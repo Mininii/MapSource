@@ -1,6 +1,6 @@
 S_ProjectSET
 Version : 0.17.9.7
-InputMap : C:\Program Files (x86)\StarCraft\Maps\지형1.scx
+InputMap : C:\Users\whatd\Desktop\Stormcoast Fortress\ScmDraft 2\Map4Source\map4.scx
 OutputMap : C:\Program Files (x86)\StarCraft\Maps\지형1C.scx
 euddraftuse : True
 loadfromCHK : True
@@ -19,20 +19,16 @@ triggerSetTouse : True
 triggerPlayer : 7
 E_ProjectSET
 S_DatEditSET
-0,36,106,-127
-0,36,109,-95
-0,36,111,-127
-0,37,106,-95
-0,37,109,-63
-0,37,111,-95
-0,51,0,-2
-0,51,34,-2
+0,11,2,193
 E_DatEditSET
 S_FireGraftSET
 E_FireGraftSET
 S_BtnSET
 E_BtnSET
 S_ReqSET
+ReqUse3,0 : 2
+ReqPos3,0 : 2
+ReqCount3,0 : 0
 E_ReqSET
 S_BinEditSET
 projectsceneDataCount : 1
@@ -68,7 +64,9 @@ SCDBDataSize : 4
 E_SCDBSet
 S_FileManagerSET
 statlang : 0
-stattextdicCount : 0
+stattextdicCount : 1
+stattextdickey0 : 1500
+stattextdicvalue0 : <13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13>
 wireuse : True
 E_FileManagerSET
 S_TriggerEditorSET
