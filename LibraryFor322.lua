@@ -165,9 +165,14 @@ function CreateCCode(CCodeDefNmber) -- CtrigAsm 5.1
 	return Ccode(DeathTableDefArr[CCodeDefNmber][1],DeathTableDefArr[CCodeDefNmber][2]-1)
 end
 
-function CreateVar() -- CtrigAsm 5.1
+function CreateVar(InitVal) -- CtrigAsm 5.1
 	VIndexAlloc = VIndexAlloc + 1
-	table.insert(CVariableIndexTable,VIndexAlloc)
+	if InitVal ~= nil then
+	local X = {VIndexAlloc,InitVal}
+		table.insert(CVariableIndexTable,X)
+	else
+		table.insert(CVariableIndexTable,VIndexAlloc)
+	end
 	return V(VIndexAlloc)
 end
 
@@ -186,7 +191,11 @@ end
 
 function InstallCVariable() -- CtrigAsm 5.1
 	for i = 1, #CVariableIndexTable do
-		CVariable(AllPlayers,CVariableIndexTable[i])
+		if type(CVariableIndexTable[i]) == "table" then
+			CVariable2(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2])
+		else
+			CVariable(AllPlayers,CVariableIndexTable[i])
+		end
 	end
 end
 
