@@ -6,7 +6,8 @@ DeathTableDefNumber = 1
 CVariableIndexTable = {}
 DeathTableDefArr = {}
 PrintString_Arr = {}
-
+BGMArr = {}
+InitBGMP = 0
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
 end
@@ -271,7 +272,7 @@ end
 
 function Overflow_HP_System(Player,Cunit_HPV,HP_K,HP_P)
     CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
-    	CDoActions(FP,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
+    	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
         CIf(Player,{TMemory(Cunit_HPV,AtMost,4000000*256),CVar(Player,HP_K[2],AtLeast,1)})
             CIfX(Player,{CVar(Player,HP_K[2],AtLeast,4000001)})
                 CDoActions(Player,{TSetMemory(Cunit_HPV,Add,4000000*256)})
@@ -293,7 +294,7 @@ end
 
 function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
     CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
-    	CDoActions(FP,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
+    	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
         CIf(Player,{TMemory(Cunit_HPV,AtMost,4000000*256),CVar(Player,HP_K[2],AtLeast,1)})
             CIfX(Player,{CVar(Player,HP_K[2],AtLeast,4000001)})
                 CDoActions(Player,{TSetMemory(Cunit_HPV,Add,4000000*256)})
@@ -309,9 +310,9 @@ function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
             	end
             CifXEnd()
         CIfEnd()
-        TriggerX(FP,{CVar(Player,HP_K[2],AtMost,1000000000),CVar(Player,HP_K2[2],AtLeast,1)},
+        TriggerX(Player,{CVar(Player,HP_K[2],AtMost,1000000000),CVar(Player,HP_K2[2],AtLeast,1)},
         	{SetCVar(Player,HP_K[2],Add,1000000000),SetCVar(Player,HP_K2[2],Subtract,1)},{Preserved})
-        TriggerX(FP,{CVar(Player,HP_K[2],AtLeast,2000000000)},
+        TriggerX(Player,{CVar(Player,HP_K[2],AtLeast,2000000000)},
         	{SetCVar(Player,HP_K[2],Subtract,1000000000),SetCVar(Player,HP_K2[2],Add,1)},{Preserved})
         CTrigger(Player,{TMemoryX(_Add(Cunit_HPV,17),Exactly,0,0xFF00)},{SetCVar(Player,Cunit_HPV[2],SetTo,0)},1)
     CIfEnd()
@@ -321,4 +322,118 @@ end
 function PlotSizeCalc(Points,SizeofPolygon)
 	local X = 1+(Points*(SizeofPolygon*(SizeofPolygon+1)/2))
 	return X
+end
+function AddBGM(BGMTypeNum,WavFile,Value)
+	local X = {}
+	if type(BGMTypeNum) ~= "number" then
+		BGMTypeNum_InputData_Error()
+	end
+	if type(WavFile) ~= "string" then
+		WavFile_InputData_Error()
+	end
+	if type(Value) ~= "number" then
+		Value_InputData_Error()
+	end
+
+	table.insert(X,BGMTypeNum)
+	table.insert(X,WavFile)
+	table.insert(X,Value)
+	table.insert(BGMArr,X)
+end
+
+function Install_BGMSystem(Player,MaxPlayers,Init)
+if InitBGMP == 0 then
+InitBGMP = ParsePlayer(Player)
+else
+	already_Installed_BGMSystem()
+end
+BGMType = CreateVar(Init)
+CIf(InitBGMP,CVar(InitBGMP,BGMType[2],AtLeast,1))
+CMov(InitBGMP,0x6509B0,0)
+CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))
+CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
+InstallBGM_Player()
+CElseX()
+Trigger { -- 브금재생시 스킵
+	players = {InitBGMP},
+		actions = {
+		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
+		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
+		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
+		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
+		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
+		PreserveTrigger();
+	},
+}
+CIfXEnd()
+CAdd(InitBGMP,0x6509B0,1)
+CWhileEnd()
+CAdd(InitBGMP,0x6509B0,InitBGMP)
+CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
+InstallBGM_Observer()
+CElseX()
+Trigger { -- 브금재생시 스킵 관전자
+	players = {InitBGMP},
+	conditions = {
+	},
+		actions = {
+		RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{128,129,130,131},InitBGMP);
+		PreserveTrigger();
+	},
+}
+CIfXEnd()
+DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMType[2],SetTo,0)})
+CIfEnd()
+end
+function InstallBGM_Player()
+	for i = 1, #BGMArr do
+		Trigger { -- 브금재생 j번
+			players = {InitBGMP},
+			conditions = {
+				Label(0);
+				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+			},
+				actions = {
+				PlayWAV(BGMArr[i][2]);
+				PlayWAV(BGMArr[i][2]);
+				SetDeaths(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
+				PreserveTrigger();
+			},
+		}
+	end
+end
+
+function InstallBGM_Observer()
+	for i = 1, #BGMArr do
+		Trigger { -- 브금재생 j번
+			players = {InitBGMP},
+			conditions = {
+				Label(0);
+				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+				
+			},
+				actions = {
+				RotatePlayer({
+					PlayWAVX(BGMArr[i][2]),
+					PlayWAVX(BGMArr[i][2])
+				},{128,129,130,131},InitBGMP);
+				SetDeaths(InitBGMP,SetTo,BGMArr[i][3],440,0xFFFFFF);
+				PreserveTrigger();
+			},
+		}
+	end
+end
+
+
+function IBGM_EPD(Player,MaxPlayer)
+f_Read(Player,0x51CE8C,Dx)
+CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
+CiSub(Player,DtP,Dy,Du)
+CMov(Player,Dv,DtP)
+CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
+CMov(Player,Du,Dy)
+
+for i = 0, MaxPlayer do
+CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- 브금타이머
+end
 end
