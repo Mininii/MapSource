@@ -7,7 +7,9 @@ CVariableIndexTable = {}
 DeathTableDefArr = {}
 PrintString_Arr = {}
 BGMArr = {}
-InitBGMP = 0
+InitBGMP = 12
+VoidInit = 0x590000
+
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
 end
@@ -127,9 +129,8 @@ end
 
 function CallTrigger(Player,Index,AddonTrigger) -- CtrigAsm 5.1
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
-	CDoActions(Player,{AddonTrigger,X})
+	DoActionsX(Player,{AddonTrigger,X})
 end
-
 
 function CallTriggerX(Player,Index,Condition,AddonTrigger) -- CtrigAsm 5.1
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
@@ -169,7 +170,7 @@ end
 function CreateVar(InitVal) -- CtrigAsm 5.1
 	VIndexAlloc = VIndexAlloc + 1
 	if InitVal ~= nil then
-	local X = {VIndexAlloc,InitVal}
+		local X = {VIndexAlloc,InitVal}
 		table.insert(CVariableIndexTable,X)
 	else
 		table.insert(CVariableIndexTable,VIndexAlloc)
@@ -190,16 +191,79 @@ function CreateStrPtr() -- CtrigAsm 5.1
 	return Ret
 end
 
+function CVariable3(Player,Index,Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Offset == "X" then 
+		Offset = nil
+	end
+	if Type == "X" then 
+		Type = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+
+	if Mask == nil then
+		Mask = 0xFFFFFFFF
+	end
+	if Offset == nil then
+		Offset = 0x58A364
+	end
+	if Type == nil then
+		Type = SetTo
+	end
+	Trigger {
+				players = {ParsePlayer(Player)},
+				conditions = {
+					Label(Index);
+				},
+				actions = {
+					SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask); -- Input Value Ctirg Offset 
+					Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+				},
+				flag = {Preserved}
+			}
+end
+
 function InstallCVariable() -- CtrigAsm 5.1
 	for i = 1, #CVariableIndexTable do
 		if type(CVariableIndexTable[i]) == "table" then
-			CVariable2(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2])
+			if type(CVariableIndexTable[i][2]) == "number" then
+				CVariable2(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2])
+			elseif type(CVariableIndexTable[i][2]) == "table" then
+				CVariable3(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2][1],CVariableIndexTable[i][2][2],CVariableIndexTable[i][2][3],CVariableIndexTable[i][2][4],CVariableIndexTable[i][2][5])
+			else
+				InstallCVariable_InputData_Error()
+			end
 		else
 			CVariable(AllPlayers,CVariableIndexTable[i])
 		end
 	end
 end
-
+function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
+	MoveCpValue = 0
+	local X = {}
+	for k, v in pairs(ExCunitArr) do
+		table.insert(X,SetCVar("X",v[2],SetTo,0))
+	end
+	Trigger { -- Cunit Calc Main
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+			Conditions,
+		},
+		actions = {
+			X,
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CCArr[CCptr],0,0,0);
+			SetCtrigX("X",CCArr[CCptr]+1,0x4,0,SetTo,"X","X",0,0,1);
+			SetCtrigX("X",CCArr[CCptr],0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",CCArr[CCptr],0x15C,0,SetTo,"X","X",0,0,1);
+			SetMemory(0x6509B0,SetTo,19025 + 84 * LoopIndex);
+			Actions,
+			},
+		flag = {Preserved}
+	}		
+end
 
 function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local X = {}
@@ -341,18 +405,31 @@ function AddBGM(BGMTypeNum,WavFile,Value)
 	table.insert(BGMArr,X)
 end
 
-function Install_BGMSystem(Player,MaxPlayers,Init)
-if InitBGMP == 0 then
+function Install_BGMSystem(Player,MaxPlayers,BGMType)
+if InitBGMP == 12 then
 InitBGMP = ParsePlayer(Player)
 else
 	already_Installed_BGMSystem()
 end
-BGMType = CreateVar(Init)
 CIf(InitBGMP,CVar(InitBGMP,BGMType[2],AtLeast,1))
 CMov(InitBGMP,0x6509B0,0)
 CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))
 CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
-InstallBGM_Player()
+	for i = 1, #BGMArr do
+		Trigger { -- 브금재생 j번
+			players = {InitBGMP},
+			conditions = {
+				Label(0);
+				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+			},
+				actions = {
+				PlayWAV(BGMArr[i][2]);
+				PlayWAV(BGMArr[i][2]);
+				SetDeaths(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
+				PreserveTrigger();
+			},
+		}
+	end
 CElseX()
 Trigger { -- 브금재생시 스킵
 	players = {InitBGMP},
@@ -370,40 +447,6 @@ CAdd(InitBGMP,0x6509B0,1)
 CWhileEnd()
 CAdd(InitBGMP,0x6509B0,InitBGMP)
 CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
-InstallBGM_Observer()
-CElseX()
-Trigger { -- 브금재생시 스킵 관전자
-	players = {InitBGMP},
-	conditions = {
-	},
-		actions = {
-		RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{128,129,130,131},InitBGMP);
-		PreserveTrigger();
-	},
-}
-CIfXEnd()
-DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMType[2],SetTo,0)})
-CIfEnd()
-end
-function InstallBGM_Player()
-	for i = 1, #BGMArr do
-		Trigger { -- 브금재생 j번
-			players = {InitBGMP},
-			conditions = {
-				Label(0);
-				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
-			},
-				actions = {
-				PlayWAV(BGMArr[i][2]);
-				PlayWAV(BGMArr[i][2]);
-				SetDeaths(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
-				PreserveTrigger();
-			},
-		}
-	end
-end
-
-function InstallBGM_Observer()
 	for i = 1, #BGMArr do
 		Trigger { -- 브금재생 j번
 			players = {InitBGMP},
@@ -422,6 +465,19 @@ function InstallBGM_Observer()
 			},
 		}
 	end
+CElseX()
+Trigger { -- 브금재생시 스킵 관전자
+	players = {InitBGMP},
+	conditions = {
+	},
+		actions = {
+		RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{128,129,130,131},InitBGMP);
+		PreserveTrigger();
+	},
+}
+CIfXEnd()
+DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMType[2],SetTo,0)})
+CIfEnd()
 end
 
 
@@ -429,11 +485,73 @@ function IBGM_EPD(Player,MaxPlayer)
 f_Read(Player,0x51CE8C,Dx)
 CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
 CiSub(Player,DtP,Dy,Du)
-CMov(Player,Dv,DtP)
+CMov(Player,Dv,DtP) 
 CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 CMov(Player,Du,Dy)
 
 for i = 0, MaxPlayer do
 CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- 브금타이머
+end
+end
+
+function VoidAlloc(Size)--1EPD(4bite)
+	local X = EPD(VoidInit)
+	VoidInit = VoidInit + (Size*4)
+	if VoidInit >= 0x5967E0 then
+		VoidSize_OverFlow()
+	end
+	return X
+end
+function Enable_HideErrorMessage(Player)
+for i = 0, 10 do
+if i%2 == 0 then
+Trigger {
+	players = {Player},
+	conditions = {
+		Memory(0x640B60+0xDA*i, Exactly, 0xEABDB2EA);
+		Memory(0x640B64+0xDA*i, Exactly, 0x203AA0B3);	
+	},
+	actions = {
+		SetMemory(0x640B60+0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+Trigger {
+	players = {Player},
+	conditions = {
+		Memory(0x640B60+0xDA*i, Exactly, 0x4E524157);
+		Memory(0x640B64+0xDA*i, Exactly, 0x3A474E49);	
+	},
+	actions = {
+		SetMemory(0x640B60+0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+else
+Trigger {
+	players = {Player},
+	conditions = {
+		MemoryX(0x640B5E + 0xDA*i, Exactly, 0xB2EA0000,0xFFFF0000);
+		Memory(0x640B62 + 0xDA*i, Exactly, 0xA0B3EABD);	
+		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x203A,0xFFFF);
+	},
+	actions = {
+		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+Trigger {
+	players = {Player},
+	conditions = {
+		MemoryX(0x640B5E + 0xDA*i, Exactly, 0x41570000,0xFFFF0000);
+		Memory(0x640B62 + 0xDA*i, Exactly, 0x4E494E52);	
+		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x00003A47,0xFFFF);
+	},
+	actions = {
+		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+end
 end
 end

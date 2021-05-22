@@ -1,24 +1,6 @@
 PatchArr = {}
 PatchArrPrsv = {}
-function CunitCtrig_Part4X2(LoopIndex,Conditions,Actions)
-	MoveCpValue = 0
-	Trigger { -- Cunit Calc Main
-		players = {ParsePlayer(PlayerID)},
-		conditions = { 
-			Label(0);
-			Conditions,
-		},
-		actions = { 
-			SetCtrigX("X","X",0x4,0,SetTo,"X",CCArr[CCptr],0,0,0);
-			SetCtrigX("X",CCArr[CCptr]+1,0x4,0,SetTo,"X","X",0,0,1);
-			SetCtrigX("X",CCArr[CCptr],0x158,0,SetTo,"X","X",0x4,1,0);
-			SetCtrigX("X",CCArr[CCptr],0x15C,0,SetTo,"X","X",0,0,1);
-			SetMemory(0x6509B0,SetTo,19025 + 84 * LoopIndex);
-			Actions,
-			},
-		flag = {Preserved}
-	}		
-end
+
 
 function SetToUnitDef(UnitID,Value)
 table.insert(PatchArr,SetMemoryB(0x65FEC8 + UnitID,SetTo,Value))
@@ -102,26 +84,32 @@ table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 end
 
 
-
-
-
+	
 
 VRet = CreateVar()
 VRet2 = CreateVar()
+VRet3 = CreateVar()
+VRet4 = CreateVar()
 CMov(FP,CurrentUID,0)
 CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
 CMov(FP,VRet,CurrentUID,EPD(0x664080))
 CMov(FP,VRet2,CurrentUID,EPD(0x662860))
+
+f_Mod(FP,VRet3,CurrentUID,_Mov(2))
+f_Div(FP,VRet4,CurrentUID,_Mov(2))
+
 CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1
-CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000)}) -- All Unit SetTo Spellcaster
+CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
+CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
+CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 CAdd(FP,CurrentUID,1)
 CWhileEnd()
 CMov(FP,CurrentUID,0)
 
 for i = 0, 227 do
 SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
-DefTypePatch(i,9) -- 방어타입 전부 9로 설정
+DefTypePatch(i,7) -- 방어타입 전부 7로 설정
 SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 end
 
@@ -184,8 +172,14 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (j * 46) + i,SetTo,255))
 end
 end
 
+
+
 	SetUnitDefUpType(7,60) -- 방업 적용 방지
 for i = 0, 6 do
+table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
+table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,5))
+table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,10))
+table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,15))
 table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
@@ -208,6 +202,7 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1]))
 end
 
+	table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
 	table.insert(PatchArr,SetMemoryW(0x656EB0,SetTo,NMarDamageAmount)) -- 기본공격력
 	table.insert(PatchArr,SetMemoryW(0x657678,SetTo,NMarDamageFactor)) -- 추가공격력
 	SetUnitDefUpType(15,60) -- 방업 적용 방지
@@ -222,9 +217,19 @@ for i = 1, 4 do
 end
 UnitEnable(72)
 UnitEnable(22)
-for i = 37,52 do
-UnitSizePatch(i,3) -- 저그 유닛 크기 3*3 설정
+
+--UnitSizePatch(39,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(45,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(44,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(48,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(49,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(56,10) -- 저그 유닛 크기 10*10 설정
+--UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(11,1)
+for i = 220, 227 do
+	DefTypePatch(i,9)
 end
+	DefTypePatch(7,9)
 
 
 Trigger { -- 퍼센트 데미지 세팅
@@ -239,27 +244,38 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BA0,SetTo,256);---------크기 6 일반형
 		SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형
 		SetMemory(0x515BA8,SetTo,256);---------크기 8 일반형
-		SetMemory(0x515BAC,SetTo,256);---------크기 9 일반형
-		SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드? 스페셜? 마린
-		SetMemory(0x515BB4,SetTo,256);---------크기 1 진동형 P2 익시드? 스페셜? 마린
-		SetMemory(0x515BB8,SetTo,256);---------크기 2 진동형 P3 익시드? 스페셜? 마린
-		SetMemory(0x515BBC,SetTo,256);---------크기 3 진동형 P4 익시드? 스페셜? 마린
-		SetMemory(0x515BC0,SetTo,256);---------크기 4 진동형 P5 익시드? 스페셜? 마린
-		SetMemory(0x515BC4,SetTo,256);---------크기 5 진동형 P6 익시드? 스페셜? 마린
-		SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드? 스페셜? 마린
-		SetMemory(0x515BCC,SetTo,256);---------크기 7 진동형 일반마린
-		SetMemory(0x515BD0,SetTo,256);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
-		SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV는 HP 1000
+		SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 가스통같은거에 쓸듯
+		SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드 마린
+		SetMemory(0x515BB4,SetTo,256);---------크기 1 진동형 P2 익시드 마린
+		SetMemory(0x515BB8,SetTo,256);---------크기 2 진동형 P3 익시드 마린
+		SetMemory(0x515BBC,SetTo,256);---------크기 3 진동형 P4 익시드 마린
+		SetMemory(0x515BC0,SetTo,256);---------크기 4 진동형 P5 익시드 마린
+		SetMemory(0x515BC4,SetTo,256);---------크기 5 진동형 P6 익시드 마린
+		SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드 마린
+		SetMemory(0x515BCC,SetTo,256*2);---------크기 7 진동형 일반마린
+		SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
+		SetMemory(0x515BD4,SetTo,0);---------크기 9 진동형	SCV, 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
 		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
 		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
 	},
 }
 DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
 
-TriggerX(FP,nil,{SetCDeaths(FP,SetTo,Limit,LimitX)}) -- Limit설정
-if Limit == 1 then
-	DoActions(FP,SetResources(Force1,Add,0x70000000,Ore))
+for i = 0, 6 do
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		Command(i,AtLeast,1,111);
+		},
+	actions = {
+		SetCVar(FP,SetPlayers[2],Add,1);
+		}
+}
 end
+
+DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+TriggerX(FP,{CDeaths(FP,AtLeast,1,TestMode)},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
 for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 Trigger {
 	players = {FP},
