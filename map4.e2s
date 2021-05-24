@@ -387,7 +387,7 @@ SCDBDataSize : 4
 E_SCDBSet
 S_FileManagerSET
 statlang : 0
-stattextdicCount : 23
+stattextdicCount : 25
 stattextdickey0 : 1500
 stattextdicvalue0 : <13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13><13>
 stattextdickey1 : 585
@@ -434,6 +434,10 @@ stattextdickey21 : 1499
 stattextdicvalue21 : <31>《%》 P<4>ercent <31>T<4>ype
 stattextdickey22 : 1498
 stattextdicvalue22 : <29>《+》 N<4>ormal <29>T<4>ype
+stattextdickey23 : 28
+stattextdicvalue23 : <7>『 <29>H<4>yperion<7> 』 
+stattextdickey24 : 29
+stattextdicvalue24 : <7>『 <31>N<04>orad <31>II<7> 』 
 wireuse : True
 E_FileManagerSET
 S_TriggerEditorSET

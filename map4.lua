@@ -1,11 +1,17 @@
 dofile("lua/Loader.lua")
 dofile("Map4Source/LibraryFor322.lua")
-
-DoActions(AllPlayers,SetDeaths(CurrentPlayer,Add,1,"Psi Emitter"),1)
-EUDTurbo(P8) -- 뎡터보
 Limit = 1
-TestStart = 1
+TestStart = 0
 FP = P8
+DoActions(AllPlayers,SetDeaths(CurrentPlayer,Add,1,"Psi Emitter"),1)
+EUDTurbo(FP) -- 뎡터보
+SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
+SetFixedPlayer(FP)
+StartCtrig()
+Enable_PlayerCheck()
+Enable_HideErrorMessage(FP)
+CJump(AllPlayers,0x700)
+Include_CtrigPlib(360,"Switch 100",1)
 CustomShapeTable = {}
 function CustomShapeAlloc()
 	local X = {}
@@ -57,13 +63,11 @@ HumanPlayers = {0,1,2,3,4,5,6,128,129,130,131}
 MapPlayers = {0,1,2,3,4,5,6}
 ObPlayers = {128,129,130,131}
 MedicTrig = {34,9,2,3}
-SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
-SetFixedPlayer(P8)
-StartCtrig()
+
 SpeedVar = CreateVar(4)
 Ex1= {20,23,26,29,32,35,38}
 P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
-HTextStr = string.rep("\x0D",150)
+HTextStr = string.rep("\x0D",200)
 
 --맵 설정 단락 끝
 
@@ -120,29 +124,22 @@ CreateCCodeSet(ExDeaths1,{"GiveConsole","F12KeyToggle","IntroT","LimitX","LimitC
 
 
 
-Enable_PlayerCheck()
-Enable_HideErrorMessage(FP)
-DoActionsX(FP,SetCDeaths(FP,SetTo,0,PCheck))
-for i = 0, 6 do
-TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck)},{Preserved})
-end
-CJump(AllPlayers,0x700) -- SetCall 지정공간
-Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-10\x06) \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
-Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-100\x06) \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
+
+Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-10\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-100\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
 Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE System Message \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
 Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
-HTextStrReset = CreateCText(FP,string.rep("\x0D",150))
+HTextStrReset = CreateCText(FP,string.rep("\x0D",200))
 HeroVArr = CVArray(FP,#HeroArr)
 Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
 
 Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
 
 
-Include_CtrigPlib(360,"Switch 100",1)
 function CreateHeroPointArr(Index,Point,Name,Type) --  영작 유닛 설정 함수
 	local TextType1 = "을(를) 처치하였다...! "
 	local TextType2 = "를 획득하였다...! "
@@ -219,6 +216,10 @@ dofile("Map4Source/func.lua") -- 루아파일 불러오기
 
 CJumpEnd(AllPlayers,0x700)
 NoAirCollisionX(FP)
+DoActionsX(FP,SetCDeaths(FP,SetTo,0,PCheck))
+for i = 0, 6 do
+TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck)},{Preserved})
+end
 
 CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF)})
 CMov(FP,BGMTypeV,ReserveBGM)
@@ -257,7 +258,7 @@ CIf(FP,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
 	for j = 1, 7 do
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
 			f_SaveCp()
-			Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
+			Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
 			Trigger { -- No comment (6496767D)
 				players = {FP},
 				conditions = {
@@ -266,7 +267,7 @@ CIf(FP,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
 				actions = {
 					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
 					SetScore(j-1,Add,1,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-100);
+					SetCVar(FP,ExScore[j][2],Add,-10);
 					PreserveTrigger();
 					},
 				}
@@ -281,7 +282,7 @@ CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
 	DoActions(FP,MoveCp(Subtract,6*4))
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
 			f_SaveCp()
-			Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
+			Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
 			Trigger { -- No comment (6496767D)
 				players = {FP},
 				conditions = {
@@ -290,7 +291,7 @@ CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
 				actions = {
 					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
 					SetScore(j-1,Add,1,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-10);
+					SetCVar(FP,ExScore[j][2],Add,-100);
 					PreserveTrigger();
 					},
 				}
@@ -594,8 +595,7 @@ CWhileEnd()
 f_GetTblptr(FP,MarTblPtr,1501)
 CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
 
-CIf(FP,CDeaths(FP,AtMost,0,RandomHeroPlace),SetCDeaths(FP,Add,1,RandomHeroPlace))
-CMov(FP,RandW,200)
+DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,200),1)
 CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
 
 NJumpXEnd(FP,0x2)
@@ -616,7 +616,6 @@ NJumpX(FP,0x2)
 NIfXEnd()
 NJumpXEnd(FP,0x3)
 CWhileEnd()
-CIfEnd()
 DoActions2(FP,PatchArrPrsv)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Add,1,HealT)})
 CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
@@ -957,17 +956,27 @@ CommandLeastAt(201,64),
 SetInvincibility(Disable,147,P8,"Anywhere")
 },{Preserved})
 CIf(FP,Deaths(FP,AtLeast,1,147))
-DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
+CIf(FP,CDeaths(FP,AtMost,0,ReplaceDelayT))
 CMov(FP,CunitIndex,0)
-CWhile(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),CVar(FP,CunitIndex[2],AtMost,1699)})
+CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
 CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
 CAdd(FP,CunitIndex,1)
 CWhileEnd()
 
-DoActions(FP,{
-	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8)
-})
-TriggerX(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT)},{RotatePlayer({DisplayTextX(ClearT1,4),},HumanPlayers,FP),SetCVar(FP,BGMTypeV[2],SetTo,1)},{Preserved})
+TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT1,4),},HumanPlayers,FP),SetCVar(FP,BGMTypeV[2],SetTo,1)},{Preserved})
+CAdd(FP,Level,1)
+
+DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
+	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8)})
+
+
+CIf(FP,CVar(FP,Level[2],AtLeast,5))
+DoActions(FP,{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},MapPlayers,FP),Victory()})
+CIfEnd()
+
+CIfEnd()
+
+
 --PlayWAVX()
 for i = 0, 4 do
 TriggerX(FP,{CDeaths(FP,AtLeast,5000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind G \x04를 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x04"..5-i.."초 남았습니다.\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4),PlayWAVX("sound\\glue\\countdown.wav"),PlayWAVX("sound\\glue\\countdown.wav"),PlayWAVX("sound\\glue\\countdown.wav")},HumanPlayers,FP),
@@ -1005,6 +1014,7 @@ CWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
 	CAdd(FP,0x6509B0,2)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
+CMov(FP,RandW,50)
 DoActionsX(FP,{SetDeaths(FP,Subtract,1,147),
 SetCDeaths(FP,SetTo,0,ReplaceDelayT),
 SetCDeaths(FP,SetTo,0,TextSwitch[1]),
@@ -1037,7 +1047,7 @@ UnitReadX(FP,AllPlayers,229,64,count)
 for i = 0, 6 do
 CMov(FP,0x582204+(4*i),count)
 CAdd(FP,0x582204+(4*i),count)
-CMov(FP,0x57f120,ExScore[i+1])
+CMov(FP,0x57f120+(4*i),ExScore[i+1])
 end
 CMov(FP,TempT,Time)
 	for i = 6, 0, -1 do
@@ -1048,7 +1058,7 @@ CMov(FP,TempT,Time)
 				CVar(FP,TempT[2],AtLeast,(2^i)*3600000)
 			},
 			actions = {
-				SetMemory(0x57F0F0+(4*5),Add,(2^i)*10000);
+				SetMemory(0x57F0F0+(4*7),Add,(2^i)*10000);
 				SetCVar(FP,TempT[2],Subtract,(2^i)*3600000);
 				PreserveTrigger();
 			}
@@ -1062,7 +1072,7 @@ CMov(FP,TempT,Time)
 				CVar(FP,TempT[2],AtLeast,(2^i)*60000)
 			},
 			actions = {
-				SetMemory(0x57F0F0+(4*5),Add,(2^i)*100);
+				SetMemory(0x57F0F0+(4*7),Add,(2^i)*100);
 				SetCVar(FP,TempT[2],Subtract,(2^i)*60000);
 				PreserveTrigger();
 			}
@@ -1076,7 +1086,7 @@ CMov(FP,TempT,Time)
 				CVar(FP,TempT[2],AtLeast,(2^i)*1000)
 			},
 			actions = {
-				SetMemory(0x57F0F0+(4*5),Add,(2^i));
+				SetMemory(0x57F0F0+(4*7),Add,(2^i));
 				SetCVar(FP,TempT[2],Subtract,(2^i)*1000);
 				PreserveTrigger();
 			}
@@ -1515,6 +1525,48 @@ table.insert(DefFactorPtrArr,0x6559C0+((i+8)*2) - DefFactorMaskRetArr[i+1])
 
 
 
+Trigger { -- SCV 소지 갯수 제한
+	players = {i},
+	conditions = {
+		Command(i,AtLeast,6,7);
+		},
+	
+	actions = {
+		KillUnitAt(1,7,"Anywhere",CurrentPlayer);
+		DisplayText("\x07『 \x04SCV는 5기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ 500 Ore\x07 』",4);
+		SetResources(CurrentPlayer,Add,500,Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- 벙커 소지 갯수 제한
+	players = {i},
+	conditions = {
+		Command(i,AtLeast,6,125);
+		},
+	
+	actions = {
+		KillUnitAt(1,125,"Anywhere",CurrentPlayer);
+		DisplayText("\x07『 \x07벙커\x04는 5기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ 8,000 Ore\x07 』",4);
+		SetResources(CurrentPlayer,Add,8000,Ore);
+		PreserveTrigger();
+	},
+}
+Trigger { -- 터렛 소지 갯수 제한
+	players = {i},
+	conditions = {
+		Command(i,AtLeast,6,124);
+		},
+	
+	actions = {
+		KillUnitAt(1,124,"Anywhere",CurrentPlayer);
+		DisplayText("\x07『 \x07터렛\x04은 5기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ 4,000 Ore\x07 』",4);
+		SetResources(CurrentPlayer,Add,4000,Ore);
+		PreserveTrigger();
+	},
+}
+
+
 CIfX(FP,PlayerCheck(i,1)) -- FP가 관리하는 시스템 부분 트리거. 각플레이어가 있을경우 실행된다.
 
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)}) -- 브금타이머
@@ -1529,6 +1581,28 @@ TriggerX(FP,{Command(i,AtLeast,1,12),Bring(i,AtMost,120-1,MarID[i+1],64)},{
 	SetMemory(0x582324+(12*12)+(i*4),SetTo,0),
 	SetMemory(0x584DE4+(12*12)+(i*4),SetTo,0),
 },{Preserved})
+Trigger { -- 조합 영웅마린
+	players = {FP},
+	conditions = {
+		Label(0);
+		Bring(i,AtLeast,1,10,10);
+		Bring(i,AtMost,120-1,MarID[i+1],64);
+		Accumulate(i,AtLeast,25000,Ore);
+		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+	},
+	actions = {
+		SetMemory(0x6509B0,SetTo,i),
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x04Norma Marine을 \x1FExceeD \x1BM\x04arine으로 \x19변환\x04하였습니다. - \x1F15,000 O r e \x07』",4);
+		SetMemory(0x6509B0,SetTo,FP),
+
+		ModifyUnitEnergy(1,10,i,10,0);
+		SetResources(i,Subtract,25000,ore);
+		RemoveUnitAt(1,10,10,i);
+		SetCDeaths(FP,Add,1,MarCreate[i+1]),
+		PreserveTrigger();
+	},
+}
+
 
 TriggerX(FP,{Command(i,AtLeast,1,15)},{
 	SetMemory(0x6509B0,SetTo,i),
@@ -1716,7 +1790,7 @@ TriggerX(FP,{CVar(FP,DefFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58D088 + (i 
 CIf(FP,{TTCVar(FP,MarHP[i+1][2],"!=",MarHP2[i+1])})
 	CMov(FP,MarHP2[i+1],MarHP[i+1])
 	CMov(FP,0x662350 + (MarID[i+1]*4),MarHP2[i+1])
-	CMov(FP,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),1000))
+	CMov(FP,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))
 CIfEnd()
 CIf(FP,{Memory(0x6284E8+(0x30*i) + 4,AtMost,0)})
 CDoActions(FP,{TSetMemory(SelOPEPD,Add,1)})
@@ -1728,7 +1802,7 @@ f_Read(FP,0x6284E8+(0x30*i),SelPTR,SelEPD)
 		f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
 		for j = 0, 6 do
 			CIf(FP,CVar(FP,SelPl[2],Exactly,j))
-				CMov(FP,SelMaxHP,_Div(MarHP2[j+1],256))
+				CMov(FP,SelMaxHP,_Div(MarHP2[j+1],_Mov(256)))
 			CIfEnd()
 		end
 		f_Div(FP,SelHP,_Mov(256))

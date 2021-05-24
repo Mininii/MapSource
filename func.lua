@@ -39,7 +39,6 @@ LoadCp_CallIndex = SetCallForward()
 SetCall(FP)
 	LoadCp(FP,BackupCp)
 SetCallEnd()
-HeroVArr = CVArray(FP,#HeroArr)
 
 OneClickUpgrade = SetCallForward()
 SetCall(FP) 

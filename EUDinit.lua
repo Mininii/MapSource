@@ -150,6 +150,7 @@ SetUnitClassType(79)
 SetUnitClassType(220)
 SetUnitClassType(150)
 
+	table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
 --0~6 공업용??
 --8~14 방업용??
 
@@ -224,7 +225,7 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 	DefTypePatch(MarID[i+1],i) -- 마린의 방어타입을 P1부터 P7까지 차례대로 배분
 	SetUnitClass(MarID[i+1],199) -- 마린 계급설정. 체력보이게 하기 위함
 	SetShield(MarID[i+1]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
-	UnitSizePatch(MarID[i+1],8) -- 마린 크기 8*8 설정
+	UnitSizePatch(MarID[i+1],5) -- 마린 크기 5*5 설정
 	UnitEnable2(MarID[i+1])
 	SetUnitGrpToMarine(MarID[i+1]) -- 마린 그래픽 전부 마린으로 설정
 	SetUnitAdvFlag(MarID[i+1],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
@@ -281,7 +282,7 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BA0,SetTo,256);---------크기 6 일반형
 		SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형
 		SetMemory(0x515BA8,SetTo,256);---------크기 8 일반형
-		SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 가스통같은거에 쓸듯
+		SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
 		SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드 마린
 		SetMemory(0x515BB4,SetTo,256);---------크기 1 진동형 P2 익시드 마린
 		SetMemory(0x515BB8,SetTo,256);---------크기 2 진동형 P3 익시드 마린
@@ -291,7 +292,7 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드 마린
 		SetMemory(0x515BCC,SetTo,256*2);---------크기 7 진동형 일반마린
 		SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
-		SetMemory(0x515BD4,SetTo,0);---------크기 9 진동형	SCV, 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
+		SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV, 진동형 퍼뎀유닛한텐 죽음 ㅅㄱ
 		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
 		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
 	},
