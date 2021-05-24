@@ -411,6 +411,9 @@ InitBGMP = ParsePlayer(Player)
 else
 	already_Installed_BGMSystem()
 end
+if #BGMArr == 0 then
+	BGM_List_does_not_exist()
+end
 CIf(InitBGMP,CVar(InitBGMP,BGMType[2],AtLeast,1))
 CMov(InitBGMP,0x6509B0,0)
 CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))

@@ -1,7 +1,6 @@
 PatchArr = {}
 PatchArrPrsv = {}
-
-
+CTrigPatchTable = {}
 function SetToUnitDef(UnitID,Value)
 table.insert(PatchArr,SetMemoryB(0x65FEC8 + UnitID,SetTo,Value))
 end
@@ -83,9 +82,21 @@ table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 78))
 table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 end
 
+function SetUnitClassType(UnitID,Type)
+	if Type == 1 then 
+		Class = 198
+	else
+		Class = 197
+	end
+	table.insert(PatchArr,SetMemoryB(0x6637A0 + UnitID,SetTo,0x02+0x08))
+	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,Class))
+end
 
+for i = 1, #HeroArr do
 	
-
+	table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
+end
+DoActionsX(FP,CTrigPatchTable,1)
 VRet = CreateVar()
 VRet2 = CreateVar()
 VRet3 = CreateVar()
@@ -108,6 +119,7 @@ CWhileEnd()
 CMov(FP,CurrentUID,0)
 
 for i = 0, 227 do
+SetUnitDefUpType(i,60) -- 방업 적용 방지
 SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
 DefTypePatch(i,7) -- 방어타입 전부 7로 설정
 SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
@@ -116,9 +128,32 @@ end
 for i = 0, 129 do
 WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 end
+WeaponTypePatch(5,2) -- 무기 타입 퍼딜
+WeaponTypePatch(21,2) -- 무기 타입 퍼딜
+WeaponTypePatch(100,2) -- 무기 타입 퍼딜
+WeaponTypePatch(85,2) -- 무기 타입 퍼딜
+SetUnitClassType(19,1)
+SetUnitClassType(29,1)
+SetUnitClassType(98,1)
+SetUnitClassType(75,1)
+
+SetUnitClassType(77)
+SetUnitClassType(78)
+SetUnitClassType(28)
+SetUnitClassType(17)
+SetUnitClassType(21)
+SetUnitClassType(86)
+SetUnitClassType(88)
+SetUnitClassType(25)
+SetUnitClassType(76)
+SetUnitClassType(79)
+SetUnitClassType(220)
+SetUnitClassType(150)
 
 --0~6 공업용??
 --8~14 방업용??
+
+	
 
 for i = 0, 6 do
 table.insert(PatchArr,SetMemoryW(0x655AC0 + (i*2),SetTo,288)) -- 아이콘
@@ -172,10 +207,13 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (j * 46) + i,SetTo,255))
 end
 end
 
+table.insert(PatchArr,SetMemoryB(0x6647B0 + (17), SetTo, 255))
+table.insert(PatchArr,SetMemoryB(0x6647B0 + (21), SetTo, 255))
+table.insert(PatchArr,SetMemoryB(0x6647B0 + (29), SetTo, 255))
 
-
-	SetUnitDefUpType(7,60) -- 방업 적용 방지
 for i = 0, 6 do
+table.insert(PatchArr,SetMemory(0x582234 + (4*i),SetTo,2400))
+table.insert(PatchArr,SetMemory(0x5821D4 + (4*i),SetTo,2400))
 table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
 table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,5))
 table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,10))
@@ -188,7 +226,6 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 	SetShield(MarID[i+1]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 	UnitSizePatch(MarID[i+1],8) -- 마린 크기 8*8 설정
 	UnitEnable2(MarID[i+1])
-	SetUnitDefUpType(MarID[i+1],60) -- 방업 적용 방지
 	SetUnitGrpToMarine(MarID[i+1]) -- 마린 그래픽 전부 마린으로 설정
 	SetUnitAdvFlag(MarID[i+1],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 
@@ -205,7 +242,6 @@ end
 	table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
 	table.insert(PatchArr,SetMemoryW(0x656EB0,SetTo,NMarDamageAmount)) -- 기본공격력
 	table.insert(PatchArr,SetMemoryW(0x657678,SetTo,NMarDamageFactor)) -- 추가공격력
-	SetUnitDefUpType(15,60) -- 방업 적용 방지
 
 	UnitEnable2(15)
 	UnitEnable2(12)
@@ -230,6 +266,7 @@ for i = 220, 227 do
 	DefTypePatch(i,9)
 end
 	DefTypePatch(7,9)
+	DefTypePatch(150,9)
 
 
 Trigger { -- 퍼센트 데미지 세팅
