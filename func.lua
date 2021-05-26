@@ -101,7 +101,7 @@ for i = 1, Var_Lines do
 	table.insert(Var_TempTable,CreateVar())
 	table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
 end
-
+CheckTemp = CreateVar()
 
 Call_Repeat = SetCallForward()
 SetCall(FP)
@@ -121,6 +121,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	end
 	CIfEnd()
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	CSub(FP,CheckTemp,Nextptrs,19025)
+	f_Mod(FP,CheckTemp,_Mov(84))
+	NJump(FP,0x780,{CVar(FP,CheckTemp[2],AtLeast,1)},RotatePlayer({DisplayTextX(f_RepeatErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 	CDoActions(FP,{
 		TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,P8,{energy = 100}),
 --		TModifyUnitEnergy(All,Gun_TempSpawnSet1,P8,1,100);
@@ -131,6 +134,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
 	})
 	CIfEnd()
+	NJumpEnd(FP,0x780)
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 SetCallEnd()
@@ -155,6 +159,10 @@ SetCall(FP)
 		CMov(FP,CPosX,CPos,0,0XFFFF)
 		CMov(FP,CPosY,CPos,0,0XFFFF0000)
 		f_Div(FP,CPosY,_Mov(0x10000))
+		NIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,201))
+		NJumpX(FP,0x11,{CVar(FP,Var_TempTable[2][2],AtMost,48*32),CVar(FP,CPosX[2],AtLeast,48*32)})
+		NJumpX(FP,0x11,{CVar(FP,Var_TempTable[2][2],AtLeast,48*32),CVar(FP,CPosX[2],AtMost,48*32)})
+		NIfEnd()
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY) -- 좌상
 		CMov(FP,Repeat_TempV,1)
 		CMov(FP,Gun_TempSpawnSet1,Gun_TempSpawnSet3)
@@ -162,6 +170,7 @@ SetCall(FP)
 		CMov(FP,Gun_TempSpawnSet1,Gun_TempSpawnSet2)
 		CMov(FP,Repeat_TempV,1)
 		CallTriggerX(FP,Set_Repeat)
+		NJumpXEnd(FP,0x11)
 		f_LoadCp()
 		CAdd(FP,0x6509B0,1)
 	CWhileEnd()
@@ -180,21 +189,92 @@ Line No.args : UnitSpawnSet
 Line No.29 : GunType
 Line No.30 : SuspendSwitch
 ]]
+function GunBreak(GName,Point)
 
+local Text = "\n\n\n\x13- \x0E- \x0F-\x11 Ｓｔｒｕｃｔｕｒｅ \x04－ "..GName.." \x04 파괴!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
 
+Trigger {
+	players = {FP},
+		conditions = {
+		Label(0);
+			},
+	actions = {
+		RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+		SetScore(Force1,Add,Point,Kills);
+		PreserveTrigger();
+		},
+	}
+
+end
 f_Gun = SetCallForward() -- 건작함수
 SetCall(FP)
 	CIf(FP,{CVar(FP,Var_TempTable[29][2],AtMost,255)}) -- 레어나 하이브 등의 건작일 경우
+
+		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,201))--오버코쿤
+			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
+				CMov(FP,ReserveBGM,5)
+				GunBreak("\x07ＣｏＣｏｏｎ",77000)
+
+			CIfEnd()
+			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
+				Input_CSData(CustomShape[6],28,19,CVar(FP,Var_TempTable[6][2],Exactly,0))
+				Input_CSData(CustomShape[6],86,79,CVar(FP,Var_TempTable[6][2],Exactly,1))
+				CallTriggerX(FP,Load_CSArr)
+				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
+			CIfEnd()
+		CIfEnd()
+
+
+		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,148))--오버마인드
+			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
+				CMov(FP,ReserveBGM,5)
+				GunBreak("\x07ＯｖｅｒＭｉｎｄ",90000)
+
+			CIfEnd()
+			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
+				Input_CSData(CustomShape[5],56,77,CVar(FP,Var_TempTable[6][2],Exactly,0))
+				Input_CSData(CustomShape[5],56,76,CVar(FP,Var_TempTable[6][2],Exactly,1))
+				CallTriggerX(FP,Load_CSArr)
+				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
+			CIfEnd()
+		CIfEnd()
+
+		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,152))--셀브다고쓰
+			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
+				CMov(FP,ReserveBGM,5)
+				GunBreak("\x07Ｄａｇｇｏｔｈ",100000)
+
+			CIfEnd()
+			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
+				Input_CSData(CustomShape[6],21,25,CVar(FP,Var_TempTable[6][2],Exactly,0))
+				Input_CSData(CustomShape[6],88,78,CVar(FP,Var_TempTable[6][2],Exactly,1))
+				CallTriggerX(FP,Load_CSArr)
+				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
+				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
+			CIfEnd()
+		CIfEnd()
+
+
 		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,151))--셀브순대
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
 				CMov(FP,ReserveBGM,4)
+				GunBreak("\x07Ｃｅｒｅｂｒａｔｅ",120000)
+
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
 				Input_CSData(CustomShape[4],55,nil,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				Input_CSData(CustomShape[4],56,nil,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				CallTriggerX(FP,Load_CSArr)
-				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
 			CIfEnd()
@@ -205,6 +285,7 @@ SetCall(FP)
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,500)})
 				CMov(FP,ReserveBGM,5)
+				GunBreak("\x07Ｇｒａｖｉｔｙ　Ｃｅｎｔｅｒ",150000)
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,500))
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
@@ -215,6 +296,7 @@ SetCall(FP)
 			TriggerX(FP,{CVar(FP,Var_TempTable[2][2],AtLeast,48*32)},{SetCVar(FP,CUID[2],SetTo,21)},{Preserved})
 
 			NWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Var_TempTable[7][2],AtLeast,1)})
+			CMov(FP,0x6509B0,FP)
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 			CMov(FP,RandSpeed,_Mod(_Rand(),2500),500)
 			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
@@ -231,29 +313,64 @@ SetCall(FP)
 			CIfEnd()
 			CDoActions(FP,{TSetMemory(_Add(G_TempH,(6*0x20)/4),Subtract,1),SetCVar(FP,Var_TempTable[7][2],Subtract,1)})
 		NWhileEnd()
-		CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,20)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+		CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,20)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 		CIfEnd()
 		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,133))--하이브
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
 				CMov(FP,ReserveBGM,4)
+				GunBreak("\x07Ｈｉｖｅ",50000)
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
 				CIf(FP,CVar(FP,Var_TempTable[4][2],Exactly,0))
-				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+					Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+						{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- 좌상
+					f_TempRepeat(77,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(78,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(56,9)
+					f_TempRepeat(104,15)
+					f_TempRepeat(48,7)
+					f_TempRepeat(51,15)
+					Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+						{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- 우상
+					f_TempRepeat(77,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(78,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(56,9)
+					f_TempRepeat(104,15)
+					f_TempRepeat(48,7)
+					f_TempRepeat(51,15)
+					Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+						{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- 좌하
+					f_TempRepeat(77,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(78,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(56,9)
+					f_TempRepeat(104,15)
+					f_TempRepeat(48,7)
+					f_TempRepeat(51,15)
+					Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+						{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- 우하
+					f_TempRepeat(77,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(78,5,{CVar(FP,Level[2],AtLeast,6)})
+					f_TempRepeat(56,9)
+					f_TempRepeat(104,15)
+					f_TempRepeat(48,7)
+					f_TempRepeat(51,15)
+					CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
+					CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
+					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,1)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 				CIfEnd()
 				CIf(FP,CVar(FP,Var_TempTable[4][2],Exactly,1))
 					Input_CSData(CustomShape[1],48,55,CVar(FP,Var_TempTable[6][2],Exactly,0))
 					Input_CSData(CustomShape[1],104,56,CVar(FP,Var_TempTable[6][2],Exactly,1))
 					Input_CSData(CustomShape[1],51,56,CVar(FP,Var_TempTable[6][2],Exactly,2))
-					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 					CallTriggerX(FP,Load_CSArr)
 				CIfEnd()
 				CIf(FP,CVar(FP,Var_TempTable[4][2],Exactly,2))
 					Input_CSData(CustomShape[2],55,nil,CVar(FP,Var_TempTable[6][2],Exactly,0))
 					Input_CSData(CustomShape[2],56,nil,CVar(FP,Var_TempTable[6][2],Exactly,1))
 					Input_CSData(CustomShape[2],56,nil,CVar(FP,Var_TempTable[6][2],Exactly,2))
-					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 					CallTriggerX(FP,Load_CSArr)
 				CIfEnd()
 				CIf(FP,CVar(FP,Var_TempTable[4][2],Exactly,3))
@@ -261,37 +378,51 @@ SetCall(FP)
 					Input_CSData(CustomShape[3],55,53,CVar(FP,Var_TempTable[6][2],Exactly,1))
 					Input_CSData(CustomShape[3],56,48,CVar(FP,Var_TempTable[6][2],Exactly,2))
 					CallTriggerX(FP,Load_CSArr)
-					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+					CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 				CIfEnd()
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
+				CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,10)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 			CIfEnd()
 		CIfEnd()
 		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,132))--레어
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
+				GunBreak("\x07Ｌａｉｒ",40000)
 				CMov(FP,ReserveBGM,3)
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- 좌상
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- 좌상
+				f_TempRepeat(17,5,{CVar(FP,Level[2],AtLeast,6)})
+				f_TempRepeat(25,5,{CVar(FP,Level[2],AtLeast,6)})
 				f_TempRepeat(55,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(56,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(53,10)
 				f_TempRepeat(48,7)
 				f_TempRepeat(54,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- 우상
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- 우상
+				f_TempRepeat(17,5,{CVar(FP,Level[2],AtLeast,6)})
+				f_TempRepeat(25,5,{CVar(FP,Level[2],AtLeast,6)})
 				f_TempRepeat(55,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(56,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(53,10)
 				f_TempRepeat(48,7)
 				f_TempRepeat(54,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- 좌하
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- 좌하
+				f_TempRepeat(17,5,{CVar(FP,Level[2],AtLeast,6)})
+				f_TempRepeat(25,5,{CVar(FP,Level[2],AtLeast,6)})
 				f_TempRepeat(55,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(56,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(53,10)
 				f_TempRepeat(48,7)
 				f_TempRepeat(54,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- 우하
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- 우하
+				f_TempRepeat(17,5,{CVar(FP,Level[2],AtLeast,6)})
+				f_TempRepeat(25,5,{CVar(FP,Level[2],AtLeast,6)})
 				f_TempRepeat(55,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(56,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(53,10)
@@ -300,34 +431,39 @@ SetCall(FP)
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
 			CIfEnd()
-			CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+			CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 		CIfEnd()
 		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,131))--해처리
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,15000)})
 				CMov(FP,ReserveBGM,2)
+				GunBreak("\x07Ｈａｔｃｈｅｒｙ",30000)
 			CIfEnd()
 	
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- 좌상
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- 좌상
 				f_TempRepeat(43,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(44,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(38,10)
 				f_TempRepeat(39,7)
 				f_TempRepeat(37,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- 우상
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- 우상
 				f_TempRepeat(43,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(44,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(38,10)
 				f_TempRepeat(39,7)
 				f_TempRepeat(37,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- 좌하
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- 좌하
 				f_TempRepeat(43,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(44,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(38,10)
 				f_TempRepeat(39,7)
 				f_TempRepeat(37,10)
-				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- 우하
+				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- 우하
 				f_TempRepeat(43,9,CVar(FP,Var_TempTable[6][2],Exactly,0))
 				f_TempRepeat(44,9,CVar(FP,Var_TempTable[6][2],Exactly,1))
 				f_TempRepeat(38,10)
@@ -336,7 +472,7 @@ SetCall(FP)
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),SetTo,0)})
 				CDoActions(FP,{TSetMemory(_Add(G_TempH,(5*0x20)/4),Add,1)})
 			CIfEnd()
-			CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+			CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,2)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 		CIfEnd()
 	CIfEnd()
 	CIf(FP,{CVar(FP,Var_TempTable[29][2],AtLeast,256)}) -- 잡건작일 경우
@@ -370,7 +506,7 @@ SetCall(FP)
 		CMov(FP,Gun_TempSpawnSet1,0)
 		TriggerX(FP,{CVar(FP,Var_TempTable[1][2],Exactly,138)},{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,45)},{Preserved})
 		f_Repeat(10)
-		CTrigger(FP,{CVar(FP,Var_TempTable[6][2],Exactly,7)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
+		CTrigger(FP,{CVar(FP,Var_TempTable[6][2],AtLeast,7)},{TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)},1)
 	CIfEnd()
 	CDoActions(FP,{TSetMemory(_Add(G_TempH,(4*0x20)/4),Add,Dt)})
 	CIf(FP,{CVar(FP,Var_TempTable[30][2],AtLeast,1)})
@@ -408,6 +544,12 @@ SetCall(FP)
 		TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,EXCunitTemp[1]),
 		TSetMemory(_Add(G_TempV,28*(0x20/4)),SetTo,Gun_Type),
 	})
+	
+	if Limit == 1 then
+	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
+	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
+	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+	end
 	CElseX()
 	DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 	CIfXEnd()

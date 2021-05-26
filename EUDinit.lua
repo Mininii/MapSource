@@ -96,6 +96,7 @@ for i = 1, #HeroArr do
 	
 	table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
 end
+
 DoActionsX(FP,CTrigPatchTable,1)
 VRet = CreateVar()
 VRet2 = CreateVar()
@@ -106,6 +107,9 @@ CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어�
 TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
 CMov(FP,VRet,CurrentUID,EPD(0x664080))
 CMov(FP,VRet2,CurrentUID,EPD(0x662860))
+
+f_Read(FP,_Add(CurrentUID,EPD(0x662350)),VArr(MaxHPBackUp,CurrentUID))
+
 
 f_Mod(FP,VRet3,CurrentUID,_Mov(2))
 f_Div(FP,VRet4,CurrentUID,_Mov(2))
@@ -124,6 +128,8 @@ SetToUnitDef(i,0) -- 방어력 전부 0으로 설정
 DefTypePatch(i,7) -- 방어타입 전부 7로 설정
 SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 end
+UnitEnable2(71)
+UnitEnable2(19)
 
 for i = 0, 129 do
 WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
@@ -213,8 +219,15 @@ table.insert(PatchArr,SetMemoryB(0x6647B0 + (21), SetTo, 255))
 table.insert(PatchArr,SetMemoryB(0x6647B0 + (29), SetTo, 255))
 
 for i = 0, 6 do
-table.insert(PatchArr,SetMemory(0x582234 + (4*i),SetTo,2400))
-table.insert(PatchArr,SetMemory(0x5821D4 + (4*i),SetTo,2400))
+
+table.insert(PatchArr,SetMemory(0x582234 + (4*i),SetTo,840*2))
+table.insert(PatchArr,SetMemory(0x5821D4 + (4*i),SetTo,840*2))
+
+
+table.insert(PatchArr,SetMemory(0x5821A4 + (4*i),SetTo,GunLimit*2))
+table.insert(PatchArr,SetMemory(0x582144 + (4*i),SetTo,GunLimit*2))
+table.insert(PatchArr,SetMemory(0x5822C4 + (4*i),SetTo,1000))
+table.insert(PatchArr,SetMemory(0x582264 + (4*i),SetTo,1000))
 table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
 table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,5))
 table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,10))
@@ -238,6 +251,8 @@ table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x6564E0 + MarWep[i+1],SetTo,2))
 	table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1]))
 	table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1]))
+	table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6))
+	table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,192))
 end
 
 	table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
@@ -254,6 +269,16 @@ for i = 1, 4 do
 end
 UnitEnable(72)
 UnitEnable(22)
+for i = 0, 6 do
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
+end
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + 10,SetTo,2))
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + 15,SetTo,2))
+
+for i = 2, 116 do
+SetWepUpType(i,3)
+end
 
 --UnitSizePatch(39,10) -- 저그 유닛 크기 10*10 설정
 --UnitSizePatch(45,10) -- 저그 유닛 크기 10*10 설정
@@ -293,7 +318,7 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BCC,SetTo,256*2);---------크기 7 진동형 일반마린
 		SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
 		SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV, 진동형 퍼뎀유닛한텐 죽음 ㅅㄱ
-		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
+		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러f
 		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
 	},
 }
