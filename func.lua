@@ -130,7 +130,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	})
 	CIf(FP,{TMemory(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	CDoActions(FP,{
-		TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
+		TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 		TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
 	})
 	CIfEnd()

@@ -65,7 +65,7 @@ f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니�
 G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 JYD = "Set Unit Order To: Junk Yard Dog" 
-VerText = "\x04Beta Ver. 0.9"
+VerText = "\x04Beta Ver. 0.9F"
 _0D = string.rep("\x0D",200) 
 MarID = {0,1,16,20,32,99,100}  
 MarWep = {117,118,119,120,121,122,123} 
@@ -84,7 +84,7 @@ HumanPlayers = {0,1,2,3,4,5,6,128,129,130,131}
 MapPlayers = {0,1,2,3,4,5,6}
 ObPlayers = {128,129,130,131}
 MedicTrig = {34,9,2,3}
-GunLimit = 1400
+GunLimit = 1500
 SpeedVar = CreateVar(4)
 Ex1= {20,23,26,29,32,35,38}
 P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
@@ -251,13 +251,13 @@ end
 
 for i = 1, 7 do
 	TriggerX(FP,{CDeaths(FP,Exactly,i,PCheck)},{
-	SetMemory(0x5821D4 + (4*0),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*1),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*2),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*3),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*4),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*5),SetTo,840/(i)),
-	SetMemory(0x5821D4 + (4*6),SetTo,840/(i))
+	SetMemory(0x5821D4 + (4*0),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*1),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*2),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*3),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*4),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*5),SetTo,(1344)/(i)),
+	SetMemory(0x5821D4 + (4*6),SetTo,(1344)/(i))
 },{Preserved})
 end
 
