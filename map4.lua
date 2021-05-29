@@ -353,9 +353,11 @@ CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
 InstallHeroPoint()
 CIfEnd()
 CMov(FP,Gun_Type,0)
+CIf(FP,{TTOR({CVar(FP,Level[2],AtMost,3),CVar(FP,Level[2],AtLeast,11)})})
 for j, k in pairs({142,135,140,141,138,139,137}) do
 CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,k,0,0xFF)},{SetCVar(FP,Gun_Type[2],SetTo,256)})
 end
+CIfEnd()
 CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,131,0,0xFF)})
 CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,132,0,0xFF)})
 CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,133,0,0xFF)})
@@ -1129,19 +1131,28 @@ CAdd(FP,Level,1)
 
 DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
 	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
-for i = 37, 56 do
-CAdd(FP,0x662350+(i*4),VArr(MaxHPBackUp,i))
+
+function SetLevelUpHP(UnitID,Multiplier)
+	CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID),SetCVar(FP,MultiplierV[2],SetTo,Multiplier)})
 end
-CAdd(FP,0x662350+(104*4),VArr(MaxHPBackUp,104))
+
+
+for i = 37, 56 do
+	SetLevelUpHP(i,2)
+end
+
+	SetLevelUpHP(104)
 for j, k in pairs(HeroArr) do
-CAdd(FP,0x662350+(k*4),VArr(MaxHPBackUp,k))
+	SetLevelUpHP(k,3)
 end
 BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146}
 
 for j, k in pairs(BdArr) do
-CAdd(FP,0x662350+(k*4),VArr(MaxHPBackUp,k))
+	SetLevelUpHP(k,3)
 end
-Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtMost,254)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,1)},{Preserved})
+
+
+Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtMost,49)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,1)},{Preserved})
 
 CIf(FP,CVar(FP,Level[2],AtLeast,11))
 DoActionsX(FP,{RotatePlayer({DisplayTextX("\x07『 \x04베타 버전 플레이 가능 레벨은 10레벨 까지입니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},MapPlayers,FP),SetCDeaths(FP,Add,1,Win)})
@@ -1534,6 +1545,8 @@ CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1)})
 		DoActions(FP,{MoveCp(Subtract,25*4)})
 	CIfEnd()
 CIfEnd()
+
+SetRecoverCp()
 CMov(FP,0x6509B0,CurrentOP)
 
 --상위플레이어 단락이지만 LV과 시간 표기시에 13번줄 조작은 문제없음. 따라서 이곳에 작성함
