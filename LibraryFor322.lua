@@ -9,6 +9,9 @@ PrintString_Arr = {}
 BGMArr = {}
 InitBGMP = 12
 VoidInit = 0x590000
+sindexAlloc = 0x000
+sindex_FuncAlloc = 0x700
+
 
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
@@ -71,6 +74,9 @@ function DoActionsXI(PlayerID,Index,Actions,flag) -- CtrigAsm 5.1
 		flags = {Preserved}
 	else
 		flags = nil
+	end
+	if Index == nil then
+		Index = 0
 	end
 	Trigger {
 		players = {ParsePlayer(PlayerID)},
@@ -284,14 +290,7 @@ function Print_All_CTextString(Player) -- CtrigAsm 5.1
 	end
 end
 
-function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
-for j=0, VArrLength do
-for k=0, 3 do
-TriggerX(Player,{VArrayX(VArr(VArrName,j),"Value",Exactly,0,255*(256^k))},{
-SetVArrayX(VArr(VArrName,j),"Value",SetTo,(256^k)*0x0D,255*(256^k))})
-end
-end
-end
+
 
 
 function CreateCCodeSet(CCodeIndex,Variables)
@@ -387,7 +386,7 @@ function PlotSizeCalc(Points,SizeofPolygon)
 	local X = 1+(Points*(SizeofPolygon*(SizeofPolygon+1)/2))
 	return X
 end
-function AddBGM(BGMTypeNum,WavFile,Value)
+function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	local X = {}
 	if type(BGMTypeNum) ~= "number" then
 		BGMTypeNum_InputData_Error()
@@ -402,6 +401,9 @@ function AddBGM(BGMTypeNum,WavFile,Value)
 	table.insert(X,BGMTypeNum)
 	table.insert(X,WavFile)
 	table.insert(X,Value)
+	if StyleFlag ~= nil then
+		table.insert(X,StyleFlag)
+	end
 	table.insert(BGMArr,X)
 end
 
@@ -419,11 +421,16 @@ CMov(InitBGMP,0x6509B0,0)
 CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))
 CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 	for i = 1, #BGMArr do
+		local X = nil
+		if #BGMArr[i] == 4 then
+			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
+		end
 		Trigger { -- 브금재생 j번
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
 				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+				X;
 			},
 				actions = {
 				PlayWAV(BGMArr[i][2]);
@@ -557,4 +564,61 @@ Trigger {
 }
 end
 end
+end
+
+function CreateJungal(UIDTable,CUTable,Player)
+	if type(CUTable) == "table" then
+		local X = CUTable
+	else
+		CUTable_InputData_Error()
+	end
+
+	if type(UIDTable) == "table" then
+		local Y = CUTable
+	else
+		CUTable_InputData_Error()
+	end
+
+	if #UIDTable % #CUTable ~= 0 then
+		CUTable_InputData_Error()
+	end
+	if #CUTable % #UIDTable ~= 0 then
+		CUTable_InputData_Error()
+	end
+	local A = #UIDTable
+	local B = #CUTable
+	if A <= B then
+	end
+end
+
+function def_sIndex()
+	local X = sindexAlloc
+	sindexAlloc = sindexAlloc + 1
+	return X
+end
+
+function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
+for j=0, VArrLength do
+for k=0, 3 do
+TriggerX(Player,{VArrayX(VArr(VArrName,j),"Value",Exactly,0,255*(256^k))},{
+SetVArrayX(VArr(VArrName,j),"Value",SetTo,(256^k)*0x0D,255*(256^k))})
+end
+end
+end
+
+
+
+TempV_0D = CreateVar()
+TempV_0D2 = CreateVar()
+function _0DPatchX(Player,VArrName,VArrLength) -- CtrigAsm 5.1
+	CMov(Player,TempV_0D,0)
+	NWhile(Player,CVar(Player,TempV_0D[2],AtMost,VArrLength-1))
+	TMem(Player,TempV_0D2,VArr(VArrName,TempV_0D))
+	for k=0, 3 do
+		CTrigger(Player,{TMemoryX(TempV_0D2,Exactly,0,255*(256^k))},{
+		TSetMemoryX(TempV_0D2,SetTo,(256^k)*0x0D,255*(256^k))
+		},1)
+	end
+	CAdd(Player,TempV_0D,1)
+	NWhileEnd()
 end

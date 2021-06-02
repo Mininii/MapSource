@@ -92,8 +92,19 @@ function SetUnitClassType(UnitID,Type)
 	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,Class))
 end
 
+function onInit_EUD()
+CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SeTMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
+
+f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--f_Read(FP,0x58F518,"X",ScoreVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--f_Rea0d(FP,0x58f51C,"X",LevelVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--f_Read(FP,0x58f520,"X",TimeVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+
 for i = 1, #HeroArr do
-	
 	table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
 end
 
@@ -269,6 +280,7 @@ for i = 1, 4 do
 end
 UnitEnable(72)
 UnitEnable(22)
+UnitEnable(70)
 for i = 0, 6 do
 	table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 end
@@ -280,13 +292,14 @@ for i = 2, 116 do
 SetWepUpType(i,3)
 end
 
---UnitSizePatch(39,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(45,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(44,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(48,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(49,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(56,10) -- 저그 유닛 크기 10*10 설정
---UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(39,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(45,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(44,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(48,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(49,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(56,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
+UnitSizePatch(53,10) -- 저그 유닛 크기 10*10 설정
 UnitSizePatch(11,1)
 for i = 220, 227 do
 	DefTypePatch(i,9)
@@ -338,7 +351,6 @@ Trigger {
 end
 
 DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
-TriggerX(FP,{CDeaths(FP,AtLeast,1,TestMode)},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
 for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 Trigger {
 	players = {FP},
@@ -394,3 +406,174 @@ Trigger {
 		},HumanPlayers,FP);
 	}
 }
+DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
+
+
+for i = 0, 6 do
+ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
+_0DPatchX(FP,Names[i+1],7)
+end
+
+f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
+f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
+f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
+f_GetStrXptr(FP,HTextStrPtr,HTextStr)
+for i = 0, 6 do
+f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D)
+f_GetStrXptr(FP,PScoreSTrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Score".._0D)
+end
+
+
+Print_All_CTextString(FP)
+f_MemCpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
+--f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
+f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
+--f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
+f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
+
+f_MemCpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
+f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
+
+f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
+
+for i = 1, 7 do
+Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
+Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
+end
+
+
+DoActions(FP,{GiveUnits(1,133,P8,11,0),GiveUnits(1,133,P8,12,1),GiveUnits(1,133,P8,13,2)})
+CMov(FP,0x6509B0,19025+19)
+CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
+		f_SaveCp()
+		CIf(FP,{TTMemory(_Add(BackupCp,6),NotSame,58)}) -- 발키리 저리가
+			f_Read(FP,_Sub(BackupCp,9),CPos)
+			f_Read(FP,BackupCp,CunitP,"X",0xFF)
+			f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
+			CMov(FP,Gun_LV,0)
+			CIf(FP,CVar(FP,RepHeroIndex[2],Exactly,133))
+			TriggerX(FP,{CVar(FP,CunitP[2],Exactly,0)},{SetCVar(FP,Gun_LV[2],SetTo,1)},{Preserved})
+			TriggerX(FP,{CVar(FP,CunitP[2],Exactly,1)},{SetCVar(FP,Gun_LV[2],SetTo,2)},{Preserved})
+			TriggerX(FP,{CVar(FP,CunitP[2],Exactly,2)},{SetCVar(FP,Gun_LV[2],SetTo,3)},{Preserved})
+			DoActionsX(FP,SetCVar(FP,CunitP[2],SetTo,7))
+			CIfEnd()
+			CMov(FP,0x6509B0,UnitDataPtr)
+			NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+			CAdd(FP,0x6509B0,2)
+			NWhileEnd()
+			CDoActions(FP,{
+			TSetDeaths(CurrentPlayer,SetTo,CPos,0),
+			SetMemory(0x6509B0,Add,1),
+			TSetDeathsX(CurrentPlayer,SetTo,RepHeroIndex,0,0xFF),
+			TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
+			TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
+			})
+			CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
+
+		CIfEnd()
+		f_LoadCp()
+	CIfEnd()
+
+	CAdd(FP,0x6509B0,6)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,101,0,0xFF)}) -- 소환 배열 저장 맵 리벌러
+	CSub(FP,0x6509B0,6)
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr
+	CAdd(FP,CustomShape[1][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[1][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+	
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,9,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr2
+	CAdd(FP,CustomShape[2][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[2][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr3
+	CAdd(FP,CustomShape[3][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[3][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,11,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr4
+	CAdd(FP,CustomShape[4][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[4][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+
+	CAdd(FP,0x6509B0,6)
+	CIfEnd()
+	CSub(FP,0x6509B0,6)
+
+	CAdd(FP,0x6509B0,6)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,209,0,0xFF)}) -- 소환 배열 저장 건트랩
+	CSub(FP,0x6509B0,6)
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr5
+	CAdd(FP,CustomShape[5][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[5][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,9,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr6
+	CAdd(FP,CustomShape[6][2],1)
+	f_SaveCp()
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	CMov(FP,0x6509B0,CustomShape[6][1])
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CAdd(FP,0x6509B0,1)
+	CWhileEnd()
+	CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
+	f_LoadCp()
+	CIfEnd()
+
+	CAdd(FP,0x6509B0,6)
+	CIfEnd()
+	CSub(FP,0x6509B0,6)
+
+	CAdd(FP,0x6509B0,84)
+CWhileEnd()
+CMov(FP,0x6509B0,FP)
+DoActions(FP,{GiveUnits(1,133,0,11,P8),GiveUnits(1,133,1,12,P8),GiveUnits(1,133,2,13,P8)})
+CMov(FP,RepHeroIndex,0)
+CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
+TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{Preserved}) -- 발키리 나가
+CDoActions(FP,{TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),TRemoveUnit(RepHeroIndex,AllPlayers),TRemoveUnit(RepHeroIndex,P9),TRemoveUnit(RepHeroIndex,P10),TRemoveUnit(RepHeroIndex,P11),TRemoveUnit(RepHeroIndex,P12)})
+CAdd(FP,RepHeroIndex,1)
+CWhileEnd()
+f_GetTblptr(FP,MarTblPtr,1501)
+
+CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
+end
