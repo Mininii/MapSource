@@ -104,7 +104,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,P8,{energy = 100}),
 --		TModifyUnitEnergy(All,Gun_TempSpawnSet1,P8,1,100);
 	})
-	CIf(FP,{TMemory(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	CDoActions(FP,{
 		TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 		TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
@@ -169,19 +169,10 @@ Line No.30 : SuspendSwitch
 function GunBreak(GName,Point)
 
 local Text = "\n\n\n\x13- \x0E- \x0F-\x11 Ｓｔｒｕｃｔｕｒｅ \x04－ "..GName.." \x04 파괴!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
-
-Trigger {
-	players = {FP},
-		conditions = {
-		Label(0);
-			},
-	actions = {
-		RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
-		SetScore(Force1,Add,Point,Kills);
-		PreserveTrigger();
-		},
-	}
-
+DoActions(FP,{
+	RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+	SetScore(Force1,Add,Point,Kills);
+})
 end
 f_Gun = SetCallForward() -- 건작함수
 SetCall(FP)
@@ -281,7 +272,7 @@ SetCall(FP)
 			CDoActions(FP,{
 				TCreateUnitWithProperties(1,CUID,1,P8,{energy = 100}),
 			})
-			CIf(FP,{TMemory(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+			CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 			CDoActions(FP,{
 				TSetDeaths(_Add(Nextptrs,13),SetTo,RandSpeed,0),
 				TSetDeathsX(_Add(Nextptrs,18),SetTo,RandSpeed,0,0xFFFF),
@@ -541,7 +532,7 @@ SetCallEnd()
 UnitIDV = CreateVar()
 TempLvHP = CreateVar()
 TempLvHP2 = CreateVar()
-MultiplierV =  CreateVar()
+MultiplierV = CreateVar()
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 	CIf(FP,{TMemory(_Add(UnitIDV,EPD(0x662350)),AtMost,7999999*256)})

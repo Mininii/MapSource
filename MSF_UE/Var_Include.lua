@@ -12,8 +12,7 @@ function Var_init()
 	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
-	HTextStrReset = CreateCText(FP,string.rep("\x0D",200))
-	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98}
+	HTextStrReset = CreateCText(FP,HTextStr)
 	HeroVArr = CVArray(FP,#HeroArr)
 	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
 	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -75,10 +74,12 @@ function Var_init()
 	UpCompTxt = CVArray(FP,5)
 	UpCompRet = CVArray(FP,5)
 	f_GunNumT = CVArray(FP,5)
+	CC_Header = CreateVar({"X",EXCC_Forward,0x15C,1,2})
 end
 
-function Init_Resources()
+function HPoints()
 	HeroPointArr = {}
+	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98}
 	CreateHeroPointArr(77,35000,"\x07『 \x1DF\x04enix \x1DZ \x07』",1)
 	CreateHeroPointArr(78,35000,"\x07『 \x1DF\x04enix \x1DD \x07』",1)
 	CreateHeroPointArr(28,45000,"\x07『 \x1DH\x04yperion \x07』",1)
@@ -95,36 +96,45 @@ function Init_Resources()
 	CreateHeroPointArr(98,99000,"\x07『 \x1FC\x04orsair \x07』",1)
 	CreateHeroPointArr(220,77777,"\x07『 \x1DP\x04oint \x1DBOX(中) \x07』",2)
 	CreateHeroPointArr(150,111111,"\x07『 \x1DP\x04oint \x1DBOX(大) \x07』",2)
+end
+
+function Objects()
+
+	-- Balance
+	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
+	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
+	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
+	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
+	AtkFactor = 10
+	DefFactor = 25
+	GunLimit = 1500
+	Ex1= {20,23,26,29,32,35,38}
+
+	--System
+	MarID = {0,1,16,20,32,99,100}  
+	MarWep = {117,118,119,120,121,122,123} 
+	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
+	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4} 
+	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
+	HumanPlayers = {0,1,2,3,4,5,6,128,129,130,131}
+	MapPlayers = {0,1,2,3,4,5,6}
+	ObPlayers = {128,129,130,131}
+	MedicTrig = {34,9,2,3}
+	EXCC_Forward = 0x3000
+
+	-- Strings
+
+	_0D = string.rep("\x0D",200) 
+	HTextStr = _0D
+	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
+	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
+	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
+	ResetSwitch = "Switch 250"
+	WaveSwitch = "Switch 150"
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다!\x07 』"
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
-	_0D = string.rep("\x0D",200) 
-	MarID = {0,1,16,20,32,99,100}  
-	MarWep = {117,118,119,120,121,122,123} 
-	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
-	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
-	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4} 
-	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
-	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
-	AtkFactor = 10
-	DefFactor = 25
-	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
-	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
-	NMarDamageFactor = 1
-	NMarDamageAmount = 20
-	HumanPlayers = {0,1,2,3,4,5,6,128,129,130,131}
-	MapPlayers = {0,1,2,3,4,5,6}
-	ObPlayers = {128,129,130,131}
-	MedicTrig = {34,9,2,3}
-	GunLimit = 1500
-	Ex1= {20,23,26,29,32,35,38}
-	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
-	HTextStr = string.rep("\x0D",200)
-	ResetSwitch = "Switch 250"
-	WaveSwitch = "Switch 150"
-	EXCC_Forward = 0x3000
-	CC_Header = CreateVar({"X",EXCC_Forward,0x15C,1,2})
 end

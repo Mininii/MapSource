@@ -12,7 +12,6 @@ VoidInit = 0x590000
 sindexAlloc = 0x000
 sindex_FuncAlloc = 0x700
 
-
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
 end
@@ -435,7 +434,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 				actions = {
 				PlayWAV(BGMArr[i][2]);
 				PlayWAV(BGMArr[i][2]);
-				SetDeaths(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
+				SetDeathsX(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
 				PreserveTrigger();
 			},
 		}
@@ -470,7 +469,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 					PlayWAVX(BGMArr[i][2]),
 					PlayWAVX(BGMArr[i][2])
 				},{128,129,130,131},InitBGMP);
-				SetDeaths(InitBGMP,SetTo,BGMArr[i][3],440,0xFFFFFF);
+				SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],440,0xFFFFFF);
 				PreserveTrigger();
 			},
 		}

@@ -1,10 +1,4 @@
-dofile("lua/Loader.lua")
-dofile("Map4Source/LibraryFor322.lua")
-dofile("Map4Source/Var_Include.lua")
-dofile("Map4Source/CallTriggers.lua")
-dofile("Map4Source/func.lua") -- 루아파일 불러오기
-dofile("Map4Source/EUDinit.lua") -- 루아파일 불러오기
-dofile("Map4Source/Waves.lua") -- 루아파일 불러오기
+
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(2)
@@ -14,13 +8,15 @@ EUDTurbo(FP) -- 뎡터보
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
+Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
 Enable_HideErrorMessage(FP)
 StartCtrig()
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100",1)
-	Init_Resources()
+	Objects()
+	HPoints()
 	Var_init()
 	Install_CallTriggers()
 CJumpEnd(AllPlayers,init_func)
@@ -30,9 +26,9 @@ DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 for i = 0, 6 do
 	TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
 end
-Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
 BGMManager()
-
+onInit_EUD()
+DoActions2(FP,PatchArrPrsv)
 
 --[[
 EXCunit 적용
@@ -40,64 +36,16 @@ EXCunit 적용
 9번줄 : 영작유닛 표식
 10번줄 : 마린 데스값 중복적용 방지용
 ]]
-
 CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
 DoActions(FP,MoveCp(Subtract,6*4))
 Check_P8 = def_sIndex()
 NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
 DoActions(FP,MoveCp(Add,6*4))
-CIf(FP,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
-	DoActions(FP,MoveCp(Subtract,6*4))
-	for j = 1, 7 do
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
-			f_SaveCp()
-			Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
-			Trigger { -- No comment (6496767D)
-				players = {FP},
-				conditions = {
-					Label(0);
-				},
-				actions = {
-					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
-					SetScore(j-1,Add,1,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-50);
-					PreserveTrigger();
-					},
-				}
-				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
-			f_LoadCp()
-		CIfEnd()
-	end
-	DoActions(FP,MoveCp(Add,6*4))
-CIfEnd()
-for j = 1, 7 do
-CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
-	DoActions(FP,MoveCp(Subtract,6*4))
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
-			f_SaveCp()
-			Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
-			Trigger { -- No comment (6496767D)
-				players = {FP},
-				conditions = {
-					Label(0);
-				},
-				actions = {
-					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
-					SetScore(j-1,Add,1,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-500);
-					PreserveTrigger();
-					},
-				}
-				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
-			f_LoadCp()
-		CIfEnd()
-	DoActions(FP,MoveCp(Add,6*4))
-CIfEnd()
-end
+Install_DeathNotice()
+
 ClearCalc()
 
 NJumpEnd(FP,Check_P8)
-
 DoActions(FP,MoveCp(Add,6*4))
 CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
 InstallHeroPoint()
@@ -157,222 +105,95 @@ CIfX(FP,CVar(FP,count[2],AtMost,GunLimit)) -- 건작함수 제어
 		SetInvincibility(Enable,"Buildings",FP,64);
 	})
 CIfXEnd()
-onInit_EUD()
-
-DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,200),1)
-CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
-
-Check_Spawn = def_sIndex()
-NJumpXEnd(FP,Check_Spawn)
-f_Mod(FP,HPosX,_Rand(),_Mov(3072))
-f_Mod(FP,HPosY,_Rand(),_Mov(6144))
-NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- 좌표설정 실패, 다시
-Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
 
 
-Check_Cannot = def_sIndex()
-NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- 캔낫. 강제캔슬
-f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-CDoActions(FP,{TCreateUnitWithProperties(1,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1,P8,{energy = 100})})
-NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
-CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+Install_RandPlaceHero()
 
-CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
 
-NElseX()
-NJumpX(FP,Check_Spawn) -- 소환실패, 다시
-NIfXEnd()
-NJumpXEnd(FP,Check_Cannot)
-CWhileEnd()
-DoActions2(FP,PatchArrPrsv)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Add,1,HealT)})
 CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 for i = 0, 6 do
-Trigger2(FP,{Bring(Force1,AtLeast,1,111,2+i)},{ModifyUnitHitPoints(All,"Men",i,i+2,100),ModifyUnitHitPoints(All,"Buildings",i,i+2,100),ModifyUnitShields(All,"Men",i,i+2,100),ModifyUnitShields(All,"Buildings",i,i+2,100)},{Preserved})
+Trigger2(FP,{PlayerCheck(i,1)},{ModifyUnitHitPoints(All,"Men",i,i+2,100),ModifyUnitHitPoints(All,"Buildings",i,i+2,100),ModifyUnitShields(All,"Men",i,i+2,100),ModifyUnitShields(All,"Buildings",i,i+2,100)},{Preserved})
 end
 CIfEnd()
---CDoActions(FP,{TSetMemory(LevelVPtr,SetTo,Level),TSetMemory(TimeVPtr,SetTo,Time)})--레벨 시간 전송 
 
 SetWave()
 
-
 for i = 0, 6 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,i*5,IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", i).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n\n\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
+	TriggerX(FP,{CDeaths(FP,AtLeast,i*5,IntroT)},{
+		RotatePlayer({
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\n\n"..string.rep("\t", i).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n\n\n\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\n\n",4);
+		},HumanPlayers,FP);
+	})
 end
-
 for i = 7, 19 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,i*5,IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", i-6).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n\n\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n",4);
-			},HumanPlayers,FP);
-
-
-		},
-	}
+	TriggerX(FP,{CDeaths(FP,AtLeast,i*5,IntroT)},{
+		RotatePlayer({
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", i-6).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n\n\n\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\n\n",4);
+		},HumanPlayers,FP);
+	})
 end
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,100,IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*1),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x043초 후 시작합니다.\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*1),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			},HumanPlayers,FP);
-		},
-	}
+TriggerX(FP,{CDeaths(FP,AtLeast,100,IntroT)},{
+	RotatePlayer({
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n\n\n",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
+	},HumanPlayers,FP);
+})
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*2),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x042초 후 시작합니다.\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*2),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			},HumanPlayers,FP);
-		},
-	}
+TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*1),IntroT)},{
+	RotatePlayer({
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x043초 후 시작합니다.\n\n",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
+	},HumanPlayers,FP);
+	SetCDeaths(FP,Add,1,countdownSound);
+})
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*3),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x041초 후 시작합니다.\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
+TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*2),IntroT)},{
+	RotatePlayer({
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x042초 후 시작합니다.\n\n",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
+	},HumanPlayers,FP);
+	SetCDeaths(FP,Add,1,countdownSound);
+})
+TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*3),IntroT)},{
+	RotatePlayer({
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x02"..VerText.."\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("\t", 6)..""..string.rep("   ", 13).."\x041초 후 시작합니다.\n\n",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX(string.rep("\t", 6)..""..string.rep("   ", 13).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
+	},HumanPlayers,FP);
+	SetCDeaths(FP,Add,1,countdownSound);
+})
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*3),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			PlayWAVX("sound\\glue\\countdown.wav");
-			},HumanPlayers,FP);
-		},
-	}
-
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*4),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n\n\n\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-			DisplayTextX("\n\n",4);
-			},HumanPlayers,FP);
-		},
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,150+(48*4),IntroT);
-		},
-		actions = {
-			RotatePlayer({
-			PlayWAVX("sound\\glue\\bnetclick.wav");
-			PlayWAVX("sound\\glue\\bnetclick.wav");
-			PlayWAVX("sound\\glue\\bnetclick.wav");
-			PlayWAVX("sound\\glue\\bnetclick.wav");
-			},HumanPlayers,FP);
-		},
-	}
+TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{
+	RotatePlayer({
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n\n\n\n\n\n",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\n\n",4);
+	},HumanPlayers,FP);
+})
+TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{
+	RotatePlayer({
+	PlayWAVX("sound\\glue\\bnetclick.wav");
+	PlayWAVX("sound\\glue\\bnetclick.wav");
+	PlayWAVX("sound\\glue\\bnetclick.wav");
+	PlayWAVX("sound\\glue\\bnetclick.wav");
+	},HumanPlayers,FP);
+})
 
 	for i = 0, 6 do
 	table.insert(CV1,SetMemory(0x6509B0,SetTo,i))
@@ -616,7 +437,7 @@ Trigger { -- 채팅창 정리 delete키
 	}
 
 Trigger { -- 게임시작 30초 후 출력되는거
-	players = {Force1},
+	players = {FP},
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,30*48,IntroT);
@@ -921,7 +742,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 				CIfEnd()
 			end
 			CIfEnd()
-			CIf(FP,{TMemory(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)})
+			CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{
 					TSetDeathsX(_Sub(BackupCp,6),SetTo,14*256,0,0xFF00),
 					TSetDeaths(_Sub(BackupCp,3),SetTo,TempBarPos,0),
@@ -991,6 +812,7 @@ BanConsole = 443
 function EPDToPtr(EPD)
 	return 0x58A364+(EPD*4)
 end
+
 SetRecoverCp()
 RecoverCp(AllPlayers)
 CIf(FP,ElapsedTime(AtLeast,4))
@@ -1974,10 +1796,17 @@ CIfEnd()
 
 
 if TestStart == 1 then
-TriggerX(FP,{},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
+TriggerX(FP,{},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)},{Preserved})
 end
-
-
+TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
+	RotatePlayer({
+		PlayWAVX("sound\\glue\\countdown.wav");
+		PlayWAVX("sound\\glue\\countdown.wav");
+		PlayWAVX("sound\\glue\\countdown.wav");
+		PlayWAVX("sound\\glue\\countdown.wav");
+		},HumanPlayers,FP);
+		SetCDeaths(FP,SetTo,0,countdownSound);
+},{Preserved})
 V_onInit = def_sIndex()
 CJump(FP,V_onInit) -- 기타 init 지정공간
 InstallCVariable()
