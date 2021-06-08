@@ -1,6 +1,6 @@
 function GameOver()
     local GameOver = CreateCCode(ExDeaths1)
-    local Win = CreateCCode(ExDeaths1)
+    Win = CreateCCode(ExDeaths1)
     Trigger { -- 게임 오버 트리거
         players = {Force1},
         conditions = {

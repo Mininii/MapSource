@@ -165,6 +165,7 @@ end
 
 function Install_RandPlaceHero()
 	local RandW2 = CreateVar()
+	local HeroID = CreateVar()
 	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,40),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
 		Check_Spawn = def_sIndex()
@@ -176,9 +177,10 @@ function Install_RandPlaceHero()
 		Check_Cannot = def_sIndex()
 		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- 캔낫. 강제캔슬
 		CMov(FP,RandW2,6)
+		CMov(FP,HeroID,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))))
 		NWhile(FP,CVar(FP,RandW2[2],AtLeast,1),SetCVar(FP,RandW2[2],Subtract,1))
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-			CDoActions(FP,{TCreateUnitWithProperties(1,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1,P8,{energy = 100})})
+			CDoActions(FP,{TCreateUnitWithProperties(1,HeroID,1,P8,{energy = 100})})
 			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
 				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
@@ -257,7 +259,7 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives)
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
 	for i = 0, MaxPlayer do
-		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- 브금타이머
+		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)},1) -- 브금타이머
 	end
 	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- 브금타이머
 end
