@@ -164,29 +164,121 @@ end
 
 
 function Install_RandPlaceHero()
-	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,200),1)
+	local RandW2 = CreateVar()
+	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,40),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
-	
-	Check_Spawn = def_sIndex()
-	NJumpXEnd(FP,Check_Spawn)
-	f_Mod(FP,HPosX,_Rand(),_Mov(3072))
-	f_Mod(FP,HPosY,_Rand(),_Mov(6144))
-	NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- 좌표설정 실패, 다시
-	Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
-	
-	
-	Check_Cannot = def_sIndex()
-	NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- 캔낫. 강제캔슬
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	CDoActions(FP,{TCreateUnitWithProperties(1,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1,P8,{energy = 100})})
-	NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
-	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-	
-	CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
-	
-	NElseX()
-	NJumpX(FP,Check_Spawn) -- 소환실패, 다시
-	NIfXEnd()
-	NJumpXEnd(FP,Check_Cannot)
+		Check_Spawn = def_sIndex()
+		NJumpXEnd(FP,Check_Spawn)
+		f_Mod(FP,HPosX,_Rand(),_Mov(3072))
+		f_Mod(FP,HPosY,_Rand(),_Mov(6144))
+		NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- 좌표설정 실패, 다시
+		Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
+		Check_Cannot = def_sIndex()
+		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- 캔낫. 강제캔슬
+		CMov(FP,RandW2,6)
+		NWhile(FP,CVar(FP,RandW2[2],AtLeast,1),SetCVar(FP,RandW2[2],Subtract,1))
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			CDoActions(FP,{TCreateUnitWithProperties(1,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1,P8,{energy = 100})})
+			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
+				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
+			NElseX()
+				NJumpX(FP,Check_Spawn) -- 소환실패, 다시
+			NIfXEnd()
+		NWhileEnd()
+		NJumpXEnd(FP,Check_Cannot)
 	CWhileEnd()
+end
+
+
+function Print13_NumSet(Ptr,Ptr2,DivNum,Mask)
+	for i = 3, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Deaths(Ptr,AtLeast,(2^i)*DivNum,0);
+			},
+			actions = {
+				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
+				SetDeaths(Ptr,Subtract,(2^i)*DivNum,0);
+				PreserveTrigger();
+			}
+		}
+	end
+end
+
+
+function ValToTimeX(VIndex,DestPtr,DivNum,DestPlace)
+	for i = 6, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				CVar(FP,VIndex,AtLeast,(2^i)*DivNum)
+			},
+			actions = {
+				SetMemory(DestPtr,Add,(2^i)*DestPlace);
+				SetCVar(FP,VIndex,Subtract,(2^i)*DivNum);
+				PreserveTrigger();
+			}
+		}
+	end
+end
+
+function EPDToPtr(EPD)
+	return 0x58A364+(EPD*4)
+end
+
+function KetInput(Key,Conditions,Actions,PreserveFlag)
+	X = {}
+	if PreserveFlag == 1 then
+		X = {Preserved}
+	end
+	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Conditions},{SetDeaths(CurrentPlayer,SetTo,0,Key),Actions},X)
+end
+
+function Print13_Preserve()
+	local Print13 = CreateCCode(ExDeaths1)
+	CIf(FP,{Memory(0x628438, AtLeast, 1)})
+		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
+			Print_13(FP,{P1,P2,P3,P4,P5,P6,P7},nil)
+		CIfEnd()
+		DoActionsX(FP,SetCDeaths(FP,Subtract,1,Print13))
+	CIfEnd()
+end
+
+
+function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives)
+	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
+	f_Read(Player,0x51CE8C,Dx)
+	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
+	CiSub(Player,DtP,Dy,Du)
+	CMov(Player,Dv,DtP) 
+	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
+	CMov(Player,Du,Dy)
+	for i = 0, MaxPlayer do
+		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- 브금타이머
+	end
+	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- 브금타이머
+end
+
+function ObDisplay()
+	CMov(FP,0x582144+(4*7),0)
+	CMov(FP,0x5821A4+(4*7),0)
+	CMov(FP,0x582174+(4*7),count)
+	CAdd(FP,0x582174+(4*7),count)
+	CMov(FP,0x57F120+(4*7),Level)
+	CMov(FP,TempT,Time)
+	CAdd(FP,WaveT,Dt)
+	CMov(FP,0x57F0F0+(4*7),0)
+	ValToTimeX(TempT[2],0x57F0F0+(4*7),3600000,10000)
+	ValToTimeX(TempT[2],0x57F0F0+(4*7),60000,100)
+	ValToTimeX(TempT[2],0x57F0F0+(4*7),1000,1)
+end
+
+function DoPlayerCheck()
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
+	for i = 0, 6 do
+		TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
+	end
 end

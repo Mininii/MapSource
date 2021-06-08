@@ -30,14 +30,15 @@ function Var_init()
 	"MarShMaskRetArr","MarShPtrArr","CustomShapeTable","CustomShape"
 	})
 	CreateVariableSet({"RepHeroIndex","RepX","RepY","BackupCp","CPos","CPosX","CPosY","BacpupPtr","CurrentUID","SelPTR","SelEPD","MarTblPtr","SelHP",
-	"SelHPEPD","MarHPEPD","SelSh","SelShEPD","SelPl","SelMaxHP","CunitP","SelOPEPD","CurCunitI","CurrentSpeed","Dx","Dy","Dt","Dv","Du","DtP","CurrentOP",
+	"SelHPEPD","MarHPEPD","SelSh","SelShEPD","SelPl","SelMaxHP","CunitP","SelOPEPD","CurCunitI","CurrentSpeed","CurrentOP",
 	"UpgradeCP","UpgradeFactor","TempUpgradePtr","TempUpgradeMaskRet","UpgradeMax","UpResearched","UpCost","UpCompleted","UPCompStrPtr","Nextptrs","CunitIndex","BarRally","G_Send","G_CA","G_TempV","GunID","Gun_X","Gun_Y","Gun_LV","G_TempW","BackupPosData","Gun_TempRand","Gun_TempSpawnSet1","Spawn_TempW",
 	"TempT","count","ReserveBGM","Repeat_TempV","TempBarPos","ExchangeRate","SetPlayers","ExchangeP","RandW","HPosX","HPosY","KillScore","Gun_Type","f_GunNum","f_GunStrPtr","ReserveBGM2",
 	"Gun_TempSpawnSet2","Gun_TempSpawnSet3","Actived_Gun","HTextStrPtr","UnitDataPtr","CUID","RandSpeed","ScoreVPtr","Time","Cunit2","f_GunSendStrPtr","MarTempSh","PCheckV","PCheckV2","B1_K","B1_K2","B1_H","SelUID",
-	"WaveT",})
+	"WaveT","CUnitID","Dt"})
 	
-	CreateCCodeSet(ExDeaths1,{"GiveConsole","F12KeyToggle","IntroT","LimitX","LimitC","TestMode","DelayMedic","Print13","ShUsed",
-	"GiveRate","FuncT","OPFuncT","PCheck","HealT","RandomHeroPlace","ReplaceDelayT","ScorePrint","GameOver","LeaderBoardT","Win","Continue2","Continue","PExitFlag"})
+	
+	CreateCCodeSet(ExDeaths1,{"GiveConsole","F12KeyToggle","IntroT","LimitX","LimitC","TestMode","DelayMedic","ShUsed",
+	"GiveRate","FuncT","OPFuncT","PCheck","RandomHeroPlace","ReplaceDelayT","ScorePrint","Continue2","Continue","PExitFlag","countdownSound"})
 	for i = 0, 6 do
 		table.insert(MarHP,CreateVar()) -- 체력기본값 1000
 		table.insert(MarHP2,CreateVar()) -- 동기화용 Temp
@@ -137,4 +138,49 @@ function Objects()
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
+	DelayMedicT = {
+		"\x07『 \x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F300 Ore\x07 』",
+		"\x07『 \x1D예약메딕\x04을 \x1B3Tick\x04으로 변경합니다. - \x1F350 Ore\x07 』",
+		"\x07『 \x1D예약메딕\x04을 \x1B4Tick\x04으로 변경합니다. - \x1F400 Ore\x07 』",
+		"\x07『 \x1D예약메딕\x04을 \x1B비활성화(1Tick)\x04하였습니다. - \x1F250 Ore\x07 』"}
+			--[[
+			MSQC KeySensor
+			[MSQC]
+			Always() ; val, 0x58F500 : 180
+			ESC = 199,1
+			Deaths(CurrentPlayer,Exactly,1,441);RIGHT = 200,1
+			Deaths(CurrentPlayer,Exactly,1,441);LEFT = 201,1
+			F12 = 202,1
+			F9 = 203,1
+			Deaths(CurrentPlayer,Exactly,1,441);B = 204,1
+			Deaths(CurrentPlayer,AtLeast,1,443);1 = 205,1
+			Deaths(CurrentPlayer,AtLeast,1,443);2 = 206,1
+			Deaths(CurrentPlayer,AtLeast,1,443);3 = 207,1
+			Deaths(CurrentPlayer,AtLeast,1,443);4 = 208,1
+			Deaths(CurrentPlayer,AtLeast,1,443);5 = 209,1
+			Deaths(CurrentPlayer,AtLeast,1,443);6 = 210,1
+			Deaths(CurrentPlayer,AtLeast,1,443);7 = 211,1
+			Deaths(CurrentPlayer,AtLeast,1,442);1 = 212,1
+			Deaths(CurrentPlayer,AtLeast,1,442);2 = 213,1
+			Deaths(CurrentPlayer,AtLeast,1,442);3 = 214,1
+			Deaths(CurrentPlayer,AtLeast,1,442);4 = 215,1
+			Deaths(CurrentPlayer,AtLeast,1,442);5 = 216,1
+			Deaths(CurrentPlayer,AtLeast,1,442);6 = 217,1
+			Deaths(CurrentPlayer,AtLeast,1,442);7 = 218,1
+			Deaths(CurrentPlayer,AtLeast,1,442);` = 219,1
+			Switch("Switch 250",Set);N = 220,1
+			Switch("Switch 250",Set);Y = 221,1
+			]]
+			ESC = 199
+			RIGHT = 200
+			LEFT = 201
+			F12 = 202
+			F9 = 203
+			B = 204
+			-- 441 = OPConsole 
+			-- 442 = CPConsole 
+			-- 443 = BanConsole
+			OPConsole = 441
+			CPConsole = 442
+			BanConsole = 443
 end

@@ -332,6 +332,21 @@ function CreateTableSet(Variables)
 	end
 end
 
+function CreateTables(vars)
+	local V = {}
+	for i = 1, vars do
+		table.insert( V,{})
+	end
+	return table.unpack(V)
+end
+function CreateVariables(vars)
+	local V = {}
+	for i = 1, vars do
+		table.insert( V,CreateVar())
+	end
+	return table.unpack(V)
+end
+
 function Overflow_HP_System(Player,Cunit_HPV,HP_K,HP_P)
     CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
     	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
@@ -491,16 +506,15 @@ end
 
 
 function IBGM_EPD(Player,MaxPlayer)
-f_Read(Player,0x51CE8C,Dx)
-CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
-CiSub(Player,DtP,Dy,Du)
-CMov(Player,Dv,DtP) 
-CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
-CMov(Player,Du,Dy)
-
-for i = 0, MaxPlayer do
-CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- 브금타이머
-end
+	f_Read(Player,0x51CE8C,Dx)
+	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
+	CiSub(Player,DtP,Dy,Du)
+	CMov(Player,Dv,DtP) 
+	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
+	CMov(Player,Du,Dy)
+	for i = 0, MaxPlayer do
+	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- 브금타이머
+	end
 end
 
 function VoidAlloc(Size)--1EPD(4bite)
@@ -512,57 +526,57 @@ function VoidAlloc(Size)--1EPD(4bite)
 	return X
 end
 function Enable_HideErrorMessage(Player)
-for i = 0, 10 do
-if i%2 == 0 then
-Trigger {
-	players = {Player},
-	conditions = {
-		Memory(0x640B60+0xDA*i, Exactly, 0xEABDB2EA);
-		Memory(0x640B64+0xDA*i, Exactly, 0x203AA0B3);	
-	},
-	actions = {
-		SetMemory(0x640B60+0xDA*i,SetTo,0);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {Player},
-	conditions = {
-		Memory(0x640B60+0xDA*i, Exactly, 0x4E524157);
-		Memory(0x640B64+0xDA*i, Exactly, 0x3A474E49);	
-	},
-	actions = {
-		SetMemory(0x640B60+0xDA*i,SetTo,0);
-		PreserveTrigger();
-	}
-}
-else
-Trigger {
-	players = {Player},
-	conditions = {
-		MemoryX(0x640B5E + 0xDA*i, Exactly, 0xB2EA0000,0xFFFF0000);
-		Memory(0x640B62 + 0xDA*i, Exactly, 0xA0B3EABD);	
-		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x203A,0xFFFF);
-	},
-	actions = {
-		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {Player},
-	conditions = {
-		MemoryX(0x640B5E + 0xDA*i, Exactly, 0x41570000,0xFFFF0000);
-		Memory(0x640B62 + 0xDA*i, Exactly, 0x4E494E52);	
-		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x00003A47,0xFFFF);
-	},
-	actions = {
-		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
-		PreserveTrigger();
-	}
-}
-end
-end
+	for i = 0, 10 do
+		if i%2 == 0 then
+		Trigger {
+			players = {Player},
+			conditions = {
+				Memory(0x640B60+0xDA*i, Exactly, 0xEABDB2EA);
+				Memory(0x640B64+0xDA*i, Exactly, 0x203AA0B3);	
+			},
+			actions = {
+				SetMemory(0x640B60+0xDA*i,SetTo,0);
+				PreserveTrigger();
+			}
+		}
+		Trigger {
+			players = {Player},
+			conditions = {
+				Memory(0x640B60+0xDA*i, Exactly, 0x4E524157);
+				Memory(0x640B64+0xDA*i, Exactly, 0x3A474E49);	
+			},
+			actions = {
+				SetMemory(0x640B60+0xDA*i,SetTo,0);
+				PreserveTrigger();
+			}
+		}
+		else
+		Trigger {
+			players = {Player},
+			conditions = {
+				MemoryX(0x640B5E + 0xDA*i, Exactly, 0xB2EA0000,0xFFFF0000);
+				Memory(0x640B62 + 0xDA*i, Exactly, 0xA0B3EABD);	
+				MemoryX(0x640B66 + 0xDA*i, Exactly, 0x203A,0xFFFF);
+			},
+			actions = {
+				SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+				PreserveTrigger();
+			}
+		}
+		Trigger {
+			players = {Player},
+			conditions = {
+				MemoryX(0x640B5E + 0xDA*i, Exactly, 0x41570000,0xFFFF0000);
+				Memory(0x640B62 + 0xDA*i, Exactly, 0x4E494E52);	
+				MemoryX(0x640B66 + 0xDA*i, Exactly, 0x00003A47,0xFFFF);
+			},
+			actions = {
+				SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+				PreserveTrigger();
+			}
+		}
+		end
+	end
 end
 
 function CreateJungal(UIDTable,CUTable,Player)

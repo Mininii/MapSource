@@ -1,7 +1,4 @@
-
-
 function Install_CallTriggers()
-
 SaveCp_CallIndex = SetCallForward()
 SetCall(FP)
 	SaveCp(FP,BackupCp)
@@ -10,7 +7,6 @@ LoadCp_CallIndex = SetCallForward()
 SetCall(FP)
 	LoadCp(FP,BackupCp)
 SetCallEnd()
-
 OneClickUpgrade = SetCallForward()
 SetCall(FP) 
 	f_Read(FP,TempUpgradePtr,UpResearched)
@@ -167,12 +163,11 @@ Line No.29 : GunType
 Line No.30 : SuspendSwitch
 ]]
 function GunBreak(GName,Point)
-
-local Text = "\n\n\n\x13- \x0E- \x0F-\x11 Ｓｔｒｕｃｔｕｒｅ \x04－ "..GName.." \x04 파괴!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
-DoActions(FP,{
-	RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
-	SetScore(Force1,Add,Point,Kills);
-})
+	local Text = "\n\n\n\x13- \x0E- \x0F-\x11 Ｓｔｒｕｃｔｕｒｅ \x04－ "..GName.." \x04 파괴!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
+	DoActions(FP,{
+		RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+		SetScore(Force1,Add,Point,Kills);
+	})
 end
 f_Gun = SetCallForward() -- 건작함수
 SetCall(FP)

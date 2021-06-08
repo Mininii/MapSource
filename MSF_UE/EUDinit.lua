@@ -350,6 +350,21 @@ Trigger {
 }
 end
 
+for k = 1, 7 do
+	Trigger { -- 미션 오브젝트, 환전률 셋팅
+		players = {Force1},
+		conditions = {
+			Label(0);
+			CVar(FP,SetPlayers[2],Exactly,k);
+		},
+		actions = {
+			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..P[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\n\x13\x1F===================================");
+			SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
+			
+		},
+	}
+end
+
 DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 Trigger {
@@ -404,6 +419,7 @@ Trigger {
 		DisplayTextX("\x13\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.",4);
 		Defeat();
 		},HumanPlayers,FP);
+		Defeat();
 	}
 }
 DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
@@ -576,4 +592,15 @@ CWhileEnd()
 f_GetTblptr(FP,MarTblPtr,1501)
 
 CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
+end
+
+function onInit_EUD2()
+	CIfOnce(FP)
+	CMov(FP,0x6509B0,UnitDataPtr)
+	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+		CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
+		CAdd(FP,0x6509B0,2)
+	CWhileEnd()
+	CMov(FP,0x6509B0,FP)
+	CIfEnd()
 end
