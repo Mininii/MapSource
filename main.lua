@@ -4,7 +4,7 @@ DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(2)
 VerText = "\x04Ver. Test"
 FP = P8
-EUDTurbo(FP) -- 뎡터보
+EUDTurbo(FP) -- ���ͺ�
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
@@ -20,14 +20,14 @@ StartCtrig()
 			Var_init()
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
-		NoAirCollisionX(FP)
 		DoPlayerCheck()
+		NoAirCollisionX(FP)
+		onInit_EUD() -- onPluginStart
 		BGMManager()
-		onInit_EUD()
 		Gun_System()
 		Install_RandPlaceHero()
 		SetWave()
-		OPText()
+		OPText() -- Opening Text
 		GameOver()
 		Overflow_HP_System(FP,B1_H,B1_K)
 		IBGM_EPDX(FP,6,Dt)
@@ -47,9 +47,7 @@ StartCtrig()
 			Test_LV2()
 		CIfEnd()
 		V_onInit = def_sIndex()
-		CJump(FP,V_onInit) -- 기타 init 지정공간
-			InstallCVariable()
-		CJumpEnd(FP,V_onInit)
+		Install_AllObject()
 	CIfEnd()
 EndCtrig()
 ErrorCheck()

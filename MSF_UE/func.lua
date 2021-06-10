@@ -45,12 +45,19 @@ else
 	TestStart = 0
 end
 end
-
+CustomShapeTable = {}
 function CustomShapeAlloc()
 	local X = {}
 	table.insert(X,VoidAlloc(300))
 	table.insert(X,CreateVar())
 	table.insert(CustomShapeTable,X)
+	return X
+end
+function Create_CSTable(Number)
+	local X = {}
+	for i = 1, Number do
+		table.insert(X,CustomShapeAlloc())
+	end
 	return X
 end
 
@@ -63,9 +70,9 @@ function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 end
 
 
-function CreateHeroPointArr(Index,Point,Name,Type) --  ì˜ì‘ ìœ ë‹› ì„¤ì • í•¨ìˆ˜
-	local TextType1 = "ì„(ë¥¼) ì²˜ì¹˜í•˜ì˜€ë‹¤...! "
-	local TextType2 = "ë¥¼ íšë“í•˜ì˜€ë‹¤...! "
+function CreateHeroPointArr(Index,Point,Name,Type) --  ¿µÀÛ À¯´Ö ¼³Á¤ ÇÔ¼ö
+	local TextType1 = "À»(¸¦) Ã³Ä¡ÇÏ¿´´Ù...! "
+	local TextType2 = "¸¦ È¹µæÇÏ¿´´Ù...! "
 	if Type == 1 then
 		Name2 = TextType1
 	elseif Type == 2 then
@@ -83,7 +90,7 @@ function CreateHeroPointArr(Index,Point,Name,Type) --  ì˜ì‘ ìœ ë‹› ì„¤ì • í•¨ì
 	table.insert(X,CreateVar(Point)) -- HPoint
 	table.insert(HeroPointArr,X)
 end
-function InstallHeroPoint() -- CreateHeroPointArrì—ì„œ ì „ì†¡ë°›ì€ ì˜ì›… í¬ì¸íŠ¸ ì •ë³´ ì„¤ì¹˜ í•¨ìˆ˜. CunitCtrig ë‹¨ë½ì— í¬í•¨ë¨.
+function InstallHeroPoint() -- CreateHeroPointArr¿¡¼­ Àü¼Û¹ŞÀº ¿µ¿õ Æ÷ÀÎÆ® Á¤º¸ ¼³Ä¡ ÇÔ¼ö. CunitCtrig ´Ü¶ô¿¡ Æ÷ÇÔµÊ.
 	for i = 1, #HeroPointArr do
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
@@ -172,20 +179,20 @@ function Install_RandPlaceHero()
 		NJumpXEnd(FP,Check_Spawn)
 		f_Mod(FP,HPosX,_Rand(),_Mov(3072))
 		f_Mod(FP,HPosY,_Rand(),_Mov(6144))
-		NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- ì¢Œí‘œì„¤ì • ì‹¤íŒ¨, ë‹¤ì‹œ
+		NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- ÁÂÇ¥¼³Á¤ ½ÇÆĞ, ´Ù½Ã
 		Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
 		Check_Cannot = def_sIndex()
-		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- ìº”ë‚«. ê°•ì œìº”ìŠ¬
+		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- Äµ³´. °­Á¦Äµ½½
 		CMov(FP,RandW2,6)
 		CMov(FP,HeroID,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))))
 		NWhile(FP,CVar(FP,RandW2[2],AtLeast,1),SetCVar(FP,RandW2[2],Subtract,1))
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 			CDoActions(FP,{TCreateUnitWithProperties(1,HeroID,1,P8,{energy = 100})})
-			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- ì†Œí™˜ ì„±ê³µ ì—¬ë¶€ 
+			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- ¼ÒÈ¯ ¼º°ø ¿©ºÎ 
 				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10ë ˆë²¨ ì´í•˜ëŠ” ì˜ì‘í¬ì¸íŠ¸ ì ìš©ë¨
+				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10·¹º§ ÀÌÇÏ´Â ¿µÀÛÆ÷ÀÎÆ® Àû¿ëµÊ
 			NElseX()
-				NJumpX(FP,Check_Spawn) -- ì†Œí™˜ì‹¤íŒ¨, ë‹¤ì‹œ
+				NJumpX(FP,Check_Spawn) -- ¼ÒÈ¯½ÇÆĞ, ´Ù½Ã
 			NIfXEnd()
 		NWhileEnd()
 		NJumpXEnd(FP,Check_Cannot)
@@ -240,7 +247,7 @@ function KetInput(Key,Conditions,Actions,PreserveFlag)
 end
 
 function Print13_Preserve()
-	local Print13 = CreateCCode(ExDeaths1)
+	local Print13 = CreateCCode()
 	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
 			Print_13(FP,{P1,P2,P3,P4,P5,P6,P7},nil)
@@ -259,9 +266,9 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives)
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
 	for i = 0, MaxPlayer do
-		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)},1) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
+		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)},1) -- ºê±İÅ¸ÀÌ¸Ó
 	end
-	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
+	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- ºê±İÅ¸ÀÌ¸Ó
 end
 
 function ObDisplay()
@@ -279,8 +286,43 @@ function ObDisplay()
 end
 
 function DoPlayerCheck()
+	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 	for i = 0, 6 do
 		TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
 	end
+end
+
+function UnitLimit(Player,UID,Limit,Text,ReturnResources)
+	Trigger {
+		players = {Player},
+		conditions = {
+			Command(Player,AtLeast,Limit+1,UID);
+			},
+		
+		actions = {
+			KillUnitAt(1,UID,"Anywhere",Player);
+			DisplayText("\x07¡º \x04"..Text.." "..Limit.."±â¸¦ ³Ñ¾î¼­ ¼ÒÁöÇÒ ¼ö ¾ø½À´Ï´Ù. \x1CÀÚ¿ø ¹İÈ¯ \x1F+ "..ReturnResources.." Ore\x07 ¡»",4);
+			SetResources(Player,Add,ReturnResources,Ore);
+			PreserveTrigger();
+		},
+	}
+end
+
+
+function GunBreak(GName,Point)
+	local Text = "\n\n\n\x13- \x0E- \x0F-\x11 £Ó£ô£ò£õ£ã£ô£õ£ò£å \x04£­ "..GName.." \x04 ÆÄ±«!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
+	DoActions(FP,{
+		RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+		SetScore(Force1,Add,Point,Kills);
+	})
+end
+function Gun_DoSuspend()
+	return TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)
+end
+function Gun_SetLine(Line,Type,Value)
+	return TSetMemory(_Add(G_TempH,(Line*0x20)/4),Type,Value)
+end
+function Gun_Line(Line,Type,Value)
+	return CVar(FP,Var_TempTable[Line+1][2],Type,Value)
 end

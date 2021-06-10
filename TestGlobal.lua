@@ -1,3 +1,5 @@
+TText1 = "�����ٶ�"
 function TestGlobal()
-    return CreateCText(FP,"일이삼니니가나다라마바사아자차카타파하")
+    return CreateCText(FP,TText1)
 end
+PushValueMsg({GetStrArr(0,TText1),"X"})

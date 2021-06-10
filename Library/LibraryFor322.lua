@@ -1,12 +1,14 @@
 VIndexAlloc = 0x800
 CallIndexAlloc = 0x2000
-StrPtrAlloc = 0x1000
+CIndexAlloc = 0x1000
 SetCallOpen = 0
 DeathTableDefNumber = 1
-CVariableIndexTable = {}
-DeathTableDefArr = {}
+CVarPushArr = {}
+CurCIndex = 0
+CD_DefArr = {}
 PrintString_Arr = {}
 BGMArr = {}
+VArrStackArr = {}
 InitBGMP = 12
 VoidInit = 0x590000
 sindexAlloc = 0x000
@@ -54,6 +56,16 @@ function Simple_CalcLoc(LocID,LeftValue,UpValue,RightValue,DownValue)
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
 	table.insert(X,SetMemory(0x58DC68+(20*LocID),Add,RightValue))
 	table.insert(X,SetMemory(0x58DC6C+(20*LocID),Add,DownValue))
+	return X
+end
+
+function Simple_CalcLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,PreserveFlag)
+	local X = {}
+	table.insert(X,SetMemory(0x58DC60+(20*LocID),Add,LeftValue))
+	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
+	table.insert(X,SetMemory(0x58DC68+(20*LocID),Add,RightValue))
+	table.insert(X,SetMemory(0x58DC6C+(20*LocID),Add,DownValue))
+	DoActions(Player,X,PreserveFlag)
 	return X
 end
 
@@ -157,43 +169,41 @@ end
 
 function DefineDeathTable(Index) -- CtrigAsm 5.1
 	local X = {Index,0}
-	table.insert(CVariableIndexTable,Index)
-	table.insert(DeathTableDefArr,X)
+	table.insert(CVarPushArr,Index)
+	table.insert(CD_DefArr,X)
 	local Ret = DeathTableDefNumber
 	DeathTableDefNumber = DeathTableDefNumber + 1
 	return Ret
 end
 
-function CreateCCode(CCodeDefNmber) -- CtrigAsm 5.1
-	if DeathTableDefArr[CCodeDefNmber][2] >= 480 or DeathTableDefArr[CCodeDefNmber][2] < 0 then
-		CreateCCode_LineOverflow()
+function CreateCCode() -- CtrigAsm 5.1
+	if CurCIndex == 0 then
+		CurCIndex = DefineDeathTable(CIndexAlloc)
+		CIndexAlloc = CIndexAlloc + 1
 	end
-	DeathTableDefArr[CCodeDefNmber][2] = DeathTableDefArr[CCodeDefNmber][2] + 1
-	return Ccode(DeathTableDefArr[CCodeDefNmber][1],DeathTableDefArr[CCodeDefNmber][2]-1)
+	if CD_DefArr[CurCIndex][2] >= 480 or CD_DefArr[CurCIndex][2] < 0 then
+		CurCIndex = DefineDeathTable(CIndexAlloc)
+		CIndexAlloc = CIndexAlloc + 1
+	end
+	CD_DefArr[CurCIndex][2] = CD_DefArr[CurCIndex][2] + 1
+	return Ccode(CD_DefArr[CurCIndex][1],CD_DefArr[CurCIndex][2]-1)
 end
 
 function CreateVar(InitVal) -- CtrigAsm 5.1
 	VIndexAlloc = VIndexAlloc + 1
 	if InitVal ~= nil then
 		local X = {VIndexAlloc,InitVal}
-		table.insert(CVariableIndexTable,X)
+		table.insert(CVarPushArr,X)
 	else
-		table.insert(CVariableIndexTable,VIndexAlloc)
+		table.insert(CVarPushArr,VIndexAlloc)
 	end
 	return V(VIndexAlloc)
 end
 
 function CreateIndex() -- CtrigAsm 5.1
 	VIndexAlloc = VIndexAlloc + 1
-	table.insert(CVariableIndexTable,VIndexAlloc)
+	table.insert(CVarPushArr,VIndexAlloc)
 	return VIndexAlloc
-end
-
-function CreateStrPtr() -- CtrigAsm 5.1
-	table.insert(CVariableIndexTable,StrPtrAlloc)
-	local Ret = StrPtrAlloc
-	StrPtrAlloc = StrPtrAlloc+1
-	return Ret
 end
 
 function CVariable3(Player,Index,Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
@@ -231,20 +241,134 @@ function CVariable3(Player,Index,Offset,Type,Player2,Index2,Address2,EPD2,Next2,
 end
 
 function InstallCVariable() -- CtrigAsm 5.1
-	for i = 1, #CVariableIndexTable do
-		if type(CVariableIndexTable[i]) == "table" then
-			if type(CVariableIndexTable[i][2]) == "number" then
-				CVariable2(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2])
-			elseif type(CVariableIndexTable[i][2]) == "table" then
-				CVariable3(AllPlayers,CVariableIndexTable[i][1],nil,nil,CVariableIndexTable[i][2][1],CVariableIndexTable[i][2][2],CVariableIndexTable[i][2][3],CVariableIndexTable[i][2][4],CVariableIndexTable[i][2][5])
+	if #CVarPushArr >= 1 then
+		for i = 1, #CVarPushArr do
+			if type(CVarPushArr[i]) == "table" then
+				if type(CVarPushArr[i][2]) == "number" then
+					CVariable2(AllPlayers,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2])
+				elseif type(CVarPushArr[i][2]) == "table" then
+					CVariable3(AllPlayers,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2][1],CVarPushArr[i][2][2],CVarPushArr[i][2][3],CVarPushArr[i][2][4],CVarPushArr[i][2][5])
+				else
+					InstallCVariable_InputData_Error()
+				end
 			else
-				InstallCVariable_InputData_Error()
+				CVariable(AllPlayers,CVarPushArr[i])
 			end
-		else
-			CVariable(AllPlayers,CVariableIndexTable[i])
 		end
 	end
 end
+
+
+function CArray2(PlayerID,Size,Index)
+	if bit32.band(Size, 0xFFFFFFFF) >= 4096*602 or Size == 0 then
+		Array_Size_Overflow()
+	end
+
+	local TNum = Size/602
+	if Size%602 ~= 0 then
+		TNum = TNum + 1
+	end
+	local Arrindex = Index
+
+	Trigger {
+		players = {ParsePlayer(PlayerID)},
+		conditions = {
+			Label(Arrindex);
+		},
+		flag = {Preserved}
+	}
+
+	for i = 2, TNum do 
+		Trigger {
+			players = {ParsePlayer(PlayerID)},
+			conditions = {
+				Label(0);
+			},
+			flag = {Preserved}
+		}
+	end
+end
+
+function CVArray2(PlayerID,Size,Index)
+	if bit32.band(Size, 0xFFFFFFFF) >= 4096 or Size == 0 then
+		VArray_Size_Overflow()
+	end
+
+	local VArrindex = Index
+
+	Trigger {
+		players = {ParsePlayer(PlayerID)},
+		conditions = {
+			Label(VArrindex);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Full Variable
+			Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+		},
+		flag = {Preserved}
+	}
+
+	for i = 2, Size do 
+		Trigger {
+			players = {ParsePlayer(PlayerID)},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Full Variable
+				Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+			},
+			flag = {Preserved}
+		}
+	end
+
+	
+end
+
+
+function CreateVarray(Player,Size)
+	local X = {}
+	local Ret = FuncAlloc
+	table.insert(X,"VArr")
+	table.insert(X,Player)
+	table.insert(X,Size)
+	table.insert(X,Ret)
+	table.insert(VArrStackArr,X)
+	FuncAlloc = FuncAlloc + 1
+	return {"X",Ret,0,"V"}
+end
+function CreateCarray(Player,Size)
+	local X = {}
+	local Ret = FuncAlloc
+	table.insert(X,"Arr")
+	table.insert(X,Player)
+	table.insert(X,Size)
+	table.insert(X,Ret)
+	table.insert(VArrStackArr,X)
+	FuncAlloc = FuncAlloc + 1
+	return {"X",Ret,0,0}
+end
+function InstallCVArrStack()
+	if #VArrStackArr >= 1 then
+		for j, k in pairs(VArrStackArr) do
+			if k[1] == "VArr" then
+				CVArray2(k[2],k[3],k[4])
+			end
+			if k[1] == "Arr" then
+				CArray2(k[2],k[3],k[4])
+			end
+		end
+	end
+end
+function Install_AllObject()
+	local ObjectSpace = def_sIndex()
+	CJump(FP,ObjectSpace) -- ±âÅ¸ init ÁöÁ¤°ø°£
+	InstallCVariable()
+	InstallCVArrStack()
+	CJumpEnd(FP,ObjectSpace)
+end
+
+
 function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
 	MoveCpValue = 0
 	local X = {}
@@ -274,7 +398,7 @@ function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local X = {}
 	table.insert(X,Text)
 	table.insert(X,GetStrSize(0,Text))
-	table.insert(X,CArray(Player,50))
+	table.insert(X,CreateCarray(Player,50))
 	local Y = {}
 	table.insert(Y,X[3])
 	table.insert(Y,X[1])
@@ -292,7 +416,7 @@ end
 
 
 
-function CreateCCodeSet(CCodeIndex,Variables)
+function CreateCCodeSet(Variables)
 	for i = 1, #Variables do
 
 		for j = 1, #Variables do
@@ -303,7 +427,7 @@ function CreateCCodeSet(CCodeIndex,Variables)
 			end
 		end
 
-		_G[Variables[i]] = CreateCCode(CCodeIndex)
+		_G[Variables[i]] = CreateCCode()
 	end
 end
 function CreateVariableSet(Variables)
@@ -339,6 +463,13 @@ function CreateTables(vars)
 	end
 	return table.unpack(V)
 end
+function CreateCCodes(vars)
+	local V = {}
+	for i = 1, vars do
+		table.insert( V,CreateCCode())
+	end
+	return table.unpack(V)
+end
 function CreateVariables(vars)
 	local V = {}
 	for i = 1, vars do
@@ -346,7 +477,27 @@ function CreateVariables(vars)
 	end
 	return table.unpack(V)
 end
-
+function Create_VTable(Number,InitVar)
+	local X = {}
+	for i = 1, Number do
+		table.insert(X,CreateVar(InitVar))
+	end
+	return X
+end
+function Create_CCTable(Number)
+	local X = {}
+	for i = 1, Number do
+		table.insert(X,CreateCCode())
+	end
+	return X
+end
+function Create_VArrTable(Number,Size)
+	local X = {}
+	for i = 1, Number do
+		table.insert(X,CreateVarray(FP,Size))
+	end
+	return X
+end
 function Overflow_HP_System(Player,Cunit_HPV,HP_K,HP_P)
     CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
     	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
@@ -439,7 +590,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 		if #BGMArr[i] == 4 then
 			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
 		end
-		Trigger { -- ë¸Œê¸ˆì¬ìƒ jë²ˆ
+		Trigger { -- ë¸Œê¸ˆ?¬?ƒ jë²?
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
@@ -455,7 +606,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 		}
 	end
 CElseX()
-Trigger { -- ë¸Œê¸ˆì¬ìƒì‹œ ìŠ¤í‚µ
+Trigger { -- ë¸Œê¸ˆ?¬?ƒ?‹œ ?Š¤?‚µ
 	players = {InitBGMP},
 		actions = {
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
@@ -472,7 +623,7 @@ CWhileEnd()
 CAdd(InitBGMP,0x6509B0,InitBGMP)
 CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 	for i = 1, #BGMArr do
-		Trigger { -- ë¸Œê¸ˆì¬ìƒ jë²ˆ
+		Trigger { -- ë¸Œê¸ˆ?¬?ƒ jë²?
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
@@ -490,7 +641,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 		}
 	end
 CElseX()
-Trigger { -- ë¸Œê¸ˆì¬ìƒì‹œ ìŠ¤í‚µ ê´€ì „ì
+Trigger { -- ë¸Œê¸ˆ?¬?ƒ?‹œ ?Š¤?‚µ ê´?? „?
 	players = {InitBGMP},
 	conditions = {
 	},
@@ -513,7 +664,7 @@ function IBGM_EPD(Player,MaxPlayer)
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
 	for i = 0, MaxPlayer do
-	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
+	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- ë¸Œê¸ˆ????´ë¨?
 	end
 end
 

@@ -1,6 +1,6 @@
 function MapPreserves()
 	Print13_Preserve()
-    Trigger { -- ë™ë§¹ìƒíƒœ ê³ ì •, ì¤‘ë¦½ë§ˆë¦° ì œê±°
+    Trigger { -- µ¿¸Í»óÅÂ °íÁ¤, Áß¸³¸¶¸° Á¦°Å
 	players = {Force1},
 	actions = {
 		SetAllianceStatus(Force1,Ally);
@@ -14,7 +14,7 @@ function MapPreserves()
 		PreserveTrigger();
 	    },
     }
-    Trigger { -- ë™ë§¹ìƒíƒœ ê³ ì •, ì¤‘ë¦½ë§ˆë¦° ì œê±°
+    Trigger { -- µ¿¸Í»óÅÂ °íÁ¤, Áß¸³¸¶¸° Á¦°Å
     	players = {FP},
     	actions = {
     		SetAllianceStatus(Force1,Enemy);
@@ -25,8 +25,8 @@ function MapPreserves()
     CAdd(FP,Time,Dt)
     CMov(FP,EPDToPtr(TimePtr),Time)
     CMov(FP,EPDToPtr(LevelPtr),Level)
-    CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF)}) -- FPì˜ ë¸Œê¸ˆíƒ€ì´ë¨¸. ê´€ì „ììš©
-    DoActions(FP,{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07ê¸°ë¶€\x04 : F9\x07 ]")})
+    CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF)}) -- FPÀÇ ºê±İÅ¸ÀÌ¸Ó. °üÀüÀÚ¿ë
+    DoActions(FP,{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07±âºÎ\x04 : F9\x07 ]")})
 	DoActions2(FP,PatchArrPrsv)
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({

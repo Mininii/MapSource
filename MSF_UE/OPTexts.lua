@@ -2,9 +2,9 @@ function OPText()
 	for i = 0, 19 do
 		TriggerX(FP,{CDeaths(FP,AtLeast,i*5,IntroT)},{
 			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
-			DisplayTextX("\n\n"..string.rep("   ", i).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n\n\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+			DisplayTextX("\n\n"..string.rep("   ", i).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n\n\n\n\n",4);
+			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 			DisplayTextX("\n\n",4);
 			},HumanPlayers,FP);
 		})
@@ -12,18 +12,18 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,100,IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 	})
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*1),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x043ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x043ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
@@ -31,18 +31,18 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*2),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x042ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x042ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
 	})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*3),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x041ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x041ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
@@ -50,9 +50,9 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX("\n\n\n\n\n\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
 		DisplayTextX("\n\n",4);
 		},HumanPlayers,FP);
 	})
@@ -74,7 +74,7 @@ function OPText()
 	end
 	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT)},{CV1},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CV2})
-	local InsertKey = "\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ì´ ë§µì€ í´ë¦¬ì–´ì˜ ê°œë…ì´ ì—†ìœ¼ë©° \n\x13\x08ê²Œìž„ ì˜¤ë²„ \x04ì‹œ \x1Fë‹¬ì„±í•œ ë‹¨ê³„\x04ì™€ \x07ìŠ¤ì½”ì–´(ê°€ìŠ¤)\x04ê°€ ê²Œìž„ì˜ ì„±ê³¼ë¥¼ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.\n\x13\x04ë‹¹ì‹ ì˜ í•œê³„ë¥¼ ì‹œí—˜í•´ ë³´ì„¸ìš”!\n\x13\x07ì´ë¡ ì ìœ¼ë¡œ ì œí•œ ì—†ëŠ” ë‹¨ê³„ì™€ ì—…ê·¸ë ˆì´ë“œ\x04ë¥¼ ì œê³µí•©ë‹ˆë‹¤.\n\x13\x04255 ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ ì‹œ \x1F0ìœ¼ë¡œ ë¦¬ì…‹ í›„ ë§ˆë¦° ê³µê²©ë ¥ì´ ê·¸ëŒ€ë¡œ ì „ìŠ¹ë©ë‹ˆë‹¤.\n\x13\x04ë‹¨, ë§ˆë¦° ìˆ˜ëŠ” \x17ì¸êµ¬ìˆ˜ë¡œ ì œí•œ\x04ë©ë‹ˆë‹¤.(ì¸ì›ìˆ˜ì— ë”°ë¼ ë‹¬ë¼ì§)\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04ì¡°í•©ì†ŒëŠ” ì¤‘ì•™ ìˆ˜ì • ê´‘ì‚°ì´ ìžˆëŠ”ê³³ìœ¼ë¡œ ê°€ì‹œë©´ ë©ë‹ˆë‹¤.\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x17ï¼£ï¼¬ï¼¯ï¼³ï¼¥ã€€ï¼šã€€ï¼¤ï¼¥ï¼¬ï¼¥ï¼´ï¼¥ã€€ï¼«ï¼¥ï¼¹"
+	local InsertKey = "\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04ÀÌ ¸ÊÀº Å¬¸®¾îÀÇ °³³äÀÌ ¾øÀ¸¸ç \n\x13\x08°ÔÀÓ ¿À¹ö \x04½Ã \x1F´Þ¼ºÇÑ ´Ü°è\x04¿Í \x07½ºÄÚ¾î(°¡½º)\x04°¡ °ÔÀÓÀÇ ¼º°ú¸¦ ³ªÅ¸³À´Ï´Ù.\n\x13\x04´ç½ÅÀÇ ÇÑ°è¸¦ ½ÃÇèÇØ º¸¼¼¿ä!\n\x13\x07ÀÌ·ÐÀûÀ¸·Î Á¦ÇÑ ¾ø´Â ´Ü°è¿Í ¾÷±×·¹ÀÌµå\x04¸¦ Á¦°øÇÕ´Ï´Ù.\n\x13\x04255 ¾÷±×·¹ÀÌµå ¿Ï·á ½Ã \x1F0À¸·Î ¸®¼Â ÈÄ ¸¶¸° °ø°Ý·ÂÀÌ ±×´ë·Î Àü½ÂµË´Ï´Ù.\n\x13\x04´Ü, ¸¶¸° ¼ö´Â \x17ÀÎ±¸¼ö·Î Á¦ÇÑ\x04µË´Ï´Ù.(ÀÎ¿ø¼ö¿¡ µû¶ó ´Þ¶óÁü)\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04Á¶ÇÕ¼Ò´Â Áß¾Ó ¼öÁ¤ ±¤»êÀÌ ÀÖ´Â°÷À¸·Î °¡½Ã¸é µË´Ï´Ù.\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x17£Ã£Ì£Ï£Ó£Å¡¡£º¡¡£Ä£Å£Ì£Å£Ô£Å¡¡£Ë£Å£Ù"
 	Trigger2(Force1,{Memory(0x596A44, Exactly, 0x00000100)},{DisplayText(InsertKey,4)},{Preserved})
 	Trigger2(Force1,{Memory(0x596A44, Exactly, 65536)},{DisplayText(string.rep("\n", 20),4)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT)},{RotatePlayer({DisplayTextX(InsertKey,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})

@@ -1,11 +1,15 @@
 function Gun_System()
+    local EXCunit_Reset = {}
+    for i = 0, 9 do
+        table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
+    end
     --[[
-    EXCunit ì ìš©
-    1ë²ˆì¤„ : ê±´ì‘ì˜ ë ˆë²¨
-    9ë²ˆì¤„ : ì˜ì‘ìœ ë‹› í‘œì‹
-    10ë²ˆì¤„ : ë§ˆë¦° ë°ìŠ¤ê°’ ì¤‘ë³µì ìš© ë°©ì§€ìš©
+    EXCunit Àû¿ë
+    1¹øÁÙ : °ÇÀÛÀÇ ·¹º§
+    9¹øÁÙ : ¿µÀÛÀ¯´Ö Ç¥½Ä
+    10¹øÁÙ : ¸¶¸° µ¥½º°ª Áßº¹Àû¿ë ¹æÁö¿ë
     ]]
-    CunitCtrig_Part1(FP) -- ì£½ì€ìœ ë‹› ì¸ì‹ ë‹¨ë½ ì‹œì‘
+    CunitCtrig_Part1(FP) -- Á×ÀºÀ¯´Ö ÀÎ½Ä ´Ü¶ô ½ÃÀÛ
     DoActions(FP,MoveCp(Subtract,6*4))
     Check_P8 = def_sIndex()
     NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
@@ -16,13 +20,13 @@ function Gun_System()
 
     NJumpEnd(FP,Check_P8)
     DoActions(FP,MoveCp(Add,6*4))
-    CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- ì˜ì‘ìœ ë‹›ì¸ì‹
+    CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- ¿µÀÛÀ¯´ÖÀÎ½Ä
     InstallHeroPoint()
     CIfEnd()
     CMov(FP,Gun_Type,0)
     CIf(FP,{TTOR({CVar(FP,Level[2],AtMost,3),CVar(FP,Level[2],AtLeast,11)})})
-    for j, k in pairs({142,135,140,141,138,139,137}) do -- ì¡ê±´ì‘ ëª©ë¡
-        f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = ì¡ê±´ì‘ í”Œë˜ê·¸
+    for j, k in pairs({142,135,140,141,138,139,137}) do -- Àâ°ÇÀÛ ¸ñ·Ï
+        f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = Àâ°ÇÀÛ ÇÃ·¡±×
     end
     CIfEnd()
 
@@ -39,7 +43,7 @@ function Gun_System()
     CunitCtrig_Part2()
     DoActionsXI(FP,EXCC_Forward)
     CunitCtrig_Part3X()
-    for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
+    for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
     CunitCtrig_Part4_EX(i,{
     DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
     DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
@@ -51,7 +55,7 @@ function Gun_System()
     end
     CunitCtrig_End()
 
-    CIfX(FP,CVar(FP,count[2],AtMost,GunLimit)) -- ê±´ì‘í•¨ìˆ˜ ì œì–´
+    CIfX(FP,CVar(FP,count[2],AtMost,GunLimit)) -- °ÇÀÛÇÔ¼ö Á¦¾î
         DoActions(FP,{
             SetInvincibility(Disable,"Buildings",FP,64);
         })

@@ -1,9 +1,10 @@
 function LevelUp()
-    local CSelT = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\n\n\n\x13\x04ìƒìœ„ í”Œë ˆì´ì–´ëŠ” ì„ íƒí•´ì£¼ì„¸ìš”.\n\x13\x04ë‹¤ìŒ ë ˆë²¨ë¡œ ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
-    local ClearT1 = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x07\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
-    local ClearT3 = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x07S T A R T\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
-    local ClearT2 = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x0710ì´ˆ í›„ ë‹¤ìŒ ë ˆë²¨ë¡œ ì§„ìž…í•©ë‹ˆë‹¤.\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
-    local NoText = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\n\x14\n\x14\n\n\x13\x04NOë¥¼ ìž…ë ¥í•˜ì…¨ìŠµë‹ˆë‹¤. ê²Œìž„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n\n\x14\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
+    local CSelT = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\n\n\x13\x04»óÀ§ ÇÃ·¹ÀÌ¾î´Â ¼±ÅÃÇØÁÖ¼¼¿ä.\n\x13\x04´ÙÀ½ ·¹º§·Î ÁøÇàÇÏ½Ã°Ú½À´Ï±î?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+    local ClearT1 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x07\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+    local ClearT3 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x07S T A R T\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+    local ClearT2 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x0710ÃÊ ÈÄ ´ÙÀ½ ·¹º§·Î ÁøÀÔÇÕ´Ï´Ù.\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+    local NoText = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x14\n\x14\n\n\x13\x04NO¸¦ ÀÔ·ÂÇÏ¼Ì½À´Ï´Ù. °ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.\n\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+    local TextSwitch = Create_CCTable(5)
     DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),
     })
     TriggerX(FP,{CVar(FP,Actived_Gun[2],AtMost,0),
@@ -22,12 +23,12 @@ function LevelUp()
     
     
     
-    -- ë ˆë²¨ í´ë¦¬ì–´ ë‹¨ë½ 
+    -- ·¹º§ Å¬¸®¾î ´Ü¶ô 
     CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
     
-    CIf(FP,CDeaths(FP,AtMost,0,ReplaceDelayT),SetCDeaths(FP,Add,1,ReplaceDelayT)) -- ë ˆë²¨ í´ë¦¬ì–´ í›„ 1íšŒ ì‹¤í–‰ íŠ¸ë¦¬ê±°ë“¤
+    CIf(FP,CDeaths(FP,AtMost,0,ReplaceDelayT),SetCDeaths(FP,Add,1,ReplaceDelayT)) -- ·¹º§ Å¬¸®¾î ÈÄ 1È¸ ½ÇÇà Æ®¸®°Åµé
     TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2)},{Preserved})
-    CMov(FP,CunitIndex,0)-- ëª¨ë“  ìœ ë‹› ì˜ìž‘ìœ ë‹› í”Œëž˜ê·¸ ë¦¬ì…‹
+    CMov(FP,CunitIndex,0)-- ¸ðµç À¯´Ö ¿µÀÛÀ¯´Ö ÇÃ·¡±× ¸®¼Â
     CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
         CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
         CAdd(FP,CunitIndex,1)
@@ -78,7 +79,7 @@ function LevelUp()
     CMov(FP,0x6509B0,FP)
     
     for i = 0, 4 do
-        TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x0710ì´ˆ í›„ ë‹¤ìŒ ë ˆë²¨ë¡œ ì§„ìž…í•©ë‹ˆë‹¤.\n\x13\x04"..5-i.."ì´ˆ ë‚¨ì•˜ìŠµë‹ˆë‹¤.\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•",4)},HumanPlayers,FP),
+        TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x0710ÃÊ ÈÄ ´ÙÀ½ ·¹º§·Î ÁøÀÔÇÕ´Ï´Ù.\n\x13\x04"..5-i.."ÃÊ ³²¾Ò½À´Ï´Ù.\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª",4)},HumanPlayers,FP),
         SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{Preserved})
     end
     CTrigger(FP,{CDeaths(FP,AtMost,5000,ReplaceDelayT)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
@@ -105,7 +106,7 @@ function LevelUp()
         CAdd(FP,0x6509B0,1)
         CIf(FP,DeathsX(CurrentPlayer,Exactly,7*256,0,0xFF00))
             CSub(FP,0x6509B0,1)
-            CallTrigger(FP,f_Replace)-- ë°ì´í„°í™” í•œ ìœ ë‹› ìž¬ë°°ì¹˜í•˜ëŠ” ì½”ë“œ.
+            CallTrigger(FP,f_Replace)-- µ¥ÀÌÅÍÈ­ ÇÑ À¯´Ö Àç¹èÄ¡ÇÏ´Â ÄÚµå.
             CAdd(FP,0x6509B0,1)
         CIfEnd()
         CSub(FP,0x6509B0,1)

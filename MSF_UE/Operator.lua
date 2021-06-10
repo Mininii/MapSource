@@ -1,10 +1,10 @@
 function OPTrig()
-    CIfX(FP,Never()) -- ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ ì‹œì‘
+    CIfX(FP,Never()) -- »óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ô ½ÃÀÛ
 	for i = 0, 6 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8,"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07ê¸°ë¶€\x04 : F9, \x1Cë°°ì†ì¡°ì • \x04: F12\x07 ]")},1)
+        CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07±âºÎ\x04 : F9, \x1C¹è¼ÓÁ¶Á¤ \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then
@@ -68,7 +68,7 @@ function OPTrig()
     end
     SetRecoverCp()
         
-    --ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ì´ì§€ë§Œ LVê³¼ ì‹œê°„ í‘œê¸°ì‹œì— 13ë²ˆì¤„ ì¡°ì‘ì€ ë¬¸ì œì—†ìŒ. ë”°ë¼ì„œ ì´ê³³ì— ì‘ì„±í•¨
+    --»óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ôÀÌÁö¸¸ LV°ú ½Ã°£ Ç¥±â½Ã¿¡ 13¹øÁÙ Á¶ÀÛÀº ¹®Á¦¾øÀ½. µû¶ó¼­ ÀÌ°÷¿¡ ÀÛ¼ºÇÔ
     --		SetMemory(0x641598, SetTo, 0x4C205B07);
     --		SetMemory(0x64159C, SetTo, 0x30302E56);--FFFF0000
     --		SetMemory(0x6415A0, SetTo, 0x2D200430);--000000FF
@@ -99,11 +99,11 @@ function OPTrig()
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,CPConsole),{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
-    	DisplayText("\x07ã€ \x1Fê¸°ë¶€ ON \x04ìƒíƒœì—ì„œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ê¸°ëŠ¥ì…ë‹ˆë‹¤. \x03ESC\x04ë¥¼ ëˆŒëŸ¬ ê¸°ëŠ¥ì„ OFFí•´ì£¼ì„¸ìš”. \x07ã€",4)},1)
+    	DisplayText("\x07¡º \x1F±âºÎ ON \x04»óÅÂ¿¡¼­´Â »ç¿ëÇÒ ¼ö ¾ø´Â ±â´ÉÀÔ´Ï´Ù. \x03ESC\x04¸¦ ´­·¯ ±â´ÉÀ» OFFÇØÁÖ¼¼¿ä. \x07¡»",4)},1)
     KetInput(F9,Deaths(CurrentPlayer,Exactly,1,OPConsole),{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
-    	DisplayText("\x07ã€ \x1Cë°°ì†ì¡°ì • \x04ìƒíƒœì—ì„œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ê¸°ëŠ¥ì…ë‹ˆë‹¤. \x03ESC\x04ë¥¼ ëˆŒëŸ¬ ê¸°ëŠ¥ì„ OFFí•´ì£¼ì„¸ìš”. \x07ã€",4)},1)
+    	DisplayText("\x07¡º \x1C¹è¼ÓÁ¶Á¤ \x04»óÅÂ¿¡¼­´Â »ç¿ëÇÒ ¼ö ¾ø´Â ±â´ÉÀÔ´Ï´Ù. \x03ESC\x04¸¦ ´­·¯ ±â´ÉÀ» OFFÇØÁÖ¼¼¿ä. \x07¡»",4)},1)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,OPConsole),{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
     CIf(FP,Deaths(CurrentPlayer,AtLeast,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT))
@@ -113,21 +113,21 @@ function OPTrig()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))
-            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x08ê°•í‡´ëª¨ë“œ ON. \x04ìˆ«ìí‚¤ë¥¼ 5íšŒ ëˆŒëŸ¬ ê°•í‡´í•˜ì„¸ìš”. ESC : ë‹«ê¸°\x07 ]")},1)
+            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x08°­Åğ¸ğµå ON. \x04¼ıÀÚÅ°¸¦ 5È¸ ´­·¯ °­ÅğÇÏ¼¼¿ä. ESC : ´İ±â\x07 ]")},1)
             -- 205 ~ 211
             for i = 1, 6 do
                 CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,205+i),TTMemory(0x6509B0,NotSame,i),PlayerCheck(i,1)},{
-                    RotatePlayer({DisplayTextX("\x07ã€ "..PlayerString[i+1].."\x04ì—ê²Œ \x08ê²½ê³  1íšŒ ëˆ„ì \x04 ë˜ì—ˆìŠµë‹ˆë‹¤. ì´ 5íšŒ ëˆ„ì ì‹œ \x08ê°•í‡´ ì²˜ë¦¬ \x04ë©ë‹ˆë‹¤. \x07ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+                    RotatePlayer({DisplayTextX("\x07¡º "..PlayerString[i+1].."\x04¿¡°Ô \x08°æ°í 1È¸ ´©Àû\x04 µÇ¾ú½À´Ï´Ù. ÃÑ 5È¸ ´©Àû½Ã \x08°­Åğ Ã³¸® \x04µË´Ï´Ù. \x07¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
                     SetCDeaths(FP,SetTo,0,OPFuncT),SetCDeaths(FP,Add,1,BanToken[i+1])},{Preserved})
             end
             CMov(FP,0x6509B0,CurrentOP)
             CelseX()
-            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x04ë°©í–¥í‚¤(â†â†’) : \x1Fë°°ì† ì¡°ì •, \x04ESC : ë‹«ê¸°, B : \x08ê°•í‡´ëª¨ë“œ ON\x07 ]")},1)
+            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x04¹æÇâÅ°(¡ç¡æ) : \x1F¹è¼Ó Á¶Á¤, \x04ESC : ´İ±â, B : \x08°­Åğ¸ğµå ON\x07 ]")},1)
         CIfXEnd()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{Preserved})
     CIfEnd()
-    CMov(FP,0x6509B0,FP) -- RecoverCP ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ ë
-    CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ë°°ì†ì¡°ì • íŠ¸ë¦¬ê±°
+    CMov(FP,0x6509B0,FP) -- RecoverCP »óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ô ³¡
+    CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ¹è¼ÓÁ¶Á¤ Æ®¸®°Å
         CMov(FP,CurrentSpeed,SpeedVar)
         for i = 1, 10 do
             Trigger { -- No comment (E93EF7A9)
@@ -138,7 +138,7 @@ function OPTrig()
                 },
                 actions = {PreserveTrigger();
                     RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-                    DisplayTextX("\x13\x07ã€ \x0Fë°°ì† ë³€ê²½ \x10- "..XSpeed[i].." \x07ã€", 0)},HumanPlayers,FP);
+                    DisplayTextX("\x13\x07¡º \x0F¹è¼Ó º¯°æ \x10- "..XSpeed[i].." \x07¡»", 0)},HumanPlayers,FP);
                     SetMemory(0x5124F0,SetTo,SpeedV[i]);
                 },
             }

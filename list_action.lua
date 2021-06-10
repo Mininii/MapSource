@@ -172,3 +172,4 @@ end
 function SetMemoryX(Offset, type, Value, Mask)
 	return 0
 end
+Preserved = 0

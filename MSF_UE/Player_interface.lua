@@ -1,19 +1,48 @@
 function PlayerInterface()
+	local MarCreate = Create_CCTable(7)
+	local MarCreate2 = Create_CCTable(7)
+	local AtkFactorV = Create_VTable(7,AtkFactor)
+	local DefFactorV = Create_VTable(7,DefFactor)
+	local AtkFactorV2 = Create_VTable(7)
+	local DefFactorV2 = Create_VTable(7)
+	local MarHP = Create_VTable(7)
+	local MarHP2 = Create_VTable(7)
+	local DefUpCompCount = Create_VTable(7)
+	local AtkUpCompCount = Create_VTable(7)
+	local CurrentHP = Create_VTable(7)
+	local MarMaxHP = Create_VTable(7,2000*256)
+	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
+	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
+	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
+	for i = 0, 6 do
+		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
+		table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+0+i - AtkUpgradeMaskRetArr[i+1])
+		table.insert(NormalUpgradeMaskRetArr,(0x58D2B0+(i*46)+7)%4)
+		table.insert(NormalUpgradePtrArr,0x58D2B0+(i*46)+7 - NormalUpgradeMaskRetArr[i+1])
+		table.insert(DefUpgradeMaskRetArr,(0x58D2B0+(i*46)+8+i)%4)
+		table.insert(DefUpgradePtrArr,0x58D2B0+(i*46)+8+i - DefUpgradeMaskRetArr[i+1])
+		table.insert(AtkFactorMaskRetArr,(0x6559C0+((i)*2))%4)
+		table.insert(AtkFactorPtrArr,0x6559C0+((i)*2) - AtkFactorMaskRetArr[i+1])
+		table.insert(DefFactorMaskRetArr,(0x6559C0+((i+8)*2))%4)
+		table.insert(DefFactorPtrArr,0x6559C0+((i+8)*2) - DefFactorMaskRetArr[i+1])
+		table.insert(MarShMaskRetArr,(0x660E00 + (MariD[i+1]*2))%4)
+		table.insert(MarShPtrArr,0x660E00 + (MariD[i+1]*2) - (MarShMaskRetArr[i+1]))
+	end
 
-	for i = 0, 6 do -- ê°í”Œë ˆì´ì–´
-		if i ~= 0 then --ê°•í‡´íŠ¸ë¦¬ê±°ëŠ” 1í”Œë ˆì´ì–´ ì œì™¸
-		Trigger { -- ê°•í‡´
+	for i = 0, 6 do -- °¢ÇÃ·¹ÀÌ¾î
+		if i ~= 0 then --°­ÅğÆ®¸®°Å´Â 1ÇÃ·¹ÀÌ¾î Á¦¿Ü
+		Trigger { -- °­Åğ
 			players = {i},
 			conditions = {
 				Label(0);
 				CDeaths(FP,AtLeast,5,BanToken[i+1]);
 			},
 			actions = {
-				RotatePlayer({DisplayTextX("\x07ã€ \x04"..PlayerString[i+1].."\x04ì˜ ê°•í‡´ì²˜ë¦¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+				RotatePlayer({DisplayTextX("\x07¡º \x04"..PlayerString[i+1].."\x04ÀÇ °­ÅğÃ³¸®°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\x07 ¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07ã€ \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù.\x07 ¡»",4);
 				Defeat();
 				},
 			}
@@ -22,20 +51,20 @@ function PlayerInterface()
 		
 		TriggerX(i,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,10)},{
 				DisplayText(string.rep("\n", 20),4);
-				DisplayText("\x13\x04"..string.rep("â€•", 56),4);
-				DisplayText("\x13\x0Fï¼³ï¼«ï¼©ï¼¬ï¼¬ã€€ï¼µï¼®ï¼¬ï¼¯ï¼£ï¼«ï¼¥ï¼¤",0);
+				DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
+				DisplayText("\x13\x0F£Ó£Ë£É£Ì£Ì¡¡£Õ£Î£Ì£Ï£Ã£Ë£Å£Ä",0);
 				DisplayText("\n",4);
-				DisplayText("\x13\x03ê³µê²©ë ¥ \x04ì—…ê·¸ë ˆì´ë“œë¥¼ 10íšŒ ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤.\n\x13\x04ì´ì œë¶€í„° \x1Bì›ê²© ìŠ¤íŒ€íŒ©\x04ì„ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",0);
+				DisplayText("\x13\x03°ø°İ·Â \x04¾÷±×·¹ÀÌµå¸¦ 10È¸ ¿Ï·áÇÏ¿´½À´Ï´Ù.\n\x13\x04ÀÌÁ¦ºÎÅÍ \x1B¿ø°İ ½ºÆÀÆÑ\x04À» »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.",0);
 				DisplayText("\n",4);
-				DisplayText("\x13\x0Fï¼³ï¼«ï¼©ï¼¬ï¼¬ã€€ï¼µï¼®ï¼¬ï¼¯ï¼£ï¼«ï¼¥ï¼¤",0);
-				DisplayText("\x13\x04"..string.rep("â€•", 56),4);
+				DisplayText("\x13\x0F£Ó£Ë£É£Ì£Ì¡¡£Õ£Î£Ì£Ï£Ã£Ë£Å£Ä",0);
+				DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
 				SetMemoryB(0x57F27C+(228*i)+71,SetTo,1);
 				PlayWAV("staredit\\wav\\Unlock.ogg");
 				PlayWAV("staredit\\wav\\Unlock.ogg");
 				PlayWAV("staredit\\wav\\Unlock.ogg");
 		})
 		
-		Trigger { -- ìŠ¤íŒ€íŒ©
+		Trigger { -- ½ºÆÀÆÑ
 			players = {i},
 			conditions = {
 				Label(0);
@@ -44,13 +73,13 @@ function PlayerInterface()
 			actions = {
 				SetDeaths(i,Add,1,71);
 				RemoveUnitAt(1,71,"Anywhere",i);
-				DisplayText("\x07ã€ \x04ì›ê²© \x1BìŠ¤íŒ€íŒ©\x04ê¸°ëŠ¥ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07¡º \x04¿ø°İ \x1B½ºÆÀÆÑ\x04±â´ÉÀ» »ç¿ëÇÕ´Ï´Ù.\x07 ¡»",4);
 				PreserveTrigger();
 			},
 		}
 		
 		CIf(i,Bring(i,AtLeast,1,19,64))
-		Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
+		Trigger { -- º¸È£¸· °¡µ¿
 			players = {i},
 			conditions = {
 				Label(0);
@@ -60,14 +89,14 @@ function PlayerInterface()
 			actions = {
 				SetResources(i,Add,65000,Ore);
 				RemoveUnitAt(1,19,"Anywhere",i);
-				DisplayText("\x07ã€ \x04ì´ë¯¸ \x1Cìˆ˜ì • ë³´í˜¸ë§‰\x04ì„ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤. ìì› ë°˜í™˜ + \x1F65000 Ore\x07ã€",4);
+				DisplayText("\x07¡º \x04ÀÌ¹Ì \x1C¼öÁ¤ º¸È£¸·\x04À» »ç¿ëÁßÀÔ´Ï´Ù. ÀÚ¿ø ¹İÈ¯ + \x1F65000 Ore\x07¡»",4);
 				PlayWAV("sound\\Misc\\PError.WAV");
 				PlayWAV("sound\\Misc\\PError.WAV");
 				PreserveTrigger();
 			},
 		}
 		
-		Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
+		Trigger { -- º¸È£¸· °¡µ¿
 			players = {i},
 			conditions = {
 				Label(0);
@@ -83,7 +112,7 @@ function PlayerInterface()
 			},
 		}
 		CIfEnd()
-		Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
+		Trigger { -- º¸È£¸· °¡µ¿
 			players = {i},
 			conditions = {
 				Label(0);
@@ -91,7 +120,7 @@ function PlayerInterface()
 				Memory(0x582294+(4*i),AtMost,0);
 			},
 			actions = {
-				DisplayText("\x07ã€ \x1Cìˆ˜ì • ë³´í˜¸ë§‰\x04 ì‚¬ìš©ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. \x07ã€",4);
+				DisplayText("\x07¡º \x1C¼öÁ¤ º¸È£¸·\x04 »ç¿ëÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. \x07¡»",4);
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				SetCDeaths(i,SetTo,0,ShUsed);
@@ -99,14 +128,14 @@ function PlayerInterface()
 			},
 		}
 		for j = 1, 5 do
-		Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
+		Trigger { -- º¸È£¸· °¡µ¿
 			players = {i},
 			conditions = {
 				Label(0);
 				Memory(0x582294+(4*i),Exactly,50*j);
 			},
 			actions = {
-				DisplayText("\x07ã€ \x1Cìˆ˜ì • ë³´í˜¸ë§‰\x04ì´ "..j.."ì´ˆ ë‚¨ì•˜ìŠµë‹ˆë‹¤. \x07ã€",4);
+				DisplayText("\x07¡º \x1C¼öÁ¤ º¸È£¸·\x04ÀÌ "..j.."ÃÊ ³²¾Ò½À´Ï´Ù. \x07¡»",4);
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PreserveTrigger();
@@ -119,8 +148,8 @@ function PlayerInterface()
 		Trigger2(i,{Memory(0x582294+(4*i),AtLeast,1)},{SetMemory(0x582294+(4*i),Subtract,1)},{Preserved})
 		
 		TriggerX(FP,{Deaths(i,AtLeast,1,CPConsole),Memory(0x57F1B0,Exactly,i)},{
-			print_utf8(12,0,"\x07[ \x1Fê¸°ë¶€ëª¨ë“œ ON. \x04ìˆ«ìí‚¤ë¥¼ ëˆŒëŸ¬ ê¸°ë¶€í•˜ì„¸ìš”. ê¸°ë¶€ë‹¨ìœ„ë³€ê²½ : ~í‚¤, ESC : ë‹«ê¸°\x07 ]")
-		},{Preserved}) -- 13ë²ˆì¤„ í”„ë¦°íŠ¸ íŠ¸ë¦¬ê±° í”Œë ˆì´ì–´ê°€ FPì¸ ì´ìœ ëŠ” íŠ¸ë¦¬ê±° ìˆœì„œê°€ 1Pë¶€í„° 8Pê¹Œì§€ ì‹¤í–‰ë˜ê¸° ë•Œë¬¸. ië¡œ í•˜ê²Œë  ê²½ìš° ì´ê²Œ ì”¹íˆê³  ìœ„ì—ìˆëŠ” CTextê°€ ë³´ì´ê²Œ ëœë‹¤. 
+			print_utf8(12,0,"\x07[ \x1F±âºÎ¸ğµå ON. \x04¼ıÀÚÅ°¸¦ ´­·¯ ±âºÎÇÏ¼¼¿ä. ±âºÎ´ÜÀ§º¯°æ : ~Å°, ESC : ´İ±â\x07 ]")
+		},{Preserved}) -- 13¹øÁÙ ÇÁ¸°Æ® Æ®¸®°Å ÇÃ·¹ÀÌ¾î°¡ FPÀÎ ÀÌÀ¯´Â Æ®¸®°Å ¼ø¼­°¡ 1PºÎÅÍ 8P±îÁö ½ÇÇàµÇ±â ¶§¹®. i·Î ÇÏ°ÔµÉ °æ¿ì ÀÌ°Ô ¾ÃÈ÷°í À§¿¡ÀÖ´Â CText°¡ º¸ÀÌ°Ô µÈ´Ù. 
 		
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,0,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,1,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
@@ -128,14 +157,14 @@ function PlayerInterface()
 		CIfX(i,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},SetCDeaths(i,Add,1,FuncT))
 		TriggerX(i,{CDeaths(i,AtLeast,30*24,FuncT)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(i,SetTo,0,FuncT)},{Preserved})
 		
-		GiveRateT = {"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F5000 Ore\x04 \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
-		"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F10000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
-		"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F50000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
-		"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F100000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
-		"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F500000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
-		"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F1000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€"}
+		GiveRateT = {"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F5000 Ore\x04 \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
+		"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F10000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
+		"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F50000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
+		"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F100000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
+		"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F500000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
+		"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F1000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»"}
 		for k = 0, 5 do
-		Trigger { -- ê¸°ë¶€ ê¸ˆì•¡ ë³€ê²½
+		Trigger { -- ±âºÎ ±İ¾× º¯°æ
 			players = {i},
 			conditions = {
 				Label(0);
@@ -155,21 +184,21 @@ function PlayerInterface()
 		
 		for j=0, 6 do
 			if i==j then
-				Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
+				Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
 					players = {i},
 					conditions = {
 						Deaths(i,AtLeast,1,j+212);
 					},
 					actions = {
 						SetDeaths(i,SetTo,0,j+212);
-						DisplayText("\x07ã€ "..PlayerString[j+1].."\x04ì€(ëŠ”) ìê¸° ìì‹ ì…ë‹ˆë‹¤. ìê¸° ìì‹ ì—ê²ŒëŠ” ê¸°ë¶€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x07ã€",4);
+						DisplayText("\x07¡º "..PlayerString[j+1].."\x04Àº(´Â) ÀÚ±â ÀÚ½ÅÀÔ´Ï´Ù. ÀÚ±â ÀÚ½Å¿¡°Ô´Â ±âºÎÇÒ ¼ö ¾ø½À´Ï´Ù. \x07¡»",4);
 						SetCDeaths(i,SetTo,0,FuncT);
 						PreserveTrigger();
 					},
 				}
 			else
 				for k=0, 5 do
-					Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
+					Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
 						players = {i},
 						conditions = {
 							Label(0);
@@ -180,12 +209,12 @@ function PlayerInterface()
 						},
 						actions = {
 							SetDeaths(i,SetTo,0,j+212);
-							DisplayText("\x07ã€ \x04ì”ì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. \x07ã€",4);
+							DisplayText("\x07¡º \x04ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù. \x07¡»",4);
 							SetCDeaths(i,SetTo,0,FuncT);
 							PreserveTrigger();
 						},
 					}
-					Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
+					Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
 						players = {i},
 						conditions = {
 							Label(0);
@@ -199,16 +228,16 @@ function PlayerInterface()
 							SetDeaths(i,SetTo,0,j+212);
 							SetResources(i,Subtract,GiveRate2[k+1],Ore);
 							SetResources(j,Add,GiveRate2[k+1],Ore);
-							DisplayText("\x07ã€ "..PlayerString[j+1].."\x04ì—ê²Œ \x1F"..GiveRate2[k+1].." Ore\x04ë¥¼ ê¸°ë¶€í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€",4);
+							DisplayText("\x07¡º "..PlayerString[j+1].."\x04¿¡°Ô \x1F"..GiveRate2[k+1].." Ore\x04¸¦ ±âºÎÇÏ¿´½À´Ï´Ù. \x07¡»",4);
 							SetMemory(0x6509B0,SetTo,j);
-							DisplayText("\x12\x07ã€"..PlayerString[i+1].."\x04ì—ê²Œ \x1F"..GiveRate2[k+1].." Ore\x04ë¥¼ ê¸°ë¶€ë°›ì•˜ìŠµë‹ˆë‹¤.\x02 \x07ã€",4);
+							DisplayText("\x12\x07¡º"..PlayerString[i+1].."\x04¿¡°Ô \x1F"..GiveRate2[k+1].." Ore\x04¸¦ ±âºÎ¹Ş¾Ò½À´Ï´Ù.\x02 \x07¡»",4);
 							SetMemory(0x6509B0,SetTo,i);
 							SetCDeaths(i,SetTo,0,FuncT);
 							PreserveTrigger();
 						},
 					}
 				end
-				Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
+				Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
 					players = {i},
 					conditions = {
 						Label(0);
@@ -217,7 +246,7 @@ function PlayerInterface()
 					},
 					actions = {
 						SetDeaths(i,SetTo,0,j+212);
-						DisplayText("\x07ã€ "..PlayerString[j+1].."\x04ì´(ê°€) ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. \x07ã€",4);
+						DisplayText("\x07¡º "..PlayerString[j+1].."\x04ÀÌ(°¡) Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù. \x07¡»",4);
 						SetCDeaths(i,SetTo,0,FuncT);
 						PreserveTrigger();
 					},
@@ -225,8 +254,8 @@ function PlayerInterface()
 			end 
 		end 
 		
-		TriggerX(i,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(i,SetTo,0,FuncT),SetDeaths(CurrentPlayer,SetTo,0,CPConsole)},{Preserved})
-		CIfXEnd()
+			TriggerX(i,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(i,SetTo,0,FuncT),SetDeaths(CurrentPlayer,SetTo,0,CPConsole)},{Preserved})
+			CIfXEnd()
 		
 			DoActions(i,{
 				SetMemoryB(0x57F27C+(228*i)+MedicTrig[1],SetTo,0),
@@ -244,125 +273,47 @@ function PlayerInterface()
 			end
 			TriggerX(i,{CDeaths("X",AtLeast,4,DelayMedic)},{SetCDeaths("X",Subtract,4,DelayMedic)},{Preserved})
 		
-		Trigger { -- BGM On Off
-			players = {i},
-			conditions = {
-				DeathsX(i,Exactly,0,440,0xFF000000);
-				Command(i,AtLeast,1,22);
-			},
-			actions = {
+			Trigger2(i,{DeathsX(i,Exactly,0,440,0xFF000000);Command(i,AtLeast,1,22);},{
 				GiveUnits(All,22,i,"Anywhere",P12);
 				RemoveUnitAt(All,22,"Anywhere",P12);
-				DisplayText("\x07ã€ \x1CBGM\x04ì„ ë“£ì§€ ì•ŠìŠµë‹ˆë‹¤. \x07ã€",4);
+				DisplayText("\x07¡º \x1CBGM\x04À» µèÁö ¾Ê½À´Ï´Ù. \x07¡»",4);
 				SetDeathsX(i,SetTo,1*16777216,440,0xFF000000);
-				PreserveTrigger();
-				},
-			}
-		Trigger { -- BGM On Off
-			players = {i},
-			conditions = {
-				DeathsX(i,Exactly,1*16777216,440,0xFF000000);
-				Command(i,AtLeast,1,22);
-			},
-			actions = {
+			},{Preserved})
+
+			Trigger2(i,{DeathsX(i,Exactly,1*16777216,440,0xFF000000);Command(i,AtLeast,1,22);},{
 				GiveUnits(All,22,i,"Anywhere",P12);
 				RemoveUnitAt(All,22,"Anywhere",P12);
-				DisplayText("\x07ã€ \x1CBGM\x04ì„ ë“£ìŠµë‹ˆë‹¤. \x07ã€",4);
+				DisplayText("\x07¡º \x1CBGM\x04À» µè½À´Ï´Ù. \x07¡»",4);
 				SetDeathsX(i,SetTo,0*16777216,440,0xFF000000);
-				PreserveTrigger();
-			},
-		}
-		
-		Trigger { -- BGM On Off
-			players = {i},
-			conditions = {
-				Deaths(i,Exactly,0,444);
-				Command(i,AtLeast,1,70);
-			},
-			actions = {
+			},{Preserved})
+
+			Trigger2(i,{Deaths(i,Exactly,0,444);Command(i,AtLeast,1,70);},{
 				GiveUnits(All,70,i,"Anywhere",P12);
 				RemoveUnitAt(All,70,"Anywhere",P12);
-				DisplayText("\x07ã€ \x1Dhatchery \x1CBGM\x04ì„ ë³€ê²½í•©ë‹ˆë‹¤ (\x0Fê²€ì—´ë²„ì „\x04). \x07ã€",4);
+				DisplayText("\x07¡º \x1Dhatchery \x1CBGM\x04À» º¯°æÇÕ´Ï´Ù (\x0F°Ë¿­¹öÀü\x04). \x07¡»",4);
 				SetDeaths(i,SetTo,1,444);
-				PreserveTrigger();
-			},
-		}
-		
-		Trigger { -- BGM On Off
-			players = {i},
-			conditions = {
-				Deaths(i,Exactly,1,444);
-				Command(i,AtLeast,1,70);
-			},
-			actions = {
+			},{Preserved})
+			
+			Trigger2(i,{Deaths(i,Exactly,1,444);Command(i,AtLeast,1,70);},{
 				GiveUnits(All,70,i,"Anywhere",P12);
 				RemoveUnitAt(All,70,"Anywhere",P12);
-				DisplayText("\x07ã€ \x1Dhatchery \x1CBGM\x04ì„ ë³€ê²½í•©ë‹ˆë‹¤ (\x0Fê¸°ì¡´ë²„ì „\x04). \x07ã€",4);
+				DisplayText("\x07¡º \x1Dhatchery \x1CBGM\x04À» º¯°æÇÕ´Ï´Ù (\x0F±âÁ¸¹öÀü\x04). \x07¡»",4);
 				SetDeaths(i,SetTo,0,444);
-				PreserveTrigger();
-			},
-		}
+			},{Preserved})
+
+		UnitLimit(i,7,5,"SCV´Â",500)
+		UnitLimit(i,125,5,"º¡Ä¿´Â",8000)
+		UnitLimit(i,7,5,"ÅÍ·¿Àº",4000)
 		
-		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
-		table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+0+i - AtkUpgradeMaskRetArr[i+1])
-		table.insert(NormalUpgradeMaskRetArr,(0x58D2B0+(i*46)+7)%4)
-		table.insert(NormalUpgradePtrArr,0x58D2B0+(i*46)+7 - NormalUpgradeMaskRetArr[i+1])
-		table.insert(DefUpgradeMaskRetArr,(0x58D2B0+(i*46)+8+i)%4)
-		table.insert(DefUpgradePtrArr,0x58D2B0+(i*46)+8+i - DefUpgradeMaskRetArr[i+1])
-		table.insert(AtkFactorMaskRetArr,(0x6559C0+((i)*2))%4)
-		table.insert(AtkFactorPtrArr,0x6559C0+((i)*2) - AtkFactorMaskRetArr[i+1])
-		table.insert(DefFactorMaskRetArr,(0x6559C0+((i+8)*2))%4)
-		table.insert(DefFactorPtrArr,0x6559C0+((i+8)*2) - DefFactorMaskRetArr[i+1])
-		
-		
-		
-		Trigger { -- SCV ì†Œì§€ ê°¯ìˆ˜ ì œí•œ
-			players = {i},
-			conditions = {
-				Command(i,AtLeast,6,7);
-				},
-			
-			actions = {
-				KillUnitAt(1,7,"Anywhere",CurrentPlayer);
-				DisplayText("\x07ã€ \x04SCVëŠ” 5ê¸°ë¥¼ ë„˜ì–´ì„œ ì†Œì§€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x1Cìì› ë°˜í™˜ \x1F+ 500 Ore\x07 ã€",4);
-				SetResources(CurrentPlayer,Add,500,Ore);
-				PreserveTrigger();
-			},
-		}
-		
-		Trigger { -- ë²™ì»¤ ì†Œì§€ ê°¯ìˆ˜ ì œí•œ
-			players = {i},
-			conditions = {
-				Command(i,AtLeast,6,125);
-				},
-			
-			actions = {
-				KillUnitAt(1,125,"Anywhere",CurrentPlayer);
-				DisplayText("\x07ã€ \x07ë²™ì»¤\x04ëŠ” 5ê¸°ë¥¼ ë„˜ì–´ì„œ ì†Œì§€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x1Cìì› ë°˜í™˜ \x1F+ 8,000 Ore\x07 ã€",4);
-				SetResources(CurrentPlayer,Add,8000,Ore);
-				PreserveTrigger();
-			},
-		}
-		Trigger { -- í„°ë › ì†Œì§€ ê°¯ìˆ˜ ì œí•œ
-			players = {i},
-			conditions = {
-				Command(i,AtLeast,6,124);
-				},
-			
-			actions = {
-				KillUnitAt(1,124,"Anywhere",CurrentPlayer);
-				DisplayText("\x07ã€ \x07í„°ë ›\x04ì€ 5ê¸°ë¥¼ ë„˜ì–´ì„œ ì†Œì§€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x1Cìì› ë°˜í™˜ \x1F+ 4,000 Ore\x07 ã€",4);
-				SetResources(CurrentPlayer,Add,4000,Ore);
-				PreserveTrigger();
-			},
-		}
-		
-		
-		CIfX(FP,PlayerCheck(i,1)) -- FPê°€ ê´€ë¦¬í•˜ëŠ” ì‹œìŠ¤í…œ ë¶€ë¶„ íŠ¸ë¦¬ê±°. ê°í”Œë ˆì´ì–´ê°€ ìˆì„ê²½ìš° ì‹¤í–‰ëœë‹¤.
+
+
+
+
+		CIfX(FP,PlayerCheck(i,1)) -- FP°¡ °ü¸®ÇÏ´Â ½Ã½ºÅÛ ºÎºĞ Æ®¸®°Å. °¢ÇÃ·¹ÀÌ¾î°¡ ÀÖÀ»°æ¿ì ½ÇÇàµÈ´Ù.
 		CIf(FP,{Deaths(i,AtLeast,36,126),Bring(i,AtLeast,1,12,64)})
 			TriggerX(FP,{Bring(i,AtLeast,1,12,64)},{
 				SetMemory(0x6509B0,SetTo,i),
-				DisplayText("\x07ã€ \x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x1FExceeD \x1BM\x04arine ì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F30,000 O r e \x07ã€",4),
+				DisplayText("\x07¡º \x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© \x1FExceeD \x1BM\x04arine À» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F30,000 O r e \x07¡»",4),
 				SetMemory(0x6509B0,SetTo,FP),
 				RemoveUnitAt(1,12,"Anywhere",i),
 				SetCDeaths(FP,Add,1,MarCreate[i+1]),
@@ -371,7 +322,7 @@ function PlayerInterface()
 			},{Preserved})
 		CIfEnd()
 		
-		  Trigger { -- ì¡°í•© ì¡°ê±´ ì•ˆë¨
+		  Trigger { -- Á¶ÇÕ Á¶°Ç ¾ÈµÊ
 			players = {i},
 			conditions = {
 				Deaths(i,AtMost,35,126);
@@ -380,12 +331,12 @@ function PlayerInterface()
 			actions = {
 				SetResources(i,Add,30000,ore);
 				RemoveUnitAt(1,12,"Anywhere",i);
-				DisplayText("\x07ã€ \x1FExceeD \x1BM\x04arine \x19ë¹ ë¥¸ ì†Œí™˜\x04 ì¡°ê±´ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - \x1FExceeD \x1BM\x04arine \x0436ê¸° ì¡°í•©) ìì› ë°˜í™˜ + \x1F30,000 O r e \x07ã€",4);
+				DisplayText("\x07¡º \x1FExceeD \x1BM\x04arine \x19ºü¸¥ ¼ÒÈ¯\x04 Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - \x1FExceeD \x1BM\x04arine \x0436±â Á¶ÇÕ) ÀÚ¿ø ¹İÈ¯ + \x1F30,000 O r e \x07¡»",4);
 				PreserveTrigger();
 			},
 		}
 		
-		Trigger { -- ì¡°í•© ì˜ì›…ë§ˆë¦°
+		Trigger { -- Á¶ÇÕ ¿µ¿õ¸¶¸°
 			players = {FP},
 			conditions = {
 				Label(0);
@@ -395,7 +346,7 @@ function PlayerInterface()
 			},
 			actions = {
 				SetMemory(0x6509B0,SetTo,i),
-				DisplayText("\x07ã€ \x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x04Norma Marineì„ \x1FExceeD \x1BM\x04arineìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F25,000 O r e \x07ã€",4);
+				DisplayText("\x07¡º \x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© \x04Norma MarineÀ» \x1FExceeD \x1BM\x04arineÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F25,000 O r e \x07¡»",4);
 				SetMemory(0x6509B0,SetTo,FP),
 				SetDeaths(i,add,1,126),
 				ModifyUnitEnergy(1,10,i,10,0);
@@ -409,7 +360,7 @@ function PlayerInterface()
 		
 		TriggerX(FP,{Bring(i,AtLeast,1,15,64)},{
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07ã€ \x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ Normal Marine ì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F5,000 O r e \x07ã€",4),
+			DisplayText("\x07¡º \x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© Normal Marine À» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F5,000 O r e \x07¡»",4),
 			SetMemory(0x6509B0,SetTo,FP),
 			RemoveUnitAt(1,15,"Anywhere",i),
 			SetCDeaths(FP,Add,1,MarCreate2[i+1]),
@@ -419,167 +370,160 @@ function PlayerInterface()
 		
 		
 		CIf(FP,{CDeaths(FP,AtLeast,1,MarCreate[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate[i+1]))
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
-		DoActions(FP,CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}))
-		CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-			CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
-			TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
-		CIfEnd()
-		CMov(FP,0x6509B0,FP)
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
+			DoActions(FP,CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}))
+			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
+				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
+			CIfEnd()
+			CMov(FP,0x6509B0,FP)
 		CIfEnd()
 		
 		CIf(FP,{CDeaths(FP,AtLeast,1,MarCreate2[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate2[i+1]))
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
-		DoActions(FP,CreateUnitWithProperties(1,10,2+i,i,{energy = 100}))
-		CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-			CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
-			TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
+			DoActions(FP,CreateUnitWithProperties(1,10,2+i,i,{energy = 100}))
+			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
+				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
+			CIfEnd()
+			CMov(FP,0x6509B0,FP)
 		CIfEnd()
-		CMov(FP,0x6509B0,FP)
-		CIfEnd()
-		
-			CIf(FP,{-- ë©”ë”•íŠ¸ë¦¬ê±° ê·€ì°®ì•„ì„œ í•œë²ˆì— ì²˜ë¦¬í•˜ê¸°;
+			CIf(FP,{-- ¸ŞµñÆ®¸®°Å ±ÍÂú¾Æ¼­ ÇÑ¹ø¿¡ Ã³¸®ÇÏ±â;
 				TTOR({
 					Command(i,AtLeast,1,MedicTrig[1]),
 					Command(i,AtLeast,1,MedicTrig[2]),
 					Command(i,AtLeast,1,MedicTrig[3]),
 					Command(i,AtLeast,1,MedicTrig[4]),
+				})},{
+					RemoveUnit(MedicTrig[1],i),
+					RemoveUnit(MedicTrig[2],i),
+					RemoveUnit(MedicTrig[3],i),
+					RemoveUnit(MedicTrig[4],i),
 				})
-			},{
-				RemoveUnit(MedicTrig[1],i),
-				RemoveUnit(MedicTrig[2],i),
-				RemoveUnit(MedicTrig[3],i),
-				RemoveUnit(MedicTrig[4],i),
-			})
-			for j = 1, 4 do
-				DoActions(FP,{
-					ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
-					ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
-					ModifyUnitShields(All,"Men",i,"Anywhere",100),
-					ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
-					SetMemory(0x582324+(MedicTrig[j]*12)+(i*4),SetTo,0),
-					SetMemory(0x584DE4+(MedicTrig[j]*12)+(i*4),SetTo,0)
-				})
-			end
+				for j = 1, 4 do
+					DoActions(FP,{
+						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+						ModifyUnitShields(All,"Men",i,"Anywhere",100),
+						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
+						SetMemory(0x582324+(MedicTrig[j]*12)+(i*4),SetTo,0),
+						SetMemory(0x584DE4+(MedicTrig[j]*12)+(i*4),SetTo,0)
+					})
+				end
 			CIfEnd()
 		
 		
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,AtLeast,1)) -- ê³µì—… 255íšŒ
-		CDoActions(FP,{
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,AtLeast,1)) -- °ø¾÷ 255È¸
+			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,255),
 				SetMemoryB(0x58D2B0+(46*i)+18,SetTo,0)})
-		CallTrigger(FP,OneClickUpgrade)
+			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+17,AtLeast,1)) -- ê³µì—… 10íšŒ
-		CDoActions(FP,{
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+17,AtLeast,1)) -- °ø¾÷ 10È¸
+			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,10),
 				SetMemoryB(0x58D2B0+(46*i)+17,SetTo,0)})
-		CallTrigger(FP,OneClickUpgrade)
+			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,1)) -- ì²´ì—… 255íšŒ
-		CDoActions(FP,{
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,1)) -- Ã¼¾÷ 255È¸
+			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,DefFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,255),
 				SetMemoryB(0x58D2B0+(46*i)+19,SetTo,0)})
-		CallTrigger(FP,OneClickUpgrade)
+			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,Exactly,1)) -- ì²´ì—… 10íšŒ
-		CDoActions(FP,{
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,Exactly,1)) -- Ã¼¾÷ 10È¸
+			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,DefFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,10),
 				SetMemoryB(0x58D2B0+(46*i)+20,SetTo,0)})
-		CallTrigger(FP,OneClickUpgrade)
+			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
 		
 		CIf(FP,{MemoryX(AtkUpgradePtrArr[i+1],AtLeast,255*(256^AtkUpgradeMaskRetArr[i+1]),255*(256^AtkUpgradeMaskRetArr[i+1]))},{SetMemoryX(AtkUpgradePtrArr[i+1],SetTo,0*(256^AtkUpgradeMaskRetArr[i+1]),255*(256^AtkUpgradeMaskRetArr[i+1]))})
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x13\x04ï¼ï¼ï¼ã€€\x1Cê³µê²©ë ¥ ì—…ê·¸ë ˆì´ë“œ\x04ê°€ 255ë¥¼ ë„˜ì–´ í•œê³„ë¥¼ ëŒíŒŒí•©ë‹ˆë‹¤.\x04ã€€ï¼ï¼ï¼\n\x13\x04ï¼ï¼ï¼ã€€\x07ì—…ê·¸ë ˆì´ë“œë¥¼ \x040ìœ¼ë¡œ ì¬ì„¤ì •í•˜ê³  \x17ê³µê²©ë ¥ ìˆ˜ì¹˜ê°€ ì „ìŠ¹\x04ë˜ì—ˆìŠµë‹ˆë‹¤.\x04ã€€ï¼ï¼ï¼",4),
+			DisplayText("\x13\x04£¡£¡£¡¡¡\x1C°ø°İ·Â ¾÷±×·¹ÀÌµå\x04°¡ 255¸¦ ³Ñ¾î ÇÑ°è¸¦ µ¹ÆÄÇÕ´Ï´Ù.\x04¡¡£¡£¡£¡\n\x13\x04£¡£¡£¡¡¡\x07¾÷±×·¹ÀÌµå¸¦ \x040À¸·Î Àç¼³Á¤ÇÏ°í \x17°ø°İ·Â ¼öÄ¡°¡ Àü½Â\x04µÇ¾ú½À´Ï´Ù.\x04¡¡£¡£¡£¡",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP),
 			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),Add,MarDamageFactor*255),
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,11)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,101)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
-		
-		
 		
 		CIf(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,255*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))},{SetMemoryX(DefUpgradePtrArr[i+1],SetTo,0*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))})
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x13\x04ï¼ï¼ï¼ã€€\x08ì²´ë ¥ ì—…ê·¸ë ˆì´ë“œ\x04ê°€ 255ë¥¼ ë„˜ì–´ í•œê³„ë¥¼ ëŒíŒŒí•©ë‹ˆë‹¤.\x04ã€€ï¼ï¼ï¼\n\x13\x04ï¼ï¼ï¼ã€€\x07ì—…ê·¸ë ˆì´ë“œë¥¼ \x040ìœ¼ë¡œ ì¬ì„¤ì •í•˜ê³  \x17ì²´ë ¥ ìˆ˜ì¹˜ê°€ ì „ìŠ¹\x04ë˜ì—ˆìŠµë‹ˆë‹¤.\x04ã€€ï¼ï¼ï¼",4),
+			DisplayText("\x13\x04£¡£¡£¡¡¡\x08Ã¼·Â ¾÷±×·¹ÀÌµå\x04°¡ 255¸¦ ³Ñ¾î ÇÑ°è¸¦ µ¹ÆÄÇÕ´Ï´Ù.\x04¡¡£¡£¡£¡\n\x13\x04£¡£¡£¡¡¡\x07¾÷±×·¹ÀÌµå¸¦ \x040À¸·Î Àç¼³Á¤ÇÏ°í \x17Ã¼·Â ¼öÄ¡°¡ Àü½Â\x04µÇ¾ú½À´Ï´Ù.\x04¡¡£¡£¡£¡",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP),
 			--SetCVar(FP,DefFactorV[i+1][2],Add,1),
 			SetCVar(FP,MarMaxHP[i+1][2],Add,2000*256),
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,11)},{SetCVar(FP,DefFactorV[i+1][2],Add,2)},{Preserved})
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)},{SetCVar(FP,DefFactorV[i+1][2],Add,2)},{Preserved})
 		CIfEnd()
-		
-		
-		
-		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- ì²´ë ¥ê°’ ì´ˆê¸°í™”
+
+		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- Ã¼·Â°ª ÃÊ±âÈ­
 		for Bit = 0, 7 do
 		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
 			{SetCVar(FP,CurrentHP[i+1][2],Add,2008*(2^Bit))},{Preserved})
 		end
 		CMov(FP,MarHP[i+1],_Add(CurrentHP[i+1],MarMaxHP[i+1]))
 		
-		
-		CIfX(FP,CVar(FP,AtkUpCompCount[i+1][2],AtMost,0)) -- ì—…ê·¸ë ˆì´ë“œ ì»´í”Œë¦¬íŠ¸ ì¹´ìš´íŠ¸(255ì—… ì°ì€ íšŸìˆ˜)ê°€ 0ì¼ ê²½ìš°.
-		DoActions(FP,{SetMemoryX(NormalUpgradePtrArr[i+1],SetTo,0*(256^NormalUpgradeMaskRetArr[i+1]),255*(256^NormalUpgradeMaskRetArr[i+1]))})
-		for Bit = 0, 7 do
-		Trigger2(FP,{MemoryX(AtkUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
-			{SetMemoryX(NormalUpgradePtrArr[i+1],Add,(2^Bit)*(256^NormalUpgradeMaskRetArr[i+1]),(2^Bit)*(256^NormalUpgradeMaskRetArr[i+1]))},{Preserved})
-		end
-		CElseX() -- ì—…ê¸€ì»´í”Œì¹´ìš´íŠ¸ 1 ì´ìƒì´ë©´ ì¼ë§ˆê³µì—… 255ë¡œ ê³ ì •ë¨!
-		DoActions(FP,SetMemoryX(NormalUpgradePtrArr[i+1],SetTo,255*(256^NormalUpgradeMaskRetArr[i+1]),255*(256^NormalUpgradeMaskRetArr[i+1])),1)
+		CIfX(FP,CVar(FP,AtkUpCompCount[i+1][2],AtMost,0)) -- ¾÷±×·¹ÀÌµå ÄÄÇÃ¸®Æ® Ä«¿îÆ®(255¾÷ ÂïÀº È½¼ö)°¡ 0ÀÏ °æ¿ì.
+			DoActions(FP,{SetMemoryX(NormalUpgradePtrArr[i+1],SetTo,0*(256^NormalUpgradeMaskRetArr[i+1]),255*(256^NormalUpgradeMaskRetArr[i+1]))})
+			for Bit = 0, 7 do
+			Trigger2(FP,{MemoryX(AtkUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
+				{SetMemoryX(NormalUpgradePtrArr[i+1],Add,(2^Bit)*(256^NormalUpgradeMaskRetArr[i+1]),(2^Bit)*(256^NormalUpgradeMaskRetArr[i+1]))},{Preserved})
+			end
+		CElseX() -- ¾÷±ÛÄÄÇÃÄ«¿îÆ® 1 ÀÌ»óÀÌ¸é ÀÏ¸¶°ø¾÷ 255·Î °íÁ¤µÊ!
+			DoActions(FP,SetMemoryX(NormalUpgradePtrArr[i+1],SetTo,255*(256^NormalUpgradeMaskRetArr[i+1]),255*(256^NormalUpgradeMaskRetArr[i+1])),1)
 		CIfXEnd()
 		
 		CIf(FP,{TTCVar(FP,DefFactorV2[i+1][2],NotSame,DefFactorV[i+1])})
-		CDoActions(FP,{TSetMemoryX(DefFactorPtrArr[i+1],SetTo,_Mul(DefFactorV[i+1],_Mov(256^DefFactorMaskRetArr[i+1])),255*(256^DefFactorMaskRetArr[i+1]))})
-		CMov(FP,DefFactorV2[i+1],DefFactorV[i+1])
+			CDoActions(FP,{TSetMemoryX(DefFactorPtrArr[i+1],SetTo,_Mul(DefFactorV[i+1],_Mov(256^DefFactorMaskRetArr[i+1])),255*(256^DefFactorMaskRetArr[i+1]))})
+			CMov(FP,DefFactorV2[i+1],DefFactorV[i+1])
 		CIfEnd()
 		
 		CIf(FP,{TTCVar(FP,AtkFactorV2[i+1][2],NotSame,AtkFactorV[i+1])})
-		CDoActions(FP,{TSetMemoryX(AtkFactorPtrArr[i+1],SetTo,_Mul(AtkFactorV[i+1],_Mov(256^AtkFactorMaskRetArr[i+1])),255*(256^AtkFactorMaskRetArr[i+1]))})
-		CMov(FP,AtkFactorV2[i+1],AtkFactorV[i+1])
+			CDoActions(FP,{TSetMemoryX(AtkFactorPtrArr[i+1],SetTo,_Mul(AtkFactorV[i+1],_Mov(256^AtkFactorMaskRetArr[i+1])),255*(256^AtkFactorMaskRetArr[i+1]))})
+			CMov(FP,AtkFactorV2[i+1],AtkFactorV[i+1])
 		CIfEnd()
 		
 		TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58D088 + (i * 46) + i,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x03ï¼®ï¼¯ï¼´ï¼©ï¼£ï¼¥\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x1Cê³µê²©ë ¥ ì—…ê·¸ë ˆì´ë“œ\x04ì˜ ì¦ê°€ëŸ‰ì´ 255ë¥¼ ë„˜ì—ˆìŠµë‹ˆë‹¤.\n\x13\x04ì´ì œë¶€í„°ëŠ” \x1Cì›í´ë¦­ ì—…ê·¸ë ˆì´ë“œ\x04ë¥¼ í†µí•´ ì—…ê·¸ë ˆì´ë“œ í•´ì£¼ì„¸ìš”.\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x03ï¼®ï¼¯ï¼´ï¼©ï¼£ï¼¥\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•",4),
+			DisplayText("\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x03£Î£Ï£Ô£É£Ã£Å\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x1C°ø°İ·Â ¾÷±×·¹ÀÌµå\x04ÀÇ Áõ°¡·®ÀÌ 255¸¦ ³Ñ¾ú½À´Ï´Ù.\n\x13\x04ÀÌÁ¦ºÎÅÍ´Â \x1C¿øÅ¬¸¯ ¾÷±×·¹ÀÌµå\x04¸¦ ÅëÇØ ¾÷±×·¹ÀÌµå ÇØÁÖ¼¼¿ä.\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x03£Î£Ï£Ô£É£Ã£Å\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª",4),
 			PlayWAV("staredit\\wav\\button3.wav"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
 		TriggerX(FP,{CVar(FP,DefFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x03ï¼®ï¼¯ï¼´ï¼©ï¼£ï¼¥\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x08ì²´ë ¥ ì—…ê·¸ë ˆì´ë“œ\x04ì˜ ì¦ê°€ëŸ‰ì´ 255ë¥¼ ë„˜ì—ˆìŠµë‹ˆë‹¤.\n\x13\x04ì´ì œë¶€í„°ëŠ” \x1Cì›í´ë¦­ ì—…ê·¸ë ˆì´ë“œ\x04ë¥¼ í†µí•´ ì—…ê·¸ë ˆì´ë“œ í•´ì£¼ì„¸ìš”.\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x03ï¼®ï¼¯ï¼´ï¼©ï¼£ï¼¥\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•",4),
+			DisplayText("\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x03£Î£Ï£Ô£É£Ã£Å\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x08Ã¼·Â ¾÷±×·¹ÀÌµå\x04ÀÇ Áõ°¡·®ÀÌ 255¸¦ ³Ñ¾ú½À´Ï´Ù.\n\x13\x04ÀÌÁ¦ºÎÅÍ´Â \x1C¿øÅ¬¸¯ ¾÷±×·¹ÀÌµå\x04¸¦ ÅëÇØ ¾÷±×·¹ÀÌµå ÇØÁÖ¼¼¿ä.\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x03£Î£Ï£Ô£É£Ã£Å\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª",4),
 			PlayWAV("staredit\\wav\\button3.wav"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
 		
 		TriggerX(FP,{CVar(FP,MarHP[i+1][2],AtLeast,160000*256)},{SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07[ \x08ì²´ë ¥\x04ì´ 16ë§Œ ë„˜ì–´ê°€ë©´ \x1F%í¼ë€\x04 ì‹œìŠ¤í…œ ë°•ì‚´ë‚˜ì„œ ë”ì´ìƒ ì²´ì—… ëª»í•´ìš” ì£„ì†¡í•©ë‹ˆë‹¤............................. \x07]",4),
+			DisplayText("\x07[ \x08Ã¼·Â\x04ÀÌ 16¸¸ ³Ñ¾î°¡¸é \x1F%ÆÛµ©\x04 ½Ã½ºÅÛ ¹Ú»ì³ª¼­ ´õÀÌ»ó Ã¼¾÷ ¸øÇØ¿ä ÁË¼ÛÇÕ´Ï´Ù............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
@@ -590,7 +534,7 @@ function PlayerInterface()
 		})
 		TriggerX(FP,{MemoryW(0x656EB0 + (MarWep[i+1]*2),AtLeast,65535-(MarDamageFactor*255))},{SetMemoryB(0x58D088 + (i * 46) + i,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 17,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 18,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07[ \x1Cê³µê²©ë ¥\x04ì´ ì‹œìŠ¤í…œìƒ í•œê³„ë¥¼ ë§ì´í–ˆë„¤ìš”... ë”ì´ìƒ ê³µì—… ëª»í•´ìš” ì£„ì†¡í•©ë‹ˆë‹¤............................. \x07]",4),
+			DisplayText("\x07[ \x1C°ø°İ·Â\x04ÀÌ ½Ã½ºÅÛ»ó ÇÑ°è¶ó¼­ ´õÀÌ»ó °ø¾÷ ¸øÇØ¿ä ÁË¼ÛÇÕ´Ï´Ù............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
@@ -602,7 +546,7 @@ function PlayerInterface()
 		
 		
 		
-		 -- ì—…ê¸€ì‹œ ëˆ ì¦ê°€ëŸ‰ ë³€ìˆ˜ì™€ ë™ê¸°í™”. TTì¡°ê±´ì„ ì´ìš©í•´ ê°’ì´ ë³€í™”í• ë•Œë§Œ ì—°ì‚°í•¨
+		 -- ¾÷±Û½Ã µ· Áõ°¡·® º¯¼ö¿Í µ¿±âÈ­. TTÁ¶°ÇÀ» ÀÌ¿ëÇØ °ªÀÌ º¯È­ÇÒ¶§¸¸ ¿¬»êÇÔ
 		
 		
 		
@@ -628,67 +572,50 @@ function PlayerInterface()
 		ExC_Cond = def_sIndex()
 		NJump(FP,ExC_Cond,{Bring(i,AtMost,0,"Men",9)})
 		CIf(FP,Score(i,Kills,AtLeast,1000))
-		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-		CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
-		CMov(FP,ExchangeP,0)
+			CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+			CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+			CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
+			CMov(FP,ExchangeP,0)
 		CIfEnd()
 		DoActions(FP,SetDeaths(i,Subtract,1,111))
 		NJumpEnd(FP,ExC_Cond)
+
 		CMov(FP,0x582174+(4*i),count)
 		CAdd(FP,0x582174+(4*i),count)
 		CMov(FP,0x57f120+(4*i),ExScore[i+1])
-		Trigger2(FP,{Memory(0x57f120+(4*i),AtLeast,0x80000000)},{SetMemory(0x57f120+(4*i),SetTo,0)},{Preserved})
-		
-		table.insert(MarShMaskRetArr,(0x660E00 + (MarID[i+1]*2))%4)
-		table.insert(MarShPtrArr,0x660E00 + (MarID[i+1]*2) - (MarShMaskRetArr[i+1]))
-		
+		Trigger2(FP,{Memory(0x57f120+(4*i),AtLeast,0x80000000)},{SetMemory(0x57f120+(4*i),SetTo,0)},{Preserved}) -- °¡½º ¸¶ÀÌ³Ê½º ¹æÁö
 		
 		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1))
-		
-		f_Div(FP,MarTempSh,MarHP[i+1],_Mov(512))
-		
-		CIfX(FP,CVar(FP,MarTempSh[2],AtMost,65535))
-		
-		CDoActions(FP,{TSetMemoryX(MarShPtrArr[i+1],SetTo,_Mul(MarTempSh,_Mov(256^MarShMaskRetArr[i+1])),65535*(256^MarShMaskRetArr[i+1]))})
-		
+			f_Div(FP,MarTempSh,MarHP[i+1],_Mov(512))
+			CIfX(FP,CVar(FP,MarTempSh[2],AtMost,65535))
+				CDoActions(FP,{TSetMemoryX(MarShPtrArr[i+1],SetTo,_Mul(MarTempSh,_Mov(256^MarShMaskRetArr[i+1])),65535*(256^MarShMaskRetArr[i+1]))})
+			CElseX()
+				DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,65535)})
+			CIfXEnd()
+			Trigger { -- º¸È£¸· °¡µ¿
+				players = {FP},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					ModifyUnitShields(All,"Any unit",i,"Anywhere",100);
+					PreserveTrigger();
+				},
+			}
 		CElseX()
-		
-		DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,65535)})
-		
+			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 		CIfXEnd()
-		Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
-			players = {FP},
-			conditions = {
-				Label(0);
-			},
-			actions = {
-				ModifyUnitShields(All,"Any unit",i,"Anywhere",100);
-				PreserveTrigger();
-			},
-		}
-		CElseX()
-		
-		DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
-		
-		CIfXEnd()
-		
-		
+
 		CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
-		CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV))
+			CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV))
 		CIfEnd()
-		
-		
-		
-		
-		
 		CElseX()
-		DoActions(FP,{SetDeathsX(i,SetTo,0,440,0xFFFFFF)}) -- ê°í”Œë ˆì´ì–´ê°€ ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš° ê°í”Œë ˆì´ì–´ì˜ ë¸Œê¸ˆíƒ€ì´ë¨¸ 0ìœ¼ë¡œ ê³ ì • 
-		Trigger2(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)})
+			DoActions(FP,{SetDeathsX(i,SetTo,0,440,0xFFFFFF)}) -- °¢ÇÃ·¹ÀÌ¾î°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì °¢ÇÃ·¹ÀÌ¾îÀÇ ºê±İÅ¸ÀÌ¸Ó 0À¸·Î °íÁ¤ 
+			Trigger2(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)})
 		CIfXEnd()
 	end
-	CIf(FP,Deaths(Force1,AtLeast,1,71)) -- ì›ê²©ìŠ¤íŒ€
+	CIf(FP,Deaths(Force1,AtLeast,1,71)) -- ¿ø°İ½ºÆÀ
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			for i = 0, 6 do
@@ -711,7 +638,7 @@ function PlayerInterface()
 		CMov(FP,0x6509B0,FP)
 		DoActions(FP,SetDeaths(Force1,SetTo,0,71))
 	CIfEnd()
-	local HealT = CreateCCode(ExDeaths1)
+	local HealT = CreateCCode()
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Add,1,HealT)})
 	CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 	for i = 0, 6 do

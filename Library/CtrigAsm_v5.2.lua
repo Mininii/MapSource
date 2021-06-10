@@ -25,8 +25,8 @@ Above = 2
 Below = 3
 NotSame = 9
 
--- STR(X) ptr ê³ ì • 0x191943c8 --
--- TBL ptr ê³ ì • 0x19184660 --
+-- STR(X) ptr °íÁ¤ 0x191943c8 --
+-- TBL ptr °íÁ¤ 0x19184660 --
 
 CtrigInitArr = {}
 for i = 1, 8 do
@@ -85,7 +85,7 @@ StackArrptr = 0
 CondLineArr = {}
 ActLineArr = {}
 
-FlagAlloc = 0 -- 0xFFF1 ~ 0xFFFA ì˜ CDeaths Code (0x0000FFF1 ~ 0x01DFFFFA)
+FlagAlloc = 0 -- 0xFFF1 ~ 0xFFFA ÀÇ CDeaths Code (0x0000FFF1 ~ 0x01DFFFFA)
 
 EUDORPlayer = 0
 EUDORFlag = 0
@@ -116,7 +116,7 @@ CForce3 = {0,0,0,0,0,0,0,0}
 CForce4 = {0,0,0,0,0,0,0,0}
 CAllPlayers = {0,0,0,0,0,0,0,0}
 
--- ë§µ ì •ë³´ ì…ë ¥ ê´€ë ¨ í•¨ìˆ˜ ---------------------------------------------------------------
+-- ¸Ê Á¤º¸ ÀÔ·Â °ü·Ã ÇÔ¼ö ---------------------------------------------------------------
 
 function SetFixedPlayer(PlayerID)
 	FixPlayer = PlayerID
@@ -197,7 +197,7 @@ function PlayerConvert(PlayerID)
 	return Temp
 end
 
--- CtrigAsm í‘œì¤€ í™˜ê²½ ì„¤ì¹˜ í•¨ìˆ˜ ---------------------------------------------------------
+-- CtrigAsm Ç¥ÁØ È¯°æ ¼³Ä¡ ÇÔ¼ö ---------------------------------------------------------
 
 function StartCtrig()
 	Trigger {
@@ -256,10 +256,10 @@ function EndCtrig()
 
 end
 
--- ê¸°ë³¸ ë‚´ì¥ ì¡°ê±´/ì•¡ì…˜ (.py) ------------------------------------------------------------
+-- ±âº» ³»Àå Á¶°Ç/¾×¼Ç (.py) ------------------------------------------------------------
 
 function Label(Index)
-	local Label = Condition(0,0,Index,0,Exactly,0xFE,0,0x2) -- flag : ì¡°ê±´/ì•¡ì…˜ - 0x2 = Disabled
+	local Label = Condition(0,0,Index,0,Exactly,0xFE,0,0x2) -- flag : Á¶°Ç/¾×¼Ç - 0x2 = Disabled
 	if Index >= 1 then
 		table.insert(LabelArr,Index)
 	end
@@ -573,9 +573,9 @@ function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
 	return ExSetCtrig2X
 end
 
--- ì˜¤ë¥˜ ì²´í¬ ê¸°ë³¸ í•¨ìˆ˜ ------------------------------------------------------------------
+-- ¿À·ù Ã¼Å© ±âº» ÇÔ¼ö ------------------------------------------------------------------
 
-function ErrorCheck() -- Ctrig ë¬¸ë²• ì˜¤ë¥˜ ì ê²€ í•¨ìˆ˜
+function ErrorCheck() -- Ctrig ¹®¹ı ¿À·ù Á¡°Ë ÇÔ¼ö
 	AllocCheck()
 	LabelCheck()
 	ControlCheck()
@@ -596,7 +596,7 @@ function AllocCheck()
 	end
 end
 
-function LabelCheck() -- Label ì¤‘ë³µ ì²´í¬
+function LabelCheck() -- Label Áßº¹ Ã¼Å©
 	local C
 	for i,key in pairs(LabelArr) do
 		C = 0
@@ -616,7 +616,7 @@ function LabelCheck() -- Label ì¤‘ë³µ ì²´í¬
 	end
 end
 
-function ControlCheck() -- ì œì–´ë¬¸ ì…ë ¥ ì˜¤ë¥˜ ì²´í¬
+function ControlCheck() -- Á¦¾î¹® ÀÔ·Â ¿À·ù Ã¼Å©
 	for i, key in pairs(CJumpArr) do
 		local X = nil
 		for k, v in pairs(CJumpEndArr) do
@@ -682,7 +682,7 @@ function ControlCheck() -- ì œì–´ë¬¸ ì…ë ¥ ì˜¤ë¥˜ ì²´í¬
 	end
 end
 
--- í‘œì¤€ ì…ì¶œë ¥ ë° ë³€í™˜ í•¨ìˆ˜ -------------------------------------------------------------
+-- Ç¥ÁØ ÀÔÃâ·Â ¹× º¯È¯ ÇÔ¼ö -------------------------------------------------------------
 
 function CAddr(Section,Line,Next) -- Convert (Data -> Mem_Address)
 	if Line == "X" or Line == nil then
@@ -807,7 +807,7 @@ function V(Index,Player,Next) -- Return(Variable Data)
 	return {Player,Index,Next,"V"}
 end
 
-function Vi(Index,Deviation,Player,Next) -- Return(Variable Data+) : T,TT Cond/Act ì „ìš© / SetRecoverCp / Arr,VArr
+function Vi(Index,Deviation,Player,Next) -- Return(Variable Data+) : T,TT Cond/Act Àü¿ë / SetRecoverCp / Arr,VArr
 	if Deviation == "X" or Deviation == nil then
 		Deviation = 0
 	end
@@ -854,7 +854,7 @@ function _Mem(Variable,Address,Next,EPDflag) -- Convert(Variable Data -> Ctrig M
 	return {Variable[1],Variable[2],Address,Variable[3]+Next,EPDflag}
 end
 
-function Arr(Array,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
+function Arr(Array,Index,Player) -- 1, V, _Mov(VArr()) »ç¿ë
 	if type(Player) == "table" then
 		Arr_InputData_Error()
 	end
@@ -886,7 +886,7 @@ function Arr(Array,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
 	end
 end
 
-function ArrX(Array,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
+function ArrX(Array,Index,Player) -- 1, V, _Mov(VArr()) »ç¿ë
 	if type(Player) == "table" then
 		ArrX_InputData_Error()
 	end
@@ -906,7 +906,7 @@ function ArrX(Array,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
 end
 
 function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> V += Arr
-	-- Dest = TempV, Source = Index, Operand = Arr / V << V ì „ìš©
+	-- Dest = TempV, Source = Index, Operand = Arr / V << V Àü¿ë
 	STPopTrigArr(PlayerID)
 	if Source[4] == "VA" or Dest[4] == "VA" then
 		ConvertArr_InputData_Error()
@@ -982,7 +982,7 @@ function GetVArray(Header)
 	return {"X",Header[2],0,"V"}
 end
 
-function VArr(VArray,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
+function VArr(VArray,Index,Player) -- 1, V, _Mov(VArr()) »ç¿ë
 	if type(Player) == "table" then
 		VArr_InputData_Error()
 	end
@@ -1014,7 +1014,7 @@ function VArr(VArray,Index,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
 	end
 end
 
-function VArrX(VArray,Index,Index4,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
+function VArrX(VArray,Index,Index4,Player) -- 1, V, _Mov(VArr()) »ç¿ë
 	if type(Player) == "table" then
 		VArrX_InputData_Error()
 	end
@@ -1037,7 +1037,7 @@ function VArrX(VArray,Index,Index4,Player) -- 1, V, _Mov(VArr()) ì‚¬ìš©
 end
 
 function ConvertVArr(PlayerID,Dest,Dest4,Source) -- V << (i+D) * 604 -> V += Arr
-	-- Dest = TempV, Source = Index, Operand = Arr / V << V ì „ìš©
+	-- Dest = TempV, Source = Index, Operand = Arr / V << V Àü¿ë
 	STPopTrigArr(PlayerID)
 	if Source[4] == "VA" or Dest[4] == "VA" or Dest4[4] == "VA" then
 		ConvertVArr_InputData_Error()
@@ -1075,7 +1075,7 @@ function ConvertVArr(PlayerID,Dest,Dest4,Source) -- V << (i+D) * 604 -> V += Arr
 	end
 end
 
-function MovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value) / ë‚´ë¶€í•¨ìˆ˜ (ì‚¬ìš© ê¶Œì¥X)
+function MovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value) / ³»ºÎÇÔ¼ö (»ç¿ë ±ÇÀåX)
 	--STPopTrigArr(PlayerID)
 	if Mode == "X" or Mode == nil then
 		Mode = SetTo
@@ -1085,7 +1085,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value) / ë
 	end
 
 	if Dest[4] == "V" and Source[4] == "VA" then -- Mov V, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥
+		Trigger {--(CPRead)·Î °ª Ãâ·Â
 				players = {ParsePlayer(PlayerID)},
 				conditions = {
 					Label(0);
@@ -1141,7 +1141,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value) / ë
 
 		RecoverCp(PlayerID)
 
-		-- Ctrig->Ctrig->Ctrig Version : Cpì‚¬ìš© X
+		-- Ctrig->Ctrig->Ctrig Version : Cp»ç¿ë X
 		--[[
 		Trigger {
 				players = {ParsePlayer(PlayerID)},
@@ -1264,7 +1264,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value) / ë
 	end
 end
 
-function MovZ(PlayerID,Dest,Source,Address) -- V << VA_EPD, A_EPD / ë‚´ë¶€í•¨ìˆ˜ (ì‚¬ìš© ê¶Œì¥X)
+function MovZ(PlayerID,Dest,Source,Address) -- V << VA_EPD, A_EPD / ³»ºÎÇÔ¼ö (»ç¿ë ±ÇÀåX)
 	--STPopTrigArr(PlayerID)
 	if Address == nil then
 		Address = 0
@@ -1478,7 +1478,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value)
 	end
 
 	if type(Dest) == "number" and Source[4] == "VA" then -- Mov V, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥
+		Trigger {--(CPRead)·Î °ª Ãâ·Â
 				players = {ParsePlayer(PlayerID)},
 				conditions = {
 					Label(0);
@@ -1534,7 +1534,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value)
 
 		RecoverCp(PlayerID)
 	elseif Dest[4] == "V" and Source[4] == "VA" then -- Mov V, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥
+		Trigger {--(CPRead)·Î °ª Ãâ·Â
 				players = {ParsePlayer(PlayerID)},
 				conditions = {
 					Label(0);
@@ -1706,7 +1706,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask) -- V << VA / VA,A << V (Value)
 	end
 end
 
--- CurrentPlayer ê´€ë ¨ í•¨ìˆ˜ / CunitCtrig -------------------------------------------------------------
+-- CurrentPlayer °ü·Ã ÇÔ¼ö / CunitCtrig -------------------------------------------------------------
 
 function RecoverCp(PlayerID)
 	if RecoverCpValue == "X" then	
@@ -1734,7 +1734,7 @@ function RecoverCp(PlayerID)
 				},
 				flag = {Preserved}
 			}	
-	elseif RecoverCpValue[4] == "V" then -- ë³€ìˆ˜ì…ë ¥ Vi ê°€ëŠ¥
+	elseif RecoverCpValue[4] == "V" then -- º¯¼öÀÔ·Â Vi °¡´É
 		if RecoverCpValue[5] == nil then
 			RecoverCpValue[5] = 0
 		end
@@ -1892,7 +1892,7 @@ function CunitCtrig_Part1(PlayerID,Actions)
 	CCptr = CCptr + 1
 	FuncAlloc = FuncAlloc + 3
 end
--- NJump Trig ì‚½ì… ë¶€ë¶„ (ì¡°ê±´ë§Œì¡±ì‹œ Jump)
+-- NJump Trig »ğÀÔ ºÎºĞ (Á¶°Ç¸¸Á·½Ã Jump)
 function CunitCtrig_Part2()
 	PlayerID = CCPArr[CCptr]
 	PlayerID = PlayerConvert(PlayerID)
@@ -1904,13 +1904,13 @@ function CunitCtrig_Part2()
 			},
 		   	actions = {
 				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
-				SetMemory(0x6509B0,SetTo,P); -- ë£¨í”„ë¥¼ ëŒë¦´ í”Œë ˆì´ì–´ ê°’ìœ¼ë¡œ ë§ì¶”ê¸° ( P1 = 0, P2 = 1, ... , P8 = 7 )
+				SetMemory(0x6509B0,SetTo,P); -- ·çÇÁ¸¦ µ¹¸± ÇÃ·¹ÀÌ¾î °ªÀ¸·Î ¸ÂÃß±â ( P1 = 0, P2 = 1, ... , P8 = 7 )
 			},
 			flag = {Preserved}
 		}	
 	end
 end
--- Cunit ì—°ì‚° íŠ¸ë¦¬ê±° ì‚½ì… ë¶€ë¶„ (Break/Clearë¡œ Return)
+-- Cunit ¿¬»ê Æ®¸®°Å »ğÀÔ ºÎºĞ (Break/Clear·Î Return)
 function CunitCtrig_Part3(Conditions,Actions)
 	PlayerID = CCPArr[CCptr]
 	Trigger { -- Cunit Calc Start
@@ -2021,7 +2021,7 @@ function BreakCalc(Conditions,Actions)
 	}	
 end
 
--- ë³€ìˆ˜/ë°°ì—´ ì„ ì–¸/í˜¸ì¶œ í•¨ìˆ˜ -----------------------------------------------------------------
+-- º¯¼ö/¹è¿­ ¼±¾ğ/È£Ãâ ÇÔ¼ö -----------------------------------------------------------------
 
 function CVariable(Player,Index)
 	Trigger {
@@ -2290,7 +2290,7 @@ function CVArray(PlayerID,Size)
 	return {"X",VArrindex,0,"V"}
 end
 
--- DoActionsë¥˜ í•¨ìˆ˜ -------------------------------------------------------------------
+-- DoActions·ù ÇÔ¼ö -------------------------------------------------------------------
 
 function DoActions(PlayerID,Actions,flag)
 	local X = {}
@@ -2517,7 +2517,7 @@ function Trigger2X(Player, Conditions, Actions, Flags)
 	end
 end
 
--- Ctrig êµ¬ì¡°ì²´ íŠ¸ë¦¬ê±° (T,TT ì‚½ì… ê°€ëŠ¥) --
+-- Ctrig ±¸Á¶Ã¼ Æ®¸®°Å (T,TT »ğÀÔ °¡´É) --
 
 function CDoActions(PlayerID,Actions,flag)
 
@@ -2573,7 +2573,7 @@ function CTrigger(PlayerID, Conditions, Actions, Flags, Index)
 		
 end
 
--- Ctrig íŒŒìƒ ì•¡ì…˜ë“¤ -------------------------------------------------------------------
+-- Ctrig ÆÄ»ı ¾×¼Çµé -------------------------------------------------------------------
 
 function SetNext(Index1,Index2,Next)
 	if Next == nil then
@@ -2769,7 +2769,7 @@ function SetCVAar(VArray,Type,Value,Mask)
 	return SetVArrayX(VArray,"Value",Type,Value,Mask)
 end
 
--- í™•ì¥ ë°ìŠ¤ê°’ --
+-- È®Àå µ¥½º°ª --
 
 function _Ccode(Player,Code,EPDflag) -- Convert(CDeaths Data -> Ctrig Mem Data)
 	if EPDflag == "X" or EPDflag == nil or EPDflag == 0 then
@@ -2881,7 +2881,7 @@ function SetNDeaths(Player,Type,Value,Code)
 	return SetNDeaths
 end
 
--- ë°ì´í„° ì½ê¸° ê´€ë ¨ í•¨ìˆ˜ (Read) ---------------------------------------------------------
+-- µ¥ÀÌÅÍ ÀĞ±â °ü·Ã ÇÔ¼ö (Read) ---------------------------------------------------------
 
 function SafeReadX(PlayerID,Input,Output,Mask,EPDRead) -- CRead 1 -> N 
 	if type(Input) == "table" then
@@ -3121,7 +3121,7 @@ function UnitReadX(PlayerID,Player,UnitId,Loc,Output) -- Binary Bring/Command Re
 	return Output
 end
 
-function ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle) -- ë©”ëª¨ë¦¬ * ìƒìˆ˜ or ë©”ëª¨ë¦¬ / ìƒìˆ˜(2ì˜ ì œê³±ìˆ˜)
+function ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle) -- ¸Ş¸ğ¸® * »ó¼ö or ¸Ş¸ğ¸® / »ó¼ö(2ÀÇ Á¦°ö¼ö)
 	if type(Input) == "table" then
 		if Input[4] == "VA" or Input[4] == "A" then
 			ConvertReadX_InputData_Error()
@@ -3222,7 +3222,7 @@ function ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle) -- ë©”ëª¨ë
 	end
 end
 
--- ì œì–´ë¬¸ (if,Jump,While) ê´€ë ¨ í•¨ìˆ˜ ----------------------------------------------------
+-- Á¦¾î¹® (if,Jump,While) °ü·Ã ÇÔ¼ö ----------------------------------------------------
 
 function CJump(PlayerID,sIndex)
 	Trigger {
@@ -3365,7 +3365,7 @@ function NJumpXEnd(PlayerID,sIndex,Actions)
 	table.insert(NJumpEndArr,sIndex)
 end
 
-function CIfOnce(PlayerID, Conditions, Actions) -- 1ë²ˆë§Œ ì‹¤í–‰
+function CIfOnce(PlayerID, Conditions, Actions) -- 1¹ø¸¸ ½ÇÇà
 	STPopTrigArr(PlayerID)
 	ORPopCondArr(PlayerID)
 	TTPopTrigArr(PlayerID)
@@ -4209,7 +4209,7 @@ function CIfXEnd()
 	CIfXptr = CIfXptr - 1
 end
 
--- ë³€ìˆ˜ ì‚½ì…í˜• ì¡°ê±´/ì•¡ì…˜ (T) ------------------------------------------------------------
+-- º¯¼ö »ğÀÔÇü Á¶°Ç/¾×¼Ç (T) ------------------------------------------------------------
 
 function TCDeathsX(Player,Type,Value,Code,Mask)
 	local Line = bit32.band(Code, 0xFFFF0000)/65536
@@ -4527,7 +4527,7 @@ function TDeaths(Player,Type,Value,UnitId)
 	if TypeNum == 0 then
 		TDeaths = Deaths(Player,Type,Value,UnitId)
 	elseif TypeNum == 1 then
-		TDeaths = CtrigX(Player[1],Player[2],Player[3],Player[4],Type,Value) -- UnitId ë¬´ì‹œ
+		TDeaths = CtrigX(Player[1],Player[2],Player[3],Player[4],Type,Value) -- UnitId ¹«½Ã
 	end 
 	table.insert(PushCondArr,TDeaths)
 	table.insert(CondLineArr,PushLine)
@@ -4721,7 +4721,7 @@ function TDeathsX(Player,Type,Value,UnitId,Mask)
 	if TypeNum == 0  then
 		TDeathsX = DeathsX(Player,Type,Value,UnitId,Mask)
 	elseif TypeNum == 1 then
-		TDeathsX = CtrigX(Player[1],Player[2],Player[3],Player[4],Type,Value,Mask) -- UnitId ë¬´ì‹œ
+		TDeathsX = CtrigX(Player[1],Player[2],Player[3],Player[4],Type,Value,Mask) -- UnitId ¹«½Ã
 	end 
 	table.insert(PushCondArr,TDeathsX)
 	table.insert(CondLineArr,PushLine)
@@ -7803,9 +7803,9 @@ function TSetAllianceStatus(Player,Status)
 	return "TAct"
 end
 
--- íŠ¹ìˆ˜ ì¡°ê±´ ê´€ë ¨ ì¡°ê±´/í•¨ìˆ˜ (EUD/TT) --------------------------------------------------------
+-- Æ¯¼ö Á¶°Ç °ü·Ã Á¶°Ç/ÇÔ¼ö (EUD/TT) --------------------------------------------------------
 
-function EUDORInit(PlayerID) -- Flag1 = CORInit(P1) -> CORCond(Flag1) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDORInit(PlayerID) -- Flag1 = CORInit(P1) -> CORCond(Flag1) -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	local FIndex = FlagAlloc
 	local FCode = FlagIndex(FIndex)
 
@@ -7817,15 +7817,15 @@ function EUDORInit(PlayerID) -- Flag1 = CORInit(P1) -> CORCond(Flag1) -- êµ¬ í•¨
 	return FIndex
 end
 
-function EUDOR(AND_Conditions) -- {{<-And->}<-Or->{<-And->}<-Or->{<-And->}} -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDOR(AND_Conditions) -- {{<-And->}<-Or->{<-And->}<-Or->{<-And->}} -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	CTrigger({EUDORPlayer},AND_Conditions,{SetCDeaths("X",SetTo,1,EUDORFlag)},{Preserved})
 end
 
-function EUDCond(FlagID) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDCond(FlagID) -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	return CDeaths("X",Exactly,1,FlagIndex(FlagID))
 end
 
-function EUDCompare(PlayerID,Mode,TargetCond)  -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDCompare(PlayerID,Mode,TargetCond)  -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 
 	local FIndex
 	if Mode == ">" or Mode == Above then
@@ -7840,7 +7840,7 @@ function EUDCompare(PlayerID,Mode,TargetCond)  -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
 	return FIndex
 end
 
-function EUDNotSame(PlayerID,TargetCond) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDNotSame(PlayerID,TargetCond) -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	local FIndex = FlagAlloc
 	local FCode = FlagIndex(FIndex)
 
@@ -7851,7 +7851,7 @@ function EUDNotSame(PlayerID,TargetCond) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
 	return FIndex
 end
 
-function EUDAbove(PlayerID,TargetCond) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDAbove(PlayerID,TargetCond) -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	local FIndex = FlagAlloc
 	local FCode = FlagIndex(FIndex)
 
@@ -7869,7 +7869,7 @@ function EUDAbove(PlayerID,TargetCond) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
 	return FIndex
 end
 
-function EUDBelow(PlayerID,TargetCond) -- êµ¬ í•¨ìˆ˜ / ì‹¤ì§ˆ ì‚¬ìš©X
+function EUDBelow(PlayerID,TargetCond) -- ±¸ ÇÔ¼ö / ½ÇÁú »ç¿ëX
 	local FIndex = FlagAlloc
 	local FCode = FlagIndex(FIndex)
 
@@ -9337,7 +9337,7 @@ function TTOpponents(Player,Type,Value)
 	return TTOpponentsX
 end
 
--- ë§¤í¬ë¡œ í•¨ìˆ˜í˜• ìµœì¢… ì—°ì‚° í•¨ìˆ˜(C) ------------------------------------------------------
+-- ¸ÅÅ©·Î ÇÔ¼öÇü ÃÖÁ¾ ¿¬»ê ÇÔ¼ö(C) ------------------------------------------------------
 
 function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 	STPopTrigArr(PlayerID)
@@ -9417,9 +9417,9 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 					CRead1 = {SetDeathsX(CurrentPlayer,SetTo,Deviation,0,Mask)}
-			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 				CRead_InputData_Error()
-			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 				CRead_InputData_Error()
 			else -- Read Cp, Mem : Cp << Mem + D
 					CRead1 = {SetDeathsX(CurrentPlayer,SetTo,Deviation,0,Mask)}
@@ -9507,9 +9507,9 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 				if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 						CRead2 = {MemoryX(Source,Exactly,CBit,CBit)}
 						CRead3 = {SetDeaths(CurrentPlayer,Add,CBit,0)}
-				elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+				elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 					CRead_InputData_Error()
-				elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+				elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 					CRead_InputData_Error()
 				else -- Read Cp, Mem : Cp << Mem + D
 						CRead2 = {CtrigX(Source[1],Source[2],Source[3],Source[4],Exactly,CBit,CBit)}
@@ -9589,9 +9589,9 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 					CRead1 = {SetDeaths(CurrentPlayer,SetTo,-1452249,0)}
-			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 				CRead_InputData_Error()
-			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 				CRead_InputData_Error()
 			else -- Read Cp, Mem : Cp << Mem + D
 					CRead1 = {SetDeaths(CurrentPlayer,SetTo,-1452249,0)}
@@ -9678,9 +9678,9 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 				if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 						CRead2 = {MemoryX(Source,Exactly,CBit,CBit)}
 						CRead3 = {SetDeaths(CurrentPlayer,Add,CBit/4,0)}
-				elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+				elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 					CRead_InputData_Error()
-				elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+				elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 					CRead_InputData_Error()
 				else -- Read Cp, Mem : Cp << Mem + D
 						CRead2 = {CtrigX(Source[1],Source[2],Source[3],Source[4],Exactly,CBit,CBit)}
@@ -9822,9 +9822,9 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 	elseif Dest == "Cp" then
 		if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 				CRead1 = {SetDeathsX(CurrentPlayer,SetTo,Deviation,0,Mask)}
-		elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+		elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 			CRead_InputData_Error()
-		elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+		elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 			CRead_InputData_Error()
 		else -- Read Cp, Mem : Cp << Mem + D
 				CRead1 = {SetDeathsX(CurrentPlayer,SetTo,Deviation,0,Mask)}
@@ -9913,9 +9913,9 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 			if type(Source) == "number" then -- Read Cp, 0x58A368 : Cp << 0x58A368 + D
 					CRead2 = {MemoryX(Source,Exactly,CBit,CBit)}
 					CRead3 = {SetDeaths(CurrentPlayer,Add,CBit*Multiplier,0)}
-			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / Cpì¤‘ë³µ
+			elseif Source == "Cp" then -- Read Cp, Cp : Cp << Cp + D / CpÁßº¹
 				CRead_InputData_Error()
-			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / Cpì¤‘ë³µ
+			elseif Source[4] == "V" then -- Read Cp, X : Cp << EPD(X) + D (CPRead) / CpÁßº¹
 				CRead_InputData_Error()
 			else -- Read Cp, Mem : Cp << Mem + D
 					CRead2 = {CtrigX(Source[1],Source[2],Source[3],Source[4],Exactly,CBit,CBit)}
@@ -10327,19 +10327,19 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 			Dest = {"X",CRet[9],0,"V"}
 		end
 
-		if type(Source) == "number" then -- Add V, 0x58A364, 1 : V << 0x58A364 + 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Add V, 0x58A364, 1 : V << 0x58A364 + 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				CAdd_InputData_Error()
-			elseif Operand[4] == "V" then -- Add V, 0x58A364, X : V << 0x58A364 + X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Add V, 0x58A364, X : V << 0x58A364 + X / ReadÇÊ¿ä
 				CAdd_InputData_Error()
 			else
 				CAdd_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- Add V, Cp, 1 : V << Cp + 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- Add V, Cp, 1 : V << Cp + 1 / ReadÇÊ¿ä 
 				CAdd_InputData_Error()
-			elseif Operand[4] == "V" then -- Add V, Cp, X : V << Cp + X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- Add V, Cp, X : V << Cp + X / ReadÇÊ¿ä 
 				CAdd_InputData_Error()
 			else
 				CAdd_InputData_Error()
@@ -10393,9 +10393,9 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 			end
 
 		else 
-			if type(Operand) == "number" then -- Add V, Mem, 1 : V << Mem + 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- Add V, Mem, 1 : V << Mem + 1 / ReadÇÊ¿ä
 				CAdd_InputData_Error()
-			elseif Operand[4] == "V" then -- Add V, Mem, X : V << Mem + X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Add V, Mem, X : V << Mem + X / ReadÇÊ¿ä
 				CAdd_InputData_Error()
 			else
 				CAdd_InputData_Error()
@@ -10589,19 +10589,19 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 			Dest = {"X",CRet[9],0,"V"}
 		end
 
-		if type(Source) == "number" then -- Sub V, 0x58A364, 1 : V << 0x58A364 - 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Sub V, 0x58A364, 1 : V << 0x58A364 - 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				CSub_InputData_Error()
-			elseif Operand[4] == "V" then -- Sub V, 0x58A364, X : V << 0x58A364 - X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Sub V, 0x58A364, X : V << 0x58A364 - X / ReadÇÊ¿ä
 				CSub_InputData_Error()
 			else
 				CSub_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- Sub V, Cp, 1 : V << Cp - 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- Sub V, Cp, 1 : V << Cp - 1 / ReadÇÊ¿ä 
 				CSub_InputData_Error()
-			elseif Operand[4] == "V" then -- Sub V, Cp, X : V << Cp - X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- Sub V, Cp, X : V << Cp - X / ReadÇÊ¿ä 
 				CSub_InputData_Error()
 			else
 				CSub_InputData_Error()
@@ -10664,9 +10664,9 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 			end
 
 		else 
-			if type(Operand) == "number" then -- Sub V, Mem, 1 : V << Mem - 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- Sub V, Mem, 1 : V << Mem - 1 / ReadÇÊ¿ä
 				CSub_InputData_Error()
-			elseif Operand[4] == "V" then -- Sub V, Mem, X : V << Mem - X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Sub V, Mem, X : V << Mem - X / ReadÇÊ¿ä
 				CSub_InputData_Error()
 			else
 				CSub_InputData_Error()
@@ -10919,19 +10919,19 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 			PDest = Dest
 			Dest = {"X",CRet[9],0,"V"}
 		end
-		if type(Source) == "number" then -- iSub V, 0x58A364, 1 : V << 0x58A364 - 1 / Readí•„ìš”
+		if type(Source) == "number" then -- iSub V, 0x58A364, 1 : V << 0x58A364 - 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				CiSub_InputData_Error()
-			elseif Operand[4] == "V" then -- iSub V, 0x58A364, X : V << 0x58A364 - X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- iSub V, 0x58A364, X : V << 0x58A364 - X / ReadÇÊ¿ä
 				CiSub_InputData_Error()
 			else
 				CiSub_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- iSub V, Cp, 1 : V << Cp - 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- iSub V, Cp, 1 : V << Cp - 1 / ReadÇÊ¿ä 
 				CiSub_InputData_Error()
-			elseif Operand[4] == "V" then -- iSub V, Cp, X : V << Cp - X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- iSub V, Cp, X : V << Cp - X / ReadÇÊ¿ä 
 				CiSub_InputData_Error()
 			else
 				CiSub_InputData_Error()
@@ -11009,9 +11009,9 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 			end
 
 		else 
-			if type(Operand) == "number" then -- iSub V, Mem, 1 : V << Mem - 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- iSub V, Mem, 1 : V << Mem - 1 / ReadÇÊ¿ä
 				CiSub_InputData_Error()
-			elseif Operand[4] == "V" then -- iSub V, Mem, X : V << Mem - X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- iSub V, Mem, X : V << Mem - X / ReadÇÊ¿ä
 				CiSub_InputData_Error()
 			else
 				CiSub_InputData_Error()
@@ -11046,9 +11046,9 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CNeg_InputData_Error()
 		end
-		if type(Dest) == "number" then -- Neg 0x58A364 / Readí•„ìš”
+		if type(Dest) == "number" then -- Neg 0x58A364 / ReadÇÊ¿ä
 			CNeg_InputData_Error()
-		elseif Dest == "Cp" then -- Neg Cp / Readí•„ìš”
+		elseif Dest == "Cp" then -- Neg Cp / ReadÇÊ¿ä
 			CNeg_InputData_Error()
 		elseif Dest[4] == "V" then -- Neg X : X << -X
 			Trigger {
@@ -11079,7 +11079,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 					},
 					flag = {Preserved}
 				}
-		else -- Neg Mem / Readí•„ìš”
+		else -- Neg Mem / ReadÇÊ¿ä
 			CNeg_InputData_Error()
 		end
 		if PDest ~= nil then
@@ -11153,7 +11153,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 	end
 end
 
-function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bit ì œí•œ (ë©”ëª¨ë¦¬ì— )
+function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y¸¸ Limit bit Á¦ÇÑ (¸Ş¸ğ¸®¿¡ )
 	STPopTrigArr(PlayerID)
 
 	if Multiplier == "X" then
@@ -11204,7 +11204,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 		if type(Dest) == "number" then -- Mul 0x58A364, 1 : 0x58A364 *= 1
 			if type(Source) == "number" then
 				MulType2 = 1
-			elseif Source[4] == "V" then -- Mul 0x58A364, X : 0x58A364 *= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Mul 0x58A364, X : 0x58A364 *= X / ReadÇÊ¿ä
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
@@ -11213,7 +11213,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Mul Cp, 1 : Cp *= 1
 				MulType2 = 2
-			elseif Source[4] == "V" then -- Mul Cp, X : Cp *= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Mul Cp, X : Cp *= X / ReadÇÊ¿ä
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
@@ -11236,7 +11236,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 		else 
 			if type(Source) == "number" then -- Mul Mem, 1 : Mem *= 1
 				MulType2 = 4
-			elseif Source[4] == "V" then -- Add Mem, X : Mem *= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Add Mem, X : Mem *= X / ReadÇÊ¿ä
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
@@ -11281,7 +11281,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 						}
 				end
 				if  bit32.band(Source*CBit,0xFFFFFFFF) >= 0x80000000 then
-					Block = 0 -- ë‚˜ëˆ—ì…ˆ : Block í•„ìš” / ê³±ì…ˆ : Block ë¶ˆí•„ìš”
+					Block = 0 -- ³ª´°¼À : Block ÇÊ¿ä / °ö¼À : Block ºÒÇÊ¿ä
 				end
 			end
 			if MulType2 == 1 then
@@ -11462,19 +11462,19 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CMul_InputData_Error()
 		end
-		if type(Source) == "number" then -- Mul V, 0x58A364, 1 : V << 0x58A364 * 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Mul V, 0x58A364, 1 : V << 0x58A364 * 1 / ReadÇÊ¿ä
 			if type(Multiplier) == "number" then
 				CMul_InputData_Error()
-			elseif Multiplier[4] == "V" then -- Mul V, 0x58A364, X : V << 0x58A364 * X / Readí•„ìš”
+			elseif Multiplier[4] == "V" then -- Mul V, 0x58A364, X : V << 0x58A364 * X / ReadÇÊ¿ä
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Multiplier) == "number" then -- Mul V, Cp, 1 : V << Cp * 1 / Readí•„ìš” 
+			if type(Multiplier) == "number" then -- Mul V, Cp, 1 : V << Cp * 1 / ReadÇÊ¿ä 
 				CMul_InputData_Error()
-			elseif Multiplier[4] == "V" then -- Mul V, Cp, X : V << Cp * X / Readí•„ìš” 
+			elseif Multiplier[4] == "V" then -- Mul V, Cp, X : V << Cp * X / ReadÇÊ¿ä 
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
@@ -11509,7 +11509,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 							}
 					end
 					if  bit32.band(Multiplier*CBit,0xFFFFFFFF) >= 0x80000000 then
-						Block = 0 -- ë‚˜ëˆ—ì…ˆ : Block í•„ìš” / ê³±ì…ˆ : Block ë¶ˆí•„ìš”
+						Block = 0 -- ³ª´°¼À : Block ÇÊ¿ä / °ö¼À : Block ºÒÇÊ¿ä
 					end
 				end
 				Trigger {
@@ -11664,9 +11664,9 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 				FuncAlloc = FuncAlloc + 1
 			end
 		else 
-			if type(Multiplier) == "number" then -- Mul V, Mem, 1 : V << Mem * 1 / Readí•„ìš”
+			if type(Multiplier) == "number" then -- Mul V, Mem, 1 : V << Mem * 1 / ReadÇÊ¿ä
 				CMul_InputData_Error()
-			elseif Multiplier[4] == "V" then -- Mul V, Mem, X : V << Mem * X / Readí•„ìš”
+			elseif Multiplier[4] == "V" then -- Mul V, Mem, X : V << Mem * X / ReadÇÊ¿ä
 				CMul_InputData_Error()
 			else
 				CMul_InputData_Error()
@@ -11681,7 +11681,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Yë§Œ Limit bi
 	end
 end
 
-function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit bit ì œí•œ, 
+function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µÑ´Ù Limit bit Á¦ÇÑ, 
 	STPopTrigArr(PlayerID)
 
 	if Divisor == "X" then
@@ -11724,19 +11724,19 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit
 			CDiv_InputData_Error()
 		end
 
-		if type(Dest) == "number" then -- Div 0x58A364, 1 : 0x58A364 /= 1 / Readí•„ìš”
+		if type(Dest) == "number" then -- Div 0x58A364, 1 : 0x58A364 /= 1 / ReadÇÊ¿ä
 			if type(Source) == "number" then
 				CDiv_InputData_Error()
-			elseif Source[4] == "V" then -- Div 0x58A364, X : 0x58A364 /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Div 0x58A364, X : 0x58A364 /= X / ReadÇÊ¿ä
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
 			end
 
 		elseif Dest == "Cp" then
-			if type(Source) == "number" then -- Div Cp, 1 : Cp /= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Div Cp, 1 : Cp /= 1 / ReadÇÊ¿ä
 				CDiv_InputData_Error()
-			elseif Source[4] == "V" then -- Div Cp, X : Cp /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Div Cp, X : Cp /= X / ReadÇÊ¿ä
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
@@ -11951,9 +11951,9 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit
 			end
 
 		else 
-			if type(Source) == "number" then -- Div Mem, 1 : Mem /= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Div Mem, 1 : Mem /= 1 / ReadÇÊ¿ä
 				CDiv_InputData_Error()
-			elseif Source[4] == "V" then -- Add Mem, X : Mem /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Add Mem, X : Mem /= X / ReadÇÊ¿ä
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
@@ -11988,19 +11988,19 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CDiv_InputData_Error()
 		end
-		if type(Source) == "number" then -- Div V, 0x58A364, 1 : V << 0x58A364 / 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Div V, 0x58A364, 1 : V << 0x58A364 / 1 / ReadÇÊ¿ä
 			if type(Divisor) == "number" then
 				CDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- Div V, 0x58A364, X : V << 0x58A364 / X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- Div V, 0x58A364, X : V << 0x58A364 / X / ReadÇÊ¿ä
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Divisor) == "number" then -- Div V, Cp, 1 : V << Cp / 1 / Readí•„ìš” 
+			if type(Divisor) == "number" then -- Div V, Cp, 1 : V << Cp / 1 / ReadÇÊ¿ä 
 				CDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- Div V, Cp, X : V << Cp / X / Readí•„ìš” 
+			elseif Divisor[4] == "V" then -- Div V, Cp, X : V << Cp / X / ReadÇÊ¿ä 
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
@@ -12215,9 +12215,9 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit
 			end
 
 		else 
-			if type(Divisor) == "number" then -- Div V, Mem, 1 : V << Mem v1 / Readí•„ìš”
+			if type(Divisor) == "number" then -- Div V, Mem, 1 : V << Mem v1 / ReadÇÊ¿ä
 				CDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- Div V, Mem, X : V << Mem / X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- Div V, Mem, X : V << Mem / X / ReadÇÊ¿ä
 				CDiv_InputData_Error()
 			else
 				CDiv_InputData_Error()
@@ -12232,7 +12232,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y ë‘˜ë‹¤ Limit
 	end
 end
 
-function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit bit ì œí•œ
+function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µÑ´Ù Limit bit Á¦ÇÑ
 	STPopTrigArr(PlayerID)
 
 	if Divisor == "X" then
@@ -12274,19 +12274,19 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CMod_InputData_Error()
 		end
-		if type(Dest) == "number" then -- Mod 0x58A364, 1 : 0x58A364 %= 1 / Readí•„ìš”
+		if type(Dest) == "number" then -- Mod 0x58A364, 1 : 0x58A364 %= 1 / ReadÇÊ¿ä
 			if type(Source) == "number" then
 				CMod_InputData_Error()
-			elseif Source[4] == "V" then -- Mod 0x58A364, X : 0x58A364 %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Mod 0x58A364, X : 0x58A364 %= X / ReadÇÊ¿ä
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
 			end
 
 		elseif Dest == "Cp" then
-			if type(Source) == "number" then -- Mod Cp, 1 : Cp %= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Mod Cp, 1 : Cp %= 1 / ReadÇÊ¿ä
 				CMod_InputData_Error()
-			elseif Source[4] == "V" then -- Mod Cp, X : Cp %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Mod Cp, X : Cp %= X / ReadÇÊ¿ä
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
@@ -12503,9 +12503,9 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit
 			end
 
 		else 
-			if type(Source) == "number" then -- Mod Mem, 1 : Mem %= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Mod Mem, 1 : Mem %= 1 / ReadÇÊ¿ä
 				CMod_InputData_Error()
-			elseif Source[4] == "V" then -- Add Mem, X : Mem %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Add Mem, X : Mem %= X / ReadÇÊ¿ä
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
@@ -12540,19 +12540,19 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CMod_InputData_Error()
 		end
-		if type(Source) == "number" then -- Mod V, 0x58A364, 1 : V << 0x58A364 % 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Mod V, 0x58A364, 1 : V << 0x58A364 % 1 / ReadÇÊ¿ä
 			if type(Divisor) == "number" then
 				CMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- Mod V, 0x58A364, X : V << 0x58A364 % X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- Mod V, 0x58A364, X : V << 0x58A364 % X / ReadÇÊ¿ä
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Divisor) == "number" then -- Mod V, Cp, 1 : V << Cp % 1 / Readí•„ìš” 
+			if type(Divisor) == "number" then -- Mod V, Cp, 1 : V << Cp % 1 / ReadÇÊ¿ä 
 				CMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- Mod V, Cp, X : V << Cp % X / Readí•„ìš” 
+			elseif Divisor[4] == "V" then -- Mod V, Cp, X : V << Cp % X / ReadÇÊ¿ä 
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
@@ -12769,9 +12769,9 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit
 			end
 
 		else 
-			if type(Divisor) == "number" then -- Mod V, Mem, 1 : V << Mem % 1 / Readí•„ìš”
+			if type(Divisor) == "number" then -- Mod V, Mem, 1 : V << Mem % 1 / ReadÇÊ¿ä
 				CMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- Mod V, Mem, X : V << Mem % X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- Mod V, Mem, X : V << Mem % X / ReadÇÊ¿ä
 				CMod_InputData_Error()
 			else
 				CMod_InputData_Error()
@@ -12786,7 +12786,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y ë‘˜ë‹¤ Limit
 	end
 end
 
-function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°ì‚° | 10/-3 = -3 / -10/3 = -3 / -10/-3 = 3
+function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivÀÇ Signed ¿¬»ê | 10/-3 = -3 / -10/3 = -3 / -10/-3 = 3
 	STPopTrigArr(PlayerID)
 
 	if Divisor == "X" then
@@ -12828,19 +12828,19 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiDiv_InputData_Error()
 		end
-		if type(Dest) == "number" then -- iDiv 0x58A364, 1 : 0x58A364 /= 1 / Readí•„ìš”
+		if type(Dest) == "number" then -- iDiv 0x58A364, 1 : 0x58A364 /= 1 / ReadÇÊ¿ä
 			if type(Source) == "number" then
 				CiDiv_InputData_Error()
-			elseif Source[4] == "V" then -- iDiv 0x58A364, X : 0x58A364 /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- iDiv 0x58A364, X : 0x58A364 /= X / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
 			end
 
 		elseif Dest == "Cp" then
-			if type(Source) == "number" then -- iDiv Cp, 1 : Cp /= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- iDiv Cp, 1 : Cp /= 1 / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
-			elseif Source[4] == "V" then -- iDiv Cp, X : Cp /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- iDiv Cp, X : Cp /= X / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
@@ -13258,9 +13258,9 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°
 			end
 
 		else 
-			if type(Source) == "number" then -- iDiv Mem, 1 : Mem /= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- iDiv Mem, 1 : Mem /= 1 / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
-			elseif Source[4] == "V" then -- Add Mem, X : Mem /= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Add Mem, X : Mem /= X / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
@@ -13295,19 +13295,19 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiDiv_InputData_Error()
 		end
-		if type(Source) == "number" then -- iDiv V, 0x58A364, 1 : V << 0x58A364 / 1 / Readí•„ìš”
+		if type(Source) == "number" then -- iDiv V, 0x58A364, 1 : V << 0x58A364 / 1 / ReadÇÊ¿ä
 			if type(Divisor) == "number" then
 				CiDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- iDiv V, 0x58A364, X : V << 0x58A364 / X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- iDiv V, 0x58A364, X : V << 0x58A364 / X / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Divisor) == "number" then -- iDiv V, Cp, 1 : V << Cp / 1 / Readí•„ìš” 
+			if type(Divisor) == "number" then -- iDiv V, Cp, 1 : V << Cp / 1 / ReadÇÊ¿ä 
 				CiDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- iDiv V, Cp, X : V << Cp / X / Readí•„ìš” 
+			elseif Divisor[4] == "V" then -- iDiv V, Cp, X : V << Cp / X / ReadÇÊ¿ä 
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
@@ -13724,9 +13724,9 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°
 			end
 
 		else 
-			if type(Divisor) == "number" then -- iDiv V, Mem, 1 : V << Mem v1 / Readí•„ìš”
+			if type(Divisor) == "number" then -- iDiv V, Mem, 1 : V << Mem v1 / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
-			elseif Divisor[4] == "V" then -- iDiv V, Mem, X : V << Mem / X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- iDiv V, Mem, X : V << Mem / X / ReadÇÊ¿ä
 				CiDiv_InputData_Error()
 			else
 				CiDiv_InputData_Error()
@@ -13741,7 +13741,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDivì˜ Signed ì—°
 	end
 end
 
-function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModì˜ Signed ì—°ì‚° | 10%-3 = 1 / -10%3 = -1 / -10%-3 = -1 (C++ë°©ì‹)
+function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModÀÇ Signed ¿¬»ê | 10%-3 = 1 / -10%3 = -1 / -10%-3 = -1 (C++¹æ½Ä)
 	STPopTrigArr(PlayerID)
 
 	if Divisor == "X" then
@@ -13783,19 +13783,19 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModì˜ Signed ì—°
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiMod_InputData_Error()
 		end
-		if type(Dest) == "number" then -- iMod 0x58A364, 1 : 0x58A364 %= 1 / Readí•„ìš”
+		if type(Dest) == "number" then -- iMod 0x58A364, 1 : 0x58A364 %= 1 / ReadÇÊ¿ä
 			if type(Source) == "number" then
 				CiMod_InputData_Error()
-			elseif Source[4] == "V" then -- iMod 0x58A364, X : 0x58A364 %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- iMod 0x58A364, X : 0x58A364 %= X / ReadÇÊ¿ä
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
 			end
 
 		elseif Dest == "Cp" then
-			if type(Source) == "number" then -- iMod Cp, 1 : Cp %= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- iMod Cp, 1 : Cp %= 1 / ReadÇÊ¿ä
 				CiMod_InputData_Error()
-			elseif Source[4] == "V" then -- iMod Cp, X : Cp %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- iMod Cp, X : Cp %= X / ReadÇÊ¿ä
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
@@ -14181,9 +14181,9 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModì˜ Signed ì—°
 			end
 
 		else 
-			if type(Source) == "number" then -- iMod Mem, 1 : Mem %= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- iMod Mem, 1 : Mem %= 1 / ReadÇÊ¿ä
 				CiMod_InputData_Error()
-			elseif Source[4] == "V" then -- Add Mem, X : Mem %= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Add Mem, X : Mem %= X / ReadÇÊ¿ä
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
@@ -14218,19 +14218,19 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModì˜ Signed ì—°
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiMod_InputData_Error()
 		end
-		if type(Source) == "number" then -- iMod V, 0x58A364, 1 : V << 0x58A364 % 1 / Readí•„ìš”
+		if type(Source) == "number" then -- iMod V, 0x58A364, 1 : V << 0x58A364 % 1 / ReadÇÊ¿ä
 			if type(Divisor) == "number" then
 				CiMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- iMod V, 0x58A364, X : V << 0x58A364 % X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- iMod V, 0x58A364, X : V << 0x58A364 % X / ReadÇÊ¿ä
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Divisor) == "number" then -- iMod V, Cp, 1 : V << Cp % 1 / Readí•„ìš” 
+			if type(Divisor) == "number" then -- iMod V, Cp, 1 : V << Cp % 1 / ReadÇÊ¿ä 
 				CiMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- iMod V, Cp, X : V << Cp % X / Readí•„ìš” 
+			elseif Divisor[4] == "V" then -- iMod V, Cp, X : V << Cp % X / ReadÇÊ¿ä 
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
@@ -14615,9 +14615,9 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CModì˜ Signed ì—°
 			end
 
 		else 
-			if type(Divisor) == "number" then -- iMod V, Mem, 1 : V << Mem % 1 / Readí•„ìš”
+			if type(Divisor) == "number" then -- iMod V, Mem, 1 : V << Mem % 1 / ReadÇÊ¿ä
 				CiMod_InputData_Error()
-			elseif Divisor[4] == "V" then -- iMod V, Mem, X : V << Mem % X / Readí•„ìš”
+			elseif Divisor[4] == "V" then -- iMod V, Mem, X : V << Mem % X / ReadÇÊ¿ä
 				CiMod_InputData_Error()
 			else
 				CiMod_InputData_Error()
@@ -14653,9 +14653,9 @@ function CNot(PlayerID,Dest,Source,Mask)
 			CNot_InputData_Error()
 		end
 
-		if type(Dest) == "number" then -- Not 0x58A364 / Readí•„ìš”
+		if type(Dest) == "number" then -- Not 0x58A364 / ReadÇÊ¿ä
 			CNot_InputData_Error()
-		elseif Dest == "Cp" then -- Not Cp / Readí•„ìš”
+		elseif Dest == "Cp" then -- Not Cp / ReadÇÊ¿ä
 			CNot_InputData_Error()
 		elseif Dest[4] == "V" then -- Not X : X << ~X
 			Trigger {
@@ -14685,7 +14685,7 @@ function CNot(PlayerID,Dest,Source,Mask)
 				},
 				flag = {Preserved}
 			}
-		else -- Neg Mem / Readí•„ìš”
+		else -- Neg Mem / ReadÇÊ¿ä
 			CNot_InputData_Error()
 		end
 		if PDest ~= nil then
@@ -14973,19 +14973,19 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 			COr_InputData_Error()
 		end
 
-		if type(Source) == "number" then -- Or V, 0x58A364, 1 : V << 0x58A364 | 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Or V, 0x58A364, 1 : V << 0x58A364 | 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				COr_InputData_Error()
-			elseif Operand[4] == "V" then -- Or V, 0x58A364, X : V << 0x58A364 | X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Or V, 0x58A364, X : V << 0x58A364 | X / ReadÇÊ¿ä
 				COr_InputData_Error()
 			else
 				COr_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- Or V, Cp, 1 : V << Cp | 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- Or V, Cp, 1 : V << Cp | 1 / ReadÇÊ¿ä 
 				COr_InputData_Error()
-			elseif Operand[4] == "V" then -- Or V, Cp, X : V << Cp | X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- Or V, Cp, X : V << Cp | X / ReadÇÊ¿ä 
 				COr_InputData_Error()
 			else
 				COr_InputData_Error()
@@ -15061,9 +15061,9 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 			end
 
 		else 
-			if type(Operand) == "number" then -- Or V, Mem, 1 : V << Mem | 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- Or V, Mem, 1 : V << Mem | 1 / ReadÇÊ¿ä
 				COr_InputData_Error()
-			elseif Operand[4] == "V" then -- Or V, Mem, X : V << Mem | X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Or V, Mem, X : V << Mem | X / ReadÇÊ¿ä
 				COr_InputData_Error()
 			else
 				COr_InputData_Error()
@@ -15311,19 +15311,19 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 			CAnd_InputData_Error()
 		end
 
-		if type(Source) == "number" then -- And V, 0x58A364, 1 : V << 0x58A364 & 1 / Readí•„ìš”
+		if type(Source) == "number" then -- And V, 0x58A364, 1 : V << 0x58A364 & 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				CAnd_InputData_Error()
-			elseif Operand[4] == "V" then -- And V, 0x58A364, X : V << 0x58A364 & X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- And V, 0x58A364, X : V << 0x58A364 & X / ReadÇÊ¿ä
 				CAnd_InputData_Error()
 			else
 				CAnd_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- And V, Cp, 1 : V << Cp & 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- And V, Cp, 1 : V << Cp & 1 / ReadÇÊ¿ä 
 				CAnd_InputData_Error()
-			elseif Operand[4] == "V" then -- And V, Cp, X : V << Cp & X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- And V, Cp, X : V << Cp & X / ReadÇÊ¿ä 
 				CAnd_InputData_Error()
 			else
 				CAnd_InputData_Error()
@@ -15400,9 +15400,9 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 			end
 
 		else 
-			if type(Operand) == "number" then -- And V, Mem, 1 : V << Mem & 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- And V, Mem, 1 : V << Mem & 1 / ReadÇÊ¿ä
 				CAnd_InputData_Error()
-			elseif Operand[4] == "V" then -- And V, Mem, X : V << Mem & X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- And V, Mem, X : V << Mem & X / ReadÇÊ¿ä
 				CAnd_InputData_Error()
 			else
 				CAnd_InputData_Error()
@@ -15444,19 +15444,19 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CXor_InputData_Error()
 		end
-		if type(Dest) == "number" then -- Xor 0x58A364, 1 : 0x58A364 ^= 1 / Readí•„ìš”
+		if type(Dest) == "number" then -- Xor 0x58A364, 1 : 0x58A364 ^= 1 / ReadÇÊ¿ä
 			if type(Source) == "number" then
 				CXor_InputData_Error()
-			elseif Source[4] == "V" then -- Xor 0x58A364, X : 0x58A364 ^= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Xor 0x58A364, X : 0x58A364 ^= X / ReadÇÊ¿ä
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
 			end
 
 		elseif Dest == "Cp" then
-			if type(Source) == "number" then -- Xor Cp, 1 : Cp ^= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Xor Cp, 1 : Cp ^= 1 / ReadÇÊ¿ä
 				CXor_InputData_Error()
-			elseif Source[4] == "V" then -- Xor Cp, X : Cp ^= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Xor Cp, X : Cp ^= X / ReadÇÊ¿ä
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
@@ -15578,9 +15578,9 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 			end
 
 		else 
-			if type(Source) == "number" then -- Xor Mem, 1 : Mem ^= 1 / Readí•„ìš”
+			if type(Source) == "number" then -- Xor Mem, 1 : Mem ^= 1 / ReadÇÊ¿ä
 				CXor_InputData_Error()
-			elseif Source[4] == "V" then -- Xor Mem, X : Mem ^= X / Readí•„ìš”
+			elseif Source[4] == "V" then -- Xor Mem, X : Mem ^= X / ReadÇÊ¿ä
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
@@ -15615,19 +15615,19 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CXor_InputData_Error()
 		end
-		if type(Source) == "number" then -- Xor V, 0x58A364, 1 : V << 0x58A364 ^ 1 / Readí•„ìš”
+		if type(Source) == "number" then -- Xor V, 0x58A364, 1 : V << 0x58A364 ^ 1 / ReadÇÊ¿ä
 			if type(Operand) == "number" then
 				CXor_InputData_Error()
-			elseif Operand[4] == "V" then -- Xor V, 0x58A364, X : V << 0x58A364 ^ X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Xor V, 0x58A364, X : V << 0x58A364 ^ X / ReadÇÊ¿ä
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
 			end
 
 		elseif Source == "Cp" then
-			if type(Operand) == "number" then -- Xor V, Cp, 1 : V << Cp ^ 1 / Readí•„ìš” 
+			if type(Operand) == "number" then -- Xor V, Cp, 1 : V << Cp ^ 1 / ReadÇÊ¿ä 
 				CXor_InputData_Error()
-			elseif Operand[4] == "V" then -- Xor V, Cp, X : V << Cp ^ X / Readí•„ìš” 
+			elseif Operand[4] == "V" then -- Xor V, Cp, X : V << Cp ^ X / ReadÇÊ¿ä 
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
@@ -15774,9 +15774,9 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 			end
 
 		else 
-			if type(Operand) == "number" then -- Xor V, Mem, 1 : V << Mem ^ 1 / Readí•„ìš”
+			if type(Operand) == "number" then -- Xor V, Mem, 1 : V << Mem ^ 1 / ReadÇÊ¿ä
 				CXor_InputData_Error()
-			elseif Operand[4] == "V" then -- Xor V, Mem, X : V << Mem ^ X / Readí•„ìš”
+			elseif Operand[4] == "V" then -- Xor V, Mem, X : V << Mem ^ X / ReadÇÊ¿ä
 				CXor_InputData_Error()
 			else
 				CXor_InputData_Error()
@@ -15792,7 +15792,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 end		
 
 
--- í•¨ìˆ˜ í˜¸ì¶œí˜• í•¨ìˆ˜ ì •ì˜ ì„ ì–¸ (Include) -------------------------------------------------
+-- ÇÔ¼ö È£ÃâÇü ÇÔ¼ö Á¤ÀÇ ¼±¾ğ (Include) -------------------------------------------------
 
 function Include_CtrigPlib(Cycle,SeedSwitch,Flag)
 	Include_DataTransfer(Flag)
@@ -16190,7 +16190,7 @@ function Include_DataTransfer(Flag) -- f_Read / f_EPD / f_Memcpy
 
 	CIfX(AllPlayers,CVar("X",FMOVE[3],AtLeast,4),SetCVar("X",FMOVE[3],Subtract,4))
 
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥ (A)
+		Trigger {--(CPRead)·Î °ª Ãâ·Â (A)
 				players = {AllPlayers},
 				conditions = {
 					Label(0);
@@ -16258,7 +16258,7 @@ function Include_DataTransfer(Flag) -- f_Read / f_EPD / f_Memcpy
 	CIfXEnd()
 	FuncAlloc = FuncAlloc + 1
 
-	Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥ (A)
+	Trigger {--(CPRead)·Î °ª Ãâ·Â (A)
 				players = {AllPlayers},
 				conditions = {
 					Label(0);
@@ -16315,7 +16315,7 @@ function Include_DataTransfer(Flag) -- f_Read / f_EPD / f_Memcpy
 	FuncAlloc = FuncAlloc + 1
 
 	CIfX(AllPlayers,CVar("X",FMOVE[3],Exactly,3))
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥ (A)
+		Trigger {--(CPRead)·Î °ª Ãâ·Â (A)
 				players = {AllPlayers},
 				conditions = {
 					Label(0);
@@ -16363,7 +16363,7 @@ function Include_DataTransfer(Flag) -- f_Read / f_EPD / f_Memcpy
 			}
 		FuncAlloc = FuncAlloc + 1
 	CElseIfX(CVar("X",FMOVE[3],Exactly,2))
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥ (A)
+		Trigger {--(CPRead)·Î °ª Ãâ·Â (A)
 				players = {AllPlayers},
 				conditions = {
 					Label(0);
@@ -16411,7 +16411,7 @@ function Include_DataTransfer(Flag) -- f_Read / f_EPD / f_Memcpy
 			}
 		FuncAlloc = FuncAlloc + 1
 	CElseIfX(CVar("X",FMOVE[3],Exactly,1))
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥ (A)
+		Trigger {--(CPRead)·Î °ª Ãâ·Â (A)
 				players = {AllPlayers},
 				conditions = {
 					Label(0);
@@ -16902,7 +16902,7 @@ FIMODCall3 = 0
 FABSCall1 = 0
 FABSCall2 = 0
 function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
-	-- f_MulX - Ret[1] : Input X / Ret[2] : Input Y / Ret[3] : Output | Ouput = X * Y (f_Mul ìµœì í™” ë²„ì ¼)
+	-- f_MulX - Ret[1] : Input X / Ret[2] : Input Y / Ret[3] : Output | Ouput = X * Y (f_Mul ÃÖÀûÈ­ ¹öÁ¯)
 	local Bit = 31
 
 	Trigger {
@@ -17036,7 +17036,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 
 	FuncAlloc = FuncAlloc + 2
 
---[[ êµ¬ f_Mul (32bit CMul)
+--[[ ±¸ f_Mul (32bit CMul)
 	local Bit = 31
 
 	local ClearValue = {}
@@ -17137,7 +17137,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 					Label(FuncAlloc); -- FIDIV1
 				},
 				actions = {
-					SetCtrigX("X",FuncAlloc+5,0x4,0,SetTo,"X",FuncAlloc+6,0x0,0,0); -- ë¶„ê¸°ì  Next -> FIDIV2
+					SetCtrigX("X",FuncAlloc+5,0x4,0,SetTo,"X",FuncAlloc+6,0x0,0,0); -- ºĞ±âÁ¡ Next -> FIDIV2
 					SetCtrig1X("X",CRet[6],0x15C,0,SetTo,0);
 				},
 				flag = {Preserved}
@@ -17316,7 +17316,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 					Label(FuncAlloc); -- FIMOD1
 				},
 				actions = {
-					SetCtrigX("X",FuncAlloc+4,0x4,0,SetTo,"X",FuncAlloc+7,0x0,0,0); -- ë¶„ê¸°ì  Next -> FIMOD2
+					SetCtrigX("X",FuncAlloc+4,0x4,0,SetTo,"X",FuncAlloc+7,0x0,0,0); -- ºĞ±âÁ¡ Next -> FIMOD2
 				},
 				flag = {Preserved}
 			}
@@ -17484,7 +17484,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 					Label(FuncAlloc); -- FDIV1
 				},
 				actions = {
-					SetCtrigX("X",FuncAlloc+3,0x4,0,SetTo,"X",FuncAlloc+8,0x0,0,0); -- ë¶„ê¸°ì  Next -> FDIV2
+					SetCtrigX("X",FuncAlloc+3,0x4,0,SetTo,"X",FuncAlloc+8,0x0,0,0); -- ºĞ±âÁ¡ Next -> FDIV2
 				},
 				flag = {Preserved}
 			}
@@ -17551,7 +17551,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 					Label(FuncAlloc); -- FMod1
 				},
 				actions = {
-					SetCtrigX("X",FuncAlloc+2,0x4,0,SetTo,"X",FuncAlloc+9,0x0,0,0); -- ë¶„ê¸°ì  Next -> FMod2
+					SetCtrigX("X",FuncAlloc+2,0x4,0,SetTo,"X",FuncAlloc+9,0x0,0,0); -- ºĞ±âÁ¡ Next -> FMod2
 				},
 				flag = {Preserved}
 			}
@@ -17701,7 +17701,7 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 		Trigger { 
 			players = {AllPlayers},
 				conditions = {
-					Label(FuncAlloc); -- ë¶„ê¸°ì 
+					Label(FuncAlloc); -- ºĞ±âÁ¡
 				},
 				flag = {Preserved}
 			}
@@ -18037,8 +18037,8 @@ FLENG = {}
 FATANCall1 = 0
 FATANCall2 = 0
 FATAN = {}
-function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 | Cycle = 2*pi, 4ì˜ ë°°ìˆ˜ì—¬ì•¼í•¨
--- f_Sqrt - Ret[1] : Input Value / Ret[2] = Output | Ret = âˆšX 
+function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 | Cycle = 2*pi, 4ÀÇ ¹è¼ö¿©¾ßÇÔ
+-- f_Sqrt - Ret[1] : Input Value / Ret[2] = Output | Ret = ¡îX 
 
 	CVariable(AllPlayers,FuncAlloc) -- Local Variable
 	CVariable(AllPlayers,FuncAlloc+1)
@@ -18185,7 +18185,7 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 | Cycle = 
 		}
 	FuncAlloc = FuncAlloc + 1
 
--- f_Lengthdir - Ret[1] : Input R  Ret[2] = Î˜ | Ret[3] = RCosÎ˜  Ret[4] = RSinÎ˜
+-- f_Lengthdir - Ret[1] : Input R  Ret[2] = ¥È | Ret[3] = RCos¥È  Ret[4] = RSin¥È
 	if Cycle == "X" or Cycle == nil then
 		Cycle = 360
 	end
@@ -18283,7 +18283,7 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 | Cycle = 
 	FLENGCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 
--- f_Atan2 - Ret[1] : Input Y  Ret[2] = X | Ret[3] = Î˜  
+-- f_Atan2 - Ret[1] : Input Y  Ret[2] = X | Ret[3] = ¥È  
 	for i = 0, 3 do
 		CVariable(AllPlayers,FuncAlloc+i) -- Local Variable
 		table.insert(FATAN,FuncAlloc+i)
@@ -18301,20 +18301,20 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 | Cycle = 
 	FuncAlloc = FuncAlloc + 1
 
 	CIfX(AllPlayers,CVar("X",FATAN[1],AtLeast,0x80000000)) 
-		CIfX(AllPlayers,CVar("X",FATAN[2],AtLeast,0x80000000)) -- 3ì‚¬ë¶„ë©´
-			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,3)}) -- Î˜ + pi
+		CIfX(AllPlayers,CVar("X",FATAN[2],AtLeast,0x80000000)) -- 3»çºĞ¸é
+			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,3)}) -- ¥È + pi
 			CNeg(AllPlayers,V(FATAN[1]))
 			CNeg(AllPlayers,V(FATAN[2]))
-		CElseX() -- 4ì‚¬ë¶„ë©´
-			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,4)}) -- 2pi - Î˜
+		CElseX() -- 4»çºĞ¸é
+			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,4)}) -- 2pi - ¥È
 			CNeg(AllPlayers,V(FATAN[1]))
 		CIfXEnd()
 	CElseX()
-		CIfX(AllPlayers,CVar("X",FATAN[2],AtLeast,0x80000000)) -- 2ì‚¬ë¶„ë©´
-			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,2)}) -- pi - Î˜
+		CIfX(AllPlayers,CVar("X",FATAN[2],AtLeast,0x80000000)) -- 2»çºĞ¸é
+			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,2)}) -- pi - ¥È
 			CNeg(AllPlayers,V(FATAN[2]))
-		CElseX() -- 1ì‚¬ë¶„ë©´
-			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,1)}) -- Î˜
+		CElseX() -- 1»çºĞ¸é
+			DoActionsX(AllPlayers,{SetCVar("X",FATAN[4],SetTo,1)}) -- ¥È
 		CIfXEnd()
 	CIfXEnd()
 
@@ -18745,9 +18745,9 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 	FuncAlloc = FuncAlloc + 2
 end
 
--- í•¨ìˆ˜ í˜¸ì¶œí˜• ìµœì¢… ì—°ì‚° í•¨ìˆ˜ (f_) ------------------------------------------------------
+-- ÇÔ¼ö È£ÃâÇü ÃÖÁ¾ ¿¬»ê ÇÔ¼ö (f_) ------------------------------------------------------
 
-function f_Movcpy(PlayerID,Dest,SourceVA,Size) -- VA index = ìƒìˆ˜ (CPRead)
+function f_Movcpy(PlayerID,Dest,SourceVA,Size) -- VA index = »ó¼ö (CPRead)
 	STPopTrigArr(PlayerID)
 	-- Input Data CRet[1] << Dest / CRet[2] << VAOffset / CRet[3] << Size (Offset)
 
@@ -18813,7 +18813,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size) -- VA index = ìƒìˆ˜ (CPRead)
 		}
 	end
 
-	if SourceVA[4] == "V" then -- â€» MovXëŠ” CPReadë°©ì‹ìœ¼ë¡œ Cpê°’ ë³€ê²½í•˜ë¯€ë¡œ Cpê°’ ìì²´ë¥¼ ì „ë‹¬í•˜ëŠ” SourceVAì¸ìëŠ” ë§¨ ë°‘ì— ìˆì–´ì•¼í•¨
+	if SourceVA[4] == "V" then -- ¡Ø MovX´Â CPRead¹æ½ÄÀ¸·Î Cp°ª º¯°æÇÏ¹Ç·Î Cp°ª ÀÚÃ¼¸¦ Àü´ŞÇÏ´Â SourceVAÀÎÀÚ´Â ¸Ç ¹Ø¿¡ ÀÖ¾î¾ßÇÔ
 		Trigger {
 			players = {ParsePlayer(PlayerID)},
 			conditions = {
@@ -18828,7 +18828,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size) -- VA index = ìƒìˆ˜ (CPRead)
 	elseif SourceVA[4] == "VA" then
 		local TempRet = {"X",FMOVE[2],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥
+		Trigger {--(CPRead)·Î °ª Ãâ·Â
 				players = {ParsePlayer(PlayerID)},
 				conditions = {
 					Label(0);
@@ -18864,7 +18864,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size) -- VA index = ìƒìˆ˜ (CPRead)
 	RecoverCp(PlayerID)
 end
 
-function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes) -- VA index = ìƒìˆ˜ (CPRead)
+function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes) -- VA index = »ó¼ö (CPRead)
 	STPopTrigArr(PlayerID)
 	-- Input Data CRet[1] << Dest / CRet[2] << VAOffset / CRet[3] << Size (EPD)
 
@@ -18946,7 +18946,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes) -- VA index = ìƒìˆ˜
 		}
 	end
 
-	if SourceVA[4] == "V" then -- â€» MovXëŠ” CPReadë°©ì‹ìœ¼ë¡œ Cpê°’ ë³€ê²½í•˜ë¯€ë¡œ Cpê°’ ìì²´ë¥¼ ì „ë‹¬í•˜ëŠ” SourceVAì¸ìëŠ” ë§¨ ë°‘ì— ìˆì–´ì•¼í•¨
+	if SourceVA[4] == "V" then -- ¡Ø MovX´Â CPRead¹æ½ÄÀ¸·Î Cp°ª º¯°æÇÏ¹Ç·Î Cp°ª ÀÚÃ¼¸¦ Àü´ŞÇÏ´Â SourceVAÀÎÀÚ´Â ¸Ç ¹Ø¿¡ ÀÖ¾î¾ßÇÔ
 		Trigger {
 			players = {ParsePlayer(PlayerID)},
 			conditions = {
@@ -18962,7 +18962,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes) -- VA index = ìƒìˆ˜
 	elseif SourceVA[4] == "VA" then
 		local TempRet = {"X",FMOVE[2],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
-		Trigger {--(CPRead)ë¡œ ê°’ ì¶œë ¥
+		Trigger {--(CPRead)·Î °ª Ãâ·Â
 				players = {ParsePlayer(PlayerID)},
 				conditions = {
 					Label(0);
@@ -20336,7 +20336,7 @@ function f_EPD(PlayerID,Dest,Source)
 	end
 end
 
-function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) ë°©ì‹ìœ¼ë¡œ ì½ìŒ
+function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) ¹æ½ÄÀ¸·Î ÀĞÀ½
 	STPopTrigArr(PlayerID)
 	if Mask == nil or Mask == "X" then
 		Mask = 0xFFFFFFFF
@@ -20468,7 +20468,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) ë°©ì‹ìœ
 end
 
 
-function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) ë°©ì‹ìœ¼ë¡œ ì½ìŒ
+function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) ¹æ½ÄÀ¸·Î ÀĞÀ½
 	STPopTrigArr(PlayerID)
 	if Mask == nil or Mask == "X" then
 		Mask = 0xFFFFFFFF
@@ -21491,7 +21491,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 	end
 end
 
--- ë‚´ë¶€ íŠ¸ë¦¬ê±° ìƒì„± ê´€ë ¨ í•¨ìˆ˜ (ì§ì ‘ ì‚¬ìš©X) -----------------------------------------------
+-- ³»ºÎ Æ®¸®°Å »ı¼º °ü·Ã ÇÔ¼ö (Á÷Á¢ »ç¿ëX) -----------------------------------------------
 
 function ORPopCondArr(PlayerID)
 	if ORPopTrigLock == 0 and ORPushCondArr[1] ~= nil then
@@ -21522,7 +21522,7 @@ function ORPopCondArr(PlayerID)
 		for i, ORCond in pairs(ORPushCondArr) do
 			DoActionsX(PlayerID,{SetCDeaths("X",SetTo,0,ORFCodeArr[i])})
 			for k, v in pairs(ORCond) do
-				if v[1] == "T" then -- Tì¡°ê±´
+				if v[1] == "T" then -- TÁ¶°Ç
 					if v[2] == "MemoryX" then
 						CTrigger(PlayerID,{TMemoryX(v[3],v[4],v[5],v[6])},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
 					elseif v[2] == "Memory" then
@@ -21566,7 +21566,7 @@ function ORPopCondArr(PlayerID)
 					elseif v[2] == "Opponents" then
 						CTrigger(PlayerID,{TOpponents(v[3],v[4],v[5])},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
 					end
-				elseif v[1] == "TT" then -- TTì¡°ê±´
+				elseif v[1] == "TT" then -- TTÁ¶°Ç
 					if v[2] == "MemoryX" then
 						CTrigger(PlayerID,{TTMemoryX(v[3],v[4],v[5],v[6])},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
 					elseif v[2] == "Memory" then
@@ -21610,10 +21610,10 @@ function ORPopCondArr(PlayerID)
 					elseif v[2] == "Opponents" then
 						CTrigger(PlayerID,{TTOpponents(v[3],v[4],v[5])},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
 					end
-				elseif v[1] == "AND" then -- ANDì¡°ê±´
+				elseif v[1] == "AND" then -- ANDÁ¶°Ç
 					local ANDCond = {}
 					for p, q in pairs(v[2]) do
-						if q[1] == "T" then -- Tì¡°ê±´
+						if q[1] == "T" then -- TÁ¶°Ç
 							if q[2] == "MemoryX" then
 								table.insert(ANDCond,{TMemoryX(q[3],q[4],q[5],q[6])})
 							elseif q[2] == "Memory" then
@@ -21657,7 +21657,7 @@ function ORPopCondArr(PlayerID)
 							elseif q[2] == "Opponents" then
 								table.insert(ANDCond,{TOpponents(q[3],q[4],q[5])})
 							end
-						elseif q[1] == "TT" then -- TTì¡°ê±´
+						elseif q[1] == "TT" then -- TTÁ¶°Ç
 							if q[2] == "MemoryX" then
 								table.insert(ANDCond,{TTMemoryX(q[3],q[4],q[5],q[6])})
 							elseif q[2] == "Memory" then
@@ -21701,12 +21701,12 @@ function ORPopCondArr(PlayerID)
 							elseif q[2] == "Opponents" then
 								table.insert(ANDCond,{TTOpponents(q[3],q[4],q[5])})
 							end
-						else -- ì¼ë°˜ ì¡°ê±´
+						else -- ÀÏ¹İ Á¶°Ç
 							table.insert(ANDCond,{q})
 						end
 					end
 					CTrigger(PlayerID,{ANDCond},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
-				else -- ì¼ë°˜ ì¡°ê±´
+				else -- ÀÏ¹İ Á¶°Ç
 					CTrigger(PlayerID,{v},{SetCDeaths("X",SetTo,1,ORFCodeArr[i])},{Preserved})
 				end
 			end
@@ -22146,7 +22146,7 @@ function _MovX(Source,Mode,Mask)
 	return TempData
 end
 
--- ì¤‘ê°„ ì—°ì‚° í•¨ìˆ˜(_) -------------------------------------------------------------------
+-- Áß°£ ¿¬»ê ÇÔ¼ö(_) -------------------------------------------------------------------
 
 function _Mov(Source,Mask)
 	local Temp = VarXAlloc
@@ -22822,9 +22822,9 @@ function _Sqrt(Source)
 	elseif Source == "Cp" then
 		Sqrt_InputData_Error()
 	elseif Source[4] == "V" then
-		table.insert(STPushTrigArr,{"Sqrt",TempData,Source}) -- A << âˆšX
+		table.insert(STPushTrigArr,{"Sqrt",TempData,Source}) -- A << ¡îX
 	elseif Source[4] == "VA" then
-		table.insert(STPushTrigArr,{"Sqrt",TempData,Source}) -- A << âˆšVA
+		table.insert(STPushTrigArr,{"Sqrt",TempData,Source}) -- A << ¡îVA
 	elseif Source[4] == "A" then
 		Sqrt_InputData_Error()
 	else
@@ -22850,7 +22850,7 @@ function _Rand()
 	return TempData
 end
 
--- Misc ê¸°íƒ€ í•¨ìˆ˜ë“¤ ---------------------------------------------------------------------------------------------
+-- Misc ±âÅ¸ ÇÔ¼öµé ---------------------------------------------------------------------------------------------
 
 function EUDTurbo(PlayerID)
 	DoActions(PlayerID,SetMemory(0x6509A0,SetTo,0))
@@ -23381,7 +23381,7 @@ function Print_13(PlayerID,DisplayPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 
-function GetPlayerName(PlayerID,TargetPlayer,OutputVA,InitBytes) -- VA[1~5] ì‚¬ìš©
+function GetPlayerName(PlayerID,TargetPlayer,OutputVA,InitBytes) -- VA[1~5] »ç¿ë
 	if InitBytes == nil then
 		InitBytes = 0
 	end
@@ -23433,7 +23433,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		end
 	end
 
-	if type(OutputVA[4]) == "string" and OutputVA[4] ~= "X" then -- VArray 0 ~ 3 / 1234 -> ï¼‘ï¼’ï¼“ï¼”
+	if type(OutputVA[4]) == "string" and OutputVA[4] ~= "X" then -- VArray 0 ~ 3 / 1234 -> £±£²£³£´
 
 		DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x60BCEF00+Color[1]),
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x60BCEF00+Color[2]),
@@ -23452,7 +23452,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			},
 			flag = {Preserved}
 		}
-		for i = 7, 0, -1 do -- 1 -> ï¼‘
+		for i = 7, 0, -1 do -- 1 -> £±
  			CBit = 2^i 
 			Trigger {
 				players = {ParsePlayer(PlayerID)},
@@ -23523,7 +23523,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			},
 			flag = {Preserved}
 		}
-		for i = 15, 8, -1 do -- 2 -> ï¼’
+		for i = 15, 8, -1 do -- 2 -> £²
  			CBit = 2^i 
 			Trigger {
 				players = {ParsePlayer(PlayerID)},
@@ -23606,7 +23606,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			},
 			flag = {Preserved}
 		}
-		for i = 23, 16, -1 do -- 3 -> ï¼“
+		for i = 23, 16, -1 do -- 3 -> £³
  			CBit = 2^i 
 			Trigger {
 				players = {ParsePlayer(PlayerID)},
@@ -23689,7 +23689,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			},
 			flag = {Preserved}
 		}
-		for i = 31, 24, -1 do -- 4 -> ï¼”
+		for i = 31, 24, -1 do -- 4 -> £´
  			CBit = 2^i 
 			Trigger {
 				players = {ParsePlayer(PlayerID)},
@@ -23759,7 +23759,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 
-	else -- ì„ íƒ 1234->ï¼‘ï¼’ï¼“ï¼”
+	else -- ¼±ÅÃ 1234->£±£²£³£´
 		if OutputVA[1] ~= nil or OutputVA[1] ~= "X" then
 			DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1][1],OutputVA[1][2],0x15C,OutputVA[1][3],SetTo,0x60BCEF00+Color[1])})
 
@@ -23775,7 +23775,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				},
 				flag = {Preserved}
 			}
-			for i = 7, 0, -1 do -- 1 -> ï¼‘
+			for i = 7, 0, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
 					players = {ParsePlayer(PlayerID)},
@@ -23850,7 +23850,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				},
 				flag = {Preserved}
 			}
-			for i = 15, 8, -1 do -- 1 -> ï¼‘
+			for i = 15, 8, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
 					players = {ParsePlayer(PlayerID)},
@@ -23925,7 +23925,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				},
 				flag = {Preserved}
 			}
-			for i = 23, 16, -1 do -- 1 -> ï¼‘
+			for i = 23, 16, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
 					players = {ParsePlayer(PlayerID)},
@@ -24000,7 +24000,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				},
 				flag = {Preserved}
 			}
-			for i = 31, 24, -1 do -- 1 -> ï¼‘
+			for i = 31, 24, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
 					players = {ParsePlayer(PlayerID)},
@@ -24078,13 +24078,13 @@ function ItoName(PlayerID,TargetPlayer,OutputVA,Color) -- VA[0~4]
 	end
 end
 
-function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = ìƒìˆ˜ / Int -> Dec VA[0~3]
+function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = »ó¼ö / Int -> Dec VA[0~3]
 	STPopTrigArr(PlayerID)
 -- B = 0x20, C = ColorCod, S = Sign, 0~9 = Number, X = 0x0D
--- ZeroMode : 0 í‘œì‹œ ë°©ë²• ì„ íƒ / 0 (0) / Space (1) / 0x0D (2)
--- Color : ì»¬ëŸ¬ì½”ë“œ ì¶”ê°€ / 0x01 ~ 0x1F (ê¸°ë³¸ 0x0D)
--- Sign : ë¶€í˜¸ ì¶”ê°€ / ë¶€í˜¸ì—†ìŒ (0) / ë¶€í˜¸ì¶”ê°€(1) / ë¶€í˜¸ì¶”ê°€ +Space (2)
--- DigitMax : ì‹œì‘ ìë¦¬ìˆ˜ (ê¸°ë³¸ 10) / DigitMin : ë ìë¦¬ìˆ˜ (ê¸°ë³¸1)
+-- ZeroMode : 0 Ç¥½Ã ¹æ¹ı ¼±ÅÃ / 0 (0) / Space (1) / 0x0D (2)
+-- Color : ÄÃ·¯ÄÚµå Ãß°¡ / 0x01 ~ 0x1F (±âº» 0x0D)
+-- Sign : ºÎÈ£ Ãß°¡ / ºÎÈ£¾øÀ½ (0) / ºÎÈ£Ãß°¡(1) / ºÎÈ£Ãß°¡ +Space (2)
+-- DigitMax : ½ÃÀÛ ÀÚ¸®¼ö (±âº» 10) / DigitMin : ³¡ ÀÚ¸®¼ö (±âº»1)
  	if Sign == nil or Sign == "X" then
  		Sign = 0
  	end
@@ -24415,13 +24415,13 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	 DoActionsX(PlayerID,X)
 end
 
-function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -- VA index = ìƒìˆ˜ / Int -> Hex VA[0~2]
+function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -- VA index = »ó¼ö / Int -> Hex VA[0~2]
 	STPopTrigArr(PlayerID)
 -- B = 0x20, C = ColorCod, 1~8 = Number, X = 0x0D
--- ZeroMode : 0 í‘œì‹œ ë°©ë²• ì„ íƒ / 0 (0) / Space (1) / 0x0D (2)
--- Color : ì»¬ëŸ¬ì½”ë“œ ì¶”ê°€ / 0x01 ~ 0x1F (ê¸°ë³¸ 0x0D)
--- DigitMax : ì‹œì‘ ìë¦¬ìˆ˜ (ê¸°ë³¸ 8) / DigitMin : ë ìë¦¬ìˆ˜ (ê¸°ë³¸1)
--- Case : ëŒ€ì†Œë¬¸ì / ëŒ€ë¬¸ì(0) / ì†Œë¬¸ì(1)
+-- ZeroMode : 0 Ç¥½Ã ¹æ¹ı ¼±ÅÃ / 0 (0) / Space (1) / 0x0D (2)
+-- Color : ÄÃ·¯ÄÚµå Ãß°¡ / 0x01 ~ 0x1F (±âº» 0x0D)
+-- DigitMax : ½ÃÀÛ ÀÚ¸®¼ö (±âº» 8) / DigitMin : ³¡ ÀÚ¸®¼ö (±âº»1)
+-- Case : ´ë¼Ò¹®ÀÚ / ´ë¹®ÀÚ(0) / ¼Ò¹®ÀÚ(1)
 	if Case == nil or Case == "X" then
 		Case = 0
 	end
@@ -24646,20 +24646,20 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 	 DoActionsX(PlayerID,X)
 end
 --[[ 3Bytes Code
-0x90BCEF00 ~ 0x99BCEF00 : ï¼ï¼‘ï¼’ï¼“ï¼”ï¼•ï¼–ï¼—ï¼˜ï¼™
-0x8BBCEF00 : ï¼‹
-0x8DBCEF00 : ï¼
-0x8080E300 : ã€€(Space)
-0xA1BCEF00 ~ 0xBABCEF00 : ï¼¡ï½ï¼º
-0x78BDEF00 ~ 0x93BDEF00 : ï½ï½ï½š
+0x90BCEF00 ~ 0x99BCEF00 : £°£±£²£³£´£µ£¶£·£¸£¹
+0x8BBCEF00 : £«
+0x8DBCEF00 : £­
+0x8080E300 : ¡¡(Space)
+0xA1BCEF00 ~ 0xBABCEF00 : £Á¢¦£Ú
+0x78BDEF00 ~ 0x93BDEF00 : £á¢¦£ú
 ]]--
-function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = ìƒìˆ˜ / Int -> DecX VA[0~11] 
+function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = »ó¼ö / Int -> DecX VA[0~11] 
 	STPopTrigArr(PlayerID)
 -- B = 0x20, C = ColorCod, S = Sign, 0~9 = Number, X = 0x0D
--- ZeroMode : 0 í‘œì‹œ ë°©ë²• ì„ íƒ / 0 (0) / Space (1) / 0x0D (2)
--- Color : ì»¬ëŸ¬ì½”ë“œ ì¶”ê°€ / 0x01 ~ 0x1F (ê¸°ë³¸ 0x0D) : ë§¨ë’¤ë¶€í„° ì ìš©
--- Sign : ë¶€í˜¸ ì¶”ê°€ / ë¶€í˜¸ì—†ìŒ (0) / ë¶€í˜¸ì¶”ê°€(1) / ë¶€í˜¸ì¶”ê°€ +Space (2)
--- DigitMax : ì‹œì‘ ìë¦¬ìˆ˜ (ê¸°ë³¸ 10) / DigitMin : ë ìë¦¬ìˆ˜ (ê¸°ë³¸1)
+-- ZeroMode : 0 Ç¥½Ã ¹æ¹ı ¼±ÅÃ / 0 (0) / Space (1) / 0x0D (2)
+-- Color : ÄÃ·¯ÄÚµå Ãß°¡ / 0x01 ~ 0x1F (±âº» 0x0D) : ¸ÇµÚºÎÅÍ Àû¿ë
+-- Sign : ºÎÈ£ Ãß°¡ / ºÎÈ£¾øÀ½ (0) / ºÎÈ£Ãß°¡(1) / ºÎÈ£Ãß°¡ +Space (2)
+-- DigitMax : ½ÃÀÛ ÀÚ¸®¼ö (±âº» 10) / DigitMin : ³¡ ÀÚ¸®¼ö (±âº»1)
  	if Sign == nil or Sign == "X" then
  		Sign = 0
  	end
@@ -25088,13 +25088,13 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	 DoActionsX(PlayerID,X)
 end
 
-function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -- VA index = ìƒìˆ˜ / Int -> DecX VA[0~8] 
+function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -- VA index = »ó¼ö / Int -> DecX VA[0~8] 
 	STPopTrigArr(PlayerID)
 -- B = 0x20, C = ColorCod,  1~8 = Number, X = 0x0D
--- ZeroMode : 0 í‘œì‹œ ë°©ë²• ì„ íƒ / 0 (0) / Space (1) / 0x0D (2)
--- Color : ì»¬ëŸ¬ì½”ë“œ ì¶”ê°€ / 0x01 ~ 0x1F (ê¸°ë³¸ 0x0D) : ë§¨ë’¤ë¶€í„° ì ìš©
--- Case : ëŒ€ì†Œë¬¸ì / ëŒ€ë¬¸ì(0) / ì†Œë¬¸ì(1)
--- DigitMax : ì‹œì‘ ìë¦¬ìˆ˜ (ê¸°ë³¸ 10) / DigitMin : ë ìë¦¬ìˆ˜ (ê¸°ë³¸1)
+-- ZeroMode : 0 Ç¥½Ã ¹æ¹ı ¼±ÅÃ / 0 (0) / Space (1) / 0x0D (2)
+-- Color : ÄÃ·¯ÄÚµå Ãß°¡ / 0x01 ~ 0x1F (±âº» 0x0D) : ¸ÇµÚºÎÅÍ Àû¿ë
+-- Case : ´ë¼Ò¹®ÀÚ / ´ë¹®ÀÚ(0) / ¼Ò¹®ÀÚ(1)
+-- DigitMax : ½ÃÀÛ ÀÚ¸®¼ö (±âº» 10) / DigitMin : ³¡ ÀÚ¸®¼ö (±âº»1)
  	if Case == nil or Case == "X" then
  		Case = 0
  	end

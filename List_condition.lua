@@ -80,3 +80,7 @@ end
 function MemoryX(Offset, type, Value, Mask)
 	return 0
 end
+
+function EPD(Offset)
+	return (Offset - 0x58A364)/4
+end

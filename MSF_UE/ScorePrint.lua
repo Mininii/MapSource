@@ -1,4 +1,6 @@
 function Print_TotalScore()
+    
+    local ExScoreP = Create_VTable(7)
     CIf(FP,CDeaths(FP,AtLeast,1,ScorePrint),SetCDeaths(FP,SetTo,0,ScorePrint))
     TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
     for i = 1, 7 do
@@ -17,7 +19,7 @@ function Print_TotalScore()
             },
         
         actions = {
-            RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10„Äê \x06Ôº¥\x04ÔΩèÔΩîÔΩÅÔΩå„ÄÄ\x1FÔº≥ÔΩÉÔΩèÔΩíÔΩÖ \x10„Äë",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+            RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10°º \x06£‘\x04£Ô£Ù£·£Ï°°\x1F£”£„£Ô£Ú£Â \x10°Ω",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
             PreserveTrigger();
         },
     }
