@@ -320,9 +320,49 @@ end
 function Gun_DoSuspend()
 	return TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)
 end
-function Gun_SetLine(Line,Type,Value)
+function Gun_SetLine(Line,Type,Value,Mask)
+	if Mask == nil then
+		Mask = 0xFFFFFFFF
+	end
+	return TSetMemoryX(_Add(G_TempH,(Line*0x20)/4),Type,Value,Mask)
+end
+function Gun_SetLineX(Line,Type,Value)
+	local BiteValue = 0
+	if type(Value) == "table" then
+		local ret = 0
+		if #Value >= 5 then
+			BiteStack_is_Over_5()
+		end
+		for i, j in pairs(Value) do
+			BiteValue = BiteValue + j*(256^ret)
+			ret = ret + 1
+		end
+		Value = BiteValue
+	end
+	
+
 	return TSetMemory(_Add(G_TempH,(Line*0x20)/4),Type,Value)
 end
-function Gun_Line(Line,Type,Value)
-	return CVar(FP,Var_TempTable[Line+1][2],Type,Value)
+function Gun_Line(Line,Type,Value,Mask)
+	if Mask == nil then
+		Mask = 0xFFFFFFFF
+	end
+	return CVar(FP,Var_TempTable[Line+1][2],Type,Value,Mask)
+end
+
+function Create_SortTable(Shape)
+	local X = {}
+	table.insert(X,CS_SortX(Shape,0))
+	table.insert(X,CS_SortX(Shape,1))
+	table.insert(X,CS_SortY(Shape,0))
+	table.insert(X,CS_SortY(Shape,1))
+	table.insert(X,CS_SortR(Shape,0))
+	table.insert(X,CS_SortR(Shape,1))
+	table.insert(X,CS_SortA(Shape,0))
+	table.insert(X,CS_SortA(Shape,1))
+	table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
+	table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
+	table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
+	table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
+	return X
 end

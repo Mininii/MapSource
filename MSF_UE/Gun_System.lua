@@ -1,7 +1,7 @@
 function Gun_System()
     local EXCunit_Reset = {}
-    for i = 0, 9 do
-        table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
+    for i = 1, #EXCunitTemp do
+        table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
     end
     --[[
     EXCunit Àû¿ë
@@ -38,6 +38,9 @@ function Gun_System()
     f_GSend(201)
     f_GSend(148)
     f_GSend(152)
+    if TestStart == 1 then
+        f_GSend(146)
+    end
 
     ClearCalc()
     CunitCtrig_Part2()

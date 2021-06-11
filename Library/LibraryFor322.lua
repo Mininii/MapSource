@@ -396,9 +396,10 @@ end
 
 function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local X = {}
+	local StrSize = GetStrSize(0,Text)
 	table.insert(X,Text)
-	table.insert(X,GetStrSize(0,Text))
-	table.insert(X,CreateCarray(Player,50))
+	table.insert(X,StrSize)
+	table.insert(X,CreateCarray(Player,StrSize))
 	local Y = {}
 	table.insert(Y,X[3])
 	table.insert(Y,X[1])

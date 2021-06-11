@@ -62,6 +62,22 @@ SetCall(FP)
 	})
 SetCallEnd()
 
+TempRandRet = CreateVar()
+InputMaxRand = CreateVar()
+InputMaxRand = CreateVar()
+Oprnd = CreateVar()
+CRandNum = SetCallForward()
+SetCall(FP)
+f_Rand(FP,TempRandRet)
+f_Mod(FP,TempRandRet,InputMaxRand)
+CAdd(FP,TempRandRet,Oprnd)
+SetCallEnd()
+
+function f_CRandNum(Max,Operand)
+	CallTrigger(FP,CRandNum,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
+	return TempRandRet
+end
+
 G_TempH = CreateVar()
 G_InputH = CreateVar({"X",0x500,0x15C,1,0})
 Var_TempTable = {}
@@ -161,11 +177,71 @@ Line No.args : UnitSpawnSet or CAPlot VarSet
 Line No.29 : GunType
 Line No.30 : SuspendSwitch
 ]]
+local CA_TempUID = CreateVar()
+local CA_Suspend = CreateCCode()
+function CA_Repeat()
+	CMov(FP,Gun_TempSpawnSet1,CA_TempUID)
+	CMov(FP,Repeat_TempV,1)
+	CallTrigger(FP,Set_Repeat)
+end
+
+local G_CA_Temp1 = CreateVar()
+local G_CA_Temp2 = CreateVar()
+local G_CA_Temp3 = CreateVar()
+local G_CA_CallStack = {}
+function G_CAPlot(ShapeTable)
+	local G_CA_CallIndex = SetCallForward()
+	local CA = CAPlotForward()
+	SetCall(FP)
+	CMov(FP,CA_TempUID,G_CA_Temp1,nil,0xFF)
+	CMov(FP,V(CA[1]),G_CA_Temp2)
+	CMov(FP,V(CA[6]),G_CA_Temp3)
+	CMov(FP,V(CA[5]),1)
+	CAPlot(ShapeTable,FP,nilunit,0,nil,1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CDoActions(FP,{TSetCVar(FP,G_CA_Temp3[2],SetTo,V(CA[6]))})
+	CTrigger(FP,{CDeaths(FP,AtLeast,1,CA_Suspend)},{SetCDeaths(FP,SetTo,0,CA_Suspend),
+	SetCVar(FP,G_CA_Temp1[2],SetTo,0,0xFF),SetCVar(FP,G_CA_Temp2[2],SetTo,0),SetCVar(FP,G_CA_Temp3[2],SetTo,0)},1)
+	SetCallEnd()
+	table.insert(G_CA_CallStack,G_CA_CallIndex)
+	return G_CA_CallIndex
+end
+G_CA_CondStack = {}
+G_CA_CondStack2 = {}
+
+local G_CLine = 6
+function Create_CreateTable()
+	local Ret = G_CLine
+	CIf(FP,CVar(FP,Var_TempTable[G_CLine+1][2],AtLeast,1,0xFF))
+	CDoActions(FP,{
+		TSetCVar(FP,G_CA_Temp1[2],SetTo,Var_TempTable[G_CLine+1]),
+		TSetCVar(FP,G_CA_Temp2[2],SetTo,Var_TempTable[G_CLine+2]),
+		TSetCVar(FP,G_CA_Temp3[2],SetTo,Var_TempTable[G_CLine+3])})
+	for j, k in pairs(G_CA_CallStack) do
+		CallTriggerX(FP,k,{CVar(FP,Var_TempTable[G_CLine+4][2],Exactly,j)})
+	end
+	CDoActions(FP,{
+		Gun_SetLine(G_CLine,SetTo,G_CA_Temp1),
+		Gun_SetLine(G_CLine+1,SetTo,G_CA_Temp2),
+		Gun_SetLine(G_CLine+2,SetTo,G_CA_Temp3),
+	})
+	CIfEnd()
+	table.insert(G_CA_CondStack,Gun_Line(G_CLine,AtMost,0))
+	table.insert(G_CA_CondStack2,Gun_Line(G_CLine,AtLeast,1))
+	G_CLine = G_CLine + 4
+	return Ret
+end
+
+InstallGunData()
+G_CAPlot(ZergAirPlot)
+G_CAPlot(ZergGroundPlot)
+
 
 f_Gun = SetCallForward() -- 건작함수
 SetCall(FP)
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
 	CIf(FP,{CVar(FP,Var_TempTable[29][2],AtMost,255)}) -- 레어나 하이브 등의 건작일 경우
+		G_AirLine = Create_CreateTable()
+		G_GndLine = Create_CreateTable()
 		Case_OverCocoon()
 		Case_Overmind()
 		Case_Daggoth()
@@ -174,6 +250,9 @@ SetCall(FP)
 		Case_Hive()
 		Case_Lair()
 		Case_Hatchery()
+		Case_Test()
+
+
 
 		
 	CIfEnd()

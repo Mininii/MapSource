@@ -5108,10 +5108,11 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 	if Preserve == 0 then
 		Preserve = nil
 	end
-
-	local LocId = Location-1
-	if type(Location) == "string" then
-		LocId =  ParseLocation(LocId)-1
+	local LocId = Location
+	if type(LocId) == "string" then
+		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5212,8 +5213,11 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5428,8 +5432,11 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5538,8 +5545,11 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5554,7 +5564,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 				table.insert(Plot,SetMemory(LocR,Add,Shape[i+1][1]+PlotSize))
 				table.insert(Plot,SetMemory(LocU,Add,Shape[i+1][2]-PlotSize))
 				table.insert(Plot,SetMemory(LocD,Add,Shape[i+1][2]+PlotSize))
-				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location+1,Owner))
+				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location,Owner))
 				table.insert(Plot,SetMemory(LocL,Add,PlotSize-SizeofLoc))
 				table.insert(Plot,SetMemory(LocR,Add,0-PlotSize+SizeofLoc))
 				table.insert(Plot,SetMemory(LocU,Add,PlotSize-SizeofLoc))
@@ -5580,7 +5590,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 				table.insert(Plot,SetMemory(LocR,SetTo,LocX+Shape[i+1][1]+PlotSize))
 				table.insert(Plot,SetMemory(LocU,SetTo,LocY+Shape[i+1][2]-PlotSize))
 				table.insert(Plot,SetMemory(LocD,SetTo,LocY+Shape[i+1][2]+PlotSize))
-				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location+1,Owner))
+				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location,Owner))
 				table.insert(Plot,SetMemory(LocL,SetTo,LocX+Shape[i+1][1]-SizeofLoc))
 				table.insert(Plot,SetMemory(LocR,SetTo,LocX+Shape[i+1][1]+SizeofLoc))
 				table.insert(Plot,SetMemory(LocU,SetTo,LocY+Shape[i+1][2]-SizeofLoc))
@@ -5658,8 +5668,11 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5785,8 +5798,11 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -5800,6 +5816,8 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
+	elseif type(OrderLocation) == "number" then
+		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -5814,7 +5832,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 				table.insert(Plot,SetMemory(LocR,Add,Shape[i+1][1]+PlotSize))
 				table.insert(Plot,SetMemory(LocU,Add,Shape[i+1][2]-PlotSize))
 				table.insert(Plot,SetMemory(LocD,Add,Shape[i+1][2]+PlotSize))
-				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location+1,Owner))
+				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location,Owner))
 				table.insert(Plot,SetMemory(LocL,Add,PlotSize-SizeofLoc))
 				table.insert(Plot,SetMemory(LocR,Add,0-PlotSize+SizeofLoc))
 				table.insert(Plot,SetMemory(LocU,Add,PlotSize-SizeofLoc))
@@ -5825,7 +5843,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,Add,OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,OrderShape[i+1][2]))
 						table.insert(Plot,SetMemory(OLocD,Add,OrderShape[i+1][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 						table.insert(Plot,SetMemory(OLocL,Add,0-OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocR,Add,0-OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,0-OrderShape[i+1][2]))
@@ -5835,7 +5853,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,Add,OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,OrderShape[Shape[1]+2-i][2]))
 						table.insert(Plot,SetMemory(OLocD,Add,OrderShape[Shape[1]+2-i][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 						table.insert(Plot,SetMemory(OLocL,Add,0-OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocR,Add,0-OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,0-OrderShape[Shape[1]+2-i][2]))
@@ -5849,13 +5867,13 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,SetTo,OLocX+OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,SetTo,OLocY+OrderShape[i+1][2]))
 						table.insert(Plot,SetMemory(OLocD,SetTo,OLocY+OrderShape[i+1][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 					else
 						table.insert(Plot,SetMemory(OLocL,SetTo,OLocX+OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocR,SetTo,OLocX+OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,SetTo,OLocY+OrderShape[Shape[1]+2-i][2]))
 						table.insert(Plot,SetMemory(OLocD,SetTo,OLocY+OrderShape[Shape[1]+2-i][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 					end
 				end
 				if PerAction ~= nil then
@@ -5879,7 +5897,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 				table.insert(Plot,SetMemory(LocR,SetTo,LocX+Shape[i+1][1]+PlotSize))
 				table.insert(Plot,SetMemory(LocU,SetTo,LocY+Shape[i+1][2]-PlotSize))
 				table.insert(Plot,SetMemory(LocD,SetTo,LocY+Shape[i+1][2]+PlotSize))
-				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location+1,Owner))
+				table.insert(Plot,CreateUnit(PerUnit,UnitId,Location,Owner))
 				table.insert(Plot,SetMemory(LocL,SetTo,LocX+Shape[i+1][1]-SizeofLoc))
 				table.insert(Plot,SetMemory(LocR,SetTo,LocX+Shape[i+1][1]+SizeofLoc))
 				table.insert(Plot,SetMemory(LocU,SetTo,LocY+Shape[i+1][2]-SizeofLoc))
@@ -5890,7 +5908,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,Add,OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,OrderShape[i+1][2]))
 						table.insert(Plot,SetMemory(OLocD,Add,OrderShape[i+1][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 						table.insert(Plot,SetMemory(OLocL,Add,0-OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocR,Add,0-OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,0-OrderShape[i+1][2]))
@@ -5900,7 +5918,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,Add,OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,OrderShape[Shape[1]+2-i][2]))
 						table.insert(Plot,SetMemory(OLocD,Add,OrderShape[Shape[1]+2-i][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 						table.insert(Plot,SetMemory(OLocL,Add,0-OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocR,Add,0-OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,Add,0-OrderShape[Shape[1]+2-i][2]))
@@ -5914,13 +5932,13 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 						table.insert(Plot,SetMemory(OLocR,SetTo,OLocX+OrderShape[i+1][1]))
 						table.insert(Plot,SetMemory(OLocU,SetTo,OLocY+OrderShape[i+1][2]))
 						table.insert(Plot,SetMemory(OLocD,SetTo,OLocY+OrderShape[i+1][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 					else
 						table.insert(Plot,SetMemory(OLocL,SetTo,OLocX+OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocR,SetTo,OLocX+OrderShape[Shape[1]+2-i][1]))
 						table.insert(Plot,SetMemory(OLocU,SetTo,OLocY+OrderShape[Shape[1]+2-i][2]))
 						table.insert(Plot,SetMemory(OLocD,SetTo,OLocY+OrderShape[Shape[1]+2-i][2]))
-						table.insert(Plot,Order(UnitId,Owner,Location+1,OrderType,OrderLocation+1))
+						table.insert(Plot,Order(UnitId,Owner,Location,OrderType,OrderLocation))
 					end
 				end
 				if PerAction ~= nil then
@@ -6003,8 +6021,11 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -6018,6 +6039,8 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
+	elseif type(OrderLocation) == "number" then
+		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -8120,8 +8143,10 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -8283,7 +8308,7 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 			CMov(PlayerID,LocR,V(CA[8]),PlotSize)
 			CMov(PlayerID,LocU,V(CA[9]),-PlotSize)
 			CMov(PlayerID,LocD,V(CA[9]),PlotSize)
-			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location+1,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
+			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
 			if CAfunc2 ~= nil then
 				_G[CAfunc2]()
 			end
@@ -8327,8 +8352,11 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -8489,7 +8517,7 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 			CMov(PlayerID,LocR,V(CA[8]),PlotSize)
 			CMov(PlayerID,LocU,V(CA[9]),-PlotSize)
 			CMov(PlayerID,LocD,V(CA[9]),PlotSize)
-			CDoActions(PlayerID,{TCreateUnitWithProperties(V(CB[1]),V(CB[2]),Location+1,V(CB[3]),Properties),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
+			CDoActions(PlayerID,{TCreateUnitWithProperties(V(CB[1]),V(CB[2]),Location,V(CB[3]),Properties),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
 			if CenterXY == nil then
 				CMov(PlayerID,LocL,V(CA2[1]))
 				CMov(PlayerID,LocR,V(CA2[2]))
@@ -8533,8 +8561,11 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -8544,6 +8575,8 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
+	elseif type(OrderLocation) == "number" then
+		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -8853,8 +8886,11 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -8864,6 +8900,8 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
+	elseif type(OrderLocation) == "number" then
+		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -10479,8 +10517,11 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
@@ -10691,8 +10732,11 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-	if type(Location) == "string" then
+
+	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId

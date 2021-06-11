@@ -1,3 +1,4 @@
+
 PatchArr = {}
 PatchArrPrsv = {}
 CTrigPatchTable = {}
@@ -117,6 +118,7 @@ function onInit_EUD()
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
+	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
 	CMov(FP,VRet,CurrentUID,EPD(0x664080))
 	CMov(FP,VRet2,CurrentUID,EPD(0x662860))
 
