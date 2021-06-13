@@ -109,12 +109,16 @@ function onInit_EUD()
 	for i = 1, #HeroArr do
 		table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
 	end
+	for i = 1, #ZergGndUArr do
+		table.insert(CTrigPatchTable,SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
+	end
 
 	DoActionsX(FP,CTrigPatchTable,1)
-	VRet = CreateVar()
-	VRet2 = CreateVar()
-	VRet3 = CreateVar()
-	VRet4 = CreateVar()
+	local VRet = CreateVar()
+	local VRet2 = CreateVar()
+	local VRet3 = CreateVar()
+	local VRet4 = CreateVar()
+	local CurrentUID = CreateVar()
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
@@ -345,7 +349,7 @@ function onInit_EUD()
 		},
 	}
 	DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
-
+	local SetPlayers = CreateVar()
 	for i = 0, 6 do
 	Trigger {
 		players = {FP},
@@ -441,6 +445,10 @@ function onInit_EUD()
 
 	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
+	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
+
+
+	
 	f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
 	for i = 0, 6 do
@@ -457,6 +465,7 @@ function onInit_EUD()
 	f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
 
 	f_MemCpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
+	f_MemCpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
 	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 
 	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
@@ -598,7 +607,6 @@ function onInit_EUD()
 	CDoActions(FP,{TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),TRemoveUnit(RepHeroIndex,AllPlayers),TRemoveUnit(RepHeroIndex,P9),TRemoveUnit(RepHeroIndex,P10),TRemoveUnit(RepHeroIndex,P11),TRemoveUnit(RepHeroIndex,P12)})
 	CAdd(FP,RepHeroIndex,1)
 	CWhileEnd()
-	f_GetTblptr(FP,MarTblPtr,1501)
 
 	CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
 end

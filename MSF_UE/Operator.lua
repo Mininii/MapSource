@@ -1,4 +1,5 @@
 function OPTrig()
+    local Cunit2 = CreateVar()
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
@@ -95,6 +96,7 @@ function OPTrig()
         
         
         
+    local SpeedVar = CreateVar(4)
     CMov(FP,0x6509B0,CurrentOP)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,CPConsole),{
     	PlayWAV("sound\\Misc\\Buzz.wav"),

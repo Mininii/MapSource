@@ -17,7 +17,6 @@ function Install_GetCLoc(TriggerPlayer) -- 점프단락에 설치
 
     local Call_GetCLoc = SetCallForward()
     SetCall(PlayerID)
-
     CMov(PlayerID,LocL,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC60))
     CMov(PlayerID,LocU,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC64))
     CMov(PlayerID,LocR,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC68))

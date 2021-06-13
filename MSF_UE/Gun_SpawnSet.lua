@@ -1,10 +1,42 @@
 
 function InstallGunData()
-	
-	S1 = CS_RatioXY(CS_CropXY(CS_Rotate(CS_FillXY(1,384,384,32,32),45),{-128,128},{-128,128}),2,2)
-	S2 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
-	ZergAirPlot = Create_SortTable(S1)
-	ZergGroundPlot = Create_SortTable(S2)
+
+function MakeLevelShape(Type,Points,LvMin,LvMax)
+	local X = {}
+	for i = LvMin, LvMax do
+		 if Type == "Polygon" then
+			  table.insert(X,CSMakePolygon(Points,((16*9)-(16*i))+24,0,PlotSizeCalc(Points,i),0))
+			  
+		 elseif Type == "Star" then
+			  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*i),180,PlotSizeCalc(Points*2,i),0))
+		 end
+	end
+	return X
+end
+S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
+S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
+S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
+S_6_ShT = Create_SortTable(MakeLevelShape("Star",6,1,4))
+S_7_ShT = Create_SortTable(MakeLevelShape("Star",7,1,4))
+S_8_ShT = Create_SortTable(MakeLevelShape("Star",8,1,4))
+P_3_ShT = Create_SortTable(MakeLevelShape("Polygon",3,1,8))
+P_4_ShT = Create_SortTable(MakeLevelShape("Polygon",4,1,8))
+P_5_ShT = Create_SortTable(MakeLevelShape("Polygon",5,1,8))
+P_6_ShT = Create_SortTable(MakeLevelShape("Polygon",6,1,8))
+P_7_ShT = Create_SortTable(MakeLevelShape("Polygon",7,1,8))
+P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
+
+
+
+
+
+
+
+
+
+
+
+
 
 	--CSSave("ZergAirPlot.txt",0,table.unpack(ZergAirPlot))
 	--CSSave("ZergGroundPlot.txt",0,table.unpack(ZergGroundPlot))
@@ -99,6 +131,8 @@ function InstallGunData()
 	end
 
 	function Case_InfestedCommand()
+		local RandSpeed = CreateVar()
+		local CUID = CreateVar()
 		CIf(FP,Gun_Line(0,Exactly,130))--감커
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,500)})
@@ -289,33 +323,19 @@ function InstallGunData()
 	CIfEnd()
 	end
 
+
 	function Case_Test()
 		if TestStart == 1 then
 			CIf(FP,Gun_Line(0,Exactly,146))--테스트용 유닛
 				CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 					CMov(FP,ReserveBGM,2)
-					RandRet = f_CRandNum(12,1)
-					CDoActions(FP,{
-					Gun_SetLineX(G_AirLine,SetTo,{56,55,56,55}),
-					Gun_SetLine(G_AirLine+1,SetTo,RandRet),
-					Gun_SetLine(G_AirLine+3,SetTo,1)})
-					RandRet = f_CRandNum(12,1)
-					CDoActions(FP,{
-					Gun_SetLineX(G_GndLine,SetTo,{54,53,48,51}),
-					Gun_SetLine(G_GndLine+1,SetTo,RandRet),
-					Gun_SetLine(G_GndLine+3,SetTo,2)})
+					CDoActions(FP,{Gun_SetLine(4,Add,15000)})
+					
+					G_CA_SetSpawn(nil,G_L1,{77,55,56,104},{S_4,P_5,P_3,S_8},{3,6,6,2})
 					GunBreak("\x07테스트용 썽큰~~~~~~~~~~~~~~~~",322322)
 				CIfEnd()
-				CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack2})
-					
-					RandRet = f_CRandNum(12,1)
-					CTrigger(FP,{Gun_Line(G_AirLine,AtMost,0,0xFF)},
-						{Gun_SetLine(G_AirLine,SetTo,_Div(Var_TempTable[G_AirLine+1],_Mov(256))),Gun_SetLine(G_GndLine+1,SetTo,RandRet)},1)
-
-					RandRet = f_CRandNum(12,1)
-					CTrigger(FP,{Gun_Line(G_GndLine,AtMost,0,0xFF)},
-						{Gun_SetLine(G_GndLine,SetTo,_Div(Var_TempTable[G_GndLine+1],_Mov(256))),Gun_SetLine(G_GndLine+1,SetTo,RandRet)},1)
-				CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
+				CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
+					CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
 				CIfEnd()
 				CTrigger(FP,{Gun_Line(5,AtLeast,2),G_CA_CondStack},{Gun_DoSuspend()},1)
 			CIfEnd()

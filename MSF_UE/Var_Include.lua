@@ -8,50 +8,68 @@ function Var_init()
 	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
 	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
+	f_GunErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Not Found. f_Gun 실행자 : ")
 	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
 	HTextStrReset = CreateCText(FP,HTextStr)
 	HeroVArr = CreateVarray(FP,#HeroArr)
+	ZergGndVArr = CreateVarray(FP,#ZergGndUArr)
+	
 	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
 	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
 	BGMTypeV = CreateVar(6)
 	Level = CreateVar(1)
 	LevelT = CreateVar(1)
+	BackupCp = CreateVar()
 	MarNumberLimit = CreateVar(84*2)
 	MaxHPBackUp = CreateVarray(FP,228)
-	SpeedVar = CreateVar(4)
-
-	CreateVariableSet({"RepHeroIndex","RepX","RepY","BackupCp","CPos","CPosX","CPosY","BacpupPtr","CurrentUID","SelPTR","SelEPD","MarTblPtr","SelHP",
-	"SelHPEPD","MarHPEPD","SelSh","SelShEPD","SelPl","SelMaxHP","CunitP","SelOPEPD","CurCunitI","CurrentSpeed","CurrentOP",
-	"UpgradeCP","UpgradeFactor","TempUpgradePtr","TempUpgradeMaskRet","UpgradeMax","UpResearched","UpCost","UpCompleted","UPCompStrPtr","Nextptrs","CunitIndex","BarRally","G_Send","G_CA","G_TempV","GunID","Gun_X","Gun_Y","Gun_LV","G_TempW","BackupPosData","Gun_TempRand","Gun_TempSpawnSet1","Spawn_TempW",
-	"TempT","count","ReserveBGM","Repeat_TempV","TempBarPos","ExchangeRate","SetPlayers","ExchangeP","RandW","HPosX","HPosY","KillScore","Gun_Type","f_GunNum","f_GunStrPtr","ReserveBGM2",
-	"Gun_TempSpawnSet2","Gun_TempSpawnSet3","Actived_Gun","HTextStrPtr","UnitDataPtr","CUID","RandSpeed","ScoreVPtr","Time","Cunit2","f_GunSendStrPtr","MarTempSh","B1_K","B1_K2","B1_H","SelUID",
-	"WaveT","CUnitID","Dt"})
+	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
+	
+	RepHeroIndex,CPos = CreateVariables(8)
+	
+	CunitP,SelOPEPD,CurCunitI,CurrentSpeed,CurrentOP = CreateVariables(5)
+	UpgradeCP,UpgradeFactor,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted,UPCompStrPtr = CreateVariables(9)
+	B1_K,B1_K2,B1_H = CreateVariables(3)
+	RandW = CreateVar()
+	Nextptrs = CreateVar()
+	count = CreateVar()
+	CunitIndex = CreateVar()
+	Gun_LV = CreateVar()
+	G_TempW = CreateVar()
+	Gun_TempRand = CreateVar()
+	Gun_TempSpawnSet1 = CreateVar()
+	Spawn_TempW = CreateVar()
+	Gun_Type = CreateVar()
+	f_GunNum = CreateVar()
+	f_GunStrPtr = CreateVar()
+	count = CreateVar()
+	ReserveBGM = CreateVar()
+	Repeat_TempV = CreateVar()
+	TempBarPos = CreateVar()
+	ExchangeRate = CreateVar()
+	Actived_Gun = CreateVar()
+	HTextStrPtr = CreateVar()
+	UnitDataPtr = CreateVar()
+	Time = CreateVar()
+	f_GunSendStrPtr = CreateVar()
+	Dt = CreateVar()
+	G_CA_StrPtr = CreateVar()
 	PCheck = CreateCCode()
 	PCheckV = CreateVar()
 	TestMode = CreateCCode()
-	DelayMedic, ShUsed, GiveRate = CreateCCodes(3)
 	FuncT, OPFuncT, IntroT, ReplaceDelayT = CreateCCodes(4)
 	RandomHeroPlace = CreateCCodes(1)
 	Continue, Continue2 = CreateCCodes(2)
 	PExitFlag, ScorePrint, countdownSound = CreateCCodes(3)
-
-
-
-
 	BarrackPtr = Create_VTable(7)
 	BarPos = Create_VTable(7)
 	ExScore = Create_VTable(7)
 	PScoreSTrPtr = Create_VTable(7)
 	EXCunitTemp = Create_VTable(10)
 	Names = Create_VArrTable(7,7)
-	ExScoreVA = Create_VArrTable(7,13)
 	CustomShape = Create_CSTable(8)
-	UpCompTxt = CreateVarray(FP,5)
-	UpCompRet = CreateVarray(FP,5)
-	f_GunNumT = CreateVarray(FP,5)
 	BanToken = Create_CCTable(7)
 	CC_Header = CreateVar({"X",EXCC_Forward,0x15C,1,2})
 end
@@ -59,6 +77,7 @@ end
 function HPoints()
 	HeroPointArr = {}
 	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98}
+	ZergGndUArr = {51,53,54,48,104}
 	CreateHeroPointArr(77,35000,"\x07『 \x1DF\x04enix \x1DZ \x07』",1)
 	CreateHeroPointArr(78,35000,"\x07『 \x1DF\x04enix \x1DD \x07』",1)
 	CreateHeroPointArr(28,45000,"\x07『 \x1DH\x04yperion \x07』",1)
@@ -113,6 +132,7 @@ function Objects()
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다!\x07 』"
+	f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받았습니다.\x07 』"
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
 	JYD = "Set Unit Order To: Junk Yard Dog" 

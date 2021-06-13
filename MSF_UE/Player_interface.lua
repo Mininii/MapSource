@@ -14,6 +14,12 @@ function PlayerInterface()
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
+	local SelPTR,SelEPD,SelHP,SelSh,SelPl,SelMaxHP = CreateVariables(6)
+	local SelUID = CreateVar()
+	local BarRally = CreateVar()
+	local ExchangeP = CreateVar()
+	local MarTempSh = CreateVar()
+	local DelayMedic, ShUsed, GiveRate = CreateCCodes(3)
 	for i = 0, 6 do
 		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
 		table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+0+i - AtkUpgradeMaskRetArr[i+1])

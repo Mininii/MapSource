@@ -21,17 +21,6 @@ function f_TempRepeatX(UnitID,Number,Condition)
 	CDoActions(FP,{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),TSetCVar(FP,Repeat_TempV[2],SetTo,Number)})
 	CallTriggerX(FP,Set_Repeat,Condition)
 end
-function Input_CSData(CSPtr,UnitID,UnitID2,Condition)
-	if UnitID2 == nil then
-		UnitID2 = 0
-	end
-	CTrigger(FP,{Condition},{
-		SetMemory(0x6509B0,SetTo,CSPtr[1]),
-		TSetCVar(FP,G_TempW[2],SetTo,CSPtr[2]),
-		SetCVar(FP,Gun_TempSpawnSet3[2],SetTo,UnitID),
-		SetCVar(FP,Gun_TempSpawnSet2[2],SetTo,UnitID2),
-	},1)
-end
 
 function TestSet(val)
 if val == 1 then 
@@ -173,6 +162,7 @@ end
 function Install_RandPlaceHero()
 	local RandW2 = CreateVar()
 	local HeroID = CreateVar()
+	local HPosX,HPosY = CreateVariables(2)
 	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,40),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
 		Check_Spawn = def_sIndex()
@@ -272,13 +262,14 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives)
 end
 
 function ObDisplay()
+	local TempT = CreateVar()
 	CMov(FP,0x582144+(4*7),0)
 	CMov(FP,0x5821A4+(4*7),0)
 	CMov(FP,0x582174+(4*7),count)
 	CAdd(FP,0x582174+(4*7),count)
 	CMov(FP,0x57F120+(4*7),Level)
 	CMov(FP,TempT,Time)
-	CAdd(FP,WaveT,Dt)
+	
 	CMov(FP,0x57F0F0+(4*7),0)
 	ValToTimeX(TempT[2],0x57F0F0+(4*7),3600000,10000)
 	ValToTimeX(TempT[2],0x57F0F0+(4*7),60000,100)
@@ -320,29 +311,27 @@ end
 function Gun_DoSuspend()
 	return TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)
 end
+
+
+function f_CRandNum(Max,Operand)
+	
+	local RandRet = TempRandRet
+	CallTrigger(FP,CRandNum,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
+	return RandRet
+end
+
 function Gun_SetLine(Line,Type,Value,Mask)
 	if Mask == nil then
 		Mask = 0xFFFFFFFF
 	end
 	return TSetMemoryX(_Add(G_TempH,(Line*0x20)/4),Type,Value,Mask)
 end
-function Gun_SetLineX(Line,Type,Value)
-	local BiteValue = 0
-	if type(Value) == "table" then
-		local ret = 0
-		if #Value >= 5 then
-			BiteStack_is_Over_5()
-		end
-		for i, j in pairs(Value) do
-			BiteValue = BiteValue + j*(256^ret)
-			ret = ret + 1
-		end
-		Value = BiteValue
-	end
-	
 
-	return TSetMemory(_Add(G_TempH,(Line*0x20)/4),Type,Value)
+
+function Gun_SetLineX(Line,Type,Value)
+	return TSetMemory(_Add(G_TempH,_Mul(Line,0x20/4)),Type,Value)
 end
+
 function Gun_Line(Line,Type,Value,Mask)
 	if Mask == nil then
 		Mask = 0xFFFFFFFF
@@ -352,17 +341,53 @@ end
 
 function Create_SortTable(Shape)
 	local X = {}
-	table.insert(X,CS_SortX(Shape,0))
-	table.insert(X,CS_SortX(Shape,1))
-	table.insert(X,CS_SortY(Shape,0))
-	table.insert(X,CS_SortY(Shape,1))
-	table.insert(X,CS_SortR(Shape,0))
-	table.insert(X,CS_SortR(Shape,1))
-	table.insert(X,CS_SortA(Shape,0))
-	table.insert(X,CS_SortA(Shape,1))
-	table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
-	table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
-	table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
-	table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
+	if type(Shape[1]) == "number" then
+		table.insert(X,CS_SortX(Shape,0))
+		table.insert(X,CS_SortX(Shape,1))
+		table.insert(X,CS_SortY(Shape,0))
+		table.insert(X,CS_SortY(Shape,1))
+		table.insert(X,CS_SortR(Shape,0))
+		table.insert(X,CS_SortR(Shape,1))
+		table.insert(X,CS_SortA(Shape,0))
+		table.insert(X,CS_SortA(Shape,1))
+		table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
+		table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
+		table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
+		table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
+	else
+		for j, k in pairs(Shape) do
+			table.insert(X,CS_SortX(k,0))
+			table.insert(X,CS_SortX(k,1))
+			table.insert(X,CS_SortY(k,0))
+			table.insert(X,CS_SortY(k,1))
+			table.insert(X,CS_SortR(k,0))
+			table.insert(X,CS_SortR(k,1))
+			table.insert(X,CS_SortA(k,0))
+			table.insert(X,CS_SortA(k,1))
+			table.insert(X,CS_DoubleSortRA(k,32,0,0))
+			table.insert(X,CS_DoubleSortRA(k,32,0,1))
+			table.insert(X,CS_DoubleSortRA(k,32,1,0))
+			table.insert(X,CS_DoubleSortRA(k,32,1,1))
+		end
+
+	end
 	return X
+end
+
+
+
+function T_to_BiteBuffer(Table)
+	local BiteValue = 0
+	if type(Table) == "table" then
+		local ret = 0
+		if #Table >= 5 then
+			BiteStack_is_Over_5()
+		end
+		for i, j in pairs(Table) do
+			BiteValue = BiteValue + j*(256^ret)
+			ret = ret + 1
+		end
+		Table = BiteValue
+	end
+	return BiteValue
 end

@@ -1,5 +1,5 @@
 function Print_TotalScore()
-    
+    local ExScoreVA = Create_VArrTable(7,13)
     local ExScoreP = Create_VTable(7)
     CIf(FP,CDeaths(FP,AtLeast,1,ScorePrint),SetCDeaths(FP,SetTo,0,ScorePrint))
     TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)

@@ -1,4 +1,5 @@
 function Test_LV1()
+    local CUnitID = CreateVar()
     if Limit == 1 then
         Trigger2(FP,{ElapsedTime(AtLeast,65)},{ModifyUnitHitPoints(All,"Men",P8,64,0),RotatePlayer({DisplayTextX("\x13\x07테스트 모드 \x04특전! 모든 유닛을 1회 끌어당깁니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
         Trigger2(FP,{ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0)},{Preserved})
