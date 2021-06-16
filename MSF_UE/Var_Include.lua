@@ -182,4 +182,5 @@ function Objects()
 	OPConsole = 441
 	CPConsole = 442
 	BanConsole = 443
+	Install_ShapeData()
 end

@@ -10,7 +10,16 @@ function OPTrig()
     CIfXEnd()
     if TestStart == 1 then
         CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1)})
-            CMov(FP,0x6509B0,CurrentOP)
+        --local TestTemp = CreateVar()
+        --f_Read(FP,_Add(Cunit2,19),TestTemp,nil,0xFF00)
+        --CTrigger(FP,{CVar(FP,Cunit2[2],AtLeast,1)},{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(TestTemp,_Mov(65536)),0xFF000000)},1)
+
+
+
+
+
+
+        CMov(FP,0x6509B0,CurrentOP)
             --Trigger {
             --	players = {FP},
             --	conditions = {
@@ -26,19 +35,13 @@ function OPTrig()
             --		PreserveTrigger();
             --	}
             --	}
-            CIf(FP,Deaths(CurrentPlayer,AtLeast,1,204))
-                f_TempRepeat(56,66)
-                f_TempRepeat(104,66)
-                f_TempRepeat(48,66)
-                f_TempRepeat(51,66)
-                CMov(FP,0x6509B0,FP)
-            CIfEnd()
             CMov(FP,0x6509B0,CurrentOP)
         
             CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)})
                 SetRecoverCp(Cunit2)
                 RecoverCp(FP)
                 DoActions(FP,MoveCp(Add,25*4))
+                CIf(FP,{TTOR({TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)})})
                 Trigger {
                     players = {FP},
                     conditions = {
@@ -63,6 +66,7 @@ function OPTrig()
                         PreserveTrigger();
                     }
                 }
+                CIfEnd()
                 DoActions(FP,{MoveCp(Subtract,25*4)})
             CIfEnd()
         CIfEnd()

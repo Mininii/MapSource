@@ -6,13 +6,16 @@ function Test_LV1()
         CIfOnce(FP,ElapsedTime(AtLeast,60))
             CMov(FP,0x6509B0,19025+19)
             CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
-                CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,7,0,0xFF)})
+                CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,7,0,0xFF),
+                TTOR({
+                    DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),
+                    DeathsX(CurrentPlayer,Exactly,3*256,0,0xFF00),
+                    DeathsX(CurrentPlayer,Exactly,156*256,0,0xFF00),
+                    DeathsX(CurrentPlayer,Exactly,160*256,0,0xFF00),
+                })
+            })
                     DoActions(FP,MoveCp(Add,6*4))
-
-                    Check_Hero = def_sIndex()
                     f_SaveCp()
-                    f_Read(FP,BackupCp,CUnitID,nil,0xFF)
-                    NJumpX(FP,Check_Hero,{TMemoryX(_Add(CUnitID,EPD(0x6637A0)),Exactly,0x10,0x10)})
                     OrderCheck = def_sIndex()
                     CJumpXEnd(FP,OrderCheck)
                         f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
@@ -34,7 +37,6 @@ function Test_LV1()
                                 TSetDeaths(_Sub(BackupCp,3),SetTo,TempBarPos,0),
                             })
                         CIfEnd()
-                    NJumpXEnd(FP,Check_Hero)
                     f_LoadCp()
 
                     DoActions(FP,MoveCp(Subtract,6*4))

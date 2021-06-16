@@ -27,7 +27,8 @@ function LevelUp()
     CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
     
     CIf(FP,CDeaths(FP,AtMost,0,ReplaceDelayT),SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
-    TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2)},{Preserved})
+    TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
+    
     CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
     CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
         CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})

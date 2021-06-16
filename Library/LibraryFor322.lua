@@ -362,7 +362,7 @@ function InstallCVArrStack()
 end
 function Install_AllObject()
 	local ObjectSpace = def_sIndex()
-	CJump(FP,ObjectSpace) -- ±‚≈∏ init ¡ˆ¡§∞¯∞£
+	CJump(FP,ObjectSpace) -- ??? init ????????
 	InstallCVariable()
 	InstallCVArrStack()
 	CJumpEnd(FP,ObjectSpace)
@@ -591,7 +591,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 		if #BGMArr[i] == 4 then
 			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
 		end
-		Trigger { -- Î∏åÍ∏à?û¨?Éù jÎ≤?
+		Trigger { -- ∫Í±›?????? j??
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
@@ -607,7 +607,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 		}
 	end
 CElseX()
-Trigger { -- Î∏åÍ∏à?û¨?Éù?ãú ?ä§?Çµ
+Trigger { -- ∫Í±›????????? ??????
 	players = {InitBGMP},
 		actions = {
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
@@ -624,7 +624,7 @@ CWhileEnd()
 CAdd(InitBGMP,0x6509B0,InitBGMP)
 CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 	for i = 1, #BGMArr do
-		Trigger { -- Î∏åÍ∏à?û¨?Éù jÎ≤?
+		Trigger { -- ∫Í±›?????? j??
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
@@ -642,7 +642,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 		}
 	end
 CElseX()
-Trigger { -- Î∏åÍ∏à?û¨?Éù?ãú ?ä§?Çµ Í¥??†Ñ?ûê
+Trigger { -- ∫Í±›????????? ?????? ????????
 	players = {InitBGMP},
 	conditions = {
 	},
@@ -665,7 +665,7 @@ function IBGM_EPD(Player,MaxPlayer)
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
 	for i = 0, MaxPlayer do
-	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- Î∏åÍ∏à????ù¥Î®?
+	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- ∫Í±›????????
 	end
 end
 

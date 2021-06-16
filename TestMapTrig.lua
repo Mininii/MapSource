@@ -416,10 +416,77 @@ function Convert_MirrorXY(...)
      end
      return X
 end
+C1 = CSMakeCircle(8,60,0,441,169)
+S1 = CSMakePolygon(4,45,45,13,0)
+S2 = CS_MoveXY(S1,700,0)
+M1 = CS_Merge(S2,C1,1,0)
+SS1 = CS_KaleidoscopeX(M1,20,0,0) --- 큰바퀴
+
+C2 = CSMakeCircle(8,45,0,122,50)
+S3 = CSMakeLineX(3,70,0,35,15)
+SS2 = CS_Merge(S3,C2,1,0) --- 작은바퀴
+
+MM = CS_Merge(SS1,SS2,1,0)
+SS3 = CS_RemoveStack(MM,5,0) -------20개 톱니바퀴
+
+function S1_Vector(X,Y) return {X+Y,X-Y} end
+
+WheelA = CS_Vector2D(SS3,1,"S1_Vector")
+
+
+----------------------------------------------
+
+CircleA = CSMakeCircle(6,60,0,61,0) ---- 작은 원
+EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- 작은 타원
+EllipseRA = CS_Rotate(EllipseA,15) ---- 작은 타원 회전
+
+CircleB = CSMakeCircle(6,40,0,91,0) ---- 큰 원
+EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- 큰 타원
+EllipseRB = CS_Rotate(EllipseB,40) ---- 큰 타원 회전
+EllipseRAD = CS_MoveXY(EllipseRA,0,500) ---- 큰 타원 평행이동
+EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- 작은타원 큰타원 합
+EllipseMirror = CS_MirrorX(EllipseShape,500,1,1) ---- X축 대칭
+
+----------------------------------------------
+
+function SF_Vector(X,Y) return {0.8*(X+Y),0.8*(X-Y)} end
+
+SF0 = CSMakePolygonX(6,60,30,96,54)
+SFM = CS_MoveXY(SF0,380,0)
+SFM1 = CS_Merge(SF0,SFM,5,0)
+SLineA = CSMakeLineX(1,60,90,25,1)
+SLineB = CS_MoveXY(CSMakePolygonX(5,60,18,45,20),860,0)
+SFM2 = CS_Merge(CS_Merge(SFM1,SLineA,5,0),SLineB,5,0)
+SFM3 =CS_Kaleidoscope(SFM2,6,0,0)
+SF1 = CS_Vector2D(CS_RemoveStack(SFM3,12),1,"SF_Vector")
+
+
+CircleA = CSMakeCircle(6,60,0,91,61)
+EllipseB = CS_Distortion(CircleA,{5,0},{5,0},nil,nil)
+EllipseN = CS_RemoveStack(CS_MoveXY(EllipseB,1600,0),20)
+Ellipse1 = CS_Rotate(EllipseN,30)
+Ellipse2 = CS_Rotate(EllipseN,60)
+Ellipse3 = CS_Rotate(EllipseN,90)
+Ellipse4 = CS_Rotate(EllipseN,120)
+Ellipse5 = CS_Rotate(EllipseN,150)
+Ellipse6 = CS_Rotate(EllipseN,180)
+Ellipse7 = CS_Rotate(EllipseN,210)
+Ellipse8 = CS_Rotate(EllipseN,240)
+Ellipse9 = CS_Rotate(EllipseN,270)
+Ellipse10 = CS_Rotate(EllipseN,300)
+Ellipse11 = CS_Rotate(EllipseN,330)
+Ellipse12 = CS_Rotate(EllipseN,0)
+
+function HyperCycloid1(T) return {2.1*math.cos(T) - math.cos(2.1*T), 2.1*math.sin(T) - math.sin(2.1*T)} end
+Hp0 = CSMakeGraphT({192,192},"HyperCycloid1",0,0,10,10,200)
+Hp1 = CS_RemoveStack(Hp0,10)
 
 
 
-for j, k in pairs(TestShapeTable) do
-     DoActions(P1,CreateUnit(1,47,64 + j,P1),1)
-     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 유닛 생성
-end
+CSPlot(SS1,P1,54,73,nil,1,32,P1) -- 유닛 생성
+CSPlot(SS2,P1,54,90,nil,1,32,P1) -- 유닛 생성
+
+--for j, k in pairs(TestShapeTable) do
+--     DoActions(P1,CreateUnit(1,47,64 + j,P1),1)
+--     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 유닛 생성
+--end

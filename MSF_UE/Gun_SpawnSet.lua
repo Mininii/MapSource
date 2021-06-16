@@ -1,58 +1,5 @@
 
 function InstallGunData()
-
-function MakeLevelShape(Type,Points,LvMin,LvMax)
-	local X = {}
-	for i = LvMin, LvMax do
-		 if Type == "Polygon" then
-			  table.insert(X,CSMakePolygon(Points,((16*9)-(16*i))+24,0,PlotSizeCalc(Points,i),0))
-			  
-		 elseif Type == "Star" then
-			  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*i),180,PlotSizeCalc(Points*2,i),0))
-		 end
-	end
-	return X
-end
-S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
-S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
-S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
-S_6_ShT = Create_SortTable(MakeLevelShape("Star",6,1,4))
-S_7_ShT = Create_SortTable(MakeLevelShape("Star",7,1,4))
-S_8_ShT = Create_SortTable(MakeLevelShape("Star",8,1,4))
-P_3_ShT = Create_SortTable(MakeLevelShape("Polygon",3,1,8))
-P_4_ShT = Create_SortTable(MakeLevelShape("Polygon",4,1,8))
-P_5_ShT = Create_SortTable(MakeLevelShape("Polygon",5,1,8))
-P_6_ShT = Create_SortTable(MakeLevelShape("Polygon",6,1,8))
-P_7_ShT = Create_SortTable(MakeLevelShape("Polygon",7,1,8))
-P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
-
-
-
-
-
-
-
-
-
-
-
-
-
-	--CSSave("ZergAirPlot.txt",0,table.unpack(ZergAirPlot))
-	--CSSave("ZergGroundPlot.txt",0,table.unpack(ZergGroundPlot))
-
---	for i = 0, 11 do
---		table.insert(ZergAirPlotLM,CreateVar((ZergAirPlot[i+1][1])/24))
---	end
---	for i = 0, 11 do
---		table.insert(ZergGroundPlotLM,CreateVar((ZergGroundPlot[i+1][1])/24))
---	end
---	ZergAirPlotLMVA = GetVArray(ZergAirPlotLM[1])
---	ZergGroundPlotLMVA = GetVArray(ZergGroundPlotLM[1])
-
-
-
-
 	function Case_OverCocoon()
 		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,201))--¿À¹öÄÚÄï
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
@@ -142,11 +89,10 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 		CIf(FP,Gun_Line(4,AtLeast,500))
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
 			CDoActions(FP,{Gun_SetLine(5,Add,1)})
-			CDoActions(FP,{Gun_SetLine(6,Add,10)})
+			CMov(FP,Spawn_TempW,10)
 		CIfEnd()
 		TriggerX(FP,{Gun_Line(1,AtMost,48*32)},{SetCVar(FP,CUID[2],SetTo,88)},{Preserved})
 		TriggerX(FP,{Gun_Line(1,AtLeast,48*32)},{SetCVar(FP,CUID[2],SetTo,21)},{Preserved})
-		CMov(FP,Spawn_TempW,Var_TempTable[7])
 		NWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CMov(FP,0x6509B0,FP)
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
@@ -164,7 +110,7 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 		DoActions(FP,{CreateUnit(3,84,1,FP),KillUnit(84,FP)})
 		CSub(FP,Spawn_TempW,1)
 	NWhileEnd()
-	CDoActions(FP,{Gun_SetLine(6,Add,Spawn_TempW)})
+	CMov(FP,Spawn_TempW,0)
 	CTrigger(FP,{Gun_Line(5,AtLeast,20)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	end
@@ -176,7 +122,7 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 			CMov(FP,ReserveBGM,4)
 			GunBreak("\x07£È£é£ö£å",50000)
 		CIfEnd()
-		CIf(FP,Gun_Line(4,AtLeast,15000))
+		CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
 			CIf(FP,Gun_Line(3,Exactly,0))
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
 					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
@@ -229,7 +175,7 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 			CIfEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
 			CDoActions(FP,{Gun_SetLine(5,Add,1)})
-			CTrigger(FP,{Gun_Line(5,AtLeast,10)},{Gun_DoSuspend()},1)
+			CTrigger(FP,{Gun_Line(5,AtLeast,2),G_CA_CondStack},{Gun_DoSuspend()},1)
 		CIfEnd()
 	CIfEnd()
 	end
@@ -242,39 +188,50 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 			GunBreak("\x07£Ì£á£é£ò",40000)
 			CMov(FP,ReserveBGM,3)
 		CIfEnd()
-		CIf(FP,Gun_Line(4,AtLeast,15000))
-			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-				{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
-			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
-			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
-			f_TempRepeat(53,10)
-			f_TempRepeat(48,7)
-			f_TempRepeat(54,10)
-			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-				{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ¿ì»ó
-			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
-			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
-			f_TempRepeat(53,10)
-			f_TempRepeat(48,7)
-			f_TempRepeat(54,10)
-			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-				{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ÁÂÇÏ
-			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
-			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
-			f_TempRepeat(53,10)
-			f_TempRepeat(48,7)
-			f_TempRepeat(54,10)
-			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-				{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ¿ìÇÏ
-			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
-			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
-			f_TempRepeat(53,10)
-			f_TempRepeat(48,7)
-			f_TempRepeat(54,10)
+		CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,0)},G_L1,{55},{P_6},{3})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,0)},G_L2,{53,104},{S_8,S_6},{0,1})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,0)},G_L3,{51,48},{S_8,S_6},{0,1})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,0)},G_L4,{48,53},{S_8,S_6},{0,1})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,1)},G_L1,{56},{P_6},{3})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,1)},G_L2,{53,104},{S_8,S_6},{1,1})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,1)},G_L3,{51,48},{S_8,S_6},{1,1})
+			G_CA_SetSpawn({LvT(AtMost,3),Gun_Line(5,Exactly,1)},G_L4,{48,53},{S_8,S_6},{1,1})
+
+--			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+--				{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
+--			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
+--			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
+--			f_TempRepeat(53,10)
+--			f_TempRepeat(48,7)
+--			f_TempRepeat(54,10)
+--			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+--				{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ¿ì»ó
+--			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
+--			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
+--			f_TempRepeat(53,10)
+--			f_TempRepeat(48,7)
+--			f_TempRepeat(54,10)
+--			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+--				{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ÁÂÇÏ
+--			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
+--			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
+--			f_TempRepeat(53,10)
+--			f_TempRepeat(48,7)
+--			f_TempRepeat(54,10)
+--			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
+--				{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ¿ìÇÏ
+--			f_TempRepeat(55,9,Gun_Line(5,Exactly,0))
+--			f_TempRepeat(56,9,Gun_Line(5,Exactly,1))
+--			f_TempRepeat(53,10)
+--			f_TempRepeat(48,7)
+--			f_TempRepeat(54,10)
+
+
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
 			CDoActions(FP,{Gun_SetLine(5,Add,1)})
 		CIfEnd()
-		CTrigger(FP,{Gun_Line(5,AtLeast,2)},{Gun_DoSuspend()},1)
+		CTrigger(FP,{Gun_Line(5,AtLeast,2),G_CA_CondStack},{Gun_DoSuspend()},1)
 	CIfEnd()
 	end
 
@@ -287,7 +244,7 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 			GunBreak("\x07£È£á£ô£ã£è£å£ò£ù",30000)
 		CIfEnd()
 
-		CIf(FP,Gun_Line(4,AtLeast,15000))
+		CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
 			Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
 				{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
 			f_TempRepeat(43,9,Gun_Line(5,Exactly,0))
@@ -319,7 +276,7 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
 			CDoActions(FP,{Gun_SetLine(5,Add,1)})
 		CIfEnd()
-		CTrigger(FP,{Gun_Line(5,AtLeast,2)},{Gun_DoSuspend()},1)
+		CTrigger(FP,{Gun_Line(5,AtLeast,2),G_CA_CondStack},{Gun_DoSuspend()},1)
 	CIfEnd()
 	end
 
@@ -333,6 +290,19 @@ P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 					
 					G_CA_SetSpawn(nil,G_L1,{77,55,56,104},{S_4,P_5,P_3,S_8},{3,6,6,2})
 					GunBreak("\x07Å×½ºÆ®¿ë ½éÅ«~~~~~~~~~~~~~~~~",322322)
+				CIfEnd()
+				CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
+					CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
+				CIfEnd()
+				CTrigger(FP,{Gun_Line(5,AtLeast,2),G_CA_CondStack},{Gun_DoSuspend()},1)
+			CIfEnd()
+			CIf(FP,Gun_Line(0,Exactly,136))--Å×½ºÆ®¿ë À¯´Ö
+				CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
+					CMov(FP,ReserveBGM,2)
+					CDoActions(FP,{Gun_SetLine(4,Add,15000)})
+					
+					G_CA_SetSpawn(nil,G_L1,{55,56,55,56},{NBYD,NBYD,NBYD,NBYD})
+					GunBreak("\x07Å×½ºÆ®¿ë µðÆÄÆÄ~~~~~~~~~~~~~~~~",322322)
 				CIfEnd()
 				CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})
 					CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})

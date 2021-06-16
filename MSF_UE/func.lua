@@ -391,3 +391,6 @@ function T_to_BiteBuffer(Table)
 	end
 	return BiteValue
 end
+function LvT(Type,Value)
+	return CVar(FP,LevelT[2],Type,Value)
+end
