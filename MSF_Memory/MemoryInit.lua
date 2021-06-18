@@ -39,14 +39,14 @@ function TemRotate()
 	local CB = CAPlotCreateArr
 	CAdd(FP,TemX,Dt)
 	CDiv(FP,TemAngle,TemX,270)
-	CA_Rotate(TemAngle) -- SX ë§Œí¼ íšŒì „
+	CA_Rotate(TemAngle) -- SX ¸¸Å­ È¸Àü
 end
 function TemRotate2()
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
 	CDiv(FP,TemAngle2,_Mul(B6_RT,10),333)
-	CA_Rotate(TemAngle2) -- SX ë§Œí¼ íšŒì „
+	CA_Rotate(TemAngle2) -- SX ¸¸Å­ È¸Àü
 end
 
 
@@ -79,7 +79,7 @@ Trigger {
 		SetSwitch("Switch 1", Random);
 		},
 	}
-Trigger { -- ë³´ìŠ¤ëª¹ ìƒì„±
+Trigger { -- º¸½º¸÷ »ı¼º
 	players = {P8},
 	actions = {
 		RunAIScript("Turn ON Shared Vision for Player 6");
@@ -134,7 +134,7 @@ Trigger {
 		
 	},
 }
-Trigger { -- ì»´í“¨í„° í”Œë ˆì´ì–´ ìƒ‰ìƒ ì„¤ì •
+Trigger { -- ÄÄÇ»ÅÍ ÇÃ·¹ÀÌ¾î »ö»ó ¼³Á¤
 	players = {P6},
 	conditions = {
 		Always();
@@ -142,8 +142,8 @@ Trigger { -- ì»´í“¨í„° í”Œë ˆì´ì–´ ìƒ‰ìƒ ì„¤ì •
 	actions = {
 		RunAIScript("Turn ON Shared Vision for Player 7");
 		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemoryX(0x581DDC,SetTo,128*1,0xFF); --P7 ë¯¸ë‹ˆë§µ 
-		SetMemoryX(0x581DA4,SetTo,128*65536,0xFF0000), --P7 ì»¬ëŸ¬
+		SetMemoryX(0x581DDC,SetTo,128*1,0xFF); --P7 ¹Ì´Ï¸Ê 
+		SetMemoryX(0x581DA4,SetTo,128*65536,0xFF0000), --P7 ÄÃ·¯
 		GiveUnits(All,125,P6,"Anywhere",P12);
 		
 },
@@ -180,19 +180,19 @@ Trigger { -- EUD Editor Preserve
 		Comment("EUD Editor Preserve");
 	},
 }
-Trigger { -- í¼ì„¼íŠ¸ ë°ë¯¸ì§€ ì„¸íŒ…
+Trigger { -- ÆÛ¼¾Æ® µ¥¹ÌÁö ¼¼ÆÃ
 	players = {P6},
 	actions = {
-		SetMemory(0x515B88,SetTo,256);---------í¬ê¸° 0
-		SetMemory(0x515B8C,SetTo,256);---------í¬ê¸° 1
-		SetMemory(0x515B90,SetTo,256);---------í¬ê¸° 2
-		SetMemory(0x515B94,SetTo,256);---------í¬ê¸° 3
-		SetMemory(0x515B98,SetTo,256);---------í¬ê¸° 4
-		SetMemory(0x515B9C,SetTo,256);---------í¬ê¸° 5
-		SetMemory(0x515BA0,SetTo,256);---------í¬ê¸° 6
-		SetMemory(0x515BA4,SetTo,256);---------í¬ê¸° 7
-		SetMemory(0x515BA8,SetTo,256);---------í¬ê¸° 8
-		SetMemory(0x515BAC,SetTo,256);---------í¬ê¸° 9
+		SetMemory(0x515B88,SetTo,256);---------Å©±â 0
+		SetMemory(0x515B8C,SetTo,256);---------Å©±â 1
+		SetMemory(0x515B90,SetTo,256);---------Å©±â 2
+		SetMemory(0x515B94,SetTo,256);---------Å©±â 3
+		SetMemory(0x515B98,SetTo,256);---------Å©±â 4
+		SetMemory(0x515B9C,SetTo,256);---------Å©±â 5
+		SetMemory(0x515BA0,SetTo,256);---------Å©±â 6
+		SetMemory(0x515BA4,SetTo,256);---------Å©±â 7
+		SetMemory(0x515BA8,SetTo,256);---------Å©±â 8
+		SetMemory(0x515BAC,SetTo,256);---------Å©±â 9
 		SetMemory(0x515BC4,SetTo,20480);
 		SetMemory(0x515BC8,SetTo,10240);
 		SetMemory(0x515BCC,SetTo,5120);

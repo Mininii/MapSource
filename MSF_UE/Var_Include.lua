@@ -19,9 +19,18 @@ function Var_init()
 	
 	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03¢Ó")
 	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03¢Ó \x04\x0d\x0d\x0d\x0d\x0d\x0d")
-	BGMTypeV = CreateVar(6)
+	if TestStart == 1 then
+		BGMTypeV = CreateVar()
+		LevelT2 = CreateVar(4)
+	else
+		BGMTypeV = CreateVar(6)
+		LevelT2 = CreateVar(1)
+	end
 	Level = CreateVar(1)
 	LevelT = CreateVar(1)
+
+
+
 	BackupCp = CreateVar()
 	MarNumberLimit = CreateVar(84*2)
 	MaxHPBackUp = CreateVarray(FP,228)
@@ -56,6 +65,8 @@ function Var_init()
 	f_GunSendStrPtr = CreateVar()
 	Dt = CreateVar()
 	G_CA_StrPtr = CreateVar()
+	B_5_C = CreateVar()
+	B_Id_C = CreateVar()
 	PCheck = CreateCCode()
 	PCheckV = CreateVar()
 	TestMode = CreateCCode()
@@ -72,6 +83,10 @@ function Var_init()
 	CustomShape = Create_CSTable(8)
 	BanToken = Create_CCTable(7)
 	CC_Header = CreateVar({"X",EXCC_Forward,0x15C,1,2})
+	rokaClear = CreateCCode()
+	IdenClear = CreateCCode()
+    BossStart = CreateCCode()
+    StoryT = CreateCCode()
 end
 
 function HPoints()
@@ -118,7 +133,8 @@ function Objects()
 	MapPlayers = {0,1,2,3,4,5,6}
 	ObPlayers = {128,129,130,131}
 	MedicTrig = {34,9,2,3}
-	EXCC_Forward = 0x3000
+	EXCC_Forward = 0x2FFF
+	ObEff = 94
 
 	-- Strings
 
@@ -181,6 +197,26 @@ function Objects()
 	-- 443 = BanConsole
 	OPConsole = 441
 	CPConsole = 442
-	BanConsole = 443
+	BanConsole = 443    
+	VResetSw = CreateVar(1)
+	VResetSw2 = CreateVar(1)
+    
+    roka7TempVoid = EPD(0x594000)
+
+    function VO(Number)
+        return EPDToPtr(roka7TempVoid+Number)
+    end
+    function Void(Number,Type,Value)
+        return Deaths(roka7TempVoid+Number,Type,Value,0)
+    end
+    function SetVoid(Number,Type,Value)
+        return SetDeaths(roka7TempVoid+Number,Type,Value,0)
+    end
+    function VoidX(Number,Type,Value,Mask)
+        return DeathsX(roka7TempVoid+Number,Type,Value,0,Mask)
+    end
+    function SetVoidX(Number,Type,Value,Mask)
+        return SetDeathsX(roka7TempVoid+Number,Type,Value,0,Mask)
+    end
 	Install_ShapeData()
 end

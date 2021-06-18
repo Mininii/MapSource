@@ -542,4 +542,26 @@ SetCall(FP)
 	CIfXEnd()
 SetCallEnd()
 
+
+
+function f_Recall(Condition,X,Y)
+	CMov(FP,Rec_X,X)
+	CMov(FP,Rec_Y,Y)
+	CallTriggerX(FP,Call_Recall,Condition)
+end
+Rec_X = CreateVar()
+Rec_Y = CreateVar()
+Call_Recall = SetCallForward()
+SetCall(FP)
+	CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Rec_X[2],AtMost,32*96),CVar(FP,Rec_Y[2],AtMost,32*192)})
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	CDoActions(FP,{
+	CreateUnit(1,71,34,FP);
+	TSetMemory(_Add(Nextptrs,0x58/4),SetTo,_Add(Rec_X,_Mul(Rec_Y,65536))),
+	TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,137*256,0xFF00)})
+	CIfEnd()
+
+SetCallEnd()
+
+
 end

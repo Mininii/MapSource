@@ -1,10 +1,32 @@
+----------------------------------------------Loader Space ---------------------------------------------------------------------
+
+Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
+for dir in io.popen(EXTLUA):lines() do
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
+		InitEXTLua()
+     end
+end
+
+EXTLUA = "dir \""..Curdir.."\\MapSource\\MSF_UE\\\" /b"
+for dir in io.popen(EXTLUA):lines() do
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "main.lua" then
+		InitEXTLua = assert(loadfile(Curdir.."MapSource\\MSF_UE\\"..dir))
+		InitEXTLua()
+     end
+end
+
+------------------------------------------------------------------------------------------------------------------------------
+
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
+DoActions(P8,RemoveUnit(71,P8))
 TestSet(2)
 VerText = "\x04Ver. Test"
 FP = P8
-EUDTurbo(FP) -- µ≤≈Õ∫∏
+EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
@@ -43,6 +65,8 @@ StartCtrig()
 			PlayerInterface()
 			Print_TotalScore()
 			LeaderBoardTFunc()
+			Install_Roka7Boss()
+			Install_IdenBoss()
 			Test_LV1()
 			Test_LV2()
 		CIfEnd()

@@ -102,10 +102,9 @@ function onInit_EUD()
 	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	--f_Read(FP,0x58F518,"X",ScoreVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	--f_Rea0d(FP,0x58f51C,"X",LevelVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	--f_Read(FP,0x58f520,"X",TimeVPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-
+	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+	f_Read(FP,0x58F55C,"X",B_Id_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+	
 	for i = 1, #HeroArr do
 		table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
 	end
@@ -156,6 +155,7 @@ function onInit_EUD()
 	WeaponTypePatch(21,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(100,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(85,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(124,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -173,7 +173,20 @@ function onInit_EUD()
 	SetUnitClassType(79)
 	SetUnitClassType(220)
 	SetUnitClassType(150)
+--roka7
+function EffUnitPatch(UnitID)
+	SetUnitAdvFlag(UnitID,4,0xFFFFFFFF)
+	table.insert(PatchArr,SetMemoryB(0x6616E0 + UnitID,SetTo,130))
+	table.insert(PatchArr,SetMemoryB(0x663238 + UnitID,SetTo,11)) -- 시야
+	UnitSizePatch(UnitID,1)
+end
+EffUnitPatch(203)
+EffUnitPatch(204)
+EffUnitPatch(94)
+UnitSizePatch(84,1)
+UnitSizePatch(71,1)
 
+-------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
 	--0~6 공업용??
 	--8~14 방업용??
@@ -267,10 +280,10 @@ function onInit_EUD()
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i+1]*2),SetTo,MarDamageAmount)) -- 기본공격력
 		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i+1]*2),SetTo,MarDamageFactor)) -- 추가공격력
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + MarWep[i+1],SetTo,2))
-		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1]))
-		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1]))
-		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6))
-		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11))
+		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- 지상무기
+		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- 공중무기
+		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- 부가사거리
+		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
 		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,192))
 	end
 

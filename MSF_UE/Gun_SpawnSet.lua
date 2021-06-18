@@ -107,7 +107,7 @@ function InstallGunData()
 			TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
 		})
 		CIfEnd()
-		DoActions(FP,{CreateUnit(3,84,1,FP),KillUnit(84,FP)})
+		DoActions(FP,{CreateUnit(1,ObEff,1,FP),KillUnit(ObEff,FP)})
 		CSub(FP,Spawn_TempW,1)
 	NWhileEnd()
 	CMov(FP,Spawn_TempW,0)

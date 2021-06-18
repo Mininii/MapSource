@@ -1,6 +1,6 @@
 VIndexAlloc = 0x800
-CallIndexAlloc = 0x2000
-CIndexAlloc = 0x1000
+CallIndexAlloc = 0x3000
+CIndexAlloc = 0x1A00
 SetCallOpen = 0
 DeathTableDefNumber = 1
 CVarPushArr = {}
@@ -11,8 +11,7 @@ BGMArr = {}
 VArrStackArr = {}
 InitBGMP = 12
 VoidInit = 0x590000
-sindexAlloc = 0x000
-sindex_FuncAlloc = 0x700
+sindexAlloc = 0x700
 
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
@@ -75,6 +74,16 @@ function Simple_SetLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,Addo
 		TSetMemory(0x58DC64+(20*LocID),SetTo,UpValue),
 		TSetMemory(0x58DC68+(20*LocID),SetTo,RightValue),
 		TSetMemory(0x58DC6C+(20*LocID),SetTo,DownValue),
+		AddonTrigger
+	})
+end
+
+function Simple_SetLoc2X(Player,LocID,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
+	CDoActions(Player,{
+		TSetMemory(0x58DC60+(20*LocID),Add,LeftValue),
+		TSetMemory(0x58DC64+(20*LocID),Add,UpValue),
+		TSetMemory(0x58DC68+(20*LocID),Add,RightValue),
+		TSetMemory(0x58DC6C+(20*LocID),Add,DownValue),
 		AddonTrigger
 	})
 end
@@ -571,6 +580,7 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 		table.insert(X,StyleFlag)
 	end
 	table.insert(BGMArr,X)
+	return BGMTypeNum
 end
 
 function Install_BGMSystem(Player,MaxPlayers,BGMType)
