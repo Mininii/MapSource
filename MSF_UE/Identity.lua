@@ -1,7 +1,10 @@
 function Install_IdenBoss()
--- 최종 보스 아칸
--- 0x58F55C : BossCunit
---"CLoc109" : 30
+
+
+	-- 아칸 보스
+	-- from MSF Identity OpenSource
+	--------0x58F55C : BossCunit
+	--"CLoc109" : 30
 Id_T0C = CreateCCode()
 Id_T1C = CreateCCode()
 Id_T2C = CreateCCode()
@@ -71,9 +74,17 @@ StoryPrint(6000*(5),{
 	PlayWAVX("sound\\Protoss\\ARCHON\\PArPss00.WAV");
 	DisplayTextX(Id_T5,4);
 },Id_T5C,{SetCDeaths(FP,SetTo,1,StoryT2)}) 
-CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2))
+CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2)) -- 소환
 f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
-CDoActions(FP,{CreateUnit(1,68,29,FP),TSetMemory(B_Id_C,SetTo,Nextptrs),SetMemory(0x58F558,SetTo,7),SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256)})
+CDoActions(FP,{
+	CreateUnit(1,68,29,FP),
+	TSetMemory(B_Id_C,SetTo,Nextptrs),
+	SetMemory(0x58F558,SetTo,7),
+	SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),
+	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
+	TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
+	KillUnitAt(All,"Men",29,Force1),
+})
 
 CIfEnd()
 

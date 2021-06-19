@@ -1,6 +1,7 @@
 function Install_Roka7Boss()
 
-    
+    -- 하템 보스
+    -- from MSF 4VS4 OpenSource
     -- #X1 : 216 -------------------------------------------------------------------------------------------
         
     
@@ -2482,23 +2483,29 @@ end
     
     
     
+    CMov(FP,0x6509B0,19025+19)
+    CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+
+    CIf(FP,DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00))
+    CAdd(FP,0x6509B0,6)
+
+    Trigger2(FP,{
+        DeathsX(CurrentPlayer,AtLeast,203,0,0xFF),
+        DeathsX(CurrentPlayer,AtMost,204,0,0xFF),
+    },{
+        SetMemory(0x6509B0,Add,55-25),
+        SetDeathsX(CurrentPlayer,SetTo,0x200104,0,0x300104),
+        SetMemory(0x6509B0,Add,2),
+        SetDeaths(CurrentPlayer,SetTo,0,0),
+        SetMemory(0x6509B0,Add,25-57),
+    },{Preserved})
+
+    CSub(FP,0x6509B0,6)
+    CIfEnd()
+    CAdd(FP,0x6509B0,84)
+    CWhileEnd()
     
     
-    
-    
-    
-    
-    
-    for i = 0, 1699 do
-        Trigger2(FP,{
-            DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
-            DeathsX(19025+(84*i)+25,AtLeast,203,0,0xFF),
-            DeathsX(19025+(84*i)+25,AtMost,204,0,0xFF),
-        },{
-            SetDeathsX(19025+(84*i)+55,SetTo,0x200104,0,0x300104),
-            SetDeaths(19025+(84*i)+57,SetTo,0,0),
-        },{Preserved})
-    end
     
     
     

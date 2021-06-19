@@ -59,7 +59,7 @@ function Gun_System()
     end
     CunitCtrig_End()
 
-    CIfX(FP,CVar(FP,count[2],AtMost,GunLimit)) -- 건작함수 제어
+    CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
         DoActions(FP,{
             SetInvincibility(Disable,"Buildings",FP,64);
         })

@@ -26,7 +26,15 @@ function LevelUp()
     CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
     
     CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
-
+    CAdd(FP,Level,1)
+    f_Mod(FP,LevelT,Level,_Mov(10))
+    CAdd(FP,LevelT,1)
+    f_Div(FP,LevelT2,Level,_Mov(10))
+    CAdd(FP,LevelT2,1)
+    if TestStart == 1 then
+        
+        CMov(FP,LevelT2,4)
+    end
     -- 보스소환 테스트
     if TestStart == 1 then
         DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
@@ -62,15 +70,7 @@ function LevelUp()
         CAdd(FP,CunitIndex,1)
     CWhileEnd()
     
-    CAdd(FP,Level,1)
-    f_Mod(FP,LevelT,Level,_Mov(10))
-    CAdd(FP,LevelT,1)
-    f_Div(FP,LevelT2,Level,_Mov(10))
-    CAdd(FP,LevelT2,1)
-    if TestStart == 1 then
-        
-        CMov(FP,LevelT2,4)
-    end
+
 
     TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{Preserved})
     --
