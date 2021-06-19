@@ -3,13 +3,13 @@ function OPTrig()
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
-        f_Read(FP,0x6284E8,"X",Cunit2)
+        f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
         CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부\x04 : F9, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then
-        CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1)})
+        CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
         --local TestTemp = CreateVar()
         --f_Read(FP,_Add(Cunit2,19),TestTemp,nil,0xFF00)
         --CTrigger(FP,{CVar(FP,Cunit2[2],AtLeast,1)},{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(TestTemp,_Mov(65536)),0xFF000000)},1)
