@@ -3,6 +3,7 @@ function Install_IdenBoss()
 
 	-- ¾ÆÄ­ º¸½º
 	-- from MSF Identity OpenSource
+	-- Thanks to Ninfia
 	--------0x58F55C : BossCunit
 	--"CLoc109" : 30
 Id_T0C = CreateCCode()

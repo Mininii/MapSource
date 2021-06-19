@@ -105,32 +105,32 @@ function Install_GetCLoc(TriggerPlayer)
          CMov(PlayerID,0x58DC6C+0x14*DestLocId,RetY)
      end
  end
-FP = P2
-SetForces({P1},{P2},{},{},{P1,P2}) 
-SetFixedPlayer(P2)
-StartCtrig()
-CJump(AllPlayers,0x600)
-Include_CtrigPlib(360,"Switch 1",0)
-Install_GetCLoc(FP)
-CJumpEnd(AllPlayers,0x600)
-NoAirCollisionX(P1)
+--FP = P2
+--SetForces({P1},{P2},{},{},{P1,P2}) 
+--SetFixedPlayer(P2)
+--StartCtrig()
+--CJump(AllPlayers,0x600)
+--Include_CtrigPlib(360,"Switch 1",0)
+--Install_GetCLoc(FP)
+--CJumpEnd(AllPlayers,0x600)
+--NoAirCollisionX(P1)--
 
-fasdas = CreateVar()
-fasdas2 = CreateVar()
+--fasdas = CreateVar()
+--fasdas2 = CreateVar()--
 
-for i = 0, 24 do
-GetLocCenter(i,fasdas,fasdas2)
-Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
-end
-Install_AllObject()
+--for i = 0, 24 do
+--GetLocCenter(i,fasdas,fasdas2)
+--Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
+--end
+--Install_AllObject()--
 
-EndCtrig()
--- 에러 체크 함수 선언 위치 --
---↑Tep에 그대로 붙여넣기----------------------------------------
-ErrorCheck()
-EUDTurbo(P1)
-TestShapeTable = {}
---
+--EndCtrig()
+---- 에러 체크 함수 선언 위치 --
+----↑Tep에 그대로 붙여넣기----------------------------------------
+--ErrorCheck()
+--EUDTurbo(P1)
+--TestShapeTable = {}
+----
 --SHA1a =
 --{36,{-140,-140},{-84,-140},{-28,-140},{28,-140},{84,-140},{140,-140},{-140,-84},{-84,-84},{-28,-84},{28,-84},{84,-84},{140,-84},{-140,-28},{-84,-28},{-28,-28},{28,-28},{84,-28},{140,-28},{-140,28},{-84,28},{-28,28},{28,28},{84,28},{140,28},{-140,84},{-84,84},{-28,84},{28,84},{84,84},{140,84},{-140,140},{-84,140},{-28,140},{28,140},{84,140},{140,140}}--
 --
@@ -392,35 +392,44 @@ TestShapeTable = {}
 
 --
 
---function Convert_MirrorXY(...)
---	local arg = table.pack(...)
---     local X = {}
---     
---     for k = 1, arg.n do
---          if type(arg[k]) == "table" then
---               local A = {}
---               local B = {}
---               local C = {}
---               local D = {}
---               table.insert(A,arg[k][1])
---               table.insert(A,arg[k][2])
---               table.insert(B,arg[k][1]*-1)
---               table.insert(B,arg[k][2]*-1)
---               table.insert(C,arg[k][1]*-1)
---               table.insert(C,arg[k][2])
---               table.insert(D,arg[k][1])
---               table.insert(D,arg[k][2]*-1)
---               table.insert(X,A)
---               table.insert(X,B)
---               table.insert(X,C)
---               table.insert(X,D)
---          else
---               Convert_MirrorXY_Inputdata_Error()
---          end
---          
---     end
---     return X
---end
+function Convert_MirrorXY(...)
+	local arg = table.pack(...)
+     local X = {}
+     
+     for k = 1, arg.n do
+          if type(arg[k]) == "table" then
+               local A = {}
+               local B = {}
+               local C = {}
+               local D = {}
+               table.insert(A,arg[k][1])
+               table.insert(A,arg[k][2])
+               table.insert(B,arg[k][1]*-1)
+               table.insert(B,arg[k][2]*-1)
+               table.insert(C,arg[k][1]*-1)
+               table.insert(C,arg[k][2])
+               table.insert(D,arg[k][1])
+               table.insert(D,arg[k][2]*-1)
+               table.insert(X,A)
+               table.insert(X,B)
+               table.insert(X,C)
+               table.insert(X,D)
+          else
+               Convert_MirrorXY_Inputdata_Error()
+          end
+          
+     end
+     return X
+end
+
+Shape1 = CS_SortX(CSMakePath(Convert_MirrorXY({32,32},{96,32},{32,96})),0)  -- →모양 Path
+CSPlot(Shape1,P1,0,"Location 1",nil,1,32,P1)
+CSPlot(CS_ConnectPath(Shape1,6,1),P1,0,"Location 2",nil,1,32,P1)
+CSPlot(CS_ConnectPath(Shape1,6),P1,0,"Location 3",nil,1,32,P1)
+CSPlot(CS_ConnectPathX(Shape1,16,1),P1,0,"Location 4",nil,1,32,P1)
+CSPlot(CS_ConnectPathX(Shape1,16),P1,0,"Location 5",nil,1,32,P1)
+
+
 --C1 = CSMakeCircle(8,60,0,441,169)
 --S1 = CSMakePolygon(4,45,45,13,0)
 --S2 = CS_MoveXY(S1,700,0)
