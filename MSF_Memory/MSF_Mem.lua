@@ -13,8 +13,8 @@ for dir in io.popen(EXTLUA):lines() do
 end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
-
-VerText = "\x04Ver. 2.4"
+sindexAlloc = 0x501
+VerText = "\x04Ver. 2.5"
 Limit = 1
 FP = P6
 TestStartToBYD = 0
@@ -2833,9 +2833,10 @@ CIfEnd()
 CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	-- initvar
 	
-	CMov(FP,0x5821D4+((i-1)*4),MaxHPP)
-	CMov(FP,0x582234+((i-1)*4),MaxHPP)
+
 	for k = 1, 5 do
+	CMov(FP,0x5821D4+((k-1)*4),MaxHPP)
+	CMov(FP,0x582234+((k-1)*4),MaxHPP)
 	Trigger { -- 미션 오브젝트 이지n인
 		players = {Force1},
 		conditions = {
@@ -7656,7 +7657,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			PreserveTrigger();
 		},
 	}
-	EVModeT = "\x13\x06Ｂｅｙｏｎｄ\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
+	EVModeT = "\x13\x06Ｂｅｙｏｎｄ(\x04ESC버튼 : \x10理論値 MODE \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -17003,23 +17004,25 @@ Trigger { -- 스팀팩
 CIfEnd()
 end
 
-
-NJump(Force1,0x1,{Deaths(CurrentPlayer,AtMost,0,"Terran Barracks"),Bring(CurrentPlayer,AtMost,0,"Men",6),Bring(CurrentPlayer,AtMost,0,"Men",7)})
 for i=0, 4 do
-CIf(i,Score(i,Kills,AtLeast,1000))
-CMov(i,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-CAdd(i,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-CMov(i,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-CIfX(i,Deaths(CurrentPlayer,Exactly,0,"【 Zergling 】"))
-CAdd(i,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
+ExJump = def_sIndex()
+NJump(FP,ExJump,{Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",6),Bring(i,AtMost,0,"Men",7)})
+
+CIf(FP,Score(i,Kills,AtLeast,1000))
+CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+CIfX(FP,Deaths(i,Exactly,0,"【 Zergling 】"))
+CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
 CElseX()
-CAdd(i,0x58F464+(i*4),_Mul(ExchangeP,{FP,ExchangeRate[2],nil,"V"}))
+CAdd(FP,0x58F464+(i*4),_Mul(ExchangeP,{FP,ExchangeRate[2],nil,"V"}))
 CIfXEnd()
 CMov(FP,ExchangeP,0)
 CIfEnd()
-DoActions(i,SetDeaths(i,Subtract,1,111))
+DoActions(FP,SetDeaths(i,Subtract,1,111))
+
+NJumpEnd(FP,ExJump)
 end
-NJumpEnd(Force1,0x01)
 NJump(Force1,0x13,{Bring(CurrentPlayer,AtMost,0,"Any unit",58),Bring(CurrentPlayer,AtMost,0,"Any unit",59)})
 
 for j = 0, 4 do
@@ -18095,48 +18098,6 @@ SetCDeaths(P6,Subtract,1,GeneT),
 SetCDeaths(P6,Subtract,1,TimerPenalty)
 },P6)
 --]]
-CIfEnd()
-
-CIf(FP,CDeaths(FP,AtLeast,1,ScorePrint),SetCDeaths(FP,SetTo,0,ScorePrint))
-TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
-for i = 1, 5 do
-CIf(FP,Deaths(i-1,AtLeast,1, "Psi Emitter"))
-CMov(FP,ExScoreP[i],ExScore[i])
-CiDiv(FP,ExScoreP[i],_Mul(ExScoreP[i],_Div(ScoreBonusV,_Mov(10))),_Mov(10))
-CiDiv(FP,ExScoreP[i],_Mul(ExScoreP[i],_Div(ClearRate,_Mov(10))),_Mov(100))
-ItoDecX(FP,ExScoreP[i],VArr(ExScoreVA[i],0),2,nil,2)
-_0DPatchforVArr(FP,ExScoreVA[i],6)
-f_Movcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip),VArr(ExScoreVA[i],0),12*4)
-f_Memcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip+(12*4)),_TMem(Arr(Str19[3],0),"X","X",1),Str19[2])
-CIfEnd()
-
-end
-Trigger {
-	players = {P6},
-	conditions = {
-		},
-	
-	actions = {
-		RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10【 \x06Ｔ\x04ｏｔａｌ　\x1FＳｃｏｒｅ \x10】",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
-		PreserveTrigger();
-	},
-}
-for i = 1, 5 do
-Trigger {
-	players = {P6},
-	conditions = {
-		Deaths(i-1,AtLeast,1, "Psi Emitter");
-		},
-	
-	actions = {
-		RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..Player[i].."Score".._0D,4)},HumanPlayers,FP);
-		PreserveTrigger();
-	},
-}
-end
-CIfEnd()
-
-
 
 CIfOnce(P6,Always()) -- onPluginStart
 f_GetStrXptr(P6,UnivStrPtr,UnivToString)
@@ -18215,9 +18176,53 @@ SetCtrigX("X",MarListHeader[5][2],0x15C,0,SetTo,"X",0x200+((5-1)*0x100),0x15C,1,
 					SetCVar(FP,BYDGunPlotSize[3][2],SetTo,ZergGunShape[3][1]),
 					SetCVar(FP,BYDGunPlotSize[4][2],SetTo,ZergGunShape[4][1])
 				})
-CJump(AllPlayers,0x610)
-InstallCVariable()
-CJumpEnd(AllPlayers,0x610)
+Install_AllObject()
 CIfEnd()
+
+
+CIfEnd()
+
+CIf(FP,CDeaths(FP,AtLeast,1,ScorePrint),SetCDeaths(FP,SetTo,0,ScorePrint))
+TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
+for i = 1, 5 do
+CIf(FP,Deaths(i-1,AtLeast,1, "Psi Emitter"))
+CMov(FP,ExScoreP[i],ExScore[i])
+CiDiv(FP,ExScoreP[i],_Mul(ExScoreP[i],_Div(ScoreBonusV,_Mov(10))),_Mov(10))
+CiDiv(FP,ExScoreP[i],_Mul(ExScoreP[i],_Div(ClearRate,_Mov(10))),_Mov(100))
+ItoDecX(FP,ExScoreP[i],VArr(ExScoreVA[i],0),2,nil,2)
+_0DPatchforVArr(FP,ExScoreVA[i],6)
+f_Movcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip),VArr(ExScoreVA[i],0),12*4)
+f_Memcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip+(12*4)),_TMem(Arr(Str19[3],0),"X","X",1),Str19[2])
+CIfEnd()
+
+end
+Trigger {
+	players = {P6},
+	conditions = {
+		},
+	
+	actions = {
+		RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10【 \x06Ｔ\x04ｏｔａｌ　\x1FＳｃｏｒｅ \x10】",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+		PreserveTrigger();
+	},
+}
+for i = 1, 5 do
+Trigger {
+	players = {P6},
+	conditions = {
+		Deaths(i-1,AtLeast,1, "Psi Emitter");
+		},
+	
+	actions = {
+		RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..Player[i].."Score".._0D,4)},HumanPlayers,FP);
+		PreserveTrigger();
+	},
+}
+end
+
+CIfEnd()
+
+
+
 EndCtrig()
 ErrorCheck()
