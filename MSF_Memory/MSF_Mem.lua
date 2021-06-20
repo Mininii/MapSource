@@ -2958,8 +2958,8 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
 		SetMemoryX(0x65651C, SetTo, 1*65535,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
 		SetMemoryX(0x663E10, SetTo, 163,0xFF00); -- 프로브보스 계급을 딜에 맞게 변경
-		SetMemoryX(0x657038, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
-
+		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
+		
 
 	})
 	Trigger2(FP,{BYD},{
