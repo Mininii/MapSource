@@ -15,7 +15,7 @@ dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
 VerText = "\x04Ver. 2.5"
-Limit = 1
+Limit = 0
 FP = P6
 TestStartToBYD = 0
 
@@ -70,7 +70,7 @@ Ex1= {25,27,29,31,33}
 Ex2= {23,26,29,32,35}
 Ex3= {27,30,33,36,39}
 Ex4= {15,17,19,21,23}
-Ex5= {(15*2),(17*2),(19*2),(21*2),(23*2)}
+Ex5= {33,36,39,42,45}
 _0D = string.rep("\x0D",200)
 _0D_1000B = string.rep("\x0D",1000)
 UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
@@ -2905,7 +2905,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			CDeaths(P6,Exactly,1,Theorist);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ \x10 理論値 \x04MODE \x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex4[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ \x10 理論値 \x04MODE \x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex5[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
 			SetCVar(P6,NexDif[2],SetTo,3);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex5[k]);
 		},
@@ -7657,7 +7657,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			PreserveTrigger();
 		},
 	}
-	EVModeT = "\x13\x06Ｂｅｙｏｎｄ(\x04ESC버튼 : \x10理論値 MODE \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
+	EVModeT = "\x13\x06Ｂｅｙｏｎｄ ( \x04ESC버튼 : \x10理論値 MODE \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -17085,6 +17085,7 @@ Trigger { -- 조합 루미너스 마린
 	conditions = {
 		Label(0);
 		BYD;
+		CDeaths(FP,Exactly,0,Theorist);
 		Deaths(j,AtLeast,10000,432);
 		Bring(j,AtLeast,1,20,58+i);
 		Accumulate(j,AtLeast,25000,Ore);
@@ -17302,10 +17303,10 @@ Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		NBYD;
 		CDeaths(P6,Exactly,0,EVMode);
 		Deaths(CurrentPlayer,AtLeast,36,125);
 		Command(j,AtLeast,1,12);
-		NBYD;
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
@@ -17320,10 +17321,11 @@ Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		BYD;
+		CDeaths(FP,AtMost,0,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
 		Command(j,AtLeast,1,12);
 		Bring(j,AtMost,95,MarID[j+1],64);
-		BYD;
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
@@ -17337,14 +17339,14 @@ Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		BYD;
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
 		Command(j,AtLeast,1,12);
-		BYD;
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. \x1B(최대 96기까지 보유 가능) \x04- \x1F45000 O r e \x07』",4);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. \x04- \x1F45000 O r e \x07』",4);
 		SetCDeaths(FP,Add,1,MarCreate);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		PreserveTrigger();
@@ -17354,9 +17356,11 @@ Trigger { -- 소환 루미너스 마린
 Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
+		Label(0);
+		BYD;
+		CDeaths(FP,AtMost,0,Theorist);
 		Bring(j,AtLeast,1,12,64);
 		Bring(j,AtLeast,96,MarID[j+1],64);
-		BYD;
 	},
 	actions = {
 		SetResources(j,Add,45000,ore);
