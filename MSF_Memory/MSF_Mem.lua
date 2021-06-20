@@ -153,8 +153,8 @@ CreateVariableSet({ -- 변수 정의
 "BYD_C1","BYD_CTemp","VBdIndex","RandMineW","BYDMineX","BYDMineY","BYDLogic","RednumberSet","NexDif","NexAngle","ClearRate","LairHiveShapeNum","ExchangeRate","ExchangeP",
 "P1Score","P2Score","P3Score","P4Score","P5Score","P1ScoreP","P3ScoreP","P2ScoreP","P5ScoreP","P4ScoreP","Ov_BYD_Index","Ov_BYD","ReadPosX","ReadPosY",
 "B7_H","IndexCheck","N_A","S_N_R","Locs","B6_D","B6_T","P6BGM","DifScoreBonusV","ModeScoreBonusV","ScoreBonusV","UPCompStrPtr","XY","SY","SZ","SW","ObPlotVar","UnivStrPtr","HTextStrPtr",
-"Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2"
-})
+"Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2",
+"CurrentOP",})
 
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
 ExScoreP = {P1ScoreP,P2ScoreP,P3ScoreP,P4ScoreP,P5ScoreP}
@@ -601,7 +601,7 @@ CMov(P6,0x58F500,DtP)
 CIfX(P6,PlayerCheck(P1,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*0))--
 	f_Read(P6,0x6284E8,Cunit2)
-	f_Read(P6,CurrentOP,0)
+	CMov(P6,CurrentOP,0)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -616,7 +616,7 @@ CIfX(P6,PlayerCheck(P1,1))
 	CElseIfX(PlayerCheck(P2,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*1))
 	f_Read(P6,0x628518,Cunit2)
-	f_Read(P6,CurrentOP,1)
+	CMov(P6,CurrentOP,1)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -631,7 +631,7 @@ CIfX(P6,PlayerCheck(P1,1))
 	CElseIfX(PlayerCheck(P3,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*2))
 	f_Read(P6,0x628548,Cunit2)
-	f_Read(P6,CurrentOP,2)
+	CMov(P6,CurrentOP,2)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -646,7 +646,7 @@ CIfX(P6,PlayerCheck(P1,1))
 	CElseIfX(PlayerCheck(P4,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*3))
 	f_Read(P6,0x628578,Cunit2)
-	f_Read(P6,CurrentOP,3)
+	CMov(P6,CurrentOP,3)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -661,7 +661,7 @@ CIfX(P6,PlayerCheck(P1,1))
 	CElseIfX(PlayerCheck(P5,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*4))
 	f_Read(P6,0x6285A8,Cunit2)
-	f_Read(P6,CurrentOP,4)
+	CMov(P6,CurrentOP,4)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -2951,14 +2951,16 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
 	SetMemory(0x6CA018, SetTo, 1401);BYDPatchArr;-- 파리 이동속도 너프
 })
-
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{
 		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
-		
 		SetMemoryX(0x656FB0, SetTo, 4000,0xFFFF); -- Enigma 딜 4000으로 감소
+		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
+		SetMemoryX(0x65651C, SetTo, 1*65535,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
+		SetMemoryX(0x663E10, SetTo, 163,0xFF00); -- 프로브보스 계급을 딜에 맞게 변경
+		SetMemoryX(0x657038, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
+
 
 	})
-
 	Trigger2(FP,{BYD},{
 
 		SetMemoryX(0x664080+(53*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
@@ -9529,11 +9531,26 @@ CIfEnd()
 Trigger { -- 조합법 insert키
 	players = {Force1},
 	conditions = {
+		Label(0);
+		CDeaths(FP,AtMost,0,Theorist);
 		BYD;
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
 		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.\n\x13\x06Ｂｅｙｏｎｄ\x04 난이도의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04은 특별한 능력을 가지고 있습니다.\n\x13\x041. \x08사망 \x04시 \x07부활. \x04일정시간 동안 \x02반 무적 \x04적용. \x1B쿨타임 : 10분\n\x13\x042. 맵상의 \x1F파일런\x04을 모두 제거할 경우 \x07특수 공격 스킬 능력 \x04활성화\n\x13\x043. \x08체력 업그레이드 \x04완료시 \x1C개별 수정 보호막 \x04활성화.\n\x13\x044.\x10【 K\x04ey \x10】\x04파괴시 공격 스킬의 \x07공격력 \x04증가\n\x13\x04수정 보호막은 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04의 체력이 반 이하로 떨어질 경우 확률적으로 발동됩니다.\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		PreserveTrigger();
+		},
+	}
+Trigger { -- 조합법 insert키
+	players = {Force1},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtLeast,1,Theorist);
+		BYD;
+		Memory(0x596A44, Exactly, 0x00000100);
+	},
+	actions = {
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -14986,6 +15003,7 @@ DisplayCTextToAll(FP,{
 },HumanPlayers)
 
 DisplayCTextToAll(FP,{
+		CDeaths(FP,AtMost,0,Theorist),
 		BYD;
 		CDeaths(FP,AtLeast,2,PyCCode[1]);
 		CDeaths(FP,AtLeast,2,PyCCode[2]);
