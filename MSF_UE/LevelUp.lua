@@ -42,7 +42,7 @@ function LevelUp()
         
         CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
         f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
-        CDoActions(FP,{CreateUnit(1,87,29,FP),TSetMemory(B_5_C,SetTo,Nextptrs),SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55))})
+        CDoActions(FP,{CreateUnit(1,87,29,FP),TSetMemory(B_5_C,SetTo,Nextptrs),TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55))})
         CElseIfX(TTOR({CVar(FP,LevelT[2],Exactly,2),CVar(FP,LevelT[2],Exactly,4),CVar(FP,LevelT[2],Exactly,6),CVar(FP,LevelT[2],Exactly,8),CVar(FP,LevelT[2],Exactly,10)}))
         DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT)})
         CIfXEnd()
