@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 2.5"
+VerText = "\x04Ver. 2.7"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -2948,16 +2948,16 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		table.insert(BYDPatchArr,SetMemoryW(0x660E00+(MarID[i]*2),SetTo,1000))
 		table.insert(BYDPatchArr,SetMemoryB(0x6647B0+MarID[i],SetTo,1))
 	end
-	TriggerX(FP,{CDeaths(FP,AtMost,0,Theorist)},{
+	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
 	SetMemory(0x6CA018, SetTo, 1401);BYDPatchArr;-- 파리 이동속도 너프
 })
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{
 		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
-		SetMemoryX(0x656FB0, SetTo, 4000,0xFFFF); -- Enigma 딜 4000으로 감소
+		SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
 		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
-		SetMemoryX(0x65651C, SetTo, 1*65535,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
-		SetMemoryX(0x663E10, SetTo, 163,0xFF00); -- 프로브보스 계급을 딜에 맞게 변경
+		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
+		SetMemoryX(0x663E10, SetTo, 163*256,0xFF00); -- 프로브보스 계급을 딜에 맞게 변경
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		
 
@@ -4696,6 +4696,23 @@ CIf(P6,CVar(P6,B2_P[2],AtLeast,1))
 			Label(0);
 			NBYD;
 			CDeaths(FP,AtLeast,2,GMode);
+			DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00);
+		},
+		actions = {
+			MoveCp(Subtract,17*4);
+			SetDeaths(CurrentPlayer, Subtract,5*256,0);
+			MoveCp(Add,17*4);
+			PreserveTrigger();
+	
+	}
+	}
+	
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			BYD;
+			CDeaths(FP,AtLeast,1,Theorist);
 			DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00);
 		},
 		actions = {
