@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 2.7"
+VerText = "\x04Ver. 2.8"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -1534,7 +1534,16 @@ CIf(P6,CVar(FP,B6_H[2],AtLeast,1))
 		CIfEnd()
 	CIfEnd()
 	CDoActions(P6,{TSetDeaths(_Add(B6_H,11),SetTo,0,0),TSetDeathsX(_Add(B6_H,16),SetTo,0,0,0xFFFF)},1)
-	CTrigger(P6,{TMemoryX(_Add(B6_H,17),Exactly,0,0xFF00)},{SetCVar(FP,B6_H[2],SetTo,0)},1)
+	
+	CIf(FP,{TMemoryX(_Add(B6_H,17),Exactly,0,0xFF00)})
+		CIfX(FP,{CVar(FP,B6_K[2],AtMost,53)})
+			CDoActions(P6,{TSetMemoryX(_Add(B6_H,17),SetTo,1*256,0xFF00),SetDeaths(P6,SetTo,0,12)})
+
+
+		CElseX()
+			CDoActions(P6,{SetCVar(FP,B6_H[2],SetTo,0),SetDeaths(P6,SetTo,1,12)})
+		CIfXEnd()
+	CIfEnd()
 CIfEnd()
 
 CIf(P6,CDeaths(P6,AtLeast,1,HDStart)) -- 미구현 Once처리
@@ -2957,7 +2966,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
 		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
 		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
-		SetMemoryX(0x663E10, SetTo, 163*256,0xFF00); -- 프로브보스 계급을 딜에 맞게 변경
+		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		
 
@@ -7078,8 +7087,8 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(FP,SetTo,1,CCode(0x1002,40));
-				SetCVar(FP,XY[2],SetTo,550*10);
+				--SetCDeaths(FP,SetTo,1,CCode(0x1002,40));
+				--SetCVar(FP,XY[2],SetTo,550*10);
 
 			},
 		}
@@ -7091,9 +7100,9 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				--SetCDeaths(P6,SetTo,1,HDStart);
-				--KillUnit("Any unit",Force2);
-				--SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
+				SetCDeaths(P6,SetTo,1,HDStart);
+				KillUnit("Any unit",Force2);
+				SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
 			},
 		}
 		Trigger {
@@ -16721,8 +16730,25 @@ Trigger { -- 예약메딕
 Trigger {
 	players = {i},
 	conditions = {
+		NBYD;
 		Accumulate(i,AtLeast,1000000,Ore);
 		Deaths(i,AtMost,159999,432);
+	},
+	actions = {
+		DisplayText("\x13\x02!!!!주의 \x07『 \x04미네랄에 비해 체력이 현저히 적어 자동으로 체력 환전 모드를 ON 하였습니다.\x07 』 \x02주의!!!!",4);
+		PlayWAV("sound\\Terran\\bldg\\tddwht00.WAV");
+		PlayWAV("sound\\Terran\\bldg\\tddwht00.WAV");
+		PlayWAV("sound\\Terran\\bldg\\tddwht00.WAV");
+		PlayWAV("sound\\Terran\\bldg\\tddwht00.WAV");
+		SetDeaths(i,SetTo,1,"【 Zergling 】");
+	}
+}
+Trigger {
+	players = {i},
+	conditions = {
+		BYD;
+		Accumulate(i,AtLeast,1000000,Ore);
+		Deaths(i,AtMost,129999,432);
 	},
 	actions = {
 		DisplayText("\x13\x02!!!!주의 \x07『 \x04미네랄에 비해 체력이 현저히 적어 자동으로 체력 환전 모드를 ON 하였습니다.\x07 』 \x02주의!!!!",4);
