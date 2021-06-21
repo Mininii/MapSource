@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 2.8"
+VerText = "\x04Ver. 2.9"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -70,12 +70,13 @@ Ex1= {25,27,29,31,33}
 Ex2= {23,26,29,32,35}
 Ex3= {27,30,33,36,39}
 Ex4= {15,17,19,21,23}
-Ex5= {33,36,39,42,45}
+Ex5= {32,34,36,38,40}
 _0D = string.rep("\x0D",200)
 _0D_1000B = string.rep("\x0D",1000)
 UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
 HTextStr = string.rep("\x0D",150)
 EUDTurbo(P6)
+Enable_HideErrorMessage(FP)
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(P6)
 StartCtrig()
@@ -2968,6 +2969,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
 		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
+		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게
 		
 
 	})
@@ -17327,19 +17329,19 @@ Trigger { -- 소환 마린
 		PreserveTrigger();
 	},
 }
-  Trigger { -- 소환 루미너스 마린
-	players = {j},
-	conditions = {
-		BYD;
-		Deaths(j,AtMost,11,125);
-		Bring(j,AtLeast,1,12,64);
-	},
-	actions = {
-		SetResources(j,Add,45000,ore);
-		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
-		PreserveTrigger();
-	},
+Trigger { -- 소환 루미너스 마린
+  players = {j},
+  conditions = {
+	  BYD;
+	  Deaths(j,AtMost,11,125);
+	  Bring(j,AtLeast,1,12,64);
+  },
+  actions = {
+	  SetResources(j,Add,45000,ore);
+	  RemoveUnitAt(1,12,"Anywhere",j);
+	  DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
+	  PreserveTrigger();
+  },
 }
 
 Trigger { -- 소환 루미너스 마린
@@ -17386,15 +17388,35 @@ Trigger { -- 소환 루미너스 마린
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
 		Command(j,AtLeast,1,12);
+		Accumulate(j,AtLeast,90000,Ore);
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. \x04- \x1F45000 O r e \x07』",4);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x1B3기 \x19소환\x04하였습니다. \x04- \x1F135,000 O r e \x07』",4);
 		SetCDeaths(FP,Add,1,MarCreate);
-		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
+		CreateUnitWithProperties(3,MarID[j+1],204+j,j,{energy = 100});
+		SetResources(j,Subtract,90000,ore);
 		PreserveTrigger();
 	},
 }  
+
+Trigger { -- 소환 루미너스 마린
+	players = {j},
+	conditions = {
+		Label(0);
+		BYD;
+		CDeaths(FP,AtLeast,1,Theorist);
+		Deaths(CurrentPlayer,AtLeast,12,125);
+		Command(j,AtLeast,1,12);
+		Accumulate(j,AtMost,89999,Ore);
+	},
+	actions = {
+		SetResources(j,Add,45000,ore);
+		RemoveUnitAt(1,12,"Anywhere",j);
+		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F90000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
+		PreserveTrigger();
+	},
+}
 
 Trigger { -- 소환 루미너스 마린
 	players = {j},
@@ -17428,23 +17450,6 @@ Trigger { -- 소환 루미너스 마린
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. - \x1F95000 O r e \x07』",4);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetCDeaths(FP,Add,1,MarCreate);
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- 소환 루미너스 마린
-	players = {j},
-	conditions = {
-		Label(0);
-		CDeaths(P6,Exactly,1,EVMode);
-		Deaths(CurrentPlayer,AtLeast,36,125);
-		Command(j,AtLeast,1,12);
-		Accumulate(j,AtMost,49999,Ore);
-	},
-	actions = {
-		SetResources(j,Add,45000,ore);
-		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F50000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
 		PreserveTrigger();
 	},
 }
