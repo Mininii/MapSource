@@ -77,14 +77,10 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 
 		
 	local L_Gun_Order = def_sIndex()
-	local L_Gun_Order2 = def_sIndex()
-	CJumpXEnd(FP,L_Gun_Order)
-	NJumpXEnd(FP,L_Gun_Order2)
+	NJumpXEnd(FP,L_Gun_Order)
 	f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
 	for i = 0, 6 do
-		NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
-			CJumpX(FP,L_Gun_Order) 
-		NIfEnd()
+		NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 	end
 	CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
 	for i = 0, 6 do
@@ -106,7 +102,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 		local TempCPCheck = CreateVar()
 		CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 		f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
-		NJumpX(FP,L_Gun_Order2,{TMemory(_Add(_Mul(TempCPCheck,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
+		NJumpX(FP,L_Gun_Order,{TMemory(_Add(_Mul(TempCPCheck,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
 		CJumpEnd(FP,HeroPointCheck)
 		f_LoadCp()
 		DoActions(FP,MoveCp(Subtract,6*4))
