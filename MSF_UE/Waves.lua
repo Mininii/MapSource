@@ -2,8 +2,9 @@ function SetWave()
 local WaveT = CreateVar()
 
 CAdd(FP,WaveT,Dt)
-TriggerX(FP,{CVar(FP,WaveT[2],AtLeast,60*1000),CDeaths(FP,AtMost,0,ReplaceDelayT)},{SetCVar(FP,WaveT[2],Subtract,60*1000),SetSwitch(WaveSwitch,Set)},{Preserved})
-CIf(FP,{Switch(WaveSwitch,Set),CVar(FP,Time[2],AtLeast,180*1000)},SetSwitch(WaveSwitch,Clear))
+TriggerX(FP,{CVar(FP,WaveT[2],AtLeast,60*1000)},{SetCVar(FP,WaveT[2],Subtract,60*1000),SetSwitch(WaveSwitch,Set)},{Preserved})
+  
+CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Switch(WaveSwitch,Set),CVar(FP,Time[2],AtLeast,180*1000)})
 DoActions(FP,{Simple_SetLoc(0,1536,4480,1536,4480)})
 f_TempRepeat(56,25)
 f_TempRepeat(104,15)
@@ -36,5 +37,6 @@ f_TempRepeat(29,11)
 CIfEnd()
 
 CIfEnd()
+DoActions(FP,SetSwitch(WaveSwitch,Clear))
 
 end
