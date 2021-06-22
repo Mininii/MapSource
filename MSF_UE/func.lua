@@ -398,3 +398,11 @@ end
 function LvT(Type,Value)
 	return CVar(FP,LevelT[2],Type,Value)
 end
+function NormalTurboSet(DeathUnitID)
+	NTUID = DeathUnitID
+	DoActions(FP,SetDeaths(FP,Add,1,DeathUnitID))
+	Trigger2(FP,{Deaths(FP,AtLeast,2,DeathUnitID)},{SetDeaths(FP,SetTo,0,DeathUnitID)},{Preserved})
+end
+function NTCond()
+	return Deaths(FP,Exactly,1,NTUID)
+end

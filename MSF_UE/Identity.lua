@@ -90,7 +90,7 @@ CIfEnd()
 
 CIfEnd()
 
-CIf(FP,Deaths(FP,AtLeast,2,214),SetDeaths(FP,SetTo,0,214))
+CIf(FP,NTCond())
 CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw2[2],SetTo,0))
 CMov(FP,VO(41),LevelT2) -- Diff
 
@@ -1396,5 +1396,4 @@ DoActionsX(FP,{
 
 CIfXEnd()
 CIfEnd()
-DoActions(FP,SetDeaths(FP,Add,1,214))
 end
