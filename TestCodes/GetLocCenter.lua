@@ -1,6 +1,6 @@
 
-function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ì•ˆì“°ê±°ë‚˜ ìì£¼ ë°”ë€ŒëŠ” ë¡œì¼€ì´ì…˜, TempUnit = ì•ˆì“°ëŠ” ìœ ë‹›. Unused ê°€ëŠ¥ ì•„ë§ˆ?
-    
+function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ¾È¾²°Å³ª ÀÚÁÖ ¹Ù²î´Â ·ÎÄÉÀÌ¼Ç, TempUnit = ¾È¾²´Â À¯´Ö. Unused °¡´É ¾Æ¸¶?
+    local TempLocID = TempLoc
     if type(TempLoc) == "string" then
         TempLocID = ParseLocation(TempLoc)-1
     end
@@ -28,7 +28,7 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ì•ˆì“°ê±°ë
         end
         Simple_SetLocX(PlayerID,DestLocId,RetX,RetY,RetX,RetY)
     end
-    function SetLocCenter2(Location) -- TempLocë¥¼ Locationìœ¼ë¡œ ì´ë™ì‹œí‚¤ê¸°ë§Œ í•¨. Callì´ í•„ìš”ì—†ìŒ. TempLocë§Œ ì‚¬ìš©í•´ë„ ë  ê²½ìš° ì´ê±¸ ì¨ë„ ë¨
-        DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)}
+    function SetLocCenter2(Location) -- TempLoc¸¦ LocationÀ¸·Î ÀÌµ¿½ÃÅ°±â¸¸ ÇÔ. CallÀÌ ÇÊ¿ä¾øÀ½. TempLoc¸¸ »ç¿ëÇØµµ µÉ °æ¿ì ÀÌ°É ½áµµ µÊ
+        DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
     end
 end
