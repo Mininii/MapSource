@@ -40,7 +40,11 @@ function RotatePlayer(Print,Players,RecoverCP)
 	table.insert(Y,SetMemory(0x6509B0, SetTo, RecoverCP))
 	return Y
 end
-function Simple_SetLoc(LocID,LeftValue,UpValue,RightValue,DownValue)
+function Simple_SetLoc(Location,LeftValue,UpValue,RightValue,DownValue)
+	local LocID = Location
+    if type(Location) == "string" then
+        LocID = ParseLocation(Location)-1
+    end
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
@@ -49,7 +53,11 @@ function Simple_SetLoc(LocID,LeftValue,UpValue,RightValue,DownValue)
 	return X
 end
 
-function Simple_CalcLoc(LocID,LeftValue,UpValue,RightValue,DownValue)
+function Simple_CalcLoc(Location,LeftValue,UpValue,RightValue,DownValue)
+	local LocID = Location
+    if type(Location) == "string" then
+        LocID = ParseLocation(Location)-1
+    end
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),Add,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
@@ -58,7 +66,11 @@ function Simple_CalcLoc(LocID,LeftValue,UpValue,RightValue,DownValue)
 	return X
 end
 
-function Simple_CalcLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,PreserveFlag)
+function Simple_CalcLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,PreserveFlag)
+	local LocID = Location
+    if type(Location) == "string" then
+        LocID = ParseLocation(Location)-1
+    end
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),Add,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
@@ -68,7 +80,11 @@ function Simple_CalcLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,Pre
 	return X
 end
 
-function Simple_SetLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
+function Simple_SetLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
+	local LocID = Location
+    if type(Location) == "string" then
+        LocID = ParseLocation(Location)-1
+    end
 	CDoActions(Player,{
 		TSetMemory(0x58DC60+(20*LocID),SetTo,LeftValue),
 		TSetMemory(0x58DC64+(20*LocID),SetTo,UpValue),
@@ -78,7 +94,11 @@ function Simple_SetLocX(Player,LocID,LeftValue,UpValue,RightValue,DownValue,Addo
 	})
 end
 
-function Simple_SetLoc2X(Player,LocID,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
+function Simple_SetLoc2X(Player,Location,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
+	local LocID = Location
+    if type(Location) == "string" then
+        LocID = ParseLocation(Location)-1
+    end
 	CDoActions(Player,{
 		TSetMemory(0x58DC60+(20*LocID),Add,LeftValue),
 		TSetMemory(0x58DC64+(20*LocID),Add,UpValue),
