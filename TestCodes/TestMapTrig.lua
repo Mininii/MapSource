@@ -2,10 +2,10 @@
 Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+	if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
-     end
+	end
 end
 
 
@@ -13,122 +13,116 @@ end
 
 PatchStack = {}
 function UnitSizePatch(UnitID,Value,Table)
-     table.insert(Table,SetMemory(0x6617C8 + (UnitID*8),SetTo,(Value)+(Value*65536)))
-     table.insert(Table,SetMemory(0x6617CC + (UnitID*8),SetTo,(Value)+(Value*65536)))
+	table.insert(Table,SetMemory(0x6617C8 + (UnitID*8),SetTo,(Value)+(Value*65536)))
+	table.insert(Table,SetMemory(0x6617CC + (UnitID*8),SetTo,(Value)+(Value*65536)))
 end
 for i = 0, 227 do
-     UnitSizePatch(i,1,PatchStack)
+	UnitSizePatch(i,1,PatchStack)
 end
 function Simple_SetLoc(LocID,LeftValue,UpValue,RightValue,DownValue,Table)
-     if Table == nil then
-	     local X = {}
-	     table.insert(X,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
-	     table.insert(X,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
-	     table.insert(X,SetMemory(0x58DC68+(20*LocID),SetTo,RightValue))
-	     table.insert(X,SetMemory(0x58DC6C+(20*LocID),SetTo,DownValue))
-	     return X
-     else
-	     table.insert(Table,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
-	     table.insert(Table,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
-	     table.insert(Table,SetMemory(0x58DC68+(20*LocID),SetTo,RightValue))
-	     table.insert(Table,SetMemory(0x58DC6C+(20*LocID),SetTo,DownValue))
-     end
+	if Table == nil then
+		local X = {}
+		table.insert(X,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
+		table.insert(X,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
+		table.insert(X,SetMemory(0x58DC68+(20*LocID),SetTo,RightValue))
+		table.insert(X,SetMemory(0x58DC6C+(20*LocID),SetTo,DownValue))
+		return X
+	else
+		table.insert(Table,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
+		table.insert(Table,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
+		table.insert(Table,SetMemory(0x58DC68+(20*LocID),SetTo,RightValue))
+		table.insert(Table,SetMemory(0x58DC6C+(20*LocID),SetTo,DownValue))
+	end
 end
 for j = 0, 7 do
-     for i = 0, 7 do
-          Simple_SetLoc((64 + i)+(j*8),512+(1024*i),512+(1024*j),512+(1024*i),512+(1024*j),PatchStack)
-     end
+	for i = 0, 7 do
+		Simple_SetLoc((64 + i)+(j*8),512+(1024*i),512+(1024*j),512+(1024*i),512+(1024*j),PatchStack)
+	end
 end
 
 DoActions2(P1,PatchStack,1)
 
-function Install_GetCLoc(TriggerPlayer)
-     local PlayerID = TriggerPlayer
-     local LocIDV = CreateVar()
-     local RetL = CreateVar()
-     local RetR = CreateVar()
-     local RetU = CreateVar()
-     local RetD = CreateVar()
-     
-     local RetX = CreateVar()
-     local RetY = CreateVar()
+function ConvertLocation(Location)
+	local TempLocID = Location
+	if type(Location) == "string" then
+		TempLocID = ParseLocation(Location)-1
+	elseif Type(Location) == "number" then
+		TempLocID = Location
+		Location = Location+1
+	end
+	return TempLocID, Location
+end
+function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 자주 바뀌는 로케이션, TempUnit = 안쓰는 유닛. Unused 가능 아마?
+	local TempLocID, TempLoc = ConvertLocation(TempLoc)
+	local PlayerID = TriggerPlayer
+	local RetX = CreateVar()
+	local RetY = CreateVar()
+	local Call_GetCLoc = SetCallForward()
+	SetCall(PlayerID)
+	f_Read(PlayerID,0x58DC60+0x14*TempLocID,RetX,"X",0xFFFFFFFF)
+	f_Read(PlayerID,0x58DC64+0x14*TempLocID,RetY,"X",0xFFFFFFFF)
+	SetCallEnd()
  
-     local LocL = CreateVar()
-     local LocU = CreateVar()
-     local LocR = CreateVar()
-     local LocD = CreateVar()
- 
-     local Call_GetCLoc = SetCallForward()
-     SetCall(PlayerID)
- 
-     CMov(PlayerID,LocL,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC60))
-     CMov(PlayerID,LocU,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC64))
-     CMov(PlayerID,LocR,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC68))
-     CMov(PlayerID,LocD,_Mul(LocIDV,_Mov(0x14/4)),EPD(0x58DC6C))
-     f_Read(PlayerID,LocL,RetL,"X",0xFFFFFFFF,1)
-     f_Read(PlayerID,LocU,RetU,"X",0xFFFFFFFF,1)
-     f_Read(PlayerID,LocR,RetR,"X",0xFFFFFFFF,1)
-     f_Read(PlayerID,LocD,RetD,"X",0xFFFFFFFF,1)
-     CiSub(PlayerID,RetX,RetR,RetL)
-     f_iDiv(PlayerID,RetX,_Mov(2))
-     CAdd(PlayerID,RetX,RetL)
-     CiSub(PlayerID,RetY,RetD,RetU)
-     f_iDiv(PlayerID,RetY,_Mov(2))
-     CAdd(PlayerID,RetY,RetU)
-     SetCallEnd()
- 
-     function GetLocCenter(Location,DestX,DestY)
-         local LocId = Location
-         if type(LocId) == "string" then
-             LocId = ParseLocation(LocId)-1
-         end
-         CMov(PlayerID,LocIDV,LocId)
-         CallTrigger(PlayerID,Call_GetCLoc)
-         CMov(PlayerID,DestX,RetX)
-         CMov(PlayerID,DestY,RetY)
-     end
-     function SetLocCenter(Location,DestLocation)
-         local LocId = Location
-         if type(LocId) == "string" then
-             LocId = ParseLocation(LocId)-1
-         end
-         CMov(PlayerID,LocIDV,LocId)
-         CallTrigger(PlayerID,Call_GetCLoc)
-         
-         local DestLocId = DestLocation
-         if type(DestLocId) == "string" then
-             DestLocId = ParseLocation(DestLocId)-1
-         end
-         CMov(PlayerID,0x58DC60+0x14*DestLocId,RetX)
-         CMov(PlayerID,0x58DC64+0x14*DestLocId,RetY)
-         CMov(PlayerID,0x58DC68+0x14*DestLocId,RetX)
-         CMov(PlayerID,0x58DC6C+0x14*DestLocId,RetY)
-     end
- end
---FP = P2
---SetForces({P1},{P2},{},{},{P1,P2}) 
---SetFixedPlayer(P2)
---StartCtrig()
---CJump(AllPlayers,0x600)
---Include_CtrigPlib(360,"Switch 1",0)
---Install_GetCLoc(FP)
---CJumpEnd(AllPlayers,0x600)
---NoAirCollisionX(P1)--
+	function GetLocCenter(Location,DestX,DestY)
+		
+		local Location2, Location = ConvertLocation(Location)
 
---fasdas = CreateVar()
---fasdas2 = CreateVar()--
+		CallTrigger(PlayerID,Call_GetCLoc,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
+		CMov(PlayerID,DestX,RetX)
+		CMov(PlayerID,DestY,RetY)
+	end
+	function SetLocCenter(Location,DestLocation)
+		local Location2, Location = ConvertLocation(Location)
+		CallTrigger(PlayerID,Call_GetCLoc,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
+		
+		local DestLocId, DestLocation = ConvertLocation(DestLocation)
 
---for i = 0, 24 do
---GetLocCenter(i,fasdas,fasdas2)
---Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
---end
---Install_AllObject()--
+		Simple_SetLocX(PlayerID,DestLocId,RetX,RetY,RetX,RetY)
+	end
+	function SetLocCenter2(Location) -- TempLoc를 Location으로 이동시키기만 함. Call이 필요없음. TempLoc만 사용해도 될 경우 이걸 써도 됨
+	
+		local Location2, Location = ConvertLocation(Location)
+		DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
+	end
+end
+ 
+FP = P2
+SetForces({P1},{P2},{},{},{P1,P2}) 
+SetFixedPlayer(P2)
+StartCtrig()
+CJump(AllPlayers,0x600)
+Include_CtrigPlib(360,"Switch 1",0)
+Install_GetCLoc(P2,253,180)
+CJumpEnd(AllPlayers,0x600)
+NoAirCollisionX(P1)--
+DoActions(FP,RemoveUnit(0,P1))
+fasdas = CreateVar()
+fasdas2 = CreateVar()--
+--
+for i = 64, 70 do
+	SetLocCenter2(i)
+	DoActions(P2,CreateUnit(1,0,254,P1))
+end
+for i = 71, 96 do
+	SetLocCenter(i,254)
+	DoActions(P2,CreateUnit(1,0,254,P1))
+end
+	for i = 97, 127 do
+	GetLocCenter(i,fasdas,fasdas2)
+	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
+end
+for i = 0, 24 do
+	GetLocCenter(i,fasdas,fasdas2)
+	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
+	
+end
+Install_AllObject()--
 
---EndCtrig()
+EndCtrig()
 ---- 에러 체크 함수 선언 위치 --
-----↑Tep에 그대로 붙여넣기----------------------------------------
---ErrorCheck()
---EUDTurbo(P1)
+--↑Tep에 그대로 붙여넣기----------------------------------------
+ErrorCheck()
+EUDTurbo(P1)
 --TestShapeTable = {}
 ----
 --SHA1a =
@@ -394,40 +388,40 @@ function Install_GetCLoc(TriggerPlayer)
 
 function Convert_MirrorXY(...)
 	local arg = table.pack(...)
-     local X = {}
-     
-     for k = 1, arg.n do
-          if type(arg[k]) == "table" then
-               local A = {}
-               local B = {}
-               local C = {}
-               local D = {}
-               table.insert(A,arg[k][1])
-               table.insert(A,arg[k][2])
-               table.insert(B,arg[k][1]*-1)
-               table.insert(B,arg[k][2]*-1)
-               table.insert(C,arg[k][1]*-1)
-               table.insert(C,arg[k][2])
-               table.insert(D,arg[k][1])
-               table.insert(D,arg[k][2]*-1)
-               table.insert(X,A)
-               table.insert(X,B)
-               table.insert(X,C)
-               table.insert(X,D)
-          else
-               Convert_MirrorXY_Inputdata_Error()
-          end
-          
-     end
-     return X
+	local X = {}
+	
+	for k = 1, arg.n do
+		if type(arg[k]) == "table" then
+			local A = {}
+			local B = {}
+			local C = {}
+			local D = {}
+			table.insert(A,arg[k][1])
+			table.insert(A,arg[k][2])
+			table.insert(B,arg[k][1]*-1)
+			table.insert(B,arg[k][2]*-1)
+			table.insert(C,arg[k][1]*-1)
+			table.insert(C,arg[k][2])
+			table.insert(D,arg[k][1])
+			table.insert(D,arg[k][2]*-1)
+			table.insert(X,A)
+			table.insert(X,B)
+			table.insert(X,C)
+			table.insert(X,D)
+		else
+			Convert_MirrorXY_Inputdata_Error()
+		end
+		
+	end
+	return X
 end
 
-Shape1 = CS_SortX(CSMakePath(Convert_MirrorXY({32,32},{96,32},{32,96})),0)  -- →모양 Path
-CSPlot(Shape1,P1,0,"Location 1",nil,1,32,P1)
-CSPlot(CS_ConnectPath(Shape1,6,1),P1,0,"Location 2",nil,1,32,P1)
-CSPlot(CS_ConnectPath(Shape1,6),P1,0,"Location 3",nil,1,32,P1)
-CSPlot(CS_ConnectPathX(Shape1,16,1),P1,0,"Location 4",nil,1,32,P1)
-CSPlot(CS_ConnectPathX(Shape1,16),P1,0,"Location 5",nil,1,32,P1)
+--Shape1 = CS_SortX(CSMakePath(Convert_MirrorXY({32,32},{96,32},{32,96})),0)  -- →모양 Path
+--CSPlot(Shape1,P1,0,"Location 1",nil,1,32,P1)
+--CSPlot(CS_ConnectPath(Shape1,6,1),P1,0,"Location 2",nil,1,32,P1)
+--CSPlot(CS_ConnectPath(Shape1,6),P1,0,"Location 3",nil,1,32,P1)
+--CSPlot(CS_ConnectPathX(Shape1,16,1),P1,0,"Location 4",nil,1,32,P1)
+--CSPlot(CS_ConnectPathX(Shape1,16),P1,0,"Location 5",nil,1,32,P1)
 
 
 --C1 = CSMakeCircle(8,60,0,441,169)

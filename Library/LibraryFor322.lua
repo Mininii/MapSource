@@ -41,10 +41,7 @@ function RotatePlayer(Print,Players,RecoverCP)
 	return Y
 end
 function Simple_SetLoc(Location,LeftValue,UpValue,RightValue,DownValue)
-	local LocID = Location
-    if type(Location) == "string" then
-        LocID = ParseLocation(Location)-1
-    end
+	local LocID, Location = ConvertLocation(Location)
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),SetTo,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),SetTo,UpValue))
@@ -54,10 +51,7 @@ function Simple_SetLoc(Location,LeftValue,UpValue,RightValue,DownValue)
 end
 
 function Simple_CalcLoc(Location,LeftValue,UpValue,RightValue,DownValue)
-	local LocID = Location
-    if type(Location) == "string" then
-        LocID = ParseLocation(Location)-1
-    end
+	local LocID, Location = ConvertLocation(Location)
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),Add,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
@@ -67,10 +61,7 @@ function Simple_CalcLoc(Location,LeftValue,UpValue,RightValue,DownValue)
 end
 
 function Simple_CalcLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,PreserveFlag)
-	local LocID = Location
-    if type(Location) == "string" then
-        LocID = ParseLocation(Location)-1
-    end
+	local LocID, Location = ConvertLocation(Location)
 	local X = {}
 	table.insert(X,SetMemory(0x58DC60+(20*LocID),Add,LeftValue))
 	table.insert(X,SetMemory(0x58DC64+(20*LocID),Add,UpValue))
@@ -81,10 +72,7 @@ function Simple_CalcLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,
 end
 
 function Simple_SetLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
-	local LocID = Location
-    if type(Location) == "string" then
-        LocID = ParseLocation(Location)-1
-    end
+	local LocID, Location = ConvertLocation(Location)
 	CDoActions(Player,{
 		TSetMemory(0x58DC60+(20*LocID),SetTo,LeftValue),
 		TSetMemory(0x58DC64+(20*LocID),SetTo,UpValue),
@@ -95,10 +83,7 @@ function Simple_SetLocX(Player,Location,LeftValue,UpValue,RightValue,DownValue,A
 end
 
 function Simple_SetLoc2X(Player,Location,LeftValue,UpValue,RightValue,DownValue,AddonTrigger) -- CtrigAsm 5.1
-	local LocID = Location
-    if type(Location) == "string" then
-        LocID = ParseLocation(Location)-1
-    end
+	local LocID, Location = ConvertLocation(Location)
 	CDoActions(Player,{
 		TSetMemory(0x58DC60+(20*LocID),Add,LeftValue),
 		TSetMemory(0x58DC64+(20*LocID),Add,UpValue),
@@ -803,8 +788,6 @@ end
 
 
 
-TempV_0D = CreateVar()
-TempV_0D2 = CreateVar()
 function _0DPatchX(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 	CMov(Player,TempV_0D,0)
 	NWhile(Player,CVar(Player,TempV_0D[2],AtMost,VArrLength-1))
@@ -817,3 +800,18 @@ function _0DPatchX(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 	CAdd(Player,TempV_0D,1)
 	NWhileEnd()
 end
+
+function ConvertLocation(Location) -- 로케이션 인덱스 변환함수. TempLocID는 0부터 시작, Location은 1부터 시작하는 인덱스를 반환함. 문자열 입력 가능
+	local TempLocID = Location
+	if type(Location) == "string" then
+		TempLocID = ParseLocation(Location)-1
+	elseif Type(Location) == "number" then
+		TempLocID = Location
+		Location = Location+1
+	end
+	return TempLocID, Location
+end
+
+
+TempV_0D = CreateVar()
+TempV_0D2 = CreateVar()
