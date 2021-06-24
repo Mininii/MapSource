@@ -672,6 +672,7 @@ CIfEnd()
 end
 
 
+--Dx,Dy,Du,DtP,Dv = CreateVariables(5)
 function IBGM_EPD(Player,MaxPlayer)
 	f_Read(Player,0x51CE8C,Dx)
 	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)

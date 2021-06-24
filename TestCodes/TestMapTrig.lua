@@ -8,8 +8,72 @@ for dir in io.popen(EXTLUA):lines() do
 	end
 end
 
+BGMArr = {}
+for i = 1, 364 do
+	if i <= 9 then
+		table.insert(BGMArr,"wav\\BGM00"..i..".ogg")
+	elseif i >= 10 and i<= 99 then
+		table.insert(BGMArr,"wav\\BGM0"..i..".ogg")
+	else
+		table.insert(BGMArr,"wav\\BGM"..i..".ogg")
+	end
+end
 
+function E_Char_Bangjungsik(X)
 
+	return (X^2)+(5*X)+6
+end
+for i = 0, 99 do
+	DoActions(P1,{DisplayText(""..E_Char_Bangjungsik(i).."")})
+end
+for i = 0, 363 do
+	Trigger { -- 하드이상 브금제어
+		players = {Force1},
+		conditions = {
+			DeathsX(CurrentPlayer,Exactly,i,441,0xFFFFFF);
+			Deaths(CurrentPlayer,AtMost,0,440);
+		},
+		actions = {
+			PlayWAV(BGMArr[i+1]); 
+			PlayWAV(BGMArr[i+1]); 
+			SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
+			SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
+			PreserveTrigger();
+			
+			},
+		}
+	end
+	Trigger { -- 하드이상 브금제어
+		players = {Force1},
+		conditions = {
+			DeathsX(CurrentPlayer,Exactly,363,441,0xFFFFFF);
+			Deaths(CurrentPlayer,AtMost,0,440);
+		},
+		actions = {
+			PlayWAV(BGMArr[364]); 
+			PlayWAV(BGMArr[364]); 
+			SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
+			SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
+			PreserveTrigger();
+			
+			},
+		}
+	Trigger { -- 하드이상 브금제어
+		players = {Force1},
+		conditions = {
+			DeathsX(CurrentPlayer,Exactly,364,441,0xFFFFFF);
+			Deaths(CurrentPlayer,AtMost,0,440);
+		},
+		actions = {
+			PlayWAV(BGMArr[1]); 
+			PlayWAV(BGMArr[1]); 
+			SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
+			SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
+			PreserveTrigger();
+			
+			},
+		}
+		
 
 PatchStack = {}
 function UnitSizePatch(UnitID,Value,Table)
@@ -99,23 +163,27 @@ DoActions(FP,RemoveUnit(0,P1))
 fasdas = CreateVar()
 fasdas2 = CreateVar()--
 --
-for i = 64, 70 do
-	SetLocCenter2(i)
-	DoActions(P2,CreateUnit(1,0,254,P1))
-end
-for i = 71, 96 do
-	SetLocCenter(i,254)
-	DoActions(P2,CreateUnit(1,0,254,P1))
-end
-	for i = 97, 127 do
-	GetLocCenter(i,fasdas,fasdas2)
-	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
-end
-for i = 0, 24 do
-	GetLocCenter(i,fasdas,fasdas2)
-	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
-	
-end
+
+Dx,Dy,Du,DtP,Dv = CreateVariables(5)
+IBGM_EPD(FP,0)
+
+--for i = 64, 70 do
+--	SetLocCenter2(i)
+--	DoActions(P2,CreateUnit(1,0,254,P1))
+--end
+--for i = 71, 96 do
+--	SetLocCenter(i,254)
+--	DoActions(P2,CreateUnit(1,0,254,P1))
+--end
+--	for i = 97, 127 do
+--	GetLocCenter(i,fasdas,fasdas2)
+--	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
+--end
+--for i = 0, 24 do
+--	GetLocCenter(i,fasdas,fasdas2)
+--	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
+--	
+--end
 Install_AllObject()--
 
 EndCtrig()

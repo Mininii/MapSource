@@ -1,8 +1,10 @@
 function Install_Roka7Boss()
 
-    -- 하템 보스
-    -- from MSF 4VS4 OpenSource
+    -- Roka7 Boss
+    -- from MSF 4 VS 4 OpenSource
 	-- Thanks to Ninfia
+
+    
     -- #X1 : 216 -------------------------------------------------------------------------------------------
         
     

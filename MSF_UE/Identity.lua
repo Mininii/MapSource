@@ -1382,18 +1382,17 @@ SetCVar(FP,Fy2[2],SetTo,0);
 SetCVar(FP,DY[2],SetTo,0);
 SetCVar(FP,DZ[2],SetTo,0);
 SetCVar(FP,Sh_Para[2],SetTo,0);
+SetCDeaths(FP,SetTo,0,Id_T0C),
+SetCDeaths(FP,SetTo,0,Id_T1C),
+SetCDeaths(FP,SetTo,0,Id_T2C),
+SetCDeaths(FP,SetTo,0,Id_T3C),
+SetCDeaths(FP,SetTo,0,Id_T4C),
+SetCDeaths(FP,SetTo,0,Id_T5C),
+SetCDeaths(FP,SetTo,0,StoryT2),
+SetCDeaths(FP,SetTo,0,StoryT),
+SetMemory(0x6CA1F4, SetTo, 1707),
+SetMemoryX(0x6C9DF4, SetTo, 67*65536,0xFFFF0000)
 })
-DoActionsX(FP,{
-	SetCDeaths(FP,SetTo,0,Id_T0C),
-	SetCDeaths(FP,SetTo,0,Id_T1C),
-	SetCDeaths(FP,SetTo,0,Id_T2C),
-	SetCDeaths(FP,SetTo,0,Id_T3C),
-	SetCDeaths(FP,SetTo,0,Id_T4C),
-	SetCDeaths(FP,SetTo,0,Id_T5C),
-	SetCDeaths(FP,SetTo,0,StoryT2),
-	SetCDeaths(FP,SetTo,0,StoryT),
-})
-
 CIfXEnd()
 CIfEnd()
 end

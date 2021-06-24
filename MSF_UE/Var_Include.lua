@@ -87,6 +87,7 @@ function Var_init()
 	IdenClear = CreateCCode()
     BossStart = CreateCCode()
     StoryT = CreateCCode()
+	DemClear = CreateCCode()
 end
 
 function HPoints()
@@ -118,8 +119,8 @@ function Objects()
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
-	AtkFactor = 10
-	DefFactor = 25
+	AtkFactor = 7
+	DefFactor = 17
 	GunLimit = 1500
 	Ex1= {20,23,26,29,32,35,38}
 

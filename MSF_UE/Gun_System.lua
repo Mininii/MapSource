@@ -39,8 +39,8 @@ function Gun_System()
     f_GSend(148)
     f_GSend(152)
     if TestStart == 1 then
-        f_GSend(146)
-        f_GSend(136)
+        --f_GSend(146)
+        --f_GSend(136)
     end
 
     ClearCalc()

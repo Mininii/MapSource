@@ -17,8 +17,9 @@ function LevelUp()
 	CommandLeastAt(148,64),
 	CommandLeastAt(130,64),
 	CommandLeastAt(201,64),
+	Bring(FP,AtLeast,1,147,64)
 	},{
-	SetInvincibility(Disable,147,P8,"Anywhere")
+	SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
 	},{Preserved})
 	
 	
@@ -135,7 +136,8 @@ TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4
 	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-
+	
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 
 
 	CTrigger(FP,{CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,AtMost,5000,ReplaceDelayT)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
@@ -184,6 +186,7 @@ TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4
 	SetCDeaths(FP,SetTo,0,Continue),
 	SetCDeaths(FP,SetTo,0,Continue2),
 	SetCDeaths(FP,SetTo,0,rokaClear),
+	SetCDeaths(FP,SetTo,0,DemClear),
 	SetCDeaths(FP,SetTo,0,IdenClear),
 	SetCDeaths(FP,SetTo,0,StoryT3),
 	SetCDeaths(FP,SetTo,0,BClear),
