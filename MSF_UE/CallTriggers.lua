@@ -6,6 +6,7 @@ SetCallEnd()
 LoadCp_CallIndex = SetCallForward()
 SetCall(FP)
 	LoadCp(FP,BackupCp)
+	SetRecoverCp()
 SetCallEnd()
 
 local UpCompTxt = CreateVarray(FP,5)

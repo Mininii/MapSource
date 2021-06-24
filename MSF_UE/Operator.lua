@@ -38,8 +38,7 @@ function OPTrig()
             CMov(FP,0x6509B0,CurrentOP)
         
             CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)})
-                SetRecoverCp(Cunit2)
-                RecoverCp(FP)
+                CMov(FP,0x6509B0,Cunit2)
                 DoActions(FP,MoveCp(Add,25*4))
                 CIf(FP,{TTOR({TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)})})
                 Trigger {
