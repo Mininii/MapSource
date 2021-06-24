@@ -21,7 +21,22 @@ function MapPreserves()
     		PreserveTrigger();
     	},
     }
-    DoActions(FP,{ModifyUnitEnergy(All,"Men",P12,64,0),KillUnit("Men",P12)})
+	RemoveTable = {}
+	for i = 0, 6 do
+		table.insert(RemoveTable, ModifyUnitEnergy(All,MarID[i+1],P12,64,0))
+		table.insert(RemoveTable, KillUnit(MarID[i+1],P12))
+	
+	end
+    DoActions(FP,{RemoveTable,
+		ModifyUnitEnergy(All,7,P12,64,0),
+		KillUnit(7,P12),
+		ModifyUnitEnergy(All,10,P12,64,0),
+		KillUnit(10,P12),
+		ModifyUnitEnergy(All,124,P12,64,0),
+		KillUnit(124,P12),
+		ModifyUnitEnergy(All,125,P12,64,0),
+		KillUnit(125,P12),
+	})
     CAdd(FP,Time,Dt)
     CMov(FP,EPDToPtr(TimePtr),Time)
     CMov(FP,EPDToPtr(LevelPtr),Level)

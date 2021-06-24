@@ -184,7 +184,6 @@ EffUnitPatch(203)
 EffUnitPatch(204)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
-UnitSizePatch(71,1)
 
 -------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))

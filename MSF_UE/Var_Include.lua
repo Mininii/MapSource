@@ -200,6 +200,7 @@ function Objects()
 	BanConsole = 443    
 	VResetSw = CreateVar(1)
 	VResetSw2 = CreateVar(1)
+	VResetSw3 = CreateVar(1)
     
     roka7TempVoid = EPD(0x594000)
 
