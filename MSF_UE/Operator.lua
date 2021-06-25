@@ -20,6 +20,8 @@ function OPTrig()
 
 
         CMov(FP,0x6509B0,CurrentOP)
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,LevelT[2],Add,1),SetCVar(FP,Level[2],Add,1)},{Preserved})
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,LevelT[2],Subtract,1),SetCVar(FP,Level[2],Subtract,1)},{Preserved})
             Trigger {
             	players = {FP},
             	conditions = {
@@ -115,11 +117,6 @@ function OPTrig()
         TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,SpeedVar[2],AtMost,9)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Add,1)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,SpeedVar[2],AtLeast,2)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Subtract,1)},{Preserved})
-        if TestStart == 1 then
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,LevelT[2],Add,1),SetCVar(FP,Level[2],Add,1)},{Preserved})
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,LevelT[2],Subtract,1),SetCVar(FP,Level[2],Subtract,1)},{Preserved})
-            
-        end
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))

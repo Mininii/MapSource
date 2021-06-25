@@ -88,6 +88,7 @@ function Var_init()
     BossStart = CreateCCode()
     StoryT = CreateCCode()
 	DemClear = CreateCCode()
+	StoryT4 = CreateCCode()
 end
 
 function HPoints()

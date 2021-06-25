@@ -9,7 +9,7 @@ def beforeTriggerExec():
 	VResetSw2 = EUDVariable()
 	
 	if EUDIf()((Bring(P8, AtLeast, 1, 68, "Anywhere"))):
-		if EUDIf()((Deaths(P8,AtLeast,2,214))):
+		if EUDIf()((Deaths(P8,Exactly,1,214))):
 			
 			if EUDIf()((Boss>=1,Bring(P8, AtLeast, 1, 68, "Anywhere"))):
 				Trigger(conditions=[Deaths(Boss+2, AtMost, 1940603*256, 0),Memory(0x58F558,AtLeast,1)],

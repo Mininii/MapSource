@@ -24,97 +24,116 @@ function LevelUp()
 	
 	
 	
-	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
-	
-	CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
+	StoryT3 = CreateCCode()
+	BClear = CreateCCode()
 
-	DoActions(FP,{
-	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
-
-	-- 보스소환 테스트
-	if TestStart == 1 then
+	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)},{ModifyUnitShields(All,"Men",Force1,64,0)})
 		
-		f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
-		CDoActions(FP,{CreateUnit(1,"Terran Civilian","Last Boss 93",FP),TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),})
---        
-		
---        CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
---        f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
---        CDoActions(FP,{CreateUnit(1,87,29,FP),TSetMemory(B_5_C,SetTo,Nextptrs),TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55),TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256))})
---        CElseIfX(TTOR({CVar(FP,LevelT[2],Exactly,2),CVar(FP,LevelT[2],Exactly,4),CVar(FP,LevelT[2],Exactly,6),CVar(FP,LevelT[2],Exactly,8),CVar(FP,LevelT[2],Exactly,10)}))
---        DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT)})
---        CIfXEnd()
+		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
+
+			DoActions(FP,{
+			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+			CIfX(FP,CVar(FP,LevelT[2],Exactly,3))
+				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT)})
+			CElseIfX(CVar(FP,LevelT[2],Exactly,6))
+				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT4),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)})
+			CElseIfX(CVar(FP,LevelT[2],Exactly,9))
+				CIf(FP,Memory(0x628438,AtLeast,1))
+					f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
+					CDoActions(FP,{
+						CreateUnit(1,87,29,FP),
+						TSetMemory(B_5_C,SetTo,Nextptrs),
+						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
+						TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
+						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
+				CIfEnd()
+			CElseX()
+				DoActionsX(FP,SetCDeaths(FP,SetTo,1,BClear))
+			CIfXEnd()
+		-- 보스소환 테스트
+		if TestStart == 1 then
+			
+	--        
+			
+	--        CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
+	--        
+
+	--        
+	--        CIfXEnd()
 
 
 
-	end
-	CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
-	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-		CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
-		CAdd(FP,CunitIndex,1)
-	CWhileEnd()
+		end
+		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
+		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
+			CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
+			CAdd(FP,CunitIndex,1)
+		CWhileEnd()
 	
 	--
 	CIfEnd()
 
-	StoryT3 = CreateCCode()
-	BClear = CreateCCode()
+	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
+	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Dem_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
-	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
-	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
-	CAdd(FP,Level,1)
-	f_Mod(FP,LevelT,Level,_Mov(10))
-	CAdd(FP,LevelT,1)
-	f_Div(FP,LevelT2,Level,_Mov(10))
-	CAdd(FP,LevelT2,1)
-	if TestStart == 1 then
+		TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
+		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+		CAdd(FP,Level,1)
+		f_Mod(FP,LevelT,Level,_Mov(10))
+		CAdd(FP,LevelT,1)
+		f_Div(FP,LevelT2,Level,_Mov(10))
+		CAdd(FP,LevelT2,1)
+		if TestStart == 1 then
+			--CMov(FP,LevelT2,4)
+		end
+		TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
 		
-		CMov(FP,LevelT2,4)
-	end
-	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
-	
-	CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
-	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-		CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
-		CAdd(FP,CunitIndex,1)
-	CWhileEnd()
-	
+		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
+		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
+			CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
+			CAdd(FP,CunitIndex,1)
+		CWhileEnd()
+		
 
 
-	TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{Preserved})
-	--
-	TriggerX(FP,{CVar(FP,LevelT[2],AtMost,5)},{SetCVar(FP,ReserveBGM[2],SetTo,6)},{Preserved})
-	TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,6)},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{Preserved})
+		--
+		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,5)},{SetCVar(FP,ReserveBGM[2],SetTo,6)},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,6)},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
 
 
-	function SetLevelUpHP(UnitID,Multiplier)
-		CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID),SetCVar(FP,MultiplierV[2],SetTo,Multiplier)})
-	end
+		function SetLevelUpHP(UnitID,Multiplier)
+			CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID),SetCVar(FP,MultiplierV[2],SetTo,Multiplier)})
+		end
 
 
-	
-	for i = 37, 56 do
-		SetLevelUpHP(i,1)
-	end
-	
-		SetLevelUpHP(104,1)
-	for j, k in pairs(HeroArr) do
-		SetLevelUpHP(k,2)
-	end
-	BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146}
-	
-	for j, k in pairs(BdArr) do
-		SetLevelUpHP(k,2)
-	end
-	
-	
-	Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtMost,49)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,1)},{Preserved})
+		
+		for i = 37, 56 do
+			SetLevelUpHP(i,1)
+		end
+		
+			SetLevelUpHP(104,1)
+		for j, k in pairs(HeroArr) do
+			SetLevelUpHP(k,2)
+		end
+		BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146}
+		
+		for j, k in pairs(BdArr) do
+			SetLevelUpHP(k,2)
+		end
+		
+		
+		Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtMost,49)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,1)},{Preserved})
 
-	
-TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP)},{Preserved})
-	DoActions(FP,{SetSwitch(ResetSwitch,Set)})
-	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
-	ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+		
+		DoActions(FP,{SetSwitch(ResetSwitch,Set)})
+		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
+		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
 	CIfEnd()
 	
 	
@@ -132,12 +151,6 @@ TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4
 		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x04"..5-i.."초 남았습니다.\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP),
 		SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{Preserved})
 	end
-
-	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 
 
 	CTrigger(FP,{CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,AtMost,5000,ReplaceDelayT)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)

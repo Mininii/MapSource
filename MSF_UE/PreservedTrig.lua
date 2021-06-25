@@ -1,17 +1,21 @@
 function MapPreserves()
 	Print13_Preserve()
-    Trigger { -- 동맹상태 고정, 중립마린 제거
-	players = {Force1},
-	actions = {
-		SetAllianceStatus(Force1,Ally);
+
+	TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT4)},{RotatePlayer({		
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");
 		RunAIScript("Turn ON Shared Vision for Player 3");
 		RunAIScript("Turn ON Shared Vision for Player 4");
 		RunAIScript("Turn ON Shared Vision for Player 5");
 		RunAIScript("Turn ON Shared Vision for Player 6");
-		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 7");},MapPlayers,FP),},{Preserved})
+    Trigger { -- 동맹상태 고정, 중립마린 제거
+	players = {Force1},
+
+	actions = {
+		SetAllianceStatus(Force1,Ally);
 		PreserveTrigger();
+
 	    },
     }
     Trigger { -- 동맹상태 고정, 중립마린 제거

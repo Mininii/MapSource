@@ -1400,7 +1400,6 @@ end
                 actions = {
                     SetVoid(94,SetTo,18);
                     SetMemory(0x58F524,SetTo,2);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1411,7 +1410,6 @@ end
                 actions = {
                     SetVoid(94,SetTo,18);
                     SetMemory(0x58F524,SetTo,3);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1422,7 +1420,6 @@ end
                 actions = {
                     SetVoid(94,SetTo,18);
                     SetMemory(0x58F524,SetTo,4);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1436,7 +1433,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,72);
                     SetMemory(0x58F524,SetTo,5);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1448,7 +1445,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,18);
                     SetMemory(0x58F524,SetTo,99);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1460,7 +1457,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,72);
                     SetMemory(0x58F524,SetTo,5);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1473,7 +1470,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,24*5);
                     SetMemory(0x58F524,SetTo,6);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1485,7 +1482,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,24*4);
                     SetMemory(0x58F524,SetTo,6);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1497,7 +1494,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,24*3);
                     SetMemory(0x58F524,SetTo,6);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }
@@ -1509,7 +1506,7 @@ end
                 actions = {
                     SetVoid(94,SetTo,24*2);
                     SetMemory(0x58F524,SetTo,6);
-                    SetMemoryX(0x57EF30,SetTo,1,0xFF);
+                    
                     RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
                     PreserveTrigger();
                 }

@@ -13,12 +13,15 @@ Id_T3C = CreateCCode()
 Id_T4C = CreateCCode()
 Id_T5C = CreateCCode()
 StoryT2 = CreateCCode()
-function StoryPrint(T,Print,Flag,AddTrig)
+function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
+	if StoryCcode == nil then
+		StoryCcode = StoryT
+	end
 	Trigger {
 		players = {FP},
 		conditions = {
 			Label(0);
-			CDeaths(FP,AtLeast,T,StoryT);
+			CDeaths(FP,AtLeast,T,StoryCcode);
 			CDeaths(FP,AtMost,0,Flag);
 
 		},

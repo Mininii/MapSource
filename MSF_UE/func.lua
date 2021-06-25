@@ -150,14 +150,18 @@ function BGMManager()
 	AddBGM(5,"staredit\\wav\\BGM4.ogg",60*1000)
 	AddBGM(6,"staredit\\wav\\GRAVITY_OP.ogg",94*1000)
 	AddBGM(7,"staredit\\wav\\BGM_SP.ogg",180*1000)
+
+	
 	roka7BGM = AddBGM(8,"staredit\\wav\\roka7boss.ogg",197*1000)
 	IdenBGM = AddBGM(9,"staredit\\wav\\JinjinZzara.ogg",220*1000)
+	Akasha = AddBGM(10,"staredit\\wav\\Akasha.ogg",262*1000)
 	
 	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF)})
 		CMov(FP,BGMTypeV,ReserveBGM)
 		CMov(FP,ReserveBGM,0)
 		TriggerX(FP,{Bring(FP,AtLeast,1,87,64)},{SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)},{Preserved})
 		TriggerX(FP,{Bring(FP,AtLeast,1,68,64)},{SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM)},{Preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,15,64)},{SetCVar(FP,BGMTypeV[2],SetTo,Akasha),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)},{Preserved})
 	CIfEnd()
 	Install_BGMSystem(FP,6,BGMTypeV)
 end
