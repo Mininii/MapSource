@@ -42,18 +42,18 @@ def beforeTriggerExec():
 
 	if EUDIf()((F2B>=1,Bring(P8, AtLeast, 1, 87, "Anywhere"))):
 
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 5000000*256, 0),F2BHP == 0,F2BSH == 0],actions=[F2BSH.SetNumber(1),SetMemory(0x58F518,SetTo,1)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 3000000*256, 0),F2BHP == 0,F2BSH == 1],actions=[F2BSH.SetNumber(2),SetMemory(0x58F518,SetTo,2)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 8000000*256, 0),F2BHP == 1,F2BSH == 2],actions=[F2BSH.SetNumber(3),SetMemory(0x58F518,SetTo,3)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 6000000*256, 0),F2BHP == 1,F2BSH == 3],actions=[F2BSH.SetNumber(4),SetMemory(0x58F518,SetTo,4)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 4000000*256, 0),F2BHP == 1,F2BSH == 4],actions=[F2BSH.SetNumber(5),SetMemory(0x58F518,SetTo,5)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 2000000*256, 0),F2BHP == 1,F2BSH == 5],actions=[F2BSH.SetNumber(6),SetMemory(0x58F518,SetTo,6)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 2000000*256, 0),F2BHP == 2,F2BSH == 6],actions=[F2BSH.SetNumber(7),SetMemory(0x58F518,SetTo,7)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 3333*256, 0),F2BHP == 0,F2BSH == 0],actions=[F2BSH.SetNumber(1),SetMemory(0x58F518,SetTo,1)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 2000*256, 0),F2BHP == 0,F2BSH == 1],actions=[F2BSH.SetNumber(2),SetMemory(0x58F518,SetTo,2)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 5000*256, 0),F2BHP == 1,F2BSH == 2],actions=[F2BSH.SetNumber(3),SetMemory(0x58F518,SetTo,3)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 4000*256, 0),F2BHP == 1,F2BSH == 3],actions=[F2BSH.SetNumber(4),SetMemory(0x58F518,SetTo,4)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 2600*256, 0),F2BHP == 1,F2BSH == 4],actions=[F2BSH.SetNumber(5),SetMemory(0x58F518,SetTo,5)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 1300*256, 0),F2BHP == 1,F2BSH == 5],actions=[F2BSH.SetNumber(6),SetMemory(0x58F518,SetTo,6)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 1300*256, 0),F2BHP == 2,F2BSH == 6],actions=[F2BSH.SetNumber(7),SetMemory(0x58F518,SetTo,7)])
 
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 1000000*256, 0),F2BHP == 0],
-				actions=[F2BHP.SetNumber(1),SetDeaths(F2B+2,SetTo,8380000*256,0),SetMemory(0x58F51C,SetTo,1)])
-		Trigger(conditions=[Deaths(F2B+2, AtMost, 1000000*256, 0),F2BHP == 1],
-				actions=[F2BHP.SetNumber(2),SetDeaths(F2B+2,SetTo,3000000*256,0),SetMemory(0x58F51C,SetTo,2)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 650*256, 0),F2BHP == 0],
+				actions=[F2BHP.SetNumber(1),SetDeaths(F2B+2,SetTo,5555*256,0),SetMemory(0x58F51C,SetTo,1)])
+		Trigger(conditions=[Deaths(F2B+2, AtMost, 650*256, 0),F2BHP == 1],
+				actions=[F2BHP.SetNumber(2),SetDeaths(F2B+2,SetTo,2000*256,0),SetMemory(0x58F51C,SetTo,2)])
 
 		Trigger(conditions=[Memory(0x594000+4*41,Exactly,1)],actions=[F2BRU.SetNumber(36*1),SetDeaths(F2B+13,SetTo,640,0),SetDeathsX(F2B+18,SetTo,27,0,0xFFFF)])
 		Trigger(conditions=[Memory(0x594000+4*41,Exactly,2)],actions=[F2BRU.SetNumber(36*4),SetDeaths(F2B+13,SetTo,853,0),SetDeathsX(F2B+18,SetTo,27,0,0xFFFF)])

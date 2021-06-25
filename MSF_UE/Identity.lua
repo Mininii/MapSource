@@ -83,9 +83,9 @@ f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
 	CreateUnit(1,68,29,FP),
 	TSetMemory(B_Id_C,SetTo,Nextptrs),
-	SetMemory(0x58F558,SetTo,7),
+	TSetMemory(0x58F558,SetTo,LevelT2),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
-	TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
+	TSetMemory(_Add(Nextptrs,2),SetTo,_Mul(LevelT2,_Mov(2000*256))),
 	KillUnitAt(All,"Men",29,Force1),
 })
 
@@ -534,7 +534,6 @@ Trigger { -- No comment (4347C6C8)
 	},
 }
 
---[[
 
 
 Trigger { -- No comment (4347C6C8)
@@ -551,20 +550,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Devouring One","CLoc115",P8);
+		CreateUnit(10,54,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Kukulza (55)","CLoc115",P8);
+		CreateUnit(10,55,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hunter Killer","CLoc115",P8);
+		CreateUnit(10,53,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Scourge","CLoc115",P8);
+		CreateUnit(10,47,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
-		SetMemory(0x6509B0,SetTo,6);
 	},
 }
+
 
 Trigger { -- No comment (4347C6C8)
 	players = {FP},
@@ -580,13 +579,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Torrasque","CLoc115",P8);
+		CreateUnit(10,48,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Kukulza (56)","CLoc115",P8);
+		CreateUnit(10,56,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Infested Duran","CLoc115",P8);
+		CreateUnit(10,104,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Devourer","CLoc115",P8);
+		CreateUnit(10,62,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -609,13 +608,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Samir Duran","CLoc115",P8);
+		CreateUnit(10,104,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Mutalisk","CLoc115",P8);
+		CreateUnit(10,43,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Defiler","CLoc115",P8);
+		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Queen","CLoc115",P8);
+		CreateUnit(10,45,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -638,13 +637,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Infested Kerrigan","CLoc115",P8);
+		CreateUnit(10,51,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hydralisk","CLoc115",P8);
+		CreateUnit(10,36,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Infested Terran","CLoc115",P8);
+		CreateUnit(10,50,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Guardian","CLoc115",P8);
+		CreateUnit(10,44,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -667,13 +666,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Zergling","CLoc115",P8);
+		CreateUnit(10,37,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity  Lurker","CLoc115",P8);
+		CreateUnit(10,103,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Ultralisk","CLoc115",P8);
+		CreateUnit(10,39,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Bow Master","CLoc115",P8);
+		CreateUnit(10,53,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -696,13 +695,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Gui Montag","CLoc115",P8);
+		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Jim Raynor","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -725,13 +724,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Edmund Duke","CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Alexei Stukov","CLoc115",P8);
+		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -760,13 +759,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Infested Kerrigan","CLoc115",P8);
+		CreateUnit(10,51,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Kukulza (56)","CLoc115",P8);
+		CreateUnit(10,56,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Infested Terran","CLoc115",P8);
+		CreateUnit(10,50,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Kukulza (55)","CLoc115",P8);
+		CreateUnit(10,55,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -789,13 +788,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Gui Montag","CLoc115",P8);
+		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Jim Raynor","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -818,13 +817,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Edmund Duke","CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Alexei Stukov","CLoc115",P8);
+		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Wraith","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -847,13 +846,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Dragoon","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Zealot","CLoc115",P8);
+		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -876,13 +875,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Ecstatic","CLoc115",P8);
+		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Antiquity","CLoc115",P8);
+		CreateUnit(10,15,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -905,13 +904,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Galere","CLoc115",P8);
+		CreateUnit(10,79,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Slaughter","CLoc115",P8);
+		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -934,13 +933,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Apocalypse","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Draint, Leader of Mercenaries","CLoc115",P8);
+		CreateUnit(10,76,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -970,13 +969,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Zealot","CLoc115",P8);
+		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Scout","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Dragoon","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -999,13 +998,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Antiquity","CLoc115",P8);
+		CreateUnit(10,15,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Ecstatic","CLoc115",P8);
+		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1028,13 +1027,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Slaughter","CLoc115",P8);
+		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Apocalypse","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1057,13 +1056,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Galere","CLoc115",P8);
+		CreateUnit(10,79,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Draint, Leader of Mercenaries","CLoc115",P8);
+		CreateUnit(10,76,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1086,13 +1085,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Rivet","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Ariel, Advisor of Draint","CLoc115",P8);
+		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Rivet","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Ariel, Advisor of Draint","CLoc115",P8);
+		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1115,13 +1114,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Commander Belvedere","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Bow Master","CLoc115",P8);
+		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Commander Belvedere","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Bow Master","CLoc115",P8);
+		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1144,13 +1143,13 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Conquest Sword","CLoc115",P8);
+		CreateUnit(10,86,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(5,"Identity Commander Rupture","CLoc115",P8);
+		CreateUnit(5,75,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Conquest Sword","CLoc115",P8);
+		CreateUnit(10,86,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(5,"Identity Commander Rupture","CLoc115",P8);
+		CreateUnit(5,75,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
@@ -1168,6 +1167,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,6);
+		Void(0,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1177,18 +1177,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Antiquity","CLoc115",P8);
+		CreateUnit(10,15,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Question","CLoc115",P8);
+		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Ecstatic","CLoc115",P8);
+		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(0,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1197,6 +1199,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,5);
+		Void(1,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1206,18 +1209,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Slaughter","CLoc115",P8);
+		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Manhunter","CLoc115",P8);
+		CreateUnit(10,88,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Hero Apocalypse","CLoc115",P8);
+		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(1,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1226,6 +1231,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,4);
+		Void(2,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1235,18 +1241,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Galere","CLoc115",P8);
+		CreateUnit(10,79,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Isomorphic Fake","CLoc115",P8);
+		CreateUnit(10,80,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Draint, Leader of Mercenaries","CLoc115",P8);
+		CreateUnit(10,76,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(2,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1255,6 +1263,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,3);
+		Void(3,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1264,18 +1273,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Rivet","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Ariel, Advisor of Draint","CLoc115",P8);
+		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Rivet","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Bow Master","CLoc115",P8);
+		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(3,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1284,6 +1295,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,2);
+		Void(4,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1293,18 +1305,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Commander Belvedere","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Siege Tank","CLoc115",FP);
+		CreateUnit(10,69,"CLoc115",FP);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Commander Belvedere","CLoc115",P8);
+		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Siege Tank","CLoc115",FP);
+		CreateUnit(10,69,"CLoc115",FP);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(4,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1313,6 +1327,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,1);
+		Void(5,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1322,18 +1337,20 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Conquest Sword","CLoc115",P8);
+		CreateUnit(10,81,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Commander Rupture","CLoc115",P8);
+		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Conquest Sword","CLoc115",P8);
+		CreateUnit(10,86,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Commander Rupture","CLoc115",P8);
+		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
+		SetVoid(5,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
@@ -1342,6 +1359,7 @@ Trigger { -- No comment (4347C6C8)
 	conditions = {
 		Void(41,Exactly, 4);
 		Memory(0x58F558,Exactly,0);
+		Void(6,Exactly, 0);
 	},
 	actions = {
 		SetMemory(0x58DC60+0x14*31,SetTo,0);
@@ -1351,24 +1369,23 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,"Identity Hero Carnage","CLoc115",P8);
+		CreateUnit(10,60,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,"Identity Division","CLoc115",P8);
+		CreateUnit(10,29,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,"Identity Hero Acquiescence","CLoc115",P8);
+		CreateUnit(10,23,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,"Identity Destroy","CLoc115",P8);
+		CreateUnit(10,81,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
 		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
-		ModifyUnitHangarCount(4,All,72,P8,"Anywhere");
-		ModifyUnitHangarCount(8,All,82,P8,"Anywhere");
+		SetVoid(6,SetTo,1);
+		PreserveTrigger();
 	},
 }
 
-]]
 CElseIfX({CVar(FP,VResetSw2[2],Exactly,0),Bring(FP,AtMost,0,"Tarim, Lord Of Regal Castle",64)},SetCVar(FP,VResetSw2[2],SetTo,1))
 DoActionsX(FP,{KillUnit(60,FP),KillUnit(60,P9),SetCDeaths(FP,Add,1,IdenClear)})
 DoActions2X(FP,{SetMemory(0x58F568,SetTo,0);
@@ -1394,7 +1411,14 @@ SetCDeaths(FP,SetTo,0,Id_T5C),
 SetCDeaths(FP,SetTo,0,StoryT2),
 SetCDeaths(FP,SetTo,0,StoryT),
 SetMemory(0x6CA1F4, SetTo, 1707),
-SetMemoryX(0x6C9DF4, SetTo, 67*65536,0xFFFF0000)
+SetMemoryX(0x6C9DF4, SetTo, 67*65536,0xFFFF0000),
+SetVoid(0,SetTo,0);
+SetVoid(1,SetTo,0);
+SetVoid(2,SetTo,0);
+SetVoid(3,SetTo,0);
+SetVoid(4,SetTo,0);
+SetVoid(5,SetTo,0);
+SetVoid(6,SetTo,0);
 })
 CIfXEnd()
 CIfEnd()

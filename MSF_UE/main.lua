@@ -53,7 +53,7 @@ StartCtrig()
 		OPText() -- Opening Text
 		GameOver()
 		Overflow_HP_System(FP,B1_H,B1_K)
-		IBGM_EPDX(FP,6,Dt)
+		IBGM_EPDX(FP,6,Dt,{Dt_NT2,Dt_NT})
 		UnitReadX(FP,AllPlayers,229,64,count)
 		ObDisplay()
 		LevelUp()

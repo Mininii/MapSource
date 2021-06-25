@@ -155,19 +155,30 @@ function onInit_EUD()
 	WeaponTypePatch(21,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(100,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(85,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(124,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
+	WeaponTypePatch(68,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(70,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(124,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(89,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
 	SetUnitClassType(75,1)
+	SetUnitClassType(87,1)
+	SetUnitClassType(68,1)
+	SetUnitClassType(84,1)
+	SetUnitClassType(81,1)
+	SetUnitClassType(23,1)
 
 	SetUnitClassType(77)
 	SetUnitClassType(78)
 	SetUnitClassType(28)
 	SetUnitClassType(17)
 	SetUnitClassType(21)
+	SetUnitClassType(27)
 	SetUnitClassType(86)
 	SetUnitClassType(88)
+	SetUnitClassType(80)
 	SetUnitClassType(25)
 	SetUnitClassType(76)
 	SetUnitClassType(79)
@@ -184,6 +195,7 @@ EffUnitPatch(203)
 EffUnitPatch(204)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
+UnitSizePatch(60,1)
 
 -------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
@@ -329,7 +341,10 @@ UnitSizePatch(84,1)
 	for i = 220, 227 do
 		DefTypePatch(i,9)
 	end
+		DefTypePatch(15,9)
+		DefTypePatch(68,9)
 		DefTypePatch(7,9)
+		DefTypePatch(87,9)
 		DefTypePatch(150,9)
 
 

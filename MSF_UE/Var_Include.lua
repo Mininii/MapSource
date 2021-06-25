@@ -89,11 +89,13 @@ function Var_init()
     StoryT = CreateCCode()
 	DemClear = CreateCCode()
 	StoryT4 = CreateCCode()
+	Dt_NT = CreateVar()
+	Dt_NT2 = CreateVar()
 end
 
 function HPoints()
 	HeroPointArr = {}
-	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98}
+	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81}
 	ZergGndUArr = {51,53,54,48,104}
 	CreateHeroPointArr(77,35000,"\x07¡º \x1DF\x04enix \x1DZ \x07¡»",1)
 	CreateHeroPointArr(78,35000,"\x07¡º \x1DF\x04enix \x1DD \x07¡»",1)
@@ -101,11 +103,15 @@ function HPoints()
 	CreateHeroPointArr(17,35000,"\x07¡º \x1DA\x04lan \x1DS\x04chezar\x07 ¡»",1)
 	CreateHeroPointArr(19,65000,"\x07¡º \x1FJ\x04im \x1FR\x04aynor \x1FV \x07¡»",1)
 	CreateHeroPointArr(21,30000,"\x07¡º \x1DT\x04om \x1DK\x04azansky \x07¡»",1)
+	CreateHeroPointArr(27,70000,"\x07¡º \x1DA\x04rcturus \x1DM\x04engsk \x07¡»",1)
 	CreateHeroPointArr(86,70000,"\x07¡º \x1DD\x04animoth \x07¡»",1)
 	CreateHeroPointArr(75,45000,"\x07¡º \x1FZ\x04eratul \x07¡»",1)
 	CreateHeroPointArr(88,55000,"\x07¡º \x1DA\x04rtanis \x07¡»",1)
+	CreateHeroPointArr(80,88000,"\x07¡º \x1DM\x04ojo \x07¡»",1)
 	CreateHeroPointArr(25,50000,"\x07¡º \x1DE\x04dmund \x1DD\x04uke \x07¡»",1)
 	CreateHeroPointArr(29,120000,"\x07¡º \x1FN\x04orad \x1FII \x07¡»",1)
+	CreateHeroPointArr(81,90000,"\x07¡º \x1FW\x04arbringer \x07¡»",1)
+	CreateHeroPointArr(23,150000,"\x07¡º \x1FE\x04dmund \x1FD\x04uke \x07¡»",1)
 	CreateHeroPointArr(76,60000,"\x07¡º \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07¡»",1)
 	CreateHeroPointArr(79,75000,"\x07¡º \x1DT\x04assadar \x07¡»",1)
 	CreateHeroPointArr(98,99000,"\x07¡º \x1FC\x04orsair \x07¡»",1)

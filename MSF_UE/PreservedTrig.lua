@@ -15,7 +15,6 @@ function MapPreserves()
 	actions = {
 		SetAllianceStatus(Force1,Ally);
 		PreserveTrigger();
-
 	    },
     }
     Trigger { -- 동맹상태 고정, 중립마린 제거

@@ -44,7 +44,7 @@ function LevelUp()
 						CreateUnit(1,87,29,FP),
 						TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
-						TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
+						TSetMemory(_Add(Nextptrs,2),SetTo,5000*256),
 						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
 				CIfEnd()
 			CElseX()

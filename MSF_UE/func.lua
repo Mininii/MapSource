@@ -255,14 +255,31 @@ function Print13_Preserve()
 end
 
 
-function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives)
+function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
+	
 	f_Read(Player,0x51CE8C,Dx)
 	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(Player,DtP,Dy,Du)
 	CMov(Player,Dv,DtP) 
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
+	
+
+	if Option_NT ~= nil then
+		if type(Option_NT) == "table" then
+		CIf(FP,{NTCond2()})
+			CMov(FP,Option_NT[1],MSQC_Recives)
+		CIfEnd()
+		CIf(FP,{NTCond()})
+			CAdd(FP,Option_NT[2],MSQC_Recives,Option_NT[1])
+		CIfEnd()
+		else
+			OPtion_NT_InputData_Error()
+		end
+	end
+
+
 	for i = 0, MaxPlayer do
 		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)},1) -- 브금타이머
 	end
@@ -403,12 +420,15 @@ function LvT(Type,Value)
 	return CVar(FP,LevelT[2],Type,Value)
 end
 function NormalTurboSet(Player,DeathUnitID)
-	NTUID = DeathUnitID
+	local NTUID = DeathUnitID
 	DoActions(Player,SetDeaths(Player,Add,1,DeathUnitID))
 	Trigger2(Player,{Deaths(Player,AtLeast,2,DeathUnitID)},{SetDeaths(Player,SetTo,0,DeathUnitID)},{Preserved})
 	
 	function NTCond()
 		return Deaths(Player,Exactly,1,NTUID)
+	end
+	function NTCond2()
+		return Deaths(Player,Exactly,0,NTUID)
 	end
 end
 function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 자주 바뀌는 로케이션, TempUnit = 안쓰는 유닛. Unused 가능 아마?
