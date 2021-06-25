@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 2.9"
+VerText = "\x04Ver. 3.0"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -143,7 +143,7 @@ CreateCCodeSet({ -- Ccode 데스값 정의
 "XBackup","SkillT","Win","RecallT1","RecallT2","ArbT","GeneT","CoreAccept","CoreInbDis","BossBGM","BegginerT","EZCon","ShUsed","ShCool","Boss1Start","BunkerEnable","CoreCon1","CoreCon2",
 "HDStart","LimitX","LimitC","CanWT","Print13","B3_Av","B4_Av","B5_Av","DarkReGen","EVMode","BYDBossStart","BYDDiff","C1","C2","C3","C4","PaneltyP","BonusP","ColorT","ColorC","QueenAv",
  "CJump_0x700","GModeTP","DifID","LastCan","ScorePrint","BYDBossP1","BYDAttackUpgrade","StoryT","ButtonSound","BYDBossStart2","MarineStackSystem","EffT","B7_Ph","WaveT","WaveC"
-,"Theorist"})
+,"Theorist","PatternProvider"})
 CreateVariableSet({ -- 변수 정의
 "B6_C","RedNumber","ShP","RedNumberT","Panelty","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
 "B1_K","B2_K","B3_K","B3_K2","B4_K","B5_K","B2_X","B2_Y","B2_H","B2_P","B2_W","B2_HS","B2_SH","B4_P","B5_P","B5_A","B5_R","B5_X","B5_Y","B5_T","Dif","UIndex","UPtr","UEPD","UHP",
@@ -1881,6 +1881,8 @@ MarCreate = CreateCCode()
 			--SetInvincibility(Disable,12,P6,"Anywhere")
 		},1)
 		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7)},{SetCDeaths(FP,Add,1,MarineStackSystem)},{Preserved})
+		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtMost,0)},{SetCDeaths(FP,SetTo,1,PatternProvider)},{Preserved})
+		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtLeast,1)},{SetCDeaths(FP,SetTo,0,PatternProvider)},{Preserved})
 		NIfX(P6,{CVar(FP,B6_T[2],AtMost,0)})
 			CSub(P6,B6_T2,1)
 			DoActionsX(P6,SetCDeaths(P6,SetTo,1,B5_Av))
@@ -3861,7 +3863,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 	RemoveUnit(179,P12)})
 
 -- 마린겹치기트리거
-CIf(FP,CDeaths(FP,AtLeast,1,MarineStackSystem))
+CIf(FP,{CDeaths(FP,AtLeast,1,MarineStackSystem),CDeaths(FP,AtLeast,1,PatternProvider)})
 for i=0, 4 do
 	Player_0x4DTemp = Player_0x4D[i+1]
 	CIf(P6,{PlayerCheck(i,1)})
@@ -7089,8 +7091,8 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				--SetCDeaths(FP,SetTo,1,CCode(0x1002,40));
-				--SetCVar(FP,XY[2],SetTo,550*10);
+				SetCDeaths(FP,SetTo,1,CCode(0x1002,40));
+				SetCVar(FP,XY[2],SetTo,550*10);
 
 			},
 		}
@@ -7102,9 +7104,9 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,HDStart);
-				KillUnit("Any unit",Force2);
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
+				--SetCDeaths(P6,SetTo,1,HDStart);
+				--KillUnit("Any unit",Force2);
+				--SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
 			},
 		}
 		Trigger {
@@ -7114,7 +7116,8 @@ Trigger { -- 예약메딕
 				Command(P1,AtLeast,30,32);
 				
 			},
-			actions = {SetCDeaths(FP,SetTo,5000*9,StoryT);
+			actions = {
+				SetCDeaths(FP,SetTo,5000*9,StoryT);
 				SetCVar(FP,B7_K[2],SetTo,80);
 				SetCJump(0x648,1);
 			},
@@ -14373,7 +14376,6 @@ CIf(P6,CVar(FP,B7_H[2],AtLeast,1))
 	CIfEnd()
 CIfEnd()
 
-
 	TriggerX(P6,{
 		CVar(FP,B7_K[2],AtLeast,40)
 		},{   
@@ -14381,6 +14383,7 @@ CIfEnd()
 		CreateUnit(5,84,64,P6),
 		SetCDeaths(P6,SetTo,0,StoryT),
 		SetCDeaths(P6,SetTo,1,B7_Ph),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
 		SetInvincibility(Enable,82,FP,64)
 		})
 	TriggerX(P6,{
@@ -14390,6 +14393,7 @@ CIfEnd()
 		CreateUnit(5,84,64,P6),
 		SetCDeaths(P6,SetTo,0,StoryT),
 		SetCDeaths(P6,SetTo,2,B7_Ph),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
 		SetInvincibility(Enable,82,FP,64)
 		})
 
@@ -14400,16 +14404,29 @@ CIfEnd()
 		CreateUnit(5,84,64,P6),
 		SetCDeaths(P6,SetTo,0,StoryT),
 		SetCDeaths(P6,SetTo,3,B7_Ph),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
 		SetInvincibility(Enable,82,FP,64),
 		SetMemory(0x58F550,SetTo,0)
 		})
 	TriggerX(P6,{
-		CVar(FP,B7_K[2],AtLeast,200)
+		CVar(FP,B7_K[2],AtLeast,200),CDeaths(FP,AtMost,0,Theorist)
 		},{
 		RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),
 		CreateUnit(5,84,64,P6),
 		SetCDeaths(P6,SetTo,0,StoryT),
 		SetCDeaths(P6,SetTo,4,B7_Ph),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
+		SetInvincibility(Enable,82,FP,64),
+		})
+	TriggerX(P6,{
+		CVar(FP,B7_K[2],AtLeast,200),CDeaths(FP,Exactly,1,Theorist)
+		},{
+		RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),
+		CreateUnit(5,84,64,P6),
+		SetCDeaths(P6,SetTo,0,StoryT),
+		SetCDeaths(P6,SetTo,4,B7_Ph),
+		SetCVar(FP,B7_K[2],SetTo,250),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
 		SetInvincibility(Enable,82,FP,64),
 		})
 	TriggerX(P6,{
@@ -14419,6 +14436,7 @@ CIfEnd()
 		CreateUnit(5,84,64,P6),
 		SetCDeaths(P6,SetTo,0,StoryT),
 		SetCDeaths(P6,SetTo,5,B7_Ph),
+		SetCDeaths(P6,SetTo,0,PatternProvider),
 		SetInvincibility(Enable,82,FP,64),
 		SetCJump(0x700,0),
 		KillUnit(128,FP)
@@ -14453,7 +14471,7 @@ CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 		CWhile(FP,Bring(FP,AtLeast,1,49,64))
 		DoActions(FP,{Simple_SetLoc(23,0,0,20,20),MoveLocation(24,49,FP,64),KillUnitAt(All,"Men",24,Force1),GiveUnits(1,49,FP,64,P8),KillUnit(49,P8)})
 		CWhileEnd()
-		DoActionsX(FP,{BYDBossMarHPPatch,SetCDeaths(FP,SetTo,1,BYDBossStart2),SetInvincibility(Disable,82,FP,64)})
+		DoActionsX(FP,{BYDBossMarHPPatch,SetCDeaths(FP,SetTo,1,BYDBossStart2),SetInvincibility(Disable,82,FP,64),SetCDeaths(P6,SetTo,1,PatternProvider)})
 	CIfEnd()
 
 	TriggerX(FP,{CDeaths(FP,AtLeast,13*1000,BYDBossPT1)},{
@@ -14468,7 +14486,7 @@ CIf(FP,CDeaths(FP,Exactly,1,B7_Ph),SetCJump(0x648,0)) -- 1페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04나는.. 이 세상의 더러운 기억들을 보고 말았어.\n\n\n\n",3000*1)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04그 뒤로 남겨진건.. 오직 \x10공허\x04뿐이었어.\n\n\n\n",3000*2)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04그러니까 이제 더이상 시간을 낭비하지 마.\n\n\n\n",3000*3)
-StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04그만 포기하고 \x08사라져.\x04\n\n\n\n",3000*4)
+StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04그만 포기하고 \x08사라져.\x04\n\n\n\n",3000*4,{SetCDeaths(P6,SetTo,1,PatternProvider)})
 	CIf(FP,CDeaths(FP,AtLeast,3000*4,StoryT))
 		CMov(FP,B7_W,8)
 		CWhile(FP,{CVar(FP,B7_W[2],AtLeast,1),Bring(FP,AtMost,15,128,64)},SetCVar(FP,B7_W[2],Subtract,1))
@@ -14485,7 +14503,7 @@ CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,2,B7_Ph),SetCJump(0x648,1)) -- 2페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04너희들도 잘 알꺼야.\n\n\n\n",3000*1)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이 뒤에 남겨진 결말은.. 결국 한심한 \x08죽음 \x04뿐이라는걸.\n\n\n\n",3000*2)
-StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04희망따위.. 결국 \x10허황된 꿈\x04이라는걸!\n\n\n\n",3000*3)
+StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04희망따위.. 결국 \x10허황된 꿈\x04이라는걸!\n\n\n\n",3000*3,{SetCDeaths(P6,SetTo,1,PatternProvider)})
 	CIf(FP,CDeaths(FP,AtLeast,3000*3,StoryT))
 	DoActionsX(FP,{SetMemoryX(0x66A1E4, SetTo, 65536*0,0xFF0000),SetInvincibility(Disable,82,FP,64),SetCJump(0x648,1),SetMemory(0x58F550,SetTo,1)},1)
 	CIfEnd()
@@ -14494,7 +14512,7 @@ CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,3,B7_Ph)) -- 3페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04질투, 배신, 죽음, 괴로움, 부패...\n\n\n\n",3000*1)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04결국 나에게 주어진건 이 \x10고통의 기억들\x04 뿐.\n\n\n\n",3000*2)
-StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이런 비극은.. \x08더이상 되풀이하고 싶지 않아!\n\n\n\n",3000*3)
+StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이런 비극은.. \x08더이상 되풀이하고 싶지 않아!\n\n\n\n",3000*3,{SetCDeaths(P6,SetTo,1,PatternProvider)})
 	CIf(FP,CDeaths(FP,AtLeast,3000*3,StoryT),{SetCJump(0x648,0),SetMemoryX(0x66A1E4, SetTo, 65536*16,0xFF0000)})
 		B7_T = CreateCCode()
 		DoActionsX(FP,SetCDeaths(FP,Add,1,B7_T))
@@ -14564,7 +14582,7 @@ B7_T2 = CreateCCode()
 CIf(FP,CDeaths(FP,Exactly,4,B7_Ph),{SetCJump(0x648,1),SetMemoryX(0x66A1E4, SetTo, 65536*0,0xFF0000),KillUnit(217,FP)}) -- 4페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이렇게까지 날 고통스럽게 할 생각이야..?\n\n\n\n",3000*1)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04오히려 포기하고싶은건 나인데..!\n\n\n\n",3000*2)
-StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들이고 다시 시작하려고 했는데!!\n\n\n\n",3000*3)
+StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들이고 다시 시작하려고 했는데!!\n\n\n\n",3000*3,{SetCDeaths(P6,SetTo,1,PatternProvider)})
 	
 	CIf(FP,CDeaths(FP,AtLeast,3000*3,StoryT),SetCDeaths(FP,Add,1,B7_T2))
 		CIf(FP,CDeaths(FP,Exactly,1,B7_T2))
@@ -14599,8 +14617,8 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들
 						CAdd(FP,B7_X,2048)
 						CAdd(FP,B7_Y,2048)
 						Simple_SetLocX(FP,23,B7_X,B7_Y,B7_X,B7_Y,{KillUnit(49,P6)})
-						TriggerX(FP,{CDeaths(FP,AtMost,0,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-20,-20,20,20),CreateUnit(1,84,24,P6),SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
-						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-20,-20,20,20),CreateUnit(1,84,24,P6),KillUnitAt(All,"Factories",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
+						TriggerX(FP,{CDeaths(FP,AtMost,0,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
+						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),KillUnitAt(All,"Factories",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
 					CWhileEnd()
 					CAdd(FP,B7_R,24)
 				CWhileEnd()
@@ -14710,8 +14728,8 @@ CIfEnd()
 CJump(FP,0x648)
 CWhile(FP,Bring(FP,AtLeast,1,128,64)) -- 죽음의 수정
 DoActions(FP,{Simple_SetLoc(23,0,0,20,20),MoveLocation(24,128,FP,64),GiveUnits(1,128,FP,64,P8)})
-Trigger2(FP,{CDeaths(FP,Exactly,0,Theorist),Bring(Force1,AtLeast,1,"Men",24)},{SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
-Trigger2(FP,{CDeaths(FP,Exactly,1,Theorist),Bring(Force1,AtLeast,1,"Men",24)},{KillUnitAt(All,"Factories",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,0,Theorist)},{SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,1,Theorist)},{KillUnitAt(All,"Men",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
 CWhileEnd()
 CJumpEnd(FP,0x648)
 DoActions(FP,GiveUnits(All,128,P8,64,FP))
@@ -14737,6 +14755,7 @@ Trigger {
 		},HumanPlayers,FP);
 		SetCVar(P6,ClearRate[2],Add,70); -- ClearRate + 7.0%
 		SetCDeaths(FP,SetTo,6,B7_Ph);
+		SetCDeaths(FP,SetTo,0,BYDBossStart2);
 		SetMemoryX(0x66A1F8, SetTo, 9*256,0xFF00);
 
 
@@ -17152,6 +17171,7 @@ Trigger { -- 조합 루미너스 마린
 	conditions = {
 		Label(0);
 		BYD;
+		CDeaths(P6,Exactly,0,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(j,AtLeast,10000,432);
 		Bring(j,AtLeast,1,20,58+i);
@@ -17164,6 +17184,29 @@ Trigger { -- 조합 루미너스 마린
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. \x04- \x1F25000 O r e \x07』",4);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
+		PreserveTrigger();
+	},
+}
+Trigger { -- 조합 루미너스 마린
+	players = {j},
+	conditions = {
+		Label(0);
+		BYD;
+		CDeaths(P6,Exactly,1,BYDBossStart2);
+		CDeaths(FP,AtLeast,1,Theorist);
+		Deaths(j,AtLeast,10000,432);
+		Bring(j,AtLeast,1,20,58+i);
+		Accumulate(j,AtLeast,25000,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,20,j,58+i,0);
+		SetResources(j,Subtract,25000,ore);
+		RemoveUnitAt(1,20,58+i,j);
+		SetDeaths(j,Add,1,125);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. \x04- \x1F25000 O r e \x07』",4);
+		BYDBossMarHPRecover;
+		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
+		BYDBossMarHPPatch;
 		PreserveTrigger();
 	},
 }
@@ -17385,6 +17428,29 @@ Trigger { -- 소환 루미너스 마린
 	conditions = {
 		Label(0);
 		BYD;
+		CDeaths(P6,Exactly,1,BYDBossStart2);
+		CDeaths(FP,AtLeast,1,Theorist);
+		Deaths(CurrentPlayer,AtLeast,12,125);
+		Command(j,AtLeast,1,12);
+		Accumulate(j,AtLeast,90000,Ore);
+	},
+	actions = {
+		RemoveUnitAt(1,12,"Anywhere",j);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x1B3기 \x19소환\x04하였습니다. \x04- \x1F135,000 O r e \x07』",4);
+		SetCDeaths(FP,Add,1,MarCreate);
+		BYDBossMarHPRecover;
+		CreateUnitWithProperties(3,MarID[j+1],204+j,j,{energy = 100});
+		BYDBossMarHPPatch;
+		SetResources(j,Subtract,90000,ore);
+		PreserveTrigger();
+	},
+}  
+Trigger { -- 소환 루미너스 마린
+	players = {j},
+	conditions = {
+		Label(0);
+		BYD;
+		CDeaths(P6,Exactly,0,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
 		Command(j,AtLeast,1,12);
