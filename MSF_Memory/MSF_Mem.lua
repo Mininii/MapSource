@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.0"
+VerText = "\x04Ver. 3.1"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -378,16 +378,20 @@ SetCallEnd()
 function EnergyKill(Amount)
 	CallTrigger(FP,EnergyKill_CallIndex,{SetCVar(FP,Amount_V[2],SetTo,Amount)})
 end
-
+UHP = CreateVar()
 PerDamage_CallIndex = SetCallForward()
 SetCall(FP)
-	f_Mul(FP,AMount_256,Amount_V,_Mov(256))
+	CMov(FP,AMount_256,Amount_V)
 	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF))
+	f_Read(FP,_Add(UnitId,221179),UHP)
+	CIf(FP,CVar(FP,UHP[2],AtLeast,0x80000000))
+	CNeg(FP,UHP)
+	CIfEnd()
 	CSub(FP,DmgRemain,AMount_256,_ReadF(_Add(BackupCp,24)))
 	CIfX(FP,{TDeaths(_Add(BackupCp,24),AtLeast,AMount_256,0)})
 		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),Subtract,AMount_256,0)})
-		CElseIfX({TDeaths(_Add(BackupCp,24),AtMost,AMount_256,0),TDeaths(_Add(BackupCp,2),AtLeast,_Mul(_Div(DmgRemain,_Mov(256)),_Div(_ReadF(_Add(UnitId,221179)),_Mov(1000))),0)})
-		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),SetTo,0,0),TSetDeaths(_Add(BackupCp,2),Subtract,_Mul(_Div(DmgRemain,_Mov(256)),_Div(_ReadF(_Add(UnitId,221179)),_Mov(1000))),0)})
+		CElseIfX({TDeaths(_Add(BackupCp,24),AtMost,AMount_256,0),TDeaths(_Add(BackupCp,2),AtLeast,_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),0)})
+		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),SetTo,0,0),TSetDeaths(_Add(BackupCp,2),Subtract,_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),0)})
 		CElseX()
 		CDoActions(FP,{TSetDeathsX(_Add(BackupCp,19),SetTo,0,0,0xFF00)
 		})
@@ -395,7 +399,7 @@ SetCall(FP)
 SetCallEnd()
 
 function PerDamage(Amount)
-	CallTrigger(FP,PerDamage_CallIndex,{SetCVar(FP,Amount_V[2],SetTo,Amount)})
+	CallTrigger(FP,PerDamage_CallIndex,{SetCVar(FP,Amount_V[2],SetTo,Amount*256)})
 end
 
 GunPosSave_CallIndex = SetCallForward()
@@ -2745,13 +2749,13 @@ MarCreate = CreateCCode()
 
 --최종보스 탱크보스 스킬
 
-
+ValLimit = CreateCCode()
 
 	TriggerX(FP,{NBYD},{SetCVar(FP,B6_DPase[2],Subtract,1)},{Preserved})
 	TriggerX(FP,{BYD,CVar(FP,B6_DPase2[2],AtLeast,1)},{SetCVar(FP,B6_DPase[2],Subtract,10),SetCVar(FP,B6_DPase2[2],SetTo,0)},{Preserved})
 	CIf(P6,{CVar(P6,B6_T[2],AtMost,0),CVar(P6,B6_DPase[2],AtMost,0),CVar(P6,B6_K[2],AtLeast,37),CVar(P6,B6_K[2],AtMost,50)},{SetCVar(FP,B6_DPase[2],Add,10)})
 	
-	
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,ValLimit)})
 	CMov(FP,0x6509B0,19025+19)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 
@@ -2802,7 +2806,7 @@ MarCreate = CreateCCode()
 	CMov(P6,CPosX,_Mov(CPos,0xFFFF))
 	CMov(P6,CPosY,_Div(_Mov(CPos,0xFFFF0000),_Mov(65536)))
 	Simple_SetLocX(P6,23,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,47,24,P6),SetSwitch("Switch 100",Random)})
-	Trigger2(FP,{Switch("Switch 100",Set)},{CreateUnit(1,22,24,P8)},{Preserved})
+	TriggerX(FP,{Switch("Switch 100",Set),CDeaths(FP,AtMost,150,ValLimit)},{CreateUnit(1,22,24,P8),SetCDeaths(FP,Add,1,ValLimit)},{Preserved})
 	Call_LoadCP()
 	DoActions(P6,{MoveCp(Add,15*4)})
 
@@ -14078,7 +14082,7 @@ Trigger { -- No comment (147F3623)
 end
 
 
-CIf(P6,CDeaths(P6,AtLeast,1,LimitX)) -- 치트모드
+CIf(P6,{CDeaths(P6,AtLeast,1,LimitX),CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드
 
 
 Trigger { -- 컴퓨터 플레이어 색상 설정
@@ -14755,7 +14759,6 @@ Trigger {
 		},HumanPlayers,FP);
 		SetCVar(P6,ClearRate[2],Add,70); -- ClearRate + 7.0%
 		SetCDeaths(FP,SetTo,6,B7_Ph);
-		SetCDeaths(FP,SetTo,0,BYDBossStart2);
 		SetMemoryX(0x66A1F8, SetTo, 9*256,0xFF00);
 
 
