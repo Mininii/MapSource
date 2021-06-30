@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.1"
+VerText = "\x04Ver. 3.2"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -290,7 +290,7 @@ BClearT1 = CreateCText(FP,"\n\n\n\x13\x04―――――――――――――――――――�
 BClearT2 = CreateCText(FP,"\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 \x11Ｔ\x04ｅｎｅｂｒｉｓ\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F３００，０００ Ｐｔｓ\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 BClearT4 = CreateCText(FP,"\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 \x11Ａ\x04ｎｏｍａｌｙ\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F３００，０００ Ｐｔｓ\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 BClearT3 = CreateCText(FP,"\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 \x11Ｄ\x04ｅｍｉｓｅ\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F３００，０００ Ｐｔｓ\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
-
+HDB_StT = CreateCText(FP,"\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n\x13\x04\x07잠시 후, \x08ＦＩＮＡＬ　ＢＯＳＳ \x08【 \x11Ｆ\x04ａｔｅ \x08】 \x04와의 전투가 시작됩니다.\n\x13\x04\x08보스 전투\x04를 준비해주세요!\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――")
 
 CreateHeroPointArr(77,55000,"\x1D【 F\x04enix \x1DZ 】","검사")
 CreateHeroPointArr(78,55000,"\x1D【 F\x04enix \x1DD 】","용기병")
@@ -556,7 +556,9 @@ CIf(FP,Memory(0x628438,AtLeast,1))
 		TSetMemoryX(_Add(Nextptrs2,0x58/4),SetTo,_ReadF(_Add(Nextptrs2,(0x28/4))),0xFFFFFFFF),
 		TSetMemoryX(_Add(Nextptrs2,0x20/4),SetTo,_Mul(Angle_V,256),0xFF00),
 		TSetMemoryX(_Add(Nextptrs2,0x4C/4),SetTo,135*256,0xFF00),
-		TSetMemoryX(_Add(Nextptrs2,40),SetTo,0,0xFF000000)
+		TSetMemoryX(_Add(Nextptrs2,40),SetTo,0,0xFF000000),
+		TSetMemoryX(_Add(Nextptrs2,55),SetTo,0x200104,0x300104),
+		TSetMemory(_Add(Nextptrs2,57),SetTo,0),
 	})
 CIfEnd()
 SetCallEnd()
@@ -565,9 +567,8 @@ SetCallEnd()
 
 Call_RangeRandom = SetCallForward()
 SetCall(FP)
-CMov(FP,RangeValue,16*256)
 CMov(FP,ColorRandom,0)
-for i = 0, 6 do
+for i = 0, 7 do
 	DoActions(FP,SetSwitch("Switch 100",Random))
 	TriggerX(FP,{Switch("Switch 100",Set)},{SetCVar(FP,RangeValue[2],Add,((2^i)*256))},{Preserved})
 end
@@ -1871,7 +1872,8 @@ MarCreate = CreateCCode()
 		CElseX()
 		DoActionsX(FP,{
 			SetCVar(FP,B2_P[2],SetTo,1),
-			SetCVar(FP,B6_T[2],SetTo,400)
+			SetCVar(FP,B6_T[2],SetTo,400),
+			CreateUnit(1,150,223,FP)
 		},1)
 		
 		CWhile(P6,{CVar(FP,B6_A2[2],AtMost,359)})
@@ -2015,6 +2017,7 @@ MarCreate = CreateCCode()
 							GiveUnits(1,49,P8,"Anywhere",P12),
 							KillUnit(49,P12)
 						})
+						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{KillUnitAt(All,"Factories",24,Force1)},{Preserved})
 					NWhileEnd()
 					CMov(P6,B6_T,200)
 					NElseX()
@@ -2732,7 +2735,16 @@ MarCreate = CreateCCode()
 			PreserveTrigger();
 		}
 	}
-	DoActionsX(P6,{SetCDeaths(P6,Add,1,ColorT),SetCVar(FP,B6_T[2],Subtract,1)})
+	BStartJump = def_sIndex()
+	BStartJumpC = CreateCCode()
+	NJump(FP,BStartJump,{CDeaths(FP,AtLeast,1,BStartJumpC)},{SetCVar(FP,B6_T[2],Subtract,1)})
+	DoActionsX(P6,{SetCDeaths(P6,Add,1,ColorT)})
+	TriggerX(FP,{Bring(FP,AtMost,0,150,64)},{SetCVar(FP,B6_T[2],Subtract,1)},{Preserved})
+	Trigger2(FP,{Bring(Force1,AtMost,0,"Men",224)},{SetInvincibility(Enable,150,FP,223)},{Preserved})
+	Trigger2(FP,{Bring(Force1,AtLeast,1,"Men",224)},{SetInvincibility(Disable,150,FP,223)},{Preserved})
+	Trigger2(FP,{Bring(FP,AtLeast,1,150,64)},{RotatePlayer({MinimapPing(223)},HumanPlayers,FP)},{Preserved})
+	DisplayCTextToAll(FP,{Bring(FP,AtMost,0,150,64),Bring(FP,AtLeast,1,12,64)},{SetCDeaths(FP,Add,1,BStartJumpC)},HDB_StT,{PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers)
+	NJumpEnd(FP,BStartJump)
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -8031,13 +8043,13 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	},
 	}
 	
-	Trigger { -- 이지모드 선택
+	Trigger { -- 이지모드 강제 선택
 		players = {P6},
 		conditions = {
 			Label(0);
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,Exactly,0,Difficulty);
-			CDeaths(P6,AtLeast,100 + (24*15),IntroT);
+			CDeaths(P6,AtLeast,100 + (24*30),IntroT);
 		},
 		actions = {
 			RotatePlayer({PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP);
@@ -8116,8 +8128,9 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		conditions = {
 			Label(0);
 			Switch("Switch 244",Cleared);
-			CDeaths(P6,AtLeast,50 + (24*15),IntroT3);
+			CDeaths(P6,AtLeast,50 + (24*30),IntroT3);
 			CDeaths(P6,AtMost,0,Ready);
+			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",64);
 		},
 		actions = {
 			RotatePlayer({PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP);
@@ -8134,6 +8147,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
 			CDeaths(P6,AtMost,0,BYDDiff);
+			CDeaths(P6,Exactly,0,Ready);
 			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",17);
 		},
 		actions = {
@@ -8151,6 +8165,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			Label(0);
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,0,Ready);
 			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",195);
 		},
 		actions = {
@@ -8199,6 +8214,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			Label(0);
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,0,Ready);
 			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",18);
 		},
 		actions = {
@@ -8214,9 +8230,10 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		players = {P6},
 		conditions = {
 			Label(0);
-			CDeaths(P6,AtMost,2,Difficulty); -- 미구현 선택방지. 구현 완료시 이것만 지우면 됨
+			CDeaths(P6,AtMost,2,Difficulty);
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,0,Ready);
 			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",19);
 		},
 		actions = {
@@ -8235,6 +8252,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			CDeaths(P6,AtLeast,3,Difficulty); -- 
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,0,Ready);
 			Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",19);
 		},
 		actions = {
@@ -8254,6 +8272,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,AtLeast,50,IntroT3);
 			Deaths(CurrentPlayer,AtLeast,1,205);
+			CDeaths(P6,Exactly,0,Ready);
 			--Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",19);
 
 		},
@@ -8490,10 +8509,10 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 				PlayWAVX("staredit\\wav\\Beyond_Start.ogg")
 			},HumanPlayers,FP);
 			SetCDeaths(FP,SetTo,1,BYDDiff);
-			SetCDeaths(FP,SetTo,0,Ready); -- 추가 텍스트 출력을 위해 강제로 Ready변수를 Off함
 			SetCVar(P6,MaxHP[2],SetTo,130000);
 			SetCVar(P6,MaxHPP[2],SetTo,2600);
 			SetCDeaths(P6,SetTo,5,DifID);
+			SetCDeaths(P6,SetTo,50,IntroT3);
 			SetSwitch("Switch 204",Set);
 			SetCVar(FP,ClearRate[2],SetTo,0);
 			},
@@ -8548,10 +8567,11 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		}
 	
 	
-	Trigger { -- 모드선택 모두 완료시 인트로타이머2작동
+		Trigger { -- 모드선택 모두 완료시 인트로타이머2작동
 		players = {P6},
 		conditions = {
 			Label(0);
+			NBYD;
 			CDeaths(P6,AtLeast,1,Ready);
 		},
 		actions = {
@@ -8559,6 +8579,19 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			PreserveTrigger();
 			},
 		}
+		
+	Trigger { -- 모드선택 모두 완료시 인트로타이머2작동 ver BYD
+	players = {P6},
+	conditions = {
+		Label(0);
+		BYD;
+		CDeaths(P6,AtLeast,130,BYDT);
+	},
+	actions = {
+		SetCDeaths(P6,Add,1,IntroT2);
+		PreserveTrigger();
+		},
+	}
 	
 	
 			
@@ -9416,6 +9449,8 @@ Trigger { -- 실시간 10분마다 웨이브
 	players = {P6},
 	conditions = {
 		Label(0);
+		CDeaths(FP,AtMost,0,BYDBossStart);
+		CDeaths(FP,AtMost,0,HDStart);
 		Switch("Switch 4",Cleared);
 		Memory(0x58F460,AtMost,0);
 	},
@@ -10018,26 +10053,11 @@ players = {P6},
 		Label(0);
 		CDeaths(P6,AtMost,0,HealT);
 		CDeaths(P6,AtMost,0,BYDBossStart2);
+		CDeaths(FP,AtMost,0,HDStart);
 	},
 	actions = {
 		SetCDeaths(P6,Add,50,HealT);
 		ModifyUnitHitPoints(All,"Men",Force1,213,100);
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- 힐존트리거
-players = {P6},
-	conditions = {
-		Label(0);
-		CDeaths(P6,AtMost,0,HealT);
-		CDeaths(P6,AtLeast,1,BYDBossStart2);
-	},
-	actions = {
-		BYDBossMarHPRecover;
-		ModifyUnitHitPoints(All,"Men",Force1,213,100);
-		BYDBossMarHPPatch;
-		SetCDeaths(P6,Add,50,HealT);
 		PreserveTrigger();
 	},
 }
@@ -14081,18 +14101,19 @@ Trigger { -- No comment (147F3623)
 }
 end
 
-
-CIf(P6,{CDeaths(P6,AtLeast,1,LimitX),CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드
-
+LimitX_Jump = def_sIndex()
+NJump(FP,LimitX_Jump,{CDeaths(P6,AtLeast,1,LimitX),CDeaths(FP,AtMost,0,TestMode)})
+NIf(P6,{CDeaths(P6,AtLeast,1,EVMode),CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드
+NJumpEnd(FP,LimitX_Jump)
 
 Trigger { -- 컴퓨터 플레이어 색상 설정
 	players = {P6},
 	conditions = {
-		Deaths(P1,AtLeast,1,202);
+		Label(0);
+		CDeaths(P6,AtLeast,1,LimitX);
 	},
 	actions = {
-		--RunAIScriptAt("Recall Here",64);
-		
+		SetDeaths(Force1,SetTo,1,111);
 		PreserveTrigger();
 },
 }
@@ -14102,12 +14123,10 @@ Trigger { -- 컴퓨터 플레이어 색상 설정
 Trigger { -- 치트모드 자환
 	players = {P6},
 	actions = {
-		SetDeaths(Force1,SetTo,1,111);
-		PreserveTrigger();
 	}
 }
 ETime = 180
-EText = "\x13\x07테스트 모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+EText = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14123,7 +14142,7 @@ Trigger { -- 치트모드 모든영웅끌당
 		ModifyUnitHitPoints(All,"Men",P7,"Anywhere",1);
 	}
 }
-EText = "\x13\x07테스트 모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+EText = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14138,7 +14157,7 @@ Trigger { -- 치트모드 모든영웅끌당
 		Order("【 Fenix D 】",P7,64,Move,64);
 	}
 }
-EText = "\x13\x07테스트 모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
+EText = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14153,7 +14172,7 @@ Trigger { -- 치트모드 모든영웅끌당
 		Order("Men",P7,64,Move,64);
 	}
 }
-EText = "\x13\x07테스트 모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
+EText = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14168,7 +14187,7 @@ Trigger { -- 치트모드 모든영웅끌당
 		Order("Men",P7,64,Move,64);
 	}
 }
-CIfEnd() -- 치트모드 끝
+NIfEnd() -- 치트모드 끝
 HPoint = 100000
 HIndex = 172
 HText = "\x13\x1D† \x04포인트 상자를 획득했습니다. \x1F+ "..HPoint.." \x1CＰｔｓ \x1D†\n"
@@ -14188,28 +14207,7 @@ Trigger { -- 포인트상자
 end
 -- 공통단락
 
-function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag)
-	local Y = {Actions}
-	local Z = {RotateActions}
-	local A = {}
-	table.insert(A,DisplayTextX(UnivToString,4))
-	for j, y in pairs(RotateActions) do
-		table.insert(A,y)
-	end
 
-	if Flag == 1 then
-		CIf(Player,conditions)
-	else
-		CIfOnce(Player,conditions)
-	end
-
-	f_MemCpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
-	DoActionsX(Player,{
-			RotatePlayer(A,RotatePlayers,Player),Y
-	})
-	f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
-	CIfEnd()
-end
 DisplayCTextToAll(FP,{
 	CDeaths(P6,AtLeast,2,CCode(0x1000,0));
 	CDeaths(P6,AtLeast,2,CCode(0x1000,24));
@@ -15786,7 +15784,7 @@ end
 CIfEnd()
 -- 영침트리거
 
-CIf(Force1,{Command(Force2,AtLeast,1,150)})
+CIf(Force1,{CDeaths(FP,AtMost,0,HDStart),Command(Force2,AtLeast,1,150)})
 Trigger {
 	players = {P6},
 	conditions = { 
@@ -17221,15 +17219,15 @@ Trigger { -- 조합 루미너스 마린
 		Label(0);
 		CDeaths(P6,Exactly,1,EVMode);
 		Bring(j,AtLeast,1,20,58+i);
-		Accumulate(j,AtLeast,75000,Ore);
+		Accumulate(j,AtLeast,50000,Ore);
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,75000,ore);
+		SetResources(j,Subtract,50000,ore);
 		RemoveUnitAt(1,20,58+i,j);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetDeaths(j,Add,1,125);
-		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. - \x1F75000 O r e \x07』",4);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. - \x1F50000 O r e \x07』",4);
 		SetCDeaths(FP,Add,1,MarCreate);
 		PreserveTrigger();
 	},
@@ -17360,36 +17358,36 @@ Trigger { -- 소환 마린
 		PreserveTrigger();
 	},
 }
+CIf(j,Bring(j,AtLeast,1,12,64))
 
-  Trigger { -- 소환 루미너스 마린
-	players = {j},
-	conditions = {
-		NBYD;
-		Deaths(j,AtMost,35,125);
-		Bring(j,AtLeast,1,12,64);
-	},
-	actions = {
-		SetResources(j,Add,45000,ore);
-		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0436기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
-		PreserveTrigger();
-	},
+Trigger { -- 소환 루미너스 마린
+players = {j},
+conditions = {
+	NBYD;
+	Deaths(j,AtMost,35,125);
+	Bring(j,AtLeast,1,12,64);
+},
+actions = {
+	SetResources(j,Add,45000,ore);
+	RemoveUnitAt(1,12,"Anywhere",j);
+	DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0436기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
+	PreserveTrigger();
+},
 }
 Trigger { -- 소환 루미너스 마린
-  players = {j},
-  conditions = {
-	  BYD;
-	  Deaths(j,AtMost,11,125);
-	  Bring(j,AtLeast,1,12,64);
-  },
-  actions = {
-	  SetResources(j,Add,45000,ore);
-	  RemoveUnitAt(1,12,"Anywhere",j);
-	  DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
-	  PreserveTrigger();
-  },
+players = {j},
+conditions = {
+  BYD;
+  Deaths(j,AtMost,11,125);
+  Bring(j,AtLeast,1,12,64);
+},
+actions = {
+  SetResources(j,Add,45000,ore);
+  RemoveUnitAt(1,12,"Anywhere",j);
+  DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
+  PreserveTrigger();
+},
 }
-
 Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
@@ -17397,7 +17395,7 @@ Trigger { -- 소환 루미너스 마린
 		NBYD;
 		CDeaths(P6,Exactly,0,EVMode);
 		Deaths(CurrentPlayer,AtLeast,36,125);
-		Command(j,AtLeast,1,12);
+		Bring(j,AtLeast,1,12,64);
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
@@ -17407,7 +17405,6 @@ Trigger { -- 소환 루미너스 마린
 		PreserveTrigger();
 	},
 }  
-
 Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
@@ -17415,7 +17412,7 @@ Trigger { -- 소환 루미너스 마린
 		BYD;
 		CDeaths(FP,AtMost,0,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
-		Command(j,AtLeast,1,12);
+		Bring(j,AtLeast,1,12,64);
 		Bring(j,AtMost,95,MarID[j+1],64);
 	},
 	actions = {
@@ -17434,7 +17431,7 @@ Trigger { -- 소환 루미너스 마린
 		CDeaths(P6,Exactly,1,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
-		Command(j,AtLeast,1,12);
+		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtLeast,90000,Ore);
 	},
 	actions = {
@@ -17456,7 +17453,7 @@ Trigger { -- 소환 루미너스 마린
 		CDeaths(P6,Exactly,0,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
-		Command(j,AtLeast,1,12);
+		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtLeast,90000,Ore);
 	},
 	actions = {
@@ -17476,7 +17473,7 @@ Trigger { -- 소환 루미너스 마린
 		BYD;
 		CDeaths(FP,AtLeast,1,Theorist);
 		Deaths(CurrentPlayer,AtLeast,12,125);
-		Command(j,AtLeast,1,12);
+		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtMost,89999,Ore);
 	},
 	actions = {
@@ -17486,6 +17483,7 @@ Trigger { -- 소환 루미너스 마린
 		PreserveTrigger();
 	},
 }
+
 
 Trigger { -- 소환 루미너스 마린
 	players = {j},
@@ -17510,18 +17508,46 @@ Trigger { -- 소환 루미너스 마린
 		Label(0);
 		CDeaths(P6,Exactly,1,EVMode);
 		Deaths(CurrentPlayer,AtLeast,36,125);
-		Command(j,AtLeast,1,12);
-		Accumulate(j,AtLeast,50000,Ore);
+		Bring(j,AtLeast,1,12,64);
+		Accumulate(j,AtLeast,25000,Ore);
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
-		SetResources(j,Subtract,50000,ore);
-		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. - \x1F95000 O r e \x07』",4);
+		SetResources(j,Subtract,25000,ore);
+		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. - \x1F70000 O r e \x07』",4);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetCDeaths(FP,Add,1,MarCreate);
 		PreserveTrigger();
 	},
 }
+
+Trigger { -- 소환 루미너스 마린
+	players = {j},
+	conditions = {
+		Label(0);
+		CDeaths(P6,Exactly,1,EVMode);
+		Deaths(CurrentPlayer,AtLeast,36,125);
+		Bring(j,AtLeast,1,12,64);
+		Accumulate(j,AtMost,24999,Ore);
+	},
+	actions = {
+		SetResources(j,Add,24999,ore);
+		RemoveUnitAt(1,12,"Anywhere",j);
+		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F25000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
+		PreserveTrigger();
+	},
+}
+
+CIfEnd()
+
+
+
+
+
+
+
+
+
 
 
 end

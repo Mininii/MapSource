@@ -31,7 +31,28 @@ function HeroSpawnSetForBYD(Player,Level,UnitID1,UnitID2,Sw1,Sw2,BYDOutPut)
 	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {Preserved})
 end
 
+function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag)
+	local Y = {Actions}
+	local Z = {RotateActions}
+	local A = {}
+	table.insert(A,DisplayTextX(UnivToString,4))
+	for j, y in pairs(RotateActions) do
+		table.insert(A,y)
+	end
 
+	if Flag == 1 then
+		CIf(Player,conditions)
+	else
+		CIfOnce(Player,conditions)
+	end
+
+	f_MemCpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
+	DoActionsX(Player,{
+			RotatePlayer(A,RotatePlayers,Player),Y
+	})
+	f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+	CIfEnd()
+end
 
 function TemRotate()
 	local PlayerID = CAPlotPlayerID
