@@ -19,13 +19,13 @@ for i = 1, 364 do
 	end
 end
 
-function E_Char_Bangjungsik(X)
+--function E_Char_Bangjungsik(X)
 
-	return (X^2)+(5*X)+6
-end
-for i = 0, 99 do
-	DoActions(P1,{DisplayText(""..E_Char_Bangjungsik(i).."")})
-end
+--	return (X^2)+(5*X)+6
+--end
+--for i = 0, 99 do
+--	DoActions(P1,{DisplayText(""..E_Char_Bangjungsik(i).."")})
+--end
 for i = 0, 363 do
 	Trigger { -- 하드이상 브금제어
 		players = {Force1},
@@ -100,7 +100,7 @@ function Simple_SetLoc(LocID,LeftValue,UpValue,RightValue,DownValue,Table)
 end
 for j = 0, 7 do
 	for i = 0, 7 do
-		Simple_SetLoc((64 + i)+(j*8),512+(1024*i),512+(1024*j),512+(1024*i),512+(1024*j),PatchStack)
+		Simple_SetLoc((64 + i)+(j*8),(512+(1024*i))-320,(512+(1024*j))-320,512+(1024*i)+320,512+(1024*j)+320,PatchStack)
 	end
 end
 
@@ -151,7 +151,7 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 �
 end
  
 FP = P2
-SetForces({P1},{P2},{},{},{P1,P2}) 
+SetForces({P1,P3,P4,P5,P6,P7,P8},{P2},{},{},{P1,P2,P3,P4,P5,P6,P7,P8}) 
 SetFixedPlayer(P2)
 StartCtrig()
 CJump(AllPlayers,0x600)
@@ -165,7 +165,7 @@ fasdas2 = CreateVar()--
 --
 
 Dx,Dy,Du,DtP,Dv = CreateVariables(5)
-IBGM_EPD(FP,0)
+IBGM_EPD(FP,7)
 
 --for i = 64, 70 do
 --	SetLocCenter2(i)
@@ -191,7 +191,7 @@ EndCtrig()
 --↑Tep에 그대로 붙여넣기----------------------------------------
 ErrorCheck()
 EUDTurbo(P1)
---TestShapeTable = {}
+TestShapeTable = {}
 ----
 --SHA1a =
 --{36,{-140,-140},{-84,-140},{-28,-140},{28,-140},{84,-140},{140,-140},{-140,-84},{-84,-84},{-28,-84},{28,-84},{84,-84},{140,-84},{-140,-28},{-84,-28},{-28,-28},{28,-28},{84,-28},{140,-28},{-140,28},{-84,28},{-28,28},{28,28},{84,28},{140,28},{-140,84},{-84,84},{-28,84},{28,84},{84,84},{140,84},{-140,140},{-84,140},{-28,140},{28,140},{84,140},{140,140}}--
@@ -561,8 +561,23 @@ end
 
 --CSPlot(SS1,P1,54,73,nil,1,32,P1) -- 유닛 생성
 --CSPlot(SS2,P1,54,90,nil,1,32,P1) -- 유닛 생성
+function Heart(T) return {12*math.sin(T) - 4*math.sin(3*T), 13*math.cos(T) - 5*math.cos(2*T) - 2*math.cos(3*T) - math.cos(4*T)} end
 
+function S1_funcY(X) return -X^2 end
+
+
+--CSPlot(CSMakeGraphT(10,"S1_funcY",-350,0,16,350,300),P1,54,88+4,nil,1,32,P1) -- 유닛 생성
+--CSPlot(CSMakeGraphX(1,"S1_funcY",-12,0,12,12,100),P1,54,88+4,nil,1,32,P1) -- 유닛 생성
 --for j, k in pairs(TestShapeTable) do
 --     DoActions(P1,CreateUnit(1,47,64 + j,P1),1)
 --     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 유닛 생성
 --end
+
+DoActions(P1,{CreateUnit(30,20,64,P1)},1)
+for i = 65, 128 do
+	DoActions(P1,{CreateUnit(1,82,i,P1),CreateUnit(1,81,i,P1)},1)
+end
+for i = 1, 8 do
+	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64)},1)
+	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64+8)})
+end
