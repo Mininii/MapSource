@@ -16,6 +16,10 @@ sindexAlloc = 0x700
 function DisplayTextX(Text,AlwaysDisplay)
 	return {"DisplayText",Text,AlwaysDisplay}
 end
+function SetMissionObjectivesX(Text)
+	return {"SetMissionObjectives",Text}
+end
+
 function PlayWAVX(WAVFile)
 	return {"PlayWAV",WAVFile}
 end
@@ -32,6 +36,8 @@ function RotatePlayer(Print,Players,RecoverCP)
 				table.insert(Y,DisplayText(x[2],x[3]))	
 			elseif x[1] == "PlayWAV" then
 				table.insert(Y,PlayWAV(x[2]))	
+			elseif x[1] == "SetMissionObjectives" then
+				table.insert(Y,SetMissionObjectives(x[2]))	
 			else 
 				table.insert(Y,x)
 			end
