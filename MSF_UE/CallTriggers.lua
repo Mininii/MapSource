@@ -488,11 +488,11 @@ TempLvHP2 = CreateVar()
 MultiplierV = CreateVar()
 f_SetLvHP = SetCallForward()
 SetCall(FP)
-	CIf(FP,{TMemory(_Add(UnitIDV,EPD(0x662350)),AtMost,7999999*256)})
-		f_Mul(FP,TempLvHP,VArr(MaxHPBackUp,UnitIDV),MultiplierV)
-		f_Read(FP,_Add(UnitIDV,EPD(0x662350)),TempLvHP2)
-		CIfX(FP,{TMemory(_Mem(_Add(TempLvHP2,TempLvHP)),AtLeast,8000000*256)})
-			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,8000000*256)})
+	CIf(FP,{TMemory(_Add(UnitIDV,EPD(0x662350)),AtMost,8319999*256)})
+		CMovX(FP,TempLvHP2,VArr(MaxHPBackUp,UnitIDV))
+		f_Mul(FP,TempLvHP,TempLvHP2,_Mul(MultiplierV,_Sub(Level,_Mov(1))))
+		CIfX(FP,{TMemory(_Mem(_Add(TempLvHP2,TempLvHP)),AtLeast,8320000*256)})
+			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,8320000*256)})
 		CElseX()
 			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
 		CIfXEnd()
@@ -567,6 +567,19 @@ SetCall(FP)
 	CIfEnd()
 
 SetCallEnd()
-
+function f_ArrReset(Condition)
+	CallTriggerX(FP,Call_ArrReset,Condition)
+end
+Call_ArrReset = SetCallForward()
+SetCall(FP)
+	-- ArrayReset
+	CMov(FP,CurArr,0)
+	CWhile(FP,CVar(FP,CurArr[2],AtMost,999))
+	CDoActions(FP,{
+		TSetMemory(_Add(XY_ArrHeader,CurArr),SetTo,0)
+	})
+	CAdd(FP,CurArr,1)
+	CWhileEnd()
+SetCallEnd()
 
 end

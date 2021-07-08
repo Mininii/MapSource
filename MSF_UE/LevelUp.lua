@@ -44,7 +44,7 @@ function LevelUp()
 						CreateUnit(1,87,29,FP),
 						TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
-						TSetMemory(_Add(Nextptrs,2),SetTo,5000*256),
+						TSetMemory(_Add(Nextptrs,2),SetTo,6000*256),
 						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
 				CIfEnd()
 			CElseX()
@@ -76,8 +76,10 @@ function LevelUp()
 	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
 	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear),CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(Dem_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},
+		{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear),CDeaths(FP,AtMost,0,StoryT3)},
+		{RotatePlayer({DisplayTextX(Dem_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 		TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})

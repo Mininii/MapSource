@@ -24,7 +24,6 @@ f_TempRepeat(19,15)
 f_TempRepeat(17,15)
 f_TempRepeat(21,30)
 
-
 CIfEnd()
 CIf(FP,CVar(FP,Level[2],AtLeast,21))
 DoActions(FP,{Simple_SetLoc(0,1088,4608,1088,4608)})

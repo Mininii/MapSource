@@ -32,6 +32,9 @@ UnitDataArr = Db(1700*12) # 0x58f510
 #LevelV = EUDVariable() # 0x58f51C
 #TimeV = EUDVariable() # 0x58f520
 
+
+SkillArr = Db(4000) # 0x58f532
+
 def onPluginStart():
 
 	TBLMarID = [1,2,17,21,33,100,101]
@@ -48,6 +51,7 @@ def onPluginStart():
 #		SetMemory(0x58f518, SetTo, ScoreV.getValueAddr()),
 #		SetMemory(0x58f51C, SetTo, LevelV.getValueAddr()),
 #		SetMemory(0x58f520, SetTo, TimeV.getValueAddr()),
+		SetMemory(0x58f532, SetTo, SkillArr.getValueAddr()),
 		SetMemory(0x58f510, SetTo, UnitDataArr)])
 	#0~6 공업
 	#8~14 방업

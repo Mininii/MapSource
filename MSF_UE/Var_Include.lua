@@ -21,7 +21,7 @@ function Var_init()
 	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03¢Ó \x04\x0d\x0d\x0d\x0d\x0d\x0d")
 	if TestStart == 1 then
 		BGMTypeV = CreateVar()
-		LevelT2 = CreateVar(4)
+		LevelT2 = CreateVar(1)
 	else
 		BGMTypeV = CreateVar(6)
 		LevelT2 = CreateVar(1)
@@ -91,6 +91,10 @@ function Var_init()
 	StoryT4 = CreateCCode()
 	Dt_NT = CreateVar()
 	Dt_NT2 = CreateVar()
+	CurArr = CreateVar()
+
+
+	XY_ArrHeader = CreateVar()
 end
 
 function HPoints()

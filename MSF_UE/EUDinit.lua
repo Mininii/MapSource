@@ -103,6 +103,7 @@ function onInit_EUD()
 	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F55C,"X",B_Id_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	
 	for i = 1, #HeroArr do
@@ -638,7 +639,7 @@ UnitSizePatch(60,1)
 	CDoActions(FP,{TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),TRemoveUnit(RepHeroIndex,AllPlayers),TRemoveUnit(RepHeroIndex,P9),TRemoveUnit(RepHeroIndex,P10),TRemoveUnit(RepHeroIndex,P11),TRemoveUnit(RepHeroIndex,P12)})
 	CAdd(FP,RepHeroIndex,1)
 	CWhileEnd()
-
+	f_ArrReset()
 	CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
 end
 

@@ -464,3 +464,16 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 �
 		DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
 	end
 end
+
+function CArrSizeConvert(Size)
+	local TNum = Size/602
+	if Size%602 ~= 0 then
+		TNum = TNum + 1
+	end
+	return TNum
+end
+
+function ShootingStar_func()
+	
+	
+end

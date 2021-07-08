@@ -14,7 +14,6 @@ def beforeTriggerExec():
 			if EUDIf()((Boss>=1,Bring(P8, AtLeast, 1, 68, "Anywhere"))):
 				Trigger(conditions=[Deaths(Boss+2, AtMost, 100*256, 0),Memory(0x58F558,AtLeast,1)],
 						actions=[SetMemory(0x58F558,Subtract,1),SetDeaths(Boss+2,Add,770*256,0)])
-						
 				Trigger(conditions=[Memory(0x594000+4*41, Exactly, 1),],
 						actions=[SetDeaths(Boss+13,SetTo,427,0)])
 				Trigger(conditions=[Memory(0x594000+4*41, Exactly, 2),],

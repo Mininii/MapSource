@@ -83,7 +83,7 @@ f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
 	CreateUnit(1,68,29,FP),
 	TSetMemory(B_Id_C,SetTo,Nextptrs),
-	TSetMemory(0x58F558,SetTo,LevelT2),
+	TSetMemory(0x58F558,SetTo,7),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
 	TSetMemory(_Add(Nextptrs,2),SetTo,_Mul(LevelT2,_Mov(2000*256))),
 	KillUnitAt(All,"Men",29,Force1),
@@ -168,6 +168,8 @@ CDoActions(FP,{
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 	CIfEnd()
@@ -184,6 +186,8 @@ CDoActions(FP,{
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 	f_Lengthdir(FP,FR,_Add(FA,240),FX,FY)
@@ -197,6 +201,8 @@ CDoActions(FP,{
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 CIfEnd()
@@ -213,6 +219,8 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 	f_Lengthdir(FP,FR,_Add(FA,180),FX,FY)
@@ -226,6 +234,8 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 	f_Lengthdir(FP,FR,_Add(FA,270),FX,FY)
@@ -239,6 +249,8 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 			TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
+			TSetDeathsX(_Add(Sh_Para,55),SetTo,0x200104,0,0x300104),
+			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
 
@@ -1000,7 +1012,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,15,"CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
@@ -1179,7 +1191,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,15,"CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
