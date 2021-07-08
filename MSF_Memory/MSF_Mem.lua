@@ -14,7 +14,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.2"
+VerText = "\x04Ver. 3.3"
 Limit = 0
 FP = P6
 TestStartToBYD = 0
@@ -68,6 +68,7 @@ MapPlayers = {0,1,2,3,4}
 ObPlayers = {128,129,130,131}
 Ex1= {25,27,29,31,33}
 Ex2= {23,26,29,32,35}
+Ex2_1= {26,29,32,35,38}
 Ex3= {27,30,33,36,39}
 Ex4= {15,17,19,21,23}
 Ex5= {32,34,36,38,40}
@@ -2866,34 +2867,66 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	CMov(FP,0x5821D4+((k-1)*4),MaxHPP)
 	CMov(FP,0x582234+((k-1)*4),MaxHPP)
 	Trigger { -- 미션 오브젝트 이지n인
-		players = {Force1},
+		players = {FP},
 		conditions = {
 			Label(0);
 			CDeaths(P6,Exactly,1,Difficulty);
+			CDeaths(P6,AtMost,1,GMode);
 			CVar(P6,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x0EＥａｓｙ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex1[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x0EＥａｓｙ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex1[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
 			SetCVar(P6,NexDif[2],SetTo,1);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex1[k]);
 			
 		},
 	}
+	
 	Trigger { -- 미션 오브젝트 이지n인
-		players = {Force1},
+		players = {FP},
 		conditions = {
 			Label(0);
-			CDeaths(P6,Exactly,2,Difficulty);
+			CDeaths(P6,Exactly,1,Difficulty);
+			CDeaths(P6,AtLeast,2,GMode);
 			CVar(P6,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x08Ｈａｒｄ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex2[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x0EＥａｓｙ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex2_1[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
+			SetCVar(P6,NexDif[2],SetTo,1);
+			SetCVar(P6,ExchangeRate[2],SetTo,Ex2_1[k]);
+			
+		},
+	}
+	Trigger { -- 미션 오브젝트 이지n인
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(P6,Exactly,2,Difficulty);
+			CDeaths(P6,AtMost,1,GMode);
+			CVar(P6,SetPlayers[2],Exactly,k);
+		},
+		actions = {
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x08Ｈａｒｄ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex2[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
 			SetCVar(P6,NexDif[2],SetTo,1);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex2[k]);
 		},
 	}
 	Trigger { -- 미션 오브젝트 이지n인
-		players = {Force1},
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(P6,Exactly,2,Difficulty);
+			CDeaths(P6,AtLeast,2,GMode);
+			CVar(P6,SetPlayers[2],Exactly,k);
+		},
+		actions = {
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x08Ｈａｒｄ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex2_1[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
+			SetCVar(P6,NexDif[2],SetTo,1);
+			SetCVar(P6,ExchangeRate[2],SetTo,Ex2_1[k]);
+		},
+	}
+	Trigger { -- 미션 오브젝트 이지n인
+		players = {FP},
 		conditions = {
 			Label(0);
 			CDeaths(P6,Exactly,3,Difficulty);
@@ -2901,14 +2934,14 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			CVar(P6,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x10Ｆｕｔｕｒｅ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex3[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x10Ｆｕｔｕｒｅ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex3[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
 			SetCVar(P6,NexDif[2],SetTo,2);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex3[k]);
 		},
 	}
 	
 	Trigger { -- 미션 오브젝트 이지n인
-		players = {Force1},
+		players = {FP},
 		conditions = {
 			Label(0);
 			CDeaths(P6,Exactly,3,Difficulty);
@@ -2917,14 +2950,14 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			CDeaths(P6,Exactly,0,Theorist);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex4[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ\x04\x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex4[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
 			SetCVar(P6,NexDif[2],SetTo,3);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex4[k]);
 		},
 	}
 	
 	Trigger { -- 미션 오브젝트 이지n인
-		players = {Force1},
+		players = {FP},
 		conditions = {
 			Label(0);
 			CDeaths(P6,Exactly,3,Difficulty);
@@ -2933,7 +2966,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			CDeaths(P6,Exactly,1,Theorist);
 		},
 		actions = {
-			SetMissionObjectives("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ \x10 理論値 \x04MODE \x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex5[k].."%\n\x13\x04――――――――――――――――――――――――――――――");
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ\n\x13\x06Ｂｅｙｏｎｄ \x10 理論値 \x04MODE \x08"..P[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..Ex5[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
 			SetCVar(P6,NexDif[2],SetTo,3);
 			SetCVar(P6,ExchangeRate[2],SetTo,Ex5[k]);
 		},
@@ -4869,7 +4902,7 @@ CIf(P6,{CDeaths(P6,AtLeast,1,PaneltyP)})
 	
 CIfEnd()
 
-CIfX(P6,{CDeaths(P6,AtMost,1,GMode)})
+CIfX(P6,{NBYD})
 	CWhile(P6,{CDeaths(P6,AtLeast,1,BonusP)},SetCDeaths(P6,Subtract,1,BonusP))
 		CAdd(P6,Bonus,_Add({FP,RedNumber[2],nil,"V"},400))
 	CWhileEnd()
@@ -9555,7 +9588,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04테란 인구수는 \x03현재 \x1B자신의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e \x06체력\x04을 의미합니다. \x16(1/100비율 표시)\n\x13\x06최대 체력\x04은 \x07최대 인구수 \x04이며 \x06체력 증가량\x04은 \x1F미네랄 환전량\x04의 1/10 에 비례합니다.\n\x13\x04컴셋 스테이션에서 \x1D환전 \x19모드 변경\x04을 사용하여 \x06체력\x04업그레이드를 직접 하셔야 합니다.\n\x13\x04레어, 하이브를 파괴할 시 \x11전투중인 유닛\x04이 2기 이하일 경우 \x10페널티\x04가 적용됩니다.\n\x13\x07조합소\x04와 \x1F환전소\x04는 는 양쪽에 있는 감옥, 풍차모양 구조물입니다.\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x04테란 인구수는 \x03현재 \x1B자신의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e \x06체력\x04을 의미합니다. \x16(1/100비율 표시)\n\x13\x06최대 체력\x04은 \x07최대 인구수 \x04이며 \x06체력 증가량\x04은 \x1F미네랄 환전량\x04의 1/10 에 비례합니다.\n\x13\x04컴셋 스테이션에서 \x1D환전 \x19모드 변경\x04을 사용하여 \x06체력\x04업그레이드를 직접 하셔야 합니다.\n\x13\x04레어, 하이브를 파괴할 시 \x11전투중인 유닛\x04이 2기 이하일 경우 \x10페널티\x04가 적용됩니다.\n\x13\x07조합소\x04와 \x1F환전소\x04는 는 양쪽에 있는 감옥, 풍차모양 구조물입니다.\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -9568,7 +9605,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04테란 인구수는 \x03현재 \x1B자신의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e \x06체력\x04을 의미합니다. \x16(1/100비율 표시)\n\x13\x06최대 체력\x04은 \x07최대 인구수 \x04이며 \x06체력 증가량\x04은 \x1F미네랄 환전량\x04의 1/10 에 비례합니다.\n\x13\x04컴셋 스테이션에서 \x1D환전 \x19모드 변경\x04을 사용하여 \x06체력\x04업그레이드를 직접 하셔야 합니다.\n\x13\x04레어, 하이브를 파괴할 시 \x11전투중인 유닛\x04이 2기 이하일 경우 \x10페널티\x04가 적용됩니다.\n\x13\x07조합소\x04와 \x1F환전소\x04는 는 양쪽에 있는 감옥, 풍차모양 구조물입니다.\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F75000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x04테란 인구수는 \x03현재 \x1B자신의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e \x06체력\x04을 의미합니다. \x16(1/100비율 표시)\n\x13\x06최대 체력\x04은 \x07최대 인구수 \x04이며 \x06체력 증가량\x04은 \x1F미네랄 환전량\x04의 1/10 에 비례합니다.\n\x13\x04컴셋 스테이션에서 \x1D환전 \x19모드 변경\x04을 사용하여 \x06체력\x04업그레이드를 직접 하셔야 합니다.\n\x13\x04레어, 하이브를 파괴할 시 \x11전투중인 유닛\x04이 2기 이하일 경우 \x10페널티\x04가 적용됩니다.\n\x13\x07조합소\x04와 \x1F환전소\x04는 는 양쪽에 있는 감옥, 풍차모양 구조물입니다.\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F50000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -9580,7 +9621,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】\n\n\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x07\x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04 * 2 + SCV * 5 = \x06【 \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x0EＡ \x10】",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -9592,7 +9637,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x10Ｐｕｒｅ　Ｍｏｄｅ \x04 적용으로 모든 마린의 공격력 증가 효과를 얻었습니다.\n\x13\x04주의! 카운트 다이머 모두 소진시 공격력이 원래대로 돌아옴\n\n\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x10Ｐｕｒｅ　Ｍｏｄｅ \x04 적용으로 모든 마린의 공격력 증가 효과를 얻었습니다.\n\x13\x04주의! 카운트 다이머 모두 소진시 공격력이 원래대로 돌아옴",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -9608,7 +9657,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.\n\x13\x06Ｂｅｙｏｎｄ\x04 난이도의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04은 특별한 능력을 가지고 있습니다.\n\x13\x041. \x08사망 \x04시 \x07부활. \x04일정시간 동안 \x02반 무적 \x04적용. \x1B쿨타임 : 10분\n\x13\x042. 맵상의 \x1F파일런\x04을 모두 제거할 경우 \x07특수 공격 스킬 능력 \x04활성화\n\x13\x043. \x08체력 업그레이드 \x04완료시 \x1C개별 수정 보호막 \x04활성화.\n\x13\x044.\x10【 K\x04ey \x10】\x04파괴시 공격 스킬의 \x07공격력 \x04증가\n\x13\x04수정 보호막은 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04의 체력이 반 이하로 떨어질 경우 확률적으로 발동됩니다.\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.\n\x13\x06Ｂｅｙｏｎｄ\x04 난이도의 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04은 특별한 능력을 가지고 있습니다.\n\x13\x041. \x08사망 \x04시 \x07부활. \x04일정시간 동안 \x02반 무적 \x04적용. \x1B쿨타임 : 10분\n\x13\x042. 맵상의 \x1F파일런\x04을 모두 제거할 경우 \x07특수 공격 스킬 능력 \x04활성화\n\x13\x043. \x08체력 업그레이드 \x04완료시 \x1C개별 수정 보호막 \x04활성화.\n\x13\x044.\x10【 K\x04ey \x10】\x04파괴시 공격 스킬의 \x07공격력 \x04증가\n\x13\x04수정 보호막은 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\x04의 체력이 반 이하로 떨어질 경우 확률적으로 발동됩니다.",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -9621,7 +9674,11 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText(string.rep("\n", 20),4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
+		DisplayText("\x13\x07조합법 \x04: Marine + \x1F15000 Ｏｒｅ \x04= \x1BH \x04Marine + \x1F25000 Ｏｒｅ \x04= \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e\n\x13\x04반드시 \x08체력 업그레이드\x04를 1만 이상 올린 후 조합해주세요.",4);
+		DisplayText("\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ",4);
+		DisplayText("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4);
 		PreserveTrigger();
 		},
 	}
@@ -17347,7 +17404,7 @@ Trigger { -- 소환 마린
 	players = {j},
 	conditions = {
 		Label(0);
-		Command(j,AtLeast,1,"Terran Wraith");
+		Bring(j,AtLeast,1,"Terran Wraith",64);
 
 	},
 	actions = {
