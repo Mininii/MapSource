@@ -149,7 +149,7 @@ RepUnitPtr = 0x593000
 TestModeOnOff = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.2.0"
+VName = "Ver.2.1"
 SetFixedPlayer(FP)
 StartCtrig()
 RandSwitch = "Switch 1"
@@ -21180,58 +21180,29 @@ for i = 0, 363 do
 	Trigger { -- 상시브금
 		players = {Force1},
 		conditions = {
-			Deaths(FP,Exactly,363,441);
-			DeathsX(FP,AtMost,0,440,0xFFFFFF);
-		},
-		actions = {
-			RotatePlayer({PlayWAVX(BGMArr[364])},{128,129,130,131},FP);
-			SetDeathsX(FP,Add,2000,440,0xFFFFFF);
-			SetDeathsX(FP,Add,1,441,0xFFFFFF);
-			PreserveTrigger();
-			
-			},
-		}
-	Trigger { -- 상시브금
-		players = {Force1},
-		conditions = {
-			Deaths(FP,Exactly,364,441);
-			DeathsX(FP,AtMost,0,440,0xFFFFFF);
+			Deaths(CurrentPlayer,AtLeast,364,441);
+			DeathsX(CurrentPlayer,AtMost,0,440,0xFFFFFF);
 		},
 		actions = {
 			RotatePlayer({PlayWAVX(BGMArr[1])},{128,129,130,131},FP);
-			SetDeathsX(FP,Add,2000,440,0xFFFFFF);
-			SetDeathsX(FP,SetTo,1,441,0xFFFFFF);
+			SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
+			SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
 			PreserveTrigger();
 			
 			},
 		}
 		
-	Trigger { -- 상시브금
-	players = {FP},
-	conditions = {
-		Deaths(CurrentPlayer,Exactly,363,441);
-		DeathsX(CurrentPlayer,AtMost,0,440,0xFFFFFF);
-	},
-	actions = {
-		PlayWAV(BGMArr[364]); 
-		PlayWAV(BGMArr[364]); 
-		SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
-		SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
-		PreserveTrigger();
-		
-		},
-	}
 Trigger { -- 상시브금
 	players = {FP},
 	conditions = {
-		Deaths(CurrentPlayer,Exactly,364,441);
-		DeathsX(CurrentPlayer,AtMost,0,440,0xFFFFFF);
+		Deaths(FP,AtLeast,364,441);
+		DeathsX(FP,AtMost,0,440,0xFFFFFF);
 	},
 	actions = {
 		PlayWAV(BGMArr[1]); 
 		PlayWAV(BGMArr[1]); 
-		SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
-		SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
+		SetDeathsX(FP,Add,2000,440,0xFFFFFF);
+		SetDeathsX(FP,SetTo,1,441,0xFFFFFF);
 		PreserveTrigger();
 		},
 	}
