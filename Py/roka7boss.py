@@ -10,16 +10,11 @@ def beforeTriggerExec():
 	VResetSw = EUDVariable()
 
 
-	Del = EUDVariable()
-	Loc = EUDVariable()
-	Num = EUDVariable()
 	F1Del = EUDVariable()
 	Seed = EUDVariable()
 	CunitX = EUDVariable()
 	CunitX19 = EUDVariable()
 	CunitX25 = EUDVariable()
-	F1LocX = EUDVariable()
-	F1LocY = EUDVariable()
 	LocX = EUDVariable()
 	LocY = EUDVariable()
 
@@ -40,8 +35,13 @@ def beforeTriggerExec():
 	F2XT2 = EUDVariable()
 	F2XT3 = EUDVariable()
 
+	F1Del2 = EUDVariable()
+	Seed2 = EUDVariable()
+	CunitX2 = EUDVariable()
+	CunitX219 = EUDVariable()
+	CunitX225 = EUDVariable()
 	if EUDIf()((F2B>=1,Bring(P8, AtLeast, 1, 87, "Anywhere"))):
-
+		VResetSw << 0
 		Trigger(conditions=[Deaths(F2B+2, AtMost, 3333*256, 0),F2BHP == 0,F2BSH == 0],actions=[F2BSH.SetNumber(1),SetMemory(0x58F518,SetTo,1)])
 		Trigger(conditions=[Deaths(F2B+2, AtMost, 2000*256, 0),F2BHP == 0,F2BSH == 1],actions=[F2BSH.SetNumber(2),SetMemory(0x58F518,SetTo,2)])
 		Trigger(conditions=[Deaths(F2B+2, AtMost, 5000*256, 0),F2BHP == 1,F2BSH == 2],actions=[F2BSH.SetNumber(3),SetMemory(0x58F518,SetTo,3)])
@@ -102,13 +102,13 @@ def beforeTriggerExec():
 			F2BDT << F2BDY - F2BDX	
 			if EUDIf()((EUDOr(F2BRT<=F2BRU,F2XT1<=F2XT2))):
 				if EUDIf()((F2BDT>=1*256,F2BDT<=0x7FFFFFFF)):
-					Trigger(conditions=[F2BDT>=640000*256],actions=[F2BDT.SubtractNumber(640000*256),KillUnitAt(64,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=320000*256],actions=[F2BDT.SubtractNumber(320000*256),KillUnitAt(32,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=160000*256],actions=[F2BDT.SubtractNumber(160000*256),KillUnitAt(16,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=80000*256],actions=[F2BDT.SubtractNumber(80000*256),KillUnitAt(8,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=40000*256],actions=[F2BDT.SubtractNumber(40000*256),KillUnitAt(4,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=20000*256],actions=[F2BDT.SubtractNumber(20000*256),KillUnitAt(2,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=10000*256],actions=[F2BDT.SubtractNumber(10000*256),KillUnitAt(1,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=640*256],actions=[F2BDT.SubtractNumber(640*256),KillUnitAt(64,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=320*256],actions=[F2BDT.SubtractNumber(320*256),KillUnitAt(32,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=160*256],actions=[F2BDT.SubtractNumber(160*256),KillUnitAt(16,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=80*256],actions=[F2BDT.SubtractNumber(80*256),KillUnitAt(8,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=40*256],actions=[F2BDT.SubtractNumber(40*256),KillUnitAt(4,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=20*256],actions=[F2BDT.SubtractNumber(20*256),KillUnitAt(2,"Men",64,Force1)])
+					Trigger(conditions=[F2BDT>=10*256],actions=[F2BDT.SubtractNumber(10*256),KillUnitAt(1,"Men",64,Force1)])
 					DoActions(SetDeaths(F2B+2,SetTo,F2BDY,0))
 				EUDEndIf()
 			EUDEndIf()
@@ -120,16 +120,44 @@ def beforeTriggerExec():
 		Trigger(conditions=[F2XT1>=F2XT3],actions=[F2XT1.SetNumber(0)])
 		F2BRT << F2BRT + 1
 		F2XT1 << F2XT1 + 1
+	if EUDElseIf()(VResetSw == 0):
+		F2BSH << 0
+		F1Del2 << 0
+		Seed2 << 0
+		CunitX2 << 0
+		CunitX219 << 0
+		CunitX225 << 0
+		F1Del << 0
+		Seed << 0
+		CunitX << 0
+		CunitX19 << 0
+		CunitX25 << 0
+		LocX << 0
+		LocY << 0
+		F2BHP << 0
+		F2BSH << 0
+		F2BDX << 0
+		F2BDT << 0
+		F2BDY << 0
+		F2BDH << 0
+		F2BRT << 0
+		F2BRU << 0
+		F2BRS << 0
+		F2BRV << 0
+		F2BSD << 0
+		F2XT1 << 0
+		F2XT2 << 0
+		F2XT3 << 0
+		
+		F2B << 0
+		DoActions([SetMemory(0x58F518,SetTo,0),
+			SetMemory(0x58F51c,SetTo,0),
+			SetMemory(0x58F520,SetTo,0),
+			SetMemory(0x58F524,SetTo,0)])
+
+		VResetSw << 1
 	EUDEndIf()
 
-	Del2 = EUDVariable()
-	Loc2 = EUDVariable()
-	Num2 = EUDVariable()
-	F1Del2 = EUDVariable()
-	Seed2 = EUDVariable()
-	CunitX2 = EUDVariable()
-	CunitX219 = EUDVariable()
-	CunitX225 = EUDVariable()
 
 	if EUDIf()((Memory(0x594000+4*1545,Exactly,1),Memory(0x58F524,Exactly,2),F1Del2 == 0)):
 
@@ -277,536 +305,3 @@ def beforeTriggerExec():
 		Trigger(conditions=[Memory(0x58F524,Exactly,3),Command(P8,Exactly,0,84)],actions=[SetMemory(0x58F524,SetTo,4),KillUnit(84,P8)])
 	EUDEndIf()
 	
-	if EUDIf()((Memory(0x594000+4*1545,AtLeast,1),Memory(0x594000+4*1545,AtMost,4),Memory(0x58F524,Exactly,3))):
-		Trigger(conditions=[Memory(0x594000+4*1545,Exactly,2)],actions=[SetMemoryX(0x66A054, SetTo, 17*0x01010100,0xFFFFFF00)])
-		Trigger(conditions=[Memory(0x594000+4*1545,Exactly,1)],actions=[SetMemoryX(0x66A054, SetTo, 10*0x01010100,0xFFFFFF00)])
-		Trigger(conditions=[Memory(0x594000+4*1545,Exactly,3)],actions=[SetMemoryX(0x66A054, SetTo, 6*0x01010100,0xFFFFFF00)])
-		Trigger(conditions=[Memory(0x594000+4*1545,Exactly,4)],actions=[SetMemoryX(0x66A054, SetTo, 13*0x01010100,0xFFFFFF00)])
-
-		if EUDIf()((Memory(0x594000+4*1545,Exactly,2))):
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,0),
-				MoveLocation("CLoc166", 87, P8, 64),
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			F1LocX << f_maskread_epd(EPD(0x58DC60+0x14*26),0xFFFF)
-			F1LocY << f_maskread_epd(EPD(0x58DC64+0x14*26),0xFFFF0000)//65536
-			if EUDWhile()((Del<2)):
-				LocX << F1LocX - 32
-				LocY << F1LocY - 64
-				Num << 0
-				if EUDWhile()((EUDOr(LocX<=0x7FFFFFFF,LocY<=0x7FFFFFFF),Num == 0)):
-					Trigger(conditions=[LocX>=0x80000000],actions=[LocX.SetNumber(0)])
-					Trigger(conditions=[LocY>=0x80000000],actions=[LocY.SetNumber(0)])
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,LocX),
-						SetMemory(0x58DC64+0x14*26,SetTo,LocY),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					LocX << LocX - 32
-					LocY << LocY - 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,0),
-				MoveLocation("CLoc166", 87, P8, 64),
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			F1LocX << f_maskread_epd(EPD(0x58DC60+0x14*26),0xFFFF)
-			F1LocY << f_maskread_epd(EPD(0x58DC64+0x14*26),0xFFFF0000)//65536
-			if EUDWhile()((Del<2)):
-				LocX << F1LocX + 32
-				LocY << F1LocY - 64
-				Num << 0
-				if EUDWhile()((EUDOr(LocX<=3072,LocY<=0x7FFFFFFF),Num == 0)):
-					Trigger(conditions=[LocX>=3072],actions=[LocX.SetNumber(3072)])
-					Trigger(conditions=[LocY>=0x80000000],actions=[LocY.SetNumber(0)])
-					DoActions([
-						SetMemory(0x58DC68+0x14*26,SetTo,LocX),
-						SetMemory(0x58DC64+0x14*26,SetTo,LocY),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					LocX << LocX + 32
-					LocY << LocY - 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,0),
-				MoveLocation("CLoc166", 87, P8, 64),
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			F1LocX << f_maskread_epd(EPD(0x58DC60+0x14*26),0xFFFF)
-			F1LocY << f_maskread_epd(EPD(0x58DC64+0x14*26),0xFFFF0000)//65536
-			if EUDWhile()((Del<2)):
-				LocX << F1LocX - 32
-				LocY << F1LocY + 64
-				Num << 0
-				if EUDWhile()((EUDOr(LocX<=0x7FFFFFFF,LocY<=6144),Num == 0)):
-					Trigger(conditions=[LocX>=0x80000000],actions=[LocX.SetNumber(0)])
-					Trigger(conditions=[LocY>=6144],actions=[LocY.SetNumber(6144)])
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,LocX),
-						SetMemory(0x58DC6C+0x14*26,SetTo,LocY),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					LocX << LocX - 32
-					LocY << LocY + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,0),
-				MoveLocation("CLoc166", 87, P8, 64),
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			F1LocX << f_maskread_epd(EPD(0x58DC60+0x14*26),0xFFFF)
-			F1LocY << f_maskread_epd(EPD(0x58DC64+0x14*26),0xFFFF0000)//65536
-			if EUDWhile()((Del<2)):
-				LocX << F1LocX + 32
-				LocY << F1LocY + 64
-				Num << 0
-				if EUDWhile()((EUDOr(LocX<=3072,LocY<=6144),Num == 0)):
-					Trigger(conditions=[LocX>=3072],actions=[LocX.SetNumber(3072)])
-					Trigger(conditions=[LocY>=6144],actions=[LocY.SetNumber(6144)])
-					DoActions([
-						SetMemory(0x58DC68+0x14*26,SetTo,LocX),
-						SetMemory(0x58DC6C+0x14*26,SetTo,LocY),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					LocX << LocX + 32
-					LocY << LocY + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-		EUDEndIf()
-
-
-		if EUDIf()((Memory(0x594000+4*1545,Exactly,1))):
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,6144),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<1)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<3072,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,Loc),
-						SetMemory(0x58DC68+0x14*26,SetTo,Loc+32),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 32
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,6144),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<1)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<3072,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,3040-Loc),
-						SetMemory(0x58DC68+0x14*26,SetTo,3072-Loc),
-						RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 32
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,3072),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<1)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<6144,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC64+0x14*26,SetTo,Loc),
-						SetMemory(0x58DC6C+0x14*26,SetTo,Loc+64),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,3072),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<1)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<6144,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC64+0x14*26,SetTo,6112-Loc),
-						SetMemory(0x58DC6C+0x14*26,SetTo,6144-Loc),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-		EUDEndIf()
-
-		if EUDIf()((Memory(0x594000+4*1545,Exactly,3))):
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,6144),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<2)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<3072,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,Loc),
-						SetMemory(0x58DC68+0x14*26,SetTo,Loc+32),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 32
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*26,SetTo,0),
-				SetMemory(0x58DC6C+0x14*26,SetTo,6144),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<2)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<3072,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC60+0x14*26,SetTo,3040-Loc),
-						SetMemory(0x58DC68+0x14*26,SetTo,3072-Loc),
-						RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 32
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-		EUDEndIf()
-
-		if EUDIf()((Memory(0x594000+4*1545,Exactly,4))):
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,3072),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<2)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<6144,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC64+0x14*26,SetTo,Loc),
-						SetMemory(0x58DC6C+0x14*26,SetTo,Loc+64),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-
-			Del << 0
-			DoActions([
-				SetMemory(0x58DC60+0x14*25,SetTo,0),
-				SetMemory(0x58DC68+0x14*25,SetTo,0),
-				SetMemory(0x58DC64+0x14*25,SetTo,0),
-				SetMemory(0x58DC6C+0x14*25,SetTo,0),
-				SetMemory(0x58DC60+0x14*26,SetTo,0),
-				SetMemory(0x58DC68+0x14*26,SetTo,3072),
-				SetMemory(0x58DC60+0x14*27,SetTo,0),
-				SetMemory(0x58DC68+0x14*27,SetTo,64),
-				SetMemory(0x58DC64+0x14*27,SetTo,0),
-				SetMemory(0x58DC6C+0x14*27,SetTo,64),
-			])
-			if EUDWhile()((Del<2)):
-				Loc << 0
-				Num << 0
-				if EUDWhile()((Loc<6144,Num == 0)):
-					DoActions([
-						SetMemory(0x58DC64+0x14*26,SetTo,6112-Loc),
-						SetMemory(0x58DC6C+0x14*26,SetTo,6144-Loc),
-							RemoveUnitAt(1,47,"CLoc166",P8),
-					])
-					Trigger(conditions=[Bring(P8, AtLeast, 1, 84, "CLoc166")],
-						actions=[Num.SetNumber(1),
-							MoveLocation("CLoc169", 84, P8, "CLoc166"),MoveLocation("CLoc165", 84, P8, "CLoc166"),
-							GiveUnits(1,84,P8,"CLoc165",P12),
-							RemoveUnit(84,P12),
-							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, UnitProperty(hallucinated=True,invincible = True)),SetMemoryX(0x669E28, SetTo, 0,0xFF),
-							MoveUnit(All, 47, P8, "Start", "CLoc169"),
-							KillUnit(47, P8),
-							])
-					Loc << Loc + 64
-				EUDEndWhile()
-				Del << Del + 1
-			EUDEndWhile()
-		EUDEndIf()
-		VResetSw << 0
-
-	if EUDElseIf()(VResetSw == 0):
-
-		F2BSH << 0
-		Del2 << 0
-		Loc2 << 0
-		Num2 << 0
-		F1Del2 << 0
-		Seed2 << 0
-		CunitX2 << 0
-		CunitX219 << 0
-		CunitX225 << 0
-		Del << 0
-		Loc << 0
-		Num << 0
-		F1Del << 0
-		Seed << 0
-		CunitX << 0
-		CunitX19 << 0
-		CunitX25 << 0
-		F1LocX << 0
-		F1LocY << 0
-		LocX << 0
-		LocY << 0
-		F2BHP << 0
-		F2BSH << 0
-		F2BDX << 0
-		F2BDT << 0
-		F2BDY << 0
-		F2BDH << 0
-		F2BRT << 0
-		F2BRU << 0
-		F2BRS << 0
-		F2BRV << 0
-		F2BSD << 0
-		F2XT1 << 0
-		F2XT2 << 0
-		F2XT3 << 0
-		
-		F2B << 0
-		DoActions([SetMemory(0x58F518,SetTo,0),
-			SetMemory(0x58F51c,SetTo,0),
-			SetMemory(0x58F520,SetTo,0),
-			SetMemory(0x58F524,SetTo,0)])
-
-		VResetSw << 1
-		
-	EUDEndIf()
