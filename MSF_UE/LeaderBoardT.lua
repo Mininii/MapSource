@@ -1,6 +1,6 @@
 function LeaderBoardTFunc()
 	local LeaderBoardT = CreateCCode()
-	Trigger { -- í‚¬ í¬ì¸íŠ¸ ë¦¬ë”ë³´ë“œ, ì§‘ê·¼ì²˜ ìœ ë‹› ì˜¤ë”ì‹œí‚¤ê¸°, ì‰´ë“œ íšŒë³µ, ì €ê¸€ë§ íˆë“œë¼ ì–´íƒë•…
+	Trigger { -- Å³ Æ÷ÀÎÆ® ¸®´õº¸µå, Áı±ÙÃ³ À¯´Ö ¿À´õ½ÃÅ°±â, ½¯µå È¸º¹, Àú±Û¸µ È÷µå¶ó ¾îÅÃ¶¥
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -15,7 +15,7 @@ function LeaderBoardTFunc()
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- ë°ìŠ¤ ìŠ¤ì½”ì–´ ë¦¬ë”ë³´ë“œ
+	Trigger { -- µ¥½º ½ºÄÚ¾î ¸®´õº¸µå
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -29,7 +29,7 @@ function LeaderBoardTFunc()
 			PreserveTrigger();
 	},
 	}
-	Trigger { -- í‚¬ ìŠ¤ì½”ì–´ ë¦¬ë”ë³´ë“œ
+	Trigger { -- Å³ ½ºÄÚ¾î ¸®´õº¸µå
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -44,8 +44,8 @@ function LeaderBoardTFunc()
 	},
 	}
 
-CIf(FP,CDeaths(FP,Exactly,200,LeaderBoardT))-- ë¦¬ë”ë³´ë“œ íƒ€ì´ë¨¸ê°€ ì£¼ê¸°ì ìœ¼ë¡œ ì •í™•íˆ 200ì¼ ê²½ìš° ë‚´ë¦° ëª…ë ¹ì´ ì—†ì–´ ë©ˆì¶°ìˆëŠ” ìœ ë‹›ì— ëª…ë ¹ì„ ë‚´ë¦¬ëŠ” ì½”ë“œ
-CMov(FP,0x6509B0,19025+19) --CUnit ì‹œì‘ì§€ì  +19 (0x4C)
+CIf(FP,CDeaths(FP,Exactly,200,LeaderBoardT))-- ¸®´õº¸µå Å¸ÀÌ¸Ó°¡ ÁÖ±âÀûÀ¸·Î Á¤È®È÷ 200ÀÏ °æ¿ì ³»¸° ¸í·ÉÀÌ ¾ø¾î ¸ØÃçÀÖ´Â À¯´Ö¿¡ ¸í·ÉÀ» ³»¸®´Â ÄÚµå
+CMov(FP,0x6509B0,19025+19) --CUnit ½ÃÀÛÁöÁ¡ +19 (0x4C)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 
 CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,7,0,0xFF)})
@@ -56,12 +56,12 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 			Deaths(CurrentPlayer,AtMost,0,0);
 		},
 		actions = {
-			SetDeaths(CurrentPlayer,Add,256*1,0); -- í˜¹ì‹œëª°ë¼ì„œ ë„£ì–´ë‘” ì¢€ë¹„ìœ ë‹› ê²€ì‚¬íŠ¸ë¦¬ê±°. ì‚´ì•„ìˆëŠ”ë° ì²´ë ¥ì´ 0ì¸ê±° 1ë¡œ ì˜¬ë¦¼
+			SetDeaths(CurrentPlayer,Add,256*1,0); -- È¤½Ã¸ô¶ó¼­ ³Ö¾îµĞ Á»ºñÀ¯´Ö °Ë»çÆ®¸®°Å. »ì¾ÆÀÖ´Âµ¥ Ã¼·ÂÀÌ 0ÀÎ°Å 1·Î ¿Ã¸²
 			PreserveTrigger();
 		}
 	}
 	DoActions(FP,MoveCp(Add,17*4))
-	CIf(FP,{TTOR({ -- ì»´í“¨í„° ìœ ë‹›ì€ ëª…ë ¹ì´ ì—†ì–´ ëŒ€ê¸°í•˜ê³  ìˆì„ ê²½ìš° 2, 3, 156, 160 ë„¤ê°€ì§€ì˜ ëª…ë ¹ íƒ€ì…ìœ¼ë¡œ ì„¤ì •ë¨. ì´ë¥¼ ì „ë¶€ ì¡ì•„ì¤˜ì•¼ë¨
+	CIf(FP,{TTOR({ -- ÄÄÇ»ÅÍ À¯´ÖÀº ¸í·ÉÀÌ ¾ø¾î ´ë±âÇÏ°í ÀÖÀ» °æ¿ì 2, 3, 156, 160 ³×°¡ÁöÀÇ ¸í·É Å¸ÀÔÀ¸·Î ¼³Á¤µÊ. ÀÌ¸¦ ÀüºÎ Àâ¾ÆÁà¾ßµÊ
 		DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,3*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,156*256,0,0xFF00),
@@ -80,29 +80,29 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 	NJumpXEnd(FP,L_Gun_Order)
 	f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
 	for i = 0, 6 do
-		NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- íƒ€ê²Ÿ ì„¤ì • ì‹œ í”Œë ˆì´ì–´ê°€ ì—†ì„ ê²½ìš° ë‹¤ì‹œ ì—°ì‚°í•¨
+		NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- Å¸°Ù ¼³Á¤ ½Ã ÇÃ·¹ÀÌ¾î°¡ ¾øÀ» °æ¿ì ´Ù½Ã ¿¬»êÇÔ
 	end
 	CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
 	for i = 0, 6 do
-		CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)}) -- ì„¤ì •ëœ íƒ€ê²Ÿì˜ ë°°ëŸ­ ì¢Œí‘œë¥¼ ê°€ì ¸ì˜´
+		CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)}) -- ¼³Á¤µÈ Å¸°ÙÀÇ ¹è·° ÁÂÇ¥¸¦ °¡Á®¿È
 			CMov(FP,TempBarPos,BarPos[i+1])
 		CIfEnd()
 	end
 	CIfEnd()
-		CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- ë§‰í˜€ì„œ ìœ ë‹› ì•ˆë‚˜ì˜¬ ê²½ìš°ì— ëª…ë ¹ì´ ë“¤ì–´ê°€ì§€ ì•Šë„ë¡ ì„¤ì •í•¨. ì´ê±°ì•ˆí•˜ë©´ ìº”ë‚« ì œí•œ ì¤„ì–´ë“¤ë©´ì„œ ë§µì´ ë§ê°€ì§
+		CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- ¸·Çô¼­ À¯´Ö ¾È³ª¿Ã °æ¿ì¿¡ ¸í·ÉÀÌ µé¾î°¡Áö ¾Êµµ·Ï ¼³Á¤ÇÔ. ÀÌ°Å¾ÈÇÏ¸é Äµ³´ Á¦ÇÑ ÁÙ¾îµé¸é¼­ ¸ÊÀÌ ¸Á°¡Áü
 		CDoActions(FP,{
-			TSetDeathsX(_Sub(BackupCp,6),SetTo,14*256,0,0xFF00), -- ëª…ë ¹ ë°œì‹¸
+			TSetDeathsX(_Sub(BackupCp,6),SetTo,14*256,0,0xFF00), -- ¸í·É ¹ß½Î
 			TSetDeaths(_Sub(BackupCp,3),SetTo,TempBarPos,0),
 		})
 		CIfEnd()
 		local HeroPointCheck = def_sIndex() 
 		CJump(FP,HeroPointCheck)
-		NJumpXEnd(FP,Check_Hero) -- ì˜ì›…ìœ ë‹›ë“¤ ë„ì°© ì§€ì . ì˜ì‘ìœ ë‹›ì¸ì§€ ì•„ë‹Œì§€ ì²´í¬í•œ í›„ ì˜ì‘ìœ ë‹›ì´ ì•„ë‹ˆë©´ ëª…ë ¹ì„ ë‚´ë¦¼
+		NJumpXEnd(FP,Check_Hero) -- ¿µ¿õÀ¯´Öµé µµÂø ÁöÁ¡. ¿µÀÛÀ¯´ÖÀÎÁö ¾Æ´ÑÁö Ã¼Å©ÇÑ ÈÄ ¿µÀÛÀ¯´ÖÀÌ ¾Æ´Ï¸é ¸í·ÉÀ» ³»¸²
 		f_SaveCp()
 		local TempCPCheck = CreateVar()
 		CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
-		f_Div(FP,TempCPCheck,_Mov(84)) -- í•´ë‹¹ìœ ë‹›ì˜ ì¸ë±ìŠ¤ê°€ ëª‡ë²ˆì¸ì§€ ì²´í¬í•¨
-		NJumpX(FP,L_Gun_Order,{TMemory(_Add(_Mul(TempCPCheck,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),AtMost,0)}) -- ì˜ì‘ìœ ë‹›ì´ ì•„ë‹ ê²½ìš° ìœ„ìª½ì˜ ëª…ë ¹ì£¼ëŠ” íŠ¸ë¦¬ê±°ë¡œ ì í”„í•¨.
+		f_Div(FP,TempCPCheck,_Mov(84)) -- ÇØ´çÀ¯´ÖÀÇ ÀÎµ¦½º°¡ ¸î¹øÀÎÁö Ã¼Å©ÇÔ
+		NJumpX(FP,L_Gun_Order,{TMemory(_Add(_Mul(TempCPCheck,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),AtMost,0)}) -- ¿µÀÛÀ¯´ÖÀÌ ¾Æ´Ò °æ¿ì À§ÂÊÀÇ ¸í·ÉÁÖ´Â Æ®¸®°Å·Î Á¡ÇÁÇÔ.
 		CJumpEnd(FP,HeroPointCheck)
 		f_LoadCp()
 		DoActions(FP,MoveCp(Subtract,6*4))

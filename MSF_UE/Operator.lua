@@ -18,10 +18,17 @@ function OPTrig()
 
 
 
-
+        local CurLev = CreateVar()
         CMov(FP,0x6509B0,CurrentOP)
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,LevelT[2],Add,1),SetCVar(FP,Level[2],Add,1)},{Preserved})
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,LevelT[2],Subtract,1),SetCVar(FP,Level[2],Subtract,1)},{Preserved})
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,Level[2],Add,1)},{Preserved})
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,Level[2],Subtract,1)},{Preserved})
+            CIf(FP,{TTCVar(FP,CurLev[2],NotSame,Level)})
+            f_Mod(FP,LevelT,Level,_Mov(10))
+            f_Div(FP,LevelT2,Level,_Mov(10))
+            CAdd(FP,LevelT2,1)
+            CMov(FP,CurLev,Level)
+            CIfEnd()
+
             Trigger {
             	players = {FP},
             	conditions = {

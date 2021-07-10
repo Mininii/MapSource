@@ -87,7 +87,6 @@ function LevelUp()
 		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
 		CAdd(FP,Level,1)
 		f_Mod(FP,LevelT,Level,_Mov(10))
-		CAdd(FP,LevelT,1)
 		f_Div(FP,LevelT2,Level,_Mov(10))
 		CAdd(FP,LevelT2,1)
 		if TestStart == 1 then
@@ -128,9 +127,14 @@ function LevelUp()
 		for j, k in pairs(BdArr) do
 			SetLevelUpHP(k,2)
 		end
+		DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
+		for i = 0, 7 do
+			TriggerX(FP,{CVar(FP,Level[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
+		end
+		TriggerX(FP,{CVar(FP,Level[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 		
 		
-		Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtMost,49)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,1)},{Preserved})
+		Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtLeast,51)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 
 		
 		DoActions(FP,{SetSwitch(ResetSwitch,Set)})
