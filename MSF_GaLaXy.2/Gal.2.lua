@@ -16821,7 +16821,8 @@ end
 
 
 CIf(FP,CDeaths(FP,AtLeast,2,GMode))
-CIf(FP,CVar(FP,ExchangeRateT[2],AtLeast,0x7FFFFFFF))
+CMov(FP,ExchangeRateT,ExchangeRate)
+CIf(FP,CVar(FP,ExchangeRateT[2],AtLeast,0x80000000))
 CNeg(FP,ExchangeRateT)
 Trigger {
 	players = {FP},
@@ -16965,7 +16966,6 @@ Trigger {
 		PreserveTrigger();
 	}
 }
-CMov(FP,ExchangeRateT,ExchangeRate)
 CMov(FP,PaneltyPointT,PaneltyPoint)
 DoActions(FP,{
 		SetMemory(0x641598, SetTo, 0x8E80E307);
@@ -21181,10 +21181,12 @@ for i = 0, 363 do
 		players = {Force1},
 		conditions = {
 			Deaths(CurrentPlayer,AtLeast,364,441);
+			DeathsX(CurrentPlayer,Exactly,0,441,0xFF000000);
 			DeathsX(CurrentPlayer,AtMost,0,440,0xFFFFFF);
 		},
 		actions = {
-			RotatePlayer({PlayWAVX(BGMArr[1])},{128,129,130,131},FP);
+			PlayWAV(BGMArr[1]); 
+			PlayWAV(BGMArr[1]); 
 			SetDeathsX(CurrentPlayer,Add,2000,440,0xFFFFFF);
 			SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
 			PreserveTrigger();
@@ -21199,8 +21201,7 @@ Trigger { -- 상시브금
 		DeathsX(FP,AtMost,0,440,0xFFFFFF);
 	},
 	actions = {
-		PlayWAV(BGMArr[1]); 
-		PlayWAV(BGMArr[1]); 
+		RotatePlayer({PlayWAVX(BGMArr[1])},{128,129,130,131},FP);
 		SetDeathsX(FP,Add,2000,440,0xFFFFFF);
 		SetDeathsX(FP,SetTo,1,441,0xFFFFFF);
 		PreserveTrigger();
