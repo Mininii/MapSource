@@ -36,9 +36,9 @@ function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
 CIf(FP,CDeaths(FP,AtLeast,1,StoryT))
 CAdd(FP,_Ccode("X",StoryT),Dt)
 Id_T0 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들\x04의 \x08레갈 성 \x15서문 요새\x04가 \x07배고픈 마린들\x04에게 \x08함락\x04되었습니다."
-Id_T1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고픈 \x11마\x03린들 \x07 ::\r\n\x1B여기\x04가 \x08놈\x04의 본거지군. 진진짜라를 내놓아라 \x08타림.\r\n\r\n  "
+Id_T1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고픈 \x11마\x03린들 \x07::\r\n\x1B여기\x04가 \x08놈\x04의 본거지군. 진진짜라를 내놓아라 \x08타림.\r\n\r\n  "
 Id_T2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x08버러지\x1B같은 \x06그지들 주제\x1B에 감히 어디서 그 이름을 입에 함부로 놀리는 것이냐?\r\n\r\n "
-Id_T3 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고픈 \x11마\x03린들 \x07 ::\r\n\x08닥쳐라. \x1B견딜 수 없는 허기\x04가 \x1B몰려오는 것\x04을 더 이상 두고 볼 수 없다.\r\n\x15타림, \x04네놈의 \x1B그 라면\x04을 가져가겠다.\r\n\r\n  "
+Id_T3 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고픈 \x11마\x03린들 \x07::\r\n\x08닥쳐라. \x1B견딜 수 없는 허기\x04가 \x1B몰려오는 것\x04을 더 이상 두고 볼 수 없다.\r\n\x15타림, \x04네놈의 \x1B그 라면\x04을 가져가겠다.\r\n\r\n  "
 Id_T4 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x1B어쩔 수 없군. 내가 직접 나서서 \x08저 그지 놈들\x1B을 처리하겠다.\r\n\r\n "
 Id_T5 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x11진진 \x15짜라의 \x1B주인 \x08타\x06림\x04이 \x08등장\x04하였습니다.\r\n\x13\x1FS\x04heild \x022,000 \x03/// \x07H\x04ealth \x1D??,???,???\r\n\x13\x1B\"내가 직접 나서서 저 빌어먹을 그지새끼들을 한 놈도 빠짐없이 라면통에 쳐박아주마.\""
 
@@ -131,8 +131,6 @@ Trigger { -- No comment (4347C6C8)
         FR = CreateVar()
         Fx2 = CreateVar()
         Fy2 = CreateVar()
-        DY = CreateVar()
-        DZ = CreateVar()
         Sh_Para = CreateVar()
 
 
@@ -546,6 +544,362 @@ Trigger { -- No comment (4347C6C8)
 	},
 }
 
+local DX1 = CreateVar()
+local DY1 = CreateVar()
+local DZ1 = CreateVar()
+local Del = CreateVar()
+local Loc = CreateVar()
+local Num = CreateVar()
+
+TriggerX(FP,{Void(41,Exactly,1)},{
+	SetCVar(FP,DX1[2],SetTo,2),
+	SetCVar(FP,DY1[2],SetTo,1),
+	SetCVar(FP,DZ1[2],SetTo,0)
+},{Preserved})
+TriggerX(FP,{Void(41,Exactly,2)},{
+	SetCVar(FP,DX1[2],SetTo,4),
+	SetCVar(FP,DY1[2],SetTo,1),
+	SetCVar(FP,DZ1[2],SetTo,1)
+},{Preserved})
+TriggerX(FP,{Void(41,Exactly,3)},{
+	SetCVar(FP,DX1[2],SetTo,6),
+	SetCVar(FP,DY1[2],SetTo,1),
+	SetCVar(FP,DZ1[2],SetTo,2)
+},{Preserved})
+TriggerX(FP,{Void(41,Exactly,4)},{
+	SetCVar(FP,DX1[2],SetTo,8),
+	SetCVar(FP,DY1[2],SetTo,2),
+	SetCVar(FP,DZ1[2],SetTo,2)
+},{Preserved})
+
+CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,1)})
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*30,SetTo,0),
+		SetMemory(0x58DC6C+0x14*30,SetTo,6144),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DX1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3096),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC60+0x14*30,SetTo,Loc),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Add(Loc,32)),
+				RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+CIfEnd()
+
+CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,2)})
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*30,SetTo,0),
+		SetMemory(0x58DC6C+0x14*30,SetTo,6144),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DX1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3096),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3096),Loc)),
+				RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+CIfEnd()
+
+CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,3)})
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC60+0x14*30,SetTo,0),
+		SetMemory(0x58DC68+0x14*30,SetTo,3072),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DX1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC64+0x14*30,SetTo,Loc),
+				TSetMemory(0x58DC6C+0x14*30,SetTo,_Add(Loc,32)),
+				RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+CIfEnd()
+CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,4)})
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC60+0x14*30,SetTo,0),
+		SetMemory(0x58DC68+0x14*30,SetTo,3072),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DX1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6112),Loc)),
+				TSetMemory(0x58DC6C+0x14*30,SetTo,_Sub(_Mov(6144),Loc)),
+				RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+CIfEnd()
+
+CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*30,SetTo,0),
+		SetMemory(0x58DC6C+0x14*30,SetTo,6144),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DY1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC60+0x14*30,SetTo,Loc),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Add(Loc,32)),
+					RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*30,SetTo,0),
+		SetMemory(0x58DC6C+0x14*30,SetTo,6144),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DY1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3096),Loc)),
+				RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC60+0x14*30,SetTo,0),
+		SetMemory(0x58DC68+0x14*30,SetTo,3072),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DZ1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC64+0x14*30,SetTo,Loc),
+				TSetMemory(0x58DC6C+0x14*30,SetTo,_Add(Loc,32)),
+					RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+
+	CMov(FP,Del,0)
+	DoActions(FP,{
+		SetMemory(0x58DC60+0x14*31,SetTo,0),
+		SetMemory(0x58DC68+0x14*31,SetTo,0),
+		SetMemory(0x58DC64+0x14*31,SetTo,0),
+		SetMemory(0x58DC6C+0x14*31,SetTo,0),
+		SetMemory(0x58DC60+0x14*30,SetTo,0),
+		SetMemory(0x58DC68+0x14*30,SetTo,3072),
+		SetMemoryX(0x669E28, SetTo, 16,0xFF),
+	})
+	local While = def_sIndex()
+	local While2 = def_sIndex()
+	CJumpEnd(FP,While)
+	NWhile(FP,{TTCVar(FP,Del[2],"<",DZ1)})
+		CMov(FP,Loc,0)
+		CMov(FP,Num,0)
+		CJumpEnd(FP,While2)
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+			CDoActions(FP,{
+				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6112),Loc)),
+				TSetMemory(0x58DC6C+0x14*30,SetTo,_Sub(_Mov(6144),Loc)),
+					RemoveUnitAt(1,47,"CLoc109",P8),
+			})
+			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
+				{SetCVar(FP,Num[2],SetTo,1),
+					MoveLocation("Shot", 60, P8, "CLoc109"),MoveLocation("CLoc115", 60, P8, "CLoc109"),
+					GiveUnits(1,60,P8,"CLoc115",P12),
+					RemoveUnit(60,P12),
+					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
+					MoveUnit(All, 47, P8, "Start", "Shot"),
+					KillUnit(47, P8),
+					},{Preserved})
+			CAdd(FP,Loc,32)
+			CJump(FP,While2)
+		NWhileEnd()
+		CAdd(FP,Del,1)
+		CJump(FP,While)
+	NWhileEnd()
+	DoActions(FP,SetMemoryX(0x669E28, SetTo, 0,0xFF))
+CIfEnd()
 
 
 Trigger { -- No comment (4347C6C8)
@@ -1411,8 +1765,12 @@ SetCVar(FP,FA[2],SetTo,0);
 SetCVar(FP,FR[2],SetTo,0);
 SetCVar(FP,Fx2[2],SetTo,0);
 SetCVar(FP,Fy2[2],SetTo,0);
-SetCVar(FP,DY[2],SetTo,0);
-SetCVar(FP,DZ[2],SetTo,0);
+SetCVar(FP,DX1[2],SetTo,0);
+SetCVar(FP,DY1[2],SetTo,0);
+SetCVar(FP,DZ1[2],SetTo,0);
+SetCVar(FP,Del[2],SetTo,0);
+SetCVar(FP,Loc[2],SetTo,0);
+SetCVar(FP,Num[2],SetTo,0);
 SetCVar(FP,Sh_Para[2],SetTo,0);
 SetCDeaths(FP,SetTo,0,Id_T0C),
 SetCDeaths(FP,SetTo,0,Id_T1C),
@@ -1431,6 +1789,7 @@ SetVoid(3,SetTo,0);
 SetVoid(4,SetTo,0);
 SetVoid(5,SetTo,0);
 SetVoid(6,SetTo,0);
+SetVoid(42,SetTo,0);
 })
 CIfXEnd()
 CIfEnd()
