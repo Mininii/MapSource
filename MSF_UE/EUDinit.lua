@@ -161,6 +161,7 @@ function onInit_EUD()
 	WeaponTypePatch(124,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(89,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -194,6 +195,8 @@ function EffUnitPatch(UnitID)
 end
 EffUnitPatch(203)
 EffUnitPatch(204)
+EffUnitPatch(205)
+EffUnitPatch(206)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
@@ -334,6 +337,7 @@ UnitSizePatch(60,1)
 	UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
 	UnitSizePatch(53,10) -- 저그 유닛 크기 10*10 설정
 	UnitSizePatch(11,1)
+	UnitSizePatch(63,5)
 
 	for j, k in pairs(HeroArr) do
 		UnitSizePatch(k,10)

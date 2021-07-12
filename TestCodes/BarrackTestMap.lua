@@ -31,6 +31,10 @@ SetCall(FP)
 	SetRecoverCp()
 SetCallEnd()
 
+CJumpEnd(AllPlayers,0x600)
+NoAirCollisionX(FP)--
+CIfOnce(FP)
+
 BRXT = CreateVarray(FP,5)
 BRYT = CreateVarray(FP,5)
 BRX2T = CreateVarray(FP,5)
@@ -42,9 +46,6 @@ BPosY = CreateVar()
 Cunit2 = CreateVar()
 CurCunit = CreateVar()
 CurBR = CreateVar()
-CJumpEnd(AllPlayers,0x600)
-NoAirCollisionX(FP)--
-CIfOnce(FP)
 TextX = CreateVar()
 TextY = CreateVar()
 TextX2 = CreateVar()

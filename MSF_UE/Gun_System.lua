@@ -41,7 +41,21 @@ function Gun_System()
     if TestStart == 1 then
         --f_GSend(146)
         --f_GSend(136)
+        CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)})
+            f_SaveCp()
+            f_Read(FP,_Sub(BackupCp,15),CPos)
+            Convert_CPosXY()
+
+            CreateBullet(205,20,0,CPosX,CPosY)
+            CreateBullet(206,20,0,CPosX,CPosY)
+            CSPlot(CSMakePolygon(8,64,0,PlotSizeCalc(4,6),1),FP,63,0,nil,1,32,FP,nil,nil,1)
+            DoActions(FP,{KillUnit(63,FP)})
+            
+            f_LoadCp()
+        CIfEnd()
     end
+
+
 
     ClearCalc()
     CunitCtrig_Part2()

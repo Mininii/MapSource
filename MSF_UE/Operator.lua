@@ -1,5 +1,5 @@
 function OPTrig()
-    local Cunit2 = CreateVar()
+    Cunit2 = CreateVar()
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
@@ -41,6 +41,7 @@ function OPTrig()
             		KillUnit(143,P8);
             		KillUnit(144,P8);
             		KillUnit(146,P8);
+            		KillUnit(193,P8);
             		PreserveTrigger();
             	}
             	}
@@ -49,7 +50,9 @@ function OPTrig()
             CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)})
                 CMov(FP,0x6509B0,Cunit2)
                 DoActions(FP,MoveCp(Add,25*4))
-                CIf(FP,{TTOR({TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)})})
+                local Not = def_sIndex()
+                NJumpX(FP,Not,{DeathsX(CurrentPlayer,Exactly,111,0,0xFF)})
+                NJumpX(FP,Not,{DeathsX(CurrentPlayer,Exactly,107,0,0xFF)})
                 Trigger {
                     players = {FP},
                     conditions = {
@@ -74,7 +77,7 @@ function OPTrig()
                         PreserveTrigger();
                     }
                 }
-                CIfEnd()
+                NJumpXEnd(FP,Not)
                 DoActions(FP,{MoveCp(Subtract,25*4)})
             CIfEnd()
         CIfEnd()
@@ -120,8 +123,11 @@ function OPTrig()
     	DisplayText("\x07『 \x1C배속조정 \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』",4)},1)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,OPConsole),{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
+
     CIf(FP,Deaths(CurrentPlayer,AtLeast,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT))
+        if Testmode == 0 then
         TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
+        end
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,SpeedVar[2],AtMost,9)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Add,1)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,SpeedVar[2],AtLeast,2)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Subtract,1)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})

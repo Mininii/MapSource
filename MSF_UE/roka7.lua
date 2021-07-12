@@ -3000,38 +3000,20 @@ end
 	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))
 	DoActionsX(FP,{KillUnit(84,FP),SetCDeaths(FP,Add,1,rokaClear)})
 	roka7ResetTable = {}
-
+	local VTable = {B5_V1[2],B5_V2[2],B5_XY[2],B5_YZ[2],B5_ZX[2],Del[2],Loc[2],Num[2],LocX[2],LocY[2],F1LocX[2],F1LocY[2],0x1FE9,
+	0x1FE8,0x1FE7,0x1FE6,0x1FE5,0x1FE4,0x1FE3,0x1FE2,0x1FE1,0x1FE0,XColor,XType,XTemp}
 	
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE9,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE8,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE7,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE6,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE5,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE4,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE3,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE2,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE1,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,0x1FE0,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,B5_V1[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,B5_V2[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,XColor,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,XType,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,XTemp,SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,B5_XY[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,B5_YZ[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,B5_ZX[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,Del[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,Loc[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,Num[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,LocX[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,LocY[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,F1LocX[2],SetTo,0))
-	table.insert(roka7ResetTable,SetCVar(FP,F1LocY[2],SetTo,0))
+	
+	table.insert(roka7ResetTable,SetMemory(0x66FABC, SetTo, 365))
+
 	for i = 0x2000, 0x2300 do
 		table.insert(roka7ResetTable,SetCVar(FP,i,SetTo,0))
 	end
 	for i = 0, 2000 do
 	table.insert(roka7ResetTable,(SetVoid(i,SetTo,0)))
+	end
+	for j, k in pairs(VTable) do
+		table.insert(roka7ResetTable,(SetCVar(FP,k,SetTo,0)))
 	end
 	DoActions2X(FP,roka7ResetTable)
 

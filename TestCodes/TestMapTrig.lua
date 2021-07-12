@@ -27,7 +27,7 @@ end
 --	DoActions(P1,{DisplayText(""..E_Char_Bangjungsik(i).."")})
 --end
 for i = 0, 363 do
-	Trigger { -- 하드이상 브금제어
+	Trigger { -- 상시브금
 		players = {Force1},
 		conditions = {
 			DeathsX(CurrentPlayer,Exactly,i,441,0xFFFFFF);
@@ -42,8 +42,23 @@ for i = 0, 363 do
 			
 			},
 		}
+	Trigger { -- 상시브금
+		players = {FP},
+		conditions = {
+			DeathsX(FP,Exactly,i,441,0xFFFFFF);
+			Deaths(FP,AtMost,0,440);
+		},
+		actions = {
+			PlayWAV(BGMArr[i+1]); 
+			PlayWAV(BGMArr[i+1]); 
+			SetDeathsX(FP,Add,2000,440,0xFFFFFF);
+			SetDeathsX(FP,Add,1,441,0xFFFFFF);
+			PreserveTrigger();
+			
+			},
+		}
 	end
-	Trigger { -- 하드이상 브금제어
+	Trigger { -- 상시브금
 		players = {Force1},
 		conditions = {
 			DeathsX(CurrentPlayer,Exactly,363,441,0xFFFFFF);
@@ -58,7 +73,7 @@ for i = 0, 363 do
 			
 			},
 		}
-	Trigger { -- 하드이상 브금제어
+	Trigger { -- 상시브금
 		players = {Force1},
 		conditions = {
 			DeathsX(CurrentPlayer,Exactly,364,441,0xFFFFFF);
@@ -110,7 +125,7 @@ function ConvertLocation(Location)
 	local TempLocID = Location
 	if type(Location) == "string" then
 		TempLocID = ParseLocation(Location)-1
-	elseif Type(Location) == "number" then
+	elseif type(Location) == "number" then
 		TempLocID = Location
 		Location = Location+1
 	end
@@ -157,9 +172,46 @@ StartCtrig()
 CJump(AllPlayers,0x600)
 Include_CtrigPlib(360,"Switch 1",0)
 Install_GetCLoc(P2,253,180)
+
+CVariable(P1,0x10) -- 변수
+CVariable(P1,0x11) -- 변수
+CVariable(P1,0x12) -- 변수
+CVariable(P1,0x13) -- 변수
+CVariable(P1,0x14) -- 변수
+A1 = CArray(P1,1000) -- 배열
+VA1 = CVArray(P1,10) -- 변수배열
+CVariable2(P1,0x20,"X","X",1) i = 0x20  -- 인덱스 변수 
+CVariable2(P1,0x30,"X","X",2) j = 0x30
+CVariable2(P1,0x40,"X","X",3) k = 0x40
+CVariable2(P1,0x50,"X","X",4) l = 0x50
+CVariable2(P1,0x60,"X","X",5) m = 0x60
+VA2 = CVArray(P1,10) -- 변수배열
+for i = 0x100, 0x105 do
+	CVariable(P1,i)
+end
 CJumpEnd(AllPlayers,0x600)
 NoAirCollisionX(P1)--
 DoActions(FP,RemoveUnit(0,P1))
+
+CMov(P1,V(0x10),17)
+CMov(P1,V(0x11),15)
+CMov(P1,V(0x14),16)
+CMov(P1,V(0x12),EPD(0x57F0F0))
+CMov(P1,V(0x13),EPD(0x57F120))
+
+CMovX(P1,VArr(VA1,V(i)),15)
+CMovX(P1,VArr(VA1,V(j)),17)
+CMovX(P1,VArr(VA1,V(k)),EPD(0x57F0F0))
+CMovX(P1,VArr(VA1,V(l)),EPD(0x57F120))
+
+CTrigger({P1},
+{TTOR({_TMemory(V(0x12),AtLeast,V(0x10)),_TMemory(VArr(VA1,V(k)),AtMost,VArr(VA1,V(i)))}),
+TTOR({_TMemory(VArr(VA1,V(l)),AtLeast,VArr(VA1,V(j))),_TMemory(V(0x13),AtMost,V(0x11))})}, 
+{DisplayText("TTOR조건만족",4)},1)
+
+CTrigger({P1},
+{TTOR({_TTMemory(V(0x12),NotSame,V(0x14)),_TTMemory(V(0x13),NotSame,V(0x14)),Bring(P1,Exactly,0,"Terran SCV","Anywhere")})},
+{DisplayText("TTOR조건만족2",4)},1)
 fasdas = CreateVar()
 fasdas2 = CreateVar()--
 --
@@ -573,11 +625,14 @@ function S1_funcY(X) return -X^2 end
 --     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 유닛 생성
 --end
 
-DoActions(P1,{CreateUnit(30,20,64,P1)},1)
-for i = 65, 128 do
-	DoActions(P1,{CreateUnit(1,82,i,P1),CreateUnit(1,81,i,P1)},1)
-end
-for i = 1, 8 do
-	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64)},1)
-	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64+8)})
-end
+--DoActions(P1,{CreateUnit(30,20,64,P1)},1)
+--for i = 65, 81 do
+--	DoActions(P1,{CreateUnit(1,82,i,P1),CreateUnit(1,81,i,P1)},1)
+--end
+--for i = 82, 89 do
+--	DoActions(P1,{CreateUnitWithProperties(1,82,i,P1,{hanger = i-81}),CreateUnitWithProperties(1,81,i,P1,{hanger = i-81})},1)
+--end
+--for i = 1, 8 do
+--	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64)},1)
+--	DoActions(P1,{ModifyUnitHangarCount(i,All,"Men",P1,i+64+8)})
+--end

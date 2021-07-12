@@ -22,7 +22,7 @@ end
 NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-DoActions(P8,RemoveUnit(71,P8))
+DoActions(P8,{RemoveUnit(71,P8),RemoveUnit(203,P8),RemoveUnit(204,P8),RemoveUnit(205,P8),RemoveUnit(206,P8)})
 TestSet(2)
 VerText = "\x04Ver. Test"
 FP = P8
