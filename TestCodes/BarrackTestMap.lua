@@ -99,6 +99,40 @@ DoActions(FP,{RotatePlayer({
 
 CIfEnd()
 CIfEnd()
+ESC = 220
+CIf(FP,{Deaths(P1,AtLeast,1,ESC),MemoryX(0x596A30,Exactly,16777216,16777216),CVar(FP,CurCunit[2],AtLeast,1),CVar(FP,CurCunit[2],AtMost,0x7FFFFFFF)})
+
+f_Read(FP,_Add(CurCunit,10),BPos)
+CMov(FP,BPosX,BPos,0,0xFFFF)
+CMov(FP,BPosY,_Div(BPos,_Mov(0x10000)),0,0xFFFF)
+
+CMov(FP,BRX,BPos,0,0xFFFF)
+CMov(FP,BRY,_Div(BPos,0x10000),0,0xFFFF)
+CiSub(FP,BRX2,BRX,BPosX)
+CiSub(FP,BRY2,BRY,BPosY)
+
+ItoDec(FP,BRX,VArr(BRXT,0),1,nil,2)
+ItoDec(FP,BRY,VArr(BRYT,0),1,nil,2)
+ItoDec(FP,BRX2,VArr(BRX2T,0),1,nil,2)
+ItoDec(FP,BRY2,VArr(BRY2T,0),1,nil,2)
+f_Movcpy(FP,_Add(TextX2,SkipText),VArr(BRXT,0),5*4)
+f_Movcpy(FP,_Add(TextY2,SkipText),VArr(BRYT,0),5*4)
+f_Movcpy(FP,_Add(TextX,SkipText),VArr(BRX2T,0),5*4)
+f_Movcpy(FP,_Add(TextY,SkipText),VArr(BRY2T,0),5*4)
+
+DoActions(FP,{RotatePlayer({
+	DisplayTextX("\x04Á¡ÀÇ Áß½É ÁÂÇ¥°¡ °»½ÅµÇ¾ú½À´Ï´Ù.",4),
+},{0,1,2,3,4,5,6,7},FP)})
+
+DoActions(FP,{RotatePlayer({
+	DisplayTextX("\x04==================",4),
+	DisplayTextX("\x04X ÁÂÇ¥ : ".._0D,4),
+	DisplayTextX("\x04Y ÁÂÇ¥ : ".._0D,4),
+	DisplayTextX("\x04¸Ê»ó X ÁÂÇ¥ : ".._0D,4),
+	DisplayTextX("\x04¸Ê»ó Y ÁÂÇ¥ : ".._0D,4),
+},{0,1,2,3,4,5,6,7},FP)})
+
+CIfEnd()
 f_Read(FP,_Add(BPtr,62),BR)
 CIf(FP,{TTCVar(FP,CurBR[2],NotSame,BR)})
 CMov(FP,CurBR,BR)
