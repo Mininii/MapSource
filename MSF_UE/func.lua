@@ -409,7 +409,11 @@ function T_to_BiteBuffer(Table)
 			BiteStack_is_Over_5()
 		end
 		for i, j in pairs(Table) do
+			if type(j) == "string" and j =="ACAS" then
+				BiteValue = BiteValue + Another_CAPlot_Shape*(256^ret)
+			else
 			BiteValue = BiteValue + j*(256^ret)
+			end
 			ret = ret + 1
 		end
 		Table = BiteValue
@@ -472,8 +476,14 @@ function CArrSizeConvert(Size)
 	end
 	return TNum
 end
-
-function ShootingStar_func()
-	
-	
+function Convert_CPosXY(Value)
+	if Value ~= nil then
+	CDoActions(FP,{
+		TSetCVar(FP,CPos[2],SetTo,Value),
+		SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
+	})
+	else
+		CallTrigger(FP,Call_CPosXY)
+	end
+	return CPosX,CPosY
 end

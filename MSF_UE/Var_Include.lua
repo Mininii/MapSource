@@ -30,13 +30,12 @@ function Var_init()
 	LevelT = CreateVar(1)
 
 
-
 	BackupCp = CreateVar()
 	MarNumberLimit = CreateVar(84*2)
 	MaxHPBackUp = CreateVarray(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
-	RepHeroIndex,CPos = CreateVariables(8)
+	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
 	
 	CunitP,SelOPEPD,CurCunitI,CurrentSpeed,CurrentOP = CreateVariables(5)
 	UpgradeCP,UpgradeFactor,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted,UPCompStrPtr = CreateVariables(9)

@@ -41,5 +41,11 @@ function Install_ShapeData()
     table.insert(NexBYDLine4,CS_Merge(NexBYDLine3[1],NexBYDLine3[2],0,0))
     table.insert(NexBYDLine4,CS_Merge(NexBYDLine3[3],NexBYDLine[1],0,0))
     NexBYDShape = CS_Merge(NexBYDLine4[1],NexBYDLine4[2],32,0)
+
+
     
+    HiveShape2 = CS_ConnectPathX(CSMakePath({32,960},{1536,3904},{3040,960}),64)
+    OvrmShape = CS_ConnectPathX(CSMakePath({1536,3296},{1088,1728},{1536,32},{1984,1728}),64,1)
+
+
 end
