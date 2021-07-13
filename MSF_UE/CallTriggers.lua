@@ -436,8 +436,8 @@ P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
 
 
-NBYD,Hive_1,Ovrm_1,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF = 
-G_CAPlot2({NBYD,Hive_1,Ovrm_1,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF})
+NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF = 
+G_CAPlot2({NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF})
 
 
 
