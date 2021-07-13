@@ -48,7 +48,7 @@ function Gun_System()
 
             CreateBullet(205,20,0,CPosX,CPosY)
             CreateBullet(206,20,0,CPosX,CPosY)
-            CSPlot(CSMakePolygon(8,64,0,PlotSizeCalc(4,6),1),FP,63,0,nil,1,32,FP,nil,nil,1)
+            CSPlot(CSMakePolygon(8,32,0,PlotSizeCalc(4,6),1),FP,63,0,nil,1,32,FP,nil,nil,1)
             DoActions(FP,{KillUnit(63,FP)})
             
             f_LoadCp()

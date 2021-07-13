@@ -154,11 +154,6 @@ SetCall(FP)
 		f_SaveCp()
 		f_Read(FP,BackupCp,CPos)
 		Convert_CPosXY()
-		NIf(FP,Gun_Line(0,Exactly,201))
-		OverC_Jump = def_sIndex()
-		NJumpX(FP,OverC_Jump,{Gun_Line(1,AtMost,48*32),CVar(FP,CPosX[2],AtLeast,48*32)})
-		NJumpX(FP,OverC_Jump,{Gun_Line(1,AtLeast,48*32),CVar(FP,CPosX[2],AtMost,48*32)})
-		NIfEnd()
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY) -- аб╩С
 		CMov(FP,Repeat_TempV,1)
 		CMov(FP,Gun_TempSpawnSet1,Gun_TempSpawnSet3)
@@ -166,7 +161,6 @@ SetCall(FP)
 		CMov(FP,Gun_TempSpawnSet1,Gun_TempSpawnSet2)
 		CMov(FP,Repeat_TempV,1)
 		CallTriggerX(FP,Set_Repeat)
-		NJumpXEnd(FP,OverC_Jump)
 		f_LoadCp()
 		CAdd(FP,0x6509B0,1)
 	CWhileEnd()
@@ -354,7 +348,7 @@ function G_CAPlot2(ShapeTable)
 		DoActionsX(FP,SetCDeaths(FP,SetTo,1,G_CA_Launch))
 	CIfXEnd()
 
-	CAPlot(ShapeTable,FP,nilunit,0,nil,1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CAPlot(ShapeTable,FP,nilunit,0,{0,0},1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp3[2],SetTo,V(CA[6]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
@@ -440,7 +434,13 @@ P_5 = G_CAPlot(P_5_ShT)
 P_6 = G_CAPlot(P_6_ShT)
 P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
-NBYD,Hive_2,Ovrm_1 = G_CAPlot2({NexBYDShape,HiveShape2,OvrmShape})
+
+
+NBYD,Hive_1,Ovrm_1,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF = 
+G_CAPlot2({NBYD,Hive_1,Ovrm_1,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF})
+
+
+
 
 Load_CAPlot_Shape = SetCallForward()
 SetCall(FP)
@@ -497,8 +497,6 @@ SetCall(FP)
 	f_SaveCp()
 	f_Read(FP,_Sub(BackupCp,15),CPos)
 	f_Read(FP,BackupCp,GunID,"X",0xFF)
-	TriggerX(FP,{CVar(FP,GunID[2],Exactly,148)},{SetCVar(FP,CPos[2],SetTo,0)},{Preserved})
-	TriggerX(FP,{CVar(FP,EXCunitTemp[1][2],AtLeast,1)},{SetCVar(FP,CPos[2],SetTo,0)},{Preserved})
 	Convert_CPosXY()
 	CMov(FP,G_CA,0)
 	G_SkipJump = def_sIndex()

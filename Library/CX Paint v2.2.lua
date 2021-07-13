@@ -2462,6 +2462,25 @@ function CS_Overlap(ShapeA,ShapeB)
 	return RetShape	
 end
 
+
+function CS_OverlapX(...)
+	if ... == nil then
+		CS_InputError()
+	end
+	local arg = table.pack(...)
+	local RetShape = {0}
+	for k = 1, arg.n do
+		RetShape[1] = RetShape[1] + arg[k][1]
+		for i = 1, arg[k][1] do
+			local NX, NY
+			NX = arg[k][i+1][1]
+			NY = arg[k][i+1][2]
+			table.insert(RetShape,{NX,NY})
+		end
+	end
+	return RetShape	
+end
+
 function CS_Merge(ShapeA,ShapeB,Size,Priority)
 	if ShapeA == nil then
 		CS_InputError()
