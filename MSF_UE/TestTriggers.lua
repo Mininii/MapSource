@@ -1,6 +1,6 @@
 function Test_LV1()
     if Limit == 1 then
-        Trigger2(FP,{ElapsedTime(AtLeast,65)},{ModifyUnitHitPoints(All,"Men",P8,64,0),RotatePlayer({DisplayTextX("\x13\x07테스트 모드 \x04특전! 모든 유닛을 1회 끌어당깁니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+        Trigger2(FP,{ElapsedTime(AtLeast,65)},{ModifyUnitHitPoints(All,"Men",P8,64,0),RotatePlayer({DisplayTextX("\x13\x07테스트 모드 \x04특전! 모든 유닛을 1회 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
         Trigger2(FP,{ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0)},{Preserved})
         CIfOnce(FP,ElapsedTime(AtLeast,60))
             CMov(FP,0x6509B0,19025+19)
@@ -178,5 +178,8 @@ function Test_LV2()
         },{0,1,2,3,4,5,6,7},FP)})
 
         CIfEnd()
+        for i = 0, 6 do
+        CMov(FP,0x57f120 + (4*i),OutputPoint)
+        end
     end
 end

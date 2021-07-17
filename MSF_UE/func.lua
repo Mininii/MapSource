@@ -62,6 +62,7 @@ end
 function CreateHeroPointArr(Index,Point,Name,Type) --  영작 유닛 설정 함수
 	local TextType1 = "을(를) 처치하였다...! "
 	local TextType2 = "를 획득하였다...! "
+	local Name2
 	if Type == 1 then
 		Name2 = TextType1
 	elseif Type == 2 then
@@ -72,11 +73,11 @@ function CreateHeroPointArr(Index,Point,Name,Type) --  영작 유닛 설정 함수
 	else
 		Need_Input_TextType()
 	end
-	local Text = "\x0D\x0D\x0D\x0D\x13\x04"..Name..""..Name2.."\x1F+ "..Point.." \x1CPoint \x07Get!\x0D\x0D\x0D\x0D\x14\x14\x14\x14\x14\x14\x14\x14"
+	local Text = "\x13\x04"..Name..""..Name2.."\x1F+ "..Point.." \x1CPoint \x07Get!"
 	local X = {}
-	table.insert(X,CreateCText(FP,Text))
+	table.insert(X,Text)
 	table.insert(X,Index)
-	table.insert(X,CreateVar(Point)) -- HPoint
+	table.insert(X,Point) -- HPoint
 	table.insert(HeroPointArr,X)
 end
 function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 설치 함수. CunitCtrig 단락에 포함됨.
@@ -84,18 +85,10 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
-			f_SaveCp()
-			f_MemCpy(FP,HTextStrPtr,_TMem(Arr(CT[3],0),"X","X",1),CT[2])
-
-			CDoActions(FP,{
-				TSetScore(Force1,Add,Point,Kills);
-				RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
-			})
-
-			f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
-			f_LoadCp()
-		CIfEnd()
+			Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,index,0,0xFF)},{
+				SetScore(Force1,Add,Point,Kills);
+				RotatePlayer({DisplayTextX(CT,4),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
+			},{Preserved})
 	end
 end
 
@@ -110,9 +103,7 @@ function Install_DeathNotice()
 					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
 					SetScore(j-1,Add,1,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-50);
-
 				})
-
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
@@ -189,7 +180,15 @@ function Install_RandPlaceHero()
 			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
 				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
-			NElseX()
+				f_Mod(FP,BiteCalc,HeroID,_Mov(2),0xFF)
+				f_Read(FP,_Add(_Div(HeroID,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
+				NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
+				CDiv(FP,UnitPoint,65536)
+				NElseX()
+				CMod(FP,UnitPoint,65536)
+				NIfXEnd()
+				CAdd(FP,InputPoint,UnitPoint)
+				NElseX()
 				NJumpX(FP,Check_Spawn) -- 소환실패, 다시
 			NIfXEnd()
 		NWhileEnd()

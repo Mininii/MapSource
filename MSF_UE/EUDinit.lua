@@ -162,6 +162,7 @@ function onInit_EUD()
 	WeaponTypePatch(89,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(127,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -197,6 +198,8 @@ EffUnitPatch(203)
 EffUnitPatch(204)
 EffUnitPatch(205)
 EffUnitPatch(206)
+EffUnitPatch(207)
+EffUnitPatch(208)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
@@ -454,6 +457,28 @@ UnitSizePatch(60,1)
 	}
 	end
 
+	YY = 2021
+	MM = 7
+	DD = 20
+	HH = 12
+	function PushErrorMsg(Message)
+		_G["\n"..Message.."\n"]() 
+	end
+	
+	GlobalTime = os.time{year=YY, month=MM, day=DD, hour=HH }
+	--PushErrorMsg(GlobalTime)
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Memory(0x6D0F38,AtMost,GlobalTime);
+
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
 
 	Trigger {
 		players = {FP},
@@ -517,6 +542,9 @@ UnitSizePatch(60,1)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
 			f_SaveCp()
+			-- 유닛정보를 길이 8바이트의 데이터 배열에 저장함
+			-- 0xYYYYXXXX 0xLLIIPPUU
+			-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 			CIf(FP,{TTMemory(_Add(BackupCp,6),NotSame,58)}) -- 발키리 저리가
 				f_Read(FP,_Sub(BackupCp,9),CPos)
 				f_Read(FP,BackupCp,CunitP,"X",0xFF)

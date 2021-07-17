@@ -471,7 +471,7 @@ function PlayerInterface()
 			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),Add,MarDamageFactor*255),
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,101)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 		
 		CIf(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,255*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))},{SetMemoryX(DefUpgradePtrArr[i+1],SetTo,0*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))})
@@ -484,7 +484,7 @@ function PlayerInterface()
 			SetCVar(FP,MarMaxHP[i+1][2],Add,2000*256),
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)},{SetCVar(FP,DefFactorV[i+1][2],Add,2)},{Preserved})
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)},{SetCVar(FP,DefFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 
 		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- 체력값 초기화
@@ -617,8 +617,8 @@ function PlayerInterface()
 			CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV))
 		CIfEnd()
 		CElseX()
-			DoActions(FP,{SetDeathsX(i,SetTo,0,440,0xFFFFFF)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
-			Trigger2(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)})
+			DoActions(FP,{SetDeaths(i,SetTo,0,440)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
+			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)})
 		CIfXEnd()
 	end
 	CIf(FP,Deaths(Force1,AtLeast,1,71)) -- 원격스팀
@@ -652,4 +652,10 @@ function PlayerInterface()
 	end
 	CIfEnd()
 	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
+	
+	
+	CIf(FP,CVar(FP,InputPoint[2],AtLeast,1000))
+	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
+	f_Mod(FP,InputPoint,_Mov(1000))
+	CIfEnd()
 end

@@ -82,8 +82,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ∏Æ∏ «Œ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ≥Ù¿Ã
+					SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ∏Æ∏ «Œ
+					SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ≥Ù¿Ã
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)

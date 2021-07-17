@@ -91,8 +91,7 @@ function Var_init()
 	Dt_NT = CreateVar()
 	Dt_NT2 = CreateVar()
 	CurArr = CreateVar()
-
-
+	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
 	XY_ArrHeader = CreateVar()
 end
 
@@ -130,7 +129,7 @@ function Objects()
 	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	AtkFactor = 7
-	DefFactor = 17
+	DefFactor = 2
 	GunLimit = 1500
 	Ex1= {20,23,26,29,32,35,38}
 

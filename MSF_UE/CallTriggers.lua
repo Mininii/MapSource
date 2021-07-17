@@ -126,6 +126,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 		TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
 	})
+	f_Mod(FP,BiteCalc,Gun_TempSpawnSet1,_Mov(2),0xFF)
+	f_Read(FP,_Add(_Div(Gun_TempSpawnSet1,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
+	NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
+	CDiv(FP,UnitPoint,65536)
+	NElseX()
+	CMod(FP,UnitPoint,65536)
+	NIfXEnd()
+	CAdd(FP,InputPoint,UnitPoint)
+	
 	CIfEnd()
 	NJumpEnd(FP,f_Repeat_ErrorCheck)
 	CSub(FP,Spawn_TempW,1)
@@ -482,7 +491,7 @@ SetCall(FP)
 			CDoActions(FP,{TSetMemory(_Add(G_TempH,G_TempW),SetTo,0)})
 			CAdd(FP,G_TempW,0x20/4)
 		CWhileEnd()
-		if Limit == 1 then
+		if TestStart == 1 then
 			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
 			_0DPatchX(FP,f_GunNumT,5)
 			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),5*4)
@@ -515,7 +524,7 @@ SetCall(FP)
 		TSetMemory(_Add(G_TempV,28*(0x20/4)),SetTo,Gun_Type),
 	})
 	
-	if Limit == 1 then
+	if TestStart == 1 then
 	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
 	_0DPatchX(FP,f_GunNumT,5)
 	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)

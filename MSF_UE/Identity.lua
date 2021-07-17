@@ -1247,7 +1247,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,21,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,15,"CLoc115",P8);
+		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);

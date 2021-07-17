@@ -2,13 +2,24 @@ function LevelUp()
 	local CSelT = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x04상위 플레이어는 선택해주세요.\n\x13\x04다음 레벨로 진행하시겠습니까?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT1 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT3 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07S T A R T\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x08주의!! \x0410단계 진입할때마다 해당 스테이지에서는 \x1C수정 보호막 \x04사용이 \x06제한\x04됩니다!\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local NoText = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04NO를 입력하셨습니다. 게임을 종료합니다.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local TextSwitch = Create_CCTable(5)
 	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),
+	TriggerX(FP,{
+		CommandLeastAt(131,64),
+		CommandLeastAt(132,64),
+		CommandLeastAt(133,64),
+		CommandLeastAt(151,64),
+		CommandLeastAt(152,64),
+		CommandLeastAt(148,64),
+		CommandLeastAt(130,64),
+		CommandLeastAt(201,64),
+		Bring(FP,AtLeast,1,147,64)},{SetCVar(FP,ReserveBGM[2],SetTo,0)},{Preserved})
 	})
-	TriggerX(FP,{CVar(FP,Actived_Gun[2],AtMost,0),
-	CVar(FP,B1_H[2],AtMost,0),
+	TriggerX(FP,{
+	DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
+	CVar(FP,Actived_Gun[2],AtMost,0),
 	CommandLeastAt(131,64),
 	CommandLeastAt(132,64),
 	CommandLeastAt(133,64),
@@ -32,7 +43,10 @@ function LevelUp()
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
 
 			DoActions(FP,{
-			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
+			KillUnitAt(All,125,17,Force1),
+			KillUnitAt(All,125,18,Force1),
+			KillUnitAt(All,125,19,Force1),})
 			CIfX(FP,CVar(FP,LevelT[2],Exactly,3))
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT)})
 			CElseIfX(CVar(FP,LevelT[2],Exactly,6))
@@ -83,12 +97,23 @@ function LevelUp()
 
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 		TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+	if Limit == 1 and TestStart == 0 then
+		TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
+	end
 		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
-		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
+		KillUnitAt(All,124,17,Force1),
+		KillUnitAt(All,124,18,Force1),
+		KillUnitAt(All,124,19,Force1),
+		KillUnitAt(All,125,17,Force1),
+		KillUnitAt(All,125,18,Force1),
+		KillUnitAt(All,125,19,Force1),
+	})
 		CAdd(FP,Level,1)
 		f_Mod(FP,LevelT,Level,_Mov(10))
 		f_Div(FP,LevelT2,Level,_Mov(10))
-		CAdd(FP,LevelT2,1)
+		CAdd(FP,LevelT2,2)
+		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
 		if TestStart == 1 then
 			--CMov(FP,LevelT2,4)
 		end
@@ -139,7 +164,13 @@ function LevelUp()
 		
 		DoActions(FP,{SetSwitch(ResetSwitch,Set)})
 		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
-		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),KillUnit(125,Force1),KillUnit(124,Force1)})
+		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
+		KillUnitAt(All,124,17,Force1),
+		KillUnitAt(All,124,18,Force1),
+		KillUnitAt(All,124,19,Force1),
+		KillUnitAt(All,125,17,Force1),
+		KillUnitAt(All,125,18,Force1),
+		KillUnitAt(All,125,19,Force1),})
 	CIfEnd()
 	
 	
@@ -164,7 +195,16 @@ function LevelUp()
 
 	CIf(FP,CDeaths(FP,AtLeast,15000,ReplaceDelayT))
 	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{Preserved})
-	
+	local ShUnitLimitT = {}
+	local ShUnitLimitT2 = {}
+	for i = 0, 6 do
+		table.insert( ShUnitLimitT,SetMemoryB(0x57F27C+(228*i)+19,SetTo,1))
+		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
+	end
+	; -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+
+	TriggerX(FP,{CVar(FP,LevelT[2],AtMost,9)},{ShUnitLimitT},{Preserved})--19
+	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10)},{ShUnitLimitT2},{Preserved})
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 	MoveMarineArr = {}
 	for i = 0, 6 do
@@ -183,9 +223,13 @@ function LevelUp()
 	CWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
 		CAdd(FP,0x6509B0,1)
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,7*256,0,0xFF00))
+			local PointJump = def_sIndex()
+			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- 포인트유닛 리젠 삭제
+			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- 포인트유닛 리젠 삭제
 			CSub(FP,0x6509B0,1)
 			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드.
 			CAdd(FP,0x6509B0,1)
+			NJumpXEnd(FP,PointJump)
 		CIfEnd()
 		CSub(FP,0x6509B0,1)
 		CAdd(FP,0x6509B0,2)
