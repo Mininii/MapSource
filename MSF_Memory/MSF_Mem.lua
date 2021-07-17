@@ -14,8 +14,8 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.3"
-Limit = 0
+VerText = "\x04Ver. 3.3T"
+Limit = 1
 FP = P6
 TestStartToBYD = 0
 
@@ -146,7 +146,7 @@ CreateCCodeSet({ -- Ccode 데스값 정의
  "CJump_0x700","GModeTP","DifID","LastCan","ScorePrint","BYDBossP1","BYDAttackUpgrade","StoryT","ButtonSound","BYDBossStart2","MarineStackSystem","EffT","B7_Ph","WaveT","WaveC"
 ,"Theorist","PatternProvider"})
 CreateVariableSet({ -- 변수 정의
-"B6_C","RedNumber","ShP","RedNumberT","Panelty","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
+"B6_C","ShP","RedNumberT","Panelty","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
 "B1_K","B2_K","B3_K","B3_K2","B4_K","B5_K","B2_X","B2_Y","B2_H","B2_P","B2_W","B2_HS","B2_SH","B4_P","B5_P","B5_A","B5_R","B5_X","B5_Y","B5_T","Dif","UIndex","UPtr","UEPD","UHP",
 "Dis_1","Dis_2","CunitID","CunitHP","B1_H","B3_H","B4_H","B5_H","BackupCp","CPosX","CPosY","CPos","RandMarRemove","DmgRemain","UnitId","AMount_256","P1MarDeaths",
 "Nextptrs","N_A1","N_A2","N_A3","N_A4","N_X","N_Y","L_X","L_Y","Sw1_On","Sw1_Off","B2_Pos","LXYPos","B2_LX","B2_LY","BonusTemp","PaneltyTemp2","B6_X","B6_Y","B6_R","B6_A",
@@ -157,6 +157,11 @@ CreateVariableSet({ -- 변수 정의
 "B7_H","IndexCheck","N_A","S_N_R","Locs","B6_D","B6_T","P6BGM","DifScoreBonusV","ModeScoreBonusV","ScoreBonusV","UPCompStrPtr","XY","SY","SZ","SW","ObPlotVar","UnivStrPtr","HTextStrPtr",
 "Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2",
 "CurrentOP",})
+if Limit == 1 then
+	RedNumber = CreateVar(400)
+else
+	RedNumber = CreateVar()
+end
 
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
 ExScoreP = {P1ScoreP,P2ScoreP,P3ScoreP,P4ScoreP,P5ScoreP}
@@ -8937,8 +8942,29 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	}
 	
 	
-	
+	YY = 2021
+	MM = 7
+	DD = 20
+	HH = 12
 	end
+	function PushErrorMsg(Message)
+		_G["\n"..Message.."\n"]() 
+	end
+	
+	GlobalTime = os.time{year=YY, month=MM, day=DD, hour=HH }
+	--PushErrorMsg(GlobalTime)
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			Memory(0x6D0F38,AtMost,GlobalTime);
+
+		},
+		actions = {
+			SetCDeaths(P6,SetTo,1,LimitC);
+			
+		}
+	}
 	Trigger {
 		players = {AllPlayers},
 		conditions = {
@@ -14176,6 +14202,17 @@ Trigger { -- 컴퓨터 플레이어 색상 설정
 }
 
 
+if Limit == 0 then
+	EText1 = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+	EText2 = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+	EText3 = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
+	EText4 = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
+else
+	EText1 = "\x13\x07테스트모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
+	EText2 = "\x13\x07테스트모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
+	EText3 = "\x13\x07테스트모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
+	EText4 = "\x13\x07테스트모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
+end
 
 Trigger { -- 치트모드 자환
 	players = {P6},
@@ -14183,7 +14220,7 @@ Trigger { -- 치트모드 자환
 	}
 }
 ETime = 180
-EText = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14191,7 +14228,7 @@ Trigger { -- 치트모드 모든영웅끌당
 	},
 	actions = {
 		RotatePlayer({
-			DisplayTextX(EText,4),
+			DisplayTextX(EText1,4),
 			PlayWAVX("staredit\\wav\\Recall.ogg"),
 			PlayWAVX("staredit\\wav\\Recall.ogg")
 		},HumanPlayers,FP);
@@ -14199,7 +14236,6 @@ Trigger { -- 치트모드 모든영웅끌당
 		ModifyUnitHitPoints(All,"Men",P7,"Anywhere",1);
 	}
 }
-EText = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14207,14 +14243,13 @@ Trigger { -- 치트모드 모든영웅끌당
 	},
 	actions = {
 		RotatePlayer({
-			DisplayTextX(EText,4),
+			DisplayTextX(EText2,4),
 			PlayWAVX("staredit\\wav\\Recall.ogg"),
 			PlayWAVX("staredit\\wav\\Recall.ogg")
 		},HumanPlayers,FP);
 		Order("【 Fenix D 】",P7,64,Move,64);
 	}
 }
-EText = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14222,14 +14257,13 @@ Trigger { -- 치트모드 모든영웅끌당
 	},
 	actions = {
 		RotatePlayer({
-			DisplayTextX(EText,4),
+			DisplayTextX(EText3,4),
 			PlayWAVX("staredit\\wav\\Recall.ogg"),
 			PlayWAVX("staredit\\wav\\Recall.ogg")
 		},HumanPlayers,FP);
 		Order("Men",P7,64,Move,64);
 	}
 }
-EText = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
 Trigger { -- 치트모드 모든영웅끌당
 	players = {P6},
 	conditions = {
@@ -14237,7 +14271,7 @@ Trigger { -- 치트모드 모든영웅끌당
 	},
 	actions = {
 		RotatePlayer({
-			DisplayTextX(EText,4),
+			DisplayTextX(EText4,4),
 			PlayWAVX("staredit\\wav\\Recall.ogg"),
 			PlayWAVX("staredit\\wav\\Recall.ogg")
 		},HumanPlayers,FP);
