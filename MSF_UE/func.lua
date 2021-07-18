@@ -333,7 +333,7 @@ function GunBreak(GName,Point)
 	})
 end
 function Gun_DoSuspend()
-	return TSetMemory(_Add(G_TempH,(29*0x20)/4),Add,1)
+	return TSetMemory(_Add(G_TempH,(54*0x20)/4),Add,1)
 end
 
 

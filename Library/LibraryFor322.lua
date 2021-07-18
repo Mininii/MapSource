@@ -277,6 +277,23 @@ function InstallCVariable() -- CtrigAsm 5.1
 		end
 	end
 end
+function InstallCVariableX() -- CtrigAsm 5.1
+	if #CVarPushArr >= 1 then
+		for i = 1, #CVarPushArr do
+			if type(CVarPushArr[i]) == "table" then
+				if type(CVarPushArr[i][2]) == "number" then
+					CVariable2(FP,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2])
+				elseif type(CVarPushArr[i][2]) == "table" then
+					CVariable3(FP,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2][1],CVarPushArr[i][2][2],CVarPushArr[i][2][3],CVarPushArr[i][2][4],CVarPushArr[i][2][5])
+				else
+					InstallCVariable_InputData_Error()
+				end
+			else
+				CVariable(FP,CVarPushArr[i])
+			end
+		end
+	end
+end
 
 
 function CArray2(PlayerID,Size,Index)
@@ -380,11 +397,32 @@ function InstallCVArrStack()
 		end
 	end
 end
+
+function InstallCVArrStackX()
+	if #VArrStackArr >= 1 then
+		for j, k in pairs(VArrStackArr) do
+			if k[1] == "VArr" then
+				CVArray2(FP,k[3],k[4])
+			end
+			if k[1] == "Arr" then
+				CArray2(FP,k[3],k[4])
+			end
+		end
+	end
+end
 function Install_AllObject()
 	local ObjectSpace = def_sIndex()
 	CJump(FP,ObjectSpace) -- ??? init ????????
 	InstallCVariable()
 	InstallCVArrStack()
+	CJumpEnd(FP,ObjectSpace)
+end
+
+function Install_AllObjectX()
+	local ObjectSpace = def_sIndex()
+	CJump(FP,ObjectSpace) -- ??? init ????????
+	InstallCVariableX()
+	InstallCVArrStackX()
 	CJumpEnd(FP,ObjectSpace)
 end
 
@@ -645,12 +683,16 @@ CWhileEnd()
 CAdd(InitBGMP,0x6509B0,InitBGMP)
 CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 	for i = 1, #BGMArr do
+		local X = nil
+		if #BGMArr[i] == 4 then
+			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
+		end
 		Trigger { -- ºê±Ý?????? j??
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
 				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
-				
+				X;
 			},
 				actions = {
 				RotatePlayer({

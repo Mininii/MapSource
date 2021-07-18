@@ -19,7 +19,10 @@ function PlayerInterface()
 	local BarRally = CreateVar()
 	local ExchangeP = CreateVar()
 	local MarTempSh = CreateVar()
-	local DelayMedic, ShUsed, GiveRate = CreateCCodes(3)
+	local DelayMedic = Create_CCTable(7)
+	local ShUsed = Create_CCTable(7)
+	local GiveRate = Create_CCTable(7)
+	
 	for i = 0, 6 do
 		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
 		table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+0+i - AtkUpgradeMaskRetArr[i+1])
@@ -113,7 +116,7 @@ function PlayerInterface()
 				SetMemory(0x582294+(4*i),SetTo,1000);
 				RemoveUnitAt(1,19,"Anywhere",i);
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
-				SetCDeaths(i,SetTo,1,ShUsed);
+				SetCDeaths(FP,SetTo,1,ShUsed[i+1]);
 				PreserveTrigger();
 			},
 		}
@@ -122,14 +125,14 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(i,AtLeast,1,ShUsed);
+				CDeaths(FP,AtLeast,1,ShUsed[i+1]);
 				Memory(0x582294+(4*i),AtMost,0);
 			},
 			actions = {
 				DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4);
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				PlayWAV("staredit\\wav\\GMode.ogg");
-				SetCDeaths(i,SetTo,0,ShUsed);
+				SetCDeaths(FP,SetTo,0,ShUsed[i+1]);
 				PreserveTrigger();
 			},
 		}
@@ -160,8 +163,8 @@ function PlayerInterface()
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,0,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,1,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		--CPConsole
-		CIfX(i,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},SetCDeaths(i,Add,1,FuncT))
-		TriggerX(i,{CDeaths(i,AtLeast,30*24,FuncT)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(i,SetTo,0,FuncT)},{Preserved})
+		CIfX(i,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},SetCDeaths(FP,Add,1,FuncT[i+1]))
+		TriggerX(i,{CDeaths(FP,AtLeast,30*24,FuncT[i+1])},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,FuncT[i+1])},{Preserved})
 		
 		GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다.\x07 』",
 		"\x07『 \x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다.\x07 』",
@@ -174,19 +177,19 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths("X",Exactly,k,GiveRate);
+				CDeaths(FP,Exactly,k,GiveRate[i+1]);
 				Deaths(CurrentPlayer,AtLeast,1,219)
 			},
 			actions = {
 				SetDeaths(CurrentPlayer,SetTo,0,219);
 				DisplayText(GiveRateT[k+1],4);
-				SetCDeaths("X",Add,1,GiveRate);
-				SetCDeaths(i,SetTo,0,FuncT);
+				SetCDeaths(FP,Add,1,GiveRate[i+1]);
+				SetCDeaths(FP,SetTo,0,FuncT[i+1]);
 				PreserveTrigger();
 				},
 		}
 		end
-		TriggerX(i,{CDeaths("X",AtLeast,6,GiveRate)},{SetCDeaths("X",Subtract,6,GiveRate)},{Preserved})
+		TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
 		
 		for j=0, 6 do
 			if i==j then
@@ -198,7 +201,7 @@ function PlayerInterface()
 					actions = {
 						SetDeaths(i,SetTo,0,j+212);
 						DisplayText("\x07『 "..PlayerString[j+1].."\x04은(는) 자기 자신입니다. 자기 자신에게는 기부할 수 없습니다. \x07』",4);
-						SetCDeaths(i,SetTo,0,FuncT);
+						SetCDeaths(FP,SetTo,0,FuncT[i+1]);
 						PreserveTrigger();
 					},
 				}
@@ -210,13 +213,13 @@ function PlayerInterface()
 							Label(0);
 							Deaths(i,AtLeast,1,j+212);
 							PlayerCheck(i,1);
-							CDeaths(i,Exactly,k,GiveRate);
+							CDeaths(FP,Exactly,k,GiveRate[i+1]);
 							Accumulate(i,AtMost,GiveRate2[k+1],Ore);
 						},
 						actions = {
 							SetDeaths(i,SetTo,0,j+212);
 							DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
-							SetCDeaths(i,SetTo,0,FuncT);
+							SetCDeaths(FP,SetTo,0,FuncT[i+1]);
 							PreserveTrigger();
 						},
 					}
@@ -226,7 +229,7 @@ function PlayerInterface()
 							Label(0);
 							Deaths(i,AtLeast,1,j+212);
 							PlayerCheck(j,1);
-							CDeaths(i,Exactly,k,GiveRate);
+							CDeaths(FP,Exactly,k,GiveRate[i+1]);
 							Accumulate(i,AtLeast,GiveRate2[k+1],Ore);
 							Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 						},
@@ -238,7 +241,7 @@ function PlayerInterface()
 							SetMemory(0x6509B0,SetTo,j);
 							DisplayText("\x12\x07『"..PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[k+1].." Ore\x04를 기부받았습니다.\x02 \x07』",4);
 							SetMemory(0x6509B0,SetTo,i);
-							SetCDeaths(i,SetTo,0,FuncT);
+							SetCDeaths(FP,SetTo,0,FuncT[i+1]);
 							PreserveTrigger();
 						},
 					}
@@ -253,14 +256,14 @@ function PlayerInterface()
 					actions = {
 						SetDeaths(i,SetTo,0,j+212);
 						DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
-						SetCDeaths(i,SetTo,0,FuncT);
+						SetCDeaths(FP,SetTo,0,FuncT[i+1]);
 						PreserveTrigger();
 					},
 				}
 			end 
 		end 
 		
-			TriggerX(i,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(i,SetTo,0,FuncT),SetDeaths(CurrentPlayer,SetTo,0,CPConsole)},{Preserved})
+			TriggerX(i,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,0,CPConsole)},{Preserved})
 			CIfXEnd()
 		
 			DoActions(i,{
@@ -270,14 +273,14 @@ function PlayerInterface()
 				SetMemoryB(0x57F27C+(228*i)+MedicTrig[4],SetTo,0),
 			})
 			for j = 0, 3 do
-			TriggerX(i,{CDeaths("X",Exactly,j,DelayMedic)},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{Preserved})
-			TriggerX(i,{Command(i,AtLeast,1,72),CDeaths("X",Exactly,j,DelayMedic)},{
+			TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{Preserved})
+			TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
 				DisplayText(DelayMedicT[j+1],4),
-				SetCDeaths("X",Add,1,DelayMedic),
+				SetCDeaths(FP,Add,1,DelayMedic[i+1]),
 				GiveUnits(All,72,i,"Anywhere",P12),
 				RemoveUnitAt(1,72,"Anywhere",P12)},{Preserved})
 			end
-			TriggerX(i,{CDeaths("X",AtLeast,4,DelayMedic)},{SetCDeaths("X",Subtract,4,DelayMedic)},{Preserved})
+			TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{Preserved})
 		
 			Trigger2(i,{DeathsX(i,Exactly,0,440,0xFF000000);Command(i,AtLeast,1,22);},{
 				GiveUnits(All,22,i,"Anywhere",P12);

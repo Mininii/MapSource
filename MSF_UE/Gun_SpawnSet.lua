@@ -429,7 +429,7 @@ function InstallGunData()
 	end
 
 	function Case_Various()
-		CIf(FP,{CVar(FP,Var_TempTable[29][2],AtLeast,256)}) -- 잡건작일 경우
+		CIf(FP,{Gun_Line(53,AtLeast,256)}) -- 잡건작일 경우
 			CIf(FP,{Gun_Line(5,Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,2500)})
 			CIfEnd()
@@ -440,6 +440,22 @@ function InstallGunData()
 				CDoActions(FP,{Gun_SetLine(7,Add,10)})
 				CDoActions(FP,{Gun_SetLine(8,Add,5)})
 				CDoActions(FP,{Gun_SetLine(9,Add,3)})
+				CIf(FP,CVar(FP,Level[2],AtLeast,11))
+				function BYDTechGunFunc()
+
+					f_TempRepeatX(VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1)
+					
+					end
+					
+					local BYDTechGunCAPlot = CAPlotForward()
+					CMov(FP,V(BYDTechGunCAPlot[5]),_Sub(Level,10))
+					CAPlot(CSMakePolygon(6,96,0,PlotSizeCalc(6,6),0),P8,nilunit,0,nil,1,32,{1,0,0,0,9999,0},nil,FP,
+						nil,nil,
+						1,"BYDTechGunFunc")
+					
+					CMov(FP,V(BYDTechGunCAPlot[6]),1)
+					
+				CIfEnd()
 			CIfEnd()
 			TriggerX(FP,{Gun_Line(0,Exactly,137)},{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,56)},{Preserved})
 			TriggerX(FP,{Gun_Line(0,Exactly,142)},{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,54)},{Preserved})
@@ -460,9 +476,7 @@ function InstallGunData()
 			TriggerX(FP,{Gun_Line(0,Exactly,138)},{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,45)},{Preserved})
 			f_Repeat(10)
 			CTrigger(FP,{Gun_Line(5,AtLeast,7)},{Gun_DoSuspend()},1)
-			CIf(FP,CVar(FP,Level[2],AtLeast,11))
-				f_TempRepeatX(_Mod(_Rand(),_Mov(#HeroArr)),_Sub(Level,10))
-			CIfEnd()
+			
 		CIfEnd()
 	end
 end

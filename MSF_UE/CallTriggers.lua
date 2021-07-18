@@ -87,7 +87,7 @@ G_TempH = CreateVar()
 G_InputH = CreateVar({"X",0x500,0x15C,1,0})
 Var_TempTable = {}
 Var_InputCVar = {}
-Var_Lines = 30
+Var_Lines = 55
 for i = 1, Var_Lines do
 	table.insert(Var_TempTable,CreateVar())
 	table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
@@ -277,8 +277,8 @@ Line No.6 : C
 Line No.args : UnitSpawnSet or CAPlot VarSet
 7~29
 
-Line No.29 : GunType
-Line No.30 : SuspendSwitch
+Line No.54 : GunType
+Line No.55 : SuspendSwitch
 ]]
 local CA_TempUID = CreateVar()
 local CA_Suspend = CreateCCode()
@@ -485,7 +485,7 @@ SetCall(FP)
 	CIfEnd()
 	Case_Various()
 	CDoActions(FP,{Gun_SetLine(4,Add,Dt)})
-	CIf(FP,{Gun_Line(29,AtLeast,1),G_CA_CondStack}) -- SuspendCode
+	CIf(FP,{Gun_Line(54,AtLeast,1),G_CA_CondStack}) -- SuspendCode
 		CMov(FP,G_TempW,0)
 		CWhile(FP,CVar(FP,G_TempW[2],AtMost,(Var_Lines-1)*(0x20/4)))
 			CDoActions(FP,{TSetMemory(_Add(G_TempH,G_TempW),SetTo,0)})
@@ -521,7 +521,7 @@ SetCall(FP)
 		TSetMemory(_Add(G_TempV,1*(0x20/4)),SetTo,CPosX),
 		TSetMemory(_Add(G_TempV,2*(0x20/4)),SetTo,CPosY),
 		TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,EXCunitTemp[1]),
-		TSetMemory(_Add(G_TempV,28*(0x20/4)),SetTo,Gun_Type),
+		TSetMemory(_Add(G_TempV,53*(0x20/4)),SetTo,Gun_Type),
 	})
 	
 	if TestStart == 1 then
