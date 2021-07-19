@@ -1,4 +1,11 @@
 function Gun_System()
+	UnitReadX(FP,AllPlayers,229,64,count)
+	UnitReadX(FP,AllPlayers,17,64,count1)
+	UnitReadX(FP,AllPlayers,23,64,count2)
+	UnitReadX(FP,AllPlayers,25,64,count3)
+	CAdd(FP,count,count1)
+	CAdd(FP,count,count2)
+	CAdd(FP,count,count3)
     local EXCunit_Reset = {}
     for i = 1, #EXCunitTemp do
         table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
@@ -21,6 +28,7 @@ function Gun_System()
     NJumpEnd(FP,Check_P8)
     DoActions(FP,MoveCp(Add,6*4))
     CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
+    f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
     CMov(FP,Gun_Type,0)
@@ -72,6 +80,8 @@ function Gun_System()
     },EXCunitTemp)
     end
     CunitCtrig_End()
+    DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
+    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 
     CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
         DoActions(FP,{

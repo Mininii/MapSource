@@ -47,11 +47,11 @@ function LevelUp()
 			KillUnitAt(All,125,17,Force1),
 			KillUnitAt(All,125,18,Force1),
 			KillUnitAt(All,125,19,Force1),})
-			CIfX(FP,CVar(FP,LevelT[2],Exactly,3))
+			CIfX(FP,CVar(FP,LevelT[2],Exactly,2))
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT)})
-			CElseIfX(CVar(FP,LevelT[2],Exactly,6))
+			CElseIfX(CVar(FP,LevelT[2],Exactly,4))
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT4),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)})
-			CElseIfX(CVar(FP,LevelT[2],Exactly,9))
+			CElseIfX(CVar(FP,LevelT[2],Exactly,6))
 				CIf(FP,Memory(0x628438,AtLeast,1))
 					f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 					CDoActions(FP,{
@@ -61,6 +61,29 @@ function LevelUp()
 						TSetMemory(_Add(Nextptrs,2),SetTo,6000*256),
 						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
 				CIfEnd()
+			CElseIfX(CVar(FP,LevelT[2],Exactly,8))
+				CIf(FP,Memory(0x628438,AtLeast,1))
+				f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
+				CDoActions(FP,{
+					CreateUnit(1,74,64,FP),
+					TSetMemory(_Add(Nextptrs,2),SetTo,_Mul(LevelT2,_Mov(4000*256))),
+					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
+					RotatePlayer({CenterView(64)},HumanPlayers,FP)
+				})
+				CIfEnd()
+			CElseIfX(CVar(FP,LevelT[2],Exactly,10))
+			
+			CIf(FP,Memory(0x628438,AtLeast,1))
+			f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
+			CDoActions(FP,{
+				SetMemory(0x66EFBC, SetTo, 67);
+				CreateUnit(1,186,64,FP),
+				SetMemory(0x66EFBC, SetTo, 78);
+				TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
+				RotatePlayer({CenterView(64)},HumanPlayers,FP)
+			})
+			CIfEnd()
+
 			CElseX()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,1,BClear))
 			CIfXEnd()
@@ -85,11 +108,12 @@ function LevelUp()
 		CWhileEnd()
 	
 	--
-	CIfEnd()
+		CIfEnd()
 
 	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
 	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},
 		{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear),CDeaths(FP,AtMost,0,StoryT3)},
@@ -129,8 +153,7 @@ function LevelUp()
 
 		TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{Preserved})
 		--
-		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,5)},{SetCVar(FP,ReserveBGM[2],SetTo,6)},{Preserved})
-		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,6)},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+		TriggerX(FP,{},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
 
 
 		function SetLevelUpHP(UnitID,Multiplier)
@@ -250,6 +273,7 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,Continue2),
 	SetCDeaths(FP,SetTo,0,rokaClear),
 	SetCDeaths(FP,SetTo,0,DemClear),
+	SetCDeaths(FP,SetTo,0,DLClear),
 	SetCDeaths(FP,SetTo,0,IdenClear),
 	SetCDeaths(FP,SetTo,0,StoryT3),
 	SetCDeaths(FP,SetTo,0,BClear),

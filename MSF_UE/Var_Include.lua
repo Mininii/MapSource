@@ -9,6 +9,7 @@ function Var_init()
 	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
 	f_GunErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Not Found. f_Gun 실행자 : ")
+	f_GunFuncT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun 실행자 : ")
 	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -43,6 +44,9 @@ function Var_init()
 	RandW = CreateVar()
 	Nextptrs = CreateVar()
 	count = CreateVar()
+	count1 = CreateVar()
+	count2 = CreateVar()
+	count3 = CreateVar()
 	CunitIndex = CreateVar()
 	Gun_LV = CreateVar()
 	G_TempW = CreateVar()
@@ -64,6 +68,7 @@ function Var_init()
 	f_GunSendStrPtr = CreateVar()
 	Dt = CreateVar()
 	G_CA_StrPtr = CreateVar()
+	G_CA_StrPtr2 = CreateVar()
 	B_5_C = CreateVar()
 	B_Id_C = CreateVar()
 	PCheck = CreateCCode()
@@ -86,6 +91,7 @@ function Var_init()
 	rokaClear = CreateCCode()
 	IdenClear = CreateCCode()
     BossStart = CreateCCode()
+	DLClear = CreateCCode()
     StoryT = CreateCCode()
 	DemClear = CreateCCode()
 	StoryT4 = CreateCCode()
@@ -94,6 +100,11 @@ function Var_init()
 	CurArr = CreateVar()
 	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
 	XY_ArrHeader = CreateVar()
+	RepeatType = CreateVar()
+	CX = CreateVar()
+	CY = CreateVar()
+	SoundLimitT = CreateCCode()
+	SoundLimit = CreateCCode()
 end
 
 function HPoints()
@@ -158,10 +169,11 @@ function Objects()
 	WaveSwitch = "Switch 150"
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
-	f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다!\x07 』"
-	f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받았습니다.\x07 』"
-	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
-	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 제작자에게 알려주세요!\x07 』"
+	f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받았습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	f_RepeatTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
 	DelayMedicT = {
 		"\x07『 \x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F300 Ore\x07 』",
@@ -212,6 +224,7 @@ function Objects()
 	VResetSw = CreateVar(1)
 	VResetSw2 = CreateVar(1)
 	VResetSw3 = CreateVar(1)
+	VResetSw4 = CreateVar(1)
     
     roka7TempVoid = EPD(0x594000)
 

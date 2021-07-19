@@ -87,7 +87,12 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local Point = HeroPointArr[i][3]
 			Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,index,0,0xFF)},{
 				SetScore(Force1,Add,Point,Kills);
-				RotatePlayer({DisplayTextX(CT,4),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
+				RotatePlayer({DisplayTextX(CT,4)},HumanPlayers,FP);
+			},{Preserved})
+			f_LoadCp()
+			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,index,0,0xFF),CDeaths(FP,AtMost,2,SoundLimit)},{
+				RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
+				SetCDeaths(FP,Add,1,SoundLimit),
 			},{Preserved})
 	end
 end
@@ -133,19 +138,34 @@ function f_GSend(UnitID,Actions)
 CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,UnitID,0,0xFF)},Actions)
 end
 function BGMManager()
-	AddBGM(1,"staredit\\wav\\ExceedOP.ogg",99000)
-	AddBGM(2,"staredit\\wav\\BGM1_1.ogg",42*1000,0)
-	AddBGM(2,"staredit\\wav\\BGM1_2.ogg",42*1000,1)
-	AddBGM(3,"staredit\\wav\\BGM2.ogg",47*1000)
-	AddBGM(4,"staredit\\wav\\BGM3.ogg",60*1000)
-	AddBGM(5,"staredit\\wav\\BGM4.ogg",60*1000)
-	AddBGM(6,"staredit\\wav\\GRAVITY_OP.ogg",94*1000)
-	AddBGM(7,"staredit\\wav\\BGM_SP.ogg",180*1000)
+	AddBGM(1,"staredit\\wav\\GRAVITY_OP.ogg",94*1000,{1,5})
+	AddBGM(1,"staredit\\wav\\ExceedOP.ogg",99000,{6,10})
+	AddBGM(2,"staredit\\wav\\BGM1_1.ogg",42*1000,{1,2})
+	AddBGM(3,"staredit\\wav\\BGM1_2.ogg",47*1000,{1,2})
+	AddBGM(4,"staredit\\wav\\BGM1_3.ogg",60*1000,{1,2})
+	AddBGM(5,"staredit\\wav\\BGM1_4.ogg",60*1000,{1,2})
+	AddBGM(2,"staredit\\wav\\BGM2_1.ogg",47*1000,{3,4})
+	AddBGM(3,"staredit\\wav\\BGM2_2.ogg",60*1000,{3,4})
+	AddBGM(4,"staredit\\wav\\BGM2_3.ogg",52230,{3,4})
+	AddBGM(5,"staredit\\wav\\BGM2_4.ogg",58780,{3,4})
+	AddBGM(2,"staredit\\wav\\BGM3_1.ogg",64*1000,{5,6})
+	AddBGM(3,"staredit\\wav\\BGM3_2.ogg",63*1000,{5,6})
+	AddBGM(4,"staredit\\wav\\BGM3_3.ogg",60*1000,{5,6})
+	AddBGM(5,"staredit\\wav\\BGM3_4.ogg",71*1000,{5,6})
+	AddBGM(2,"staredit\\wav\\BGM4_1.ogg",48*1000,{7,8})
+	AddBGM(3,"staredit\\wav\\BGM4_2.ogg",53*1000,{7,8})
+	AddBGM(4,"staredit\\wav\\BGM4_3.ogg",45*1000,{7,8})
+	AddBGM(5,"staredit\\wav\\BGM4_4.ogg",53*1000,{7,8})
+	AddBGM(2,"staredit\\wav\\BGM5_1.ogg",49*1000,{9,10})
+	AddBGM(3,"staredit\\wav\\BGM5_2.ogg",48*1000,{9,10})
+	AddBGM(4,"staredit\\wav\\BGM5_3.ogg",50*1000,{9,10})
+	AddBGM(5,"staredit\\wav\\BGM5_4.ogg",59*1000,{9,10})
 
 	
 	roka7BGM = AddBGM(8,"staredit\\wav\\roka7boss.ogg",197*1000)
 	IdenBGM = AddBGM(9,"staredit\\wav\\JinjinZzara.ogg",220*1000)
 	Akasha = AddBGM(10,"staredit\\wav\\Akasha.ogg",262*1000)
+	DLBossBGM = AddBGM(11,"staredit\\wav\\Lanterns.ogg",231*1000)
 	
 	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF)})
 		CMov(FP,BGMTypeV,ReserveBGM)
@@ -153,6 +173,7 @@ function BGMManager()
 		TriggerX(FP,{Bring(FP,AtLeast,1,87,64)},{SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)},{Preserved})
 		TriggerX(FP,{Bring(FP,AtLeast,1,68,64)},{SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM)},{Preserved})
 		TriggerX(FP,{Bring(FP,AtLeast,1,15,64)},{SetCVar(FP,BGMTypeV[2],SetTo,Akasha),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)},{Preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,74,64)},{SetCVar(FP,BGMTypeV[2],SetTo,DLBossBGM),SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM)},{Preserved})
 	CIfEnd()
 	Install_BGMSystem(FP,6,BGMTypeV)
 end
@@ -353,7 +374,7 @@ end
 
 
 function Gun_SetLineX(Line,Type,Value)
-	return TSetMemory(_Add(G_TempH,_Mul(Line,0x20/4)),Type,Value)
+	return TSetMemory(_Add(G_TempH,_Mul(Line,_Mov(0x20/4))),Type,Value)
 end
 
 function Gun_Line(Line,Type,Value,Mask)

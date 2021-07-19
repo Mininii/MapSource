@@ -1,4 +1,7 @@
 function OPText()
+	if TestStart == 1 then
+		DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4),IntroT)},1)
+	end
 	for i = 0, 19 do
 		TriggerX(FP,{CDeaths(FP,AtLeast,i*5,IntroT)},{
 			RotatePlayer({

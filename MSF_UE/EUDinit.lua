@@ -163,6 +163,7 @@ function onInit_EUD()
 	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(127,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(86,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -172,6 +173,8 @@ function onInit_EUD()
 	SetUnitClassType(84,1)
 	SetUnitClassType(81,1)
 	SetUnitClassType(23,1)
+	SetUnitClassType(74,1)
+	SetUnitClassType(74,1)
 
 	SetUnitClassType(77)
 	SetUnitClassType(78)
@@ -200,6 +203,7 @@ EffUnitPatch(205)
 EffUnitPatch(206)
 EffUnitPatch(207)
 EffUnitPatch(208)
+EffUnitPatch(210)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
@@ -343,7 +347,9 @@ UnitSizePatch(60,1)
 	UnitSizePatch(63,5)
 
 	for j, k in pairs(HeroArr) do
+		if k ~= 86 then
 		UnitSizePatch(k,10)
+		end
 	end
 
 	for i = 220, 227 do
@@ -354,6 +360,8 @@ UnitSizePatch(60,1)
 		DefTypePatch(7,9)
 		DefTypePatch(87,9)
 		DefTypePatch(150,9)
+		DefTypePatch(74,9)
+		DefTypePatch(186,9)
 
 
 	Trigger { -- 퍼센트 데미지 세팅
@@ -507,6 +515,7 @@ UnitSizePatch(60,1)
 	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
+	f_GetStrXptr(FP,G_CA_StrPtr2,"\x0D\x0D\x0DG_CA_Func".._0D)
 
 
 	
@@ -527,6 +536,7 @@ UnitSizePatch(60,1)
 
 	f_MemCpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
 	f_MemCpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
+	f_MemCpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
 	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 
 	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])

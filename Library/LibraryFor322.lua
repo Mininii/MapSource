@@ -646,9 +646,10 @@ CMov(InitBGMP,0x6509B0,0)
 CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))
 CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 	for i = 1, #BGMArr do
-		local X = nil
+		local X = {}
 		if #BGMArr[i] == 4 then
-			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
+			table.insert(X,CVar(FP,LevelT[2],AtLeast,BGMArr[i][4][1]))
+			table.insert(X,CVar(FP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
 		Trigger { -- 브금?????? j??
 			players = {InitBGMP},
@@ -683,9 +684,10 @@ CWhileEnd()
 CAdd(InitBGMP,0x6509B0,InitBGMP)
 CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 	for i = 1, #BGMArr do
-		local X = nil
+		local X = {}
 		if #BGMArr[i] == 4 then
-			X = Deaths(CurrentPlayer,Exactly,BGMArr[i][4],444)
+			table.insert(X,CVar(FP,LevelT[2],AtLeast,BGMArr[i][4][1]))
+			table.insert(X,CVar(FP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
 		Trigger { -- 브금?????? j??
 			players = {InitBGMP},
