@@ -1,10 +1,10 @@
 function Install_Destr0yer()
 	
 local Lyrics = {
-	{"\x12\x04Ladies and Gentlemen",2,222},
-	{"\x12\x07Let's start",5,0},
-	{"\x12\x04Only is in Memories",8,0},
-	{"\x12\x08Tonight.",12,333},
+	{"\x13\x04Ladies and Gentlemen",2,222},
+	{"\x13\x07Let's start",5,0},
+	{"\x13\x04Only is in Memories",8,0},
+	{"\x13\x08Tonight.",12,333},
 	{"\x13\x04I wonder why things have happened.\n\x13\x04왜 이런 일들이 일어났는지 궁금해.",60-3,0},
 	{"\x13\x04Could you imagine the world is boring?\n\x13\x04이 세상은 따분한 걸, 넌 알고 있니?",68-3,0},
 	{"\x13\x04Stereotype\n\x13\x04고정관념",76-3,0},
@@ -50,6 +50,7 @@ local Lyrics = {
 	local BGMLength = 439
 	local BGMVar = 440
 	local Length = 666
+	local CBulletT = CreateCCode()
 	CIf(FP,Bring(FP,AtLeast,1,186,64))
 	SetRecoverCp()
 	RecoverCp(FP)
@@ -72,6 +73,141 @@ local Lyrics = {
 				},
 			}
 	end
+	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
+	local PatternCcode = {}
+	function Create_PatternCcode(Table)
+		local TempCcode = CreateCCode()
+		table.insert(Table,TempCcode)
+		return TempCcode
+	end
+	local Angle1 = CreateVar()
+	local Angle2 = CreateVar()
+	local Angle3 = CreateVar()
+	local Angle4 = CreateVar()
+	local Angle5 = CreateVar()
+	local Angle6 = CreateVar()
+	for i = 0, 3 do
+		local Pat1 = Create_PatternCcode(PatternCcode)
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,13+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
+			if i == 0 then
+				local Randnum = f_CRandNum(43)
+				CMov(FP,Angle1,Randnum)
+				CMov(FP,Angle2,Randnum,43)
+				CMov(FP,Angle3,Randnum,43*2)
+				CMov(FP,Angle4,Randnum,43*3)
+				CMov(FP,Angle5,Randnum,43*4)
+				CMov(FP,Angle6,Randnum,43*5)
+			end
+		CIfEnd()
+	end
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,13,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,16,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(210,20,Angle1,CPosX,CPosY)
+		CreateBullet(210,20,Angle2,CPosX,CPosY)
+		CreateBullet(210,20,Angle3,CPosX,CPosY)
+		CreateBullet(210,20,Angle4,CPosX,CPosY)
+		CreateBullet(210,20,Angle5,CPosX,CPosY)
+		CreateBullet(210,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,17,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,19,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(208,20,Angle1,CPosX,CPosY)
+		CreateBullet(208,20,Angle2,CPosX,CPosY)
+		CreateBullet(208,20,Angle3,CPosX,CPosY)
+		CreateBullet(208,20,Angle4,CPosX,CPosY)
+		CreateBullet(208,20,Angle5,CPosX,CPosY)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,20,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		DoActionsX(FP,KillUnit(94,P11))
+	CIfEnd()
+
+	
+	for i = 0, 3 do
+		local Pat1 = Create_PatternCcode(PatternCcode)
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,(29*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
+			if i == 0 then
+				local Randnum = f_CRandNum(43)
+				CMov(FP,Angle1,Randnum)
+				CMov(FP,Angle2,Randnum,43)
+				CMov(FP,Angle3,Randnum,43*2)
+				CMov(FP,Angle4,Randnum,43*3)
+				CMov(FP,Angle5,Randnum,43*4)
+				CMov(FP,Angle6,Randnum,43*5)
+			end
+		CIfEnd()
+	end
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(29*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(29*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(210,20,Angle1,CPosX,CPosY)
+		CreateBullet(210,20,Angle2,CPosX,CPosY)
+		CreateBullet(210,20,Angle3,CPosX,CPosY)
+		CreateBullet(210,20,Angle4,CPosX,CPosY)
+		CreateBullet(210,20,Angle5,CPosX,CPosY)
+		CreateBullet(210,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(30*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(30*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(208,20,Angle1,CPosX,CPosY)
+		CreateBullet(208,20,Angle2,CPosX,CPosY)
+		CreateBullet(208,20,Angle3,CPosX,CPosY)
+		CreateBullet(208,20,Angle4,CPosX,CPosY)
+		CreateBullet(208,20,Angle5,CPosX,CPosY)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		DoActionsX(FP,KillUnit(94,P11))
+	CIfEnd()
+
+	
+	for i = 0, 3 do
+		local Pat1 = Create_PatternCcode(PatternCcode)
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,(48*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
+			if i == 0 then
+				local Randnum = f_CRandNum(43)
+				CMov(FP,Angle1,Randnum)
+				CMov(FP,Angle2,Randnum,43)
+				CMov(FP,Angle3,Randnum,43*2)
+				CMov(FP,Angle4,Randnum,43*3)
+				CMov(FP,Angle5,Randnum,43*4)
+				CMov(FP,Angle6,Randnum,43*5)
+			end
+		CIfEnd()
+	end
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(48*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(48*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(210,20,Angle1,CPosX,CPosY)
+		CreateBullet(210,20,Angle2,CPosX,CPosY)
+		CreateBullet(210,20,Angle3,CPosX,CPosY)
+		CreateBullet(210,20,Angle4,CPosX,CPosY)
+		CreateBullet(210,20,Angle5,CPosX,CPosY)
+		CreateBullet(210,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(49*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(49*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(208,20,Angle1,CPosX,CPosY)
+		CreateBullet(208,20,Angle2,CPosX,CPosY)
+		CreateBullet(208,20,Angle3,CPosX,CPosY)
+		CreateBullet(208,20,Angle4,CPosX,CPosY)
+		CreateBullet(208,20,Angle5,CPosX,CPosY)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		DoActionsX(FP,KillUnit(94,P11))
+	CIfEnd()
+
 	for i = 0, #BGMArr-1 do
 		Trigger { -- 상시브금
 			players = {FP},
@@ -87,15 +223,15 @@ local Lyrics = {
 				},
 			}
 	end
+	TriggerX(FP,{CDeaths(FP,AtMost,0,CBulletT)},{SetCDeaths(FP,Add,7,CBulletT)},{Preserved})
+	DoActionsX(FP,SetCDeaths(FP,Subtract,1,CBulletT))
 	CIfEnd()
-	local CBulletT = CreateCCode()
---	CIf(FP,CDeaths(FP,AtMost,0,CBulletT),SetCDeaths(FP,Add,7,CBulletT))
+--	CIf(FP,)
 --	GetLocCenter(63,CPosX,CPosY)
 --	for i = 0, 7 do
---	CreateBullet(208,20,i*32,CPosX,CPosY)
+	--CreateBullet(208,20,i*32,CPosX,CPosY)
 --	end
 --	CIfEnd()
-	DoActionsX(FP,SetCDeaths(FP,Subtract,1,CBulletT))
 	--SetMemoryX(0x663788, SetTo, ,0xFF);
 	--staredit\wav\LV10_001.ogg -- 272
 

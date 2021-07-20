@@ -1256,18 +1256,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 				resource = 0,
 				hanger = 0,
 			});
-			CreateUnitWithProperties(8, "Artanis (Scout)", "Create 1", CurrentPlayer, {
-				clocked = false,
-				burrowed = false,
-				intransit = false,
-				hallucinated = false,
-				invincible = true,
-				hitpoint = 100,
-				shield = 100,
-				energy = 100,
-				resource = 0,
-				hanger = 0,
-			});
 			MoveUnit(1, "Zerg Lurker", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Zerg Lurker", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Zerg Lurker", CurrentPlayer, "Create", "C3");
@@ -1284,42 +1272,36 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C6");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C7");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C8");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C1");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C2");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C3");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C4");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C5");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C6");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C7");
-			MoveUnit(1, "Artanis (Scout)", CurrentPlayer, "Create", "C8");
-			Order("Artanis (Scout)", CurrentPlayer, "C1", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C2", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C3", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C4", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C5", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C6", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C7", Attack, "Boss");
-			Order("Artanis (Scout)", CurrentPlayer, "C8", Attack, "Boss");
 			Comment("유닛 소환");
 		},
 	}
 	GetLocCenter("C1",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C2",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C3",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C4",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C5",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C6",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C7",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	GetLocCenter("C8",CX,CY)
+	f_TempRepeat(88,1,nil,2)
 	CallTriggerX(FP,WrPosSave)
 	CIfEnd()
+	SetRecoverCp()
+	RecoverCp(FP)
 	Trigger { -- 레이스 삭제
 		players = {P8},
 		conditions = {
@@ -1352,159 +1334,206 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			KillUnit("Artanis (Scout)", CurrentPlayer);
 			SetVoid(5, SetTo, 350);
+			SetVoid(6, SetTo, 1);
 			Comment("데스값");
 		},
 	}
+
+
+--	for i = 1,14 do
+--	Trigger {
+--		players = {P8},
+--		conditions = {
+--			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
+--			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
+--			Void(5,Exactly,350);
+--		},
+--		actions = {
+--			PreserveTrigger();
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,27,"C1",CurrentPlayer);
+--			Order(27,CurrentPlayer,"Anywhere",Attack,"Boss");
+--			SetInvincibility(Enable,27,CurrentPlayer,"Anywhere");
+--			Comment("노라드 생성 트리거 노가다 보다 걍 for문 쓰삼");
+--		}
+--	}
+--	end
+--	for i = 1,14 do
+--	Trigger {
+--		players = {P8},
+--		conditions = {
+--			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
+--			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
+--			Void(5,Exactly,200);
+--		},
+--		actions = {
+--			PreserveTrigger();
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
+--			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
+--			CreateUnit(1,80,"C1",CurrentPlayer);
+--			Order(80,CurrentPlayer,"Anywhere",Attack,"Boss");
+--			SetInvincibility(Enable,80,CurrentPlayer,"Anywhere");
+--			Comment("스카 생성 트리거 보다 걍 for문 쓰삼");
+--		}
+--	}
+--	end
 	
-	for i = 1,14 do
-	Trigger {
-		players = {P8},
-		conditions = {
+
+	
+		TriggerX(FP,{			
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
 			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
-			Void(5,Exactly,350);
-		},
-		actions = {
-			PreserveTrigger();
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,27,"C1",CurrentPlayer);
-			Order(27,CurrentPlayer,"Anywhere",Attack,"Boss");
-			SetInvincibility(Enable,27,CurrentPlayer,"Anywhere");
-			Comment("노라드 생성 트리거 노가다 보다 걍 for문 쓰삼");
-		}
-	}
-	end
-	for i = 1,14 do
-	Trigger {
-		players = {P8},
-		conditions = {
+			Void(5,Exactly,350);},{SetCVar(FP,CurArr[2],SetTo,0)},{Preserved})
+
+		TriggerX(FP,{			
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
 			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
 			Void(5,Exactly,200);
-		},
-		actions = {
-			PreserveTrigger();
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			MoveLocation("C1","Edmund Duke (Siege Mode)",CurrentPlayer,"Anywhere");
-			GiveUnits(1,"Edmund Duke (Siege Mode)",CurrentPlayer,"C1",P9);
-			CreateUnit(1,80,"C1",CurrentPlayer);
-			Order(80,CurrentPlayer,"Anywhere",Attack,"Boss");
-			SetInvincibility(Enable,80,CurrentPlayer,"Anywhere");
-			Comment("스카 생성 트리거 보다 걍 for문 쓰삼");
-		}
-	}
-	end
+		},{SetCVar(FP,CurArr[2],SetTo,0)},{Preserved})
+
+
+		local WrPos = CreateVar()
+		local WhileLim = CreateCCode()
+		local Wr_Sum = def_sIndex()
+		CIf(FP,{
+			Void(6,AtLeast,1)
+		})	
+			CJumpEnd(FP,Wr_Sum)
+			NIf(FP,{TMemory(_Add(XY_ArrHeader,CurArr),AtLeast,1),CDeaths(FP,AtMost,7,WhileLim)},SetCDeaths(FP,Add,1,WhileLim))
+				f_Read(FP,_Add(XY_ArrHeader,CurArr),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-32*1,-32*1,32*1,32*1)})
+				DoActions(FP,{
+					CreateUnit(1,"Kakaru (Twilight)",1,FP),
+					KillUnit("Kakaru (Twilight)",FP)})
+				CIf(FP,Memory(0x628438,AtLeast,1))
+				NIfX(FP,Void(5,AtLeast,201))
+					f_TempRepeat(27,1,nil,2)
+				NElseIfX(Void(5,AtMost,200))
+					f_TempRepeat(80,1,nil,2)
+				NIfXEnd()
+				CifEnd()
+
+
+				CAdd(FP,CurArr,1)
+				CJump(FP,Wr_Sum)
+			NIfEnd()
+			DoActionsX(FP,SetCDeaths(FP,SetTo,0,WhileLim))
+		CIfEnd()
+		SetRecoverCp()
+		RecoverCp(FP)
 	
 	Trigger { -- 유닛 킬
 		players = {P8},
@@ -1515,7 +1544,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},
 		actions = {
 			PreserveTrigger();
-			KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
 			KillUnit("Zerg Lurker", CurrentPlayer);
 			Comment("유닛 킬");
 		},
@@ -1555,6 +1583,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},
 		actions = {
 			PreserveTrigger();
+			SetVoid(6,SetTo,0);
 			KillUnit(80, CurrentPlayer);
 			KillUnit(27, CurrentPlayer);
 			KillUnit("Zeratul (Dark Templar)", CurrentPlayer);
@@ -2271,6 +2300,29 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},
 	}
 	
+	CIf(FP,{
+		Void(0, Exactly, 11);
+		Void(1, Exactly, 8);
+		Void(2, Exactly, 31);
+		Void(3, AtLeast, 15);
+		Void(3, AtMost, 39);})
+		SetLocCenter2("C1")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C2")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C3")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C4")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C5")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C6")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C7")
+		f_TempRepeat(17,1,nil,2)
+		SetLocCenter2("C8")
+		f_TempRepeat(17,1,nil,2)
+	CIfEnd()
 	Trigger { -- 헤으응 미니니? 삼니니 유닛 소환 밑 무브로케
 		players = {P8},
 		conditions = {
@@ -2285,7 +2337,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			CreateUnit(8, "Hyperion (Battlecruiser)", "Create 1", CurrentPlayer);
 			CreateUnit(8, "Edmund Duke (Siege Mode)", "Create 2", CurrentPlayer);
-			CreateUnit(8, "Alan Schezar (Goliath)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C3");
@@ -2304,14 +2355,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C7");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C8");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C1");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C1");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C2");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C3");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C4");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C5");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C6");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C7");
-			MoveUnit(1, "Alan Schezar (Goliath)", CurrentPlayer, "Create", "C8");
 			KillUnitAt(All, "Men", "C1", Foes);
 			KillUnitAt(All, "Men", "C2", Foes);
 			KillUnitAt(All, "Men", "C3", Foes);
@@ -2320,7 +2363,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			KillUnitAt(All, "Men", "C6", Foes);
 			KillUnitAt(All, "Men", "C7", Foes);
 			KillUnitAt(All, "Men", "C8", Foes);
-			Order("Men", CurrentPlayer, "Anywhere", Attack, "Boss");
 			SetVoid(3, Add, 1);
 			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
 		},
@@ -2366,37 +2408,18 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		Void(1, Exactly, 8);
 		Void(2, Exactly, 31);
 		Void(3, Exactly, 41);})
-	Trigger { -- 스킬 초기화
-		players = {P8},
-		conditions = {
-			
-			Bring(AllPlayers, Exactly, 0, "Gantrithor (Carrier)", "Anywhere");
-			Void(0, Exactly, 11);
-			Void(1, Exactly, 8);
-			Void(2, Exactly, 31);
-			Void(3, Exactly, 41);
-		},
-		actions = {
-			PreserveTrigger();
-			SetVoid(0, SetTo, 0);
-			SetVoid(1, SetTo, 0);
-			SetVoid(2, SetTo, 0);
-			SetVoid(4, SetTo, 0);
-			SetVoid(3, SetTo, 0);
-			SetVoid(5, SetTo, 0);
-			Comment("스킬 초기화");
-		},
-	}
 		
+	CallTriggerX(FP,Call_VoidReset,{
+	Bring(AllPlayers, Exactly, 0, "Gantrithor (Carrier)", "Anywhere");
+	Void(0, Exactly, 11);
+	Void(1, Exactly, 8);
+	Void(2, Exactly, 31);
+	Void(3, Exactly, 41);})
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
+	
+	CallTrigger(FP,Call_VoidReset)
 		DoActionsX(FP,{
 			SetCDeaths(FP,SetTo,1,DLClear);
-			SetVoid(0, SetTo, 0);
-			SetVoid(1, SetTo, 0);
-			SetVoid(2, SetTo, 0);
-			SetVoid(4, SetTo, 0);
-			SetVoid(3, SetTo, 0);
-			SetVoid(5, SetTo, 0);
 			DL_Recover;
 		})
 		f_ArrReset()
