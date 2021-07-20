@@ -14,8 +14,8 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.3T"
-Limit = 1
+VerText = "\x04Ver. 3.3R"
+Limit = 0
 FP = P6
 TestStartToBYD = 0
 
@@ -160,7 +160,7 @@ CreateVariableSet({ -- 변수 정의
 if Limit == 1 then
 	RedNumber = CreateVar(400)
 else
-	RedNumber = CreateVar()
+	RedNumber = CreateVar(400)
 end
 
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
@@ -14186,14 +14186,14 @@ end
 
 LimitX_Jump = def_sIndex()
 NJump(FP,LimitX_Jump,{CDeaths(P6,AtLeast,1,LimitX),CDeaths(FP,AtMost,0,TestMode)})
-NIf(P6,{CDeaths(P6,AtLeast,1,EVMode),CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드
+NIf(P6,{CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드 CDeaths(P6,AtLeast,1,EVMode)
 NJumpEnd(FP,LimitX_Jump)
 
 Trigger { -- 컴퓨터 플레이어 색상 설정
 	players = {P6},
 	conditions = {
 		Label(0);
-		CDeaths(P6,AtLeast,1,LimitX);
+		--CDeaths(P6,AtLeast,1,LimitX);
 	},
 	actions = {
 		SetDeaths(Force1,SetTo,1,111);
@@ -14203,10 +14203,10 @@ Trigger { -- 컴퓨터 플레이어 색상 설정
 
 
 if Limit == 0 then
-	EText1 = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
-	EText2 = "\x13\x07EV모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
-	EText3 = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
-	EText4 = "\x13\x07EV모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
+	EText1 = "\x13\x07특수 모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+	EText2 = "\x13\x07특수 모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다."
+	EText3 = "\x13\x07특수 모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x0430초 뒤, 한번 더 끌어당깁니다."
+	EText4 = "\x13\x07특수 모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다."
 else
 	EText1 = "\x13\x07테스트모드 \x04특전! 모든 \x1D【 F\x04enix \x1DZ 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
 	EText2 = "\x13\x07테스트모드 \x04특전! 모든 \x1D【 F\x04enix \x1DD 】\x04를 끌어당깁니다.\n\x13\x0430초 뒤, 다음 영웅을 끌어당깁니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
@@ -18373,7 +18373,8 @@ Trigger {
 		Label(0);
 		},
 	actions = {
-		SetCVar(P6,RednumberSet[2],SetTo,500);
+		SetCVar(P6,RednumberSet[2],SetTo,400);
+		--SetCVar(P6,RednumberSet[2],SetTo,500);
 		SetCJump(0x510,0);
 		}
 }
