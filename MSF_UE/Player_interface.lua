@@ -444,7 +444,7 @@ function PlayerInterface()
 				SetMemoryB(0x58D2B0+(46*i)+17,SetTo,0)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,1)) -- 체업 255회
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,AtLeast,1)) -- 체업 255회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
@@ -454,7 +454,7 @@ function PlayerInterface()
 				SetMemoryB(0x58D2B0+(46*i)+19,SetTo,0)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,Exactly,1)) -- 체업 10회
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,AtLeast,1)) -- 체업 10회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),

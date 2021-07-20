@@ -14,8 +14,9 @@ function f_Repeat(Line)
 	CIfEnd()
 end
 
-function f_TempRepeat(UnitID,Number,Condition)
-	CallTriggerX(FP,Set_Repeat,Condition,{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),SetCVar(FP,Repeat_TempV[2],SetTo,Number)})
+function f_TempRepeat(UnitID,Number,Condition,Type)
+	if Type == nil then Type = 0 end
+	CallTriggerX(FP,Set_Repeat,Condition,{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),SetCVar(FP,Repeat_TempV[2],SetTo,Number),SetCVar(FP,RepeatType[2],SetTo,Type)})
 end
 function f_TempRepeatX(UnitID,Number,Condition)
 	CDoActions(FP,{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),TSetCVar(FP,Repeat_TempV[2],SetTo,Number)})
@@ -359,7 +360,7 @@ end
 
 
 function f_CRandNum(Max,Operand)
-	
+	if Operand == nil then Operand = 0 end
 	local RandRet = TempRandRet
 	CallTrigger(FP,CRandNum,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
 	return RandRet

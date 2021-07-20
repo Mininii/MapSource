@@ -192,7 +192,6 @@ function onInit_EUD()
 	SetUnitClassType(150)
 --roka7
 function EffUnitPatch(UnitID)
-	SetUnitAdvFlag(UnitID,4,0xFFFFFFFF)
 	table.insert(PatchArr,SetMemoryB(0x6616E0 + UnitID,SetTo,130))
 	table.insert(PatchArr,SetMemoryB(0x663238 + UnitID,SetTo,11)) -- 시야
 	UnitSizePatch(UnitID,1)
@@ -498,10 +497,11 @@ UnitSizePatch(60,1)
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.",4);
+			DisplayTextX("\x13\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요. \n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
+			SetMemory(0xCDDDCDDD,SetTo,1);
 		}
 	}
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))

@@ -105,6 +105,7 @@ function Var_init()
 	CY = CreateVar()
 	SoundLimitT = CreateCCode()
 	SoundLimit = CreateCCode()
+	WaitT = CreateCCode()
 end
 
 function HPoints()
@@ -243,5 +244,25 @@ function Objects()
     function SetVoidX(Number,Type,Value,Mask)
         return SetDeathsX(roka7TempVoid+Number,Type,Value,0,Mask)
     end
+	MoveMarineArr2 = {}
+	for i = 0, 6 do
+	table.insert(MoveMarineArr2,MoveUnit(All,"Men",i,"Create 1",2+i))
+	table.insert(MoveMarineArr2,MoveUnit(All,"Men",i,"Create 2",2+i))
+	for j = 0, 4 do
+	table.insert(MoveMarineArr2,MoveUnit(All,"Men",i,"Create 1",20+j))
+	table.insert(MoveMarineArr2,MoveUnit(All,"Men",i,"Create 2",20+j))
+	end
+	end
+	
+	OWTable = {}
+	for i = 0, 95 do
+		if i <= 20 or i >= 75 then 
+	table.insert(OWTable,SetLoc("OW","L",SetTo,i*32))
+	table.insert(OWTable,SetLoc("OW","R",SetTo,32+(i*32)))
+	table.insert(OWTable,SetLoc("OWDest","L",SetTo,i*32))
+	table.insert(OWTable,SetLoc("OWDest","R",SetTo,32+(i*32)))
+	table.insert(OWTable,Order("Men",Force1,"OW",Move,"OWDest"))
+		end
+	end
 	Install_ShapeData()
 end

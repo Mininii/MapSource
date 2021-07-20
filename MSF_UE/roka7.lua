@@ -3009,14 +3009,11 @@ end
 	for i = 0x2000, 0x2300 do
 		table.insert(roka7ResetTable,SetCVar(FP,i,SetTo,0))
 	end
-	for i = 0, 2000 do
-	table.insert(roka7ResetTable,(SetVoid(i,SetTo,0)))
-	end
 	for j, k in pairs(VTable) do
 		table.insert(roka7ResetTable,(SetCVar(FP,k,SetTo,0)))
 	end
 	DoActions2X(FP,roka7ResetTable)
-
+	CallTrigger(FP,Call_VoidReset)
 	CIfXEnd()
 	
 	

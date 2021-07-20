@@ -93,7 +93,7 @@ for i = 1, Var_Lines do
 	table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
 end
 local CheckTemp = CreateVar()
-
+local isScore = CreateCCode()
 Call_Repeat = SetCallForward()
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -124,12 +124,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 --		TModifyUnitEnergy(All,Gun_TempSpawnSet1,P8,1,100);
 	})
 	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
+		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0),SetCDeaths(FP,SetTo,1,isScore))
 			CDoActions(FP,{
 				TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 				TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
 			})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,187),SetCDeaths(FP,SetTo,1,isScore))
 			CDoActions(FP,{
 				TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
 			})
@@ -150,9 +150,24 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 			Simple_SetLocX(FP,0,BackupL,BackupU,BackupR,BackupD) -- RecoverLoc
 
-		CElseX()
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
+		TriggerX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
+
+		local TempPos = CreateVar()
+		GetLocCenter("Boss",CPosX,CPosY)
+		CMov(FP,TempPos,_Add(CPosX,_Mul(CPosY,_Mov(65536))))
+		
+		CDoActions(FP,{
+			TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
+			TSetDeaths(_Add(Nextptrs,22),SetTo,TempPos,0),
+			--TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000),
+		})
+
+			
+		CElseX(SetCDeaths(FP,SetTo,0,isScore))
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
+		CIf(FP,CDeaths(FP,AtLeast,1,isScore))
 		f_Mod(FP,BiteCalc,Gun_TempSpawnSet1,_Mov(2),0xFF)
 		f_Read(FP,_Add(_Div(Gun_TempSpawnSet1,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
 		NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
@@ -702,6 +717,10 @@ local CB_Y = CreateVar()
 	CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 		CAdd(FP,CB_Y,10)
+		CIf(FP,{CVar(FP,Angle_V[2],AtLeast,0x80000000)})
+			CNeg(FP,Angle_V)
+			CSub(FP,Angle_V,_Mov(256),Angle_V)
+		CifEnd()
 		f_Mod(FP,Angle_V,_Mov(256))
 		CDoActions(FP,{
 			TSetMemoryX(0x66321C, SetTo, Height_V,0xFF),
@@ -720,10 +739,27 @@ local CB_Y = CreateVar()
 		})
 	CIfEnd()
 	SetCallEnd()
+	local IndexJump = def_sIndex()
+	WrPosSave = SetCallForward()
+	SetCall(FP)
+		CMov(FP,CurArr,0)
+		CJumpEnd(FP,IndexJump)
+		NIf(FP,{TMemory(_Add(XY_ArrHeader,CurArr),AtLeast,1)})
+			CAdd(FP,CurArr,1)
+			CJump(FP,IndexJump)
+		NIfEnd()
+		CDoActions(FP,{TSetMemory(_Add(XY_ArrHeader,CurArr),SetTo,_Add(_Mov(CX,0xFFFF),_Mul(CY,_Mov(65536))))})
+	SetCallEnd()
 
 	
-
-
+	local VoidResetTable = {}
+	for i = 0, 2000 do
+	table.insert(VoidResetTable,(SetVoid(i,SetTo,0)))
+	end
+	Call_VoidReset = SetCallForward()
+	SetCall(FP)
+		DoActions2(FP,VoidResetTable)
+	SetCallEnd()
 
 
 end
