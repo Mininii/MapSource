@@ -1601,7 +1601,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},
 		actions = {
 			PreserveTrigger();
-			CreateUnit(9, 91, "Create 3", CurrentPlayer);
+			CreateUnit(9, 91, "Create 2", CurrentPlayer);
 			MoveUnit(All, 91, CurrentPlayer, "Create", "Boss");
 			KillUnit(91, CurrentPlayer);
 			Wait(1000);
@@ -1671,7 +1671,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(6, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -1680,7 +1680,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(6, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -1709,7 +1709,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -1719,7 +1719,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -1795,8 +1795,8 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			CreateUnit(15, "Zerg Devourer", "Create 1", CurrentPlayer);
 			CreateUnit(2, "Danimoth (Arbiter)", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "Boss");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
@@ -1810,7 +1810,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
-			CreateUnit(3, "Zerg Devourer", "Create 3", CurrentPlayer);
+			CreateUnit(3, "Zerg Devourer", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C1");
@@ -1819,7 +1819,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
-			CreateUnit(3, "Zerg Devourer", "Create 3", CurrentPlayer);
+			CreateUnit(3, "Zerg Devourer", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C1");
@@ -1847,7 +1847,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 2", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 1", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -1857,7 +1857,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 2", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 1", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -1933,8 +1933,8 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			CreateUnit(17, "Zerg Devourer", "Create 1", CurrentPlayer);
 			CreateUnit(2, "Danimoth (Arbiter)", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(2, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "Boss");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
@@ -1948,7 +1948,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -1957,7 +1957,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -1986,7 +1986,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(4, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -1996,7 +1996,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(4, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -2072,8 +2072,8 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			CreateUnit(19, "Zerg Devourer", "Create 1", CurrentPlayer);
 			CreateUnit(2, "Danimoth (Arbiter)", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "Boss");
 			MoveUnit(3, "Zerg Devourer", CurrentPlayer, "Create", "Boss");
@@ -2087,7 +2087,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(2, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -2097,7 +2097,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Mutalisk)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Mutalisk)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			MoveUnit(2, "Zerg Devourer", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Kukulza (Mutalisk)", CurrentPlayer, "Create", "C1");
@@ -2126,7 +2126,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(5, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -2136,7 +2136,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			CreateUnit(6, "Zerg Devourer", "Create 2", CurrentPlayer);
-			CreateUnit(1, "Kukulza (Guardian)", "Create 3", CurrentPlayer);
+			CreateUnit(1, "Kukulza (Guardian)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(5, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Kukulza (Guardian)", CurrentPlayer, "Create", "C2");
@@ -2285,7 +2285,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			PreserveTrigger();
 			CreateUnit(8, "Hyperion (Battlecruiser)", "Create 1", CurrentPlayer);
 			CreateUnit(8, "Edmund Duke (Siege Mode)", "Create 2", CurrentPlayer);
-			CreateUnit(8, "Alan Schezar (Goliath)", "Create 3", CurrentPlayer);
+			CreateUnit(8, "Alan Schezar (Goliath)", "Create 2", CurrentPlayer);
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C1");
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C2");
 			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C3");
