@@ -1,6 +1,8 @@
 function Install_DLBoss()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
+	DoActions2(FP,MoveMarineArr2)
+	DoActions2(FP,OWTable)
 local DL_Patch = {}
 table.insert(DL_Patch,SetMemory(0x6617C8 + (55*8),SetTo,(22)+(22*65536)))
 table.insert(DL_Patch,SetMemory(0x6617CC + (55*8),SetTo,(21)+(21*65536)))
@@ -1219,13 +1221,14 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		GetLocCenter("C8",CX,CY)
 		f_Recall(nil,CX,CY)
 	CIfEnd()
+	CIf(FP,Void(4, Exactly, 7),SetVoid(4, SetTo, 0))
 	Trigger { -- 유닛 소환
 		players = {P8},
 		conditions = {
 			
 			Bring(AllPlayers, AtLeast, 1, "Tom Kazansky (Wraith)", "Anywhere");
 			Bring(AllPlayers, AtLeast, 1, "Terran Wraith", "Anywhere");
-			Void(4, Exactly, 7);
+			
 		},
 		actions = {
 			PreserveTrigger();
@@ -1297,11 +1300,26 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Order("Artanis (Scout)", CurrentPlayer, "C6", Attack, "Boss");
 			Order("Artanis (Scout)", CurrentPlayer, "C7", Attack, "Boss");
 			Order("Artanis (Scout)", CurrentPlayer, "C8", Attack, "Boss");
-			SetVoid(4, SetTo, 0);
 			Comment("유닛 소환");
 		},
 	}
-	
+	GetLocCenter("C1",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C2",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C3",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C4",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C5",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C6",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C7",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	GetLocCenter("C8",CX,CY)
+	CallTriggerX(FP,WrPosSave)
+	CIfEnd()
 	Trigger { -- 레이스 삭제
 		players = {P8},
 		conditions = {
@@ -2342,6 +2360,12 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},
 	}
 	
+	f_ArrReset({
+		Bring(AllPlayers, Exactly, 0, "Gantrithor (Carrier)", "Anywhere");
+		Void(0, Exactly, 11);
+		Void(1, Exactly, 8);
+		Void(2, Exactly, 31);
+		Void(3, Exactly, 41);})
 	Trigger { -- 스킬 초기화
 		players = {P8},
 		conditions = {
@@ -2363,6 +2387,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Comment("스킬 초기화");
 		},
 	}
+		
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
 		DoActionsX(FP,{
 			SetCDeaths(FP,SetTo,1,DLClear);
@@ -2374,6 +2399,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			SetVoid(5, SetTo, 0);
 			DL_Recover;
 		})
+		f_ArrReset()
 	CIfXEnd()
 	CIfEnd()
 	end
