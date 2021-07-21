@@ -8,6 +8,19 @@ for dir in io.popen(EXTLUA):lines() do
 	end
 end
 
+Trigger { -- EUD Editor
+	players = {P1},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetMemory(0x6616B0, SetTo, 2097615);
+		SetMemory(0x6643B0, SetTo, 536870916);
+		SetMemory(0x666460, SetTo, 32965359);
+		SetMemory(0x66F424, SetTo, 131);
+		Comment("EUD Editor");
+	},
+}
 BGMArr = {}
 for i = 1, 364 do
 	if i <= 9 then
@@ -19,6 +32,7 @@ for i = 1, 364 do
 	end
 end
 
+FP = P2
 --function E_Char_Bangjungsik(X)
 
 --	return (X^2)+(5*X)+6
@@ -165,7 +179,6 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 �
 	end
 end
  
-FP = P2
 SetForces({P1,P3,P4,P5,P6,P7,P8},{P2},{},{},{P1,P2,P3,P4,P5,P6,P7,P8}) 
 SetFixedPlayer(P2)
 StartCtrig()
@@ -173,50 +186,112 @@ CJump(AllPlayers,0x600)
 Include_CtrigPlib(360,"Switch 1",0)
 Install_GetCLoc(P2,253,180)
 
-CVariable(P1,0x10) -- 변수
-CVariable(P1,0x11) -- 변수
-CVariable(P1,0x12) -- 변수
-CVariable(P1,0x13) -- 변수
-CVariable(P1,0x14) -- 변수
-A1 = CArray(P1,1000) -- 배열
-VA1 = CVArray(P1,10) -- 변수배열
-CVariable2(P1,0x20,"X","X",1) i = 0x20  -- 인덱스 변수 
-CVariable2(P1,0x30,"X","X",2) j = 0x30
-CVariable2(P1,0x40,"X","X",3) k = 0x40
-CVariable2(P1,0x50,"X","X",4) l = 0x50
-CVariable2(P1,0x60,"X","X",5) m = 0x60
-VA2 = CVArray(P1,10) -- 변수배열
-for i = 0x100, 0x105 do
-	CVariable(P1,i)
-end
+Dx,Dy,Du,DtP,Dv = CreateVariables(5)
+-- 여기에 변수, 배열 및 Include류 함수 선언 --
+CVariable(AllPlayers,0x1005) CunitEPD = 0x1005
+	
+CXArrX = CArray(P1,100) 
+CXArrY = CArray(P1,100)
+CXArrZ = CArray(P1,100)
+
+CVariable(AllPlayers,0x1000) TSize = 0x1000
+CVariable(AllPlayers,0x1001) XAngle = 0x1001
+CVariable(AllPlayers,0x1002) YAngle = 0x1002
+CVariable(AllPlayers,0x1003) ZAngle = 0x1003
+CVariable(AllPlayers,0x1004) TCount = 0x1004
+
+CVariable(AllPlayers,0x2000) THeight = 0x2000
+CVariable(AllPlayers,0x2001) Arrptr = 0x2001
+CVariable(AllPlayers,0x2002) CArrptr = 0x2002
+CVariable(AllPlayers,0x2010) Arrptr1 = 0x2010
+CVariable(AllPlayers,0x2011) Arrptr2 = 0x2011
+CVariable(AllPlayers,0x2012) Var1 = 0x2012
+CVariable(AllPlayers,0x2013) Var2 = 0x2013
 CJumpEnd(AllPlayers,0x600)
 NoAirCollisionX(P1)--
-DoActions(FP,RemoveUnit(0,P1))
+TSize2 = CreateVar()
+DoActions(P1,RemoveUnit(204,P2))
 
-CMov(P1,V(0x10),17)
-CMov(P1,V(0x11),15)
-CMov(P1,V(0x14),16)
-CMov(P1,V(0x12),EPD(0x57F0F0))
-CMov(P1,V(0x13),EPD(0x57F120))
+	TShape = CXMakeShape(96,{0,0,0},{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}) -- 중심점을 포함한 2x2x2 정육면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
 
-CMovX(P1,VArr(VA1,V(i)),15)
-CMovX(P1,VArr(VA1,V(j)),17)
-CMovX(P1,VArr(VA1,V(k)),EPD(0x57F0F0))
-CMovX(P1,VArr(VA1,V(l)),EPD(0x57F120))
+---------------------------------------------------------------------------------------------
+	SHLX = 1365
+	SHLY = 1365
+	Timer1= CreateCCode()
+	Trigger {
+		players = {P1},
+		conditions = {
+			Label(0);
+		},
+		actions = {
+			SetCVar("X",TCount,SetTo,1);
+			SetCVar("X",TSize,SetTo,0);
+			SetCVar("X",TSize2[2],SetTo,540*4);
+			CenterView(1);
+		}
+	}
+	DoActionsX(P1,SetCDeaths("X",Add,1,Timer1))
+	Trigger {
+		players = {P1},
+		conditions = {
+			Label(0);
+			CDeaths("X",AtLeast,100,Timer1);
+		},
+		actions = {
+			SetCVar("X",TSize,SetTo,0);
+			SetCVar("X",TSize2[2],SetTo,540*4);
+			SetCDeaths("X",SetTo,0,Timer1);
+			PreserveTrigger();
+		}
+	}
 
-CTrigger({P1},
-{TTOR({_TMemory(V(0x12),AtLeast,V(0x10)),_TMemory(VArr(VA1,V(k)),AtMost,VArr(VA1,V(i)))}),
-TTOR({_TMemory(VArr(VA1,V(l)),AtLeast,VArr(VA1,V(j))),_TMemory(V(0x13),AtMost,V(0x11))})}, 
-{DisplayText("TTOR조건만족",4)},1)
+	CAdd(P1,V(TSize),TSize2)
+	Trigger {
+			players = {P1},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCVar("X",XAngle,Add,11);
+				SetCVar("X",YAngle,Add,8);
+				SetCVar("X",ZAngle,Add,5);
+				SetCVar("X",TSize,Add,4);
+				SetCVar("X",TCount,SetTo,1);
+				SetCVar("X",TSize2[2],Add,-160);
+				PreserveTrigger();
+			}
+		}
+		Trigger {
+				players = {P1},
+				conditions = {
+					Label(0);
+					CVar("X",TSize,AtLeast,0x80000000);
+				},
+				actions = {
+					SetCVar("X",TSize,SetTo,0);
+					PreserveTrigger();
+				}
+			}
+		
 
-CTrigger({P1},
-{TTOR({_TTMemory(V(0x12),NotSame,V(0x14)),_TTMemory(V(0x13),NotSame,V(0x14)),Bring(P1,Exactly,0,"Terran SCV","Anywhere")})},
-{DisplayText("TTOR조건만족2",4)},1)
-fasdas = CreateVar()
-fasdas2 = CreateVar()--
---
+	function CXfunc()
+				local CA = CAPlotDataArr
+				local CB = CAPlotCreateArr
+				local PlayerID = CAPlotPlayerID
+				
+				CX_Ratio(V(TSize),540*3*12,V(TSize),540*3*12,V(TSize),540*3*12)
+				CX_Rotate(_Div(V(XAngle),10),_Div(V(YAngle),10),_Div(V(ZAngle),10))
+						
+	end
+	CXPlot(TShape,P2,204,1,{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",P1,Always(),nil,nil)
+	
+				
+CMov(P1,V(CunitEPD),161741)
+CWhile(P1,{CVar("X",CunitEPD,AtLeast,19025)})
+	CTrigger(P1,{TDeaths(Vi(CunitEPD,25),Exactly,204,0)},
+	{TSetDeathsX(Vi(CunitEPD,55),SetTo,0x104,0,0x104),TSetDeathsX(Vi(0x2000,57),SetTo,0,0,0xFF)},{Preserved}) -- 유닛 드래그 방지
+CWhileEnd({SetCVar("X",CunitEPD,Subtract,84)})
 
-Dx,Dy,Du,DtP,Dv = CreateVariables(5)
 IBGM_EPD(FP,7)
 
 --for i = 64, 70 do
@@ -244,6 +319,8 @@ EndCtrig()
 ErrorCheck()
 EUDTurbo(P1)
 TestShapeTable = {}
+
+
 ----
 --SHA1a =
 --{36,{-140,-140},{-84,-140},{-28,-140},{28,-140},{84,-140},{140,-140},{-140,-84},{-84,-84},{-28,-84},{28,-84},{84,-84},{140,-84},{-140,-28},{-84,-28},{-28,-28},{28,-28},{84,-28},{140,-28},{-140,28},{-84,28},{-28,28},{28,28},{84,28},{140,28},{-140,84},{-84,84},{-28,84},{28,84},{84,84},{140,84},{-140,140},{-84,140},{-28,140},{28,140},{84,140},{140,140}}--
