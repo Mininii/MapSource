@@ -168,14 +168,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
 		CIf(FP,CDeaths(FP,AtLeast,1,isScore))
-		f_Mod(FP,BiteCalc,Gun_TempSpawnSet1,_Mov(2),0xFF)
-		f_Read(FP,_Add(_Div(Gun_TempSpawnSet1,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
-		NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
-		CDiv(FP,UnitPoint,65536)
-		NElseX()
-		CMod(FP,UnitPoint,65536)
-		NIfXEnd()
-		CAdd(FP,InputPoint,UnitPoint)
+			f_Mod(FP,BiteCalc,Gun_TempSpawnSet1,_Mov(2),0xFF)
+			f_Read(FP,_Add(_Div(Gun_TempSpawnSet1,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
+			NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
+			CDiv(FP,UnitPoint,65536)
+			NElseX()
+			CMod(FP,UnitPoint,65536)
+			NIfXEnd()
+			CAdd(FP,InputPoint,UnitPoint)
+		CIfEnd()
 		
 	CIfEnd()
 	NJumpEnd(FP,f_Repeat_ErrorCheck)
@@ -761,5 +762,83 @@ local CB_Y = CreateVar()
 		DoActions2(FP,VoidResetTable)
 	SetCallEnd()
 
+	Call_ScorePrint = SetCallForward()
+	SetCall(FP)
+	
+		local ExScoreVA = Create_VArrTable(7,13)
+		local ExScoreP = Create_VTable(7)
+		local TotalScoreVA = CreateVarray(FP,7)
+		local DBossScoreVA = CreateVarray(FP,7)
+		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
+		for i = 1, 7 do
+		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
+		CMov(FP,ExScoreP[i],ExScore[i])
+		ItoDecX(FP,ExScoreP[i],VArr(ExScoreVA[i],0),2,nil,2)
+		_0DPatchX(FP,ExScoreVA[i],6)
+		f_Movcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip),VArr(ExScoreVA[i],0),12*4)
+		f_Memcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip+(12*4)),_TMem(Arr(Str19[3],0),"X","X",1),Str19[2])
+		CIfEnd()
+
+		
+		end
+		Trigger {
+			players = {FP},
+			conditions = {
+				},
+			
+			actions = {
+				RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10¡¼ \x06£Ô\x04£ï£ô£á£ì¡¡\x1F£Ó£ã£ï£ò£å \x10¡½",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+				PreserveTrigger();
+			},
+		}
+		CMov(FP,TotalScore,0)
+		for i = 1, 7 do
+		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
+		CAdd(FP,TotalScore,ExScore[i])
+		Trigger {
+			players = {FP},
+			conditions = {
+				},
+			
+			actions = {
+				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i].."Score".._0D,4)},HumanPlayers,FP);
+				PreserveTrigger();
+			},
+		}
+		CIfEnd()
+		end
+if TestStart == 1 then
+	CIf(FP,CDeaths(FP,AtLeast,0,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
+else
+	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
+end
+		ItoDec(FP,TotalScore,VArr(TotalScoreVA,0),2,nil,2)
+		ItoDec(FP,OutputPoint,VArr(DBossScoreVA,0),2,nil,2)
+		_0DPatchX(FP,TotalScoreVA,6)
+		_0DPatchX(FP,DBossScoreVA,6)
+
+		f_MemCpy(FP,DBoss_PrintScore,_TMem(Arr(DBossT1[3],0),"X","X",1),DBossT1[2])
+		f_Movcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]),VArr(TotalScoreVA,0),5*4)
+		f_MemCpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
+		f_Movcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)+DBossT2[2]),VArr(DBossScoreVA,0),5*4)
+		f_MemCpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+		
+
+--		"\x13\x10¡¼ \x07P\x04layer \x06T\x04otal \x1FS\x04core : "TotalScore" / "DBossScore" \x10¡½"
+
+		Trigger {
+			players = {FP},
+			conditions = {
+				},
+			
+			actions = {
+				RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossSC".._0D,4)},HumanPlayers,FP);
+				PreserveTrigger();
+			},
+		}
+	CIfEnd()
+	
+
+	SetCallEnd()
 
 end

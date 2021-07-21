@@ -1,41 +1,41 @@
 function Install_Destr0yer()
 	
 local Lyrics = {
-	{"\x13\x04Ladies and Gentlemen",2,222},
-	{"\x13\x07Let's start",5,0},
-	{"\x13\x04Only is in Memories",8,0},
-	{"\x13\x08Tonight.",12,333},
-	{"\x13\x04I wonder why things have happened.\n\x13\x04왜 이런 일들이 일어났는지 궁금해.",60-3,0},
-	{"\x13\x04Could you imagine the world is boring?\n\x13\x04이 세상은 따분한 걸, 넌 알고 있니?",68-3,0},
-	{"\x13\x04Stereotype\n\x13\x04고정관념",76-3,0},
-	{"\x13\x04Sham\n\x13\x04엉터리",78-3,444},
-	{"\x13\x04Brain Freeze\n\x13\x04브레인 프리즈",79-3,444},
-	{"\x13\x04Collusion\n\x13\x04공모",80-3,222},
-	{"\x13\x04Mental block\n\x13\x04정신적 블록",82-3,333},
-	{"\x13\x04The world is fading.\n\x13\x04세계는 사라져 가고,",83-3,222},
-	{"\x13\x04I know the fate.\n\x13\x04그 운명은 난 알고 있어.",86-3,333},
-	{"\x13\x04The world is fading.\n\x13\x04세계는 사라지고,",88-3,444},
-	{"\x13\x04I know the fate.\n\x13\x04나는 그 운명을 아는걸.",90-3,444},
-	{"\x13\x04I know all of you.\n\x13\x04나는 너희를 모두 아는데,",91-3,0},
-	{"\x13\x04Have you, you, followed me?\n\x13\x04너희는, 너희는 날 쫓아오기라도 했니?",95-3,444},
-	{"\x13\x04Me in your mind is the dream.\n\x13\x04너희 마음 속의 나는 꿈인걸.",99-3,0},
-	{"\x13\x04The dream of the past.\n\x13\x04과거의 꿈.",105-3,333},
-	{"\x13\x04So I would forget you.\n\x13\x04난 너희를 잊을테니,",107-3,0},
-	{"\x13\x04Let you forget me.\n\x13\x04너희도 날 잊어줘.",111-3,0},
-	{"\x13\x04'Cause I'm \"Destroyer\"\n\x13\x04나는 \"파괴자\"이니까.",115-3,333},
-	{"\x13\x04I kill us all.\n\x13\x04다 끝장내겠어.",138-3,0},
-	{"\x13\x04It's the only way.\n\x13\x04이 길 뿐이야.",151-3,333},
-	{"\x13\x04It's over.\n\x13\x04다 끝났어.",153-3,0},
-	{"\x13\x04I will kill.\n\x13\x04끝장내겠어.",159-3,333},
-	{"\x13\x04I will destroy the world.\n\x13\x04내가 세상을 파괴하겠어.",161-3,333},
-	{"\x13\x04No matter what you do, I don't stop.\n\x13\x04너희가 뭐래도, 멈추지 않아.",165-3,500},
-	{"\x13\x04I'm the only one who's right.\n\x13\x04나만이 진리이기에.",168-3,0},
-	{"\x13\x04I will kill.\n\x13\x04끝장내겠어.",175-3,333},
-	{"\x13\x04I will destroy the world.\n\x13\x04내가 세상을 파괴하겠어.",177-3,444},
-	{"\x13\x04No matter what you do, I don't stop.\n\x13\x04너희가 뭐래도, 멈추지 않아.",181-3,500},
-	{"\x13\x04It is what it is.\n\x13\x04뭐 어쩌겠어.",184-3,0},
-	{"\x13\x04It is what it is.\n\x13\x04원래 이랬는걸.",188-3,0},
-	{"\x13\x04It is not. It's not my fault.\n\x13\x04아냐. 내 잘못이 아냐.",192-3,0},
+	{"\x13\x06※ \x04Ladies and Gentlemen \x06※",2,222},
+	{"\x13\x06※ \x07Let's start \x06※",5,0},
+	{"\x13\x06※ \x04Only is in Memories \x06※",8,0},
+	{"\x13\x06※ \x08Tonight. \x06※",12,333},
+	{"\x13\x07♪\x04 I wonder why things have \x03happened\x04. \x07♪\n\x13\x07♪\x04 왜 \x03이런 일들\x04이 일어났는지 궁금해. \x07♪",60-3,0},
+	{"\x13\x07♪\x04 \x1DCould you imagine \x04the world is \x1Cboring\x04? \x07♪\n\x13\x07♪\x04 이 세상은 \x1C따분한 \x04걸, \x1D넌 알고 있니? \x07♪",68-3,0},
+	{"\x13\x07♪\x08 Stereotype \x07♪\n\x13\x07♪\x08 고정관념 \x07♪",76-3,0},
+	{"\x13\x07♪\x0E Sham \x07♪\n\x13\x07♪\x0E 엉터리 \x07♪",78-3,444},
+	{"\x13\x07♪\x0F Brain Freeze \x07♪\n\x13\x07♪\x0F 브레인 프리즈 \x07♪",79-3,444},
+	{"\x13\x07♪\x10 Collusion \x07♪\n\x13\x07♪\x10 공모 \x07♪",80-3,222},
+	{"\x13\x07♪\x1F Mental block \x07♪\n\x13\x07♪\x1F 정신적 블록 \x07♪",82-3,333},
+	{"\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x13\x07♪\x04 세계는 \x1B사라져 가고\x04, \x07♪",83-3,222},
+	{"\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x13\x07♪\x04 그 \x08( \x11운\x04명 \x08)\x04은 난 알고 있어. \x07♪",86-3,333},
+	{"\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x13\x07♪\x04 세계는 \x1B사라지고\x04, \x07♪",88-3,444},
+	{"\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x13\x07♪\x04 나는 그 \x08( \x11운\x04명 \x08)\x04을 아는걸. \x07♪",90-3,444},
+	{"\x13\x07♪\x04 I know \x07all of you\x04. \x07♪\n\x13\x07♪\x04 나는 너희를 \x07모두 아는데\x04, \x07♪",91-3,0},
+	{"\x13\x07♪\x04 Have you, you, \x10followed me\x04? \x07♪\n\x13\x07♪\x04 너희는, 너희는, 날 \x10쫓아오기라도 했니\x04? \x07♪",95-3,444},
+	{"\x13\x07♪\x04 Me in your mind is the \x1Fdream\x04. \x07♪\n\x13\x07♪\x04 너희 마음 속의 나는 \x1F꿈\x04인걸. \x07♪",99-3,0},
+	{"\x13\x07♪\x04 The dream of the \x10 ( \x11Ｐ\x04ａｓｔ \x10) \x04. \x07♪\n\x13\x07♪\x04 \x10 ( \x11과\x04거 \x10) \x04의 꿈. \x07♪",105-3,333},
+	{"\x13\x07♪\x04 So I would \x08forget \x04you. \x07♪\n\x13\x07♪\x04 난 너희를 \x08잊을\x04테니, \x07♪",107-3,0},
+	{"\x13\x07♪\x11 Let you forget me. \x07♪\n\x13\x07♪\x11 너희도 날 잊어줘. \x07♪",111-3,0},
+	{"\x13\x07♪\x04 'Cause I'm \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x07♪\n\x13\x07♪\x04 왜냐면 나는 \x07『 \x08파\x10괴\x04자\x07 』\x04이니까. \x07♪",115-3,333},
+	{"\x13\x07♪\x08 I kill us all. \x07♪\n\x13\x07♪\x08 다 끝장내겠어. \x07♪",138-3,0},
+	{"\x13\x07♪\x10 It's the only way. \x07♪\n\x13\x07♪\x10 이 길 뿐이야. \x07♪",151-3,333},
+	{"\x13\x07♪\x06 It's over. \x07♪\n\x13\x07♪\x06 다 끝났어. \x07♪",153-3,0},
+	{"\x13\x07♪\x08 I will kill. \x07♪\n\x13\x07♪\x08 끝장내겠어. \x07♪",159-3,333},
+	{"\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",161-3,333},
+	{"\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",165-3,500},
+	{"\x13\x07♪\x04 I'm the only one \x1Fwho's right\x04. \x07♪\n\x13\x07♪\x04 나만이 \x1F진리\x04이기에. \x07♪",168-3,0},
+	{"\x13\x07♪\x08 I will kill. \x07♪\n\x13\x07♪\x08 끝장내겠어. \x07♪",175-3,333},
+	{"\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",177-3,444},
+	{"\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",181-3,500},
+	{"\x13\x07♪\x15 It is what it is. \x07♪\n\x13\x07♪\x15 뭐 어쩌겠어. \x07♪",184-3,0},
+	{"\x13\x07♪\x1E It is what it is. \x07♪\n\x13\x07♪\x1E 원래 이랬는걸. \x07♪",188-3,0},
+	{"\x13\x07♪\x04 It is not. It's not \x08my fault\x04. \x07♪\n\x13\x07♪\x04 아냐. \x08내 잘못\x04이 아냐. \x07♪",192-3,0},
 	}
 	local BGMArr = {}
 	for i = 1, 272 do
@@ -51,7 +51,25 @@ local Lyrics = {
 	local BGMVar = 440
 	local Length = 666
 	local CBulletT = CreateCCode()
-	CIf(FP,Bring(FP,AtLeast,1,186,64))
+	local LockBossUnit = CreateCCode()
+	if TestStart == 1 then
+		CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+	else	
+		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})})},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+	end
+	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{MoveUnit(All,186,FP,64,"DCenter")},{Preserved})
+	
+	CIf(FP,{Memory(0x628438,AtLeast,1)})
+		f_Read(FP,0x628438,nil,Nextptrs)
+		CDoActions(FP,{
+			Simple_CalcLoc("DCenter",0,-16,0,-16),
+			CreateUnit(4,207, "DCenter",FP),
+			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
+			Simple_CalcLoc("DCenter",0,16,0,16),
+			--TSetMemory(_Add(Nextptrs,57))
+		})
+	CIfEnd()
 	SetRecoverCp()
 	RecoverCp(FP)
 	local LyricsCCode = {}
@@ -63,8 +81,8 @@ local Lyrics = {
 			conditions = {
 				Label(0);
 				CDeaths(FP,AtMost,0,TempCcode);
-				DeathsX(CurrentPlayer,Exactly,k[2],BGMLength,0xFFFFFF);
-				DeathsX(CurrentPlayer,AtMost,k[3],BGMVar,0xFFFFFF);
+				DeathsX(FP,Exactly,k[2],BGMLength,0xFFFFFF);
+				DeathsX(FP,AtMost,k[3],BGMVar,0xFFFFFF);
 			},
 			actions = {
 				RotatePlayer({DisplayTextX(k[1],4)},HumanPlayers,FP);
@@ -73,7 +91,6 @@ local Lyrics = {
 				},
 			}
 	end
-	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
 	local PatternCcode = {}
 	function Create_PatternCcode(Table)
 		local TempCcode = CreateCCode()
@@ -88,9 +105,10 @@ local Lyrics = {
 	local Angle6 = CreateVar()
 	for i = 0, 3 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,13+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		CIf(FP,{DeathsX(FP,Exactly,13+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
 			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
-			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
+			DoActionsX(FP,{SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
 			if i == 0 then
 				local Randnum = f_CRandNum(43)
 				CMov(FP,Angle1,Randnum)
@@ -102,7 +120,7 @@ local Lyrics = {
 			end
 		CIfEnd()
 	end
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,13,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,16,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+	CIf(FP,{DeathsX(FP,AtLeast,13,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,16,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
 		GetLocCenter("DCenter",CPosX,CPosY)
 		CreateBullet(210,20,Angle1,CPosX,CPosY)
 		CreateBullet(210,20,Angle2,CPosX,CPosY)
@@ -111,7 +129,7 @@ local Lyrics = {
 		CreateBullet(210,20,Angle5,CPosX,CPosY)
 		CreateBullet(210,20,Angle6,CPosX,CPosY)
 	CIfEnd()
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,17,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,19,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+	CIf(FP,{DeathsX(FP,AtLeast,17,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,19,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
 		GetLocCenter("DCenter",CPosX,CPosY)
 		CreateBullet(208,20,Angle1,CPosX,CPosY)
 		CreateBullet(208,20,Angle2,CPosX,CPosY)
@@ -120,59 +138,24 @@ local Lyrics = {
 		CreateBullet(208,20,Angle5,CPosX,CPosY)
 		CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
-	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,20,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+	TriggerX(FP,{DeathsX(FP,Exactly,20,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(FP,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		DoActionsX(FP,KillUnit(94,P11))
 	CIfEnd()
 
 	
-	for i = 0, 3 do
-		local Pat1 = Create_PatternCcode(PatternCcode)
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,(29*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
-			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
-			if i == 0 then
-				local Randnum = f_CRandNum(43)
-				CMov(FP,Angle1,Randnum)
-				CMov(FP,Angle2,Randnum,43)
-				CMov(FP,Angle3,Randnum,43*2)
-				CMov(FP,Angle4,Randnum,43*3)
-				CMov(FP,Angle5,Randnum,43*4)
-				CMov(FP,Angle6,Randnum,43*5)
-			end
-		CIfEnd()
-	end
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(29*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(29*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
-		GetLocCenter("DCenter",CPosX,CPosY)
-		CreateBullet(210,20,Angle1,CPosX,CPosY)
-		CreateBullet(210,20,Angle2,CPosX,CPosY)
-		CreateBullet(210,20,Angle3,CPosX,CPosY)
-		CreateBullet(210,20,Angle4,CPosX,CPosY)
-		CreateBullet(210,20,Angle5,CPosX,CPosY)
-		CreateBullet(210,20,Angle6,CPosX,CPosY)
-	CIfEnd()
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(30*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(30*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
-		GetLocCenter("DCenter",CPosX,CPosY)
-		CreateBullet(208,20,Angle1,CPosX,CPosY)
-		CreateBullet(208,20,Angle2,CPosX,CPosY)
-		CreateBullet(208,20,Angle3,CPosX,CPosY)
-		CreateBullet(208,20,Angle4,CPosX,CPosY)
-		CreateBullet(208,20,Angle5,CPosX,CPosY)
-		CreateBullet(208,20,Angle6,CPosX,CPosY)
-	CIfEnd()
-	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-		DoActionsX(FP,KillUnit(94,P11))
-	CIfEnd()
-
+	TriggerX(FP,{DeathsX(FP,Exactly,(13*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)},{Preserved})
+	
 	
 	for i = 0, 3 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,(48*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
-			DoActionsX(FP,{Order(94,P8,64,Move,"DCenter"),GiveUnits(All,94,P8,64,P11),Order(94,P11,64,Move,"DCenter")})
+		CIf(FP,{DeathsX(FP,Exactly,(29*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+		DoActionsX(FP,{SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
 			if i == 0 then
 				local Randnum = f_CRandNum(43)
 				CMov(FP,Angle1,Randnum)
@@ -184,7 +167,7 @@ local Lyrics = {
 			end
 		CIfEnd()
 	end
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(48*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(48*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+	CIf(FP,{DeathsX(FP,AtLeast,(29*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(29*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
 		GetLocCenter("DCenter",CPosX,CPosY)
 		CreateBullet(210,20,Angle1,CPosX,CPosY)
 		CreateBullet(210,20,Angle2,CPosX,CPosY)
@@ -193,7 +176,7 @@ local Lyrics = {
 		CreateBullet(210,20,Angle5,CPosX,CPosY)
 		CreateBullet(210,20,Angle6,CPosX,CPosY)
 	CIfEnd()
-	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,(49*4)+1,BGMLength,0xFFFFFF),DeathsX(CurrentPlayer,AtMost,(49*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+	CIf(FP,{DeathsX(FP,AtLeast,(30*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(30*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
 		GetLocCenter("DCenter",CPosX,CPosY)
 		CreateBullet(208,20,Angle1,CPosX,CPosY)
 		CreateBullet(208,20,Angle2,CPosX,CPosY)
@@ -202,9 +185,78 @@ local Lyrics = {
 		CreateBullet(208,20,Angle5,CPosX,CPosY)
 		CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
-	TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64),SetCDeaths(FP,SetTo,0,LockBossUnit)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		DoActionsX(FP,KillUnit(94,P11))
+	CIfEnd()
+
+	for i = 0, 2 do
+		local Pat1 = Create_PatternCcode(PatternCcode)
+		CIf(FP,{DeathsX(FP,Exactly,(34*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)})
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+		DoActionsX(FP,{SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
+		CIfEnd()
+	end	
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(FP,Exactly,(34*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),})
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,LockBossUnit),SetMemoryX(0x665E44, SetTo, 1*16777216,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64),KillUnit(94,P11)})
+		GetLocCenter("DCenter",CPosX,CPosY)
+		local Randnum = f_CRandNum(43)
+		CMov(FP,Angle1,Randnum)
+		CMov(FP,Angle2,Randnum,43)
+		CMov(FP,Angle3,Randnum,43*2)
+		CMov(FP,Angle4,Randnum,43*3)
+		CMov(FP,Angle5,Randnum,43*4)
+		CMov(FP,Angle6,Randnum,43*5)
+		CreateBullet(208,20,Angle1,CPosX,CPosY)
+		CreateBullet(208,20,Angle2,CPosX,CPosY)
+		CreateBullet(208,20,Angle3,CPosX,CPosY)
+		CreateBullet(208,20,Angle4,CPosX,CPosY)
+		CreateBullet(208,20,Angle5,CPosX,CPosY)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	for i = 0, 3 do
+		local Pat1 = Create_PatternCcode(PatternCcode)
+		CIf(FP,{DeathsX(FP,Exactly,(48*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)})
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
+		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+		DoActionsX(FP,{SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
+			if i == 0 then
+				local Randnum = f_CRandNum(43)
+				CMov(FP,Angle1,Randnum)
+				CMov(FP,Angle2,Randnum,43)
+				CMov(FP,Angle3,Randnum,43*2)
+				CMov(FP,Angle4,Randnum,43*3)
+				CMov(FP,Angle5,Randnum,43*4)
+				CMov(FP,Angle6,Randnum,43*5)
+			end
+		CIfEnd()
+	end
+	CIf(FP,{DeathsX(FP,AtLeast,(48*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(48*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryX(0x665E44, SetTo, 0,0xFF000000)})
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(210,20,Angle1,CPosX,CPosY)
+		CreateBullet(210,20,Angle2,CPosX,CPosY)
+		CreateBullet(210,20,Angle3,CPosX,CPosY)
+		CreateBullet(210,20,Angle4,CPosX,CPosY)
+		CreateBullet(210,20,Angle5,CPosX,CPosY)
+		CreateBullet(210,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(49*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(49*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000))
+		GetLocCenter("DCenter",CPosX,CPosY)
+		CreateBullet(208,20,Angle1,CPosX,CPosY)
+		CreateBullet(208,20,Angle2,CPosX,CPosY)
+		CreateBullet(208,20,Angle3,CPosX,CPosY)
+		CreateBullet(208,20,Angle4,CPosX,CPosY)
+		CreateBullet(208,20,Angle5,CPosX,CPosY)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		DoActionsX(FP,KillUnit(94,P11))
 	CIfEnd()
 
@@ -212,19 +264,70 @@ local Lyrics = {
 		Trigger { -- 상시브금
 			players = {FP},
 			conditions = {
-				DeathsX(CurrentPlayer,Exactly,i,BGMLength,0xFFFFFF);
-				DeathsX(CurrentPlayer,AtMost,0,BGMVar,0xFFFFFF);
+				DeathsX(FP,Exactly,i,BGMLength,0xFFFFFF);
+				DeathsX(FP,AtMost,0,BGMVar,0xFFFFFF);
 			},
 			actions = {
 				RotatePlayer({PlayWAVX(BGMArr[i+1]);PlayWAVX(BGMArr[i+1]);},HumanPlayers,FP);
-				SetDeathsX(CurrentPlayer,Add,Length,BGMVar,0xFFFFFF);
-				SetDeathsX(CurrentPlayer,Add,1,BGMLength,0xFFFFFF);
+				SetDeathsX(FP,Add,Length,BGMVar,0xFFFFFF);
+				SetDeathsX(FP,Add,1,BGMLength,0xFFFFFF);
 				PreserveTrigger();
 				},
 			}
 	end
 	TriggerX(FP,{CDeaths(FP,AtMost,0,CBulletT)},{SetCDeaths(FP,Add,7,CBulletT)},{Preserved})
 	DoActionsX(FP,SetCDeaths(FP,Subtract,1,CBulletT))
+	CElseIfX(CVar(FP,VResetSw5[2],Exactly,0),SetCVar(FP,VResetSw5[2],SetTo,1))
+	local DResetTable = {}
+	for j, k in pairs(LyricsCCode) do
+		table.insert(DResetTable,SetCDeaths(FP,SetTo,0,k))
+	end
+	for j, k in pairs(PatternCcode) do
+		table.insert(DResetTable,SetCDeaths(FP,SetTo,0,k))
+	end
+	DoActionsX(FP,DResetTable)
+	CallTrigger(FP,Call_VoidReset)
+
+	DoActionsX(FP,{
+		SetCDeaths(FP,SetTo,1,Destr0yerClear),SetDeaths(FP,SetTo,0,BGMLength)
+	})
+
+	f_ArrReset()
+	CIfXEnd()
+	CIf(FP,CDeaths(FP,AtLeast,1,Destr0yerClear))
+		local ClearText1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\x13\n\x14\n\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		local ClearText2 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04점수를 계산중입니다...\n\x14\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		local ClearTimer = CreateCCode()
+		local ClearSw1 = CreateCCode()
+		local ClearSw2 = CreateCCode()
+		TriggerX(FP,{CDeaths(FP,AtMost,0,ClearTimer)},{RotatePlayer({PlayWAVX("staredit\\wav\\DClear.ogg"),PlayWAVX("staredit\\wav\\DClear.ogg"),DisplayTextX(ClearText1,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearTimer)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,3000,ClearTimer),CDeaths(FP,AtMost,0,ClearSw1)},{RotatePlayer({PlayWAVX("staredit\\wav\\CalcSE.ogg"),PlayWAVX("staredit\\wav\\CalcSE.ogg"),DisplayTextX(ClearText2,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearSw1)},{Preserved})
+		CAdd(FP,_Ccode("X",ClearTimer),Dt)
+		CIf(FP,{CDeaths(FP,AtLeast,3000+3000,ClearTimer),CDeaths(FP,AtMost,0,ClearSw2)},SetCDeaths(FP,SetTo,1,ClearSw2))
+			CallTrigger(FP,Call_ScorePrint,{SetCDeaths(FP,SetTo,1,isDBossClear)})
+		CIfEnd()
+		CIf(FP,CDeaths(FP,AtLeast,3000+6000,ClearTimer))
+		CIfX(FP,{TCVar(FP,TotalScore[2],AtLeast,OutputPoint),CVar(FP,TotalScore[2],AtMost,0x7FFFFFFF)}) --  점수만족시
+		local ClearScoreT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07다음 단계 진입 가능\x04합니다.\x14\n\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		DoActionsX(FP,{RotatePlayer({DisplayTextX(ClearScoreT,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
+			SetCDeaths(FP,SetTo,1,Destr0yerClear2)})
+		CElseX()--  점수불만족시
+		DoActions2(FP,RotatePlayer({
+			DisplayTextX(string.rep("\n", 20),4),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),
+			DisplayTextX("\n",4),
+			DisplayTextX("\x13\x15점수가 충분하지 않아 다음 단계 진입이 불가능합니다...\n",4);
+			DisplayTextX("\x13\x05게임을 종료합니다.",4);
+			DisplayTextX("\n",4),
+			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			PlayWAVX("staredit\\wav\\Game_Over.ogg")
+		},HumanPlayers,FP)) 
+		DoActionsX(FP,{SetCDeaths(FP,SetTo,1,Win)})
+		CIfXEnd()
+		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,ClearTimer),SetCDeaths(FP,SetTo,0,ClearSw1),SetCDeaths(FP,SetTo,0,ClearSw2),SetCDeaths(FP,SetTo,0,Destr0yerClear)})
+	CIfEnd()
 	CIfEnd()
 --	CIf(FP,)
 --	GetLocCenter(63,CPosX,CPosY)
@@ -234,5 +337,5 @@ local Lyrics = {
 --	CIfEnd()
 	--SetMemoryX(0x663788, SetTo, ,0xFF);
 	--staredit\wav\LV10_001.ogg -- 272
-
+--SetMemoryX(0x66655C, SetTo, 65536*961,0xFFFF0000) -- 복구할때
 end

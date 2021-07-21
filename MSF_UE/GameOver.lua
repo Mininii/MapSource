@@ -1,8 +1,16 @@
 function GameOver()
-    local GameOver = CreateCCode()
     Win = CreateCCode()
+    local GameOverTrig = SetCDeaths(FP,SetTo,1,Win);
+    if TestStart == 1 then
+        GameOverTrig = SetCDeaths(FP,SetTo,1,ScorePrint);
+    end
     Trigger { -- 게임 오버 트리거
     players = {FP},
+    conditions = {
+        Label(0);
+        CDeaths(FP,AtLeast,150+(48*4)+3,IntroT);
+        Bring(Force1,AtMost,0,"Men",64);
+    },
     actions = {
         RotatePlayer({
             DisplayTextX(string.rep("\n", 20),4),
@@ -16,7 +24,9 @@ function GameOver()
             DisplayTextX("\x13\x04"..string.rep("―", 56),4),
             PlayWAVX("staredit\\wav\\Game_Over.ogg")
         },ObPlayers,FP);
-        SetCDeaths(FP,SetTo,1,GameOver);
+        SetResources(AllPlayers,SetTo,0,Ore);
+        GameOverTrig;
+        
 
         },
     }
@@ -25,7 +35,7 @@ function GameOver()
         conditions = {
             Label(0);
             CDeaths(FP,AtLeast,150+(48*4)+3,IntroT);
-            Command(Force1,AtMost,0,"Men");
+            Bring(Force1,AtMost,0,"Men",64);
         },
         actions = {
             DisplayText(string.rep("\n", 20),4);
@@ -40,33 +50,6 @@ function GameOver()
             PlayWAV("staredit\\wav\\Game_Over.ogg");
             },
         }
-    CIf({FP},CDeaths(FP,AtLeast,1,GameOver)) -- 패배트리거
-        Trigger {
-            players = {FP},
-            conditions = {
-                Label(0);
-                CDeaths(FP,AtLeast,100,GameOver);
-            },
-            actions = {
-                SetCDeaths(FP,Add,1,ScorePrint);
-            },
-        }
-        Trigger {
-            players = {FP},
-            conditions = {
-                Label(0);
-                CDeaths(FP,AtMost,0,TestMode);
-                CDeaths(FP,AtLeast,200,GameOver);
-            },
-            actions = {
-                RotatePlayer({Defeat()},MapPlayers,FP);
-                Defeat();
-            },
-        }
-        DoActionsX(FP,SetCDeaths(FP,Add,1,GameOver))
-    CIfEnd() -- 패배트리거 끝
-    
-    
     CIf({Force1,FP},CDeaths(FP,AtLeast,1,Win)) -- 승리트리거
     
         for i=0, 56 do

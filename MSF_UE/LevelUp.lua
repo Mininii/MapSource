@@ -43,6 +43,7 @@ function LevelUp()
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
 
 			DoActions(FP,{
+			SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
 			KillUnitAt(All,125,17,Force1),
 			KillUnitAt(All,125,18,Force1),
@@ -114,6 +115,7 @@ function LevelUp()
 	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{SetCDeaths(FP,SetTo,1,BClear),SetCDeaths(FP,SetTo,1,StoryT3)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear),CDeaths(FP,AtMost,0,StoryT3)},
 		{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3),SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear),CDeaths(FP,AtMost,0,StoryT3)},
@@ -122,7 +124,7 @@ function LevelUp()
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 		TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({DisplayTextX(ClearT1,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
 	if Limit == 1 and TestStart == 0 then
-		TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
+		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
 	end
 		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
 		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
@@ -275,6 +277,8 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,DemClear),
 	SetCDeaths(FP,SetTo,0,DLClear),
 	SetCDeaths(FP,SetTo,0,IdenClear),
+	SetCDeaths(FP,SetTo,0,Destr0yerClear),
+	SetCDeaths(FP,SetTo,0,Destr0yerClear2),
 	SetCDeaths(FP,SetTo,0,StoryT3),
 	SetCDeaths(FP,SetTo,0,BClear),
 	SetSwitch(ResetSwitch,Clear),

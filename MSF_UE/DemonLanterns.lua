@@ -1,6 +1,7 @@
 function Install_DLBoss()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
+	CMov(FP,VO(41),LevelT2) -- Diff
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
 local DL_Patch = {}
@@ -1171,6 +1172,26 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		conditions = {
 			
 			Bring(AllPlayers, AtLeast, 1, "Tom Kazansky (Wraith)", "Anywhere");
+			Void(41,AtLeast,3)
+		},
+		actions = {
+			PreserveTrigger();
+			KillUnitAt(All, "Men", "C1", Foes);
+			KillUnitAt(All, "Men", "C2", Foes);
+			KillUnitAt(All, "Men", "C3", Foes);
+			KillUnitAt(All, "Men", "C4", Foes);
+			KillUnitAt(All, "Men", "C5", Foes);
+			KillUnitAt(All, "Men", "C6", Foes);
+			KillUnitAt(All, "Men", "C7", Foes);
+			KillUnitAt(All, "Men", "C8", Foes);
+			Comment("레아스 원형 그리기");
+		},
+	}
+	Trigger { -- 레아스 원형 그리기
+		players = {P8},
+		conditions = {
+			
+			Bring(AllPlayers, AtLeast, 1, "Tom Kazansky (Wraith)", "Anywhere");
 		},
 		actions = {
 			PreserveTrigger();
@@ -1633,6 +1654,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			CreateUnit(9, 91, "Create 2", CurrentPlayer);
 			MoveUnit(All, 91, CurrentPlayer, "Create", "Boss");
 			KillUnit(91, CurrentPlayer);
+			ModifyUnitHitPoints(All, "Men", Foes, "Anywhere", 0);
 			Wait(1000);
 			MoveLocation("C1", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C2", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
@@ -1656,6 +1678,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Void(2, Exactly, 31);
 			Void(3, AtLeast, 4);
 			Void(3, AtMost, 14);
+			Void(41, AtLeast, 4);
 		},
 		actions = {
 			PreserveTrigger();
@@ -2332,6 +2355,30 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Void(2, Exactly, 31);
 			Void(3, AtLeast, 15);
 			Void(3, AtMost, 39);
+			Void(41, AtLeast, 3);
+		},
+		actions = {
+			PreserveTrigger();
+			KillUnitAt(All, "Men", "C1", Foes);
+			KillUnitAt(All, "Men", "C2", Foes);
+			KillUnitAt(All, "Men", "C3", Foes);
+			KillUnitAt(All, "Men", "C4", Foes);
+			KillUnitAt(All, "Men", "C5", Foes);
+			KillUnitAt(All, "Men", "C6", Foes);
+			KillUnitAt(All, "Men", "C7", Foes);
+			KillUnitAt(All, "Men", "C8", Foes);
+			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
+		},
+	}
+	Trigger { -- 헤으응 미니니? 삼니니 유닛 소환 밑 무브로케
+		players = {P8},
+		conditions = {
+			
+			Void(0, Exactly, 11);
+			Void(1, Exactly, 8);
+			Void(2, Exactly, 31);
+			Void(3, AtLeast, 15);
+			Void(3, AtMost, 39);
 		},
 		actions = {
 			PreserveTrigger();
@@ -2355,14 +2402,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C7");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C8");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C1");
-			KillUnitAt(All, "Men", "C1", Foes);
-			KillUnitAt(All, "Men", "C2", Foes);
-			KillUnitAt(All, "Men", "C3", Foes);
-			KillUnitAt(All, "Men", "C4", Foes);
-			KillUnitAt(All, "Men", "C5", Foes);
-			KillUnitAt(All, "Men", "C6", Foes);
-			KillUnitAt(All, "Men", "C7", Foes);
-			KillUnitAt(All, "Men", "C8", Foes);
 			SetVoid(3, Add, 1);
 			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
 		},
@@ -2418,11 +2457,11 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
 	
 	CallTrigger(FP,Call_VoidReset)
-		DoActionsX(FP,{
-			SetCDeaths(FP,SetTo,1,DLClear);
-			DL_Recover;
-		})
-		f_ArrReset()
+	DoActionsX(FP,{
+		SetCDeaths(FP,SetTo,1,DLClear);
+		DL_Recover;
+	})
+	f_ArrReset()
 	CIfXEnd()
 	CIfEnd()
 	end

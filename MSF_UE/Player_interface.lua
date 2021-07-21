@@ -661,4 +661,5 @@ function PlayerInterface()
 	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
 	f_Mod(FP,InputPoint,_Mov(1000))
 	CIfEnd()
+    CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 end
