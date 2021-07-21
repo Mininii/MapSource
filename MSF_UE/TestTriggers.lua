@@ -155,7 +155,7 @@ function Test_LV2()
 
         CMov(FP,BRX,CurBR,0,0xFFFF)
         CMov(FP,BRY,_Div(CurBR,0x10000),0,0xFFFF)
-        Simple_SetLocX(FP,0,BRX,BRY,BRX,BRY,{CreateUnit(1,193,1,P8)})
+        Simple_SetLocX(FP,0,BRX,BRY,BRX,BRY,{CreateUnit(1,MarID[1],1,P1)})
         CiSub(FP,BRX2,BRX,BPosX)
         CiSub(FP,BRY2,BRY,BPosY)
 
@@ -178,8 +178,5 @@ function Test_LV2()
         },{0,1,2,3,4,5,6,7},FP)})
 
         CIfEnd()
-        for i = 0, 6 do
-        CMov(FP,0x57f120 + (4*i),OutputPoint)
-        end
     end
 end

@@ -77,11 +77,15 @@ function LevelUp()
 			CIf(FP,Memory(0x628438,AtLeast,1))
 			f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 			CDoActions(FP,{
-				SetMemory(0x66EFBC, SetTo, 67);
 				CreateUnit(1,186,64,FP),
-				SetMemory(0x66EFBC, SetTo, 78);
+				TSetCVar(FP,DPtr[2],SetTo,Nextptrs),
 				TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
-				RotatePlayer({CenterView(64)},HumanPlayers,FP)
+			})
+			DoActions(FP,{
+				SetCVar(FP,DcurHP[2],SetTo,8320000*256),
+				SetMemory(0x66EFBC, SetTo, 67);
+				SetMemory(0x66EFBC, SetTo, 78);
+				RotatePlayer({CenterView(64)},HumanPlayers,FP),
 			})
 			CIfEnd()
 

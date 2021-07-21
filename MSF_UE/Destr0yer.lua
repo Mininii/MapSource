@@ -52,13 +52,27 @@ local Lyrics = {
 	local Length = 666
 	local CBulletT = CreateCCode()
 	local LockBossUnit = CreateCCode()
-	if TestStart == 1 then
-		CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
-	else	
+	--if TestStart == 1 then
+		--CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+	--else	
 		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})})},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+	--end
+	
+	local DTotalDmg = CreateVar()
+	CIf(FP,{CVar(FP,DPtr[2],AtLeast,1),CVar(FP,DPtr[2],AtMost,0x7FFFFFFF)})
+		CIf(FP,{TTMemory(_Add(DPtr,2),NotSame,DcurHP)})
+			f_Read(FP,_Add(DPtr,2),DHP)
+			CAdd(FP,DTotalDmg,_Sub(DcurHP,DHP))
+			CMov(FP,DcurHP,DHP)
+		CIfEnd()
+	CIfEnd()
+	if TestStart == 1 then
+		for i = 0, 6 do
+			CMov(FP,0x57f120 + (4*i),DTotalDmg)
+		end
 	end
 	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{MoveUnit(All,186,FP,64,"DCenter")},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{Order(186,FP,64,Move,"DCenter")},{Preserved})
 	
 	CIf(FP,{Memory(0x628438,AtLeast,1)})
 		f_Read(FP,0x628438,nil,Nextptrs)
@@ -141,9 +155,7 @@ local Lyrics = {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,20,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(FP,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-		DoActionsX(FP,KillUnit(94,P11))
-	CIfEnd()
+	TriggerX(FP,{DeathsX(FP,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11)},{Preserved})
 
 	
 	local Pat1 = Create_PatternCcode(PatternCcode)
@@ -188,9 +200,7 @@ local Lyrics = {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64),SetCDeaths(FP,SetTo,0,LockBossUnit)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-		DoActionsX(FP,KillUnit(94,P11))
-	CIfEnd()
+	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11)},{Preserved})
 
 	for i = 0, 2 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
@@ -256,8 +266,24 @@ local Lyrics = {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetInvincibility(Disable,193,P8,64)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-		DoActionsX(FP,KillUnit(94,P11))
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11)},{Preserved})
+
+	
+
+	local TotalDmgVA = CreateVarray(FP,13)
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
+		f_Div(FP,DTotalDmg,_Mov(256))
+		ItoDecX(FP,DTotalDmg,VArr(TotalDmgVA,0),2,0x7,2)
+		_0DPatchX(FP,TotalDmgVA,12)
+		f_MemCpy(FP,DBoss_PrintScore2,_TMem(Arr(DBossTotalDMGT[3],0),"X","X",1),DBossTotalDMGT[2])
+		f_Movcpy(FP,_Add(DBoss_PrintScore2,DBossTotalDMGT[2]),VArr(TotalDmgVA,0),12*4)
+		for i = 1, 7 do
+		CAdd(FP,ExScore[i],DTotalDmg)
+		end
+		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
+		DoActions(FP,RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossDMG".._0D,4)},HumanPlayers,FP))
+		DoActionsX(FP,{RemoveUnit(186,FP),ModifyUnitEnergy(All,193,FP,64,0),RemoveUnit(193,FP)})
 	CIfEnd()
 
 	for i = 0, #BGMArr-1 do
