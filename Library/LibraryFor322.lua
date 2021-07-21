@@ -412,10 +412,10 @@ function InstallCVArrStackX()
 end
 function Install_AllObject()
 	local ObjectSpace = def_sIndex()
-	CJump(FP,ObjectSpace) -- ??? init ????????
+	CJump(AllPlayers,ObjectSpace) -- ??? init ????????
 	InstallCVariable()
 	InstallCVArrStack()
-	CJumpEnd(FP,ObjectSpace)
+	CJumpEnd(AllPlayers,ObjectSpace)
 end
 
 function Install_AllObjectX()

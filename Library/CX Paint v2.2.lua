@@ -10709,7 +10709,7 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 			CMov(PlayerID,LocR,V(CA[8]),PlotSize)
 			CMov(PlayerID,LocU,V(CA[9]),-PlotSize)
 			CMov(PlayerID,LocD,V(CA[9]),PlotSize)
-			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location-1,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
+			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
 			if CXfunc2 ~= nil then
 				_G[CXfunc2]() -- 사용자 지정 함수
 			end
