@@ -15,10 +15,10 @@ function PlayerInterface()
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
 	local SelPTR,SelEPD,SelHP,SelSh,SelPl,SelMaxHP = CreateVariables(6)
-	local SelUID = CreateVar()
-	local BarRally = CreateVar()
-	local ExchangeP = CreateVar()
-	local MarTempSh = CreateVar()
+	local SelUID = CreateVar(FP)
+	local BarRally = CreateVar(FP)
+	local ExchangeP = CreateVar(FP)
+	local MarTempSh = CreateVar(FP)
 	local DelayMedic = Create_CCTable(7)
 	local ShUsed = Create_CCTable(7)
 	local GiveRate = Create_CCTable(7)
@@ -92,7 +92,24 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				Memory(0x582294+(4*i),AtLeast,200);
+				Memory(0x582294+(4*i),AtLeast,1);
+				Memory(0x582294+(4*i),AtMost,1000);
+				Bring(i,AtLeast,1,19,64);
+			},
+			actions = {
+				SetResources(i,Add,65000,Ore);
+				RemoveUnitAt(1,19,"Anywhere",i);
+				DisplayText("\x07『 \x04현재 \x1C수정 보호막\x04이 쿨타임중입니다. 자원 반환 + \x1F65000 Ore\x07』",4);
+				PlayWAV("sound\\Misc\\PError.WAV");
+				PlayWAV("sound\\Misc\\PError.WAV");
+				PreserveTrigger();
+			},
+		}
+		Trigger { -- 보호막 가동
+			players = {i},
+			conditions = {
+				Label(0);
+				Memory(0x582294+(4*i),AtLeast,1001);
 				Bring(i,AtLeast,1,19,64);
 			},
 			actions = {
@@ -109,11 +126,11 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				Memory(0x582294+(4*i),AtMost,199);
+				Memory(0x582294+(4*i),AtMost,0);
 				Bring(i,AtLeast,1,19,64);
 			},
 			actions = {
-				SetMemory(0x582294+(4*i),SetTo,1000);
+				SetMemory(0x582294+(4*i),SetTo,2000);
 				RemoveUnitAt(1,19,"Anywhere",i);
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
 				SetCDeaths(FP,SetTo,1,ShUsed[i+1]);
@@ -125,11 +142,24 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(FP,AtLeast,1,ShUsed[i+1]);
-				Memory(0x582294+(4*i),AtMost,0);
+				Memory(0x582294+(4*i),Exactly,1000);
 			},
 			actions = {
 				DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4);
+				PlayWAV("staredit\\wav\\GMode.ogg");
+				PlayWAV("staredit\\wav\\GMode.ogg");
+				PreserveTrigger();
+			},
+		}
+		Trigger { -- 보호막 가동
+			players = {i},
+			conditions = {
+				Label(0);
+				CDeaths(FP,AtLeast,1,ShUsed[i+1]);
+				Memory(0x582294+(4*i),Exactly,0);
+			},
+			actions = {
+				DisplayText("\x07『 \x1C수정 보호막\x04 쿨타임이 종료되었습니다. \x07』",4);
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				SetCDeaths(FP,SetTo,0,ShUsed[i+1]);
@@ -137,14 +167,29 @@ function PlayerInterface()
 			},
 		}
 		for j = 1, 5 do
-		Trigger { -- 보호막 가동
+		Trigger { -- 보호막 사용
+			players = {i},
+			conditions = {
+				Label(0);
+				Memory(0x582294+(4*i),Exactly,50*j+(1000));
+			},
+			actions = {
+				DisplayText("\x07『 \x1C수정 보호막\x04이 "..j.."초 남았습니다. \x07』",4);
+				PlayWAV("staredit\\wav\\sel_m.ogg");
+				PlayWAV("staredit\\wav\\sel_m.ogg");
+				PreserveTrigger();
+			},
+		}
+		end
+		for j = 1, 5 do
+		Trigger { -- 보호막 쿨타임
 			players = {i},
 			conditions = {
 				Label(0);
 				Memory(0x582294+(4*i),Exactly,50*j);
 			},
 			actions = {
-				DisplayText("\x07『 \x1C수정 보호막\x04이 "..j.."초 남았습니다. \x07』",4);
+				DisplayText("\x07『 \x1C수정 보호막\x04 쿨타임이 "..j.."초 남았습니다. \x07』",4);
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PreserveTrigger();
@@ -399,29 +444,24 @@ function PlayerInterface()
 			CIfEnd()
 			CMov(FP,0x6509B0,FP)
 		CIfEnd()
-			CIf(FP,{-- 메딕트리거 귀찮아서 한번에 처리하기;
-				TTOR({
-					Command(i,AtLeast,1,MedicTrig[1]),
-					Command(i,AtLeast,1,MedicTrig[2]),
-					Command(i,AtLeast,1,MedicTrig[3]),
-					Command(i,AtLeast,1,MedicTrig[4]),
-				})},{
-					RemoveUnit(MedicTrig[1],i),
-					RemoveUnit(MedicTrig[2],i),
-					RemoveUnit(MedicTrig[3],i),
-					RemoveUnit(MedicTrig[4],i),
-				})
-				for j = 1, 4 do
+		local MedicTrigJump = def_sIndex()
+		for j = 1, 4 do
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
+		end
+
+			NIf(FP,Never())
+				NJumpXEnd(FP,MedicTrigJump)
 					DoActions(FP,{
+						RemoveUnit(MedicTrig[1],i),
+						RemoveUnit(MedicTrig[2],i),
+						RemoveUnit(MedicTrig[3],i),
+						RemoveUnit(MedicTrig[4],i),
 						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
 						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
-						SetMemory(0x582324+(MedicTrig[j]*12)+(i*4),SetTo,0),
-						SetMemory(0x584DE4+(MedicTrig[j]*12)+(i*4),SetTo,0)
 					})
-				end
-			CIfEnd()
+			NIfEnd()
 		
 		
 		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,AtLeast,1)) -- 공업 255회
@@ -595,7 +635,7 @@ function PlayerInterface()
 		CMov(FP,0x57f120+(4*i),ExScore[i+1])
 		Trigger2(FP,{Memory(0x57f120+(4*i),AtLeast,0x80000000)},{SetMemory(0x57f120+(4*i),SetTo,0)},{Preserved}) -- 가스 마이너스 방지
 		
-		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1))
+		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1001))
 			f_Div(FP,MarTempSh,MarHP[i+1],_Mov(512))
 			CIfX(FP,CVar(FP,MarTempSh[2],AtMost,65535))
 				CDoActions(FP,{TSetMemoryX(MarShPtrArr[i+1],SetTo,_Mul(MarTempSh,_Mov(256^MarShMaskRetArr[i+1])),65535*(256^MarShMaskRetArr[i+1]))})
@@ -621,7 +661,7 @@ function PlayerInterface()
 		CIfEnd()
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,440)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
-			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)})
+			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
 		CIfXEnd()
 	end
 	CIf(FP,Deaths(Force1,AtLeast,1,71)) -- 원격스팀
@@ -657,9 +697,9 @@ function PlayerInterface()
 	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
 	
 	
-	CIf(FP,CVar(FP,InputPoint[2],AtLeast,1000))
-	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
-	f_Mod(FP,InputPoint,_Mov(1000))
+	CIf(FP,CVar(FP,InputPoint[2],AtLeast,2000))
+	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(2000)))
+	f_Mod(FP,InputPoint,_Mov(2000))
 	CIfEnd()
     CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 end

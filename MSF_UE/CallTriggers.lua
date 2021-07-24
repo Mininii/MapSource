@@ -73,9 +73,9 @@ CMov(FP,CPosY,CPos,0,0XFFFF0000)
 f_Div(FP,CPosY,_Mov(0x10000))
 SetCallEnd()
 
-TempRandRet = CreateVar()
-InputMaxRand = CreateVar()
-Oprnd = CreateVar()
+TempRandRet = CreateVar(FP)
+InputMaxRand = CreateVar(FP)
+Oprnd = CreateVar(FP)
 CRandNum = SetCallForward()
 SetCall(FP)
 f_Rand(FP,TempRandRet)
@@ -83,16 +83,17 @@ f_Mod(FP,TempRandRet,InputMaxRand)
 CAdd(FP,TempRandRet,Oprnd)
 SetCallEnd()
 
-G_TempH = CreateVar()
-G_InputH = CreateVar({"X",0x500,0x15C,1,0})
+G_TempH = CreateVar(FP)
+G_InputH = CreateVar2({"X",0x500,0x15C,1,0},FP)
+
 Var_TempTable = {}
 Var_InputCVar = {}
 Var_Lines = 55
 for i = 1, Var_Lines do
-	table.insert(Var_TempTable,CreateVar())
+	table.insert(Var_TempTable,CreateVar(FP))
 	table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
 end
-local CheckTemp = CreateVar()
+local CheckTemp = CreateVar(FP)
 local isScore = CreateCCode()
 Call_Repeat = SetCallForward()
 SetCall(FP)
@@ -134,10 +135,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
 			})
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
-			local BackupL = CreateVar()
-			local BackupU = CreateVar()
-			local BackupR = CreateVar()
-			local BackupD = CreateVar()
+			local BackupL = CreateVar(FP)
+			local BackupU = CreateVar(FP)
+			local BackupR = CreateVar(FP)
+			local BackupD = CreateVar(FP)
 			f_Read(FP,0x58DC60+0x14*0,BackupL)
 			f_Read(FP,0x58DC64+0x14*0,BackupU)
 			f_Read(FP,0x58DC68+0x14*0,BackupR)
@@ -153,14 +154,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
 		TriggerX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
 
-		local TempPos = CreateVar()
+		local TempPos = CreateVar(FP)
 		GetLocCenter("Boss",CPosX,CPosY)
 		CMov(FP,TempPos,_Add(CPosX,_Mul(CPosY,_Mov(65536))))
 		
 		CDoActions(FP,{
 			TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 			TSetDeaths(_Add(Nextptrs,22),SetTo,TempPos,0),
-			--TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000),
+			TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000),
 		})
 
 			
@@ -234,13 +235,13 @@ end
 
 
 
-local G_CA_LineV = CreateVar()
-local G_CA_CUTV = CreateVar()
-local G_CA_SNTV = CreateVar()
-local G_CA_LMTV = CreateVar()
-local G_CA_RTV = CreateVar()
+local G_CA_LineV = CreateVar(FP)
+local G_CA_CUTV = CreateVar(FP)
+local G_CA_SNTV = CreateVar(FP)
+local G_CA_LMTV = CreateVar(FP)
+local G_CA_RTV = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
-local SL_Ret = CreateVar()
+local SL_Ret = CreateVar(FP)
 
 Write_SpawnSet = SetCallForward()
 SetCall(FP)
@@ -328,7 +329,7 @@ Line No.args : UnitSpawnSet or CAPlot VarSet
 Line No.54 : GunType
 Line No.55 : SuspendSwitch
 ]]
-local CA_TempUID = CreateVar()
+local CA_TempUID = CreateVar(FP)
 local CA_Suspend = CreateCCode()
 local G_CA_Temp = Create_VTable(7)
 
@@ -598,10 +599,10 @@ SetCall(FP)
 	CIfXEnd()
 	f_LoadCp()
 SetCallEnd()
-UnitIDV = CreateVar()
-TempLvHP = CreateVar()
-TempLvHP2 = CreateVar()
-MultiplierV = CreateVar()
+UnitIDV = CreateVar(FP)
+TempLvHP = CreateVar(FP)
+TempLvHP2 = CreateVar(FP)
+MultiplierV = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 	CIf(FP,{TMemory(_Add(UnitIDV,EPD(0x662350)),AtMost,8319999*256)})
@@ -665,8 +666,8 @@ function f_Recall(Condition,X,Y)
 	CMov(FP,Rec_Y,Y)
 	CallTriggerX(FP,Call_Recall,Condition)
 end
-Rec_X = CreateVar()
-Rec_Y = CreateVar()
+Rec_X = CreateVar(FP)
+Rec_Y = CreateVar(FP)
 Call_Recall = SetCallForward()
 SetCall(FP)
 	CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Rec_X[2],AtMost,32*96),CVar(FP,Rec_Y[2],AtMost,32*192)})
@@ -697,11 +698,11 @@ SetCall(FP)
 	CWhileEnd()
 SetCallEnd()
 
-local CB_UnitIDV =CreateVar()
-local Height_V = CreateVar()
-local Angle_V = CreateVar()
-local CB_X = CreateVar()
-local CB_Y = CreateVar()
+local CB_UnitIDV =CreateVar(FP)
+local Height_V = CreateVar(FP)
+local Angle_V = CreateVar(FP)
+local CB_X = CreateVar(FP)
+local CB_Y = CreateVar(FP)
 	function CreateBullet(UnitID,Height,Angle,X,Y)
 	CDoActions(FP,{
 		TSetCVar(FP,CB_UnitIDV[2],SetTo,UnitID),

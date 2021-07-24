@@ -2,7 +2,7 @@ function LevelUp()
 	local CSelT = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x04상위 플레이어는 선택해주세요.\n\x13\x04다음 레벨로 진행하시겠습니까?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT1 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT3 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07S T A R T\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x08주의!! \x0410단계 진입할때마다 해당 스테이지에서는 \x1C수정 보호막 \x04사용이 \x06제한\x04됩니다!\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x08주의!! \x049, 10단계 진입할때마다 해당 스테이지에서는 \x1C수정 보호막 \x04사용이 \x06제한\x04됩니다!\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local NoText = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04NO를 입력하셨습니다. 게임을 종료합니다.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local TextSwitch = Create_CCTable(5)
 	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),
@@ -67,7 +67,7 @@ function LevelUp()
 				f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 				CDoActions(FP,{
 					CreateUnit(1,74,64,FP),
-					TSetMemory(_Add(Nextptrs,2),SetTo,_Mul(LevelT2,_Mov(4000*256))),
+					TSetMemory(_Add(Nextptrs,2),SetTo,8000*256),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
 					RotatePlayer({CenterView(64)},HumanPlayers,FP)
 				})
@@ -77,14 +77,15 @@ function LevelUp()
 			CIf(FP,Memory(0x628438,AtLeast,1))
 			f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 			CDoActions(FP,{
+				SetMemoryX(0x669FB4, SetTo, 16777216*17,0xFFFFFFFF),
+				SetMemory(0x66EFBC, SetTo, 67);
 				CreateUnit(1,186,64,FP),
+				SetMemory(0x66EFBC, SetTo, 78);
 				TSetCVar(FP,DPtr[2],SetTo,Nextptrs),
 				TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
 			})
 			DoActions(FP,{
 				SetCVar(FP,DcurHP[2],SetTo,8320000*256),
-				SetMemory(0x66EFBC, SetTo, 67);
-				SetMemory(0x66EFBC, SetTo, 78);
 				RotatePlayer({CenterView(64)},HumanPlayers,FP),
 			})
 			CIfEnd()
@@ -142,7 +143,7 @@ function LevelUp()
 		CAdd(FP,Level,1)
 		f_Mod(FP,LevelT,Level,_Mov(10))
 		f_Div(FP,LevelT2,Level,_Mov(10))
-		CAdd(FP,LevelT2,2)
+		CAdd(FP,LevelT2,1)
 		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
 		if TestStart == 1 then
 			--CMov(FP,LevelT2,4)
@@ -230,10 +231,10 @@ function LevelUp()
 		table.insert( ShUnitLimitT,SetMemoryB(0x57F27C+(228*i)+19,SetTo,1))
 		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
 	end
-	; -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+	 -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 
-	TriggerX(FP,{CVar(FP,LevelT[2],AtMost,9)},{ShUnitLimitT},{Preserved})--19
-	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10)},{ShUnitLimitT2},{Preserved})
+	TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
+	TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 	MoveMarineArr = {}
 	for i = 0, 6 do

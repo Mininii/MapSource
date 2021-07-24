@@ -1,5 +1,5 @@
 function OPTrig()
-    Cunit2 = CreateVar()
+    Cunit2 = CreateVar(FP)
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
@@ -10,7 +10,7 @@ function OPTrig()
     CIfXEnd()
     if TestStart == 1 then
         CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
-        --local TestTemp = CreateVar()
+        --local TestTemp = CreateVar(FP)
         --f_Read(FP,_Add(Cunit2,19),TestTemp,nil,0xFF00)
         --CTrigger(FP,{CVar(FP,Cunit2[2],AtLeast,1)},{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(TestTemp,_Mov(65536)),0xFF000000)},1)
 
@@ -18,14 +18,14 @@ function OPTrig()
 
 
 
-        local CurLev = CreateVar()
+        local CurLev = CreateVar(FP)
         CMov(FP,0x6509B0,CurrentOP)
             TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,Level[2],Add,1)},{Preserved})
             TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,Level[2],Subtract,1)},{Preserved})
             CIf(FP,{TTCVar(FP,CurLev[2],NotSame,Level)})
             f_Mod(FP,LevelT,Level,_Mov(10))
             f_Div(FP,LevelT2,Level,_Mov(10))
-            CAdd(FP,LevelT2,2)
+            CAdd(FP,LevelT2,1)
             TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
             CMov(FP,CurLev,Level)
             CIfEnd()
@@ -112,7 +112,7 @@ function OPTrig()
         
         
         
-    local SpeedVar = CreateVar(4)
+    local SpeedVar = CreateVar2(4,FP)
     CMov(FP,0x6509B0,CurrentOP)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,CPConsole),{
     	PlayWAV("sound\\Misc\\Buzz.wav"),

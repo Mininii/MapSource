@@ -114,11 +114,11 @@ function onInit_EUD()
 	end
 
 	DoActionsX(FP,CTrigPatchTable,1)
-	local VRet = CreateVar()
-	local VRet2 = CreateVar()
-	local VRet3 = CreateVar()
-	local VRet4 = CreateVar()
-	local CurrentUID = CreateVar()
+	local VRet = CreateVar(FP)
+	local VRet2 = CreateVar(FP)
+	local VRet3 = CreateVar(FP)
+	local VRet4 = CreateVar(FP)
+	local CurrentUID = CreateVar(FP)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
@@ -391,7 +391,7 @@ UnitSizePatch(60,1)
 		},
 	}
 	DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
-	local SetPlayers = CreateVar()
+	local SetPlayers = CreateVar(FP)
 	for i = 0, 6 do
 	Trigger {
 		players = {FP},
@@ -466,8 +466,8 @@ UnitSizePatch(60,1)
 
 	YY = 2021
 	MM = 7
-	DD = 20
-	HH = 12
+	DD = 25
+	HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
 	end
@@ -584,95 +584,6 @@ UnitSizePatch(60,1)
 			CIfEnd()
 			f_LoadCp()
 		CIfEnd()
-
-		CAdd(FP,0x6509B0,6)
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,101,0,0xFF)}) -- 소환 배열 저장 맵 리벌러
-		CSub(FP,0x6509B0,6)
-
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr
-		CAdd(FP,CustomShape[1][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[1][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-		
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,9,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr2
-		CAdd(FP,CustomShape[2][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[2][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr3
-		CAdd(FP,CustomShape[3][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[3][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,11,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr4
-		CAdd(FP,CustomShape[4][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[4][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-
-		CAdd(FP,0x6509B0,6)
-		CIfEnd()
-		CSub(FP,0x6509B0,6)
-
-		CAdd(FP,0x6509B0,6)
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,209,0,0xFF)}) -- 소환 배열 저장 건트랩
-		CSub(FP,0x6509B0,6)
-
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr5
-		CAdd(FP,CustomShape[5][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[5][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,9,0,0xFF)}) -- 소환 배열 저장 CustomShapePtr6
-		CAdd(FP,CustomShape[6][2],1)
-		f_SaveCp()
-		f_Read(FP,_Sub(BackupCp,9),CPos)
-		CMov(FP,0x6509B0,CustomShape[6][1])
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-			CAdd(FP,0x6509B0,1)
-		CWhileEnd()
-		CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,CPos,0)})
-		f_LoadCp()
-		CIfEnd()
-
-		CAdd(FP,0x6509B0,6)
-		CIfEnd()
-		CSub(FP,0x6509B0,6)
-
 		CAdd(FP,0x6509B0,84)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)

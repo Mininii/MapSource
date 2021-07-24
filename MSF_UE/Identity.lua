@@ -85,7 +85,7 @@ CDoActions(FP,{
 	TSetMemory(B_Id_C,SetTo,Nextptrs),
 	TSetMemory(0x58F558,SetTo,7),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
-	TSetMemory(_Add(Nextptrs,2),SetTo,_Mul(LevelT2,_Mov(2000*256))),
+	TSetMemory(_Add(Nextptrs,2),SetTo,6400*256),
 	KillUnitAt(All,"Men",29,Force1),
 })
 
@@ -125,13 +125,13 @@ Trigger { -- No comment (4347C6C8)
 	},
 }
 --目技绢 积己备埃
-        FX = CreateVar()
-        FY = CreateVar()
-        FA = CreateVar()
-        FR = CreateVar()
-        Fx2 = CreateVar()
-        Fy2 = CreateVar()
-        Sh_Para = CreateVar()
+        FX = CreateVar(FP)
+        FY = CreateVar(FP)
+        FA = CreateVar(FP)
+        FR = CreateVar(FP)
+        Fx2 = CreateVar(FP)
+        Fy2 = CreateVar(FP)
+        Sh_Para = CreateVar(FP)
 
 
 
@@ -544,12 +544,12 @@ Trigger { -- No comment (4347C6C8)
 	},
 }
 
-local DX1 = CreateVar()
-local DY1 = CreateVar()
-local DZ1 = CreateVar()
-local Del = CreateVar()
-local Loc = CreateVar()
-local Num = CreateVar()
+local DX1 = CreateVar(FP)
+local DY1 = CreateVar(FP)
+local DZ1 = CreateVar(FP)
+local Del = CreateVar(FP)
+local Loc = CreateVar(FP)
+local Num = CreateVar(FP)
 
 TriggerX(FP,{Void(41,Exactly,1)},{
 	SetCVar(FP,DX1[2],SetTo,2),

@@ -16,7 +16,7 @@ function OPText()
 	TriggerX(FP,{CDeaths(FP,AtLeast,100,IntroT)},{
 		RotatePlayer({
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n\n\n",4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3\x04 \x04in Used \x19(つ>ㅅ<)つ\n\n\n",4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
@@ -25,7 +25,7 @@ function OPText()
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*1),IntroT)},{
 		RotatePlayer({
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x043초 후 시작합니다.\n\n",4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x043초 후 시작합니다.\n\n",4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
@@ -35,7 +35,7 @@ function OPText()
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*2),IntroT)},{
 		RotatePlayer({
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x042초 후 시작합니다.\n\n",4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x042초 후 시작합니다.\n\n",4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
@@ -44,7 +44,7 @@ function OPText()
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*3),IntroT)},{
 		RotatePlayer({
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3T\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x041초 후 시작합니다.\n\n",4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FCtrig \x04Assembler \x07v5.3\x04 \x04in Used \x19(つ>ㅅ<)つ\n"..string.rep("   ", 20).."\x041초 후 시작합니다.\n\n",4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);

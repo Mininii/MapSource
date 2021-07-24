@@ -158,9 +158,9 @@ CreateVariableSet({ -- 변수 정의
 "Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2",
 "CurrentOP",})
 if Limit == 1 then
-	RedNumber = CreateVar(400)
+	RedNumber = CreateVar2(400)
 else
-	RedNumber = CreateVar(400)
+	RedNumber = CreateVar2(400)
 end
 
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
@@ -3967,7 +3967,7 @@ function Line(Line,Type,Value)
 end
 
 EXCC_Forward = 0x2FFF
-CC_Header = CreateVar({"X",EXCC_Forward,0x15C,1,2})
+CC_Header = CreateVar2(nil,{"X",EXCC_Forward,0x15C,1,2})
 EXCunitTemp = Create_VTable(3)
 
 -- 이론치 모드 마린 확장 구조오프셋

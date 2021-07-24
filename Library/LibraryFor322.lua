@@ -10,41 +10,10 @@ PrintString_Arr = {}
 BGMArr = {}
 VArrStackArr = {}
 InitBGMP = 12
-VoidInit = 0x590000
 sindexAlloc = 0x700
 
-function DisplayTextX(Text,AlwaysDisplay)
-	return {"DisplayText",Text,AlwaysDisplay}
-end
-function SetMissionObjectivesX(Text)
-	return {"SetMissionObjectives",Text}
-end
-
-function PlayWAVX(WAVFile)
-	return {"PlayWAV",WAVFile}
-end
 function RotatePlayer(Print,Players,RecoverCP)
-	local Y = {}
-	if type(Players) == "number" then
-		temp = {Players}
-		Players = temp
-	end
-	for j, y in pairs(Players) do
-		table.insert(Y,SetMemory(0x6509B0, SetTo, y))
-		for k, x in pairs(Print) do
-			if x[1] == "DisplayText" then
-				table.insert(Y,DisplayText(x[2],x[3]))	
-			elseif x[1] == "PlayWAV" then
-				table.insert(Y,PlayWAV(x[2]))	
-			elseif x[1] == "SetMissionObjectives" then
-				table.insert(Y,SetMissionObjectives(x[2]))	
-			else 
-				table.insert(Y,x)
-			end
-		end
-	end
-	table.insert(Y,SetMemory(0x6509B0, SetTo, RecoverCP))
-	return Y
+	return CopyCpAction(Print,Players,RecoverCP)
 end
 function Simple_SetLoc(Location,LeftValue,UpValue,RightValue,DownValue)
 	local LocID, Location = ConvertLocation(Location)
@@ -187,243 +156,14 @@ function FindError()
 	CAdd(FP,0x57f120,1)
 end
 
-function DefineDeathTable(Index) -- CtrigAsm 5.1
-	local X = {Index,0}
-	table.insert(CVarPushArr,Index)
-	table.insert(CD_DefArr,X)
-	local Ret = DeathTableDefNumber
-	DeathTableDefNumber = DeathTableDefNumber + 1
-	return Ret
-end
 
-function CreateCCode() -- CtrigAsm 5.1
-	if CurCIndex == 0 then
-		CurCIndex = DefineDeathTable(CIndexAlloc)
-		CIndexAlloc = CIndexAlloc + 1
-	end
-	if CD_DefArr[CurCIndex][2] >= 480 or CD_DefArr[CurCIndex][2] < 0 then
-		CurCIndex = DefineDeathTable(CIndexAlloc)
-		CIndexAlloc = CIndexAlloc + 1
-	end
-	CD_DefArr[CurCIndex][2] = CD_DefArr[CurCIndex][2] + 1
-	return Ccode(CD_DefArr[CurCIndex][1],CD_DefArr[CurCIndex][2]-1)
-end
-
-function CreateVar(InitVal) -- CtrigAsm 5.1
-	VIndexAlloc = VIndexAlloc + 1
-	if InitVal ~= nil then
-		local X = {VIndexAlloc,InitVal}
-		table.insert(CVarPushArr,X)
-	else
-		table.insert(CVarPushArr,VIndexAlloc)
-	end
-	return V(VIndexAlloc)
-end
-
-function CreateIndex() -- CtrigAsm 5.1
-	VIndexAlloc = VIndexAlloc + 1
-	table.insert(CVarPushArr,VIndexAlloc)
-	return VIndexAlloc
-end
-
-function CVariable3(Player,Index,Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
-	if Offset == "X" then 
-		Offset = nil
-	end
-	if Type == "X" then 
-		Type = nil
-	end
-	if Mask == "X" then 
-		Mask = nil
-	end
-
-
-	if Mask == nil then
-		Mask = 0xFFFFFFFF
-	end
-	if Offset == nil then
-		Offset = 0x58A364
-	end
-	if Type == nil then
-		Type = SetTo
-	end
-	Trigger {
-				players = {ParsePlayer(Player)},
-				conditions = {
-					Label(Index);
-				},
-				actions = {
-					SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask); -- Input Value Ctirg Offset 
-					Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
-				},
-				flag = {Preserved}
-			}
-end
-
-function InstallCVariable() -- CtrigAsm 5.1
-	if #CVarPushArr >= 1 then
-		for i = 1, #CVarPushArr do
-			if type(CVarPushArr[i]) == "table" then
-				if type(CVarPushArr[i][2]) == "number" then
-					CVariable2(AllPlayers,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2])
-				elseif type(CVarPushArr[i][2]) == "table" then
-					CVariable3(AllPlayers,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2][1],CVarPushArr[i][2][2],CVarPushArr[i][2][3],CVarPushArr[i][2][4],CVarPushArr[i][2][5])
-				else
-					InstallCVariable_InputData_Error()
-				end
-			else
-				CVariable(AllPlayers,CVarPushArr[i])
-			end
-		end
-	end
-end
-function InstallCVariableX() -- CtrigAsm 5.1
-	if #CVarPushArr >= 1 then
-		for i = 1, #CVarPushArr do
-			if type(CVarPushArr[i]) == "table" then
-				if type(CVarPushArr[i][2]) == "number" then
-					CVariable2(FP,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2])
-				elseif type(CVarPushArr[i][2]) == "table" then
-					CVariable3(FP,CVarPushArr[i][1],nil,nil,CVarPushArr[i][2][1],CVarPushArr[i][2][2],CVarPushArr[i][2][3],CVarPushArr[i][2][4],CVarPushArr[i][2][5])
-				else
-					InstallCVariable_InputData_Error()
-				end
-			else
-				CVariable(FP,CVarPushArr[i])
-			end
-		end
-	end
-end
-
-
-function CArray2(PlayerID,Size,Index)
-	if bit32.band(Size, 0xFFFFFFFF) >= 4096*602 or Size == 0 then
-		Array_Size_Overflow()
-	end
-
-	local TNum = Size/602
-	if Size%602 ~= 0 then
-		TNum = TNum + 1
-	end
-	local Arrindex = Index
-
-	Trigger {
-		players = {ParsePlayer(PlayerID)},
-		conditions = {
-			Label(Arrindex);
-		},
-		flag = {Preserved}
-	}
-
-	for i = 2, TNum do 
-		Trigger {
-			players = {ParsePlayer(PlayerID)},
-			conditions = {
-				Label(0);
-			},
-			flag = {Preserved}
-		}
-	end
-end
-
-function CVArray2(PlayerID,Size,Index)
-	if bit32.band(Size, 0xFFFFFFFF) >= 4096 or Size == 0 then
-		VArray_Size_Overflow()
-	end
-
-	local VArrindex = Index
-
-	Trigger {
-		players = {ParsePlayer(PlayerID)},
-		conditions = {
-			Label(VArrindex);
-		},
-		actions = {
-			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Full Variable
-			Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
-		},
-		flag = {Preserved}
-	}
-
-	for i = 2, Size do 
-		Trigger {
-			players = {ParsePlayer(PlayerID)},
-			conditions = {
-				Label(0);
-			},
-			actions = {
-				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Full Variable
-				Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
-			},
-			flag = {Preserved}
-		}
-	end
-
-	
-end
 
 
 function CreateVarray(Player,Size)
-	local X = {}
-	local Ret = FuncAlloc
-	table.insert(X,"VArr")
-	table.insert(X,Player)
-	table.insert(X,Size)
-	table.insert(X,Ret)
-	table.insert(VArrStackArr,X)
-	FuncAlloc = FuncAlloc + 1
-	return {"X",Ret,0,"V"}
+	return CreateVArr(Size,Player)
 end
 function CreateCarray(Player,Size)
-	local X = {}
-	local Ret = FuncAlloc
-	table.insert(X,"Arr")
-	table.insert(X,Player)
-	table.insert(X,Size)
-	table.insert(X,Ret)
-	table.insert(VArrStackArr,X)
-	FuncAlloc = FuncAlloc + 1
-	return {"X",Ret,0,0}
-end
-function InstallCVArrStack()
-	if #VArrStackArr >= 1 then
-		for j, k in pairs(VArrStackArr) do
-			if k[1] == "VArr" then
-				CVArray2(k[2],k[3],k[4])
-			end
-			if k[1] == "Arr" then
-				CArray2(k[2],k[3],k[4])
-			end
-		end
-	end
-end
-
-function InstallCVArrStackX()
-	if #VArrStackArr >= 1 then
-		for j, k in pairs(VArrStackArr) do
-			if k[1] == "VArr" then
-				CVArray2(FP,k[3],k[4])
-			end
-			if k[1] == "Arr" then
-				CArray2(FP,k[3],k[4])
-			end
-		end
-	end
-end
-function Install_AllObject()
-	local ObjectSpace = def_sIndex()
-	CJump(AllPlayers,ObjectSpace) -- ??? init ????????
-	InstallCVariable()
-	InstallCVArrStack()
-	CJumpEnd(AllPlayers,ObjectSpace)
-end
-
-function Install_AllObjectX()
-	local ObjectSpace = def_sIndex()
-	CJump(FP,ObjectSpace) -- ??? init ????????
-	InstallCVariableX()
-	InstallCVArrStackX()
-	CJumpEnd(FP,ObjectSpace)
+	return CreateArr(Size,Player)
 end
 
 
@@ -489,7 +229,21 @@ function CreateCCodeSet(Variables)
 		_G[Variables[i]] = CreateCCode()
 	end
 end
-function CreateVariableSet(Variables)
+function CreateNCodeSet(Variables)
+	for i = 1, #Variables do
+
+		for j = 1, #Variables do
+			if i ~= j then
+				if Variables[i] == Variables[j] then
+					_G["VarName_Duplicated! VarName : "..Variables[i]]()
+				end
+			end
+		end
+
+		_G[Variables[i]] = CreateNCode()
+	end
+end
+function CreateVariableSet(Variables,Player)
 	for i = 1, #Variables do
 		for j = 1, #Variables do
 			if i ~= j then
@@ -498,7 +252,7 @@ function CreateVariableSet(Variables)
 				end
 			end
 		end
-		_G[Variables[i]] = CreateVar()
+		_G[Variables[i]] = CreateVar(Player)
 	end
 end
 function CreateTableSet(Variables)
@@ -522,41 +276,26 @@ function CreateTables(vars)
 	end
 	return table.unpack(V)
 end
-function CreateCCodes(vars)
-	local V = {}
-	for i = 1, vars do
-		table.insert( V,CreateCCode())
-	end
-	return table.unpack(V)
+function CreateVariables(vars,Player)
+	if Player == nil then Player = FP end
+	return CreateVars(vars,Player)
 end
-function CreateVariables(vars)
-	local V = {}
-	for i = 1, vars do
-		table.insert( V,CreateVar())
-	end
-	return table.unpack(V)
-end
-function Create_VTable(Number,InitVar)
+function Create_VTable(Number,InitVar,Player)
+	if Player == nil then Player = FP end
 	local X = {}
 	for i = 1, Number do
-		table.insert(X,CreateVar(InitVar))
+		table.insert(X,CreateVar2(InitVar,Player,nil,nil))
 	end
 	return X
 end
 function Create_CCTable(Number)
-	local X = {}
-	for i = 1, Number do
-		table.insert(X,CreateCCode())
-	end
-	return X
+	return CreateCcodeArr(Number)
 end
-function Create_VArrTable(Number,Size)
-	local X = {}
-	for i = 1, Number do
-		table.insert(X,CreateVarray(FP,Size))
-	end
-	return X
+function Create_VArrTable(Number,Size,Player)
+	if Player == nil then Player = FP end
+	return CreateVArrArr(Number,Size,Player)
 end
+
 function Overflow_HP_System(Player,Cunit_HPV,HP_K,HP_P)
     CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
     	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
@@ -735,14 +474,6 @@ function IBGM_EPD(Player,MaxPlayer)
 	end
 end
 
-function VoidAlloc(Size)--1EPD(4bite)
-	local X = EPD(VoidInit)
-	VoidInit = VoidInit + (Size*4)
-	if VoidInit >= 0x5967E0 then
-		VoidSize_OverFlow()
-	end
-	return X
-end
 function Enable_HideErrorMessage(Player)
 	for i = 0, 10 do
 		if i%2 == 0 then
@@ -794,31 +525,6 @@ function Enable_HideErrorMessage(Player)
 			}
 		}
 		end
-	end
-end
-
-function CreateJungal(UIDTable,CUTable,Player)
-	if type(CUTable) == "table" then
-		local X = CUTable
-	else
-		CUTable_InputData_Error()
-	end
-
-	if type(UIDTable) == "table" then
-		local Y = CUTable
-	else
-		CUTable_InputData_Error()
-	end
-
-	if #UIDTable % #CUTable ~= 0 then
-		CUTable_InputData_Error()
-	end
-	if #CUTable % #UIDTable ~= 0 then
-		CUTable_InputData_Error()
-	end
-	local A = #UIDTable
-	local B = #CUTable
-	if A <= B then
 	end
 end
 

@@ -1525,7 +1525,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 		},{SetCVar(FP,CurArr[2],SetTo,0)},{Preserved})
 
 
-		local WrPos = CreateVar()
+		local WrPos = CreateVar(FP)
 		local WhileLim = CreateCCode()
 		local Wr_Sum = def_sIndex()
 		CIf(FP,{

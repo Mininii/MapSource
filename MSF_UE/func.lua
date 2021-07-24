@@ -35,22 +35,6 @@ else
 	TestStart = 0
 end
 end
-CustomShapeTable = {}
-function CustomShapeAlloc()
-	local X = {}
-	table.insert(X,VoidAlloc(300))
-	table.insert(X,CreateVar())
-	table.insert(CustomShapeTable,X)
-	return X
-end
-function Create_CSTable(Number)
-	local X = {}
-	for i = 1, Number do
-		table.insert(X,CustomShapeAlloc())
-	end
-	return X
-end
-
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
 	f_MemCpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
@@ -106,14 +90,16 @@ function Install_DeathNotice()
 				f_SaveCp()
 				Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
 				DoActionsX(FP,{
-					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 					SetScore(j-1,Add,1,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-50);
 				})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
 		end
+
 		DoActions(FP,MoveCp(Add,6*4))
 	CIfEnd()
 	for j = 1, 7 do
@@ -123,10 +109,11 @@ function Install_DeathNotice()
 				f_SaveCp()
 				Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
 				DoActionsX(FP,{
-					RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 					SetScore(j-1,Add,1,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-500);
 				})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
@@ -181,8 +168,8 @@ end
 
 
 function Install_RandPlaceHero()
-	local RandW2 = CreateVar()
-	local HeroID = CreateVar()
+	local RandW2 = CreateVar(FP)
+	local HeroID = CreateVar(FP)
 	local HPosX,HPosY = CreateVariables(2)
 	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,40),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
@@ -224,11 +211,11 @@ function Print13_NumSet(Ptr,Ptr2,DivNum,Mask)
 		Trigger {
 			players = {FP},
 			conditions = {
-				Deaths(Ptr,AtLeast,(2^i)*DivNum,0);
+				Memory(Ptr,AtLeast,(2^i)*DivNum);
 			},
 			actions = {
 				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
-				SetDeaths(Ptr,Subtract,(2^i)*DivNum,0);
+				SetMemory(Ptr,Subtract,(2^i)*DivNum);
 				PreserveTrigger();
 			}
 		}
@@ -308,7 +295,7 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 end
 
 function ObDisplay()
-	local TempT = CreateVar()
+	local TempT = CreateVar(FP)
 	CMov(FP,0x582144+(4*7),0)
 	CMov(FP,0x5821A4+(4*7),0)
 	CMov(FP,0x582174+(4*7),count)
@@ -334,7 +321,7 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 	Trigger {
 		players = {Player},
 		conditions = {
-			Command(Player,AtLeast,Limit+1,UID);
+			Bring(Player,AtLeast,Limit+1,UID,64);
 			},
 		
 		actions = {
@@ -459,8 +446,8 @@ end
 function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 자주 바뀌는 로케이션, TempUnit = 안쓰는 유닛. Unused 가능 아마?
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
 	local PlayerID = TriggerPlayer
-	local RetX = CreateVar()
-	local RetY = CreateVar()
+	local RetX = CreateVar(FP)
+	local RetY = CreateVar(FP)
 	local Call_GetCLoc = SetCallForward()
 	SetCall(PlayerID)
 	f_Read(PlayerID,0x58DC60+0x14*TempLocID,RetX,"X",0xFFFFFFFF)

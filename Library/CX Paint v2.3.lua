@@ -30,8 +30,6 @@ function CSMakePath(PathData,...)
 	return Shape
 end
 
-
-
 function CSMakePathX(Ratio,PathData,...)
 	local XRatio
 	local YRatio
@@ -2462,20 +2460,13 @@ function CS_Overlap(ShapeA,ShapeB)
 	return RetShape	
 end
 
-
 function CS_OverlapX(...)
-	if ... == nil then
-		CS_InputError()
-	end
-	local arg = table.pack(...)
 	local RetShape = {0}
+	local arg = table.pack(...)
 	for k = 1, arg.n do
 		RetShape[1] = RetShape[1] + arg[k][1]
 		for i = 1, arg[k][1] do
-			local NX, NY
-			NX = arg[k][i+1][1]
-			NY = arg[k][i+1][2]
-			table.insert(RetShape,{NX,NY})
+			table.insert(RetShape,{arg[k][i+1][1],arg[k][i+1][2]})
 		end
 	end
 	return RetShape	
@@ -5129,6 +5120,7 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 	if Preserve == 0 then
 		Preserve = nil
 	end
+
 	local LocId = Location
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
@@ -5234,7 +5226,6 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -5453,7 +5444,6 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -5566,7 +5556,6 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -5689,7 +5678,6 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -5819,7 +5807,6 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -5837,8 +5824,6 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OrderLocation) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -6042,7 +6027,6 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -6060,8 +6044,6 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OrderLocation) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -6352,81 +6334,142 @@ end
 
 ----------- Extended Set for v2.1 ---------------------------------------
 
-function CS_ConnectPath(Path,PerNumber,EndLine)
-	local RetShape = {0}
-	local Count = 0
-	if Path == nil then
-		CS_InputError()
-	end
-	if PerNumber <= 0 then
-		CS_InputError()
-	end
+function CS_ConnectPath(Path,PerNumber,EndLine,Index)
+	if Index == nil then
+		local RetShape = {0}
+		local Count = 0
+		if Path == nil then
+			CS_InputError()
+		end
+		if PerNumber <= 0 then
+			CS_InputError()
+		end
 
-	for i = 1, Path[1]-1 do
-		table.insert(RetShape,Path[i+1])
+		for i = 1, Path[1]-1 do
+			table.insert(RetShape,Path[i+1])
+			Count = Count + 1
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[i+1][1]+(PerNumber-j+1)*Path[i+2][1])/(PerNumber+1)
+				NY = (j*Path[i+1][2]+(PerNumber-j+1)*Path[i+2][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
+		end
+		table.insert(RetShape,Path[Path[1]+1])
 		Count = Count + 1
-		for j = 1, PerNumber do
-			local NX, NY
-			NX = (j*Path[i+1][1]+(PerNumber-j+1)*Path[i+2][1])/(PerNumber+1)
-			NY = (j*Path[i+1][2]+(PerNumber-j+1)*Path[i+2][2])/(PerNumber+1)
-			table.insert(RetShape,{NX,NY})
-			Count = Count + 1
+		if EndLine ~= nil then
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[Path[1]+1][1]+(PerNumber-j+1)*Path[2][1])/(PerNumber+1)
+				NY = (j*Path[Path[1]+1][2]+(PerNumber-j+1)*Path[2][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
 		end
-	end
-	table.insert(RetShape,Path[Path[1]+1])
-	Count = Count + 1
-	if EndLine ~= nil then
-		for j = 1, PerNumber do
-			local NX, NY
-			NX = (j*Path[Path[1]+1][1]+(PerNumber-j+1)*Path[2][1])/(PerNumber+1)
-			NY = (j*Path[Path[1]+1][2]+(PerNumber-j+1)*Path[2][2])/(PerNumber+1)
-			table.insert(RetShape,{NX,NY})
-			Count = Count + 1
+		RetShape[1] = Count
+		return RetShape
+	else
+		local RetShape = {0}
+		local Count = 0
+		if Path == nil then
+			CS_InputError()
 		end
+		if PerNumber <= 0 then
+			CS_InputError()
+		end
+
+		local RetShape = {Shape[1]}
+		for i = 1, Shape[1] do
+			table.insert(RetShape,Shape[i+1])
+		end
+
+		for k, v in pairs(Index) do
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[v[1]+1][1]+(PerNumber-j+1)*Path[v[2]+1][1])/(PerNumber+1)
+				NY = (j*Path[v[1]+1][2]+(PerNumber-j+1)*Path[v[2]+1][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
+		end
+
+		RetShape[1] = RetShape[1] + Count
+		return RetShape
 	end
-	RetShape[1] = Count
-	return RetShape
 end
 
-function CS_ConnectPathX(Path,PerSize,EndLine)
-	local RetShape = {0}
-	local Count = 0
-	if Path == nil then
-		CS_InputError()
-	end
-	if PerSize <= 0 then
-		CS_InputError()
-	end
-	PerSize = PerSize^2
+function CS_ConnectPathX(Path,PerSize,EndLine,Index)
+	if Index == nil then
+		local RetShape = {0}
+		local Count = 0
+		if Path == nil then
+			CS_InputError()
+		end
+		if PerSize <= 0 then
+			CS_InputError()
+		end
+		PerSize = PerSize^2
 
-	for i = 1, Path[1]-1 do
-		local Length = (Path[i+2][1]-Path[i+1][1])^2+(Path[i+2][2]-Path[i+1][2])^2
-		local PerNumber = math.floor(math.sqrt(Length/PerSize)+0.5)
-		table.insert(RetShape,Path[i+1])
+		for i = 1, Path[1]-1 do
+			local Length = (Path[i+2][1]-Path[i+1][1])^2+(Path[i+2][2]-Path[i+1][2])^2
+			local PerNumber = math.floor(math.sqrt(Length/PerSize)+0.5)
+			table.insert(RetShape,Path[i+1])
+			Count = Count + 1
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[i+1][1]+(PerNumber-j+1)*Path[i+2][1])/(PerNumber+1)
+				NY = (j*Path[i+1][2]+(PerNumber-j+1)*Path[i+2][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
+		end
+		table.insert(RetShape,Path[Path[1]+1])
 		Count = Count + 1
-		for j = 1, PerNumber do
-			local NX, NY
-			NX = (j*Path[i+1][1]+(PerNumber-j+1)*Path[i+2][1])/(PerNumber+1)
-			NY = (j*Path[i+1][2]+(PerNumber-j+1)*Path[i+2][2])/(PerNumber+1)
-			table.insert(RetShape,{NX,NY})
-			Count = Count + 1
+		if EndLine ~= nil then
+			local Length = (Path[Path[1]+1][1]-Path[2][1])^2+(Path[Path[1]+1][2]-Path[2][2])^2
+			local PerNumber = math.floor(math.sqrt(Length/PerSize)+0.5)
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[Path[1]+1][1]+(PerNumber-j+1)*Path[2][1])/(PerNumber+1)
+				NY = (j*Path[Path[1]+1][2]+(PerNumber-j+1)*Path[2][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
 		end
-	end
-	table.insert(RetShape,Path[Path[1]+1])
-	Count = Count + 1
-	if EndLine ~= nil then
-		local Length = (Path[Path[1]+1][1]-Path[2][1])^2+(Path[Path[1]+1][2]-Path[2][2])^2
-		local PerNumber = math.floor(math.sqrt(Length/PerSize)+0.5)
-		for j = 1, PerNumber do
-			local NX, NY
-			NX = (j*Path[Path[1]+1][1]+(PerNumber-j+1)*Path[2][1])/(PerNumber+1)
-			NY = (j*Path[Path[1]+1][2]+(PerNumber-j+1)*Path[2][2])/(PerNumber+1)
-			table.insert(RetShape,{NX,NY})
-			Count = Count + 1
+		RetShape[1] = Count
+		return RetShape
+	else
+		local RetShape = {0}
+		local Count = 0
+		if Path == nil then
+			CS_InputError()
 		end
+		if PerSize <= 0 then
+			CS_InputError()
+		end
+		PerSize = PerSize^2
+
+		local RetShape = {Shape[1]}
+		for i = 1, Shape[1] do
+			table.insert(RetShape,Shape[i+1])
+		end
+
+		for k, v in pairs(Index) do
+			local Length = (Path[v[2]+1][1]-Path[v[1]+1][1])^2+(Path[v[2]+1][2]-Path[v[1]+1][2])^2
+			local PerNumber = math.floor(math.sqrt(Length/PerSize)+0.5)
+			for j = 1, PerNumber do
+				local NX, NY
+				NX = (j*Path[v[1]+1][1]+(PerNumber-j+1)*Path[v[2]+1][1])/(PerNumber+1)
+				NY = (j*Path[v[1]+1][2]+(PerNumber-j+1)*Path[v[2]+1][2])/(PerNumber+1)
+				table.insert(RetShape,{NX,NY})
+				Count = Count + 1
+			end
+		end
+
+		RetShape[1] = RetShape[1] + Count
+		return RetShape
 	end
-	RetShape[1] = Count
-	return RetShape
 end
 
 function CS_GetRmax(Shape)
@@ -7700,11 +7743,17 @@ end
 
 --------- CA Paint v2.1 ---------------------------------------------------------------------------
 
-CAPlotJumpAlloc = 0x800
-CAPlotVarAlloc = 0x8000
+CAPlotJumpAlloc = 0xA00
+CAPlotVarAlloc = 0x1A000
 CAPlotDataArr = {}
 CAPlotPlayerID = {}
 CAPlotCreateArr = {}
+
+function CAPlotAllocCheck()
+	if CAPlotVarAlloc >= 0x1CFFF then
+		CAPlotAllocation_Overflow()
+	end
+end
 
 function CA_ConvertRA(DestR,DestA,SourceX,SourceY)
 	local PlayerID = CAPlotPlayerID
@@ -7725,6 +7774,14 @@ function CA_ConvertXY(DestX,DestY,SourceR,SourceA)
 	local CB = CAPlotCreateArr
 	STPopTrigArr(PlayerID)
 	f_Lengthdir(PlayerID,SourceR,SourceA,V(CA[8]),V(CA[9]))
+end
+
+function CA_Convert2D(Shape)
+	local RetShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		table.insert(RetShape,{Shape[i+1][1],Shape[i+1][2]})
+	end
+	return RetShape
 end
 
 function CA_MoveXY(X,Y)
@@ -8373,7 +8430,6 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -8582,7 +8638,6 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -8596,8 +8651,6 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OrderLocation) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -8907,7 +8960,6 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -8921,8 +8973,6 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OrderLocation) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -10528,7 +10578,7 @@ function CXGetZCntr(Shape)
 	return (CXGetZmax(Shape)+CXGetZmin(Shape))/2
 end
 
-function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve,CXfunc2)
+function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve)
 	if Shape == nil then
 		CX_InputError()
 	end
@@ -10538,7 +10588,6 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -10710,9 +10759,6 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 			CMov(PlayerID,LocU,V(CA[9]),-PlotSize)
 			CMov(PlayerID,LocD,V(CA[9]),PlotSize)
 			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
-			if CXfunc2 ~= nil then
-				_G[CXfunc2]() -- 사용자 지정 함수
-			end
 			if CenterXY == nil then
 				CMov(PlayerID,LocL,V(CA2[1]))
 				CMov(PlayerID,LocR,V(CA2[2]))
@@ -10753,7 +10799,6 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	end
 
 	local LocId = Location
-
 	if type(LocId) == "string" then
 		LocId = ParseLocation(LocId)-1
 	elseif type(LocId) == "number" then
@@ -10951,4 +10996,656 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 	CAPlotDataArr = {}
 	CAPlotPlayerID = {}
 	return Ret
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-- 추가 고급 함수
+function CS_Level(Type,Point,Number)
+	if Type == "Polygon" then
+		return Point*(Number*(Number-1))/2 + 1
+	elseif Type == "PolygonX" then
+		return Point*(Number*Number)
+	elseif Type == "Line" then
+		return (Number-1) * Point + 1
+	elseif Type == "LineX" then
+		return Number * Point
+	elseif Type == "Circle" then
+		return Point*(Number*(Number-1))/2 + 1
+	elseif Type == "CircleX" then
+		return Point*(Number*Number)
+	elseif Type == "Star" then
+		return Point*(Number*(Number-1)) + 1
+	elseif Type == "StarX" then
+		return Point*(Number*Number)*2
+	else
+		CS_InputError()
+	end
+end
+
+function CS_Delete(Shape,PathData,...)
+	local Count = 0
+	if type(PathData[2]) == "number" then
+		PathData = {PathData}
+	end
+	local arg = table.pack(...)
+	for k = 1, arg.n do
+		table.insert(PathData,arg[k])
+	end
+
+	local RetShape = {0}
+	for i = 1, Shape[1] do
+		local Check = 0
+		for k, v in pairs(PathData) do
+			if Check == 0 and Shape[i+1][1] == v[1] and Shape[i+1][2] == v[2] then
+				Check = 1
+				Count = Count + 1
+			end
+		end
+		if Check == 0 then
+			table.insert(RetShape,Shape[i+1])
+		end
+	end
+	
+	RetShape[1] = Shape[1] - Count
+	return RetShape
+end
+
+function CS_ConvertXY(Shape,AMax)
+	local NShape = {Shape[1]}
+	for i = 2, Shape[1]+1 do
+		local NR, NA
+		NR = Shape[i][1]
+		NA = Shape[i][2]
+		if AMax ~= nil and AMax ~= 360 then
+			NA = (NA/AMax)*360
+		end
+		NA = math.rad(NA)
+		table.insert(NShape,{NR*math.cos(NA),NR*math.sin(NA)})
+	end
+	return NShape
+end
+
+function CS_ConvertRA(Shape,AAdd,AMax)
+	local NShape = {Shape[1]}
+	for i = 2, Shape[1]+1 do
+		local NX, NY, NR, NA
+		NX = Shape[i][1]
+		NY = Shape[i][2]
+
+		NR = math.sqrt(NX^2+NY^2)
+		if NX>=0 and NY>=0 then
+			NA = math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY>=0 then
+			NA = math.pi - math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY<0 then
+			NA = math.pi + math.abs(math.atan(NY/NX))
+		elseif NX>=0 and NY<0 then
+			NA = 2*math.pi - math.abs(math.atan(NY/NX))
+		end
+
+		NA = math.deg(NA)
+
+		if AMax ~= nil and AMax ~= 360 then
+			NA = (NA/AMax)*360
+		end
+		if type(AAdd) == "number" then
+			NA = NA + AAdd
+		elseif type(AAdd) == "table" then
+			NA = NA + (AAdd/360)*AMax
+		end
+
+		table.insert(NShape,{NR,NA})
+	end
+	return NShape
+end
+
+function CS_InputVoid(Size)
+	local NShape = {Size}
+	for i = 1, Size do
+		table.insert(NShape,{0,0})
+	end
+	return NShape
+end
+
+function CS_VectorPath2D(Shape,Ratio,VectorFunc,Path,Outside)
+	local XRatio
+	local YRatio
+	if type(Ratio) == "number" then
+		XRatio = Ratio
+		YRatio = Ratio
+	else
+		if Ratio[1] == nil then
+			XRatio = 1
+		else
+			XRatio = Ratio[1]
+		end
+		if Ratio[2] == nil then
+			YRatio = 1
+		else
+			YRatio = Ratio[2]
+		end
+	end
+	local RetShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		local NX, NY, PX, PY
+		NX = Shape[i+1][1]
+		NY = Shape[i+1][2]
+		local Ret
+		local Temp = CS_CropPath({1,{NX,NY}},Path,Outside)
+		if Temp[1] == 1 then
+			Ret = _G[VectorFunc](NX/XRatio,NY/YRatio)
+		else
+			Ret = {NX,NY}
+		end 
+		PX = Ret[1]
+		PY = Ret[2]
+		table.insert(RetShape,{PX*XRatio,PY*YRatio})
+	end
+	return RetShape
+end
+
+function CS_VectorPath2DPolar(Shape,Ratio,VectorFunc,Path,Outside)
+	local XRatio
+	local YRatio
+	if type(Ratio) == "number" then
+		XRatio = Ratio
+		YRatio = Ratio
+	else
+		if Ratio[1] == nil then
+			XRatio = 1
+		else
+			XRatio = Ratio[1]
+		end
+		if Ratio[2] == nil then
+			YRatio = 1
+		else
+			YRatio = Ratio[2]
+		end
+	end
+	local RetShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		local NX, NY, PX, PY, NR, NA
+		NX = Shape[i+1][1]
+		NY = Shape[i+1][2]
+		local Temp = CS_CropPath({1,{NX,NY}},Path,Outside)
+		if Temp[1] == 1 then
+			NX = NX/XRatio
+			NY = NY/YRatio
+			NR = math.sqrt(NX^2+NY^2)
+			if NX>=0 and NY>=0 then
+				NA = math.abs(math.atan(NY/NX))
+			elseif NX<0 and NY>=0 then
+				NA = math.pi - math.abs(math.atan(NY/NX))
+			elseif NX<0 and NY<0 then
+				NA = math.pi + math.abs(math.atan(NY/NX))
+			elseif NX>=0 and NY<0 then
+				NA = 2*math.pi - math.abs(math.atan(NY/NX))
+			end
+
+			local Ret = _G[VectorFunc](NR,NA)
+			PR = Ret[1]
+			PA = Ret[2]
+
+			NX = PR*math.cos(PA)
+			NY = PR*math.sin(PA)	
+			table.insert(RetShape,{NX*XRatio,NY*YRatio})
+		else
+			table.insert(RetShape,{NX,NY})
+		end
+	end
+	return RetShape
+end
+
+function CS_GetLmax(Shape)
+	local Lmax, Length
+	Lmax = 0
+	for i = 1, Shape[1]-1 do
+		Length = (Shape[i+2][1]-Shape[i+1][1])^2 + (Shape[i+2][2]-Shape[i+1][2])^2 
+		if Length > Lmax then
+			Lmax = Length
+		end
+	end
+	Length = (Shape[2][1]-Shape[Shape[1]+1][1])^2 + (Shape[2][2]-Shape[Shape[1]+1][2])^2 
+	if Length > Lmax then
+		Lmax = Length
+	end
+	Lmax = math.sqrt(Lmax)
+	return Lmax
+end
+
+function CS_GetLmin(Shape)
+	local Lmin, Length
+	Lmin = (Shape[2][1]-Shape[Shape[1]+1][1])^2 + (Shape[2][2]-Shape[Shape[1]+1][2])^2 
+	for i = 1, Shape[1]-1 do
+		Length = (Shape[i+2][1]-Shape[i+1][1])^2 + (Shape[i+2][2]-Shape[i+1][2])^2 
+		if Length < Lmin then
+			Lmin = Length
+		end
+	end
+	Lmin = math.sqrt(Lmin)
+	return Lmin
+end
+
+function CS_MakeShape(Path,Radius,Angle,Number,Hollow,Auto,X,Y)
+	if X == nil then
+		X = 0
+	end
+	if Y == nil then
+		Y = 0
+	end
+	local NPath
+	if Hollow == nil then
+		Hollow = 0
+	end
+	if Auto == 0 then
+		Auto = nil
+	end
+	if Angle == nil then
+		Angle = 0 
+	end
+	NPath = CS_MoveCenter(Path,0,0)
+	if Angle ~= 0 then
+		NPath = CS_Rotate(NPath,Angle)
+	end
+
+	if type(Number) == "number" then
+		if Number < Hollow then
+			CS_InputError()
+		end
+		if Auto == nil then
+			local Rmax, Shape, RetShape 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			if Hollow == 0 then
+				RetShape = {1,{0,0}} 
+			else
+				RetShape = {0} 
+				Hollow = Hollow - 1
+			end
+			
+			for i = Hollow+1, Number-1 do
+				if i == 1 then
+					Shape = NPath
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(Shape,X,Y)
+					end
+				else
+					Shape = CS_ConnectPath(CS_RatioXY(NPath,i,i),i-1,1)
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(Shape,X*i,Y*i)
+					end
+				end
+				RetShape = CS_Overlap(RetShape,Shape)
+			end
+			return RetShape
+		else
+			local Rmax, Shape, RetShape, Lmax 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			if Hollow == 0 then
+				RetShape = {1,{0,0}} 
+			else
+				RetShape = {0} 
+				Hollow = Hollow - 1
+			end
+			
+			for k = Hollow+1, Number-1 do
+				if k == 1 then
+					if X ~= 0 or Y ~= 0 then
+						RetShape = CS_Overlap(RetShape,CS_MoveXY(NPath,X,Y))
+					else
+						RetShape = CS_Overlap(RetShape,NPath)
+					end
+				else
+					local PX, PY
+					PX = X*k
+					PY = Y*k
+					local Temp = CS_RatioXY(NPath,k,k)
+					Lmax = CS_GetLmax(Temp)
+					for i = 1, Temp[1]-1 do
+						local Length = math.sqrt((Temp[i+2][1]-Temp[i+1][1])^2+(Temp[i+2][2]-Temp[i+1][2])^2)
+						local PerNumber = math.floor((Length/Lmax)*k+0.5)
+						table.insert(RetShape,{Temp[i+1][1]+PX,Temp[i+1][2]+PY})
+						RetShape[1] = RetShape[1] + 1
+						for j = 1, PerNumber do
+							local NX, NY
+							NX = (j*Temp[i+1][1]+(PerNumber-j+1)*Temp[i+2][1])/(PerNumber+1)
+							NY = (j*Temp[i+1][2]+(PerNumber-j+1)*Temp[i+2][2])/(PerNumber+1)
+							table.insert(RetShape,{NX+PX,NY+PY})
+							RetShape[1] = RetShape[1] + 1
+						end
+					end
+					table.insert(RetShape,{Temp[Temp[1]+1][1]+PX,Temp[Temp[1]+1][2]+PY})
+					RetShape[1] = RetShape[1] + 1
+					local Length = math.sqrt((Temp[Temp[1]+1][1]-Temp[2][1])^2+(Temp[Temp[1]+1][2]-Temp[2][2])^2)
+					local PerNumber = math.floor((Length/Lmax)*k+0.5)
+					for j = 1, PerNumber do
+						local NX, NY
+						NX = (j*Temp[Temp[1]+1][1]+(PerNumber-j+1)*Temp[2][1])/(PerNumber+1)
+						NY = (j*Temp[Temp[1]+1][2]+(PerNumber-j+1)*Temp[2][2])/(PerNumber+1)
+						table.insert(RetShape,{NX+PX,NY+PY})
+						RetShape[1] = RetShape[1] + 1
+					end
+				end
+			end
+			
+			return RetShape
+		end
+	elseif type(Number) == "table" then
+		local Index_1
+		for k, v in pairs(Number) do
+			if v == 1 then
+				Index_1 = 1
+			end
+		end
+
+		if Auto == nil then
+			local Rmax, Shape, RetShape 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			if Index_1 == 1 then
+				RetShape = {1,{0,0}}
+			else
+				RetShape = {0}
+			end
+				
+			for k, v in pairs(Number) do
+				if v == 2 then
+					Shape = NPath
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(Shape,X,Y)
+					end
+				else
+					if v >= 3 then
+						Shape = CS_ConnectPath(CS_RatioXY(NPath,v-1,v-1),v-2,1)
+						if X ~= 0 or Y ~= 0 then
+							Shape = CS_MoveXY(Shape,X*i,Y*i)
+						end
+					end
+				end
+				RetShape = CS_Overlap(RetShape,Shape)
+			end
+			return RetShape
+		else
+			local Rmax, Shape, RetShape, Lmax 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			if Index_1 == 1 then
+				RetShape = {1,{0,0}}
+			else
+				RetShape = {0}
+			end
+				
+			for k, v in pairs(Number) do
+				if v == 2 then
+					if X ~= 0 or Y ~= 0 then
+						RetShape = CS_Overlap(RetShape,CS_MoveXY(NPath,X,Y))
+					else
+						RetShape = CS_Overlap(RetShape,NPath)
+					end
+				else
+					if v >= 3 then
+						local PX, PY
+						PX = X*(v-1)
+						PY = Y*(v-1)
+						local Temp = CS_RatioXY(NPath,v-1,v-1)
+						Lmax = CS_GetLmax(Temp)
+						for i = 1, Temp[1]-1 do
+							local Length = math.sqrt((Temp[i+2][1]-Temp[i+1][1])^2+(Temp[i+2][2]-Temp[i+1][2])^2)
+							local PerNumber = math.floor((Length/Lmax)*(v-1)+0.5)
+							table.insert(RetShape,{Temp[i+1][1]+PX,Temp[i+1][2]+PY})
+							RetShape[1] = RetShape[1] + 1
+							for j = 1, PerNumber do
+								local NX, NY
+								NX = (j*Temp[i+1][1]+(PerNumber-j+1)*Temp[i+2][1])/(PerNumber+1)
+								NY = (j*Temp[i+1][2]+(PerNumber-j+1)*Temp[i+2][2])/(PerNumber+1)
+								table.insert(RetShape,{NX+PX,NY+PY})
+								RetShape[1] = RetShape[1] + 1
+							end
+						end
+						table.insert(RetShape,{Temp[Temp[1]+1][1]+PX,Temp[Temp[1]+1][2]+PY})
+						RetShape[1] = RetShape[1] + 1
+						local Length = math.sqrt((Temp[Temp[1]+1][1]-Temp[2][1])^2+(Temp[Temp[1]+1][2]-Temp[2][2])^2)
+						local PerNumber = math.floor((Length/Lmax)*(v-1)+0.5)
+						for j = 1, PerNumber do
+							local NX, NY
+							NX = (j*Temp[Temp[1]+1][1]+(PerNumber-j+1)*Temp[2][1])/(PerNumber+1)
+							NY = (j*Temp[Temp[1]+1][2]+(PerNumber-j+1)*Temp[2][2])/(PerNumber+1)
+							table.insert(RetShape,{NX+PX,NY+PY})
+							RetShape[1] = RetShape[1] + 1
+						end
+					end
+				end
+			end
+			return RetShape
+		end
+	else
+		CS_InputError()
+	end
+end
+
+function CS_MakeShapeX(Path,Radius,Angle,Number,Hollow,Auto,X,Y)
+	if Number >= 1 then
+		Number = Number + 1
+	end
+	if X == nil then
+		X = 0
+	end
+	if Y == nil then
+		Y = 0
+	end
+	local NPath, HalfRad
+	if Hollow == nil then
+		Hollow = 0
+	end
+	if Auto == 0 then
+		Auto = nil
+	end
+	if Angle == nil then
+		Angle = 0 
+	end
+	NPath = CS_MoveCenter(Path,0,0)
+	if Angle ~= 0 then
+		NPath = CS_Rotate(NPath,Angle)
+	end
+
+	if type(Number) == "number" then
+		if Number < Hollow then
+			CS_InputError()
+		end
+		if Auto == nil then
+			local Rmax, Shape, RetShape 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			RetShape = {0} 
+			
+			for i = Hollow+1, Number-1 do
+				if i == 1 then
+					Shape = NPath
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(CS_RatioXY(Shape,0.5,0.5),X/2,Y/2)
+					end
+				else
+					Shape = CS_ConnectPath(CS_RatioXY(NPath,i-0.5,i-0.5),i-1,1)
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(Shape,X*(i-0.5),Y*(i-0.5))
+					end
+				end
+				RetShape = CS_Overlap(RetShape,Shape)
+			end
+			return RetShape
+		else
+			local Rmax, Shape, RetShape, Lmax 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			RetShape = {0} 
+			
+			for k = Hollow+1, Number-1 do
+				if k == 1 then
+					if X ~= 0 or Y ~= 0 then
+						RetShape = CS_Overlap(RetShape,CS_MoveXY(CS_RatioXY(NPath,0.5,0.5),X/2,Y/2))
+					else
+						RetShape = CS_Overlap(RetShape,CS_RatioXY(NPath,0.5,0.5))
+					end
+				else
+					local PX, PY
+					PX = X*(k-0.5)
+					PY = Y*(k-0.5)
+					local Temp = CS_RatioXY(NPath,k-0.5,k-0.5)
+					Lmax = CS_GetLmax(Temp)
+					for i = 1, Temp[1]-1 do
+						local Length = math.sqrt((Temp[i+2][1]-Temp[i+1][1])^2+(Temp[i+2][2]-Temp[i+1][2])^2)
+						local PerNumber = math.floor((Length/Lmax)*(k-0.5)+0.5)
+						table.insert(RetShape,{Temp[i+1][1]+PX,Temp[i+1][2]+PY})
+						RetShape[1] = RetShape[1] + 1
+						for j = 1, PerNumber do
+							local NX, NY
+							NX = (j*Temp[i+1][1]+(PerNumber-j+1)*Temp[i+2][1])/(PerNumber+1)
+							NY = (j*Temp[i+1][2]+(PerNumber-j+1)*Temp[i+2][2])/(PerNumber+1)
+							table.insert(RetShape,{NX+PX,NY+PY})
+							RetShape[1] = RetShape[1] + 1
+						end
+					end
+					table.insert(RetShape,{Temp[Temp[1]+1][1]+PX,Temp[Temp[1]+1][2]+PY})
+					RetShape[1] = RetShape[1] + 1
+					local Length = math.sqrt((Temp[Temp[1]+1][1]-Temp[2][1])^2+(Temp[Temp[1]+1][2]-Temp[2][2])^2)
+					local PerNumber = math.floor((Length/Lmax)*(k-0.5)+0.5)
+					for j = 1, PerNumber do
+						local NX, NY
+						NX = (j*Temp[Temp[1]+1][1]+(PerNumber-j+1)*Temp[2][1])/(PerNumber+1)
+						NY = (j*Temp[Temp[1]+1][2]+(PerNumber-j+1)*Temp[2][2])/(PerNumber+1)
+						table.insert(RetShape,{NX+PX,NY+PY})
+						RetShape[1] = RetShape[1] + 1
+					end
+				end
+			end
+			
+			return RetShape
+		end
+	elseif type(Number) == "table" then
+
+		if Auto == nil then
+			local Rmax, Shape, RetShape 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			RetShape = {0} 
+				
+			for k, v in pairs(Number) do
+				if v == 2 then
+					Shape = NPath
+					if X ~= 0 or Y ~= 0 then
+						Shape = CS_MoveXY(CS_RatioXY(Shape,0.5,0.5),X/2,Y/2)
+					end
+				else
+					if v >= 3 then
+						Shape = CS_ConnectPath(CS_RatioXY(NPath,v-1.5,v-1.5),v-2,1)
+						if X ~= 0 or Y ~= 0 then
+							Shape = CS_MoveXY(Shape,X*(i-0.5),Y*(i-0.5))
+						end
+					end
+				end
+				RetShape = CS_Overlap(RetShape,Shape)
+			end
+			return RetShape
+		else
+			local Rmax, Shape, RetShape, Lmax 
+			if Radius ~= nil then
+				Rmax = CS_GetRmax(NPath)
+				NPath = CS_RatioXY(NPath,Radius/Rmax,Radius/Rmax)
+			end
+			
+			RetShape = {0} 
+				
+			for k, v in pairs(Number) do
+				if v == 2 then
+					if X ~= 0 or Y ~= 0 then
+						RetShape = CS_Overlap(RetShape,CS_MoveXY(CS_RatioXY(NPath,0.5,0.5),X/2,Y/2))
+					else
+						RetShape = CS_Overlap(RetShape,CS_RatioXY(Nhape,0.5,0.5))
+					end
+				else
+					if v >= 3 then
+						local PX, PY
+						PX = X*(v-1.5)
+						PY = Y*(v-1.5)
+						local Temp = CS_RatioXY(NPath,v-1.5,v-1.5)
+						Lmax = CS_GetLmax(Temp)
+						for i = 1, Temp[1]-1 do
+							local Length = math.sqrt((Temp[i+2][1]-Temp[i+1][1])^2+(Temp[i+2][2]-Temp[i+1][2])^2)
+							local PerNumber = math.floor((Length/Lmax)*(v-1.5)+0.5)
+							table.insert(RetShape,{Temp[i+1][1]+PX,Temp[i+1][2]+PY})
+							RetShape[1] = RetShape[1] + 1
+							for j = 1, PerNumber do
+								local NX, NY
+								NX = (j*Temp[i+1][1]+(PerNumber-j+1)*Temp[i+2][1])/(PerNumber+1)
+								NY = (j*Temp[i+1][2]+(PerNumber-j+1)*Temp[i+2][2])/(PerNumber+1)
+								table.insert(RetShape,{NX+PX,NY+PY})
+								RetShape[1] = RetShape[1] + 1
+							end
+						end
+						table.insert(RetShape,{Temp[Temp[1]+1][1]+PX,Temp[Temp[1]+1][2]+PY})
+						RetShape[1] = RetShape[1] + 1
+						local Length = math.sqrt((Temp[Temp[1]+1][1]-Temp[2][1])^2+(Temp[Temp[1]+1][2]-Temp[2][2])^2)
+						local PerNumber = math.floor((Length/Lmax)*(v-1.5)+0.5)
+						for j = 1, PerNumber do
+							local NX, NY
+							NX = (j*Temp[Temp[1]+1][1]+(PerNumber-j+1)*Temp[2][1])/(PerNumber+1)
+							NY = (j*Temp[Temp[1]+1][2]+(PerNumber-j+1)*Temp[2][2])/(PerNumber+1)
+							table.insert(RetShape,{NX+PX,NY+PY})
+							RetShape[1] = RetShape[1] + 1
+						end
+					end
+				end
+			end
+			return RetShape
+		end
+	else
+		CS_InputError()
+	end
+end
+
+function CS_ShapeInShape(Shape,InShape,Rotate,Angle,Radius)
+	if Radius ~= nil then
+		Rmax = CS_GetRmax(Shape)
+		Shape = CS_RatioXY(Shape,Radius/Rmax,Radius/Rmax)
+	else
+		Shape = Shape
+	end
+	Shape = CS_MoveCenter(Shape,0,0)
+	if Angle ~= nil and Angle ~= 0 then
+		Shape = CS_Rotate(Shape,Angle)
+	end
+	local RetShape = {0}
+	for i = 1, InShape[1] do
+		local CX = InShape[i+1][1]
+		local CY = InShape[i+1][2]
+		if Rotate == nil or Rotate == 0 then
+			RetShape = CS_Overlap(RetShape,CS_MoveCenter(Shape,CX,CY))
+		else
+			local CA = math.deg(math.atan2(CX, CY))
+			RetShape = CS_Overlap(RetShape,CS_MoveCenter(CS_Rotate(Shape,180-CA),CX,CY))
+		end
+	end
+	return RetShape
 end
