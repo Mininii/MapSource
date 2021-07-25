@@ -44,12 +44,13 @@ function Install_ShapeData()
 	NBYD = CS_Merge(NexBYDLine4[1],NexBYDLine4[2],32,0)
 	Hive_1 = CS_ConnectPath(CSMakePath({32,960},{1536,3904},{3040,960}),45)
 	Ovrm = CS_ConnectPathX(CSMakePath({1536,3296},{1088,1728},{1536,32},{1984,1728}),64,1)
-	OvrmF = CS_FillPathXY(CSMakePath({1536,3296},{1088,1728},{1536,32},{1984,1728}),0,64,64)
+	OvrmF = CS_FillPathXY(CSMakePath({1536,3296},{1088,1728},{1536,32},{1984,1728}),0,96,96)
 	CC_L = CS_ConnectPathX(CSMakePath({896,224},{1344,704},{1120,1664}),64,1)
 	CC_R = CS_ConnectPathX(CSMakePath({2176,224},{1728,704},{1952,1664}),64,1) 
 	CC_LF = CS_FillPathXY(CSMakePath({896,224},{1344,704},{1120,1664}),0,64,64)
 	CC_RF = CS_FillPathXY(CSMakePath({2176,224},{1728,704},{1952,1664}),0,64,64)
-	Hive_3 = CS_MirrorX(CS_FillPathXY(CSMakePath({1504,4832},{992,5088},{512,3968},{1504,4448}),0,96,64),(32*48)+64,1)
+	Hive_3F = CS_MirrorX(CS_FillPathXY(CSMakePath({1504,4832},{992,5088},{512,3968},{1504,4448}),0,96,64),(32*48)+64,1)
+	Hive_3 = CS_MirrorX(CS_ConnectPathX(CSMakePath({1504,4832},{992,5088},{512,3968},{1504,4448}),64,1),(32*48)+64,1)
 	Hive_2_1 = CS_MirrorX(CS_OverlapX(
 	CS_ConnectPath(CSMakePath({32,2400},{416,1408}),11),
 	CS_ConnectPath(CSMakePath({448,1376},{736,1088}),8),
@@ -59,5 +60,22 @@ function Install_ShapeData()
 	Hive_2 = CS_Overlap(Hive_2_1,Hive_2_2)
 	Cere_L = CS_FillPathXY(CSMakePath({416,6080},{320,6080},{320,5824},{384,5824},{384,5824-32},{448,5792},{448,5792-32},{512,5760},{512,5760-32},{576,5728},{576,5728-32},{640,5696},{640,5696-32},{672,5664},{672,5408},{768,5408},{768,5760},{640,5760},{640,5760+32},{576,5792},{576,5792+32},{512,5824},{512,5824+32},{448,5856},{448,5856+32},{416,5888}),0,32,32)
 	Cere_R =CS_Subtract(CS_MirrorX(Cere_L,(32*48),1),Cere_L,32) 
+	GC1 = CS_MoveXY(CS_RatioXY(CSMakeCircle(40,3000,0,41,1),0.5,1),48*32,96*32)
+	
+	C1 = CSMakeCircle(8,60,0,441,169)
+	S1 = CSMakePolygon(4,45,45,13,0)
+	S2 = CS_MoveXY(S1,700,0)
+	M1 = CS_Merge(S2,C1,1,0)
+	SS1 = CS_KaleidoscopeX(M1,20,0,0) --- Å«¹ÙÄû--
+
+	C2 = CSMakeCircle(8,45,0,122,50)
+	S3 = CSMakeLineX(3,70,0,35,15)
+	SS2 = CS_Merge(S3,C2,1,0) --- ÀÛÀº¹ÙÄû--
+
+	MM = CS_Merge(SS1,SS2,1,0)
+	SS3 = CS_RemoveStack(MM,5,0) -------20°³ Åé´Ï¹ÙÄû--
+	function S1_Vector(X,Y) return {X+Y,X-Y} end--
+	WheelA = CS_Vector2D(SS3,1,"S1_Vector")--
+	GC2 = CS_MoveXY(CS_RatioXY(WheelA,1.4,2.6),48*32,96*32)
 	
 end

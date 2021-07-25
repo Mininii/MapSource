@@ -636,11 +636,15 @@ function PlayerInterface()
 		Trigger2(FP,{Memory(0x57f120+(4*i),AtLeast,0x80000000)},{SetMemory(0x57f120+(4*i),SetTo,0)},{Preserved}) -- 가스 마이너스 방지
 		
 		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1001))
+			CIfX(FP,Bring(FP,AtLeast,1,147,64))
 			f_Div(FP,MarTempSh,MarHP[i+1],_Mov(512))
 			CIfX(FP,CVar(FP,MarTempSh[2],AtMost,65535))
 				CDoActions(FP,{TSetMemoryX(MarShPtrArr[i+1],SetTo,_Mul(MarTempSh,_Mov(256^MarShMaskRetArr[i+1])),65535*(256^MarShMaskRetArr[i+1]))})
 			CElseX()
 				DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,65535)})
+			CIfXEnd()
+			CElseX()
+			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 			CIfXEnd()
 			Trigger { -- 보호막 가동
 				players = {FP},
@@ -657,7 +661,8 @@ function PlayerInterface()
 		CIfXEnd()
 
 		CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
-			CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV))
+			CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV),24*2)
+			CMov(FP,0x582234 + (4*i),_Div(MarNumberLimit,PCheckV),24*2)
 		CIfEnd()
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,440)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
@@ -694,7 +699,7 @@ function PlayerInterface()
 		Trigger2(FP,{PlayerCheck(i,1)},{ModifyUnitHitPoints(All,"Men",i,i+2,100),ModifyUnitHitPoints(All,"Buildings",i,i+2,100),ModifyUnitShields(All,"Men",i,i+2,100),ModifyUnitShields(All,"Buildings",i,i+2,100)},{Preserved})
 	end
 	CIfEnd()
-	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
+--	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
 	
 	
 	CIf(FP,CVar(FP,InputPoint[2],AtLeast,2000))

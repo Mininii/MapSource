@@ -38,7 +38,7 @@ function LevelUp()
 	StoryT3 = CreateCCode()
 	BClear = CreateCCode()
 
-	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)},{ModifyUnitShields(All,"Men",Force1,64,0)})
+	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
 		
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
 
@@ -167,15 +167,17 @@ function LevelUp()
 			CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID),SetCVar(FP,MultiplierV[2],SetTo,Multiplier)})
 		end
 
-
+		for i = 2, 10 do
+			TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*8*i),SetMemory(0x662350+(4*125),SetTo,8000*256*i),SetMemory(0x662350+(4*124),SetTo,8000*256*i)},{Preserved})
+		end
 		
-		for i = 37, 56 do
+		for i = 37, 57 do
 			SetLevelUpHP(i,1)
 		end
 		
 			SetLevelUpHP(104,1)
 		for j, k in pairs(HeroArr) do
-			SetLevelUpHP(k,2)
+			SetLevelUpHP(k,1)
 		end
 		BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146}
 		
@@ -183,10 +185,14 @@ function LevelUp()
 			SetLevelUpHP(k,2)
 		end
 		DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
+		local UpVar = CreateVar(FP)
+		CMov(FP,UpVar,Level)
+		f_Div(FP,UpVar,_Mov(2))
 		for i = 0, 7 do
-			TriggerX(FP,{CVar(FP,Level[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
+			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
 		end
-		TriggerX(FP,{CVar(FP,Level[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
+		
+		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 		
 		
 		Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtLeast,51)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})

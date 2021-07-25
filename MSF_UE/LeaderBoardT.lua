@@ -29,6 +29,18 @@ function LeaderBoardTFunc()
 			PreserveTrigger();
 	},
 	}
+	Trigger { -- 데스 스코어 리더보드
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,400,LeaderBoardT);
+			Bring(P11,AtLeast,700,"Any unit",64);
+		},
+		actions = {
+			SetInvincibility(Disable,"Any unit",P11,64);
+			PreserveTrigger();
+	},
+	}
 	Trigger { -- 킬 스코어 리더보드
 		players = {FP},
 		conditions = {

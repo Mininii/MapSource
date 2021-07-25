@@ -164,6 +164,7 @@ function onInit_EUD()
 	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(127,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(86,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(110,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -175,7 +176,9 @@ function onInit_EUD()
 	SetUnitClassType(23,1)
 	SetUnitClassType(74,1)
 	SetUnitClassType(74,1)
+	SetUnitClassType(57,1)
 
+	SetUnitClassType(47)
 	SetUnitClassType(77)
 	SetUnitClassType(78)
 	SetUnitClassType(28)
@@ -271,11 +274,6 @@ UnitSizePatch(60,1)
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (29), SetTo, 255))
 
 	for i = 0, 6 do
-
-	table.insert(PatchArr,SetMemory(0x582234 + (4*i),SetTo,840*2))
-	table.insert(PatchArr,SetMemory(0x5821D4 + (4*i),SetTo,840*2))
-
-
 	table.insert(PatchArr,SetMemory(0x5821A4 + (4*i),SetTo,GunLimit*2))
 	table.insert(PatchArr,SetMemory(0x582144 + (4*i),SetTo,GunLimit*2))
 	table.insert(PatchArr,SetMemory(0x5822C4 + (4*i),SetTo,1000))
@@ -466,7 +464,7 @@ UnitSizePatch(60,1)
 
 	YY = 2021
 	MM = 7
-	DD = 25
+	DD = 26
 	HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 

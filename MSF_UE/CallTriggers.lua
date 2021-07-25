@@ -83,6 +83,30 @@ f_Mod(FP,TempRandRet,InputMaxRand)
 CAdd(FP,TempRandRet,Oprnd)
 SetCallEnd()
 
+
+function f_Recall(Condition,X,Y)
+	CMov(FP,Rec_X,X)
+	CMov(FP,Rec_Y,Y)
+	CallTriggerX(FP,Call_Recall,Condition)
+end
+Rec_X = CreateVar(FP)
+Rec_Y = CreateVar(FP)
+Call_Recall = SetCallForward()
+SetCall(FP)
+	CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Rec_X[2],AtMost,32*96),CVar(FP,Rec_Y[2],AtMost,32*192)})
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		Simple_SetLocX(FP,0,Rec_X,Rec_Y,Rec_X,Rec_Y)
+		DoActions(FP,{
+		CreateUnitWithProperties(1,71,1,FP,{energy = 100});})
+		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+			CDoActions(FP,{
+			TSetMemory(_Add(Nextptrs,0x58/4),SetTo,_Add(Rec_X,_Mul(Rec_Y,65536))),
+			TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,137*256,0xFF00)})
+		CIfEnd()
+	CIfEnd()
+
+SetCallEnd()
+
 G_TempH = CreateVar(FP)
 G_InputH = CreateVar2({"X",0x500,0x15C,1,0},FP)
 
@@ -134,7 +158,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CDoActions(FP,{
 				TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
 			})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,1),SetCDeaths(FP,SetTo,1,isScore))
 			local BackupL = CreateVar(FP)
 			local BackupU = CreateVar(FP)
 			local BackupR = CreateVar(FP)
@@ -147,7 +171,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-32,-32,32,32)})
 			CDoActions(FP,{
-				TGiveUnits(1,Gun_TempSpawnSet1,P8,1,P11),TSetInvincibility(Enable,Gun_TempSpawnSet1,FP,1),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00)
+				TSetInvincibility(Enable,Gun_TempSpawnSet1,FP,1),TGiveUnits(1,Gun_TempSpawnSet1,P8,1,P11),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00)
 			})
 			Simple_SetLocX(FP,0,BackupL,BackupU,BackupR,BackupD) -- RecoverLoc
 
@@ -161,8 +185,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CDoActions(FP,{
 			TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
 			TSetDeaths(_Add(Nextptrs,22),SetTo,TempPos,0),
-			TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000),
 		})
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
 
 			
 		CElseX(SetCDeaths(FP,SetTo,0,isScore))
@@ -509,8 +533,8 @@ P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
 
 
-NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF = 
-G_CAPlot2({NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF})
+NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2 = 
+G_CAPlot2({NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2})
 
 
 
@@ -661,28 +685,6 @@ SetCallEnd()
 
 
 
-function f_Recall(Condition,X,Y)
-	CMov(FP,Rec_X,X)
-	CMov(FP,Rec_Y,Y)
-	CallTriggerX(FP,Call_Recall,Condition)
-end
-Rec_X = CreateVar(FP)
-Rec_Y = CreateVar(FP)
-Call_Recall = SetCallForward()
-SetCall(FP)
-	CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Rec_X[2],AtMost,32*96),CVar(FP,Rec_Y[2],AtMost,32*192)})
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		Simple_SetLocX(FP,0,Rec_X,Rec_Y,Rec_X,Rec_Y)
-		DoActions(FP,{
-		CreateUnitWithProperties(1,71,1,FP,{energy = 100});})
-		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-			CDoActions(FP,{
-			TSetMemory(_Add(Nextptrs,0x58/4),SetTo,_Add(Rec_X,_Mul(Rec_Y,65536))),
-			TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,137*256,0xFF00)})
-		CIfEnd()
-	CIfEnd()
-
-SetCallEnd()
 function f_ArrReset(Condition)
 	CallTriggerX(FP,Call_ArrReset,Condition)
 end

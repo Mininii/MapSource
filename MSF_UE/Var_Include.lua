@@ -162,9 +162,9 @@ function Objects()
 	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4} 
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
-	HumanPlayers = {0,1,2,3,4,5,6,128,129,130,131}
+	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4,5,6}
-	ObPlayers = {128,129,130,131}
+	ObPlayers = {P9,P10,P11,P12}
 	MedicTrig = {34,9,2,3}
 	EXCC_Forward = 0x2FFF
 	ObEff = 94

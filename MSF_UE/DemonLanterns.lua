@@ -1211,14 +1211,6 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Order("Tom Kazansky (Wraith)", P10, "Anywhere", Move, "C7");
 			Order("Tom Kazansky (Wraith)", P11, "Anywhere", Move, "C8");
 			Order("Tom Kazansky (Wraith)", P12, "Anywhere", Move, "C1");
-			KillUnitAt(All, "Men", "C1", Foes);
-			KillUnitAt(All, "Men", "C2", Foes);
-			KillUnitAt(All, "Men", "C3", Foes);
-			KillUnitAt(All, "Men", "C4", Foes);
-			KillUnitAt(All, "Men", "C5", Foes);
-			KillUnitAt(All, "Men", "C6", Foes);
-			KillUnitAt(All, "Men", "C7", Foes);
-			KillUnitAt(All, "Men", "C8", Foes);
 			SetVoid(4, Add, 1);
 			Comment("레아스 원형 그리기");
 		},
@@ -2355,7 +2347,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 			Void(2, Exactly, 31);
 			Void(3, AtLeast, 15);
 			Void(3, AtMost, 39);
-			Void(41, AtLeast, 3);
+			Void(41, AtLeast, 2);
 		},
 		actions = {
 			PreserveTrigger();

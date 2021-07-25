@@ -148,8 +148,8 @@ end
 function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 자주 바뀌는 로케이션, TempUnit = 안쓰는 유닛. Unused 가능 아마?
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
 	local PlayerID = TriggerPlayer
-	local RetX = CreateVar()
-	local RetY = CreateVar()
+	local RetX = CreateVar(FP)
+	local RetY = CreateVar(FP)
 	local Call_GetCLoc = SetCallForward()
 	SetCall(PlayerID)
 	f_Read(PlayerID,0x58DC60+0x14*TempLocID,RetX,"X",0xFFFFFFFF)
@@ -190,9 +190,6 @@ Dx,Dy,Du,DtP,Dv = CreateVariables(5)
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
 CVariable(AllPlayers,0x1005) CunitEPD = 0x1005
 	
-CXArrX = CArray(P1,100) 
-CXArrY = CArray(P1,100)
-CXArrZ = CArray(P1,100)
 
 CVariable(AllPlayers,0x1000) TSize = 0x1000
 CVariable(AllPlayers,0x1001) XAngle = 0x1001
@@ -209,15 +206,16 @@ CVariable(AllPlayers,0x2012) Var1 = 0x2012
 CVariable(AllPlayers,0x2013) Var2 = 0x2013
 CJumpEnd(AllPlayers,0x600)
 NoAirCollisionX(P1)--
-TSize2 = CreateVar()
+TSize2 = CreateVar(FP)
 DoActions(P1,RemoveUnit(204,P2))
 
-	TShape = CXMakeShape(96,{0,0,0},{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}) -- 중심점을 포함한 2x2x2 정육면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
+	TShape = CXMakeShape(96,{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}) -- 중심점을 포함한 2x2x2 정육면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
 
 ---------------------------------------------------------------------------------------------
+	Timer1= CreateCCode()
+	DoActionsX(P1,SetCDeaths("X",Add,1,Timer1))
 	SHLX = 1365
 	SHLY = 1365
-	Timer1= CreateCCode()
 	Trigger {
 		players = {P1},
 		conditions = {
@@ -226,16 +224,51 @@ DoActions(P1,RemoveUnit(204,P2))
 		actions = {
 			SetCVar("X",TCount,SetTo,1);
 			SetCVar("X",TSize,SetTo,0);
-			SetCVar("X",TSize2[2],SetTo,540*4);
-			CenterView(1);
+			SetCVar("X",TSize2[2],SetTo,540*2);
+			CenterView(2);
 		}
 	}
-	DoActionsX(P1,SetCDeaths("X",Add,1,Timer1))
 	Trigger {
 		players = {P1},
 		conditions = {
 			Label(0);
-			CDeaths("X",AtLeast,100,Timer1);
+			CDeaths("X",Exactly,100,Timer1);
+		},
+		actions = {
+			SetCVar("X",TSize,SetTo,0);
+			SetCVar("X",TSize2[2],SetTo,540*1);
+			PreserveTrigger();
+		}
+	}
+	Trigger {
+		players = {P1},
+		conditions = {
+			Label(0);
+			CDeaths("X",Exactly,200,Timer1);
+		},
+		actions = {
+			SetCVar("X",TSize,SetTo,0);
+			SetCVar("X",TSize2[2],SetTo,540*2);
+			PreserveTrigger();
+		}
+	}
+	Trigger {
+		players = {P1},
+		conditions = {
+			Label(0);
+			CDeaths("X",Exactly,300,Timer1);
+		},
+		actions = {
+			SetCVar("X",TSize,SetTo,0);
+			SetCVar("X",TSize2[2],SetTo,540*3);
+			PreserveTrigger();
+		}
+	}
+	Trigger {
+		players = {P1},
+		conditions = {
+			Label(0);
+			CDeaths("X",AtLeast,400,Timer1);
 		},
 		actions = {
 			SetCVar("X",TSize,SetTo,0);
@@ -257,7 +290,7 @@ DoActions(P1,RemoveUnit(204,P2))
 				SetCVar("X",ZAngle,Add,5);
 				SetCVar("X",TSize,Add,4);
 				SetCVar("X",TCount,SetTo,1);
-				SetCVar("X",TSize2[2],Add,-160);
+				SetCVar("X",TSize2[2],Add,-100);
 				PreserveTrigger();
 			}
 		}
@@ -281,7 +314,44 @@ DoActions(P1,RemoveUnit(204,P2))
 				
 				CX_Ratio(V(TSize),540*3*12,V(TSize),540*3*12,V(TSize),540*3*12)
 				CX_Rotate(_Div(V(XAngle),10),_Div(V(YAngle),10),_Div(V(ZAngle),10))
-						
+
+				Trigger {
+					players = {P1},
+					conditions = {
+						Label(0);
+						CVar("X",CA[11],AtLeast,0x80000000);
+					},
+					actions = {
+						SetMemoryX(0x66A01C, SetTo, 10*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 0,0xFF); -- 높이
+						PreserveTrigger();
+					}
+				}
+			
+		Trigger {
+					players = {P1},
+					conditions = {
+						Label(0);
+						CVar("X",CA[11],AtMost,0x7FFFFFFF);
+					},
+					actions = {
+						SetMemoryX(0x66A01C, SetTo, 0*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 20,0xFF); -- 높이
+						PreserveTrigger();
+					}
+				}
+		Trigger {
+					players = {P1},
+					conditions = {
+						Label(0);
+						CVar("X",CA[11],Exactly,0x0);
+					},
+					actions = {
+						SetMemoryX(0x66A01C, SetTo, 16*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 12,0xFF); -- 높이
+						PreserveTrigger();
+					}
+				}
 	end
 	CXPlot(TShape,P2,204,1,{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",P1,Always(),nil,nil)
 	
@@ -311,7 +381,6 @@ IBGM_EPD(FP,7)
 --	Simple_SetLocX(FP,25,fasdas,fasdas2,fasdas,fasdas2,{CreateUnit(1,0,26,P1)})
 --	
 --end
-Install_AllObject()--
 
 EndCtrig()
 ---- 에러 체크 함수 선언 위치 --
