@@ -71,8 +71,10 @@ function LevelUp()
 					CreateUnit(1,74,64,FP),
 					TSetMemory(_Add(Nextptrs,2),SetTo,8000*256),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
-					RotatePlayer({CenterView(64)},HumanPlayers,FP)
 				})
+				TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{RotatePlayer({
+					CenterView(64),
+				},HumanPlayers,FP)},{Preserved})
 				CIfEnd()
 			CElseIfX(CVar(FP,LevelT[2],Exactly,10))
 			
@@ -88,9 +90,12 @@ function LevelUp()
 				TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
 			})
 			DoActions(FP,{
-				SetCVar(FP,DcurHP[2],SetTo,8320000*256),
-				RotatePlayer({CenterView(64)},HumanPlayers,FP),
+				SetCVar(FP,DcurHP[2],SetTo,8320000*256)
 			})
+			
+			TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{RotatePlayer({
+				CenterView(64),
+			},HumanPlayers,FP)},{Preserved})
 			CIfEnd()
 
 			CElseX()

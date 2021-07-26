@@ -117,6 +117,7 @@ function Var_init()
 	DPtr = CreateVar(FP)
 	DcurHP = CreateVar(FP)
 	GCT = CreateCcode()
+	isSingle = CreateCcode()
 end
 
 function HPoints()

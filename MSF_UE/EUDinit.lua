@@ -562,21 +562,38 @@ UnitSizePatch(60,1)
 			SetMemory(0xCDDDCDDD,SetTo,1);
 		}
 	}
-		Trigger { -- 싱글플 불가능 맵
+	--		Trigger { -- 싱글플 불가능 맵
+	--			players = {FP},
+	--			conditions = {
+	--				Memory(0x57F0B4, Exactly, 0);
+	--		},
+	--			actions = {
+	--				RotatePlayer({
+	--				DisplayTextX("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+	--				Defeat();
+	--				},HumanPlayers,FP);
+	--				Defeat();
+	--				SetMemory(0xCDDDCDDD,SetTo,1);
+	--		},
+	--		}
+	--	
+		Trigger { -- 혹시 싱글이신가요?
 			players = {FP},
 			conditions = {
+				Label(0);
 				Memory(0x57F0B4, Exactly, 0);
 		},
 			actions = {
-				RotatePlayer({
-				DisplayTextX("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
-				Defeat();
-				},HumanPlayers,FP);
-				Defeat();
-				SetMemory(0xCDDDCDDD,SetTo,1);
+				SetCDeaths(FP,SetTo,1,isSingle);
 		},
 		}
-	
+	--	
+	CIf(FP,CDeaths(FP,AtLeast,1,isSingle))
+		DoActions(FP,{
+			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8컬러f
+			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 미니맵
+		})
+	CIfEnd()
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
 
 

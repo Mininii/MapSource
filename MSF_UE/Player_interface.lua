@@ -57,6 +57,17 @@ function PlayerInterface()
 			}
 		end
 		
+		Trigger { -- 미네랄 마이너스 방지
+			players = {i},
+			conditions = {
+				Accumulate(i,AtLeast,0x80000000,ore)
+			},
+			actions = {
+				SetResources(i,SetTo,0x7FFFFFFF,ore);
+				PreserveTrigger();
+			},
+		}
+		
 		
 		TriggerX(i,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,10)},{
 				DisplayText(string.rep("\n", 20),4);
