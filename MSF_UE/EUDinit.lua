@@ -165,6 +165,7 @@ function onInit_EUD()
 	WeaponTypePatch(127,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(86,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(110,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(128,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
@@ -205,6 +206,7 @@ EffUnitPatch(205)
 EffUnitPatch(206)
 EffUnitPatch(207)
 EffUnitPatch(208)
+EffUnitPatch(209)
 EffUnitPatch(210)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
@@ -280,8 +282,8 @@ UnitSizePatch(60,1)
 	table.insert(PatchArr,SetMemory(0x582264 + (4*i),SetTo,1000))
 	table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
 	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,5))
-	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,10))
-	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,15))
+	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,15))
+	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,30))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
@@ -340,6 +342,7 @@ UnitSizePatch(60,1)
 	UnitSizePatch(56,10) -- 저그 유닛 크기 10*10 설정
 	UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
 	UnitSizePatch(53,10) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(57,10) -- 저그 유닛 크기 10*10 설정
 	UnitSizePatch(11,1)
 	UnitSizePatch(63,5)
 
@@ -417,7 +420,7 @@ UnitSizePatch(60,1)
 			},
 		}
 	end
-
+	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if TestStart == 1 then
 		DoActions(FP,SetSwitch("Switch 230",Set))
@@ -502,6 +505,78 @@ UnitSizePatch(60,1)
 			SetMemory(0xCDDDCDDD,SetTo,1);
 		}
 	}
+	
+	Trigger { -- 배속방지
+		players = {FP},
+		conditions = {
+			Memory(0x51CE84,AtLeast,1001);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B방 제목에서 배속 옵션을 제거해 주십시오. \n\x13\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDD,SetTo,1);
+		}
+	}
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDD,SetTo,1);
+		}
+	}
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*7,Exactly,2,0xFF);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDD,SetTo,1);
+		}
+	}
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE0 + (36*7)+8,AtLeast,1*256,0xFF00);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDD,SetTo,1);
+		}
+	}
+		Trigger { -- 싱글플 불가능 맵
+			players = {FP},
+			conditions = {
+				Memory(0x57F0B4, Exactly, 0);
+		},
+			actions = {
+				RotatePlayer({
+				DisplayTextX("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDD,SetTo,1);
+		},
+		}
+	
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
 
 

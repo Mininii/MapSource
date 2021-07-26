@@ -56,6 +56,7 @@ function LevelUp()
 				CIf(FP,Memory(0x628438,AtLeast,1))
 					f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 					CDoActions(FP,{
+						KillUnitAt(All,"Men",29,Force1),
 						CreateUnit(1,87,29,FP),
 						TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
@@ -66,6 +67,7 @@ function LevelUp()
 				CIf(FP,Memory(0x628438,AtLeast,1))
 				f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 				CDoActions(FP,{
+					KillUnitAt(All,"Men","Center",Force1),
 					CreateUnit(1,74,64,FP),
 					TSetMemory(_Add(Nextptrs,2),SetTo,8000*256),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
@@ -79,6 +81,7 @@ function LevelUp()
 			CDoActions(FP,{
 				SetMemoryX(0x669FB4, SetTo, 16777216*17,0xFFFFFFFF),
 				SetMemory(0x66EFBC, SetTo, 67);
+				KillUnitAt(All,"Men","Center",Force1),
 				CreateUnit(1,186,64,FP),
 				SetMemory(0x66EFBC, SetTo, 78);
 				TSetCVar(FP,DPtr[2],SetTo,Nextptrs),

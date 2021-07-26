@@ -34,10 +34,10 @@ function LeaderBoardTFunc()
 		conditions = {
 			Label(0);
 			CDeaths(FP,Exactly,400,LeaderBoardT);
-			Bring(P11,AtLeast,700,"Any unit",64);
+			Bring(P9,AtLeast,700,"Any unit",64);
 		},
 		actions = {
-			SetInvincibility(Disable,"Any unit",P11,64);
+			SetInvincibility(Disable,"Any unit",P9,64);
 			PreserveTrigger();
 	},
 	}

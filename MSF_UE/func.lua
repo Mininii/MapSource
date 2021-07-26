@@ -464,3 +464,18 @@ function Convert_CPosXY(Value)
 	end
 	return CPosX,CPosY
 end
+
+
+function SetCVar(Player,Index,Type,Value,Mask)
+	if type(Index) == "table" and Index[4] == "V" then
+		Index = Index[2]
+	end
+	return SetVariableX(Player,Index,"Value",Type,Value,Mask)
+end
+
+function CVar(Player,Index,Type,Value,Mask)
+	if type(Index) == "table" and Index[4] == "V" then
+		Index = Index[2]
+	end
+	return VariableX(Player,Index,"Value",Type,Value,Mask)
+end

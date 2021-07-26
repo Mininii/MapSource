@@ -356,8 +356,8 @@ function PlayerInterface()
 			},{Preserved})
 
 		UnitLimit(i,7,5,"SCV´Â",500)
-		UnitLimit(i,125,5,"º¡Ä¿´Â",8000)
-		UnitLimit(i,7,5,"ÅÍ·¿Àº",4000)
+		UnitLimit(i,125,8,"º¡Ä¿´Â",8000)
+		UnitLimit(i,124,15,"ÅÍ·¿Àº",4000)
 		
 
 
@@ -702,9 +702,9 @@ function PlayerInterface()
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
 	
 	
-	CIf(FP,CVar(FP,InputPoint[2],AtLeast,2000))
-	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(2000)))
-	f_Mod(FP,InputPoint,_Mov(2000))
+	CIf(FP,CVar(FP,InputPoint[2],AtLeast,1000))
+	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
+	f_Mod(FP,InputPoint,_Mov(1000))
 	CIfEnd()
     CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 end

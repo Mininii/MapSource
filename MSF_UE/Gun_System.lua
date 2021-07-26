@@ -32,7 +32,7 @@ function Gun_System()
     InstallHeroPoint()
     CIfEnd()
     CMov(FP,Gun_Type,0)
-    CIf(FP,{TTOR({CVar(FP,Level[2],AtMost,3),CVar(FP,Level[2],AtLeast,11)})})
+    CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
     for j, k in pairs({142,135,140,141,138,139,137}) do -- 잡건작 목록
         f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = 잡건작 플래그
     end

@@ -58,7 +58,37 @@ local Lyrics = {
 		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})})},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
 	--end
 	
+			
+
+
+	
+	local TShape = CXMakeShape(96,{0,0,0},{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1})
+	local WhileLaunch = CreateCcode()
+	local BursterCall = CreateCCode()
+	local BlackBox =CreateCcode()
 	local DTotalDmg = CreateVar(FP)
+	local TSize = CreateVar(FP)
+	local XAngle = CreateVar(FP)
+	local YAngle = CreateVar(FP)
+	local ZAngle = CreateVar(FP)
+	local TCount = CreateVar(FP)
+	local TCount2 = CreateVar(FP)
+	local Angle1 = CreateVar(FP)
+	local Angle2 = CreateVar(FP)
+	local Angle3 = CreateVar(FP)
+	local Angle4 = CreateVar(FP)
+	local Angle5 = CreateVar(FP)
+	local Angle6 = CreateVar(FP)
+	local Angle7 = CreateVar(FP)
+	local Angle8 = CreateVar(FP)
+	local Angle9 = CreateVar(FP)
+	local SkillW = CreateVar(FP)
+	local SkillW2 = CreateVar(FP)
+	local SkillW3 = CreateVar(FP)
+	local CPosX2 = CreateVar(FP)
+	local CPosY2 = CreateVar(FP)
+	local RandRet2 = CreateVar(FP)
+	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
 	CIf(FP,{CVar(FP,DPtr[2],AtLeast,1),CVar(FP,DPtr[2],AtMost,0x7FFFFFFF)})
 		CIf(FP,{TTMemory(_Add(DPtr,2),NotSame,DcurHP)})
 			f_Read(FP,_Add(DPtr,2),DHP)
@@ -71,21 +101,149 @@ local Lyrics = {
 			CMov(FP,0x57f120 + (4*i),DTotalDmg)
 		end
 	end
+	local PatternCcode = {}
+	function Create_PatternCcode(Table)
+		local TempCcode = CreateCCode()
+		table.insert(Table,TempCcode)
+		return TempCcode
+	end
 	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
+	local Pat1 = Create_PatternCcode(Table)
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{Order(186,FP,64,Move,"DCenter")},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit),CDeaths(FP,Exactly,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),MoveUnit(All,186,FP,64,64)},{Preserved})
 	
-	CIf(FP,{DeathsX(FP,AtMost,(66*4),BGMLength,0xFFFFFF),Memory(0x628438,AtLeast,1)})
+	CIf(FP,{DeathsX(FP,AtMost,(66*4),BGMLength,0xFFFFFF)})
+		
+	local CXForward = CAPlotForward()
+
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+	},
+	actions = {
+		SetCVar("X",TCount,SetTo,1);
+		SetCVar("X",TSize,SetTo,540*16);
+	}
+}
+Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+		},
+		actions = {
+			SetCVar("X",XAngle,Add,11);
+			SetCVar("X",YAngle,Add,8);
+			SetCVar("X",ZAngle,Add,5);
+			SetCVar("X",TCount,SetTo,1);
+			PreserveTrigger();
+		}
+	}
+	Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				CVar("X",TSize,AtLeast,0x80000000);
+			},
+			actions = {
+				SetCVar("X",TSize,SetTo,0);
+				PreserveTrigger();
+			}
+		}
+	
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				CVar("X",TSize,AtLeast,1);
+			},
+			actions = {
+				SetCVar("X",CXForward[5],SetTo,TShape[1]);
+				PreserveTrigger();
+			}
+		}
+
+	function CXfunc()
+				local CA = CAPlotDataArr
+				local CB = CAPlotCreateArr
+				local PlayerID = CAPlotPlayerID
+				
+				CX_Ratio(TSize,540*3*12,TSize,540*3*12,TSize,540*3*12)
+				CX_Rotate(_Div(XAngle,10),_Div(YAngle,10),_Div(ZAngle,10))
+
+				Trigger {
+					players = {FP},
+					conditions = {
+						Label(0);
+						CVar("X",CA[11],AtLeast,0x80000000);
+					},
+					actions = {
+						SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 0*16777216,0xFF000000); -- 높이
+						PreserveTrigger();
+					}
+				}
+			
+		Trigger {
+					players = {FP},
+					conditions = {
+						Label(0);
+						CVar("X",CA[11],AtMost,0x7FFFFFFF);
+					},
+					actions = {
+						SetMemoryX(0x669FB4, SetTo, 16*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 20*16777216,0xFF000000); -- 높이
+						PreserveTrigger();
+					}
+				}
+		Trigger {
+					players = {FP},
+					conditions = {
+						Label(0);
+						CDeaths(FP,Exactly,0,BlackBox);
+						CVar("X",CA[11],Exactly,0x0);
+					},
+					actions = {
+						SetMemoryX(0x669FB4, SetTo, 17*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
+						PreserveTrigger();
+					}
+				}
+		Trigger {
+					players = {FP},
+					conditions = {
+						Label(0);
+						CDeaths(FP,Exactly,1,BlackBox);
+						CVar("X",CA[11],Exactly,0x0);
+					},
+					actions = {
+						SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
+						SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
+						PreserveTrigger();
+					}
+				}
+	end
+
+	function CXfunc2()
+		CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,nil,Nextptrs)
 		CDoActions(FP,{
-			Simple_CalcLoc("DCenter",0,-16,0,-16),
-			CreateUnit(4,207, "DCenter",FP),
+			CreateUnit(1,207, "DCenter",FP),
 			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
-			Simple_CalcLoc("DCenter",0,16,0,16),
-			--TSetMemory(_Add(Nextptrs,57))
+			TSetMemory(_Add(Nextptrs,57),SetTo,0),
 		})
+		CIfEnd()
+	end
+	DoActions(FP,{Simple_CalcLoc("DCenter",0,-16,0,-16)})
+	CXPlot(TShape,FP,nilunit,"DCenter",nil,1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1,"CXfunc2")
+	DoActions(FP,{Simple_CalcLoc("DCenter",0,16,0,16)})
+
+	CMov(FP,V(CXForward[6]),1)
+
 	CIfEnd()
 	SetRecoverCp()
 	RecoverCp(FP)
+	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
 	local LyricsCCode = {}
 	for j, k in pairs(Lyrics) do
 		local TempCcode = CreateCCode()
@@ -105,18 +263,7 @@ local Lyrics = {
 				},
 			}
 	end
-	local PatternCcode = {}
-	function Create_PatternCcode(Table)
-		local TempCcode = CreateCCode()
-		table.insert(Table,TempCcode)
-		return TempCcode
-	end
-	local Angle1 = CreateVar(FP)
-	local Angle2 = CreateVar(FP)
-	local Angle3 = CreateVar(FP)
-	local Angle4 = CreateVar(FP)
-	local Angle5 = CreateVar(FP)
-	local Angle6 = CreateVar(FP)
+
 	for i = 0, 3 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
 		CIf(FP,{DeathsX(FP,Exactly,13+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
@@ -124,12 +271,12 @@ local Lyrics = {
 			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
 			DoActionsX(FP,{SetMemoryB(0x6636B8 + 193, SetTo, 130),SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
 			if i == 0 then
-				local Randnum = f_CRandNum(43)
+				local Randnum = f_CRandNum(256)
 				CMov(FP,Angle1,Randnum)
 				CMov(FP,Angle2,Randnum,13)
 				CMov(FP,Angle3,Randnum,13*2)
-				CMov(FP,Angle4,Randnum,-13)
-				CMov(FP,Angle5,Randnum,-13*2)
+				CiSub(FP,Angle4,Randnum,13)
+				CiSub(FP,Angle5,Randnum,13*2)
 			end
 		CIfEnd()
 	end
@@ -153,7 +300,7 @@ local Lyrics = {
 
 	
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(13*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)},{Preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(13*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit),SetCVar(FP,TSize,SetTo,0)},{Preserved})
 	
 	
 	for i = 0, 3 do
@@ -163,12 +310,13 @@ local Lyrics = {
 		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
 		DoActionsX(FP,{SetMemoryB(0x6636B8 + 193, SetTo, 130),SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
 			if i == 0 then
-				local Randnum = f_CRandNum(43)
+				local Randnum = f_CRandNum(256)
 				CMov(FP,Angle1,Randnum)
 				CMov(FP,Angle2,Randnum,13)
 				CMov(FP,Angle3,Randnum,13*2)
-				CMov(FP,Angle4,Randnum,-13)
-				CMov(FP,Angle5,Randnum,-13*2)
+				CiSub(FP,Angle4,Randnum,13)
+				CiSub(FP,Angle5,Randnum,13*2)
+				CMov(FP,Angle6,Angle1)
 			end
 		CIfEnd()
 	end
@@ -186,57 +334,132 @@ local Lyrics = {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetCDeaths(FP,SetTo,0,LockBossUnit)},{Preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{Preserved})
-	
-	for i = 0, 2 do
+	CIf(FP,{DeathsX(FP,AtLeast,(31*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(31*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CAdd(FP,Angle6,3)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Add,800);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(32*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(32*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CiSub(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Subtract,400);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(33*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(33*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CAdd(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Add,1200);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(34*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(34*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CiSub(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CMov(FP,Angle8,Angle6,64)
+		CMov(FP,Angle9,Angle6,192)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		CreateBullet(208,20,Angle8,CPosX,CPosY)
+		CreateBullet(208,20,Angle9,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Subtract,1500);})
+	CIfEnd()
+	for i = 0, 3 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
 		CIf(FP,{DeathsX(FP,Exactly,(34*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)})
-		CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
-		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
-		DoActionsX(FP,{SetMemoryB(0x6636B8 + 193, SetTo, 130),SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
+		if i <= 2 then
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
+			CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
+			DoActionsX(FP,{SetMemoryB(0x6636B8 + 193, SetTo, 130),SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
+		end
+		if i == 3 then
+			local Randnum = f_CRandNum(256)
+			CMov(FP,Angle6,Randnum)
+			DoActionsX(FP,{SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),KillUnit(94,P11)})
+		end
 		CIfEnd()
 	end	
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	CIf(FP,{DeathsX(FP,Exactly,(34*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,LockBossUnit),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),KillUnit(94,P11)})
-		GetLocCenter("DCenter",CPosX,CPosY)
-		local Randnum = f_CRandNum(43)
-		CMov(FP,Angle1,Randnum)
-		CMov(FP,Angle2,Randnum,13)
-		CMov(FP,Angle3,Randnum,13*2)
-		CMov(FP,Angle4,Randnum,-13)
-		CMov(FP,Angle5,Randnum,-13*2)
-		CreateBullet(208,20,Angle1,CPosX,CPosY)
-		CreateBullet(208,20,Angle2,CPosX,CPosY)
-		CreateBullet(208,20,Angle3,CPosX,CPosY)
-		CreateBullet(208,20,Angle4,CPosX,CPosY)
-		CreateBullet(208,20,Angle5,CPosX,CPosY)
-		--CreateBullet(208,20,Angle6,CPosX,CPosY)
-	CIfEnd()
-	
-	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(34*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetInvincibility(Disable,193,P8,64),SetMemoryB(0x6636B8 + 193, SetTo, 55)},{Preserved})
+	CIf(FP,{DeathsX(FP,AtLeast,(35*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(35*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CAdd(FP,Angle6,3)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Add,600);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(36*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(36*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CiSub(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Subtract,400);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(37*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(37*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CAdd(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Add,900);})
+	CIfEnd()
+	CIf(FP,{DeathsX(FP,AtLeast,(38*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(38*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
+	GetLocCenter("DCenter",CPosX,CPosY)
+		CiSub(FP,Angle6,3)
+		CMov(FP,Angle7,Angle6,128)
+		CMov(FP,Angle8,Angle6,64)
+		CMov(FP,Angle9,Angle6,192)
+		CreateBullet(208,20,Angle6,CPosX,CPosY)
+		CreateBullet(208,20,Angle7,CPosX,CPosY)
+		CreateBullet(208,20,Angle8,CPosX,CPosY)
+		CreateBullet(208,20,Angle9,CPosX,CPosY)
+		DoActionsX(FP,{SetCVar("X",TSize,Subtract,1500);})
+	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(38*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCVar(FP,SkillW[2],SetTo,0),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetCVar("X",TSize,SetTo,0)},{Preserved})
+	CIf(FP,{DeathsX(FP,AtLeast,(39*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(45*4)+1+3,BGMLength,0xFFFFFF)})
+		DoActionsX(FP,{SetCVar("X",TSize,Add,100);})
+		CIf(FP,{CDeaths(FP,AtLeast,1,WhileLaunch)},{SetCDeaths(FP,SetTo,0,WhileLaunch)})
+			CMov(FP,SkillW2,SkillW)
+		CifEnd()
+		CWhile(FP,{CVar(FP,SkillW2[2],AtLeast,1),CVar(FP,SkillW2[2],AtMost,100)},{SetCVar(FP,SkillW3[2],Add,100),SetCVar(FP,SkillW2[2],Subtract,1)})
+			local Randnum = f_CRandNum(360)
+			CMov(FP,RandRet2,Randnum)
+			f_Mod(FP,InputMaxRand,_Rand(),_Mov(10*32))
+			CallTriggerX(FP,CRandNum,nil,{SetCVar(FP,Oprnd[2],SetTo,0)})
+			f_Lengthdir(FP,TempRandRet,RandRet2,CPosX2,CPosY2)
+			GetLocCenter("DCenter",CPosX,CPosY)
+			CAdd(FP,CPosX,CPosX2)
+			CAdd(FP,CPosY,CPosY2)
+			local Randnum = f_CRandNum(256)
+			CreateBullet(209,20,Randnum,CPosX,CPosY)
+		CWhileEnd()
+		DoActionsX(FP,{SetCVar(FP,SkillW3[2],SetTo,0)})
+	CIfEnd()
+	Trigger2(FP,{DeathsX(FP,AtLeast,(39*4)+1,BGMLength,0xFFFFFF)},{ModifyUnitShields(All,"Any unit",Force1,64,0)},{Preserved})
 	for i = 0, 3 do
 		local Pat1 = Create_PatternCcode(PatternCcode)
-		CIf(FP,{DeathsX(FP,Exactly,(48*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,LockBossUnit)})
+		CIf(FP,{DeathsX(FP,Exactly,(48*4)+1+i,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCVar("X",TSize,SetTo,0)})
 		CSPlot(CSMakePolygon(32,160,0,33,1),FP,193,"DCenter",nil,1,32,FP,nil,nil,1)
 		CSPlot(CSMakePolygon(32,160,0,33,1),FP,94,"DCenter",nil,1,32,FP,nil,nil,1)
 		DoActionsX(FP,{SetMemoryB(0x6636B8 + 193, SetTo, 130),SetInvincibility(Enable,193,P8,64),GiveUnits(All,94,P8,64,P11),GiveUnits(All,193,P8,64,P11),Order(94,P11,64,Move,"DCenter"),Order(193,P11,64,Move,"DCenter")})
 			if i == 0 then
-				local Randnum = f_CRandNum(43)
+				local Randnum = f_CRandNum(256)
 				CMov(FP,Angle1,Randnum)
 				CMov(FP,Angle2,Randnum,13)
 				CMov(FP,Angle3,Randnum,13*2)
-				CMov(FP,Angle4,Randnum,-13)
-				CMov(FP,Angle5,Randnum,-13*2)
+				CiSub(FP,Angle4,Randnum,13)
+				CiSub(FP,Angle5,Randnum,13*2)
 			end
 		CIfEnd()
 	end
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(48*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000)},{Preserved})
-	
 	CIf(FP,{
 		DeathsX(FP,AtLeast,(48*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(49*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 		GetLocCenter("DCenter",CPosX,CPosY)
@@ -247,19 +470,17 @@ local Lyrics = {
 		CreateBullet(208,20,Angle5,CPosX,CPosY)
 		--CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
-	local BursterCall = CreateCCode()
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{KillUnit(94,P11),SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BursterCall),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{Preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{Preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BursterCall),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(59*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryX(0x669FB4, SetTo, 16777216*10,0xFFFFFFFF),SetCDeaths(FP,SetTo,0,BursterCall)},{Preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(59*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BlackBox),SetCDeaths(FP,SetTo,0,BursterCall),SetCVar("X",TSize,SetTo,0)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	local N_R,N_A,N_X,N_Y,N_A2,N_A3 = CreateVariables(6)
-	CIf(FP,{CDeaths(FP,AtLeast,1,BursterCall)},SetCVar(FP,N_R[2],Add,2))
-	
+	CIf(FP,{CDeaths(FP,AtLeast,1,BursterCall)},{SetCVar(FP,N_R[2],Add,2),SetCVar("X",TSize,Add,100)})
 	CMov(FP,N_A,0)
 	CAdd(FP,N_A2,1)
 	CAdd(FP,N_A3,N_A2)
@@ -269,11 +490,12 @@ local Lyrics = {
 	CAdd(FP,N_X,CPosX)
 	CAdd(FP,N_Y,CPosY)
 
-	CIfX(FP,{CVar(FP,N_X[2],AtMost,4096),CVar(FP,N_Y[2],AtMost,4096)})
+	CIfX(FP,{CVar(FP,N_X[2],AtMost,96*32),CVar(FP,N_Y[2],AtMost,192*32)})
 	Simple_SetLocX(FP,0,_Add(N_X,-16),_Add(N_Y,-16),_Add(N_X,16),_Add(N_Y,16),{
 		CreateUnit(1,94,1,FP),
 		KillUnit(94,FP),
 		KillUnitAt(All,"Men",1,Force1),
+		KillUnitAt(All,193,1,FP),
 	})
 	CIfXEnd()
 
@@ -302,6 +524,7 @@ local Lyrics = {
 		Trigger { -- 상시브금
 			players = {FP},
 			conditions = {
+				Label(0);
 				DeathsX(FP,Exactly,i,BGMLength,0xFFFFFF);
 				DeathsX(FP,AtMost,0,BGMVar,0xFFFFFF);
 			},
@@ -309,6 +532,8 @@ local Lyrics = {
 				RotatePlayer({PlayWAVX(BGMArr[i+1]);PlayWAVX(BGMArr[i+1]);},HumanPlayers,FP);
 				SetDeathsX(FP,Add,Length,BGMVar,0xFFFFFF);
 				SetDeathsX(FP,Add,1,BGMLength,0xFFFFFF);
+				SetCVar(FP,SkillW[2],Add,4);
+				SetCDeaths(FP,Add,1,WhileLaunch);
 				PreserveTrigger();
 				},
 			}
@@ -325,9 +550,43 @@ local Lyrics = {
 	end
 	DoActions2X(FP,DResetTable)
 	CallTrigger(FP,Call_VoidReset)
+	
+	
+	
 
 	DoActionsX(FP,{
-		SetCDeaths(FP,SetTo,1,Destr0yerClear),SetDeaths(FP,SetTo,0,BGMLength),SetCVar(FP,N_R[2],SetTo,0)
+		SetCDeaths(FP,SetTo,1,Destr0yerClear),
+		SetDeaths(FP,SetTo,0,BGMLength),
+		SetCDeaths(FP,SetTo,0,WhileLaunch),
+		SetCDeaths(FP,SetTo,0,BursterCall),
+		SetCDeaths(FP,SetTo,0,BlackBox),
+		SetCVar(FP,N_R[2],SetTo,0),
+		SetCVar(FP,N_A[2],SetTo,0);
+		SetCVar(FP,N_X[2],SetTo,0);
+		SetCVar(FP,N_Y[2],SetTo,0);
+		SetCVar(FP,N_A2[2],SetTo,0);
+		SetCVar(FP,N_A3[2],SetTo,0);
+		SetCVar(FP,TSize[2],SetTo,0);
+		SetCVar(FP,XAngle[2],SetTo,0);
+		SetCVar(FP,YAngle[2],SetTo,0);
+		SetCVar(FP,ZAngle[2],SetTo,0);
+		SetCVar(FP,TCount[2],SetTo,0);
+		SetCVar(FP,TCount2[2],SetTo,0);
+		SetCVar(FP,Angle1[2],SetTo,0);
+		SetCVar(FP,Angle2[2],SetTo,0);
+		SetCVar(FP,Angle3[2],SetTo,0);
+		SetCVar(FP,Angle4[2],SetTo,0);
+		SetCVar(FP,Angle5[2],SetTo,0);
+		SetCVar(FP,Angle6[2],SetTo,0);
+		SetCVar(FP,Angle7[2],SetTo,0);
+		SetCVar(FP,Angle8[2],SetTo,0);
+		SetCVar(FP,Angle9[2],SetTo,0);
+		SetCVar(FP,SkillW[2],SetTo,0);
+		SetCVar(FP,SkillW2[2],SetTo,0);
+		SetCVar(FP,SkillW3[2],SetTo,0);
+		SetCVar(FP,CPosX2[2],SetTo,0);
+		SetCVar(FP,CPosY2[2],SetTo,0);
+		SetCVar(FP,RandRet2[2],SetTo,0);
 	})
 
 	f_ArrReset()
