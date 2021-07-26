@@ -7208,8 +7208,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		},
 		actions = {
 			RotatePlayer({
-				DisplayTextX("\x13\x1B방 제목에서 배속 옵션을 제거해 주십시오.",4),
-				Victory()
+				DisplayTextX("\x13\x1B방 제목에서 배속 옵션을 제거해 주십시오. \n\x13\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.",4),
 			},HumanPlayers,FP);
 		}
 	}
@@ -7239,17 +7238,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	Trigger { -- 게임오버
 		players = {Force1},
 		conditions = {
-			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
-		},
-		actions = {
-			PlayWAV("sound\\Misc\\TPwrDown.wav");
-			DisplayText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.",4);
-			Defeat();
-		}
-	}
-	Trigger { -- 게임오버
-		players = {Force1},
-		conditions = {
 			MemoryX(0x57EEE8 + 36*5,Exactly,2,0xFF);
 		},
 		actions = {
@@ -7262,6 +7250,17 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		players = {Force1},
 		conditions = {
 			MemoryX(0x57EEE8 + 36*6,Exactly,2,0xFF);
+		},
+		actions = {
+			PlayWAV("sound\\Misc\\TPwrDown.wav");
+			DisplayText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.",4);
+			Defeat();
+		}
+	}
+	Trigger { -- 게임오버
+		players = {Force1},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
 		},
 		actions = {
 			PlayWAV("sound\\Misc\\TPwrDown.wav");
