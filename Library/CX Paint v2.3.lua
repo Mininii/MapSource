@@ -10578,7 +10578,7 @@ function CXGetZCntr(Shape)
 	return (CXGetZmax(Shape)+CXGetZmin(Shape))/2
 end
 
-function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve)
+function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve,CXfunc2)
 	if Shape == nil then
 		CX_InputError()
 	end
@@ -10759,6 +10759,9 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 			CMov(PlayerID,LocU,V(CA[9]),-PlotSize)
 			CMov(PlayerID,LocD,V(CA[9]),PlotSize)
 			CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
+			if CXfunc2 ~= nil then
+				_G[CXfunc2]() -- Z좌표는 여기서 CX_ 함수에 의해 X,Y좌표값에 영향을 미침
+			end
 			if CenterXY == nil then
 				CMov(PlayerID,LocL,V(CA2[1]))
 				CMov(PlayerID,LocR,V(CA2[2]))
