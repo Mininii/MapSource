@@ -588,12 +588,20 @@ UnitSizePatch(60,1)
 		},
 		}
 	--	
-	CIf(FP,CDeaths(FP,AtLeast,1,isSingle))
+	CIfX(FP,CDeaths(FP,AtLeast,1,isSingle))
+
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ÄÃ·¯f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ¹Ì´Ï¸Ê
+			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),
 		})
-	CIfEnd()
+	CElseX()
+	SinglePatch = {}
+	for i = 0, 6 do
+		table.insert(SinglePatch,SetMemoryB(0x57F27C + (i * 228) + 70,SetTo,0))
+	end
+	DoActions(FP,SinglePatch)
+	CIfXEnd()
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
 
 

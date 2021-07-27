@@ -85,7 +85,7 @@ CDoActions(FP,{
 	TSetMemory(B_Id_C,SetTo,Nextptrs),
 	TSetMemory(0x58F558,SetTo,7),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
-	TSetMemory(_Add(Nextptrs,2),SetTo,6400*256),
+	TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(1000*256)),_Mov(2000*256))),
 	KillUnitAt(All,"Men",29,Force1),
 })
 

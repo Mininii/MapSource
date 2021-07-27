@@ -34,7 +34,7 @@ function LeaderBoardTFunc()
 		conditions = {
 			Label(0);
 			CDeaths(FP,Exactly,400,LeaderBoardT);
-			Bring(P9,AtLeast,700,"Any unit",64);
+			CVar(FP,count[2],AtLeast,1500);
 		},
 		actions = {
 			SetInvincibility(Disable,"Any unit",P9,64);

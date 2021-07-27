@@ -686,6 +686,7 @@ function InstallGunData()
 					
 					CMov(FP,V(BYDTechGunCAPlot[6]),1)
 					
+					Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
 				CIfEnd()
 			CIfEnd()
 			TriggerX(FP,{Gun_Line(0,Exactly,137)},{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,56)},{Preserved})

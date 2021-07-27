@@ -352,19 +352,16 @@ function PlayerInterface()
 				SetDeathsX(i,SetTo,0*16777216,440,0xFF000000);
 			},{Preserved})
 
-			Trigger2(i,{Deaths(i,Exactly,0,444);Command(i,AtLeast,1,70);},{
+			Trigger2(i,{Command(i,AtLeast,1,70);},{
 				GiveUnits(All,70,i,"Anywhere",P12);
 				RemoveUnitAt(All,70,"Anywhere",P12);
-				DisplayText("\x07『 \x1Dhatchery \x1CBGM\x04을 변경합니다 (\x0F검열버전\x04). \x07』",4);
-				SetDeaths(i,SetTo,1,444);
+				DisplayText("\x07『 \x1C모든 유닛\x04에 \x1D자율공격명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
+				SetMemoryX(0x57EEE0 + (i*36)+8,SetTo,1,0xFF),
+				RunAIScriptAt(JYD,61),
+				RunAIScriptAt(JYD,62),
+				SetMemoryX(0x57EEE0 + (i*36)+8,SetTo,2,0xFF),
 			},{Preserved})
 			
-			Trigger2(i,{Deaths(i,Exactly,1,444);Command(i,AtLeast,1,70);},{
-				GiveUnits(All,70,i,"Anywhere",P12);
-				RemoveUnitAt(All,70,"Anywhere",P12);
-				DisplayText("\x07『 \x1Dhatchery \x1CBGM\x04을 변경합니다 (\x0F기존버전\x04). \x07』",4);
-				SetDeaths(i,SetTo,0,444);
-			},{Preserved})
 
 		UnitLimit(i,7,5,"SCV는",500)
 		UnitLimit(i,125,8,"벙커는",8000)
@@ -711,11 +708,9 @@ function PlayerInterface()
 	end
 	CIfEnd()
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
-	
-	
-	CIf(FP,CVar(FP,InputPoint[2],AtLeast,1000))
-	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
-	f_Mod(FP,InputPoint,_Mov(1000))
+	CIf(FP,{CDeaths(FP,Exactly,0,isSingle),CVar(FP,InputPoint[2],AtLeast,2000)})
+	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(2000)))
+	f_Mod(FP,InputPoint,_Mov(2000))
 	CIfEnd()
     CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 end

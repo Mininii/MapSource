@@ -60,7 +60,7 @@ function LevelUp()
 						CreateUnit(1,87,29,FP),
 						TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
-						TSetMemory(_Add(Nextptrs,2),SetTo,6000*256),
+						TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(1000*256)),_Mov(5000*256))),
 						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
 				CIfEnd()
 			CElseIfX(CVar(FP,LevelT[2],Exactly,8))
@@ -69,7 +69,7 @@ function LevelUp()
 				CDoActions(FP,{
 					KillUnitAt(All,"Men","Center",Force1),
 					CreateUnit(1,74,64,FP),
-					TSetMemory(_Add(Nextptrs,2),SetTo,8000*256),
+					TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(2000*256)),_Mov(1500*256))),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
 				})
 				TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{RotatePlayer({

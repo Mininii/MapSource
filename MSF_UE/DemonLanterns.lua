@@ -4,6 +4,7 @@ function Install_DLBoss()
 	CMov(FP,VO(41),LevelT2) -- Diff
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
+	CMov(FP,SpeedVar,4)
 local DL_Patch = {}
 table.insert(DL_Patch,SetMemory(0x6617C8 + (55*8),SetTo,(22)+(22*65536)))
 table.insert(DL_Patch,SetMemory(0x6617CC + (55*8),SetTo,(21)+(21*65536)))
@@ -2449,7 +2450,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
 	
 	CallTrigger(FP,Call_VoidReset)
-	DoActionsX(FP,{
+	DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P11),KillUnit("Any unit",P12),
 		SetCDeaths(FP,SetTo,1,DLClear);
 		DL_Recover;
 	})

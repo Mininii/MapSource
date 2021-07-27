@@ -112,7 +112,6 @@ function OPTrig()
         
         
         
-    local SpeedVar = CreateVar2(4,FP)
     CMov(FP,0x6509B0,CurrentOP)
     KetInput(F12,Deaths(CurrentPlayer,Exactly,1,CPConsole),{
     	PlayWAV("sound\\Misc\\Buzz.wav"),

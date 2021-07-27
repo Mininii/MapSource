@@ -228,14 +228,15 @@ Trigger {
 		CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,nil,Nextptrs)
 		CDoActions(FP,{
-			CreateUnit(1,207, "DCenter",FP),
+			CreateUnit(1,207, 1,FP),
 			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 			TSetMemory(_Add(Nextptrs,57),SetTo,0),
 		})
 		CIfEnd()
 	end
 	DoActions(FP,{Simple_CalcLoc("DCenter",0,-16,0,-16)})
-	CXPlot(TShape,FP,nilunit,"DCenter",nil,1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1,"CXfunc2")
+	GetLocCenter("DCenter",CPosX,CPosY)
+	CXPlot2(TShape,FP,nilunit,0,{CPosX,CPosY},1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1,"CXfunc2")
 	DoActions(FP,{Simple_CalcLoc("DCenter",0,16,0,16)})
 
 	CMov(FP,V(CXForward[6]),1)

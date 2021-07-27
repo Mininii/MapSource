@@ -118,6 +118,10 @@ function Var_init()
 	DcurHP = CreateVar(FP)
 	GCT = CreateCcode()
 	isSingle = CreateCcode()
+	CA2ArrX = CreateVArr(1700,FP)
+	CA2ArrY = CreateVArr(1700,FP)
+	CA2ArrZ = CreateVArr(10,FP)
+    SpeedVar = CreateVar2(4,FP)
 end
 
 function HPoints()
