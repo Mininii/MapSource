@@ -189,24 +189,21 @@ Install_GetCLoc(P2,253,180)
 Dx,Dy,Du,DtP,Dv = CreateVariables(5)
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
 CVariable(AllPlayers,0x1005) CunitEPD = 0x1005
-	
-
-CVariable(AllPlayers,0x1000) TSize = 0x1000
-CVariable(AllPlayers,0x1001) XAngle = 0x1001
-CVariable(AllPlayers,0x1002) YAngle = 0x1002
-CVariable(AllPlayers,0x1003) ZAngle = 0x1003
-CVariable(AllPlayers,0x1004) TCount = 0x1004
-
-CVariable(AllPlayers,0x2000) THeight = 0x2000
-CVariable(AllPlayers,0x2001) Arrptr = 0x2001
-CVariable(AllPlayers,0x2002) CArrptr = 0x2002
-CVariable(AllPlayers,0x2010) Arrptr1 = 0x2010
-CVariable(AllPlayers,0x2011) Arrptr2 = 0x2011
-CVariable(AllPlayers,0x2012) Var1 = 0x2012
-CVariable(AllPlayers,0x2013) Var2 = 0x2013
+TSize = CreateVar(FP)
+XAngle = CreateVar(FP)
+YAngle = CreateVar(FP)
+ZAngle = CreateVar(FP)
+TCount = CreateVar(FP)
+THeight = CreateVar(FP)
+Arrptr = CreateVar(FP)
+CArrptr = CreateVar(FP)
+Arrptr1 = CreateVar(FP)
+Arrptr2 = CreateVar(FP)
+Var1 = CreateVar(FP)
+Var2 = CreateVar(FP)
+TSize2 = CreateVar(FP)
 CJumpEnd(AllPlayers,0x600)
 NoAirCollisionX(P1)--
-TSize2 = CreateVar(FP)
 DoActions(P1,RemoveUnit(204,P2))
 
 	TShape = CXMakeShape(96,{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}) -- 중심점을 포함한 2x2x2 정육면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
@@ -353,7 +350,9 @@ DoActions(P1,RemoveUnit(204,P2))
 					}
 				}
 	end
+	local CXForward = CXPlotForward()
 	CXPlot(TShape,P2,204,1,{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",P1,Always(),nil,nil)
+	CMov(FP,V(CXForward[6]),1)
 	
 				
 CMov(P1,V(CunitEPD),161741)
