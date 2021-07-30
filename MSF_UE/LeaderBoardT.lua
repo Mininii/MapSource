@@ -1,14 +1,17 @@
 function LeaderBoardTFunc()
 	local LeaderBoardT = CreateCCode()
+	local DifTextArr = {"\x0EＥａｓｙ","\x0FＮｏｒｍａｌ","\x08Ｈａｒｄ","\x10Ｉｎｓａｎｅ"}
+	for i = 1, 4 do
+		CIf(FP,{Switch("Switch 240",Set),CVar(FP,Diff,Exactly,i-1)})
+		
 	Trigger { -- 킬 포인트 리더보드, 집근처 유닛 오더시키기, 쉴드 회복, 저글링 히드라 어택땅
 		players = {FP},
 		conditions = {
 			Label(0);
-			
 			CDeaths(FP,AtMost,0,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Kills, "\x07[ \x1DP\x04oints\x07 ]");
+			LeaderBoardScore(Kills, "\x07[ \x1DP\x04oints\x07 ] \x04- "..DifTextArr[i]);
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
@@ -23,7 +26,7 @@ function LeaderBoardTFunc()
 			CDeaths(FP,Exactly,400,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Custom, "\x07[ \x08D\x04eaths\x07 ]");
+			LeaderBoardScore(Custom, "\x07[ \x08D\x04eaths\x07 ] \x04- "..DifTextArr[i]);
 			LeaderBoardComputerPlayers(Disable);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 			PreserveTrigger();
@@ -49,12 +52,14 @@ function LeaderBoardTFunc()
 			CDeaths(FP,Exactly,200,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardKills("Any unit","\x07[ \x11K\x04ills\x07 ]");
+			LeaderBoardKills("Any unit","\x07[ \x11K\x04ills\x07 ] \x04- "..DifTextArr[i]);
 			LeaderBoardComputerPlayers(Disable);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 			PreserveTrigger();
 	},
 	}
+	CIfEnd()
+end
 
 CIf(FP,{CDeaths(FP,Exactly,200,LeaderBoardT),Bring(FP,AtLeast,1,147,64)})-- 리더보드 타이머가 주기적으로 정확히 200일 경우 내린 명령이 없어 멈춰있는 유닛에 명령을 내리는 코드. 오버마인드 존재해야함
 CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
@@ -124,5 +129,5 @@ CAdd(FP,0x6509B0,84)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
 CIfEnd()
-	DoActionsX(FP,SetCDeaths(FP,Subtract,1,LeaderBoardT))
+TriggerX(FP,{Switch("Switch 240",Set)},{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Subtract,1,LeaderBoardT)},{Preserved})
 end

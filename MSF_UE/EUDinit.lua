@@ -153,6 +153,7 @@ function onInit_EUD()
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
 	WeaponTypePatch(5,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(12,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(21,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(100,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(85,2) -- 무기 타입 퍼딜
@@ -289,6 +290,14 @@ UnitSizePatch(60,1)
 
 		DefTypePatch(MarID[i+1],i) -- 마린의 방어타입을 P1부터 P7까지 차례대로 배분
 		SetUnitClass(MarID[i+1],199) -- 마린 계급설정. 체력보이게 하기 위함
+		SetUnitClass(10,199) -- 마린 계급설정. 체력보이게 하기 위함
+		
+		SetUnitClass(15,199) -- 보스몹 체력보이게하기
+		SetUnitClass(74,199) -- 보스몹 체력보이게하기
+		SetUnitClass(68,199) -- 보스몹 체력보이게하기
+		SetUnitClass(87,199) -- 보스몹 체력보이게하기
+		SetUnitClass(186,199) -- 보스몹 체력보이게하기
+
 		SetShield(MarID[i+1]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i+1],5) -- 마린 크기 5*5 설정
 		UnitEnable2(MarID[i+1])
@@ -334,21 +343,28 @@ UnitSizePatch(60,1)
 	SetWepUpType(i,3)
 	end
 
-	UnitSizePatch(39,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(45,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(44,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(48,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(49,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(56,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(55,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(53,10) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(57,10) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(37,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(38,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(39,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(45,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(44,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(43,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(48,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(49,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(56,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(55,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(53,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(57,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(51,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(54,1) -- 저그 유닛 크기 10*10 설정
+	UnitSizePatch(104,1) -- 저그 유닛 크기 10*10 설정
+
 	UnitSizePatch(11,1)
 	UnitSizePatch(63,5)
 
 	for j, k in pairs(HeroArr) do
 		if k ~= 86 then
-		UnitSizePatch(k,10)
+		UnitSizePatch(k,5)
 		end
 	end
 
@@ -384,7 +400,7 @@ UnitSizePatch(60,1)
 			SetMemory(0x515BC0,SetTo,256);---------크기 4 진동형 P5 익시드 마린
 			SetMemory(0x515BC4,SetTo,256);---------크기 5 진동형 P6 익시드 마린
 			SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드 마린
-			SetMemory(0x515BCC,SetTo,256*2);---------크기 7 진동형 일반마린
+			SetMemory(0x515BCC,SetTo,256*10);---------크기 7 진동형 일반마린
 			SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
 			SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV, 진동형 퍼뎀유닛한텐 죽음 ㅅㄱ
 			SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러f
@@ -467,7 +483,7 @@ UnitSizePatch(60,1)
 
 	YY = 2021
 	MM = 7
-	DD = 26
+	DD = 31
 	HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
@@ -614,6 +630,7 @@ UnitSizePatch(60,1)
 	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
 	f_GetStrXptr(FP,G_CA_StrPtr2,"\x0D\x0D\x0DG_CA_Func".._0D)
+	f_GetStrXptr(FP,G_CA_StrPtr3,"\x0D\x0D\x0DG_CA_SendError".._0D)
 
 
 	
@@ -638,6 +655,7 @@ UnitSizePatch(60,1)
 	f_MemCpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
 	f_MemCpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
 	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
+	f_MemCpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
 
 	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
 

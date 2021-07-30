@@ -11,10 +11,10 @@ table.insert(DL_Patch,SetMemory(0x6617CC + (55*8),SetTo,(21)+(21*65536)))
 table.insert(DL_Patch,SetMemory(0x6617C8 + (56*8),SetTo,(22)+(22*65536)))
 table.insert(DL_Patch,SetMemory(0x6617CC + (56*8),SetTo,(21)+(21*65536)))
 local DL_Recover = {}
-table.insert(DL_Recover,SetMemory(0x6617C8 + (55*8),SetTo,(10)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617CC + (55*8),SetTo,(10)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617C8 + (56*8),SetTo,(10)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(10)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617C8 + (55*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617CC + (55*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617C8 + (56*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 	Trigger { -- 보스 무브 로케
 		players = {P8},
 		conditions = {

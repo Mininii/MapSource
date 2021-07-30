@@ -10,7 +10,7 @@ function PlayerInterface()
 	local DefUpCompCount = Create_VTable(7)
 	local AtkUpCompCount = Create_VTable(7)
 	local CurrentHP = Create_VTable(7)
-	local MarMaxHP = Create_VTable(7,2000*256)
+	local MarMaxHP = Create_VTable(7,10000*256)
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
@@ -48,13 +48,24 @@ function PlayerInterface()
 			},
 			actions = {
 				RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07『 \x04당신은 강되당했습니다.\x07 』",4);
-				Defeat();
 				},
 			}
+			Trigger { -- 강퇴 드랍
+				players = {i},
+				conditions = {
+					Label(0);
+					CDeaths(FP,AtLeast,5,BanToken[i+1]);Memory(0x57F1B0, Exactly, i)
+					
+				},
+				actions = {
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					SetMemory(0xCDDDCDDD,SetTo,1);
+					
+					},
+				}
 		end
 		
 		Trigger { -- 미네랄 마이너스 방지
@@ -701,10 +712,10 @@ function PlayerInterface()
 		DoActions(FP,SetDeaths(Force1,SetTo,0,71))
 	CIfEnd()
 	local HealT = CreateCCode()
-	DoActionsX(FP,{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Add,1,HealT)})
+	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
 	CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 	for i = 0, 6 do
-		Trigger2(FP,{PlayerCheck(i,1)},{ModifyUnitHitPoints(All,"Men",i,i+2,100),ModifyUnitHitPoints(All,"Buildings",i,i+2,100),ModifyUnitShields(All,"Men",i,i+2,100),ModifyUnitShields(All,"Buildings",i,i+2,100)},{Preserved})
+		Trigger2(FP,{PlayerCheck(i,1)},{ModifyUnitHitPoints(All,"Men",Force1,i+2,100),ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),ModifyUnitShields(All,"Men",Force1,i+2,100),ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{Preserved})
 	end
 	CIfEnd()
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})

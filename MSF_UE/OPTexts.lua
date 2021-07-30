@@ -1,9 +1,13 @@
 function OPText()
 	if TestStart == 1 then
-		DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4),IntroT)},1)
+		--DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4),IntroT)},1)
 	end
 	for i = 0, 19 do
-		TriggerX(FP,{CDeaths(FP,AtLeast,i*5,IntroT)},{
+		local OPOprand = 0
+		if i == 0 then
+			OPOprand = 1
+		end
+		TriggerX(FP,{CDeaths(FP,AtLeast,(i*5) + OPOprand,IntroT)},{
 			RotatePlayer({
 			DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 			DisplayTextX("\n\n"..string.rep("   ", i).."\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x1F==\n\n\n\n\n",4);

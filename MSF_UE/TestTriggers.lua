@@ -1,8 +1,8 @@
 function Test_LV1()
     if Limit == 1 and TestStart == 0 then
-        Trigger2(FP,{ElapsedTime(AtLeast,65)},{ModifyUnitHitPoints(All,"Men",P8,64,0),RotatePlayer({DisplayTextX("\x13\x07테스트 모드 \x04특전! 모든 유닛 영작이 완료되었습니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
-        Trigger2(FP,{ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0)},{Preserved})
-        CIfOnce(FP,ElapsedTime(AtLeast,60),{
+        Trigger2(FP,{ElapsedTime(AtLeast,65)},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+        Trigger2(FP,{Never(),ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0),ModifyUnitHitPoints(All,"Men",P8,64,0)},{Preserved})
+        CIfOnce(FP,{Never(),ElapsedTime(AtLeast,60)},{
             KillUnit("Men",P8);
             KillUnit(143,P8);
             KillUnit(144,P8);
@@ -10,7 +10,7 @@ function Test_LV1()
             KillUnit(193,P8);
         })
             CMov(FP,0x6509B0,19025+19)
-            CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+            CWhile(FP,{Memory(0x6509B0,AtMost,19025+19 + (84*1699))})
                 CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,7,0,0xFF),
                 TTOR({
                     DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),

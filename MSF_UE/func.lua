@@ -172,13 +172,13 @@ function Install_RandPlaceHero()
 	local RandW2 = CreateVar(FP)
 	local HeroID = CreateVar(FP)
 	local HPosX,HPosY = CreateVariables(2)
-	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,40),1)
+	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,100),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
 		Check_Spawn = def_sIndex()
 		NJumpXEnd(FP,Check_Spawn)
 		f_Mod(FP,HPosX,_Rand(),_Mov(3072))
 		f_Mod(FP,HPosY,_Rand(),_Mov(6144))
-		NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,5408)}) -- ÁÂÇ¥¼³Á¤ ½ÇÆÐ, ´Ù½Ã
+		NJumpX(FP,Check_Spawn,{CVar(FP,HPosX[2],AtLeast,320),CVar(FP,HPosX[2],AtMost,2752),CVar(FP,HPosY[2],AtLeast,4480)}) -- ÁÂÇ¥¼³Á¤ ½ÇÆÐ, ´Ù½Ã
 		Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
 		Check_Cannot = def_sIndex()
 		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- Äµ³´. °­Á¦Äµ½½

@@ -152,6 +152,7 @@ function LevelUp()
 		f_Mod(FP,LevelT,Level,_Mov(10))
 		f_Div(FP,LevelT2,Level,_Mov(10))
 		CAdd(FP,LevelT2,1)
+		CAdd(FP,LevelT2,Diff)
 		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
 		if TestStart == 1 then
 			--CMov(FP,LevelT2,4)
@@ -279,8 +280,8 @@ function LevelUp()
 		CAdd(FP,0x6509B0,2)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
-	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,RandW[2],Add,10)},{Preserved})
-	TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{SetCVar(FP,RandW[2],Add,80)},{Preserved})
+	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,RandW[2],Add,30)},{Preserved})
+	TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{SetCVar(FP,RandW[2],Add,100)},{Preserved})
 	
 
 	DoActions2X(FP,{SetDeaths(FP,Subtract,1,147),

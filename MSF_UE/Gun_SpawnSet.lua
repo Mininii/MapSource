@@ -76,6 +76,19 @@ function InstallGunData()
 
 		CIfEnd()
 		CIf(FP,Gun_Line(4,AtLeast,15000))
+		local OvCUTable = {{{56,48},{57,51}},{{47,51},{57,104}},{{88,77},{80,78}},{{21,75},{28,76}},{{88,19},{29,79}}}
+		local ShapeType = Ovrm
+--		for i = 1, 10 do
+--			local iNum = i
+--			if iNum >= 6 then 
+--				iNum = iNum - 5
+--				ShapeType = OvrmF
+--			end
+--			for j = 0, 1 do
+--				G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,i),Gun_Line(5,Exactly,j)},G_L1,OvCUTable[iNum][j+1],{"ACAS","ACAS"},ShapeType,{255,255})
+--			end
+--		end--
+
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0)},G_L1,{56,48},{"ACAS","ACAS"},{Ovrm,Ovrm},{255,255})
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,1)},G_L1,{57,51},{"ACAS","ACAS"},{Ovrm,Ovrm},{255,255})
 
@@ -90,7 +103,7 @@ function InstallGunData()
 
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,5),Gun_Line(5,Exactly,0)},G_L1,{88,19},{"ACAS","ACAS"},{Ovrm,Ovrm},{255,255})
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,5),Gun_Line(5,Exactly,1)},G_L1,{29,79},{"ACAS","ACAS"},{Ovrm,Ovrm},{255,255})
-			
+
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,0)},G_L1,{56,48},{"ACAS","ACAS"},{OvrmF,OvrmF},{255,255})
 			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,1)},G_L1,{57,51},{"ACAS","ACAS"},{OvrmF,OvrmF},{255,255})
 
@@ -285,12 +298,12 @@ function InstallGunData()
 					G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,9),Gun_Line(1,AtLeast,48*32)},G_L1,{29},{"ACAS"},{GC2},{1},{1})
 				CIfEnd()
 				CIf(FP,{Gun_Line(4,AtLeast,20000),G_CA_CondStack},{Gun_DoSuspend()})
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,7)},{GiveUnits(All,88,P9,64,FP),SetInvincibility(Disable,88,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,7)},{GiveUnits(All,21,P9,64,FP),SetInvincibility(Disable,21,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,8)},{GiveUnits(All,27,P9,64,FP),SetInvincibility(Disable,27,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,8)},{GiveUnits(All,80,P9,64,FP),SetInvincibility(Disable,80,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,9)},{GiveUnits(All,98,P9,64,FP),SetInvincibility(Disable,98,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
-					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,9)},{GiveUnits(All,29,P9,64,FP),SetInvincibility(Disable,29,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,7),Gun_Line(1,AtMost,48*32)},{GiveUnits(All,88,P9,64,FP),SetInvincibility(Disable,88,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,7),Gun_Line(1,AtLeast,48*32)},{GiveUnits(All,21,P9,64,FP),SetInvincibility(Disable,21,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,8),Gun_Line(1,AtMost,48*32)},{GiveUnits(All,27,P9,64,FP),SetInvincibility(Disable,27,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,8),Gun_Line(1,AtLeast,48*32)},{GiveUnits(All,80,P9,64,FP),SetInvincibility(Disable,80,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,9),Gun_Line(1,AtMost,48*32)},{GiveUnits(All,98,P9,64,FP),SetInvincibility(Disable,98,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
+					CTrigger(FP,{CVar(FP,LevelT[2],Exactly,9),Gun_Line(1,AtLeast,48*32)},{GiveUnits(All,29,P9,64,FP),SetInvincibility(Disable,29,FP,64),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},1)
 				CIfEnd()
 				DoActions(FP,{CreateUnit(1,ObEff,64,FP),KillUnit(ObEff,FP)})
 			CIfEnd()
@@ -635,7 +648,8 @@ function InstallGunData()
 					CMov(FP,ReserveBGM,2)
 					CDoActions(FP,{Gun_SetLine(4,Add,15000)})
 					
-					G_CA_SetSpawn(nil,G_L1,{77,55,56,104},{S_4,P_5,P_3,S_8},{3,6,6,2})
+					G_CA_SetSpawnX(nil,{77,S_4,3},{55,P_5,6},{56,P_3,6},{104,S_8,2})
+					
 					GunBreak("\x07테스트용 썽큰~~~~~~~~~~~~~~~~",322322)
 				CIfEnd()
 				CIf(FP,{Gun_Line(4,AtLeast,15000),G_CA_CondStack})

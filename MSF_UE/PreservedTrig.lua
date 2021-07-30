@@ -40,12 +40,15 @@ function MapPreserves()
 		ModifyUnitEnergy(All,125,P12,64,0),
 		KillUnit(125,P12),
 	})
+	
+CIf(FP,Switch("Switch 240",Set))
+	CAdd(FP,WaveT,Dt)
     CAdd(FP,Time,Dt)
     CMov(FP,TimePtr,Time)
     CMov(FP,LevelPtr,Level)
 	CSub(FP,_Ccode(FP,GCT),Dt)
+	CIfEnd()
     DoActions(FP,{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07±âºÎ\x04 : F9\x07 ]")})
-	DoActions2(FP,PatchArrPrsv)
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({
 			PlayWAVX("sound\\glue\\countdown.wav");
@@ -55,4 +58,5 @@ function MapPreserves()
 			},HumanPlayers,FP);
 			SetCDeaths(FP,SetTo,0,countdownSound);
 	},{Preserved})
+	DoActions2(FP,PatchArrPrsv)
 end

@@ -26,6 +26,7 @@ function OPTrig()
             f_Mod(FP,LevelT,Level,_Mov(10))
             f_Div(FP,LevelT2,Level,_Mov(10))
             CAdd(FP,LevelT2,1)
+            CAdd(FP,LevelT2,Diff)
             TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
             CMov(FP,CurLev,Level)
             CIfEnd()
@@ -113,18 +114,42 @@ function OPTrig()
         
         
     CMov(FP,0x6509B0,CurrentOP)
-    KetInput(F12,Deaths(CurrentPlayer,Exactly,1,CPConsole),{
+    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT)})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{Preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetCVar(FP,Diff[2],SetTo,0),{SetSwitch("Switch 240",Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)}},{Preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+        DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 보스 난이도를 선택해주세요. 숫자가 클수록 어려워집니다.(선택 ←, → 키, 확인 Y키) \x1E◀\n\x13\x03１ \x04２ ３ ４",4)},HumanPlayers,FP)},1)
+        CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
+        CMov(FP,CurrentDiff,Diff)
+        TriggerX(FP,{CVar(FP,Diff,Exactly,0)},{
+            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
+            DisplayTextX("\x13\x03１ \x04２ ３ ４", 0)},HumanPlayers,FP);},{Preserved})
+        TriggerX(FP,{CVar(FP,Diff,Exactly,1)},{
+            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
+            DisplayTextX("\x13\x04１ \x03２ \x04３ ４", 0)},HumanPlayers,FP);},{Preserved})
+        TriggerX(FP,{CVar(FP,Diff,Exactly,2)},{
+            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
+            DisplayTextX("\x13\x04１ ２ \x03３ \x04４", 0)},HumanPlayers,FP);},{Preserved})
+        TriggerX(FP,{CVar(FP,Diff,Exactly,3)},{
+            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
+            DisplayTextX("\x13\x04１ ２ ３ \x03４", 0)},HumanPlayers,FP);},{Preserved})
+        CIfEnd()
+        CMov(FP,0x6509B0,CurrentOP)
+    CIfEnd()
+    KetInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	DisplayText("\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』",4)},1)
-    KetInput(F9,Deaths(CurrentPlayer,Exactly,1,OPConsole),{
+    KetInput(F9,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	DisplayText("\x07『 \x1C배속조정 \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』",4)},1)
-    KetInput(F12,Deaths(CurrentPlayer,Exactly,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
-    KetInput(F12,Deaths(CurrentPlayer,Exactly,1,OPConsole),{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
+    KetInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,0,OPConsole)},SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
+    KetInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
 
-    CIf(FP,Deaths(CurrentPlayer,AtLeast,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT))
+    CIf(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,AtLeast,1,OPConsole)},SetCDeaths(FP,Add,1,OPFuncT))
         if Testmode == 0 then
         TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
         end
@@ -133,7 +158,7 @@ function OPTrig()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))
-            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x08강퇴모드 ON. \x04숫자키를 5회 눌러 강퇴하세요. ESC : 닫기\x07 ]")},1)
+            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x08강퇴모드 ON. \x04숫자키를 5회 눌러 강퇴하세요. ESC : 닫기\x07 ]")},1)
             -- 205 ~ 211
             for i = 1, 6 do
                 CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,205+i),TTMemory(0x6509B0,NotSame,i),PlayerCheck(i,1)},{
@@ -142,7 +167,7 @@ function OPTrig()
             end
             CMov(FP,0x6509B0,CurrentOP)
             CelseX()
-            CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x04방향키(←→) : \x1F배속 조정, \x04ESC : 닫기, B : \x08강퇴모드 ON\x07 ]")},1)
+            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x04방향키(←→) : \x1F배속 조정, \x04ESC : 닫기, B : \x08강퇴모드 ON\x07 ]")},1)
         CIfXEnd()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{Preserved})
     CIfEnd()
