@@ -16,6 +16,7 @@ dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
 VerText = "\x04Ver. 3.3R"
 Limit = 0
+RedMode = 0
 FP = P6
 TestStartToBYD = 0
 
@@ -159,8 +160,10 @@ CreateVariableSet({ -- 변수 정의
 "CurrentOP",})
 if Limit == 1 then
 	RedNumber = CreateVar2(400)
-else
+elseif RedMode == 1 then
 	RedNumber = CreateVar2(400)
+else
+	RedNumber = CreateVar()
 end
 
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
@@ -14185,10 +14188,15 @@ end
 
 LimitX_Jump = def_sIndex()
 NJump(FP,LimitX_Jump,{CDeaths(P6,AtLeast,1,LimitX),CDeaths(FP,AtMost,0,TestMode)})
+if RedMode == 1 then
 NIf(P6,{CDeaths(FP,AtMost,0,TestMode)}) -- 치트모드 CDeaths(P6,AtLeast,1,EVMode)
+else
+	NIf(P6,{CDeaths(FP,AtMost,0,TestMode),CDeaths(P6,AtLeast,1,EVMode)}) -- 치트모드 
+end
 NJumpEnd(FP,LimitX_Jump)
 
-Trigger { -- 컴퓨터 플레이어 색상 설정
+if RedMode == 1 or Limit == 1 then
+Trigger { -- 자환설정
 	players = {P6},
 	conditions = {
 		Label(0);
@@ -14199,6 +14207,7 @@ Trigger { -- 컴퓨터 플레이어 색상 설정
 		PreserveTrigger();
 },
 }
+end
 
 
 if Limit == 0 then
@@ -14213,11 +14222,6 @@ else
 	EText4 = "\x13\x07테스트모드 \x04특전! 모든 유닛을 끌어당깁니다.\n\x13\x04모든 유닛 끌어당기기를 종료합니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."
 end
 
-Trigger { -- 치트모드 자환
-	players = {P6},
-	actions = {
-	}
-}
 ETime = 180
 
 Trigger { -- 치트모드 모든영웅끌당

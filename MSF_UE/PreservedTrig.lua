@@ -1,6 +1,6 @@
 function MapPreserves()
 	Print13_Preserve()
-
+	DoActionsX(FP,{SetCVar(FP,RecallPosX[2],SetTo,32)})
 	TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT4)},{RotatePlayer({		
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");
@@ -16,13 +16,6 @@ function MapPreserves()
 		SetAllianceStatus(Force1,Ally);
 		PreserveTrigger();
 	    },
-    }
-    Trigger { -- 동맹상태 고정, 중립마린 제거
-    	players = {FP},
-    	actions = {
-    		SetAllianceStatus(Force1,Enemy);
-    		PreserveTrigger();
-    	},
     }
 	RemoveTable = {}
 	for i = 0, 6 do

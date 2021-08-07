@@ -1,5 +1,7 @@
 function Install_Destr0yer()
 	
+	local IdenSiege,SMine,YamatoShuttle,HackBattle = CreateCcodes(4)
+	local ResetCodeT = {IdenSiege,SMine,YamatoShuttle,HackBattle}
 local Lyrics = {
 	{"\x13\x06『 \x04Ladies and Gentlemen \x06『",2,222},
 	{"\x13\x06『 \x07Let's start \x06『",5,0},
@@ -55,7 +57,7 @@ local Lyrics = {
 	--if TestStart == 1 then
 		--CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
 	--else	
-		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})})},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})}),CDeaths(FP,Exactly,0,Win)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
 	--end
 	
 			
@@ -115,8 +117,7 @@ local Lyrics = {
 	CIf(FP,{DeathsX(FP,AtMost,(66*4),BGMLength,0xFFFFFF)})
 		
 	local CXForward = CAPlotForward()
-
-Trigger {
+	Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -232,12 +233,20 @@ Trigger {
 			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 			TSetMemory(_Add(Nextptrs,57),SetTo,0),
 		})
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,HackBattle)},{CreateUnit(1,121, 1,FP),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenSiege)},{CreateUnit(1,30, 1,FP),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,SMine)},{CreateUnit(1,13, 1,FP),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,YamatoShuttle)},{CreateUnit(1,69, 1,FP),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},{Preserved})
 		CIfEnd()
 	end
 	DoActions(FP,{Simple_CalcLoc("DCenter",0,-16,0,-16)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 	CXPlot2(TShape,FP,nilunit,0,{CPosX,CPosY},1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1,"CXfunc2")
-	DoActions(FP,{Simple_CalcLoc("DCenter",0,16,0,16)})
+	local ResetActT = {}
+	for j, k in pairs(ResetCodeT) do
+		table.insert(ResetActT,SetCDeaths(FP,SetTo,0,k))
+	end
+	DoActionsX(FP,{Simple_CalcLoc("DCenter",0,16,0,16),ResetActT})
 
 	CMov(FP,V(CXForward[6]),1)
 
@@ -344,6 +353,8 @@ Trigger {
 		CreateBullet(208,20,Angle6,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Add,800);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(31*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,SMine)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(32*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(32*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CiSub(FP,Angle6,3)
@@ -351,6 +362,8 @@ Trigger {
 		CreateBullet(208,20,Angle7,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Subtract,400);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(32*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,IdenSiege)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(33*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(33*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CAdd(FP,Angle6,3)
@@ -359,6 +372,8 @@ Trigger {
 		CreateBullet(208,20,Angle7,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Add,1200);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(32*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,YamatoShuttle)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(34*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(34*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CiSub(FP,Angle6,3)
@@ -394,6 +409,8 @@ Trigger {
 		CreateBullet(208,20,Angle6,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Add,600);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(35*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,IdenSiege)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(36*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(36*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CiSub(FP,Angle6,3)
@@ -401,6 +418,8 @@ Trigger {
 		CreateBullet(208,20,Angle7,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Subtract,400);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(36*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,YamatoShuttle)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(37*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(37*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CAdd(FP,Angle6,3)
@@ -409,6 +428,8 @@ Trigger {
 		CreateBullet(208,20,Angle7,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Add,900);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(37*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,SMine)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(38*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(38*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)})
 	GetLocCenter("DCenter",CPosX,CPosY)
 		CiSub(FP,Angle6,3)
@@ -421,6 +442,8 @@ Trigger {
 		CreateBullet(208,20,Angle9,CPosX,CPosY)
 		DoActionsX(FP,{SetCVar("X",TSize,Subtract,1500);})
 	CIfEnd()
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{DeathsX(FP,Exactly,(38*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,HackBattle)},{Preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(38*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCVar(FP,SkillW[2],SetTo,0),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetCVar("X",TSize,SetTo,0)},{Preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(39*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(45*4)+1+3,BGMLength,0xFFFFFF)})
@@ -518,7 +541,7 @@ Trigger {
 		end
 		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
 		DoActions(FP,RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossDMG".._0D,4)},HumanPlayers,FP))
-		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),killUnit(94,FP),ModifyUnitEnergy(All,193,FP,64,0),RemoveUnit(193,FP)})
+		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),killUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
 	CIfEnd()
 
 	for i = 0, #BGMArr-1 do
@@ -588,6 +611,7 @@ Trigger {
 		SetCVar(FP,CPosX2[2],SetTo,0);
 		SetCVar(FP,CPosY2[2],SetTo,0);
 		SetCVar(FP,RandRet2[2],SetTo,0);
+		ResetActT
 	})
 
 	f_ArrReset()

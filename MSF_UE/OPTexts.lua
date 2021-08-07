@@ -1,6 +1,7 @@
 function OPText()
+	CIf(AllPlayers,{CDeaths(FP,AtMost,(30*48)+3,IntroT)})
 	if TestStart == 1 then
-		--DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4),IntroT)},1)
+		--DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4)-2,IntroT)},1)
 	end
 	for i = 0, 19 do
 		local OPOprand = 0
@@ -77,14 +78,22 @@ function OPText()
 	table.insert(CV1,CenterView("Anywhere"))
 	table.insert(CV2,SetMemory(0x6509B0,SetTo,i))
 	table.insert(CV2,CenterView(2+i))
-	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CreateUnitWithProperties(4,10,2+i,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CreateUnitWithProperties(4,10,2+i,i,{energy = 100}),SetResources(i,Add,30000,Ore)})
+	for j = 1, 3 do
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,j)},{CreateUnitWithProperties(4*j,10,2+i,i,{energy = 100})})
+	end
+	end
+	for i = 1, 3 do
+	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,ore),SetMemoryW(0x656EB0, Add, 500*i)})
 	end
 	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV2})
 	local InsertKey = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04이 맵은 클리어의 개념이 없으며 \n\x13\x08게임 오버 \x04시 \x1F달성한 단계\x04와 \x07스코어(가스)\x04가 게임의 성과를 나타냅니다.\n\x13\x04당신의 한계를 시험해 보세요!\n\x13\x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04단, 마린 수는 \x17인구수로 제한\x04됩니다.(인원수에 따라 달라짐)\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	Trigger2(Force1,{Memory(0x596A44, Exactly, 0x00000100)},{DisplayText(InsertKey,4)},{Preserved})
-	Trigger2(Force1,{Memory(0x596A44, Exactly, 65536)},{DisplayText(string.rep("\n", 20),4)},{Preserved})
-	local Formation = "\t\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x13\x04!!!!!!! 스캔에 원클릭 업글 있습니다 w, a 연타하지마셈 !!!!!!!\n\x13\x04!!!!!!! 조합소는 중앙에 있는 광산입니다 !!!!!!!\n\x13\x04!!!!!!! 스캔에 원클릭 업글 있습니다 w, a 연타하지마셈 !!!!!!!\n\x13\x04!!!!!!! 조합소는 중앙에 있는 광산입니다 !!!!!!!\n\x13\x04!!!!!!! 스캔에 원클릭 업글 있습니다 w, a 연타하지마셈 !!!!!!!\n\x13\x04!!!!!!! 조합소는 중앙에 있는 광산입니다 !!!!!!!\n\x13\x04!!!!!!! 스캔에 원클릭 업글 있습니다 w, a 연타하지마셈 !!!!!!!\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+
+	local Formation = "\n\n\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(つ>ㅅ<)つ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04이 문구가 뜰 경우 \x07수정되지 않은 정식버전\x04입니다. \n\x13\x04현재 유행중인 맵 수정 이슈를 주의해주세요.\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT)},{RotatePlayer({DisplayTextX(Formation,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
 	TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT),CDeaths(FP,AtMost,30*52,IntroT)},{CopyCpAction({MinimapPing(10)},HumanPlayers,FP)},{Preserved})
+	CIfEnd()
+	Trigger2(Force1,{Memory(0x596A44, Exactly, 0x00000100)},{DisplayText(InsertKey,4)},{Preserved})
+	Trigger2(Force1,{Memory(0x596A44, Exactly, 65536)},{DisplayText(string.rep("\n", 20),4)},{Preserved})
 end

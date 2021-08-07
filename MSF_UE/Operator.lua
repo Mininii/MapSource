@@ -117,24 +117,31 @@ function OPTrig()
     CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT)})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{Preserved})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{Preserved})
+    for i = 0, 3 do
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{Preserved})
+    end    
     TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetCVar(FP,Diff[2],SetTo,0),{SetSwitch("Switch 240",Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)}},{Preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
-        DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 보스 난이도를 선택해주세요. 숫자가 클수록 어려워집니다.(선택 ←, → 키, 확인 Y키) \x1E◀\n\x13\x03１ \x04２ ３ ４",4)},HumanPlayers,FP)},1)
+    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+    if TestStart ==1 then
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCDeaths(FP,Add,150+(48*4),IntroT)},{Preserved})
+    else
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+    end
+        DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 난이도를 선택해주세요. 숫자가 클수록 어려워집니다. \x1E◀\n\x13\x04숫자버튼 또는 방향키로 선택 후 Y를 눌러주세요.\n\x13\x03１ \x04２ ３ ４ Press (Y) to Start",4)},HumanPlayers,FP)},1)
         CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
         CMov(FP,CurrentDiff,Diff)
         TriggerX(FP,{CVar(FP,Diff,Exactly,0)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x03１ \x04２ ３ ４", 0)},HumanPlayers,FP);},{Preserved})
+            DisplayTextX("\x13\x03１ \x04２ ３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0)},{Preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,1)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ \x03２ \x04３ ４", 0)},HumanPlayers,FP);},{Preserved})
+            DisplayTextX("\x13\x04１ \x03２ \x04３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,5)},{Preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,2)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ \x03３ \x04４", 0)},HumanPlayers,FP);},{Preserved})
+            DisplayTextX("\x13\x04１ ２ \x03３ \x04４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,10)},{Preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,3)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ ３ \x03４", 0)},HumanPlayers,FP);},{Preserved})
+            DisplayTextX("\x13\x04１ ２ ３ \x03４ \x04Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,15)},{Preserved})
         CIfEnd()
         CMov(FP,0x6509B0,CurrentOP)
     CIfEnd()

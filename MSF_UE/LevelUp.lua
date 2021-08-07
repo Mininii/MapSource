@@ -1,4 +1,11 @@
 function LevelUp()
+	local ShUnitLimitT = {}
+	local ShUnitLimitT2 = {}
+	for i = 0, 6 do
+		table.insert( ShUnitLimitT,SetMemoryB(0x57F27C+(228*i)+19,SetTo,1))
+		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
+	end
+	 -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 	local CSelT = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x04상위 플레이어는 선택해주세요.\n\x13\x04다음 레벨로 진행하시겠습니까?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT1 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT3 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07S T A R T\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -42,6 +49,7 @@ function LevelUp()
 		
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
 
+			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{Preserved})--19
 			DoActions(FP,{
 			SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
@@ -158,6 +166,8 @@ function LevelUp()
 			--CMov(FP,LevelT2,4)
 		end
 		TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
+		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
 		
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
@@ -177,8 +187,9 @@ function LevelUp()
 		end
 
 		for i = 2, 10 do
-			TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*8*i),SetMemory(0x662350+(4*125),SetTo,8000*256*i),SetMemory(0x662350+(4*124),SetTo,8000*256*i)},{Preserved})
+			TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*16*i),SetMemory(0x662350+(4*125),SetTo,16000*256*i),SetMemory(0x662350+(4*124),SetTo,16000*256*i)},{Preserved})
 		end
+		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{Preserved})
 		
 		for i = 37, 57 do
 			SetLevelUpHP(i,1)
@@ -193,6 +204,9 @@ function LevelUp()
 		for j, k in pairs(BdArr) do
 			SetLevelUpHP(k,2)
 		end
+		SetLevelUpHP(11,1)
+		SetLevelUpHP(13,1)
+		SetLevelUpHP(69,1)
 		DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
 		local UpVar = CreateVar(FP)
 		CMov(FP,UpVar,Level)
@@ -200,7 +214,9 @@ function LevelUp()
 		for i = 0, 7 do
 			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
 		end
-		
+		for i = 1, 3 do
+		TriggerX(FP,{CVar(FP,Diff[2],Exactly,i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,5)},{Preserved})
+		end
 		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 		
 		
@@ -240,16 +256,7 @@ function LevelUp()
 
 	CIf(FP,CDeaths(FP,AtLeast,15000,ReplaceDelayT))
 	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{Preserved})
-	local ShUnitLimitT = {}
-	local ShUnitLimitT2 = {}
-	for i = 0, 6 do
-		table.insert( ShUnitLimitT,SetMemoryB(0x57F27C+(228*i)+19,SetTo,1))
-		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
-	end
-	 -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 
-	TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
-	TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 	MoveMarineArr = {}
 	for i = 0, 6 do
@@ -271,6 +278,7 @@ function LevelUp()
 			local PointJump = def_sIndex()
 			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- 포인트유닛 리젠 삭제
 			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- 포인트유닛 리젠 삭제
+			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,221,0,0xFF)}) -- 포인트유닛 리젠 삭제
 			CSub(FP,0x6509B0,1)
 			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드.
 			CAdd(FP,0x6509B0,1)

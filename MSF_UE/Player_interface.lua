@@ -1,6 +1,7 @@
 function PlayerInterface()
 	local MarCreate = Create_CCTable(7)
 	local MarCreate2 = Create_CCTable(7)
+	local UpSELemit = Create_CCTable(7)
 	local AtkFactorV = Create_VTable(7,AtkFactor)
 	local DefFactorV = Create_VTable(7,DefFactor)
 	local AtkFactorV2 = Create_VTable(7)
@@ -374,7 +375,7 @@ function PlayerInterface()
 			},{Preserved})
 			
 
-		UnitLimit(i,7,5,"SCV는",500)
+		UnitLimit(i,7,50,"SCV는",500)
 		UnitLimit(i,125,8,"벙커는",8000)
 		UnitLimit(i,124,15,"터렛은",4000)
 		
@@ -478,8 +479,11 @@ function PlayerInterface()
 						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
-						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
+						ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
 					})
+					TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
+						ModifyUnitShields(All,"Men",i,"Anywhere",0),
+						ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
 			NIfEnd()
 		
 		
@@ -528,11 +532,11 @@ function PlayerInterface()
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
 			DisplayText("\x13\x04！！！　\x1C공격력 업그레이드\x04가 255를 넘어 한계를 돌파합니다.\x04　！！！\n\x13\x04！！！　\x07업그레이드를 \x040으로 재설정하고 \x17공격력 수치가 전승\x04되었습니다.\x04　！！！",4),
-			PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP),
 			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),Add,MarDamageFactor*255),
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
+		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
 		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 		
@@ -540,12 +544,12 @@ function PlayerInterface()
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
 			DisplayText("\x13\x04！！！　\x08체력 업그레이드\x04가 255를 넘어 한계를 돌파합니다.\x04　！！！\n\x13\x04！！！　\x07업그레이드를 \x040으로 재설정하고 \x17체력 수치가 전승\x04되었습니다.\x04　！！！",4),
-			PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP),
 			--SetCVar(FP,DefFactorV[i+1][2],Add,1),
 			SetCVar(FP,MarMaxHP[i+1][2],Add,2000*256),
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
+		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
 		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)},{SetCVar(FP,DefFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 
@@ -611,6 +615,7 @@ function PlayerInterface()
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
+		DoActionsX(FP,{SetCVar(FP,Subtract,1,UpSELemit[i+1])})
 		
 		
 		
@@ -675,6 +680,8 @@ function PlayerInterface()
 					PreserveTrigger();
 				},
 			}
+			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
+				ModifyUnitShields(All,"Any unit",i,"Anywhere",0);},{Preserved})
 		CElseX()
 			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 		CIfXEnd()

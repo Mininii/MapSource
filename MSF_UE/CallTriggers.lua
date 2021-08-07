@@ -95,7 +95,7 @@ Call_Recall = SetCallForward()
 SetCall(FP)
 	CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Rec_X[2],AtMost,32*96),CVar(FP,Rec_Y[2],AtMost,32*192)})
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		Simple_SetLocX(FP,0,Rec_X,Rec_Y,Rec_X,Rec_Y)
+		Simple_SetLocX(FP,0,RecallPosX,5984,RecallPosX,5984,{SetCVar(FP,RecallPosX[2],Add,4)})
 		DoActions(FP,{
 		CreateUnitWithProperties(1,71,1,FP,{energy = 100});})
 		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -256,7 +256,8 @@ local SL_Ret = CreateVar(FP)
 
 local f_GunNumT = CreateVarray(FP,5)
 local Write_SpawnSet_Jump = def_sIndex()
-Write_SpawnSet = SetCallForward()
+
+Call_SLCalc = SetCallForward()
 SetCall(FP)
 CMov(FP,SL_Ret,0)
 for i = 1, 4 do
@@ -271,6 +272,11 @@ for i = 1, 4 do
 		CMov(FP,SL_Ret,SL_TempV[i],0,0xFF*(256^(i-1)))
 	CIfXEnd()
 end
+SetCallEnd()
+
+Write_SpawnSet = SetCallForward()
+SetCall(FP)
+CallTrigger(FP,Call_SLCalc)
 CJumpEnd(FP,Write_SpawnSet_Jump)
 NIfX(FP,{TMemory(_Add(G_TempH,_Mul(G_CA_LineV,_Mov(0x20/4))),AtMost,0)})
 CDoActions(FP,{
@@ -281,7 +287,7 @@ CDoActions(FP,{
 	Gun_SetLineX(_Add(G_CA_LineV,4),SetTo,G_CA_LMTV),
 	Gun_SetLineX(_Add(G_CA_LineV,5),SetTo,G_CA_RPTV),
 })
-NElseIfX({TMemory(_Add(G_TempH,_Mul(G_CA_LineV,_Mov(0x20/4))),AtMost,34)})
+NElseIfX({TMemory(G_CA_LineV,AtMost,47)})
 CAdd(FP,G_CA_LineV,7)
 CJump(FP,Write_SpawnSet_Jump)
 NElseX()
@@ -298,9 +304,22 @@ SetCallEnd()
 
 
 
-function G_CA_SetSpawn(Condition,G_CA_Line,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType)
-	if type(G_CA_CUTable) ~= "table" and type(G_CA_SNTable) ~= "table" and type(G_CA_SLTable) ~= "table" then
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType)
+	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
+	end
+	if type(G_CA_SNTable) ~= "table" then
+		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
+	elseif G_CA_SNTable == nil then 
+		G_CA_SetSpawn_Inputdata_Error()
+	end
+	if type(G_CA_SLTable) ~= "table" then
+		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
+	elseif G_CA_SLTable == nil then
+		G_CA_SetSpawn_Inputdata_Error()
+	end
+	if type(G_CA_RepeatType) ~= "table" then
+		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
 	end
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
@@ -320,23 +339,20 @@ function G_CA_SetSpawn(Condition,G_CA_Line,G_CA_CUTable,G_CA_SNTable,G_CA_SLTabl
 				table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256))
 			end
 		end
-	elseif G_CA_SLTable == nil then
-		for i = 1, 4 do
-			table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256))
-		end
+	else
+		G_CA_SLTable_InputData_Error()
 	end
 	local LMRet = 0
 	if G_CA_LMTable == "MAX" then
 		LMRet = T_to_BiteBuffer({255,255,255,255})
 	elseif type(G_CA_LMTable) == "table" then
-		
 		LMRet = T_to_BiteBuffer(G_CA_LMTable)
 	elseif type(G_CA_LMTable) == "number" then
 		local NumRet = G_CA_LMTable
 		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
 	end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
-		SetCVar(FP,G_CA_LineV[2],SetTo,G_CA_Line),
+		SetCVar(FP,G_CA_LineV[2],SetTo,6),
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
@@ -393,6 +409,58 @@ function G_CA_SetSpawnX(Condition,...)
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,T_to_BiteBuffer(G_CA_LMTable)),
 		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
+	})
+end
+function G_CA_SetSpawn2X(Condition,VarArr,...)
+	local arg = table.pack(...)
+	local G_CA_CUTable = {}
+	local G_CA_SNTable = {}
+	local G_CA_SLTable = {}
+	local G_CA_LMTable = {}
+	local G_CA_RepeatType = {}
+
+	if arg.n >= 5 then
+		BiteStack_is_Over_5()
+	end
+	for i = 1, arg.n do
+		if type(arg[i]) ~= "table" then
+			G_CA_SetSpawnX_InputData_Error()
+		end
+	end
+
+	for i = 1, arg.n do
+		table.insert(G_CA_CUTable,arg[i][1])
+		table.insert(G_CA_SNTable,arg[i][2])
+		table.insert(G_CA_SLTable,arg[i][3])
+		table.insert(G_CA_LMTable,arg[i][4])
+		table.insert(G_CA_RepeatType,arg[i][5])
+	end
+
+
+	local X = {}
+	if #G_CA_SLTable>= 1 then
+		for j, k in pairs(G_CA_SLTable)do
+			if type(k) == "number" then
+				G_CA_SetSpawn2X_InputData_Error()
+			elseif type(k) == "string" then
+				table.insert(X,tonumber(k))
+			else
+				G_CA_SLTable_InputData_Error()
+			end
+		end
+	else
+		for i = 1, 4 do
+			G_CA_SetSpawn2X_InputData_Error()
+		end
+	end
+
+	TriggerX(FP,Condition,{
+		SetCVar(FP,VarArr[1][2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),
+		SetCVar(FP,VarArr[2][2],SetTo,T_to_BiteBuffer(X)),
+		SetCVar(FP,VarArr[3][2],SetTo,1),
+		SetCVar(FP,VarArr[4][2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
+		SetCVar(FP,VarArr[5][2],SetTo,T_to_BiteBuffer(G_CA_LMTable)),
+		SetCVar(FP,VarArr[6][2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
 	})
 end
 
@@ -490,6 +558,32 @@ function G_CAPlot2(ShapeTable)
 	return table.unpack(X)
 end
 
+function G_CAPlot3(ShapeTable)
+	local G_CA_CallIndex = SetCallForward()
+	Another_CAPlot_Shape = G_CA_IndexAlloc
+	local CA = CAPlotForward()
+	local X = {}
+	SetCall(FP)
+	CMov(FP,CA_TempUID,G_CA_Temp[1],nil,0xFF)
+	CMov(FP,V(CA[1]),G_CA_Temp[2],nil,0xFF)
+	CMov(FP,V(CA[6]),G_CA_Temp[3])
+	CIfX(FP,CVar(FP,G_CA_Temp[5][2],AtMost,0))
+		for j, k in pairs(ShapeTable) do
+			CTrigger(FP,{CVar(FP,G_CA_Temp[2][2],Exactly,j,0xFF)},{SetCVar(FP,CA[5],SetTo,(k[1]/50)+1)},1)
+			table.insert(X,tostring(j))
+		end
+	CElseX()
+		CMov(FP,V(CA[5]),G_CA_Temp[5])
+	CIfXEnd()
+
+	CAPlot2(ShapeTable,FP,nilunit,0,{CPosX,CPosY},1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
+	SetCallEnd()
+	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
+	table.insert(G_CA_CallStack,G_CA_CallIndex)
+	return table.unpack(X)
+end
+
 
 
 G_CA_CondStack = {}
@@ -567,8 +661,85 @@ function Create_CreateTable()
 	table.insert(G_CA_CondStack,Gun_Line(G_CLine,AtMost,0))
 	table.insert(G_CA_CondStack2,Gun_Line(G_CLine,AtLeast,1))
 	G_CLine = G_CLine + 7 -- 1 ¿¹ºñ
+	if G_CLine >= 53 then
+		G_CLine_Overflow()
+	end
 	return Ret
 end
+
+
+function Create_CreateTable2()
+	local VarTemp = CreateVarArr(7,FP)
+	local Ret = VarTemp
+	CIfX(FP,CVar(VarTemp[1][2],AtLeast,1,0xFF))
+		CDoActions(FP,{
+			TSetCVar(FP,G_CA_Temp[1][2],SetTo,VarTemp[1],0xFF),
+			TSetCVar(FP,G_CA_Temp[2][2],SetTo,VarTemp[2],0xFF),
+			TSetCVar(FP,G_CA_Temp[3][2],SetTo,VarTemp[3]),
+			TSetCVar(FP,G_CA_Temp[4][2],SetTo,VarTemp[4],0xFF),
+			TSetCVar(FP,G_CA_Temp[5][2],SetTo,VarTemp[5],0xFF),
+			TSetCVar(FP,G_CA_Temp[6][2],SetTo,VarTemp[6],0xFF),
+			TSetCVar(FP,G_CA_Temp[7][2],SetTo,VarTemp[7],0xFF),
+		})
+		CallTrigger(FP,Load_CAPlot_Shape)
+		CIfX(FP,{CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtMost,0,CA_Suspend)})
+			CDoActions(FP,{
+				TSetCVar(FP,VarTemp[1][2],SetTo,G_CA_Temp[1],0xFF),
+				TSetCVar(FP,VarTemp[2][2],SetTo,G_CA_Temp[2],0xFF),
+				TSetCVar(FP,VarTemp[3][2],SetTo,G_CA_Temp[3]),
+				TSetCVar(FP,VarTemp[4][2],SetTo,G_CA_Temp[4],0xFF),
+				TSetCVar(FP,VarTemp[5][2],SetTo,G_CA_Temp[5],0xFF),
+				TSetCVar(FP,VarTemp[6][2],SetTo,G_CA_Temp[6],0xFF),
+				TSetCVar(FP,VarTemp[7][2],SetTo,G_CA_Temp[7],0xFF),
+			})
+		CElseIfX({CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
+		CDoActions(FP,{
+			TSetCVar(FP,VarTemp[1][2],SetTo,0,0xFF),
+			TSetCVar(FP,VarTemp[2][2],SetTo,0,0xFF),
+			TSetCVar(FP,VarTemp[3][2],SetTo,1),
+			TSetCVar(FP,VarTemp[4][2],SetTo,0,0xFF),
+			TSetCVar(FP,VarTemp[5][2],SetTo,0,0xFF),
+			TSetCVar(FP,VarTemp[6][2],SetTo,0,0xFF),
+			TSetCVar(FP,VarTemp[7][2],SetTo,0,0xFF),
+		})
+		CElseX()
+			if Limit == 1 then
+				ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
+				_0DPatchX(FP,f_GunNumT,5)
+				f_Movcpy(FP,_Add(G_CA_StrPtr2,f_GunErrT[2]),VArr(f_GunNumT,0),5*4)
+				DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_Err".._0D,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+			end
+			CDoActions(FP,{
+				TSetCVar(FP,VarTemp[1][2],SetTo,0,0xFF),
+				TSetCVar(FP,VarTemp[2][2],SetTo,0,0xFF),
+				TSetCVar(FP,VarTemp[3][2],SetTo,1),
+				TSetCVar(FP,VarTemp[4][2],SetTo,0,0xFF),
+				TSetCVar(FP,VarTemp[5][2],SetTo,0,0xFF),
+				TSetCVar(FP,VarTemp[6][2],SetTo,0,0xFF),
+				TSetCVar(FP,VarTemp[7][2],SetTo,0,0xFF),
+			})
+		CIfXEnd()
+	CElseifX({CVar(VarTemp[1][2],AtMost,0,0xFF),Gun_Line(G_CLine,AtLeast,1)})
+		if TestStart == 1 then
+			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
+			_0DPatchX(FP,f_GunNumT,5)
+			f_Movcpy(FP,_Add(G_CA_StrPtr2,f_GunFuncT[2]),VArr(f_GunNumT,0),5*4)
+			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_Func".._0D,4)},HumanPlayers,FP)})
+		end
+		CDoActions(FP,{
+		TSetCVar(VarTemp[1][2],SetTo,_Div(Var_TempTable[G_CLine+1],_Mov(256))),
+		TSetCVar(VarTemp[2][2],SetTo,_Div(Var_TempTable[G_CLine+2],_Mov(256))),
+		TSetCVar(VarTemp[3][2],SetTo,1),
+		TSetCVar(VarTemp[4][2],SetTo,_Div(Var_TempTable[G_CLine+4],_Mov(256))),
+		TSetCVar(VarTemp[5][2],SetTo,_Div(Var_TempTable[G_CLine+5],_Mov(256))),
+		TSetCVar(VarTemp[6][2],SetTo,_Div(Var_TempTable[G_CLine+6],_Mov(256))),
+		TSetCVar(VarTemp[7][2],SetTo,_Div(Var_TempTable[G_CLine+7],_Mov(256))),
+	})
+	CIfXEnd()
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CA_Launch)})
+	return Ret
+end
+
 
 InstallGunData()
 
@@ -612,6 +783,8 @@ SetCall(FP)
 		G_L2 = Create_CreateTable()
 		G_L3 = Create_CreateTable()
 		G_L4 = Create_CreateTable()
+		G_L5 = Create_CreateTable()
+		G_L6 = Create_CreateTable()
 		Case_OverCocoon()
 		Case_Overmind()
 		Case_Daggoth()

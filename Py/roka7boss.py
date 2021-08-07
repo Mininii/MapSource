@@ -303,5 +303,6 @@ def beforeTriggerExec():
 		Trigger(conditions=[Memory(0x58F524,Exactly,2)],actions=[F1Del2.AddNumber(1)])
 		Trigger(conditions=[Memory(0x58F524,Exactly,2),F1Del2>=24*3],actions=[F1Del2.SetNumber(0),SetMemory(0x58F524,SetTo,3),SetMemoryX(0x66370C, SetTo, 124*1,0xFF)])
 		Trigger(conditions=[Memory(0x58F524,Exactly,3),Command(P8,Exactly,0,84)],actions=[SetMemory(0x58F524,SetTo,4),KillUnit(84,P8)])
+
 	EUDEndIf()
 	

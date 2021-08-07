@@ -5,16 +5,6 @@ function Install_DLBoss()
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
 	CMov(FP,SpeedVar,4)
-local DL_Patch = {}
-table.insert(DL_Patch,SetMemory(0x6617C8 + (55*8),SetTo,(22)+(22*65536)))
-table.insert(DL_Patch,SetMemory(0x6617CC + (55*8),SetTo,(21)+(21*65536)))
-table.insert(DL_Patch,SetMemory(0x6617C8 + (56*8),SetTo,(22)+(22*65536)))
-table.insert(DL_Patch,SetMemory(0x6617CC + (56*8),SetTo,(21)+(21*65536)))
-local DL_Recover = {}
-table.insert(DL_Recover,SetMemory(0x6617C8 + (55*8),SetTo,(1)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617CC + (55*8),SetTo,(1)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617C8 + (56*8),SetTo,(1)+(10*65536)))
-table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 	Trigger { -- 보스 무브 로케
 		players = {P8},
 		conditions = {
@@ -2338,6 +2328,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 		f_TempRepeat(17,1,nil,2)
 		SetLocCenter2("C8")
 		f_TempRepeat(17,1,nil,2)
+		CMov(FP,0x6509B0,FP)
 	CIfEnd()
 	Trigger { -- 헤으응 미니니? 삼니니 유닛 소환 밑 무브로케
 		players = {P8},
@@ -2372,6 +2363,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 			Void(2, Exactly, 31);
 			Void(3, AtLeast, 15);
 			Void(3, AtMost, 39);
+			Void(41, AtMost, 3);
 		},
 		actions = {
 			PreserveTrigger();
@@ -2399,6 +2391,43 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
 		},
 	}
+	Trigger { -- 헤으응 미니니? 삼니니 유닛 소환 밑 무브로케
+		players = {P8},
+		conditions = {
+			
+			Void(0, Exactly, 11);
+			Void(1, Exactly, 8);
+			Void(2, Exactly, 31);
+			Void(3, AtLeast, 15);
+			Void(3, AtMost, 39);
+			Void(41, AtLeast, 4);
+		},
+		actions = {
+			PreserveTrigger();
+			CreateUnit(8, "Hyperion (Battlecruiser)", "Create 1", CurrentPlayer);
+			CreateUnit(8, 30, "Create 2", CurrentPlayer);
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C1");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C2");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C3");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C4");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C5");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C6");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C7");
+			MoveUnit(1, "Hyperion (Battlecruiser)", CurrentPlayer, "Create", "C8");
+			KillUnit("Hyperion (Battlecruiser)", CurrentPlayer);
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C1");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C2");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C3");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C4");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C5");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C6");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C7");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C8");
+			MoveUnit(1, 30, CurrentPlayer, "Create", "C1");
+			SetVoid(3, Add, 1);
+			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
+		},
+	}
 	
 	Trigger { -- 유닛 킬
 		players = {P8},
@@ -2414,6 +2443,7 @@ table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
 			Wait(5000);
 			SetVoid(3, Add, 1);
 			KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
+			KillUnit(30, CurrentPlayer);
 			KillUnit("Alan Schezar (Goliath)", CurrentPlayer);
 			Comment("유닛 킬");
 		},

@@ -137,13 +137,13 @@ function BGMManager()
 	AddBGM(3,"staredit\\wav\\BGM2_2.ogg",60*1000,{3,4})
 	AddBGM(4,"staredit\\wav\\BGM2_3.ogg",52230,{3,4})
 	AddBGM(5,"staredit\\wav\\BGM2_4.ogg",58780,{3,4})
-	AddBGM(2,"staredit\\wav\\BGM3_1.ogg",64*1000,{5,6})
+	AddBGM(2,"staredit\\wav\\BGM3_1.ogg",35*1000,{5,6})
 	AddBGM(3,"staredit\\wav\\BGM3_2.ogg",63*1000,{5,6})
-	AddBGM(4,"staredit\\wav\\BGM3_3.ogg",60*1000,{5,6})
-	AddBGM(5,"staredit\\wav\\BGM3_4.ogg",71*1000,{5,6})
+	AddBGM(4,"staredit\\wav\\BGM3_3.ogg",62*1000,{5,6})
+	AddBGM(5,"staredit\\wav\\BGM3_4.ogg",66*1000,{5,6})
 	AddBGM(2,"staredit\\wav\\BGM4_1.ogg",48*1000,{7,8})
-	AddBGM(3,"staredit\\wav\\BGM4_2.ogg",53*1000,{7,8})
-	AddBGM(4,"staredit\\wav\\BGM4_3.ogg",45*1000,{7,8})
+	AddBGM(3,"staredit\\wav\\BGM4_2.ogg",60*1000,{7,8})
+	AddBGM(4,"staredit\\wav\\BGM4_3.ogg",52*1000,{7,8})
 	AddBGM(5,"staredit\\wav\\BGM4_4.ogg",53*1000,{7,8})
 	AddBGM(2,"staredit\\wav\\BGM5_1.ogg",49*1000,{9,10})
 	AddBGM(3,"staredit\\wav\\BGM5_2.ogg",48*1000,{9,10})
@@ -920,3 +920,28 @@ end
 		CAPlotPlayerID = {}
 		return Ret
 	end
+	
+function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
+	MoveCpValue = 0
+	local X = {}
+	for k, v in pairs(ExCunitArr) do
+		table.insert(X,SetCVar("X",v[2],SetTo,0))
+	end
+	Trigger { -- Cunit Calc Main
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+			Conditions,
+		},
+		actions = {
+			X,
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CCArr[CCptr],0,0,0);
+			SetCtrigX("X",CCArr[CCptr]+1,0x4,0,SetTo,"X","X",0,0,1);
+			SetCtrigX("X",CCArr[CCptr],0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",CCArr[CCptr],0x15C,0,SetTo,"X","X",0,0,1);
+			SetMemory(0x6509B0,SetTo,19025 + 84 * LoopIndex);
+			Actions,
+			},
+		flag = {Preserved}
+	}		
+end

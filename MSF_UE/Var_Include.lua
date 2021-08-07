@@ -127,11 +127,17 @@ function Var_init()
 	CA2ArrZ = CreateVArr(10,FP)
     SpeedVar = CreateVar2(4,FP)
 	WaveT = CreateVar(FP)
+	RecallPosX = CreateVar(FP)
+
 end
 
 function HPoints()
 	HeroPointArr = {}
-	HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81}
+	if TestStart == 1 then
+		HeroArr = {84,11,69,121}
+	else
+		HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81}
+	end
 	ZergGndUArr = {51,53,54,48,104}
 	CreateHeroPointArr(77,35000,"\x07¡º \x1DF\x04enix \x1DZ \x07¡»",1)
 	CreateHeroPointArr(78,35000,"\x07¡º \x1DF\x04enix \x1DD \x07¡»",1)
@@ -151,8 +157,9 @@ function HPoints()
 	CreateHeroPointArr(76,60000,"\x07¡º \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07¡»",1)
 	CreateHeroPointArr(79,75000,"\x07¡º \x1DT\x04assadar \x07¡»",1)
 	CreateHeroPointArr(98,99000,"\x07¡º \x1FC\x04orsair \x07¡»",1)
-	CreateHeroPointArr(220,77777,"\x07¡º \x1DP\x04oint \x1DBOX(ñé) \x07¡»",2)
-	CreateHeroPointArr(150,111111,"\x07¡º \x1DP\x04oint \x1DBOX(ÓÞ) \x07¡»",2)
+	CreateHeroPointArr(220,123456,"\x07¡º \x1DP\x04oint \x1DBOX(ñé) \x07¡»",2)
+	CreateHeroPointArr(150,322322,"\x07¡º \x1DP\x04oint \x1DBOX(ÓÞ) \x07¡»",2)
+	CreateHeroPointArr(221,4999999,"\x07¡º \x1DP\x04oint \x1DBOX \x08EX \x07¡»",2)
 end
 
 function Objects()
@@ -179,6 +186,7 @@ function Objects()
 	MedicTrig = {34,9,2,3}
 	EXCC_Forward = 0x2FFF
 	ObEff = 94
+	nilunit = 181
 
 	-- Strings
 
@@ -236,7 +244,6 @@ function Objects()
 	F12 = 202
 	F9 = 203
 	B = 204
-	nilunit = 181
 	-- 441 = OPConsole 
 	-- 442 = CPConsole 
 	-- 443 = BanConsole
@@ -291,5 +298,23 @@ VoidAreaAlloc = 0x594000-4
 	table.insert(OWTable,Order("Men",Force1,"OW",Move,"OWDest"))
 		end
 	end
+	
+DL_Patch = {}
+table.insert(DL_Patch,SetMemory(0x6617C8 + (55*8),SetTo,(22)+(22*65536)))
+table.insert(DL_Patch,SetMemory(0x6617CC + (55*8),SetTo,(21)+(21*65536)))
+table.insert(DL_Patch,SetMemory(0x6617C8 + (56*8),SetTo,(22)+(22*65536)))
+table.insert(DL_Patch,SetMemory(0x6617CC + (56*8),SetTo,(21)+(21*65536)))
+table.insert(DL_Patch,SetMemory(0x6617C8 + (62*8),SetTo,(22)+(22*65536)))
+table.insert(DL_Patch,SetMemory(0x6617CC + (62*8),SetTo,(21)+(21*65536)))
+DL_Recover = {}
+table.insert(DL_Recover,SetMemory(0x6617C8 + (55*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617CC + (55*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617C8 + (56*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617CC + (56*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617C8 + (62*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Recover,SetMemory(0x6617CC + (62*8),SetTo,(1)+(10*65536)))
+table.insert(DL_Patch,SetMemoryX(0x664080 + (30*4),SetTo,0x0,0x4))
+table.insert(DL_Recover,SetMemoryX(0x664080 + (30*4),SetTo,0x4,0x4))
+
 	Install_ShapeData()
 end

@@ -10,6 +10,7 @@ function GameOver()
         Label(0);
         CDeaths(FP,AtLeast,150+(48*4)+3,IntroT);
         Bring(Force1,AtMost,0,"Men",64);
+        Bring(FP,AtMost,0,186,64);
     },
     actions = {
         RotatePlayer({
@@ -36,6 +37,7 @@ function GameOver()
             Label(0);
             CDeaths(FP,AtLeast,150+(48*4)+3,IntroT);
             Bring(Force1,AtMost,0,"Men",64);
+            Bring(FP,AtMost,0,186,64);
         },
         actions = {
             DisplayText(string.rep("\n", 20),4);

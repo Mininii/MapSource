@@ -467,7 +467,7 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		GiveUnits(All,60,P9,"Anywhere",FP);
 		SetMemory(0x6509B0,SetTo,FP);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x1B줴거하라.\r\n\r\n ",4),TalkingPortrait(68, 2000),
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);
 		PreserveTrigger();
@@ -500,7 +500,7 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		GiveUnits(All,60,P9,"Anywhere",FP);
 		SetMemory(0x6509B0,SetTo,FP);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		PreserveTrigger();
 	},
 }
@@ -590,7 +590,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,1)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",3096),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
 				TSetMemory(0x58DC60+0x14*30,SetTo,Loc),
 				TSetMemory(0x58DC68+0x14*30,SetTo,_Add(Loc,32)),
@@ -632,10 +632,10 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,2)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",3096),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
-				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
-				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3096),Loc)),
+				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072-32),Loc)),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
 				RemoveUnitAt(1,47,"CLoc109",P8),
 			})
 			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
@@ -674,7 +674,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,3)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
 				TSetMemory(0x58DC64+0x14*30,SetTo,Loc),
 				TSetMemory(0x58DC6C+0x14*30,SetTo,_Add(Loc,32)),
@@ -715,9 +715,9 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,4)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
-				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6112),Loc)),
+				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6144-32),Loc)),
 				TSetMemory(0x58DC6C+0x14*30,SetTo,_Sub(_Mov(6144),Loc)),
 				RemoveUnitAt(1,47,"CLoc109",P8),
 			})
@@ -757,7 +757,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
 				TSetMemory(0x58DC60+0x14*30,SetTo,Loc),
 				TSetMemory(0x58DC68+0x14*30,SetTo,_Add(Loc,32)),
@@ -797,10 +797,10 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",3072-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
-				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
-				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3096),Loc)),
+				TSetMemory(0x58DC60+0x14*30,SetTo,_Sub(_Mov(3072-32),Loc)),
+				TSetMemory(0x58DC68+0x14*30,SetTo,_Sub(_Mov(3072),Loc)),
 				RemoveUnitAt(1,47,"CLoc109",P8),
 			})
 			TriggerX(FP,{Bring(P8, AtLeast, 1, 60, "CLoc109")},
@@ -837,7 +837,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
 				TSetMemory(0x58DC64+0x14*30,SetTo,Loc),
 				TSetMemory(0x58DC6C+0x14*30,SetTo,_Add(Loc,32)),
@@ -877,9 +877,9 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 		CMov(FP,Loc,0)
 		CMov(FP,Num,0)
 		CJumpEnd(FP,While2)
-		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144),CVar(FP,Num[2],Exactly,0)})
+		NWhile(FP,{TTCVar(FP,Loc[2],"<",6144-32),CVar(FP,Num[2],Exactly,0)})
 			CDoActions(FP,{
-				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6112),Loc)),
+				TSetMemory(0x58DC64+0x14*30,SetTo,_Sub(_Mov(6144-32),Loc)),
 				TSetMemory(0x58DC6C+0x14*30,SetTo,_Sub(_Mov(6144),Loc)),
 					RemoveUnitAt(1,47,"CLoc109",P8),
 			})
@@ -926,7 +926,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 	},
 }
 
@@ -955,7 +955,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -984,7 +984,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1013,7 +1013,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1042,7 +1042,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1071,7 +1071,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1100,7 +1100,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1135,7 +1135,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1164,7 +1164,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1193,7 +1193,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1222,7 +1222,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1251,7 +1251,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1280,7 +1280,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1309,7 +1309,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1339,13 +1339,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,88,"CLoc115",P8);
+		CreateUnit(2,30,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1368,13 +1368,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,21,"CLoc115",P8);
+		CreateUnit(10,57,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,17,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1393,7 +1393,7 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,88,"CLoc115",P8);
+		CreateUnit(10,13,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
@@ -1403,7 +1403,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1426,13 +1426,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,79,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,80,"CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,76,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1451,17 +1451,17 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,27,"CLoc115",P8);
+		CreateUnit(4,11,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,27,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,19,"CLoc115",P8);
+		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1480,17 +1480,17 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,27,"CLoc115",P8);
+		CreateUnit(3,13,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
-		CreateUnit(10,52,"CLoc115",P8);
+		CreateUnit(10,11,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,27,"CLoc115",P8);
+		CreateUnit(3,30,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,52,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1515,11 +1515,11 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,86,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(5,75,"CLoc115",P8);
+		CreateUnitWithProperties(2,121,"CLoc115",P8,{hitpoint = 10});
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 	},
 }
@@ -1553,7 +1553,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(0,SetTo,1);
 		PreserveTrigger();
@@ -1579,13 +1579,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,77,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,88,"CLoc115",P8);
+		CreateUnit(10,25,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,78,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(1,SetTo,1);
 		PreserveTrigger();
@@ -1607,17 +1607,17 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,80,"CLoc115",P8);
+		CreateUnit(10,13,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,79,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,80,"CLoc115",P8);
+		CreateUnit(10,30,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
 		CreateUnit(10,76,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(2,SetTo,1);
 		PreserveTrigger();
@@ -1639,7 +1639,7 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,27,"CLoc115",P8);
+		CreateUnit(10,11,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,19,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
@@ -1649,7 +1649,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(3,SetTo,1);
 		PreserveTrigger();
@@ -1675,13 +1675,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,69,"CLoc115",FP);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,27,"CLoc115",P8);
+		CreateUnit(10,30,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,69,"CLoc115",FP);
+		CreateUnit(10,11,"CLoc115",FP);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(4,SetTo,1);
 		PreserveTrigger();
@@ -1707,13 +1707,13 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,75,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
-		CreateUnit(10,86,"CLoc115",P8);
+		CreateUnit(10,13,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,75,"CLoc115",P8);
+		CreateUnit(10,11,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(5,SetTo,1);
 		PreserveTrigger();
@@ -1735,17 +1735,17 @@ Trigger { -- No comment (4347C6C8)
 		MoveLocation("CLoc115","Tarim, Lord Of Regal Castle",FP,"Anywhere");
 		SetMemory(0x58DC68+0x14*31,Subtract,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
-		CreateUnit(10,60,"CLoc115",P8);
+		CreateUnit(10,98,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,320);
 		CreateUnit(10,29,"CLoc115",P8);
 		SetMemory(0x58DC6C+0x14*31,Add,320);
 		CreateUnit(10,23,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Subtract,320);
-		CreateUnit(10,81,"CLoc115",P8);
+		CreateUnit(10,121,"CLoc115",P8);
 		SetMemory(0x58DC68+0x14*31,Add,160);
 		SetMemory(0x58DC6C+0x14*31,Subtract,160);
 		SetMemory(0x6509B0,SetTo,7);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "Anywhere");
+		RunAIScriptAt(JYD, "Anywhere");
 		SetMemory(0x6509B0,SetTo,6);
 		SetVoid(6,SetTo,1);
 		PreserveTrigger();

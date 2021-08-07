@@ -159,7 +159,6 @@ function onInit_EUD()
 	WeaponTypePatch(85,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(68,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(70,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(124,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(89,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
@@ -167,19 +166,23 @@ function onInit_EUD()
 	WeaponTypePatch(86,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(110,2) -- 무기 타입 퍼딜
 	WeaponTypePatch(128,2) -- 무기 타입 퍼딜
+	WeaponTypePatch(90,2) -- 무기 타입 퍼딜
 	SetUnitClassType(19,1)
 	SetUnitClassType(29,1)
 	SetUnitClassType(98,1)
 	SetUnitClassType(75,1)
 	SetUnitClassType(87,1)
 	SetUnitClassType(68,1)
-	SetUnitClassType(84,1)
 	SetUnitClassType(81,1)
 	SetUnitClassType(23,1)
 	SetUnitClassType(74,1)
 	SetUnitClassType(74,1)
 	SetUnitClassType(57,1)
+	SetUnitClassType(69,1)
+	SetUnitClassType(11,1)
 
+	SetUnitClassType(84)
+	SetUnitClassType(30)
 	SetUnitClassType(47)
 	SetUnitClassType(77)
 	SetUnitClassType(78)
@@ -212,6 +215,7 @@ EffUnitPatch(210)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
+UnitSizePatch(121,10)
 
 -------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
@@ -282,9 +286,9 @@ UnitSizePatch(60,1)
 	table.insert(PatchArr,SetMemory(0x5822C4 + (4*i),SetTo,1000))
 	table.insert(PatchArr,SetMemory(0x582264 + (4*i),SetTo,1000))
 	table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
-	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,5))
-	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,15))
-	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,30))
+	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,2))
+	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,2))
+	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,2))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
@@ -316,6 +320,10 @@ UnitSizePatch(60,1)
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
 		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,192))
 	end
+	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(125,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(126,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 
 		table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
 		table.insert(PatchArr,SetMemoryW(0x656EB0,SetTo,NMarDamageAmount)) -- 기본공격력
@@ -343,30 +351,26 @@ UnitSizePatch(60,1)
 	SetWepUpType(i,3)
 	end
 
-	UnitSizePatch(37,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(38,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(39,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(45,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(44,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(43,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(48,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(49,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(56,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(55,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(53,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(57,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(51,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(54,1) -- 저그 유닛 크기 10*10 설정
-	UnitSizePatch(104,1) -- 저그 유닛 크기 10*10 설정
+	local ZergArr = {37,38,39,45,44,43,48,49,56,55,53,57,51,54,104}
+	for j, k in pairs(ZergArr) do
+		
+	UnitSizePatch(k,1) -- 저그 유닛 크기 10*10 설정
+	SetUnitAdvFlag(k,4,4) -- 공중유닛으로설정
+	end
 
 	UnitSizePatch(11,1)
+	UnitSizePatch(ParseUnit("Protoss Arbiter"),1)
 	UnitSizePatch(63,5)
+	UnitSizePatch(52,5)
+	UnitSizePatch(62,1)
 
 	for j, k in pairs(HeroArr) do
 		if k ~= 86 then
 		UnitSizePatch(k,5)
 		end
 	end
+	UnitSizePatch(27,5)
+	UnitSizePatch(7,1)
 
 	for i = 220, 227 do
 		DefTypePatch(i,9)
@@ -378,6 +382,7 @@ UnitSizePatch(60,1)
 		DefTypePatch(150,9)
 		DefTypePatch(74,9)
 		DefTypePatch(186,9)
+		DefTypePatch(121,9)
 
 
 	Trigger { -- 퍼센트 데미지 세팅
@@ -482,8 +487,8 @@ UnitSizePatch(60,1)
 	end
 
 	YY = 2021
-	MM = 7
-	DD = 31
+	MM = 08
+	DD = 08
 	HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 

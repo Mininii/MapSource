@@ -24,7 +24,8 @@ function Install_Roka7Boss()
 
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
 	CMov(FP,VO(41),LevelT2) -- Diff
-	
+	Trigger2(FP,{Memory(0x58F524,Exactly,3)},{ModifyUnitHitPoints(All, "Men", Force1, 64, 35)},{Preserved})
+	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
 	
 	
 	CJump(FP,11)
@@ -524,7 +525,8 @@ end
 					RotatePlayer({DisplayTextX("\n\n\n\x13\x04『☆˚.*·。˚＃7사단을 파괴했습니다. \x05。+.˚。˚·*˙。★』\n\n\n",4)},HumanPlayers,FP);
 					SetCDeaths(FP,SetTo,1,BossStart);
 					Simple_SetLoc(164,4096,352,4160,480);
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					SetMemory(0x6509B0,SetTo,FP);
+					RunAIScriptAt(JYD, 64);
 					KillUnit(125,Force1);
 					PreserveTrigger();
 				}
@@ -540,122 +542,122 @@ end
 		}
 		
 		
-	
 		-- ez -------------------------------------------------------------------------------------------
 		
-		CSPlot(SHX1a1,FP,37,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1a2,FP,38,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1a3,FP,43,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},nil,nil)
+		CSPlot(SHX1a1,FP,37,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,38,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,43,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 	   
-		CSPlot(SHX1a1,FP,39,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1a2,FP,54,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1a3,FP,55,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},nil,nil)
+		CSPlot(SHX1a1,FP,39,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,54,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,55,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 	   
-		CSPlot(SHX1a1,FP,48,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1a2,FP,53,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1a3,FP,56,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},nil,nil)
+		CSPlot(SHX1a1,FP,48,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,53,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,56,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 	
-		CSPlot(SHX1a1,FP,104,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1a2,FP,51,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1a3,FP,47,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},nil,nil)
+		CSPlot(SHX1a1,FP,104,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,51,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,47,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 
-		CSPlot(SHX1a1,FP,52,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1a2,FP,57,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1a3,FP,44,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},nil,nil)
+		CSPlot(SHX1a1,FP,52,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,57,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,44,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1a1,FP,48,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1a2,FP,47,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1a3,FP,62,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},nil,nil)
+		CSPlot(SHX1a1,FP,48,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,47,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,62,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1a1,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1a2,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1a3,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},nil,nil)
+		CSPlot(SHX1a1,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a2,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1a3,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,1),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		-- NM -------------------------------------------------------------------------------------------
 		
-		CSPlot(SHX1d1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1d3,FP,88,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},nil,nil)
+		CSPlot(SHX1d1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,88,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1d1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1d2,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1d3,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},nil,nil)
+		CSPlot(SHX1d1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1d1,FP,78,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1d2,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1d3,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1d1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1d2,FP,54,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1d3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},nil,nil)
+		CSPlot(SHX1d1,FP,78,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,57,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1d1,FP,104,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1d2,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1d3,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},nil,nil)
+		CSPlot(SHX1d1,FP,104,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1d1,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1d2,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1d3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},nil,nil)
+		CSPlot(SHX1d1,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1d1,FP,28,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1d2,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1d3,FP,27,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},nil,nil)
+		CSPlot(SHX1d1,FP,28,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d2,FP,21,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1d3,FP,27,"Location 1",nil,1,32,FP,{Void(41,Exactly,2),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
 		-- HD -------------------------------------------------------------------------------------------
 		
-		CSPlot(SHX1c1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1c2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},nil,nil)
-		CSPlot(SHX1c3,FP,80,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},nil,nil)
+		CSPlot(SHX1c1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,80,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,1)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1c2,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},nil,nil)
-		CSPlot(SHX1c3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},nil,nil)
+		CSPlot(SHX1c1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,2)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1c2,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},nil,nil)
-		CSPlot(SHX1c3,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},nil,nil)
+		CSPlot(SHX1c1,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,3)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1c2,FP,51,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},nil,nil)
-		CSPlot(SHX1c3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},nil,nil)
+		CSPlot(SHX1c1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,51,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,4)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1c2,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},nil,nil)
-		CSPlot(SHX1c3,FP,29,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},nil,nil)
+		CSPlot(SHX1c1,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,30,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,5)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1c2,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},nil,nil)
-		CSPlot(SHX1c3,FP,13,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},nil,nil)
+		CSPlot(SHX1c1,FP,25,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,13,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,6)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
 		
-		CSPlot(SHX1c1,FP,29,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1c2,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},nil,nil)
-		CSPlot(SHX1c3,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},nil,nil)
+		CSPlot(SHX1c1,FP,29,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c2,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},nil)
+		CSPlot(SHX1c3,FP,121,"Location 1",nil,1,32,FP,{Void(41,Exactly,3),Memory(0x58F518,Exactly,7)},{SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64),ModifyUnitHitPoints(All, 121, FP, 64, 0)},nil)
 		-- LN -------------------------------------------------------------------------------------------
 		
-		CSPlot(SHX1d1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1)},1)
-		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1)},1)
-		CSPlot(SHX1d3,FP,80,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1)},1)
+		CSPlot(SHX1d1,FP,77,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,80,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,1),Void(1500,AtMost,2)},{SetVoid(1500,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		CSPlot(SHX1d1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1)},1)
-		CSPlot(SHX1d2,FP,78,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1)},1)
-		CSPlot(SHX1d3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1)},1)
+		CSPlot(SHX1d1,FP,79,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,78,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,2),Void(1501,AtMost,2)},{SetVoid(1501,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		CSPlot(SHX1d1,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1)},1)
-		CSPlot(SHX1d2,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1)},1)
-		CSPlot(SHX1d3,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1)},1)
-		CSPlot(SHX1d1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1)},1)
-		CSPlot(SHX1d2,FP,104,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1)},1)
-		CSPlot(SHX1d3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1)},1)
+		CSPlot(SHX1d1,FP,76,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,30,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,3),Void(1502,AtMost,2)},{SetVoid(1502,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		CSPlot(SHX1d1,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1)},1)
-		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1)},1)
-		CSPlot(SHX1d3,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1)},1)
+		CSPlot(SHX1d1,FP,17,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,52,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,86,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,4),Void(1503,AtMost,2)},{SetVoid(1503,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		CSPlot(SHX1d1,FP,75,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1)},1)
-		CSPlot(SHX1d2,FP,69,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1)},1)
-		CSPlot(SHX1d3,FP,13,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1)},1)
+		CSPlot(SHX1d1,FP,81,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,19,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,5),Void(1504,AtMost,2)},{SetVoid(1504,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		CSPlot(SHX1d1,FP,29,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1)},1)
-		CSPlot(SHX1d2,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1)},1)
-		CSPlot(SHX1d3,FP,98,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1)},1)
+		CSPlot(SHX1d1,FP,30,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,11,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,13,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,6),Void(1505,AtMost,2)},{SetVoid(1505,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		
+		CSPlot(SHX1d1,FP,29,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d2,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
+		CSPlot(SHX1d3,FP,121,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
 		-- Void / 0x58F524 : Type / Void 1543 : Type Save / 0x58F520 : 공반 Check / Void 1547 : System / Delay : 90 -> 94 & 91->93 / Void 1545 Current Type
 	CMov(FP,0x6509B0,FP)
@@ -667,7 +669,7 @@ end
 				},
 				actions = {
 					SetMemory(0x58F518,SetTo,0);
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1400,7 +1402,8 @@ end
 				actions = {
 					SetVoid(94,SetTo,18);
 					SetMemory(0x58F524,SetTo,2);
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					SetMemory(0x6509B0,SetTo,FP);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1410,7 +1413,8 @@ end
 				actions = {
 					SetVoid(94,SetTo,18);
 					SetMemory(0x58F524,SetTo,3);
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					SetMemory(0x6509B0,SetTo,FP);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1420,7 +1424,8 @@ end
 				actions = {
 					SetVoid(94,SetTo,18);
 					SetMemory(0x58F524,SetTo,4);
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					SetMemory(0x6509B0,SetTo,FP);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1433,8 +1438,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,72);
 					SetMemory(0x58F524,SetTo,5);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1445,8 +1451,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,18);
 					SetMemory(0x58F524,SetTo,99);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1457,8 +1464,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,72);
 					SetMemory(0x58F524,SetTo,5);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1470,8 +1478,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,24*5);
 					SetMemory(0x58F524,SetTo,6);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1482,8 +1491,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,24*4);
 					SetMemory(0x58F524,SetTo,6);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1494,8 +1504,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,24*3);
 					SetMemory(0x58F524,SetTo,6);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1506,8 +1517,9 @@ end
 				actions = {
 					SetVoid(94,SetTo,24*2);
 					SetMemory(0x58F524,SetTo,6);
+					SetMemory(0x6509B0,SetTo,FP);
 					
-					RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64);
+					RunAIScriptAt(JYD, 64);
 					PreserveTrigger();
 				}
 			}
@@ -1799,19 +1811,19 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnitWithProperties(1,121,"CLoc165",FP,{
-					--    clocked = false,
-					--    burrowed = false,
-					--    intransit = false,
-					--    hallucinated = false,
-					--    invincible = false,
-					--    hitpoint = 0,
-					--    shield = 100,
-					--    energy = 0,
-					--    resource = 0,
-					--    hanger = 0,
-					--});
-				   -- 
+					CreateUnitWithProperties(1,121,"CLoc165",FP,{
+					    clocked = false,
+					    burrowed = false,
+					    intransit = false,
+					    hallucinated = false,
+					    invincible = false,
+					    hitpoint = 10,
+					    shield = 100,
+					    energy = 0,
+					    resource = 0,
+					    hanger = 0,
+					});
+				    
 					PreserveTrigger();
 				}
 			}
@@ -1826,7 +1838,7 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnit(1,1,"CLoc165",FP),
+					CreateUnit(1,13,"CLoc165",FP),
 					
 					PreserveTrigger();
 				}
@@ -1839,7 +1851,7 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnit(1,58,"CLoc165",FP),
+					CreateUnit(1,69,"CLoc165",FP),
 					
 					PreserveTrigger();
 				}
@@ -1852,7 +1864,7 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnit(1,11,"CLoc165",FP),
+					CreateUnit(1,11,"CLoc165",FP),
 					
 					PreserveTrigger();
 				}
@@ -1865,18 +1877,18 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnitWithProperties(1,27,"CLoc165",FP,{
-					--    clocked = false,
-					--    burrowed = false,
-					--    intransit = false,
-					--    hallucinated = false,
-					--    invincible = false,
-					--    hitpoint = 0,
-					--    shield = 100,
-					--    energy = 0,
-					--    resource = 0,
-					--    hanger = 0,
-					--});
+					CreateUnitWithProperties(1,27,"CLoc165",FP,{
+					    clocked = false,
+					    burrowed = false,
+					    intransit = false,
+					    hallucinated = false,
+					    invincible = false,
+					    hitpoint = 0,
+					    shield = 100,
+					    energy = 0,
+					    resource = 0,
+					    hanger = 0,
+					});
 					
 					PreserveTrigger();
 				}
@@ -1889,19 +1901,19 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnitWithProperties(1,121,"CLoc165",FP,{
-					--    clocked = false,
-					--    burrowed = false,
-					--    intransit = false,
-					--    hallucinated = false,
-					--    invincible = false,
-					--    hitpoint = 100,
-					--    shield = 100,
-					--    energy = 0,
-					--    resource = 0,
-					--    hanger = 0,
-					--});
-					
+					CreateUnitWithProperties(1,121,"CLoc165",FP,{
+					    clocked = false,
+					    burrowed = false,
+					    intransit = false,
+					    hallucinated = false,
+					    invincible = false,
+					    hitpoint = 10,
+					    shield = 100,
+					    energy = 0,
+					    resource = 0,
+					    hanger = 0,
+					});
+				
 					PreserveTrigger();
 				}
 			}
@@ -1929,7 +1941,7 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					CreateUnit(1,8,"CLoc165",FP),
+					CreateUnit(1,30,"CLoc165",FP),
 					
 					PreserveTrigger();
 				}
@@ -1981,7 +1993,7 @@ end
 				actions = {
 					CreateUnit(1,94,"CLoc165",FP),
 					KillUnit(94,FP);
-					--CreateUnit(1,121,"CLoc165",FP),
+					CreateUnit(1,121,"CLoc165",FP),
 					
 					PreserveTrigger();
 				}
