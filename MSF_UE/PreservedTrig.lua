@@ -39,7 +39,8 @@ CIf(FP,Switch("Switch 240",Set))
     CAdd(FP,Time,Dt)
     CMov(FP,TimePtr,Time)
     CMov(FP,LevelPtr,Level)
-	CSub(FP,_Ccode(FP,GCT),Dt)
+
+
 	CIfEnd()
     DoActions(FP,{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07±âºÎ\x04 : F9\x07 ]")})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{

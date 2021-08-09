@@ -5,6 +5,7 @@ function Install_DLBoss()
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
 	CMov(FP,SpeedVar,4)
+	CMov(FP,0x6509B0,FP)
 	Trigger { -- 보스 무브 로케
 		players = {P8},
 		conditions = {
@@ -1225,6 +1226,7 @@ function Install_DLBoss()
 		GetLocCenter("C8",CX,CY)
 		f_Recall(nil,CX,CY)
 	CIfEnd()
+	CMov(FP,0x6509B0,FP)
 	CIf(FP,Void(4, Exactly, 7),SetVoid(4, SetTo, 0))
 	Trigger { -- 유닛 소환
 		players = {P8},

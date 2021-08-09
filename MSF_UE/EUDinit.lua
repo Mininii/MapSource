@@ -340,7 +340,13 @@ UnitSizePatch(121,10)
 	UnitEnable(72)
 	UnitEnable(22)
 	UnitEnable(70)
+	UnitEnable(64)
+	UnitEnable(65)
+	UnitEnable(66)
+	UnitEnable(67)
+
 	for i = 0, 6 do
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
@@ -413,7 +419,7 @@ UnitSizePatch(121,10)
 		},
 	}
 	DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
-	local SetPlayers = CreateVar(FP)
+	
 	for i = 0, 6 do
 	Trigger {
 		players = {FP},
@@ -609,18 +615,20 @@ UnitSizePatch(121,10)
 		},
 		}
 	--	
+	local SinglePatch2 = {}
+	local SinglePatch = {}
+	for i = 0, 6 do
+		table.insert(SinglePatch,SetMemoryB(0x57F27C + (i * 228) + 70,SetTo,0))
+		table.insert(SinglePatch2,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+	end
 	CIfX(FP,CDeaths(FP,AtLeast,1,isSingle))
 
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8컬러f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 미니맵
-			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),
+			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2
 		})
 	CElseX()
-	SinglePatch = {}
-	for i = 0, 6 do
-		table.insert(SinglePatch,SetMemoryB(0x57F27C + (i * 228) + 70,SetTo,0))
-	end
 	DoActions(FP,SinglePatch)
 	CIfXEnd()
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))

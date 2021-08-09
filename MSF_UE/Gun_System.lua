@@ -87,6 +87,7 @@ function Gun_System()
             SetInvincibility(Disable,"Buildings",FP,64);
         })
         CMov(FP,Actived_Gun,0)
+        CSub(FP,_Ccode(FP,GCT),Dt)
         for i = 0, 63 do
             CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
                 Var_InputCVar,

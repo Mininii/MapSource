@@ -77,6 +77,7 @@ function LevelUp()
 				CDoActions(FP,{
 					KillUnitAt(All,"Men","Center",Force1),
 					CreateUnit(1,74,64,FP),
+					MoveLocation("Boss", "Dark Templar (Hero)", FP, "Anywhere");
 					TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(2000*256)),_Mov(1500*256))),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
 				})
@@ -165,9 +166,19 @@ function LevelUp()
 		if TestStart == 1 then
 			--CMov(FP,LevelT2,4)
 		end
+		local ButtonPatch = {}
+		for i = 0, 6 do
+			table.insert(ButtonPatch,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+			table.insert(ButtonPatch,SetMemoryB(0x57F27C+(228*i)+70,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		end
 		TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
 		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
 		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
+		if Limit == 0 then
+			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,1)},{ButtonPatch},{Preserved})
+		else
+			TriggerX(FP,{},{ButtonPatch},{Preserved})
+		end
 		
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
@@ -215,7 +226,7 @@ function LevelUp()
 			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
 		end
 		for i = 1, 3 do
-		TriggerX(FP,{CVar(FP,Diff[2],Exactly,i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,5)},{Preserved})
+		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,5)},{Preserved})
 		end
 		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 		
@@ -260,15 +271,22 @@ function LevelUp()
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 	MoveMarineArr = {}
 	for i = 0, 6 do
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,19,2+i))
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,17,2+i))
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,18,2+i))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,2+i))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,2+i))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,2+i))
 	for j = 0, 4 do
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,19,20+j))
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,17,20+j))
-	table.insert(MoveMarineArr,MoveUnit(All,"Men",i,18,20+j))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,20+j))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,20+j))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,20+j))
+	end
+	for j = 65, 73 do
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,j))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,j))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,j))
+	
 	end
 	end
+	--65~73
 	DoActions2(FP,MoveMarineArr)
 	
 	CMov(FP,0x6509B0,UnitDataPtr)
@@ -279,6 +297,8 @@ function LevelUp()
 			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- 포인트유닛 리젠 삭제
 			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- 포인트유닛 리젠 삭제
 			NJumpX(FP,PointJump,{DeathsX(CurrentPlayer,Exactly,221,0,0xFF)}) -- 포인트유닛 리젠 삭제
+			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],AtLeast,7),DeathsX(CurrentPlayer,Exactly,131,0,0xFF)}) -- 해처리레어 리젠없음
+			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],Exactly,10),DeathsX(CurrentPlayer,Exactly,132,0,0xFF)}) -- 해처리레어 리젠없음
 			CSub(FP,0x6509B0,1)
 			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드.
 			CAdd(FP,0x6509B0,1)

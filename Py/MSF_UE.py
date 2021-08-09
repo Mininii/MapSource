@@ -151,14 +151,18 @@ def afterTriggerExec():
 	PercentCalc = EUDVariable()
 	if EUDIf()(SelOP >= 1):
 		ct.f_setTbl(1501, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
+		ct.f_setTbl(831, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
 		
 		PercentCalc << (SelHP*3)//MarHP
 		if EUDIf()(PercentCalc >= 2):
 			ct.f_setTbl(1501, 0, 30,"\x07",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
 		if EUDElseIf()(PercentCalc == 1):
 			ct.f_setTbl(1501, 0, 30,"\x17",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
 		if EUDElse()():
 			ct.f_setTbl(1501, 0, 30,"\x08",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
 		EUDEndIf()
 		SelOP.SubtractNumber(1)
 	EUDEndIf()

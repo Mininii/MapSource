@@ -19,7 +19,7 @@ function Var_init()
 	DBossT2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d / \x0d\x0d\x0d\x0d\x0d\x0d")
 	DBossT3 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x10¡½\x0d\x0d\x0d\x0d\x0d\x0d")
 
-	DBossTotalDMGT = CreateCText(FP,"\x13\x1F£Ô\x04£ï£ô£á£ì \x08£Ä\x04£á£í£á£ç£å : ")
+	DBossTotalDMGT = CreateCText(FP,"\x13\x1F£Â\x04£ï£ó£ó \x08£Â\x04£á£ô£ô£ì£å \x07£Â\x04£ï£î£õ£ó : ")
 	HTextStrReset = CreateCText(FP,HTextStr)
 	HeroVArr = CreateVarray(FP,#HeroArr)
 	ZergGndVArr = CreateVarray(FP,#ZergGndUArr)
@@ -128,6 +128,8 @@ function Var_init()
     SpeedVar = CreateVar2(4,FP)
 	WaveT = CreateVar(FP)
 	RecallPosX = CreateVar(FP)
+	CUnitFlag = CreateCcode()
+	SetPlayers = CreateVar(FP)
 
 end
 

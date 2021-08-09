@@ -17,7 +17,7 @@ function PlayerInterface()
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
 	local SelPTR,SelEPD,SelHP,SelSh,SelPl,SelMaxHP = CreateVariables(6)
 	local SelUID = CreateVar(FP)
-	local BarRally = CreateVar(FP)
+	local BarRally = CreateVarArr(7,FP)
 	local ExchangeP = CreateVar(FP)
 	local MarTempSh = CreateVar(FP)
 	local DelayMedic = Create_CCTable(7)
@@ -80,6 +80,21 @@ function PlayerInterface()
 			},
 		}
 		
+		for k = 64, 67 do
+			Trigger { -- 버튼 기능
+				players = {i},
+				conditions = {
+					Label(0);
+					Bring(i,AtLeast,1,k,64);
+				},
+				actions = {
+					SetDeaths(i,SetTo,1,k);
+					RemoveUnitAt(1,k,"Anywhere",i);
+					SetCDeaths(FP,Add,1,CUnitFlag);
+					PreserveTrigger();
+				},
+			}
+		end
 		
 		TriggerX(i,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,10)},{
 				DisplayText(string.rep("\n", 20),4);
@@ -106,6 +121,7 @@ function PlayerInterface()
 				SetDeaths(i,Add,1,71);
 				RemoveUnitAt(1,71,"Anywhere",i);
 				DisplayText("\x07『 \x04원격 \x1B스팀팩\x04기능을 사용합니다.\x07 』",4);
+				SetCDeaths(FP,Add,1,CUnitFlag);
 				PreserveTrigger();
 			},
 		}
@@ -364,14 +380,12 @@ function PlayerInterface()
 				SetDeathsX(i,SetTo,0*16777216,440,0xFF000000);
 			},{Preserved})
 
-			Trigger2(i,{Command(i,AtLeast,1,70);},{
+			TriggerX(i,{Command(i,AtLeast,1,70);},{
 				GiveUnits(All,70,i,"Anywhere",P12);
 				RemoveUnitAt(All,70,"Anywhere",P12);
 				DisplayText("\x07『 \x1C모든 유닛\x04에 \x1D자율공격명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
-				SetMemoryX(0x57EEE0 + (i*36)+8,SetTo,1,0xFF),
-				RunAIScriptAt(JYD,61),
-				RunAIScriptAt(JYD,62),
-				SetMemoryX(0x57EEE0 + (i*36)+8,SetTo,2,0xFF),
+				SetDeaths(i,SetTo,1,70);
+				SetCDeaths(FP,Add,1,CUnitFlag);
 			},{Preserved})
 			
 
@@ -442,25 +456,24 @@ function PlayerInterface()
 			SetMemory(0x584DE4+(12*12)+(i*4),SetTo,0),
 		},{Preserved})
 		
-		
 		CIf(FP,{CDeaths(FP,AtLeast,1,MarCreate[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate[i+1]))
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
+			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally[i+1])
 			DoActions(FP,CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}))
-			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
-				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
+				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0)})
 			CIfEnd()
 			CMov(FP,0x6509B0,FP)
 		CIfEnd()
 		
 		CIf(FP,{CDeaths(FP,AtLeast,1,MarCreate2[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate2[i+1]))
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally)
+			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally[i+1])
 			DoActions(FP,CreateUnitWithProperties(1,10,2+i,i,{energy = 100}))
-			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally),CVar(FP,BarRally[2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
-				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally,0)})
+				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0)})
 			CIfEnd()
 			CMov(FP,0x6509B0,FP)
 		CIfEnd()
@@ -536,7 +549,7 @@ function PlayerInterface()
 			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),Add,MarDamageFactor*255),
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
 		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 		
@@ -549,7 +562,7 @@ function PlayerInterface()
 			SetCVar(FP,MarMaxHP[i+1][2],Add,2000*256),
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{Preserved})
 		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)},{SetCVar(FP,DefFactorV[i+1][2],Add,1)},{Preserved})
 		CIfEnd()
 
@@ -615,7 +628,7 @@ function PlayerInterface()
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
-		DoActionsX(FP,{SetCVar(FP,Subtract,1,UpSELemit[i+1])})
+		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1])})
 		
 		
 		
@@ -677,13 +690,16 @@ function PlayerInterface()
 				},
 				actions = {
 					ModifyUnitShields(All,"Any unit",i,"Anywhere",100);
+					SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0x8000,0x8000);
 					PreserveTrigger();
 				},
 			}
+
 			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
 				ModifyUnitShields(All,"Any unit",i,"Anywhere",0);},{Preserved})
 		CElseX()
 			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
+			TriggerX(FP,{CDeaths(FP,AtMost,0,isSingle)},{SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000);},{Preserved})
 		CIfXEnd()
 
 		CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
@@ -695,28 +711,58 @@ function PlayerInterface()
 			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
 		CIfXEnd()
 	end
-	CIf(FP,Deaths(Force1,AtLeast,1,71)) -- 원격스팀
+	local TempPos = CreateVar(FP)
+	local CurP = CreateVar(FP)
+	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀 외 기능들
+		for i = 0, 6 do
+			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally[i+1])
+		end
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+			CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
+			f_SaveCp()
 			for i = 0, 6 do
-				Trigger {
-					players = {FP},
-					conditions = {
-						DeathsX(CurrentPlayer,Exactly,i,0,0xFF);
-						Deaths(i,AtLeast,1,71);
-					},
-					actions = {
-						MoveCp(Add,50*4);
-						SetDeathsX(CurrentPlayer,SetTo,255*256,0,0xFF00);
-						MoveCp(Subtract,50*4);
-						PreserveTrigger();
-					}
+			CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+			Trigger {
+				players = {FP},
+				conditions = {
+					Deaths(i,AtLeast,1,71);
+				},
+				actions = {
+					MoveCp(Add,50*4);
+					SetDeathsX(CurrentPlayer,SetTo,255*256,0,0xFF00);
+					MoveCp(Subtract,50*4);
+					PreserveTrigger();
 				}
+			}
+			f_SaveCp()
+			local ValCancle = def_sIndex()
+			NJump(FP,ValCancle,{TMemory(_Add(BackupCP,6),Exactly,58)})
+			CTrigger(FP,{Deaths(i,AtLeast,1,65)}, -- Stop
+			{TSetDeathsX(BackupCP,SetTo,1*256,0,0xFF00)},{Preserved})
+			CIf(FP,{Deaths(i,AtLeast,1,67)}) -- Hold
+				f_Read(FP,_Sub(BackupCP,9),TempPos)
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,64)}) -- Move
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,6*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,BarRally[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,BarRally[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,BarRally[i+1],0)})
+			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,66)}) -- Attack
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,BarRally[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,BarRally[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,BarRally[i+1],0)})
+			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
+				f_Read(FP,_Sub(BackupCP,9),TempPos)
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,187*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+			CIfEnd()
+			NJumpEnd(FP,ValCancle)
+			f_LoadCp()
+			CIfEnd()
 			end
+			CIfEnd()
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
 		CMov(FP,0x6509B0,FP)
-		DoActions(FP,SetDeaths(Force1,SetTo,0,71))
+		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetCDeaths(FP,SetTo,0,CUnitFlag)})
 	CIfEnd()
 	local HealT = CreateCCode()
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
@@ -726,9 +772,9 @@ function PlayerInterface()
 	end
 	CIfEnd()
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
-	CIf(FP,{CDeaths(FP,Exactly,0,isSingle),CVar(FP,InputPoint[2],AtLeast,2000)})
-	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(2000)))
-	f_Mod(FP,InputPoint,_Mov(2000))
+	CIf(FP,{CDeaths(FP,Exactly,0,isSingle),CVar(FP,InputPoint[2],AtLeast,1000)})
+	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
+	f_Mod(FP,InputPoint,_Mov(1000))
 	CIfEnd()
     CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 end
