@@ -19,6 +19,7 @@ function LevelUp()
 		CommandLeastAt(133,64),
 		CommandLeastAt(151,64),
 		CommandLeastAt(152,64),
+		CommandLeastAt(173,64),
 		CommandLeastAt(148,64),
 		CommandLeastAt(130,64),
 		CommandLeastAt(201,64),
@@ -30,6 +31,7 @@ function LevelUp()
 	CommandLeastAt(131,64),
 	CommandLeastAt(132,64),
 	CommandLeastAt(133,64),
+	CommandLeastAt(173,64),
 	CommandLeastAt(151,64),
 	CommandLeastAt(152,64),
 	CommandLeastAt(148,64),
@@ -175,9 +177,9 @@ function LevelUp()
 		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
 		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
 		if Limit == 0 then
-			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,1)},{ButtonPatch},{Preserved})
+			TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{ButtonPatch,SetSwitch("Switch 211",Set)},{Preserved})
 		else
-			TriggerX(FP,{},{ButtonPatch},{Preserved})
+			TriggerX(FP,{},{ButtonPatch,SetSwitch("Switch 211",Set)},{Preserved})
 		end
 		
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
@@ -210,7 +212,7 @@ function LevelUp()
 		for j, k in pairs(HeroArr) do
 			SetLevelUpHP(k,1)
 		end
-		BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146}
+		BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146,147}
 		
 		for j, k in pairs(BdArr) do
 			SetLevelUpHP(k,2)

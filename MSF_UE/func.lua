@@ -336,12 +336,21 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 end
 
 
-function GunBreak(GName,Point)
+function GunBreak(GName,Point,Flag)
 	local Text = "\n\n\n\x13- \x0E- \x0F-\x11 £Ó£ô£ò£õ£ã£ô£õ£ò£å \x04£­ "..GName.." \x04 ÆÄ±«!! \x1F+ "..Point.." P t s \x11- \x0E- \x0F-\n"
-	DoActions(FP,{
-		RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
-		SetScore(Force1,Add,Point,Kills);
-	})
+	if Flag == 1 then
+		DoActions(FP,{
+			RotatePlayer({DisplayTextX(Text,4)},HumanPlayers,FP);
+			SetScore(Force1,Add,Point,Kills);
+	
+		})
+	else
+		DoActions(FP,{
+			RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+			SetScore(Force1,Add,Point,Kills);
+	
+		})
+	end
 end
 function Gun_DoSuspend()
 	return TSetMemory(_Add(G_TempH,(54*0x20)/4),Add,1)
@@ -373,42 +382,6 @@ function Gun_Line(Line,Type,Value,Mask)
 	end
 	return CVar(FP,Var_TempTable[Line+1][2],Type,Value,Mask)
 end
-
-function Create_SortTable(Shape)
-	local X = {}
-	if type(Shape[1]) == "number" then
-		table.insert(X,CS_SortX(Shape,0))
-		table.insert(X,CS_SortX(Shape,1))
-		table.insert(X,CS_SortY(Shape,0))
-		table.insert(X,CS_SortY(Shape,1))
-		table.insert(X,CS_SortR(Shape,0))
-		table.insert(X,CS_SortR(Shape,1))
-		table.insert(X,CS_SortA(Shape,0))
-		table.insert(X,CS_SortA(Shape,1))
-		table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
-		table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
-		table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
-		table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
-	else
-		for j, k in pairs(Shape) do
-			table.insert(X,CS_SortX(k,0))
-			table.insert(X,CS_SortX(k,1))
-			table.insert(X,CS_SortY(k,0))
-			table.insert(X,CS_SortY(k,1))
-			table.insert(X,CS_SortR(k,0))
-			table.insert(X,CS_SortR(k,1))
-			table.insert(X,CS_SortA(k,0))
-			table.insert(X,CS_SortA(k,1))
-			table.insert(X,CS_DoubleSortRA(k,32,0,0))
-			table.insert(X,CS_DoubleSortRA(k,32,0,1))
-			table.insert(X,CS_DoubleSortRA(k,32,1,0))
-			table.insert(X,CS_DoubleSortRA(k,32,1,1))
-		end
-
-	end
-	return X
-end
-
 
 
 function T_to_BiteBuffer(Table)

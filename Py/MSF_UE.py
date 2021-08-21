@@ -58,13 +58,13 @@ SelHP = EUDVariable() # 0x58f500
 MarHP = EUDVariable() # 0x58f504
 SelSh = EUDVariable() # 0x58f508
 SelOP = EUDVariable() # 0x58f50C
-UnitDataArr = Db(1700*12) # 0x58f510
+#UnitDataArr = Db(1700*12) # 0x58f510
 #ScoreV = EUDVariable() # 0x58f518
 #LevelV = EUDVariable() # 0x58f51C
 #TimeV = EUDVariable() # 0x58f520
 
 
-SkillArr = Db(4000) # 0x58f532
+#SkillArr = Db(4000) # 0x58f532
 
 def onPluginStart():
 
@@ -82,8 +82,9 @@ def onPluginStart():
 #		SetMemory(0x58f518, SetTo, ScoreV.getValueAddr()),
 #		SetMemory(0x58f51C, SetTo, LevelV.getValueAddr()),
 #		SetMemory(0x58f520, SetTo, TimeV.getValueAddr()),
-		SetMemory(0x58f532, SetTo, SkillArr.getValueAddr()),
-		SetMemory(0x58f510, SetTo, UnitDataArr)])
+		#SetMemory(0x58f532, SetTo, SkillArr.getValueAddr()),
+		#SetMemory(0x58f510, SetTo, UnitDataArr)
+		])
 	#0~6 공업
 	#8~14 방업
 	#배럭버튼셋 플레이어마다 다르게 설정해야함

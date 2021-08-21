@@ -69,4 +69,6 @@ function S1_Vector(X,Y) return {X+Y,X-Y} end--
 WheelA = CS_Vector2D(SS3,1,"S1_Vector")--
 
 
-CSPlot(CS_MoveXY(CS_RatioXY(WheelA,1.4,2.6),48*32,96*32),P1,54,64,{0,0},1,32,P1) -- 政間 持失
+
+
+CSPlot(CSMakeLine(4,72,45,49,1),P1,"Protoss Carrier","Location 13",nil,1,60,P1) -- 政間 持失

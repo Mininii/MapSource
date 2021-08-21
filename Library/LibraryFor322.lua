@@ -146,6 +146,14 @@ function CallTriggerX(Player,Index,Condition,AddonTrigger) -- CtrigAsm 5.1
 	TriggerX(Player,Condition,{AddonTrigger,X},{Preserved})
 end
 
+function SetNextTrigger(Index,AddonTrigger)
+	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1),AddonTrigger}
+	return X
+end
+function SetNextForward(AddonTrigger)
+	local X = {SetNext("X",CallIndexAlloc,0),SetNext(CallIndexAlloc+1,"X",1),AddonTrigger}
+	return X
+end
 function SetCallErrorCheck() -- CtrigAsm 5.1
 	if SetCallOpen == 1 then
 		SetCall_Already_Open()
@@ -260,7 +268,7 @@ function Create_VTable(Number,InitVar,Player)
 	if Player == nil then Player = FP end
 	local X = {}
 	for i = 1, Number do
-		table.insert(X,CreateVar2(InitVar,Player,nil,nil))
+		table.insert(X,CreateVar3(Player,InitVar,nil,nil))
 	end
 	return X
 end
@@ -538,7 +546,7 @@ function ConvertLocation(Location) -- ·ÎÄÉÀÌ¼Ç ÀÎµ¦½º º¯È¯ÇÔ¼ö. TempLocID´Â 0ºÎÅ
 	local TempLocID = Location
 	if type(Location) == "string" then
 		TempLocID = ParseLocation(Location)-1
-	elseif Type(Location) == "number" then
+	elseif type(Location) == "number" then
 		TempLocID = Location
 		Location = Location+1
 	end
@@ -546,6 +554,7 @@ function ConvertLocation(Location) -- ·ÎÄÉÀÌ¼Ç ÀÎµ¦½º º¯È¯ÇÔ¼ö. TempLocID´Â 0ºÎÅ
 end
 
 function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ¾È¾²°Å³ª ÀÚÁÖ ¹Ù²î´Â ·ÎÄÉÀÌ¼Ç, TempUnit = ¾È¾²´Â À¯´Ö. Unused °¡´É ¾Æ¸¶?
+	GLocC = 1
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
 	local PlayerID = TriggerPlayer
 	local RetX = CreateVar(FP)
@@ -577,6 +586,38 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ¾È¾²°Å³ª À
 		local Location2, Location = ConvertLocation(Location)
 		DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
 	end
+end
+
+function CreateVar3(PlayerID,Value,Offset,Type,Mask)
+	CreateVarXAlloc = CreateVarXAlloc + 1
+	if CreateVarXAlloc > CreateMaxVAlloc then
+		CreateVariable_IndexAllocation_Overflow()
+	end
+	if PlayerID == nil then
+		PlayerID = AllPlayers
+	end
+	table.insert(CreateVarPArr,{"V2",PlayerID,Offset,Type,Value,Mask})
+	return V(CreateVarXAlloc)
+end
+
+function Include_CRandNum(Player)
+
+	TempRandRet = CreateVar(FP)
+	InputMaxRand = CreateVar(FP)
+	Oprnd = CreateVar(FP)
+	function f_CRandNum(Max,Operand,Condition)
+		if Operand == nil then Operand = 0 end
+		local RandRet = TempRandRet
+		CallTriggerX(Player,CRandNum,Condition,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
+		return RandRet
+	end
+	CRandNum = SetCallForward()
+	SetCall(Player)
+	f_Rand(Player,TempRandRet)
+	f_Mod(Player,TempRandRet,InputMaxRand)
+	CAdd(Player,TempRandRet,Oprnd)
+	SetCallEnd()
+
 end
 
 TempV_0D = CreateVar()

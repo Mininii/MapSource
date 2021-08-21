@@ -45,6 +45,7 @@ function Gun_System()
     f_GSend(151)
     f_GSend(201)
     f_GSend(148)
+    f_GSend(173)
     f_GSend(152)
     CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- ´ÙÅ©¾ÆÄ­ Æø¹ßÀÌÆåÆ®
         f_SaveCp()

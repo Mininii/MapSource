@@ -12,6 +12,8 @@ SetCallEnd()
 local UpCompTxt = CreateVarray(FP,5)
 local UpCompRet = CreateVarray(FP,5)
 
+TempMul_254,TempMul_255,TempMul_1,TempFactor = CreateVars(4,FP)
+
 OneClickUpgrade = SetCallForward()
 SetCall(FP) 
 	f_Read(FP,TempUpgradePtr,UpResearched)
@@ -19,23 +21,27 @@ SetCall(FP)
 		CMod(FP,UpResearched,_Mul(TempUpgradeMaskRet,_Mov(256)))
 	CIfEnd()
 	CDiv(FP,UpResearched,TempUpgradeMaskRet)
+	f_Mul(FP,TempMul_254,TempUpgradeMaskRet,_Mov(254))
+	f_Mul(FP,TempMul_255,TempUpgradeMaskRet,_Mov(255))
+	f_Mul(FP,TempMul_1,TempUpgradeMaskRet,_Mov(1))
 	CMov(FP,0x6509B0,UpgradeCP)
 	OCU_Jump = def_sIndex()
 	CJumpEnd(FP,OCU_Jump)
+	f_Mul(FP,TempFactor,UpResearched,UpgradeFactor)
 	NWhile(FP,{
 		CVar(FP,UpResearched[2],AtMost,254),
 		CVar(FP,UpgradeMax[2],AtLeast,1),
-		TAccumulate(CurrentPlayer,AtLeast,_Mul(UpResearched,UpgradeFactor),Ore),
-		TMemoryX(TempUpgradePtr,AtMost,_Mul(TempUpgradeMaskRet,254),_Mul(TempUpgradeMaskRet,255))
+		TAccumulate(CurrentPlayer,AtLeast,TempFactor,Ore),
+		TMemoryX(TempUpgradePtr,AtMost,TempMul_254,TempMul_255)
 	})
 		CDoActions(FP,{
-			TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
-			TSetResources(CurrentPlayer,Subtract,_Mul(UpResearched,UpgradeFactor),Ore),
+			TSetCVar(FP,UpCost[2],Add,TempFactor),
+			TSetResources(CurrentPlayer,Subtract,TempFactor,Ore),
 			SetCVar(FP,UpResearched[2],Add,1),
 			SetCVar(FP,UpCompleted[2],Add,1),
 			SetCVar(FP,UpgradeMax[2],Subtract,1),
-			--TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
-			TSetMemoryX(TempUpgradePtr,Add,_Mul(TempUpgradeMaskRet,_Mov(1)),_Mul(TempUpgradeMaskRet,_Mov(255)))
+			--TSetCVar(FP,UpCost[2],Add,TempFactor),
+			TSetMemoryX(TempUpgradePtr,Add,TempMul_1,TempMul_255)
 		})
 		CJump(FP,OCU_Jump)
 	NWhileEnd()
@@ -108,7 +114,7 @@ SetCall(FP)
 SetCallEnd()
 
 G_TempH = CreateVar(FP)
-G_InputH = CreateVar2({"X",0x500,0x15C,1,0},FP)
+G_InputH = CreateVar(FP) --{"X",0x500,0x15C,1,0}
 
 Var_TempTable = {}
 Var_InputCVar = {}
@@ -165,6 +171,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CDoActions(FP,{
 				TSetInvincibility(Enable,Gun_TempSpawnSet1,FP,60),TGiveUnits(1,Gun_TempSpawnSet1,P8,60,P9),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00)
 			})
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
 
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
 		TriggerX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
@@ -287,7 +294,7 @@ CDoActions(FP,{
 	Gun_SetLineX(_Add(G_CA_LineV,4),SetTo,G_CA_LMTV),
 	Gun_SetLineX(_Add(G_CA_LineV,5),SetTo,G_CA_RPTV),
 })
-NElseIfX({TMemory(G_CA_LineV,AtMost,47)})
+NElseIfX({CVar(FP,G_CA_LineV[2],AtMost,47)})
 CAdd(FP,G_CA_LineV,7)
 CJump(FP,Write_SpawnSet_Jump)
 NElseX()
@@ -759,9 +766,8 @@ P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
 
 
-NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2 = 
-G_CAPlot2({NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2})
-
+NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2,Form,Form2,FormF1,FormF2,FormF3 = 
+G_CAPlot2({NBYD,Hive_1,Ovrm,CC_L,CC_R,Hive_2,Hive_3F,Cere_L,Cere_R,CC_LF,CC_RF,OvrmF,Hive_3,GC1,GC2,Form,Form2,FormF1,FormF2,FormF3})
 
 
 
@@ -793,6 +799,7 @@ SetCall(FP)
 		Case_Hive()
 		Case_Lair()
 		Case_Hatchery()
+		Case_Formation()
 		Case_Test()
 
 

@@ -1,4 +1,41 @@
 function Install_ShapeData()
+	
+	function Create_SortTable(Shape)
+		local X = {}
+		if type(Shape[1]) == "number" then
+			table.insert(X,CS_SortX(Shape,0))
+			table.insert(X,CS_SortX(Shape,1))
+			table.insert(X,CS_SortY(Shape,0))
+			table.insert(X,CS_SortY(Shape,1))
+			table.insert(X,CS_SortR(Shape,0))
+			table.insert(X,CS_SortR(Shape,1))
+			table.insert(X,CS_SortA(Shape,0))
+			table.insert(X,CS_SortA(Shape,1))
+			table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
+			table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
+			table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
+			table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
+		else
+			for j, k in pairs(Shape) do
+				table.insert(X,CS_SortX(k,0))
+				table.insert(X,CS_SortX(k,1))
+				table.insert(X,CS_SortY(k,0))
+				table.insert(X,CS_SortY(k,1))
+				table.insert(X,CS_SortR(k,0))
+				table.insert(X,CS_SortR(k,1))
+				table.insert(X,CS_SortA(k,0))
+				table.insert(X,CS_SortA(k,1))
+				table.insert(X,CS_DoubleSortRA(k,32,0,0))
+				table.insert(X,CS_DoubleSortRA(k,32,0,1))
+				table.insert(X,CS_DoubleSortRA(k,32,1,0))
+				table.insert(X,CS_DoubleSortRA(k,32,1,1))
+			end
+
+		end
+		return X
+	end
+
+
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
 		local X = {}
 		for i = LvMin, LvMax do
@@ -77,5 +114,10 @@ function Install_ShapeData()
 	function S1_Vector(X,Y) return {X+Y,X-Y} end--
 	WheelA = CS_Vector2D(SS3,1,"S1_Vector")--
 	GC2 = CS_MoveXY(CS_RatioXY(WheelA,1.4,2.6),48*32,96*32)
+	Form = CS_ConnectPathX(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),128,1)
+	Form2 = CS_ConnectPathX(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),64,1)
+	FormF1 = CS_FillPathXY(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),0,256,256)
+	FormF2 = CS_FillPathXY(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),0,128,128)
+	FormF3 = CS_FillPathXY(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),0,64,64)
 	
 end

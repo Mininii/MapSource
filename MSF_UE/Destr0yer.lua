@@ -110,7 +110,7 @@ local Lyrics = {
 		return TempCcode
 	end
 	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
-	local Pat1 = Create_PatternCcode(Table)
+	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{Order(186,FP,64,Move,"DCenter")},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit),CDeaths(FP,Exactly,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),MoveUnit(All,186,FP,64,64)},{Preserved})
 	

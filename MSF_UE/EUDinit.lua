@@ -101,9 +101,9 @@ function onInit_EUD()
 	f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+	--f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F55C,"X",B_Id_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	
 	for i = 1, #HeroArr do
@@ -112,13 +112,18 @@ function onInit_EUD()
 	for i = 1, #ZergGndUArr do
 		table.insert(CTrigPatchTable,SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
 	end
-
+	table.insert(CTrigPatchTable,SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))
+	table.insert(CTrigPatchTable,SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))
 	DoActionsX(FP,CTrigPatchTable,1)
 	local VRet = CreateVar(FP)
 	local VRet2 = CreateVar(FP)
 	local VRet3 = CreateVar(FP)
 	local VRet4 = CreateVar(FP)
 	local CurrentUID = CreateVar(FP)
+	
+	
+	TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+	TMem(FP,XY_ArrHeader,XY_ArrHeaderVoid)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
@@ -389,6 +394,7 @@ UnitSizePatch(121,10)
 		DefTypePatch(74,9)
 		DefTypePatch(186,9)
 		DefTypePatch(121,9)
+		DefTypePatch(173,9)
 
 
 	Trigger { -- 퍼센트 데미지 세팅
@@ -529,7 +535,7 @@ UnitSizePatch(121,10)
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDD,SetTo,1);
+			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
 	
@@ -544,7 +550,7 @@ UnitSizePatch(121,10)
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDD,SetTo,1);
+			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
 	Trigger { -- 게임오버
@@ -558,7 +564,7 @@ UnitSizePatch(121,10)
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDD,SetTo,1);
+			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
 	Trigger { -- 게임오버
@@ -572,7 +578,7 @@ UnitSizePatch(121,10)
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDD,SetTo,1);
+			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
 	Trigger { -- 게임오버
@@ -586,7 +592,7 @@ UnitSizePatch(121,10)
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDD,SetTo,1);
+			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
 	--		Trigger { -- 싱글플 불가능 맵
@@ -600,7 +606,7 @@ UnitSizePatch(121,10)
 	--				Defeat();
 	--				},HumanPlayers,FP);
 	--				Defeat();
-	--				SetMemory(0xCDDDCDDD,SetTo,1);
+	--				SetMemory(0xCDDDCDDC,SetTo,1);
 	--		},
 	--		}
 	--	
@@ -626,7 +632,7 @@ UnitSizePatch(121,10)
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8컬러f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 미니맵
-			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2
+			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2,SetSwitch("Switch 211",Set)
 		})
 	CElseX()
 	DoActions(FP,SinglePatch)
@@ -720,7 +726,13 @@ UnitSizePatch(121,10)
 	CMov(FP,RepHeroIndex,0)
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
 	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{Preserved}) -- 발키리 나가
-	CDoActions(FP,{TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),TRemoveUnit(RepHeroIndex,AllPlayers),TRemoveUnit(RepHeroIndex,P9),TRemoveUnit(RepHeroIndex,P10),TRemoveUnit(RepHeroIndex,P11),TRemoveUnit(RepHeroIndex,P12)})
+	CDoActions(FP,{
+		TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),
+		TRemoveUnit(RepHeroIndex,AllPlayers),
+		TRemoveUnit(RepHeroIndex,P9),
+		TRemoveUnit(RepHeroIndex,P10),
+		TRemoveUnit(RepHeroIndex,P11),
+		TRemoveUnit(RepHeroIndex,P12)})
 	CAdd(FP,RepHeroIndex,1)
 	CWhileEnd()
 	f_ArrReset()

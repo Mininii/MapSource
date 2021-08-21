@@ -18,11 +18,13 @@ function PlayerInterface()
 	local SelPTR,SelEPD,SelHP,SelSh,SelPl,SelMaxHP = CreateVariables(6)
 	local SelUID = CreateVar(FP)
 	local BarRally = CreateVarArr(7,FP)
+	local MulCon = CreateVarArr(7,FP)
 	local ExchangeP = CreateVar(FP)
 	local MarTempSh = CreateVar(FP)
 	local DelayMedic = Create_CCTable(7)
 	local ShUsed = Create_CCTable(7)
 	local GiveRate = Create_CCTable(7)
+	local OrderCool = CreateCCodeArr(7)
 	
 	for i = 0, 6 do
 		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
@@ -63,7 +65,7 @@ function PlayerInterface()
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					SetMemory(0xCDDDCDDD,SetTo,1);
+					SetMemory(0xCDDDCDDC,SetTo,1);
 					
 					},
 				}
@@ -81,6 +83,12 @@ function PlayerInterface()
 		}
 		
 		for k = 64, 67 do
+			local X = {}
+			if k == 64 or k == 66 then
+				X = {SetCDeaths(FP,Add,100,OrderCool[i+1])}
+			else
+				X = nil
+			end
 			Trigger { -- 버튼 기능
 				players = {i},
 				conditions = {
@@ -91,6 +99,7 @@ function PlayerInterface()
 					SetDeaths(i,SetTo,1,k);
 					RemoveUnitAt(1,k,"Anywhere",i);
 					SetCDeaths(FP,Add,1,CUnitFlag);
+					X;
 					PreserveTrigger();
 				},
 			}
@@ -386,6 +395,7 @@ function PlayerInterface()
 				DisplayText("\x07『 \x1C모든 유닛\x04에 \x1D자율공격명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
 				SetDeaths(i,SetTo,1,70);
 				SetCDeaths(FP,Add,1,CUnitFlag);
+				SetCDeaths(FP,Add,100,OrderCool[i+1]);
 			},{Preserved})
 			
 
@@ -428,6 +438,7 @@ function PlayerInterface()
 			players = {FP},
 			conditions = {
 				Label(0);
+				Bring(FP,AtLeast,1,173,10);
 				Bring(i,AtLeast,1,10,10);
 				Accumulate(i,AtLeast,25000,Ore);
 				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -617,7 +628,11 @@ function PlayerInterface()
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
-		TriggerX(FP,{MemoryW(0x656EB0 + (MarWep[i+1]*2),AtLeast,65535-(MarDamageFactor*255))},{SetMemoryB(0x58D088 + (i * 46) + i,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 17,SetTo,0),SetMemoryB(0x58D088 + (i * 46) + 18,SetTo,0),
+		TriggerX(FP,{MemoryW(0x656EB0 + (MarWep[i+1]*2),AtLeast,65535-(MarDamageFactor*255))},{
+			SetMemoryB(0x58D088 + (i * 46) + i,SetTo,0),
+			SetMemoryB(0x58D088 + (i * 46) + 17,SetTo,0),
+			SetMemoryB(0x58D088 + (i * 46) + 18,SetTo,0),
+			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),SetTo,65535),
 			SetMemory(0x6509B0,SetTo,i),
 			DisplayText("\x07[ \x1C공격력\x04이 시스템상 한계라서 더이상 공업 못해요 죄송합니다............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
@@ -628,7 +643,7 @@ function PlayerInterface()
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
-		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1])})
+		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,OrderCool[i+1])})
 		
 		
 		
@@ -655,8 +670,6 @@ function PlayerInterface()
 			CDoActions(FP,{TSetMemory(SelHPEPD,SetTo,SelHP),TSetMemory(MarHPEPD,SetTo,SelMaxHP),TSetMemory(SelShEPD,SetTo,SelSh)})
 		CIfEnd()
 		
-		ExC_Cond = def_sIndex()
-		NJump(FP,ExC_Cond,{Bring(i,AtMost,0,"Men",9)})
 		CIf(FP,Score(i,Kills,AtLeast,1000))
 			CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 			CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
@@ -665,7 +678,6 @@ function PlayerInterface()
 			CMov(FP,ExchangeP,0)
 		CIfEnd()
 		DoActions(FP,SetDeaths(i,Subtract,1,111))
-		NJumpEnd(FP,ExC_Cond)
 
 		CMov(FP,0x582174+(4*i),count)
 		CAdd(FP,0x582174+(4*i),count)
@@ -706,16 +718,27 @@ function PlayerInterface()
 			CMov(FP,0x5821D4 + (4*i),_Div(MarNumberLimit,PCheckV),24*2)
 			CMov(FP,0x582234 + (4*i),_Div(MarNumberLimit,PCheckV),24*2)
 		CIfEnd()
+		local OrderCooltime = {}
+		local OrderCooltimeRecover = {}
+		table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+66,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+70,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+66,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+70,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		TriggerX(FP,{CVar(FP,Level[2],AtLeast,11),CDeaths(FP,AtLeast,1,OrderCool[i+1])},{OrderCooltime},{Preserved})
+		TriggerX(FP,{CVar(FP,Level[2],AtLeast,11),CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{Preserved})
+
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,440)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
 			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
 		CIfXEnd()
 	end
 	local TempPos = CreateVar(FP)
-	local CurP = CreateVar(FP)
 	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀 외 기능들
 		for i = 0, 6 do
-			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally[i+1])
+			GetLocCenter(73+i,CPosX,CPosY)
+			CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
 		end
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
@@ -745,10 +768,10 @@ function PlayerInterface()
 				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,64)}) -- Move
-				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,6*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,BarRally[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,BarRally[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,BarRally[i+1],0)})
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,6*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,MulCon[i+1],0)})
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,66)}) -- Attack
-				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,BarRally[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,BarRally[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,BarRally[i+1],0)})
+				CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,MulCon[i+1],0)})
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
 				f_Read(FP,_Sub(BackupCP,9),TempPos)

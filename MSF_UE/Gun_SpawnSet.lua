@@ -650,6 +650,29 @@ function InstallGunData()
 	CIfEnd()
 	end
 
+	function Case_Formation()
+		CIf(FP,Gun_Line(0,Exactly,173))--«ÿ√≥∏Æ
+		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
+			CDoActions(FP,{Gun_SetLine(4,Add,15000)})
+			GunBreak("\x07£∆£Ô£Ú£Ì£·£Ù£È£Ô£Ó",3000000,1)
+			G_CA_SetSpawn(CVar(FP,LevelT[2],AtMost,9),{13},"ACAS",Form,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1)},{25},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,2)},{25},"ACAS",FormF2,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,3)},{25},"ACAS",FormF3,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,4)},{29},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,5)},{23},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,6)},{98},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,7)},{11},"ACAS",FormF2,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,8)},{69},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,9)},{30},"ACAS",FormF1,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{30},"ACAS",Form2,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{69},"ACAS",FormF2,"MAX",3)
+			G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{121},"ACAS",FormF1,"MAX",3)
+			DoActions2(FP,RotatePlayer({PlayWavX("staredit\\wav\\Glass.wav"),PlayWavX("staredit\\wav\\Glass.wav"),PlayWavX("staredit\\wav\\Glass.wav"),PlayWavX("staredit\\wav\\Glass.wav"),PlayWavX("staredit\\wav\\Glass.wav")},HumanPlayers,FP))
+		CIfEnd()
+		CTrigger(FP,{Gun_Line(4,AtLeast,20000),G_CA_CondStack},{Gun_DoSuspend()},1)
+		CIfEnd()
+	end
 
 	function Case_Test()
 		if TestStart == 1 then
