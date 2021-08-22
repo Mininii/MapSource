@@ -796,7 +796,7 @@ function GunData()
 			NWhileEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
 		CIfEnd()
-		CTrigger(FP,{Gun_Line(5,AtLeast,Hive_3F),G_CA_CondStack},{Gun_DoSuspend()},1)
+		CTrigger(FP,{Gun_Line(5,AtLeast,3),G_CA_CondStack},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,SPGunCond)},1)
 		
 	CIfEnd()
 
@@ -834,7 +834,7 @@ function GunData()
 			CIfEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
 		CIfEnd()
-		CTrigger(FP,{Gun_Line(5,AtLeast,3),G_CA_CondStack},{Gun_DoSuspend()},1)	
+		CTrigger(FP,{Gun_Line(5,AtLeast,3),G_CA_CondStack},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,SPGunCond)},1)	
 	CIfEnd()
 	
 	CIf(FP,{Gun_Line(0,Exactly,148)}) -- BdIndex Overmind
@@ -842,10 +842,12 @@ function GunData()
 			GunBreak("ºò! ÇÑ \x18Large Chrysalis \x04¸¦",100000,6)
 		CIfEnd()
 		CIf(FP,{CVar(FP,count[2],AtMost,1500),Gun_Line(4,AtLeast,480)})
-
+			G_CA_SetSpawn({CDeaths(FP,Exactly,1,GMode)},{84,25},"ACAS","Chry_N",{1,999},nil,1)
+			G_CA_SetSpawn({CDeaths(FP,Exactly,2,GMode)},{84,25},"ACAS","Chry_H",{2,999},nil,1)
+			G_CA_SetSpawn({CDeaths(FP,Exactly,3,GMode)},{84,25},"ACAS","Chry_B",{3,999},nil,1)
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
 		CIfEnd()
-		CTrigger(FP,{Gun_Line(5,AtLeast,3),G_CA_CondStack},{Gun_DoSuspend()},1)	
+		CTrigger(FP,{Gun_Line(5,AtLeast,3),G_CA_CondStack},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,B_Chry_cond);},1)	
 	CIfEnd()
 	
 --	CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
@@ -859,7 +861,7 @@ function GunData()
 			CDoActions(FP,{TSetMemory(_Add(G_TempH,G_TempW),SetTo,0)})
 			CAdd(FP,G_TempW,0x20/4)
 		CWhileEnd()
-		if TestStart == 1 then
+		if Limit == 1 then
 			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
 			_0DPatchX(FP,f_GunNumT,5)
 			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),5*4)

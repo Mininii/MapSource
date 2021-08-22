@@ -1,6 +1,8 @@
 
 --dofile("C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\MapSource\\MSF_GaLaXy.2\\Gal.2.lua")
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+
+-- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -26,7 +28,7 @@ HumanPlayers = {P1,P2,P3,P4,P5,P9,P10,P11,P12}
 SetForces({P1,P2,P3,P4,P5,P6},{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 RepUnitPtr = 0x593000
-TestStart = 1
+TestStart = 0
 Limit = 1
 GunSafety = 0
 VName = "Ver.2.1"
