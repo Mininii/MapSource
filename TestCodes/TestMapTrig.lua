@@ -770,6 +770,39 @@ function S1_funcY(X) return -X^2 end
 --     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 政間 持失
 --end
 
+
+L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
+H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
+L00_1_64F = CS_FillPathXY(L00_1,0,64,64)
+L00_1_96F = CS_FillPathXY(L00_1,0,96,96)
+L00_1_128F = CS_FillPathXY(L00_1,0,128,128)
+L00_1_164F = CS_FillPathXY(L00_1,0,164,164)
+L00_1_96L = CS_ConnectPathX(L00_1,96,1)
+H00_1_64F = CS_FillPathXY(H00_1,0,64,64)
+H00_1_82F = CS_FillPathXY(H00_1,0,82,82)
+H00_1_96F = CS_FillPathXY(H00_1,0,96,96)
+H00_1_128F = CS_FillPathXY(H00_1,0,128,128)
+H00_1_82L = CS_ConnectPathX(H00_1,82,1)
+CSPlot(Chry_N,P1,54,"Location 13",{0,0},1,60,P1) -- 政間 持失
+
+TestShapeTable = {
+L00_1_64F,
+L00_1_96F,
+L00_1_128F,
+L00_1_164F,
+L00_1_96L,
+H00_1_64F,
+H00_1_82F,
+H00_1_96F,
+H00_1_128F,
+H00_1_82L,
+
+}
+for j, k in pairs(TestShapeTable) do
+     DoActions(P1,CreateUnit(1,47,64 + j,P1),1)
+     CSPlot(k,P1,54,64+(j-1),nil,1,32,P1) -- 政間 持失
+end
+
 --DoActions(P1,{CreateUnit(30,20,64,P1)},1)
 --for i = 65, 81 do
 --	DoActions(P1,{CreateUnit(1,82,i,P1),CreateUnit(1,81,i,P1)},1)

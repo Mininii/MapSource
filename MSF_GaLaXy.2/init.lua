@@ -187,6 +187,11 @@ function SetZergGroupFlags(UnitID)
 	UnitEnable2(72)
 	UnitEnable2(72)
 	SetUnitClass(16)
+	SetUnitClass(68)
+	SetUnitClass(25)
+	SetUnitClass(74)
+	SetUnitClass(11)
+	SetUnitClass(5)
 	
 	
 	
@@ -249,9 +254,9 @@ function SetZergGroupFlags(UnitID)
 			SetMemory(0x515BA4,SetTo,256);---------크기 7
 			SetMemory(0x515BA8,SetTo,256);---------크기 8
 			SetMemory(0x515BAC,SetTo,256);---------크기 9
-			SetMemory(0x515BB0,SetTo,32);
+			SetMemory(0x515BB0,SetTo,128);
 			SetMemory(0x515BB4,SetTo,256);
-			SetMemory(0x515BB8,SetTo,256+128);
+			SetMemory(0x515BB8,SetTo,256+256);
 			SetMemory(0x515BBC,SetTo,256);
 			SetMemory(0x515BC0,SetTo,256);
 			SetMemory(0x515BC4,SetTo,256);
@@ -326,6 +331,7 @@ function SetZergGroupFlags(UnitID)
 	Gun_UID = CreateVar()
 	Gun_UID2 = CreateVar()
 	Gun_UID3 = CreateVar()
+	Gun_UID4 = CreateVar()
 	CocoonValue = CreateVar()
 	CocoonValue2 = CreateVar()
 	Gun_TempPosX =  CreateVar()
@@ -467,6 +473,8 @@ function SetZergGroupFlags(UnitID)
 	TGiveforCoCoon = CreateCCode()
 	CocoonGunCon = CreateCCode()
 	ifUpisAtk = CreateCCode()
+	LV_10_UnitTableCode = CreateCCode()
+	LV_11_UnitTableCode = CreateCCode()
 	OverCocooncomp = CreateCCode()
 	CanOut = CreateCCode()
 	ToggleHondon = CreateCCode()

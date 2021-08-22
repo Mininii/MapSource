@@ -28,7 +28,7 @@ HumanPlayers = {P1,P2,P3,P4,P5,P9,P10,P11,P12}
 SetForces({P1,P2,P3,P4,P5,P6},{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 RepUnitPtr = 0x593000
-TestStart = 0
+TestStart = 1
 Limit = 1
 GunSafety = 0
 VName = "Ver.2.1"
@@ -226,12 +226,7 @@ P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
 
 
-G_CAPlot2({
-	"L00_1_64F","L00_1_96F","L00_1_128F","L00_1_96L",
-	"H00_1_64F","H00_1_82F","H00_1_96F","H00_1_82L",
-	"Cere_Z","Cere_N","Cere_H","Cere_B",
-	"Ovrm_X64","Ovrm_X96","Ovrm_X128","Ovrm_X160","Ovrm_X192",
-})
+G_CAPlot2(G_CAPlot_Shape_InputTable)
 Install_Load_CAPlot()
 GunData()
 G_CA_Lib_ErrorCheck()
@@ -1834,7 +1829,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(PosSavePtr,(0x20/4)*3),SetTo,CVoid_ID2),
 })
 --CMov(FP,_Add(_Mul(CurrentArr,12),0x58D740),_ReadF(BackupPosData))
-if TestStart == 1 then
+if Limit == 1 then
 	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
 	_0DPatchX(FP,f_GunNumT,5)
 	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
@@ -1848,6 +1843,39 @@ f_LoadCP()
 DoActions(FP,{SetDeathsX(CurrentPlayer,SetTo,0,0,0x00FF0000),MoveCp(Add,16*4)})
 
 SetCallEnd()
+
+
+
+Force_PosSave_CallIndex = SetCallForward()
+SetCall(FP)
+CMov(FP,PosSavePtr,0)
+CMov(FP,G_CA,0)
+G_SkipJump = def_sIndex()
+CJumpEnd(FP,G_SkipJump)
+CAdd(FP,PosSavePtr,_Mul(G_CA,_Mov(0x970/4)),G_InputH)
+NIf(FP,{TMemory(PosSavePtr,AtLeast,1),CVar(FP,G_CA[2],AtMost,127)},{SetCVar(FP,G_CA[2],Add,1)})
+	CJump(FP,G_SkipJump)
+NIfEnd()
+
+CIfX(FP,{CVar(FP,G_CA[2],AtMost,127)})
+CDoActions(FP,{
+	TSetMemory(_Add(PosSavePtr,(0x20/4)*0),SetTo,f_GunUID),
+	TSetMemory(_Add(PosSavePtr,(0x20/4)*1),SetTo,CPosX),
+	TSetMemory(_Add(PosSavePtr,(0x20/4)*2),SetTo,CPosY),
+	TSetMemory(_Add(PosSavePtr,(0x20/4)*3),SetTo,CVoid_ID2),
+})
+--CMov(FP,_Add(_Mul(CurrentArr,12),0x58D740),_ReadF(BackupPosData))
+if Limit == 1 then
+	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
+	_0DPatchX(FP,f_GunNumT,5)
+	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
+	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+end
+CElseX()
+DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+CIfXEnd()
+SetCallEnd()
+
 
 
 CJumpEnd(FP,0xF01)
@@ -3288,7 +3316,6 @@ Trigger { -- 인트로1
 		PlayWAV(WavFile);
 		DisplayText(Text1,4);
 		SetMemory(0x6509B0, SetTo, FP);
-		SetMemory(0x515BB0,SetTo,128);	
 		ModifyUnitEnergy(All,201,Force2,64,0);
 		ModifyUnitEnergy(All,190,Force2,64,0);
 		ModifyUnitEnergy(All,63,Force2,64,0);
@@ -3342,7 +3369,6 @@ Trigger { -- 인트로1
 		PlayWAV(WavFile);
 		DisplayText(Text1,4);
 		SetMemory(0x6509B0, SetTo, FP);
-		SetMemory(0x515BB0,SetTo,64);
 		
 	},
 	}
@@ -4136,7 +4162,7 @@ Count7 = CreateVar()
 UnitReadX(FP,AllPlayers,229,64,count)
 UnitReadX(FP,AllPlayers,5,nil,Count2)
 UnitReadX(FP,AllPlayers,23,nil,Count3)
-UnitReadX(FP,AllPlayers,24,nil,Count4)
+UnitReadX(FP,AllPlayers,25,nil,Count4)
 UnitReadX(FP,AllPlayers,30,nil,Count5)
 UnitReadX(FP,AllPlayers,3,nil,Count6)
 UnitReadX(FP,AllPlayers,17,nil,Count7)
@@ -4376,6 +4402,15 @@ MoveCp("X",25*4)
 function Call_GunPosSave(BdID)
 CallTriggerX(FP,GunPosSave_CallIndex,DeathsX(CurrentPlayer,Exactly,BdID,0,0xFF))
 end
+
+
+
+
+
+
+
+
+
 Call_GunPosSave(132,0)
 Call_GunPosSave(133,1)
 Call_GunPosSave(216,2)
@@ -4390,6 +4425,8 @@ Call_GunPosSave(152,10)
 Call_GunPosSave(151,11)
 Call_GunPosSave(148,12)
 Call_GunPosSave(150,13)
+Call_GunPosSave(154,13)
+Call_GunPosSave(200,13)
 CIf(FP,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 DoActions(FP,MoveCp(Subtract,6*4))
 for j = 1, 6 do
@@ -4859,11 +4896,21 @@ Trigger {
 		CDeaths(FP,Exactly,1,GMode);
 	},
 	actions = {
-		SetMemoryX(0x660EC8, SetTo, 5000,0xFFFF);
+		SetMemoryX(0x660EC8, SetTo, 9999,0xFFFF);
 		SetMemoryX(0x664814, SetTo, 255,0xFF);
-		SetCDeaths(FP,Add,3,BossKill);
 		SetCDeaths(FP,Add,2,SPGunCond);
 		SetCVar(FP,CanC[2],Add,2);
+	}
+}
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,2,GMode);
+	},
+	actions = {
+		SetMemoryX(0x660EC8, SetTo, 5000,0xFFFF);
+		SetMemoryX(0x664814, SetTo, 255,0xFF);
 	}
 }
 Trigger {
@@ -5140,6 +5187,7 @@ CUnit_PlacedUnitHP(65,100000)
 CUnit_PlacedUnitHP(66,100000)
 CUnit_PlacedUnitHP(28,20211)
 CUnit_PlacedUnitHP(75,20211)
+CUnit_PlacedUnitHP(68,999999)
 
 
 CIfX(FP,TTOR({
@@ -5148,6 +5196,7 @@ DeathsX(CurrentPlayer,Exactly,190,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,147,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,156,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,109,0,0xFF),
+DeathsX(CurrentPlayer,Exactly,148,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,173,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,201,0,0xFF),
 DeathsX(CurrentPlayer,Exactly,175,0,0xFF),
@@ -5295,12 +5344,27 @@ Trigger {
 	},
 	actions = {
 		
-		SetMemory(0x662350 + (23*4), SetTo, (50000*256));
-		SetMemory(0x662350 + (74*4), SetTo, (50000*256));
-		SetMemory(0x662350 + (68*4), SetTo, (50000*256));
-		SetMemory(0x662350 + (61*4), SetTo, (50000*256));
+		SetMemory(0x662350 + (23*4), SetTo, (23500*256));
+		SetMemory(0x662350 + (74*4), SetTo, (23500*256));
+		SetMemory(0x662350 + (68*4), SetTo, (23500*256));
 		SetMemory(0x662350 + (32*4), SetTo, (30000*256));
 		SetMemory(0x662350 + (29*4), SetTo, (30000*256));
+		PreserveTrigger();
+	}
+}
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,2,GMode);
+	},
+	actions = {
+		
+		SetMemory(0x662350 + (23*4), SetTo, (75000*256));
+		SetMemory(0x662350 + (74*4), SetTo, (75000*256));
+		SetMemory(0x662350 + (68*4), SetTo, (100000*256));
+		SetMemory(0x662350 + (32*4), SetTo, (40000*256));
+		SetMemory(0x662350 + (29*4), SetTo, (40000*256));
 		PreserveTrigger();
 	}
 }
@@ -5320,7 +5384,7 @@ Trigger {
 end
 
 
-CIf(FP,CDeaths(FP,AtLeast,2,GMode))
+CIf(FP,CDeaths(FP,AtLeast,3,GMode))
 CMov(FP,ExchangeRateT,ExchangeRate)
 CIf(FP,CVar(FP,ExchangeRateT[2],AtLeast,0x80000000))
 CNeg(FP,ExchangeRateT)
@@ -5597,7 +5661,7 @@ end
 
 
 CIfEnd()
-CIf(FP,CDeaths(FP,Exactly,1,GMode))
+CIf(FP,CDeaths(FP,AtMost,2,GMode))
 DoActions(FP,{
 		SetMemory(0x641598, SetTo, 0x8E80E307);
 		SetMemory(0x64159C, SetTo, 0x6E550820);
@@ -5967,8 +6031,8 @@ GiveUnits(All,192,FP,"Anywhere",6)})
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,192,6,"Anywhere",FP),Order(192,AllPlayers,"Anywhere",Move,2),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
 DoActions(FP,{
-		SetMemory(0x662350 + (23*4), SetTo, (150000*256)/3);
-		SetMemory(0x662350 + (32*4), SetTo, (60000*256)/2);
+		SetMemory(0x662350 + (23*4), SetTo, (50000*256)/3);
+		SetMemory(0x662350 + (32*4), SetTo, (30000*256)/2);
 })
 CreateUnitPolygonSafeWithPropertiesGun(FP,Bring(FP,AtLeast,1,192,2),13,1,32,128,30,4,1,P8,{1,23,1,29,1,3,1,32},{hitpoint = 50})
 CreateUnitPolygonSafe2Gun(FP,Bring(FP,AtLeast,1,192,2),13,1,32,128,30,4,1,P8,{1,23,1,29,1,3,1,32})
@@ -6384,6 +6448,9 @@ end
 		},
 	}
 NIf(FP,CVar(FP,Cell_R[2],Exactly,0))
+TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
 CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))})
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,TBossHPPtr,Nextptrs,2)
@@ -6924,12 +6991,12 @@ NIfEnd()
 
 
 NIf(FP,CVar(FP,Cell_R[2],AtLeast,1))
-CMov(FP,Gun_TempPosX,1024)
-CMov(FP,Gun_TempPosY,2400)
 CMov(FP,Gun_W,0)
 NWhile(FP,CVar(FP,Gun_W[2],AtMost,4),SetCVar(FP,Gun_W[2],Add,1))
 f_Lengthdir(FP,_Sub(Cell_R,100),_Add(_Mul(Gun_W,_Mov(72)),Cell_A),Gun_X,Gun_Y)
-Call_Gun_LocPos()
+CAdd(FP,Gun_X,1024)
+CAdd(FP,Gun_Y,2400)
+Simple_SetLocX(FP,0,Gun_X,Gun_Y,Gun_X,Gun_Y)
 DoActions(FP,{
 		SetMemoryX(0x666458, SetTo, 391,0xFFFF);
 		SetMemoryX(0x669FAC, SetTo, 13*16777216,0xFF000000);
@@ -6980,12 +7047,15 @@ Memory(0x58DC60 + 0x14*0,AtMost,4096),
 Memory(0x58DC68 + 0x14*0,AtMost,4096),
 Memory(0x58DC64 + 0x14*0,AtMost,4096),
 Memory(0x58DC6C + 0x14*0,AtMost,4096)})
+CIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CDoActions(FP,{
 TCreateUnit(1,GunBoss_UID,1,FP),
+TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 TGiveUnits(All,GunBoss_UID,FP,"Anywhere",11),
 TSetInvincibility(Enable,GunBoss_UID,11,64)
-
 })
+CIfEnd()
 
 NIfEnd()
 NIfEnd()
@@ -8113,7 +8183,7 @@ CDeaths(FP,AtMost,0,CCode(0x1002,10)),
 CDeaths(FP,AtMost,0,CCode(0x1002,11))},152,Force2,44,"Ｄａｇｇｏｔｈ")
 InvDisable({
 CDeaths(FP,AtLeast,15,Chry_cond),
-CDeaths(FP,AtLeast,10,SPGunCond),
+CDeaths(FP,AtLeast,12,SPGunCond),
 CDeaths(FP,AtLeast,2,FormCon),
 CDeaths(FP,AtLeast,3,BossKill)},174,Force2,64,"최후의　\x04Ｔｅｍｐｌｅ")
 Trigger { -- 솔플 보너스
@@ -9528,12 +9598,16 @@ Trigger {
 }
 end
 
+TriggerX(FP,{CDeaths(FP,AtLeast,#LV_10_UnitTable,LV_10_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_10_UnitTableCode)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_11_UnitTableCode)},{Preserved})
+
+
 CIfEnd()-- GameStart End
 --]]
 
 
 CIf(FP,CDeaths(FP,AtLeast,1,BGMType))
-CIfX(FP,{Deaths(FP,AtMost,2001,440)})
+CIfX(FP,{Deaths(FP,AtMost,0,440)})
 function BGMOb(Index,BGMFile,Value)
 Trigger { -- 브금재생 j번 - 관전자
 	players = {FP},
@@ -9593,7 +9667,7 @@ CIfXEnd()
 CMov(FP,0x6509B0,0)
 CWhile(FP,Memory(0x6509B0,AtMost,5))
 CIf(FP,Bring(CurrentPlayer,AtLeast,1,111,64))
-CIfX(FP,{Deaths(CurrentPlayer,AtMost,2001,440)})
+CIfX(FP,{Deaths(CurrentPlayer,AtMost,0,440)})
 function BGMPlayer(Index,BGMFile,Value)
 Trigger { -- 브금재생 j번
 	players = {FP},
@@ -9632,7 +9706,7 @@ CWhileEnd()
 DoActionsX(FP,{SetCDeaths(FP,SetTo,0,BGMType),SetMemory(0x6509B0,SetTo,FP)})
 CIfEnd()
 --]]
-DoActions(FP,{KillUnit(84,FP),KillUnit(72,FP),KillUnit(22,FP),KillUnit(9,FP),SetMemoryX(0x666458, SetTo, 546,0xFFFF),RemoveUnit(33,FP)})
+DoActions(FP,{KillUnit(84,Force2),KillUnit(72,Force2),KillUnit(22,Force2),KillUnit(9,Force2),SetMemoryX(0x666458, SetTo, 546,0xFFFF),RemoveUnit(33,Force2)})
 EndCtrig()
 ErrorCheck()
 EUDTurbo(FP)

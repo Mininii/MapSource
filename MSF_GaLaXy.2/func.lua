@@ -792,10 +792,15 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 				if type(G_CA_SLTable[i]) == "number" then
 					table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,12*G_CA_SLTable[i]))
 				elseif type(G_CA_SLTable[i]) == "string" then
+					local G_CA2_ShapeTable_Check = ""
 					for j, k in pairs(G_CA2_ShapeTable) do
 						if G_CA_SLTable[i] == k then
 							table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+j))
+							G_CA2_ShapeTable_Check = "OK"
 						end
+					end
+					if G_CA2_ShapeTable_Check ~= "OK" then
+						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
 					G_CA_SLTable_InputData_Error()
@@ -824,6 +829,10 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
 		SetCVar(FP,G_CA_CTTV[2],SetTo,T_to_BiteBuffer(G_CA_CenterType)),
 	})
+end
+function CGMode(Level,Type)
+	if Type == nil then Type = Exactly end
+	return CDeaths(FP,Type,Level,GMode)
 end
 --{G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType}
 function G_CA_SetSpawnX(Condition,...)
@@ -1049,4 +1058,32 @@ CMov(Player,CPosX,CPos,0,0XFFFF)
 CMov(Player,CPosY,CPos,0,0XFFFF0000)
 f_Div(Player,CPosY,_Mov(0x10000))
 SetCallEnd()
+end
+
+function f_ForcePosSave(Condition,UID,X,Y,VoiDN)
+	CallTriggerX(FP,Force_PosSave_CallIndex,Condition,{
+	SetCVar(FP,f_GunUID[2],SetTo,UID),
+	SetCVar(FP,CPosX[2],SetTo,X),
+	SetCVar(FP,CPosY[2],SetTo,Y),
+	SetCVar(FP,CVoid_ID2[2],SetTo,VoiDN)})
+end
+
+
+function CS_CreateSquarePath(Size,CenterXY)
+	local X = {}
+	if CenterXY ~= nil and type(CenterXY) == "table" then
+		table.insert(X,{CenterXY[1] + (-Size),0 + CenterXY[2]})
+		table.insert(X,{CenterXY[1] + (0),(-Size/2) + CenterXY[2]})
+		table.insert(X,{CenterXY[1] + (Size),0 + CenterXY[2]})
+		table.insert(X,{CenterXY[1] + (0),(Size/2) + CenterXY[2]})
+		
+	elseif CenterXY == nil then
+		table.insert(X,{-Size,0})
+		table.insert(X,{0,-Size/2})
+		table.insert(X,{Size,0})
+		table.insert(X,{0,Size/2})
+	else
+		PushErrorMsg("CenterXY_InputData_Error")
+	end
+	return X
 end
