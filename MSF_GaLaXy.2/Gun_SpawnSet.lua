@@ -851,7 +851,7 @@ function GunData()
 	
 	CIfEnd()
 	CIf(FP,{Gun_Line(0,Exactly,152)}) -- BdIndex Daggoth
-		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
+		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			GunBreak("완전체 \x18DaGGoTh \x04를",400000,6)
 		CIfEnd()
 		local CurTime = CreateVar(FP)
@@ -871,10 +871,7 @@ function GunData()
 				Memory(0x58DC64 + 0x14*0,AtMost,4096),
 				Memory(0x58DC6C + 0x14*0,AtMost,4096)},{CreateUnit(1,84,1,FP)
 					})
-				
-
 				NIfXEnd()
-
 			NWhileEnd()
 			NWhileEnd()
 
@@ -1018,13 +1015,13 @@ function GunData()
 
 		for i = 1, 3 do
 			local Dif
-			if i == 1 then Dif = "N" end
-			if i == 2 then Dif = "H" end
-			if i == 3 then Dif = "B" end
+			if i == 1 then Dif = "N" PyLM = 1 end
+			if i == 2 then Dif = "H" PyLM = 2 end
+			if i == 3 then Dif = "B" PyLM = 4 end
 			for j = 1, 5 do
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{84,57},"ACAS","Py"..j.."F"..Dif,"MAX",nil,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{84,80},"ACAS","Py"..j.."F"..Dif,"MAX",nil,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{84,86},"ACAS","Py"..j.."F"..Dif,"MAX",nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{84,57},"ACAS","Py"..j.."F"..Dif,PyLM,nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{84,80},"ACAS","Py"..j.."F"..Dif,PyLM,nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{84,86},"ACAS","Py"..j.."F"..Dif,PyLM,nil,1)
 			end
 		end
 
@@ -1048,19 +1045,20 @@ function GunData()
 
 		for i = 1, 3 do
 			local Dif
-			if i == 1 then Dif = "N" end
-			if i == 2 then Dif = "H" end
-			if i == 3 then Dif = "B" end
+			local PyLM
+			if i == 1 then Dif = "N" PyLM = 1 end
+			if i == 2 then Dif = "H" PyLM = 2 end
+			if i == 3 then Dif = "B" PyLM = 4 end
 			for j = 1, 5 do
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{84,62},"ACAS","Su"..j.."F"..Dif,"MAX",nil,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{84,21},"ACAS","Su"..j.."F"..Dif,"MAX",nil,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{84,27},"ACAS","Su"..j.."F"..Dif,"MAX",nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{84,62},"ACAS","Su"..j.."F"..Dif,PyLM,nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{84,21},"ACAS","Su"..j.."F"..Dif,PyLM,nil,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{84,27},"ACAS","Su"..j.."F"..Dif,PyLM,nil,1)
 			end
 		end
 
 		CElseIfX({Gun_Line(4,AtLeast,1),G_CA_CondStack})
 		for j = 1, 5 do
-			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Su"..j,1,nil,1)
+			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Su"..j,1,2,1)
 		end
 		CIfXEnd()
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(4,AtLeast,1100),G_CA_CondStack},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,SPGunCond);},1)	

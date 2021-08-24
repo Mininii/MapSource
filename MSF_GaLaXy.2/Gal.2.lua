@@ -6455,26 +6455,9 @@ CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Ex
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,TBossHPPtr,Nextptrs,2)
 DoActions(FP,{CreateUnit(1,5,34,FP),SetMemoryX(0x664080+(25*4),SetTo,4,4)})
-UnitReadX(FP,Force2,"Buildings",64,B1_Calc)
-CIf(FP,CDeaths(FP,Exactly,2,GMode))
-f_Mul(FP,B1_Calc,100)
-CIfEnd()
-CIf(FP,CDeaths(FP,Exactly,3,GMode))
-f_Mul(FP,B1_Calc,400)
-CIfEnd()
 
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,B1_Calc[2],AtLeast,65535);
-	},
-	actions = {
-		SetCVar(FP,B1_Calc[2],SetTo,65535);
-	}
-}
 
-CDoActions(FP,{TSetMemory(_Add(Nextptrs,2),SetTo,3000000*256),TSetMemory(_Mem(TBossHP),SetTo,3000000*256),TSetMemory(0x656EC4, SetTo, _Mul(B1_Calc,65536),_Mov(0xFFFF0000))})
+CDoActions(FP,{TSetMemory(_Add(Nextptrs,2),SetTo,3000000*256),TSetMemory(_Mem(TBossHP),SetTo,3000000*256)})
 
 
 BText = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x04적의 \x08수호자 \x11Ｃ\x04ａｌｃｕｌａｔｏ\x08Ｒ \x04가 깨어났습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※"
@@ -6684,7 +6667,51 @@ NIfEnd()
 
 BKillPoint({CDeaths(FP,AtLeast,6000,GunBossAct),CDeaths(FP,AtLeast,2,FormCon)},82,2000000,"\x08Ｇ\x11ａｒ\x18Ｇ\x10ａｎ\x1FＴ\x17ｕ\x0FＡ")
 NIf(FP,Command(FP,AtLeast,1,5))
+local TBossT = CreateCcode()
 
+--
+--
+local TBossTxt1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x11Ｃ\x04ａｌｃｕｌａｔｏ\x08Ｒ \x07::\r\n\x08적 \x17전투력 \x1F계산 \x04중...\r\n\r\n  "
+local TBossTxt2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x11Ｃ\x04ａｌｃｕｌａｔｏ\x08Ｒ \x07::\r\n\x06적 \x17전투력 \x1F계산 \x07완료. \x08공격력이 재설정 되었습니다.\r\n\r\n  "
+
+--
+DoActionsX(FP,SetCDeaths(FP,Add,1,TBossT))
+Trigger2X(FP,{CDeaths(FP,Exactly,200,TBossT)},{CopyCpAction({
+	TalkingPortrait(5, 6100),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
+	DisplayTextX(TBossTxt1,4)
+},HumanPlayers,FP)},{Preserved})
+Trigger2X(FP,{CDeaths(FP,Exactly,400,TBossT)},{CopyCpAction({
+	TalkingPortrait(5, 6100),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
+	DisplayTextX(TBossTxt2,4)
+},HumanPlayers,FP)},{Preserved})
+CIf(FP,CDeaths(FP,Exactly,400,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
+Simple_SetLocX(FP,0,0,0,480,480,{MoveLocation(1,5,FP,64)})
+UnitReadX(FP,Force1,"Factories",1,B1_Calc)
+
+CAdd(FP,B1_Calc,2)
+CIf(FP,CDeaths(FP,Exactly,2,GMode))
+f_Mul(FP,B1_Calc,100)
+CIfEnd()
+CIf(FP,CDeaths(FP,Exactly,3,GMode))
+f_Mul(FP,B1_Calc,400)
+CIfEnd()
+
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,B1_Calc[2],AtLeast,65535);
+	},
+	actions = {
+		SetCVar(FP,B1_Calc[2],SetTo,65535);
+	}
+}
+CDoActions(FP,{TSetMemoryX(0x656EC4, SetTo, _Mul(B1_Calc,65536),_Mov(0xFFFF0000))})
+CIfEnd()
 NIf(FP,{TTMemory(TBossHPPtr,NotSame,TBossHP)})
 f_Read(FP,TBossHPPtr,TBossHPTemp)
 CAdd(FP,TBossSkill,_Sub(TBossHP,TBossHPTemp))
@@ -7003,7 +7030,9 @@ DoActions(FP,{
 CreateUnit(1,33,1,FP)
 })
 NIf(FP,{CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtLeast,1,GunBossAct),CDeaths(FP,Exactly,0,GunBossT),CVar(FP,Cell_R[2],AtLeast,100)})
-
+CIfOnce(FP)
+f_ForcePosSave(nil,1000,1024,2400,0)
+CIfEnd()
 GunBossUIDArr = {80,86,102,98,88}
 
 Trigger {
