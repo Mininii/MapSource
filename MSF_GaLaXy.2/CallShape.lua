@@ -40,55 +40,7 @@ function Install_Shape()
 	Chry_2 = {64  ,{512, 2048},{448, 2080},{384, 2112},{320, 2144},{256, 2176},{320, 2208},{384, 2240},{448, 2272},{512, 2304},{576, 2272},{640, 2240},{704, 2208},{768, 2176},{704, 2144},{640, 2112},{576, 2080},{832, 2208},{768, 2240},{704, 2272},{640, 2304},{576, 2336},{640, 2368},{704, 2400},{768, 2432},{832, 2464},{896, 2432},{960, 2400},{1024, 2368},{1088, 2336},{1024, 2304},{960, 2272},{896, 2240},{1152, 2368},{1088, 2400},{1024, 2432},{960, 2464},{896, 2496},{960, 2528},{1024, 2560},{1088, 2592},{1152, 2624},{1216, 2592},{1280, 2560},{1344, 2528},{1408, 2496},{1344, 2464},{1280, 2432},{1216, 2400},{1472, 2528},{1408, 2560},{1344, 2592},{1280, 2624},{1216, 2656},{1280, 2688},{1344, 2720},{1408, 2752},{1472, 2784},{1536, 2752},{1600, 2720},{1664, 2688},{1728, 2656},{1664, 2624},{1600, 2592},{1536, 2560}}
 	Chry_3 = {48  ,{704, 2176},{640, 2144},{576, 2112},{512, 2080},{448, 2112},{384, 2144},{320, 2176},{384, 2208},{448, 2240},{512, 2272},{576, 2240},{640, 2208},{1024, 2336},{960, 2304},{896, 2272},{832, 2240},{768, 2272},{704, 2304},{640, 2336},{704, 2368},{768, 2400},{832, 2432},{896, 2400},{960, 2368},{1344, 2496},{1280, 2464},{1216, 2432},{1152, 2400},{1088, 2432},{1024, 2464},{960, 2496},{1024, 2528},{1088, 2560},{1152, 2592},{1216, 2560},{1280, 2528},{1664, 2656},{1600, 2624},{1536, 2592},{1472, 2560},{1408, 2592},{1344, 2624},{1280, 2656},{1344, 2688},{1408, 2720},{1472, 2752},{1536, 2720},{1600, 2688}}
 	Chry_4 = {36  ,{640, 2176},{576, 2144},{512, 2112},{448, 2144},{384, 2176},{448, 2208},{512, 2240},{576, 2208},{512, 2176},{960, 2336},{896, 2304},{832, 2272},{768, 2304},{704, 2336},{768, 2368},{832, 2400},{896, 2368},{832, 2336},{1280, 2496},{1216, 2464},{1152, 2432},{1088, 2464},{1024, 2496},{1088, 2528},{1152, 2560},{1216, 2528},{1152, 2496},{1600, 2656},{1536, 2624},{1472, 2592},{1408, 2624},{1344, 2656},{1408, 2688},{1472, 2720},{1536, 2688},{1472, 2656}}
-
-
-	Py1 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),1024,1760)
-	Py2 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),1536,1440)
-	Py3 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),2048,1760)
-	Py4 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),2560,1440)
-	Py5 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),3072,1760)
-
-	Su1 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),1024,1376)
-	Su2 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),1536,1824)
-	Su3 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),2048,1376)
-	Su4 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),2560,1824)
-	Su5 = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),3072,1376)
-	
-	Py1FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),1024,1760),1)
-	Py2FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),1536,1440),1)
-	Py3FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),2048,1760),1)
-	Py4FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),2560,1440),1)
-	Py5FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),3072,1760),1)
-
-	Su1FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),1024,1376),1)
-	Su2FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),1536,1824),1)
-	Su3FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),2048,1376),1)
-	Su4FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),2560,1824),1)
-	Su5FN = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,5*5,0),1,0.5),3072,1376),1)
-
-	Py1FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),1024,1760),1)
-	Py2FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),1536,1440),1)
-	Py3FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),2048,1760),1)
-	Py4FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),2560,1440),1)
-	Py5FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),3072,1760),1)
-
-	Su1FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),1024,1376),1)
-	Su2FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),1536,1824),1)
-	Su3FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),2048,1376),1)
-	Su4FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),2560,1824),1)
-	Su5FH = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,7*7,0),1,0.5),3072,1376),1)
-
-	Py1FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),1024,1760),1)
-	Py2FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),1536,1440),1)
-	Py3FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),2048,1760),1)
-	Py4FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),2560,1440),1)
-	Py5FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),3072,1760),1)
-
-	Su1FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),1024,1376),1)
-	Su2FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),1536,1824),1)
-	Su3FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),2048,1376),1)
-	Su4FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),2560,1824),1)
-	Su5FB = CS_SortR(CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,0),1,0.5),3072,1376),1)
+	PySuPos = {{{1024,1760},{1536,1440},{2048,1760},{2560,1440},{3072,1760}},{{1024,1376},{1536,1824},{2048,1376},{2560,1824},{3072,1376}}}
 
 	G_CAPlot_Shape_InputTable = {
 		"L00_1_64F","L00_1_96F","L00_1_128F","L00_1_164F","L00_1_64L","L00_1_96L","L00_1_128L","L00_1_164L",	
@@ -97,12 +49,45 @@ function Install_Shape()
 		"Ovrm_X64","Ovrm_X96","Ovrm_X128","Ovrm_X160","Ovrm_X192",
 		"Chry_1","Chry_2","Chry_3","Chry_4",
 		"Chry_N","Chry_H","Chry_B",
-		"Py1","Py2","Py3","Py4","Py5",
-		"Su1","Su2","Su3","Su4","Su5",
-		"Py1FN","Py2FN","Py3FN","Py4FN","Py5FN","Su1FN","Su2FN","Su3FN","Su4FN","Su5FN",
-		"Py1FH","Py2FH","Py3FH","Py4FH","Py5FH","Su1FH","Su2FH","Su3FH","Su4FH","Su5FH",
-		"Py1FB","Py2FB","Py3FB","Py4FB","Py5FB","Su1FB","Su2FB","Su3FB","Su4FB","Su5FB",
 	}
+
+for p, s in pairs(PySuPos) do
+	local PSType
+	if p == 1 then PSType = "Py" end
+	if p == 2 then PSType = "Su" end
+	for j = 1, 5 do
+		_G[PSType..j] = CS_MoveCenter(CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5),s[j][1],s[j][2])
+		table.insert(G_CAPlot_Shape_InputTable,PSType..j)
+		for i = 1, 3 do
+			local Dif
+			local ShN
+			if i == 1 then Dif = "N" ShN = 5*5 end
+			if i == 2 then Dif = "H" ShN = 7*7 end
+			if i == 3 then Dif = "B" ShN = 9*9 end
+			_G[PSType..j.."F"..Dif] = CS_MoveCenter(CS_SortR(CS_RatioXY(CSMakeStar(4,180,75,45,ShN,0),1,0.5),1),s[j][1],s[j][2])
+			table.insert(G_CAPlot_Shape_InputTable,PSType..j.."F"..Dif)
+		end
+	end
+end
+
+Shape_Hard = CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5)
+Shape_Hard2 = CS_RatioXY(CSMakeStar(4,180,75,45,3*3,0),1,0.5)
+Shape_Burst = CS_RatioXY(CSMakeStar(4,180,75,45,9*9,5*5),1,0.5)
+Shape_Burst2 = CS_RatioXY(CSMakeStar(4,180,75,45,5*5,3*3),1,0.5)
+
+local ChryPos = {{512, 2176},{832, 2336},{1152, 2496},{1472, 2656}}
+for j, k in pairs(ChryPos) do
+_G["GB_H1_"..j] = CS_MoveCenter(Shape_Hard,k[1],k[2])
+_G["GB_H2_"..j] = CS_MoveCenter(Shape_Hard2,k[1],k[2])
+_G["GB_B1_"..j] = CS_MoveCenter(Shape_Burst,k[1],k[2])
+_G["GB_B2_"..j] = CS_MoveCenter(Shape_Burst2,k[1],k[2])
+table.insert(G_CAPlot_Shape_InputTable,"GB_H1_"..j)
+table.insert(G_CAPlot_Shape_InputTable,"GB_H2_"..j)
+table.insert(G_CAPlot_Shape_InputTable,"GB_B1_"..j)
+table.insert(G_CAPlot_Shape_InputTable,"GB_B2_"..j)
+end
+
+
 
 		function Create_SortTable(Shape)
 		local X = {}

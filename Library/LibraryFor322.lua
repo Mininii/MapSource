@@ -138,12 +138,14 @@ function CallTrigger(Player,Index,AddonTrigger) -- CtrigAsm 5.1
 	DoActionsX(Player,{AddonTrigger,X})
 end
 
-function CallTriggerX(Player,Index,Condition,AddonTrigger) -- CtrigAsm 5.1
+function CallTriggerX(Player,Index,Condition,AddonTrigger,Flags) -- CtrigAsm 5.1
+	local Y
+	if Flags == nil then Y = {Preserved} elseif Flags == "X" or Flags == 1 then Y = {} else PushErrorMsg("CallTriggerX_FlagError") end
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
 	table.insert(X,SetCtrigX("X",Index+1,0x158,0,SetTo,"X","X",0x4,1,0))
 	table.insert(X,SetCtrigX("X",Index+1,0x15C,0,SetTo,"X","X",0,0,1))
 	table.insert(X,SetCtrig1X("X",Index+1,0x164,0,SetTo,0x0,0x2))
-	TriggerX(Player,Condition,{AddonTrigger,X},{Preserved})
+	TriggerX(Player,Condition,{AddonTrigger,X},Y)
 end
 
 function SetNextTrigger(Index,AddonTrigger)

@@ -24,11 +24,11 @@ Trigger2(Force2,{Command(CurrentPlayer,AtLeast,10,42)},{KillUnitAt(1,42,"Anywher
 Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,35)},{KillUnit(35,CurrentPlayer)},{Preserved})
 Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,37)},{RemoveUnitAt(1,37,64,CurrentPlayer)},{Preserved})
 DoActions(Force1,{SetDeaths(CurrentPlayer,SetTo,1,217)},1)
-HumanPlayers = {P1,P2,P3,P4,P5,P9,P10,P11,P12}
-SetForces({P1,P2,P3,P4,P5,P6},{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
+HumanPlayers = {P1,P2,P3,P4,P5,P6,P9,P10,P11,P12}
+MapPlayers = {P1,P2,P3,P4,P5,P6}
+SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
-RepUnitPtr = 0x593000
-TestStart = 1
+TestStart = 0
 Limit = 1
 GunSafety = 0
 VName = "Ver.2.1"
@@ -47,7 +47,7 @@ DoActions2(FP,UnitDefPatch,1)
 DoActions2(FP,DefIgnorePatch,1)
 DoActions2(FP,NonBionicPatch,1)
 DoActions2(FP,ButtonSetPatch,1)
-DoActions2X(FP,{SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0)})
+table.insert(CtrigInitArr[7],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))
 DoActions(FP,{
 SetInvincibility(Disable,"Mineral Field (Type 1)",11,64),
 SetInvincibility(Disable,"Mineral Field (Type 2)",11,64),
@@ -118,7 +118,7 @@ SetMemory(0x58DC60 + 0x14*0,SetTo,0),
 SetMemory(0x58DC68 + 0x14*0,SetTo,0),
 SetMemory(0x58DC64 + 0x14*0,SetTo,0),
 SetMemory(0x58DC6C + 0x14*0,SetTo,0),TMoveLocation(1,RepHeroIndex,6,64),TGiveUnits(1,RepHeroIndex,6,1,8),TRemoveUnit(RepHeroIndex,8)})
-CMov(FP,0x6509B0,EPD(RepUnitPtr))
+CMov(FP,0x6509B0,RepUnitPtr)
 NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
 CAdd(FP,0x6509B0,1)
 NWhileEnd()
@@ -228,6 +228,7 @@ P_8 = G_CAPlot(P_8_ShT)
 
 G_CAPlot2(G_CAPlot_Shape_InputTable)
 Install_Load_CAPlot()
+Install_Call_G_CA()
 GunData()
 G_CA_Lib_ErrorCheck()
 
@@ -261,9 +262,17 @@ GiveUnitsArr = {}
 VArrPatchTable ={}
 CIfOnce(FP,Always()) -- onPluginStart
 
-
-
-
+VoidAreaOffset = 0x590010
+VoidAreaAlloc = 0x590010-4
+local VoidResetTable = {}
+for i = 0, 2000 do
+table.insert(VoidResetTable,(SetVoid(i,SetTo,0)))
+end
+DoActions2(FP,VoidResetTable)
+--TMem(FP,GunPtrMemory,GunPtrMemoryVO)
+--TMem(FP,RepUnitPtr,RepUnitPtrVO)
+CMov(FP,GunPtrMemory,EPDF(0x590010))
+CMov(FP,RepUnitPtr,EPDF(0x590010+(4*20)))
 
 for i = 1, #HeroIndexArr do
 Trigger {
@@ -281,9 +290,6 @@ end
 
 DoActions2(FP,SizePatchArr,1)
 Print_All_CTextString(FP)
-
-
-
 
 for i = 0, 5 do
 Trigger {
@@ -355,6 +361,13 @@ f_GetStrXPtr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 f_GetStrXPtr(FP,HiddenModeStrPtr,"HD".._0D)
+for j = 0, 5 do
+	f_GetStrXptr(FP,DefStrPtr[j+1],"\x0D\x0D\x0DDef"..Player[j+1].._0D)
+end
+for i = 0, 5 do
+	Install_CText1(DefStrPtr[i+1],DefStr1,DefStr2,Names[i+1])
+end
+
 t00 = "\x0d\x0d\x0d\x12\x02◆ \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 t01 = "\x0d\x0d\x0d\x04의 \x04Marine\x04이 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 t02 = "\x0d\x0d\x0d\x04의 \x1BH \x04Marine\x04이 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x04(\x08Death \x10C\x0Fount \x04+ \x060.5\x04)\x02◆\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
@@ -1644,8 +1657,8 @@ Trigger {
 f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 f_MemCpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
 
-CMov(FP,0x6509B0,EPD(0x591000))
-NWhile(FP,Memory(0x6509B0,AtMost,EPD(0x591000+(0x20*227))))
+CMov(FP,0x6509B0,EPDF(0x591000))
+NWhile(FP,Memory(0x6509B0,AtMost,EPDF(0x591000+(0x20*227))))
 Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF)},{
 SetDeathsX(CurrentPlayer,SetTo,0x0D,0,0xFF)
 },{preserved})
@@ -1756,7 +1769,7 @@ SetCall(FP)
 f_SaveCP()
 f_Read(FP,BackupCP,HIndex,"X",0xFF)
 f_Mod(FP,HIndex2,HIndex,2,0xFF)
-f_Read(FP,_Add(_Div(HIndex,2),_Mov(EPD(0x663EB8))),HPoint)
+f_Read(FP,_Add(_Div(HIndex,2),_Mov(EPDF(0x663EB8))),HPoint)
 NIfX(FP,{TMemory(_Mem(HIndex2),AtLeast,1)})
 f_Div(FP,HPoint,65536)
 NElseX()
@@ -1804,12 +1817,12 @@ f_Read(FP,BackupPosData,CPos)
 Convert_CPosXY()
 f_Read(FP,_Add(BackupCP,16),f_GunUID)
 NIf(FP,{TDeathsX(_Add(BackupCP,16),Exactly,216,0,0xFF)})
-CMov(FP,0x6509B0,EPD(GunPtrMemory))
-NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),Deaths(EPD(0x6509B0),AtMost,EPD(GunPtrMemory)+50,0)})
+CMov(FP,0x6509B0,GunPtrMemory)
+NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
 CAdd(FP,0x6509B0,1)
 NWhileEnd()
 SaveCp(FP,PosSavePtr)
-CDoActions(FP,{TSetMemory(PosSavePtr,SetTo,_Mov(CPos,0xFFF0FFF)),TSetMemoryX(PosSavePtr,SetTo,_Mul(CVoid_ID2,_Mov(0x1000)),0xF000)})
+CDoActions(FP,{TSetMemory(PosSavePtr,SetTo,CPos),TSetMemoryX(PosSavePtr,SetTo,_Mul(CVoid_ID2,_Mov(0x1000)),0xF000)})
 NIfEnd()
 
 CMov(FP,PosSavePtr,0)
@@ -2745,38 +2758,32 @@ Trigger { -- 텟모드 설치 여부
 	},
 	}
 
-CIf(FP,CDeaths(FP,AtLeast,1,TestMode))
+CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
+YY = 2021
+MM = 08
+DD = 27
+HH = 00
+function PushErrorMsg(Message)
+	_G["\n"..Message.."\n"]() 
+end
 
+GlobalTime = os.time{year=YY, month=MM, day=DD, hour=HH }
+--PushErrorMsg(GlobalTime)
 Trigger {
 	players = {FP},
 	conditions = {
+		Label(0);
+		Memory(0x6D0F38,AtMost,GlobalTime);
+
 	},
 	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, 1);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, 2);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, 3);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, 4);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, 5);
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemory(0x6509B0, SetTo, FP);
+		SetCDeaths(FP,SetTo,1,LimitC);
 		
 	}
-	}
-CIfEnd()
-CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
+}
+
+
 Trigger {
 	players = {FP},
 	conditions = {
@@ -4207,6 +4214,8 @@ CMov(FP,0x582174 + (i*4) , CanDefeat)
 CIfEnd()
 end
 CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF)})
+
+
 CIf(FP,{CVar(FP,HiddenPts[2],AtLeast,1)
 })
 CMov(FP,CanDefeat,0)
@@ -4259,7 +4268,7 @@ CIfXEnd()
 DoActions(FP,MoveCp(Add,25*4))
 CIfX(FP,{DeathsX(CurrentPlayer,Exactly,218,0,0xFF)})
 DoActions(FP,MoveCp(Subtract,0x3C))
-for i = 0, 9 do
+for i = 0, 10 do
 CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,3744+(32*i),0,0xFFFF),DeathsX(CurrentPlayer,AtMost,3744+(32*(i+1)),0,0xFFFF),TTMemory(0x5124F0,"!=",SpeedV[i+1])})
 f_SaveCP()
 Trigger { -- No comment (E93EF7A9)
@@ -4309,10 +4318,11 @@ TriggerX(FP,{CDeaths(FP,AtLeast,1,TGiveComplete)},{
 	GiveUnits(All,80,11,64,7);
 	GiveUnits(All,21,11,64,6);
 })
-
+local CurCCLI = CreateVar(FP)
 NIf(FP,CDeaths(FP,AtLeast,1,CocoonLaunch))
-CMov(FP,0x6509B0,EPD(GunPtrMemory))
-CWhile(FP,Memory(0x6509B0,AtMost,EPD(GunPtrMemory)+14))
+CMov(FP,0x6509B0,GunPtrMemory)
+CMov(FP,CurCCLI,0)
+CWhile(FP,{CVar(FP,CurCCLI[2],AtMost,14)})
 
 CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
 Trigger { -- No comment (00F60EE3)
@@ -4386,8 +4396,10 @@ Trigger { -- No comment (00F60EE3)
 
 end
 f_LoadCP()
+
 CAdd(FP,CocoonValue,1)
 CAdd(FP,0x6509B0,1)
+CAdd(FP,CurCCLI,1)
 CWhileEnd()
 CIfEnd()
 DoActionsX(FP,SetCDeaths(FP,Subtract,1,CocoonLaunch))
@@ -4526,8 +4538,8 @@ CunitCtrig_Part2()
 CunitCtrig_Part3X()
 for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
-DeathsX(EPD(0x628298-0x150*i+(40*4)),AtLeast,1*16777216,0,0xFF000000),
-DeathsX(EPD(0x628298-0x150*i+(19*4)),Exactly,0*256,0,0xFF00),
+DeathsX(EPDF(0x628298-0x150*i+(40*4)),AtLeast,1*16777216,0,0xFF000000),
+DeathsX(EPDF(0x628298-0x150*i+(19*4)),Exactly,0*256,0,0xFF00),
 },
 {MoveCp(Add,25*4)})
 end
@@ -4537,6 +4549,19 @@ TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\
 CWhileEnd()
 DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
 TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+
+CIfX(FP,{CVar(FP,count[2],AtMost,1500)}) -- 건작함수 제어
+DoActions(FP,{
+	SetInvincibility(Disable,132,Force2,64);
+	SetInvincibility(Disable,133,Force2,64);
+})
+Create_G_CA_Arr()
+CElseX()
+DoActions(FP,{
+	SetInvincibility(Enable,132,Force2,64);
+	SetInvincibility(Enable,133,Force2,64);
+})
+CIfXEnd()
 
 
 
@@ -4590,9 +4615,9 @@ CunitCtrig_Part2()
 CunitCtrig_Part3X()
 for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
-	Deaths(EPD(0x628298-0x150*i+(13*4)),AtMost,11999,0),
-	DeathsX(EPD(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
-	DeathsX(EPD(0x628298-0x150*i+(19*4)),AtLeast,6,0,0xFF),
+	Deaths(EPDF(0x628298-0x150*i+(13*4)),AtMost,11999,0),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,6,0,0xFF),
 	
 },
 {
@@ -4602,9 +4627,7 @@ CunitCtrig_End()
 CIfEnd()
 
 
-CIf(FP,CDeaths(FP,AtLeast,1,LimitX)) -- TestMode
-
-f_Memcpy(FP,0x58f700,MemoryPtr,4*12)
+if Limit == 1 then
 CIf(FP,CDeaths(FP,AtLeast,1,TestMode))
 Trigger {
 	players = {FP},
@@ -4637,23 +4660,60 @@ Trigger {
 		--SetCDeaths(FP,SetTo,1,FormCon);
 	}
 	}
+
+
+Trigger {
+	players = {FP},
+	conditions = {
+	},
+	actions = {
+		SetMemory(0x6509B0, SetTo, 0);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, 1);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, 2);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, 3);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, 4);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, 5);
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");
+		SetMemory(0x6509B0, SetTo, FP);
+		PreserveTrigger();
+		
+	}
+	}
+	local TestV = CreateVar(FP)
+	local TestV2 = CreateVar(FP)
+DoActionsX(FP,SetCtrigX("X",TestV[2],0x15C,0,SetTo,"X",0x580,CAddr("CMask",2),1,0))
+f_Read(FP,TestV,TestV2)
+CMov(FP,0x57F120,TestV2)
 CIfEnd()
+end
 --[[
 for i = 0, 1699 do -- 오토스팀
 Trigger {
 	players = {FP},
 	conditions = {
-		DeathsX(EPD(0x628298-0x150*i+(19*4)),AtMost,4,0,0xFF),
-		DeathsX(EPD(0x628298-0x150*i+(69*4)),AtMost,0,0,0xFF00),
+		DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,4,0,0xFF),
+		DeathsX(EPDF(0x628298-0x150*i+(69*4)),AtMost,0,0,0xFF00),
 	},
 	actions = {
-		SetDeathsX(EPD(0x628298-0x150*i+(69*4)),SetTo,255*256,0,0xFF00);
+		SetDeathsX(EPDF(0x628298-0x150*i+(69*4)),SetTo,255*256,0,0xFF00);
 		PreserveTrigger();
 	}
 }
 end
 ]]
-CIfEnd()
+
+
 CJumpEnd(FP,0x103) -- if NonGameStart End
 SetRecoverCp()
 RecoverCp(FP)
@@ -4722,6 +4782,9 @@ Trigger {
 	}
 }
 
+
+
+
 for i = 1, 5 do
 Trigger {
 	players = {FP},
@@ -4730,7 +4793,7 @@ Trigger {
 		CVar(FP,HiddenPts[2],Exactly,i);
 	},
 	actions = {
-		SetCVar(FP,HPointVar[2],SetTo,15+(12*i));
+		SetCVar(FP,HPointVar[2],SetTo,HPointFactor+(((HPointFactor*5)/4)*i));
 	}
 }
 Trigger {
@@ -4740,7 +4803,7 @@ Trigger {
 		CVar(FP,HiddenPtsM[2],Exactly,i);
 	},
 	actions = {
-		SetCVar(FP,HPointVar[2],SetTo,15-(i*3));
+		SetCVar(FP,HPointVar[2],SetTo,HPointFactor-(i*(HPointFactor/5)));
 	}
 }
 Trigger {
@@ -4842,16 +4905,18 @@ CIfEnd()
 NWhile(FP,{Bring(FP,AtLeast,1,217,64)})
 
 DoActions(FP,{MoveLocation(1,217,FP,64),GiveUnits(1,217,FP,1,8),RemoveUnit(217,8),
-CreateUnit(1,48,1,6),
-CreateUnit(1,51,1,7),
-CreateUnit(1,53,1,6),
+CreateUnit(2,48,1,6),
+CreateUnit(3,51,1,7),
+CreateUnit(2,53,1,6),
 CreateUnit(1,54,1,7),
+CreateUnit(1,55,1,7),
+CreateUnit(1,56,1,7),
 CreateUnit(1,104,1,6),
 })
 NWhileEnd()
 
 
-CMov(FP,0x6509B0,EPD(RepUnitPtr))
+CMov(FP,0x6509B0,RepUnitPtr)
 CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
 
 f_SaveCP()
@@ -4906,22 +4971,11 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,Exactly,2,GMode);
+		CDeaths(FP,AtLeast,2,GMode);
 	},
 	actions = {
-		SetMemoryX(0x660EC8, SetTo, 5000,0xFFFF);
+		SetMemoryX(0x660EC8, SetTo, 9999,0xFFFF);
 		SetMemoryX(0x664814, SetTo, 255,0xFF);
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,3,GMode);
-	},
-	actions = {
-		SetMemoryX(0x660E20, SetTo, 0,0xFFFF);
-		SetMemoryX(0x6647C0, SetTo, 0,0xFF);
 	}
 }
 Ex1 = {}
@@ -5176,6 +5230,7 @@ CUnit_PlacedUnitHP(21,20211)
 CUnit_PlacedUnitHP(80,20211)
 CUnit_PlacedUnitHP(52,50000)
 CUnit_PlacedUnitHP(25,20211)
+CUnit_PlacedUnitHP(27,100000)
 CUnit_PlacedUnitHP(17,20211)
 CUnit_PlacedUnitHP(76,20211)
 CUnit_PlacedUnitHP(86,20211)
@@ -5188,6 +5243,7 @@ CUnit_PlacedUnitHP(66,100000)
 CUnit_PlacedUnitHP(28,20211)
 CUnit_PlacedUnitHP(75,20211)
 CUnit_PlacedUnitHP(68,999999)
+CUnit_PlacedUnitHP(88,120000)
 
 
 CIfX(FP,TTOR({
@@ -5421,61 +5477,6 @@ Trigger {
 		PreserveTrigger();
 	}
 }
-
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,PaneltyPoint[2],AtLeast,1000);
-		CDeaths(FP,Exactly,2,GMode);
-	},
-	actions = {
-		SetMemory(0x6509B0,SetTo,0);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,1);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,2);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,3);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,4);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,5);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,128);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,129);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,130);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,131);
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		PlayWAV("sound\\Bullet\\TNsFir00.wav");
-		SetMemory(0x6509B0,SetTo,FP);
-		SetCVar(FP,PaneltyPoint[2],Subtract,1000);
-		SetCVar(FP,ExchangeRate[2],Add,-8);
-		PreserveTrigger();
-	}
-}
 Trigger {
 	players = {FP},
 	conditions = {
@@ -5526,7 +5527,7 @@ Trigger {
 		PlayWAV("sound\\Bullet\\TNsFir00.wav");
 		SetMemory(0x6509B0,SetTo,FP);
 		SetCVar(FP,PaneltyPoint[2],Subtract,1000);
-		SetCVar(FP,ExchangeRate[2],Add,-15);
+		SetCVar(FP,ExchangeRate[2],Add,-6);
 		PreserveTrigger();
 	}
 }
@@ -5750,6 +5751,8 @@ Trigger {
 		KillUnit("Sunken Colony",Force2);
 		KillUnit("Creep Colony",Force2);
 		KillUnit("Spore Colony",Force2);
+		KillUnit(179,Force2);
+		KillUnit(180,Force2);
 		PreserveTrigger();
 	}
 	}
@@ -6328,6 +6331,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CVar(FP,Cell_R[2],Exactly,0);
+		CDeaths(FP,AtLeast,2,GMode);
 		CommandLeastAt(BIndex,64);
 		BossCon
 	},
@@ -6448,9 +6452,9 @@ end
 		},
 	}
 NIf(FP,CVar(FP,Cell_R[2],Exactly,0))
-TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
-TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
-TriggerX(FP,{DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
 CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))})
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,TBossHPPtr,Nextptrs,2)
@@ -6676,25 +6680,24 @@ local TBossTxt2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x
 
 --
 DoActionsX(FP,SetCDeaths(FP,Add,1,TBossT))
-Trigger2X(FP,{CDeaths(FP,Exactly,200,TBossT)},{CopyCpAction({
+Trigger2X(FP,{CDeaths(FP,Exactly,50,TBossT)},{CopyCpAction({
 	TalkingPortrait(5, 6100),
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
 	DisplayTextX(TBossTxt1,4)
 },HumanPlayers,FP)},{Preserved})
-Trigger2X(FP,{CDeaths(FP,Exactly,400,TBossT)},{CopyCpAction({
+Trigger2X(FP,{CDeaths(FP,Exactly,250,TBossT)},{CopyCpAction({
 	TalkingPortrait(5, 6100),
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
 	DisplayTextX(TBossTxt2,4)
 },HumanPlayers,FP)},{Preserved})
-CIf(FP,CDeaths(FP,Exactly,400,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
-Simple_SetLocX(FP,0,0,0,480,480,{MoveLocation(1,5,FP,64)})
-UnitReadX(FP,Force1,"Factories",1,B1_Calc)
+Simple_SetLocX(FP,"TBossLoc",0,0,640,640,{MoveLocation("TBossLoc",5,FP,64)})
+CIf(FP,CDeaths(FP,Exactly,300,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
+UnitReadX(FP,Force1,"Factories","TBossLoc",B1_Calc)
 
-CAdd(FP,B1_Calc,2)
 CIf(FP,CDeaths(FP,Exactly,2,GMode))
-f_Mul(FP,B1_Calc,100)
+f_Mul(FP,B1_Calc,200)
 CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,3,GMode))
 f_Mul(FP,B1_Calc,400)
@@ -7030,10 +7033,7 @@ DoActions(FP,{
 CreateUnit(1,33,1,FP)
 })
 NIf(FP,{CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtLeast,1,GunBossAct),CDeaths(FP,Exactly,0,GunBossT),CVar(FP,Cell_R[2],AtLeast,100)})
-CIfOnce(FP)
-f_ForcePosSave(nil,1000,1024,2400,0)
-CIfEnd()
-GunBossUIDArr = {80,86,102,98,88}
+
 
 Trigger {
 	players = {FP},
@@ -7055,6 +7055,30 @@ Trigger {
 		SetMemory(0x6509B0,SetTo,FP);
 	}
 }
+
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,Cell_R[2],AtMost,0);
+	},
+	actions = {
+		SetMemory(0x6509B0,SetTo,0);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,1);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,2);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,3);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,4);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,5);
+		RunAIScript("Turn OFF Shared Vision for Player 8");
+		SetMemory(0x6509B0,SetTo,FP);
+	}
+}
+
 
 
 for i = 1, #GunBossUIDArr do
@@ -7110,11 +7134,9 @@ Trigger {
 NIfEnd()
 NIf(FP,{CDeaths(FP,AtLeast,2,GMode),Deaths(8,Exactly,3,168),CDeaths(FP,AtMost,6000,GunBossAct)})
 
-Shape_Hard = CS_RatioXY(CSMakeStar(4,180,75,45,9*9,7*7),1,0.5)
-Shape_Hard2 =CS_RatioXY(CSMakeStar(4,180,75,45,3*3,0),1,0.5)
-Shape_Burst =CS_RatioXY(CSMakeStar(4,180,75,45,9*9,5*5),1,0.5)
-Shape_Burst2 = CS_RatioXY(CSMakeStar(4,180,75,45,5*5,3*3),1,0.5)
-GunBossUIDArr2 = {15,87,89,77,78,79,76,10,52,19}
+CIfOnce(FP)
+f_ForcePosSave(nil,1000,1024,2400,0)
+CIfEnd()
 
 
 
@@ -7130,65 +7152,14 @@ Trigger {
 	actions = {
 		GiveUnits(All,GunBossUIDArr[i],11,"Anywhere",FP);
 		SetInvincibility(Disable,GunBossUIDArr[i],FP,64);
+		RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+		
 		},
 	}
 end
 for i = 1, #GunBossUIDArr2 do
 table.insert(GunBossPatchArr,SetMemoryX(0x664080+(GunBossUIDArr2[i]*4),SetTo,4,4))
 table.insert(GunBossPatchArr2,SetMemoryX(0x664080+(GunBossUIDArr2[i]*4),SetTo,0,4))
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,Cell_R[2],AtMost,0);
-	},
-	actions = {
-		SetMemory(0x6509B0,SetTo,0);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,1);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,2);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,3);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,4);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,5);
-		RunAIScript("Turn OFF Shared Vision for Player 8");
-		SetMemory(0x6509B0,SetTo,FP);
-	}
-}
-
-Trigger {
-	players = {FP},
-		conditions = {
-		Label(0);
-		CDeaths(FP,AtLeast,i*500,GunBossAct);
-			},
-	actions = {
-		SetSwitch("Switch 256",Set);
-		},
-	}
-CSPlotAct(Shape_Hard,FP,GunBossUIDArr2[i],25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,0)
-CSPlotAct(Shape_Burst,FP,GunBossUIDArr2[i],25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,0)
-CSPlotAct(Shape_Hard,FP,GunBossUIDArr2[i],26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,0)
-CSPlotAct(Shape_Burst,FP,GunBossUIDArr2[i],26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,0)
-CSPlotAct(Shape_Hard,FP,GunBossUIDArr2[i],27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,0)
-CSPlotAct(Shape_Burst,FP,GunBossUIDArr2[i],27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,0)
-CSPlotAct(Shape_Hard,FP,GunBossUIDArr2[i],28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,0)
-CSPlotAct(Shape_Burst,FP,GunBossUIDArr2[i],28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,0)
-Trigger {
-	players = {FP},
-		conditions = {
-		Label(0);
-		CDeaths(FP,AtLeast,i*500,GunBossAct);
-			},
-	actions = {
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog",64);
-		SetSwitch("Switch 256",Clear);
-		},
-	}
-
 end
 
 Trigger {
@@ -7220,50 +7191,7 @@ Trigger {
 		},
 	}
 
-Trigger {
-	players = {FP},
-		conditions = {
-		Label(0);
-		
-		CDeaths(FP,AtLeast,200,GunBossT3);
-			},
-	actions = {
-		SetCDeaths(FP,SetTo,0,GunBossT3);
-		SetSwitch("Switch 256",Set);
-		PreserveTrigger();
-		},
-	}
 
-
-CSPlotAct(Shape_Hard2,FP,69,25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,69,26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,69,27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,69,28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,27,25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,27,26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,27,27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Hard2,FP,27,28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Cleared)},nil,1)
-CSPlotAct(Shape_Burst2,FP,69,25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,69,26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,69,27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,69,28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,27,25,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,27,26,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,27,27,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-CSPlotAct(Shape_Burst2,FP,27,28,nil,1,32,32,nil,FP,{Switch("Switch 256",Set),Switch("Switch 255",Set)},nil,1)
-Trigger {
-	players = {FP},
-	conditions = {
-		Switch("Switch 256",Set);
-	},
-	actions = {
-		
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog",64);
-		PreserveTrigger();
-	}
-}
-
-DoActions(FP,SetSwitch("Switch 256",Clear))
 Trigger {
 	players = {FP},
 		conditions = {
@@ -7284,7 +7212,7 @@ Trigger {
 		Label(0);
 			},
 	actions = {
-		SetCDeaths(FP,SetTo,5,BGMType);
+		SetCDeaths(FP,SetTo,7,BGMType);
 		SetCDeaths(FP,Add,1,GunBossAct);
 		GunBossPatchArr;
 		},
@@ -7341,7 +7269,7 @@ CMov(FP,UpCount,0)
 for i = 0, 5 do
 NIf(FP,MemoryB(0x58D2B0+(46*i)+8,Exactly,1))
 DoActionsX(FP,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
+		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactor),
 		SetCVar(FP,UpgradeCP[2],SetTo,i),
@@ -7352,7 +7280,7 @@ DoActionsX(FP,{
 NIfEnd()
 NIf(FP,MemoryB(0x58D2B0+(46*i)+9,Exactly,1))
 DoActionsX(FP,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
+		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactor),
 		SetCVar(FP,UpgradeCP[2],SetTo,i),
@@ -7365,7 +7293,7 @@ NIfEnd()
 
 NIf(FP,MemoryB(0x58D2B0+(46*i)+1,Exactly,1))
 DoActionsX(FP,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
+		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(DefUpgradePtrArr[i+1])),
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 		SetCVar(FP,UpgradeFactor[2],SetTo,DefFactor),
 		SetCVar(FP,UpgradeCP[2],SetTo,i),
@@ -7375,7 +7303,7 @@ DoActionsX(FP,{
 NIfEnd()
 NIf(FP,MemoryB(0x58D2B0+(46*i)+2,Exactly,1))
 DoActionsX(FP,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
+		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(DefUpgradePtrArr[i+1])),
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 		SetCVar(FP,UpgradeFactor[2],SetTo,DefFactor),
 		SetCVar(FP,UpgradeCP[2],SetTo,i),
@@ -7394,7 +7322,7 @@ CDoActions(FP,{TSetMemory(SelOPEPD,Add,1)})
 f_Read(FP,_Add(SelEPD,2),SelHP)
 f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
 f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
-CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))),_Mov(256)))
+CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPDF(0x662350)))),_Mov(256)))
 f_Div(FP,SelHP,_Mov(256))
 f_Div(FP,SelSh,_Mov(256))
 CDoActions(FP,{TSetMemory(SelHPEPD,SetTo,SelHP),TSetMemory(MarHPEPD,SetTo,SelMaxHP),TSetMemory(SelShEPD,SetTo,SelSh)})
@@ -7573,7 +7501,6 @@ Trigger { -- 데스 스코어 리더보드
 		Order("Kukulza Guardian", Force2, "Anywhere", Attack, 2);
 		Order("Mutalisk", Force2, "Anywhere", Attack, 2);
 		Order("Guardian", Force2, "Anywhere", Attack, 2);
-		Order(5, Force2, "Anywhere", Attack, 2);
 		Order("Any unit",Force2,45,Attack,2);
 		Order("Any unit",Force2,46,Attack,2);
 		Order(121, Force2, "Anywhere", Attack, 2);
@@ -7610,32 +7537,49 @@ end
 DoActionsX(FP,{
 SetCDeaths(FP,Subtract,1,LeaderBoardT)
 })
+
+ShToken = CreateCcodeArr(6)
+for i = 0, 5 do
 Trigger { -- 메딕트리거
-	players = {Force1},
+	players = {i},
 	conditions = {
-		Command(CurrentPlayer, AtLeast, 1, 34);
+		Label(0);
+		Command(i, AtLeast, 1, 34);
 	},
 	actions = {
-		ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
-		ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
-		ModifyUnitHitPoints(All, "Buildings", CurrentPlayer, "Anywhere", 100);
-		RemoveUnitAt(1,34,"Anywhere",CurrentPlayer);
+		ModifyUnitHitPoints(All, "Men", i, "Anywhere", 100);
+		ModifyUnitHitPoints(All, "Buildings", i, "Anywhere", 100);
+		RemoveUnitAt(1,34,"Anywhere",i);
+		SetCDeaths(FP,Add,1,ShToken[i+1]);
 		PreserveTrigger();
 	},
 	}
 Trigger { -- 메딕트리거
-	players = {Force1},
+	players = {i},
 	conditions = {
-		Command(CurrentPlayer, AtLeast, 1, 9);
+		Label(0);
+		Command(i, AtLeast, 1, 9);
 	},
 	actions = {
-		ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
-		ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
-		ModifyUnitHitPoints(All, "Buildings", CurrentPlayer, "Anywhere", 100);
-		RemoveUnitAt(1,9,"Anywhere",CurrentPlayer);
+		ModifyUnitHitPoints(All, "Men", i, "Anywhere", 100);
+		ModifyUnitHitPoints(All, "Buildings", i, "Anywhere", 100);
+		RemoveUnitAt(1,9,"Anywhere",i);
+		SetCDeaths(FP,Add,1,ShToken[i+1]);
 		PreserveTrigger();
 	},
 	}
+end
+CIfX(FP,CGMode(2,AtLeast))
+for i = 0, 5 do
+CTrigger(FP,{CDeaths(FP,AtLeast,1,ShToken[i+1])},{TModifyUnitShields(All, "Men", i, "Anywhere", MarSh),SetCDeaths(FP,Subtract,1,ShToken[i+1])},1)
+end
+CElseX()
+for i = 0, 5 do
+CTrigger(FP,{CDeaths(FP,AtLeast,1,ShToken[i+1])},{ModifyUnitShields(All, "Men", i, "Anywhere", 100),SetCDeaths(FP,Subtract,1,ShToken[i+1])},1)
+end
+
+CIfXEnd()
+
 for i = 1, 5 do -- 강퇴기능
 
 Trigger { -- 강퇴토큰
@@ -7710,11 +7654,15 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.." Ore \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine + \x1F"..NeCost.." Ore = \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x04\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 는 저그 유닛을 효과적으로 제거하지만, 적 영웅 유닛에게 취약함\n\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine + \x1F"..NeCost.."원 = \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x04\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 는 저그 유닛을 효과적으로 제거하지만, 적 영웅 유닛에게 취약함\n\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
 		PreserveTrigger();
 		},
 	}
-
+	if Limit == 1 then
+	Trigger2(FP,{ElapsedTime(AtLeast,75)},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..YY.."년 "..MM.."월 "..DD.."일 "..HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+	end
+	Trigger2(FP,{ElapsedTime(AtLeast,60)},{RotatePlayer({DisplayTextX(InFormation,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+	
 Trigger { -- 채팅창 정리 delete키
 	players = {Force1},
 	conditions = {
@@ -7726,7 +7674,37 @@ Trigger { -- 채팅창 정리 delete키
 		PreserveTrigger();
 		},
 	}
-
+for j = 0, 5 do
+UpText1 = "\x0D\x0D\x0DDef"..Player[j+1].._0D
+UpText2 = "\x13\x04\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04의 \x08체력\x04이 일정량 증가하였습니다."
+Trigger2X(FP,{CGMode(1),MemoryB(0x58D2B0+(46*j),AtLeast,255);},{
+	RotatePlayer({
+		DisplayTextX(string.rep("\n", 20),4),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+		DisplayTextX("\x13\x1FＯＶＥＲＤＲＩＶＥ　ＥＦＦＥＣＴ\n\n\n",0),
+		DisplayTextX(UpText1,0),
+		DisplayTextX(UpText2,0),
+		DisplayTextX("\n\n\x13\x1FＯＶＥＲＤＲＩＶＥ　ＥＦＦＥＣＴ",0),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+		PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),
+		PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),
+		PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")
+	},HumanPlayers,FP);})
+UpText2 = "\x13\x04\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04의 \x08체력\x04과 모든 마린의 \x1C쉴드 \07회복 상한\x04이 일정량 증가하였습니다."
+Trigger2X(FP,{CGMode(2,AtLeast),MemoryB(0x58D2B0+(46*j),AtLeast,255);},{
+		RotatePlayer({
+			DisplayTextX(string.rep("\n", 20),4),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			DisplayTextX("\x13\x1FＯＶＥＲＤＲＩＶＥ　ＥＦＦＥＣＴ\n\n\n",0),
+			DisplayTextX(UpText1,0),
+			DisplayTextX(UpText2,0),
+			DisplayTextX("\n\n\x13\x1FＯＶＥＲＤＲＩＶＥ　ＥＦＦＥＣＴ",0),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),
+			PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),
+			PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")
+	},HumanPlayers,FP);})
+end
 
 
 Trigger { -- 캔낫시 모든 저그유닛 삭제, 경고1회부여, 정야독
@@ -9215,11 +9193,6 @@ Trigger { -- 가스통깨면 가스추가
 --end
 
 -- 난이도별 인터페이스 설정 - 다인플
-CIfX(Force1,{
-CVar(FP,HiddenPts[2],AtLeast,1),
-CVar(FP,HiddenATK[2],AtLeast,1),
-CVar(FP,HiddenHP[2],AtLeast,1)
-})
 Trigger { -- 조합 네뷸라
 	players = {Force1},
 	conditions = {
@@ -9231,132 +9204,10 @@ Trigger { -- 조합 네뷸라
 		SetResources(CurrentPlayer,Subtract,NeCost,ore);
 		RemoveUnitAt(1,100,3,CurrentPlayer);
 		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능",4);
+		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
 		PreserveTrigger();
 	},
 }
-CElseX()
-CIf(Force1,CVar(FP,SetPlayers[2],AtLeast,2))
-CIf(Force1,CDeaths(FP,Exactly,1,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,47,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1148\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIf(Force1,CDeaths(FP,Exactly,2,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,35,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1136\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIf(Force1,CDeaths(FP,Exactly,3,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,23,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1124\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIfEnd()
-CIfXEnd()
--- 난이도별 인터페이스 설정 - 솔로
-CIf(Force1,CVar(FP,SetPlayers[2],Exactly,1))
-CIf(Force1,CDeaths(FP,Exactly,1,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,83,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1184\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIf(Force1,CDeaths(FP,Exactly,2,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,59,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1160\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIf(Force1,CDeaths(FP,Exactly,3,GMode))
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Command(CurrentPlayer,AtMost,35,16);
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n\x02▶ \x08주의\x04 : 총 \x1136\x04기 보유 가능",4);
-		PreserveTrigger();
-	},
-}
-
-CIfEnd()
-CIfEnd()
-
 
 CMov(FP,MarUpData,0)
 
@@ -9370,10 +9221,12 @@ CIfXEnd()
 CIfEnd()
 end
 CIf(FP,{TTCVar(FP,InputMarUpData[2],NotSame,MarUpData)})
+local SetPUpCalc = CreateVar(FP)
+CMov(FP,SetPUpCalc,_Mul(SetPlayers,_Mov(255)))
 
 CIfX(FP,{CVar(FP,HiddenHP[2],Exactly,0),CVar(FP,HiddenHPM[2],Exactly,0)})
-CMov(FP,MarHP,_Div(_Mov(5000*256),_Mul(SetPlayers,_Mov(255))))
-CIfX(FP,{TMemory(_Mem(MarUpData),Exactly,_Mul(SetPlayers,_Mov(255)))})
+CMov(FP,MarHP,_Div(_Mov(5000*256),SetPUpCalc))
+CIfX(FP,{TMemory(_Mem(MarUpData),Exactly,SetPUpCalc)})
 CMov(FP,0x6624E0,(9999*256)+1)
 CElseX()
 CMov(FP,0x6624E0,_Mul(MarHP,MarUpData),(4999*256)+5)
@@ -9382,7 +9235,7 @@ CIfXEnd()
 
 CElseIfX(CVar(FP,HiddenHP[2],AtLeast,1))
 
-CMov(FP,MarHP,_Div(_Add(_Mul(HiddenHP,_Mov(4000*256)),5000*256),_Mul(SetPlayers,_Mov(255))))
+CMov(FP,MarHP,_Div(_Add(_Mul(HiddenHP,_Mov(4000*256)),5000*256),SetPUpCalc))
 CMov(FP,0x6624E0,_Mul(MarHP,MarUpData),(4999*256)+5)
 
 CElseIfX(CVar(FP,HiddenHPM[2],AtLeast,1))
@@ -9390,8 +9243,8 @@ CElseIfX(CVar(FP,HiddenHPM[2],AtLeast,1))
 
 CIf(FP,CVar(FP,HiddenHPM[2],AtMost,4))
 
-CMov(FP,MarHP,_Div(_Sub(_Mov(5000*256),_Mul(HiddenHPM,_Mov(1000*256))),_Mul(SetPlayers,_Mov(255))))
-CIfX(FP,{TMemory(_Mem(MarUpData),Exactly,_Mul(SetPlayers,_Mov(255)))})
+CMov(FP,MarHP,_Div(_Sub(_Mov(5000*256),_Mul(HiddenHPM,_Mov(1000*256))),SetPUpCalc))
+CIfX(FP,{TMemory(_Mem(MarUpData),Exactly,SetPUpCalc)})
 CMov(FP,0x6624E0,_Add(_Sub(_Mov(5000*256),_Mul(HiddenHPM,_Mov(1000*256))),5000*256))
 CElseX()
 CMov(FP,0x6624E0,_Mul(MarHP,MarUpData),(4999*256)+5)
@@ -9399,9 +9252,17 @@ CIfXEnd()
 
 CIfEnd()
 
-
+--ocal MarSh1 = CreateVar(FP)
 CIfXEnd()
-CMov(FP,InputMarUpData,MarUpData)
+--CMov(FP,MarSh1,_Div(_Mov(100*16777216),SetPUpCalc))
+CIfX(FP,{TMemory(_Mem(MarUpData),Exactly,SetPUpCalc)})
+CMov(FP,MarSh,100)
+CElseX()
+f_Div(FP,MarSh,_Mul(MarHP,MarUpData),_Mov(50*256))
+--CMov(FP,MarSh,_Mul(_Div(MarSh1,_Mov(16777216)),MarUpData))
+CIfXEnd()
+
+
 
 CIfEnd()
 
@@ -9658,7 +9519,7 @@ Trigger { -- 브금재생 j번 - 관전자
 		PlayWAV(BGMFile);
 		PlayWAV(BGMFile);
 		SetMemory(0x6509B0,SetTo,FP);
-		SetDeaths(FP,SetTo,Value,400,0xFFFFFF);
+		SetDeathsX(FP,SetTo,Value,440,0xFFFFFF);
 		PreserveTrigger();
 	},
 	}
@@ -9670,6 +9531,7 @@ BGMOb(4,"staredit\\wav\\bgm1long.ogg",61 * 1000 )
 BGMOb(5,"staredit\\wav\\bgm2long.ogg",61 * 1000)
 BGMOb(6,"staredit\\wav\\bgm1_3.ogg",83640)
 BGMOb(7,"staredit\\wav\\bgm_sp1.ogg",182 * 1000)
+BGMOb(8,"staredit\\wav\\bgm_sp2.ogg",57 * 1000)
 CElseX()
 Trigger { -- 브금재생시 스킵 관전자
 	players = {FP},
@@ -9719,6 +9581,7 @@ BGMPlayer(4,"staredit\\wav\\bgm1long.ogg",61 * 1000 )
 BGMPlayer(5,"staredit\\wav\\bgm2long.ogg",61 * 1000)
 BGMPlayer(6,"staredit\\wav\\bgm1_3.ogg",83640)
 BGMPlayer(7,"staredit\\wav\\bgm_sp1.ogg",182 * 1000)
+BGMPlayer(8,"staredit\\wav\\bgm_sp2.ogg",57 * 1000)
 CElseX()
 Trigger { -- 브금재생시 스킵
 	players = {FP},

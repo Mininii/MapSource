@@ -3,11 +3,9 @@ function onInit()
 	_0D = string.rep("\x0D",200)
 	BanToken = {84,69,70,60,71}
 	GiveUnitID = {64,65,66,67,61,63}
-	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
-	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4}
+	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
+	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1}
 	GiveRate2 = {1000, 5000, 10000, 50000, 100000,500000} 
-	GunPtrMemory = 0x590000
-	MemoryPtr = 0x590100
 	Player = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6"}
 	Color = {"\x08","\x0E","\x0F","\x10","\x11","\x15"}
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15}
@@ -46,7 +44,7 @@ function onInit()
 	ButtonSetArr = {72,3,84,69,70,60,71,64,65,66,67,61,63,83}
 	ButtonSetPatch = {}
 	ButtonSetPatch2 = {}
-
+	GunBossUIDArr = {80,86,102,98,88}
 	
 	for i = 1, #ButtonSetArr do
 		table.insert(ButtonSetPatch,SetMemoryW(0x65FD00 + (ButtonSetArr[i]*2), SetTo, 10000))
@@ -61,8 +59,13 @@ function onInit()
 	f_GunSendT2 = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+
+	DefStr1 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d")
+	DefStr2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04(이)가 \x1C방어력 \x04업그레이드를 완료하였습니다.\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	
 
+
+	InFormation = "\n\n\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(つ>ㅅ<)つ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04이 문구가 뜰 경우 \x07정식버전\x04입니다. \n\x13\x04무단 수정맵을 주의해주세요.\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
 
 	--Balance
@@ -71,11 +74,11 @@ function onInit()
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000
-	HPointFactor = 15
-	ExRate = 15
-	EasyEx1P = 150
-	HDEx1P = 170
-	BurEx1P = 200
+	HPointFactor = 30
+	ExRate = 0
+	EasyEx1P = 100
+	HDEx1P = 100
+	BurEx1P = 100
 
 
 
@@ -188,7 +191,7 @@ function SetZergGroupFlags(UnitID)
 	UnitEnable2(72)
 	SetUnitClass(16)
 	SetUnitClass(68)
-	SetUnitClass(25)
+	SetUnitClass(23)
 	SetUnitClass(74)
 	SetUnitClass(11)
 	SetUnitClass(5)
@@ -414,6 +417,8 @@ function SetZergGroupFlags(UnitID)
 	G_InputH = CreateVar(FP) --{"X",0x500,0x15C,1,0}
 	G_CA = CreateVar(FP)
 	f_GunStrPtr = CreateVar(FP)
+	MarSh = CreateVar(FP)
+	DefStrPtr = CreateVarArr(6,FP)
 
 	--Include CCode
 	BGMType = CreateCCode()
@@ -518,11 +523,17 @@ function SetZergGroupFlags(UnitID)
 	Str22 = CArray(FP,50)
 	Str23 = CArray(FP,50)
 	Str24 = CArray(FP,50)
+
+--	GunPtrMemoryVO = f_GetVoidptr(FP,100*4)
+--	RepUnitPtrVO = f_GetVoidptr(FP,1700*4)
+
+	GunPtrMemory = CreateVar(FP)
+	RepUnitPtr = CreateVar(FP)
 	HiddenModeT = CVArray(FP,20)
 	f_GunNumT = CVArray(FP,5)
-	CA2ArrX = CreateVArr(1700,FP)
-	CA2ArrY = CreateVArr(1700,FP)
-	CA2ArrZ = CreateVArr(1700,FP)
+	CA2ArrX = CVArray(FP,1700)
+	CA2ArrY = CVArray(FP,1700)
+	CA2ArrZ = CVArray(FP,1700)
 	Str25 = {}
 	Str26 = {}
 	Str27 = {}
