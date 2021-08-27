@@ -77,8 +77,8 @@ function onInit()
 	HPointFactor = 30
 	ExRate = 0
 	EasyEx1P = 100
-	HDEx1P = 100
-	BurEx1P = 100
+	HDEx1P = 110
+	BurEx1P = 130
 
 
 
