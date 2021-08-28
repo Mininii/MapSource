@@ -559,8 +559,8 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 �
 	GLocC = 1
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
 	local PlayerID = TriggerPlayer
-	local RetX = CreateVar(FP)
-	local RetY = CreateVar(FP)
+	local RetX = CreateVar(TriggerPlayer)
+	local RetY = CreateVar(TriggerPlayer)
 	local Call_GetCLoc = SetCallForward()
 	SetCall(PlayerID)
 	f_Read(PlayerID,0x58DC60+0x14*TempLocID,RetX,"X",0xFFFFFFFF)

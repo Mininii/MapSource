@@ -56,7 +56,7 @@ function GunBreak(GName,Point,BGMIndex)
 end
 
 
-function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine)
+function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_G_CA_Arr)
 	if CPos == nil then PushErrorMsg("Need_Include_Conv_CPosXY") end
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end
 	if GLocC == nil then PushErrorMsg("Need_Install_GetCLoc") end
@@ -475,70 +475,79 @@ local BackupCPosY = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
-	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
-	DoActions(FP,{SetSwitch(RandSwitch,Random)})
-	TriggerX(FP,{Switch(RandSwitch,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
-	TriggerX(FP,{Switch(RandSwitch,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
-	CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
-	CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
-
-	CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	CIfX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,204))
 		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			CMov(FP,BackupCPosX,CPosX)
-			CMov(FP,BackupCPosY,CPosY)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				Order("Men", Force2, 1, Attack, DefaultAttackLoc);
-			})
-			CMov(FP,CPosX,BackupCPosX)
-			CMov(FP,CPosY,BackupCPosY)
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-			})
-
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,189))
-		CDoActions(FP,{
-			TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-			TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
-		})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,190))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			CMov(FP,BackupCPosX,CPosX)
-			CMov(FP,BackupCPosY,CPosY)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				Order("Men", Force2, 1, Attack, DefaultAttackLoc);
-				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
-			})
-			CMov(FP,CPosX,BackupCPosX)
-			CMov(FP,CPosY,BackupCPosY)
-
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
-			CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-			TempSpeedVar = f_CRandNum(4000)
-			CDoActions(FP,{
-				TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
-				TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
-			CelseX()
-			CDoActions(FP,{
-				TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
-				TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-			CIfXEnd()
-			CDoActions(FP,{
-				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-			})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,3))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
+			RepeatBullet(204,20)
 		CElseX()
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
-	CIfEnd()
+	CElseX()
+		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+		DoActions(FP,{SetSwitch(RandSwitch,Random)})
+		TriggerX(FP,{Switch(RandSwitch,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
+		TriggerX(FP,{Switch(RandSwitch,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
+		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
+
+		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
+				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+				CMov(FP,BackupCPosX,CPosX)
+				CMov(FP,BackupCPosY,CPosY)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CDoActions(FP,{
+					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
+				})
+				CMov(FP,CPosX,BackupCPosX)
+				CMov(FP,CPosY,BackupCPosY)
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
+				CDoActions(FP,{
+					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				})
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,189))
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
+			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,190))
+				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+				CMov(FP,BackupCPosX,CPosX)
+				CMov(FP,BackupCPosY,CPosY)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CDoActions(FP,{
+					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
+					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
+				})
+				CMov(FP,CPosX,BackupCPosX)
+				CMov(FP,CPosY,BackupCPosY)
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
+				CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+				TempSpeedVar = f_CRandNum(4000)
+				CDoActions(FP,{
+					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
+					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
+				CelseX()
+				CDoActions(FP,{
+					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
+					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
+				CIfXEnd()
+				CDoActions(FP,{
+					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))
+				CDoActions(FP,{
+					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
+			CElseX()
+				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+			CIfXEnd()
+		CIfEnd()
+	CIfXEnd()
+
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 CMov(FP,RepeatType,0)
@@ -597,7 +606,7 @@ SetCallEnd()
 
 
 local Write_SpawnSet_Jump = def_sIndex()
-local G_CA_Arr_IndexAlloc = 0x600
+local G_CA_Arr_IndexAlloc = StartIndex
 local G_CA_InputCVar = {}
 local G_CA_Lines = 55
 local G_CA_TempTable = CreateVarArr(G_CA_Lines,FP)
@@ -608,7 +617,7 @@ for i = 1, G_CA_Lines do
 end
 local G_CA_InputH = CreateVar(FP)
 local G_CA_LineTemp = CreateVar(FP)
-table.insert(CtrigInitArr[7],SetCtrigX(FP,G_CA_InputH[2],0x15C,0,SetTo,FP,0x600,0x15C,1,0))
+table.insert(CtrigInitArr[7],SetCtrigX(FP,G_CA_InputH[2],0x15C,0,SetTo,FP,StartIndex,0x15C,1,0))
 
 Write_SpawnSet = SetCallForward()
 SetCall(FP)
@@ -630,7 +639,7 @@ end
 CMov(FP,G_CA_LineV,0)
 CJumpEnd(FP,Write_SpawnSet_Jump)
 
-CAdd(FP,G_CA_LineTemp,_Mul(G_CA_LineV,_Mov(0x970/4)),G_CA_InputH)
+CAdd(FP,G_CA_LineTemp,G_CA_LineV,G_CA_InputH)
 NIfX(FP,{TMemory(G_CA_LineTemp,AtMost,0)})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,0*(0x20/4)),SetTo,G_CA_CUTV),
@@ -641,10 +650,20 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,5*(0x20/4)),SetTo,G_CA_RPTV),
 	TSetMemory(_Add(G_CA_LineTemp,6*(0x20/4)),SetTo,G_CA_CTTV),
 })
-CTrigger(FP,{CVar(FP,G_CA_XPos[2],Exactly,0)},{TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,Var_TempTable[2])},1)
-CTrigger(FP,{CVar(FP,G_CA_YPos[2],Exactly,0)},{TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,Var_TempTable[3])},1)
-NElseIfX({CVar(FP,G_CA_LineV[2],AtMost,126)})
-CAdd(FP,G_CA_LineV,1)
+CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0),CVar(FP,G_CA_YPos[2],Exactly,0)})
+CDoActions(FP,{
+	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,Var_TempTable[2]),
+	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,Var_TempTable[3])
+})
+CElseX()
+CDoActions(FP,{
+	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_XPos),
+	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,G_CA_YPos)
+})
+CIfXEnd()
+
+NElseIfX({CVar(FP,G_CA_LineV[2],AtMost,((0x970/4)*Size_of_G_CA_Arr-2))})
+CAdd(FP,G_CA_LineV,0x970/4)
 CJump(FP,Write_SpawnSet_Jump)
 NElseX()
 
@@ -1081,8 +1100,8 @@ function Install_Call_G_CA()
 end
 
 function Create_G_CA_Arr()
-	if G_CA_Arr_IndexAlloc ~= 0x600 then PushErrorMsg("Already_G_CA_Arr_Created") end
-	for i = 0, 127 do
+	if G_CA_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CA_Arr_Created") end
+	for i = 0, Size_of_G_CA_Arr-1 do
 		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
 			G_CA_InputCVar,
 			SetCtrigX("X",G_CA_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
@@ -1159,3 +1178,60 @@ function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 	f_MemCpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
+
+function SetBulletSpeed(Value,BreakDis) -- 야마토건 Flingy Speed
+	if BreakDis ~= nil then
+		return {
+			SetMemoryX(0x6C9DB4, SetTo, 0xFFFFFFFF-Value,0xFFFF);
+			SetMemory(0x6CA170, SetTo, Value);
+			SetMemory(0x6C9BA8, SetTo, BreakDis);
+		}
+	else
+		return {
+			SetMemoryX(0x6C9DB4, SetTo, 0xFFFFFFFF-Value,0xFFFF);
+			SetMemory(0x6CA170, SetTo, Value);
+		}
+	end
+end
+
+function CreateBullet(UnitId,Height,Angle,X,Y)
+	CDoActions(FP,{
+		TSetCVar(FP,CBY[2],SetTo,Y),
+		TSetCVar(FP,CBX[2],SetTo,X),
+		TSetCVar(FP,CBAngle[2],SetTo,Angle),
+		TSetCVar(FP,CBHeight[2],SetTo,Height),
+		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+		SetNextTrigger(Call_CBullet)
+	})
+	end
+	function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
+	CDoActions(FP,{
+		TSetCVar(FP,CBY[2],SetTo,Y),
+		TSetCVar(FP,CBX[2],SetTo,X),
+		TSetCVar(FP,CBAngle[2],SetTo,Angle),
+		TSetCVar(FP,CBHeight[2],SetTo,Height),
+		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+		SetNextTrigger(Call_CBullet_PosCalc)
+	})
+	end
+	
+	
+	function SetBullet(UnitId,Height,X,Y)
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,Y),
+			TSetCVar(FP,CBX[2],SetTo,X),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_SetBulletXY)
+		})
+	end
+
+	function RepeatBullet(UnitId,Height)
+		CDoActions(FP,{
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_SetBulletXY_for_Repeat)
+		})
+	end
+
+	
