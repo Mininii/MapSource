@@ -59,6 +59,7 @@ function onInit()
 	f_GunSendT2 = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 
 	DefStr1 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d")
 	DefStr2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04(이)가 \x1C방어력 \x04업그레이드를 완료하였습니다.\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
@@ -175,6 +176,7 @@ function SetZergGroupFlags(UnitID)
 	ZergDefTypePatch(62)
 	ZergDefTypePatch(103)
 	ZergDefTypePatch(104)
+	ZergDefTypePatch(186)
 	UnitEnable(72)
 	UnitEnable(83)
 	UnitEnable(3)
@@ -195,6 +197,7 @@ function SetZergGroupFlags(UnitID)
 	SetUnitClass(74)
 	SetUnitClass(11)
 	SetUnitClass(5)
+	SetUnitClass(186)
 	
 	
 	
@@ -419,7 +422,10 @@ function SetZergGroupFlags(UnitID)
 	f_GunStrPtr = CreateVar(FP)
 	MarSh = CreateVar(FP)
 	DefStrPtr = CreateVarArr(6,FP)
-
+	BPosX,BPosY,AngleA,TempEPD,TempA,TempT,LocsA,CB_TempH = CreateVars(8)
+	CBullet_InputH = CreateVar(FP)
+	CBullet_ArrTemp = CreateVar(FP)
+	
 	--Include CCode
 	BGMType = CreateCCode()
 	LeaderBoardT = CreateCCode()

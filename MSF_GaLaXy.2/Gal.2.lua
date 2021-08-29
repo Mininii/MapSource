@@ -3,6 +3,7 @@
 
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--dofile(Curdir.."MapSource\\MSF_GaLaXy.2\\Gal.2.lua")
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -63,7 +64,7 @@ Objects()
 Include_CtrigPlib(360,RandSwitch,1,FP)
 Include_Conv_CPosXY(FP)
 nilunit = 181
-Install_GetCLoc(FP,0,nilunit)
+Install_GetCLoc(FP,255,nilunit)
 Include_CRandNum(FP)
 function f_SaveCp()
 	CallTrigger(FP,Call_SaveCP,nil)
@@ -158,11 +159,6 @@ CMov(FP,Gun_Level,_Div(_Mov(Gun_Temp,0xFF0000),_Mov(0x10000)))
 CMov(FP,Gun_V,Gun_Temp,"X",0xFF)
 SetCallEnd()
 
-Call_UnitIDVOvr = SetNextForward()
-SetCall(FP)
-CDoActions(FP,{TCreateUnit(1, UnitIDVOvr, 1, _Add(_Mod(_Rand(),2),_Mov(6)))})
-SetCallEnd()
-
 
 Call_CBullet = SetCallForward()
 SetCall(FP)
@@ -181,10 +177,120 @@ f_Read(FP,_Add(Nextptrs,10),Locs)
 CDoActions(FP,{
 	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
 	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
-	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00)
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
 })
 NIfEnd()
 SetCallEnd()
+
+Call_SetBulletXY = SetCallForward()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+local Cur_CBulletArr = CreateVar(FP)
+
+local CBullet_ArrCheck = def_sIndex()
+
+CMov(FP,Cur_CBulletArr,0)
+CJumpEnd(FP,CBullet_ArrCheck)
+CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
+
+
+NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
+	TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+	TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+	TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+	TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+	CreateUnit(1, 204, 1, FP),
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+})
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,_Add(BPosX,_Mul(BPosY,_Mov(65536))),0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+	TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
+	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,2,0xFFFFFFFF),
+})
+
+NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
+CAdd(FP,Cur_CBulletArr,0x970/4)
+CJump(FP,CBullet_ArrCheck)
+NElseX()
+
+DoActions(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+
+NIfXEnd()
+
+NIfEnd()
+SetCallEnd()
+
+Call_SetBulletXY_for_Repeat = SetCallForward()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+local Cur_CBulletArr = CreateVar(FP)
+
+local CBullet_ArrCheck = def_sIndex()
+
+CMov(FP,Cur_CBulletArr,0)
+CJumpEnd(FP,CBullet_ArrCheck)
+CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
+
+
+NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
+	CreateUnit(1, 204, 1, FP),
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+})
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,_Add(BPosX,_Mul(BPosY,_Mov(65536))),0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+	TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
+	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,2,0xFFFFFFFF),
+})
+
+NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
+CAdd(FP,Cur_CBulletArr,0x970/4)
+CJump(FP,CBullet_ArrCheck)
+NElseX()
+
+DoActions(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+
+NIfXEnd()
+
+NIfEnd()
+SetCallEnd()
+
+
+Call_CBulletA = SetCallForward()
+SetCall(FP)
+CIf(FP,{CVar(FP,TempEPD[2],AtLeast,19025),CVar(FP,TempEPD[2],AtMost,19025+(84*1699))})
+
+--CIf(FP,CVar(FP,AngleA[2],AtLeast,1*256))
+--CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x40/4),SetTo,AngleA)})
+--CIfEnd()
+CIfX(FP,CVar(FP,TempT[2],Exactly,0))
+f_Read(FP,_Add(TempEPD,8),AngleA,nil,0xFF00)
+f_Read(FP,_Add(TempEPD,10),LocsA)
+CDoActions(FP,{
+	TSetMemoryX(_Add(TempEPD,4),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,6),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,7),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,22),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,8),SetTo,_Add(AngleA,32768),0xFF00),
+	TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(CB_TempH,SetTo,0,0xFFFFFFFF)})
+CIfEnd()
+CElseX()
+CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x20/4),Subtract,1)})
+CIfXEnd()
+
+SetCallEnd()
+
 
 Call_CBullet_PosCalc = SetCallForward()
 SetCall(FP)
@@ -197,19 +303,20 @@ CDoActions(FP,{
 	TSetMemory(0x58DC64 + 0x14*0,Add,_Add(CBY,10)),
 	TSetMemory(0x58DC6C + 0x14*0,Add,_Add(CBY,10)),
 	CreateUnit(1, 204, 1, FP),
-	TSetMemory(_Add(Nextptrs,25),SetTo,CBUnitId)
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
 })
 f_Read(FP,_Add(Nextptrs,10),Locs)
 CDoActions(FP,{
 	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
 	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
-	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00)
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
 })
 NIfEnd()
 SetCallEnd()
 
 
-Include_G_CA_Library("Location 2",6)
+Include_G_CA_Library("Location 2",6,0x600,256)
 Install_Shape()
 
 S_3 = G_CAPlot(S_3_ShT)
@@ -231,29 +338,9 @@ Install_Load_CAPlot()
 Install_Call_G_CA()
 GunData()
 G_CA_Lib_ErrorCheck()
-
+Install_GetCLoc(FP,253,nilunit)
 CJumpEnd(AllPlayers,InitJump)
 NoAirCollisionX(FP)
-function CreateBullet(UnitId,Height,Angle,X,Y)
-CDoActions(FP,{
-	TSetCVar(FP,CBY[2],SetTo,Y),
-	TSetCVar(FP,CBX[2],SetTo,X),
-	TSetCVar(FP,CBAngle[2],SetTo,Angle),
-	TSetCVar(FP,CBHeight[2],SetTo,Height),
-	TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-	SetNextTrigger(Call_CBullet)
-})
-end
-function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
-CDoActions(FP,{
-	TSetCVar(FP,CBY[2],SetTo,Y),
-	TSetCVar(FP,CBX[2],SetTo,X),
-	TSetCVar(FP,CBAngle[2],SetTo,Angle),
-	TSetCVar(FP,CBHeight[2],SetTo,Height),
-	TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-	SetNextTrigger(Call_CBullet_PosCalc)
-})
-end
 
 
 
@@ -4550,6 +4637,8 @@ CWhileEnd()
 DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
 TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 
+Install_boss()
+
 CIfX(FP,{CVar(FP,count[2],AtMost,1500)}) -- 건작함수 제어
 DoActions(FP,{
 	SetInvincibility(Disable,132,Force2,64);
@@ -4656,8 +4745,8 @@ Trigger {
 		RemoveUnit("Stasis Cell",Force2);
 		RemoveUnit("Xel'Naga Temple",Force2);
 		RemoveUnit("Small Chrysalis",Force2);
-		--SetCDeaths(FP,SetTo,6000,GunBossAct);
-		--SetCDeaths(FP,SetTo,1,FormCon);
+		SetCDeaths(FP,SetTo,6001,GunBossAct);
+		SetCDeaths(FP,SetTo,2,FormCon);
 	}
 	}
 
@@ -6455,7 +6544,7 @@ NIf(FP,CVar(FP,Cell_R[2],Exactly,0))
 TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
 TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
 TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
-CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))})
+CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtMost,5999,GunBossAct),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))})
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,TBossHPPtr,Nextptrs,2)
 DoActions(FP,{CreateUnit(1,5,34,FP),SetMemoryX(0x664080+(25*4),SetTo,4,4)})
@@ -6527,7 +6616,7 @@ BText = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\
 	}
 
 CIfEnd()
-CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^1)*0x10000,168,(2^1)*(0x10000))})
+CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtMost,5999,GunBossAct),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^1)*0x10000,168,(2^1)*(0x10000))})
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,DBossPlaguePatch,Nextptrs,70)
 DoActions(FP,CreateUnit(1,11,35,FP))
@@ -7032,7 +7121,7 @@ DoActions(FP,{
 		SetMemoryX(0x669FAC, SetTo, 13*16777216,0xFF000000);
 CreateUnit(1,33,1,FP)
 })
-NIf(FP,{CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtLeast,1,GunBossAct),CDeaths(FP,Exactly,0,GunBossT),CVar(FP,Cell_R[2],AtLeast,100)})
+NIf(FP,{CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtLeast,1,GunBossAct),CDeaths(FP,AtMost,5999,GunBossAct),CDeaths(FP,Exactly,0,GunBossT),CVar(FP,Cell_R[2],AtLeast,100)})
 
 
 Trigger {
@@ -8020,6 +8109,7 @@ Trigger { -- 소환 마린
 		RemoveUnitAt(1,"Terran Firebat","Anywhere",j);
 		CreateUnitWithProperties(1,20,2,j,{energy = 100});
 		DisplayText("\x02▶ \x1BH \x04Marine을 \x19소환\x04하였습니다. - \x1F"..MarCost.." O r e",4);
+		SetDeaths(j,SetTo,1,50);
 		PreserveTrigger();
 	},
 }
@@ -8047,6 +8137,7 @@ Trigger { -- 소환 갤마
 		RemoveUnitAt(1,2,"Anywhere",j);
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine을 \x19소환\x04하였습니다. - \x1F"..(GMCost+MarCost).." O r e",4);
 		CreateUnitWithProperties(1,100,2,j,{energy = 100});
+		SetDeaths(j,SetTo,1,50);
 		PreserveTrigger();
 	},
 }
@@ -8081,17 +8172,34 @@ Trigger { -- 조합 갤럭시 마린
 		CreateUnitWithProperties(1,"GaLaXy Marine",2,j,{energy = 100});
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x1BH \x04Marine을 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다. - \x1F"..GMCost.." O r e",4);
+		SetDeaths(j,SetTo,1,50);
 		PreserveTrigger();
 	},
 }
 
-
+Trigger { -- 조합 네뷸라
+	players = {j},
+	conditions = {
+		Bring(j,AtLeast,1,100,3);
+		Accumulate(j,AtLeast,NeCost,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,100,j,3,0);
+		SetResources(j,Subtract,NeCost,ore);
+		RemoveUnitAt(1,100,3,j);
+		CreateUnitWithProperties(1,16,2,j,{energy = 100});
+		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
+		SetDeaths(j,SetTo,1,50);
+		PreserveTrigger();
+	},
+}
 end
 
 Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
+		CGMode(1);
 		CommandLeastAt(174,64);
 	},
 	actions = {
@@ -9162,52 +9270,6 @@ Trigger { -- 가스통깨면 가스추가
 		},
 	}
 
---for i = 1, 11 do
---Trigger { -- No comment (147F3623)
---	players = {Force1},
---	conditions = {
---		Kills(CurrentPlayer,AtLeast,i,"Mineral Field (Type 1)");
---	},
---	actions = {
---		SetScore(Force1,Add,40000,Kills);
---	},
---}
---Trigger { -- No comment (147F3623)
---	players = {Force1},
---	conditions = {
---		Kills(CurrentPlayer,AtLeast,i,"Mineral Field (Type 2)");
---	},
---	actions = {
---		SetScore(Force1,Add,40000,Kills);
---	},
---}
---Trigger { -- No comment (147F3623)
---	players = {Force1},
---	conditions = {
---		Kills(CurrentPlayer,AtLeast,i,"Mineral Field (Type 3)");
---	},
---	actions = {
---		SetScore(Force1,Add,40000,Kills);
---	},
---}
---end
-
--- 난이도별 인터페이스 설정 - 다인플
-Trigger { -- 조합 네뷸라
-	players = {Force1},
-	conditions = {
-		Bring(CurrentPlayer,AtLeast,1,100,3);
-		Accumulate(CurrentPlayer,AtLeast,NeCost,Ore);
-	},
-	actions = {
-		ModifyUnitEnergy(1,100,CurrentPlayer,3,0);
-		SetResources(CurrentPlayer,Subtract,NeCost,ore);
-		RemoveUnitAt(1,100,3,CurrentPlayer);
-		CreateUnitWithProperties(1,16,2,CurrentPlayer,{energy = 100});
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
-		PreserveTrigger();
-	},
-}
 
 CMov(FP,MarUpData,0)
 
