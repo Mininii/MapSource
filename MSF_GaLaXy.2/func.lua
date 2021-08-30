@@ -466,18 +466,19 @@ G_CA_PosErr = "\x07°∫ \x03CAUCTION : \x04ª˝º∫ ¡¬«•∞° ∏  π€¿ª π˛æÓ≥µΩ¿¥œ¥Ÿ.\x07 °
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
-local CenterType = CreateVar(FP)
 local G_CA_Nextptrs = CreateVar(FP)
 local Repeat_TempV = CreateVar(FP)
 local CreatePlayer = CreateVar(FP)
-local BackupCPosX = CreateVar(FP)
-local BackupCPosY = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
-	CIfX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,204))
+	CIfX(FP,{CVar(FP,Gun_TempSpawnSet1[2],AtLeast,204),CVar(FP,Gun_TempSpawnSet1[2],AtMost,220)})
 		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
-			RepeatBullet(204,20)
+			SetBullet(Gun_TempSpawnSet1,20)
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
+			CreateBullet(Gun_TempSpawnSet1,20,0)
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
+			CreateBullet(Gun_TempSpawnSet1,20,0)
 		CElseX()
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
@@ -492,15 +493,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				CMov(FP,BackupCPosX,CPosX)
-				CMov(FP,BackupCPosY,CPosY)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
 					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
 				})
-				CMov(FP,CPosX,BackupCPosX)
-				CMov(FP,CPosY,BackupCPosY)
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
@@ -513,16 +510,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,190))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				CMov(FP,BackupCPosX,CPosX)
-				CMov(FP,BackupCPosY,CPosY)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
 					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
 					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 				})
-				CMov(FP,CPosX,BackupCPosX)
-				CMov(FP,CPosY,BackupCPosY)
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
 				CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
@@ -650,7 +643,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,5*(0x20/4)),SetTo,G_CA_RPTV),
 	TSetMemory(_Add(G_CA_LineTemp,6*(0x20/4)),SetTo,G_CA_CTTV),
 })
-CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0),CVar(FP,G_CA_YPos[2],Exactly,0)})
+CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,Var_TempTable[2]),
 	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,Var_TempTable[3])
@@ -704,6 +697,13 @@ function CA_Repeat()
 	CIfXEnd()
 end
 
+function CA_Func1()
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	CIfX(FP,{CDeaths(FP,Exactly,2,B_P)})
+		CA_Rotate(B_CA_Angle)
+	CIfXEnd()
+end
 local G_CA_CallStack = {}
 local G_CA_IndexAlloc = 1
 function G_CAPlot(ShapeTable)
@@ -727,19 +727,7 @@ function G_CAPlot(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
-	CIfX(FP,{CVar(FP,G_CA_Temp[7][2],Exactly,1,0xFF)})
-	CMov(FP,CPosX,0)
-	CMov(FP,CPosY,0)
-	CElseIfX({CVar(FP,G_CA_Temp[7][2],Exactly,2,0xFF)})
-	GetLocCenter("Location 2",CPosX,CPosY)
-	CElseIfX({CVar(FP,G_CA_Temp[7][2],Exactly,3,0xFF)})
-	CMov(FP,CPosX,4000)
-	CMov(FP,CPosY,2240)
-	CElseX()
-	CMov(FP,CPosX,G_CA_TempTable[8])
-	CMov(FP,CPosY,G_CA_TempTable[9])
-	CIfXEnd()
-	CAPlot2(ShapeTable,FP,nilunit,0,{CPosX,CPosY},1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CAPlot2(ShapeTable,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func1",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
@@ -776,20 +764,7 @@ function G_CAPlot2(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
-	
-	CIfX(FP,{CVar(FP,G_CA_Temp[7][2],Exactly,1,0xFF)})
-	CMov(FP,CPosX,0)
-	CMov(FP,CPosY,0)
-	CElseIfX({CVar(FP,G_CA_Temp[7][2],Exactly,2,0xFF)})
-	GetLocCenter("Location 2",CPosX,CPosY)
-	CElseIfX({CVar(FP,G_CA_Temp[7][2],Exactly,3,0xFF)})
-	CMov(FP,CPosX,4000)
-	CMov(FP,CPosY,2240)
-	CElseX()
-	CMov(FP,CPosX,G_CA_TempTable[8])
-	CMov(FP,CPosY,G_CA_TempTable[9])
-	CIfXEnd()
-	CAPlot2(Y,FP,nilunit,0,{CPosX,CPosY},1,32,{0,0,0,0,0,1},nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CAPlot2(Y,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func1",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
@@ -836,9 +811,6 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
 	end
 	
-	if type(G_CA_CenterType) ~= "table" then
-		G_CA_CenterType = {G_CA_CenterType,G_CA_CenterType,G_CA_CenterType,G_CA_CenterType}
-	end
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
@@ -880,8 +852,8 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	end
 	local Y = {}
 	if CenterXY == nil then 
-		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0))
-		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0))
+		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0xFFFFFFFF))
+		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0xFFFFFFFF))
 	elseif type(CenterXY) == "table" then
 		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,CenterXY[1]))
 		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,CenterXY[2]))
@@ -893,8 +865,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
-		SetCVar(FP,G_CA_CTTV[2],SetTo,T_to_BiteBuffer(G_CA_CenterType)),Y
+		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y
 	},PreserveFlag)
 end
 
@@ -1182,56 +1153,74 @@ end
 function SetBulletSpeed(Value,BreakDis) -- æﬂ∏∂≈‰∞« Flingy Speed
 	if BreakDis ~= nil then
 		return {
-			SetMemoryX(0x6C9DB4, SetTo, 0xFFFFFFFF-Value,0xFFFF);
-			SetMemory(0x6CA170, SetTo, Value);
+			SetMemory(0x6CA170, SetTo,0xFFFFFFFF-Value);
+			SetMemoryX(0x6C9DB4, SetTo, Value,0xFFFF);
 			SetMemory(0x6C9BA8, SetTo, BreakDis);
 		}
 	else
 		return {
-			SetMemoryX(0x6C9DB4, SetTo, 0xFFFFFFFF-Value,0xFFFF);
-			SetMemory(0x6CA170, SetTo, Value);
+			SetMemory(0x6CA170, SetTo, 0xFFFFFFFF-Value);
+			SetMemoryX(0x6C9DB4, SetTo, Value,0xFFFF);
 		}
 	end
 end
 
-function CreateBullet(UnitId,Height,Angle,X,Y)
-	CDoActions(FP,{
-		TSetCVar(FP,CBY[2],SetTo,Y),
-		TSetCVar(FP,CBX[2],SetTo,X),
-		TSetCVar(FP,CBAngle[2],SetTo,Angle),
-		TSetCVar(FP,CBHeight[2],SetTo,Height),
-		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-		SetNextTrigger(Call_CBullet)
-	})
-	end
-	function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
-	CDoActions(FP,{
-		TSetCVar(FP,CBY[2],SetTo,Y),
-		TSetCVar(FP,CBX[2],SetTo,X),
-		TSetCVar(FP,CBAngle[2],SetTo,Angle),
-		TSetCVar(FP,CBHeight[2],SetTo,Height),
-		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-		SetNextTrigger(Call_CBullet_PosCalc)
-	})
-	end
-	
-	
-	function SetBullet(UnitId,Height,X,Y)
+function CreateBullet(UnitId,Height,Angle,XY)
+	if XY ~= nil and type(XY) == "table" then
 		CDoActions(FP,{
-			TSetCVar(FP,CBY[2],SetTo,Y),
-			TSetCVar(FP,CBX[2],SetTo,X),
+			TSetCVar(FP,CBY[2],SetTo,XY[2]),
+			TSetCVar(FP,CBX[2],SetTo,XY[1]),
+			TSetCVar(FP,CBAngle[2],SetTo,Angle),
 			TSetCVar(FP,CBHeight[2],SetTo,Height),
 			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-			SetNextTrigger(Call_SetBulletXY)
+			SetNextTrigger(Call_CBullet)
 		})
+	elseif XY == nil then
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,0),
+			TSetCVar(FP,CBX[2],SetTo,0),
+			TSetCVar(FP,CBAngle[2],SetTo,Angle),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_CBullet)
+		})
+	else
+		PushErrorMsg("CreateBullet_XY_Error")
 	end
+end
 
-	function RepeatBullet(UnitId,Height)
-		CDoActions(FP,{
-			TSetCVar(FP,CBHeight[2],SetTo,Height),
-			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-			SetNextTrigger(Call_SetBulletXY_for_Repeat)
-		})
+function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
+CDoActions(FP,{
+	TSetCVar(FP,CBY[2],SetTo,Y),
+	TSetCVar(FP,CBX[2],SetTo,X),
+	TSetCVar(FP,CBAngle[2],SetTo,Angle),
+	TSetCVar(FP,CBHeight[2],SetTo,Height),
+	TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+	SetNextTrigger(Call_CBullet_PosCalc)
+})
+end
+	
+	
+	function SetBullet(UnitId,Height,XY)
+		if XY ~= nil and type(XY) == "table" then
+			CDoActions(FP,{
+				TSetCVar(FP,CBY[2],SetTo,XY[2]),
+				TSetCVar(FP,CBX[2],SetTo,XY[1]),
+				TSetCVar(FP,CBHeight[2],SetTo,Height),
+				TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+				SetNextTrigger(Call_SetBulletXY)
+			})
+		elseif XY == nil then
+			CDoActions(FP,{
+				TSetCVar(FP,CBY[2],SetTo,0),
+				TSetCVar(FP,CBX[2],SetTo,0),
+				TSetCVar(FP,CBHeight[2],SetTo,Height),
+				TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+				SetNextTrigger(Call_SetBulletXY)
+			})
+		else
+			PushErrorMsg("SetBullet_XY_Error")
+		end
 	end
 
 	

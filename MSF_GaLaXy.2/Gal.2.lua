@@ -164,12 +164,18 @@ Call_CBullet = SetCallForward()
 SetCall(FP)
 NIf(FP,Memory(0x628438,AtLeast,1))
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
-CDoActions(FP,{TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF)})
+
+CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
+
 CDoActions(FP,{
-	TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
-	TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
-	TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
-	TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+})
+CIfEnd()
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF);
 	CreateUnit(1, 204, 1, FP),
 	TSetMemory(_Add(Nextptrs,25),SetTo,CBUnitId)
 })
@@ -195,49 +201,15 @@ CMov(FP,Cur_CBulletArr,0)
 CJumpEnd(FP,CBullet_ArrCheck)
 CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
 
+CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
 
-NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
 CDoActions(FP,{
-	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
-	TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
-	TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
-	TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
-	TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
-	CreateUnit(1, 204, 1, FP),
-	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
 })
-CDoActions(FP,{
-	TSetMemoryX(_Add(Nextptrs,22),SetTo,_Add(BPosX,_Mul(BPosY,_Mov(65536))),0xFFFFFFFF),
-	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
-	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
-	TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
-	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,2,0xFFFFFFFF),
-})
-
-NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
-CAdd(FP,Cur_CBulletArr,0x970/4)
-CJump(FP,CBullet_ArrCheck)
-NElseX()
-
-DoActions(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
-
-NIfXEnd()
-
-NIfEnd()
-SetCallEnd()
-
-Call_SetBulletXY_for_Repeat = SetCallForward()
-SetCall(FP)
-NIf(FP,Memory(0x628438,AtLeast,1))
-f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
-local Cur_CBulletArr = CreateVar(FP)
-
-local CBullet_ArrCheck = def_sIndex()
-
-CMov(FP,Cur_CBulletArr,0)
-CJumpEnd(FP,CBullet_ArrCheck)
-CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
-
+CIfEnd()
 
 NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
 CDoActions(FP,{
@@ -250,7 +222,7 @@ CDoActions(FP,{
 	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
 	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
 	TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
-	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,2,0xFFFFFFFF),
+	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,1,0xFFFFFFFF),
 })
 
 NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
@@ -332,6 +304,9 @@ P_6 = G_CAPlot(P_6_ShT)
 P_7 = G_CAPlot(P_7_ShT)
 P_8 = G_CAPlot(P_8_ShT)
 
+if #G_CAPlot_Shape_InputTable >= 256 then
+	PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
+end
 
 G_CAPlot2(G_CAPlot_Shape_InputTable)
 Install_Load_CAPlot()
@@ -2849,7 +2824,7 @@ CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
 YY = 2021
 MM = 08
-DD = 27
+DD = 31
 HH = 00
 function PushErrorMsg(Message)
 	_G["\n"..Message.."\n"]() 
@@ -4205,6 +4180,21 @@ Trigger { -- 인트로1
 		
 	},
 	}
+	if Limit == 1 then 
+
+		Trigger { -- 인트로1
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtLeast,1,ModeO);
+			CDeaths(FP,AtLeast,1,Testmode);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,20+(24*5),modeT)
+			
+		},
+		}
+	end
 Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
@@ -4246,6 +4236,7 @@ CIfEnd()
 CMov(FP,Dx,_ReadF(0x51CE8C))
 CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 CiSub(FP,Dt,Dy,Du)
+CMov(FP,0x58F500,Dt)
 CMov(FP,Dv,Dt)
 Count2 = CreateVar()
 Count3 = CreateVar()
@@ -4277,6 +4268,7 @@ CIfX(FP,Never())
 	for i = 0, 5 do
 	CElseIfX(PlayerCheck(i,1))
 	f_Read(FP,0x6284E8+(i*0x30),Cunit2,Cunit3)
+	CMov(FP,Dt,_ReadF(0x58A364+48*180+4*i))--
 	Trigger {
 		players = {FP},
 		conditions = {
@@ -4290,15 +4282,17 @@ CIfX(FP,Never())
 	}
 	end
 	CIfXEnd()
-	CIfOnce(FP,{TMemory(_Mem(Dt),AtLeast,10000)})
+CIfOnce(FP,{TMemory(_Mem(Dt),AtLeast,10000)})
 CMov(FP,Dt,0)
 CIfEnd()
 for i = 0,5 do
-CIf(FP,PlayerCheck(i,1))
+CIfX(FP,PlayerCheck(i,1))
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 CMov(FP,0x57f120 + (i*4) , CanC)
 CMov(FP,0x582174 + (i*4) , CanDefeat)
-CIfEnd()
+CElseX()
+DoActions(FP,{SetDeaths(i,SetTo,0,440)})
+CIfXEnd()
 end
 CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF)})
 
@@ -4913,9 +4907,9 @@ Trigger {
 	},
 	actions = {		
 		SetMemoryX(0x656F98, Add, i*32*65536,0xFFFF0000);--기본공
-		SetMemoryX(0x657760, Add, i*5*65536,0xFFFF0000);--계수
+		SetMemoryX(0x657760, Add, i*4*65536,0xFFFF0000);--계수
 		SetMemoryX(0x656F9C, Add, i*72,0xFFFF);
-		SetMemoryX(0x657764, Add, i*4,0xFFFF);
+		SetMemoryX(0x657764, Add, i*7,0xFFFF);
 		SetMemoryX(0x656EB0, Add, i*32*65536,0xFFFF0000);--
 		SetMemoryX(0x657678, Add, i*3*65536,0xFFFF0000);--
 	}
@@ -5616,7 +5610,7 @@ Trigger {
 		PlayWAV("sound\\Bullet\\TNsFir00.wav");
 		SetMemory(0x6509B0,SetTo,FP);
 		SetCVar(FP,PaneltyPoint[2],Subtract,1000);
-		SetCVar(FP,ExchangeRate[2],Add,-6);
+		SetCVar(FP,ExchangeRate[2],Add,-2);
 		PreserveTrigger();
 	}
 }
@@ -5648,7 +5642,7 @@ Trigger {
 		
 	},
 	actions = {
-		SetMemory(0x6415C8,SetTo,(2^i)*1,2^i*1);
+		SetMemoryX(0x6415C8,SetTo,(2^i)*1,2^i*1);
 		SetCVar(FP,PaneltyPointT[2],Subtract,(2^i)*1000);
 		PreserveTrigger();
 	}
@@ -6769,6 +6763,7 @@ local TBossTxt2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x
 
 --
 DoActionsX(FP,SetCDeaths(FP,Add,1,TBossT))
+DoActionsX(FP,SetCDeaths(FP,Add,250,TBossT),1)
 Trigger2X(FP,{CDeaths(FP,Exactly,50,TBossT)},{CopyCpAction({
 	TalkingPortrait(5, 6100),
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
@@ -6781,15 +6776,16 @@ Trigger2X(FP,{CDeaths(FP,Exactly,250,TBossT)},{CopyCpAction({
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
 	DisplayTextX(TBossTxt2,4)
 },HumanPlayers,FP)},{Preserved})
-Simple_SetLocX(FP,"TBossLoc",0,0,640,640,{MoveLocation("TBossLoc",5,FP,64)})
-CIf(FP,CDeaths(FP,Exactly,300,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
-UnitReadX(FP,Force1,"Factories","TBossLoc",B1_Calc)
+Simple_SetLocX(FP,"TBossLoc",0,0,480,480,{MoveLocation("TBossLoc",5,FP,64)})
+CIf(FP,CDeaths(FP,AtLeast,250,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
+UnitReadX(FP,Force1,"Men","TBossLoc",B1_Calc)
 
+CAdd(FP,B1_Calc,2)
 CIf(FP,CDeaths(FP,Exactly,2,GMode))
-f_Mul(FP,B1_Calc,200)
+f_Mul(FP,B1_Calc,100)
 CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,3,GMode))
-f_Mul(FP,B1_Calc,400)
+f_Mul(FP,B1_Calc,300)
 CIfEnd()
 
 Trigger {
@@ -7038,7 +7034,7 @@ f_Mod(FP,B1_Y,_Rand(),576)
 f_Mod(FP,B1_A,_Rand(),256)
 CAdd(FP,B1_X,384)
 CAdd(FP,B1_Y,224)
-CreateBullet(204,20,B1_A,B1_X,B1_Y)
+CreateBullet(204,20,B1_A,{B1_X,B1_Y})
 
 
 NWhileEnd()
@@ -7111,7 +7107,7 @@ NIfEnd()
 
 NIf(FP,CVar(FP,Cell_R[2],AtLeast,1))
 CMov(FP,Gun_W,0)
-NWhile(FP,CVar(FP,Gun_W[2],AtMost,4),SetCVar(FP,Gun_W[2],Add,1))
+NWhile(FP,{CVar(FP,Gun_W[2],AtMost,4)},SetCVar(FP,Gun_W[2],Add,1))
 f_Lengthdir(FP,_Sub(Cell_R,100),_Add(_Mul(Gun_W,_Mov(72)),Cell_A),Gun_X,Gun_Y)
 CAdd(FP,Gun_X,1024)
 CAdd(FP,Gun_Y,2400)
@@ -7221,6 +7217,8 @@ Trigger {
 
 
 NIfEnd()
+
+
 NIf(FP,{CDeaths(FP,AtLeast,2,GMode),Deaths(8,Exactly,3,168),CDeaths(FP,AtMost,6000,GunBossAct)})
 
 CIfOnce(FP)
@@ -7795,199 +7793,11 @@ Trigger2X(FP,{CGMode(2,AtLeast),MemoryB(0x58D2B0+(46*j),AtLeast,255);},{
 	},HumanPlayers,FP);})
 end
 
-
-Trigger { -- 캔낫시 모든 저그유닛 삭제, 경고1회부여, 정야독
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,AtMost,0,CanOut);
-		CVar(FP,CanC[2],AtLeast,2);
-		CDeaths(FP,AtMost,0,CanCT);
-		Memory(0x628438,AtMost,0);
-	},
-	actions = {
-		SetMemory(0x6509B0,SetTo,0);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,1);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,2);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,3);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,5);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,128);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,129);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,130);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,131);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\warn.wav");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
-		SetMemory(0x6509B0,SetTo,6);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
-		SetMemory(0x6509B0,SetTo,FP);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
-		SetCDeaths(FP,SetTo,24*7,CanCT);
-		SetCVar(FP,CanC[2],Subtract,1);
-		KillUnit("Factories",Force2);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger { -- 캔낫 3회초과 환전률 0퍼셋
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,AtMost,0,CanOut);
-		CVar(FP,CanC[2],AtMost,1);
-		CDeaths(FP,AtMost,0,CanCT);
-		Memory(0x628438,AtMost,0);
-	},
-	actions = {
-		SetMemory(0x6509B0,SetTo,0);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,1);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,2);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,3);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,5);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,128);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,129);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,130);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,131);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		PlayWAV("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
-		SetMemory(0x6509B0,SetTo,FP);
-		SetCVar(FP,CanC[2],Subtract,1);
-		SetCVar(FP,ExchangeRate[2],SetTo,0);
-		KillUnit("Factories",Force2);
-		SetCDeaths(FP,Add,1,CanOut);
-	},
-}
-Trigger { -- 캔낫 3회초과 이후 캔낫 트리거
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,AtLeast,1,CanOut);
-		CDeaths(FP,AtMost,0,CanCT);
-		Memory(0x628438,AtMost,0);
-	},
-	actions = {
-		SetMemory(0x6509B0,SetTo,0);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,1);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,2);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,3);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,5);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,128);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,129);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,130);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,131);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		PlayWAV("staredit\\wav\\CanOver.ogg");
-		SetMemory(0x6509B0,SetTo,6);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
-		SetMemory(0x6509B0,SetTo,FP);
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
-		SetCDeaths(FP,SetTo,24*30,CanCT);
-		KillUnit("Factories",Force2);
-		SetCVar(FP,CanC[2],Subtract,1);
-		PreserveTrigger();
-	},
-}
 Trigger { -- 지속캔낫 감지용
 	players = {FP},
 	conditions = {
 		Label(0);
+		CDeaths(FP,AtMost,0,BossStart);
 		Memory(0x628438,AtMost,0);
 	},
 	actions = {
@@ -8082,6 +7892,17 @@ Trigger {
 	}
 }
 
+Trigger { -- 지속캔낫 감지용
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,count[2],AtMost,1500)
+	},
+	actions = {
+		SetCVar(FP,CanDefeat[2],Subtract,1);
+		PreserveTrigger();
+	}
+}
 CIf(FP,CDeaths(FP,AtLeast,1,GameOver)) -- 패배트리거
 
 Trigger {
@@ -8109,7 +7930,7 @@ Trigger { -- 소환 마린
 		RemoveUnitAt(1,"Terran Firebat","Anywhere",j);
 		CreateUnitWithProperties(1,20,2,j,{energy = 100});
 		DisplayText("\x02▶ \x1BH \x04Marine을 \x19소환\x04하였습니다. - \x1F"..MarCost.." O r e",4);
-		SetDeaths(j,SetTo,1,50);
+		SetDeaths(j,SetTo,1,101);
 		PreserveTrigger();
 	},
 }
@@ -8137,7 +7958,7 @@ Trigger { -- 소환 갤마
 		RemoveUnitAt(1,2,"Anywhere",j);
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine을 \x19소환\x04하였습니다. - \x1F"..(GMCost+MarCost).." O r e",4);
 		CreateUnitWithProperties(1,100,2,j,{energy = 100});
-		SetDeaths(j,SetTo,1,50);
+		SetDeaths(j,SetTo,1,101);
 		PreserveTrigger();
 	},
 }
@@ -8172,7 +7993,7 @@ Trigger { -- 조합 갤럭시 마린
 		CreateUnitWithProperties(1,"GaLaXy Marine",2,j,{energy = 100});
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x1BH \x04Marine을 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다. - \x1F"..GMCost.." O r e",4);
-		SetDeaths(j,SetTo,1,50);
+		SetDeaths(j,SetTo,1,101);
 		PreserveTrigger();
 	},
 }
@@ -8189,7 +8010,7 @@ Trigger { -- 조합 네뷸라
 		RemoveUnitAt(1,100,3,j);
 		CreateUnitWithProperties(1,16,2,j,{energy = 100});
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
-		SetDeaths(j,SetTo,1,50);
+		SetDeaths(j,SetTo,1,101);
 		PreserveTrigger();
 	},
 }
@@ -8312,72 +8133,13 @@ Trigger { -- 솔플 보너스
 		CreateUnit(7,20,2,Force1);
 	},
 }
+Trigger2(FP,{Bring(Force2,AtMost,0,"Protoss Temple",64)},{CopyCPAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
+PlayWAVX("staredit\\wav\\E_Clear.ogg");
+PlayWAVX("staredit\\wav\\E_Clear.ogg");
+PlayWAVX("staredit\\wav\\E_Clear.ogg");},HumanPlayers,FP)})
 CIf(FP,CDeaths(FP,AtLeast,1,Win))
 DoActionsX(FP,SetCDeaths(FP,Add,1,Win))
 
-Trigger { -- 템플 파괴시
-	players = {FP},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 5);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, FP);
-},
-}
-
-Trigger { -- 템플 파괴시 관전자
-	players = {FP},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 128);		
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple 이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 129);		
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple 이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		PlayWAV("staredit\\wav\\clear.ogg");
-		SetMemory(0x6509B0, SetTo, 5);
-},
-}
 ClearText = "\n\n\n\n\n\n\n\n\n\n\n\x13\x04-\n\n\n\n\x13\x04-\n\n\n"
 Trigger { -- 게임승리
 	players = {FP},
@@ -9556,6 +9318,16 @@ TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeat
 
 CIfEnd()-- GameStart End
 --]]
+BGMArr = 
+{{"staredit\\wav\\Opening1.ogg",32 * 1000 },
+{"staredit\\wav\\bgm1short.ogg",32 * 1000},
+{"staredit\\wav\\bgm2short.ogg",47 * 1000},
+{"staredit\\wav\\bgm1long.ogg",61 * 1000 },
+{"staredit\\wav\\bgm2long.ogg",61 * 1000},
+{"staredit\\wav\\bgm1_3.ogg",83640},
+{"staredit\\wav\\bgm_sp1.ogg",182 * 1000},
+{"staredit\\wav\\bgm_sp2.ogg",57 * 1000},}
+
 
 
 CIf(FP,CDeaths(FP,AtLeast,1,BGMType))
@@ -9586,14 +9358,10 @@ Trigger { -- 브금재생 j번 - 관전자
 	},
 	}
 end
-BGMOb(1,"staredit\\wav\\Opening1.ogg",32 * 1000 )
-BGMOb(2,"staredit\\wav\\bgm1short.ogg",32 * 1000)
-BGMOb(3,"staredit\\wav\\bgm2short.ogg",47 * 1000)
-BGMOb(4,"staredit\\wav\\bgm1long.ogg",61 * 1000 )
-BGMOb(5,"staredit\\wav\\bgm2long.ogg",61 * 1000)
-BGMOb(6,"staredit\\wav\\bgm1_3.ogg",83640)
-BGMOb(7,"staredit\\wav\\bgm_sp1.ogg",182 * 1000)
-BGMOb(8,"staredit\\wav\\bgm_sp2.ogg",57 * 1000)
+for j, k in pairs(BGMArr) do
+BGMOb(j,k[1],k[2])
+end
+
 CElseX()
 Trigger { -- 브금재생시 스킵 관전자
 	players = {FP},
@@ -9636,14 +9404,10 @@ Trigger { -- 브금재생 j번
 	},
 	}
 end
-BGMPlayer(1,"staredit\\wav\\Opening1.ogg",32 * 1000 )
-BGMPlayer(2,"staredit\\wav\\bgm1short.ogg",32 * 1000)
-BGMPlayer(3,"staredit\\wav\\bgm2short.ogg",47 * 1000)
-BGMPlayer(4,"staredit\\wav\\bgm1long.ogg",61 * 1000 )
-BGMPlayer(5,"staredit\\wav\\bgm2long.ogg",61 * 1000)
-BGMPlayer(6,"staredit\\wav\\bgm1_3.ogg",83640)
-BGMPlayer(7,"staredit\\wav\\bgm_sp1.ogg",182 * 1000)
-BGMPlayer(8,"staredit\\wav\\bgm_sp2.ogg",57 * 1000)
+
+for j, k in pairs(BGMArr) do
+	BGMPlayer(j,k[1],k[2])
+end
 CElseX()
 Trigger { -- 브금재생시 스킵
 	players = {FP},

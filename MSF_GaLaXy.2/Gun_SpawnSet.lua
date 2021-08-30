@@ -21,34 +21,34 @@ function GunData()
 			GunBreak("기지 \x18Hive \x04를",30000,4)
 			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{Preserved})
 --			G_CA_SetSpawn(nil,{55},"ACAS",{"NBYD"})
-			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,0,"Stasis Cell/Prison")},{23,74,88},{P_6,S_3,P_3},{3,1,4,3},"MAX",nil,2)
-			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,1,"Stasis Cell/Prison")},{74,88},{S_3,P_3},{1,4,3},"MAX",nil,2)
-			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,2,"Stasis Cell/Prison")},{88},{P_3},{4,3},"MAX",nil,2)
-			G_CA_SetSpawn({CDeaths(FP, AtLeast, 2, GMode)},{103},{S_8},{3},{10},2,2)
+			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,0,"Stasis Cell/Prison")},{23,74,88},{P_6,S_3,P_3},{3,1,4,3},"MAX",nil,nil,{3776,3808})
+			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,1,"Stasis Cell/Prison")},{74,88},{S_3,P_3},{1,4,3},"MAX",nil,nil,{3776,3808})
+			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,2,"Stasis Cell/Prison")},{88},{P_3},{4,3},"MAX",nil,nil,{3776,3808})
+			G_CA_SetSpawn({CDeaths(FP, AtLeast, 2, GMode)},{103},{S_8},{3},{10},2,nil,{3776,3808})
 
 		CIfEnd()
 
 		CMov(FP,CurLoc,_Mul(f_GunNum,_Mov(20/4)))
 		CMov(FP,CurLoc2,_Add(f_GunNum,190-64))
-		CDoActions(FP,{
-			TSetMemory(_Add(CurLoc,EPDF(0x58DC60 + (20*(189-64)))),SetTo,_Sub(Var_TempTable[2],32*9)),
-			TSetMemory(_Add(CurLoc,EPDF(0x58DC64 + (20*(189-64)))),SetTo,_Sub(Var_TempTable[3],32*9)),
-			TSetMemory(_Add(CurLoc,EPDF(0x58DC68 + (20*(189-64)))),SetTo,_Add(Var_TempTable[2],32*9)),
-			TSetMemory(_Add(CurLoc,EPDF(0x58DC6C + (20*(189-64)))),SetTo,_Add(Var_TempTable[3],32*9)),
-		})
-		CDoActions(FP,{
-			TSetCtrig1X("X",0x580,CAddr("CMask",2),nil,SetTo,CurLoc2),
-			TSetCtrig1X("X",0x580,CAddr("CMask",3),nil,SetTo,CurLoc2),
-			TSetCtrig1X("X",0x581,CAddr("CMask",2),nil,SetTo,CurLoc2),
-			TSetCtrig1X("X",0x581,CAddr("CMask",3),nil,SetTo,CurLoc2),
-			TSetCtrig1X("X",0x582,CAddr("CMask",2),nil,SetTo,CurLoc2),
-		})
+		
+		CDoActions(FP,{TSetMemory(_Add(CurLoc,EPDF(0x58DC60 + (20*(189-64)))),SetTo,_Sub(Var_TempTable[2],32*9))})
+		CDoActions(FP,{TSetMemory(_Add(CurLoc,EPDF(0x58DC64 + (20*(189-64)))),SetTo,_Sub(Var_TempTable[3],32*9))})
+		CDoActions(FP,{TSetMemory(_Add(CurLoc,EPDF(0x58DC68 + (20*(189-64)))),SetTo,_Add(Var_TempTable[2],32*9))})
+		CDoActions(FP,{TSetMemory(_Add(CurLoc,EPDF(0x58DC6C + (20*(189-64)))),SetTo,_Add(Var_TempTable[3],32*9))})
+		
+		
+		CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+		CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",3),nil,SetTo,CurLoc2)})
+		CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+		CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",3),nil,SetTo,CurLoc2)})
+		CDoActions(FP,{TSetCtrig1X("X",0x582,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+	
 		Trigger { -- No comment (00F60EE3)
 			players = {FP},
 			conditions = {
 				Label(0x580);
 				Bring(Force2, AtLeast, 6, "Men", 1);
-				Bring(Force1, AtMost, 2, "Factories", 1);
+				Bring(Force1, AtMost, 2, "Men", 1);
 			},
 			actions = {
 				SetCVar(FP,PaneltyPoint[2],Add,1);
@@ -60,7 +60,7 @@ function GunData()
 			conditions = {
 				Label(0x581);
 				Bring(Force2, AtLeast, 6, "Men", 1);
-				Bring(Force1, AtLeast, 3, "Factories", 1);
+				Bring(Force1, AtLeast, 3, "Men", 1);
 			},
 			actions = {
 				SetCDeaths(FP,Add,1,BonusP);
@@ -441,12 +441,12 @@ function GunData()
 
 	CIf(FP,Gun_Line(0,Exactly,147)) -- BdIndex Monster Kraken
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
-			G_CA_SetSpawn({CGMode(1)},{84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
-			G_CA_SetSpawn({CGMode(1)},{25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
-			G_CA_SetSpawn({CGMode(2)},{84,84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
-			G_CA_SetSpawn({CGMode(2)},{25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
-			G_CA_SetSpawn({CGMode(3)},{84,84,84,84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
-			G_CA_SetSpawn({CGMode(3)},{25,25,25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,1)
+			G_CA_SetSpawn({CGMode(1)},{84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
+			G_CA_SetSpawn({CGMode(1)},{25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
+			G_CA_SetSpawn({CGMode(2)},{84,84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
+			G_CA_SetSpawn({CGMode(2)},{25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
+			G_CA_SetSpawn({CGMode(3)},{84,84,84,84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
+			G_CA_SetSpawn({CGMode(3)},{25,25,25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
 			GunBreak("빅! 한 \x18Monster Kraken! \x04을",222222,6)
 		CIfEnd()
 		CTrigger(FP,{CGMode(1)},{Gun_SetLine(4,Add,35)},1)
@@ -861,7 +861,6 @@ function GunData()
 		f_Read(FP,0x58D6F8,CurTime)
 		CIf(FP,{TTOR({Gun_Line(4,Exactly,0),Gun_Line(4,Exactly,30),Gun_Line(4,Exactly,60),Gun_Line(4,Exactly,90),Gun_Line(4,Exactly,120)})})
 			CMov(FP,Gun_W2,0)
-			local JumpCon = def_sIndex()
 			NWhile(FP,CVar(FP,Gun_W2[2],AtMost,4096/64))
 			CAdd(FP,Gun_W2,1)
 			CMov(FP,Gun_W,0)
@@ -897,7 +896,7 @@ function GunData()
 					TriggerX(FP,{CGMode(3)},{SetCVar(FP,Gun_W2[2],SetTo,4)},{Preserved})
 
 					NWhile(FP,CVar(FP,Gun_W2[2],AtLeast,1),SetCVar(FP,Gun_W2[2],Subtract,1))
-						NIfX(FP,{TMemoryX(_Mem(Gun_Level),Exactly,1)})
+						NIfX(FP,{Gun_Line(3,Exactly,1)})
 						CDoActions(FP,{TCreateUnit(1,VArr(UArr1,_Mod(_Rand(),_Mov(16))), 1, _Add((_Mod(_Rand(),_Mov(2))),6))})
 						NElseX()
 						CDoActions(FP,{TCreateUnit(1,VArr(UArr2,_Mod(_Rand(),_Mov(16))), 1, _Add((_Mod(_Rand(),_Mov(2))),6))})
@@ -922,13 +921,13 @@ function GunData()
 			
 			
 			
-			G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{56,53},"ACAS","Cere_Z",nil,nil,3)
-			G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{57,48},"ACAS","Cere_Z",nil,nil,3)
-			G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{62,51},"ACAS","Cere_Z",nil,nil,3)
+			G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{56,53},"ACAS","Cere_Z",nil,nil,nil,{4000,2240})
+			G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{57,48},"ACAS","Cere_Z",nil,nil,nil,{4000,2240})
+			G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{62,51},"ACAS","Cere_Z",nil,nil,nil,{4000,2240})
 			for i = 1, 3 do
-				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,0)},{8,17},"ACAS",CereDiff[i],nil,nil,3)
-				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,1)},{86,78},"ACAS",CereDiff[i],nil,nil,3)
-				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,2)},{98,81},"ACAS",CereDiff[i],nil,nil,3)
+				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,0)},{8,17},"ACAS",CereDiff[i],nil,nil,nil,{4000,2240})
+				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,1)},{86,78},"ACAS",CereDiff[i],nil,nil,nil,{4000,2240})
+				G_CA_SetSpawn({CDeaths(FP,Exactly,i,GMode),Gun_Line(5,Exactly,2)},{98,81},"ACAS",CereDiff[i],nil,nil,nil,{4000,2240})
 			end
 			CMov(FP,Gun_W,0)
 			NWhile(FP,CVar(FP,Gun_W[2],AtMost,359),{TSetCVar(FP,Gun_W[2],Add,_Mul(B11_Level,_Mov(3)))})
@@ -965,28 +964,28 @@ function GunData()
 
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
 			CIf(FP,CGMode(1))
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,1)
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X192","Ovrm_X160"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X96","Ovrm_X128","Ovrm_X160"},nil,nil,nil,{0,0})
 			CIfEnd()
 			CIf(FP,CGMode(2))
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,1)
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X160","Ovrm_X128"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X96","Ovrm_X96","Ovrm_X128"},nil,nil,nil,{0,0})
 			CIfEnd()
 			CIf(FP,CGMode(3))
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,1)
-				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,1)
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{21,15},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,0)},{53,48,56},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{80,87},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,1)},{51,48,57},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{28,17},"ACAS",{"Ovrm_X128","Ovrm_X96"},nil,nil,nil,{0,0})
+				G_CA_SetSpawn({Gun_Line(5,Exactly,2)},{51,48,62},"ACAS",{"Ovrm_X64","Ovrm_X64","Ovrm_X96"},nil,nil,nil,{0,0})
 			CIfEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
 		CIfEnd()
@@ -1024,18 +1023,18 @@ function GunData()
 			if i == 2 then Dif = "H" PyLM = 2 end
 			if i == 3 then Dif = "B" PyLM = 4 end
 			for j = 1, 5 do
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{57},"ACAS","Py"..j.."F"..Dif,PyLM,190,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{80},"ACAS","Py"..j.."F"..Dif,PyLM,190,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{86},"ACAS","Py"..j.."F"..Dif,PyLM,190,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{57},"ACAS","Py"..j.."F"..Dif,PyLM,190,nil,{0,0})
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{80},"ACAS","Py"..j.."F"..Dif,PyLM,190,nil,{0,0})
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{86},"ACAS","Py"..j.."F"..Dif,PyLM,190,nil,{0,0})
 			end
 		end
 
 		CElseIfX({Gun_Line(4,AtMost,1100),Gun_Line(6,AtLeast,32*4)},{Gun_SetLine(6,SetTo,0)})
 		for j = 1, 5 do
-			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Py"..j,1,3,1)
+			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Py"..j,1,3,nil,{0,0})
 		end
 		CIfXEnd()
-		CDoActions(FP,{Gun_SetLine(6,Add,1)})
+		CTrigger(FP,{CVar(FP,count[2],AtMost,1500)},{Gun_SetLine(6,Add,1)},1)
 		CIf(FP,{Gun_Line(54,AtMost,0),Gun_Line(4,AtLeast,1100)})
 		CDoActions(FP,{Gun_DoSuspend()})
 		DoActionsX(FP,{CopyCpAction({RunAIScript("Turn OFF Shared Vision for Player 7")},MapPlayers,FP),SetCDeaths(FP,Add,1,SPGunCond)})
@@ -1060,18 +1059,18 @@ function GunData()
 			if i == 2 then Dif = "H" PyLM = 2 end
 			if i == 3 then Dif = "B" PyLM = 4 end
 			for j = 1, 5 do
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{62},"ACAS","Su"..j.."F"..Dif,PyLM,190,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{21},"ACAS","Su"..j.."F"..Dif,PyLM,190,1)
-				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{27},"ACAS","Su"..j.."F"..Dif,PyLM,190,1)
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtMost,499)},{62},"ACAS","Su"..j.."F"..Dif,PyLM,190,nil,{0,0})
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,499),Gun_Line(4,AtMost,999)},{21},"ACAS","Su"..j.."F"..Dif,PyLM,190,nil,{0,0})
+				G_CA_SetSpawn({CGMode(i),Gun_Line(4,AtLeast,1000)},{27},"ACAS","Su"..j.."F"..Dif,PyLM,190,nil,{0,0})
 			end
 		end
 
 		CElseIfX({Gun_Line(4,AtMost,1100),Gun_Line(6,AtLeast,32*4)},{Gun_SetLine(6,SetTo,0)})
 		for j = 1, 5 do
-			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Su"..j,1,3,1)
+			G_CA_SetSpawn(nil,{84,84,84,84},"ACAS","Su"..j,1,3,nil,{0,0})
 		end
 		CIfXEnd()
-		CDoActions(FP,{Gun_SetLine(6,Add,1)})
+		CTrigger(FP,{CVar(FP,count[2],AtMost,1500)},{Gun_SetLine(6,Add,1)},1)
 		CIf(FP,{Gun_Line(54,AtMost,0),Gun_Line(4,AtLeast,1100),})
 		CDoActions(FP,{Gun_DoSuspend()})
 		DoActionsX(FP,{CopyCpAction({RunAIScript("Turn OFF Shared Vision for Player 8")},MapPlayers,FP),SetCDeaths(FP,Add,1,SPGunCond)})
@@ -1094,8 +1093,8 @@ function GunData()
 			if j == 2 then Dif = "H" end
 			if j == 3 then Dif = "B" end
 			for c = 1, 4 do
-				G_CA_SetSpawn({CGMode(j),CVar(FP,UnitIDV1[2],AtLeast,1)},{UID1I},"ACAS","GB_"..Dif.."1_"..c,nil,189,1)
-				G_CA_SetSpawn({CGMode(j),CVar(FP,UnitIDV2[2],AtLeast,1)},{69,27},"ACAS","GB_"..Dif.."2_"..c,nil,189,1)
+				G_CA_SetSpawn({CGMode(j),CVar(FP,UnitIDV1[2],AtLeast,1)},{UID1I},"ACAS","GB_"..Dif.."1_"..c,nil,189,nil,{0,0})
+				G_CA_SetSpawn({CGMode(j),CVar(FP,UnitIDV2[2],AtLeast,1)},{69,27},"ACAS","GB_"..Dif.."2_"..c,nil,189,nil,{0,0})
 			end
 		end
 		CTrigger(FP,{Gun_Line(5,AtLeast,6200/200),},{Gun_DoSuspend()},1)

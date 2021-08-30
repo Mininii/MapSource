@@ -77,14 +77,18 @@ function onInit()
 	NeCost = 30000
 	HPointFactor = 30
 	ExRate = 0
-	EasyEx1P = 100
-	HDEx1P = 110
-	BurEx1P = 130
-
-
-
+	EasyEx1P = 110
+	HDEx1P = 120
+	BurEx1P = 140
+	for i = 65, 255 do
+	
+	table.insert(PatchArr2,SetMemoryX(0x58DC70 + (20*(i)),SetTo,0 ,4128768))
+	end
 	--Patch
 	
+function SetUnitAdvFlag(UnitID,Value,Mask)
+	table.insert(PatchArr2,SetMemoryX(0x664080 + (UnitID*4),SetTo,Value,Mask))
+end
 function SetZergGroupFlags(UnitID)
 	table.insert(ZergGroupFlagsPatch,SetMemoryB(0x6637A0 + (UnitID),SetTo,0x01+0x08+0x20))
 	end
@@ -199,6 +203,9 @@ function SetZergGroupFlags(UnitID)
 	SetUnitClass(5)
 	SetUnitClass(186)
 	
+	for i = 0, 227 do
+		SetUnitAdvFlag(i,0x200000,0x200000)
+	end
 	
 	
 	table.insert(PatchArr2,SetMemoryX(0x6638C8, SetTo, MarCost,0xFFFF))
@@ -425,7 +432,7 @@ function SetZergGroupFlags(UnitID)
 	BPosX,BPosY,AngleA,TempEPD,TempA,TempT,LocsA,CB_TempH = CreateVars(8)
 	CBullet_InputH = CreateVar(FP)
 	CBullet_ArrTemp = CreateVar(FP)
-	
+	B_CA_Angle = CreateVar(FP)
 	--Include CCode
 	BGMType = CreateCCode()
 	LeaderBoardT = CreateCCode()
@@ -439,6 +446,7 @@ function SetZergGroupFlags(UnitID)
 	LimitC = CreateCCode()
 	LimitX = CreateCCode()
 	TestMode = CreateCCode()
+	B_P = CreateCcode()
 	BanCode = CreateCCodeArr(5) -- 18~23
 	ModeT2 = CreateCCode()
 	ModeSel = CreateCCode()
@@ -493,6 +501,7 @@ function SetZergGroupFlags(UnitID)
 	Die_SEC = CreateCCode()
 	SoundLimitT = CreateCCode()
 	SoundLimit = CreateCCode()
+	BossStart = CreateCCode()
 	f_GunSendStrPtr = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
