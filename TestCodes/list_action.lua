@@ -70,7 +70,7 @@ end
 function RemoveUnit(Unit, Player)
 	return 0
 end
-function RemoveUnitAtLocation(Count, Unit, ForPlayer, Location)
+function RemoveUnitAt(Count, Unit, Location, ForPlayer)
 	return 0
 end
 function SetResources(Player, Modifier, Amount, ResourceType)

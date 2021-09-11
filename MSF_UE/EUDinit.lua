@@ -119,11 +119,11 @@ function onInit_EUD()
 	local VRet2 = CreateVar(FP)
 	local VRet3 = CreateVar(FP)
 	local VRet4 = CreateVar(FP)
-	local CurrentUID = CreateVar(FP)
 	
 	
 	TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 	TMem(FP,XY_ArrHeader,XY_ArrHeaderVoid)
+	local CurrentUID = CreateVar(FP)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
