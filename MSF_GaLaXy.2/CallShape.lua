@@ -55,6 +55,10 @@ function Install_Shape()
 	Boss3 = CS_ConnectPathX(BSh2,32)
 	Boss4 = CSMakePolygon(6,24,0,PlotSizeCalc(6,5),0)
 	
+	TestSh1 = CS_FillPathHX(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),1,48,48,2)
+	TestSh2 = CS_FillPathHX(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),1,48,48,3)
+	--CS_Distortion()
+	BattleShape = CSMakeStar(5,165-(12*(5-2)),(36*6)-(36*2),180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
 	G_CAPlot_Shape_InputTable = {
 		"L00_1_64F","L00_1_96F","L00_1_128F","L00_1_164F","L00_1_64L","L00_1_96L","L00_1_128L","L00_1_164L",	
 		"H00_1_64F","H00_1_82F","H00_1_96F","H00_1_128F","H00_1_64L","H00_1_82L","H00_1_96L","H00_1_128L",
@@ -63,7 +67,8 @@ function Install_Shape()
 		"Chry_1","Chry_2","Chry_3","Chry_4",
 		"Chry_N","Chry_H","Chry_B",
 		"HLC","HRC","HUC","HDC",
-		"Boss1","Boss2","Boss3","Boss4"
+		"Boss1","Boss2","Boss3","Boss4",
+		"TestSh1","TestSh2","BattleShape"
 	}
 
 	for p, s in pairs(PySuPos) do
@@ -101,8 +106,7 @@ function Install_Shape()
 	table.insert(G_CAPlot_Shape_InputTable,"GB_B1_"..j)
 	table.insert(G_CAPlot_Shape_InputTable,"GB_B2_"..j)
 	end
-
-
+	
 
 	function Create_SortTable(Shape)
 		local X = {}
@@ -138,7 +142,7 @@ function Install_Shape()
 		end
 		return X
 	end
-
+	
 
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
 		local X = {}

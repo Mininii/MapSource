@@ -484,13 +484,19 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfXEnd()
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+		
 		DoActions(FP,{SetSwitch(RandSwitch,Random)})
+		CIfX(FP,CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF))
 		TriggerX(FP,{Switch(RandSwitch,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
 		TriggerX(FP,{Switch(RandSwitch,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
 		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
+		CElseX()
+		CTrigger(FP,{},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
+		CIfXEnd()
 
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
@@ -498,6 +504,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
 				})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,4))
+				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-2,-2,2,2)})
+				CDoActions(FP,{
+					--TSetDeathsX(_Add(G_CA_Nextptrs,68),SetTo,10,0,0xFFFF),
+					Order(1, Force1, 1, Patrol, 64);
+				})
+				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
@@ -538,6 +553,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
+			
+			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
+				},1)
 		CIfEnd()
 	CIfXEnd()
 
@@ -546,14 +567,16 @@ CWhileEnd()
 CMov(FP,RepeatType,0)
 SetCallEnd()
 
-function f_TempRepeat(Condition,UnitID,Number,Type)
+function f_TempRepeat(Condition,UnitID,Number,Type,Owner)
+	if Owner == nil then Owner = 0xFFFFFFFF end
 	if Type == nil then Type = 0 end
-	CallTriggerX(FP,Set_Repeat,Condition,{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),SetCVar(FP,Repeat_TempV[2],SetTo,Number),SetCVar(FP,RepeatType[2],SetTo,Type)})
+	CallTriggerX(FP,Set_Repeat,Condition,{SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),SetCVar(FP,Repeat_TempV[2],SetTo,Number),SetCVar(FP,RepeatType[2],SetTo,Type),SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
 end
 
-function f_TempRepeatX(Condition,UnitID,Number,Type)
+function f_TempRepeatX(Condition,UnitID,Number,Type,Owner)
+	if Owner == nil then Owner = 0xFFFFFFFF end
 	if Type == nil then Type = 0 end
-	CDoActions(FP,{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),TSetCVar(FP,Repeat_TempV[2],SetTo,Number),SetCVar(FP,RepeatType[2],SetTo,Type)})
+	CDoActions(FP,{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),TSetCVar(FP,Repeat_TempV[2],SetTo,Number),SetCVar(FP,RepeatType[2],SetTo,Type),SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
 	CallTriggerX(FP,Set_Repeat,Condition)
 end
 Set_Repeat = SetCallForward()
@@ -574,6 +597,7 @@ local G_CA_SNTV = CreateVar(FP)
 local G_CA_LMTV = CreateVar(FP)
 local G_CA_RPTV = CreateVar(FP)
 local G_CA_CTTV = CreateVar(FP)
+local G_CA_CPTV = CreateVar(FP)
 local G_CA_XPos = CreateVar(FP)
 local G_CA_YPos = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
@@ -642,6 +666,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,4*(0x20/4)),SetTo,G_CA_LMTV),
 	TSetMemory(_Add(G_CA_LineTemp,5*(0x20/4)),SetTo,G_CA_RPTV),
 	TSetMemory(_Add(G_CA_LineTemp,6*(0x20/4)),SetTo,G_CA_CTTV),
+	TSetMemory(_Add(G_CA_LineTemp,9*(0x20/4)),SetTo,G_CA_CPTV),
 })
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
@@ -676,7 +701,7 @@ SetCallEnd()
 
 local CA_TempUID = CreateVar(FP)
 local CA_Suspend = CreateCCode()
-local G_CA_Temp = Create_VTable(9)
+local G_CA_Temp = Create_VTable(10)
 
 Call_CA_Repeat = SetCallForward()
 SetCall(FP)
@@ -684,6 +709,7 @@ TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo
 CMov(FP,Gun_TempSpawnSet1,CA_TempUID)
 CMov(FP,Repeat_TempV,1)
 CMov(FP,RepeatType,G_CA_Temp[6],nil,0xFF)
+CMov(FP,CreatePlayer,G_CA_Temp[10])
 CallTrigger(FP,Set_Repeat)
 SetCallEnd()
 
@@ -700,7 +726,7 @@ end
 function CA_Func1()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
-	CIfX(FP,{CDeaths(FP,Exactly,2,B_P)})
+	CIfX(FP,{CDeaths(FP,AtLeast,2,B_P)})
 		CA_Rotate(B_CA_Angle)
 	CIfXEnd()
 end
@@ -793,7 +819,7 @@ function T_to_BiteBuffer(Table)
 	return BiteValue
 end
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,PreserveFlag)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,Owner,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	end
@@ -860,12 +886,16 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	else
 		PushErrorMsg("G_CA_SetSpawn_CenterXY_Inputdata_Error")
 	end
+	if Owner == nil then
+		Owner = 0xFFFFFFFF
+	end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
 		SetCVar(FP,G_CA_LineV[2],SetTo,Start_G_CLine),
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y
+		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y,
+		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
 	},PreserveFlag)
 end
 
@@ -1004,6 +1034,7 @@ end
 function Install_Call_G_CA()
 	Call_G_CA = SetCallForward()
 	SetCall(FP)
+		CIf(FP,{TTOR({CVar(FP,G_CA_TempTable[10][2],AtMost,5),CVar(FP,count[2],AtMost,GunLimit)})})
 		CIfX(FP,CVar(FP,G_CA_TempTable[1][2],AtLeast,1,0xFF))
 			CDoActions(FP,{
 				TSetCVar(FP,G_CA_Temp[1][2],SetTo,G_CA_TempTable[1],0xFF),
@@ -1015,6 +1046,7 @@ function Install_Call_G_CA()
 				TSetCVar(FP,G_CA_Temp[7][2],SetTo,G_CA_TempTable[7],0xFF),
 				TSetCVar(FP,G_CA_Temp[8][2],SetTo,G_CA_TempTable[8]),
 				TSetCVar(FP,G_CA_Temp[9][2],SetTo,G_CA_TempTable[9]),
+				TSetCVar(FP,G_CA_Temp[10][2],SetTo,G_CA_TempTable[10]),
 			})
 			CallTrigger(FP,Load_CAPlot_Shape)
 			CIfX(FP,{CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtMost,0,CA_Suspend)})
@@ -1066,17 +1098,20 @@ function Install_Call_G_CA()
 			TSetMemory(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,_Div(G_CA_TempTable[7],_Mov(256))),
 		})
 		CIfXEnd()
+		CIfEnd()
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CA_Launch)})
 	SetCallEnd()
 end
-
+local Actived_G_CA = CreateVar(FP)
 function Create_G_CA_Arr()
 	if G_CA_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CA_Arr_Created") end
+	CMov(FP,Actived_G_CA,0)
 	for i = 0, Size_of_G_CA_Arr-1 do
 		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
 			G_CA_InputCVar,
 			SetCtrigX("X",G_CA_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
 			SetCVar(FP,G_CA_Num[2],SetTo,i),
+			SetCVar(FP,Actived_G_CA[2],Add,1),
 			SetNext("X",Call_G_CA,0),SetNext(Call_G_CA+1,"X",1), -- Call f_Gun
 			SetCtrigX("X",Call_G_CA+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
 			SetCtrigX("X",Call_G_CA+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
@@ -1084,6 +1119,7 @@ function Create_G_CA_Arr()
 		}, 1, G_CA_Arr_IndexAlloc)
 		G_CA_Arr_IndexAlloc = G_CA_Arr_IndexAlloc + 1
 	end
+	--CMov(FP,0x57f0f0,Actived_G_CA)
 end
 
 

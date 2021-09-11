@@ -60,7 +60,9 @@ function onInit()
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-
+	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	SuT00 = CreateCText(FP,"\x0d\x0d\x0d\x12\x02◆ \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	
 	DefStr1 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d")
 	DefStr2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04(이)가 \x1C방어력 \x04업그레이드를 완료하였습니다.\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	
@@ -72,14 +74,17 @@ function onInit()
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
+	SuFactor = 100
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000
+	SuCost = 500000
 	HPointFactor = 30
 	ExRate = 0
 	EasyEx1P = 110
 	HDEx1P = 120
 	BurEx1P = 140
+	GunLimit = 1450
 	for i = 65, 255 do
 	
 	table.insert(PatchArr2,SetMemoryX(0x58DC70 + (20*(i)),SetTo,0 ,4128768))
@@ -201,6 +206,7 @@ function SetZergGroupFlags(UnitID)
 	SetUnitClass(74)
 	SetUnitClass(11)
 	SetUnitClass(5)
+	SetUnitClass(12)
 	SetUnitClass(186)
 	
 	for i = 0, 227 do
@@ -212,6 +218,7 @@ function SetZergGroupFlags(UnitID)
 	table.insert(PatchArr2,SetMemoryX(0x66388C, SetTo, MarCost+GMCost,0xFFFF))
 	table.insert(PatchArr2,SetMemoryX(0x6559CC, SetTo, AtkFactor*65536,0xFFFF0000))
 	table.insert(PatchArr2,SetMemoryX(0x6559C0, SetTo, DefFactor,0xFFFF))
+	table.insert(PatchArr2,SetMemoryX(0x6559DC, SetTo, SuFactor,0xFFFF))
 	
 	
 	HondonPatchArr = {}
@@ -219,20 +226,20 @@ function SetZergGroupFlags(UnitID)
 		if TunRad ~= nil then
 		table.insert(HondonPatchArr, SetMemoryB(0x6C9E20 + FlingyID,SetTo,TunRad))
 		else 
-			table.insert(HondonPatchArr, SetMemoryB(0x6C9E20 + FlingyID,SetTo,70))
+			table.insert(HondonPatchArr, SetMemoryB(0x6C9E20 + FlingyID,SetTo,40))
 		end
 		table.insert(HondonPatchArr, SetMemoryB(0x6C9858 + FlingyID,SetTo,0))
 		table.insert(HondonPatchArr, SetMemory(0x6C9930 + (FlingyID*4),SetTo,0))
 		table.insert(HondonPatchArr, SetMemoryW(0x6C9C78 + (FlingyID*2),SetTo,4000))
-		table.insert(HondonPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,12000))
+		table.insert(HondonPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,18000))
 	end
 	
 	
 	
-	HondonPatch(75,70)
-	HondonPatch(82,70)
-	HondonPatch(70,127)
-	HondonPatch(80,127)
+	HondonPatch(75)
+	HondonPatch(82)
+	HondonPatch(70) -- 배틀
+	HondonPatch(80)
 	for j, k in pairs(HondonFlingyArr) do
 		HondonPatch(k)
 	end
@@ -267,7 +274,7 @@ function SetZergGroupFlags(UnitID)
 			SetMemory(0x515BA4,SetTo,256);---------크기 7
 			SetMemory(0x515BA8,SetTo,256);---------크기 8
 			SetMemory(0x515BAC,SetTo,256);---------크기 9
-			SetMemory(0x515BB0,SetTo,128);
+			SetMemory(0x515BB0,SetTo,256);
 			SetMemory(0x515BB4,SetTo,256);
 			SetMemory(0x515BB8,SetTo,256+256);
 			SetMemory(0x515BBC,SetTo,256);
@@ -502,10 +509,12 @@ function SetZergGroupFlags(UnitID)
 	SoundLimitT = CreateCCode()
 	SoundLimit = CreateCCode()
 	BossStart = CreateCCode()
+	HiddenEnable = CreateCCode()
 	f_GunSendStrPtr = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
-
+	BSkillT = CreateCcodeArr(6)
+	SuStrPtr = CreateVarArr(6,FP)
 	function Objects()
 	CVariable(AllPlayers,0x1000)
 	CVariable(AllPlayers,0x1001)

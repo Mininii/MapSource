@@ -374,9 +374,9 @@ function GunData()
 		
 		},{preserved})
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			SetMemory(0x6CA010, SetTo, 12000);--배틀
-			SetMemory(0x6C9F8C, SetTo, 12000);--아비터
-			SetMemory(0x6C9FA4, SetTo, 12000);--스카웃
+			SetMemory(0x6CA010, SetTo, 20000);--배틀
+			SetMemory(0x6C9F8C, SetTo, 20000);--아비터
+			SetMemory(0x6C9FA4, SetTo, 20000);--스카웃
 		},{preserved})
 
 		CTrigger(FP,{Gun_Line(4,AtLeast,1)},{Gun_SetLine(4,SetTo,0),Gun_SetLine(3,Add,1)},1)
@@ -385,35 +385,45 @@ function GunData()
 		CMov(FP,DisGunTempPos,_Mul(DisGun,_Mov(32)))
 
 		CIf(FP,Memory(0x628438,AtLeast,1))
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
-		CDoActions(FP,{
-			SetMemory(0x662350 + (27*4), SetTo, (22000*256));
-			SetMemory(0x662350 + (88*4), SetTo, (25000*256));
-			SetMemory(0x662350 + (98*4), SetTo, (10000*256));
-			TSetMemory(0x58DC60 + 0x14*0,SetTo,DisGunTempPos),
-			TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(DisGunTempPos,32)),
-			SetMemory(0x58DC64 + 0x14*0,SetTo,0),
-			SetMemory(0x58DC6C + 0x14*0,SetTo,32),
-			TCreateUnit(1,UnitIDVDis,1,P8),
-			Order("Men",P8,1,Attack,2),
-			TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-		})
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+			CDoActions(FP,{
+				SetMemory(0x662350 + (27*4), SetTo, (22000*256));
+				SetMemory(0x662350 + (88*4), SetTo, (25000*256));
+				SetMemory(0x662350 + (98*4), SetTo, (10000*256));
+				TSetMemory(0x58DC60 + 0x14*0,SetTo,DisGunTempPos),
+				TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(DisGunTempPos,32)),
+				SetMemory(0x58DC64 + 0x14*0,SetTo,0),
+				SetMemory(0x58DC6C + 0x14*0,SetTo,32),
+				TCreateUnit(1,UnitIDVDis,1,P8),
+				Order("Men",P8,1,Attack,2),
+				TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+			})
+			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+				TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(Nextptrs,13),SetTo,20000),
+				TSetMemoryX(_Add(Nextptrs,18),SetTo,4000,0xFFFF),
+				},1)
 		CIfEnd()
 		CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
-		CDoActions(FP,{
-			SetMemory(0x58DC60 + 0x14*0,SetTo,0),
-			SetMemory(0x58DC68 + 0x14*0,SetTo,32),
-			TSetMemory(0x58DC64 + 0x14*0,SetTo,DisGunTempPos),
-			TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(DisGunTempPos,32)),
-			TCreateUnit(1,UnitIDVDis,1,P8),
-			Order("Men",P8,1,Attack,2),
-			TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-			SetCVar(FP,DisGun[2],Add,1),
-			SetMemory(0x662350 + (27*4), SetTo, (30000*256));
-			SetMemory(0x662350 + (88*4), SetTo, (40000*256));
-			SetMemory(0x662350 + (98*4), SetTo, (20000*256));
-		})
+			CDoActions(FP,{
+				SetMemory(0x58DC60 + 0x14*0,SetTo,0),
+				SetMemory(0x58DC68 + 0x14*0,SetTo,32),
+				TSetMemory(0x58DC64 + 0x14*0,SetTo,DisGunTempPos),
+				TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(DisGunTempPos,32)),
+				TCreateUnit(1,UnitIDVDis,1,P8),
+				Order("Men",P8,1,Attack,2),
+				TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				SetCVar(FP,DisGun[2],Add,1),
+				SetMemory(0x662350 + (27*4), SetTo, (30000*256));
+				SetMemory(0x662350 + (88*4), SetTo, (40000*256));
+				SetMemory(0x662350 + (98*4), SetTo, (20000*256));
+			})
+			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+				TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(Nextptrs,13),SetTo,20000),
+				TSetMemoryX(_Add(Nextptrs,18),SetTo,4000,0xFFFF),
+				},1)
 		CIfEnd()
 
 		CTrigger(FP,{CVar(FP,DisGun[2],AtLeast,127)},{Gun_SetLine(5,Add,1),SetCVar(FP,DisGun[2],SetTo,0)},1)
@@ -428,9 +438,9 @@ function GunData()
 		
 		},{preserved})
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			SetMemory(0x6CA010, SetTo, 12000);--배틀
-			SetMemory(0x6C9F8C, SetTo, 12000);--아비터
-			SetMemory(0x6C9FA4, SetTo, 12000);--스카웃
+			SetMemory(0x6CA010, SetTo, 20000);--배틀
+			SetMemory(0x6C9F8C, SetTo, 20000);--아비터
+			SetMemory(0x6C9FA4, SetTo, 20000);--스카웃
 		
 		},{preserved})
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(5,AtLeast,(#DisGunUnitID)),},{
@@ -512,6 +522,10 @@ function GunData()
 		})
 		CIfEnd()
 
+		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+			SetMemory(0x6CA010, SetTo, 20000);--배틀
+		
+		},{preserved})
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(4,AtLeast,1100),},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,SPGunCond)},1)
 	CIfEnd()
 	
@@ -700,6 +714,16 @@ function GunData()
 					}
 			}
 		end
+		Trigger { -- 
+			players = {FP},
+			conditions = {
+				Label(0);
+				Memory(0x628438,Exactly,0)
+		},
+			actions = {
+				SetCDeaths(FP,Add,1,CocoonGunCon);
+				}
+		}
 	
 		Trigger { -- 
 		players = {FP},
@@ -843,7 +867,7 @@ function GunData()
 		CreateUnit(1,84,1,FP),
 		})
 		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,0)},{SetMemory(0x6CA010, SetTo, 640)},{Preserved})
-		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,1)},{SetMemory(0x6CA010, SetTo, 12000)},{Preserved})
+		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,1)},{SetMemory(0x6CA010, SetTo, 20000)},{Preserved})
 
 		for i = 1, 3 do
 			CTrigger(FP,{Gun_Line(54,AtMost,0),CDeaths(FP,Exactly,i,GMode);Gun_Line(4,AtLeast,((8*(i+1))+7)),Gun_Line(5,AtLeast,(i+1)+1)},{
@@ -946,7 +970,7 @@ function GunData()
 					
 					SetMemory(0x6CA010, SetTo, 640),
 					})
-					TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{SetMemory(0x6CA010, SetTo, 12000)},{preserved})
+					TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{SetMemory(0x6CA010, SetTo, 20000)},{preserved})
 				CIfEnd()
 			NWhileEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
