@@ -629,7 +629,9 @@ Trigger {
 		local ClearSw2 = CreateCCode()
 		TriggerX(FP,{CDeaths(FP,AtMost,0,ClearTimer)},{RotatePlayer({PlayWAVX("staredit\\wav\\DClear.ogg"),PlayWAVX("staredit\\wav\\DClear.ogg"),DisplayTextX(ClearText1,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearTimer)},{Preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,3000,ClearTimer),CDeaths(FP,AtMost,0,ClearSw1)},{RotatePlayer({PlayWAVX("staredit\\wav\\CalcSE.ogg"),PlayWAVX("staredit\\wav\\CalcSE.ogg"),DisplayTextX(ClearText2,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearSw1)},{Preserved})
-		CAdd(FP,_Ccode("X",ClearTimer),Dt)
+		--CAdd(FP,_Ccode("X",ClearTimer),Dt)
+		
+		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Add,Dt,ClearTimer)},1)
 		CIf(FP,{CDeaths(FP,AtLeast,3000+3000,ClearTimer),CDeaths(FP,AtMost,0,ClearSw2)},SetCDeaths(FP,SetTo,1,ClearSw2))
 			CallTrigger(FP,Call_ScorePrint,{SetCDeaths(FP,SetTo,1,isDBossClear)})
 		CIfEnd()

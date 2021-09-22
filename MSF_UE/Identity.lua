@@ -34,7 +34,8 @@ function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
 	}
 	end
 CIf(FP,CDeaths(FP,AtLeast,1,StoryT))
-CAdd(FP,_Ccode("X",StoryT),Dt)
+--CAdd(FP,_Ccode("X",StoryT),Dt)
+CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Add,Dt,StoryT)},1)
 Id_T0 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들\x04의 \x08레갈 성 \x15서문 요새\x04가 \x07배고픈 마린들\x04에게 \x08함락\x04되었습니다."
 Id_T1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고픈 \x11마\x03린들 \x07::\r\n\x1B여기\x04가 \x08놈\x04의 본거지군. 진진짜라를 내놓아라 \x08타림.\r\n\r\n  "
 Id_T2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x08버러지\x1B같은 \x06그지들 주제\x1B에 감히 어디서 그 이름을 입에 함부로 놀리는 것이냐?\r\n\r\n "

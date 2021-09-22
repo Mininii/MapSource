@@ -807,7 +807,7 @@ SetCall(FP)
 		
 	CIfEnd()
 	Case_Various()
-	CDoActions(FP,{Gun_SetLine(4,Add,Dt)})
+	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{Gun_SetLine(4,Add,Dt)},1)
 	CIf(FP,{Gun_Line(54,AtLeast,1),G_CA_CondStack}) -- SuspendCode
 		CMov(FP,G_TempW,0)
 		CWhile(FP,CVar(FP,G_TempW[2],AtMost,(Var_Lines-1)*(0x20/4)))

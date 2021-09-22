@@ -1,6 +1,10 @@
+-- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--dofile(Curdir.."MapSource\\MSF_UE\\main.lua")
+
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -24,7 +28,7 @@ NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(71,P8),RemoveUnit(203,P8),RemoveUnit(204,P8),RemoveUnit(205,P8),RemoveUnit(206,P8),RemoveUnit(207,P8),RemoveUnit(208,P8),RemoveUnit(209,P8),RemoveUnit(210,P8)})
-TestSet(0)
+TestSet(1)
 VerText = "\x04Ver. 1.9FP"
 FP = P8
 EUDTurbo(FP)
@@ -49,6 +53,7 @@ StartCtrig()
 		onInit_EUD() -- onPluginStart
 		OPText() -- Opening Text
 		MapPreserves()
+		OPTrig()
 		SetRecoverCp()
 		RecoverCp(AllPlayers)
 		CIf(AllPlayers,ElapsedTime(AtLeast,4))
@@ -58,10 +63,8 @@ StartCtrig()
 			SetWave()
 			GameOver()
 			Overflow_HP_System(FP,B1_H,B1_K)
-			IBGM_EPDX(FP,6,Dt,{Dt_NT2,Dt_NT})
 			ObDisplay()
 			LevelUp()
-			OPTrig()
 			PlayerInterface()
 			LeaderBoardTFunc()
 			Install_Roka7Boss()

@@ -264,8 +264,9 @@ function LevelUp()
 	end
 
 
-	CTrigger(FP,{CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,AtMost,5000,ReplaceDelayT)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
-	CTrigger(FP,{CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,Exactly,1,Continue)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
+	
+	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500),CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,AtMost,5000,ReplaceDelayT)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
+	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500),CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,Exactly,1,Continue)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
 
 	CIf(FP,CDeaths(FP,AtLeast,15000,ReplaceDelayT))
 	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{Preserved})
