@@ -512,6 +512,24 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					--TSetDeathsX(_Add(G_CA_Nextptrs,68),SetTo,10,0,0xFFFF),
 					Order(1, Force1, 1, Patrol, 64);
 				})
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,5))
+				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-2,-2,2,2)})
+				CDoActions(FP,{
+					--TSetDeathsX(_Add(G_CA_Nextptrs,68),SetTo,10,0,0xFFFF),
+					Order(182, Force1, 1, Patrol, 64);
+				})
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))
+				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-2,-2,2,2)})
+				CDoActions(FP,{
+					--TSetDeathsX(_Add(G_CA_Nextptrs,68),SetTo,10,0,0xFFFF),
+					Order(183, Force1, 1, Patrol, 64);
+				})
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
 				CDoActions(FP,{

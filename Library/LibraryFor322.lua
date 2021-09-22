@@ -71,9 +71,9 @@ end
 function DoActionsXI(PlayerID,Index,Actions,flag) -- CtrigAsm 5.1
 	local X = {}
 	if flag == nil then
-		flags = {Preserved}
+		flag = {Preserved}
 	else
-		flags = nil
+		flag = nil
 	end
 	if Index == nil then
 		Index = 0
@@ -86,7 +86,7 @@ function DoActionsXI(PlayerID,Index,Actions,flag) -- CtrigAsm 5.1
 		actions = {
 			Actions,
 		},
-		flag = {flags}
+		flag = {flag}
 	}
 end
 

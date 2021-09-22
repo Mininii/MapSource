@@ -61,6 +61,7 @@ function onInit()
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	TeText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x065\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	SuT00 = CreateCText(FP,"\x0d\x0d\x0d\x12\x02◆ \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	
 	DefStr1 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -74,10 +75,11 @@ function onInit()
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
-	SuFactor = 100
+	SuFactor = 150
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000
+	TeCost = 50000
 	SuCost = 500000
 	HPointFactor = 30
 	ExRate = 0
@@ -90,7 +92,11 @@ function onInit()
 	table.insert(PatchArr2,SetMemoryX(0x58DC70 + (20*(i)),SetTo,0 ,4128768))
 	end
 	--Patch
-	
+	for j = 0, 5 do
+	table.insert(PatchArr2,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
+	table.insert(PatchArr2,Simple_CalcLoc("S"..j+1,0,0,32*10,32*10))
+	table.insert(PatchArr2,Simple_CalcLoc("G"..j+1,0,0,32*10,32*10))
+	end
 function SetUnitAdvFlag(UnitID,Value,Mask)
 	table.insert(PatchArr2,SetMemoryX(0x664080 + (UnitID*4),SetTo,Value,Mask))
 end
@@ -200,6 +206,7 @@ function SetZergGroupFlags(UnitID)
 	UnitEnable2(34)
 	UnitEnable2(72)
 	UnitEnable2(72)
+	SetUnitClass(0)
 	SetUnitClass(16)
 	SetUnitClass(68)
 	SetUnitClass(23)
@@ -499,6 +506,9 @@ function SetZergGroupFlags(UnitID)
 	TGiveforCoCoon = CreateCCode()
 	CocoonGunCon = CreateCCode()
 	ifUpisAtk = CreateCCode()
+	WaveT = CreateCCode()
+	MarMode = CreateCCode()
+	NBMode = CreateCCode()
 	LV_10_UnitTableCode = CreateCCode()
 	LV_11_UnitTableCode = CreateCCode()
 	OverCocooncomp = CreateCCode()
@@ -510,11 +520,15 @@ function SetZergGroupFlags(UnitID)
 	SoundLimit = CreateCCode()
 	BossStart = CreateCCode()
 	HiddenEnable = CreateCCode()
+	Sel_G = CreateCCode()
 	f_GunSendStrPtr = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
 	BSkillT = CreateCcodeArr(6)
+	BSkillT2 = CreateCcodeArr(6)
+	BSkillT3 = CreateCcodeArr(6)
 	SuStrPtr = CreateVarArr(6,FP)
+	TeStrPtr = CreateVarArr(6,FP)
 	function Objects()
 	CVariable(AllPlayers,0x1000)
 	CVariable(AllPlayers,0x1001)
