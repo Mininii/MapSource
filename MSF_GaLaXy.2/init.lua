@@ -75,7 +75,7 @@ function onInit()
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
-	SuFactor = 150
+	SuFactor = 257
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000

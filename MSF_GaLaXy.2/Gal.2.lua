@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.1"
+VName = "Ver.1.2"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -478,10 +478,10 @@ t28 = {
 }
 
 t27 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커\x0d\x0d\x0d\x0d\x0d", -- GMode 3
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d", -- GMode 3
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
 }
 Print_String(FP,_TMem(Arr(Str00,0)),t00,0)
 Print_String(FP,_TMem(Arr(Str01,0)),t01,0)
@@ -2422,6 +2422,20 @@ Trigger {
 	}
 	}
 
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Deaths(CurrentPlayer,AtLeast,1,212);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,0,NBMode);
+			SetCDeaths(FP,SetTo,0,MarMode);
+			SetDeaths(CurrentPlayer,SetTo,0,212);
+			SetCDeaths(FP,SetTo,1,Sel_G);
+			PreserveTrigger();
+		}
+		}
 Trigger {
 	players = {FP},
 	conditions = {
@@ -4195,6 +4209,21 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
+		CDeaths(FP,AtLeast,21+(24*5),modeT);
+		CDeaths(FP,AtLeast,1,NBMode);
+
+
+	},
+	actions = {
+		SetResources(Force1,Add,150000,Ore);ModifyUnitEnergy(All,71,Force2,64,0),ModifyUnitEnergy(All,67,Force2,64,0),ModifyUnitEnergy(All,63,Force2,64,0)
+		
+	},
+	}
+Trigger { -- 인트로1
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtLeast,1,ModeO);
 	},
 	actions = {
 		SetCDeaths(FP,Add,1,ModeT);
@@ -5071,7 +5100,7 @@ f_LoadCP()
 CAdd(FP,0x6509B0,1)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
-TriggerX(FP,{CDeaths(FP,AtLeast,1,NBMode)},{KillUnit(125,AllPlayers),KillUnit(125,P12),ModifyUnitEnergy(All,71,Force2,64,0),ModifyUnitEnergy(All,67,Force2,64,0),ModifyUnitEnergy(All,63,Force2,64,0),NBT,SetMemoryX(0x6636F8, SetTo, 130*16777216,0xFF000000);})
+TriggerX(FP,{CDeaths(FP,AtLeast,1,NBMode)},{KillUnit(125,AllPlayers),KillUnit(125,P12),NBT,SetMemoryX(0x6636F8, SetTo, 130*16777216,0xFF000000);})
 
 for i = 1,3 do
 Trigger {
@@ -5376,7 +5405,7 @@ CUnit_PlacedUnitHP(28,20211)
 CUnit_PlacedUnitHP(75,20211)
 CUnit_PlacedUnitHP(68,999999)
 CUnit_PlacedUnitHP(88,120000)
-CUnit_PlacedUnitHP(219,8320000)
+CUnit_PlacedUnitHP(219,666666)
 
 
 CIfX(FP,TTOR({
@@ -8122,7 +8151,7 @@ Trigger { -- 조합 네뷸라
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtMost,0,MarMode);
-		Bring(j,AtMost,0,16,64);
+		Command(j,AtMost,0,16);
 		Bring(j,AtLeast,3,100,3);
 		Accumulate(j,AtLeast,NeCost,Ore);
 	},
@@ -8143,7 +8172,7 @@ Trigger { -- 조합 테라
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtMost,0,MarMode);
-		Bring(j,AtMost,0,0,64);
+		Command(j,AtMost,0,0);
 		Bring(j,AtLeast,1,16,3);
 		Bring(j,Exactly,2,100,3);
 		Bring(j,Exactly,3,"Terran SCV",3);
@@ -8227,8 +8256,13 @@ TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
 CElseX({RemoveUnit(183,j)})
 CIfXEnd()
-end
 
+end
+DoActions(FP,{
+	RemoveUnit(1,P12),
+	RemoveUnit(182,P12),
+	RemoveUnit(183,P12),
+})
 Trigger {
 	players = {FP},
 	conditions = {
