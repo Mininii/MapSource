@@ -30,9 +30,9 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 0
+Limit = 1
 GunSafety = 0
-VName = "Ver.1.2"
+VName = "Ver.1.3T"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -457,17 +457,17 @@ t23 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 \x04회 업그레이드를 완료하였습니다. \x07
 
 t24 = "\x0d\x0d\x0d\x0d\x0d\x04현재 선택가능 플레이어는...\x0d\x0d\x0d\x0d\x0d"
 t25 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST\x0d\x0d\x0d\x0d\x0d"
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
 }
 
 t26 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x0EEASY \x02[W] \x08HARD \x02[E] \x11BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x02[W] \x02HARD \x02[E] \x02BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x03[W] \x08HARD \x02[E] \x02BURST\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x02[W] \x02HARD \x03[E] \x11BURST\x0d\x0d\x0d\x0d\x0d"
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x0EEASY \x02[W] \x08HARD \x02[E] \x11BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x02[W] \x02HARD \x02[E] \x02BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x03[W] \x08HARD \x02[E] \x02BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x02[W] \x02HARD \x03[E] \x11BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
 }
 t28 = {
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02신나는 \x02[W] \x02진지한 \x02[E] \x02강렬한 \x02[R] \x02강렬한2\x0d\x0d\x0d\x0d\x0d",
@@ -478,10 +478,10 @@ t28 = {
 }
 
 t27 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d", -- GMode 3
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d", -- GMode 3
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
 }
 Print_String(FP,_TMem(Arr(Str00,0)),t00,0)
 Print_String(FP,_TMem(Arr(Str01,0)),t01,0)
@@ -2456,11 +2456,22 @@ Trigger {
 CIfEnd()
 SetRecoverCp()
 RecoverCp(FP)
-
+Trigger { -- 당신 혹시 싱글?!
+players = {FP},
+conditions = {
+	Label(0);
+Memory(0x57F0B4, Exactly, 0);
+},
+actions = {
+	SetCDeaths(FP,SetTo,1,isSingle);
+	
+},
+}
 Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
 		Label(0);
+		CDeaths(FP,AtMost,0,isSingle);
 		Switch("Switch 201",Cleared);
 	},
 	actions = {
@@ -2818,7 +2829,7 @@ CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
 YY = 2021
 MM = 09
-DD = 12
+DD = 27
 HH = 00
 function PushErrorMsg(Message)
 	_G["\n"..Message.."\n"]() 
@@ -4098,6 +4109,7 @@ Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
 		Label(0);
+		CDeaths(FP,AtMost,0,isSingle);
 		CDeaths(FP,AtLeast,1,ModeO);
 		CDeaths(FP,AtLeast,21+(24*5),modeT);
 	},
@@ -4147,6 +4159,51 @@ Trigger { -- 인트로1
 		
 	},
 	}
+	Trigger { -- 인트로1
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,1,isSingle);
+		CDeaths(FP,AtLeast,1,ModeO);
+		CDeaths(FP,AtLeast,21+(24*5),modeT);
+	},
+	actions = {
+		SetMemory(0x6509B0, SetTo, 0);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 1);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 2);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 3);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 4);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 5);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 128);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 129);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 130);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, 131);
+		DisplayText(Text1,4);
+		PlayWAV(WavFile);
+		SetMemory(0x6509B0, SetTo, FP);
+		
+		
+	},
+	}
+
 	if Limit == 1 then 
 
 		Trigger { -- 인트로1
@@ -4934,6 +4991,7 @@ Trigger {
 	},
 	actions = {
 		SetMemory(0x662390, Add, i*16000*256);
+		SetMemory(0x662350, Add, i*24000*256);
 	}
 }
 
@@ -5055,6 +5113,11 @@ DoActions2(FP,HondonPatchArr)
 CIfEnd()
 
 CIfEnd()
+
+TriggerX(FP,{CDeaths(FP,AtLeast,1,isSingle)},{
+SetMemoryX(0x581DAC,SetTo,51*65536,0xFF0000), --P8컬러
+SetMemoryX(0x581DDC,SetTo,51*256,0xFF00); --P8 미니맵
+})
 
 NWhile(FP,{Bring(FP,AtLeast,1,217,64)})
 TriggerX(FP,CDeaths(FP,Exactly,0,NBMode),{MoveLocation(1,217,FP,64),GiveUnits(1,217,FP,1,8),RemoveUnit(217,8),
@@ -5291,16 +5354,7 @@ Trigger { -- 게임오버
 		Defeat();
 	}
 	}
-Trigger { -- 싱글플 방지
-players = {AllPlayers},
-conditions = {
-Memory(0x57F0B4, Exactly, 0);
-},
-actions = {
-	DisplayText("\x13\x1B멀티플레이 전용 맵입니다. 배틀넷 멀티플레이로 시작해주세요.",4);
-	Victory();
-},
-}
+
 Trigger { -- 
 players = {Force2},
 conditions = {
@@ -7843,12 +7897,18 @@ Trigger { -- 강퇴
 	end
 	
 for i = 0,5 do
+TriggerX(i,{
+	CVar(FP,HiddenATK[2],AtLeast,1);
+	MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);},{SetCDeaths(FP,SetTo,1,OneStim[i+1])})
+
+TriggerX(i,{
+	CDeaths(FP,AtLeast,1,isSingle);
+	MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);},{SetCDeaths(FP,SetTo,1,OneStim[i+1])})
 Trigger { -- 공업완료시 스팀 활성화
 	players = {i},
 	conditions = {
 		Label(0);
-		CVar(FP,HiddenATK[2],AtLeast,1);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
+		CDeaths(FP,AtLeast,1,OneStim[i+1]);
 	},
 	actions = {
 		DisplayText(string.rep("\n", 20),4);
