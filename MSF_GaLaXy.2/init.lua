@@ -118,6 +118,8 @@ function SetZergGroupFlags(UnitID)
 	table.insert(PatchArr2,SetMemoryW(0x660428 + (UnitID *2),SetTo,1))
 	table.insert(PatchArr2,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
 	end
+
+
 	for i=0,5 do
 	table.insert(PatchArr3,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
 	end
@@ -197,6 +199,10 @@ function SetZergGroupFlags(UnitID)
 	UnitEnable(3)
 	UnitEnable(8)
 	UnitEnable(54)
+	UnitEnable(53)
+	UnitEnable(48)
+	UnitEnable(52)
+	UnitEnable(49)
 	UnitEnable2(9)
 	UnitEnable2(0)
 	UnitEnable2(1)
@@ -291,10 +297,10 @@ function SetZergGroupFlags(UnitID)
 			SetMemory(0x515BCC,SetTo,256);
 			SetMemory(0x515BD0,SetTo,256);
 			SetMemory(0x515BD4,SetTo,256);		
-			SetMemory(0x5188AC, SetTo, 5339096);
-			SetMemory(0x518C9C, SetTo, 5339096);		
-			SetMemory(0x5188A8, SetTo, 6);
-			SetMemory(0x518C98, SetTo, 6);
+			--SetMemory(0x5188AC, SetTo, 5339096);
+			--SetMemory(0x518C9C, SetTo, 5339096);		
+			--SetMemory(0x5188A8, SetTo, 6);
+			--SetMemory(0x518C98, SetTo, 6);
 		},
 		}
 
@@ -487,6 +493,7 @@ function SetZergGroupFlags(UnitID)
 	CanCT = CreateCCode()
 	Print13 = CreateCCode()
 	GameOver = CreateCCode()
+	CUnitFlag = CreateCCode()
 	ExchangeRateTMinusFlag = CreateCCode()
 	GunBossT3 = CreateCCode()
 	DBossGen = CreateCCode()

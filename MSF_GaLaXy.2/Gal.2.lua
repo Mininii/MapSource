@@ -30,7 +30,7 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 1
+Limit = 0
 GunSafety = 0
 VName = "Ver.1.3T"
 SetFixedPlayer(FP)
@@ -325,6 +325,29 @@ GiveUnitsArr = {}
 VArrPatchTable ={}
 CIfOnce(FP,Always()) -- onPluginStart
 
+GiveT = {}
+for i = 0, 5 do
+	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
+	table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
+end
+table.insert(GiveT,Simple_SetLoc(0,3827,3690,3827+1,3690+1))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P6))
+table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P3))
+table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P4))
+table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P1))
+table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P5))
+table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+table.insert(GiveT,GiveUnits(2, 125, P12, 1, P2))
+
+DoActions(FP,GiveT)
+for i = 0, 5 do
+Trigger2(FP,{PlayerCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+end
+
 VoidAreaOffset = 0x590010
 VoidAreaAlloc = 0x590010-4
 local VoidResetTable = {}
@@ -359,7 +382,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		Command(i,AtLeast,1,111);
+		PlayerCheck(i,1);
 		},
 	actions = {
 		SetCVar(FP,SetPlayers[2],Add,1);
@@ -2460,10 +2483,11 @@ Trigger { -- 당신 혹시 싱글?!
 players = {FP},
 conditions = {
 	Label(0);
-Memory(0x57F0B4, Exactly, 0);
+	Memory(0x57F0B4, Exactly, 0);
 },
 actions = {
 	SetCDeaths(FP,SetTo,1,isSingle);
+	SetSwitch("Switch 211",Set);
 	
 },
 }
@@ -2829,7 +2853,7 @@ CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
 YY = 2021
 MM = 09
-DD = 27
+DD = 28
 HH = 00
 function PushErrorMsg(Message)
 	_G["\n"..Message.."\n"]() 
@@ -3640,51 +3664,76 @@ Trigger {
 		SetMemory(0x6509B0, SetTo, FP);
 	}
 	}
-
+GOpT = {
+	"\x13\x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함",
+	"\x13\x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함",
+	"\x13\x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함",
+	"\x13\x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함",}
 Text3 = "\x13\x18게임옵션 \x04선택이 완료되었습니다."
-WavFile = "staredit\\wav\\Select.ogg"
-Trigger { -- 인트로1
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,0,ModeO);
-		CDeaths(FP,Exactly,2,BGMSel);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		PlayWAV(WavFile);
-		DisplayText(Text3,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		
-	},
-	}
+
+for i = 1, #t27 do
+	local j
+	local k
+	if i == 1 then j=0 k=0 
+	elseif i == 2 then j=1 k=0 
+	elseif i == 3 then j=0 k=1 
+	elseif i == 4 then j=1 k=1 end
+	WavFile = "staredit\\wav\\Select.ogg"
+	Trigger { -- 인트로1
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,j,MarMode),CDeaths(FP,Exactly,k,NBMode);
+			CDeaths(FP,Exactly,0,ModeO);
+			CDeaths(FP,Exactly,2,BGMSel);
+		},
+		actions = {
+			SetMemory(0x6509B0, SetTo, 0);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 1);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 2);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 3);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 4);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 5);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 128);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 129);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 130);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, 131);
+			PlayWAV(WavFile);
+			DisplayText(Text3,4);
+			DisplayText(GOpT[i],4);
+			SetMemory(0x6509B0, SetTo, FP);
+			
+		},
+		}	
+	end
+	
 
 Trigger {
 	players = {FP},
@@ -4657,7 +4706,7 @@ Trigger { -- No comment (6496767D)
 	actions = {
 		CopyCpAction({DisplayTextX("\x0D\x0D\x0D"..Color[j].."Te".._0D,4)},HumanPlayers,FP);
 		SetDeaths(j-1,Subtract,1,27);
-		SetScore(j-1,Add,100,Custom);
+		SetScore(j-1,Add,5,Custom);
 		SetCDeaths(FP,Add,1,Die_SEC);
 		PreserveTrigger();
 		},
@@ -5016,10 +5065,10 @@ Trigger {
 		SetMemoryX(0x657760, Add, i*4*65536,0xFFFF0000);--계수
 		SetMemoryX(0x656F9C, Add, i*72,0xFFFF);
 		SetMemoryX(0x657764, Add, i*7,0xFFFF);
-		SetMemoryX(0x656EB0, Add, i*32*65536,0xFFFF0000);--
-		SetMemoryX(0x657678, Add, i*3*65536,0xFFFF0000);--
-		SetMemoryW(0x657678+(2*2),Add,10*i);
-		SetMemoryW(0x656EB0+(2*2),Add,256*i);
+		SetMemoryX(0x656EB0, Add, i*120*65536,0xFFFF0000);--
+		SetMemoryX(0x657678, Add, i*16*65536,0xFFFF0000);--
+		SetMemoryW(0x657678+(2*2),Add,8*i);
+		SetMemoryW(0x656EB0+(2*2),Add,204*i);
 		SetMemoryW(0x657678+(122*2),Add,20*i);
 		SetMemoryW(0x656EB0+(122*2),Add,1500*i);
 		
@@ -5042,12 +5091,12 @@ Trigger {
 		SetMemoryB(0x58D088+(4*46)+7,SetTo,50+(200-(40*i)));
 		SetMemoryB(0x58D088+(5*46)+7,SetTo,50+(200-(40*i)));
 
-		SetMemoryB(0x58D088+(0*46)+14,SetTo,50+(200-(40*i)));
-		SetMemoryB(0x58D088+(1*46)+14,SetTo,50+(200-(40*i)));
-		SetMemoryB(0x58D088+(2*46)+14,SetTo,50+(200-(40*i)));
-		SetMemoryB(0x58D088+(3*46)+14,SetTo,50+(200-(40*i)));
-		SetMemoryB(0x58D088+(4*46)+14,SetTo,50+(200-(40*i)));
-		SetMemoryB(0x58D088+(5*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(0*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(1*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(2*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(3*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(4*46)+14,SetTo,50+(200-(40*i)));
+--		SetMemoryB(0x58D088+(5*46)+14,SetTo,50+(200-(40*i)));
 	}
 }
 
@@ -5118,6 +5167,15 @@ TriggerX(FP,{CDeaths(FP,AtLeast,1,isSingle)},{
 SetMemoryX(0x581DAC,SetTo,51*65536,0xFF0000), --P8컬러
 SetMemoryX(0x581DDC,SetTo,51*256,0xFF00); --P8 미니맵
 })
+TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{
+	SetMemoryB(0x57F27C+(228*0)+54,SetTo,0);
+	SetMemoryB(0x57F27C+(228*1)+54,SetTo,0);
+	SetMemoryB(0x57F27C+(228*2)+54,SetTo,0);
+	SetMemoryB(0x57F27C+(228*3)+54,SetTo,0);
+	SetMemoryB(0x57F27C+(228*4)+54,SetTo,0);
+	SetMemoryB(0x57F27C+(228*5)+54,SetTo,0);
+})
+
 
 NWhile(FP,{Bring(FP,AtLeast,1,217,64)})
 TriggerX(FP,CDeaths(FP,Exactly,0,NBMode),{MoveLocation(1,217,FP,64),GiveUnits(1,217,FP,1,8),RemoveUnit(217,8),
@@ -7633,7 +7691,6 @@ Trigger {
 		PreserveTrigger();
 	}
 }
-
 end
 CAdd(FP,0x6509B0,84)
 CWhileEnd()
@@ -7641,6 +7698,96 @@ CMov(FP,0x6509B0,FP)
 DoActions(FP,SetDeaths(Force1,SetTo,0,8))
 CIfEnd()
 
+CIf(FP,CDeaths(FP,AtLeast,1,isSingle))
+local OrderCool = CreateCCodeArr(6)
+local CUnitFlag = CreateCCode()
+local MulCon = CreateVarArr(6,FP)
+local TempPos = CreateVar(FP)
+MCButtonUID = {53,52,54,48,49}
+
+for i = 0, 5 do
+for j, k in pairs(MCButtonUID) do
+	local X = {}
+	if k == 54 or k == 48 or k == 49 then
+		X = {SetCDeaths(FP,Add,100,OrderCool[i+1])}
+	else
+		X = nil
+	end
+	Trigger { -- 버튼 기능
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,k,64);
+		},
+		actions = {
+			SetDeaths(i,SetTo,1,k);
+			RemoveUnitAt(1,k,"Anywhere",i);
+			SetCDeaths(FP,Add,1,CUnitFlag);
+			X;
+			PreserveTrigger();
+		},
+	}
+end
+end
+
+CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag))
+for i = 0, 5 do
+	GetLocCenter(73+i,CPosX,CPosY)
+	CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
+end
+CMov(FP,0x6509B0,19025+19)
+CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+	CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
+	f_SaveCp()
+	for i = 0, 5 do
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+	f_SaveCp()
+	local ValCancle = def_sIndex()
+	NJump(FP,ValCancle,{TMemory(_Add(BackupCP,6),Exactly,58)})
+	CTrigger(FP,{Deaths(i,AtLeast,1,53)}, -- Stop
+	{TSetDeathsX(BackupCP,SetTo,1*256,0,0xFF00)},{Preserved})
+	CIf(FP,{Deaths(i,AtLeast,1,52)}) -- Hold
+		f_Read(FP,_Sub(BackupCP,9),TempPos)
+		CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+	CIfEnd()
+	CIf(FP,{Deaths(i,AtLeast,1,54)}) -- Move
+		CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,6*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,MulCon[i+1],0)})
+	CIfEnd()
+	CIf(FP,{Deaths(i,AtLeast,1,48)}) -- Attack
+		CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCP,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCP,15),SetTo,MulCon[i+1],0)})
+	CIfEnd()
+	CIf(FP,{Deaths(i,AtLeast,1,49)}) -- JYD
+		f_Read(FP,_Sub(BackupCP,9),TempPos)
+		CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,187*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+	CIfEnd()
+	NJumpEnd(FP,ValCancle)
+	f_LoadCp()
+	CIfEnd()
+	end
+	CIfEnd()
+	CAdd(FP,0x6509B0,84)
+CWhileEnd()
+CMov(FP,0x6509B0,FP)
+DoActionsX(FP,{SetDeaths(Force1,SetTo,0,49),SetDeaths(Force1,SetTo,0,48),SetDeaths(Force1,SetTo,0,54),SetDeaths(Force1,SetTo,0,52),SetDeaths(Force1,SetTo,0,53),SetCDeaths(FP,SetTo,0,CUnitFlag)})
+CIfEnd()
+local OrderCooltime2 = {}
+for i = 0, 5 do
+local OrderCooltime = {}
+local OrderCooltimeRecover = {}
+table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+54,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltime,SetMemoryB(0x57F27C+(228*i)+49,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+54,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+48,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+49,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+table.insert(OrderCooltime2,SetCDeaths(FP,Subtract,1,OrderCool[i+1]))
+
+TriggerX(FP,{CDeaths(FP,AtLeast,1,OrderCool[i+1])},{OrderCooltime},{Preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{Preserved})
+end
+DoActionsX(FP,OrderCooltime2)
+
+CIfEnd()--isSingle
 
 CIf(FP,CDeaths(FP,AtLeast,100,ZombieCheck),SetCDeaths(FP,Subtract,100,ZombieCheck))
 CMov(FP,0x6509B0,19025)
@@ -8205,7 +8352,10 @@ Trigger { -- 조합 갤럭시 마린
 		PreserveTrigger();
 	},
 }
-
+local CreateNe = CreateCcodeArr(6)
+local CreateTe = CreateCcodeArr(6)
+local CreateSu = CreateCcodeArr(6)
+local BUpEnable = CreateCcodeArr(6)
 Trigger { -- 조합 네뷸라
 	players = {j},
 	conditions = {
@@ -8219,9 +8369,10 @@ Trigger { -- 조합 네뷸라
 		ModifyUnitEnergy(3,100,j,3,0);
 		SetResources(j,Subtract,NeCost,ore);
 		RemoveUnitAt(3,100,3,j);
-		CreateUnitWithProperties(1,16,2,j,{energy = 100});
+		--
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4);
 		SetDeaths(j,SetTo,1,101);
+		SetCDeaths(FP,Add,1,CreateNe[j+1]);
 		PreserveTrigger();
 	},
 }
@@ -8245,9 +8396,10 @@ Trigger { -- 조합 테라
 		RemoveUnitAt(1,16,3,j);
 		RemoveUnitAt(2,100,3,j);
 		RemoveUnitAt(3,"Terran SCV",3,j);
-		CreateUnitWithProperties(1,0,2,j,{energy = 100});
+		--
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04, \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04, SCV 를 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다. - \x1F"..TeCost.." O r e\n",4);
 		SetDeaths(j,SetTo,1,101);
+		SetCDeaths(FP,Add,1,CreateTe[j+1]);
 		PreserveTrigger();
 	},
 }
@@ -8259,11 +8411,11 @@ Trigger { -- 조합 핵배틀
 		CDeaths(FP,AtMost,0,MarMode);
 		MemoryB(0x58D2B0+(j*46)+7,AtLeast,255);
 		MemoryB(0x58D2B0+(j*46),AtLeast,255);
+		Command(j,AtMost,0,12);
 		Bring(j,Exactly,12,100,3);
 		Bring(j,Exactly,10,"Terran SCV",3);
 		Bring(j,Exactly,1,16,3);
 		Bring(j,Exactly,1,0,3);
-		Bring(j,AtMost,0,12,64);
 		Accumulate(j,AtLeast,SuCost,Ore);
 	},
 	actions = {
@@ -8275,15 +8427,150 @@ Trigger { -- 조합 핵배틀
 		RemoveUnitAt(1,16,3,j);
 		RemoveUnitAt(1,0,3,j);
 		RemoveUnitAt(10,"Terran SCV",3,j);
-		CreateUnitWithProperties(1,12,2,j,{energy = 100});
+		--
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04, SCV를 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ 로 \x19변환\x04하였습니다. - \x1F"..SuCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
-		SetMemoryB(0x58D088+(46*j)+14,SetTo,255);
+		--SetMemoryB(0x58D088+(46*j)+14,SetTo,255);
+		SetCDeaths(FP,Add,1,CreateSu[j+1]);
+		SetCDeaths(FP,Add,1,BUpEnable[j+1]);
 		SetMemoryB(0x58D088+(46*j)+13,SetTo,255);
 		PreserveTrigger();
 	},
 }
+for i = 1, 5 do
 
-CIfX(FP,Bring(j,AtLeast,1,12,64))
+Trigger {
+	players = {j},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtLeast,1,BUpEnable[j+1]);
+		CVar(FP,HiddenAtkM[2],Exactly,i);
+	},
+	actions = {
+		SetMemoryB(0x58D088+(j*46)+14,SetTo,50+(200-(40*i)));
+	}
+}
+
+end
+
+Trigger {
+	players = {j},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtLeast,1,BUpEnable[j+1]);
+		CVar(FP,HiddenAtkM[2],Exactly,0);
+	},
+	actions = {
+		SetMemoryB(0x58D088+(j*46)+14,SetTo,255);
+	}
+}
+local NePtr = CreateVarArr(6,FP)
+local TePtr = CreateVarArr(6,FP)
+local SuPtr = CreateVarArr(6,FP)
+local NeSkill = CreateCcodeArr(6)
+local TeSkill = CreateCcodeArr(6)
+local SuSkill = CreateCcodeArr(6)
+CIf(FP,PlayerCheck(j,1))
+
+CDeaths(FP,AtLeast,1,CreateTe[j+1])
+CDeaths(FP,AtLeast,1,CreateSu[j+1])
+
+SetCDeaths(FP,Subtract,1,CreateNe[j+1]);
+SetCDeaths(FP,Subtract,1,CreateTe[j+1]);
+SetCDeaths(FP,Subtract,1,CreateSu[j+1]);
+
+CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateNe[j+1]),Command(j,AtMost,0,16)},{SetCDeaths(FP,SetTo,0,CreateNe[j+1])}) -- 소환 또는 조합시
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+CMov(FP,NePtr[j+1],Nextptrs)
+DoActions(FP,CreateUnitWithProperties(1,16,2,j,{energy = 100}))
+CDoActions(FP,{
+	TSetMemory(_Add(Nextptrs,0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(Nextptrs,0x9C/4),SetTo,228 + 228*65536);
+})
+CIfEnd()
+
+CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateTe[j+1]),Command(j,AtMost,0,0)},{SetCDeaths(FP,SetTo,0,CreateTe[j+1])}) -- 소환 또는 조합시
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+CMov(FP,TePtr[j+1],Nextptrs)
+DoActions(FP,CreateUnitWithProperties(1,0,2,j,{energy = 100}))
+CDoActions(FP,{
+	TSetMemory(_Add(Nextptrs,0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(Nextptrs,0x9C/4),SetTo,228 + 228*65536);
+})
+CIfEnd()
+
+CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateSu[j+1]),Command(j,AtMost,0,12)},{SetCDeaths(FP,SetTo,0,CreateSu[j+1])}) -- 소환 또는 조합시
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+CMov(FP,SuPtr[j+1],Nextptrs)
+DoActions(FP,CreateUnitWithProperties(1,12,2,j,{energy = 100}))
+CDoActions(FP,{
+	TSetMemory(_Add(Nextptrs,0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(Nextptrs,0x9C/4),SetTo,228 + 228*65536);
+})
+CIfEnd()
+
+CIf(FP,CVar(FP,NePtr[j+1][2],AtLeast,1))
+CTrigger(FP,{TMemory(_Add(NePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,NeSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04의 Skill을 \x06Off \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,1,NeSkill[j+1]),
+	TSetMemory(_Add(NePtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(NePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+CTrigger(FP,{TMemory(_Add(NePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,1,NeSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04의 Skill을 \x1FOn \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,0,NeSkill[j+1]),
+	TSetMemory(_Add(NePtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(NePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+CTrigger(FP,{TMemoryX(_Add(NePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,NePtr[j+1][2],SetTo,0)},1)
+CIfEnd()
+
+CIf(FP,CVar(FP,TePtr[j+1][2],AtLeast,1))
+CTrigger(FP,{TMemory(_Add(TePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,TeSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04의 Skill을 \x06Off \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,1,TeSkill[j+1]),
+	TSetMemory(_Add(TePtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(TePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+CTrigger(FP,{TMemory(_Add(TePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,1,TeSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04의 Skill을 \x1FOn \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,0,TeSkill[j+1]),
+	TSetMemory(_Add(TePtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(TePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+
+CTrigger(FP,{TMemoryX(_Add(TePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,TePtr[j+1][2],SetTo,0)},1)
+CIfEnd()
+
+CIf(FP,CVar(FP,SuPtr[j+1][2],AtLeast,1))
+CTrigger(FP,{TMemory(_Add(SuPtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,SuSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04의 Skill을 \x06Off \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,1,SuSkill[j+1]),
+	TSetMemory(_Add(SuPtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(SuPtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+CTrigger(FP,{TMemory(_Add(SuPtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,1,SuSkill[j+1])},{
+	SetMemory(0x6509B0,SetTo,j);
+	DisplayText("▶ \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04의 Skill을 \x1FOn \x04하였습니다.",4),
+	SetMemory(0x6509B0,SetTo,FP);
+	SetCDeaths(FP,SetTo,0,SuSkill[j+1]),
+	TSetMemory(_Add(SuPtr[j+1],0x98/4),SetTo,0 + 228*65536);
+	TSetMemory(_Add(SuPtr[j+1],0x9C/4),SetTo,228 + 228*65536);
+	},1)
+CTrigger(FP,{TMemoryX(_Add(SuPtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,SuPtr[j+1][2],SetTo,0)},1)
+CIfEnd()
+
+
+CIfX(FP,{Bring(j,AtLeast,1,12,64),CDeaths(FP,Exactly,0,SuSkill[j+1])})
 DoActions(FP,{MoveLocation("P"..j+1,12,j,64)})
 CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","P"..j+1),CDeaths(FP,AtMost,0,BSkillT[j+1])})
 GetLocCenter("P"..j+1,Var_TempTable[2],Var_TempTable[3])
@@ -8295,7 +8582,7 @@ CElseX({RemoveUnit(1,j)})
 CIfXEnd()
 
 
-CIfX(FP,Bring(j,AtLeast,1,16,64))
+CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
 DoActions(FP,{MoveLocation("S"..j+1,16,j,64)})
 CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","S"..j+1),CDeaths(FP,AtMost,0,BSkillT2[j+1])})
 GetLocCenter("S"..j+1,Var_TempTable[2],Var_TempTable[3])
@@ -8306,7 +8593,7 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1]),SetCVar(FP,Var_TempTable[
 CElseX({RemoveUnit(182,j)})
 CIfXEnd()
 
-CIfX(FP,Bring(j,AtLeast,1,0,64))
+CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
 DoActions(FP,{MoveLocation("G"..j+1,0,j,64)})
 CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","G"..j+1),CDeaths(FP,AtMost,0,BSkillT3[j+1])})
 GetLocCenter("G"..j+1,Var_TempTable[2],Var_TempTable[3])
@@ -8317,6 +8604,7 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1]),SetCVar(FP,Var_TempTable[
 CElseX({RemoveUnit(183,j)})
 CIfXEnd()
 
+CIfEnd()
 end
 DoActions(FP,{
 	RemoveUnit(1,P12),
