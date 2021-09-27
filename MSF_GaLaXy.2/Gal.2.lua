@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.3T"
+VName = "Ver.1.3"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
