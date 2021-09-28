@@ -75,13 +75,13 @@ function onInit()
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
-	SuFactor = 257
+	SuFactor = 200
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000
 	TeCost = 50000
 	SuCost = 500000
-	HPointFactor = 30
+	HPointFactor = 20
 	ExRate = 0
 	EasyEx1P = 110
 	HDEx1P = 120
@@ -263,6 +263,7 @@ function SetZergGroupFlags(UnitID)
 	for i = 60,81 do
 	unitSizePatch(i,5)
 	end
+	unitSizePatch(103,5)
 	unitSizePatch(3,5)
 	unitSizePatch(5,1)
 	unitSizePatch(10,5)

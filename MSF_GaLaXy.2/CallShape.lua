@@ -58,7 +58,12 @@ function Install_Shape()
 	TestSh1 = CS_FillPathHX(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),1,48,48,2)
 	TestSh2 = CS_FillPathHX(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),1,48,48,3)
 	--CS_Distortion()
-	BattleShape = CSMakeStar(5,165-(12*(5-2)),(36*6)-(36*2),180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
+	BattleShape = CSMakeStar(5,165-(12*(5-2)),((36*6)-(36*2))/2,180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
+
+	NeShape = CSMakePolygon(6,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(6,1),0)
+
+	TeShape = CSMakeStar(4,165-(12*(4-2)),((36*6)-(36*1))/2,180,PlotSizeCalc(4*2,1),0)
+
 	G_CAPlot_Shape_InputTable = {
 		"L00_1_64F","L00_1_96F","L00_1_128F","L00_1_164F","L00_1_64L","L00_1_96L","L00_1_128L","L00_1_164L",	
 		"H00_1_64F","H00_1_82F","H00_1_96F","H00_1_128F","H00_1_64L","H00_1_82L","H00_1_96L","H00_1_128L",
@@ -68,7 +73,9 @@ function Install_Shape()
 		"Chry_N","Chry_H","Chry_B",
 		"HLC","HRC","HUC","HDC",
 		"Boss1","Boss2","Boss3","Boss4",
-		"TestSh1","TestSh2","BattleShape"
+		"TestSh1","TestSh2","BattleShape",
+		"NeShape","TeShape"
+
 	}
 
 	for p, s in pairs(PySuPos) do

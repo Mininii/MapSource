@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.3"
+VName = "Ver.1.4"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -4950,8 +4950,10 @@ SetRecoverCp()
 RecoverCp(FP)
 CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{SetCDeaths(FP,SetTo,1,BGMMode),ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100)}) -- onPluginStart
 NBT = {}
+MarModePatch = {}
 for i = 0, 5 do
 	table.insert(NBT,SetMemoryB(0x57F27C+(228*i)+125,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+	table.insert(MarModePatch,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 
 end
 
@@ -4989,6 +4991,8 @@ SetMemoryX(0x581DDC,SetTo,166*256,0xFF00); --P8 미니맵
 		
 },
 }
+
+TriggerX(FP,{CDeaths(FP,AtLeast,1,MarMode)},MarModePatch)
 CIf(FP,CDeaths(FP,AtLeast,7,HiddenMode))
 Trigger {
 	players = {FP},
@@ -5065,8 +5069,10 @@ Trigger {
 		SetMemoryX(0x657760, Add, i*4*65536,0xFFFF0000);--계수
 		SetMemoryX(0x656F9C, Add, i*72,0xFFFF);
 		SetMemoryX(0x657764, Add, i*7,0xFFFF);
-		SetMemoryX(0x656EB0, Add, i*120*65536,0xFFFF0000);--
-		SetMemoryX(0x657678, Add, i*16*65536,0xFFFF0000);--
+		SetMemoryX(0x656EB0, Add, i*32*65536,0xFFFF0000);--
+		SetMemoryX(0x657678, Add, i*3*65536,0xFFFF0000);--
+		SetMemoryX(0x656EB0, Add, i*120,0xFFFF);--
+		SetMemoryX(0x657678, Add, i*16,0xFFFF);--
 		SetMemoryW(0x657678+(2*2),Add,8*i);
 		SetMemoryW(0x656EB0+(2*2),Add,204*i);
 		SetMemoryW(0x657678+(122*2),Add,20*i);
@@ -7247,13 +7253,21 @@ SetMemoryB(0x6636B8+204, SetTo, 124), -- 무기변경
 --SetMemoryW(0x657780 + (2*124), SetTo, 384), -- 스플
 })
 NWhile(FP,CVar(FP,B1_E[2],AtLeast,1),SetCVar(FP,B1_E[2],Subtract,1))
+RandRet2 = CreateVar(FP)
+CPosX2 = CreateVar(FP)
+CPosY2 = CreateVar(FP)
 
-f_Mod(FP,B1_X,_Rand(),640)
-f_Mod(FP,B1_Y,_Rand(),576)
-f_Mod(FP,B1_A,_Rand(),256)
-CAdd(FP,B1_X,384)
-CAdd(FP,B1_Y,224)
-CreateBullet(204,20,B1_A,{B1_X,B1_Y})
+local Randnum = f_CRandNum(360)
+CMov(FP,RandRet2,Randnum)
+f_Mod(FP,InputMaxRand,_Rand(),_Mov(10*32))
+CallTriggerX(FP,CRandNum,nil,{SetCVar(FP,Oprnd[2],SetTo,0)})
+f_Lengthdir(FP,TempRandRet,RandRet2,CPosX2,CPosY2)
+GetLocCenter("36",B1_X,B1_Y)
+CAdd(FP,B1_X,CPosX2)
+CAdd(FP,B1_Y,CPosY2)
+local Randnum = f_CRandNum(256)
+
+CreateBullet(204,20,Randnum,{B1_X,B1_Y})
 
 
 NWhileEnd()
@@ -8095,7 +8109,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04(1기 제한)\n\x12\x04특수 마린에 기존에 있던 스킬은 제거됨\n\x12\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete\n\n\n",4);
 		PreserveTrigger();
 	},
 }
@@ -8107,7 +8121,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04???*255 + ???*255 + ???*12 + ???*10 + ??? + ??? + \x1F"..SUCost.."원 = \x04？？？？？？？？？\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04？？？？？？？？？\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
 		PreserveTrigger();
 	},
 }
@@ -8376,7 +8390,24 @@ Trigger { -- 조합 네뷸라
 		PreserveTrigger();
 	},
 }
-
+Trigger { -- 조합 네뷸라 마린모드
+	players = {j},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,1,MarMode);
+		Bring(j,AtLeast,1,100,3);
+		Accumulate(j,AtLeast,NeCost,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,100,j,3,0);
+		SetResources(j,Subtract,NeCost,ore);
+		RemoveUnitAt(1,100,3,j);
+		CreateUnitWithProperties(1,16,2,j,{energy = 100});
+		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4);
+		SetDeaths(j,SetTo,1,101);
+		PreserveTrigger();
+	},
+}
 
 Trigger { -- 조합 테라
 	players = {j},
@@ -8403,7 +8434,25 @@ Trigger { -- 조합 테라
 		PreserveTrigger();
 	},
 }
-
+Trigger { -- 조합 테라 마린모드
+	players = {j},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,1,MarMode);
+		Command(j,AtMost,0,0);
+		Bring(j,AtLeast,1,16,3);
+		Accumulate(j,AtLeast,TeCost,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,16,j,3,0);
+		SetResources(j,Subtract,TeCost,ore);
+		RemoveUnitAt(1,16,3,j);
+		CreateUnitWithProperties(1,0,2,j,{energy = 100});
+		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04, \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04, SCV 를 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다. - \x1F"..TeCost.." O r e\n",4);
+		SetDeaths(j,SetTo,1,101);
+		PreserveTrigger();
+	},
+}
 Trigger { -- 조합 핵배틀
 	players = {j},
 	conditions = {
@@ -8469,7 +8518,7 @@ local SuPtr = CreateVarArr(6,FP)
 local NeSkill = CreateCcodeArr(6)
 local TeSkill = CreateCcodeArr(6)
 local SuSkill = CreateCcodeArr(6)
-CIf(FP,PlayerCheck(j,1))
+CIf(FP,{CDeaths(FP,AtMost,0,MarMode),PlayerCheck(j,1)})
 
 CDeaths(FP,AtLeast,1,CreateTe[j+1])
 CDeaths(FP,AtLeast,1,CreateSu[j+1])
@@ -8581,12 +8630,11 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1]),SetCVar(FP,Var_TempTable[2
 CElseX({RemoveUnit(1,j)})
 CIfXEnd()
 
-
 CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
 DoActions(FP,{MoveLocation("S"..j+1,16,j,64)})
 CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","S"..j+1),CDeaths(FP,AtMost,0,BSkillT2[j+1])})
 GetLocCenter("S"..j+1,Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({},{182},P_6,0,"MAX",5,nil,nil,j)
+G_CA_SetSpawn({},{182},"ACAS","NeShape","MAX",5,nil,nil,j)
 CIfEnd()
 TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT2[j+1]),RemoveUnit(182,j)},{Preserved})
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
@@ -8597,7 +8645,7 @@ CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
 DoActions(FP,{MoveLocation("G"..j+1,0,j,64)})
 CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","G"..j+1),CDeaths(FP,AtMost,0,BSkillT3[j+1])})
 GetLocCenter("G"..j+1,Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({},{183},S_4,0,"MAX",6,nil,nil,j)
+G_CA_SetSpawn({},{183},"ACAS","TeShape","MAX",6,nil,nil,j)
 CIfEnd()
 TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT3[j+1]),RemoveUnit(183,j)},{Preserved})
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
@@ -9415,6 +9463,8 @@ Trigger { -- 게임승리
 	conditions = {
 		Label(0);
 		CDeaths(FP,Exactly,i,GMode);
+		CDeaths(FP,Exactly,j,MarMode);
+		CDeaths(FP,Exactly,l,NBMode);
 		CVar(FP,SetPlayers[2],Exactly,k);
 		CDeaths(FP,AtLeast,280,Win);
 		},
@@ -9559,6 +9609,8 @@ Trigger { -- 게임승리
 	conditions = {
 		Label(0);
 		CDeaths(FP,Exactly,i,GMode);
+		CDeaths(FP,Exactly,j,MarMode);
+		CDeaths(FP,Exactly,l,NBMode);
 		CVar(FP,SetPlayers[2],Exactly,k);
 		CDeaths(FP,AtLeast,280,Win);
 		},
