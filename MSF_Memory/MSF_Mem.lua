@@ -4139,6 +4139,7 @@ CIf(P6,{Deaths(P6,AtLeast,1,72)}) -- 마린타노스 전용 데스값 인식
 	CJumpEnd(P6,0x600)
 	DoActions(P6,MoveCp(Subtract,6*4))
 CIfEnd()
+
 CIfX(P6,{CDeaths(FP,AtLeast,1,MarineStackSystem)})
 	DoActions(P6,{MoveCp(Add,6*4)})
 	CIf(P6,TTOR({
