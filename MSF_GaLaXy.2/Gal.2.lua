@@ -4370,23 +4370,23 @@ CIfX(FP,Never())
 
 
 
-	for i = 0, 5 do
-	CElseIfX(PlayerCheck(i,1))
-	f_Read(FP,0x6284E8+(i*0x30),Cunit2,Cunit3)
---	CMov(FP,Dt,_ReadF(0x58A364+48*180+4*i))--
-	Trigger {
-		players = {FP},
-		conditions = {
-			Command(i,AtMost,0,218);
-			Command(AllPlayers,AtLeast,1,218);		
-		},
-		actions = {
-			GiveUnits(All,218,AllPlayers,"Anywhere",i);
-			GiveUnits(All,160,AllPlayers,"Anywhere",i);
-		}
+for i = 0, 5 do
+CElseIfX(PlayerCheck(i,1))
+f_Read(FP,0x6284E8+(i*0x30),Cunit2,Cunit3)
+--CMov(FP,Dt,_ReadF(0x58A364+48*180+4*i))--
+Trigger {
+	players = {FP},
+	conditions = {
+		Command(i,AtMost,0,218);
+		Command(AllPlayers,AtLeast,1,218);		
+	},
+	actions = {
+		GiveUnits(All,218,AllPlayers,"Anywhere",i);
+		GiveUnits(All,160,AllPlayers,"Anywhere",i);
 	}
-	end
-	CIfXEnd()
+}
+end
+CIfXEnd()
 CIfOnce(FP,{TMemory(_Mem(Dt),AtLeast,10000)})
 CMov(FP,Dt,0)
 CIfEnd()

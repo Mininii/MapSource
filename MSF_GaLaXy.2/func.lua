@@ -1168,12 +1168,12 @@ f_Div(Player,CPosY,_Mov(0x10000))
 SetCallEnd()
 end
 
-function f_ForcePosSave(Condition,UID,X,Y,VoiDN)
+function f_ForcePosSave(Condition,UID,X,Y,VoidN)
 	CallTriggerX(FP,Force_PosSave_CallIndex,Condition,{
 	SetCVar(FP,f_GunUID[2],SetTo,UID),
 	SetCVar(FP,CPosX[2],SetTo,X),
 	SetCVar(FP,CPosY[2],SetTo,Y),
-	SetCVar(FP,CVoid_ID2[2],SetTo,VoiDN)})
+	SetCVar(FP,CVoid_ID2[2],SetTo,VoidN)})
 end
 
 

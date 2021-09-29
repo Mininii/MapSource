@@ -87,10 +87,6 @@ function onInit()
 	HDEx1P = 120
 	BurEx1P = 140
 	GunLimit = 1450
-	for i = 65, 255 do
-	
-	table.insert(PatchArr2,SetMemoryX(0x58DC70 + (20*(i)),SetTo,0 ,4128768))
-	end
 	--Patch
 	for j = 0, 5 do
 	table.insert(PatchArr2,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
