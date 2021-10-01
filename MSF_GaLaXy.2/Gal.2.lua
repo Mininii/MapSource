@@ -30,9 +30,9 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 0
+Limit = 1
 GunSafety = 0
-VName = "Ver.1.4"
+VName = "Ver.1.5"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -2914,7 +2914,7 @@ Trigger {
 		players = {FP},
 		conditions = {
 			Label(0);
-			isname(i,"UnusedTypeGB");
+			isname(i,"RonaRonaChan");
 			CDeaths(FP,AtLeast,1,LimitX);
 		},
 		actions = {
