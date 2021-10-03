@@ -488,7 +488,7 @@ UnitSizePatch(121,10)
 		players = {FP},
 		conditions = {
 			Label(0);
-			isname(i,"UnusedTypeGB");
+			isname(i,"RonaRonaChan");
 			CDeaths(FP,AtLeast,1,LimitX);
 		},
 		actions = {
@@ -632,7 +632,7 @@ UnitSizePatch(121,10)
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ÄÃ·¯f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ¹Ì´Ï¸Ê
-			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2,SetSwitch("Switch 211",Set)
+			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2
 		})
 	CElseX()
 	DoActions(FP,SinglePatch)
@@ -661,7 +661,11 @@ UnitSizePatch(121,10)
 	end
 	f_GetStrXptr(FP,DBoss_PrintScore,"\x0D\x0D\x0DDBossSC".._0D)
 	f_GetStrXptr(FP,DBoss_PrintScore2,"\x0D\x0D\x0DDBossDMG".._0D)
-
+	f_GetStrXptr(FP,PointStrPtr,"\x0D\x0D\x0DGetP".._0D)
+	f_GetStrXptr(FP,KillScStrPtr,"\x0D\x0D\x0DKillP".._0D)
+	f_GetStrXptr(FP,StatusStrPtr1,"\x0D\x0D\x0DUStat".._0D)
+	f_GetStrXptr(FP,HiScoreStrPtr,"\x0D\x0D\x0DHiSc".._0D)
+	
 
 	Print_All_CTextString(FP)
 	f_MemCpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
@@ -675,6 +679,20 @@ UnitSizePatch(121,10)
 	f_MemCpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
 	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 	f_MemCpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
+
+	f_MemCpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
+	f_MemCpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
+	f_MemCpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
+	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
+	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+
+
+	f_MemCpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
+	f_MemCpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(5*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
+	f_MemCpy(FP,_Add(HiScoreStrPtr,StatPT[2]+(5*4)+HiScoreT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+	
+	f_Read(FP,0x57F1B0,LocalPV)
+	
 
 	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
 

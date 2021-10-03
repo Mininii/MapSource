@@ -1,5 +1,4 @@
 function GameOver()
-    Win = CreateCCode()
 --    local GameOverTrig = SetCDeaths(FP,SetTo,1,Win);
 --    if TestStart == 1 then
 --        GameOverTrig = SetCDeaths(FP,SetTo,1,ScorePrint);
@@ -146,7 +145,7 @@ function GameOver()
             conditions = {
                 Label(0);
                 CDeaths(FP,AtMost,0,TestMode);
-                CDeaths(FP,AtLeast,450,Win);
+                CDeaths(FP,AtLeast,1350,Win);
             },
             actions = {
                 RotatePlayer({Victory()},MapPlayers,FP);

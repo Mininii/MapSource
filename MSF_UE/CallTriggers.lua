@@ -1045,6 +1045,33 @@ local CB_Y = CreateVar(FP)
 		}
 		CIfEnd()
 		end
+		CIf(FP,CDeaths(FP,AtLeast,1,Win))
+			ReadScore = CreateVar(FP)
+			for i = 0, 6 do
+				CIf(FP,{PlayerCheck(i,1)})
+					f_Div(FP,ReadScore,ExScore[i+1],1000)
+					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),
+					SetDeaths(0,SetTo,1,14)})
+					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),
+					DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
+					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
+					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
+					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
+					SetMemory(0x6509B0,SetTo,FP)},1)
+					GetPVA = CreateVarray(FP,13)
+					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
+					_0DPatchX(FP,GetPVA,12)
+					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
+					f_MemCpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+					DoActions(FP,{
+						SetMemory(0x6509B0,SetTo,i),
+						DisplayText("\x0D\x0D\x0DKillP".._0D,4),
+						SetMemory(0x6509B0,SetTo,FP)
+					})
+				CIfEnd()
+			end
+
+		CIfEnd()
 if TestStart == 1 then
 	CIf(FP,CDeaths(FP,AtLeast,0,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
 else

@@ -2,16 +2,16 @@ function PlayerInterface()
 	local MarCreate = Create_CCTable(7)
 	local MarCreate2 = Create_CCTable(7)
 	local UpSELemit = Create_CCTable(7)
-	local AtkFactorV = Create_VTable(7,AtkFactor)
-	local DefFactorV = Create_VTable(7,DefFactor)
-	local AtkFactorV2 = Create_VTable(7)
-	local DefFactorV2 = Create_VTable(7)
-	local MarHP = Create_VTable(7)
-	local MarHP2 = Create_VTable(7)
-	local DefUpCompCount = Create_VTable(7)
-	local AtkUpCompCount = Create_VTable(7)
-	local CurrentHP = Create_VTable(7)
-	local MarMaxHP = Create_VTable(7,10000*256)
+	local AtkFactorV = Create_VTable(7,AtkFactor,FP)
+	local DefFactorV = Create_VTable(7,DefFactor,FP)
+	local AtkFactorV2 = Create_VTable(7,nil,FP)
+	local DefFactorV2 = Create_VTable(7,nil,FP)
+	local MarHP = Create_VTable(7,nil,FP)
+	local MarHP2 = Create_VTable(7,nil,FP)
+	local DefUpCompCount = Create_VTable(7,nil,FP)
+	local AtkUpCompCount = Create_VTable(7,nil,FP)
+	local CurrentHP = Create_VTable(7,nil,FP)
+	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
@@ -25,6 +25,15 @@ function PlayerInterface()
 	local ShUsed = Create_CCTable(7)
 	local GiveRate = Create_CCTable(7)
 	local OrderCool = CreateCCodeArr(7)
+	local AvailableStat = Create_VTable(7,nil,FP)
+	local CurrentStat = Create_VTable(7,nil,FP)
+	local MaxLevel = Create_VTable(7,nil,FP)
+	local MaxScore = Create_VTable(7,nil,FP)
+
+	--스탯
+	local Supply = CreateCcodeArr(7)
+	local MultiCommand = CreateCcodeArr(7)
+	local MultiStimPack = CreateCcodeArr(7)
 	
 	for i = 0, 6 do
 		table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+0+i)%4)
@@ -40,6 +49,71 @@ function PlayerInterface()
 		table.insert(MarShMaskRetArr,(0x660E00 + (MariD[i+1]*2))%4)
 		table.insert(MarShPtrArr,0x660E00 + (MariD[i+1]*2) - (MarShMaskRetArr[i+1]))
 	end
+
+	local InsertKey = {}
+	InsertKey[1] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04이 맵은 클리어의 개념이 없으며 \n\x13\x08게임 오버 \x04시 \x1F달성한 단계\x04와 \x07스코어(가스)\x04가 게임의 성과를 나타냅니다.\n\x13\x04당신의 한계를 시험해 보세요!\n\x13\x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[2] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\x1CS C Archive \x04설명\n\x13\x04현재 저장이 지원되는 항목은 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다.\n\x13\x04그외 \x1F미네랄\x04, \x17업그레이드 수치\x04, \x1B마린 수 \x04등은 \x08저장이 불가능합니다.\n\x13\x04스탯 포인트로 다양한 이로운 효과를 얻을 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D1 Level \x04스테이지에서만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[3] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04스탯포인트 증가량 공식은 시작난이도에 따라 달라집니다.\n\x13\x04\x0EＥａｓｙ\x04 = 증가량X \x0FＮｏｒｍａｌ\x04 = +3\n\x13\x04\x08Ｈａｒｄ\x04 = +6 \x10Ｉｎｓａｎｅ\x04 = +9\n\x13\x04위의 값에서 클리어한 스테이지의 수치가 합산되어 더해집니다.\n\x13\x04\n\x13\x04Ex) 8스테이지 클리어 + \x08Ｈａｒｄ\x04난이도 = 8 + 6 = +14 증가\n\x13\x04\n\x13\x04즉, 높은 난이도에서 시작할 수록 더 많은 스탯포인트를 얻을 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	local InsertPage = CreateCcode()
+	local KeyToggle = CreateCcode()
+	CMov(FP,0x6509B0,LocalPV)
+	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},{},{Preserved})
+	CIfX(FP,{Deaths(CurrentPlayer,Exactly,0,CPConsole)})
+	Trigger2X(FP,{MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,Add,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
+	Trigger2X(FP,{MemoryX(0x596A38, Exactly, 0x00010000,0x10000),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,Subtract,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
+	Trigger2X(FP,{Memory(0x596A44, Exactly, 0x00000100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
+	for i = 0, 2 do
+	Trigger2X(FP,{CDeaths(FP,Exactly,i,InsertPage),CDeaths(FP,Exactly,1,DeleteToggle)},{DisplayText(InsertKey[i+1],4)},{Preserved})
+	end
+	CElseX(SetCDeaths(FP,SetTo,0,DeleteToggle)) -- 현재스탯 등 출력
+	local AvailableStatVA = CreateVarray(FP,7)
+	local CurrentStatVA = CreateVarray(FP,7)
+	local MaxLevelVA = CreateVarray(FP,7)
+	local MaxScoreVA = CreateVarray(FP,7)
+		for i = 0, 6 do
+		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP)})
+		ItoDec(FP,AvailableStat[i+1],VArr(AvailableStatVA,0),2,nil,2)
+		ItoDec(FP,CurrentStat[i+1],VArr(CurrentStatVA,0),2,nil,2)
+		ItoDec(FP,MaxLevel[i+1],VArr(MaxLevelVA,0),2,0x1F,2)
+		ItoDec(FP,MaxScore[i+1],VArr(MaxScoreVA,0),2,0x07,2)
+		CIfEnd()
+		end
+
+		_0DPatchX(FP,AvailableStatVA,6)
+		_0DPatchX(FP,CurrentStatVA,6)
+		_0DPatchX(FP,MaxLevelVA,6)
+		_0DPatchX(FP,MaxScoreVA,6)
+		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]),VArr(AvailableStatVA,0),5*4)
+		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]+DBossT2[2]+(5*4)),VArr(CurrentStatVA,0),5*4)
+
+		
+		f_Movcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]),VArr(MaxLevelVA,0),5*4)
+		f_Movcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+HiScoreT2[2]+(5*4)),VArr(MaxScoreVA,0),5*4)
+
+
+		CMov(FP,0x6509B0,LocalPV)--CP 로컬로 전환
+
+		DoActions(FP,{DisplayText(string.rep("\n", 20),4),
+		DisplayText("\x0D\x0D\x0DHiSc".._0D,4),
+		DisplayText("\x0D\x0D\x0DUStat".._0D,4)})
+
+		Trigger2X(FP,{MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
+			PlayWAV("sound\\Misc\\Buzz.wav"),
+			print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』"),SetDeaths(CurrentPlayer,SetTo,150,15);},{Preserved})
+		Trigger2X(FP,{MemoryX(0x596A38, Exactly, 0x00010000,0x10000),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
+			PlayWAV("sound\\Misc\\Buzz.wav"),
+			print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』"),SetDeaths(CurrentPlayer,SetTo,150,15);},{Preserved})
+		Trigger2X(FP,{Memory(0x596A44, Exactly, 0x00000100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
+			PlayWAV("sound\\Misc\\Buzz.wav"),
+			print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』"),SetDeaths(CurrentPlayer,SetTo,150,15);},{Preserved})
+
+	CIfXEnd()
+	Trigger2X(FP,{Memory(0x596A38, Exactly, 0),Memory(0x596A44, Exactly, 0),CDeaths(FP,Exactly,1,KeyToggle)},{SetCDeaths(FP,SetTo,0,KeyToggle)},{Preserved})
+	
+	Trigger2X(FP,{Memory(0x596A44, Exactly, 65536)},{SetCDeaths(FP,SetTo,0,DeleteToggle),DisplayText(string.rep("\n", 20),4)},{Preserved})
+
+	DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
+
 
 	for i = 0, 6 do -- 각플레이어
 		if i ~= 0 then --강퇴트리거는 1플레이어 제외
@@ -64,6 +138,22 @@ function PlayerInterface()
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
 					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);
 					
@@ -110,7 +200,7 @@ function PlayerInterface()
 				DisplayText("\x13\x04"..string.rep("―", 56),4);
 				DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
 				DisplayText("\n",4);
-				DisplayText("\x13\x03공격력 \x04업그레이드를 10회 완료하였습니다.\n\x13\x04이제부터 \x1B원격 스팀팩\x04을 사용할 수 있습니다.",0);
+				DisplayText("\x13\x1B원격 스팀팩 \x04을 구입하셨습니다.\n\x13\x04이제부터 \x1B원격 스팀팩\x04을 사용할 수 있습니다.",0);
 				DisplayText("\n",4);
 				DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
 				DisplayText("\x13\x04"..string.rep("―", 56),4);
@@ -249,10 +339,12 @@ function PlayerInterface()
 		
 		Trigger2(i,{Memory(0x582294+(4*i),AtLeast,1)},{SetMemory(0x582294+(4*i),Subtract,1)},{Preserved})
 		
-		TriggerX(FP,{Deaths(i,AtLeast,1,CPConsole),Memory(0x57F1B0,Exactly,i)},{
-			print_utf8(12,0,"\x07[ \x1F기부모드 ON. \x04숫자키를 눌러 기부하세요. 기부단위변경 : ~키, ESC : 닫기\x07 ]")
+		TriggerX(FP,{Deaths(i,AtMost,0,15),Deaths(i,AtLeast,1,CPConsole),Memory(0x57F1B0,Exactly,i)},{SetCDeaths(FP,SetTo,0,DeleteToggle),
+			print_utf8(12,0,"\x07[ \x1F기부, \x19스탯창\04이 켜져있습니다. ESC : 닫기\x07 ]")
 		},{Preserved}) -- 13번줄 프린트 트리거 플레이어가 FP인 이유는 트리거 순서가 1P부터 8P까지 실행되기 때문. i로 하게될 경우 이게 씹히고 위에있는 CText가 보이게 된다. 
+		CIf(FP,{Deaths(i,AtLeast,1,CPConsole)}) -- 스탯창 인터페이스
 		
+		CifEnd()
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,0,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,1,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		--CPConsole
@@ -408,6 +500,24 @@ function PlayerInterface()
 
 
 		CIfX(FP,PlayerCheck(i,1)) -- FP가 관리하는 시스템 부분 트리거. 각플레이어가 있을경우 실행된다.
+		--SCA 데이터 변동시 갱신
+		local TempStat = CreateVar(FP)
+		local TempStat2 = CreateVar(FP)
+		CIf(FP,{TTDeaths(i,NotSame,CurrentStat[i+1],4)})
+			f_Read(FP,0x58A364+(48*4)+(4*i),TempStat)
+			CSub(FP,TempStat2,TempStat,CurrentStat[i+1])
+			CMov(FP,CurrentStat[i+1],TempStat)
+			CAdd(FP,AvailableStat[i+1],TempStat2)
+		CIfEnd()
+		CIf(FP,{TTDeaths(i,NotSame,MaxLevel[i+1],6)})
+			f_Read(FP,0x58A364+(48*6)+(4*i),TempStat)
+			CMov(FP,MaxLevel[i+1],TempStat)
+		CIfEnd()
+		CIf(FP,{TTDeaths(i,NotSame,MaxScore[i+1],24)})
+			f_Read(FP,0x58A364+(48*24)+(4*i),TempStat)
+			CMov(FP,MaxScore[i+1],TempStat)
+		CIfEnd()
+
 		CIf(FP,{Deaths(i,AtLeast,36,126),Bring(i,AtLeast,1,12,64)})
 			TriggerX(FP,{Bring(i,AtLeast,1,12,64)},{
 				SetMemory(0x6509B0,SetTo,i),
@@ -643,7 +753,7 @@ function PlayerInterface()
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
 		})
-		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,OrderCool[i+1])})
+		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,OrderCool[i+1]),SetDeaths(i,Subtract,1,15)})
 		
 		
 		

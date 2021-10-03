@@ -254,11 +254,36 @@ function KetInput(Key,Conditions,Actions,PreserveFlag)
 	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Conditions},{SetDeaths(CurrentPlayer,SetTo,0,Key),Actions},X)
 end
 
+function Print_13_2(PlayerID,DisplayPlayer,String)
+	local X = {}
+	local Y = {}
+	PlayerID = PlayerConvert(PlayerID)
+	if type(DisplayPlayer) == "number" then
+		temp = {DisplayPlayer}
+		DisplayPlayer = temp
+	end
+	for k, P in pairs(DisplayPlayer) do
+		table.insert(X,CreateUnit(1,0,"Anywhere",P))
+	end
+	if String ~= nil then
+		table.insert(Y,print_utf8(12, 0, String))
+	end
+	CIf(PlayerID,Memory(0x628438,AtLeast,1))
+		f_ReadX(PlayerID,0x628438,V(FuncAlloc),1,0xFFFFFF)
+		DoActionsX(PlayerID,{SetMemory(0x628438,SetTo,0),X,Y})
+		CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
+	CIfEnd()
+	FuncAlloc = FuncAlloc + 1
+end
 function Print13_Preserve()
 	local Print13 = CreateCCode()
 	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
-			Print_13(FP,{P1,P2,P3,P4,P5,P6,P7},nil)
+			for i = 0, 6 do
+				CIf(FP,{PlayerCheck(i,1),Deaths(i,AtMost,0,15)})
+					Print_13_2(FP,{i},nil)
+				CIfEnd()
+			end
 		CIfEnd()
 		DoActionsX(FP,SetCDeaths(FP,Subtract,1,Print13))
 	CIfEnd()

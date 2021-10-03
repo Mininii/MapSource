@@ -5,7 +5,7 @@ function OPTrig()
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부\x04 : F9, \x1C배속조정 \x04: F12\x07 ]")},1)
+        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then
@@ -99,8 +99,8 @@ function OPTrig()
     --		SetMemory(0x6415BC, SetTo, 0x200480B6);
     --		SetMemory(0x6415C0, SetTo, 0x3946203A);
     --		SetMemory(0x6415C4, SetTo, 0x005D2007);
-        
-        
+    for i = 0, 6 do
+    CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,i)})
     Print13_NumSet(LevelPtr,0x64159C,100,0x10000)
     Print13_NumSet(LevelPtr,0x64159C,10,0x1000000)
     Print13_NumSet(LevelPtr,0x6415A0,1,0x1)
@@ -110,8 +110,8 @@ function OPTrig()
     Print13_NumSet(TimePtr,0x6415AC,60000,0x1)
     Print13_NumSet(TimePtr,0x6415B0,10000,0x1)
     Print13_NumSet(TimePtr,0x6415B0,1000,0x100)
-        
-        
+    CIfEnd()
+    end
         
     CMov(FP,0x6509B0,CurrentOP)
     CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT)})
@@ -121,11 +121,11 @@ function OPTrig()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{Preserved})
     end    
     TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
     if TestStart ==1 then
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCDeaths(FP,Add,150+(48*4),IntroT)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{Preserved})
     else
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
     end
         DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 난이도를 선택해주세요. 숫자가 클수록 어려워집니다. \x1E◀\n\x13\x04숫자버튼 또는 방향키로 선택 후 Y를 눌러주세요.\n\x13\x03１ \x04２ ３ ４ Press (Y) to Start",4)},HumanPlayers,FP)},1)
         CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
