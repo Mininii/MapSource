@@ -246,7 +246,7 @@ function EPDToPtr(EPD)
 	return 0x58A364+(EPD*4)
 end
 
-function KetInput(Key,Conditions,Actions,PreserveFlag)
+function KeyInput(Key,Conditions,Actions,PreserveFlag)
 	X = {}
 	if PreserveFlag == 1 then
 		X = {Preserved}

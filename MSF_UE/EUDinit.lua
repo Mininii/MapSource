@@ -665,6 +665,8 @@ UnitSizePatch(121,10)
 	f_GetStrXptr(FP,KillScStrPtr,"\x0D\x0D\x0DKillP".._0D)
 	f_GetStrXptr(FP,StatusStrPtr1,"\x0D\x0D\x0DUStat".._0D)
 	f_GetStrXptr(FP,HiScoreStrPtr,"\x0D\x0D\x0DHiSc".._0D)
+	f_GetStrXptr(FP,NukeStrPtr,"\x0D\x0D\x0DNuke".._0D)
+	f_GetStrXptr(FP,SupplyStrPtr,"\x0D\x0D\x0DSupp".._0D)
 	
 
 	Print_All_CTextString(FP)
@@ -690,6 +692,17 @@ UnitSizePatch(121,10)
 	f_MemCpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
 	f_MemCpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(5*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
 	f_MemCpy(FP,_Add(HiScoreStrPtr,StatPT[2]+(5*4)+HiScoreT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+
+	
+	f_MemCpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
+	f_MemCpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
+
+	
+	f_MemCpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])
+	f_MemCpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)),_TMem(Arr(SupplyT2[3],0),"X","X",1),SupplyT2[2])
+	f_MemCpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)+SupplyT2[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
+
+
 	
 	f_Read(FP,0x57F1B0,LocalPV)
 	

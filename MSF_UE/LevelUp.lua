@@ -219,7 +219,7 @@ function LevelUp()
 			table.insert(ButtonPatch,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 			table.insert(ButtonPatch,SetMemoryB(0x57F27C+(228*i)+70,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		end
-		TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
+		--TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
 		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
 		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
 		if Limit == 0 then

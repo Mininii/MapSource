@@ -42,9 +42,11 @@ CIf(FP,Switch("Switch 240",Set))
 	CIfEnd()
     CMov(FP,TimePtr,Time)
     CMov(FP,LevelPtr,Level)
+CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
+	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*2)
+CIfEnd()
 
-
-	CIfEnd()
+CIfEnd()
 	for i = 0, 6 do
 	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x57F1B0,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07±‚∫Œ, Ω∫≈» √¢\x04 : F9\x07 ]")},{Preserved})
 	end

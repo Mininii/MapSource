@@ -26,6 +26,12 @@ function Var_init()
 
 	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
 
+	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 \x04구입(W) \x1F(Cost:1) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:1) \x07(1회 구입당 3 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵\x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
+
+	ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
+
 	DBossTotalDMGT = CreateCText(FP,"\x13\x1FＢ\x04ｏｓｓ \x08Ｂ\x04ａｔｔｌｅ \x07Ｂ\x04ｏｎｕｓ : ")
 	HTextStrReset = CreateCText(FP,HTextStr)
 	HeroVArr = CreateVarray(FP,#HeroArr)
@@ -44,7 +50,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,84*2)
+	MarNumberLimit = CreateVar3(FP,(84*2)*10)
 	MaxHPBackUp = CreateVarray(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
@@ -149,7 +155,9 @@ function Var_init()
 	SetPlayers = CreateVar(FP)
 	LocalPV = CreateVar(FP)
 	HiScoreStrPtr = CreateVar(FP)
-
+	NukeStrPtr = CreateVar(FP)
+	SupplyStrPtr = CreateVar(FP)
+	SuppMax = CreateVar(FP)
 	end
 
 function HPoints()
@@ -180,7 +188,7 @@ function HPoints()
 	CreateHeroPointArr(98,99000,"\x07『 \x1FC\x04orsair \x07』",1)
 	CreateHeroPointArr(220,123456,"\x07『 \x1DP\x04oint \x1DBOX(中) \x07』",2)
 	CreateHeroPointArr(150,322322,"\x07『 \x1DP\x04oint \x1DBOX(大) \x07』",2)
-	CreateHeroPointArr(221,4999999,"\x07『 \x1DP\x04oint \x1DBOX \x08EX \x07』",2)
+--	CreateHeroPointArr(221,4999999,"\x07『 \x1DP\x04oint \x1DBOX \x08EX \x07』",2)
 end
 
 function Objects()
