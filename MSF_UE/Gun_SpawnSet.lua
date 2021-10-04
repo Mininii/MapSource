@@ -9,6 +9,7 @@ function InstallGunData()
 
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,15000))
+
 				G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtMost,48*32)},{40,43},"ACAS",CC_L,{255,255})
 				G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtLeast,48*32)},{40,43},"ACAS",CC_R,{255,255})
 				G_CA_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,1),Gun_Line(1,AtMost,48*32)},{39,44},"ACAS",CC_L,{255,255})

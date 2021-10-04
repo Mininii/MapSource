@@ -1,195 +1,3 @@
-function Var_init()
-	-- 0x58f500 SelHP 0x58f504 MarHP 0x58f508 SelSh 0x58f0c 0x58f510
-	TimePtr = 0x590000
-	LevelPtr = 0x590004
-	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
-	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
-	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
-	f_GunErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Not Found. f_Gun 실행자 : ")
-	f_GunFuncT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun 실행자 : ")
-	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
-	f_GunSendErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Send Failed. f_Gun 실행자 : ")
-	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
-	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
-	DBossT1 = CreateCText(FP,"\x13\x10【 \x07P\x04layer \x06T\x04otal \x1FS\x04core : \x0d\x0d\x0d\x0d\x0d\x0d")
-	DBossT2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d / \x0d\x0d\x0d\x0d\x0d\x0d")
-	DBossT3 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x10】\x0d\x0d\x0d\x0d\x0d\x0d")
-	StPT = CreateCText(FP,"\x13\x10【 \x04이번 \x07Level\x04에서 얻은 \x19스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-	KillPT = CreateCText(FP,"\x13\x10【 \x07킬 스코어가 \x19스탯 포인트\x04로 전환되었습니다. \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-	HiScoreT1 = CreateCText(FP,"\x13\x10【 \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
-	HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
-
-
-	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-
-	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 \x04구입(W) \x1F(Cost:1) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
-	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:1) \x07(1회 구입당 3 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
-	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵\x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
-
-	ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
-
-	DBossTotalDMGT = CreateCText(FP,"\x13\x1FＢ\x04ｏｓｓ \x08Ｂ\x04ａｔｔｌｅ \x07Ｂ\x04ｏｎｕｓ : ")
-	HTextStrReset = CreateCText(FP,HTextStr)
-	HeroVArr = CreateVarray(FP,#HeroArr)
-	ZergGndVArr = CreateVarray(FP,#ZergGndUArr)
-	
-	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
-	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
-	if TestStart == 1 then
-		BGMTypeV = CreateVar(FP)
-		LevelT2 = CreateVar3(FP,1,nil,nil)
-	else
-		BGMTypeV = CreateVar(FP)
-		LevelT2 = CreateVar3(FP,1,nil,nil)
-	end
-	Level = CreateVar3(FP,1,nil,nil)
-	LevelT = CreateVar3(FP,1,nil,nil)
-
-
-	MarNumberLimit = CreateVar3(FP,(84*2)*10)
-	MaxHPBackUp = CreateVarray(FP,228)
-	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
-	
-	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
-	
-	CunitP,SelOPEPD,CurCunitI,CurrentSpeed,CurrentOP = CreateVariables(5)
-	UpgradeCP,UpgradeFactor,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted,UPCompStrPtr = CreateVariables(9)
-	B1_K,B1_K2,B1_H = CreateVariables(3)
-	count,count1,count2,count3 = CreateVariables(4)
-	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
-	XY_ArrHeaderVoid = f_GetVoidptr(FP,4000)
-	PCheck = CreateCCode()
-	TestMode = CreateCCode()
-	FuncT = Create_CCTable(7)
-	OPFuncT, IntroT, ReplaceDelayT = CreateCCodes(4)
-	RandomHeroPlace = CreateCCodes(1)
-	Continue, Continue2 = CreateCCodes(2)
-	PExitFlag, ScorePrint, countdownSound = CreateCCodes(3)
-	BarrackPtr = Create_VTable(7)
-	BarPos = Create_VTable(7)
-	ExScore = Create_VTable(7)
-	PScoreSTrPtr = Create_VTable(7)
-	EXCunitTemp = Create_VTable(10)
-	Names = Create_VArrTable(7,7)
-	BanToken = Create_CCTable(7) -- {"X",EXCC_Forward,0x15C,1,2}
-	rokaClear = CreateCCode()
-	IdenClear = CreateCCode()
-    BossStart = CreateCCode()
-	DLClear = CreateCCode()
-    StoryT = CreateCCode()
-	DemClear = CreateCCode()
-	StoryT4 = CreateCCode()
-	Win = CreateCCode()
-	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
-	SoundLimitT = CreateCCode()
-	SoundLimit = CreateCCode()
-	WaitT = CreateCCode()
-	Destr0yerClear = CreateCCode()
-	Destr0yerClear2 = CreateCCode()
-	isDBossClear = CreateCCode()
-	GCT = CreateCcode()
-	isSingle = CreateCcode()
-	DeleteToggle = CreateCcode()
-	CA2ArrX = f_GetVArrptr(FP,1700)
-	CA2ArrY = f_GetVArrptr(FP,1700)
-	CA2ArrZ = f_GetVArrptr(FP,1700)
-	CUnitFlag = CreateCcode()
-
-
-	--CreateVar
-    SpeedVar = CreateVar3(FP,4)
-	BackupCp = CreateVar(FP)
-	RandW = CreateVar(FP)
-	Nextptrs = CreateVar(FP)
-	CunitIndex = CreateVar(FP)
-	Gun_LV = CreateVar(FP)
-	G_TempW = CreateVar(FP)
-	Gun_TempRand = CreateVar(FP)
-	Gun_TempSpawnSet1 = CreateVar(FP)
-	Spawn_TempW = CreateVar(FP)
-	Gun_Type = CreateVar(FP)
-	f_GunNum = CreateVar(FP)
-	f_GunStrPtr = CreateVar(FP)
-	count = CreateVar(FP)
-	ReserveBGM = CreateVar(FP)
-	Repeat_TempV = CreateVar(FP)
-	TempBarPos = CreateVar(FP)
-	ExchangeRate = CreateVar(FP)
-	Actived_Gun = CreateVar(FP)
-	HTextStrPtr = CreateVar(FP)
-	UnitDataPtr = CreateVar(FP)
-	XY_ArrHeader = CreateVar(FP)
-	Time = CreateVar(FP)
-	f_GunSendStrPtr = CreateVar(FP)
-	Dt = CreateVar(FP)
-	G_CA_StrPtr = CreateVar(FP)
-	G_CA_StrPtr2 = CreateVar(FP)
-	G_CA_StrPtr3 = CreateVar(FP)
-	B_5_C = CreateVar(FP)
-	B_Id_C = CreateVar(FP)
-	PCheckV = CreateVar(FP)
-	CC_Header = CreateVar(FP)
-	Dt_NT = CreateVar(FP)
-	Dt_NT2 = CreateVar(FP)
-	CurArr = CreateVar(FP)
-	RepeatType = CreateVar(FP)
-	CX = CreateVar(FP)
-	CY = CreateVar(FP)
-	DBoss_PrintScore = CreateVar(FP)
-	DBoss_PrintScore2 = CreateVar(FP)
-	TotalScore = CreateVar(FP)
-	PointStrPtr = CreateVar(FP)
-	DHP = CreateVar(FP)
-	DPtr = CreateVar(FP)
-	DcurHP = CreateVar(FP)
-	StatusStrPtr1 = CreateVar(FP)
-	CurrentDiff = CreateVar(FP)
-	KillScStrPtr = CreateVar(FP)
-	Diff = CreateVar(FP)
-	WaveT = CreateVar(FP)
-	RecallPosX = CreateVar(FP)
-	SetPlayers = CreateVar(FP)
-	LocalPV = CreateVar(FP)
-	HiScoreStrPtr = CreateVar(FP)
-	NukeStrPtr = CreateVar(FP)
-	SupplyStrPtr = CreateVar(FP)
-	SuppMax = CreateVar(FP)
-	end
-
-function HPoints()
-	HeroPointArr = {}
-	if TestStart == 1 then
-		HeroArr = {84,11,69,121}
-	else
-		HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81}
-	end
-	ZergGndUArr = {51,53,54,48,104}
-	CreateHeroPointArr(77,35000,"\x07『 \x1DF\x04enix \x1DZ \x07』",1)
-	CreateHeroPointArr(78,35000,"\x07『 \x1DF\x04enix \x1DD \x07』",1)
-	CreateHeroPointArr(28,45000,"\x07『 \x1DH\x04yperion \x07』",1)
-	CreateHeroPointArr(17,35000,"\x07『 \x1DA\x04lan \x1DS\x04chezar\x07 』",1)
-	CreateHeroPointArr(19,65000,"\x07『 \x1FJ\x04im \x1FR\x04aynor \x1FV \x07』",1)
-	CreateHeroPointArr(21,30000,"\x07『 \x1DT\x04om \x1DK\x04azansky \x07』",1)
-	CreateHeroPointArr(27,70000,"\x07『 \x1DA\x04rcturus \x1DM\x04engsk \x07』",1)
-	CreateHeroPointArr(86,70000,"\x07『 \x1DD\x04animoth \x07』",1)
-	CreateHeroPointArr(75,45000,"\x07『 \x1FZ\x04eratul \x07』",1)
-	CreateHeroPointArr(88,55000,"\x07『 \x1DA\x04rtanis \x07』",1)
-	CreateHeroPointArr(80,88000,"\x07『 \x1DM\x04ojo \x07』",1)
-	CreateHeroPointArr(25,50000,"\x07『 \x1DE\x04dmund \x1DD\x04uke \x07』",1)
-	CreateHeroPointArr(29,120000,"\x07『 \x1FN\x04orad \x1FII \x07』",1)
-	CreateHeroPointArr(81,90000,"\x07『 \x1FW\x04arbringer \x07』",1)
-	CreateHeroPointArr(23,150000,"\x07『 \x1FE\x04dmund \x1FD\x04uke \x07』",1)
-	CreateHeroPointArr(76,60000,"\x07『 \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07』",1)
-	CreateHeroPointArr(79,75000,"\x07『 \x1DT\x04assadar \x07』",1)
-	CreateHeroPointArr(98,99000,"\x07『 \x1FC\x04orsair \x07』",1)
-	CreateHeroPointArr(220,123456,"\x07『 \x1DP\x04oint \x1DBOX(中) \x07』",2)
-	CreateHeroPointArr(150,322322,"\x07『 \x1DP\x04oint \x1DBOX(大) \x07』",2)
---	CreateHeroPointArr(221,4999999,"\x07『 \x1DP\x04oint \x1DBOX \x08EX \x07』",2)
-end
 
 function Objects()
 
@@ -198,11 +6,23 @@ function Objects()
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
-	AtkFactor = 7
-	DefFactor = 2
+	AtkFactor = 1
+	DefFactor = 1
 	GunLimit = 1500
 	Ex1= {20,23,26,29,32,35,38}
 
+	--Shop
+	P_MinCost = 7 -- 미네랄 증가
+	P_MinAmount = 2500000 -- 미네랄 증가량
+	P_NukeCost = 1 -- 핵 장전
+	P_NukeAmount = 1 -- 핵 장전양
+	P_SuppCost = 1 -- 서플라이 증가
+	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
+	P_MultiCost = 300 -- 멀티커맨드 사용가능
+	P_StimCost = 25 -- 원격 스팀팩 사용가능
+	P_EnchantCost = 50 -- 뉴비를 위한 일마 강화 적용
+	P_SkilluUnit = 200 -- 핵배틀 잠금해제
+	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 
@@ -346,4 +166,199 @@ table.insert(DL_Patch,SetMemoryX(0x664080 + (30*4),SetTo,0x0,0x4))
 table.insert(DL_Recover,SetMemoryX(0x664080 + (30*4),SetTo,0x4,0x4))
 
 	Install_ShapeData()
+end
+
+function Var_init()
+	-- 0x58f500 SelHP 0x58f504 MarHP 0x58f508 SelSh 0x58f0c 0x58f510
+	TimePtr = 0x590000
+	LevelPtr = 0x590004
+	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
+	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
+	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
+	f_GunErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Not Found. f_Gun 실행자 : ")
+	f_GunFuncT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun 실행자 : ")
+	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
+	f_GunSendErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Send Failed. f_Gun 실행자 : ")
+	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
+	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
+	DBossT1 = CreateCText(FP,"\x13\x10【 \x07P\x04layer \x06T\x04otal \x1FS\x04core : \x0d\x0d\x0d\x0d\x0d\x0d")
+	DBossT2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d / \x0d\x0d\x0d\x0d\x0d\x0d")
+	DBossT3 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x10】\x0d\x0d\x0d\x0d\x0d\x0d")
+	StPT = CreateCText(FP,"\x13\x10【 \x04이번 \x07Level\x04에서 얻은 \x19스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+	KillPT = CreateCText(FP,"\x13\x10【 \x07킬 스코어가 \x19스탯 포인트\x04로 전환되었습니다. \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+	HiScoreT1 = CreateCText(FP,"\x13\x10【 \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
+	HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
+	NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+
+
+	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+
+	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 \x04구입(W) \x1F(Cost:"..P_NukeCost..") \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:"..P_SuppCost..") \x07(1회 구입당 3 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
+
+	ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
+
+	DBossTotalDMGT = CreateCText(FP,"\x13\x1FＢ\x04ｏｓｓ \x08Ｂ\x04ａｔｔｌｅ \x07Ｂ\x04ｏｎｕｓ : ")
+	HTextStrReset = CreateCText(FP,HTextStr)
+	HeroVArr = CreateVarray(FP,#HeroArr)
+	ZergGndVArr = CreateVarray(FP,#ZergGndUArr)
+	
+	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
+	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
+	if TestStart == 1 then
+		BGMTypeV = CreateVar(FP)
+		LevelT2 = CreateVar3(FP,1,nil,nil)
+	else
+		BGMTypeV = CreateVar(FP)
+		LevelT2 = CreateVar3(FP,1,nil,nil)
+	end
+	Level = CreateVar3(FP,1,nil,nil)
+	LevelT = CreateVar3(FP,1,nil,nil)
+
+
+	MarNumberLimit = CreateVar3(FP,(84*2)*10)
+	MaxHPBackUp = CreateVarray(FP,228)
+	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
+	
+	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
+	
+	CunitP,SelOPEPD,CurCunitI,CurrentSpeed,CurrentOP = CreateVariables(5)
+	UpgradeCP,UpgradeFactor,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted,UPCompStrPtr = CreateVariables(9)
+	B1_K,B1_K2,B1_H = CreateVariables(3)
+	count,count1,count2,count3 = CreateVariables(4)
+	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
+	XY_ArrHeaderVoid = f_GetVoidptr(FP,4000)
+	PCheck = CreateCCode()
+	TestMode = CreateCCode()
+	FuncT = Create_CCTable(7)
+	OPFuncT, IntroT, ReplaceDelayT = CreateCCodes(4)
+	RandomHeroPlace = CreateCCodes(1)
+	Continue, Continue2 = CreateCCodes(2)
+	PExitFlag, ScorePrint, countdownSound = CreateCCodes(3)
+	BarrackPtr = Create_VTable(7)
+	BarPos = Create_VTable(7)
+	ExScore = Create_VTable(7)
+	PScoreSTrPtr = Create_VTable(7)
+	EXCunitTemp = Create_VTable(10)
+	NukeUseStrPtr = Create_VTable(7)
+	Names = Create_VArrTable(7,7)
+	BanToken = Create_CCTable(7) -- {"X",EXCC_Forward,0x15C,1,2}
+	rokaClear = CreateCCode()
+	IdenClear = CreateCCode()
+    BossStart = CreateCCode()
+	DLClear = CreateCCode()
+    StoryT = CreateCCode()
+	DemClear = CreateCCode()
+	StoryT4 = CreateCCode()
+	Win = CreateCCode()
+	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
+	SoundLimitT = CreateCCode()
+	SoundLimit = CreateCCode()
+	WaitT = CreateCCode()
+	Destr0yerClear = CreateCCode()
+	Destr0yerClear2 = CreateCCode()
+	isDBossClear = CreateCCode()
+	GCT = CreateCcode()
+	isSingle = CreateCcode()
+	DeleteToggle = CreateCcode()
+	CA2ArrX = f_GetVArrptr(FP,1700)
+	CA2ArrY = f_GetVArrptr(FP,1700)
+	CA2ArrZ = f_GetVArrptr(FP,1700)
+	CUnitFlag = CreateCcode()
+
+
+	--CreateVar
+    SpeedVar = CreateVar3(FP,4)
+	BackupCp = CreateVar(FP)
+	RandW = CreateVar(FP)
+	Nextptrs = CreateVar(FP)
+	CunitIndex = CreateVar(FP)
+	Gun_LV = CreateVar(FP)
+	G_TempW = CreateVar(FP)
+	Gun_TempRand = CreateVar(FP)
+	Gun_TempSpawnSet1 = CreateVar(FP)
+	Spawn_TempW = CreateVar(FP)
+	Gun_Type = CreateVar(FP)
+	f_GunNum = CreateVar(FP)
+	f_GunStrPtr = CreateVar(FP)
+	count = CreateVar(FP)
+	ReserveBGM = CreateVar(FP)
+	Repeat_TempV = CreateVar(FP)
+	TempBarPos = CreateVar(FP)
+	ExchangeRate = CreateVar(FP)
+	Actived_Gun = CreateVar(FP)
+	HTextStrPtr = CreateVar(FP)
+	UnitDataPtr = CreateVar(FP)
+	XY_ArrHeader = CreateVar(FP)
+	Time = CreateVar(FP)
+	f_GunSendStrPtr = CreateVar(FP)
+	Dt = CreateVar(FP)
+	G_CA_StrPtr = CreateVar(FP)
+	G_CA_StrPtr2 = CreateVar(FP)
+	G_CA_StrPtr3 = CreateVar(FP)
+	B_5_C = CreateVar(FP)
+	B_Id_C = CreateVar(FP)
+	PCheckV = CreateVar(FP)
+	CC_Header = CreateVar(FP)
+	Dt_NT = CreateVar(FP)
+	Dt_NT2 = CreateVar(FP)
+	CurArr = CreateVar(FP)
+	RepeatType = CreateVar(FP)
+	CX = CreateVar(FP)
+	CY = CreateVar(FP)
+	DBoss_PrintScore = CreateVar(FP)
+	DBoss_PrintScore2 = CreateVar(FP)
+	TotalScore = CreateVar(FP)
+	PointStrPtr = CreateVar(FP)
+	DHP = CreateVar(FP)
+	DPtr = CreateVar(FP)
+	DcurHP = CreateVar(FP)
+	StatusStrPtr1 = CreateVar(FP)
+	CurrentDiff = CreateVar(FP)
+	KillScStrPtr = CreateVar(FP)
+	Diff = CreateVar(FP)
+	WaveT = CreateVar(FP)
+	RecallPosX = CreateVar(FP)
+	SetPlayers = CreateVar(FP)
+	LocalPV = CreateVar(FP)
+	HiScoreStrPtr = CreateVar(FP)
+	NukeStrPtr = CreateVar(FP)
+	SupplyStrPtr = CreateVar(FP)
+	SuppMax = CreateVar(FP)
+	end
+
+function HPoints()
+	HeroPointArr = {}
+	if TestStart == 1 then
+		HeroArr = {84,11,69,121}
+	else
+		HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81}
+	end
+	ZergGndUArr = {51,53,54,48,104}
+	CreateHeroPointArr(77,35000,"\x07『 \x1DF\x04enix \x1DZ \x07』",1)
+	CreateHeroPointArr(78,35000,"\x07『 \x1DF\x04enix \x1DD \x07』",1)
+	CreateHeroPointArr(28,45000,"\x07『 \x1DH\x04yperion \x07』",1)
+	CreateHeroPointArr(17,35000,"\x07『 \x1DA\x04lan \x1DS\x04chezar\x07 』",1)
+	CreateHeroPointArr(19,65000,"\x07『 \x1FJ\x04im \x1FR\x04aynor \x1FV \x07』",1)
+	CreateHeroPointArr(21,30000,"\x07『 \x1DT\x04om \x1DK\x04azansky \x07』",1)
+	CreateHeroPointArr(27,70000,"\x07『 \x1DA\x04rcturus \x1DM\x04engsk \x07』",1)
+	CreateHeroPointArr(86,70000,"\x07『 \x1DD\x04animoth \x07』",1)
+	CreateHeroPointArr(75,45000,"\x07『 \x1FZ\x04eratul \x07』",1)
+	CreateHeroPointArr(88,55000,"\x07『 \x1DA\x04rtanis \x07』",1)
+	CreateHeroPointArr(80,88000,"\x07『 \x1DM\x04ojo \x07』",1)
+	CreateHeroPointArr(25,50000,"\x07『 \x1DE\x04dmund \x1DD\x04uke \x07』",1)
+	CreateHeroPointArr(29,120000,"\x07『 \x1FN\x04orad \x1FII \x07』",1)
+	CreateHeroPointArr(81,90000,"\x07『 \x1FW\x04arbringer \x07』",1)
+	CreateHeroPointArr(23,150000,"\x07『 \x1FE\x04dmund \x1FD\x04uke \x07』",1)
+	CreateHeroPointArr(76,60000,"\x07『 \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07』",1)
+	CreateHeroPointArr(79,75000,"\x07『 \x1DT\x04assadar \x07』",1)
+	CreateHeroPointArr(98,99000,"\x07『 \x1FC\x04orsair \x07』",1)
+	CreateHeroPointArr(220,123456,"\x07『 \x1DP\x04oint \x1DBOX(中) \x07』",2)
+	CreateHeroPointArr(150,322322,"\x07『 \x1DP\x04oint \x1DBOX(大) \x07』",2)
+--	CreateHeroPointArr(221,4999999,"\x07『 \x1DP\x04oint \x1DBOX \x08EX \x07』",2)
 end

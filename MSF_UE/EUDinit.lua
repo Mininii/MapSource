@@ -217,6 +217,7 @@ EffUnitPatch(207)
 EffUnitPatch(208)
 EffUnitPatch(209)
 EffUnitPatch(210)
+EffUnitPatch(211)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
@@ -632,7 +633,7 @@ UnitSizePatch(121,10)
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ÄÃ·¯f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ¹Ì´Ï¸Ê
-			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000),SinglePatch2
+			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000)
 		})
 	CElseX()
 	DoActions(FP,SinglePatch)
@@ -658,6 +659,7 @@ UnitSizePatch(121,10)
 	for i = 0, 6 do
 	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D)
 	f_GetStrXptr(FP,PScoreSTrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Score".._0D)
+	f_GetStrXptr(FP,NukeUseStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Nuke".._0D)
 	end
 	f_GetStrXptr(FP,DBoss_PrintScore,"\x0D\x0D\x0DDBossSC".._0D)
 	f_GetStrXptr(FP,DBoss_PrintScore2,"\x0D\x0D\x0DDBossDMG".._0D)
@@ -712,6 +714,7 @@ UnitSizePatch(121,10)
 	for i = 1, 7 do
 	Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
 	Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
+	Install_CText1(NukeUseStrPtr[i],Str12,NukeUseT,Names[i])
 	end
 
 

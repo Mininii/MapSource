@@ -311,7 +311,7 @@ SetCallEnd()
 
 
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,Owner,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	end
@@ -328,6 +328,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	if type(G_CA_RepeatType) ~= "table" then
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
 	end
+	
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
@@ -338,7 +339,16 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 				if type(G_CA_SLTable[i]) == "number" then
 					table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,12*G_CA_SLTable[i]))
 				elseif type(G_CA_SLTable[i]) == "string" then
-					table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+tonumber(G_CA_SLTable[i])))
+					local G_CA2_ShapeTable_Check = ""
+					for j, k in pairs(G_CA2_ShapeTable) do
+						if G_CA_SLTable[i] == k then
+							table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+j))
+							G_CA2_ShapeTable_Check = "OK"
+						end
+					end
+					if G_CA2_ShapeTable_Check ~= "OK" then
+						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
+					end
 				else
 					G_CA_SLTable_InputData_Error()
 				end
@@ -358,14 +368,29 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		local NumRet = G_CA_LMTable
 		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
 	end
+	local Y = {}
+	if CenterXY == nil then 
+		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0xFFFFFFFF))
+		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0xFFFFFFFF))
+	elseif type(CenterXY) == "table" then
+		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,CenterXY[1]))
+		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,CenterXY[2]))
+	else
+		PushErrorMsg("G_CA_SetSpawn_CenterXY_Inputdata_Error")
+	end
+	if Owner == nil then
+		Owner = 0xFFFFFFFF
+	end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
-		SetCVar(FP,G_CA_LineV[2],SetTo,6),
+		SetCVar(FP,G_CA_LineV[2],SetTo,Start_G_CLine),
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
-	})
+		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y,
+		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
+	},PreserveFlag)
 end
+
 --{G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType}
 function G_CA_SetSpawnX(Condition,...)
 	local arg = table.pack(...)
@@ -940,13 +965,16 @@ local Height_V = CreateVar(FP)
 local Angle_V = CreateVar(FP)
 local CB_X = CreateVar(FP)
 local CB_Y = CreateVar(FP)
-	function CreateBullet(UnitID,Height,Angle,X,Y)
+local CB_P = CreateVar(FP)
+	function CreateBullet(UnitID,Height,Angle,X,Y,ForPlayer)
+		if ForPlayer == nil then ForPlayer = FP end
 	CDoActions(FP,{
 		TSetCVar(FP,CB_UnitIDV[2],SetTo,UnitID),
 		TSetCVar(FP,Height_V[2],SetTo,Height),
 		TSetCVar(FP,Angle_V[2],SetTo,Angle),
 		TSetCVar(FP,CB_X[2],SetTo,X),
 		TSetCVar(FP,CB_Y[2],SetTo,Y),
+		TSetCVar(FP,CB_P[2],SetTo,ForPlayer),
 		SetNext("X",CallCBullet,0),SetNext(CallCBullet+1,"X",1)
 	})
 	end
@@ -967,7 +995,7 @@ local CB_Y = CreateVar(FP)
 			TSetMemory(0x58DC68 + 0x14*0,SetTo,CB_X),
 			TSetMemory(0x58DC64 + 0x14*0,SetTo,CB_Y),
 			TSetMemory(0x58DC6C + 0x14*0,SetTo,CB_Y),
-			TCreateUnit(1, CB_UnitIDV, 1, FP)})
+			TCreateUnit(1, CB_UnitIDV, 1, CB_P)})
 		CDoActions(FP,{
 			TSetMemoryX(_Add(Nextptrs,0x58/4),SetTo,_ReadF(_Add(Nextptrs,(0x28/4))),0xFFFFFFFF),
 			TSetMemoryX(_Add(Nextptrs,0x20/4),SetTo,_Mul(Angle_V,256),0xFF00),
@@ -1105,5 +1133,12 @@ end
 	
 
 	SetCallEnd()
+	Call_Print13 = {}
+	for i = 0, 6 do
+	Call_Print13[i+1] = SetCallForward()
+	SetCall(FP)
+		Print_13_2(FP,{i},nil)
+	SetCallEnd()
+	end
 
 end

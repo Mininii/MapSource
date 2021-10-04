@@ -246,12 +246,14 @@ function EPDToPtr(EPD)
 	return 0x58A364+(EPD*4)
 end
 
-function KeyInput(Key,Conditions,Actions,PreserveFlag)
+function KeyInput(Key,Conditions,Actions,PreserveFlag,CutFlag)
 	X = {}
+	Y = SetDeaths(CurrentPlayer,SetTo,0,Key)
+	if CutFlag == 1 then Y = {} end
 	if PreserveFlag == 1 then
 		X = {Preserved}
 	end
-	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Conditions},{SetDeaths(CurrentPlayer,SetTo,0,Key),Actions},X)
+	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Conditions},{Y,Actions},X)
 end
 
 function Print_13_2(PlayerID,DisplayPlayer,String)
@@ -277,16 +279,20 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 end
 function Print13_Preserve()
 	local Print13 = CreateCCode()
-	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
 			for i = 0, 6 do
-				CIf(FP,{PlayerCheck(i,1),Deaths(i,AtMost,0,15)})
-					Print_13_2(FP,{i},nil)
-				CIfEnd()
+				CallTriggerX(FP,Call_Print13[i+1],{PlayerCheck(i,1),Deaths(i,AtMost,0,15)})
 			end
 		CIfEnd()
+		for i = 0, 6 do
+			CIf(FP,PlayerCheck(i,1))
+			for j = 0, 5 do
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,190+j)})
+			end
+			CIfEnd()
+		end
+		
 		DoActionsX(FP,SetCDeaths(FP,Subtract,1,Print13))
-	CIfEnd()
 end
 
 

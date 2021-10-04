@@ -33,7 +33,6 @@ function MapPreserves()
 		ModifyUnitEnergy(All,125,P12,64,0),
 		KillUnit(125,P12),
 	})
-	
 CIf(FP,Switch("Switch 240",Set))
 	CIf(FP,CVar(FP,Dt[2],AtMost,2500))
 		CAdd(FP,WaveT,Dt)
@@ -60,4 +59,6 @@ CIfEnd()
 			SetCDeaths(FP,SetTo,0,countdownSound);
 	},{Preserved})
 	DoActions2(FP,PatchArrPrsv)
+	Trigger2(FP,{Bring(FP,AtLeast,1,121,64)},{SetMemory(0x66F140, SetTo, 246);},{Preserved})
+	Trigger2(FP,{Bring(FP,AtMost,0,121,64)},{SetMemory(0x66F140, SetTo, 133);},{Preserved})
 end

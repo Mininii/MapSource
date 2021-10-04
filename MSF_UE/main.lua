@@ -27,7 +27,7 @@ end
 NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-DoActions(P8,{RemoveUnit(71,P8),RemoveUnit(203,P8),RemoveUnit(204,P8),RemoveUnit(205,P8),RemoveUnit(206,P8),RemoveUnit(207,P8),RemoveUnit(208,P8),RemoveUnit(209,P8),RemoveUnit(210,P8)})
+DoActions(P8,{RemoveUnit(71,P8),RemoveUnit(203,P8),RemoveUnit(204,P8),RemoveUnit(205,P8),RemoveUnit(206,P8),RemoveUnit(207,P8),RemoveUnit(208,P8),RemoveUnit(209,P8),RemoveUnit(210,P8),RemoveUnit(211,P8)})
 TestSet(2)
 VerText = "\x04Ver. 1.9FP"
 FP = P8
@@ -37,6 +37,15 @@ SetFixedPlayer(FP)
 Enable_PlayerCheck()
 Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
 StartCtrig()
+GiveT = {}
+for i = 0, 6 do
+	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
+	table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
+end
+DoActions(FP,GiveT,1)
+for i = 0, 6 do
+Trigger2(FP,{PlayerCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+end
 	CIf(AllPlayers,ElapsedTime(AtLeast,3))
 		init_func = def_sIndex()
 		CJump(AllPlayers,init_func)
