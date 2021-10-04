@@ -321,10 +321,10 @@ NoAirCollisionX(FP)
 
 
 
-GiveUnitsArr = {}
+
 VArrPatchTable ={}
 CIfOnce(FP,Always()) -- onPluginStart
-
+GiveUnitsArr = {}
 GiveT = {}
 for i = 0, 5 do
 	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
