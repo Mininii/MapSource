@@ -311,7 +311,7 @@ SetCallEnd()
 
 
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,Owner,PreserveFlag)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType)
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	end
@@ -328,7 +328,6 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	if type(G_CA_RepeatType) ~= "table" then
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
 	end
-	
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
@@ -339,16 +338,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 				if type(G_CA_SLTable[i]) == "number" then
 					table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,12*G_CA_SLTable[i]))
 				elseif type(G_CA_SLTable[i]) == "string" then
-					local G_CA2_ShapeTable_Check = ""
-					for j, k in pairs(G_CA2_ShapeTable) do
-						if G_CA_SLTable[i] == k then
-							table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+j))
-							G_CA2_ShapeTable_Check = "OK"
-						end
-					end
-					if G_CA2_ShapeTable_Check ~= "OK" then
-						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
-					end
+					table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+tonumber(G_CA_SLTable[i])))
 				else
 					G_CA_SLTable_InputData_Error()
 				end
@@ -368,27 +358,13 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		local NumRet = G_CA_LMTable
 		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
 	end
-	local Y = {}
-	if CenterXY == nil then 
-		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0xFFFFFFFF))
-		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0xFFFFFFFF))
-	elseif type(CenterXY) == "table" then
-		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,CenterXY[1]))
-		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,CenterXY[2]))
-	else
-		PushErrorMsg("G_CA_SetSpawn_CenterXY_Inputdata_Error")
-	end
-	if Owner == nil then
-		Owner = 0xFFFFFFFF
-	end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
-		SetCVar(FP,G_CA_LineV[2],SetTo,Start_G_CLine),
+		SetCVar(FP,G_CA_LineV[2],SetTo,6),
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y,
-		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
-	},PreserveFlag)
+		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
+	})
 end
 
 --{G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType}
@@ -1077,7 +1053,17 @@ local CB_P = CreateVar(FP)
 			ReadScore = CreateVar(FP)
 			for i = 0, 6 do
 				CIf(FP,{PlayerCheck(i,1)})
-					f_Div(FP,ReadScore,ExScore[i+1],1000)
+					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
+					
+					CIfX(FP,{CDeaths(FP,AtLeast,1,isSingle)})
+					f_Div(FP,ReadScore,ExScore[i+1],100000)
+					CElseX()
+					f_Div(FP,ReadScore,ExScore[i+1],10000)
+					CIfXEnd()
+					CElseX()
+					CMov(FP,ReadScore,0)
+					CIfXEnd()
+
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),
 					SetDeaths(0,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),

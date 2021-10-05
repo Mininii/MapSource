@@ -12,16 +12,17 @@ function Objects()
 	Ex1= {20,23,26,29,32,35,38}
 
 	--Shop
-	P_MinCost = 7 -- 미네랄 증가
-	P_MinAmount = 2500000 -- 미네랄 증가량
+	P_MinCost = 1 -- 미네랄 증가
+	P_MinAmount = 3000000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
 	P_NukeAmount = 1 -- 핵 장전양
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
-	P_MultiCost = 300 -- 멀티커맨드 사용가능
 	P_StimCost = 25 -- 원격 스팀팩 사용가능
-	P_EnchantCost = 50 -- 뉴비를 위한 일마 강화 적용
-	P_SkilluUnit = 200 -- 핵배틀 잠금해제
+	P_MultiCost = 300 -- 멀티커맨드 사용가능
+	P_EnchantCost = 200 -- 뉴비를 위한 일마 강화 적용
+	P_SkillUnitCost = 200 -- 핵배틀 잠금해제
+
 	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
@@ -174,6 +175,7 @@ function Var_init()
 	LevelPtr = 0x590004
 	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-10000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
 	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -258,7 +260,7 @@ function Var_init()
 	Win = CreateCCode()
 	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
 	SoundLimitT = CreateCCode()
-	SoundLimit = CreateCCode()
+	SoundLimit = CreateCCodeArr(7)
 	WaitT = CreateCCode()
 	Destr0yerClear = CreateCCode()
 	Destr0yerClear2 = CreateCCode()
@@ -270,6 +272,7 @@ function Var_init()
 	CA2ArrY = f_GetVArrptr(FP,1700)
 	CA2ArrZ = f_GetVArrptr(FP,1700)
 	CUnitFlag = CreateCcode()
+	HeroPointNotice = CreateCcodeArr(7)
 
 
 	--CreateVar

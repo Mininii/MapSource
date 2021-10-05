@@ -71,15 +71,24 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,index,0,0xFF)},{
-				SetScore(Force1,Add,Point,Kills);
-				RotatePlayer({DisplayTextX(CT,4)},HumanPlayers,FP);
-			},{Preserved})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),SetScore(Force1,Add,Point,Kills))
+			for i = 0, 6 do
+				TriggerX(FP,{CDeaths(FP,Exactly,0,HeroPointNotice[i+1])},{
+					SetMemory(0x6509B0,SetTo,i),
+					DisplayText(CT,4);
+					SetMemory(0x6509B0,SetTo,FP),
+				},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit[i+1]),CDeaths(FP,Exactly,0,HeroPointNotice[i+1])},{
+					SetMemory(0x6509B0,SetTo,i),
+					PlayWAV("staredit\\wav\\HeroKill.ogg"),PlayWAV("staredit\\wav\\HeroKill.ogg");DisplayText(CT,4);
+					SetMemory(0x6509B0,SetTo,FP),
+					SetCDeaths(FP,Add,1,SoundLimit[i+1]),
+				},{Preserved})
+			end
+			CIfEnd()
+			
+
 			f_LoadCp()
-			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,index,0,0xFF),CDeaths(FP,AtMost,2,SoundLimit)},{
-				RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
-				SetCDeaths(FP,Add,1,SoundLimit),
-			},{Preserved})
 	end
 end
 
@@ -92,17 +101,40 @@ function Install_DeathNotice()
 				Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
 				DoActionsX(FP,{
 					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,1,Custom);
+					SetScore(j-1,Add,50,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-50);
 				})
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+				for k = 0, 6 do
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+				end
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
 		end
-
 		DoActions(FP,MoveCp(Add,6*4))
 	CIfEnd()
+	
+	CIf(FP,DeathsX(CurrentPlayer,Exactly,12,0,0xFF))
+		DoActions(FP,MoveCp(Subtract,6*4))
+		for j = 1, 7 do
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
+				f_SaveCp()
+				Install_CText1(HTextStrPtr,Str12,Str03,Names[j])
+				DoActionsX(FP,{
+					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
+					SetScore(j-1,Add,10000,Custom);
+					SetCVar(FP,ExScore[j][2],Add,-10000);
+				})
+				for k = 0, 6 do
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+				end
+				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				f_LoadCp()
+			CIfEnd()
+		end
+		DoActions(FP,MoveCp(Add,6*4))
+	CIfEnd()
+
 	for j = 1, 7 do
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
 		DoActions(FP,MoveCp(Subtract,6*4))
@@ -111,10 +143,12 @@ function Install_DeathNotice()
 				Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
 				DoActionsX(FP,{
 					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,1,Custom);
+					SetScore(j-1,Add,500,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-500);
 				})
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+				for k = 0, 6 do
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+				end
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
@@ -190,7 +224,8 @@ function Install_RandPlaceHero()
 			CDoActions(FP,{TCreateUnitWithProperties(1,HeroID,1,P8,{energy = 100})})
 			NIfX(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)}) -- 소환 성공 여부 
 				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-				CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
+				--CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
+				CTrigger(FP,{},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 
 				f_Mod(FP,BiteCalc,HeroID,_Mov(2),0xFF)
 				f_Read(FP,_Add(_Div(HeroID,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
 				NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
@@ -377,7 +412,7 @@ function GunBreak(GName,Point,Flag)
 		})
 	else
 		DoActions(FP,{
-			RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav"),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
+			RotatePlayer({DisplayTextX(Text,4),PlayWAVX("staredit\\wav\\SpeedMessage.wav")},HumanPlayers,FP);
 			SetScore(Force1,Add,Point,Kills);
 	
 		})

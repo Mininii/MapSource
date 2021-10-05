@@ -82,7 +82,9 @@ table.insert(PatchArr,SetMemoryW(0x661EE8+(UnitID*2), SetTo, 410))
 table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 78))
 table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 end
-
+for j = 0, 6 do
+	table.insert(PatchArr,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
+	end
 function SetUnitClassType(UnitID,Type)
 	if Type == 1 then 
 		Class = 198
@@ -293,8 +295,8 @@ UnitSizePatch(121,10)
 	table.insert(PatchArr,SetMemory(0x582264 + (4*i),SetTo,1000))
 	table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
 	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,2))
-	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,2))
-	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,2))
+	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,6))
+	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,10))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
@@ -307,6 +309,7 @@ UnitSizePatch(121,10)
 		SetUnitClass(68,199) -- 보스몹 체력보이게하기
 		SetUnitClass(87,199) -- 보스몹 체력보이게하기
 		SetUnitClass(186,199) -- 보스몹 체력보이게하기
+		SetUnitClass(12,199) -- 보스몹 체력보이게하기
 
 		SetShield(MarID[i+1]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i+1],5) -- 마린 크기 5*5 설정
@@ -322,9 +325,9 @@ UnitSizePatch(121,10)
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + MarWep[i+1],SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- 공중무기
-		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- 부가사거리
+		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
-		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,192))
+		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
 	end
 	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
@@ -336,7 +339,7 @@ UnitSizePatch(121,10)
 		table.insert(PatchArr,SetMemoryW(0x657678,SetTo,NMarDamageFactor)) -- 추가공격력
 
 		UnitEnable2(15)
-		UnitEnable2(12)
+		UnitEnable2(28)
 		UnitEnable2(7)
 		UnitEnable2(1)
 	for i = 1, 4 do
@@ -345,6 +348,7 @@ UnitSizePatch(121,10)
 	end
 	UnitEnable(72)
 	UnitEnable(22)
+	UnitEnable(29)
 	UnitEnable(70)
 	UnitEnable(64)
 	UnitEnable(65)
@@ -356,18 +360,21 @@ UnitSizePatch(121,10)
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
+		table.insert(PatchArr,SetMemoryB(0x663CE8 + 28,SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 10,SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 15,SetTo,2))
 
 	for i = 2, 116 do
 	SetWepUpType(i,3)
 	end
+	SetWepUpType(92,59)
+	SetWepUpType(93,59)
 
 	local ZergArr = {37,38,39,45,44,43,48,49,56,55,53,57,51,54,104}
 	for j, k in pairs(ZergArr) do
 		
-	UnitSizePatch(k,1) -- 저그 유닛 크기 10*10 설정
-	SetUnitAdvFlag(k,4,4) -- 공중유닛으로설정
+	UnitSizePatch(k,3) -- 저그 유닛 크기 10*10 설정
+--	SetUnitAdvFlag(k,4,4) -- 공중유닛으로설정
 	end
 
 	UnitSizePatch(11,1)
@@ -448,7 +455,7 @@ UnitSizePatch(121,10)
 				CVar(FP,SetPlayers[2],Exactly,k);
 			},
 			actions = {
-				SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..P[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\n\x13\x1F===================================");
+				SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..P[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
 				SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
 				
 			},
@@ -500,8 +507,8 @@ UnitSizePatch(121,10)
 	end
 
 	YY = 2021
-	MM = 08
-	DD = 08
+	MM = 10
+	DD = 06
 	HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 

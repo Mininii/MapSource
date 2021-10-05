@@ -5,7 +5,7 @@ function OPTrig()
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1C배속조정 \x04: F12\x07 ]")},1)
+        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then

@@ -65,7 +65,7 @@ Objects()
 Include_CtrigPlib(360,RandSwitch,1,FP)
 Include_Conv_CPosXY(FP)
 nilunit = 181
-Install_GetCLoc(FP,255,nilunit)
+Install_GetCLoc(FP,253,nilunit)
 Include_CRandNum(FP)
 function f_SaveCp()
 	CallTrigger(FP,Call_SaveCP,nil)
@@ -314,7 +314,6 @@ Install_Load_CAPlot()
 Install_Call_G_CA()
 GunData()
 G_CA_Lib_ErrorCheck()
-Install_GetCLoc(FP,253,nilunit)
 CJumpEnd(AllPlayers,InitJump)
 NoAirCollisionX(FP)
 
@@ -8519,13 +8518,6 @@ local NeSkill = CreateCcodeArr(6)
 local TeSkill = CreateCcodeArr(6)
 local SuSkill = CreateCcodeArr(6)
 CIf(FP,{CDeaths(FP,AtMost,0,MarMode),PlayerCheck(j,1)})
-
-CDeaths(FP,AtLeast,1,CreateTe[j+1])
-CDeaths(FP,AtLeast,1,CreateSu[j+1])
-
-SetCDeaths(FP,Subtract,1,CreateNe[j+1]);
-SetCDeaths(FP,Subtract,1,CreateTe[j+1]);
-SetCDeaths(FP,Subtract,1,CreateSu[j+1]);
 
 CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateNe[j+1]),Command(j,AtMost,0,16)},{SetCDeaths(FP,SetTo,0,CreateNe[j+1])}) -- 소환 또는 조합시
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)

@@ -81,14 +81,22 @@ function Gun_System()
     end
     CunitCtrig_End()
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
-    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{
+        SetCDeaths(FP,SetTo,0,SoundLimit[1]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[2]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[3]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[4]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[5]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[6]),
+        SetCDeaths(FP,SetTo,0,SoundLimit[7]),
+        SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 
     CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
         DoActions(FP,{
             SetInvincibility(Disable,"Buildings",FP,64);
         })
         CMov(FP,Actived_Gun,0)
-        --CSub(FP,_Ccode(FP,GCT),Dt)
+        CSub(FP,_Ccode(FP,GCT),Dt)
 		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Add,Dt,GCT)},1)
         for i = 0, 63 do
             CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
