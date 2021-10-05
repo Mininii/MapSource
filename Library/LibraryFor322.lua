@@ -385,7 +385,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,440))
 			},
 				actions = {
 				PlayWAV(BGMArr[i][2]);
-				PlayWAV(BGMArr[i][2]);
+				--PlayWAV(BGMArr[i][2]);
 				SetDeathsX(CurrentPlayer,SetTo,BGMArr[i][3],440,0xFFFFFF);
 				PreserveTrigger();
 			},
@@ -424,7 +424,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,440))
 				actions = {
 				RotatePlayer({
 					PlayWAVX(BGMArr[i][2]),
-					PlayWAVX(BGMArr[i][2])
+					--rPlayWAVX(BGMArr[i][2])
 				},{P9,P10,P11,P12},InitBGMP);
 				SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],440,0xFFFFFF);
 				PreserveTrigger();
