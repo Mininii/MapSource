@@ -80,7 +80,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 				},{Preserved})
 				TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit[i+1]),CDeaths(FP,Exactly,0,HeroPointNotice[i+1])},{
 					SetMemory(0x6509B0,SetTo,i),
-					PlayWAV("staredit\\wav\\HeroKill.ogg"),PlayWAV("staredit\\wav\\HeroKill.ogg");DisplayText(CT,4);
+					PlayWAV("staredit\\wav\\HeroKill.ogg"),PlayWAV("staredit\\wav\\HeroKill.ogg");
 					SetMemory(0x6509B0,SetTo,FP),
 					SetCDeaths(FP,Add,1,SoundLimit[i+1]),
 				},{Preserved})
@@ -105,7 +105,7 @@ function Install_DeathNotice()
 					SetCVar(FP,ExScore[j][2],Add,-50);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -122,11 +122,11 @@ function Install_DeathNotice()
 				Install_CText1(HTextStrPtr,Str12,Str03,Names[j])
 				DoActionsX(FP,{
 					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,10000,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-10000);
+					SetScore(j-1,Add,1000,Custom);
+					SetCVar(FP,ExScore[j][2],Add,-1000);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -147,7 +147,7 @@ function Install_DeathNotice()
 					SetCVar(FP,ExScore[j][2],Add,-500);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
 				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -322,7 +322,7 @@ function Print13_Preserve()
 		for i = 0, 6 do
 			CIf(FP,PlayerCheck(i,1))
 			for j = 0, 5 do
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,190+j)})
+			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,100+j)})
 			end
 			CIfEnd()
 		end

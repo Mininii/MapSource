@@ -333,6 +333,10 @@ UnitSizePatch(121,10)
 	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(125,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(126,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(12,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetWepTargetFlags(0,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
+	SetWepTargetFlags(92,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
+	SetWepTargetFlags(93,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 
 		table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
 		table.insert(PatchArr,SetMemoryW(0x656EB0,SetTo,NMarDamageAmount)) -- 기본공격력

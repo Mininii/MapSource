@@ -155,9 +155,12 @@ function LevelUp()
 		CElseX()
 		CMov(FP,GetP,_Add(Level,_Mul(Diff,_Mov(3))))
 		CIfXEnd()
-		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage),})
+		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
+		if Limit == 1 then
+			f_Mul(FP,GetP,_Mov(2))
+		end
 		
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)

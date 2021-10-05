@@ -13,21 +13,21 @@ function Objects()
 
 	--Shop
 	P_MinCost = 1 -- 미네랄 증가
-	P_MinAmount = 3000000 -- 미네랄 증가량
+	P_MinAmount = 1000000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
-	P_NukeAmount = 1 -- 핵 장전양
+	P_NukeAmount = 2 -- 핵 장전양
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
 	P_StimCost = 25 -- 원격 스팀팩 사용가능
 	P_MultiCost = 300 -- 멀티커맨드 사용가능
-	P_EnchantCost = 200 -- 뉴비를 위한 일마 강화 적용
+	P_EnchantCost = 150 -- 뉴비를 위한 일마 강화 적용
 	P_SkillUnitCost = 200 -- 핵배틀 잠금해제
 
 	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 
-	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
+	GiveRate2 = {10000, 50000,100000,500000,1000000,5000000}  
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4} 
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
 	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
@@ -175,7 +175,7 @@ function Var_init()
 	LevelPtr = 0x590004
 	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-10000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-1000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
 	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -199,8 +199,8 @@ function Var_init()
 
 	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
 
-	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 \x04구입(W) \x1F(Cost:"..P_NukeCost..") \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
-	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:"..P_SuppCost..") \x07(1회 구입당 3 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 "..P_NukeAmount.."발 \x04구입(W) \x1F(Cost:"..P_NukeCost..") \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:"..P_SuppCost..") \x07(1회 구입당 "..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
 	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 
 	ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -232,7 +232,7 @@ function Var_init()
 	CunitP,SelOPEPD,CurCunitI,CurrentSpeed,CurrentOP = CreateVariables(5)
 	UpgradeCP,UpgradeFactor,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted,UPCompStrPtr = CreateVariables(9)
 	B1_K,B1_K2,B1_H = CreateVariables(3)
-	count,count1,count2,count3 = CreateVariables(4)
+	count = CreateVar()
 	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
 	XY_ArrHeaderVoid = f_GetVoidptr(FP,4000)
 	PCheck = CreateCCode()
@@ -273,6 +273,7 @@ function Var_init()
 	CA2ArrZ = f_GetVArrptr(FP,1700)
 	CUnitFlag = CreateCcode()
 	HeroPointNotice = CreateCcodeArr(7)
+	CPConsoleToggle = CreateCcode()
 
 
 	--CreateVar

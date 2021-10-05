@@ -1,11 +1,6 @@
 function Gun_System()
-	UnitReadX(FP,AllPlayers,229,64,count)
-	UnitReadX(FP,AllPlayers,17,64,count1)
-	UnitReadX(FP,AllPlayers,23,64,count2)
-	UnitReadX(FP,AllPlayers,25,64,count3)
-	CAdd(FP,count,count1)
-	CAdd(FP,count,count2)
-	CAdd(FP,count,count3)
+
+
     local EXCunit_Reset = {}
     for i = 1, #EXCunitTemp do
         table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
@@ -96,8 +91,7 @@ function Gun_System()
             SetInvincibility(Disable,"Buildings",FP,64);
         })
         CMov(FP,Actived_Gun,0)
-        CSub(FP,_Ccode(FP,GCT),Dt)
-		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Add,Dt,GCT)},1)
+		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,Dt,GCT)},1)
         for i = 0, 63 do
             CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
                 Var_InputCVar,

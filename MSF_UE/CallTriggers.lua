@@ -1063,6 +1063,9 @@ local CB_P = CreateVar(FP)
 					CElseX()
 					CMov(FP,ReadScore,0)
 					CIfXEnd()
+					if Limit == 1 then
+						f_Mul(FP,ReadScore,_Mov(2))
+					end
 
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),
 					SetDeaths(0,SetTo,1,14)})
