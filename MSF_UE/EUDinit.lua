@@ -159,52 +159,23 @@ function onInit_EUD()
 	for i = 0, 129 do
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
-	WeaponTypePatch(5,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(12,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(21,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(100,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(85,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(68,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(70,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(89,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(6,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(126,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(127,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(86,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(110,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(128,2) -- 무기 타입 퍼딜
-	WeaponTypePatch(90,2) -- 무기 타입 퍼딜
-	SetUnitClassType(19,1)
-	SetUnitClassType(29,1)
-	SetUnitClassType(98,1)
-	SetUnitClassType(75,1)
-	SetUnitClassType(87,1)
-	SetUnitClassType(68,1)
-	SetUnitClassType(81,1)
-	SetUnitClassType(23,1)
-	SetUnitClassType(74,1)
-	SetUnitClassType(74,1)
-	SetUnitClassType(57,1)
-	SetUnitClassType(69,1)
-	SetUnitClassType(11,1)
+	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90}
+	NormalClassTable = {84,30,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
+	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11}
+	for j, k in pairs(PercentTable) do
+		WeaponTypePatch(k,2) -- 무기 타입 퍼딜
+	end
+	for j, k in pairs(NormalClassTable) do
+		SetUnitClassType(k)
+	end
+	for j, k in pairs(PercentClassTable) do
+		SetUnitClassType(k,1)
+	end
 
-	SetUnitClassType(84)
-	SetUnitClassType(30)
-	SetUnitClassType(47)
-	SetUnitClassType(77)
-	SetUnitClassType(78)
-	SetUnitClassType(28)
-	SetUnitClassType(17)
-	SetUnitClassType(21)
-	SetUnitClassType(27)
-	SetUnitClassType(86)
-	SetUnitClassType(88)
-	SetUnitClassType(80)
-	SetUnitClassType(25)
-	SetUnitClassType(76)
-	SetUnitClassType(79)
-	SetUnitClassType(220)
-	SetUnitClassType(150)
+	
+
+	
+
 --roka7
 function EffUnitPatch(UnitID)
 	table.insert(PatchArr,SetMemoryB(0x6616E0 + UnitID,SetTo,130))
@@ -334,6 +305,7 @@ UnitSizePatch(121,10)
 	SetUnitAdvFlag(125,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(126,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(12,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(124,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetWepTargetFlags(0,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 	SetWepTargetFlags(92,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 	SetWepTargetFlags(93,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
@@ -398,15 +370,15 @@ UnitSizePatch(121,10)
 	for i = 220, 227 do
 		DefTypePatch(i,9)
 	end
-		DefTypePatch(15,9)
-		DefTypePatch(68,9)
-		DefTypePatch(7,9)
-		DefTypePatch(87,9)
-		DefTypePatch(150,9)
-		DefTypePatch(74,9)
-		DefTypePatch(186,9)
-		DefTypePatch(121,9)
-		DefTypePatch(173,9)
+	DefTypePatch(15,9)
+	DefTypePatch(68,9)
+	DefTypePatch(7,9)
+	DefTypePatch(87,9)
+	DefTypePatch(150,9)
+	DefTypePatch(74,9)
+	DefTypePatch(186,9)
+	DefTypePatch(121,9)
+	DefTypePatch(173,9)
 
 
 	Trigger { -- 퍼센트 데미지 세팅

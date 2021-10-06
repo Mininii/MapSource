@@ -454,12 +454,12 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		CIfX(i,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},SetCDeaths(FP,Add,1,FuncT[i+1]))
 		TriggerX(i,{CDeaths(FP,AtLeast,30*24,FuncT[i+1])},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,FuncT[i+1])},{Preserved})
 		
-		GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다.\x07 』",
-		"\x07『 \x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다.\x07 』",
-		"\x07『 \x04기부금액 단위가 \x1F50000 Ore \x04로 변경되었습니다.\x07 』",
-		"\x07『 \x04기부금액 단위가 \x1F100000 Ore \x04로 변경되었습니다.\x07 』",
-		"\x07『 \x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다.\x07 』",
-		"\x07『 \x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.\x07 』"}
+		GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[2].." Ore\x04 \x04로 변경되었습니다.\x07 』",
+		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[3].." Ore \x04로 변경되었습니다.\x07 』",
+		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[4].." Ore \x04로 변경되었습니다.\x07 』",
+		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[5].." Ore \x04로 변경되었습니다.\x07 』",
+		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[6].." Ore \x04로 변경되었습니다.\x07 』",
+		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[1].." Ore \x04로 변경되었습니다.\x07 』"}
 		for k = 0, 5 do
 		Trigger { -- 기부 금액 변경
 			players = {i},
