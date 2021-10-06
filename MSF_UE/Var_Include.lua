@@ -16,6 +16,7 @@ function Objects()
 	P_MinAmount = 1000000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
 	P_NukeAmount = 2 -- 핵 장전양
+	P_AMCost = 10 -- 반물질 폭탄 장전
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
 	P_StimCost = 25 -- 원격 스팀팩 사용가능
@@ -173,6 +174,8 @@ function Var_init()
 	-- 0x58f500 SelHP 0x58f504 MarHP 0x58f508 SelSh 0x58f0c 0x58f510
 	TimePtr = 0x590000
 	LevelPtr = 0x590004
+	LimitTimePtr = 0x590008
+	EvCheckPtr = 0x59000C
 	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-1000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -195,20 +198,27 @@ function Var_init()
 	HiScoreT1 = CreateCText(FP,"\x13\x10【 \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
 	HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 	NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-
+	AMUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x1F반물질 \x08폭탄\x04을 \x1F투하\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	
 
 	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
 
-	NukeT = CreateCText(FP,"\x13\x07『 \x08뉴클리어 "..P_NukeAmount.."발 \x04구입(W) \x1F(Cost:"..P_NukeCost..") \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
-	SupplyT = CreateCText(FP,"\x13\x07『 \x08인구수 \x04구입(E) \x1F(Cost:"..P_SuppCost..") \x07(1회 구입당 "..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	NukeT = CreateCText(FP,"\x07『 \x04뉴클리어(W) \x1F(Cost:"..P_NukeCost..", "..P_NukeAmount.."발, 보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	NukeEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d발) \x07』\x12\x07『 \x1F반물질 \x08폭탄\x04 투하(S) \x1F(Cost:"..P_AMCost..", 맵 전범위, 바로사용) \x07』")
+
+	SupplyT = CreateCText(FP,"\x07『 \x08인구수\x04(E) \x1F(Cost:"..P_SuppCost..") \x07("..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
 	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
+
+	ArmorT = CreateCText(FP,"\x07『 \x0F퍼센트 방어력\x04 업그레이드(D) \x1F(Cost:\x0d\x0d\x0d\x0d\x0d\x0d")
+	ArmorT2 = CreateCText(FP,") \x04(\x0d\x0d\x0d\x0d\x0d\x0d")
+	ArmorT3 = CreateCText(FP,"/255) \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 
 	ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 
 	DBossTotalDMGT = CreateCText(FP,"\x13\x1FＢ\x04ｏｓｓ \x08Ｂ\x04ａｔｔｌｅ \x07Ｂ\x04ｏｎｕｓ : ")
 	HTextStrReset = CreateCText(FP,HTextStr)
-	HeroVArr = CreateVarray(FP,#HeroArr)
-	ZergGndVArr = CreateVarray(FP,#ZergGndUArr)
+	HeroVArr = f_GetVArrptr(FP,#HeroArr)
+	ZergGndVArr = f_GetVArrptr(FP,#ZergGndUArr)
 	
 	Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03†")
 	Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03† \x04\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -224,7 +234,7 @@ function Var_init()
 
 
 	MarNumberLimit = CreateVar3(FP,(84*2)*10)
-	MaxHPBackUp = CreateVarray(FP,228)
+	MaxHPBackUp = f_GetVArrptr(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
 	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
@@ -248,6 +258,7 @@ function Var_init()
 	PScoreSTrPtr = Create_VTable(7)
 	EXCunitTemp = Create_VTable(10)
 	NukeUseStrPtr = Create_VTable(7)
+	AMUseStrPtr = Create_VTable(7)
 	Names = Create_VArrTable(7,7)
 	BanToken = Create_CCTable(7) -- {"X",EXCC_Forward,0x15C,1,2}
 	rokaClear = CreateCCode()
@@ -334,6 +345,8 @@ function Var_init()
 	NukeStrPtr = CreateVar(FP)
 	SupplyStrPtr = CreateVar(FP)
 	SuppMax = CreateVar(FP)
+	MulPoint = CreateVar(FP)
+	ArmorStrPtr = CreateVar(FP)
 	end
 
 function HPoints()

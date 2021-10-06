@@ -528,7 +528,7 @@ Trigger {
 
 	CIfEnd()
 
-	local TotalDmgVA = CreateVarray(FP,13)
+	local TotalDmgVA = CreateVArray(FP,13)
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		f_Div(FP,DTotalDmg,_Mov(256))
@@ -638,9 +638,10 @@ Trigger {
 		CIfEnd()
 		CIf(FP,CDeaths(FP,AtLeast,3000+6000,ClearTimer))
 		CIfX(FP,{TCVar(FP,TotalScore[2],AtLeast,OutputPoint),CVar(FP,TotalScore[2],AtMost,0x7FFFFFFF)}) --  점수만족시
-		local ClearScoreT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07다음 단계 진입 가능\x04합니다.\x14\n\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-		DoActionsX(FP,{RotatePlayer({DisplayTextX(ClearScoreT,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
-			SetCDeaths(FP,SetTo,1,Destr0yerClear2)})
+
+		DoActionsX(FP,{SetCDeaths(FP,SetTo,1,Destr0yerClear2)})
+
+
 		CElseX()--  점수불만족시
 		DoActions2(FP,RotatePlayer({
 			DisplayTextX(string.rep("\n", 20),4),

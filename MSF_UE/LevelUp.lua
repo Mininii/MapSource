@@ -149,7 +149,7 @@ function LevelUp()
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 
 		GetP = CreateVar(FP)
-		local GetPVA = CreateVarray(FP,13)
+		local GetPVA = CreateVArray(FP,13)
 		CIfX(FP,{CDeaths(FP,AtLeast,1,isSingle)})
 		CMov(FP,GetP,_Div(_Add(Level,_Mul(Diff,_Mov(3))),_Mov(10)))
 		CElseX()
@@ -161,6 +161,9 @@ function LevelUp()
 		if Limit == 1 then
 			f_Mul(FP,GetP,_Mov(2))
 		end
+		CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
+			f_Mul(FP,GetP,MulPoint)
+		CIfEnd()
 		
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)
@@ -177,6 +180,12 @@ function LevelUp()
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+		local ClearScoreT1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07다음 단계 진입 가능\x04합니다."
+		local ClearScoreT2 = "\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+
+		Trigger2X(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{
+		RotatePlayer({DisplayTextX(ClearScoreT1,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),DisplayTextX(ClearScoreT2,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
+		},{Preserved})
 	if Limit == 1 and TestStart == 0 then
 		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
 	end
@@ -273,16 +282,15 @@ function LevelUp()
 		local UpVar = CreateVar(FP)
 		CMov(FP,UpVar,Level)
 		f_Div(FP,UpVar,_Mov(2))
+		for i = 1, 3 do
+		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{Preserved})
+		end
 		for i = 0, 7 do
 			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
 		end
-		for i = 1, 3 do
-		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,5)},{Preserved})
-		end
-		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
+		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,255)},{Preserved})
 		
 		
-		Trigger2(FP,{MemoryB(0x58D2B0+(46*7)+3,AtLeast,51)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,50)},{Preserved})
 
 		
 		DoActions(FP,{SetSwitch(ResetSwitch,Set)})

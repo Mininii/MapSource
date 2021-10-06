@@ -9,8 +9,8 @@ SetCall(FP)
 	SetRecoverCp()
 SetCallEnd()
 
-local UpCompTxt = CreateVarray(FP,5)
-local UpCompRet = CreateVarray(FP,5)
+local UpCompTxt = CreateVArray(FP,5)
+local UpCompRet = CreateVArray(FP,5)
 
 TempMul_254,TempMul_255,TempMul_1,TempFactor = CreateVars(4,FP)
 
@@ -261,7 +261,7 @@ local G_CA_RPTV = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
 local SL_Ret = CreateVar(FP)
 
-local f_GunNumT = CreateVarray(FP,5)
+local f_GunNumT = CreateVArray(FP,5)
 local Write_SpawnSet_Jump = def_sIndex()
 
 Call_SLCalc = SetCallForward()
@@ -1009,8 +1009,8 @@ local CB_P = CreateVar(FP)
 	
 		local ExScoreVA = Create_VArrTable(7,13)
 		local ExScoreP = Create_VTable(7)
-		local TotalScoreVA = CreateVarray(FP,7)
-		local DBossScoreVA = CreateVarray(FP,7)
+		local TotalScoreVA = CreateVArray(FP,7)
+		local DBossScoreVA = CreateVArray(FP,7)
 		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
 		for i = 1, 7 do
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
@@ -1066,7 +1066,9 @@ local CB_P = CreateVar(FP)
 					if Limit == 1 then
 						f_Mul(FP,ReadScore,_Mov(2))
 					end
-
+					CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
+						f_Mul(FP,ReadScore,MulPoint)
+					CIfEnd()
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),
 					SetDeaths(0,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),
@@ -1075,7 +1077,7 @@ local CB_P = CreateVar(FP)
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					SetMemory(0x6509B0,SetTo,FP)},1)
-					GetPVA = CreateVarray(FP,13)
+					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)

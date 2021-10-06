@@ -191,11 +191,13 @@ EffUnitPatch(208)
 EffUnitPatch(209)
 EffUnitPatch(210)
 EffUnitPatch(211)
+EffUnitPatch(212)
 EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
 UnitSizePatch(121,10)
 
+UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 -------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
 	--0~6 공업용??
@@ -384,14 +386,14 @@ UnitSizePatch(121,10)
 	Trigger { -- 퍼센트 데미지 세팅
 		players = {P8},
 		actions = {
-			SetMemory(0x515B88,SetTo,256);---------크기 0 일반형
-			SetMemory(0x515B8C,SetTo,256);---------크기 1 일반형
-			SetMemory(0x515B90,SetTo,256);---------크기 2 일반형
-			SetMemory(0x515B94,SetTo,256);---------크기 3 일반형
-			SetMemory(0x515B98,SetTo,256);---------크기 4 일반형
-			SetMemory(0x515B9C,SetTo,256);---------크기 5 일반형
-			SetMemory(0x515BA0,SetTo,256);---------크기 6 일반형
-			SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형
+			SetMemory(0x515B88,SetTo,256);---------크기 0 일반형 P1 익시드 마린
+			SetMemory(0x515B8C,SetTo,256);---------크기 1 일반형 P2 익시드 마린
+			SetMemory(0x515B90,SetTo,256);---------크기 2 일반형 P3 익시드 마린
+			SetMemory(0x515B94,SetTo,256);---------크기 3 일반형 P4 익시드 마린
+			SetMemory(0x515B98,SetTo,256);---------크기 4 일반형 P5 익시드 마린
+			SetMemory(0x515B9C,SetTo,256);---------크기 5 일반형 P6 익시드 마린
+			SetMemory(0x515BA0,SetTo,256);---------크기 6 일반형 P7 익시드 마린
+			SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형 
 			SetMemory(0x515BA8,SetTo,256);---------크기 8 일반형
 			SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
 			SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드 마린
@@ -482,16 +484,21 @@ UnitSizePatch(121,10)
 	}
 	end
 
-	YY = 2021
-	MM = 10
-	DD = 06
-	HH = 00
+	T_YY = 2021
+	T_MM = 10
+	T_DD = 06
+	T_HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
 	end
-	
-	GlobalTime = os.time{year=YY, month=MM, day=DD, hour=HH }
+	L_YY = 2021
+	L_MM = 10
+	L_DD = 20
+	L_HH = 00
+	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
+	L_GlobalTime = os.time{year=L_YY, month=L_MM, day=L_DD, hour=L_HH }
 	--PushErrorMsg(GlobalTime)
+	DoActions(FP,{SetMemory(LimitTimePtr,SetTo,L_GlobalTime)})
 	Trigger {
 		players = {FP},
 		conditions = {
@@ -643,6 +650,7 @@ UnitSizePatch(121,10)
 	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D)
 	f_GetStrXptr(FP,PScoreSTrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Score".._0D)
 	f_GetStrXptr(FP,NukeUseStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Nuke".._0D)
+	f_GetStrXptr(FP,AMUseStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."AMatter".._0D)
 	end
 	f_GetStrXptr(FP,DBoss_PrintScore,"\x0D\x0D\x0DDBossSC".._0D)
 	f_GetStrXptr(FP,DBoss_PrintScore2,"\x0D\x0D\x0DDBossDMG".._0D)
@@ -652,6 +660,9 @@ UnitSizePatch(121,10)
 	f_GetStrXptr(FP,HiScoreStrPtr,"\x0D\x0D\x0DHiSc".._0D)
 	f_GetStrXptr(FP,NukeStrPtr,"\x0D\x0D\x0DNuke".._0D)
 	f_GetStrXptr(FP,SupplyStrPtr,"\x0D\x0D\x0DSupp".._0D)
+	f_GetStrXptr(FP,ArmorStrPtr,"\x0D\x0D\x0DArmor".._0D)
+	
+	
 	
 
 	Print_All_CTextString(FP)
@@ -680,7 +691,7 @@ UnitSizePatch(121,10)
 
 	
 	f_MemCpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
-	f_MemCpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
+	f_MemCpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(NukeEndT[3],0),"X","X",1),NukeEndT[2])
 
 	
 	f_MemCpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])
@@ -688,6 +699,9 @@ UnitSizePatch(121,10)
 	f_MemCpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)+SupplyT2[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
 
 
+	f_MemCpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
+	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)),_TMem(Arr(ArmorT2[3],0),"X","X",1),ArmorT2[2])
+	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)+ArmorT2[2]+(5*4)),_TMem(Arr(ArmorT3[3],0),"X","X",1),ArmorT3[2])
 	
 	f_Read(FP,0x57F1B0,LocalPV)
 	
@@ -698,6 +712,7 @@ UnitSizePatch(121,10)
 	Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
 	Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
 	Install_CText1(NukeUseStrPtr[i],Str12,NukeUseT,Names[i])
+	Install_CText1(AMUseStrPtr[i],Str12,AMUseT,Names[i])
 	end
 
 

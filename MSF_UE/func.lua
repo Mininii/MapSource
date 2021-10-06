@@ -38,9 +38,9 @@ end
 end
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
-	f_MemCpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
+	f_MemCpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
 	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
-	f_MemCpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+	f_MemCpy(FP,_Add(StrPtr,CText1[2]+(4*6)),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
 
@@ -321,7 +321,7 @@ function Print13_Preserve()
 		CIfEnd()
 		for i = 0, 6 do
 			CIf(FP,PlayerCheck(i,1))
-			for j = 0, 5 do
+			for j = 0, 9 do
 			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,100+j)})
 			end
 			CIfEnd()
