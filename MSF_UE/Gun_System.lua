@@ -92,7 +92,7 @@ function Gun_System()
         })
         CMov(FP,Actived_Gun,0)
 		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,Dt,GCT)},1)
-        for i = 0, 63 do
+        for i = 0, 127 do
             CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
                 Var_InputCVar,
                 SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),

@@ -320,8 +320,8 @@ function Print13_Preserve()
 			end
 		CIfEnd()
 		for i = 0, 6 do
-			CIf(FP,PlayerCheck(i,1))
-			for j = 0, 9 do
+			CIf(FP,{PlayerCheck(i,1),Deaths(i,AtMost,0,202)})
+			for j = 0, 12 do
 			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,100+j)})
 			end
 			CIfEnd()

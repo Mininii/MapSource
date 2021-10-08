@@ -835,11 +835,11 @@ SetCall(FP)
 	G_SkipJump = def_sIndex()
 	CJumpEnd(FP,G_SkipJump)
 	CAdd(FP,G_TempV,_Mul(G_CA,_Mov(0x970/4)),G_InputH)
-	NIf(FP,{TMemory(G_TempV,AtLeast,1),CVar(FP,G_CA[2],AtMost,63)},{SetCVar(FP,G_CA[2],Add,1)})
+	NIf(FP,{TMemory(G_TempV,AtLeast,1),CVar(FP,G_CA[2],AtMost,126)},{SetCVar(FP,G_CA[2],Add,1)})
 		CJump(FP,G_SkipJump)
 	NIfEnd()
 
-	CIfX(FP,{CVar(FP,G_CA[2],AtMost,63)})
+	CIfX(FP,{CVar(FP,G_CA[2],AtMost,126)})
 	CDoActions(FP,{
 		TSetMemory(G_TempV,SetTo,GunID),
 		TSetMemory(_Add(G_TempV,1*(0x20/4)),SetTo,CPosX),

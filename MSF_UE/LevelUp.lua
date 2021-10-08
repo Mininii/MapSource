@@ -26,23 +26,38 @@ function LevelUp()
 		Bring(FP,AtLeast,1,147,64)},{SetCVar(FP,ReserveBGM[2],SetTo,0)},{Preserved})
 	})
 	TriggerX(FP,{
-	DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
-	CVar(FP,Actived_Gun[2],AtMost,0),
-	CommandLeastAt(131,64),
-	CommandLeastAt(132,64),
-	CommandLeastAt(133,64),
-	CommandLeastAt(173,64),
-	CommandLeastAt(151,64),
-	CommandLeastAt(152,64),
-	CommandLeastAt(148,64),
-	CommandLeastAt(130,64),
-	CommandLeastAt(201,64),
-	Bring(FP,AtLeast,1,147,64)
-	},{
-	SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-	},{Preserved})
-	
-	
+		CVar(FP,LevelT2[2],AtMost,1),
+		DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
+		CVar(FP,Actived_Gun[2],AtMost,0),
+		CommandLeastAt(131,64),
+		CommandLeastAt(132,64),
+		CommandLeastAt(133,64),
+		CommandLeastAt(173,64),
+		CommandLeastAt(151,64),
+		CommandLeastAt(152,64),
+		CommandLeastAt(148,64),
+		CommandLeastAt(130,64),
+		CommandLeastAt(201,64),
+		Bring(FP,AtLeast,1,147,64)
+		},{
+		SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
+		},{Preserved})
+	TriggerX(FP,{
+		CVar(FP,LevelT2[2],AtLeast,2),
+		CVar(FP,Actived_Gun[2],AtMost,0),
+		CommandLeastAt(131,64),
+		CommandLeastAt(132,64),
+		CommandLeastAt(133,64),
+		CommandLeastAt(173,64),
+		CommandLeastAt(151,64),
+		CommandLeastAt(152,64),
+		CommandLeastAt(148,64),
+		CommandLeastAt(130,64),
+		CommandLeastAt(201,64),
+		Bring(FP,AtLeast,1,147,64)
+		},{
+		SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
+		},{Preserved})
 	
 	StoryT3 = CreateCCode()
 	BClear = CreateCCode()
@@ -52,7 +67,7 @@ function LevelUp()
 
 			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{Preserved})--19
 			DoActions(FP,{
-			SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
+			--SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
 			KillUnitAt(All,125,17,Force1),
 			KillUnitAt(All,125,18,Force1),
@@ -393,6 +408,15 @@ function LevelUp()
 	SetSwitch(ResetSwitch,Clear),
 	SetCDeaths(FP,SetTo,0,BossStart),
 	SetCDeaths(FP,SetTo,0,isBossStage),
+	SetCDeaths(FP,SetTo,0,AmUsed[1]),
+	SetCDeaths(FP,SetTo,0,AmUsed[2]),
+	SetCDeaths(FP,SetTo,0,AmUsed[3]),
+	SetCDeaths(FP,SetTo,0,AmUsed[4]),
+	SetCDeaths(FP,SetTo,0,AmUsed[5]),
+	SetCDeaths(FP,SetTo,0,AmUsed[6]),
+	SetCDeaths(FP,SetTo,0,AmUsed[7]),
+	
+
 	})
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VOFF)},MapPlayers,FP)})
 	CIfEnd()

@@ -491,14 +491,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
 	end
-	L_YY = 2021
-	L_MM = 10
-	L_DD = 20
-	L_HH = 00
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
-	L_GlobalTime = os.time{year=L_YY, month=L_MM, day=L_DD, hour=L_HH }
 	--PushErrorMsg(GlobalTime)
-	DoActions(FP,{SetMemory(LimitTimePtr,SetTo,L_GlobalTime)})
+	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	Trigger {
 		players = {FP},
 		conditions = {

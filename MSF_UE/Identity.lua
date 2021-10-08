@@ -43,6 +43,7 @@ Id_T3 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F배\x02고
 Id_T4 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x1B어쩔 수 없군. 내가 직접 나서서 \x08저 그지 놈들\x1B을 처리하겠다.\r\n\r\n "
 Id_T5 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x11진진 \x15짜라의 \x1B주인 \x08타\x06림\x04이 \x08등장\x04하였습니다.\r\n\x13\x1FS\x04heild \x022,000 \x03/// \x07H\x04ealth \x1D??,???,???\r\n\x13\x1B\"내가 직접 나서서 저 빌어먹을 그지새끼들을 한 놈도 빠짐없이 라면통에 쳐박아주마.\""
 
+CIfX(FP,CVar(FP,LevelT2[2],AtMost,1))
 StoryPrint(6000*(0),{
 	PlayWAVX("staredit\\wav\\button3.wav");
 	PlayWAVX("staredit\\wav\\button3.wav");
@@ -74,11 +75,10 @@ StoryPrint(6000*(4),{
 	DisplayTextX(Id_T4,4);
 },Id_T4C) 
 StoryPrint(6000*(5),{
-	TalkingPortrait(68, 6100);
-	PlayWAVX("sound\\Protoss\\ARCHON\\PArPss00.WAV");
-	PlayWAVX("sound\\Protoss\\ARCHON\\PArPss00.WAV");
-	DisplayTextX(Id_T5,4);
 },Id_T5C,{SetCDeaths(FP,SetTo,1,StoryT2)}) 
+
+CElseIfX(CDeaths(FP,AtMost,6000*(5),StoryT),{SetCDeaths(FP,SetTo,1,StoryT2),SetCDeaths(FP,SetTo,6*6000,StoryT)})
+CIfXEnd()
 CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2)) -- 소환
 f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
@@ -89,6 +89,12 @@ CDoActions(FP,{
 	TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(1000*256)),_Mov(2000*256))),
 	KillUnitAt(All,"Men",29,Force1),
 })
+DoActions2(FP,
+RotatePlayer({
+	TalkingPortrait(68, 6100);
+	PlayWAVX("sound\\Protoss\\ARCHON\\PArPss00.WAV");
+	PlayWAVX("sound\\Protoss\\ARCHON\\PArPss00.WAV");
+	DisplayTextX(Id_T5,4);},HumanPlayers,FP))
 
 CIfEnd()
 
