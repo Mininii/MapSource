@@ -16,13 +16,14 @@ function Objects()
 	P_MinAmount = 1000000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
 	P_NukeAmount = 1 -- 핵 장전양
-	P_AMCost = 50 -- 반물질 폭탄 장전
+	P_AMCost = 25 -- 반물질 폭탄 장전
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
 	P_StimCost = 25 -- 원격 스팀팩 사용가능
 	P_MultiCost = 300 -- 멀티커맨드 사용가능
 	P_EnchantCost = 150 -- 뉴비를 위한 일마 강화 적용
 	P_SkillUnitCost = 200 -- 핵배틀 잠금해제
+--	P_TeamMinCost = 100 -- 핵배틀 잠금해제
 
 	
 	--System
@@ -176,6 +177,7 @@ function Var_init()
 	LevelPtr = 0x590004
 	LimitVerPtr = 0x590008
 	EvCheckPtr = 0x59000C
+	--0x590010 MSQC
 	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-1000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -187,7 +189,7 @@ function Var_init()
 	f_GunFuncT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun 실행자 : ")
 	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	f_GunSendErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Send Failed. f_Gun 실행자 : ")
-	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04이(가) \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
+	Str13 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04님이 \x1C수정 보호막\x04을 사용했습니다. \x07』\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
 	DBossT1 = CreateCText(FP,"\x13\x10【 \x07P\x04layer \x06T\x04otal \x1FS\x04core : \x0d\x0d\x0d\x0d\x0d\x0d")
@@ -200,11 +202,17 @@ function Var_init()
 	NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	AMUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x1F융단 \x08폭격\x04을 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	
+	GiveSendT = CreateCText(FP,"\x07『 \x0d\x0d\x0d\x0d")
+	GiveT2 = CreateCText(FP,"\x04에게 \x0d\x0d\x0d\x0d")
+	GiveSendT2 = CreateCText(FP," Ore\x04를 기부하였습니다. \x07』")
+	GiveReciveT = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d")
+	GiveReciveT2 = CreateCText(FP," Ore\x04를 기부받았습니다.\x02 \x07』")
+	GiveTReset = CreateCText(FP,"\x0D\x0D\x0DGive".._0D)
 
 	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
 
 	NukeT = CreateCText(FP,"\x07『 \x08뉴클리어 \x04"..P_NukeCost.."Point / \x07"..P_NukeAmount.."발\x1F(Z:1, X:10, C:100) 보유량 : \x0d\x0d\x0d")
-	NukeEndT = CreateCText(FP,"발) \x07』\x12\x07『 \x1F융단 \x08폭격 \x04투하(V) \x1F(Cost:"..P_AMCost..", 맵 전범위, Level당 1회 제한) \x07』")
+	NukeEndT = CreateCText(FP,"발) \x07』\x12\x07『 \x1F융단 \x08폭격 \x04투하(V) \x1F(Cost:"..P_AMCost..", 맵 전범위, 쿨타임 180초) \x07』")
 
 	SupplyT = CreateCText(FP,"\x07『 \x08인구수\x04(Q) \x1F(Cost:"..P_SuppCost..") \x07("..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
 	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -233,7 +241,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,(84*2)*10)
+	MarNumberLimit = CreateVar3(FP,(96)*10)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
@@ -348,6 +356,7 @@ function Var_init()
 	SuppMax = CreateVar(FP)
 	MulPoint = CreateVar(FP)
 	ArmorStrPtr = CreateVar(FP)
+	GiveStrPtr = CreateVar(FP)
 	end
 
 function HPoints()

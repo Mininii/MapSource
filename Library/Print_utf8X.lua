@@ -92,7 +92,7 @@ function print_utf8(line, offset, string)
         local str = string
         local n = 1
         if dst % 4 >= 1 then
-            for i = 1, dst % 4 do str = '\0'..str end
+            for i = 1, dst % 4 do str = '\x0d'..str end
         end
         local t = cp949_to_utf8(str)
         while n <= #t do

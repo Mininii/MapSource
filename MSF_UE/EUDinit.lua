@@ -656,6 +656,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_GetStrXptr(FP,NukeStrPtr,"\x0D\x0D\x0DNuke".._0D)
 	f_GetStrXptr(FP,SupplyStrPtr,"\x0D\x0D\x0DSupp".._0D)
 	f_GetStrXptr(FP,ArmorStrPtr,"\x0D\x0D\x0DArmor".._0D)
+	f_GetStrXptr(FP,GiveStrPtr,"\x0D\x0D\x0DGive".._0D)
 	
 	
 	
@@ -697,6 +698,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_MemCpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
 	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)),_TMem(Arr(ArmorT2[3],0),"X","X",1),ArmorT2[2])
 	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)+ArmorT2[2]+(5*4)),_TMem(Arr(ArmorT3[3],0),"X","X",1),ArmorT3[2])
+
+	
 	
 	f_Read(FP,0x57F1B0,LocalPV)
 	

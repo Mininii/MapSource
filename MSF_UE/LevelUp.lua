@@ -12,8 +12,8 @@ function LevelUp()
 	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x08주의!! \x049, 10단계 진입할때마다 해당 스테이지에서는 \x1C수정 보호막 \x04사용이 \x06제한\x04됩니다!\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local NoText = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04NO를 입력하셨습니다. 게임을 종료합니다.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local TextSwitch = Create_CCTable(5)
-	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),
-	TriggerX(FP,{
+	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere")})
+	CIf(FP,{
 		CommandLeastAt(131,64),
 		CommandLeastAt(132,64),
 		CommandLeastAt(133,64),
@@ -23,41 +23,24 @@ function LevelUp()
 		CommandLeastAt(148,64),
 		CommandLeastAt(130,64),
 		CommandLeastAt(201,64),
-		Bring(FP,AtLeast,1,147,64)},{SetCVar(FP,ReserveBGM[2],SetTo,0)},{Preserved})
-	})
-	TriggerX(FP,{
-		CVar(FP,LevelT2[2],AtMost,1),
-		DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
 		CVar(FP,Actived_Gun[2],AtMost,0),
-		CommandLeastAt(131,64),
-		CommandLeastAt(132,64),
-		CommandLeastAt(133,64),
-		CommandLeastAt(173,64),
-		CommandLeastAt(151,64),
-		CommandLeastAt(152,64),
-		CommandLeastAt(148,64),
-		CommandLeastAt(130,64),
-		CommandLeastAt(201,64),
-		Bring(FP,AtLeast,1,147,64)
-		},{
-		SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-		},{Preserved})
-	TriggerX(FP,{
-		CVar(FP,LevelT2[2],AtLeast,2),
-		CVar(FP,Actived_Gun[2],AtMost,0),
-		CommandLeastAt(131,64),
-		CommandLeastAt(132,64),
-		CommandLeastAt(133,64),
-		CommandLeastAt(173,64),
-		CommandLeastAt(151,64),
-		CommandLeastAt(152,64),
-		CommandLeastAt(148,64),
-		CommandLeastAt(130,64),
-		CommandLeastAt(201,64),
-		Bring(FP,AtLeast,1,147,64)
-		},{
-		SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-		},{Preserved})
+		Bring(FP,AtLeast,1,147,64),
+	},{SetCVar(FP,ReserveBGM[2],SetTo,0)})
+		CIfX(FP,{CVar(FP,LevelT2[2],AtMost,1)})
+			TriggerX(FP,{DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),},{
+				SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
+				},{Preserved})
+		CElseIfX({CVar(FP,LevelT2[2],AtLeast,2)})
+		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,9)
+			},{
+			SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
+			},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
+			},{
+			SetInvincibility(Disable,147,P8,"Anywhere"),SetCVar(FP,ReserveBGM[2],SetTo,0),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
+			},{Preserved})
+		CIfXEnd()
+	CIfEnd()
 	
 	StoryT3 = CreateCCode()
 	BClear = CreateCCode()
