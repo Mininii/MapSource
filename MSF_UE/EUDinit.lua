@@ -674,8 +674,15 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 	f_MemCpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
 
+	CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
 	f_MemCpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
 	f_MemCpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
+	CElseX()
+	f_MemCpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	f_MemCpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	CIfXEnd()
+	
+
 	f_MemCpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
 	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
 	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])

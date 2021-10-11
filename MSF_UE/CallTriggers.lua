@@ -1055,8 +1055,8 @@ local CB_P = CreateVar(FP)
 				CIf(FP,{PlayerCheck(i,1)})
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
 					
-					CIfX(FP,{CDeaths(FP,AtLeast,1,isSingle)})
-					f_Div(FP,ReadScore,ExScore[i+1],100000)
+					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+					CMov(FP,ReadScore,0)
 					CElseX()
 					f_Div(FP,ReadScore,ExScore[i+1],10000)
 					CIfXEnd()
@@ -1079,8 +1079,13 @@ local CB_P = CreateVar(FP)
 					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
+					CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
 					f_MemCpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+					CElseX()
+					f_MemCpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+					CIfXEnd()
+
 					DoActions(FP,{
 						SetMemory(0x6509B0,SetTo,i),
 						DisplayText("\x0D\x0D\x0DKillP".._0D,4),

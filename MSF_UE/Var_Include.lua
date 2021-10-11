@@ -13,16 +13,19 @@ function Objects()
 
 	--Shop
 	P_MinCost = 1 -- 미네랄 증가
-	P_MinAmount = 1000000 -- 미네랄 증가량
+	P_MinAmount = 500000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
 	P_NukeAmount = 1 -- 핵 장전양
 	P_AMCost = 20 -- 반물질 폭탄 장전
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
-	P_StimCost = 25 -- 원격 스팀팩 사용가능
-	P_MultiCost = 300 -- 멀티커맨드 사용가능
+	P_StimCost = 35 -- 원격 스팀팩 사용가능
+	P_MultiCost = 500 -- 멀티커맨드 사용가능
 	P_EnchantCost = 150 -- 뉴비를 위한 일마 강화 적용
-	P_SkillUnitCost = 200 -- 핵배틀 잠금해제
+	P_SkillUnitCost = 450 -- 핵배틀 잠금해제
+	P_AutoStimCost = 600 -- 오토스팀
+	P_AutoHealCost = 7300 -- 오토힐
+	P_MarDetectorCost = 2500 -- 디텍터
 --	P_TeamMinCost = 100 -- 핵배틀 잠금해제
 
 	
@@ -208,9 +211,11 @@ function Var_init()
 	GiveReciveT = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d")
 	GiveReciveT2 = CreateCText(FP," Ore\x04를 기부받았습니다.\x02 \x07』")
 	GiveTReset = CreateCText(FP,"\x0D\x0D\x0DGive".._0D)
+	SoloNoPointT = CreateCText(FP,"\x13\x10【 \x07솔로 플레이\x04에서는 \x08포인트를 획득할 수 없습니다. \x10】")
+	
 
 	StatPT = CreateCText(FP,"\x13\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-
+	
 	NukeT = CreateCText(FP,"\x07『 \x08뉴클리어 \x04"..P_NukeCost.."Point / \x07"..P_NukeAmount.."발\x1F(Z:1, X:10, C:100) 보유량 : \x0d\x0d\x0d")
 	NukeEndT = CreateCText(FP,"발) \x07』\x12\x07『 \x1F융단 \x08폭격 \x04투하(V) \x1F(Cost:"..P_AMCost..", 맵 전범위, 쿨타임 180초) \x07』")
 

@@ -143,8 +143,8 @@ function LevelUp()
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CIfX(FP,{CDeaths(FP,AtLeast,1,isSingle)})
-		CMov(FP,GetP,_Div(_Add(Level,_Mul(Diff,_Mov(3))),_Mov(10)))
+		CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+		CMov(FP,GetP,0)
 		CElseX()
 		CMov(FP,GetP,_Add(Level,_Mul(Diff,_Mov(3))))
 		CIfXEnd()
@@ -160,8 +160,12 @@ function LevelUp()
 		
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)
+		CIf(FP,CVar(FP,SetPlayers[2],AtLeast,2))
 		f_Movcpy(FP,_Add(PointStrPtr,StPT[2]),VArr(GetPVA,0),12*4)
 		f_MemCpy(FP,_Add(PointStrPtr,StPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+		CIfEnd()
+		
+
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},
 			{RotatePlayer({DisplayTextX(Id_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,DemClear)},
@@ -179,6 +183,9 @@ function LevelUp()
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{
 		RotatePlayer({DisplayTextX(ClearScoreT1,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),DisplayTextX(ClearScoreT2,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
 		},{Preserved})
+		
+		
+
 	if Limit == 1 and TestStart == 0 then
 		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
 	end
