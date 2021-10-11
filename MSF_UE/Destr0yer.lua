@@ -114,6 +114,21 @@ local Lyrics = {
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit)},{Order(186,FP,64,Move,"DCenter")},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,LockBossUnit),CDeaths(FP,Exactly,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),MoveUnit(All,186,FP,64,64)},{Preserved})
 	
+
+	
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{CDeaths(FP,Exactly,0,Pat1)},{
+		SetCDeaths(FP,SetTo,1,Pat1),SetInvincibility(Enable,186,P8,64)},{Preserved})
+
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{CDeaths(FP,Exactly,0,Pat1),DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF)},{RotatePlayer({
+		SetInvincibility(Disable,186,P8,64),
+	},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Pat1)},{Preserved})
+	local Pat1 = Create_PatternCcode(PatternCcode)
+	TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle),CDeaths(FP,Exactly,0,Pat1),DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF)},{RotatePlayer({
+		CenterView(64),
+	},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Pat1),},{Preserved})
+
 	CIf(FP,{DeathsX(FP,AtMost,(66*4),BGMLength,0xFFFFFF)})
 		
 	local CXForward = CAPlotForward()

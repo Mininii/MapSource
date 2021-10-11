@@ -1069,8 +1069,7 @@ local CB_P = CreateVar(FP)
 					CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
 						f_Mul(FP,ReadScore,MulPoint)
 					CIfEnd()
-					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),
-					SetDeaths(0,SetTo,1,14)})
+					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),
 					DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),

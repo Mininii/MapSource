@@ -62,7 +62,7 @@ CIf(FP,Switch("Switch 240",Set))
     CMov(FP,TimePtr,Time)
     CMov(FP,LevelPtr,Level)
 CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
-	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*2)
+	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*3)
 CIfEnd()
 
 CIfEnd()

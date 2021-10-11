@@ -28,9 +28,9 @@ NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,P8),RemoveUnit(204,P8),RemoveUnit(205,P8),RemoveUnit(206,P8),RemoveUnit(207,P8),RemoveUnit(208,P8),RemoveUnit(209,P8),RemoveUnit(210,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
-TestSet(1)
-VerText = "\x04Ver. 2.5T"
-LimitVer = 25
+TestSet(0)
+VerText = "\x04Ver. 2.6"
+LimitVer = 26
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

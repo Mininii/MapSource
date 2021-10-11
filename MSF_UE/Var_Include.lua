@@ -16,7 +16,7 @@ function Objects()
 	P_MinAmount = 1000000 -- 미네랄 증가량
 	P_NukeCost = 1 -- 핵 장전
 	P_NukeAmount = 1 -- 핵 장전양
-	P_AMCost = 25 -- 반물질 폭탄 장전
+	P_AMCost = 20 -- 반물질 폭탄 장전
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
 	P_StimCost = 25 -- 원격 스팀팩 사용가능
@@ -241,7 +241,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,(96)*10)
+	MarNumberLimit = CreateVar3(FP,(96)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
