@@ -275,7 +275,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		Trigger { -- 미네랄 마이너스 방지
 			players = {i},
 			conditions = {
-				Memory(0x57f0f0+(i*4),0x7FFFFFFF,ore);
+				Memory(0x57f0f0+(i*4),AtLeast,0x7FFFFFFF);
 			},
 			actions = {
 				SetResources(i,SetTo,2100000000,ore);
