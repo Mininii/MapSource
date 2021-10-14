@@ -1,6 +1,7 @@
 function LevelUp()
 	local ShUnitLimitT = {}
 	local ShUnitLimitT2 = {}
+	local NoCcode = CreateCcode()
 	for i = 0, 6 do
 		table.insert( ShUnitLimitT,SetMemoryB(0x57F27C+(228*i)+19,SetTo,1))
 		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
@@ -9,7 +10,8 @@ function LevelUp()
 	local CSelT = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\n\n\x13\x04»óÀ§ ÇÃ·¹ÀÌ¾î´Â ¼±ÅÃÇØÁÖ¼¼¿ä.\n\x13\x04´ÙÀ½ ·¹º§·Î ÁøÇàÇÏ½Ã°Ú½À´Ï±î?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
 	local ClearT3 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x07S T A R T\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
 	local ClearT2 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x0710ÃÊ ÈÄ ´ÙÀ½ ·¹º§·Î ÁøÀÔÇÕ´Ï´Ù.\n\x13\x08ÁÖÀÇ!! \x049, 10´Ü°è ÁøÀÔÇÒ¶§¸¶´Ù ÇØ´ç ½ºÅ×ÀÌÁö¿¡¼­´Â \x1C¼öÁ¤ º¸È£¸· \x04»ç¿ëÀÌ \x06Á¦ÇÑ\x04µË´Ï´Ù!\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
-	local NoText = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x14\n\x14\n\n\x13\x04NO¸¦ ÀÔ·ÂÇÏ¼Ì½À´Ï´Ù. °ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.\n\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	local NoText = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x14\n\x14\n\n\x13\x04Á¤¸»·Î Á¾·áÇÏ½Ã°Ú½À´Ï±î? Á¾·á¸¦ ¿øÇÏ½Ã¸é NÀ» 5È¸ ´­·¯ÁÖ¼¼¿ä.\n\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	local NoText2 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x14\n\x14\n\n\x13\x04NO¸¦ ÀÔ·ÂÇÏ¼Ì½À´Ï´Ù. °ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.\n\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
 	local TextSwitch = Create_CCTable(5)
 	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere")})
 	CIf(FP,{
@@ -311,7 +313,8 @@ function LevelUp()
 	CMov(FP,0x6509B0,CurrentOP)
 	NoB = 220
 	YesB = 221
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtLeast,5,NoCcode)},{RotatePlayer({DisplayTextX(NoText2,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,YesB)},{RotatePlayer({DisplayTextX(ClearT2,4),PlayWAVX("staredit\\wav\\LimitBreak.ogg")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue)},{Preserved})
 	CMov(FP,0x6509B0,FP)
 	
@@ -400,6 +403,7 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,AmUsed[5]),
 	SetCDeaths(FP,SetTo,0,AmUsed[6]),
 	SetCDeaths(FP,SetTo,0,AmUsed[7]),
+	SetCDeaths(FP,SetTo,0,NoCcode),
 	
 
 	})
