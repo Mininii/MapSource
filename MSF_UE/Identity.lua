@@ -153,13 +153,14 @@ f_Read(FP,0x58DC60+0x14*30,Fx2,nil,0xFFFF)
 f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 f_Recall(nil,Fx2,Fy2)
 f_Recall(nil,Fx2,Fy2)
+CIf(FP,{Memory(0x628438,AtLeast,1)})
 f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 CDoActions(FP,{
 		CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
 		TSetDeathsX(_Add(Sh_Para,72),SetTo,0xFF*256,0,0xFF00),
 		GiveUnits(All,60,P8,64,P9),
 	})
-
+CIfEnd()
 	CIf(FP,Memory(0x594000+4*41, Exactly, 2))
 
 	f_Lengthdir(FP,FR,_Add(FA,180),FX,FY)
@@ -169,6 +170,7 @@ CDoActions(FP,{
 	f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 	f_Recall(nil,Fx2,Fy2)
 	f_Recall(nil,Fx2,Fy2)
+	CIf(FP,{Memory(0x628438,AtLeast,1)})
 	f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
@@ -177,6 +179,7 @@ CDoActions(FP,{
 			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
+	CIfEnd()
 	CIfEnd()
 
 	CIf(FP,Memory(0x594000+4*41, Exactly, 3))
@@ -187,6 +190,7 @@ CDoActions(FP,{
 	f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 	f_Recall(nil,Fx2,Fy2)
 	f_Recall(nil,Fx2,Fy2)
+CIf(FP,{Memory(0x628438,AtLeast,1)})
 	f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
@@ -195,6 +199,7 @@ CDoActions(FP,{
 			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
+CIfEnd()
 	f_Lengthdir(FP,FR,_Add(FA,240),FX,FY)
 	DoActions(FP,{Simple_SetLoc(30,0,0,0,0),MoveLocation("CLoc109","Tarim, Lord Of Regal Castle",P8,"Anywhere")})
 	Simple_SetLoc2X(FP,30,FX,FY,FX,FY)
@@ -202,6 +207,7 @@ CDoActions(FP,{
 	f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 	f_Recall(nil,Fx2,Fy2)
 	f_Recall(nil,Fx2,Fy2)
+CIf(FP,{Memory(0x628438,AtLeast,1)})
 	f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
@@ -210,6 +216,7 @@ CDoActions(FP,{
 			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
+CIfEnd()
 CIfEnd()
 
 CIf(FP,Memory(0x594000+4*41, Exactly, 4))
@@ -220,6 +227,7 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 	f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 	f_Recall(nil,Fx2,Fy2)
 	f_Recall(nil,Fx2,Fy2)
+CIf(FP,{Memory(0x628438,AtLeast,1)})
 	f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
@@ -228,6 +236,7 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
+CIfEnd()
 	f_Lengthdir(FP,FR,_Add(FA,180),FX,FY)
 	DoActions(FP,{Simple_SetLoc(30,0,0,0,0),MoveLocation("CLoc109","Tarim, Lord Of Regal Castle",P8,"Anywhere")})
 	Simple_SetLoc2X(FP,30,FX,FY,FX,FY)
@@ -235,6 +244,7 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 	f_Read(FP,0x58DC64+0x14*30,Fy2,nil,0xFFFF)
 	f_Recall(nil,Fx2,Fy2)
 	f_Recall(nil,Fx2,Fy2)
+CIf(FP,{Memory(0x628438,AtLeast,1)})
 	f_Read(FP,0x628438,nil,Sh_Para,0xFFFFFF)
 	CDoActions(FP,{
 			CreateUnitWithProperties(1, 60, "CLoc109", P8, {invincible = true}),
@@ -243,6 +253,7 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 			TSetDeaths(_Add(Sh_Para,57),SetTo,0,0),
 			GiveUnits(All,60,P8,64,P9),
 		})
+CIfEnd()
 	f_Lengthdir(FP,FR,_Add(FA,270),FX,FY)
 	DoActions(FP,{Simple_SetLoc(30,0,0,0,0),MoveLocation("CLoc109","Tarim, Lord Of Regal Castle",P8,"Anywhere")})
 	Simple_SetLoc2X(FP,30,FX,FY,FX,FY)
@@ -260,8 +271,8 @@ CIf(FP,Memory(0x594000+4*41, Exactly, 4))
 		})
 
 CIfEnd()
-DoActions(FP,RemoveUnit(33,P8))
 CIfEnd()
+DoActions(FP,RemoveUnit(33,P8))
 
 CIf(FP,{Memory(0x58F564,AtLeast,1),Memory(0x58F564,AtMost,47)})
 DoActions(FP,{SetMemory(0x58DC60+0x14*30,SetTo,0),
