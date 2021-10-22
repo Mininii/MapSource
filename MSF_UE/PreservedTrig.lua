@@ -20,6 +20,7 @@ function MapPreserves()
     CAdd(FP,count,Count5)
     CAdd(FP,count,Count6)
     CAdd(FP,count,Count7)
+    CAdd(FP,count,QCUnits)
 	DoActionsX(FP,{SetCVar(FP,RecallPosX[2],SetTo,32)})
 	TriggerX(FP,{CDeaths(FP,AtMost,0,StoryT4)},{RotatePlayer({		
 		RunAIScript("Turn ON Shared Vision for Player 1");
@@ -58,6 +59,12 @@ CIf(FP,Switch("Switch 240",Set))
 		CAdd(FP,WaveT,Dt)
 		CAdd(FP,Time,Dt)
 		IBGM_EPDX(FP,6,Dt,{Dt_NT2,Dt_NT})
+
+
+		for i = 0, 6 do
+			CSub(FP,_Ccode(FP,AmUsed[i+1]),Dt)
+		end
+
 	CIfEnd()
     CMov(FP,TimePtr,Time)
     CMov(FP,LevelPtr,Level)
@@ -67,7 +74,7 @@ CIfEnd()
 
 CIfEnd()
 	for i = 0, 6 do
-	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x57F1B0,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{Preserved})
+	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{Preserved})
 	end
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({

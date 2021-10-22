@@ -26,7 +26,7 @@ function Objects()
 	P_AutoStimCost = 600 -- 오토스팀
 	P_AutoHealCost = 7300 -- 오토힐
 	P_MarDetectorCost = 2500 -- 디텍터
---	P_TeamMinCost = 100 -- 핵배틀 잠금해제
+	P_TelCost = 100
 
 	
 	--System
@@ -219,10 +219,10 @@ function Var_init()
 	NukeT = CreateCText(FP,"\x07『 \x08뉴클리어 \x04"..P_NukeCost.."Point / \x07"..P_NukeAmount.."발\x1F(Z:1, X:10, C:100) 보유량 : \x0d\x0d\x0d")
 	NukeEndT = CreateCText(FP,"발) \x07』\x12\x07『 \x1F융단 \x08폭격 \x04투하(V) \x1F(Cost:"..P_AMCost..", 맵 전범위, 쿨타임 180초) \x07』")
 
-	SupplyT = CreateCText(FP,"\x07『 \x08인구수\x04(Q) \x1F(Cost:"..P_SuppCost..") \x07("..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
+	SupplyT = CreateCText(FP,"\x07『 \x08인구수\x04(Q, E:일괄구입) \x1F(Cost:"..P_SuppCost..") \x07("..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
 	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 
-	ArmorT = CreateCText(FP,"\x07『 \x0F퍼센트 방어력\x04 업그레이드(W) \x1F(Cost:\x0d\x0d\x0d\x0d\x0d\x0d")
+	ArmorT = CreateCText(FP,"\x07『 \x0F퍼센트 방어력\x04 업그레이드(W, R:일괄구입) \x1F(Cost:\x0d\x0d\x0d\x0d\x0d\x0d")
 	ArmorT2 = CreateCText(FP,") \x04(\x0d\x0d\x0d\x0d\x0d\x0d")
 	ArmorT3 = CreateCText(FP,"/255) \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 
@@ -246,7 +246,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,(96)*7)
+	MarNumberLimit = CreateVar3(FP,(96*2)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
@@ -299,6 +299,8 @@ function Var_init()
 	HeroPointNotice = CreateCcodeArr(7)
 	CPConsoleToggle = CreateCcode()
 	AmUsed = CreateCcodeArr(7)
+	ConCP = CreateCcodeArr(7)
+	GivePChange = CreateCcodeArr(7)
 
 
 	--CreateVar
@@ -354,7 +356,6 @@ function Var_init()
 	WaveT = CreateVar(FP)
 	RecallPosX = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
-	LocalPV = CreateVar(FP)
 	HiScoreStrPtr = CreateVar(FP)
 	NukeStrPtr = CreateVar(FP)
 	SupplyStrPtr = CreateVar(FP)
@@ -362,6 +363,7 @@ function Var_init()
 	MulPoint = CreateVar(FP)
 	ArmorStrPtr = CreateVar(FP)
 	GiveStrPtr = CreateVar(FP)
+	QCUnits = CreateVar(FP)
 	end
 
 function HPoints()

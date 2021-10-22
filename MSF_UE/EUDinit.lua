@@ -128,7 +128,7 @@ function onInit_EUD()
 	local CurrentUID = CreateVar(FP)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
-	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
+	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
 	CMov(FP,VRet,CurrentUID,EPD(0x664080)) -- SpecialAdvFlag
 	CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
@@ -332,9 +332,11 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnable(65)
 	UnitEnable(66)
 	UnitEnable(67)
+	UnitEnable(68)
 
 	for i = 0, 6 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
@@ -708,7 +710,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 	
 	
-	f_Read(FP,0x57F1B0,LocalPV)
 	
 
 	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])

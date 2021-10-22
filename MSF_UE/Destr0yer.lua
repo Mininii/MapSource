@@ -131,15 +131,19 @@ local Lyrics = {
 
 	CIf(FP,{DeathsX(FP,AtMost,(66*4),BGMLength,0xFFFFFF)})
 		
+	local Pat1 = Create_PatternCcode(PatternCcode)
 	local CXForward = CAPlotForward()
 	Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
+		CDeaths(FP,Exactly,0,Pat1)
 	},
 	actions = {
 		SetCVar("X",TCount,SetTo,1);
 		SetCVar("X",TSize,SetTo,540*16);
+		SetCDeaths(FP,SetTo,1,Pat1);
+		PreserveTrigger();
 	}
 }
 Trigger {

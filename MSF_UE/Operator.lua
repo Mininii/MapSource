@@ -5,7 +5,7 @@ function OPTrig()
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
+        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then
@@ -100,7 +100,7 @@ function OPTrig()
     --		SetMemory(0x6415C0, SetTo, 0x3946203A);
     --		SetMemory(0x6415C4, SetTo, 0x005D2007);
     for i = 0, 6 do
-    CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x57F1B0,Exactly,i)})
+    CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,i)})
     Print13_NumSet(LevelPtr,0x64159C,100,0x10000)
     Print13_NumSet(LevelPtr,0x64159C,10,0x1000000)
     Print13_NumSet(LevelPtr,0x6415A0,1,0x1)
@@ -114,13 +114,13 @@ function OPTrig()
     end
         
     CMov(FP,0x6509B0,CurrentOP)
-    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCDeaths(FP,Add,1,OPFuncT)})
+    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),TSetCDeaths(FP,Add,Dt,OPFuncT)})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{Preserved})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{Preserved})
     for i = 0, 3 do
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{Preserved})
     end    
-    TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
     TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
     if TestStart ==1 then
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{Preserved})
@@ -145,27 +145,29 @@ function OPTrig()
         CIfEnd()
         CMov(FP,0x6509B0,CurrentOP)
     CIfEnd()
+	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
-    	DisplayText("\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』",4)},1)
+        SetDeaths(CurrentPlayer,SetTo,150,15);},1)
+    CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F9),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole),},{print_utf8(12,0,"\x07『 \x1C배속조정 \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
     KeyInput(F9,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
     	PlayWAV("sound\\Misc\\Buzz.wav"),
-    	DisplayText("\x07『 \x1C배속조정 \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』",4)},1)
+        SetDeaths(CurrentPlayer,SetTo,150,15);},1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,0,OPConsole)},SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
 
-    CIf(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,AtLeast,1,OPConsole)},SetCDeaths(FP,Add,1,OPFuncT))
+    CIf(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,AtLeast,1,OPConsole)},{TSetCDeaths(FP,Add,Dt,OPFuncT)})
         if Testmode == 0 then
-        TriggerX(FP,{CDeaths(FP,AtLeast,30*24,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
+        TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
         end
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,SpeedVar[2],AtMost,9)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Add,1)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,SpeedVar[2],AtLeast,2)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Subtract,1)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
         CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))
-            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x08강퇴모드 ON. \x04숫자키를 5회 눌러 강퇴하세요. ESC : 닫기\x07 ]")},1)
+            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x08강퇴모드 ON. \x04숫자키를 5회 눌러 강퇴하세요. ESC : 닫기\x07 ]")},1)
             -- 205 ~ 211
             for i = 1, 6 do
                 CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,205+i),TTMemory(0x6509B0,NotSame,i),PlayerCheck(i,1)},{
@@ -174,7 +176,7 @@ function OPTrig()
             end
             CMov(FP,0x6509B0,CurrentOP)
             CelseX()
-            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x57F1B0,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ \x04방향키(←→) : \x1F배속 조정, \x04ESC : 닫기, B : \x08강퇴모드 ON\x07 ]")},1)
+            CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x04방향키(←→) : \x1F배속 조정, \x04ESC : 닫기, B : \x08강퇴모드 ON\x07 ]")},1)
         CIfXEnd()
         TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{Preserved})
     CIfEnd()

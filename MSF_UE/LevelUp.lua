@@ -7,7 +7,7 @@ function LevelUp()
 		table.insert( ShUnitLimitT2,SetMemoryB(0x57F27C+(228*i)+19,SetTo,0))
 	end
 	local isBossStage = CreateCcode()
-	local CSelT = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x04상위 플레이어는 선택해주세요.\n\x13\x04다음 레벨로 진행하시겠습니까?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	
 	local ClearT3 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x07S T A R T\n\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local ClearT2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x08주의!! \x049, 10단계 진입할때마다 해당 스테이지에서는 \x1C수정 보호막 \x04사용이 \x06제한\x04됩니다!\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local NoText = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04정말로 종료하시겠습니까? 종료를 원하시면 N을 5회 눌러주세요.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -47,7 +47,15 @@ function LevelUp()
 	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
 		
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
-
+		DoActionsX(FP,{
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[1]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[2]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[3]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[4]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[5]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[6]);
+			SetCDeaths(FP,SetTo,1,HeroPointNotice[7]);
+		},1)
 			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{Preserved})--19
 			DoActions(FP,{
 			--SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
@@ -148,7 +156,7 @@ function LevelUp()
 		CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
 		CMov(FP,GetP,0)
 		CElseX()
-		CMov(FP,GetP,_Add(Level,_Mul(Diff,_Mov(3))))
+		CMov(FP,GetP,_Add(_Mul(Level,_Mov(3)),_Mul(Diff,_Mov(5))),15)
 		CIfXEnd()
 		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 			f_Mul(FP,GetP,_Mov(2))
@@ -307,10 +315,27 @@ function LevelUp()
 	CIfEnd()
 	
 	
-	CTrigger(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,AtMost,0,Continue2),CDeaths(FP,Exactly,0,Continue)},{
+
+	CIfX(FP,{Never()})
+
+	for i = 0, 6 do
+	CElseIfX({CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtMost,4,NoCcode),PlayerCheck(i,1),CDeaths(FP,AtMost,500,ConCP[i+1])},{SetCDeaths(FP,Add,1,ConCP[i+1])})
+	local CSelT = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\x13\x04현재 선택가능 플레이어는"..PlayerString[i+1].."\x04입니다.\n\x13\x04다음 레벨로 진행하시겠습니까?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	CTrigger(FP,{CDeaths(FP,Exactly,2,ConCP[i+1])},{
 		RotatePlayer({DisplayTextX(CSelT,4),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue2)
 	},1)
-	CMov(FP,0x6509B0,CurrentOP)
+	CMov(FP,0x6509B0,i)
+	end
+	CElseX({
+		SetCDeaths(FP,SetTo,0,ConCP[1]);
+		SetCDeaths(FP,SetTo,0,ConCP[2]);
+		SetCDeaths(FP,SetTo,0,ConCP[3]);
+		SetCDeaths(FP,SetTo,0,ConCP[4]);
+		SetCDeaths(FP,SetTo,0,ConCP[5]);
+		SetCDeaths(FP,SetTo,0,ConCP[6]);
+		SetCDeaths(FP,SetTo,0,ConCP[7]);
+	})
+	CIfXEnd()
 	NoB = 220
 	YesB = 221
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{Preserved})
@@ -334,18 +359,18 @@ function LevelUp()
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 	MoveMarineArr = {}
 	for i = 0, 6 do
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,2+i))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,2+i))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,2+i))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,2+i))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,2+i))
+	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,2+i))
 	for j = 0, 4 do
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,20+j))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,20+j))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,20+j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,20+j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,20+j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,20+j))
 	end
 	for j = 65, 73 do
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,j))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,j))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,j))
+	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,j))
 	
 	end
 	end
@@ -404,6 +429,13 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,AmUsed[6]),
 	SetCDeaths(FP,SetTo,0,AmUsed[7]),
 	SetCDeaths(FP,SetTo,0,NoCcode),
+	SetCDeaths(FP,SetTo,0,ConCP[1]);
+	SetCDeaths(FP,SetTo,0,ConCP[2]);
+	SetCDeaths(FP,SetTo,0,ConCP[3]);
+	SetCDeaths(FP,SetTo,0,ConCP[4]);
+	SetCDeaths(FP,SetTo,0,ConCP[5]);
+	SetCDeaths(FP,SetTo,0,ConCP[6]);
+	SetCDeaths(FP,SetTo,0,ConCP[7]);
 	
 
 	})

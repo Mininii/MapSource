@@ -40,6 +40,7 @@ function PlayerInterface()
 	local BattleHeal = CreateVarArr(7,FP)
 	local AMatter = CreateVarArr(7,FP)
 	local TempPtr = CreateVar(FP)
+	local TempPtr2 = CreateVar(FP)
 	local TempStat = CreateVar(FP)
 	local TempStat2 = CreateVar(FP)
 	local NsW = CreateCcode()
@@ -49,13 +50,15 @@ function PlayerInterface()
 	local TempGiveV = CreateVar(FP)
 	local TempGivePV = CreateVar(FP)
 	local GiveVA = CreateVArray(FP,7)
-	local GivePChange = CreateCcodeArr(7)
 	local AutoStim = CreateCcodeArr(7)
 	local AutoHeal = CreateCcodeArr(7)
 	local MarDetector = CreateCcodeArr(7)
 	local AutoStimT = CreateCcodeArr(7)
 	local AutoHealT = CreateCcodeArr(7)
-
+	local ArmorT3 = CreateCcodeArr(7)
+	local SuHeal = CreateCcodeArr(7)
+	local TelCool = CreateCcodeArr(7)
+	
 	
 	if TestStart == 1 then
 		DoActionsX(FP,SetCDeaths(FP,SetTo,1,CreateSu[1]))
@@ -89,11 +92,12 @@ function PlayerInterface()
 	local InsertKey = {}
 	InsertKey[1] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04이 맵은 클리어의 개념이 없으며 \n\x13\x08게임 오버 \x04시 \x1F달성한 단계\x04와 \x07스코어(가스)\x04가 게임의 성과를 나타냅니다.\n\x13\x04당신의 한계를 시험해 보세요!\n\x13\x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[2] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\x1CSCArchive \x04설명 (문의는 마공카를 찾아주세요.)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 이로운 효과를 얻을 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D1 Level \x04스테이지에서만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	InsertKey[3] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04스탯포인트 증가량 공식은 시작난이도에 따라 달라집니다.\n\x13\x04\x0EＥａｓｙ\x04 = 증가량X \x0FＮｏｒｍａｌ\x04 = +3\n\x13\x04\x08Ｈａｒｄ\x04 = +6 \x10Ｉｎｓａｎｅ\x04 = +9\n\x13\x04위의 값에서 클리어한 스테이지의 수치가 합산되어 더해집니다.\n\x13\x04\n\x13\x04Ex) 8스테이지 클리어 + \x08Ｈａｒｄ\x04난이도 = 8 + 6 = +14 증가\n\x13\x04\n\x13\x04즉, 높은 난이도에서 시작할 수록 더 많은 스탯포인트를 얻을 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[3] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04스탯포인트 증가량 공식은 시작난이도에 따라 달라집니다.\n\x13\x04\x0EＥａｓｙ\x04 = 증가량X \x0FＮｏｒｍａｌ\x04 = +5\n\x13\x04\x08Ｈａｒｄ\x04 = +10 \x10Ｉｎｓａｎｅ\x04 = +15\n\x13\x04위의 값에서 클리어한 스테이지의 수치가 합산되어 더해집니다.\n\x13\x04\n\x13\x04Ex) 8스테이지 클리어 + \x08Ｈａｒｄ\x04난이도 = 8 + 10 = +18 증가\n\x13\x04\n\x13\x04즉, 높은 난이도에서 시작할 수록 더 많은 스탯포인트를 얻을 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	local InsertPage = CreateCcode()
 	local KeyToggle = CreateCcode()
-	
-	CMov(FP,0x6509B0,LocalPV)
+	for i = 0, 6 do
+		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{Preserved})
+	end
 
 	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
 	PlayWAV("sound\\Misc\\Buzz.wav"),
@@ -108,7 +112,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 
 
 
-	CIfX(FP,{Deaths(CurrentPlayer,Exactly,0,CPConsole)},{SetCDeaths(FP,SetTo,2,CPConsoleToggle)})
+	CIfX(FP,{Deaths(CurrentPlayer,Exactly,0,CPConsole)})
 	Trigger2X(FP,{Switch("Switch 240",Set);MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle),CDeaths(FP,AtMost,1,InsertPage)},{SetCDeaths(FP,Add,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
 	Trigger2X(FP,{Switch("Switch 240",Set);MemoryX(0x596A38, Exactly, 0x00010000,0x10000),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,Subtract,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
 	Trigger2X(FP,{Switch("Switch 240",Set);Memory(0x596A44, Exactly, 0x00000100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{Preserved})
@@ -116,14 +120,11 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 	Trigger2X(FP,{CDeaths(FP,Exactly,i,InsertPage),CDeaths(FP,Exactly,1,DeleteToggle)},{DisplayText(InsertKey[i+1],4)},{Preserved})
 	end
 
-
-	CElseX() -- 현재스탯 등 출력
-	for i = 100,120 do
-		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,i)},SetCDeaths(FP,SetTo,2,CPConsoleToggle),{Preserved})
-	end
 	
 
-	CIf(FP,CDeaths(FP,AtLeast,1,CPConsoleToggle),SetCDeaths(FP,Subtract,1,CPConsoleToggle))
+	CElseX({}) -- 현재스탯 등 출력
+	
+
 	local AvailableStatVA = CreateVArray(FP,7)
 	local CurrentStatVA = CreateVArray(FP,7)
 	local MaxLevelVA = CreateVArray(FP,7)
@@ -143,7 +144,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 	local AmVA = CreateVArray(FP,7)
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,LocalCcode_Stim),SetCDeaths(FP,SetTo,0,LocalCcode_Multi),SetCDeaths(FP,SetTo,0,LocalCcode_SkillUnit)})
 		for i = 0, 6 do
-		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP)}) -- 스테이터스 전송
+		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,SetTo,2,CPConsoleToggle)}) -- 스테이터스 전송
 		ItoDec(FP,AvailableStat[i+1],VArr(AvailableStatVA,0),2,nil,2)
 		ItoDec(FP,CurrentStat[i+1],VArr(CurrentStatVA,0),2,nil,2)
 		ItoDec(FP,MaxLevel[i+1],VArr(MaxLevelVA,0),2,0x1F,2)
@@ -193,13 +194,15 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 
 
 
-		CMov(FP,0x6509B0,LocalPV)--CP 로컬로 전환
+		for i = 0, 6 do
+			TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{Preserved})
+		end
 
 		
 		DoActions(FP,{DisplayText(string.rep("\n", 20),4),
 		DisplayText("\x0D\x0D\x0DHiSc".._0D,4),
 		DisplayText("\x0D\x0D\x0DUStat".._0D,4),
-		DisplayText("\x07『 \x1F 미네랄 \x03"..P_MinCost.."Point / \x1F"..P_MinAmount.." \x1F(A:1, S:10, D:100) \x07』",4), -- 미네랄 구입
+		DisplayText("\x07『 \x1F 미네랄 \x03"..P_MinCost.."Point / \x1F"..P_MinAmount.." \x1F(A:1, S:10, D:100, F:1000) \x07』",4), -- 미네랄 구입
 		DisplayText("\x0D\x0D\x0DNuke".._0D,4),
 		DisplayText("\x0D\x0D\x0DSupp".._0D,4),
 		DisplayText("\x0D\x0D\x0DArmor".._0D,4),
@@ -212,17 +215,16 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 	--TriggerX(FP,{CDeaths(FP,AtLeast,1,LocalCcode_Multi)},{DisplayText("\x13\x07『 \x1D멀티 \x1B커맨드 \x04(T) \x1F(Cost:"..P_MultiCost..") \x03구입 완료! \x07』",4)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,Exactly,0,TeamEnchant)},{DisplayText("\x07『 \x04Normal Marine \x1B강화 \x04(I) \x1F(Cost:"..P_EnchantCost..") \x07』",4)},{Preserved})
 	--TriggerX(FP,{CDeaths(FP,AtLeast,1,TeamEnchant)},{DisplayText("\x13\x07『 \x04Normal Marine \x1B강화 \x04(Y) \x1F(Cost:"..P_EnchantCost..") \x03구입 완료! \x07』",4)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,Exactly,0,LocalCcode_SkillUnit)},{DisplayText("\x07『 \x08핵배틀 \x04조합 \x1B활성화 \x04(U) \x1F(Cost:"..P_SkillUnitCost..") \x07』",4)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,Exactly,0,LocalCcode_SkillUnit)},{DisplayText("\x07『 \x08핵배틀 \x04조합 \x1B활성화\x04, 생성시 자동으로 \x1F10,000,000 Ore\x04를 소모합니다. \x04(U) \x1F(Cost:"..P_SkillUnitCost..") \x07』",4)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,Exactly,1,LocalCcode_SkillUnit),CDeaths(FP,Exactly,0,LocalCcode_Detector)},{DisplayText("\x07『 \x1FExceeD \x1BM\x04arine \x1C디텍터 \x1B활성화 \x04(U) \x1F(Cost:"..P_MarDetectorCost..") \x07』",4)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,LocalCcode_SkillUnit)},{DisplayText("\x07『 \x08핵배틀 \x04조합법 : \x1FExceeD \x1BM\x04arine*12 + SCV*10 + \x1F50만원 \x07』",4)},{Preserved})
 	DoActions(FP,DisplayText("\x12\x07『\x1F 미네랄 \x03기부방법 \x041. 물결버튼(～)을 누른 상태로 원하는 플레이어를 숫자키로 선택하세요. 2. 숫자를 \x1F1만원 단위\x04로 채팅창에 입력하세요. \x07』",4))
 
-	CIfEnd()
 	CIfXEnd()
 	Trigger2X(FP,{Memory(0x596A38, Exactly, 0),Memory(0x596A44, Exactly, 0),CDeaths(FP,Exactly,1,KeyToggle)},{SetCDeaths(FP,SetTo,0,KeyToggle)},{Preserved})
 	
 	Trigger2X(FP,{Memory(0x596A44, Exactly, 65536)},{SetCDeaths(FP,SetTo,0,DeleteToggle),DisplayText(string.rep("\n", 20),4)},{Preserved})
 
+	TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,CPConsole),CDeaths(FP,AtLeast,1,CPConsoleToggle)},{DisplayText(string.rep("\n", 20),4),SetCDeaths(FP,Subtract,1,CPConsoleToggle)},{Preserved})
 	DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
 
 
@@ -242,7 +244,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 				players = {i},
 				conditions = {
 					Label(0);
-					CDeaths(FP,AtLeast,5,BanToken[i+1]);Memory(0x57F1B0, Exactly, i)
+					CDeaths(FP,AtLeast,5,BanToken[i+1]);Memory(0x512684, Exactly, i)
 					
 				},
 				actions = {
@@ -445,21 +447,26 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		Trigger2(i,{Memory(0x582294+(4*i),AtLeast,1)},{SetMemory(0x582294+(4*i),Subtract,1)},{Preserved})
 		
 		CIf(FP,{Deaths(i,AtLeast,1,CPConsole)},{SetMemory(0x6509B0,SetTo,i)}) -- 스탯창 인터페이스 Deaths 100~199
-			KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]);DisplayText("\x07『 \x1F기부 플레이어\x04를 선택해주세요. \x07』",4),SetCDeaths(FP,SetTo,0,FuncT[i+1])},1)
+		KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1]),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x1F기부 플레이어\x04를 선택해주세요. \x07』")},1,1)
+			KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15)},1)
 				
 			for j = 0, 6 do
 				if i==j then 
-					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);DisplayText("\x07『 "..PlayerString[j+1].."\x04은(는) 자기 자신입니다. 자기 자신에게는 기부할 수 없습니다. \x07』",4),SetCDeaths(FP,SetTo,0,FuncT[i+1])},1)
+					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 "..PlayerString[j+1].."\x04은(는) 자기 자신입니다. 자기 자신에게는 기부할 수 없습니다. \x07』")},1,1)
+					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),},1)
+
 				else 
-					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,j+1,151),DisplayText("\x07『 \x1F기부 플레이어\x04가"..PlayerString[j+1].."\x04으로 설정되었습니다. \x07』",4),SetCDeaths(FP,SetTo,0,FuncT[i+1])},1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x1F기부 플레이어\x04가"..PlayerString[j+1].."\x04으로 설정되었습니다. \x07』")},1,1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,j+1,151),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15)},1)
 				end
 
-				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,0)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);SetCDeaths(FP,SetTo,0,FuncT[i+1])},1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,0),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』")},1,1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),PlayerCheck(j,0)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15)},1)
 				TriggerX(FP,{Deaths(CurrentPlayer,Exactly,j+1,151),PlayerCheck(j,0)},{SetDeaths(CurrentPlayer,SetTo,0,151)},{Preserved})
 			end
 
 
-			CIfX(FP,{Deaths(CurrentPlayer,AtLeast,1,150),Deaths(CurrentPlayer,AtMost,220000,150),Deaths(CurrentPlayer,AtLeast,1,151)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);})
+			CIfX(FP,{Deaths(CurrentPlayer,AtLeast,1,150),Deaths(CurrentPlayer,AtMost,220000,150),Deaths(CurrentPlayer,AtLeast,1,151)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15);})
 
 				f_Read(FP,0x58A364+(48*150)+(4*i),TempGiveV)
 				f_Read(FP,0x58A364+(48*151)+(4*i),TempGivePV)
@@ -469,18 +476,22 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 				CIfX(FP,{TAccumulate(i,AtLeast,TempGiveV,Ore)},{TSetResources(_Sub(TempGivePV,1),Add,TempGiveV,Ore),TSetResources(i,Subtract,TempGiveV,Ore)})
 					ItoDec(FP,TempGiveV,VArr(GiveVA,0),2,0x1F,0)
 					_0DPatchX(FP,GiveVA,6)
+
+					CIf(FP,{LocalPlayerID(i)})
 					
-					f_MemCpy(FP,GiveStrPtr,_TMem(Arr(GiveSendT[3],0),"X","X",1),GiveSendT[2])
+					f_MemCpy(FP,0x640B60 + (12 * 218),_TMem(Arr(GiveTReset[3],0),"X","X",1),GiveTReset[2])
+					f_MemCpy(FP,0x640B60 + (12 * 218),_TMem(Arr(GiveSendT[3],0),"X","X",1),GiveSendT[2])
 					for j = 1, 7 do
 					CIf(FP,CVar(FP,TempGivePV[2],Exactly,j))
-					f_MovCpy(FP,_Add(GiveStrPtr,GiveSendT[2]),VArr(Names[j],0),4*6)
+					f_MovCpy(FP,0x640B60 + (12 * 218)+GiveSendT[2],VArr(Names[j],0),4*6)
 					CIfEnd()
 					end
-					f_MemCpy(FP,_Add(GiveStrPtr,GiveSendT[2]+(4*6)),_TMem(Arr(GiveT2[3],0),"X","X",1),GiveT2[2])
-					f_MovCpy(FP,_Add(GiveStrPtr,GiveSendT[2]+(4*6)+GiveT2[2]),VArr(GiveVA,0),4*5)
-					f_MemCpy(FP,_Add(GiveStrPtr,GiveSendT[2]+(4*6)+GiveT2[2]+(4*5)),_TMem(Arr(GiveSendT2[3],0),"X","X",1),GiveSendT2[2])
-
-					DoActions(FP,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D\x0DGive".._0D,4)})
+					f_MemCpy(FP,0x640B60 + (12 * 218)+GiveSendT[2]+(4*6),_TMem(Arr(GiveT2[3],0),"X","X",1),GiveT2[2])
+					f_MovCpy(FP,0x640B60 + (12 * 218)+GiveSendT[2]+(4*6)+GiveT2[2],VArr(GiveVA,0),4*5)
+					f_MemCpy(FP,0x640B60 + (12 * 218)+GiveSendT[2]+(4*6)+GiveT2[2]+(4*5),_TMem(Arr(GiveSendT2[3],0),"X","X",1),GiveSendT2[2])
+					CIfEnd()
+					CIf(FP,{TMemory(0x512684,Exactly,_Sub(TempGivePV,1))})
+					
 					f_MemCpy(FP,GiveStrPtr,_TMem(Arr(GiveTReset[3],0),"X","X",1),GiveTReset[2])
 
 					f_MemCpy(FP,GiveStrPtr,_TMem(Arr(GiveReciveT[3],0),"X","X",1),GiveReciveT[2])
@@ -488,17 +499,20 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 					f_MemCpy(FP,_Add(GiveStrPtr,GiveReciveT[2]+(4*6)),_TMem(Arr(GiveT2[3],0),"X","X",1),GiveT2[2])
 					f_MovCpy(FP,_Add(GiveStrPtr,GiveReciveT[2]+(4*6)+GiveT2[2]),VArr(GiveVA,0),4*5)
 					f_MemCpy(FP,_Add(GiveStrPtr,GiveReciveT[2]+(4*6)+GiveT2[2]+(4*5)),_TMem(Arr(GiveReciveT2[3],0),"X","X",1),GiveReciveT2[2])
-
 					CDoActions(FP,{TSetMemory(0x6509B0,SetTo,_Sub(TempGivePV,1)),DisplayText("\x0D\x0D\x0DGive".._0D,4)})
-					f_MemCpy(FP,GiveStrPtr,_TMem(Arr(GiveTReset[3],0),"X","X",1),GiveTReset[2])
 
-				CElseX({SetMemory(0x6509B0,SetTo,i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);})
+					f_MemCpy(FP,GiveStrPtr,_TMem(Arr(GiveTReset[3],0),"X","X",1),GiveTReset[2])
+					CIfEnd()
+				CElseX({SetMemory(0x6509B0,SetTo,i)})
+				TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x04잔액이 부족합니다. \x07』")},{Preserved})
+
 				CIfXEnd()
 			DoActions(FP,SetMemory(0x6509B0,SetTo,i))
-			CElseIfX({Deaths(CurrentPlayer,AtLeast,1,150),Deaths(CurrentPlayer,AtMost,220000,150),Deaths(CurrentPlayer,AtMost,0,151)},{DisplayText("\x07『 \x1F기부 플레이어\x04가 설정되지 않았습니다. \x07』",4)})
+			CElseIfX({Deaths(CurrentPlayer,AtLeast,1,150),Deaths(CurrentPlayer,AtMost,220000,150),Deaths(CurrentPlayer,AtMost,0,151)},{SetDeaths(CurrentPlayer,SetTo,150,15)})
+			TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x1F기부 플레이어\x04가 설정되지 않았습니다. \x07』")},{Preserved})
 			CIfXEnd()
 			Trigger2(FP,{Deaths(i,AtLeast,1,113)},{SetDeaths(i,SetTo,2,14)},{Preserved})
-			TriggerX(FP,{Deaths(i,AtMost,0,15),Memory(0x57F1B0,Exactly,i)},{SetCDeaths(FP,SetTo,0,DeleteToggle),
+			TriggerX(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{SetCDeaths(FP,SetTo,0,DeleteToggle),
 				print_utf8(12,0,"\x07[ \x1F기부, \x19스탯창\04 ON, ESC : 닫기, End : SCA 복구용 버튼\x07 ]")
 			},{Preserved}) -- 13번줄 프린트 트리거 플레이어가 FP인 이유는 트리거 순서가 1P부터 8P까지 실행되기 때문. i로 하게될 경우 이게 씹히고 위에있는 CText가 보이게 된다. 
 			--구입 성공시 사운드 PlayWAV("staredit\\wav\\BuySE.ogg");
@@ -519,12 +533,19 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			KeyInput(112--[[D]],{Accumulate(i,AtMost,1999999999,Ore),LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtMost,(P_MinCost*100)-1)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1,1) --미네랄
 			KeyInput(112--[[D]],{Accumulate(i,AtMost,1999999999,Ore),CVar(FP,AvailableStat[i+1][2],AtMost,(P_MinCost*100)-1)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
 
+			KeyInput(114--[[D]],{Accumulate(i,AtMost,2100000000-(P_MinAmount*1000)-1,Ore),LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtLeast,(P_MinCost*1000))},{print_utf8(12,0,"\x07[ \x07구입 성공, \x04미네랄이 \x1F"..(P_MinAmount*1000).." \x04증가하였습니다. \x07]")},1,1) --미네랄
+			KeyInput(114--[[D]],{Accumulate(i,AtMost,2100000000-(P_MinAmount*1000)-1,Ore),CVar(FP,AvailableStat[i+1][2],AtLeast,(P_MinCost*1000))},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,(P_MinCost*1000)),SetResources(i,Add,(P_MinAmount*1000),Ore),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --미네랄
+			KeyInput(114--[[D]],{Accumulate(i,AtMost,2100000000-(P_MinAmount*1000)-1,Ore),LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtMost,(P_MinCost*1000)-1)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1,1) --미네랄
+			KeyInput(114--[[D]],{Accumulate(i,AtMost,2100000000-(P_MinAmount*1000)-1,Ore),CVar(FP,AvailableStat[i+1][2],AtMost,(P_MinCost*1000)-1)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
+
 			KeyInput(100--[[A]],{Accumulate(i,AtLeast,2000000000,Ore),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x1F미네랄 \x0820억 이상 \x04보유중입니다. \x08구매할 수 없습니다. \x07]")},1,1) --미네랄
 			KeyInput(100--[[A]],{Accumulate(i,AtLeast,2000000000,Ore)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
 			KeyInput(107--[[S]],{Accumulate(i,AtLeast,2000000000,Ore),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x1F미네랄 \x0820억 이상 \x04보유중입니다. \x08구매할 수 없습니다. \x07]")},1,1) --미네랄
 			KeyInput(107--[[S]],{Accumulate(i,AtLeast,2000000000,Ore)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
 			KeyInput(112--[[D]],{Accumulate(i,AtLeast,2000000000,Ore),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x1F미네랄 \x0820억 이상 \x04보유중입니다. \x08구매할 수 없습니다. \x07]")},1,1) --미네랄
 			KeyInput(112--[[D]],{Accumulate(i,AtLeast,2000000000,Ore)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
+			KeyInput(114--[[D]],{Accumulate(i,AtLeast,2100000000-(P_MinAmount*1000),Ore),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x1F미네랄 \x0820억 이상 \x04보유중입니다. \x08구매할 수 없습니다. \x07]")},1,1) --미네랄
+			KeyInput(114--[[D]],{Accumulate(i,AtLeast,2100000000-(P_MinAmount*1000),Ore)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --미네랄
 
 			KeyInput(101--[[Z]],{LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtLeast,P_NukeCost)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x08뉴클리어\x04가 \x07"..P_NukeAmount.."발 \x04장전되었습니다. (사용법 : 배럭으로 우클릭) \x07]")},1,1) --미네랄
 			KeyInput(101--[[Z]],{CVar(FP,AvailableStat[i+1][2],AtLeast,P_NukeCost)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_NukeCost),SetCVar(FP,Nukes[i+1][2],Add,P_NukeAmount),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --핵
@@ -544,8 +565,8 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 
 			KeyInput(108--[[V]],{LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtLeast,P_AMCost),CDeaths(FP,AtMost,0,AmUsed[i+1])},{print_utf8(12,0,"\x07[ \x07구입 성공, 곧 \x1F융단 \x08폭격\x04이 \x04투하됩니다. \x07]")},1,1) --핵
 			KeyInput(108--[[V]],{CVar(FP,AvailableStat[i+1][2],AtLeast,P_AMCost),CDeaths(FP,AtMost,0,AmUsed[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_AMCost),SetCVar(FP,AMatter[i+1][2],Add,1),SetCDeaths(FP,SetTo,1000*180,AmUsed[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --핵
-			KeyInput(108--[[V]],{LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtMost,P_AMCost-1),CDeaths(FP,AtMost,0,AmUsed[i+1])},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1,1) --핵
-			KeyInput(108--[[V]],{CVar(FP,AvailableStat[i+1][2],AtMost,P_AMCost-1),CDeaths(FP,AtMost,0,AmUsed[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --핵
+			KeyInput(108--[[V]],{LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtMost,P_AMCost-1),},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1,1) --핵
+			KeyInput(108--[[V]],{CVar(FP,AvailableStat[i+1][2],AtMost,P_AMCost-1)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1) --핵
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,108),CVar(FP,AvailableStat[i+1][2],AtLeast,P_AMCost),CDeaths(FP,AtLeast,1,AmUsed[i+1])},{SetDeaths(CurrentPlayer,SetTo,0,108),SetDeaths(CurrentPlayer,SetTo,150,15),SetCDeaths(FP,SetTo,0,FuncT[i+1])})
 				CIf(FP,LocalPlayerID(i))
 					DoActionsX(FP,{{PlayWAV("staredit\\wav\\FailSE.ogg"),print_utf8(12,0,"\x07[ \x1F융단 \x08폭격\x04이 쿨타임중입니다. 남은 시간 : \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"),print_utf8(12,GetStrSize(0,"\x07[ \x1F융단 \x08폭격\x04이 쿨타임중입니다. 남은 시간 : ")+(5*4)+3,"초 \x07]")}})
@@ -556,25 +577,27 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			CIfEnd(SetMemory(0x6509B0,SetTo,i))
 
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,102)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);})
-				CIfX(FP,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_SuppCost),TCVar(FP,Supply[i+1][2],AtMost,_Sub(SuppMax,1))},{SetCVar(FP,AvailableStat[i+1][2],Subtract,P_SuppCost),SetCVar(FP,Supply[i+1][2],Add,P_SuppAmount),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");})
+				CIfX(FP,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_SuppCost),TCVar(FP,Supply[i+1][2],AtMost,_Sub(SuppMax,1))},{SetCVar(FP,AvailableStat[i+1][2],Subtract,P_SuppCost),SetCVar(FP,Supply[i+1][2],Add,P_SuppAmount),SetDeaths(CurrentPlayer,SetTo,150,15)})
 					TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x04인구수가 \x07"..(P_SuppAmount/2).." \x04증가하였습니다. \x07]")},{Preserved})
-				CElseX()
+					TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCDeaths(FP,SetTo,100,UpSELemit[i+1])})
+				CElseX({})
 					CTrigger(FP,{TCVar(FP,Supply[i+1][2],AtLeast,SuppMax),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08구입 실패, \x04맵 최대 인구수가 꽉 찼습니다. \x07]"),},1)
-					CTrigger(FP,{TCVar(FP,Supply[i+1][2],AtLeast,SuppMax)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1)
+					CTrigger(FP,{CDeaths(FP,AtMost,0,ArmorT3[i+1]),TCVar(FP,Supply[i+1][2],AtLeast,SuppMax)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");SetCDeaths(FP,SetTo,150,ArmorT3[i+1])},1)
 					TriggerX(FP,{CVar(FP,AvailableStat[i+1][2],AtMost,P_SuppCost-1),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},{Preserved})
-					TriggerX(FP,{CVar(FP,AvailableStat[i+1][2],AtMost,P_SuppCost-1)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,0,ArmorT3[i+1]),CVar(FP,AvailableStat[i+1][2],AtMost,P_SuppCost-1)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");SetCDeaths(FP,SetTo,150,ArmorT3[i+1])},{Preserved})
 				CIfXEnd()
 			CIfEnd()
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,109)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);})
-				CIfX(FP,{TCVar(FP,AvailableStat[i+1][2],AtLeast,_Add(P_Armor[i+1],1)),CVar(FP,P_Armor[i+1][2],AtMost,254)},{TSetCVar(FP,AvailableStat[i+1][2],Subtract,_Add(P_Armor[i+1],1)),SetCVar(FP,P_Armor[i+1][2],Add,1),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");})
+				CIfX(FP,{TCVar(FP,AvailableStat[i+1][2],AtLeast,_Add(P_Armor[i+1],1)),CVar(FP,P_Armor[i+1][2],AtMost,254)},{TSetCVar(FP,AvailableStat[i+1][2],Subtract,_Add(P_Armor[i+1],1)),SetCVar(FP,P_Armor[i+1][2],Add,1),SetDeaths(CurrentPlayer,SetTo,150,15)})
+					TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCDeaths(FP,SetTo,100,UpSELemit[i+1])})
 					TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x0F퍼센트 방어력\x04이 증가하였습니다. \x07]")},{Preserved})
 					CMov(FP,0x515B88+(i*4),_Sub(_Mov(256),P_Armor[i+1]))
 					CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),256),_Sub(_Mov(256),P_Armor[i+1])))
-				CElseX(SetMemory(0x6509B0,SetTo,i))
+				CElseX({SetMemory(0x6509B0,SetTo,i)})
 					CTrigger(FP,{CVar(FP,P_Armor[i+1][2],AtLeast,255),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08구입 실패, \x04업그레이드 수치가 이미 최대치입니다. \x07]"),},1)
-					CTrigger(FP,{CVar(FP,P_Armor[i+1][2],AtLeast,255)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1)
+					CTrigger(FP,{CDeaths(FP,AtMost,0,ArmorT3[i+1]),CVar(FP,P_Armor[i+1][2],AtLeast,255)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");SetCDeaths(FP,SetTo,150,ArmorT3[i+1])},1)
 					CTrigger(FP,{TCVar(FP,AvailableStat[i+1][2],AtMost,P_Armor[i+1]),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1)
-					CTrigger(FP,{TCVar(FP,AvailableStat[i+1][2],AtMost,P_Armor[i+1])},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");},1)
+					CTrigger(FP,{CDeaths(FP,AtMost,0,ArmorT3[i+1]),TCVar(FP,AvailableStat[i+1][2],AtMost,P_Armor[i+1])},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");SetCDeaths(FP,SetTo,150,ArmorT3[i+1])},1)
 				CIfXEnd()
 			CIfEnd(SetMemory(0x6509B0,SetTo,i))
 			
@@ -597,7 +620,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			KeyInput(104,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_MultiCost),CDeaths(FP,AtMost,0,MultiCommand[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_MultiCost),SetCDeaths(FP,SetTo,1,MultiCommand[i+1]),SetMemoryB(0x57F27C+(228*i)+64,SetTo,1),SetMemoryB(0x57F27C+(228*i)+70,SetTo,1),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --원격스팀
 			KeyInput(105,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_EnchantCost),CDeaths(FP,AtMost,0,TeamEnchant)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_EnchantCost),SetCDeaths(FP,SetTo,1,TeamEnchant),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --일마강화
 			KeyInput(106,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_SkillUnitCost),CDeaths(FP,AtMost,0,SkillUnit[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_SkillUnitCost),SetCDeaths(FP,SetTo,1,SkillUnit[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --핵배틀 구입
-			KeyInput(103,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_AutoStimCost),CDeaths(FP,AtLeast,1,MultiStimPack[i+1]),CDeaths(FP,AtMost,0,AutoStim[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_AutoStimCost),SetCDeaths(FP,SetTo,1,AutoStim[i+1]),SetMemoryB(0x57F27C+(228*i)+71,SetTo,0),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --멀티커맨
+			KeyInput(103,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_AutoStimCost),CDeaths(FP,AtLeast,1,MultiStimPack[i+1]),CDeaths(FP,AtMost,0,AutoStim[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_AutoStimCost),SetCDeaths(FP,SetTo,1,AutoStim[i+1]),SetMemoryB(0x57F27C+(228*i)+71,SetTo,0),SetMemoryB(0x57F27C+(228*i)+68,SetTo,1),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --멀티커맨
 			KeyInput(104,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_AutoHealCost),CDeaths(FP,AtLeast,1,MultiCommand[i+1]),CDeaths(FP,AtMost,0,AutoHeal[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_AutoHealCost),SetCDeaths(FP,SetTo,1,AutoHeal[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --원격스팀
 			KeyInput(106,{CVar(FP,AvailableStat[i+1][2],AtLeast,P_MarDetectorCost),CDeaths(FP,AtLeast,1,SkillUnit[i+1]),CDeaths(FP,AtMost,0,MarDetector[i+1])},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);SetCVar(FP,AvailableStat[i+1][2],Subtract,P_MarDetectorCost),SetCDeaths(FP,SetTo,1,MarDetector[i+1]),SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg");},1) --핵배틀 구입
 			KeyInput(103,{LocalPlayerID(i),CVar(FP,AvailableStat[i+1][2],AtMost,P_StimCost-1),CDeaths(FP,AtMost,0,MultiStimPack[i+1])},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},1,1) --멀티커맨
@@ -618,111 +641,10 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,0,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,1,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		TriggerX(i,{Deaths(CurrentPlayer,Exactly,0,OPConsole),Deaths(CurrentPlayer,AtLeast,1,F9),Deaths(CurrentPlayer,Exactly,0,B),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetDeaths(CurrentPlayer,SetTo,0,F9)},{Preserved})
 		--CPConsole
-		CIfX(i,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},SetCDeaths(FP,Add,1,FuncT[i+1]))
-		TriggerX(i,{CDeaths(FP,AtLeast,30*24,FuncT[i+1])},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,0,151),},{Preserved})
-
-		
-		
-		
---		GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[2].." Ore\x04 \x04로 변경되었습니다.\x07 』",
---		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[3].." Ore \x04로 변경되었습니다.\x07 』",
---		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[4].." Ore \x04로 변경되었습니다.\x07 』",
---		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[5].." Ore \x04로 변경되었습니다.\x07 』",
---		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[6].." Ore \x04로 변경되었습니다.\x07 』",
---		"\x07『 \x04기부금액 단위가 \x1F"..GiveRate2[1].." Ore \x04로 변경되었습니다.\x07 』"}
---		for k = 0, 5 do
---		Trigger { -- 기부 금액 변경
---			players = {i},
---			conditions = {
---				Label(0);
---				CDeaths(FP,Exactly,k,GiveRate[i+1]);
---				Deaths(CurrentPlayer,AtLeast,1,219)
---			},
---			actions = {
---				SetDeaths(CurrentPlayer,SetTo,0,219);
---				DisplayText(GiveRateT[k+1],4);
---				SetCDeaths(FP,Add,1,GiveRate[i+1]);
---				SetCDeaths(FP,SetTo,0,FuncT[i+1]);
---				PreserveTrigger();
---				},
---		}
---		end
---		TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
-		
---		for j=0, 6 do
---			if i==j then
---				Trigger { -- 돈 기부 시스템
---					players = {i},
---					conditions = {
---						Deaths(i,AtLeast,1,j+212);
---					},
---					actions = {
---						SetDeaths(i,SetTo,0,j+212);
---						DisplayText("\x07『 "..PlayerString[j+1].."\x04은(는) 자기 자신입니다. 자기 자신에게는 기부할 수 없습니다. \x07』",4);
---						SetCDeaths(FP,SetTo,0,FuncT[i+1]);
---						PreserveTrigger();
---					},
---				}
---			else
---				for k=0, 5 do
---					Trigger { -- 돈 기부 시스템
---						players = {i},
---						conditions = {
---							Label(0);
---							Deaths(i,AtLeast,1,j+212);
---							PlayerCheck(i,1);
---							CDeaths(FP,Exactly,k,GiveRate[i+1]);
---							Accumulate(i,AtMost,GiveRate2[k+1],Ore);
---						},
---						actions = {
---							SetDeaths(i,SetTo,0,j+212);
---							DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
---							SetCDeaths(FP,SetTo,0,FuncT[i+1]);
---							PreserveTrigger();
---						},
---					}
---					Trigger { -- 돈 기부 시스템
---						players = {i},
---						conditions = {
---							Label(0);
---							Deaths(i,AtLeast,1,j+212);
---							PlayerCheck(j,1);
---							CDeaths(FP,Exactly,k,GiveRate[i+1]);
---							Accumulate(i,AtLeast,GiveRate2[k+1],Ore);
---							Accumulate(i,AtMost,0x7FFFFFFF,Ore);
---						},
---						actions = {
---							SetDeaths(i,SetTo,0,j+212);
---							SetResources(i,Subtract,GiveRate2[k+1],Ore);
---							SetResources(j,Add,GiveRate2[k+1],Ore);
---							DisplayText("\x07『 "..PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[k+1].." Ore\x04를 기부하였습니다. \x07』",4);
---							SetMemory(0x6509B0,SetTo,j);
---							DisplayText("\x12\x07『"..PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[k+1].." Ore\x04를 기부받았습니다.\x02 \x07』",4);
---							SetMemory(0x6509B0,SetTo,i);
---							SetCDeaths(FP,SetTo,0,FuncT[i+1]);
---							PreserveTrigger();
---						},
---					}
---				end
---				Trigger { -- 돈 기부 시스템
---					players = {i},
---					conditions = {
---						Label(0);
---						Deaths(i,AtLeast,1,j+212);
---						PlayerCheck(j,0);
---					},
---					actions = {
---						SetDeaths(i,SetTo,0,j+212);
---						DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
---						SetCDeaths(FP,SetTo,0,FuncT[i+1]);
---						PreserveTrigger();
---					},
---				}
---			end 
---		end 
-		
-			TriggerX(i,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,0,151)},{Preserved})
-			CIfXEnd()
+		CIfX(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole)},{TSetCDeaths(FP,Add,Dt,FuncT[i+1])})
+		TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,FuncT[i+1])},{SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,0,151),},{Preserved})
+		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(CurrentPlayer,SetTo,0,CPConsole),SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(CurrentPlayer,SetTo,0,151)},{Preserved})
+		CIfXEnd()
 		
 			DoActions(i,{
 				SetMemoryB(0x57F27C+(228*i)+MedicTrig[1],SetTo,0),
@@ -777,7 +699,25 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 				SetCDeaths(FP,Add,1,CUnitFlag);
 				SetCDeaths(FP,Add,100,OrderCool[i+1]);
 			},{Preserved})
+
 			
+			TriggerX(i,{Command(i,AtLeast,1,68);CVar(FP,AvailableStat[i+1][2],AtLeast,P_TelCost)},{
+				GiveUnits(All,68,i,"Anywhere",P12);
+				RemoveUnitAt(All,68,"Anywhere",P12);
+				SetCVar(FP,AvailableStat[i+1][2],Subtract,P_TelCost);
+				DisplayText("\x07『 \x16마우스 위치\x04로 \x1D모든 유닛\x04을 \x1B텔레포트\x04하였습니다 \x1F(-100Point) \x07』",4);
+				SetDeaths(i,SetTo,1,68);
+				PlayWAV("staredit\\wav\\BuySE.ogg");
+				PlayWAV("staredit\\wav\\BuySE.ogg");
+				SetCDeaths(FP,Add,100,TelCool[i+1]);
+			},{Preserved})
+			TriggerX(i,{Command(i,AtLeast,1,68);CVar(FP,AvailableStat[i+1][2],AtMost,P_TelCost-1)},{
+				GiveUnits(All,68,i,"Anywhere",P12);
+				RemoveUnitAt(All,68,"Anywhere",P12);
+				DisplayText("\x07『\x1F스탯 포인트\x04가 부족합니다.\x1F(Cost:100) \x07』",4);
+				PlayWAV("staredit\\wav\\FailSE.ogg");
+			},{Preserved})
+
 
 		UnitLimit(i,7,25,"SCV는",500)
 		UnitLimit(i,125,15,"벙커는",8000)
@@ -864,20 +804,14 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 				--Bring(FP,AtLeast,1,173,10);
 				CDeaths(FP,AtLeast,1,SkillUnit[i+1]);
 				Bring(i,AtMost,0,12,64);
-				Bring(i,AtLeast,12,MarID[i+1],10);
-				Bring(i,AtLeast,10,"Terran SCV",10);
-				Accumulate(i,AtLeast,500000,Ore);
+				Accumulate(i,AtLeast,10000000,Ore);
 				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 			},
 			actions = {
 				SetMemory(0x6509B0,SetTo,i),
-				DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1FExceeD \x1BM\x04arine, SCV를 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ 로 \x19변환\x04하였습니다. - \x1F500,000 O r e \x07』",4);
+				DisplayText("\x07『 \x1F광물\x04을 소모하여 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ 가 \x19자동 생산 \x04되었습니다. - \x1F10,000,000 O r e \x07』",4);
 				SetMemory(0x6509B0,SetTo,FP),
-				ModifyUnitEnergy(12,MarID[i+1],i,10,0);
-				ModifyUnitEnergy(10,"Terran SCV",i,10,0);
-				RemoveUnitAt(12,MarID[i+1],10,i);
-				RemoveUnitAt(10,"Terran SCV",10,i);
-				SetResources(i,Subtract,500000,ore);
+				SetResources(i,Subtract,10000000,ore);
 				SetCDeaths(FP,Add,1,CreateSu[i+1]),
 				PreserveTrigger();
 			},
@@ -965,7 +899,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
-					DoActions(FP,{
+					DoActionsX(FP,{
 						RemoveUnit(MedicTrig[1],i),
 						RemoveUnit(MedicTrig[2],i),
 						RemoveUnit(MedicTrig[3],i),
@@ -973,7 +907,8 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
-						ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
+						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
+						SetCDeaths(FP,SetTo,1,SuHeal[i+1])
 					})
 					TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
 						ModifyUnitShields(All,"Men",i,"Anywhere",0),
@@ -1109,7 +1044,9 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			SetMemory(0x6509B0,SetTo,FP)
 		})
 		
-		--핵배틀...귀찮아ㅅㅂ
+		CIf(FP,{Deaths(i,AtLeast,1,68)},{SetDeaths(i,SetTo,0,68)})
+			CSPlotAct(TelShape,i,nilunit,73+i,nil,1,32,32,{MoveUnit(1,MarID[i+1],i,16,74+i)},FP,nil,nil,1)
+		CIfEnd()
 
 		CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateSu[i+1]),Command(i,AtMost,0,12)},{SetCDeaths(FP,SetTo,0,CreateSu[i+1])}) -- 소환 또는 조합시
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
@@ -1151,17 +1088,18 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		TSetMemory(_Add(SuPtr[i+1],13),SetTo,3000),
 		TSetMemoryX(_Add(SuPtr[i+1],18),SetTo,3000,0xFFFF),})
 		CMov(FP,TempPtr,SuPtr[i+1],2)
-		CIf(FP,{TMemory(TempPtr,AtMost,166999*256)})
-			CIfX(FP,{TMemory(_Mem(_Add(_ReadF(TempPtr),BattleHeal[i+1])),AtLeast,167000*256)},{TSetMemory(TempPtr,SetTo,167000*256)})
+		CIf(FP,{TMemory(TempPtr,AtMost,(1670000*256)-256)})
+			CIfX(FP,{TMemory(_Mem(_Add(_ReadF(TempPtr),BattleHeal[i+1])),AtLeast,1670000*256)},{TSetMemory(TempPtr,SetTo,1670000*256)})
 			CElseX({TSetMemory(TempPtr,Add,BattleHeal[i+1])})
 			CIfXEnd()
 		CIfEnd()
-		CMov(FP,TempPtr,SuPtr[i+1],24)
-		CIf(FP,{TMemoryX(TempPtr,AtMost,65534*256,0xFFFFFF)})
-			CIfX(FP,{TMemory(_Mem(_Add(_ReadF(TempPtr),BattleHeal[i+1])),AtLeast,65535*256)},{TSetMemoryX(TempPtr,SetTo,65535*256,0xFFFFFF)})
-			CElseX({TSetMemoryX(TempPtr,Add,BattleHeal[i+1],0xFFFFFF)})
+		CMov(FP,TempPtr2,SuPtr[i+1],24)
+		CIf(FP,{TMemoryX(TempPtr2,AtMost,65534*256,0xFFFFFF)})
+			CIfX(FP,{TMemory(_Mem(_Add(_ReadF(TempPtr2),BattleHeal[i+1])),AtLeast,65535*256)},{TSetMemoryX(TempPtr2,SetTo,65535*256,0xFFFFFF)})
+			CElseX({TSetMemoryX(TempPtr2,Add,BattleHeal[i+1],0xFFFFFF)})
 			CIfXEnd()
 		CIfEnd()
+		CTrigger(FP,{CDeaths(FP,AtLeast,1,SuHeal[i+1])},{SetCDeaths(FP,SetTo,0,SuHeal[i+1]),TSetMemory(TempPtr,SetTo,1670000*256),TSetMemoryX(TempPtr2,SetTo,65535*256,0xFFFFFF)},1)
 		CTrigger(FP,{TMemoryX(_Add(SuPtr[i+1],19),Exactly,0,0xFF00)},{SetCVar(FP,SuPtr[i+1][2],SetTo,0)},1)
 		CIfEnd()
 
@@ -1185,7 +1123,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			CMov(FP,0x662350 + (MarID[i+1]*4),MarHP2[i+1])
 			CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),256),_Sub(_Mov(256),P_Armor[i+1])))
 		CIfEnd()
-		CIf(FP,{Memory(0x6284E8+(0x30*i) ,AtLeast,1),Memory(0x6284E8+(0x30*i) + 4,AtMost,0),Memory(0x57F1B0, Exactly, i)})
+		CIf(FP,{Memory(0x6284E8+(0x30*i) ,AtLeast,1),Memory(0x6284E8+(0x30*i) + 4,AtMost,0),Memory(0x512684, Exactly, i)})
 			f_Read(FP,0x6284E8+(0x30*i),SelPTR,SelEPD)
 			CDoActions(FP,{TSetMemory(SelOPEPD,Add,1)})
 			f_Read(FP,_Add(SelEPD,2),SelHP)
@@ -1240,7 +1178,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 			TriggerX(FP,{CDeaths(FP,AtMost,0,isSingle)},{SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000);},{Preserved})
 		CIfXEnd()
-		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,OrderCool[i+1]),SetCDeaths(FP,Subtract,1,NukeCool[i+1]),SetDeaths(i,Subtract,1,15),SetCDeaths(FP,Add,1,AutoHealT[i+1]),SetCDeaths(FP,Add,1,AutoStimT[i+1])})
+		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,OrderCool[i+1]),SetCDeaths(FP,Subtract,1,TelCool[i+1]),SetCDeaths(FP,Subtract,1,NukeCool[i+1]),SetDeaths(i,Subtract,1,15),SetCDeaths(FP,Subtract,1,ArmorT3[i+1]),SetCDeaths(FP,Add,1,AutoHealT[i+1]),SetCDeaths(FP,Add,1,AutoStimT[i+1])})
 
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,MarDetector[i+1])},{SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0x8000,0x8000)},{Preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoStim[i+1]),CDeaths(FP,AtLeast,150,AutoStimT[i+1])},{SetDeaths(i,Add,1,71);SetCDeaths(FP,Add,1,CUnitFlag);SetCDeaths(FP,SetTo,0,AutoStimT[i+1])},{Preserved})
@@ -1255,6 +1193,12 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+70,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,MultiCommand[i+1]),CDeaths(FP,AtLeast,1,OrderCool[i+1])},{OrderCooltime},{Preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,MultiCommand[i+1]),CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{Preserved})
+		local TelCooltime = {}
+		local TelCooltimeRecover = {}
+		table.insert(TelCooltime,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(TelCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+68,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoStim[i+1]),CDeaths(FP,AtLeast,1,TelCool[i+1])},{TelCooltime},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoStim[i+1]),CDeaths(FP,Exactly,0,TelCool[i+1])},{TelCooltimeRecover},{Preserved})
 		Trigger2(FP,{Deaths(i,AtLeast,1,197)},{SetDeaths(i,SetTo,1,14)},{Preserved})
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,440)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
@@ -1319,7 +1263,27 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
 	CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 	for i = 0, 6 do
-		Trigger2(FP,{PlayerCheck(i,1)},{ModifyUnitHitPoints(All,"Men",Force1,i+2,100),ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),ModifyUnitShields(All,"Men",Force1,i+2,100),ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{Preserved})
+		Trigger2(FP,{PlayerCheck(i,1)},{
+			ModifyUnitHitPoints(All,MarID[1],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[1],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[2],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[2],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[3],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[3],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[4],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[4],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[5],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[5],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[6],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[6],Force1,i+2,100),
+			ModifyUnitHitPoints(All,MarID[7],Force1,i+2,100),
+			ModifyUnitShields(All,MarID[7],Force1,i+2,100),
+			ModifyUnitHitPoints(All,10,Force1,i+2,100),
+			ModifyUnitShields(All,10,Force1,i+2,100),
+			ModifyUnitHitPoints(All,7,Force1,i+2,100),
+			ModifyUnitShields(All,7,Force1,i+2,100),
+			ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
+			ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{Preserved})
 	end
 	CIfEnd()
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{Preserved})
