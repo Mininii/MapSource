@@ -484,6 +484,18 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			
 		}
 	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"(+=.=+)");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
 	end
 
 	T_YY = 2021

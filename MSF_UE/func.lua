@@ -325,7 +325,7 @@ function Print13_Preserve()
 			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,100+j)})
 			end
 			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,114)})
-			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,150)})
+--			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,150)})
 			
 			for j = 0, 6 do
 				CallTriggerX(FP,Call_Print13[i+1],{CDeaths(FP,AtLeast,1,GivePChange[i+1]),Switch("Switch 240",Set);Deaths(i,AtLeast,1,212+j)})
