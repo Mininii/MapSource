@@ -8,7 +8,6 @@ function Install_Roka7Boss()
 	-- #X1 : 216 -------------------------------------------------------------------------------------------
 		
 	
-	DoActions(FP,{RemoveUnit(203,FP),RemoveUnit(204,FP)})
 	SHIndex = 217
 	VARI = (SHIndex-2)*3
 	VONM = (SHIndex-1)*5
@@ -23,6 +22,7 @@ function Install_Roka7Boss()
 
 
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
+	DoActions(FP,{RemoveUnit(203,FP),RemoveUnit(204,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
 	Trigger2(FP,{Memory(0x58F524,Exactly,3)},{ModifyUnitHitPoints(All, "Men", Force1, 64, 35)},{Preserved})
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})

@@ -282,9 +282,11 @@ function EPDToPtr(EPD)
 end
 
 function KeyInput(Key,Conditions,Actions,PreserveFlag,CutFlag)
-	X = {}
-	Y = SetDeaths(CurrentPlayer,SetTo,0,Key)
-	if CutFlag == 1 then Y = {} end
+	local X = {}
+	local Y = {}
+	if CutFlag ~= 1 then 
+		Y = {SetDeaths(CurrentPlayer,SetTo,0,Key)}
+	end
 	if PreserveFlag == 1 then
 		X = {Preserved}
 	end

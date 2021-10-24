@@ -340,7 +340,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
-		table.insert(PatchArr,SetMemoryB(0x663CE8 + 28,SetTo,2))
+		table.insert(PatchArr,SetMemoryB(0x663CE8 + 28,SetTo,24))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 10,SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 15,SetTo,2))
 
@@ -786,6 +786,11 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CAdd(FP,RepHeroIndex,1)
 	CWhileEnd()
 	f_ArrReset()
+	
+	
+
+
+
 	CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
 end
 

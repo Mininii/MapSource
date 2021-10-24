@@ -327,6 +327,7 @@ function LevelUp()
 	CMov(FP,0x6509B0,i)
 	end
 	CElseX({
+		SetMemory(0x6509B0,SetTo,0);
 		SetCDeaths(FP,SetTo,0,ConCP[1]);
 		SetCDeaths(FP,SetTo,0,ConCP[2]);
 		SetCDeaths(FP,SetTo,0,ConCP[3]);
