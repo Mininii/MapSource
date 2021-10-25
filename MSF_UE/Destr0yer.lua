@@ -609,6 +609,8 @@ Trigger {
 		SetCDeaths(FP,SetTo,0,WhileLaunch),
 		SetCDeaths(FP,SetTo,0,BursterCall),
 		SetCDeaths(FP,SetTo,0,BlackBox),
+		SetCDeaths(FP,SetTo,0,LockBossUnit),
+		
 		SetCVar(FP,N_R[2],SetTo,0),
 		SetCVar(FP,N_A[2],SetTo,0);
 		SetCVar(FP,N_X[2],SetTo,0);

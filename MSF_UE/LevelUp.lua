@@ -26,11 +26,12 @@ function LevelUp()
 		CommandLeastAt(201,64),
 		Bring(FP,AtLeast,1,147,64),
 	},{SetCVar(FP,ReserveBGM[2],SetTo,0)})
+	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),CVar(FP,Actived_Gun[2],AtMost,2)},{SetCDeaths(FP,SetTo,0,GCT)},{Preserved})
 		CIfX(FP,{CVar(FP,LevelT2[2],AtMost,1)})
 			TriggerX(FP,{DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),CVar(FP,Actived_Gun[2],AtMost,0),},{
 				SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
 				},{Preserved})
-		CElseIfX({CVar(FP,LevelT2[2],AtLeast,2),CVar(FP,Actived_Gun[2],AtMost,0),})
+		CElseIfX({CVar(FP,LevelT2[2],AtLeast,2),CVar(FP,Actived_Gun[2],AtMost,0)})
 		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,9)
 			},{
 			SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)

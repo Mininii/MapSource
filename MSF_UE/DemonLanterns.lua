@@ -1,9 +1,14 @@
 function Install_DLBoss()
+	local SpeedBackupCcode = CreateCcode()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
+	CIf(FP,{CDeaths(FP,AtMost,0,SpeedBackupCcode)},{SetCDeaths(FP,SetTo,1,SpeedBackupCcode)})
+	CMov(FP,SpeedBackup,SpeedVar)
+	CIfEnd()
+
 	CMov(FP,SpeedVar,4)
 	CMov(FP,0x6509B0,FP)
 	Trigger { -- 보스 무브 로케
@@ -2480,12 +2485,14 @@ function Install_DLBoss()
 	Void(2, Exactly, 31);
 	Void(3, Exactly, 41);})
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
-	
+	CMov(FP,SpeedVar,SpeedBackup)
 	CallTrigger(FP,Call_VoidReset)
 	DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P11),KillUnit("Any unit",P12),
-		SetCDeaths(FP,SetTo,1,DLClear);
+	SetCDeaths(FP,SetTo,1,DLClear);
+	SetCDeaths(FP,SetTo,0,SpeedBackupCcode);
 		DL_Recover;
 	})
+	
 	f_ArrReset()
 	CIfXEnd()
 	CIfEnd()

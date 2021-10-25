@@ -364,6 +364,7 @@ function Var_init()
 	ArmorStrPtr = CreateVar(FP)
 	GiveStrPtr = CreateVar(FP)
 	QCUnits = CreateVar(FP)
+	SpeedBackup = CreateVar(FP)
 	end
 
 function HPoints()

@@ -275,6 +275,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 		DefTypePatch(MarID[i+1],i) -- 마린의 방어타입을 P1부터 P7까지 차례대로 배분
 		SetUnitClass(MarID[i+1],199) -- 마린 계급설정. 체력보이게 하기 위함
+		SetUnitClass(63,199) -- 마린 계급설정. 체력보이게 하기 위함
 		SetUnitClass(10,199) -- 마린 계급설정. 체력보이게 하기 위함
 		
 		SetUnitClass(15,199) -- 보스몹 체력보이게하기
