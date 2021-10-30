@@ -14,9 +14,9 @@ function Objects()
 	--Shop
 	P_MinCost = 1 -- 미네랄 증가
 	P_MinAmount = 500000 -- 미네랄 증가량
-	P_NukeCost = 1 -- 핵 장전
+	P_NukeCost = 10 -- 핵 장전
 	P_NukeAmount = 1 -- 핵 장전양
-	P_AMCost = 20 -- 반물질 폭탄 장전
+	P_AMCost = 200 -- 반물질 폭탄 장전
 	P_SuppCost = 1 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
 	P_StimCost = 35 -- 원격 스팀팩 사용가능
@@ -365,6 +365,10 @@ function Var_init()
 	GiveStrPtr = CreateVar(FP)
 	QCUnits = CreateVar(FP)
 	SpeedBackup = CreateVar(FP)
+	
+	RandV = CreateVar(FP)
+	TempX = CreateVar(FP)
+	TempY = CreateVar(FP)
 	end
 
 function HPoints()

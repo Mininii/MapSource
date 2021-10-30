@@ -102,13 +102,19 @@ def beforeTriggerExec():
 			F2BDT << F2BDY - F2BDX	
 			if EUDIf()((EUDOr(F2BRT<=F2BRU,F2XT1<=F2XT2))):
 				if EUDIf()((F2BDT>=1*256,F2BDT<=0x7FFFFFFF)):
-					Trigger(conditions=[F2BDT>=640*256],actions=[F2BDT.SubtractNumber(640*256),KillUnitAt(64,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=320*256],actions=[F2BDT.SubtractNumber(320*256),KillUnitAt(32,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=160*256],actions=[F2BDT.SubtractNumber(160*256),KillUnitAt(16,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=80*256],actions=[F2BDT.SubtractNumber(80*256),KillUnitAt(8,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=40*256],actions=[F2BDT.SubtractNumber(40*256),KillUnitAt(4,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=20*256],actions=[F2BDT.SubtractNumber(20*256),KillUnitAt(2,"Men",64,Force1)])
-					Trigger(conditions=[F2BDT>=10*256],actions=[F2BDT.SubtractNumber(10*256),KillUnitAt(1,"Men",64,Force1)])
+					DoActions([
+						SetMemory(0x58DC60,SetTo,0),
+						SetMemory(0x58DC64,SetTo,0),
+						SetMemory(0x58DC68,SetTo,640),
+						SetMemory(0x58DC6C,SetTo,640),
+						MoveLocation(1, 87,P8,"Anywhere"),])
+					Trigger(conditions=[F2BDT>=640*256],actions=[F2BDT.SubtractNumber(640*256),KillUnitAt(64,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=320*256],actions=[F2BDT.SubtractNumber(320*256),KillUnitAt(32,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=160*256],actions=[F2BDT.SubtractNumber(160*256),KillUnitAt(16,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=80*256],actions=[F2BDT.SubtractNumber(80*256),KillUnitAt(8,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=40*256],actions=[F2BDT.SubtractNumber(40*256),KillUnitAt(4,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=20*256],actions=[F2BDT.SubtractNumber(20*256),KillUnitAt(2,"Men",1,Force1)])
+					Trigger(conditions=[F2BDT>=10*256],actions=[F2BDT.SubtractNumber(10*256),KillUnitAt(1,"Men",1,Force1)])
 					DoActions(SetDeaths(F2B+2,SetTo,F2BDY,0))
 				EUDEndIf()
 			EUDEndIf()
@@ -299,7 +305,6 @@ def beforeTriggerExec():
 
 	if EUDIf()((Memory(0x594000+4*1545,AtLeast,1),Memory(0x594000+4*1545,AtMost,4))):
 		Trigger(conditions=[Memory(0x58F524,Exactly,2),F1Del2 == 0],actions=[SetCurrentPlayer(7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64),SetMemoryX(0x66370C, SetTo, 130*1,0xFF)])
-		
 		Trigger(conditions=[Memory(0x58F524,Exactly,2)],actions=[F1Del2.AddNumber(1)])
 		Trigger(conditions=[Memory(0x58F524,Exactly,2),F1Del2>=24*3],actions=[F1Del2.SetNumber(0),SetMemory(0x58F524,SetTo,3),SetMemoryX(0x66370C, SetTo, 124*1,0xFF)])
 		Trigger(conditions=[Memory(0x58F524,Exactly,3),Command(P8,Exactly,0,84)],actions=[SetMemory(0x58F524,SetTo,4),KillUnit(84,P8)])

@@ -1361,6 +1361,9 @@ CIfEnd()
 			SetCDeaths(FP,SetTo,0,ViOff),
 			SetCDeaths(FP,SetTo,0,ViON),
 			SetCDeaths(FP,SetTo,0,StoryT4),
+			SetCVar(FP,SY[2],SetTo,0);
+			SetCVar(FP,SZ[2],SetTo,0);
+			SetCVar(FP,SW[2],SetTo,0);
 			SetMemory(0x6CA1F4, SetTo, 1707),
 			SetMemoryX(0x6C9DF4, SetTo, 67*65536,0xFFFF0000),DL_Recover
 		})

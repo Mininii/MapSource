@@ -863,17 +863,23 @@ UnitIDV = CreateVar(FP)
 TempLvHP = CreateVar(FP)
 TempLvHP2 = CreateVar(FP)
 MultiplierV = CreateVar(FP)
+TempLvHP_L = CreateWar(FP)
+TempLvHP_L2 = CreateWar(FP)
+TempLvHP_L3 = CreateWar(FP)
+
 f_SetLvHP = SetCallForward()
 SetCall(FP)
-	CIf(FP,{TMemory(_Add(UnitIDV,EPD(0x662350)),AtMost,8319999*256)})
-		CMovX(FP,TempLvHP2,VArr(MaxHPBackUp,UnitIDV))
-		f_Mul(FP,TempLvHP,TempLvHP2,_Mul(MultiplierV,_Sub(Level,_Mov(1))))
+
+		f_LMov(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0})
+		f_LMul(FP,TempLvHP_L2,TempLvHP_L,{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
+		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{Preserved})
+		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
+		
 		CIfX(FP,{TMemory(_Mem(_Add(TempLvHP2,TempLvHP)),AtLeast,8320000*256)})
 			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,8320000*256)})
 		CElseX()
 			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
 		CIfXEnd()
-	CIfEnd()
 SetCallEnd()
 
 f_Replace = SetCallForward()
@@ -1013,6 +1019,9 @@ local CB_P = CreateVar(FP)
 		local DBossScoreVA = CreateVArray(FP,7)
 		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
 		for i = 1, 7 do
+			if TestStart == 1 then
+				TriggerX(FP,{CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{Preserved})
+			end
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 		CMov(FP,ExScoreP[i],ExScore[i])
 		ItoDecX(FP,ExScoreP[i],VArr(ExScoreVA[i],0),2,nil,2)
@@ -1096,7 +1105,7 @@ local CB_P = CreateVar(FP)
 
 		CIfEnd()
 if TestStart == 1 then
-	CIf(FP,CDeaths(FP,AtLeast,0,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
+	CIf(FP,CDeaths(FP,AtLeast,0,isDBossClear),{SetCDeaths(FP,SetTo,0,isDBossClear),SetCVar(FP,OutputPoint[2],SetTo,0)})
 else
 	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
 end

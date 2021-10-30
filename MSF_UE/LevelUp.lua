@@ -281,14 +281,15 @@ function LevelUp()
 		for j, k in pairs(HeroArr) do
 			SetLevelUpHP(k,1)
 		end
-		BdArr = {131,132,133,135,136,137,138,139,140,141,142,143,144,146,147}
+		BdArr = {130,131,132,133,135,136,137,138,139,140,141,142,143,144,146,147,148,151,152,201}
 		
 		for j, k in pairs(BdArr) do
-			SetLevelUpHP(k,2)
+			SetLevelUpHP(k,1)
 		end
 		SetLevelUpHP(11,1)
 		SetLevelUpHP(13,1)
 		SetLevelUpHP(69,1)
+		SetLevelUpHP(193,1)
 		DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
 		local UpVar = CreateVar(FP)
 		CMov(FP,UpVar,Level)
@@ -359,25 +360,33 @@ function LevelUp()
 	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{Preserved})
 
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
-	MoveMarineArr = {}
-	for i = 0, 6 do
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,2+i))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,2+i))
-	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,2+i))
-	for j = 0, 4 do
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,20+j))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,20+j))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,20+j))
-	end
-	for j = 65, 73 do
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,j))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,j))
-	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,j))
-	
-	end
-	end
+--	MoveMarineArr = {}
+--	for i = 0, 6 do
+--	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,19,2+i))
+--	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,17,2+i))
+--	table.insert(MoveMarineArr,MoveUnit(50,"Men",i,18,2+i))
+--	for j = 0, 4 do
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,20+j))
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,20+j))
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,20+j))
+--	end
+--	for j = 65, 73 do
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,19,j))
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,17,j))
+--	table.insert(MoveMarineArr,MoveUnit(255,"Men",i,18,j))
+--	
+--	end
+--	end
+--	DoActions2(FP,MoveMarineArr)
 	--65~73
-	DoActions2(FP,MoveMarineArr)
+	for i = 17, 19 do
+	CWhile(FP,{Bring(Force1,AtLeast,1,"Men",i)})
+	f_Rand(FP,RandV)
+	CAdd(FP,TempX,_Mod(RandV,2272-800),800)
+	CAdd(FP,TempY,_Mod(RandV,6080-5440),5440)
+	Simple_SetLocX(FP,0,TempX,TempY,TempX,TempY,{MoveUnit(1,"Men",Force1,i,1)})
+	CWhileEnd()
+	end
 	
 	CMov(FP,0x6509B0,UnitDataPtr)
 	CWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})

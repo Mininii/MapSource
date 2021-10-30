@@ -256,7 +256,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (j * 46) + i,SetTo,255))
 	end
 	end
-
+	table.insert(PatchArr,SetMemory(0x58D718, SetTo, -1))
+	table.insert(PatchArr,SetMemory(0x58D71C, SetTo, -1))
+	
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (17), SetTo, 255))
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (21), SetTo, 255))
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (29), SetTo, 255))
@@ -299,9 +301,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + MarWep[i+1],SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- 공중무기
-		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
 		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
+		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
 	end
 	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
@@ -334,10 +336,12 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnable(66)
 	UnitEnable(67)
 	UnitEnable(68)
+	UnitEnable(48)
 
 	for i = 0, 6 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
@@ -501,7 +505,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 	T_YY = 2021
 	T_MM = 10
-	T_DD = 06
+	T_DD = 29
 	T_HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
@@ -509,6 +513,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
 	--PushErrorMsg(GlobalTime)
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
+	if Limit == 1 then
 	Trigger {
 		players = {FP},
 		conditions = {
@@ -521,7 +526,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			
 		}
 	}
-
+	end
 	Trigger {
 		players = {FP},
 		conditions = {

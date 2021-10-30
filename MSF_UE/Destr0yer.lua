@@ -90,6 +90,8 @@ local Lyrics = {
 	local CPosX2 = CreateVar(FP)
 	local CPosY2 = CreateVar(FP)
 	local RandRet2 = CreateVar(FP)
+	local CXTemp1 = CreateVar2(FP,nil,nil,540*3*12)
+	local CXTemp2 = CreateVar2(FP,nil,nil,10)
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
 	CIf(FP,{CVar(FP,DPtr[2],AtLeast,1),CVar(FP,DPtr[2],AtMost,0x7FFFFFFF)})
 		CIf(FP,{TTMemory(_Add(DPtr,2),NotSame,DcurHP)})
@@ -188,8 +190,9 @@ Trigger {
 				local CB = CAPlotCreateArr
 				local PlayerID = CAPlotPlayerID
 				
-				CX_Ratio(TSize,540*3*12,TSize,540*3*12,TSize,540*3*12)
-				CX_Rotate(_Div(XAngle,10),_Div(YAngle,10),_Div(ZAngle,10))
+
+				CX_Ratio(TSize,CXTemp1,TSize,CXTemp1,TSize,CXTemp1)
+				CX_Rotate(_Div(XAngle,CXTemp2),_Div(YAngle,CXTemp2),_Div(ZAngle,CXTemp2))
 
 				Trigger {
 					players = {FP},
@@ -473,7 +476,7 @@ Trigger {
 		CWhile(FP,{CVar(FP,SkillW2[2],AtLeast,1),CVar(FP,SkillW2[2],AtMost,100)},{SetCVar(FP,SkillW3[2],Add,100),SetCVar(FP,SkillW2[2],Subtract,1)})
 			local Randnum = f_CRandNum(360)
 			CMov(FP,RandRet2,Randnum)
-			f_Mod(FP,InputMaxRand,_Rand(),_Mov(10*32))
+			f_Mod(FP,InputMaxRand,_Rand(),_Mov(30*32))
 			CallTriggerX(FP,CRandNum,nil,{SetCVar(FP,Oprnd[2],SetTo,0)})
 			f_Lengthdir(FP,TempRandRet,RandRet2,CPosX2,CPosY2)
 			GetLocCenter("DCenter",CPosX,CPosY)

@@ -103,6 +103,15 @@ CIfEnd()
 CIf(FP,NTCond())
 CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw2[2],SetTo,0))
 CMov(FP,VO(41),LevelT2) -- Diff
+DoActions2(FP,{
+	Simple_SetLoc(0,0,0,32*96,5),
+	RemoveUnitAt(All,60,1,FP);
+	Simple_SetLoc(0,3072-5,0,3072,6144),
+	RemoveUnitAt(All,60,1,FP);
+	Simple_SetLoc(0,0,0,5,6144),
+	RemoveUnitAt(All,60,1,FP);
+
+})
 
 Trigger { -- No comment (4347C6C8)
 	players = {FP},

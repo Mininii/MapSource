@@ -86,7 +86,7 @@ function Gun_System()
         SetCDeaths(FP,SetTo,0,SoundLimit[7]),
         SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 
-    CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
+    CIfX(FP,{Memory(0x628438,AtLeast,1),CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
         DoActions(FP,{
             SetInvincibility(Disable,"Buildings",FP,64);
         })
