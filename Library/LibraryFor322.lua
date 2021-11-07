@@ -133,6 +133,9 @@ function SetCallEnd() -- CtrigAsm 5.1
 	end
 end
 
+function CallTriggerA(Index,AddonTrigger) -- CtrigAsm 5.1
+	return {SetNext("X",Index,0),SetNext(Index+1,"X",1),AddonTrigger}
+end
 function CallTrigger(Player,Index,AddonTrigger) -- CtrigAsm 5.1
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
 	DoActionsX(Player,{AddonTrigger,X})
