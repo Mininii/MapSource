@@ -1053,7 +1053,6 @@ end
 function Install_Call_G_CA()
 	Call_G_CA = SetCallForward()
 	SetCall(FP)
-		CIf(FP,{TTOR({CVar(FP,G_CA_TempTable[10][2],AtMost,5),CVar(FP,count[2],AtMost,GunLimit)})})
 		CIfX(FP,CVar(FP,G_CA_TempTable[1][2],AtLeast,1,0xFF))
 			CDoActions(FP,{
 				TSetCVar(FP,G_CA_Temp[1][2],SetTo,G_CA_TempTable[1],0xFF),
@@ -1117,7 +1116,6 @@ function Install_Call_G_CA()
 			TSetMemory(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,_Div(G_CA_TempTable[7],_Mov(256))),
 		})
 		CIfXEnd()
-		CIfEnd()
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CA_Launch)})
 	SetCallEnd()
 end

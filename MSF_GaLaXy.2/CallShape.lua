@@ -60,9 +60,9 @@ function Install_Shape()
 	--CS_Distortion()
 	BattleShape = CSMakeStar(5,165-(12*(5-2)),((36*6)-(36*2))/2,180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
 
-	NeShape = CSMakePolygon(6,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(6,1),0)
+	NeShape = CSMakePolygon(4,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(4,1),1)
 
-	TeShape = CSMakeStar(4,165-(12*(4-2)),((36*6)-(36*1))/2,180,PlotSizeCalc(4*2,1),0)
+	TeShape = CSMakePolygon(3,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(3,1),1)
 
 	G_CAPlot_Shape_InputTable = {
 		"L00_1_64F","L00_1_96F","L00_1_128F","L00_1_164F","L00_1_64L","L00_1_96L","L00_1_128L","L00_1_164L",	
@@ -150,6 +150,19 @@ function Install_Shape()
 		return X
 	end
 	
+
+	function MakeLevelShapeA(Type,Points,Level)
+		local X = {}
+		if Type == "Polygon" then
+			table.insert(X,CSMakePolygon(Points,((16*9)-(16*Level))+24,0,PlotSizeCalc(Points,Level),0))
+		  
+		elseif Type == "Star" then
+			table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*Level),180,PlotSizeCalc(Points*2,Level),0))
+		else
+			PushErrorMsg("Type_InputError")
+		end
+		return X
+	end
 
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
 		local X = {}

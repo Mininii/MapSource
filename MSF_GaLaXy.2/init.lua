@@ -80,18 +80,18 @@ function onInit()
 	GMCost = 30000
 	NeCost = 30000
 	TeCost = 50000
-	SuCost = 500000
+	SuCost = 400000
 	HPointFactor = 20
 	ExRate = 0
 	EasyEx1P = 110
-	HDEx1P = 120
-	BurEx1P = 140
+	HDEx1P = 105
+	BurEx1P = 90
 	GunLimit = 1450
 	--Patch
 	for j = 0, 5 do
 	table.insert(PatchArr2,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
-	table.insert(PatchArr2,Simple_CalcLoc("S"..j+1,0,0,32*10,32*10))
-	table.insert(PatchArr2,Simple_CalcLoc("G"..j+1,0,0,32*10,32*10))
+	table.insert(PatchArr2,Simple_CalcLoc("S"..j+1,0,0,32*5,32*5))
+	table.insert(PatchArr2,Simple_CalcLoc("G"..j+1,0,0,32*5,32*5))
 	end
 function SetUnitAdvFlag(UnitID,Value,Mask)
 	table.insert(PatchArr2,SetMemoryX(0x664080 + (UnitID*4),SetTo,Value,Mask))

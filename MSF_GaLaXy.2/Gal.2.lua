@@ -30,7 +30,7 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 1
+Limit = 0
 GunSafety = 0
 VName = "Ver.1.5"
 SetFixedPlayer(FP)
@@ -479,17 +479,17 @@ t23 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 \x04회 업그레이드를 완료하였습니다. \x07
 
 t24 = "\x0d\x0d\x0d\x0d\x0d\x04현재 선택가능 플레이어는...\x0d\x0d\x0d\x0d\x0d"
 t25 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
 }
 
 t26 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x0EEASY \x02[W] \x08HARD \x02[E] \x11BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x02[W] \x02HARD \x02[E] \x02BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x03[W] \x08HARD \x02[E] \x02BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x02[W] \x02HARD \x03[E] \x11BURST \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x0EEASY \x02[W] \x08HARD \x02[E] \x11BURST\x04(비추천) \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x02[W] \x02HARD \x02[E] \x02BURST\x04(비추천) \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x03[W] \x08HARD \x02[E] \x02BURST\x04(비추천) \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02EASY \x02[W] \x02HARD \x03[E] \x11BURST\x04(비추천) \x02[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d"
 }
 t28 = {
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x02[Q] \x02신나는 \x02[W] \x02진지한 \x02[E] \x02강렬한 \x02[R] \x02강렬한2\x0d\x0d\x0d\x0d\x0d",
@@ -2851,8 +2851,8 @@ Trigger { -- 텟모드 설치 여부
 CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
 YY = 2021
-MM = 09
-DD = 28
+MM = 11
+DD = 09
 HH = 00
 function PushErrorMsg(Message)
 	_G["\n"..Message.."\n"]() 
@@ -4268,21 +4268,26 @@ Trigger { -- 인트로1
 		}
 	end
 	Shape1013 = {6   ,{3696, 3808},{3728, 3808},{3760, 3808},{3664, 3808},{3632, 3808},{3600, 3808}}
-	Shape2013 = {6   ,{3696, 3872},{3728, 3872},{3760, 3872},{3664, 3872},{3632, 3872},{3600, 3872}}
-	Shape3013 = {6   ,{3696, 3744},{3728, 3744},{3760, 3744},{3664, 3744},{3632, 3744},{3600, 3744}}
-	Shape4013 = {6   ,{3696, 3776},{3728, 3776},{3760, 3776},{3664, 3776},{3632, 3776},{3600, 3776}}
-	Shape5013 = {6   ,{3696, 3840},{3728, 3840},{3760, 3840},{3664, 3840},{3632, 3840},{3600, 3840}}
-	Shape6013 = {6   ,{3696, 3712},{3728, 3712},{3760, 3712},{3664, 3712},{3632, 3712},{3600, 3712}}
-
-
+    Shape2013 = {6   ,{3696, 3872},{3728, 3872},{3760, 3872},{3664, 3872},{3632, 3872},{3600, 3872}}
+    Shape3013 = {6   ,{3696, 3744},{3728, 3744},{3760, 3744},{3664, 3744},{3632, 3744},{3600, 3744}}
+    Shape4013 = {6   ,{3696, 3776},{3728, 3776},{3760, 3776},{3664, 3776},{3632, 3776},{3600, 3776}}
+    Shape5013 = {6   ,{3696, 3840},{3728, 3840},{3760, 3840},{3664, 3840},{3632, 3840},{3600, 3840}}
+    Shape6013 = {6   ,{3696, 3712},{3728, 3712},{3760, 3712},{3664, 3712},{3632, 3712},{3600, 3712}}
+	
+	MutalCreateS = {16  ,{3968, 3648},{3840, 3648},{3712, 3648},{3584, 3648},{3584, 3712},{3584, 3776},{3584, 3840},{3584, 3904},{3584, 3968},{3712, 3968},{3840, 3968},{3968, 3968},{3968, 3904},{3968, 3840},{3968, 3776},{3968, 3712}}
+	ZerglingCreateS = {25  ,{3648, 3648},{3776, 3648},{3904, 3648},{3968, 3680},{3968, 3744},{3968, 3808},{3968, 3872},{3968, 3936},{3904, 3968},{3648, 3968},{3584, 3936},{3584, 3872},{3584, 3808},{3584, 3744},{3584, 3680},{3680, 3968},{3872, 3968},{3872, 3648},{3744, 3648},{3680, 3648},{3808, 3648},{3616, 3648},{3936, 3648},{3712, 3968},{3840, 3968}}
 	MarCreateSh = {Shape1013,Shape2013,Shape3013,Shape4013,Shape5013,Shape6013}
 CIfOnce(FP,{
 	CDeaths(FP,AtLeast,1,ModeO);
 	CDeaths(FP,AtLeast,21+(24*5),modeT);
 })
 for i = 0, 5 do
-CSPlot(MarCreateSh[i+1],i,20,0,{0,0},1,32,FP,PlayerCheck(i,1))
+	CSPlot(MarCreateSh[i+1],i,20,0,{0,0},1,32,FP,PlayerCheck(i,1))
 end
+CSPlot(MutalCreateS,FP,43,0,{0,0},1,32,FP,nil)
+CSPlot(ZerglingCreateS,FP,37,0,{0,0},1,32,FP,nil)
+
+
 CIfEnd()
 Trigger { -- 인트로1
 	players = {FP},
@@ -4320,7 +4325,7 @@ Trigger { -- 인트로1
 
 	},
 	actions = {
-		SetResources(Force1,Add,150000,Ore);ModifyUnitEnergy(All,71,Force2,64,0),ModifyUnitEnergy(All,67,Force2,64,0),ModifyUnitEnergy(All,63,Force2,64,0)
+		SetResources(Force1,Add,50000,Ore);ModifyUnitEnergy(All,71,Force2,64,0),ModifyUnitEnergy(All,67,Force2,64,0),ModifyUnitEnergy(All,63,Force2,64,0)
 		
 	},
 	}
@@ -4784,8 +4789,9 @@ DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
 TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 
 Install_boss()
-
+CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
 Create_G_CA_Arr()
+CIfEnd()
 CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit)}) -- 건작함수 제어
 DoActions(FP,{
 	SetInvincibility(Disable,132,Force2,64);
@@ -5054,7 +5060,7 @@ Trigger {
 		CVar(FP,HiddenHPM[2],Exactly,i);
 	},
 	actions = {
-		SetMemory(0x662350 + (4*12), Subtract, i*20000*256);
+		SetMemory(0x662350 + (4*12), Subtract, i*10000*256);
 	}
 }
 Trigger {
@@ -5671,6 +5677,55 @@ CIfEnd() -- OnpluginStartEnd
 CIf(AllPlayers,{Switch("Switch 201",Set)}) -- GameStart
 DoActions2(FP,ButtonSetPatch2,1)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,WaveT)})
+local WaveC = CreateCcode()
+
+CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,7200),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
+
+GetLocCenter("Location 31",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn({CDeaths(FP,Exactly,0,WaveC)},{55,40, 54},P_4,6,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,1,WaveC)},{55,53, 39},P_7,4,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,2,WaveC)},{56,54, 53},P_6,4,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,3,WaveC)},{56,104, 48, 51},P_8,4,"MAX")
+DoActionsX(FP,SetCDeaths(FP,Add,1,WaveC))
+TriggerX(FP,{CDeaths(FP,AtLeast,4,WaveC)},{SetCDeaths(FP,SetTo,0,WaveC)},{Preserved})
+CIfEnd()
+
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",81)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 81",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{53, 54},P_3,4,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",82)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 82",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{53, 54},P_3,4,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",83)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 83",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{48,53,55},P_4,3,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",84)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 84",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",85)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 85",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{17,15,21},P_4,2,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",86)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 86",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{77,78,80},S_3,1,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",87)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 87",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
+CIfEnd()
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",88)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+GetLocCenter("Location 88",Var_TempTable[2],Var_TempTable[3])
+G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
+CIfEnd()
+
+
+CMov(FP,Var_TempTable[2],0)
+CMov(FP,Var_TempTable[3],0)
 Trigger {
 	players = {FP},
 	conditions = {
@@ -8120,7 +8175,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04？？？？？？？？？\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04？？？(힌트 : 3부대로 고생하시고 \x07【힐링】 \x04하세요~)\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
 		PreserveTrigger();
 	},
 }
@@ -8460,21 +8515,21 @@ Trigger { -- 조합 핵배틀
 		MemoryB(0x58D2B0+(j*46)+7,AtLeast,255);
 		MemoryB(0x58D2B0+(j*46),AtLeast,255);
 		Command(j,AtMost,0,12);
-		Bring(j,Exactly,12,100,3);
-		Bring(j,Exactly,10,"Terran SCV",3);
+		Bring(j,Exactly,10,100,3);
+		Bring(j,Exactly,0,"Terran SCV",3);
 		Bring(j,Exactly,1,16,3);
 		Bring(j,Exactly,1,0,3);
+		Deaths(j,AtLeast,40,125);
 		Accumulate(j,AtLeast,SuCost,Ore);
 	},
 	actions = {
-		ModifyUnitEnergy(12,100,j,3,0);
+		ModifyUnitEnergy(10,100,j,3,0);
 		ModifyUnitEnergy(1,16,j,3,0);
 		ModifyUnitEnergy(1,0,j,3,0);
 		SetResources(j,Subtract,SuCost,ore);
-		RemoveUnitAt(12,100,3,j);
+		RemoveUnitAt(10,100,3,j);
 		RemoveUnitAt(1,16,3,j);
 		RemoveUnitAt(1,0,3,j);
-		RemoveUnitAt(10,"Terran SCV",3,j);
 		--
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04, SCV를 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ 로 \x19변환\x04하였습니다. - \x1F"..SuCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
 		--SetMemoryB(0x58D088+(46*j)+14,SetTo,255);
@@ -8612,35 +8667,32 @@ CIfEnd()
 
 
 CIfX(FP,{Bring(j,AtLeast,1,12,64),CDeaths(FP,Exactly,0,SuSkill[j+1])})
-DoActions(FP,{MoveLocation("P"..j+1,12,j,64)})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","P"..j+1),CDeaths(FP,AtMost,0,BSkillT[j+1])})
-GetLocCenter("P"..j+1,Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({},{1},"ACAS","BattleShape","MAX",4,nil,nil,j)
+DoActions(FP,{Simple_SetLoc("P"..j+1,0,0,32*10,32*10),MoveLocation("P"..j+1,12,j,64)})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT[j+1])},{RemoveUnit(1,j)},{Preserved})
+CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","P"..j+1),CDeaths(FP,AtMost,0,BSkillT[j+1])},SetCDeaths(FP,SetTo,13,BSkillT[j+1]))
+CSPlotAct(BattleShape,j,1,"P"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(1,j,64,Patrol,64)},1)
 CIfEnd()
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT[j+1]),RemoveUnit(1,j)},{Preserved})
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
+DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1])})
 CElseX({RemoveUnit(1,j)})
 CIfXEnd()
 
 CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
-DoActions(FP,{MoveLocation("S"..j+1,16,j,64)})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","S"..j+1),CDeaths(FP,AtMost,0,BSkillT2[j+1])})
-GetLocCenter("S"..j+1,Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({},{182},"ACAS","NeShape","MAX",5,nil,nil,j)
+DoActions(FP,{Simple_SetLoc("S"..j+1,0,0,32*5,32*5),MoveLocation("S"..j+1,16,j,64)})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{RemoveUnit(182,j)},{Preserved})
+CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","S"..j+1),CDeaths(FP,AtMost,0,BSkillT2[j+1])},SetCDeaths(FP,SetTo,18,BSkillT2[j+1]))
+CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(182,j,64,Patrol,64)},1)
 CIfEnd()
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT2[j+1]),RemoveUnit(182,j)},{Preserved})
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
+DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1])})
 CElseX({RemoveUnit(182,j)})
 CIfXEnd()
 
 CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
-DoActions(FP,{MoveLocation("G"..j+1,0,j,64)})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","G"..j+1),CDeaths(FP,AtMost,0,BSkillT3[j+1])})
-GetLocCenter("G"..j+1,Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({},{183},"ACAS","TeShape","MAX",6,nil,nil,j)
+DoActions(FP,{Simple_SetLoc("G"..j+1,0,0,32*5,32*5),MoveLocation("G"..j+1,0,j,64)})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{RemoveUnit(183,j)},{Preserved})
+CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","G"..j+1),CDeaths(FP,AtMost,0,BSkillT3[j+1])},SetCDeaths(FP,SetTo,18,BSkillT3[j+1]))
+CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(183,j,64,Patrol,64)},1)
 CIfEnd()
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{SetCDeaths(FP,SetTo,10,BSkillT3[j+1]),RemoveUnit(183,j)},{Preserved})
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1]),SetCVar(FP,Var_TempTable[2][2],SetTo,0),SetCVar(FP,Var_TempTable[3][2],SetTo,0)})
+DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1])})
 CElseX({RemoveUnit(183,j)})
 CIfXEnd()
 
@@ -8765,7 +8817,7 @@ Trigger { -- 솔플 보너스
 	},
 	actions = {
 		SetResources(Force1,Add,80000,Ore);
-		CreateUnit(6,20,2,Force1);
+		CreateUnit(4,20,2,Force1);
 	},
 }
 --수정트리거
