@@ -2275,7 +2275,6 @@ end
 				KillUnitAt(All,84,"Location 1",FP);
 				})
 		CIfXEnd()
-		
 		CIfX(FP,{CVar(FP,LevelT2[2],Exactly,1),Void(1545,Exactly,4),Memory(0x58F524,Exactly,3)})
 			CMov(FP,V(XTemp),_iSub(_Div(_Mul(V(0x2000),384*2),360),384)) 
 			CDoActions(FP,{
@@ -3015,31 +3014,6 @@ end
 	CIfEnd()
 
 
-	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))
-	DoActionsX(FP,{KillUnit(84,FP),SetCDeaths(FP,Add,1,rokaClear)})
-	roka7ResetTable = {}
-	local VTable = {B5_V1[2],B5_V2[2],B5_XY[2],B5_YZ[2],B5_ZX[2],Del[2],Loc[2],Num[2],LocX[2],LocY[2],F1LocX[2],F1LocY[2],0x1FE9,
-	0x1FE8,0x1FE7,0x1FE6,0x1FE5,0x1FE4,0x1FE3,0x1FE2,0x1FE1,0x1FE0,XColor,XType,XTemp}
-	
-	
-	table.insert(roka7ResetTable,SetMemory(0x66FABC, SetTo, 365))
-
-	for i = 0x2000, 0x2300 do
-		table.insert(roka7ResetTable,SetCVar(FP,i,SetTo,0))
-	end
-	for j, k in pairs(VTable) do
-		table.insert(roka7ResetTable,(SetCVar(FP,k,SetTo,0)))
-	end
-	DoActions2X(FP,roka7ResetTable)
-	CallTrigger(FP,Call_VoidReset)
-	CIfXEnd()
-	
-	
-	
-	
-	
-	
-	
 	CMov(FP,0x6509B0,19025+19)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 
@@ -3065,9 +3039,6 @@ end
 	
 	
 	
-	
-	
-	
 	Trigger {
 		players = {FP},
 		conditions = {Command(FP,AtLeast,1,203)},
@@ -3086,4 +3057,39 @@ end
 		actions = {SetInvincibility(Enable,209,FP,"Anywhere");},
 		flag = {Preserved}
 	}
+
+	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))
+	DoActionsX(FP,{KillUnit(84,FP),SetCDeaths(FP,Add,1,rokaClear)})
+	roka7ResetTable = {}
+	local VTable = {B5_V1[2],B5_V2[2],B5_XY[2],B5_YZ[2],B5_ZX[2],Del[2],Loc[2],Num[2],LocX[2],LocY[2],F1LocX[2],F1LocY[2],0x1FE9,
+	0x1FE8,0x1FE7,0x1FE6,0x1FE5,0x1FE4,0x1FE3,0x1FE2,0x1FE1,0x1FE0,XColor,XType,XTemp}
+	
+	
+	table.insert(roka7ResetTable,SetMemory(0x66FABC, SetTo, 365))
+
+	for i = 0x2000, 0x2300 do
+		table.insert(roka7ResetTable,SetCVar(FP,i,SetTo,0))
+	end
+	for j, k in pairs(VTable) do
+		table.insert(roka7ResetTable,(SetCVar(FP,k,SetTo,0)))
+	end
+	DoActions2X(FP,roka7ResetTable)
+	DoActions(FP,{
+		SetMemory(0x58F524,SetTo,0);
+		SetMemory(0x58F518,SetTo,0);
+		SetMemory(0x58F520,SetTo,0);
+		SetMemory(0x58F51C,SetTo,0);
+	})
+	CallTrigger(FP,Call_VoidReset)
+	CIfXEnd()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 end

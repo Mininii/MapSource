@@ -337,6 +337,10 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnable(67)
 	UnitEnable(68)
 	UnitEnable(48)
+	for i = 37, 45 do
+		UnitEnable(i)
+		
+	end
 
 	for i = 0, 6 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
@@ -345,7 +349,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
-		table.insert(PatchArr,SetMemoryB(0x663CE8 + 28,SetTo,24))
+		table.insert(PatchArr,SetMemoryB(0x663CE8 + 28,SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 10,SetTo,2))
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 15,SetTo,2))
 
@@ -504,8 +508,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 
 	T_YY = 2021
-	T_MM = 10
-	T_DD = 29
+	T_MM = 11
+	T_DD = 10
 	T_HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
@@ -677,6 +681,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_GetStrXptr(FP,SupplyStrPtr,"\x0D\x0D\x0DSupp".._0D)
 	f_GetStrXptr(FP,ArmorStrPtr,"\x0D\x0D\x0DArmor".._0D)
 	f_GetStrXptr(FP,GiveStrPtr,"\x0D\x0D\x0DGive".._0D)
+	f_GetStrXptr(FP,AHPStrPtr,"\x0D\x0D\x0DAHP".._0D)
 	
 	
 	
@@ -715,6 +720,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	
 	f_MemCpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
 	f_MemCpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(NukeEndT[3],0),"X","X",1),NukeEndT[2])
+
+	f_MemCpy(FP,AHPStrPtr,_TMem(Arr(EnemyHPT1[3],0),"X","X",1),EnemyHPT1[2])
+	f_MemCpy(FP,_Add(AHPStrPtr,EnemyHPT1[2]+(5*4)),_TMem(Arr(EnemyHPT2[3],0),"X","X",1),EnemyHPT2[2])
 
 	
 	f_MemCpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])

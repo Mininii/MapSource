@@ -866,13 +866,15 @@ MultiplierV = CreateVar(FP)
 TempLvHP_L = CreateWar(FP)
 TempLvHP_L2 = CreateWar(FP)
 TempLvHP_L3 = CreateWar(FP)
-
+HPMul = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 
-		f_LMov(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0})
-		f_LMul(FP,TempLvHP_L2,TempLvHP_L,{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
+		f_LMul(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0},{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
+		CMov(FP,HPMul,_Sub(_Mov(256),TotalAHP))
+		f_LMul(FP,TempLvHP_L2,_LDiv(TempLvHP_L,"256"),{HPMul,0})
 		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{Preserved})
+		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{Preserved})
 		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
 		
 		CIfX(FP,{TMemory(_Mem(_Add(TempLvHP2,TempLvHP)),AtLeast,8320000*256)})

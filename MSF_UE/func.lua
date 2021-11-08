@@ -190,7 +190,7 @@ function BGMManager()
 	Akasha = AddBGM(10,"staredit\\wav\\Akasha.ogg",262*1000)
 	DLBossBGM = AddBGM(11,"staredit\\wav\\Lanterns.ogg",231*1000)
 	
-	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF)})
+	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)})
 		CMov(FP,BGMTypeV,ReserveBGM)
 		CMov(FP,ReserveBGM,0)
 		TriggerX(FP,{Bring(FP,AtLeast,1,87,64)},{SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)},{Preserved})
@@ -367,9 +367,9 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 
 
 	for i = 0, MaxPlayer do
-		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,440,0xFFFFFF)},1) -- 브금타이머
+		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- 브금타이머
 	end
-	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,440,0xFFFFFF)}) -- 브금타이머
+	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF)}) -- 브금타이머
 end
 
 function ObDisplay()
@@ -993,4 +993,14 @@ function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
 			},
 		flag = {Preserved}
 	}		
+end
+
+
+	--0x590004~0x591FE4 PEUD Area UnitID : 494~664
+StartPEUDValue = 494
+function CreatePEUD()
+	if StartPEUDValue >= 665 then PushErrorMsg("PEUD Has OverFlowed") end
+	local Ret = StartPEUDValue
+	StartPEUDValue = StartPEUDValue+1
+	return Ret
 end

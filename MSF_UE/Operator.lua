@@ -5,7 +5,7 @@ function OPTrig()
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.000\x04 - \x1F00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
+        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
     if TestStart == 1 then
@@ -101,9 +101,10 @@ function OPTrig()
     --		SetMemory(0x6415C4, SetTo, 0x005D2007);
     for i = 0, 6 do
     CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,i)})
-    Print13_NumSet(LevelPtr,0x64159C,100,0x10000)
-    Print13_NumSet(LevelPtr,0x64159C,10,0x1000000)
-    Print13_NumSet(LevelPtr,0x6415A0,1,0x1)
+    Print13_NumSet(LevelPtr,0x64159C,1000,0x10000)
+    Print13_NumSet(LevelPtr,0x64159C,100,0x1000000)
+    Print13_NumSet(LevelPtr,0x6415A0,10,0x1)
+    Print13_NumSet(LevelPtr,0x6415A0,1,0x100)
     Print13_NumSet(TimePtr,0x6415A4,36000000,0x10000)
     Print13_NumSet(TimePtr,0x6415A4,3600000,0x1000000)
     Print13_NumSet(TimePtr,0x6415A8,60000*10,0x1000000)

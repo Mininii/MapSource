@@ -13,7 +13,7 @@ function LevelUp()
 	local NoText = "\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！\n\n\x14\n\x14\n\n\x13\x04舛源稽 曽戟馬獣畏柔艦猿? 曽戟研 据馬獣檎 N聖 5噺 喚君爽室推.\n\n\x14\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！"
 	local NoText2 = "\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！\n\n\x14\n\x14\n\n\x13\x04NO研 脊径馬写柔艦陥. 惟績聖 曽戟杯艦陥.\n\n\x14\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！"
 	local TextSwitch = Create_CCTable(5)
-	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere")})
+	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),SetCP(FP)})
 	CIf(FP,{
 		CommandLeastAt(131,64),
 		CommandLeastAt(132,64),
@@ -26,9 +26,10 @@ function LevelUp()
 		CommandLeastAt(201,64),
 		Bring(FP,AtLeast,1,147,64),
 	},{SetCVar(FP,ReserveBGM[2],SetTo,0)})
+	
 	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),CVar(FP,Actived_Gun[2],AtMost,2)},{SetCDeaths(FP,SetTo,0,GCT)},{Preserved})
 		CIfX(FP,{CVar(FP,LevelT2[2],AtMost,1)})
-			TriggerX(FP,{DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),CVar(FP,Actived_Gun[2],AtMost,0),},{
+			TriggerX(FP,{DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF),CVar(FP,Actived_Gun[2],AtMost,0),},{
 				SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
 				},{Preserved})
 		CElseIfX({CVar(FP,LevelT2[2],AtLeast,2),CVar(FP,Actived_Gun[2],AtMost,0)})
@@ -36,7 +37,7 @@ function LevelUp()
 			},{
 			SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
 			},{Preserved})
-		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF),
+		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF),
 			},{
 			SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
 			},{Preserved})
@@ -59,7 +60,7 @@ function LevelUp()
 		},1)
 			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{Preserved})--19
 			DoActions(FP,{
-			--SetDeathsX(AllPlayers,SetTo,0,440,0xFFFFFF),
+			--SetDeathsX(AllPlayers,SetTo,0,12,0xFFFFFF),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
 			KillUnitAt(All,125,17,Force1),
 			KillUnitAt(All,125,18,Force1),

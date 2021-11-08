@@ -74,8 +74,8 @@ function Test_LV2()
         local BRX2 = CreateVar(FP)
         local BRY2 = CreateVar(FP)
         local CR = CreateVar(FP)
-
-        DoActions(FP,{SetResources(Force1,SetTo,2000000000,Ore),SetDeaths(Force1,Add,200,126),RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
+        DoActions(FP,SetResources(Force1,SetTo,2000000000,Ore),1)
+        DoActions(FP,{SetDeaths(Force1,Add,200,126),RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
         CIfOnce(FP)
         
             f_GetStrXptr(FP,TextX,"\x04X ÁÂÇ¥ : ".._0D)

@@ -50,7 +50,7 @@ local Lyrics = {
 		end
 	end
 	local BGMLength = 439
-	local BGMVar = 440
+	local BGMVar = 12
 	local Length = 666
 	local CBulletT = CreateCCode()
 	local LockBossUnit = CreateCCode()
