@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.5"
+VName = "Ver.1.6"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -1890,6 +1890,7 @@ GunPosSave_CallIndex = SetCallForward()
 CVoid_ID = CreateVar()
 CVoid_ID2 = CreateVar()
 SetCall(FP)
+DoActionsX(FP,{SetCVar(FP,CanC[2],Add,1)})
 DoActions(FP,MoveCp(Subtract,15*4))
 SaveCp(FP,BackupPosData)
 DoActions(FP,MoveCp(Subtract,1*4))
@@ -2000,7 +2001,7 @@ CIfX(FP,Never())
 	CIfXEnd()
 LoadCp(FP,SelCP)
 
-HiddenCommand = {51,50,52,50,52,50,50}
+HiddenCommand = {51,50,52,50,52,50,50,62,61,61}
 for i = 1, #HiddenCommand do
 Trigger {
 	players = {FP},
@@ -2071,7 +2072,7 @@ Trigger {
 	}
 
 
-CIf(FP,{CDeaths(FP,AtLeast,7,HiddenMode),CDeaths(FP,Exactly,0,ModeO)})
+CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,ModeO)})
 
 Trigger {
 	players = {FP},
@@ -2526,7 +2527,7 @@ Trigger { -- 인트로1
 	}
 CIf(FP,CDeaths(FP,Exactly,0,ModeO))
 
-CIf(FP,CDeaths(FP,AtLeast,7,HiddenMode))
+CIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
 HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"
 HiddenModeStr2 = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x08: ON) \x10]\x0D\x0D\x0D\x0D\x0D"
 CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
@@ -4998,7 +4999,7 @@ SetMemoryX(0x581DDC,SetTo,166*256,0xFF00); --P8 미니맵
 }
 
 TriggerX(FP,{CDeaths(FP,AtLeast,1,MarMode)},MarModePatch)
-CIf(FP,CDeaths(FP,AtLeast,7,HiddenMode))
+CIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
 Trigger {
 	players = {FP},
 	conditions = {
@@ -5048,8 +5049,13 @@ Trigger {
 		CVar(FP,HiddenHP[2],Exactly,i);
 	},
 	actions = {
-		SetMemory(0x662390, Add, i*16000*256);
-		SetMemory(0x662350, Add, i*24000*256);
+		
+		SetMemory(0x662350 + (4*12), Add, i*22000*256);
+		SetMemory(0x662350 + (4*0), Add, i*16000*256);
+		SetMemory(0x662350 + (4*16), Add, i*8000*256);
+		SetMemoryW(0x660E00 + (2*0), Add, i*6000);
+		SetMemoryW(0x660E00 + (2*16), Add, i*4000);
+		SetMemoryW(0x660E00 + (2*12), Add, i*2000);
 	}
 }
 
@@ -5060,7 +5066,12 @@ Trigger {
 		CVar(FP,HiddenHPM[2],Exactly,i);
 	},
 	actions = {
-		SetMemory(0x662350 + (4*12), Subtract, i*10000*256);
+		SetMemory(0x662350 + (4*12), Subtract, i*8000*256);
+		SetMemory(0x662350 + (4*0), Subtract, i*4000*256);
+		SetMemory(0x662350 + (4*16), Subtract, i*2000*256);
+		SetMemoryW(0x660E00 + (2*0), Subtract, i*4000);
+		SetMemoryW(0x660E00 + (2*16), Subtract, i*2000);
+		SetMemoryW(0x660E00 + (2*12), Subtract, i*8000);
 	}
 }
 Trigger {
@@ -5080,8 +5091,8 @@ Trigger {
 		SetMemoryX(0x657678, Add, i*16,0xFFFF);--
 		SetMemoryW(0x657678+(2*2),Add,8*i);
 		SetMemoryW(0x656EB0+(2*2),Add,204*i);
-		SetMemoryW(0x657678+(122*2),Add,20*i);
-		SetMemoryW(0x656EB0+(122*2),Add,1500*i);
+		SetMemoryW(0x657678+(122*2),Add,16*i);
+		SetMemoryW(0x656EB0+(122*2),Add,800*i);
 		
 	}
 }
@@ -5116,7 +5127,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,AtLeast,7,HiddenMode);
+		CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode);
 		CVar(FP,HondonMode[2],AtMost,0);
 	},
 	actions = {
@@ -5144,7 +5155,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,AtLeast,7,HiddenMode);
+		CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode);
 		CVar(FP,HondonMode[2],AtLeast,1);
 	},
 	actions = {
@@ -5246,7 +5257,6 @@ Trigger {
 	}
 }
 end
-DoActionsX(FP,{SetCVar(FP,CanC[2],SetTo,2)})
 Trigger {
 	players = {FP},
 	conditions = {
@@ -5257,7 +5267,7 @@ Trigger {
 		SetMemoryX(0x660EC8, SetTo, 9999,0xFFFF);
 		SetMemoryX(0x664814, SetTo, 255,0xFF);
 		SetCDeaths(FP,Add,2,SPGunCond);
-		SetCVar(FP,CanC[2],Add,2);
+		SetCVar(FP,CanC[2],Add,6);
 	}
 }
 Trigger {
@@ -5682,10 +5692,10 @@ local WaveC = CreateCcode()
 CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,7200),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
 
 GetLocCenter("Location 31",Var_TempTable[2],Var_TempTable[3])
-G_CA_SetSpawn({CDeaths(FP,Exactly,0,WaveC)},{55,40, 54},P_4,6,"MAX")
-G_CA_SetSpawn({CDeaths(FP,Exactly,1,WaveC)},{55,53, 39},P_7,4,"MAX")
-G_CA_SetSpawn({CDeaths(FP,Exactly,2,WaveC)},{56,54, 53},P_6,4,"MAX")
-G_CA_SetSpawn({CDeaths(FP,Exactly,3,WaveC)},{56,104, 48, 51},P_8,4,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,0,WaveC)},{55,40, 54},P_4,5,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,1,WaveC)},{55,53, 39},P_7,3,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,2,WaveC)},{56,54, 53},P_6,3,"MAX")
+G_CA_SetSpawn({CDeaths(FP,Exactly,3,WaveC)},{56,104, 48, 51},P_8,3,"MAX")
 DoActionsX(FP,SetCDeaths(FP,Add,1,WaveC))
 TriggerX(FP,{CDeaths(FP,AtLeast,4,WaveC)},{SetCDeaths(FP,SetTo,0,WaveC)},{Preserved})
 CIfEnd()
@@ -8163,7 +8173,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04(1기 제한)\n\x12\x04특수 마린에 기존에 있던 스킬은 제거됨\n\x12\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete\n\n\n",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 + \x076 Gas \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 + \x1F"..TeCost.."원 + \x0712 Gas \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04(1기 제한)\n\x12\x04특수 마린에 기존에 있던 스킬은 제거됨\n\x12\x12\x04방업할 시 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete\n\n\n",4);
 		PreserveTrigger();
 	},
 }
@@ -8175,7 +8185,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04？？？(힌트 : 3부대로 고생하시고 \x07【힐링】 \x04하세요~)\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F"..NeCost.."원 + \x076 Gas \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F"..TeCost.."원 + \x0712 Gas \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x04？？？(힌트 : 3부대로 고생하시고 \x07【힐링】 \x04하세요~)\n\x12\x04\x11\x12\x04방업할 시 \x08HP\x04와 \x1CShields \x0F증가\n\x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
 		PreserveTrigger();
 	},
 }
@@ -8428,6 +8438,7 @@ Trigger { -- 조합 네뷸라
 	players = {j},
 	conditions = {
 		Label(0);
+		CVar(FP,CanC[2],AtLeast,6);
 		CDeaths(FP,AtMost,0,MarMode);
 		Command(j,AtMost,0,16);
 		Bring(j,AtLeast,3,100,3);
@@ -8448,6 +8459,7 @@ Trigger { -- 조합 네뷸라 마린모드
 	players = {j},
 	conditions = {
 		Label(0);
+		CVar(FP,CanC[2],AtLeast,6);
 		CDeaths(FP,Exactly,1,MarMode);
 		Bring(j,AtLeast,1,100,3);
 		Accumulate(j,AtLeast,NeCost,Ore);
@@ -8467,6 +8479,7 @@ Trigger { -- 조합 테라
 	players = {j},
 	conditions = {
 		Label(0);
+		CVar(FP,CanC[2],AtLeast,12);
 		CDeaths(FP,AtMost,0,MarMode);
 		Command(j,AtMost,0,0);
 		Bring(j,AtLeast,1,16,3);
@@ -8492,6 +8505,7 @@ Trigger { -- 조합 테라 마린모드
 	players = {j},
 	conditions = {
 		Label(0);
+		CVar(FP,CanC[2],AtLeast,12);
 		CDeaths(FP,Exactly,1,MarMode);
 		Command(j,AtMost,0,0);
 		Bring(j,AtLeast,1,16,3);
@@ -9423,7 +9437,7 @@ local MText = {
 	}
 
 
-CIf(FP,CDeaths(FP,AtMost,6,HiddenMode))
+CIf(FP,CDeaths(FP,AtMost,#HiddenCommand-1,HiddenMode))
 for i = 1, 3 do
 for k = 1, 6 do
 for n = 1, 4 do
@@ -9556,7 +9570,7 @@ CIfEnd()
 
 
 
-CIf(FP,CDeaths(FP,AtLeast,7,HiddenMode))
+CIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
 for i = 1, 3 do
 for k = 1, 6 do
 for n = 1, 4 do
@@ -9711,28 +9725,28 @@ Trigger { -- 게임승리 빅토리 트리거
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,AtMost,6,HiddenMode);
+		CDeaths(FP,AtMost,#HiddenCommand-1,HiddenMode);
 		CDeaths(FP,AtLeast,499,Win);
 		},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, 1);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, 2);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, 3);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, 4);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, 5);
 		PlayWAV("staredit\\wav\\button3.wav");
-		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii",4);
+		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
 		SetMemory(0x6509B0, SetTo, FP);
 		},
 	}
@@ -9761,19 +9775,6 @@ Trigger { -- 게임승리 빅토리 트리거
 	}
 
 CIfEnd()
-
-Trigger { -- 가스통깨면 가스추가
-	players = {FP},
-	conditions = {
-		Label(0);
-		Deaths(P12,AtLeast,1,188);
-	},
-	actions = {
-		SetCVar(FP,CanC[2],Add,1);
-		SetDeaths(P12,Subtract,1,188);
-		PreserveTrigger();
-		},
-	}
 
 
 CMov(FP,MarUpData,0)
