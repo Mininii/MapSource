@@ -1890,7 +1890,8 @@ GunPosSave_CallIndex = SetCallForward()
 CVoid_ID = CreateVar()
 CVoid_ID2 = CreateVar()
 SetCall(FP)
-DoActionsX(FP,{SetCVar(FP,CanC[2],Add,1)})
+DoActionsX(FP,{SetCVar(FP,CanC[2],Add,1),SetCVar(FP,ExchangeRate[2],Add,1);})
+CTrigger(FP,{TCVar(FP,ExchangeRate[2],AtLeast,ExrateBackup)},{TSetCVar(FP,ExchangeRate[2],SetTo,ExrateBackup)},1)
 DoActions(FP,MoveCp(Subtract,15*4))
 SaveCp(FP,BackupPosData)
 DoActions(FP,MoveCp(Subtract,1*4))
@@ -2853,7 +2854,7 @@ CIf(FP,CDeaths(FP,AtLeast,1,LimitX))
 
 YY = 2021
 MM = 11
-DD = 09
+DD = 11
 HH = 00
 function PushErrorMsg(Message)
 	_G["\n"..Message.."\n"]() 
@@ -5687,9 +5688,10 @@ CIfEnd() -- OnpluginStartEnd
 CIf(AllPlayers,{Switch("Switch 201",Set)}) -- GameStart
 DoActions2(FP,ButtonSetPatch2,1)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,WaveT)})
+DoActionsX(FP,{SetCDeaths(FP,Add,24*75,WaveT)},1)
 local WaveC = CreateCcode()
 
-CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,7200),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
+CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,3600),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
 
 GetLocCenter("Location 31",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn({CDeaths(FP,Exactly,0,WaveC)},{55,40, 54},P_4,5,"MAX")
@@ -5871,7 +5873,7 @@ Trigger {
 		PlayWAV("sound\\Bullet\\TNsFir00.wav");
 		SetMemory(0x6509B0,SetTo,FP);
 		SetCVar(FP,PaneltyPoint[2],Subtract,1000);
-		SetCVar(FP,ExchangeRate[2],Add,-2);
+		SetCVar(FP,ExchangeRate[2],Add,-6);
 		PreserveTrigger();
 	}
 }
@@ -8531,6 +8533,8 @@ Trigger { -- 조합 핵배틀
 		Command(j,AtMost,0,12);
 		Bring(j,Exactly,10,100,3);
 		Bring(j,Exactly,0,"Terran SCV",3);
+		Bring(j,Exactly,0,124,3);
+		Bring(j,Exactly,0,125,3);
 		Bring(j,Exactly,1,16,3);
 		Bring(j,Exactly,1,0,3);
 		Deaths(j,AtLeast,40,125);
@@ -8618,7 +8622,7 @@ CDoActions(FP,{
 })
 CIfEnd()
 
-CIf(FP,CVar(FP,NePtr[j+1][2],AtLeast,1))
+CIfX(FP,CVar(FP,NePtr[j+1][2],AtLeast,1))
 CTrigger(FP,{TMemory(_Add(NePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,NeSkill[j+1])},{
 	SetMemory(0x6509B0,SetTo,j);
 	DisplayText("▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04의 Skill을 \x06Off \x04하였습니다.",4),
@@ -8635,10 +8639,30 @@ CTrigger(FP,{TMemory(_Add(NePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	TSetMemory(_Add(NePtr[j+1],0x98/4),SetTo,0 + 228*65536);
 	TSetMemory(_Add(NePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
 	},1)
-CTrigger(FP,{TMemoryX(_Add(NePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,NePtr[j+1][2],SetTo,0)},1)
-CIfEnd()
+	
+CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
+	DoActions(FP,{Simple_SetLoc("S"..j+1,0,0,32*5,32*5),MoveLocation("S"..j+1,16,j,64)})
+	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{RemoveUnit(182,j)},{Preserved})
+	CIf(FP,{
+		_TP(_TOR(
+			_TAND(
+				_TMemoryX(_Add(NePtr[j+1],19),Exactly,107*256,0xFF00),
+				_TMemory(_Add(NePtr[j+1],23),AtLeast,1)
+			),
+			_TMemoryX(_Add(NePtr[j+1],19),Exactly,10*256,0xFF00),
+			_TC(Bring(Force2,AtLeast,1,"Any unit","S"..j+1))
 
-CIf(FP,CVar(FP,TePtr[j+1][2],AtLeast,1))
+		)),
+		CDeaths(FP,AtMost,0,BSkillT2[j+1])},SetCDeaths(FP,SetTo,18,BSkillT2[j+1]))
+	CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(182,j,64,Patrol,64)},1)
+	CIfEnd()
+	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1])})
+CIfXEnd()
+CTrigger(FP,{TMemoryX(_Add(NePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,NePtr[j+1][2],SetTo,0)},1)
+CElseX({RemoveUnit(182,j)})
+CIfXEnd()
+
+CIfX(FP,CVar(FP,TePtr[j+1][2],AtLeast,1))
 CTrigger(FP,{TMemory(_Add(TePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,TeSkill[j+1])},{
 	SetMemory(0x6509B0,SetTo,j);
 	DisplayText("▶ \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04의 Skill을 \x06Off \x04하였습니다.",4),
@@ -8655,11 +8679,29 @@ CTrigger(FP,{TMemory(_Add(TePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	TSetMemory(_Add(TePtr[j+1],0x98/4),SetTo,0 + 228*65536);
 	TSetMemory(_Add(TePtr[j+1],0x9C/4),SetTo,228 + 228*65536);
 	},1)
+CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
+	DoActions(FP,{Simple_SetLoc("G"..j+1,0,0,32*5,32*5),MoveLocation("G"..j+1,0,j,64)})
+	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{RemoveUnit(183,j)},{Preserved})
+	CIf(FP,{
+		_TP(_TOR(
+			_TAND(
+				_TMemoryX(_Add(TePtr[j+1],19),Exactly,107*256,0xFF00),
+				_TMemory(_Add(TePtr[j+1],23),AtLeast,1)
+			),
+			_TMemoryX(_Add(TePtr[j+1],19),Exactly,10*256,0xFF00),
+			_TC(Bring(Force2,AtLeast,1,"Any unit","G"..j+1))
 
+		)),
+		CDeaths(FP,AtMost,0,BSkillT3[j+1])},SetCDeaths(FP,SetTo,18,BSkillT3[j+1]))
+	CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(183,j,64,Patrol,64)},1)
+	CIfEnd()
+	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1])})
+CIfXEnd()
 CTrigger(FP,{TMemoryX(_Add(TePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,TePtr[j+1][2],SetTo,0)},1)
-CIfEnd()
+CElseX({RemoveUnit(183,j)})
+CIfXEnd()
 
-CIf(FP,CVar(FP,SuPtr[j+1][2],AtLeast,1))
+CIfX(FP,CVar(FP,SuPtr[j+1][2],AtLeast,1))
 CTrigger(FP,{TMemory(_Add(SuPtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,SuSkill[j+1])},{
 	SetMemory(0x6509B0,SetTo,j);
 	DisplayText("▶ \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04의 Skill을 \x06Off \x04하였습니다.",4),
@@ -8676,39 +8718,30 @@ CTrigger(FP,{TMemory(_Add(SuPtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	TSetMemory(_Add(SuPtr[j+1],0x98/4),SetTo,0 + 228*65536);
 	TSetMemory(_Add(SuPtr[j+1],0x9C/4),SetTo,228 + 228*65536);
 	},1)
-CTrigger(FP,{TMemoryX(_Add(SuPtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,SuPtr[j+1][2],SetTo,0)},1)
-CIfEnd()
-
-
+	
 CIfX(FP,{Bring(j,AtLeast,1,12,64),CDeaths(FP,Exactly,0,SuSkill[j+1])})
 DoActions(FP,{Simple_SetLoc("P"..j+1,0,0,32*10,32*10),MoveLocation("P"..j+1,12,j,64)})
 TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT[j+1])},{RemoveUnit(1,j)},{Preserved})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","P"..j+1),CDeaths(FP,AtMost,0,BSkillT[j+1])},SetCDeaths(FP,SetTo,13,BSkillT[j+1]))
+CIf(FP,{
+	_TP(_TOR(
+		_TAND(
+			_TMemoryX(_Add(SuPtr[j+1],19),Exactly,107*256,0xFF00),
+			_TMemory(_Add(SuPtr[j+1],23),AtLeast,1)
+		),
+		_TMemoryX(_Add(SuPtr[j+1],19),Exactly,10*256,0xFF00),
+		_TC(Bring(Force2,AtLeast,1,"Any unit","P"..j+1))
+	)),
+	CDeaths(FP,AtMost,0,BSkillT[j+1])},SetCDeaths(FP,SetTo,13,BSkillT[j+1]))
 CSPlotAct(BattleShape,j,1,"P"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(1,j,64,Patrol,64)},1)
 CIfEnd()
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1])})
+CIfXEnd()
+CTrigger(FP,{TMemoryX(_Add(SuPtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,SuPtr[j+1][2],SetTo,0)},1)
 CElseX({RemoveUnit(1,j)})
 CIfXEnd()
 
-CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
-DoActions(FP,{Simple_SetLoc("S"..j+1,0,0,32*5,32*5),MoveLocation("S"..j+1,16,j,64)})
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{RemoveUnit(182,j)},{Preserved})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","S"..j+1),CDeaths(FP,AtMost,0,BSkillT2[j+1])},SetCDeaths(FP,SetTo,18,BSkillT2[j+1]))
-CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(182,j,64,Patrol,64)},1)
-CIfEnd()
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1])})
-CElseX({RemoveUnit(182,j)})
-CIfXEnd()
 
-CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
-DoActions(FP,{Simple_SetLoc("G"..j+1,0,0,32*5,32*5),MoveLocation("G"..j+1,0,j,64)})
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{RemoveUnit(183,j)},{Preserved})
-CIf(FP,{Bring(Force2,AtLeast,1,"Any unit","G"..j+1),CDeaths(FP,AtMost,0,BSkillT3[j+1])},SetCDeaths(FP,SetTo,18,BSkillT3[j+1]))
-CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(183,j,64,Patrol,64)},1)
-CIfEnd()
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1])})
-CElseX({RemoveUnit(183,j)})
-CIfXEnd()
+
 
 CIfEnd()
 end

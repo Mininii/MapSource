@@ -81,10 +81,10 @@ function onInit()
 	NeCost = 30000
 	TeCost = 50000
 	SuCost = 400000
-	HPointFactor = 20
-	ExRate = 0
-	EasyEx1P = 110
-	HDEx1P = 105
+	HPointFactor = 30
+	ExRate = 5
+	EasyEx1P = 100
+	HDEx1P = 100
 	BurEx1P = 90
 	GunLimit = 1450
 	--Patch

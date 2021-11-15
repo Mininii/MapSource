@@ -198,7 +198,7 @@ function BGMManager()
 		TriggerX(FP,{Bring(FP,AtLeast,1,15,64)},{SetCVar(FP,BGMTypeV[2],SetTo,Akasha),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)},{Preserved})
 		TriggerX(FP,{Bring(FP,AtLeast,1,74,64)},{SetCVar(FP,BGMTypeV[2],SetTo,DLBossBGM),SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM)},{Preserved})
 	CIfEnd()
-	Install_BGMSystem(FP,6,BGMTypeV)
+	Install_BGMSystem(FP,6,BGMTypeV,12)
 end
 
 

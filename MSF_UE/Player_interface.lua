@@ -168,7 +168,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		ItoDec(FP,_Div(Supply[i+1],2),VArr(SupplyVA,0),2,nil,2)
 		ItoDec(FP,_Div(SuppMax,2),VArr(SuppMaxVA,0),2,nil,2)
 		ItoDec(FP,P_Armor[i+1],VArr(ArmorVA,0),2,nil,2)
-		CMov(FP,LocalV_ArmorCost,_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(6)),1)
+		CMov(FP,LocalV_ArmorCost,_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(8)),1)
 		TriggerX(FP,{CVar(FP,P_Armor[i+1][2],AtLeast,255)},{SetCVar(FP,LocalV_ArmorCost[2],SetTo,0)},{Preserved})
 		ItoDec(FP,LocalV_ArmorCost,VArr(ArmorCostVA,0),2,nil,2)
 		
@@ -541,7 +541,7 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 				CIfXEnd()
 			CIfEnd()
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,109)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]);})
-				CIfX(FP,{TCVar(FP,AvailableStat[i+1][2],AtLeast,_Add(_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(6)),1)),CVar(FP,P_Armor[i+1][2],AtMost,254)},{TSetCVar(FP,AvailableStat[i+1][2],Subtract,_Add(_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(6)),1)),SetCVar(FP,P_Armor[i+1][2],Add,1),SetDeaths(CurrentPlayer,SetTo,150,15)})
+				CIfX(FP,{TCVar(FP,AvailableStat[i+1][2],AtLeast,_Add(_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(8)),1)),CVar(FP,P_Armor[i+1][2],AtMost,254)},{TSetCVar(FP,AvailableStat[i+1][2],Subtract,_Add(_Div(_Mul(P_Armor[i+1],P_Armor[i+1]),_Mov(8)),1)),SetCVar(FP,P_Armor[i+1][2],Add,1),SetDeaths(CurrentPlayer,SetTo,150,15)})
 					TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCDeaths(FP,SetTo,100,UpSELemit[i+1])},{Preserved})
 					TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x0F퍼센트 방어력\x04이 증가하였습니다. \x07]")},{Preserved})
 					CMov(FP,0x515B88+(i*4),_Sub(_Mov(256),P_Armor[i+1]))
@@ -734,13 +734,19 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		CIf(FP,{TTDeaths(i,NotSame,MaxLevel[i+1],6)})
 			f_Read(FP,0x58A364+(48*6)+(4*i),TempStat)
 			CMov(FP,MaxLevel[i+1],TempStat)
-			f_Mul(FP,SuSpeed[i+1],MaxLevel[i+1],20)
-			CMov(FP,MarAtkL[i+1],MaxLevel[i+1],224)
+			CIfX(FP,{CVar(FP,MaxLevel[i+1][2],AtMost,500)})
+			f_Mul(FP,SuSpeed[i+1],_Mul(MaxLevel[i+1],_Mov(2)),20)
+			CMov(FP,MarAtkL[i+1],_Mul(MaxLevel[i+1],_Mov(2)),224)
+			CElseIfX({CVar(FP,MaxLevel[i+1][2],AtLeast,501)})
+			CMov(FP,SuSpeed[i+1],1000*20)
+			CMov(FP,MarAtkL[i+1],1000,224)
+			CIfXEnd()
 			f_Div(FP,MarAtkC[i+1],MarAtkL[i+1],_Mov(32))
 
+
 			
-			table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
-			table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
+			--table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
+			--table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
 			CDoActions(FP,{
 				TSetMemory(0x657470 + (MarWep[i+1]*4),SetTo,MarAtkL[i+1]),
 				TSetMemoryX(MarACPtrArr[i+1],SetTo,_Mul(MarAtkC[i+1],_Mov(256^MarACMaskRetArr[i+1])),255*(256^MarACMaskRetArr[i+1])),

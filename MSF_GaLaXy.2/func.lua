@@ -1124,7 +1124,7 @@ function Create_G_CA_Arr()
 	if G_CA_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CA_Arr_Created") end
 	CMov(FP,Actived_G_CA,0)
 	for i = 0, Size_of_G_CA_Arr-1 do
-		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
+		CTrigger(FP, {CVar("X","X",AtLeast,1),Memory(0x628438,AtLeast,1)}, {
 			G_CA_InputCVar,
 			SetCtrigX("X",G_CA_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
 			SetCVar(FP,G_CA_Num[2],SetTo,i),

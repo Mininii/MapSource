@@ -27,7 +27,7 @@ function Objects()
 	P_AutoHealCost = 37000 -- 오토힐
 	P_MarDetectorCost = 25000 -- 디텍터
 	P_TelCost = 100
-	P_AHP = 50000
+	P_AHP = 40000
 
 	
 	--System
