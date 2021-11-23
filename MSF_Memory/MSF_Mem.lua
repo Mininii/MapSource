@@ -1,9 +1,12 @@
 
+-- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--dofile(Curdir.."MapSource\\MSF_Memory\\MSF_Mem.lua")
 
 --↓ 트리거 코드 작성 영역 ------------------------------------------------------------------------------------------------------------------------------------------
 
 --Library Loader
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -14,8 +17,8 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.3R"
-Limit = 0
+VerText = "\x04Ver. 3.4"
+Limit = 1
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
@@ -23,7 +26,7 @@ TestStartToBYD = 0
 --Literally Unused Offset Alloc
 MemoryPtr = 0x593000
 MemoryPtrSize = 25
-GunPtrMemory = 0x590300
+--GunPtrMemory = 0x590300
 GunTempPtr = 0x591000
 CenterPtr = 0x592000
 CenterPtr2 = 0x592600
@@ -64,15 +67,18 @@ DifT = {"\x18Ｔｕｔｏｒｉａｌ \x0EＥａｓｙ","\x0EＥａｓｙ","\x08Ｈａｒｄ","\x10�
 GModeT = {"\x0E정식모드","\x08클래식모드","\x18EV MODE","\x10PURE MODE"}
 P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인"}
 SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4}
-HumanPlayers = {0,1,2,3,4,128,129,130,131}
+HumanPlayers = {0,1,2,3,4,P9,P10,P11,P12}
 MapPlayers = {0,1,2,3,4}
-ObPlayers = {128,129,130,131}
+ObPlayers = {P9,P10,P11,P12}
 Ex1= {25,27,29,31,33}
 Ex2= {23,26,29,32,35}
 Ex2_1= {26,29,32,35,38}
 Ex3= {27,30,33,36,39}
-Ex4= {15,17,19,21,23}
-Ex5= {32,34,36,38,40}
+Ex4= {50,55,60,65,70}
+Ex5= {64,73,82,91,100}
+UpCostTable = {500000,300000,400000}
+
+AtkFactorArr = {30,15,20}
 _0D = string.rep("\x0D",200)
 _0D_1000B = string.rep("\x0D",1000)
 UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
@@ -98,43 +104,51 @@ Trigger { -- No comment (6496767D)
 CJump(AllPlayers,0)
 
 
-ExDeaths1 = DefineDeathTable(0x1005) -- 확장 데스값 정의
 CreateTableSet({ -- 테이블 정의
 "MarHP","ShieldP","PExitCheck","Player_S","Player_0x18","Player_0x4D","Player_0x58","Player_0x5C","Player_T","Player_C","MarCount","PlayerDeaths","PlayerMarineListArr",
 "PlayerMarineListHeader","PlayerMarCreateToken","MarListSkillLv","Marine","HMarine","LumMarine","Lumia","LumiaCT","ShieldT","PlayerScore","ATKExitText","ATKUpText1",
 "ATKUpText2","MarStrPtr","HMarStrPtr","LumMarStrPtr","LumiaStrPtr","LumiaCTStrPtr","ATKExtStrPtr","ShTStrPtr","ATKUp1StrPtr","ATKUp2StrPtr","PScoreSTrPtr",
-"BanCCode","Names","AtkUpgradePtrArr","AtkUpgradeMaskRetArr","initHDTable","initFTRTable","initBYDTable",
-})
+"BanCCode","Names","AtkUpgradePtrArr","AtkUpgradeMaskRetArr","initHDTable","initFTRTable","initBYDTable","PUMaskRetArr","PUPtrArr","MarWepMaskRetArr","MarWepPtrArr"
+,"LBAttackT","MarWepMaskRetArr2","MarWepPtrArr2"})
 
 for i = 0, 4 do
-	table.insert(MarHP,CreateVar())
-	table.insert(ShieldP,CreateVar())
+	table.insert(MarHP,CreateVar(FP))
+	table.insert(ShieldP,CreateVar(FP))
 	table.insert(PExitCheck,CreateCCode())
-	table.insert(Player_S,CreateVar())
-	table.insert(Player_0x18,CreateVar())
-	table.insert(Player_0x4D,CreateVar())
-	table.insert(Player_0x58,CreateVar())
-	table.insert(Player_0x5C,CreateVar())
-	table.insert(Player_T,CreateVar())
-	table.insert(Player_C,CreateVar())
-	table.insert(MarCount,CreateVar())
-	table.insert(PlayerDeaths,CreateVar())
---  table.insert(PlayerMarineListHeader,CreateVar())
+	table.insert(Player_S,CreateVar(FP))
+	table.insert(Player_0x18,CreateVar(FP))
+	table.insert(Player_0x4D,CreateVar(FP))
+	table.insert(Player_0x58,CreateVar(FP))
+	table.insert(Player_0x5C,CreateVar(FP))
+	table.insert(Player_T,CreateVar(FP))
+	table.insert(Player_C,CreateVar(FP))
+	table.insert(MarCount,CreateVar(FP))
+	table.insert(PlayerDeaths,CreateVar(FP))
+--  table.insert(PlayerMarineListHeader,CreateVar(FP))
 	table.insert(PlayerMarineListArr,CArray(FP,602))
-	table.insert(MarListSkillLv,CreateVar())
-	table.insert(MarStrPtr,CreateVar())
-	table.insert(HMarStrPtr,CreateVar())
-	table.insert(LumMarStrPtr,CreateVar())
-	table.insert(LumiaStrPtr,CreateVar())
-	table.insert(LumiaCTStrPtr,CreateVar())
-	table.insert(ShTStrPtr,CreateVar())
-	table.insert(ATKExtStrPtr,CreateVar())
-	table.insert(ATKUp1StrPtr,CreateVar())
-	table.insert(ATKUp2StrPtr,CreateVar())
-	table.insert(PScoreSTrPtr,CreateVar())
+	table.insert(MarListSkillLv,CreateVar(FP))
+	table.insert(MarStrPtr,CreateVar(FP))
+	table.insert(HMarStrPtr,CreateVar(FP))
+	table.insert(LumMarStrPtr,CreateVar(FP))
+	table.insert(LumiaStrPtr,CreateVar(FP))
+	table.insert(LumiaCTStrPtr,CreateVar(FP))
+	table.insert(ShTStrPtr,CreateVar(FP))
+	table.insert(ATKExtStrPtr,CreateVar(FP))
+	table.insert(ATKUp1StrPtr,CreateVar(FP))
+	table.insert(ATKUp2StrPtr,CreateVar(FP))
+	table.insert(PScoreSTrPtr,CreateVar(FP))
 	Names[i+1] = CVArray(P6,7)
 table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+7)%4)
 table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+7 - AtkUpgradeMaskRetArr[i+1])
+
+
+table.insert(PUMaskRetArr,(0x58D2B0+(i*46)+9)%4)
+table.insert(PUPtrArr,0x58D2B0+(i*46)+9 - PUMaskRetArr[i+1])
+table.insert(MarWepMaskRetArr,(0x656EB0+(i*2)+(87*2))%4)
+table.insert(MarWepPtrArr,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr[i+1])
+table.insert(MarWepMaskRetArr2,(0x656EB0+(i*2)+(87*2))%4)
+table.insert(MarWepPtrArr2,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr2[i+1])
+
 end
 for i = 0, 3 do
 	table.insert(BanCCode,CreateCCode())
@@ -157,15 +171,13 @@ CreateVariableSet({ -- 변수 정의
 "P1Score","P2Score","P3Score","P4Score","P5Score","P1ScoreP","P3ScoreP","P2ScoreP","P5ScoreP","P4ScoreP","Ov_BYD_Index","Ov_BYD","ReadPosX","ReadPosY",
 "B7_H","IndexCheck","N_A","S_N_R","Locs","B6_D","B6_T","P6BGM","DifScoreBonusV","ModeScoreBonusV","ScoreBonusV","UPCompStrPtr","XY","SY","SZ","SW","ObPlotVar","UnivStrPtr","HTextStrPtr",
 "Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2",
-"CurrentOP",})
-if Limit == 1 then
-	RedNumber = CreateVar2(400)
-elseif RedMode == 1 then
-	RedNumber = CreateVar2(400)
+"CurrentOP","GunPtrMemory"},FP)
+if RedMode == 1 then
+	RedNumber = CreateVar2(FP,nil,nil,400)
 else
-	RedNumber = CreateVar()
+	RedNumber = CreateVar(FP)
 end
-
+SELimit = CreateCcode()
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
 ExScoreP = {P1ScoreP,P2ScoreP,P3ScoreP,P4ScoreP,P5ScoreP}
 UpCompTxt = CVArray(P6,5)
@@ -185,7 +197,7 @@ FTR = {Switch("Switch 201",Set),Switch("Switch 204",Cleared)}
 BYD = {Switch("Switch 201",Set),Switch("Switch 204",Set)}
 NBYD = {Switch("Switch 204",Cleared)}
 FTRBYD = {Switch("Switch 201",Set)}
-Include_CtrigPlib(360,"Switch 100",1) -- 주기 : 360 = 360도 / Switch 100을 랜덤스위치로 사용 / f_Memcpy(Readcpy) 포함
+Include_CtrigPlib(360,"Switch 100",1,FP) -- 주기 : 360 = 360도 / Switch 100을 랜덤스위치로 사용 / f_Memcpy(Readcpy) 포함
 HeroPointArr = {}
 function CreateHeroPointArr(Index,Point,Name,Name2) --  영작 유닛 설정 함수
 	local Text = "\x0D\x0D\x0D\x0D\x13\x1D† \x04기억의 "..Name2.." "..Name.." \x04를 처치하였습니다. \x1F+ "..Point.." \x1CＰｔｓ \x1D†\x0D\x0D\x0D\x0D\x14\x14\x14\x14\x14\x14\x14\x14"
@@ -213,7 +225,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 					},
 					actions = {
 						SetScore(Force1,Add,Point,Kills);
-						RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP);
+						RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 						SetCVar(FP,P1Score[2],Add,-(Point/1000));
 						SetCVar(FP,P2Score[2],Add,-(Point/1000));
 						SetCVar(FP,P3Score[2],Add,-(Point/1000));
@@ -222,6 +234,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 						PreserveTrigger();
 					},
 				}
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 				f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
 			CIfEnd()
@@ -237,10 +250,11 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 					actions = {
 						SetDeathsX(CurrentPlayer, SetTo,0*65536,0,0xFF0000);
 						SetResources(Force1,Add,Point/20,Gas);
-						RotatePlayer({DisplayTextX(HTextStr,4),PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP);
+						RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 						PreserveTrigger();
 					},
 				}
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 				f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
 			CIfEnd()
@@ -301,6 +315,24 @@ BClearT4 = CreateCText(FP,"\n\n\n\x13\x04―――――――――――――――――――�
 BClearT3 = CreateCText(FP,"\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 \x11Ｄ\x04ｅｍｉｓｅ\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F３００，０００ Ｐｔｓ\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 HDB_StT = CreateCText(FP,"\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n\x13\x04\x07잠시 후, \x08ＦＩＮＡＬ　ＢＯＳＳ \x08【 \x11Ｆ\x04ａｔｅ \x08】 \x04와의 전투가 시작됩니다.\n\x13\x04\x08보스 전투\x04를 준비해주세요!\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――")
 
+
+CurPerAttack = CreateVarArr(5,FP)
+PerAttack = CreateVarArr(5,FP)
+PerAttackFactor = CreateVar(FP)
+
+PerAttackCost = {}
+PerAttackCostFactor = 10000
+for i = 1, 5 do
+	table.insert(PerAttackCost,CreateVar2(FP,nil,nil,30000))
+end
+
+for i = 1, 3 do
+	LBAttackT[i] = CreateCText(FP,"w\x02\x07『 \x04공격력 \x11한계돌파\x04(100→250) \x18업그레이드 \x1F"..UpCostTable[i].." Ore \x1B단축키 \x18: \x03W\x07 』")
+end
+
+PerAttackT1 = CreateCText(FP,"w\x02\x07『 \x1D퍼센트 \x04공격력 \x18업그레이드 \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+PerAttackT2 = CreateCText(FP," Ore \x1B단축키 \x18: \x03W\x07 』")
+
 CreateHeroPointArr(77,55000,"\x1D【 F\x04enix \x1DZ 】","검사")
 CreateHeroPointArr(78,55000,"\x1D【 F\x04enix \x1DD 】","용기병")
 CreateHeroPointArr(71,110000,"\x10【 I\x04mperial \x10】","절대자")
@@ -340,6 +372,9 @@ CVariable(AllPlayers,0x1002)
 CVariable(AllPlayers,0x1003)
 CVariable(AllPlayers,0x1004)
 
+LBATblPtr = CreateVar(FP)
+PerUpTblPtr = CreateVar(FP)
+
 	BYDBossMarHPPatch = {}
 	BYDBossMarHPRecover = {}
 	for i=0,4 do
@@ -350,7 +385,7 @@ for i = 0, 0x4FF do
 --  CVariable(AllPlayers,0x200+i)
 end
 --PlayerMarineListHeader = {GetVArray(V(0x200)),GetVArray(V(0x300)),GetVArray(V(0x400)),GetVArray(V(0x500)),GetVArray(V(0x600))}
-MarListHeader = {CreateVar(),CreateVar(),CreateVar(),CreateVar(),CreateVar()}
+MarListHeader = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
 UArr1 = CVArray(P6,16)
 UArr2 = CVArray(P6,16)
 UArr3 = CVArray(P6,30)
@@ -376,7 +411,7 @@ end
 
 EnergyKill_CallIndex = SetCallForward()
 SetCall(FP)
-	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF))
+	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF),nil,0xFF)
 	CIfX(FP,{TDeathsX(_Add(BackupCp,40),AtLeast,_Mul(Amount_V,_Mov(16777126)),0,0xFF000000)})
 		CDoActions(FP,{TSetDeathsX(_Add(BackupCp,40),Subtract,_Mul(Amount_V,_Mov(16777126)),0,0xFF000000)})
 		CElseX()
@@ -387,11 +422,11 @@ SetCallEnd()
 function EnergyKill(Amount)
 	CallTrigger(FP,EnergyKill_CallIndex,{SetCVar(FP,Amount_V[2],SetTo,Amount)})
 end
-UHP = CreateVar()
+UHP = CreateVar(FP)
 PerDamage_CallIndex = SetCallForward()
 SetCall(FP)
 	CMov(FP,AMount_256,Amount_V)
-	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF))
+	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF),nil,0xFF)
 	f_Read(FP,_Add(UnitId,221179),UHP)
 	CIf(FP,CVar(FP,UHP[2],AtLeast,0x80000000))
 	CNeg(FP,UHP)
@@ -417,25 +452,25 @@ SetCall(FP)
 	SaveCp(FP,BackupPosData)
 	DoActions(FP,MoveCp(Subtract,1*4))
 	Call_SaveCp()
-	CMov(FP,0x6509B0,EPD(MemoryPtr))
-	NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),Deaths(EPD(0x6509B0),AtMost,EPD(MemoryPtr)+(MemoryPtrSize*50),0)},{SetMemory(0x6509B0,Add,MemoryPtrSize)})
+	CMov(FP,0x6509B0,EPDF(MemoryPtr))
+	NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),Deaths(EPDF(0x6509B0),AtMost,EPDF(MemoryPtr)+(MemoryPtrSize*50),0)},{SetMemory(0x6509B0,Add,MemoryPtrSize)})
 	NWhileEnd()
 	SaveCp(FP,PosSavePtr)
 	CDoActions(FP,{
-		TSetMemory(PosSavePtr,SetTo,_ReadF(BackupPosData,0xFFF0FFF)),
+		TSetMemoryX(PosSavePtr,SetTo,_ReadF(BackupPosData,0xFFF0FFF),0xFFF0FFF),
 		TSetMemoryX(PosSavePtr,SetTo,_Mul(VBdIndex,_Mov(0x1000)),0xF000),
 		TSetMemoryX(_Add(PosSavePtr,1),SetTo,_ReadF(BackupCp,0xFF0000),0xFF0000),
 		SetCVar(FP,WhileLaunch[2],Add,1)
 	})
 	NIf(FP,{BYD})
-		CMov(FP,0x6509B0,EPD(GunPtrMemory))
-		NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),Deaths(EPD(0x6509B0),AtMost,EPD(GunPtrMemory)+200,0)},SetMemory(0x6509B0,Add,1))
+		CMov(FP,0x6509B0,GunPtrMemory)
+		NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),TDeaths(EPDF(0x6509B0),AtMost,_Add(GunPtrMemory,200),0)},SetMemory(0x6509B0,Add,1))
 		NWhileEnd()
 		SaveCp(FP,PosSavePtr)
 
-		CMov(FP,ReadPosX,_ReadF(BackupPosData,0xFFF))
-		CMov(FP,ReadPosY,_Div(_ReadF(BackupPosData,0xFFF0000),_Mov(65536)))
-		CDoActions(FP,{TSetMemory(PosSavePtr,SetTo,_ReadF(BackupPosData,0xFFF0FFF))})
+		CMov(FP,ReadPosX,_ReadF(BackupPosData,0xFFF),nil,0xFFF)
+		CMov(FP,ReadPosY,_Div(_ReadF(BackupPosData,0xFFF0000),_Mov(65536)),nil,0xFFF)
+		CDoActions(FP,{TSetMemoryX(PosSavePtr,SetTo,_ReadF(BackupPosData,0xFFF0FFF),0xFFF0FFF)})
 
 		CTrigger(FP,{
 			TMemoryX(_Add(BackupCP,16),Exactly,133,0xFF)
@@ -477,57 +512,58 @@ SetCall(FP)
 	DoActions(FP,{SetDeathsX(CurrentPlayer,SetTo,0,0,0x00FF0000),MoveCp(Add,16*4)})
 SetCallEnd()
 
-OneClickUpgrade = SetCallForward()
-SetCall(FP)
-	f_Read(FP,TempUpgradePtr,UpResearched)
-	CIf(FP,CVar(FP,TempUpgradeMaskRet[2],AtMost,256^2))
-		f_Mod(FP,UpResearched,_Mul(TempUpgradeMaskRet,256))
-	CIfEnd()
-	f_Div(FP,UpResearched,TempUpgradeMaskRet)
-	CMov(FP,0x6509B0,UpgradeCP)
-	CJumpEnd(FP,UpResearched[2])
-	NWhile(FP,{
-		CVar(FP,UpResearched[2],AtMost,254),
-		CVar(FP,UpgradeMax[2],AtLeast,1),
-		TAccumulate(CurrentPlayer,AtLeast,_Mul(UpResearched,UpgradeFactor),Ore),
-		TMemoryX(TempUpgradePtr,AtMost,_Mul(TempUpgradeMaskRet,254),_Mul(TempUpgradeMaskRet,255))
-	})
-		CDoActions(FP,{
-			TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
-			TSetResources(CurrentPlayer,Subtract,_Mul(UpResearched,UpgradeFactor),Ore),
-			SetCVar(FP,UpResearched[2],Add,1),
-			SetCVar(FP,UpCompleted[2],Add,1),
-			SetCVar(FP,UpgradeMax[2],Subtract,1),
-			--TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
-			TSetMemoryX(TempUpgradePtr,Add,_Mul(TempUpgradeMaskRet,1),_Mul(TempUpgradeMaskRet,255))
-		})
-		CJump(FP,UpResearched[2])
-	NWhileEnd()
-	NJump(FP,0x24,CVar(FP,UpCompleted[2],Exactly,0),{
-		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x12\x07『 \x04잔액이 부족합니다. \x07』",4),
-		SetMemory(0x6509B0,SetTo,FP)
-	})
-	ItoDec(FP,UpCost,VArr(UpCompTxt,0),2,0x1F,0)
-	ItoDec(FP,UpCompleted,VArr(UpCompRet,0),2,0x19,0)
-	_0DPatchforVArr(FP,UpCompRet,4)
-	_0DPatchforVArr(FP,UpCompTxt,4)
-	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),VArr(UpCompTxt,0),5*4)
-	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),VArr(UpCompRet,0),5*4)
-	CDoActions(FP,{
-		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x0D\x0D\x0DUPC".._0D,4),
-		SetMemory(0x6509B0,SetTo,FP)
-	})
-	NJumpEnd(FP,0x24)
-	DoActionsX(FP,{
-		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,0),
-		SetCVar(FP,TempUpgradePtr[2],SetTo,0),
-		SetCVar(FP,UpResearched[2],SetTo,0),
-		SetCVar(FP,UpCost[2],SetTo,0),
-		SetCVar(FP,UpCompleted[2],SetTo,0)
-	})
-SetCallEnd()
+--OneClickUpgrade = SetCallForward()
+--SetCall(FP)
+--	f_Read(FP,TempUpgradePtr,UpResearched)
+--	CIf(FP,CVar(FP,TempUpgradeMaskRet[2],AtMost,256^2))
+--		f_Mod(FP,UpResearched,_Mul(TempUpgradeMaskRet,256))
+--	CIfEnd()
+--	f_Div(FP,UpResearched,TempUpgradeMaskRet)
+--	CMov(FP,0x6509B0,UpgradeCP)
+--	OneUp1 = def_sIndex()
+--	CJumpEnd(FP,OneUp1)
+--	NWhile(FP,{
+--		CVar(FP,UpResearched[2],AtMost,254),
+--		CVar(FP,UpgradeMax[2],AtLeast,1),
+--		TAccumulate(CurrentPlayer,AtLeast,_Mul(UpResearched,UpgradeFactor),Ore),
+--		TMemoryX(TempUpgradePtr,AtMost,_Mul(TempUpgradeMaskRet,254),_Mul(TempUpgradeMaskRet,255))
+--	})
+--		CDoActions(FP,{
+--			TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
+--			TSetResources(CurrentPlayer,Subtract,_Mul(UpResearched,UpgradeFactor),Ore),
+--			SetCVar(FP,UpResearched[2],Add,1),
+--			SetCVar(FP,UpCompleted[2],Add,1),
+--			SetCVar(FP,UpgradeMax[2],Subtract,1),
+--			--TSetCVar(FP,UpCost[2],Add,_Mul(UpResearched,UpgradeFactor)),
+--			TSetMemoryX(TempUpgradePtr,Add,_Mul(TempUpgradeMaskRet,1),_Mul(TempUpgradeMaskRet,255))
+--		})
+--		CJump(FP,OneUp1)
+--	NWhileEnd()
+--	NJump(FP,0x24,CVar(FP,UpCompleted[2],Exactly,0),{
+--		TSetMemory(0x6509B0,SetTo,UpgradeCP),
+--		DisplayText("\x12\x07『 \x04잔액이 부족합니다. \x07』",4),
+--		SetMemory(0x6509B0,SetTo,FP)
+--	})
+--	ItoDec(FP,UpCost,VArr(UpCompTxt,0),2,0x1F,0)
+--	ItoDec(FP,UpCompleted,VArr(UpCompRet,0),2,0x19,0)
+--	_0DPatchforVArr(FP,UpCompRet,4)
+--	_0DPatchforVArr(FP,UpCompTxt,4)
+--	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),VArr(UpCompTxt,0),5*4)
+--	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),VArr(UpCompRet,0),5*4)
+--	CDoActions(FP,{
+--		TSetMemory(0x6509B0,SetTo,UpgradeCP),
+--		DisplayText("\x0D\x0D\x0DUPC".._0D,4),
+--		SetMemory(0x6509B0,SetTo,FP)
+--	})
+--	NJumpEnd(FP,0x24)
+--	DoActionsX(FP,{
+--		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,0),
+--		SetCVar(FP,TempUpgradePtr[2],SetTo,0),
+--		SetCVar(FP,UpResearched[2],SetTo,0),
+--		SetCVar(FP,UpCost[2],SetTo,0),
+--		SetCVar(FP,UpCompleted[2],SetTo,0)
+--	})
+--SetCallEnd()
 
 function Call_GunPosSave(BdID,GunIndex)
 	NIf(FP,DeathsX(CurrentPlayer,Exactly,BdID,0,0xFF))
@@ -600,7 +636,7 @@ SetCallEnd()
 CJumpEnd(AllPlayers,0)
 Enable_PlayerCheck()
 NoAirCollisionX(P6)
-DtP = CreateVar()
+DtP = CreateVar(FP)
 
 
 
@@ -701,7 +737,7 @@ for i = 0,4 do
 		DoActions(P6,{SetDeathsX(i,SetTo,0,440,0xFFFFFF)})
 	CIfXEnd()
 end
-RedNumberX = CreateVar()
+RedNumberX = CreateVar(FP)
 RedNumberX = {FP,RedNumberX[2],nil,"V"}
 
 
@@ -868,7 +904,7 @@ CIf(P6,MemoryX(0x58F450,AtLeast,1,0xFF))
 		CIf(P6,{Memory(0x628438,AtLeast,1)})
 			f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 			CIf(FP,BYD)
-				CDoActions(FP,{TSetMemory(_Add(N_A1,EPD(CenterPtr)),SetTo,Nextptrs)})
+				CDoActions(FP,{TSetMemory(_Add(N_A1,EPDF(CenterPtr)),SetTo,Nextptrs)})
 			CIfEnd()
 			f_Lengthdir(P6,2000,N_A1,N_X,N_Y)
 			f_Lengthdir(P6,2000,_Add(N_A1,180),L_X,L_Y)
@@ -918,8 +954,8 @@ CIf(P6,MemoryX(0x58F450,AtLeast,1,0xFF))
 		
 		CIf(FP,BYD)
 			CMov(FP,BYD_C1,0)
-			CMov(FP,0x6509B0,EPD(CenterPtr))
-			CWhile(FP,Memory(0x6509B0,AtMost,EPD(CenterPtr)+359))
+			CMov(FP,0x6509B0,EPDF(CenterPtr))
+			CWhile(FP,Memory(0x6509B0,AtMost,EPDF(CenterPtr)+359))
 				CAdd(FP,BYD_C1,6)
 				Call_SaveCp()
 				f_Read(FP,BackupCp,BYD_CTemp)
@@ -975,7 +1011,7 @@ CIf(P6,MemoryX(0x58F450,AtLeast,1*65536,0xFF0000))
 			f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 			
 			CIf(FP,BYD)
-				CDoActions(FP,{TSetMemory(_Add(N_A2,EPD(CenterPtr2)),SetTo,Nextptrs)})
+				CDoActions(FP,{TSetMemory(_Add(N_A2,EPDF(CenterPtr2)),SetTo,Nextptrs)})
 			CIfEnd()
 			f_Lengthdir(P6,2000,_Add(N_A2,180),N_X,N_Y)
 			f_Lengthdir(P6,2000,N_A2,L_X,L_Y)
@@ -1026,8 +1062,8 @@ CIf(P6,MemoryX(0x58F450,AtLeast,1*65536,0xFF0000))
 		
 		CIf(FP,BYD)
 			CMov(FP,BYD_C1,0)
-			CMov(FP,0x6509B0,EPD(CenterPtr2))
-			CWhile(FP,Memory(0x6509B0,AtMost,EPD(CenterPtr2)+359))
+			CMov(FP,0x6509B0,EPDF(CenterPtr2))
+			CWhile(FP,Memory(0x6509B0,AtMost,EPDF(CenterPtr2)+359))
 				CAdd(FP,BYD_C1,6)
 				Call_SaveCp()
 				f_Read(FP,BackupCp,BYD_CTemp)
@@ -1179,7 +1215,7 @@ CIf(P6,CVar(P6,Dis_2[2],AtLeast,1))
 	CTrigger(P6,{TMemory(_Add(Dis_2,17),Exactly,0*256,0xFF00)},{SetCVar(FP,Dis_2[2],SetTo,0)},1)
 CIfEnd()
 
-B2_P2 = CreateVar()
+B2_P2 = CreateVar(FP)
 Overflow_HP_System(FP,B2_H,B2_K,nil)
 
 CIfX(P6,{CVar(FP,B2_H[2],AtLeast,1)})
@@ -1307,7 +1343,7 @@ Trigger {
 		PreserveTrigger();
 },
 }
-B3_P = CreateVar()
+B3_P = CreateVar(FP)
 Overflow_HP_SystemX(FP,B3_H,B3_K,B3_K2,B3_P)
 CIfX(P6,Command(P6,AtLeast,1,74))
 
@@ -1466,7 +1502,7 @@ Trigger { -- 피까일때 효과음
 		PreserveTrigger();
 	}
 }
-B5_O = CreateVar()
+B5_O = CreateVar(FP)
 Overflow_HP_System(FP,B5_H,B5_K,B5_O)
 
 CIf(FP,CVar(FP,B5_O[2],AtLeast,1),SetCVar(FP,B5_O[2],Subtract,1))
@@ -1592,7 +1628,7 @@ CIf(P6,CDeaths(P6,AtLeast,1,HDStart)) -- 미구현 Once처리
 		ExScoreBackup = {}
 		CIfOnce(P6,CVar(P6,HDEnd2[2],AtLeast,HDEndVar))
 			for i=0, 4 do
-				table.insert(ExScoreBackup,CreateVar())
+				table.insert(ExScoreBackup,CreateVar(FP))
 				CMov(P6,PlayerDeaths[i+1],_ReadF(0x5822F4+(4*i)))
 				CMov(P6,ExScoreBackup[i+1],ExScore[i+1])
 			end
@@ -2090,7 +2126,7 @@ MarCreate = CreateCCode()
 						Simple_SetLocX(P6,23,_Add(B6_X,2048),_Add(B6_Y,2048),_Add(B6_X,2048),_Add(B6_Y,2048),{CreateUnit(1,84,24,P6)})
 						CAdd(P6,B6_W,1)
 					CWhileEnd()
-					TemAngle2 = CreateVar()
+					TemAngle2 = CreateVar(FP)
 					CAdd(P6,B6_RT,Dt)
 					CAPlot(CSMakeLine(1,32,0,8,0),FP,84,190,nil,1,32,{1,0,0,0,99,0},"TemRotate2",FP,{BYD,CVar(P6,B6_RT[2],AtMost,12000)},nil,1)
 					DoActions(P6,{Simple_SetLoc(23,2048,2048,2048,2048)})
@@ -2202,7 +2238,7 @@ MarCreate = CreateCCode()
 				}
 				CAdd(P6,B6_T2,2)
 				NIf(P6,{CVar(FP,B6_T2[2],AtLeast,50)})
-					B6_Break = CreateVar()
+					B6_Break = CreateVar(FP)
 					CMov(P6,B6_Break,0)
 					CMov(P6,B6_W,0)
 					CWhile(P6,{TCVar(FP,B6_Break[2],AtMost,B6_Dif3),TCVar(FP,B6_W[2],AtMost,_Mul(_Mul(B6_C2,B6_Dif),5))})
@@ -3017,29 +3053,69 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		table.insert(BYDPatchArr,SetMemoryW(0x660E00+(MarID[i]*2),SetTo,1000))
 		table.insert(BYDPatchArr,SetMemoryB(0x6647B0+MarID[i],SetTo,1))
 	end
+
+	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtLeast,2);},{ -- 퓨어모드 선택시 2인이상 공격력조절
+	SetMemoryW(0x656EB0 + (0*2), SetTo, 200);
+	SetMemoryW(0x657678 + (0*2), SetTo, 14);
+	SetMemoryW(0x656EB0 + (1*2), SetTo, 1000);
+	SetMemoryW(0x657678 + (1*2), SetTo, 30);
+	SetMemoryW(0x657678 + (87*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (88*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (89*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (90*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (91*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
+	SetCVar(FP,PerAttackFactor[2],SetTo,75),
+})
+	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtMost,1);},{ -- 퓨어모드 선택시 1인 공격력조절
+	SetMemoryW(0x656EB0 + (0*2), SetTo, 300);
+	SetMemoryW(0x657678 + (0*2), SetTo, 21);
+	SetMemoryW(0x656EB0 + (1*2), SetTo, 1500);
+	SetMemoryW(0x657678 + (1*2), SetTo, 45);
+	SetMemoryW(0x657678 + (87*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (88*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (89*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (90*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (91*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
+	SetCVar(FP,PerAttackFactor[2],SetTo,150),
+})
 	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
 	SetMemory(0x6CA018, SetTo, 1401);BYDPatchArr;-- 파리 이동속도 너프
 })
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{
-		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
+--		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
 		SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
 		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
 		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
 		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
-		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게
+		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
+		
+		SetMemoryW(0x657678 + (87*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (88*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (89*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (90*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (91*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetCVar(FP,PerAttackFactor[2],SetTo,150),
+	})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(P6,SetPlayers[2],AtMost,1)},{
+		SetMemoryW(0x657678 + (87*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetMemoryW(0x657678 + (88*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetMemoryW(0x657678 + (89*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetMemoryW(0x657678 + (90*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetMemoryW(0x657678 + (91*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetCVar(FP,PerAttackFactor[2],SetTo,300)
+	})
 		
 
-	})
-	Trigger2(FP,{BYD},{
 
-		SetMemoryX(0x664080+(53*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
-		SetMemoryX(0x664080+(54*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
-		SetMemoryX(0x664080+(104*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
-		SetMemoryX(0x664080+(51*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
-		SetMemoryX(0x664080+(48*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
-		SetMemoryX(0x664080+(25*4),SetTo,0x4,0x4), -- 탱크시즈모드 공중유닛으로 변경
+	Trigger2(FP,{BYD},{
+	SetMemoryX(0x664080+(53*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
+	SetMemoryX(0x664080+(54*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
+	SetMemoryX(0x664080+(104*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
+	SetMemoryX(0x664080+(51*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
+	SetMemoryX(0x664080+(48*4),SetTo,0x4,0x4), -- 저그 지상 영웅유닛 공중유닛으로 변경
+	SetMemoryX(0x664080+(25*4),SetTo,0x4,0x4), -- 탱크시즈모드 공중유닛으로 변경
 	SetMemory(0x66254C, SetTo, 0);
 	SetMemory(0x662608, SetTo, 0);
 	SetMemory(0x66260C, SetTo, 0);
@@ -3052,6 +3128,8 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemoryX(0x656554, SetTo, 2*16777216,0xFF000000);
 
 	})
+
+
 	CWhile(FP,{BYD,Command(P7,AtLeast,1,102)}) -- 배틀변경
 		DoActions(FP,{
 		SetMemory(0x58DC60 + 0x14*23,SetTo,0),
@@ -3084,7 +3162,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	CIf(P6,{CDeaths(P6,AtMost,1,Difficulty)})
 		CMov(P6,Dif,80)
 		CWhile(P6,{CVar(FP,UIndex[2],AtMost,29)})
-			CMov(P6,UEPD,_Add(_Mov(VArr(UArr3,UIndex)),EPD(0x662350)))
+			CMov(P6,UEPD,_Add(_Mov(VArr(UArr3,UIndex)),EPDF(0x662350)))
 			CDoActions(P6,{TSetMemory(UEPD,SetTo,_Mul(_Div(_ReadF(UEPD),_Mov(100)),Dif))})
 			CAdd(P6,UIndex,1)
 		CWhileEnd()
@@ -3365,6 +3443,15 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		CAdd(FP,0x6509B0,84)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
+
+	for i = 0, 2 do
+		TriggerX(FP,{CDeaths(FP,Exactly,i,GMode)},{SetMemoryX(0x6559CC, SetTo, (AtkFactorArr[i+1])*65536,0xFFFF0000);},{Preserved})
+		
+		
+	CIf(FP,CDeaths(FP,Exactly,i,GMode))
+		f_MemCpy(FP,LBATblPtr,_TMem(Arr(LBAttackT[i+1][3],0),"X","X",1),LBAttackT[i+1][2])
+	CIfEnd()
+	end
 	
 	
 	
@@ -3456,25 +3543,25 @@ CIfEnd() -- onPluginStart End
 --각 마린 연결리스트 코드. BYD 난이도 한정. Main : FP
 MarListLength = 5 -- 배열의 길이
 MarListSize = 95 -- 배열의 크기
-MarListCurrentArr = CreateVar()
+MarListCurrentArr = CreateVar(FP)
 
-MarListTempTarget = CreateVar()
-MarListTempHeader = CreateVar()
-MarListTempVar = CreateVar()
-MarListTempVar2 = CreateVar()
-MarListTempVar3 = CreateVar()
-MarListTempVar4 = CreateVar()
-MarListTempVar5 = CreateVar()
-MarListTempVar6 = CreateVar()
-MarListTempVar7 = CreateVar()
-MarListTempVar8 = CreateVar()
-MarListTempVar9 = CreateVar()
-MarListTempPos = CreateVar()
-MarListTempPosX = CreateVar()
-MarListTempPosY = CreateVar()
-		TempMarListSkillLv = CreateVar()
-		MarListCurrentPlayer = CreateVar()
-B7_K = CreateVar()
+MarListTempTarget = CreateVar(FP)
+MarListTempHeader = CreateVar(FP)
+MarListTempVar = CreateVar(FP)
+MarListTempVar2 = CreateVar(FP)
+MarListTempVar3 = CreateVar(FP)
+MarListTempVar4 = CreateVar(FP)
+MarListTempVar5 = CreateVar(FP)
+MarListTempVar6 = CreateVar(FP)
+MarListTempVar7 = CreateVar(FP)
+MarListTempVar8 = CreateVar(FP)
+MarListTempVar9 = CreateVar(FP)
+MarListTempPos = CreateVar(FP)
+MarListTempPosX = CreateVar(FP)
+MarListTempPosY = CreateVar(FP)
+		TempMarListSkillLv = CreateVar(FP)
+		MarListCurrentPlayer = CreateVar(FP)
+B7_K = CreateVar(FP)
 VariableSetTable = {{},{},{},{},{}}
 VariableSetTable2 = {{},{},{},{},{}}
 
@@ -3483,25 +3570,14 @@ VariableSetTable2 = {{},{},{},{},{}}
 
 
 CIf(FP,{CDeaths(FP,AtMost,0,Theorist),BYD})
-	--f_MemCpyEPD(P6,EPD(0x58F700), MarListHeader[1],2*4)
-	--f_MovCpyEPD(P6,EPD(0x58F700)+(2), _Add(MarListHeader[1],1*(0x970/4)),2*4)
-	--f_MovCpyEPD(P6,EPD(0x58F700)+(4), _Add(MarListHeader[1],2*(0x970/4)),2*4)
-	--f_MovCpyEPD(P6,EPD(0x58F700)+(6), _Add(MarListHeader[1],3*(0x970/4)),2*4)
-	--f_MovCpyEPD(P6,EPD(0x58F700)+(8), _Add(MarListHeader[1],4*(0x970/4)),2*4)
-	--f_MovCpyEPD(P6,EPD(0x58F700)+(10),_Add(MarListHeader[1],5*(0x970/4)),2*4)
+	--f_MemCpyEPD(P6,EPDF(0x58F700), MarListHeader[1],2*4)
+	--f_MovCpyEPD(P6,EPDF(0x58F700)+(2), _Add(MarListHeader[1],1*(0x970/4)),2*4)
+	--f_MovCpyEPD(P6,EPDF(0x58F700)+(4), _Add(MarListHeader[1],2*(0x970/4)),2*4)
+	--f_MovCpyEPD(P6,EPDF(0x58F700)+(6), _Add(MarListHeader[1],3*(0x970/4)),2*4)
+	--f_MovCpyEPD(P6,EPDF(0x58F700)+(8), _Add(MarListHeader[1],4*(0x970/4)),2*4)
+	--f_MovCpyEPD(P6,EPDF(0x58F700)+(10),_Add(MarListHeader[1],5*(0x970/4)),2*4)
 KeyUpText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＰＧＲＡＤＥ\x04　！！！\n\n\n\x13\x1F\x10【 K\x04ey \x10】\x04가 파괴되어 \x08L\x0Eu\x0Fm\x10i\x11n\x10o\x0Fu\x0Es \x08M\x0Ea\x0Fr\x10i\x11n\x15e \x04의 \x16빛\x04이 \x03강화\x03되었습니다.\n\n\n\x13\x04！！！　\x07ＵＰＧＲＡＤＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 ShText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x08HP 130,000\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-
-	for i = 0, 3 do
-		Trigger2(FP,Command(Force2,Exactly,i,150),{
-			RotatePlayer({
-			DisplayTextX(KeyUpText,4),
-			PlayWAVX("staredit\\wav\\start.ogg"),
-			PlayWAVX("staredit\\wav\\start.ogg"),
-			PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
-			SetCDeaths(FP,Add,1,BYDAttackUpgrade)
-		})
-	end
 
 		CJump(FP,0x625)
 		CallMarSkill =  SetCallForward()
@@ -3555,11 +3631,17 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 			end
 			SkillShape = {}
 			function MarListSkillUnitFunc()
+				local MarListCPUnitID = {182,183,184,185,186}
+				local UnitID = CreateVar(FP)
 				CIf(FP,Memory(0x628438,AtLeast,1))
+				for i = 0, 4 do
+					TriggerX(FP,{CVar(FP,MarListCurrentPlayer[2],Exactly,i)},{SetCVar(FP,UnitID[2],SetTo,MarListCPUnitID[i+1])},{Preserved})
+				end
 				f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 				CDoActions(FP,{
-					TCreateUnit(1,179,24,MarListCurrentPlayer),
+					TCreateUnit(1,UnitID,24,MarListCurrentPlayer),
 					TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
+					TSetDeathsX(_Add(Nextptrs,9),SetTo,255*65536,0,0xFF0000),
 					TSetDeaths(_Add(Nextptrs,22),SetTo,2048+(2048*65536),0),
 				})
 				CIfEnd()
@@ -3787,8 +3869,8 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 	})
 	
 		CIf(FP,PlayerCheck(i-1,1))
-			CIfX(FP,MemoryB(0x58D2B0+((i-1)*46)+7,AtMost,254))
-			CMov(FP,MarListSkillLv[i],_Div(_ReadF(AtkUpgradePtrArr[i],255*(256^AtkUpgradeMaskRetArr[i])),_Mov(256^AtkUpgradeMaskRetArr[i])))
+			CIfX(FP,MemoryB(0x58D2B0+((i-1)*46)+7,AtMost,249))
+			CMov(FP,MarListSkillLv[i],_Div(_ReadF(AtkUpgradePtrArr[i],255*(256^AtkUpgradeMaskRetArr[i])),_Mov(256^AtkUpgradeMaskRetArr[i])),nil,0xFF)
 			CElseX()
 			CMov(FP,MarListSkillLv[i],255)
 			CIfXEnd()
@@ -3852,7 +3934,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 		CIfEnd()
 		Trigger2(FP,{Deaths(i-1,AtLeast,1,34)},{SetDeaths(i-1,SetTo,0,34)},{Preserved})
 	end
-	SkillUnitP = CreateVar()
+	SkillUnitP = CreateVar(FP)
 	--CMov(FP,0x6509B0,19025+19)
 	--CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699))) -- 스킬유닛 순환기
 	--CIf(FP,{DeathsX(CurrentPlayer,AtMost,4,0,0xFF),DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
@@ -3891,7 +3973,9 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 			actions = {
 				MoveCp(Add,23*4); -- 
 				SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF);
-				MoveCp(Subtract,23*4); -- 
+				MoveCp(Subtract,16*4); -- 
+				SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF0000);
+				MoveCp(Subtract,7*4); -- 
 				PreserveTrigger();
 		
 		},
@@ -3903,11 +3987,11 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 	CunitCtrig_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 	CunitCtrig_Part4X(i,{
-	DeathsX(EPD(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
-	DeathsX(EPD(0x628298-0x150*i+(25*4)),Exactly,179,0,0xFF),
+		DeathsX(EPDF(0x628298-0x150*i+(9*4)),Exactly,255*65536,0,0xFF0000),
+		DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 	},
-	{SetDeaths(EPD(0x628298-0x150*i+0x08), Subtract,1*256,0),
-		SetDeathsX(EPD(0x628298-0x150*i+(40*4)), SetTo,0,0,0xFF000000),
+	{SetDeaths(EPDF(0x628298-0x150*i+0x08), Subtract,1*256,0),
+		SetDeathsX(EPDF(0x628298-0x150*i+(40*4)), SetTo,0,0,0xFF000000),
 	MoveCp(Add,2*4)})
 	end
 	CunitCtrig_End()
@@ -3927,7 +4011,7 @@ for i=0, 4 do
 
 		f_Read(P6,0x6284E8+(0x30*i),"X",Player_S[i+1],0xFFFFFF)
 		CIf(P6,Memory(0x6284E8+(0x30*i),AtLeast,1))
-			CMov(P6,Player_0x4D[i+1],_ReadF(_Add(Player_S[i+1],0x4C/4),0xFF00))
+			CMov(P6,Player_0x4D[i+1],_ReadF(_Add(Player_S[i+1],0x4C/4),0xFF00),nil,0xFF00)
 			CMov(P6,Player_0x18[i+1],_ReadF(_Add(Player_S[i+1],0x18/4)))
 			CMov(P6,Player_0x58[i+1],_ReadF(_Add(Player_S[i+1],0x58/4)))
 			CMov(P6,Player_0x5C[i+1],_ReadF(_Add(Player_S[i+1],0x5C/4)))
@@ -3935,10 +4019,10 @@ for i=0, 4 do
 				CMov(P6,Player_C[i+1],1)
 				Player_CTemp = Player_C[i+1]
 				CWhile(P6,{CVar(FP,Player_CTemp[2],AtMost,11)})
-					CIf(P6,{TDeaths(_Add(Player_C[i+1],EPD(0x6284E8+(0x30*i))),AtLeast,1,0)})
+					CIf(P6,{TDeaths(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))),AtLeast,1,0)})
 						--CMov(P6,0x6509B0,_EPD(_Read(BackupCp,0xFFFFFF)))
 						--CRead(P6,0x6509B0,BackupCp,0,0xFFFFFF,1)
-						CMov(P6,Player_T[i+1],_EPD(_ReadF(_Add(Player_C[i+1],EPD(0x6284E8+(0x30*i))))))
+						CMov(P6,Player_T[i+1],_EPD(_ReadF(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))))))
 						CTrigger(P6,{
 							TDeaths(_Add(Player_T[i+1],0x8/4),AtLeast,256,0),
 							TDeathsX(_Add(Player_T[i+1],0x4C/4),AtLeast,1*256,0,0xFF00)
@@ -4297,13 +4381,14 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
 					Label(0);
 				},
 				actions = {
-					RotatePlayer({DisplayTextX(UnivToString,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX(UnivToString,4)},HumanPlayers,FP);
 					SetDeaths(j-1,Subtract,1,32);
 					SetScore(j-1,Add,1,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-10);
 					PreserveTrigger();
 					},
 				}
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4323,13 +4408,14 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 					Label(0);
 				},
 				actions = {
-					RotatePlayer({DisplayTextX(UnivToString,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX(UnivToString,4)},HumanPlayers,FP);
 					SetDeaths(j-1,Subtract,1,20);
 					SetScore(j-1,Add,2,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-30);
 					PreserveTrigger();
 					},
 				}
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4349,13 +4435,14 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,27,0,0xFF))
 					Label(0);
 				},
 				actions = {
-					RotatePlayer({DisplayTextX(UnivToString,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX(UnivToString,4)},HumanPlayers,FP);
 					SetDeaths(j-1,Subtract,1,27);
 					SetScore(j-1,Add,9,Custom);
 					SetCVar(FP,ExScore[j][2],Add,-1000);
 					PreserveTrigger();
 					},
 				}
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4374,13 +4461,14 @@ for j=1, 5 do
 				DeathsX(CurrentPlayer,AtMost,4,0,0xFF);
 			},
 			actions = {
-				RotatePlayer({DisplayTextX(UnivToString,4),PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP);
+				RotatePlayer({DisplayTextX(UnivToString,4)},HumanPlayers,FP);
 				SetDeaths(j-1,Subtract,1,MarID[j]);
 				SetScore(j-1,Add,3,Custom);
 				SetCVar(FP,ExScore[j][2],Add,-100);
 				PreserveTrigger();
 				},
 			}
+			TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 		Call_LoadCp()
 		DoActions(P6,MoveCp(Add,6*4))
@@ -4394,7 +4482,7 @@ InstallHeroPoint()
 
 function HeroPanelty(Index,Point,Name)
 local HText2 = "\x13\x1D† ! \x04맵상에 아직 "..Name.." \x04이(가) 남아있습니다. \x1F- "..(Point/20).." \x1CＯｒｅ\x1D ! †\n"
-CIf(P6,Deaths(CurrentPlayer,Exactly,Index,0,0xFF))
+CIf(P6,{Deaths(CurrentPlayer,Exactly,Index,0,0xFF)})
 DoActions(P6,MoveCp(Subtract,16*4))
 Call_SaveCp()
 Trigger {
@@ -4406,10 +4494,11 @@ Trigger {
 	actions = {
 		SetDeathsX(CurrentPlayer, SetTo,0*65536,0,0xFF0000);
 		SetResources(Force1,Add,Point/20,Gas);
-		RotatePlayer({DisplayTextX(HText2,4),PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP);
+		RotatePlayer({DisplayTextX(HText2,4)},HumanPlayers,FP);
 		PreserveTrigger();
 	},
 }
+TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
 Call_LoadCp()
 DoActions(P6,MoveCp(Add,16*4))
 CIfEnd()
@@ -4551,10 +4640,10 @@ CunitCtrig_Part2()
 CunitCtrig_Part3X()
 for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
-DeathsX(EPD(0x628298-0x150*i+(40*4)),AtLeast,1*16777216,0,0xFF000000),
-DeathsX(EPD(0x628298-0x150*i+(19*4)),Exactly,0*256,0,0xFF00),
+DeathsX(EPDF(0x628298-0x150*i+(40*4)),AtLeast,1*16777216,0,0xFF000000),
+DeathsX(EPDF(0x628298-0x150*i+(19*4)),Exactly,0*256,0,0xFF00),
 },
-{SetDeathsX(EPD(0x628298-0x150*i+(40*4)),SetTo,0*16777216,0,0xFF000000),
+{SetDeathsX(EPDF(0x628298-0x150*i+(40*4)),SetTo,0*16777216,0,0xFF000000),
 MoveCp(Add,25*4),
 })
 end
@@ -4722,9 +4811,9 @@ CIfEnd()
 	CunitCtrig_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 	CunitCtrig_Part4X(i,{
-	DeathsX(EPD(0x628298-0x150*i+(72*4)),AtLeast,1*256,0,0xFF00)
+	DeathsX(EPDF(0x628298-0x150*i+(72*4)),AtLeast,1*256,0,0xFF00)
 	},
-	{SetDeaths(EPD(0x628298-0x150*i+(72*4)), SetTo,0,0,0xFF00),SetDeaths(EPD(0x628298-0x150*i+(69*4)), SetTo,255*65536,0)})
+	{SetDeaths(EPDF(0x628298-0x150*i+(72*4)), SetTo,0,0,0xFF00),SetDeaths(EPDF(0x628298-0x150*i+(69*4)), SetTo,255*65536,0)})
 	end
 	CunitCtrig_End()
 
@@ -4819,10 +4908,10 @@ CIf(P6,CVar(P6,B2_P[2],AtLeast,1))
 	CunitCtrig_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 	CunitCtrig_Part4X(i,{
-	DeathsX(EPD(0x628298-0x150*i+(25*4)),Exactly,180,0,0xFF),
-	DeathsX(EPD(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
+	DeathsX(EPDF(0x628298-0x150*i+(25*4)),Exactly,180,0,0xFF),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 	},
-	{SetDeaths(EPD(0x628298-0x150*i+0x08), Subtract,1*256,0),
+	{SetDeaths(EPDF(0x628298-0x150*i+0x08), Subtract,1*256,0),
 	MoveCp(Add,19*4)})
 	end
 	CunitCtrig_End()
@@ -5009,12 +5098,12 @@ for i=0,4 do
 		},1)
 	CIfEnd()
 end
-GunListErrorCheck = CreateVar()
+GunListErrorCheck = CreateVar(FP)
 NJump(FP,0x701,CVar(FP,WhileLaunch[2],AtMost,0))
 CMov(FP,WhileLaunch,0)
-CMov(P6,0x6509B0,EPD(MemoryPtr))
+CMov(P6,0x6509B0,EPDF(MemoryPtr))
 DoWhile(FP)
-NJump(FP,0x702,Memory(0x6509B0,AtMost,EPD(MemoryPtr)-1),{
+NJump(FP,0x702,Memory(0x6509B0,AtMost,EPDF(MemoryPtr)-1),{
 			RotatePlayer({
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x08\n\x13\x06ＥＲＲＯＲ\n\n\x13\x06심각한 오류가 발생했습니다. 제작자에게 알려주세요.\n\x13\x08(ERROR CODE:0x702)\n\x13\x06ＥＲＲＯＲ\n.",0),
@@ -5026,7 +5115,7 @@ NJump(FP,0x702,Memory(0x6509B0,AtMost,EPD(MemoryPtr)-1),{
 NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 	Call_SaveCp()
 	CAdd(FP,WhileLaunch,1)
-	f_Mod(FP,GunListErrorCheck,_Sub(BackupCp,EPD(MemoryPtr)),_Mov(MemoryPtrSize))
+	f_Mod(FP,GunListErrorCheck,_Sub(BackupCp,EPDF(MemoryPtr)),_Mov(MemoryPtrSize))
 	NJump(FP,0x703,{CVar(FP,GunListErrorCheck[2],AtLeast,1)},{
 			RotatePlayer({
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
@@ -5038,8 +5127,8 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 })--SafetyEscape
 	NIf(FP,DeathsX(CurrentPlayer,AtMost,1*0x1000,0,0xF000)) -- BdIndex LAIR HIVE
 		Call_SaveCp()
-		CMov(FP,CPosX,_Mov(_ReadF(BackupCp),0xFFF))
-		CMov(FP,CPosY,_Div(_Mov(_ReadF(BackupCp),0xFFF0000),_Mov(65536)))
+		CMov(FP,CPosX,_Mov(_ReadF(BackupCp),0xFFF),nil,0xFFF)
+		CMov(FP,CPosY,_Div(_Mov(_ReadF(BackupCp),0xFFF0000),_Mov(65536)),nil,0xFFF)
 		Simple_SetLocX(FP,23,_Sub(CPosX,32*9),_Sub(CPosY,32*9),_Add(CPosX,32*9),_Add(CPosY,32*9))
 		Call_LoadCp()
 		
@@ -5613,19 +5702,19 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 		GunGround2 = CSMakePolygon(8,96,0,PlotSizeCalc(8,2),0)
 		ZergGunShape = {GunAir,GunGround,GunLong,GunGround2}
 
-		BYDGunBreak = CreateVar()
-		BYDGunX = CreateVar()
-		BYDGunTimer = CreateVar()
-		BYDPlotNum = CreateVar()
-		BYDPlotSize = CreateVar()
-		BYDGunPhase = CreateVar()
+		BYDGunBreak = CreateVar(FP)
+		BYDGunX = CreateVar(FP)
+		BYDGunTimer = CreateVar(FP)
+		BYDPlotNum = CreateVar(FP)
+		BYDPlotSize = CreateVar(FP)
+		BYDGunPhase = CreateVar(FP)
 
-		BYDZergSpawnSet = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
-		BYDGunPlotSize = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
-		ZergGunTimer = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
-		ZergGunBreak = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
-		ZergGunPhase = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
-		BYDGunLoopLimit = {CreateVar(),CreateVar(),CreateVar(),CreateVar()}
+		BYDZergSpawnSet = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
+		BYDGunPlotSize = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
+		ZergGunTimer = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
+		ZergGunBreak = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
+		ZergGunPhase = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
+		BYDGunLoopLimit = {CreateVar(FP),CreateVar(FP),CreateVar(FP),CreateVar(FP)}
 
 		NIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0),BYD})
 			Call_SaveCp()
@@ -5654,7 +5743,7 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 			-- 1 = 0xFF000000 SpawnCount 0xFF0000 GunLevel 0xFFFF Timer 
 
 			CDoActions(FP,{
-				TSetCVar(FP,BYDGunCA1[6],SetTo,_ReadF(_Add(BackupCp,2),0xFF)), -- 2 = BYDGunCA1[6] DataIndex
+				TSetCVar(FP,BYDGunCA1[6],SetTo,_ReadF(_Add(BackupCp,2),0xFF),0xFF), -- 2 = BYDGunCA1[6] DataIndex
 				TSetCVar(FP,BYDGunTimer[2],SetTo,_ReadF(_Add(BackupCp,3))), -- 3 = BYDGunTimer
 				TSetCVar(FP,BYDGunBreak[2],SetTo,_ReadF(_Add(BackupCp,4),0x3)), -- 4 = SpawnBreak
 --              TSetCVar(FP,BYDGunPhase[2],SetTo,_Read(_Add(BackupCp,5))), -- 5 = GunPhase
@@ -5665,10 +5754,10 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 				TSetCVar(FP,ZergGunTimer[3][2],SetTo,_ReadF(_Add(BackupCp,12))),
 				TSetCVar(FP,ZergGunTimer[4][2],SetTo,_ReadF(_Add(BackupCp,13))),
 				--10~13 ZergGunTimer
-				TSetCVar(FP,ZergGunBreak[1][2],SetTo,_ReadF(_Add(BackupCp,14),0x3)), 
-				TSetCVar(FP,ZergGunBreak[2][2],SetTo,_ReadF(_Add(BackupCp,15),0x3)), 
-				TSetCVar(FP,ZergGunBreak[3][2],SetTo,_ReadF(_Add(BackupCp,16),0x3)), 
-				TSetCVar(FP,ZergGunBreak[4][2],SetTo,_ReadF(_Add(BackupCp,17),0x3)), 
+				TSetCVar(FP,ZergGunBreak[1][2],SetTo,_ReadF(_Add(BackupCp,14),0x3),0x3), 
+				TSetCVar(FP,ZergGunBreak[2][2],SetTo,_ReadF(_Add(BackupCp,15),0x3),0x3), 
+				TSetCVar(FP,ZergGunBreak[3][2],SetTo,_ReadF(_Add(BackupCp,16),0x3),0x3), 
+				TSetCVar(FP,ZergGunBreak[4][2],SetTo,_ReadF(_Add(BackupCp,17),0x3),0x3), 
 				--14~17 ZergGunBreak
 				--18~21 ZergGunPhase
 			})
@@ -5742,7 +5831,8 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 
 
 
-
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,666666*256)},{Preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,450000*256)},{Preserved})
 
 			NIfX(FP,{TMemory(_Mem(RedNumberX),AtLeast,BYDPlotSize)})
 				CMov(FP,V(BYDGunCA1[5]),1)
@@ -5764,11 +5854,13 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 			CTrigger(FP, {CVar(FP,BYDGunTimer[2],Exactly,0)}, {TSetCVar(FP,BYDGunTimer[2],SetTo,BYDGunX)}, 1)
 			CSub(FP,BYDGunTimer,1)
 			CTrigger(FP,{CVar(FP,BYDGunPhase[2],AtLeast,1)},{TSetMemory(_Add(BackupCp,5),Add,1),SetCVar(FP,BYDGunPhase[2],SetTo,0)},1)
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,6666666*256)},{Preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,4500000*256)},{Preserved})
 			ZergGunCAPlot = {}
 
 			for i = 1, 4 do
 				table.insert(ZergGunCAPlot,CAPlotForward())
-				CDoActions(FP,{TSetCVar(FP,ZergGunCAPlot[i][6],SetTo,_ReadF(_Add(BackupCp,6+i-1),0xFF)),SetCVar(FP,ZergGunCAPlot[i][9],SetTo,6)})
+				CDoActions(FP,{TSetCVar(FP,ZergGunCAPlot[i][6],SetTo,_ReadF(_Add(BackupCp,6+i-1),0xFF),0xFF),SetCVar(FP,ZergGunCAPlot[i][9],SetTo,6)})
 				CIf(FP,{TMemoryX(BackupCp,Exactly,0x1000,0xF000)})
 					CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Atmost,3*65536,0xFF0000)},{SetCVar(FP,ZergGunCAPlot[i][9],SetTo,7)},1)
 					if i == 1 then
@@ -5844,7 +5936,7 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 	NIfEnd() -- LAIR HIVE END
 NIfEnd()
 DoActions(FP,MoveCp(Add,MemoryPtrSize*4))
-DoWhileEnd({Memory(0x6509B0,AtMost,EPD(MemoryPtr)+(MemoryPtrSize*50))})
+DoWhileEnd({Memory(0x6509B0,AtMost,EPDF(MemoryPtr)+(MemoryPtrSize*50))})
 NJumpEnd(FP,0x702)
 NJumpEnd(FP,0x703)
 NJumpEnd(FP,0x701)
@@ -6729,7 +6821,6 @@ Trigger { -- 예약메딕
 		},
 		actions = {
 			RemoveUnit(125,AllPlayers);
-			SetMemoryX(0x6559CC, SetTo, 20*65536,0xFFFF0000);
 			SetMemoryW(0x656380+44,SetTo,150);
 			PatchArr1;
 			
@@ -6923,7 +7014,7 @@ Trigger { -- 예약메딕
 				DisplayText("\x13\x04"..string.rep("―", 56),4);
 				PlayWAV("sound\\Bullet\\pshield.wav");
 				SetAllianceStatus(Force2,Enemy);
-				SetResources(i,Add,0x70000000,Ore);
+				SetResources(i,Add,10000000,Ore);
 				--CreateUnit(255,MarID[i+1],5,i);
 				SetDeaths(i,SetTo,36,125);
 				
@@ -8451,7 +8542,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			CDeaths(P6,AtLeast,1,Ready);
 		},
 		actions = {
-			SetMemoryX(0x6559CC, SetTo, 15*65536,0xFFFF0000);
 			
 			},
 		}
@@ -8467,7 +8557,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		},
 		actions = {
 			RemoveUnit(125,AllPlayers);
-			SetMemoryX(0x6559CC, SetTo, 20*65536,0xFFFF0000);
 			KillUnitAt(4,219,64,AllPlayers);
 			SetMemoryW(0x656380+44,SetTo,150);
 			PatchArr1;
@@ -8475,44 +8564,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			},
 		}
 	
-	Trigger { -- 퓨어모드 선택시 2인이상 공격력조절
-		players = {P6},
-		conditions = {
-			Label(0);
-			CDeaths(P6,AtLeast,2,GMode);
-			CDeaths(P6,AtLeast,1,Ready);
-			CVar(P6,SetPlayers[2],AtLeast,2);
-		},
-		actions = {
-			
-			SetMemoryX(0x656EB0, SetTo, 200,0xFFFF);
-			SetMemoryX(0x657678, SetTo, 14,0xFFFF);
-			SetMemoryX(0x656EB0, SetTo, 1000*65536,0xFFFF0000);
-			SetMemoryX(0x657678, SetTo, 30*65536,0xFFFF0000);
-			SetMemoryX(0x656F98, SetTo, (3000)*65536,0xFFFF0000);
-			SetMemoryX(0x657760, SetTo, (130)*65536,0xFFFF0000);
-			},
-		}
-	
-	
-	Trigger { -- 퓨어모드 선택시 1인 공격력조절
-		players = {P6},
-		conditions = {
-			Label(0);
-			CDeaths(P6,AtLeast,2,GMode);
-			CDeaths(P6,AtLeast,1,Ready);
-			CVar(P6,SetPlayers[2],Exactly,1);
-		},
-		actions = {
-			
-			SetMemoryX(0x656EB0, SetTo, 300,0xFFFF);
-			SetMemoryX(0x657678, SetTo, 21,0xFFFF);
-			SetMemoryX(0x656EB0, SetTo, 1500*65536,0xFFFF0000);
-			SetMemoryX(0x657678, SetTo, 45*65536,0xFFFF0000);
-			SetMemoryX(0x656F98, SetTo, (4500)*65536,0xFFFF0000);
-			SetMemoryX(0x657760, SetTo, (65*3)*65536,0xFFFF0000);
-			},
-		}
 	
 	
 		
@@ -8946,9 +8997,9 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	
 	
 	YY = 2021
-	MM = 7
+	MM = 11
 	DD = 20
-	HH = 12
+	HH = 00
 	end
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
@@ -9028,6 +9079,8 @@ CIfEnd() -- 인트로 끝
 
 CIf(AllPlayers,Switch("Switch 203",Set)) -- 203 스위치가 켜져있을 경우
 
+	CPLPT = "\n\n\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(つ>ㅅ<)つ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04이 문구가 뜰 경우 \x07정식버전\x04입니다. \n\x13\x04무단 수정맵을 주의해주세요.\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	TriggerX(FP,{CVar(FP,Time1[2],AtLeast,60*1000)},{RotatePlayer({DisplayTextX(CPLPT,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
 CallTable = {61,62,63,65}
 Trigger { -- 게임 승리 트리거 이지
 	players = {P6},
@@ -10074,7 +10127,7 @@ Trigger {
 		
 	}
 }
-Points = 8
+Points = 12
 SizeofPolygon = 1
 Radius = 48
 CreateUnitPolygonSafe2Gun(i,{Label(0),CDeaths("X",AtMost,0,SkillT),Bring(Force2,AtLeast,1,"Men",74+i)},1+(Points*(SizeofPolygon*(SizeofPolygon+1)/2)),73+i,32,Radius,0,Points,1,i, {1,179})
@@ -11739,8 +11792,8 @@ CIf(FP,BYD)
 SpawnLocTable = {135+i,LocationID,51+i}
 SpawnSetTable = {22,29,8}
 for j = 1, 3 do
-CereLoopLimit = CreateVar()
-CereBYDTimer = CreateVar()
+CereLoopLimit = CreateVar(FP)
+CereBYDTimer = CreateVar(FP)
 NIfX(FP,{TMemory(_Mem(RedNumberX),AtLeast,BYDCere[j][1])})
 	CMov(FP,CereLoopLimit,1)
 	CiDiv(FP,BYDGunX,RedNumberX,BYDCere[j][1])
@@ -11821,7 +11874,7 @@ function BYDSCoutPatch()
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
-	NIf(FP,{CVar(FP,CB[2],Exactly,80),TTCVar(FP,Nextptrs[2],NotSame,EPD(0)),BYD})
+	NIf(FP,{CVar(FP,CB[2],Exactly,80),TTCVar(FP,Nextptrs[2],NotSame,EPDF(0)),BYD})
 	CDoActions(FP,{
 		TSetDeaths(_Add(Nextptrs,13),SetTo,128,0),
 		TSetDeathsX(_Add(Nextptrs,18),SetTo,128,0,0xFFFF)})
@@ -11840,9 +11893,9 @@ BdID = 154
 BdIndex = CCode(0x1004,4)
 Sw1Status1 = Cleared
 Sw1Status2 = Set
-NexA = CreateVar()
-NexLoopLimit = CreateVar()
-NexBYDTimer = CreateVar()
+NexA = CreateVar(FP)
+NexLoopLimit = CreateVar(FP)
+NexBYDTimer = CreateVar(FP)
 NexLocSet={1024,1024*3,1024*3,1024}
 
 BdAv = CreateCCode()
@@ -12033,9 +12086,9 @@ BdID = 154
 BdIndex = CCode(0x1004,4)
 Sw1Status1 = Set
 Sw1Status2 = Cleared
-NexA = CreateVar()
-NexLoopLimit = CreateVar()
-NexBYDTimer = CreateVar()
+NexA = CreateVar(FP)
+NexLoopLimit = CreateVar(FP)
+NexBYDTimer = CreateVar(FP)
 NexLocSet={1024,1024,1024*3,1024*3}
 
 BdAv = CreateCCode()
@@ -12450,12 +12503,13 @@ Trigger {
 		SetMemory(0x662350 + (57*4), SetTo, (700000*256)/2);
 		SetMemory(0x662350 + (66*4), SetTo, (2500000*256)/3);
 		SetMemory(0x662350 + (19*4), SetTo, (700000*256)/2);
+
 		PreserveTrigger();
 		}
 }
-Ov_BYD_E = CreateVar()
-CMov(FP,0x6509B0,EPD(GunPtrMemory))
-CWhile(FP,Memory(0x6509B0,AtMost,EPD(GunPtrMemory)+200))
+Ov_BYD_E = CreateVar(FP)
+CMov(FP,0x6509B0,GunPtrMemory)
+CWhile(FP,{TMemory(0x6509B0,AtMost,_Add(GunPtrMemory,200))})
 CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
 Call_SaveCP()
 CIf(FP,{TDeathsX(BackupCp,Exactly,_Mul(Ov_BYD,0x1000),0,0xF000)})
@@ -12474,40 +12528,38 @@ Trigger { -- No comment (00F60EE3)
 
 DoActionsX(FP,SetCVar(FP,Ov_BYD_E[2],Add,1))
 
-CWhile(FP,CVar(FP,Ov_BYD_E[2],AtLeast,1),SetCVar(FP,Ov_BYD_E[2],Subtract,1))
-
-CMov(FP,CPosX,_ReadF(BackupCP,0xFFF))
-CMov(FP,CPosY,_Div(_ReadF(BackupCP,0xFFF0000),_Mov(65536)))
-
+CWhile(FP,CVar(FP,Ov_BYD_E[2],AtLeast,1),{SetCVar(FP,Ov_BYD_E[2],Subtract,1)})
+CMov(FP,CPosX,_ReadF(BackupCP,0xFFF),nil,0xFFF)
+CMov(FP,CPosY,_Div(_ReadF(BackupCP,0xFFF0000),_Mov(65536)),nil,0xFFF)
 CDoActions(FP,{
 TSetMemory(0x58DC60 + 0x14*23,SetTo,_Sub(CPosX,32*3)),
 TSetMemory(0x58DC68 + 0x14*23,SetTo,_Add(CPosX,32*3)),
 TSetMemory(0x58DC64 + 0x14*23,SetTo,_Sub(CPosY,32*3)),
 TSetMemory(0x58DC6C + 0x14*23,SetTo,_Add(CPosY,32*3)),
-Createunit(1,84,24,FP)
+Createunit(1,84,24,FP),
 })
 
-CIfX(CPlayer,{Switch("Switch 1",Set)})
-CTrigger(CPlayer,{
+CIfX(FP,{Switch("Switch 1",Set)})
+CTrigger(FP,{
 	CVar(FP,Ov_BYD_Index[2],AtLeast,0),
 	CVar(FP,Ov_BYD_Index[2],AtMost,1),
 },{
 	TCreateUnit(1,VArr(UArr1,_Mod(_Rand(),16)),24,7)
 },1)
-CTrigger(CPlayer,{
+CTrigger(FP,{
 	CVar(FP,Ov_BYD_Index[2],AtLeast,2),
 	CVar(FP,Ov_BYD_Index[2],AtMost,3),
 },{
 	TCreateUnit(1,VArr(UArr2,_Mod(_Rand(),16)),24,7)
 },1)
 CElseX()
-CTrigger(CPlayer,{
+CTrigger(FP,{
 	CVar(FP,Ov_BYD_Index[2],AtLeast,0),
 	CVar(FP,Ov_BYD_Index[2],AtMost,1),
 },{
 	TCreateUnit(1,VArr(UArr2,_Mod(_Rand(),16)),24,7)
 },1)
-CTrigger(CPlayer,{
+CTrigger(FP,{
 	CVar(FP,Ov_BYD_Index[2],AtLeast,2),
 	CVar(FP,Ov_BYD_Index[2],AtMost,3),
 },{
@@ -12699,8 +12751,8 @@ T = CCode(0x1003,26+i)
 LocationID = 184+i
 BdID = 152
 BdIndex = CCode(0x1004,10)
-DGInfection = CreateVar()
-DGSwitch = CreateVar()
+DGInfection = CreateVar(FP)
+DGSwitch = CreateVar(FP)
 
 if i == 0 then
 	BdPlayer = 6
@@ -12863,9 +12915,9 @@ LocationID = 166+i
 BdID = 200
 BdIndex = CCode(0x1004,11)
 
-GSY = CreateVar()
-GSZ = CreateVar()
-GSW = CreateVar()
+GSY = CreateVar(FP)
+GSZ = CreateVar(FP)
+GSW = CreateVar(FP)
 
 if i == 0 then
 	BdPlayer = 7
@@ -12974,8 +13026,8 @@ C = CCode(0x1002,32+i)
 T = CCode(0x1003,32+i)
 LocationID = 186+i
 BdID = 174
-TemAngle = CreateVar()
-TemX = CreateVar()
+TemAngle = CreateVar(FP)
+TemX = CreateVar(FP)
 BdIndex = CCode(0x1004,12)
 if i == 0 then
 	BdPlayer = 7
@@ -14037,7 +14089,7 @@ function RecallHere()
 	CIfEnd()
 
 end
-BackupXY = CreateVar()
+BackupXY = CreateVar(FP)
 CIfOnce(FP,CDeaths(FP,Exactly,2,B7_Ph))
 CMov(FP,BackupXY,XY)
 CMov(FP,XY,0)
@@ -14056,7 +14108,7 @@ S1 = CSMakePolygon(6,350,0,7,1)
 S3 = CSMakePolygon(3,350,0,4,1)
 DoActionsX(FP,{SetCVar("X",SY[2],Add,2),SetCVar("X",SZ[2],Add,3),SetCVar("X",SW[2],Add,4)})
 DoActions(FP,{SetMemoryX(0x666458, SetTo, 391,0xFFFF),RemoveUnit(71,P6),})
-RecallSpriteShape = CreateVar()
+RecallSpriteShape = CreateVar(FP)
 DoActionsX(FP,SetCVar(FP,RecallSpriteShape[2],SetTo,1),1)
 TriggerX(FP,{CDeaths(FP,Exactly,2,B7_Ph)},{SetCVar(FP,RecallSpriteShape[2],SetTo,2)})
 CAPlot({S1,S3},FP,181,190,nil,1,1,{RecallSpriteShape,0,0,0,9999,0},"S2_CAfunc",FP,nil,nil,{RemoveUnit(33,FP),SetCDeaths(FP,Subtract,4,EffT)},"RecallHere")
@@ -14549,7 +14601,7 @@ CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 	CIf(FP,CDeaths(FP,AtLeast,1,BYDBossP1))
 	CAdd(FP,_CCode("X",BYDBossPT1),Dt)
 	CIfEnd()
-	B7_W =CreateVar()
+	B7_W =CreateVar(FP)
 	CIf(FP,{CDeaths(FP,AtLeast,1,BYDBossP1),CDeaths(FP,AtMost,2*1000,BYDBossPT1)})
 		CMov(FP,B7_W,15)
 		CWhile(FP,{CVar(FP,B7_W[2],AtLeast,1),Bring(FP,AtMost,499,49,64)},SetCVar(FP,B7_W[2],Subtract,1))
@@ -14667,14 +14719,14 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이런 비극은.. \x0
 		TriggerX(FP,{CDeaths(FP,AtLeast,36,B7_T),Bring(FP,AtMost,0,128,64)},{SetCDeaths(FP,SetTo,0,B7_T)},{Preserved})
 	CIfEnd()
 CIfEnd()
-B7_X = CreateVar()
-B7_Y = CreateVar()
-B7_R = CreateVar()
-B7_A = CreateVar()
-B7_Point = CreateVar()
-B7_A2 = CreateVar()
-B7_W2 = CreateVar()
-B7_W3 = CreateVar()
+B7_X = CreateVar(FP)
+B7_Y = CreateVar(FP)
+B7_R = CreateVar(FP)
+B7_A = CreateVar(FP)
+B7_Point = CreateVar(FP)
+B7_A2 = CreateVar(FP)
+B7_W2 = CreateVar(FP)
+B7_W3 = CreateVar(FP)
 B7_T2 = CreateCCode()
 CIf(FP,CDeaths(FP,Exactly,4,B7_Ph),{SetCJump(0x648,1),SetMemoryX(0x66A1E4, SetTo, 65536*0,0xFF0000),KillUnit(217,FP)}) -- 4페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이렇게까지 날 고통스럽게 할 생각이야..?\n\n\n\n",3000*1)
@@ -17355,18 +17407,59 @@ end
 end
 NJumpEnd(Force1,0x13)
 
-
 for i=0, 4 do
-Trigger {
-	players = {i},
-	conditions = {
-		MemoryB(0x58D2B0+(46*i)+7,Exactly,255);
-	},
-	actions = {
-		SetMemoryB(0x58D088+(46*i)+8,SetTo,0);
-		SetMemoryB(0x58D088+(46*i)+9,SetTo,0);
+	Trigger {
+		players = {i},
+		conditions = {
+			MemoryB(0x58D2B0+(46*i)+7,Exactly,100);
+		},
+		actions = {
+			SetMemoryB(0x58D088+(46*i)+8,SetTo,1);
+			SetMemoryB(0x58D088+(46*i)+7,SetTo,0);
+		}
 	}
-}
+	for j = 0, 2 do
+	Trigger {
+		players = {i},
+		conditions = {
+			label(0);
+			CDeaths(FP,Exactly,j,GMode);
+			Accumulate(i,AtMost,UpCostTable[j+1]-1,ore);
+			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
+			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
+			MemoryB(0x58D088+(46*i)+9,AtMost,249);
+		},
+		actions = {
+			
+			DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
+			SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0);
+			PreserveTrigger();
+		}
+	}
+	Trigger {
+		players = {i},
+		conditions = {
+			label(0);
+			CDeaths(FP,Exactly,j,GMode);
+			Accumulate(i,AtLeast,UpCostTable[j+1],ore);
+			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
+			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
+			MemoryB(0x58D088+(46*i)+9,AtMost,249);
+		},
+		actions = {
+			
+			SetResources(i,Subtract,UpCostTable[j+1],ore);
+			SetMemoryB(0x58D2B0+(46*i)+7,SetTo,250);
+			SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
+		}
+	}
+	TriggerX(FP,{NBYD},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{Preserved})
+	end
+	DoActionsX(FP,{SetCVar(FP,CurPerAttack[i+1][2],SetTo,0)})
+	
+	for j = 0, 7 do
+		TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{Preserved})
+	end
 end
 
 for i=0, 4 do
@@ -17408,31 +17501,57 @@ Trigger {
 }
 end
 
-
-AtkFactorArr = {30,15,20}
+PerCostVA = CreateVArr(6,FP)
 for i = 0, 4 do
-for j = 0, 2 do
-NIf(FP,CDeaths(FP,Exactly,j,GMode))
-NIf(FP,MemoryB(0x58D2B0+(46*i)+8,AtLeast,1))
-CallTrigger(FP,OneClickUpgrade,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
-		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
-		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorArr[j+1]),
-		SetCVar(FP,UpgradeCP[2],SetTo,i),
-		SetCVar(FP,UpgradeMax[2],SetTo,255),
-		SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0)})
-NIfEnd()
-NIf(FP,MemoryB(0x58D2B0+(46*i)+9,AtLeast,1))
-CallTrigger(FP,OneClickUpgrade,{
-		SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
-		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
-		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorArr[j+1]),
-		SetCVar(FP,UpgradeCP[2],SetTo,i),
-		SetCVar(FP,UpgradeMax[2],SetTo,10),
-		SetMemoryB(0x58D2B0+(46*i)+9,SetTo,0)})
-NIfEnd()
-NIfEnd()
-end
+	CIf(FP,PlayerCheck(i,1))
+		CIf(FP,{TTCVar(FP,CurPerAttack[i+1][2],NotSame,PerAttack[i+1])})
+			CIfX(FP,{TAccumulate(i,AtLeast,PerAttackCost[i+1],Ore)})
+				CMov(FP,PerAttack[i+1],CurPerAttack[i+1])
+				CDoActions(FP,{
+					TSetResources(i,Subtract,PerAttackCost[i+1],Ore),
+					SetCVar(FP,PerAttackCost[i+1][2],Add,PerAttackCostFactor),
+					TSetMemoryX(MarWepPtrArr[i+1],SetTo,_Mul(_Mul(PerAttack[i+1],PerAttackFactor),(256^MarWepMaskRetArr[i+1])),65535*(256^MarWepMaskRetArr[i+1])),
+					TSetMemoryX(MarWepPtrArr2[i+1],SetTo,_Mul(_Mul(PerAttack[i+1],PerAttackFactor),(256^MarWepMaskRetArr2[i+1])),65535*(256^MarWepMaskRetArr2[i+1]))
+				})
+				CIf(FP,LocalPlayerID(i))
+				ItoDec(FP,PerAttackCost[i+1],VArr(PerCostVA,0),2,0x1F,0)
+				_0DPatchforVArr(FP,PerCostVA,6)
+				f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
+				CIfEnd()
+				
+			CElseX()
+				CDoActions(FP,{TSetMemoryX(PUPtrArr[i+1],SetTo,_Mul(PerAttack[i+1],(256^PUMaskRetArr[i+1])),255*(256^PUMaskRetArr[i+1])),
+				SetCP(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCP(FP)})
+				CMov(FP,CurPerAttack[i+1],PerAttack[i+1])
+
+			CIfXEnd()
+		CIfEnd()
+	
+	CIfEnd()
+
+
+
+
+--NIf(FP,CDeaths(FP,Exactly,j,GMode))
+--NIf(FP,MemoryB(0x58D2B0+(46*i)+8,AtLeast,1))
+--CallTrigger(FP,OneClickUpgrade,{
+--		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
+--		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
+--		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorArr[j+1]),
+--		SetCVar(FP,UpgradeCP[2],SetTo,i),
+--		SetCVar(FP,UpgradeMax[2],SetTo,255),
+--		SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0)})
+--NIfEnd()
+--NIf(FP,MemoryB(0x58D2B0+(46*i)+9,AtLeast,1))
+--CallTrigger(FP,OneClickUpgrade,{
+--		SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
+--		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
+--		SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorArr[j+1]),
+--		SetCVar(FP,UpgradeCP[2],SetTo,i),
+--		SetCVar(FP,UpgradeMax[2],SetTo,10),
+--		SetMemoryB(0x58D2B0+(46*i)+9,SetTo,0)})
+--NIfEnd()
+--NIfEnd()
 end
 
 for j = 0, 4 do -- 소환
@@ -18164,11 +18283,11 @@ Trigger { -- 브금재생 j번 - 관전자
 end
 BGMOb(1,14 * 1000 ,"staredit\\wav\\intro1.ogg")
 BGMOb(3,36 * 1000 ,"staredit\\wav\\bgm2.ogg",1)
-BGMOb(2,45 * 1000 ,"staredit\\wav\\BYD_BGM1.ogg",2)
+BGMOb(2,48 * 1000 ,"staredit\\wav\\BYD_BGM1.ogg",2)
 BGMOb(2,39 * 1000 ,"staredit\\wav\\bgm1.ogg",1)
-BGMOb(3,53 * 1000 ,"staredit\\wav\\BYD_BGM2.ogg",2)
+BGMOb(3,48 * 1000 ,"staredit\\wav\\BYD_BGM2.ogg",2)
 BGMOb(4,70 * 1000 ,"staredit\\wav\\bgm1_l.ogg",1)
-BGMOb(4,86 * 1000 ,"staredit\\wav\\BYD_BGM1_l.ogg",2)
+BGMOb(4,115 * 1000 ,"staredit\\wav\\BYD_BGM1_l.ogg",2)
 BGMOb(5,185 * 1000 ,"staredit\\wav\\bgm_sp.ogg")
 BGMOb(6,45 * 1000 ,"staredit\\wav\\bgm3.ogg")
 BGMOb(7,74 * 1000 ,"staredit\\wav\\MBoss.ogg",1)
@@ -18219,12 +18338,12 @@ Trigger { -- 브금재생 j번
 end
 
 BGMPlayer(1,14 * 1000 ,"staredit\\wav\\intro1.ogg")
-BGMPlayer(2,39 * 1000 ,"staredit\\wav\\bgm1.ogg",1)
-BGMPlayer(2,45 * 1000 ,"staredit\\wav\\BYD_BGM1.ogg",2)
 BGMPlayer(3,36 * 1000 ,"staredit\\wav\\bgm2.ogg",1)
-BGMPlayer(3,53 * 1000 ,"staredit\\wav\\BYD_BGM2.ogg",2)
+BGMPlayer(2,48 * 1000 ,"staredit\\wav\\BYD_BGM1.ogg",2)
+BGMPlayer(2,39 * 1000 ,"staredit\\wav\\bgm1.ogg",1)
+BGMPlayer(3,48 * 1000 ,"staredit\\wav\\BYD_BGM2.ogg",2)
 BGMPlayer(4,70 * 1000 ,"staredit\\wav\\bgm1_l.ogg",1)
-BGMPlayer(4,86 * 1000 ,"staredit\\wav\\BYD_BGM1_l.ogg",2)
+BGMPlayer(4,115 * 1000 ,"staredit\\wav\\BYD_BGM1_l.ogg",2)
 BGMPlayer(5,185 * 1000 ,"staredit\\wav\\bgm_sp.ogg")
 BGMPlayer(6,45 * 1000 ,"staredit\\wav\\bgm3.ogg")
 BGMPlayer(7,74 * 1000 ,"staredit\\wav\\MBoss.ogg",1)
@@ -18287,7 +18406,7 @@ Trigger { -- 브금재생 인트로 BYD
 	},
 		actions = {
 		PlayWAV("staredit\\wav\\BYD_OP.ogg");
-		SetDeathsX(CurrentPlayer,SetTo,59*1000,440,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,SetTo,152*1000,440,0xFFFFFF);
 	},
 }
 CIfEnd()
@@ -18329,9 +18448,13 @@ Trigger { -- 브금재생 인트로 - 관전자
 }
 CIfEnd()
 --]]
+SETimer = CreateCcode()
+TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
+
 DoActionsP({KillUnit(84,Force2),KillUnit(47,P6)},P6)
 DoActionsPX({
-SetCDeaths(P6,Subtract,1,HealT),
+	SetCDeaths(P6,Subtract,1,HealT),
+	SetCDeaths(P6,Subtract,1,SETimer),
 SetCDeaths(P6,Subtract,1,LeaderBoardT),
 SetCDeaths(P6,Subtract,1,CanCT),
 SetCDeaths(P6,Subtract,1,CanWT),
@@ -18342,6 +18465,8 @@ SetCDeaths(P6,Subtract,1,TimerPenalty)
 --]]
 
 CIfOnce(P6,Always()) -- onPluginStart
+
+f_Read(FP,0x590300,"X",GunPtrMemory) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 f_GetStrXptr(P6,UnivStrPtr,UnivToString)
 f_GetStrXptr(P6,HTextStrPtr,HTextStr)
 for j=1, 5 do
@@ -18370,18 +18495,33 @@ Trigger {
 		}
 }
 end
+if RedMode == 1 then
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			},
+		actions = {
+			SetCVar(P6,RednumberSet[2],SetTo,400);
+			--SetCVar(P6,RednumberSet[2],SetTo,500);
+			SetCJump(0x510,0);
+			}
+	}
+else
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			},
+		actions = {
+			--SetCVar(P6,RednumberSet[2],SetTo,400);
+			SetCVar(P6,RednumberSet[2],SetTo,500);
+			SetCJump(0x510,0);
+			}
+	}
+end
 
-Trigger {
-	players = {P6},
-	conditions = {
-		Label(0);
-		},
-	actions = {
-		SetCVar(P6,RednumberSet[2],SetTo,400);
-		--SetCVar(P6,RednumberSet[2],SetTo,500);
-		SetCJump(0x510,0);
-		}
-}
+
 for i = 0, 4 do
 ItoName(P6,i,VArr(Names[i+1],0),ColorCode[i+1])
 
@@ -18402,11 +18542,25 @@ Install_CText1(ATKUp2StrPtr[i],Str14,Str17,Names[i])
 Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
 
 end
+f_GetTblptr(FP,LBATblPtr,1368)
+f_GetTblptr(FP,PerUpTblPtr,1370)
+
+
+
 f_MemCpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2]-3)
 --f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
 f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2]-3)
 --f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
 f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
+
+f_MemCpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
+
+ItoDec(FP,PerAttackCost[1],VArr(PerCostVA,0),2,0x1F,0)
+_0DPatchforVArr(FP,PerCostVA,6)
+
+f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
+f_MemCpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]+(5*4)),_TMem(Arr(PerAttackT2[3],0),"X","X",1),PerAttackT2[2])
+
 DoActionsX(FP,{
 SetCtrigX("X",MarListHeader[1][2],0x15C,0,SetTo,"X",0x200+((1-1)*0x100),0x15C,1,0),
 SetCtrigX("X",MarListHeader[2][2],0x15C,0,SetTo,"X",0x200+((2-1)*0x100),0x15C,1,0),
@@ -18419,7 +18573,6 @@ SetCtrigX("X",MarListHeader[5][2],0x15C,0,SetTo,"X",0x200+((5-1)*0x100),0x15C,1,
 					SetCVar(FP,BYDGunPlotSize[3][2],SetTo,ZergGunShape[3][1]),
 					SetCVar(FP,BYDGunPlotSize[4][2],SetTo,ZergGunShape[4][1])
 				})
-Install_AllObject()
 CIfEnd()
 
 
