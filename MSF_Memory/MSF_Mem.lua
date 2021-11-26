@@ -74,8 +74,8 @@ Ex1= {25,27,29,31,33}
 Ex2= {23,26,29,32,35}
 Ex2_1= {26,29,32,35,38}
 Ex3= {27,30,33,36,39}
-Ex4= {50,55,60,65,70}
-Ex5= {64,73,82,91,100}
+Ex4= {40,45,50,55,60}
+Ex5= {55,60,65,70,75}
 UpCostTable = {500000,300000,400000}
 
 AtkFactorArr = {30,15,20}
@@ -109,7 +109,7 @@ CreateTableSet({ -- 테이블 정의
 "PlayerMarineListHeader","PlayerMarCreateToken","MarListSkillLv","Marine","HMarine","LumMarine","Lumia","LumiaCT","ShieldT","PlayerScore","ATKExitText","ATKUpText1",
 "ATKUpText2","MarStrPtr","HMarStrPtr","LumMarStrPtr","LumiaStrPtr","LumiaCTStrPtr","ATKExtStrPtr","ShTStrPtr","ATKUp1StrPtr","ATKUp2StrPtr","PScoreSTrPtr",
 "BanCCode","Names","AtkUpgradePtrArr","AtkUpgradeMaskRetArr","initHDTable","initFTRTable","initBYDTable","PUMaskRetArr","PUPtrArr","MarWepMaskRetArr","MarWepPtrArr"
-,"LBAttackT","MarWepMaskRetArr2","MarWepPtrArr2"})
+,"LBAttackT","MarWepMaskRetArr2","MarWepPtrArr2","PAMaskRetArr","PAPtrArr"})
 
 for i = 0, 4 do
 	table.insert(MarHP,CreateVar(FP))
@@ -144,6 +144,8 @@ table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+7 - AtkUpgradeMaskRetArr[i+1])
 
 table.insert(PUMaskRetArr,(0x58D2B0+(i*46)+9)%4)
 table.insert(PUPtrArr,0x58D2B0+(i*46)+9 - PUMaskRetArr[i+1])
+table.insert(PAMaskRetArr,(0x58D2B0+(i*46)+6)%4)
+table.insert(PAPtrArr,0x58D2B0+(i*46)+6 - PAMaskRetArr[i+1])
 table.insert(MarWepMaskRetArr,(0x656EB0+(i*2)+(87*2))%4)
 table.insert(MarWepPtrArr,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr[i+1])
 table.insert(MarWepMaskRetArr2,(0x656EB0+(i*2)+(87*2))%4)
@@ -318,12 +320,19 @@ HDB_StT = CreateCText(FP,"\n\n\n\n\x13\x04―――――――――――――――――――
 
 CurPerAttack = CreateVarArr(5,FP)
 PerAttack = CreateVarArr(5,FP)
+CurPerArmor = CreateVarArr(5,FP)
+PerArmor = CreateVarArr(5,FP)
 PerAttackFactor = CreateVar(FP)
 
 PerAttackCost = {}
-PerAttackCostFactor = 10000
+PerAttackCostFactor = 5000
 for i = 1, 5 do
 	table.insert(PerAttackCost,CreateVar2(FP,nil,nil,30000))
+end
+PerArmorCost = {}
+PerArmorCostFactor = 10000
+for i = 1, 5 do
+	table.insert(PerArmorCost,CreateVar2(FP,nil,nil,10000))
 end
 
 for i = 1, 3 do
@@ -332,6 +341,8 @@ end
 
 PerAttackT1 = CreateCText(FP,"w\x02\x07『 \x1D퍼센트 \x04공격력 \x18업그레이드 \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 PerAttackT2 = CreateCText(FP," Ore \x1B단축키 \x18: \x03W\x07 』")
+PerArmorT1 = CreateCText(FP,"a\x02\x07『 \x1D퍼센트 \x1C방어력 \x18업그레이드 \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+PerArmorT2 = CreateCText(FP," Ore \x1B단축키 \x18: \x03A\x07 』")
 
 CreateHeroPointArr(77,55000,"\x1D【 F\x04enix \x1DZ 】","검사")
 CreateHeroPointArr(78,55000,"\x1D【 F\x04enix \x1DD 】","용기병")
@@ -374,7 +385,7 @@ CVariable(AllPlayers,0x1004)
 
 LBATblPtr = CreateVar(FP)
 PerUpTblPtr = CreateVar(FP)
-
+PerArmTblPtr = CreateVar(FP)
 	BYDBossMarHPPatch = {}
 	BYDBossMarHPRecover = {}
 	for i=0,4 do
@@ -3059,24 +3070,34 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemoryW(0x657678 + (0*2), SetTo, 14);
 	SetMemoryW(0x656EB0 + (1*2), SetTo, 1000);
 	SetMemoryW(0x657678 + (1*2), SetTo, 30);
-	SetMemoryW(0x657678 + (87*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (88*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (89*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (90*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (91*2), SetTo, 30); -- 비욘드 다인플 기본공격력 1.5만
-	SetCVar(FP,PerAttackFactor[2],SetTo,75),
+	SetMemoryW(0x657678 + (87*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (88*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (89*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (90*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (91*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
+	SetMemoryW(0x657678 + (123*2), SetTo, 40);
+	SetMemoryW(0x657678 + (124*2), SetTo, 40);
+	SetMemoryW(0x657678 + (125*2), SetTo, 40);
+	SetMemoryW(0x657678 + (126*2), SetTo, 40);
+	SetMemoryW(0x657678 + (127*2), SetTo, 40);
+	SetCVar(FP,PerAttackFactor[2],SetTo,100),
 })
 	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtMost,1);},{ -- 퓨어모드 선택시 1인 공격력조절
 	SetMemoryW(0x656EB0 + (0*2), SetTo, 300);
 	SetMemoryW(0x657678 + (0*2), SetTo, 21);
 	SetMemoryW(0x656EB0 + (1*2), SetTo, 1500);
 	SetMemoryW(0x657678 + (1*2), SetTo, 45);
-	SetMemoryW(0x657678 + (87*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (88*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (89*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (90*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (91*2), SetTo, 60); -- 비욘드 1인플 기본공격력 3만
-	SetCVar(FP,PerAttackFactor[2],SetTo,150),
+	SetMemoryW(0x657678 + (87*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (88*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (89*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (90*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (91*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
+	SetMemoryW(0x657678 + (123*2), SetTo, 80);
+	SetMemoryW(0x657678 + (124*2), SetTo, 80);
+	SetMemoryW(0x657678 + (125*2), SetTo, 80);
+	SetMemoryW(0x657678 + (126*2), SetTo, 80);
+	SetMemoryW(0x657678 + (127*2), SetTo, 80);
+	SetCVar(FP,PerAttackFactor[2],SetTo,200),
 })
 	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
@@ -3091,12 +3112,17 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
 		
-		SetMemoryW(0x657678 + (87*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (88*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (89*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (90*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (91*2), SetTo, 60); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetCVar(FP,PerAttackFactor[2],SetTo,150),
+		SetMemoryW(0x657678 + (87*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (88*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (89*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (90*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (91*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
+		SetMemoryW(0x657678 + (123*2), SetTo, 80);
+		SetMemoryW(0x657678 + (124*2), SetTo, 80);
+		SetMemoryW(0x657678 + (125*2), SetTo, 80);
+		SetMemoryW(0x657678 + (126*2), SetTo, 80);
+		SetMemoryW(0x657678 + (127*2), SetTo, 80);
+		SetCVar(FP,PerAttackFactor[2],SetTo,200),
 	})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(P6,SetPlayers[2],AtMost,1)},{
 		SetMemoryW(0x657678 + (87*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
@@ -3104,6 +3130,11 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryW(0x657678 + (89*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
 		SetMemoryW(0x657678 + (90*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
 		SetMemoryW(0x657678 + (91*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
+		SetMemoryW(0x657678 + (123*2), SetTo, 120);
+		SetMemoryW(0x657678 + (124*2), SetTo, 120);
+		SetMemoryW(0x657678 + (125*2), SetTo, 120);
+		SetMemoryW(0x657678 + (126*2), SetTo, 120);
+		SetMemoryW(0x657678 + (127*2), SetTo, 120);
 		SetCVar(FP,PerAttackFactor[2],SetTo,300)
 	})
 		
@@ -3865,7 +3896,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 		PlayWAV("staredit\\wav\\BYD_shieldunlock.ogg"),
 		PlayWAV("staredit\\wav\\BYD_shieldunlock.ogg"),
 		PlayWAV("staredit\\wav\\BYD_shieldunlock.ogg"),
-		SetMemory(0x6509B0,SetTo,FP)
+		SetMemory(0x6509B0,SetTo,FP),
 	})
 	
 		CIf(FP,PlayerCheck(i-1,1))
@@ -5074,8 +5105,12 @@ for i=0,4 do
 			CIfXEnd()
 			
 			CIfX(P6,CDeaths(P6,AtMost,0,EVMode))
-				CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))
+				CIfX(FP,BYD)
+					CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
 				CElseX()
+					CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))--비욘드아님
+				CIfXEnd()
+			CElseX()
 				CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)))
 			CIfXEnd()
 			
@@ -8998,7 +9033,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	
 	YY = 2021
 	MM = 11
-	DD = 20
+	DD = 28
 	HH = 00
 	end
 	function PushErrorMsg(Message)
@@ -17456,9 +17491,13 @@ for i=0, 4 do
 	TriggerX(FP,{NBYD},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{Preserved})
 	end
 	DoActionsX(FP,{SetCVar(FP,CurPerAttack[i+1][2],SetTo,0)})
+	DoActionsX(FP,{SetCVar(FP,CurPerArmor[i+1][2],SetTo,0)})
 	
 	for j = 0, 7 do
 		TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{Preserved})
+	end
+	for j = 0, 7 do
+		TriggerX(FP,{MemoryX(PAPtrArr[i+1],Exactly,2^(j+(8*PAMaskRetArr[i+1])),2^(j+(8*PAMaskRetArr[i+1])))},{SetCVar(FP,CurPerArmor[i+1][2],SetTo,2^j,2^j)},{Preserved})
 	end
 end
 
@@ -17497,11 +17536,14 @@ Trigger {
 	actions = {
 		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
 		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
+		SetMemoryB(0x58D088+(46*i)+6,SetTo,90);
+		SetMemoryB(0x58D2B0+(46*i)+6,SetTo,0);
 	}
 }
 end
 
 PerCostVA = CreateVArr(6,FP)
+PerCostVA2 = CreateVArr(6,FP)
 for i = 0, 4 do
 	CIf(FP,PlayerCheck(i,1))
 		CIf(FP,{TTCVar(FP,CurPerAttack[i+1][2],NotSame,PerAttack[i+1])})
@@ -17523,7 +17565,29 @@ for i = 0, 4 do
 				CDoActions(FP,{TSetMemoryX(PUPtrArr[i+1],SetTo,_Mul(PerAttack[i+1],(256^PUMaskRetArr[i+1])),255*(256^PUMaskRetArr[i+1])),
 				SetCP(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCP(FP)})
 				CMov(FP,CurPerAttack[i+1],PerAttack[i+1])
+			CIfXEnd()
+		CIfEnd()
+		
+		CIf(FP,{TTCVar(FP,CurPerArmor[i+1][2],NotSame,PerArmor[i+1])})
+			CIfX(FP,{TAccumulate(i,AtLeast,PerArmorCost[i+1],Ore)})
+				CMov(FP,PerArmor[i+1],CurPerArmor[i+1])
+				CDoActions(FP,{
+					TSetResources(i,Subtract,PerArmorCost[i+1],Ore),
+					SetCVar(FP,PerArmorCost[i+1][2],Add,PerArmorCostFactor),
+				})
+				CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
+				CMov(P6,0x515B88+(i*4),_Div(_Mul(_Sub(_Mov(100),PerArmor[i+1]),256),100))--비욘드임
+				CIf(FP,LocalPlayerID(i))
+				ItoDec(FP,PerArmorCost[i+1],VArr(PerCostVA2,0),2,0x1F,0)
+				_0DPatchforVArr(FP,PerCostVA2,6)
+				f_Movcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]),VArr(PerCostVA2,0),5*4)
+				CIfEnd()
+				
 
+			CElseX()
+				CDoActions(FP,{TSetMemoryX(PAPtrArr[i+1],SetTo,_Mul(PerArmor[i+1],(256^PAMaskRetArr[i+1])),255*(256^PAMaskRetArr[i+1])),
+				SetCP(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCP(FP)})
+				CMov(FP,CurPerArmor[i+1],PerArmor[i+1])
 			CIfXEnd()
 		CIfEnd()
 	
@@ -18543,6 +18607,7 @@ Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
 
 end
 f_GetTblptr(FP,LBATblPtr,1368)
+f_GetTblptr(FP,PerArmTblPtr,1369)
 f_GetTblptr(FP,PerUpTblPtr,1370)
 
 
@@ -18553,13 +18618,18 @@ f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),St
 --f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
 f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
 
-f_MemCpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
 
 ItoDec(FP,PerAttackCost[1],VArr(PerCostVA,0),2,0x1F,0)
 _0DPatchforVArr(FP,PerCostVA,6)
+ItoDec(FP,PerArmorCost[1],VArr(PerCostVA2,0),2,0x1F,0)
+_0DPatchforVArr(FP,PerCostVA2,6)
 
-f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
+f_MemCpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
 f_MemCpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]+(5*4)),_TMem(Arr(PerAttackT2[3],0),"X","X",1),PerAttackT2[2])
+f_Movcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]),VArr(PerCostVA,0),5*4)
+f_MemCpy(FP,PerArmTblPtr,_TMem(Arr(PerArmorT1[3],0),"X","X",1),PerArmorT1[2])
+f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
+f_MemCpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]+(5*4)),_TMem(Arr(PerArmorT2[3],0),"X","X",1),PerArmorT2[2])
 
 DoActionsX(FP,{
 SetCtrigX("X",MarListHeader[1][2],0x15C,0,SetTo,"X",0x200+((1-1)*0x100),0x15C,1,0),
