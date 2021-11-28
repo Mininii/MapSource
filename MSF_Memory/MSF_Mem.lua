@@ -159,14 +159,14 @@ CreateCCodeSet({ -- Ccode 데스값 정의
 "BGMOnOff","Test1","Test2","GiveRate","MarineHP","BGMType","IntroBGM","GameStart","IntroT","IntroT2","Difficulty","TestMode","TimerPenalty","TimerBonus","GameOver",
 "HealT","LeaderBoardT","RandomBGM","ShieldUnlock","Ready","IntroT3","GMode","TimerPenaltySolo","TimerisDEAD","CanCT","CanC","TTCon1","TTCon2","TTAct1","TTAct2","TTAct3","TTAct4","TTFTR",
 "XBackup","SkillT","Win","RecallT1","RecallT2","ArbT","GeneT","CoreAccept","CoreInbDis","BossBGM","BegginerT","EZCon","ShUsed","ShCool","Boss1Start","BunkerEnable","CoreCon1","CoreCon2",
-"HDStart","LimitX","LimitC","CanWT","Print13","B3_Av","B4_Av","B5_Av","DarkReGen","EVMode","BYDBossStart","BYDDiff","C1","C2","C3","C4","PaneltyP","BonusP","ColorT","ColorC","QueenAv",
+"HDStart","LimitX","LimitC","CanWT","Print13","B3_Av","B4_Av","B5_Av","DarkReGen","EVMode","BYDBossStart","BYDDiff","C1","C2","C3","C4","BonusP","ColorT","ColorC","QueenAv",
  "CJump_0x700","GModeTP","DifID","LastCan","ScorePrint","BYDBossP1","BYDAttackUpgrade","StoryT","ButtonSound","BYDBossStart2","MarineStackSystem","EffT","B7_Ph","WaveT","WaveC"
 ,"Theorist","PatternProvider"})
 CreateVariableSet({ -- 변수 정의
-"B6_C","ShP","RedNumberT","Panelty","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
+"B6_C","ShP","RedNumberT","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
 "B1_K","B2_K","B3_K","B3_K2","B4_K","B5_K","B2_X","B2_Y","B2_H","B2_P","B2_W","B2_HS","B2_SH","B4_P","B5_P","B5_A","B5_R","B5_X","B5_Y","B5_T","Dif","UIndex","UPtr","UEPD","UHP",
 "Dis_1","Dis_2","CunitID","CunitHP","B1_H","B3_H","B4_H","B5_H","BackupCp","CPosX","CPosY","CPos","RandMarRemove","DmgRemain","UnitId","AMount_256","P1MarDeaths",
-"Nextptrs","N_A1","N_A2","N_A3","N_A4","N_X","N_Y","L_X","L_Y","Sw1_On","Sw1_Off","B2_Pos","LXYPos","B2_LX","B2_LY","BonusTemp","PaneltyTemp2","B6_X","B6_Y","B6_R","B6_A",
+"Nextptrs","N_A1","N_A2","N_A3","N_A4","N_X","N_Y","L_X","L_Y","Sw1_On","Sw1_Off","B2_Pos","LXYPos","B2_LX","B2_LY","BonusTemp","B6_X","B6_Y","B6_R","B6_A",
 "B6_A2","B6_K","B6_H","B6_T2","B3_HV","B3_HV2","B6_W","B6_Dif","B6_Dif2","B6_Dif3","B6_UC","HDEnd","HDEnd2","B6_T3","B6_RT","B6_T4","Time2","B6_C2","B6_T5","BackupPosData","PosSavePtr",
 "WhileLaunch","SetPlayers","MaxHP","MaxHPP","UpgradeCP","UpgradeFactor","TempUpgradePtr","TempUpgradeMaskRet","UpgradeMax","UpResearched","UpCost","UpCompleted","AMount_V",
 "BYD_C1","BYD_CTemp","VBdIndex","RandMineW","BYDMineX","BYDMineY","BYDLogic","RednumberSet","NexDif","NexAngle","ClearRate","LairHiveShapeNum","ExchangeRate","ExchangeP",
@@ -179,6 +179,9 @@ if RedMode == 1 then
 else
 	RedNumber = CreateVar(FP)
 end
+PaneltyP = CreateCcodeArr(5)
+Panelty = CreateVarArr(5,FP)
+PaneltyTemp2 = CreateVarArr(5,FP)
 SELimit = CreateCcode()
 ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
 ExScoreP = {P1ScoreP,P2ScoreP,P3ScoreP,P4ScoreP,P5ScoreP}
@@ -326,12 +329,12 @@ PerArmor = CreateVarArr(5,FP)
 PerAttackFactor = CreateVar(FP)
 
 PerAttackCost = {}
-PerAttackCostFactor = 5000
+PerAttackCostFactor = 3500
 for i = 1, 5 do
 	table.insert(PerAttackCost,CreateVar2(FP,nil,nil,30000))
 end
 PerArmorCost = {}
-PerArmorCostFactor = 10000
+PerArmorCostFactor = 6500
 for i = 1, 5 do
 	table.insert(PerArmorCost,CreateVar2(FP,nil,nil,10000))
 end
@@ -459,6 +462,7 @@ function PerDamage(Amount)
 end
 
 GunPosSave_CallIndex = SetCallForward()
+ExcuteCP = CreateVar(FP)
 SetCall(FP)
 	DoActions(FP,MoveCp(Subtract,15*4))
 	SaveCp(FP,BackupPosData)
@@ -468,9 +472,25 @@ SetCall(FP)
 	NWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0),Deaths(EPDF(0x6509B0),AtMost,EPDF(MemoryPtr)+(MemoryPtrSize*50),0)},{SetMemory(0x6509B0,Add,MemoryPtrSize)})
 	NWhileEnd()
 	SaveCp(FP,PosSavePtr)
+	CMov(FP,ExcuteCP,0)
+	CIf(FP,{CVar(FP,VBdIndex[2],Exactly,0)})--0=lair 1=hive
+	ExcuteJump0 = def_sIndex()
+	for i = 0, 4 do
+		NJumpX(FP,ExcuteJump0,{Memory(0x5878A4+(132*48) + (i*4),AtLeast,1)},{SetMemory(0x5878A4+(132*48) + (i*4),SetTo,0),SetCVar(FP,ExcuteCP[2],SetTo,i+1)})
+	end
+	NJumpXEnd(FP,ExcuteJump0)
+	CIfEnd()
+	CIf(FP,{CVar(FP,VBdIndex[2],Exactly,1)})--0=lair 1=hive
+	ExcuteJump0 = def_sIndex()
+	for i = 0, 4 do
+		NJumpX(FP,ExcuteJump0,{Memory(0x5878A4+(133*48) + (i*4),AtLeast,1)},{SetMemory(0x5878A4+(133*48) + (i*4),SetTo,0),SetCVar(FP,ExcuteCP[2],SetTo,i+1)})
+	end
+	NJumpXEnd(FP,ExcuteJump0)
+	CIfEnd()
 	CDoActions(FP,{
 		TSetMemoryX(PosSavePtr,SetTo,_ReadF(BackupPosData,0xFFF0FFF),0xFFF0FFF),
 		TSetMemoryX(PosSavePtr,SetTo,_Mul(VBdIndex,_Mov(0x1000)),0xF000),
+		TSetMemoryX(PosSavePtr,SetTo,_Mul(ExcuteCP,_Mov(0x10000000)),0xF0000000),
 		TSetMemoryX(_Add(PosSavePtr,1),SetTo,_ReadF(BackupCp,0xFF0000),0xFF0000),
 		SetCVar(FP,WhileLaunch[2],Add,1)
 	})
@@ -3081,7 +3101,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemoryW(0x657678 + (125*2), SetTo, 20);
 	SetMemoryW(0x657678 + (126*2), SetTo, 20);
 	SetMemoryW(0x657678 + (127*2), SetTo, 20);
-	SetCVar(FP,PerAttackFactor[2],SetTo,200),
+	SetCVar(FP,PerAttackFactor[2],SetTo,100),
 })
 	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtMost,1);},{ -- 퓨어모드 선택시 1인 공격력조절
 	SetMemoryW(0x656EB0 + (0*2), SetTo, 300);
@@ -3098,7 +3118,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemoryW(0x657678 + (125*2), SetTo, 40);
 	SetMemoryW(0x657678 + (126*2), SetTo, 40);
 	SetMemoryW(0x657678 + (127*2), SetTo, 40);
-	SetCVar(FP,PerAttackFactor[2],SetTo,400),
+	SetCVar(FP,PerAttackFactor[2],SetTo,200),
 })
 	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
@@ -3110,7 +3130,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
 		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
 		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
-		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
+		SetMemoryB(0x656FB8+120, SetTo, 150); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
 		
 		SetMemoryW(0x657678 + (87*2), SetTo, 40);
@@ -3123,7 +3143,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryW(0x657678 + (125*2), SetTo, 40);
 		SetMemoryW(0x657678 + (126*2), SetTo, 40);
 		SetMemoryW(0x657678 + (127*2), SetTo, 40);
-		SetCVar(FP,PerAttackFactor[2],SetTo,400),
+		SetCVar(FP,PerAttackFactor[2],SetTo,200),
 	})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(P6,SetPlayers[2],AtMost,1)},{
 		SetMemoryW(0x657678 + (87*2), SetTo, 60);
@@ -3136,7 +3156,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryW(0x657678 + (125*2), SetTo, 60);
 		SetMemoryW(0x657678 + (126*2), SetTo, 60);
 		SetMemoryW(0x657678 + (127*2), SetTo, 60);
-		SetCVar(FP,PerAttackFactor[2],SetTo,600)
+		SetCVar(FP,PerAttackFactor[2],SetTo,400)
 	})
 		
 
@@ -4950,38 +4970,35 @@ CIf(P6,CVar(P6,B2_P[2],AtLeast,1))
 CIfEnd()
 
 
-
---
-
-CIf(P6,{CDeaths(P6,AtLeast,1,PaneltyP)})
-	
-	CMul(P6,PaneltyTemp2,_Add({FP,RedNumber[2],nil,"V"},400),_Ccode("X",PaneltyP))
-	CAdd(P6,Panelty,PaneltyTemp2)
+TPaneltyA = CreateCcode()
+for i = 0, 4 do
+	CIf(FP,{PlayerCheck(i,1),CDeaths(P6,AtLeast,1,PaneltyP[i+1])},{SetCDeaths(FP,Add,1,TPaneltyA)})
+	CMul(P6,PaneltyTemp2[i+1],_Add({FP,RedNumber[2],nil,"V"},400),_Ccode("X",PaneltyP[i+1]))
+	CAdd(P6,Panelty[i+1],PaneltyTemp2[i+1])
 	CIf(FP,{BYD})
-		CAdd(P6,RedNumberT,PaneltyTemp2)
+		CAdd(P6,RedNumberT,PaneltyTemp2[i+1])
 	CIfEnd()
-	f_Div(P6,PaneltyTemp,Panelty,_Mov(400))
+	f_Div(P6,PaneltyTemp,Panelty[i+1],_Mov(400))
+	
 	CIfX(P6,HD)
-		for i=0, 4 do
-			CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,20))
-		end
+		CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,20))
 		CAdd(P6,TPanelty,PaneltyTemp)
 	CElseIfX(FTR)
-		for i=0, 4 do
-			CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,50))
-		end
+		CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,50))
 		CAdd(P6,TPanelty,_Mul(PaneltyTemp,2))
 	CElseIfX(BYD)
-		for i=0, 4 do
-			CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,150))
-		end
+		CAdd(P6,0x57F120+i*4,_Mul(PaneltyTemp,_Mul(ExchangeRate,10)))
 		CAdd(P6,TPanelty,_Mul(PaneltyTemp,4))
 	CIfXEnd()
-	
 	CSub(P6,0x58D6F4,_Div(TPanelty,_Mov(3)))
 	f_Mod(P6,TPanelty,_Mov(3))
-	f_Mod(P6,Panelty,_Mov(400))
-	CMov(P6,_Ccode("X",PaneltyP),0)
+	f_Mod(P6,Panelty[i+1],_Mov(400))
+	CMov(P6,_Ccode("X",PaneltyP[i+1]),0)
+
+	CIfEnd()
+end
+
+CIf(P6,{CDeaths(P6,AtLeast,1,TPaneltyA)},SetCDeaths(FP,SetTo,0,TPaneltyA))
 	Trigger { -- 타이머 패널티 알림
 		players = {P6},
 		conditions = {
@@ -4995,7 +5012,7 @@ CIf(P6,{CDeaths(P6,AtLeast,1,PaneltyP)})
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x07ＣＡＵＴＩＯＮ",0),
 				DisplayTextX("\n",4),
-				DisplayTextX("\x13\x1B기억의 기둥\x04이 있던 자리에서 \x16기억의 기운\x04이 느껴집니다.\n\x13\x04그 자리를 지키지 않을 시 \x1F자원\x04과 \x1D시간\x04이 \x08소실\x04됩니다. 조심하십시오.",0),
+				DisplayTextX("\x13\x1B기억의 기둥\x04이 있던 자리에서 \x16기억의 기운\x04이 느껴집니다.\n\x13\x04그 자리를 지키지 않을 시 \x1D시간\x04이 \x08소실\x04됩니다. 조심하십시오.",0),
 				DisplayTextX("\n",4),
 				DisplayTextX("\x13\x07ＣＡＵＴＩＯＮ",0),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
@@ -5018,7 +5035,7 @@ CIf(P6,{CDeaths(P6,AtLeast,1,PaneltyP)})
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x07ＣＡＵＴＩＯＮ",0),
 				DisplayTextX("\n",4),
-				DisplayTextX("\x13\x1B기억의 기둥\x04이 있던 자리에서 \x16기억의 기운\x04이 느껴집니다.\n\x13\x04그 자리를 지키지 않을 시 \x1F자원\x04과 \x1D시간\x04이 \x08소실\x04됩니다. 조심하십시오.",0),
+				DisplayTextX("\x13\x1B기억의 기둥\x04이 있던 자리에서 \x16기억의 기운\x04이 느껴집니다.\n\x13\x04그 자리를 지키지 않을 시 \x1D시간\x04이 \x08소실\x04됩니다. 조심하십시오.",0),
 				DisplayTextX("\n",4),
 				DisplayTextX("\x13\x07ＣＡＵＴＩＯＮ",0),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
@@ -5161,42 +5178,37 @@ NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 				PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")
 			},HumanPlayers,FP);
 })--SafetyEscape
+ExcuteLaunch = CreateVar(FP)
+PosLoad = CreateVar(FP)
 	NIf(FP,DeathsX(CurrentPlayer,AtMost,1*0x1000,0,0xF000)) -- BdIndex LAIR HIVE
 		Call_SaveCp()
-		CMov(FP,CPosX,_Mov(_ReadF(BackupCp),0xFFF),nil,0xFFF)
-		CMov(FP,CPosY,_Div(_Mov(_ReadF(BackupCp),0xFFF0000),_Mov(65536)),nil,0xFFF)
+		f_Read(FP,BackupCp,PosLoad)
+		CMov(FP,CPosX,_Mov(PosLoad,0xFFF),nil,0xFFF)
+		CMov(FP,CPosY,_Div(_Mov(PosLoad,0xFFF0000),_Mov(65536)),nil,0xFFF)
+		CMov(FP,ExcuteLaunch,_Div(_Mov(PosLoad,0xF0000000),_Mov(0x10000000)),nil,0xF)
 		Simple_SetLocX(FP,23,_Sub(CPosX,32*9),_Sub(CPosY,32*9),_Add(CPosX,32*9),_Add(CPosY,32*9))
 		Call_LoadCp()
 		
-		Trigger { -- No comment (00F60EE3)
-			players = {FP},
-			conditions = {
-				Label(0);
-				CDeaths(P6, AtLeast, 2, Difficulty);
-				CVar(P6,SetPlayers[2],Exactly,1);
-				Bring(Force2, AtLeast, 6, "Men", 24);
-				Bring(Force1, AtMost, 2, "Factories", 24);
-			},
-			actions = {
-				SetCDeaths(P6,Add,1,PaneltyP);
-				SetCDeaths(P6,Add,1,PaneltyP);
-				PreserveTrigger();
-			},
-		}
-		Trigger { -- No comment (00F60EE3)
-			players = {FP},
-			conditions = {
-				Label(0);
-				CVar(P6,SetPlayers[2],AtLeast,2);
-				CDeaths(P6, AtLeast, 2, Difficulty);
-				Bring(Force2, AtLeast, 6, "Men", 24);
-				Bring(Force1, AtMost, 2, "Factories", 24);
-			},
-			actions = {
-				SetCDeaths(P6,Add,1,PaneltyP);
-				PreserveTrigger();
-			},
-		}
+		CIf(FP,{
+			CVar(P6,SetPlayers[2],Exactly,1);
+			CDeaths(P6, AtLeast, 2, Difficulty);
+			Bring(Force2, AtLeast, 6, "Men", 24);
+			Bring(Force1, AtMost, 2, "Factories", 24);
+		})
+		for i = 0, 4 do
+		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,2,PaneltyP[i+1])},{Preserved})
+		end
+		CIfEnd()
+		CIf(FP,{
+			CVar(P6,SetPlayers[2],AtLeast,2);
+			CDeaths(P6, AtLeast, 2, Difficulty);
+			Bring(Force2, AtLeast, 6, "Men", 24);
+			Bring(Force1, AtMost, 2, "Factories", 24);
+		})
+		for i = 0, 4 do
+		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,1,PaneltyP[i+1])},{Preserved})
+		end
+		CIfEnd()
 		Trigger { -- No comment (00F60EE3)
 			players = {FP},
 			conditions = {
@@ -9042,7 +9054,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	
 	YY = 2021
 	MM = 11
-	DD = 28
+	DD = 30
 	HH = 00
 	end
 	function PushErrorMsg(Message)
@@ -11423,7 +11435,11 @@ Trigger { -- No comment (00F60EE3)
 		Bring(Force1, AtMost, 5, "Factories", LocationID+1);
 	},
 	actions = {
-		SetCDeaths(P6,Add,1,PaneltyP);
+		SetCDeaths(P6,Add,1,PaneltyP[1]);
+		SetCDeaths(P6,Add,1,PaneltyP[2]);
+		SetCDeaths(P6,Add,1,PaneltyP[3]);
+		SetCDeaths(P6,Add,1,PaneltyP[4]);
+		SetCDeaths(P6,Add,1,PaneltyP[5]);
 		PreserveTrigger();
 	},
 }
@@ -11674,7 +11690,11 @@ Trigger { -- No comment (00F60EE3)
 		Bring(Force1, AtMost, 5, "Factories", LocationID+1);
 	},
 	actions = {
-		SetCDeaths(P6,Add,1,PaneltyP);
+		SetCDeaths(P6,Add,1,PaneltyP[1]);
+		SetCDeaths(P6,Add,1,PaneltyP[2]);
+		SetCDeaths(P6,Add,1,PaneltyP[3]);
+		SetCDeaths(P6,Add,1,PaneltyP[4]);
+		SetCDeaths(P6,Add,1,PaneltyP[5]);
 		PreserveTrigger();
 	},
 }
@@ -18642,7 +18662,7 @@ _0DPatchforVArr(FP,PerCostVA2,6)
 
 f_MemCpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
 f_MemCpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]+(5*4)),_TMem(Arr(PerAttackT2[3],0),"X","X",1),PerAttackT2[2])
-f_Movcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]),VArr(PerCostVA,0),5*4)
+f_Movcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]),VArr(PerCostVA2,0),5*4)
 f_MemCpy(FP,PerArmTblPtr,_TMem(Arr(PerArmorT1[3],0),"X","X",1),PerArmorT1[2])
 f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
 f_MemCpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]+(5*4)),_TMem(Arr(PerArmorT2[3],0),"X","X",1),PerArmorT2[2])
