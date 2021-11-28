@@ -148,8 +148,8 @@ table.insert(PAMaskRetArr,(0x58D2B0+(i*46)+6)%4)
 table.insert(PAPtrArr,0x58D2B0+(i*46)+6 - PAMaskRetArr[i+1])
 table.insert(MarWepMaskRetArr,(0x656EB0+(i*2)+(87*2))%4)
 table.insert(MarWepPtrArr,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr[i+1])
-table.insert(MarWepMaskRetArr2,(0x656EB0+(i*2)+(87*2))%4)
-table.insert(MarWepPtrArr2,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr2[i+1])
+table.insert(MarWepMaskRetArr2,(0x656EB0+(i*2)+(123*2))%4)
+table.insert(MarWepPtrArr2,0x656EB0+(i*2)+(123*2) - MarWepMaskRetArr2[i+1])
 
 end
 for i = 0, 3 do
@@ -317,7 +317,8 @@ BClearT4 = CreateCText(FP,"\n\n\n\x13\x04―――――――――――――――――――�
 BClearT3 = CreateCText(FP,"\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 \x11Ｄ\x04ｅｍｉｓｅ\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F３００，０００ Ｐｔｓ\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 HDB_StT = CreateCText(FP,"\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n\x13\x04\x07잠시 후, \x08ＦＩＮＡＬ　ＢＯＳＳ \x08【 \x11Ｆ\x04ａｔｅ \x08】 \x04와의 전투가 시작됩니다.\n\x13\x04\x08보스 전투\x04를 준비해주세요!\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――")
 
-
+PUPtr = CreateVarArr(5,FP)
+PAPtr = CreateVarArr(5,FP)
 CurPerAttack = CreateVarArr(5,FP)
 PerAttack = CreateVarArr(5,FP)
 CurPerArmor = CreateVarArr(5,FP)
@@ -3070,34 +3071,34 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemoryW(0x657678 + (0*2), SetTo, 14);
 	SetMemoryW(0x656EB0 + (1*2), SetTo, 1000);
 	SetMemoryW(0x657678 + (1*2), SetTo, 30);
-	SetMemoryW(0x657678 + (87*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (88*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (89*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (90*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (91*2), SetTo, 40); -- 비욘드 다인플 기본공격력 1.5만
-	SetMemoryW(0x657678 + (123*2), SetTo, 40);
-	SetMemoryW(0x657678 + (124*2), SetTo, 40);
-	SetMemoryW(0x657678 + (125*2), SetTo, 40);
-	SetMemoryW(0x657678 + (126*2), SetTo, 40);
-	SetMemoryW(0x657678 + (127*2), SetTo, 40);
-	SetCVar(FP,PerAttackFactor[2],SetTo,100),
+	SetMemoryW(0x657678 + (87*2), SetTo, 20);
+	SetMemoryW(0x657678 + (88*2), SetTo, 20);
+	SetMemoryW(0x657678 + (89*2), SetTo, 20);
+	SetMemoryW(0x657678 + (90*2), SetTo, 20);
+	SetMemoryW(0x657678 + (91*2), SetTo, 20);
+	SetMemoryW(0x657678 + (123*2), SetTo, 20);
+	SetMemoryW(0x657678 + (124*2), SetTo, 20);
+	SetMemoryW(0x657678 + (125*2), SetTo, 20);
+	SetMemoryW(0x657678 + (126*2), SetTo, 20);
+	SetMemoryW(0x657678 + (127*2), SetTo, 20);
+	SetCVar(FP,PerAttackFactor[2],SetTo,200),
 })
 	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtMost,1);},{ -- 퓨어모드 선택시 1인 공격력조절
 	SetMemoryW(0x656EB0 + (0*2), SetTo, 300);
 	SetMemoryW(0x657678 + (0*2), SetTo, 21);
 	SetMemoryW(0x656EB0 + (1*2), SetTo, 1500);
 	SetMemoryW(0x657678 + (1*2), SetTo, 45);
-	SetMemoryW(0x657678 + (87*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (88*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (89*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (90*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (91*2), SetTo, 80); -- 비욘드 1인플 기본공격력 3만
-	SetMemoryW(0x657678 + (123*2), SetTo, 80);
-	SetMemoryW(0x657678 + (124*2), SetTo, 80);
-	SetMemoryW(0x657678 + (125*2), SetTo, 80);
-	SetMemoryW(0x657678 + (126*2), SetTo, 80);
-	SetMemoryW(0x657678 + (127*2), SetTo, 80);
-	SetCVar(FP,PerAttackFactor[2],SetTo,200),
+	SetMemoryW(0x657678 + (87*2), SetTo, 40);
+	SetMemoryW(0x657678 + (88*2), SetTo, 40);
+	SetMemoryW(0x657678 + (89*2), SetTo, 40);
+	SetMemoryW(0x657678 + (90*2), SetTo, 40);
+	SetMemoryW(0x657678 + (91*2), SetTo, 40);
+	SetMemoryW(0x657678 + (123*2), SetTo, 40);
+	SetMemoryW(0x657678 + (124*2), SetTo, 40);
+	SetMemoryW(0x657678 + (125*2), SetTo, 40);
+	SetMemoryW(0x657678 + (126*2), SetTo, 40);
+	SetMemoryW(0x657678 + (127*2), SetTo, 40);
+	SetCVar(FP,PerAttackFactor[2],SetTo,400),
 })
 	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
@@ -3112,30 +3113,30 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemoryX(0x657034, SetTo, 150,0xFF); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
 		
-		SetMemoryW(0x657678 + (87*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (88*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (89*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (90*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (91*2), SetTo, 80); -- 비욘드 이론치 다인플 기본공격력 3만
-		SetMemoryW(0x657678 + (123*2), SetTo, 80);
-		SetMemoryW(0x657678 + (124*2), SetTo, 80);
-		SetMemoryW(0x657678 + (125*2), SetTo, 80);
-		SetMemoryW(0x657678 + (126*2), SetTo, 80);
-		SetMemoryW(0x657678 + (127*2), SetTo, 80);
-		SetCVar(FP,PerAttackFactor[2],SetTo,200),
+		SetMemoryW(0x657678 + (87*2), SetTo, 40);
+		SetMemoryW(0x657678 + (88*2), SetTo, 40);
+		SetMemoryW(0x657678 + (89*2), SetTo, 40);
+		SetMemoryW(0x657678 + (90*2), SetTo, 40);
+		SetMemoryW(0x657678 + (91*2), SetTo, 40);
+		SetMemoryW(0x657678 + (123*2), SetTo, 40);
+		SetMemoryW(0x657678 + (124*2), SetTo, 40);
+		SetMemoryW(0x657678 + (125*2), SetTo, 40);
+		SetMemoryW(0x657678 + (126*2), SetTo, 40);
+		SetMemoryW(0x657678 + (127*2), SetTo, 40);
+		SetCVar(FP,PerAttackFactor[2],SetTo,400),
 	})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(P6,SetPlayers[2],AtMost,1)},{
-		SetMemoryW(0x657678 + (87*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
-		SetMemoryW(0x657678 + (88*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
-		SetMemoryW(0x657678 + (89*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
-		SetMemoryW(0x657678 + (90*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
-		SetMemoryW(0x657678 + (91*2), SetTo, 120); -- 비욘드 이론치 1인플 기본공격력 6만
-		SetMemoryW(0x657678 + (123*2), SetTo, 120);
-		SetMemoryW(0x657678 + (124*2), SetTo, 120);
-		SetMemoryW(0x657678 + (125*2), SetTo, 120);
-		SetMemoryW(0x657678 + (126*2), SetTo, 120);
-		SetMemoryW(0x657678 + (127*2), SetTo, 120);
-		SetCVar(FP,PerAttackFactor[2],SetTo,300)
+		SetMemoryW(0x657678 + (87*2), SetTo, 60);
+		SetMemoryW(0x657678 + (88*2), SetTo, 60);
+		SetMemoryW(0x657678 + (89*2), SetTo, 60);
+		SetMemoryW(0x657678 + (90*2), SetTo, 60);
+		SetMemoryW(0x657678 + (91*2), SetTo, 60);
+		SetMemoryW(0x657678 + (123*2), SetTo, 60);
+		SetMemoryW(0x657678 + (124*2), SetTo, 60);
+		SetMemoryW(0x657678 + (125*2), SetTo, 60);
+		SetMemoryW(0x657678 + (126*2), SetTo, 60);
+		SetMemoryW(0x657678 + (127*2), SetTo, 60);
+		SetCVar(FP,PerAttackFactor[2],SetTo,600)
 	})
 		
 
@@ -3155,7 +3156,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemory(0x662350+(189*4), SetTo, 0);
 	SetMemory(0x662350+(147*4), SetTo, 0);
 	SetMemory(0x662350+(148*4), SetTo, 0);
-	SetMemory(0x515BA8,SetTo,128);---------크기 8 Fate 데미지반감
+	--SetMemory(0x515BA8,SetTo,128);---------크기 8 Fate 데미지반감
 	SetMemoryX(0x656554, SetTo, 2*16777216,0xFF000000);
 
 	})
@@ -6792,13 +6793,21 @@ CIf(P6,Switch("Switch 203",Set))
 			},
 			actions = {
 				SetMemoryX(0x6415D8,SetTo,(2^i)*65536,2^i*65536);
-				SetMemory(0x58F554,Subtract,(2^i));
+				SetMemory(0x58F554,Subtract,(2^i)*1);
 				PreserveTrigger();
 			}
 		}
 	end
-	
-	
+
+
+--	LineBak = CreateVar(FP)
+--	CMov(FP,LineBak,0)
+--	for i = 0, 3 do
+--		TriggerX(FP,{Memory(0x640B58,AtLeast,(2^i))},{SetMemory(0x640B58,Subtract,(2^i));SetCVar(FP,LineBak[2],Add,2^i)},{Preserved})
+--	end
+--	DoActions(FP,{SetMemory(0x640B58,SetTo,0),RotatePlayer({DisplayTextX("Test",4)},HumanPlayers,FP)})
+--	CMov(FP,0x640B58,LineBak)
+--	
 CIfEnd()
 CIf({P6},CDeaths(P6,AtLeast,1,GameOver)) -- 패배트리거
 	
@@ -17553,8 +17562,10 @@ for i = 0, 4 do
 					TSetResources(i,Subtract,PerAttackCost[i+1],Ore),
 					SetCVar(FP,PerAttackCost[i+1][2],Add,PerAttackCostFactor),
 					TSetMemoryX(MarWepPtrArr[i+1],SetTo,_Mul(_Mul(PerAttack[i+1],PerAttackFactor),(256^MarWepMaskRetArr[i+1])),65535*(256^MarWepMaskRetArr[i+1])),
-					TSetMemoryX(MarWepPtrArr2[i+1],SetTo,_Mul(_Mul(PerAttack[i+1],PerAttackFactor),(256^MarWepMaskRetArr2[i+1])),65535*(256^MarWepMaskRetArr2[i+1]))
+					TSetMemoryX(MarWepPtrArr2[i+1],SetTo,_Mul(_Mul(PerAttack[i+1],PerAttackFactor),(256^MarWepMaskRetArr2[i+1])),65535*(256^MarWepMaskRetArr2[i+1])),
+					TSetMemory(PUPtr[i+1],SetTo,_Add(_Add(PerAttack[i+1],PerAttack[i+1]),100))
 				})
+
 				CIf(FP,LocalPlayerID(i))
 				ItoDec(FP,PerAttackCost[i+1],VArr(PerCostVA,0),2,0x1F,0)
 				_0DPatchforVArr(FP,PerCostVA,6)
@@ -17574,6 +17585,7 @@ for i = 0, 4 do
 				CDoActions(FP,{
 					TSetResources(i,Subtract,PerArmorCost[i+1],Ore),
 					SetCVar(FP,PerArmorCost[i+1][2],Add,PerArmorCostFactor),
+					TSetMemory(PAPtr[i+1],SetTo,_Add(PerArmor[i+1],100))
 				})
 				CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
 				CMov(P6,0x515B88+(i*4),_Div(_Mul(_Sub(_Mov(100),PerArmor[i+1]),256),100))--비욘드임
@@ -18531,6 +18543,10 @@ SetCDeaths(P6,Subtract,1,TimerPenalty)
 CIfOnce(P6,Always()) -- onPluginStart
 
 f_Read(FP,0x590300,"X",GunPtrMemory) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+for i = 0, 4 do
+f_Read(FP,0x590304+(i*4),"X",PUPtr[i+1]) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+f_Read(FP,0x590304+(5*4)+(i*4),"X",PAPtr[i+1]) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+end
 f_GetStrXptr(P6,UnivStrPtr,UnivToString)
 f_GetStrXptr(P6,HTextStrPtr,HTextStr)
 for j=1, 5 do
