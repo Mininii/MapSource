@@ -32,4 +32,4 @@ def onPluginStart():
 
 		])
 def afterTriggerExec():
-	f_chatprintAll(10, "\x08P1 \x04: \x06",P1PU,"% \x1C",P1PA,"% \x0EP2 \x04: \x06",P2PU,"% \x1C",P2PA,"% ")
+	#f_chatprintAll(10, "\x08P1 \x04: \x06",P1PU,"% \x1C",P1PA,"% \x0EP2 \x04: \x06",P2PU,"% \x1C",P2PA,"% ")
