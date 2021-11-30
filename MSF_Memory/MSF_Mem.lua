@@ -1400,7 +1400,7 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 			}
 		}
 	CIfEnd()
-
+	ScanP = CreateVar(FP)
 	-- 다크보스스킬 스캔약화
 	CMov(FP,0x6509B0,19025+25)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+25 + (84*1699)))
@@ -1414,10 +1414,12 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 					CIf(P6,FTRBYD)
 						DoActions(P6,MoveCp(Subtract,59*4))
 						Call_SaveCp()
+						f_Read(FP,ScanP,_Add(BackupCp,15),nil,0xFF)
 						CMov(P6,CPos,_ReadF(BackupCp))
 						CMov(P6,CPosX,_Mov(CPos,0xFFFF))
 						CMov(P6,CPosY,_Div(_Mov(CPos,0xFFFF0000),_Mov(65536)))
 						Simple_SetLocX(P6,23,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,24,P6)})
+						CTrigger(FP,{BYD},{},{Preserved})
 						Points = 6
 						SizeofPolygon = 1
 						Radius = 256
