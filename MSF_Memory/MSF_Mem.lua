@@ -18,7 +18,7 @@ dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
 VerText = "\x04Ver. 3.4"
-Limit = 1
+Limit = 0
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
@@ -70,12 +70,12 @@ SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4}
 HumanPlayers = {0,1,2,3,4,P9,P10,P11,P12}
 MapPlayers = {0,1,2,3,4}
 ObPlayers = {P9,P10,P11,P12}
-Ex1= {25,27,29,31,33}
-Ex2= {23,26,29,32,35}
-Ex2_1= {26,29,32,35,38}
-Ex3= {27,30,33,36,39}
-Ex4= {40,45,50,55,60}
-Ex5= {55,60,65,70,75}
+Ex1= {25,27,29,31,33}--노말 일반모드
+Ex2= {23,26,29,32,35}--하드 일반모드
+Ex2_1= {30,35,40,45,50}--퓨어모드 환전률
+Ex3= {27,30,33,36,39} -- 퓨쳐 일반모드
+Ex4= {40,45,50,55,60} -- 비욘드
+Ex5= {55,60,65,70,75} -- 이론치
 UpCostTable = {500000,300000,400000}
 
 AtkFactorArr = {30,15,20}
@@ -439,9 +439,17 @@ function EnergyKill(Amount)
 end
 UHP = CreateVar(FP)
 PerDamage_CallIndex = SetCallForward()
+EPDPlayer = CreateVar(FP)
+PerArmorTemp = CreateVar(FP)
 SetCall(FP)
 	CMov(FP,AMount_256,Amount_V)
 	CMov(FP,UnitId,_ReadF(_Add(BackupCp,25),0xFF),nil,0xFF)
+	CMov(FP,EPDPlayer,_ReadF(_Add(BackupCp,19),0xFF),nil,0xFF)
+	for i = 0, 4 do
+		CIf(FP,{BYD,CVar(FP,EPDPlayer[2],Exactly,i)})
+		CMov(FP,PerArmorTemp,PerArmor[i+1])
+		CIfEnd()
+	end
 	f_Read(FP,_Add(UnitId,221179),UHP)
 	CIf(FP,CVar(FP,UHP[2],AtLeast,0x80000000))
 	CNeg(FP,UHP)
@@ -449,8 +457,8 @@ SetCall(FP)
 	CSub(FP,DmgRemain,AMount_256,_ReadF(_Add(BackupCp,24)))
 	CIfX(FP,{TDeaths(_Add(BackupCp,24),AtLeast,AMount_256,0)})
 		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),Subtract,AMount_256,0)})
-		CElseIfX({TDeaths(_Add(BackupCp,24),AtMost,AMount_256,0),TDeaths(_Add(BackupCp,2),AtLeast,_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),0)})
-		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),SetTo,0,0),TSetDeaths(_Add(BackupCp,2),Subtract,_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),0)})
+		CElseIfX({TDeaths(_Add(BackupCp,24),AtMost,AMount_256,0),TDeaths(_Add(BackupCp,2),AtLeast,_Mul(_Div(_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),100),_Sub(_Mov(100),PerArmorTemp)),0)})
+		CDoActions(FP,{TSetDeaths(_Add(BackupCp,24),SetTo,0,0),TSetDeaths(_Add(BackupCp,2),Subtract,_Mul(_Div(_Mul(_Div(DmgRemain,_Mov(256)),_Div(UHP,_Mov(1000))),100),_Sub(_Mov(100),PerArmorTemp)),0)})
 		CElseX()
 		CDoActions(FP,{TSetDeathsX(_Add(BackupCp,19),SetTo,0,0,0xFF00)
 		})
@@ -872,7 +880,7 @@ CIf(P6,Switch("Switch 203",Set))
 		f_EPD(FP,Cunit3,Cunit2)
 		SetRecoverCp(Cunit3)
 		RecoverCp(FP)
-		CIfX(FP,{CDeaths(FP,AtLeast,1,TestMode),Deaths(P1,AtLeast,1,203),Switch("Switch 200",Cleared)})
+		CIfX(FP,{CDeaths(FP,AtLeast,1,TestMode),Deaths(Force1,AtLeast,1,203),Switch("Switch 200",Cleared)})
 			DoActions(FP,MoveCp(Add,25*4))
 			Trigger {
 				players = {FP},
@@ -899,7 +907,7 @@ CIf(P6,Switch("Switch 203",Set))
 				}
 			}
 			DoActions(FP,{MoveCp(Subtract,25*4),SetSwitch("Switch 200",Set)})
-			CElseIfX(Deaths(P1,AtMost,0,203))
+			CElseIfX(Deaths(Force1,AtMost,0,203))
 			DoActions(FP,{SetSwitch("Switch 200",Clear)})
 		CIfXEnd()
 		DoActions(FP,MoveCp(Add,0x64))
@@ -1434,12 +1442,15 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 					CIf(P6,FTRBYD)
 						DoActions(P6,MoveCp(Subtract,59*4))
 						Call_SaveCp()
-						f_Read(FP,ScanP,_Add(BackupCp,15),nil,0xFF)
+						CMov(P6,ScanP,_ReadF(_Add(BackupCp,9)),nil,0xFF)
 						CMov(P6,CPos,_ReadF(BackupCp))
 						CMov(P6,CPosX,_Mov(CPos,0xFFFF))
 						CMov(P6,CPosY,_Div(_Mov(CPos,0xFFFF0000),_Mov(65536)))
 						Simple_SetLocX(P6,23,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,24,P6)})
-						CTrigger(FP,{BYD},{},{Preserved})
+						CIf(FP,{Memory(0x628438,AtLeast,1),BYD})
+						f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
+						CTrigger(FP,{},{TCreateUnit(1,214,24,ScanP),TSetDeathsX(_Add(Nextptrs,9),SetTo,255*65536,0,0xFF0000)},1)
+						CIfEnd()
 						Points = 6
 						SizeofPolygon = 1
 						Radius = 256
@@ -3191,8 +3202,27 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemory(0x58DC64 + 0x14*23,SetTo,0),
 		SetMemory(0x58DC6C + 0x14*23,SetTo,32),MoveLocation(24,102,P7,64),GiveUnits(1,102,P7,24,P12),RemoveUnit(102,P12),CreateUnit(1,60,24,P7)})
 	CWhileEnd()
+	EVPatchT = {}
+
+	for i = 0, 4 do
+		table.insert(EVPatchT,SetMemoryB(0x6566F8+(87+i), SetTo, 3)) -- 스플형
+		table.insert(EVPatchT,SetMemory(0x656CA8+(4*(i+87)), SetTo, 150)) -- 그래픽
+		table.insert(EVPatchT,SetMemoryW(0x656888+(2*(i+87)), SetTo, 2)) -- 안쪽
+		table.insert(EVPatchT,SetMemoryW(0x6570C8+(2*(i+87)), SetTo, 5)) -- 중앙
+		table.insert(EVPatchT,SetMemoryW(0x657780+(2*(i+87)), SetTo, 10)) -- 바깥
+		table.insert(EVPatchT,SetMemoryW(0x656EB0+(2*(i+87)), SetTo, 0))--루미마린 기본공격
+		table.insert(EVPatchT,SetMemoryW(0x657678+(2*(i+87)), SetTo, 60))--루미마린 증가량
+	end
+	table.insert(EVPatchT,SetMemoryX(0x660434, SetTo, 65536,0xFFFF0000)) -- SCV생산속도
+	table.insert(EVPatchT,SetMemoryX(0x656EB0, SetTo, 150,0xFFFF))--일마기본공격
+	table.insert(EVPatchT,SetMemoryX(0x657678, SetTo, 11,0xFFFF))--일마증가량
+	table.insert(EVPatchT,SetMemoryW(0x656EB0+(123*2), SetTo, 1000))--스킬유닛 기본공격
+	table.insert(EVPatchT,SetMemoryW(0x657678+(123*2), SetTo, 60))--스킬유닛 증가량
+	table.insert(EVPatchT,SetMemoryX(0x656EB0, SetTo, 150*65536,0xFFFF0000))--영마기본공격
+	table.insert(EVPatchT,SetMemoryX(0x657678, SetTo, 20*65536,0xFFFF0000))--영마증가량
 	
 	
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,EVMode)},EVPatchT)	
 	--]]
 	CTrigPatchTable = {}
 	for i = 0, 15 do
@@ -4971,7 +5001,7 @@ CIf(P6,CVar(P6,B2_P[2],AtLeast,1))
 	CunitCtrig_End()
 CIfEnd()
 
-
+TPaneltyP = CreateCcodeArr(5)
 TPaneltyA = CreateCcode()
 for i = 0, 4 do
 	CIf(FP,{PlayerCheck(i,1),CDeaths(P6,AtLeast,1,PaneltyP[i+1])},{SetCDeaths(FP,Add,1,TPaneltyA)})
@@ -4996,8 +5026,8 @@ for i = 0, 4 do
 	f_Mod(P6,TPanelty,_Mov(3))
 	f_Mod(P6,Panelty[i+1],_Mov(400))
 	CMov(P6,_Ccode("X",PaneltyP[i+1]),0)
-
-	CIfEnd()
+	TriggerX(FP,CDeaths(FP,AtMost,0,TPaneltyP[i+1]),{SetCDeaths(FP,SetTo,100,TPaneltyP[i+1]),SetCP(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText("\x07『 \x17뿌튀 \x08패널티\x04 작동! \x1F미네랄\x04이 차감됩니다. 건작 위치를 지켜주세요. \x07』",4),SetCP(FP)},{Preserved})
+	CIfEnd(SetCDeaths(FP,Subtract,1,TPaneltyP[i+1]))
 end
 
 CIf(P6,{CDeaths(P6,AtLeast,1,TPaneltyA)},SetCDeaths(FP,SetTo,0,TPaneltyA))
@@ -5167,6 +5197,7 @@ NJump(FP,0x702,Memory(0x6509B0,AtMost,EPDF(MemoryPtr)-1),{
 				PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")
 			},HumanPlayers,FP);
 })--SafetyEscape
+
 NIf(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 0
 	Call_SaveCp()
 	CAdd(FP,WhileLaunch,1)
@@ -5189,6 +5220,7 @@ PosLoad = CreateVar(FP)
 		CMov(FP,CPosY,_Div(_Mov(PosLoad,0xFFF0000),_Mov(65536)),nil,0xFFF)
 		CMov(FP,ExcuteLaunch,_Div(_Mov(PosLoad,0xF0000000),_Mov(0x10000000)),nil,0xF)
 		Simple_SetLocX(FP,23,_Sub(CPosX,32*9),_Sub(CPosY,32*9),_Add(CPosX,32*9),_Add(CPosY,32*9))
+		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
 		Call_LoadCp()
 		
 		CIf(FP,{
@@ -6884,42 +6916,6 @@ Trigger { -- 예약메딕
 			
 			},
 		}
-	
-	Trigger { -- 퓨어모드 선택시 2인이상 공격력조절
-		players = {P6},
-		conditions = {
-			Label(0);
-			CVar(P6,SetPlayers[2],AtLeast,2);
-		},
-		actions = {
-			
-			SetMemoryX(0x656EB0, SetTo, 200,0xFFFF);
-			SetMemoryX(0x657678, SetTo, 14,0xFFFF);
-			SetMemoryX(0x656EB0, SetTo, 1000*65536,0xFFFF0000);
-			SetMemoryX(0x657678, SetTo, 30*65536,0xFFFF0000);
-			SetMemoryX(0x656F98, SetTo, (3000)*65536,0xFFFF0000);
-			SetMemoryX(0x657760, SetTo, (130)*65536,0xFFFF0000);
-			},
-		}
-	
-	
-	Trigger { -- 퓨어모드 선택시 1인 공격력조절
-		players = {P6},
-		conditions = {
-			Label(0);
-			CVar(P6,SetPlayers[2],Exactly,1);
-		},
-		actions = {
-			
-			SetMemoryX(0x656EB0, SetTo, 300,0xFFFF);
-			SetMemoryX(0x657678, SetTo, 21,0xFFFF);
-			SetMemoryX(0x656EB0, SetTo, 1500*65536,0xFFFF0000);
-			SetMemoryX(0x657678, SetTo, 45*65536,0xFFFF0000);
-			SetMemoryX(0x656F98, SetTo, (4500)*65536,0xFFFF0000);
-			SetMemoryX(0x657760, SetTo, (65*3)*65536,0xFFFF0000);
-			},
-		}
-		
 	Trigger { -- 퓨어모드+퓨쳐 선택시
 		players = {P6},
 		conditions = {
@@ -6979,7 +6975,7 @@ Trigger { -- 예약메딕
 			players = {FP},
 			conditions = {
 				Label(0);
-				Deaths(P1,AtLeast,1,204);
+				Deaths(Force1,AtLeast,1,204);
 			},
 			actions = {
 				KillUnit("Men",P7);
@@ -7038,8 +7034,8 @@ Trigger { -- 예약메딕
 				CDeaths(FP,AtMost,0,BYDBossStart);
 			},
 			actions = {
-				ModifyUnitShields(All,"Men",Force1,"Anywhere",100);
-				ModifyUnitHitPoints(All,"Men",Force1,"Anywhere",100);
+				--ModifyUnitShields(All,"Men",Force1,"Anywhere",100);
+				--ModifyUnitHitPoints(All,"Men",Force1,"Anywhere",100);
 				PreserveTrigger();
 			},
 		}
@@ -8378,22 +8374,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			SetMemory(0x515BC8,SetTo,10240/3);
 			SetMemory(0x515BCC,SetTo,5120/3);
 			SetMemory(0x515BD0,SetTo,40960/3);
-			SetMemoryX(0x6616F8, SetTo, 16777216*119,0xFF000000);
-			SetMemoryX(0x6636D0, SetTo, 16777216*119,0xFF000000);
-			SetMemory(0x656E7C, SetTo, 150);
-			SetMemoryX(0x660434, SetTo, 65536,0xFFFF0000);
-			SetMemoryX(0x65676C, SetTo, 256*3,0xFF00);
-			SetMemoryX(0x656970, SetTo, 131072,0xFFFF0000);
-			SetMemoryX(0x6571B0, SetTo, 655360,0xFFFF0000);
-			SetMemoryX(0x657868, SetTo, 1310720,0xFFFF0000);
-			SetMemoryX(0x656F9C, SetTo, 7500*65536,0xFFFF0000);
-			SetMemoryX(0x657764, SetTo, 150*65536,0xFFFF0000);
-			SetMemoryX(0x656EB0, SetTo, 150,0xFFFF);
-			SetMemoryX(0x657678, SetTo, 11,0xFFFF);
-			SetMemoryX(0x656EB0, SetTo, 150*65536,0xFFFF0000);
-			SetMemoryX(0x657678, SetTo, 20*65536,0xFFFF0000);
-			SetMemoryX(0x656F98, SetTo, (750)*65536,0xFFFF0000);
-			SetMemoryX(0x657760, SetTo, (98)*65536,0xFFFF0000);
 	
 	},
 	}
@@ -8994,7 +8974,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		conditions = {
 			Label(0);
 			CDeaths(P6,AtLeast,1,LimitX);
-			Deaths(P1,AtLeast,1,199);
+			Deaths(Force1,AtLeast,1,199);
 			
 		},
 		actions = {
@@ -9999,7 +9979,7 @@ Trigger { -- =
 	players = {P6},
 		conditions = {
 			Label(0);
-			Command(Force1,AtMost,0,"Men");
+			Bring(Force1,AtMost,0,"Men",64);
 		
 	},
 	actions = {
@@ -10012,7 +9992,7 @@ Trigger { -- =
 	players = {P6},
 		conditions = {
 			Label(0);
-			Command(Force1,AtLeast,1,"Men");
+			Bring(Force1,AtLeast,1,"Men",64);
 		
 	},
 	actions = {
