@@ -240,6 +240,14 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 
 
 
+for i =0, 6 do
+	if i == 0 then 
+		CMov(FP,TotalAHP,0)
+	end
+	CIf(FP,PlayerCheck(i,1))
+		CAdd(FP,TotalAHP,AHP[i+1])
+	CIfEnd()
+end
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
 		if i ~= 0 then --강퇴트리거는 1플레이어 제외
@@ -712,13 +720,8 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 		
 
 
-
-		if i == 0 then 
-			CMov(FP,TotalAHP,0)
-		end
 		CIfX(FP,PlayerCheck(i,1)) -- FP가 관리하는 시스템 부분 트리거. 각플레이어가 있을경우 실행된다.
 
-		CAdd(FP,TotalAHP,AHP[i+1])
 
 		TriggerX(FP,{CVar(FP,AvailableStat[i+1][2],AtLeast,1)},{SetDeaths(i,SetTo,36,126)},{Preserved})
 			CMov(FP,0x5821D4 + (4*i),Supply[i+1]) -- 인구수 상시 업데이트(사용가능)

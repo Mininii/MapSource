@@ -508,8 +508,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 
 	T_YY = 2021
-	T_MM = 11
-	T_DD = 10
+	T_MM = 12
+	T_DD = 02
 	T_HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
