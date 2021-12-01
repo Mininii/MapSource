@@ -17,7 +17,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.4"
+VerText = "\x04Ver. 3.5"
 Limit = 0
 RedMode = 0
 FP = P6
@@ -17023,7 +17023,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 		CDeaths(P6,Exactly,0,GMode);
 		CDeaths(i,AtLeast,1,ShieldUnlock);
 		CDeaths(P6,AtMost,2,Difficulty);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
 		Memory(0x58F4B0+(4*i),AtMost,0);
 	},
 	actions = {
