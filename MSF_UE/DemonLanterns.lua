@@ -1,5 +1,5 @@
 function Install_DLBoss()
-	local SpeedBackupCcode = CreateCcode()
+	local SpeedBackupCcode = CreateCCode()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff

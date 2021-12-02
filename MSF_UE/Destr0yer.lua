@@ -65,9 +65,9 @@ local Lyrics = {
 
 	
 	local TShape = CXMakeShape(96,{0,0,0},{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1})
-	local WhileLaunch = CreateCcode()
+	local WhileLaunch = CreateCCode()
 	local BursterCall = CreateCCode()
-	local BlackBox =CreateCcode()
+	local BlackBox =CreateCCode()
 	local DTotalDmg = CreateVar(FP)
 	local TSize = CreateVar(FP)
 	local XAngle = CreateVar(FP)

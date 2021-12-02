@@ -69,8 +69,8 @@ function PlayerInterface()
 	local ShopSw = CreateCcodeArr(7)
 
 	
-	local BEff = CreateCcode()
-	local NsW = CreateCcode()
+	local BEff = CreateCCode()
+	local NsW = CreateCCode()
 	
 	
 	if TestStart == 1 then
@@ -85,7 +85,7 @@ function PlayerInterface()
 	end
 	local MultiCommand = CreateCcodeArr(7)
 	local MultiStimPack = CreateCcodeArr(7)
-	local TeamEnchant = CreateCcode()
+	local TeamEnchant = CreateCCode()
 	MarACMaskRetArr = {}
 	MarACPtrArr = {}
 	for i = 0, 6 do
@@ -109,8 +109,8 @@ function PlayerInterface()
 	InsertKey[1] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04이 맵은 클리어의 개념이 없으며 \n\x13\x08게임 오버 \x04시 \x1F달성한 단계\x04와 \x07스코어(가스)\x04가 게임의 성과를 나타냅니다.\n\x13\x04당신의 한계를 시험해 보세요!\n\x13\x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[2] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\x1CSCArchive \x04설명 (문의는 마공카를 찾아주세요.)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 이로운 효과를 얻을 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D1 Level \x04스테이지에서만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[3] = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04스탯포인트 증가량 공식은 시작난이도에 따라 달라집니다.\n\x13\x04\x0EＥａｓｙ\x04 = 증가량X \x0FＮｏｒｍａｌ\x04 = +5\n\x13\x04\x08Ｈａｒｄ\x04 = +10 \x10Ｉｎｓａｎｅ\x04 = +15\n\x13\x04위의 값에서 클리어한 스테이지의 수치가 합산되어 더해집니다.\n\x13\x04\n\x13\x04Ex) 8스테이지 클리어 + \x08Ｈａｒｄ\x04난이도 = 8 + 10 = +18 증가\n\x13\x04\n\x13\x04즉, 높은 난이도에서 시작할 수록 더 많은 스탯포인트를 얻을 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	local InsertPage = CreateCcode()
-	local KeyToggle = CreateCcode()
+	local InsertPage = CreateCCode()
+	local KeyToggle = CreateCCode()
 	for i = 0, 6 do
 		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{Preserved})
 	end
@@ -149,12 +149,12 @@ Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly
 	local TotalAHPVA = CreateVArray(FP,7)
 	local ArmorCostVA = CreateVArray(FP,7)
 	local LocalV_ArmorCost = CreateVar(FP)
-	local LocalCcode_Stim = CreateCcode()
-	local LocalCcode_Stim2 = CreateCcode()
-	local LocalCcode_Multi = CreateCcode()
-	local LocalCcode_AutoHeal = CreateCcode()
-	local LocalCcode_SkillUnit = CreateCcode()
-	local LocalCcode_Detector = CreateCcode()
+	local LocalCcode_Stim = CreateCCode()
+	local LocalCcode_Stim2 = CreateCCode()
+	local LocalCcode_Multi = CreateCCode()
+	local LocalCcode_AutoHeal = CreateCCode()
+	local LocalCcode_SkillUnit = CreateCCode()
+	local LocalCcode_Detector = CreateCCode()
 	local AmVA = CreateVArray(FP,7)
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,LocalCcode_Stim),SetCDeaths(FP,SetTo,0,LocalCcode_Multi),SetCDeaths(FP,SetTo,0,LocalCcode_SkillUnit)})
 		for i = 0, 6 do

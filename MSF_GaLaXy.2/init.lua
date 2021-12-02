@@ -463,7 +463,7 @@ function SetZergGroupFlags(UnitID)
 	LimitC = CreateCCode()
 	LimitX = CreateCCode()
 	TestMode = CreateCCode()
-	B_P = CreateCcode()
+	B_P = CreateCCode()
 	BanCode = CreateCCodeArr(5) -- 18~23
 	ModeT2 = CreateCCode()
 	ModeSel = CreateCCode()
