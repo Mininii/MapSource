@@ -17,18 +17,6 @@ function Install_CallTriggers()
 		f_Div(FP,CPosY,_Mov(0x10000))
 	SetCallEnd()
 
-	function f_CRandNum(Max,Operand,Condition)
-		if Operand == nil then Operand = 0 end
-		local RandRet = TempRandRet
-		CallTriggerX(FP,CRandNum,Condition,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
-		return RandRet
-	end
-	CRandNum = SetCallForward()
-	SetCall(FP)
-	f_Rand(FP,TempRandRet)
-	f_Mod(FP,TempRandRet,InputMaxRand)
-	CAdd(FP,TempRandRet,Oprnd)
-	SetCallEnd()
 
 
 	-- 저장된 유닛정보를 데이터 배열에서 불러온 후 재배치

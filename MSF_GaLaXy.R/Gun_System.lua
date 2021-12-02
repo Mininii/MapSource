@@ -19,14 +19,14 @@ function Gun_System()
     ]]
     CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
     DoActions(FP,MoveCp(Subtract,6*4))
-    Check_P8 = def_sIndex()
-    NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
+    Check_Force2 = def_sIndex()
+    NJump(FP,Check_Force2,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
     DoActions(FP,MoveCp(Add,6*4))
     --Install_DeathNotice()
 
     ClearCalc()
 
-    NJumpEnd(FP,Check_P8)
+    NJumpEnd(FP,Check_Force2)
     DoActions(FP,MoveCp(Add,6*4))
     CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
     f_SaveCp()

@@ -66,7 +66,23 @@ function Gun_SetLine(Line,Type,Value,Mask)
 	return TSetMemoryX(_Add(G_TempH,(Line*0x20)/4),Type,Value,Mask)
 end
 
-
+function Include_CRandNum(Player)
+	TempRandRet = CreateVar(Player)
+	Oprnd = CreateVar(Player)
+	InputMaxRand = CreateVar(Player)
+	function f_CRandNum(Max,Operand,Condition)
+		if Operand == nil then Operand = 0 end
+		local RandRet = TempRandRet
+		CallTriggerX(Player,CRandNum,Condition,{SetCVar(Player,InputMaxRand[2],SetTo,Max),SetCVar(Player,Oprnd[2],SetTo,Operand)})
+		return RandRet
+	end
+CRandNum = SetCallForward()
+SetCall(Player)
+f_Rand(Player,TempRandRet)
+f_Mod(Player,TempRandRet,InputMaxRand)
+CAdd(Player,TempRandRet,Oprnd)
+SetCallEnd()
+end
 function Gun_SetLineX(Line,Type,Value)
 	return TSetMemory(_Add(G_TempH,_Mul(Line,_Mov(0x20/4))),Type,Value)
 end
