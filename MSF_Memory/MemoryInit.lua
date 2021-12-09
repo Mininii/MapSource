@@ -46,11 +46,11 @@ function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePl
 		CIfOnce(Player,conditions)
 	end
 
-	f_MemCpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
+	f_Memcpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
 	DoActionsX(Player,{
 			RotatePlayer(A,RotatePlayers,Player),Y
 	})
-	f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+	f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 	CIfEnd()
 end
 

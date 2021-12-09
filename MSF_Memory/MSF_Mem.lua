@@ -17,11 +17,12 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.5"
-Limit = 0
+VerText = "\x04Ver. 3.6T"
+Limit = 1
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
+
 
 --Literally Unused Offset Alloc
 MemoryPtr = 0x593000
@@ -75,7 +76,7 @@ Ex2= {23,26,29,32,35}--하드 일반모드
 Ex2_1= {30,35,40,45,50}--퓨어모드 환전률
 Ex3= {27,30,33,36,39} -- 퓨쳐 일반모드
 Ex4= {40,45,50,55,60} -- 비욘드
-Ex5= {55,60,65,70,75} -- 이론치
+Ex5= {50,55,60,65,70} -- 이론치
 UpCostTable = {500000,300000,400000}
 
 AtkFactorArr = {30,15,20}
@@ -104,44 +105,46 @@ Trigger { -- No comment (6496767D)
 CJump(AllPlayers,0)
 
 
-CreateTableSet({ -- 테이블 정의
-"MarHP","ShieldP","PExitCheck","Player_S","Player_0x18","Player_0x4D","Player_0x58","Player_0x5C","Player_T","Player_C","MarCount","PlayerDeaths","PlayerMarineListArr",
-"PlayerMarineListHeader","PlayerMarCreateToken","MarListSkillLv","Marine","HMarine","LumMarine","Lumia","LumiaCT","ShieldT","PlayerScore","ATKExitText","ATKUpText1",
-"ATKUpText2","MarStrPtr","HMarStrPtr","LumMarStrPtr","LumiaStrPtr","LumiaCTStrPtr","ATKExtStrPtr","ShTStrPtr","ATKUp1StrPtr","ATKUp2StrPtr","PScoreSTrPtr",
-"BanCCode","Names","AtkUpgradePtrArr","AtkUpgradeMaskRetArr","initHDTable","initFTRTable","initBYDTable","PUMaskRetArr","PUPtrArr","MarWepMaskRetArr","MarWepPtrArr"
-,"LBAttackT","MarWepMaskRetArr2","MarWepPtrArr2","PAMaskRetArr","PAPtrArr"})
-
+MarHP = CreateVarArr(5,FP)
+ShieldP = CreateVarArr(5,FP)
+PExitCheck = CreateCcodeArr(5)
+Player_S = CreateVarArr(5,FP)
+Player_0x18 = CreateVarArr(5,FP)
+Player_0x4D = CreateVarArr(5,FP)
+Player_0x58 = CreateVarArr(5,FP)
+Player_0x5C = CreateVarArr(5,FP)
+Player_T = CreateVarArr(5,FP)
+Player_C = CreateVarArr(5,FP)
+MarCount = CreateVarArr(5,FP)
+PlayerDeaths = CreateVarArr(5,FP)
+PlayerMarineListArr = CreateArrArr(5,602,FP)
+MarListSkillLv = CreateVarArr(5,FP)
+MarStrPtr = CreateVarArr(5,FP)
+HMarStrPtr = CreateVarArr(5,FP)
+LumMarStrPtr = CreateVarArr(5,FP)
+LumiaStrPtr = CreateVarArr(5,FP)
+LumiaCTStrPtr = CreateVarArr(5,FP)
+ShTStrPtr = CreateVarArr(5,FP)
+ATKExtStrPtr = CreateVarArr(5,FP)
+ATKUp1StrPtr = CreateVarArr(5,FP)
+ATKUp2StrPtr = CreateVarArr(5,FP)
+PScoreSTrPtr = CreateVarArr(5,FP)
+Names = CreateVArrArr(5,7,P6)
+BanCCode = CreateCcodeArr(4)
+AtkUpgradeMaskRetArr = {}
+AtkUpgradePtrArr = {}
+PUMaskRetArr = {}
+PUPtrArr = {}
+PAMaskRetArr = {}
+PAPtrArr = {}
+MarWepMaskRetArr = {}
+MarWepPtrArr = {}
+MarWepMaskRetArr2 = {}
+MarWepPtrArr2 = {}
+PlayerScore = {}
 for i = 0, 4 do
-	table.insert(MarHP,CreateVar(FP))
-	table.insert(ShieldP,CreateVar(FP))
-	table.insert(PExitCheck,CreateCCode())
-	table.insert(Player_S,CreateVar(FP))
-	table.insert(Player_0x18,CreateVar(FP))
-	table.insert(Player_0x4D,CreateVar(FP))
-	table.insert(Player_0x58,CreateVar(FP))
-	table.insert(Player_0x5C,CreateVar(FP))
-	table.insert(Player_T,CreateVar(FP))
-	table.insert(Player_C,CreateVar(FP))
-	table.insert(MarCount,CreateVar(FP))
-	table.insert(PlayerDeaths,CreateVar(FP))
---  table.insert(PlayerMarineListHeader,CreateVar(FP))
-	table.insert(PlayerMarineListArr,CArray(FP,602))
-	table.insert(MarListSkillLv,CreateVar(FP))
-	table.insert(MarStrPtr,CreateVar(FP))
-	table.insert(HMarStrPtr,CreateVar(FP))
-	table.insert(LumMarStrPtr,CreateVar(FP))
-	table.insert(LumiaStrPtr,CreateVar(FP))
-	table.insert(LumiaCTStrPtr,CreateVar(FP))
-	table.insert(ShTStrPtr,CreateVar(FP))
-	table.insert(ATKExtStrPtr,CreateVar(FP))
-	table.insert(ATKUp1StrPtr,CreateVar(FP))
-	table.insert(ATKUp2StrPtr,CreateVar(FP))
-	table.insert(PScoreSTrPtr,CreateVar(FP))
-	Names[i+1] = CVArray(P6,7)
 table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+7)%4)
 table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+7 - AtkUpgradeMaskRetArr[i+1])
-
-
 table.insert(PUMaskRetArr,(0x58D2B0+(i*46)+9)%4)
 table.insert(PUPtrArr,0x58D2B0+(i*46)+9 - PUMaskRetArr[i+1])
 table.insert(PAMaskRetArr,(0x58D2B0+(i*46)+6)%4)
@@ -150,30 +153,263 @@ table.insert(MarWepMaskRetArr,(0x656EB0+(i*2)+(87*2))%4)
 table.insert(MarWepPtrArr,0x656EB0+(i*2)+(87*2) - MarWepMaskRetArr[i+1])
 table.insert(MarWepMaskRetArr2,(0x656EB0+(i*2)+(123*2))%4)
 table.insert(MarWepPtrArr2,0x656EB0+(i*2)+(123*2) - MarWepMaskRetArr2[i+1])
-
 end
-for i = 0, 3 do
-	table.insert(BanCCode,CreateCCode())
-end
-CreateCCodeSet({ -- Ccode 데스값 정의
-"BGMOnOff","Test1","Test2","GiveRate","MarineHP","BGMType","IntroBGM","GameStart","IntroT","IntroT2","Difficulty","TestMode","TimerPenalty","TimerBonus","GameOver",
-"HealT","LeaderBoardT","RandomBGM","ShieldUnlock","Ready","IntroT3","GMode","TimerPenaltySolo","TimerisDEAD","CanCT","CanC","TTCon1","TTCon2","TTAct1","TTAct2","TTAct3","TTAct4","TTFTR",
-"XBackup","SkillT","Win","RecallT1","RecallT2","ArbT","GeneT","CoreAccept","CoreInbDis","BossBGM","BegginerT","EZCon","ShUsed","ShCool","Boss1Start","BunkerEnable","CoreCon1","CoreCon2",
-"HDStart","LimitX","LimitC","CanWT","Print13","B3_Av","B4_Av","B5_Av","DarkReGen","EVMode","BYDBossStart","BYDDiff","C1","C2","C3","C4","BonusP","ColorT","ColorC","QueenAv",
- "CJump_0x700","GModeTP","DifID","LastCan","ScorePrint","BYDBossP1","BYDAttackUpgrade","StoryT","ButtonSound","BYDBossStart2","MarineStackSystem","EffT","B7_Ph","WaveT","WaveC"
-,"Theorist","PatternProvider"})
-CreateVariableSet({ -- 변수 정의
-"B6_C","ShP","RedNumberT","TPanelty","Bonus","PaneltyTemp","Dx","Dy","Dt","Dv","Du","Time1","Cunit2","Cunit3","Speed","count","Ov_E","Ov_X","Ov_Y",
-"B1_K","B2_K","B3_K","B3_K2","B4_K","B5_K","B2_X","B2_Y","B2_H","B2_P","B2_W","B2_HS","B2_SH","B4_P","B5_P","B5_A","B5_R","B5_X","B5_Y","B5_T","Dif","UIndex","UPtr","UEPD","UHP",
-"Dis_1","Dis_2","CunitID","CunitHP","B1_H","B3_H","B4_H","B5_H","BackupCp","CPosX","CPosY","CPos","RandMarRemove","DmgRemain","UnitId","AMount_256","P1MarDeaths",
-"Nextptrs","N_A1","N_A2","N_A3","N_A4","N_X","N_Y","L_X","L_Y","Sw1_On","Sw1_Off","B2_Pos","LXYPos","B2_LX","B2_LY","BonusTemp","B6_X","B6_Y","B6_R","B6_A",
-"B6_A2","B6_K","B6_H","B6_T2","B3_HV","B3_HV2","B6_W","B6_Dif","B6_Dif2","B6_Dif3","B6_UC","HDEnd","HDEnd2","B6_T3","B6_RT","B6_T4","Time2","B6_C2","B6_T5","BackupPosData","PosSavePtr",
-"WhileLaunch","SetPlayers","MaxHP","MaxHPP","UpgradeCP","UpgradeFactor","TempUpgradePtr","TempUpgradeMaskRet","UpgradeMax","UpResearched","UpCost","UpCompleted","AMount_V",
-"BYD_C1","BYD_CTemp","VBdIndex","RandMineW","BYDMineX","BYDMineY","BYDLogic","RednumberSet","NexDif","NexAngle","ClearRate","LairHiveShapeNum","ExchangeRate","ExchangeP",
-"P1Score","P2Score","P3Score","P4Score","P5Score","P1ScoreP","P3ScoreP","P2ScoreP","P5ScoreP","P4ScoreP","Ov_BYD_Index","Ov_BYD","ReadPosX","ReadPosY",
-"B7_H","IndexCheck","N_A","S_N_R","Locs","B6_D","B6_T","P6BGM","DifScoreBonusV","ModeScoreBonusV","ScoreBonusV","UPCompStrPtr","XY","SY","SZ","SW","ObPlotVar","UnivStrPtr","HTextStrPtr",
-"Height_V","Angle_V","CB_X","CB_Y","B6_5_M","B6_5_N","B6_5_A","B6_5_D","B6_5_T","RangeValue","ColorRandom","Nextptrs2","B6_DPase","B6_DPase2",
-"CurrentOP","GunPtrMemory"},FP)
+BGMOnOff = CreateCcode()
+Test1 = CreateCcode()
+Test2 = CreateCcode()
+GiveRate = CreateCcode()
+MarineHP = CreateCcode()
+BGMType = CreateCcode()
+IntroBGM = CreateCcode()
+GameStart = CreateCcode()
+IntroT = CreateCcode()
+IntroT2 = CreateCcode()
+Difficulty = CreateCcode()
+TestMode = CreateCcode()
+TimerPenalty = CreateCcode()
+TimerBonus = CreateCcode()
+GameOver = CreateCcode()
+HealT = CreateCcode()
+LeaderBoardT = CreateCcode()
+RandomBGM = CreateCcode()
+ShieldUnlock = CreateCcode()
+Ready = CreateCcode()
+IntroT3 = CreateCcode()
+GMode = CreateCcode()
+TimerPenaltySolo = CreateCcode()
+TimerisDEAD = CreateCcode()
+CanCT = CreateCcode()
+CanC = CreateCcode()
+TTCon1 = CreateCcode()
+TTCon2 = CreateCcode()
+TTAct1 = CreateCcode()
+TTAct2 = CreateCcode()
+TTAct3 = CreateCcode()
+TTAct4 = CreateCcode()
+TTFTR = CreateCcode()
+XBackup = CreateCcode()
+SkillT = CreateCcode()
+Win = CreateCcode()
+RecallT1 = CreateCcode()
+RecallT2 = CreateCcode()
+ArbT = CreateCcode()
+GeneT = CreateCcode()
+CoreAccept = CreateCcode()
+CoreInbDis = CreateCcode()
+BossBGM = CreateCcode()
+BegginerT = CreateCcode()
+EZCon = CreateCcode()
+ShUsed = CreateCcode()
+ShCool = CreateCcode()
+Boss1Start = CreateCcode()
+BunkerEnable = CreateCcode()
+CoreCon1 = CreateCcode()
+CoreCon2 = CreateCcode()
+HDStart = CreateCcode()
+LimitX = CreateCcode()
+LimitC = CreateCcode()
+CanWT = CreateCcode()
+Print13 = CreateCcode()
+B3_Av = CreateCcode()
+B4_Av = CreateCcode()
+B5_Av = CreateCcode()
+DarkReGen = CreateCcode()
+EVMode = CreateCcode()
+BYDBossStart = CreateCcode()
+BYDDiff = CreateCcode()
+C1 = CreateCcode()
+C2 = CreateCcode()
+C3 = CreateCcode()
+C4 = CreateCcode()
+BonusP = CreateCcode()
+ColorT = CreateCcode()
+ColorC = CreateCcode()
+QueenAv = CreateCcode()
+ CJump_0x700 = CreateCcode()
+GModeTP = CreateCcode()
+DifID = CreateCcode()
+LastCan = CreateCcode()
+ScorePrint = CreateCcode()
+BYDBossP1 = CreateCcode()
+BYDAttackUpgrade = CreateCcode()
+StoryT = CreateCcode()
+ButtonSound = CreateCcode()
+BYDBossStart2 = CreateCcode()
+MarineStackSystem = CreateCcode()
+EffT = CreateCcode()
+B7_Ph = CreateCcode()
+WaveT = CreateCcode()
+WaveC = CreateCcode()
+Theorist = CreateCcode()
+PatternProvider = CreateCcode()
+B6_C = CreateVar(FP)
+ShP = CreateVar(FP)
+RedNumberT = CreateVar(FP)
+TPanelty = CreateVar(FP)
+Bonus = CreateVar(FP)
+PaneltyTemp = CreateVar(FP)
+Dx = CreateVar(FP)
+Dy = CreateVar(FP)
+Dt = CreateVar(FP)
+Dv = CreateVar(FP)
+Du = CreateVar(FP)
+Time1 = CreateVar(FP)
+Cunit2 = CreateVar(FP)
+Cunit3 = CreateVar(FP)
+Speed = CreateVar(FP)
+count = CreateVar(FP)
+Ov_E = CreateVar(FP)
+Ov_X = CreateVar(FP)
+Ov_Y = CreateVar(FP)
+B1_K = CreateVar(FP)
+B2_K = CreateVar(FP)
+B3_K = CreateVar(FP)
+B3_K2 = CreateVar(FP)
+B4_K = CreateVar(FP)
+B5_K = CreateVar(FP)
+B2_X = CreateVar(FP)
+B2_Y = CreateVar(FP)
+B2_H = CreateVar(FP)
+B2_P = CreateVar(FP)
+B2_W = CreateVar(FP)
+B2_HS = CreateVar(FP)
+B2_SH = CreateVar(FP)
+B4_P = CreateVar(FP)
+B5_P = CreateVar(FP)
+B5_A = CreateVar(FP)
+B5_R = CreateVar(FP)
+B5_X = CreateVar(FP)
+B5_Y = CreateVar(FP)
+B5_T = CreateVar(FP)
+Dif = CreateVar(FP)
+UIndex = CreateVar(FP)
+UPtr = CreateVar(FP)
+UEPD = CreateVar(FP)
+UHP = CreateVar(FP)
+Dis_1 = CreateVar(FP)
+Dis_2 = CreateVar(FP)
+CunitID = CreateVar(FP)
+CunitHP = CreateVar(FP)
+B1_H = CreateVar(FP)
+B3_H = CreateVar(FP)
+B4_H = CreateVar(FP)
+B5_H = CreateVar(FP)
+BackupCp = CreateVar(FP)
+CPosX = CreateVar(FP)
+CPosY = CreateVar(FP)
+CPos = CreateVar(FP)
+RandMarRemove = CreateVar(FP)
+DmgRemain = CreateVar(FP)
+UnitId = CreateVar(FP)
+AMount_256 = CreateVar(FP)
+P1MarDeaths = CreateVar(FP)
+Nextptrs = CreateVar(FP)
+N_A1 = CreateVar(FP)
+N_A2 = CreateVar(FP)
+N_A3 = CreateVar(FP)
+N_A4 = CreateVar(FP)
+N_X = CreateVar(FP)
+N_Y = CreateVar(FP)
+L_X = CreateVar(FP)
+L_Y = CreateVar(FP)
+Sw1_On = CreateVar(FP)
+Sw1_Off = CreateVar(FP)
+B2_Pos = CreateVar(FP)
+LXYPos = CreateVar(FP)
+B2_LX = CreateVar(FP)
+B2_LY = CreateVar(FP)
+BonusTemp = CreateVar(FP)
+B6_X = CreateVar(FP)
+B6_Y = CreateVar(FP)
+B6_R = CreateVar(FP)
+B6_A = CreateVar(FP)
+B6_A2 = CreateVar(FP)
+B6_K = CreateVar(FP)
+B6_H = CreateVar(FP)
+B6_T2 = CreateVar(FP)
+B3_HV = CreateVar(FP)
+B3_HV2 = CreateVar(FP)
+B6_W = CreateVar(FP)
+B6_Dif = CreateVar(FP)
+B6_Dif2 = CreateVar(FP)
+B6_Dif3 = CreateVar(FP)
+B6_UC = CreateVar(FP)
+HDEnd = CreateVar(FP)
+HDEnd2 = CreateVar(FP)
+B6_T3 = CreateVar(FP)
+B6_RT = CreateVar(FP)
+B6_T4 = CreateVar(FP)
+Time2 = CreateVar(FP)
+B6_C2 = CreateVar(FP)
+B6_T5 = CreateVar(FP)
+BackupPosData = CreateVar(FP)
+PosSavePtr = CreateVar(FP)
+WhileLaunch = CreateVar(FP)
+SetPlayers = CreateVar(FP)
+MaxHP = CreateVar(FP)
+MaxHPP = CreateVar(FP)
+UpgradeCP = CreateVar(FP)
+UpgradeFactor = CreateVar(FP)
+TempUpgradePtr = CreateVar(FP)
+TempUpgradeMaskRet = CreateVar(FP)
+UpgradeMax = CreateVar(FP)
+UpResearched = CreateVar(FP)
+UpCost = CreateVar(FP)
+UpCompleted = CreateVar(FP)
+Amount_V = CreateVar(FP)
+BYD_C1 = CreateVar(FP)
+BYD_CTemp = CreateVar(FP)
+VBdIndex = CreateVar(FP)
+RandMineW = CreateVar(FP)
+BYDMineX = CreateVar(FP)
+BYDMineY = CreateVar(FP)
+BYDLogic = CreateVar(FP)
+RednumberSet = CreateVar(FP)
+NexDif = CreateVar(FP)
+NexAngle = CreateVar(FP)
+ClearRate = CreateVar(FP)
+LairHiveShapeNum = CreateVar(FP)
+ExchangeRate = CreateVar(FP)
+ExchangeP = CreateVar(FP)
+Ov_BYD_Index = CreateVar(FP)
+Ov_BYD = CreateVar(FP)
+ReadPosX = CreateVar(FP)
+ReadPosY = CreateVar(FP)
+B7_H = CreateVar(FP)
+IndexCheck = CreateVar(FP)
+N_A = CreateVar(FP)
+S_N_R = CreateVar(FP)
+Locs = CreateVar(FP)
+B6_D = CreateVar(FP)
+B6_T = CreateVar(FP)
+P6BGM = CreateVar(FP)
+DifScoreBonusV = CreateVar(FP)
+ModeScoreBonusV = CreateVar(FP)
+ScoreBonusV = CreateVar(FP)
+UPCompStrPtr = CreateVar(FP)
+XY = CreateVar(FP)
+SY = CreateVar(FP)
+SZ = CreateVar(FP)
+SW = CreateVar(FP)
+ObPlotVar = CreateVar(FP)
+UnivStrPtr = CreateVar(FP)
+HTextStrPtr = CreateVar(FP)
+Height_V = CreateVar(FP)
+Angle_V = CreateVar(FP)
+CB_X = CreateVar(FP)
+CB_Y = CreateVar(FP)
+B6_5_M = CreateVar(FP)
+B6_5_N = CreateVar(FP)
+B6_5_A = CreateVar(FP)
+B6_5_D = CreateVar(FP)
+B6_5_T = CreateVar(FP)
+RangeValue = CreateVar(FP)
+ColorRandom = CreateVar(FP)
+Nextptrs2 = CreateVar(FP)
+B6_DPase = CreateVar(FP)
+B6_DPase2 = CreateVar(FP)
+CurrentOP = CreateVar(FP)
+GunPtrMemory = CreateVar(FP)
 if RedMode == 1 then
 	RedNumber = CreateVar2(FP,nil,nil,400)
 else
@@ -182,17 +418,12 @@ end
 PaneltyP = CreateCcodeArr(5)
 Panelty = CreateVarArr(5,FP)
 PaneltyTemp2 = CreateVarArr(5,FP)
-SELimit = CreateCCode()
-ExScore = {P1Score,P2Score,P3Score,P4Score,P5Score}
-ExScoreP = {P1ScoreP,P2ScoreP,P3ScoreP,P4ScoreP,P5ScoreP}
+SELimit = CreateCcode()
+ExScore = CreateVarArr(5,FP)
+ExScoreP = CreateVarArr(5,FP)
 UpCompTxt = CVArray(P6,5)
 UpCompRet = CVArray(P6,5)
-P1ScoreVA = CVArray(P6,13)
-P2ScoreVA = CVArray(P6,13)
-P3ScoreVA = CVArray(P6,13)
-P4ScoreVA = CVArray(P6,13)
-P5ScoreVA = CVArray(P6,13)
-ExScoreVA = {P1ScoreVA,P2ScoreVA,P3ScoreVA,P4ScoreVA,P5ScoreVA}
+ExScoreVA = CreateVArrArr(5,13,P6)
 B3_HT = CVArray(P6,4)
 B3_HT2 = CVArray(P6,4)
 MarIDV = CVArray(P6,5)
@@ -218,11 +449,11 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 	for i = 1, #HeroPointArr do
 		local index = HeroPointArr[i][3]
 		local Point = HeroPointArr[i][4]
-		CIf(P6,Deaths(CurrentPlayer,Exactly,index,0,0xFF))
+		CIf(P6,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
 			DoActions(P6,MoveCp(Subtract,6*4))
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,6,0,0xFF))
 				Call_SaveCp()
-				f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HeroPointArr[i][1][3],0),"X","X",1),HeroPointArr[i][1][2])
+				f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HeroPointArr[i][1][3],0),"X","X",1),HeroPointArr[i][1][2])
 				Trigger {
 					players = {P6},
 					conditions = {
@@ -231,22 +462,23 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 					actions = {
 						SetScore(Force1,Add,Point,Kills);
 						RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-						SetCVar(FP,P1Score[2],Add,-(Point/1000));
-						SetCVar(FP,P2Score[2],Add,-(Point/1000));
-						SetCVar(FP,P3Score[2],Add,-(Point/1000));
-						SetCVar(FP,P4Score[2],Add,-(Point/1000));
-						SetCVar(FP,P5Score[2],Add,-(Point/1000));
+						SetCVar(FP,ExScore[1][2],Add,-(Point/1000));
+						SetCVar(FP,ExScore[2][2],Add,-(Point/1000));
+						SetCVar(FP,ExScore[3][2],Add,-(Point/1000));
+						SetCVar(FP,ExScore[4][2],Add,-(Point/1000));
+						SetCVar(FP,ExScore[5][2],Add,-(Point/1000));
 						PreserveTrigger();
 					},
 				}
 				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-				f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+
+				f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
 			CIfEnd()
 			DoActions(P6,MoveCp(Subtract,10*4))
 			CIf(FP,{Deaths(P6,AtLeast,1,173),DeathsX(CurrentPlayer, AtLeast,1*65536,0,0xFF0000)})
 				Call_SaveCp()
-					f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HeroPointArr[i][2][3],0),"X","X",1),HeroPointArr[i][2][2]-3)
+					f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HeroPointArr[i][2][3],0),"X","X",1),HeroPointArr[i][2][2]-3)
 				Call_LoadCp()
 				Trigger {
 					players = {P6},
@@ -260,7 +492,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 					},
 				}
 				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-				f_MemCpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
 			CIfEnd()
 			DoActions(P6,MoveCp(Add,16*4))
@@ -271,9 +503,9 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 end
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
-	f_MemCpy(P6,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
-	f_MovCpy(P6,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
-	f_MemCpy(P6,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+	f_Memcpy(P6,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
+	f_Movcpy(P6,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
+	f_Memcpy(P6,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
 HTextStrReset = CreateCText(FP,string.rep("\x0D",150))
@@ -329,16 +561,16 @@ PerArmor = CreateVarArr(5,FP)
 PerAttackFactor = CreateVar(FP)
 
 PerAttackCost = {}
-PerAttackCostFactor = 3500
+PerAttackCostFactor = 3000
 for i = 1, 5 do
-	table.insert(PerAttackCost,CreateVar2(FP,nil,nil,30000))
+	table.insert(PerAttackCost,CreateVar2(FP,nil,nil,10000))
 end
 PerArmorCost = {}
-PerArmorCostFactor = 6500
+PerArmorCostFactor = 12000
 for i = 1, 5 do
-	table.insert(PerArmorCost,CreateVar2(FP,nil,nil,10000))
+	table.insert(PerArmorCost,CreateVar2(FP,nil,nil,30000))
 end
-
+LBAttackT = {}
 for i = 1, 3 do
 	LBAttackT[i] = CreateCText(FP,"w\x02\x07『 \x04공격력 \x11한계돌파\x04(100→250) \x18업그레이드 \x1F"..UpCostTable[i].." Ore \x1B단축키 \x18: \x03W\x07 』")
 end
@@ -791,7 +1023,7 @@ CIf(P6,Switch("Switch 203",Set))
 		CAdd(P6,Time2,Dt)
 		CAdd(P6,RedNumberT,Dt)
 
-		CAdd(P6,_CCode("X",WaveT),Dt)
+		CAdd(P6,_Ccode("X",WaveT),Dt)
 
 		
 		
@@ -1233,7 +1465,7 @@ CIfX(P6,{CVar(FP,B1_H[2],AtLeast,1)})
 		CIfX(P6,{CVar(FP,B1_K[2],AtLeast,4000001)})
 			CDoActions(P6,{TSetMemory(B1_H,Add,4000000*256),SetDeaths(P10,Add,1,0x91),SetCVar(FP,B1_K[2],Subtract,4000000)})
 			CElseIfX({CVar(FP,B1_K[2],AtMost,4000000)})
-			CDoActions(P6,{TSetMemory(B1_H,Add,_Mul(B1_K,256),SetDeaths(P10,Add,2,0x91))})
+			CDoActions(P6,{TSetMemory(B1_H,Add,_Mul(B1_K,256)),SetDeaths(P10,Add,2,0x91)})
 			CMov(P6,B1_K,0)
 		CIfXEnd()
 	CIfEnd()
@@ -1246,13 +1478,13 @@ CIfXEnd()
 CIf(P6,CVar(P6,Dis_1[2],AtLeast,1))
 	CTrigger(P6,{TMemory(Dis_1,AtMost,8000000*256)},{TSetMemory(Dis_1,Add,70000*256)},1)
 	CTrigger(P6,{TMemory(Dis_1,AtMost,1000000*256)},{SetCVar(FP,Dis_1[2],SetTo,0),RemoveUnit(190,P7)},1)
-	CTrigger(P6,{TMemory(_Add(Dis_1,17),Exactly,0*256,0xFF00)},{SetCVar(FP,Dis_1[2],SetTo,0)},1)
+	CTrigger(P6,{TMemoryX(_Add(Dis_1,17),Exactly,0*256,0xFF00)},{SetCVar(FP,Dis_1[2],SetTo,0)},1)
 CIfEnd()
 
 CIf(P6,CVar(P6,Dis_2[2],AtLeast,1))
 	CTrigger(P6,{TMemory(Dis_2,AtMost,8000000*256)},{TSetMemory(Dis_2,Add,70000*256)},1)
 	CTrigger(P6,{TMemory(Dis_2,AtMost,1000000*256)},{SetCVar(FP,Dis_2[2],SetTo,0),RemoveUnit(190,P8)},1)
-	CTrigger(P6,{TMemory(_Add(Dis_2,17),Exactly,0*256,0xFF00)},{SetCVar(FP,Dis_2[2],SetTo,0)},1)
+	CTrigger(P6,{TMemoryX(_Add(Dis_2,17),Exactly,0*256,0xFF00)},{SetCVar(FP,Dis_2[2],SetTo,0)},1)
 CIfEnd()
 
 B2_P2 = CreateVar(FP)
@@ -1268,10 +1500,10 @@ CIfX(P6,{CVar(FP,B2_H[2],AtLeast,1)})
 					f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 					CIfX(FP,NBYD)
 						CAdd(P6,B2_HS,_Mod(_Rand(),4000),300)
-					CelseIfX(BYD)
+					CElseIfX(BYD)
 						CIfX(FP,CVar(FP,B2_P2[2],Exactly,0))
 							CAdd(P6,B2_HS,_Mod(_Rand(),1000),0)
-						CelseIfX(CVar(FP,B2_P2[2],Exactly,1))
+						CElseIfX(CVar(FP,B2_P2[2],Exactly,1))
 							CAdd(P6,B2_HS,_Mod(_Rand(),4000),2000)
 						CIfXEnd()
 					CIfXEnd()
@@ -1368,7 +1600,7 @@ CIfX(P6,{CVar(FP,B2_H[2],AtLeast,1)})
 		},
 		}
 	CIfEnd()
-	CElseifX(CDeaths(P6,AtMost,0,HDStart))
+	CElseIfX(CDeaths(P6,AtMost,0,HDStart))
 	DoActions(P6,KillUnit(180,AllPlayers))
 CIfXEnd()
 
@@ -1434,7 +1666,7 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+25 + (84*1699)))
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,214,0,0xFF))
 			DoActions(P6,{MoveCp(Subtract,23*4),SetDeaths(CurrentPlayer,Subtract,1*256,0)})
-			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{MoveCp(Add,17*4),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00),MoveCp(Subtract,17*4)},{Preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{MoveCp(Add,23*4),SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF),MoveCp(Subtract,23*4)},{Preserved})
 			DoActions(P6,{MoveCp(Add,23*4)})
 		CIfEnd()
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,33,0,0xFF))
@@ -1476,7 +1708,7 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
 CElseX()
-DoActions(FP,RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 6"),RemoveUnit(214,AllPlayers),RemoveUnit(214,8),RemoveUnit(214,9),RemoveUnit(214,10),RemoveUnit(214,11)},MapPlayers,FP))
+DoActions(FP,{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 6")},MapPlayers,FP),RemoveUnit(214,AllPlayers),RemoveUnit(214,8),RemoveUnit(214,9),RemoveUnit(214,10),RemoveUnit(214,11)})
 CIfXEnd()
 CIf(FP,CVar(FP,B3_P[2],AtLeast,1),SetCVar(FP,B3_P[2],Subtract,1))
 	Trigger {
@@ -1613,7 +1845,7 @@ CIfX(P6,{Command(P6,AtLeast,1,2),CVar(FP,B5_H[2],AtLeast,1)})
 	CreateUnitPolygonSafe2Gun(P6,{Deaths(P7,Exactly,4,"【 Anomaly 】")},1+(Points*(SizeofPolygon*(SizeofPolygon+1)/2)),23,32,Radius,Angle,Points,1,P6,{1,19,1,84})
 	DoActionsP({SetDeaths(P7,SetTo,0,"【 Anomaly 】"),Order(19,P6,"Anywhere",Attack,"Anywhere"),SetMemory(0x66239C,SetTo,179200000)},P6)
 	CIfEnd()
-CElseifX({CDeaths(P6,AtMost,0,HDStart),CDeaths(P6,AtMost,0,BYDBossStart)})
+CElseIfX({CDeaths(P6,AtMost,0,HDStart),CDeaths(P6,AtMost,0,BYDBossStart)})
 	DoActions(P6,{KillUnit(128,P6)})
 CIfXEnd()
 
@@ -1868,7 +2100,7 @@ CIf(P6,CDeaths(P6,AtLeast,1,HDStart)) -- 미구현 Once처리
 			CMov(P6,Time1,Time2)
 		CIfEnd()
 	CIfEnd()
-MarCreate = CreateCCode()
+MarCreate = CreateCcode()
 	TriggerX(P6,{
 		CDeaths(FP,AtLeast,1,MarCreate)
 		},{   
@@ -2161,7 +2393,7 @@ MarCreate = CreateCCode()
 						CDeaths(P6,AtLeast,1,EVMode);
 					},
 					actions = {
-						SetMemoryX(0x65676C, SetTo, 256*3,0xFF00);
+						--SetMemoryX(0x65676C, SetTo, 256*3,0xFF00);
 					}
 				}
 				NIf(P6,CVar(P6,B6_T3[2],AtLeast,1500))
@@ -2763,6 +2995,29 @@ MarCreate = CreateCCode()
 	
 	
 	
+	BStartJump = def_sIndex()
+	BStartJumpC = CreateCcode()
+	NJump(FP,BStartJump,{CDeaths(FP,AtLeast,1,BStartJumpC)},{SetCVar(FP,B6_T[2],Subtract,1)})
+	DoActionsX(P6,{SetCDeaths(P6,Add,1,ColorT)})
+	TriggerX(FP,{Bring(FP,AtMost,0,150,64)},{SetCVar(FP,B6_T[2],Subtract,1)},{Preserved})
+	Trigger2(FP,{Bring(Force1,AtMost,0,"Men",224)},{SetInvincibility(Enable,150,FP,223)},{Preserved})
+	Trigger2(FP,{Bring(Force1,AtLeast,1,"Men",224)},{SetInvincibility(Disable,150,FP,223)},{Preserved})
+	Trigger2(FP,{Bring(FP,AtLeast,1,150,64)},{RotatePlayer({MinimapPing(223)},HumanPlayers,FP)},{Preserved})
+	DisplayCTextToAll(FP,{Bring(FP,AtMost,0,150,64),Bring(FP,AtLeast,1,12,64)},{SetCDeaths(FP,Add,1,BStartJumpC)},HDB_StT,{PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers)
+	NJumpEnd(FP,BStartJump)
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			CVar(FP,B6_T[2],AtLeast,1);
+	},
+		actions = {
+			SetInvincibility(Enable,12,P6,"Anywhere");
+			ModifyUnitShields(All,12,P6,64,100);
+			PreserveTrigger();
+		}
+	}
+
 	Trigger {
 		players = {P6},
 		actions = {
@@ -2827,33 +3082,10 @@ MarCreate = CreateCCode()
 			PreserveTrigger();
 		}
 	}
-	BStartJump = def_sIndex()
-	BStartJumpC = CreateCCode()
-	NJump(FP,BStartJump,{CDeaths(FP,AtLeast,1,BStartJumpC)},{SetCVar(FP,B6_T[2],Subtract,1)})
-	DoActionsX(P6,{SetCDeaths(P6,Add,1,ColorT)})
-	TriggerX(FP,{Bring(FP,AtMost,0,150,64)},{SetCVar(FP,B6_T[2],Subtract,1)},{Preserved})
-	Trigger2(FP,{Bring(Force1,AtMost,0,"Men",224)},{SetInvincibility(Enable,150,FP,223)},{Preserved})
-	Trigger2(FP,{Bring(Force1,AtLeast,1,"Men",224)},{SetInvincibility(Disable,150,FP,223)},{Preserved})
-	Trigger2(FP,{Bring(FP,AtLeast,1,150,64)},{RotatePlayer({MinimapPing(223)},HumanPlayers,FP)},{Preserved})
-	DisplayCTextToAll(FP,{Bring(FP,AtMost,0,150,64),Bring(FP,AtLeast,1,12,64)},{SetCDeaths(FP,Add,1,BStartJumpC)},HDB_StT,{PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers)
-	NJumpEnd(FP,BStartJump)
-	Trigger {
-		players = {P6},
-		conditions = {
-			Label(0);
-			CVar(FP,B6_T[2],AtLeast,1);
-	},
-		actions = {
-			SetInvincibility(Enable,12,P6,"Anywhere");
-			ModifyUnitShields(All,12,P6,64,100);
-			PreserveTrigger();
-		}
-	}
-
 
 --최종보스 탱크보스 스킬
 
-ValLimit = CreateCCode()
+ValLimit = CreateCcode()
 
 	TriggerX(FP,{NBYD},{SetCVar(FP,B6_DPase[2],Subtract,1)},{Preserved})
 	TriggerX(FP,{BYD,CVar(FP,B6_DPase2[2],AtLeast,1)},{SetCVar(FP,B6_DPase[2],Subtract,10),SetCVar(FP,B6_DPase2[2],SetTo,0)},{Preserved})
@@ -2931,7 +3163,7 @@ CIfEnd()
 -- 본진버콜이펙트
 CIf(P6,Switch("Switch 130",Set))
 	CWhile(P6,{CVar(FP,N_A[2],AtMost,359),CVar(FP,S_N_R[2],AtMost,2400)})
-		f_lengthdir(P6,S_N_R,N_A,N_X,N_Y)
+		f_Lengthdir(P6,S_N_R,N_A,N_X,N_Y)
 		CAdd(P6,N_X,2048)
 		CAdd(P6,N_Y,2048)
 		CTrigger(P6,{
@@ -3089,6 +3321,9 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			table.insert(Table,SetCVar("X",VVTable[i][1][2],SetTo,VVTable[i][2]))
 		end
 	end
+initHDTable = {}
+initFTRTable = {}
+initBYDTable = {}
 	Init_VarSet(initHDTable,{{B6_Dif,1},{B6_Dif2,1},{B6_Dif3,30},{ShP,1600},{B2_K,100000000},{B3_K,80000000},{B4_K,80000000},{B5_K,50000000}})
 	Init_VarSet(initFTRTable,{{B6_Dif,2},{B6_Dif2,2},{B6_Dif3,60},{ShP,3200},{B2_K,150000000},{B3_K,120000000},{B4_K,120000000},{B5_K,60000000}})
 	Init_VarSet(initBYDTable,{{B6_Dif,3},{B6_Dif2,5},{B6_Dif3,120},{B2_K,200000000},{B3_K,150000000},{B4_K,150000000},{B5_K,80000000}})
@@ -3141,11 +3376,11 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 })
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{
 --		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
-		SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
-		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
-		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
-		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
-		SetMemoryB(0x656FB8+120, SetTo, 150); -- 핵배틀 공격속도 10배로 느려지도록 너프
+		--SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
+		--SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
+		--SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
+		--SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
+		--SetMemoryB(0x656FB8+120, SetTo, 150); -- 핵배틀 공격속도 10배로 느려지도록 너프
 		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
 		
 		SetMemoryW(0x657678 + (87*2), SetTo, 40);
@@ -3191,7 +3426,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	SetMemory(0x662350+(189*4), SetTo, 0);
 	SetMemory(0x662350+(147*4), SetTo, 0);
 	SetMemory(0x662350+(148*4), SetTo, 0);
-	--SetMemory(0x515BA8,SetTo,128);---------크기 8 Fate 데미지반감
+	SetMemory(0x515BA8,SetTo,128);---------크기 8 Fate 데미지반감
 	SetMemoryX(0x656554, SetTo, 2*16777216,0xFF000000);
 
 	})
@@ -3205,6 +3440,8 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		SetMemory(0x58DC6C + 0x14*23,SetTo,32),MoveLocation(24,102,P7,64),GiveUnits(1,102,P7,24,P12),RemoveUnit(102,P12),CreateUnit(1,60,24,P7)})
 	CWhileEnd()
 	EVPatchT = {}
+	EVPatchT2 = {}
+	EVPatchT3 = {}
 
 	for i = 0, 4 do
 		table.insert(EVPatchT,SetMemoryB(0x6566F8+(87+i), SetTo, 3)) -- 스플형
@@ -3214,6 +3451,15 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		table.insert(EVPatchT,SetMemoryW(0x657780+(2*(i+87)), SetTo, 10)) -- 바깥
 		table.insert(EVPatchT,SetMemoryW(0x656EB0+(2*(i+87)), SetTo, 0))--루미마린 기본공격
 		table.insert(EVPatchT,SetMemoryW(0x657678+(2*(i+87)), SetTo, 60))--루미마린 증가량
+		table.insert(EVPatchT2,SetMemoryB(0x6566F8+(87+i), SetTo, 3)) -- 스플형
+		table.insert(EVPatchT2,SetMemory(0x656CA8+(4*(i+87)), SetTo, 150)) -- 그래픽
+		table.insert(EVPatchT2,SetMemoryW(0x656888+(2*(i+87)), SetTo, 2)) -- 안쪽
+		table.insert(EVPatchT2,SetMemoryW(0x6570C8+(2*(i+87)), SetTo, 5)) -- 중앙
+		table.insert(EVPatchT2,SetMemoryW(0x657780+(2*(i+87)), SetTo, 10)) -- 바깥
+		table.insert(EVPatchT2,SetMemoryB(0x6566F8+(123+i), SetTo, 3)) -- 스플형
+		table.insert(EVPatchT2,SetMemoryW(0x656888+(2*(i+123)), SetTo, 2)) -- 안쪽
+		table.insert(EVPatchT2,SetMemoryW(0x6570C8+(2*(i+123)), SetTo, 5)) -- 중앙
+		table.insert(EVPatchT2,SetMemoryW(0x657780+(2*(i+123)), SetTo, 10)) -- 바깥
 	end
 	table.insert(EVPatchT,SetMemoryX(0x660434, SetTo, 65536,0xFFFF0000)) -- SCV생산속도
 	table.insert(EVPatchT,SetMemoryX(0x656EB0, SetTo, 150,0xFFFF))--일마기본공격
@@ -3223,8 +3469,23 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 	table.insert(EVPatchT,SetMemoryX(0x656EB0, SetTo, 150*65536,0xFFFF0000))--영마기본공격
 	table.insert(EVPatchT,SetMemoryX(0x657678, SetTo, 20*65536,0xFFFF0000))--영마증가량
 	
+	table.insert(EVPatchT3,SetMemory(0x515B88,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515B8C,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515B90,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515B94,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515B98,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515B9C,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515BA0,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515BA4,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515BA8,SetTo,128))
+	table.insert(EVPatchT3,SetMemory(0x515BC4,SetTo,20480/3))
+	table.insert(EVPatchT3,SetMemory(0x515BC8,SetTo,10240/3))
+	table.insert(EVPatchT3,SetMemory(0x515BCC,SetTo,5120/3))
+	table.insert(EVPatchT3,SetMemory(0x515BD0,SetTo,40960/3))
 	
-	Trigger2X(FP,{CDeaths(FP,AtLeast,1,EVMode)},EVPatchT)	
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,EVMode),NBYD},EVPatchT)	
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,EVMode),BYD},EVPatchT2)	
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,EVMode)},EVPatchT3)	
 	--]]
 	CTrigPatchTable = {}
 	for i = 0, 15 do
@@ -3413,7 +3674,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 				CSub(P6,B7_H,23)
 				CDoActions(FP,{TSetMemory(B7_H,SetTo,8000000*256)})
 			CIfEnd()
-			ClockBuilding = Def_sIndex()
+			ClockBuilding = def_sIndex()
 			
 			
 
@@ -3433,7 +3694,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			NJumpX(FP,ClockBuilding,{DeathsX(CurrentPlayer,Exactly,173,0,0xFF)})
 			NJumpX(FP,ClockBuilding,{DeathsX(CurrentPlayer,Exactly,190,0,0xFF)})
 			NJumpX(FP,ClockBuilding,{DeathsX(CurrentPlayer,Exactly,174,0,0xFF),CDeaths(FP,AtLeast,1,Theorist)})
-			ClockBuildingSkip = Def_sIndex()
+			ClockBuildingSkip = def_sIndex()
 			CJump(FP,ClockBuildingSkip)
 			NJumpXEnd(FP,ClockBuilding)
 				DoActions(P6,{
@@ -3535,7 +3796,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		
 		
 	CIf(FP,CDeaths(FP,Exactly,i,GMode))
-		f_MemCpy(FP,LBATblPtr,_TMem(Arr(LBAttackT[i+1][3],0),"X","X",1),LBAttackT[i+1][2])
+		f_Memcpy(FP,LBATblPtr,_TMem(Arr(LBAttackT[i+1][3],0),"X","X",1),LBAttackT[i+1][2])
 	CIfEnd()
 	end
 	
@@ -3557,7 +3818,7 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		table.insert(InitPatchTable,SetInvincibility(Disable,133, AllPlayers,"Anywhere"))
 		DoActions2(FP,InitPatchTable)
 	DifScoreBonus = {10,10,20,40,50}
-	ModeScoreBonus = {5,10,20,30}
+	ModeScoreBonus = {5,10,20,30,15}
 	for i = 1, 5 do
 		Trigger {
 			players = {P6},
@@ -3597,9 +3858,21 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 		conditions = {
 			Label(0);
 			CDeaths(FP,AtLeast,1,EVMode);
+			NBYD;
 	},
 		actions = {
 			SetCVar(FP,ModeScoreBonusV[2],SetTo,ModeScoreBonus[1])
+		}
+	}
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtLeast,1,EVMode);
+			BYD;
+	},
+		actions = {
+			SetCVar(FP,ModeScoreBonusV[2],SetTo,ModeScoreBonus[5])
 		}
 	}
 	Trigger {
@@ -3820,7 +4093,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 					CSub(FP,0x6509B0,4)
 				CIfEnd()
 			CIfEnd()
-			NJump(FP,0x631,{Memory(0x58A364,AtMost,129999)})
+			NJump(FP,0x631,{TDeaths(MarListCurrentPlayer,AtMost,129999,432)})
 				CSub(FP,0x6509B0,17)
 				NIf(FP,{Deaths(CurrentPlayer,AtMost,80000*256,0)})
 					NJump(FP,0x635,{CVar(FP,MarListTempVar3[2],AtLeast,1)})
@@ -3853,12 +4126,21 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				NJumpEnd(FP,0x635)
 				CAdd(FP,0x6509B0,17)
 			NJumpEnd(FP,0x631)
+			NIf(FP,{CDeaths(FP,Exactly,0,HealT)})
+				CSub(FP,0x6509B0,9)
+				CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1824,0,0xFFFF),DeathsX(CurrentPlayer,AtMost,2272,0,0xFFFF),DeathsX(CurrentPlayer,AtLeast,1888*65536,0,0xFFFF0000),DeathsX(CurrentPlayer,AtMost,2208*65536,0,0xFFFF0000)})
+				CAdd(FP,0x6509B0,14)
+				CIfX(FP,DeathsX(CurrentPlayer,AtMost,750*256,0,0xFFFFFF),SetDeathsX(CurrentPlayer,Add,250*256,0,0xFFFFFF))
+				CElseX({SetDeathsX(CurrentPlayer,SetTo,1000*256,0,0xFFFFFF)})
+				CIfXEnd()
+				CSub(FP,0x6509B0,14)
+				CIfEnd()
+				CAdd(FP,0x6509B0,9)
+			NIfEnd()
 			NIf(FP,{TDeaths(MarListCurrentPlayer,AtLeast,1,34)})
 				CAdd(FP,0x6509B0,5)
-				CIfX(FP,DeathsX(CurrentPlayer,AtMost,750*256,0,0xFFFFFF))
-					DoActions(FP,SetDeathsX(CurrentPlayer,Add,250*256,0,0xFFFFFF))
-					CElseX()
-					DoActions(FP,SetDeathsX(CurrentPlayer,SetTo,1000*256,0,0xFFFFFF))
+				CIfX(FP,DeathsX(CurrentPlayer,AtMost,750*256,0,0xFFFFFF),SetDeathsX(CurrentPlayer,Add,250*256,0,0xFFFFFF))
+				CElseX({SetDeathsX(CurrentPlayer,SetTo,1000*256,0,0xFFFFFF)})
 				CIfXEnd()
 				CSub(FP,0x6509B0,5)
 			NIfEnd()
@@ -3866,12 +4148,8 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				CAdd(FP,0x6509B0,5)
 				DoActions(FP,SetDeathsX(CurrentPlayer,SetTo,1000*256,0,0xFFFFFF))
 				CSub(FP,0x6509B0,22)
-
-
-				CIfX(FP,Deaths(CurrentPlayer,AtMost,124999*256,0))
-					DoActions(FP,SetDeaths(CurrentPlayer,Add,5000*256,0))
-					CElseX()
-					DoActions(FP,SetDeaths(CurrentPlayer,SetTo,130000*256,0))
+				CIfX(FP,{Deaths(CurrentPlayer,AtMost,124999*256,0)},{SetDeaths(CurrentPlayer,Add,5000*256,0)})
+				CElseX({SetDeaths(CurrentPlayer,SetTo,130000*256,0)})
 				CIfXEnd()
 				CAdd(FP,0x6509B0,17)
 			NIfEnd()
@@ -4002,7 +4280,6 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				SetCVar(P6,MarListTempVar8[2],SetTo,0), -- 0x23C
 				SetCVar(P6,MarListTempVar9[2],SetTo,0), -- 0x25C
 				SetCVar(P6,MarListCurrentPlayer[2],SetTo,i-1), -- 0x25C
-				SetCtrigX("X",0x631+0xC000,0xC + 0x14*1,0,SetTo,"X",MarHP[i][2],0x15C,1,0),
 				SetCtrigX("X",MarListTempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
 				SetNext("X",MarListCallTrigger,0),SetNext(MarListCallTrigger+1,"X",1), -- Go To MarListCallTrigger
 				SetCtrigX("X",MarListCallTrigger+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
@@ -4475,7 +4752,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
 					},
 				}
 				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
 	end
@@ -4502,7 +4779,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 					},
 				}
 				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
 	end
@@ -4529,7 +4806,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,27,0,0xFF))
 					},
 				}
 				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
 		end
@@ -4555,7 +4832,7 @@ for j=1, 5 do
 				},
 			}
 			TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
-			f_MemCpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 		Call_LoadCp()
 		DoActions(P6,MoveCp(Add,6*4))
 	CIfEnd()
@@ -4568,7 +4845,7 @@ InstallHeroPoint()
 
 function HeroPanelty(Index,Point,Name)
 local HText2 = "\x13\x1D† ! \x04맵상에 아직 "..Name.." \x04이(가) 남아있습니다. \x1F- "..(Point/20).." \x1CＯｒｅ\x1D ! †\n"
-CIf(P6,{Deaths(CurrentPlayer,Exactly,Index,0,0xFF)})
+CIf(P6,{DeathsX(CurrentPlayer,Exactly,Index,0,0xFF)})
 DoActions(P6,MoveCp(Subtract,16*4))
 Call_SaveCp()
 Trigger {
@@ -4899,7 +5176,7 @@ CIfEnd()
 	CunitCtrig_Part4X(i,{
 	DeathsX(EPDF(0x628298-0x150*i+(72*4)),AtLeast,1*256,0,0xFF00)
 	},
-	{SetDeaths(EPDF(0x628298-0x150*i+(72*4)), SetTo,0,0,0xFF00),SetDeaths(EPDF(0x628298-0x150*i+(69*4)), SetTo,255*65536,0)})
+	{SetDeathsX(EPDF(0x628298-0x150*i+(72*4)), SetTo,0,0,0xFF00),SetDeaths(EPDF(0x628298-0x150*i+(69*4)), SetTo,255*65536,0)})
 	end
 	CunitCtrig_End()
 
@@ -5004,7 +5281,7 @@ CIf(P6,CVar(P6,B2_P[2],AtLeast,1))
 CIfEnd()
 
 TPaneltyP = CreateCcodeArr(5)
-TPaneltyA = CreateCCode()
+TPaneltyA = CreateCcode()
 for i = 0, 4 do
 	CIf(FP,{PlayerCheck(i,1),CDeaths(P6,AtLeast,1,PaneltyP[i+1])},{SetCDeaths(FP,Add,1,TPaneltyA)})
 	CMul(P6,PaneltyTemp2[i+1],_Add({FP,RedNumber[2],nil,"V"},400),_Ccode("X",PaneltyP[i+1]))
@@ -5028,7 +5305,7 @@ for i = 0, 4 do
 	f_Mod(P6,TPanelty,_Mov(3))
 	f_Mod(P6,Panelty[i+1],_Mov(400))
 	CMov(P6,_Ccode("X",PaneltyP[i+1]),0)
-	TriggerX(FP,CDeaths(FP,AtMost,0,TPaneltyP[i+1]),{SetCDeaths(FP,SetTo,100,TPaneltyP[i+1]),SetCP(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText("\x07『 \x17뿌튀 \x08패널티\x04 작동! \x1F미네랄\x04이 차감됩니다. 건작 위치를 지켜주세요. \x07』",4),SetCP(FP)},{Preserved})
+	TriggerX(FP,CDeaths(FP,AtMost,0,TPaneltyP[i+1]),{SetCDeaths(FP,SetTo,100,TPaneltyP[i+1]),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText("\x07『 \x17뿌튀 \x08패널티\x04 작동! \x1F미네랄\x04이 차감됩니다. 건작 위치를 지켜주세요. \x07』",4),SetCp(FP)},{Preserved})
 	CIfEnd(SetCDeaths(FP,Subtract,1,TPaneltyP[i+1]))
 end
 
@@ -5089,7 +5366,7 @@ CIfX(P6,{NBYD})
 	CWhileEnd()
 	CWhile(P6,{CVar(FP,Bonus[2],AtLeast,5000)},{SetCVar(FP,Bonus[2],Subtract,5000),SetMemory(0x58D6F4,Add,1)})
 	CWhileEnd()
-CelseIfX({BYD})
+CElseIfX({BYD})
 	CWhile(P6,{CDeaths(P6,AtLeast,1,BonusP)},SetCDeaths(P6,Subtract,1,BonusP))
 		CAdd(P6,Bonus,_Add({FP,RedNumber[2],nil,"V"},400))
 	CWhileEnd()
@@ -5156,14 +5433,18 @@ for i=0,4 do
 			CMov(P6,0x662350 + (MarID[i+1]*4),_Mul(MarHP[i+1],_Mov(256)))
 			CIfXEnd()
 			
-			CIfX(P6,CDeaths(P6,AtMost,0,EVMode))
+			CIfX(P6,{CDeaths(P6,AtMost,0,EVMode)})
 				CIfX(FP,BYD)
 					CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
 				CElseX()
 					CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))--비욘드아님
 				CIfXEnd()
 			CElseX()
-				CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)))
+				CIfX(FP,BYD)
+					CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
+				CElseX()
+					CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)))
+				CIfXEnd()
 			CIfXEnd()
 			
 			CMov(P6,0x582204+(i*4),_Div(MarHP[i+1],_Mov(50)))
@@ -5436,8 +5717,8 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,i*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,1,CCode(0x1000,00+(i*2)));
-					SetCDeaths(P6,Add,1,CCode(0x1000,01+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,00+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,01+(i*2)));
 					PreserveTrigger();
 			},
 			}
@@ -5450,8 +5731,8 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(4+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,1,CCode(0x1000,20+(i*2)));
-					SetCDeaths(P6,Add,1,CCode(0x1000,21+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,20+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,21+(i*2)));
 					PreserveTrigger();
 			},
 			}
@@ -5464,8 +5745,8 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(8+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,1,CCode(0x1000,12+(i*2)));
-					SetCDeaths(P6,Add,1,CCode(0x1000,13+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,12+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,13+(i*2)));
 					PreserveTrigger();
 			},
 			}
@@ -5478,8 +5759,8 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(12+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,1,CCode(0x1000,36+(i*2)));
-					SetCDeaths(P6,Add,1,CCode(0x1000,37+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,36+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,37+(i*2)));
 					PreserveTrigger();
 			},
 			}
@@ -5492,8 +5773,8 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(16+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,1,CCode(0x1000,48+(i*2)));
-					SetCDeaths(P6,Add,1,CCode(0x1000,49+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,48+(i*2)));
+					SetCDeaths(P6,Add,1,Ccode(0x1000,49+(i*2)));
 					PreserveTrigger();
 			},
 			}
@@ -5662,7 +5943,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,i*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1000,32+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1000,32+i));
 			},
 			}
 			end
@@ -5674,7 +5955,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(4+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1000,8+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1000,8+i));
 			},
 			}
 			end
@@ -5686,7 +5967,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(8+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1000,28+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1000,28+i));
 			},
 			}
 			end
@@ -5699,7 +5980,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(12+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1000,44+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1000,44+i));
 			},
 			}
 			end
@@ -5712,7 +5993,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(16+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1000,56+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1000,56+i));
 			},
 			}
 			end
@@ -5725,7 +6006,7 @@ PosLoad = CreateVar(FP)
 					DeathsX(CurrentPlayer,Exactly,(20+i)*65536,0,0xFF0000);
 					},
 				actions = {
-					SetCDeaths(P6,Add,2,CCode(0x1002,00+i));
+					SetCDeaths(P6,Add,2,Ccode(0x1002,00+i));
 			},
 			}
 			end
@@ -5946,9 +6227,9 @@ PosLoad = CreateVar(FP)
 				table.insert(ZergGunCAPlot,CAPlotForward())
 				CDoActions(FP,{TSetCVar(FP,ZergGunCAPlot[i][6],SetTo,_ReadF(_Add(BackupCp,6+i-1),0xFF),0xFF),SetCVar(FP,ZergGunCAPlot[i][9],SetTo,6)})
 				CIf(FP,{TMemoryX(BackupCp,Exactly,0x1000,0xF000)})
-					CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Atmost,3*65536,0xFF0000)},{SetCVar(FP,ZergGunCAPlot[i][9],SetTo,7)},1)
+					CTrigger(FP,{TMemoryX(_Add(BackupCp,1),AtMost,3*65536,0xFF0000)},{SetCVar(FP,ZergGunCAPlot[i][9],SetTo,7)},1)
 					if i == 1 then
-						CTrigger(FP,{TMemoryX(_Add(BackupCp,1),AtLeast,12*65536,0xFF0000),TMemoryX(_Add(BackupCp,1),Atmost,19*65536,0xFF0000)},{SetCVar(FP,ZergGunCAPlot[1][9],SetTo,7)},1)
+						CTrigger(FP,{TMemoryX(_Add(BackupCp,1),AtLeast,12*65536,0xFF0000),TMemoryX(_Add(BackupCp,1),AtMost,19*65536,0xFF0000)},{SetCVar(FP,ZergGunCAPlot[1][9],SetTo,7)},1)
 					end
 				CIfEnd()
 			NIfX(FP,{TMemory(_Mem(RedNumberX),AtLeast,ZergGunShape[i][1])})
@@ -6528,7 +6809,7 @@ CIf(P6,Switch("Switch 203",Set))
 	}
 	CIfX(P6,Command(P6,AtLeast,1, "【 Tenebris 】"))
 		
-		f_MemCpy(P6,0x64160C,_TMem(Arr(BStr01[3],0),"X","X",1),BStr01[2])
+		f_Memcpy(P6,0x64160C,_TMem(Arr(BStr01[3],0),"X","X",1),BStr01[2])
 		CIf(P6,{CVar(FP,B3_H[2],AtLeast,1)})
 			CMov(P6,B3_HV,_Add(_Div(_ReadF(B3_H),_Mov(256)),B3_K))
 			CMov(P6,B3_HV2,B3_K2)
@@ -6538,8 +6819,8 @@ CIf(P6,Switch("Switch 203",Set))
 
 			ItoDec(P6,B3_HV,VArr(B3_HT,0),0,0x08,0,9)
 			ItoDec(P6,B3_HV2,VArr(B3_HT2,0),1,0x08,0)
-			f_MovCpy(P6,0x64160C+BStr01[2],VArr(B3_HT2,0),4*4)
-			f_MovCpy(P6,0x64160C+BStr01[2]+(4*4),VArr(B3_HT,0),4*4)
+			f_Movcpy(P6,0x64160C+BStr01[2],VArr(B3_HT2,0),4*4)
+			f_Movcpy(P6,0x64160C+BStr01[2]+(4*4),VArr(B3_HT,0),4*4)
 		CIfEnd()
 	CElseX()
 		CMov(P6,0x64160C,0)
@@ -6938,7 +7219,7 @@ Trigger { -- 예약메딕
 		}
 	end
 
-		--f_MemCpy(P6,0x58F700,MemoryPtr+(10*4),4*12)
+		--f_Memcpy(P6,0x58F700,MemoryPtr+(10*4),4*12)
 		Trigger {
 			players = {Force1},
 			conditions = {
@@ -7021,7 +7302,7 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,40));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,40));
 				RemoveUnit(190,Force2);
 				RemoveUnit(200,Force2);
 				SetSwitch("Switch 245",Set);
@@ -7164,21 +7445,21 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,0));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,24));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,9));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,58));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,44));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,34));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,16));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,17));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,1));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,25));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,54));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,55));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,40));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,41));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,31));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,0));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,24));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,9));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,58));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,44));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,34));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,16));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,17));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,1));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,25));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,54));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,55));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,40));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,41));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,31));
 				SetSwitch("Switch 130",Set);
 				--SetDeaths(P6,SetTo,1,173);
 		--  KillUnit(152,P7)
@@ -7193,21 +7474,21 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,2));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,26));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,8));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,59));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,45));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,35));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,18));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,19));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,3));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,27));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,52));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,53));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,42));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,43));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,30));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,2));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,26));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,8));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,59));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,45));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,35));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,18));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,19));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,3));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,27));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,52));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,53));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,42));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,43));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,30));
 				SetSwitch("Switch 130",Set);
 		--  KillUnit(152,P8)
 			},
@@ -7220,21 +7501,21 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,4));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,20));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,10));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,56));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,28));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,36));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,37));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,5));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,21));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,48));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,49));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,46));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,32));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,14));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,15));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,4));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,20));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,10));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,56));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,28));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,36));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,37));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,5));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,21));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,48));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,49));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,46));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,32));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,14));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,15));
 				SetSwitch("Switch 130",Set);
 			},
 		}
@@ -7246,34 +7527,34 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,0));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,1));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,2));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,3));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,8));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,9));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,10));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,11));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,41));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,42));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,43));
-				SetCDeaths(P6,SetTo,1,CCode(0x1002,44));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,0));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,1));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,2));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,3));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,8));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,9));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,10));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,11));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,41));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,42));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,43));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1002,44));
 				SetCDeaths(P6,SetTo,2,EZCon);
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,6));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,22));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,11));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,57));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,29));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,38));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,39));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,7));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,23));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,50));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,51));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,47));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,33));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,12));
-				SetCDeaths(P6,SetTo,1,CCode(0x1000,13));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,6));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,22));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,11));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,57));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,29));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,38));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,39));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,7));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,23));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,50));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,51));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,47));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,33));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,12));
+				SetCDeaths(P6,SetTo,1,Ccode(0x1000,13));
 		--    SetInvincibility(Disable,173,Force2,64);
 				KillUnit(150,Force2);
 				KillUnit(156,Force2);
@@ -7285,7 +7566,7 @@ Trigger { -- 예약메딕
 				--KillUnit("Buildings",Force2);
 				--SetCDeaths(P6,SetTo,1,HDStart);
 				--SetCDeaths(P6,SetTo,1,BYDBossStart);
-				--SetCDeaths(P6,SetTo,1,CCode(0x1002,45))
+				--SetCDeaths(P6,SetTo,1,Ccode(0x1002,45))
 			},
 		}
 		Trigger {
@@ -7296,7 +7577,7 @@ Trigger { -- 예약메딕
 				
 			},
 			actions = {
-				SetCDeaths(FP,SetTo,1,CCode(0x1002,40));
+				SetCDeaths(FP,SetTo,1,Ccode(0x1002,40));
 				SetCVar(FP,XY[2],SetTo,550*10);
 
 			},
@@ -7311,7 +7592,7 @@ Trigger { -- 예약메딕
 			actions = {
 				--SetCDeaths(P6,SetTo,1,HDStart);
 				--KillUnit("Any unit",Force2);
-				--SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
+				--SetCDeaths(P6,SetTo,1,Ccode(0x1002,45));
 			},
 		}
 		Trigger {
@@ -7331,7 +7612,7 @@ Trigger { -- 예약메딕
 		
 		TestTable = {}
 		for i = 0,39 do
-		table.insert(TestTable,SetCDeaths(P6,SetTo,1,CCode(0x1002,i)))
+		table.insert(TestTable,SetCDeaths(P6,SetTo,1,Ccode(0x1002,i)))
 		end
 		
 		Trigger {
@@ -7892,7 +8173,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			PreserveTrigger();
 		},
 	}
-	EVModeT = "\x13\x06Ｂｅｙｏｎｄ ( \x04ESC버튼 : \x10理論値 MODE \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
+	EVModeT = "\x13\x06Ｂｅｙｏｎｄ ( \x04ESC버튼 : \x10理論値 MODE, \x18TAB버튼 : \x06비욘드 \x18EVMode 적용하기 \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
 	Trigger {
 		players = {P6},
 		conditions = {
@@ -7902,6 +8183,28 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			Switch("Switch 244",Cleared);
 			CDeaths(P6,Exactly,0,Ready);
 			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,0,EVMode);
+		},
+		actions = {
+			RotatePlayer({
+				CenterView(21),
+				DisplayTextX(string.rep("\n", 20),4),
+				DisplayTextX(EVModeT,4)
+			},HumanPlayers,FP);
+			PreserveTrigger();
+		},
+	}
+	EVModeT = "\x13\x06Ｂｅｙｏｎｄ ( \x04ESC버튼 : \x10理論値 MODE, \x06비욘드 \x18EVMode 적용됨 \x04)\n\n\x13\x0E정식모드\t\t\t\t\t\t\x08클래식 모드\n\n\x13\x18EV MODE\n\n\x13\x04모드를 선택하십시오.\n"
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			CDeaths(P6,Exactly,0,BYDDiff);
+			CDeaths(P6,Exactly,3,Difficulty);
+			Switch("Switch 244",Cleared);
+			CDeaths(P6,Exactly,0,Ready);
+			CDeaths(P6,AtLeast,50,IntroT3);
+			CDeaths(P6,Exactly,1,EVMode);
 		},
 		actions = {
 			RotatePlayer({
@@ -8344,6 +8647,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			SetCDeaths(P6,SetTo,1,Ready);
 			SetMemory(0x58F4F0, SetTo, 4);
 			SetCDeaths(P6,SetTo,1,GModeTP);
+			SetCDeaths(P6,SetTo,0,EVMode);
 	},
 	}
 	
@@ -8363,19 +8667,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			SetCDeaths(P6,SetTo,1,EVMode);
 			SetCDeaths(P6,SetTo,3,GModeTP);
 			SetMemory(0x58F4F0, SetTo, 4);
-			SetMemory(0x515B88,SetTo,128);---------크기 0
-			SetMemory(0x515B8C,SetTo,128);---------크기 1
-			SetMemory(0x515B90,SetTo,128);---------크기 2
-			SetMemory(0x515B94,SetTo,128);---------크기 3
-			SetMemory(0x515B98,SetTo,128);---------크기 4
-			SetMemory(0x515B9C,SetTo,128);---------크기 5
-			SetMemory(0x515BA0,SetTo,128);---------크기 6
-			SetMemory(0x515BA4,SetTo,128);---------크기 7
-			SetMemory(0x515BA8,SetTo,128);---------크기 8
-			SetMemory(0x515BC4,SetTo,20480/3);
-			SetMemory(0x515BC8,SetTo,10240/3);
-			SetMemory(0x515BCC,SetTo,5120/3);
-			SetMemory(0x515BD0,SetTo,40960/3);
 	
 	},
 	}
@@ -8395,6 +8686,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			SetCDeaths(P6,SetTo,1,GMode);
 			SetCDeaths(P6,SetTo,1,Ready);
 			SetCDeaths(P6,SetTo,2,GModeTP);
+			SetCDeaths(P6,SetTo,0,EVMode);
 	},
 	}
 	
@@ -8412,6 +8704,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			RemoveUnit("Bengalaas (Jungle)",AllPlayers);
 			SetCDeaths(P6,SetTo,2,GMode);
 			SetCDeaths(P6,SetTo,1,Ready);
+			SetCDeaths(P6,SetTo,0,EVMode);
 			SetCDeaths(P6,SetTo,4,GModeTP);
 	},
 	}
@@ -8435,6 +8728,50 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	},
 	}
 	CMov(FP,0x6509B0,CurrentOP)
+	Trigger { -- 버튼인식 TAB BYD EVMode 적용
+		players = {P6},
+		conditions = {
+			Label(0);
+			--CDeaths(P6,AtLeast,1,LimitX); -- 
+			CDeaths(P6,AtLeast,3,Difficulty); -- 
+			Switch("Switch 244",Cleared);
+			CDeaths(P6,AtLeast,50,IntroT3);
+			Deaths(CurrentPlayer,AtLeast,1,206);
+			CDeaths(P6,Exactly,0,Ready);
+			CDeaths(P6,Exactly,0,EVMode);
+			--Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",19);
+
+		},
+		actions = {
+			RotatePlayer({PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+			SetCDeaths(P6,SetTo,1,EVMode);
+			SetDeaths(CurrentPlayer,SetTo,0,206);
+			PreserveTrigger();
+			
+	},
+	}
+	Trigger { -- 버튼인식 TAB BYD EVMode 적용
+		players = {P6},
+		conditions = {
+			Label(0);
+			--CDeaths(P6,AtLeast,1,LimitX); -- 
+			CDeaths(P6,AtLeast,3,Difficulty); -- 
+			Switch("Switch 244",Cleared);
+			CDeaths(P6,AtLeast,50,IntroT3);
+			Deaths(CurrentPlayer,AtLeast,1,206);
+			CDeaths(P6,Exactly,0,Ready);
+			CDeaths(P6,Exactly,1,EVMode);
+			--Bring(AllPlayers,Exactly,1,"Bengalaas (Jungle)",19);
+
+		},
+		actions = {
+			RotatePlayer({PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+			SetCDeaths(P6,SetTo,0,EVMode);
+			SetDeaths(CurrentPlayer,SetTo,0,206);
+			PreserveTrigger();
+			
+	},
+	}
 	Trigger { -- 버튼인식 esc BYD 이론치난이도 진입
 		players = {P6},
 		conditions = {
@@ -8647,9 +8984,10 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			SetCDeaths(P6,SetTo,50,IntroT3);
 			SetSwitch("Switch 204",Set);
 			SetCVar(FP,ClearRate[2],SetTo,0);
+			--SetCDeaths(P6,Add,1,EVMode);
 			},
 		}
-	BYDT = CreateCCode()
+	BYDT = CreateCcode()
 	Trigger { -- BYDDiff 1이상시 BYDT작동 
 		players = {P6},
 		conditions = {
@@ -9037,8 +9375,8 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	
 	
 	YY = 2021
-	MM = 11
-	DD = 30
+	MM = 12
+	DD = 10
 	HH = 00
 	end
 	function PushErrorMsg(Message)
@@ -9708,6 +10046,7 @@ Trigger { -- 조합법 insert키
 		CDeaths(FP,Exactly,0,EVMode);
 		CDeaths(FP,Exactly,0,GMode);
 		Memory(0x596A44, Exactly, 0x00000100);
+		NBYD;
 	},
 	actions = {
 		DisplayText(string.rep("\n", 20),4);
@@ -9725,6 +10064,7 @@ Trigger { -- 조합법 insert키
 		CDeaths(FP,Exactly,1,EVMode);
 		CDeaths(FP,Exactly,0,GMode);
 		Memory(0x596A44, Exactly, 0x00000100);
+		NBYD;
 	},
 	actions = {
 		DisplayText(string.rep("\n", 20),4);
@@ -9976,7 +10316,7 @@ Trigger { -- 시작 컴퓨터 세팅
 		PreserveTrigger();
 		},
 	}
-	GameOverT = CreateCCode()
+	GameOverT = CreateCcode()
 Trigger { -- =
 	players = {P6},
 		conditions = {
@@ -10281,11 +10621,11 @@ Trigger { -- 캔낫시 모든 저그유닛 삭제, 경고1회부여, 정야독
 			},HumanPlayers,7);
 		RunAIScriptAt(JYD,"Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
-		SetMemory(0x582174,add,2);
-		SetMemory(0x582178,add,2);
-		SetMemory(0x58217C,add,2);
-		SetMemory(0x582180,add,2);
-		SetMemory(0x582184,add,2);
+		SetMemory(0x582174,Add,2);
+		SetMemory(0x582178,Add,2);
+		SetMemory(0x58217C,Add,2);
+		SetMemory(0x582180,Add,2);
+		SetMemory(0x582184,Add,2);
 		SetMemory(0x58F558,SetTo,0);
 		SetCDeaths(P6,SetTo,24*30,CanCT);
 		SetCDeaths(P6,Add,1,CanC);
@@ -10310,11 +10650,11 @@ Trigger { -- 캔낫 3회초과 아웃
 			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
 			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
 		},HumanPlayers,FP);
-		SetMemory(0x582174,add,2);
-		SetMemory(0x582178,add,2);
-		SetMemory(0x58217C,add,2);
-		SetMemory(0x582180,add,2);
-		SetMemory(0x582184,add,2);
+		SetMemory(0x582174,Add,2);
+		SetMemory(0x582178,Add,2);
+		SetMemory(0x58217C,Add,2);
+		SetMemory(0x582180,Add,2);
+		SetMemory(0x582184,Add,2);
 		SetMemory(0x58F558,SetTo,0);
 		SetCDeaths(P6,Add,1,GameOver);
 		KillUnit("Factories",Force2);
@@ -10363,7 +10703,7 @@ DoActions(FP,{
 		ModifyUnitEnergy(All,MarID[3],P12,64,0);
 		ModifyUnitEnergy(All,MarID[4],P12,64,0);
 		ModifyUnitEnergy(All,MarID[5],P12,64,0);
-		KillUnitAt(all,"Factories","Anywhere",P12);
+		KillUnitAt(All,"Factories","Anywhere",P12);
 		KillUnit(179,P12);})
 CIf(FP,BYD)
 
@@ -10386,11 +10726,11 @@ Trigger { -- 캔낫시 모든 저그유닛 삭제, 경고1회부여, 정야독
 			},HumanPlayers,7);
 		RunAIScriptAt(JYD,"Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
-		SetMemory(0x582174,add,2);
-		SetMemory(0x582178,add,2);
-		SetMemory(0x58217C,add,2);
-		SetMemory(0x582180,add,2);
-		SetMemory(0x582184,add,2);
+		SetMemory(0x582174,Add,2);
+		SetMemory(0x582178,Add,2);
+		SetMemory(0x58217C,Add,2);
+		SetMemory(0x582180,Add,2);
+		SetMemory(0x582184,Add,2);
 		SetMemory(0x58F558,SetTo,0);
 		SetCDeaths(P6,SetTo,24*30,CanCT);
 		SetCDeaths(P6,Add,1,CanC);
@@ -10415,11 +10755,11 @@ Trigger { -- 캔낫 3회초과 아웃
 			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
 			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
 		},HumanPlayers,FP);
-		SetMemory(0x582174,add,2);
-		SetMemory(0x582178,add,2);
-		SetMemory(0x58217C,add,2);
-		SetMemory(0x582180,add,2);
-		SetMemory(0x582184,add,2);
+		SetMemory(0x582174,Add,2);
+		SetMemory(0x582178,Add,2);
+		SetMemory(0x58217C,Add,2);
+		SetMemory(0x582180,Add,2);
+		SetMemory(0x582184,Add,2);
 		SetMemory(0x58F558,SetTo,0);
 		SetCDeaths(P6,Add,1,GameOver);
 		KillUnit("Factories",Force2);
@@ -10687,7 +11027,7 @@ DoActionsP(SetSwitch("Switch 5",Clear),P6)
 CIfEnd()
 
  -- 레어 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,0)
+	BdIndex = Ccode(0x1004,0)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 기둥 \x1D【 Ｌ\x04ａｉｒ \x1D】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．４\x04％ 〓\n\n\n"
 	
 Trigger {
@@ -10704,7 +11044,7 @@ Trigger {
 		},
 	}
  -- 하이브 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,1)
+	BdIndex = Ccode(0x1004,1)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 기둥 \x1D【 Ｈ\x04ｉｖｅ \x1D】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．７\x04％ 〓\n\n\n"
 	
 Trigger {
@@ -10722,7 +11062,7 @@ Trigger {
 	}
 
  -- 센터 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,2)
+	BdIndex = Ccode(0x1004,2)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 조각상 \x10【 Ｃ\x04ｅｎｔｅｒ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．２\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10738,7 +11078,7 @@ Trigger {
 		},
 	}
  -- 셀브 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,3)
+	BdIndex = Ccode(0x1004,3)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 정신체 \x10【 Ｃ\x04ｅｒｅｂｒａｔｅ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．８\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10754,7 +11094,7 @@ Trigger {
 		},
 	}
  -- 센터 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,4)
+	BdIndex = Ccode(0x1004,4)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 연결체 \x10【 Ｎ\x04ｅｘｕｓ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．８\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10770,7 +11110,7 @@ Trigger {
 		},
 	}
  -- 센터 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,5)
+	BdIndex = Ccode(0x1004,5)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 초월체 \x10【 Ｏ\x04ｖｅｒｍｉｎ\x10Ｄ 】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．４\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10786,7 +11126,7 @@ Trigger {
 		},
 	}
  -- 센터 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,6)
+	BdIndex = Ccode(0x1004,6)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 현재 \x10【 \x04ｔｈｅ \x10Ｐ\x04ｒｅｓｅｎｔ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．２\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10802,7 +11142,7 @@ Trigger {
 		},
 	}
  -- 센터 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,7)
+	BdIndex = Ccode(0x1004,7)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 심연 \x10【 Ｄ\x04ｅｅｐ \x10Ａ\x04ｂｙｓｓ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．２\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10818,7 +11158,7 @@ Trigger {
 		},
 	}
  -- 젤나가 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,8)
+	BdIndex = Ccode(0x1004,8)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 외곽 \x10【 Ｕ\x04ｎｄｅｆｉｎｅｄ \x10Ｏ\x04ｕｔｓｉｄｅ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．４\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10834,7 +11174,7 @@ Trigger {
 		},
 	}
  -- 코쿤 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,9)
+	BdIndex = Ccode(0x1004,9)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 고치 \x10【 Ｏ\x04ｖｅｒＣｏＣｏｏｎ \x10】 \x04을 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０２．０\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10850,7 +11190,7 @@ Trigger {
 		},
 	}
  -- 다고스 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,10)
+	BdIndex = Ccode(0x1004,10)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 완전체 \x10【 Ｄ\x04ａｇｇｏｔｈ \x10】 \x04를 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．５\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10866,7 +11206,7 @@ Trigger {
 		},
 	}
  -- 제네 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,11)
+	BdIndex = Ccode(0x1004,11)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 발전소 \x10【 Ｏ\x04ｖｅｒｗｈｅｌｍｉｎｇ \x10】 \x04을 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03００．５\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10882,7 +11222,7 @@ Trigger {
 		},
 	}
  -- 제네 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,12)
+	BdIndex = Ccode(0x1004,12)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 신전 \x10【 Ｌ\x04ｏｓｔ　\x10Ｃ\x04ｉｖｉｌｉｚａｔｉｏｎ \x10】 \x04을 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x03０１．０\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10898,7 +11238,7 @@ Trigger {
 		},
 	}
  -- 워프 파괴시 브금, 텍스트
-	BdIndex = CCode(0x1004,13)
+	BdIndex = Ccode(0x1004,13)
 	GText = "\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 동굴 \x10【 Ｗ\x04ａｒｐ　\x10Ｔ\x04ｕｎｎｅｌ \x10】 \x04을 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x07００．４\x04％ 〓\n\n\n"
 Trigger {
 	players = {P6},
@@ -10924,8 +11264,8 @@ CIfEnd()
 CPlayer = 6
 LocationID = 10
 BdID = 130
-C = CCode(0x1002,41)
-BdIndex = CCode(0x1004,2)
+C = Ccode(0x1002,41)
+BdIndex = Ccode(0x1004,2)
 CIf(CPlayer,{CDeaths("X", AtMost, 0, C),CommandLeastAt(BdID,LocationID+1)})
 
 Trigger {
@@ -11001,8 +11341,8 @@ CIndex = 0x67
 CPlayer = 7
 LocationID = 33
 BdID = 130
-C = CCode(0x1002,42)
-BdIndex = CCode(0x1004,2)
+C = Ccode(0x1002,42)
+BdIndex = Ccode(0x1004,2)
 CIf(CPlayer,{CDeaths("X", AtMost, 0, C),CommandLeastAt(BdID,LocationID+1)})
 Trigger {
 	players = {CPlayer},
@@ -11076,8 +11416,8 @@ CIndex = 0x68
 CPlayer = 7
 LocationID = 11
 BdID = 130
-C = CCode(0x1002,43)
-BdIndex = CCode(0x1004,2)
+C = Ccode(0x1002,43)
+BdIndex = Ccode(0x1004,2)
 CIf(CPlayer,{CDeaths("X", AtMost, 0, C),CommandLeastAt(BdID,LocationID+1)})
 Trigger {
 	players = {CPlayer},
@@ -11151,8 +11491,8 @@ CIndex = 0x69
 CPlayer = 6
 LocationID = 34
 BdID = 130
-C = CCode(0x1002,44)
-BdIndex = CCode(0x1004,2)
+C = Ccode(0x1002,44)
+BdIndex = Ccode(0x1004,2)
 CIf(CPlayer,{CDeaths("X", AtMost, 0, C),CommandLeastAt(BdID,LocationID+1)})
 Trigger {
 	players = {CPlayer},
@@ -11226,14 +11566,14 @@ for i=0, 1 do -- CIf 0x50~0x51 EX2 04~05 L140~L141 SP
 --cannon
 CIndex = 0x50+i
 CPlayer = 5
-C = CCode(0x1002,04+i)
-T = CCode(0x1003,04+i)
+C = Ccode(0x1002,04+i)
+T = Ccode(0x1003,04+i)
 LocationID = 140+i
 BdID = 127
-BdIndex = CCode(0x1004,6)
+BdIndex = Ccode(0x1004,6)
 Sw1Status1 = Set
 Sw1Status2 = Cleared
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P7},
 	conditions = {
@@ -11485,14 +11825,14 @@ for i=0, 1 do -- CIf 0x52~0x53 EX2 06~07 L142~L143 SP
 --norad
 CIndex = 0x52+i
 CPlayer = 5
-C = CCode(0x1002,06+i)
-T = CCode(0x1003,06+i)
+C = Ccode(0x1002,06+i)
+T = Ccode(0x1003,06+i)
 LocationID = 142+i
 BdID = 126
-BdIndex = CCode(0x1004,7)
+BdIndex = Ccode(0x1004,7)
 Sw1Status1 = Cleared
 Sw1Status2 = Set
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P8},
 	conditions = {
@@ -11740,16 +12080,16 @@ for i=0, 3 do -- CIf 0x54~0x57 EX2 08~11 L144~L147 CERE
 --Cere
 CIndex = 0x54+i
 CPlayer = 5
-C = CCode(0x1002,08+i)
-T = CCode(0x1003,08+i)
+C = Ccode(0x1002,08+i)
+T = Ccode(0x1003,08+i)
 LocationID = 144+i
 BdID = 151
-BdIndex = CCode(0x1004,3)
+BdIndex = Ccode(0x1004,3)
 
 CereGen = {}
-table.insert(CereGen,CreateCCode())
-table.insert(CereGen,CreateCCode())
-table.insert(CereGen,CreateCCode())
+table.insert(CereGen,CreateCcode())
+table.insert(CereGen,CreateCcode())
+table.insert(CereGen,CreateCcode())
 if i == 0 then
 	BdPlayer = 7
 elseif i == 1 then
@@ -11760,7 +12100,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -11934,11 +12274,11 @@ for i=0, 1 do -- CIf 0x58~0x59 EX2 12~13 L164~L165 NEX
 --Nexus
 CIndex = 0x58+i
 CPlayer = 5
-C = CCode(0x1002,12+i)
-T = CCode(0x1003,12+i)
+C = Ccode(0x1002,12+i)
+T = Ccode(0x1003,12+i)
 LocationID = 164+i
 BdID = 154
-BdIndex = CCode(0x1004,4)
+BdIndex = Ccode(0x1004,4)
 Sw1Status1 = Cleared
 Sw1Status2 = Set
 NexA = CreateVar(FP)
@@ -11946,7 +12286,7 @@ NexLoopLimit = CreateVar(FP)
 NexBYDTimer = CreateVar(FP)
 NexLocSet={1024,1024*3,1024*3,1024}
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P8},
 	conditions = {
@@ -12127,11 +12467,11 @@ for i=0, 1 do -- CIf 0x5A~0x5B EX2 14~15 L162~L163 NEX
 --Nexus
 CIndex = 0x5A+i
 CPlayer = 5
-C = CCode(0x1002,14+i)
-T = CCode(0x1003,14+i)
+C = Ccode(0x1002,14+i)
+T = Ccode(0x1003,14+i)
 LocationID = 162+i
 BdID = 154
-BdIndex = CCode(0x1004,4)
+BdIndex = Ccode(0x1004,4)
 Sw1Status1 = Set
 Sw1Status2 = Cleared
 NexA = CreateVar(FP)
@@ -12139,7 +12479,7 @@ NexLoopLimit = CreateVar(FP)
 NexBYDTimer = CreateVar(FP)
 NexLocSet={1024,1024,1024*3,1024*3}
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P7},
 	conditions = {
@@ -12320,11 +12660,11 @@ for i=0, 3 do -- CIf 0x5C~0x5F EX2 16~19 L148~L151 OvrM
 --OvrM
 CIndex = 0x5C+i
 CPlayer = 5
-C = CCode(0x1002,16+i)
-T = CCode(0x1003,16+i)
+C = Ccode(0x1002,16+i)
+T = Ccode(0x1003,16+i)
 LocationID = 148+i
 BdID = 148
-BdIndex = CCode(0x1004,5)
+BdIndex = Ccode(0x1004,5)
 Sw1Status1 = Set
 Sw1Status2 = Cleared
 OX = {1536,2560,1536,2560}
@@ -12340,7 +12680,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -12584,7 +12924,7 @@ TSetMemory(0x58DC60 + 0x14*23,SetTo,_Sub(CPosX,32*3)),
 TSetMemory(0x58DC68 + 0x14*23,SetTo,_Add(CPosX,32*3)),
 TSetMemory(0x58DC64 + 0x14*23,SetTo,_Sub(CPosY,32*3)),
 TSetMemory(0x58DC6C + 0x14*23,SetTo,_Add(CPosY,32*3)),
-Createunit(1,84,24,FP),
+CreateUnit(1,84,24,FP),
 })
 
 CIfX(FP,{Switch("Switch 1",Set)})
@@ -12667,11 +13007,11 @@ for i=0, 3 do -- CIf 0x60~0x63 EX2 20~23 L152~L155 Xelnaga
 --XelNaga
 CIndex = 0x60+i
 CPlayer = 5
-C = CCode(0x1002,20+i)
-T = CCode(0x1003,20+i)
+C = Ccode(0x1002,20+i)
+T = Ccode(0x1003,20+i)
 LocationID = 152+i
 BdID = 175
-BdIndex = CCode(0x1004,8)
+BdIndex = Ccode(0x1004,8)
 Sw1Status1 = Cleared
 Sw1Status2 = Set
 if i == 0 then
@@ -12684,7 +13024,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -12794,11 +13134,11 @@ for i=0, 1 do -- CIf 0x66~0x67 EX2 26~27 L184~L185 Daggoth
 DGPos = {384,3712}
 CIndex = 0x66+i
 CPlayer = 5
-C = CCode(0x1002,26+i)
-T = CCode(0x1003,26+i)
+C = Ccode(0x1002,26+i)
+T = Ccode(0x1003,26+i)
 LocationID = 184+i
 BdID = 152
-BdIndex = CCode(0x1004,10)
+BdIndex = Ccode(0x1004,10)
 DGInfection = CreateVar(FP)
 DGSwitch = CreateVar(FP)
 
@@ -12808,7 +13148,7 @@ elseif i == 1 then
 	BdPlayer = 7
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -12853,7 +13193,7 @@ Trigger {
 
 CMov(CPlayer,N_A,0)
 CWhile(CPlayer,{CDeaths("X", AtLeast, 240, T),CDeaths("X", AtMost, 340, T),CVar(FP,N_A[2],AtMost,359),NBYD})
-f_lengthdir(CPlayer,_Mul(_Sub(_ReadF(_CCode(CPlayer,T)),240),20),N_A,N_X,N_Y)
+f_Lengthdir(CPlayer,_Mul(_Sub(_ReadF(_Ccode(CPlayer,T)),240),20),N_A,N_X,N_Y)
 CAdd(CPlayer,N_X,2048)
 CAdd(CPlayer,N_Y,DGPos[i+1])
 
@@ -12885,7 +13225,7 @@ CIfOnce(CPlayer,CDeaths("X", AtLeast, 390, T))
 	}
 	DoActions(CPlayer,{SetMemory(0x6CA010, SetTo, 1707)})
 	CWhile(CPlayer,{CVar(FP,N_A[2],AtMost,359),NBYD})
-		f_lengthdir(CPlayer,2000,N_A,N_X,N_Y)
+		f_Lengthdir(CPlayer,2000,N_A,N_X,N_Y)
 		CAdd(CPlayer,N_X,2048)
 		CAdd(CPlayer,N_Y,DGPos[i+1])
 		
@@ -12957,11 +13297,11 @@ for i=0, 3 do -- CIf 0x68~0x6B EX2 28~31 L166~L169 Gene
 --Gene
 CIndex = 0x68+i
 CPlayer = 5
-C = CCode(0x1002,28+i)
-T = CCode(0x1003,28+i)
+C = Ccode(0x1002,28+i)
+T = Ccode(0x1003,28+i)
 LocationID = 166+i
 BdID = 200
-BdIndex = CCode(0x1004,11)
+BdIndex = Ccode(0x1004,11)
 
 GSY = CreateVar(FP)
 GSZ = CreateVar(FP)
@@ -12977,7 +13317,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -13070,13 +13410,13 @@ for i=0, 3 do -- CIf 0x6C~0x6F EX2 32~35 L186~L189 Temple
 --Temple
 CIndex = 0x6C+i
 CPlayer = 5
-C = CCode(0x1002,32+i)
-T = CCode(0x1003,32+i)
+C = Ccode(0x1002,32+i)
+T = Ccode(0x1003,32+i)
 LocationID = 186+i
 BdID = 174
 TemAngle = CreateVar(FP)
 TemX = CreateVar(FP)
-BdIndex = CCode(0x1004,12)
+BdIndex = Ccode(0x1004,12)
 if i == 0 then
 	BdPlayer = 7
 elseif i == 1 then
@@ -13087,7 +13427,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -13206,11 +13546,11 @@ for i=0, 3 do -- CIf 0x70~0x73 EX2 36~39 L069~L072 Warp
 --Warp
 CIndex = 0x70+i
 CPlayer = 5
-C = CCode(0x1002,36+i)
-T = CCode(0x1003,36+i)
+C = Ccode(0x1002,36+i)
+T = Ccode(0x1003,36+i)
 LocationID = 69+i
 BdID = 189
-BdIndex = CCode(0x1004,13)
+BdIndex = Ccode(0x1004,13)
 WarpMineXPos1 = {768,3328,768,3328}
 WarpMineYPos1 = {768,768,3328,3328}
 WarpMineXPos2 = {1792,2304,1792,2304}
@@ -13229,7 +13569,7 @@ elseif i == 3 then
 	BdPlayer = 6
 end
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {BdPlayer},
 	conditions = {
@@ -13361,15 +13701,15 @@ end
 				
 CIndex = 0x64
 CPlayer = 5
-C = CCode(0x1002,24)
-T = CCode(0x1003,24)
+C = Ccode(0x1002,24)
+T = Ccode(0x1003,24)
 LocationID = 178
 BdID = 201
-BdIndex = CCode(0x1004,9)
+BdIndex = Ccode(0x1004,9)
 Sw1Status1 = Cleared
 Sw1Status2 = Set
 
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P7},
 	conditions = {
@@ -13497,14 +13837,14 @@ NIfEnd()
 --OverC
 CIndex = 0x65
 CPlayer = 5
-C = CCode(0x1002,25)
-T = CCode(0x1003,25)
+C = Ccode(0x1002,25)
+T = Ccode(0x1003,25)
 LocationID = 179
 BdID = 201
-BdIndex = CCode(0x1004,9)
+BdIndex = Ccode(0x1004,9)
 Sw1Status1 = Set
 Sw1Status2 = Cleared
-BdAv = CreateCCode()
+BdAv = CreateCcode()
 Trigger {
 	players = {P8},
 	conditions = {
@@ -13633,9 +13973,9 @@ CIfEnd()--건작함수 끝
 --WhiteHole
 CIndex = 0x90
 CPlayer = 5
-C = CCode(0x1002,40)
-T = CCode(0x1003,40)
-CoreSwitch = CreateCCode()
+C = Ccode(0x1002,40)
+T = Ccode(0x1003,40)
+CoreSwitch = CreateCcode()
 BdID = 190
 CIf(CPlayer,{CVar(P6,Dis_1[2],AtMost,0),CVar(P6,Dis_2[2],AtMost,0),CDeaths("X", AtMost, 0, C),CDeaths(P6, AtLeast, 1, CoreAccept),CDeaths(P6, AtLeast, 2, Difficulty)})
 Trigger { -- remove pause
@@ -14165,7 +14505,7 @@ S2 = CSMakePolygon(6,96,0,PlotSizeCalc(6,6),1)
 CAPlot(S2,P8,181,190,nil,1,32,{1,0,0,0,9999,0},"S2_CAfunc2",FP,{CDeaths(FP,AtLeast,1,CoreSwitch),BYD},nil,{SetCDeaths(FP,SetTo,0,CoreSwitch)},"CoreSpawnSet")
 
 DoActionsX(FP,{SetCDeaths(FP,Add,1,EffT)})
-TriggerX(FP,{NBYD},{SetCDeaths(FP,SetTo,10,EfFT)},{Preserved})
+TriggerX(FP,{NBYD},{SetCDeaths(FP,SetTo,10,EffT)},{Preserved})
 CIfEnd()
 
 CIndex = 0x91
@@ -14404,21 +14744,21 @@ end
 
 
 DisplayCTextToAll(FP,{
-	CDeaths(P6,AtLeast,2,CCode(0x1000,0));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,24));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,9));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,58));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,44));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,34));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,16));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,17));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,1));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,25));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,54));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,55));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,40));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,41));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,31));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,0));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,24));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,9));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,58));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,44));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,34));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,16));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,17));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,1));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,25));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,54));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,55));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,40));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,41));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,31));
 },{
 	SetInvincibility(Disable,189,Force2,72);
 },WDWarpT,{
@@ -14427,21 +14767,21 @@ DisplayCTextToAll(FP,{
 },HumanPlayers)
 
 DisplayCTextToAll(FP,{
-	CDeaths(P6,AtLeast,2,CCode(0x1000,2));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,26));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,8));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,59));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,45));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,35));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,18));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,19));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,3));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,27));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,52));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,53));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,42));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,43));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,30));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,2));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,26));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,8));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,59));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,45));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,35));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,18));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,19));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,3));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,27));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,52));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,53));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,42));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,43));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,30));
 },{
 		SetInvincibility(Disable,189,Force2,71);
 },EUWarpT,{
@@ -14450,21 +14790,21 @@ DisplayCTextToAll(FP,{
 },HumanPlayers)
 
 DisplayCTextToAll(FP,{
-	CDeaths(P6,AtLeast,2,CCode(0x1000,4));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,20));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,10));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,56));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,28));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,36));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,37));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,5));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,21));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,48));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,49));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,46));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,32));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,14));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,15));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,4));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,20));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,10));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,56));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,28));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,36));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,37));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,5));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,21));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,48));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,49));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,46));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,32));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,14));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,15));
 },{
 		SetInvincibility(Disable,189,Force2,70);
 },WUWarpT,{
@@ -14473,21 +14813,21 @@ DisplayCTextToAll(FP,{
 },HumanPlayers)
 
 DisplayCTextToAll(FP,{
-	CDeaths(P6,AtLeast,2,CCode(0x1000,6));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,22));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,11));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,57));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,29));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,38));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,39));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,7));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,23));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,50));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,51));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,47));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,33));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,12));
-	CDeaths(P6,AtLeast,2,CCode(0x1000,13));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,6));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,22));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,11));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,57));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,29));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,38));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,39));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,7));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,23));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,50));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,51));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,47));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,33));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,12));
+	CDeaths(P6,AtLeast,2,Ccode(0x1000,13));
 },{
 		SetInvincibility(Disable,189,Force2,73);
 },EDWarpT,{
@@ -14514,14 +14854,14 @@ Trigger { -- 수정산 파괴, 모든 유저 브금 끝날시 모든 건물 파괴, 브금재생
 		RotatePlayer({
 			DisplayTextX("\n\n\n\n\n\n\n\x13\x1B\x04† \x1B기억의 보석 \x10【 Ｕ\x04ｎｋｎｏｗｎ \x10Ｃ\x04ｒｙｓｔａｌ \x10】 \x04을 파괴하였습니다. †\n\x13\x04〓 \x1FＣ\x04ｌｅａｒ \x10Ｒ\x04ａｔｅ ＋ \x10００．４\x04％ 〓\n\n\n",4);
 		},HumanPlayers,FP);
-		SetCDeaths(P6,SetTo,1,CCode(0x1002,45));
+		SetCDeaths(P6,SetTo,1,Ccode(0x1002,45));
 		SetCDeaths(P6,SetTo,6,BGMType);
 		SetCVar(P6,ClearRate[2],Add,4); -- ClearRate + 0.4%
 	},
 }
 DoActions(FP,{Order(82,FP,64,Move,64)})
-BYDBossClear = CreateCCode()
-CIf({Force1,FP},{BYD,CDeaths(FP,AtMost,0,BYDBossClear),CDeaths(FP,AtLeast,1,CCode(0x1002,40))}) -- 비욘드 보스!
+BYDBossClear = CreateCcode()
+CIf({Force1,FP},{BYD,CDeaths(FP,AtMost,0,BYDBossClear),CDeaths(FP,AtLeast,1,Ccode(0x1002,40))}) -- 비욘드 보스!
 CIfOnce(FP,Always())--BYDBossInit
 DoActionsX(FP,{
 	SetMemoryX(0x66A1E4, SetTo, 65536*16,0xFF0000); -- 수정
@@ -14538,7 +14878,7 @@ DoActionsX(FP,{RemoveUnit(204,Force2)})
 		SetCJump(0x700,0),SetCDeaths(FP,SetTo,0,MarCreate)
 		},{Preserved})
 
-CAdd(FP,_CCode("X",StoryT),Dt)
+CAdd(FP,_Ccode("X",StoryT),Dt)
 DoActionsX(FP,{RemoveUnit(41,Force2),SetCDeaths(P6,SetTo,1,BYDBossStart),Order(82,FP,64,Move,64)})
 StoryPrint("\x12\n\n\n\x13\x08？？？\n\x13\x04그래. 그것은 운명 \x08( \x11Ｆ\x04ａｔｅ \x08)\x04 이었어.\n\n\n\n",5000*1)
 StoryPrint("\x12\n\n\n\x13\x08？？？\n\x13\x04아무리 노력해보아도, 쌓아 올려도.. 분열 \x10( \x11D\x04ivide \x10)\x04 되었고\n\n\n\n",5000*2)
@@ -14549,7 +14889,6 @@ StoryPrint("\x12\n\n\n\x13\x08？？？\n\x13\x04그런 나를.. 그런 참혹한 결말에서 �
 StoryPrint("\x12\n\n\n\x13\x08？？？\n\x13\x04하지만.. 이젠 소용 없어. 이 기억은 종말 \x10( \x11D\x04emise \x10)\x04 을 맞이할 테니까.\n\n\n\n",5000*7)
 StoryPrint("\x12\n\n\n\x13\x08？？？\n\x13\x04폭풍이 지나가면, 이 기억을 다시한번 창조 하는거야.\n\n\n\n",5000*8)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이 또한 운명 \x08( \x11Ｆ\x04ａｔｅ \x08)\x04이니까.\n\n\n\n",5000*9,SetCDeaths(FP,Add,1,BYDBossP1))
-
 -- 보스전 패턴 코드 작성 단락
 TriggerX(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,B7_K[2],AtLeast,1000)},{SetDeaths(FP,Add,1,82),KillUnit(82,AllPlayers)})
 CIf(P6,CVar(FP,B7_H[2],AtLeast,1))
@@ -14640,27 +14979,27 @@ CIfEnd()
 		})
 
 
-BYDBossPT1 = CreateCCode()
-BPatternBreak = CreateCCode()
+BYDBossPT1 = CreateCcode()
+BPatternBreak = CreateCcode()
 
 
 TriggerX(FP,{CDeaths(FP,AtMost,4,B7_Ph)},{SetCDeaths(P6,SetTo,1,MarineStackSystem)},{Preserved})
 CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 	CIf(FP,CDeaths(FP,AtLeast,1,BYDBossP1))
-	CAdd(FP,_CCode("X",BYDBossPT1),Dt)
+	CAdd(FP,_Ccode("X",BYDBossPT1),Dt)
 	CIfEnd()
 	B7_W =CreateVar(FP)
 	CIf(FP,{CDeaths(FP,AtLeast,1,BYDBossP1),CDeaths(FP,AtMost,2*1000,BYDBossPT1)})
 		CMov(FP,B7_W,15)
 		CWhile(FP,{CVar(FP,B7_W[2],AtLeast,1),Bring(FP,AtMost,499,49,64)},SetCVar(FP,B7_W[2],Subtract,1))
-		f_lengthdir(FP,150,_Mod(_Rand(),360),N_X,N_Y)
+		f_Lengthdir(FP,150,_Mod(_Rand(),360),N_X,N_Y)
 		Simple_SetLocX(FP,23,N_X,N_Y,N_X,N_Y,{Simple_CalcLoc(23,2048,2048,2048,2048),CreateUnitWithProperties(1,49,24,FP,{invincible = true}),Order(49,FP,64,Move,64)})
 		CWhileEnd()
 	CIfEnd()
 	BPatternBreakTable = {}
 	BPatternResetTable = {}
 	for i = 0, 5 do
-		table.insert(BPatternBreakTable,CreateCCode())
+		table.insert(BPatternBreakTable,CreateCcode())
 		table.insert(BPatternResetTable,SetCDeaths(FP,SetTo,0,BPatternBreakTable[i+1]))
 		TriggerX(FP,{CDeaths(FP,AtLeast,(2+i)*1000,BYDBossPT1),CDeaths(FP,AtMost,8*1000,BYDBossPT1),CDeaths(FP,AtMost,0,BPatternBreakTable[i+1])},{RunAIScriptAt(JYD,64),SetCDeaths(FP,Add,1,BPatternBreakTable[i+1])},{Preserved})
 	end
@@ -14687,7 +15026,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04그만 포기하고 \x0
 	CIf(FP,CDeaths(FP,AtLeast,3000*4,StoryT))
 		CMov(FP,B7_W,8)
 		CWhile(FP,{CVar(FP,B7_W[2],AtLeast,1),Bring(FP,AtMost,15,128,64)},SetCVar(FP,B7_W[2],Subtract,1))
-		f_lengthdir(FP,_Mod(_Rand(),360),_Mod(_Rand(),360),N_X,N_Y)
+		f_Lengthdir(FP,_Mod(_Rand(),360),_Mod(_Rand(),360),N_X,N_Y)
 		Simple_SetLocX(FP,23,N_X,N_Y,N_X,N_Y,{Simple_CalcLoc(23,2048,2048,2048,2048),CreateUnitWithProperties(1,128,24,P6,{hitpoint = 50}),CreateUnit(1,84,24,FP)})
 		CWhileEnd()
 
@@ -14711,7 +15050,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04질투, 배신, 죽음,
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04결국 나에게 주어진건 이 \x10고통의 기억들\x04 뿐.\n\n\n\n",3000*2)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이런 비극은.. \x08더이상 되풀이하고 싶지 않아!\n\n\n\n",3000*3,{SetCDeaths(P6,SetTo,1,PatternProvider)})
 	CIf(FP,CDeaths(FP,AtLeast,3000*3,StoryT),{SetCJump(0x648,0),SetMemoryX(0x66A1E4, SetTo, 65536*16,0xFF0000)})
-		B7_T = CreateCCode()
+		B7_T = CreateCcode()
 		DoActionsX(FP,SetCDeaths(FP,Add,1,B7_T))
 		DoActionsX(FP,{SetInvincibility(Disable,82,FP,64)},1)
 		CIf(FP,{TTOR({CDeaths(FP,Exactly,1,B7_T),CDeaths(FP,Exactly,35,B7_T)})})
@@ -14775,7 +15114,7 @@ B7_Point = CreateVar(FP)
 B7_A2 = CreateVar(FP)
 B7_W2 = CreateVar(FP)
 B7_W3 = CreateVar(FP)
-B7_T2 = CreateCCode()
+B7_T2 = CreateCcode()
 CIf(FP,CDeaths(FP,Exactly,4,B7_Ph),{SetCJump(0x648,1),SetMemoryX(0x66A1E4, SetTo, 65536*0,0xFF0000),KillUnit(217,FP)}) -- 4페이즈
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이렇게까지 날 고통스럽게 할 생각이야..?\n\n\n\n",3000*1)
 StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04오히려 포기하고싶은건 나인데..!\n\n\n\n",3000*2)
@@ -14792,7 +15131,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들
 		CIf(FP,Memory(0x628438,AtLeast,1))
 			f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 			DoActions(FP,{CreateUnitWithProperties(1,49,64,P6,{invincible = true}),CreateUnitWithProperties(1,84,64,P6,{hallucinated = true})})
-			f_lengthdir(FP,2000,_Add(B7_A,_Mul(B7_W3,B7_A2)),B7_X,B7_Y)
+			f_Lengthdir(FP,2000,_Add(B7_A,_Mul(B7_W3,B7_A2)),B7_X,B7_Y)
 			CDoActions(P6,{
 				TSetDeaths(_Add(Nextptrs,13),SetTo,1500,0),
 				TSetDeathsX(_Add(Nextptrs,18),SetTo,1500,0,0xFFFF),
@@ -14810,7 +15149,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들
 				CWhile(FP,{CVar(FP,B7_W[2],AtLeast,1),CVar(FP,B7_R[2],AtMost,600)},SetCVar(FP,B7_W[2],Subtract,1))
 					CDoActions(FP,{TSetCVar(FP,B7_W2[2],SetTo,B7_Point)})
 					CWhile(FP,{CVar(FP,B7_W2[2],AtLeast,1)},{SetCVar(FP,B7_W2[2],Subtract,1)})
-						f_lengthdir(FP,B7_R,_Add(B7_A,_Mul(B7_W2,B7_A2)),B7_X,B7_Y)
+						f_Lengthdir(FP,B7_R,_Add(B7_A,_Mul(B7_W2,B7_A2)),B7_X,B7_Y)
 						CAdd(FP,B7_X,2048)
 						CAdd(FP,B7_Y,2048)
 						Simple_SetLocX(FP,23,B7_X,B7_Y,B7_X,B7_Y,{KillUnit(49,P6)})
@@ -15101,7 +15440,7 @@ PyCon2 = {154,166,188}
 PyCon3 = {155,165,187}
 PyCon4 = {156,164,190}
 
-PyCCode = {CreateCCode(),CreateCCode(),CreateCCode(),CreateCCode()}
+PyCCode = {CreateCcode(),CreateCcode(),CreateCcode(),CreateCcode()}
 for i = 0, 3 do
 
 if i == 0 then
@@ -15319,8 +15658,8 @@ Trigger { -- 상단 다고스 조건만족시 무적해제
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,9));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,10));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,9));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,10));
 	},
 	actions = {
 		RotatePlayer({
@@ -15336,8 +15675,8 @@ Trigger { -- 하단 다고스 조건만족시 무적해제
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,8));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,11));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,8));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,11));
 	},
 	actions = {
 		RotatePlayer({
@@ -15353,12 +15692,12 @@ Trigger { -- 상단 디스럽터 조건만족시 무적해제
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,4));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,5));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,14));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,15));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,18));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,19));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,4));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,5));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,14));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,15));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,18));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,19));
 		CDeaths(P6,AtLeast,1,CoreCon1);
 		
 	},
@@ -15377,12 +15716,12 @@ Trigger { -- 하단 디스럽터 조건만족시 무적해제
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,6));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,7));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,12));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,13));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,16));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,17));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,6));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,7));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,12));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,13));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,16));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,17));
 		CDeaths(P6,AtLeast,1,CoreCon2);
 	},
 	actions = {
@@ -15400,16 +15739,16 @@ Trigger { -- 하드이상 코어 무적해제 조건1
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,41));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,44));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,20));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,23));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,26));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,30));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,31));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,34));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,35));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,24));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,41));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,44));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,20));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,23));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,26));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,30));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,31));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,34));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,35));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,24));
 	},
 	actions = {
 		SetCDeaths(P6,Add,1,CoreCon1);
@@ -15420,16 +15759,16 @@ Trigger { -- 하드이상 코어 무적해제 조건2
 	conditions = { 
 		Label(0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,42));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,43));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,21));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,22));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,27));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,28));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,29));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,32));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,33));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,25));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,42));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,43));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,21));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,22));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,27));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,28));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,29));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,32));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,33));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,25));
 	},
 	actions = {
 		SetCDeaths(P6,Add,1,CoreCon2);
@@ -15441,11 +15780,11 @@ Trigger { -- 나머지건물, 함정하이브 파괴시 수정광산 무적해제 하드
 		Label(0);
 		NBYD;
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,0));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,1));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,2));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,3));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,40));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,0));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,1));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,2));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,3));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,40));
 
 		Bring(AllPlayers,AtMost,0,"【 Divide 】",64);
 		Bring(AllPlayers,AtMost,0,"【 Tenebris 】",64);
@@ -15471,11 +15810,11 @@ Trigger { -- 나머지건물, 함정하이브 파괴시 수정광산 무적해제 하드
 		CDeaths(FP,AtLeast,1,BYDBossClear);
 		Memory(0x58F494,AtMost,0);
 		CDeaths(P6,AtLeast,2,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,0));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,1));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,2));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,3));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,40));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,0));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,1));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,2));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,3));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,40));
 		Bring(AllPlayers,AtMost,0,"【 Divide 】",64);
 		Bring(AllPlayers,AtMost,0,"【 Tenebris 】",64);
 		Bring(AllPlayers,AtMost,0,"【 Demise 】",64);
@@ -15503,7 +15842,7 @@ Trigger { -- 수정산 파괴 후 브금 끝날 시 하드모드 이상 기믹 발동, 임시 승리트리�
 		DeathsX(3,AtMost,0,440,0xFFFFFF);
 		DeathsX(4,AtMost,0,440,0xFFFFFF);
 		Memory(0x58F494,AtMost,0);
-		CDeaths(P6,Exactly,1,CCode(0x1002,45));
+		CDeaths(P6,Exactly,1,Ccode(0x1002,45));
 		CDeaths(P6,AtLeast,2,Difficulty);
 	},
 	actions = {
@@ -15516,7 +15855,7 @@ Trigger { -- 수정산 파괴 후 브금 끝날 시 하드모드 이상 기믹 발동, 임시 승리트리�
 		
 		},
 	}
-CIf(Force1,{CDeaths(P6,Exactly,1,HDStart),CDeaths(P6,Exactly,1,CCode(0x1002,45)),CVar(P6,HDEnd[2],AtMost,199)})
+CIf(Force1,{CDeaths(P6,Exactly,1,HDStart),CDeaths(P6,Exactly,1,Ccode(0x1002,45)),CVar(P6,HDEnd[2],AtMost,199)})
 for i = 0, 155 do
 Trigger { -- 하드이상 브금제어
 	players = {Force1},
@@ -15528,7 +15867,7 @@ Trigger { -- 하드이상 브금제어
 		PlayWAV(BGMArr[i+1]); 
 		PlayWAV(BGMArr[i+1]); 
 		SetDeathsX(CurrentPlayer,Add,1000,440,0xFFFFFF);
-		SetDeaths(CurrentPlayer,Add,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
@@ -15544,7 +15883,7 @@ Trigger { -- 하드이상 브금제어
 		PlayWAV(BGMArr[157]); 
 		PlayWAV(BGMArr[157]); 
 		SetDeathsX(CurrentPlayer,Add,500,440,0xFFFFFF);
-		SetDeaths(CurrentPlayer,Add,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
@@ -15559,13 +15898,13 @@ Trigger { -- 하드이상 브금제어
 		PlayWAV(BGMArr[1]); 
 		PlayWAV(BGMArr[1]); 
 		SetDeathsX(CurrentPlayer,Add,980,440,0xFFFFFF);
-		SetDeaths(CurrentPlayer,SetTo,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
 	}
 CIfEnd()
-CIf(P6,{CDeaths(P6,Exactly,1,HDStart),CDeaths(P6,Exactly,1,CCode(0x1002,45)),CVar(P6,HDEnd[2],AtMost,199)})
+CIf(P6,{CDeaths(P6,Exactly,1,HDStart),CDeaths(P6,Exactly,1,Ccode(0x1002,45)),CVar(P6,HDEnd[2],AtMost,199)})
 for i = 0, 155 do
 Trigger { -- 하드이상 브금제어
 	players = {P6},
@@ -15579,7 +15918,7 @@ Trigger { -- 하드이상 브금제어
 			PlayWAVX(BGMArr[i+1])
 		},ObPlayers,FP);
 		SetMemory(0x58F494,Add,980);
-		SetDeaths(CurrentPlayer,Add,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
@@ -15597,7 +15936,7 @@ Trigger { -- 하드이상 브금제어
 			PlayWAVX(BGMArr[157])
 		},ObPlayers,FP);
 		SetMemory(0x58F494,Add,500);
-		SetDeaths(CurrentPlayer,Add,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,Add,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
@@ -15614,7 +15953,7 @@ Trigger { -- 하드이상 브금제어
 			PlayWAVX(BGMArr[1])
 		},ObPlayers,FP);
 		SetMemory(0x58F494,Add,1000);
-		SetDeaths(CurrentPlayer,SetTo,1,441,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,SetTo,1,441,0xFFFFFF);
 		PreserveTrigger();
 		
 		},
@@ -15797,15 +16136,15 @@ Trigger { -- 이지모드 클리어조건1
 	conditions = { 
 		Label(0);
 		CDeaths(P6,Exactly,1,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,4));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,5));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,14));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,15));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,18));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,19));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,20));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,23));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,24));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,4));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,5));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,14));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,15));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,18));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,19));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,20));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,23));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,24));
 	},
 	actions = {
 		SetCDeaths(P6,Add,1,EZCon);
@@ -15816,15 +16155,15 @@ Trigger { -- 이지모드 클리어조건2
 	conditions = { 
 		Label(0);
 		CDeaths(P6,Exactly,1,Difficulty);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,6));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,7));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,12));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,13));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,16));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,17));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,21));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,22));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,25));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,6));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,7));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,12));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,13));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,16));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,17));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,21));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,22));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,25));
 	},
 	actions = {
 		SetCDeaths(P6,Add,1,EZCon);
@@ -15836,18 +16175,18 @@ Trigger { -- 나머지건물, 함정하이브 파괴시 수정광산 무적해제 이지
 		Label(0);
 		CDeaths(P6,Exactly,1,Difficulty);
 		CDeaths(P6,Exactly,2,EZCon);
-		CDeaths(P6,AtLeast,1,CCode(0x1002,0));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,1));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,2));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,3));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,8));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,9));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,10));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,11));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,0));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,1));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,2));
-		CDeaths(P6,AtLeast,1,CCode(0x1002,3));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,0));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,1));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,2));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,3));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,8));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,9));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,10));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,11));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,0));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,1));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,2));
+		CDeaths(P6,AtLeast,1,Ccode(0x1002,3));
 	},
 	actions = {
 		RotatePlayer({
@@ -15873,7 +16212,7 @@ Trigger { -- 수정산 파괴 후 브금 끝날 시 보스브금재생, 보스출현 이지모드
 		DeathsX(3,AtMost,0,440,0xFFFFFF);
 		DeathsX(4,AtMost,0,440,0xFFFFFF);
 		Memory(0x58F494,AtMost,0);
-		CDeaths(P6,Exactly,1,CCode(0x1002,45));
+		CDeaths(P6,Exactly,1,Ccode(0x1002,45));
 		CDeaths(P6,Exactly,1,Difficulty);
 	},
 	actions = {
@@ -15894,10 +16233,10 @@ Trigger { -- 젤나가 전부 부술시 타이머 삭제 조건
 	players = {P6},
 	conditions = {
 		Label(0);
-		CDeaths("X",Exactly,1,CCode(0x1002,20));
-		CDeaths("X",Exactly,1,CCode(0x1002,21));
-		CDeaths("X",Exactly,1,CCode(0x1002,22));
-		CDeaths("X",Exactly,1,CCode(0x1002,23));
+		CDeaths("X",Exactly,1,Ccode(0x1002,20));
+		CDeaths("X",Exactly,1,Ccode(0x1002,21));
+		CDeaths("X",Exactly,1,Ccode(0x1002,22));
+		CDeaths("X",Exactly,1,Ccode(0x1002,23));
 	},
 	actions = {
 		SetSwitch("Switch 103",Set);
@@ -16079,8 +16418,8 @@ Trigger {
 		PreserveTrigger();
 	},
 }
-TT_Invincible1 = CreateCCode()
-TT_Invincible2 = CreateCCode()
+TT_Invincible1 = CreateCcode()
+TT_Invincible2 = CreateCcode()
 BYDTTCondTable = {}
 BYDTTCondTable2 = {}
 for i = 0, 4 do
@@ -17009,7 +17348,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,0,GMode);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
 	},
 	actions = {
 		PlayWAV("staredit\\wav\\shield_unlock.ogg");
@@ -17049,7 +17388,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 		CDeaths(P6,Exactly,0,GMode);
 		CDeaths(i,AtLeast,1,ShieldUnlock);
 		CDeaths(P6,Exactly,3,Difficulty);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
 		Memory(0x58F4B0+(4*i),AtMost,0);
 	},
 	actions = {
@@ -17296,7 +17635,7 @@ Trigger { -- 조합 영웅마린
 	},
 	actions = {
 		ModifyUnitEnergy(1,32,j,58+i,0);
-		SetResources(j,Subtract,15000,ore);
+		SetResources(j,Subtract,15000,Ore);
 		RemoveUnitAt(1,32,58+i,j);
 		CreateUnitWithProperties(1,20,204+j,j,{energy = 100});
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x04Marine을 \x1BH \x04Marine으로 \x19변환\x04하였습니다. - \x1F15000 O r e \x07』",4);
@@ -17316,7 +17655,7 @@ Trigger { -- 조합 루미너스 마린
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,25000,ore);
+		SetResources(j,Subtract,25000,Ore);
 		RemoveUnitAt(1,20,58+i,j);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetDeaths(j,Add,1,125);
@@ -17353,7 +17692,7 @@ Trigger { -- 조합 루미너스 마린
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,25000,ore);
+		SetResources(j,Subtract,25000,Ore);
 		RemoveUnitAt(1,20,58+i,j);
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. \x1B(최대 96기까지 보유 가능) \x04- \x1F25000 O r e \x07』",4);
@@ -17375,7 +17714,7 @@ Trigger { -- 조합 루미너스 마린
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,25000,ore);
+		SetResources(j,Subtract,25000,Ore);
 		RemoveUnitAt(1,20,58+i,j);
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. \x04- \x1F25000 O r e \x07』",4);
@@ -17396,7 +17735,7 @@ Trigger { -- 조합 루미너스 마린
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,25000,ore);
+		SetResources(j,Subtract,25000,Ore);
 		RemoveUnitAt(1,20,58+i,j);
 		SetDeaths(j,Add,1,125);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1BH \x04Marine을 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 으로 \x19변환\x04하였습니다. \x04- \x1F25000 O r e \x07』",4);
@@ -17412,13 +17751,14 @@ Trigger { -- 조합 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		NBYD;
 		CDeaths(P6,Exactly,1,EVMode);
 		Bring(j,AtLeast,1,20,58+i);
 		Accumulate(j,AtLeast,50000,Ore);
 	},
 	actions = {
 		ModifyUnitEnergy(1,20,j,58+i,0);
-		SetResources(j,Subtract,50000,ore);
+		SetResources(j,Subtract,50000,Ore);
 		RemoveUnitAt(1,20,58+i,j);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetDeaths(j,Add,1,125);
@@ -17470,9 +17810,9 @@ for i=0, 4 do
 	Trigger {
 		players = {i},
 		conditions = {
-			label(0);
+			Label(0);
 			CDeaths(FP,Exactly,j,GMode);
-			Accumulate(i,AtMost,UpCostTable[j+1]-1,ore);
+			Accumulate(i,AtMost,UpCostTable[j+1]-1,Ore);
 			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
 			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
 			MemoryB(0x58D088+(46*i)+9,AtMost,249);
@@ -17487,16 +17827,16 @@ for i=0, 4 do
 	Trigger {
 		players = {i},
 		conditions = {
-			label(0);
+			Label(0);
 			CDeaths(FP,Exactly,j,GMode);
-			Accumulate(i,AtLeast,UpCostTable[j+1],ore);
+			Accumulate(i,AtLeast,UpCostTable[j+1],Ore);
 			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
 			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
 			MemoryB(0x58D088+(46*i)+9,AtMost,249);
 		},
 		actions = {
 			
-			SetResources(i,Subtract,UpCostTable[j+1],ore);
+			SetResources(i,Subtract,UpCostTable[j+1],Ore);
 			SetMemoryB(0x58D2B0+(46*i)+7,SetTo,250);
 			SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
 		}
@@ -17549,7 +17889,7 @@ Trigger {
 	actions = {
 		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
 		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
-		SetMemoryB(0x58D088+(46*i)+6,SetTo,90);
+		SetMemoryB(0x58D088+(46*i)+6,SetTo,50);
 		SetMemoryB(0x58D2B0+(46*i)+6,SetTo,0);
 	}
 }
@@ -17578,7 +17918,7 @@ for i = 0, 4 do
 				
 			CElseX()
 				CDoActions(FP,{TSetMemoryX(PUPtrArr[i+1],SetTo,_Mul(PerAttack[i+1],(256^PUMaskRetArr[i+1])),255*(256^PUMaskRetArr[i+1])),
-				SetCP(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCP(FP)})
+				SetCp(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCp(FP)})
 				CMov(FP,CurPerAttack[i+1],PerAttack[i+1])
 			CIfXEnd()
 		CIfEnd()
@@ -17591,8 +17931,13 @@ for i = 0, 4 do
 					SetCVar(FP,PerArmorCost[i+1][2],Add,PerArmorCostFactor),
 					TSetMemory(PAPtr[i+1],SetTo,_Add(PerArmor[i+1],100))
 				})
+				CIfX(FP,{CDeaths(P6,Exactly,0,EVMode);})
 				CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
 				CMov(P6,0x515B88+(i*4),_Div(_Mul(_Sub(_Mov(100),PerArmor[i+1]),256),100))--비욘드임
+				CElseX()
+				CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)),100),_Sub(_Mov(100),PerArmor[i+1])))--비욘드임
+				CMov(P6,0x515B88+(i*4),_Div(_Mul(_Sub(_Mov(100),PerArmor[i+1]),128),100))--비욘드임
+				CIfXEnd()
 				CIf(FP,LocalPlayerID(i))
 				ItoDec(FP,PerArmorCost[i+1],VArr(PerCostVA2,0),2,0x1F,0)
 				_0DPatchforVArr(FP,PerCostVA2,6)
@@ -17602,7 +17947,7 @@ for i = 0, 4 do
 
 			CElseX()
 				CDoActions(FP,{TSetMemoryX(PAPtrArr[i+1],SetTo,_Mul(PerArmor[i+1],(256^PAMaskRetArr[i+1])),255*(256^PAMaskRetArr[i+1])),
-				SetCP(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCP(FP)})
+				SetCp(i),DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4),SetCp(FP)})
 				CMov(FP,CurPerArmor[i+1],PerArmor[i+1])
 			CIfXEnd()
 		CIfEnd()
@@ -17662,7 +18007,7 @@ conditions = {
 	Bring(j,AtLeast,1,12,64);
 },
 actions = {
-	SetResources(j,Add,45000,ore);
+	SetResources(j,Add,45000,Ore);
 	RemoveUnitAt(1,12,"Anywhere",j);
 	DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0436기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
 	PreserveTrigger();
@@ -17676,7 +18021,7 @@ conditions = {
   Bring(j,AtLeast,1,12,64);
 },
 actions = {
-  SetResources(j,Add,45000,ore);
+  SetResources(j,Add,45000,Ore);
   RemoveUnitAt(1,12,"Anywhere",j);
   DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
   PreserveTrigger();
@@ -17713,7 +18058,7 @@ Trigger { -- 소환 루미너스 마린
 		RemoveUnitAt(1,12,"Anywhere",j);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. \x1B(최대 96기까지 보유 가능) \x04- \x1F45000 O r e \x07』",4);
 		SetCDeaths(FP,Add,1,MarCreate);
-		SetCVAar(VArr(PlayerMarCreateToken,j,fP),Add,1);
+		SetCVAar(VArr(PlayerMarCreateToken,j,FP),Add,1);
 		PreserveTrigger();
 	},
 }  
@@ -17735,7 +18080,7 @@ Trigger { -- 소환 루미너스 마린
 		BYDBossMarHPRecover;
 		CreateUnitWithProperties(3,MarID[j+1],204+j,j,{energy = 100});
 		BYDBossMarHPPatch;
-		SetResources(j,Subtract,90000,ore);
+		SetResources(j,Subtract,90000,Ore);
 		PreserveTrigger();
 	},
 }  
@@ -17755,7 +18100,7 @@ Trigger { -- 소환 루미너스 마린
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x1B3기 \x19소환\x04하였습니다. \x04- \x1F135,000 O r e \x07』",4);
 		SetCDeaths(FP,Add,1,MarCreate);
 		CreateUnitWithProperties(3,MarID[j+1],204+j,j,{energy = 100});
-		SetResources(j,Subtract,90000,ore);
+		SetResources(j,Subtract,90000,Ore);
 		PreserveTrigger();
 	},
 }  
@@ -17771,7 +18116,7 @@ Trigger { -- 소환 루미너스 마린
 		Accumulate(j,AtMost,89999,Ore);
 	},
 	actions = {
-		SetResources(j,Add,45000,ore);
+		SetResources(j,Add,45000,Ore);
 		RemoveUnitAt(1,12,"Anywhere",j);
 		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F90000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
 		PreserveTrigger();
@@ -17789,7 +18134,7 @@ Trigger { -- 소환 루미너스 마린
 		Bring(j,AtLeast,96,MarID[j+1],64);
 	},
 	actions = {
-		SetResources(j,Add,45000,ore);
+		SetResources(j,Add,45000,Ore);
 		RemoveUnitAt(1,12,"Anywhere",j);
 		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19최대 보유 가능수\x04가 초과되었습니다. \x1B(최대 96기까지 보유 가능) \x04자원 반환 + \x1F45000 O r e \x07』",4);
 		PreserveTrigger();
@@ -17800,6 +18145,7 @@ Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		NBYD;
 		CDeaths(P6,Exactly,1,EVMode);
 		Deaths(CurrentPlayer,AtLeast,36,125);
 		Bring(j,AtLeast,1,12,64);
@@ -17807,7 +18153,7 @@ Trigger { -- 소환 루미너스 마린
 	},
 	actions = {
 		RemoveUnitAt(1,12,"Anywhere",j);
-		SetResources(j,Subtract,25000,ore);
+		SetResources(j,Subtract,25000,Ore);
 		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. - \x1F70000 O r e \x07』",4);
 		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
 		SetCDeaths(FP,Add,1,MarCreate);
@@ -17819,13 +18165,14 @@ Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
+		NBYD;
 		CDeaths(P6,Exactly,1,EVMode);
 		Deaths(CurrentPlayer,AtLeast,36,125);
 		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtMost,24999,Ore);
 	},
 	actions = {
-		SetResources(j,Add,24999,ore);
+		SetResources(j,Add,24999,Ore);
 		RemoveUnitAt(1,12,"Anywhere",j);
 		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F25000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
 		PreserveTrigger();
@@ -17932,7 +18279,7 @@ end end
 MarDmg = {1200,4800}
 
 CIf(P6,Switch("Switch 203",Set))
-CIf(P6,CDeaths(P6,Atmost,1,GMode))
+CIf(P6,CDeaths(P6,AtMost,1,GMode))
 
 for x = 1, 5 do
 CIf(P6,CVar(P6,SetPlayers[2],Exactly,x))
@@ -18411,7 +18758,7 @@ Trigger { -- 브금재생 j번
 		actions = {
 		PlayWAV(BGMFile);
 		PlayWAV(BGMFile);
-		SetDeaths(CurrentPlayer,SetTo,Value,440,0xFFFFFF);
+		SetDeathsX(CurrentPlayer,SetTo,Value,440,0xFFFFFF);
 		PreserveTrigger();
 	},
 }
@@ -18528,7 +18875,7 @@ Trigger { -- 브금재생 인트로 - 관전자
 }
 CIfEnd()
 --]]
-SETimer = CreateCCode()
+SETimer = CreateCcode()
 TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
 
 DoActionsP({KillUnit(84,Force2),KillUnit(47,P6)},P6)
@@ -18632,11 +18979,11 @@ f_GetTblptr(FP,PerUpTblPtr,1370)
 
 
 
-f_MemCpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2]-3)
---f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
-f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2]-3)
---f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
-f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
+f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2]-3)
+--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
+f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2]-3)
+--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
+f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
 
 
 ItoDec(FP,PerAttackCost[1],VArr(PerCostVA,0),2,0x1F,0)
@@ -18644,12 +18991,12 @@ _0DPatchforVArr(FP,PerCostVA,6)
 ItoDec(FP,PerArmorCost[1],VArr(PerCostVA2,0),2,0x1F,0)
 _0DPatchforVArr(FP,PerCostVA2,6)
 
-f_MemCpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
-f_MemCpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]+(5*4)),_TMem(Arr(PerAttackT2[3],0),"X","X",1),PerAttackT2[2])
+f_Memcpy(FP,PerUpTblPtr,_TMem(Arr(PerAttackT1[3],0),"X","X",1),PerAttackT1[2])
+f_Memcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]+(5*4)),_TMem(Arr(PerAttackT2[3],0),"X","X",1),PerAttackT2[2])
 f_Movcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]),VArr(PerCostVA2,0),5*4)
-f_MemCpy(FP,PerArmTblPtr,_TMem(Arr(PerArmorT1[3],0),"X","X",1),PerArmorT1[2])
+f_Memcpy(FP,PerArmTblPtr,_TMem(Arr(PerArmorT1[3],0),"X","X",1),PerArmorT1[2])
 f_Movcpy(FP,_Add(PerUpTblPtr,PerAttackT1[2]),VArr(PerCostVA,0),5*4)
-f_MemCpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]+(5*4)),_TMem(Arr(PerArmorT2[3],0),"X","X",1),PerArmorT2[2])
+f_Memcpy(FP,_Add(PerArmTblPtr,PerArmorT1[2]+(5*4)),_TMem(Arr(PerArmorT2[3],0),"X","X",1),PerArmorT2[2])
 
 DoActionsX(FP,{
 SetCtrigX("X",MarListHeader[1][2],0x15C,0,SetTo,"X",0x200+((1-1)*0x100),0x15C,1,0),
