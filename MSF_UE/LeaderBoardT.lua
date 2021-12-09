@@ -1,5 +1,5 @@
 function LeaderBoardTFunc()
-	local LeaderBoardT = CreateCCode()
+	local LeaderBoardT = CreateCcode()
 	local DifTextArr = {"\x0E£Å£á£ó£ù","\x0F£Î£ï£ò£í£á£ì","\x08£È£á£ò£ä","\x10£É£î£ó£á£î£å"}
 	for i = 1, 4 do
 		CIf(FP,{Switch("Switch 240",Set),CVar(FP,Diff,Exactly,i-1)})

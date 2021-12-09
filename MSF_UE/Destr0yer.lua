@@ -52,8 +52,8 @@ local Lyrics = {
 	local BGMLength = 439
 	local BGMVar = 12
 	local Length = 666
-	local CBulletT = CreateCCode()
-	local LockBossUnit = CreateCCode()
+	local CBulletT = CreateCcode()
+	local LockBossUnit = CreateCcode()
 	--if TestStart == 1 then
 		--CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
 	--else	
@@ -65,9 +65,9 @@ local Lyrics = {
 
 	
 	local TShape = CXMakeShape(96,{0,0,0},{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1})
-	local WhileLaunch = CreateCCode()
-	local BursterCall = CreateCCode()
-	local BlackBox =CreateCCode()
+	local WhileLaunch = CreateCcode()
+	local BursterCall = CreateCcode()
+	local BlackBox =CreateCcode()
 	local DTotalDmg = CreateVar(FP)
 	local TSize = CreateVar(FP)
 	local XAngle = CreateVar(FP)
@@ -107,7 +107,7 @@ local Lyrics = {
 	end
 	local PatternCcode = {}
 	function Create_PatternCcode(Table)
-		local TempCcode = CreateCCode()
+		local TempCcode = CreateCcode()
 		table.insert(Table,TempCcode)
 		return TempCcode
 	end
@@ -278,7 +278,7 @@ Trigger {
 	Simple_SetLocX(FP,"DCenter",0,0,32,32,{MoveLocation("DCenter",186,FP,64)})
 	local LyricsCCode = {}
 	for j, k in pairs(Lyrics) do
-		local TempCcode = CreateCCode()
+		local TempCcode = CreateCcode()
 		table.insert(LyricsCCode,TempCcode)
 		Trigger { -- »ó½Ãºê±Ý
 			players = {FP},
@@ -649,9 +649,9 @@ Trigger {
 	CIf(FP,CDeaths(FP,AtLeast,1,Destr0yerClear))
 		local ClearText1 = "\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04\x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù£å£ò\x07 ¡» \x04¿¡°Ô¼­ »ì¾Æ³²À¸¼Ì½À´Ï´Ù.\x13\n\x14\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
 		local ClearText2 = "\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x14\n\x14\n\n\x13\x04Á¡¼ö¸¦ °è»êÁßÀÔ´Ï´Ù...\n\x14\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
-		local ClearTimer = CreateCCode()
-		local ClearSw1 = CreateCCode()
-		local ClearSw2 = CreateCCode()
+		local ClearTimer = CreateCcode()
+		local ClearSw1 = CreateCcode()
+		local ClearSw2 = CreateCcode()
 		TriggerX(FP,{CDeaths(FP,AtMost,0,ClearTimer)},{RotatePlayer({PlayWAVX("staredit\\wav\\DClear.ogg"),PlayWAVX("staredit\\wav\\DClear.ogg"),DisplayTextX(ClearText1,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearTimer)},{Preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,3000,ClearTimer),CDeaths(FP,AtMost,0,ClearSw1)},{RotatePlayer({PlayWAVX("staredit\\wav\\CalcSE.ogg"),PlayWAVX("staredit\\wav\\CalcSE.ogg"),DisplayTextX(ClearText2,4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ClearSw1)},{Preserved})
 		--CAdd(FP,_Ccode("X",ClearTimer),Dt)

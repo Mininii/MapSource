@@ -4499,7 +4499,7 @@ SetRecoverCp()
 RecoverCp(FP)
 CMov(FP,Du,Dy)
 --]]
-local TGiveComplete = CreateCCode()
+local TGiveComplete = CreateCcode()
 NWhile(FP,CDeaths(FP,AtLeast,1,TGiveforCoCoon),{SetCDeaths(FP,Subtract,1,TGiveforCoCoon),SetCDeaths(FP,SetTo,1,TGiveComplete)})
 Trigger2(FP,{Command(11,AtLeast,1,80)},{GiveUnits(1,80,11,64,7)},{Preserved})
 Trigger2(FP,{Command(11,AtLeast,1,21)},{GiveUnits(1,21,11,64,7)},{Preserved})
@@ -4825,7 +4825,7 @@ end
 
 
 CIf(FP,CVar(FP,HondonMode[2],AtLeast,1))
-local HondonT = CreateCCode()
+local HondonT = CreateCcode()
 CIf(FP,CDeaths(FP,AtMost,0,HondonT),SetCDeaths(FP,SetTo,10,HondonT))
 CunitCtrig_Part1(FP)
 NJumpX(FP,0x100,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
@@ -5689,7 +5689,7 @@ CIf(AllPlayers,{Switch("Switch 201",Set)}) -- GameStart
 DoActions2(FP,ButtonSetPatch2,1)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,WaveT)})
 DoActionsX(FP,{SetCDeaths(FP,Add,24*75,WaveT)},1)
-local WaveC = CreateCCode()
+local WaveC = CreateCcode()
 
 CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,3600),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
 
@@ -7045,7 +7045,7 @@ NIfEnd()
 
 BKillPoint({CDeaths(FP,AtLeast,6000,GunBossAct),CDeaths(FP,AtLeast,2,FormCon)},82,2000000,"\x08£Ç\x11£á£ò\x18£Ç\x10£á£î\x1F£Ô\x17£õ\x0F£Á")
 NIf(FP,Command(FP,AtLeast,1,5))
-local TBossT = CreateCCode()
+local TBossT = CreateCcode()
 
 --
 --
@@ -7780,7 +7780,7 @@ CIfEnd()
 
 CIf(FP,CDeaths(FP,AtLeast,1,isSingle))
 local OrderCool = CreateCCodeArr(6)
-local CUnitFlag = CreateCCode()
+local CUnitFlag = CreateCcode()
 local MulCon = CreateVarArr(6,FP)
 local TempPos = CreateVar(FP)
 MCButtonUID = {53,52,54,48,49}

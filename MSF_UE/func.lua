@@ -315,7 +315,7 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 function Print13_Preserve()
-	local Print13 = CreateCCode()
+	local Print13 = CreateCcode()
 		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
 			for i = 0, 6 do
 				CallTriggerX(FP,Call_Print13[i+1],{PlayerCheck(i,1),Deaths(i,AtMost,0,15)})

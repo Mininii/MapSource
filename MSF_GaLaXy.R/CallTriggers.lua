@@ -54,7 +54,7 @@ function Install_CallTriggers()
 	SetCallEnd()
 	
 	local CA_TempUID = CreateVar(FP)
-	local CA_Suspend = CreateCCode()
+	local CA_Suspend = CreateCcode()
 	local G_CA_Temp = Create_VTable(7)
 	
 --	RandZ = 227
@@ -71,7 +71,7 @@ function Install_CallTriggers()
 --	CallTrigger(FP,Set_Repeat)
 --	SetCallEnd()
 	
-	local G_CA_Launch = CreateCCode()
+	local G_CA_Launch = CreateCcode()
 	function CA_Repeat()
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 	end
@@ -219,7 +219,7 @@ function Create_CreateTable()
 	return Ret
 end
 
-	local f_GunNumT = CreateVarray(FP,5)
+	local f_GunNumT = CreateVArray(FP,5)
 	local G_TempV,G_CA,GunID = CreateVariables(3)
 	G_Send = SetCallForward()
 	SetCall(FP)
@@ -281,7 +281,7 @@ end
 		CIfEnd()
 	SetCallEnd()
 
---	local f_GunNumT = CreateVarray(FP,5)
+--	local f_GunNumT = CreateVArray(FP,5)
 --	local G_CA,GunID,SVCheckV = CreateVariables(3)
 --	G_Send = SetCallForward()
 --	SetCall(FP)

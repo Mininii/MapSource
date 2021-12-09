@@ -262,7 +262,7 @@ function CreateUnitPolygonSafe2GunMove(PlayerID,Condition,Number,LocId,SizeofLoc
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -297,7 +297,7 @@ function CreateUnitPolygonSafe2GunMove(PlayerID,Condition,Number,LocId,SizeofLoc
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 		end
-		        table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+		        table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,(65536-dX)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
@@ -382,7 +382,7 @@ function CreateUnitPolygonSafeWithPropertiesGunMove(PlayerID,Condition,Number,Lo
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -417,7 +417,7 @@ function CreateUnitPolygonSafeWithPropertiesGunMove(PlayerID,Condition,Number,Lo
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 		end
-		        table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+		        table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,(65536-dX)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
@@ -618,7 +618,7 @@ function CreateUnitLineSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -645,7 +645,7 @@ function CreateUnitLineSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 			table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc-dX))
 			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
@@ -838,7 +838,7 @@ function CreateUnitLineSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -865,7 +865,7 @@ function CreateUnitLineSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 			table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc-dX))
 			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
@@ -1063,7 +1063,7 @@ function CreateUnitStarSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -1106,7 +1106,7 @@ function CreateUnitStarSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,(65536-dX)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
@@ -1319,7 +1319,7 @@ function CreateUnitStarSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -1362,7 +1362,7 @@ function CreateUnitStarSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,(65536-dX)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
@@ -1583,7 +1583,7 @@ function CreateUnitFlowerSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,R
 					for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 					table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -1612,7 +1612,7 @@ function CreateUnitFlowerSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,R
 				for j=1,tc do
 				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc-dX))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
@@ -1831,7 +1831,7 @@ function CreateUnitFlowerSafeWithPropertiesGunMove(PlayerID,Condition,Number,Loc
 					for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 					table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
@@ -1860,7 +1860,7 @@ function CreateUnitFlowerSafeWithPropertiesGunMove(PlayerID,Condition,Number,Loc
 				for j=1,tc do
 				table.insert(X,CreateUnitWithProperties(tn[j],tu[j],LocId+1,ForPlayer,Properties))
 			end
-			    table.insert(X,order("Men", ForPlayer,LocId+1, Inst, Dest+1))
+			    table.insert(X,Order("Men", ForPlayer,LocId+1, Inst, Dest+1))
 				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc-dX))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))

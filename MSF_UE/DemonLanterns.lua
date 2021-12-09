@@ -1,5 +1,5 @@
 function Install_DLBoss()
-	local SpeedBackupCcode = CreateCCode()
+	local SpeedBackupCcode = CreateCcode()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
@@ -1516,7 +1516,7 @@ function Install_DLBoss()
 
 
 		local WrPos = CreateVar(FP)
-		local WhileLim = CreateCCode()
+		local WhileLim = CreateCcode()
 		local Wr_Sum = def_sIndex()
 		CIf(FP,{
 			Void(6,AtLeast,1)

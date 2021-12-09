@@ -719,7 +719,7 @@ SetCallEnd()
 
 
 local CA_TempUID = CreateVar(FP)
-local CA_Suspend = CreateCCode()
+local CA_Suspend = CreateCcode()
 local G_CA_Temp = Create_VTable(10)
 
 Call_CA_Repeat = SetCallForward()
@@ -732,7 +732,7 @@ CMov(FP,CreatePlayer,G_CA_Temp[10])
 CallTrigger(FP,Set_Repeat)
 SetCallEnd()
 
-local G_CA_Launch = CreateCCode()
+local G_CA_Launch = CreateCcode()
 function CA_Repeat()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr

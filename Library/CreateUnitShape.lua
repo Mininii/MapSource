@@ -1437,7 +1437,7 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 					table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
-					table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer,Properties))
+					table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
 					Remain = Remain - 1
 				end
 				Main = 2
@@ -1459,7 +1459,7 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
-				table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer,Properties))
+				table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
 	            Remain = Remain - 1
 	            Main = Main + 1
 	            Case = Case + 1

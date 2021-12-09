@@ -153,7 +153,7 @@ function GunData()
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,11)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,29); -- 안쪽 하이브
 				},{Preserved})
-				local BreakCcode = CreateCCode()
+				local BreakCcode = CreateCcode()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,0,BreakCcode))
 				LV_10_11_AirTable = {21,80,28,86,98,27,88,21,80,28,86,98,27,88,21,80,28,86,98,27,88,21,80,28,86,98,27,88}
 				LV_10_UnitTable = {15,87,17,77,78,79,76,75,81,19,10,3,65,66,75,78,79,76,75,81,3,10,15,87,17,77}
@@ -546,7 +546,7 @@ function GunData()
 		CTrigger(FP,{Gun_Line(4,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,1830)},1)
 		CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(5,Add,1)},1)
 		CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(5,Subtract,1)},1)
-		local PS_Create = CreateCCode()
+		local PS_Create = CreateCcode()
 		CTrigger(FP,{Gun_Line(5,Exactly,0),Gun_Line(50,Exactly,1)},{Gun_SetLine(3,Add,1),Gun_SetLine(50,SetTo,0),SetCDeaths(FP,Add,1,PS_Create)},1)
 		CTrigger(FP,{Gun_Line(5,Exactly,12)},{SetCDeaths(FP,Add,1,PS_Create)},1)
 		CTrigger(FP,{Gun_Line(5,Exactly,24)},{SetCDeaths(FP,Add,1,PS_Create)},1)

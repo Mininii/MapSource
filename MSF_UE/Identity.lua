@@ -6,13 +6,13 @@ function Install_IdenBoss()
 	-- Thanks to Ninfia
 	--------0x58F55C : BossCunit
 	--"CLoc109" : 30
-Id_T0C = CreateCCode()
-Id_T1C = CreateCCode()
-Id_T2C = CreateCCode()
-Id_T3C = CreateCCode()
-Id_T4C = CreateCCode()
-Id_T5C = CreateCCode()
-StoryT2 = CreateCCode()
+Id_T0C = CreateCcode()
+Id_T1C = CreateCcode()
+Id_T2C = CreateCcode()
+Id_T3C = CreateCcode()
+Id_T4C = CreateCcode()
+Id_T5C = CreateCcode()
+StoryT2 = CreateCcode()
 function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
 	if StoryCcode == nil then
 		StoryCcode = StoryT

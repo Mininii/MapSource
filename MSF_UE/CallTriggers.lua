@@ -124,7 +124,7 @@ for i = 1, Var_Lines do
 	table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
 end
 local CheckTemp = CreateVar(FP)
-local isScore = CreateCCode()
+local isScore = CreateCcode()
 Call_Repeat = SetCallForward()
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -486,7 +486,7 @@ Line No.54 : GunType
 Line No.55 : SuspendSwitch
 ]]
 local CA_TempUID = CreateVar(FP)
-local CA_Suspend = CreateCCode()
+local CA_Suspend = CreateCcode()
 local G_CA_Temp = Create_VTable(7)
 
 RandZ = 227
@@ -503,7 +503,7 @@ CMov(FP,RepeatType,G_CA_Temp[6],nil,0xFF)
 CallTrigger(FP,Set_Repeat)
 SetCallEnd()
 
-local G_CA_Launch = CreateCCode()
+local G_CA_Launch = CreateCcode()
 function CA_Repeat()
 CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 end

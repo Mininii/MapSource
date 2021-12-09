@@ -109,7 +109,7 @@ function SetCall(Player) -- CtrigAsm 5.1
 	if SetCallOpen == 0 then
 		SetCallOpen = 1
 	else
-		SetCall_Already_Open()
+		PushErrorMsg("SetCall_Already_Open")
 	end
 end
 
@@ -129,7 +129,7 @@ function SetCallEnd() -- CtrigAsm 5.1
 	if SetCallOpen == 1 then
 		SetCallOpen = 0
 	else
-		SetCall_Not_Open()
+		PushErrorMsg("SetCall_Not_Open")
 	end
 end
 
@@ -161,7 +161,7 @@ function SetNextForward(AddonTrigger)
 end
 function SetCallErrorCheck() -- CtrigAsm 5.1
 	if SetCallOpen == 1 then
-		SetCall_Already_Open()
+		PushErrorMsg("SetCall_Already_Open")
 	end
 end
 
@@ -172,10 +172,10 @@ end
 
 
 
-function CreateVarray(Player,Size)
+function CreateVArray(Player,Size)
 	return CreateVArr(Size,Player)
 end
-function CreateCarray(Player,Size)
+function CreateCArray(Player,Size)
 	return CreateArr(Size,Player)
 end
 
@@ -186,7 +186,7 @@ function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local StrSize = GetStrSize(0,Text)
 	table.insert(X,Text)
 	table.insert(X,StrSize)
-	table.insert(X,CreateCarray(Player,StrSize))
+	table.insert(X,CreateCArray(Player,StrSize))
 	local Y = {}
 	table.insert(Y,X[3])
 	table.insert(Y,X[1])
@@ -215,7 +215,7 @@ function CreateCCodeSet(Variables)
 			end
 		end
 
-		_G[Variables[i]] = CreateCCode()
+		_G[Variables[i]] = CreateCcode()
 	end
 end
 function CreateNCodeSet(Variables)
@@ -229,7 +229,7 @@ function CreateNCodeSet(Variables)
 			end
 		end
 
-		_G[Variables[i]] = CreateNCode()
+		_G[Variables[i]] = CreateNcode()
 	end
 end
 function CreateVariableSet(Variables,Player)
@@ -301,7 +301,7 @@ function Overflow_HP_System(Player,Cunit_HPV,HP_K,HP_P)
                 if type(HP_P) == "table" then
                 	CAdd(Player,HP_P,1)
             	end
-            CifXEnd()
+            CIfXEnd()
         CIfEnd()
         CTrigger(Player,{TMemoryX(_Add(Cunit_HPV,17),Exactly,0,0xFF00)},{SetCVar(Player,Cunit_HPV[2],SetTo,0)},1)
     CIfEnd()
@@ -323,7 +323,7 @@ function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
                 if type(HP_P) == "table" then
                 	CAdd(Player,HP_P,1)
             	end
-            CifXEnd()
+            CIfXEnd()
         CIfEnd()
         TriggerX(Player,{CVar(Player,HP_K[2],AtMost,1000000000),CVar(Player,HP_K2[2],AtLeast,1)},
         	{SetCVar(Player,HP_K[2],Add,1000000000),SetCVar(Player,HP_K2[2],Subtract,1)},{Preserved})
@@ -341,13 +341,13 @@ end
 function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	local X = {}
 	if type(BGMTypeNum) ~= "number" then
-		BGMTypeNum_InputData_Error()
+		PushErrorMsg("BGMTypeNum_InputData_Error")
 	end
 	if type(WavFile) ~= "string" then
-		WavFile_InputData_Error()
+		PushErrorMsg("WavFile_InputData_Error")
 	end
 	if type(Value) ~= "number" then
-		Value_InputData_Error()
+		PushErrorMsg("Value_InputData_Error")
 	end
 
 	table.insert(X,BGMTypeNum)
@@ -364,10 +364,10 @@ function Install_BGMSystem(Player,MaxPlayers,BGMType,DeathUnit)
 if InitBGMP == 12 then
 InitBGMP = ParsePlayer(Player)
 else
-	already_Installed_BGMSystem()
+	PushErrorMsg("already_Installed_BGMSystem")
 end
 if #BGMArr == 0 then
-	BGM_List_does_not_exist()
+	PushErrorMsg("BGM_List_does_not_exist")
 end
 CIf(InitBGMP,CVar(InitBGMP,BGMType[2],AtLeast,1))
 CMov(InitBGMP,0x6509B0,0)
@@ -596,7 +596,7 @@ end
 function CreateVar3(PlayerID,Value,Offset,Type,Mask)
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
-		CreateVariable_IndexAllocation_Overflow()
+		PushErrorMsg("CreateVariable_IndexAllocation_Overflow")
 	end
 	if PlayerID == nil then
 		PlayerID = AllPlayers
