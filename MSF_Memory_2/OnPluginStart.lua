@@ -1,5 +1,301 @@
 function init() -- 맵 실행시 1회 실행 트리거
+	
+	PatchArr = {}
+	PatchArrPrsv = {}
+	CTrigPatchTable = {}
+	function SetToUnitDef(UnitID,Value)
+	table.insert(PatchArr,SetMemoryB(0x65FEC8 + UnitID,SetTo,Value))
+	end
+
+	function UnitSizePatch(UnitID,L,U,R,D)
+	table.insert(PatchArr,SetMemory(0x6617C8 + (UnitID*8),SetTo,(L)+(U*65536)))
+	table.insert(PatchArr,SetMemory(0x6617CC + (UnitID*8),SetTo,(R)+(D*65536)))
+	end
+
+	function SetUnitClass(UnitID,Value)
+	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,Value))
+	end
+
+	function DefTypePatch(UnitID,Value)
+	table.insert(PatchArr,SetMemoryB(0x662180 + UnitID,SetTo,Value))
+	end
+
+	function SetShield(UnitID)
+	table.insert(PatchArr,SetMemoryW(0x660E00 + (UnitID *2), SetTo, 1000))
+	table.insert(PatchArr,SetMemoryB(0x6647B0 + (UnitID), SetTo, 255))
+	end
+
+	function UnitEnable(UnitID,MinCost,GasCost,BuildTime,SuppCost)
+	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
+	if MinCost ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- 미네랄
+	else
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0)) -- 미네랄
+	end
+	if GasCost ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,GasCost)) -- 가스
+	else
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0)) -- 가스
+	end
+	if BuildTime ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,BuildTime)) -- 생산속도
+	else
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1)) -- 생산속도
+	end
+	if SuppCost ~= nil then
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,SuppCost)) -- 서플
+	else
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0)) -- 서플
+	end
+
+	end
+	function SetUnitDefUpType(UnitID,Value)
+	table.insert(PatchArr,SetMemoryB(0x6635D0 + UnitID,SetTo,Value))
+	end
+
+	function SetUnitAdvFlag(UnitID,Value,Mask)
+	table.insert(PatchArr,SetMemoryX(0x664080 + (UnitID*4),SetTo,Value,Mask))
+	end
+
+
+	function SetWepTargetFlags(WeaponID,Value)
+	table.insert(PatchArr,SetMemoryW(0x657998 + (WeaponID*2), SetTo, Value))
+	end
+
+	function WeaponTypePatch(WeaponID,Value)
+	table.insert(PatchArr,SetMemoryB(0x657258 + WeaponID,SetTo,Value))
+	end
+
+
+	function SetWepUpType(WeaponID,Value)
+	table.insert(PatchArr,SetMemoryB(0x6571D0 + WeaponID, SetTo, Value))
+	end
+
+	function SetUnitCost(UnitID,Cost)
+	table.insert(PatchArr,SetMemoryW(0x65FD00+(UnitID*2), SetTo, 0))
+	table.insert(PatchArr,SetMemoryW(0x663888+(UnitID*2), SetTo, Cost))
+	end
+
+	function SetUnitGrpToMarine(UnitID) -- 플레이어 마린에게만 적용하는것
+	table.insert(PatchArr,SetMemoryW(0x661FC0+(UnitID*2), SetTo, 0))
+	table.insert(PatchArr,SetMemoryW(0x663C10+(UnitID*2), SetTo, 466))
+	table.insert(PatchArr,SetMemoryW(0x661440+(UnitID*2), SetTo, 469))
+	table.insert(PatchArr,SetMemoryW(0x65FFB0+(UnitID*2), SetTo, 462))
+	table.insert(PatchArr,SetMemoryW(0x662BF0+(UnitID*2), SetTo, 465))
+	table.insert(PatchArr,SetMemoryW(0x663B38+(UnitID*2), SetTo, 457))
+	table.insert(PatchArr,SetMemoryW(0x661EE8+(UnitID*2), SetTo, 461))
+	table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 77))
+	table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
+	end
+
+	for i = 0, 227 do
+	SetUnitDefUpType(i,60) -- 방업 적용 방지
+	SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
+	DefTypePatch(i,7) -- 방어타입 전부 7로 설정
+	SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
+	end
+	for i = 63, 70 do
+		UnitEnable(i) -- 원격스팀팩
+	end
+	
+	for i=0,3 do
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
+	end
+	UnitEnable(71) -- 원격스팀팩
+	UnitEnable(2) -- 자환
+	UnitEnable(19,25000) -- 수정보호막
+	UnitEnable(8,9000,nil,5,2) -- 마린
+	UnitEnable(7,500) -- SCV
+	
+	UnitEnable(125,8000)
+	UnitEnable(124,4000)
+	UnitEnable(109,1000)
+	UnitEnable(22) -- 브금
+	UnitEnable(72) -- 예약메딕
+	UnitEnable(60)
+	UnitEnable(62)
+	UnitEnable(61)
+	for i = 1, 4 do
+		UnitEnable(MedicTrig[i],25+(i*25)) -- 메딕
+		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
+		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
+		UnitSizePatch(MarID[i],7,10,7,11) -- 마린 크기 설정
+		UnitEnable(MarID[i],9000,nil,5,2)
+		SetUnitGrpToMarine(MarID[i]) -- 마린 그래픽 전부 마린으로 설정
+		SetUnitAdvFlag(MarID[i],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
+		--SetWepUpType(MarWep[i],i-1) -- 플레이어 마린무기에 각각 다른 공업 적용
+		table.insert(PatchArr,SetMemory(0x662350 + (MarID[i]*4),SetTo,9999*256)) -- 기본공격력
+		
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,9999)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,0)) -- 추가공격력
+		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i],SetTo,MarWep[i])) -- 지상무기
+		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i],SetTo,MarWep[i])) -- 공중무기
+	end
+
+	--UnitEnable2(71)
+	--UnitEnable2(19)
+
+	for i = 0, 129 do
+	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
+	end
+	DoActions2(FP,PatchArr,1)
+	DoActions2(FP,PatchArrPrsv)
+	DoActions2X(FP,CTrigPatchTable,1)
 	CIfOnce(FP)
+
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+	if Limit == 1 then
+		DoActions(FP,SetSwitch("Switch 230",Set))
+	end
+
+	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"GALAXY_BURST");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"_Mininii");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"RonaRonaChan");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	end
+
+	T_YY = 2021
+	T_MM = 12
+	T_DD = 02
+	T_HH = 00
+	function PushErrorMsg(Message)
+		_G["\n"..Message.."\n"]() 
+	end
+	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
+	--PushErrorMsg(GlobalTime)
+	if Limit == 1 then
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Memory(0x6D0F38,AtMost,GlobalTime);
+
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	end
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,1,LimitX);
+			CDeaths(FP,Exactly,0,LimitC);
+			
+		},
+		actions = {
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+	
+	Trigger { -- 배속방지
+		players = {FP},
+		conditions = {
+			Memory(0x51CE84,AtLeast,1001);
+		},
+		actions = {
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+
+
+	for i = 4, 7 do
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+	end
+
+
+
 	table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 
 
@@ -32,6 +328,7 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		-- 0xYYYYXXXX 0xLLIIPPUU
 		-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 		CAdd(FP,0x6509B0,6)
+		
 		local Rep_Jump4 = def_sIndex()
 		for j, k in pairs(Replace_JumpUnitArr) do
 			NJumpX(FP,Rep_Jump4,{DeathsX(CurrentPlayer,Exactly,k,0,0xFF)})
@@ -94,7 +391,6 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
 	CMov(FP,0x6509B0,UnitDataPtr)
 	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
-		f_SaveCp()
 	--	CIf(FP,{TDeathsX(_Add(BackupCP,1),Exactly,TestCheck,0,0xFF)})
 		CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
 	--	CIfEnd()
@@ -105,7 +401,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	CWhileEnd()
 	--CIfEnd()
 	DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
-	if TestStart == 1 then
+	if Limit == 1 then
 		DoActions(P8,SetResources(Force1,SetTo,0x66666666,Ore),1)
 	end
 	CMov(FP,CurrentUID,0)
@@ -120,7 +416,11 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	NJumpEnd(FP,Rep_Jump3)
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
-	
+	if Limit == 1 then
+	for i = 0, 3 do
+	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(12,MarID[i+1],i+2,i)})
+	end
+	end
 	CIfEnd()
 end
 

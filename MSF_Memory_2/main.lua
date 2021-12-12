@@ -25,7 +25,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-TestSet(2)
+TestSet(1)
 VerText = "\x04Ver. Test"
 FP = P8
 nilunit = 181
@@ -33,7 +33,7 @@ EUDTurbo(FP)
 SetForces({P1,P2,P3,P4},{P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
-Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0)},{RotatePlayer({Defeat()},{Force2},FP)})
+Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0)},{RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
 StartCtrig()
 
 init_func = def_sIndex()
@@ -45,7 +45,7 @@ CJump(AllPlayers,init_func)
 	Include_CRandNum(FP)
 	Install_GetCLoc(FP,0,nilunit)
 	Install_BackupCP(FP)
-	install_UnitCount(FP)
+	Install_UnitCount(FP)
 	Install_EXCC(FP,0x2FFF,10)
 	Install_CallTriggers()
 CJumpEnd(AllPlayers,init_func)
@@ -55,8 +55,8 @@ System()
 CIf(AllPlayers,ElapsedTime(AtLeast,2))
 	init_Start()
 --	Gun_System()
---	Operator_Trig()
---	Interface()
+	Operator_Trig()
+	Interface()
 CIfEnd()
 
 --Enable_HideErrorMessage(FP)

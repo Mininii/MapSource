@@ -1,10 +1,11 @@
 function System()
 	Cast_UnitCount()
+    IBGM_EPDX(FP,3,Dt)
 
     CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
     DoActions(FP,MoveCp(Subtract,6*4))
     Check_P8 = def_sIndex()
-    NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
+    NJump(FP,Check_P8,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
     DoActions(FP,MoveCp(Add,6*4))
     --Install_DeathNotice()
 
@@ -32,4 +33,6 @@ function System()
 
     ClearCalc()
 	Cast_EXCC()
+
+
 end

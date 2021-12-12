@@ -1,4 +1,10 @@
 
+function StrDesign(Str)
+	return "\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
+end
+function StrDesignX(Str)
+	return "\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
+end
 function TestSet(val)
 	if val == 1 then 
 		Limit = 1
@@ -91,7 +97,12 @@ end
 
 function Include_Conv_CPosXY(Player)
 	CPos,CPosX,CPosY = CreateVars(3,Player)
-	
+	Call_CPosXY = SetCallForward()
+	SetCall(Player)
+	CMov(Player,CPosX,CPos,0,0XFFFF)
+	CMov(Player,CPosY,CPos,0,0XFFFF0000)
+	f_Div(Player,CPosY,_Mov(0x10000))
+	SetCallEnd()
 	function Convert_CPosXY(Value)
 		if Value ~= nil then
 			CDoActions(Player,{
@@ -103,101 +114,85 @@ function Include_Conv_CPosXY(Player)
 		end
 		return CPosX,CPosY
 	end
-	Call_CPosXY = SetCallForward()
-	SetCall(Player)
-	CMov(Player,CPosX,CPos,0,0XFFFF)
-	CMov(Player,CPosY,CPos,0,0XFFFF0000)
-	f_Div(Player,CPosY,_Mov(0x10000))
-	SetCallEnd()
 end
 function Include_CRandNum(Player)
 	TempRandRet = CreateVar(Player)
 	Oprnd = CreateVar(Player)
 	InputMaxRand = CreateVar(Player)
-	function f_CRandNum(Max,Operand,Condition)
-		if Operand == nil then Operand = 0 end
-		local RandRet = TempRandRet
-		CallTriggerX(Player,CRandNum,Condition,{SetCVar(Player,InputMaxRand[2],SetTo,Max),SetCVar(Player,Oprnd[2],SetTo,Operand)})
-		return RandRet
-	end
 CRandNum = SetCallForward()
 SetCall(Player)
 f_Rand(Player,TempRandRet)
 f_Mod(Player,TempRandRet,InputMaxRand)
 CAdd(Player,TempRandRet,Oprnd)
 SetCallEnd()
+function f_CRandNum(Max,Operand,Condition)
+	if Operand == nil then Operand = 0 end
+	local RandRet = TempRandRet
+	CallTriggerX(Player,CRandNum,Condition,{SetCVar(Player,InputMaxRand[2],SetTo,Max),SetCVar(Player,Oprnd[2],SetTo,Operand)})
+	return RandRet
+end
 end
 
 
 
-function Install_CallTriggers()
-	f_Replace = SetCallForward()
-	SetCall(FP)
-		CIfX(FP,Memory(0x628438,AtLeast,1)) -- 캔낫체크.
-		f_SaveCp()
-		CMov(FP,Gun_LV,0)
-		f_Read(FP,BackupCP,CPos)
-		Convert_CPosXY()
-		f_Read(FP,_Add(BackupCP,1),Gun_LV,"X",0xFF000000)
-		f_Read(FP,_Add(BackupCP,1),RepHeroIndex,"X",0xFF)
-		f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		
-		CMov(FP,CunitP,4)
-		CIf(FP,CDeaths(FP,Exactly,1,CurPlace))
-			CNeg(FP,CPosX)
-			CAdd(FP,CPosX,4096)
-			CMov(FP,CunitP,5)
-		CIfEnd()
-		CIf(FP,CDeaths(FP,Exactly,2,CurPlace))
-			CNeg(FP,CPosY)
-			CAdd(FP,CPosY,4096)
-			CMov(FP,CunitP,6)
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,41)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,176)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,177)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,178)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-		CIfEnd()
-		CIf(FP,CDeaths(FP,Exactly,3,CurPlace))
-			CNeg(FP,CPosX)
-			CAdd(FP,CPosX,4096)
-			CNeg(FP,CPosY)
-			CAdd(FP,CPosY,4096)
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,41)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,176)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,177)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,178)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			CMov(FP,CunitP,7)
-		CIfEnd()
-
-		CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-		CDoActions(FP,{
-		TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
-		TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(CPosX,18)),
-		TSetMemory(0x58DC64 + 0x14*0,SetTo,_Sub(CPosY,18)),
-		TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
-		})
-		CDoActions(FP,{
-			TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1), -- 확장 구조오프셋 변수에 값 입력
-			TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV), -- 확장 구조오프셋 변수에 값 입력
-			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
-		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
-		f_LoadCp()
-		CElseX()
-		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
-		CIfXEnd()
-	SetCallEnd()
-end
-
-function install_UnitCount(Player)
+function Install_UnitCount(Player)
 	count,count1,count2,count3 = CreateVars(4,FP)
 	function Cast_UnitCount()
 		UnitReadX(Player,AllPlayers,229,64,count)
-		UnitReadX(Player,AllPlayers,17,64,count1)
-		UnitReadX(Player,AllPlayers,23,64,count2)
-		UnitReadX(Player,AllPlayers,25,64,count3)
+		UnitReadX(Player,AllPlayers,17,nil,count1)
+		UnitReadX(Player,AllPlayers,23,nil,count2)
+		UnitReadX(Player,AllPlayers,25,nil,count3)
 		CAdd(Player,count,count1)
 		CAdd(Player,count,count2)
 		CAdd(Player,count,count3)
 	end
+end
+
+
+function UnitLimit(Player,UID,Limit,Text,ReturnResources)
+	Trigger {
+		players = {Player},
+		conditions = {
+			Bring(Player,AtLeast,Limit+1,UID,64);
+			},
+		
+		actions = {
+			KillUnitAt(1,UID,"Anywhere",Player);
+			DisplayText(StrDesign("\x04"..Text.." "..Limit.."기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ "..ReturnResources.." Ore\x07"),4);
+			SetResources(Player,Add,ReturnResources,Ore);
+			PreserveTrigger();
+		},
+	}
+end
+
+
+function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
+	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
+	
+	f_Read(Player,0x51CE8C,Dx)
+	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
+	CiSub(Player,DtP,Dy,Du)
+	CMov(Player,Dv,DtP) 
+	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
+	CMov(Player,Du,Dy)
+	
+
+	if Option_NT ~= nil then
+		if type(Option_NT) == "table" then
+		CIf(FP,{NTCond2()})
+			CMov(FP,Option_NT[1],MSQC_Recives)
+		CIfEnd()
+		CIf(FP,{NTCond()})
+			CAdd(FP,Option_NT[2],MSQC_Recives,Option_NT[1])
+		CIfEnd()
+		else
+			OPtion_NT_InputData_Error()
+		end
+	end
+
+
+	for i = 0, MaxPlayer do
+		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- 브금타이머
+	end
+	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF),SetDeathsX(Player,SetTo,0,12,0xFF000000)}) -- 브금타이머
 end
