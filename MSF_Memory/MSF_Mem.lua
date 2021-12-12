@@ -17,8 +17,8 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.6T"
-Limit = 1
+VerText = "\x04Ver. 3.6"
+Limit = 0
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
@@ -141,7 +141,6 @@ MarWepMaskRetArr = {}
 MarWepPtrArr = {}
 MarWepMaskRetArr2 = {}
 MarWepPtrArr2 = {}
-PlayerScore = {}
 for i = 0, 4 do
 table.insert(AtkUpgradeMaskRetArr,(0x58D2B0+(i*46)+7)%4)
 table.insert(AtkUpgradePtrArr,0x58D2B0+(i*46)+7 - AtkUpgradeMaskRetArr[i+1])
@@ -18901,12 +18900,12 @@ end
 f_GetStrXptr(P6,UnivStrPtr,UnivToString)
 f_GetStrXptr(P6,HTextStrPtr,HTextStr)
 for j=1, 5 do
-LumiaCT[j] = f_GetStrXptr(P6,LumiaCTStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Lumia".._0D)
-ShieldT[j] = f_GetStrXptr(P6,ShTStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Shield".._0D)
-ATKExitText[j] = f_GetStrXptr(P6,ATKExtStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Exit".._0D)
-ATKUpText1[j] = f_GetStrXptr(P6,ATKUp1StrPtr[j],"\x0D\x0D\x0D"..Player[j].."100".._0D)
-ATKUpText2[j] = f_GetStrXptr(P6,ATKUp2StrPtr[j],"\x0D\x0D\x0D"..Player[j].."200".._0D)
-PlayerScore[j] = f_GetStrXptr(P6,PScoreSTrPtr[j],"\x0D\x0D\x0D"..Player[j].."Score".._0D)
+f_GetStrXptr(P6,LumiaCTStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Lumia".._0D)
+f_GetStrXptr(P6,ShTStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Shield".._0D)
+f_GetStrXptr(P6,ATKExtStrPtr[j],"\x0D\x0D\x0D"..Player[j].."Exit".._0D)
+f_GetStrXptr(P6,ATKUp1StrPtr[j],"\x0D\x0D\x0D"..Player[j].."100".._0D)
+f_GetStrXptr(P6,ATKUp2StrPtr[j],"\x0D\x0D\x0D"..Player[j].."200".._0D)
+f_GetStrXptr(P6,PScoreSTrPtr[j],"\x0D\x0D\x0D"..Player[j].."Score".._0D)
 --TMem(FP,PlayerMarineListHeader[j],PlayerMarineListArr[j])
 end
 f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
