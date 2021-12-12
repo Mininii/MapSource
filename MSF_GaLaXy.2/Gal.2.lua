@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.6"
+VName = "Ver.1.7"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -8657,6 +8657,7 @@ CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
 	CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(182,j,64,Patrol,64)},1)
 	CIfEnd()
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1])})
+CElseX({RemoveUnit(182,j)})
 CIfXEnd()
 CTrigger(FP,{TMemoryX(_Add(NePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,NePtr[j+1][2],SetTo,0)},1)
 CElseX({RemoveUnit(182,j)})
@@ -8696,6 +8697,7 @@ CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
 	CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(183,j,64,Patrol,64)},1)
 	CIfEnd()
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1])})
+CElseX({RemoveUnit(183,j)})
 CIfXEnd()
 CTrigger(FP,{TMemoryX(_Add(TePtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,TePtr[j+1][2],SetTo,0)},1)
 CElseX({RemoveUnit(183,j)})
@@ -8735,6 +8737,7 @@ CIf(FP,{
 CSPlotAct(BattleShape,j,1,"P"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(1,j,64,Patrol,64)},1)
 CIfEnd()
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1])})
+CElseX({RemoveUnit(1,j)})
 CIfXEnd()
 CTrigger(FP,{TMemoryX(_Add(SuPtr[j+1],19),Exactly,0,0xFF00)},{SetCVar(FP,SuPtr[j+1][2],SetTo,0)},1)
 CElseX({RemoveUnit(1,j)})

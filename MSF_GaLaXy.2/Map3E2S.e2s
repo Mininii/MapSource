@@ -753,7 +753,7 @@ BtnData246 : 7,237,4363488,4338896,0,0,334,346,1,228,4361632,4342848,0,0,664,0,2
 E_BtnSET
 S_ReqSET
 ReqUse0,19 : 2
-ReqPos0,19 : 0
+ReqPos0,19 : 81
 ReqCount0,19 : 0
 ReqUse0,124 : 3
 ReqPos0,124 : 349
@@ -858,7 +858,7 @@ ReqData1,14,6 : 65312
 ReqData1,14,7 : 65535
 ReqData1,14,8 : 65313
 ReqUse3,0 : 2
-ReqPos3,0 : 0
+ReqPos3,0 : 2
 ReqCount3,0 : 0
 E_ReqSET
 S_BinEditSET
