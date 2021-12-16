@@ -360,7 +360,7 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	return BGMTypeNum
 end
 
-function Install_BGMSystem(Player,MaxPlayers,BGMType,DeathUnit)
+function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit)
 if InitBGMP == 12 then
 InitBGMP = ParsePlayer(Player)
 else
@@ -369,7 +369,7 @@ end
 if #BGMArr == 0 then
 	PushErrorMsg("BGM_List_does_not_exist")
 end
-CIf(InitBGMP,CVar(InitBGMP,BGMType[2],AtLeast,1))
+CIf(InitBGMP,CVar(InitBGMP,BGMTypeV[2],AtLeast,1))
 CMov(InitBGMP,0x6509B0,0)
 CWhile(InitBGMP,Memory(0x6509B0,AtMost,MaxPlayers))
 CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
@@ -383,12 +383,12 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
-				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+				CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
 				X;
 			},
 				actions = {
 				PlayWAV(BGMArr[i][2]);
-				--PlayWAV(BGMArr[i][2]);
+				PlayWAV(BGMArr[i][2]);
 				SetDeathsX(CurrentPlayer,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
 				PreserveTrigger();
 			},
@@ -421,13 +421,13 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
-				CVar(InitBGMP,BGMType[2],Exactly,BGMArr[i][1]);
+				CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
 				X;
 			},
 				actions = {
 				RotatePlayer({
 					PlayWAVX(BGMArr[i][2]),
-					--rPlayWAVX(BGMArr[i][2])
+					PlayWAVX(BGMArr[i][2])
 				},{P9,P10,P11,P12},InitBGMP);
 				SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
 				PreserveTrigger();
@@ -445,7 +445,7 @@ Trigger { -- ºê±Ý????????? ?????? ????????
 	},
 }
 CIfXEnd()
-DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMType[2],SetTo,0)})
+DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMTypeV[2],SetTo,0)})
 CIfEnd()
 end
 
