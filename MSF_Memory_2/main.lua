@@ -5,7 +5,6 @@
 --dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -50,13 +49,16 @@ CJump(AllPlayers,init_func)
 	Install_CallTriggers()
 CJumpEnd(AllPlayers,init_func)
 init()
-System()
+IBGM_EPDX(FP,3,Dt)
 --DoActions2(FP,PatchArrPrsv)
 CIf(AllPlayers,ElapsedTime(AtLeast,2))
 	init_Start()
+	System()
+	Opening()
 --	Gun_System()
 	Operator_Trig()
 	Interface()
+	InputStory()
 CIfEnd()
 
 --Enable_HideErrorMessage(FP)

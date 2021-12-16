@@ -1,7 +1,8 @@
 function System()
 	Cast_UnitCount()
-    IBGM_EPDX(FP,3,Dt)
-
+    AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
+    AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
+    Install_BGMSystem(FP,3,BGMType,12)
     CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
     DoActions(FP,MoveCp(Subtract,6*4))
     Check_P8 = def_sIndex()

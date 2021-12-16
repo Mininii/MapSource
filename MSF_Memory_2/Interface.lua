@@ -1,9 +1,13 @@
 function Interface()
-	local OPCCode = CreateCCode()
-	local CUnitFlag = CreateCCode()
+	local CUnitFlag = CreateCcode()
 	local DelayMedic = CreateCcodeArr(4)
 	local GiveRate = CreateCcodeArr(4)
-
+	local CurAtk = CreateVarArr(#MapPlayers,FP)
+	local CurHP = CreateVarArr(#MapPlayers,FP)
+	local AtkCondTmp = CreateVar(FP)
+	local HPCondTmp = CreateVar(FP)
+	AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0+7,46)
+	HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0,46)
 
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
@@ -13,6 +17,24 @@ function Interface()
 	StrDesign("\x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.")}
 	for i = 0, 3 do
+		CIf(FP,PlayerCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0)})
+
+		for CBit = 0, 7 do
+			TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
+			TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit)},{Preserved})
+		end
+		CMov(FP,AtkCondTmp,_Add(Level,Level),150)
+		CMov(FP,HPCondTmp,_Add(_Add(Level,Level),_Add(Level,Level)),50)
+		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0)})
+		CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3)})
+		CElseX({SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,0)})
+		CIfXEnd()
+		CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0)})
+		CElseIfX({CV(CurHP[i+1],HPCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i),SetTo,250),SetMemoryB(0x58D2B0+(i*24)+1,SetTo,3)})
+		CElseX({SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemoryB(0x58D2B0+(i*24)+1,SetTo,0)})
+		CIfXEnd()
+		
+		CIfEnd()
 	for k = 0, 5 do
 	Trigger { -- 기부 금액 변경
 		players = {i},
@@ -63,9 +85,9 @@ function Interface()
 				SetResources(i,Subtract,GiveRate2[l+1],Ore);
 				SetResources(j,Add,GiveRate2[l+1],Ore);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayText("\x07『 "..PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부하였습니다. \x07』",4);
+				DisplayText(StrDesign(PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부하였습니다."),4);
 				SetMemory(0x6509B0,SetTo,j);
-				DisplayText("\x12\x07『"..PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부받았습니다.\x02 \x07』",4);
+				DisplayText(StrDesign(PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부받았습니다."),4);
 				SetMemory(0x6509B0,SetTo,i);
 				PreserveTrigger();
 			},
@@ -79,7 +101,7 @@ function Interface()
 				PlayerCheck(j,0);
 			},
 			actions = {
-				DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
+				DisplayText(StrDesign(PlayerString[j+1].."\x04이(가) 존재하지 않습니다."),4);
 				--SetMemoryB(0x58D2B0+(46*i)+GiveUnitID[j+1],SetTo,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
 				PreserveTrigger();
@@ -107,7 +129,11 @@ function Interface()
 
 	local MedicTrigJump = def_sIndex()
 	for j = 1, 4 do
-		NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
+		if Limit == 1 then
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)},{AddV(CurEXP,10^(j-1))})
+		else
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
+		end
 	end
 
 		NIf(FP,Never())
@@ -142,7 +168,23 @@ function Interface()
 	UnitLimit(i,7,25,"SCV는",500)
 	UnitLimit(i,125,15,"벙커는",8000)
 	UnitLimit(i,124,15,"터렛은",4000)
+	Trigger { -- 스팀팩
+	players = {i},
+	conditions = {
+		Label(0);
+		Command(i,AtLeast,1,71);
+	},
+	actions = {
+		SetCD(CUnitFlag,1);
+		SetDeaths(i,Add,1,71);
+		RemoveUnitAt(1,71,"Anywhere",i);
+		DisplayText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다. - \x1F1000 Ore"),4);
+		PreserveTrigger();
+	},
+	}
 	end
+
+	
 	
 	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀
 		CMov(FP,0x6509B0,19025+19)
@@ -160,7 +202,5 @@ function Interface()
 			CIfEnd()
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
-		CMov(FP,0x6509B0,FP)
-		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetCDeaths(FP,SetTo,0,CUnitFlag)})
-	CIfEnd()
+	CIfEnd({SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetCDeaths(FP,SetTo,0,CUnitFlag)})
 end

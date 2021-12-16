@@ -186,13 +186,113 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 			CAdd(FP,Option_NT[2],MSQC_Recives,Option_NT[1])
 		CIfEnd()
 		else
-			OPtion_NT_InputData_Error()
+			PushErrorMsg("OPtion_NT_InputData_Error")
 		end
 	end
 
 
 	for i = 0, MaxPlayer do
 		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- 브금타이머
+		CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,12)},1) -- 브금타이머
 	end
-	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF),SetDeathsX(Player,SetTo,0,12,0xFF000000)}) -- 브금타이머
+	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF),SetDeathsX(Player,SetTo,0,12,0xFF000000),SetDeaths(8,SetTo,0,12),SetDeaths(9,SetTo,0,12),SetDeaths(10,SetTo,0,12),SetDeaths(11,SetTo,0,12)}) -- 브금타이머
+end
+
+function AddCD(Code,Value)
+
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,Add,Value,Code)
+	else
+		return TSetCDeaths(FP,Add,Value,Code)
+	end
+end
+function SubCD(Code,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,Subtract,Value,Code)
+	else
+		return TSetCDeaths(FP,Subtract,Value,Code)
+	end
+end
+function SetCD(Code,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,SetTo,Value,Code)
+	else
+		return TSetCDeaths(FP,SetTo,Value,Code)
+	end
+end
+function AddV(V,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Add,Value)
+	else
+		return TSetCVar(FP,V[2],Add,Value)
+	end
+end
+function SubV(V,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Subtract,Value)
+	else
+		return TSetCVar(FP,V[2],Subtract,Value)
+	end
+end
+function SetV(V,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],SetTo,Value)
+	else
+		return TSetCVar(FP,V[2],SetTo,Value)
+	end
+end
+function CD(Code,Value,Type)
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CDeaths(FP,Type,Value,Code)
+	else
+		return TCDeaths(FP,Type,Value,Code)
+	end
+	
+end
+function CV(V,Value,Type)
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CVar(FP,V[2],Type,Value)
+	else
+		return TCVar(FP,V[2],Type,Value)
+	end
+	
+end
+
+
+function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask)
+	for i = 3, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label();
+
+				CDeaths(FP,AtLeast,(2^i)*DivNum,Ptr);
+			},
+			actions = {
+				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
+				SetCDeaths(FP,Subtract,(2^i)*DivNum,Ptr);
+				PreserveTrigger();
+			}
+		}
+	end
+end
+
+function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
+	local X = {}
+	local Y = {}
+	for i = 0, MaxPlayer do
+		table.insert(X,(Ptr+(i*Multiplier))%4)
+		table.insert(Y,(Ptr+(i*Multiplier))-X[i+1])
+	end
+	return X,Y
 end

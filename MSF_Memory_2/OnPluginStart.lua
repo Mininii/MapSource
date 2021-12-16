@@ -92,6 +92,12 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 	end
 
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + BanToken[1],SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + BanToken[1],SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + BanToken[2],SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[1],SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[2],SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[3],SetTo,0))
 	for i = 0, 227 do
 	SetUnitDefUpType(i,60) -- 방업 적용 방지
 	SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
@@ -120,7 +126,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitEnable(62)
 	UnitEnable(61)
 	for i = 1, 4 do
-		UnitEnable(MedicTrig[i],25+(i*25)) -- 메딕
+		UnitEnable(MedicTrig[i],25+(i*25),nil,i) -- 메딕
 		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
 		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i],7,10,7,11) -- 마린 크기 설정
@@ -140,17 +146,20 @@ function init() -- 맵 실행시 1회 실행 트리거
 	--UnitEnable2(71)
 	--UnitEnable2(19)
 
+	
+	
+	table.insert(PatchArr,SetMemory(0x657A9C,SetTo,0)) -- 화면꺼트리기
 	for i = 0, 129 do
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
 	DoActions2(FP,PatchArr,1)
-	DoActions2(FP,PatchArrPrsv)
+	DoActions2(Force1,PatchArrPrsv)
 	DoActions2X(FP,CTrigPatchTable,1)
 	CIfOnce(FP)
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
-		DoActions(FP,SetSwitch("Switch 230",Set))
+		DoActions(FP,{SetSwitch("Switch 230",Set)})
 	end
 
 	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
@@ -383,7 +392,8 @@ NJumpXEnd(FP,Rep_Jump2)
 CAdd(FP,CurrentUID,1)
 CWhileEnd()
 CDoActions(FP,{KillUnit(35,P5)})
-CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
+TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
+CIfEnd({SetMemory(0x6509B0,SetTo,FP)}) -- OnPluginStart End
 end
 function init_Start() -- 게임 시작시 1회 실행 트리거
 	CIfOnce(FP)
@@ -416,11 +426,27 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	NJumpEnd(FP,Rep_Jump3)
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
-	if Limit == 1 then
+	
 	for i = 0, 3 do
-	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(12,MarID[i+1],i+2,i)})
+		DoActions(i+4,{
+			SetInvincibility(Disable,"Mineral Field (Type 1)",AllPlayers,"Anywhere");
+			SetInvincibility(Disable,"Mineral Field (Type 2)",AllPlayers,"Anywhere");
+			SetInvincibility(Disable,"Mineral Field (Type 3)",AllPlayers,"Anywhere");
+			GiveUnits(All,"Mineral Field (Type 1)",P12,6+i,i);
+			GiveUnits(All,"Mineral Field (Type 2)",P12,6+i,i);
+			GiveUnits(All,"Mineral Field (Type 3)",P12,6+i,i);
+			RunAIScript("Turn ON Shared Vision for Player 5");
+			RunAIScript("Turn ON Shared Vision for Player 6");
+			RunAIScript("Turn ON Shared Vision for Player 7");
+			RunAIScript("Turn ON Shared Vision for Player 8");
+			SetResources(CurrentPlayer,SetTo,10000000,OreAndGas);
+			--SetMemory(0x582144 + (4 * (i+4)),SetTo,1600);
+			--SetMemory(0x5821A4 + (4 * (i+4)),SetTo,1600);
+			RunAIScriptAt("Expansion Zerg Campaign Insane",6+i);
+			ModifyUnitEnergy(All,"Any unit",i,"Anywhere",100);
+			RunAIScriptAt("Value This Area Higher",2+i),ModifyUnitResourceAmount(All,P12,64,65535)},1)
 	end
-	end
-	CIfEnd()
+
+	CIfEnd({})
 end
 
