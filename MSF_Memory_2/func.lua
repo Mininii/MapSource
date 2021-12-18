@@ -37,63 +37,175 @@ function Install_BackupCP(Player)
 		CallTrigger(Player,LoadCp_CallIndex,nil)
 	end
 end
-function Install_EXCC(Player,Index,ArrSize)
-	EXCC_Forward = Index
-	CurCunitI = CreateVar(Player)
-	CC_Header = CreateVar(Player)
-	EXCunitTemp = CreateVarArr(ArrSize,Player)
-    EXCunit_Reset = {}
-    for i = 1, #EXCunitTemp do
-        table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
-    end
-    --[[
-    EXCunit 적용
-    1번줄 : 건작의 레벨
-    9번줄 : 영작유닛 표식
-    10번줄 : 마린 데스값 중복적용 방지용
-    ]]
-	function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
-		MoveCpValue = 0
-		local X = {}
-		for k, v in pairs(ExCunitArr) do
-			table.insert(X,SetCVar("X",v[2],SetTo,0))
-		end
-		Trigger { -- Cunit Calc Main
-			players = {ParsePlayer(PlayerID)},
-			conditions = { 
-				Label(0);
-				Conditions,
-			},
-			actions = {
-				X,
-				SetCtrigX("X","X",0x4,0,SetTo,"X",CCArr[CCptr],0,0,0);
-				SetCtrigX("X",CCArr[CCptr]+1,0x4,0,SetTo,"X","X",0,0,1);
-				SetCtrigX("X",CCArr[CCptr],0x158,0,SetTo,"X","X",0x4,1,0);
-				SetCtrigX("X",CCArr[CCptr],0x15C,0,SetTo,"X","X",0,0,1);
-				SetMemory(0x6509B0,SetTo,19025 + 84 * LoopIndex);
-				Actions,
-				},
-			flag = {Preserved}
-		}		
-	end
-	function Cast_EXCC()
-		CunitCtrig_Part2()
-		DoActionsXI(Player,EXCC_Forward)
-		CunitCtrig_Part3X()
-		for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
-			CunitCtrig_Part4_EX(i,{
-			DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
-			DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
-			},
-			{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
-			SetCVar(Player,CurCunitI[2],SetTo,i),EXCunit_Reset,
-			MoveCp(Add,25*4),
-			},EXCunitTemp)
-		end
-		CunitCtrig_End()
+function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배열 구성하기
+	local HeaderV = CreateVar(Player) -- 헤더가 저장된 V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- 구조오프셋 확장 변수 TempV
+	local Index = FuncAlloc -- FuncAlloc에서 라벨 받아옴
+	FuncAlloc = FuncAlloc + 3
+	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
+	local EXCUnitArr = {}
+	for k, v in pairs(EXCunitTemp) do
+		table.insert(EXCUnitArr,SetCVar("X",v[2],SetTo,0))
 	end
 
+	if ResetFlag ~= nil then
+		local EXCunit_Reset = {} -- 필요시 리셋시키기 위한 테이블
+		for i = 1, #EXCunitTemp do
+			table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+		end
+		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+	else
+		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
+	end
 end
+function Set_EXCC2(EXCC_init,CurUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemory(_Add(_Mul(CurUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+
+function Set_EXCC(Line,Type,Value) -- EXCC단락 내부에서 값을 쓰고싶을때. 무조건 T액션, TempVar에서는 값이 변동하지 않으므로 TempVar값과 함께 변경시켜줘야됨
+	return {TSetMemory(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value),SetV(EXCC_TempVarArr[Line+1],Value,Type)}
+end
+
+function Cond_EXCC(Line,Type,Value) -- EXCC단락 내부에서 값을 검사하고 싶을때.
+	return CV(EXCC_TempVarArr[Line+1],Value,Type)
+end
+EXCC_initArr = {}
+function EXCC_Part1(EXCC_init,Actions)
+	if #EXCC_initArr ~= 0 then
+		PushErrorMsg("EXCCinitArr_Already_Loading")
+	end
+	EXCC_initArr = EXCC_init
+	EXCC_Player = EXCC_initArr[1]
+	EXCC_Index = EXCC_initArr[2]
+	EXCC_TempVarArr = EXCC_initArr[4]
+	PlayerID = EXCC_Player
+	EXCC_TempHeader = CreateVar(EXCC_Player)
+	PlayerID = PlayerConvert(PlayerID)
+	Trigger { -- Cunit Ctrig Start
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+2,0,0,1); 
+		},
+		flag = {Preserved}
+	}	
+	Trigger { -- Cunit Calc Selector
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(EXCC_Index);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+			Actions,
+		},
+		flag = {Preserved}
+	}	
+	
+end
+-- NJump Trig 삽입 부분 (조건만족시 Jump)
+function EXCC_Part2()
+	PlayerID = EXCC_Player
+	PlayerID = PlayerConvert(PlayerID)
+	for k, P in pairs(PlayerID) do
+		Trigger { -- Cunit Calc Last
+			players = {P},
+			conditions = { 
+				Label(EXCC_Index+1);
+			},
+		   	actions = {
+				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+				SetMemory(0x6509B0,SetTo,P); -- 루프를 돌릴 플레이어 값으로 맞추기 ( P1 = 0, P2 = 1, ... , P8 = 7 )
+			},
+			flag = {Preserved}
+		}	
+	end
+end
+function EXCC_Part3X()
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Start
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(EXCC_Index+2);
+		},
+		flag = {Preserved}
+	}	
+end
+
+function EXCC_Part4X(LoopIndex,Conditions,Actions)
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Main
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+			Conditions,
+		},
+		actions = { 
+			EXCC_initArr[5],
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index,0,0,0);
+			SetCtrigX("X",EXCC_Index+1,0x4,0,SetTo,"X","X",0,0,1);
+			SetCtrigX("X",EXCC_Index,0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",EXCC_Index,0x15C,0,SetTo,"X","X",0,0,1);
+			SetCtrigX("X",EXCC_TempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+			SetMemory(0x6509B0,SetTo,19025 + (84 * LoopIndex));
+			Actions,
+			EXCC_initArr[6]
+			},
+		flag = {Preserved}
+	}		
+end
+
+	
+function EXCC_ClearCalc()
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc End
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+		},
+		flag = {Preserved}
+	}	
+end
+
+function EXCC_BreakCalc(Conditions,Actions)	
+	PlayerID = EXCC_Player
+	STPopTrigArr(PlayerID)
+	TTPopTrigArr(PlayerID)
+	Conditions = PopCondArr(Conditions)
+	Actions = PopActArr(Actions)
+	PopTrigArr(PlayerID,3)
+
+	Trigger { -- Cunit Calc Break
+		players = {ParsePlayer(PlayerID)},
+		conditions = { 
+			Label(0);
+			Conditions,
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			SetCtrigX("X",EXCC_Index+1,0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",EXCC_Index+1,0x15C,0,SetTo,"X","X",0,0,1);
+			Actions,
+		},
+		flag = {Preserved}
+	}	
+end
+
+function EXCC_End()
+	EXCC_Index = nil
+	EXCC_Player = nil
+	EXCC_initArr = {}
+	EXCC_TempHeader = nil
+end
+	
+
+
 
 function Include_Conv_CPosXY(Player)
 	CPos,CPosX,CPosY = CreateVars(3,Player)
@@ -239,12 +351,13 @@ function SubV(V,Value)
 		return TSetCVar(FP,V[2],Subtract,Value)
 	end
 end
-function SetV(V,Value)
+function SetV(V,Value,Type)
+	if Type == nil then Type = SetTo end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
-		return SetCVar(FP,V[2],SetTo,Value)
+		return SetCVar(FP,V[2],Type,Value)
 	else
-		return TSetCVar(FP,V[2],SetTo,Value)
+		return TSetCVar(FP,V[2],Type,Value)
 	end
 end
 function CD(Code,Value,Type)
@@ -295,4 +408,90 @@ function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
 		table.insert(Y,(Ptr+(i*Multiplier))-X[i+1])
 	end
 	return X,Y
+end
+
+function S_to_EmS(Str)
+	local X={}
+	for i = 1, #Str do
+		local Check = string.byte(string.sub(Str,i,i),1)
+		if Check>=0x20 or Check~=string.byte(" ",1) then
+			table.insert(X,string.char(163,128+string.byte(string.sub(Str,i,i),1)))
+		else	
+			table.insert(X,string.sub(Str,i,i))
+		end
+	end
+	return table.concat(X),X
+end
+
+function N_to_EmN(Num)
+	if type(Num) ~= "string" then Num = tostring(Num) end
+	T,X = S_to_EmS(Num)
+	local LoopCount = 0
+	for i = #X, 1, -1 do
+		LoopCount = LoopCount+1
+		if LoopCount>=3 and i~=1 then
+			LoopCount = LoopCount - 3
+			table.insert(X,i,",")
+		end
+	end
+	return table.concat(X)
+end
+function Conv_HStr(Str)
+	return "\x07【 "..S_to_EmS(Convert_StrCode(Str)).." \x07】"
+end
+
+
+function Convert_StrCode(Str)
+	for i = 1, #Str do
+		if string.sub(Str,i,i) == "<" then
+			for j= i, #Str do
+				if string.sub(Str,j,j) == ">" then
+					local Str1 = string.sub(Str,1,i-1)
+					local Str2 = string.sub(Str,j+1,#Str)
+					local Code = string.sub(Str,i+1,j-1)
+					Str = Str1..string.char(tonumber(Code,16))..Str2
+				break end
+				if j == #Str then PushErrorMsg("StrCode_EndPos_NotFound") end
+			end
+		end
+	end
+	return Str
+end
+HeroPointArr = {}
+function CreateHeroPointArr(Index,Name,Point,Type) --  영작 유닛 설정 함수
+	local TextType1 = " 을(를) 처치하였습니다. "
+	local TextType2 = " 를 획득하였습니다. "
+	local Name2
+	if Type == 1 then
+		Name2 = TextType1
+	elseif Type == 2 then
+		Name2 = TextType2
+	
+	elseif Type == nil then
+		Name2 = TextType1
+	else
+		PushErrorMsg("Need_Input_TextType")
+	end
+	local Text = StrDesignX("\x10기억\x04의 "..Name..""..Name2.."\x1F＋ "..N_to_EmN(Point).." \x1FＰｔｓ")
+	local X = {}
+	table.insert(X,Text)
+	table.insert(X,Index)
+	table.insert(X,Point) -- HPoint
+	table.insert(HeroPointArr,X)
+end
+function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 설치 함수. CunitCtrig 단락에 포함됨.
+	for i = 1, #HeroPointArr do
+		local CT = HeroPointArr[i][1]
+		local index = HeroPointArr[i][2]
+		local Point = HeroPointArr[i][3]
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),SetScore(Force1,Add,Point,Kills))
+			DoActions(FP,{RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
+			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),
+			SetCDeaths(FP,Add,1,SoundLimit),
+		})
+			f_LoadCp()
+			CIfEnd()
+			
+
+	end
 end

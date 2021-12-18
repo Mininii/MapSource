@@ -3,20 +3,18 @@ function System()
     AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
     AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
     Install_BGMSystem(FP,3,BGMType,12)
-    CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
-    DoActions(FP,MoveCp(Subtract,6*4))
-    Check_P8 = def_sIndex()
-    NJump(FP,Check_P8,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
+
+    EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
+    Check_Enemy = def_sIndex()
+    NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)},{AddV(CurEXP,1)})
     DoActions(FP,MoveCp(Add,6*4))
     --Install_DeathNotice()
-
-    ClearCalc()
-
-    NJumpEnd(FP,Check_P8)
+    EXCC_ClearCalc()
+    NJumpEnd(FP,Check_Enemy)
     DoActions(FP,MoveCp(Add,6*4))
-    CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
+    CIf(FP,{Cond_EXCC(8,AtLeast,1)}) -- 영작유닛인식
     f_SaveCp()
-    --InstallHeroPoint()
+    InstallHeroPoint()
     CIfEnd()
 --    CMov(FP,Gun_Type,0)
 
@@ -32,8 +30,26 @@ function System()
 
 
 
-    ClearCalc()
-	Cast_EXCC()
+    EXCC_ClearCalc()
+    EXCC_Part2()
+    EXCC_Part3X()
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+		EXCC_Part4X(i,{
+		DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
+		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
+		},
+		{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
+		MoveCp(Add,19*4),
+		})
+	end
+	EXCC_End()
+
+
+    
+    SETimer = CreateCcode()
+    TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
+
+
 
 
 end

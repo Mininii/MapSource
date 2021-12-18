@@ -16,6 +16,8 @@ function Interface()
 	StrDesign("\x04기부금액 단위가 \x1F100000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.")}
+	CMov(FP,AtkCondTmp,_Add(Level,Level),150)
+	CMov(FP,HPCondTmp,_Add(_Add(Level,Level),_Add(Level,Level)),50)
 	for i = 0, 3 do
 		CIf(FP,PlayerCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0)})
 
@@ -23,8 +25,6 @@ function Interface()
 			TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
 			TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit)},{Preserved})
 		end
-		CMov(FP,AtkCondTmp,_Add(Level,Level),150)
-		CMov(FP,HPCondTmp,_Add(_Add(Level,Level),_Add(Level,Level)),50)
 		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0)})
 		CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3)})
 		CElseX({SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,0)})

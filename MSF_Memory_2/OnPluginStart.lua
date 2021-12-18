@@ -305,7 +305,6 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 
 
-	table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 
 
 	CMov(FP,CurrentUID,0)
@@ -368,8 +367,8 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 				})
 				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
 			--CDoActions(FP,{
-			--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1),
-			--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV)})
+			--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*8)/4))),SetTo,1),
+			--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),DUnitCalc[3]),SetTo,Gun_LV)})
 		f_LoadCp()
 		CAdd(FP,0x6509B0,6)
 		NJumpXEnd(FP,Rep_Jump4)

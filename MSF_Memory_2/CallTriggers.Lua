@@ -1,7 +1,7 @@
 
 function Install_CallTriggers()
-	local InverseOptionX = CreateCCode()
-	local InverseOptionY = CreateCCode()
+	local InverseOptionX = CreateCcode()
+	local InverseOptionY = CreateCcode()
 	f_Replace = SetCallForward()
 	SetCall(FP)
 		CIfX(FP,Memory(0x628438,AtLeast,1)) -- 캔낫체크.
@@ -46,8 +46,8 @@ function Install_CallTriggers()
 		TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
 		})
 		CDoActions(FP,{
-			TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1), -- 확장 구조오프셋 변수에 값 입력
-			TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV), -- 확장 구조오프셋 변수에 값 입력
+			Set_EXCC2(DUnitCalc,CunitIndex,8,SetTo,1),
+			Set_EXCC2(DUnitCalc,CunitIndex,0,SetTo,Gun_LV),
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
 		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
 		f_LoadCp()
