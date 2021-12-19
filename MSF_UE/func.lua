@@ -38,9 +38,9 @@ end
 end
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
-	f_MemCpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
 	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
-	f_MemCpy(FP,_Add(StrPtr,CText1[2]+(4*6)),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
 
@@ -107,7 +107,7 @@ function Install_DeathNotice()
 				for k = 0, 6 do
 					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
-				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
 		end
@@ -128,7 +128,7 @@ function Install_DeathNotice()
 				for k = 0, 6 do
 					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
-				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
 		end
@@ -149,7 +149,7 @@ function Install_DeathNotice()
 				for k = 0, 6 do
 					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
 				end
-				f_MemCpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
 			CIfEnd()
 		DoActions(FP,MoveCp(Add,6*4))

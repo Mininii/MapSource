@@ -687,58 +687,58 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	
 
 	Print_All_CTextString(FP)
-	f_MemCpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
-	--f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
-	f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
-	--f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
-	f_MemCpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
+	f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
+	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
+	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
+	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
+	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
 
-	f_MemCpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
-	f_MemCpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
-	f_MemCpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
-	f_MemCpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
-	f_MemCpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
+	f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
+	f_Memcpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
+	f_Memcpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
+	f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
+	f_Memcpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
 
 	CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
-	f_MemCpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
-	f_MemCpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
+	f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
+	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
 	CElseX()
-	f_MemCpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-	f_MemCpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	f_Memcpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
 	CIfXEnd()
 	
 
-	f_MemCpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
-	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
-	f_MemCpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+	f_Memcpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
+	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
+	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 
 
-	f_MemCpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
-	f_MemCpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(5*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
-	f_MemCpy(FP,_Add(HiScoreStrPtr,StatPT[2]+(5*4)+HiScoreT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-
-	
-	f_MemCpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
-	f_MemCpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(NukeEndT[3],0),"X","X",1),NukeEndT[2])
-
-	f_MemCpy(FP,AHPStrPtr,_TMem(Arr(EnemyHPT1[3],0),"X","X",1),EnemyHPT1[2])
-	f_MemCpy(FP,_Add(AHPStrPtr,EnemyHPT1[2]+(5*4)),_TMem(Arr(EnemyHPT2[3],0),"X","X",1),EnemyHPT2[2])
+	f_Memcpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
+	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(5*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
+	f_Memcpy(FP,_Add(HiScoreStrPtr,StatPT[2]+(5*4)+HiScoreT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 
 	
-	f_MemCpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])
-	f_MemCpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)),_TMem(Arr(SupplyT2[3],0),"X","X",1),SupplyT2[2])
-	f_MemCpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)+SupplyT2[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
+	f_Memcpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
+	f_Memcpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(NukeEndT[3],0),"X","X",1),NukeEndT[2])
+
+	f_Memcpy(FP,AHPStrPtr,_TMem(Arr(EnemyHPT1[3],0),"X","X",1),EnemyHPT1[2])
+	f_Memcpy(FP,_Add(AHPStrPtr,EnemyHPT1[2]+(5*4)),_TMem(Arr(EnemyHPT2[3],0),"X","X",1),EnemyHPT2[2])
+
+	
+	f_Memcpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])
+	f_Memcpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)),_TMem(Arr(SupplyT2[3],0),"X","X",1),SupplyT2[2])
+	f_Memcpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)+SupplyT2[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
 
 
-	f_MemCpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
-	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)),_TMem(Arr(ArmorT2[3],0),"X","X",1),ArmorT2[2])
-	f_MemCpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)+ArmorT2[2]+(5*4)),_TMem(Arr(ArmorT3[3],0),"X","X",1),ArmorT3[2])
+	f_Memcpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
+	f_Memcpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)),_TMem(Arr(ArmorT2[3],0),"X","X",1),ArmorT2[2])
+	f_Memcpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)+ArmorT2[2]+(5*4)),_TMem(Arr(ArmorT3[3],0),"X","X",1),ArmorT3[2])
 
 	
 	
 	
 
-	f_MemCpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
+	f_Memcpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
 
 	for i = 1, 7 do
 	Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])

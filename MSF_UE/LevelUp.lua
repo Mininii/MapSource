@@ -174,7 +174,7 @@ function LevelUp()
 		_0DPatchX(FP,GetPVA,12)
 		CIf(FP,CVar(FP,SetPlayers[2],AtLeast,2))
 		f_Movcpy(FP,_Add(PointStrPtr,StPT[2]),VArr(GetPVA,0),12*4)
-		f_MemCpy(FP,_Add(PointStrPtr,StPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+		f_Memcpy(FP,_Add(PointStrPtr,StPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 		CIfEnd()
 		
 

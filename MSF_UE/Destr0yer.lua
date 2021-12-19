@@ -560,7 +560,7 @@ Trigger {
 		
 		ItoDecX(FP,DTotalDmg,VArr(TotalDmgVA,0),2,0x7,2)
 		_0DPatchX(FP,TotalDmgVA,12)
-		f_MemCpy(FP,DBoss_PrintScore2,_TMem(Arr(DBossTotalDMGT[3],0),"X","X",1),DBossTotalDMGT[2])
+		f_Memcpy(FP,DBoss_PrintScore2,_TMem(Arr(DBossTotalDMGT[3],0),"X","X",1),DBossTotalDMGT[2])
 		f_Movcpy(FP,_Add(DBoss_PrintScore2,DBossTotalDMGT[2]),VArr(TotalDmgVA,0),12*4)
 		for i = 1, 7 do
 			CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))

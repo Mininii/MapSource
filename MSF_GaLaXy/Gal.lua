@@ -26,9 +26,9 @@ end
 
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
-	f_MemCpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
+	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
 	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
-	f_MemCpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
 
@@ -14404,9 +14404,9 @@ NJump(P6,0x24,CVar(P6,0x26,Exactly,0),{
 	
 
 f_GetStrXptr(P6,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
-f_MemCpy(P6,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2]-3)
---f_MemCpy(P6,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
-f_MemCpy(P6,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2]-3)
+f_Memcpy(P6,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2]-3)
+--f_Memcpy(P6,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
+f_Memcpy(P6,_Add(UPCompStrPtr,Str12[2]-3+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2]-3)
 
 
 
@@ -14416,7 +14416,7 @@ _0DPatchforVArr(UpCompRet,4)
 _0DPatchforVArr(UpCompTxt,4)
 f_Movcpy(P6,_Add(UPCompStrPtr,Str12[2]-3),VArr(UpCompTxt,0),5*4)
 f_Movcpy(P6,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),VArr(UpCompRet,0),5*4)
-f_MemCpy(P6,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
+f_Memcpy(P6,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2]-3)
 
 CDoActions(P6,{
 		TSetMemory(0x6509B0,SetTo,UpgradeCP),
