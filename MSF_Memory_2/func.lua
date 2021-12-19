@@ -414,10 +414,10 @@ function S_to_EmS(Str)
 	local X={}
 	for i = 1, #Str do
 		local Check = string.byte(string.sub(Str,i,i),1)
-		if Check>=0x20 or Check~=string.byte(" ",1) then
-			table.insert(X,string.char(163,128+string.byte(string.sub(Str,i,i),1)))
-		else	
+		if Check<=0x20 or Check==string.byte(" ",1) then
 			table.insert(X,string.sub(Str,i,i))
+		else	
+			table.insert(X,string.char(163,128+string.byte(string.sub(Str,i,i),1)))
 		end
 	end
 	return table.concat(X),X
@@ -437,7 +437,7 @@ function N_to_EmN(Num)
 	return table.concat(X)
 end
 function Conv_HStr(Str)
-	return "\x07【 "..S_to_EmS(Convert_StrCode(Str)).." \x07】"
+	return "\x10【 "..S_to_EmS(Convert_StrCode(Str)).." \x10】"
 end
 
 
@@ -459,8 +459,8 @@ function Convert_StrCode(Str)
 end
 HeroPointArr = {}
 function CreateHeroPointArr(Index,Name,Point,Type) --  영작 유닛 설정 함수
-	local TextType1 = " 을(를) 처치하였습니다. "
-	local TextType2 = " 를 획득하였습니다. "
+	local TextType1 = "\x04 을(를) \x08처치\x04하였습니다. "
+	local TextType2 = "\x04 를 \x07획득\x04하였습니다. "
 	local Name2
 	if Type == 1 then
 		Name2 = TextType1
