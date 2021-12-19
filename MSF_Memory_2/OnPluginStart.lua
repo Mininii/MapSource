@@ -92,6 +92,19 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 	end
 
+	function SetGroupFlags(UnitID,Value)
+		table.insert(PatchArr,SetMemoryB(0x6637A0 + (UnitID),SetTo,Value))
+	end
+	for j, k in pairs(HeroPointArr) do
+		SetGroupFlags(k[2],0xA)
+		if k[4] == 1 then
+			SetUnitClass(k[2],162) -- 퍼뎀유닛
+		else
+			SetUnitClass(k[2],161) -- 일반유닛
+		end
+		
+	end
+	SetGroupFlags(15,0x9)
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + BanToken[1],SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + BanToken[1],SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + BanToken[2],SetTo,0))
@@ -156,6 +169,21 @@ function init() -- 맵 실행시 1회 실행 트리거
 	DoActions2(Force1,PatchArrPrsv)
 	DoActions2X(FP,CTrigPatchTable,1)
 	CIfOnce(FP)
+	
+	f_GetTblptr(FP,NMDMGTblPtr,1463)
+	f_GetTblptr(FP,PerDMGTblPtr,1464)
+
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*4)),_TMem(Arr(ClassInfo1[3],0),"X","X",1),ClassInfo1[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*8)+ClassInfo1[2]),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*12)+ClassInfo1[2]+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*16)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo4[3],0),"X","X",1),ClassInfo4[2])
+	
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*4)),_TMem(Arr(ClassInfo1[3],0),"X","X",1),ClassInfo1[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*8)+ClassInfo1[2]),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo1[2]+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
+	
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
@@ -306,24 +334,34 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 
 
-
+	local VRet5 = CreateVar()
+	local MaskRet = CreateVar()
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	local Rep_Jump1 = def_sIndex()
 	for j, k in pairs(Replace_JumpUnitArr) do
 		NJumpX(FP,Rep_Jump1,{CVar(FP,CurrentUID[2],Exactly,k)})
 	end
+	CMod(FP,MaskRet,CurrentUID,4)
+	local MaskRet2 = f_Sqrd(256,MaskRet)
 	CMov(FP,VRet,CurrentUID,EPD(0x664080)) -- SpecialAdvFlag
 	CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
+	CMov(FP,VRet5,_Div(CurrentUID,4),EPD(0x6637A0)) --GroupFlags
+	
 	ConvertArr(FP,ArrID,CurrentUID)
 	CMov(FP,ArrX(BdDimArr,ArrID),_ReadF(VRet2))
 	f_Read(FP,_Add(CurrentUID,EPD(0x662350)),ArrX(MaxHPBackUp,ArrID))
 	f_Mod(FP,VRet3,CurrentUID,_Mov(2))
 	f_Div(FP,VRet4,CurrentUID,_Mov(2))
-	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1
+	 
+	
+	CTrigger(FP,{TDeathsX(VRet5,Exactly,_Mul(_Mov(0x9),MaskRet2),0,_Mul(_Mov(0x9),MaskRet2))},{TSetMemoryX(VRet5,SetTo,_Mul(_Mov(0x20),MaskRet2),_Mul(_Mov(0x20),MaskRet2))},1) -- if Group ==Zerg And Unit then Set Group Factories
+	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0),TSetMemoryX(VRet5,SetTo,0,_Mul(_Mov(0x20),MaskRet2))},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1, Remove Factories Flag
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+
+	
 	NJumpXEnd(FP,Rep_Jump1)
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()

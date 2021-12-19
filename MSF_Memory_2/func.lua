@@ -458,7 +458,8 @@ function Convert_StrCode(Str)
 	return Str
 end
 HeroPointArr = {}
-function CreateHeroPointArr(Index,Name,Point,Type) --  영작 유닛 설정 함수
+function CreateHeroPointArr(Index,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
+	if DmgType == nil then DmgType = 0 end
 	local TextType1 = "\x04 을(를) \x08처치\x04하였습니다. "
 	local TextType2 = "\x04 를 \x07획득\x04하였습니다. "
 	local Name2
@@ -477,6 +478,7 @@ function CreateHeroPointArr(Index,Name,Point,Type) --  영작 유닛 설정 함수
 	table.insert(X,Text)
 	table.insert(X,Index)
 	table.insert(X,Point) -- HPoint
+	table.insert(X,DmgType) -- HPoint
 	table.insert(HeroPointArr,X)
 end
 function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 설치 함수. CunitCtrig 단락에 포함됨.

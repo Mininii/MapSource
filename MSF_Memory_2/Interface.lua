@@ -19,22 +19,24 @@ function Interface()
 	CMov(FP,AtkCondTmp,_Add(Level,Level),150)
 	CMov(FP,HPCondTmp,_Add(_Add(Level,Level),_Add(Level,Level)),50)
 	for i = 0, 3 do
-		CIf(FP,PlayerCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0)})
+		CIf(FP,PlayerCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(1000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256)})
 
 		for CBit = 0, 7 do
 			TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
-			TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit)},{Preserved})
+			TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,9216*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,9*(2^CBit))},{Preserved})
 		end
-		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0)})
+		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(9999*256)+1)})
 		CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,3)})
 		CElseX({SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x58D2B0+(i*24)+8,SetTo,0)})
 		CIfXEnd()
-		CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0)})
+		CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(i*24)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemory(0x515BB0+(i*4),SetTo,2560)})
 		CElseIfX({CV(CurHP[i+1],HPCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i),SetTo,250),SetMemoryB(0x58D2B0+(i*24)+1,SetTo,3)})
 		CElseX({SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemoryB(0x58D2B0+(i*24)+1,SetTo,0)})
 		CIfXEnd()
 		
 		CIfEnd()
+
+
 	for k = 0, 5 do
 	Trigger { -- 기부 금액 변경
 		players = {i},
@@ -183,9 +185,111 @@ function Interface()
 	},
 	}
 	end
+	
+	--선택인식 피통 보임 비공유
+	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
+	SelWepID_Mask = CreateVar(FP)
+	SelWepID_Mask2 = CreateVar(FP)
+	SelUID_Mask = CreateVar(FP)
+	SelUID_Atk = CreateVar(FP)
+	SelUID_Atk2 = CreateVar(FP)
+	SelWep = CreateVar(FP)
+	SelWepID = CreateVar(FP)
+	SelUID = CreateVar(FP)
+	SelATK = CreateVar(FP)
+	SelClass = CreateVar(FP)
+	SelClass_Mask = CreateVar(FP)
+SelHPVA = CreateVArr(4,FP)
+SelShVA = CreateVArr(4,FP)
+SelMaxHPVA = CreateVArr(4,FP)
+SelATKVA = CreateVArr(4,FP)
+SelATKVA2 = CreateVArr(4,FP)
+AFlag = CreateCcode()
+BFlag = CreateCcode()
+--DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))
+
+	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)},{SetCD(AFlag,0),SetCD(BFlag,2)})
+	f_Read(FP,0x6284B8,nil,SelEPD)
+	f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
+	f_Mod(FP,SelClass_Mask,SelUID,4)
+	f_Read(FP,_Add(_Div(SelUID,4),EPDF(0x663DD0)),SelClass)
+	CTrigger(FP,{CV(SelClass_Mask,0),CVar(FP,SelClass[2],Exactly,162,0xFF)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,1),CVar(FP,SelClass[2],Exactly,162*256,0xFF00)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,2),CVar(FP,SelClass[2],Exactly,162*65536,0xFF0000)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,3),CVar(FP,SelClass[2],Exactly,162*16777216,0xFF000000)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,0),CVar(FP,SelClass[2],Exactly,161,0xFF)},{SetCD(BFlag,0)},1)
+	CTrigger(FP,{CV(SelClass_Mask,1),CVar(FP,SelClass[2],Exactly,161*256,0xFF00)},{SetCD(BFlag,0)},1)
+	CTrigger(FP,{CV(SelClass_Mask,2),CVar(FP,SelClass[2],Exactly,161*65536,0xFF0000)},{SetCD(BFlag,0)},1)
+	CTrigger(FP,{CV(SelClass_Mask,3),CVar(FP,SelClass[2],Exactly,161*16777216,0xFF000000)},{SetCD(BFlag,0)},1)
+	CIf(FP,{TMemoryX(_Add(SelEPD,19),AtLeast,4,0xFF),CD(BFlag,1,AtMost)})
+	f_Read(FP,_Add(SelEPD,2),SelHP)
+	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+	CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPDF(0x662350)))),_Mov(256)))
 
 	
-	
+	TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{Preserved})
+	TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{Preserved})
+	TriggerX(FP,CV(SelUID,25),SetV(SelUID,26),{Preserved})
+	TriggerX(FP,CV(SelUID,30),SetV(SelUID,31),{Preserved})
+	TriggerX(FP,CV(SelUID,3),SetV(SelUID,4),{Preserved})
+	TriggerX(FP,CV(SelUID,17),SetV(SelUID,18),{Preserved})
+	TriggerX(FP,CV(SelUID,77),SetCD(AFlag,1),{Preserved})
+	TriggerX(FP,CV(SelUID,65),SetCD(AFlag,1),{Preserved})
+	TriggerX(FP,CV(SelUID,10),SetCD(AFlag,1),{Preserved})
+
+	f_Mod(FP,SelUID_Mask,SelUID,4)
+	f_Read(FP,_Add(_Div(SelUID,4),EPDF(0x6636B8)),SelWep)
+	CTrigger(FP,{CV(SelUID_Mask,0)},{TSetCVar(FP,SelWepID[2],SetTo,SelWep,0xFF)},1)
+	CTrigger(FP,{CV(SelUID_Mask,1)},{TSetCVar(FP,SelWepID[2],SetTo,_Div(SelWep,0x100),0xFF)},1)
+	CTrigger(FP,{CV(SelUID_Mask,2)},{TSetCVar(FP,SelWepID[2],SetTo,_Div(SelWep,0x10000),0xFF)},1)
+	CTrigger(FP,{CV(SelUID_Mask,3)},{TSetCVar(FP,SelWepID[2],SetTo,_Div(SelWep,0x1000000),0xFF)},1)
+	f_Mod(FP,SelWepID_Mask,SelWepID,2)
+	f_Mod(FP,SelWepID_Mask2,SelWepID,4)
+	f_Read(FP,_Add(_Div(SelWepID,2),EPDF(0x656EB0)),SelUID_Atk)
+	f_Read(FP,_Add(_Div(SelWepID,4),EPDF(0x6564E0)),SelUID_Atk2)
+	CTrigger(FP,{CV(SelWepID_Mask,0)},{TSetCVar(FP,SelATK[2],SetTo,SelUID_Atk,0xFFFF)},1)
+	CTrigger(FP,{CV(SelWepID_Mask,1)},{TSetCVar(FP,SelATK[2],SetTo,_Div(SelUID_Atk,0x10000),0xFFFF)},1)
+	CTrigger(FP,{CV(SelWepID_Mask2,0),CVar(FP,SelUID_Atk2[2],Exactly,2,0xFF)},{SetCD(AFlag,1)},1)
+	CTrigger(FP,{CV(SelWepID_Mask2,1),CVar(FP,SelUID_Atk2[2],Exactly,2*256,0xFF00)},{SetCD(AFlag,1)},1)
+	CTrigger(FP,{CV(SelWepID_Mask2,2),CVar(FP,SelUID_Atk2[2],Exactly,2*65536,0xFF0000)},{SetCD(AFlag,1)},1)
+	CTrigger(FP,{CV(SelWepID_Mask2,3),CVar(FP,SelUID_Atk2[2],Exactly,2*16777216,0xFF000000)},{SetCD(AFlag,1)},1)
+	CIf(FP,{CD(AFlag,1)})
+		CAdd(FP,SelATK,SelATK)
+	CIfEnd()
+	f_Div(FP,SelHP,_Mov(256))
+	f_Div(FP,SelSh,_Mov(256))
+	ItoDec(FP,SelHP,VArr(SelHPVA,0),2,0x08,0)--체
+	ItoDec(FP,SelMaxHP,VArr(SelMaxHPVA,0),2,0x19,0)--체
+	ItoDec(FP,SelSh,VArr(SelShVA,0),2,0x1C,0)--쉴
+
+	CIfX(FP,CD(BFlag,0))
+	ItoDec(FP,SelATK,VArr(SelATKVA,0),2,0x1B,0)--일반딜
+	f_Movcpy(FP,NMDMGTblPtr,VArr(SelHPVA,0),4*4)
+	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]),VArr(SelMaxHPVA,0),4*4)
+	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
+	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
+	CElseX()
+	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x1F,0)--퍼딜1
+	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x1F,0)--퍼딜2
+	f_Movcpy(FP,PerDMGTblPtr,VArr(SelHPVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]),VArr(SelMaxHPVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]+(4*4)+ClassInfo6[2]),VArr(SelATKVA2,0),4*4)
+	CIfXEnd()
+
+
+	--SelHP 
+	--SelSh 
+	--SelMaxHP 
+	--SelATK 
+
+
+	CIfEnd()
+	CIfEnd()
+
+
+		
 	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))

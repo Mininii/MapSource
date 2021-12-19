@@ -180,26 +180,43 @@ function CreateCArray(Player,Size)
 end
 
 
-
 function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local X = {}
 	local StrSize = GetStrSize(0,Text)
+	if (StrSize)/4>601 then PushErrorMsg("StrSize_OverFlow") end
 	table.insert(X,Text)
 	table.insert(X,StrSize)
-	table.insert(X,CreateCArray(Player,StrSize))
-	local Y = {}
-	table.insert(Y,X[3])
-	table.insert(Y,X[1])
-	table.insert(PrintString_Arr,Y)
+	table.insert(X,CreateCArray(Player,((StrSize)/4)+1))
+	local Z = print_utf8A(X[3],0, Text)
+	for j, k in pairs(Z) do
+		table.insert(CtrigInitArr[Player+1],k)
+	end
 	return X
 end
 
 
-function Print_All_CTextString(Player) -- CtrigAsm 5.1
-	for i = 1, #PrintString_Arr do
-		Print_String(Player,_TMem(Arr(PrintString_Arr[i][1],0)),PrintString_Arr[i][2],0)
-	end
+
+function print_utf8A(Array,pos, string)
+    local ret = {}
+    local dst = pos*4
+    if type(string) == "string" then
+        local str = string
+        local n = 1
+        if dst % 4 >= 1 then
+            for i = 1, dst % 4 do str = '\x0d'..str end
+        end
+        local t = cp949_to_utf8(str)
+        while n <= #t do
+			
+            ret[#ret+1] = SetMemX(Arr(Array,(dst - dst % 4 +n-1)/4),SetTo,_dw(t, n))
+            n = n + 4
+        end
+    elseif type(string) == "number" then
+        PushErrorMsg("print_utf8A_InputError")
+    end
+    return ret
 end
+
 
 
 
@@ -627,3 +644,24 @@ end
 
 TempV_0D = CreateVar()
 TempV_0D2 = CreateVar()
+
+function Install_f_Sqrd(Player)
+	local LoopCcode = CreateCcode()
+	local DestV = CreateVar(Player)
+	local SqV = CreateVar(Player)
+	Call_f_Sqrd = SetCallForward()
+	SetCall(Player)
+	CIfX(Player,CDeaths(Player,AtLeast,2,LoopCcode))
+	CWhile(Player,CDeaths(Player,AtLeast,2,LoopCcode))
+		f_Mul(Player,DestV,SqV)
+	CWhileEnd(SetCDeaths(Player,Subtract,1,LoopCcode))
+	CElseIfX({CDeaths(Player,Exactly,0,LoopCcode)})
+		CMov(Player,DestV,1)
+	CIfXEnd()
+	SetCallEnd()
+	function f_Sqrd(Dest,Sqrd)
+		CDoActions(Player,{TSetCVar(Player,DestV[2],SetTo,Dest),TSetCVar(Player,SqV[2],SetTo,Dest),TSetCDeaths(Player,SetTo,Sqrd,LoopCcode)})
+		CallTrigger(Player,Call_f_Sqrd)
+		return DestV
+	end
+end

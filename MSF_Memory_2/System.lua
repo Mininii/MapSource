@@ -21,7 +21,8 @@ function System()
 --    f_GSend(131)
 --    f_GSend(132)
 --    f_GSend(133)
-	
+    CMov(FP,0x57f0f0,f_Sqrd(256,2))
+    CMov(FP,0x57f120,f_Sqrd(256,3))
 
     if TestStart == 1 then
         --f_GSend(146)

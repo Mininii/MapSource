@@ -18,7 +18,7 @@ dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
 VerText = "\x04Ver. 3.6"
-Limit = 0
+Limit = 1
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
@@ -18957,7 +18957,7 @@ ItoName(P6,i,VArr(Names[i+1],0),ColorCode[i+1])
 
 _0DPatchforVArr(FP,Names[i+1],6)
 end
-Print_All_CTextString(FP)
+--Print_All_CTextString(FP)
 for i = 1, 5 do
 Install_CText1(LumiaCTStrPtr[i],Str10,Str11,Names[i])
 
