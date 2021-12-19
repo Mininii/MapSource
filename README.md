@@ -16,6 +16,8 @@
 + 마린키우기 GaLaXy.2
 + 마린키우기 UnLimit ExceeD
 
-## 현재 개발 예정 작품
+## 개발중인 작품
 + 마린키우기 Memory 2
+
+## 현재 개발 예정 작품
 + 마린키우기 GaLaXy:ReB∞t
