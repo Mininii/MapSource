@@ -117,6 +117,13 @@ function init() -- 맵 실행시 1회 실행 트리거
 	DefTypePatch(i,7) -- 방어타입 전부 7로 설정
 	SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 	end
+	for i = 0, 129 do
+	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
+	end
+	PerWepArr = {8,12,27}
+	for j, k in pairs(PerWepArr) do
+		WeaponTypePatch(k,2)
+	end
 	for i = 63, 70 do
 		UnitEnable(i) -- 원격스팀팩
 	end
@@ -148,10 +155,10 @@ function init() -- 맵 실행시 1회 실행 트리거
 		SetUnitAdvFlag(MarID[i],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 		--SetWepUpType(MarWep[i],i-1) -- 플레이어 마린무기에 각각 다른 공업 적용
-		table.insert(PatchArr,SetMemory(0x662350 + (MarID[i]*4),SetTo,9999*256)) -- 기본공격력
 		
-		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,9999)) -- 기본공격력
-		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,0)) -- 추가공격력
+		
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor)) -- 추가공격력
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i],SetTo,MarWep[i])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i],SetTo,MarWep[i])) -- 공중무기
 	end
@@ -162,9 +169,6 @@ function init() -- 맵 실행시 1회 실행 트리거
 	
 	
 	table.insert(PatchArr,SetMemory(0x657A9C,SetTo,0)) -- 화면꺼트리기
-	for i = 0, 129 do
-	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
-	end
 	DoActions2(FP,PatchArr,1)
 	DoActions2(Force1,PatchArrPrsv)
 	DoActions2X(FP,CTrigPatchTable,1)
@@ -334,8 +338,13 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 
 
-	local VRet5 = CreateVar()
-	local MaskRet = CreateVar()
+	local VRet5 = CreateVar(FP)
+	local MaskRet = CreateVar(FP)
+	local WepTypeSetV = CreateVar(FP)
+	local WepTypeSetV2 = CreateVar(FP)
+	local SelWepID_Mask3 = CreateVar(FP)
+
+	
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	local Rep_Jump1 = def_sIndex()
@@ -344,13 +353,13 @@ function init() -- 맵 실행시 1회 실행 트리거
 	end
 	CMod(FP,MaskRet,CurrentUID,4)
 	local MaskRet2 = f_Sqrd(256,MaskRet)
-	CMov(FP,VRet,CurrentUID,EPD(0x664080)) -- SpecialAdvFlag
-	CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
-	CMov(FP,VRet5,_Div(CurrentUID,4),EPD(0x6637A0)) --GroupFlags
+	CMov(FP,VRet,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
+	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
+	CMov(FP,VRet5,_Div(CurrentUID,4),EPDF(0x6637A0)) --GroupFlags
 	
 	ConvertArr(FP,ArrID,CurrentUID)
 	CMov(FP,ArrX(BdDimArr,ArrID),_ReadF(VRet2))
-	f_Read(FP,_Add(CurrentUID,EPD(0x662350)),ArrX(MaxHPBackUp,ArrID))
+	f_Read(FP,_Add(CurrentUID,EPDF(0x662350)),ArrX(MaxHPBackUp,ArrID))
 	f_Mod(FP,VRet3,CurrentUID,_Mov(2))
 	f_Div(FP,VRet4,CurrentUID,_Mov(2))
 	 
@@ -358,14 +367,49 @@ function init() -- 맵 실행시 1회 실행 트리거
 	CTrigger(FP,{TDeathsX(VRet5,Exactly,_Mul(_Mov(0x9),MaskRet2),0,_Mul(_Mov(0x9),MaskRet2))},{TSetMemoryX(VRet5,SetTo,_Mul(_Mov(0x20),MaskRet2),_Mul(_Mov(0x20),MaskRet2))},1) -- if Group ==Zerg And Unit then Set Group Factories
 	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0),TSetMemoryX(VRet5,SetTo,0,_Mul(_Mov(0x20),MaskRet2))},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1, Remove Factories Flag
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
-	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
-	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 
+
+	
+
+	
+	DoActionsX(FP,SetCD(BFlag,2))
+	f_Mod(FP,SelClass_Mask,CurrentUID,4)
+	f_Read(FP,_Add(_Div(CurrentUID,4),EPDF(0x663DD0)),SelClass)
+	CTrigger(FP,{CV(SelClass_Mask,0),CVar(FP,SelClass[2],Exactly,162,0xFF)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,1),CVar(FP,SelClass[2],Exactly,162*256,0xFF00)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,2),CVar(FP,SelClass[2],Exactly,162*65536,0xFF0000)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(SelClass_Mask,3),CVar(FP,SelClass[2],Exactly,162*16777216,0xFF000000)},{SetCD(BFlag,1)},1)
+	f_Mod(FP,SelUID_Mask,CurrentUID,4)
+	f_Read(FP,_Add(_Div(CurrentUID,4),EPDF(0x6636B8)),SelWep)
+	MaskRet = f_Sqrd(256,SelUID_Mask)
+	f_Div(FP,SelWep,MaskRet)
+	CTrigger(FP,{},{TSetCVar(FP,SelWepID[2],SetTo,SelWep,0xFF)},1)
+	NJumpX(FP,Rep_Jump1,CV(SelWepID,130))
+	f_Mod(FP,SelWepID_Mask2,SelWepID,4)
+	f_Mod(FP,SelWepID_Mask3,SelWepID,2)
+	MaskRet = f_Sqrd(256,SelWepID_Mask2)
+	CMov(FP,WepTypeSetV,_Div(SelWepID,4),EPDF(0x657258))
+	CTrigger(FP,{CD(BFlag,1)},{TSetMemoryX(WepTypeSetV,SetTo,_Mul(MaskRet,2),_Mul(MaskRet,255))},1)
+	CMov(FP,WepTypeSetV2,_Div(SelWepID,2),EPDF(0x657998))
+	MaskRet = f_Sqrd(256,SelWepID_Mask3)
+	CTrigger(FP,{},{TSetMemoryX(WepTypeSetV2,SetTo,_Mul(MaskRet,3),_Mul(MaskRet,3))},1)
+	
 	
 	NJumpXEnd(FP,Rep_Jump1)
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
+
+
+
+
+
+
+	
+	
+
 	
 CMov(FP,0x6509B0,19025+19)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
@@ -457,7 +501,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	for j, k in pairs(Replace_JumpUnitArr) do
 		NJumpX(FP,Rep_Jump3,{CVar(FP,CurrentUID[2],Exactly,k)})
 	end
-	CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
+	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
 	ConvertArr(FP,ArrID,CurrentUID)
 	CDoActions(FP,{TSetMemory(VRet2,SetTo,_ReadF(ArrX(BdDimArr,ArrID)))})
 	NJumpEnd(FP,Rep_Jump3)

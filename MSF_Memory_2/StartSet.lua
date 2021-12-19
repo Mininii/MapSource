@@ -53,7 +53,7 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BC0,SetTo,256);--4
 		SetMemory(0x515BC4,SetTo,20480);--5
 		SetMemory(0x515BC8,SetTo,10240);--6
-		SetMemory(0x515BCC,SetTo,5120);--7
+		SetMemory(0x515BCC,SetTo,256);--7
 		SetMemory(0x515BD0,SetTo,40960);--8
 		SetMemory(0x515BD4,SetTo,256);--9
 	},

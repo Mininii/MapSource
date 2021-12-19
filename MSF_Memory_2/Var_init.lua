@@ -1,4 +1,8 @@
 function Var_init()
+	MarAtk = 15
+	MarAtkFactor = 3
+
+
 	UnitDataPtr = EPDF(0x5967EC-(1700*4))
 	MaxHPBackUp = CreateArr(228,FP)
 	BdDimArr = CreateArr(228,FP)
@@ -33,6 +37,26 @@ function Var_init()
 	NMDMGTblPtr = CreateVar(FP)
 	PerDMGTblPtr = CreateVar(FP)
 	Dt = CreateVar(FP)
+	
+	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
+	SelWepID_Mask = CreateVar(FP)
+	SelWepID_Mask2 = CreateVar(FP)
+	SelUID_Mask = CreateVar(FP)
+	SelUID_Atk = CreateVar(FP)
+	SelUID_Atk2 = CreateVar(FP)
+	SelWep = CreateVar(FP)
+	SelWepID = CreateVar(FP)
+	SelUID = CreateVar(FP)
+	SelATK = CreateVar(FP)
+	SelClass = CreateVar(FP)
+	SelClass_Mask = CreateVar(FP)
+	SelHPVA = CreateVArr(4,FP)
+	SelShVA = CreateVArr(4,FP)
+	SelMaxHPVA = CreateVArr(4,FP)
+	SelATKVA = CreateVArr(4,FP)
+	SelATKVA2 = CreateVArr(4,FP)
+	AFlag = CreateCcode()
+	BFlag = CreateCcode()
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")

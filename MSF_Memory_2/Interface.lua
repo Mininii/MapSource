@@ -8,7 +8,6 @@ function Interface()
 	local HPCondTmp = CreateVar(FP)
 	AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0+7,46)
 	HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0,46)
-
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다."),
@@ -36,7 +35,7 @@ function Interface()
 		
 		CIfEnd()
 
-
+		
 	for k = 0, 5 do
 	Trigger { -- 기부 금액 변경
 		players = {i},
@@ -187,25 +186,6 @@ function Interface()
 	end
 	
 	--선택인식 피통 보임 비공유
-	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
-	SelWepID_Mask = CreateVar(FP)
-	SelWepID_Mask2 = CreateVar(FP)
-	SelUID_Mask = CreateVar(FP)
-	SelUID_Atk = CreateVar(FP)
-	SelUID_Atk2 = CreateVar(FP)
-	SelWep = CreateVar(FP)
-	SelWepID = CreateVar(FP)
-	SelUID = CreateVar(FP)
-	SelATK = CreateVar(FP)
-	SelClass = CreateVar(FP)
-	SelClass_Mask = CreateVar(FP)
-SelHPVA = CreateVArr(4,FP)
-SelShVA = CreateVArr(4,FP)
-SelMaxHPVA = CreateVArr(4,FP)
-SelATKVA = CreateVArr(4,FP)
-SelATKVA2 = CreateVArr(4,FP)
-AFlag = CreateCcode()
-BFlag = CreateCcode()
 --DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))
 
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)},{SetCD(AFlag,0),SetCD(BFlag,2)})
