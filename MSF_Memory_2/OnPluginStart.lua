@@ -176,6 +176,13 @@ function init() -- 맵 실행시 1회 실행 트리거
 	
 	f_GetTblptr(FP,NMDMGTblPtr,1463)
 	f_GetTblptr(FP,PerDMGTblPtr,1464)
+	f_GetTblptr(FP,AtkCondTblPtr,1413)
+	f_GetTblptr(FP,HPCondTblPtr,1414)
+	f_Memcpy(FP,AtkCondTblPtr,_TMem(Arr(AtkCondT[3],0),"X","X",1),AtkCondT[2])
+	f_Memcpy(FP,HPCondTblPtr,_TMem(Arr(HPCondT[3],0),"X","X",1),HPCondT[2])
+	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
+	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
+	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
 
 	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*4)),_TMem(Arr(ClassInfo1[3],0),"X","X",1),ClassInfo1[2])
 	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*8)+ClassInfo1[2]),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
@@ -191,7 +198,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
-		DoActions(FP,{SetSwitch("Switch 230",Set)})
+		DoActions(FP,{SetSwitch("Switch 253",Set)})
 	end
 
 	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
@@ -336,20 +343,27 @@ function init() -- 맵 실행시 1회 실행 트리거
 	end
 
 
-
-	local SpecialAdvFlagPtr = CreateVar(FP)
+	local StarEditAvFlag = CreateVar(FP)
 	local GroupFlagsPtr = CreateVar(FP)
 	local ShieldAvPtr = CreateVar(FP)
 	local ShieldAmPtr = CreateVar(FP)
 	local WepTypePtr = CreateVar(FP)
+	local SeekRangePtr = CreateVar(FP)
+	local SeekRange = CreateVar(FP)
+	local WepLength = CreateVar(FP)
 	local TargetFlagPtr = CreateVar(FP)
-	local SelWepID_Mask3 = CreateVar(FP)
-	local MaskRet = CreateVar(FP)
+	local MaskRet1 = CreateVar(FP)
 	local MaskRet3 = CreateVar(FP)
 	local MaskRet2 = CreateVar(FP)
 	local MaskRet4 = CreateVar(FP)
+	local MaskRet5 = CreateVar(FP)
+	local MaskRet6 = CreateVar(FP)
+	local MaskRet7 = CreateVar(FP)
+	local MaskRet8 = CreateVar(FP)
 	local DivNum4 = CreateVar(FP)
 	local DivNum2 = CreateVar(FP)
+	local DivNum2_2 = CreateVar(FP)
+	local DivNum4_2 = CreateVar(FP)
 	
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛 전처리
@@ -358,21 +372,24 @@ function init() -- 맵 실행시 1회 실행 트리거
 		NJumpX(FP,Rep_Jump1,{CVar(FP,CurrentUID[2],Exactly,k)})
 	end
 
-	f_Mod(FP,MaskRet,CurrentUID,4)
-	CMov(FP,MaskRet2,f_Sqrd(256,MaskRet))
+	f_Mod(FP,MaskRet1,CurrentUID,4)
+	CMov(FP,MaskRet2,f_Sqrd(256,MaskRet1))
 	f_Mod(FP,MaskRet3,CurrentUID,2)
-	CMov(FP,MaskRet4,f_Sqrd(256,MaskRet3))
+	CMov(FP,MaskRet4,f_Sqrd(65536,MaskRet3))
 	f_Div(FP,DivNum2,CurrentUID,_Mov(2))
 	f_Div(FP,DivNum4,CurrentUID,_Mov(4))
 
 
 	CMov(FP,SpecialAdvFlagPtr,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
 	CMov(FP,BdDimPtr,CurrentUID,EPDF(0x662860)) --BdDim
-
+	
 
 	CMov(FP,GroupFlagsPtr,DivNum4,EPDF(0x6637A0)) --GroupFlags
 	CMov(FP,ShieldAvPtr,DivNum4,EPDF(0x6647B0)) --Has Shield
 	CMov(FP,ShieldAmPtr,DivNum2,EPDF(0x660E00)) --Shield Amount
+	CMov(FP,StarEditAvFlag,DivNum2,EPDF(0x661518)) --Shield Amount
+	
+	
 
 	local Temp1 = CreateVar(FP)
 	local Temp2 = CreateVar(FP)
@@ -385,33 +402,49 @@ function init() -- 맵 실행시 1회 실행 트리거
 	CTrigger(FP,{TDeathsX(GroupFlagsPtr,Exactly,Temp2,0,Temp2)},{TSetMemoryX(GroupFlagsPtr,SetTo,Temp1,Temp1)},1) -- if Group ==Zerg And Unit then Set Group Factories
 	CTrigger(FP,{TDeathsX(SpecialAdvFlagPtr,Exactly,0x1,0,0x1)},{TSetDeaths(BdDimPtr,SetTo,65537,0),TSetMemoryX(GroupFlagsPtr,SetTo,0,Temp1)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1, Remove Factories Flag
 	CDoActions(FP,{TSetDeathsX(SpecialAdvFlagPtr,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
-	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,0)},{TSetDeathsX(_Add(DivNum2,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
-	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,1)},{TSetDeathsX(_Add(DivNum2,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,0)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,1)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{TMemoryX(ShieldAvPtr,Exactly,0,_Mul(MaskRet2,255))},{TSetDeathsX(ShieldAmPtr,SetTo,0,0,_Mul(MaskRet4,65535))},1) -- if Has Shield == 0 then Shield Amount = 0
 
 	
 
 	
 	DoActionsX(FP,SetCD(BFlag,2))
-	f_Mod(FP,MaskRet,CurrentUID,4)
-	f_Read(FP,_Add(DivNum4,EPDF(0x663DD0)),SelClass)
-	CTrigger(FP,{CV(MaskRet,0),CVar(FP,SelClass[2],Exactly,162,0xFF)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet,1),CVar(FP,SelClass[2],Exactly,162*256,0xFF00)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet,2),CVar(FP,SelClass[2],Exactly,162*65536,0xFF0000)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet,3),CVar(FP,SelClass[2],Exactly,162*16777216,0xFF000000)},{SetCD(BFlag,1)},1)
+
+	
+
+	CTrigger(FP,{CV(MaskRet1,0),CVar(FP,SelClass[2],Exactly,162,0xFF)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(MaskRet1,1),CVar(FP,SelClass[2],Exactly,162*256,0xFF00)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(MaskRet1,2),CVar(FP,SelClass[2],Exactly,162*65536,0xFF0000)},{SetCD(BFlag,1)},1)
+	CTrigger(FP,{CV(MaskRet1,3),CVar(FP,SelClass[2],Exactly,162*16777216,0xFF000000)},{SetCD(BFlag,1)},1)
 	f_Read(FP,_Add(DivNum4,EPDF(0x6636B8)),SelWep)
-	MaskRet = f_Sqrd(256,MaskRet)
-	f_Div(FP,SelWep,MaskRet)
+	f_Div(FP,SelWep,MaskRet2)
 	CTrigger(FP,{},{TSetCVar(FP,SelWepID[2],SetTo,SelWep,0xFF)},1)
+
+
+
+
 	NJumpX(FP,Rep_Jump1,CV(SelWepID,130))
-	f_Mod(FP,SelWepID_Mask2,SelWepID,4)
-	f_Mod(FP,SelWepID_Mask3,SelWepID,2)
-	MaskRet = f_Sqrd(256,SelWepID_Mask2)
-	CMov(FP,WepTypePtr,_Div(SelWepID,4),EPDF(0x657258))
-	CTrigger(FP,{CD(BFlag,1)},{TSetMemoryX(WepTypePtr,SetTo,_Mul(MaskRet,2),_Mul(MaskRet,255))},1)
-	CMov(FP,TargetFlagPtr,_Div(SelWepID,2),EPDF(0x657998))
-	MaskRet = f_Sqrd(256,SelWepID_Mask3)
-	CTrigger(FP,{},{TSetMemoryX(TargetFlagPtr,SetTo,_Mul(MaskRet,3),_Mul(MaskRet,3))},1)
+	f_Mod(FP,MaskRet5,SelWepID,4)
+	CMov(FP,MaskRet6,f_Sqrd(256,MaskRet5))
+	f_Mod(FP,MaskRet7,SelWepID,2)
+	CMov(FP,MaskRet8,f_Sqrd(65536,MaskRet7))
+	f_Div(FP,DivNum2_2,SelWepID,_Mov(2))
+	f_Div(FP,DivNum4_2,SelWepID,_Mov(4))
+
+
+	CMov(FP,WepTypePtr,DivNum4_2,EPDF(0x657258))
+	CTrigger(FP,{CD(BFlag,1)},{TSetMemoryX(WepTypePtr,SetTo,_Mul(MaskRet6,2),_Mul(MaskRet6,255))},1)
+	CMov(FP,TargetFlagPtr,DivNum2_2,EPDF(0x657998))
+	CTrigger(FP,{},{TSetMemoryX(TargetFlagPtr,SetTo,_Mul(MaskRet8,3),_Mul(MaskRet8,3))},1)
+
+--	f_Read(FP,_Add(SelWepID,EPDF(0x657470)),WepLength)
+--	CMov(FP,SeekRange,_Div(WepLength,32))
+--	CMov(FP,0x57f120,SeekRange)--
+
+--	CMov(FP,SeekRangePtr,DivNum4,EPDF(0x662DB8))
+--	
+--	CTrigger(FP,{},{TSetMemoryX(SeekRangePtr,SetTo,_Mul(MaskRet2,SeekRange),_Mul(MaskRet2,255))},1)
 	
 	
 	NJumpXEnd(FP,Rep_Jump1)
@@ -509,9 +542,6 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	CWhileEnd()
 	--CIfEnd()
 	DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
-	if Limit == 1 then
-		DoActions(P8,SetResources(Force1,SetTo,0x66666666,Ore),1)
-	end
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))
 	local Rep_Jump3 = def_sIndex()
@@ -519,6 +549,8 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 		NJumpX(FP,Rep_Jump3,{CVar(FP,CurrentUID[2],Exactly,k)})
 	end
 	CMov(FP,BdDimPtr,CurrentUID,EPDF(0x662860)) --BdDim
+	CMov(FP,SpecialAdvFlagPtr,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
+--	CTrigger(FP,{TDeathsX(SpecialAdvFlagPtr,Exactly,0x1,0,0x1)},{TSetMemoryX(SpecialAdvFlagPtr,SetTo,0,1)},1) -- if Advanced Flags = Building then Building = 0
 	ConvertArr(FP,ArrID,CurrentUID)
 	CDoActions(FP,{TSetMemory(BdDimPtr,SetTo,_ReadF(ArrX(BdDimArr,ArrID)))})
 	NJumpEnd(FP,Rep_Jump3)
@@ -545,6 +577,6 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			RunAIScriptAt("Value This Area Higher",2+i),ModifyUnitResourceAmount(All,P12,64,65535)},1)
 	end
 
-	CIfEnd({})
+	CIfEnd({SetMemoryX(0x664080 + (162*4),SetTo,0,1)})
 end
 

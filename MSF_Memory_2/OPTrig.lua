@@ -61,19 +61,26 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
     DisplayTextX("\x13\x04"..string.rep("¡ª", 57),4);
     DisplayTextX("\x13\x04\n",4);
     PlayWAVX("sound\\Bullet\\pshield.wav");
-},HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31)})
+},HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31),SetSwitch("Switch 253",Clear)})
 CIfEnd()
 CIfOnce(FP,CD(OPJump,1))
 
 
 
 if Limit == 1 then
-	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
+    TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
+
+
+	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	for i = 0, 3 do
-	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(12,MarID[i+1],i+2,i)})
+	TriggerX(FP,{CD(TestMode,1),PlayerCheck(i)},{CreateUnit(12,MarID[i+1],i+2,i)})
+	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(3,MarID[i+1],i+2,i)})
 	end
 else
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
+	for i = 0, 3 do
+	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(3,MarID[i+1],i+2,i)})
+	end
 end
 for i = 0, 3 do
 	TriggerX(FP,{PlayerCheck(i)},{GiveUnits(All,"Buildings",P12,i+2,i),SetCp(i),CenterView(i+2),SetCp(FP)})

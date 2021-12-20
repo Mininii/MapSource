@@ -17,6 +17,7 @@ function Var_init()
     SpeedVar = CreateVar2(FP,nil,nil,4)
     CurrentSpeed = CreateVar(FP)
 	BdDimPtr = CreateVar(FP)
+	SpecialAdvFlagPtr = CreateVar(FP)
 	ArrID = CreateVar(FP)
 	CunitHP = CreateVar(FP)
 	BGMType = CreateVar(FP)
@@ -33,8 +34,12 @@ function Var_init()
 	ButtonSound = CreateCcode()
 	NMDMGTblPtr = CreateVar(FP)
 	PerDMGTblPtr = CreateVar(FP)
+	AtkCondTblPtr = CreateVar()
+	HPCondTblPtr = CreateVar()
 	Dt = CreateVar(FP)
 	
+	AtkCondTmp = CreateVar2(FP,nil,nil,54)
+	HPCondTmp = CreateVar2(FP,nil,nil,5)
 	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
 	SelWepID_Mask = CreateVar(FP)
 	SelWepID_Mask2 = CreateVar(FP)
@@ -99,6 +104,9 @@ function Var_init()
 	ClassInfo6 = CreateCText(FP,"\x1F.")
 	ClassInfo5 = CreateCText(FP," ％")
 
+	AtkCondT = CreateCText(FP,"공격력 업그레이드 조건 불만족\n	Next Level - ")
+	HPCondT = CreateCText(FP,"체력 업그레이드 조건 불만족\n	Next Level - ")
+
 --	CreateHeroPointArr(15,"\x1B잔\x04해 "..Conv_HStr("<1B>C<04>ivilian"),30000)
 
 CreateHeroPointArr(17,"\x1B전\x04투병기 "..Conv_HStr("<1B>A<04>lan <1B>S<04>chezar"),30000)
@@ -133,8 +141,9 @@ CreateHeroPointArr(66,"\x1F영\x04생자 "..Conv_HStr("<1F>I<4>mmortal"),30000,nil,
 CreateHeroPointArr(57,"\x1F마\x04녀 "..Conv_HStr("<1F>W<4>itch"),30000,nil,1)
 CreateHeroPointArr(8,"\x1F유\x04령 "..Conv_HStr("<1F>P<04>hantom"),30000,nil,1)
 CreateHeroPointArr(3,"\x1F무\x04법자 "..Conv_HStr("<1F>B<04>rutal"),30000,nil,1)
-CreateHeroPointArr(80,"\x1F균\x04형 "..Conv_HStr("<1F>E<4>quilibrium"),30000,nil,1)
+CreateHeroPointArr(80,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese"),30000,nil,1)
 CreateHeroPointArr(102,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),30000,nil,1)
+CreateHeroPointArr(150,"\x19선\x04물 "..Conv_HStr("<19>B<04>onus"),30000,1,1)
 
 	
 end

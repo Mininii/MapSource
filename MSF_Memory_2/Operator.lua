@@ -18,7 +18,57 @@ function Operator_Trig()
 		CTrigger(FP,{CV(DtX,2500,AtMost)},{SetV(Dt,DtX)},1)
 	end
     CIfXEnd()
+	if Limit == 1 then
+	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
+
+	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Deaths(CurrentPlayer,AtLeast,1,204);
+		},
+		actions = {
+			KillUnit("Men",Force2);
+			KillUnit(143,Force2);
+			KillUnit(144,Force2);
+			KillUnit(146,Force2);
+			PreserveTrigger();
+		}
+		}
+		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
+			CMov(FP,0x6509B0,Cunit2,25)
+			Trigger {
+				players = {FP},
+				conditions = {
+					DeathsX(CurrentPlayer,AtMost,57,0,0xFF);
+				},
+				actions = {
+					MoveCp(Subtract,6*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+					MoveCp(Add,6*4);
+					PreserveTrigger();
+				}
+			}
+			Trigger {
+				players = {FP},
+				conditions = {
+					DeathsX(CurrentPlayer,AtLeast,59,0,0xFF);
+				},
+				actions = {
+					MoveCp(Subtract,6*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+					MoveCp(Add,6*4);
+					PreserveTrigger();
+				}
+			}
+		CIfEnd()
+	CIfEnd()
+
+	CMov(FP,0x6509B0,FP)--상위플레이어 단락
+			end
 --function StrDesignX(Str)
 --	return "\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 --end
@@ -40,6 +90,7 @@ local LevelTmp = CreateCcode()
 local ExpTmp = CreateCcode()
 local RedNumberTmp = CreateCcode()
 local ArrI = CreateVar()
+local LVVA = CreateVArr(4,FP)
 CMov(FP,_Ccode(FP,RedNumberTmp),RedNumber)
 CMov(FP,_Ccode(FP,TimeTmp),Time1)
 CMov(FP,_Ccode(FP,LevelTmp),Level)
@@ -56,6 +107,11 @@ CIf(FP,{CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})
 	ConvertArr(FP,ArrI,Level)
 	f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP,nil,nil,1)
 	CAdd(FP,Level,1)
+	CMov(FP,AtkCondTmp,_Mul(Level,4),50)
+	CMov(FP,HPCondTmp,_Mul(Level,5))
+	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
+	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
+	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
 CIfEnd()
 
 TriggerX(FP,{CD(CountTmp,399,AtMost)},{SetMemoryX(0x641630,SetTo,14,0xFF)},{Preserved})
