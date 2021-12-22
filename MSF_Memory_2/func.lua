@@ -49,11 +49,40 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배�
 	end
 
 	if ResetFlag ~= nil then
-		local EXCunit_Reset = {} -- 필요시 리셋시키기 위한 테이블
-		for i = 1, #EXCunitTemp do
-			table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+		if type(ResetFlag) == "number" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블
+			for i = 1, #EXCunitTemp do
+				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		elseif type(ResetFlag) == "table" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블(타이머or값초기화 등)
+			for i = 1, #EXCunitTemp do
+				if ResetFlag[i]~= nil then
+					if type(ResetFlag[i]) == "table" then
+						local X = ResetFlag[i]
+						local RFValue = X[1]
+						local RFType
+						local RFMask
+						if X[2] == nil then
+							RFType = SetTo
+						else
+							RFType = X[2]
+						end
+						if X[3] == nil then
+							RFMask = 0xFFFFFFFF
+						else
+							RFMask = X[3]
+						end
+
+					table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,RFType,RFValue,RFMask))
+					else
+						PushErrorMsg("ResetFlag_Inputdata_Error")
+					end
+				end
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		end
-		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 	else
 		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
 	end

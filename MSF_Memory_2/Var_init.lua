@@ -37,7 +37,10 @@ function Var_init()
 	AtkCondTblPtr = CreateVar()
 	HPCondTblPtr = CreateVar()
 	Dt = CreateVar(FP)
-	
+
+	MarHPRegen = CreateVar(FP)
+	LVVA = CreateVArr(4,FP)
+	MarHPRead = CreateVarArr(4,FP)
 	AtkCondTmp = CreateVar2(FP,nil,nil,54)
 	HPCondTmp = CreateVar2(FP,nil,nil,5)
 	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
