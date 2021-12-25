@@ -8,7 +8,7 @@ function System()
     Check_Enemy = def_sIndex()
     NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)},{AddV(CurEXP,1)})
     DoActions(FP,MoveCp(Add,6*4))
-    --Install_DeathNotice()
+    Install_DeathNotice()
     EXCC_ClearCalc()
     NJumpEnd(FP,Check_Enemy)
     DoActions(FP,MoveCp(Add,6*4))
@@ -52,9 +52,8 @@ function System()
     end
 	CSub(FP,0x6509B0,6)
     
-	CSub(FP,0x6509B0,17)
     
-	for i = 1, 4 do-- 조건부 CMov
+	for i = 1, 4 do-- 조건부 CMov. 중간연산자 사용불가능
         Trigger {
             players = {FP},
             conditions = {
@@ -83,6 +82,8 @@ function System()
         }
         end
 
+    CSub(FP,0x6509B0,17)
+
 	CIfX(FP,{TDeaths(CurrentPlayer,AtMost,Vi(TempMarHPRead[2],-256),0)},{TSetDeaths(CurrentPlayer,Add,MarHPRegen,0)})
 	CElseX({TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
 	CIfXEnd()
@@ -94,7 +95,7 @@ function System()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 		EXCC_Part4X(i,{
             DeathsX(19025+(84*i)+19,AtLeast,0,0,0xFF),
-            DeathsX(19025+(84*i)+19,AtLeast,3,0,0xFF),
+            DeathsX(19025+(84*i)+19,AtMost,3,0,0xFF),
             DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
 		},
 		{MoveCp(Add,25*4),

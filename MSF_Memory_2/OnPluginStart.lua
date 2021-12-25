@@ -89,7 +89,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryW(0x663B38+(UnitID*2), SetTo, 457))
 	table.insert(PatchArr,SetMemoryW(0x661EE8+(UnitID*2), SetTo, 461))
 	table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 77))
-	table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
+	table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 12))
 	end
 
 	function SetGroupFlags(UnitID,Value)
@@ -174,10 +174,18 @@ function init() -- 맵 실행시 1회 실행 트리거
 	DoActions2X(FP,CTrigPatchTable,1)
 	CIfOnce(FP)
 	
+	for i = 0, 3 do
+	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
+	f_GetTblptr(FP,MarTblPtr[i+1],MarID[i+1]+1)
+	_0DPatchforVArr(FP,Names[i+1],4)
+	Install_CText1(MarTblPtr[i+1],Str12,Str02[i+1],Names[i+1])
+	end
+
 	f_GetTblptr(FP,NMDMGTblPtr,1463)
 	f_GetTblptr(FP,PerDMGTblPtr,1464)
 	f_GetTblptr(FP,AtkCondTblPtr,1413)
 	f_GetTblptr(FP,HPCondTblPtr,1414)
+	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
 	f_Memcpy(FP,AtkCondTblPtr,_TMem(Arr(AtkCondT[3],0),"X","X",1),AtkCondT[2])
 	f_Memcpy(FP,HPCondTblPtr,_TMem(Arr(HPCondT[3],0),"X","X",1),HPCondT[2])
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
