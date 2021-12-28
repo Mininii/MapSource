@@ -393,8 +393,8 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
 	for i = 1, #BGMArr do
 		local X = {}
 		if #BGMArr[i] == 4 then
-			table.insert(X,CVar(FP,LevelT[2],AtLeast,BGMArr[i][4][1]))
-			table.insert(X,CVar(FP,LevelT[2],AtMost,BGMArr[i][4][2]))
+			table.insert(X,CVar(InitBGMP,LevelT[2],AtLeast,BGMArr[i][4][1]))
+			table.insert(X,CVar(InitBGMP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
 		Trigger { -- 브금?????? j??
 			players = {InitBGMP},
@@ -431,8 +431,8 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 	for i = 1, #BGMArr do
 		local X = {}
 		if #BGMArr[i] == 4 then
-			table.insert(X,CVar(FP,LevelT[2],AtLeast,BGMArr[i][4][1]))
-			table.insert(X,CVar(FP,LevelT[2],AtMost,BGMArr[i][4][2]))
+			table.insert(X,CVar(InitBGMP,LevelT[2],AtLeast,BGMArr[i][4][1]))
+			table.insert(X,CVar(InitBGMP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
 		Trigger { -- 브금?????? j??
 			players = {InitBGMP},
@@ -575,6 +575,78 @@ function ConvertLocation(Location) -- 로케이션 인덱스 변환함수. TempLocID는 0부�
 	return TempLocID, Location
 end
 
+function Install_TMemoryBX(PlayerID)
+	local OffsetV = CreateVar(PlayerID)
+	local MaskRetV = CreateVar(PlayerID)
+	local BWTypeV = CreateVar(PlayerID)
+	local TypeV = CreateVar(PlayerID)
+	local ValueV = CreateVar(PlayerID)
+	local MaskV = CreateVar(PlayerID)
+	local MaskV2 = CreateVar(PlayerID)
+
+
+	Call_MemoryCalc = SetCallForward()
+	SetCall(PlayerID)
+		CiSub(PlayerID,OffsetV,0x58A364)
+		f_iMod(PlayerID,MaskRetV,OffsetV,4)
+		f_iDiv(PlayerID,OffsetV,4)
+		CIf(PlayerID,{CVar(PlayerID,MaskRetV[2],AtLeast,0x80000000)})
+			CNeg(PlayerID,MaskRetV)
+		CIfEnd()
+		CIfX(PlayerID,{CVar(PlayerID,BWTypeV[2],Exactly,1)}) -- B
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,0)},{SetCVar(PlayerID,MaskV[2],SetTo,1)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,1)},{SetCVar(PlayerID,MaskV[2],SetTo,256)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,3)},{SetCVar(PlayerID,MaskV[2],SetTo,16777216)},1)
+			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0x7FFFFFFF))
+			f_Mul(PlayerID,MaskV,255)
+			CElseX()
+			f_Mul(PlayerID,MaskV,MaskV2)
+			CIfXEnd()
+		CElseX() -- W
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,0)},{SetCVar(PlayerID,MaskV[2],SetTo,1)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536)},1)
+			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0x7FFFFFFF))
+			f_Mul(PlayerID,MaskV,65535)
+			CElseX()
+			f_Mul(PlayerID,MaskV,MaskV2)
+			CIfXEnd()
+		CIfXEnd()
+		CIfX(PlayerID,{CVar(PlayerID,TypeV[2],Exactly,SetTo)})
+			CDoActions(PlayerID,{TSetMemoryX(OffsetV,SetTo,ValueV,MaskV)})
+		CElseIfX({CVar(PlayerID,TypeV[2],Exactly,Add)})
+			CDoActions(PlayerID,{TSetMemoryX(OffsetV,Add,ValueV,MaskV)})
+		CElseIfX({CVar(PlayerID,TypeV[2],Exactly,Subtract)})
+			CDoActions(PlayerID,{TSetMemoryX(OffsetV,Subtract,ValueV,MaskV)})
+		CIfXEnd()
+	SetCallEnd()
+
+	function Act_TSetMemoryB(Offset,Type,Value,Mask)
+		CDoActions(PlayerID,{
+			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
+			TSetCVar(PlayerID,TypeV[2],SetTo,Type),
+			TSetCVar(PlayerID,ValueV[2],SetTo,Value),
+			TSetCVar(PlayerID,MaskV2[2],SetTo,Mask),
+			SetCVar(PlayerID,BWTypeV[2],SetTo,1),
+			
+		})
+		CallTrigger(PlayerID,Call_MemoryCalc,{})
+	end	
+	function Act_TSetMemoryW(Offset,Type,Value,Mask)
+		CDoActions(PlayerID,{
+			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
+			TSetCVar(PlayerID,TypeV[2],SetTo,Type),
+			TSetCVar(PlayerID,ValueV[2],SetTo,Value),
+			TSetCVar(PlayerID,MaskV2[2],SetTo,Mask),
+			SetCVar(PlayerID,BWTypeV[2],SetTo,0),
+			
+		})
+		CallTrigger(PlayerID,Call_MemoryCalc,{})
+	end
+
+	
+end
+
 function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거나 자주 바뀌는 로케이션, TempUnit = 안쓰는 유닛. Unused 가능 아마?
 	GLocC = 1
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
@@ -624,13 +696,13 @@ end
 
 function Include_CRandNum(Player)
 
-	TempRandRet = CreateVar(FP)
-	InputMaxRand = CreateVar(FP)
-	Oprnd = CreateVar(FP)
+	TempRandRet = CreateVar(Player)
+	InputMaxRand = CreateVar(Player)
+	Oprnd = CreateVar(Player)
 	function f_CRandNum(Max,Operand,Condition)
 		if Operand == nil then Operand = 0 end
 		local RandRet = TempRandRet
-		CallTriggerX(Player,CRandNum,Condition,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
+		CallTriggerX(Player,CRandNum,Condition,{SetCVar(Player,InputMaxRand[2],SetTo,Max),SetCVar(Player,Oprnd[2],SetTo,Operand)})
 		return RandRet
 	end
 	CRandNum = SetCallForward()
