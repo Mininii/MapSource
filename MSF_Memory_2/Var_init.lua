@@ -10,7 +10,7 @@ function Var_init()
 	for i = 0, 49 do
 		table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i),SetTo,80*(i+1)))
 	end
-	
+	MarTblPtr = CreateVarArr(4,FP)
 
 	CurrentUID = CreateVar(FP)
 	Nextptrs = CreateVar(FP)
@@ -37,7 +37,11 @@ function Var_init()
 	AtkCondTblPtr = CreateVar()
 	HPCondTblPtr = CreateVar()
 	Dt = CreateVar(FP)
-	
+	HTextStrPtr = CreateVar(FP)
+
+	MarHPRegen = CreateVar2(FP,nil,nil,256)
+	LVVA = CreateVArr(4,FP)
+	MarHPRead = CreateVarArr(4,FP)
 	AtkCondTmp = CreateVar2(FP,nil,nil,54)
 	HPCondTmp = CreateVar2(FP,nil,nil,5)
 	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
@@ -57,6 +61,7 @@ function Var_init()
 	SelMaxHPVA = CreateVArr(4,FP)
 	SelATKVA = CreateVArr(4,FP)
 	SelATKVA2 = CreateVArr(4,FP)
+	Names = CreateVArrArr(4,5,FP)
 	AFlag = CreateCcode()
 	BFlag = CreateCcode()
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
@@ -66,10 +71,11 @@ function Var_init()
 	HumanPlayers = {P1,P2,P3,P4,P9,P10,P11,P12}
 	MapPlayers = {P1,P2,P3,P4}
 	ObPlayers = {P9,P10,P11,P12}
-	MarID = {0,1,6,99}
+	MarID = {0,1,16,99}
 	MarWep = {117,118,119,120} 
 	GiveRate2 = {1000, 5000,10000,50000,100000,500000}  
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1} 
+	Color = {"\x08","\x0E","\x0F","\x10","\x11"}
 	ColorCode = {0x08,0x0E,0x0F,0x10}
 	MedicTrig = {34,9,5,10}
 	BanToken = {63,64,65}
@@ -103,6 +109,16 @@ function Var_init()
 	ClassInfo4 = CreateCText(FP," Ｄｍｇ")
 	ClassInfo6 = CreateCText(FP,"\x1F.")
 	ClassInfo5 = CreateCText(FP," ％")
+	
+	HTextStrReset = CreateCText(FP,HTextStr)
+	Str12 = CreateCText(FP,"\x07·\x11·\x08·\x07【 ")
+	Str03 = {}
+	Str02 = {}
+	
+	for i = 0, 3 do
+		table.insert(Str03,CreateCText(FP,"\x04의 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·"))
+		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."\x07】\x08·\x11·\x07·"))
+	end
 
 	AtkCondT = CreateCText(FP,"공격력 업그레이드 조건 불만족\n	Next Level - ")
 	HPCondT = CreateCText(FP,"체력 업그레이드 조건 불만족\n	Next Level - ")

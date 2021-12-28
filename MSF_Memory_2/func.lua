@@ -49,17 +49,46 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배�
 	end
 
 	if ResetFlag ~= nil then
-		local EXCunit_Reset = {} -- 필요시 리셋시키기 위한 테이블
-		for i = 1, #EXCunitTemp do
-			table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+		if type(ResetFlag) == "number" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블
+			for i = 1, #EXCunitTemp do
+				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		elseif type(ResetFlag) == "table" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블(타이머or값초기화 등)
+			for i = 1, #EXCunitTemp do
+				if ResetFlag[i]~= nil then
+					if type(ResetFlag[i]) == "table" then
+						local X = ResetFlag[i]
+						local RFValue = X[1]
+						local RFType
+						local RFMask
+						if X[2] == nil then
+							RFType = SetTo
+						else
+							RFType = X[2]
+						end
+						if X[3] == nil then
+							RFMask = 0xFFFFFFFF
+						else
+							RFMask = X[3]
+						end
+
+					table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,RFType,RFValue,RFMask))
+					else
+						PushErrorMsg("ResetFlag_Inputdata_Error")
+					end
+				end
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		end
-		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 	else
 		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
 	end
 end
-function Set_EXCC2(EXCC_init,CurUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
-	return TSetMemory(_Add(_Mul(CurUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
 
 function Set_EXCC(Line,Type,Value) -- EXCC단락 내부에서 값을 쓰고싶을때. 무조건 T액션, TempVar에서는 값이 변동하지 않으므로 TempVar값과 함께 변경시켜줘야됨
@@ -116,7 +145,7 @@ function EXCC_Part2()
 			},
 		   	actions = {
 				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
-				SetMemory(0x6509B0,SetTo,P); -- 루프를 돌릴 플레이어 값으로 맞추기 ( P1 = 0, P2 = 1, ... , P8 = 7 )
+				SetMemory(0x6509B0,SetTo,P);
 			},
 			flag = {Preserved}
 		}	
@@ -144,15 +173,15 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 			Conditions,
 		},
 		actions = { 
-			EXCC_initArr[5],
-			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index,0,0,0);
-			SetCtrigX("X",EXCC_Index+1,0x4,0,SetTo,"X","X",0,0,1);
-			SetCtrigX("X",EXCC_Index,0x158,0,SetTo,"X","X",0x4,1,0);
-			SetCtrigX("X",EXCC_Index,0x15C,0,SetTo,"X","X",0,0,1);
-			SetCtrigX("X",EXCC_TempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
-			SetMemory(0x6509B0,SetTo,19025 + (84 * LoopIndex));
-			Actions,
-			EXCC_initArr[6]
+		EXCC_initArr[5],
+		SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index,0,0,0);
+		SetCtrigX("X",EXCC_Index+1,0x4,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_Index,0x158,0,SetTo,"X","X",0x4,1,0);
+		SetCtrigX("X",EXCC_Index,0x15C,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_TempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+		SetMemory(0x6509B0,SetTo,19025 + (84 * LoopIndex));
+		Actions,
+		EXCC_initArr[6]
 			},
 		flag = {Preserved}
 	}		
@@ -496,4 +525,32 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 			
 
 	end
+end
+
+
+function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
+
+	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*5)
+	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+
+end
+
+function Install_DeathNotice()
+	for j = 1, 4 do
+	CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
+		DoActions(FP,MoveCp(Subtract,6*4))
+		f_SaveCp()
+		Install_CText1(HTextStrPtr,Str12,Str03[j],Names[j])
+		DoActionsX(FP,{
+			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
+			SetScore(j-1,Add,1,Custom);
+		})
+		TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+		f_LoadCp()
+		DoActions(FP,MoveCp(Add,6*4))
+	CIfEnd()
+end
+	
 end
