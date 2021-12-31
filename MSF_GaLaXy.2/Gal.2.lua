@@ -18,7 +18,6 @@ for dir in io.popen(EXTLUA):lines() do
 		InitEXTLua()
      end
 end
-
 FP = P8
 DoActions(FP,{RemoveUnit(205,FP)})
 Trigger2(Force2,{Command(CurrentPlayer,AtLeast,10,42)},{KillUnitAt(1,42,"Anywhere",CurrentPlayer)},{Preserved})
@@ -32,7 +31,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.1.7"
+VName = "Ver.1.8"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -322,7 +321,7 @@ NoAirCollisionX(FP)
 
 
 VArrPatchTable ={}
-CIfOnce(FP,Always()) -- onPluginStart
+CIfOnce(FP,Always(),SetCDeaths(FP,SetTo,1,BGMMode)) -- onPluginStart
 GiveUnitsArr = {}
 GiveT = {}
 for i = 0, 5 do
@@ -374,7 +373,6 @@ Trigger {
 end
 
 DoActions2(FP,SizePatchArr,1)
-Print_All_CTextString(FP)
 
 for i = 0, 5 do
 Trigger {
@@ -477,7 +475,7 @@ t21 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d P t s \x15] \x15◀ ◀ ◀
 t22 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d"
 t23 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d"
 
-t24 = "\x0d\x0d\x0d\x0d\x0d\x04현재 선택가능 플레이어는...\x0d\x0d\x0d\x0d\x0d"
+t24 = "현재 선택가능 플레이어는...\x0d\x0d\x0d\x0d\x0d"
 t25 = {
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04(비추천) \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
@@ -500,11 +498,24 @@ t28 = {
 }
 
 t27 = {
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d", -- GMode 3
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
-"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x04[W] \x08노벙커 \x03[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d", -- GMode 3
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x04[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d",
+"\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d",
 }
+BModeArr = {
+"\x0E신나는 ",
+"\x08진지한 ",
+"\x11강렬한 ",
+"\x10강렬한2",
+"\x17메모리 ",
+"\x1F익시드 ",
+--"\x1C스페셜 "
+}
+BModeTArr = {}
+for j, k in pairs(BModeArr) do
+table.insert(BModeTArr,CreateCText(FP,k))
+end
 Print_String(FP,_TMem(Arr(Str00,0)),t00,0)
 Print_String(FP,_TMem(Arr(Str01,0)),t01,0)
 Print_String(FP,_TMem(Arr(Str02,0)),t02,0)
@@ -2381,6 +2392,12 @@ Trigger {
 	}
 CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,1,BGMSel))
+
+TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,67)},{SetCDeaths(FP,Subtract,1,BGMMode)},{Preserved})
+TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,68)},{SetCDeaths(FP,Add,1,BGMMode)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BGMMode)},{SetCDeaths(FP,SetTo,1,BGMMode)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,#BModeArr+1,BGMMode)},{SetCDeaths(FP,SetTo,#BModeArr,BGMMode)},{Preserved})
+
 Trigger {
 	players = {FP},
 	conditions = {
@@ -3532,6 +3549,7 @@ Trigger {
 CIf(FP,{CDeaths(FP,Exactly,0,ModeO),CDeaths(FP,Exactly,1,BGMSel)})
 
 
+
 Text3 = "\x13\x18게임옵션\x04을 선택해주세요. 버튼을 누르면 On,Off 가능하며 30초 후 자동시작 됩니다."
 
 Trigger { -- 인트로1
@@ -3592,7 +3610,27 @@ CIf(FP,{CDeaths(FP,Exactly,j,MarMode),CDeaths(FP,Exactly,k,NBMode)})
 f_Memcpy(FP,0x641598+Str24L+(4*6)-5,_TMem(Arr(Str27[i],0),"X","X",1),Str27L[i])
 CIfEnd()
 end
-
+CurrentBGM = CreateVar(FP)
+CIf(FP,{TTCDeaths(FP,NotSame,CurrentBGM,BGMMode)})
+for j, k in pairs(BModeTArr) do
+CIf(FP,CDeaths(FP,Exactly,j,BGMMode))
+f_Memcpy(FP,0x641598+Str24L+(4*6)+Str27L[1],_TMem(Arr(k[3],0),"X","X",1),k[2])
+Trigger { -- 인트로1
+	players = {FP},
+	conditions = {
+		Label(0);
+		
+	},
+	actions = {
+		SetCVar(FP,CurrentBGM[2],SetTo,j);
+		SetCDeaths(FP,SetTo,1,Sel_G);
+		PreserveTrigger();
+		
+	},
+	}
+CIfEnd()
+end
+CIfEnd()
 
 CIfEnd()
 
@@ -4405,7 +4443,7 @@ CElseX()
 DoActions(FP,{SetDeaths(i,SetTo,0,440)})
 CIfXEnd()
 end
-CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF)})
+CDoActions(FP,{TSetDeathsX(FP,Subtract,Dt,440,0xFFFFFF),SetDeaths(6,SetTo,0,440),SetDeaths(8,SetTo,0,440),SetDeaths(9,SetTo,0,440),SetDeaths(10,SetTo,0,440),SetDeaths(11,SetTo,0,440),})
 
 
 CIf(FP,{CVar(FP,HiddenPts[2],AtLeast,1)
@@ -4955,7 +4993,7 @@ end
 CJumpEnd(FP,0x103) -- if NonGameStart End
 SetRecoverCp()
 RecoverCp(FP)
-CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{SetCDeaths(FP,SetTo,1,BGMMode),ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100)}) -- onPluginStart
+CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100)}) -- onPluginStart
 NBT = {}
 MarModePatch = {}
 for i = 0, 5 do
@@ -10108,25 +10146,87 @@ TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeat
 CIfEnd()-- GameStart End
 --]]
 BGMArr = 
-{{"staredit\\wav\\Opening1.ogg",32 * 1000 },
-{"staredit\\wav\\bgm1short.ogg",32 * 1000},
-{"staredit\\wav\\bgm2short.ogg",47 * 1000},
-{"staredit\\wav\\bgm1long.ogg",61 * 1000 },
-{"staredit\\wav\\bgm2long.ogg",61 * 1000},
-{"staredit\\wav\\bgm1_3.ogg",83640},
-{"staredit\\wav\\bgm_sp1.ogg",182 * 1000},
-{"staredit\\wav\\bgm_sp2.ogg",57 * 1000},}
+{
+--1
+{{".ogg",32 * 1000 },
+{".ogg",32 * 1000},
+{".ogg",47 * 1000},
+{".ogg",61 * 1000 },
+{".ogg",61 * 1000},
+{".ogg",83640},
+{".ogg",182 * 1000},
+{".ogg",57 * 1000},
+{".ogg",138 * 1000}},
+
+--2
+{{".ogg",49 * 1000 },
+{".ogg",57 * 1000},
+{".ogg",51 * 1000},
+{".ogg",76 * 1000 },
+{".ogg",61 * 1000},
+{".ogg",93 * 1000},
+{".ogg",185 * 1000},
+{".ogg",90 * 1000},
+{".ogg",241 * 1000}},
+
+--3
+{{".ogg",54 * 1000 },
+{".ogg",48 * 1000},
+{".ogg",34 * 1000},
+{".ogg",61 * 1000 },
+{".ogg",55 * 1000},
+{".ogg",87 * 1000},
+{".ogg",184 * 1000},
+{".ogg",133 * 1000},
+{".ogg",120 * 1000}},
+
+--4
+{{".ogg",60 * 1000 },
+{".ogg",56 * 1000},
+{".ogg",59 * 1000},
+{".ogg",82 * 1000 },
+{".ogg",51 * 1000},
+{".ogg",120 * 1000},
+{".ogg",194 * 1000},
+{".ogg",133 * 1000},
+{".ogg",136 * 1000}},
+
+--5
+{{".ogg",53 * 1000 },
+{".ogg",55 * 1000},
+{".ogg",46 * 1000},
+{".ogg",63 * 1000 },
+{".ogg",72 * 1000},
+{".ogg",102 * 1000},
+{".ogg",185 * 1000},
+{".ogg",87 * 1000},
+{".ogg",164 * 1000}},
+
+--6
+{{".ogg",65 * 1000 },
+{".ogg",42 * 1000},
+{".ogg",35 * 1000},
+{".ogg",52 * 1000 },
+{".ogg",61 * 1000},
+{".ogg",80 * 1000},
+{".ogg",180 * 1000},
+{".ogg",60 * 1000},
+{".ogg",145 * 1000}},
+
+
+}
 
 
 
 CIf(FP,CDeaths(FP,AtLeast,1,BGMType))
 CIfX(FP,{Deaths(FP,AtMost,0,440)})
-function BGMOb(Index,BGMFile,Value)
+function BGMOb(Index,BGMFile,Value,BMode)
 Trigger { -- 브금재생 j번 - 관전자
 	players = {FP},
 	conditions = {
 		Label(0);
 		CDeaths(FP,Exactly,Index,BGMType);
+		CDeaths(FP,Exactly,BMode,BGMMode);
 	},
 		actions = {
 		SetMemory(0x6509B0,SetTo,128);
@@ -10147,43 +10247,26 @@ Trigger { -- 브금재생 j번 - 관전자
 	},
 	}
 end
-for j, k in pairs(BGMArr) do
-BGMOb(j,k[1],k[2])
+for l, m in pairs(BGMArr) do
+	for j, k in pairs(m) do
+	BGMOb(j,"staredit\\wav\\BGM"..l.."_"..j..k[1],k[2],l)
+	end
 end
 
 CElseX()
-Trigger { -- 브금재생시 스킵 관전자
-	players = {FP},
-	conditions = {
-	},
-		actions = {
-		SetMemory(0x6509B0,SetTo,128);
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		SetMemory(0x6509B0,SetTo,129);
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		SetMemory(0x6509B0,SetTo,130);
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		SetMemory(0x6509B0,SetTo,131);
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		SetMemory(0x6509B0,SetTo,FP);
-		PreserveTrigger();
-	},
-	}
+TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},FP)},{Preserved})
 CIfXEnd()
 CMov(FP,0x6509B0,0)
 CWhile(FP,Memory(0x6509B0,AtMost,5))
 CIf(FP,Bring(CurrentPlayer,AtLeast,1,111,64))
 CIfX(FP,{Deaths(CurrentPlayer,AtMost,0,440)})
-function BGMPlayer(Index,BGMFile,Value)
+function BGMPlayer(Index,BGMFile,Value,BMode)
 Trigger { -- 브금재생 j번
 	players = {FP},
 	conditions = {
 		Label(0);
 		CDeaths(FP,Exactly,Index,BGMType);
+		CDeaths(FP,Exactly,BMode,BGMMode);
 	},
 		actions = {
 		PlayWAV(BGMFile);
@@ -10193,19 +10276,13 @@ Trigger { -- 브금재생 j번
 	},
 	}
 end
-
-for j, k in pairs(BGMArr) do
-	BGMPlayer(j,k[1],k[2])
+for l, m in pairs(BGMArr) do
+	for j, k in pairs(m) do
+	BGMPlayer(j,"staredit\\wav\\BGM"..l.."_"..j..k[1],k[2],l)
+	end
 end
 CElseX()
-Trigger { -- 브금재생시 스킵
-	players = {FP},
-		actions = {
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PreserveTrigger();
-	},
-	}
+TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{PlayWAV("staredit\\wav\\BGM_Skip.ogg");PlayWAV("staredit\\wav\\BGM_Skip.ogg");},{Preserved})
 CIfXEnd()
 CIfEnd()
 CAdd(FP,0x6509B0,1)

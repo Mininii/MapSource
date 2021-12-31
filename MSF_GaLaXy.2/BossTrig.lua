@@ -29,61 +29,7 @@ function Install_boss()
 		else
 			DoActions({Force1,FP},{SetCountdownTimer(SetTo,180)},1)
 		end
-
-		Trigger { -- 브금재생 보스
-			players = {Force1},
-			conditions = {
-				Label(0);
-				CountdownTimer(AtMost,0);
-				Deaths(CurrentPlayer,AtMost,0,440);
-			},
-				actions = {
-				SetDeathsX(CurrentPlayer,SetTo,138 * 1000,440,0xFFFFFF);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PreserveTrigger();
-			},
-		}
-		--{"staredit\\wav\\FBoss.ogg",148 * 1000}
-		Trigger { -- 브금재생 보스
-			players = {Force1},
-			conditions = {
-				Label(0);
-				CountdownTimer(AtMost,0);
-				Deaths(CurrentPlayer,AtMost,0,440);
-			},
-				actions = {
-				SetDeathsX(CurrentPlayer,SetTo,138 * 1000,440,0xFFFFFF);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PreserveTrigger();
-			},
-		}
-		Trigger { -- 브금재생 보스 관전자
-			players = {FP},
-			conditions = {
-				Label(0);
-				CountdownTimer(AtMost,0);
-				Deaths(FP,AtMost,0,440);
-			},
-				actions = {
-				SetDeathsX(FP,SetTo,138 * 1000,440,0xFFFFFF);
-				SetMemory(0x6509B0,SetTo,128);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				SetMemory(0x6509B0,SetTo,129);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				SetMemory(0x6509B0,SetTo,130);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				SetMemory(0x6509B0,SetTo,131);
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				PlayWAV("staredit\\wav\\FBoss.ogg");
-				SetMemory(0x6509B0,SetTo,FP);
-				PreserveTrigger();
-			},
-		}
+		TriggerX(FP,{CountdownTimer(AtMost,0);DeathsX(AllPlayers,AtMost,0,440,0xFFFFFF)},{SetCDeaths(FP,SetTo,9,BGMType)},{Preserved})
 		DoActions(FP,{KillUnit(101,11)})
 		local FBPtr = CreateVar(FP)
 		local FBH = CreateVar(FP)
