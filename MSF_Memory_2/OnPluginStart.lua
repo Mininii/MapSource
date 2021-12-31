@@ -395,8 +395,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	CMov(FP,GroupFlagsPtr,DivNum4,EPDF(0x6637A0)) --GroupFlags
 	CMov(FP,ShieldAvPtr,DivNum4,EPDF(0x6647B0)) --Has Shield
 	CMov(FP,ShieldAmPtr,DivNum2,EPDF(0x660E00)) --Shield Amount
-	CMov(FP,StarEditAvFlag,DivNum2,EPDF(0x661518)) --Shield Amount
-	
+    CMov(FP,StarEditAvFlag,_Mul(CurrentUID,2),0x661518)
 	
 
 	local Temp1 = CreateVar(FP)
@@ -410,8 +409,9 @@ function init() -- 맵 실행시 1회 실행 트리거
 	CTrigger(FP,{TDeathsX(GroupFlagsPtr,Exactly,Temp2,0,Temp2)},{TSetMemoryX(GroupFlagsPtr,SetTo,Temp1,Temp1)},1) -- if Group ==Zerg And Unit then Set Group Factories
 	CTrigger(FP,{TDeathsX(SpecialAdvFlagPtr,Exactly,0x1,0,0x1)},{TSetDeaths(BdDimPtr,SetTo,65537,0),TSetMemoryX(GroupFlagsPtr,SetTo,0,Temp1)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1, Remove Factories Flag
 	CDoActions(FP,{TSetDeathsX(SpecialAdvFlagPtr,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
-	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,0)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
-	CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,1)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+    Act_TSetMemoryW(StarEditAvFlag,SetTo,0x1C7,0x1C7)
+--    CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,0)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
+--    CTrigger(FP,{CVar(FP,MaskRet3[2],Exactly,1)},{TSetDeathsX(StarEditAvFlag,SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{TMemoryX(ShieldAvPtr,Exactly,0,_Mul(MaskRet2,255))},{TSetDeathsX(ShieldAmPtr,SetTo,0,0,_Mul(MaskRet4,65535))},1) -- if Has Shield == 0 then Shield Amount = 0
 
 	
@@ -420,15 +420,10 @@ function init() -- 맵 실행시 1회 실행 트리거
 	DoActionsX(FP,SetCD(BFlag,2))
 
 	
+	local SelClass = Act_BRead(_Add(CurrentUID,0x6637A0))
 
-	CTrigger(FP,{CV(MaskRet1,0),CVar(FP,SelClass[2],Exactly,162,0xFF)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet1,1),CVar(FP,SelClass[2],Exactly,162*256,0xFF00)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet1,2),CVar(FP,SelClass[2],Exactly,162*65536,0xFF0000)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CV(MaskRet1,3),CVar(FP,SelClass[2],Exactly,162*16777216,0xFF000000)},{SetCD(BFlag,1)},1)
-	f_Read(FP,_Add(DivNum4,EPDF(0x6636B8)),SelWep)
-	f_Div(FP,SelWep,MaskRet2)
-	CTrigger(FP,{},{TSetCVar(FP,SelWepID[2],SetTo,SelWep,0xFF)},1)
-
+	CTrigger(FP,{CVar(FP,SelClass[2],Exactly,162)},{SetCD(BFlag,1)},1)
+	local SelWepID = Act_BRead(_Add(CurrentUID,0x6636B8))
 
 
 
@@ -443,8 +438,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 	CMov(FP,WepTypePtr,DivNum4_2,EPDF(0x657258))
 	CTrigger(FP,{CD(BFlag,1)},{TSetMemoryX(WepTypePtr,SetTo,_Mul(MaskRet6,2),_Mul(MaskRet6,255))},1)
-	CMov(FP,TargetFlagPtr,DivNum2_2,EPDF(0x657998))
-	CTrigger(FP,{},{TSetMemoryX(TargetFlagPtr,SetTo,_Mul(MaskRet8,3),_Mul(MaskRet8,3))},1)
+    CMov(FP,TargetFlagPtr,_Mul(SelWepID,2),0x657998)
+    Act_TSetMemoryW(TargetFlagPtr,SetTo,3,3)
 
 --	f_Read(FP,_Add(SelWepID,EPDF(0x657470)),WepLength)
 --	CMov(FP,SeekRange,_Div(WepLength,32))

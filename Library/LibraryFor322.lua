@@ -575,11 +575,13 @@ function ConvertLocation(Location) -- 로케이션 인덱스 변환함수. TempLocID는 0부�
 	return TempLocID, Location
 end
 
-function Install_TMemoryBX(PlayerID)
+function Install_TMemoryBW(PlayerID)
 	local OffsetV = CreateVar(PlayerID)
 	local MaskRetV = CreateVar(PlayerID)
 	local BWTypeV = CreateVar(PlayerID)
 	local TypeV = CreateVar(PlayerID)
+	local RetV = CreateVar(PlayerID)
+	local EPDRetV = CreateVar(PlayerID)
 	local ValueV = CreateVar(PlayerID)
 	local MaskV = CreateVar(PlayerID)
 	local MaskV2 = CreateVar(PlayerID)
@@ -598,15 +600,18 @@ function Install_TMemoryBX(PlayerID)
 			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,1)},{SetCVar(PlayerID,MaskV[2],SetTo,256)},1)
 			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536)},1)
 			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,3)},{SetCVar(PlayerID,MaskV[2],SetTo,16777216)},1)
-			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0x7FFFFFFF))
+			f_Mul(PlayerID,ValueV,MaskV)
+			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0xFFFFFFFF))
 			f_Mul(PlayerID,MaskV,255)
 			CElseX()
 			f_Mul(PlayerID,MaskV,MaskV2)
 			CIfXEnd()
 		CElseX() -- W
+			
 			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,0)},{SetCVar(PlayerID,MaskV[2],SetTo,1)},1)
 			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536)},1)
-			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0x7FFFFFFF))
+			f_Mul(PlayerID,ValueV,MaskV)
+			CIfX(PlayerID,CVar(PlayerID,MaskV2[2],Exactly,0xFFFFFFFF))
 			f_Mul(PlayerID,MaskV,65535)
 			CElseX()
 			f_Mul(PlayerID,MaskV,MaskV2)
@@ -620,8 +625,32 @@ function Install_TMemoryBX(PlayerID)
 			CDoActions(PlayerID,{TSetMemoryX(OffsetV,Subtract,ValueV,MaskV)})
 		CIfXEnd()
 	SetCallEnd()
+	Call_ReadCalc = SetCallForward()
+	SetCall(PlayerID)
+		CiSub(PlayerID,OffsetV,0x58A364)
+		f_iMod(PlayerID,MaskRetV,OffsetV,4)
+		f_iDiv(PlayerID,OffsetV,4)
+		CIf(PlayerID,{CVar(PlayerID,MaskRetV[2],AtLeast,0x80000000)})
+			CNeg(PlayerID,MaskRetV)
+		CIfEnd()
+		f_Read(PlayerID,OffsetV,RetV)
+		CIfX(PlayerID,{CVar(PlayerID,BWTypeV[2],Exactly,1)}) -- B
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,0)},{SetCVar(PlayerID,MaskV[2],SetTo,1),SetCVar(PlayerID,MaskV2[2],SetTo,256)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,1)},{SetCVar(PlayerID,MaskV[2],SetTo,256),SetCVar(PlayerID,MaskV2[2],SetTo,65536)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536),SetCVar(PlayerID,MaskV2[2],SetTo,16777216)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,3)},{SetCVar(PlayerID,MaskV[2],SetTo,16777216),SetCVar(PlayerID,MaskV2[2],SetTo,0)},1)
+		CElseX() -- W
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,0)},{SetCVar(PlayerID,MaskV[2],SetTo,1),SetCVar(PlayerID,MaskV2[2],SetTo,65536)},1)
+			CTrigger(PlayerID,{CVar(PlayerID,MaskRetV[2],Exactly,2)},{SetCVar(PlayerID,MaskV[2],SetTo,65536),SetCVar(PlayerID,MaskV2[2],SetTo,0)},1)
+		CIfXEnd()
+		f_Mod(PlayerID,RetV,MaskV2)
+		f_Div(PlayerID,RetV,MaskV)
+		CIf(FP,CVar(PlayerID,MaskV2[2],AtLeast,1))
+		CIfEnd()
+	SetCallEnd()
 
 	function Act_TSetMemoryB(Offset,Type,Value,Mask)
+		if Mask == nil then Mask = 0xFFFFFFFF end
 		CDoActions(PlayerID,{
 			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
 			TSetCVar(PlayerID,TypeV[2],SetTo,Type),
@@ -633,6 +662,7 @@ function Install_TMemoryBX(PlayerID)
 		CallTrigger(PlayerID,Call_MemoryCalc,{})
 	end	
 	function Act_TSetMemoryW(Offset,Type,Value,Mask)
+		if Mask == nil then Mask = 0xFFFFFFFF end
 		CDoActions(PlayerID,{
 			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
 			TSetCVar(PlayerID,TypeV[2],SetTo,Type),
@@ -642,6 +672,24 @@ function Install_TMemoryBX(PlayerID)
 			
 		})
 		CallTrigger(PlayerID,Call_MemoryCalc,{})
+	end
+	function Act_BRead(Offset)
+		CDoActions(PlayerID,{
+			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
+			SetCVar(PlayerID,BWTypeV[2],SetTo,1),
+			
+		})
+		CallTrigger(PlayerID,Call_ReadCalc,{})
+		return RetV
+	end
+	function Act_WRead(Offset)
+		CDoActions(PlayerID,{
+			TSetCVar(PlayerID,OffsetV[2],SetTo,Offset),
+			SetCVar(PlayerID,BWTypeV[2],SetTo,0),
+			
+		})
+		CallTrigger(PlayerID,Call_ReadCalc,{})
+		return RetV
 	end
 
 	
