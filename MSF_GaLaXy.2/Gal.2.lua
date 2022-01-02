@@ -29,7 +29,7 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 0
+Limit = 1
 GunSafety = 0
 VName = "Ver.1.8"
 SetFixedPlayer(FP)
@@ -321,7 +321,7 @@ NoAirCollisionX(FP)
 
 
 VArrPatchTable ={}
-CIfOnce(FP,Always(),SetCDeaths(FP,SetTo,1,BGMMode)) -- onPluginStart
+CIfOnce(FP,Always()) -- onPluginStart
 GiveUnitsArr = {}
 GiveT = {}
 for i = 0, 5 do
@@ -503,6 +503,7 @@ t27 = {
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x04[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d",
 "\x0d\x0d\x0d\x0d\x0d\x04 : \x03[Q] \x11Only마린 \x03[W] \x08노벙커 \x04[E] \x0E선택안함 \x04[Y] \x07선택완료 - \x11BGM\x04(←→키로 선택) \x04: \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d",
 }
+RndBGMT = CreateCText(FP,"\x04랜덤 "..(string.rep("\x0d",GetStrSizeD(0,"칸"))))
 BModeArr = {
 "\x0E신나는 ",
 "\x08진지한 ",
@@ -2395,7 +2396,6 @@ CIf(FP,CDeaths(FP,Exactly,1,BGMSel))
 
 TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,67)},{SetCDeaths(FP,Subtract,1,BGMMode)},{Preserved})
 TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,68)},{SetCDeaths(FP,Add,1,BGMMode)},{Preserved})
-TriggerX(FP,{CDeaths(FP,AtMost,0,BGMMode)},{SetCDeaths(FP,SetTo,1,BGMMode)},{Preserved})
 TriggerX(FP,{CDeaths(FP,AtLeast,#BModeArr+1,BGMMode)},{SetCDeaths(FP,SetTo,#BModeArr,BGMMode)},{Preserved})
 
 Trigger {
@@ -3611,25 +3611,17 @@ f_Memcpy(FP,0x641598+Str24L+(4*6)-5,_TMem(Arr(Str27[i],0),"X","X",1),Str27L[i])
 CIfEnd()
 end
 CurrentBGM = CreateVar(FP)
-CIf(FP,{TTCDeaths(FP,NotSame,CurrentBGM,BGMMode)})
-for j, k in pairs(BModeTArr) do
-CIf(FP,CDeaths(FP,Exactly,j,BGMMode))
-f_Memcpy(FP,0x641598+Str24L+(4*6)+Str27L[1],_TMem(Arr(k[3],0),"X","X",1),k[2])
-Trigger { -- 인트로1
-	players = {FP},
-	conditions = {
-		Label(0);
-		
-	},
-	actions = {
-		SetCVar(FP,CurrentBGM[2],SetTo,j);
-		SetCDeaths(FP,SetTo,1,Sel_G);
-		PreserveTrigger();
-		
-	},
-	}
+CIf(FP,CDeaths(FP,Exactly,0,BGMMode))
+f_Memcpy(FP,0x641598+Str24L+(4*6)+Str27L[1],_TMem(Arr(RndBGMT[3],0),"X","X",1),RndBGMT[2])
 CIfEnd()
+for j, k in pairs(BModeTArr) do
+	CIf(FP,CDeaths(FP,Exactly,j,BGMMode))
+	f_Memcpy(FP,0x641598+Str24L+(4*6)+Str27L[1],_TMem(Arr(k[3],0),"X","X",1),k[2])
+	CIfEnd()
 end
+
+CIf(FP,{TTCDeaths(FP,NotSame,CurrentBGM,BGMMode)},SetCDeaths(FP,SetTo,1,Sel_G))
+CMov(FP,CurrentBGM,_Read(_Ccode(FP,BGMMode)))
 CIfEnd()
 
 CIfEnd()
@@ -4994,6 +4986,10 @@ CJumpEnd(FP,0x103) -- if NonGameStart End
 SetRecoverCp()
 RecoverCp(FP)
 CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100)}) -- onPluginStart
+CIf(FP,CDeaths(FP,Exactly,0,BGMMode))
+CMov(FP,_Ccode(FP,BGMMode),_Mod(_Rand(),#BModeTArr),1)
+CIfEnd()
+
 NBT = {}
 MarModePatch = {}
 for i = 0, 5 do
@@ -5556,25 +5552,25 @@ CUnit_PlacedUnitHP(3,400000)
 CUnit_PlacedUnitHP(23,500000)
 CUnit_PlacedUnitHP(74,666666)
 CUnit_PlacedUnitHP(29,200000)
-CUnit_PlacedUnitHP(15,20211)
-CUnit_PlacedUnitHP(77,20211)
-CUnit_PlacedUnitHP(78,20211)
-CUnit_PlacedUnitHP(21,20211)
-CUnit_PlacedUnitHP(80,20211)
+CUnit_PlacedUnitHP(15,20222)
+CUnit_PlacedUnitHP(77,20222)
+CUnit_PlacedUnitHP(78,20222)
+CUnit_PlacedUnitHP(21,20222)
+CUnit_PlacedUnitHP(80,20222)
 CUnit_PlacedUnitHP(52,50000)
-CUnit_PlacedUnitHP(25,20211)
+CUnit_PlacedUnitHP(25,20222)
 CUnit_PlacedUnitHP(27,100000)
-CUnit_PlacedUnitHP(17,20211)
-CUnit_PlacedUnitHP(76,20211)
-CUnit_PlacedUnitHP(86,20211)
+CUnit_PlacedUnitHP(17,20222)
+CUnit_PlacedUnitHP(76,20222)
+CUnit_PlacedUnitHP(86,20222)
 CUnit_PlacedUnitHP(98,100000)
 CUnit_PlacedUnitHP(10,100000)
 CUnit_PlacedUnitHP(32,300000)
 CUnit_PlacedUnitHP(19,100000)
 CUnit_PlacedUnitHP(65,100000)
 CUnit_PlacedUnitHP(66,100000)
-CUnit_PlacedUnitHP(28,20211)
-CUnit_PlacedUnitHP(75,20211)
+CUnit_PlacedUnitHP(28,20222)
+CUnit_PlacedUnitHP(75,20222)
 CUnit_PlacedUnitHP(68,999999)
 CUnit_PlacedUnitHP(88,120000)
 CUnit_PlacedUnitHP(219,666666)
@@ -10189,7 +10185,7 @@ BGMArr =
 {".ogg",120 * 1000},
 {".ogg",194 * 1000},
 {".ogg",133 * 1000},
-{".ogg",136 * 1000}},
+{".ogg",150 * 1000}},
 
 --5
 {{".ogg",53 * 1000 },
