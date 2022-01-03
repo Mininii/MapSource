@@ -1,7 +1,9 @@
 function Var_init()
+	RandSwitch = "Switch 100"
+	RandSwitch2 = "Switch 101"
 	MarAtk = 15
 	MarAtkFactor = 3
-
+	GunLimit = 1450
 
 	UnitDataPtr = EPDF(0x5967EC-(1700*4))
 	MaxHPBackUp = CreateArr(228,FP)
@@ -39,12 +41,16 @@ function Var_init()
 	Dt = CreateVar(FP)
 	HTextStrPtr = CreateVar(FP)
 
+	CA2ArrX = CreateVArr(1700,FP)
+	CA2ArrY = CreateVArr(1700,FP)
+	CA2ArrZ = CreateVArr(1700,FP)
 	MarHPRegen = CreateVar2(FP,nil,nil,256)
 	LVVA = CreateVArr(4,FP)
 	MarHPRead = CreateVarArr(4,FP)
 	AtkCondTmp = CreateVar2(FP,nil,nil,54)
 	HPCondTmp = CreateVar2(FP,nil,nil,5)
 	SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
+	UnitIDV1,UnitIDV2,UnitIDV3,UnitIDV4 = CreateVars(4,FP)
 	SelWepID_Mask = CreateVar(FP)
 	SelWepID_Mask2 = CreateVar(FP)
 	SelUID_Mask = CreateVar(FP)
@@ -156,6 +162,7 @@ CreateHeroPointArr(8,"\x1F유\x04령 "..Conv_HStr("<1F>P<04>hantom"),30000,nil,1)
 CreateHeroPointArr(3,"\x1F무\x04법자 "..Conv_HStr("<1F>B<04>rutal"),30000,nil,1)
 CreateHeroPointArr(80,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese"),30000,nil,1)
 CreateHeroPointArr(102,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),30000,nil,1)
+CreateHeroPointArr(101,"\x1F소\x04멸자 "..Conv_HStr("<1F>E<04>clipse"),30000,nil,1)
 CreateHeroPointArr(150,"\x19선\x04물 "..Conv_HStr("<19>B<04>onus"),30000,1,1)
 
 	

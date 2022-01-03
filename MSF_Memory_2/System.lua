@@ -108,6 +108,28 @@ function System()
     TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
 
 
+    CIf(FP,Command(AllPlayers,AtLeast,1,"Dark Swarm"),{MoveLocation(1,"Dark Swarm",AllPlayers,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,AllPlayers),CreateUnit(1,84,1,FP),KillUnit(84,FP)}) -- 다크스웜 트리거
+    --DoActionsP(FP,{,,CreateUnit(1,"【 Artanis 】",1,P8)})
+    --CreateUnitPolygonSafe2Gun(FP,Always(),16,23,32,64,30,5,1,P8,{1,51})
+    CIfEnd()
 
+    CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
+    Create_G_CA_Arr()
+    CIfEnd()
+    WarpXY = {
+    {1632,1824},
+    {-1632+4096,1824},
+    {1632,-1824+4096},
+    {-1632+4096,-1824+4096}}
+    local WaveT = CreateCcode()
+    CIf(FP,{CV(Time1,(60*20)*1000,AtMost),CD(WaveT,300,AtLeast)},SetCD(WaveT,0))
+        CIf(FP,CV(Level,50,AtMost))
+        for i = 0, 3 do
+            f_TempRepeat({Command(i+4,AtLeast,1,189)},54,15,1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--PlayerCheck(i,1),
+            f_TempRepeat({Command(i+4,AtLeast,1,189)},53,10,1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--PlayerCheck(i,1),
+        end
+        CIfEnd()
+    CIfEnd()
+    DoActionsX(FP,AddCD(WaveT,1))
 
 end
