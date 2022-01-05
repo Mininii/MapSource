@@ -14,7 +14,7 @@ function LeaderBoardF()
 --        },{Preserved})
     end
 
-	CIf(FP,{ElapsedTime(AtLeast,60*10),TTOR({CDeaths(FP,Exactly,150,LeaderBoardT),CDeaths(FP,Exactly,450,LeaderBoardT)})})-- 리더보드 타이머가 주기적으로 정확히 200일 경우 내린 명령이 없어 멈춰있는 유닛에 명령을 내리는 코드. 오버마인드 존재해야함
+	CIf(FP,{ElapsedTime(AtLeast,60*10),CDeaths(FP,Exactly,150,LeaderBoardT),})-- 리더보드 타이머가 주기적으로 정확히 200일 경우 내린 명령이 없어 멈춰있는 유닛에 명령을 내리는 코드. 오버마인드 존재해야함
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	

@@ -6,6 +6,11 @@ function Interface()
 	local CurHP = CreateVarArr(#MapPlayers,FP)
 	AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0+7,46)
 	HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0,46)
+	if Limit== 1 then
+		for i = 0, 3 do
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),SetV(CurEXP,0x7FFFFFFF)})
+		end
+	end
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다."),
@@ -49,6 +54,181 @@ function Interface()
 			},
 	}
 	end
+	CSub(FP,ShieldEnV[i+1],Dt)
+	local ExchangeP = CreateVar(FP)
+	for i=0, 3 do
+		ExJump = def_sIndex()
+		NJump(FP,ExJump,{PlayerCheck(i,1),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",17),Bring(i,AtMost,0,"Men",18),Bring(i,AtMost,0,"Men",19),Bring(i,AtMost,0,"Men",20)})
+		CIf(FP,Score(i,Kills,AtLeast,1000))
+		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+--		CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
+		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExRateV[2],nil,"V"}))
+		CMov(FP,ExchangeP,0)
+		CIfEnd()
+		DoActions(FP,SetDeaths(i,Subtract,1,111))
+		
+		NJumpEnd(FP,ExJump)
+	end
+		
+	Trigger { -- 소환 마린
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,"Terran Wraith",64);
+	
+		},
+		actions = {
+			RemoveUnitAt(1,"Terran Wraith","Anywhere",i);
+			CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F25000 O r e"),4);
+			--SetCDeaths(FP,Add,1,MarCreate);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 자동환전
+		players = {i},
+		conditions = {
+			Command(CurrentPlayer,AtLeast,1,"Terran Vulture");
+		},
+		actions = {
+			RemoveUnitAt(1,"Terran Vulture","Anywhere",CurrentPlayer);
+			SetDeaths(CurrentPlayer,SetTo,1,"Terran Barracks");
+			DisplayText(StrDesign("\x04자동환전을 사용하셨습니다. - \x1F2000 O r e"),4);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 공업완료시 수정보호막 활성화
+	players = {i},
+	conditions = {
+		Label(0);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
+	},
+	actions = {
+		PlayWAV("staredit\\wav\\shield_unlock.ogg");
+		PlayWAV("staredit\\wav\\shield_unlock.ogg");
+		SetV(ShieldEnV[i+1],3200);
+		SetCDeaths(i,SetTo,1,ShieldUnlock);
+	},
+	}
+	Trigger { -- 공업완료시 수정보호막 활성화
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(i,AtLeast,1,ShieldUnlock);
+			MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
+			CV(ShieldEnV[i+1],0);
+		},
+		actions = {
+			DisplayText(string.rep("\n", 20),4);
+			DisplayText("\x13\x04"..string.rep("―", 56),4);
+			DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
+			DisplayText("\n",4);
+			DisplayText(StrDesignX("\x08공격력 \x04업그레이드를 완료하였습니다.\n\x13\x04이제부터 \x1C빛의 보호막\x04을 사용할 수 있습니다."),0);
+			DisplayText("\n",4);
+			DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
+			DisplayText("\x13\x04"..string.rep("―", 56),4);
+			SetMemory(0x5822C4+(i*4),SetTo,1200);
+			SetMemory(0x582264+(i*4),SetTo,1200);
+			SetMemoryB(0x57F27C+(228*i)+19,SetTo,1);
+		},
+	}
+	
+	Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		Memory(0x582294+(4*i),AtLeast,1200);
+		Command(i,AtLeast,1,19);
+	},
+	actions = {
+		SetResources(i,Add,30000,Ore);
+		RemoveUnitAt(1,19,"Anywhere",i);
+		DisplayText(StrDesign("\x04이미 \x1C빛의 보호막\x04을 사용중입니다. 자원 반환 + \x1F25000 Ore"),4);
+		PlayWAV("sound\\Misc\\PError.WAV");
+		PlayWAV("sound\\Misc\\PError.WAV");
+		PreserveTrigger();
+	},
+	}
+
+	Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		Memory(0x582294+(4*i),AtLeast,1);
+		Memory(0x582294+(4*i),AtMost,1199);
+		Command(i,AtLeast,1,19);
+	},
+	actions = {
+		SetResources(i,Add,30000,Ore);
+		RemoveUnitAt(1,19,"Anywhere",i);
+		DisplayText(StrDesign("\x1C빛의 보호막\x04이 현재 \x0E쿨타임 \x04중입니다. 자원 반환 + \x1F25000 Ore"),4);
+		PlayWAV("sound\\Misc\\PError.WAV");
+		PlayWAV("sound\\Misc\\PError.WAV");
+		PreserveTrigger();
+	},
+}
+	Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		Memory(0x582294+(4*i),Exactly,0);
+		Command(i,AtLeast,1,19);
+	},
+	actions = {
+		SetMemory(0x582294+(4*i),SetTo,2000);
+		RemoveUnitAt(1,19,"Anywhere",i);
+		RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
+		PreserveTrigger();
+	},
+}
+Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		Memory(0x582294+(4*i),AtLeast,1200);
+	},
+	actions = {
+		SetCDeaths(i,SetTo,1,ShUsed);
+		ModifyUnitShields(All,"Men",i,"Anywhere",100);
+		ModifyUnitShields(All,"Buildings",i,"Anywhere",100);
+		PreserveTrigger();
+	},
+}
+	DoActions(i,{SetMemory(0x582294+(4*i),Subtract,1)})
+
+Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		CDeaths(i,AtLeast,1,ShUsed);
+		Memory(0x582294+(4*i),AtMost,1199);
+	},
+	actions = {
+		DisplayText(StrDesign("\x1C빛의 보호막\x04 사용이 종료되었습니다."),4);
+		PlayWAV("staredit\\wav\\GMode.ogg");
+		PlayWAV("staredit\\wav\\GMode.ogg");
+		SetCDeaths(i,SetTo,0,ShUsed);
+		SetCDeaths(i,SetTo,1,ShCool);
+		PreserveTrigger();
+	},
+}
+Trigger { -- 보호막 가동
+	players = {i},
+	conditions = {
+		Label(0);
+		CDeaths(i,AtLeast,1,ShCool);
+		Memory(0x582294+(4*i),AtMost,0);
+	},
+	actions = {
+		DisplayText(StrDesign("\x1C빛의 보호막\x04 쿨타임이 종료되었습니다."),4);
+		PlayWAV("staredit\\wav\\GMode.ogg");
+		PlayWAV("staredit\\wav\\GMode.ogg");
+		SetCDeaths(i,SetTo,0,ShCool);
+		PreserveTrigger();
+	},
+}
+
 	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
 	for j=0, 3 do
 		if i~=j then
@@ -190,6 +370,17 @@ function Interface()
 	--선택인식 피통 보임 비공유
 --DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))
 
+local HealT = CreateCcode()
+DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
+CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
+for i = 0, 3 do
+	Trigger2(FP,{PlayerCheck(i,1)},{
+		ModifyUnitHitPoints(All,"Men",Force1,i+2,100),
+		ModifyUnitShields(All,"Men",Force1,i+2,100),
+		ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
+		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{Preserved})
+end
+CIfEnd()
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)},{SetCD(AFlag,0),SetCD(BFlag,2)})
 	f_Read(FP,0x6284B8,nil,SelEPD)
 	f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
@@ -199,7 +390,6 @@ function Interface()
 	CIf(FP,{TMemoryX(_Add(SelEPD,19),AtLeast,4,0xFF),CD(BFlag,1,AtMost)})
 	f_Read(FP,_Add(SelEPD,2),SelHP)
 	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
-	CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPDF(0x662350)))),_Mov(256)))
 
 	
 	TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{Preserved})
@@ -224,30 +414,22 @@ function Interface()
 	f_Div(FP,SelHP,_Mov(256))
 	f_Div(FP,SelSh,_Mov(256))
 	ItoDec(FP,SelHP,VArr(SelHPVA,0),2,0x08,0)--체
-	ItoDec(FP,SelMaxHP,VArr(SelMaxHPVA,0),2,0x19,0)--체
 	ItoDec(FP,SelSh,VArr(SelShVA,0),2,0x1C,0)--쉴
 
 	CIfX(FP,CD(BFlag,0))
 	ItoDec(FP,SelATK,VArr(SelATKVA,0),2,0x1B,0)--일반딜
 	f_Movcpy(FP,NMDMGTblPtr,VArr(SelHPVA,0),4*4)
-	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]),VArr(SelMaxHPVA,0),4*4)
-	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
-	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
+	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
+	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
 	CElseX()
 	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x1F,0)--퍼딜1
 	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x1F,0)--퍼딜2
 	f_Movcpy(FP,PerDMGTblPtr,VArr(SelHPVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]),VArr(SelMaxHPVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+ClassInfo1[2]+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]+(4*4)+ClassInfo6[2]),VArr(SelATKVA2,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
+	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]+(4*4)+ClassInfo6[2]),VArr(SelATKVA2,0),4*4)
 	CIfXEnd()
 
-
-	--SelHP 
-	--SelSh 
-	--SelMaxHP 
-	--SelATK 
 
 
 	CIfEnd()

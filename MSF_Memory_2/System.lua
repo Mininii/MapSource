@@ -6,12 +6,15 @@ function System()
 
     EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
     Check_Enemy = def_sIndex()
-    NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)},{AddV(CurEXP,1)})
+    NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,4,0,0xFF),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
+
     DoActions(FP,MoveCp(Add,6*4))
     Install_DeathNotice()
     EXCC_ClearCalc()
     NJumpEnd(FP,Check_Enemy)
     DoActions(FP,MoveCp(Add,6*4))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,35,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
     CIf(FP,{Cond_EXCC(8,AtLeast,1)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
@@ -29,7 +32,7 @@ function System()
 
 
 
-    EXCC_ClearCalc()
+    EXCC_ClearCalc(AddV(CurEXP,1))
     EXCC_Part2()
     EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
@@ -46,10 +49,13 @@ function System()
     
     local TempMarHPRead = CreateVar(FP)
     EXCC_Part1(MarCUnit) -- 마린 구조오프셋 단락 시작
-    PassArr={7,111,107,109,124,125}
-    for j, i in pairs(PassArr) do
-        EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+    WhiteList = def_sIndex()
+    for j, i in pairs(MarID) do
+        NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
     end
+    EXCC_ClearCalc()
+    NJumpXEnd(FP,WhiteList)
+
 	CSub(FP,0x6509B0,6)
     
     
@@ -94,7 +100,6 @@ function System()
     EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 		EXCC_Part4X(i,{
-            DeathsX(19025+(84*i)+19,AtLeast,0,0,0xFF),
             DeathsX(19025+(84*i)+19,AtMost,3,0,0xFF),
             DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
 		},
@@ -122,14 +127,31 @@ function System()
     {1632,-1824+4096},
     {-1632+4096,-1824+4096}}
     local WaveT = CreateCcode()
-    CIf(FP,{CV(Time1,(60*20)*1000,AtMost),CD(WaveT,300,AtLeast)},SetCD(WaveT,0))
-        CIf(FP,CV(Level,50,AtMost))
-        for i = 0, 3 do
-            f_TempRepeat({Command(i+4,AtLeast,1,189)},54,15,1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--PlayerCheck(i,1),
-            f_TempRepeat({Command(i+4,AtLeast,1,189)},53,10,1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--PlayerCheck(i,1),
+    function WaveSet(LVTable,CUTable)
+        local LvLeast
+        local LVMost
+        if type(LVTable)=="table" then
+            LvLeast = LVTable[1]
+            LVMost = LVTable[2]
+        else
+            PushErrorMsg("LVTable_TypeError")
         end
-        CIfEnd()
-    CIfEnd()
-    DoActionsX(FP,AddCD(WaveT,1))
+        if type(CUTable)=="table" then
+            for j, k in pairs(CUTable) do
+                for i = 0, 3 do
+                    f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost),PlayerCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
+                end
+            end
+        else
+            PushErrorMsg("CUTable_TypeError")
+        end
+        
+    end
+    CIf(FP,{CV(Time1,(60*20)*1000,AtMost),CD(WaveT,1800,AtLeast)},SetCD(WaveT,0))
+        WaveSet({0,9},{{53,25},{54,30}})
+        WaveSet({10,19},{{48,15},{53,20},{55,15}})
+        WaveSet({20,24},{{55,25},{48,10},{54,15},{53,10}})
+        WaveSet({25,50},{{56,25},{51,10},{104,10},{48,10},{53,10},{54,10}})
+    CIfEnd(AddCD(WaveT,1))
 
 end

@@ -188,7 +188,7 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 end
 
 	
-function EXCC_ClearCalc()
+function EXCC_ClearCalc(Actions)
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc End
 		players = {ParsePlayer(PlayerID)},
@@ -197,6 +197,7 @@ function EXCC_ClearCalc()
 		}, 
 		actions = {
 			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			Actions
 		},
 		flag = {Preserved}
 	}	
@@ -495,10 +496,10 @@ function Convert_StrCode(Str)
 	return Str
 end
 HeroPointArr = {}
-function CreateHeroPointArr(Index,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
+function CreateHeroPointArr(Index,HPRate,ShieldRate,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
 	if DmgType == nil then DmgType = 0 end
 	local TextType1 = "\x04 을(를) \x08처치\x04하였습니다. "
-	local TextType2 = "\x04 를 \x07획득\x04하였습니다. "
+	local TextType2 = "\x04 을(를) \x07획득\x04하였습니다. "
 	local Name2
 	if Type == 1 then
 		Name2 = TextType1
@@ -516,6 +517,8 @@ function CreateHeroPointArr(Index,Name,Point,Type,DmgType) --  영작 유닛 설정 함
 	table.insert(X,Index)
 	table.insert(X,Point) -- HPoint
 	table.insert(X,DmgType) -- HPoint
+	table.insert(X,HPRate*256) -- HPoint
+	table.insert(X,ShieldRate) -- HPoint
 	table.insert(HeroPointArr,X)
 end
 function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 설치 함수. CunitCtrig 단락에 포함됨.
@@ -523,11 +526,8 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/1000))})
-			DoActions(FP,{RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
-			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),
-			SetCDeaths(FP,Add,1,SoundLimit),
-		})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/1000)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
+			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{Preserved})
 			f_LoadCp()
 			CIfEnd()
 			
@@ -554,7 +554,7 @@ function Install_DeathNotice()
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,1,Custom);
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 		f_LoadCp()
 		DoActions(FP,MoveCp(Add,6*4))

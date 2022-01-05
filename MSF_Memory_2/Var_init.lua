@@ -1,7 +1,7 @@
 function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
-	MarAtk = 15
+	MarAtk = 50
 	MarAtkFactor = 3
 	GunLimit = 1450
 
@@ -13,6 +13,8 @@ function Var_init()
 		table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i),SetTo,80*(i+1)))
 	end
 	MarTblPtr = CreateVarArr(4,FP)
+	ShieldEnV = CreateVarArr(4,FP)
+	ShTStrPtr = CreateVarArr(4,FP)
 
 	CurrentUID = CreateVar(FP)
 	Nextptrs = CreateVar(FP)
@@ -27,17 +29,21 @@ function Var_init()
 	CurEXP = CreateVar(FP)
 	MaxEXP = CreateVar2(FP,nil,nil,80)
 	Level = CreateVar2(FP,nil,nil,1)
-	RedNumber = CreateVar(FP)
+	RedNumber = CreateVar2(FP,nil,nil,400)
+	RedNumberT = CreateVar(FP)
 	LimitX = CreateCcode()
 	LimitC = CreateCcode()
 	SoundLimit = CreateCcode()
 	TestMode = CreateCcode() 
 	OPJump = CreateCcode()
 	ButtonSound = CreateCcode()
+	ShieldUnlock = CreateCcode()
 	NMDMGTblPtr = CreateVar(FP)
 	PerDMGTblPtr = CreateVar(FP)
-	AtkCondTblPtr = CreateVar()
-	HPCondTblPtr = CreateVar()
+	AtkCondTblPtr = CreateVar(FP)
+	HPCondTblPtr = CreateVar(FP)
+	SetPlayers = CreateVar(FP)
+	ExRateV = CreateVar(FP)
 	Dt = CreateVar(FP)
 	HTextStrPtr = CreateVar(FP)
 
@@ -67,6 +73,8 @@ function Var_init()
 	Names = CreateVArrArr(4,5,FP)
 	AFlag = CreateCcode()
 	BFlag = CreateCcode()
+	ShUsed = CreateCcode()
+	ShCool = CreateCcode()
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")
@@ -74,6 +82,7 @@ function Var_init()
 	HumanPlayers = {P1,P2,P3,P4,P9,P10,P11,P12}
 	MapPlayers = {P1,P2,P3,P4}
 	ObPlayers = {P9,P10,P11,P12}
+	Players = {"\x081인","\x0E2인","\x0F3인","\x104인"}
 	MarID = {0,1,16,99}
 	MarWep = {117,118,119,120} 
 	GiveRate2 = {1000, 5000,10000,50000,100000,500000}  
@@ -83,6 +92,7 @@ function Var_init()
 	MedicTrig = {34,9,5,10}
 	BanToken = {63,64,65}
 	GiveUnitID = {66,67,68,69}
+	ExRate = {20,23,26,29}
 	_0D = string.rep("\x0D",200) 
 	HTextStr = _0D
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x06#X_MAX"}
@@ -106,7 +116,6 @@ function Var_init()
 	JYD = "Set Unit Order To: Junk Yard Dog"
 
 	
-	ClassInfo1 = CreateCText(FP,"\x04 / ")
 	ClassInfo2 = CreateCText(FP,"\x04 (")
 	ClassInfo3 = CreateCText(FP,"\x04) - ")
 	ClassInfo4 = CreateCText(FP," Ｄｍｇ")
@@ -122,48 +131,51 @@ function Var_init()
 		table.insert(Str03,CreateCText(FP,"\x04의 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·"))
 		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."\x07】\x08·\x11·\x07·"))
 	end
+	Str13 = CreateCText(FP,"\x04이(가) \x1C빛의 보호막\x04을 사용했습니다. \x07】\x08·\x11·\x07·』")
 
 	AtkCondT = CreateCText(FP,"공격력 업그레이드 조건 불만족\n	Next Level - ")
 	HPCondT = CreateCText(FP,"체력 업그레이드 조건 불만족\n	Next Level - ")
 
 --	CreateHeroPointArr(15,"\x1B잔\x04해 "..Conv_HStr("<1B>C<04>ivilian"),30000)
 
-CreateHeroPointArr(17,"\x1B전\x04투병기 "..Conv_HStr("<1B>A<04>lan <1B>S<04>chezar"),30000)
-CreateHeroPointArr(77,"\x1B검\x04투병 "..Conv_HStr("<1B>F<4>enix <1B>Z"),30000)
-CreateHeroPointArr(78,"\x1B용\x04기병 "..Conv_HStr("<1B>F<4>enix <1B>D"),30000)
-CreateHeroPointArr(76,"\x1B보\x04옥 "..Conv_HStr("<1B>O<4>rb"),30000)
-CreateHeroPointArr(28,"\x1B전\x04함 "..Conv_HStr("<1B>H<4>yperion"),30000)
-CreateHeroPointArr(19,"\x1B기\x04습자 "..Conv_HStr("<1B>J<04>im <1B>R<04>aynor <1B>V"),30000)
-CreateHeroPointArr(21,"\x1B망\x04령 "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000)
-CreateHeroPointArr(86,"\x1B망\x04토 "..Conv_HStr("<1B>D<4>animoth"),30000)
-CreateHeroPointArr(75,"\x1B그\x04림자 "..Conv_HStr("<1B>Z<4>eratul"),30000)
-CreateHeroPointArr(88,"\x1B정\x04찰기 "..Conv_HStr("<1B>A<4>rtanis"),30000)
-CreateHeroPointArr(25,"\x1B대\x04포 "..Conv_HStr("<1B>M<4>ortal"),30000)
-CreateHeroPointArr(79,"\x1B불\x04사자 "..Conv_HStr("<1B>T<4>assadar"),30000)
-CreateHeroPointArr(52,"\x1B부\x04패 "..Conv_HStr("<1B>O<4>rganes"),30000)
-CreateHeroPointArr(60,"\x08적\x04대자 "..Conv_HStr("<08>A<4>ntagonism"),30000)
-CreateHeroPointArr(30,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),30000,nil,1)
-CreateHeroPointArr(67,"\x1F창\x04세자 "..Conv_HStr("<1F>G<4>enesis"),30000,nil,1)
-CreateHeroPointArr(10,"\x1F화\x04염 "..Conv_HStr("<1F>I<04>nferno"),30000,nil,1)
-CreateHeroPointArr(71,"\x1F고\x04통 "..Conv_HStr("<1F>P<4>ain"),30000,nil,1)
-CreateHeroPointArr(63,"\x1F보\x04주 "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),30000,nil,1)
-CreateHeroPointArr(61,"\x1F변\x04명자 "..Conv_HStr("<1F>V<4>indication"),30000,nil,1)
-CreateHeroPointArr(27,"\x1F승\x04천자 "..Conv_HStr("<1F>A<4>scension"),30000,nil,1)
-CreateHeroPointArr(29,"\x1F기\x04함 "..Conv_HStr("<1F>N<4>orad <1F>II"),30000,nil,1)
-CreateHeroPointArr(23,"\x1F우\x04상 "..Conv_HStr("<1F>I<4>conoclasm"),30000,nil,1)
-CreateHeroPointArr(81,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>antalion"),30000,nil,1)
-CreateHeroPointArr(162,"\x1F증\x04오자 "..Conv_HStr("<1F>H<4>ate"),30000,nil,1)
-CreateHeroPointArr(98,"\x1F위\x04반자 "..Conv_HStr("<1F>B<4>reach"),30000,nil,1)
-CreateHeroPointArr(68,"\x1F집\x04행관 "..Conv_HStr("<1F>J<4>udgment"),30000,nil,1)
-CreateHeroPointArr(65,"\x1F광\x04전사 "..Conv_HStr("<1F>M<4>adness"),30000,nil,1)
-CreateHeroPointArr(66,"\x1F영\x04생자 "..Conv_HStr("<1F>I<4>mmortal"),30000,nil,1)
-CreateHeroPointArr(57,"\x1F마\x04녀 "..Conv_HStr("<1F>W<4>itch"),30000,nil,1)
-CreateHeroPointArr(8,"\x1F유\x04령 "..Conv_HStr("<1F>P<04>hantom"),30000,nil,1)
-CreateHeroPointArr(3,"\x1F무\x04법자 "..Conv_HStr("<1F>B<04>rutal"),30000,nil,1)
-CreateHeroPointArr(80,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese"),30000,nil,1)
-CreateHeroPointArr(102,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),30000,nil,1)
-CreateHeroPointArr(101,"\x1F소\x04멸자 "..Conv_HStr("<1F>E<04>clipse"),30000,nil,1)
-CreateHeroPointArr(150,"\x19선\x04물 "..Conv_HStr("<19>B<04>onus"),30000,1,1)
+CreateHeroPointArr(17,8000,0,"\x1B전\x04투병기 "..Conv_HStr("<1B>A<04>lan <1B>S<04>chezar"),25000)
+CreateHeroPointArr(77,6000,2000,"\x1B검\x04투병 "..Conv_HStr("<1B>F<4>enix <1B>Z"),30000)
+CreateHeroPointArr(78,8000,3000,"\x1B용\x04기병 "..Conv_HStr("<1B>F<4>enix <1B>D"),33000)
+CreateHeroPointArr(76,9000,6000,"\x1B보\x04옥 "..Conv_HStr("<1B>O<4>rb"),45000)
+CreateHeroPointArr(28,9999,0,"\x1B전\x04함 "..Conv_HStr("<1B>H<4>yperion"),35000)
+CreateHeroPointArr(19,22000,0,"\x1B기\x04습자 "..Conv_HStr("<1B>J<04>im <1B>R<04>aynor <1B>V"),45000)
+CreateHeroPointArr(21,7000,0,"\x1B망\x04령 "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000)
+CreateHeroPointArr(86,9000,7000,"\x1B망\x04토 "..Conv_HStr("<1B>D<4>animoth"),42000)
+CreateHeroPointArr(75,4000,9000,"\x1B그\x04림자 "..Conv_HStr("<1B>Z<4>eratul"),40000)
+CreateHeroPointArr(88,6000,3000,"\x1B정\x04찰기 "..Conv_HStr("<1B>A<4>rtanis"),32000)
+CreateHeroPointArr(25,9999,0,"\x1B대\x04포 "..Conv_HStr("<1B>M<4>ortal"),38000)
+CreateHeroPointArr(79,25000,6000,"\x1B불\x04사자 "..Conv_HStr("<1B>T<4>assadar"),45000)
+CreateHeroPointArr(52,30000,0,"\x1B부\x04패 "..Conv_HStr("<1B>O<4>rganes"),55000)
+CreateHeroPointArr(60,90000,60000,"\x08적\x04대자 "..Conv_HStr("<08>A<4>ntagonism"),322000)
+CreateHeroPointArr(30,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)
+CreateHeroPointArr(67,90000,60000,"\x1F창\x04세자 "..Conv_HStr("<1F>G<4>enesis"),75000,nil,1)
+CreateHeroPointArr(10,35000,0,"\x1F화\x04염 "..Conv_HStr("<1F>I<04>nferno"),55000,nil,1)
+CreateHeroPointArr(71,1,60000,"\x1F고\x04통 "..Conv_HStr("<1F>P<4>ain"),55000,nil,1)
+CreateHeroPointArr(63,3000,9000,"\x1F보\x04주 "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),50000,nil,1)
+CreateHeroPointArr(61,150000,60000,"\x1F변\x04명자 "..Conv_HStr("<1F>V<4>indication"),80000,nil,1)
+CreateHeroPointArr(27,50000,25000,"\x1F승\x04천자 "..Conv_HStr("<1F>A<4>scension"),65000,nil,1)
+CreateHeroPointArr(29,75000,0,"\x1F기\x04함 "..Conv_HStr("<1F>N<4>orad <1F>II"),45000,nil,1)
+CreateHeroPointArr(23,350000,0,"\x1F우\x04상 "..Conv_HStr("<1F>I<4>conoclasm"),66600,nil,1)
+CreateHeroPointArr(81,150000,65000,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1)
+CreateHeroPointArr(162,40000,60000,"\x1F증\x04오자 "..Conv_HStr("<1F>H<4>ate"),65000,nil,1)
+CreateHeroPointArr(98,18000,40000,"\x1F위\x04반자 "..Conv_HStr("<1F>B<4>reach"),75000,nil,1)
+CreateHeroPointArr(68,500000,64000,"\x1F집\x04행관 "..Conv_HStr("<1F>J<4>udgement"),110000,nil,1)
+CreateHeroPointArr(65,35000,20000,"\x1F광\x04전사 "..Conv_HStr("<1F>M<4>adness"),65000,nil,1)
+CreateHeroPointArr(66,75000,40000,"\x1F영\x04생자 "..Conv_HStr("<1F>I<4>mmortal"),75000,nil,1)
+CreateHeroPointArr(57,75000,0,"\x1F마\x04녀 "..Conv_HStr("<1F>W<4>itch"),56000,nil,1)
+CreateHeroPointArr(8,53000,0,"\x1F유\x04령 "..Conv_HStr("<1F>P<04>hantom"),67000,nil,1)
+CreateHeroPointArr(3,68920,0,"\x1F무\x04법자 "..Conv_HStr("<1F>B<04>rutal"),76000,nil,1)
+CreateHeroPointArr(80,58000,8900,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese"),70000,nil,1)
+CreateHeroPointArr(102,150000,0,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),100000,nil,1)
+CreateHeroPointArr(100,100000,0,"\x1F소\x04멸자 "..Conv_HStr("<1F>E<04>clipse"),85000,nil,1)
+CreateHeroPointArr(150,80000,0,"\x19선\x04물 "..Conv_HStr("<19>B<04>onus"),35000,2,1)
+CreateHeroPointArr(22,35000,0,"\x1F부\x04정자 "..Conv_HStr("<1F>A<4>dverse"),55000,nil,1)
+CreateHeroPointArr(70,35000,22000,"\x1F나\x04락 "..Conv_HStr("<1F>F<04>allen"),75000,nil,1)
 
 	
 end

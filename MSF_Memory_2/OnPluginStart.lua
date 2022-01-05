@@ -24,7 +24,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryW(0x660E00 + (UnitID *2), SetTo, 1000))
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (UnitID), SetTo, 255))
 	end
-
+	
 	function UnitEnable(UnitID,MinCost,GasCost,BuildTime,SuppCost)
 	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
@@ -97,6 +97,10 @@ function init() -- 맵 실행시 1회 실행 트리거
 	end
 	for j, k in pairs(HeroPointArr) do
 		SetGroupFlags(k[2],0xA)
+		SetUnitAdvFlag(k[2],0x40,0x8000+0x40)
+		table.insert(PatchArr,SetMemory(0x662350 + (k[2]*4),SetTo,k[5]))
+		table.insert(PatchArr,SetMemoryB(0x660178 + (k[2]),SetTo,3))
+		table.insert(PatchArr,SetMemoryW(0x660E00 + (k[2]*2),SetTo,k[6]))
 		if k[4] == 1 then
 			SetUnitClass(k[2],162) -- 퍼뎀유닛
 		else
@@ -128,13 +132,10 @@ function init() -- 맵 실행시 1회 실행 트리거
 		UnitEnable(i) -- 원격스팀팩
 	end
 	
-	for i=0,3 do
-		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
-	end
 	UnitEnable(71) -- 원격스팀팩
 	UnitEnable(2) -- 자환
 	UnitEnable(19,25000) -- 수정보호막
-	UnitEnable(8,9000,nil,5,2) -- 마린
+	UnitEnable(8,25000,nil,5,2) -- 마린
 	UnitEnable(7,500) -- SCV
 	
 	UnitEnable(125,8000)
@@ -145,8 +146,13 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitEnable(60)
 	UnitEnable(62)
 	UnitEnable(61)
+	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
+	for i= 0,3 do
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 19,SetTo,0))
+	end
 	for i = 1, 4 do
-		UnitEnable(MedicTrig[i],25+(i*25),nil,i) -- 메딕
+		UnitEnable(MedicTrig[i],200+(i*50),nil,i) -- 메딕
 		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
 		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i],7,10,7,11) -- 마린 크기 설정
@@ -163,8 +169,6 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i],SetTo,MarWep[i])) -- 공중무기
 	end
 
-	--UnitEnable2(71)
-	--UnitEnable2(19)
 
 	
 	
@@ -175,10 +179,14 @@ function init() -- 맵 실행시 1회 실행 트리거
 	CIfOnce(FP)
 	
 	for i = 0, 3 do
+	TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 	f_GetTblptr(FP,MarTblPtr[i+1],MarID[i+1]+1)
 	_0DPatchforVArr(FP,Names[i+1],4)
 	Install_CText1(MarTblPtr[i+1],Str12,Str02[i+1],Names[i+1])
+	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D)
+	
+	Install_CText1(ShTStrPtr[i+1],Str12,Str13,Names[i+1])
 	end
 
 	f_GetTblptr(FP,NMDMGTblPtr,1463)
@@ -188,20 +196,18 @@ function init() -- 맵 실행시 1회 실행 트리거
 	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
 	f_Memcpy(FP,AtkCondTblPtr,_TMem(Arr(AtkCondT[3],0),"X","X",1),AtkCondT[2])
 	f_Memcpy(FP,HPCondTblPtr,_TMem(Arr(HPCondT[3],0),"X","X",1),HPCondT[2])
-	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
+	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
 
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*4)),_TMem(Arr(ClassInfo1[3],0),"X","X",1),ClassInfo1[2])
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*8)+ClassInfo1[2]),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*12)+ClassInfo1[2]+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*16)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo4[3],0),"X","X",1),ClassInfo4[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*8)),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
+	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo4[3],0),"X","X",1),ClassInfo4[2])
 	
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*4)),_TMem(Arr(ClassInfo1[3],0),"X","X",1),ClassInfo1[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*8)+ClassInfo1[2]),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo1[2]+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo1[2]+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*8)),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
+	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
 	
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
@@ -420,7 +426,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	DoActionsX(FP,SetCD(BFlag,2))
 
 	
-	local SelClass = Act_BRead(_Add(CurrentUID,0x6637A0))
+	local SelClass = Act_BRead(_Add(CurrentUID,0x663DD0))
 
 	CTrigger(FP,{CVar(FP,SelClass[2],Exactly,162)},{SetCD(BFlag,1)},1)
 	local SelWepID = Act_BRead(_Add(CurrentUID,0x6636B8))
@@ -531,7 +537,20 @@ CIfEnd({SetMemory(0x6509B0,SetTo,FP)}) -- OnPluginStart End
 end
 function init_Start() -- 게임 시작시 1회 실행 트리거
 	CIfOnce(FP)
-	
+	for k = 1, 4 do
+	Trigger { -- 미션 오브젝트 이지n인
+		players = {FP},
+		conditions = {
+			Label(0);
+			CVar(FP,SetPlayers[2],Exactly,k);
+		},
+		actions = {
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
+			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
+			
+		},
+	}
+	end
 	CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
 	CMov(FP,0x6509B0,UnitDataPtr)
 	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.

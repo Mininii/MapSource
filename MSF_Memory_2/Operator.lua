@@ -16,12 +16,13 @@ function Operator_Trig()
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*181)+(4*i),DtX) -- MSQC val Recive. 181
 		CTrigger(FP,{CV(DtX,2500,AtMost)},{SetV(Dt,DtX)},1)
+		CAdd(FP,RedNumberT,Dt)
 	end
     CIfXEnd()
 	if Limit == 1 then
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
-
+	
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	
 	Trigger {
@@ -79,6 +80,20 @@ CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(P
 CIfEnd({print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：００．０％ ◈ \x06０００\x04 ◈ \x04００００"))})
 CAdd(FP,Print13T,Dt)
 CAdd(FP,Time1,Dt)
+Trigger { -- 빨간숫자
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,RedNumberT[2],AtLeast,9000*2);
+		CVar(FP,RedNumber[2],AtLeast,1);
+	},
+	actions = {
+		SetCVar(FP,RedNumberT[2],Subtract,9000*2);
+		SetCVar(FP,RedNumber[2],Subtract,1);
+		PreserveTrigger();
+	},
+}
+
 local CurExpTmp = CreateVar()
 --local MaxExpTmp = CreateVar()
 
