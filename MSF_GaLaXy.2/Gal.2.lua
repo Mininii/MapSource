@@ -3784,7 +3784,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,0,modeT);
+		CDeaths(FP,AtLeast,0,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3817,7 +3817,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,3,modeT);
+		CDeaths(FP,AtLeast,3,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3850,7 +3850,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,6,modeT);
+		CDeaths(FP,AtLeast,6,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3883,7 +3883,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,9,modeT);
+		CDeaths(FP,AtLeast,9,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3916,7 +3916,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,12,modeT);
+		CDeaths(FP,AtLeast,12,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3949,7 +3949,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,15,modeT);
+		CDeaths(FP,AtLeast,15,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -3982,7 +3982,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,18,modeT);
+		CDeaths(FP,AtLeast,18,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4016,7 +4016,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21,modeT);
+		CDeaths(FP,AtLeast,21,ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4060,7 +4060,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*2),modeT);
+		CDeaths(FP,AtLeast,21+(24*2),ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4103,7 +4103,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*3),modeT);
+		CDeaths(FP,AtLeast,21+(24*3),ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4146,7 +4146,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*4),modeT);
+		CDeaths(FP,AtLeast,21+(24*4),ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4191,7 +4191,7 @@ Trigger { -- 인트로1
 		Label(0);
 		CDeaths(FP,AtMost,0,isSingle);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*5),modeT);
+		CDeaths(FP,AtLeast,21+(24*5),ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4245,7 +4245,7 @@ Trigger { -- 인트로1
 		Label(0);
 		CDeaths(FP,Exactly,1,isSingle);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*5),modeT);
+		CDeaths(FP,AtLeast,21+(24*5),ModeT);
 	},
 	actions = {
 		SetMemory(0x6509B0, SetTo, 0);
@@ -4294,7 +4294,7 @@ Trigger { -- 인트로1
 			CDeaths(FP,AtLeast,1,Testmode);
 		},
 		actions = {
-			SetCDeaths(FP,SetTo,20+(24*5),modeT)
+			SetCDeaths(FP,SetTo,20+(24*5),ModeT)
 			
 		},
 		}
@@ -4311,7 +4311,7 @@ Trigger { -- 인트로1
 	MarCreateSh = {Shape1013,Shape2013,Shape3013,Shape4013,Shape5013,Shape6013}
 CIfOnce(FP,{
 	CDeaths(FP,AtLeast,1,ModeO);
-	CDeaths(FP,AtLeast,21+(24*5),modeT);
+	CDeaths(FP,AtLeast,21+(24*5),ModeT);
 })
 for i = 0, 5 do
 	CSPlot(MarCreateSh[i+1],i,20,0,{0,0},1,32,FP,PlayerCheck(i,1))
@@ -4326,7 +4326,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*5),modeT);
+		CDeaths(FP,AtLeast,21+(24*5),ModeT);
 	},
 	actions = {
 		--CreateUnit(2,0,2,Force1);
@@ -4351,7 +4351,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeO);
-		CDeaths(FP,AtLeast,21+(24*5),modeT);
+		CDeaths(FP,AtLeast,21+(24*5),ModeT);
 		CDeaths(FP,AtLeast,1,NBMode);
 
 
@@ -5041,10 +5041,10 @@ Trigger {
 		Label(0);
 		CVar(FP,HiddenPts[2],Exactly,0);
 		CVar(FP,HiddenHP[2],Exactly,0);
-		CVar(FP,HiddenAtk[2],Exactly,0);
+		CVar(FP,HiddenATK[2],Exactly,0);
 		CVar(FP,HiddenPtsM[2],Exactly,0);
 		CVar(FP,HiddenHPM[2],Exactly,0);
-		CVar(FP,HiddenAtkM[2],Exactly,0);
+		CVar(FP,HiddenATKM[2],Exactly,0);
 		CVar(FP,HondonMode[2],Exactly,0);
 		
 	},
@@ -5113,7 +5113,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		CVar(FP,HiddenAtk[2],Exactly,i);
+		CVar(FP,HiddenATK[2],Exactly,i);
 	},
 	actions = {		
 		SetMemoryX(0x656F98, Add, i*32*65536,0xFFFF0000);--기본공
@@ -5136,7 +5136,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		CVar(FP,HiddenAtkM[2],Exactly,i);
+		CVar(FP,HiddenATKM[2],Exactly,i);
 	},
 	actions = {
 		SetCVar(FP,AtkUpMax[2],SetTo,50+(200-(40*i)));
@@ -7309,11 +7309,11 @@ NIf(FP,Command(FP,AtLeast,1,82))
 CTrigger(FP,{
 CDeaths(FP,Exactly,2,GMode),
 TMemory(Boss1_H,AtMost,6000000*256)},
-{TSetMemory(Boss1_H, Add, _Sub(_Mov(1500*256),_Mul(HiddenAtkM,_Mov(300*256))))},1)
+{TSetMemory(Boss1_H, Add, _Sub(_Mov(1500*256),_Mul(HiddenATKM,_Mov(300*256))))},1)
 CTrigger(FP,{
 CDeaths(FP,Exactly,3,GMode),
 TMemory(Boss1_H,AtMost,8000000*256)},
-{TSetMemory(Boss1_H, Add, _Sub(_Mov(3500*256),_Mul(HiddenAtkM,_Mov(700*256))))},1)
+{TSetMemory(Boss1_H, Add, _Sub(_Mov(3500*256),_Mul(HiddenATKM,_Mov(700*256))))},1)
 
 
 Trigger {
@@ -8598,7 +8598,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,BUpEnable[j+1]);
-		CVar(FP,HiddenAtkM[2],Exactly,i);
+		CVar(FP,HiddenATKM[2],Exactly,i);
 	},
 	actions = {
 		SetMemoryB(0x58D088+(j*46)+14,SetTo,50+(200-(40*i)));
@@ -8612,7 +8612,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,BUpEnable[j+1]);
-		CVar(FP,HiddenAtkM[2],Exactly,0);
+		CVar(FP,HiddenATKM[2],Exactly,0);
 	},
 	actions = {
 		SetMemoryB(0x58D088+(j*46)+14,SetTo,255);
