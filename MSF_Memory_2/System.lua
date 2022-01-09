@@ -1,4 +1,5 @@
 function System()
+    local CPlayer = CreateVar(FP)
 	Cast_UnitCount()
     AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
     AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
@@ -19,11 +20,24 @@ function System()
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
+    CIf(FP,{Cond_EXCC(7,AtLeast,1)}) -- 건작유닛인식
+        f_SaveCp()
+        f_Read(FP,_Sub(BackupCp,15),CPos)
+        f_Read(FP,_Sub(BackupCp,6),CPlayer)
+
+        Convert_CPosXY()
+        Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+        CWhile(FP,{Cond_EXCC(7,AtLeast,1)})
+            
+            CDoActions(FP,{TCreateUnit(1,_Mov(EXCC_TempVarArr[8],0xFF),1,_Mov(CPlayer,0xFF)),Set_EXCC(7,SetTo,_Div(EXCC_TempVarArr[8],256))})
+        CWhileEnd()
+        f_LoadCp()
+    CIfEnd()
 --    CMov(FP,Gun_Type,0)
 
---    f_GSend(131)
---    f_GSend(132)
---    f_GSend(133)
+    f_GSend(131)
+    f_GSend(132)
+    f_GSend(133)
 
     if TestStart == 1 then
         --f_GSend(146)
@@ -41,6 +55,7 @@ function System()
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
 		},
 		{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
+        SetDeathsX(19025+(84*i)+9,SetTo,0*16777216,0,0xFF000000),
 		MoveCp(Add,19*4),
 		})
 	end
@@ -48,11 +63,29 @@ function System()
     
     
     local TempMarHPRead = CreateVar(FP)
-    EXCC_Part1(MarCUnit) -- 마린 구조오프셋 단락 시작
+    EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
     WhiteList = def_sIndex()
     for j, i in pairs(MarID) do
         NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
     end
+    CIf(FP,{DeathsX(CurrentPlayer,Exactly,185,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+        EXCC_BreakCalc({Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
+        CAdd(FP,0x6509B0,38)--40
+        CIf(FP,{DeathsX(CurrentPlayer,AtLeast,150*16777216,0,0xFF000000)})
+            CDoActions(FP,{
+                SetMemory(0x6509B0,Subtract,17),
+                SetDeaths(CurrentPlayer,SetTo,0,0),
+                SetMemory(0x6509B0,Subtract,4),
+                SetDeathsX(CurrentPlayer,SetTo,6*256,0,0xFF00),
+                SetMemory(0x6509B0,Subtract,15),
+                TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+                SetMemory(0x6509B0,Add,2),
+                TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+                SetMemory(0x6509B0,Add,16),
+                TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+            })
+        CIfEnd()
+    CIfEnd()
     EXCC_ClearCalc()
     NJumpXEnd(FP,WhiteList)
 
@@ -100,7 +133,7 @@ function System()
     EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 		EXCC_Part4X(i,{
-            DeathsX(19025+(84*i)+19,AtMost,3,0,0xFF),
+            DeathsX(19025+(84*i)+9,AtMost,0,0,0xFF0000),
             DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
 		},
 		{MoveCp(Add,25*4),
@@ -117,7 +150,7 @@ function System()
     --DoActionsP(FP,{,,CreateUnit(1,"【 Artanis 】",1,P8)})
     --CreateUnitPolygonSafe2Gun(FP,Always(),16,23,32,64,30,5,1,P8,{1,51})
     CIfEnd()
-
+    Install_GunStack()
     CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
     Create_G_CA_Arr()
     CIfEnd()

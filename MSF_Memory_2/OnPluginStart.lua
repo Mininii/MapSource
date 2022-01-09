@@ -208,7 +208,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
-	
+	G_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then

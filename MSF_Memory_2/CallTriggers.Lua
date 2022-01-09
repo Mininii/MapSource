@@ -13,7 +13,8 @@ function Install_CallTriggers()
 		f_Read(FP,_Add(BackupCP,1),RepHeroIndex,"X",0xFF)
 		f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		DoActionsX(FP,{
+		CDoActions(FP,{
+			TSetMemoryX(_Add(Nextptrs,9),SetTo,1*65536,0xFF0000),
 			SetCDeaths(FP,SetTo,0,InverseOptionX),
 			SetCDeaths(FP,SetTo,0,InverseOptionY),
 		})
@@ -55,4 +56,5 @@ function Install_CallTriggers()
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 	SetCallEnd()
+
 end
