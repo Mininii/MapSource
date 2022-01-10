@@ -1012,6 +1012,8 @@ f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받�
 f_GunSendErrT = "\x07『 \x08ERROR \x04: G_CA_SpawnSet 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 G_CA_PosErr = "\x07『 \x03CAUCTION : \x04생성 좌표가 맵 밖을 벗어났습니다.\x07 』"
 f_GunErrT = "\x07『 \x08ERROR \x04: G_CAPlot Not Found. \x07』"
+f_GunFuncT = "\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07』"
+f_GunErrT = "\x07『 \x08ERROR \x04: G_CAPlot Not Found. \x07』"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
@@ -1043,6 +1045,11 @@ local G_CA_InputH = CreateVar(FP)
 local G_CA_LineTemp = CreateVar(FP)
 local CA_Repeat_Check = CreateCcode()
 local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
+G_CA_CenterX = CreateVar(FP)
+G_CA_CenterY = CreateVar(FP)
+G_CA_Player = CreateVar(FP)
+local G_CA_X = CreateVar(FP)
+local G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward() -- 유닛생성부
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -1059,7 +1066,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
-		CIf(FP,{CDeaths(FP,AtMost,0,CA_Repeat_Check),CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)}) -- TempRepeat로 생성했을 경우 생성위치, 타겟위치 설정
+		CIf(FP,{CDeaths(FP,AtMost,0,CA_Repeat_Check),CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)},{}) -- TempRepeat로 생성했을 경우 생성위치, 타겟위치 설정
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
 			CMov(FP,G_CA_TempTable[8],TRepeatX)
 			CMov(FP,G_CA_TempTable[9],TRepeatY)
@@ -1087,9 +1094,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2),TTCVar(FP,RepeatType[2],NotSame,100)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
 		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1) -- 버로우상태로 소환
+		CElseIfX({CVar(FP,CreatePlayer[2],Exactly,0x7FFFFFFF)})
+			CMov(FP,CreatePlayer,G_CA_Player)
 		CElseX()
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
 		CIfXEnd()
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,100)},{TCreateUnitWithProperties(1,185,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),},1)
 		CIf(FP,{TTCVar(FP,RepeatType[2],NotSame,100)})
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
 		Convert_CPosXY()
@@ -1107,13 +1117,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CDoActions(FP,{
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,100))-- 특수생성트리거
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
 			CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
-			f_Mod(FP,G_CA_UnitIndex,_Mov(84))
-			CTrigger(FP,{},{TCreateUnitWithProperties(1,185,DefaultAttackLoc,CreatePlayer,{energy = 100}),
-			Set_EXCC2(DUnitCalc,G_CA_UnitIndex,7,SetTo,G_CA_TempTable[1]),
-			Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_TempTable[8],_Mul(G_CA_TempTable[9],65536))),
-		},1)
+			f_Div(FP,G_CA_UnitIndex,_Mov(84))
+			CDoActions(FP,{
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,7,SetTo,G_CA_TempTable[1]),
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
+			Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
+			})
 				
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- 정야독
@@ -1280,8 +1292,8 @@ CDoActions(FP,{
 })
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
---	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,Var_TempTable[2]),
---	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,Var_TempTable[3])
+	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_CenterX),
+	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,G_CA_CenterY)
 })
 CElseX()
 CDoActions(FP,{
@@ -1328,6 +1340,8 @@ function CA_Repeat()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
 	CIfX(FP,{})
+	CMov(FP,G_CA_X,V(CA[8]))
+	CMov(FP,G_CA_Y,V(CA[9]))
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 	CIfXEnd()
@@ -1575,6 +1589,8 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 	end
 	if Owner == nil then
 		Owner = 0xFFFFFFFF
+	elseif Owner == "CP" then
+		Owner = 0x7FFFFFFF
 	end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
@@ -1703,11 +1719,11 @@ function Install_Call_G_CA()
 				TSetMemory(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0),
 			})
 
-			if TestStart == 1 then
+			if Limit == 1 then
 			DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
 			end
 			CElseX()
-			if TestStart == 1 then
+			if Limit == 1 then
 				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 			end
 			
@@ -1752,7 +1768,7 @@ function Create_G_CA_Arr()
 		}, 1, G_CA_Arr_IndexAlloc)
 		G_CA_Arr_IndexAlloc = G_CA_Arr_IndexAlloc + 1
 	end
-	--CMov(FP,0x57f0f0,Actived_G_CA)
+	CMov(FP,0x57f0f0,Actived_G_CA)
 end
 
 

@@ -1,5 +1,6 @@
 function Include_GunData(Size,LineNum)
-	local G_TempV,G_A,GunID = CreateVariables(3)
+	local G_TempV,G_A,GunID = CreateVariables(3,FP)
+	local GunPlayer = CreateVar(FP)
 	local CIndex = FuncAlloc
 	f_GunSendT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
@@ -37,6 +38,7 @@ function Include_GunData(Size,LineNum)
 		f_SaveCp()
 		f_Read(FP,_Sub(BackupCp,15),CPos)
 		f_Read(FP,BackupCp,GunID,"X",0xFF)
+		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
 		Convert_CPosXY()
 		CMov(FP,G_A,0)
 		G_SkipJump = def_sIndex()
@@ -52,6 +54,7 @@ function Include_GunData(Size,LineNum)
 			TSetMemory(_Add(G_TempV,1*(0x20/4)),SetTo,CPosX),
 			TSetMemory(_Add(G_TempV,2*(0x20/4)),SetTo,CPosY),
 			TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,DUnitCalc[4][1]),
+			TSetMemory(_Add(G_TempV,4*(0x20/4)),SetTo,GunPlayer),
 		})
 		
 		if Limit == 1 then
@@ -119,10 +122,21 @@ function Include_GunData(Size,LineNum)
 	SetCall(FP)
 
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
-	DoActions(FP,{SetSwitch(RandSwitch,Random),SetCD(GunCaseCheck,0)})
+	CMov(FP,G_CA_CenterX,Var_TempTable[2])
+	CMov(FP,G_CA_CenterY,Var_TempTable[3])
+	CMov(FP,G_CA_Player,Var_TempTable[5])
+	DoActionsX(FP,{SetSwitch(RandSwitch,Random),SetCD(GunCaseCheck,0)})
 	CDoActions(FP,{Gun_SetLine(4,Add,1)})
 	CIf_GCase(133)
-		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,nil)
+		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
+		CDoActions(FP,{Gun_DoSuspend()})
+	CIfEnd()
+	CIf_GCase(132)
+		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
+		CDoActions(FP,{Gun_DoSuspend()})
+	CIfEnd()
+	CIf_GCase(131)
+		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
 		CDoActions(FP,{Gun_DoSuspend()})
 	CIfEnd()
 

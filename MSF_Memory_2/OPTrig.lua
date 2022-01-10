@@ -64,12 +64,14 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
 },HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31),SetSwitch("Switch 253",Clear)})
 DoActions(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 CIfEnd()
+if Limit == 1 then
+TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
+end
 CIfOnce(FP,CD(OPJump,1))
 
 
 
 if Limit == 1 then
-    TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
 
 
 	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
