@@ -23,7 +23,7 @@ function Include_GunData(Size,LineNum)
 	f_GunSendStrPtr2 = CreateVar(FP)
 	
 	function G_init()
-		table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,CIndex,0x15C,1,1))--{"X",0x500,0x15C,1,0}--G_InputH
+		table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,CIndex,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
 		f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 		f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 		f_GetStrXptr(FP,f_GunSendStrPtr2,"\x0D\x0D\x0Df_GunSend2".._0D)
@@ -98,8 +98,9 @@ function Include_GunData(Size,LineNum)
 	end
 	f_Gun = SetCallForward()
 	function Install_GunStack()
-		TriggerX(FP,{Never()},nil,nil,CIndex)
 		for i = 0, Size-1 do
+			local TempCIndex
+			if i == 0 then TempCIndex=CIndex else TempCIndex = 0 end
 			CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
 				Var_InputCVar,
 				SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
@@ -109,7 +110,7 @@ function Include_GunData(Size,LineNum)
 				SetCtrigX("X",f_Gun+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
 				SetCtrigX("X",f_Gun+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
 				SetCtrig1X("X",f_Gun+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
-			}, 1)
+			}, 1,TempCIndex)
 		end
 	end
 	local G_TempW = CreateVar(FP)
@@ -126,17 +127,17 @@ function Include_GunData(Size,LineNum)
 	CMov(FP,G_CA_CenterY,Var_TempTable[3])
 	CMov(FP,G_CA_Player,Var_TempTable[5])
 	DoActionsX(FP,{SetSwitch(RandSwitch,Random),SetCD(GunCaseCheck,0)})
-	CDoActions(FP,{Gun_SetLine(4,Add,1)})
+	CDoActions(FP,{Gun_SetLine(4,Add,1),RotatePlayer({DisplayTextX("다시 만나요",4)},HumanPlayers,FP)})
 	CIf_GCase(133)
-		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
+		G_CA_SetSpawn2X(nil,{53,54,55,56,80,88,77,76,17,21},"ACAS","L00_1_64F",1,582,nil,"CP")
 		CDoActions(FP,{Gun_DoSuspend()})
 	CIfEnd()
 	CIf_GCase(132)
-		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
+		G_CA_SetSpawn2X(nil,{53,54,55,56,80,88,77,76,17,21},"ACAS","L00_1_64F",1,523,nil,"CP")
 		CDoActions(FP,{Gun_DoSuspend()})
 	CIfEnd()
 	CIf_GCase(131)
-		G_CA_SetSpawn2X(nil,{53,54,55,56},"ACAS","L00_1_64F","MAX",nil,"CP")
+		G_CA_SetSpawn2X(nil,{53,54,55,56,80,88,77,76,17,21},"ACAS","L00_1_64F",1,397,nil,"CP")
 		CDoActions(FP,{Gun_DoSuspend()})
 	CIfEnd()
 

@@ -77,7 +77,7 @@ function Operator_Trig()
 local Print13T = CreateVar(FP)
 CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(Print13T,0)})
 	Print_13(FP,MapPlayers,nil)
-CIfEnd({print_utf8(12,0,StrDesign("\x10£Ô\x04£É£Í£Å£Ò£­\x07£°£°\x04£º\x0F£°£°\x04£º\x1F£°£° \x04¢Â \x07£Ì£Ö\x04£®£°£°£¯\x1C£µ£° \x04¢Â \x07£Å£Ø£Ð\x04£º£°£°£®£°£¥ ¢Â \x06£°£°£°\x04 ¢Â \x04£°£°£°£°"))})
+CIfEnd({})
 CAdd(FP,Print13T,Dt)
 CAdd(FP,Time1,Dt)
 Trigger { -- »¡°£¼ýÀÚ
@@ -90,6 +90,7 @@ Trigger { -- »¡°£¼ýÀÚ
 	actions = {
 		SetCVar(FP,RedNumberT[2],Subtract,9000*2);
 		SetCVar(FP,RedNumber[2],Subtract,1);
+		SetMemory(0x662350+(185*4),Subtract,256);
 		PreserveTrigger();
 	},
 }
@@ -110,10 +111,10 @@ CMov(FP,_Ccode(FP,TimeTmp),Time1)
 CMov(FP,_Ccode(FP,LevelTmp),Level)
 CMov(FP,_Ccode(FP,CountTmp),count)
 
-CIfX(FP,{CV(Level,49,AtMost)})
+CIfX(FP,{CV(Level,49,AtMost)},{print_utf8(12,0,StrDesign("\x10£Ô\x04£É£Í£Å£Ò£­\x07£°£°\x04£º\x0F£°£°\x04£º\x1F£°£° \x04¢Â \x07£Ì£Ö\x04£®£°£°£¯\x1C£µ£° \x04¢Â \x07£Å£Ø£Ð\x04£º"..string.rep("\x0D",GetStrSize(0,"£®")).."£°"..string.rep("\x0D",GetStrSize(0,"£®")).."£°£¥ ¢Â \x06£°£°£°\x04 ¢Â \x04£°£°£°£°"))})
 	f_Mul(FP,CurExpTmp,CurEXP,100)
 	f_Div(FP,_Ccode(FP,ExpTmp),CurExpTmp,MaxEXP)
-CElseX({SetCD(ExpTmp,100)})
+CElseX({SetCD(ExpTmp,100),print_utf8(12,0,StrDesign("\x10£Ô\x04£É£Í£Å£Ò£­\x07£°£°\x04£º\x0F£°£°\x04£º\x1F£°£° \x04¢Â \x07£Ì£Ö\x04£®£°£°£¯\x1C£µ£° \x04¢Â \x07£Å£Ø£Ð\x04£º£°£°"..string.rep("\x0D",GetStrSize(0,"£®")).."£°£¥ ¢Â \x06£°£°£°\x04 ¢Â \x04£°£°£°£°"))})
 CIfXEnd()
 
 CIf(FP,{CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})

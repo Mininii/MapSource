@@ -1,5 +1,6 @@
 function System()
     local CPlayer = CreateVar(FP)
+    local BCPos = CreateVar(FP)
 	Cast_UnitCount()
     AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
     AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
@@ -16,28 +17,39 @@ function System()
     DoActions(FP,MoveCp(Add,6*4))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,35,0,0xFF))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
-    CIf(FP,{Cond_EXCC(8,AtLeast,1)}) -- 영작유닛인식
+    CIf(FP,{Cond_EXCC(1,AtLeast,1)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
-    CIf(FP,{Cond_EXCC(7,AtLeast,1)}) -- 건작유닛인식
+    CIf(FP,{DeathsX(CurrentPlayer,Exactly,185,0,0xFF)}) -- 건작유닛인식
         f_SaveCp()
-        f_Read(FP,_Sub(BackupCp,15),CPos)
+        f_Read(FP,_Sub(BackupCp,15),BCPos)
         f_Read(FP,_Sub(BackupCp,6),CPlayer)
-        Convert_CPosXY()
-        Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-        CWhile(FP,{Cond_EXCC(7,AtLeast,1)})
+        Simple_SetLocX(FP,9,EXCC_TempVarArr[6],EXCC_TempVarArr[7],EXCC_TempVarArr[6],EXCC_TempVarArr[7])
+
+        for i = 7, 11 do
+        CWhile(FP,{Cond_EXCC(i,AtLeast,1)})
             CIf(FP,Memory(0x628438,AtLeast,1))
                 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-                CDoActions(FP,{TCreateUnit(1,_Mov(EXCC_TempVarArr[8],0xFF),1,_Mov(CPlayer,0xFF))})
-                f_Read(FP,_Add(Nextptrs,10),CPos)
-                Convert_CPosXY()
-                Simple_SetLocX(FP,9,EXCC_TempVarArr[6],EXCC_TempVarArr[7],EXCC_TempVarArr[6],EXCC_TempVarArr[7])
+                Convert_CPosXY(BCPos)
                 Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-                DoActions(FP,{Order("Men",Force2,1,Attack,10)})
+                for j = 0, 3 do
+                CTrigger(FP,{CVar(FP,CPlayer[2],Exactly,j+4,0xFF)},{TCreateUnitWithProperties(1,_Mov(EXCC_TempVarArr[i+1],0xFF),22+j,_Mov(CPlayer,0xFF),{energy = 100}),TMoveUnit(1,_Mov(EXCC_TempVarArr[i+1],0xFF),_Mov(CPlayer,0xFF),22+j,1)},1)
+                end
+                CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+                    f_Read(FP,_Add(Nextptrs,10),CPos)
+                    Convert_CPosXY()
+                    Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+                    DoActions(FP,{Order("Men",Force2,1,Attack,10)})
+                CIfEnd()
             CIfEnd()
-            CDoActions(FP,{Set_EXCC(7,SetTo,_Div(EXCC_TempVarArr[8],256))})
+            CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
         CWhileEnd()
+        end
+        for i = 0, 3 do
+            DoActions(FP,Order("Men",4+i,22+i,Attack,2+i))
+        end
+
         f_LoadCp()
     CIfEnd()
 --    CMov(FP,Gun_Type,0)
@@ -45,15 +57,52 @@ function System()
     f_GSend(131)
     f_GSend(132)
     f_GSend(133)
+    
+    --그외 잡건작
+    --{잡건작 번호,{유닛테이블},{도형스트링정보},{이펙트번호}}
+    OtherGunT = {
+        
 
+        {135,{{53},{103}},{"Star1","Circle1"},{982,983}},--히드라덴
+        {136,{{52},{54}},{"L00_1_164F","L00_1_64F"},{984,982}},--디파마운드
+        {137,{{56}},{"H00_1_64F"},{983}},--그레이터스파이어
+        {138,{{45},{51,104}},{"H00_1_128F","QNest"},{984,983}},--퀸네스트
+        {139,{{53,54}},{"EChamb"},{983}},--에볼루션챔버
+        {140,{{48}},{"H00_1_64L"},{983}},--울트라
+        {141,{{55}},{"H00_1_64F"},{983}},--스파이어
+        {142,{{54}},{"Circle2"},{982}},--스포닝풀
+
+    }
+    OtherG = def_sIndex()
+    for j, k in pairs(OtherGunT) do
+        NJumpX(FP,OtherG,DeathsX(CurrentPlayer,Exactly,k[1],0,0xFF))
+    end
     if TestStart == 1 then
         --f_GSend(146)
         --f_GSend(136)
     end
 
-
+    C_UID = CreateVar(FP)
 
     EXCC_ClearCalc(AddV(CurEXP,1))
+    NJumpXEnd(FP,OtherG)
+    f_SaveCp()
+    f_Read(FP,_Sub(BackupCp,15),CPos)
+    f_Read(FP,BackupCp,C_UID)
+    f_Read(FP,_Sub(BackupCp,6),G_CA_Player)
+    Convert_CPosXY()
+	CMov(FP,G_CA_CenterX,CPosX)
+	CMov(FP,G_CA_CenterY,CPosY)
+    for j, k in pairs(OtherGunT) do
+        for l,m in pairs(k[2]) do
+            G_CA_SetSpawn2X(CVar(FP,C_UID[2],Exactly,k[1],0xFF),m,"ACAS",k[3][l],1,k[4][l],nil,"CP")
+        end
+    end
+    f_LoadCp()
+
+
+
+    EXCC_ClearCalc()
     EXCC_Part2()
     EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
@@ -62,7 +111,7 @@ function System()
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
 		},
 		{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
-        SetDeathsX(19025+(84*i)+9,SetTo,0*16777216,0,0xFF000000),
+        SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
 		MoveCp(Add,19*4),
 		})
 	end

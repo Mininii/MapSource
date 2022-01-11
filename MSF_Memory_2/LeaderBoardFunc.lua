@@ -1,11 +1,13 @@
 function LeaderBoardF()
     
 	local LeaderBoardT = CreateCcode()
-    local CurAttackP = CreateCcode()
-
+	local Gun_TempRand = CreateVar(FP)
     CIf(FP,{CD(OPJump,1)})
 		
     for i = 0, 3 do
+        TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+			SetCp(4+i),RunAIScriptAt(JYD,2+i)
+        },{Preserved})
 --        TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 --            Order("Factories",P5+i,11+i,Attack,64),--트리거 인식상 Factories 처리 유닛들만 이동시킴
 --        },{Preserved})
@@ -48,17 +50,22 @@ function LeaderBoardF()
 			f_SaveCp()
 			CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
 	
-			local L_Gun_Order = def_sIndex()
 			local TargetRotation = CreateVar(FP)
 			local TargerXY = CreateVarArr(2,FP)
 			local CurXY = CreateVar(FP)
+			CMov(FP,TargetRotation,_Read(BackupCP),-4,0xFF)
+			for i = 0, 3 do
+				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
+				local L_Gun_Order = def_sIndex()
+				NJumpXEnd(FP,L_Gun_Order)
+				f_Mod(FP,Gun_TempRand,_Rand(),_Mov(4))
+				NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+				CMov(FP,TargetRotation,Gun_TempRand)
+				CIfEnd()
+			end
 			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			
-			NJumpXEnd(FP,L_Gun_Order)
-			for i = 0, 3 do
-				TriggerX(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)},{AddV(TargetRotation,1)},{Preserved}) -- 타겟 설정 시 플레이어가 없을 경우 타겟번호+1
-			end
-			TriggerX(FP,{CV(TargetRotation,4,AtLeast)},{SetV(TargetRotation,0)},{Preserved}) -- 타겟번호가 4 이상일 경우 0으로 재설정
+			
 			for i = 0, 3 do
 				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i)}) -- 설정된 타겟의 배럭 좌표를 가져옴
 					CMov(FP,TargerXY[1],TargetArr[i+1][1],2)

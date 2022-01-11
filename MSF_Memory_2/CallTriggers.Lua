@@ -47,7 +47,7 @@ function Install_CallTriggers()
 		TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
 		})
 		CDoActions(FP,{
-			Set_EXCC2(DUnitCalc,CunitIndex,8,SetTo,1),
+			Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
 			Set_EXCC2(DUnitCalc,CunitIndex,0,SetTo,Gun_LV),
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
 		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈

@@ -94,7 +94,7 @@ function Interface()
 		actions = {
 			RemoveUnitAt(1,"Terran Vulture","Anywhere",CurrentPlayer);
 			SetDeaths(CurrentPlayer,SetTo,1,"Terran Barracks");
-			DisplayText(StrDesign("\x04자동환전을 사용하셨습니다. - \x1F2000 O r e"),4);
+			DisplayText(StrDesign("\x07자동환전\x04을 사용하셨습니다."),4);
 			PreserveTrigger();
 		},
 	}
