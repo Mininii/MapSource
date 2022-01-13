@@ -895,7 +895,7 @@ SCDBDataSize : 4
 E_SCDBSet
 S_FileManagerSET
 statlang : 0
-stattextdicCount : 33
+stattextdicCount : 34
 stattextdickey0 : 1303
 stattextdicvalue0 : <1>★<14>-- <28>G<22>uardians <17>of <3>G<15>a<16>L<15>a<3>X<15>y<14><14> --<2>★
 stattextdickey1 : 1354
@@ -957,11 +957,13 @@ stattextdicvalue28 : f<2>▶ <31>히든 <24>업그레이드 <27>단축키 <24>: 
 stattextdickey29 : 1493
 stattextdicvalue29 : t<0>Use S<3>t<1>im Packs
 stattextdickey30 : 1492
-stattextdicvalue30 : d<0>Set Unit Order To: Junk Yard <3>D<1>og
+stattextdicvalue30 : x<0>Set Unit Order To: Junk Yard Dog(<3>X<1>)
 stattextdickey31 : 1491
 stattextdicvalue31 : o<0><7>★ <24>마우스 <15>로케이션 <29>멀티 <27>커맨드 <4>사용 (<3>O<4>) <7>★
 stattextdickey32 : 1490
 stattextdicvalue32 : e<0><7>★ <17>스킬 <31>ON <4>/ <6>OFF <4>(<3>E<4>) <7>★
+stattextdickey33 : 333
+stattextdicvalue33 : t<0>Use S<3>t<1>im Packs
 wireuse : True
 E_FileManagerSET
 S_TriggerEditorSET

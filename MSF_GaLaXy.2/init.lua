@@ -578,6 +578,7 @@ function SetZergGroupFlags(UnitID)
 	CA2ArrX = CVArray(FP,1700)
 	CA2ArrY = CVArray(FP,1700)
 	CA2ArrZ = CVArray(FP,1700)
+	MultiCon = CreateCcode()
 	Str25 = {}
 	Str26 = {}
 	Str27 = {}

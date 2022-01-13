@@ -29,9 +29,9 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 1
+Limit = 0
 GunSafety = 0
-VName = "Ver.1.8"
+VName = "Ver.1.9"
 SetFixedPlayer(FP)
 StartCtrig()
 onInit()
@@ -2505,7 +2505,6 @@ conditions = {
 },
 actions = {
 	SetCDeaths(FP,SetTo,1,isSingle);
-	SetSwitch("Switch 211",Set);
 	
 },
 }
@@ -5032,6 +5031,15 @@ SetMemoryX(0x581DDC,SetTo,166*256,0xFF00); --P8 ¹Ì´Ï¸Ê
 		
 },
 }
+DoActions(FP,{
+	
+SetMemoryB(0x57F27C+(228*0)+54,SetTo,0);
+SetMemoryB(0x57F27C+(228*1)+54,SetTo,0);
+SetMemoryB(0x57F27C+(228*2)+54,SetTo,0);
+SetMemoryB(0x57F27C+(228*3)+54,SetTo,0);
+SetMemoryB(0x57F27C+(228*4)+54,SetTo,0);
+SetMemoryB(0x57F27C+(228*5)+54,SetTo,0);
+})
 
 TriggerX(FP,{CDeaths(FP,AtLeast,1,MarMode)},MarModePatch)
 CIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
@@ -5054,6 +5062,27 @@ Trigger {
 }
 
 
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,HiddenPts[2],AtLeast,1);
+		CVar(FP,HiddenHP[2],AtLeast,1);
+		CVar(FP,HiddenATK[2],AtLeast,1);
+		
+	},
+	actions = {
+		SetMemoryB(0x57F27C+(228*0)+54,SetTo,1);
+		SetMemoryB(0x57F27C+(228*1)+54,SetTo,1);
+		SetMemoryB(0x57F27C+(228*2)+54,SetTo,1);
+		SetMemoryB(0x57F27C+(228*3)+54,SetTo,1);
+		SetMemoryB(0x57F27C+(228*4)+54,SetTo,1);
+		SetMemoryB(0x57F27C+(228*5)+54,SetTo,1);
+		SetCDeaths(FP,SetTo,1,MultiCon);
+		SetSwitch("Switch 211",Set);
+		
+	}
+}
 
 
 for i = 1, 5 do
@@ -5223,14 +5252,14 @@ CIfEnd()
 TriggerX(FP,{CDeaths(FP,AtLeast,1,isSingle)},{
 SetMemoryX(0x581DAC,SetTo,51*65536,0xFF0000), --P8ÄÃ·¯
 SetMemoryX(0x581DDC,SetTo,51*256,0xFF00); --P8 ¹Ì´Ï¸Ê
+SetMemoryB(0x57F27C+(228*0)+54,SetTo,1);
+SetMemoryB(0x57F27C+(228*1)+54,SetTo,1);
+SetMemoryB(0x57F27C+(228*2)+54,SetTo,1);
+SetMemoryB(0x57F27C+(228*3)+54,SetTo,1);
+SetMemoryB(0x57F27C+(228*4)+54,SetTo,1);
+SetMemoryB(0x57F27C+(228*5)+54,SetTo,1);
 })
-TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{
-	SetMemoryB(0x57F27C+(228*0)+54,SetTo,0);
-	SetMemoryB(0x57F27C+(228*1)+54,SetTo,0);
-	SetMemoryB(0x57F27C+(228*2)+54,SetTo,0);
-	SetMemoryB(0x57F27C+(228*3)+54,SetTo,0);
-	SetMemoryB(0x57F27C+(228*4)+54,SetTo,0);
-	SetMemoryB(0x57F27C+(228*5)+54,SetTo,0);
+TriggerX(FP,{},{
 })
 
 
@@ -7078,7 +7107,7 @@ NIfEnd()
 
 
 BKillPoint({CDeaths(FP,AtLeast,6000,GunBossAct),CDeaths(FP,AtLeast,2,FormCon)},82,2000000,"\x08£Ç\x11£á£ò\x18£Ç\x10£á£î\x1F£Ô\x17£õ\x0F£Á")
-NIf(FP,Command(FP,AtLeast,1,5))
+NIf(FP,Bring(FP,AtLeast,1,5,64))
 local TBossT = CreateCcode()
 
 --
@@ -7178,7 +7207,7 @@ NIfEnd()
 NWhileEnd()
 NIfEnd()
 
-NIf(FP,Command(FP,AtLeast,1,11))
+NIf(FP,Bring(FP,AtLeast,1,11,64))
 CTrigger(FP,CVar(FP,DBossPlaguePatch[2],AtLeast,1),{TSetMemoryX(DBossPlaguePatch,SetTo,0,0xFF0000)},1)
 DoActions(FP,SetSwitch("Switch 1",Random))
 Trigger {
@@ -7812,7 +7841,7 @@ CMov(FP,0x6509B0,FP)
 DoActions(FP,SetDeaths(Force1,SetTo,0,8))
 CIfEnd()
 
-CIf(FP,CDeaths(FP,AtLeast,1,isSingle))
+CIf(FP,CDeaths(FP,AtLeast,1,MultiCon))
 local OrderCool = CreateCCodeArr(6)
 local CUnitFlag = CreateCcode()
 local MulCon = CreateVarArr(6,FP)
@@ -7901,7 +7930,7 @@ TriggerX(FP,{CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{Prese
 end
 DoActionsX(FP,OrderCooltime2)
 
-CIfEnd()--isSingle
+CIfEnd()--MultiCon
 
 CIf(FP,CDeaths(FP,AtLeast,100,ZombieCheck),SetCDeaths(FP,Subtract,100,ZombieCheck))
 CMov(FP,0x6509B0,19025)

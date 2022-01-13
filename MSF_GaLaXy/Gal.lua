@@ -3,7 +3,7 @@
 -- CtrgAsm 제작자 -  Ninfia
 
 TestModeOnOff=0
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+Curdir="C:\\Users\\USER\\Documents\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -142,7 +142,7 @@ Trigger { -- 기본 세팅 트리거
 		SetMemory(0x58F514,SetTo,3);
 		SetMemory(0x58F5F8,SetTo,200);
 		SetMemory(0x58F5FC,SetTo,5);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 	},
 }
 
@@ -629,13 +629,13 @@ end
 CIfEnd()
 
 DoActionsPX(SetCDeathsF(P6,Add,1,ModeT),P6)
-Trigger { -- 싱글플 불가능 맵
+Trigger { -- 멀티플 불가능 맵
 players = {AllPlayers},
 conditions = {
-Memory(0x57F0B4, Exactly, 0);
+Memory(0x57F0B4, AtLeast, 1);
 },
 actions = {
-		DisplayText("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.",4);
+		DisplayText("\x13\x04멀티플레이로는 플레이할 수 없습니다. 싱글플레이로 시작해주세요.",4);
 		PlayWAV("sound\\Misc\\TPwrDown.wav");
 		Victory();
 },
@@ -841,31 +841,31 @@ Trigger { -- 모드 선택 타임오버
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		RemoveUnit("Bengalaas (Jungle)",AllPlayers);
 		RemoveUnit("▶ Unknown ◀",AllPlayers);
@@ -1280,19 +1280,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1319,19 +1319,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1357,19 +1357,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1396,19 +1396,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		CenterView("Location 8");
+		--centerview("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1432,31 +1432,31 @@ Trigger { -- 갤럭시 이지모드 선택
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,Intro);
 		RemoveUnit("Bengalaas (Jungle)",AllPlayers);
@@ -1479,31 +1479,31 @@ Trigger { -- 갤럭시 하드모드 선택
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,Intro);
 		SetCDeathsF(P6,SetTo,1,GMode);
@@ -1994,15 +1994,15 @@ Trigger { -- 인트로 작동중 화면 중앙고정
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		PreserveTrigger();
 		},
@@ -2168,7 +2168,7 @@ Trigger { -- 3
 		CDeathsF(P6,AtLeast,50,IntroT);
 	},
 	actions = {
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		SetMemory(0x5124F0, SetTo, 0x0000001D);
 		PlayWAV("sound\\glue\\countdown.wav");
@@ -2182,19 +2182,19 @@ Trigger { -- 3 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2208,7 +2208,7 @@ Trigger { -- 2
 		CDeathsF(P6,AtLeast,80,IntroT);
 	},
 	actions = {
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		
@@ -2222,19 +2222,19 @@ Trigger { -- 2 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2248,7 +2248,7 @@ Trigger { -- 1
 		CDeathsF(P6,AtLeast,110,IntroT);
 	},
 	actions = {
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 	},
@@ -2261,19 +2261,19 @@ Trigger { -- 1 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		CenterView("Anywhere");
+		--centerview("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2291,31 +2291,31 @@ Trigger { -- 시작, 스타트 세팅
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		CenterView("Heal");
+		--centerview("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,1);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		CenterView("Heal");
+		--centerview("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,2);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		CenterView("Heal");
+		--centerview("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,3);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		CenterView("Heal");
+		--centerview("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,4);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		CenterView("Heal");
+		--centerview("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,MarineMove);
