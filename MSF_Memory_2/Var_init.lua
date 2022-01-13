@@ -174,6 +174,9 @@ CreateHeroPointArr(80,58000,8900,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese
 CreateHeroPointArr(102,150000,0,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),100000,nil,1)
 CreateHeroPointArr(100,100000,0,"\x1F소\x04멸자 "..Conv_HStr("<1F>E<04>clipse"),85000,nil,1)
 CreateHeroPointArr(150,80000,0,"\x19선\x04물 "..Conv_HStr("<19>B<04>onus"),35000,2,1)
+CreateHeroPointArr(176,10000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15500,2,1)
+CreateHeroPointArr(177,10000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15500,2,1)
+CreateHeroPointArr(178,10000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15500,2,1)
 CreateHeroPointArr(22,35000,0,"\x1F부\x04정자 "..Conv_HStr("<1F>A<4>dverse"),55000,nil,1)
 CreateHeroPointArr(70,35000,22000,"\x1F나\x04락 "..Conv_HStr("<1F>F<04>allen"),75000,nil,1)
 

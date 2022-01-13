@@ -11,6 +11,7 @@ function Interface()
 			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),SetV(CurEXP,0x7FFFFFFF)})
 		end
 	end
+	DoActions(Force1,{SetAllianceStatus(Force1,Ally),SetAllianceStatus(P12,Enemy),ModifyUnitEnergy(All,"Men",P12,64,0),RemoveUnit("Men",P12)})
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다."),

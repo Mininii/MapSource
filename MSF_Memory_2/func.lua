@@ -1030,6 +1030,8 @@ local G_CA_CPTV = CreateVar(FP)
 local G_CA_EFTV = CreateVar(FP)
 local G_CA_XPos = CreateVar(FP)
 local G_CA_YPos = CreateVar(FP)
+local G_CA_SMTV = CreateVar(FP)
+
 local SL_TempV = Create_VTable(4)
 local SL_Ret = CreateVar(FP)
 local TRepeatX = CreateVar(FP)
@@ -1309,6 +1311,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,12*(0x20/4)),SetTo,G_CA_CUTV[4]),
 	TSetMemory(_Add(G_CA_LineTemp,13*(0x20/4)),SetTo,G_CA_CUTV[5]),
 	TSetMemory(_Add(G_CA_LineTemp,14*(0x20/4)),SetTo,G_CA_EFTV),
+	TSetMemory(_Add(G_CA_LineTemp,15*(0x20/4)),SetTo,G_CA_SMTV),
 	
 })
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
@@ -1344,7 +1347,7 @@ SetCallEnd()
 
 local CA_TempUID = CreateVar(FP)
 local CA_Suspend = CreateCcode()
-local G_CA_Temp = Create_VTable(10)
+local G_CA_Temp = Create_VTable(11)
 
 Call_CA_Repeat = SetCallForward()
 SetCall(FP)
@@ -1360,12 +1363,15 @@ local G_CA_Launch = CreateCcode()
 function CA_Repeat()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
-	CIfX(FP,{})
 	CMov(FP,G_CA_X,V(CA[8]))
 	CMov(FP,G_CA_Y,V(CA[9]))
+	CIf(FP,{CVar(FP,G_CA_Temp[11][2],AtLeast,1)})
+		CIf(FP,{TTCVar(FP,G_CA_Temp[11][2],"<",V(CA[10]))})
+			CMov(FP,V(CA[10]),G_CA_Temp[11])
+		CIfEnd()
+	CIfEnd()
+
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
-	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})
-	CIfXEnd()
 end
 
 function CA_Func1()
@@ -1464,7 +1470,7 @@ function T_to_BiteBuffer(Table)
 	return BiteValue
 end
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,CenterXY,Owner,PreserveFlag)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,CenterXY,Owner,G_CA_SMTable,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	end
@@ -1477,6 +1483,11 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
 	elseif G_CA_SLTable == nil then
 		G_CA_SetSpawn_Inputdata_Error()
+	end
+	if type(G_CA_SMTable) ~= "table" then
+		G_CA_SMTable = {G_CA_SMTable,G_CA_SMTable,G_CA_SMTable,G_CA_SMTable}
+	elseif G_CA_SMTable == nil then
+		G_CA_SMTable = {0,0,0,0}
 	end
 	if type(G_CA_RepeatType) ~= "table" then
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
@@ -1545,13 +1556,14 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
 		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y,
 		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
+		SetCVar(FP,G_CA_SMTV[2],SetTo,T_to_BiteBuffer(G_CA_SMTable)),
 		SetCVar(FP,G_CA_EFTV[2],SetTo,0),
 		
 	},PreserveFlag)
 end
 
 
-function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,PreserveFlag)
+function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,MaxNum,PreserveFlag)
 	local Z = {}
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
@@ -1642,6 +1654,9 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 	elseif Owner == "CP" then
 		Owner = 0x7FFFFFFF
 	end
+	if MaxNum == nil then
+		MaxNum = 0
+	end
 	local Ef = {}
 	--if EffType == nil then EffType = 0 
 	--else Ef = {SetMemoryB(0x667718+EffType,SetTo,0)}
@@ -1657,7 +1672,9 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
 		SetCVar(FP,G_CA_RPTV[2],SetTo,100),Y,Ef,
 		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
-		SetCVar(FP,G_CA_EFTV[2],SetTo,EffType),RotatePlayer({DisplayTextX("잘있어요",4)},HumanPlayers,FP)
+		SetCVar(FP,G_CA_EFTV[2],SetTo,EffType),
+		
+		SetCVar(FP,G_CA_SMTV[2],SetTo,MaxNum),
 
 	},PreserveFlag)
 end
@@ -1680,6 +1697,7 @@ function Install_Call_G_CA()
 				TSetCVar(FP,G_CA_Temp[8][2],SetTo,G_CA_TempTable[8]),
 				TSetCVar(FP,G_CA_Temp[9][2],SetTo,G_CA_TempTable[9]),
 				TSetCVar(FP,G_CA_Temp[10][2],SetTo,G_CA_TempTable[10]),
+				TSetCVar(FP,G_CA_Temp[11][2],SetTo,G_CA_TempTable[16]),
 			})
 			CallTrigger(FP,Load_CAPlot_Shape)
 			CIfX(FP,{CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtMost,0,CA_Suspend)})
@@ -1691,6 +1709,7 @@ function Install_Call_G_CA()
 					TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,G_CA_Temp[5],0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,G_CA_Temp[6],0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,G_CA_Temp[7],0xFF),
+					TSetMemoryX(Vi(G_CA_TempH[2],15*(0x20/4)),SetTo,G_CA_Temp[11],0xFF),
 				})
 			CElseIfX({TTCVar(FP,G_CA_TempTable[6][2],NotSame,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			CDoActions(FP,{
@@ -1701,6 +1720,7 @@ function Install_Call_G_CA()
 				TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
 				TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
 				TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0,0xFF),
+				TSetMemoryX(Vi(G_CA_TempH[2],15*(0x20/4)),SetTo,0,0xFF),
 			})
 			CElseIfX({CVar(FP,G_CA_TempTable[6][2],Exactly,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			CDoActions(FP,{
@@ -1715,6 +1735,8 @@ function Install_Call_G_CA()
 				TSetMemory(Vi(G_CA_TempH[2],11*(0x20/4)),SetTo,0),
 				TSetMemory(Vi(G_CA_TempH[2],12*(0x20/4)),SetTo,0),
 				TSetMemory(Vi(G_CA_TempH[2],13*(0x20/4)),SetTo,0),
+				TSetMemory(Vi(G_CA_TempH[2],14*(0x20/4)),SetTo,0),
+				TSetMemory(Vi(G_CA_TempH[2],15*(0x20/4)),SetTo,0),
 			})
 
 			if Limit == 1 then
@@ -1733,9 +1755,10 @@ function Install_Call_G_CA()
 					TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0,0xFF),
+					TSetMemoryX(Vi(G_CA_TempH[2],15*(0x20/4)),SetTo,0,0xFF),
 				})
 			CIfXEnd()
-		CElseifX({CVar(FP,G_CA_TempTable[1][2],AtMost,0,0xFF),CVar(FP,G_CA_TempTable[1][2],AtLeast,1)})
+		CElseIfX({CVar(FP,G_CA_TempTable[1][2],AtMost,0,0xFF),CVar(FP,G_CA_TempTable[1][2],AtLeast,1)})
 			CDoActions(FP,{
 			TSetMemory(Vi(G_CA_TempH[2],0*(0x20/4)),SetTo,_Div(G_CA_TempTable[1],_Mov(256))),
 			TSetMemory(Vi(G_CA_TempH[2],1*(0x20/4)),SetTo,_Div(G_CA_TempTable[2],_Mov(256))),
@@ -1744,6 +1767,7 @@ function Install_Call_G_CA()
 			TSetMemory(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,_Div(G_CA_TempTable[5],_Mov(256))),
 			TSetMemory(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,_Div(G_CA_TempTable[6],_Mov(256))),
 			TSetMemory(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,_Div(G_CA_TempTable[7],_Mov(256))),
+			TSetMemory(Vi(G_CA_TempH[2],15*(0x20/4)),SetTo,_Div(G_CA_TempTable[16],_Mov(256))),
 		})
 		CIfXEnd()
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CA_Launch)})

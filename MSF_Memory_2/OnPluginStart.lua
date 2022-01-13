@@ -96,16 +96,19 @@ function init() -- ¸Ê ½ÇÇà½Ã 1È¸ ½ÇÇà Æ®¸®°Å
 		table.insert(PatchArr,SetMemoryB(0x6637A0 + (UnitID),SetTo,Value))
 	end
 	for j, k in pairs(HeroPointArr) do
+		if k[2]~=150 and k[2]~=176 and k[2]~=177 and k[2]~=178 then
 		SetGroupFlags(k[2],0xA)
 		SetUnitAdvFlag(k[2],0x40,0x8000+0x40)
-		table.insert(PatchArr,SetMemory(0x662350 + (k[2]*4),SetTo,k[5]))
 		table.insert(PatchArr,SetMemoryB(0x660178 + (k[2]),SetTo,3))
-		table.insert(PatchArr,SetMemoryW(0x660E00 + (k[2]*2),SetTo,k[6]))
 		if k[4] == 1 then
 			SetUnitClass(k[2],162) -- ÆÛµ©À¯´Ö
 		else
 			SetUnitClass(k[2],161) -- ÀÏ¹ÝÀ¯´Ö
 		end
+	end
+
+		table.insert(PatchArr,SetMemory(0x662350 + (k[2]*4),SetTo,k[5]))
+		table.insert(PatchArr,SetMemoryW(0x660E00 + (k[2]*2),SetTo,k[6]))
 		
 	end
 	SetGroupFlags(15,0x9)
@@ -131,6 +134,8 @@ function init() -- ¸Ê ½ÇÇà½Ã 1È¸ ½ÇÇà Æ®¸®°Å
 	for i = 63, 70 do
 		UnitEnable(i) -- ¿ø°Ý½ºÆÀÆÑ
 	end
+	UnitSizePatch(55,6,6,6,6) 
+	UnitSizePatch(56,6,6,6,6) 
 	
 	UnitEnable(71) -- ¿ø°Ý½ºÆÀÆÑ
 	UnitEnable(2) -- ÀÚÈ¯

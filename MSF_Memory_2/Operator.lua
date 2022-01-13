@@ -39,6 +39,7 @@ function Operator_Trig()
 			PreserveTrigger();
 		}
 		}
+		
 		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
 			CMov(FP,0x6509B0,Cunit2,25)
 			Trigger {
@@ -65,7 +66,17 @@ function Operator_Trig()
 					PreserveTrigger();
 				}
 			}
+			CMov(FP,0x6509B0,FP)--상위플레이어 단락
 		CIfEnd()
+		
+		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
+		CMov(FP,0x6509B0,Cunit2,19)
+		f_SaveCp()
+		CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCP),65536),0xFF000000)})
+		f_LoadCp()
+		CMov(FP,0x6509B0,FP)--상위플레이어 단락
+		CIfEnd()
+
 	CIfEnd()
 
 	CMov(FP,0x6509B0,FP)--상위플레이어 단락

@@ -12,8 +12,8 @@ function M2_Install_Shape()
 	Circle1 = CSMakeCircle(18,32*7,0,19,1)
 	Circle2 = CSMakeCircle(36,32*7,0,37,1)
 	Star1 = CSMakeStar(6,165-(12*(6-2)),((32*6)-(32*1))/2,180,PlotSizeCalc(6*2,2),PlotSizeCalc(6*2,1))
-	QNest = CSMakePolygon(4,64,0,PlotSizeCalc(4,5),PlotSizeCalc(4,4))
-	EChamb = CSMakePolygon(6,64,0,PlotSizeCalc(6,6),PlotSizeCalc(6,5))
+	QNest = CSMakePolygon(4,48,0,PlotSizeCalc(4,5),PlotSizeCalc(4,4))
+	EChamb = CSMakePolygon(6,32,0,PlotSizeCalc(6,6),PlotSizeCalc(6,5))
 
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
 	H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
@@ -54,7 +54,7 @@ function M2_Install_Shape()
 		"H00_1_128F",
 		"QNest",
 		"EChamb",
-		"H00_1_64L","L00_1_164F"}
+		"H00_1_64L","L00_1_164F","L00_1_128F","H00_1_96F"}
 	)
 
 

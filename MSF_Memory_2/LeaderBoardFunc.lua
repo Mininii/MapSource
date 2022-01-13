@@ -8,6 +8,12 @@ function LeaderBoardF()
         TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			SetCp(4+i),RunAIScriptAt(JYD,2+i)
         },{Preserved})
+        TriggerX(FP,{PlayerCheck(i,1),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+			Order("Factories",4+i,64,Attack,2+i)
+        },{Preserved})
+        TriggerX(FP,{PlayerCheck(i,0)},{
+			RemoveUnit(35,4+i),RemoveUnit(42,4+i)
+        },{Preserved})
 --        TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 --            Order("Factories",P5+i,11+i,Attack,64),--트리거 인식상 Factories 처리 유닛들만 이동시킴
 --        },{Preserved})
@@ -16,7 +22,7 @@ function LeaderBoardF()
 --        },{Preserved})
     end
 
-	CIf(FP,{ElapsedTime(AtLeast,60*10),CDeaths(FP,Exactly,150,LeaderBoardT),})-- 리더보드 타이머가 주기적으로 정확히 200일 경우 내린 명령이 없어 멈춰있는 유닛에 명령을 내리는 코드. 오버마인드 존재해야함
+	CIf(FP,{ElapsedTime(AtLeast,60),CDeaths(FP,Exactly,0,LeaderBoardT),},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	
@@ -37,11 +43,15 @@ function LeaderBoardF()
 
 
 		CIf(FP,{TTOR({ -- 컴퓨터 유닛은 명령이 없어 대기하고 있을 경우 2, 3, 156, 160 네가지의 명령 타입으로 설정됨. 이를 전부 잡아줘야됨
-			DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),
-			DeathsX(CurrentPlayer,Exactly,3*256,0,0xFF00),
-			DeathsX(CurrentPlayer,Exactly,156*256,0,0xFF00),
-			DeathsX(CurrentPlayer,Exactly,160*256,0,0xFF00),
-		})})
+		DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,3*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,156*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,187*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,157*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,158*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,159*256,0,0xFF00),
+		DeathsX(CurrentPlayer,Exactly,160*256,0,0xFF00),
+	})})
 			DoActions(FP,MoveCp(Add,6*4))
 			local Check_Hero = def_sIndex()
 			for j, k in pairs(HeroPointArr) do
@@ -53,13 +63,19 @@ function LeaderBoardF()
 			local TargetRotation = CreateVar(FP)
 			local TargerXY = CreateVarArr(2,FP)
 			local CurXY = CreateVar(FP)
-			CMov(FP,TargetRotation,_Read(BackupCP),-4,0xFF)
+			CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
 			for i = 0, 3 do
 				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
 				local L_Gun_Order = def_sIndex()
 				NJumpXEnd(FP,L_Gun_Order)
-				f_Mod(FP,Gun_TempRand,_Rand(),_Mov(4))
-				NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+				DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,0)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,1)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,2)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,3)},{Preserved})
+				for j = 0, 3 do
+				NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+				end
 				CMov(FP,TargetRotation,Gun_TempRand)
 				CIfEnd()
 			end
