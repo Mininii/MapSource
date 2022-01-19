@@ -1102,14 +1102,16 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
 		CIfXEnd()
 
-		CIfX(FP,{CVar(FP,RepeatType[2],Exactly,100)},{RotatePlayer({DisplayTextX("안녕하세요",4)},HumanPlayers,FP)})
+		CIfX(FP,{CVar(FP,RepeatType[2],Exactly,100)},{})
 		local EffType = G_CA_TempTable[15]
 		local ScriptBak = CreateVar(FP)
-		f_Read(FP,Vi(EffType[2],EPDF(0x66EC48)),ScriptBak)
+		local Script2 = CreateVar(FP)
+		CMov(FP,Script2,EffType,EPDF(0x66EC48))
+		CMov(FP,ScriptBak,_Read(Script2),nil,0xFFFF)
 		CDoActions(FP,{TSetMemoryX(0x6663C4, SetTo, EffType,0xFFFF),
-			TSetMemory(Vi(EffType[2],EPDF(0x66EC48)),SetTo,165),
+			TSetMemory(Script2,SetTo,165),
 			TCreateUnitWithProperties(1,185,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),
-			TSetMemory(Vi(EffType[2],EPDF(0x66EC48)),SetTo,ScriptBak)
+			TSetMemory(Script2,SetTo,ScriptBak)
 		})
 		CElseX()
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기

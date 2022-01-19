@@ -140,7 +140,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitEnable(71) -- 원격스팀팩
 	UnitEnable(2) -- 자환
 	UnitEnable(19,25000) -- 수정보호막
-	UnitEnable(8,25000,nil,5,2) -- 마린
+	UnitEnable(8,25000,nil,5) -- 마린
 	UnitEnable(7,500) -- SCV
 	
 	UnitEnable(125,8000)
