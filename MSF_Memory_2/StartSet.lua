@@ -30,6 +30,8 @@ Trigger {
 		KillUnit("Vespene Geyser",AllPlayers);
 		ModifyUnitShields(All,174,AllPlayers,"Anywhere",100); --174 Temple
 		ModifyUnitShields(All,200,AllPlayers,"Anywhere",100); --200 Generator
+		ModifyUnitShields(All,184,AllPlayers,"Anywhere",100); --200 Generator
+		
 		ModifyUnitEnergy(All,8,Force2,"Anywhere",100);
 		PreserveTrigger();
 	}

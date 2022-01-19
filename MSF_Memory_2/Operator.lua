@@ -10,6 +10,27 @@ function Operator_Trig()
 		SetMemoryB(0x57F27C + (2 * 228) + 60,SetTo,0),
 		SetMemoryB(0x57F27C + (3 * 228) + 60,SetTo,0)
 	})
+	for i = 0, 3 do
+		CIf(FP,{PlayerCheck(i,1),})
+
+        f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
+		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
+		CMov(FP,0x6509B0,Cunit2,25)
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)})
+			DoActionsX(FP,{
+                SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*25,0),
+			})
+			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{Preserved})
+
+			CAdd(FP,0x6509B0,7)
+			
+			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),SetCDeaths(FP,Add,1,EEggCode),RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{Preserved})
+			
+		CMov(FP,0x6509B0,FP)
+		CIfEnd()
+		CIfEnd()
+		CIfEnd()
+	end
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 3 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})

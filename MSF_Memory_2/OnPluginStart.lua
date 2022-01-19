@@ -111,6 +111,9 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryW(0x660E00 + (k[2]*2),SetTo,k[6]))
 		
 	end
+	table.insert(PatchArr,SetMemory(0x662350 + (131*4),SetTo,25000*256))
+	table.insert(PatchArr,SetMemory(0x662350 + (132*4),SetTo,50000*256))
+	table.insert(PatchArr,SetMemory(0x662350 + (133*4),SetTo,100000*256))
 	SetGroupFlags(15,0x9)
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + BanToken[1],SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + BanToken[1],SetTo,0))
@@ -134,8 +137,44 @@ function init() -- 맵 실행시 1회 실행 트리거
 	for i = 63, 70 do
 		UnitEnable(i) -- 원격스팀팩
 	end
-	UnitSizePatch(55,6,6,6,6) 
-	UnitSizePatch(56,6,6,6,6) 
+	UnitSizePatch(55,9,9,9,9) 
+	UnitSizePatch(56,9,9,9,9) 
+	UnitSizePatch(17,11,11,11,11)
+	UnitSizePatch(19,10,10,10,10)
+	UnitSizePatch(77,8,4,8,10)
+	UnitSizePatch(78,9,9,10,10)
+	UnitSizePatch(52,8,8,8,8)
+	UnitSizePatch(10,6,8,6,9)
+	UnitSizePatch(76,8,8,9,9)
+	UnitSizePatch(63,8,8,9,9)
+	UnitSizePatch(21,4,4,4,4)
+	UnitSizePatch(88,4,4,4,4)
+	UnitSizePatch(28,4,4,4,4)
+	UnitSizePatch(86,4,4,4,4)
+	UnitSizePatch(22,4,4,4,4)
+	UnitSizePatch(75,6,6,6,6)
+	UnitSizePatch(79,7,7,7,7)
+	UnitSizePatch(80,4,4,4,4)
+	UnitSizePatch(25,10,10,10,10)
+	UnitSizePatch(27,4,4,4,4)
+	UnitSizePatch(102,4,4,4,4)
+	UnitSizePatch(60,4,4,4,4)
+	UnitSizePatch(30,1,1,1,1)
+	UnitSizePatch(67,7,7,7,7)
+	UnitSizePatch(71,4,4,4,4)
+	UnitSizePatch(61,6,6,6,6)
+	UnitSizePatch(29,4,4,4,4)
+	UnitSizePatch(23,10,10,10,10)
+	UnitSizePatch(81,10,10,10,10)
+	UnitSizePatch(98,4,4,4,4)
+	UnitSizePatch(68,8,8,9,9)
+	UnitSizePatch(65,8,4,8,10)
+	UnitSizePatch(66,9,9,10,10)
+	UnitSizePatch(57,4,4,4,4)
+	UnitSizePatch(8,4,4,4,4)
+	UnitSizePatch(3,11,11,11,11)
+	UnitSizePatch(70,4,4,4,4)
+
 	
 	UnitEnable(71) -- 원격스팀팩
 	UnitEnable(2) -- 자환
@@ -190,9 +229,12 @@ function init() -- 맵 실행시 1회 실행 트리거
 	_0DPatchforVArr(FP,Names[i+1],4)
 	Install_CText1(MarTblPtr[i+1],Str12,Str02[i+1],Names[i+1])
 	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D)
+	f_GetStrXptr(FP,EEggStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D)
 	
 	Install_CText1(ShTStrPtr[i+1],Str12,Str13,Names[i+1])
+	Install_CText1(EEggStrPtr[i+1],Str12,EEggStr,Names[i+1])
 	end
+	
 
 	f_GetTblptr(FP,NMDMGTblPtr,1463)
 	f_GetTblptr(FP,PerDMGTblPtr,1464)
@@ -213,6 +255,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
+	DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	G_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
@@ -511,7 +554,8 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 				TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
 				TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
 				})
-				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
+				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,0x10000,0,0x10000)},1) -- 0x10000 무적플래그
+				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x40000000,0x40000000)},{SetDeathsX(CurrentPlayer,SetTo,0x20000,0,0x20000)},1) -- 0x20000 할루시플래그
 			--CDoActions(FP,{
 			--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*8)/4))),SetTo,1),
 			--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),DUnitCalc[3]),SetTo,Gun_LV)})

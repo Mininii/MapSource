@@ -18,6 +18,9 @@ function M2_Install_Shape()
 	--해처리
 	Circle3 = CSMakeCircle(6,48,0,PlotSizeCalc(6,3),0) --1
 	Polygon6 = CSMakePolygon(6,48,0,PlotSizeCalc(6,3),0) --2
+	Polygon6_2 = CSMakePolygon(6,24,0,PlotSizeCalc(6,5),0) --3
+	Circle6_2 = CSMakeCircle(6,24,0,PlotSizeCalc(6,5),0) --4
+	Star6_2 = CSMakeStar(6,120,48,0,PlotSizeCalc(6*2,4),0)
 
 	--레어
 	Star2 = CSMakeStar(5,120,80,180,PlotSizeCalc(5*2,2),0)
@@ -172,16 +175,40 @@ function CSMakeTornado(Point,Radius,Angle,Numner,Outside)
 	end
 end
 local x,y=lengthdir(90, 30)
-CirA = CSMakeCircle(7,32,0,8,1)
+CirA = CSMakeCircle(8,32,0,9,1)
 CirAX = CS_KaleidoscopeX(CS_MoveXY(CirA,x,y),6,0,1)
 Tornado = CSMakeTornado(6,40,10,4,1)
 Sp1 = CSMakeSpiral(4,1,1,28,0,61,9)
+MinHive = CS_RatioXY(CS_OverlapX(NexBYDLine[2],NexBYDLine[4],NexBYDLine[6]),0.5,0.5)
+function CSMinimap_Inverse4X(Shape,X,Y)
+	local P5 = CS_MoveXY(Shape,-X,-Y)
+	local P6 = CS_MoveXY(CS_InvertXY(Shape,2048,nil),-(4096-X),-Y)
+	local P7 = CS_MoveXY(CS_InvertXY(Shape,nil,2048),-X,-(4096-Y))
+	local P8 = CS_MoveXY(CS_InvertXY(Shape,2048,2048),-(4096-X),-(4096-Y))
+	return P5,P6,P7,P8
+end
+MinHiveTemp = {16  ,{64, 1088},{128, 1120},{192, 1152},{256, 1184},{320, 1216},{384, 1248},{448, 1280},{512, 1312},{576, 1344},{640, 1376},{704, 1408},{640, 1440},{576, 1472},{512, 1504},{448, 1536},{384, 1568}}
+MinHiveP5 ,MinHiveP6 ,MinHiveP7 ,MinHiveP8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
+
+
+function CSMakeKaleidoPolygon(PolygonPoint,KaleidoPoint,KaleidoRadius,PolygonRadius,Angle,StartAngle,Numner,Hallow)
+	local x,y=lengthdir(KaleidoRadius, (360/(KaleidoPoint*2)))
+	local A = CSMakePolygon(PolygonPoint,PolygonRadius,Angle,Numner,Hallow)
+	local AX = CS_KaleidoscopeX(CS_MoveXY(A,x,y),KaleidoPoint,StartAngle,1)
+	return AX
+end
+
+SqKal1 = CSMakeKaleidoPolygon(4,8,145,24,45,0,5,1)
+SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
+
+
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
 		for j, k in pairs(t) do
 			table.insert(G_CAPlot_Shape_InputTable,k)
 		end
+		
 	end
 	G_CA_Shape({
 		"NBYD",
@@ -207,6 +234,16 @@ Sp1 = CSMakeSpiral(4,1,1,28,0,61,9)
 		"CirAX",
 		"Sp1",
 		"Tornado",
+		"MinHive",
+		"MinHiveP5",
+		"MinHiveP6",
+		"MinHiveP7",
+		"MinHiveP8",
+		"SqKal1",
+		"SqKal2",
+		"Polygon6_2",
+		"Circle6_2",
+		"Star6_2",
 	}
 	)
 

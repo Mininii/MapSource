@@ -16,6 +16,7 @@ function System()
     DoActions(FP,MoveCp(Add,6*4))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,35,0,0xFF))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
+	CallTriggerX(FP,MakeEisEgg,{Cond_EXCC(13,Exactly,1,1)})
     CIf(FP,{Cond_EXCC(1,AtLeast,1)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
@@ -40,6 +41,7 @@ function System()
                     Convert_CPosXY()
                     Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
                     DoActions(FP,{Order("Men",Force2,1,Attack,10)})
+                    CTrigger(FP,{Cond_EXCC(12,AtLeast,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,EXCC_TempVarArr[13])},1)
                 CIfEnd()
             CIfEnd()
             CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
@@ -123,7 +125,9 @@ function System()
     for j, i in pairs(MarID) do
         NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
     end
-    CIfX(FP,{DeathsX(CurrentPlayer,Exactly,185,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+    CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)}) -- 건작유닛인식
+    CIfEnd()
+    CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,184,0,0xFF),DeathsX(CurrentPlayer,AtMost,185,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
         EXCC_BreakCalc({Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
         CAdd(FP,0x6509B0,38)--40
         CIf(FP,{DeathsX(CurrentPlayer,AtLeast,150*16777216,0,0xFF000000)})
