@@ -419,58 +419,58 @@ function G_CA_SetSpawnX(Condition,...)
 		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
 	})
 end
-function G_CA_SetSpawn2X(Condition,VarArr,...)
-	local arg = table.pack(...)
-	local G_CA_CUTable = {}
-	local G_CA_SNTable = {}
-	local G_CA_SLTable = {}
-	local G_CA_LMTable = {}
-	local G_CA_RepeatType = {}
+--function G_CA_SetSpawn2X(Condition,VarArr,...)
+--	local arg = table.pack(...)
+--	local G_CA_CUTable = {}
+--	local G_CA_SNTable = {}
+--	local G_CA_SLTable = {}
+--	local G_CA_LMTable = {}
+--	local G_CA_RepeatType = {}--
 
-	if arg.n >= 5 then
-		BiteStack_is_Over_5()
-	end
-	for i = 1, arg.n do
-		if type(arg[i]) ~= "table" then
-			G_CA_SetSpawnX_InputData_Error()
-		end
-	end
+--	if arg.n >= 5 then
+--		BiteStack_is_Over_5()
+--	end
+--	for i = 1, arg.n do
+--		if type(arg[i]) ~= "table" then
+--			G_CA_SetSpawnX_InputData_Error()
+--		end
+--	end--
 
-	for i = 1, arg.n do
-		table.insert(G_CA_CUTable,arg[i][1])
-		table.insert(G_CA_SNTable,arg[i][2])
-		table.insert(G_CA_SLTable,arg[i][3])
-		table.insert(G_CA_LMTable,arg[i][4])
-		table.insert(G_CA_RepeatType,arg[i][5])
-	end
+--	for i = 1, arg.n do
+--		table.insert(G_CA_CUTable,arg[i][1])
+--		table.insert(G_CA_SNTable,arg[i][2])
+--		table.insert(G_CA_SLTable,arg[i][3])
+--		table.insert(G_CA_LMTable,arg[i][4])
+--		table.insert(G_CA_RepeatType,arg[i][5])
+--	end--
+--
 
+--	local X = {}
+--	if #G_CA_SLTable>= 1 then
+--		for j, k in pairs(G_CA_SLTable)do
+--			if type(k) == "number" then
+--				G_CA_SetSpawn2X_InputData_Error()
+--			elseif type(k) == "string" then
+--				table.insert(X,tonumber(k))
+--			else
+--				G_CA_SLTable_InputData_Error()
+--			end
+--		end
+--	else
+--		for i = 1, 4 do
+--			G_CA_SetSpawn2X_InputData_Error()
+--		end
+--	end--
 
-	local X = {}
-	if #G_CA_SLTable>= 1 then
-		for j, k in pairs(G_CA_SLTable)do
-			if type(k) == "number" then
-				G_CA_SetSpawn2X_InputData_Error()
-			elseif type(k) == "string" then
-				table.insert(X,tonumber(k))
-			else
-				G_CA_SLTable_InputData_Error()
-			end
-		end
-	else
-		for i = 1, 4 do
-			G_CA_SetSpawn2X_InputData_Error()
-		end
-	end
-
-	TriggerX(FP,Condition,{
-		SetCVar(FP,VarArr[1][2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),
-		SetCVar(FP,VarArr[2][2],SetTo,T_to_BiteBuffer(X)),
-		SetCVar(FP,VarArr[3][2],SetTo,1),
-		SetCVar(FP,VarArr[4][2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
-		SetCVar(FP,VarArr[5][2],SetTo,T_to_BiteBuffer(G_CA_LMTable)),
-		SetCVar(FP,VarArr[6][2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
-	})
-end
+--	TriggerX(FP,Condition,{
+--		SetCVar(FP,VarArr[1][2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),
+--		SetCVar(FP,VarArr[2][2],SetTo,T_to_BiteBuffer(X)),
+--		SetCVar(FP,VarArr[3][2],SetTo,1),
+--		SetCVar(FP,VarArr[4][2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
+--		SetCVar(FP,VarArr[5][2],SetTo,T_to_BiteBuffer(G_CA_LMTable)),
+--		SetCVar(FP,VarArr[6][2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
+--	})
+--end
 
 --[[
 Line No.1 : UnitID(Gun)
