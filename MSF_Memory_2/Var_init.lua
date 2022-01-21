@@ -2,7 +2,8 @@ function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	MarAtk = 50
-	MarAtkFactor = 3
+	MarAtkFactor = 4
+	MarAtkFactor2 = 6
 	GunLimit = 1450
 
 	UnitDataPtr = EPDF(0x5967EC-(1700*4))
@@ -16,7 +17,7 @@ function Var_init()
 	ShieldEnV = CreateVarArr(4,FP)
 	ShTStrPtr = CreateVarArr(4,FP)
 	EEggStrPtr = CreateVarArr(4,FP)
-	PyCCode = CreateCCodeArr(4)
+	PyCCode = CreateCcodeArr(4)
 
 	CurrentUID = CreateVar(FP)
 	Nextptrs = CreateVar(FP)
@@ -152,29 +153,29 @@ CreateHeroPointArr(52,30000,0,"\x1B부\x04패 "..Conv_HStr("<1B>O<4>rganes"),55000
 CreateHeroPointArr(10,35000,0,"\x1F화\x04염 "..Conv_HStr("<1F>I<04>nferno"),55000,nil,1) --
 CreateHeroPointArr(76,9000,6000,"\x1B보\x04옥 "..Conv_HStr("<1B>O<4>rb"),45000) --
 CreateHeroPointArr(63,5000,9000,"\x1F보\x04주 "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),50000,nil,1) --
-CreateHeroPointArr(21,7000,0,"\x1B망\x04령 "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000) --
-CreateHeroPointArr(88,7000,3000,"\x1B정\x04찰기 "..Conv_HStr("<1B>A<4>rtanis"),32000) --
+CreateHeroPointArr(21,9999,0,"\x1B망\x04령 "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000) --
+CreateHeroPointArr(88,9000,3000,"\x1B정\x04찰기 "..Conv_HStr("<1B>A<4>rtanis"),32000) --
 CreateHeroPointArr(28,9999,0,"\x1B전\x04함 "..Conv_HStr("<1B>H<4>yperion"),35000)--
-CreateHeroPointArr(86,9000,7000,"\x1B망\x04토 "..Conv_HStr("<1B>D<4>animoth"),42000)--
+CreateHeroPointArr(86,9999,7000,"\x1B망\x04토 "..Conv_HStr("<1B>D<4>animoth"),42000)--
 CreateHeroPointArr(25,9999,0,"\x1B대\x04포 "..Conv_HStr("<1B>M<4>ortal"),38000)
 CreateHeroPointArr(22,35000,0,"\x1F부\x04정자 "..Conv_HStr("<1F>A<4>dverse"),55000,nil,1)--
-CreateHeroPointArr(75,4000,9000,"\x1B그\x04림자 "..Conv_HStr("<1B>Z<4>eratul"),40000)--
+CreateHeroPointArr(75,7000,9000,"\x1B그\x04림자 "..Conv_HStr("<1B>Z<4>eratul"),40000)--
 CreateHeroPointArr(79,25000,6000,"\x1B불\x04사자 "..Conv_HStr("<1B>T<4>assadar"),45000)--
 CreateHeroPointArr(80,28000,8900,"\x1F반\x04정립 "..Conv_HStr("<1F>A<04>ntithese"),55000,nil,1)
 CreateHeroPointArr(8,53000,0,"\x1F유\x04령 "..Conv_HStr("<1F>P<04>hantom"),67000,nil,1)
-CreateHeroPointArr(27,50000,25000,"\x1F승\x04천자 "..Conv_HStr("<1F>A<4>scension"),65000,nil,1)
-CreateHeroPointArr(65,35000,20000,"\x1F광\x04전사 "..Conv_HStr("<1F>M<4>adness"),65000,nil,1)
-CreateHeroPointArr(66,75000,40000,"\x1F영\x04생자 "..Conv_HStr("<1F>I<4>mmortal"),75000,nil,1)
+CreateHeroPointArr(27,60000,20000,"\x1F승\x04천자 "..Conv_HStr("<1F>A<4>scension"),65000,nil,1)
+CreateHeroPointArr(65,45000,20000,"\x1F광\x04전사 "..Conv_HStr("<1F>M<4>adness"),65000,nil,1)
+CreateHeroPointArr(66,75000,10000,"\x1F영\x04생자 "..Conv_HStr("<1F>I<4>mmortal"),75000,nil,1)
 CreateHeroPointArr(102,150000,0,"\x1F대\x04립자 "..Conv_HStr("<1F>C<4>onflict"),100000,nil,1)
-CreateHeroPointArr(61,150000,60000,"\x1F변\x04명자 "..Conv_HStr("<1F>V<4>indication"),80000,nil,1)
-CreateHeroPointArr(67,180000,60000,"\x1F창\x04세자 "..Conv_HStr("<1F>G<4>enesis"),115000,nil,1)
+CreateHeroPointArr(61,220000,10000,"\x1F변\x04명자 "..Conv_HStr("<1F>V<4>indication"),80000,nil,1)
+CreateHeroPointArr(67,250000,10000,"\x1F창\x04세자 "..Conv_HStr("<1F>G<4>enesis"),115000,nil,1)
 
 CreateHeroPointArr(23,350000,0,"\x1F우\x04상 "..Conv_HStr("<1F>I<4>conoclasm"),66600,nil,1)
-CreateHeroPointArr(81,150000,65000,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1)
+CreateHeroPointArr(81,200000,25000,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1)
 
 CreateHeroPointArr(29,75000,0,"\x1F기\x04함 "..Conv_HStr("<1F>N<4>orad <1F>II"),45000,nil,1)
-CreateHeroPointArr(98,18000,40000,"\x1F위\x04반자 "..Conv_HStr("<1F>B<4>reach"),75000,nil,1)
-CreateHeroPointArr(70,35000,22000,"\x1F나\x04락 "..Conv_HStr("<1F>F<04>allen"),75000,nil,1)
+CreateHeroPointArr(98,85000,10000,"\x1F위\x04반자 "..Conv_HStr("<1F>B<4>reach"),75000,nil,1)
+CreateHeroPointArr(70,55000,12000,"\x1F나\x04락 "..Conv_HStr("<1F>F<04>allen"),75000,nil,1)
 CreateHeroPointArr(57,75000,0,"\x1F마\x04녀 "..Conv_HStr("<1F>W<4>itch"),56000,nil,1)
 CreateHeroPointArr(100,55000,0,"\x1F소\x04멸자 "..Conv_HStr("<1F>E<04>clipse"),55000,nil,1)
 CreateHeroPointArr(30,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)

@@ -232,7 +232,7 @@ function System()
         CMov(FP,V(MarSkillCA[6]),1)
         CMov(FP,V(MarSkillCA[5]),5)
         for i = 0, 3 do
-        TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
+        --TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
         end
         function MarListSkillUnitFunc()
             CIf(FP,Memory(0x628438,AtLeast,1))
@@ -597,5 +597,15 @@ InvDisable(154,4,{CD(PyCCode[1],3)},"\x11좌측 상단 \x04지역 \x10"..Conv_HStr("<1
 InvDisable(154,5,{CD(PyCCode[2],3)},"\x18우측 상단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 InvDisable(154,6,{CD(PyCCode[3],3)},"\x16좌측 하단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 InvDisable(154,7,{CD(PyCCode[4],3)},"\x17우측 하단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+
+TriggerX(FP,{
+    CV(Actived_Gun,0);
+    Bring(Force2,AtMost,0,131,64);
+    Bring(Force2,AtMost,0,132,64);
+    Bring(Force2,AtMost,0,133,64);
+    Bring(Force2,AtMost,0,148,64);
+    Bring(Force2,AtMost,0,154,64);
+
+},{RotatePlayer({Victory()},MapPlayers,FP),RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
 
 end

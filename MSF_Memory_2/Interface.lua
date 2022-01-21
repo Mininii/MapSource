@@ -127,7 +127,6 @@ function Interface()
 		conditions = {
 			Label(0);
 			CDeaths(FP,AtLeast,1,ShieldUnlock[i+1]);
-			MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
 			CV(ShieldEnV[i+1],0);
 		},
 		actions = {

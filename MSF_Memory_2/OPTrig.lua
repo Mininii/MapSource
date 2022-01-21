@@ -3,7 +3,7 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    --DoActionsX(FP,{SetV(BGMType,1)},1)
+    DoActionsX(FP,{SetV(BGMType,1)},1)
 	for i=1, 57 do
         Trigger2X(FP,{CDeaths(FP,AtLeast,i*15,OPCCode);},{RotatePlayer(
 			{DisplayTextX(string.rep("\n", 20),4);
