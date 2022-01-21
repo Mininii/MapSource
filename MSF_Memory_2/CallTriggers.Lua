@@ -59,15 +59,14 @@ function Install_CallTriggers()
 	SetCallEnd()
 
 	
-	MakeEisEgg = SetCallForward()
 	local BCPos = CreateVar(FP)
 	local CPlayer = CreateVar(FP)
 	local CurCunitI = CreateVar(FP)
 	
+	MakeEisEgg = SetCallForward()
 	SetCall(FP)
 	f_SaveCp()
 	CIf(FP,Memory(0x628438,AtLeast,1))
-		DoActions(FP,{RotatePlayer({DisplayTextX("다시 만나요",4)},HumanPlayers,FP)})
 		f_Read(FP,_Sub(BackupCp,15),BCPos)
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
 		Convert_CPosXY(BCPos)
@@ -87,5 +86,6 @@ function Install_CallTriggers()
 	CIfEnd()
 	f_LoadCp()
 	SetCallEnd()
+
 
 end

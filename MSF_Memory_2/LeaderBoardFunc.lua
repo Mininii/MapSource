@@ -8,7 +8,7 @@ function LeaderBoardF()
         TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			SetCp(4+i),RunAIScriptAt(JYD,2+i)
         },{Preserved})
-        TriggerX(FP,{PlayerCheck(i,1),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+        TriggerX(FP,{PlayerCheck(i,1),ElapsedTime(AtLeast,60*3),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			Order("Factories",4+i,64,Attack,2+i)
         },{Preserved})
         TriggerX(FP,{PlayerCheck(i,0)},{
@@ -22,7 +22,7 @@ function LeaderBoardF()
 --        },{Preserved})
     end
 
-	CIf(FP,{ElapsedTime(AtLeast,60),CDeaths(FP,Exactly,0,LeaderBoardT),},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
+	CIf(FP,{ElapsedTime(AtLeast,60*5),CDeaths(FP,Exactly,0,LeaderBoardT),},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	

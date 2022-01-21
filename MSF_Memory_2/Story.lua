@@ -34,6 +34,8 @@ function InputStory()
 --    StoryPrint(TalkerA,5000*7,"\x04너희들은 이 기억을 정화해 주었으면 좋겠어.")
 --    StoryPrint(TalkerA,5000*8,"\x04그럼, 건투를 빌게!")
 CIfEnd()
+
+
 TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
     RotatePlayer({
     PlayWAVX("staredit\\wav\\button3.wav"),

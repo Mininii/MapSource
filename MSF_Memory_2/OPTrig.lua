@@ -3,7 +3,7 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    DoActionsX(FP,{SetV(BGMType,1)},1)
+    --DoActionsX(FP,{SetV(BGMType,1)},1)
 	for i=1, 57 do
         Trigger2X(FP,{CDeaths(FP,AtLeast,i*15,OPCCode);},{RotatePlayer(
 			{DisplayTextX(string.rep("\n", 20),4);
@@ -75,20 +75,23 @@ if Limit == 1 then
 
 
 	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
+	TriggerX(FP,{CD(TestMode,0)},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
 	for i = 0, 3 do
-	TriggerX(FP,{CD(TestMode,1),PlayerCheck(i)},{CreateUnit(24,MarID[i+1],i+2,i)})
-	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(3,MarID[i+1],i+2,i)})
+	TriggerX(FP,{CD(TestMode,1),PlayerCheck(i)},{CreateUnitWithProperties(24,MarID[i+1],i+2,i,{energy = 100}),SetResources(i,Add,5500,Ore)})
+	TriggerX(FP,{PlayerCheck(i)},{CreateUnitWithProperties(3,MarID[i+1],i+2,i,{energy = 100}),SetResources(i,Add,5500,Ore)})
 	end
 else
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
 	for i = 0, 3 do
-	TriggerX(FP,{PlayerCheck(i)},{CreateUnit(3,MarID[i+1],i+2,i)})
+	TriggerX(FP,{PlayerCheck(i)},{CreateUnitWithProperties(3,MarID[i+1],i+2,i,{energy = 100}),SetResources(i,Add,2500,Ore)})
 	end
 end
 for i = 0, 3 do
 	TriggerX(FP,{PlayerCheck(i)},{GiveUnits(All,"Buildings",P12,i+2,i),GiveUnits(All,"Buildings",P12,i+17,i),SetCp(i),CenterView(i+2),SetCp(FP)})
 end
-DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12)})
+DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),RemoveUnit(84,Force1)})
 
 CIfEnd()
+DoActions(FP,{RemoveUnit(84,Force1)})
+
 end

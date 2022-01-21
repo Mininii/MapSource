@@ -8,10 +8,16 @@ function Interface()
 	HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0,46)
 	if Limit== 1 then
 		for i = 0, 3 do
-			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),SetV(CurEXP,0x7FFFFFFF)})
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),})--SetV(CurEXP,0x7FFFFFFF)
 		end
 	end
-	DoActions(Force1,{SetAllianceStatus(Force1,Ally),SetAllianceStatus(P12,Enemy),ModifyUnitEnergy(All,"Men",P12,64,0),RemoveUnit("Men",P12)})
+	DoActions(Force1,{SetAllianceStatus(Force1,Ally),SetAllianceStatus(P12,Enemy),ModifyUnitEnergy(All,"Men",P12,64,0),
+	RemoveUnit(7,P12),
+	RemoveUnit(MarID[1],P12),
+	RemoveUnit(MarID[2],P12),
+	RemoveUnit(MarID[3],P12),
+	RemoveUnit(MarID[4],P12),
+})
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다."),
@@ -87,6 +93,21 @@ function Interface()
 			PreserveTrigger();
 		},
 	}
+	
+	Trigger { -- 소환 마린
+		players = {i},
+		conditions = {
+			Label(0);
+			Memory(0x628438,AtLeast,1);
+			Deaths(i,AtLeast,1,178);
+	
+		},
+		actions = {
+			SetDeaths(i,Subtract,1,178);
+			CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+			PreserveTrigger();
+		},
+	}
 	Trigger { -- 자동환전
 		players = {i},
 		conditions = {
@@ -99,36 +120,18 @@ function Interface()
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- 공업완료시 수정보호막 활성화
-	players = {i},
-	conditions = {
-		Label(0);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
-	},
-	actions = {
-		PlayWAV("staredit\\wav\\shield_unlock.ogg");
-		PlayWAV("staredit\\wav\\shield_unlock.ogg");
-		SetV(ShieldEnV[i+1],3200);
-		SetCDeaths(i,SetTo,1,ShieldUnlock);
-	},
-	}
+	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+
 	Trigger { -- 공업완료시 수정보호막 활성화
 		players = {i},
 		conditions = {
 			Label(0);
-			CDeaths(i,AtLeast,1,ShieldUnlock);
+			CDeaths(FP,AtLeast,1,ShieldUnlock[i+1]);
 			MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
 			CV(ShieldEnV[i+1],0);
 		},
 		actions = {
-			DisplayText(string.rep("\n", 20),4);
-			DisplayText("\x13\x04"..string.rep("―", 56),4);
-			DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
-			DisplayText("\n",4);
-			DisplayText(StrDesignX("\x08공격력 \x04업그레이드를 완료하였습니다.\n\x13\x04이제부터 \x1C빛의 보호막\x04을 사용할 수 있습니다."),0);
-			DisplayText("\n",4);
-			DisplayText("\x13\x0FＳＫＩＬＬ　ＵＮＬＯＣＫＥＤ",0);
-			DisplayText("\x13\x04"..string.rep("―", 56),4);
+			DisplayText(ShieldUnlockT,4);
 			SetMemory(0x5822C4+(i*4),SetTo,1200);
 			SetMemory(0x582264+(i*4),SetTo,1200);
 			SetMemoryB(0x57F27C+(228*i)+19,SetTo,1);
@@ -316,7 +319,7 @@ Trigger { -- 보호막 가동
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
 		end
 	end
-
+	
 		NIf(FP,Never())
 			NJumpXEnd(FP,MedicTrigJump)
 				DoActionsX(FP,{
@@ -328,6 +331,9 @@ Trigger { -- 보호막 가동
 					ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 					ModifyUnitShields(All,"Men",i,"Anywhere",100),
 					ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
+					SetCp(i);
+					PlayWAV("staredit\\wav\\heal.ogg");
+					SetCp(FP);
 				})
 		NIfEnd()
 

@@ -194,6 +194,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 	for i= 0,3 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 19,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 71,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
 	end
 	for i = 1, 4 do
 		UnitEnable(MedicTrig[i],200+(i*50),nil,i) -- 메딕
@@ -269,6 +271,18 @@ function init() -- 맵 실행시 1회 실행 트리거
 		conditions = {
 			Label(0);
 			isname(i,"GALAXY_BURST");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"LucasSpia");
 			CDeaths(FP,AtLeast,1,LimitX);
 		},
 		actions = {
@@ -564,6 +578,15 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		NJumpXEnd(FP,Rep_Jump4)
 		CSub(FP,0x6509B0,6)
 	CIfEnd()
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
+	CAdd(FP,0x6509B0,6)
+	f_SaveCp()
+		f_Read(FP,BackupCp,RepHeroIndex)
+		CDoActions(FP,{TSetDeaths(_Sub(BackupCp,23),SetTo,_Sub(_Read((_Add(RepHeroIndex,EPDF(0x662350)))),128),0)})
+	f_LoadCp()
+	CSub(FP,0x6509B0,6)
+	CIfEnd()
+
 	CAdd(FP,0x6509B0,84)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
@@ -648,6 +671,8 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			RunAIScriptAt("Value This Area Higher",2+i),ModifyUnitResourceAmount(All,P12,64,65535)},1)
 	end
 
+	
 	CIfEnd({SetMemoryX(0x664080 + (162*4),SetTo,0,1)})
+	DoActions(FP,GiveUnits(All,68,Force2,"Anywhere",P12),1)
 end
 

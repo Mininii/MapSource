@@ -150,11 +150,43 @@ CElseX({SetCD(ExpTmp,100),print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07０�
 CIfXEnd()
 
 CIf(FP,{CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})
+local StimUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.10\x04 돌파, \x1B원격 스팀팩\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+local ReviveUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.50\x04 돌파, \x07소생 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+local SkillUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.40\x04 돌파, \x08공격 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.20\x04 돌파, \x07자동 환전\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+
 	CSub(FP,CurEXP,MaxEXP)
 	ConvertArr(FP,ArrI,Level)
 	f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP,nil,nil,1)
 	CAdd(FP,Level,1)
+	Trigger2X(FP,{CV(Level,10,AtLeast)},{RotatePlayer({DisplayTextX(StimUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
 
+	SetMemoryB(0x57F27C + (0 * 228) + 71,SetTo,1),
+	SetMemoryB(0x57F27C + (1 * 228) + 71,SetTo,1),
+	SetMemoryB(0x57F27C + (2 * 228) + 71,SetTo,1),
+	SetMemoryB(0x57F27C + (3 * 228) + 71,SetTo,1)})
+	Trigger2X(FP,{CV(Level,20,AtLeast)},{RotatePlayer({DisplayTextX(ExchangeUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
+
+	SetMemoryB(0x57F27C + (0 * 228) + 2,SetTo,1),
+	SetMemoryB(0x57F27C + (1 * 228) + 2,SetTo,1),
+	SetMemoryB(0x57F27C + (2 * 228) + 2,SetTo,1),
+	SetMemoryB(0x57F27C + (3 * 228) + 2,SetTo,1)})
+	
+	Trigger2X(FP,{CV(Level,30,AtLeast)},{
+		RotatePlayer({PlayWAVX("staredit\\wav\\shield_unlock.ogg"),PlayWAVX("staredit\\wav\\shield_unlock.ogg")},HumanPlayers,FP);
+		SetV(ShieldEnV[1],3200);
+		SetV(ShieldEnV[2],3200);
+		SetV(ShieldEnV[3],3200);
+		SetV(ShieldEnV[4],3200);
+		SetCDeaths(FP,SetTo,1,ShieldUnlock[1]);
+		SetCDeaths(FP,SetTo,1,ShieldUnlock[2]);
+		SetCDeaths(FP,SetTo,1,ShieldUnlock[3]);
+		SetCDeaths(FP,SetTo,1,ShieldUnlock[4]);
+		
+	})
+	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayTextX(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
+	
 	f_Mul(FP,MarHPRegen,Level,256)
 	CMov(FP,AtkCondTmp,_Mul(Level,4),50)
 	CMov(FP,HPCondTmp,_Mul(Level,5))

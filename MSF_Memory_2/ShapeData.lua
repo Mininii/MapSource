@@ -25,7 +25,14 @@ function M2_Install_Shape()
 	--·¹¾î
 	Star2 = CSMakeStar(5,120,80,180,PlotSizeCalc(5*2,2),0)
 	Star3 = CSMakePolygon(5,128,0,PlotSizeCalc(5,1),1)
+	Pol_6_1 = CS_Intersect(CSMakePolygon(6,32,0,PlotSizeCalc(6,7),0),CS_Merge(CSMakeLine(6,32,0,(8*6)+1,0),CSMakePolygon(6,32,0,PlotSizeCalc(6,7),PlotSizeCalc(6,6)),8,0),8,0)
+	Pol_6_2 = CSMakeLine(6,128,30,7,1)
+	Pol_4_1 = CS_RatioXY(CSMakeStar(4,180,64,45,9*9,0),1,0.5)
+	Pol_4_2 = CS_RatioXY(CSMakeLine(8,192,0,9,1),1,0.5)
+	Cir36_1 = CSMakeStar(36,30,192,0,PlotSizeCalc(36*2,1),1)
+	Cir36_2 = CSMakeCircle(6,128,0,7,1)
 
+	
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
 	H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
 	L00_1_64F = CS_FillPathXY(L00_1,0,64,64)
@@ -198,9 +205,11 @@ function CSMakeKaleidoPolygon(PolygonPoint,KaleidoPoint,KaleidoRadius,PolygonRad
 	return AX
 end
 
+NexP5,NexP6,NexP7,NexP8 = CSMinimap_Inverse4X(CS_ConnectPathX({3,{1856, 800},{1856, 96},{480, 800}},32,1),1344,608)
+
 SqKal1 = CSMakeKaleidoPolygon(4,8,145,24,45,0,5,1)
 SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
-
+Point = {1,{0,0}}
 
 --------------------------------------------------------------
 
@@ -244,6 +253,17 @@ SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
 		"Polygon6_2",
 		"Circle6_2",
 		"Star6_2",
+		"Pol_6_1",
+		"Pol_6_2",
+		"Pol_4_1",
+		"Pol_4_2",
+		"Cir36_1",
+		"Cir36_2",
+		"NexP5",
+		"NexP6",
+		"NexP7",
+		"NexP8",
+		"Point"
 	}
 	)
 

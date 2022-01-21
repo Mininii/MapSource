@@ -52,7 +52,7 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 		if type(ResetFlag) == "number" then
 			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí
 			for i = 1, #EXCunitTemp do
-				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
+				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
 			end
 			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		elseif type(ResetFlag) == "table" then
@@ -75,7 +75,7 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 							RFMask = X[3]
 						end
 
-					table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,RFType,RFValue,RFMask))
+						table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,RFType,RFValue,RFMask))
 					else
 						PushErrorMsg("ResetFlag_Inputdata_Error")
 					end
@@ -94,13 +94,20 @@ function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿
 	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
 
-function Set_EXCC(Line,Type,Value) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§.
+function Set_EXCC(Line,Type,Value) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª X
 	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
+end
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª
+	if Mask == nil then Mask = 0xFFFFFFFF end
+	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
 end
 
 
 function Cond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
 	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
+end
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 	
 end
 EXCC_initArr = {}
@@ -321,7 +328,7 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 end
 
 
-function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
+function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
 	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
 	
 	f_Read(Player,0x51CE8C,Dx)
@@ -345,12 +352,15 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 		end
 	end
 
-
-	for i = 0, MaxPlayer do
-		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- ºê±ÝÅ¸ÀÌ¸Ó
-		CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,12)},1) -- ºê±ÝÅ¸ÀÌ¸Ó
+	for j, k in pairs(BGMDeathsT) do
+		for i = 0, MaxPlayer do
+			CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- ºê±ÝÅ¸ÀÌ¸Ó
+			CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- ºê±ÝÅ¸ÀÌ¸Ó
+		end
+		CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,k,0xFFFFFF),
+		SetDeathsX(Player,SetTo,0,k,0xFF000000),
+		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- ºê±ÝÅ¸ÀÌ¸Ó
 	end
-	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF),SetDeathsX(Player,SetTo,0,12,0xFF000000),SetDeaths(8,SetTo,0,12),SetDeaths(9,SetTo,0,12),SetDeaths(10,SetTo,0,12),SetDeaths(11,SetTo,0,12)}) -- ºê±ÝÅ¸ÀÌ¸Ó
 end
 
 function AddCD(Code,Value)
@@ -531,7 +541,7 @@ function InstallHeroPoint() -- CreateHeroPointArr¿¡¼­ Àü¼Û¹ÞÀº ¿µ¿õ Æ÷ÀÎÆ® Á¤º¸ 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/1000)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
 			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{Preserved})
 			f_LoadCp()
 			CIfEnd()
@@ -1055,6 +1065,7 @@ local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 G_CA_CenterX = CreateVar(FP)
 G_CA_CenterY = CreateVar(FP)
 G_CA_Player = CreateVar(FP)
+local LDrX,LDrY = CreateVars(2,FP)
 local G_CA_X = CreateVar(FP)
 local G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward() -- À¯´Ö»ý¼ººÎ
@@ -1146,9 +1157,13 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,11,SetTo,G_CA_TempTable[14]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
-			Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
+				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
 			})
 			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1)},{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,12,SetTo,64)},1)
+			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2)})
+				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
+				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536)))})
+			CIfEnd()
 				
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- Á¤¾ßµ¶
@@ -1752,11 +1767,15 @@ function Install_Call_G_CA()
 			})
 
 			if Limit == 1 then
-			DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
+				CIf(FP,CD(TestMode,1))
+				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
+				CIfEnd()
 			end
 			CElseX()
 			if Limit == 1 then
+				CIf(FP,CD(TestMode,1))
 				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+				CIfEnd()
 			end
 			
 				CDoActions(FP,{
