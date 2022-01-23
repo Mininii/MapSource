@@ -96,7 +96,7 @@ function Var_init()
 	MedicTrig = {34,9,5,10}
 	BanToken = {63,64,65}
 	GiveUnitID = {66,67,68,69}
-	ExRate = {20,23,26,29}
+	ExRate = {17,18,19,20}
 	_0D = string.rep("\x0D",200) 
 	HTextStr = _0D
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x06#X_MAX"}

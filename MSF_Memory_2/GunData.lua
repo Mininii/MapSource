@@ -113,6 +113,7 @@ function Include_GunData(Size,LineNum)
 	
 	f_Gun = SetCallForward()
 	function Install_GunStack()
+		CMov(FP,Actived_Gun,0)
 		for i = 0, Size-1 do
 			local TempCIndex
 			if i == 0 then TempCIndex=CIndex else TempCIndex = 0 end
@@ -132,8 +133,14 @@ function Include_GunData(Size,LineNum)
 	local CurLoc,CurLoc2 = CreateVars(2,FP)
 	local GunCaseCheck = CreateCcode()
 	local GunCaseErrT = StrDesign("\x08ERROR : \x04등록되지 않은 건작이 작동하여 자동으로 Suspend하였습니다. 건작을 등록해주세요.\x07")
+	f_GunTable = {}
 	function CIf_GCase(Index)
 		CIf(FP,{Gun_Line(0,Exactly,Index),Gun_Line(54,AtMost,0)},{SetCD(GunCaseCheck,1)})
+		table.insert(f_GunTable,Index)
+	end
+	function GCP(Value,Type)
+		if Type==nil then Type = Exactly end
+		return Gun_Line(4,Type,Value)
 	end
 	SetCall(FP)
 
@@ -204,10 +211,10 @@ function Include_GunData(Size,LineNum)
 
 
 	
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Star3",1,445,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Star2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Star3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Spi2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Spi3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Spi2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Spi3",1,445,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Star3",1,445,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Star2",1,559,nil,"CP")
@@ -229,8 +236,8 @@ function Include_GunData(Size,LineNum)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)},{25},"ACAS","MinHive",1,398,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)},{25,100},"ACAS","MinHive",1,397,nil,"CP")
 	for i = 4, 7 do
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0),Gun_Line(4,Exactly,i)},{27},"ACAS","MinHiveP"..i+1,1,983,nil,"CP",1)
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),Gun_Line(4,Exactly,i)},{102},"ACAS","MinHiveP"..i+1,1,984,nil,"CP",1)
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0),GCP(i)},{27},"ACAS","MinHiveP"..i+1,1,983,nil,"CP",1)
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),GCP(i)},{102},"ACAS","MinHiveP"..i+1,1,984,nil,"CP",1)
 	end
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{52},"ACAS","Sp1",1,389,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{10,22},"ACAS","Sp1",1,474,nil,"CP")
@@ -310,6 +317,60 @@ function Include_GunData(Size,LineNum)
 	
 	CIfEnd()
 
+	CIf_GCase(174)
+	TempleXY = {
+		{1024,1024},
+		{1024*3,1024},
+		{1024,1024*3},
+		{1024*3,1024*3},
+	}
+	--Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
+	--Tier2 = {79,80,52,10,22,65,70}
+	--Tier3 = {27,66,29,98,57,3,8}
+	--Tier4 = {102,61,67,23,81,30}
+	TempleCUT = {55,56,62,21,88,28,80,22,70,27,8,98,57}
+	for i = 4, 7 do
+	TriggerX(FP,{GCP(i)},{SetV(G_CA_CenterX,TempleXY[i-3][1]),SetV(G_CA_CenterY,TempleXY[i-3][2])},{Preserved})
+	end
+	
+	for i = 0, 12 do
+		local cond = {Gun_Line(8,AtLeast,1000),Gun_Line(9,Exactly,i-1)}
+		if i == 0 then cond = {Gun_Line(7,Exactly,0)} end
+	G_CA_SetSpawn(cond,{TempleCUT[i+1]},"ACAS","TempleG",1,3,nil,"CP",G_CA_Rotate(270+(i*30)))
+	end
+
+	CDoActions(FP,{Gun_SetLine(8,Add,Dt)})
+	CTrigger(FP,{Gun_Line(8,AtLeast,1000)},{Gun_SetLine(9,Add,1),Gun_SetLine(8,Subtract,1000),RotatePlayer({PlayWAVX("staredit\\wav\\Clock.ogg"),PlayWAVX("staredit\\wav\\Clock.ogg")},HumanPlayers,FP)},1)
+	CTrigger(FP,{Gun_Line(9,AtLeast,12)},{Gun_DoSuspend()},1)
+	CIfEnd()
+	CIf_GCase(147)
+	CTrigger(FP,{Gun_Line(7,AtLeast,(#OvG-1)*5)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},{Preserved})
+	OvGCUT = {11,29,69,102}
+	for i = 0, 3 do
+		local cond = {Gun_Line(7,AtLeast,(#OvG-1)*5),Gun_Line(6,Exactly,i-1)}
+		if i == 0 then cond = {Gun_Line(7,Exactly,0),Gun_Line(6,Exactly,0)} end
+	G_CA_SetSpawn(cond,{OvGCUT[i+1]},"ACAS","OvG"..i+1,1,3,nil,"CP",G_CA_LoopTimer(5))
+	end
+	CTrigger(FP,{Gun_Line(6,AtLeast,4)},{Gun_DoSuspend()},1)
+	CIfEnd()
+
+
+	CIf_GCase(151)
+		CDoActions(FP,{Gun_SetLine(8,SetTo,1),TCreateUnit(1,84,1,G_CA_Player),KillUnit(84,Force2)})
+		CereT = {80,8}
+		for j = 1, 2 do
+		for i = 0, 7 do
+		local cond = {Gun_Line(3,Exactly,j),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+		if i == 0 then cond = {Gun_Line(3,Exactly,j),Gun_Line(8,AtMost,0)} end
+			G_CA_SetSpawn(cond,{CereT[j]},"ACAS","Cere1","MAX",0,nil,"CP",G_CA_Rotate(270+(i*45)))
+		end
+		end
+	--Gun_Line(3,Exactly,1),
+		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
+		CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
+		CTrigger(FP,{Gun_Line(6,AtLeast,8)},{TSetMemory(0x6509B0,SetTo,G_CA_Player),RunAIScriptAt(JYD,1),Gun_DoSuspend()},1)
+
+	CIfEnd()
 
 
 	CTrigger(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayTextX(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},1)

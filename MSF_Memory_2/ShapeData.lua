@@ -20,7 +20,8 @@ function M2_Install_Shape()
 	Polygon6 = CSMakePolygon(6,48,0,PlotSizeCalc(6,3),0) --2
 	Polygon6_2 = CSMakePolygon(6,24,0,PlotSizeCalc(6,5),0) --3
 	Circle6_2 = CSMakeCircle(6,24,0,PlotSizeCalc(6,5),0) --4
-	Star6_2 = CSMakeStar(6,120,48,0,PlotSizeCalc(6*2,4),0)
+	local Shape1 = CSMakeStar(6,120,48,0,PlotSizeCalc(6*2,4),0)
+    Star6_2 = CS_OverlapX(CS_CropRA(Shape1,{0,1200},{30,150}),CS_CropRA(Shape1,{0,1200},{210,330}))
 
 	--·¹¾î
 	Star2 = CSMakeStar(5,120,80,180,PlotSizeCalc(5*2,2),0)
@@ -31,6 +32,8 @@ function M2_Install_Shape()
 	Pol_4_2 = CS_RatioXY(CSMakeLine(8,192,0,9,1),1,0.5)
 	Cir36_1 = CSMakeStar(36,30,192,0,PlotSizeCalc(36*2,1),1)
 	Cir36_2 = CSMakeCircle(6,128,0,7,1)
+	Spi2 = CSMakeSpiral(6,0.2,0.9,32,0,(12*6)+1,0)
+	Spi3 = CSMakeSpiral(6,0.2,0.9,32,0,(12*7)+1,(12*6)+1)
 
 	
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
@@ -211,6 +214,14 @@ SqKal1 = CSMakeKaleidoPolygon(4,8,145,24,45,0,5,1)
 SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
 Point = {1,{0,0}}
 
+TempleG = CS_Distortion(CSMakeCircle(32,960,0,33,1),{0,0},{0,0})
+
+OvG = CSMakeStar(4,180,128,90,9*9,0)
+OvG1 = CS_SortR(OvG,0)
+OvG2 = CS_SortR(OvG,1)
+OvG3 = CS_SortA(OvG,0)
+OvG4 = CS_SortA(OvG,1)
+Cere1 = CS_MoveXY(CSMakeStar(4,135,64,45,PlotSizeCalc(4*2,3),0),128)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -263,7 +274,15 @@ Point = {1,{0,0}}
 		"NexP6",
 		"NexP7",
 		"NexP8",
-		"Point"
+		"Point",
+		"Spi2",
+		"Spi3",
+		"TempleG",
+		"OvG1",
+		"OvG2",
+		"OvG3",
+		"OvG4",
+		"Cere1",
 	}
 	)
 

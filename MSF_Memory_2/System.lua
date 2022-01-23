@@ -448,13 +448,9 @@ function System()
         f_LoadCp()
     CIfEnd()
 --    CMov(FP,Gun_Type,0)
-
-    f_GSend(131)
-    f_GSend(132)
-    f_GSend(133)
-    f_GSend(154)
-    f_GSend(148)
-
+    for j, k in pairs(f_GunTable) do
+    f_GSend(k)
+    end
     
     
     --그외 잡건작
@@ -464,7 +460,7 @@ function System()
 
         {135,{{53,53},{103}},{"Star1","Circle1"},{982,366}},--히드라덴
         {136,{{46},{54,54,50}},{"L00_1_128F","L00_1_64F"},{984,365}},--디파마운드
-        {137,{{56,56}},{"H00_1_64F"},{366}},--그레이터스파이어
+        {137,{{56,62}},{"H00_1_64F"},{366}},--그레이터스파이어
         {138,{{45},{40,40,51,104,51,104}},{"H00_1_128F","QNest"},{984,366}},--퀸네스트
         {139,{{53,54},{15}},{"EChamb","H00_1_96F"},{366,367}},--에볼루션챔버
         {140,{{48,48}},{"H00_1_64L"},{365}},--울트라
@@ -593,19 +589,26 @@ function InvDisable(UnitID,Owner,Condition,Str)
         SetInvincibility(Disable,UnitID,Owner,1);
     })
 end
-InvDisable(154,4,{CD(PyCCode[1],3)},"\x11좌측 상단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-InvDisable(154,5,{CD(PyCCode[2],3)},"\x18우측 상단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-InvDisable(154,6,{CD(PyCCode[3],3)},"\x16좌측 하단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-InvDisable(154,7,{CD(PyCCode[4],3)},"\x17우측 하단 \x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+GunPStr = {
+"\x11좌측 상단 ",
+"\x18우측 상단 ",
+"\x16좌측 하단 ",
+"\x17우측 하단 ",
+}
+for i = 4, 7 do
+    InvDisable(154,i,{CD(PyCCode[i-3],3)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    
+end
 
+if Limit == 1 then
+    TestCondT = {}
+    for j, k in pairs(f_GunTable) do
+        table.insert(TestCondT,Bring(Force2,AtMost,0,k,64))
+    end
 TriggerX(FP,{
+    CD(TestMode,0);
     CV(Actived_Gun,0);
-    Bring(Force2,AtMost,0,131,64);
-    Bring(Force2,AtMost,0,132,64);
-    Bring(Force2,AtMost,0,133,64);
-    Bring(Force2,AtMost,0,148,64);
-    Bring(Force2,AtMost,0,154,64);
-
+    TestCondT;
 },{RotatePlayer({Victory()},MapPlayers,FP),RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
-
+end
 end

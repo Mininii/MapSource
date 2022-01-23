@@ -106,6 +106,16 @@ function init() -- 맵 실행시 1회 실행 트리거
 			SetUnitClass(k[2],161) -- 일반유닛
 		end
 	end
+	SetUnitClass(11,162) -- 퍼뎀유닛
+	SetUnitClass(69,162) -- 퍼뎀유닛
+	SetGroupFlags(11,0xA)
+	SetGroupFlags(69,0xA)
+	table.insert(PatchArr,SetMemoryB(0x660178 + (11),SetTo,3))
+	table.insert(PatchArr,SetMemoryB(0x660178 + (69),SetTo,3))
+	SetUnitAdvFlag(11,0x40,0x8000+0x40)
+	SetUnitAdvFlag(69,0x40,0x8000+0x40)
+	
+
 
 		table.insert(PatchArr,SetMemory(0x662350 + (k[2]*4),SetTo,k[5]))
 		table.insert(PatchArr,SetMemoryW(0x660E00 + (k[2]*2),SetTo,k[6]))
@@ -258,12 +268,12 @@ function init() -- 맵 실행시 1회 실행 트리거
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
-	DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	G_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
+		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	end
 
 	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
@@ -554,6 +564,7 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
 			CMov(FP,Gun_LV,0)
 			CTrigger(FP,{TTOR({
+				CVar(FP,RepHeroIndex[2],Exactly,151),
 				CVar(FP,RepHeroIndex[2],Exactly,133),
 				CVar(FP,RepHeroIndex[2],Exactly,132),
 				CVar(FP,RepHeroIndex[2],Exactly,131)})},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
