@@ -112,6 +112,7 @@ CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(P
 CIfEnd({})
 CAdd(FP,Print13T,Dt)
 CAdd(FP,Time1,Dt)
+CDoActions(FP,{TSetCDeaths(FP,Add,Dt,GeneT)})
 Trigger { -- »¡°£¼ýÀÚ
 	players = {FP},
 	conditions = {

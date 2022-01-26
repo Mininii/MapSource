@@ -269,13 +269,14 @@ function init() -- 맵 실행시 1회 실행 트리거
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
 	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
 	G_init()
+	G_CA_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
 		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	end
-
+--	PushErrorMsg("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다.")
 	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 	Trigger {
 		players = {FP},

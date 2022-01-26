@@ -163,35 +163,38 @@ function Include_GunData(Size,LineNum)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)},{55,53,54,48},"ACAS","Star6_2",5,4,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)},{104,56,53,54},"ACAS","Star6_2",5,4,nil,"CP")
 	
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{55,53,54,48},"ACAS","Circle6_2",5,979,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{104,56,53,54},"ACAS","Circle6_2",5,979,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Circle6_2",5,979,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{104,62,53,54},"ACAS","Circle6_2",5,979,nil,"CP")
 
 	
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)},{55,53,54,48},"ACAS","Polygon6_2",5,530,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)},{104,56,53,54},"ACAS","Polygon6_2",5,530,nil,"CP")
-
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Polygon6_2",5,530,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)},{104,62,53,54},"ACAS","Polygon6_2",5,530,nil,"CP")
+	
+	
+	
+	
 
 
 	CIfEnd()
 	CIf_GCase(132)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,964,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0)},{77,77,77,77},"ACAS","Star3",1,547,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Star2",1,964,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Star2",1,964,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1)},{78,78,78,78},"ACAS","Star3",1,547,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,427,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(5,Exactly,0)},{77,77,77,77},"ACAS","Star3",1,984,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Star2",1,427,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Star2",1,427,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1)},{78,78,78,78},"ACAS","Star3",1,984,nil,"CP")
 
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","SqKal1",1,391,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)},{65,70,65,70},"ACAS","SqKal2",1,364,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","SqKal1",1,391,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","SqKal1",1,391,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)},{66,70,66,70},"ACAS","SqKal2",1,364,nil,"CP")
 
 	
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Pol_6_1",1,524,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{61,61,98,98,98},"ACAS","Pol_6_2",1,548,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Pol_6_1",1,524,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Pol_6_1",1,524,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)},{67,67,98,98,98},"ACAS","Pol_6_2",1,548,nil,"CP")
 
 
@@ -199,25 +202,25 @@ function Include_GunData(Size,LineNum)
 
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Pol_4_1",1,441,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)},{81,29,29},"ACAS","Pol_4_2",1,503,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Pol_4_1",1,441,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Pol_4_1",1,441,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)},{23,29,29},"ACAS","Pol_4_2",1,503,nil,"CP")
 	
 
 
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,6),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Cir36_1",1,441,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,6),Gun_Line(5,Exactly,0)},{3,3,3,57,57,57},"ACAS","Cir36_2",1,503,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,6),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Cir36_1",1,441,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,6),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Cir36_1",1,441,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,6),Gun_Line(6,AtLeast,1)},{30,30,30,57,57,57},"ACAS","Cir36_2",1,503,nil,"CP")
 
 
 	
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Spi2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Spi3",1,445,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Spi2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Spi2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Spi3",1,445,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Star3",1,445,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{104,56,51,15},"ACAS","Star2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Star2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Star3",1,445,nil,"CP")
 
 
@@ -268,7 +271,7 @@ function Include_GunData(Size,LineNum)
 	UID4I = 224
 	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
 	Tier2 = {79,80,52,10,22,65,70}
-	Tier3 = {27,66,29,98,57,3,8}
+	Tier3 = {27,66,29,98,57,3,8,11,69}
 	Tier4 = {102,61,67,23,81,30}
 	Tier5 = {60,68}
 	Tier1VA = CreateVArr(#Tier1,FP)
@@ -324,24 +327,32 @@ function Include_GunData(Size,LineNum)
 		{1024,1024*3},
 		{1024*3,1024*3},
 	}
-	--Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
-	--Tier2 = {79,80,52,10,22,65,70}
-	--Tier3 = {27,66,29,98,57,3,8}
-	--Tier4 = {102,61,67,23,81,30}
 	TempleCUT = {55,56,62,21,88,28,80,22,70,27,8,98,57}
+	EffShape1 = CSMakeCircle(90,960,0,91,1)
+	EffShape2 = CSMakeLine(1,96,0,11,0)
 	for i = 4, 7 do
+		TriggerX(FP,{GCP(i),Gun_Line(9,AtLeast,13)},{Order("Men",i,64,Attack,11+i-4)},{Preserved})
 	TriggerX(FP,{GCP(i)},{SetV(G_CA_CenterX,TempleXY[i-3][1]),SetV(G_CA_CenterY,TempleXY[i-3][2])},{Preserved})
+	CSPlot(EffShape1,i,84,0,{TempleXY[i-3][1],TempleXY[i-3][2]},1,32,FP,{Label(),GCP(i),Gun_Line(20,AtMost,0)},nil,1)
+	for j = 0, 12 do
+	local cond = {Label(),GCP(i),Gun_Line(8,AtLeast,1000),Gun_Line(9,Exactly,j-1)}
+	if j == 0 then cond = {Label(),GCP(i),Gun_Line(7,Exactly,0)} end
+	CSPlot(CS_Rotate(EffShape2,(j*30)),i,84,0,{TempleXY[i-3][1],TempleXY[i-3][2]},1,32,FP,cond,nil,nil)
 	end
+	end
+	CTrigger(FP,{Gun_Line(20,AtMost,0)},{Gun_SetLine(20,SetTo,1)},1)
+	
 	
 	for i = 0, 12 do
 		local cond = {Gun_Line(8,AtLeast,1000),Gun_Line(9,Exactly,i-1)}
 		if i == 0 then cond = {Gun_Line(7,Exactly,0)} end
-	G_CA_SetSpawn(cond,{TempleCUT[i+1]},"ACAS","TempleG",1,3,nil,"CP",G_CA_Rotate(270+(i*30)))
+	G_CA_SetSpawn(cond,{TempleCUT[i+1]},"ACAS","TempleG",1,4,nil,"CP",G_CA_Rotate(270+(i*30)))
+
 	end
 
 	CDoActions(FP,{Gun_SetLine(8,Add,Dt)})
-	CTrigger(FP,{Gun_Line(8,AtLeast,1000)},{Gun_SetLine(9,Add,1),Gun_SetLine(8,Subtract,1000),RotatePlayer({PlayWAVX("staredit\\wav\\Clock.ogg"),PlayWAVX("staredit\\wav\\Clock.ogg")},HumanPlayers,FP)},1)
-	CTrigger(FP,{Gun_Line(9,AtLeast,12)},{Gun_DoSuspend()},1)
+	CTrigger(FP,{Gun_Line(8,AtLeast,1000)},{Gun_SetLine(9,Add,1),Gun_SetLine(20,SetTo,0),Gun_SetLine(8,Subtract,1000),RotatePlayer({PlayWAVX("staredit\\wav\\Clock.ogg"),PlayWAVX("staredit\\wav\\Clock.ogg")},HumanPlayers,FP)},1)
+	CTrigger(FP,{Gun_Line(9,AtLeast,13)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	CIf_GCase(147)
 	CTrigger(FP,{Gun_Line(7,AtLeast,(#OvG-1)*5)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},{Preserved})
@@ -356,7 +367,8 @@ function Include_GunData(Size,LineNum)
 
 
 	CIf_GCase(151)
-		CDoActions(FP,{Gun_SetLine(8,SetTo,1),TCreateUnit(1,84,1,G_CA_Player),KillUnit(84,Force2)})
+		DoActions2(FP,{Simple_CalcLoc(0,-256,-256,256,256)})
+		CDoActions(FP,{Gun_SetLine(8,SetTo,1),TCreateUnit(1,84,1,G_CA_Player)})
 		CereT = {80,8}
 		for j = 1, 2 do
 		for i = 0, 7 do
@@ -365,11 +377,112 @@ function Include_GunData(Size,LineNum)
 			G_CA_SetSpawn(cond,{CereT[j]},"ACAS","Cere1","MAX",0,nil,"CP",G_CA_Rotate(270+(i*45)))
 		end
 		end
+		for i = 0, 3 do
+			TriggerX(FP,{Gun_Line(6,AtLeast,8)},{AddCD(CereCond[i+1],1)},{Preserved})
+		end
 	--Gun_Line(3,Exactly,1),
 		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
 		CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
 		CTrigger(FP,{Gun_Line(6,AtLeast,8)},{TSetMemory(0x6509B0,SetTo,G_CA_Player),RunAIScriptAt(JYD,1),Gun_DoSuspend()},1)
 
+	CIfEnd()
+
+--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
+--	Tier2 = {79,80,52,10,22,65,70}
+--	Tier3 = {27,66,29,98,57,3,8,11,69}
+--	Tier4 = {102,61,67,23,81,30}
+--	Tier5 = {60,68}
+	CIf_GCase(127)
+	CDoActions(FP,{Gun_SetLine(8,SetTo,1)})
+	Ion_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
+	Ion_CUTable2={{21},{28},{22},{8}}
+	Ion_CUTable3={{55,53,54,48,17},{104,56,53,54,19},{56,53,54,48,10},{104,62,51,15,3}}
+	for j = 1, 4 do
+	for i = 0, 3 do
+	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+	if i == 0 then cond = {GCP(j+3),Gun_Line(8,AtMost,0)} end
+--	if j == 1 then PushErrorMsg(table.concat(Ion_CUTable3[i+1])) end
+		G_CA_SetSpawn2X(cond,Ion_CUTable3[i+1],"ACAS","ion2_P"..j+4,"MAX",974,nil,"CP")
+		G_CA_SetSpawn(cond,Ion_CUTable1[i+1],"ACAS","ion1_P"..j+4,1,0,nil,"CP")
+		G_CA_SetSpawn(cond,Ion_CUTable2[i+1],"ACAS","ion3_P"..j+4,nil,0,nil,"CP")
+	end
+	end
+	CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
+	CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
+	CTrigger(FP,{Gun_Line(6,AtLeast,3)},{Gun_DoSuspend()},1)
+	CIfEnd()
+
+	
+	CIf(FP,{TTOR({Gun_Line(0,Exactly,200),Gun_Line(0,Exactly,152)})})
+	CDoActions(FP,{
+		Gun_SetLine(11,Add,11); --SetCVar("X",XAngle,Add,11);
+		Gun_SetLine(12,Add,8); --SetCVar("X",YAngle,Add,8);
+		Gun_SetLine(13,Add,5); --SetCVar("X",ZAngle,Add,5);
+	})
+	CTrigger(FP,{
+		Gun_Line(14,Exactly,0) --CVar("X",Move1,Exactly,0);
+	},{
+		Gun_SetLine(15,Add,1); -- SetCVar("X",Move2,Add,1);
+	},{Preserved})
+	CTrigger(FP,{
+		Gun_Line(14,Exactly,1) --CVar("X",Move1,Exactly,1);
+	},{
+		Gun_SetLine(15,Subtract,9); -- SetCVar("X",Move2,Subtract,9);
+	},{Preserved})
+	CTrigger(FP,{
+		Gun_Line(14,Exactly,1); --CVar("X",Move1,Exactly,1);
+		Gun_Line(15,Exactly,0); --CVar("X",Move2,Exactly,0);
+	},{
+		Gun_SetLine(14,SetTo,0); -- SetCVar("X",Move1,SetTo,0);
+	},{Preserved})
+	CTrigger(FP,{
+		Gun_Line(14,Exactly,0); --CVar("X",Move1,Exactly,0);
+		Gun_Line(15,AtLeast,1280); --CVar("X",Move2,AtLeast,1280);
+	},{
+		Gun_SetLine(14,SetTo,1); -- SetCVar("X",Move1,SetTo,1);
+	},{Preserved})
+	CMov(FP,V(TSize),Var_TempTable[10+1])
+	CMov(FP,V(XAngle),Var_TempTable[11+1])
+	CMov(FP,V(YAngle),Var_TempTable[12+1])
+	CMov(FP,V(ZAngle),Var_TempTable[13+1])
+	CMov(FP,V(Move1),Var_TempTable[14+1])
+	CMov(FP,V(Move2),Var_TempTable[15+1])
+	CMov(FP,SHLX,G_CA_CenterX)
+	CMov(FP,SHLY,G_CA_CenterY)
+	CIfEnd()
+	CIf_GCase(200)
+	
+	
+	CTrigger(FP,{
+		Gun_Line(7,AtMost,0)},{
+		Gun_SetLine(10,SetTo,540); -- SetCVar("X",TSize,SetTo,540);
+		SetCD(GeneT,0),RotatePlayer({PlayWAVX("sound\\Terran\\Frigate\\AfterOff.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOff.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOff.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOff.wav")},HumanPlayers,FP);
+		SetInvincibility(Enable,"Men",Force2,64);
+	},{Preserved})
+	CTrigger(FP,{
+		Gun_Line(10,AtMost,540*3*6) --CVar(FP,TSize,AtMost,540*3*6)
+	},{
+		Gun_SetLine(10,Add,540/4); -- SetCVar("X",TSize,Add,540/4);
+	},{Preserved})
+	
+	
+	CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0)})
+	CTrigger(FP,{CD(GeneT,30000,AtLeast)},{Gun_DoSuspend(),SetInvincibility(Disable,"Men",Force2,64),RotatePlayer({PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")},HumanPlayers,FP);},1)
+	CIfEnd()
+
+	CIf_GCase(152)
+	TriggerX(FP,{Gun_Line(7,AtMost,340)},{CreateUnit(1,84,1,FP)},{Preserved})
+	CIf(FP,{Gun_Line(7,AtLeast,241),Gun_Line(7,AtLeast,240)},{Gun_SetLine(10,Add,540/2)})
+	CTrigger(FP,{GCP(6)},{Gun_SetLine(1,Add,12)},{Preserved})
+	CTrigger(FP,{GCP(7),Gun_Line(7,AtLeast,241),Gun_Line(7,AtLeast,240)},{Gun_SetLine(1,Subtract,12)},{Preserved})
+	CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0)})
+	CIfEnd()
+	CIf(FP,{Gun_Line(7,AtLeast,290)},{Gun_DoSuspend()})
+
+	CallTriggerX(FP,CallCXPlot,{GCP(6)},{SetCD(CXEffType,1)})
+	CallTriggerX(FP,CallCXPlot,{GCP(7)},{SetCD(CXEffType,2)})
+	CIfEnd()
+		
 	CIfEnd()
 
 

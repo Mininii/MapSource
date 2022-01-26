@@ -3,7 +3,7 @@ function Var_init()
 	RandSwitch2 = "Switch 101"
 	MarAtk = 50
 	MarAtkFactor = 4
-	MarAtkFactor2 = 6
+	MarAtkFactor2 = 8
 	GunLimit = 1450
 
 	UnitDataPtr = EPDF(0x5967EC-(1700*4))
@@ -18,6 +18,7 @@ function Var_init()
 	ShTStrPtr = CreateVarArr(4,FP)
 	EEggStrPtr = CreateVarArr(4,FP)
 	PyCCode = CreateCcodeArr(4)
+	CereCond= CreateCcodeArr(4)
 
 	CurrentUID = CreateVar(FP)
 	Nextptrs = CreateVar(FP)
@@ -79,6 +80,8 @@ function Var_init()
 	BFlag = CreateCcode()
 	ShUsed = CreateCcode()
 	ShCool = CreateCcode()
+	GeneT = CreateCcode()
+	CXEffType = CreateCcode()
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")
@@ -141,6 +144,41 @@ function Var_init()
 	AtkCondT = CreateCText(FP,"공격력 업그레이드 조건 불만족\n	Next Level - ")
 	HPCondT = CreateCText(FP,"체력 업그레이드 조건 불만족\n	Next Level - ")
 
+	--CXPlot 
+	function CreateVarA(Player)
+		local R = CreateVar(Player)
+		return R[2]
+	end
+	CXArrX = CreateArr(100,FP)
+	CXArrY = CreateArr(100,FP)
+	CXArrZ = CreateArr(100,FP)
+	TSize = CreateVarA(FP)
+	XAngle = CreateVarA(FP)
+	YAngle = CreateVarA(FP)
+	ZAngle = CreateVarA(FP)
+	TCount = CreateVarA(FP)
+	THeight = CreateVarA(FP)
+	Arrptr = CreateVarA(FP)
+	CArrptr = CreateVarA(FP)
+	Arrptr1 = CreateVarA(FP)
+	Arrptr2 = CreateVarA(FP)
+	VArrptr1 = CreateVar(FP)
+	VArrptr4 = CreateVar(FP)
+	Var1 = CreateVarA(FP)
+	Var2 = CreateVarA(FP)
+	Move1 = CreateVarA(FP)
+	Move2 = CreateVarA(FP)
+	SHLX = CreateVar(FP)
+	SHLY = CreateVar(FP)
+
+	TTemp = CXMakePolyhedron(20,512) -- 한변의 크기가 512 정20면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
+	TNumber = TTemp[1]/2 + 1
+	TShape = {1,{0,0,0}} -- 원점 데이터 삽입
+	local Sym = {{1,4},{2,3},{5,8},{6,7},{9,12},{10,11}}
+	for i = 1, TTemp[1]/2 do
+	table.insert(TShape,{TTemp[Sym[i][1]+1][1],TTemp[Sym[i][1]+1][2], TTemp[Sym[i][1]+1][3]})
+	TShape[1] = TShape[1] + 1
+	end
 --	CreateHeroPointArr(15,"\x1B잔\x04해 "..Conv_HStr("<1B>C<04>ivilian"),30000)
 
 

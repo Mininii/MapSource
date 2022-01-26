@@ -17,6 +17,7 @@ function Interface()
 	RemoveUnit(MarID[2],P12),
 	RemoveUnit(MarID[3],P12),
 	RemoveUnit(MarID[4],P12),
+	RemoveUnit(204,FP)
 })
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),

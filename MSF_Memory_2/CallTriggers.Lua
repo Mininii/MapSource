@@ -88,4 +88,183 @@ function Install_CallTriggers()
 	SetCallEnd()
 
 
+	SendEff = CreateVarArr(3,FP)
+	SendEff2 = CreateVarArr(2,FP)
+	RecoverEff1 = CreateVar(FP)
+	RecoverEff2 = CreateVar(FP)
+	Call_EffUnit = SetCallForward()
+	SetCall(FP)
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	
+	f_Read(FP,SendEff[1],RecoverEff1)
+	f_Read(FP,SendEff2[1],RecoverEff2)
+	CDoActions(FP,{
+		TSetMemory(SendEff2[1],SetTo,131);
+		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]);
+		CreateUnit(1,204,"Location 1",FP);
+		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]);
+		TSetMemory(SendEff2[1],SetTo,RecoverEff1);
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
+		TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);
+	})
+	CIfEnd()
+	SetCallEnd()
+
+
+
+	CallCXPlot = SetCallForward()
+	SetCall(FP)
+	DoActionsX(FP,{SetCVar("X",TCount,SetTo,1)})
+	
+	CMov(FP,V(Arrptr),1)
+	CMov(FP,V(CArrptr),1)
+	CallCXPlotEff = FuncAlloc
+	FuncAlloc = FuncAlloc+2
+	function CXfunc()
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local PlayerID = CAPlotPlayerID
+	CX_Ratio(V(TSize),540*3*12,V(TSize),540*3*12, V(TSize),540*3*12)
+	CX_Rotate(_Div(V(XAngle),10),_Div(V(YAngle),10),_Div(V(ZAngle),10))
+	CIfX(FP,CVar("X",CA[6],Exactly,1))
+	CMov(FP,Arr(CXArrX,0),_Add(V(CA[8]), V(CA[8])))
+	CMov(FP,Arr(CXArrY,0),_Add(V(CA[9]), V(CA[9])))
+	CMov(FP,Arr(CXArrZ,0),_Add(V(CA[11]),V(CA[11])))
+	CElseX()
+	local Sym = {{1,4},{2,3},{5,8},{6,7},{9,12},{10,11}}
+	for i = 2, TNumber do
+	Trigger {
+	players = {FP},
+	conditions = {
+	Label(0);
+	CVar("X",CA[6],Exactly,i);
+	},
+	actions = {
+	SetCVar("X",CArrptr,SetTo,Sym[i-1][1]);
+	PreserveTrigger();
+	}
+	}
+	end
+	CMovX(FP,Arr(CXArrX,V(CArrptr)),V(CA[8]))
+	CMovX(FP,Arr(CXArrY,V(CArrptr)),V(CA[9]))
+	CMovX(FP,Arr(CXArrZ,V(CArrptr)),V(CA[11]))
+	for i = 2, TNumber do
+	Trigger {
+	players = {FP},
+	conditions = {
+	Label(0);
+	CVar("X",CA[6],Exactly,i);
+	},
+	actions = {
+	SetCVar("X",CArrptr,SetTo,Sym[i-1][2]);
+	PreserveTrigger();
+	}
+	}
+	end
+	CMovX(FP,Arr(CXArrX,V(CArrptr)),_iSub(_Read(Arr(CXArrX ,0)),V(CA[8])))
+	CMovX(FP,Arr(CXArrY,V(CArrptr)),_iSub(_Read(Arr(CXArrY ,0)),V(CA[9])))
+	CMovX(FP,Arr(CXArrZ,V(CArrptr)),_iSub(_Read(Arr(CXArrZ ,0)),V(CA[11])))
+	CIfXEnd()
+	CJump(FP,0x1)
+	DoActionsXI(FP,CallCXPlotEff)
+	local AddNum1 = 15
+	local Ratio1 = 1
+	local Total1 = AddNum1 * Ratio1
+	CWhile(FP,{CVar("X",CA[6],Exactly,TShape[1]+1),CVar("X", Arrptr, AtMost, AddNum1*Ratio1)})
+	local AddArr = {{2,1},{2,9},{2,7},{2,8},{2,11},{1,9},{1,5},{1,6},{9,7},{9,5},{9,10},{7,8},{7,10},{8,11}, {11,1}}
+	local AddRatio = {{1,1}}
+	for i = 1, AddNum1 do
+	for j = 1, Ratio1 do
+	Trigger {
+	players = {FP},
+	conditions = {
+	Label(0);
+	CVar("X",Arrptr,Exactly,Ratio1*(i-1)+j);
+	},
+	actions = {
+	SetCVar("X",Arrptr1,SetTo,AddArr[i][1]);
+	SetCVar("X",Arrptr2,SetTo,AddArr[i][2]);
+	SetCVar("X",Var1,SetTo,AddRatio[j][1]);
+	SetCVar("X",Var2,SetTo,AddRatio[j][2]);
+	PreserveTrigger();
+	}
+	}
+	end
+	end
+	CMov(FP,V(CA[8]),_Read(Arr(CXArrX,V(Arrptr1)))) -- X << ArrX[Arrptr]
+	CMov(FP,V(CA[9]),_Read(Arr(CXArrY,V(Arrptr1)))) 
+	CMov(FP,V(CA[11]),_Read(Arr(CXArrZ, V(Arrptr1)))) 
+	CMov(FP,V(CA[12]),_Read(Arr(CXArrX, V(Arrptr2)))) -- X << ArrX[Arrptr]
+	CMov(FP,V(CA[13]),_Read(Arr(CXArrY, V(Arrptr2)))) 
+	CMov(FP,V(CA[14]),_Read(Arr(CXArrZ, V(Arrptr2)))) 
+	CIfX(FP,{CVar("X",Var1,Exactly,AddRatio[1][1]),CVar("X",Var2,Exactly,AddRatio[1][2])})
+	CMov(FP,V(CA[8]),_iDiv(_Add(V(CA[8]), V(CA[12])),2))
+	CMov(FP,V(CA[9]),_iDiv(_Add(V(CA[9]), V(CA[13])),2))
+	CMov(FP,V(CA[11]),_iDiv(_Add(V(CA[11]),V(CA [14])),2))
+	CMov(FP,V(CA[12]),_iSub( _Read(Arr(CXArrX,0)),V(CA[8])))
+	CMov(FP,V(CA[13]),_iSub( _Read(Arr(CXArrY,0)),V(CA[9])))
+	CMov(FP,V(CA[14]),_iSub( _Read(Arr(CXArrZ,0)),V(CA[11])))
+	CIfXEnd()
+	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-128,-128,128,128))
+
+
+	CIf(FP,CD(CXEffType,0))
+	CreateEffUnit({CVar("X",CA[11],AtLeast,0x80000000);CVar("X",CA[11],AtMost,0xFFFFFFFF-128)},0,982,10)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,0xFFFFFFFF-127)},0,983,10)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},18,983,17)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},20,983,16)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},19,983,13)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},20,984,17)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},19,984,16)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},18,984,13)
+	CIfEnd()
+	--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
+	--	Tier2 = {79,80,52,10,22,65,70}
+	--	Tier3 = {27,66,29,98,57,3,8,11,69}
+	--	Tier4 = {102,61,67,23,81,30}
+	--	Tier5 = {60,68}
+	--G_CA_Player
+	function CreateOrder(Number,UnitID,Player,Start,OrderType,Dest)
+		return {CreateUnit(Number,UnitID,Start,Player),Order(UnitID,Player,Start,OrderType,Dest)}
+	end
+	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640*3);},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,11,6,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,29,6,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,8,7,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,22,7,1,Attack,64)},{Preserved})
+
+	------ ¿øÁ¡ ´ëÄª -------------------------------------------------------------
+	CMov(FP,V(CA[8]),V(CA[12]))
+	CMov(FP,V(CA[9]),V(CA[13]))
+	CMov(FP,V(CA[11]),V(CA[14]))
+	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-128,-128,128,128))
+
+
+	CIf(FP,CD(CXEffType,0))
+	CreateEffUnit({CVar("X",CA[11],AtLeast,0x80000000);CVar("X",CA[11],AtMost,0xFFFFFFFF-128)},0,982,10)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,0xFFFFFFFF-127)},0,983,10)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},18,983,17)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},20,983,16)
+	CreateEffUnit({CVar("X",CA[11],AtMost,127);},19,983,13)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},20,984,17)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},19,984,16)
+	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},18,984,13)
+	CIfEnd()
+
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,98,6,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,86,6,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,70,7,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,69,7,1,Attack,64)},{Preserved})
+
+	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640);},{Preserved})
+
+	CWhileEnd(SetCVar("X",Arrptr,Add,1))
+	DoActionsXI(FP,CallCXPlotEff+1)
+	CJumpEnd(FP,0x1)
+	end
+	CXPlot(TShape,FP,nilunit,"Location 1",{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",FP,Always(),{SetNext("X",CallCXPlotEff),SetNext(CallCXPlotEff+1,"X",1)},nil)
+
+	SetCallEnd()
+	
 end

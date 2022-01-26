@@ -227,10 +227,9 @@ function System()
         CMov(FP,CPlayer,_Read(BackupCp),nil,0xFF)
         Convert_CPosXY()
         Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-
-        MarSkillCA = CAPlotForward()
-        CMov(FP,V(MarSkillCA[6]),1)
-        CMov(FP,V(MarSkillCA[5]),5)
+--        MarSkillCA = CAPlotForward()
+--        CMov(FP,V(MarSkillCA[6]),1)
+--        CMov(FP,V(MarSkillCA[5]),5)
         for i = 0, 3 do
         --TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
         end
@@ -245,7 +244,8 @@ function System()
             })
             CIfEnd()
         end
-            CAPlot({CSMakePolygon(4,128,45,5,1)},FP,181,0,nil,1,1,{1,0,0,0,6,0},nil,FP,nil,nil,1,"MarListSkillUnitFunc")
+        MarListSkillUnitFunc()
+            --CAPlot({CSMakePolygon(4,128,45,5,1)},FP,181,0,nil,1,1,{1,0,0,0,6,0},nil,FP,nil,nil,1,"MarListSkillUnitFunc")
         
 
 
@@ -342,8 +342,10 @@ function System()
                 PlayWAV("staredit\\wav\\revive.ogg"),
                 DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
                 SetMemory(0x6509B0,SetTo,FP),
+                SetmemoryB(0x665C48+380,SetTo,0);
                 SetMemoryX(0x666458, SetTo, 391,0xFFFF),
-                CreateUnitWithProperties(1,33,1,FP,{energy = 1}),
+                CreateUnitWithProperties(1,33,1,i,{energy = 1}),
+                SetmemoryB(0x665C48+380,SetTo,1);
                 SetMemoryX(0x666458, SetTo, 546,0xFFFF),
                 --RunAIScriptAt("Recall Here",24)
             },{Preserved})
@@ -388,13 +390,15 @@ function System()
     NJumpEnd(FP,Check_Enemy)
     DoActions(FP,MoveCp(Add,6*4))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,35,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,33,0,0xFF))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
 
     CIf(FP,DeathsX(CurrentPlayer,Exactly,156,0,0xFF)) -- 파일런 인식
         f_SaveCp()
         f_Read(FP,_Sub(BackupCp,15),CPos)
         Convert_CPosXY()
-        Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+        Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,CreateScanEff(981))
         DoActions2(FP,{RotatePlayer({MinimapPing(1),
         PlayWAVX("staredit\\wav\\Eff1.ogg"),
         PlayWAVX("staredit\\wav\\Eff1.ogg"),
@@ -584,6 +588,7 @@ function InvDisable(UnitID,Owner,Condition,Str)
         RotatePlayer({
             MinimapPing(1),
             PlayWAVX("staredit\\wav\\start.ogg"),
+            PlayWAVX("staredit\\wav\\start.ogg"),
             DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)
         },HumanPlayers,FP);
         SetInvincibility(Disable,UnitID,Owner,1);
@@ -596,7 +601,8 @@ GunPStr = {
 "\x17우측 하단 ",
 }
 for i = 4, 7 do
-    InvDisable(154,i,{CD(PyCCode[i-3],3)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(154,i,{CD(PyCCode[i-3],3,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(147,i,{CD(CereCond[i-3],2,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<1D>the <19>H<1D>eaven").." \x04의 \x02무적상태\x04가 해제되었습니다.")
     
 end
 

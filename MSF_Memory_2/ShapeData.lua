@@ -190,12 +190,16 @@ CirAX = CS_KaleidoscopeX(CS_MoveXY(CirA,x,y),6,0,1)
 Tornado = CSMakeTornado(6,40,10,4,1)
 Sp1 = CSMakeSpiral(4,1,1,28,0,61,9)
 MinHive = CS_RatioXY(CS_OverlapX(NexBYDLine[2],NexBYDLine[4],NexBYDLine[6]),0.5,0.5)
-function CSMinimap_Inverse4X(Shape,X,Y)
+function CSMinimap_Inverse4X(Shape,X,Y,RetType)
 	local P5 = CS_MoveXY(Shape,-X,-Y)
 	local P6 = CS_MoveXY(CS_InvertXY(Shape,2048,nil),-(4096-X),-Y)
 	local P7 = CS_MoveXY(CS_InvertXY(Shape,nil,2048),-X,-(4096-Y))
 	local P8 = CS_MoveXY(CS_InvertXY(Shape,2048,2048),-(4096-X),-(4096-Y))
-	return P5,P6,P7,P8
+	if RetType == nil then
+		return P5,P6,P7,P8
+	else
+		return {P5,P6,P7,P8}
+	end
 end
 MinHiveTemp = {16  ,{64, 1088},{128, 1120},{192, 1152},{256, 1184},{320, 1216},{384, 1248},{448, 1280},{512, 1312},{576, 1344},{640, 1376},{704, 1408},{640, 1440},{576, 1472},{512, 1504},{448, 1536},{384, 1568}}
 MinHiveP5 ,MinHiveP6 ,MinHiveP7 ,MinHiveP8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
@@ -222,6 +226,22 @@ OvG2 = CS_SortR(OvG,1)
 OvG3 = CS_SortA(OvG,0)
 OvG4 = CS_SortA(OvG,1)
 Cere1 = CS_MoveXY(CSMakeStar(4,135,64,45,PlotSizeCalc(4*2,3),0),128)
+
+ion1 = {4   ,{1440, 1056},{1888, 832},{1888, 1568},{1440, 1344}}
+ion2 = CS_FillPathHX2(ion1,1,72,48,1,0,26.57,5)
+ion3 = CS_SortR(CS_ConnectPathX(ion1,48,1),0)
+ion1T = CSMinimap_Inverse4X(ion1,1680,1216,1)
+ion2T = CSMinimap_Inverse4X(ion2,1680,1216,1)
+ion3T = CSMinimap_Inverse4X(ion3,1680,1216,1)
+for i = 1, 4 do
+	_G["ion1_P"..i+4] = CS_RatioXY(ion1T[i],0.5,0.5)
+	_G["ion2_P"..i+4] = ion2T[i]
+	_G["ion3_P"..i+4] = ion3T[i]
+	table.insert(G_CAPlot_Shape_InputTable,"ion1_P"..i+4)
+	table.insert(G_CAPlot_Shape_InputTable,"ion2_P"..i+4)
+	table.insert(G_CAPlot_Shape_InputTable,"ion3_P"..i+4)
+end
+
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)

@@ -622,6 +622,8 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	if TempRandRet == nil then PushErrorMsg("Need_Include_CRandNum") end
 	if CA2ArrX == nil or CA2ArrY == nil or CA2ArrZ == nil then PushErrorMsg("Need_Include_CAPlot2_VArr") end
 
+	CXPlotVAI = CreateVar(FP)
+	CXPlotVAI4 = CreateVar(FP)
 	function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAfunc,PlayerID,Condition,PerAction,Preserve,CAfunc2)
 		if Shape == nil then
 			CS_InputError()
@@ -753,8 +755,9 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	
 		NWhile(PlayerID,{CVar("X",CA[2],Exactly,0),Condition})
 			NIfX(PlayerID,{TCVar("X",CA[4],AtMost,Vi(CA[5],-1)),TCVar("X",CA[6],AtMost,V(CA[10]))})
-				CMovX(PlayerID,V(CA[8]),VArr(PlotArrX,V(CA[6])),nil,0xFFFFFFFF,nil,1)
-				CMovX(PlayerID,V(CA[9]),VArr(PlotArrY,V(CA[6])),nil,0xFFFFFFFF,nil,1)
+				ConvertVArr(PlayerID,CXPlotVAI,CXPlotVAI4,V(CA[6]))
+				CMovX(PlayerID,V(CA[8]),VArrX(PlotArrX,CXPlotVAI,CXPlotVAI4),nil,0xFFFFFFFF,nil,1)
+				CMovX(PlayerID,V(CA[9]),VArrX(PlotArrY,CXPlotVAI,CXPlotVAI4),nil,0xFFFFFFFF,nil,1)
 		-------------------------------------------------------------------------
 				CAPlotDataArr = {CAPlotVarAlloc-17,CAPlotVarAlloc-16,CAPlotVarAlloc-15,CAPlotVarAlloc-14,CAPlotVarAlloc-13,CAPlotVarAlloc-12,CAPlotVarAlloc-11,CAPlotVarAlloc-10,CAPlotVarAlloc-9,CAPlotVarAlloc-8,CAPlotVarAlloc-7,CAPlotVarAlloc-6,CAPlotVarAlloc-5,CAPlotVarAlloc-4}
 				CAPlotPlayerID = PlayerID
@@ -949,9 +952,10 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	
 		NWhile(PlayerID,{CVar("X",CA[2],Exactly,0),Condition})
 			NIfX(PlayerID,{TCVar("X",CA[4],AtMost,Vi(CA[5],-1)),TCVar("X",CA[6],AtMost,V(CA[10]))})
-				CMovX(PlayerID,V(CA[8]),VArr(PlotArrX,V(CA[6])),nil,0xFFFFFFFF,nil,1)
-				CMovX(PlayerID,V(CA[9]),VArr(PlotArrY,V(CA[6])),nil,0xFFFFFFFF,nil,1)
-				CMovX(PlayerID,V(CA2[1]),VArr(PlotArrZ,V(CA[6])),nil,0xFFFFFFFF,nil,1)
+				ConvertVArr(PlayerID,CXPlotVAI,CXPlotVAI4,V(CA[6]))
+				CMovX(PlayerID,V(CA[8]),VArrX(PlotArrX,CXPlotVAI,CXPlotVAI4),nil,0xFFFFFFFF,nil,1)
+				CMovX(PlayerID,V(CA[9]),VArrX(PlotArrY,CXPlotVAI,CXPlotVAI4),nil,0xFFFFFFFF,nil,1)
+				CMovX(PlayerID,V(CA2[1]),VArrX(PlotArrZ,CXPlotVAI,CXPlotVAI4),nil,0xFFFFFFFF,nil,1)
 		-------------------------------------------------------------------------
 				CAPlotDataArr = {CAPlotVarAlloc-17,CAPlotVarAlloc-16,CAPlotVarAlloc-15,CAPlotVarAlloc-14,CAPlotVarAlloc-13,CAPlotVarAlloc-12,CAPlotVarAlloc-11,CAPlotVarAlloc-10,CAPlotVarAlloc-9,CAPlotVarAlloc-8,CAPlotVarAlloc-7,CAPlotVarAlloc-6,CAPlotVarAlloc-5,CAPlotVarAlloc-4}
 				CAPlotPlayerID = PlayerID
@@ -1027,6 +1031,7 @@ f_GunSendErrT = "\x07『 \x08ERROR \x04: G_CA_SpawnSet 목록이 가득 차 데이터를 입
 G_CA_PosErr = "\x07『 \x03CAUCTION : \x04생성 좌표가 맵 밖을 벗어났습니다.\x07 』"
 f_GunErrT = "\x07『 \x08ERROR \x04: G_CAPlot Not Found. \x07』"
 f_GunFuncT = "\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07』"
+f_GunFuncT2 = "\x07『 \x03TESTMODE OP \x04: G_CAPlot Sended. \x07』"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
@@ -1067,6 +1072,8 @@ G_CA_Player = CreateVar(FP)
 local LDrX,LDrY = CreateVars(2,FP)
 local G_CA_X = CreateVar(FP)
 local G_CA_Y = CreateVar(FP)
+local G_CA_WSTestStrPtr = CreateVar(FP)
+local G_CA_WSTestVA = CreateVArr(5,FP)
 Call_Repeat = SetCallForward() -- 유닛생성부
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -1347,13 +1354,34 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_CenterX),
 	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,G_CA_CenterY)
 })
+
+if Limit == 1 then
+	CIf(FP,CD(TestMode,1))
+	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{Preserved})
+	ItoDec(FP,G_CA_CUTV[1],VArr(G_CA_WSTestVA,0),0,nil,0)
+	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--	ItoDec(FP,G_CA_CUTV[2],VArr(G_CA_WSTestVA,0),0,nil,0)
+--	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--	ItoDec(FP,G_CA_CUTV[3],VArr(G_CA_WSTestVA,0),0,nil,0)
+--	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--	ItoDec(FP,G_CA_CUTV[4],VArr(G_CA_WSTestVA,0),0,nil,0)
+--	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--	ItoDec(FP,G_CA_CUTV[5],VArr(G_CA_WSTestVA,0),0,nil,0)
+--	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+	CIfEnd()
+
+end
 CElseX()
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_XPos),
 	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,G_CA_YPos)
 })
 CIfXEnd()
-
 NElseIfX({CVar(FP,G_CA_LineV[2],AtMost,((0x970/4)*Size_of_G_CA_Arr-2))})
 CAdd(FP,G_CA_LineV,0x970/4)
 CJump(FP,Write_SpawnSet_Jump)
@@ -1604,22 +1632,21 @@ function G_CA_LoopTimer(num)
 end
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
 	local Z = {}
+	local CUTable = {}
+	local CUTable2 = G_CA_CUTable
 
-	if type(G_CA_CUTable) ~= "table" then
+	if type(CUTable2) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	else
-		if #G_CA_CUTable <= 4 then
-			Z = {SetCVar(FP,G_CA_CUTV[1][2],SetTo,T_to_BiteBuffer(G_CA_CUTable))}
-		elseif #G_CA_CUTable >= 5 and #G_CA_CUTable <= 20 then
-			local CUTable = {}
-			while #G_CA_CUTable~=0 do
-				local TempT = {}
-				while #TempT<4 do
-					table.insert(TempT,G_CA_CUTable[1])
-					table.remove(G_CA_CUTable,1)
-					if #G_CA_CUTable==0 then break end
-				end
-				table.insert(CUTable,TempT)
+		if #CUTable2 <= 4 then
+			Z = {SetCVar(FP,G_CA_CUTV[1][2],SetTo,T_to_BiteBuffer(CUTable2))}
+
+		elseif #CUTable2 >= 5 and #CUTable2 <= 20 then
+			local TempT = {}
+			
+			for j, k in pairs(CUTable2) do
+				if #TempT > 5 then table.insert(CUTable,TempT) TempT = {} end
+				table.insert(TempT,k)
 			end
 			for j, k in pairs(CUTable) do
 				table.insert(Z,SetCVar(FP,G_CA_CUTV[j][2],SetTo,T_to_BiteBuffer(k)))
@@ -1710,7 +1737,6 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 		SetCVar(FP,G_CA_Owner[2],SetTo,Owner),
 		SetCVar(FP,G_CA_EffType[2],SetTo,EffType),
 		SetCVar(FP,G_CA_FuncNum[2],SetTo,FuncNum),
-		
 		SetCVar(FP,G_CA_MaxNum[2],SetTo,MaxNum),
 
 	},PreserveFlag)
@@ -1761,6 +1787,9 @@ function Install_Call_G_CA()
 				TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0,0xFF),
 				TSetMemory(Vi(G_CA_TempH[2],17*(0x20/4)),SetTo,0),
 			})
+			if Limit == 1 then
+				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{Preserved})
+			end
 			CElseIfX({CVar(FP,G_CA_TempTable[6][2],Exactly,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			CDoActions(FP,{
 				TSetMemory(Vi(G_CA_TempH[2],0*(0x20/4)),SetTo,0),
@@ -1781,15 +1810,11 @@ function Install_Call_G_CA()
 			})
 
 			if Limit == 1 then
-				CIf(FP,CD(TestMode,1))
-				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
-				CIfEnd()
+				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{Preserved})
 			end
 			CElseX()
 			if Limit == 1 then
-				CIf(FP,CD(TestMode,1))
-				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
-				CIfEnd()
+				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{Preserved})
 			end
 			
 				CDoActions(FP,{
@@ -1848,4 +1873,48 @@ end
 		if Load_CAPlot_Shape == nil then PushErrorMsg("Need_Install_Load_CAPlot") end
 	end
 
+	function G_CA_init()
+
+		f_GetStrXptr(FP,G_CA_WSTestStrPtr,"\x0D\x0D\x0DG_CA_WS".._0D)
+
+	end
+
+end
+
+function CreateEffUnit(Condition,Height,EffType,Color)
+	local ret2 = 0x669E28+EffType
+	local ret = bit32.band(ret2, 0xFFFFFFFF)%4
+	local Mask = 0
+	if ret == 0 then
+		Mask = 0xFF
+	elseif ret == 1 then
+		Mask = 0xFF00
+		Color = Color * 0x100
+	elseif ret == 2 then
+		Mask = 0xFF0000
+		Color = Color * 0x10000
+	elseif ret == 3 then
+		Mask = 0xFF000000
+		Color = Color * 0x1000000
+	end
+	ret2 = ret2 - ret
+
+	
+CallTriggerX(FP,Call_EffUnit,Condition,{
+	SetMemoryW(0x666462, SetTo, EffType);
+	SetMemoryB(0x66321C, SetTo, Height); -- 높이
+	SetCVar(FP,SendEff[1][2],SetTo,EPDF(ret2));
+	SetCVar(FP,SendEff[2][2],SetTo,Color);
+	SetCVar(FP,SendEff[3][2],SetTo,Mask);
+	SetCVar(FP,SendEff2[1][2],SetTo,EffType+EPDF(0x66EC48));
+})
+end
+
+function CreateScanEff(EffType)
+	T ={
+		SetMemoryX(0x666458, SetTo, EffType,0xFFFF),
+		CreateUnitWithProperties(1,33,1,FP,{energy = 100}),
+		KillUnit(33,FP);
+		SetMemoryX(0x666458, SetTo, 546,0xFFFF),}
+return T	
 end
