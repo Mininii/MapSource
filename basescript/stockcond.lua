@@ -121,6 +121,12 @@ function Deaths(Player, Comparison, Number, Unit)
     Unit = ParseUnit(Unit)
     return Condition(0, Player, Number, Unit, Comparison, 15, 0, 0)
 end
+function DeathsX(Player, Comparison, Number, Unit,Mask)
+    Player = ParsePlayer(Player)
+    Comparison = ParseComparison(Comparison)
+    Unit = ParseUnit(Unit)
+    return Condition(0, Player, Number, Unit, Comparison, 15, 0, 0)
+end
 
 
 function CommandLeast(Unit)

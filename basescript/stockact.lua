@@ -336,6 +336,12 @@ function SetDeaths(Player, Modifier, Number, Unit)
     Unit = ParseUnit(Unit)
     return Action(0, 0, 0, 0, Player, Number, Unit, 45, Modifier, 20)
 end
+function SetDeathsX(Player, Modifier, Number, Unit,Mask)
+    Player = ParsePlayer(Player)
+    Modifier = ParseModifier(Modifier)
+    Unit = ParseUnit(Unit)
+    return Action(0, 0, 0, 0, Player, Number, Unit, 45, Modifier, 20)
+end
 
 
 function Order(Unit, Owner, StartLocation, OrderType, DestLocation)
