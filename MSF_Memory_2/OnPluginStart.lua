@@ -149,6 +149,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	end
 	UnitSizePatch(55,9,9,9,9) 
 	UnitSizePatch(56,9,9,9,9) 
+	UnitSizePatch(62,9,9,9,9) 
 	UnitSizePatch(17,11,11,11,11)
 	UnitSizePatch(19,10,10,10,10)
 	UnitSizePatch(77,8,4,8,10)
@@ -189,7 +190,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitEnable(71) -- 원격스팀팩
 	UnitEnable(2) -- 자환
 	UnitEnable(19,50000) -- 수정보호막
-	UnitEnable(8,45000,nil,5) -- 마린
+	UnitEnable(8,5000,nil,5) -- 마린
 	UnitEnable(7,500) -- SCV
 	
 	UnitEnable(125,8000)
@@ -206,6 +207,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 19,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 71,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
+		table.insert(PatchArr,SetMemory(0x582144+(i*4),SetTo,8))--캔낫기회
+			
 	end
 	for i = 1, 4 do
 		UnitEnable(MedicTrig[i],200+(i*50),nil,i) -- 메딕
@@ -224,6 +227,10 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i],SetTo,MarWep[i])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i],SetTo,MarWep[i])) -- 공중무기
 	end
+	DefTypePatch(20,9) -- 
+	DefTypePatch(32,8) -- 
+	DefTypePatch(124,5) -- 
+	DefTypePatch(125,4) -- 
 	table.insert(PatchArr,SetMemoryW(0x657678 + (123*2),SetTo,MarAtkFactor2)) -- 추가공격력
 
 
@@ -273,6 +280,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	if Limit == 1 then
+		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
+		f_GetStrXptr(FP,ReadCPStrPtr,"\x0d\x0d\x0dReadCPStrPtr : ".._0D)
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
 		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	end
@@ -556,6 +565,8 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		for j, k in pairs(Replace_JumpUnitArr) do
 			NJumpX(FP,Rep_Jump4,{DeathsX(CurrentPlayer,Exactly,k,0,0xFF)})
 		end
+
+		
 		CSub(FP,0x6509B0,6)
 		f_SaveCp()
 			f_Read(FP,_Sub(BackupCp,9),CPos)
@@ -596,6 +607,20 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	f_SaveCp()
 		f_Read(FP,BackupCp,RepHeroIndex)
 		CDoActions(FP,{TSetDeaths(_Sub(BackupCp,23),SetTo,_Sub(_Read((_Add(RepHeroIndex,EPDF(0x662350)))),128),0)})
+		
+		CTrigger(FP,{TTOR({
+			CVar(FP,RepHeroIndex[2],Exactly,200);
+			CVar(FP,RepHeroIndex[2],Exactly,190);
+			CVar(FP,RepHeroIndex[2],Exactly,173);
+			CVar(FP,RepHeroIndex[2],Exactly,168);
+			CVar(FP,RepHeroIndex[2],Exactly,152);
+			CVar(FP,RepHeroIndex[2],Exactly,201);
+		})},{
+			TSetMemoryX(_Add(BackupCp,55-25),SetTo,0xB00,0xB00),
+			TSetMemoryX(_Add(BackupCp,57-25),SetTo,0,0xFFFFFFFF),
+			TSetMemoryX(_Add(BackupCp,37-25),SetTo,0,0xFF0000),
+		},1)
+
 	f_LoadCp()
 	CSub(FP,0x6509B0,6)
 	CIfEnd()
@@ -630,7 +655,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			CVar(FP,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x04플레이 중\n\x13\x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――")},HumanPlayers,FP);
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F8500 Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F45000 Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : ")},HumanPlayers,FP);
 			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
 			
 		},

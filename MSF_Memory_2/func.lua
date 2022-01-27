@@ -319,6 +319,7 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 			},
 		
 		actions = {
+			ModifyUnitEnergy(1,UID,Player,64,0);
 			KillUnitAt(1,UID,"Anywhere",Player);
 			DisplayText(StrDesign("\x04"..Text.." "..Limit.."기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ "..ReturnResources.." Ore\x07"),4);
 			SetResources(Player,Add,ReturnResources,Ore);
@@ -563,8 +564,24 @@ function Install_DeathNotice()
 	for j = 1, 4 do
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
 		DoActions(FP,MoveCp(Subtract,6*4))
+		EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,11,0,0xFF)})
 		f_SaveCp()
 		Install_CText1(HTextStrPtr,Str12,Str03[j],Names[j])
+		DoActionsX(FP,{
+			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
+			SetScore(j-1,Add,3,Custom);
+		})
+		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+		f_LoadCp()
+		DoActions(FP,MoveCp(Add,6*4))
+	CIfEnd()
+	DoActions(FP,MoveCp(Subtract,6*4))
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF)})
+	DoActions(FP,MoveCp(Add,6*4))
+	CIf(FP,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
+		f_SaveCp()
+		Install_CText1(HTextStrPtr,Str12,NMT,Names[j])
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,1,Custom);
@@ -572,8 +589,21 @@ function Install_DeathNotice()
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 		f_LoadCp()
-		DoActions(FP,MoveCp(Add,6*4))
 	CIfEnd()
+	CIf(FP,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
+		f_SaveCp()
+		Install_CText1(HTextStrPtr,Str12,HMT,Names[j])
+		DoActionsX(FP,{
+			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
+			SetScore(j-1,Add,2,Custom);
+		})
+		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+		f_LoadCp()
+	CIfEnd()
+	DoActions(FP,MoveCp(Subtract,6*4))
+	CIfEnd()
+	DoActions(FP,MoveCp(Add,6*4))
 end
 
 end
@@ -1358,9 +1388,9 @@ CDoActions(FP,{
 if Limit == 1 then
 	CIf(FP,CD(TestMode,1))
 	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{Preserved})
-	ItoDec(FP,G_CA_CUTV[1],VArr(G_CA_WSTestVA,0),0,nil,0)
-	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
-	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+	--ItoDec(FP,G_CA_CUTV[1],VArr(G_CA_WSTestVA,0),0,nil,0)
+	--f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
+	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
 --	ItoDec(FP,G_CA_CUTV[2],VArr(G_CA_WSTestVA,0),0,nil,0)
 --	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
 --	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
@@ -1645,9 +1675,11 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 			local TempT = {}
 			
 			for j, k in pairs(CUTable2) do
-				if #TempT > 5 then table.insert(CUTable,TempT) TempT = {} end
+				if #TempT > 3 then table.insert(CUTable,TempT) TempT = {} end
 				table.insert(TempT,k)
 			end
+			if #TempT > 0 then table.insert(CUTable,TempT) TempT = {} end
+
 			for j, k in pairs(CUTable) do
 				table.insert(Z,SetCVar(FP,G_CA_CUTV[j][2],SetTo,T_to_BiteBuffer(k)))
 			end

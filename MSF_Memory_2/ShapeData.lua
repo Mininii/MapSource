@@ -242,6 +242,24 @@ for i = 1, 4 do
 	table.insert(G_CAPlot_Shape_InputTable,"ion3_P"..i+4)
 end
 
+
+
+norad1 = {4   ,{800, 1440},{32, 1056},{352, 896},{832, 1152}}
+norad2 = CS_FillPathHX2(norad1,1,72,48,1,0,-26.57,5)
+norad3 = CS_SortR(CS_ConnectPathX(norad1,48,1),0)
+
+norad1T = CSMinimap_Inverse4X(norad1,432,1120,1)
+norad2T = CSMinimap_Inverse4X(norad2,432,1120,1)
+norad3T = CSMinimap_Inverse4X(norad3,432,1120,1)
+for i = 1, 4 do
+	_G["norad1_P"..i+4] = norad1T[i]
+	_G["norad2_P"..i+4] = norad2T[i]
+	_G["norad3_P"..i+4] = norad3T[i]
+	table.insert(G_CAPlot_Shape_InputTable,"norad1_P"..i+4)
+	table.insert(G_CAPlot_Shape_InputTable,"norad2_P"..i+4)
+	table.insert(G_CAPlot_Shape_InputTable,"norad3_P"..i+4)
+end
+
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)

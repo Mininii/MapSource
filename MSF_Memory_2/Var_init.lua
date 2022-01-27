@@ -82,6 +82,10 @@ function Var_init()
 	ShCool = CreateCcode()
 	GeneT = CreateCcode()
 	CXEffType = CreateCcode()
+	CanCT = CreateCcode()
+	CanC = CreateCcode()
+	DefeatCC = CreateCcode()
+	CanWT = CreateCcode()
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")
@@ -133,7 +137,8 @@ function Var_init()
 	Str12 = CreateCText(FP,"\x07·\x11·\x08·\x07【 ")
 	Str03 = {}
 	Str02 = {}
-	
+	NMT = CreateCText(FP,"\x04의 Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·")
+	HMT = CreateCText(FP,"\x04의 \x1BＨ \x04Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·")
 	for i = 0, 3 do
 		table.insert(Str03,CreateCText(FP,"\x04의 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·"))
 		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."\x07】\x08·\x11·\x07·"))

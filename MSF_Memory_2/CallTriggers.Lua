@@ -111,6 +111,36 @@ function Install_CallTriggers()
 	CIfEnd()
 	SetCallEnd()
 
+	function CheckCP()
+			
+		if Limit == 1 then
+			CallTrigger(FP,CallCheckCP)
+		end
+	end
+	if Limit == 1 then
+	CurCP = CreateVar(FP)
+	ReadCP = CreateVar(FP)
+	CurCPVA = CreateVArr(4,FP)
+	ReadCPVA = CreateVArr(4,FP)
+	CurCPStrPtr = CreateVar(FP)
+	ReadCPStrPtr = CreateVar(FP)
+
+	CallCheckCP = SetCallForward()
+	SetCall(FP)
+	f_SaveCp()
+
+	f_Read(FP,BackupCp,ReadCp)
+	CMov(FP,CurCP,BackupCp,-19025)
+	f_Mod(FP,CurCP,84)
+	ItoDec(FP,CurCP,VArr(CurCPVA,0),2,nil,0)
+	ItoDec(FP,ReadCP,VArr(ReadCPVA,0),2,nil,0)
+	f_Movcpy(FP,_Add(CurCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dCurCPStrPtr : ")),VArr(CurCPVA,0),4*4)
+	f_Movcpy(FP,_Add(ReadCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dReadCPStrPtr : ")),VArr(ReadCPVA,0),4*4)
+	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{Preserved})
+	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{Preserved})
+	f_LoadCp()
+	SetCallEnd()
+	end
 
 
 	CallCXPlot = SetCallForward()
