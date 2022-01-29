@@ -345,21 +345,21 @@ function System()
         Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
             for i = 0, 3 do
                 TriggerX(FP,{CV(CPlayer,i)},{
-                CreateUnitWithProperties(1,MarID[i+1],1,i,{energy = 1}),
+                CreateUnitWithProperties(1,MarID[i+1],1,i,{energy = 100}),
                 SetMemory(0x6509B0,SetTo,i),
                 PlayWAV("staredit\\wav\\revive.ogg"),
                 DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
                 SetMemory(0x6509B0,SetTo,FP),
                 SetmemoryB(0x665C48+380,SetTo,0);
                 SetMemoryX(0x666458, SetTo, 391,0xFFFF),
-                CreateUnitWithProperties(1,33,1,i,{energy = 1}),
+                CreateUnitWithProperties(1,33,1,i,{energy = 100}),
                 SetmemoryB(0x665C48+380,SetTo,1);
                 SetMemoryX(0x666458, SetTo, 546,0xFFFF),
                 --RunAIScriptAt("Recall Here",24)
             },{Preserved})
             end
             f_Read(FP,_Add(Nextptrs,0x28/4),TempTarget)
-        CIf(FP,{TMemoryX(_Add(Nextptrs,19),Exactly,2*256,0xFF00)})
+        CIf(FP,{TMemoryX(_Add(Nextptrs,19),Exactly,2*256,0xFF00),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
         CDoActions(FP,{
             TSetMemory(_Add(Nextptrs,0x5C/4),SetTo,0),
             TSetMemory(_Add(Nextptrs,0x18/4),SetTo,TempTarget),
@@ -610,10 +610,23 @@ GunPStr = {
 "\x16좌측 하단 ",
 "\x17우측 하단 ",
 }
+CellPStr = {
+"\x11중앙 좌측 ",
+"\x18중앙 하단 ",
+"\x16중앙 우측 ",
+"\x17중앙 상단 ",
+}
 for i = 4, 7 do
     InvDisable(154,i,{CD(PyCCode[i-3],3,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
     InvDisable(147,i,{CD(CereCond[i-3],2,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<1D>the <19>H<1D>eaven").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-    
+    InvDisable(168,i,{CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost)},CellPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>R<1D>esonance").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(189,i,{CD(HiveCcode[i-3],0,AtMost)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>W<1D>arp <19>T<1D>unnel").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+end
+for i = 4, 5 do
+    InvDisable(201,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>O<1D>blivion").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+end
+for i = 6, 7 do
+    InvDisable(152,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>N<1D>ightmare").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
 
 if Limit == 1 then

@@ -39,6 +39,15 @@ function Install_CallTriggers()
 			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,147)},{SetCVar(FP,CPosY[2],Add,-32)},{Preserved})
 		CIfEnd()
 
+
+
+
+		for i = 0, 3 do
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,131)},{AddCD(HactCcode[i+1],1)},{Preserved})
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,132)},{AddCD(LairCcode[i+1],1)},{Preserved})
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,133)},{AddCD(HiveCcode[i+1],1)},{Preserved})
+		end
+
 		CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 		CDoActions(FP,{
 		TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),

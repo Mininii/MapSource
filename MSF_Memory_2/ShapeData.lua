@@ -225,10 +225,18 @@ Point = {1,{0,0}}
 TempleG = CS_Distortion(CSMakeCircle(32,960,0,33,1),{0,0},{0,0})
 
 OvG = CSMakeStar(4,180,128,90,9*9,0)
-OvG1 = CS_SortR(OvG,0)
-OvG2 = CS_SortR(OvG,1)
-OvG3 = CS_SortA(OvG,0)
-OvG4 = CS_SortA(OvG,1)
+OvG1 = CS_SortX(OvG,0)
+OvG2 = CS_SortX(OvG,1)
+OvG3 = CS_SortY(OvG,0)
+OvG4 = CS_SortY(OvG,1)
+OvG5 = CS_SortR(OvG,0)
+OvG6 = CS_SortR(OvG,1)
+OvG7 = CS_SortA(OvG,0)
+OvG8 = CS_SortA(OvG,1)
+for i = 1, 8 do
+	table.insert(G_CAPlot_Shape_InputTable,"OvG"..i)
+end
+
 Cere1 = CS_MoveXY(CSMakeStar(4,135,64,45,PlotSizeCalc(4*2,3),0),128)
 
 ion1 = {4   ,{1440, 1056},{1888, 832},{1888, 1568},{1440, 1344}}
@@ -322,10 +330,6 @@ end
 		"Tor2",
 		"Tor3",
 		"TempleG",
-		"OvG1",
-		"OvG2",
-		"OvG3",
-		"OvG4",
 		"Cere1",
 	}
 	)

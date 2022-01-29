@@ -45,59 +45,59 @@ function Operator_Trig()
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
-	
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			Deaths(CurrentPlayer,AtLeast,1,204);
-		},
-		actions = {
-			KillUnit("Men",Force2);
-			KillUnit(143,Force2);
-			KillUnit(144,Force2);
-			KillUnit(146,Force2);
-			PreserveTrigger();
-		}
-		}
-		
-		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
-			CMov(FP,0x6509B0,Cunit2,25)
-			Trigger {
-				players = {FP},
-				conditions = {
-					DeathsX(CurrentPlayer,AtMost,57,0,0xFF);
-				},
-				actions = {
-					MoveCp(Subtract,6*4);
-					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
-					MoveCp(Add,6*4);
-					PreserveTrigger();
-				}
+		for i = 0, 3 do
+			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{Preserved})
+		end
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				Deaths(CurrentPlayer,AtLeast,1,204);
+			},
+			actions = {
+				KillUnit("Men",Force2);
+				KillUnit(143,Force2);
+				KillUnit(144,Force2);
+				KillUnit(146,Force2);
+				PreserveTrigger();
 			}
-			Trigger {
-				players = {FP},
-				conditions = {
-					DeathsX(CurrentPlayer,AtLeast,59,0,0xFF);
-				},
-				actions = {
-					MoveCp(Subtract,6*4);
-					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
-					MoveCp(Add,6*4);
-					PreserveTrigger();
-				}
 			}
-			CMov(FP,0x6509B0,FP)--상위플레이어 단락
-		CIfEnd()
-		
-		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
-		CMov(FP,0x6509B0,Cunit2,19)
-		f_SaveCp()
-		CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCP),65536),0xFF000000)})
-		f_LoadCp()
-		CMov(FP,0x6509B0,FP)--상위플레이어 단락
+		TestUPtr = CreateVar(FP)
+		CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{Preserved})
+		CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
+			CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
 		CIfEnd()
 
+		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,207)})
+				CMov(FP,0x6509B0,Cunit2,25)
+				CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,58,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
+					MoveCp(Add,15*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF000000);
+					MoveCp(Subtract,21*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+					MoveCp(Add,6*4);
+				},1)
+			CIfEnd()
+
+			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203)})
+				CMov(FP,0x6509B0,Cunit2,25)
+				CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,58,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
+					MoveCp(Subtract,6*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+					MoveCp(Add,6*4);
+				},1)
+			CIfEnd()
+			
+			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+			CMov(FP,0x6509B0,Cunit2,19)
+			f_SaveCp()
+			CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCP),65536),0xFF000000)})
+			f_LoadCp()
+
+		CIfEnd()
 	CIfEnd()
 
 	CMov(FP,0x6509B0,FP)--상위플레이어 단락

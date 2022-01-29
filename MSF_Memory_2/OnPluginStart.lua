@@ -198,6 +198,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitEnable(109,1000)
 	UnitEnable(22) -- 브금
 	UnitEnable(72) -- 예약메딕
+	UnitEnable(74) -- 멀티스탑
+	UnitEnable(75) -- 멀티홀드
 	UnitEnable(60)
 	UnitEnable(62)
 	UnitEnable(61)
@@ -206,6 +208,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 19,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 71,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
 		table.insert(PatchArr,SetMemory(0x582144+(i*4),SetTo,8))--캔낫기회
 			

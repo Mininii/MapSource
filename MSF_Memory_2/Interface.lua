@@ -32,11 +32,11 @@ function Interface()
 			TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
 			TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,9216*(2^CBit)),AddV(MarHPRead[i+1],9216*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,9*(2^CBit))},{Preserved})
 		end
-		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(9999*256)+1)})
+		CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(9999*256)+1),SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,1)})
 		CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3)})
 		CElseX({SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0)})
 		CIfXEnd()
-		CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemory(0x515BB0+(i*4),SetTo,2560)})
+		CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemory(0x515BB0+(i*4),SetTo,2560),SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,1)})
 		CElseIfX({CV(CurHP[i+1],HPCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i),SetTo,250),SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3)})
 		CElseX({SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemoryB(0x58D2B0+(46*i)+1,SetTo,0)})
 		CIfXEnd()
@@ -421,6 +421,36 @@ Trigger { -- 보호막 가동
 		PreserveTrigger();
 	},
 	}
+	Trigger { -- 스팀팩
+	players = {i},
+	conditions = {
+		Label(0);
+		Command(i,AtLeast,1,74);
+	},
+	actions = {
+		SetCD(CUnitFlag,1);
+		SetDeaths(i,Add,1,74);
+		ModifyUnitEnergy(1,74,i,64,0);
+		RemoveUnitAt(1,74,"Anywhere",i);
+		DisplayText(StrDesign("\x04멀티 \x07스탑\x04기능을 사용합니다."),4);
+		PreserveTrigger();
+	},
+	}
+	Trigger { -- 스팀팩
+	players = {i},
+	conditions = {
+		Label(0);
+		Command(i,AtLeast,1,75);
+	},
+	actions = {
+		SetCD(CUnitFlag,1);
+		SetDeaths(i,Add,1,75);
+		ModifyUnitEnergy(1,75,i,64,0);
+		RemoveUnitAt(1,75,"Anywhere",i);
+		DisplayText(StrDesign("\x04멀티 \x11홀드\x04기능을 사용합니다."),4);
+		PreserveTrigger();
+	},
+	}
 	end
 	
 	if Limit == 1 then
@@ -499,17 +529,45 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,3,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
+			DoActions(FP,MoveCp(Add,6*4))
+
+			CIf(FP,{TTOR({
+				DeathsX(CurrentPlayer,Exactly,MarID[1],0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,MarID[2],0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,MarID[3],0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,MarID[4],0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,32,0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,111,0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,20,0,0xFF),
+				DeathsX(CurrentPlayer,Exactly,7,0,0xFF)})})
+				DoActions(FP,MoveCp(Subtract,6*4))
+
 			for i = 0, 3 do
-			CTrigger(FP,{TTOR({
-				DeathsX(CurrentPlayer,Exactly,MarID[i+1],0,0xFF),
-				DeathsX(CurrentPlayer,Exactly,7,0,0xFF),
-			}),Deaths(i,AtLeast,1,71)},{
+			CTrigger(FP,{Deaths(i,AtLeast,1,71),DeathsX(CurrentPlayer,Exactly,i,0,0xFF)},{
 				MoveCp(Add,50*4);
 				SetDeathsX(CurrentPlayer,SetTo,30*256,0,0xFF00);
 				MoveCp(Subtract,50*4);},{Preserved})
+
+			CTrigger(FP,{Deaths(i,AtLeast,1,74),DeathsX(CurrentPlayer,Exactly,i,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,5*256,0,0xFF00)},{ -- Stop
+				SetDeathsX(CurrentPlayer,SetTo,1*256,0,0xFF00),},{Preserved})
+				
+			CIf(FP,{Deaths(i,AtLeast,1,75),DeathsX(CurrentPlayer,Exactly,i,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,5*256,0,0xFF00)}) -- Hold
+				f_SaveCp()
+				f_Read(FP,_Sub(BackupCP,9),TempPos)
+				CDoActions(FP,{
+					TSetDeaths(_Add(BackupCP,4),SetTo,0,0),
+					TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),
+					TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),
+					TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),
+					TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+				f_LoadCp()
+			CIfEnd()
 			end
+			DoActions(FP,MoveCp(Add,6*4))
+			CIfEnd()
+			DoActions(FP,MoveCp(Subtract,6*4))
 			CIfEnd()
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
-	CIfEnd({SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetCDeaths(FP,SetTo,0,CUnitFlag)})
+	CIfEnd({SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,74),SetDeaths(Force1,SetTo,0,75),SetCDeaths(FP,SetTo,0,CUnitFlag)})
 end
