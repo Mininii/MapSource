@@ -1,4 +1,47 @@
 function M2_Install_Shape()
+	
+function degtorad( d )
+
+	return d * math.pi / 180
+
+end
+
+function lengthdir(Radius, Angle)
+	Angle = degtorad(Angle)
+	return math.cos(Angle) * Radius,-math.sin(Angle) * Radius
+end
+function lengthdirT(Radius, Angle)
+	Angle = degtorad(Angle)
+	return {math.cos(Angle) * Radius,-math.sin(Angle) * Radius}
+end
+
+
+function CS_OverlapShape(Shape,...)
+	local RetShape = Shape
+
+	local arg = table.pack(...)
+	for k = 1, arg.n do
+		RetShape[1] = RetShape[1] + arg[k][1]
+		for i = 1, arg[k][1] do
+			table.insert(RetShape,{arg[k][i+1][1],arg[k][i+1][2]})
+		end
+	end
+	return RetShape	
+end
+function CSMakeTornado(Point,Radius,Angle,Numner,Outside,StartNumber)
+	local Shape = {0}
+	if StartNumber == nil then StartNumber = 1 end
+	for i = StartNumber, Numner do
+		CS_OverlapShape(Shape,CSMakePolygon(Point,i*Radius,i*Angle,Point+1,0))
+	end
+	if Outside~=nil then
+		return CS_Rotate((CS_OverlapShape(Shape,CSMakePolygon(Point,Radius,Numner*Angle,PlotSizeCalc(Point,Numner),PlotSizeCalc(Point,Numner-1)))),-Numner*Angle)
+	else
+		return Shape
+	end
+end
+
+
 	G_CAPlot_Shape_InputTable = {}
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
 	H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
@@ -34,8 +77,8 @@ function M2_Install_Shape()
 	Cir36_2 = CSMakeCircle(6,128,0,7,1)
 	Spi2 = CSMakeSpiral(6,0.2,0.9,32,0,(12*6)+1,0)
 	Spi3 = CSMakeSpiral(6,0.2,0.9,32,0,(12*7)+1,(12*6)+1)
-
-	
+	Tor2 = CSMakeTornado(6,32,12,6,1)
+	Tor3 = CSMakeTornado(6,32,12,6,nil,5)
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
 	H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
 	L00_1_64F = CS_FillPathXY(L00_1,0,64,64)
@@ -145,45 +188,6 @@ EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- 작은타원 큰타원 합
 EllipseMirror = CS_MirrorX(EllipseShape,500,1,1) --나비
 
 
-function degtorad( d )
-
-	return d * math.pi / 180
-
-end
-
-function lengthdir(Radius, Angle)
-	Angle = degtorad(Angle)
-	return math.cos(Angle) * Radius,-math.sin(Angle) * Radius
-end
-function lengthdirT(Radius, Angle)
-	Angle = degtorad(Angle)
-	return {math.cos(Angle) * Radius,-math.sin(Angle) * Radius}
-end
-
-
-function CS_OverlapShape(Shape,...)
-	local RetShape = Shape
-
-	local arg = table.pack(...)
-	for k = 1, arg.n do
-		RetShape[1] = RetShape[1] + arg[k][1]
-		for i = 1, arg[k][1] do
-			table.insert(RetShape,{arg[k][i+1][1],arg[k][i+1][2]})
-		end
-	end
-	return RetShape	
-end
-function CSMakeTornado(Point,Radius,Angle,Numner,Outside)
-	local Shape = {0}
-	for i = 1, Numner do
-		CS_OverlapShape(Shape,CSMakePolygon(Point,i*Radius,i*Angle,Point+1,0))
-	end
-	if Outside~=nil then
-		return CS_Rotate((CS_OverlapShape(Shape,CSMakePolygon(Point,Radius,Numner*Angle,PlotSizeCalc(Point,Numner),PlotSizeCalc(Point,Numner-1)))),-Numner*Angle)
-	else
-		return Shape
-	end
-end
 local x,y=lengthdir(90, 30)
 CirA = CSMakeCircle(8,32,0,9,1)
 CirAX = CS_KaleidoscopeX(CS_MoveXY(CirA,x,y),6,0,1)
@@ -315,6 +319,8 @@ end
 		"Point",
 		"Spi2",
 		"Spi3",
+		"Tor2",
+		"Tor3",
 		"TempleG",
 		"OvG1",
 		"OvG2",

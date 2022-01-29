@@ -218,10 +218,10 @@ function Include_GunData(Size,LineNum)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Spi3",1,445,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Spi2",1,559,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Spi3",1,445,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Star2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Star3",1,445,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Star2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Star3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Tor2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,65,65,65,8},"ACAS","Tor3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{104,62,51,15},"ACAS","Tor2",1,559,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1)},{66,66,66,66,8},"ACAS","Tor3",1,445,nil,"CP")
 
 
 	
@@ -378,7 +378,7 @@ function Include_GunData(Size,LineNum)
 		end
 		end
 		for i = 0, 3 do
-			TriggerX(FP,{Gun_Line(6,AtLeast,8)},{AddCD(CereCond[i+1],1)},{Preserved})
+			TriggerX(FP,{GCP(i+4),Gun_Line(6,AtLeast,8)},{AddCD(CereCond[i+1],1)},{Preserved})
 		end
 	--Gun_Line(3,Exactly,1),
 		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)

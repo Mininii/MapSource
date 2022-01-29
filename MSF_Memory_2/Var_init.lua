@@ -5,6 +5,10 @@ function Var_init()
 	MarAtkFactor = 4
 	MarAtkFactor2 = 8
 	GunLimit = 1450
+	ShCost = 50000
+	NMCost = 5000
+	HMCost = 8500
+	LMCost = 45000
 
 	UnitDataPtr = EPDF(0x5967EC-(1700*4))
 	MaxHPBackUp = CreateArr(228,FP)

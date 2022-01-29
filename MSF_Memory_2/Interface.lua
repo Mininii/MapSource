@@ -17,14 +17,7 @@ function Interface()
 	RunAIScript("Turn ON Shared Vision for Player 3");
 	RunAIScript("Turn ON Shared Vision for Player 4");
 })
-	DoActions(FP,{
-	RemoveUnit(7,P12),
-	RemoveUnit(MarID[1],P12),
-	RemoveUnit(MarID[2],P12),
-	RemoveUnit(MarID[3],P12),
-	RemoveUnit(MarID[4],P12),
-	ModifyUnitEnergy(All,"Men",P12,64,0),
-	RemoveUnit(204,FP)})
+
 	GiveRateT = {
 	StrDesign("\x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다."),
@@ -98,7 +91,7 @@ actions = {
 	ModifyUnitEnergy(1,"Terran Wraith",i,64,0);
 	RemoveUnitAt(1,"Terran Wraith","Anywhere",i);
 	CreateUnitWithProperties(1,32,2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x04Ｍａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F5000 O r e"),4);
+	DisplayText(StrDesign("\x04Ｍａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
 	--SetCDeaths(FP,Add,1,MarCreate);
 	PreserveTrigger();
 },
@@ -107,15 +100,15 @@ Trigger { -- 조합 영웅마린
 players = {i},
 conditions = {
 	Bring(i,AtLeast,1,32,26+i); 
-	Accumulate(i,AtLeast,8500,Ore);
+	Accumulate(i,AtLeast,HMCost,Ore);
 	Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 },
 actions = {
 	ModifyUnitEnergy(1,32,i,26+i,0);
 	RemoveUnitAt(1,32,26+i,i);
-	SetResources(i,Subtract,8500,Ore);
+	SetResources(i,Subtract,HMCost,Ore);
 	CreateUnitWithProperties(1,20,2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x04Ｍａｒｉｎｅ을 \x1BＨ \x04Ｍａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F8500 O r e"),4);
+	DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x04Ｍａｒｉｎｅ을 \x1BＨ \x04Ｍａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..HMCost.." O r e"),4);
 	PreserveTrigger();
 },
 }
@@ -124,16 +117,16 @@ Trigger { -- 조합 루미아마린
 	conditions = {
 		Label(0);
 		Bring(i,AtLeast,1,20,26+i); 
-		Accumulate(i,AtLeast,45000,Ore);
+		Accumulate(i,AtLeast,LMCost,Ore);
 		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 
 	},
 	actions = {
-		SetResources(i,Subtract,45000,Ore);
+		SetResources(i,Subtract,LMCost,Ore);
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
 		CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F45000 O r e"),4);
+		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost.." O r e"),4);
 		--SetCDeaths(FP,Add,1,MarCreate);
 		PreserveTrigger();
 	},
@@ -191,10 +184,10 @@ Trigger { -- 조합 루미아마린
 		Command(i,AtLeast,1,19);
 	},
 	actions = {
-		SetResources(i,Add,30000,Ore);
+		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayText(StrDesign("\x04이미 \x1C빛의 보호막\x04을 사용중입니다. 자원 반환 + \x1F25000 Ore"),4);
+		DisplayText(StrDesign("\x04이미 \x1C빛의 보호막\x04을 사용중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PreserveTrigger();
@@ -210,10 +203,10 @@ Trigger { -- 조합 루미아마린
 		Command(i,AtLeast,1,19);
 	},
 	actions = {
-		SetResources(i,Add,30000,Ore);
+		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayText(StrDesign("\x1C빛의 보호막\x04이 현재 \x0E쿨타임 \x04중입니다. 자원 반환 + \x1F25000 Ore"),4);
+		DisplayText(StrDesign("\x1C빛의 보호막\x04이 현재 \x0E쿨타임 \x04중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PreserveTrigger();
@@ -424,7 +417,7 @@ Trigger { -- 보호막 가동
 		SetDeaths(i,Add,1,71);
 		ModifyUnitEnergy(1,71,i,64,0);
 		RemoveUnitAt(1,71,"Anywhere",i);
-		DisplayText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다. - \x1F1000 Ore"),4);
+		DisplayText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다."),4);
 		PreserveTrigger();
 	},
 	}

@@ -5,6 +5,15 @@ function System()
 	local CurCunitI2 = CreateVar(FP)
 
     local TempTarget = CreateVar(FP)
+    DoActions(FP,{
+        RemoveUnit(7,P12),
+        RemoveUnit(MarID[1],P12),
+        RemoveUnit(MarID[2],P12),
+        RemoveUnit(MarID[3],P12),
+        RemoveUnit(MarID[4],P12),
+        ModifyUnitEnergy(All,"Men",P12,64,0),
+        RemoveUnit(204,FP)})
+
 	Cast_UnitCount()
     AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
     AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
@@ -618,7 +627,7 @@ TriggerX(FP,{
     TestCondT;
 },{RotatePlayer({Victory()},MapPlayers,FP),RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
 end
-CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x073회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
 Trigger { -- 캔낫 경고
 	players = {FP},

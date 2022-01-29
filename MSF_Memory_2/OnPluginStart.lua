@@ -189,8 +189,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 	
 	UnitEnable(71) -- 원격스팀팩
 	UnitEnable(2) -- 자환
-	UnitEnable(19,50000) -- 수정보호막
-	UnitEnable(8,5000,nil,5) -- 마린
+	UnitEnable(19,ShCost) -- 수정보호막
+	UnitEnable(8,NMCost,nil,5) -- 마린
 	UnitEnable(7,500) -- SCV
 	
 	UnitEnable(125,8000)
@@ -655,7 +655,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			CVar(FP,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F8500 Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F45000 Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : ")},HumanPlayers,FP);
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : ")},HumanPlayers,FP);
 			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
 			
 		},
