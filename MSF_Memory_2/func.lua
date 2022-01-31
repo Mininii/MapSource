@@ -512,7 +512,7 @@ function Convert_StrCode(Str)
 	return Str
 end
 HeroPointArr = {}
-function CreateHeroPointArr(Index,HPRate,ShieldRate,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
+function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
 	if DmgType == nil then DmgType = 0 end
 	local TextType1 = "\x04 을(를) \x08처치\x04하였습니다. "
 	local TextType2 = "\x04 을(를) \x07획득\x04하였습니다. "
@@ -545,6 +545,14 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
 			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{Preserved})
 			f_LoadCp()
+			if index == 68 then
+				DoActions(FP,{MoveCp(Subtract,4*6)})
+				TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,4,0,0xFF)},{AddCD(TTEndC1,1)},{Preserved})
+				TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,5,0,0xFF)},{AddCD(TTEndC2,1)},{Preserved})
+				TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,6,0,0xFF)},{AddCD(TTEndC1,1)},{Preserved})
+				TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,7,0,0xFF)},{AddCD(TTEndC2,1)},{Preserved})
+				DoActions(FP,{MoveCp(Add,4*6)})
+			end
 			CIfEnd()
 			
 
@@ -1082,8 +1090,8 @@ local G_CA_MaxNum = CreateVar(FP)
 local G_CA_FuncNum = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
 local SL_Ret = CreateVar(FP)
-local TRepeatX = CreateVar(FP)
-local TRepeatY = CreateVar(FP)
+TRepeatX = CreateVar(FP)
+TRepeatY = CreateVar(FP)
 local G_CA_UnitIndex = CreateVar(FP)
 local Write_SpawnSet_Jump = def_sIndex()
 local G_CA_Arr_IndexAlloc = StartIndex
@@ -1120,10 +1128,30 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
-		CIf(FP,{CDeaths(FP,AtMost,0,CA_Repeat_Check),CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)},{}) -- TempRepeat로 생성했을 경우 생성위치, 타겟위치 설정
+
+		
+
+		CIf(FP,{CDeaths(FP,AtMost,0,CA_Repeat_Check)},{
+			SetCVar(FP,G_CA_TempTable[1][2],SetTo,0);
+			SetCVar(FP,G_CA_TempTable[11][2],SetTo,0);
+			SetCVar(FP,G_CA_TempTable[12][2],SetTo,0);
+			SetCVar(FP,G_CA_TempTable[13][2],SetTo,0);
+			SetCVar(FP,G_CA_TempTable[14][2],SetTo,0);
+		}) -- TempRepeat로 생성했을 경우
+		
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,221)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV1)},1)
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,223)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV3)},1)
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,224)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV4)},1)
+		CMov(FP,G_CA_TempTable[1],Gun_TempSpawnSet1)
+		CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,0x7FFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,0),TSetCVar(FP,CreatePlayer[2],SetTo,G_CA_Player,0xFF)},1)
+		CIf(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
 			CMov(FP,G_CA_TempTable[8],TRepeatX)
 			CMov(FP,G_CA_TempTable[9],TRepeatY)
+			CMov(FP,G_CA_X,TRepeatX)
+			CMov(FP,G_CA_Y,TRepeatY)
+		CIfEnd()
 		CIfEnd()
 		if DefaultAttackLocCheck == 1 then -- 디폴트 로케이션이 0일 경우 RepeatType에 따라 중심점으로 어택
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,1)) -- 어택 일반 해당플레이어 위치로
@@ -1145,6 +1173,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
 		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
 		CIfXEnd()
+		
+		
 
 		CIfX(FP,{CVar(FP,RepeatType[2],Exactly,100)},{})
 
@@ -1299,6 +1329,39 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
 		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
 	CallTriggerX(FP,Set_Repeat,Condition)
 end
+
+function f_TempRepeat2X(Condition,UnitID,Number,EffType,Owner,CenterXY,Flags)
+	if Owner == nil then Owner = 0xFFFFFFFF
+	elseif Owner == "CP" then Owner = 0x7FFFFFFF end
+	if Type == nil then Type = 0 end
+	local SetXY = {}
+	if CenterXY == nil then 
+		SetXY = {
+		SetCVar(FP,TRepeatX[2],SetTo,0xFFFFFFFF),
+		SetCVar(FP,TRepeatY[2],SetTo,0xFFFFFFFF),
+		}
+	elseif type(CenterXY) == "table" then
+		SetXY = {
+		SetCVar(FP,TRepeatX[2],SetTo,CenterXY[1]),
+		SetCVar(FP,TRepeatY[2],SetTo,CenterXY[2]),
+		}
+	elseif CenterXY ~= "X" then 
+		PushErrorMsg("TRepeat_CenterXY_Error")
+	end
+	CDoActions(FP,{
+		TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+		TSetCVar(FP,Repeat_TempV[2],SetTo,Number),
+		SetXY,
+		SetCVar(FP,RepeatType[2],SetTo,100),
+		SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+		SetCVar(FP,G_CA_TempTable[15][2],SetTo,EffType),
+		SetCVar(FP,G_CA_TempTable[17][2],SetTo,Flags),
+		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
+	CallTriggerX(FP,Set_Repeat,Condition)
+end
+
+
+
 Set_Repeat = SetCallForward()
 SetCall(FP)
 TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{Preserved})

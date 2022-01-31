@@ -634,10 +634,9 @@ if Limit == 1 then
     for j, k in pairs(f_GunTable) do
         table.insert(TestCondT,Bring(Force2,AtMost,0,k,64))
     end
-TriggerX(FP,{
+CTrigger(FP,{
     CD(TestMode,0);
-    CV(Actived_Gun,0);
-    TestCondT;
+    CV(Actived_Gun,0);TTOR({TTAND(TestCondT)})
 },{RotatePlayer({Victory()},MapPlayers,FP),RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
 end
 CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -735,4 +734,63 @@ DoActions2(FP,{RotatePlayer({
 
 TriggerX(FP,{CD(TestMode,0),CD(DefeatCC,100,AtLeast)},{RotatePlayer({Defeat()},MapPlayers,FP)})
 CIfEnd()
+TTShape1 = {{416, 1984},{352, 1952},{288, 1920},{224, 1888},{160, 1856},{96, 1824},{32, 1792}}
+TTShape3 = {{416, 2144},{352, 2176},{288, 2208},{224, 2240},{160, 2272},{96, 2304},{32, 2336}}
+TTShape2 = {{4064, 1792},{4000, 1824},{3936, 1856},{3872, 1888},{3808, 1920},{3744, 1952},{3680, 1984}}
+TTShape4 = {{4064, 2336},{4000, 2304},{3936, 2272},{3872, 2240},{3808, 2208},{3744, 2176},{3680, 2144}}
+TTCond1 = CreateCcode()
+TTAct1 = CreateCcode()
+TTCond2 = CreateCcode()
+TTAct2 = CreateCcode()
+CIf(FP,{CD(TTEndC1,3,AtMost)})
+for j, k in pairs(TTShape1) do
+    DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond1,1)})
+    TriggerX(FP,{
+        CD(TTAct1,0),
+        Loc(9,0,Exactly,k[1]),
+        Loc(9,4,Exactly,k[2]),
+    },{SetCD(TTCond1,0)
+    },{Preserved})
+    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
+    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
+end
+for j, k in pairs(TTShape3) do
+    DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond1,1)})
+    TriggerX(FP,{
+        CD(TTAct1,0),
+        Loc(9,0,Exactly,k[1]),
+        Loc(9,4,Exactly,k[2]),
+    },{SetCD(TTCond1,0)
+    },{Preserved})
+    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
+    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
+end
+CIfEnd()
+
+
+CIf(FP,{CD(TTEndC2,3,AtMost)})
+for j, k in pairs(TTShape2) do
+    DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond2,1)})
+    TriggerX(FP,{
+        CD(TTAct2,0),
+        Loc(9,0,Exactly,k[1]),
+        Loc(9,4,Exactly,k[2]),
+    },{SetCD(TTCond2,0)
+    },{Preserved})
+    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
+    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
+end
+for j, k in pairs(TTShape4) do
+    DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond2,1)})
+    TriggerX(FP,{
+        CD(TTAct2,0),
+        Loc(9,0,Exactly,k[1]),
+        Loc(9,4,Exactly,k[2]),
+    },{SetCD(TTCond2,0)
+    },{Preserved})
+    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
+    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
+end
+CIfEnd()
+
 end

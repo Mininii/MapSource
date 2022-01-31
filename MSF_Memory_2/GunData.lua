@@ -275,11 +275,6 @@ function Include_GunData(Size,LineNum)
 	UID2I = 222
 	UID3I = 223
 	UID4I = 224
-	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
-	Tier2 = {79,80,52,10,22,65,70}
-	Tier3 = {27,66,29,98,57,3,8,11,69}
-	Tier4 = {102,61,67,23,81,30}
-	Tier5 = {60,68}
 	Tier1VA = CreateVArr(#Tier1,FP)
 	Tier2VA = CreateVArr(#Tier2,FP)
 	Tier3VA = CreateVArr(#Tier3,FP)
@@ -296,30 +291,35 @@ function Include_GunData(Size,LineNum)
 	WV = CreateVar(FP)
 	CIf_GCase(148)
 		CTrigger(FP,{Gun_Line(10,AtMost,0)},{Gun_SetLine(7,SetTo,50),Gun_SetLine(10,SetTo,1)},1)
-
+		CMov(FP,TRepeatX,G_CA_CenterX)
+		CMov(FP,TRepeatY,G_CA_CenterY)
 		CIf(FP,{Gun_Line(7,AtLeast,35)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)})
 		DoActionsX(FP,{SetV(WV,0)})
 		CWhile(FP,{CV(WV,4,AtMost)},{AddV(WV,1)}) -- 티어1
 			CMov(FP,UnitIDV1,VArr(Tier1VA,f_CRandNum(#Tier1,0)))
-			G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",233,nil,"CP",2,nil)
+			f_TempRepeat2X(nil,UID1I,1,233,"CP","X",2)
+			--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",233,nil,"CP",2,nil)
 		CWhileEnd()
 		DoActionsX(FP,{SetV(WV,0)})
 		CWhile(FP,{CV(WV,2,AtMost)},{AddV(WV,1)}) -- 티어2
 			CMov(FP,UnitIDV1,VArr(Tier2VA,f_CRandNum(#Tier2,0)))
-			G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",545,nil,"CP",2,nil)
+			f_TempRepeat2X(nil,UID1I,1,545,"CP","X",2)
+			--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",545,nil,"CP",2,nil)
 		CWhileEnd()
 		CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- 티어3
-		G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",211,nil,"CP",2,nil)
+		f_TempRepeat2X(nil,UID1I,1,211,"CP","X",2)
+		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",211,nil,"CP",2,nil)
 		CIfEnd()
 		CIf(FP,{Gun_Line(6,AtLeast,5)},{Gun_SetLine(8,Add,1),Gun_SetLine(6,SetTo,0)})
 		CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- 티어3
-		G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",548,nil,"CP",2,nil)
+		f_TempRepeat2X(nil,UID1I,1,548,"CP","X",2)
+		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",548,nil,"CP",2,nil)
 
 		CIfEnd()
 		CIf(FP,{Gun_Line(8,AtLeast,2)},{Gun_SetLine(9,Add,1),Gun_SetLine(8,SetTo,0)})
 		CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- 티어3
-		
-		G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",984,nil,"CP",2,nil)
+		f_TempRepeat2X(nil,UID1I,1,984,"CP","X",2)
+		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",984,nil,"CP",2,nil)
 
 		CIfEnd()
 	CTrigger(FP,{Gun_Line(9,AtLeast,5)},{Gun_DoSuspend()},1)
@@ -363,7 +363,7 @@ function Include_GunData(Size,LineNum)
 	CIf_GCase(147)
 	--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
 	--	Tier2 = {79,80,52,10,22,65,70}
-	--	Tier3 = {27,66,29,98,57,3,8,11,69}
+	--	Tier3 = {27,66,29,98,57,3,8,11,69,100}
 	--	Tier4 = {102,61,67,23,81,30}
 	--	Tier5 = {60,68}
 	CTrigger(FP,{Gun_Line(7,AtLeast,(#OvG-1)*3)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},{Preserved})
@@ -433,7 +433,7 @@ function Include_GunData(Size,LineNum)
 	CDoActions(FP,{Gun_SetLine(8,SetTo,1)})
 	--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
 	--	Tier2 = {79,80,52,10,22,65,70}
-	--	Tier3 = {27,66,29,98,57,3,8,11,69}
+	--	Tier3 = {27,66,29,98,57,3,8,11,69,100}
 	--	Tier4 = {102,61,67,23,81,30}
 	--	Tier5 = {60,68}
 	Norad_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
@@ -624,7 +624,45 @@ function Include_GunData(Size,LineNum)
 
 
 	CIfEnd()
+	N_R,N_A = CreateVars(2,FP)
+	CIf_GCase(168)
+	N_Check = CreateCcode()
+	CDoActions(FP,{Gun_SetLine(8,Add,1),SetCD(N_Check,0)})
+	CMov(FP,N_A,0)
+	CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
+	f_Lengthdir(FP,N_R,_Add(N_A,Var_TempTable[9]),N_X,N_Y)
+	
+	CAdd(FP,N_X,G_CA_CenterX)
+	CAdd(FP,N_Y,G_CA_CenterY)
 
+	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+	CreateEffUnit({GCP(4)},20,548,0)
+	CreateEffUnit({GCP(5)},20,548,0)
+	CreateEffUnit({GCP(6)},20,548,0)
+	CreateEffUnit({GCP(7)},20,548,0)
+	DoActions(FP,Simple_CalcLoc(0,-96,-96,96,96))
+	for i = 4, 7 do
+		TriggerX(FP,{GCP(i)},{
+			KillUnitAt(All,135,1,i);
+			KillUnitAt(All,136,1,i);
+			KillUnitAt(All,137,1,i);
+			KillUnitAt(All,138,1,i);
+			KillUnitAt(All,139,1,i);
+			KillUnitAt(All,140,1,i);
+			KillUnitAt(All,141,1,i);
+			KillUnitAt(All,142,1,i);
+		},{Preserved})
+	end
+	
+	TriggerX(FP,{CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},{SetCD(N_Check,1)},{Preserved})
+	CAdd(FP,N_A,12)
+	CWhileEnd()
+	
+	CAdd(FP,N_R,25)
+	CTrigger(FP,{CD(N_Check,0)},{Gun_DoSuspend()},1)
+
+
+	CIfEnd()
 
 
 	CTrigger(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayTextX(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},1)

@@ -48,10 +48,16 @@ end
 	L00_1_64F = CS_FillPathXY(L00_1,0,64,64)
 	
 	NexBYDLine = {}
+	NexBYDLine2 = {}
 	for i=0, 12 do
 	   table.insert(NexBYDLine,CSMakeLine(1+(6*i),64+(64*i),0,2+(6*i),1))
 	end
+	for i=0, 46 do
+	   table.insert(NexBYDLine2,CSMakeLine(1+(6*i),64+(64*i),0,2+(6*i),1))
+	end
 	NBYD = CS_RatioXY(CS_OverlapX(table.unpack(NexBYDLine)),1,0.5)
+	NBYD2 = CS_RatioXY(CS_OverlapX(table.unpack(NexBYDLine2)),1,0.5)
+	
 	Circle1 = CSMakeCircle(18,32*7,0,19,1)
 	Circle2 = CSMakeCircle(36,32*7,0,37,1)
 	Star1 = CSMakeStar(6,165-(12*(6-2)),((32*6)-(32*1))/2,180,PlotSizeCalc(6*2,2),PlotSizeCalc(6*2,1))
@@ -220,8 +226,6 @@ NexP5,NexP6,NexP7,NexP8 = CSMinimap_Inverse4X(CS_ConnectPathX({3,{1856, 800},{18
 
 SqKal1 = CSMakeKaleidoPolygon(4,8,145,24,45,0,5,1)
 SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
-Point = {1,{0,0}}
-
 TempleG = CS_Distortion(CSMakeCircle(32,960,0,33,1),{0,0},{0,0})
 
 OvG = CSMakeStar(4,180,128,90,9*9,0)
@@ -324,7 +328,6 @@ end
 		"NexP6",
 		"NexP7",
 		"NexP8",
-		"Point",
 		"Spi2",
 		"Spi3",
 		"Tor2",

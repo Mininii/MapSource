@@ -24,7 +24,14 @@ function Operator_Trig()
 
 			CAdd(FP,0x6509B0,7)
 			
-			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),SetCDeaths(FP,Add,1,EEggCode),RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{Preserved})
+			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
+				SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
+				SetMemory(0x582204+(0*4),Add,2),
+				SetMemory(0x582204+(1*4),Add,2),
+				SetMemory(0x582204+(2*4),Add,2),
+				SetMemory(0x582204+(3*4),Add,2),
+				SetCDeaths(FP,Add,1,EEggCode),
+				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{Preserved})
 			
 		CMov(FP,0x6509B0,FP)
 		CIfEnd()

@@ -131,6 +131,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[1],SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[2],SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + BanToken[3],SetTo,0))
+	table.insert(PatchArr,SetMemoryW(0x6559C0+(7*2),SetTo,AtkUpgradeFactor)) -- 공업 미네랄 증가량
+	table.insert(PatchArr,SetMemoryW(0x6559C0+(0*2),SetTo,DefUpgradeFactor)) -- 체업 미네랄 증가량
 	for i = 0, 227 do
 	SetUnitDefUpType(i,60) -- 방업 적용 방지
 	SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
@@ -144,6 +146,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	for j, k in pairs(PerWepArr) do
 		WeaponTypePatch(k,2)
 	end
+	WeaponTypePatch(84,2)--스톰퍼딜
 	for i = 63, 70 do
 		UnitEnable(i) -- 원격스팀팩
 	end
@@ -212,6 +215,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
 		table.insert(PatchArr,SetMemory(0x582144+(i*4),SetTo,8))--캔낫기회
+		table.insert(PatchArr,SetMemory(0x5821D4+(i*4),SetTo,24*2))--이스터에그총갯수
 			
 	end
 	for i = 1, 4 do
@@ -219,7 +223,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
 		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i],7,10,7,11) -- 마린 크기 설정
-		UnitEnable(MarID[i],9000,nil,5,2)
+		UnitEnable(MarID[i],0,nil,5)
 		SetUnitGrpToMarine(MarID[i]) -- 마린 그래픽 전부 마린으로 설정
 		SetUnitAdvFlag(MarID[i],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
