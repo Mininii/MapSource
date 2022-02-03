@@ -181,17 +181,19 @@ WheelA = CS_Vector2D(SS3,1,"S1_Vector") -- 톱니바퀴
 --------------------------------------------------------------
 
 
-CircleA = CSMakeCircle(6,60,0,61,0) ---- 작은 원
+CircleA = CSMakeCircle(6,60,0,61,19) ---- 작은 원
 EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- 작은 타원
 EllipseRA = CS_Rotate(EllipseA,15) ---- 작은 타원 회전
 
-CircleB = CSMakeCircle(6,40,0,91,0) ---- 큰 원
+CircleB = CSMakeCircle(6,40,0,91,19+18) ---- 큰 원
 EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- 큰 타원
 EllipseRB = CS_Rotate(EllipseB,40) ---- 큰 타원 회전
 EllipseRAD = CS_MoveXY(EllipseRA,0,500) ---- 큰 타원 평행이동
 EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- 작은타원 큰타원 합
 
 EllipseMirror = CS_MirrorX(EllipseShape,500,1,1) --나비
+
+EllipseMirror1 = CS_MoveXY(EllipseMirror,-500,-250)
 
 
 local x,y=lengthdir(90, 30)
@@ -276,6 +278,28 @@ for i = 1, 4 do
 	table.insert(G_CAPlot_Shape_InputTable,"norad3_P"..i+4)
 end
 
+Warp1 = {}
+for i=0, 15 do
+   table.insert(Warp1,CSMakeCircle(6+(6*i),32+(32*i),0,7+(6*i),1))
+end
+Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
+
+
+function CSMakeFillPathXY(Range,Radius)
+	local a = CSMakePath({-Range,-Range},{Range,-Range},{Range,Range},{-Range,Range})
+	return CS_FillPathXY(a,0,Radius,Radius)
+end
+Warp2 = CSMakeFillPathXY(256,72)
+Warp3 = CSMakeFillPathXY(256,96)
+Warp4 = CSMakeFillPathXY(256,128)
+GB_P1 = CS_MoveXY(CSMakeCircle(360,2008,90,92,1),-2008,-2008)
+GB_P2 = CS_MoveXY(CSMakeCircle(360,2008,180,92,1),2008,-2008)
+GB_P3 = CS_MoveXY(CSMakeCircle(360,2008,0,92,1),-2008,2008)
+GB_P4 = CS_MoveXY(CSMakeCircle(360,2008,270,92,1),2008,2008)
+
+Hp2 = CS_RatioXY(Hp1,4,2)
+HCD2 = CS_RatioXY(HCD,10,10)
+GBAir = CSMakePolygon(4,64,45,PlotSizeCalc(4,20),PlotSizeCalc(4,19))
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -334,6 +358,20 @@ end
 		"Tor3",
 		"TempleG",
 		"Cere1",
+		"Warp1",
+		"Warp2",
+		"Warp3",
+		"Warp4",
+		"GB_P1",
+		"GB_P2",
+		"GB_P3",
+		"GB_P4",
+
+		"EllipseMirror1",
+		"HCD2",
+		"Hp2",
+		"GBAir",
+
 	}
 	)
 

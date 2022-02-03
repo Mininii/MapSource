@@ -1,6 +1,5 @@
 function Operator_Trig()
     Cunit2 = CreateVar(FP)
-	CurrentOP = CreateVar(FP)
 	local DtX = CreateVar(FP)
 	
 	BanCode = CreateCcodeArr(3)
@@ -15,7 +14,30 @@ function Operator_Trig()
 
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
+
 		CMov(FP,0x6509B0,Cunit2,25)
+
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,111,0,0xFF)})
+		
+			CAdd(FP,0x6509B0,62-25)
+			CIf(FP,{TTDeaths(CurrentPlayer,NotSame,BarRally[i+1],0)}) --배럭랠리 갱신
+				f_SaveCp()
+				f_Read(FP,BackupCP,BarRally[i+1])
+				f_LoadCp()
+			CIfEnd()
+			CSub(FP,0x6509B0,62-25)
+
+			CIfOnce(FP) -- 배럭위치 초기세팅
+				CSub(FP,0x6509B0,15)
+				f_SaveCp()
+				f_Read(FP,BackupCP,BarPos[i+1])
+				f_LoadCp()
+				CAdd(FP,0x6509B0,15)
+			CIfEnd()
+
+		CIfEnd()
+
+
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)})
 			DoActionsX(FP,{
                 SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*25,0),
@@ -52,6 +74,25 @@ function Operator_Trig()
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
+	
+    WhiteHoleTestMode = {}
+    WT123 = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
+
+    for j, k in pairs(f_GunTable) do
+		if k ~= 190 then
+        table.insert(WhiteHoleTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
+        table.insert(WhiteHoleTestMode,RemoveUnit(k,Force2))
+        table.insert(WhiteHoleTestMode,RemoveUnit(k,P12))
+		end
+    end
+    for j, k in pairs(WT123) do
+        table.insert(WhiteHoleTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
+        table.insert(WhiteHoleTestMode,RemoveUnit(k,Force2))
+        table.insert(WhiteHoleTestMode,RemoveUnit(k,P12))
+    end
+	table.insert(WhiteHoleTestMode,SetV(CurEXP,0x7FFFFFFF))
+    Trigger2X(FP,Deaths(CurrentPlayer,AtLeast,1,208),WhiteHoleTestMode)
+
 		for i = 0, 3 do
 			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{Preserved})
 		end
@@ -71,9 +112,9 @@ function Operator_Trig()
 			}
 		TestUPtr = CreateVar(FP)
 		CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{Preserved})
-		CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
-			CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
-		CIfEnd()
+		--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
+		--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
+		--CIfEnd()
 
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
@@ -91,6 +132,13 @@ function Operator_Trig()
 			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203)})
 				CMov(FP,0x6509B0,Cunit2,25)
+				f_SaveCp()
+				TestUID = CreateVar(FP)
+				TestP = CreateVar(FP)
+				f_Read(FP,BackupCp,TestUID,nil,0xFF,1)
+				f_Read(FP,_Sub(BackupCp,6),TestP,nil,0xFF,1)
+				CDoActions(FP,{TSetMemory(_Add(_Mul(TestUID,12),TestP),Add,1)})
+				f_LoadCp()
 				CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,58,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
 					MoveCp(Subtract,6*4);
 					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);

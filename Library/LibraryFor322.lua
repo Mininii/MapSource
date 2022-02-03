@@ -418,8 +418,6 @@ Trigger { -- ºê±Ý????????? ??????
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
-		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
 		PreserveTrigger();
 	},
 }

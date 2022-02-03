@@ -15,11 +15,12 @@ function System()
         RemoveUnit(204,FP)})
 
 	Cast_UnitCount()
-    AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)
-    AddBGM(2,"staredit\\wav\\story.ogg",81*1000)
-    AddBGM(3,"staredit\\wav\\GBGM1.ogg",126*1000)
-    AddBGM(4,"staredit\\wav\\GBGM2.ogg",128*1000)
-    AddBGM(5,"staredit\\wav\\GBGM3.ogg",164*1000)
+    AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)--오프닝
+    AddBGM(2,"staredit\\wav\\GBGM1.ogg",33*1000)--햇
+    AddBGM(3,"staredit\\wav\\GBGM2.ogg",34*1000)--레어
+    AddBGM(4,"staredit\\wav\\GBGM3.ogg",55*1000)--하이브
+    AddBGM(5,"staredit\\wav\\GBGM4.ogg",69*1000)--특건
+    AddBGM(6,"staredit\\wav\\MBoss.ogg",133*1000)--워프
     Install_BGMSystem(FP,3,BGMType,12)
 
     BGMArr = {}
@@ -33,6 +34,7 @@ function System()
         end
     end
 
+    CIf(FP,{Command(FP,AtLeast,1,190)})
     for i = 0, 3 do
         CIf(FP,{PlayerCheck(i,1),Deaths(i,Exactly,0,12),Deaths(i,Exactly,0,14)})
         for j = 0, 363 do
@@ -103,9 +105,11 @@ function System()
             },
         }
     CIfEnd()
+    CIfEnd()
 
 
-    
+
+--    CMov(FP,0x57f120,0)
     local TempMarHPRead = CreateVar(FP)
     EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
     WhiteList = def_sIndex()
@@ -116,9 +120,22 @@ function System()
     NJump(FP,SkillUnit,DeathsX(CurrentPlayer,Exactly,183,0,0xFF))
 
 
+--    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF),{
+--        SetMemory(0x6509B0,Add,55-25),
+--        TSetMemoryX(CurrentPlayer,SetTo,0x104,0x104);
+--        SetMemory(0x6509B0,Add,57),
+--        TSetMemoryX(CurrentPlayer,SetTo,0,0xFF);
+--    })
 
     
     CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,184,0,0xFF),DeathsX(CurrentPlayer,AtMost,185,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+
+--    local HPJump = def_sIndex()
+--    NJumpX(FP,HPJump,{CV(count,1450,AtLeast)})
+--    DoActions(FP,{SetDeaths(CurrentPlayer,Subtract,256,0)})
+--    NJumpXEnd(FP,HPJump)
+
+
 
     EXCC_BreakCalc({Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
         CAdd(FP,0x6509B0,38)--40
@@ -138,6 +155,7 @@ function System()
         CIfEnd()
     CElseX({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
     CIfXEnd()
+
     EXCC_ClearCalc()
     NJumpEnd(FP,SkillUnit)
 
@@ -145,6 +163,7 @@ function System()
     CIf(FP,Deaths(CurrentPlayer,Exactly,0,0))
     CAdd(FP,0x6509B0,23)
     DoActions(FP,{SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF),
+    RemoveUnit(84,Force1);
     SetMemory(0x6509B0,Subtract,16),
     SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
     SetMemory(0x6509B0,Add,16),})
@@ -227,9 +246,9 @@ function System()
         f_SaveCp()
 
         CIfX(FP,{TMemoryX(_Add(BackupCp,50),AtLeast,1*256,0xFF00)})
-        CDoActions(FP,{Set_EXCCX(3,SetTo,35)})
+        CDoActions(FP,{Set_EXCCX(3,SetTo,10)})
         CElseX()
-        CDoActions(FP,{Set_EXCCX(3,SetTo,55)})
+        CDoActions(FP,{Set_EXCCX(3,SetTo,25)})
         CIfXEnd()
 
         f_Read(FP,_Sub(BackupCp,9),CPos)
@@ -288,7 +307,7 @@ function System()
             DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
 		},
 		{MoveCp(Add,25*4),
-        SetCVar(FP,CurCunitI2[2],SetTo,i)
+        SetCVar(FP,CurCunitI2[2],SetTo,i),--SetResources(P1,Add,1,Gas)
 		})
 	end
 	EXCC_End()
@@ -425,7 +444,7 @@ function System()
 
 
 	CallTriggerX(FP,MakeEisEgg,{Cond_EXCC(13,Exactly,1,1)})
-    CIf(FP,{Cond_EXCC(1,AtLeast,1)}) -- 영작유닛인식
+    CIf(FP,{Cond_EXCC(1,AtLeast,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
@@ -448,8 +467,9 @@ function System()
                     f_Read(FP,_Add(Nextptrs,10),CPos)
                     Convert_CPosXY()
                     Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-                    DoActions(FP,{Order("Men",Force2,1,Attack,10)})
-                    CTrigger(FP,{Cond_EXCC(12,AtLeast,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,EXCC_TempVarArr[13])},1)
+                    DoActions2(FP,{Order("Men",Force2,1,Attack,10),Simple_CalcLoc(0,-64,-64,64,64)})
+                    CTrigger(FP,{Cond_EXCC(12,Exactly,1,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
+                    --CTrigger(FP,{Cond_EXCC(12,Exactly,4,4)},{TSetMemory(0x6509B0,SetTo,_Mov(CPlayer,0xFF)),RunAIScriptAt(JYD,1)},1)
                 CIfEnd()
             CIfEnd()
             CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
@@ -616,11 +636,15 @@ CellPStr = {
 "\x16중앙 우측 ",
 "\x17중앙 상단 ",
 }
+
+
 for i = 4, 7 do
     InvDisable(154,i,{CD(PyCCode[i-3],3,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
     InvDisable(147,i,{CD(CereCond[i-3],2,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<1D>the <19>H<1D>eaven").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-    InvDisable(168,i,{CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost)},CellPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>R<1D>esonance").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-    InvDisable(189,i,{CD(HiveCcode[i-3],0,AtMost)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>W<1D>arp <19>T<1D>unnel").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(168,i,{CD(HiveCcode[i-3],0,AtMost)},CellPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>R<1D>esonance").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+
+    
+    InvDisable(189,i,{CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>W<1D>arp <19>T<1D>unnel").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
 for i = 4, 5 do
     InvDisable(201,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>O<1D>blivion").." \x04의 \x02무적상태\x04가 해제되었습니다.")
@@ -628,23 +652,29 @@ end
 for i = 6, 7 do
     InvDisable(152,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>N<1D>ightmare").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
+InvDisable(190,FP,{
+    Deaths(4,AtLeast,1,BossUID[1]),
+    Deaths(5,AtLeast,1,BossUID[2]),
+    Deaths(6,AtLeast,1,BossUID[3]),
+    Deaths(7,AtLeast,1,BossUID[4]),
+    CD(NexCcode,4,AtLeast);
+    CD(OvCcode,4,AtLeast);
+    CD(OvGCcode,4,AtLeast);
+    CD(CellCcode,4,AtLeast);
+    CD(XelCcode,4,AtLeast);
+    CD(CenCcode,4,AtLeast);
+    CD(OcCcode,2,AtLeast);
+    CD(DgCcode,2,AtLeast); 
+    CD(GeneCcode,2,AtLeast);
+},"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
-if Limit == 1 then
-    TestCondT = {}
-    for j, k in pairs(f_GunTable) do
-        table.insert(TestCondT,Bring(Force2,AtMost,0,k,64))
-    end
-CTrigger(FP,{
-    CD(TestMode,0);
-    CV(Actived_Gun,0);TTOR({TTAND(TestCondT)})
-},{RotatePlayer({Victory()},MapPlayers,FP),RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
-end
 CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
 Trigger { -- 캔낫 경고
 	players = {FP},
 	conditions = {
 		Label(0);
+        CDeaths(FP,AtMost,0,CanCT);
 		CDeaths(FP,Exactly,0,CanWT);
         CVar(FP,count[2],AtLeast,1500);
 },
@@ -751,7 +781,7 @@ for j, k in pairs(TTShape1) do
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond1,0)
     },{Preserved})
-    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
+    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),SetInvincibility(Disable,68,P5,64),SetInvincibility(Disable,68,P7,64),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
     TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
 end
 for j, k in pairs(TTShape3) do
@@ -762,7 +792,7 @@ for j, k in pairs(TTShape3) do
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond1,0)
     },{Preserved})
-    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
+    TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),SetInvincibility(Disable,68,P5,64),SetInvincibility(Disable,68,P7,64),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
     TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
 end
 CIfEnd()
@@ -777,7 +807,7 @@ for j, k in pairs(TTShape2) do
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond2,0)
     },{Preserved})
-    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
+    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),SetInvincibility(Disable,68,P6,64),SetInvincibility(Disable,68,P8,64),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
     TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
 end
 for j, k in pairs(TTShape4) do
@@ -788,9 +818,14 @@ for j, k in pairs(TTShape4) do
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond2,0)
     },{Preserved})
-    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
+    TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),SetInvincibility(Disable,68,P6,64),SetInvincibility(Disable,68,P8,64),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
     TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
 end
 CIfEnd()
+
+for j = 4, 7 do
+Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+end
+
 
 end

@@ -106,6 +106,15 @@ function init() -- 맵 실행시 1회 실행 트리거
 			SetUnitClass(k[2],161) -- 일반유닛
 		end
 	end
+	
+	for j, k in pairs(BossUID) do
+		SetGroupFlags(k,0xA)
+		UnitSizePatch(k,4,4,4,4)
+		SetUnitAdvFlag(k,0x40,0x8000+0x40)
+		table.insert(PatchArr,SetMemoryB(0x660178 + (k),SetTo,3))
+		SetUnitClass(k,162) -- 퍼뎀유닛
+	end
+
 	SetUnitClass(11,162) -- 퍼뎀유닛
 	SetUnitClass(69,162) -- 퍼뎀유닛
 	SetGroupFlags(11,0xA)
@@ -188,6 +197,9 @@ function init() -- 맵 실행시 1회 실행 트리거
 	UnitSizePatch(8,4,4,4,4)
 	UnitSizePatch(3,11,11,11,11)
 	UnitSizePatch(70,4,4,4,4)
+	UnitEnable(131) -- 건작Disable
+	UnitEnable(132) -- 건작Disable
+	UnitEnable(133) -- 건작Disable
 
 	
 	UnitEnable(71) -- 원격스팀팩
@@ -218,7 +230,9 @@ function init() -- 맵 실행시 1회 실행 트리거
 		table.insert(PatchArr,SetMemory(0x5821D4+(i*4),SetTo,24*2))--이스터에그총갯수
 			
 	end
+
 	for i = 1, 4 do
+		
 		UnitEnable(MedicTrig[i],200+(i*50),nil,i) -- 메딕
 		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
 		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정

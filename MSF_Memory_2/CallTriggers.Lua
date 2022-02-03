@@ -117,7 +117,7 @@ function Install_CallTriggers()
 		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]);
 		CreateUnit(1,204,"Location 1",FP);
 		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]);
-		TSetMemory(SendEff2[1],SetTo,RecoverEff1);
+		TSetMemory(SendEff2[1],SetTo,RecoverEff2);
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
 		TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);
 	})
@@ -308,6 +308,99 @@ function Install_CallTriggers()
 	end
 	CXPlot(TShape,FP,nilunit,"Location 1",{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",FP,Always(),{SetNext("X",CallCXPlotEff),SetNext(CallCXPlotEff+1,"X",1)},nil)
 
+	SetCallEnd()
+
+
+
+	Call_CA_Effect = SetCallForward()
+	function CA_Eff()
+		local CA = CAPlotDataArr
+		local CB = CAPlotCreateArr
+		local PlayerID = CAPlotPlayerID
+		CA_RatioXY(CA_Eff_Rat,186000,CA_Eff_Rat,186000)
+		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
+		Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-32,-32,32,32))
+		
+		CIf(FP,{CV(CA_Create,0)},{
+			SetMemoryW(0x666462, SetTo, 936),
+			SetMemory(0x66EC48+(4*936), SetTo, 131),
+	})
+		
+
+
+		function CreateEffUnitA(Condition,Height,Color)
+			TriggerX(FP,Condition,{{
+				SetMemoryB(0x66321C, SetTo, Height); -- 높이
+				SetMemoryB(0x669E28+936, SetTo, Color); -- 색상
+				CreateUnitWithProperties(1,204,1,FP,{energy = 100})
+			}},{Preserved})
+		end
+
+		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},20,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,2);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,2);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,2);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},20,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},20,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,6)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},20,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},18,13)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},19,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},20,17)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},18,13)
+
+		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
+		CA_CP = CreateVar(FP)
+		CIf(FP,{CV(CA_Create,1,AtLeast),CV(CA_Create,227,AtMost)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,7)},{Preserved})
+			CDoActions(FP,{TCreateUnitWithProperties(1,CA_Create,1,CA_CP,{energy = 100}),TSetMemory(0x6509B0,SetTo,CA_CP),RunAIScriptAt(JYD,1)})
+			
+		CIfEnd()
+		CIf(FP,{CV(CA_Create,1000,AtLeast)})
+			CDoActions(FP,{
+				TSetMemoryX(0x666458, SetTo, _Sub(CA_Create,1000),0xFFFF),
+				CreateUnitWithProperties(1,33,1,FP,{energy = 100}),
+				KillUnit(33,FP);
+				SetMemoryX(0x666458, SetTo, 546,0xFFFF)
+			})
+		CIfEnd()
+		
+	end
+	SetCall(FP)
+		CAPlot(CSMakePolygon(8,256,0,9,1),FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
+	SetCallEnd()
+	EffUnitLoop = SetCallForward()
+	SetCall(FP)
+	for i = 0, 1699 do
+		Trigger2(FP,{
+			DeathsX(19025+(84*i)+25,Exactly,204,0,0xFF),
+			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00)},
+		{
+			SetDeathsX(19025+(84*i)+55,SetTo,0x104,0,0x104);
+			SetDeathsX(19025+(84*i)+57,SetTo,0,0,0xFF);
+			},{Preserved})
+	end
 	SetCallEnd()
 	
 end

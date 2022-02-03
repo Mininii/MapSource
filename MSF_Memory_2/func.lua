@@ -493,6 +493,9 @@ end
 function Conv_HStr(Str)
 	return "\x10【 "..S_to_EmS(Convert_StrCode(Str)).." \x10】"
 end
+function Conv_HStr2(Str)
+	return S_to_EmS(Convert_StrCode(Str))
+end
 
 
 function Convert_StrCode(Str)
@@ -1196,6 +1199,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
 		Convert_CPosXY()
 		CIfXEnd()
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,3)},{TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TKillUnit(84,CreatePlayer)},1)-- 어택없음+옵저버이펙트
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 
@@ -1210,12 +1214,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))-- 어택없음+옵저버이펙트
-			
-			CDoActions(FP,{
-				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TKillUnit(84,CreatePlayer)
-			})
-				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,4))-- 어택없음
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,5))-- 그냥 터지는 유닛
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,19),SetTo,0,0xFF00)
+			})
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
 			CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
 			f_Div(FP,G_CA_UnitIndex,_Mov(84))
@@ -1229,11 +1233,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
 				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
 			})
-			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1)},{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,12,SetTo,64)},1)
-			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2)})
+			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,1,1)},1)
+			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2)})
 				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
 				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536)))})
 			CIfEnd()
+			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
 				
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- 정야독
@@ -1263,9 +1268,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,5)) -- 패러사이트 적용 생성
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,72)) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
 				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
+					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),RotatePlayer({CenterView(1)},HumanPlayers,FP),CreateScanEff(391),
+				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -1422,6 +1429,7 @@ CJumpEnd(FP,Write_SpawnSet_Jump)
 CAdd(FP,G_CA_LineTemp,G_CA_LineV,G_CA_InputH)
 NIfX(FP,{TMemory(G_CA_LineTemp,AtMost,0)})
 CTrigger(FP,{CVar(FP,G_CA_Owner[2],Exactly,0x7FFFFFFF)},{SetCVar(FP,G_CA_Owner[2],SetTo,0),TSetCVar(FP,G_CA_Owner[2],SetTo,G_CA_Player,0xFF)},1)
+CTrigger(FP,{CVar(FP,G_CA_Owner[2],Exactly,0x8FFFFFFF)},{SetCVar(FP,G_CA_Owner[2],SetTo,0),TSetCVar(FP,G_CA_Owner[2],SetTo,CurrentOP,0xFF)},1)
 
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,0*(0x20/4)),SetTo,G_CA_CUTV[1]),
@@ -1534,6 +1542,11 @@ function CA_Func()
 	CElseX()
 	CMov(FP,V(CA[3]),0)
 	CIfXEnd()
+
+	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x30000000,0xF0000000)})
+		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
+	CIfXEnd()
+	
 end
 local G_CA_CallStack = {}
 local G_CA_IndexAlloc = 1
@@ -1696,7 +1709,8 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	end
 	if FuncNum == nil then FuncNum = 0 end
 	if Owner == nil then Owner = 0xFFFFFFFF
-	elseif Owner == "CP" then Owner = 0x7FFFFFFF end
+	elseif Owner == "CP" then Owner = 0x7FFFFFFF
+	elseif Owner == "OP" then Owner = 0x8FFFFFFF end
 	if MaxNum == nil then MaxNum = 0 end
 	CallTriggerX(FP,Write_SpawnSet,Condition,{
 		SetCVar(FP,G_CA_CUTV[1][2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),
@@ -1723,6 +1737,10 @@ end
 function G_CA_LoopTimer(num)
 	return 0x20000000+num
 end
+function G_CA_Rotate3D()
+	return 0x30000000
+end
+
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
 	local Z = {}
 	local CUTable = {}
