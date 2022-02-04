@@ -12,7 +12,7 @@ function System()
         RemoveUnit(MarID[3],P12),
         RemoveUnit(MarID[4],P12),
         ModifyUnitEnergy(All,"Men",P12,64,0),
-        RemoveUnit(204,FP)})
+        RemoveUnit(204,FP),RemoveUnit(205,Force2)})
 
 	Cast_UnitCount()
     AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)--오프닝
@@ -21,6 +21,7 @@ function System()
     AddBGM(4,"staredit\\wav\\GBGM3.ogg",55*1000)--하이브
     AddBGM(5,"staredit\\wav\\GBGM4.ogg",69*1000)--특건
     AddBGM(6,"staredit\\wav\\MBoss.ogg",133*1000)--워프
+    AddBGM(7,"staredit\\wav\\story.ogg",83*1000)--스토리
     Install_BGMSystem(FP,3,BGMType,12)
 
     BGMArr = {}
@@ -117,7 +118,12 @@ function System()
         NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
     end
     SkillUnit = def_sIndex()
-    NJump(FP,SkillUnit,DeathsX(CurrentPlayer,Exactly,183,0,0xFF))
+    NJumpX(FP,SkillUnit,{TTOR({DeathsX(CurrentPlayer,Exactly,183,0,0xFF),DeathsX(CurrentPlayer,Exactly,214,0,0xFF)})})
+
+    DarkSkill = def_sIndex()
+    NJumpX(FP,DarkSkill,{Command(P6,AtLeast,1,BossUID[2]),DeathsX(CurrentPlayer,Exactly,33,0,0xFF)})
+    Crystal = def_sIndex()
+    NJumpX(FP,Crystal,{DeathsX(CurrentPlayer,Exactly,128,0,0xFF)})
 
 
 --    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF),{
@@ -153,11 +159,39 @@ function System()
                 TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
             })
         CIfEnd()
+    CElseIfX({DeathsX(CurrentPlayer,Exactly,94,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+    EXCC_BreakCalc({Deaths(CurrentPlayer,Exactly,0,0)},{
+        MoveCp(Add,53*4); -- 55
+        SetDeathsX(CurrentPlayer,SetTo,0x40000000,0,0x40000000);
+        SetMemory(0x6509B0,Subtract,55-19),
+        SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
+
+   
+    
     CElseX({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
     CIfXEnd()
 
+    
     EXCC_ClearCalc()
-    NJumpEnd(FP,SkillUnit)
+    NJumpXEnd(FP,Crystal)
+
+    DoActions(FP,{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+    CIf(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
+    CSub(FP,0x6509B0,9)
+    f_SaveCp()
+    f_Read(FP,BackupCp,CPos)
+    Convert_CPosXY()
+    Simple_SetLocX(FP,0,_Sub(CPosX,11),_Sub(CPosY,11),_Add(CPosX,11),_Add(CPosY,11),{
+        CreateUnit(1,191,1,P6),
+        KillUnit(191,P6),KillUnitAt(All, "Men",1,Force1)
+    })
+    f_LoadCp()
+    CAdd(FP,0x6509B0,9)
+    CIfEnd()
+
+
+    EXCC_ClearCalc()
+    NJumpXEnd(FP,SkillUnit)
 
     DoActions(FP,{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
     CIf(FP,Deaths(CurrentPlayer,Exactly,0,0))
@@ -171,6 +205,18 @@ function System()
     CIfEnd()
 
     
+    EXCC_ClearCalc()
+    NJumpXEnd(FP,DarkSkill)
+
+    DoActions(FP,{SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),SetMemory(0x6509B0,Add,1),})
+    f_SaveCp()
+    CMov(FP,CPlayer,_ReadF(_Add(BackupCp,9)),nil,0xFF)
+    CMov(FP,CPos,_ReadF(BackupCp))
+    Convert_CPosXY()
+    Simple_SetLocX(FP,0,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,1,P6)}) --
+    CTrigger(FP,{},{TCreateUnit(1,214,1,CPlayer)},1)
+    f_LoadCp()
+
     EXCC_ClearCalc()
     NJumpXEnd(FP,WhiteList)
 
@@ -246,7 +292,7 @@ function System()
         f_SaveCp()
 
         CIfX(FP,{TMemoryX(_Add(BackupCp,50),AtLeast,1*256,0xFF00)})
-        CDoActions(FP,{Set_EXCCX(3,SetTo,10)})
+        CDoActions(FP,{Set_EXCCX(3,SetTo,15)})
         CElseX()
         CDoActions(FP,{Set_EXCCX(3,SetTo,25)})
         CIfXEnd()
@@ -369,13 +415,15 @@ function System()
                 PlayWAV("staredit\\wav\\revive.ogg"),
                 DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
                 SetMemory(0x6509B0,SetTo,FP),
-                SetmemoryB(0x665C48+380,SetTo,0);
-                SetMemoryX(0x666458, SetTo, 391,0xFFFF),
-                CreateUnitWithProperties(1,33,1,i,{energy = 100}),
-                SetmemoryB(0x665C48+380,SetTo,1);
-                SetMemoryX(0x666458, SetTo, 546,0xFFFF),
                 --RunAIScriptAt("Recall Here",24)
             },{Preserved})
+                TriggerX(FP,{CV(CPlayer,i),Command(P6,AtMost,0,BossUID[2])},{
+                SetMemoryB(0x665C48+380,SetTo,0);
+                SetMemoryX(0x666458, SetTo, 391,0xFFFF),
+                CreateUnitWithProperties(1,33,1,i,{energy = 100}),
+                SetMemoryB(0x665C48+380,SetTo,1);
+                SetMemoryX(0x666458, SetTo, 546,0xFFFF),
+                },{Preserved})
             end
             f_Read(FP,_Add(Nextptrs,0x28/4),TempTarget)
         CIf(FP,{TMemoryX(_Add(Nextptrs,19),Exactly,2*256,0xFF00),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -422,6 +470,9 @@ function System()
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,33,0,0xFF))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,84,0,0xFF))
     EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,191,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,128,0,0xFF))
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,205,0,0xFF))
 
     CIf(FP,DeathsX(CurrentPlayer,Exactly,156,0,0xFF)) -- 파일런 인식
         f_SaveCp()
@@ -443,7 +494,7 @@ function System()
 
 
 
-	CallTriggerX(FP,MakeEisEgg,{Cond_EXCC(13,Exactly,1,1)})
+	CallTriggerX(FP,MakeEisEgg,{Command(FP,AtLeast,1,190),Cond_EXCC(13,Exactly,1,1)})
     CIf(FP,{Cond_EXCC(1,AtLeast,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
@@ -553,11 +604,35 @@ function System()
     SETimer = CreateCcode()
     TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
 
+    function SwarmSet(LVTable,CUTable,Player)
+        local LvLeast
+        local LVMost
+        if type(LVTable)=="table" then
+            LvLeast = LVTable[1]
+            LVMost = LVTable[2]
+        else
+            PushErrorMsg("LVTable_TypeError")
+        end
+        if type(CUTable)=="table" then
+            for j, k in pairs(CUTable) do
+                f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},k[1],k[2],1,Player,nil)--
 
-    CIf(FP,Command(AllPlayers,AtLeast,1,"Dark Swarm"),{MoveLocation(1,"Dark Swarm",AllPlayers,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,AllPlayers),CreateUnit(1,84,1,FP),KillUnit(84,FP)}) -- 다크스웜 트리거
-    --DoActionsP(FP,{,,CreateUnit(1,"【 Artanis 】",1,P8)})
-    --CreateUnitPolygonSafe2Gun(FP,Always(),16,23,32,64,30,5,1,P8,{1,51})
+            end
+        else
+            PushErrorMsg("CUTable_TypeError")
+        end
+        
+    end
+for i = 4, 7 do
+    CIf(FP,Command(i,AtLeast,1,"Dark Swarm"),{Simple_SetLoc(0,0,0,0,0),MoveLocation(1,"Dark Swarm",i,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,i),CreateUnit(1,84,1,i),KillUnit(84,i)}) -- 다크스웜 트리거
+
+    SwarmSet({0,9},{{53,10},{54,10}},i)
+    SwarmSet({10,19},{{48,5},{53,5},{55,9}},i)
+    SwarmSet({20,24},{{55,9},{48,3},{54,3},{53,3},{88,1},{21,1}},i)
+    SwarmSet({25,50},{{56,9},{51,3},{104,3},{48,3},{53,3},{54,3},{88,2},{21,2}},i)
+    
     CIfEnd()
+end
     Install_GunStack()
     CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
         Create_G_CA_Arr()
@@ -611,19 +686,6 @@ TriggerX(FP,{CD(PyCCode[i+1],3)},{
 end
 
     --
-function InvDisable(UnitID,Owner,Condition,Str)
-    Trigger2X(FP,Condition,{
-        Simple_SetLoc(0,0,0,32,32);
-        MoveLocation(1,UnitID,Owner,64);
-        RotatePlayer({
-            MinimapPing(1),
-            PlayWAVX("staredit\\wav\\start.ogg"),
-            PlayWAVX("staredit\\wav\\start.ogg"),
-            DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)
-        },HumanPlayers,FP);
-        SetInvincibility(Disable,UnitID,Owner,1);
-    })
-end
 GunPStr = {
 "\x11좌측 상단 ",
 "\x18우측 상단 ",

@@ -777,7 +777,7 @@ BossUID = {87,74,5,2}
 		{-1632+4096,-1824+4096}}
 	for j = 4, 7 do
 		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP)})
-		CTrigger(FP,{GCP(j)},{SetV(BossArr[j-3],Nextptrs)})
+		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
 	CIfXEnd()
@@ -785,7 +785,7 @@ BossUID = {87,74,5,2}
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
 
-
+	
 
 
 
@@ -793,8 +793,9 @@ BossUID = {87,74,5,2}
 
 
 	CIf_GCase(190)
-	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,nil,nil,1)
+	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,G_CA_LoopTimer(2),nil,1)
 	DoActionsX(FP,{Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+	TriggerX(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
 
 	CIf(FP,Gun_Line(7,AtLeast,400))
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt),SetV(CA_Create,0)})
@@ -853,6 +854,7 @@ BossUID = {87,74,5,2}
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,127570)},{86,79},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,142730)},{98,52},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,157890)},{70,65},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+	
 	--
 
 	bit = 315.7894
@@ -888,13 +890,17 @@ BossUID = {87,74,5,2}
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,66940+(6*(bit)/2))},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,66940+(8*(bit)/2))},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,66940+(10*(bit)/2))},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,112420)},{84},"ACAS","Warp1",Warp1[1]/20,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,66940+(12*(bit)/2))},{84},"ACAS","EllipseMirror1","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,76420)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,77360)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,78310)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,79260)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,78630)},{84},"ACAS","Warp1",Warp1[1]/30,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,79260)},{84},"ACAS","EllipseMirror1","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,80210)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,112420)},{84},"ACAS","Warp1",Warp1[1]/20,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,173050)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 
+	
 
 	
 
@@ -960,16 +966,16 @@ function SetBright(Time,Value)
 	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(25*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(26*(bit)/8))},{SetV(Var_TempTable[11],110210+(26*(bit)/8))})
 	TriggerX(FP,{Gun_Line(8,AtLeast,111780)},{SetV(Var_TempTable[11],(110210+(27*(bit)/8))*2)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,111780),Gun_Line(8,AtMost,112420)},{SubV(Var_TempTable[11],5000)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,111780),Gun_Line(8,AtMost,112420)},{SubV(Var_TempTable[11],8500)},{Preserved})
 	TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{SetV(Var_TempTable[11],112420+25000)})
 	
 
 	function NUGive(Var,UnitID)
 	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{
-		GiveUnits(23,UnitID,P9,64,P5),
-		GiveUnits(23,UnitID,P9,64,P6),
-		GiveUnits(23,UnitID,P9,64,P7),
-		GiveUnits(23,UnitID,P9,64,P8),
+		GiveUnits(12,UnitID,P9,64,P5),
+		GiveUnits(12,UnitID,P9,64,P6),
+		GiveUnits(12,UnitID,P9,64,P7),
+		GiveUnits(12,UnitID,P9,64,P8),
 		Order(UnitID,Force2,64,Attack,64),
 	SetInvincibility(Disable,UnitID,Force2,64)})
 	end
@@ -1011,6 +1017,24 @@ end
 
 	PushCr(50280,62,59)
 	PushCr(50360,62,59)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	PushCr(50840,62,213)
 	PushCr(51150,62,213)
@@ -1093,7 +1117,29 @@ end
 		end
 	PushCr(55570+(j*(bit/4)),l,k)
 	end
+	PushCr(63150,27,429)
+	PushCr(63150+(1*(bit)/2),27,429)
+	PushCr(63150+(3*(bit)/2),27,429)
+	PushCr(63150+(5*(bit)/2),27,429)
+	PushCr(63150+(6*(bit)/2),27,429)
+	PushCr(63150+(7*(bit)/2),27,429)
+	PushCr(63150+(9*(bit)/2),27,429)
+	PushCr(63150+(11*(bit)/2),27,429)
+	PushCr(63150+(12*(bit)/2),30,334)
+	PushCr(66940+(0*(bit)/2),102,444)
+	PushCr(66940+(3*(bit)/2),102,444)
+	PushCr(66940+(5*(bit)/2),102,444)
+	PushCr(66940+(6*(bit)/2),102,444)
+	PushCr(66940+(8*(bit)/2),102,444)
+	PushCr(66940+(10*(bit)/2),102,444)
+	PushCr(66940+(12*(bit)/2),60,334)
 
+	
+	PushCr(76420,30,391)
+	PushCr(77360,30,391)
+	PushCr(78310,30,391)
+	PushCr(79260,30,391)
+	PushCr(80210,60,391)
 	
 	PushCr(126310+(0*(bit/4)),21,214)
 	PushCr(126310+(2*(bit/4)),21,214)
@@ -1148,7 +1194,26 @@ end
 	end
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,141780)},{84},"ACAS","Warp1",Warp1[1]/20,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	
+	
+	PushCr(170210,102,334)
+	PushCr(170440,102,334)
+	PushCr(170680,102,334)
+	PushCr(170920,102,334)
+	
+	
+	for j = 0, 23 do--171150 0~23
+		
+		local k = 80
+		local l = 214
 
+		if j >=12 and j<=23 then
+			k = 21
+			l = 333
+		end
+		PushCr(171150+(j*(bit/4)),k,l)
+	end
+	
+	
 
 	for j, k in pairs(CrEfT) do
 		if k == 0 then
@@ -1161,10 +1226,50 @@ end
 	CMov(FP,SHLX,G_CA_CenterX)
 	CMov(FP,SHLY,G_CA_CenterY)
 	CallTrigger(FP,EffUnitLoop)
-	TriggerX(FP,{Gun_Line(8,AtLeast,186000)},{Gun_DoSuspend()})
+	TriggerX(FP,{Gun_Line(8,AtLeast,186000)},{Gun_SetLine(10,Subtract,4000)},{Preserved})
+	
+	InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08최후\x04의 \x10기억 \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+	TriggerX(FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},{Gun_DoSuspend()})
+	
 	CIfEnd()
 	CIfEnd()
 
+	CIf_GCase(173)
+
+--	CIf(CD(EEggCode,15,AtMost))
+	
+    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
+	function StoryPrint(T,Text,AddTrig)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				Gun_Line(8,AtLeast,T)
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX(string.rep("\n", 20),4),
+					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+					DisplayTextX("\x12\n\n\n\n\x13"..Text.."\n\n\n\n",0),
+					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+				},HumanPlayers,FP);
+				SetCDeaths(FP,Add,1,ButtonSound);
+				AddTrig
+			},
+		}
+	end
+	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
+	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
+	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
+	StoryPrint(4000*5,"\x04...라는.. 혹독한 \x1F절망\x04감에 다시한번 사로잡히게 된다.")
+	StoryPrint(4000*6,"\x0F잃어버린 \x17기억\x04의 \x0E멋지고 \x1F아름다운 \x1D추상화\x04는, 도대체 어디에 있단 말인가?")
+	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
+	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
+	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
+	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,0)})
+--	CIfEnd()
+	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+	CIfEnd()
 	
 	GunPushTrig = {}
 	for i = 0, 54 do

@@ -112,8 +112,13 @@ function init() -- ¸Ê ½ÇÇà½Ã 1È¸ ½ÇÇà Æ®¸®°Å
 		UnitSizePatch(k,4,4,4,4)
 		SetUnitAdvFlag(k,0x40,0x8000+0x40)
 		table.insert(PatchArr,SetMemoryB(0x660178 + (k),SetTo,3))
-		SetUnitClass(k,162) -- ÆÛµ©À¯´Ö
+		if k == 5 then
+			SetUnitClass(k,161) -- ÆÛµ©À¯´Ö
+		else
+			SetUnitClass(k,162) -- ÆÛµ©À¯´Ö
+		end
 	end
+	SetUnitClass(94,161) -- ÆÛµ©À¯´Ö
 
 	SetUnitClass(11,162) -- ÆÛµ©À¯´Ö
 	SetUnitClass(69,162) -- ÆÛµ©À¯´Ö

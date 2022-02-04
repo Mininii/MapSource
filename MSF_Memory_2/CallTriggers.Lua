@@ -402,5 +402,45 @@ function Install_CallTriggers()
 			},{Preserved})
 	end
 	SetCallEnd()
+
+	
+Call_CBullet = SetCallForward()
+
+CBY = CreateVar()
+CBX = CreateVar()
+
+CBAngle = CreateVar()
+CBHeight = CreateVar()
+CBUnitId = CreateVar()
+CBPlayer = CreateVar()
+Locs = CreateVar()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+
+CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
+
+CDoActions(FP,{
+TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+})
+CIfEnd()
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF);
+	TCreateUnit(1, 205, 1, CBPlayer),
+	TSetMemory(_Add(Nextptrs,25),SetTo,CBUnitId)
+})
+f_Read(FP,_Add(Nextptrs,10),Locs)
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+})
+NIfEnd()
+SetCallEnd()
+
 	
 end

@@ -73,6 +73,7 @@ CIf(AllPlayers,ElapsedTime(AtLeast,3))
 	Operator_Trig()
 	Interface()
 	InputStory()
+	BossTrig()
 CIfEnd()
 
 --Enable_HideErrorMessage(FP)

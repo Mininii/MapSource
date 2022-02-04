@@ -1131,6 +1131,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
+		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,128)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),},1)
 
 		
 
@@ -1156,6 +1157,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CMov(FP,G_CA_Y,TRepeatY)
 		CIfEnd()
 		CIfEnd()
+		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- 생성플레이어가 설정되지 않았을경우
+		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,4)},{Preserved})
+		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,5)},{Preserved})
+		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
+		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
+		CIfXEnd()
 		if DefaultAttackLocCheck == 1 then -- 디폴트 로케이션이 0일 경우 RepeatType에 따라 중심점으로 어택
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,1)) -- 어택 일반 해당플레이어 위치로
 				CIfX(FP,Never())
@@ -1170,12 +1177,6 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 			CIfXEnd()
 		end
-		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- 생성플레이어가 설정되지 않았을경우
-		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,4)},{Preserved})
-		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,5)},{Preserved})
-		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{Preserved})
-		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
-		CIfXEnd()
 		
 		
 
@@ -2030,4 +2031,57 @@ function CreateScanEff(EffType)
 		KillUnit(33,FP);
 		SetMemoryX(0x666458, SetTo, 546,0xFFFF),}
 return T	
+end
+
+function InvDisable(UnitID,Owner,Condition,Str)
+    Trigger2X(FP,Condition,{
+        Simple_SetLoc(0,0,0,32,32);
+        MoveLocation(1,UnitID,Owner,64);
+        RotatePlayer({
+            MinimapPing(1),
+            PlayWAVX("staredit\\wav\\start.ogg"),
+            PlayWAVX("staredit\\wav\\start.ogg"),
+            DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)
+        },HumanPlayers,FP);
+        SetInvincibility(Disable,UnitID,Owner,1);
+    })
+end
+
+
+function CreateBullet(UnitId,Height,Angle,XY,Player)
+	if XY ~= nil and type(XY) == "table" then
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,XY[2]),
+			TSetCVar(FP,CBX[2],SetTo,XY[1]),
+			TSetCVar(FP,CBAngle[2],SetTo,Angle),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			TSetCVar(FP,CBPlayer[2],SetTo,Player),
+			SetNextTrigger(Call_CBullet)
+		})
+	elseif XY == nil then
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,0),
+			TSetCVar(FP,CBX[2],SetTo,0),
+			TSetCVar(FP,CBAngle[2],SetTo,Angle),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			TSetCVar(FP,CBPlayer[2],SetTo,Player),
+			SetNextTrigger(Call_CBullet)
+		})
+	else
+		PushErrorMsg("CreateBullet_XY_Error")
+	end
+end
+
+function CreateBulletLoc(UnitId,Height,Angle,Player)
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,0),
+			TSetCVar(FP,CBX[2],SetTo,0),
+			TSetCVar(FP,CBAngle[2],SetTo,Angle),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			TSetCVar(FP,CBPlayer[2],SetTo,Player),
+			SetNextTrigger(Call_CBullet)
+		})
 end

@@ -75,23 +75,29 @@ function Operator_Trig()
 	
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	
-    WhiteHoleTestMode = {}
-    WT123 = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
-
+    SingleGunTestMode = {}
+    ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
+	TargetTestGun = 189
     for j, k in pairs(f_GunTable) do
-		if k ~= 190 then
-        table.insert(WhiteHoleTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
-        table.insert(WhiteHoleTestMode,RemoveUnit(k,Force2))
-        table.insert(WhiteHoleTestMode,RemoveUnit(k,P12))
+		if k ~= TargetTestGun then
+        table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
+        table.insert(SingleGunTestMode,RemoveUnit(k,Force2))
+        table.insert(SingleGunTestMode,RemoveUnit(k,P12))
 		end
     end
-    for j, k in pairs(WT123) do
-        table.insert(WhiteHoleTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
-        table.insert(WhiteHoleTestMode,RemoveUnit(k,Force2))
-        table.insert(WhiteHoleTestMode,RemoveUnit(k,P12))
+    for j, k in pairs(ExWt) do
+        table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
+        table.insert(SingleGunTestMode,RemoveUnit(k,Force2))
+        table.insert(SingleGunTestMode,RemoveUnit(k,P12))
     end
-	table.insert(WhiteHoleTestMode,SetV(CurEXP,0x7FFFFFFF))
-    Trigger2X(FP,Deaths(CurrentPlayer,AtLeast,1,208),WhiteHoleTestMode)
+	table.insert(SingleGunTestMode,SetV(CurEXP,0x7FFFFFFF))
+    Trigger2X(FP,Deaths(CurrentPlayer,AtLeast,1,208),SingleGunTestMode)
+	CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
+	CMov(FP,0x6509B0,19025+9) --CUnit 시작지점 +19 (0x4C)
+	CWhile(FP,Memory(0x6509B0,AtMost,19025+9 + (84*1699)),{SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF0000),SetMemory(0x6509b0,Add,84)})
+	CWhileEnd()
+	CMov(FP,0x6509B0,FP)
+	CIfEnd()
 
 		for i = 0, 3 do
 			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{Preserved})
@@ -166,7 +172,9 @@ CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(P
 	Print_13(FP,MapPlayers,nil)
 CIfEnd({})
 CAdd(FP,Print13T,Dt)
+CIf(FP,CD(Fin,0))
 CAdd(FP,Time1,Dt)
+CIfEnd()
 CDoActions(FP,{TSetCDeaths(FP,Add,Dt,GeneT)})
 Trigger { -- 빨간숫자
 	players = {FP},

@@ -3,9 +3,8 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
+    if Limit == 0 then
     DoActionsX(FP,{SetV(BGMType,1)},1)
-    if Limit == 1 then
-        
     end
 	for i=1, 57 do
         Trigger2X(FP,{CDeaths(FP,AtLeast,i*15,OPCCode);},{RotatePlayer(
@@ -97,4 +96,39 @@ DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),Remove
 CIfEnd()
 DoActions(FP,{RemoveUnit(84,Force1)})
 
+
+CIf(FP,CD(Win,1,AtLeast))
+CDoActions(FP,{AddCD(Win,Dt)})
+DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\H_Clear.ogg"),PlayWAVX("staredit\\wav\\H_Clear.ogg")},HumanPlayers,FP)},1)
+	for i=1, 57 do
+	Trigger2X(FP,{CD(Win,i*8,AtLeast)},RotatePlayer({
+        DisplayTextX(string.rep("\n", 20),4),
+        DisplayTextX("\n",4),
+        DisplayTextX("\x13\x04"..string.rep("―", i),4),
+        DisplayTextX("\n\n\n\n",4),
+        DisplayTextX("\x13\x04"..string.rep("―", i),4),
+        DisplayTextX("\n\n",4),
+    },HumanPlayers,FP))
+
+    
+    
+	end
+EDText = {"\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ： \x18잃어버린 \x07빛\x04의 \x17기억"}
+
+for i=1, 1 do
+Trigger2X(FP,{CD(Win,500,AtLeast)},
+    RotatePlayer({
+        DisplayTextX(string.rep("\n", 20),4),
+        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+        DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝ \n\x13\x10클리어\x04 하셨습니다.",4),
+        DisplayTextX("\x13"..EDText[i],4),
+        DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4),
+        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+        DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
+    },HumanPlayers,FP))
+end
+Trigger2X(FP,{CD(Win,5000,AtLeast),CD(TestMode,0)},
+RotatePlayer({Victory()
+},HumanPlayers,FP))
+CIfEnd()
 end
