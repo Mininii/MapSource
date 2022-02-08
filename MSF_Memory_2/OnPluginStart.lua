@@ -164,6 +164,7 @@ function init() -- 맵 실행시 1회 실행 트리거
 	for i = 63, 70 do
 		UnitEnable(i) -- 원격스팀팩
 	end
+	SetUnitDefUpType(111,0)
 	UnitSizePatch(55,9,9,9,9) 
 	UnitSizePatch(56,9,9,9,9) 
 	UnitSizePatch(62,9,9,9,9) 
@@ -364,9 +365,9 @@ function init() -- 맵 실행시 1회 실행 트리거
 	}
 	end
 
-	T_YY = 2021
-	T_MM = 12
-	T_DD = 02
+	T_YY = 2022
+	T_MM = 02
+	T_DD = 09
 	T_HH = 00
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 

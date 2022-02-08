@@ -73,7 +73,6 @@ function Interface()
 			},
 	}
 	end
-	CSub(FP,ShieldEnV[i+1],Dt)
 	local ExchangeP = CreateVar(FP)
 	for i=0, 3 do
 		ExJump = def_sIndex()
@@ -173,22 +172,7 @@ Trigger { -- 조합 루미아마린
 			PreserveTrigger();
 		},
 	}
-	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
-	Trigger { -- 공업완료시 수정보호막 활성화
-		players = {i},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,1,ShieldUnlock[i+1]);
-			CV(ShieldEnV[i+1],0);
-		},
-		actions = {
-			DisplayText(ShieldUnlockT,4);
-			SetMemory(0x5822C4+(i*4),SetTo,1200);
-			SetMemory(0x582264+(i*4),SetTo,1200);
-			SetMemoryB(0x57F27C+(228*i)+19,SetTo,1);
-		},
-	}
 	
 	Trigger { -- 보호막 가동
 	players = {i},

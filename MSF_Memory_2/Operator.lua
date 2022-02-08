@@ -172,6 +172,7 @@ CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(P
 	Print_13(FP,MapPlayers,nil)
 CIfEnd({})
 CAdd(FP,Print13T,Dt)
+CSub(FP,ShieldEnV,Dt)
 CIf(FP,CD(Fin,0))
 CAdd(FP,Time1,Dt)
 CIfEnd()
@@ -238,16 +239,37 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 	
 	Trigger2X(FP,{CV(Level,30,AtLeast)},{
 		RotatePlayer({PlayWAVX("staredit\\wav\\shield_unlock.ogg"),PlayWAVX("staredit\\wav\\shield_unlock.ogg")},HumanPlayers,FP);
-		SetV(ShieldEnV[1],3200);
-		SetV(ShieldEnV[2],3200);
-		SetV(ShieldEnV[3],3200);
-		SetV(ShieldEnV[4],3200);
-		SetCDeaths(FP,SetTo,1,ShieldUnlock[1]);
-		SetCDeaths(FP,SetTo,1,ShieldUnlock[2]);
-		SetCDeaths(FP,SetTo,1,ShieldUnlock[3]);
-		SetCDeaths(FP,SetTo,1,ShieldUnlock[4]);
+		SetV(ShieldEnV,3200);
+		SetCDeaths(FP,SetTo,1,ShieldUnlock);
 		
 	})
+
+	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+
+	Trigger { -- 공업완료시 수정보호막 활성화
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtLeast,1,ShieldUnlock);
+			CV(ShieldEnV,0);
+		},
+		actions = {
+			RotatePlayer({DisplayTextX(ShieldUnlockT,4);},HumanPlayers,FP);
+			SetMemory(0x5822C4+(0*4),SetTo,1200);
+			SetMemory(0x582264+(0*4),SetTo,1200);
+			SetMemoryB(0x57F27C+(228*0)+19,SetTo,1);
+			SetMemory(0x5822C4+(1*4),SetTo,1200);
+			SetMemory(0x582264+(1*4),SetTo,1200);
+			SetMemoryB(0x57F27C+(228*1)+19,SetTo,1);
+			SetMemory(0x5822C4+(2*4),SetTo,1200);
+			SetMemory(0x582264+(2*4),SetTo,1200);
+			SetMemoryB(0x57F27C+(228*2)+19,SetTo,1);
+			SetMemory(0x5822C4+(3*4),SetTo,1200);
+			SetMemory(0x582264+(3*4),SetTo,1200);
+			SetMemoryB(0x57F27C+(228*3)+19,SetTo,1);
+		},
+	}
+
 	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayTextX(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
 	

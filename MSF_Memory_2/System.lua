@@ -766,9 +766,6 @@ Trigger2X(FP,{--Äµ¹ßµ¿
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
         },HumanPlayers,FP);
-    RotatePlayer({
-        RunAIScriptAt(JYD,"Anywhere");
-        },{P5,P6,P7,P8},FP);
 		SetMemory(0x582174,Add,2);
 		SetMemory(0x582178,Add,2);
 		SetMemory(0x58217C,Add,2);
@@ -791,9 +788,6 @@ Trigger2X(FP,{--Äµ¹ßµ¿
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
         },HumanPlayers,FP);
-    RotatePlayer({
-        RunAIScriptAt(JYD,"Anywhere");
-        },{P5,P6,P7,P8},FP);
 		SetMemory(0x582174,Add,2);
 		SetMemory(0x582178,Add,2);
 		SetMemory(0x58217C,Add,2);
