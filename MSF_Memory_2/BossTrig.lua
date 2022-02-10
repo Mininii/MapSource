@@ -102,7 +102,8 @@ function BossTrig()
 		CIf(FP,CD(B3C[1],3))
 			CMov(FP,B3V[5],f_CRandNum(60))
 		CIfEnd()
-
+		DoActionsX(FP,{AddCD(B3C[2],1)})
+		CIf(FP,{CD(B3C[2],5,AtLeast)},{SetCD(B3C[2],0)})
 		CIf(FP,CV(B3V[4],512,AtMost))
 			CMov(FP,B3V[2],0)
 			CWhile(FP,{CVar(FP,B3V[2][2],AtMost,359)})
@@ -116,8 +117,10 @@ function BossTrig()
 
 			CAdd(FP,B3V[2],60)
 			CWhileEnd()
-			CAdd(FP,B3V[4],12)
+			CAdd(FP,B3V[4],60)
 		CIfEnd()
+		CIfEnd()
+
 		CIfEnd()
 
 		TriggerX(FP,{CV(B3V[4],512,AtLeast)},{
@@ -169,4 +172,22 @@ function BossTrig()
 		TriggerX(FP,{CD(B4C[2],200,AtLeast)},{SetCD(B4C[1],0),SetCD(B4C[2],0)},{Preserved})
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),},1)
 	CIfEnd()
+
+	function InvDisable2(UnitID,Owner,Condition)
+		Trigger2X(FP,Condition,{
+			Simple_SetLoc(0,0,0,32,32);
+			MoveLocation(1,UnitID,Owner,64);
+			SetInvincibility(Disable,UnitID,Owner,1);
+		},{Preserved})
+	end
+	for i = 4, 7 do
+	InvDisable2(189,i,{
+		CV(BPtrArr[1],0,AtMost),
+		CV(BPtrArr[2],0,AtMost),
+		CV(BPtrArr[3],0,AtMost),
+		CV(BPtrArr[4],0,AtMost),
+		CD(WarpCheck,0),
+		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
+	end
+	DoActionsX(FP,{SetCD(WarpCheck,0)})
 end

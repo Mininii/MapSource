@@ -6,7 +6,7 @@ function LeaderBoardF()
 		
     for i = 0, 3 do
         TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
-			SetCp(4+i),RunAIScriptAt(JYD,2+i)
+			SetCp(4+i),RunAIScriptAt(JYD,2+i)--32
         },{Preserved})
         TriggerX(FP,{PlayerCheck(i,1),ElapsedTime(AtLeast,60*3),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			Order("Factories",4+i,64,Attack,2+i)
@@ -22,7 +22,8 @@ function LeaderBoardF()
 --        },{Preserved})
     end
 
-	CIf(FP,{ElapsedTime(AtLeast,60*5),CDeaths(FP,Exactly,0,LeaderBoardT),},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
+	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
+		,CDeaths(FP,Exactly,0,LeaderBoardT)},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	
@@ -46,39 +47,41 @@ function LeaderBoardF()
 		DeathsX(CurrentPlayer,Exactly,2*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,3*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,156*256,0,0xFF00),
-		DeathsX(CurrentPlayer,Exactly,187*256,0,0xFF00),
+--		DeathsX(CurrentPlayer,Exactly,187*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,157*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,158*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,159*256,0,0xFF00),
 		DeathsX(CurrentPlayer,Exactly,160*256,0,0xFF00),
 	})})
+			local L_Gun_Order = def_sIndex()
+			local TargetRotation = CreateVar(FP)
+			local TargetUID = CreateVar(FP)
+			local TargerXY = CreateVarArr(2,FP)
+			local CurXY = CreateVar(FP)
 			DoActions(FP,MoveCp(Add,6*4))
 			local Check_Hero = def_sIndex()
 			for j, k in pairs(HeroPointArr) do
 				NJumpX(FP,Check_Hero,DeathsX(CurrentPlayer,Exactly,k[2],0,0xFF))
 			end
 			f_SaveCp()
-			CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
-	
-			local TargetRotation = CreateVar(FP)
-			local TargerXY = CreateVarArr(2,FP)
-			local CurXY = CreateVar(FP)
+			NJumpXEnd(FP,L_Gun_Order)
+			CMov(FP,TargetUID,_Read(BackupCP),nil,0xFF)
 			CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
+			NIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
+	
 			for i = 0, 3 do
 				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
-				local L_Gun_Order = def_sIndex()
-				NJumpXEnd(FP,L_Gun_Order)
 				DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
 				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,0)},{Preserved})
 				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,1)},{Preserved})
 				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,2)},{Preserved})
 				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,3)},{Preserved})
-				for j = 0, 3 do
-				NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
-				end
-				CMov(FP,TargetRotation,Gun_TempRand)
 				CIfEnd()
 			end
+			for j = 0, 3 do
+			NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+			end
+			CMov(FP,TargetRotation,Gun_TempRand)
 			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			
 			
@@ -89,13 +92,26 @@ function LeaderBoardF()
 				CIfEnd()
 			end
 				f_Read(FP,_Sub(BackupCP,15),CurXY)
-				CurX,CurY = Convert_CPosXY(CurXY,2)
+				CurX,CurY = Convert_CPosXY(CurXY,1)
 				Simple_SetLocX(FP,9,TargerXY[1],TargerXY[2],TargerXY[1],TargerXY[2])
 				Simple_SetLocX(FP,0,CurX,CurY,CurX,CurY)
-				DoActions(FP,Order("Factories",Force2,1,Attack,10))
-			CIfEnd()
+				CDoActions(FP,{TOrder(TargetUID,Force2,1,Attack,10)})
+				HeroOrder = def_sIndex()
+				CJump(FP,HeroOrder)
+				NJumpXEnd(FP,Check_Hero)
+				f_SaveCp()
+				CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
+				local TempCPCheck = CreateVar()
+				for i = 0, 3 do
+				NIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})--{Order("Men",Force2,1,Attack,10)}
+					CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
+					f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
+					NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
+				NIfEnd()
+				end
+				CJumpEnd(FP,HeroOrder)
+			NIfEnd()
 			f_LoadCp()
-			NJumpXEnd(FP,Check_Hero)
 			DoActions(FP,MoveCp(Subtract,6*4))
 		CIfEnd()
 	CIfEnd()

@@ -367,8 +367,8 @@ function init() -- 맵 실행시 1회 실행 트리거
 
 	T_YY = 2022
 	T_MM = 02
-	T_DD = 09
-	T_HH = 00
+	T_DD = 11
+	T_HH = 12
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
 	end

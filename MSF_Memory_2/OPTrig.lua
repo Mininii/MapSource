@@ -3,8 +3,9 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    if Limit == 0 then
     DoActionsX(FP,{SetV(BGMType,1)},1)
+    if Limit == 0 then
+    
     end
 	for i=1, 57 do
         Trigger2X(FP,{CDeaths(FP,AtLeast,i*15,OPCCode);},{RotatePlayer(
@@ -67,7 +68,8 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
 DoActions(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 CIfEnd()
 if Limit == 1 then
-TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
+    TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
+    TriggerX(FP,{CD(TestMode,1)},{ModifyUnitShields(All,"Men",Force1,64,100),ModifyUnitHitPoints(All,"Men",Force1,64,100)},{preserved})
 end
 CIfOnce(FP,CD(OPJump,1))
 
@@ -81,6 +83,8 @@ if Limit == 1 then
 	for i = 0, 3 do
 	TriggerX(FP,{CD(TestMode,1),PlayerCheck(i)},{CreateUnitWithProperties(24,MarID[i+1],i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
 	TriggerX(FP,{PlayerCheck(i)},{CreateUnitWithProperties(3,32,i+2,i,{energy = 100}),CreateUnitWithProperties(1,20,i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
+	TriggerX(FP,{PlayerCheck(i),CVar(FP,SetPlayers[2],Exactly,1)},{CreateUnitWithProperties(2,32,i+2,i,{energy = 100}),CreateUnitWithProperties(1,20,i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
+    
 	end
 else
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
@@ -89,13 +93,11 @@ else
 	end
 end
 for i = 0, 3 do
-	TriggerX(FP,{PlayerCheck(i)},{GiveUnits(All,"Buildings",P12,i+2,i),GiveUnits(All,"Buildings",P12,i+17,i),SetCp(i),CenterView(i+2),SetCp(FP)})
+	TriggerX(FP,{PlayerCheck(i)},{GiveUnits(All,"Buildings",P12,i+2,i),GiveUnits(All,203,P12,i+2,i),GiveUnits(All,"Buildings",P12,i+17,i),SetCp(i),CenterView(i+2),SetCp(FP)})
 end
-DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),RemoveUnit(84,Force1)})
 
 CIfEnd()
-DoActions(FP,{RemoveUnit(84,Force1)})
-
+DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),RemoveUnit(203,P12),RemoveUnit(183,P12),RemoveUnit(84,P12),RemoveUnit(84,Force1)})
 
 CIf(FP,CD(Win,1,AtLeast))
 CDoActions(FP,{AddCD(Win,Dt)})

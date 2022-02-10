@@ -214,7 +214,10 @@ function System()
     CMov(FP,CPos,_ReadF(BackupCp))
     Convert_CPosXY()
     Simple_SetLocX(FP,0,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,1,P6)}) --
-    CTrigger(FP,{},{TCreateUnit(1,214,1,CPlayer)},1)
+    CIf(FP,Memory(0x628438,AtLeast,1))
+    f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+    CTrigger(FP,{},{TCreateUnit(1,214,1,CPlayer),TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)},1)
+    CIfEnd()
     f_LoadCp()
 
     EXCC_ClearCalc()
@@ -420,7 +423,8 @@ function System()
                 TriggerX(FP,{CV(CPlayer,i),Command(P6,AtMost,0,BossUID[2])},{
                 SetMemoryB(0x665C48+380,SetTo,0);
                 SetMemoryX(0x666458, SetTo, 391,0xFFFF),
-                CreateUnitWithProperties(1,33,1,i,{energy = 100}),
+                CreateUnitWithProperties(1,33,1,FP,{energy = 100}),
+                RemoveUnit(33,FP),
                 SetMemoryB(0x665C48+380,SetTo,1);
                 SetMemoryX(0x666458, SetTo, 546,0xFFFF),
                 },{Preserved})
@@ -495,7 +499,7 @@ function System()
 
 
 	CallTriggerX(FP,MakeEisEgg,{Command(FP,AtLeast,1,190),Cond_EXCC(13,Exactly,1,1)})
-    CIf(FP,{Cond_EXCC(1,AtLeast,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
+    CIf(FP,{Cond_EXCC(1,Exactly,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
@@ -543,14 +547,14 @@ function System()
     OtherGunT = {
         
 
-        {135,{{53,53},{103}},{"Star1","Circle1"},{982,366}},--히드라덴
-        {136,{{46},{54,54,50}},{"L00_1_128F","L00_1_64F"},{984,365}},--디파마운드
-        {137,{{56,62}},{"H00_1_64F"},{366}},--그레이터스파이어
-        {138,{{45},{40,40,51,104,51,104}},{"H00_1_128F","QNest"},{984,366}},--퀸네스트
-        {139,{{53,54},{15}},{"EChamb","H00_1_96F"},{366,367}},--에볼루션챔버
-        {140,{{48,48}},{"H00_1_64L"},{365}},--울트라
-        {141,{{55,55}},{"H00_1_64F"},{366}},--스파이어
-        {142,{{54,54}},{"Circle2"},{982}},--스포닝풀
+        {135,{{53},{103}},{"Star1","Circle1"},{982,366}},--히드라덴
+        {136,{{46},{54,50}},{"L00_1_128F","L00_1_64F"},{984,365}},--디파마운드
+        {137,{{56,62}},{"H00_1_82F"},{366}},--그레이터스파이어
+        {138,{{45},{40,51,104}},{"H00_1_128F","QNest"},{984,366}},--퀸네스트
+        {139,{{53},{15}},{"EChamb","H00_1_96F"},{366,367}},--에볼루션챔버
+        {140,{{48}},{"H00_1_64L"},{365}},--울트라
+        {141,{{55}},{"H00_1_82F"},{366}},--스파이어
+        {142,{{54}},{"Circle2"},{982}},--스포닝풀
 
     }
     OtherG = def_sIndex()
@@ -626,10 +630,10 @@ function System()
 for i = 4, 7 do
     CIf(FP,Command(i,AtLeast,1,"Dark Swarm"),{Simple_SetLoc(0,0,0,0,0),MoveLocation(1,"Dark Swarm",i,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,i),CreateUnit(1,84,1,i),KillUnit(84,i)}) -- 다크스웜 트리거
 
-    SwarmSet({0,9},{{53,10},{54,10}},i)
-    SwarmSet({10,19},{{48,5},{53,5},{55,9}},i)
-    SwarmSet({20,24},{{55,9},{48,3},{54,3},{53,3},{88,1},{21,1}},i)
-    SwarmSet({25,50},{{56,9},{51,3},{104,3},{48,3},{53,3},{54,3},{88,2},{21,2}},i)
+    SwarmSet({0,9},{{53,5},{54,5}},i)
+    SwarmSet({10,19},{{48,3},{53,3},{55,4}},i)
+    SwarmSet({20,24},{{55,4},{48,2},{54,2},{53,2},{88,1},{21,1}},i)
+    SwarmSet({25,50},{{56,4},{51,2},{104,2},{48,2},{53,2},{54,2},{88,2},{21,2}},i)
     
     CIfEnd()
 end
@@ -664,10 +668,10 @@ end
         
     end
     CIf(FP,{CV(Time1,(60*30)*1000,AtMost),CD(WaveT,1800,AtLeast)},SetCD(WaveT,0))
-        WaveSet({0,9},{{53,25},{54,30}})
-        WaveSet({10,19},{{48,15},{53,20},{55,15}})
-        WaveSet({20,24},{{55,25},{48,10},{54,15},{53,10}})
-        WaveSet({25,50},{{56,25},{51,10},{104,10},{48,10},{53,10},{54,10}})
+        WaveSet({0,9},{{53,15},{54,20}})
+        WaveSet({10,19},{{48,8},{53,10},{55,10}})
+        WaveSet({20,24},{{55,10},{48,8},{54,7},{53,6}})
+        WaveSet({25,50},{{56,15},{51,5},{104,5},{48,5},{53,5},{54,5}})
     CIfEnd(AddCD(WaveT,1))
 CMov(FP,0x6509B0,FP)
 for i = 0, 3 do
@@ -686,6 +690,12 @@ TriggerX(FP,{CD(PyCCode[i+1],3)},{
 end
 
     --
+GunSPStr = {
+"\x11좌측 9시 ",
+"\x18우측 3시 ",
+"\x16중앙 9시 ",
+"\x17중앙 3시 ",
+}
 GunPStr = {
 "\x11좌측 상단 ",
 "\x18우측 상단 ",
@@ -703,16 +713,16 @@ CellPStr = {
 for i = 4, 7 do
     InvDisable(154,i,{CD(PyCCode[i-3],3,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>F<1D>elis").." \x04의 \x02무적상태\x04가 해제되었습니다.")
     InvDisable(147,i,{CD(CereCond[i-3],2,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<1D>the <19>H<1D>eaven").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-    InvDisable(168,i,{CD(HiveCcode[i-3],0,AtMost)},CellPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>R<1D>esonance").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    --InvDisable(168,i,{CD(HiveCcode[i-3],0,AtMost)},CellPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>R<1D>esonance").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
     
-    InvDisable(189,i,{CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>W<1D>arp <19>T<1D>unnel").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(189,i,{CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>W<1D>arp <19>T<1D>unnel").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
 for i = 4, 5 do
-    InvDisable(201,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>O<1D>blivion").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(201,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunSPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>O<1D>blivion").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
 for i = 6, 7 do
-    InvDisable(152,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>N<1D>ightmare").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+    InvDisable(152,i,{CD(IonCcode[i-3],1,AtLeast),CD(NoradCcode[i-3],1,AtLeast)},GunSPStr[i-3].."\x04지역 \x10"..Conv_HStr("<19>N<1D>ightmare").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 end
 InvDisable(190,FP,{
     Deaths(4,AtLeast,1,BossUID[1]),

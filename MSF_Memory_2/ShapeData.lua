@@ -58,8 +58,8 @@ end
 	NBYD = CS_RatioXY(CS_OverlapX(table.unpack(NexBYDLine)),1,0.5)
 	NBYD2 = CS_RatioXY(CS_OverlapX(table.unpack(NexBYDLine2)),1,0.5)
 	
-	Circle1 = CSMakeCircle(18,32*7,0,19,1)
-	Circle2 = CSMakeCircle(36,32*7,0,37,1)
+	Circle1 = CSMakeCircle(12,32*5,0,13,1)
+	Circle2 = CSMakeCircle(24,32*4,0,25,1)
 	Star1 = CSMakeStar(6,165-(12*(6-2)),((32*6)-(32*1))/2,180,PlotSizeCalc(6*2,2),PlotSizeCalc(6*2,1))
 	QNest = CSMakePolygon(4,48,0,PlotSizeCalc(4,5),PlotSizeCalc(4,4))
 	EChamb = CSMakePolygon(6,32,0,PlotSizeCalc(6,6),PlotSizeCalc(6,5))
@@ -67,9 +67,9 @@ end
 	--해처리
 	Circle3 = CSMakeCircle(6,48,0,PlotSizeCalc(6,3),0) --1
 	Polygon6 = CSMakePolygon(6,48,0,PlotSizeCalc(6,3),0) --2
-	Polygon6_2 = CSMakePolygon(6,24,0,PlotSizeCalc(6,5),0) --3
-	Circle6_2 = CSMakeCircle(6,24,0,PlotSizeCalc(6,5),0) --4
-	local Shape1 = CSMakeStar(6,120,48,0,PlotSizeCalc(6*2,4),0)
+	Polygon6_2 = CSMakePolygon(6,48,45,PlotSizeCalc(6,3),0) --3
+	Circle6_2 = CSMakeCircle(6,48,45,PlotSizeCalc(6,3),0)
+	local Shape1 = CSMakeStar(6,120,72,0,PlotSizeCalc(6*2,3),0)
     Star6_2 = CS_OverlapX(CS_CropRA(Shape1,{0,1200},{30,150}),CS_CropRA(Shape1,{0,1200},{210,330}))
 
 	--레어
@@ -81,9 +81,9 @@ end
 	Pol_4_2 = CS_RatioXY(CSMakeLine(8,192,0,9,1),1,0.5)
 	Cir36_1 = CSMakeStar(36,30,192,0,PlotSizeCalc(36*2,1),1)
 	Cir36_2 = CSMakeCircle(6,128,0,7,1)
-	Spi2 = CSMakeSpiral(6,0.2,0.9,32,0,(12*6)+1,0)
+	Spi2 = CSMakeSpiral(6,0.2,0.9,32,0,(12*4)+1,0)
+	Tor2 = CSMakeTornado(6,48,12,4,1)
 	Spi3 = CSMakeSpiral(6,0.2,0.9,32,0,(12*7)+1,(12*6)+1)
-	Tor2 = CSMakeTornado(6,32,12,6,1)
 	Tor3 = CSMakeTornado(6,32,12,6,nil,5)
 	L00_1 = CSMakePath({-160,-160},{160,-160},{160,160},{-160,160})
 	H00_1 = CSMakePath({-192,-192},{192,-192},{192,192},{-192,192})
@@ -197,7 +197,7 @@ EllipseMirror1 = CS_MoveXY(EllipseMirror,-500,-250)
 
 
 local x,y=lengthdir(90, 30)
-CirA = CSMakeCircle(8,32,0,9,1)
+CirA = CSMakeCircle(5,32,0,6,1)
 CirAX = CS_KaleidoscopeX(CS_MoveXY(CirA,x,y),6,0,1)
 Tornado = CSMakeTornado(6,40,10,4,1)
 Sp1 = CSMakeSpiral(4,1,1,28,0,61,9)
@@ -318,6 +318,7 @@ GBAir = CSMakePolygon(4,64,45,PlotSizeCalc(4,20),PlotSizeCalc(4,19))
 		"L00_1_96F",
 		"H00_1_64F",
 		"H00_1_128F",
+		"H00_1_82F",
 		"QNest",
 		"EChamb",
 		"H00_1_64L","L00_1_164F","L00_1_128F","H00_1_96F",

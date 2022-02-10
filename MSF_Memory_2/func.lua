@@ -454,6 +454,23 @@ function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask)
 	end
 end
 
+function Print13_NumSetC2(Ptr,Ptr2,DivNum,Mask)
+	for i = 3, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				CDeaths(FP,AtLeast,(2^i)*DivNum,Ptr);
+			},
+			actions = {
+				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
+				SetCDeaths(FP,Subtract,(2^i)*DivNum,Ptr);
+				PreserveTrigger();
+			}
+		}
+	end
+end
+
+
 function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
 	local X = {}
 	local Y = {}
@@ -1113,6 +1130,8 @@ G_CA_Player = CreateVar(FP)
 local LDrX,LDrY = CreateVars(2,FP)
 local G_CA_X = CreateVar(FP)
 local G_CA_Y = CreateVar(FP)
+local G_CA_BakX = CreateVar(FP)
+local G_CA_BakY = CreateVar(FP)
 local G_CA_WSTestStrPtr = CreateVar(FP)
 local G_CA_WSTestVA = CreateVArr(5,FP)
 Call_Repeat = SetCallForward() -- 유닛생성부
@@ -1130,6 +1149,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 --		CIfXEnd()
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+		CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
+		f_Div(FP,G_CA_UnitIndex,_Mov(84))
+		CDoActions(FP,{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,2),})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
 		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,128)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),},1)
 
@@ -1173,8 +1195,23 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CElseX() -- 해당플레이어가 존재하지 않을 경우 생성 중심점에 어택
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 				CIfXEnd()
+			CElseIfX({CVar(FP,RepeatType[2],Exactly,100)}) 
+
+				CIfX(FP,Never())
+				for i = 0, 3 do
+					CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),PlayerCheck(i,1)})
+						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+						CMov(FP,G_CA_BakX,G_CA_TempTable[8])
+						CMov(FP,G_CA_BakY,G_CA_TempTable[9])
+						CMov(FP,G_CA_TempTable[8],TargetArr[i+1][1])
+						CMov(FP,G_CA_TempTable[9],TargetArr[i+1][2])
+				end
+				CElseX() -- 해당플레이어가 존재하지 않을 경우 생성 중심점에 어택
+						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+				CIfXEnd()
 			CElseX() -- 어택 일반 도형중심점
 			Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+
 			CIfXEnd()
 		end
 		
@@ -1188,7 +1225,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CMov(FP,Script2,EffType,EPDF(0x66EC48))
 		CMov(FP,ScriptBak,_Read(Script2),nil,0xFFFF)
 		CDoActions(FP,{TSetMemoryX(0x6663C4, SetTo, EffType,0xFFFF),
-			TSetMemory(Script2,SetTo,165),
+		
+			TSetMemory(Script2,SetTo,165),--131
 			TCreateUnitWithProperties(1,185,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),
 			TSetMemory(Script2,SetTo,ScriptBak)
 		})
@@ -1222,8 +1260,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
-			CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
-			f_Div(FP,G_CA_UnitIndex,_Mov(84))
+
 			CDoActions(FP,{
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,7,SetTo,G_CA_TempTable[1]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,8,SetTo,G_CA_TempTable[11]),
@@ -1234,10 +1271,20 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
 				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
 			})
+			CIfX(FP,Never())
+			for i = 0, 3 do
+				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),PlayerCheck(i,1)})
+				CMov(FP,G_CA_TempTable[8],G_CA_BakX)
+				CMov(FP,G_CA_TempTable[9],G_CA_BakY)
+			end
+			CIfXEnd()
+
 			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,1,1)},1)
 			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2)})
 				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
-				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536)))})
+				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536))),
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),})
 			CIfEnd()
 			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
 				

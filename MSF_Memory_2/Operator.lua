@@ -198,6 +198,7 @@ local CurExpTmp = CreateVar()
 
 
 local TimeTmp = CreateCcode()
+local TimeTmp2 = CreateCcode()
 local CountTmp = CreateCcode()
 local LevelTmp = CreateCcode()
 local ExpTmp = CreateCcode()
@@ -205,12 +206,19 @@ local RedNumberTmp = CreateCcode()
 local ArrI = CreateVar()
 CMov(FP,_Ccode(FP,RedNumberTmp),RedNumber)
 CMov(FP,_Ccode(FP,TimeTmp),Time1)
+CMov(FP,_Ccode(FP,TimeTmp2),Time1)
 CMov(FP,_Ccode(FP,LevelTmp),Level)
 CMov(FP,_Ccode(FP,CountTmp),count)
 
+
+
+
+
+
 CIfX(FP,{CV(Level,49,AtMost)},{print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04："..string.rep("\x0D",GetStrSize(0,"．")).."０"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
 	f_Mul(FP,CurExpTmp,CurEXP,100)
-	f_Div(FP,_Ccode(FP,ExpTmp),CurExpTmp,MaxEXP)
+	f_Div(FP,CurExpTmp,MaxEXP)
+	CMov(FP,_Ccode(FP,ExpTmp),CurExpTmp)
 CElseX({SetCD(ExpTmp,100),print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：００"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
 CIfXEnd()
 
@@ -246,29 +254,6 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 
 	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
-	Trigger { -- 공업완료시 수정보호막 활성화
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,1,ShieldUnlock);
-			CV(ShieldEnV,0);
-		},
-		actions = {
-			RotatePlayer({DisplayTextX(ShieldUnlockT,4);},HumanPlayers,FP);
-			SetMemory(0x5822C4+(0*4),SetTo,1200);
-			SetMemory(0x582264+(0*4),SetTo,1200);
-			SetMemoryB(0x57F27C+(228*0)+19,SetTo,1);
-			SetMemory(0x5822C4+(1*4),SetTo,1200);
-			SetMemory(0x582264+(1*4),SetTo,1200);
-			SetMemoryB(0x57F27C+(228*1)+19,SetTo,1);
-			SetMemory(0x5822C4+(2*4),SetTo,1200);
-			SetMemory(0x582264+(2*4),SetTo,1200);
-			SetMemoryB(0x57F27C+(228*2)+19,SetTo,1);
-			SetMemory(0x5822C4+(3*4),SetTo,1200);
-			SetMemory(0x582264+(3*4),SetTo,1200);
-			SetMemoryB(0x57F27C+(228*3)+19,SetTo,1);
-		},
-	}
 
 	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayTextX(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
@@ -280,6 +265,81 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
 CIfEnd()
+
+CMov(FP,0x57F0F0+(4*4),10000000)
+
+for i = 6, 0, -1 do
+	Trigger {
+		players = {FP},
+		conditions = {
+			CDeaths(FP,AtLeast,(2^i)*3600000,TimeTmp2);
+		},
+		actions = {
+			SetMemory(0x57F0F0+(4*4),Add,(2^i)*10000);
+			SetCDeaths(FP,Subtract,(2^i)*3600000,TimeTmp2);
+			PreserveTrigger();
+		}
+	}
+end
+for i = 6, 0, -1 do
+	Trigger {
+		players = {FP},
+		conditions = {
+			CDeaths(FP,AtLeast,(2^i)*60000,TimeTmp2);
+		},
+		actions = {
+			SetCDeaths(FP,Subtract,(2^i)*60000,TimeTmp2);
+			SetMemory(0x57F0F0+(4*4),Add,(2^i)*100);
+			PreserveTrigger();
+		}
+	}
+end
+for i = 6, 0, -1 do
+	Trigger {
+		players = {FP},
+		conditions = {
+			CDeaths(FP,AtLeast,(2^i)*1000,TimeTmp2);
+		},
+		actions = {
+			SetCDeaths(FP,Subtract,(2^i)*1000,TimeTmp2);
+			SetMemory(0x57F0F0+(4*4),Add,(2^i));
+			PreserveTrigger();
+		}
+	}
+end
+
+CMov(FP,0x57F120+(4*4),count,10000000)
+CMov(FP,0x57F0F0+(4*5),Level,10000000)
+CMov(FP,0x57F120+(4*5),CurExpTmp,10000000)
+CMov(FP,0x57F0F0+(4*6),Rednumber,10000000)
+CMov(FP,0x57F120+(4*6),10000000)
+CMov(FP,0x57F0F0+(4*7),10000000)
+CMov(FP,0x57F120+(4*7),10000000)
+
+
+Trigger { -- 공업완료시 수정보호막 활성화
+players = {FP},
+conditions = {
+	Label(0);
+	CDeaths(FP,AtLeast,1,ShieldUnlock);
+	CV(ShieldEnV,0);
+},
+actions = {
+	RotatePlayer({DisplayTextX(ShieldUnlockT,4);},HumanPlayers,FP);
+	SetMemory(0x5822C4+(0*4),SetTo,1200);
+	SetMemory(0x582264+(0*4),SetTo,1200);
+	SetMemoryB(0x57F27C+(228*0)+19,SetTo,1);
+	SetMemory(0x5822C4+(1*4),SetTo,1200);
+	SetMemory(0x582264+(1*4),SetTo,1200);
+	SetMemoryB(0x57F27C+(228*1)+19,SetTo,1);
+	SetMemory(0x5822C4+(2*4),SetTo,1200);
+	SetMemory(0x582264+(2*4),SetTo,1200);
+	SetMemoryB(0x57F27C+(228*2)+19,SetTo,1);
+	SetMemory(0x5822C4+(3*4),SetTo,1200);
+	SetMemory(0x582264+(3*4),SetTo,1200);
+	SetMemoryB(0x57F27C+(228*3)+19,SetTo,1);
+},
+}
 
 TriggerX(FP,{CD(CountTmp,399,AtMost)},{SetMemoryX(0x641630,SetTo,14,0xFF)},{Preserved})
 TriggerX(FP,{CD(CountTmp,400,AtLeast)},{SetMemoryX(0x641630,SetTo,15,0xFF)},{Preserved})
@@ -303,6 +363,8 @@ Print13_NumSetC(CountTmp,0x641630,1000,0x1000000)
 Print13_NumSetC(CountTmp,0x641634,100,0x10000)
 Print13_NumSetC(CountTmp,0x641638,10,0x100)
 Print13_NumSetC(CountTmp,0x64163C,1,0x1)
+
+
 
 --SetMemory(0x641598, SetTo, 0x11B7C207);
 --SetMemory(0x64159C, SetTo, 0xC208B7C2);
