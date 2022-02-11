@@ -807,7 +807,11 @@ BossUID = {87,74,5,2}
 	TriggerX(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
 
 	CIf(FP,Gun_Line(7,AtLeast,400))
-	CDoActions(FP,{TGun_SetLine(8,Add,Dt),SetV(CA_Create,0)})
+
+	CTrigger(FP,{},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
+--	CTrigger(FP,{CV(Dt,0x2A+1,AtLeast)},{TGun_SetLine(10,Add,0x2A),TGun_SetLine(8,Add,0x2A)},1)
+
+	DoActionsX(FP,{SetV(CA_Create,0)})
 	DoActionsX(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
 	CMov(FP,CA_Eff_XY,Var_TempTable[12])
@@ -825,7 +829,6 @@ BossUID = {87,74,5,2}
         end
 		TriggerX(FP,{Gun_Line(8,AtLeast,(i-1)*1263)},{RotatePlayer({PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i])},HumanPlayers,FP)})
     end
-	CDoActions(FP,{TGun_SetLine(10,Add,Dt)})
 
 	function CA_3DAcc(Time,XY,YZ,ZX)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
@@ -854,11 +857,16 @@ BossUID = {87,74,5,2}
 	
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,32840)},{15,56},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,40420)},{17,28},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,70730)},{75,80},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,80210)},{22,76},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,87780)},{100,57},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+--
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,55570)},{75,80},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,70730)},{22,76},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+	
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,80210)},{100,57},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,95360)},{63,29},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,102940)},{10,8},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,112420)},{10,8},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,127570)},{86,79},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,142730)},{98,52},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)

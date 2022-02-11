@@ -96,8 +96,10 @@ for i = 0, 3 do
 	TriggerX(FP,{PlayerCheck(i)},{GiveUnits(All,"Buildings",P12,i+2,i),GiveUnits(All,203,P12,i+2,i),GiveUnits(All,"Buildings",P12,i+17,i),SetCp(i),CenterView(i+2),SetCp(FP)})
 end
 
+DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),RemoveUnit(203,P12)})
 CIfEnd()
-DoActions(FP,{RemoveUnit(111,P12),RemoveUnit(107,P12),RemoveUnit(125,P12),RemoveUnit(203,P12),RemoveUnit(183,P12),RemoveUnit(84,P12),RemoveUnit(84,Force1)})
+
+DoActions(FP,{RemoveUnit(183,P12),RemoveUnit(84,P12),RemoveUnit(84,Force1)})
 
 CIf(FP,CD(Win,1,AtLeast))
 CDoActions(FP,{AddCD(Win,Dt)})

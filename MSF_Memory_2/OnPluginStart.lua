@@ -314,55 +314,29 @@ function init() -- 맵 실행시 1회 실행 트리거
 		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 	end
 --	PushErrorMsg("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다.")
+function InputTesterID(Player,ID)
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(Player,ID);
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+end
 	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"GALAXY_BURST");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"LucasSpia");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"_Mininii");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"RonaRonaChan");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
+		InputTesterID(i,"GALAXY_BURST")
+		InputTesterID(i,"LucasSpia")
+		InputTesterID(i,"_Mininii")
+		InputTesterID(i,"RonaRonaChan")
+		InputTesterID(i,"+=.=+")
+		InputTesterID(i,"UnusedTypeQ")
+		InputTesterID(i,"DemonLanterns")
+		InputTesterID(i,"UnusedTypeW")
 	end
 
 	T_YY = 2022

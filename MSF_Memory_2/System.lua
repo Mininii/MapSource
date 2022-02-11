@@ -746,6 +746,7 @@ Trigger { -- Äµ³´ °æ°í
 	players = {FP},
 	conditions = {
 		Label(0);
+        Command(FP,AtLeast,1,190);
         CDeaths(FP,AtMost,0,CanCT);
 		CDeaths(FP,Exactly,0,CanWT);
         CVar(FP,count[2],AtLeast,1500);
@@ -765,6 +766,7 @@ Trigger { -- Äµ³´ °æ°í
 
 
 Trigger2X(FP,{--Äµ¹ßµ¿
+Command(FP,AtLeast,1,190);
     CDeaths(FP,AtMost,2,CanC);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
@@ -787,6 +789,7 @@ Trigger2X(FP,{--Äµ¹ßµ¿
 },{Preserved})
 
 Trigger2X(FP,{--Äµ¹ßµ¿
+Command(FP,AtLeast,1,190);
     CDeaths(FP,AtLeast,3,CanC);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
