@@ -1035,24 +1035,6 @@ end
 	PushCr(50280,62,59)
 	PushCr(50360,62,59)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	PushCr(50840,62,213)
 	PushCr(51150,62,213)
 	PushCr(51150+(1*(bit/2)),62,213)
@@ -1253,39 +1235,83 @@ end
 
 	CIf_GCase(173)
 
---	CIf(CD(EEggCode,15,AtMost))
-	
-    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
-	function StoryPrint(T,Text,AddTrig)
-		Trigger {
-			players = {FP},
-			conditions = {
-				Label(0);
-				Gun_Line(8,AtLeast,T)
-			},
-			actions = {
-				RotatePlayer({
-					DisplayTextX(string.rep("\n", 20),4),
-					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-					DisplayTextX("\x12\n\n\n\n\x13"..Text.."\n\n\n\n",0),
-					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-				},HumanPlayers,FP);
-				SetCDeaths(FP,Add,1,ButtonSound);
-				AddTrig
-			},
-		}
-	end
-	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
-	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
-	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
-	StoryPrint(4000*5,"\x04...라는.. 혹독한 \x1F절망\x04감에 다시한번 사로잡히게 된다.")
-	StoryPrint(4000*6,"\x0F잃어버린 \x17기억\x04의 \x0E멋지고 \x1F아름다운 \x1D추상화\x04는, 도대체 어디에 있단 말인가?")
-	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
-	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
-	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
-	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,0)})
+--	CIf(FP,CD(EEggCode,9,AtMost))
+--	
+--    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
+
+--	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
+--	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
+--	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
+--	StoryPrint(4000*5,"\x04...라는.. 혹독한 \x1F절망\x04감에 다시한번 사로잡히게 된다.")
+--	StoryPrint(4000*6,"\x0F잃어버린 \x17기억\x04의 \x0E멋지고 \x1F아름다운 \x1D추상화\x04는, 도대체 어디에 있단 말인가?")
+--	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
+--	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
+--	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
+--	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,0)})
 --	CIfEnd()
-	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+--	CIf(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)})
+    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
+	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
+	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
+	f_Mul(FP,Var_TempTable[11],Var_TempTable[10],Var_TempTable[10])
+	f_Div(FP,Var_TempTable[11],195674)
+	CMov(FP,N_A,0)
+	CWhile(FP,{CV(N_A,359,AtMost)})
+	f_Lengthdir(FP,Var_TempTable[11],_Add(N_A,Var_TempTable[12]),N_X,N_Y)
+	CAdd(FP,N_X,G_CA_CenterX)
+	CAdd(FP,N_Y,G_CA_CenterY)
+	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
+	CAdd(FP,N_A,12)
+	CWhileEnd()
+
+	
+
+	CIfOnce(FP,{Gun_Line(9,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),SetMemoryB(0x6636B8+64,SetTo,130)})
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,41680000)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+
+
+	CTrigger(FP,{},{SetV(BPtrArr[5],Nextptrs),CreateUnitWithProperties(1,64,64,FP,{energy=100, invincible = true})})
+	CIfEnd()
+	CIfEnd()
+	
+	CIf(FP,{CD(ED2Clear,0)})
+	local SpawnSet = {{22580,{77,88}},{33880,{25,21}},{45170,{15,56}},{56470,{17,28}},{68480,{75,80}},{79760,{22,76}},{91050,{100,57}},{102350,{63,29}},{113640,{10,8}},{124940,{86,79}},{136240,{98,52}},{147520,{70,65}}}
+for j, k in pairs(SpawnSet) do
+	G_CA_SetSpawn({Gun_Line(13,AtLeast,k[1])},k[2],"ACAS","EllipseMirror1",nil,0,nil,nil,nil,nil,1)
+end
+	CIfEnd()
+
+--
+	CIf(FP,{CD(ED2Clear,1)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+Trigger2X(FP,{},{RotatePlayer({
+	DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\n\n\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\n\n\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg")
+	},HumanPlayers,FP);})
+		StoryPrint(4000*1,"\x04마침내, 과거의 기억을 되찾아 내었다.")
+		StoryPrint(4000*2,"\x04하지만, 어째서일까, \x10슬픈 \x18감정\x04이 \x08폭풍\x04처럼 몰아친다.")
+		StoryPrint(4000*3,"\x04아아, 이것은 그녀와 함께했던 \x1C추억\x04의 \x17기억\x04인가..?")
+		StoryPrint(4000*4,"\x04지금은 이 세상에 존재하지 않는 그녀와의 \x0E소중한 기억\x04.")
+		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
+		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
+		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
+		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+	CIfEnd()
+--	CIfEnd()
+
+
+CDoActions(FP,{TGun_SetLine(9,Subtract,Dt)})
+CDoActions(FP,{TGun_SetLine(13,Add,Dt)})
 	CIfEnd()
 	
 	GunPushTrig = {}

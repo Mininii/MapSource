@@ -499,6 +499,9 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 	CIfEnd()
 	f_Div(FP,SelHP,_Mov(256))
 	f_Div(FP,SelSh,_Mov(256))
+	CIf(FP,{CV(SelUID,64)})
+	CAdd(FP,SelHP,B2H)
+	CIfEnd()
 	ItoDec(FP,SelHP,VArr(SelHPVA,0),2,0x08,0)--Ã¼
 	ItoDec(FP,SelSh,VArr(SelShVA,0),2,0x1C,0)--½¯
 
@@ -508,8 +511,13 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
 	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
 	CElseX()
+	CIfX(FP,{TTOR({CV(SelUID,12),CV(SelUID,82)})})
+	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x06,0)--ÆÛµô1
+	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x06,0)--ÆÛµô2
+	CElseX()
 	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x1F,0)--ÆÛµô1
 	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x1F,0)--ÆÛµô2
+	CIfEnd()
 	f_Movcpy(FP,PerDMGTblPtr,VArr(SelHPVA,0),4*4)
 	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
 	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)

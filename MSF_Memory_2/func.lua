@@ -1316,10 +1316,13 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,72)) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),RotatePlayer({CenterView(1)},HumanPlayers,FP),CreateScanEff(391),
+					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),RotatePlayer({CenterView(1)},HumanPlayers,FP),
+					TCreateUnitWithProperties(1,33,1,CurrentOP,{energy = 100}),
+					TKillUnit(33,CurrentOP);
+					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
 				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
@@ -2131,4 +2134,23 @@ function CreateBulletLoc(UnitId,Height,Angle,Player)
 			TSetCVar(FP,CBPlayer[2],SetTo,Player),
 			SetNextTrigger(Call_CBullet)
 		})
+end
+function StoryPrint(T,Text,AddTrig)
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Gun_Line(8,AtLeast,T)
+		},
+		actions = {
+			RotatePlayer({
+				DisplayTextX(string.rep("\n", 20),4),
+				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+				DisplayTextX("\x12\n\n\n\n\x13"..Text.."\n\n\n\n",0),
+				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			},HumanPlayers,FP);
+			SetCDeaths(FP,Add,1,ButtonSound);
+			AddTrig
+		},
+	}
 end

@@ -107,13 +107,14 @@ function init() -- 맵 실행시 1회 실행 트리거
 		end
 	end
 	
-	for j, k in pairs(BossUID) do
+BossUIDP = {87,74,5,2,64,12,82}
+	for j, k in pairs(BossUIDP) do
 		SetGroupFlags(k,0xA)
 		UnitSizePatch(k,4,4,4,4)
 		SetUnitAdvFlag(k,0x40,0x8000+0x40)
 		table.insert(PatchArr,SetMemoryB(0x660178 + (k),SetTo,3))
 		if k == 5 then
-			SetUnitClass(k,161) -- 퍼뎀유닛
+			SetUnitClass(k,161) -- 일반유닛
 		else
 			SetUnitClass(k,162) -- 퍼뎀유닛
 		end

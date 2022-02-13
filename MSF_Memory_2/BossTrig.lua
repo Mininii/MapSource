@@ -5,6 +5,8 @@ function BossTrig()
 	B3V = CreateVarArr(5,FP)
 	B4C = CreateCcodeArr(10)
 	B4V = CreateVarArr(5,FP)
+	B5C = CreateCcodeArr(3)
+	B5V = CreateVarArr(5,FP)
 
 	TC = CreateCcodeArr(10)
 	TV = CreateVarArr(10,FP)
@@ -173,6 +175,13 @@ function BossTrig()
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),},1)
 	CIfEnd()
 
+	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force1,64)})--프로브보스
+	CDoActions(FP,{
+		TSetMemory(_Add(BPtrArr[5],13),SetTo,640)
+	})
+
+	CTrigger(FP,{TMemoryX(_Add(BPtrArr[5],19),Exactly,0,0xFF00)},{SetV(BPtrArr[5],0),SetCD(ED2Clear,1)},1)
+	CIfEnd()
 	function InvDisable2(UnitID,Owner,Condition)
 		Trigger2X(FP,Condition,{
 			Simple_SetLoc(0,0,0,32,32);

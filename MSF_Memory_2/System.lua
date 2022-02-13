@@ -1,7 +1,6 @@
 function System()
     local CPlayer = CreateVar(FP)
     local BCPos = CreateVar(FP)
-	local CurCunitI = CreateVar(FP)
 	local CurCunitI2 = CreateVar(FP)
 
     local TempTarget = CreateVar(FP)
@@ -22,6 +21,7 @@ function System()
     AddBGM(5,"staredit\\wav\\GBGM4.ogg",69*1000)--특건
     AddBGM(6,"staredit\\wav\\MBoss.ogg",133*1000)--워프
     AddBGM(7,"staredit\\wav\\story.ogg",83*1000)--스토리
+    AddBGM(8,"staredit\\wav\\ED2Boss.ogg",165*1000)--엔딩2
     Install_BGMSystem(FP,3,BGMType,12)
 
     BGMArr = {}
@@ -108,14 +108,18 @@ function System()
     CIfEnd()
     CIfEnd()
 
-
-
+CurBID = CreateCcode()
+HPRegenTable = {64}
 --    CMov(FP,0x57f120,0)
     local TempMarHPRead = CreateVar(FP)
     EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
     WhiteList = def_sIndex()
+    HPRList = def_sIndex()
     for j, i in pairs(MarID) do
         NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
+    end
+    for j, i in pairs(HPRegenTable) do
+        NJumpX(FP,HPRList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF),{SetCD(CurBID,i)})
     end
     SkillUnit = def_sIndex()
     NJumpX(FP,SkillUnit,{TTOR({DeathsX(CurrentPlayer,Exactly,183,0,0xFF),DeathsX(CurrentPlayer,Exactly,214,0,0xFF)})})
@@ -221,8 +225,23 @@ function System()
     f_LoadCp()
 
     EXCC_ClearCalc()
-    NJumpXEnd(FP,WhiteList)
+    NJumpXEnd(FP,HPRList)
+    CSub(FP,0x6509B0,23)
+    CIf(FP,{Deaths(CurrentPlayer,AtMost,4000000*256,0),Cond_EXCC(4,AtLeast,1)})
+    CIfX(FP,Cond_EXCC(4,AtLeast,1000000))
+    CDoActions(FP,{Set_EXCCX(4,Subtract,1000000),SetDeaths(CurrentPlayer,Add,1000000*256,0),Set_EXCC(4,Subtract,1000000)})
+    CElseX()
+    CDoActions(FP,{Set_EXCCX(4,SetTo,0),TSetDeaths(CurrentPlayer,Add,_Mul(EXCC_TempVarArr[5],256),0),Set_EXCC(4,SetTo,0)})
+    CIfXEnd()
+    CIfEnd()
+    CTrigger(FP,CD(CurBID,64),{SetV(B2H,EXCC_TempVarArr[5])},1)
+    CAdd(FP,0x6509B0,23)
 
+
+
+    EXCC_ClearCalc()
+    NJumpXEnd(FP,WhiteList)
+    
 	CSub(FP,0x6509B0,6)
     
     

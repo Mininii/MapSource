@@ -70,7 +70,6 @@ function Install_CallTriggers()
 	
 	local BCPos = CreateVar(FP)
 	local CPlayer = CreateVar(FP)
-	local CurCunitI = CreateVar(FP)
 	
 	MakeEisEgg = SetCallForward()
 	SetCall(FP)

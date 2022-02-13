@@ -3,7 +3,7 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    DoActionsX(FP,{SetV(BGMType,1)},1)
+--    DoActionsX(FP,{SetV(BGMType,1)},1)
     if Limit == 0 then
     
     end
@@ -109,7 +109,7 @@ DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\H_Clear.ogg"),PlayWAVX("st
         DisplayTextX(string.rep("\n", 20),4),
         DisplayTextX("\n",4),
         DisplayTextX("\x13\x04"..string.rep("―", i),4),
-        DisplayTextX("\n\n\n\n",4),
+        DisplayTextX("\n\n\n\n\n",4),
         DisplayTextX("\x13\x04"..string.rep("―", i),4),
         DisplayTextX("\n\n",4),
     },HumanPlayers,FP))
@@ -117,10 +117,13 @@ DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\H_Clear.ogg"),PlayWAVX("st
     
     
 	end
-EDText = {"\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ： \x18잃어버린 \x07빛\x04의 \x17기억"}
+EDText = {
+    "\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ １ ： \x18잃어버린 \x07빛\x04의 \x17기억",
+    "\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ２ ： \x11과거\x04의 \x17기억"
+}
 
-for i=1, 1 do
-Trigger2X(FP,{CD(Win,500,AtLeast)},
+for i=1, 2 do
+Trigger2X(FP,{CD(Win,500,AtLeast),CD(EDNum,i)},
     RotatePlayer({
         DisplayTextX(string.rep("\n", 20),4),
         DisplayTextX("\x13\x04"..string.rep("―", 56),4),
