@@ -308,11 +308,17 @@ BossUIDP = {87,74,5,2,64,12,82}
 	G_CA_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+	T_YY = 2022
+	T_MM = 02
+	T_DD = 17
+	T_HH = 12
 	if Limit == 1 then
 		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
 		f_GetStrXptr(FP,ReadCPStrPtr,"\x0d\x0d\x0dReadCPStrPtr : ".._0D)
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
 		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
+		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+        
 	end
 --	PushErrorMsg("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다.")
 function InputTesterID(Player,ID)
@@ -338,12 +344,15 @@ end
 		InputTesterID(i,"UnusedTypeQ")
 		InputTesterID(i,"DemonLanterns")
 		InputTesterID(i,"UnusedTypeW")
+		InputTesterID(i,"seeiogion")
+		InputTesterID(i,"Hakuyou")
+		InputTesterID(i,"cairan")
+		InputTesterID(i,"Hybrid)_GOD60")
+		InputTesterID(i,"lptime106")
+		InputTesterID(i,"IIII(uood)IIIII")
+		
 	end
-
-	T_YY = 2022
-	T_MM = 02
-	T_DD = 11
-	T_HH = 12
+	
 	function PushErrorMsg(Message)
 		_G["\n"..Message.."\n"]() 
 	end
@@ -640,6 +649,7 @@ for j, k in pairs(Replace_JumpUnitArr) do
 end
 CDoActions(FP,{
 	TModifyUnitEnergy(All,CurrentUID,P5,64,0),
+	SetCDeaths(FP,Add,1,CUnitRefrash);
 	TRemoveUnit(CurrentUID,P5)})
 NJumpXEnd(FP,Rep_Jump2)
 CAdd(FP,CurrentUID,1)
@@ -709,6 +719,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			--SetMemory(0x5821A4 + (4 * (i+4)),SetTo,1600);
 			RunAIScriptAt("Expansion Zerg Campaign Insane",6+i);
 			ModifyUnitEnergy(All,"Any unit",i,"Anywhere",100);
+			SetCDeaths(FP,Add,1,CUnitRefrash);
 			RunAIScriptAt("Value This Area Higher",2+i),ModifyUnitResourceAmount(All,P12,64,65535)},1)
 	end
 

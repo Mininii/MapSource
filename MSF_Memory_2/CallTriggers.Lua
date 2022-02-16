@@ -441,5 +441,17 @@ CDoActions(FP,{
 NIfEnd()
 SetCallEnd()
 
+Call_CunitRefrash = SetCallForward()
+SetCall(FP)
+
+for i = 0, 1699 do
+	Trigger2(FP,{
+		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00)},
+	{
+		SetDeathsX(19025+(84*i)+9,SetTo,0,0,0xFF0000);
+		},{Preserved})
+end
+SetCallEnd()
+
 	
 end

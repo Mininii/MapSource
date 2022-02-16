@@ -175,7 +175,7 @@ function BossTrig()
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),},1)
 	CIfEnd()
 
-	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force1,64)})--프로브보스
+	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force2,64)})--프로브보스
 	CDoActions(FP,{
 		TSetMemory(_Add(BPtrArr[5],13),SetTo,640)
 	})

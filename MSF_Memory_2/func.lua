@@ -319,7 +319,6 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 			},
 		
 		actions = {
-			ModifyUnitEnergy(1,UID,Player,64,0);
 			KillUnitAt(1,UID,"Anywhere",Player);
 			DisplayText(StrDesign("\x04"..Text.." "..Limit.."기를 넘어서 소지할 수 없습니다. \x1C자원 반환 \x1F+ "..ReturnResources.." Ore\x07"),4);
 			SetResources(Player,Add,ReturnResources,Ore);

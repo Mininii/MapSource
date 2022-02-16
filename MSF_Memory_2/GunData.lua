@@ -802,6 +802,7 @@ BossUID = {87,74,5,2}
 
 
 	CIf_GCase(190)
+	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,G_CA_LoopTimer(2),nil,1)
 	DoActionsX(FP,{Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	TriggerX(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
@@ -1234,6 +1235,7 @@ end
 	CIfEnd()
 
 	CIf_GCase(173)
+    DoActionsX(FP,{KillUnit("Men",Force2)},1)
 
 --	CIf(FP,CD(EEggCode,9,AtMost))
 --	
@@ -1247,7 +1249,7 @@ end
 --	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
 --	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
 --	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
---	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,0)})
+--	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
 --	CIfEnd()
 --	CIf(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)})
     DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
@@ -1304,7 +1306,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
 		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
 		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
-		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,2)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
 --	CIfEnd()

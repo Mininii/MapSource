@@ -126,6 +126,7 @@ function Var_init()
 	DgCcode = CreateCcode()--2
 	GeneCcode = CreateCcode()--2
 	WarpCheck = CreateCcode()
+	CUnitRefrash = CreateCcode()
 
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}

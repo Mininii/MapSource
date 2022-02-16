@@ -5,7 +5,6 @@ Trigger {
 		
 	},
 	actions = {
-		ModifyUnitEnergy(All,42,CurrentPlayer,64,0);
 		KillUnit(42,CurrentPlayer);
 		PreserveTrigger();
 		
@@ -18,7 +17,6 @@ Trigger {
 		
 	},
 	actions = {
-		ModifyUnitEnergy(All,35,CurrentPlayer,64,0);
 		KillUnit(35,CurrentPlayer);
 		PreserveTrigger();
 		
