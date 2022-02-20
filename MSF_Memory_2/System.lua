@@ -638,7 +638,8 @@ HPRegenTable = {64}
         end
         if type(CUTable)=="table" then
             for j, k in pairs(CUTable) do
-                f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},k[1],k[2],1,Player,nil)--
+                --f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},k[1],k[2],1,Player)--
+                CTrigger(FP,{CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},{TCreateUnit(k[2],k[1],1,f_CRandNum(4,4))},1)
 
             end
         else
@@ -646,16 +647,14 @@ HPRegenTable = {64}
         end
         
     end
-for i = 4, 7 do
-    CIf(FP,Command(i,AtLeast,1,"Dark Swarm"),{Simple_SetLoc(0,0,0,0,0),MoveLocation(1,"Dark Swarm",i,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,i),CreateUnit(1,84,1,i),KillUnit(84,i)}) -- 다크스웜 트리거
+    CIf(FP,{Bring(AllPlayers,AtLeast,1,"Dark Swarm",64)},{Simple_SetLoc(0,0,0,0,0),MoveLocation(1,"Dark Swarm",AllPlayers,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,AllPlayers),CreateUnit(1,84,1,FP),KillUnit(84,FP)}) -- 다크스웜 트리거
 
-    SwarmSet({0,9},{{53,5},{54,5}},i)
-    SwarmSet({10,19},{{48,3},{53,3},{55,4}},i)
-    SwarmSet({20,24},{{55,4},{48,2},{54,2},{53,2},{88,1},{21,1}},i)
-    SwarmSet({25,50},{{56,4},{51,2},{104,2},{48,2},{53,2},{54,2},{88,2},{21,2}},i)
+    SwarmSet({0,9},{{53,5},{54,5}})
+    SwarmSet({10,19},{{48,3},{53,3},{55,4}})
+    SwarmSet({20,24},{{55,4},{48,2},{54,2},{53,2},{88,1},{21,1}})
+    SwarmSet({25,50},{{56,4},{51,2},{104,2},{48,2},{53,2},{54,2},{88,2},{21,2}})
     
     CIfEnd()
-end
     Install_GunStack()
     CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
         Create_G_CA_Arr()

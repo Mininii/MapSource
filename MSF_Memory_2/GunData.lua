@@ -1235,7 +1235,7 @@ end
 	CIfEnd()
 
 	CIf_GCase(173)
-    DoActionsX(FP,{KillUnit("Men",Force2)},1)
+--    DoActionsX(FP,{KillUnit("Men",Force2)},1)
 
 --	CIf(FP,CD(EEggCode,9,AtMost))
 --	
@@ -1273,7 +1273,7 @@ end
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,41680000)})
+	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,20000000-8320000)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 
 

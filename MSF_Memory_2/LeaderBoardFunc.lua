@@ -102,13 +102,9 @@ function LeaderBoardF()
 				f_SaveCp()
 				CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
 				local TempCPCheck = CreateVar()
-				for i = 0, 3 do
-				NIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})--{Order("Men",Force2,1,Attack,10)}
-					CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
-					f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
-					NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
-				NIfEnd()
-				end
+				CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
+				f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
+				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
 				CJumpEnd(FP,HeroOrder)
 			NIfEnd()
 			f_LoadCp()

@@ -1218,12 +1218,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		CIfX(FP,{CVar(FP,RepeatType[2],Exactly,100)},{})
 
-		local EffType = G_CA_TempTable[15]
+		local EffType1 = G_CA_TempTable[15]
 		local ScriptBak = CreateVar(FP)
 		local Script2 = CreateVar(FP)
-		CMov(FP,Script2,EffType,EPDF(0x66EC48))
-		CMov(FP,ScriptBak,_Read(Script2),nil,0xFFFF)
-		CDoActions(FP,{TSetMemoryX(0x6663C4, SetTo, EffType,0xFFFF),
+		CMov(FP,Script2,EffType1,EPDF(0x66EC48))
+		CMov(FP,ScriptBak,_Read(Script2))
+		CDoActions(FP,{TSetMemoryX(0x6663C4, SetTo, EffType1,0xFFFF),
 		
 			TSetMemory(Script2,SetTo,165),--131
 			TCreateUnitWithProperties(1,185,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),

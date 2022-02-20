@@ -89,6 +89,8 @@ if Limit == 1 then
 else
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
 	for i = 0, 3 do
+    TriggerX(FP,{PlayerCheck(i),CVar(FP,SetPlayers[2],Exactly,1)},{CreateUnitWithProperties(2,32,i+2,i,{energy = 100}),CreateUnitWithProperties(1,20,i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
+    
 	TriggerX(FP,{PlayerCheck(i)},{CreateUnitWithProperties(3,32,i+2,i,{energy = 100}),CreateUnitWithProperties(1,20,i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
 	end
 end

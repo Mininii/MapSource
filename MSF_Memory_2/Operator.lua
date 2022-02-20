@@ -55,10 +55,11 @@ function Operator_Trig()
 				SetCDeaths(FP,Add,1,EEggCode),
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{Preserved})
 			
+		CIfEnd()
+
+		CIfEnd()
+		CIfEnd()
 		CMov(FP,0x6509B0,FP)
-		CIfEnd()
-		CIfEnd()
-		CIfEnd()
 	end
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 3 do
@@ -77,7 +78,7 @@ function Operator_Trig()
 	
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
-	TargetTestGun = 189
+	TargetTestGun = 190
     for j, k in pairs(f_GunTable) do
 		if k ~= TargetTestGun then
         table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))

@@ -261,9 +261,12 @@ BossUIDP = {87,74,5,2,64,12,82}
 	DefTypePatch(124,5) -- 
 	DefTypePatch(125,4) -- 
 	table.insert(PatchArr,SetMemoryW(0x657678 + (123*2),SetTo,MarAtkFactor2)) -- 추가공격력
+if Limit == 1 then
 
-
-	
+	for i = 0, 516 do
+		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
+	end
+end
 	
 	table.insert(PatchArr,SetMemory(0x657A9C,SetTo,0)) -- 화면꺼트리기
 	DoActions2(FP,PatchArr,1)
@@ -310,7 +313,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	T_YY = 2022
 	T_MM = 02
-	T_DD = 17
+	T_DD = 19
 	T_HH = 12
 	if Limit == 1 then
 		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
@@ -668,7 +671,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			CVar(FP,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : ")},HumanPlayers,FP);
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : 정식 1.0 출시 시 작성예정")},HumanPlayers,FP);
 			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
 			
 		},
