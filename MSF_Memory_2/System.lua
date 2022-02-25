@@ -784,7 +784,7 @@ Trigger { -- 캔낫 경고
 
 
 Trigger2X(FP,{--캔발동
-Command(FP,AtLeast,1,190);
+Command(FP,AtLeast,1,173);
     CDeaths(FP,AtMost,2,CanC);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
@@ -807,7 +807,7 @@ Command(FP,AtLeast,1,190);
 },{Preserved})
 
 Trigger2X(FP,{--캔발동
-Command(FP,AtLeast,1,190);
+Command(FP,AtLeast,1,173);
     CDeaths(FP,AtLeast,3,CanC);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
@@ -913,6 +913,37 @@ CIfEnd()
 for j = 4, 7 do
 Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
 end
+T_X,T_Y = CreateVars(2,FP)
+TargetRotation = CreateVar(FP)
+for i = 0, 3 do
+    L_Gun_Move = def_sIndex()
+    CWhile(FP,{PlayerCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i)})
+    f_Lengthdir(FP,f_CRandNum(384,320),_Mod(_Rand(),360),T_X,T_Y)
+    Simple_SetLocX(FP,9,T_X,T_Y,T_X,T_Y,{Simple_CalcLoc(9,2048,2048,2048,2048)})
+    DoActions(FP,{MoveUnit(1,"Men",i+4,36+i,10)})
+--    NJumpXEnd(FP,L_Gun_Move)
+--    CMov(FP,TargetRotation,f_CRandNum(4))
+--    
+--	for i = 0, 3 do
+--		CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
+--		DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+--		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,0)},{Preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,1)},{Preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,2)},{Preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,3)},{Preserved})
+--		CIfEnd()
+--	end
+--    for j = 0, 3 do
+--    NJumpX(FP,L_Gun_Move,{CVar(FP,TargetRotation[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+--    end
+--	for i = 0, 3 do
+--        TriggerX(FP,{CV(TargetRotation,i)},{Order("Men")},{Preserved})
+--    end
+
+
+    CWhileEnd()
+end
+
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})
 

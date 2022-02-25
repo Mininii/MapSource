@@ -1,7 +1,6 @@
 function LeaderBoardF()
     
 	local LeaderBoardT = CreateCcode()
-	local Gun_TempRand = CreateVar(FP)
     CIf(FP,{CD(OPJump,1)})
 		
     for i = 0, 3 do
@@ -66,27 +65,26 @@ function LeaderBoardF()
 			f_SaveCp()
 			NJumpXEnd(FP,L_Gun_Order)
 			CMov(FP,TargetUID,_Read(BackupCP),nil,0xFF)
-			CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
+			CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),nil,0xFF)
 			NIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
 	
 			for i = 0, 3 do
-				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
+				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),PlayerCheck(i,0)})
 				DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
-				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,0)},{Preserved})
-				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(Gun_TempRand,1)},{Preserved})
-				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,2)},{Preserved})
-				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(Gun_TempRand,3)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,4)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,5)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,6)},{Preserved})
+				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,7)},{Preserved})
 				CIfEnd()
 			end
 			for j = 0, 3 do
-			NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+			NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 			end
-			CMov(FP,TargetRotation,Gun_TempRand)
 			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			
 			
 			for i = 0, 3 do
-				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i)}) -- 설정된 타겟의 배럭 좌표를 가져옴
+				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4)}) -- 설정된 타겟의 배럭 좌표를 가져옴
 					CMov(FP,TargerXY[1],TargetArr[i+1][1],2)
 					CMov(FP,TargerXY[2],TargetArr[i+1][2],2)
 				CIfEnd()
@@ -100,7 +98,6 @@ function LeaderBoardF()
 				CJump(FP,HeroOrder)
 				NJumpXEnd(FP,Check_Hero)
 				f_SaveCp()
-				CMov(FP,TargetRotation,_Read(_Sub(BackupCP,6)),-4,0xFF)
 				local TempCPCheck = CreateVar()
 				CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 				f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함

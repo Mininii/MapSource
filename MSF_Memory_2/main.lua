@@ -25,7 +25,7 @@ end
 
 
 TestSet(0)
-VerText = "\x04Ver. Beta 0.1"
+VerText = "\x04Ver. Beta 0.3"
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
