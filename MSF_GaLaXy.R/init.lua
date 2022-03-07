@@ -33,8 +33,8 @@ function init()
 	ZergGndUArr = {51,53,54,48,104}
 	HondonFlingyArr = {88,73,72,176,4,188,187,49,40,45,38,44,43,37,46,47,191,15,8,14,1,5,12,11,7,13,0,2,9,41,190,115,74,81,186}
 
-	F12 =204
-	ESC =203
+	F12 =202
+	ESC =199
 	Tab =214
 
 	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -104,8 +104,8 @@ function init()
 	BanCode = CreateCcodeArr(6)
 	DelayMedic = CreateCcodeArr(7)
 	GiveRate = CreateCcodeArr(7)
-	UnitDataPtr = CreateVar(FP)
-	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
+	UnitDataPtr = EPDF(0x5967EC-(1700*4))
+	--UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
     SpeedVar = CreateVar2(FP,nil,nil,4)
     CurrentSpeed = CreateVar(FP)
 	ZergGndVArr = CreateVArray(FP,#ZergGndUArr)
@@ -390,14 +390,13 @@ function init()
 			f_GetStrXptr(FP,G_CA_StrPtr3,"\x0D\x0D\x0DG_CA_SendError".._0D)
 			f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 			f_GetStrXptr(FP,f_GunSendStrPtr2,"\x0D\x0D\x0Df_GunSend2".._0D)
-			Print_All_CTextString(FP)
 			table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 			table.insert(CtrigInitArr[FP],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
 	
 			
 			
 	
-			TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
 			--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
 			f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
@@ -417,7 +416,7 @@ function init()
 	
 			
 			
-			TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			CMov(FP,CurrentUID,0)
 			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요

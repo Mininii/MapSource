@@ -6,7 +6,6 @@
 --dofile(Curdir.."MapSource\\MSF_GaLaXy.R\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
-Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
@@ -41,7 +40,6 @@ StartCtrig()
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100",1,FP)
-	Include_64BitLibrary("Switch 101",FP)
 	init()
 	Install_GetCLoc(FP,0,nilunit)
 	Install_CallTriggers()

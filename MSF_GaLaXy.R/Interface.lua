@@ -139,9 +139,9 @@ function Interface()
 					ModifyUnitShields(All,"Men",i,"Anywhere",100),
 					ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
 				})
-				TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
-					ModifyUnitShields(All,"Men",i,"Anywhere",0),
-					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
+--				TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
+--					ModifyUnitShields(All,"Men",i,"Anywhere",0),
+--					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
 		NIfEnd()
 	end
 
