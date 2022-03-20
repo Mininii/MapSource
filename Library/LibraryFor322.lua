@@ -466,15 +466,35 @@ end
 
 
 --Dx,Dy,Du,DtP,Dv = CreateVariables(5)
-function IBGM_EPD(Player,MaxPlayer)
+function IBGM_EPD(Player,MaxPlayer,Option_NT,BGMDeathsT)
+	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
 	f_Read(Player,0x51CE8C,Dx)
 	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(Player,DtP,Dy,Du)
 	CMov(Player,Dv,DtP) 
 	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
 	CMov(Player,Du,Dy)
-	for i = 0, MaxPlayer do
-	CDoActions(Player,{TSetDeathsX(i,Subtract,DtP,440,0xFFFFFF)}) -- 브금????????
+	if Option_NT ~= nil then
+		if type(Option_NT) == "table" then
+		CIf(FP,{NTCond2()})
+			CMov(FP,Option_NT[1],DtP)
+		CIfEnd()
+		CIf(FP,{NTCond()})
+			CAdd(FP,Option_NT[2],DtP,Option_NT[1])
+		CIfEnd()
+		else
+			PushErrorMsg("OPtion_NT_InputData_Error")
+		end
+	end
+
+	for j, k in pairs(BGMDeathsT) do
+		for i = 0, MaxPlayer do
+			CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,DtP,k,0xFFFFFF)},1) -- 브금타이머
+			CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
+		end
+		CDoActions(Player,{TSetDeathsX(Player,Subtract,DtP,k,0xFFFFFF),
+		SetDeathsX(Player,SetTo,0,k,0xFF000000),
+		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- 브금타이머
 	end
 end
 
