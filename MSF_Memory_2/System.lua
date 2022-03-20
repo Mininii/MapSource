@@ -915,9 +915,10 @@ Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kill
 end
 T_X,T_Y = CreateVars(2,FP)
 TargetRotation = CreateVar(FP)
+WBreak=CreateCcode()
 for i = 0, 3 do
-    L_Gun_Move = def_sIndex()
-    CWhile(FP,{PlayerCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i)})
+    DoActionsX(FP,{SetCD(WBreak,100)})
+    CWhile(FP,{PlayerCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i),CD(WBreak,1,AtLeast)},SubCD(WBreak,1))
     f_Lengthdir(FP,f_CRandNum(384,320),_Mod(_Rand(),360),T_X,T_Y)
     Simple_SetLocX(FP,9,T_X,T_Y,T_X,T_Y,{Simple_CalcLoc(9,2048,2048,2048,2048)})
     DoActions(FP,{MoveUnit(1,"Men",i+4,36+i,10)})
