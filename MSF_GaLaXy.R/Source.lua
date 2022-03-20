@@ -105,7 +105,7 @@ CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[
 }
 
 	RandSwitch1 = "Switch 100"
-	RandSwitch2 = "Switch 100"
+	RandSwitch2 = "Switch 101"
 	--Gun_SVA = CreateSVArr(16,64,FP)
 	--G_CA_SVA = CreateSVArr(16,64,FP)
 	BGMType=CreateVar(FP)
@@ -141,6 +141,8 @@ CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[
 	TestMode = CreateCcode()
 	LimitX = CreateCcode()
 	LimitC = CreateCcode()
+	NosBGM = CreateCcode()
+	NextNosBGM = CreateCcode()
 	BackupCp = CreateVar(FP)
 	AtkUpMax = CreateVar2(FP,nil,nil,255)
 	UpgradeAv = CreateVar(FP)
@@ -188,6 +190,9 @@ CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[
     SpeedVar = CreateVar2(FP,nil,nil,4)
     CurrentSpeed = CreateVar(FP)
 	ZergGndVArr = CreateVArray(FP,#ZergGndUArr)
+	HactLinkArr = CreateArrArr(10,5,FP)
+	LairLinkArr = CreateArrArr(10,5,FP)
+	TempEPD =CreateVar(FP)
 	TempRandRet,InputMaxRand,Oprnd = CreateVars(3,FP)
 	Gun_TempSpawnSet1,Repeat_TempV,RepeatType = CreateVars(3,FP)
 	f_GunSendStrPtr,f_GunSendStrPtr2,G_CA_StrPtr,G_CA_StrPtr2,G_CA_StrPtr3,f_GunStrPtr,UPCompStrPtr = CreateVars(7,FP)

@@ -7,9 +7,16 @@ function Gun_System()
 	CAdd(FP,count,count2)
 	CAdd(FP,count,count3)
 	local CurCunitI2 = CreateVar(FP)
+	CIf(FP,{CD(NosBGM,1)},SetCD(NosBGM,0))
+	TriggerX(FP,DeathsX(AllPlayers,AtLeast,1,12,0xFFFFFF),{SetV(BGMType,99)},{Preserved})
+	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,0),CV(BGMType,0)},{SetV(BGMType,2),SetCD(NextNosBGM,1)},{Preserved})
+	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,1),CV(BGMType,0)},{SetV(BGMType,3),SetCD(NextNosBGM,0)},{Preserved})
+	CIfEnd()
 
 	IBGM_EPD(FP,6,nil,{12})
     AddBGM(1,"staredit\\wav\\Opening.ogg",23*1000)--¿ÀÇÁ´×
+    AddBGM(2,"staredit\\wav\\NosBGM_2.ogg",29*1000)
+    AddBGM(3,"staredit\\wav\\NosBGM_1.ogg",32*1000)
     Install_BGMSystem(FP,3,BGMType,12)
 
 	
@@ -81,9 +88,9 @@ function Gun_System()
 	
 	f_LoadCp()
     CIfEnd()
-    --for j, k in pairs(f_GunTable) do
-    --f_GSend(k)
-    --end
+    for j, k in pairs(f_GunTable) do
+    f_GSend(k)
+    end
     
     
     EXCC_ClearCalc()

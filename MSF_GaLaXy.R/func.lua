@@ -792,6 +792,8 @@ local Repeat_TempV = CreateVar(FP)
 local CreatePlayer = CreateVar(FP)
 local CA_Repeat_Check = CreateCcode()
 local TRepeatX,TRepeatY = CreateVars(2,FP)
+G_CA_X = CreateVar(FP)
+G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -802,11 +804,13 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			if i == 1 then RS1 = Set RS2=Cleared end
 			if i == 2 then RS1 = Cleared RS2=Set end
 			if i == 3 then RS1 = Set RS2=Set end
-			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("CMask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("CMask",1),nil,SetTo,11+i)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,11+i)},{Preserved})
 		end
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
+		CElseIfX(CVar(FP,TRepeatX[2],Exactly,0x80000000))
+		Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
 		CElseX()
 			Simple_SetLocX(FP,0,3712,288,3712,288)
 		CIfXEnd()
@@ -895,6 +899,9 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags)
 	elseif type(CenterXY) == "table" then
 		SetX = CenterXY[1]
 		SetY = CenterXY[2]
+	elseif CenterXY == "CG" then
+		SetX = 0x80000000
+		SetY = 0x80000000
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
@@ -1026,8 +1033,8 @@ CDoActions(FP,{
 })
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
-	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,Var_TempTable[2]),
-	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,Var_TempTable[3])
+	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_X),
+	TSetMemory(_Add(G_CA_LineTemp,8*(0x20/4)),SetTo,G_CA_Y)
 })
 CElseX()
 CDoActions(FP,{

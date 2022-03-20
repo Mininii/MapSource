@@ -27,7 +27,7 @@ function KeyInput(Key,Condition,Action)
 	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},Action,{Preserved})	
 	end
 if Limit == 1 then
-	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode),SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetResources(Force1,SetTo,0x66666666,Ore),SetCDeaths(FP,SetTo,35+(36*5),ModeT)})
+	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode),SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetResources(Force1,SetTo,0x66666666,Ore),SetCDeaths(FP,SetTo,(36*5),ModeT)})
 end
 CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,SelectorT),})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,0)},{SetCVar(FP,HondonMode[2],SetTo,1),SetCDeaths(FP,SetTo,1,ToggleSound)})

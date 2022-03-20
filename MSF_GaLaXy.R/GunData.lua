@@ -69,14 +69,16 @@ function Include_GunData(Size,LineNum)
 			TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,DUnitCalc[4][1]),
 			TSetMemory(_Add(G_TempV,4*(0x20/4)),SetTo,GunPlayer),
 		})
-		
+		local TempV = CreateVar(FP)
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
 			ItoDec(FP,G_A,VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),4*4)
+			CMov(FP,TempV,f_GunSendStrPtr,f_GunSendT[2])
+			f_Movcpy(FP,TempV,VArr(f_GunNumT,0),4*4)
 			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
 			ItoDec(FP,DUnitCalc[4][1],VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr2,f_GunSendT2[2]),VArr(f_GunNumT,0),4*4)
+			CMov(FP,TempV,f_GunSendStrPtr2,f_GunSendT2[2])
+			f_Movcpy(FP,TempV,VArr(f_GunNumT,0),4*4)
 			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend2".._0D,4)},HumanPlayers,FP)})
 			CIfEnd()
 		end
@@ -156,11 +158,110 @@ function Include_GunData(Size,LineNum)
 		return Gun_Line(4,Type,Value)
 	end
 	SetCall(FP)
-
+	CMov(FP,G_CA_X,Var_TempTable[2])
+	CMov(FP,G_CA_Y,Var_TempTable[3])
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
-	DoActionsX(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCD(GunCaseCheck,0),Gun_SetLine(7,Add,1)})
+	DoActionsX(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCD(GunCaseCheck,0),Gun_SetLine(7,Subtract,1)})
+	CIf_GCase(131)
+	TriggerX(FP,{Gun_Line(6,Exactly,0)},{SetCD(NosBGM,1)},{Preserved})
+	DoActionsX(FP,{Gun_SetLine(6,SetTo,1)})
+	HatcCUTable = {
+		{ -- Index 1
+			{54,25,1},{53,15,2},{55,9,3},{48,15,4},{104,{5,10,15},5}
+		},
+		{ -- Index 2
+			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15},5}
+		},
+		{ -- Index 3
+			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15},5}
+		},
+		{ -- Index 4
+			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15},5},{51,15,5}
+		}
+		}
+		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,120))
+		TMem(FP,TempEPD,Arr(HactLinkArr[1],0),0,0)
+		CAdd(FP,TempEPD,_Mul(Var_TempTable[4],0x970/4))
+		JumpArrI = def_sIndex()
+		CJumpEnd(FP,JumpArrI)
+		NIf(FP,{TMemory(TempEPD,AtLeast,1)})
+			f_Read(FP,TempEPD,CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+			CMov(FP,G_CA_X,CPosX)
+			CMov(FP,G_CA_Y,CPosY)
+			--여기에 TempRepeat나 G_CA_SpawnSet을 입력
+			for j, k in pairs(HatcCUTable) do
+				for l,m in pairs(k) do
+					if type(m[2]) == "table" then
+						for o,p in pairs(m[2]) do
+							f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+						end
+					else
+						f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1)},m[1],m[2],nil,nil,"CG")
+					end
+				end
+			end
 
+			DoActionsX(FP,{AddV(TempEPD,1)})
+			CJump(FP,JumpArrI)
+		NIfEnd()
+		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
+		CIfEnd()
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend()},{Preserved})
+	CIfEnd()
 	
+	CIf_GCase(132)
+	TriggerX(FP,{Gun_Line(6,Exactly,0)},{SetCD(NosBGM,1)},{Preserved})
+	DoActionsX(FP,{Gun_SetLine(6,SetTo,1)})
+	LairCUTable = {
+		{ -- Index 1
+			{53,25,1},{48,15,2},{56,9,3},{51,15,4},{10,{2,5,15},5}
+		},
+		{ -- Index 2
+			{53,25,1},{48,15,2},{56,9,3},{51,15,4},{77,{2,5,15},5}
+		},
+		{ -- Index 3
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{75,{2,5,15},5}
+		},
+		{ -- Index 4
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{17,{2,5,15},5}
+		},
+		{ -- Index 5
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{82,{1,3,11},5}
+		}
+		}
+		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,120))
+		TMem(FP,TempEPD,Arr(LairLinkArr[1],0),0,0)
+		CAdd(FP,TempEPD,_Mul(Var_TempTable[4],0x970/4))
+		JumpArrI = def_sIndex()
+		CJumpEnd(FP,JumpArrI)
+		NIf(FP,{TMemory(TempEPD,AtLeast,1)})
+			f_Read(FP,TempEPD,CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+			CMov(FP,G_CA_X,CPosX)
+			CMov(FP,G_CA_Y,CPosY)
+			--여기에 TempRepeat나 G_CA_SpawnSet을 입력
+			for j, k in pairs(LairCUTable) do
+				for l,m in pairs(k) do
+					if type(m[2]) == "table" then
+						for o,p in pairs(m[2]) do
+							f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+						end
+					else
+						f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1)},m[1],m[2],nil,nil,"CG")
+					end
+				end
+			end
+
+			DoActionsX(FP,{AddV(TempEPD,1)})
+			CJump(FP,JumpArrI)
+		NIfEnd()
+		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
+		CIfEnd()
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend()},{Preserved})
+	CIfEnd()
 	GunPushTrig = {}
 	for i = 0, 54 do
 		table.insert(GunPushTrig,TSetMemory(_Add(G_TempH,(i*0x20)/4),SetTo,Var_TempTable[i+1]))
@@ -176,7 +277,8 @@ function Include_GunData(Size,LineNum)
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
 			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),4*4)
+			CMov(FP,TempV,f_GunStrPtr,f_GunT[2])
+			f_Movcpy(FP,TempV,VArr(f_GunNumT,0),4*4)
 			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_Gun".._0D,4)},HumanPlayers,FP)})
 			CIfEnd()
 		end

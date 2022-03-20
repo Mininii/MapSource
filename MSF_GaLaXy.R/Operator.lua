@@ -21,6 +21,20 @@ function Operator_Trig()
 	CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
 		CMov(FP,0x6509B0,CurrentOP)
 	
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				Deaths(CurrentPlayer,AtLeast,1,214);
+			},
+			actions = {
+				KillUnit("Men",Force2);
+				KillUnit(143,Force2);
+				KillUnit(144,Force2);
+				KillUnit(146,Force2);
+				PreserveTrigger();
+			}
+			}
 		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)})
 			CMov(FP,0x6509B0,Cunit2)
 			DoActions(FP,MoveCp(Add,25*4))

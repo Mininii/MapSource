@@ -54,6 +54,13 @@ Trigger { -- 킬 스코어 리더보드
 		Order(43,FP,64,Attack,4);
 		Order(44,FP,64,Attack,4);
 		Order(47,FP,64,Attack,4);
+		Order(48,FP,64,Attack,4);
+		Order(50,FP,64,Attack,4);
+		Order(51,FP,64,Attack,4);
+		Order(53,FP,64,Attack,4);
+		Order(54,FP,64,Attack,4);
+		Order(55,FP,64,Attack,4);
+		Order(56,FP,64,Attack,4);
 		PreserveTrigger();
 },
 }

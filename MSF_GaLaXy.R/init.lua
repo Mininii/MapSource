@@ -374,6 +374,15 @@ function init()
 	for i = 0, 6 do
 		TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
 	end
+			CFor(FP,0,600,1)
+				local CI = CForVariable()
+				local TempArrI = CreateVar(FP)
+				ConvertArr(FP,TempArrI,CI)
+				for i = 0, 9 do
+				CMov(FP,Arr(HactLinkArr[i+1],TempArrI),0)
+				CMov(FP,Arr(LairLinkArr[i+1],TempArrI),0)
+				end
+			CForEnd()
 	
 			f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 			f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
