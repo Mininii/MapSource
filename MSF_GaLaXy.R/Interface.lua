@@ -1,5 +1,4 @@
 function Interface()
-
 	for i = 1, 6 do -- 강퇴기능
 		Trigger { -- 강퇴토큰
 			players = {FP},
@@ -91,18 +90,18 @@ function Interface()
 		end
 			TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{Preserved})
 		
-			Trigger2(i,{DeathsX(i,Exactly,0,440,0xFF000000);Command(i,AtLeast,1,3);},{
+			Trigger2(i,{DeathsX(i,Exactly,0,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
 				DisplayText("\x07『 \x1CBGM\x04을 듣지 않습니다. \x07』",4);
-				SetDeathsX(i,SetTo,1*16777216,440,0xFF000000);
+				SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
 			},{Preserved})
 
-			Trigger2(i,{DeathsX(i,Exactly,1*16777216,440,0xFF000000);Command(i,AtLeast,1,3);},{
+			Trigger2(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
 				DisplayText("\x07『 \x1CBGM\x04을 듣습니다. \x07』",4);
-				SetDeathsX(i,SetTo,0*16777216,440,0xFF000000);
+				SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
 			},{Preserved})
 
 			for k = 0, 5 do
@@ -123,26 +122,280 @@ function Interface()
 				}
 			end
 		TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
-		local MedicTrigJump = def_sIndex()
-		for j = 1, 4 do
-			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
-		end
-		NIf(FP,Never())
-			NJumpXEnd(FP,MedicTrigJump)
-				DoActions(FP,{
-					RemoveUnit(MedicTrig[1],i),
-					RemoveUnit(MedicTrig[2],i),
-					RemoveUnit(MedicTrig[3],i),
-					RemoveUnit(MedicTrig[4],i),
-					ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
-					ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
-					ModifyUnitShields(All,"Men",i,"Anywhere",100),
-					ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
-				})
+
+		
+Trigger {
+	players = {i},
+	conditions = {
+		MemoryB(0x58D2B0+(46*i)+0,Exactly,255);
+	},
+	actions = {
+		SetMemoryB(0x58D088+(46*i)+1,SetTo,0);
+		SetMemoryB(0x58D088+(46*i)+2,SetTo,0);
+	}
+}
+
+Trigger { -- 자동환전
+players = {i},
+conditions = {
+	Command(i,AtLeast,1,"Terran Vulture");
+},
+actions = {
+	RemoveUnitAt(1,"Terran Vulture","Anywhere",i);
+	SetDeaths(i,SetTo,50,"Terran Barracks");
+	DisplayText(StrDesign("\x07자동환전\x04을 사용하셨습니다. - \x1F1000 O r e"),4);
+	PreserveTrigger();
+},
+}
+CIf(FP,{PlayerCheck(i,1)})
+
+
+local ExchangeP = CreateVar(FP)
+local TempScore=CreateVar(FP)
+local TempOre=CreateVar(FP)
+	ExJump = def_sIndex()
+	NJump(FP,ExJump,{Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",2)})
+	CIf(FP,Score(i,Kills,AtLeast,1000))
+	f_Read(FP,0x581F04+(i*4),TempScore)
+	f_Div(FP,ExchangeP,TempScore,1000)
+	f_Mod(FP,0x581F04+(i*4),TempScore,1000)
+	f_Mul(FP,TempOre,ExchangeP,ExRateV)
+	CAdd(FP,0x57F0F0+(i*4),TempOre)
+	CMov(FP,0x6509B0,FP)
+	CIfEnd({SetV(TempScore,0),
+	SetV(ExchangeP,0),
+	SetV(TempOre,0)})
+	DoActions(FP,SetDeaths(i,Subtract,1,111))
+	NJumpEnd(FP,ExJump)
+
+HealT = CreateCcode()
+
+Trigger { -- 힐존트리거
+players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtMost,0,HealT);
+	},
+	actions = {
+		SetCDeaths(FP,Add,50,HealT);
+		ModifyUnitHitPoints(All,"Men",Force1,4,100);
+		ModifyUnitShields(All,"Men",Force1,4,100);
+		PreserveTrigger();
+	},
+}
+DoActionsX(FP,{SubCD(HealT,1)})
+
+	for j = 1, 5 do
+TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+7,Exactly,50+(200-(40*j)))},{
+	SetMemoryB(0x58D088+(46*i)+8,SetTo,0),
+	SetMemoryB(0x58D088+(46*i)+9,SetTo,0)
+})
+
+TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+14,Exactly,50+(200-(40*j)))},{
+	SetMemoryB(0x58D088+(46*i)+13,SetTo,0),
+})
+
+	end
+
+TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,0),MemoryB(0x58D2B0+(46*i)+7,Exactly,255)},{
+	SetMemoryB(0x58D088+(46*i)+8,SetTo,0),
+	SetMemoryB(0x58D088+(46*i)+9,SetTo,0)
+})
+
+UpButtonSetArr = {}
+table.insert(UpButtonSetArr,SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0))
+table.insert(UpButtonSetArr,SetMemoryB(0x58D2B0+(46*i)+9,SetTo,0))
+table.insert(UpButtonSetArr,SetMemoryB(0x58D2B0+(46*i)+1,SetTo,0))
+table.insert(UpButtonSetArr,SetMemoryB(0x58D2B0+(46*i)+2,SetTo,0))
+
+
+
+local MedicTrigJump = def_sIndex()
+for j = 1, 4 do
+	NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
+end
+NIf(FP,Never())
+	NJumpXEnd(FP,MedicTrigJump)
+		DoActions(FP,{
+			RemoveUnit(MedicTrig[1],i),
+			RemoveUnit(MedicTrig[2],i),
+			RemoveUnit(MedicTrig[3],i),
+			RemoveUnit(MedicTrig[4],i),
+			ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+			ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+			ModifyUnitShields(All,"Men",i,"Anywhere",100),
+			ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
+		})
 --				TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
 --					ModifyUnitShields(All,"Men",i,"Anywhere",0),
 --					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
-		NIfEnd()
+NIfEnd()
+DoActionsX(FP,{
+SetV(TempUpgradeMaskRet,0),
+SetV(TempUpgradePtr,0),
+SetV(CurrentUpgrade,0),
+SetV(CurrentFactor,0),
+SetV(UpCount,0)
+})
+CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+8,AtLeast,1),{
+	SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
+	SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
+	SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactor),
+	SetCVar(FP,UpgradeCP[2],SetTo,i),
+	SetCVar(FP,UpgradeMax[2],SetTo,255),
+	SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0),
+	SetCDeaths(FP,SetTo,1,ifUpisAtk)
+})
+CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+9,AtLeast,1),{
+	SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
+	SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
+	SetCVar(FP,UpgradeFactor[2],SetTo,AtkFactor),
+	SetCVar(FP,UpgradeCP[2],SetTo,i),
+	SetCVar(FP,UpgradeMax[2],SetTo,10),
+	SetMemoryB(0x58D2B0+(46*i)+9,SetTo,0),
+	SetCDeaths(FP,SetTo,1,ifUpisAtk),
+
+})
+
+CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+1,AtLeast,1),{
+	SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(DefUpgradePtrArr[i+1])),
+	SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
+	SetCVar(FP,UpgradeFactor[2],SetTo,DefFactor),
+	SetCVar(FP,UpgradeCP[2],SetTo,i),
+	SetCVar(FP,UpgradeMax[2],SetTo,255),
+	SetMemoryB(0x58D2B0+(46*i)+1,SetTo,0),
+	SetCDeaths(FP,SetTo,0,ifUpisAtk)
+
+})
+CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+2,AtLeast,1),{
+	SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(DefUpgradePtrArr[i+1])),
+	SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
+	SetCVar(FP,UpgradeFactor[2],SetTo,DefFactor),
+	SetCVar(FP,UpgradeCP[2],SetTo,i),
+	SetCVar(FP,UpgradeMax[2],SetTo,10),
+	SetMemoryB(0x58D2B0+(46*i)+2,SetTo,0),
+	SetCDeaths(FP,SetTo,0,ifUpisAtk)
+})
+DoActions2(FP,UpButtonSetArr)
+	for NB = 0, 6 do -- 중벙 트리거
+	Trigger {
+		players = {FP},
+		conditions = {
+			Bring(i,AtLeast,1,"Men",NB+5);
+			Bring(P10,AtLeast,1,125,NB+5);
+		},
+		actions = {
+			GiveUnits(All,125,P10,NB+5,i);
+			PreserveTrigger();
+		},
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Bring(i,Exactly,0,"Men",NB+5);
+			Bring(i,AtLeast,1,125,NB+5);
+		},
+		actions = {
+			GiveUnits(All,125,i,NB+5,P10);
+			PreserveTrigger();
+		},
+	}
+	end
+CIfEnd()
+	end
+	for j=0, 6 do
+
+
+	Trigger { -- 소환 마린
+	players = {j},
+	conditions = {
+		Command(j,AtLeast,1,"Terran Firebat");
+	},
+	actions = {
+		RemoveUnitAt(1,"Terran Firebat","Anywhere",j);
+		CreateUnitWithProperties(1,0,4,j,{energy = 100});
+		DisplayText("\x02▶ x04Marine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e",4);
+		SetDeaths(j,SetTo,1,101);
+		PreserveTrigger();
+	},
+}
+Trigger { -- 소환 갤마
+players = {j},
+conditions = {
+	Command(j,AtLeast,1,1);
+	Deaths(j,AtMost,23,125);
+},
+actions = {
+	SetResources(j,Add,NMCost+GMCost+HMCost,ore);
+	RemoveUnitAt(1,1,"Anywhere",j);
+	DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x0424기 조합) 자원 반환 + \x1F"..(NMCost+GMCost+HMCost).." O r e",4);
+	PreserveTrigger();
+},
+}
+
+Trigger { -- 소환 갤마
+players = {j},
+conditions = {
+	Deaths(j,AtLeast,24,125);
+	Command(j,AtLeast,1,1);
+},
+actions = {
+	RemoveUnitAt(1,1,"Anywhere",j);
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine을 \x19소환\x04하였습니다. - \x1F"..(GMCost+NMCost).." O r e",4);
+	CreateUnitWithProperties(1,100,4,j,{energy = 100});
+	SetDeaths(j,SetTo,1,101);
+	PreserveTrigger();
+},
+}
+
+Trigger { -- 조합 영웅마린
+players = {j},
+conditions = {
+	Bring(j,AtLeast,1,0,3);
+	Accumulate(j,AtLeast,HMCost,Ore);
+},
+actions = {
+	ModifyUnitEnergy(1,0,j,3,0);
+	SetResources(j,Subtract,HMCost,ore);
+	RemoveUnitAt(1,0,3,j);
+	CreateUnitWithProperties(1,20,4,j,{energy = 100});
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x04Marine을 \x1BH \x04Marine으로 \x19변환\x04하였습니다. - \x1F10000 O r e",4);
+	PreserveTrigger();
+},
+}
+Trigger { -- 조합 갤럭시 마린
+players = {j},
+conditions = {
+	Bring(j,AtLeast,1,20,3);
+	Accumulate(j,AtLeast,GMCost,Ore);
+},
+actions = {
+	ModifyUnitEnergy(1,20,j,3,0);
+	SetResources(j,Subtract,GMCost,ore);
+	RemoveUnitAt(1,20,3,j);
+	CreateUnitWithProperties(1,100,4,j,{energy = 100});
+	SetDeaths(j,Add,1,125);
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x1BH \x04Marine을 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다. - \x1F"..GMCost.." O r e",4);
+	PreserveTrigger();
+},
+}
+Trigger { -- 조합 네뷸라
+players = {j},
+conditions = {
+	Label(0);
+	Command(j,AtMost,0,16);
+	Bring(j,AtLeast,1,100,1);
+	Accumulate(j,AtLeast,NeCost,Ore);
+},
+actions = {
+	ModifyUnitEnergy(1,100,j,1,0);
+	SetResources(j,Subtract,NeCost,ore);
+	RemoveUnitAt(1,100,1,j);
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4);
+	CreateUnitWithProperties(1,16,4,j,{energy = 100});
+	PreserveTrigger();
+},
+}
 	end
 
 	for k=0, 6 do -- 기부시스템
@@ -206,5 +459,22 @@ function Interface()
 			},
 			}
 	end end end
+	CallTxt = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04현재 마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x04를 플레이 중입니다.\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ\n\x13\x0FCreator \x04: GALAXY_BURST\n\x13\x07제작자 오픈카톡 \x04: https://open.kakao.com/o/sejFLxdb\n\x13\x04\n\x13\x04지원금 \x1F2000 Ore\x04를 받았습니다.\n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
+		RotatePlayer({
+		PlayWAVX("staredit\\wav\\button3.wav"),
+		PlayWAVX("staredit\\wav\\button3.wav")
+		},HumanPlayers,FP);
+		SetCD(ButtonSound,0);
+	},{Preserved})
+	TriggerX(FP,{CD(NoticeCD,1,AtLeast)},{
+		RotatePlayer({
+		PlayWAVX("staredit\\wav\\notice.wav"),
+		PlayWAVX("staredit\\wav\\notice.wav"),
+		DisplayTextX(CallTxt,4)
+		},HumanPlayers,FP);
+		SetCD(NoticeCD,0);SetResources(Force1,Add,2000,Ore)
+	},{Preserved})
+	
 
 end

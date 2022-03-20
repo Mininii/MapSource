@@ -13,7 +13,7 @@ function Operator_Trig()
 			},
 			actions = {
 				GiveUnits(All,219,AllPlayers,"Anywhere",i);
-				GiveUnits(All,160,AllPlayers,"Anywhere",i);
+				--GiveUnits(All,160,AllPlayers,"Anywhere",i);
 			}
 		}
     end
@@ -53,6 +53,7 @@ function Operator_Trig()
 			end
 		CIfEnd()
 	CIfEnd()
+	CMov(FP,0x6509B0,FP)
     CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
         CMov(FP,CurrentSpeed,SpeedVar)
         for i = 1, 11 do
@@ -64,7 +65,7 @@ function Operator_Trig()
                 },
                 actions = {PreserveTrigger();
                     RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-                    DisplayTextX("\x13\x07『 \x0F배속 변경 \x10- "..XSpeed[i].." \x07』", 0)},HumanPlayers,FP);
+                    DisplayTextX("\x13\x07『 \x0F배속 변경 \x10- "..XSpeed[i].." \x07』", 4)},HumanPlayers,FP);
                     SetMemory(0x5124F0,SetTo,SpeedV[i]);
                 },
             }

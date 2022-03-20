@@ -1,127 +1,6 @@
 
 function init()
 	
-	--Balance
-	AtkFactor = 15
-	DefFactor = 20
-	SuFactor = 200
-	MarCost = 10000
-	GMCost = 30000
-	NeCost = 30000
-	TeCost = 50000
-	SuCost = 500000
-	HPointFactor = 20
-	ExRate = 0
-	EasyEx1P = 110
-	HDEx1P = 120
-	BurEx1P = 140
-	GunLimit = 1450
-
-	--System
-	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
-	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1}
-	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
-	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
-	MapPlayers = {0,1,2,3,4,5,6}
-	ObPlayers = {P9,P10,P11,P12}
-	MedicTrig = {34,9,5,10}
-	EXCC_Forward = 0x2FFF
-	
-	CC_Header = CreateVar(FP)
-	ObEff = 84
-	nilunit = 181
-	ZergGndUArr = {51,53,54,48,104}
-	HondonFlingyArr = {88,73,72,176,4,188,187,49,40,45,38,44,43,37,46,47,191,15,8,14,1,5,12,11,7,13,0,2,9,41,190,115,74,81,186}
-
-	F12 =202
-	ESC =199
-	Tab =214
-
-	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str22 = CreateCText(FP,"\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d")
-	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
-	
-	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
-	f_GunErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Not Found. f_Gun 실행자 : ")
-	f_GunFuncT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun 실행자 : ")
-	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
-	f_GunSendT2 = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
-	f_GunSendErrT = CreateCText(FP,"\x07『 \x08ERROR \x04: G_CAPlot Send Failed. f_Gun 실행자 : ")
-	f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-	f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받았습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-	f_RepeatTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-	
-
-	_0D = string.rep("\x0D",200) 
-	HTextStr = _0D
-	GiveUnitID = {64,65,66,67,61,63,68}
-	BanToken = {84,69,70,60,71,98}
-	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
-	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
-	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
-	P8VOFF = "Turn OFF Shared Vision for Player 8"
-	P8VON = "Turn ON Shared Vision for Player 8"
-	JYD = "Set Unit Order To: Junk Yard Dog" 
-	DelayMedicT = {
-		"\x1E▶ \x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F300 Ore\x1E ◀",
-		"\x1E▶ \x1D예약메딕\x04을 \x1B3Tick\x04으로 변경합니다. - \x1F350 Ore\x1E ◀",
-		"\x1E▶ \x1D예약메딕\x04을 \x1B4Tick\x04으로 변경합니다. - \x1F400 Ore\x1E ◀",
-		"\x1E▶ \x1D예약메딕\x04을 \x1B비활성화(1Tick)\x04하였습니다. - \x1F250 Ore\x1E ◀"}
-
-	GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다.\x07 』",
-	"\x07『 \x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다.\x07 』",
-	"\x07『 \x04기부금액 단위가 \x1F50000 Ore \x04로 변경되었습니다.\x07 』",
-	"\x07『 \x04기부금액 단위가 \x1F100000 Ore \x04로 변경되었습니다.\x07 』",
-	"\x07『 \x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다.\x07 』",
-	"\x07『 \x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.\x07 』"}
-
-	--Gun_SVA = CreateSVArr(16,64,FP)
-	--G_CA_SVA = CreateSVArr(16,64,FP)
-	EXCunitTemp = CreateVarArr(10,FP)
-	MaxHPBackUp = CreateArr(228,FP)
-	BdDimArr = CreateArr(228,FP)
-	f_GunNum = CreateVar(FP)
-	Actived_Gun = CreateVar(FP)
-	SoundLimitT = CreateCcode()
-	SoundLimit = CreateCcode()
-	TestMode = CreateCcode()
-	BackupCp = CreateVar(FP)
-	CPosX,CPosY,CPos = CreateVars(3,FP)
-	count,count1,count2,count3 = CreateVars(4,FP)
-	Gun_Type = CreateVar(FP)
-	CurCunitI = CreateVar(FP)
-	G_TempH = CreateVar(FP)
-	G_TempW = CreateVar(FP)
-	CunitP = CreateVar(FP)
-	NextPtrs = CreateVar(FP)
-	G_InputH = CreateVar(FP)
-	CA2ArrX = CreateVArr(1700,FP)
-	CA2ArrY = CreateVArr(1700,FP)
-	CA2ArrZ = CreateVArr(10,FP)
-	BanCode = CreateCcodeArr(6)
-	DelayMedic = CreateCcodeArr(7)
-	GiveRate = CreateCcodeArr(7)
-	UnitDataPtr = EPDF(0x5967EC-(1700*4))
-	--UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
-    SpeedVar = CreateVar2(FP,nil,nil,4)
-    CurrentSpeed = CreateVar(FP)
-	ZergGndVArr = CreateVArray(FP,#ZergGndUArr)
-	TempRandRet,InputMaxRand,Oprnd = CreateVars(3,FP)
-	Gun_TempSpawnSet1,Repeat_TempV,RepeatType = CreateVars(3,FP)
-	Var_InputCVar = {}
-	Var_Lines = 55
-	Var_TempTable = CreateVarArr(Var_Lines,FP)
-	for i = 1, Var_Lines do
-		table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
-	end
-
-	f_GunSendStrPtr,f_GunSendStrPtr2,G_CA_StrPtr,G_CA_StrPtr2,G_CA_StrPtr3,f_GunStrPtr,UPCompStrPtr = CreateVars(7,FP)
-	
-	RepHeroIndex,Gun_LV,CunitHP,CunitIndex = CreateVars(4,FP)
-
 	local CurrentUID = CreateVar(FP)
 	local VRet = CreateVar(FP)
 	local VRet2 = CreateVar(FP)
@@ -135,7 +14,7 @@ function init()
 			table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
 			table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
 		end
-		table.insert(GiveT,Simple_SetLoc(0,3802,182,3802+1,182+1))
+		table.insert(GiveT,Simple_SetLoc(0,3634,182,3634+1,182+1))
 		for i = 0, 6 do
 		table.insert(GiveT,GiveUnits(2, 125, P12, 1, i))
 		table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
@@ -169,6 +48,35 @@ function init()
 			table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1))
 			table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
 			end
+			
+	function UnitEnableX(UnitID,MinCost,GasCost,BuildTime,SuppCost)
+		table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
+		if MinCost ~= nil then
+		table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- 미네랄
+		else
+		table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0)) -- 미네랄
+		end
+		if GasCost ~= nil then
+		table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,GasCost)) -- 가스
+		else
+		table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0)) -- 가스
+		end
+		if BuildTime ~= nil then
+		table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,BuildTime)) -- 생산속도
+		else
+		table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1)) -- 생산속도
+		end
+		if SuppCost ~= nil then
+		table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,SuppCost)) -- 서플
+		else
+		table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0)) -- 서플
+		end
+	
+		end
 			function SetUnitClass(UnitID)
 				if type(UnitID) == "string" then
 					UnitID = ParseUnit(UnitID)
@@ -220,19 +128,19 @@ function init()
 			table.insert(PatchArr,SetMemory(0x6617C8 + (Index*8),SetTo,(Value)+(Value*65536)))
 			table.insert(PatchArr,SetMemory(0x6617CC + (Index*8),SetTo,(Value)+(Value*65536)))
 			end
-			for i = 34, 99 do
-			EnermyNonBionic(i)
+			
+			function SetToUnitDef(UnitID,Value)
+				table.insert(PatchArr,SetMemoryB(0x65FEC8 + UnitID,SetTo,Value))
 			end
-			for i =0, 56 do
-			SetTo0UnitDef(i)
+			for i = 0, 227 do
+				SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
+				SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
+			end
+			PUnitR = {0,1,16,20,100,7,125,124}
+			for j, k in pairs(PUnitR) do
+				SetUnitAdvFlag(k,0x4000,0x4000)
 			end
 			
-			for i = 37, 47 do
-			ZergCreateSpeedPatch(i)
-			end
-			for i = 131, 149 do
-			ZergCreateSpeedPatch(i)
-			end
 			
 			for i = 1, 6 do
 			UnitEnable(BanToken[i])
@@ -240,17 +148,7 @@ function init()
 			for i=1,7 do
 			UnitEnable(GiveUnitID[i])
 			end
-			for i = 35,57 do
-			ZergDefTypePatch(i)
-			end
-			for i = 131,152 do
-			ZergDefTypePatch(i)
-			end
-			ZergDefTypePatch(59)
-			ZergDefTypePatch(62)
-			ZergDefTypePatch(103)
-			ZergDefTypePatch(104)
-			ZergDefTypePatch(186)
+			
 			UnitEnable(72)
 			UnitEnable(83)
 			UnitEnable(3)
@@ -260,42 +158,19 @@ function init()
 			UnitEnable(48)
 			UnitEnable(52)
 			UnitEnable(49)
-			UnitEnable2(9)
-			UnitEnable2(0)
-			UnitEnable2(1)
-			UnitEnable2(7)
-			UnitEnable2(2)
-			UnitEnable2(32)
-			UnitEnable2(34)
-			UnitEnable2(72)
-			UnitEnable2(72)
-			SetUnitClass(0)
-			SetUnitClass(16)
-			SetUnitClass(68)
-			SetUnitClass(23)
-			SetUnitClass(74)
-			SetUnitClass(11)
-			SetUnitClass(5)
-			SetUnitClass(12)
-			SetUnitClass(186)
-			
-			function UnitEnable3(UnitID,Tick)
-				table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-				table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,Tick))
-				table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
-				table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
-			end
-			function SetUnitCost(UnitID,Cost)
-				table.insert(PatchArr,SetMemoryW(0x65FD00+(UnitID*2), SetTo, 0))
-				table.insert(PatchArr,SetMemoryW(0x663888+(UnitID*2), SetTo, Cost))
-				end
-			for i = 1, 4 do
-				UnitEnable3(MedicTrig[i],i)
-				SetUnitCost(MedicTrig[i],200+(i*50))
-			end
 
-			table.insert(PatchArr,SetMemoryX(0x6638C8, SetTo, MarCost,0xFFFF))
-			table.insert(PatchArr,SetMemoryX(0x66388C, SetTo, MarCost+GMCost,0xFFFF))
+			UnitEnableX(2,1000,nil,3,nil)
+			UnitEnableX(0,NMCost,nil,4,nil)
+			UnitEnableX(32,NMCost,nil,4,nil)
+			UnitEnableX(1,NMCost+HMCost+GMCost,nil,12)
+			UnitEnableX(7,500)
+			UnitEnableX(125,5000)
+			UnitEnableX(124,2000)
+			for i = 1, 4 do
+				UnitEnableX(MedicTrig[i],200+(i*50),nil,i,nil)
+			end
+			
+			
 			table.insert(PatchArr,SetMemoryX(0x6559CC, SetTo, AtkFactor*65536,0xFFFF0000))
 			table.insert(PatchArr,SetMemoryX(0x6559C0, SetTo, DefFactor,0xFFFF))
 			table.insert(PatchArr,SetMemoryX(0x6559DC, SetTo, SuFactor,0xFFFF))
@@ -324,23 +199,6 @@ function init()
 				HondonPatch(k)
 			end
 			
-			for i = 37,57 do
-			unitSizePatch(i,3)
-			end
-			for i = 60,81 do
-			unitSizePatch(i,5)
-			end
-			unitSizePatch(103,5)
-			unitSizePatch(3,5)
-			unitSizePatch(5,1)
-			unitSizePatch(10,5)
-			unitSizePatch(15,5)
-			unitSizePatch(17,5)
-			unitSizePatch(19,5)
-			unitSizePatch(25,5)
-			unitSizePatch(32,4)
-			unitSizePatch(87,5)
-			unitSizePatch(89,5)
 			
 			Trigger { -- 퍼센트 데미지 세팅, 버튼셋
 				players = {FP},
@@ -357,7 +215,7 @@ function init()
 					SetMemory(0x515BAC,SetTo,256);---------크기 9
 					SetMemory(0x515BB0,SetTo,256);
 					SetMemory(0x515BB4,SetTo,256);
-					SetMemory(0x515BB8,SetTo,256+256);
+					SetMemory(0x515BB8,SetTo,256);
 					SetMemory(0x515BBC,SetTo,256);
 					SetMemory(0x515BC0,SetTo,256);
 					SetMemory(0x515BC4,SetTo,256);
@@ -380,9 +238,143 @@ function init()
 --				table.insert(PatchArr,SetMemory(0x5821A4 + (4*i),SetTo,GunLimit*2))
 --				table.insert(PatchArr,SetMemory(0x582144 + (4*i),SetTo,GunLimit*2))
 --			end
-			if TestStart == 1 then
-				DoActionsX(FP,{SetCDeaths(FP,SetTo,1,TestMode),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
-			end
+
+			DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+
+			
+	T_YY = 2022
+	T_MM = 02
+	T_DD = 19
+	T_HH = 12
+	function InputTesterID(Player,ID)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+	end
+		for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
+			InputTesterID(i,"GALAXY_BURST")
+			InputTesterID(i,"_Mininii")
+			InputTesterID(i,"RonaRonaChan")
+			
+		end
+		
+	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
+	--PushErrorMsg(GlobalTime)
+	if Limit == 1 then
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Memory(0x6D0F38,AtMost,GlobalTime);
+
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	end
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,1,LimitX);
+			CDeaths(FP,Exactly,0,LimitC);
+			
+		},
+		actions = {
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+	
+	Trigger { -- 배속방지
+		players = {FP},
+		conditions = {
+			Memory(0x51CE84,AtLeast,1001);
+		},
+		actions = {
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+
+
+	for i = 7, 7 do
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+	end
+
+
+
+	if Limit == 1 then
+		DoActions(FP,{SetSwitch("Switch 254",Set)})
+		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
+		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+	end
+
+	
+	for i = 0, 6 do
+		TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
+	end
+	
 			f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 			f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 			f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
@@ -390,35 +382,90 @@ function init()
 			f_GetStrXptr(FP,G_CA_StrPtr3,"\x0D\x0D\x0DG_CA_SendError".._0D)
 			f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 			f_GetStrXptr(FP,f_GunSendStrPtr2,"\x0D\x0D\x0Df_GunSend2".._0D)
-			table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
-			table.insert(CtrigInitArr[FP],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
+			f_GetStrXptr(FP,HiddenModeStrPtr,"HD".._0D)
+			--table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
+			--table.insert(CtrigInitArr[FP],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
 	
 			
 			
 	
+			f_GetStrXptr(FP,HeroTxtStrPtr,"\x0D\x0D\x0DHK".._0D)
+			f_Memcpy(FP,HeroTxtStrPtr,_TMem(Arr(Str19[3],0),"X","X",1),Str19[2])
+			
+			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40),_TMem(Arr(Str20[3],0),"X","X",1),Str20[2])
+			
+			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40+Str20[2]+16),_TMem(Arr(Str21[3],0),"X","X",1),Str21[2])
+
 			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
 			--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
 			f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
 			--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
 			f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
-		
-			f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
-			f_Memcpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
-			f_Memcpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
-			f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
-			f_Memcpy(FP,f_GunSendStrPtr2,_TMem(Arr(f_GunSendT2[3],0),"X","X",1),f_GunSendT2[2])
-			f_Memcpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
-		
-			f_Memcpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
-			DoActions2(FP,PatchArr)
 
-	
-			
-			
+			for i = 0, 6 do
+				ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
+				_0DPatchforVArr(FP,Names[i+1],6)
+				f_GetStrXptr(FP,NMStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D)
+				f_GetStrXptr(FP,HMStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D)
+				f_GetStrXptr(FP,GMStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D)
+				f_GetStrXptr(FP,NBStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D)
+				f_GetStrXptr(FP,SVStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D)
+				Install_CText1(NMStrPtr[i+1],Str00,Str01,Names[i+1])
+				Install_CText1(HMStrPtr[i+1],Str00,Str02,Names[i+1])
+				Install_CText1(GMStrPtr[i+1],Str00,Str03,Names[i+1])
+				Install_CText1(NBStrPtr[i+1],Str00,Str04,Names[i+1])
+				Install_CText1(SVStrPtr[i+1],Str00,Str05,Names[i+1])
+			end
+			G_init()
+			table.insert(PatchArr,ModifyUnitHitPoints(All,125,AllPlayers,64,100))
+			table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
+			DoActions2(FP,PatchArr)
+			tblAdrrArr = CreateArr(227,FP)
+			for i = 0, 227 do
+				
+				f_GetTblptr(FP,Arr(tblAdrrArr,i),i+1)
+			end
+			UTbl_27 = CreateCText(FP,"\x04쥬림 \x11거대 \x06골렘")
+			UTbl_61 = CreateCText(FP,"\x04쥬림 \x06산맥의 \x11수호자")
 			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			CMov(FP,CurrentUID,0)
 			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
+
+			local tblAdrr = CreateVar(FP)
+			local tblAdrrPtr = CreateVar(FP)
+			local CurUNamePtr = CreateVar(FP)
+			local CurUNameEPD = CreateVar(FP)
+			CMov(FP,CurUNamePtr,_Mul(CurrentUID,0x40),UnitNamePtr)
+			CMov(FP,CurUNameEPD,_EPD(CurUNamePtr))
+			ConvertArr(FP,tblAdrrPtr,CurrentUID)
+			CMov(FP,tblAdrr,_ReadF(ArrX(tblAdrrArr,tblAdrrPtr)))
+			CIfX(FP,CV(CurrentUID,27))
+			f_Memcpy(FP,CurUNamePtr,_TMem(Arr(UTbl_27[3],0),"X","X",1),UTbl_27[2])
+			CElseIfX(CV(CurrentUID,61))
+			f_Memcpy(FP,CurUNamePtr,_TMem(Arr(UTbl_61[3],0),"X","X",1),UTbl_61[2])
+			CElseX()
+			f_Memcpy(FP,CurUNamePtr,tblAdrr,0x40)
+			CIfXEnd()
+			local TblCheckCD = CreateCcode()
+			DoActionsX(FP,{SetCD(TblCheckCD,0)})
+			CFor(FP,0,16,1)
+			Ci = CForVariable()
+			for i = 0, 3 do
+				CTrigger(FP,{TMemoryX(_Add(CurUNameEPD,Ci),Exactly,0,0xFF*(256^i))},{
+					TSetMemoryX(_Add(CurUNameEPD,Ci),SetTo,0x0D*(256^i),0xFF*(256^i)),SetCD(TblCheckCD,1)
+				},1)
+				CTrigger(FP,{CD(TblCheckCD,1)},{
+					TSetMemoryX(_Add(CurUNameEPD,Ci),SetTo,0x0D*(256^i),0xFF*(256^i))
+				},1)
+			end
+			CForEnd()
+
+			CAdd(FP,CurrentUID,1)
+			CWhileEnd()
+			CMov(FP,CurrentUID,0)
+			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
+
 			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
 			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,nilunit)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
 			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,4)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
@@ -445,7 +492,7 @@ function init()
 			CAdd(FP,CurrentUID,1)
 			CWhileEnd()
 			CMov(FP,CurrentUID,0)
-			
+		DoActions(FP,{KillUnit(35,FP)})
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,7,0,0xFF)})
@@ -528,18 +575,15 @@ function init()
 		CMov(FP,0x6509B0,FP)
 		--CIfEnd()
 		DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
-		if TestStart == 1 then
-			DoActions(P8,SetResources(Force1,SetTo,0x66666666,Ore),1)
-		end
 		CMov(FP,CurrentUID,0)
 		CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))
-		TriggerX(FP,{TTOR({TTMemory(_Add(BackupCp,6),NotSame,58),TTMemory(_Add(BackupCp,6),NotSame,nilunit)})},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 발키리 나가
-		CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
-		ConvertArr(FP,ArrID,CurrentUID)
-		CDoActions(FP,{TSetMemory(VRet2,SetTo,_ReadF(ArrX(BdDimArr,ArrID)))})
-		CAdd(FP,CurrentUID,1)
+			TriggerX(FP,{TTOR({TTMemory(_Add(BackupCp,6),NotSame,58),TTMemory(_Add(BackupCp,6),NotSame,nilunit)})},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 발키리 나가
+			CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
+			ConvertArr(FP,ArrID,CurrentUID)
+			CDoActions(FP,{TSetMemory(VRet2,SetTo,_ReadF(ArrX(BdDimArr,ArrID)))})
+			CAdd(FP,CurrentUID,1)
 		CWhileEnd()
-		
+		DoActions(FP,{ModifyUnitHitPoints(All,10,FP,22,20)})
 		CIfEnd()
 	end
 end
