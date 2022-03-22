@@ -28,8 +28,10 @@ function Gun_System()
 	DUnitID = CreateVar(FP)
 	DPlayer = CreateVar(FP)
 	DSound = CreateCcode()
+	local TempV = CreateVar(FP)
 	CMov(FP,DUnitID,_ReadF(BackupCP),nil,0xFF)
-	CMov(FP,DPlayer,_ReadF(_Sub(BackupCP,6)),nil,0xFF)
+	CMov(FP,TempV,BackupCP,6)
+	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
 	DUArr={0,20,100,16,7}
 	DCArr = {1,2,3,5,0}
 	for i = 0, 6 do
