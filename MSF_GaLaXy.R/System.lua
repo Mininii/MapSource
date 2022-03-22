@@ -17,6 +17,13 @@ function Gun_System()
     AddBGM(1,"staredit\\wav\\Opening.ogg",23*1000)--오프닝
     AddBGM(2,"staredit\\wav\\NosBGM_2.ogg",29*1000)
     AddBGM(3,"staredit\\wav\\NosBGM_1.ogg",32*1000)
+    AddBGM(4,"staredit\\wav\\BGM_1.ogg",41*1000)
+    AddBGM(5,"staredit\\wav\\BGM_2.ogg",79*1000)
+    AddBGM(6,"staredit\\wav\\BGM_3.ogg",62*1000)
+    AddBGM(7,"staredit\\wav\\BGM_4.ogg",61*1000)
+
+	
+	
     Install_BGMSystem(FP,3,BGMType,12)
 
 	
@@ -139,4 +146,96 @@ function Gun_System()
 	RunAIScriptAt("Value This Area Higher",4);},1)
 	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{Preserved})
 	
+	for i=1,9 do -- 파일런 갯수마다 벙커 체력 설정
+	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(10*i));},{preserved})
+	end
+	
+-- 193번 오브젝트 존재시 처리
+CIf(FP,Command(AllPlayers,AtLeast,1,193))
+DoActions(FP,{Simple_SetLoc(0,0,32,0,32)})
+CWhile(FP,Bring(FP,AtLeast,1,193,64),{
+	MoveLocation(1,193,FP,"Anywhere"),
+	CreateUnit(1,84,1,FP),KillUnit(84,FP),
+	GiveUnits(All,193,FP,"Anywhere",8)})
+CWhileEnd()
+DoActions(FP,{GiveUnits(All,193,8,"Anywhere",FP),Order(193,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
+CIf(FP,Bring(FP,AtLeast,1,193,4),{GiveUnits(1,193,FP,4,8),KillUnitAt(1,193,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
+HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
+for j, k in pairs(HealZoneSpawnArr) do
+	f_TempRepeat({CD(GMode,2)},77,2,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},78,2,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},75,3,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},88,4,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},77,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},78,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},75,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},88,15,nil,nil,k)
+end
+CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+WaveArr = {
+"staredit\\wav\\zealot1.ogg",
+"staredit\\wav\\zealot2.ogg",
+"staredit\\wav\\zealot3.ogg",
+"staredit\\wav\\zealot4.ogg",
+}
+for i = 0, 3 do
+	if i == 0 then RS1 = Cleared RS2=Cleared end
+	if i == 1 then RS1 = Set RS2=Cleared end
+	if i == 2 then RS1 = Cleared RS2=Set end
+	if i == 3 then RS1 = Set RS2=Set end
+	TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{Preserved})
+end
+CIfEnd()
+CIfEnd()
+-- 192번 오브젝트 존재시 처리
+CIf(FP,Command(AllPlayers,AtLeast,1,192))
+DoActions(FP,{Simple_SetLoc(0,0,32,0,32)})
+CWhile(FP,Bring(FP,AtLeast,1,192,64),{
+	MoveLocation(1,192,FP,"Anywhere"),
+	CreateUnit(1,84,1,FP),KillUnit(84,FP),
+	GiveUnits(All,192,FP,"Anywhere",8)})
+CWhileEnd()
+DoActions(FP,{GiveUnits(All,192,8,"Anywhere",FP),Order(192,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
+CIf(FP,Bring(FP,AtLeast,1,192,4),{GiveUnits(1,192,FP,4,8),KillUnitAt(1,192,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
+for j, k in pairs(HealZoneSpawnArr) do
+	f_TempRepeat({CD(GMode,2)},10,2,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},17,2,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},19,3,nil,nil,k)
+	f_TempRepeat({CD(GMode,2)},21,4,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},10,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},17,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},19,6,nil,nil,k)
+	f_TempRepeat({CD(GMode,3)},21,15,nil,nil,k)
+end
+CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+WaveArr = {
+"sound\\Zerg\\BUGGUY\\ZBGPss00.wav",
+"sound\\Zerg\\BUGGUY\\ZBGPss01.wav",
+"sound\\Zerg\\BUGGUY\\ZBGPss02.wav",
+"sound\\Zerg\\BUGGUY\\ZBGPss03.wav",
+}
+for i = 0, 3 do
+	if i == 0 then RS1 = Cleared RS2=Cleared end
+	if i == 1 then RS1 = Set RS2=Cleared end
+	if i == 2 then RS1 = Cleared RS2=Set end
+	if i == 3 then RS1 = Set RS2=Set end
+	Trigger2X(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{Preserved})
+end
+CIfEnd()
+CIfEnd()
+function InvDisable(Cond,UnitID,Player,Loc,Name)
+txt = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※\n\n\n\x13\x03"..Name.."\x04의 \x08무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※"
+Wav = "staredit\\wav\\Unlock.ogg"
+Trigger2X(FP,Cond,{
+	MoveLocation(1,UnitID,Player,Loc);
+	SetInvincibility(Disable,UnitID,Player,Loc);
+	RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)
+})
+end
+InvDisable({CDeaths(FP,AtLeast,4,ChryCcode)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
+InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
+InvDisable({CDeaths(FP,AtLeast,9,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
+InvDisable({CDeaths(FP,AtLeast,4,XelCcode)},127,Force2,64,"\x07쥬림 \x06산맥의 \x11결계")
+InvDisable({CDeaths(FP,AtLeast,4,CereCcode),CDeaths(FP,AtLeast,4,CenCcode)},201,Force2,64,"Ｏｖｅｒｃｏｃｏｏｎ")
+
 end

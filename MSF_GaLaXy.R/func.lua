@@ -929,6 +929,9 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
 	elseif type(CenterXY) == "table" then
 		SetX = CenterXY[1]
 		SetY = CenterXY[2]
+	elseif CenterXY == "CG" then
+		SetX = 0x80000000
+		SetY = 0x80000000
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
@@ -1179,7 +1182,7 @@ function T_to_BiteBuffer(Table)
 	return BiteValue
 end
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,Owner,PreserveFlag)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,CenterXY,Owner,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()
 	end
@@ -1243,6 +1246,9 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	elseif type(CenterXY) == "table" then
 		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,CenterXY[1]))
 		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,CenterXY[2]))
+	elseif CenterXY == "CG" then
+		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0x80000000))
+		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0x80000000))
 	else
 		PushErrorMsg("G_CA_SetSpawn_CenterXY_Inputdata_Error")
 	end

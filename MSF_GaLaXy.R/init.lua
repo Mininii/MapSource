@@ -264,6 +264,8 @@ function init()
 			InputTesterID(i,"GALAXY_BURST")
 			InputTesterID(i,"_Mininii")
 			InputTesterID(i,"RonaRonaChan")
+			InputTesterID(i,"RonaRonaTTang")
+			
 			
 		end
 		
@@ -378,7 +380,7 @@ function init()
 				local CI = CForVariable()
 				local TempArrI = CreateVar(FP)
 				ConvertArr(FP,TempArrI,CI)
-				for i = 0, 9 do
+				for i = 0, 13 do
 				CMov(FP,Arr(HactLinkArr[i+1],TempArrI),0)
 				CMov(FP,Arr(LairLinkArr[i+1],TempArrI),0)
 				end
@@ -508,44 +510,47 @@ function init()
 				-- 유닛정보를 길이 8바이트의 데이터 배열에 저장함
 				-- 0xYYYYXXXX 0xLLIIPPUU
 				-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
+
+				JumpUnitsIndex = def_sIndex()
+				JumpUID = {4,6,18,24,26,31,58,35}
+				CAdd(FP,0x6509B0,6)
+				for j,k in pairs(JumpUID) do
+					NJumpX(FP,JumpUnitsIndex,DeathsX(CurrentPlayer,Exactly,k,0,0xFF))
+				end
+				CSub(FP,0x6509B0,6)
 				f_SaveCp()
-				CIf(FP,{TTOR({
-					TTMemory(_Add(BackupCp,6),NotSame,4),
-					TTMemory(_Add(BackupCp,6),NotSame,6),
-					TTMemory(_Add(BackupCp,6),NotSame,18),
-					TTMemory(_Add(BackupCp,6),NotSame,24),
-					TTMemory(_Add(BackupCp,6),NotSame,26),
-					TTMemory(_Add(BackupCp,6),NotSame,31),
-					TTMemory(_Add(BackupCp,6),NotSame,58),
-					TTMemory(_Add(BackupCp,6),NotSame,35)})}) -- 일부 제외 유닛
-					f_Read(FP,_Sub(BackupCp,9),CPos)
-					f_Read(FP,_Sub(BackupCp,17),CunitHP)
-					f_Read(FP,BackupCp,CunitP,"X",0xFF)
-					f_Div(FP,CunitHP,_Mov(256))
-					f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
-					CMov(FP,Gun_LV,0)
-					CTrigger(FP,{TTOR({
-						CVar(FP,RepHeroIndex[2],Exactly,133),
-						CVar(FP,RepHeroIndex[2],Exactly,132),
-						CVar(FP,RepHeroIndex[2],Exactly,131)})},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
-					CMov(FP,CunitIndex,_Div(_Sub(BackupCp,19025+19),_Mov(84)))
-					CMov(FP,0x6509B0,UnitDataPtr)
-					NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-					CAdd(FP,0x6509B0,2)
-					NWhileEnd()
-					CDoActions(FP,{
-						TSetDeaths(CurrentPlayer,SetTo,CPos,0),
-						SetMemory(0x6509B0,Add,1),
-						TSetDeathsX(CurrentPlayer,SetTo,RepHeroIndex,0,0xFF),
-						TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
-						TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
-						})
-						CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
-					--CDoActions(FP,{
-					--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1),
-					--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV)})
-				CIfEnd()
+
+				f_Read(FP,_Sub(BackupCp,9),CPos)
+				f_Read(FP,_Sub(BackupCp,17),CunitHP)
+				f_Read(FP,BackupCp,CunitP,"X",0xFF)
+				f_Div(FP,CunitHP,_Mov(256))
+				f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
+				CMov(FP,Gun_LV,0)
+				CTrigger(FP,{TTOR({
+					CVar(FP,RepHeroIndex[2],Exactly,133),
+					CVar(FP,RepHeroIndex[2],Exactly,132),
+					CVar(FP,RepHeroIndex[2],Exactly,148),
+					CVar(FP,RepHeroIndex[2],Exactly,131)})},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
+				CMov(FP,CunitIndex,_Div(_Sub(BackupCp,19025+19),_Mov(84)))
+				CMov(FP,0x6509B0,UnitDataPtr)
+				NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+				CAdd(FP,0x6509B0,2)
+				NWhileEnd()
+				CDoActions(FP,{
+					TSetDeaths(CurrentPlayer,SetTo,CPos,0),
+					SetMemory(0x6509B0,Add,1),
+					TSetDeathsX(CurrentPlayer,SetTo,RepHeroIndex,0,0xFF),
+					TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
+					TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
+					})
+					CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
+				--CDoActions(FP,{
+				--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1),
+				--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV)})
 				f_LoadCp()
+				CAdd(FP,0x6509B0,6)
+				NJumpXEnd(FP,JumpUnitsIndex)
+				CSub(FP,0x6509B0,6)
 			CIfEnd()
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
@@ -553,11 +558,16 @@ function init()
 	
 		CMov(FP,CurrentUID,0)
 		CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))
-		TriggerX(FP,{TTOR({TTMemory(_Add(BackupCp,6),NotSame,58),TTMemory(_Add(BackupCp,6),NotSame,nilunit)})},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 발키리 나가
-		CDoActions(FP,{
-			TModifyUnitEnergy(All,CurrentUID,P8,64,0),
-			TRemoveUnit(CurrentUID,P8)})
-		CAdd(FP,CurrentUID,1)
+			JumpUnitsIndex = def_sIndex()
+			for j,k in pairs(JumpUID) do
+				NJumpX(FP,JumpUnitsIndex,CV(CurrentUID,k))
+			end
+			
+			CDoActions(FP,{
+				TModifyUnitEnergy(All,CurrentUID,P8,64,0),
+				TRemoveUnit(CurrentUID,P8)})
+			NJumpXEnd(FP,JumpUnitsIndex)
+			CAdd(FP,CurrentUID,1)
 		CWhileEnd()
 		CDoActions(FP,{KillUnit(35,P8)})
 		CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
@@ -586,10 +596,14 @@ function init()
 		DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
 		CMov(FP,CurrentUID,0)
 		CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))
-			TriggerX(FP,{TTOR({TTMemory(_Add(BackupCp,6),NotSame,58),TTMemory(_Add(BackupCp,6),NotSame,nilunit)})},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 발키리 나가
+			JumpUnitsIndex = def_sIndex()
+			for j,k in pairs(JumpUID) do
+				NJumpX(FP,JumpUnitsIndex,CV(CurrentUID,k))
+			end
 			CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
 			ConvertArr(FP,ArrID,CurrentUID)
 			CDoActions(FP,{TSetMemory(VRet2,SetTo,_ReadF(ArrX(BdDimArr,ArrID)))})
+			NJumpXEnd(FP,JumpUnitsIndex)
 			CAdd(FP,CurrentUID,1)
 		CWhileEnd()
 		DoActions(FP,{ModifyUnitHitPoints(All,10,FP,22,20)})

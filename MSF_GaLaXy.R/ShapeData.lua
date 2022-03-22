@@ -1,6 +1,8 @@
 function G3_Install_Shape()
 	NexBYDLine = {}
 	NexBYDLine2 = {}
+	IonShape =  CS_ConnectPathX({4   ,{2816, 1280},{2272, 1568},{2880, 1888},{3456, 1600}},148)
+	IonShape2 = CS_ConnectPathX({4   ,{2880, 1456},{2656, 1568},{2880, 1680},{3120, 1568}},96,1)
 	for i=0, 12 do
 	   table.insert(NexBYDLine,CSMakeLine(1+(6*i),64+(64*i),0,2+(6*i),1))
 	end
@@ -17,7 +19,9 @@ function G3_Install_Shape()
 		
 	end
 	G_CA_Shape({
-		"NBYD"
+		"NBYD",
+		"IonShape",
+		"IonShape2"
 
 	}
 	)
