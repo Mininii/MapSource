@@ -5824,6 +5824,8 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	local OLocId = OrderLocation
 	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
+	elseif type(LocId) == "number" then
+		Location = Location + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
