@@ -16,7 +16,9 @@ LoadCp(FP,SelCP)
 
 HiddenCommand = {51,50,52,50,52,50,50,62,61,61}
 for i = 1, #HiddenCommand do
-	TriggerX(FP,{CDeaths(FP,Exactly,0,SelectorT),
+	TriggerX(FP,{
+		CD(TestMode,1),
+		CDeaths(FP,Exactly,0,SelectorT),
 		Deaths(CurrentPlayer,AtLeast,1,HiddenCommand[i]);
 		CDeaths(FP,Exactly,i-1,HiddenMode);
 		CDeaths(FP,AtMost,0,KeyToggle);},{
@@ -27,7 +29,7 @@ function KeyInput(Key,Condition,Action)
 	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},Action,{Preserved})	
 	end
 if Limit == 1 then
-	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode),SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetResources(Force1,SetTo,0x66666666,Ore),SetCDeaths(FP,SetTo,(36*5),ModeT)})
+	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode),SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetCDeaths(FP,SetTo,(36*5),ModeT)})
 end
 CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,SelectorT),})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,0)},{SetCVar(FP,HondonMode[2],SetTo,1),SetCDeaths(FP,SetTo,1,ToggleSound)})
@@ -202,7 +204,7 @@ TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnit(2
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..ExArr[i][j].."%\n\x13\x07==================\n\x13\x04Special Thanks to\n\x13\x04\n")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."."..(ExArr[i][j]%10).."%\n\x13\x07==================\n\x13\x04Special Thanks to\n\x13\x04\n")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
 CIfEnd()

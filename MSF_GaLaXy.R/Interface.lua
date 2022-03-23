@@ -277,6 +277,7 @@ CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+2,AtLeast,1),{
 	SetCDeaths(FP,SetTo,0,ifUpisAtk)
 })
 DoActions2(FP,UpButtonSetArr)
+CIf(FP,{CD(FormCcode,0)})
 	for NB = 0, 6 do -- 중벙 트리거
 	Trigger {
 		players = {FP},
@@ -301,6 +302,7 @@ DoActions2(FP,UpButtonSetArr)
 		},
 	}
 	end
+CIfEnd()
 CIfEnd()
 	end
 	for j=0, 6 do
@@ -383,14 +385,14 @@ Trigger { -- 조합 네뷸라
 players = {j},
 conditions = {
 	Label(0);
-	Command(j,AtMost,0,16);
-	Bring(j,AtLeast,1,100,1);
+--	Command(j,AtMost,0,16);
+	Bring(j,AtLeast,1,100,3);
 	Accumulate(j,AtLeast,NeCost,Ore);
 },
 actions = {
-	ModifyUnitEnergy(1,100,j,1,0);
+	ModifyUnitEnergy(1,100,j,3,0);
 	SetResources(j,Subtract,NeCost,ore);
-	RemoveUnitAt(1,100,1,j);
+	RemoveUnitAt(1,100,3,j);
 	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine 을 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다. - \x1F"..NeCost.." O r e\n",4);
 	CreateUnitWithProperties(1,16,4,j,{energy = 100});
 	PreserveTrigger();
@@ -475,6 +477,9 @@ actions = {
 		},HumanPlayers,FP);
 		SetCD(NoticeCD,0);SetResources(Force1,Add,2000,Ore)
 	},{Preserved})
+	if Limit == 1 then
+		TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{Preserved})
+	end
 	
 
 end

@@ -529,6 +529,7 @@ function init()
 				CTrigger(FP,{TTOR({
 					CVar(FP,RepHeroIndex[2],Exactly,133),
 					CVar(FP,RepHeroIndex[2],Exactly,132),
+					CVar(FP,RepHeroIndex[2],Exactly,168),
 					CVar(FP,RepHeroIndex[2],Exactly,148),
 					CVar(FP,RepHeroIndex[2],Exactly,131)})},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
 				CMov(FP,CunitIndex,_Div(_Sub(BackupCp,19025+19),_Mov(84)))

@@ -783,6 +783,7 @@ f_RepeatErr2 = "\x07『 \x08ERROR : \x04Set_Repeat에서 잘못된 UnitID(0)을 입력받�
 f_GunSendErrT = "\x07『 \x08ERROR \x04: G_CA_SpawnSet 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 G_CA_PosErr = "\x07『 \x03CAUCTION : \x04생성 좌표가 맵 밖을 벗어났습니다.\x07 』"
 f_GunFuncT = "\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07』"
+f_GunSpawnSet = "\x07『 \x03TESTMODE OP \x04: G_CAPlot SpawnSet Initiation. \x07』"
 f_GunErrT = "\x07『 \x08ERROR \x04: G_CAPlot Not Found. \x07』"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
@@ -851,7 +852,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
 					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLoc);
-					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TRemoveUnit(84,CreatePlayer)
+					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920),
+					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+					
 				})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
@@ -868,9 +872,27 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,147))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, 23);
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,128),
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+				CreateUnit(1,84,1,FP),KillUnit(84,FP)
+			})
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,84))
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
+			})
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -1000,7 +1022,7 @@ for i = 1, G_CA_Lines do
 end
 local G_CA_InputH = CreateVar(FP)
 local G_CA_LineTemp = CreateVar(FP)
-table.insert(CtrigInitArr[7],SetCtrigX(FP,G_CA_InputH[2],0x15C,0,SetTo,FP,StartIndex,0x15C,1,0))
+table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_CA_InputH[2],0x15C,0,SetTo,FP,StartIndex,0x15C,1,0))
 
 Write_SpawnSet = SetCallForward()
 SetCall(FP)
@@ -1018,6 +1040,9 @@ for i = 221, 224 do
 	CIf(FP,{CVar(FP,G_CA_CUTV[2],Exactly,i*0x1000000,0xFF000000)})
 		CTrigger(FP,{},{TSetCVar(FP,G_CA_CUTV[2],SetTo,_Mul(PatchCondArr[i-220],_Mov(0x1000000)),0xFF000000)},1)
 	CIfEnd()
+end
+if Limit == 1 then
+TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunSpawnSet,4)},HumanPlayers,FP)})
 end
 CMov(FP,G_CA_LineV,0)
 CJumpEnd(FP,Write_SpawnSet_Jump)
@@ -1071,7 +1096,8 @@ local G_CA_Temp = Create_VTable(10)
 
 Call_CA_Repeat = SetCallForward()
 SetCall(FP)
-TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo,0),SetCDeaths(FP,SetTo,1,CA_Repeat_Check)},{Preserved})
+TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo,0)},{Preserved})
+DoActionsX(FP,{SetCDeaths(FP,SetTo,1,CA_Repeat_Check)})
 CMov(FP,Gun_TempSpawnSet1,CA_TempUID)
 CMov(FP,Repeat_TempV,1)
 CMov(FP,RepeatType,G_CA_Temp[6],nil,0xFF)
@@ -1085,7 +1111,7 @@ function CA_Repeat()
 	local CB = CAPlotCreateArr
 	CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
-	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})
+	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})
 	CIfXEnd()
 end
 
@@ -1246,9 +1272,6 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	elseif type(CenterXY) == "table" then
 		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,CenterXY[1]))
 		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,CenterXY[2]))
-	elseif CenterXY == "CG" then
-		table.insert(Y,SetCVar(FP,G_CA_XPos[2],SetTo,0x80000000))
-		table.insert(Y,SetCVar(FP,G_CA_YPos[2],SetTo,0x80000000))
 	else
 		PushErrorMsg("G_CA_SetSpawn_CenterXY_Inputdata_Error")
 	end

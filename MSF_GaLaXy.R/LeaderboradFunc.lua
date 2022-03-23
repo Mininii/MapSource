@@ -1,9 +1,5 @@
 function LeaderBoardF()
     
-DifLeaderBoard = {
-	"\x04 - \x0EEASY \x04Mode",
-	"\x04 - \x08HARD \x04Mode",
-	"\x04 - \x11BURST \x04Mode"}
 
 
 	local LeaderBoardT = CreateCcode()

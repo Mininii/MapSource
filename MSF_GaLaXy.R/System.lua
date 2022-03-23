@@ -1,11 +1,17 @@
 function Gun_System()
+	count4 = CreateVar(FP)
+	count5 = CreateVar(FP)
 	UnitReadX(FP,AllPlayers,229,64,count)
-	UnitReadX(FP,AllPlayers,17,64,count1)
-	UnitReadX(FP,AllPlayers,23,64,count2)
-	UnitReadX(FP,AllPlayers,25,64,count3)
+	UnitReadX(FP,AllPlayers,17,nil,count1)
+	UnitReadX(FP,AllPlayers,23,nil,count2)
+	UnitReadX(FP,AllPlayers,25,nil,count3)
+	UnitReadX(FP,AllPlayers,73,nil,count4)
+	UnitReadX(FP,AllPlayers,65,nil,count5)
 	CAdd(FP,count,count1)
 	CAdd(FP,count,count2)
 	CAdd(FP,count,count3)
+	CAdd(FP,count,count4)
+	CAdd(FP,count,count5)
 	local CurCunitI2 = CreateVar(FP)
 	CIf(FP,{CD(NosBGM,1)},SetCD(NosBGM,0))
 	TriggerX(FP,DeathsX(AllPlayers,AtLeast,1,12,0xFFFFFF),{SetV(BGMType,99)},{Preserved})
@@ -21,6 +27,7 @@ function Gun_System()
     AddBGM(5,"staredit\\wav\\BGM_2.ogg",79*1000)
     AddBGM(6,"staredit\\wav\\BGM_3.ogg",62*1000)
     AddBGM(7,"staredit\\wav\\BGM_4.ogg",61*1000)
+    AddBGM(8,"staredit\\wav\\BGM_5.ogg",84*1000)
 
 	
 	
@@ -30,28 +37,35 @@ function Gun_System()
     EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
     Check_Enemy = def_sIndex()
     NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,7,0,0xFF)})
-    DoActions(FP,MoveCp(Add,6*4))
-	f_SaveCp()
-	DUnitID = CreateVar(FP)
-	DPlayer = CreateVar(FP)
+--	f_SaveCp()
+--	DUnitID = CreateVar(FP)
+--	DPlayer = CreateVar(FP)
 	DSound = CreateCcode()
-	local TempV = CreateVar(FP)
-	CMov(FP,DUnitID,_ReadF(BackupCP),nil,0xFF)
-	CMov(FP,TempV,BackupCP,6)
-	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
+--	local TempV = CreateVar(FP)
+--	CMov(FP,DUnitID,_ReadF(BackupCP),nil,0xFF)
+--	CMov(FP,TempV,BackupCP,6)
+--	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
+
 	DUArr={0,20,100,16,7}
 	DCArr = {1,2,3,5,0}
 	for i = 0, 6 do
-	DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,}
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+		DoActions(FP,MoveCp(Add,6*4))
+		DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,}
 		for j= 1, 5 do
-			Trigger2X(FP,{CV(DUnitID,DUArr[j]),CV(DPlayer,i)},{SetScore(i,Add,DCArr[j],Custom),SetCD(DSound,1),RotatePlayer({DisplayTextX(DUStrArr[j],4)},HumanPlayers,FP)},{Preserved})
+			CIf(FP,{DeathsX(CurrentPlayer,Exactly,DUArr[j],0,0xFF)})
+			f_SaveCp()
+			Trigger2X(FP,{},{SetScore(i,Add,DCArr[j],Custom),SetCD(DSound,1),RotatePlayer({DisplayTextX(DUStrArr[j],4)},HumanPlayers,FP)},{Preserved})
+			f_LoadCp()
+			CIfEnd()
 		end
+		DoActions(FP,MoveCp(Subtract,6*4))
+		CIfEnd()
 	end
 
 	f_LoadCp()
     
 
-    --Install_DeathNotice()
 
 
 
@@ -122,13 +136,11 @@ function Gun_System()
 
 	TriggerX(FP,{CD(SoundLimit,5,AtMost),CD(DSound,1,AtLeast)},{SetCD(DSound,0),AddCD(SoundLimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP)},{Preserved})
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
-    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCD(DSound,0),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
 	Install_GunStack()
-    CIfX(FP,{CVar(FP,count[2],AtMost,GunLimit)}) -- 건작함수 제어
-		Create_G_CA_Arr()
-        CMov(FP,Actived_Gun,0)
-        CMov(FP,0x6509B0,FP)
-    CIfXEnd()
+	Create_G_CA_Arr()
+	CMov(FP,0x6509B0,FP)
+	
 	countDisplayT = {}
 	for i = 0, 6 do
 	
@@ -145,6 +157,7 @@ function Gun_System()
 	DoActions(FP,{SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane",17);
 	RunAIScriptAt("Value This Area Higher",4);},1)
 	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{Preserved})
+	Trigger2(FP,{Command(FP,AtLeast,30,35)},{KillUnit(35,FP)},{Preserved})
 	
 	for i=1,9 do -- 파일런 갯수마다 벙커 체력 설정
 	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(10*i));},{preserved})
@@ -171,6 +184,7 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},75,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},88,15,nil,nil,k)
 end
+CMov(FP,0x6509B0,FP)
 CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
 WaveArr = {
 "staredit\\wav\\zealot1.ogg",
@@ -207,6 +221,7 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},19,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},21,15,nil,nil,k)
 end
+CMov(FP,0x6509B0,FP)
 CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
 WaveArr = {
 "sound\\Zerg\\BUGGUY\\ZBGPss00.wav",
@@ -237,5 +252,182 @@ InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
 InvDisable({CDeaths(FP,AtLeast,9,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
 InvDisable({CDeaths(FP,AtLeast,4,XelCcode)},127,Force2,64,"\x07쥬림 \x06산맥의 \x11결계")
 InvDisable({CDeaths(FP,AtLeast,4,CereCcode),CDeaths(FP,AtLeast,4,CenCcode)},201,Force2,64,"Ｏｖｅｒｃｏｃｏｏｎ")
+InvDisable({CDeaths(FP,AtLeast,3,CellCcode)},160,Force2,64,"Ｂｏｓｓ　Ｇａｔｅ")
+InvDisable({
+	CD(HactCcode,0,AtMost), -- 0일경우
+	CD(LairCcode,0,AtMost), -- 0일경우
+	CD(HiveCcode,0,AtMost), -- 0일경우
+	CD(IonCcode,1,AtLeast), -- 1일경우
+	CD(NexCcode,2,AtLeast), -- 2일경우
+	CD(CocoonCcode,1,AtLeast), -- 1일경우
+	CD(GeneCcode,1,AtLeast), -- 1일경우
+	CD(OverGCcode,1,AtLeast), -- 1일경우
+	CD(OvrmCcode,2,AtLeast), -- 2일경우
+	CD(PsiCcode,1,AtLeast), -- 1일경우
+	CD(BossCcode,1,AtLeast), -- 1일경우
+	
+},174,Force2,64,"최후의 Ｔｅｍｐｌｅ")
+function InvDisable2(Cond,UnitID,Player,Locs,Name)
+txt = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※\n\n\n\x13\x03"..Name.."\x04의 \x08무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※"
+Wav = "staredit\\wav\\Unlock.ogg"
+local X = {}
+for j, k in pairs(Locs) do
+	table.insert(X,MoveLocation(1,UnitID,Player,k))
+	table.insert(X,SetInvincibility(Disable,UnitID,Player,k))
+	table.insert(X,RotatePlayer({MinimapPing(1)},HumanPlayers,FP))
+end
+	table.insert(X,RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);DisplayTextX(txt,4)},HumanPlayers,FP))
+Trigger2X(FP,Cond,X)
+end
+InvDisable2(CD(FormCcode,1),168,FP,{24,25,26},"Ｓｔａｓｉｓ　Ｃｅｌｌ")
+Trigger2X(FP,{CommandLeastAt(160,27)},{CreateUnit(1,65,27,FP),
+RotatePlayer({TalkingPortrait(68, 2000),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);})
+CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)})
+DoActions(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,65,FP,64)})
+BossT = CreateCcode()
+DoActionsX(FP,{SubCD(BossT,1)})
+TriggerX(FP,{CD(GMode,2,Exactly),CD(BossT,0)},{AddCD(BossT,50),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(9,70,1,FP),Order(70,FP,64,Patrol,1)},{Preserved})
+TriggerX(FP,{CD(GMode,3,Exactly),CD(BossT,0)},{AddCD(BossT,50),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(20,70,1,FP),Order(70,FP,64,Patrol,1)},{Preserved})
+TriggerX(FP,{CD(GMode,2,AtLeast),CD(BossT,35)},{KillUnit(70,FP)},{Preserved})
+
+Trigger2X(FP,{Bring(FP,AtMost,0,65,64)},{AddCD(BossCcode,1),SetScore(Force1,Add,1000000,Kills),KillUnit(70,FP),RotatePlayer({PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x04적의 \x08수호자 \x07Nought \x04가 쓰러졌습니다.\n\x13\x10+\x17 1000000 P t s \n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※",4)},HumanPlayers,FP)})
+CIfEnd()
+
+Win = CreateCcode()
+Trigger2X(FP,{CommandLeastAt(174,64);},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple이 \x08파괴\x04되었습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4);
+PlayWAVX("staredit\\wav\\E_Clear.ogg");
+PlayWAVX("staredit\\wav\\E_Clear.ogg");
+PlayWAVX("staredit\\wav\\E_Clear.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)})
+
+CIf(FP,CDeaths(FP,AtLeast,1,Win))
+DoActionsX(FP,SetCDeaths(FP,Add,1,Win))
+
+ClearTextArr = {
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04-\n\n\n\n\x13\x04-\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- -\n\n\n\n\x13\x04- -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - -\n\n\n\n\x13\x04- - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - -\n\n\n\n\x13\x04- - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - -\n\n\n\n\x13\x04- - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - -\n\n\n\n\x13\x04- - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - -\n\n\n\n\x13\x04- - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - -\n\n\n\n\x13\x04- - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - - - - - -\n\n\n",
+"\n\n\n\n\n\n\n\n\n\n\n\x13\x04- - - - - - - - - - - - - -\n\n\n\n\x13\x04- - - - - - - - - - - - - -\n\n\n"}
+
+for j, k in pairs(ClearTextArr) do
+	Trigger2X(FP,{CD(Win,140+(j*10),AtLeast)},{RotatePlayer({DisplayTextX(k,4)},HumanPlayers,FP)})
+end
+
+PlayersT = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x186인","\x167인"}
+GModeT = {"\x0EEASY","\x08HARD","\x11BURST"}
+
+for i = 1, 3 do
+for k = 1, 7 do
+
+
+
+	ClearText1 = "\n\n\n\n\n\n\n\n\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\n\x13\x04- - - - - - - - - - - - - -\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04.2 : \x1FRE \x03★"
+	ClearText2 = "\x13"..PlayersT[k]..", "..GModeT[i].." Mode"
+	ClearText3 = "\x13\x04클리어 하셨습니다.\n\x13\x04Creator - GALAXY_BURST\n\x13\x04- - - - - - - - - - - - - -\n\x13\x04Thanks For Playing\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆"
+	ClearText4 = "\x13\x18Hidden Mode \x04적용됨"
+	ClearText5 = "HD".._0D
+	
+
+Trigger2X(FP,{
+	CDeaths(FP,AtMost,#HiddenCommand-1,HiddenMode),
+	CDeaths(FP,Exactly,i,GMode);
+	CVar(FP,SetPlayers[2],Exactly,k);
+	CDeaths(FP,AtLeast,280,Win);
+},RotatePlayer({
+	DisplayTextX(ClearText1,4);
+	DisplayTextX(ClearText2,4);
+	DisplayTextX(ClearText3,4);
+	PlayWAVX("staredit\\wav\\clear2.ogg");
+	PlayWAVX("staredit\\wav\\clear2.ogg");
+	PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP))
+
+
+	Trigger2X(FP,{
+		CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),
+		CDeaths(FP,Exactly,i,GMode);
+		CVar(FP,SetPlayers[2],Exactly,k);
+		CDeaths(FP,AtLeast,280,Win);
+	},RotatePlayer({
+		DisplayTextX(ClearText1,4);
+		DisplayTextX(ClearText2,4);
+		DisplayTextX(ClearText4,4);
+		DisplayTextX(ClearText5,4);
+		DisplayTextX(ClearText3,4);
+		PlayWAVX("staredit\\wav\\clear2.ogg");
+		PlayWAVX("staredit\\wav\\clear2.ogg");
+		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
+	)
+end
+end
+
+
+--Trigger { -- 게임승리 빅토리 트리거
+--	players = {FP},
+--	conditions = {
+--		Label(0);
+--		CDeaths(FP,AtMost,#HiddenCommand-1,HiddenMode);
+--		CDeaths(FP,AtLeast,499,Win);
+--		},
+--	actions = {
+--		SetMemory(0x6509B0, SetTo, 0);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 1);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 2);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 3);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 4);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 5);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, 6);
+--		PlayWAV("staredit\\wav\\button3.wav");
+--		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
+--		SetMemory(0x6509B0, SetTo, FP);
+--		},
+--	}
+Trigger { -- 게임승리 빅토리 트리거
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,AtMost,0,TestMode);
+		CDeaths(FP,AtLeast,500,Win);
+		},
+	actions = {
+		SetMemory(0x6509B0, SetTo, 0);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 1);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 2);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 3);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 4);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 5);
+		Victory();
+		SetMemory(0x6509B0, SetTo, 6);
+		Victory();
+		SetMemory(0x6509B0, SetTo, FP);
+		},
+	}
+
+CIfEnd()
 
 end

@@ -59,10 +59,15 @@ function Include_GunData(Size,LineNum)
 		GunBGM(116,7,"연구소 \x18Facility \x04을",30000)
 		GunBGM(150,7,"번데기 \x18Mature Crysalis \x04을",30000)
 		GunBGM(151,4,"정신체 \x18Cerebrate \x04을",60000)
-		GunBGM(130,4,"감염체 \x18Center \x04을",60000)
-		GunBGM(201,4,"정신체 \x18Cocoon \x04을",150000)
+		GunBGM(130,4,"감염체 \x18Center \x04를",60000)
+		GunBGM(201,8,"정신체 \x18Cocoon \x04을",150000)
+		GunBGM(200,8,"발전소 \x18Generator \x04를",250000)
+		GunBGM(147,8,"완전체 \x18Overmind G \x04를",400000)
+		GunBGM(148,8,"초월체 \x18Overmind \x04를",100000)
+		GunBGM(173,8,"수정 집합체 \x18Formation \x04을",100000)
+		GunBGM(190,8,"교란기 \x18Psi Disrupter \x04를",300000)
+		GunBGM(168,nil,"봉인 \x18Stasis Cell \x04을",50000)
 
-		
 		Convert_CPosXY()
 		CMov(FP,G_A,0)
 		G_SkipJump = def_sIndex()
@@ -384,6 +389,7 @@ function Include_GunData(Size,LineNum)
 				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{25,{4,10,25},3},{104,25,4},{48,15,4},{28,{2,5,11},5}
 			},
 			{ -- Index 16
+				{53,15,1},{54,15,2},{51,25,5},{104,25,4},{48,15,3},
 				{77,{2,5,10},1},{78,{2,5,10},2},{77,{2,5,10},3},{78,{2,5,10},4},{77,{2,5,10},5},
 				{88,{2,5,10},1},{88,{2,5,10},2},{88,{2,5,10},3},{88,{2,5,10},4},{88,{2,5,10},5}
 			},
@@ -391,6 +397,7 @@ function Include_GunData(Size,LineNum)
 				{79,{4,10,25},1},{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{4,10,25},3},{104,25,4},{48,15,4},{80,{2,5,11},5}
 			},
 			{ -- Index 18
+				{53,15,1},{54,15,2},{51,25,5},{104,25,4},{48,15,3},
 				{10,{2,5,10},1},{17,{2,5,10},2},{10,{2,5,10},3},{17,{2,5,10},4},{10,{2,5,10},5},
 				{21,{2,5,10},1},{21,{2,5,10},2},{21,{2,5,10},3},{21,{2,5,10},4},{21,{2,5,10},5}
 			},
@@ -456,12 +463,10 @@ function Include_GunData(Size,LineNum)
 	XelCUTable = {3,6,11}
 	XelCUTable2 = {2,5,12}
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
-			for i = 0, 1 do
 				for l = 1, 3 do
-					f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},27,XelCUTable[l],nil,nil,"CG")
-					f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},61,XelCUTable2[l],nil,nil,"CG")
+					f_TempRepeat({CD(GMode,l)},27,XelCUTable[l],nil,nil,"CG")
+					f_TempRepeat({CD(GMode,l)},61,XelCUTable2[l],nil,nil,"CG")
 				end
-			end
 			DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
 		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(XelCcode,1)},{Preserved})
@@ -577,9 +582,172 @@ function Include_GunData(Size,LineNum)
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,70)},{Gun_DoSuspend(),AddCD(CereCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,70)},{Gun_DoSuspend(),AddCD(CocoonCcode,1)},{Preserved})
 	CIfEnd()
 
+	CIf_GCase(200)
+		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,400))
+			FaciCUTable = {3,6,11}
+			FaciCUTable2 = {7,15,30}
+			FaciCUTable3 = {1,3,10}
+			FaciPosArr = {
+				{2336,2144},{864,2144},{1600,2528},{1600,1760}
+			}
+			CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
+			CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
+			CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+			for l = 1, 3 do
+				for j, k in pairs(FaciPosArr) do
+					f_TempRepeat({Gun_Line(9,Exactly,0),Gun_Line(8,AtMost,3),CD(GMode,l)},28,FaciCUTable[l],187,nil,k)
+					f_TempRepeat({Gun_Line(9,Exactly,1),Gun_Line(8,AtMost,3),CD(GMode,l)},21,FaciCUTable2[l],187,nil,k)
+					f_TempRepeat({Gun_Line(8,Exactly,4),CD(GMode,l)},98,FaciCUTable2[l],187,nil,k)
+				end
+			end
+			
+			DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
+			TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{Preserved})
+		CIfEnd()
+		GeneActArr={}
+		for j, k in pairs(FaciPosArr) do
+			table.insert(GeneActArr,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
+			table.insert(GeneActArr,CreateUnit(1,84,1,FP))
+		end
+		DoActions(FP,{GeneActArr,KillUnit(84,FP)})
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),AddCD(GeneCcode,1)},{Preserved})
+
+	CIfEnd()
+	CIf_GCase(147)
+	DoActionsX(FP,{Gun_SetLine(7,Add,2)})
+	TriggerX(FP,{Gun_Line(7,AtLeast,NBYD[1]/15)},{Gun_DoSuspend(),SetCD(OverGCcode,1)})
+	G_CA_SetSpawn(CD(GMode,1),{56},"ACAS","NBYD",15,147,nil,FP,1)
+	G_CA_SetSpawn(CD(GMode,2),{88},"ACAS","NBYD",15,147,nil,FP,1)
+	G_CA_SetSpawn(CD(GMode,3),{98},"ACAS","NBYD",15,147,nil,FP,1)
+	CIfEnd()
+
+	CIf_GCase(148)
+		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,400)})
+		OvrmLinkArr = {
+			{4000,2016},{3968,2752}
+		}
+		OverLinkCUTable = {
+			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{17,{2,4,10}},{10,{2,4,10}}},
+			{{48,{25,15,10}},{56,25},{19,{3,6,15}}},
+			{{51,{25,20,15}},{104,{25,20,15}},{21,{4,9,25}},{25,{2,4,10}}}
+		}
+
+		for j, k in pairs(OverLinkCUTable) do
+			for l,m in pairs(k) do
+				if type(m[2]) == "table" then
+					for o,p in pairs(m[2]) do
+						for i = 1, #OvrmLinkArr do
+						f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,OvrmLinkArr[i])
+						end
+						f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+					end
+				else
+					for i = 1, #OvrmLinkArr do
+					f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1)},m[1],m[2],nil,nil,OvrmLinkArr[i])
+					end
+					f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1)},m[1],m[2],nil,nil,"CG")
+				end
+			end
+		end
+		OvrmLinkArr2 = {
+			{2464,2720},{3200,2304}
+		}
+		OverLinkCUTable2 = {
+			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{77,{2,4,10}},{78,{2,4,10}}},
+			{{48,{25,15,10}},{56,25},{75,{2,4,10}},{79,{2,4,10}}},
+			{{51,{25,20,15}},{104,{25,20,15}},{88,{4,9,25}},{76,{2,4,10}}}
+		}
+
+		for j, k in pairs(OverLinkCUTable2) do
+			for l,m in pairs(k) do
+				if type(m[2]) == "table" then
+					for o,p in pairs(m[2]) do
+						for i = 1, #OvrmLinkArr2 do
+						f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,OvrmLinkArr2[i])
+						end
+						f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+					end
+				else
+					for i = 1, #OvrmLinkArr2 do
+					f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1)},m[1],m[2],nil,nil,OvrmLinkArr2[i])
+					end
+					f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1)},m[1],m[2],nil,nil,"CG")
+				end
+			end
+		end
+
+		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
+		CIfEnd()
+		DoActionsX(FP,{Gun_SetLine(9,Subtract,1)})
+		CIf(FP,Gun_Line(9,AtMost,0),{Gun_SetLine(9,Add,50)})
+			OvrMineActArr = {}
+			OvrMinePosArr = {
+				{3776,2368},{3712,2144},{3904,2752}
+			}
+			for j, k in pairs(OvrMinePosArr) do
+				table.insert(OvrMineActArr,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
+				table.insert(OvrMineActArr,CreateUnit(1,13,1,FP))
+			end
+			OvrMineActArr2 = {}
+			OvrMinePosArr2 = {
+				{2848,2432},{2752,2720},{2944,2624}
+			}
+			for j, k in pairs(OvrMinePosArr2) do
+				table.insert(OvrMineActArr2,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
+				table.insert(OvrMineActArr2,CreateUnit(1,13,1,FP))
+			end
+			Trigger2X(FP,{Gun_Line(3,Exactly,1)},OvrMineActArr,{Preserved})
+			Trigger2X(FP,{Gun_Line(3,Exactly,2)},OvrMineActArr2,{Preserved})
+		DoActionsX(FP,{Gun_SetLine(10,Add,1)})
+		CIfEnd()
+		TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(OvrmCcode,1)},{Preserved})
+	CIfEnd()
+	CIf_GCase(190)
+	PsiCUTable = {
+	{55,56,55,56,55,56},
+	{55,56,88,21,28,64},
+	{88,21,28,64,86,98}}
+	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,480)})
+
+	for i = 0 ,5 do
+		for l=1, 3 do
+			if i%2 == 0 then
+				G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64,2048},FP,1)
+	
+			else
+				G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048,4096},FP,1)
+			end
+		end
+	end
+	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
+	CIfEnd()
+	TriggerX(FP,{Gun_Line(8,AtLeast,6)},{Gun_DoSuspend(),AddCD(PsiCcode,1)},{Preserved})
+		
+	CIfEnd()
+	CIf_GCase(173)
+		DoActions(FP,{CreateUnit(1,84,1,FP),KillUnit(84,FP)})
+		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
+			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
+			FormShape = {4,{-12*32,0},{0,-6*32},{12*32,0},{0,6*32}}
+			CSPlot(FormShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
+		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
+		CSPlot(FormShape,FP,72,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(72,FP)},1)
+		Trigger2X(FP,{Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\seeya.ogg"),PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),Gun_DoSuspend(),KillUnitAt(All,125,21,AllPlayers),AddCD(FormCcode,1)},{Preserved})
+	CIfEnd()
+	
+	CIf_GCase(168)
+	DoActionsX(FP,Gun_SetLine(7,Add,2))
+	TriggerX(FP,{Gun_Line(3,Exactly,1),Gun_Line(7,AtLeast,Cell1[1])},{Gun_DoSuspend(),AddCD(CellCcode,1)})
+	TriggerX(FP,{Gun_Line(3,Exactly,2),Gun_Line(7,AtLeast,Cell2[1])},{Gun_DoSuspend(),AddCD(CellCcode,1)})
+	TriggerX(FP,{Gun_Line(3,Exactly,3),Gun_Line(7,AtLeast,Cell3[1])},{Gun_DoSuspend(),AddCD(CellCcode,1)})
+	G_CA_SetSpawn({Gun_Line(3,Exactly,1)},{84},"ACAS","Cell1",1,84,{0,0},FP,1)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,2)},{84},"ACAS","Cell2",1,84,{0,0},FP,1)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,3)},{84},"ACAS","Cell3",1,84,{0,0},FP,1)
+
+	CIfEnd()
 
 	GunPushTrig = {}
 	for i = 0, 54 do

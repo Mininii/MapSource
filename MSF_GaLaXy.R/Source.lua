@@ -104,6 +104,10 @@ CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[
 CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07急琶肯丰"),
 }
 
+DifLeaderBoard = {
+	"\x04 - \x0EEASY \x04Mode",
+	"\x04 - \x08HARD \x04Mode",
+	"\x04 - \x11BURST \x04Mode"}
 	RandSwitch1 = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	--Gun_SVA = CreateSVArr(16,64,FP)
@@ -184,17 +188,25 @@ CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[
 	BanCode = CreateCcodeArr(6)
 	DelayMedic = CreateCcodeArr(7)
 	GiveRate = CreateCcodeArr(7)
-	HactCcode = CreateCcode()
-	LairCcode = CreateCcode()
-	HiveCcode = CreateCcode()
-	PyCCode = CreateCcode()
-	XelCcode = CreateCcode()
-	IonCcode = CreateCcode()
-	FaciCcode = CreateCcode()
-	ChryCcode = CreateCcode()
-	CereCcode = CreateCcode()
-	CenCcode = CreateCcode()
-	NexCcode = CreateCcode()
+	HactCcode = CreateCcode() -- 0老版快
+	LairCcode = CreateCcode() -- 0老版快
+	HiveCcode = CreateCcode() -- 0老版快
+	PyCCode = CreateCcode() -- 9老版快
+	XelCcode = CreateCcode() -- 4老版快
+	IonCcode = CreateCcode() -- 1老版快
+	FaciCcode = CreateCcode() -- 4老版快
+	ChryCcode = CreateCcode() -- 4老版快
+	CereCcode = CreateCcode() -- 4老版快
+	CenCcode = CreateCcode() -- 4老版快
+	NexCcode = CreateCcode() -- 2老版快
+	CocoonCcode = CreateCcode() -- 1老版快
+	GeneCcode = CreateCcode() -- 1老版快
+	OverGCcode = CreateCcode() -- 1老版快
+	OvrmCcode = CreateCcode() -- 2老版快
+	PsiCcode = CreateCcode() -- 1老版快
+	FormCcode = CreateCcode() -- 1老版快
+	CellCcode = CreateCcode() -- 3老版快
+	BossCcode = CreateCcode()
 	UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
 	UnitNamePtr = 0x590000 --0x590000~0x5938C0
 	--UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
