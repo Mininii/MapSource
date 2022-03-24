@@ -1,4 +1,75 @@
 function Gun_System()
+	CanC = CreateCcode()
+	CanCT = CreateCcode()
+	DefeatCC = CreateCcode()
+	CIf(FP,{Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
+
+	CanDisplayT = {}
+	CanDisplayT2 = {}
+
+	for i = 0, 6 do
+	table.insert(CanDisplayT,SetMemory(0x582174+(4*i),Add,2))
+	table.insert(CanDisplayT2,SetMemory(0x582144+(4*i),Add,8))
+	table.insert(CanDisplayT2,SetMemory(0x5821A4+(4*i),Add,8))
+	end
+	DoActions(FP,CanDisplayT2,1)
+	DoActionsX(FP,{SubCD(CanCT,1)})
+	Trigger2X(FP,{
+		CDeaths(FP,AtMost,0,CanCT);
+		Memory(0x628438,AtMost,0)},{
+			KillUnit(37,FP);
+			KillUnit(38,FP);
+			KillUnit(39,FP);
+			KillUnit(43,FP);
+			KillUnit(44,FP);
+			KillUnit(47,FP);
+			KillUnit(48,FP);
+			KillUnit(50,FP);
+			KillUnit(51,FP);
+			KillUnit(53,FP);
+			KillUnit(54,FP);
+			KillUnit(55,FP);
+			KillUnit(56,FP);
+			CanDisplayT;},{Preserved})
+	Trigger2X(FP,{--캔발동
+	Memory(0x628438,AtMost,0);
+		CDeaths(FP,AtMost,2,CanC);
+		CDeaths(FP,AtMost,0,CanCT);
+	},{
+		RotatePlayer({
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\warn.wav"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+			},HumanPlayers,FP);
+			SetCDeaths(FP,SetTo,24*30,CanCT);
+			SetCDeaths(FP,Add,1,CanC);
+	},{Preserved})
+	
+	Trigger2X(FP,{--캔발동
+		Memory(0x628438,AtMost,0);
+		CDeaths(FP,AtLeast,3,CanC);
+		CDeaths(FP,AtMost,0,CanCT);
+	},{
+		RotatePlayer({
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\CanOver.ogg"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+			},HumanPlayers,FP);
+			SetCDeaths(FP,SetTo,24*30,CanCT);
+			SetCDeaths(FP,Add,1,CanC);
+			SetCDeaths(FP,Add,1,DefeatCC);
+	},{Preserved})
+
+	
+
+
+	TriggerX(FP,CD(DefeatCC,1,AtLeast),{AddCD(DefeatCC,1)},{Preserved})
+	TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(TestMode,0)},{
+		RotatePlayer({Defeat()},HumanPlayers,FP);},{Preserved})
+
+	CIfEnd()
 	count4 = CreateVar(FP)
 	count5 = CreateVar(FP)
 	UnitReadX(FP,AllPlayers,229,64,count)
@@ -21,8 +92,8 @@ function Gun_System()
 
 	IBGM_EPD(FP,6,nil,{12})
     AddBGM(1,"staredit\\wav\\Opening.ogg",23*1000)--오프닝
-    AddBGM(2,"staredit\\wav\\NosBGM_2.ogg",29*1000)
-    AddBGM(3,"staredit\\wav\\NosBGM_1.ogg",32*1000)
+    AddBGM(2,"staredit\\wav\\NosBGM_2.ogg",32*1000)
+    AddBGM(3,"staredit\\wav\\NosBGM_1.ogg",29*1000)
     AddBGM(4,"staredit\\wav\\BGM_1.ogg",41*1000)
     AddBGM(5,"staredit\\wav\\BGM_2.ogg",79*1000)
     AddBGM(6,"staredit\\wav\\BGM_3.ogg",62*1000)
@@ -31,7 +102,7 @@ function Gun_System()
 
 	
 	
-    Install_BGMSystem(FP,3,BGMType,12)
+    Install_BGMSystem(FP,6,BGMType,12)
 
 	
     EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
@@ -144,10 +215,10 @@ function Gun_System()
 	countDisplayT = {}
 	for i = 0, 6 do
 	
-		table.insert(countDisplayT,SetMemory(0x582144 + (i*4),SetTo,GunLimit*2))
-		table.insert(countDisplayT,SetMemory(0x5821A4 + (i*4),SetTo,GunLimit*2))
-	CMov(FP,0x582174+(4*i),count)
-	CAdd(FP,0x582174+(4*i),count)
+		table.insert(countDisplayT,SetMemory(0x582234 + (i*4),SetTo,GunLimit*2))
+		table.insert(countDisplayT,SetMemory(0x5821D4 + (i*4),SetTo,GunLimit*2))
+	CMov(FP,0x582204+(4*i),count)
+	CAdd(FP,0x582204+(4*i),count)
 	end
 	DoActions(FP,countDisplayT,1)
 	DoActions(FP,{ModifyUnitHangarCount(1,All,82,P8,64),SetInvincibility(Enable,73,P8,64)})
@@ -159,10 +230,10 @@ function Gun_System()
 	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{Preserved})
 	Trigger2(FP,{Command(FP,AtLeast,30,35)},{KillUnit(35,FP)},{Preserved})
 	
-	for i=1,9 do -- 파일런 갯수마다 벙커 체력 설정
-	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(10*i));},{preserved})
+	for i=1,10 do -- 파일런 갯수마다 벙커 체력 설정
+	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(9*i));},{preserved})
 	end
-	
+	PyT = CreateCcode()
 -- 193번 오브젝트 존재시 처리
 CIf(FP,Command(AllPlayers,AtLeast,1,193))
 DoActions(FP,{Simple_SetLoc(0,0,32,0,32)})
@@ -172,7 +243,7 @@ CWhile(FP,Bring(FP,AtLeast,1,193,64),{
 	GiveUnits(All,193,FP,"Anywhere",8)})
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,193,8,"Anywhere",FP),Order(193,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
-CIf(FP,Bring(FP,AtLeast,1,193,4),{GiveUnits(1,193,FP,4,8),KillUnitAt(1,193,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
+CIf(FP,{Bring(FP,AtLeast,1,193,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,193,FP,4,8),KillUnitAt(1,193,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
 HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
 for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,2)},77,2,nil,nil,k)
@@ -210,7 +281,7 @@ CWhile(FP,Bring(FP,AtLeast,1,192,64),{
 	GiveUnits(All,192,FP,"Anywhere",8)})
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,192,8,"Anywhere",FP),Order(192,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
-CIf(FP,Bring(FP,AtLeast,1,192,4),{GiveUnits(1,192,FP,4,8),KillUnitAt(1,192,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
+CIf(FP,{Bring(FP,AtLeast,1,192,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,192,FP,4,8),KillUnitAt(1,192,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
 for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,2)},10,2,nil,nil,k)
 	f_TempRepeat({CD(GMode,2)},17,2,nil,nil,k)
@@ -238,6 +309,7 @@ for i = 0, 3 do
 end
 CIfEnd()
 CIfEnd()
+DoActionsX(FP,SubCD(PyT,1))
 function InvDisable(Cond,UnitID,Player,Loc,Name)
 txt = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※\n\n\n\x13\x03"..Name.."\x04의 \x08무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※"
 Wav = "staredit\\wav\\Unlock.ogg"
@@ -247,9 +319,9 @@ Trigger2X(FP,Cond,{
 	RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)
 })
 end
-InvDisable({CDeaths(FP,AtLeast,4,ChryCcode)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
+InvDisable({CDeaths(FP,AtLeast,4,ChryCcode),CD(GeneCcode,1,AtLeast)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
 InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
-InvDisable({CDeaths(FP,AtLeast,9,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
+InvDisable({CDeaths(FP,AtLeast,10,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
 InvDisable({CDeaths(FP,AtLeast,4,XelCcode)},127,Force2,64,"\x07쥬림 \x06산맥의 \x11결계")
 InvDisable({CDeaths(FP,AtLeast,4,CereCcode),CDeaths(FP,AtLeast,4,CenCcode)},201,Force2,64,"Ｏｖｅｒｃｏｃｏｏｎ")
 InvDisable({CDeaths(FP,AtLeast,3,CellCcode)},160,Force2,64,"Ｂｏｓｓ　Ｇａｔｅ")
@@ -280,7 +352,7 @@ end
 Trigger2X(FP,Cond,X)
 end
 InvDisable2(CD(FormCcode,1),168,FP,{24,25,26},"Ｓｔａｓｉｓ　Ｃｅｌｌ")
-Trigger2X(FP,{CommandLeastAt(160,27)},{CreateUnit(1,65,27,FP),
+Trigger2X(FP,{CommandLeastAt(160,27),Memory(0x628438,AtLeast,1)},{CreateUnit(1,65,27,FP),
 RotatePlayer({TalkingPortrait(68, 2000),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);})
 CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)})
 DoActions(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,65,FP,64)})

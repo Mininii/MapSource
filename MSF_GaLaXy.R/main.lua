@@ -27,7 +27,7 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(2)
+TestSet(1)
 VerText = "\x04Ver. Test"
 FP = P8
 EUDTurbo(FP)
@@ -38,7 +38,7 @@ Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0)
 StartCtrig()
 
 init_func = def_sIndex()
-CJump(FP,init_func)
+CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100",1,FP)
 	Source()
 	DUnitCalc = Install_EXCC(FP,15,1)
@@ -54,7 +54,7 @@ CJump(FP,init_func)
 	G_CA_Lib_ErrorCheck()
 	Include_GunData(64,55)
 	init()
-CJumpEnd(FP,init_func)
+CJumpEnd(AllPlayers,init_func)
 onInit_EUD()
 DoActions2(AllPlayers,PatchArrPrsv)
 --DoActionsX(FP,{SetCtrigX("X",IndexAlloc,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0),SetCtrig1X("X",IndexAlloc,CAddr("CEPD",2),0,SetTo,EPD(0x58D6F8)),SetCtrigX("X",IndexAlloc,0x15C,0,SetTo,"X",IndexAlloc,0x0,0,1)})

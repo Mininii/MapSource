@@ -1,4 +1,30 @@
 function Interface()
+	Trigger { -- 채팅창 정리 delete키
+		players = {Force1},
+		conditions = {
+			
+			Memory(0x596A44, Exactly, 65536);
+	},
+		actions = {
+			DisplayText(string.rep("\n", 20),4);
+			PreserveTrigger();
+			},
+		}
+	Trigger { -- 동맹상태 고정
+	players = {Force1},
+	actions = {
+		SetAllianceStatus(Force1,Ally);
+		SetAllianceStatus(P12,Enemy);
+		RunAIScript("Turn ON Shared Vision for Player 1");
+		RunAIScript("Turn ON Shared Vision for Player 2");
+		RunAIScript("Turn ON Shared Vision for Player 3");
+		RunAIScript("Turn ON Shared Vision for Player 4");
+		RunAIScript("Turn ON Shared Vision for Player 5");
+		RunAIScript("Turn ON Shared Vision for Player 6");
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		PreserveTrigger();
+	},
+}
 	for i = 1, 6 do -- 강퇴기능
 		Trigger { -- 강퇴토큰
 			players = {FP},
@@ -297,11 +323,12 @@ CIf(FP,{CD(FormCcode,0)})
 			Bring(i,AtLeast,1,125,NB+5);
 		},
 		actions = {
-			GiveUnits(All,125,i,NB+5,P10);
+			GiveUnits(All,125,i,NB+5,P8);
 			PreserveTrigger();
 		},
 	}
 	end
+	DoActions(FP,{GiveUnits(All,125,P12,64,P10),GiveUnits(All,125,P8,64,P10)})
 CIfEnd()
 CIfEnd()
 	end
@@ -316,7 +343,7 @@ CIfEnd()
 	actions = {
 		RemoveUnitAt(1,"Terran Firebat","Anywhere",j);
 		CreateUnitWithProperties(1,0,4,j,{energy = 100});
-		DisplayText("\x02▶ x04Marine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e",4);
+		DisplayText("\x02▶ \x04Marine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e",4);
 		SetDeaths(j,SetTo,1,101);
 		PreserveTrigger();
 	},
@@ -343,7 +370,7 @@ conditions = {
 },
 actions = {
 	RemoveUnitAt(1,1,"Anywhere",j);
-	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine을 \x19소환\x04하였습니다. - \x1F"..(GMCost+NMCost).." O r e",4);
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine을 \x19소환\x04하였습니다. - \x1F"..(GMCost+NMCost+HMCost).." O r e",4);
 	CreateUnitWithProperties(1,100,4,j,{energy = 100});
 	SetDeaths(j,SetTo,1,101);
 	PreserveTrigger();
@@ -361,7 +388,7 @@ actions = {
 	SetResources(j,Subtract,HMCost,ore);
 	RemoveUnitAt(1,0,3,j);
 	CreateUnitWithProperties(1,20,4,j,{energy = 100});
-	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x04Marine을 \x1BH \x04Marine으로 \x19변환\x04하였습니다. - \x1F10000 O r e",4);
+	DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x04Marine을 \x1BH \x04Marine으로 \x19변환\x04하였습니다. - \x1F"..HMCost.." O r e",4);
 	PreserveTrigger();
 },
 }

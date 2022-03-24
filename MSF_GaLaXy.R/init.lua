@@ -51,9 +51,6 @@ function init()
 			
 	function UnitEnableX(UnitID,MinCost,GasCost,BuildTime,SuppCost)
 		table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-		table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
-		table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
-		table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
 		if MinCost ~= nil then
 		table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- ¹Ì³×¶ö
@@ -232,7 +229,7 @@ function init()
 
 				
 			for i = 1, #ZergGndUArr do
-				table.insert(CtrigInitArr[FP],SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
+				table.insert(CtrigInitArr[FP+1],SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
 			end
 --			for i = 0, 6 do
 --				table.insert(PatchArr,SetMemory(0x5821A4 + (4*i),SetTo,GunLimit*2))

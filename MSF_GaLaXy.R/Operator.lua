@@ -13,7 +13,7 @@ function Operator_Trig()
 			},
 			actions = {
 				GiveUnits(All,219,AllPlayers,"Anywhere",i);
-				--GiveUnits(All,160,AllPlayers,"Anywhere",i);
+				GiveUnits(All,115,AllPlayers,"Anywhere",i);
 			}
 		}
     end

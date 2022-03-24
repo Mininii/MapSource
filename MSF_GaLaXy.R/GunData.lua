@@ -420,13 +420,20 @@ function Include_GunData(Size,LineNum)
 				{1216,2336},{1984,2336},{1216,1952},{1984,1952}
 			}
 			HTankDiffArr = {2,5,15}
-			HTankDiffArr2 = {1,2,3}
+			HTankDiffArr2 = {nil,1,3}
 			for i = 0, 4 do
 				for j, k in pairs(HTankZoneArr) do
-					for l = 1, 3 do
+					for l, m in pairs(HTankDiffArr) do
+						if m ~= nil then
+							f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},25,m,nil,nil,k)
+						end
 						
-						f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},25,HTankDiffArr[l],nil,nil,k)
-						f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},30,HTankDiffArr2[l],nil,nil,k)
+					end
+					for l, m in pairs(HTankDiffArr2) do
+						if m ~= nil then
+							f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},30,m,nil,nil,k)
+							
+						end
 					end
 				end
 			end

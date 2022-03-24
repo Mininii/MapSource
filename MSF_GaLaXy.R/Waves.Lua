@@ -3,19 +3,21 @@ function Waves()
 	--ElapsedTimeX(Comparison, Time)
 	WaveXYArr = {{3552,160},{3872,160},{3552,416},{3872,416}}
 	
-	function CallSet(Time,CUTable,TimerFlag)
+	function CallSet(Time,CUTable,TimerFlag,NoticeFlag)
 		if TimerFlag==1 then
 			for i = 1,5 do
 				TriggerX(FP,{CD(GMode,1),ElapsedTimeX(Exactly,Time-(i*2))},{RotatePlayer({DisplayTextX("\x13\x04"..i.."초 남았습니다.",4)},HumanPlayers,FP),SetCD(ButtonSound,1)})
 			end
 		end
+		local Y
+		if NoticeFlag == 1 then Y = SetCD(NoticeCD,1) else Y =nil end
 		Trigger2X(FP,{ElapsedTimeX(Exactly,Time)},{
 			SetMemoryX(0x666458, SetTo, 391,0xFFFF),
-			Simple_SetLoc(0,WaveXYArr[1][1],WaveXYArr[1][2],WaveXYArr[1][1],WaveXYArr[1][2]),CreateUnit(1,33,0,FP),CreateUnit(1,84,0,FP),
-			Simple_SetLoc(0,WaveXYArr[2][1],WaveXYArr[2][2],WaveXYArr[2][1],WaveXYArr[2][2]),CreateUnit(1,33,0,FP),CreateUnit(1,84,0,FP),
-			Simple_SetLoc(0,WaveXYArr[3][1],WaveXYArr[3][2],WaveXYArr[3][1],WaveXYArr[3][2]),CreateUnit(1,33,0,FP),CreateUnit(1,84,0,FP),
-			Simple_SetLoc(0,WaveXYArr[4][1],WaveXYArr[4][2],WaveXYArr[4][1],WaveXYArr[4][2]),CreateUnit(1,33,0,FP),CreateUnit(1,84,0,FP),RemoveUnit(33,FP),KillUnit(84,FP),
-			SetMemoryX(0x666458, SetTo, 546,0xFFFF),SetCD(NoticeCD,1)
+			Simple_SetLoc(0,WaveXYArr[1][1],WaveXYArr[1][2],WaveXYArr[1][1],WaveXYArr[1][2]),CreateUnit(1,33,1,FP),CreateUnit(1,84,1,FP),
+			Simple_SetLoc(0,WaveXYArr[2][1],WaveXYArr[2][2],WaveXYArr[2][1],WaveXYArr[2][2]),CreateUnit(1,33,1,FP),CreateUnit(1,84,1,FP),
+			Simple_SetLoc(0,WaveXYArr[3][1],WaveXYArr[3][2],WaveXYArr[3][1],WaveXYArr[3][2]),CreateUnit(1,33,1,FP),CreateUnit(1,84,1,FP),
+			Simple_SetLoc(0,WaveXYArr[4][1],WaveXYArr[4][2],WaveXYArr[4][1],WaveXYArr[4][2]),CreateUnit(1,33,1,FP),CreateUnit(1,84,1,FP),RemoveUnit(33,FP),KillUnit(84,FP),
+			SetMemoryX(0x666458, SetTo, 546,0xFFFF),Y
 		})
 		for j, k in pairs(CUTable) do
 			for i = 1, 4 do
@@ -24,25 +26,27 @@ function Waves()
 		end
 	end
 
-	CallSet(90,{{48,5},{55,9},{54,5},{53,5}},1)
-	CallSet(255,{{48,7},{56,9},{51,5},{104,5}},1)
-	CallSet(455,{{48,9},{56,25},{51,10},{104,15}},1)
+	CallSet(180,{{48,5},{55,9},{54,5},{53,5}},1,1)
+	CallSet(427,{{48,7},{56,9},{51,5},{104,5}},1,1)
+	CallSet(852,{{51,25},{56,25}},1,1)
+	CallSet(1290,{{51,25},{56,25}},1,1)
+	CallSet(1580,{{51,25},{56,25}},1,1)
 	CIf(FP,{CD(GMode,2)})
 		CallSet(265,{{77,3}})
 		CallSet(620,{{25,6}})
 		CallSet(900,{{78,5}})
 		CallSet(1159,{{29,6}})
 	CIfEnd()
-	CIf(FP,{CD(GMode,2)})
+	CIf(FP,{CD(GMode,3)})
 		CallSet(290,{{77,10}})
 		CallSet(600,{{78,15}})
 		CallSet(802,{{25,15},{30,5}})
 		CallSet(1000,{{13,25},{88,15}})
 	CIfEnd()
 	for i = 1, 10 do
-		CallSet(1250*i,{
-			{29,4},{88,5},{21,5},{17,3},{77,3},{78,3},
-		},1)
+		CallSet(1850*i,{
+			{28,4},{88,5},{21,5},{17,3},{77,3},{78,3},
+		},1,1)
 		
 	end
 	

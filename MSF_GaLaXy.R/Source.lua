@@ -5,14 +5,14 @@ function Source()
 	DefFactor = 20
 	SuFactor = 200
 	NMCost = 7000
-	HMCost = 15000
+	HMCost = 10000
 	GMCost = 25000
 	NeCost = 20000
 	HPointFactor = 20
-	ExRate = 10
-	EasyEx1P = 200
-	HDEx1P = 190
-	BurEx1P = 180
+	ExRate = 15
+	EasyEx1P = 170
+	HDEx1P = 195
+	BurEx1P = 210
 	GunLimit = 1500
 
 	ExArr = {--환전률
@@ -29,7 +29,7 @@ function Source()
 	--System
 	GiveRate2 = {1000, 5000, 10000, 50000,100000,500000}  
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1}
-	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
+	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x18,0x16}
 	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4,5,6}
 	ObPlayers = {P9,P10,P11,P12}
@@ -71,8 +71,8 @@ function Source()
 	GiveUnitID = {64,65,66,67,61,63,68}
 	BanToken = {84,69,70,60,71,98}
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
-	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
-	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
+	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x17P6","\x16P7"} 
+	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x176인","\x167인"}
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
