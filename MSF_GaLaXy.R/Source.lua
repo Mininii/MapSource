@@ -1,5 +1,5 @@
 function Source()
-	VName = "1.0A"
+	VName = "1.1A"
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
