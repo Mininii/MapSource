@@ -1,8 +1,17 @@
 function Interface()
+	Trigger { -- 조합법 insert키
+		players = {Force1},
+		conditions = {
+			Memory(0x596A44, Exactly, 0x00000100);
+		},
+		actions = {
+			DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\n\x12\x04히든조합은 없습니다.\n\x12\x04환전 : \x03배럭에서 F를 누르세요.\n\x12\x04닫기 : \x03Delete\n\n\n",4);
+			PreserveTrigger();
+		},
+	}
 	Trigger { -- 채팅창 정리 delete키
 		players = {Force1},
 		conditions = {
-			
 			Memory(0x596A44, Exactly, 65536);
 	},
 		actions = {

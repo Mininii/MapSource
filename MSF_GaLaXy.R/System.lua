@@ -118,7 +118,7 @@ function Gun_System()
 --	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
 
 	DUArr={0,20,100,16,7}
-	DCArr = {1,2,3,5,0}
+	DCArr = {1,2,4,5,1}
 	for i = 0, 6 do
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
 		DoActions(FP,MoveCp(Add,6*4))
@@ -354,7 +354,7 @@ end
 InvDisable2(CD(FormCcode,1),168,FP,{24,25,26},"Ｓｔａｓｉｓ　Ｃｅｌｌ")
 Trigger2X(FP,{CommandLeastAt(160,27),Memory(0x628438,AtLeast,1)},{CreateUnit(1,65,27,FP),
 RotatePlayer({TalkingPortrait(68, 2000),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);})
-CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)})
+CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)},{ModifyUnitShields(All,65,FP,64,100)})
 DoActions(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,65,FP,64)})
 BossT = CreateCcode()
 DoActionsX(FP,{SubCD(BossT,1)})
@@ -402,7 +402,7 @@ for k = 1, 7 do
 
 
 
-	ClearText1 = "\n\n\n\n\n\n\n\n\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\n\x13\x04- - - - - - - - - - - - - -\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04.2 : \x1FRE \x03★"
+	ClearText1 = "\n\n\n\n\n\n\n\n\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\n\x13\x04- - - - - - - - - - - - - -\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★"
 	ClearText2 = "\x13"..PlayersT[k]..", "..GModeT[i].." Mode"
 	ClearText3 = "\x13\x04클리어 하셨습니다.\n\x13\x04Creator - GALAXY_BURST\n\x13\x04- - - - - - - - - - - - - -\n\x13\x04Thanks For Playing\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆"
 	ClearText4 = "\x13\x18Hidden Mode \x04적용됨"
@@ -438,67 +438,92 @@ Trigger2X(FP,{
 		PlayWAVX("staredit\\wav\\clear2.ogg");
 		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
 	)
+	Trigger2X(FP,{
+		CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),
+		CDeaths(FP,Exactly,i,GMode);
+		CVar(FP,SetPlayers[2],Exactly,k);
+		CDeaths(FP,AtLeast,280,Win);
+	},RotatePlayer({
+		DisplayTextX(ClearText1,4);
+		DisplayTextX(ClearText2,4);
+		DisplayTextX(ClearText4,4);
+		DisplayTextX(ClearText5,4);
+		DisplayTextX(ClearText3,4);
+		PlayWAVX("staredit\\wav\\clear2.ogg");
+		PlayWAVX("staredit\\wav\\clear2.ogg");
+		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
+	)
 end
 end
+function DisplayDeathRank(Player,GM,Sc1,Sc2,Text,GameOverFlag)
+	local X = nil
+	local Y = nil
+	local Z = nil
+	if GameOverFlag ~= nil then X = Defeat() else X = Victory() end
+	if Sc1 ~= nil then Y = Score(Player,Custom,AtLeast,Sc1) end
+	if Sc2 ~= nil then Z = Score(Player,Custom,AtMost,Sc2) end
+	TriggerX(FP,{CD(GMode,GM),CDeaths(FP,AtLeast,760,Win),Y,Z},{SetCp(Player),DisplayText(Text,4),PlayWAV("staredit\\wav\\HeroKill.wav"),PlayWAV("staredit\\wav\\HeroKill.wav"),X,SetCp(FP)})
+end
 
-
---Trigger { -- 게임승리 빅토리 트리거
---	players = {FP},
---	conditions = {
---		Label(0);
---		CDeaths(FP,AtMost,#HiddenCommand-1,HiddenMode);
---		CDeaths(FP,AtLeast,499,Win);
---		},
---	actions = {
---		SetMemory(0x6509B0, SetTo, 0);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 1);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 2);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 3);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 4);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 5);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, 6);
---		PlayWAV("staredit\\wav\\button3.wav");
---		DisplayText("\x13\x18히든 \x04커맨드는? : \x17Mininii322",4);
---		SetMemory(0x6509B0, SetTo, FP);
---		},
---	}
-Trigger { -- 게임승리 빅토리 트리거
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,AtMost,0,TestMode);
-		CDeaths(FP,AtLeast,500,Win);
-		},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 1);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 2);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 3);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 4);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 5);
-		Victory();
-		SetMemory(0x6509B0, SetTo, 6);
-		Victory();
-		SetMemory(0x6509B0, SetTo, FP);
-		},
+--\n
+ScoreBoardArr = {
+	{
+		{0,1},{2,10},{11,20},{21,50},{51,100},{101,200},{201,300},{301,99999999}--이지
+	},
+	{
+		{0,3},{4,12},{13,25},{26,65},{66,100},{101,200},{201,300},{301,99999999}--하드
+	},
+	{
+		{0,5},{6,15},{16,30},{31,70},{71,100},{101,200},{201,300},{301,99999999}--버
 	}
+}
+
+RankTextArr = {
+"\x07GOD \x04- \x04마린키우기의 신 인정합니다.",
+"\x07S \x04- \x04당신은 초고수입니다.",
+"\x0EA \x04- \x04열심히 하셧네요. 조금만 더 힘내봅시다.",
+"\x0FB \x04- \x04살짝 아쉽네요. ㅠㅠ",
+"\x10C \x04- \x04너무 많이 죽었네요...힘내시길 바랍니다.",
+"\x15D \x04- \x04메딕을 잘 활용해보시기 바랍니다.",
+"\x17E \x04- \x04게임오버는 피하셨네요;;",
+"\x08Game Over \x04- \x04저런... 얼마나 죽으신 겁니까? 좀 더 분발하세요"}
+RankTextArr2 = {
+"\x13\x07GOD\x04 - \x04",
+"\x13\x07S\x04 - \x04",
+"\x13\x0EA\x04 - \x04",
+"\x13\x0FB\x04 - \x04",
+"\x13\x10C\x04 - \x04",
+"\x13\x15D\x04 - \x04",
+"\x13\x17E\x04 - \x04",
+"\x13\x08Game Over\x04 - \x04"}
+ScoreBoardTextArr = {
+	{},{},{}
+}
+for j, k in pairs(ScoreBoardArr) do
+	for l,m in pairs(k) do
+		local X = m[2]
+		if l == 8 then X = "" end
+		table.insert(ScoreBoardTextArr[j],RankTextArr2[l])
+		table.insert(ScoreBoardTextArr[j],m[1].." ～ "..X.."\n")
+	end
+end
+for i = 1, 3 do
+	TriggerX(FP,{CD(GMode,i),CD(Win,500,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),DisplayTextX("\x13"..DifLeaderBoard[i].." \x07ScoreBoard \x04-\n"..table.concat(ScoreBoardTextArr[i]),4),},HumanPlayers,FP)})
+end
+for i = 0, 6 do
+	for j, k in pairs(ScoreBoardArr) do
+		for l,m in pairs(k) do
+			
+			local X = nil
+			if l==8 then X = 1 end
+			DisplayDeathRank(i,j,m[1],m[2],"\x13\x08Death\x04Rank \x04: "..RankTextArr[l],X)
+		end
+	end
+	TriggerX(FP,{CD(GMode,3),Score(i,Custom,AtMost,70)},{SetCp(i),DisplayText("\x13\x07GOD \x04Rank 보상 : 히든 활성화\x13\x04스크린샷으로 이 문구를 제작자에게 보여주세요.",4),SetCp(FP)})
+end
+
+
+
 
 CIfEnd()
 

@@ -1,5 +1,5 @@
 function Source()
-	VName = "Test"
+	VName = "1.0A"
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
@@ -71,8 +71,8 @@ function Source()
 	GiveUnitID = {64,65,66,67,61,63,68}
 	BanToken = {84,69,70,60,71,98}
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
-	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x17P6","\x16P7"} 
-	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x176인","\x167인"}
+	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
+	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x186인","\x167인"}
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	JYD = "Set Unit Order To: Junk Yard Dog" 

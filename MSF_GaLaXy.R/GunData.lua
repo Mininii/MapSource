@@ -420,7 +420,7 @@ function Include_GunData(Size,LineNum)
 				{1216,2336},{1984,2336},{1216,1952},{1984,1952}
 			}
 			HTankDiffArr = {2,5,15}
-			HTankDiffArr2 = {nil,1,3}
+			HTankDiffArr2 = {nil,1,1}
 			for i = 0, 4 do
 				for j, k in pairs(HTankZoneArr) do
 					for l, m in pairs(HTankDiffArr) do

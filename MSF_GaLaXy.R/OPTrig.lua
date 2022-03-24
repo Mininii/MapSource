@@ -187,11 +187,11 @@ OPArr = {
 {"\n\n\n\n\n\n\n\n\n\n\x13\x0E★ 마 린 키 우 기 GaLaXy:ReB∞t ★\n\n\n\n\n",20,nil},
 {"\n\n\n\n\n\n\n\n\n\n\x13\x11★ 마 린 키 우 기 GaLaXy:ReB∞t ★\n\n\n\n\n",25,nil},
 {"\n\n\n\n\n\n\n\n\n\n\x13\x16★ 마 린 키 우 기 GaLaXy:ReB∞t ★\n\n\n\n\n",30,nil},
-{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\n\n",35,"staredit\\wav\\GameStart.ogg"},
-{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\n\x13\x043\n",35+(36*2),"staredit\\wav\\Countdown.ogg"},
-{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\n\x13\x042\n",35+(36*3),"staredit\\wav\\Countdown.ogg"},
-{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\n\x13\x041\n",35+(36*4),"staredit\\wav\\Countdown.ogg"},
-{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\n\x13\x04START",35+(36*5),"staredit\\wav\\GameStart2.ogg"}}
+{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert키를 참고해주세요\n\n",35,"staredit\\wav\\GameStart.ogg"},
+{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert키를 참고해주세요\n\x13\x043\n",35+(36*2),"staredit\\wav\\Countdown.ogg"},
+{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert키를 참고해주세요\n\x13\x042\n",35+(36*3),"staredit\\wav\\Countdown.ogg"},
+{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert키를 참고해주세요\n\x13\x041\n",35+(36*4),"staredit\\wav\\Countdown.ogg"},
+{"\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert키를 참고해주세요\n\x13\x04START",35+(36*5),"staredit\\wav\\GameStart2.ogg"}}
 for j, k in pairs(OPArr) do
 	if k[3] == nil then
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,ModeO);CDeaths(FP,AtLeast,k[2],ModeT);},{RotatePlayer({DisplayTextX(k[1],4)},HumanPlayers,FP)})
@@ -201,7 +201,10 @@ for j, k in pairs(OPArr) do
 end
 
 TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnit(2,0,4,Force1),CreateUnit(1,20,4,Force1)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnit(2,0,4,Force1),CreateUnit(1,20,4,Force1),SetResources(Force1,Add,35000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnit(4,0,4,Force1),CreateUnit(3,20,4,Force1),SetResources(Force1,Add,75000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,2)},{CreateUnit(3,0,4,Force1),CreateUnit(2,20,4,Force1),SetResources(Force1,Add,55000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,3)},{CreateUnit(2,0,4,Force1),CreateUnit(1,20,4,Force1),SetResources(Force1,Add,35000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,4)},{CreateUnit(1,0,4,Force1),CreateUnit(1,20,4,Force1),SetResources(Force1,Add,15000,Ore)})
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 for i = 1, 3 do
 	for j = 1, 7 do

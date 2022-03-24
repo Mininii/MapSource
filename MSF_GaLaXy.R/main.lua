@@ -27,7 +27,7 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(1)
+TestSet(0)
 VerText = "\x04Ver. Test"
 FP = P8
 EUDTurbo(FP)
@@ -36,7 +36,6 @@ SetFixedPlayer(FP)
 Enable_PlayerCheck()
 Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
 StartCtrig()
-
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100",1,FP)

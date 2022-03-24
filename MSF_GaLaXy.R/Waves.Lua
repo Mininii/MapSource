@@ -81,4 +81,40 @@ function Waves()
 	TriggerX(FP,{CD(WaveT2,500,AtLeast)},{SetCD(WaveT2,0)},{Preserved})
 	CIfEnd()
 	CIfEnd()
+	TTArr= {28,29,30,31,32,33,34,35}
+	TTCUTable = {
+		{
+			{53,10},{54,15}
+		},
+		{
+			{56,25},{51,15},{104,15}
+		},
+		{
+			{56,25},{51,15},{104,15}
+		},
+		{
+			{56,25},{51,15},{104,15}
+		},
+		{
+			{79,9},{88,9}
+		},
+		{
+			{28,11},{19,25}
+		},
+		{
+			{79,9},{88,9}
+		},
+		{
+			{53,10},{54,15}
+		},
+	}
+	for j, k in pairs(TTCUTable) do
+		CIfOnce(FP,Bring(Force1,AtLeast,1,"Men",TTArr[j]))
+		DoActions2(FP,{RotatePlayer({DisplayTextX("\x13\x04누군가가 \x08적의 \x07영역\x04을 침범하였습니다."),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+		GetLocCenter(TTArr[j]-1,G_CA_X,G_CA_Y)
+		for l, m in pairs(k) do
+			f_TempRepeat(nil,m[1],m[2],nil,nil,"CG",1)
+		end
+		CIfEnd()
+	end
 end
