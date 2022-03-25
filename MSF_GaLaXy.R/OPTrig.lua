@@ -200,11 +200,11 @@ for j, k in pairs(OPArr) do
 	end
 end
 
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnit(2,0,4,Force1),CreateUnit(1,20,4,Force1)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnit(4,0,4,Force1),CreateUnit(3,20,4,Force1),SetResources(Force1,Add,75000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,2)},{CreateUnit(3,0,4,Force1),CreateUnit(2,20,4,Force1),SetResources(Force1,Add,55000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,3)},{CreateUnit(2,0,4,Force1),CreateUnit(1,20,4,Force1),SetResources(Force1,Add,35000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,4)},{CreateUnit(1,0,4,Force1),CreateUnit(1,20,4,Force1),SetResources(Force1,Add,15000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100})})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100}),SetResources(Force1,Add,75000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(2,20,4,Force1,{energy = 100}),SetResources(Force1,Add,55000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,35000,Ore)})
+TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,15000,Ore)})
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 for i = 1, 3 do
 	for j = 1, 7 do
