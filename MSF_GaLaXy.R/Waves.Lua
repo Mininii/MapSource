@@ -59,7 +59,7 @@ function Waves()
 	local WaveT2 = CreateCcode()
 	local DGDeath = CreateCcode()
 	local WarpDeath = CreateCcode()
-	Trigger2X(FP,{CommandLeastAt(189,20)},{AddCD(WarpDeath,1),SetScore(Force1,Add,500000,Kills),AddV(ExRateV,20),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08！ ！ ！ \x04적의 생산기지 \x18Warp Gate\x04를 파괴하였다!\x17 + 500000 P t s, \x1F+ 2.0% Exchange Rate\x08 ！ ！ ！\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+	Trigger2X(FP,{CommandLeastAt(189,20)},{AddCD(WarpDeath,1),SetScore(Force1,Add,500000,Kills),AddV(ExRateV,50),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08！ ！ ！ \x04적의 생산기지 \x18Warp Gate\x04를 파괴하였다!\x17 + 500000 P t s, \x1F+ 5.0% Exchange Rate\x08 ！ ！ ！\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 	
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(WarpDeath,0)},{AddCD(WaveT,1)})
 		CIf(FP,CD(WaveT,3000,AtLeast),SetCD(WaveT,0))

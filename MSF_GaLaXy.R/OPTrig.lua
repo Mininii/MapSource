@@ -208,11 +208,18 @@ TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,4)},{CreateUnitWi
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04Special Thanks to\n\x13\x04\n")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04조합 설명은 Insert키에서 확인 가능합니다.\n\x13\x04\n")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
 CIfEnd()
 
+CIfEnd({SetCp(FP)})
+CIfOnce(FP,{CommandLeastAt(189,20)})
+for i = 1, 3 do
+	for j = 1, 7 do
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]+50/10).."%\n\x13\x07==================\n\x13\x04조합 설명은 Insert키에서 확인 가능합니다.")},HumanPlayers,FP)})
+	end
+end
 CIfEnd()
 
 end
