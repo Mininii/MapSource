@@ -497,7 +497,7 @@ actions = {
 			},
 			}
 	end end end
-	CallTxt = "\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04\n\x13\x04\n\x13\x04ÇöÀç ¸¶¸°Å°¿ì±â \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01¡Ä\x07t \x04¸¦ ÇÃ·¹ÀÌ ÁßÀÔ´Ï´Ù.\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\x13\x0FCreator \x04: GALAXY_BURST\n\x13\x07Á¦ÀÛÀÚ ¿ÀÇÂÄ«Åå \x04: https://open.kakao.com/o/sejFLxdb\n\x13\x04\n\x13\x04Áö¿ø±Ý \x1F2000 Ore\x04¸¦ ¹Þ¾Ò½À´Ï´Ù.\n\x13\x04\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	CallTxt = "\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04\n\x13\x04\x04ÇöÀç ¸¶¸°Å°¿ì±â \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01¡Ä\x07t \x04¸¦ ÇÃ·¹ÀÌ ÁßÀÔ´Ï´Ù.\n\x13\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\x13\x0FCreator \x04: GALAXY_BURST\n\x13\x07Á¦ÀÛÀÚ ¿ÀÇÂÄ«Åå \x04: https://open.kakao.com/o/sejFLxdb\n\x13\x04\n\x13\x04Áö¿ø±Ý \x1F2000 Ore\x04¸¦ ¹Þ¾Ò½À´Ï´Ù.\n\x13\x04\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
 	TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
 		RotatePlayer({
 		PlayWAVX("staredit\\wav\\button3.wav"),

@@ -1,5 +1,4 @@
 function Source()
-	VName = "1.1A"
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
@@ -33,7 +32,7 @@ function Source()
 	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4,5,6}
 	ObPlayers = {P9,P10,P11,P12}
-	MedicTrig = {34,9,5,10}
+	MedicTrig = {34,9,5,11}
 	EXCC_Forward = 0x2FFF
 	
 	CC_Header = CreateVar(FP)

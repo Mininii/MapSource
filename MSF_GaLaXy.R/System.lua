@@ -529,4 +529,9 @@ CIfEnd()
 DoActions(FP,{SetResources(FP,Add,0x12345678,OreAndGas)},1)
 TriggerX(FP,{Deaths(FP,AtLeast,4,10)},{SetMemoryX(0x663ECC, SetTo, 400,0xFFFF);
 })
+TriggerX(FP,{ElapsedTimeX(AtMost,390)},{
+	ModifyUnitEnergy(All,71,FP,64,20),
+	ModifyUnitEnergy(All,63,FP,64,20),
+	ModifyUnitEnergy(All,67,FP,64,20),
+},{Preserved})
 end
