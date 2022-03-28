@@ -514,8 +514,8 @@ actions = {
 		SetCD(NoticeCD,0);SetResources(Force1,Add,2000,Ore)
 	},{Preserved})
 	if Limit == 1 then
-		TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{Preserved})
+		--TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{Preserved})
 	end
 	
 
-end
+end 
