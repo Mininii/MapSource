@@ -198,7 +198,7 @@ function init()
 				table.insert(HondonPatchArr, SetMemoryB(0x6C9858 + FlingyID,SetTo,0))
 				table.insert(HondonPatchArr, SetMemory(0x6C9930 + (FlingyID*4),SetTo,0))
 				table.insert(HondonPatchArr, SetMemoryW(0x6C9C78 + (FlingyID*2),SetTo,4000))
-				table.insert(HondonPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,18000))
+				table.insert(HondonPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,20000))
 			end
 			
 			table.insert( HondonPatchArr,SetMemory(0x656A18+(4*28), SetTo, 0)) -- 듀크최소사거리
@@ -208,6 +208,11 @@ function init()
 			table.insert( HondonPatchArr,SetMemoryW(0x656888+(6*2), SetTo, 8192))
 			table.insert( HondonPatchArr,SetMemoryW(0x6570C8+(6*2), SetTo, 8192))
 			table.insert( HondonPatchArr,SetMemoryW(0x657780+(6*2), SetTo, 8192))
+			table.insert( HondonPatchArr,SetMemory(0x515B9C, SetTo, 64))
+			table.insert( HondonPatchArr,SetMemory(0x515BA0, SetTo, 64))
+			table.insert( HondonPatchArr,SetMemory(0x515BA4, SetTo, 64))
+			table.insert( HondonPatchArr,SetMemory(0x515BA8, SetTo, 64))
+			table.insert( HondonPatchArr,SetMemory(0x515BAC, SetTo, 64))
 			
 			
 			

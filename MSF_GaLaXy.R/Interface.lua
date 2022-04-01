@@ -538,9 +538,9 @@ actions = {
 		for j, k in pairs(MedicFuncArr) do
 			TriggerX(FP,{CV(HiddenHPM,i),DeathsX(CurrentPlayer,Exactly,k,0,0xFF)},{
 				SetMemory(0x6509B0,Subtract,23),
-				SetDeaths(CurrentPlayer,Add,(MedicFuncArr2[j]-(MedicFuncArr2[j]*0.16))*256,0);
+				SetDeaths(CurrentPlayer,Add,(MedicFuncArr2[j]-(MedicFuncArr2[j]*(0.16*i)))*256,0);
 				SetMemory(0x6509B0,Add,22),
-				SetDeathsX(CurrentPlayer,Add,(MedicFuncArr3[j]-(MedicFuncArr3[j]*0.16))*256,0,0xFFFFFF);
+				SetDeathsX(CurrentPlayer,Add,(MedicFuncArr3[j]-(MedicFuncArr3[j]*(0.16*i)))*256,0,0xFFFFFF);
 				SetMemory(0x6509B0,Add,1),
 			},{Preserved})
 		end
@@ -560,8 +560,6 @@ actions = {
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
 	DoActions(FP,{SetDeaths(Force1,SetTo,0,34)})
-	CIfEnd()
-
 	CIfEnd()
 	
 

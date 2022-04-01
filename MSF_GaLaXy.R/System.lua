@@ -443,21 +443,7 @@ Trigger2X(FP,{
 		PlayWAVX("staredit\\wav\\clear2.ogg");
 		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
 	)
-	Trigger2X(FP,{
-		CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),
-		CDeaths(FP,Exactly,i,GMode);
-		CVar(FP,SetPlayers[2],Exactly,k);
-		CDeaths(FP,AtLeast,280,Win);
-	},RotatePlayer({
-		DisplayTextX(ClearText1,4);
-		DisplayTextX(ClearText2,4);
-		DisplayTextX(ClearText4,4);
-		DisplayTextX(ClearText5,4);
-		DisplayTextX(ClearText3,4);
-		PlayWAVX("staredit\\wav\\clear2.ogg");
-		PlayWAVX("staredit\\wav\\clear2.ogg");
-		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
-	)
+	
 end
 end
 function DisplayDeathRank(Player,GM,Sc1,Sc2,Text,GameOverFlag)

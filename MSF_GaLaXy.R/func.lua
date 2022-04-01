@@ -824,6 +824,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		FuncAlloc=FuncAlloc+2
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+		CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+			TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+			TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+			TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
+			},1)
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP,15,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(15,-4,-4,4,4)})
@@ -850,9 +855,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CTrigger(FP,{CVar(FP,HondonMode[2],Exactly,0)},{
+					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920),
+					},1)
+				CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+					},1)
 				CDoActions(FP,{
 					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLoc);
-					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920),
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 					
@@ -880,6 +890,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CDoActions(FP,{
 				TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, 23);
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,128),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,128,0xFFFF),
 				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 				CreateUnit(1,84,1,FP),KillUnit(84,FP)
@@ -893,16 +904,19 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
 			})
 
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,201))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
+				TOrder(Gun_TempSpawnSet1, Force2, 1, Move, 36);
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
 			
-			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
-				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
-				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
-				},1)
 		CIfEnd()
 
 	CSub(FP,Spawn_TempW,1)

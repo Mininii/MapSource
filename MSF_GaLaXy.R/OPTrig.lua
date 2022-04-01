@@ -17,7 +17,7 @@ LoadCp(FP,SelCP)
 HiddenCommand = {50}
 for i = 1, #HiddenCommand do
 	TriggerX(FP,{
-		CD(TestMode,1),
+		CD(LimitX,1),
 		CDeaths(FP,Exactly,0,SelectorT),
 		Deaths(CurrentPlayer,AtLeast,1,HiddenCommand[i]);
 		CDeaths(FP,Exactly,i-1,HiddenMode);},{
@@ -25,7 +25,7 @@ for i = 1, #HiddenCommand do
 end
 
 function KeyInput(Key,Condition,Action)
-	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},Action,{Preserved})	
+	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},{SetDeaths(CurrentPlayer,SetTo,0,Key),Action},{Preserved})	
 	end
 if Limit == 1 then
 	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode)})
@@ -36,10 +36,10 @@ KeyInput(66,{CVar(FP,HondonMode[2],Exactly,0)},{SetCVar(FP,HondonMode[2],SetTo,1
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,1)},{SetCVar(FP,HondonMode[2],SetTo,0),SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(60,{CVar(FP,HiddenHP[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(63,{CVar(FP,HiddenHPM[2],AtMost,4);},{SetCVar(FP,HiddenHPM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
-KeyInput(61,{CVar(FP,HiddenATK[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
-KeyInput(64,{CVar(FP,HiddenATKM[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
-KeyInput(62,{CVar(FP,HiddenPts[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
-KeyInput(65,{CVar(FP,HiddenPtsM[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(61,{CVar(FP,HiddenATK[2],AtMost,4);},{SetCVar(FP,HiddenATK[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(64,{CVar(FP,HiddenATKM[2],AtMost,4);},{SetCVar(FP,HiddenATKM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(62,{CVar(FP,HiddenPts[2],AtMost,4);},{SetCVar(FP,HiddenPts[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(65,{CVar(FP,HiddenPtsM[2],AtMost,4);},{SetCVar(FP,HiddenPtsM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],Subtract,1);SetCVar(FP,HiddenHPM[2],Subtract,1);},{Preserved})
 TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],Subtract,1);SetCVar(FP,HiddenATKM[2],Subtract,1);},{Preserved})
 TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],Subtract,1);SetCVar(FP,HiddenPtsM[2],Subtract,1);},{Preserved})
@@ -58,7 +58,7 @@ DoActions2X(FP,{
 		PlayWAVX(WavFile);
 		DisplayTextX(HiddenFindT,4);
 		DisplayTextX("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);},HumanPlayers,FP)
-})
+},1)
 for i = 2, 0, -1 do
 	TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{Preserved})
 	TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{Preserved})
@@ -67,6 +67,13 @@ for i = 2, 0, -1 do
 	TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{Preserved})
 	TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{Preserved})
 end
+TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x2D*256,0xFF00);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenHPM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x0D*256,0xFF00);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x2D*65536,0xFF0000);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenATKM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x0D*65536,0xFF0000);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x2D*16777216,0xFF000000);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x0D*16777216,0xFF000000);},{Preserved})
+
 f_Movcpy(FP,HiddenModeStrPtr,VArr(HiddenModeT,0),HiddenModeL)
 WavFile = "staredit\\wav\\sel_g.ogg"
 Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{RotatePlayer({PlayWAVX(WavFile);DisplayTextX("HD".._0D,4);},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound);},{Preserved})
@@ -200,7 +207,10 @@ for j, k in pairs(OPArr) do
 end
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 
-NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
+NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),{
+	SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
+	SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
+})
 HiddenCancel = def_sIndex()
 NJump(FP,HiddenCancel,{
 	CVar(FP,HiddenPts[2],Exactly,0);
@@ -234,6 +244,25 @@ for i = 1, 5 do
 		players = {FP},
 		conditions = {
 			Label(0);
+			CVar(FP,HiddenATK[2],Exactly,i);
+		},
+		actions = {		
+			SetMemoryW(0x656EB0+(0*2),Add,70*i);
+			SetMemoryW(0x657678+(0*2),Add,3*i);
+			SetMemoryW(0x656EB0+(1*2),Add,88*i);
+			SetMemoryW(0x657678+(1*2),Add,4*i);
+			SetMemoryW(0x656EB0+(117*2),Add,70*i);
+			SetMemoryW(0x657678+(117*2),Add,6*i);
+			SetMemoryW(0x656EB0+(3*2),Add,150*i);
+			SetMemoryW(0x657678+(3*2),Add,5*i);
+			SetMemoryW(0x656EB0+(13*2),Add,5*i);
+			SetMemoryW(0x657678+(13*2),Add,2*i);
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
 			CVar(FP,HiddenATKM[2],Exactly,i);
 		},
 		actions = {
@@ -244,20 +273,33 @@ for i = 1, 5 do
 			SetMemoryB(0x58D088+(3*46)+7,SetTo,50+(200-(40*i)));
 			SetMemoryB(0x58D088+(4*46)+7,SetTo,50+(200-(40*i)));
 			SetMemoryB(0x58D088+(5*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(6*46)+7,SetTo,50+(200-(40*i)));
 		}
 	}
 	
 end
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-	},
-	actions = {
-		
-	}
-}
 
+
+CIf(FP,CV(HondonMode,1),{
+	SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 미니맵
+	SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8컬러
+})
+DoActions2X(FP,HondonPatchArr)
+PtrV = CreateVar(FP)
+
+CMov(FP,PtrV,19025)
+CWhile(FP,CV(PtrV,19025 + (84*1699),AtMost))
+
+CTrigger(FP,{TTMemoryX(_Add(PtrV,19),NotSame,58,0xFF)},{
+	TSetMemoryX(_Add(PtrV,8),SetTo,127*65536,0xFF0000),
+	TSetMemoryX(_Add(PtrV,9),SetTo,0*16777216,0xFF000000),
+	TSetMemory(_Add(PtrV,13),SetTo,20000),
+	TSetMemoryX(_Add(PtrV,18),SetTo,4000,0xFFFF),
+	},1)
+CAdd(FP,PtrV,84)
+CWhileEnd()
+
+CIfEnd()
 NIfEnd()
 NJumpEnd(FP,HiddenCancel)
 
@@ -271,21 +313,7 @@ for i = 1, 3 do
 		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
-CIf(FP,CV(HondonMode,1))
-PtrV = CreateVar(FP)
 
-CMov(FP,PtrV,19025)
-CWhile(FP,CV(PtrV,19025 + (84*1699),AtMost))
-
-CTrigger(FP,{TTMemoryX(_Add(PtrV,19),NotSame,58,0xFF)},{
-	TSetMemoryX(_Add(PtrV,8),SetTo,127*65536,0xFF0000),
-	TSetMemory(_Add(PtrV,13),SetTo,20000),
-	TSetMemoryX(_Add(PtrV,18),SetTo,4000,0xFFFF),
-	},1)
-CAdd(FP,PtrV,84)
-CWhileEnd()
-
-CIfEnd()
 
 CIfEnd()
 

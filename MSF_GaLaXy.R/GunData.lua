@@ -350,7 +350,8 @@ function Include_GunData(Size,LineNum)
 		TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
-		DoActions(FP,SetMemory(0x6CA010, SetTo, 640))
+		TriggerX(FP,{CV(HondonMode,0)},{SetMemory(0x6CA010, SetTo, 640)},{Preserved})
+		TriggerX(FP,{CV(HondonMode,1,AtLeast)},{SetMemory(0x6CA010, SetTo, 20000)},{Preserved})
 		HiveCUTable2 = {
 			{ -- Index 4
 				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{104,25,4},{48,15,4},{19,{5,10,20},5}
@@ -565,27 +566,31 @@ function Include_GunData(Size,LineNum)
 
 
 	CIf_GCase(201)
-	DoActions(FP,{Simple_SetLoc(15,1600-256,2144-256,1600+256,2144+256)})
+	DoActions(FP,{Simple_SetLoc(35,1600-256,2144-256,1600+256,2144+256)})
 	TriggerX(FP,{Gun_Line(8,AtMost,62)},{
-		Order(88,FP,16,Move,16),
-		Order(21,FP,16,Move,16),
-		SetMemoryX(0x666458, SetTo, 391,0xFFFF),CreateUnit(1,33,16,FP),
+		Order(88,FP,36,Move,36),
+		Order(21,FP,36,Move,36),
+		SetMemoryX(0x666458, SetTo, 391,0xFFFF),CreateUnit(1,33,36,FP),
 		KillUnit(33,FP),
 		SetMemoryX(0x666458, SetTo, 546,0xFFFF)
-	})
+	},Preserved)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,10)})
 	Shape8130 = {{4032, 3392},{3392, 3072},{3392, 3712},{2752, 3392}}
 	Shape8151 = {{3072, 3232},{3072, 3552},{3712, 3552},{3712, 3232}}
 
 	
-	for i = 1, 4 do
+	for i = 1, 4 do 
+		CMov(FP,G_CA_X,Shape8130[i][1])
+		CMov(FP,G_CA_Y,Shape8130[i][2])
 		DoActions(FP,{Simple_SetLoc(0,Shape8130[i][1]-128,Shape8130[i][2]-128,Shape8130[i][1]+128,Shape8130[i][2]+128),CreateUnit(1,84,1,FP),KillUnit(84,FP)})
-		TriggerX(FP,{Gun_Line(8,AtMost,39)},{CreateUnitWithProperties(1,21,1,FP,{invincible = true}),Order(21,FP,1,Move,16)},{Preserved})
+		f_TempRepeat({Gun_Line(8,AtMost,39)},21,1,201,nil,"CG")
+		CMov(FP,G_CA_X,Shape8151[i][1])
+		CMov(FP,G_CA_Y,Shape8151[i][2])
 		DoActions(FP,{Simple_SetLoc(0,Shape8151[i][1]-128,Shape8151[i][2]-128,Shape8151[i][1]+128,Shape8151[i][2]+128),CreateUnit(1,72,1,FP),KillUnit(72,FP)})
-		TriggerX(FP,{Gun_Line(8,AtMost,39)},{CreateUnitWithProperties(1,88,1,FP,{invincible = true}),Order(88,FP,1,Move,16)},{Preserved})
+		f_TempRepeat({Gun_Line(8,AtMost,39)},88,1,201,nil,"CG")
 	end
-	TriggerX(FP,{Gun_Line(8,AtLeast,63),Gun_Line(8,AtMost,68)},{SetCp(FP),RunAIScriptAt(JYD,16)},{Preserved})
-	TriggerX(FP,{Gun_Line(8,Exactly,69)},{Order(88,FP,16,Attack,4),Order(21,FP,16,Attack,4),CreateUnit(5,84,16,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,63),Gun_Line(8,AtMost,68)},{SetCp(FP),RunAIScriptAt(JYD,36)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,Exactly,69)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{Preserved})
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
