@@ -134,8 +134,10 @@ function init()
 				SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 			end
 			PUnitR = {0,1,16,20,100,7,125,124}
+			HiddenHPMPatchArr = {}
 			for j, k in pairs(PUnitR) do
 				SetUnitAdvFlag(k,0x4000,0x4000)
+				table.insert(HiddenHPMPatchArr,SetMemoryX(0x664080 + (k*4),SetTo,0x80,0x80))
 			end
 			
 			
@@ -185,6 +187,14 @@ function init()
 				table.insert(HondonPatchArr, SetMemoryW(0x6C9C78 + (FlingyID*2),SetTo,4000))
 				table.insert(HondonPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,18000))
 			end
+			
+			table.insert( HondonPatchArr,SetMemory(0x656A18+(4*28), SetTo, 0)) -- 듀크최소사거리
+			table.insert( HondonPatchArr,SetMemoryW(0x656EB0+(28*2), SetTo, 627)) -- 듀크공
+			table.insert( HondonPatchArr,SetMemoryB(0x656FB8+27, SetTo, 1))
+			table.insert( HondonPatchArr,SetMemoryB(0x656FB8+28, SetTo, 1))
+			table.insert( HondonPatchArr,SetMemoryW(0x656888+(6*2), SetTo, 8192))
+			table.insert( HondonPatchArr,SetMemoryW(0x6570C8+(6*2), SetTo, 8192))
+			table.insert( HondonPatchArr,SetMemoryW(0x657780+(6*2), SetTo, 8192))
 			
 			
 			

@@ -251,16 +251,26 @@ for j = 1, 4 do
 end
 NIf(FP,Never())
 	NJumpXEnd(FP,MedicTrigJump)
-		DoActions(FP,{
-			RemoveUnit(MedicTrig[1],i),
-			RemoveUnit(MedicTrig[2],i),
-			RemoveUnit(MedicTrig[3],i),
-			RemoveUnit(MedicTrig[4],i),
-			ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
-			ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
-			ModifyUnitShields(All,"Men",i,"Anywhere",100),
-			ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
-		})
+	TriggerX(FP,{CV(HiddenHPM,0)},{
+		RemoveUnit(MedicTrig[1],i),
+		RemoveUnit(MedicTrig[2],i),
+		RemoveUnit(MedicTrig[3],i),
+		RemoveUnit(MedicTrig[4],i),
+		ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+		ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+		ModifyUnitShields(All,"Men",i,"Anywhere",100),
+		ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
+	},{Preserved})
+	TriggerX(FP,{CV(HiddenHPM,1,AtLeast)},{
+		RemoveUnit(MedicTrig[1],i),
+		RemoveUnit(MedicTrig[2],i),
+		RemoveUnit(MedicTrig[3],i),
+		RemoveUnit(MedicTrig[4],i),
+		SetDeaths(i,SetTo,1,34);
+		SetCD(CUnitFlag,1)
+	},{Preserved})
+
+		
 --				TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
 --					ModifyUnitShields(All,"Men",i,"Anywhere",0),
 --					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
@@ -516,6 +526,43 @@ actions = {
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{Preserved})
 	end
+
+
+	CIf(FP,{CV(HiddenHPM,1,AtLeast),CD(CUnitFlag,1,AtLeast)},{SetCD(CUnitFlag,0)})
+	FuncJump = def_sIndex()
+	CJump(FP,FuncJump)
+	MedicFunc = SetCallForward()
+	SetCall(FP)
+	CAdd(FP,0x6509B0,6)
+	for i = 1, 5 do
+		for j, k in pairs(MedicFuncArr) do
+			TriggerX(FP,{CV(HiddenHPM,i),DeathsX(CurrentPlayer,Exactly,k,0,0xFF)},{
+				SetMemory(0x6509B0,Subtract,23),
+				SetDeaths(CurrentPlayer,Add,(MedicFuncArr2[j]-(MedicFuncArr2[j]*0.16))*256,0);
+				SetMemory(0x6509B0,Add,22),
+				SetDeathsX(CurrentPlayer,Add,(MedicFuncArr3[j]-(MedicFuncArr3[j]*0.16))*256,0,0xFFFFFF);
+				SetMemory(0x6509B0,Add,1),
+			},{Preserved})
+		end
+	end
+
+	CSub(FP,0x6509B0,6)
+	SetCallEnd()
+	CJumpEnd(FP,FuncJump)
+	CMov(FP,0x6509B0,19025+19)
+	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+	for i = 0, 6 do
+		CallTriggerX(FP,MedicFunc,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF),Deaths(i,AtLeast,1,34)})
+	end
+	
+
+	CAdd(FP,0x6509B0,84)
+	CWhileEnd()
+	CMov(FP,0x6509B0,FP)
+	DoActions(FP,{SetDeaths(Force1,SetTo,0,34)})
+	CIfEnd()
+
+	CIfEnd()
 	
 
 end

@@ -14,14 +14,13 @@ CIfX(FP,Never())
 LoadCp(FP,SelCP)
 
 
-HiddenCommand = {51,50,52,50,52,50,50,62,61,61}
+HiddenCommand = {50}
 for i = 1, #HiddenCommand do
 	TriggerX(FP,{
 		CD(TestMode,1),
 		CDeaths(FP,Exactly,0,SelectorT),
 		Deaths(CurrentPlayer,AtLeast,1,HiddenCommand[i]);
-		CDeaths(FP,Exactly,i-1,HiddenMode);
-		CDeaths(FP,AtMost,0,KeyToggle);},{
+		CDeaths(FP,Exactly,i-1,HiddenMode);},{
 			SetCDeaths(FP,Add,1,HiddenMode);})
 end
 
@@ -31,7 +30,7 @@ function KeyInput(Key,Condition,Action)
 if Limit == 1 then
 	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode)})
 end
-TriggerX(FP,{CD(TestMode,1)},{SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetCDeaths(FP,SetTo,(36*5),ModeT),SetResources(Force1,Add,666666666,Ore)})
+TriggerX(FP,{CD(TestMode,1)},{SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),SetCDeaths(FP,SetTo,30+(36*5),ModeT),SetResources(Force1,Add,666666666,Ore)})
 CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,SelectorT),})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,0)},{SetCVar(FP,HondonMode[2],SetTo,1),SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,1)},{SetCVar(FP,HondonMode[2],SetTo,0),SetCDeaths(FP,SetTo,1,ToggleSound)})
@@ -199,25 +198,102 @@ for j, k in pairs(OPArr) do
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,ModeO);CDeaths(FP,AtLeast,k[2],ModeT);},{RotatePlayer({DisplayTextX(k[1],4),PlayWAVX(k[3])},HumanPlayers,FP)})
 	end
 end
-
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100})})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100}),SetResources(Force1,Add,75000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(2,20,4,Force1,{energy = 100}),SetResources(Force1,Add,55000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,35000,Ore)})
-TriggerX(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT);CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,15000,Ore)})
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
+
+NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
+HiddenCancel = def_sIndex()
+NJump(FP,HiddenCancel,{
+	CVar(FP,HiddenPts[2],Exactly,0);
+	CVar(FP,HiddenHP[2],Exactly,0);
+	CVar(FP,HiddenATK[2],Exactly,0);
+	CVar(FP,HiddenPtsM[2],Exactly,0);
+	CVar(FP,HiddenHPM[2],Exactly,0);
+	CVar(FP,HiddenATKM[2],Exactly,0);
+	CVar(FP,HondonMode[2],Exactly,0);
+},{SetCDeaths(FP,SetTo,0,HiddenMode);})
+Trigger2X(FP,{CV(HiddenHPM,1,AtLeast)},HiddenHPMPatchArr)
+for i = 1, 5 do
+	TriggerX(FP,{
+		CVar(FP,HiddenHP[2],Exactly,i);
+	},{
+		SetMemory(0x662350 + (4*0), Add, i*3500*256);
+		SetMemory(0x662350 + (4*16), Add, i*9000*256);
+		SetMemory(0x662350 + (4*7), Add, (i*2000*256)-1);
+		SetMemory(0x662350 + (4*100), Add, (i*10000*256)-1);
+		SetMemory(0x662350 + (4*124), Add, (i*10000*256)-1);
+		SetMemory(0x662350 + (4*125), Add, (i*10000*256)-1);
+		SetMemory(0x662350 + (4*20), Add, i*6500*256);
+		SetMemoryW(0x660E00 + (2*124), Add, i*10000);
+		SetMemoryW(0x660E00 + (2*125), Add, i*10000);
+	})
+	
+	TriggerX(FP,{CVar(FP,HiddenPts[2],Exactly,i);},{SetCVar(FP,HPointVar[2],Add,100*i);})
+	TriggerX(FP,{CVar(FP,HiddenPtsM[2],Exactly,i);},{SetCVar(FP,HPointVar[2],SetTo,100-(16*i));})
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CVar(FP,HiddenATKM[2],Exactly,i);
+		},
+		actions = {
+			SetCVar(FP,AtkUpMax[2],SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(0*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(1*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(2*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(3*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(4*46)+7,SetTo,50+(200-(40*i)));
+			SetMemoryB(0x58D088+(5*46)+7,SetTo,50+(200-(40*i)));
+		}
+	}
+	
+end
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+	},
+	actions = {
+		
+	}
+}
+
+NIfEnd()
+NJumpEnd(FP,HiddenCancel)
+
+TriggerX(FP,{},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100})})
+TriggerX(FP,{CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100}),SetResources(Force1,Add,75000,Ore)})
+TriggerX(FP,{CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(2,20,4,Force1,{energy = 100}),SetResources(Force1,Add,55000,Ore)})
+TriggerX(FP,{CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,35000,Ore)})
+TriggerX(FP,{CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,15000,Ore)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04조합 설명은 Insert키에서 확인 가능합니다.\n\x13\x04\n")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
+CIf(FP,CV(HondonMode,1))
+PtrV = CreateVar(FP)
+
+CMov(FP,PtrV,19025)
+CWhile(FP,CV(PtrV,19025 + (84*1699),AtMost))
+
+CTrigger(FP,{TTMemoryX(_Add(PtrV,19),NotSame,58,0xFF)},{
+	TSetMemoryX(_Add(PtrV,8),SetTo,127*65536,0xFF0000),
+	TSetMemory(_Add(PtrV,13),SetTo,20000),
+	TSetMemoryX(_Add(PtrV,18),SetTo,4000,0xFFFF),
+	},1)
+CAdd(FP,PtrV,84)
+CWhileEnd()
+
+CIfEnd()
+
 CIfEnd()
 
 CIfEnd({SetCp(FP)})
-CIfOnce(FP,{CommandLeastAt(189,20)})
+CIfOnce(FP,{Switch("Switch 201",Set),CommandLeastAt(189,20)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].."\n\x13\x04"..j.."인 \x04플레이 중입니다.\n\x13\x0E환전률 : "..(ExArr[i][j]+50/10).."%\n\x13\x07==================\n\x13\x04조합 설명은 Insert키에서 확인 가능합니다.")},HumanPlayers,FP)})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]+50/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP)})
 	end
 end
 CIfEnd()

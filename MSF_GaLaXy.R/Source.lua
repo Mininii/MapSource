@@ -7,7 +7,6 @@ function Source()
 	HMCost = 10000
 	GMCost = 25000
 	NeCost = 20000
-	HPointFactor = 20
 	ExRate = 15
 	EasyEx1P = 170
 	HDEx1P = 195
@@ -38,6 +37,9 @@ function Source()
 	CC_Header = CreateVar(FP)
 	ObEff = 84
 	nilunit = 181
+	MedicFuncArr = {0,16,7,100,124,125,20}
+	MedicFuncArr2 = {3500,9000,2000,10000,10000,10000,6500}
+	MedicFuncArr3 = {0,0,0,0,10000,10000,0}
 	ZergGndUArr = {51,53,54,48,104}
 	HondonFlingyArr = {88,73,72,176,4,188,187,49,40,45,38,44,43,37,46,47,191,15,8,14,1,5,12,11,7,13,0,2,9,41,190,115,74,81,186}
 
@@ -148,6 +150,8 @@ DifLeaderBoard = {
 	NextNosBGM = CreateCcode()
 	BackupCp = CreateVar(FP)
 	AtkUpMax = CreateVar2(FP,nil,nil,255)
+	
+	CUnitFlag = CreateCcode()
 	UpgradeAv = CreateVar(FP)
 	HiddenHP = CreateVar(FP)
 	HiddenATK = CreateVar(FP)
@@ -157,7 +161,7 @@ DifLeaderBoard = {
 	HiddenPtsM = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
 	HiddenModeStrPtr = CreateVar(FP)
-	HPointVar = CreateVar2(FP,nil,nil,1)
+	HPointVar = CreateVar2(FP,nil,nil,100)
 	ifUpisAtk = CreateCcode()
 	ButtonSound = CreateCcode()
 	NoticeCD = CreateCcode()

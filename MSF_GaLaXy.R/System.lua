@@ -168,7 +168,12 @@ function Gun_System()
 	NElseX()
 	f_Mod(FP,HPoint,65536)
 	NIfXEnd()
+	CIfX(FP,{CV(HiddenPts,0),CV(HiddenPtsM,0)})
 	CMov(FP,HPoint10,_Mul(HPoint,100))
+	CElseX()
+	CMov(FP,HPoint10,_Mul(HPoint,HPointVar))
+	CIfXEnd()
+	
 	local HPointT = CreateVArr(4,FP)
 	ItoDec(FP,HPoint10,VArr(HPointT,0),2,0x1F,0)
 

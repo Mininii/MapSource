@@ -898,11 +898,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
 			
-			--CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			--	TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
-			--	TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
-			--	TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
-			--	},1)
+			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
+				},1)
 		CIfEnd()
 
 	CSub(FP,Spawn_TempW,1)
