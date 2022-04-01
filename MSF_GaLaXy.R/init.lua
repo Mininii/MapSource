@@ -129,10 +129,23 @@ function init()
 			function SetToUnitDef(UnitID,Value)
 				table.insert(PatchArr,SetMemoryB(0x65FEC8 + UnitID,SetTo,Value))
 			end
+			function DefTypePatch(UnitID,Value)
+			table.insert(PatchArr,SetMemoryB(0x662180 + UnitID,SetTo,Value))
+			end
+		
+			function WeaponTypePatch(WeaponID,Value)
+			table.insert(PatchArr,SetMemoryB(0x657258 + WeaponID,SetTo,Value))
+			end
 			for i = 0, 227 do
+				DefTypePatch(i,0) -- 방어타입 전부 0으로 설정
 				SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
 				SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 			end
+			for i = 0, 129 do
+				WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정
+			end
+			WeaponTypePatch(27,1) -- 아덴시즈
+			WeaponTypePatch(84,4) -- 스톰
 			PUnitR = {0,1,16,20,100,7,125,124}
 			HiddenHPMPatchArr = {}
 			for j, k in pairs(PUnitR) do
@@ -209,27 +222,27 @@ function init()
 			
 			Trigger { -- 퍼센트 데미지 세팅, 버튼셋
 				players = {FP},
-				actions = {
-					SetMemory(0x515B88,SetTo,256);---------크기 0
-					SetMemory(0x515B8C,SetTo,256);---------크기 1
-					SetMemory(0x515B90,SetTo,256);---------크기 2
-					SetMemory(0x515B94,SetTo,256);---------크기 3
-					SetMemory(0x515B98,SetTo,256);---------크기 4
-					SetMemory(0x515B9C,SetTo,256);---------크기 5
-					SetMemory(0x515BA0,SetTo,256);---------크기 6
-					SetMemory(0x515BA4,SetTo,256);---------크기 7
-					SetMemory(0x515BA8,SetTo,256);---------크기 8
-					SetMemory(0x515BAC,SetTo,256);---------크기 9
-					SetMemory(0x515BB0,SetTo,256);
-					SetMemory(0x515BB4,SetTo,256);
-					SetMemory(0x515BB8,SetTo,256);
-					SetMemory(0x515BBC,SetTo,256);
-					SetMemory(0x515BC0,SetTo,256);
-					SetMemory(0x515BC4,SetTo,256);
-					SetMemory(0x515BC8,SetTo,256);
-					SetMemory(0x515BCC,SetTo,256);
-					SetMemory(0x515BD0,SetTo,256);
-					SetMemory(0x515BD4,SetTo,256);		
+				actions = {	                    
+					SetMemory(0x515B88,SetTo,256);
+                    SetMemory(0x515B8C,SetTo,256);
+                    SetMemory(0x515B90,SetTo,256);
+                    SetMemory(0x515B94,SetTo,256);
+                    SetMemory(0x515B98,SetTo,256);
+                    SetMemory(0x515B9C,SetTo,128);
+                    SetMemory(0x515BA0,SetTo,128);
+                    SetMemory(0x515BA4,SetTo,128);
+                    SetMemory(0x515BA8,SetTo,128);
+                    SetMemory(0x515BAC,SetTo,128);
+                    SetMemory(0x515BB0,SetTo,256);
+                    SetMemory(0x515BB4,SetTo,256);
+                    SetMemory(0x515BB8,SetTo,256);
+                    SetMemory(0x515BBC,SetTo,256);
+                    SetMemory(0x515BC0,SetTo,256);
+                    SetMemory(0x515BC4,SetTo,256);
+                    SetMemory(0x515BC8,SetTo,256);
+                    SetMemory(0x515BCC,SetTo,256);
+                    SetMemory(0x515BD0,SetTo,256);
+                    SetMemory(0x515BD4,SetTo,256);        
 					--SetMemory(0x5188AC, SetTo, 5339096);
 					--SetMemory(0x518C9C, SetTo, 5339096);		
 					--SetMemory(0x5188A8, SetTo, 6);
@@ -446,6 +459,7 @@ function init()
 			end
 			UTbl_27 = CreateCText(FP,"\x04쥬림 \x11거대 \x06골렘")
 			UTbl_61 = CreateCText(FP,"\x04쥬림 \x06산맥의 \x11수호자")
+			UTbl_68 = CreateCText(FP,"\x07쥬림 \x06산맥의 \x11왕")
 			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			CMov(FP,CurrentUID,0)
 			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
@@ -462,6 +476,8 @@ function init()
 			f_Memcpy(FP,CurUNamePtr,_TMem(Arr(UTbl_27[3],0),"X","X",1),UTbl_27[2])
 			CElseIfX(CV(CurrentUID,61))
 			f_Memcpy(FP,CurUNamePtr,_TMem(Arr(UTbl_61[3],0),"X","X",1),UTbl_61[2])
+			CElseIfX(CV(CurrentUID,68))
+			f_Memcpy(FP,CurUNamePtr,_TMem(Arr(UTbl_68[3],0),"X","X",1),UTbl_68[2])
 			CElseX()
 			f_Memcpy(FP,CurUNamePtr,tblAdrr,0x40)
 			CIfXEnd()
