@@ -17,8 +17,8 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.6"
-Limit = 1
+VerText = "\x04Ver. 3.7"
+Limit = 0
 RedMode = 0
 FP = P6
 TestStartToBYD = 0
@@ -5502,29 +5502,33 @@ PosLoad = CreateVar(FP)
 		CMov(FP,CPosY,_Div(_Mov(PosLoad,0xFFF0000),_Mov(65536)),nil,0xFFF)
 		CMov(FP,ExcuteLaunch,_Div(_Mov(PosLoad,0xF0000000),_Mov(0x10000000)),nil,0xF)
 		Simple_SetLocX(FP,23,_Sub(CPosX,32*9),_Sub(CPosY,32*9),_Add(CPosX,32*9),_Add(CPosY,32*9))
-		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
-		Call_LoadCp()
+		DoActions(FP,KillUnitAt(1, 181, 24, P12))
 		
 		CIf(FP,{
+			CDeaths(P6,AtMost,0,EVMode);
 			CVar(P6,SetPlayers[2],Exactly,1);
 			CDeaths(P6, AtLeast, 2, Difficulty);
 			Bring(Force2, AtLeast, 6, "Men", 24);
 			Bring(Force1, AtMost, 2, "Factories", 24);
 		})
+		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
 		for i = 0, 4 do
 		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,2,PaneltyP[i+1])},{Preserved})
 		end
 		CIfEnd()
 		CIf(FP,{
+			CDeaths(P6,AtMost,0,EVMode);
 			CVar(P6,SetPlayers[2],AtLeast,2);
 			CDeaths(P6, AtLeast, 2, Difficulty);
 			Bring(Force2, AtLeast, 6, "Men", 24);
 			Bring(Force1, AtMost, 2, "Factories", 24);
 		})
+		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
 		for i = 0, 4 do
 		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,1,PaneltyP[i+1])},{Preserved})
 		end
 		CIfEnd()
+		Call_LoadCp()
 		Trigger { -- No comment (00F60EE3)
 			players = {FP},
 			conditions = {
@@ -11753,6 +11757,7 @@ Trigger { -- No comment (00F60EE3)
 	players = {CPlayer},
 	conditions = {
 		Label(0);
+		CDeaths(P6,AtMost,0,EVMode);
 		CDeaths(P6, AtLeast, 2, Difficulty);
 		Bring(Force2, AtLeast, 6, "Men", LocationID+1);
 		Bring(Force1, AtMost, 5, "Factories", LocationID+1);
@@ -12008,6 +12013,7 @@ Trigger { -- No comment (00F60EE3)
 	players = {CPlayer},
 	conditions = {
 		Label(0);
+		CDeaths(P6,AtMost,0,EVMode);
 		CDeaths(P6, AtLeast, 2, Difficulty);
 		Bring(Force2, AtLeast, 6, "Men", LocationID+1);
 		Bring(Force1, AtMost, 5, "Factories", LocationID+1);
