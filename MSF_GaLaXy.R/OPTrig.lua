@@ -265,20 +265,20 @@ for i = 1, 5 do
 			CVar(FP,HiddenATKM[2],Exactly,i);
 		},
 		actions = {
-			SetCVar(FP,AtkUpMax[2],SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(0*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(1*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(2*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(3*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(4*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(5*46)+7,SetTo,50+(200-(40*i)));
-			SetMemoryB(0x58D088+(6*46)+7,SetTo,50+(200-(40*i)));
+			SetCVar(FP,AtkUpMax[2],SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(0*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(1*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(2*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(3*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(4*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(5*46)+7,SetTo,100+(150-(30*i)));
+			SetMemoryB(0x58D088+(6*46)+7,SetTo,100+(150-(30*i)));
 		}
 	}
 	
 end
 
-
+DoActions(FP,{ModifyUnitHitPoints(All,125,AllPlayers,64,100),ModifyUnitHitPoints(All,125,P10,64,100)})
 CIf(FP,CV(HondonMode,1),{
 	SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ¹Ì´Ï¸Ê
 	SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ÄÃ·¯
