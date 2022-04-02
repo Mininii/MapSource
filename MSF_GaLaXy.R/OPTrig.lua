@@ -17,7 +17,6 @@ LoadCp(FP,SelCP)
 HiddenCommand = {50}
 for i = 1, #HiddenCommand do
 	TriggerX(FP,{
-		CD(LimitX,1),
 		CDeaths(FP,Exactly,0,SelectorT),
 		Deaths(CurrentPlayer,AtLeast,1,HiddenCommand[i]);
 		CDeaths(FP,Exactly,i-1,HiddenMode);},{
@@ -321,7 +320,7 @@ CIfEnd({SetCp(FP)})
 CIfOnce(FP,{Switch("Switch 201",Set),CommandLeastAt(189,20)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]+50/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP)})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP)})
 	end
 end
 CIfEnd()
