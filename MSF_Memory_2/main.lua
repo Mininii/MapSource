@@ -1,7 +1,7 @@
 
 
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
--- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\St	ormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ end
 
 
 TestSet(0)
-VerText = "\x04Ver. Beta 0.3"
+VerText = "\x04Ver. Beta 0.4"
 FP = P8
 nilunit = 181
 EUDTurbo(FP)

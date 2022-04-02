@@ -1126,8 +1126,6 @@ local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 G_CA_CenterX = CreateVar(FP)
 G_CA_CenterY = CreateVar(FP)
 G_CA_Player = CreateVar(FP)
-local TRepeatX = CreateVar(FP)
-local TRepeatY = CreateVar(FP)
 local LDrX,LDrY = CreateVars(2,FP)
 local G_CA_X = CreateVar(FP)
 local G_CA_Y = CreateVar(FP)
@@ -1159,26 +1157,26 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		
 
 		CIf(FP,{CDeaths(FP,AtMost,0,CA_Repeat_Check)},{
-			SetCVar(FP,G_CA_TempTable[1][2],SetTo,0);
-			SetCVar(FP,G_CA_TempTable[11][2],SetTo,0);
-			SetCVar(FP,G_CA_TempTable[12][2],SetTo,0);
-			SetCVar(FP,G_CA_TempTable[13][2],SetTo,0);
-			SetCVar(FP,G_CA_TempTable[14][2],SetTo,0);
-		}) -- TempRepeat로 생성했을 경우
-		
-		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,221)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV1)},1)
-		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
-		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,223)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV3)},1)
-		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,224)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV4)},1)
-		CMov(FP,G_CA_TempTable[1],Gun_TempSpawnSet1)
-		CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,0x7FFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,0),TSetCVar(FP,CreatePlayer[2],SetTo,G_CA_Player,0xFF)},1)
-		CIf(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
-			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
-			CMov(FP,G_CA_TempTable[8],TRepeatX)
-			CMov(FP,G_CA_TempTable[9],TRepeatY)
-			CMov(FP,G_CA_X,TRepeatX)
-			CMov(FP,G_CA_Y,TRepeatY)
-		CIfEnd()
+				SetCVar(FP,G_CA_TempTable[1][2],SetTo,0);
+				SetCVar(FP,G_CA_TempTable[11][2],SetTo,0);
+				SetCVar(FP,G_CA_TempTable[12][2],SetTo,0);
+				SetCVar(FP,G_CA_TempTable[13][2],SetTo,0);
+				SetCVar(FP,G_CA_TempTable[14][2],SetTo,0);
+			}) -- TempRepeat로 생성했을 경우
+			
+			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,221)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV1)},1)
+			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
+			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,223)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV3)},1)
+			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,224)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV4)},1)
+			CMov(FP,G_CA_TempTable[1],Gun_TempSpawnSet1)
+			CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,0x7FFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,0),TSetCVar(FP,CreatePlayer[2],SetTo,G_CA_Player,0xFF)},1)
+			CIf(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
+				Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
+				CMov(FP,G_CA_TempTable[8],TRepeatX)
+				CMov(FP,G_CA_TempTable[9],TRepeatY)
+				CMov(FP,G_CA_X,TRepeatX)
+				CMov(FP,G_CA_Y,TRepeatY)
+			CIfEnd()
 		CIfEnd()
 		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- 생성플레이어가 설정되지 않았을경우
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,4)},{Preserved})
