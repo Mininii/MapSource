@@ -241,6 +241,7 @@ HPRegenTable = {64}
 
     EXCC_ClearCalc()
     NJumpXEnd(FP,WhiteList)
+    EXCC_BreakCalc({CD(Theorist,1)})
     
 	CSub(FP,0x6509B0,6)
     
@@ -390,7 +391,7 @@ HPRegenTable = {64}
     
     WhiteList2 = def_sIndex()
     for j, i in pairs(MarID) do
-        NJumpX(FP,WhiteList2,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
+        NJumpX(FP,WhiteList2,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF),CD(Theorist,0)})
     end
 
     ReviveSkill = def_sIndex()
@@ -627,7 +628,7 @@ HPRegenTable = {64}
     SETimer = CreateCcode()
     TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
 
-    function SwarmSet(LVTable,CUTable,Player)
+    function SwarmSet(LVTable,CUTable)
         local LvLeast
         local LVMost
         if type(LVTable)=="table" then
@@ -920,6 +921,7 @@ for i = 0, 3 do
     DoActionsX(FP,{SetCD(WBreak,100)})
     CWhile(FP,{PlayerCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i),CD(WBreak,1,AtLeast)},SubCD(WBreak,1))
     f_Lengthdir(FP,f_CRandNum(384,320),_Mod(_Rand(),360),T_X,T_Y)
+    f_Div(FP,T_Y,2)
     Simple_SetLocX(FP,9,T_X,T_Y,T_X,T_Y,{Simple_CalcLoc(9,2048,2048,2048,2048)})
     DoActions(FP,{MoveUnit(1,"Men",i+4,36+i,10)})
 --    NJumpXEnd(FP,L_Gun_Move)
@@ -944,6 +946,30 @@ for i = 0, 3 do
 
     CWhileEnd()
 end
+
+CIfOnce(FP,CD(Theorist,1))
+TheoristPatchArr = {}
+for i = 1, 4 do
+    table.insert(TheoristPatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),Add,MarAtk)) -- 기본공격력
+    table.insert(TheoristPatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),Add,MarAtkFactor)) -- 추가공격력
+end
+
+DoActions2X(FP,{
+RemoveUnit(203,AllPlayers),
+SetMemoryW(0x656EB0+(0*2),Add,15);
+SetMemoryW(0x657678+(0*2),Add,1);
+SetMemoryW(0x656EB0+(1*2),Add,50);
+SetMemoryW(0x657678+(1*2),Add,3);TheoristPatchArr,
+SetV(Level,50),
+SetV(AtkCondTmp,250),
+SetV(HPCondTmp,250),
+})
+TheoristTxt = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\n\n\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n \x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\n\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+	
+
+
+CIfEnd()
 
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})

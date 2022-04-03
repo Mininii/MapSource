@@ -2,7 +2,15 @@ function LeaderBoardF()
     
 	local LeaderBoardT = CreateCcode()
     CIf(FP,{CD(OPJump,1)})
-		
+	TriggerX(FP,ElapsedTime(AtMost,(60*3)-1),{
+		SetMemoryW(0x656380+(14*2),SetTo,255),
+		SetMemoryW(0x656380+(17*2),SetTo,255)
+	},{Preserved}) -- 스웜인스 사용제한
+	TriggerX(FP,ElapsedTime(AtLeast,(60*3)),{
+		SetMemoryW(0x656380+(14*2),SetTo,100),
+		SetMemoryW(0x656380+(17*2),SetTo,75)
+	},{Preserved}) -- 스웜인스 사용제한
+	
     for i = 0, 3 do
         TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			SetCp(4+i),RunAIScriptAt(JYD,2+i)--32

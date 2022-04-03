@@ -64,6 +64,8 @@ function Operator_Trig()
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 3 do
         CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
+		DoActions(FP,SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),1)
+		TriggerX(FP,{ElapsedTime(AtLeast,60)},{SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,0)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*181)+(4*i),DtX) -- MSQC val Recive. 181
 		CTrigger(FP,{CV(DtX,2500,AtMost)},{SetV(Dt,DtX)},1)
@@ -215,15 +217,18 @@ CMov(FP,_Ccode(FP,CountTmp),count)
 
 
 
-
+CIfX(FP,{CD(Theorist,0)})
 CIfX(FP,{CV(Level,49,AtMost)},{print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04："..string.rep("\x0D",GetStrSize(0,"．")).."０"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
 	f_Mul(FP,CurExpTmp,CurEXP,100)
 	f_Div(FP,CurExpTmp,MaxEXP)
 	CMov(FP,_Ccode(FP,ExpTmp),CurExpTmp)
 CElseX({SetCD(ExpTmp,100),print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：００"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
 CIfXEnd()
+CElseX({print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04"..string.rep("\x0D",GetStrSize(0,"◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：．０．０％ ")).."◈ \x06０００\x04 ◈ \x04００００"))})
 
-CIf(FP,{CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})
+CIfXEnd()
+
+CIf(FP,{CD(Theorist,0),CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})
 local StimUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.10\x04 돌파, \x1B원격 스팀팩\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 local ReviveUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.50\x04 돌파, \x07소생 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 local SkillUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.40\x04 돌파, \x08공격 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -352,11 +357,11 @@ Print13_NumSetC(TimeTmp,0x6415C8,60000*10,0x1)
 Print13_NumSetC(TimeTmp,0x6415C8,60000,0x1000000)
 Print13_NumSetC(TimeTmp,0x6415D0,10000,0x1000000)
 Print13_NumSetC(TimeTmp,0x6415D4,1000,0x10000)
-Print13_NumSetC(LevelTmp,0x6415E8,10,0x10000)
-Print13_NumSetC(LevelTmp,0x6415EC,1,0x100)
-Print13_NumSetC(ExpTmp,0x64160C,100,0x10000)
-Print13_NumSetC(ExpTmp,0x641610,10,0x100)
-Print13_NumSetC(ExpTmp,0x641614,1,0x1000000)
+Print13_NumSetC(LevelTmp,0x6415E8,10,0x10000,1)
+Print13_NumSetC(LevelTmp,0x6415EC,1,0x100,1)
+Print13_NumSetC(ExpTmp,0x64160C,100,0x10000,1)
+Print13_NumSetC(ExpTmp,0x641610,10,0x100,1)
+Print13_NumSetC(ExpTmp,0x641614,1,0x1000000,1)
 Print13_NumSetC(RedNumberTmp,0x641620,100,0x1000000)
 Print13_NumSetC(RedNumberTmp,0x641624,10,0x10000)
 Print13_NumSetC(RedNumberTmp,0x641628,1,0x100)

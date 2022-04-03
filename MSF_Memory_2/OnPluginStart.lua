@@ -162,6 +162,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 		WeaponTypePatch(k,2)
 	end
 	WeaponTypePatch(84,2)--½ºÅèÆÛµô
+	WeaponTypePatch(6,2)--¸¶ÀÎÆÛµô
 	for i = 63, 70 do
 		UnitEnable(i) -- ¿ø°Ý½ºÆÀÆÑ
 	end
@@ -224,6 +225,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(75) -- ¸ÖÆ¼È¦µå
 	UnitEnable(60)
 	UnitEnable(62)
+	UnitEnable(23) -- ÀÌ·ÐÄ¡¸ðµå ON
 	UnitEnable(61)
 	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8º¡
 	for i= 0,3 do

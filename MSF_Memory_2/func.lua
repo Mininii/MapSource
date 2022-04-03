@@ -435,29 +435,16 @@ function CV(V,Value,Type)
 end
 
 
-function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask)
+function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask,flag)
+	local X = {}
+
+	if flag ~= nil then X=CD(Theorist,1); end
 	for i = 3, 0, -1 do
 		Trigger {
 			players = {FP},
 			conditions = {
 				Label();
-
-				CDeaths(FP,AtLeast,(2^i)*DivNum,Ptr);
-			},
-			actions = {
-				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
-				SetCDeaths(FP,Subtract,(2^i)*DivNum,Ptr);
-				PreserveTrigger();
-			}
-		}
-	end
-end
-
-function Print13_NumSetC2(Ptr,Ptr2,DivNum,Mask)
-	for i = 3, 0, -1 do
-		Trigger {
-			players = {FP},
-			conditions = {
+				X;
 				CDeaths(FP,AtLeast,(2^i)*DivNum,Ptr);
 			},
 			actions = {
@@ -1278,7 +1265,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			end
 			CIfXEnd()
 
-			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,1,1)},1)
+			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1)})
+			CDoActions(FP,{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,1,1),
+			Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
+			Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),})
+
+			CIfEnd()
 			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2)})
 				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
 				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536))),
@@ -1318,11 +1310,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),RotatePlayer({CenterView(1)},HumanPlayers,FP),
+					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),
 					TCreateUnitWithProperties(1,33,1,CurrentOP,{energy = 100}),
 					TKillUnit(33,CurrentOP);
 					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
 				})
+				DoActions(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
