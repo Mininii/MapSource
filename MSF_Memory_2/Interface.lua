@@ -176,7 +176,7 @@ Trigger { -- 조합 루미아마린
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- 자동환전
+	Trigger {
 		players = {i},
 		conditions = {
 			Label();
