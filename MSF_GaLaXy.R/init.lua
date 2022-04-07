@@ -14,10 +14,18 @@ function init()
 			table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
 			table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
 		end
-		table.insert(GiveT,Simple_SetLoc(0,3634,182,3634+1,182+1))
+		if X2_Mode == 1 then
+			table.insert(GiveT,Simple_SetLoc(0,7237,370,7357,400))
+		else
+			table.insert(GiveT,Simple_SetLoc(0,3634,182,3634+1,182+1))
+		end
 		for i = 0, 6 do
 		table.insert(GiveT,GiveUnits(2, 125, P12, 1, i))
-		table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+		if X2_Mode == 1 then
+			table.insert(GiveT,Simple_CalcLoc(0,0,32*2,0,32*2))
+		else
+			table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
+		end
 		end
 		DoActions(FP,GiveT)
 		for i = 0, 6 do
@@ -170,11 +178,17 @@ function init()
 			UnitEnable(48)
 			UnitEnable(52)
 			UnitEnable(49)
-
-			UnitEnableX(2,1000,nil,3,nil)
-			UnitEnableX(0,NMCost,nil,4,nil)
-			UnitEnableX(32,NMCost,nil,4,nil)
-			UnitEnableX(1,NMCost+HMCost+GMCost,nil,12)
+			if X2_Mode == 1 then
+				UnitEnableX(2,1000,nil,1,nil)
+				UnitEnableX(0,NMCost,nil,1,nil)
+				UnitEnableX(32,NMCost,nil,1,nil)
+				UnitEnableX(1,NMCost+HMCost+GMCost,nil,1)
+			else
+				UnitEnableX(2,1000,nil,3,nil)
+				UnitEnableX(0,NMCost,nil,4,nil)
+				UnitEnableX(32,NMCost,nil,4,nil)
+				UnitEnableX(1,NMCost+HMCost+GMCost,nil,12)
+			end
 			UnitEnableX(7,500)
 			UnitEnableX(125,5000)
 			UnitEnableX(124,2000)
@@ -268,8 +282,8 @@ function init()
 
 			
 	T_YY = 2022
-	T_MM = 02
-	T_DD = 19
+	T_MM = 04
+	T_DD = 20
 	T_HH = 12
 	function InputTesterID(Player,ID)
 		Trigger {

@@ -24,7 +24,13 @@ function Install_CallTriggers()
 	-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 	f_Replace = SetCallForward()
 	SetCall(FP)
-		CIfX(FP,Memory(0x628438,AtLeast,1)) -- 캔낫체크.
+	if X2_Mode == 1 then
+		X2_Jump = def_sIndex()
+		X2_Hero = CreateCcode()
+		DoActionsX(FP,SetCD(X2_Hero,0))
+		NJumpXEnd(FP,X2_Jump)
+	end
+		NIfX(FP,Memory(0x628438,AtLeast,1)) -- 캔낫체크.
 		f_SaveCp()
 		CMov(FP,Gun_LV,0)
 		f_Read(FP,BackupCP,CPos)
@@ -77,10 +83,13 @@ function Install_CallTriggers()
 		
 		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
 		f_LoadCp()
-		CElseX()
+		if X2_Mode == 1 then
+			NJumpX(FP,X2_Jump,{CV(RepHeroIndex,104,AtMost),CD(X2_Hero,0,AtMost)},{AddCD(X2_Hero,1)})
+		end
+		NElseX()
 		f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
-		CIfXEnd()
+		NIfXEnd()
 	SetCallEnd()
 	
 Call_OCU = SetCallForward()

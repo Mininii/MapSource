@@ -61,9 +61,15 @@ function Operator_Trig()
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,219,0,0xFF)},{MoveCp(Subtract,0x3C)})
 
 			for i = 1, 11 do
-			TriggerX(FP,{
-				DeathsX(CurrentPlayer,AtLeast,3744+(32*(i-1)),0,0xFFFF),
-				DeathsX(CurrentPlayer,AtMost,3744+(32*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{Preserved})
+				if X2_Mode == 1 then
+					TriggerX(FP,{
+						DeathsX(CurrentPlayer,AtLeast,(3744*2)+(64*(i-1)),0,0xFFFF),
+						DeathsX(CurrentPlayer,AtMost,(3744*2)+(64*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{Preserved})
+				else
+					TriggerX(FP,{
+						DeathsX(CurrentPlayer,AtLeast,3744+(32*(i-1)),0,0xFFFF),
+						DeathsX(CurrentPlayer,AtMost,3744+(32*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{Preserved})
+				end
 			end
 		CIfEnd()
 	CIfEnd()

@@ -2,7 +2,12 @@ function Gun_System()
 	CanC = CreateCcode()
 	CanCT = CreateCcode()
 	DefeatCC = CreateCcode()
-	CIf(FP,{Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
+	if X2_Mode == 1 then
+		X2Cancel = Never()
+	else
+		X2Cancel = nil
+	end
+	CIf(FP,{X2Cancel,Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 
 	CanDisplayT = {}
 	CanDisplayT2 = {}
@@ -249,7 +254,12 @@ CWhile(FP,Bring(FP,AtLeast,1,193,64),{
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,193,8,"Anywhere",FP),Order(193,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
 CIf(FP,{Bring(FP,AtLeast,1,193,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,193,FP,4,8),KillUnitAt(1,193,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
-HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
+if X2_Mode == 1 then
+	HealZoneSpawnArr = {{3552*2, 160*2},{3552*2, 416*2},{3872*2, 416*2},{3872*2, 160*2}}
+else
+	HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
+end
+
 for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,2)},77,2,nil,nil,k)
 	f_TempRepeat({CD(GMode,2)},78,2,nil,nil,k)
@@ -261,7 +271,11 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},88,15,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
-CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+if X2_Mode==1 then
+	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712*2,288*2},1,32,FP,nil,{KillUnit(84,FP)},1)
+else
+	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+end
 WaveArr = {
 "staredit\\wav\\zealot1.ogg",
 "staredit\\wav\\zealot2.ogg",
@@ -298,7 +312,11 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},21,15,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
-CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+if X2_Mode==1 then
+	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712*2,288*2},1,32,FP,nil,{KillUnit(84,FP)},1)
+else
+	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+end
 WaveArr = {
 "sound\\Zerg\\BUGGUY\\ZBGPss00.wav",
 "sound\\Zerg\\BUGGUY\\ZBGPss01.wav",

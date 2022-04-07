@@ -27,8 +27,13 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(0)
-VName = "1.7"
+TestSet(1)
+X2_Mode = 1
+if X2_Mode == 1 then
+	VName = "1.7_2X"
+else
+	VName = "1.7"
+end
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
@@ -45,7 +50,7 @@ CJump(AllPlayers,init_func)
 	Install_GetCLoc(FP,0,nilunit)
 	Include_Conv_CPosXY(FP)
 	Include_CRandNum(FP)
-	Include_G_CA_Library(4,0x600,8)
+	Include_G_CA_Library(4,0x600,32)
 	G3_Install_Shape()
 	G_CAPlot2(G_CAPlot_Shape_InputTable)
 	Install_Load_CAPlot()
@@ -59,7 +64,7 @@ DoActions2(AllPlayers,PatchArrPrsv)
 --DoActionsX(FP,{SetCtrigX("X",IndexAlloc,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0),SetCtrig1X("X",IndexAlloc,CAddr("CEPD",2),0,SetTo,EPD(0x58D6F8)),SetCtrigX("X",IndexAlloc,0x15C,0,SetTo,"X",IndexAlloc,0x0,0,1)})
 CIfOnce(FP)
 CIfEnd()
-NIf(FP)
+NIf(FP,ElapsedTime(AtLeast,3))
 	OPTrig()
 	onInit_EUD2()
 	Gun_System()

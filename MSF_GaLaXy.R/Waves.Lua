@@ -1,7 +1,11 @@
 function Waves()
 	CIf(FP,Switch("Switch 201",Set))
 	--ElapsedTimeX(Comparison, Time)
-	CallXYArr = {{3552,160},{3872,160},{3552,416},{3872,416}}
+	if X2_Mode == 1 then
+		CallXYArr = {{3552*2,160*2},{3872*2,160*2},{3552*2,416*2},{3872*2,416*2}}
+	else
+		CallXYArr = {{3552,160},{3872,160},{3552,416},{3872,416}}
+	end
 	
 	function CallSet(Time,CUTable,TimerFlag,NoticeFlag)
 		if TimerFlag==1 then
@@ -63,15 +67,21 @@ function Waves()
 	
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(WarpDeath,0)},{AddCD(WaveT,1)})
 		CIf(FP,CD(WaveT,3000,AtLeast),SetCD(WaveT,0))
-		f_TempRepeat({ElapsedTimeX(AtLeast,1200)},61,1,nil,FP,{432,688},1)
-		f_TempRepeat({ElapsedTimeX(AtLeast,1800),CD(GMode,2,AtLeast)},68,1,nil,FP,{432,688},1)
-		f_TempRepeat({ElapsedTimeX(AtLeast,2400),CD(GMode,2,AtLeast)},102,1,nil,FP,{432,688},1)
-		f_TempRepeat({ElapsedTimeX(AtMost,600)},54,15,nil,FP,{432,688})
-		f_TempRepeat({ElapsedTimeX(AtMost,600)},53,15,nil,FP,{432,688})
-		f_TempRepeat({ElapsedTimeX(AtMost,600)},55,25,nil,FP,{432,688})
-		f_TempRepeat({ElapsedTimeX(AtLeast,600)},48,10,nil,FP,{432,688})
-		f_TempRepeat({ElapsedTimeX(AtLeast,600)},104,10,nil,FP,{432,688})
-		f_TempRepeat({ElapsedTimeX(AtLeast,600)},51,15,nil,FP,{432,688})
+		if X2_Mode == 1 then
+			DG1XY = {432*2,688*2}
+		else
+			DG1XY = {432,688}
+		end
+
+		f_TempRepeat({ElapsedTimeX(AtLeast,1200)},61,1,nil,FP,DG1XY,1)
+		f_TempRepeat({ElapsedTimeX(AtLeast,1800),CD(GMode,2,AtLeast)},68,1,nil,FP,DG1XY,1)
+		f_TempRepeat({ElapsedTimeX(AtLeast,2400),CD(GMode,2,AtLeast)},102,1,nil,FP,DG1XY,1)
+		f_TempRepeat({ElapsedTimeX(AtMost,600)},54,15,nil,FP,DG1XY)
+		f_TempRepeat({ElapsedTimeX(AtMost,600)},53,15,nil,FP,DG1XY)
+		f_TempRepeat({ElapsedTimeX(AtMost,600)},55,25,nil,FP,DG1XY)
+		f_TempRepeat({ElapsedTimeX(AtLeast,600)},48,10,nil,FP,DG1XY)
+		f_TempRepeat({ElapsedTimeX(AtLeast,600)},104,10,nil,FP,DG1XY)
+		f_TempRepeat({ElapsedTimeX(AtLeast,600)},51,15,nil,FP,DG1XY)
 		CIfEnd()
 	CIfEnd()
 	
@@ -80,12 +90,19 @@ function Waves()
 
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(DGDeath,1,AtMost)},{AddCD(WaveT2,1)})
 		CIf(FP,CD(WaveT2,250,AtLeast),SetCD(WaveT2,0))
-		f_TempRepeat({CD(DGDeath,0)},37,7,nil,FP,{3360,272})
-		f_TempRepeat({CD(DGDeath,0)},38,7,nil,FP,{3360,272})
-		f_TempRepeat({CD(DGDeath,0)},40,15,nil,FP,{3360,272})
-		f_TempRepeat({CD(DGDeath,1)},54,10,nil,FP,{352,1856})
-		f_TempRepeat({CD(DGDeath,1)},53,10,nil,FP,{352,1856})
-		f_TempRepeat({CD(DGDeath,1)},48,10,nil,FP,{352,1856})
+		if X2_Mode == 1 then
+			DG1XY2 = {3360*2,272*2}
+			DG1XY3 = {352*2,1856*2}
+		else
+			DG1XY2 = {3360,272}
+			DG1XY3 = {352,1856}
+		end
+		f_TempRepeat({CD(DGDeath,0)},37,7,nil,FP,DG1XY2)
+		f_TempRepeat({CD(DGDeath,0)},38,7,nil,FP,DG1XY2)
+		f_TempRepeat({CD(DGDeath,0)},40,15,nil,FP,DG1XY2)
+		f_TempRepeat({CD(DGDeath,1)},54,10,nil,FP,DG1XY3)
+		f_TempRepeat({CD(DGDeath,1)},53,10,nil,FP,DG1XY3)
+		f_TempRepeat({CD(DGDeath,1)},48,10,nil,FP,DG1XY3)
 		CIfEnd()
 	CIfEnd()
 	CIfEnd()

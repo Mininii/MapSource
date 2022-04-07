@@ -797,6 +797,11 @@ G_CA_X = CreateVar(FP)
 G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
+if X2_Mode==1 then
+	X2_XYArr = {
+		{-128,-128},{128,-128},{-128,128},{128,128},
+	}
+end
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
@@ -808,12 +813,28 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,11+i)},{Preserved})
 		end
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
-		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
+		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
+
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
-		CElseIfX(CVar(FP,TRepeatX[2],Exactly,0x80000000))
-		Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
+
+		CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
+		if X2_Mode == 1 then
+			CIfX(FP,Never())
+			for i = 0, 3 do
+				CElseIfX({CVar(FP,TRepeatX[2],Exactly,0x80000000-i)})
+				Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,Simple_CalcLoc(0,X2_XYArr[i+1][1],X2_XYArr[i+1][2],X2_XYArr[i+1][1],X2_XYArr[i+1][2]))
+			end
+			CIfXEnd()
+		else
+			Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
+		end
+
 		CElseX()
+		if X2_Mode == 1 then
+			Simple_SetLocX(FP,0,3712*2,288*2,3712*2,288*2)
+		else
 			Simple_SetLocX(FP,0,3712,288,3712,288)
+		end
 		CIfXEnd()
 		CIfEnd()
 
@@ -923,16 +944,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 CWhileEnd()
 CMov(FP,RepeatType,0)
 SetCallEnd()
-
 function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags)
 	if Owner == nil then Owner = 0xFFFFFFFF end
 	if Type == nil then Type = 0 end
 	local SetX = 0 
 	local SetY = 0
-	if CenterXY == nil then 
-		SetX = 0xFFFFFFFF
-		SetY = 0xFFFFFFFF
-	elseif type(CenterXY) == "table" then
+	if type(CenterXY) == "table" then
 		SetX = CenterXY[1]
 		SetY = CenterXY[2]
 	elseif CenterXY == "CG" then
@@ -941,17 +958,58 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags)
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
-	
+	if X2_Mode == 1 then
+		if SetX == 0xFFFFFFFF then
+			for i =0, 3 do
+				CallTriggerX(FP,Set_Repeat,Condition,{
+					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
+					SetCVar(FP,RepeatType[2],SetTo,Type),
+					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+					SetCVar(FP,TRepeatX[2],SetTo,SetX-i),
+					SetCVar(FP,TRepeatY[2],SetTo,SetY-i),
+				},Flags)
+			end
 
-	CallTriggerX(FP,Set_Repeat,Condition,{
-		SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-		SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
-		SetCVar(FP,Repeat_TempV[2],SetTo,Number),
-		SetCVar(FP,RepeatType[2],SetTo,Type),
-		SetCVar(FP,CreatePlayer[2],SetTo,Owner),
-		SetCVar(FP,TRepeatX[2],SetTo,SetX),
-		SetCVar(FP,TRepeatY[2],SetTo,SetY),
-	},Flags)
+		elseif SetX == 0x80000000 then
+			for i =0, 3 do
+				CallTriggerX(FP,Set_Repeat,Condition,{
+					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
+					SetCVar(FP,RepeatType[2],SetTo,Type),
+					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+					SetCVar(FP,TRepeatX[2],SetTo,SetX-i),
+					SetCVar(FP,TRepeatY[2],SetTo,SetY-i),
+				},Flags)
+			end
+		else
+			for i =0, 3 do
+				CallTriggerX(FP,Set_Repeat,Condition,{
+					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
+					SetCVar(FP,RepeatType[2],SetTo,Type),
+					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+					SetCVar(FP,TRepeatX[2],SetTo,SetX+X2_XYArr[i+1][1]),
+					SetCVar(FP,TRepeatY[2],SetTo,SetY+X2_XYArr[i+1][2]),
+				},Flags)
+			end
+
+		end
+	else
+		CallTriggerX(FP,Set_Repeat,Condition,{
+			SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+			SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+			SetCVar(FP,Repeat_TempV[2],SetTo,Number),
+			SetCVar(FP,RepeatType[2],SetTo,Type),
+			SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+			SetCVar(FP,TRepeatX[2],SetTo,SetX),
+			SetCVar(FP,TRepeatY[2],SetTo,SetY),
+		},Flags)
+	end
+
 end
 
 function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
@@ -1123,7 +1181,11 @@ local G_CA_Launch = CreateCcode()
 function CA_Repeat()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
-	CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
+	if X2_Mode == 1 then 
+		CIfX(FP,{CVar(FP,CA[8],AtMost,4096*2),CVar(FP,CA[9],AtMost,4096*2)})
+	else
+		CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
+	end
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})
 	CIfXEnd()

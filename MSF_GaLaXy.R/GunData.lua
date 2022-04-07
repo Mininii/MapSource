@@ -316,17 +316,31 @@ function Include_GunData(Size,LineNum)
 				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{3,10,20},3},{104,25,4},{48,15,4},{28,{2,5,11},5}
 			},
 		}
-		HiveLinkTable = {
-			{ -- Index 1
-				{2432,672},{2400,288},
-			},
-			{ -- Index 2
-				{1760,608},{2208,768},
-			},
-			{ -- Index 3
-				{1312,832},{1056,960},
-			},
-		}
+		if X2_Mode == 1 then
+			HiveLinkTable = {
+				{ -- Index 1
+					{2432*2,672*2},{2400*2,288*2},
+				},
+				{ -- Index 2
+					{1760*2,608*2},{2208*2,768*2},
+				},
+				{ -- Index 3
+					{1312*2,832*2},{1056*2,960*2},
+				},
+			}
+		else
+			HiveLinkTable = {
+				{ -- Index 1
+					{2432,672},{2400,288},
+				},
+				{ -- Index 2
+					{1760,608},{2208,768},
+				},
+				{ -- Index 3
+					{1312,832},{1056,960},
+				},
+			}
+		end
 		for j, k in pairs(HiveCUTable) do
 			for l,m in pairs(k) do
 				if type(m[2]) == "table" then
@@ -346,8 +360,13 @@ function Include_GunData(Size,LineNum)
 			end
 		end
 		CIfEnd()
-		PSIHiveShape = CS_ConnectPathX({3   ,{480, 1600},{1152, 1216},{448, 864}},148)
-		TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
+		if X2_Mode == 1 then
+			PSIHiveShape = CS_ConnectPathX({3   ,{480*2, 1600*2},{1152*2, 1216*2},{448*2, 864*2}},148)
+			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
+		else
+			PSIHiveShape = CS_ConnectPathX({3   ,{480, 1600},{1152, 1216},{448, 864}},148)
+			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
+		end
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
 		TriggerX(FP,{CV(HondonMode,0)},{SetMemory(0x6CA010, SetTo, 640)},{Preserved})
@@ -417,9 +436,15 @@ function Include_GunData(Size,LineNum)
 
 
 		CIf(FP,{Gun_Line(3,AtLeast,19),Gun_Line(3,AtMost,22)})
+		if X2_Mode == 1 then
+			HTankZoneArr = {
+				{1216*2,2336*2},{1984*2,2336*2},{1216*2,1952*2},{1984*2,1952*2}
+			}
+		else
 			HTankZoneArr = {
 				{1216,2336},{1984,2336},{1216,1952},{1984,1952}
 			}
+		end
 			HTankDiffArr = {2,5,nil}
 			HTankDiffArr2 = {nil,nil,3}
 			for i = 0, 4 do
@@ -452,7 +477,11 @@ function Include_GunData(Size,LineNum)
 		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{Preserved})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
-			PySuShape = {4,{-6*32,0},{0,-3*32},{6*32,0},{0,3*32}}
+			if X2_Mode==1 then
+				PySuShape = {4,{-6*32*2,0},{0,-3*32*2},{6*32*2,0},{0,3*32*2}}
+			else
+				PySuShape = {4,{-6*32,0},{0,-3*32},{6*32,0},{0,3*32}}
+			end
 			CSPlot(PySuShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(PySuShape,FP,84,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(84,FP)},1)
@@ -485,11 +514,21 @@ function Include_GunData(Size,LineNum)
 	IonCUTable = {1,6,25}
 	IonCUTable2 = {28,27,27}
 	IonCUTable3 = {75,19,61}
-	IonShape =  CS_ConnectPathX({4   ,{2816, 1280},{2272, 1568},{2880, 1888},{3456, 1600}},148)
-	IonShape2 = CS_ConnectPathX({4   ,{2880, 1456},{2656, 1568},{2880, 1680},{3120, 1568}},96,1)
+	
+	if X2_Mode==1 then
+		IonShape =  CS_ConnectPathX({4   ,{2816*2, 1280*2},{2272*2, 1568*2},{2880*2, 1888*2},{3456*2, 1600*2}},148)
+		IonShape2 = CS_ConnectPathX({4   ,{2880*2, 1456*2},{2656*2, 1568*2},{2880*2, 1680*2},{3120*2, 1568*2}},96,1)
+	else
+		IonShape =  CS_ConnectPathX({4   ,{2816, 1280},{2272, 1568},{2880, 1888},{3456, 1600}},148)
+		IonShape2 = CS_ConnectPathX({4   ,{2880, 1456},{2656, 1568},{2880, 1680},{3120, 1568}},96,1)
+	end
 
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
+		if X2_Mode == 1 then
+			 
+		else 
 			CAdd(FP,G_CA_Y,64)
+		end
 			for i = 0, 1 do
 				for l = 1, 3 do
 					f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},68,IonCUTable[l],nil,nil,"CG")
@@ -523,9 +562,21 @@ function Include_GunData(Size,LineNum)
 	ChryShape1 = CSMakePolygon(4,192,0,PlotSizeCalc(4,2),0)
 	ChryShape2 = CSMakePolygon(4,164,0,PlotSizeCalc(4,3),0)
 	ChryShape3 = CSMakePolygon(4,96,0,PlotSizeCalc(4,5),0)
-	CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,1)},nil,1)
-	CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,2)},nil,1)
-	CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,3)},nil,1)
+	if X2_Mode==1 then
+		X2_XYArr2 = {
+			{-256,-256},{256,-256},{-256,256},{256,256},
+		}
+
+		for i = 0, 3 do
+			CSPlot(CS_MoveXY(ChryShape1,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,1)},nil,1)
+			CSPlot(CS_MoveXY(ChryShape2,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,2)},nil,1)
+			CSPlot(CS_MoveXY(ChryShape3,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,3)},nil,1)
+		end
+	else
+		CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,1)},nil,1)
+		CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,2)},nil,1)
+		CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,3)},nil,1)
+	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
 	TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(ChryCcode,1)},{Preserved})
@@ -568,7 +619,12 @@ function Include_GunData(Size,LineNum)
 
 
 	CIf_GCase(201)
-	DoActions(FP,{Simple_SetLoc(35,1600-256,2144-256,1600+256,2144+256)})
+	if X2_Mode == 1 then
+		DoActions(FP,{Simple_SetLoc(35,(1600-256)*2,(2144-256)*2,(1600+256)*2,(2144+256)*2)})
+	else
+		DoActions(FP,{Simple_SetLoc(35,1600-256,2144-256,1600+256,2144+256)})
+	end
+	
 	TriggerX(FP,{Gun_Line(8,AtMost,62)},{
 		Order(88,FP,36,Move,36),
 		Order(21,FP,36,Move,36),
@@ -577,8 +633,14 @@ function Include_GunData(Size,LineNum)
 		SetMemoryX(0x666458, SetTo, 546,0xFFFF)
 	},Preserved)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,10)})
-	Shape8130 = {{4032, 3392},{3392, 3072},{3392, 3712},{2752, 3392}}
-	Shape8151 = {{3072, 3232},{3072, 3552},{3712, 3552},{3712, 3232}}
+	if X2_Mode == 1 then
+		Shape8130 = {{4032*2, 3392*2},{3392*2, 3072*2},{3392*2, 3712*2},{2752*2, 3392*2}}
+		Shape8151 = {{3072*2, 3232*2},{3072*2, 3552*2},{3712*2, 3552*2},{3712*2, 3232*2}}
+	else
+		Shape8130 = {{4032, 3392},{3392, 3072},{3392, 3712},{2752, 3392}}
+		Shape8151 = {{3072, 3232},{3072, 3552},{3712, 3552},{3712, 3232}}
+	end
+	
 
 	
 	for i = 1, 4 do 
@@ -604,12 +666,32 @@ function Include_GunData(Size,LineNum)
 			FaciCUTable = {3,6,11}
 			FaciCUTable2 = {7,15,30}
 			FaciCUTable3 = {1,3,10}
-			FaciPosArr = {
-				{2336,2144},{864,2144},{1600,2528},{1600,1760}
-			}
-			CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
-			CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
-			CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+			if X2_Mode == 1 then
+				FaciPosArr = {
+					{2336*2,2144*2},{864*2,2144*2},{1600*2,2528*2},{1600*2,1760*2}
+				}
+			else
+				FaciPosArr = {
+					{2336,2144},{864,2144},{1600,2528},{1600,1760}
+				}
+			end
+			
+	if X2_Mode==1 then
+		X2_XYArr2 = {
+			{-256,-256},{256,-256},{-256,256},{256,256},
+		}
+
+		for i = 0, 3 do
+			CSPlot(CS_MoveXY(ChryShape1,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
+			CSPlot(CS_MoveXY(ChryShape2,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
+			CSPlot(CS_MoveXY(ChryShape3,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+		end
+	else
+		CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
+		CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
+		CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+	end
+	
 			for l = 1, 3 do
 				for j, k in pairs(FaciPosArr) do
 					f_TempRepeat({Gun_Line(9,Exactly,0),Gun_Line(8,AtMost,3),CD(GMode,l)},28,FaciCUTable[l],187,nil,k)
@@ -640,9 +722,17 @@ function Include_GunData(Size,LineNum)
 
 	CIf_GCase(148)
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,400)})
-		OvrmLinkArr = {
-			{4000,2016},{3968,2752}
-		}
+		if X2_Mode == 1 then
+
+			OvrmLinkArr = {
+				{4000*2,2016*2},{3968*2,2752*2}
+			}
+		else
+
+			OvrmLinkArr = {
+				{4000,2016},{3968,2752}
+			}
+		end
 		OverLinkCUTable = {
 			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{17,{2,4,10}},{10,{2,4,10}}},
 			{{48,{25,15,10}},{56,25},{19,{3,6,15}}},
@@ -666,9 +756,17 @@ function Include_GunData(Size,LineNum)
 				end
 			end
 		end
-		OvrmLinkArr2 = {
-			{2464,2720},{3200,2304}
-		}
+		if X2_Mode == 1 then
+
+			OvrmLinkArr2 = {
+				{2464*2,2720*2},{3200*2,2304*2}
+			}
+		else
+
+			OvrmLinkArr2 = {
+				{2464,2720},{3200,2304}
+			}
+		end
 		OverLinkCUTable2 = {
 			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{77,{2,4,10}},{78,{2,4,10}}},
 			{{48,{25,15,10}},{56,25},{75,{2,4,10}},{79,{2,4,10}}},
@@ -698,20 +796,53 @@ function Include_GunData(Size,LineNum)
 		DoActionsX(FP,{Gun_SetLine(9,Subtract,1)})
 		CIf(FP,Gun_Line(9,AtMost,0),{Gun_SetLine(9,Add,50)})
 			OvrMineActArr = {}
-			OvrMinePosArr = {
-				{3776,2368},{3712,2144},{3904,2752}
-			}
+			if X2_Mode == 1 then
+	
+				X2_MineXYArr = {
+					{-64,-64},{64,-64},{-64,64},{64,64},
+				}
+				OvrMinePosArr = {
+					{3776*2,2368*2},{3712*2,2144*2},{3904*2,2752*2}
+				}
+			else
+	
+				OvrMinePosArr = {
+					{3776,2368},{3712,2144},{3904,2752}
+				}
+			end
 			for j, k in pairs(OvrMinePosArr) do
-				table.insert(OvrMineActArr,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
-				table.insert(OvrMineActArr,CreateUnit(1,13,1,FP))
+				if X2_Mode == 1 then
+					for i = 0, 3 do
+						table.insert(OvrMineActArr,Simple_SetLoc(0,k[1]+X2_MineXYArr[i+1][1],k[2]+X2_MineXYArr[i+1][2],k[1]+X2_MineXYArr[i+1][1],k[2]+X2_MineXYArr[i+1][2]))
+						table.insert(OvrMineActArr,CreateUnit(1,13,1,FP))
+					end
+				else
+					table.insert(OvrMineActArr,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
+					table.insert(OvrMineActArr,CreateUnit(1,13,1,FP))
+				end
 			end
 			OvrMineActArr2 = {}
+			if X2_Mode == 1 then
+	
+			OvrMinePosArr2 = {
+				{2848*2,2432*2},{2752*2,2720*2},{2944*2,2624*2}
+			}
+			else
+	
 			OvrMinePosArr2 = {
 				{2848,2432},{2752,2720},{2944,2624}
 			}
+			end
 			for j, k in pairs(OvrMinePosArr2) do
-				table.insert(OvrMineActArr2,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
-				table.insert(OvrMineActArr2,CreateUnit(1,13,1,FP))
+				if X2_Mode == 1 then
+					for i = 0, 3 do
+						table.insert(OvrMineActArr2,Simple_SetLoc(0,k[1]+X2_MineXYArr[i+1][1],k[2]+X2_MineXYArr[i+1][2],k[1]+X2_MineXYArr[i+1][1],k[2]+X2_MineXYArr[i+1][2]))
+						table.insert(OvrMineActArr2,CreateUnit(1,13,1,FP))
+					end
+				else
+					table.insert(OvrMineActArr2,Simple_SetLoc(0,k[1],k[2],k[1],k[2]))
+					table.insert(OvrMineActArr2,CreateUnit(1,13,1,FP))
+				end
 			end
 			Trigger2X(FP,{Gun_Line(3,Exactly,1)},OvrMineActArr,{Preserved})
 			Trigger2X(FP,{Gun_Line(3,Exactly,2)},OvrMineActArr2,{Preserved})
@@ -729,10 +860,19 @@ function Include_GunData(Size,LineNum)
 	for i = 0 ,5 do
 		for l=1, 3 do
 			if i%2 == 0 then
-				G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64,2048},FP,1)
+				
+				if X2_Mode==1 then
+					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64*2,2048*2},FP,1)
+				else
+					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64,2048},FP,1)
+				end
 	
 			else
-				G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048,4096},FP,1)
+				if X2_Mode==1 then
+					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048*2,4096*2},FP,1)
+				else
+					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048,4096},FP,1)
+				end
 			end
 		end
 	end
@@ -742,10 +882,16 @@ function Include_GunData(Size,LineNum)
 		
 	CIfEnd()
 	CIf_GCase(173)
+	
+
 		DoActions(FP,{CreateUnit(1,84,1,FP),KillUnit(84,FP)})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
-			FormShape = {4,{-12*32,0},{0,-6*32},{12*32,0},{0,6*32}}
+			if X2_Mode==1 then
+				FormShape = {4,{-12*32*2,0},{0,-6*32*2},{12*32*2,0},{0,6*32*2}}
+			else
+				FormShape = {4,{-12*32,0},{0,-6*32},{12*32,0},{0,6*32}}
+			end
 			CSPlot(FormShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(FormShape,FP,72,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(72,FP)},1)
