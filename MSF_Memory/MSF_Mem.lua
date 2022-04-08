@@ -17,7 +17,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.7"
+VerText = "\x04Ver. 3.7X"
 Limit = 0
 RedMode = 0
 FP = P6
@@ -88,7 +88,7 @@ EUDTurbo(P6)
 Enable_HideErrorMessage(FP)
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(P6)
-StartCtrig(1,FP)
+StartCtrig(1,FP,nil,1)
 
 CIf(AllPlayers,{ElapsedTime(AtLeast,3)})
 Trigger { -- No comment (6496767D)
@@ -6500,7 +6500,7 @@ Trigger { --
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4);
 			DisplayText("\x13"..DifT[i].." "..P[j].." "..GModeT[k],4);
-			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
 			PlayWAV("staredit\\wav\\H_Clear.ogg");
@@ -6522,7 +6522,7 @@ Trigger { --
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4),
 				DisplayTextX("\x13"..DifT[i].." "..P[j].." "..GModeT[k],4),
-				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
 				PlayWAVX("staredit\\wav\\H_Clear.ogg"),
@@ -6551,7 +6551,7 @@ Trigger { --
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4);
 			DisplayText("\x13"..DifT[i].." "..P[j].." "..GModeT[k],4);
-			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
 			PlayWAV("staredit\\wav\\H_Clear.ogg");
@@ -6573,7 +6573,7 @@ Trigger { --
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4),
 				DisplayTextX("\x13"..DifT[i].." "..P[j].." "..GModeT[k],4),
-				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
 				PlayWAVX("staredit\\wav\\H_Clear.ogg"),
@@ -6600,7 +6600,7 @@ Trigger { --
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4);
 			DisplayText("\x13"..DifT[1].." "..P[j].." "..GModeT[1],4);
-			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
 			PlayWAV("staredit\\wav\\H_Clear.ogg");
@@ -6621,7 +6621,7 @@ Trigger { --
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4),
 				DisplayTextX("\x13"..DifT[1].." "..P[j].." "..GModeT[1],4),
-				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
 				PlayWAVX("staredit\\wav\\H_Clear.ogg"),
@@ -6646,7 +6646,7 @@ Trigger { --
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4);
 			DisplayText("\x13"..DifT[5].." "..P[j],4);
-			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x04"..string.rep("―", 56),4);
 			DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
 			PlayWAV("staredit\\wav\\H_Clear.ogg");
@@ -6668,7 +6668,7 @@ Trigger { --
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x06==",4),
 				DisplayTextX("\x13"..DifT[5].." "..P[j],4),
-				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
 				PlayWAVX("staredit\\wav\\H_Clear.ogg"),
@@ -6694,7 +6694,7 @@ Trigger { --
 				DisplayText("\x13\x04"..string.rep("―", 56),4);
 				DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x08와ㅋㅋ 이걸 깨다니;;; 초고순가? \x06==",4);
 				DisplayText("\x13"..DifT[5].." \x10理論値 \x04Mode "..P[j],4);
-				DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+				DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 				DisplayText("\x13\x04"..string.rep("―", 56),4);
 				DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
 				PlayWAV("staredit\\wav\\H_Clear.ogg");
@@ -6716,7 +6716,7 @@ Trigger { --
 					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 					DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x04를 \x10클리어\x04 하셨습니다. \x08와ㅋㅋ 이걸 깨다니;;; 초고순가? \x06==",4),
 					DisplayTextX("\x13"..DifT[5].." \x10理論値 \x04Mode "..P[j],4),
-					DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+					DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 					DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 					DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
 					PlayWAVX("staredit\\wav\\H_Clear.ogg"),
@@ -7922,7 +7922,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			DisplayText(string.rep("\n", 20),4);
 			DisplayText("\n",4);
 			DisplayText("\x13\x04"..string.rep("―", i),4);
-			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x02"..VerText.."\n\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x02"..VerText.."\n\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x04"..string.rep("―", i),4);
 			DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},
@@ -7938,7 +7938,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 				DisplayTextX(string.rep("\n", 20),4),
 				DisplayTextX("\n",4),
 				DisplayTextX("\x13\x04"..string.rep("―", i),4),
-				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x02"..VerText.."\n\x13\x1FCtrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x02"..VerText.."\n\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x04"..string.rep("―", i),4),
 				DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\n",4)
 			},ObPlayers,FP);
@@ -7968,7 +7968,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			DisplayText(string.rep("\n", 20),4);
 			DisplayText("\n",4);
 			DisplayText("\x13\x05"..string.rep("―", 56),4);
-			DisplayText("\x13\x05== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x05"..VerText.."\n\x13\x05Ctrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4);
+			DisplayText("\x13\x05== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x05"..VerText.."\n\x13\x05Ctrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
 			DisplayText("\x13\x05"..string.rep("―", 56),4);
 			DisplayText("\x13\x05Made \x06by \x04GALAXY_BURST\n\n",4);
 		},
@@ -7984,7 +7984,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 				DisplayTextX(string.rep("\n", 20),4),
 				DisplayTextX("\n",4),
 				DisplayTextX("\x13\x05"..string.rep("―", 56),4),
-				DisplayTextX("\x13\x05== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x05"..VerText.."\n\x13\x05Ctrig \x04Assembler \x07v5.3T\x04, \x1FCA \x16Paint \x07v2.1 \x04in Used \x19(つ>ㅅ<)つ",4),
+				DisplayTextX("\x13\x05== \x04마린키우기 \x07Ｍｅｍｏｒｙ \x06==\n\x13\x05"..VerText.."\n\x13\x05Ctrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
 				DisplayTextX("\x13\x05"..string.rep("―", 56),4),
 				DisplayTextX("\x13\x05Made \x06by \x04GALAXY_BURST\n\n",4)
 			},ObPlayers,FP);
