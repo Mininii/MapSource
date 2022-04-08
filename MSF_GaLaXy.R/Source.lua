@@ -212,10 +212,12 @@ DifLeaderBoard = {
 	BossCcode = CreateCcode()
 	if STRCTRIGASM == 1 then
 		
-		UnitDataPtrVoid = f_GetVoidptr(FP,1700*16)
-		UnitNamePtrVoid = f_GetVoidptr(FP,230*(0x40))
-		UnitDataPtr = CreateVar(FP)
-		UnitNamePtr = CreateVar(FP)
+		UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
+		UnitNamePtr = 0x590000 --0x590000~0x5938C0
+		--UnitDataPtrVoid = f_GetVoidptr(FP,1700*16)
+		--UnitNamePtrVoid = f_GetVoidptr(FP,230*(0x40))
+		--UnitDataPtr = CreateVar(FP)
+		--UnitNamePtr = CreateVar(FP)
 	else
 		UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
 		UnitNamePtr = 0x590000 --0x590000~0x5938C0

@@ -405,6 +405,10 @@ function init()
 
 
 
+	if STRCTRIGASM == 1 then
+		--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+		--TMem(FP,UnitNamePtr,UnitNamePtrVoid)
+	end
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 254",Set)})
 		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
@@ -445,10 +449,6 @@ function init()
 			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40),_TMem(Arr(Str20[3],0),"X","X",1),Str20[2])
 			
 			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40+Str20[2]+16),_TMem(Arr(Str21[3],0),"X","X",1),Str21[2])
-			if STRCTRIGASM == 1 then
-			TMem(FP,UnitDataPtr,UnitDataPtrVoid)
-			TMem(FP,UnitNamePtr,UnitNamePtrVoid)
-			end
 			f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
 			--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
 			f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
