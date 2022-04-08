@@ -1,0 +1,8 @@
+[main]
+input: CBTest_out.scx
+output: CBTestT.scx
+[Debug]
+[STRCtrig Assembler v5.4]
+
+[freeze]
+freeze: 0

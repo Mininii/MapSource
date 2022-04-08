@@ -1,0 +1,9 @@
+[main]
+input: TestMap_out.scx
+output: C:\Program Files (x86)\StarCraft\Maps\TestMapSTRC.scx
+
+[STRCtrig Assembler v5.4]
+[Debug]
+
+[freeze]
+freeze: 0
