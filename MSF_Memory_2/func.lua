@@ -1477,7 +1477,7 @@ CTrigger(FP,{CVar(FP,G_CA_Owner[2],Exactly,0x8FFFFFFF)},{SetCVar(FP,G_CA_Owner[2
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,0*(0x20/4)),SetTo,G_CA_CUTV[1]),
 	TSetMemory(_Add(G_CA_LineTemp,1*(0x20/4)),SetTo,SL_Ret),
-	TSetMemory(_Add(G_CA_LineTemp,2*(0x20/4)),SetTo,1),
+	TSetMemory(_Add(G_CA_LineTemp,2*(0x20/4)),SetTo,0),
 	TSetMemory(_Add(G_CA_LineTemp,3*(0x20/4)),SetTo,G_CA_SNTV),
 	TSetMemory(_Add(G_CA_LineTemp,4*(0x20/4)),SetTo,G_CA_LMTV),
 	TSetMemory(_Add(G_CA_LineTemp,5*(0x20/4)),SetTo,G_CA_RPTV),
@@ -1560,20 +1560,6 @@ CallTrigger(FP,Set_Repeat,{SetCDeaths(FP,SetTo,1,CA_Repeat_Check)})
 SetCallEnd()
 
 local G_CA_Launch = CreateCcode()
-function CA_Repeat()
-	local CA = CAPlotDataArr
-	local CB = CAPlotCreateArr
-	CMov(FP,G_CA_X,V(CA[8]))
-	CMov(FP,G_CA_Y,V(CA[9]))
-	CIf(FP,{CVar(FP,G_CA_Temp[11][2],AtLeast,1)})
-		CIf(FP,{TTCVar(FP,G_CA_Temp[11][2],"<",V(CA[10]))})
-			CMov(FP,V(CA[10]),G_CA_Temp[11])
-		CIfEnd()
-	CIfEnd()
-
-	CallTrigger(FP,Call_CA_Repeat,{})
-end
-
 function CA_Func()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
@@ -1589,6 +1575,14 @@ function CA_Func()
 	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x30000000,0xF0000000)})
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 	CIfXEnd()
+	CAdd(FP,G_CA_X,V(CA[8]),G_CA_TempTable[8])
+	CAdd(FP,G_CA_Y,V(CA[9]),G_CA_TempTable[9])
+	CIf(FP,{CVar(FP,G_CA_Temp[11][2],AtLeast,1)})
+		CIf(FP,{TTCVar(FP,G_CA_Temp[11][2],"<",V(CA[10]))})
+			CMov(FP,V(CA[10]),G_CA_Temp[11])
+		CIfEnd()
+	CIfEnd()
+	CallTrigger(FP,Call_CA_Repeat,{})
 	
 end
 local G_CA_CallStack = {}
@@ -1616,7 +1610,8 @@ function G_CAPlot(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
-	CAPlot2(ShapeTable,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CBPlot(ShapeTable,nil,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",nil,FP,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},Preserve) 
+--	CAPlot2(ShapeTable,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6])),TSetCVar(FP,G_CA_Temp[13][2],SetTo,V(CA[2]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
@@ -1655,7 +1650,8 @@ function G_CAPlot2(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
-	CAPlot2(Y,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
+	CBPlot(Y,nil,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",nil,FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)}) 
+--	CAPlot2(Y,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6])),TSetCVar(FP,G_CA_Temp[13][2],SetTo,V(CA[2]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1

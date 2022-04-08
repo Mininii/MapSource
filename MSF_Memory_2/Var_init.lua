@@ -12,7 +12,9 @@ function Var_init()
 	HMCost = 8500
 	LMCost = 45000
 
-	UnitDataPtr = EPDF(0x5967EC-(1700*4))
+	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
+	UnitDataPtr = CreateVar(FP)
+	table.insert(CtrigInitArr[FP+1],SetCtrigX(UnitDataPtr[1],UnitDataPtr[2],0x15C,UnitDataPtr[3],SetTo,UnitDataPtrVoid[1],UnitDataPtrVoid[2],UnitDataPtrVoid[3],1,UnitDataPtrVoid[4]))
 	MaxHPBackUp = CreateArr(228,FP)
 	BdDimArr = CreateArr(228,FP)
 	EXPArr = CreateArr(50,FP)
@@ -75,9 +77,15 @@ function Var_init()
 	CA_Create = CreateVar(FP)
 	EEggCode = CreateCcode()
 
-	CA2ArrX = CreateVArr(1700,FP)
-	CA2ArrY = CreateVArr(1700,FP)
-	CA2ArrZ = CreateVArr(1700,FP)
+	if STRCTRIGASM == 1 then
+		CA2ArrX = f_GetVArrptr(FP,1700)
+		CA2ArrY = f_GetVArrptr(FP,1700)
+		CA2ArrZ = f_GetVArrptr(FP,1700)
+	else
+		CA2ArrX = CreateVArr(1700,FP)
+		CA2ArrY = CreateVArr(1700,FP)
+		CA2ArrZ = CreateVArr(1700,FP)
+	end
 	MarHPRegen = CreateVar2(FP,nil,nil,256)
 	LVVA = CreateVArr(4,FP)
 	CurrentOP = CreateVar(FP)

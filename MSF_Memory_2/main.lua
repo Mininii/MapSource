@@ -24,8 +24,8 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-TestSet(0)
-VerText = "\x04Ver. Beta 0.5F"
+TestSet(1)
+VerText = "\x04Ver. Beta 0.5X"
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
@@ -33,7 +33,7 @@ SetForces({P1,P2,P3,P4},{P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
 Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0)},{RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
-StartCtrig(1,FP)
+StartCtrig(1,FP,nil,1,"C:\\Temp")
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Var_init()

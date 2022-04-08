@@ -21,28 +21,28 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,956,OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
-    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\n\x13\x02"..VerText.."\n\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4);
+    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\n\x13\x02"..VerText.."\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
     DisplayTextX("\x13\x03\n\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,3100,OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
-    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x05＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4);
+    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x05＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
     DisplayTextX("\x13\x03\n\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,3378,OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
-    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4);
+    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
     DisplayTextX("\x13\x03\n\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,4200,OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
-    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4);
+    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
     DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04조합 설명은 F10 + J 에 있습니다.",4);},HumanPlayers,FP)})
 for i = 1, 3 do
@@ -50,7 +50,7 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(i*1000),OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
-    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\x13\x04"..(4-i).."초 남았습니다.\n\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4);
+    DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝\n\x13\x02"..VerText.."\n\x13\x04"..(4-i).."초 남았습니다.\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4);
     DisplayTextX("\x13\x04"..string.rep("―", 57),4);
     DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04조합 설명은 F10 + J 에 있습니다.",4);
     PlayWAVX("sound\\glue\\countdown.wav")
@@ -131,7 +131,7 @@ Trigger2X(FP,{CD(Win,500,AtLeast),CD(EDNum,i)},
         DisplayTextX("\x13\x04"..string.rep("―", 56),4),
         DisplayTextX("\x13\x06== \x04마린키우기 \x07Ｍｅｍｏｒｙ_２ \x06==\n\x13\x07＝\x04The Wonderful Abstractions of a Lost Memory\x07＝ \n\x13\x10클리어\x04 하셨습니다.",4),
         DisplayTextX("\x13"..EDText[i],4),
-        DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3\x04, \x1FCA \x16Paint \x07v2.3 \x04in Used \x19(つ>ㅅ<)つ",4),
+        DisplayTextX("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",4),
         DisplayTextX("\x13\x04"..string.rep("―", 56),4),
         DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
     },HumanPlayers,FP))
