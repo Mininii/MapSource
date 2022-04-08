@@ -88,7 +88,7 @@ EUDTurbo(P6)
 Enable_HideErrorMessage(FP)
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(P6)
-StartCtrig()
+StartCtrig(1,FP)
 
 CIf(AllPlayers,{ElapsedTime(AtLeast,3)})
 Trigger { -- No comment (6496767D)
@@ -432,7 +432,7 @@ FTR = {Switch("Switch 201",Set),Switch("Switch 204",Cleared)}
 BYD = {Switch("Switch 201",Set),Switch("Switch 204",Set)}
 NBYD = {Switch("Switch 204",Cleared)}
 FTRBYD = {Switch("Switch 201",Set)}
-Include_CtrigPlib(360,"Switch 100",1,FP) -- 주기 : 360 = 360도 / Switch 100을 랜덤스위치로 사용 / f_Memcpy(Readcpy) 포함
+Include_CtrigPlib(360,"Switch 100") -- 주기 : 360 = 360도 / Switch 100을 랜덤스위치로 사용 / f_Memcpy(Readcpy) 포함
 HeroPointArr = {}
 function CreateHeroPointArr(Index,Point,Name,Name2) --  영작 유닛 설정 함수
 	local Text = "\x0D\x0D\x0D\x0D\x13\x1D† \x04기억의 "..Name2.." "..Name.." \x04를 처치하였습니다. \x1F+ "..Point.." \x1CＰｔｓ \x1D†\x0D\x0D\x0D\x0D\x14\x14\x14\x14\x14\x14\x14\x14"

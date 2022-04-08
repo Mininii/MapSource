@@ -33,7 +33,7 @@ Limit = 0
 GunSafety = 0
 VName = "Ver.1.9"
 SetFixedPlayer(FP)
-StartCtrig()
+StartCtrig(1,FP)
 onInit()
 DoActions2(FP,PatchArr)
 DoActions2(FP,PatchArr2,1)
@@ -61,7 +61,7 @@ Enable_PlayerCheck()
 InitJump = def_sIndex()
 CJump(AllPlayers,InitJump) -- 트리거 가둬놓는곳
 Objects()
-Include_CtrigPlib(360,RandSwitch,1,FP)
+Include_CtrigPlib(360,RandSwitch)
 Include_Conv_CPosXY(FP)
 nilunit = 181
 Install_GetCLoc(FP,253,nilunit)

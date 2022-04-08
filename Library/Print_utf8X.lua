@@ -42,7 +42,14 @@ end
 
 function cp949_to_utf8(s)
     local ret = {}
-    local s = s..'\0'
+
+    local s2
+    if #s == 1 then
+    	s2 = s..'a\0'
+    else
+    	s2 = s..'\0'
+    end
+     
     local i = 1
     function readbyte(s)
         local ret = string.byte(s, i)
@@ -50,12 +57,12 @@ function cp949_to_utf8(s)
         return ret
     end
     while true do
-        local b1 = readbyte(s, i)
+        local b1 = readbyte(s2, i)
         if b1 == 0 and i >= 4 then break end
         if b1 < 128 then
             ret[#ret+1] = b1
         else
-            local b2 = readbyte(s, i+1)
+            local b2 = readbyte(s2, i+1)
             if b2 == 0 and i >= 4 then break end
             local code = cvtb[b2 * 256 + b1]
             if code == nil then code = 0 end
@@ -72,6 +79,9 @@ function cp949_to_utf8(s)
         end
     end
     ret[#ret+1] = 0
+    if #s == 1 then
+	    table.remove(ret,#ret-1)
+	end
     return ret
 end
 
@@ -92,7 +102,7 @@ function print_utf8(line, offset, string)
         local str = string
         local n = 1
         if dst % 4 >= 1 then
-            for i = 1, dst % 4 do str = '\x0d'..str end
+            for i = 1, dst % 4 do str = '\0'..str end
         end
         local t = cp949_to_utf8(str)
         while n <= #t do
