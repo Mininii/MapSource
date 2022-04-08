@@ -210,9 +210,16 @@ DifLeaderBoard = {
 	FormCcode = CreateCcode() -- 1老版快
 	CellCcode = CreateCcode() -- 3老版快
 	BossCcode = CreateCcode()
-	UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
-	UnitNamePtr = 0x590000 --0x590000~0x5938C0
-	--UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
+	if STRCTRIGASM == 1 then
+		
+		UnitDataPtrVoid = f_GetVoidptr(FP,1700*16)
+		UnitNamePtrVoid = f_GetVoidptr(FP,230*(0x40))
+		UnitDataPtr = CreateVar(FP)
+		UnitNamePtr = CreateVar(FP)
+	else
+		UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
+		UnitNamePtr = 0x590000 --0x590000~0x5938C0
+	end
     SpeedVar = CreateVar2(FP,nil,nil,4)
     CurrentSpeed = CreateVar(FP)
 	ZergGndVArr = CreateVArray(FP,#ZergGndUArr)

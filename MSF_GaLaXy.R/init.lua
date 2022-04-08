@@ -445,8 +445,10 @@ function init()
 			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40),_TMem(Arr(Str20[3],0),"X","X",1),Str20[2])
 			
 			f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19[2]+0x40+Str20[2]+16),_TMem(Arr(Str21[3],0),"X","X",1),Str21[2])
-
-			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+			if STRCTRIGASM == 1 then
+			TMem(FP,UnitDataPtr,UnitDataPtrVoid)
+			TMem(FP,UnitNamePtr,UnitNamePtrVoid)
+			end
 			f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
 			--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
 			f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
@@ -479,7 +481,6 @@ function init()
 			UTbl_27 = CreateCText(FP,"\x04Áê¸² \x11°Å´ë \x06°ñ·½")
 			UTbl_61 = CreateCText(FP,"\x04Áê¸² \x06»ê¸ÆÀÇ \x11¼öÈ£ÀÚ")
 			UTbl_68 = CreateCText(FP,"\x07Áê¸² \x06»ê¸ÆÀÇ \x11¿Õ")
-			--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
 			CMov(FP,CurrentUID,0)
 			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  ¸ðµç À¯´ÖÀÇ ½ºÆÐ¼È ¾îºô¸®Æ¼ ÇÃ·¡±× ¼³Á¤
 
@@ -487,7 +488,7 @@ function init()
 			local tblAdrrPtr = CreateVar(FP)
 			local CurUNamePtr = CreateVar(FP)
 			local CurUNameEPD = CreateVar(FP)
-			CMov(FP,CurUNamePtr,_Mul(CurrentUID,0x40),UnitNamePtr)
+			CAdd(FP,CurUNamePtr,_Mul(CurrentUID,0x40),UnitNamePtr)
 			CMov(FP,CurUNameEPD,_EPD(CurUNamePtr))
 			ConvertArr(FP,tblAdrrPtr,CurrentUID)
 			CMov(FP,tblAdrr,_ReadF(ArrX(tblAdrrArr,tblAdrrPtr)))

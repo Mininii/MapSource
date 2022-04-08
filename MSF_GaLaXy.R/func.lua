@@ -373,14 +373,20 @@ function Include_Conv_CPosXY(Player)
 	SetCallEnd()
 end
 
-function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
+function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr,STRCtrigFlag)
 	if CPos == nil then PushErrorMsg("Need_Include_Conv_CPosXY") end
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end
 	if GLocC == nil then PushErrorMsg("Need_Install_GetCLoc") end
 	if TempRandRet == nil then PushErrorMsg("Need_Include_CRandNum") end
-	CA2ArrX = CreateVArr(1700,FP)
-	CA2ArrY = CreateVArr(1700,FP)
-	CA2ArrZ = CreateVArr(1700,FP)
+	if STRCtrigFlag == 1 then
+		CA2ArrX = f_GetVArrptr(FP,1700)
+		CA2ArrY = f_GetVArrptr(FP,1700)
+		CA2ArrZ = f_GetVArrptr(FP,1700)
+	else
+		CA2ArrX = CreateVArr(1700,FP)
+		CA2ArrY = CreateVArr(1700,FP)
+		CA2ArrZ = CreateVArr(1700,FP)
+	end
 
 	function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAfunc,PlayerID,Condition,PerAction,Preserve,CAfunc2)
 		if Shape == nil then
