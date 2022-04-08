@@ -212,12 +212,13 @@ DifLeaderBoard = {
 	BossCcode = CreateCcode()
 	if STRCTRIGASM == 1 then
 		
-		UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
-		UnitNamePtr = 0x590000 --0x590000~0x5938C0
-		--UnitDataPtrVoid = f_GetVoidptr(FP,1700*16)
-		--UnitNamePtrVoid = f_GetVoidptr(FP,230*(0x40))
-		--UnitDataPtr = CreateVar(FP)
-		--UnitNamePtr = CreateVar(FP)
+		--UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
+		--UnitNamePtr = 0x590000 --0x590000~0x5938C0
+		UnitDataVoid = {f_GetVoidptr(FP,1700*4),f_GetVoidptr(FP,1700*4)}
+		UnitDataPtr = CreateVar(FP)
+		UnitNamePtrVoid = f_GetVoidptr(FP,230*(0x40))
+		UnitNamePtr = CreateVar(FP)
+		table.insert(CtrigInitArr[FP+1],SetCtrigX(UnitNamePtr[1],UnitNamePtr[2],0x15C,UnitNamePtr[3],SetTo,UnitNamePtrVoid[1],UnitNamePtrVoid[2],UnitNamePtrVoid[3],0,UnitNamePtrVoid[4]))
 	else
 		UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
 		UnitNamePtr = 0x590000 --0x590000~0x5938C0

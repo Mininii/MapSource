@@ -406,8 +406,7 @@ function init()
 
 
 	if STRCTRIGASM == 1 then
-		--TMem(FP,UnitDataPtr,UnitDataPtrVoid)
-		--TMem(FP,UnitNamePtr,UnitNamePtrVoid)
+		TMem(FP,UnitNamePtr,UnitNamePtrVoid,nil,nil,1)
 	end
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 254",Set)})
@@ -576,21 +575,17 @@ function init()
 					CVar(FP,RepHeroIndex[2],Exactly,148),
 					CVar(FP,RepHeroIndex[2],Exactly,131)})},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
 				CMov(FP,CunitIndex,_Div(_Sub(BackupCp,19025+19),_Mov(84)))
-				CMov(FP,0x6509B0,UnitDataPtr)
-				NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-				CAdd(FP,0x6509B0,2)
-				NWhileEnd()
-				CDoActions(FP,{
-					TSetDeaths(CurrentPlayer,SetTo,CPos,0),
-					SetMemory(0x6509B0,Add,1),
-					TSetDeathsX(CurrentPlayer,SetTo,RepHeroIndex,0,0xFF),
-					TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
-					TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
-					})
-					CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 무적플래그
+				CMovX(FP,FArr(UnitDataVoid[1],UnitDataPtr),CPos) 
+				CMovX(FP,FArr(UnitDataVoid[2],UnitDataPtr),RepHeroIndex,nil,0xFF) 
+				CMovX(FP,FArr(UnitDataVoid[2],UnitDataPtr),_Mul(CunitP,_Mov(0x100)),nil,0xFF00) 
+				CMovX(FP,FArr(UnitDataVoid[2],UnitDataPtr),_Mul(Gun_LV,_Mov(0x1000000)),nil,0xFF000000) 
+				CIf(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)})
+				CMovX(FP,FArr(UnitDataVoid[2],UnitDataPtr),1*65536,nil,0x10000) 
+				CIfEnd()
 				--CDoActions(FP,{
 				--	--TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1),
 				--	TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV)})
+				CAdd(FP,UnitDataPtr,1)
 				f_LoadCp()
 				CAdd(FP,0x6509B0,6)
 				NJumpXEnd(FP,JumpUnitsIndex)
@@ -627,16 +622,11 @@ function init()
 		--	TriggerX(FP,{CDeaths(FP,AtLeast,i*40,TestT)},{CopyCpAction({DisplayTextX("\x13\x04"..i.."번 유닛을 배치합니다.",4)},HumanPlayers,FP),SetCVar(FP,TestCheck[2],SetTo,i),SetCDeaths(FP,SetTo,1,TestPush)})
 		--end
 		--CIf(FP,CDeaths(FP,AtLeast,1,TestPush),SetCDeaths(FP,SetTo,0,TestPush))
-		CMov(FP,0x6509B0,UnitDataPtr)
-		CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
-			f_SaveCp()
-		--	CIf(FP,{TDeathsX(_Add(BackupCP,1),Exactly,TestCheck,0,0xFF)})
-			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
-		--	CIfEnd()
-			CAdd(FP,0x6509B0,2)
-		CWhileEnd()
-		CMov(FP,0x6509B0,FP)
-		--CIfEnd()
+		
+		
+		CMov(FP,UnitDataPtr,0)
+		CallCFuncX(FP,f_ReplaceX)
+		
 		DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
 		CMov(FP,CurrentUID,0)
 		CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))

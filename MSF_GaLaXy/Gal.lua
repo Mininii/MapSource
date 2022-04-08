@@ -211,7 +211,7 @@ ColorCode = {0x08,0x0E,0x0F,0x10,0x11}
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8}) 
 SetFixedPlayer(FP)
-StartCtrig(1,FP) 
+StartCtrig(1,FP,nil,1) 
 CIf(AllPlayers,ElapsedTime(AtLeast,3)) -- 모든 트리거는 게임 시작 3초 후 작동 시작합니다.(여기부터 끝까지 전부 묶여있음.)
 --사망알림
 for i = 0, 4 do
@@ -293,7 +293,7 @@ CJumpEnd(AllPlayers,2)
 
 Enable_PlayerCheck()
 NoAirCollisionX(FP)
-VName = "Ver. 1.7P"
+VName = "Ver. 1.7X"
 ModeO = 0x00010001
 Intro = 0x00010002
 IntroT = 0x00010003

@@ -373,12 +373,12 @@ function Include_Conv_CPosXY(Player)
 	SetCallEnd()
 end
 
-function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr,STRCtrigFlag)
+function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	if CPos == nil then PushErrorMsg("Need_Include_Conv_CPosXY") end
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end
 	if GLocC == nil then PushErrorMsg("Need_Install_GetCLoc") end
 	if TempRandRet == nil then PushErrorMsg("Need_Include_CRandNum") end
-	if STRCtrigFlag == 1 then
+	if STRCTRIGASM == 1 then
 		CA2ArrX = f_GetVArrptr(FP,1700)
 		CA2ArrY = f_GetVArrptr(FP,1700)
 		CA2ArrZ = f_GetVArrptr(FP,1700)
