@@ -17,7 +17,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.7X"
+VerText = "\x04Ver. 3.8"
 Limit = 0
 RedMode = 0
 FP = P6
@@ -17846,7 +17846,7 @@ for i=0, 4 do
 			SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
 		}
 	}
-	TriggerX(FP,{NBYD},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,1,GMode);},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{Preserved})
 	end
 	DoActionsX(FP,{SetCVar(FP,CurPerAttack[i+1][2],SetTo,0)})
 	DoActionsX(FP,{SetCVar(FP,CurPerArmor[i+1][2],SetTo,0)})
@@ -17878,10 +17878,26 @@ Trigger {
 		Label(0);
 		NBYD;
 		Memory(0x58F464+(i*4),AtLeast,160000);
+		CDeaths(FP,AtMost,1,GMode)
 	},
 	actions = {
 		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
 		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
+	}
+}
+Trigger {
+	players = {i},
+	conditions = {
+		Label(0);
+		NBYD;
+		Memory(0x58F464+(i*4),AtLeast,160000);
+		CDeaths(FP,AtLeast,2,GMode)
+	},
+	actions = {
+		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
+		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
+		SetMemoryB(0x58D088+(46*i)+6,SetTo,50);
+		SetMemoryB(0x58D2B0+(46*i)+6,SetTo,0);
 	}
 }
 Trigger {
