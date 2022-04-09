@@ -314,8 +314,8 @@ end
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit¼³Á¤
 	T_YY = 2022
-	T_MM = 02
-	T_DD = 19
+	T_MM = 04
+	T_DD = 20
 	T_HH = 12
 	if Limit == 1 then
 		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
