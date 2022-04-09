@@ -308,11 +308,19 @@ function Var_init()
 	ConCP = CreateCcodeArr(7)
 	GivePChange = CreateCcodeArr(7)
 
+	Var_TempTable = {}
+	Var_InputCVar = {}
+	Var_Lines = 55
+	for i = 1, Var_Lines do
+		table.insert(Var_TempTable,CreateVar(FP))
+		table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
+	end
 
 	--CreateVar
     SpeedVar = CreateVar3(FP,4)
 	BackupCp = CreateVar(FP)
 	RandW = CreateVar(FP)
+	TRepeatX,TRepeatY = CreateVars(2,FP)
 	Nextptrs = CreateVar(FP)
 	CunitIndex = CreateVar(FP)
 	Gun_LV = CreateVar(FP)

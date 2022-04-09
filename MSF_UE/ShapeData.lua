@@ -1,42 +1,6 @@
 function Install_ShapeData()
-	
-	function Create_SortTable(Shape)
-		local X = {}
-		if type(Shape[1]) == "number" then
-			table.insert(X,CS_SortX(Shape,0))
-			table.insert(X,CS_SortX(Shape,1))
-			table.insert(X,CS_SortY(Shape,0))
-			table.insert(X,CS_SortY(Shape,1))
-			table.insert(X,CS_SortR(Shape,0))
-			table.insert(X,CS_SortR(Shape,1))
-			table.insert(X,CS_SortA(Shape,0))
-			table.insert(X,CS_SortA(Shape,1))
-			table.insert(X,CS_DoubleSortRA(Shape,32,0,0))
-			table.insert(X,CS_DoubleSortRA(Shape,32,0,1))
-			table.insert(X,CS_DoubleSortRA(Shape,32,1,0))
-			table.insert(X,CS_DoubleSortRA(Shape,32,1,1))
-		else
-			for j, k in pairs(Shape) do
-				table.insert(X,CS_SortX(k,0))
-				table.insert(X,CS_SortX(k,1))
-				table.insert(X,CS_SortY(k,0))
-				table.insert(X,CS_SortY(k,1))
-				table.insert(X,CS_SortR(k,0))
-				table.insert(X,CS_SortR(k,1))
-				table.insert(X,CS_SortA(k,0))
-				table.insert(X,CS_SortA(k,1))
-				table.insert(X,CS_DoubleSortRA(k,32,0,0))
-				table.insert(X,CS_DoubleSortRA(k,32,0,1))
-				table.insert(X,CS_DoubleSortRA(k,32,1,0))
-				table.insert(X,CS_DoubleSortRA(k,32,1,1))
-			end
 
-		end
-		return X
-	end
-
-
-	function MakeLevelShape(Type,Points,LvMin,LvMax)
+	function MakeLevelShapeX(Type,Points,LvMin,LvMax,ShapeName)
 		local X = {}
 		for i = LvMin, LvMax do
 			 if Type == "Polygon" then
@@ -46,21 +10,13 @@ function Install_ShapeData()
 				  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*i),180,PlotSizeCalc(Points*2,i),0))
 			 end
 		end
-		return X
+		for j, k in pairs(X) do
+			_G[ShapeName..j-1] = k
+			table.insert(G_CB_ShapeT,ShapeName..j-1)
+		end
 	end
-	S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
-	S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
-	S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
-	S_6_ShT = Create_SortTable(MakeLevelShape("Star",6,1,4))
-	S_7_ShT = Create_SortTable(MakeLevelShape("Star",7,1,4))
-	S_8_ShT = Create_SortTable(MakeLevelShape("Star",8,1,4))
-	P_3_ShT = Create_SortTable(MakeLevelShape("Polygon",3,1,8))
-	P_4_ShT = Create_SortTable(MakeLevelShape("Polygon",4,1,8))
-	P_5_ShT = Create_SortTable(MakeLevelShape("Polygon",5,1,8))
-	P_6_ShT = Create_SortTable(MakeLevelShape("Polygon",6,1,8))
-	P_7_ShT = Create_SortTable(MakeLevelShape("Polygon",7,1,8))
-	P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
-	
+
+
 	
 	NexBYDLine = {}
 	NexBYDLine2 = {}
@@ -122,4 +78,38 @@ function Install_ShapeData()
 	BattleShape = CSMakeStar(5,165-(12*(5-2)),((36*6)-(36*2))/2,180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
 	TelShape = CSMakeStar(8,165-(12*(8-2)),(36*6)-(36*4),180,PlotSizeCalc(8*2,4),0)
 	
+	G_CB_ShapeT = {
+		"NBYD",
+		"Hive_1",
+		"Ovrm",
+		"CC_L",
+		"CC_R",
+		"Hive_2",
+		"Hive_3F",
+		"Cere_L",
+		"Cere_R",
+		"CC_LF",
+		"CC_RF",
+		"OvrmF",
+		"Hive_3",
+		"GC1",
+		"GC2",
+		"Form",
+		"Form2",
+		"FormF1",
+		"FormF2",
+		"FormF3"
+	}
+MakeLevelShapeX("Star",3,1,4,"S_3_")
+MakeLevelShapeX("Star",4,1,4,"S_4_")
+MakeLevelShapeX("Star",5,1,4,"S_5_")
+MakeLevelShapeX("Star",6,1,4,"S_6_")
+MakeLevelShapeX("Star",7,1,4,"S_7_")
+MakeLevelShapeX("Star",8,1,4,"S_8_")
+MakeLevelShapeX("Polygon",3,1,8,"P_3_")
+MakeLevelShapeX("Polygon",4,1,8,"P_4_")
+MakeLevelShapeX("Polygon",5,1,8,"P_5_")
+MakeLevelShapeX("Polygon",6,1,8,"P_6_")
+MakeLevelShapeX("Polygon",7,1,8,"P_7_")
+MakeLevelShapeX("Polygon",8,1,8,"P_8_")
 end

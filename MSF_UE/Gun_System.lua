@@ -105,6 +105,7 @@ function Gun_System()
             }, 1, 0x500+i)
         end
         CMov(FP,0x6509B0,FP)
+        Create_G_CB_Arr()
         CElseX()
         DoActions(FP,{
             SetInvincibility(Enable,"Buildings",FP,64);

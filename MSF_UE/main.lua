@@ -37,7 +37,7 @@ SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_PlayerCheck()
 Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
-StartCtrig(1,FP,nil,1)
+StartCtrig(1,FP,nil,1,"C:\\Temp")
 GiveT = {}
 for i = 0, 6 do
 	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
@@ -56,6 +56,7 @@ end
 			HPoints()
 			Var_init()
 			Install_GetCLoc(FP,0,nilunit)
+			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT)
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
 		DoPlayerCheck()
