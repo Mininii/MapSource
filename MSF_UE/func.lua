@@ -322,11 +322,11 @@ function Print13_Preserve()
 	local Print13 = CreateCcode()
 		CIf(FP,CDeaths(FP,Exactly,0,Print13),SetCDeaths(FP,Add,88,Print13))
 			for i = 0, 6 do
-				CallTriggerX(FP,Call_Print13[i+1],{PlayerCheck(i,1),Deaths(i,AtMost,0,15)})
+				CallTriggerX(FP,Call_Print13[i+1],{HumanCheck(i,1),Deaths(i,AtMost,0,15)})
 			end
 		CIfEnd()
 		for i = 0, 6 do
-			CIf(FP,{PlayerCheck(i,1),Deaths(i,AtMost,0,202)})
+			CIf(FP,{HumanCheck(i,1),Deaths(i,AtMost,0,202)})
 			for j = 0, 12 do
 			CallTriggerX(FP,Call_Print13[i+1],{Switch("Switch 240",Set);Deaths(i,AtLeast,1,100+j)})
 			end
@@ -371,7 +371,7 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 
 
 	for i = 0, MaxPlayer do
-		CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- 브금타이머
+		CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,12,0xFFFFFF)},1) -- 브금타이머
 	end
 	CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,12,0xFFFFFF),SetDeathsX(Player,SetTo,0,12,0xFF000000)}) -- 브금타이머
 end
@@ -391,11 +391,11 @@ function ObDisplay()
 	ValToTimeX(TempT[2],0x57F0F0+(4*7),1000,1)
 end
 
-function DoPlayerCheck()
+function DoHumanCheck()
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 	for i = 0, 6 do
-		TriggerX(FP,{PlayerCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
+		TriggerX(FP,{HumanCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
 	end
 end
 
@@ -1069,7 +1069,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CJumpXEnd(FP,Gun_Order)
 		f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
 		for i = 0, 6 do
-			NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)})
+			NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
 				CJumpX(FP,Gun_Order)
 			NIfEnd()
 		end

@@ -26,7 +26,7 @@ function Interface()
 	StrDesign("\x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.")}
 	for i = 0, 3 do
-		CIf(FP,PlayerCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(5000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256*5),SetV(MarHPRead[i+1],(5000*256)-255)})
+		CIf(FP,HumanCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(5000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256*5),SetV(MarHPRead[i+1],(5000*256)-255)})
 
 			for CBit = 0, 7 do
 				TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
@@ -77,7 +77,7 @@ function Interface()
 	local ExchangeP = CreateVar(FP)
 	for i=0, 3 do
 		ExJump = def_sIndex()
-		NJump(FP,ExJump,{PlayerCheck(i,1),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",17),Bring(i,AtMost,0,"Men",18),Bring(i,AtMost,0,"Men",19),Bring(i,AtMost,0,"Men",20)})
+		NJump(FP,ExJump,{HumanCheck(i,1),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",17),Bring(i,AtMost,0,"Men",18),Bring(i,AtMost,0,"Men",19),Bring(i,AtMost,0,"Men",20)})
 		CIf(FP,Score(i,Kills,AtLeast,1000))
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 --		CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
@@ -309,7 +309,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 			conditions = {
 				Label(0);
 				Command(i,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,1);
+				HumanCheck(j,1);
 				CDeaths(FP,Exactly,l,GiveRate[i+1]);
 				Accumulate(i,AtMost,GiveRate2[l+1],Ore);
 			},
@@ -326,7 +326,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 			conditions = {
 				Label(0);
 				Command(i,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,1);
+				HumanCheck(j,1);
 				CDeaths(FP,Exactly,l,GiveRate[i+1]);
 				Accumulate(i,AtLeast,GiveRate2[l+1],Ore);
 				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -350,7 +350,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 			conditions = {
 				--MemoryB(0x58D2B0+(46*i)+GiveUnitID[j+1],AtLeast,1);
 				Command(i,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,0);
+				HumanCheck(j,0);
 			},
 			actions = {
 				DisplayText(StrDesign(PlayerString[j+1].."\x04이(가) 존재하지 않습니다."),4);
@@ -498,7 +498,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 local HealT = CreateCcode()
 CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 for i = 0, 3 do
-	Trigger2(FP,{PlayerCheck(i,1)},{
+	Trigger2(FP,{HumanCheck(i,1)},{
 		ModifyUnitHitPoints(All,"Men",Force1,i+2,100),
 		ModifyUnitShields(All,"Men",Force1,i+2,100),
 		ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),

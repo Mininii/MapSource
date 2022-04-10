@@ -29,7 +29,7 @@ function init()
 		end
 		DoActions(FP,GiveT)
 		for i = 0, 6 do
-		Trigger2(FP,{PlayerCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+		Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
 		end
 	
 		PatchArrPrsv = {}	
@@ -416,7 +416,7 @@ function init()
 
 	
 	for i = 0, 6 do
-		TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
+		TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
 	end
 			CFor(FP,0,600,1)
 				local CI = CForVariable()

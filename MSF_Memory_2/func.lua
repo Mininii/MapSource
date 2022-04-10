@@ -354,8 +354,8 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
 
 	for j, k in pairs(BGMDeathsT) do
 		for i = 0, MaxPlayer do
-			CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- 브금타이머
-			CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
+			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- 브금타이머
+			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
 		end
 		CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,k,0xFFFFFF),
 		SetDeathsX(Player,SetTo,0,k,0xFF000000),
@@ -783,7 +783,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,1)) -- 어택 일반 해당플레이어 위치로
 				CIfX(FP,Never())
 			for i = 0, 3 do
-				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),PlayerCheck(i,1)})
+				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 					Simple_SetLocX(FP,DefaultAttackLoc,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2)
 			end
 				CElseX() -- 해당플레이어가 존재하지 않을 경우 생성 중심점에 어택
@@ -793,7 +793,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 				CIfX(FP,Never())
 				for i = 0, 3 do
-					CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),PlayerCheck(i,1)})
+					CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 						CMov(FP,G_CA_BakX,G_CA_TempTable[8])
 						CMov(FP,G_CA_BakY,G_CA_TempTable[9])
@@ -867,7 +867,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 			CIfX(FP,Never())
 			for i = 0, 3 do
-				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),PlayerCheck(i,1)})
+				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 				CMov(FP,G_CA_TempTable[8],G_CA_BakX)
 				CMov(FP,G_CA_TempTable[9],G_CA_BakY)
 			end

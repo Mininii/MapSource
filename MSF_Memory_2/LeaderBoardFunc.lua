@@ -12,19 +12,19 @@ function LeaderBoardF()
 	},{Preserved}) -- 스웜인스 사용제한
 	
     for i = 0, 3 do
-        TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+        TriggerX(FP,{HumanCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			SetCp(4+i),RunAIScriptAt(JYD,2+i)--32
         },{Preserved})
-        TriggerX(FP,{PlayerCheck(i,1),ElapsedTime(AtLeast,60*3),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+        TriggerX(FP,{HumanCheck(i,1),ElapsedTime(AtLeast,60*3),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			Order("Factories",4+i,64,Attack,2+i)
         },{Preserved})
-        TriggerX(FP,{PlayerCheck(i,0)},{
+        TriggerX(FP,{HumanCheck(i,0)},{
 			RemoveUnit(35,4+i),RemoveUnit(42,4+i)
         },{Preserved})
---        TriggerX(FP,{PlayerCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+--        TriggerX(FP,{HumanCheck(i,0),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 --            Order("Factories",P5+i,11+i,Attack,64),--트리거 인식상 Factories 처리 유닛들만 이동시킴
 --        },{Preserved})
---        TriggerX(FP,{PlayerCheck(i,1),CDeaths(FP,Exactly,300,LeaderBoardT);},{
+--        TriggerX(FP,{HumanCheck(i,1),CDeaths(FP,Exactly,300,LeaderBoardT);},{
 --            Order("Factories",P5+i,11+i,Attack,64),--트리거 인식상 Factories 처리 유닛들만 이동시킴
 --        },{Preserved})
     end
@@ -77,7 +77,7 @@ function LeaderBoardF()
 			NIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
 	
 			for i = 0, 3 do
-				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),PlayerCheck(i,0)})
+				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,0)})
 				DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
 				TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,4)},{Preserved})
 				TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,5)},{Preserved})
@@ -86,7 +86,7 @@ function LeaderBoardF()
 				CIfEnd()
 			end
 			for j = 0, 3 do
-			NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+			NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 			end
 			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			

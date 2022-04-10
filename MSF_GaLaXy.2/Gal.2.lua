@@ -57,7 +57,7 @@ SetInvincibility(Disable,"Vespene Geyser",11,64),
 SetInvincibility(Disable,"Young Chrysalis",Force2,64)
 },1)
 
-Enable_PlayerCheck()
+Enable_HumanCheck()
 InitJump = def_sIndex()
 CJump(AllPlayers,InitJump) -- 트리거 가둬놓는곳
 Objects()
@@ -343,7 +343,7 @@ table.insert(GiveT,GiveUnits(2, 125, P12, 1, P2))
 
 DoActions(FP,GiveT)
 for i = 0, 5 do
-Trigger2(FP,{PlayerCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
 end
 
 VoidAreaOffset = 0x590010
@@ -379,7 +379,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
-		PlayerCheck(i,1);
+		HumanCheck(i,1);
 		},
 	actions = {
 		SetCVar(FP,SetPlayers[2],Add,1);
@@ -2008,7 +2008,7 @@ end
 DoActions2(FP,UpButtonSetArr)
 CIfX(FP,Never())
 	for i = 0, 5 do
-	CElseIfX(PlayerCheck(i,1))
+	CElseIfX(HumanCheck(i,1))
 	CMov(FP,SelCP,i)
 	end
 	CIfXEnd()
@@ -4313,7 +4313,7 @@ CIfOnce(FP,{
 	CDeaths(FP,AtLeast,21+(24*5),ModeT);
 })
 for i = 0, 5 do
-	CSPlot(MarCreateSh[i+1],i,20,0,{0,0},1,32,FP,PlayerCheck(i,1))
+	CSPlot(MarCreateSh[i+1],i,20,0,{0,0},1,32,FP,HumanCheck(i,1))
 end
 CSPlot(MutalCreateS,FP,43,0,{0,0},1,32,FP,nil)
 CSPlot(ZerglingCreateS,FP,37,0,{0,0},1,32,FP,nil)
@@ -4406,7 +4406,7 @@ CIfX(FP,Never())
 
 
 for i = 0, 5 do
-CElseIfX(PlayerCheck(i,1))
+CElseIfX(HumanCheck(i,1))
 f_Read(FP,0x6284E8+(i*0x30),Cunit2,Cunit3)
 --CMov(FP,Dt,_ReadF(0x58A364+48*180+4*i))--
 Trigger {
@@ -4426,7 +4426,7 @@ CIfOnce(FP,{TMemory(_Mem(Dt),AtLeast,10000)})
 CMov(FP,Dt,0)
 CIfEnd()
 for i = 0,5 do
-CIfX(FP,PlayerCheck(i,1))
+CIfX(FP,HumanCheck(i,1))
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 CMov(FP,0x57f120 + (i*4) , CanC)
 CMov(FP,0x582174 + (i*4) , CanDefeat)
@@ -7747,7 +7747,7 @@ CMov(FP,CurrentUpgrade,0)
 CMov(FP,CurrentFactor,0)
 CMov(FP,UpCount,0)
 for i = 0, 5 do
-CIf(FP,PlayerCheck(i,1))
+CIf(FP,HumanCheck(i,1))
 CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+8,Exactly,1),{
 	SetCVar(FP,TempUpgradePtr[2],SetTo,EPDF(AtkUpgradePtrArr[i+1])),
 	SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
@@ -8653,7 +8653,7 @@ local SuPtr = CreateVarArr(6,FP)
 local NeSkill = CreateCcodeArr(6)
 local TeSkill = CreateCcodeArr(6)
 local SuSkill = CreateCcodeArr(6)
-CIf(FP,{CDeaths(FP,AtMost,0,MarMode),PlayerCheck(j,1)})
+CIf(FP,{CDeaths(FP,AtMost,0,MarMode),HumanCheck(j,1)})
 
 CIf(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtLeast,1,CreateNe[j+1]),Command(j,AtMost,0,16)},{SetCDeaths(FP,SetTo,0,CreateNe[j+1])}) -- 소환 또는 조합시
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
@@ -8717,7 +8717,7 @@ CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
 
 		)),
 		CDeaths(FP,AtMost,0,BSkillT2[j+1])},SetCDeaths(FP,SetTo,18,BSkillT2[j+1]))
-	CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(182,j,64,Patrol,64)},1)
+	CSPlotAct(NeShape,j,182,"S"..j+1,nil,1,32,32,nil,FP,HumanCheck(j,1),{Order(182,j,64,Patrol,64)},1)
 	CIfEnd()
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT2[j+1])})
 CElseX({RemoveUnit(182,j)})
@@ -8757,7 +8757,7 @@ CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
 
 		)),
 		CDeaths(FP,AtMost,0,BSkillT3[j+1])},SetCDeaths(FP,SetTo,18,BSkillT3[j+1]))
-	CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(183,j,64,Patrol,64)},1)
+	CSPlotAct(TeShape,j,183,"G"..j+1,nil,1,32,32,nil,FP,HumanCheck(j,1),{Order(183,j,64,Patrol,64)},1)
 	CIfEnd()
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT3[j+1])})
 CElseX({RemoveUnit(183,j)})
@@ -8797,7 +8797,7 @@ CIf(FP,{
 		_TC(Bring(Force2,AtLeast,1,"Any unit","P"..j+1))
 	)),
 	CDeaths(FP,AtMost,0,BSkillT[j+1])},SetCDeaths(FP,SetTo,13,BSkillT[j+1]))
-CSPlotAct(BattleShape,j,1,"P"..j+1,nil,1,32,32,nil,FP,PlayerCheck(j,1),{Order(1,j,64,Patrol,64)},1)
+CSPlotAct(BattleShape,j,1,"P"..j+1,nil,1,32,32,nil,FP,HumanCheck(j,1),{Order(1,j,64,Patrol,64)},1)
 CIfEnd()
 DoActionsX(FP,{SetCDeaths(FP,Subtract,1,BSkillT[j+1])})
 CElseX({RemoveUnit(1,j)})
@@ -9880,7 +9880,7 @@ CMov(FP,MarUpData,0)
 
 for i=0, 5 do
 	CIf(FP,Deaths(i,Exactly,1,217))
-		CIfX(FP,PlayerCheck(i,1))
+		CIfX(FP,HumanCheck(i,1))
 			CAdd(FP,MarUpData,_Div(_ReadF(DefUpgradePtrArr[i+1],_Mov(255*(256^DefUpgradeMaskRetArr[i+1]))),256^DefUpgradeMaskRetArr[i+1]))
 		CElseX()
 			CAdd(FP,MarUpData,255)
@@ -10048,7 +10048,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		CDeaths(FP,Exactly,i,GiveRate[k+1]);
 		Accumulate(k,AtMost,GiveRate2[i+1],Ore);
 	},
@@ -10065,7 +10065,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		CDeaths(FP,Exactly,i,GiveRate[k+1]);
 		Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
 		Accumulate(k,AtMost,0x7FFFFFFF,Ore);
@@ -10089,7 +10089,7 @@ Trigger { -- 돈 기부 시스템
 	conditions = {
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 	},
 	actions = {
 		DisplayText("\x07『 "..Player[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
@@ -10102,7 +10102,7 @@ end end end
 CIf(FP,CDeaths(FP,AtMost,0,NBMode))
 for i = 0, 5 do
 for NB = 0, 4 do -- 중벙 트리거
-CIf(FP,{PlayerCheck(i,1)})
+CIf(FP,{HumanCheck(i,1)})
 Trigger {
 	players = {FP},
 	conditions = {

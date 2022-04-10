@@ -182,7 +182,7 @@ actions = {
 	PreserveTrigger();
 },
 }
-CIf(FP,{PlayerCheck(i,1)})
+CIf(FP,{HumanCheck(i,1)})
 
 
 local ExchangeP = CreateVar(FP)
@@ -456,7 +456,7 @@ actions = {
 				Label(0);
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 				Command(k,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,1);
+				HumanCheck(j,1);
 				CDeaths(FP,Exactly,i,GiveRate[k+1]);
 				Accumulate(k,AtMost,GiveRate2[i+1],Ore);
 			},
@@ -473,7 +473,7 @@ actions = {
 				Label(0);
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 				Command(k,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,1);
+				HumanCheck(j,1);
 				CDeaths(FP,Exactly,i,GiveRate[k+1]);
 				Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
 				Accumulate(k,AtMost,0x7FFFFFFF,Ore);
@@ -497,7 +497,7 @@ actions = {
 			conditions = {
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 				Command(k,AtLeast,1,GiveUnitID[j+1]);
-				PlayerCheck(j,0);
+				HumanCheck(j,0);
 			},
 			actions = {
 				DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);

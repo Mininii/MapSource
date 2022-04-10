@@ -3,7 +3,7 @@ function Operator_Trig()
 	CurrentOP = CreateVar(FP)
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
-        CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
+        CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		Trigger {
 			players = {FP},

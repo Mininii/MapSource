@@ -404,7 +404,7 @@ local CB_P = CreateVar(FP)
 		CIf(FP,CDeaths(FP,AtLeast,1,Win))
 			ReadScore = CreateVar(FP)
 			for i = 0, 6 do
-				CIf(FP,{PlayerCheck(i,1)})
+				CIf(FP,{HumanCheck(i,1)})
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
 					
 					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})

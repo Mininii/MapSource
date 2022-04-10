@@ -291,7 +291,7 @@ Str03 = CreateCText(FP,"\x12\x02◆ \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 CJumpEnd(AllPlayers,2)
 
 
-Enable_PlayerCheck()
+Enable_HumanCheck()
 NoAirCollisionX(FP)
 VName = "Ver. 1.7X"
 ModeO = 0x00010001
@@ -16232,7 +16232,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		Deaths(CurrentPlayer,Exactly,i,"Protoss Reaver");
 		Accumulate(k,AtMost,GiveRate2[i+1],Ore);
 	},
@@ -16250,7 +16250,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		Deaths(CurrentPlayer,Exactly,i,"Protoss Reaver");
 		Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
 		Accumulate(k,AtMost,0x7FFFFFFF,Ore);
@@ -16274,7 +16274,7 @@ Trigger { -- 돈 기부 시스템
 	conditions = {
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 	},
 	actions = {
 		DisplayText("\x07『 "..Player[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);

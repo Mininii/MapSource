@@ -35,8 +35,8 @@ FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
-Enable_PlayerCheck()
-Trigger2(FP,{PlayerCheck(0,0),PlayerCheck(1,0),PlayerCheck(2,0),PlayerCheck(3,0),PlayerCheck(4,0),PlayerCheck(5,0),PlayerCheck(6,0)},{Defeat()})
+Enable_HumanCheck()
+Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 GiveT = {}
 for i = 0, 6 do
@@ -45,7 +45,7 @@ for i = 0, 6 do
 end
 DoActions(FP,GiveT,1)
 for i = 0, 6 do
-Trigger2(FP,{PlayerCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
 end
 	CIf(AllPlayers,ElapsedTime(AtLeast,3))
 		init_func = def_sIndex()
@@ -60,7 +60,7 @@ end
 			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT)
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
-		DoPlayerCheck()
+		DoHumanCheck()
 		NoAirCollisionX(FP)
 		BGMManager()
 		onInit_EUD() -- onPluginStart

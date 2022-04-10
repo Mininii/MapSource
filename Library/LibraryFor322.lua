@@ -150,7 +150,43 @@ function CallTriggerX(Player,Index,Condition,AddonTrigger,Flags) -- CtrigAsm 5.1
 	table.insert(X,SetCtrig1X("X",Index+1,0x164,0,SetTo,0x0,0x2))
 	TriggerX(Player,Condition,{AddonTrigger,X},Y)
 end
+HumanCheckOffset = 0
+function Enable_HumanCheck(Offset)
+	if Offset == nil or Offset == "X" then
+		Offset = 0x58D740+(20*60)
+	end
+	HumanCheckOffset = Offset
+	DoActions(AllPlayers,{FSetMemory(Offset,SetTo,0)})
 
+	for i = 0, 7 do
+		Trigger {
+			players = {AllPlayers},
+			conditions = {
+				FMemoryX(0x57EEE8 + 36*i,AtLeast,0x1,0xFF);
+				FMemoryX(0x57EEE8 + 36*i,AtMost,0x2,0xFF);
+			},
+			actions = {
+				FSetMemoryX(Offset,SetTo,2^i,2^i);
+			},
+			flag = {Preserved}
+		}
+	end
+end
+
+function HumanCheck(Player,Status)
+	if HumanCheckOffset == 0 then
+		Need_Enable_HumanCheck()
+	end
+	if Player >= 8  or Player < 0 then
+		HumanCheck_InputData_Error()
+	end
+	if Status == "X" or Status == 0 then
+		Status = 0
+	else
+		Status = 2^Player
+	end
+	return FMemoryX(HumanCheckOffset,Exactly,Status,2^Player)
+end
 function SetNextTrigger(Index,AddonTrigger)
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1),AddonTrigger}
 	return X
@@ -489,8 +525,8 @@ function IBGM_EPD(Player,MaxPlayer,Option_NT,BGMDeathsT)
 
 	for j, k in pairs(BGMDeathsT) do
 		for i = 0, MaxPlayer do
-			CTrigger(Player,{PlayerCheck(i,1)},{TSetDeathsX(i,Subtract,DtP,k,0xFFFFFF)},1) -- 브금타이머
-			CTrigger(Player,{PlayerCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
+			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,DtP,k,0xFFFFFF)},1) -- 브금타이머
+			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
 		end
 		CDoActions(Player,{TSetDeathsX(Player,Subtract,DtP,k,0xFFFFFF),
 		SetDeathsX(Player,SetTo,0,k,0xFF000000),

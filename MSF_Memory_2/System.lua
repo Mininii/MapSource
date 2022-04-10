@@ -37,7 +37,7 @@ function System()
 
     CIf(FP,{Command(FP,AtLeast,1,190)})
     for i = 0, 3 do
-        CIf(FP,{PlayerCheck(i,1),Deaths(i,Exactly,0,12),Deaths(i,Exactly,0,14)})
+        CIf(FP,{HumanCheck(i,1),Deaths(i,Exactly,0,12),Deaths(i,Exactly,0,14)})
         for j = 0, 363 do
             Trigger { -- 상시브금
                 players = {FP},
@@ -328,7 +328,7 @@ HPRegenTable = {64}
 --        CMov(FP,V(MarSkillCA[6]),1)
 --        CMov(FP,V(MarSkillCA[5]),5)
         for i = 0, 3 do
-        --TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
+        --TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
         end
         function MarListSkillUnitFunc()
             CIf(FP,Memory(0x628438,AtLeast,1))
@@ -678,7 +678,7 @@ HPRegenTable = {64}
         if type(CUTable)=="table" then
             for j, k in pairs(CUTable) do
                 for i = 0, 3 do
-                    f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost),PlayerCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
+                    f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
                 end
             end
         else
@@ -919,7 +919,7 @@ TargetRotation = CreateVar(FP)
 WBreak=CreateCcode()
 for i = 0, 3 do
     DoActionsX(FP,{SetCD(WBreak,100)})
-    CWhile(FP,{PlayerCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i),CD(WBreak,1,AtLeast)},SubCD(WBreak,1))
+    CWhile(FP,{HumanCheck(i,0),Bring(i+4,AtLeast,1,"Men",36+i),CD(WBreak,1,AtLeast)},SubCD(WBreak,1))
     f_Lengthdir(FP,f_CRandNum(384,320),_Mod(_Rand(),360),T_X,T_Y)
     f_Div(FP,T_Y,2)
     Simple_SetLocX(FP,9,T_X,T_Y,T_X,T_Y,{Simple_CalcLoc(9,2048,2048,2048,2048)})
@@ -928,7 +928,7 @@ for i = 0, 3 do
 --    CMov(FP,TargetRotation,f_CRandNum(4))
 --    
 --	for i = 0, 3 do
---		CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),PlayerCheck(i,0)})
+--		CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),HumanCheck(i,0)})
 --		DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
 --		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,0)},{Preserved})
 --		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,1)},{Preserved})
@@ -937,7 +937,7 @@ for i = 0, 3 do
 --		CIfEnd()
 --	end
 --    for j = 0, 3 do
---    NJumpX(FP,L_Gun_Move,{CVar(FP,TargetRotation[2],Exactly,j),PlayerCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+--    NJumpX(FP,L_Gun_Move,{CVar(FP,TargetRotation[2],Exactly,j),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 --    end
 --	for i = 0, 3 do
 --        TriggerX(FP,{CV(TargetRotation,i)},{Order("Men")},{Preserved})

@@ -322,7 +322,7 @@ function LevelUp()
 	CIfX(FP,{Never()})
 
 	for i = 0, 6 do
-	CElseIfX({CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtMost,4,NoCcode),PlayerCheck(i,1),CDeaths(FP,AtMost,500,ConCP[i+1])},{SetCDeaths(FP,Add,1,ConCP[i+1])})
+	CElseIfX({CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtMost,4,NoCcode),HumanCheck(i,1),CDeaths(FP,AtMost,500,ConCP[i+1])},{SetCDeaths(FP,Add,1,ConCP[i+1])})
 	local CSelT = "\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！\n\n\n\n\x13\x04薄仙 識澱亜管 巴傾戚嬢澗"..PlayerString[i+1].."\x04脊艦陥.\n\x13\x04陥製 傾婚稽 遭楳馬獣畏柔艦猿?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！"
 	CTrigger(FP,{CDeaths(FP,Exactly,2,ConCP[i+1])},{
 		RotatePlayer({DisplayTextX(CSelT,4),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue2)

@@ -97,7 +97,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 	NJumpXEnd(FP,L_Gun_Order)
 	f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
 	for i = 0, 6 do
-		NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+		NJumpX(FP,L_Gun_Order,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 	end
 	CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
 	for i = 0, 6 do

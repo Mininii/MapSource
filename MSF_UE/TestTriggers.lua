@@ -25,7 +25,7 @@ function Test_LV1()
                     CJumpXEnd(FP,OrderCheck)
                         f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
                         for i = 0, 6 do
-                            NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),PlayerCheck(i,0)})
+                            NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
                                 CJumpX(FP,OrderCheck)
                             NIfEnd()
                         end

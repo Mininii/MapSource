@@ -905,7 +905,7 @@ end
 SetCallEnd()
 
 CJumpEnd(AllPlayers,0)
-Enable_PlayerCheck()
+Enable_HumanCheck()
 NoAirCollisionX(P6)
 DtP = CreateVar(FP)
 
@@ -920,7 +920,7 @@ CMov(P6,Dv,DtP)
 CMov(P6,0x58F500,DtP)
 
 
-CIfX(P6,PlayerCheck(P1,1))
+CIfX(P6,HumanCheck(P1,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*0))--
 	f_Read(P6,0x6284E8,Cunit2)
 	CMov(P6,CurrentOP,0)
@@ -935,7 +935,7 @@ CIfX(P6,PlayerCheck(P1,1))
 		}
 	}
 	
-	CElseIfX(PlayerCheck(P2,1))
+	CElseIfX(HumanCheck(P2,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*1))
 	f_Read(P6,0x628518,Cunit2)
 	CMov(P6,CurrentOP,1)
@@ -950,7 +950,7 @@ CIfX(P6,PlayerCheck(P1,1))
 		}
 	}
 	
-	CElseIfX(PlayerCheck(P3,1))
+	CElseIfX(HumanCheck(P3,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*2))
 	f_Read(P6,0x628548,Cunit2)
 	CMov(P6,CurrentOP,2)
@@ -965,7 +965,7 @@ CIfX(P6,PlayerCheck(P1,1))
 		}
 	}
 	
-	CElseIfX(PlayerCheck(P4,1))
+	CElseIfX(HumanCheck(P4,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*3))
 	f_Read(P6,0x628578,Cunit2)
 	CMov(P6,CurrentOP,3)
@@ -980,7 +980,7 @@ CIfX(P6,PlayerCheck(P1,1))
 		}
 	}
 	
-	CElseIfX(PlayerCheck(P5,1))
+	CElseIfX(HumanCheck(P5,1))
 	CMov(P6,Dt,_ReadF(0x58A364+48*180+4*4))
 	f_Read(P6,0x6285A8,Cunit2)
 	CMov(P6,CurrentOP,4)
@@ -1001,7 +1001,7 @@ CIfOnce(P6,{CVar(FP,Dt[2],AtLeast,10000)})
 	CMov(P6,Dt,0)
 CIfEnd()
 for i = 0,4 do
-	CIfX(P6,PlayerCheck(i,1))
+	CIfX(P6,HumanCheck(i,1))
 		CDoActions(P6,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 		CSub(P6,0x58F4B0+(i*4),Dt)
 		CElseX()
@@ -3985,7 +3985,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 			CMov(FP,V(MarSkillCA[6]),1)
 			CMov(FP,V(MarSkillCA[5]),6)
 			for i = 0, 4 do
-			TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
+			TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
 			end
 			SkillShape = {}
 			function MarListSkillUnitFunc()
@@ -4231,7 +4231,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 		SetMemory(0x6509B0,SetTo,FP),
 	})
 	
-		CIf(FP,PlayerCheck(i-1,1))
+		CIf(FP,HumanCheck(i-1,1))
 			CIfX(FP,MemoryB(0x58D2B0+((i-1)*46)+7,AtMost,249))
 			CMov(FP,MarListSkillLv[i],_Div(_ReadF(AtkUpgradePtrArr[i],255*(256^AtkUpgradeMaskRetArr[i])),_Mov(256^AtkUpgradeMaskRetArr[i])),nil,0xFF)
 			CElseX()
@@ -4369,7 +4369,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 CIf(FP,{CDeaths(FP,AtLeast,1,MarineStackSystem),CDeaths(FP,AtLeast,1,PatternProvider)})
 for i=0, 4 do
 	Player_0x4DTemp = Player_0x4D[i+1]
-	CIf(P6,{PlayerCheck(i,1)})
+	CIf(P6,{HumanCheck(i,1)})
 
 		f_Read(P6,0x6284E8+(0x30*i),"X",Player_S[i+1],0xFFFFFF)
 		CIf(P6,Memory(0x6284E8+(0x30*i),AtLeast,1))
@@ -5282,7 +5282,7 @@ CIfEnd()
 TPaneltyP = CreateCcodeArr(5)
 TPaneltyA = CreateCcode()
 for i = 0, 4 do
-	CIf(FP,{PlayerCheck(i,1),CDeaths(P6,AtLeast,1,PaneltyP[i+1])},{SetCDeaths(FP,Add,1,TPaneltyA)})
+	CIf(FP,{HumanCheck(i,1),CDeaths(P6,AtLeast,1,PaneltyP[i+1])},{SetCDeaths(FP,Add,1,TPaneltyA)})
 	CMul(P6,PaneltyTemp2[i+1],_Add({FP,RedNumber[2],nil,"V"},400),_Ccode("X",PaneltyP[i+1]))
 	CAdd(P6,Panelty[i+1],PaneltyTemp2[i+1])
 	CIf(FP,{BYD})
@@ -5409,7 +5409,7 @@ Trigger { -- 빨간숫자
 
 
 for i=0,4 do
-	CIf(P6,PlayerCheck(i,1))
+	CIf(P6,HumanCheck(i,1))
 		
 		CIf(P6,{Memory(0x57F120+(i*4),AtLeast,1),Memory(0x57f0f0+(i*4),AtLeast,1)})
 			
@@ -17919,7 +17919,7 @@ end
 PerCostVA = CreateVArr(6,FP)
 PerCostVA2 = CreateVArr(6,FP)
 for i = 0, 4 do
-	CIf(FP,PlayerCheck(i,1))
+	CIf(FP,HumanCheck(i,1))
 		CIf(FP,{TTCVar(FP,CurPerAttack[i+1][2],NotSame,PerAttack[i+1])})
 			CIfX(FP,{TAccumulate(i,AtLeast,PerAttackCost[i+1],Ore)})
 				CMov(FP,PerAttack[i+1],CurPerAttack[i+1])
@@ -18242,7 +18242,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		CDeaths(k,Exactly,i,GiveRate);
 		Accumulate(k,AtMost,GiveRate2[i+1],Ore);
 	},
@@ -18260,7 +18260,7 @@ Trigger { -- 돈 기부 시스템
 		Label(0);
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,1);
+		HumanCheck(j,1);
 		CDeaths(k,Exactly,i,GiveRate);
 		Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
 		Accumulate(k,AtMost,0x7FFFFFFF,Ore);
@@ -18284,7 +18284,7 @@ Trigger { -- 돈 기부 시스템
 	conditions = {
 		--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 		Command(k,AtLeast,1,GiveUnitID[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 	},
 	actions = {
 		DisplayText("\x07『 "..Player[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
@@ -18365,7 +18365,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	
@@ -18390,7 +18390,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	
@@ -18494,7 +18494,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	
@@ -18519,7 +18519,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	
@@ -18624,7 +18624,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	
@@ -18649,7 +18649,7 @@ Trigger {
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,l-1,PExitCheck[j+1]);
-		PlayerCheck(j,0);
+		HumanCheck(j,0);
 		Deaths(j,Exactly,1,"Psi Emitter");
 		},
 	

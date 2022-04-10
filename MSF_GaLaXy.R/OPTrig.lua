@@ -7,7 +7,7 @@ CIfEnd()
 DoActionsX(FP,SetCDeaths(FP,Subtract,1,Print13))
 CIfX(FP,Never())
 	for i = 0, 6 do
-	CElseIfX(PlayerCheck(i,1))
+	CElseIfX(HumanCheck(i,1))
 	CMov(FP,SelCP,i)
 	end
 	CIfXEnd()

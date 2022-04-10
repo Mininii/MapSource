@@ -14,7 +14,7 @@ function Operator_Trig()
 		SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0)
 	})
 	for i = 0, 3 do
-		CIf(FP,{PlayerCheck(i,1),})
+		CIf(FP,{HumanCheck(i,1),})
 
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
@@ -67,7 +67,7 @@ function Operator_Trig()
 	end
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 3 do
-        CElseIfX(PlayerCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
+        CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
 		
 		TriggerX(FP,{CD(Theorist,0),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{Preserved})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)

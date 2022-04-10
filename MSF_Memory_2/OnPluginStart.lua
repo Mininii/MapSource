@@ -277,7 +277,7 @@ end
 	CIfOnce(FP)
 	
 	for i = 0, 3 do
-	TriggerX(FP,{PlayerCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
+	TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,SetPlayers[2],Add,1)})
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 	f_GetTblptr(FP,MarTblPtr[i+1],MarID[i+1]+1)
 	_0DPatchforVArr(FP,Names[i+1],4)
