@@ -438,7 +438,7 @@ end
 function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask,flag)
 	local X = {}
 
-	if flag ~= nil then X=CD(Theorist,1); end
+	if flag ~= nil then X=CD(Theorist,0); end
 	for i = 3, 0, -1 do
 		Trigger {
 			players = {FP},

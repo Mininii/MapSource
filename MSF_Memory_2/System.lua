@@ -362,6 +362,15 @@ HPRegenTable = {64}
 			CIfEnd()
 			CSub(FP,0x6509B0,4)
 		CIfEnd()
+		CIf(FP,DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00))
+			CAdd(FP,0x6509B0,4)
+			CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+				CSub(FP,0x6509B0,4)
+				CallTrigger(FP,CallMarSkill)
+				CAdd(FP,0x6509B0,4)
+			CIfEnd()
+			CSub(FP,0x6509B0,4)
+		CIfEnd()
         
 	CIfEnd()
 
@@ -950,8 +959,12 @@ end
 CIfOnce(FP,CD(Theorist,1))
 TheoristPatchArr = {}
 for i = 1, 4 do
-    table.insert(TheoristPatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),Add,MarAtk)) -- 기본공격력
-    table.insert(TheoristPatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),Add,MarAtkFactor)) -- 추가공격력
+		table.insert(TheoristPatchArr,SetMemoryW(0x656EB0 + (0*2),SetTo,NMAtk*2)) -- 기본공격력
+		table.insert(TheoristPatchArr,SetMemoryW(0x657678 + (0*2),SetTo,NMAtkFactor*2)) -- 추가공격력
+		table.insert(TheoristPatchArr,SetMemoryW(0x656EB0 + (1*2),SetTo,HMAtk*2)) -- 기본공격력
+		table.insert(TheoristPatchArr,SetMemoryW(0x657678 + (1*2),SetTo,HMAtkFactor*2)) -- 추가공격력
+        table.insert(TheoristPatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*2)) -- 기본공격력
+        table.insert(TheoristPatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*2)) -- 추가공격력
 end
 
 DoActions2X(FP,{

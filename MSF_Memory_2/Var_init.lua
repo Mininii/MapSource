@@ -1,9 +1,29 @@
 function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
-	MarAtk = 50
-	MarAtkFactor = 4
-	MarAtkFactor2 = 12
+	if EVFFlag == 1 then
+		GTAtk = 50*2
+		GTAtkFactor = 10*2
+		NMAtk = 15*2
+		NMAtkFactor = 1*2
+		HMAtk = 50*2
+		HMAtkFactor = 3*2
+		MarAtk = 50*2
+		MarAtkFactor = 4*2
+		MarAtk2 = 100*2
+		MarAtkFactor2 = 12*2
+	else
+		GTAtk = 50*2
+		GTAtkFactor = 10*2
+		NMAtk = 15
+		NMAtkFactor = 1
+		HMAtk = 50
+		HMAtkFactor = 3
+		MarAtk = 50
+		MarAtkFactor = 4
+		MarAtk2 = 100
+		MarAtkFactor2 = 12
+	end
 	AtkUpgradeFactor = 15
 	DefUpgradeFactor = 20
 	GunLimit = 1450
@@ -136,6 +156,9 @@ function Var_init()
 	WarpCheck = CreateCcode()
 	CUnitRefrash = CreateCcode()
 	Theorist = CreateCcode() -- 이론치모드 Ccode
+	
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrLetter(" ",38).."\r\n",3)) 
+	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}

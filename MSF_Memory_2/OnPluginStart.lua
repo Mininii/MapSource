@@ -253,8 +253,17 @@ BossUIDP = {87,74,5,2,64,12,82}
 		--SetWepUpType(MarWep[i],i-1) -- 플레이어 마린무기에 각각 다른 공업 적용
 		
 		
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (0*2),SetTo,NMAtk)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (0*2),SetTo,NMAtkFactor)) -- 추가공격력
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (1*2),SetTo,HMAtk)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (1*2),SetTo,HMAtkFactor)) -- 추가공격력
+		
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk)) -- 기본공격력
 		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor)) -- 추가공격력
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (123*2),SetTo,MarAtk2)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (123*2),SetTo,MarAtkFactor2)) -- 추가공격력
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (99*2),SetTo,GTAtk)) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (99*2),SetTo,GTAtkFactor)) -- 추가공격력
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i],SetTo,MarWep[i])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i],SetTo,MarWep[i])) -- 공중무기
 	end
@@ -262,7 +271,6 @@ BossUIDP = {87,74,5,2,64,12,82}
 	DefTypePatch(32,8) -- 
 	DefTypePatch(124,5) -- 
 	DefTypePatch(125,4) -- 
-	table.insert(PatchArr,SetMemoryW(0x657678 + (123*2),SetTo,MarAtkFactor2)) -- 추가공격력
 if Limit == 1 then
 
 	for i = 0, 516 do

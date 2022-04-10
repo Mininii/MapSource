@@ -210,35 +210,19 @@ local CurExpTmp = CreateVar()
 
 
 
-local TimeTmp = CreateCcode()
-local TimeTmp2 = CreateCcode()
-local CountTmp = CreateCcode()
-local LevelTmp = CreateCcode()
-local ExpTmp = CreateCcode()
-local RedNumberTmp = CreateCcode()
 local ArrI = CreateVar()
-CMov(FP,_Ccode(FP,RedNumberTmp),RedNumber)
-CMov(FP,_Ccode(FP,TimeTmp),Time1)
-CMov(FP,_Ccode(FP,TimeTmp2),Time1)
-CMov(FP,_Ccode(FP,LevelTmp),Level)
-CMov(FP,_Ccode(FP,CountTmp),count)
+local LevelUpEff = CreateVar(FP)
 
 
 
-
-
-CIfX(FP,{CD(Theorist,0)})
-CIfX(FP,{CV(Level,49,AtMost)},{print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04："..string.rep("\x0D",GetStrSize(0,"．")).."０"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
-	f_Mul(FP,CurExpTmp,CurEXP,100)
+CIf(FP,CD(Theorist,0))
+CIfX(FP,{CV(Level,49,AtMost)})
+	f_Mul(FP,CurExpTmp,CurEXP,1000)
 	f_Div(FP,CurExpTmp,MaxEXP)
-	CMov(FP,_Ccode(FP,ExpTmp),CurExpTmp)
-CElseX({SetCD(ExpTmp,100),print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：００"..string.rep("\x0D",GetStrSize(0,"．")).."０％ ◈ \x06０００\x04 ◈ \x04００００"))})
-CIfXEnd()
-CElseX({print_utf8(12,0,StrDesign("\x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x04"..string.rep("\x0D",GetStrSize(0,"◈ \x07ＬＶ\x04．００／\x1C５０ \x04◈ \x07ＥＸＰ\x04：．０．０％ ")).."◈ \x06０００\x04 ◈ \x04００００"))})
-
+CElseX({SetV(CurExpTmp,1000)})
 CIfXEnd()
 
-CIf(FP,{CD(Theorist,0),CD(ExpTmp,100,AtLeast),CV(Level,49,AtMost)},{SubCD(ExpTmp,100)})
+CIf(FP,{CV(CurExpTmp,1000,AtLeast),CV(Level,49,AtMost)},{SubV(CurExpTmp,1000),SetV(LevelUpEff,1)})
 local StimUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.10\x04 돌파, \x1B원격 스팀팩\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 local ReviveUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.50\x04 돌파, \x07소생 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 local SkillUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.40\x04 돌파, \x08공격 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -265,7 +249,6 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 		RotatePlayer({PlayWAVX("staredit\\wav\\shield_unlock.ogg"),PlayWAVX("staredit\\wav\\shield_unlock.ogg")},HumanPlayers,FP);
 		SetV(ShieldEnV,3200);
 		SetCDeaths(FP,SetTo,1,ShieldUnlock);
-		
 	})
 
 	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -280,57 +263,8 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
-CIfEnd()
+	CIfEnd()
 
-CMov(FP,0x57F0F0+(4*4),10000000)
-
-for i = 6, 0, -1 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			CDeaths(FP,AtLeast,(2^i)*3600000,TimeTmp2);
-		},
-		actions = {
-			SetMemory(0x57F0F0+(4*4),Add,(2^i)*10000);
-			SetCDeaths(FP,Subtract,(2^i)*3600000,TimeTmp2);
-			PreserveTrigger();
-		}
-	}
-end
-for i = 6, 0, -1 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			CDeaths(FP,AtLeast,(2^i)*60000,TimeTmp2);
-		},
-		actions = {
-			SetCDeaths(FP,Subtract,(2^i)*60000,TimeTmp2);
-			SetMemory(0x57F0F0+(4*4),Add,(2^i)*100);
-			PreserveTrigger();
-		}
-	}
-end
-for i = 6, 0, -1 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			CDeaths(FP,AtLeast,(2^i)*1000,TimeTmp2);
-		},
-		actions = {
-			SetCDeaths(FP,Subtract,(2^i)*1000,TimeTmp2);
-			SetMemory(0x57F0F0+(4*4),Add,(2^i));
-			PreserveTrigger();
-		}
-	}
-end
-
-CMov(FP,0x57F120+(4*4),count,10000000)
-CMov(FP,0x57F0F0+(4*5),Level,10000000)
-CMov(FP,0x57F120+(4*5),CurExpTmp,10000000)
-CMov(FP,0x57F0F0+(4*6),Rednumber,10000000)
-CMov(FP,0x57F120+(4*6),10000000)
-CMov(FP,0x57F0F0+(4*7),10000000)
-CMov(FP,0x57F120+(4*7),10000000)
 
 
 Trigger { -- 공업완료시 수정보호막 활성화
@@ -356,78 +290,135 @@ actions = {
 	SetMemoryB(0x57F27C+(228*3)+19,SetTo,1);
 },
 }
-
-TriggerX(FP,{CD(CountTmp,399,AtMost)},{SetMemoryX(0x641630,SetTo,14,0xFF)},{Preserved})
-TriggerX(FP,{CD(CountTmp,400,AtLeast)},{SetMemoryX(0x641630,SetTo,15,0xFF)},{Preserved})
-TriggerX(FP,{CD(CountTmp,800,AtLeast)},{SetMemoryX(0x641630,SetTo,17,0xFF)},{Preserved})
-TriggerX(FP,{CD(CountTmp,1200,AtLeast)},{SetMemoryX(0x641630,SetTo,08,0xFF)},{Preserved})
-Print13_NumSetC(TimeTmp,0x6415BC,36000000,0x100)
-Print13_NumSetC(TimeTmp,0x6415C0,3600000,0x1)
-Print13_NumSetC(TimeTmp,0x6415C8,60000*10,0x1)
-Print13_NumSetC(TimeTmp,0x6415C8,60000,0x1000000)
-Print13_NumSetC(TimeTmp,0x6415D0,10000,0x1000000)
-Print13_NumSetC(TimeTmp,0x6415D4,1000,0x10000)
-Print13_NumSetC(LevelTmp,0x6415E8,10,0x10000,1)
-Print13_NumSetC(LevelTmp,0x6415EC,1,0x100,1)
-Print13_NumSetC(ExpTmp,0x64160C,100,0x10000,1)
-Print13_NumSetC(ExpTmp,0x641610,10,0x100,1)
-Print13_NumSetC(ExpTmp,0x641614,1,0x1000000,1)
-Print13_NumSetC(RedNumberTmp,0x641620,100,0x1000000)
-Print13_NumSetC(RedNumberTmp,0x641624,10,0x10000)
-Print13_NumSetC(RedNumberTmp,0x641628,1,0x100)
-Print13_NumSetC(CountTmp,0x641630,1000,0x1000000)
-Print13_NumSetC(CountTmp,0x641634,100,0x10000)
-Print13_NumSetC(CountTmp,0x641638,10,0x100)
-Print13_NumSetC(CountTmp,0x64163C,1,0x1)
+CIfEnd()
 
 
+function TEST() 
 
---SetMemory(0x641598, SetTo, 0x11B7C207);
---SetMemory(0x64159C, SetTo, 0xC208B7C2);
---SetMemory(0x6415A0, SetTo, 0x80E307B7);
---SetMemory(0x6415A4, SetTo, 0xEF102090);
---SetMemory(0x6415A8, SetTo, 0xEF04B4BC);
---SetMemory(0x6415AC, SetTo, 0xBCEFA9BC);
---SetMemory(0x6415B0, SetTo, 0xA5BCEFAD);
---SetMemory(0x6415B4, SetTo, 0xEFB2BCEF);
---SetMemory(0x6415B8, SetTo, 0xEF078DBC);
---SetMemory(0x6415BC, SetTo, 0xBCEF90BC);--10시
---SetMemory(0x6415C0, SetTo, 0xBCEF0490);--1시
---SetMemory(0x6415C4, SetTo, 0xBCEF0F9A);
---SetMemory(0x6415C8, SetTo, 0x90BCEF90);--0xFF 10분 0xFF000000 1분
---SetMemory(0x6415CC, SetTo, 0x9ABCEF04);
---SetMemory(0x6415D0, SetTo, 0x90BCEF1F);--10초
---SetMemory(0x6415D4, SetTo, 0x2090BCEF);--1초
---SetMemory(0x6415D8, SetTo, 0x8897E204);
---SetMemory(0x6415DC, SetTo, 0xBCEF0720);
---SetMemory(0x6415E0, SetTo, 0xB6BCEFAC);
---SetMemory(0x6415E4, SetTo, 0x8EBCEF04);
---SetMemory(0x6415E8, SetTo, 0xEF90BCEF);--10레벨
---SetMemory(0x6415EC, SetTo, 0xBCEF90BC);--1레벨
---SetMemory(0x6415F0, SetTo, 0xBCEF1C8F);
---SetMemory(0x6415F4, SetTo, 0x90BCEF95);--ㄴㄴ
---SetMemory(0x6415F8, SetTo, 0x97E20420);
---SetMemory(0x6415FC, SetTo, 0xEF072088);
---SetMemory(0x641600, SetTo, 0xBCEFA5BC);
---SetMemory(0x641604, SetTo, 0xB0BCEFB8);
---SetMemory(0x641608, SetTo, 0x9ABCEF04);
---SetMemory(0x64160C, SetTo, 0xEF90BCEF);--100
---SetMemory(0x641610, SetTo, 0xBCEF90BC);--10
---SetMemory(0x641614, SetTo, 0x90BCEF8E);--1
---SetMemory(0x641618, SetTo, 0x2085BCEF);
---SetMemory(0x64161C, SetTo, 0x208897E2);
---SetMemory(0x641620, SetTo, 0x90BCEF06);--10퍼
---SetMemory(0x641624, SetTo, 0xEF90BCEF);--1퍼
---SetMemory(0x641628, SetTo, 0x200490BC);--0.1퍼
---SetMemory(0x64162C, SetTo, 0x208897E2);
---SetMemory(0x641630, SetTo, 0x90BCEF04);--1000마리
---SetMemory(0x641634, SetTo, 0xEF90BCEF);--100마리
---SetMemory(0x641638, SetTo, 0xBCEF90BC);--10마리
---SetMemory(0x64163C, SetTo, 0xE3072090);--1마리
---SetMemory(0x641640, SetTo, 0xC2089180);
---SetMemory(0x641644, SetTo, 0xB7C211B7);
---SetMemory(0x641648, SetTo, 0x00B7C207);
+	TimeTmp = CreateCcode()
+	TimeV = CreateVar(FP)
+	CMov(FP,_Ccode(FP,TimeTmp),Time1)
+	CMov(FP,TimeV,0)
+	for i = 6, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label();
+				CDeaths(FP,AtLeast,(2^i)*3600000,TimeTmp);
+			},
+			actions = {
+				SetCVar(FP,TimeV[2],Add,(2^i)*10000);
+				SetCDeaths(FP,Subtract,(2^i)*3600000,TimeTmp);
+				PreserveTrigger();
+			}
+		}
+	end
+	for i = 6, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label();
+				CDeaths(FP,AtLeast,(2^i)*60000,TimeTmp);
+			},
+			actions = {
+				SetCVar(FP,TimeV[2],Add,(2^i)*100);
+				SetCDeaths(FP,Subtract,(2^i)*60000,TimeTmp);
+				PreserveTrigger();
+			}
+		}
+	end
+	for i = 6, 0, -1 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label();
+				CDeaths(FP,AtLeast,(2^i)*1000,TimeTmp);
+			},
+			actions = {
+				SetCVar(FP,TimeV[2],Add,(2^i)*1);
+				SetCDeaths(FP,Subtract,(2^i)*1000,TimeTmp);
+				PreserveTrigger();
+			}
+		}
+	end
 
+
+	local PlayerID = CAPrintPlayerID 
+ CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x07】\x08·\x11·\x07·",nil,0) 
+ local Data = {{{0,9},{"０",{0x1000000}}}} 
+ CA__ItoCustom(SVA1(Str1,0),TimeV,nil,nil,{10,6},1,{"\x07０","\x07０","\x0F０","\x0F０","\x1F０","\x1F０"},nil,{0x07,0x07,0x0F,0x0F,0x1F,0x1F},{11,12,14,15,17,18},Data)
+ CA__InputVA(40*0,Str1,Str1s,nil,40*0,40*1-3)
+ CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
+ CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x06０００\x04 ◈ ００００ \x07】\x08·\x11·\x07·",nil,0) 
+ CA__ItoCustom(SVA1(Str1,0),RedNumber,nil,nil,{10,3},1,"\x06０",nil,0x06,{5,6,7},Data) 
+ CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"０",nil,nil,{11,12,13,14},Data) 
+ CIf(FP,CVar(FP,count[2],AtMost,399))
+ CA__Input(14,SVA1(Str1,10),0xFF) 
+ CIfEnd()
+CIf(FP,CVar(FP,count[2],AtLeast,400))
+  CA__Input(15,SVA1(Str1,10),0xFF) 
+ CIfEnd()
+CIf(FP,CVar(FP,count[2],AtLeast,800))
+  CA__Input(17,SVA1(Str1,10),0xFF) 
+ CIfEnd()
+CIf(FP,CVar(FP,count[2],AtLeast,1200))
+  CA__Input(08,SVA1(Str1,10),0xFF) 
+ CIfEnd()
+ CA__InputVA(40*1,Str1,Str1s,nil,40*1,40*2-3)
+ CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
+
+CIfX(FP,{CDeaths(FP,AtMost,0,Theorist)})
+
+ CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：０００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,0) 
+ CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 
+ CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,4},1,"\x04０",nil,{0x04,0x04,0x04,0x04},{20,21,22,24},Data) 
+
+ function LevelIStrColor(Color,ValueArr)
+	CIf(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])})
+	CA__Input(Color,SVA1(Str1,8),0xFF) 
+	CA__Input(Color,SVA1(Str1,9),0xFF) 
+   CIfEnd()
+ end
+
+ LevelIStrColor(0x0E,{0,9})
+ LevelIStrColor(0x0F,{10,19})
+ LevelIStrColor(0x07,{20,29})
+ LevelIStrColor(0x11,{30,39})
+ LevelIStrColor(0x08,{40,49})
+ LevelIStrColor(0x1F,{50,50})
+
+CElseX()
+CIfOnce(FP)
+CA__SetMemoryX((40*2)-1,0x0D0D0D0D,0xFFFFFFFF,1)
+CA__SetMemoryX((40*2)-2,0x0D0D0D0D,0xFFFFFFFF,1)
+CA__SetMemoryX((40*3)-1,0x0D0D0D0D,0xFFFFFFFF,1)
+CA__SetMemoryX((40*3)-2,0x0D0D0D0D,0xFFFFFFFF,1)
+CIfEnd()
+CIfXEnd()
+CIf(FP,CV(LevelUpEff,1,AtLeast))
+local LevelUpEffTmp2 = CreateVar(FP)
+local LevelUpEffTmp = CreateVarArr(8,FP)
+LVEFT = {}
+for i = 1, 8 do
+	CMov(FP,LevelUpEffTmp[i],LevelUpEffTmp2)
+	table.insert(LVEFT,{SubV(LevelUpEffTmp[i],604*i)})
+end
+DoActionsX(FP,LVEFT)
+
+LVUpEffArr = {0x08,0x0E,0x0F,0x10,0x11,0x18,0x16,0x17}
+for j,k in pairs(LVUpEffArr) do
+	CA__Input(k,SVA1(Str1,LevelUpEffTmp[j]),0xFF) 
+end
+LVUPEffT= CreateCcode()
+CAdd(FP,_Ccode(FP,LVUPEffT),1)
+TriggerX(FP,{CD(LVUPEffT,3,AtLeast)},{AddV(LevelUpEffTmp2,604),SetCD(LVUPEffT,0)},{Preserved})
+TriggerX(FP,{CV(LevelUpEffTmp2,40*604,AtLeast)},{SetV(LevelUpEff,0),SetV(LevelUpEffTmp2,0)},{Preserved})
+CIfEnd()
+
+ CA__InputVA(40*2,Str1,Str1s,nil,40*2,40*3)
+ CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
+end 
+CAPrint(iStr1,{Force1,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}) 
 
 
 
