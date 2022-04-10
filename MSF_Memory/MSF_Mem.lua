@@ -17,7 +17,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.8"
+VerText = "\x04Ver. 3.8F"
 Limit = 0
 RedMode = 0
 FP = P6
