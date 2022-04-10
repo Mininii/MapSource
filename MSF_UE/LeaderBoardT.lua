@@ -106,11 +106,18 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 		CIfEnd()
 	end
 	CIfEnd()
+	local TempUID = CreateVar(FP)
+	-- DefAttackLoc = 89
+	-- DefCreateLoc = 90
 		CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함. 이거안하면 캔낫 제한 줄어들면서 맵이 망가짐
-		CDoActions(FP,{
-			TSetDeathsX(_Sub(BackupCp,6),SetTo,14*256,0,0xFF00), -- 명령 발싸
-			TSetDeaths(_Sub(BackupCp,3),SetTo,TempBarPos,0),
-		})
+		f_Read(FP,_Sub(BackupCp,6),CPos) -- 생성유닛 위치 불러오기
+		Convert_CPosXY()
+		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
+		CMov(FP,CPos,TempBarPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+		CMov(FP,TempUID,_Read(BackupCp),nil,0xFF)
+		CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89)})
 		CIfEnd()
 		local HeroPointCheck = def_sIndex() 
 		CJump(FP,HeroPointCheck)

@@ -54,7 +54,7 @@ function Gun_System()
     CIfEnd()
 
     if TestStart == 1 then
-        f_GSend(146)
+        --f_GSend(146)
         --f_GSend(136)
     end
 

@@ -362,22 +362,22 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	local ZergArr = {37,38,39,45,44,43,48,49,56,55,53,57,51,54,104}
 	for j, k in pairs(ZergArr) do
 		
-	UnitSizePatch(k,3) -- 저그 유닛 크기 10*10 설정
+	--UnitSizePatch(k,3) -- 저그 유닛 크기 10*10 설정
 --	SetUnitAdvFlag(k,4,4) -- 공중유닛으로설정
 	end
 
-	UnitSizePatch(11,1)
+	--UnitSizePatch(11,1)
 	UnitSizePatch(ParseUnit("Protoss Arbiter"),1)
-	UnitSizePatch(63,5)
-	UnitSizePatch(52,5)
-	UnitSizePatch(62,1)
+	--UnitSizePatch(63,5)
+	--UnitSizePatch(52,5)
+	--UnitSizePatch(62,1)
 
 	for j, k in pairs(HeroArr) do
 		if k ~= 86 then
-		UnitSizePatch(k,5)
+		--UnitSizePatch(k,5)
 		end
 	end
-	UnitSizePatch(27,5)
+	--UnitSizePatch(27,5)
 	UnitSizePatch(7,1)
 
 	for i = 220, 227 do
@@ -451,7 +451,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		}
 	end
 	
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)}) -- Limit설정
 	if TestStart == 1 then
 		DoActions(FP,SetSwitch("Switch 230",Set))
 	end
@@ -647,6 +647,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CElseX()
 	DoActions(FP,SinglePatch)
 	CIfXEnd()
+	G_CB_init()
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
 
 

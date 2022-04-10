@@ -5,15 +5,28 @@ function f_LoadCp()
 	CallTrigger(FP,LoadCp_CallIndex,nil)
 end
 
-function f_Repeat(Line)
-	TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{SetCVar(FP,Var_TempTable[Line][2],SetTo,0)},{Preserved})
-	CIf(FP,CVar(FP,Var_TempTable[Line][2],AtLeast,1))
-		CMov(FP,Spawn_TempW,Var_TempTable[Line])
-		CallTrigger(FP,Call_Repeat)
-		CDoActions(FP,{TSetMemory(_Add(G_TempH,((Line-1)*0x20)/4),SetTo,Spawn_TempW)})
-	CIfEnd()
-end
 
+function Include_Conv_CPosXY(Player)
+	CPos,CPosX,CPosY = CreateVars(3,Player)
+	
+	function Convert_CPosXY(Value)
+			if Value ~= nil then
+		CDoActions(Player,{
+			TSetCVar(Player,CPos[2],SetTo,Value),
+			SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
+		})
+		else
+			CallTrigger(Player,Call_CPosXY)
+		end
+		return CPosX,CPosY
+	end
+	Call_CPosXY = SetCallForward()
+	SetCall(Player)
+	CMov(Player,CPosX,CPos,0,0XFFFF)
+	CMov(Player,CPosY,CPos,0,0XFFFF0000)
+	f_Div(Player,CPosY,_Mov(0x10000))
+	SetCallEnd()
+end
 
 function TestSet(val)
 if val == 1 then 
@@ -494,17 +507,6 @@ function CArrSizeConvert(Size)
 		TNum = TNum + 1
 	end
 	return TNum
-end
-function Convert_CPosXY(Value)
-	if Value ~= nil then
-	CDoActions(FP,{
-		TSetCVar(FP,CPos[2],SetTo,Value),
-		SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
-	})
-	else
-		CallTrigger(FP,Call_CPosXY)
-	end
-	return CPosX,CPosY
 end
 
 
@@ -1057,12 +1059,12 @@ local isScore = CreateCcode()
 local Call_Repeat = SetCallForward()
 SetCall(FP)
 --RandZ = 227
---CIfX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,RandZ,0xFF))
+--CIfX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,RandZ,0xFF))
 --local RetRand = f_CRandNum(#ZergGndUArr,0)
---CMovX(FP,Gun_TempSpawnSet1,VArr(ZergGndVArr,RetRand),nil,0xFF)
+--CMovX(FP,Repeat_UnitIDV,VArr(ZergGndVArr,RetRand),nil,0xFF)
 --CIfXEnd()
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
-	CIf(FP,CVar(FP,RepeatType[2],Exactly,0))
+	CIf(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,0),CVar(FP,RepeatType[2],Exactly,4)})})
 		local Gun_Order = def_sIndex()
 		CJumpXEnd(FP,Gun_Order)
 		f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
@@ -1079,51 +1081,71 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		end
 		CIfEnd()
 	CIfEnd()
+	-- MoveUnitLoc = 1
+	-- DefAttackLoc = 89
+	-- DefCreateLoc = 90
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CSub(FP,CheckTemp,Nextptrs,19025)
 	f_Mod(FP,CheckTemp,_Mov(84))
 	local f_Repeat_ErrorCheck = def_sIndex()
 	NJump(FP,f_Repeat_ErrorCheck,{CVar(FP,CheckTemp[2],AtLeast,1)},RotatePlayer({DisplayTextX(f_RepeatErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+	
+	f_Lengthdir(FP,_Mod(_Rand(),24*32),_Mod(_Rand(),360),CPosX,CPosY)
+	CDiv(FP,CPosY,2)
+	Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,1536,4480,1536,4480)})
 	CDoActions(FP,{
-		TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,P8,{energy = 100}),
---		TModifyUnitEnergy(All,Gun_TempSpawnSet1,P8,1,100);
+		TCreateUnitWithProperties(1,Repeat_UnitIDV,90,P8,{energy = 100}),
+--		TModifyUnitEnergy(All,Repeat_UnitIDV,P8,1,100);
 	})
+	
+
 	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	
+		f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+		Convert_CPosXY()
+		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
+		CDoActions(FP,{TMoveUnit(1,Repeat_UnitIDV,FP,90,1)})
+		f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+		Convert_CPosXY()
+		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
+
 		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0),SetCDeaths(FP,SetTo,1,isScore))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
-				TSetDeaths(_Add(Nextptrs,22),SetTo,TempBarPos,0),
-			})
+		
+			CMov(FP,CPos,TempBarPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+			CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89)})
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,4),SetCDeaths(FP,SetTo,1,isScore)) -- 겹효과 부여+어택
+
+			CMov(FP,CPos,TempBarPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+			CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
+
+
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,187),SetCDeaths(FP,SetTo,1,isScore))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
-			})
+			CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),})
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,1),SetCDeaths(FP,SetTo,1,isScore))
 			f_Read(FP,_Add(Nextptrs,10),CPos)
-			CMov(FP,CPosX,CPos,0,0XFFFF)
-			CMov(FP,CPosY,CPos,0,0XFFFF0000)
+			Convert_CPosXY()
 			Simple_SetLocX(FP,59,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(59,-32,-32,32,32)})
 			CDoActions(FP,{
-				TSetInvincibility(Enable,Gun_TempSpawnSet1,FP,60),TGiveUnits(1,Gun_TempSpawnSet1,P8,60,P9),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00)
+				TSetInvincibility(Enable,Repeat_UnitIDV,FP,60),TGiveUnits(1,Repeat_UnitIDV,P8,60,P9),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)
 			})
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
 
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
-		TriggerX(FP,CVar(FP,Gun_TempSpawnSet1[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
-		local TempPos = CreateVar(FP)
+		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
 		GetLocCenter("Boss",CPosX,CPosY)
-		CMov(FP,TempPos,_Add(CPosX,_Mul(CPosY,_Mov(65536))))
-		CDoActions(FP,{
-			TSetDeathsX(_Add(Nextptrs,19),SetTo,14*256,0,0xFF00),
-			TSetDeaths(_Add(Nextptrs,22),SetTo,TempPos,0),
-		})
-		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
+		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+		CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89)})
+		CTrigger(FP,{CVar(FP,Repeat_UnitIDV[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
 		CElseX(SetCDeaths(FP,SetTo,0,isScore))
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
 		CIf(FP,CDeaths(FP,AtLeast,1,isScore))
-			f_Mod(FP,BiteCalc,Gun_TempSpawnSet1,_Mov(2),0xFF)
-			f_Read(FP,_Add(_Div(Gun_TempSpawnSet1,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
+			f_Mod(FP,BiteCalc,Repeat_UnitIDV,_Mov(2),0xFF)
+			f_Read(FP,_Add(_Div(Repeat_UnitIDV,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
 			NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
 			CDiv(FP,UnitPoint,65536)
 			NElseX()
@@ -1570,7 +1592,7 @@ end
 		CDoActions(FP,G_CB_InputCAct)
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,G_CB_Suspend),SetCDeaths(FP,SetTo,0,G_CB_Launch)})
 	SetCallEnd()
-local Actived_G_CB = CreateVar(FP)
+Actived_G_CB = CreateVar(FP)
 function Create_G_CB_Arr()
 	if G_CB_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CB_Arr_Created") end
 	CMov(FP,Actived_G_CB,0)

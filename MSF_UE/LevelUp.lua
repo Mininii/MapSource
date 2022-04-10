@@ -338,7 +338,7 @@ function LevelUp()
 		SetCDeaths(FP,SetTo,0,ConCP[5]);
 		SetCDeaths(FP,SetTo,0,ConCP[6]);
 		SetCDeaths(FP,SetTo,0,ConCP[7]);
-		SetCDeaths(FP,SetTo,1,Continue);
+		--SetCDeaths(FP,SetTo,1,Continue);
 	})
 	CIfXEnd()
 	NoB = 220

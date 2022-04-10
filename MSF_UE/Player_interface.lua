@@ -553,7 +553,7 @@ end
 					TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCDeaths(FP,SetTo,100,UpSELemit[i+1])},{Preserved})
 					TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x0F퍼센트 방어력\x04이 증가하였습니다. \x07]")},{Preserved})
 					CMov(FP,0x515B88+(i*4),_Sub(_Mov(256),P_Armor[i+1]))
-					CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),256),_Sub(_Mov(256),P_Armor[i+1])))
+					CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),_Mov(256)),_Sub(_Mov(256),P_Armor[i+1])))
 				CElseX({SetMemory(0x6509B0,SetTo,i)})
 					CTrigger(FP,{CVar(FP,P_Armor[i+1][2],AtLeast,255),LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08구입 실패, \x04업그레이드 수치가 이미 최대치입니다. \x07]"),},1)
 					CTrigger(FP,{CDeaths(FP,AtMost,0,ArmorT3[i+1]),CVar(FP,P_Armor[i+1][2],AtLeast,255)},{SetDeaths(CurrentPlayer,SetTo,150,15),PlayWAV("staredit\\wav\\FailSE.ogg");SetCDeaths(FP,SetTo,150,ArmorT3[i+1])},1)
@@ -764,7 +764,7 @@ end
 		CIf(FP,{Bring(i,AtLeast,1,28,64)},{
 			RemoveUnitAt(1,28,"Anywhere",i),
 		})
-		CIfX(FP,{TMemory(_Mem(_Read(0x5821D4 + (4*i))),AtLeast,_Read(0x582204 + (4*i)))})
+		CIfX(FP,{TMemory(_Mem(_ReadF(0x5821D4 + (4*i))),AtLeast,_ReadF(0x582204 + (4*i)))})
 			TriggerX(FP,{Accumulate(i,AtLeast,30000*12,Ore),Deaths(i,AtLeast,36,126)},{
 				SetMemory(0x6509B0,SetTo,i),
 				DisplayText("\x07『 \x1F광물\x04을 소모하여 \x1FExceeD \x1BM\x04arine 을 \x0712기 \x19소환\x04하였습니다. - \x1F360,000 O r e \x07』",4),
@@ -902,7 +902,7 @@ end
 		CIfEnd()
 		CWhile(FP,{CDeaths(FP,AtLeast,1,MarCreate[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate[i+1]))
 		
-			CIfX(FP,{TMemory(_Mem(_Read(0x5821D4 + (4*i))),AtLeast,_Read(0x582204 + (4*i)))})
+			CIfX(FP,{TMemory(_Mem(_ReadF(0x5821D4 + (4*i))),AtLeast,_ReadF(0x582204 + (4*i)))})
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 			DoActions(FP,CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}))
 			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -915,7 +915,7 @@ end
 		CWhileEnd()
 		
 		CIf(FP,{CDeaths(FP,AtLeast,1,MarCreate2[i+1]),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Subtract,1,MarCreate2[i+1]))
-		CIfX(FP,{TMemory(_Mem(_Read(0x5821D4 + (4*i))),AtLeast,_Read(0x582204 + (4*i)))})
+		CIfX(FP,{TMemory(_Mem(_ReadF(0x5821D4 + (4*i))),AtLeast,_ReadF(0x582204 + (4*i)))})
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 			DoActions(FP,CreateUnitWithProperties(1,10,2+i,i,{energy = 100}))
 			CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -1121,7 +1121,7 @@ end
 		end
 		CIfEnd()
 		if TestStart == 1 then
-			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(i,AtLeast,0,6),Command(i,AtMost,0,63)},{SetMemory(0x66FABC, SetTo, 365),SetMemoryX(0x66A1C4, SetTo, 0*256,0xFF00)})
+			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(i,AtLeast,500,6),Command(i,AtMost,0,63)},{SetMemory(0x66FABC, SetTo, 365),SetMemoryX(0x66A1C4, SetTo, 0*256,0xFF00)})
 		else
 			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(i,AtLeast,500,6),Command(i,AtMost,0,63)},{SetMemory(0x66FABC, SetTo, 365),SetMemoryX(0x66A1C4, SetTo, 0*256,0xFF00)})
 		end
@@ -1323,7 +1323,7 @@ end
 		CIf(FP,{TTCVar(FP,MarHP[i+1][2],"!=",MarHP2[i+1])})
 			CMov(FP,MarHP2[i+1],MarHP[i+1])
 			CMov(FP,0x662350 + (MarID[i+1]*4),MarHP2[i+1])
-			CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),256),_Sub(_Mov(256),P_Armor[i+1])))
+			CMov(FP,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),_Mov(256)),_Sub(_Mov(256),P_Armor[i+1])))
 		CIfEnd()
 		CIf(FP,{Memory(0x6284E8+(0x30*i) ,AtLeast,1),Memory(0x6284E8+(0x30*i) + 4,AtMost,0),Memory(0x512684, Exactly, i)})
 			f_Read(FP,0x6284E8+(0x30*i),SelPTR,SelEPD)
