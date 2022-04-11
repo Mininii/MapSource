@@ -387,6 +387,76 @@ function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
 end
 
 
+function AddCD(Code,Value)
+
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,Add,Value,Code)
+	else
+		return TSetCDeaths(FP,Add,Value,Code)
+	end
+end
+function SubCD(Code,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,Subtract,Value,Code)
+	else
+		return TSetCDeaths(FP,Subtract,Value,Code)
+	end
+end
+function SetCD(Code,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeaths(FP,SetTo,Value,Code)
+	else
+		return TSetCDeaths(FP,SetTo,Value,Code)
+	end
+end
+function AddV(V,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Add,Value)
+	else
+		return TSetCVar(FP,V[2],Add,Value)
+	end
+end
+function SubV(V,Value)
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Subtract,Value)
+	else
+		return TSetCVar(FP,V[2],Subtract,Value)
+	end
+end
+function SetV(V,Value,Type)
+	if Type == nil then Type = SetTo end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Type,Value)
+	else
+		return TSetCVar(FP,V[2],Type,Value)
+	end
+end
+function CD(Code,Value,Type)
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CDeaths(FP,Type,Value,Code)
+	else
+		return TCDeaths(FP,Type,Value,Code)
+	end
+end
+function CV(V,Value,Type)
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CVar(FP,V[2],Type,Value)
+	else
+		return TCVar(FP,V[2],Type,Value)
+	end
+	
+end
+
 function PlotSizeCalc(Points,SizeofPolygon)
 	local X = 1+(Points*(SizeofPolygon*(SizeofPolygon+1)/2))
 	return X
@@ -413,7 +483,23 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	return BGMTypeNum
 end
 
-function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit)
+function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag)
+	if ObConFlag ~= nil then
+		ObCcode1 = CreateCcode()
+		ObCcode2 = CreateCcode()
+
+for i = 128, 131 do
+	CIf(FP,{LocalPlayerID(i)})
+	CIfX(FP,{Memory(0x596A44, Exactly, 65536),CD(ObCcode1,0)})
+	TriggerX(FP,{CD(ObCcode2,0),CD(ObCcode1,0)},{SetCD(ObCcode2,1),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 Off했습니다."),4),SetCP(FP)},{Preserved})
+	TriggerX(FP,{CD(ObCcode2,1),CD(ObCcode1,0)},{SetCD(ObCcode2,0),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 On했습니다."),4),SetCP(FP)},{Preserved})
+	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
+	CElseX(SetCD(ObCcode1,0))
+	CIfXEnd()
+	CIfEnd()
+	end
+end
+
 if InitBGMP == 12 then
 InitBGMP = ParsePlayer(Player)
 else
@@ -468,22 +554,70 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 			table.insert(X,CVar(InitBGMP,LevelT[2],AtLeast,BGMArr[i][4][1]))
 			table.insert(X,CVar(InitBGMP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
-		Trigger { -- 브금?????? j??
-			players = {InitBGMP},
-			conditions = {
-				Label(0);
-				CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
-				X;
-			},
-				actions = {
-				RotatePlayer({
-					PlayWAVX(BGMArr[i][2]),
-					PlayWAVX(BGMArr[i][2])
-				},{P9,P10,P11,P12},InitBGMP);
-				SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
-				PreserveTrigger();
-			},
-		}
+
+		if ObConFlag~=nil then
+			Trigger { -- 브금?????? j??
+				players = {InitBGMP},
+				conditions = {
+					Label(0);
+					CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
+					CDeaths(InitBGMP,AtMost,0,ObCcode2);
+					X;
+				},
+					actions = {
+					RotatePlayer({
+						PlayWAVX(BGMArr[i][2]),
+						PlayWAVX(BGMArr[i][2])
+					},{P9,P10,P11,P12},InitBGMP);
+					PreserveTrigger();
+				},
+			}
+			Trigger { -- 브금?????? j??
+				players = {InitBGMP},
+				conditions = {
+					Label(0);
+					CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
+					CDeaths(InitBGMP,Exactly,1,ObCcode2);
+					X;
+				},
+					actions = {
+					RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},InitBGMP);
+					PreserveTrigger();
+				},
+			}
+			Trigger { -- 브금?????? j??
+				players = {InitBGMP},
+				conditions = {
+					Label(0);
+					CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
+					X;
+				},
+					actions = {
+						SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
+					PreserveTrigger();
+				},
+			}
+
+		else
+			Trigger { -- 브금?????? j??
+				players = {InitBGMP},
+				conditions = {
+					Label(0);
+					CVar(InitBGMP,BGMTypeV[2],Exactly,BGMArr[i][1]);
+					X;
+				},
+					actions = {
+					RotatePlayer({
+						PlayWAVX(BGMArr[i][2]),
+						PlayWAVX(BGMArr[i][2])
+					},{P9,P10,P11,P12},InitBGMP);
+					SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
+					PreserveTrigger();
+				},
+			}
+		end
+		
+
 	end
 CElseX()
 Trigger { -- 브금????????? ?????? ????????
