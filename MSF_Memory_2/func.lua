@@ -363,77 +363,6 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
 	end
 end
 
-function AddCD(Code,Value)
-
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCDeaths(FP,Add,Value,Code)
-	else
-		return TSetCDeaths(FP,Add,Value,Code)
-	end
-end
-function SubCD(Code,Value)
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCDeaths(FP,Subtract,Value,Code)
-	else
-		return TSetCDeaths(FP,Subtract,Value,Code)
-	end
-end
-function SetCD(Code,Value)
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCDeaths(FP,SetTo,Value,Code)
-	else
-		return TSetCDeaths(FP,SetTo,Value,Code)
-	end
-end
-function AddV(V,Value)
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCVar(FP,V[2],Add,Value)
-	else
-		return TSetCVar(FP,V[2],Add,Value)
-	end
-end
-function SubV(V,Value)
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCVar(FP,V[2],Subtract,Value)
-	else
-		return TSetCVar(FP,V[2],Subtract,Value)
-	end
-end
-function SetV(V,Value,Type)
-	if Type == nil then Type = SetTo end
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return SetCVar(FP,V[2],Type,Value)
-	else
-		return TSetCVar(FP,V[2],Type,Value)
-	end
-end
-function CD(Code,Value,Type)
-	if Type == nil then Type = Exactly end
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return CDeaths(FP,Type,Value,Code)
-	else
-		return TCDeaths(FP,Type,Value,Code)
-	end
-	
-end
-function CV(V,Value,Type)
-	if Type == nil then Type = Exactly end
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return CVar(FP,V[2],Type,Value)
-	else
-		return TCVar(FP,V[2],Type,Value)
-	end
-	
-end
-
 
 function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask,flag)
 	local X = {}
@@ -1691,7 +1620,7 @@ function InvDisable(UnitID,Owner,Condition,Str)
             MinimapPing(1),
             PlayWAVX("staredit\\wav\\start.ogg"),
             PlayWAVX("staredit\\wav\\start.ogg"),
-            DisplayTextX("\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª",4)
+            DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\x13\x04",4)
         },HumanPlayers,FP);
         SetInvincibility(Disable,UnitID,Owner,1);
     })

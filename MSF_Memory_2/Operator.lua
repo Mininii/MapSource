@@ -174,11 +174,6 @@ function Operator_Trig()
 --	return "\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 --end
 
-local Print13T = CreateVar(FP)
-CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CV(Print13T,3000,AtLeast)},{SetV(Print13T,0)})
-	Print_13(FP,MapPlayers,nil)
-CIfEnd({})
-CAdd(FP,Print13T,Dt)
 CSub(FP,ShieldEnV,Dt)
 CIf(FP,CD(Fin,0))
 CAdd(FP,Time1,Dt)
@@ -223,10 +218,10 @@ CElseX({SetV(CurExpTmp,1000)})
 CIfXEnd()
 
 CIf(FP,{CV(CurExpTmp,1000,AtLeast),CV(Level,49,AtMost)},{SubV(CurExpTmp,1000),SetV(LevelUpEff,1)})
-local StimUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.10\x04 돌파, \x1B원격 스팀팩\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-local ReviveUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.50\x04 돌파, \x07소생 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-local SkillUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.40\x04 돌파, \x08공격 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.20\x04 돌파, \x07자동 환전\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+local StimUnlock = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.10\x04 돌파, \x1B원격 스팀팩\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04"
+local ReviveUnlock = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.50\x04 돌파, \x07소생 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04"
+local SkillUnlock = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.40\x04 돌파, \x08공격 스킬\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04"
+local ExchangeUnlock = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.20\x04 돌파, \x07자동 환전\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04"
 
 	CSub(FP,CurEXP,MaxEXP)
 	ConvertArr(FP,ArrI,Level)
@@ -251,7 +246,7 @@ local ExchangeUnlock = "\n\n\n\n\x13\x04――――――――――――――――――――
 		SetCDeaths(FP,SetTo,1,ShieldUnlock);
 	})
 
-	local ShieldUnlockT = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	local ShieldUnlockT = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\n \n\n\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\n\x13\x04"
 
 
 	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayTextX(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
@@ -343,27 +338,79 @@ function TEST()
 	end
 
 
-	local PlayerID = CAPrintPlayerID 
- CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x07】\x08·\x11·\x07·",nil,0) 
- local Data = {{{0,9},{"０",{0x1000000}}}} 
- CA__ItoCustom(SVA1(Str1,0),TimeV,nil,nil,{10,6},1,{"\x07０","\x07０","\x0F０","\x0F０","\x1F０","\x1F０"},nil,{0x07,0x07,0x0F,0x0F,0x1F,0x1F},{11,12,14,15,17,18},Data)
- CA__InputVA(40*0,Str1,Str1s,nil,40*0,40*1-3)
- CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
- CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x06０００\x04 ◈ ００００ \x07】\x08·\x11·\x07·",nil,0) 
- CA__ItoCustom(SVA1(Str1,0),RedNumber,nil,nil,{10,3},1,"\x06０",nil,0x06,{5,6,7},Data) 
- CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"０",nil,nil,{11,12,13,14},Data) 
- CIf(FP,CVar(FP,count[2],AtMost,399))
- CA__Input(14,SVA1(Str1,10),0xFF) 
- CIfEnd()
-CIf(FP,CVar(FP,count[2],AtLeast,400))
-  CA__Input(15,SVA1(Str1,10),0xFF) 
- CIfEnd()
-CIf(FP,CVar(FP,count[2],AtLeast,800))
-  CA__Input(17,SVA1(Str1,10),0xFF) 
- CIfEnd()
-CIf(FP,CVar(FP,count[2],AtLeast,1200))
-  CA__Input(08,SVA1(Str1,10),0xFF) 
- CIfEnd()
+local PlayerID = CAPrintPlayerID 
+CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x10Ｔ\x04ＩＭＥＲ－\x07００\x04：\x0F００\x04：\x1F００ \x07】\x08·\x11·\x07·",nil,0) 
+local Data = {{{0,9},{"０",{0x1000000}}}} 
+CA__ItoCustom(SVA1(Str1,0),TimeV,nil,nil,{10,6},1,{"\x07０","\x07０","\x0F０","\x0F０","\x1F０","\x1F０"},nil,{0x07,0x07,0x0F,0x0F,0x1F,0x1F},{11,12,14,15,17,18},Data)
+CA__InputVA(40*0,Str1,Str1s,nil,40*0,40*1-3)
+CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
+CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x06０００\x04 ◈ ００００ \x04◈ ０\x04／\x10４　\x07】\x08·\x11·\x07·",nil,0) 
+CA__ItoCustom(SVA1(Str1,0),RedNumber,nil,nil,{10,3},1,"\x06０",nil,0x06,{5,6,7},Data) 
+CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"０",nil,nil,{11,12,13,14},Data) 
+CA__ItoCustom(SVA1(Str1,0),CanC,nil,nil,{10,1},1,"\x04０",nil,0x04,{18},Data) 
+
+function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
+	if Flag == nil then Flag = {Preserved} elseif Flag == 1 then Flag = {} end
+	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
+end
+function SetStr1Data(Index,ConActTable,Flags) --{{{"CD"or "V",CDVIndex,CType,CValue},...},Value,Mask}
+	for j, k in pairs(ConActTable) do
+		local X = {}
+		for l, m in pairs(k[1]) do
+			if m[1] == "CD" then
+				table.insert(X,CD(m[2],m[4],m[3]))
+			elseif m[1] == "V" then
+				table.insert(X,CV(m[2],m[4],m[3]))
+			else PushErrorMsg("SetStr1Data_InputData_Error") end
+		end
+
+		CS__InputTA(FP,{X},SVA1(Str1,Index),k[2],k[3],Flags)
+	end
+end
+
+
+
+CanCTC = CreateCcode()
+SetStr1Data(10,
+{
+	{
+		{
+			{"V",count,AtMost,399}
+		},14,0xFF
+	},
+	{
+		{
+			{"V",count,AtLeast,400},
+			{"V",count,AtMost,799}
+		},15,0xFF
+	},
+	{
+		{
+			{"V",count,AtLeast,800},
+			{"V",count,AtMost,1199}
+		},0x11,0xFF
+	},
+	{
+		{
+			{"V",count,AtLeast,1200},
+			{"V",count,AtMost,1499}
+		},08,0xFF
+	},
+	{
+		{
+			{"V",count,AtLeast,1500},
+			{"CD",CanCTC,Exactly,1}
+		},0x11,0xFF
+	}
+})
+
+CanColorT = {0x0E,0x0F,0x11,0x08,0x1F}
+for j, k in pairs(CanColorT) do
+	CS__InputTA(PlayerID,{CV(CanC,j-1)},SVA1(Str1,18),k,0xFF)
+end
+CS__InputTA(PlayerID,{CD(CanCT,1,AtLeast),CD(CanCTC,1)},SVA1(Str1,18),0x04,0xFF)
+TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{Preserved})
+
  CA__InputVA(40*1,Str1,Str1s,nil,40*1,40*2-3)
  CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
 
@@ -373,16 +420,17 @@ CIfX(FP,{CDeaths(FP,AtMost,0,Theorist)})
  CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 
  CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,4},1,"\x04０",nil,{0x04,0x04,0x04,0x04},{20,21,22,24},Data) 
 
+ TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{Preserved})
  function LevelIStrColor(Color,ValueArr)
-	CIf(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])})
-	CA__Input(Color,SVA1(Str1,8),0xFF) 
-	CA__Input(Color,SVA1(Str1,9),0xFF) 
-   CIfEnd()
+	TriggerX(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])},{
+		SetCSVA1(SVA1(Str1,8),SetTo,Color,0xFF),
+		SetCSVA1(SVA1(Str1,9),SetTo,Color,0xFF),
+	},{Preserved})
  end
 
  LevelIStrColor(0x0E,{0,9})
  LevelIStrColor(0x0F,{10,19})
- LevelIStrColor(0x07,{20,29})
+ LevelIStrColor(0x18,{20,29})
  LevelIStrColor(0x11,{30,39})
  LevelIStrColor(0x08,{40,49})
  LevelIStrColor(0x1F,{50,50})
@@ -396,6 +444,16 @@ CA__SetMemoryX((40*3)-2,0x0D0D0D0D,0xFFFFFFFF,1)
 CIfEnd()
 CIfXEnd()
 CIf(FP,CV(LevelUpEff,1,AtLeast))
+TriggerX(FP,{CD(CanCTC,1)},{
+	SetCSVA1(SVA1(Str1,8),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,9),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,20),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,21),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,22),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
+},{Preserved})
 local LevelUpEffTmp2 = CreateVar(FP)
 local LevelUpEffTmp = CreateVarArr(8,FP)
 LVEFT = {}
@@ -411,10 +469,11 @@ for j,k in pairs(LVUpEffArr) do
 end
 LVUPEffT= CreateCcode()
 CAdd(FP,_Ccode(FP,LVUPEffT),1)
+
 TriggerX(FP,{CD(LVUPEffT,3,AtLeast)},{AddV(LevelUpEffTmp2,604),SetCD(LVUPEffT,0)},{Preserved})
 TriggerX(FP,{CV(LevelUpEffTmp2,40*604,AtLeast)},{SetV(LevelUpEff,0),SetV(LevelUpEffTmp2,0)},{Preserved})
 CIfEnd()
-
+DoActionsX(FP,{AddCD(CanCTC,1)})
  CA__InputVA(40*2,Str1,Str1s,nil,40*2,40*3)
  CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
 end 

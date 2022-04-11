@@ -2,7 +2,6 @@ function System()
     local CPlayer = CreateVar(FP)
     local BCPos = CreateVar(FP)
 	local CurCunitI2 = CreateVar(FP)
-
     local TempTarget = CreateVar(FP)
     DoActions(FP,{
         RemoveUnit(7,P12),
@@ -22,7 +21,7 @@ function System()
     AddBGM(6,"staredit\\wav\\MBoss.ogg",133*1000)--워프
     AddBGM(7,"staredit\\wav\\story.ogg",83*1000)--스토리
     AddBGM(8,"staredit\\wav\\ED2Boss.ogg",165*1000)--엔딩2
-    Install_BGMSystem(FP,3,BGMType,12)
+    Install_BGMSystem(FP,3,BGMType,12,1)
 
     BGMArr = {}
     for i = 1, 364 do
@@ -758,6 +757,7 @@ InvDisable(190,FP,{
     Deaths(6,AtLeast,1,BossUID[3]),
     Deaths(7,AtLeast,1,BossUID[4]),
     CD(NexCcode,4,AtLeast);
+    CD(TempleCcode,4,AtLeast);
     CD(OvCcode,4,AtLeast);
     CD(OvGCcode,4,AtLeast);
     CD(CellCcode,4,AtLeast);
@@ -768,7 +768,7 @@ InvDisable(190,FP,{
     CD(GeneCcode,2,AtLeast);
 },"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
-CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+CanText = "\x13\x04\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04"
 
 Trigger { -- 캔낫 경고
 	players = {FP},
@@ -795,7 +795,7 @@ Trigger { -- 캔낫 경고
 
 Trigger2X(FP,{--캔발동
 Command(FP,AtLeast,1,173);
-    CDeaths(FP,AtMost,2,CanC);
+    CV(CanC,2,AtMost);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
     Memory(0x628438,AtMost,0);
@@ -806,19 +806,14 @@ Command(FP,AtLeast,1,173);
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
         },HumanPlayers,FP);
-		SetMemory(0x582174,Add,2);
-		SetMemory(0x582178,Add,2);
-		SetMemory(0x58217C,Add,2);
-		SetMemory(0x582180,Add,2);
-		SetMemory(0x582184,Add,2);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
-		SetCDeaths(FP,Add,1,CanC);
+		AddV(CanC,1);
 		KillUnit("Factories",Force2);
 },{Preserved})
 
 Trigger2X(FP,{--캔발동
 Command(FP,AtLeast,1,173);
-    CDeaths(FP,AtLeast,3,CanC);
+    CV(CanC,3,AtLeast);
     CDeaths(FP,AtMost,0,CanCT);
     CVar(FP,count[2],AtLeast,1500);
     Memory(0x628438,AtMost,0);
@@ -829,13 +824,8 @@ Command(FP,AtLeast,1,173);
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
         PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
         },HumanPlayers,FP);
-		SetMemory(0x582174,Add,2);
-		SetMemory(0x582178,Add,2);
-		SetMemory(0x58217C,Add,2);
-		SetMemory(0x582180,Add,2);
-		SetMemory(0x582184,Add,2);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
-		SetCDeaths(FP,Add,1,CanC);
+		AddV(CanC,1);
 		KillUnit("Factories",Force2);
 		SetCDeaths(FP,Add,1,DefeatCC);
 },{Preserved})
@@ -921,7 +911,7 @@ end
 CIfEnd()
 
 for j = 4, 7 do
-Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x13\x04\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
 end
 T_X,T_Y = CreateVars(2,FP)
 TargetRotation = CreateVar(FP)
@@ -977,7 +967,7 @@ SetV(Level,50),
 SetV(AtkCondTmp,250),
 SetV(HPCondTmp,250),
 })
-TheoristTxt = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\n\n\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n \x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\n\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+TheoristTxt = "\n\n\n\n\x13\x04\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\n\n\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n \x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\n\n\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x13\x04"
 DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
 
@@ -986,5 +976,7 @@ CIfEnd()
 
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})
+
+--관전자 키인식부분
 
 end

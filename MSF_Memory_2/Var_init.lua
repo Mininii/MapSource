@@ -138,11 +138,12 @@ function Var_init()
 	Win = CreateCcode()
 	Fin = CreateCcode()
 	EDNum = CreateCcode()
-	CanC = CreateCcode()
+	CanC = CreateVar(FP)
 	DefeatCC = CreateCcode()
 	CanWT = CreateCcode()
 	TTEndC1 = CreateCcode()
 	TTEndC2 = CreateCcode()
+	TempleCcode = CreateCcode() -- 4
 	NexCcode = CreateCcode()--4
 	OvCcode = CreateCcode()--4
 	OvGCcode = CreateCcode()--4

@@ -387,7 +387,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
 	CTrigger(FP,{Gun_Line(8,AtLeast,1000)},{Gun_SetLine(9,Add,1),Gun_SetLine(20,SetTo,0),Gun_SetLine(8,Subtract,1000)},1)
-	CTrigger(FP,{Gun_Line(9,AtLeast,13)},{Gun_DoSuspend()},1)
+	CTrigger(FP,{Gun_Line(9,AtLeast,13)},{Gun_DoSuspend(),AddCD(TempleCcode,1)},1)
 	CIfEnd()
 	CIf_GCase(147)
 	--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
@@ -785,7 +785,7 @@ BossUID = {87,74,5,2}
 		{1632,-1824+4096},
 		{-1632+4096,-1824+4096}}
 	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP)})
+		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04",4)},HumanPlayers,FP)})
 		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
@@ -1292,7 +1292,7 @@ end
 	CIf(FP,{CD(ED2Clear,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 Trigger2X(FP,{},{RotatePlayer({
-	DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\n\n\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\n\n\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4),
+	DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\n\n\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\n\n\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),

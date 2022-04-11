@@ -235,7 +235,6 @@ BossUIDP = {87,74,5,2,64,12,82}
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
-		table.insert(PatchArr,SetMemory(0x582144+(i*4),SetTo,8))--Äµ³´±âÈ¸
 		table.insert(PatchArr,SetMemory(0x5821D4+(i*4),SetTo,24*2))--ÀÌ½ºÅÍ¿¡±×ÃÑ°¹¼ö
 			
 	end

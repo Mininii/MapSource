@@ -59,9 +59,9 @@ end
 Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
     {DisplayTextX(string.rep("\n", 20),4);
     DisplayTextX("\n",4);
-    DisplayTextX("\x13\x04"..string.rep("¡ª", 57),4);
+    DisplayTextX("\x13\x04",4);
     DisplayTextX("\x13\x06\n\n\x13\x04£Ó¡¡£Ô¡¡£Á¡¡£Ò¡¡£Ô\n\n\x13\x1F",4);
-    DisplayTextX("\x13\x04"..string.rep("¡ª", 57),4);
+    DisplayTextX("\x13\x04",4);
     DisplayTextX("\x13\x04\n\n",4);
     PlayWAVX("sound\\Bullet\\pshield.wav");
 },HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31),SetSwitch("Switch 253",Clear)})
