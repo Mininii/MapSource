@@ -252,6 +252,8 @@ function G_CB_Func()
 end
 G_CB_ShapeTable = {}
 
+--Prefunc 작동조건 : CVar("X",CA[2],Exactly,0)
+
 
 -- Line0 = UnitIDTable 0xFF
 -- Line1 = RepeatTypeTable 0xFF
