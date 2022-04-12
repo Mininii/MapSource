@@ -444,16 +444,6 @@ CA__SetMemoryX((40*3)-2,0x0D0D0D0D,0xFFFFFFFF,1)
 CIfEnd()
 CIfXEnd()
 CIf(FP,CV(LevelUpEff,1,AtLeast))
-TriggerX(FP,{CD(CanCTC,1)},{
-	SetCSVA1(SVA1(Str1,8),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,9),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,20),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,21),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,22),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
-},{Preserved})
 local LevelUpEffTmp2 = CreateVar(FP)
 local LevelUpEffTmp = CreateVarArr(8,FP)
 LVEFT = {}
@@ -467,6 +457,16 @@ LVUpEffArr = {0x08,0x0E,0x0F,0x10,0x11,0x18,0x16,0x17}
 for j,k in pairs(LVUpEffArr) do
 	CA__Input(k,SVA1(Str1,LevelUpEffTmp[j]),0xFF) 
 end
+TriggerX(FP,{CD(CanCTC,1)},{
+	SetCSVA1(SVA1(Str1,8),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,9),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,20),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,21),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,22),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
+},{Preserved})
 LVUPEffT= CreateCcode()
 CAdd(FP,_Ccode(FP,LVUPEffT),1)
 

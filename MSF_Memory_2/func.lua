@@ -1,7 +1,12 @@
 
+---@param Str? string
+---@return string
 function StrDesign(Str)
 	return "\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 end
+
+---@param Str? string
+---@return string
 function StrDesignX(Str)
 	return "\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 end
@@ -108,7 +113,9 @@ function Cond_EXCC(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 검사하고 싶을
 end
 function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때.
 	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
-	
+end
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때. TTOR전용
+	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
 EXCC_initArr = {}
 function EXCC_Part1(EXCC_init,Actions)

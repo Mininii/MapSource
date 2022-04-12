@@ -32,7 +32,7 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.6T"
+VerText = "\x04Ver. Beta 0.7T"
 if EVFFlag == 1 then
 	VerText = VerText.." - EVF"
 end
@@ -73,9 +73,9 @@ CJump(AllPlayers,init_func)
 CJumpEnd(AllPlayers,init_func)
 NoAirCollisionX(FP)
 init()
-IBGM_EPDX(FP,3,Dt,nil,{12,14})
 --DoActions2(FP,PatchArrPrsv)
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
+	IBGM_EPDX(FP,3,Dt,nil,{12,14})
 	init_Start()
 	System()
 	Opening()
