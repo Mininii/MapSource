@@ -183,6 +183,13 @@ function Var_init()
 	EvCheckPtr = 0x58f60C
 	--0x58f610 MSQC
 	--0x590004~0x591FE4 PEUD Area UnitID : 494~664
+	PlayerInfoT = "\x12\x10【 \x08Y\x04our \x0FL\x04evel :\x1F 0000000000 \x04◈ Score :\x07 0000000000 \x10】"
+	PlayerItemT = "\x12\x10【 \x0FI\x04tems ＃ \x08뉴클리어 \x04: 0000000000 \x04◈ \x08인구수 \x04: 0000000000 /\x07 0000000000 \x04◈ \x0E퍼센트 \x1E방어력 : 000 / 255 ◈ 적 체력 약화 : 000 / 255 ◈\x10】"
+	PlayerInfoSize = GetiStrSize(0,PlayerInfoT)
+	PlayerItemSize = GetiStrSize(0,PlayerItemT)
+	iStr1 = GetiStrId(FP,MakeiStrLetter(" ",PlayerInfoSize).."\r\n",..MakeiStrLetter(" ",))
+	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
+
 	Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x04Normal Marine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-50\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-500\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str03 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-1000\x06) \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
