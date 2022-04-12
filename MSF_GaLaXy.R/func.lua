@@ -1,12 +1,6 @@
 
 
 --}
-function StrDesign(Str)
-	return "\x07¡º "..Str.." \x07¡»"
-end
-function StrDesignX(Str)
-	return "\x13\x07¡º "..Str.." \x07¡»"
-end
 function TestSet(val)
 	if val == 1 then 
 		Limit = 1

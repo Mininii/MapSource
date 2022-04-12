@@ -12,6 +12,16 @@ VArrStackArr = {}
 InitBGMP = 12
 sindexAlloc = 0x700
 
+---@param Str? string
+---@return string
+function StrDesign(Str)
+	return "\x07¡º "..Str.." \x07¡»"
+end
+---@param Str? string
+---@return string
+function StrDesignX(Str)
+	return "\x13\x07¡º "..Str.." \x07¡»"
+end
 function RotatePlayer(Print,Players,RecoverCP)
 	return CopyCpAction(Print,Players,RecoverCP)
 end
@@ -972,4 +982,198 @@ function Install_f_Sqrd(Player)
 		CallTrigger(Player,Call_f_Sqrd)
 		return DestV
 	end
+end
+
+
+function DoActions(PlayerID,Actions,Flags)
+	if Flags == nil then
+		Flags = {Preserved}
+	elseif Flags == 1 then
+		Flags = {}
+	end
+	Trigger {
+		players = {ParsePlayer(PlayerID)},
+		actions = {
+			Actions,
+		},
+		flag = {
+			Flags,
+		},
+	}
+end
+
+function DoActions2(PlayerID,Actions,Flags)
+	local k = 1
+	local Size = #Actions
+
+
+	if Flags == nil then
+		Flags = {Preserved}
+	elseif Flags == 1 then
+		Flags = {}
+	end
+
+	local Act = {}
+	for i = 1, Size do
+		if type(Actions[i][1]) == "table" and #Actions[i][1] == 10 then
+			for j = 1, #Actions[i] do
+				table.insert(Act,Actions[i][j])
+			end
+		else
+			table.insert(Act,Actions[i])
+		end
+	end
+	Size = #Act
+
+	while k <= Size do
+		if Size - k + 1 >= 64 then
+			local X = {}
+			for i = 0, 63 do
+				table.insert(X, Act[k])
+				k = k + 1
+			end
+			Trigger {
+					players = {ParsePlayer(PlayerID)},
+					actions = {
+						X,
+					},
+					flag = {
+						Flags,
+					},
+				}
+		else
+			local X = {}
+			repeat
+				table.insert(X, Act[k])
+				k = k + 1
+			until k == Size + 1
+			Trigger {
+					players = {ParsePlayer(PlayerID)},
+					actions = {
+						X,
+					},
+					flag = {
+						Flags,
+					},
+				}
+		end
+	end
+end
+
+function DoActionsX(PlayerID,Actions,Flags,Index)
+	if Index == nil then
+		Index = 0
+	end
+	if Flags == nil then
+		Flags = {Preserved}
+	elseif Flags == 1 then
+		Flags = {}
+	end
+	Trigger {
+		players = {ParsePlayer(PlayerID)},
+		conditions = {
+			Label(Index);
+		},
+		actions = {
+			Actions,
+		},
+		flag = {
+			Flags,
+		},
+	}
+end
+
+function DoActions2X(PlayerID,Actions,Flags)
+	local k = 1
+	local Size = #Actions
+
+	if Flags == nil then
+		Flags = {Preserved}
+	elseif Flags == 1 then
+		Flags = {}
+	end
+
+	local Act = {}
+	for i = 1, Size do
+		if type(Actions[i][1]) == "table" and #Actions[i][1] == 10 then
+			for j = 1, #Actions[i] do
+				table.insert(Act,Actions[i][j])
+			end
+		else
+			table.insert(Act,Actions[i])
+		end
+	end
+	Size = #Act
+
+	while k <= Size do
+		if Size - k + 1 >= 64 then
+			local X = {}
+			for i = 0, 63 do
+				table.insert(X, Act[k])
+				k = k + 1
+			end
+			Trigger {
+					players = {ParsePlayer(PlayerID)},
+					conditions = {
+						Label(0);
+					},
+					actions = {
+						X,
+					},
+					flag = {
+						Flags,
+					},
+				}
+		else
+			local X = {}
+			repeat
+				table.insert(X, Act[k])
+				k = k + 1
+			until k == Size + 1
+			Trigger {
+					players = {ParsePlayer(PlayerID)},
+					conditions = {
+						Label(0);
+					},
+					actions = {
+						X,
+					},
+					flag = {
+						Flags,
+					},
+				}
+		end
+	end
+end
+
+
+function CDoActions(PlayerID,Actions,Flags,Index)
+	-- Actions = PatchAct(Actions)
+
+	STPopTrigArr(PlayerID)
+	Actions = PopActArr(Actions)
+	PopTrigArr(PlayerID)
+
+	if Flags == nil then
+		Flags = {Preserved}
+	elseif Flags == 1 then
+		Flags = {}
+	end
+
+	if Index == nil or Index == "X" then
+		Index = 0
+	end
+
+	Trigger {
+		players = {ParsePlayer(PlayerID)},
+		conditions = {
+			Label(Index);
+		},
+		actions = {
+			Actions,
+		},
+		flag = {
+			Flags,
+		}
+	}
 end
