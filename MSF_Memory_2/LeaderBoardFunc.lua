@@ -110,7 +110,9 @@ function LeaderBoardF()
 				CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 				f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
+				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtLeast,2),CD(Theorist,0)})
 				CJumpEnd(FP,HeroOrder)
+				
 			NIfEnd()
 			f_LoadCp()
 			DoActions(FP,MoveCp(Subtract,6*4))
