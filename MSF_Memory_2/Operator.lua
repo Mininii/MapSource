@@ -344,7 +344,7 @@ local Data = {{{0,9},{"£°",{0x1000000}}}}
 CA__ItoCustom(SVA1(Str1,0),TimeV,nil,nil,{10,6},1,{"\x07£°","\x07£°","\x0F£°","\x0F£°","\x1F£°","\x1F£°"},nil,{0x07,0x07,0x0F,0x0F,0x1F,0x1F},{11,12,14,15,17,18},Data)
 CA__InputVA(40*0,Str1,Str1s,nil,40*0,40*1-3)
 CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
-CA__SetValue(Str1,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x06£°£°£°\x04 ¢Â £°£°£°£° \x04¢Â £°\x04£¯\x10£´¡¡\x07¡½\x08¡¤\x11¡¤\x07¡¤",nil,0) 
+CA__SetValue(Str1,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x06£°£°£°\x04 ¢Â £°£°£°£° \x04¢Â £°\x04£¯\x10£´ \x07¡½\x08¡¤\x11¡¤\x07¡¤",nil,0) 
 CA__ItoCustom(SVA1(Str1,0),RedNumber,nil,nil,{10,3},1,"\x06£°",nil,0x06,{5,6,7},Data) 
 CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"£°",nil,nil,{11,12,13,14},Data) 
 CA__ItoCustom(SVA1(Str1,0),CanC,nil,nil,{10,1},1,"\x04£°",nil,0x04,{18},Data) 
@@ -368,6 +368,12 @@ function SetStr1Data(Index,ConActTable,Flags) --{{{"CD"or "V",CDVIndex,CType,CVa
 	end
 end
 
+TriggerX(FP,{Command(FP,AtMost,0,190)},{
+	SetCSVA1(SVA1(Str1,18),SetTo,0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(Str1,19),SetTo,0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(Str1,20),SetTo,0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(Str1,21),SetTo,0x0D0D0D0D,0xFFFFFFFF),
+},{preserved})
 
 
 CanCTC = CreateCcode()

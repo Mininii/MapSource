@@ -632,7 +632,7 @@ function Include_GunData(Size,LineNum)
 						TSetDeaths(_Add(CenterPtrs,22),SetTo,TempPos,0),
 						TSetDeaths(_Add(CenterPtrs,13),SetTo,C_FS,0),
 						TSetDeathsX(_Add(CenterPtrs,18),SetTo,C_FS,0,0xFFFF),
-						TSetDeathsX(_Add(CenterPtrs,19),SetTo,6*256,0,0xFF00),
+						--TSetDeathsX(_Add(CenterPtrs,19),SetTo,6*256,0,0xFF00),
 						})
 				TriggerX(FP,{CV(C_FS,2000,AtLeast)},{SetV(C_FS,1)},{Preserved})
 				CElseX()
@@ -644,11 +644,13 @@ function Include_GunData(Size,LineNum)
 					TGiveUnits(1,CenterUIDV,P9,1,G_CA_Player);
 					TSetDeathsX(_Add(CenterPtrs,72),SetTo,0,0,0xFF00),
 					TSetDeathsX(_Add(CenterPtrs,55),SetTo,0,0,0x04000000),
-					TSetDeaths(_Add(CenterPtrs,23),SetTo,0,0),
-					TSetDeathsX(_Add(CenterPtrs,19),SetTo,187*256,0,0xFF00),
-					TSetDeaths(_Add(CenterPtrs,6),SetTo,TempPos,0),
-					TSetDeaths(_Add(CenterPtrs,22),SetTo,TempPos,0),
-					TSetDeaths(_Add(CenterPtrs,4),SetTo,TempPos,0),Gun_DoSuspend(),AddCD(CenCcode,1)
+					--TSetDeaths(_Add(CenterPtrs,23),SetTo,0,0),
+					--TSetDeathsX(_Add(CenterPtrs,19),SetTo,187*256,0,0xFF00),
+					--TSetDeaths(_Add(CenterPtrs,6),SetTo,TempPos,0),
+					--TSetDeaths(_Add(CenterPtrs,22),SetTo,TempPos,0),
+					--TSetDeaths(_Add(CenterPtrs,4),SetTo,TempPos,0),
+					SetCp(i+4),RunAIScriptAt(JYD,64),SetCp(FP),
+					Gun_DoSuspend(),AddCD(CenCcode,1)
 				})
 				for i = 4, 7 do
 					TriggerX(FP,{GCP(i)},{AddCD(CenCcode2[i-3],1)},{Preserved})
@@ -657,6 +659,7 @@ function Include_GunData(Size,LineNum)
 			CIfEnd()
 				DoActionsX(FP,{AddV(C_W,1)})
 			CWhileEnd()
+			
 			
 			CTrigger(FP,{Gun_Line(8,Exactly,360)},{Gun_SeTLine(8,SetTo,361)},1)
 	CIfEnd()
