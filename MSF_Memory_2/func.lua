@@ -256,34 +256,6 @@ end
 
 
 
-function Include_Conv_CPosXY(Player)
-	CPos,CPosDeviation,CPosX,CPosY = CreateVars(4,Player)
-
-	Call_CPosXY = SetCallForward()
-	SetCall(Player)
-	CMov(Player,CPosX,CPos,0,0XFFFF)
-	CMov(Player,CPosY,CPos,0,0XFFFF0000)
-	f_Div(Player,CPosY,_Mov(0x10000))
-	CIf(FP,CVar(FP,CPosDeviation[2],AtLeast,1))
-		CAdd(FP,CPosX,CPosDeviation)
-		CAdd(FP,CPosY,CPosDeviation)
-	CIfEnd()
-	SetCallEnd()
-	function Convert_CPosXY(Value,Deviation)
-		if Deviation == nil then 
-			Deviation = 0
-		end
-		if Value ~= nil then
-			CDoActions(Player,{
-				TSetCVar(Player,CPos[2],SetTo,Value),SetCVar(Player,CPosDeviation[2],SetTo,Deviation),
-				SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
-			})
-		else
-			CallTrigger(Player,Call_CPosXY)
-		end
-		return CPosX,CPosY
-	end
-end
 function Include_CRandNum(Player)
 	TempRandRet = CreateVar(Player)
 	Oprnd = CreateVar(Player)

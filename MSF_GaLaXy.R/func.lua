@@ -274,28 +274,6 @@ function f_CRandNum(Max,Operand,Condition)
 end
 end
 
-function Include_Conv_CPosXY(Player)
-	CPos,CPosX,CPosY = CreateVars(3,Player)
-	
-	function Convert_CPosXY(Value)
-			if Value ~= nil then
-		CDoActions(Player,{
-			TSetCVar(Player,CPos[2],SetTo,Value),
-			SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
-		})
-		else
-			CallTrigger(Player,Call_CPosXY)
-		end
-		return CPosX,CPosY
-	end
-	Call_CPosXY = SetCallForward()
-	SetCall(Player)
-	CMov(Player,CPosX,CPos,0,0XFFFF)
-	CMov(Player,CPosY,CPos,0,0XFFFF0000)
-	f_Div(Player,CPosY,_Mov(0x10000))
-	SetCallEnd()
-end
-
 function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	if CPos == nil then PushErrorMsg("Need_Include_Conv_CPosXY") end
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end

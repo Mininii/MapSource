@@ -1145,27 +1145,6 @@ end
 	end
 end
 
-function Include_Conv_CPosXY(Player)
-CPos,CPosX,CPosY = CreateVars(3,Player)
-
-function Convert_CPosXY(Value)
-		if Value ~= nil then
-	CDoActions(Player,{
-		TSetCVar(Player,CPos[2],SetTo,Value),
-		SetNext("X",Call_CPosXY,0),SetNext(Call_CPosXY+1,"X",1)
-	})
-	else
-		CallTrigger(Player,Call_CPosXY)
-	end
-	return CPosX,CPosY
-end
-Call_CPosXY = SetCallForward()
-SetCall(Player)
-CMov(Player,CPosX,CPos,0,0XFFFF)
-CMov(Player,CPosY,CPos,0,0XFFFF0000)
-f_Div(Player,CPosY,_Mov(0x10000))
-SetCallEnd()
-end
 
 function f_ForcePosSave(Condition,UID,X,Y,VoidN)
 	CallTriggerX(FP,Force_PosSave_CallIndex,Condition,{
