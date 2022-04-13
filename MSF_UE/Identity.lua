@@ -1,7 +1,7 @@
 function Install_IdenBoss()
 
 
-	-- ¾ÆÄ­ º¸½º
+	-- Boss : Tarim, Lord Of Regal Castle, Made By Ninfia. Arrenged By Mininii
 	-- from MSF Identity OpenSource
 	-- Thanks to Ninfia
 	--------0x58F55C : BossCunit

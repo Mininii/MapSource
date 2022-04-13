@@ -111,4 +111,7 @@ function Gun_System()
             SetInvincibility(Enable,"Buildings",FP,64);
         })
     CIfXEnd()
+    if TestStart == 1 then
+        DoActions(FP, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP))
+    end
 end

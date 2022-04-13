@@ -1,6 +1,6 @@
 function Install_Roka7Boss()
 
-	-- Roka7 Boss
+	-- roka7 Boss. Made By Ninfia
 	-- from MSF 4 VS 4 OpenSource
 	-- Thanks to Ninfia
 

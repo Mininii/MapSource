@@ -343,7 +343,7 @@ function LevelUp()
 	CIfXEnd()
 	NoB = 220
 	YesB = 221
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtMost,9),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,2),CVar(FP,LevelT[2],AtMost,10),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtLeast,5,NoCcode)},{RotatePlayer({DisplayTextX(NoText2,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,YesB)},{RotatePlayer({DisplayTextX(ClearT2,4),PlayWAVX("staredit\\wav\\LimitBreak.ogg")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue)},{Preserved})
@@ -384,12 +384,14 @@ function LevelUp()
 --	DoActions2(FP,MoveMarineArr)
 	--65~73
 	for i = 17, 19 do
-	CWhile(FP,{Bring(Force1,AtLeast,1,"Men",i)})
+	local WhileC = CreateCcode() 
+	CWhile(FP,{Bring(Force1,AtLeast,1,"Men",i),CD(WhileC,1000,AtMost)},{AddCD(WhileC,1)})
 	f_Rand(FP,RandV)
 	CAdd(FP,TempX,_Mod(RandV,2272-800),800)
 	CAdd(FP,TempY,_Mod(RandV,6080-5440),5440)
 	Simple_SetLocX(FP,0,TempX,TempY,TempX,TempY,{MoveUnit(1,"Men",Force1,i,1)})
 	CWhileEnd()
+	DoActionsX(FP,{SetCD(WhileC,0)})
 	end
 	
 	CMov(FP,0x6509B0,UnitDataPtr)

@@ -451,7 +451,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		}
 	end
 	
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)}) -- Limit설정
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit설정
 	if TestStart == 1 then
 		DoActions(FP,SetSwitch("Switch 230",Set))
 	end
@@ -747,8 +747,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	Install_CText1(AMUseStrPtr[i],Str12,AMUseT,Names[i])
 	end
 
-
-	DoActions(FP,{GiveUnits(1,133,P8,11,0),GiveUnits(1,133,P8,12,1),GiveUnits(1,133,P8,13,2)})
+--	DoActions(FP,{GiveUnits(1,133,P8,11,0),GiveUnits(1,133,P8,12,1),GiveUnits(1,133,P8,13,2)})
 	CMov(FP,0x6509B0,19025+19)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
@@ -756,17 +755,26 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			-- 유닛정보를 길이 8바이트의 데이터 배열에 저장함
 			-- 0xYYYYXXXX 0xLLIIPPUU
 			-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
+			CunitHP = CreateVar(FP)
 			CIf(FP,{TTMemory(_Add(BackupCp,6),NotSame,58)}) -- 발키리 저리가
 				f_Read(FP,_Sub(BackupCp,9),CPos)
+				f_Read(FP,_Sub(BackupCp,17),CunitHP)
+				f_Div(FP,CunitHP,_Mov(256))
 				f_Read(FP,BackupCp,CunitP,"X",0xFF)
 				f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
 				CMov(FP,Gun_LV,0)
-				CIf(FP,CVar(FP,RepHeroIndex[2],Exactly,133))
-				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,0)},{SetCVar(FP,Gun_LV[2],SetTo,1)},{Preserved})
-				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,1)},{SetCVar(FP,Gun_LV[2],SetTo,2)},{Preserved})
-				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,2)},{SetCVar(FP,Gun_LV[2],SetTo,3)},{Preserved})
-				DoActionsX(FP,SetCVar(FP,CunitP[2],SetTo,7))
-				CIfEnd()
+				CTrigger(FP,{TTOR({
+					CVar(FP,RepHeroIndex[2],Exactly,133),
+					CVar(FP,RepHeroIndex[2],Exactly,132),
+					CVar(FP,RepHeroIndex[2],Exactly,131)
+				}),CV(CunitHP,99,AtMost)},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
+--				CIf(FP,CVar(FP,RepHeroIndex[2],Exactly,133))
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,0)},{SetCVar(FP,Gun_LV[2],SetTo,1)},{Preserved})
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,1)},{SetCVar(FP,Gun_LV[2],SetTo,2)},{Preserved})
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,2)},{SetCVar(FP,Gun_LV[2],SetTo,3)},{Preserved})
+--				DoActionsX(FP,SetCVar(FP,CunitP[2],SetTo,7))
+--				CIfEnd()
+
 				CMov(FP,0x6509B0,UnitDataPtr)
 				NWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
 				CAdd(FP,0x6509B0,2)
@@ -786,7 +794,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		CAdd(FP,0x6509B0,84)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
-	DoActions(FP,{GiveUnits(1,133,0,11,P8),GiveUnits(1,133,1,12,P8),GiveUnits(1,133,2,13,P8)})
+--	DoActions(FP,{GiveUnits(1,133,0,11,P8),GiveUnits(1,133,1,12,P8),GiveUnits(1,133,2,13,P8)})
 	CMov(FP,RepHeroIndex,0)
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
 	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{Preserved}) -- 발키리 나가

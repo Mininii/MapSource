@@ -1,22 +1,44 @@
 function Install_ShapeData()
-
+	PolMaxIndexT = {}
+	StarMaxIndexT = {}
 	function MakeLevelShapeX(Type,Points,LvMin,LvMax,ShapeName)
 		local X = {}
-		for i = LvMin, LvMax do
 			 if Type == "Polygon" then
-				  table.insert(X,CSMakePolygon(Points,((16*9)-(16*i))+24,0,PlotSizeCalc(Points,i),0))
+				  table.insert(X,CSMakePolygon(Points,24,0,PlotSizeCalc(Points,8),0))
 				  
 			 elseif Type == "Star" then
-				  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*i),180,PlotSizeCalc(Points*2,i),0))
+				  table.insert(X,CSMakeStar(Points,165,24,180,PlotSizeCalc(Points*2,4),0))
 			 end
-		end
-		for j, k in pairs(X) do
-			_G[ShapeName..j-1] = k
-			table.insert(G_CB_ShapeT,ShapeName..j-1)
+
+		for l, k in pairs(X) do
+			local i = 1
+			local j = 1
+			local TempLoopMaxT = {}
+			local MaxP = k[1]
+			while MaxP>=j do
+				if j==1 then
+					table.insert(TempLoopMaxT,1)
+					j=j+1
+				else
+					local Ret
+					if Type == "Polygon" then
+						Ret = Points*i
+					elseif Type == "Star" then
+						Ret = (Points*2)*i
+					end
+					i=i+1
+					j=j+Ret
+					table.insert(TempLoopMaxT,Ret)
+				end
+			
+			end
+
+			_G[ShapeName] = k
+			local curpos = #G_CB_ShapeT+1
+			G_CB_LoopMaxT[curpos] = CS_TMakePath(TempLoopMaxT)
+			G_CB_ShapeT[curpos] = ShapeName
 		end
 	end
-
-
 	
 	NexBYDLine = {}
 	NexBYDLine2 = {}
@@ -77,7 +99,11 @@ function Install_ShapeData()
 	FormF3 = CS_FillPathXY(CSMakePath({1536, 4864},{2048, 5088},{2048, 5696},{2272, 5920},{2560, 5920},{2560, 6080},{512, 6080},{512, 5920},{800, 5920},{1024, 5696},{1024, 5088}),0,64,64)
 	BattleShape = CSMakeStar(5,165-(12*(5-2)),((36*6)-(36*2))/2,180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
 	TelShape = CSMakeStar(8,165-(12*(8-2)),(36*6)-(36*4),180,PlotSizeCalc(8*2,4),0)
+
 	
+
+
+	G_CB_LoopMaxT = {}
 	G_CB_ShapeT = {
 		"NBYD",
 		"Hive_1",
@@ -100,16 +126,16 @@ function Install_ShapeData()
 		"FormF2",
 		"FormF3"
 	}
-MakeLevelShapeX("Star",3,1,4,"S_3_")
-MakeLevelShapeX("Star",4,1,4,"S_4_")
-MakeLevelShapeX("Star",5,1,4,"S_5_")
-MakeLevelShapeX("Star",6,1,4,"S_6_")
-MakeLevelShapeX("Star",7,1,4,"S_7_")
-MakeLevelShapeX("Star",8,1,4,"S_8_")
-MakeLevelShapeX("Polygon",3,1,8,"P_3_")
-MakeLevelShapeX("Polygon",4,1,8,"P_4_")
-MakeLevelShapeX("Polygon",5,1,8,"P_5_")
-MakeLevelShapeX("Polygon",6,1,8,"P_6_")
-MakeLevelShapeX("Polygon",7,1,8,"P_7_")
-MakeLevelShapeX("Polygon",8,1,8,"P_8_")
+MakeLevelShapeX("Star",3,1,4,"S_3")
+MakeLevelShapeX("Star",4,1,4,"S_4")
+MakeLevelShapeX("Star",5,1,4,"S_5")
+MakeLevelShapeX("Star",6,1,4,"S_6")
+MakeLevelShapeX("Star",7,1,4,"S_7")
+MakeLevelShapeX("Star",8,1,4,"S_8")
+MakeLevelShapeX("Polygon",3,1,8,"P_3")
+MakeLevelShapeX("Polygon",4,1,8,"P_4")
+MakeLevelShapeX("Polygon",5,1,8,"P_5")
+MakeLevelShapeX("Polygon",6,1,8,"P_6")
+MakeLevelShapeX("Polygon",7,1,8,"P_7")
+MakeLevelShapeX("Polygon",8,1,8,"P_8")
 end

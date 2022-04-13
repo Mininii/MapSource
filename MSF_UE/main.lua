@@ -57,7 +57,7 @@ end
 			Var_init()
 			Include_Conv_CPosXY(FP)
 			Install_GetCLoc(FP,0,nilunit)
-			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT)
+			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT,G_CB_LoopMaxT)
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
 		DoHumanCheck()
