@@ -1,5 +1,6 @@
 function Install_Destr0yer()
-	
+	--Boss : Destr0yer. Made By Mininii
+	--from. MSF_UE
 	local IdenSiege,SMine,YamatoShuttle,HackBattle = CreateCcodes(4)
 	local ResetCodeT = {IdenSiege,SMine,YamatoShuttle,HackBattle}
 local Lyrics = {
