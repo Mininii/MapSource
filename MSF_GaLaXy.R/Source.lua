@@ -130,7 +130,6 @@ DifLeaderBoard = {
 	ModeT2 = CreateCcode()
 	ModeO = CreateCcode()
 	Print13 = CreateCcode()
-	EXCunitTemp = CreateVarArr(10,FP)
 	MaxHPBackUp = CreateArr(228,FP)
 	NMStrPtr = CreateVarArr(7,FP)
 	HMStrPtr = CreateVarArr(7,FP)
