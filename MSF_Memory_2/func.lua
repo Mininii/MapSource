@@ -2,12 +2,15 @@
 ---@param Str? string
 ---@return string
 function StrDesign(Str)
-	return "\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
+	return "\x0D\x0D\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 end
 
 ---@param Str? string
 ---@return string
 function StrDesignX(Str)
+	return "\x0D\x0D\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
+end
+function StrDesignX2(Str)
 	return "\x13\x07·\x11·\x08·\x07【 "..Str.." \x07】\x08·\x11·\x07·"
 end
 function TestSet(val)
@@ -441,7 +444,7 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	else
 		PushErrorMsg("Need_Input_TextType")
 	end
-	local Text = StrDesignX("\x10기억\x04의 "..Name..""..Name2.."\x1F＋ "..N_to_EmN(Point).." \x1FＰｔｓ")
+	local Text = StrDesignX2("\x10기억\x04의 "..Name..""..Name2.."\x1F＋ "..N_to_EmN(Point).." \x1FＰｔｓ")
 	local X = {}
 	table.insert(X,Text)
 	table.insert(X,Index)
@@ -456,7 +459,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("!H"..CT,4);},HumanPlayers,FP)})
 			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{Preserved})
 			f_LoadCp()
 			if index == 68 then
@@ -1599,7 +1602,7 @@ function InvDisable(UnitID,Owner,Condition,Str)
             MinimapPing(1),
             PlayWAVX("staredit\\wav\\start.ogg"),
             PlayWAVX("staredit\\wav\\start.ogg"),
-            DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n"..StrDesignX(Str).."\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04",4)
+            DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n"..StrDesignX(Str).."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04",4)
         },HumanPlayers,FP);
         SetInvincibility(Disable,UnitID,Owner,1);
     })
@@ -1652,10 +1655,10 @@ function StoryPrint(T,Text,AddTrig)
 		},
 		actions = {
 			RotatePlayer({
-				DisplayTextX(string.rep("\n", 20),4),
-				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-				DisplayTextX("\x12\n\n\n\n\x13"..Text.."\n\n\n\n",0),
-				DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+				DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
+				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("―", 56),4),
+				DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
+				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("―", 56),4),
 			},HumanPlayers,FP);
 			SetCDeaths(FP,Add,1,ButtonSound);
 			AddTrig

@@ -158,6 +158,12 @@ function Var_init()
 	CUnitRefrash = CreateCcode()
 	Theorist = CreateCcode() -- 이론치모드 Ccode
 	
+	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
+	--HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HVA3 = CVArray(FP,4*5) 
+
+	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrLetter(" ",38).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 
@@ -209,7 +215,7 @@ function Var_init()
 	ClassInfo5 = CreateCText(FP," ％")
 	
 	HTextStrReset = CreateCText(FP,HTextStr)
-	Str12 = CreateCText(FP,"\x07·\x11·\x08·\x07【 ")
+	Str12 = CreateCText(FP,"!H\x07·\x11·\x08·\x07【 ")
 	Str03 = {}
 	Str02 = {}
 	NMT = CreateCText(FP,"\x04의 Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·")

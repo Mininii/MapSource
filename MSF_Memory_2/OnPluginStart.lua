@@ -463,6 +463,7 @@ end
 		}
 	end
 
+	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"!H")) 
 
 	local StarEditAvFlag = CreateVar(FP)
 	local GroupFlagsPtr = CreateVar(FP)

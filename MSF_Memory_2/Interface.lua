@@ -67,7 +67,7 @@ function Interface()
 			ModifyUnitEnergy(All,70,i,64,0);
 			GiveUnits(All,70,i,"Anywhere",11);
 			RemoveUnitAt(All,70,"Anywhere",11);
-			DisplayText(GiveRateT[k+1],4);
+			DisplayText("\x0D\x0D"..GiveRateT[k+1],4);
 			SetCDeaths(FP,Add,1,GiveRate[i+1]);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
 			PreserveTrigger();
@@ -295,10 +295,10 @@ Trigger { -- 보호막 가동
 }
 
 
-Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText(StrDesignX(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText(StrDesignX(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText(StrDesignX(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText(StrDesignX(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
 
 	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
 	for j=0, 3 do
@@ -316,7 +316,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 			actions = {
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
+				DisplayText(StrDesign("\x04잔액이 부족합니다."),4);
 				SetCDeaths(FP,Add,1,CUnitRefrash);
 				PreserveTrigger();
 			},

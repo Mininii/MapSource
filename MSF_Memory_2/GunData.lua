@@ -40,7 +40,7 @@ function Include_GunData(Size,LineNum)
 		f_Read(FP,BackupCp,GunID,"X",0xFF,1)
 		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
 		function GunBGM(ID,Type,Text)
-			local GText = "\n\n\n\n\n\n\n\x13\x07·\x11·\x08·\x07† "..Text.." \x04을(를) 파괴하였습니다. \x07†\x08·\x11·\x07·\n\n\n\n"
+			local GText = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x07·\x11·\x08·\x07† "..Text.." \x04을(를) 파괴하였습니다. \x07†\x08·\x11·\x07·\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D"
 			if Type == nil then
 				TriggerX(FP,{CV(GunID,ID)},{RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP)},{Preserved})
 			else
@@ -639,7 +639,7 @@ function Include_GunData(Size,LineNum)
 				f_Read(FP,_Add(CenterPtrs,10),TempPos)
 				CMov(FP,CPos,TempPos)
 				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0, -2, -2, 2, 2))
 				CDoActions(FP,{
 					TGiveUnits(1,CenterUIDV,P9,1,G_CA_Player);
 					TSetDeathsX(_Add(CenterPtrs,72),SetTo,0,0,0xFF00),
@@ -649,7 +649,8 @@ function Include_GunData(Size,LineNum)
 					--TSetDeaths(_Add(CenterPtrs,6),SetTo,TempPos,0),
 					--TSetDeaths(_Add(CenterPtrs,22),SetTo,TempPos,0),
 					--TSetDeaths(_Add(CenterPtrs,4),SetTo,TempPos,0),
-					SetCp(i+4),RunAIScriptAt(JYD,64),SetCp(FP),
+					TSetMemory(0x6509B0,SetTo,CenterUIDV),
+					RunAIScriptAt(JYD,1),SetCp(FP),
 					Gun_DoSuspend(),AddCD(CenCcode,1)
 				})
 				for i = 4, 7 do
@@ -788,7 +789,7 @@ BossUID = {87,74,5,2}
 		{1632,-1824+4096},
 		{-1632+4096,-1824+4096}}
 	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x14\n\x14\n\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x13\x04",4)},HumanPlayers,FP)})
+		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n"..StrDesignX("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
@@ -1295,7 +1296,7 @@ end
 	CIf(FP,{CD(ED2Clear,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 Trigger2X(FP,{},{RotatePlayer({
-	DisplayTextX("\n\n\n\n\x13\x04\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\n\n\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\n\n\n\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04",4),
+	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
