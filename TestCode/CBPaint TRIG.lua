@@ -25,7 +25,7 @@ DoActions2(P1,PatchStack,1)--유닛크기변경
 
 SetForces({P1},{P2},{},{},{P1,P2}) 
 SetFixedPlayer(P2)
-StartCtrig(1,nil,nil,1,"C:\\Users\\whatd\\Desktop\\Ctrig Assembler v5.4\\TestMap\\CtrigAsm\\CGRP Image")
+StartCtrig(1,nil,nil,1,"C:\\Temp")
 CJump(AllPlayers,0)
 Include_CtrigPlib(360,"Switch 1")
 Include_CBPaint()
@@ -33,41 +33,36 @@ CJumpEnd(AllPlayers,0)
 NoAirCollisionX(P1)
 DoActions(P1,{SetMemoryX(0x581D74,SetTo,0x75750000,0xFFFF0000),SetMemory(0x581D78,SetTo,0x75757575),SetMemoryX(0x581DD4,SetTo,0x750000,0xFF0000)})
 
-DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
-S1 = CS_FillXY({1,1},256,256,32,32) 
-DoActions(P1,{RemoveUnit(0,P1)}) 
-X, Y, Z = CreateVars(3,P1) 
-DoActionsX(P1,{SetNVar(X,Add,2),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)}) 
-TriggerX(P1,Memory(0x58F45C,Exactly,1) 
-,{SetNVar(X,SetTo,0),SetNVar(Y,SetTo,0),SetNVar(Z,SetTo,0)},{PReserved})
-function func1() 
- CIfX(P1,Memory(0x58F454,Exactly,0)) 
- CB_Move(X,Y,1,2) 
- CElseX()
- CB_MoveCenter(_Read(0x57F0F0),_Read(0x57F120),1,2) 
- CIfXEnd()
-end 
-CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,"Location 13",nil,1,32 
-,{2,0,0,0,S1[1],0},nil,"func1",P1,Memory(0x58F450,Exactly,0),nil,1) 
-function func2() 
- CIfX(P1,Memory(0x58F458,Exactly,0)) 
- CB_Move(Z,0,1,2) -- R+=1 
- CElseX()
- CB_Move(0,Z,1,2) -- A+=1 
- CIfXEnd()
- CB_ConvertXY(2,3) -- XY모드로 복구
-end 
-CBPlot({CS_ConvertRA(S1),CS_InputVoid(S1[1]),CS_InputVoid(S1[1])},nil,P1,0,"Location 13",nil,1,32 
-,{3,0,0,0,S1[1],0},nil,"func2",P1,Memory(0x58F450,Exactly,1),nil,1) 
-function func3() 
- CB_MoveCenter(X,Y,1,2) -- 중심을 0,0에서 떨어트림
- CB_ConvertRA(2,3) -- RA모드 전환
- CB_Move(0,Z,3,2) -- 회전
- CB_ConvertXY(2,3) -- XY모드로 복구
-end 
-CBPlot({S1,CS_InputVoid(S1[1]),CS_InputVoid(S1[1])},nil,P1,0,"Location 13",nil,1,32 
-,{3,0,0,0,S1[1],0},nil,"func3",P1,Memory(0x58F450,Exactly,2),nil,1)
-
+S0 = CS_FillXY({1,1},{0,6},{0,6},2,2) -- Base 도형 (4x4 정사각형) 
+function func1(X,Y) return {X+Y} end 
+S1, TS1 = CS_NSortXY(S0,nil,5,"func1",nil,1) 
+CBPlot(CS_RatioXY(S1,32,32),TS1,P1,0,"Location 7",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(0,P1)}) 
+function func2(X,Y) return {X,Y} end 
+function func2a(I) return 2*I-1 end 
+S1, TS1 = CS_NSortXY(S0,"func2a",4,"func2",{0},0) 
+CBPlot(CS_RatioXY(S1,32,32),TS1,P1,1,"Location 8",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(1,P1)}) 
+S0 = CS_FillXY({1,1},{-3,3},{-3,3},2,2) -- Base 도형 (4x4 정사각형) 
+function func3(R,A) return {R,A} end 
+function func3a(I) 
+ if I<=4 or I>=9 then 
+ return 1 
+ else 
+ return 2 
+end
+end
+S1, TS1 = CS_NSortRA(S0,"func3a",12,"func3",{0},0) 
+CBPlot(CS_RatioXY(S1,32,32),TS1,P1,16,"Location 17",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(16,P1)}) 
+S0 = CSMakeCircle(12,128,0,13,1) 
+function func4(I) 
+ return {math.floor((I-1)/4),I} 
+end
+function func4a(I) 
+ if I<=4 then return 1 
+ elseif I==7 then return 4 
+ else return 2 end 
+end
+S1, TS1 = CS_NSortI(S0,"func4a",7,"func4",{0},{0,1}) 
+CBPlot(S1,TS1,P1,15,"Location 18",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(15,P1)})
 EndCtrig()
 -- 에러 체크 함수 선언 위치 --
 --↑Tep에 그대로 붙여넣기----------------------------------------

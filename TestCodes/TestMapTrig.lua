@@ -209,7 +209,7 @@ DoActions(P1,RemoveUnit(204,P2))
 	TShape = CXMakeShape(96,{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}) -- 중심점을 포함한 2x2x2 정육면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
 
 ---------------------------------------------------------------------------------------------
-	Timer1= CreateCCode()
+	Timer1= CreateCcode()
 	DoActionsX(P1,SetCDeaths("X",Add,1,Timer1))
 	SHLX = 1365
 	SHLY = 1365
@@ -771,12 +771,12 @@ function S1_funcY(X) return -X^2 end
 --end
 
 
+Pol_6_1 = CS_Intersect(CSMakePolygon(6,32,0,PlotSizeCalc(6,7),0),CS_Merge(CSMakeLine(6,32,0,(8*6)+1,0),CSMakePolygon(6,32,0,PlotSizeCalc(6,7),PlotSizeCalc(6,6)),8,0),8,0)
 
-
-
+Pol_6_2 = CSMakeLine(6,128,30,7,1)
+PushErrorMsg(Pol_6[1])
 TestShapeTable = {
-	CS_Intersect(CSMakePolygon(6,24,0,PlotSizeCalc(6,20),0),CS_Merge(CSMakeLine(6,24,0,(21*6)+1,0),CSMakePolygon(6,24,0,PlotSizeCalc(6,20),PlotSizeCalc(6,19)),8,0),8,0)
-
+	
 }
 
 

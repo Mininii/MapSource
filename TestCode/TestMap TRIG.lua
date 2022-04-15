@@ -9,58 +9,79 @@ end
 
 --↓ Tep에 그대로 붙여넣기 -----------------------------------------------------------------
 
-PatchStack = {}
-UnitSizePatch(0,1,PatchStack)
 
-DoActions2(P1,PatchStack,1)--유닛크기변경
-FP = P8
+FP = P1
 SetForces({P1},{P2,P3,P4,P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(P1)
-StartCtrig(1,AllPlayers,nil,1,"C:\\Users\\whatd\\Desktop\\Ctrig Assembler v5.4\\TestMap\\CtrigAsm\\CGRP Image")
+StartCtrig(1,AllPlayers,nil,1,"C:\\Temp")
 CJump(AllPlayers,0x9FF)
 Include_CtrigPlib(360,"Switch 1")
 Include_64BitLibrary("Switch 1")
 Include_CBPaint()
-TempPtrVoid = f_GetVoidptr(FP,1700*16)
-TempPtr = CreateVar(FP)
 CJumpEnd(AllPlayers,0x9FF)
 --↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
+CJump(AllPlayers,0) 
+iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04(\x1C000.0%\x04)")
+iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F(\x1F000.0%\x04)")
+S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
+S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- 단축키없음
+-- ↑ TBLString.txt에서 == 사이에 들어있는 텍스트를 그대로 복사해서 
+-- EUDEditor2,3의 372번 TBL스트링에 붙여넣고 해당 tbl파일을 맵에 삽입해야함
+iTbl1 = GetiTblId(P1,1501,S1) 
+iTbl2 = GetiTblId(P1,831,S2) 
+Str3, Str3a, Str3s = SaveiStrArr(P1,"0000000000 \x04/ 0000000000 \x04(\x1C000.0%\x04)")
 
-DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
-S1 = CS_FillXY({1,1},256,256,32,32) 
-DoActions(P1,{RemoveUnit(0,P1)}) 
-X, Y, Z = CreateVars(3,P1) 
-DoActionsX(P1,{SetNVar(X,Add,2),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)}) 
-TriggerX(P1,Memory(0x58F45C,Exactly,1) 
-,{SetNVar(X,SetTo,0),SetNVar(Y,SetTo,0),SetNVar(Z,SetTo,0)},{PReserved})
-function func1() 
- CIfX(P1,Memory(0x58F454,Exactly,0)) 
- CB_Move(X,Y,1,2) 
- CElseX()
- CB_MoveCenter(_Read(0x57F0F0),_Read(0x57F120),1,2) 
- CIfXEnd()
-end 
-CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,81,nil,1,32 
-,{2,0,0,0,S1[1],0},nil,"func1",P1,Memory(0x58F450,Exactly,0),nil,1) 
-function func2() 
- CIfX(P1,Memory(0x58F458,Exactly,0)) 
- CB_Move(Z,0,1,2) -- R+=1 
- CElseX()
- CB_Move(0,Z,1,2) -- A+=1 
- CIfXEnd()
- CB_ConvertXY(2,3) -- XY모드로 복구
-end 
-CBPlot({CS_ConvertRA(S1),CS_InputVoid(S1[1]),CS_InputVoid(S1[1])},nil,P1,0,81,nil,1,32 
-,{3,0,0,0,S1[1],0},nil,"func2",P1,Memory(0x58F450,Exactly,1),nil,1) 
-function func3() 
- CB_MoveCenter(X,Y,1,2) -- 중심을 0,0에서 떨어트림
- CB_ConvertRA(2,3) -- RA모드 전환
- CB_Move(0,Z,3,2) -- 회전
- CB_ConvertXY(2,3) -- XY모드로 복구
-end 
-CBPlot({S1,CS_InputVoid(S1[1]),CS_InputVoid(S1[1])},nil,P1,0,81,nil,1,32 
-,{3,0,0,0,S1[1],0},nil,"func3",P1,Memory(0x58F450,Exactly,2),nil,1)
 
+
+SelPTR = CreateVar(FP)
+SelHP = CreateVar(FP)
+SelPl = CreateVar(FP)
+SelUID = CreateVar(FP)
+SelEPD = CreateVar(FP)
+SelSh = CreateVar(FP)
+SelPl = CreateVar(FP)
+B1_H = CreateVar(FP)
+SelMaxHP= CreateVar(FP)
+B1_K= CreateVar(FP)
+TBLNUM= CreateVar(FP)
+
+TBLLoad = SetCallForward()
+SetCall(FP)
+function HPBar() 
+	local PlayerID = CAPrintPlayerID 
+	CA__ItoCustom(SVA1(Str3,12),SelMaxHP,nil,0xFFFF0000,10,1,"\x0D",nil,nil,{0,1,2,3,4,5,6,7,8,9}) 
+	CA__ItoCustom(SVA1(Str3,0),SelHP,nil,0xFFFF0000,10,1,"\x0D",nil,nil,{0,1,2,3,4,5,6,7,8,9}) 
+	CA__ItoCustom(SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,4},1,{"\x0D","0","0"},nil,nil,{25,26,27,29}) 
+	
+	
+	--CA__InputSVA1(SVA1(Str2,1),SVA1(Str1,A),12,0xFF,1,12) 
+	--CA__InputSVA1(SVA1(Str2,13),SVA1(Str0,C),6,0xFF,13,18) 
+	CA__InputVA(0,Str3,Str3s,nil,0,31) 
+   end 
+   CBPrint({iTbl1,iTbl2},{TBLNUM,0,0,0,1},"HPBar",P1) --
+SetCallEnd()
+
+
+CJumpEnd(AllPlayers,0) 
+DoActions(P1,DisplayText(MakeiStrWord("\r\n",11),4)) 
+DoActions(P1,{CreateUnit(1,"Kakaru (Twilight)","Anywhere",P1),RemoveUnitAt(1,"Kakaru (Twilight)","Anywhere",P1)}) -- TBL Refresh 
+CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 체력표기
+f_Read(FP,0x6284B8,SelPTR,SelEPD)
+f_Read(FP,_Add(SelEPD,2),SelHP)
+f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
+f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
+f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))),_Mov(256)))
+CTrigger(FP,{CVar(FP,SelPl[2],Exactly,7),CVar(FP,B1_H[2],AtLeast,1)},{TSetCVar(FP,SelHP[2],Add,B1_K)},1)
+f_Div(FP,SelHP,_Mov(256))
+f_Div(FP,SelSh,_Mov(256))
+CallTrigger(FP,TBLLoad,{SetV(TBLNUM,1)})
+CallTrigger(FP,TBLLoad,{SetV(TBLNUM,2)})
+CIfEnd()
+
+
+
+--------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------
 Trigger {
 	players = {P1},
@@ -388,7 +409,7 @@ Trigger { -- No comment (B3442EB7)
 	},
 	actions = {
 		CreateUnit(1, "Zerg Broodling", "broodling", P1);
-		SetMemoryX(0x58F448,SetTo,255,255);
+		--SetMemoryX(0x58F448,SetTo,255,255);
 	},
 }
 Trigger { -- No comment (EC7DF1DE)
