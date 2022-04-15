@@ -1,6 +1,6 @@
 
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
-for dir in io.popen(EXTLUA):lines() do
+for dir in io.popen(EXTLUA):HLines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
@@ -21,67 +21,56 @@ Include_CBPaint()
 CJumpEnd(AllPlayers,0x9FF)
 --↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
 CJump(AllPlayers,0) 
-iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04(\x1C000.0%\x04)")
-iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F(\x1F000.0%\x04)")
-S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
-S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- 단축키없음
--- ↑ TBLString.txt에서 == 사이에 들어있는 텍스트를 그대로 복사해서 
--- EUDEditor2,3의 372번 TBL스트링에 붙여넣고 해당 tbl파일을 맵에 삽입해야함
-iTbl1 = GetiTblId(P1,1501,S1) 
-iTbl2 = GetiTblId(P1,831,S2) 
-Str3, Str3a, Str3s = SaveiStrArr(P1,"0000000000 \x04/ 0000000000 \x04(\x1C000.0%\x04)")
-
-
-
-SelPTR = CreateVar(FP)
-SelHP = CreateVar(FP)
-SelPl = CreateVar(FP)
-SelUID = CreateVar(FP)
-SelEPD = CreateVar(FP)
-SelSh = CreateVar(FP)
-SelPl = CreateVar(FP)
-B1_H = CreateVar(FP)
-SelMaxHP= CreateVar(FP)
-B1_K= CreateVar(FP)
-TBLNUM= CreateVar(FP)
-
-TBLLoad = SetCallForward()
-SetCall(FP)
-function HPBar() 
-	local PlayerID = CAPrintPlayerID 
-	CA__ItoCustom(SVA1(Str3,12),SelMaxHP,nil,0xFFFF0000,10,1,"\x0D",nil,nil,{0,1,2,3,4,5,6,7,8,9}) 
-	CA__ItoCustom(SVA1(Str3,0),SelHP,nil,0xFFFF0000,10,1,"\x0D",nil,nil,{0,1,2,3,4,5,6,7,8,9}) 
-	CA__ItoCustom(SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,4},1,{"\x0D","0","0"},nil,nil,{25,26,27,29}) 
-	
-	
-	--CA__InputSVA1(SVA1(Str2,1),SVA1(Str1,A),12,0xFF,1,12) 
-	--CA__InputSVA1(SVA1(Str2,13),SVA1(Str0,C),6,0xFF,13,18) 
-	CA__InputVA(0,Str3,Str3s,nil,0,31) 
-   end 
-   CBPrint({iTbl1,iTbl2},{TBLNUM,0,0,0,1},"HPBar",P1) --
-SetCallEnd()
-
-
+HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
+--HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+HVA3 = CVArray(FP,4*5) 
 CJumpEnd(AllPlayers,0) 
-DoActions(P1,DisplayText(MakeiStrWord("\r\n",11),4)) 
-DoActions(P1,{CreateUnit(1,"Kakaru (Twilight)","Anywhere",P1),RemoveUnitAt(1,"Kakaru (Twilight)","Anywhere",P1)}) -- TBL Refresh 
-CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 체력표기
-f_Read(FP,0x6284B8,SelPTR,SelEPD)
-f_Read(FP,_Add(SelEPD,2),SelHP)
-f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
-f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
-f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
-CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))),_Mov(256)))
-CTrigger(FP,{CVar(FP,SelPl[2],Exactly,7),CVar(FP,B1_H[2],AtLeast,1)},{TSetCVar(FP,SelHP[2],Add,B1_K)},1)
-f_Div(FP,SelHP,_Mov(256))
-f_Div(FP,SelSh,_Mov(256))
-CallTrigger(FP,TBLLoad,{SetV(TBLNUM,1)})
-CallTrigger(FP,TBLLoad,{SetV(TBLNUM,2)})
+HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
+CIfOnce(FP) 
+ CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"!H")) 
 CIfEnd()
-
-
-
---------------------------------------
+SpCodeBase = 0x8080E200 
+SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
+SpCode3 = 0x8B80E200 -- !H
+function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
+CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
+CA__SetNext(HStr4,8,SetTo,0,54*11-1,0)
+CMov(FP,HLine,0)
+CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
+	f_ChatOffset(FP,HLine,0,ChatOff) 
+	CTrigger(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"!H"))},{SetNVar(HCheck,SetTo,3)},{preserved}) 
+	CurLiV = CreateVar(FP)
+	EffCV = CreateVArr(11, FP)
+	CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
+		CMovX(FP,VArr(EffCV,HLine),0)
+		CMov(FP,CurLiV, _Mul(HLine,54*604))
+		CA__SetValue(HStr2,MakeiStrLetter(" ",53),0xFFFFFFFF,CurLiV,1,1) 
+		CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
+		CIfX(FP,NVar(HCheck,Exactly,3))
+			CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
+			CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
+		CElseX()
+			CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
+		CIfXEnd()
+		CIf(FP,{TTNVar(HCheck, NotSame, 3)})
+		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CIfEnd()
+		CD__InputMask(HLine,0xFFFFFFFF,0,52) 
+	CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
+	TempEC = CreateVar(FP)
+		CMov(FP,CurLiV, _Mul(HLine,54*604))
+		CMovX(FP,TempEC,VArr(EffCV,HLine))
+		CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CIf(FP,NVar(TempEC,AtMost,51),SetNVar(TempEC, Add, 1))
+			CMovX(FP,VArr(EffCV,HLine),TempEC)
+		CIfEnd()
+	CIfXEnd()
+CWhileEnd(SetNVar(HLine,Add,1)) 
+end 
+CDPrint(0,11,{" ",0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+------------------------------------------------------------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------
 Trigger {
 	players = {P1},
@@ -448,5 +437,5 @@ Trigger { -- No comment (43CD0280)
 
 EUDTurbo(P1)
 EndCtrig()
-ErrorCheck()
+ErrorHCheck()
 --↑ Tep에 그대로 붙여넣기 -----------------------------------------------------------------
