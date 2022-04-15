@@ -137,7 +137,7 @@ function LevelUp()
 		end
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-			CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
+			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 0)})
 			CAdd(FP,CunitIndex,1)
 		CWhileEnd()
 	
@@ -164,7 +164,7 @@ function LevelUp()
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 		if Limit == 1 then
-			f_Mul(FP,GetP,_Mov(2))
+			f_Mul(FP,GetP,_Mov(TestPMul))
 		end
 		CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
 			f_Mul(FP,GetP,MulPoint)
@@ -254,7 +254,7 @@ function LevelUp()
 		
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-			CDoActions(FP,{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,0)})
+			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 0)})
 			CAdd(FP,CunitIndex,1)
 		CWhileEnd()
 		

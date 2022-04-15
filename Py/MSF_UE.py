@@ -64,7 +64,7 @@ SelOP = EUDVariable() # 0x58f50C
 #TimeV = EUDVariable() # 0x58f520
 
 
-#SkillArr = Db(4000) # 0x58f532
+SkillArr = Db(4000) # 0x58f532
 
 def onPluginStart():
 
@@ -75,14 +75,14 @@ def onPluginStart():
 		number = number +1
 
 	DoActions([
-		SetMemory(0x58f500, SetTo, SelHP.getValueAddr()),
-		SetMemory(0x58f504, SetTo, MarHP.getValueAddr()),
-		SetMemory(0x58f508, SetTo, SelSh.getValueAddr()),
-		SetMemory(0x58f50C, SetTo, SelOP.getValueAddr()),
+#		SetMemory(0x58f500, SetTo, SelHP.getValueAddr()),
+#		SetMemory(0x58f504, SetTo, MarHP.getValueAddr()),
+#		SetMemory(0x58f508, SetTo, SelSh.getValueAddr()),
+#		SetMemory(0x58f50C, SetTo, SelOP.getValueAddr()),
 #		SetMemory(0x58f518, SetTo, ScoreV.getValueAddr()),
 #		SetMemory(0x58f51C, SetTo, LevelV.getValueAddr()),
 #		SetMemory(0x58f520, SetTo, TimeV.getValueAddr()),
-		#SetMemory(0x58f532, SetTo, SkillArr.getValueAddr()),
+#		SetMemory(0x58f532, SetTo, SkillArr.getValueAddr()),
 		#SetMemory(0x58f510, SetTo, UnitDataArr)
 		])
 	#0~6 공업
@@ -148,22 +148,22 @@ def onPluginStart():
 #
 #	EUDEndIf()
 
-def afterTriggerExec():
-	PercentCalc = EUDVariable()
-	if EUDIf()(SelOP >= 1):
-		ct.f_setTbl(1501, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
-		ct.f_setTbl(831, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
-		
-		PercentCalc << (SelHP*3)//MarHP
-		if EUDIf()(PercentCalc >= 2):
-			ct.f_setTbl(1501, 0, 30,"\x07",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
-			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
-		if EUDElseIf()(PercentCalc == 1):
-			ct.f_setTbl(1501, 0, 30,"\x17",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
-			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
-		if EUDElse()():
-			ct.f_setTbl(1501, 0, 30,"\x08",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
-			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
-		EUDEndIf()
-		SelOP.SubtractNumber(1)
-	EUDEndIf()
+#def afterTriggerExec():
+#	PercentCalc = EUDVariable()
+#	if EUDIf()(SelOP >= 1):
+#		ct.f_setTbl(1501, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
+#		ct.f_setTbl(831, 0, 30,"\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D") #\x0D 개당 1바이트 현재 40바이트 #영어,특문,숫자 1바이트 차지 // 한글 3바이트 차지 함 #\x0D 해당1바이트 안보임
+#		
+#		PercentCalc << (SelHP*3)//MarHP
+#		if EUDIf()(PercentCalc >= 2):
+#			ct.f_setTbl(1501, 0, 30,"\x07",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+#			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
+#		if EUDElseIf()(PercentCalc == 1):
+#			ct.f_setTbl(1501, 0, 30,"\x17",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+#			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
+#		if EUDElse()():
+#			ct.f_setTbl(1501, 0, 30,"\x08",SelHP," \x04/ ",MarHP," \x1C",SelSh//10,".",SelSh%10,"%")
+#			ct.f_setTbl(831, 0, 30,"\x07",SelHP," \x1C/ ",MarHP," \x1F",SelSh//10,".",SelSh%10,"%")
+#		EUDEndIf()
+#		SelOP.SubtractNumber(1)
+#	EUDEndIf()

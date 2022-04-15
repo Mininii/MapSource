@@ -183,10 +183,12 @@ function Var_init()
 	EvCheckPtr = 0x58f60C
 	--0x58f610 MSQC
 	--0x590004~0x591FE4 PEUD Area UnitID : 494~664
-	--PlayerInfoT = "\x12\x10【 \x08Y\x04our \x0FL\x04evel :\x1F 0000000000 \x04◈ Score :\x07 0000000000 \x10】"
-	--PlayerItemT = "\x12\x10【 \x0FI\x04tems ＃ \x08뉴클리어 \x04: 0000000000 \x04◈ \x08인구수 \x04: 0000000000 /\x07 0000000000 \x04◈ \x0E퍼센트 \x1E방어력 : 000 / 255 ◈ 적 체력 약화 : 000 / 255 ◈\x10】"
-	--PlayerInfoSize = GetiStrSize(0,PlayerInfoT)
-	--PlayerItemSize = GetiStrSize(0,PlayerItemT)
+	
+	iStr1 = GetiStrId(FP,MakeiStrLetter(" ",100).."\r\n"..MakeiStrLetter(" ",100)) 
+	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(100))
+	
+
+
 	--iStr1 = GetiStrId(FP,MakeiStrLetter(" ",PlayerInfoSize).."\r\n",..MakeiStrLetter(" ",))
 	--Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 
@@ -259,7 +261,9 @@ function Var_init()
 
 	MarNumberLimit = CreateVar3(FP,(96*2)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
-	SelHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
+	
+	MaxHPWarr = f_GetWArrptr(FP, 228)
+	--elHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
 	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
 	
@@ -280,7 +284,6 @@ function Var_init()
 	BarPos = Create_VTable(7)
 	ExScore = Create_VTable(7)
 	PScoreSTrPtr = Create_VTable(7)
-	EXCunitTemp = Create_VTable(10)
 	NukeUseStrPtr = Create_VTable(7)
 	AMUseStrPtr = Create_VTable(7)
 	f_GunNumT = CreateVarr(5,FP)

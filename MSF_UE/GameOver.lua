@@ -101,7 +101,7 @@ function GameOver()
                 DisplayText(string.rep("\n", 20),4);
                 DisplayText("\x13\x04"..string.rep("―", 56),4);
                 DisplayText("\n\x13\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x04를 \x10클리어\x04 하셨습니다. \x1F==\n",4);
-                DisplayText("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04 in Used \x19(つ>ㅅ<)つ\n\n",4);
+                DisplayText("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(つ>ㅅ<)つ\n\n",4);
                 DisplayText("\x13\x04"..string.rep("―", 56),4);
                 DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
                 PlayWAV("staredit\\wav\\Level_Clear.ogg");
@@ -120,7 +120,7 @@ function GameOver()
                 DisplayTextX(string.rep("\n", 20),4);
                 DisplayTextX("\x13\x04"..string.rep("―", 56),4);
                 DisplayTextX("\n\x13\x1F== \x04마린키우기 \x08ＵｎＬｉｍｉＴ \x1CＥｘｃｅｅＤ \x04를 \x10클리어\x04 하셨습니다. \x1F==\n",4);
-                DisplayTextX("\x13\x1FCtrig \x04Assembler \x07v5.3T\x04 in Used \x19(つ>ㅅ<)つ\n\n",4);
+                DisplayTextX("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(つ>ㅅ<)つ\n\n",4);
                 DisplayTextX("\x13\x04"..string.rep("―", 56),4);
                 DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4);
                 PlayWAVX("staredit\\wav\\Level_Clear.ogg");

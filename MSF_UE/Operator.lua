@@ -115,6 +115,7 @@ function OPTrig()
     end
         
     CMov(FP,0x6509B0,CurrentOP)
+    KeyCP = CurrentPlayer
     CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),TSetCDeaths(FP,Add,Dt,OPFuncT)})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{Preserved})
     TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{Preserved})

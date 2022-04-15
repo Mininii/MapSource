@@ -185,7 +185,7 @@ SetCall(FP)
 		TSetMemory(G_TempV,SetTo,GunID),
 		TSetMemory(_Add(G_TempV,1*(0x20/4)),SetTo,CPosX),
 		TSetMemory(_Add(G_TempV,2*(0x20/4)),SetTo,CPosY),
-		TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,EXCunitTemp[1]),
+		TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,DUnitCalc[4][1]),
 		TSetMemory(_Add(G_TempV,53*(0x20/4)),SetTo,Gun_Type),
 	})
 	
@@ -214,15 +214,12 @@ SetCall(FP)
 		f_LMul(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0},{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
 		CMov(FP,HPMul,_Sub(_Mov(256),TotalAHP))
 		f_LMul(FP,TempLvHP_L2,_LDiv(TempLvHP_L,"256"),{HPMul,0})
+		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L2)
 		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{Preserved})
 		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{Preserved})
 		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
 		
-		CIfX(FP,{TMemory(_Mem(_Add(TempLvHP2,TempLvHP)),AtLeast,8320000*256)})
-			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,8320000*256)})
-		CElseX()
-			CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
-		CIfXEnd()
+		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
 SetCallEnd()
 
 f_Replace = SetCallForward()
@@ -246,8 +243,8 @@ SetCall(FP)
 	TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
 	})
 	CDoActions(FP,{
-		TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1),
-		TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),CC_Header),SetTo,Gun_LV)})
+		Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo,1),
+		Set_EXCC2(DUnitCalc, CunitIndex, 0, SetTo,Gun_LV),})
 	CIfX(FP,CVar(FP,RepHeroIndex[2],Exactly,111))
 	CDoActions(FP,{
 	TCreateUnitWithProperties(1, RepHeroIndex, 1, P8,{energy = 100}),TSetMemoryX(_Add(Nextptrs,19),SetTo,CunitP,0xFF)})
@@ -276,13 +273,12 @@ end
 Call_ArrReset = SetCallForward()
 SetCall(FP)
 	-- ArrayReset
-	CMov(FP,CurArr,0)
-	CWhile(FP,CVar(FP,CurArr[2],AtMost,999))
+	CFor(FP,0,1000,1)
+	local CI = CForVariable()
 	CDoActions(FP,{
-		TSetMemory(_Add(XY_ArrHeader,CurArr),SetTo,0)
+		TSetMemory(_Add(XY_ArrHeader,CI),SetTo,0)
 	})
-	CAdd(FP,CurArr,1)
-	CWhileEnd()
+	CForEnd()
 SetCallEnd()
 
 local CB_UnitIDV =CreateVar(FP)
@@ -344,13 +340,12 @@ local CB_P = CreateVar(FP)
 	SetCallEnd()
 
 	
-	local VoidResetTable = {}
-	for i = 0, 2000 do
-	table.insert(VoidResetTable,(SetVoid(i,SetTo,0)))
-	end
 	Call_VoidReset = SetCallForward()
 	SetCall(FP)
-		DoActions2(FP,VoidResetTable)
+		CFor(FP, EPD(VoidAreaOffset), EPD(VoidAreaOffset)+2001, 1)
+			local CI = CForVariable()
+			CDoActions(FP,{TSetMemory(CI,SetTo,0)})
+		CForEnd()
 	SetCallEnd()
 
 	Call_ScorePrint = SetCallForward()
@@ -488,4 +483,39 @@ end
 	SetCallEnd()
 	end
 
+	
+	iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04 \x1C000.0%\x04 ")
+	iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F \x1F000.0%\x04 ")
+	iStrSize4 = GetiStrSize(0,"\x07『 \x08뉴클리어 \x04보유량 :\x04 0000000000 \x07』")
+	iStrSize5 = GetiStrSize(0,"\x07『 \x08포인트 \x04보유량 :\x04 0000000000 \x07』")
+	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
+
+	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
+	S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- 단축키없음
+	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- 단축키없음
+	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- 단축키없음
+	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
+	-- ↑ TBLString.txt에서 == 사이에 들어있는 텍스트를 그대로 복사해서 
+	-- EUDEditor2,3의 372번 TBL스트링에 붙여넣고 해당 tbl파일을 맵에 삽입해야함
+	iTbl1 = GetiTblId(FP,1501,S1) 
+	iTbl2 = GetiTblId(FP,831,S2) 
+	iTbl3 = GetiTblId(FP,816,S3) 
+	iTbl4 = GetiTblId(FP,129,S4) 
+	PMariTbl = {}
+	for i = 0, 6 do
+		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
+
+	end
+	Str3, Str3a, Str3s = SaveiStrArr(FP,"0000000000 \x04/ 0000000000 \x04 \x1C0000.0%\x04 ")
+	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x08뉴클리어 \x04보유량 : 0000000000  \x05-")
+	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07포인트 \x04보유량 :\x04 0000000000  \x07』 ")
+	MarStr = {}
+	MarStra = {}
+	MarStrs = {}
+	for i = 0, 6 do
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D")
+	end
+	
+
+	
 end

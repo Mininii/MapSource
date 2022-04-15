@@ -99,10 +99,10 @@ function onInit_EUD()
 	local LimitX, LimitC = CreateCCodes(2)
 	local ShTStrPtr = Create_VTable(7)
 	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SeTMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
-	f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	--f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
@@ -130,19 +130,20 @@ function onInit_EUD()
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
-	CMov(FP,VRet,CurrentUID,EPD(0x664080)) -- SpecialAdvFlag
-	CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
-
-	f_Read(FP,_Add(CurrentUID,EPD(0x662350)),VArr(MaxHPBackUp,CurrentUID))
-
-
+	CMov(FP,VRet,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
+	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
+	local TempHPBak = CreateVar(FP)
+	f_Read(FP, _Add(CurrentUID,EPDF(0x662350)) , TempHPBak)
+	CMovX(FP,VArr(MaxHPBackUp,CurrentUID),TempHPBak)
+	f_LMovX(FP, WArr(MaxHPWarr,CurrentUID), {TempHPBak,0})
+	
 	f_Mod(FP,VRet3,CurrentUID,_Mov(2))
 	f_Div(FP,VRet4,CurrentUID,_Mov(2))
 
 	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
-	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
-	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPD(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
@@ -649,11 +650,16 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CIfXEnd()
 	G_CB_init()
 	DoActionsX(FP,SetCDeaths(FP,SetTo,200,PExitFlag))
-
-
+	
 	for i = 0, 6 do
+
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 	_0DPatchX(FP,Names[i+1],7)
+	CS__ItoName(FP, SVA1(MarStr[i+1],3), i, nil, "\x0D", ColorCode[i+1])
+
+	CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1]-3)
+
+
 	end
 
 	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
@@ -797,6 +803,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 --	DoActions(FP,{GiveUnits(1,133,0,11,P8),GiveUnits(1,133,1,12,P8),GiveUnits(1,133,2,13,P8)})
 	CMov(FP,RepHeroIndex,0)
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
+	--
 	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{Preserved}) -- 발키리 나가
 	CDoActions(FP,{
 		TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),
@@ -825,4 +832,5 @@ function onInit_EUD2()
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
 	CIfEnd()
+--	DoActions(FP, SetMemoryX(0x664080 + (111*4),SetTo,0,1), 1)
 end

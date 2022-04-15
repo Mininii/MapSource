@@ -1,28 +1,25 @@
 function Gun_System()
 
 
-    local EXCunit_Reset = {}
-    for i = 1, #EXCunitTemp do
-        table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i-1,0),0,SetTo,0))
-    end
     --[[
     EXCunit 적용
     1번줄 : 건작의 레벨
     9번줄 : 영작유닛 표식
     10번줄 : 마린 데스값 중복적용 방지용
     ]]
-    CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
+    EXCC_Part1(DUnitCalc)
+    --CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
     DoActions(FP,MoveCp(Subtract,6*4))
     Check_P8 = def_sIndex()
     NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
     DoActions(FP,MoveCp(Add,6*4))
     Install_DeathNotice()
-
-    ClearCalc()
+    EXCC_ClearCalc()
+    --ClearCalc()
 
     NJumpEnd(FP,Check_P8)
     DoActions(FP,MoveCp(Add,6*4))
-    CIf(FP,CVar(FP,EXCunitTemp[9][2],AtLeast,1)) -- 영작유닛인식
+    CIf(FP,Cond_EXCC(8,AtLeast,1)) -- 영작유닛인식
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
@@ -60,21 +57,23 @@ function Gun_System()
 
 
 
-    ClearCalc()
-    CunitCtrig_Part2()
-    DoActionsXI(FP,EXCC_Forward)
-    CunitCtrig_Part3X()
+    EXCC_ClearCalc()
+    EXCC_Part2()
+    --CunitCtrig_Part2()
+    --DoActionsXI(FP,EXCC_Forward)
+    EXCC_Part3X()
+    --CunitCtrig_Part3X()
     for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
-    CunitCtrig_Part4_EX(i,{
+    EXCC_Part4X(i,{
     DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
     DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
     },
     {SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
     SetCVar(FP,CurCunitI[2],SetTo,i),EXCunit_Reset,
     MoveCp(Add,25*4),
-    },EXCunitTemp)
+    })--
     end
-    CunitCtrig_End()
+    EXCC_End()
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
     TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{
         SetCDeaths(FP,SetTo,0,SoundLimit[1]),
