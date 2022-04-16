@@ -30,7 +30,7 @@ function Install_Roka7Boss()
 	Simple_SetLoc(0,3072-5,0,3072,6144),
 	RemoveUnitAt(All,84,1,FP);
 	Simple_SetLoc(0,0,0,5,6144),
-	RemoveUnitAt(All,84,1,FP);},{Preserved})
+	RemoveUnitAt(All,84,1,FP);},{preserved})
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
 	
 	
@@ -83,7 +83,7 @@ end
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,1))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -94,7 +94,7 @@ end
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,2))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -105,7 +105,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
@@ -115,7 +115,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,3))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -126,7 +126,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
@@ -136,7 +136,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,4))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -147,7 +147,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,5))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -158,7 +158,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CIfXEnd()
 	CIfEnd()
 	
@@ -173,7 +173,7 @@ end
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,1))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -184,7 +184,7 @@ end
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,2))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -195,7 +195,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
@@ -205,7 +205,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,3))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -216,7 +216,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
@@ -226,7 +226,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,4))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -237,7 +237,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar("X",XColor,Exactly,5))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -248,7 +248,7 @@ end
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CIfXEnd()
 	CIfEnd()
 	
@@ -357,7 +357,7 @@ end
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
 
-			},{Preserved})
+			},{preserved})
 			
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -370,7 +370,7 @@ end
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
 
-			},{Preserved})
+			},{preserved})
 			
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -383,7 +383,7 @@ end
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
 
-			},{Preserved})
+			},{preserved})
 		CElseIfX(CVar(FP,LevelT2[2],Exactly,2))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -395,7 +395,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -406,7 +406,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -417,7 +417,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -428,7 +428,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar(FP,LevelT2[2],Exactly,3))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -440,7 +440,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -451,7 +451,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -462,7 +462,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CElseIfX(CVar(FP,LevelT2[2],Exactly,4))
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
@@ -474,7 +474,7 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 --            CMov(FP,V(Nextptrs[2]),0)
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],Atleast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
@@ -485,12 +485,12 @@ end
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
-},{Preserved})
+},{preserved})
 		CIfXEnd()
 		CMov(FP,0x6509B0,FP)
 
 		
-		CTrigger(FP,{Memory(0x58D744,AtLeast,56)},{TSetDeathsX(_Read(0x58D744),SetTo,0,0,0x40000)},{Preserved})
+		CTrigger(FP,{Memory(0x58D744,AtLeast,56)},{TSetDeathsX(_Read(0x58D744),SetTo,0,0,0x40000)},{preserved})
 		
 		SHX1b1 =
 		{16,{1.9594348786358e-014,-320},{122.45869835683,-295.64145040361},{226.2741699797,-226.2741699797},{295.64145040361,-122.45869835683},{320,0},{295.64145040361,122.45869835683},{226.2741699797,226.2741699797},{122.45869835683,295.64145040361},{1.9594348786358e-014,320},{-122.45869835683,295.64145040361},{-226.2741699797,226.2741699797},{-295.64145040361,122.45869835683},{-320,3.9188697572715e-014},{-295.64145040361,-122.45869835683},{-226.2741699797,-226.2741699797},{-122.45869835683,-295.64145040361}}
@@ -785,7 +785,7 @@ end
 				SetCVar("X",B5_V1[2],SetTo,1);
 				SetCVar("X",B5_V2[2],SetTo,0);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}
 		Trigger {
 			players = {FP},
@@ -2470,10 +2470,10 @@ end
 	local F1LocY = CreateVar()
 	
 		CIf(FP,{Memory(0x594000+4*1545,AtLeast,1),Memory(0x594000+4*1545,AtMost,4),Memory(0x58F524,Exactly,3)})
-			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,2)},{SetMemoryX(0x66A054, SetTo, 17*0x01010100,0xFFFFFF00)},{Preserved})
-			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,1)},{SetMemoryX(0x66A054, SetTo, 10*0x01010100,0xFFFFFF00)},{Preserved})
-			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,3)},{SetMemoryX(0x66A054, SetTo, 6*0x01010100,0xFFFFFF00)},{Preserved})
-			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,4)},{SetMemoryX(0x66A054, SetTo, 13*0x01010100,0xFFFFFF00)},{Preserved})
+			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,2)},{SetMemoryX(0x66A054, SetTo, 17*0x01010100,0xFFFFFF00)},{preserved})
+			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,1)},{SetMemoryX(0x66A054, SetTo, 10*0x01010100,0xFFFFFF00)},{preserved})
+			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,3)},{SetMemoryX(0x66A054, SetTo, 6*0x01010100,0xFFFFFF00)},{preserved})
+			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,4)},{SetMemoryX(0x66A054, SetTo, 13*0x01010100,0xFFFFFF00)},{preserved})
 
 		CIf(FP,{Memory(0x594000+4*1545,Exactly,2)})
 			CMov(FP,Del,0)
@@ -2503,8 +2503,8 @@ end
 				CMov(FP,Num,0)
 				CJumpEnd(FP,While2)
 				NWhile(FP,{TTOR({CVar(FP,LocX[2],AtMost,0x7FFFFFFF),CVar(FP,LocY[2],AtMost,0x7FFFFFFF)}),CVar(FP,Num[2],Exactly,0)})
-					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,0x80000000)},{SetCVar(FP,LocX[2],SetTo,0)},{Preserved})
-					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,0x80000000)},{SetCVar(FP,LocY[2],SetTo,0)},{Preserved})
+					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,0x80000000)},{SetCVar(FP,LocX[2],SetTo,0)},{preserved})
+					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,0x80000000)},{SetCVar(FP,LocY[2],SetTo,0)},{preserved})
 					CDoActions(FP,{
 						TSetMemory(0x58DC60+0x14*26,SetTo,LocX),
 						TSetMemory(0x58DC64+0x14*26,SetTo,LocY),
@@ -2518,7 +2518,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CiSub(FP,LocX,32)
 					CiSub(FP,LocY,64)
 					CJump(FP,While2)
@@ -2553,8 +2553,8 @@ end
 				CMov(FP,Num,0)
 				CJumpEnd(FP,While2)
 				NWhile(FP,{TTOR({CVar(FP,LocX[2],AtMost,3072),CVar(FP,LocY[2],AtMost,0x7FFFFFFF)}),CVar(FP,Num[2],Exactly,0)})
-					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,3072)},{SetCVar(FP,LocX[2],SetTo,3072)},{Preserved})
-					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,0x80000000)},{SetCVar(FP,LocY[2],SetTo,0)},{Preserved})
+					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,3072)},{SetCVar(FP,LocX[2],SetTo,3072)},{preserved})
+					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,0x80000000)},{SetCVar(FP,LocY[2],SetTo,0)},{preserved})
 					CDoActions(FP,{
 						TSetMemory(0x58DC68+0x14*26,SetTo,LocX),
 						TSetMemory(0x58DC64+0x14*26,SetTo,LocY),
@@ -2568,7 +2568,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,LocX,32)
 					CiSub(FP,LocY,64)
 					CJump(FP,While2)
@@ -2603,8 +2603,8 @@ end
 				CMov(FP,Num,0)
 				CJumpEnd(FP,While2)
 				NWhile(FP,{TTOR({CVar(FP,LocX[2],AtMost,0x7FFFFFFF),CVar(FP,LocY[2],AtMost,6144)}),CVar(FP,Num[2],Exactly,0)})
-					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,0x80000000)},{SetCVar(FP,LocX[2],SetTo,0)},{Preserved})
-					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,6144)},{SetCVar(FP,LocY[2],SetTo,6144)},{Preserved})
+					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,0x80000000)},{SetCVar(FP,LocX[2],SetTo,0)},{preserved})
+					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,6144)},{SetCVar(FP,LocY[2],SetTo,6144)},{preserved})
 					CDoActions(FP,{
 						TSetMemory(0x58DC60+0x14*26,SetTo,LocX),
 						TSetMemory(0x58DC6C+0x14*26,SetTo,LocY),
@@ -2618,7 +2618,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CiSub(FP,LocX,32)
 					CAdd(FP,LocY,64)
 					CJump(FP,While2)
@@ -2653,8 +2653,8 @@ end
 				CMov(FP,Num,0)
 				CJumpEnd(FP,While2)
 				NWhile(FP,{TTOR({CVar(FP,LocX[2],AtMost,3072),CVar(FP,LocY[2],AtMost,6144)}),CVar(FP,Num[2],Exactly,0)})
-					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,3072)},{SetCVar(FP,LocX[2],SetTo,3072)},{Preserved})
-					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,6144)},{SetCVar(FP,LocY[2],SetTo,6144)},{Preserved})
+					TriggerX(FP,{CVar(FP,LocX[2],AtLeast,3072)},{SetCVar(FP,LocX[2],SetTo,3072)},{preserved})
+					TriggerX(FP,{CVar(FP,LocY[2],AtLeast,6144)},{SetCVar(FP,LocY[2],SetTo,6144)},{preserved})
 					CDoActions(FP,{
 						TSetMemory(0x58DC68+0x14*26,SetTo,LocX),
 						TSetMemory(0x58DC6C+0x14*26,SetTo,LocY),
@@ -2668,7 +2668,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,LocX,32)
 					CAdd(FP,LocY,64)
 					CJump(FP,While2)
@@ -2712,7 +2712,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,32)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2753,7 +2753,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,32)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2794,7 +2794,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,64)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2835,7 +2835,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,64)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2878,7 +2878,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,32)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2919,7 +2919,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,32)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -2962,7 +2962,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,64)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -3003,7 +3003,7 @@ end
 							SetMemoryX(0x669E28, SetTo, 3,0xFF),CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true,invincible = true}),SetMemoryX(0x669E28, SetTo, 0,0xFF),
 							MoveUnit(All, 47, P8, "Start", "CLoc169"),
 							KillUnit(47, P8),
-							},{Preserved})
+							},{preserved})
 					CAdd(FP,Loc,64)
 					CJump(FP,While2)
 				NWhileEnd()
@@ -3029,7 +3029,7 @@ end
 		SetMemory(0x6509B0,Add,2),
 		SetDeaths(CurrentPlayer,SetTo,0,0),
 		SetMemory(0x6509B0,Add,25-57),
-	},{Preserved})
+	},{preserved})
 
 	CSub(FP,0x6509B0,6)
 	CIfEnd()
@@ -3043,19 +3043,19 @@ end
 		players = {FP},
 		conditions = {Command(FP,AtLeast,1,203)},
 		actions = {SetInvincibility(Enable,203,FP,"Anywhere");},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	Trigger {
 		players = {FP},
 		conditions = {Command(FP,AtLeast,1,204)},
 		actions = {SetInvincibility(Enable,204,FP,"Anywhere");},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	Trigger {
 		players = {FP},
 		conditions = {Command(FP,AtLeast,1,209)},
 		actions = {SetInvincibility(Enable,209,FP,"Anywhere");},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 
 	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))

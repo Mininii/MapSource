@@ -136,5 +136,5 @@ CAdd(FP,0x6509B0,84)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
 CIfEnd()
-TriggerX(FP,{Switch("Switch 240",Set)},{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Subtract,1,LeaderBoardT)},{Preserved})
+TriggerX(FP,{Switch("Switch 240",Set)},{SetCDeaths(FP,Add,1,IntroT),SetCDeaths(FP,Subtract,1,LeaderBoardT)},{preserved})
 end

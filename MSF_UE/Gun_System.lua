@@ -83,7 +83,7 @@ function Gun_System()
         SetCDeaths(FP,SetTo,0,SoundLimit[5]),
         SetCDeaths(FP,SetTo,0,SoundLimit[6]),
         SetCDeaths(FP,SetTo,0,SoundLimit[7]),
-        SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+        SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 
     CIfX(FP,{Memory(0x628438,AtLeast,1),CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
         DoActions(FP,{

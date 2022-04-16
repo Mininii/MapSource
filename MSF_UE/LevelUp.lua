@@ -13,7 +13,7 @@ function LevelUp()
 	local NoText = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04정말로 종료하시겠습니까? 종료를 원하시면 N을 5회 눌러주세요.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local NoText2 = "\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04NO를 입력하셨습니다. 게임을 종료합니다.\n\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local TextSwitch = Create_CCTable(5)
-	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),SetCP(FP)})
+	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),SetCp(FP)})
 	CIf(FP,{
 		CommandLeastAt(131,64),
 		CommandLeastAt(132,64),
@@ -27,20 +27,20 @@ function LevelUp()
 		Bring(FP,AtLeast,1,147,64),
 	},{SetCVar(FP,ReserveBGM[2],SetTo,0)})
 	
-	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),CVar(FP,Actived_Gun[2],AtMost,2)},{SetCDeaths(FP,SetTo,0,GCT)},{Preserved})
+	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),CVar(FP,Actived_Gun[2],AtMost,2)},{SetCDeaths(FP,SetTo,0,GCT)},{preserved})
 		CIfX(FP,{CVar(FP,LevelT2[2],AtMost,1)})
 			TriggerX(FP,{DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF),CVar(FP,Actived_Gun[2],AtMost,0),},{
 				SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-				},{Preserved})
+				},{preserved})
 		CElseIfX({CVar(FP,LevelT2[2],AtLeast,2),CVar(FP,Actived_Gun[2],AtMost,0)})
 		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,9)
 			},{
 			SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-			},{Preserved})
+			},{preserved})
 		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF),
 			},{
 			SetInvincibility(Disable,147,P8,"Anywhere"),RotatePlayer({MinimapPing("Location 29")},HumanPlayers,FP)
-			},{Preserved})
+			},{preserved})
 		CIfXEnd()
 	CIfEnd()
 	
@@ -58,7 +58,7 @@ function LevelUp()
 			SetCDeaths(FP,SetTo,1,HeroPointNotice[6]);
 			SetCDeaths(FP,SetTo,1,HeroPointNotice[7]);
 		},1)
-			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{Preserved})--19
+			TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{preserved})--19
 			DoActions(FP,{
 			--SetDeathsX(AllPlayers,SetTo,0,12,0xFFFFFF),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
@@ -96,7 +96,7 @@ function LevelUp()
 				})
 				TriggerX(FP,{CDeaths(FP,Exactly,0,isSingle)},{RotatePlayer({
 					CenterView(64),
-				},HumanPlayers,FP)},{Preserved})
+				},HumanPlayers,FP)},{preserved})
 				CIfEnd()
 			CElseIfX(CVar(FP,LevelT[2],Exactly,10))
 			
@@ -146,11 +146,11 @@ function LevelUp()
 
 	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
 	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear)},{SetCDeaths(FP,SetTo,1,BClear)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{SetCDeaths(FP,SetTo,1,BClear),SetCDeaths(FP,SetTo,1,StoryT3)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{SetCDeaths(FP,SetTo,1,BClear),SetCDeaths(FP,SetTo,1,StoryT3)},{preserved})
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 
 		GetP = CreateVar(FP)
@@ -179,27 +179,27 @@ function LevelUp()
 		
 
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},
-			{RotatePlayer({DisplayTextX(Id_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+			{RotatePlayer({DisplayTextX(Id_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,DemClear)},
-			{RotatePlayer({DisplayTextX(Dem_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+			{RotatePlayer({DisplayTextX(Dem_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({
 			DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.",4),
 			DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),
 			DisplayTextX("\x07\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
-			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{Preserved})
+			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		local ClearScoreT1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07다음 단계 진입 가능\x04합니다."
 		local ClearScoreT2 = "\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{
 		RotatePlayer({DisplayTextX(ClearScoreT1,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),DisplayTextX(ClearScoreT2,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
-		},{Preserved})
+		},{preserved})
 		
 		
 
 	if Limit == 1 and TestStart == 0 then
-		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{Preserved})
+		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07『 \x04테스트에 협조해주셔서 감사합니다. 빠른 시일 내에 완성된 작품으로 뵙겠습니다. \x07』 ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{preserved})
 	end
 		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
 		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
@@ -243,13 +243,13 @@ function LevelUp()
 		f_Div(FP,LevelT2,Level,_Mov(10))
 		CAdd(FP,LevelT2,1)
 		CAdd(FP,LevelT2,Diff)
-		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{preserved})
 		if TestStart == 1 then
 			--CMov(FP,LevelT2,4)
 		end
-		--TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{Preserved})
-		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{Preserved})--19
-		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{Preserved})
+		--TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{preserved})
+		TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{preserved})--19
+		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{preserved})
 
 		
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
@@ -260,9 +260,9 @@ function LevelUp()
 		
 
 
-		TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{Preserved})
+		TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{preserved})
 		--
-		TriggerX(FP,{},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+		TriggerX(FP,{},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
 
 
 		function SetLevelUpHP(UnitID,Multiplier)
@@ -270,9 +270,9 @@ function LevelUp()
 		end
 
 		for i = 2, 10 do
-			TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*16*i),SetMemory(0x662350+(4*125),SetTo,16000*256*i),SetMemory(0x662350+(4*124),SetTo,16000*256*i)},{Preserved})
+			TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*16*i),SetMemory(0x662350+(4*125),SetTo,16000*256*i),SetMemory(0x662350+(4*124),SetTo,16000*256*i)},{preserved})
 		end
-		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{Preserved})
+		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{preserved})
 		
 		for i = 37, 57 do
 			SetLevelUpHP(i,1)
@@ -296,12 +296,12 @@ function LevelUp()
 		CMov(FP,UpVar,Level)
 		f_Div(FP,UpVar,_Mov(2))
 		for i = 1, 3 do
-		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{Preserved})
+		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{preserved})
 		end
 		for i = 0, 7 do
-			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{Preserved})
+			TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{preserved})
 		end
-		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,255)},{Preserved})
+		TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,255)},{preserved})
 		
 		
 
@@ -343,16 +343,16 @@ function LevelUp()
 	CIfXEnd()
 	NoB = 220
 	YesB = 221
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,2),CVar(FP,LevelT[2],AtMost,10),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtLeast,5,NoCcode)},{RotatePlayer({DisplayTextX(NoText2,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{Preserved})
-	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,YesB)},{RotatePlayer({DisplayTextX(ClearT2,4),PlayWAVX("staredit\\wav\\LimitBreak.ogg")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,2),CVar(FP,LevelT[2],AtMost,10),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtLeast,5,NoCcode)},{RotatePlayer({DisplayTextX(NoText2,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,YesB)},{RotatePlayer({DisplayTextX(ClearT2,4),PlayWAVX("staredit\\wav\\LimitBreak.ogg")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue)},{preserved})
 	
 	CMov(FP,0x6509B0,FP)
 	
 	for i = 0, 4 do
 		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0710초 후 다음 레벨로 진입합니다.\n\x13\x04"..5-i.."초 남았습니다.\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP),
-		SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{Preserved})
+		SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{preserved})
 	end
 
 
@@ -361,7 +361,7 @@ function LevelUp()
 	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500),CDeaths(FP,AtLeast,1,BClear),CDeaths(FP,Exactly,1,Continue)},{TSetCDeaths(FP,Add,Dt,ReplaceDelayT)},1)
 
 	CIf(FP,CDeaths(FP,AtLeast,15000,ReplaceDelayT))
-	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{Preserved})
+	TriggerX(FP,{},{RotatePlayer({DisplayTextX(ClearT3,4)},HumanPlayers,FP)},{preserved})
 
 	DoActions(FP,{RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP)})
 --	MoveMarineArr = {}
@@ -413,9 +413,9 @@ function LevelUp()
 		CAdd(FP,0x6509B0,2)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
-	TriggerX(FP,{},{SetCVar(FP,RandW[2],Add,30)},{Preserved})
---	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,RandW[2],Add,30)},{Preserved})
---	TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{SetCVar(FP,RandW[2],Add,100)},{Preserved})
+	TriggerX(FP,{},{SetCVar(FP,RandW[2],Add,30)},{preserved})
+--	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,RandW[2],Add,30)},{preserved})
+--	TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{SetCVar(FP,RandW[2],Add,100)},{preserved})
 	
 
 	DoActions2X(FP,{SetDeaths(FP,Subtract,1,147),

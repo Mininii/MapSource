@@ -215,8 +215,8 @@ SetCall(FP)
 		CMov(FP,HPMul,_Sub(_Mov(256),TotalAHP))
 		f_LMul(FP,TempLvHP_L2,_LDiv(TempLvHP_L,"256"),{HPMul,0})
 		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L2)
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{Preserved})
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{Preserved})
+		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{preserved})
+		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{preserved})
 		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
 		
 		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
@@ -227,11 +227,11 @@ SetCall(FP)
 	CIfX(FP,Memory(0x628438,AtLeast,1))
 	f_SaveCp()
 	CMov(FP,Gun_LV,0)
-	f_Read(FP,BackupCP,CPos)
+	f_Read(FP,BackupCp,CPos)
 	Convert_CPosXY()
-	f_Read(FP,_Add(BackupCP,1),Gun_LV,"X",0xFF000000)
-	f_Read(FP,_Add(BackupCP,1),CunitP,"X",0xFF00)
-	f_Read(FP,_Add(BackupCP,1),RepHeroIndex,"X",0xFF)
+	f_Read(FP,_Add(BackupCp,1),Gun_LV,"X",0xFF000000)
+	f_Read(FP,_Add(BackupCp,1),CunitP,"X",0xFF00)
+	f_Read(FP,_Add(BackupCp,1),RepHeroIndex,"X",0xFF)
 	f_Div(FP,CunitP,_Mov(0x100)) -- 0
 	f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
@@ -257,7 +257,7 @@ SetCall(FP)
 	CElseX()
 	CDoActions(FP,{
 	TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
-	CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
+	CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
 	CIfXEnd()
 	f_LoadCp()
 	CElseX()
@@ -358,7 +358,7 @@ local CB_P = CreateVar(FP)
 		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
 		for i = 1, 7 do
 			if TestStart == 1 then
-				TriggerX(FP,{CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{Preserved})
+				TriggerX(FP,{CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{preserved})
 			end
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 		CMov(FP,ExScoreP[i],ExScore[i])

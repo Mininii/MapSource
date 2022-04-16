@@ -26,7 +26,7 @@ function Operator_Trig()
 			CAdd(FP,0x6509B0,62-25)
 			CIf(FP,{TTDeaths(CurrentPlayer,NotSame,BarRally[i+1],0)}) --배럭랠리 갱신
 				f_SaveCp()
-				f_Read(FP,BackupCP,BarRally[i+1])
+				f_Read(FP,BackupCp,BarRally[i+1])
 				f_LoadCp()
 			CIfEnd()
 			CSub(FP,0x6509B0,62-25)
@@ -34,7 +34,7 @@ function Operator_Trig()
 			CIfOnce(FP) -- 배럭위치 초기세팅
 				CSub(FP,0x6509B0,15)
 				f_SaveCp()
-				f_Read(FP,BackupCP,BarPos[i+1])
+				f_Read(FP,BackupCp,BarPos[i+1])
 				f_LoadCp()
 				CAdd(FP,0x6509B0,15)
 			CIfEnd()
@@ -46,7 +46,7 @@ function Operator_Trig()
 			DoActionsX(FP,{
                 SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*25,0),
 			})
-			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{Preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{preserved})
 
 			CAdd(FP,0x6509B0,7)
 			
@@ -57,7 +57,7 @@ function Operator_Trig()
 				SetMemory(0x582204+(2*4),Add,2),
 				SetMemory(0x582204+(3*4),Add,2),
 				SetCDeaths(FP,Add,1,EEggCode),
-				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{Preserved})
+				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
 			
 		CIfEnd()
 
@@ -69,7 +69,7 @@ function Operator_Trig()
 	for i = 0, 3 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
 		
-		TriggerX(FP,{CD(Theorist,0),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{Preserved})
+		TriggerX(FP,{CD(Theorist,0),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{preserved})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*181)+(4*i),DtX) -- MSQC val Recive. 181
 		CTrigger(FP,{CV(DtX,2500,AtMost)},{SetV(Dt,DtX)},1)
@@ -107,7 +107,7 @@ function Operator_Trig()
 	CIfEnd()
 
 		for i = 0, 3 do
-			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{Preserved})
+			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{preserved})
 		end
 		Trigger {
 			players = {FP},
@@ -124,7 +124,7 @@ function Operator_Trig()
 			}
 			}
 		TestUPtr = CreateVar(FP)
-		CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{Preserved})
+		CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 		--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
 		--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
 		--CIfEnd()
@@ -162,7 +162,7 @@ function Operator_Trig()
 			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 			CMov(FP,0x6509B0,Cunit2,19)
 			f_SaveCp()
-			CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCP),65536),0xFF000000)})
+			CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 			f_LoadCp()
 
 		CIfEnd()
@@ -184,7 +184,7 @@ TriggerX(FP,{ElapsedTime(AtLeast,60)},{
 	SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
-},{Preserved})
+},{preserved})
 Trigger { -- 빨간숫자
 	players = {FP},
 	conditions = {
@@ -288,14 +288,14 @@ actions = {
 CIfEnd()
 
 TriggerX(FP,{Command(Force1,AtLeast,1,62);},{ModifyUnitEnergy(1,62,Force1,64,0);
-SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);},{Preserved})
+SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);},{preserved})
 TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
-SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);},{Preserved})
+SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
-TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{Preserved})
-TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{Preserved})
-TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{Preserved})
+TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
+TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
+TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
 CMov(FP,CurrentSpeed,SpeedVar)
 for i = 1, 11 do
 	Trigger { -- No comment (E93EF7A9)
@@ -432,7 +432,7 @@ CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"０",nil,nil,{11,12,13,14},Dat
 CA__ItoCustom(SVA1(Str1,0),CanC,nil,nil,{10,1},1,"\x04０",nil,0x04,{18},Data) 
 
 function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
-	if Flag == nil then Flag = {Preserved} elseif Flag == 1 then Flag = {} end
+	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
 	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end
 function SetStr1Data(Index,ConActTable,Flags) --{{{"CD"or "V",CDVIndex,CType,CValue},...},Value,Mask}
@@ -497,7 +497,7 @@ for j, k in pairs(CanColorT) do
 	CS__InputTA(PlayerID,{CV(CanC,j-1)},SVA1(Str1,18),k,0xFF)
 end
 CS__InputTA(PlayerID,{CD(CanCT,1,AtLeast),CD(CanCTC,1)},SVA1(Str1,18),0x04,0xFF)
-TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{Preserved})
+TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
 
  CA__InputVA(40*1,Str1,Str1s,nil,40*1,40*2-3)
  CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
@@ -508,12 +508,12 @@ CIfX(FP,{CDeaths(FP,AtMost,0,Theorist)})
  CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 
  CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,4},1,"\x04０",nil,{0x04,0x04,0x04,0x04},{20,21,22,24},Data) 
 
- TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{Preserved})
+ TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
  function LevelIStrColor(Color,ValueArr)
 	TriggerX(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])},{
 		SetCSVA1(SVA1(Str1,8),SetTo,Color,0xFF),
 		SetCSVA1(SVA1(Str1,9),SetTo,Color,0xFF),
-	},{Preserved})
+	},{preserved})
  end
 
  LevelIStrColor(0x0E,{0,9})
@@ -554,12 +554,12 @@ TriggerX(FP,{CD(CanCTC,1)},{
 	SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
-},{Preserved})
+},{preserved})
 LVUPEffT= CreateCcode()
 CAdd(FP,_Ccode(FP,LVUPEffT),1)
 
-TriggerX(FP,{CD(LVUPEffT,3,AtLeast)},{AddV(LevelUpEffTmp2,604),SetCD(LVUPEffT,0)},{Preserved})
-TriggerX(FP,{CV(LevelUpEffTmp2,40*604,AtLeast)},{SetV(LevelUpEff,0),SetV(LevelUpEffTmp2,0)},{Preserved})
+TriggerX(FP,{CD(LVUPEffT,3,AtLeast)},{AddV(LevelUpEffTmp2,604),SetCD(LVUPEffT,0)},{preserved})
+TriggerX(FP,{CV(LevelUpEffTmp2,40*604,AtLeast)},{SetV(LevelUpEff,0),SetV(LevelUpEffTmp2,0)},{preserved})
 CIfEnd()
 DoActionsX(FP,{AddCD(CanCTC,1)})
  CA__InputVA(40*2,Str1,Str1s,nil,40*2,40*3)
@@ -571,7 +571,7 @@ CAPrint(iStr1,{Force1,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}
 
 	for i = 1, 3 do -- 강퇴기능
 		TriggerX(FP,{Command(Force1,AtLeast,1,BanToken[i]);},{ModifyUnitEnergy(1,BanToken[i],Force1,64,0);
-		SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,BanToken[i],"Anywhere",Force1);SetCDeaths(FP,Add,1,BanCode[i]);},{Preserved})
+		SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,BanToken[i],"Anywhere",Force1);SetCDeaths(FP,Add,1,BanCode[i]);},{preserved})
 		for j = 1, 4 do
 			TriggerX(i,{CDeaths(FP,Exactly,j,BanCode[i])},{RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i)})
 		end

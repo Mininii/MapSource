@@ -43,5 +43,5 @@ TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
     PlayWAVX("staredit\\wav\\button3.wav")
     },HumanPlayers,FP);
     SetCD(ButtonSound,0);
-},{Preserved})
+},{preserved})
 end

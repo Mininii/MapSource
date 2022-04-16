@@ -1,5 +1,5 @@
 function SetWave()
-TriggerX(FP,{CVar(FP,WaveT[2],AtLeast,60*1000)},{SetCVar(FP,WaveT[2],Subtract,60*1000),SetSwitch(WaveSwitch,Set)},{Preserved})
+TriggerX(FP,{CVar(FP,WaveT[2],AtLeast,60*1000)},{SetCVar(FP,WaveT[2],Subtract,60*1000),SetSwitch(WaveSwitch,Set)},{preserved})
   
 CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Switch(WaveSwitch,Set),CVar(FP,Time[2],AtLeast,180*1000)},{SetResources(Force1,Add,500,Ore)})
 DoActions(FP,{Simple_SetLoc(0,1536,4480,1536,4480)})

@@ -84,14 +84,14 @@ function OPText()
 	end
 	end
 	for i = 1, 3 do
-	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,ore),SetMemoryW(0x656EB0, Add, 500*i)})
+	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,Ore),SetMemoryW(0x656EB0, Add, 500*i)})
 	end
-	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV2})
 
 	--local Formation = "\n\n\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(つ>ㅅ<)つ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04이 문구가 뜰 경우 \x07정식버전\x04입니다. \n\x13\x04무단 수정맵을 주의해주세요.\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	local Formation = "\t\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x13\x04처음하시는 분들은 Insert키 숙지 필수입니다. 꼭 확인하세요\n\n\x13\x04처음하시는 분들은 Insert키 숙지 필수입니다. 꼭 확인하세요\n\n\x13\x04처음하시는 분들은 Insert키 숙지 필수입니다. 꼭 확인하세요\n\n\x13\x04처음하시는 분들은 Insert키 숙지 필수입니다. 꼭 확인하세요\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 	TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT)},{RotatePlayer({DisplayTextX(Formation,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
-	--TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT),CDeaths(FP,AtMost,30*52,IntroT)},{CopyCpAction({MinimapPing(10)},HumanPlayers,FP)},{Preserved})
+	--TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT),CDeaths(FP,AtMost,30*52,IntroT)},{CopyCpAction({MinimapPing(10)},HumanPlayers,FP)},{preserved})
 	CIfEnd()
 end

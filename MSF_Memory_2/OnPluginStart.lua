@@ -695,7 +695,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
 	CMov(FP,0x6509B0,UnitDataPtr)
 	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0)) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
-	--	CIf(FP,{TDeathsX(_Add(BackupCP,1),Exactly,TestCheck,0,0xFF)})
+	--	CIf(FP,{TDeathsX(_Add(BackupCp,1),Exactly,TestCheck,0,0xFF)})
 		CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
 	--	CIfEnd()
 		CAdd(FP,0x6509B0,2)

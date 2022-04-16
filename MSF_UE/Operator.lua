@@ -20,14 +20,14 @@ function OPTrig()
 
         local CurLev = CreateVar(FP)
         CMov(FP,0x6509B0,CurrentOP)
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,Level[2],Add,1)},{Preserved})
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,Level[2],Subtract,1)},{Preserved})
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCVar(FP,Level[2],Add,1)},{preserved})
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCVar(FP,Level[2],Subtract,1)},{preserved})
             CIf(FP,{TTCVar(FP,CurLev[2],NotSame,Level)})
             f_Mod(FP,LevelT,Level,_Mov(10))
             f_Div(FP,LevelT2,Level,_Mov(10))
             CAdd(FP,LevelT2,1)
             CAdd(FP,LevelT2,Diff)
-            TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{Preserved})
+            TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{preserved})
             CMov(FP,CurLev,Level)
             CIfEnd()
 
@@ -116,37 +116,51 @@ function OPTrig()
         
     CMov(FP,0x6509B0,CurrentOP)
     KeyCP = CurrentPlayer
-    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),TSetCDeaths(FP,Add,Dt,OPFuncT)})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{Preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{Preserved})
-    for i = 0, 3 do
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{Preserved})
-    end    
-    TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
+    TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
     if TestStart ==1 then
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{preserved})
     else
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
     end
+    local SCAText = "\x13\x07SCA \x04로드 현황"
+    local P1Text = "\x08P1 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P2Text = "\x0EP2 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P3Text = "\x0FP3 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P4Text = "\x10P4 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P5Text = "\x11P5 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P6Text = "\x15P6 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local P7Text = "\x16P7 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
+    local iStrInit = def_sIndex()
+    CJump(FP, iStrInit)
+    
+    CJumpEnd(FP, iStrInit)
+
         DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 난이도를 선택해주세요. 숫자가 클수록 어려워집니다. \x1E◀\n\x13\x04숫자버튼 또는 방향키로 선택 후 Y를 눌러주세요.\n\x13\x03１ \x04２ ３ ４ Press (Y) to Start",4)},HumanPlayers,FP)},1)
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{preserved})
+        for i = 0, 3 do
+            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{preserved})
+        end    
         CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
         CMov(FP,CurrentDiff,Diff)
         TriggerX(FP,{CVar(FP,Diff,Exactly,0)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x03１ \x04２ ３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0)},{Preserved})
+            DisplayTextX("\x13\x03１ \x04２ ３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0)},{preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,1)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ \x03２ \x04３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,5)},{Preserved})
+            DisplayTextX("\x13\x04１ \x03２ \x04３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,5)},{preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,2)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ \x03３ \x04４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,10)},{Preserved})
+            DisplayTextX("\x13\x04１ ２ \x03３ \x04４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,10)},{preserved})
         TriggerX(FP,{CVar(FP,Diff,Exactly,3)},{
             RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ ３ \x03４ \x04Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,15)},{Preserved})
+            DisplayTextX("\x13\x04１ ２ ３ \x03４ \x04Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,15)},{preserved})
         CIfEnd()
         CMov(FP,0x6509B0,CurrentOP)
     CIfEnd()
+
 	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
@@ -162,25 +176,25 @@ function OPTrig()
 
     CIf(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,AtLeast,1,OPConsole)},{TSetCDeaths(FP,Add,Dt,OPFuncT)})
         if Testmode == 0 then
-        TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{Preserved})
+        TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{preserved})
         end
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,SpeedVar[2],AtMost,9)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Add,1)},{Preserved})
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,SpeedVar[2],AtLeast,2)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Subtract,1)},{Preserved})
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,SpeedVar[2],AtMost,9)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Add,1)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,SpeedVar[2],AtLeast,2)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetCVar(FP,SpeedVar[2],Subtract,1)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{preserved})
         CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))
             CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x08강퇴모드 ON. \x04숫자키를 5회 눌러 강퇴하세요. ESC : 닫기\x07 ]")},1)
             -- 205 ~ 211
             for i = 1, 6 do
                 CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,205+i),TTMemory(0x6509B0,NotSame,i),HumanCheck(i,1)},{
                     RotatePlayer({DisplayTextX("\x07『 "..PlayerString[i+1].."\x04에게 \x08경고 1회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다. \x07』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
-                    SetCDeaths(FP,SetTo,0,OPFuncT),SetCDeaths(FP,Add,1,BanToken[i+1])},{Preserved})
+                    SetCDeaths(FP,SetTo,0,OPFuncT),SetCDeaths(FP,Add,1,BanToken[i+1])},{preserved})
             end
             CMov(FP,0x6509B0,CurrentOP)
             CelseX()
             CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x04방향키(←→) : \x1F배속 조정, \x04ESC : 닫기, B : \x08강퇴모드 ON\x07 ]")},1)
         CIfXEnd()
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{Preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{preserved})
     CIfEnd()
     CMov(FP,0x6509B0,FP) -- RecoverCP 상위플레이어 단락 끝
     CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거

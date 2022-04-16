@@ -1508,13 +1508,13 @@ function Install_DLBoss()
 		TriggerX(FP,{			
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
 			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
-			Void(5,Exactly,350);},{SetCVar(FP,CurArr[2],SetTo,0)},{Preserved})
+			Void(5,Exactly,350);},{SetCVar(FP,CurArr[2],SetTo,0)},{preserved})
 
 		TriggerX(FP,{			
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
 			Bring(CurrentPlayer, AtLeast, 1, "Edmund Duke (Siege Mode)", "Anywhere");
 			Void(5,Exactly,200);
-		},{SetCVar(FP,CurArr[2],SetTo,0)},{Preserved})
+		},{SetCVar(FP,CurArr[2],SetTo,0)},{preserved})
 
 
 		local WrPos = CreateVar(FP)

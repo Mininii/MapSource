@@ -582,22 +582,22 @@ TriggerX(FP,{Void(41,Exactly,1)},{
 	SetCVar(FP,DX1[2],SetTo,2),
 	SetCVar(FP,DY1[2],SetTo,1),
 	SetCVar(FP,DZ1[2],SetTo,0)
-},{Preserved})
+},{preserved})
 TriggerX(FP,{Void(41,Exactly,2)},{
 	SetCVar(FP,DX1[2],SetTo,4),
 	SetCVar(FP,DY1[2],SetTo,1),
 	SetCVar(FP,DZ1[2],SetTo,1)
-},{Preserved})
+},{preserved})
 TriggerX(FP,{Void(41,Exactly,3)},{
 	SetCVar(FP,DX1[2],SetTo,6),
 	SetCVar(FP,DY1[2],SetTo,1),
 	SetCVar(FP,DZ1[2],SetTo,2)
-},{Preserved})
+},{preserved})
 TriggerX(FP,{Void(41,Exactly,4)},{
 	SetCVar(FP,DX1[2],SetTo,8),
 	SetCVar(FP,DY1[2],SetTo,2),
 	SetCVar(FP,DZ1[2],SetTo,2)
-},{Preserved})
+},{preserved})
 
 CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,1)})
 	CMov(FP,Del,0)
@@ -631,7 +631,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,1)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -673,7 +673,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,2)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -715,7 +715,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,3)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -756,7 +756,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,4)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -798,7 +798,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -838,7 +838,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -878,7 +878,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()
@@ -918,7 +918,7 @@ CIf(FP,{Memory(0x58F564,Exactly,61),Void(42,Exactly,5)})
 					CreateUnitWithProperties(1, 47, "Start", P8, {hallucinated = true, invincible = true}),
 					MoveUnit(All, 47, P8, "Start", "Shot"),
 					KillUnit(47, P8),
-					},{Preserved})
+					},{preserved})
 			CAdd(FP,Loc,32)
 			CJump(FP,While2)
 		NWhileEnd()

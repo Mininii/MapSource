@@ -259,7 +259,7 @@ HPRegenTable = {64}
                 SetCtrigX("X",MarHPRead[i][2],0x158,"X",SetTo,"X",TempMarHPRead[2],0x15C,1,"X");
                 CallLabel1("X",MarHPRead[i][2],"X")
             },
-            flag = {Preserved}
+            flag = {preserved}
         }
         Trigger {
             players = {FP},
@@ -270,7 +270,7 @@ HPRegenTable = {64}
             actions = {
                 CallLabel2("X",MarHPRead[i][2],"X")
             },
-            flag = {Preserved}
+            flag = {preserved}
         }
         end
 
@@ -327,7 +327,7 @@ HPRegenTable = {64}
 --        CMov(FP,V(MarSkillCA[6]),1)
 --        CMov(FP,V(MarSkillCA[5]),5)
         for i = 0, 3 do
-        --TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
+        --TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{preserved})
         end
         function MarListSkillUnitFunc()
             CIf(FP,Memory(0x628438,AtLeast,1))
@@ -437,7 +437,7 @@ HPRegenTable = {64}
         f_Read(FP,BackupCp,CPos)
         CAdd(FP,BackupCp,30)
         Convert_CPosXY()
-        --TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{Preserved})
+        --TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{preserved})
         Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
             for i = 0, 3 do
                 TriggerX(FP,{CV(CPlayer,i)},{
@@ -447,7 +447,7 @@ HPRegenTable = {64}
                 DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
                 SetMemory(0x6509B0,SetTo,FP),
                 --RunAIScriptAt("Recall Here",24)
-            },{Preserved})
+            },{preserved})
                 TriggerX(FP,{CV(CPlayer,i),Command(P6,AtMost,0,BossUID[2])},{
                 SetMemoryB(0x665C48+380,SetTo,0);
                 SetMemoryX(0x666458, SetTo, 391,0xFFFF),
@@ -455,7 +455,7 @@ HPRegenTable = {64}
                 RemoveUnit(33,FP),
                 SetMemoryB(0x665C48+380,SetTo,1);
                 SetMemoryX(0x666458, SetTo, 546,0xFFFF),
-                },{Preserved})
+                },{preserved})
             end
             f_Read(FP,_Add(Nextptrs,0x28/4),TempTarget)
         CIf(FP,{TMemoryX(_Add(Nextptrs,19),Exactly,2*256,0xFF00),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -467,7 +467,7 @@ HPRegenTable = {64}
             TSetMemoryX(_Add(Nextptrs,19),SetTo,107*256,0xFF00),
         })
         CIfEnd()
-        --TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{Preserved})
+        --TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{preserved})
         --CMov(FP,BackupCp,Nextptrs,40)
         NJumpEnd(FP,CCMU_Check)
         CDoActions(FP,{
@@ -518,7 +518,7 @@ HPRegenTable = {64}
         PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP)})
         CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
         for i = 4, 7 do
-            TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCCode[i-3],1)},{Preserved})
+            TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCCode[i-3],1)},{preserved})
         end
         
         f_LoadCp()
@@ -634,7 +634,7 @@ HPRegenTable = {64}
     
     
     SETimer = CreateCcode()
-    TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
 
     function SwarmSet(LVTable,CUTable)
         local LvLeast
@@ -766,7 +766,7 @@ InvDisable(190,FP,{
     CD(OcCcode,2,AtLeast);
     CD(DgCcode,2,AtLeast); 
     CD(GeneCcode,2,AtLeast);
-},"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+},"\x17중앙 \x10"..Conv_HStr("<08>C<1D>Ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
 CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 
@@ -809,7 +809,7 @@ Command(FP,AtLeast,1,173);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
 		AddV(CanC,1);
 		KillUnit("Factories",Force2);
-},{Preserved})
+},{preserved})
 
 Trigger2X(FP,{--캔발동
 Command(FP,AtLeast,1,173);
@@ -828,7 +828,7 @@ Command(FP,AtLeast,1,173);
 		AddV(CanC,1);
 		KillUnit("Factories",Force2);
 		SetCDeaths(FP,Add,1,DefeatCC);
-},{Preserved})
+},{preserved})
 
 DoActions2X(FP,{SubCD(CanWT,1),SubCD(CanCT,1)})
 CIf(FP,CD(DefeatCC,1,AtLeast))
@@ -867,9 +867,9 @@ for j, k in pairs(TTShape1) do
         Loc(9,0,Exactly,k[1]),
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond1,0)
-    },{Preserved})
+    },{preserved})
     TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),SetInvincibility(Disable,68,P5,64),SetInvincibility(Disable,68,P7,64),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
-    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
+    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{preserved})
 end
 for j, k in pairs(TTShape3) do
     DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond1,1)})
@@ -878,9 +878,9 @@ for j, k in pairs(TTShape3) do
         Loc(9,0,Exactly,k[1]),
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond1,0)
-    },{Preserved})
+    },{preserved})
     TriggerX(FP,{CD(TTCond1,1),CD(TTAct1,0)},{SetCD(TTAct1,1),GiveUnits(All,68,P12,11,P5),GiveUnits(All,68,P12,13,P7),SetInvincibility(Disable,68,P5,64),SetInvincibility(Disable,68,P7,64),Order(68,P5,64,Attack,30),Order(68,P7,64,Attack,30)})
-    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
+    TriggerX(FP,{CD(TTAct1,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{preserved})
 end
 CIfEnd()
 
@@ -893,9 +893,9 @@ for j, k in pairs(TTShape2) do
         Loc(9,0,Exactly,k[1]),
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond2,0)
-    },{Preserved})
+    },{preserved})
     TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),SetInvincibility(Disable,68,P6,64),SetInvincibility(Disable,68,P8,64),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
-    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{Preserved})
+    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32+64,k[1]+32,k[2]+32+64),Order("Men",Force1,1,Move,10)},{preserved})
 end
 for j, k in pairs(TTShape4) do
     DoActions2X(FP,{Simple_SetLoc(0,k[1]-32,k[2]-32,k[1]+32,k[2]+32),Simple_SetLoc(9,0,0,0,0),MoveLocation(10,"Men",Force1,1),SetCD(TTCond2,1)})
@@ -904,9 +904,9 @@ for j, k in pairs(TTShape4) do
         Loc(9,0,Exactly,k[1]),
         Loc(9,4,Exactly,k[2]),
     },{SetCD(TTCond2,0)
-    },{Preserved})
+    },{preserved})
     TriggerX(FP,{CD(TTCond2,1),CD(TTAct2,0)},{SetCD(TTAct2,1),GiveUnits(All,68,P12,12,P6),GiveUnits(All,68,P12,14,P8),SetInvincibility(Disable,68,P6,64),SetInvincibility(Disable,68,P8,64),Order(68,P6,64,Attack,31),Order(68,P8,64,Attack,31)})
-    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{Preserved})
+    TriggerX(FP,{CD(TTAct2,1)},{Simple_SetLoc(9,k[1]-32,k[2]-32-64,k[1]+32,k[2]+32-64),Order("Men",Force1,1,Move,10)},{preserved})
 end
 CIfEnd()
 
@@ -929,17 +929,17 @@ for i = 0, 3 do
 --	for i = 0, 3 do
 --		CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i),HumanCheck(i,0)})
 --		DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
---		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,0)},{Preserved})
---		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,1)},{Preserved})
---		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,2)},{Preserved})
---		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,3)},{Preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,0)},{preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,1)},{preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,2)},{preserved})
+--		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,3)},{preserved})
 --		CIfEnd()
 --	end
 --    for j = 0, 3 do
 --    NJumpX(FP,L_Gun_Move,{CVar(FP,TargetRotation[2],Exactly,j),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 --    end
 --	for i = 0, 3 do
---        TriggerX(FP,{CV(TargetRotation,i)},{Order("Men")},{Preserved})
+--        TriggerX(FP,{CV(TargetRotation,i)},{Order("Men")},{preserved})
 --    end
 
 

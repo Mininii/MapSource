@@ -22,7 +22,7 @@ end
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
 	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
-	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
+	f_Movcpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
 	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
@@ -60,13 +60,13 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 					SetMemory(0x6509B0,SetTo,i),
 					DisplayText(CT,4);
 					SetMemory(0x6509B0,SetTo,FP),
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit[i+1]),CDeaths(FP,Exactly,0,HeroPointNotice[i+1])},{
 					SetMemory(0x6509B0,SetTo,i),
 					PlayWAV("staredit\\wav\\HeroKill.ogg"),PlayWAV("staredit\\wav\\HeroKill.ogg");
 					SetMemory(0x6509B0,SetTo,FP),
 					SetCDeaths(FP,Add,1,SoundLimit[i+1]),
-				},{Preserved})
+				},{preserved})
 			end
 			CIfEnd()
 			
@@ -88,7 +88,7 @@ function Install_DeathNotice()
 					SetCVar(FP,ExScore[j][2],Add,-50);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
 				end
 				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -109,7 +109,7 @@ function Install_DeathNotice()
 					SetCVar(FP,ExScore[j][2],Add,-1000);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
 				end
 				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -130,7 +130,7 @@ function Install_DeathNotice()
 					SetCVar(FP,ExScore[j][2],Add,-500);
 				})
 				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
 				end
 				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				f_LoadCp()
@@ -176,10 +176,10 @@ function BGMManager()
 	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)})
 		CMov(FP,BGMTypeV,ReserveBGM)
 		CMov(FP,ReserveBGM,0)
-		TriggerX(FP,{Bring(FP,AtLeast,1,87,64)},{SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)},{Preserved})
-		TriggerX(FP,{Bring(FP,AtLeast,1,68,64)},{SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM)},{Preserved})
-		TriggerX(FP,{Bring(FP,AtLeast,1,15,64)},{SetCVar(FP,BGMTypeV[2],SetTo,Akasha),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)},{Preserved})
-		TriggerX(FP,{Bring(FP,AtLeast,1,74,64)},{SetCVar(FP,BGMTypeV[2],SetTo,DLBossBGM),SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM)},{Preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,87,64)},{SetCVar(FP,BGMTypeV[2],SetTo,roka7BGM),SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)},{preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,68,64)},{SetCVar(FP,BGMTypeV[2],SetTo,IdenBGM),SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM)},{preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,15,64)},{SetCVar(FP,BGMTypeV[2],SetTo,Akasha),SetCVar(FP,ReserveBGM[2],SetTo,Akasha)},{preserved})
+		TriggerX(FP,{Bring(FP,AtLeast,1,74,64)},{SetCVar(FP,BGMTypeV[2],SetTo,DLBossBGM),SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM)},{preserved})
 	CIfEnd()
 	Install_BGMSystem(FP,6,BGMTypeV,12,1)
 end
@@ -271,7 +271,7 @@ function KeyInput(Key,Conditions,Actions,PreserveFlag,CutFlag)
 		Y = {SetDeaths(KeyCP,SetTo,0,Key)}
 	end
 	if PreserveFlag == 1 then
-		X = {Preserved}
+		X = {preserved}
 	end
 	TriggerX(FP,{Deaths(KeyCP,AtLeast,1,Key),Conditions},{Y,Actions},X)
 end
@@ -374,7 +374,7 @@ function DoHumanCheck()
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 	for i = 0, 6 do
-		TriggerX(FP,{HumanCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{Preserved})
+		TriggerX(FP,{HumanCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{preserved})
 	end
 end
 
@@ -469,7 +469,7 @@ end
 function NormalTurboSet(Player,DeathUnitID)
 	local NTUID = DeathUnitID
 	DoActions(Player,SetDeaths(Player,Add,1,DeathUnitID))
-	Trigger2(Player,{Deaths(Player,AtLeast,2,DeathUnitID)},{SetDeaths(Player,SetTo,0,DeathUnitID)},{Preserved})
+	Trigger2(Player,{Deaths(Player,AtLeast,2,DeathUnitID)},{SetDeaths(Player,SetTo,0,DeathUnitID)},{preserved})
 	
 	function NTCond()
 		return Deaths(Player,Exactly,1,NTUID)
@@ -631,7 +631,7 @@ end
 		CIf(PlayerID,CVar("X",CA[1],AtLeast,1))
 			if type(Shape[1]) ~= "number" then
 				for i = 1, #Shape do
-					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
+					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{preserved})
 				end
 			else
 				DoActions2X(PlayerID,TempAct)
@@ -692,9 +692,9 @@ end
 		DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 		if Preserve ~= nil then
 			if type(Preserve) == "number" then
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{preserved})
 			else
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{preserved})
 			end
 		end
 		local Ret = {CA[1],CA[2],CA[3],CA[4],CA[5],CA[6],CB[1],CB[2],CB[3]}
@@ -725,7 +725,7 @@ function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
 			SetMemory(0x6509B0,SetTo,19025 + 84 * LoopIndex);
 			Actions,
 			},
-		flag = {Preserved}
+		flag = {preserved}
 	}		
 end
 
@@ -874,14 +874,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 공중 충돌판정 삭제 루카스보스 전용 RepeatType
-		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
+		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
 		GetLocCenter("Boss",CPosX,CPosY)
 		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
 		CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
 		CTrigger(FP,{CVar(FP,Repeat_UnitIDV[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
 
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
-		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{Preserved})
+		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
 		GetLocCenter("Boss",CPosX,CPosY)
 		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
 		CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89)})
@@ -1020,26 +1020,26 @@ CJumpEnd(FP,Write_SpawnSet_Jump)
 CAdd(FP,G_CB_LineTemp,G_CB_LineV,G_CB_InputH)
 NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
 
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 _0D = string.rep("\x0D",200)
 if Limit == 1 then
 	--	CIf(FP,CD(TestMode,1))
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_CUTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_RPTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_FNTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_SNTV[1],VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_LMTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
---		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+--		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 	--	CIfEnd()
 	
 	end
@@ -1182,7 +1182,7 @@ G_CB_ShapeTable = {}
 	CMov(FP,V(CA[3]),G_CB_TempTable[12])
 	CMov(FP,V(CA[6]),G_CB_TempTable[13])
 	CMov(FP,V(CA[5]),G_CB_TempTable[10],nil,0xFF,1)
-	TriggerX(FP, {CVar(FP,G_CB_TempTable[10][2],AtMost,0,0xFF)}, {SetV(V(CA[5]),1)}, {Preserved})
+	TriggerX(FP, {CVar(FP,G_CB_TempTable[10][2],AtMost,0,0xFF)}, {SetV(V(CA[5]),1)}, {preserved})
 
 
 	CBPlot(Y,nil,FP,nilunit,0,{G_CB_TempTable[8],G_CB_TempTable[9]},1,32,{0,0,0,0,0,1},"G_CB_Func",nil,FP,nil,nil,{SetCDeaths(FP,Add,1,G_CB_Suspend)}) 
@@ -1336,12 +1336,12 @@ end
 			CMov(FP,G_CB_TempTable[12],0)
 			CMov(FP,G_CB_TempTable[13],0)
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{Preserved}) --CD(TestMode,1)
+				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --CD(TestMode,1)
 			end
 			CElseIfX({CDeaths(FP,AtLeast,1,G_CB_Launch),CDeaths(FP,AtLeast,0,G_CB_Suspend)})
 			CElseX()
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{Preserved})
+				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 			end
 			
 			local G_CB_InputCAct = {}
@@ -1363,7 +1363,7 @@ end
 		CMov(FP,G_CB_TempTable[12],0)
 		CMov(FP,G_CB_TempTable[13],0)
 		if Limit == 1 then
-			TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{Preserved})
+			TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
 
 		CIfXEnd()
@@ -1499,7 +1499,7 @@ function EXCC_Part1(EXCC_init,Actions)
 		actions = {
 			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+2,0,0,1); 
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 	Trigger { -- Cunit Calc Selector
 		players = {ParsePlayer(PlayerID)},
@@ -1510,7 +1510,7 @@ function EXCC_Part1(EXCC_init,Actions)
 			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
 			Actions,
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 	
 end
@@ -1528,7 +1528,7 @@ function EXCC_Part2()
 				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
 				SetMemory(0x6509B0,SetTo,P);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}	
 	end
 end
@@ -1540,7 +1540,7 @@ function EXCC_Part3X()
 		conditions = { 
 			Label(EXCC_Index+2);
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 
@@ -1564,7 +1564,7 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 		Actions,
 		EXCC_initArr[6]
 			},
-		flag = {Preserved}
+		flag = {preserved}
 	}		
 end
 
@@ -1580,7 +1580,7 @@ function EXCC_ClearCalc(Actions)
 			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
 			Actions
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 
@@ -1604,7 +1604,7 @@ function EXCC_BreakCalc(Conditions,Actions)
 			SetCtrigX("X",EXCC_Index+1,0x15C,0,SetTo,"X","X",0,0,1);
 			Actions,
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 

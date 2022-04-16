@@ -167,22 +167,22 @@ NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
 _0D = string.rep("\x0D",200)
 if Limit == 1 then
 	--	CIf(FP,CD(TestMode,1))
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 		ItoDec(FP,G_CB_CUTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		ItoDec(FP,G_CB_RPTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		ItoDec(FP,G_CB_FNTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		ItoDec(FP,G_CB_SNTV[1],VArr(G_CB_WSTestVA,0),0,nil,0)
 		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		ItoDec(FP,G_CB_LMTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 	--	CIfEnd()
 	
 	end
@@ -448,12 +448,12 @@ end
 			CMov(FP,G_CB_TempTable[7],0)
 			CMov(FP,G_CB_TempTable[13],0)
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{Preserved}) --CD(TestMode,1)
+				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --CD(TestMode,1)
 			end
 			CElseIfX({CDeaths(FP,AtLeast,1,G_CB_Launch),CDeaths(FP,AtLeast,0,G_CB_Suspend)})
 			CElseX()
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{Preserved})
+				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 			end
 			
 			local G_CB_InputCAct = {}
@@ -472,7 +472,7 @@ end
 		CMov(FP,G_CB_TempTable[7],0)
 		CMov(FP,G_CB_TempTable[13],0)
 		if Limit == 1 then
-			TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{Preserved})
+			TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
 
 		CIfXEnd()

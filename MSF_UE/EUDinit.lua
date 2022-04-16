@@ -127,8 +127,8 @@ function onInit_EUD()
 	local CurrentUID = CreateVar(FP)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
-	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
-	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
+	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{preserved}) -- 아 발키리 좀 저리가요
+	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Cantina = nil
 	CMov(FP,VRet,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
 	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
 	local TempHPBak = CreateVar(FP)
@@ -774,9 +774,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 					CVar(FP,RepHeroIndex[2],Exactly,131)
 				}),CV(CunitHP,99,AtMost)},{TSetCVar(FP,Gun_LV[2],SetTo,CunitHP)},1)
 --				CIf(FP,CVar(FP,RepHeroIndex[2],Exactly,133))
---				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,0)},{SetCVar(FP,Gun_LV[2],SetTo,1)},{Preserved})
---				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,1)},{SetCVar(FP,Gun_LV[2],SetTo,2)},{Preserved})
---				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,2)},{SetCVar(FP,Gun_LV[2],SetTo,3)},{Preserved})
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,0)},{SetCVar(FP,Gun_LV[2],SetTo,1)},{preserved})
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,1)},{SetCVar(FP,Gun_LV[2],SetTo,2)},{preserved})
+--				TriggerX(FP,{CVar(FP,CunitP[2],Exactly,2)},{SetCVar(FP,Gun_LV[2],SetTo,3)},{preserved})
 --				DoActionsX(FP,SetCVar(FP,CunitP[2],SetTo,7))
 --				CIfEnd()
 
@@ -803,7 +803,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CMov(FP,RepHeroIndex,0)
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
 	--
-	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{Preserved}) -- 발키리 나가
+	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{preserved}) -- 발키리 나가
 	CDoActions(FP,{
 		TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),
 		TRemoveUnit(RepHeroIndex,AllPlayers),

@@ -29,8 +29,8 @@ function Interface()
 		CIf(FP,HumanCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(5000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256*5),SetV(MarHPRead[i+1],(5000*256)-255)})
 
 			for CBit = 0, 7 do
-				TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{Preserved})
-				TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,5120*(2^CBit)),AddV(MarHPRead[i+1],5120*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,5*(2^CBit))},{Preserved})
+				TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{preserved})
+				TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,5120*(2^CBit)),AddV(MarHPRead[i+1],5120*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,5*(2^CBit))},{preserved})
 			end
 			CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,1)})
 			CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3)})
@@ -295,12 +295,12 @@ Trigger { -- 보호막 가동
 }
 
 
-Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
 
-	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
+	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
 	for j=0, 3 do
 		if i~=j then
 		for l=0, 5 do
@@ -372,16 +372,16 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 		SetMemoryB(0x57F27C+(228*i)+MedicTrig[4],SetTo,0),
 	})
 	for j = 0, 3 do
-	TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{Preserved})
+	TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
 	TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
 		DisplayText(DelayMedicT[j+1],4),
 		SetCDeaths(FP,Add,1,DelayMedic[i+1]),
 		GiveUnits(All,72,i,"Anywhere",P12),
 		ModifyUnitEnergy(1,72,P12,64,0);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
-		RemoveUnitAt(1,72,"Anywhere",P12)},{Preserved})
+		RemoveUnitAt(1,72,"Anywhere",P12)},{preserved})
 	end
-	TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{Preserved})
+	TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{preserved})
 
 	local MedicTrigJump = def_sIndex()
 	for j = 1, 4 do
@@ -424,7 +424,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 		DisplayText(StrDesign("\x1CBGM\x04을 듣지 않습니다."),4);
 		SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
-	},{Preserved})
+	},{preserved})
 
 	Trigger2(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,22);},{
 		GiveUnits(All,22,i,"Anywhere",P12);
@@ -433,7 +433,7 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 		DisplayText(StrDesign("\x1CBGM\x04을 듣습니다."),4);
 		SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
-	},{Preserved})
+	},{preserved})
 
 
 	UnitLimit(i,7,25,"SCV는",500)
@@ -502,7 +502,7 @@ for i = 0, 3 do
 		ModifyUnitHitPoints(All,"Men",Force1,i+2,100),
 		ModifyUnitShields(All,"Men",Force1,i+2,100),
 		ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
-		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{Preserved})
+		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{preserved})
 end
 CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)},{SetCD(AFlag,0),SetCD(BFlag,2)})
@@ -516,15 +516,15 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
 
 	
-	TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{Preserved})
-	TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{Preserved})
-	TriggerX(FP,CV(SelUID,25),SetV(SelUID,26),{Preserved})
-	TriggerX(FP,CV(SelUID,30),SetV(SelUID,31),{Preserved})
-	TriggerX(FP,CV(SelUID,3),SetV(SelUID,4),{Preserved})
-	TriggerX(FP,CV(SelUID,17),SetV(SelUID,18),{Preserved})
-	TriggerX(FP,CV(SelUID,77),SetCD(AFlag,1),{Preserved})
-	TriggerX(FP,CV(SelUID,65),SetCD(AFlag,1),{Preserved})
-	TriggerX(FP,CV(SelUID,10),SetCD(AFlag,1),{Preserved})
+	TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{preserved})
+	TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{preserved})
+	TriggerX(FP,CV(SelUID,25),SetV(SelUID,26),{preserved})
+	TriggerX(FP,CV(SelUID,30),SetV(SelUID,31),{preserved})
+	TriggerX(FP,CV(SelUID,3),SetV(SelUID,4),{preserved})
+	TriggerX(FP,CV(SelUID,17),SetV(SelUID,18),{preserved})
+	TriggerX(FP,CV(SelUID,77),SetCD(AFlag,1),{preserved})
+	TriggerX(FP,CV(SelUID,65),SetCD(AFlag,1),{preserved})
+	TriggerX(FP,CV(SelUID,10),SetCD(AFlag,1),{preserved})
 	local SelWepID = CreateVar(FP)
 	CMov(FP,SelWepID,Act_BRead(_Add(SelUID,0x6636B8)))
 	local SelATK = CreateVar(FP)
@@ -590,20 +590,20 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 			CTrigger(FP,{Deaths(i,AtLeast,1,71),DeathsX(CurrentPlayer,Exactly,i,0,0xFF)},{
 				MoveCp(Add,50*4);
 				SetDeathsX(CurrentPlayer,SetTo,30*256,0,0xFF00);
-				MoveCp(Subtract,50*4);},{Preserved})
+				MoveCp(Subtract,50*4);},{preserved})
 
 			CTrigger(FP,{Deaths(i,AtLeast,1,74),DeathsX(CurrentPlayer,Exactly,i,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,5*256,0,0xFF00)},{ -- Stop
-				SetDeathsX(CurrentPlayer,SetTo,1*256,0,0xFF00),},{Preserved})
+				SetDeathsX(CurrentPlayer,SetTo,1*256,0,0xFF00),},{preserved})
 				
 			CIf(FP,{Deaths(i,AtLeast,1,75),DeathsX(CurrentPlayer,Exactly,i,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,5*256,0,0xFF00)}) -- Hold
 				f_SaveCp()
-				f_Read(FP,_Sub(BackupCP,9),TempPos)
+				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{
-					TSetDeaths(_Add(BackupCP,4),SetTo,0,0),
-					TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),
-					TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),
-					TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),
-					TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
+					TSetDeaths(_Add(BackupCp,4),SetTo,0,0),
+					TSetDeathsX(BackupCp,SetTo,107*256,0,0xFF00),
+					TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),
+					TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),
+					TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
 				f_LoadCp()
 			CIfEnd()
 			end

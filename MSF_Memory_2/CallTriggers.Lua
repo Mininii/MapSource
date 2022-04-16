@@ -7,10 +7,10 @@ function Install_CallTriggers()
 		CIfX(FP,Memory(0x628438,AtLeast,1)) -- 캔낫체크.
 		f_SaveCp()
 		CMov(FP,Gun_LV,0)
-		f_Read(FP,BackupCP,CPos)
+		f_Read(FP,BackupCp,CPos)
 		Convert_CPosXY()
-		f_Read(FP,_Add(BackupCP,1),Gun_LV,"X",0xFF000000)
-		f_Read(FP,_Add(BackupCP,1),RepHeroIndex,"X",0xFF)
+		f_Read(FP,_Add(BackupCp,1),Gun_LV,"X",0xFF000000)
+		f_Read(FP,_Add(BackupCp,1),RepHeroIndex,"X",0xFF)
 		f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 		CDoActions(FP,{
@@ -18,10 +18,10 @@ function Install_CallTriggers()
 			SetCDeaths(FP,SetTo,0,InverseOptionX),
 			SetCDeaths(FP,SetTo,0,InverseOptionY),
 		})
-		TriggerX(FP,{CDeaths(FP,Exactly,0,CurPlace)},{SetCDeaths(FP,SetTo,0,InverseOptionX),SetCDeaths(FP,SetTo,0,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,4)},{Preserved})
-		TriggerX(FP,{CDeaths(FP,Exactly,1,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,0,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,5)},{Preserved})
-		TriggerX(FP,{CDeaths(FP,Exactly,2,CurPlace)},{SetCDeaths(FP,SetTo,0,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,6)},{Preserved})
-		TriggerX(FP,{CDeaths(FP,Exactly,3,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,7)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,0,CurPlace)},{SetCDeaths(FP,SetTo,0,InverseOptionX),SetCDeaths(FP,SetTo,0,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,4)},{preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,1,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,0,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,5)},{preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,2,CurPlace)},{SetCDeaths(FP,SetTo,0,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,6)},{preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,3,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,7)},{preserved})
 
 		CIf(FP,CDeaths(FP,Exactly,1,InverseOptionX))
 			CNeg(FP,CPosX)
@@ -30,23 +30,23 @@ function Install_CallTriggers()
 		CIf(FP,CDeaths(FP,Exactly,1,InverseOptionY))
 			CNeg(FP,CPosY)
 			CAdd(FP,CPosY,4096)
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,41)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,149)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,176)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,177)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,178)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,127)},{SetCVar(FP,CPosY[2],Add,64)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,151)},{SetCVar(FP,CPosY[2],Add,-32)},{Preserved})
-			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,147)},{SetCVar(FP,CPosY[2],Add,-32)},{Preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,41)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,149)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,176)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,177)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,178)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,127)},{SetCVar(FP,CPosY[2],Add,64)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,151)},{SetCVar(FP,CPosY[2],Add,-32)},{preserved})
+			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,147)},{SetCVar(FP,CPosY[2],Add,-32)},{preserved})
 		CIfEnd()
 
 
 
 
 		for i = 0, 3 do
-			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,131)},{AddCD(HactCcode[i+1],1)},{Preserved})
-			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,132)},{AddCD(LairCcode[i+1],1)},{Preserved})
-			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,133)},{AddCD(HiveCcode[i+1],1)},{Preserved})
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,131)},{AddCD(HactCcode[i+1],1)},{preserved})
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,132)},{AddCD(LairCcode[i+1],1)},{preserved})
+			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,133)},{AddCD(HiveCcode[i+1],1)},{preserved})
 		end
 
 		CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
@@ -60,8 +60,8 @@ function Install_CallTriggers()
 			Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
 			Set_EXCC2(DUnitCalc,CunitIndex,0,SetTo,Gun_LV),
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
-		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
-		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CUnitIndex,13,SetTo,0x1,0x1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
+		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
+		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CUnitIndex,13,SetTo,0x1,0x1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
 		f_LoadCp()
 		CElseX()
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -149,8 +149,8 @@ function Install_CallTriggers()
 	ItoDec(FP,ReadCP,VArr(ReadCPVA,0),2,nil,0)
 	f_Movcpy(FP,_Add(CurCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dCurCPStrPtr : ")),VArr(CurCPVA,0),4*4)
 	f_Movcpy(FP,_Add(ReadCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dReadCPStrPtr : ")),VArr(ReadCPVA,0),4*4)
-	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{Preserved})
-	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{Preserved})
+	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
+	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
 	f_LoadCp()
 	SetCallEnd()
 	end
@@ -271,11 +271,11 @@ function Install_CallTriggers()
 	function CreateOrder(Number,UnitID,Player,Start,OrderType,Dest)
 		return {CreateUnit(Number,UnitID,Start,Player),Order(UnitID,Player,Start,OrderType,Dest)}
 	end
-	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640*3);},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,11,6,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,29,6,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,8,7,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,22,7,1,Attack,64)},{Preserved})
+	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640*3);},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,11,6,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,29,6,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,8,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,22,7,1,Attack,64)},{preserved})
 
 	------ 원점 대칭 -------------------------------------------------------------
 	CMov(FP,V(CA[8]),V(CA[12]))
@@ -295,12 +295,12 @@ function Install_CallTriggers()
 	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},18,984,13)
 	CIfEnd()
 
-	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,98,6,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,86,6,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,70,7,1,Attack,64)},{Preserved})
-	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,69,7,1,Attack,64)},{Preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,98,6,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,86,6,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,70,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,69,7,1,Attack,64)},{preserved})
 
-	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640);},{Preserved})
+	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640);},{preserved})
 
 	CWhileEnd(SetCVar("X",Arrptr,Add,1))
 	DoActionsXI(FP,CallCXPlotEff+1)
@@ -333,7 +333,7 @@ function Install_CallTriggers()
 				SetMemoryB(0x66321C, SetTo, Height); -- 높이
 				SetMemoryB(0x669E28+936, SetTo, Color); -- 색상
 				CreateUnitWithProperties(1,204,1,FP,{energy = 100})
-			}},{Preserved})
+			}},{preserved})
 		end
 
 		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},19,6)
@@ -370,10 +370,10 @@ function Install_CallTriggers()
 		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
 		CA_CP = CreateVar(FP)
 		CIf(FP,{CV(CA_Create,1,AtLeast),CV(CA_Create,227,AtMost)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
-			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{Preserved})
-			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{Preserved})
-			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{Preserved})
-			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,7)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,7)},{preserved})
 			CDoActions(FP,{TCreateUnitWithProperties(1,CA_Create,1,CA_CP,{energy = 100, hitpoint = 1}),TSetMemory(0x6509B0,SetTo,CA_CP),RunAIScriptAt(JYD,1)})
 			
 		CIfEnd()
@@ -399,7 +399,7 @@ function Install_CallTriggers()
 		{
 			SetDeathsX(19025+(84*i)+55,SetTo,0x104,0,0x104);
 			SetDeathsX(19025+(84*i)+57,SetTo,0,0,0xFF);
-			},{Preserved})
+			},{preserved})
 	end
 	SetCallEnd()
 
@@ -450,7 +450,7 @@ for i = 0, 1699 do
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00)},
 	{
 		SetDeathsX(19025+(84*i)+9,SetTo,0,0,0xFF0000);
-		},{Preserved})
+		},{preserved})
 end
 SetCallEnd()
 

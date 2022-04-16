@@ -1,7 +1,7 @@
 function Test_LV1()
     if Limit == 1 and TestStart == 0 then
         Trigger2(FP,{ElapsedTime(AtLeast,65)},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
-        Trigger2(FP,{Never(),ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0),ModifyUnitHitPoints(All,"Men",P8,64,0)},{Preserved})
+        Trigger2(FP,{Never(),ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0),ModifyUnitHitPoints(All,"Men",P8,64,0)},{preserved})
         CIfOnce(FP,{Never(),ElapsedTime(AtLeast,60)},{
             KillUnit("Men",P8);
             KillUnit(143,P8);
