@@ -21,4 +21,4 @@
 + 마린키우기 Memory 2
 
 ## 현재 개발 예정 작품
-+ 미정
++ 마린키우기 UnLimit ExceeD:RE
