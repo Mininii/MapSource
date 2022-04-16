@@ -911,7 +911,7 @@ end
 CIfEnd()
 
 for j = 4, 7 do
-Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x0D\x0D\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\n\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n!H\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n!H\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
 end
 T_X,T_Y = CreateVars(2,FP)
 TargetRotation = CreateVar(FP)
@@ -967,7 +967,7 @@ SetV(Level,50),
 SetV(AtkCondTmp,250),
 SetV(HPCondTmp,250),
 })
-TheoristTxt = "\n\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\n\n\x0D\x0D\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n \x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\n\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
 DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
 
@@ -976,55 +976,5 @@ CIfEnd()
 
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})
-
-SpCodeBase = 0x8080E200 
-SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
-SpCode3 = 0x8B80E200 -- !H
-function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
-CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
-CA__SetNext(HStr4,8,SetTo,0,54-1,0)
-CMov(FP,HLine,0)
-EffCV2 = CreateVArr(11, FP)
-CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
-	f_ChatOffset(FP,HLine,0,ChatOff) 
-    CMovX(FP,HCheck,VArr(EffCV2,HLine))
-    CIfX(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"!H"))},{SetNVar(HCheck,SetTo,3)})
-    CElseIfX({TTDisplayX(HLine,0,NotSame,SpCode3,0xFFFFFF00)},{SetNVar(HCheck,SetTo,0)})
-    CIfXEnd()
-	CurLiV = CreateVar(FP)
-	EffCV = CreateVArr(11, FP)
-    CIf(FP,{NVar(HCheck,Exactly,3)})
-	CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
-		CMovX(FP,VArr(EffCV,HLine),0)
-		CMov(FP,CurLiV, _Mul(HLine,54*604))
-		CA__SetValue(HStr2,MakeiStrLetter(" ",53),0xFFFFFFFF,CurLiV,1,1) 
-		CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
-		CIfX(FP,NVar(HCheck,Exactly,3))
-			CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
-			CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
-		CElseX()
-			CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
-		CIfXEnd()
-		CIf(FP,{TTNVar(HCheck, NotSame, 3)})
-		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CIfEnd()
-		CD__InputMask(HLine,0xFFFFFFFF,0,52) 
-	CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
-	TempEC = CreateVar(FP)
-		CMov(FP,CurLiV, _Mul(HLine,54*604))
-		CMovX(FP,TempEC,VArr(EffCV,HLine))
-		CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CIf(FP,NVar(TempEC,AtMost,51),SetNVar(TempEC, Add, 1))
-			CMovX(FP,VArr(EffCV,HLine),TempEC)
-		CIfEnd()
-	CIfXEnd()
-    CIfEnd()
-
-
-    CMovX(FP,VArr(EffCV2,HLine),HCheck)
-CWhileEnd(SetNVar(HLine,Add,1)) 
-end 
-CDPrint(0,11,{"\x0D",0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
 
 end

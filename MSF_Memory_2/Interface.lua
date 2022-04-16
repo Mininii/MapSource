@@ -295,10 +295,10 @@ Trigger { -- 보호막 가동
 }
 
 
-Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
-Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋ "..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
+Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{Preserved})
 
 	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
 	for j=0, 3 do

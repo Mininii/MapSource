@@ -164,7 +164,7 @@ function Var_init()
 	HVA3 = CVArray(FP,4*5) 
 
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrLetter(" ",38).."\r\n",3)) 
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(38).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
@@ -215,6 +215,7 @@ function Var_init()
 	ClassInfo5 = CreateCText(FP," ��")
 	
 	HTextStrReset = CreateCText(FP,HTextStr)
+	Str122 = CreateCText(FP,"\x07，\x11，\x08，\x07ー ")
 	Str12 = CreateCText(FP,"!H\x07，\x11，\x08，\x07ー ")
 	Str03 = {}
 	Str02 = {}
