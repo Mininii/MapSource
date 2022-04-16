@@ -116,33 +116,20 @@ function OPTrig()
         
     CMov(FP,0x6509B0,CurrentOP)
     KeyCP = CurrentPlayer
-    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
+    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),TSetCDeaths(FP,Add,Dt,OPFuncT)})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{preserved})
+    TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{preserved})
+    for i = 0, 3 do
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{preserved})
+    end    
     TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{preserved})
     TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
     if TestStart ==1 then
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{preserved})
     else
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
+        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
     end
-    local SCAText = "\x13\x07SCA \x04로드 현황"
-    local P1Text = "\x08P1 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P2Text = "\x0EP2 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P3Text = "\x0FP3 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P4Text = "\x10P4 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P5Text = "\x11P5 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P6Text = "\x15P6 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local P7Text = "\x16P7 : LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 돌파석 : 000/000"
-    local iStrInit = def_sIndex()
-    CJump(FP, iStrInit)
-    
-    CJumpEnd(FP, iStrInit)
-
         DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 난이도를 선택해주세요. 숫자가 클수록 어려워집니다. \x1E◀\n\x13\x04숫자버튼 또는 방향키로 선택 후 Y를 눌러주세요.\n\x13\x03１ \x04２ ３ ４ Press (Y) to Start",4)},HumanPlayers,FP)},1)
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{preserved})
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{preserved})
-        for i = 0, 3 do
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{preserved})
-        end    
         CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
         CMov(FP,CurrentDiff,Diff)
         TriggerX(FP,{CVar(FP,Diff,Exactly,0)},{
@@ -160,7 +147,6 @@ function OPTrig()
         CIfEnd()
         CMov(FP,0x6509B0,CurrentOP)
     CIfEnd()
-
 	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
     	PlayWAV("sound\\Misc\\Buzz.wav"),
