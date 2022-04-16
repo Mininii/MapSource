@@ -115,7 +115,6 @@ function onInit_EUD()
 		table.insert(CTrigPatchTable,SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
 	end
 	table.insert(CTrigPatchTable,SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))
-	table.insert(CTrigPatchTable,SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))
 	DoActionsX(FP,CTrigPatchTable,1)
 	local VRet = CreateVar(FP)
 	local VRet2 = CreateVar(FP)

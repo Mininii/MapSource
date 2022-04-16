@@ -126,7 +126,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 		local TempCPCheck = CreateVar()
 		CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 		f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
-		NJumpX(FP,L_Gun_Order,{TMemory(_Add(_Mul(TempCPCheck,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
+		NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc, TempCPCheck, 1, AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
 		CJumpEnd(FP,HeroPointCheck)
 		f_LoadCp()
 		DoActions(FP,MoveCp(Subtract,6*4))
