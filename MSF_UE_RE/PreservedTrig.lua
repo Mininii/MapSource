@@ -54,6 +54,7 @@ function MapPreserves()
 		ModifyUnitEnergy(All,125,P12,64,0),
 		KillUnit(125,P12),
 	})
+CMov(FP,LevelPtr,Level)
 CIf(FP,Switch("Switch 240",Set))
 	CIf(FP,CVar(FP,Dt[2],AtMost,2500))
 		CAdd(FP,WaveT,Dt)
@@ -61,13 +62,8 @@ CIf(FP,Switch("Switch 240",Set))
 		IBGM_EPDX(FP,6,Dt,{Dt_NT2,Dt_NT})
 
 
-		for i = 0, 6 do
-			CSub(FP,_Ccode(FP,AmUsed[i+1]),Dt)
-		end
-
 	CIfEnd()
     CMov(FP,TimePtr,Time)
-    CMov(FP,LevelPtr,Level)
 CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
 	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*3)
 	for i = 0, 6 do
@@ -77,7 +73,7 @@ CIfEnd()
 
 CIfEnd()
 	for i = 0, 6 do
-	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{preserved})
+	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{preserved})
 	end
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({

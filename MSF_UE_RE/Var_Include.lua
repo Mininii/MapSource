@@ -10,14 +10,15 @@ function Objects()
 	DefFactor = 10
 	GunLimit = 1500
 	Ex1= {20,23,26,29,32,35,38}
+	NK= {30,18,13,9,7,6,5}
 
 	--Shop
-	P_NukeCost = 10 -- 핵 장전
-	P_SuppCost = 1 -- 서플라이 증가
+	P_NukeCost = 10000 -- 핵 장전
+	P_SuppCost = 100 -- 서플라이 증가
 	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
-	P_MultiStopCost = 70
-	P_MultiHoldCost = 70
-	P_StimCost = 70 -- 원격 스팀팩 사용가능
+	P_MultiStopCost = 100000
+	P_MultiHoldCost = 100000
+	P_StimCost = 50000 -- 원격 스팀팩 사용가능
 	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
@@ -248,7 +249,7 @@ function Var_init()
 	MarNumberLimit = CreateVar3(FP,(96*2)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	
-	MaxHPWarr = f_GetWArrptr(FP, 228)
+	MaxHPWArr = f_GetWArrptr(FP, 228)
 	--elHPEPD,MarHPEPD,SelShEPD = CreateVariables(3)
 	
 	RepHeroIndex,CPos,CPosX,CPosY = CreateVariables(4)
@@ -300,7 +301,6 @@ function Var_init()
 	CUnitFlag = CreateCcode()
 	HeroPointNotice = CreateCcodeArr(7)
 	CPConsoleToggle = CreateCcode()
-	AmUsed = CreateCcodeArr(7)
 	ConCP = CreateCcodeArr(7)
 	GivePChange = CreateCcodeArr(7)
 
@@ -376,12 +376,18 @@ function Var_init()
 	TotalAHP = CreateVar(FP)
 	AHPStrPtr = CreateVar(FP)
 	NukesUsage = CreateVarArr(7,FP)
-	CurrentStat = Create_VTable(7,nil,FP)
-	MaxLevel = Create_VTable(7,nil,FP)
-	MaxScore = Create_VTable(7,nil,FP)
+	OldStat = Create_VTable(7,nil,FP)
+	OldMaxLevel = Create_VTable(7,nil,FP)
+	NewMaxLevel = Create_VTable(7,1,FP)
+	OldMaxScore = Create_VTable(7,nil,FP)
 	AtkLV = Create_VTable(7,nil,FP)
 	HPLV = Create_VTable(7,nil,FP)
-	
+	NewStat = Create_VTable(7,nil,FP)
+	NewAvStat = Create_VTable(7,nil,FP)
+	NewMaxScore = Create_VTable(7,nil,FP)
+    MapMaxLevel = CreateVar(FP)
+    CurLevel = CreateVar2(FP,nil,nil,1)
+	initStart = CreateCcode()
 	RandV = CreateVar(FP)
 	TempX = CreateVar(FP)
 	TempY = CreateVar(FP)

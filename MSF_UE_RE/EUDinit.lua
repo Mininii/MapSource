@@ -134,7 +134,7 @@ function onInit_EUD()
 	local TempHPBak = CreateVar(FP)
 	f_Read(FP, _Add(CurrentUID,EPDF(0x662350)) , TempHPBak)
 	CMovX(FP,VArr(MaxHPBackUp,CurrentUID),TempHPBak)
-	f_LMovX(FP, WArr(MaxHPWarr,CurrentUID), {TempHPBak,0})
+	f_LMovX(FP, WArr(MaxHPWArr,CurrentUID), {TempHPBak,0})
 	
 	f_Mod(FP,VRet3,CurrentUID,_Mov(2))
 	f_Div(FP,VRet4,CurrentUID,_Mov(2))
@@ -445,6 +445,14 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			},
 			actions = {
 				SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..P[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
+				
+				SetCVar(FP,NukesUsage[1][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[2][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[3][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[4][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[5][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[6][2],SetTo,NK[k]);
+				SetCVar(FP,NukesUsage[7][2],SetTo,NK[k]);
 				SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
 				
 			},

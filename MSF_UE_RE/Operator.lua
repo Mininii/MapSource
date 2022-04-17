@@ -5,9 +5,23 @@ function OPTrig()
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
+        CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
     CIfXEnd()
+    for i = 0, 6 do
+        CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,i)})
+--        Print13_NumSet(LevelPtr,0x64159C,1000,0x10000)
+        Print13_NumSet(LevelPtr,0x64159C,100,0x1000000)
+        Print13_NumSet(LevelPtr,0x6415A0,10,0x1)
+        Print13_NumSet(LevelPtr,0x6415A0,1,0x100)
+        Print13_NumSet(TimePtr,0x6415A4,36000000,0x10000)
+        Print13_NumSet(TimePtr,0x6415A4,3600000,0x1000000)
+        Print13_NumSet(TimePtr,0x6415A8,60000*10,0x1000000)
+        Print13_NumSet(TimePtr,0x6415AC,60000,0x1)
+        Print13_NumSet(TimePtr,0x6415B0,10000,0x1)
+        Print13_NumSet(TimePtr,0x6415B0,1000,0x100)
+        CIfEnd()
+    end
     if TestStart == 1 then
         CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
         --local TestTemp = CreateVar(FP)
@@ -26,7 +40,6 @@ function OPTrig()
             f_Mod(FP,LevelT,Level,_Mov(10))
             f_Div(FP,LevelT2,Level,_Mov(10))
             CAdd(FP,LevelT2,1)
-            CAdd(FP,LevelT2,Diff)
             TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{preserved})
             CMov(FP,CurLev,Level)
             CIfEnd()
@@ -99,123 +112,112 @@ function OPTrig()
     --		SetMemory(0x6415BC, SetTo, 0x200480B6);
     --		SetMemory(0x6415C0, SetTo, 0x3946203A);
     --		SetMemory(0x6415C4, SetTo, 0x005D2007);
-    for i = 0, 6 do
-    CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,i)})
-    Print13_NumSet(LevelPtr,0x64159C,1000,0x10000)
-    Print13_NumSet(LevelPtr,0x64159C,100,0x1000000)
-    Print13_NumSet(LevelPtr,0x6415A0,10,0x1)
-    Print13_NumSet(LevelPtr,0x6415A0,1,0x100)
-    Print13_NumSet(TimePtr,0x6415A4,36000000,0x10000)
-    Print13_NumSet(TimePtr,0x6415A4,3600000,0x1000000)
-    Print13_NumSet(TimePtr,0x6415A8,60000*10,0x1000000)
-    Print13_NumSet(TimePtr,0x6415AC,60000,0x1)
-    Print13_NumSet(TimePtr,0x6415B0,10000,0x1)
-    Print13_NumSet(TimePtr,0x6415B0,1000,0x100)
-    CIfEnd()
-    end
         
+function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
+	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
+	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
+end
+        local StartC = CreateCcode()
+        local StartT = CreateCcode()
     CMov(FP,0x6509B0,CurrentOP)
     KeyCP = CurrentPlayer
-    CIf(FP,{Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
-    TriggerX(FP,{CDeaths(FP,AtLeast,15*1000,OPFuncT)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetCDeaths(FP,SetTo,0,OPFuncT)},{preserved})
-    TriggerX(FP,{Deaths(CurrentPlayer,AtMost,0,OPConsole)},{SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
-    if TestStart ==1 then
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCDeaths(FP,Add,150+(48*4),IntroT)},{preserved})
-    else
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,221)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
-    end
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
+    CIf(FP,{CD(StartC,0),Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
     local iStrInit = def_sIndex()
     CJump(FP, iStrInit)
-    local initStr = "   LV. 0000000000 StatPoint : 0000000000 HighScore : 0000000000 ATK,HP 돌파석 : 000 - 000" 
-    local initStr2 = "\x08P1 : " 
+    
+    local initStr = "\x07LV.0000" 
+    local initStr2 = MakeiStrVoid(20).." \x04: " 
     local SCAStat1 = "\x07연결 되었습니다!" 
     local NonSCAStr = "\x10런쳐와 연결해주세요." 
     local NonPlayerStr = "\x04플레이어 없음" 
-    local SCAInitStr = "\x13\x07SCA \x04로드 현황"
-    local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(100))
+    local SCAInitStr = "\x04선택 가능 \x1F최대 \x07Level \x04- 0000 / \x1F선택 \x07Level - 0000"
     
-	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(100).."\r\n",9)) 
+    local IntroT1 = "\x13\x1E▶ \x04상위 플레이어는 시작 레벨 선택 후 Y를 눌러주세요.(좌우버튼)\x1E◀"
+    local IntroT2 = "\x13\x1E▶ \x08게임이 시작되면 SCA에서 데이터를 불러올 수 없습니다. \x1E◀"
+    local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))
+    
+	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",10)) 
+    local EffStr1 = SaveiStrArrX(FP,MakeiStrWord("\x0E \x1C \x1F \x0F \x1D \x16 \x04 \x1B ",4)) -- 26+6 
     CJumpEnd(FP, iStrInit)
-
+    local EffC = CreateCcode()
+    local EC = CreateVar(FP)
+    DoActionsX(FP, {AddCD(EffC,1),SetNVar(EC,Add,604)})
+    TriggerX(FP, {CD(EffC,2,AtLeast)}, {SetCD(EffC,0)}, {preserved})
+    TriggerX(FP,NVar(EC,AtLeast,8*604),SetNVar(EC,SetTo,0),{Preserved}) 
     
+    CTrigger(FP,{TCVar(FP,MapMaxLevel[2],AtLeast,_Add(CurLevel,10)),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
+    CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP, CurLevel[2], AtLeast, 11)},{SetCVar(FP,CurLevel[2],Subtract,10)},1)
+    CTrigger(FP, {TTCVar(FP,Level[2],NotSame,CurLevel)}, {TSetCVar(FP, Level[2], SetTo, CurLevel),RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg")},HumanPlayers,FP)}, 1)
     function CA_OPText() 
-        CA__SetValue(OPStr,MakeiStrVoid(100),0xFFFFFFFF,0) 
+        CA__SetValue(OPStr,MakeiStrVoid(54),0xFFFFFFFF,0) 
         CA__SetValue(OPStr,SCAInitStr,nil,0) 
-        CA__InputVA(0,OPStr,OPStrs,nil,0,102*1-3)
+        CA__ItoCustom(SVA1(OPStr,17),MapMaxLevel,nil,nil,{10,4},1,nil,"\x040",0x04,{0,1,2,3})
+        CA__ItoCustom(SVA1(OPStr,35),CurLevel,nil,nil,{10,4},1,nil,"\x040",0x04,{0,1,2,3})
+        CA__InputVA(0,OPStr,OPStrs,nil,0,56*1-3)
         for i = 0, 6 do
+        CA__SetValue(OPStr,MakeiStrVoid(54),0xFFFFFFFF,0) 
         CA__SetValue(OPStr,initStr2,nil,0) 
+        CIfX(FP,HumanCheck(i,1))
+        CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1])},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
+        CA__ItoName(SVA1(OPStr,0), i, nil, nil, ColorCode[i+1])
+        CElseX()
+        CA__SetValue(OPStr,"P",nil,0) 
         CA__SetValue(OPStr,tostring(i+1),nil,1) 
         CA__Input(ColorCode[i+1], SVA1(OPStr,0), 0xFF)
         CA__Input(ColorCode[i+1], SVA1(OPStr,1), 0xFF)
+        CIfXEnd()
         CIfX(FP, {HumanCheck(i,1),Deaths(i,Exactly,2,23)})
         
-        CA__SetValue(OPStr,MakeiStrVoid(100),0xFFFFFFFF,0) 
-        CA__SetValue(OPStr,initStr,nil,5) 
-
+        CA__SetValue(OPStr,initStr,nil,23) 
+        CA__ItoCustom(SVA1(OPStr,26),NewMaxLevel[i+1],nil,nil,{10,4},1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3})
         
-        --CA__ItoCustom(SVA1(OPStr,9),MaxLevel[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
-        --CA__ItoCustom(SVA1(OPStr,55),MaxScore[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
-        --CA__ItoCustom(SVA1(OPStr,32),CurrentStat[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
+        CA__InputSVA1(SVA1(OPStr,23),SVA1(EffStr1,EC),26,0xFF,0,31)
+
+        --CA__ItoCustom(SVA1(OPStr,55),OldMaxScore[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
+        --CA__ItoCustom(SVA1(OPStr,32),OldStat[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
         --CA__ItoCustom(SVA1(OPStr,79),AtkLV[i+1],nil,nil,{10,3},1,nil,"0",nil,{0,1,2})
         --CA__ItoCustom(SVA1(OPStr,85),HPLV[i+1],nil,nil,{10,3},1,nil,"0",nil,{0,1,2})
-        CA__InputVA((102*(i+1)),OPStr,OPStrs,nil,(102*(i+1)),(102*((i+1)+1))-3)
+        CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
 
         CElseIfX(HumanCheck(i, 0))
-        CA__SetValue(OPStr,MakeiStrVoid(100),0xFFFFFFFF,0) 
-        CA__SetValue(OPStr,NonPlayerStr,nil,5) 
-        CA__InputVA((102*(i+1)),OPStr,OPStrs,nil,(102*(i+1)),(102*((i+1)+1))-3)
+        CA__SetValue(OPStr,NonPlayerStr,nil,23) 
+        CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
 
         CElseIfX(Deaths(i,Exactly,0,23))
-        CA__SetValue(OPStr,MakeiStrVoid(100),0xFFFFFFFF,0) 
-        CA__SetValue(OPStr,NonSCAStr,nil,5) 
-        CA__InputVA((102*(i+1)),OPStr,OPStrs,nil,(102*(i+1)),(102*((i+1)+1))-3)
+        CA__SetValue(OPStr,NonSCAStr,nil,23) 
+        CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
         CElseIfX(Deaths(i,Exactly,1,23))
-        CA__SetValue(OPStr,MakeiStrVoid(100),0xFFFFFFFF,0) 
-        CA__SetValue(OPStr,SCAStat1,nil,5) 
-        CA__InputVA((102*(i+1)),OPStr,OPStrs,nil,(102*(i+1)),(102*((i+1)+1))-3)
+        CA__SetValue(OPStr,SCAStat1,nil,23) 
+        CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,23),0x04,0xFF)
+        CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
         CIfXEnd()
         end
+        CA__SetValue(OPStr,MakeiStrVoid(54),0xFFFFFFFF,0) 
+        CA__SetValue(OPStr,IntroT1,nil,0) 
+        CA__InputVA((56*(8)),OPStr,OPStrs,nil,(56*(8)),(56*((8)+1))-3)
+        CA__SetValue(OPStr,MakeiStrVoid(54),0xFFFFFFFF,0) 
+        CA__SetValue(OPStr,IntroT2,nil,0) 
+        CA__InputVA((56*(9)),OPStr,OPStrs,nil,(56*(9)),(56*((9)+1))-3)
 
 
         end 
         CAPrint(OPiStr,{Force1,Force5},{1,0,0,0,1,3,0,0},"CA_OPText",FP,{}) 
+
         
-        CIf(FP,Never())
-        DoActions(FP,{RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\n\n\x13\x1E▶ \x04상위 플레이어는 시작 난이도를 선택해주세요. 숫자가 클수록 어려워집니다. \x1E◀\n\x13\x04숫자버튼 또는 방향키로 선택 후 Y를 눌러주세요.\n\x13\x03１ \x04２ ３ ４ Press (Y) to Start",4)},HumanPlayers,FP)},1)
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,RIGHT),CVar(FP,Diff[2],AtMost,2)},{SetCVar(FP,Diff[2],Add,1)},{preserved})
-        TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP,Diff[2],AtLeast,1)},{SetCVar(FP,Diff[2],Subtract,1)},{preserved})
-        for i = 0, 3 do
-            TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,100+i)},{SetCVar(FP,Diff[2],SetTo,i)},{preserved})
-        end    
-        CIf(FP,{TTCVar(FP,CurrentDiff[2],NotSame,Diff)})
-        CMov(FP,CurrentDiff,Diff)
-        TriggerX(FP,{CVar(FP,Diff,Exactly,0)},{
-            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x03１ \x04２ ３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0)},{preserved})
-        TriggerX(FP,{CVar(FP,Diff,Exactly,1)},{
-            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ \x03２ \x04３ ４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,5)},{preserved})
-        TriggerX(FP,{CVar(FP,Diff,Exactly,2)},{
-            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ \x03３ \x04４ Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,10)},{preserved})
-        TriggerX(FP,{CVar(FP,Diff,Exactly,3)},{
-            RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-            DisplayTextX("\x13\x04１ ２ ３ \x03４ \x04Press (Y) to Start", 0)},HumanPlayers,FP);SetMemoryB(0x58D2B0+(46*7)+3,SetTo,15)},{preserved})
-        CIfEnd()
-        CIfEnd()
         CMov(FP,0x6509B0,CurrentOP)
+        CIfOnce(FP, {Deaths(CurrentPlayer,AtLeast,1,221)},{SetCD(StartC,1),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)})
+        DoActions2(FP, RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E▶ \x04모든 설정이 완료되었습니다. 잠시 후 게임이 시작됩니다. \x1E◀", 4)}, HumanPlayers, FP), 1)
+		CallTrigger(FP, LevelReset)
+        CIfEnd()
+
+        
+
+
     CIfEnd()
+    TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
+    CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetDeaths(Force1,SetTo,1,32),SetV(ReserveBGM,1)}, 1)
+
+    CMov(FP,0x6509B0,CurrentOP)
 
 	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
     KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{

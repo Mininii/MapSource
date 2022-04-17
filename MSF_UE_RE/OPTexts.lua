@@ -80,11 +80,11 @@ function OPText()
 	table.insert(CV2,CenterView(2+i))
 	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CreateUnitWithProperties(4,10,2+i,i,{energy = 100}),SetResources(i,Add,30000,Ore)})
 	for j = 1, 3 do
-	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,j)},{CreateUnitWithProperties(4*j,10,2+i,i,{energy = 100})})
+	--TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,j)},{CreateUnitWithProperties(4*j,10,2+i,i,{energy = 100})})
 	end
 	end
 	for i = 1, 3 do
-	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,ore),SetMemoryW(0x656EB0, Add, 500*i)})
+	--TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,ore),SetMemoryW(0x656EB0, Add, 500*i)})
 	end
 	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{Preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV2})
