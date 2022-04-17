@@ -101,9 +101,9 @@ local Lyrics = {
 			CMov(FP,DcurHP,DHP)
 		CIfEnd()
 	CIfEnd()
-	if TestStart == 1 then
+	if Limit == 1 then
 		for i = 0, 6 do
-			CMov(FP,0x57f120 + (4*i),DTotalDmg)
+			CTrigger(FP,{CD(TestMode,1)},{TSetResources(i, SetTo, DTotalDmg, Gas)},1)
 		end
 	end
 	local PatternCcode = {}
@@ -473,7 +473,7 @@ Trigger {
 		DoActionsX(FP,{SetCVar("X",TSize,Add,100);})
 		CIf(FP,{CDeaths(FP,AtLeast,1,WhileLaunch)},{SetCDeaths(FP,SetTo,0,WhileLaunch)})
 			CMov(FP,SkillW2,SkillW)
-		CifEnd()
+		CIfEnd()
 		CWhile(FP,{CVar(FP,SkillW2[2],AtLeast,1),CVar(FP,SkillW2[2],AtMost,100)},{SetCVar(FP,SkillW3[2],Add,100),SetCVar(FP,SkillW2[2],Subtract,1)})
 			local Randnum = f_CRandNum(360)
 			CMov(FP,RandRet2,Randnum)
@@ -525,14 +525,13 @@ Trigger {
 	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BursterCall),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(59*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BlackBox),SetCDeaths(FP,SetTo,0,BursterCall),SetCVar("X",TSize,SetTo,0)},{preserved})
-	local Pat1 = Create_PatternCcode(PatternCcode)
 	local N_R,N_A,N_X,N_Y,N_A2,N_A3 = CreateVariables(6)
 	CIf(FP,{CDeaths(FP,AtLeast,1,BursterCall)},{SetCVar(FP,N_R[2],Add,2),SetCVar("X",TSize,Add,100)})
 	CMov(FP,N_A,0)
 	CAdd(FP,N_A2,1)
 	CAdd(FP,N_A3,N_A2)
 	CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
-	f_lengthdir(FP,N_R,_Add(N_A,N_A3),N_X,N_Y)
+	f_Lengthdir(FP,N_R,_Add(N_A,N_A3),N_X,N_Y)
 	GetLocCenter("DCenter",CPosX,CPosY)
 	CAdd(FP,N_X,CPosX)
 	CAdd(FP,N_Y,CPosY)
@@ -570,7 +569,7 @@ Trigger {
 		end
 		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
 		DoActions(FP,RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossDMG".._0D,4)},HumanPlayers,FP))
-		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),killUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
+		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),KillUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
 	CIfEnd()
 
 	for i = 0, #BGMArr-1 do

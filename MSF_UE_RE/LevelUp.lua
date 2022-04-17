@@ -221,8 +221,8 @@ function LevelUp()
 		CAdd(FP,Level,1)
 		CMov(FP,0x58f900,Level)
 		for i = 0, 6 do
-			CTrigger(FP,{TDeaths(i,AtMost,Level,6)},{TSetDeaths(i,SetTo,Level,6),SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 레벨 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
+			CTrigger(FP,{TDeaths(i,AtMost,Level,6)},{SetDeaths(i,Add,1,6),SetMemory(0x6509B0,SetTo,i),
+			DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 레벨이 올랐습니다! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
 			CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),

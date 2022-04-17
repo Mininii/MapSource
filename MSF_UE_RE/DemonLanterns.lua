@@ -1537,7 +1537,7 @@ function Install_DLBoss()
 				NElseIfX(Void(5,AtMost,200))
 					f_TempRepeat(80,1,nil,5)
 				NIfXEnd()
-				CifEnd()
+				CIfEnd()
 
 
 				CAdd(FP,CurArr,1)

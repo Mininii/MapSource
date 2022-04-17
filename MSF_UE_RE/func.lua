@@ -40,7 +40,7 @@ function CreateHeroPointArr(Index,Point,Name,Type) --  영작 유닛 설정 함수
 	elseif Type == nil then
 		Name2 = nil
 	else
-		Need_Input_TextType()
+		PushErrorMsg("Need_Input_TextType")
 	end
 	local Text = "\x13\x04"..Name..""..Name2.."\x1F+ "..Point.." \x1CPoint \x07Get!"
 	local X = {}
@@ -344,7 +344,7 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT)
 			CAdd(FP,Option_NT[2],MSQC_Recives,Option_NT[1])
 		CIfEnd()
 		else
-			OPtion_NT_InputData_Error()
+			PushErrorMsg("OPtion_NT_InputData_Error")
 		end
 	end
 
@@ -443,26 +443,6 @@ function Gun_Line(Line,Type,Value,Mask)
 	return CVar(FP,Var_TempTable[Line+1][2],Type,Value,Mask)
 end
 
-
-function T_to_BiteBuffer(Table)
-	local BiteValue = 0
-	if type(Table) == "table" then
-		local ret = 0
-		if #Table >= 5 then
-			BiteStack_is_Over_5()
-		end
-		for i, j in pairs(Table) do
-			if type(j) == "string" and j =="ACAS" then
-				BiteValue = BiteValue + Another_CAPlot_Shape*(256^ret)
-			else
-			BiteValue = BiteValue + j*(256^ret)
-			end
-			ret = ret + 1
-		end
-		Table = BiteValue
-	end
-	return BiteValue
-end
 function LvT(Type,Value)
 	return CVar(FP,LevelT[2],Type,Value)
 end
@@ -508,13 +488,12 @@ end
 
 	function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve,CXfunc2)
 		if Shape == nil then
-			CX_InputError()
+			PushErrorMsg("CX_InputError")
 		end
 	
 		if Preserve == 0 then
 			Preserve = nil
 		end
-	
 		local LocId = Location
 		if type(LocId) == "string" then
 			LocId = ParseLocation(LocId)-1
@@ -1198,7 +1177,7 @@ function T_to_BiteBuffer(Table)
 	if type(Table) == "table" then
 		local ret = 0
 		if #Table >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i, j in pairs(Table) do
 			BiteValue = BiteValue + j*(256^ret)
@@ -1213,12 +1192,12 @@ end
 
 function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPTable,G_CB_FNTable,Delay,CenterXY,Owner,PreserveFlag)
 	if type(G_CB_CUTable) ~= "table" then
-		G_CB_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
 	local X = {}
 	if type(G_CB_SNTable) == "table" then
 		if #G_CB_SNTable >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CB_SNTable[i] ~= nil then
@@ -1234,7 +1213,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
-					G_CB_SNTable_InputData_Error()
+					PushErrorMsg("G_CB_SNTable_InputData_Error")
 				end
 			else
 				table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,0))
@@ -1255,7 +1234,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 			PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 		end
 	else
-		G_CB_SNTable_InputData_Error()
+		PushErrorMsg("G_CB_SNTable_InputData_Error")
 	end
 	if type(G_CB_FNTable) ~= "table" then
 		G_CB_FNTable = {G_CB_FNTable,G_CB_FNTable,G_CB_FNTable,G_CB_FNTable}
@@ -1265,7 +1244,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 	if type(G_CB_RPTable) ~= "table" then
 		G_CB_RPTable = {G_CB_RPTable,G_CB_RPTable,G_CB_RPTable,G_CB_RPTable}
 	elseif G_CB_RPTable == nil then 
-		G_CB_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
 	
 	local LMRet = 0

@@ -13,12 +13,9 @@ function Objects()
 	NK= {30,18,13,9,7,6,5}
 
 	--Shop
-	P_NukeCost = 10000 -- 핵 장전
-	P_SuppCost = 100 -- 서플라이 증가
-	P_SuppAmount = 6 -- 서플라이 증가량 (1당 *2 만큼 입력)
-	P_MultiStopCost = 100000
-	P_MultiHoldCost = 100000
-	P_StimCost = 50000 -- 원격 스팀팩 사용가능
+	P_MultiStopCost = 20
+	P_MultiHoldCost = 20
+	P_StimCost = 10 -- 원격 스팀팩 사용가능
 	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
@@ -40,7 +37,7 @@ function Objects()
 	HTextStr = _0D
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
-	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
+	PlayersN = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x156인","\x167인"}
 	ResetSwitch = "Switch 250"
 	WaveSwitch = "Switch 150"
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
@@ -201,7 +198,6 @@ function Var_init()
 	HiScoreT1 = CreateCText(FP,"\x13\x10【 \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
 	HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 	NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	AMUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x1F융단 \x08폭격\x04을 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	
 	GiveSendT = CreateCText(FP,"\x07『 \x0d\x0d\x0d\x0d")
 	GiveT2 = CreateCText(FP,"\x04에게 \x0d\x0d\x0d\x0d")
@@ -217,8 +213,6 @@ function Var_init()
 	NukeT = CreateCText(FP,"\x07『 \x08뉴클리어 보유량 : \x0d\x0d\x0d")
 	NukeEndT = CreateCText(FP,"발) \x07』")
 
-	SupplyT = CreateCText(FP,"\x07『 \x08인구수\x04(Q, E:일괄구입) \x1F(Cost:"..P_SuppCost..") \x07("..(P_SuppAmount/2).." 증가) \x04보유량 : \x0d\x0d\x0d\x0d\x0d\x0d")
-	SupplyT2 = CreateCText(FP,"\x04 / 현재 맵 \x08최대\x04 인구수 : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 
 	ArmorT = CreateCText(FP,"\x07『 \x0F퍼센트 방어력\x04 업그레이드(W, R:일괄구입) \x1F(Cost:\x0d\x0d\x0d\x0d\x0d\x0d")
 	ArmorT2 = CreateCText(FP,") \x04(\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -246,7 +240,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,(96*2)*7)
+	MarNumberLimit = CreateVar3(FP,(48*2)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	
 	MaxHPWArr = f_GetWArrptr(FP, 228)
@@ -377,6 +371,7 @@ function Var_init()
 	AHPStrPtr = CreateVar(FP)
 	NukesUsage = CreateVarArr(7,FP)
 	OldStat = Create_VTable(7,nil,FP)
+	UsedOldP = Create_VTable(7,nil,FP)
 	OldMaxLevel = Create_VTable(7,nil,FP)
 	NewMaxLevel = Create_VTable(7,1,FP)
 	OldMaxScore = Create_VTable(7,nil,FP)
@@ -384,7 +379,6 @@ function Var_init()
 	HPLV = Create_VTable(7,nil,FP)
 	NewStat = Create_VTable(7,nil,FP)
 	NewAvStat = Create_VTable(7,nil,FP)
-	NewMaxScore = Create_VTable(7,nil,FP)
     MapMaxLevel = CreateVar(FP)
     CurLevel = CreateVar2(FP,nil,nil,1)
 	initStart = CreateCcode()

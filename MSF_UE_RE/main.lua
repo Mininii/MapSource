@@ -31,7 +31,7 @@ DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),R
 TestSet(1)
 TestPMul=3
 VerText = "\x04Ver. 3.6T"
-LimitVer = 35
+LimitVer = 0
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
@@ -52,8 +52,8 @@ end
 		init_func = def_sIndex()
 		CJump(AllPlayers,init_func)
 
-			Include_CtrigPlib(360,"Switch 100",1,FP)
-			Include_64BitLibrary("Switch 100",FP)
+			Include_CtrigPlib(360,"Switch 100")
+			Include_64BitLibrary("Switch 100")
 			DUnitCalc = Install_EXCC(FP,25,1)
 			Objects()
 			HPoints()

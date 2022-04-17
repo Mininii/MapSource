@@ -155,11 +155,13 @@ SetCall(FP)
 			CDoActions(FP,{TSetMemory(_Add(G_TempH,G_TempW),SetTo,0)})
 			CAdd(FP,G_TempW,0x20/4)
 		CWhileEnd()
-		if TestStart == 1 then
+		if Limit == 1 then
+			CIf(FP,CD(TestMode,1))
 			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
 			_0DPatchX(FP,f_GunNumT,5)
 			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),5*4)
 			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_Gun".._0D,4)},HumanPlayers,FP)})
+			CIfEnd()
 		end
 	CIfEnd()
 
@@ -189,11 +191,13 @@ SetCall(FP)
 		TSetMemory(_Add(G_TempV,53*(0x20/4)),SetTo,Gun_Type),
 	})
 	
-	if TestStart == 1 then
+	if Limit == 1 then
+	CIf(FP,CD(TestMode,1))
 	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
 	_0DPatchX(FP,f_GunNumT,5)
 	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
 	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+	CIfEnd()
 	end
 	CElseX()
 	DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -308,7 +312,7 @@ local CB_P = CreateVar(FP)
 		CIf(FP,{CVar(FP,Angle_V[2],AtLeast,0x80000000)})
 			CNeg(FP,Angle_V)
 			CSub(FP,Angle_V,_Mov(256),Angle_V)
-		CifEnd()
+		CIfEnd()
 		f_Mod(FP,Angle_V,_Mov(256))
 		CDoActions(FP,{
 			TSetMemoryX(0x66321C, SetTo, Height_V,0xFF),
@@ -357,8 +361,8 @@ local CB_P = CreateVar(FP)
 		local DBossScoreVA = CreateVArray(FP,7)
 		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
 		for i = 1, 7 do
-			if TestStart == 1 then
-				TriggerX(FP,{CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{preserved})
+			if Limit == 1 then
+				TriggerX(FP,{CD(TestMode,1),CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{preserved})
 			end
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 		CMov(FP,ExScoreP[i],ExScore[i])
@@ -442,8 +446,8 @@ local CB_P = CreateVar(FP)
 			end
 
 		CIfEnd()
-if TestStart == 1 then
-	CIf(FP,CDeaths(FP,AtLeast,0,isDBossClear),{SetCDeaths(FP,SetTo,0,isDBossClear),SetCVar(FP,OutputPoint[2],SetTo,0)})
+if Limit == 1 then
+	CIf(FP,{CD(TestMode,1),CDeaths(FP,AtLeast,0,isDBossClear)},{SetCDeaths(FP,SetTo,0,isDBossClear),SetCVar(FP,OutputPoint[2],SetTo,0)})
 else
 	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
 end
@@ -587,7 +591,7 @@ end
 	iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04 \x1C000.0%\x04 ")
 	iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F \x1F000.0%\x04 ")
 	iStrSize4 = GetiStrSize(0,"\x07『 \x08뉴클리어 \x04보유량 :\x04 0000000000 \x07』")
-	iStrSize5 = GetiStrSize(0,"\x07『 \x08포인트 \x04보유량 :\x04 0000000000 \x07』")
+	iStrSize5 = GetiStrSize(0,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
 
 	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음

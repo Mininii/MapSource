@@ -96,9 +96,9 @@ function SetUnitClassType(UnitID,Type)
 end
 
 function onInit_EUD()
-	local LimitX, LimitC = CreateCCodes(2)
+	local LimitX, LimitC = CreateCcodes(2)
 	local ShTStrPtr = Create_VTable(7)
-	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SeTMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
+	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SetMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
 --	f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
@@ -367,7 +367,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 
 	--UnitSizePatch(11,1)
-	UnitSizePatch(ParseUnit("Protoss Arbiter"),1)
+	UnitSizePatch(71,1)
 	--UnitSizePatch(63,5)
 	--UnitSizePatch(52,5)
 	--UnitSizePatch(62,1)
@@ -422,42 +422,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		},
 	}
 	DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
-	
-	for i = 0, 6 do
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			Command(i,AtLeast,1,111);
-			},
-		actions = {
-			SetCVar(FP,SetPlayers[2],Add,1);
-			}
-	}
-	end
-
-	for k = 1, 7 do
-		Trigger { -- 미션 오브젝트, 환전률 셋팅
-			players = {Force1},
-			conditions = {
-				Label(0);
-				CVar(FP,SetPlayers[2],Exactly,k);
-			},
-			actions = {
-				SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..P[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
-				
-				SetCVar(FP,NukesUsage[1][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[2][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[3][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[4][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[5][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[6][2],SetTo,NK[k]);
-				SetCVar(FP,NukesUsage[7][2],SetTo,NK[k]);
-				SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
-				
-			},
-		}
-	end
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit설정
 	if TestStart == 1 then
@@ -738,9 +702,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_Memcpy(FP,_Add(AHPStrPtr,EnemyHPT1[2]+(5*4)),_TMem(Arr(EnemyHPT2[3],0),"X","X",1),EnemyHPT2[2])
 
 	
-	f_Memcpy(FP,SupplyStrPtr,_TMem(Arr(SupplyT[3],0),"X","X",1),SupplyT[2])
-	f_Memcpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)),_TMem(Arr(SupplyT2[3],0),"X","X",1),SupplyT2[2])
-	f_Memcpy(FP,_Add(SupplyStrPtr,SupplyT[2]+(5*4)+SupplyT2[2]+(5*4)),_TMem(Arr(ShopEndT[3],0),"X","X",1),ShopEndT[2])
 
 
 	f_Memcpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
@@ -757,7 +718,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
 	Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
 	Install_CText1(NukeUseStrPtr[i],Str12,NukeUseT,Names[i])
-	Install_CText1(AMUseStrPtr[i],Str12,AMUseT,Names[i])
 	end
 
 --	DoActions(FP,{GiveUnits(1,133,P8,11,0),GiveUnits(1,133,P8,12,1),GiveUnits(1,133,P8,13,2)})

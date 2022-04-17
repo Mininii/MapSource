@@ -1,7 +1,7 @@
 function OPText()
 	CIf(AllPlayers,{CDeaths(FP,AtMost,(30*48)+3,IntroT)})
-	if TestStart == 1 then
-		--DoActionsX(FP,{SetCDeaths(FP,Add,150+(48*4)-2,IntroT)},1)
+	if Limit == 1 then
+		TriggerX(FP, CD(TestMode,1), {SetCDeaths(FP,Add,150+(48*4)-2,IntroT)})
 	end
 	for i = 0, 19 do
 		local OPOprand = 0

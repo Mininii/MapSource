@@ -110,7 +110,7 @@ function Gun_System()
             SetInvincibility(Enable,"Buildings",FP,64);
         })
     CIfXEnd()
-    if TestStart == 1 then
-        DoActions(FP, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP))
+    if Limit == 1 then
+        TriggerX(FP,CD(TestMode,1), RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
     end
 end

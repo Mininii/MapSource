@@ -68,6 +68,7 @@ CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
 	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*3)
 	for i = 0, 6 do
 	CMov(FP,0x582234 + (4*i),SuppMax) -- 인구수 상시 업데이트(맥스)
+	CMov(FP,0x5821D4 + (4*i),SuppMax) -- 인구수 상시 업데이트(사용가능)
 	end
 CIfEnd()
 
