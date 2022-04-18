@@ -135,9 +135,10 @@ end
 	
 	local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))
 	
-	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",8)) 
+	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",10)) 
 	local EffStr1 = SaveiStrArrX(FP,MakeiStrWord("\x0E \x1C \x1F \x0F \x1D \x16 \x04 \x1B ",6)) -- 26+6 
 	CJumpEnd(FP, iStrInit)
+	
 	local EffC = CreateCcode()
 	local EC = CreateVar(FP)
 	DoActionsX(FP, {AddCD(EffC,1),SetNVar(EC,Add,604)})
@@ -185,13 +186,9 @@ end
 		f_Div(FP,NukesUsage[i+1],NCCalc,SetPlayers)
 		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1])},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
 		CA__ItoName(SVA1(OPStr,0), i, nil, nil, ColorCode[i+1])
-		CElseX()
+
 		
-		CA__Input(ColorCode[i+1], SVA1(OPStr,0), 0xFF)
-		CA__Input(ColorCode[i+1], SVA1(OPStr,1), 0xFF)
-		
-		CIfXEnd()
-		CIfX(FP, {HumanCheck(i,1),Deaths(i,Exactly,2,23)})
+		CIfX(FP, {Deaths(i,Exactly,2,23)})
 		
 		CA__SetValue(OPStr,initStr,nil,23) 
 		CA__ItoCustom(SVA1(OPStr,26),NewMaxLevel[i+1],nil,nil,{10,4},1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3})
@@ -202,30 +199,31 @@ end
 		--CA__ItoCustom(SVA1(OPStr,32),OldStat[i+1],nil,nil,10,1,nil,"\x07NEWBIE!!!",nil,{0,1,2,3,4,5,6,7,8,9})
 		--CA__ItoCustom(SVA1(OPStr,79),AtkLV[i+1],nil,nil,{10,3},1,nil,"0",nil,{0,1,2})
 		--CA__ItoCustom(SVA1(OPStr,85),HPLV[i+1],nil,nil,{10,3},1,nil,"0",nil,{0,1,2})
-		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
-
-		CElseIfX(HumanCheck(i, 0))
-		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
-		
-		CA__SetMemoryX((56*(i+1))+20,0x0D0D0D0D,0xFFFFFFFF,1)
-		CA__SetMemoryX((56*(i+1))+21,0x0D0D0D0D,0xFFFFFFFF,1)
-		CA__SetMemoryX((56*(i+1))+22,0x0D0D0D0D,0xFFFFFFFF,1)
-		CA__SetMemoryX((56*((i+1)+1))-1,0x0D0D0D0D,0xFFFFFFFF,1)
-		CA__SetMemoryX((56*((i+1)+2))-1,0x0D0D0D0D,0xFFFFFFFF,1)
-
 
 		CElseIfX(Deaths(i,Exactly,0,23))
 		CA__SetValue(OPStr,NonSCAStr,nil,23) 
-		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
 		CElseIfX(Deaths(i,Exactly,3,23))
 		CA__SetValue(OPStr,SCAStat1,nil,23) 
 		CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,23),0x04,0xFF)
-		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
 		CElseIfX(Deaths(i,Exactly,1,23))
 		CA__SetValue(OPStr,SCAStat2,nil,23) 
 		CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,23),0x04,0xFF)
-		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*((i+1)+1))-3)
 		CIfXEnd()
+
+
+		CElseX()
+--		CA__Input(0x0D0D0D0D, SVA1(OPStr,20), 0xFFFFFFFF)
+--		CA__Input(0x0D0D0D0D, SVA1(OPStr,21), 0xFFFFFFFF)
+--		CA__Input(0x0D0D0D0D, SVA1(OPStr,22), 0xFFFFFFFF)
+--		CA__SetMemoryX((56*(i+1))-1,0x0D0D0D0D,0xFFFFFFFF,1)
+--		CA__SetMemoryX((56*(i+1))-2,0x0D0D0D0D,0xFFFFFFFF,1)
+		CIfXEnd()
+
+
+		
+
+		CA__InputVA((56*(i+1)),OPStr,OPStrs,nil,(56*(i+1)),(56*(i+2))-3)
+
 		end
 
 
