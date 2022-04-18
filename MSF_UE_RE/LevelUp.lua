@@ -147,7 +147,7 @@ function LevelUp()
 		CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
 		CMov(FP,GetP,0)
 		CElseX()
-		CMov(FP,GetP,_Mul(Level,_Mov(3)),15)
+		CMov(FP,GetP,_Div(Level, 10),1)
 		CIfXEnd()
 		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 			f_Mul(FP,GetP,_Mov(2))
@@ -203,13 +203,13 @@ function LevelUp()
 	})
 	
 		CDoActions(FP,{
-			TSetDeaths(0,Add,GetP,4),
-			TSetDeaths(1,Add,GetP,4),
-			TSetDeaths(2,Add,GetP,4),
-			TSetDeaths(3,Add,GetP,4),
-			TSetDeaths(4,Add,GetP,4),
-			TSetDeaths(5,Add,GetP,4),
-			TSetDeaths(6,Add,GetP,4),
+			TSetDeaths(0,Add,GetP,35),
+			TSetDeaths(1,Add,GetP,35),
+			TSetDeaths(2,Add,GetP,35),
+			TSetDeaths(3,Add,GetP,35),
+			TSetDeaths(4,Add,GetP,35),
+			TSetDeaths(5,Add,GetP,35),
+			TSetDeaths(6,Add,GetP,35),
 			SetDeaths(0,SetTo,1,14),
 			SetDeaths(1,SetTo,1,14),
 			SetDeaths(2,SetTo,1,14),
@@ -225,7 +225,7 @@ function LevelUp()
 			DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 레벨이 올랐습니다! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
-			CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),
+			CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
 			DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)

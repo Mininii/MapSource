@@ -207,23 +207,23 @@ SetCallEnd()
 UnitIDV = CreateVar(FP)
 TempLvHP = CreateVar(FP)
 TempLvHP2 = CreateVar(FP)
-MultiplierV = CreateVar(FP)
 TempLvHP_L = CreateWar(FP)
-TempLvHP_L2 = CreateWar(FP)
 TempLvHP_L3 = CreateWar(FP)
 HPMul = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 
-		f_LMul(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0},{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
-		CMov(FP,HPMul,_Sub(_Mov(256),TotalAHP))
-		f_LMul(FP,TempLvHP_L2,_LDiv(TempLvHP_L,"256"),{HPMul,0})
-		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L2)
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{preserved})
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{preserved})
-		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
-		
-		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
+
+
+
+
+		f_LMul(FP,TempLvHP_L,_LDiv({VArr(MaxHPBackUp,UnitIDV),0}, _LMov(10)),{_Add(Level,_Mov(9)),0})
+		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L,SetTo,nil,nil,1)
+		CTrigger(FP,{TTCWar(FP,TempLvHP_L[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L[2],SetTo,"2129920000")},{preserved})
+		TriggerX(FP,{CWar(FP,TempLvHP_L[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L[2],SetTo,"256")},{preserved})
+		f_Cast(FP,{TempLvHP2,0},TempLvHP_L,nil,nil,1) 
+		CMov(FP,0x57f120+(4*0),TempLvHP2)
+		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPDF(0x662350)),SetTo,TempLvHP2)})
 SetCallEnd()
 
 f_Replace = SetCallForward()
@@ -240,6 +240,19 @@ SetCall(FP)
 	f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+	local TempW = CreateWar(FP)
+	f_LMovX(FP, TempW, WArr(MaxHPWArr,RepHeroIndex), SetTo, nil, nil, 1)
+	CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+		CDoActions(FP, {
+			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
+			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+	})
+	CIfEnd()
+
 	CDoActions(FP,{
 	TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
 	TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(CPosX,18)),
@@ -401,48 +414,14 @@ local CB_P = CreateVar(FP)
 		CIfEnd()
 		end
 		CIf(FP,CDeaths(FP,AtLeast,1,Win))
-			ReadScore = CreateVar(FP)
 			for i = 0, 6 do
-				CIf(FP,{HumanCheck(i,1)})
-					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
-					
-					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
-					CMov(FP,ReadScore,0)
-					CElseX()
-					f_Div(FP,ReadScore,ExScore[i+1],1000)
-					CIfXEnd()
-					CElseX()
-					CMov(FP,ReadScore,0)
-					CIfXEnd()
-					if Limit == 1 then
-						f_Mul(FP,ReadScore,_Mov(2))
-					end
-					CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
-						f_Mul(FP,ReadScore,MulPoint)
-					CIfEnd()
-					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
-					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],24),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],24),SetMemory(0x6509B0,SetTo,i),
+					CTrigger(FP,{HumanCheck(i,1),TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
 					DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
+					SetDeaths(i,SetTo,1,14),
 					SetMemory(0x6509B0,SetTo,FP)},1)
-					GetPVA = CreateVArray(FP,13)
-					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
-					_0DPatchX(FP,GetPVA,12)
-					CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
-					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
-					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-					CElseX()
-					f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-					CIfXEnd()
-
-					DoActions(FP,{
-						SetMemory(0x6509B0,SetTo,i),
-						DisplayText("\x0D\x0D\x0DKillP".._0D,4),
-						SetMemory(0x6509B0,SetTo,FP)
-					})
-				CIfEnd()
 			end
 
 		CIfEnd()
@@ -540,12 +519,12 @@ end
 	
 	CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-		CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 0)})
+		CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0),TSetMemoryX(_Add(_Mul(CunitIndex,84),19025+40), SetTo, 0,0xFF000000)})
 		CAdd(FP,CunitIndex,1)
 	CWhileEnd()
 
-	function SetLevelUpHP(UnitID,Multiplier)
-		CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID),SetCVar(FP,MultiplierV[2],SetTo,Multiplier)})
+	function SetLevelUpHP(UnitID)
+		CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID)})
 	end
 
 	--TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{preserved})
@@ -611,8 +590,8 @@ end
 
 	end
 	Str3, Str3a, Str3s = SaveiStrArr(FP,"0000000000 \x04/ 0000000000 \x04 \x1C0000.0%\x04 ")
-	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x08뉴클리어 \x04사용 가능 횟수 : 0000000000  \x05-")
-	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07포인트 \x04보유량 :\x04 0000000000  \x07』 ")
+	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04남은 \x08뉴클리어\x04 : 0000000000  \x05-")
+	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	MarStr = {}
 	MarStra = {}
 	MarStrs = {}

@@ -424,8 +424,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	DoActions2(FP,PatchArr,1) -- 위에서 받은 테이블 정보를 한번에 쏘는것
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit설정
-	if TestStart == 1 then
-		DoActions(FP,SetSwitch("Switch 230",Set))
+	if Limit == 1 then
+		DoActions(FP,SetSwitch("Switch 231",Set))
 	end
 
 	for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김

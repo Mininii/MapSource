@@ -690,7 +690,7 @@ function CunitCtrig_Part4_EX(LoopIndex,Conditions,Actions,ExCunitArr)
 		table.insert(X,SetCVar("X",v[2],SetTo,0))
 	end
 	Trigger { -- Cunit Calc Main
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,
@@ -804,11 +804,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	-- DefAttackLoc = 89
 	-- DefCreateLoc = 90
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	CSub(FP,CheckTemp,Nextptrs,19025)
-	f_Mod(FP,CheckTemp,_Mov(84))
-	local f_Repeat_ErrorCheck = def_sIndex()
-	NJump(FP,f_Repeat_ErrorCheck,{CVar(FP,CheckTemp[2],AtLeast,1)},RotatePlayer({DisplayTextX(f_RepeatErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
-	
+	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+
 	f_Lengthdir(FP,_Mod(_Rand(),24*32),_Mod(_Rand(),360),CPosX,CPosY)
 	CDiv(FP,CPosY,2)
 	Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,1536,4480,1536,4480)})
@@ -820,6 +817,21 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	
+
+		local TempW = CreateWar(FP)
+		f_LMovX(FP, TempW, WArr(MaxHPWArr,RepHeroIndex), SetTo, nil, nil, 1)
+		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+		local TempV1 = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
+		f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+			CDoActions(FP, {
+				Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+				Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
+				Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+		})
+		CIfEnd()
+
+
 		f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
 		Convert_CPosXY()
 		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
@@ -880,7 +892,6 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfEnd()
 		
 	CIfEnd()
-	NJumpEnd(FP,f_Repeat_ErrorCheck)
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 CMov(FP,RepeatType,0)
@@ -1315,12 +1326,12 @@ end
 			CMov(FP,G_CB_TempTable[12],0)
 			CMov(FP,G_CB_TempTable[13],0)
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --CD(TestMode,1)
+				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --
 			end
 			CElseIfX({CDeaths(FP,AtLeast,1,G_CB_Launch),CDeaths(FP,AtLeast,0,G_CB_Suspend)})
 			CElseX()
 			if Limit == 1 then
-				TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 			end
 			
 			local G_CB_InputCAct = {}
@@ -1342,7 +1353,7 @@ end
 		CMov(FP,G_CB_TempTable[12],0)
 		CMov(FP,G_CB_TempTable[13],0)
 		if Limit == 1 then
-			TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+			TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
 
 		CIfXEnd()
@@ -1471,7 +1482,7 @@ function EXCC_Part1(EXCC_init,Actions)
 	EXCC_TempHeader = CreateVar(EXCC_Player)
 	PlayerID = PlayerConvert(PlayerID)
 	Trigger { -- Cunit Ctrig Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		},
@@ -1481,7 +1492,7 @@ function EXCC_Part1(EXCC_init,Actions)
 		flag = {preserved}
 	}	
 	Trigger { -- Cunit Calc Selector
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(EXCC_Index);
 		},
@@ -1515,7 +1526,7 @@ function EXCC_Part3X()
 	MoveCpValue = 0
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(EXCC_Index+2);
 		},
@@ -1527,7 +1538,7 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 	MoveCpValue = 0
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc Main
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,
@@ -1551,7 +1562,7 @@ end
 function EXCC_ClearCalc(Actions)
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc End
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		}, 
@@ -1572,7 +1583,7 @@ function EXCC_BreakCalc(Conditions,Actions)
 	PopTrigArr(PlayerID,3)
 
 	Trigger { -- Cunit Calc Break
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,

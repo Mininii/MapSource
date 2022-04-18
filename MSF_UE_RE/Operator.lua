@@ -122,7 +122,7 @@ end
 	CMov(FP,0x6509B0,CurrentOP)
 	KeyCP = CurrentPlayer
 	CIf(FP,{CD(StartC,0),Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
-	TriggerX(FP, {Deaths(CurrentPlayer,Exactly,1,226),Deaths(CurrentPlayer,Exactly,1,11)}, {SetCD(TestMode,1)})
+	TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
 	local iStrInit = def_sIndex()
 	CJump(FP, iStrInit)
 	local NCCalc = CreateVar(FP)
@@ -135,7 +135,7 @@ end
 	
 	local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))
 	
-	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",10)) 
+	local OPiStr = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",8)) 
 	local EffStr1 = SaveiStrArrX(FP,MakeiStrWord("\x0E \x1C \x1F \x0F \x1D \x16 \x04 \x1B ",6)) -- 26+6 
 	CJumpEnd(FP, iStrInit)
 	
@@ -145,8 +145,11 @@ end
 	TriggerX(FP, {CD(EffC,2,AtLeast)}, {SetCD(EffC,0)}, {preserved})
 	TriggerX(FP,NVar(EC,AtLeast,8*604),SetNVar(EC,SetTo,0),{preserved}) 
 	
-	CTrigger(FP,{TCVar(FP,MapMaxLevel[2],AtLeast,_Add(CurLevel,10)),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
+	CTrigger(FP,{CD(TestMode,0),TCVar(FP,MapMaxLevel[2],AtLeast,_Add(CurLevel,10)),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
+	CTrigger(FP,{CD(TestMode,1),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
+
 	CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP, CurLevel[2], AtLeast, 11)},{SetCVar(FP,CurLevel[2],Subtract,10)},1)
+
 	CTrigger(FP, {TTCVar(FP,Level[2],NotSame,CurLevel)}, {TSetCVar(FP, Level[2], SetTo, CurLevel),RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg")},HumanPlayers,FP)}, 1)
 
 	
@@ -212,11 +215,11 @@ end
 
 
 		CElseX()
---		CA__Input(0x0D0D0D0D, SVA1(OPStr,20), 0xFFFFFFFF)
---		CA__Input(0x0D0D0D0D, SVA1(OPStr,21), 0xFFFFFFFF)
---		CA__Input(0x0D0D0D0D, SVA1(OPStr,22), 0xFFFFFFFF)
---		CA__SetMemoryX((56*(i+1))-1,0x0D0D0D0D,0xFFFFFFFF,1)
---		CA__SetMemoryX((56*(i+1))-2,0x0D0D0D0D,0xFFFFFFFF,1)
+		CA__Input(0x0D0D0D0D, SVA1(OPStr,20), 0xFFFFFFFF)
+		CA__Input(0x0D0D0D0D, SVA1(OPStr,21), 0xFFFFFFFF)
+		CA__Input(0x0D0D0D0D, SVA1(OPStr,22), 0xFFFFFFFF)
+		CA__SetMemoryX((56*(i+1))-1,0x0D0D0D0D,0xFFFFFFFF,1)
+		CA__SetMemoryX((56*(i+1))-2,0x0D0D0D0D,0xFFFFFFFF,1)
 		CIfXEnd()
 
 
@@ -239,8 +242,9 @@ end
 		FixText(FP,2)
 
 
-
+		SetLevelUpHP(148)
 		CMov(FP,0x6509B0,CurrentOP)
+		
 		CIfOnce(FP, {Deaths(CurrentPlayer,AtLeast,1,221)},{SetCD(StartC,1),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)})
 		DoActions2(FP, RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E▶ \x04모든 설정이 완료되었습니다. 잠시 후 게임이 시작됩니다. \x1E◀", 4)}, HumanPlayers, FP), 1)
 		CallTrigger(FP, LevelReset)

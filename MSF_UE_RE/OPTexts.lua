@@ -1,7 +1,7 @@
 function OPText()
 	CIf(AllPlayers,{CDeaths(FP,AtMost,(30*48)+3,IntroT)})
 	if Limit == 1 then
-		TriggerX(FP, CD(TestMode,1), {SetCDeaths(FP,Add,150+(48*4)-2,IntroT)})
+		TriggerX(FP, {CD(TestMode,1),Switch("Switch 240",Set)}, {SetCDeaths(FP,Add,150+(48*4)-2,IntroT),SetSwitch("Switch 230",Set)})
 	end
 	for i = 0, 19 do
 		local OPOprand = 0
@@ -70,7 +70,7 @@ function OPText()
 		PlayWAVX("sound\\glue\\bnetclick.wav");
 		PlayWAVX("sound\\glue\\bnetclick.wav");
 		PlayWAVX("sound\\glue\\bnetclick.wav");
-		},HumanPlayers,FP);
+		},HumanPlayers,FP);SetSwitch("Switch 242", Set)
 	})
 	local CV1, CV2 = {}, {}
 	for i = 0, 6 do

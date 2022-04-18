@@ -86,7 +86,7 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -203,7 +203,7 @@ function CreateUnitPolygonSafe2Gun(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -324,7 +324,7 @@ function CreateUnitPolygonSafe2GunMove(PlayerID,Condition,Number,LocId,SizeofLoc
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -444,7 +444,7 @@ function CreateUnitPolygonSafeWithPropertiesGunMove(PlayerID,Condition,Number,Lo
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -562,7 +562,7 @@ function CreateUnitPolygonSafeWithPropertiesGun(PlayerID,Condition,Number,LocId,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -674,7 +674,7 @@ function CreateUnitLineSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -783,7 +783,7 @@ function CreateUnitLineSafeGun(PlayerID,Condition,Number,LocId,SizeofLoc,Radius,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -894,7 +894,7 @@ function CreateUnitLineSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1003,7 +1003,7 @@ function CreateUnitLineSafeWithPropertiesGun(PlayerID,Condition,Number,LocId,Siz
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1132,7 +1132,7 @@ function CreateUnitStarSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1259,7 +1259,7 @@ function CreateUnitStarSafeGun(PlayerID,Condition,Number,LocId,SizeofLoc,Radius,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1388,7 +1388,7 @@ function CreateUnitStarSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1515,7 +1515,7 @@ function CreateUnitStarSafeWithPropertiesGun(PlayerID,Condition,Number,LocId,Siz
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1640,7 +1640,7 @@ function CreateUnitFlowerSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,R
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1763,7 +1763,7 @@ function CreateUnitFlowerSafeGun(PlayerID,Condition,Number,LocId,SizeofLoc,Radiu
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1888,7 +1888,7 @@ function CreateUnitFlowerSafeWithPropertiesGunMove(PlayerID,Condition,Number,Loc
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -2011,7 +2011,7 @@ function CreateUnitFlowerSafeWithPropertiesGun(PlayerID,Condition,Number,LocId,S
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,

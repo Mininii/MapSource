@@ -74,6 +74,80 @@ function Gun_System()
     })--
     end
     EXCC_End()
+
+
+
+
+    
+    
+    EXCC_Part1(LHPCunit)
+    f_SaveCp()
+    local ReadHP = CreateVar(FP)
+    local TempV1 = CreateVar(FP)
+    local TempV2 = CreateVar(FP)
+    local TempW = CreateWar(FP)
+    local TempW2 = CreateWar(FP)
+    local TempW3 = CreateWar(FP)
+    local TempW4 = CreateWar(FP)
+    local TempW5 = CreateWar(FP)
+    local VoidV = CreateVar(FP)
+
+    
+    f_Read(FP, BackupCp, ReadHP, nil, 1, 1)
+
+    f_LMov(FP, TempW, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]}, nil, nil, 1)
+    f_LMov(FP, TempW2, {ReadHP,VoidV}, nil, nil, 1)
+
+
+    f_LAdd(FP, TempW3, TempW, TempW2)
+    
+    CIfX(FP, {TTCWar(FP, TempW3[2], AtLeast, tostring(8320000*256))})
+    
+        f_LSub(FP, TempW4, _LMov(tostring(8320000*256)), TempW2)
+        f_LSub(FP, TempW5, TempW, TempW4)
+
+
+        f_LMov(FP, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]},TempW5, nil, nil, 1)
+    CDoActions(FP, {
+        TSetMemory(BackupCp, SetTo, 8320000*256),
+        Set_EXCCX(0, SetTo, 1),
+        Set_EXCCX(1, SetTo, EXCC_TempVarArr[2]),
+        Set_EXCCX(2, SetTo, EXCC_TempVarArr[3]),
+    })
+    CElseX()
+        f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+        CDoActions(FP, {
+            TSetMemory(BackupCp, Add, TempV1),
+            Set_EXCCX(0, SetTo, 0),
+            Set_EXCCX(1, SetTo, 0),
+            Set_EXCCX(2, SetTo, 0),
+        })
+    CIfXEnd()
+    
+
+    f_LoadCp()
+    EXCC_ClearCalc()
+    EXCC_Part2()
+    EXCC_Part3X()
+    
+    for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+    EXCC_Part4X(i,{
+        
+        CVar("X", "X", AtLeast, 1);
+        Deaths(19025+(84*i)+2,AtMost,(8320000*256)-256,0),
+        DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+        DeathsX(19025+(84*i)+19,AtLeast,7,0,0xFF00),
+    },
+    {
+        SetCVar(FP,CurCunitI[2],SetTo,i),
+        SetCVar(FP, BackupCp[2], SetTo, 19025+(84*i)+2);
+        MoveCp(Add,2*4),
+    })--
+    end
+    EXCC_End()
+
+
+    
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
     TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{
         SetCDeaths(FP,SetTo,0,SoundLimit[1]),

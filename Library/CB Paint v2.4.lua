@@ -5123,12 +5123,8 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
+	
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5186,7 +5182,7 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5202,7 +5198,7 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5227,12 +5223,7 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5290,7 +5281,7 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5306,7 +5297,7 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5333,12 +5324,7 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5404,7 +5390,7 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5420,7 +5406,7 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5447,12 +5433,7 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5518,7 +5499,7 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5534,7 +5515,7 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5559,12 +5540,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5640,7 +5616,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5656,7 +5632,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5681,12 +5657,7 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5762,7 +5733,7 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5778,7 +5749,7 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -5810,12 +5781,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 		Direction = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5826,10 +5792,8 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	end
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -5984,7 +5948,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -6000,7 +5964,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -6032,12 +5996,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Direction = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6048,10 +6007,8 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -6206,7 +6163,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 				k = k + 1
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -6222,7 +6179,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Condition,
 				},
@@ -7779,7 +7736,9 @@ end
 --------- CA Paint v2.1 ---------------------------------------------------------------------------
 
 CAPlotJumpAlloc = 0xA00
+CAPlotJumpLimit = 0x1000
 CAPlotVarAlloc = 0x1A000
+CAPlotVarLimit = 0x1D000
 CAPlotDataArr = {}
 CAPlotPlayerID = {}
 CAPlotCreateArr = {}
@@ -7792,7 +7751,7 @@ CBPlotNum = {}
 CBPlotTNum = {}
 
 function CAPlotAllocCheck()
-	if CAPlotVarAlloc >= 0x1CFFF then
+	if CAPlotVarAlloc >= CAPlotVarLimit then
 		CAPlotAllocation_Overflow()
 	end
 end
@@ -8262,12 +8221,7 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8468,12 +8422,7 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8676,22 +8625,15 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -9000,22 +8942,15 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -9323,12 +9258,7 @@ function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CA
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9546,12 +9476,7 @@ function CAPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9771,22 +9696,15 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -10112,22 +10030,15 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -11756,13 +11667,7 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -11968,13 +11873,7 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12180,13 +12079,7 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12409,13 +12302,7 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13295,13 +13182,7 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13333,18 +13214,18 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 				if LoopMax ~= nil then
 					if LoopMax[i] ~= nil then
 						table.insert(PlotArrN,f_GetFileArrptrN(PlayerID,LoopMax[i],4,1))
+						table.insert(CBPlotTNum,LoopMax[i][1])
 					else
 						table.insert(PlotArrN,"X")
+						table.insert(CBPlotTNum,0)
 					end
-					CBPlotFArrN = PlotArrN
-					table.insert(CBPlotTNum,LoopMax[i][1])
 				end
 				table.insert(PlotArrX,f_GetFileArrptrN(PlayerID,TempArrX,4,1))
 				table.insert(PlotArrY,f_GetFileArrptrN(PlayerID,TempArrY,4,1))
 				table.insert(TempAct[i],SetCVar("X",CA[10],SetTo,Shape[i][1]))
 				table.insert(CBPlotNum,Shape[i][1])
-
 			end
+			CBPlotFArrN = PlotArrN
 		else
 			if Shape[1] < 0 then
 				CBPlot_InputError()
@@ -13388,6 +13269,18 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 			else
 				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (고정) [5]
 			end
+		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
+			if type(Preset[5][1]) == "number" then 
+				ptr = CreateVar2(PlayerID,nil,nil,Preset[5][1])
+			else
+				ptr = CreateVar2(PlayerID,nil,nil,1)
+			end
+			if type(Preset[5][2]) == "number" then 
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (고정) [5]
+			else
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (고정)
+			end
+			CBPlotLoopMaxptr = ptr
 		else
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,1)
@@ -13454,7 +13347,16 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 	if type(Preset[5]) ~= "number" then
 		if LoopMax ~= nil then
 			if Preset[5] ~= nil then
-				CMov(PlayerID,ptr,Preset[5])
+				if type(Preset[5]) == "table" and #Preset[5] == 2 then
+					if Preset[5][1] ~= nil and type(Preset[5][1]) ~= "number" then
+						CMov(PlayerID,ptr,Preset[5][1])
+					end
+					if Preset[5][2] ~= nil and type(Preset[5][2]) ~= "number" then
+						CMov(PlayerID,V(CA[5]),Preset[5][2])
+					end
+				else
+					CMov(PlayerID,ptr,Preset[5])
+				end
 			end
 		else
 			CMov(PlayerID,V(CA[5]),Preset[5])
@@ -13474,7 +13376,7 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 	end
 	CMov(PlayerID,V(CB[10]),0)
 
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CD)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(CD)},flag = {Preserved}}
 	if type(Shape[1]) ~= "number" then
 		for i = 1, #Shape do
 			TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
@@ -13488,13 +13390,17 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 			for i = 1, #Shape do
 				if PlotArrN[i] ~= "X" then
 					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[i][2],0x970,1,0),{Preserved})
+				else
+					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrig1X("X",CA2[7],0x15C,0,SetTo,0),{Preserved})
 				end
 			end
 		else
 			DoActionsX(PlayerID,SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[2],0x970,1,0),{Preserved})
 		end
-		f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
-		CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIf(PlayerID,CVar("X",CA2[7],AtLeast,1))
+			f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
+			CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIfEnd()
 	end
 
 	if type(CenterXY) == "number" then
@@ -13628,13 +13534,7 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13666,18 +13566,18 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 				if LoopMax ~= nil then
 					if LoopMax[i] ~= nil then
 						table.insert(PlotArrN,f_GetFileArrptrN(PlayerID,LoopMax[i],4,1))
+						table.insert(CBPlotTNum,LoopMax[i][1])
 					else
 						table.insert(PlotArrN,"X")
+						table.insert(CBPlotTNum,0)
 					end
-					CBPlotFArrN = PlotArrN
-					table.insert(CBPlotTNum,LoopMax[i][1])
 				end
 				table.insert(PlotArrX,f_GetFileArrptrN(PlayerID,TempArrX,4,1))
 				table.insert(PlotArrY,f_GetFileArrptrN(PlayerID,TempArrY,4,1))
 				table.insert(TempAct[i],SetCVar("X",CA[10],SetTo,Shape[i][1]))
 				table.insert(CBPlotNum,Shape[i][1])
-
 			end
+			CBPlotFArrN = PlotArrN
 		else
 			if Shape[1] < 0 then
 				CBPlot_InputError()
@@ -13721,6 +13621,18 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 			else
 				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (고정) [5]
 			end
+		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
+			if type(Preset[5][1]) == "number" then 
+				ptr = CreateVar2(PlayerID,nil,nil,Preset[5][1])
+			else
+				ptr = CreateVar2(PlayerID,nil,nil,1)
+			end
+			if type(Preset[5][2]) == "number" then 
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (고정) [5]
+			else
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (고정)
+			end
+			CBPlotLoopMaxptr = ptr
 		else
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,1)
@@ -13787,7 +13699,16 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 	if type(Preset[5]) ~= "number" then
 		if LoopMax ~= nil then
 			if Preset[5] ~= nil then
-				CMov(PlayerID,ptr,Preset[5])
+				if type(Preset[5]) == "table" and #Preset[5] == 2 then
+					if Preset[5][1] ~= nil and type(Preset[5][1]) ~= "number" then
+						CMov(PlayerID,ptr,Preset[5][1])
+					end
+					if Preset[5][2] ~= nil and type(Preset[5][2]) ~= "number" then
+						CMov(PlayerID,V(CA[5]),Preset[5][2])
+					end
+				else
+					CMov(PlayerID,ptr,Preset[5])
+				end
 			end
 		else
 			CMov(PlayerID,V(CA[5]),Preset[5])
@@ -13807,7 +13728,7 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 	end
 	CMov(PlayerID,V(CB[10]),0)
 
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CD)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(CD)},flag = {Preserved}}
 	if type(Shape[1]) ~= "number" then
 		for i = 1, #Shape do
 			TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
@@ -13821,14 +13742,17 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 			for i = 1, #Shape do
 				if PlotArrN[i] ~= "X" then
 					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[i][2],0x970,1,0),{Preserved})
+				else
+					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrig1X("X",CA2[7],0x15C,0,SetTo,0),{Preserved})
 				end
 			end
 		else
 			DoActionsX(PlayerID,SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[2],0x970,1,0),{Preserved})
 		end
-
-		f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
-		CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIf(PlayerID,CVar("X",CA2[7],AtLeast,1))
+			f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
+			CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIfEnd()
 	end
 
 	if type(CenterXY) == "number" then
@@ -13961,23 +13885,15 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
-
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -14010,18 +13926,18 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 				if LoopMax ~= nil then
 					if LoopMax[i] ~= nil then
 						table.insert(PlotArrN,f_GetFileArrptrN(PlayerID,LoopMax[i],4,1))
+						table.insert(CBPlotTNum,LoopMax[i][1])
 					else
 						table.insert(PlotArrN,"X")
+						table.insert(CBPlotTNum,0)
 					end
-					CBPlotFArrN = PlotArrN
-					table.insert(CBPlotTNum,LoopMax[i][1])
 				end
 				table.insert(PlotArrX,f_GetFileArrptrN(PlayerID,TempArrX,4,1))
 				table.insert(PlotArrY,f_GetFileArrptrN(PlayerID,TempArrY,4,1))
 				table.insert(TempAct[i],SetCVar("X",CA[10],SetTo,Shape[i][1]))
 				table.insert(CBPlotNum,Shape[i][1])
-
 			end
+			CBPlotFArrN = PlotArrN
 		else
 			if Shape[1] < 0 then
 				CBPlot_InputError()
@@ -14065,6 +13981,18 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 			else
 				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (고정) [5]
 			end
+		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
+			if type(Preset[5][1]) == "number" then 
+				ptr = CreateVar2(PlayerID,nil,nil,Preset[5][1])
+			else
+				ptr = CreateVar2(PlayerID,nil,nil,1)
+			end
+			if type(Preset[5][2]) == "number" then 
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (고정) [5]
+			else
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (고정)
+			end
+			CBPlotLoopMaxptr = ptr
 		else
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,1)
@@ -14150,7 +14078,16 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 	if type(Preset[5]) ~= "number" then
 		if LoopMax ~= nil then
 			if Preset[5] ~= nil then
-				CMov(PlayerID,ptr,Preset[5])
+				if type(Preset[5]) == "table" and #Preset[5] == 2 then
+					if Preset[5][1] ~= nil and type(Preset[5][1]) ~= "number" then
+						CMov(PlayerID,ptr,Preset[5][1])
+					end
+					if Preset[5][2] ~= nil and type(Preset[5][2]) ~= "number" then
+						CMov(PlayerID,V(CA[5]),Preset[5][2])
+					end
+				else
+					CMov(PlayerID,ptr,Preset[5])
+				end
 			end
 		else
 			CMov(PlayerID,V(CA[5]),Preset[5])
@@ -14177,7 +14114,7 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 
 	CMov(PlayerID,V(CB[10]),0)
 
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CD)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(CD)},flag = {Preserved}}
 	if type(Shape[1]) ~= "number" then
 		for i = 1, #Shape do
 			TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
@@ -14191,14 +14128,17 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 			for i = 1, #Shape do
 				if PlotArrN[i] ~= "X" then
 					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[i][2],0x970,1,0),{Preserved})
+				else
+					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrig1X("X",CA2[7],0x15C,0,SetTo,0),{Preserved})
 				end
 			end
 		else
 			DoActionsX(PlayerID,SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[2],0x970,1,0),{Preserved})
 		end
-
-		f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
-		CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIf(PlayerID,CVar("X",CA2[7],AtLeast,1))
+			f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
+			CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIfEnd()
 	end
 
 	if type(CenterXY) == "number" then
@@ -14403,24 +14343,15 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		Preserve = nil
 	end
 
-
-	local LocId = Location
-	if type(LocId) == "string" then
-		LocId = ParseLocation(LocId)-1
-	elseif type(LocId) == "number" then
-		Location = Location + 1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-
 	local OLocId = OrderLocation
-	if type(OLocId) == "string" then
+	if type(OrderLocation) == "string" then
 		OLocId = ParseLocation(OLocId)-1
-	elseif type(OLocId) == "number" then
-		OrderLocation = OrderLocation + 1
 	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
@@ -14453,18 +14384,18 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 				if LoopMax ~= nil then
 					if LoopMax[i] ~= nil then
 						table.insert(PlotArrN,f_GetFileArrptrN(PlayerID,LoopMax[i],4,1))
+						table.insert(CBPlotTNum,LoopMax[i][1])
 					else
 						table.insert(PlotArrN,"X")
+						table.insert(CBPlotTNum,0)
 					end
-					CBPlotFArrN = PlotArrN
-					table.insert(CBPlotTNum,LoopMax[i][1])
 				end
 				table.insert(PlotArrX,f_GetFileArrptrN(PlayerID,TempArrX,4,1))
 				table.insert(PlotArrY,f_GetFileArrptrN(PlayerID,TempArrY,4,1))
 				table.insert(TempAct[i],SetCVar("X",CA[10],SetTo,Shape[i][1]))
 				table.insert(CBPlotNum,Shape[i][1])
-
 			end
+			CBPlotFArrN = PlotArrN
 		else
 			if Shape[1] < 0 then
 				CBPlot_InputError()
@@ -14508,6 +14439,18 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 			else
 				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (고정) [5]
 			end
+		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
+			if type(Preset[5][1]) == "number" then 
+				ptr = CreateVar2(PlayerID,nil,nil,Preset[5][1])
+			else
+				ptr = CreateVar2(PlayerID,nil,nil,1)
+			end
+			if type(Preset[5][2]) == "number" then 
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (고정) [5]
+			else
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (고정)
+			end
+			CBPlotLoopMaxptr = ptr
 		else
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,1)
@@ -14593,7 +14536,16 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 	if type(Preset[5]) ~= "number" then
 		if LoopMax ~= nil then
 			if Preset[5] ~= nil then
-				CMov(PlayerID,ptr,Preset[5])
+				if type(Preset[5]) == "table" and #Preset[5] == 2 then
+					if Preset[5][1] ~= nil and type(Preset[5][1]) ~= "number" then
+						CMov(PlayerID,ptr,Preset[5][1])
+					end
+					if Preset[5][2] ~= nil and type(Preset[5][2]) ~= "number" then
+						CMov(PlayerID,V(CA[5]),Preset[5][2])
+					end
+				else
+					CMov(PlayerID,ptr,Preset[5])
+				end
 			end
 		else
 			CMov(PlayerID,V(CA[5]),Preset[5])
@@ -14620,7 +14572,7 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 
 	CMov(PlayerID,V(CB[10]),0)
 
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CD)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(CD)},flag = {Preserved}}
 	if type(Shape[1]) ~= "number" then
 		for i = 1, #Shape do
 			TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
@@ -14634,14 +14586,17 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 			for i = 1, #Shape do
 				if PlotArrN[i] ~= "X" then
 					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[i][2],0x970,1,0),{Preserved})
+				else
+					TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),SetCtrig1X("X",CA2[7],0x15C,0,SetTo,0),{Preserved})
 				end
 			end
 		else
 			DoActionsX(PlayerID,SetCtrigX("X",CA2[7],0x15C,0,SetTo,"X",PlotArrN[2],0x970,1,0),{Preserved})
 		end
-
-		f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
-		CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIf(PlayerID,CVar("X",CA2[7],AtLeast,1))
+			f_SHRead(PlayerID,_Add(V(CA2[7]),ptr),V(CA[5]),0xFFFFFFFF,1)
+			CTrigger(PlayerID,{TTMemory(V(CA2[7]),Above,ptr),CVar("X",CA[2],Exactly,0)},SetNVar(ptr,Add,1),{Preserved})
+		CIfEnd()
 	end
 
 	if type(CenterXY) == "number" then
@@ -18226,7 +18181,7 @@ function CB_Shuffle(Start,End,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[3],AtLeast,1);
@@ -18282,7 +18237,7 @@ function CB_Reverse(Start,End,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[3],AtLeast,1);
@@ -18330,7 +18285,7 @@ function CB_ConvertRA(Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18348,7 +18303,7 @@ function CB_ConvertRA(Shape,RetShape)
 
 	-- Call f_CBCONVRA
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18398,7 +18353,7 @@ function CB_ConvertXY(Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18416,7 +18371,7 @@ function CB_ConvertXY(Shape,RetShape)
 
 	-- Call f_CBCONVXY
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18469,7 +18424,7 @@ function CB_Move(X,Y,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18487,7 +18442,7 @@ function CB_Move(X,Y,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18541,7 +18496,7 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18559,7 +18514,7 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18624,7 +18579,7 @@ function CB_Invert(X,Y,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18642,7 +18597,7 @@ function CB_Invert(X,Y,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18719,7 +18674,7 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18737,7 +18692,7 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18753,7 +18708,7 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 			flag = {Preserved}
 		}
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18801,7 +18756,7 @@ function CB_Rotate(Angle,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18819,7 +18774,7 @@ function CB_Rotate(Angle,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18835,7 +18790,7 @@ function CB_Rotate(Angle,Shape,RetShape)
 			flag = {Preserved}
 		}
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18896,7 +18851,7 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18914,7 +18869,7 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -18991,7 +18946,7 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19009,7 +18964,7 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19063,7 +19018,7 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19081,7 +19036,7 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19135,7 +19090,7 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19153,7 +19108,7 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19289,7 +19244,7 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19307,7 +19262,7 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19445,7 +19400,7 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19463,7 +19418,7 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19562,7 +19517,7 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19580,7 +19535,7 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19646,7 +19601,7 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19664,7 +19619,7 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19728,7 +19683,7 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19746,7 +19701,7 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19810,7 +19765,7 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19828,7 +19783,7 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19893,7 +19848,7 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19911,7 +19866,7 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -19966,7 +19921,7 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19984,7 +19939,7 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20059,7 +20014,7 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,InShape,SetTo,"X",CA[7],0x0,0,InShape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20079,7 +20034,7 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20145,7 +20100,7 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Path,SetTo,"X",CA[7],0x0,0,Path+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20165,7 +20120,7 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20227,7 +20182,7 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20245,7 +20200,7 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20330,7 +20285,7 @@ function CB_Copy(Shape,RetShape)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20348,7 +20303,7 @@ function CB_Copy(Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20434,7 +20389,7 @@ function CB_Fill(startX,startY,sizeX,sizeY,numX,numY,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20491,7 +20446,7 @@ function CB_Draw(startX,startY,sizeX,sizeY,num,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20548,7 +20503,7 @@ function CB_Draw2(startX,startY,sizeX,sizeY,num,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20604,7 +20559,7 @@ function CB_Delete(X,Y,SizeX,SizeY,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[1],AtLeast,1);
@@ -20657,7 +20612,7 @@ function CB_Overlap(Shape,RetShape)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20674,7 +20629,7 @@ function CB_Overlap(Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20735,7 +20690,7 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20756,7 +20711,7 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20816,7 +20771,7 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 	CMov(PlayerID,CV[12],SizeY)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20833,7 +20788,7 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20897,7 +20852,7 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	CMov(PlayerID,CV[12],SizeY)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -20918,7 +20873,7 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -20984,7 +20939,7 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	CMov(PlayerID,CV[12],SizeY)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21005,7 +20960,7 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21071,7 +21026,7 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	CMov(PlayerID,CV[12],SizeY)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21092,7 +21047,7 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21158,7 +21113,7 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	CMov(PlayerID,CV[12],SizeY)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21179,7 +21134,7 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21244,7 +21199,7 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 	end 
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21262,7 +21217,7 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21311,7 +21266,7 @@ function CB_GetXmax(Shape,Output)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21325,7 +21280,7 @@ function CB_GetXmax(Shape,Output)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21375,7 +21330,7 @@ function CB_GetXmin(Shape,Output)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21389,7 +21344,7 @@ function CB_GetXmin(Shape,Output)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21439,7 +21394,7 @@ function CB_GetXCntr(Shape,Output,maxOutput,minOutput)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21453,7 +21408,7 @@ function CB_GetXCntr(Shape,Output,maxOutput,minOutput)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21509,7 +21464,7 @@ function CB_GetYmax(Shape,Output)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21523,7 +21478,7 @@ function CB_GetYmax(Shape,Output)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21573,7 +21528,7 @@ function CB_GetYmin(Shape,Output)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21587,7 +21542,7 @@ function CB_GetYmin(Shape,Output)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21637,7 +21592,7 @@ function CB_GetYCntr(Shape,Output,maxOutput,minOutput)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21651,7 +21606,7 @@ function CB_GetYCntr(Shape,Output,maxOutput,minOutput)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -21902,7 +21857,7 @@ function CB_TDelete(Index,Shape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[1],AtLeast,1);
@@ -21941,7 +21896,7 @@ function CB_TCopy(Shape,RetShape)
 	f_SHRead(PlayerID,FArr(FN[Shape],0),CV[2]) -- TNum
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -21957,7 +21912,7 @@ function CB_TCopy(Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,1);
@@ -22010,7 +21965,7 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22028,7 +21983,7 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22084,7 +22039,7 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22102,7 +22057,7 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22167,7 +22122,7 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22186,7 +22141,7 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22252,7 +22207,7 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22271,7 +22226,7 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22338,7 +22293,7 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22357,7 +22312,7 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22424,7 +22379,7 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
 	})
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22443,7 +22398,7 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[2],AtLeast,2);
@@ -22511,7 +22466,7 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 	})
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -22529,7 +22484,7 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 
 	-- Call f_CBMove
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				NVar(CV[13],AtLeast,1);
@@ -26174,10 +26129,7 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location = ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -26304,7 +26256,7 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		CMov(PlayerID,V(CB[3]),Preset[9])
 	end
 
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CD)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(CD)},flag = {Preserved}}
 	if type(Shape[1]) ~= "number" then
 		for i = 1, #Shape do
 			TriggerX(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})

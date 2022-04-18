@@ -81,7 +81,13 @@ SLoopNptr = 0
 SLoopNVArr = {}
 SLoopNCount = 0
 IndexAlloc = 0xC000 -- 0xC000 ~ 0xEFFF : If, While / 0xA000 ~ 0xBFFF : Jump
+IndexAllocLimit = 0xF000
 FuncAlloc = 0x1D000 -- 0x1D000 ~ 0x1FFFF : CMul, CDiv, CMod / CtrigFunc
+FuncAllocLimit = 0x20000
+JumpStartAlloc = 0xA000
+JumpEndAlloc = 0xB000
+FlagAllocBase = 0xF300
+FlagAllocLimit = 0xF400
 VarXAlloc = 0xFE00 --  0xFE00 ~ 0xFFEF : Temp CVariable Alloc 
 MAXVAlloc = 0xFE00
 VarXReleaseLock = 0
@@ -160,6 +166,7 @@ EveryPlayers = "EveryPlayers"
 
 VoidAreaOffset = 0x58F500
 VoidAreaAlloc = 0x58F500-4
+VoidAreaLimit = 0x5967F0
 StringKeyArr = {}
 DetectRecoverCp = 0
 
@@ -428,6 +435,7 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 	for i = 1, 10 do -- CRet
 		CVariable(AllPlayers,0xFFF0 + i)
 	end
+
 	if STRCTRIGASM == 0 then
 		Trigger {
 			players = {AllPlayers},
@@ -544,6 +552,16 @@ function EndCtrig()
 		}
 	end
 
+	local FlagAllocIndex = FlagAllocBase+math.ceil(FlagAlloc/480)-1
+	for i = FlagAllocBase, FlagAllocIndex do
+		Trigger {
+			players = {AllPlayers},
+			conditions = {
+				Label(i);
+			},
+		}
+	end
+	
 	Trigger {
 		players = {AllPlayers},
 			conditions = {
@@ -579,6 +597,8 @@ function EndCtrig()
 			SetMemoryX(0x640C38+218*8,SetTo,0x0D0D,0xFFFF),
 			SetMemoryX(0x640C38+218*8,SetTo,0x0D0D0000,0xFFFF0000),
 		}
+	local MaskOff = {0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,
+					0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000,0xFFFF,0xFFFF0000}
 	for i = 1, 21 do
 		local Box = {}
 		for j = 0, 53 do
@@ -592,6 +612,7 @@ function EndCtrig()
 			actions = {
 				Box,
 				InitOff[i],
+				SetCtrig1X("X","X",0x148+0x20*54,0,SetTo,MaskOff[i]);
 			},
 			flag = {Preserved}
 		}
@@ -618,7 +639,7 @@ function EndCtrig()
 			CSVariable2(CreateVarPArr[k][2],i,CreateVarPArr[k][3],CreateVarPArr[k][4],CreateVarPArr[k][5],CreateVarPArr[k][6],CreateVarPArr[k][7])
 		elseif CreateVarPArr[k][1] == "VA" then
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -630,7 +651,7 @@ function EndCtrig()
 			}
 			for i = 2, CreateVarPArr[k][3] do 
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label(0);
 					},
@@ -647,7 +668,7 @@ function EndCtrig()
 				TempValue = 0
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -663,7 +684,7 @@ function EndCtrig()
 					TempValue = 0
 				end
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label(0);
 					},
@@ -676,7 +697,7 @@ function EndCtrig()
 			end
 		elseif CreateVarPArr[k][1] == "WA" then
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -690,7 +711,7 @@ function EndCtrig()
 			}
 			for i = 2, CreateVarPArr[k][3] do 
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label(0);
 					},
@@ -713,7 +734,7 @@ function EndCtrig()
 				TempValue = I64(CreateVarPArr[k][4][1])
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -734,7 +755,7 @@ function EndCtrig()
 					TempValue = I64(CreateVarPArr[k][4][i])
 				end
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label(0);
 					},
@@ -757,7 +778,7 @@ function EndCtrig()
 				table.insert(Box,SetDeathsX(0,SetTo,0,0,0xFFFFFFFF))
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -770,7 +791,7 @@ function EndCtrig()
 			}
 			for i = 2, CreateVarPArr[k][3] do 
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label(0);
 					},
@@ -788,7 +809,7 @@ function EndCtrig()
 				TNum = TNum + 1
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -796,14 +817,14 @@ function EndCtrig()
 			}
 			for i = 2, TNum do 
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					flag = {Preserved}
 				}
 			end
 		elseif CreateVarPArr[k][1] == "LA" then
 			local TNum = math.ceil(CreateVarPArr[k][3]/151)
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -811,7 +832,7 @@ function EndCtrig()
 			}
 			for i = 2, TNum do 
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					flag = {Preserved}
 				}
 			end
@@ -833,7 +854,7 @@ function EndCtrig()
 				if n > #Arr then break end
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -863,7 +884,7 @@ function EndCtrig()
 				if n > #Arr then break end
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -891,7 +912,7 @@ function EndCtrig()
 				if n > #Arr then break end
 			end
 			Trigger {
-				players = {ParsePlayer(CreateVarPArr[k][2])},
+				players = {CreateVarPArr[k][2]},
 				conditions = {
 					Label(i);
 				},
@@ -904,7 +925,7 @@ function EndCtrig()
 			}
 			for m = 2, Size do
 				Trigger {
-					players = {ParsePlayer(CreateVarPArr[k][2])},
+					players = {CreateVarPArr[k][2]},
 					conditions = {
 						Label();
 					},
@@ -1308,6 +1329,54 @@ function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
 end
 
 -- ø¿∑˘ √º≈© ±‚∫ª «‘ºˆ ------------------------------------------------------------------
+function __SetFuncAlloc(Start,End)
+	FuncAlloc = Start
+	FuncAllocLimit = End
+end
+
+function __SetIndexAlloc(Start,End)
+	IndexAlloc = Start
+	IndexAllocLimit = End
+end
+
+function __SetJumpAlloc(Start,End)
+	JumpStartAlloc = Start
+	JumpEndAlloc = End
+end
+
+function __SetCreateVarIndex(Init,Max,Ccode,NCode)
+	CreateVarInitIndex = Init
+	CreateVarXAlloc = Init-1
+	CreateMaxVAlloc = Max
+	CreateCCodeVarXAlloc = Max-Ccode
+	CreateNCodeVarXAlloc = Max-NCode-Ccode
+end
+
+function __SetVoidArea(Start,End)
+	VoidAreaOffset = Start
+	VoidAreaAlloc = Start-4
+	VoidAreaLimit = End
+end
+
+function __SetFlagAlloc(Start,End)
+	FlagAllocBase = Start
+	FlagAllocLimit = End
+end
+
+function __SetCAPlotJumpAlloc(Start,End)
+	CAPlotJumpAlloc = Start
+	CAPlotJumpLimit = End
+end
+
+function __SetCAPlotVarAlloc(Start,End)
+	CAPlotVarAlloc = Start
+	CAPlotVarLimit = End
+end
+
+function __SetCAPrintVarAlloc(Start,End)
+	CAPrintVarAlloc = Start
+	CAPrintVarLimit = End
+end
 
 function ErrorCheck() -- Ctrig πÆπ˝ ø¿∑˘ ¡°∞À «‘ºˆ
 	--AllocCheck() ±‚∫ª¿˚øÎµ 
@@ -1316,14 +1385,20 @@ function ErrorCheck() -- Ctrig πÆπ˝ ø¿∑˘ ¡°∞À «‘ºˆ
 end
 
 function AllocCheck()
-	if IndexAlloc >= 0xF000 then
+	if IndexAlloc >= IndexAllocLimit then
 		IndexAllocation_Overflow()
 	end
-	if FuncAlloc >= 0x20000 then
+	if FuncAlloc >= FuncAllocLimit then
 		FuncAllocation_Overflow()
 	end
-	if FlagAlloc >= 12480 then
+	if FlagAlloc >= (FlagAllocLimit-FlagAllocBase)*480 then
 		FlagAllocation_Overflow()
+	end
+	if VoidAreaAlloc >= VoidAreaLimit then
+		VoidAllocation_Overflow()
+	end
+	if CAPlotJumpAlloc >= CAPlotJumpLimit then
+		CAPlotJumpAllocation_Overflow()
 	end
 	if MAXVAlloc >= 0xFFE0 then
 		VarXAllocation_Overflow()
@@ -1345,10 +1420,10 @@ function LabelCheck() -- Label ¡ﬂ∫π √º≈©
 			if not C[v] then
 				C[v] = true
 			else
-				if v < 0xA000 or v >= 0xC000 then
+				if v < JumpStartAlloc or v >= JumpEndAlloc + (JumpEndAlloc-JumpStartAlloc) then
 					_G["Label_duplicated! Current Label : 0x"..string.format("%X",v)]() -- push error msg
 				else
-					_G["sIndex_duplicated! Current sIndex : 0x"..string.format("%X",v%0x1000)]() -- push error msg
+					_G["sIndex_duplicated! Current sIndex : 0x"..string.format("%X",v%(JumpEndAlloc-JumpStartAlloc))]() -- push error msg
 				end
 			end
 		else
@@ -1820,7 +1895,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 		Source[5] = 0
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -1836,7 +1911,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(FuncAlloc);
 			CtrigX("X",CRet[1],0x15C,0,AtMost,601);
@@ -1848,7 +1923,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			--CtrigX("X",CRet[1],0x15C,0,AtLeast,602);
@@ -1862,7 +1937,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			--CtrigX("X",CRet[1],0x15C,0,AtLeast,1204);
@@ -1876,7 +1951,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			--CtrigX("X",CRet[1],0x15C,0,AtLeast,1806);
@@ -1892,7 +1967,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	for i = 22, 0, -1 do
 		local CBit = 2^i
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,602*CBit);
@@ -1906,7 +1981,7 @@ function ConvertArr(PlayerID,Dest,Source) -- V << (i+D)/301 -> V SetTo 0 0x1 -> 
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(FuncAlloc+1);
 		},
@@ -2110,7 +2185,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 
 	if Mode == 0 or Mode == 1 then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -2128,7 +2203,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -2140,7 +2215,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 		}
 		if Mode == 0 then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2151,7 +2226,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 			}
 		elseif Mode == 1 then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2164,7 +2239,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 	elseif Mode == 8 then
 		if Dest[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2182,7 +2257,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2193,7 +2268,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2204,7 +2279,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 			}
 		elseif Dest[4] == "W" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2228,7 +2303,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2239,7 +2314,7 @@ function ConvertLArr(PlayerID,Dest,Source,Mode) -- V << (i+D)/301 -> V SetTo 0 0
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2337,7 +2412,7 @@ function ConvertVArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -2352,7 +2427,7 @@ function ConvertVArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 		local CBit = 2^i
 		if Size >= CBit then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit);
@@ -2457,7 +2532,7 @@ function ConvertSVArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V 
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -2472,7 +2547,7 @@ function ConvertSVArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V 
 		local CBit = 2^i
 		if Size >= CBit then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit);
@@ -2588,7 +2663,7 @@ function ConvertWArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 
 	if Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -2605,7 +2680,7 @@ function ConvertWArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 			local CBit = 2^i
 			if Size >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit);
@@ -2622,7 +2697,7 @@ function ConvertWArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 		end
 	elseif Source[4] == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -2639,7 +2714,7 @@ function ConvertWArr(PlayerID,Dest,Dest4,Source,Size) -- V << (i+D) * 604 -> V +
 			local CBit = 2^i
 			if Size >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit); -- Index W = {index,index} 
@@ -2674,7 +2749,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 	local Box0 = {}
 	if type(Dest) == "number" and Source[4] == "VA" then -- Mov Offset, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2698,7 +2773,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2724,7 +2799,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 		end
 
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2749,7 +2824,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2773,7 +2848,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		--[[
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2793,7 +2868,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2805,7 +2880,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2819,7 +2894,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2833,7 +2908,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			]]--
 	elseif type(Dest[4]) ~= "string" and Source[4] == "VA" then -- Mov Mem, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2857,7 +2932,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2879,7 +2954,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 		RecoverCp(PlayerID)
 	elseif Dest[4] == "VA" and Source[4] == "V" then -- Mov VA, V 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2897,7 +2972,7 @@ function MovX(PlayerID,Dest,Source,Mode,Mask,Clear) -- V << VA / VA,A << V (Valu
 			}
 	elseif Dest[4] == "A" and Source[4] == "V" then -- Mov A, V 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2930,7 +3005,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2954,7 +3029,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2966,7 +3041,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2978,7 +3053,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -2990,7 +3065,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3004,7 +3079,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3021,7 +3096,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3045,7 +3120,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3057,7 +3132,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3069,7 +3144,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3081,7 +3156,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3095,7 +3170,7 @@ function MovY(PlayerID,Dest,Source,Mode,Mask) -- ªÛºˆ,V << VA / ≥ª∫Œ«‘ºˆ (ªÁøÎ ±
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3134,7 +3209,7 @@ function MovY(PlayerID,Dest,Source,Type,Mask) -- ªÛºˆ Mem V VA A << W ¿¸øÎ ≥ª∫Œ«
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3176,7 +3251,7 @@ function MovY(PlayerID,Dest,Source,Type,Mask) -- ªÛºˆ Mem V VA A << W ¿¸øÎ ≥ª∫Œ«
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3223,7 +3298,7 @@ function MovY(PlayerID,Dest,Source,Type,Mask) -- ªÛºˆ Mem V VA A << W ¿¸øÎ ≥ª∫Œ«
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3254,7 +3329,7 @@ function MovY(PlayerID,Dest,Source,Type,Mask) -- ªÛºˆ Mem V VA A << W ¿¸øÎ ≥ª∫Œ«
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3283,7 +3358,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 	end
 	if Dest[4] == "V" and Source[4] == "VA" then -- Mov V, VA_EPD / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3299,7 +3374,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif Dest[4] == "V" and Source[4] == "A" then -- Mov V, A_EPD / {Index[1],Index[2],Index[3],"A",Array(APlayer,AIndex,0)}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3314,7 +3389,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif Dest[4] == "W" and Source[4] == "WA" then -- Mov W, WA_EPD / {Index[1],Index[2],Index[3],"WA",WArray(WAPlayer,WAIndex,0)}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3335,7 +3410,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif Dest[4] == "V" and Source[4] == "LA_V" then -- Mov V, LA_EPD (2π¯ ªÁøÎ « ø‰)/ {Index[1],Index[2],Index[3],"LA",WArray(LAPlayer,LAIndex,0)}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3350,7 +3425,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif Dest[4] == "W" and Source[4] == "LA_V" then -- Mov W, LA_EPD / {Index[1],Index[2],Index[3],"LA",WArray(LAPlayer,LAIndex,0)}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3364,7 +3439,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3379,7 +3454,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif Dest[4] == "W" and Source[4] == "LA_W" then -- Mov W, LA_EPD / {Index[1],Index[2],Index[3],"LA",LArray(LAPlayer,LAIndex,0)}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3398,7 +3473,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif #Dest == 2 and Dest[1][4] == "V" and Dest[2][4] == "V" and Source[4] == "LA_V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3412,7 +3487,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3427,7 +3502,7 @@ function MovZ(PlayerID,Dest,Source,Address) -- V << LA_EPD, VA_EPD, A_EPD / W <<
 			}
 	elseif #Dest == 2 and Dest[1][4] == "V" and Dest[2][4] == "V" and Source[4] == "LA_W" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -3468,7 +3543,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3479,7 +3554,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3495,7 +3570,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3506,7 +3581,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3519,7 +3594,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		elseif Source[4] == "A" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3534,7 +3609,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3554,7 +3629,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3567,7 +3642,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		elseif Source[4] == "VA" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3583,7 +3658,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3601,7 +3676,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		elseif Source[4] == "WA" then 
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3618,7 +3693,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3637,7 +3712,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		elseif Source[4] == "LA_V" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3652,7 +3727,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3672,7 +3747,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3685,7 +3760,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		elseif Source[4] == "LA_W" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3701,7 +3776,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3722,7 +3797,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3735,7 +3810,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 		else
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3746,7 +3821,7 @@ function TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << V_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3783,7 +3858,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3795,7 +3870,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3815,7 +3890,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3827,7 +3902,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3841,7 +3916,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 		elseif Source[4] == "A" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3855,7 +3930,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3870,7 +3945,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3891,7 +3966,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3906,7 +3981,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3924,7 +3999,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 		elseif Source[4] == "VA" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3939,7 +4014,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3955,7 +4030,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3970,7 +4045,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -3991,7 +4066,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4012,7 +4087,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4035,7 +4110,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 		elseif Source[4] == "LA_V" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4057,7 +4132,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4079,7 +4154,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4093,7 +4168,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4106,7 +4181,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 		elseif Source[4] == "LA_W" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4125,7 +4200,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4153,7 +4228,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4167,7 +4242,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 			if #Source == 2 then
 				if OffsetFlag == 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -4179,7 +4254,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -4193,7 +4268,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 			else
 				if OffsetFlag == 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -4205,7 +4280,7 @@ function TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- W << V_EPD/Offse
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -4242,7 +4317,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 
 	if type(Dest) == "number" and Source[4] == "VA" then -- Mov V, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4266,7 +4341,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4288,7 +4363,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 		RecoverCp(PlayerID)
 	elseif type(Dest[4]) ~= "string" and Source[4] == "VA" then -- Mov Mem, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4313,7 +4388,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4335,7 +4410,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 		RecoverCp(PlayerID)
 	elseif Dest[4] == "V" and Source[4] == "VA" then -- Mov V, VA / {Index[1],Index[2],Index[3],"VA",VArray(VAPlayer,VAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4360,7 +4435,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4383,7 +4458,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 	elseif Dest[4] == "VA" then -- Mov VA, V 
 		if type(Source) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4398,7 +4473,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4409,7 +4484,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 		elseif Source[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4428,7 +4503,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4439,7 +4514,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 		elseif Source[4] == "VA" then
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4469,7 +4544,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4489,7 +4564,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4504,7 +4579,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 	elseif Dest[4] == "A" then -- Mov A, V 
 		if type(Source) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4518,7 +4593,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4529,7 +4604,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 		elseif Source[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4547,7 +4622,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -4558,7 +4633,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 			}
 		elseif Source[4] == "VA" then
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4587,7 +4662,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4607,7 +4682,7 @@ function CMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- V << VA / VA,A
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -4734,7 +4809,7 @@ function SaveCp(PlayerID,Output,OffsetOutput)
 		end
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		},
@@ -4760,7 +4835,7 @@ function SaveCp(PlayerID,Output,OffsetOutput)
 			end
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			   	MemoryX(0x6509B0,Exactly,CBit,CBit);
@@ -4787,7 +4862,7 @@ end
 
 function CunitCtrig_Part1(PlayerID,Actions)
 	Trigger { -- Cunit Ctrig Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		},
@@ -4797,7 +4872,7 @@ function CunitCtrig_Part1(PlayerID,Actions)
 		flag = {Preserved}
 	}	
 	Trigger { -- Cunit Calc Selector
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(FuncAlloc);
 		},
@@ -4835,7 +4910,7 @@ end
 function CunitCtrig_Part3(Conditions,Actions)
 	PlayerID = CCPArr[CCptr]
 	Trigger { -- Cunit Calc Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(CCArr[CCptr]+2);
 		},
@@ -4845,7 +4920,7 @@ function CunitCtrig_Part3(Conditions,Actions)
 	for i = 0 , 1699 do
 		MoveCpValue = 0
 		Trigger { -- Cunit Calc Main
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = { 
 				Label(0);
 				Conditions,
@@ -4870,7 +4945,7 @@ function CunitCtrig_Part3X()
 	MoveCpValue = 0
 	PlayerID = CCPArr[CCptr]
 	Trigger { -- Cunit Calc Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(CCArr[CCptr]+2);
 		},
@@ -4881,7 +4956,7 @@ end
 function CunitCtrig_Part4X(LoopIndex,Conditions,Actions)
 	MoveCpValue = 0
 	Trigger { -- Cunit Calc Main
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,
@@ -4907,7 +4982,7 @@ end
 function ClearCalc()
 	PlayerID = CCPArr[CCptr]
 	Trigger { -- Cunit Calc End
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		}, 
@@ -4929,7 +5004,7 @@ function BreakCalc(Conditions,Actions)
 	PopTrigArr(PlayerID,3)
 
 	Trigger { -- Cunit Calc Break
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,
@@ -4948,7 +5023,7 @@ end
 
 function CVariable(Player,Index)
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -4987,7 +5062,7 @@ function CVariable2(Player,Index,Offset,Type,Value,Mask)
 		Value = 0
 	end
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -5001,7 +5076,7 @@ end
 
 function CWariable(Player,Index)
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -5066,7 +5141,7 @@ function CWariable2(Player,Index,Offset,Type,Value,Mask)
 	end
 
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -5090,7 +5165,7 @@ function CSVariable(Player,Index,Number)
 		table.insert(Box,SetDeathsX(0,SetTo,0,0,0xFFFFFFFF))
 	end
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -5199,7 +5274,7 @@ function CSVariable2(Player,Index,Number,Offset,Type,Value,Mask)
 		MaskT = MaskN
 	end
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 				},
@@ -5393,7 +5468,7 @@ function CallVariableAlwaysN(PlayerID,...)
 	end
 	if arg.n == 1 then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -5405,7 +5480,7 @@ function CallVariableAlwaysN(PlayerID,...)
 	else
 		DoActions2X(PlayerID,X)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -5423,7 +5498,7 @@ function CallVariable(PlayerID,Player,Index,Next,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5435,7 +5510,7 @@ function CallVariable(PlayerID,Player,Index,Next,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5447,7 +5522,7 @@ function CallVariable(PlayerID,Player,Index,Next,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5468,7 +5543,7 @@ function CallVariableX(PlayerID,Variable,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5480,7 +5555,7 @@ function CallVariableX(PlayerID,Variable,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5492,7 +5567,7 @@ function CallVariableX(PlayerID,Variable,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5548,7 +5623,7 @@ function CallWariable(PlayerID,Player,Index,Next,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5560,7 +5635,7 @@ function CallWariable(PlayerID,Player,Index,Next,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5572,7 +5647,7 @@ function CallWariable(PlayerID,Player,Index,Next,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5593,7 +5668,7 @@ function CallWariableX(PlayerID,Wariable,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5605,7 +5680,7 @@ function CallWariableX(PlayerID,Wariable,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5617,7 +5692,7 @@ function CallWariableX(PlayerID,Wariable,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5695,7 +5770,7 @@ function CallSVariable(PlayerID,Player,SVariable,Next,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5707,7 +5782,7 @@ function CallSVariable(PlayerID,Player,SVariable,Next,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5719,7 +5794,7 @@ function CallSVariable(PlayerID,Player,SVariable,Next,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5744,7 +5819,7 @@ function CallSVariableX(PlayerID,SVData,Conditions,Actions)
 		end
 		if Conditions == nil or Conditions == "X" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5756,7 +5831,7 @@ function CallSVariableX(PlayerID,SVData,Conditions,Actions)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					Conditions,
@@ -5768,7 +5843,7 @@ function CallSVariableX(PlayerID,SVData,Conditions,Actions)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -5799,7 +5874,7 @@ function CArray(PlayerID,Size)
 	local Arrindex = FuncAlloc
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Arrindex);
 		},
@@ -5808,7 +5883,7 @@ function CArray(PlayerID,Size)
 
 	for i = 2, TNum do 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			flag = {Preserved}
 		}
 	end
@@ -5833,7 +5908,7 @@ function LArray(PlayerID,Size)
 	local Arrindex = FuncAlloc
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Arrindex);
 		},
@@ -5842,7 +5917,7 @@ function LArray(PlayerID,Size)
 
 	for i = 2, TNum do 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			flag = {Preserved}
 		}
 	end
@@ -5859,7 +5934,7 @@ function CVArray(PlayerID,Size)
 	local VArrindex = FuncAlloc
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(VArrindex);
 		},
@@ -5872,7 +5947,7 @@ function CVArray(PlayerID,Size)
 
 	for i = 2, Size do 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -5896,7 +5971,7 @@ function CWArray(PlayerID,Size)
 	local WArrindex = FuncAlloc
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(WArrindex);
 		},
@@ -5911,7 +5986,7 @@ function CWArray(PlayerID,Size)
 
 	for i = 2, Size do 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -5944,7 +6019,7 @@ function SVArray(PlayerID,Size,Number)
 		table.insert(Box,SetDeathsX(0,SetTo,0,0,0xFFFFFFFF))
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(SVArrindex);
 		},
@@ -5957,7 +6032,7 @@ function SVArray(PlayerID,Size,Number)
 	}
 	for i = 2, Size do 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -5980,7 +6055,7 @@ function DoActions(PlayerID,Actions,Flags)
 		Flags = {Preserved}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		actions = {
 			Actions,
 		},
@@ -6018,7 +6093,7 @@ function DoActions2(PlayerID,Actions,Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					actions = {
 						X,
 					},
@@ -6033,7 +6108,7 @@ function DoActions2(PlayerID,Actions,Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					actions = {
 						X,
 					},
@@ -6053,7 +6128,7 @@ function DoActionsX(PlayerID,Actions,Flags,Index)
 		Flags = {Preserved}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -6094,7 +6169,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -6112,7 +6187,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -6132,7 +6207,7 @@ function TriggerX(Player, Conditions, Actions, Flags, Index)
 		Index = 0
 	end
 	Trigger {
-				players = {ParsePlayer(Player)},
+				players = {Player},
 				conditions = {
 					Label(Index);
 					Conditions,
@@ -6170,7 +6245,7 @@ function Trigger2(Player, Conditions, Actions, Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(Player)},
+					players = {Player},
 					conditions = {
 						Conditions,
 					},
@@ -6188,7 +6263,7 @@ function Trigger2(Player, Conditions, Actions, Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(Player)},
+					players = {Player},
 					conditions = {
 						Conditions,
 					},
@@ -6227,7 +6302,7 @@ function Trigger2X(Player, Conditions, Actions, Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(Player)},
+					players = {Player},
 					conditions = {
 						Label(0);
 						Conditions,
@@ -6246,7 +6321,7 @@ function Trigger2X(Player, Conditions, Actions, Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(Player)},
+					players = {Player},
 					conditions = {
 						Label(0);
 						Conditions,
@@ -6280,7 +6355,7 @@ function CDoActions(PlayerID,Actions,Flags,Index)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -6313,7 +6388,7 @@ function CTrigger(PlayerID, Conditions, Actions, Flags, Index)
 	end
 
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(Index);
 					Conditions,
@@ -6342,12 +6417,12 @@ function SetCJump(sIndex,Status,NewDest)
 	local SetCJump 
 	if NewDest == nil or NewDest == "X" then
 		if Status == 1 or Status == "On" then
-			SetCJump = SetNext(sIndex+0xA000,sIndex+0xB000,0)
+			SetCJump = SetNext(sIndex+JumpStartAlloc,sIndex+JumpEndAlloc,0)
 		else
-			SetCJump = SetNext(sIndex+0xA000,sIndex+0xA000,1)
+			SetCJump = SetNext(sIndex+JumpStartAlloc,sIndex+JumpStartAlloc,1)
 		end
 	else
-		SetCJump = SetNext(sIndex+0xA000,NewDest,0)
+		SetCJump = SetNext(sIndex+JumpStartAlloc,NewDest,0)
 	end
 	return SetCJump
 end
@@ -6652,7 +6727,7 @@ function WariableX(Player,Index,Section,Type,Value,Mask)
 	if Check ==  1 then
 		WariableX = {CtrigX(Player,Index,Addr,0,Type,Value[1],Mask[1]),CtrigX(Player,Index,Addr+0x40,0,Type,Value[2],Mask[2])}
 	else
-		WariableX = {CtrigX(Player,Index,Addr,0,Type,Value,Mask)}
+		WariableX = CtrigX(Player,Index,Addr,0,Type,Value,Mask)
 	end
 	return WariableX
 end
@@ -6775,7 +6850,7 @@ function SetWariableX(Player,Index,Section,Type,Value,Mask)
 	if Check ==  1 then
 		SetWariableX = {SetCtrig1X(Player,Index,Addr,0,Type,Value[1],Mask[1]),SetCtrig1X(Player,Index,Addr+0x40,0,Type,Value[2],Mask[2])}
 	else
-		SetWariableX = {SetCtrig1X(Player,Index,Addr,0,Type,Value,Mask)}
+		SetWariableX = SetCtrig1X(Player,Index,Addr,0,Type,Value,Mask)
 	end
 	return SetWariableX
 end
@@ -6898,7 +6973,7 @@ function Wariable(Wariable,Section,Type,Value,Mask)
 	if Check ==  1 then
 		WariableX = {CtrigX(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value[1],Mask[1]),CtrigX(Wariable[1],Wariable[2],Addr+0x40,Wariable[3],Type,Value[2],Mask[2])}
 	else
-		WariableX = {CtrigX(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value,Mask)}
+		WariableX = CtrigX(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value,Mask)
 	end
 	return WariableX
 end
@@ -7021,7 +7096,7 @@ function SetWariable(Wariable,Section,Type,Value,Mask)
 	if Check ==  1 then
 		SetWariableX = {SetCtrig1X(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value[1],Mask[1]),SetCtrig1X(Wariable[1],Wariable[2],Addr+0x40,Wariable[3],Type,Value[2],Mask[2])}
 	else
-		SetWariableX = {SetCtrig1X(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value,Mask)}
+		SetWariableX = SetCtrig1X(Wariable[1],Wariable[2],Addr,Wariable[3],Type,Value,Mask)
 	end
 	return SetWariableX
 end
@@ -7148,7 +7223,7 @@ function WArrayX(WArray,Section,Type,Value,Mask)
 	if Check ==  1 then
 		WArrayX = {CtrigX(WArray[1],WArray[2],Addr,WArray[3],Type,Value[1],Mask[1]),CtrigX(WArray[1],WArray[2],Addr+0x40,WArray[3],Type,Value[2],Mask[2])}
 	else
-		WArrayX = {CtrigX(WArray[1],WArray[2],Addr,WArray[3],Type,Value,Mask)}
+		WArrayX = CtrigX(WArray[1],WArray[2],Addr,WArray[3],Type,Value,Mask)
 	end
 	return WArrayX
 end
@@ -7275,7 +7350,7 @@ function SetWArrayX(WArray,Section,Type,Value,Mask)
 	if Check ==  1 then
 		SetWArrayX = {SetCtrig1X(WArray[1],WArray[2],Addr,WArray[3],Type,Value[1],Mask[1]),SetCtrig1X(WArray[1],WArray[2],Addr+0x40,WArray[3],Type,Value[2],Mask[2])}
 	else
-		SetWArrayX = {SetCtrig1X(WArray[1],WArray[2],Addr,WArray[3],Type,Value,Mask)}
+		SetWArrayX = SetCtrig1X(WArray[1],WArray[2],Addr,WArray[3],Type,Value,Mask)
 	end
 	return SetWArrayX
 end
@@ -8236,7 +8311,7 @@ function SafeReadX(PlayerID,Input,Output,Mask,EPDRead) -- CRead 1 -> N
 			end
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 		   		 Label(0);
 			},
@@ -8280,7 +8355,7 @@ function SafeReadX(PlayerID,Input,Output,Mask,EPDRead) -- CRead 1 -> N
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 				   		 Label(0);
 						 InputArr,
@@ -8312,7 +8387,7 @@ function SafeReadX(PlayerID,Input,Output,Mask,EPDRead) -- CRead 1 -> N
 			end
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 		   		 Label(0);
 			},
@@ -8358,7 +8433,7 @@ function SafeReadX(PlayerID,Input,Output,Mask,EPDRead) -- CRead 1 -> N
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 				   		 Label(0);
 						 InputArr,
@@ -8394,7 +8469,7 @@ function UnitReadX(PlayerID,Player,UnitId,Loc,Output) -- Binary Bring/Command Re
 		j = j + 1
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -8421,7 +8496,7 @@ function UnitReadX(PlayerID,Player,UnitId,Loc,Output) -- Binary Bring/Command Re
 		end
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				UnitArr2,
@@ -8474,7 +8549,7 @@ function ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle) -- ∏ﬁ∏∏Æ 
 		end
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 	   		 Label(0);
 		},
@@ -8520,7 +8595,7 @@ function ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle) -- ∏ﬁ∏∏Æ 
 			end
 			if Check == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 				   		 Label(0);
 						 InputArr,
@@ -8577,7 +8652,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 			end
 			local Size = math.ceil(Repeat/151) -- N = 151*TRIG
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc);
 						Conditions,
@@ -8589,7 +8664,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 					flag = {Preserved}
 				}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -8603,13 +8678,13 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 				}
 			for i = 1, Size do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					flag = {Preserved}
 				}
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+1);
 					},
@@ -8659,7 +8734,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 			end
 			
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc);
 						NVar(Repeat[1],AtLeast,min*4,0xFFFFFFFC);
@@ -8679,7 +8754,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 					flag = {Preserved}
 				}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -8691,13 +8766,13 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 				}
 			for i = 1, Size do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					flag = {Preserved}
 				}
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+1);
 					},
@@ -8733,7 +8808,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 			end
 			local Size = math.ceil((Repeat-1)/151) -- N = 151*TRIG
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc);
 						Conditions,
@@ -8748,13 +8823,13 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 
 			for i = 1, Size do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					flag = {Preserved}
 				}
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+1);
 					},
@@ -8770,7 +8845,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 				EndActions = Single
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+2);
 					},
@@ -8817,7 +8892,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 			end
 			
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc);
 						NVar(Repeat[1],AtLeast,min*4,0xFFFFFFFC);
@@ -8839,13 +8914,13 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 
 			for i = 1, Size do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					flag = {Preserved}
 				}
 			end
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+1);
 					},
@@ -8861,7 +8936,7 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 				EndActions = Single
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 					conditions = {
 						Label(IndexAlloc+2);
 					},
@@ -8897,7 +8972,7 @@ function SLoopNEnd(Actions)
 		SLoopNCount = SLoopNCount - 1
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(Index);
 				},
@@ -8923,7 +8998,7 @@ function SLoopNEnd(Actions)
 		SLoopNCount = SLoopNCount - 1
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(Index);
 				},
@@ -8943,9 +9018,9 @@ end
 
 function CJump(PlayerID,sIndex)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xA000);
+			Label(sIndex+JumpStartAlloc);
 		},
 		actions = {
 	   		PreserveTrigger();
@@ -8953,16 +9028,16 @@ function CJump(PlayerID,sIndex)
 	}
 	PlayerID = PlayerConvert(PlayerID)
 	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1],SetNext(sIndex+0xA000,sIndex+0xB000))
+		table.insert(CtrigInitArr[P+1],SetNext(sIndex+JumpStartAlloc,sIndex+JumpEndAlloc))
 	end
 	table.insert(CJumpArr,sIndex)
 end
 
 function CJumpEnd(PlayerID,sIndex)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xB000);
+			Label(sIndex+JumpEndAlloc);
 		},
 		actions = {
 	   		PreserveTrigger();
@@ -8998,9 +9073,9 @@ function NJump(PlayerID,sIndex,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xA000);
+			Label(sIndex+JumpStartAlloc);
 			Conditions,
 		},
 		actions = {
@@ -9011,18 +9086,18 @@ function NJump(PlayerID,sIndex,Conditions,Actions,UnPack)
 	}
 	PlayerID = PlayerConvert(PlayerID)
 	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+0xA000,0x158,0,SetTo,"X",sIndex+0xA000,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+0xA000,0x15C,0,SetTo,"X",sIndex+0xB000,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+0xB000,0x158,0,SetTo,"X",sIndex+0xA000,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+0xB000,0x15C,0,SetTo,"X",sIndex+0xA000,0x0,0,1))
+		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x15C,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,0))
+		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x15C,0,SetTo,"X",sIndex+JumpStartAlloc,0x0,0,1))
 	end
 	table.insert(NJumpArr,sIndex)
 end
 function NJumpEnd(PlayerID,sIndex,Actions_Always)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xB000);
+			Label(sIndex+JumpEndAlloc);
 		},
 		actions = {
 			SetDeaths(0,SetTo,0,0);
@@ -9035,12 +9110,12 @@ end
 
 function CJumpX(PlayerID,sIndex)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		actions = {
-			SetNext("X",sIndex+0xB000);
+			SetNext("X",sIndex+JumpEndAlloc);
 	   		PreserveTrigger();
 		},
 	}
@@ -9049,9 +9124,9 @@ end
 
 function CJumpXEnd(PlayerID,sIndex)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xB000);
+			Label(sIndex+JumpEndAlloc);
 		},
 		actions = {
 	   		PreserveTrigger();
@@ -9088,16 +9163,16 @@ function NJumpX(PlayerID,sIndex,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			Conditions,
 		},
 		actions = {
-			SetCtrigX("X","X",0x4,0,SetTo,"X",sIndex+0xB000,0x0,0,0);
-			SetCtrigX("X",sIndex+0xB000,0x158,0,SetTo,"X","X",0x4,1,0);
-			SetCtrigX("X",sIndex+0xB000,0x15C,0,SetTo,"X","X",0x0,0,1);
-			SetCtrig1X("X",sIndex+0xB000,0x2C,0,SetTo,0x0200,0x0200);
+			SetCtrigX("X","X",0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,0);
+			SetCtrigX("X",sIndex+JumpEndAlloc,0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",sIndex+JumpEndAlloc,0x15C,0,SetTo,"X","X",0x0,0,1);
+			SetCtrig1X("X",sIndex+JumpEndAlloc,0x2C,0,SetTo,0x0200,0x0200);
 			Actions,
 	   		PreserveTrigger();
 		},
@@ -9106,14 +9181,14 @@ function NJumpX(PlayerID,sIndex,Conditions,Actions,UnPack)
 end
 function NJumpXEnd(PlayerID,sIndex,Actions)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
-			Label(sIndex+0xB000);
+			Label(sIndex+JumpEndAlloc);
 			Never();
 		},
 		actions = {
 			SetDeaths(0,SetTo,0,0);
-			SetCtrig1X("X",sIndex+0xB000,0x2C,0,SetTo,0x0000,0x0200);
+			SetCtrig1X("X",sIndex+JumpEndAlloc,0x2C,0,SetTo,0x0000,0x0200);
 			Actions,
 			PreserveTrigger();
 		},
@@ -9149,7 +9224,7 @@ function CIfOnce(PlayerID, Conditions, Actions, UnPack) -- 1π¯∏∏ Ω««‡
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -9194,7 +9269,7 @@ function CIf(PlayerID, Conditions, Actions, UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -9230,7 +9305,7 @@ function CIfEnd(Actions_Always)
 	end
 	
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -9270,7 +9345,7 @@ function NIf(PlayerID, Conditions, Actions, UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -9282,7 +9357,7 @@ function NIf(PlayerID, Conditions, Actions, UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -9316,7 +9391,7 @@ function NIfEnd()
 	end
 	
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -9354,7 +9429,7 @@ function CWhile(PlayerID, Conditions, Actions, UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -9366,7 +9441,7 @@ function CWhile(PlayerID, Conditions, Actions, UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -9411,7 +9486,7 @@ function CLoop(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,2,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			CDeaths("X",AtMost,Repeat-1,Ccode(IndexAlloc+1,0));
@@ -9425,7 +9500,7 @@ function CLoop(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -9476,7 +9551,7 @@ function CWhileEnd(Actions,UnPack)
 	PopTrigArr(PlayerID,1)
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -9494,7 +9569,7 @@ end
 
 function CWhileX(PlayerID, Conditions, Actions, UnPack)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Never();
@@ -9527,7 +9602,7 @@ function CWhileX(PlayerID, Conditions, Actions, UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			Conditions,
@@ -9539,7 +9614,7 @@ function CWhileX(PlayerID, Conditions, Actions, UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9560,7 +9635,7 @@ end
 
 function CLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -9593,7 +9668,7 @@ function CLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,2,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			CDeaths("X",AtMost,Repeat-1,Ccode(IndexAlloc+2,0));
@@ -9607,7 +9682,7 @@ function CLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9657,7 +9732,7 @@ function CWhileXEnd(Actions,UnPack)
 	PopTrigArr(PlayerID,1)
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -9697,7 +9772,7 @@ function NWhile(PlayerID, Conditions, Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -9709,7 +9784,7 @@ function NWhile(PlayerID, Conditions, Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -9718,7 +9793,7 @@ function NWhile(PlayerID, Conditions, Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9762,7 +9837,7 @@ function NLoop(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,2,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			CDeaths("X",AtMost,Repeat-1,Ccode(IndexAlloc+1,0));
@@ -9776,7 +9851,7 @@ function NLoop(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -9785,7 +9860,7 @@ function NLoop(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9835,7 +9910,7 @@ function NWhileEnd(Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -9852,7 +9927,7 @@ end
 
 function NWhileX(PlayerID, Conditions, Actions,UnPack)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Never();
@@ -9885,7 +9960,7 @@ function NWhileX(PlayerID, Conditions, Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			Conditions,
@@ -9897,7 +9972,7 @@ function NWhileX(PlayerID, Conditions, Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9906,7 +9981,7 @@ function NWhileX(PlayerID, Conditions, Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+3);
 		},
@@ -9928,7 +10003,7 @@ end
 
 function NLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -9961,7 +10036,7 @@ function NLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,2,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			CDeaths("X",AtMost,Repeat-1,Ccode(IndexAlloc+2,0));
@@ -9975,7 +10050,7 @@ function NLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -9984,7 +10059,7 @@ function NLoopX(PlayerID,Repeat,Conditions,Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+3);
 		},
@@ -10034,7 +10109,7 @@ function NWhileXEnd(Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -10047,7 +10122,7 @@ end
 
 function DoWhile(PlayerID, Actions_Always)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -10104,7 +10179,7 @@ function DoWhileEnd(Loop_Conditions, Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 			Loop_Conditions,
@@ -10135,7 +10210,7 @@ function CFor(PlayerID,Init,End,Step,Actions,UnPack) -- DoWhile x CJump
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			VariableX("X",IndexAlloc+1,"Value",Exactly,End); -- Calc Last
@@ -10146,9 +10221,9 @@ function CFor(PlayerID,Init,End,Step,Actions,UnPack) -- DoWhile x CJump
 	   		PreserveTrigger();
 		},
 	}
-	CVariable(ParsePlayer(PlayerID),IndexAlloc+1)
+	CVariable(PlayerID,IndexAlloc+1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -10202,7 +10277,7 @@ function CForEnd(Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -10250,7 +10325,7 @@ function NIfX(PlayerID, Conditions, Actions, UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -10262,7 +10337,7 @@ function NIfX(PlayerID, Conditions, Actions, UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -10288,14 +10363,14 @@ function NElseIfX(Conditions, Actions,UnPack)
 	local PlayerID
 	PlayerID = NIfXPArr[NIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -10323,7 +10398,7 @@ function NElseIfX(Conditions, Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			Conditions,
@@ -10335,7 +10410,7 @@ function NElseIfX(Conditions, Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -10356,14 +10431,14 @@ function NElseX(Actions,UnPack)
 	local PlayerID
 	PlayerID = NIfXPArr[NIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -10381,7 +10456,7 @@ function NElseX(Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,1)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -10392,7 +10467,7 @@ function NElseX(Actions,UnPack)
 		},
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -10409,21 +10484,21 @@ function NIfXEnd()
 	local PlayerID
 	PlayerID = NIfXPArr[NIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -10483,7 +10558,7 @@ function CIfX(PlayerID, Conditions, Actions,UnPack)
 	PopTrigArr(PlayerID,3)
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -10513,14 +10588,14 @@ function CElseIfX(Conditions, Actions,UnPack)
 	local PlayerID
 	PlayerID = CIfXPArr[CIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -10548,7 +10623,7 @@ function CElseIfX(Conditions, Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,3)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 			Conditions,
@@ -10573,14 +10648,14 @@ function CElseX(Actions,UnPack)
 	local PlayerID
 	PlayerID = CIfXPArr[CIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
@@ -10598,7 +10673,7 @@ function CElseX(Actions,UnPack)
 	Actions = PopActArr(Actions)
 	PopTrigArr(PlayerID,3)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -10618,21 +10693,21 @@ function CIfXEnd()
 	local PlayerID
 	PlayerID = CIfXPArr[CIfXptr]
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 		},
 		flag = {Preserved}
 	}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -18801,7 +18876,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read 0x58A364, X : 0x58A364 << EPD(X) + D (CPRead)
 					CRead1 = {SetMemoryX(Dest,SetTo,Deviation,Mask)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -18836,7 +18911,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read X, Y : X << EPD(Y) + D (CPRead)
 					CRead1 = {SetCtrig1X(Dest[1],Dest[2],0x15C,Dest[3],SetTo,Deviation,Mask2)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -18861,7 +18936,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read Mem, X : Mem << EPD(X) + D (CPRead)
 					CRead1 = {SetCtrig1X(Dest[1],Dest[2],Dest[3],Dest[4],SetTo,Deviation,Mask)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -18881,7 +18956,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 		end
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -18952,7 +19027,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			end
 			if CBit == 2^i then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					   	CRead2,
@@ -18973,7 +19048,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read 0x58A364, X : 0x58A364 << EPD(X) + D (CPRead)
 					CRead1 = {SetMemoryX(Dest,SetTo,-1452249)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19008,7 +19083,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read X, Y : X << EPD(Y) + D (CPRead)
 					CRead1 = {SetCtrig1X(Dest[1],Dest[2],0x15C,Dest[3],SetTo,-1452249)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19033,7 +19108,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			elseif Source[4] == "V" then -- Read Mem, X : Mem << EPD(X) + D (CPRead)
 					CRead1 = {SetCtrig1X(Dest[1],Dest[2],Dest[3],Dest[4],SetTo,-1452249)}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19052,7 +19127,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			end
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -19123,7 +19198,7 @@ function CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear) -- f_maskread
 			end
 			if CBit == 2^i then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					   	CRead2,
@@ -19214,7 +19289,7 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 		elseif Source[4] == "V" then -- Read 0x58A364, X : 0x58A364 << EPD(X) + D (CPRead)
 				CRead1 = {SetMemoryX(Dest,SetTo,Deviation,DestMask)}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19249,7 +19324,7 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 		elseif Source[4] == "V" then -- Read X, Y : X << EPD(Y) + D (CPRead)
 				CRead1 = {SetCtrig1X(Dest[1],Dest[2],0x15C,Dest[3],SetTo,Deviation,DestMask)}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19274,7 +19349,7 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 		elseif Source[4] == "V" then -- Read Mem, X : Mem << EPD(X) + D (CPRead)
 				CRead1 = {SetCtrig1X(Dest[1],Dest[2],Dest[3],Dest[4],SetTo,Deviation,DestMask)}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19294,7 +19369,7 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -19366,7 +19441,7 @@ function CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear) -- f_Conve
 		end
 		if CBit == 2^i and CBit*Multiplier >= 1 and Check == 0 then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				   	CRead2,
@@ -19433,7 +19508,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 	if type(Dest) == "number" then -- Mov 0x58A364, 1 : 0x58A364 << 1
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19444,7 +19519,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 				}
 		elseif Source[4] == "V" then -- Mov 0x58A364, X : 0x58A364 << X + D
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19463,7 +19538,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 	elseif Dest == "Cp" then
 		if type(Source) == "number" then -- Mov Cp, 1 : Cp << 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19474,7 +19549,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 				}
 		elseif Source[4] == "V" then -- Mov Cp, X : Cp << X + D
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19493,7 +19568,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 	elseif Dest[4] == "V" then
 		if type(Source) == "number" then -- Mov X, 1 : X << 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19504,7 +19579,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 				}
 		elseif Source[4] == "V" then -- Mov X, Y : X << Y + D
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19524,7 +19599,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 	else 
 		if type(Source) == "number" then -- Mov Mem 1 : Mem << 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19535,7 +19610,7 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 				}
 		elseif Source[4] == "V" then -- Mov Mem, X : Mem << X + D
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19593,7 +19668,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 		end
 		if type(Source) == "number" then -- Write X, 1 : EPD(X) << 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19607,7 +19682,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19618,7 +19693,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 				}
 		elseif Source[4] == "V" then -- Write X, Y : EPD(X) << Y + D
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19636,7 +19711,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -19692,7 +19767,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 				if Source ~= 0 then
 					local Repeat = Source
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19710,7 +19785,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19723,7 +19798,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 								flag = {Preserved}
 							}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19740,7 +19815,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 				end
 			elseif Source[4] == "V" then -- And X, Y : X <<= Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0,0x1F);
@@ -19751,7 +19826,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19777,7 +19852,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19790,7 +19865,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19806,7 +19881,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19876,7 +19951,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 				if Operand ~= 0 then
 					local Repeat = Operand
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19894,7 +19969,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19907,7 +19982,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 								flag = {Preserved}
 							}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -19924,7 +19999,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 				end
 			elseif Operand[4] == "V" then -- And V, X, Y : V << (X << Y)
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Operand[1],Operand[2],0x15C,Operand[3],Exactly,0,0x1F);
@@ -19939,7 +20014,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19965,7 +20040,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19978,7 +20053,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -19994,7 +20069,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 							flag = {Preserved}
 						}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20056,7 +20131,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		if type(Dest) == "number" then -- Add 0x58A364, 1 : 0x58A364 += 1
 			if type(Source) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20067,7 +20142,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 					}
 			elseif Source[4] == "V" then -- Add 0x58A364, X : 0x58A364 += X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20086,7 +20161,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Add Cp, 1 : Cp += 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20097,7 +20172,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 					}
 			elseif Source[4] == "V" then -- Add Cp, X : Cp += X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20116,7 +20191,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Add X, 1 : X += 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20127,7 +20202,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 					}
 			elseif Source[4] == "V" then -- Add X, Y : X += Y
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20146,7 +20221,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		else 
 			if type(Source) == "number" then -- Add Mem, 1 : Mem += 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20157,7 +20232,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 					}
 			elseif Source[4] == "V" then -- Add Mem, X : Mem += X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20225,7 +20300,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- Add V, X, 1 : V << X + 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20240,7 +20315,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 				}
 			elseif Operand[4] == "V" then -- Add V, X, Y : V << X + Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20253,7 +20328,7 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20318,7 +20393,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		if type(Dest) == "number" then -- Sub 0x58A364, 1 : 0x58A364 -= 1
 			if type(Source) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20329,7 +20404,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					}
 			elseif Source[4] == "V" then -- Sub 0x58A364, X : 0x58A364 -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20348,7 +20423,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Sub Cp, 1 : Cp -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20359,7 +20434,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					}
 			elseif Source[4] == "V" then -- Sub Cp, X : Cp -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20378,7 +20453,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Sub X, 1 : X -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20389,7 +20464,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					}
 			elseif Source[4] == "V" then -- Sub X, Y : X -= Y
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20408,7 +20483,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		else 
 			if type(Source) == "number" then -- Sub Mem, 1 : Mem -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20419,7 +20494,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					}
 			elseif Source[4] == "V" then -- Sub Mem, X : Mem -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20487,7 +20562,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- Sub V, X, 1 : V << X - 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20500,7 +20575,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20511,7 +20586,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 				}
 			elseif Operand[4] == "V" then -- Sub V, X, Y : V << X - Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20524,7 +20599,7 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20589,7 +20664,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		if type(Dest) == "number" then -- iSub 0x58A364, 1 : 0x58A364 -= 1
 			if type(Source) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20600,7 +20675,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					}
 			elseif Source[4] == "V" then -- iSub 0x58A364, X : 0x58A364 -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20614,7 +20689,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20634,7 +20709,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- iSub Cp, 1 : Cp -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20645,7 +20720,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					}
 			elseif Source[4] == "V" then -- iSub Cp, X : Cp -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20659,7 +20734,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20679,7 +20754,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- iSub X, 1 : X -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20690,7 +20765,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					}
 			elseif Source[4] == "V" then -- iSub X, Y : X -= Y
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20704,7 +20779,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20724,7 +20799,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		else 
 			if type(Source) == "number" then -- iSub Mem, 1 : Mem -= 1
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20735,7 +20810,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					}
 			elseif Source[4] == "V" then -- iSub Mem, X : Mem -= X
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20749,7 +20824,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20817,7 +20892,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- iSub V, X, 1 : V << X - 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20830,7 +20905,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20841,7 +20916,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 				}
 			elseif Operand[4] == "V" then -- iSub V, X, Y : V << X - Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20854,7 +20929,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20868,7 +20943,7 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 					flag = {Preserved}
 				}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -20929,7 +21004,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 			CNeg_InputData_Error()
 		elseif Dest[4] == "V" then -- Neg X : X << -X
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20943,7 +21018,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -20989,7 +21064,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 				CNeg_InputData_Error()
 			elseif Source[4] == "V" then -- Neg V, X : V << -X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21003,7 +21078,7 @@ function CNeg(PlayerID,Dest,Source,Mask) -- x-1
 					flag = {Preserved}
 				}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21124,7 +21199,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21147,7 +21222,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 				if Block == 0 then
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								MulArr1,
@@ -21172,7 +21247,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				MulArr2 = {SetCtrigX("X",CRet[1],0x158,0,SetTo,Dest[1],Dest[2],Dest[3],1,Dest[4])}
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21188,7 +21263,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 		if MulType == 1 then
 			if Dest == Source then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21204,7 +21279,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			end
 
 			Trigger { 
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21227,7 +21302,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			end
 
 			Trigger { 
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(FuncAlloc);
 					},
@@ -21238,7 +21313,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				}
 
 			Trigger { -- local Var1 (1)
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21252,7 +21327,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 
 			for i = 0, Bit do
 				Trigger { -- (2 ~ Bit+2)
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21284,7 +21359,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { -- (Bit+3 ~ 2*Bit+3)
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						MulArr3,
@@ -21297,7 +21372,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			end
 
 			Trigger { -- 2*Bit + 4
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21361,7 +21436,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 		elseif Source[4] == "V" then
 			if type(Multiplier) == "number" then -- Mul V, X, 1 : V << X * 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21375,7 +21450,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					local CBit = 2^i
 					if Block == 0 then
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit);
@@ -21391,7 +21466,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					end
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21417,7 +21492,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			if MulType == 1 then
 				if Source == Multiplier then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21433,7 +21508,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { 
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21456,7 +21531,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { 
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(FuncAlloc);
 						},
@@ -21467,7 +21542,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					}
 
 				Trigger { -- local Var1 (1)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21481,7 +21556,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 
 				for i = 0, Bit do
 					Trigger { -- (2 ~ Bit+2)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21513,7 +21588,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					end
 
 					Trigger { -- (Bit+3 ~ 2*Bit+3)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							MulArr3,
@@ -21526,7 +21601,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { -- 2*Bit + 4
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21653,7 +21728,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21676,7 +21751,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 				if Block == 0 then
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								MulArr1,
@@ -21701,7 +21776,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				MulArr2 = {SetCtrigX("X",CRet[1],0x158,0,SetTo,Dest[1],Dest[2],Dest[3],1,Dest[4])}
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21717,7 +21792,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 		if MulType == 1 then
 			if Dest == Source then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21738,7 +21813,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			end
 			local Repeat = Bit*2
 			Trigger {  -- 0
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(FuncAlloc);
 					},
@@ -21760,7 +21835,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				}
 
 			Trigger { -- local Var1 (1)
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21790,7 +21865,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { -- (+2 ~ Bit+2)
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						MulArr3,
@@ -21803,7 +21878,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			end
 
 			Trigger { -- Bit + 3
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21867,7 +21942,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 		elseif Source[4] == "V" then
 			if type(Multiplier) == "number" then -- Mul V, X, 1 : V << X * 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -21881,7 +21956,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					local CBit = 2^i
 					if Block == 0 then
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,CBit,CBit);
@@ -21897,7 +21972,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					end
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21923,7 +21998,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 			if MulType == 1 then
 				if Source == Multiplier then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21944,7 +22019,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 				local Repeat = Bit*2
 				Trigger {  -- 0
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(FuncAlloc);
 						},
@@ -21966,7 +22041,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					}
 
 				Trigger { -- local Var1 (1)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -21996,7 +22071,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 					end
 
 					Trigger { -- (+2 ~ Bit+2)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							MulArr3,
@@ -22009,7 +22084,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y∏∏ Limit bit
 				end
 
 				Trigger { -- Bit + 3
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22106,7 +22181,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Div X, 1 : X /= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -22130,7 +22205,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Source*CBit);
@@ -22143,7 +22218,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 							}
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22158,7 +22233,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 			elseif Source[4] == "V" then -- Div X, Y : X /= Y
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					Trigger { -- Y -> CRet[1] Act#1 (-3)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22172,7 +22247,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					}
 
 					Trigger { -- Y -> CRet[1] Act#2 (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22190,7 +22265,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 					
 					Trigger { -- X -> CRet[2] (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22213,7 +22288,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -22225,7 +22300,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -22237,7 +22312,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22252,7 +22327,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22277,7 +22352,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -22291,7 +22366,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- 2*Bit + 5
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22323,7 +22398,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -22336,7 +22411,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22366,7 +22441,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -22379,7 +22454,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22406,7 +22481,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -22420,7 +22495,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -22434,7 +22509,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22512,7 +22587,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 		elseif Source[4] == "V" then
 			if type(Divisor) == "number" then -- Div V, X, 1 : V << X / 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -22536,7 +22611,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Divisor*CBit);
@@ -22549,7 +22624,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 							}
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22564,7 +22639,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 			elseif Divisor[4] == "V" then -- Div V, X, Y : V << X / Y
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					Trigger { -- Y -> CRet[1] Act#1 (-3)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22578,7 +22653,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					}
 
 					Trigger { -- Y -> CRet[1] Act#2 (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22596,7 +22671,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 					
 					Trigger { -- X -> CRet[2] (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22619,7 +22694,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -22631,7 +22706,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -22643,7 +22718,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22658,7 +22733,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22683,7 +22758,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -22697,7 +22772,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- 2*Bit + 5
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22729,7 +22804,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -22742,7 +22817,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22772,7 +22847,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -22785,7 +22860,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22812,7 +22887,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -22826,7 +22901,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -22840,7 +22915,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -22940,7 +23015,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Mod X, 1 : X %= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -22964,7 +23039,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Source*CBit);
@@ -22977,7 +23052,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 							}
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -22993,7 +23068,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 			elseif Source[4] == "V" then -- Mod X, Y : X %= Y
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					Trigger { -- Y -> CRet[1] Act#1 (-3)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -23007,7 +23082,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					}
 
 					Trigger { -- Y -> CRet[1] Act#2 (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23025,7 +23100,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 					
 					Trigger { -- X -> CRet[2] (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23048,7 +23123,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -23060,7 +23135,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -23072,7 +23147,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23087,7 +23162,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23112,7 +23187,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -23126,7 +23201,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- 2*Bit + 5
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23159,7 +23234,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 					
 					Trigger { --  (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23189,7 +23264,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { --  (-1) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -23202,7 +23277,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -23215,7 +23290,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23242,7 +23317,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -23256,7 +23331,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -23270,7 +23345,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23348,7 +23423,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 		elseif Source[4] == "V" then
 			if type(Divisor) == "number" then -- Mod V, X, 1 : V << X % 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -23372,7 +23447,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Divisor*CBit);
@@ -23385,7 +23460,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 							}
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -23402,7 +23477,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 			elseif Divisor[4] == "V" then -- Mod V, X, Y : V << X % Y
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					Trigger { -- Y -> CRet[1] Act#1 (-3)
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -23416,7 +23491,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					}
 
 					Trigger { -- Y -> CRet[1] Act#2 (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23434,7 +23509,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 					
 					Trigger { -- X -> CRet[2] (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23457,7 +23532,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -23469,7 +23544,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -23481,7 +23556,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23496,7 +23571,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23521,7 +23596,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -23535,7 +23610,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- 2*Bit + 5
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23567,7 +23642,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 					
 					Trigger { --  (-2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23597,7 +23672,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { --  (-1) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -23609,7 +23684,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -23622,7 +23697,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23649,7 +23724,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -23663,7 +23738,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -23677,7 +23752,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y µ—¥Ÿ Limit b
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23776,7 +23851,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 			if type(Source) == "number" then -- iDiv X, 1 : X /= 1
 				CIfX(PlayerID,CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000))
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23792,7 +23867,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23803,7 +23878,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23822,7 +23897,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				if bit32.band(Source,0xFFFFFFFF) >= 0x80000000 then
 					Source = 0 - Source
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23844,7 +23919,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Source*CBit);
@@ -23858,7 +23933,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				end
 				CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23872,7 +23947,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23883,7 +23958,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -23900,7 +23975,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23917,7 +23992,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23933,7 +24008,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23945,7 +24020,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23960,7 +24035,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23979,7 +24054,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000))
 						Trigger { -- X -> CRet[2] (-2)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -23997,7 +24072,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24008,7 +24083,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- X -> CRet[2] (-1)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24032,7 +24107,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -24044,7 +24119,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -24056,7 +24131,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24071,7 +24146,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24096,7 +24171,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -24111,7 +24186,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24129,7 +24204,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24139,7 +24214,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(<0)/0 -> 0x80000000
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -24151,7 +24226,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24168,7 +24243,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(>=0)/0 -> 0x7FFFFFFF
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -24185,7 +24260,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					Bit = 31
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24202,7 +24277,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24213,7 +24288,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24225,7 +24300,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24240,7 +24315,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24254,7 +24329,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24269,7 +24344,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24280,7 +24355,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24295,7 +24370,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					CIfXEnd()
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -24307,7 +24382,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24335,7 +24410,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -24346,7 +24421,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24373,7 +24448,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -24387,7 +24462,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -24401,7 +24476,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24413,7 +24488,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24427,7 +24502,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24437,7 +24512,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(<0)/0 -> 0x80000000
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -24449,7 +24524,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24462,7 +24537,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(>=0)/0 -> 0x7FFFFFFF
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -24540,7 +24615,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 			if type(Divisor) == "number" then -- iDiv V, X, 1 : V << X / 1
 				CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24556,7 +24631,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24567,7 +24642,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24586,7 +24661,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				if bit32.band(Divisor,0xFFFFFFFF) >= 0x80000000 then
 					Divisor = 0 - Divisor
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24607,7 +24682,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Divisor*CBit);
@@ -24621,7 +24696,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				end
 				CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24635,7 +24710,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24646,7 +24721,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24663,7 +24738,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					CIfX(PlayerID,CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],AtLeast,0x80000000))
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24680,7 +24755,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24696,7 +24771,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24708,7 +24783,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24723,7 +24798,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24742,7 +24817,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { -- X -> CRet[2] (-2)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24760,7 +24835,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24771,7 +24846,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- X -> CRet[2] (-1)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24795,7 +24870,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -24807,7 +24882,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -24819,7 +24894,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24834,7 +24909,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24859,7 +24934,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -24874,7 +24949,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24892,7 +24967,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24902,7 +24977,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger { -- X(<0)/0 -> 0x80000000
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -24914,7 +24989,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -24931,7 +25006,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(>=0)/0 -> 0x7FFFFFFF
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -24948,7 +25023,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					Bit = 31
 					CIfX(PlayerID,CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24965,7 +25040,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24976,7 +25051,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -24988,7 +25063,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25003,7 +25078,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25017,7 +25092,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25032,7 +25107,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25043,7 +25118,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25058,7 +25133,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					CIfXEnd()
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -25070,7 +25145,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25098,7 +25173,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -25109,7 +25184,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25136,7 +25211,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -25150,7 +25225,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -25164,7 +25239,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25176,7 +25251,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25190,7 +25265,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25200,7 +25275,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(<0)/0 -> 0x80000000
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -25212,7 +25287,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25225,7 +25300,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { -- X(>=0)/0 -> 0x7FFFFFFF
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -25325,7 +25400,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 			if type(Source) == "number" then -- iMod X, 1 : X %= 1
 				CIfX(PlayerID,CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000))
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25341,7 +25416,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25352,7 +25427,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25383,7 +25458,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Source*CBit);
@@ -25397,7 +25472,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				end
 				CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25411,7 +25486,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25422,7 +25497,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25440,7 +25515,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25456,7 +25531,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25472,7 +25547,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25484,7 +25559,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25498,7 +25573,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25517,7 +25592,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000))
 						Trigger { -- X -> CRet[2] (-2)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25535,7 +25610,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25546,7 +25621,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- X -> CRet[2] (-1)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25571,7 +25646,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -25583,7 +25658,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -25595,7 +25670,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25610,7 +25685,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25635,7 +25710,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -25650,7 +25725,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25668,7 +25743,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25679,7 +25754,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25702,7 +25777,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					Bit = 31
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25718,7 +25793,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25729,7 +25804,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25741,7 +25816,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25755,7 +25830,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25769,7 +25844,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,{CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000),CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x1)})
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25784,7 +25859,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25795,7 +25870,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -25811,7 +25886,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					CIfXEnd()
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,0x0);
@@ -25823,7 +25898,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25851,7 +25926,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -25862,7 +25937,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25889,7 +25964,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -25903,7 +25978,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -25917,7 +25992,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25929,7 +26004,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25943,7 +26018,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -25954,7 +26029,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26034,7 +26109,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 			if type(Divisor) == "number" then -- iMod V, X, 1 : V << X % 1
 				CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26050,7 +26125,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26061,7 +26136,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26091,7 +26166,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				for i = Block, 0, -1 do
 					local CBit = 2^i
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 									CtrigX("X",CRet[2],0x15C,0,AtLeast,Divisor*CBit);
@@ -26105,7 +26180,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				end
 				CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26119,7 +26194,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26130,7 +26205,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 				CElseX()
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26148,7 +26223,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 				if BitLimit ~= nil and BitLimit ~= "X" then
 					CIfX(PlayerID,CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],AtLeast,0x80000000))
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26164,7 +26239,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26180,7 +26255,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26192,7 +26267,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- Y -> CRet[1] Act#1 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26206,7 +26281,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { -- Y -> CRet[1] Act#2 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26225,7 +26300,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000))
 						Trigger { -- X -> CRet[2] (-2)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26243,7 +26318,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26254,7 +26329,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger { -- X -> CRet[2] (-1)
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26279,7 +26354,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -26291,7 +26366,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 
 					Trigger { -- local Var2 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[1],0x15C,0,AtLeast,0x80000000);
@@ -26303,7 +26378,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26318,7 +26393,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					for i = 0, Bit do
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26343,7 +26418,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -26358,7 +26433,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26376,7 +26451,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26387,7 +26462,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26410,7 +26485,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					Bit = 31
 					CIfX(PlayerID,CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],AtLeast,0x80000000))
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26426,7 +26501,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26437,7 +26512,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26449,7 +26524,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26463,7 +26538,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26477,7 +26552,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,{CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000),CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],AtLeast,1)})
 						Trigger { 
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26492,7 +26567,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 								flag = {Preserved}
 							}
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26503,7 +26578,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							}
 					CElseX()
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -26519,7 +26594,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					CIfXEnd()
 					
 					Trigger { --  (-2) /0 √≥∏Æ
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX(Divisor[1],Divisor[2],0x15C,Divisor[3],Exactly,0x0);
@@ -26531,7 +26606,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { --  (-1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26559,7 +26634,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Clear Value 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(FuncAlloc);
 							},
@@ -26570,7 +26645,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var1 (1)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26597,7 +26672,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 
 					Trigger { -- local Var2 (2)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",FuncAlloc,0x15C+0x20*10,1,AtLeast,0x80000000);
@@ -26611,7 +26686,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (3 ~ Bit+3)
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 								CtrigX("X",CRet[2],0x15C,0,AtLeast,0);
@@ -26625,7 +26700,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 					end
 
 					Trigger { -- Bit + 4
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26637,7 +26712,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 
 					CIfX(PlayerID,CtrigX("X",CRet[5],0x15C,0,Exactly,0x1,0x1)) -- Sflag == 1
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26651,7 +26726,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 							flag = {Preserved}
 						}
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26662,7 +26737,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod¿« Signed ø¨ªÍ
 						}
 					CElseX()
 						Trigger { 
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -26727,7 +26802,7 @@ function CNot(PlayerID,Dest,Source,Mask)
 			CNot_InputData_Error()
 		elseif Dest[4] == "V" then -- Not X : X << ~X
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -26777,7 +26852,7 @@ function CNot(PlayerID,Dest,Source,Mask)
 				CNot_InputData_Error()
 			elseif Source[4] == "V" then -- Not V, X : V << ~X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26834,7 +26909,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "number" then -- Or 0x58A364, 1 : 0x58A364 |= 1
 			if type(Source) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26845,7 +26920,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- Or 0x58A364, X : 0x58A364 |= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26869,7 +26944,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- Or Cp, 1 : Cp |= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26880,7 +26955,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- Or Cp, X : Cp |= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26904,7 +26979,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Or X, 1 : X |= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26915,7 +26990,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- Or X, Y : X |= Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26939,7 +27014,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		else 
 			if type(Source) == "number" then -- Or Mem, 1 : Mem |= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -26950,7 +27025,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- Or Mem, X : Mem |= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27022,7 +27097,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- Or V, X, 1 : V << X | 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27035,7 +27110,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27046,7 +27121,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Operand[4] == "V" then -- Or V, X, Y : V << X | Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27119,7 +27194,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "number" then -- And 0x58A364, 1 : 0x58A364 &= 1
 			if type(Source) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27130,7 +27205,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- And 0x58A364, X : 0x58A364 &= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27155,7 +27230,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		elseif Dest == "Cp" then
 			if type(Source) == "number" then -- And Cp, 1 : Cp &= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27166,7 +27241,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- And Cp, X : Cp &= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27191,7 +27266,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- And X, 1 : X &= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27202,7 +27277,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- And X, Y : X &= Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27227,7 +27302,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		else 
 			if type(Source) == "number" then -- And Mem, 1 : Mem &= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27238,7 +27313,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- And Mem, X : Mem &= X
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27311,7 +27386,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- And V, X, 1 : V << X & 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27324,7 +27399,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27335,7 +27410,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Operand[4] == "V" then -- And V, X, Y : V << X & Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27427,7 +27502,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 		elseif Dest[4] == "V" then
 			if type(Source) == "number" then -- Xor X, 1 : X ^= 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27440,7 +27515,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27456,7 +27531,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Source[4] == "V" then -- Xor X, Y : X ^= Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27478,7 +27553,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27563,7 +27638,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 		elseif Source[4] == "V" then
 			if type(Operand) == "number" then -- Xor V, X, 1 : V << X ^ 1
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27576,7 +27651,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27589,7 +27664,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27605,7 +27680,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 			elseif Operand[4] == "V" then -- Xor V, X, Y : V << X ^ Y
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27618,7 +27693,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -27640,7 +27715,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -29646,7 +29721,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29665,7 +29740,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29679,7 +29754,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29692,7 +29767,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29707,7 +29782,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29723,7 +29798,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29737,7 +29812,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 		local TempRet = {"X",FMOVE[2],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -29758,7 +29833,7 @@ function f_Movcpy(PlayerID,Dest,SourceVA,Size,Distance) -- VA index = ªÛºˆ (CPRe
 	end
 	-- Call f_Movcpy
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -29801,7 +29876,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29820,7 +29895,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29834,7 +29909,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29847,7 +29922,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29862,7 +29937,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29878,7 +29953,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29893,7 +29968,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 		local TempRet = {"X",FMOVE[2],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -29915,7 +29990,7 @@ function f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes,Distance) -- VA index
 	end
 	-- Call f_MovcpyEPD
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -29942,7 +30017,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 		
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29959,7 +30034,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29978,7 +30053,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -29992,7 +30067,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30005,7 +30080,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30020,7 +30095,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30039,7 +30114,7 @@ function f_ReadcpyEPD(PlayerID,DestVA,Source,Size,Distance)
 	end
 	-- Call f_MemcpyEPD
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30062,7 +30137,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 	-- Input Data CRet[1] << Dest / CRet[2] << Source / CRet[3] << Size (EPD)
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30081,7 +30156,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30095,7 +30170,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30108,7 +30183,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30127,7 +30202,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30141,7 +30216,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30154,7 +30229,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30169,7 +30244,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30191,7 +30266,7 @@ function f_MemcpyEPD(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 	end
 	-- Call f_MemcpyEPD
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30386,7 +30461,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 	end
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30404,7 +30479,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 		MovZ(PlayerID,{"X",FCONV[3],0,"V"},DestVA,0x15C)
 		MovZ(PlayerID,{"X",FCONV[4],0,"V"},DestVA,0x15C)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30419,7 +30494,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30434,7 +30509,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30448,7 +30523,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30461,7 +30536,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30476,7 +30551,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30499,7 +30574,7 @@ function f_byteConvert(PlayerID,DestVA,Source,Size,Distance) -- 1 -> 4
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30526,7 +30601,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 	end
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30544,7 +30619,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		MovZ(PlayerID,{"X",FCONV[3],0,"V"},DestVA,0x15C)
 		MovZ(PlayerID,{"X",FCONV[4],0,"V"},DestVA,0x15C)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30559,7 +30634,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30574,7 +30649,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30588,7 +30663,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30601,7 +30676,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 
 	if type(SourceX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30616,7 +30691,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		SourceX = TempRet
 	elseif SourceX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30632,7 +30707,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30647,7 +30722,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30670,7 +30745,7 @@ function f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30695,7 +30770,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30709,7 +30784,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 		local TempRet = {"X",FBYTE[1],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30728,7 +30803,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30743,7 +30818,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30757,7 +30832,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30770,7 +30845,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30785,7 +30860,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30808,7 +30883,7 @@ function f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30832,7 +30907,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30846,7 +30921,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		local TempRet = {"X",FBYTE[1],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -30864,7 +30939,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30879,7 +30954,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30893,7 +30968,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30906,7 +30981,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(DestX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30921,7 +30996,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		DestX = TempRet
 	elseif DestX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30937,7 +31012,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30952,7 +31027,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -30975,7 +31050,7 @@ function f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31002,7 +31077,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 	end
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31016,7 +31091,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 		local TempRet = {"X",FCOND[1],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31035,7 +31110,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31050,7 +31125,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31064,7 +31139,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31077,7 +31152,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31092,7 +31167,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31122,7 +31197,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31140,7 +31215,7 @@ function f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
 	end
 
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31161,7 +31236,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 	end
 	if SourceVA[4] == "V" then -- °ÿ MovX¥¬ CPReadπÊΩƒ¿∏∑Œ Cp∞™ ∫Ø∞Ê«œπ«∑Œ Cp∞™ ¿⁄√º∏¶ ¿¸¥ﬁ«œ¥¬ SourceVA¿Œ¿⁄¥¬ ∏« πÿø° ¿÷æÓæﬂ«‘
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31175,7 +31250,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		local TempRet = {"X",FCOND[1],0,"V"}
 		TMem(PlayerID,TempRet,SourceVA,0,0,1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31193,7 +31268,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31208,7 +31283,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31222,7 +31297,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31235,7 +31310,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(DestX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31250,7 +31325,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		DestX = TempRet
 	elseif DestX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31266,7 +31341,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31281,7 +31356,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31311,7 +31386,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 		table.insert(Temp,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31329,7 +31404,7 @@ function f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
 	end
 
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31355,7 +31430,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 	end
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31370,7 +31445,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 		MovZ(PlayerID,TempRet,DestVA,0x15C)
 		DestVA = TempRet
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31383,7 +31458,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31402,7 +31477,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31416,7 +31491,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31429,7 +31504,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31444,7 +31519,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31471,7 +31546,7 @@ function f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes,Distance)
 		table.insert(Temp2,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31501,7 +31576,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 	end
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31516,7 +31591,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		MovZ(PlayerID,TempRet,DestVA,0x15C)
 		DestVA = TempRet
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31529,7 +31604,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31548,7 +31623,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31562,7 +31637,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31575,7 +31650,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 
 	if type(SourceX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31590,7 +31665,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		SourceX = TempRet
 	elseif SourceX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31606,7 +31681,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31621,7 +31696,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31648,7 +31723,7 @@ function f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes,Distance)
 		table.insert(Temp2,SetCtrig1X("X",v[1],v[2],0,SetTo,Distance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31672,7 +31747,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 	-- Input Data CRet[1] << Dest / CRet[2] << Source / CRet[3] << Size (Offset)
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31691,7 +31766,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31705,7 +31780,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31718,7 +31793,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31737,7 +31812,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31751,7 +31826,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31764,7 +31839,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31779,7 +31854,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31809,7 +31884,7 @@ function f_Memcpy(PlayerID,Dest,Source,Size,DestDistance,SourceDistance)
 		table.insert(Temp2,SetCtrig1X("X",v[1],v[2],0,SetTo,SourceDistance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -31833,7 +31908,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 	-- Input Data CRet[1] << Dest / CRet[2] << Source / CRet[3] << Size (Offset)
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31852,7 +31927,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		Dest = TempRet
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31866,7 +31941,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31879,7 +31954,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31898,7 +31973,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		Source = TempRet
 	elseif Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31912,7 +31987,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		}
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31925,7 +32000,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 
 	if type(DestX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31940,7 +32015,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		DestX = TempRet
 	elseif DestX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31956,7 +32031,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 
 	if type(SourceX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31971,7 +32046,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		SourceX = TempRet
 	elseif SourceX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -31987,7 +32062,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32002,7 +32077,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		Size = TempRet
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32032,7 +32107,7 @@ function f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size,DestDistance,SourceDi
 		table.insert(Temp2,SetCtrig1X("X",v[1],v[2],0,SetTo,SourceDistance))
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32059,7 +32134,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 	-- Input Data CRet[1],CRet[2] << TBL Index
 	if type(TBLIndex) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32071,7 +32146,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 		}
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32088,7 +32163,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 			TBLIndex = TempRet
 		elseif TBLIndex[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32103,7 +32178,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 		end
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32123,7 +32198,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 	-- Output Data CRet[2] = Output 
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32138,7 +32213,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32158,7 +32233,7 @@ function f_GetTblptr(PlayerID,Output,TBLIndex)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32183,7 +32258,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 	if type(StringId) == "number" then
 		StringKey = StringId
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32195,7 +32270,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 	elseif type(StringId) == "string" then
 		StringKey = ParseString(StringId)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32212,7 +32287,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 			StringId = TempRet
 		elseif StringId[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32235,7 +32310,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 	end
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32250,7 +32325,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 	-- Output Data CRet[2] = Output 
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32265,7 +32340,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32285,7 +32360,7 @@ function f_GetiStrXepd(PlayerID,Output,StringId)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32313,7 +32388,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 	if type(StringId) == "number" then
 		StringKey = StringId
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32325,7 +32400,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 	elseif type(StringId) == "string" then
 		StringKey = ParseString(StringId)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32342,7 +32417,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 			StringId = TempRet
 		elseif StringId[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32365,7 +32440,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 	end
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32379,7 +32454,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 	-- Output Data CRet[2] = Output 
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32394,7 +32469,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32414,7 +32489,7 @@ function f_GetStrXptr(PlayerID,Output,StringId)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32441,7 +32516,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 	if type(StringId) == "number" then
 		StringKey = StringId
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32453,7 +32528,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 			}
 	
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32466,7 +32541,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 	elseif type(StringId) == "string" then
 		StringKey = ParseString(StringId)
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32479,7 +32554,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 			}
 	
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32496,7 +32571,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 			StringId = TempRet
 		elseif StringId[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32511,7 +32586,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 		end
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32531,7 +32606,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 	-- Output Data CRet[3] = Output 
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32546,7 +32621,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32566,7 +32641,7 @@ function f_GetStrptr(PlayerID,Output,StringId)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32596,7 +32671,7 @@ end
 function f_InitiStrptr(PlayerID,Output,StringOffset,Size)
 	-- Input Data CRet[1],CRet[4] << StringOffset, Size
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32613,7 +32688,7 @@ function f_InitiStrptr(PlayerID,Output,StringOffset,Size)
 	------------------------------------------------------------
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32632,7 +32707,7 @@ function f_InitiStrptr(PlayerID,Output,StringOffset,Size)
 
 	-- Output Data CRet[5] = Output (StringEPD)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32650,7 +32725,7 @@ end
 function f_InitiTblptr(PlayerID,Output,TBLOffset,Size,TBLIndex)
 	-- Input Data CRet[1],CRet[4] << StringOffset, Size
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32662,7 +32737,7 @@ function f_InitiTblptr(PlayerID,Output,TBLOffset,Size,TBLIndex)
 		}
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32679,7 +32754,7 @@ function f_InitiTblptr(PlayerID,Output,TBLOffset,Size,TBLIndex)
 	------------------------------------------------------------
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32698,7 +32773,7 @@ function f_InitiTblptr(PlayerID,Output,TBLOffset,Size,TBLIndex)
 
 	-- Output Data CRet[5] = Output (TBLEPD), CRet[6] = PointerEPD, CRet[7] = PointerEPDX
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32726,7 +32801,7 @@ function f_Rand(PlayerID,Dest,Mask)
 	end
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32740,7 +32815,7 @@ function f_Rand(PlayerID,Dest,Mask)
 -- Output Data CRet[1] = Output 
 	if type(Dest) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32755,7 +32830,7 @@ function f_Rand(PlayerID,Dest,Mask)
 	else
 		if Dest[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32775,7 +32850,7 @@ function f_Rand(PlayerID,Dest,Mask)
 				MovX(PlayerID,Dest,TempRet,SetTo,Mask)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32799,7 +32874,7 @@ function f_Log2(PlayerID,Dest,Source)
 	-- Input Data CRet[1] << X 
 	if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -32815,7 +32890,7 @@ function f_Log2(PlayerID,Dest,Source)
 			Source = TempRet
 		elseif Source[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -32835,7 +32910,7 @@ function f_Log2(PlayerID,Dest,Source)
 		Need_Include_MatheMatics()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32849,7 +32924,7 @@ function f_Log2(PlayerID,Dest,Source)
 -- Output Data CRet[2] = Output 
 	if type(Dest) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32864,7 +32939,7 @@ function f_Log2(PlayerID,Dest,Source)
 	else
 		if Dest[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32884,7 +32959,7 @@ function f_Log2(PlayerID,Dest,Source)
 				MovX(PlayerID,Dest,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -32906,7 +32981,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 	-- Input Data CRet[1] << DeltaY
 	if type(DeltaY) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32921,7 +32996,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 		DeltaY = TempRet
 	elseif DeltaY[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32938,7 +33013,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 	-- Input Data CRet[2] << DeltaX 
 	if type(DeltaX) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32953,7 +33028,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 		DeltaX = TempRet
 	elseif DeltaX[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32972,7 +33047,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 		Need_Include_MatheMatics()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -32986,7 +33061,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 -- Output Data CRet[3] = AngleOutput 
 	if type(AngleOutput) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33001,7 +33076,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 	else
 		if AngleOutput[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33021,7 +33096,7 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 				MovX(PlayerID,AngleOutput,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33044,7 +33119,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 
 	if type(Radius) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33059,7 +33134,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 		Radius = TempRet
 	elseif Radius[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33075,7 +33150,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 	-- Input Data CRet[2] << Angle 
 	if type(Angle) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33090,7 +33165,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 		Angle = TempRet
 	elseif Angle[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33109,7 +33184,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 		Need_Include_MatheMatics()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33123,7 +33198,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 -- Output Data CRet[3] = CosOutput 
 	if type(CosOutput) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33138,7 +33213,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 	else
 		if CosOutput[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33158,7 +33233,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 				MovX(PlayerID,CosOutput,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33175,7 +33250,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 -- Output Data CRet[4] = SinOutput 
 	if type(SinOutput) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33190,7 +33265,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 	else
 		if SinOutput[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33210,7 +33285,7 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 				MovX(PlayerID,SinOutput,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33233,7 +33308,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 
 	if type(Source) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33249,7 +33324,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 			Source = TempRet
 		elseif Source[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33269,7 +33344,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 		Need_Include_MatheMatics()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33283,7 +33358,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 -- Output Data CRet[2] = Output 
 	if type(Dest) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33298,7 +33373,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 	else
 		if Dest[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33318,7 +33393,7 @@ function f_Sqrt(PlayerID,Dest,Source)
 				MovX(PlayerID,Dest,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33342,7 +33417,7 @@ function f_EPD(PlayerID,Dest,Source)
 
 	if type(Source) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33358,7 +33433,7 @@ function f_EPD(PlayerID,Dest,Source)
 			Source = TempRet
 		elseif Source[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33378,7 +33453,7 @@ function f_EPD(PlayerID,Dest,Source)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33392,7 +33467,7 @@ function f_EPD(PlayerID,Dest,Source)
 -- Output Data CRet[2] = Output
 	if type(Dest) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33407,7 +33482,7 @@ function f_EPD(PlayerID,Dest,Source)
 	else
 		if Dest[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33427,7 +33502,7 @@ function f_EPD(PlayerID,Dest,Source)
 				MovX(PlayerID,Dest,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33554,7 +33629,7 @@ function f_EPDX(PlayerID,DestX,Source)
 	if type(Source) == "number" then
 		if type(DestX) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33566,7 +33641,7 @@ function f_EPDX(PlayerID,DestX,Source)
 					}
 		elseif DestX[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33578,7 +33653,7 @@ function f_EPDX(PlayerID,DestX,Source)
 					}
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33592,7 +33667,7 @@ function f_EPDX(PlayerID,DestX,Source)
 	elseif Source[4] == "V" then
 		if type(DestX) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33602,7 +33677,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,1,1);
@@ -33613,7 +33688,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,2,2);
@@ -33625,7 +33700,7 @@ function f_EPDX(PlayerID,DestX,Source)
 					}
 		elseif DestX[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33635,7 +33710,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,1,1);
@@ -33646,7 +33721,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,2,2);
@@ -33658,7 +33733,7 @@ function f_EPDX(PlayerID,DestX,Source)
 					}
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33668,7 +33743,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,1,1);
@@ -33679,7 +33754,7 @@ function f_EPDX(PlayerID,DestX,Source)
 						flag = {Preserved}
 					}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX(Source[1],Source[2],0x15C,Source[3],Exactly,2,2);
@@ -33705,7 +33780,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 	-- Input Data CRet[1] << EPD 
 	if type(Input) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33716,7 +33791,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 			}
 	elseif Input[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33738,7 +33813,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 		CMov(PlayerID,0x6509B0,V(CRet[1]))
 	else
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33751,7 +33826,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 
 	-- Call f_SHRead
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33775,7 +33850,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 		end
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33790,7 +33865,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 		else
 			if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33811,7 +33886,7 @@ function f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 				MovX(PlayerID,Output,TempRet,SetTo,Mask)
 			else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33846,7 +33921,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 	-- Input Data CRet[1] << EPD 
 	if type(Input) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33859,7 +33934,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 		f_Read_InputData_Error()
 	elseif Input[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33881,7 +33956,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 		Input = TempRet
 	else
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -33894,7 +33969,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 
 	-- Call f_Read
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -33917,7 +33992,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 		end
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33932,7 +34007,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 		else
 			if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33953,7 +34028,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 				MovX(PlayerID,Output,TempRet,SetTo,Mask)
 			else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33973,7 +34048,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 	if EPDOutput ~= nil then
 		if type(EPDOutput) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -33988,7 +34063,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 		else
 			if EPDOutput[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -34008,7 +34083,7 @@ function f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ
 				MovX(PlayerID,EPDOutput,TempRet)
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34041,7 +34116,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 	-- Input Data CRet[1] << EPD 
 	if type(Input) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34054,7 +34129,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 		f_Read_InputData_Error()
 	elseif Input[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -34076,7 +34151,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 		Input = TempRet
 	else
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -34254,7 +34329,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 	end
 
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34265,7 +34340,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 				flag = {Preserved}
 			}
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34286,7 +34361,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 	if Output ~= nil then
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -34301,7 +34376,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 		else
 			if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -34322,7 +34397,7 @@ function f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿∏
 				MovX(PlayerID,Output,TempRet,SetTo,Mask2)
 			else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -34363,7 +34438,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 			Dest = TempRet
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34379,7 +34454,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34395,7 +34470,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 				Source = TempRet
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34413,7 +34488,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 
 	-- Call f_Abs
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34431,7 +34506,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34446,7 +34521,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34466,7 +34541,7 @@ function f_Abs(PlayerID,Dest,Source,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34501,7 +34576,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 			Dest = TempRet
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34516,7 +34591,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34532,7 +34607,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34549,7 +34624,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34565,7 +34640,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34581,7 +34656,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 		end
 		if type(Multiplier) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34597,7 +34672,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 				Multiplier = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34615,7 +34690,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 
 	-- Call f_Mul
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34633,7 +34708,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34648,7 +34723,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34668,7 +34743,7 @@ function f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34703,7 +34778,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 			Dest = TempRet
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34718,7 +34793,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34734,7 +34809,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34751,7 +34826,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34767,7 +34842,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34783,7 +34858,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 		end
 		if type(Multiplier) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34799,7 +34874,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 				Multiplier = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34817,7 +34892,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 
 	-- Call f_iMul
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34836,7 +34911,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34851,7 +34926,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34871,7 +34946,7 @@ function f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34906,7 +34981,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 			Dest = TempRet
 		else
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -34921,7 +34996,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34937,7 +35012,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34954,7 +35029,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34970,7 +35045,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -34986,7 +35061,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Divisor) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35002,7 +35077,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 				Divisor = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35020,7 +35095,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 
 	-- Call f_Div
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35037,7 +35112,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 	-- Output Data CRet[3] = Output
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35052,7 +35127,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35072,7 +35147,7 @@ function f_Div(PlayerID,Dest,Source,Divisor,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35106,7 +35181,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 			Dest = TempRet
 		else
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35121,7 +35196,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35137,7 +35212,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35154,7 +35229,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35170,7 +35245,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35186,7 +35261,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Divisor) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35202,7 +35277,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 				Divisor = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35220,7 +35295,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 
 	-- Call f_Mod
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35237,7 +35312,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 	-- Output Data CRet[2] = Output
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35252,7 +35327,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35272,7 +35347,7 @@ function f_Mod(PlayerID,Dest,Source,Divisor,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35307,7 +35382,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 			Dest = TempRet
 		else
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35322,7 +35397,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35338,7 +35413,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35355,7 +35430,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35371,7 +35446,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35387,7 +35462,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Divisor) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35403,7 +35478,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 				Divisor = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35421,7 +35496,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 
 	-- Call f_iDiv
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35438,7 +35513,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 	-- Output Data CRet[3] = Output
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35453,7 +35528,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35473,7 +35548,7 @@ function f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35507,7 +35582,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 			Dest = TempRet
 		else
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35522,7 +35597,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35538,7 +35613,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35555,7 +35630,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if type(Source) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35571,7 +35646,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 				Source = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35587,7 +35662,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 		end
 		if type(Divisor) == "number" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35603,7 +35678,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 				Divisor = TempRet
 			else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35621,7 +35696,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 
 	-- Call f_Div
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -35638,7 +35713,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 	-- Output Data CRet[2] = Output
 	if type(PDest) == "number" then
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35653,7 +35728,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 	else
 		if PDest[4] == "V" then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -35673,7 +35748,7 @@ function f_iMod(PlayerID,Dest,Source,Divisor,Mask)
 			MovX(PlayerID,PDest,TempRet)
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -36192,7 +36267,7 @@ function InitCtrig()
 end
 
 function FlagIndex(FlagID)
-	return (FlagID/480) + (FlagID%480)*0x100000 + 0x0000FFE1
+	return (FlagID/480) + (FlagID%480)*0x100000 + FlagAllocBase
 end
 --[[
 function PatchCond(Conditions)
@@ -36310,7 +36385,7 @@ function PopTrigArr(PlayerID,ActPushLine,CondPushLine)
 			Act[5][5] = Act[5][5] + (0x970/4) * PushTrigStack
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -36361,7 +36436,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36376,7 +36451,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36399,7 +36474,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36413,7 +36488,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36440,7 +36515,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36454,7 +36529,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36482,7 +36557,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36497,7 +36572,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -36510,7 +36585,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -36523,7 +36598,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36547,7 +36622,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36562,7 +36637,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X >= 0 
@@ -36575,7 +36650,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X < 0 
@@ -36588,7 +36663,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36612,7 +36687,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36627,7 +36702,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -36640,7 +36715,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -36653,7 +36728,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36677,7 +36752,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36692,7 +36767,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X >= 0 
@@ -36705,7 +36780,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X < 0 
@@ -36718,7 +36793,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36745,7 +36820,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36760,7 +36835,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -36773,7 +36848,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -36786,7 +36861,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36818,7 +36893,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36833,7 +36908,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X >= 0 
@@ -36846,7 +36921,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X < 0 
@@ -36859,7 +36934,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36891,7 +36966,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36906,7 +36981,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -36919,7 +36994,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -36932,7 +37007,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -36964,7 +37039,7 @@ function TTPopTrigArr(PlayerID)
 						Act[5][5] = Act[5][5] + (0x970/4) * Stack
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -36979,7 +37054,7 @@ function TTPopTrigArr(PlayerID)
 				end
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x00000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X >= 0 
@@ -36992,7 +37067,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[2],0x80000000,TargetCond[4],Exactly,0xFF,TargetCond[7],0x80); -- X < 0 
@@ -37005,7 +37080,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37033,7 +37108,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * Stack -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37047,7 +37122,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37070,7 +37145,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * Stack -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37084,7 +37159,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37105,7 +37180,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+1) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37121,7 +37196,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37142,7 +37217,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37153,7 +37228,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37163,7 +37238,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37183,7 +37258,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37199,7 +37274,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37223,7 +37298,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x24,3,Exactly,0x80000000,0x80000000);
@@ -37235,7 +37310,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -37248,7 +37323,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -37262,7 +37337,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37273,7 +37348,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37283,7 +37358,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37303,7 +37378,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+1) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37319,7 +37394,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37340,7 +37415,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37351,7 +37426,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37361,7 +37436,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37381,7 +37456,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37397,7 +37472,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37421,7 +37496,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x24,3,Exactly,0x80000000,0x80000000);
@@ -37433,7 +37508,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -37446,7 +37521,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -37460,7 +37535,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37471,7 +37546,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37481,7 +37556,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37501,7 +37576,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+1) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37517,7 +37592,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37538,7 +37613,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37549,7 +37624,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37559,7 +37634,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37579,7 +37654,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37595,7 +37670,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37619,7 +37694,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x24,3,Exactly,0x80000000,0x80000000);
@@ -37631,7 +37706,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -37644,7 +37719,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -37658,7 +37733,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37669,7 +37744,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37679,7 +37754,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37699,7 +37774,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+1) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37715,7 +37790,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37736,7 +37811,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37747,7 +37822,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37757,7 +37832,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37777,7 +37852,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) * (2*Stack+4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37793,7 +37868,7 @@ function TTPopTrigArr(PlayerID)
 						Act[9][5] = Act[9][5] + (0x970/4) -- EPD NEXT
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -37817,7 +37892,7 @@ function TTPopTrigArr(PlayerID)
 				})
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x24,3,Exactly,0x80000000,0x80000000);
@@ -37829,7 +37904,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x00000000,0,Exactly,0xF,0,0x80); -- X >= 0 
@@ -37842,7 +37917,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(0x80000000,TargetCond[1][2],0x80000000,0,Exactly,0xF,0,0x80); -- X < 0 
@@ -37856,7 +37931,7 @@ function TTPopTrigArr(PlayerID)
 				}
 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond[1],
@@ -37867,7 +37942,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -37877,7 +37952,7 @@ function TTPopTrigArr(PlayerID)
 						flag = {Preserved}
 					}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond,
@@ -37920,7 +37995,7 @@ function TTPopTrigArr(PlayerID)
 				STPopTrigLock = STTemp
 			elseif TTModeArr[i] == 20 then -- TTKeyDown
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -37930,7 +38005,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Condition(TargetCond[1],TargetCond[2],0,0,Exactly,0xF,0,0x80); -- Key == 0
@@ -37941,7 +38016,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x17C,-1,Exactly,0); -- Switch Cleared
@@ -37955,7 +38030,7 @@ function TTPopTrigArr(PlayerID)
 				}
 			elseif TTModeArr[i] == 21 then -- TTKeyUp
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -37965,7 +38040,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond, -- Key == 1
@@ -37976,7 +38051,7 @@ function TTPopTrigArr(PlayerID)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X","X",0x17C,-1,Exactly,1); -- Switch Set
@@ -37992,7 +38067,7 @@ function TTPopTrigArr(PlayerID)
 				if TTPushTrigArr[i] ~= nil then
 					for j, Act in pairs(TTPushTrigArr[i]) do
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -38006,7 +38081,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond, -- CRet[2] == 1
@@ -38020,7 +38095,7 @@ function TTPopTrigArr(PlayerID)
 				if TTPushTrigArr[i] ~= nil then
 					for j, Act in pairs(TTPushTrigArr[i]) do
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -38034,7 +38109,7 @@ function TTPopTrigArr(PlayerID)
 					end
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						TargetCond, -- CRet[5] == 1
@@ -38068,7 +38143,7 @@ function STPopTrigArr(PlayerID)
 			table.insert(VarXArr,SetCtrig1X("X",i,0x15C,0,SetTo,0))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41037,7 +41112,7 @@ function _ConvertBwriteZ(PlayerID,Offset,Value,ValueOutput)
 	FBWZCheck = 1
 	-- Input Data CRet[1] << EPD 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41054,7 +41129,7 @@ function _ConvertBwriteZ(PlayerID,Offset,Value,ValueOutput)
 
 	-- Call f_BwriteZ
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41070,7 +41145,7 @@ function _ConvertBwriteZ(PlayerID,Offset,Value,ValueOutput)
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41089,7 +41164,7 @@ function _ConvertBwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 	-- Input Data CRet[1] << EPD 
 	if type(Value) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41106,7 +41181,7 @@ function _ConvertBwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 			}
 	elseif Value[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41127,7 +41202,7 @@ function _ConvertBwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 
 	-- Call f_BwriteX
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41143,7 +41218,7 @@ function _ConvertBwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41168,7 +41243,7 @@ function _ConvertBwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 	-- Input Data CRet[1] << EPD 
 	if type(Value) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41185,7 +41260,7 @@ function _ConvertBwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 			}
 	elseif Value[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41206,7 +41281,7 @@ function _ConvertBwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 
 	-- Call f_BwriteX
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41222,7 +41297,7 @@ function _ConvertBwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41247,7 +41322,7 @@ function _ConvertWwriteZ(PlayerID,Offset,Value,ValueOutput)
 	FWWZCheck = 1
 	-- Input Data CRet[1] << EPD 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41264,7 +41339,7 @@ function _ConvertWwriteZ(PlayerID,Offset,Value,ValueOutput)
 
 	-- Call f_BwriteZ
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41280,7 +41355,7 @@ function _ConvertWwriteZ(PlayerID,Offset,Value,ValueOutput)
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41299,7 +41374,7 @@ function _ConvertWwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 	-- Input Data CRet[1] << EPD 
 	if type(Value) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41316,7 +41391,7 @@ function _ConvertWwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 			}
 	elseif Value[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41337,7 +41412,7 @@ function _ConvertWwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 
 	-- Call f_BwriteX
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41353,7 +41428,7 @@ function _ConvertWwriteX(PlayerID,Offset,Value,EPDOutput,ValueOutput,MaskOutput)
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -41378,7 +41453,7 @@ function _ConvertWwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 	-- Input Data CRet[1] << EPD 
 	if type(Value) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41395,7 +41470,7 @@ function _ConvertWwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 			}
 	elseif Value[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41416,7 +41491,7 @@ function _ConvertWwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 
 	-- Call f_BwriteX
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -41432,7 +41507,7 @@ function _ConvertWwrite(PlayerID,Base,Index,Value,EPDOutput,ValueOutput,MaskOutp
 	
 	-- Output Data CRet[2] = Output
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -42103,9 +42178,9 @@ function PlayerCheck(Player,Status)
 		PlayerCheck_InputData_Error()
 	end
 	if Status == "X" or Status == 0 then
-		return FMemoryX(0x57EEE8 + 36*Player,Exactly,0,0xFF)
+		return FMemory(0x51A284 + 12*Player,Exactly,0x51A284 + 12*Player)
 	else
-		return FMemoryX(0x57EEE8 + 36*Player,AtLeast,1,0xFF)
+		return FMemory(0x51A284 + 12*Player,AtLeast,0x51A2E4)
 	end
 	
 end
@@ -42869,7 +42944,7 @@ function CA__Input(Input,SVA1,Mask)
 			DoActionsX(PlayerID,SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5],SetTo,Input,Mask))
 		elseif Input[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -42888,7 +42963,7 @@ function CA__Input(Input,SVA1,Mask)
 		end
 		if type(Input) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -42902,7 +42977,7 @@ function CA__Input(Input,SVA1,Mask)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -42913,7 +42988,7 @@ function CA__Input(Input,SVA1,Mask)
 			}
 		elseif Input[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -42930,7 +43005,7 @@ function CA__Input(Input,SVA1,Mask)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -42961,7 +43036,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 	-- Input Var
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -42975,7 +43050,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -42993,7 +43068,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 	-- Get Start Curindex
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43011,7 +43086,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			Index[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43032,7 +43107,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 	-- Get Start & END
 	if type(Start) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43050,7 +43125,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			Start[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43070,7 +43145,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 
 	if type(End) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43088,7 +43163,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			End[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43109,7 +43184,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 	-- Set Call VA
 	if SVA1[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43130,7 +43205,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			SVA1[5][5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43155,7 +43230,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43166,7 +43241,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43179,7 +43254,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43191,7 +43266,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43208,7 +43283,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 			local CBit = 2^i
 			if SVA1[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(SVA1[5][1],SVA1[5][2],0x15C,SVA1[5][3],Exactly,CBit,CBit);
@@ -43228,7 +43303,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 
 	CWhile(PlayerID,{CVar("X",INVA[1],AtLeast,1)},{SetCVar("X",INVA[1],Subtract,1)})
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -43243,7 +43318,7 @@ function CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance) -- SVA1 -> i
 
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43272,7 +43347,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 	-- Get Size
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43287,7 +43362,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43306,7 +43381,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 	-- Get Dest Cp
 	if Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43325,7 +43400,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 			Dest[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43348,7 +43423,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 	-- Set Call VA
 	if Source[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43370,7 +43445,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 			Source[5][5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43397,7 +43472,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43408,7 +43483,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43421,7 +43496,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43433,7 +43508,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43449,7 +43524,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 	NWhile(PlayerID,{CVar("X",INVA[1],AtLeast,1)})
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 				},
@@ -43465,7 +43540,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 					DeathsX(CurrentPlayer,Exactly,0,0,Mask);
@@ -43480,7 +43555,7 @@ function CA__epdcmp(Dest,Source,Size,Mask,CFlag)
 	FuncAlloc = FuncAlloc + 1
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(FuncAlloc);
 				CVar("X",INVA[1],AtLeast,1);
@@ -43519,7 +43594,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 	-- Get Size
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43533,7 +43608,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43551,7 +43626,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 	-- Get Dest Cp
 	if Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43566,7 +43641,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			Dest[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43584,7 +43659,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 		for i = 0, 31 do
 			local CBit = 2^i
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Dest[5][1],Dest[5][2],0x15C,Dest[5][3],Exactly,CBit,CBit);
@@ -43601,7 +43676,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 	-- Get Start & END
 	if type(Start) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43616,7 +43691,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			Start[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43635,7 +43710,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			local CBit = 2^i
 			if Dest[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Start[1],Start[2],0x15C,Start[3],Exactly,CBit,CBit);
@@ -43652,7 +43727,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 
 	if type(End) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43667,7 +43742,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			End[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43686,7 +43761,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			local CBit = 2^i
 			if Dest[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(End[1],End[2],0x15C,End[3],Exactly,CBit,CBit);
@@ -43704,7 +43779,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 	-- Set Call VA
 	if Source[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43725,7 +43800,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			Source[5][5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43750,7 +43825,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43761,7 +43836,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43774,7 +43849,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43786,7 +43861,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43803,7 +43878,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 			local CBit = 2^i
 			if Source[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Source[5][1],Source[5][2],0x15C,Source[5][3],Exactly,CBit,CBit);
@@ -43823,7 +43898,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 
 	CWhile(PlayerID,{CVar("X",INVA[1],AtLeast,1)},{SetCVar("X",INVA[1],Subtract,1)})
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -43838,7 +43913,7 @@ function CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceD
 
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -43881,7 +43956,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 	-- Get Size
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43895,7 +43970,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43913,7 +43988,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 	-- Get Dest Cp
 	if Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43928,7 +44003,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			Dest[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43946,7 +44021,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 		for i = 0, 31 do
 			local CBit = 2^i
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Dest[5][1],Dest[5][2],0x15C,Dest[5][3],Exactly,CBit,CBit);
@@ -43963,7 +44038,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 	-- Get Start & END
 	if type(Start) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43978,7 +44053,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			Start[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -43997,7 +44072,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			local CBit = 2^i
 			if Dest[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Start[1],Start[2],0x15C,Start[3],Exactly,CBit,CBit);
@@ -44014,7 +44089,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 
 	if type(End) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -44029,7 +44104,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			End[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -44048,7 +44123,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			local CBit = 2^i
 			if Dest[6] >= CBit then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(End[1],End[2],0x15C,End[3],Exactly,CBit,CBit);
@@ -44067,7 +44142,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 	if Source[4] == "V" then
 		if Mask == nil then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44085,7 +44160,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44108,7 +44183,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 		end
 		if Mask == nil then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44133,7 +44208,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44144,7 +44219,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44157,7 +44232,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44169,7 +44244,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44183,7 +44258,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 				}
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44208,7 +44283,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44219,7 +44294,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44232,7 +44307,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44244,7 +44319,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44262,7 +44337,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 	CWhile(PlayerID,{CVar("X",INVA[1],AtLeast,1)},{SetCVar("X",INVA[1],Subtract,1)})
 		if Mask == nil then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -44278,7 +44353,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -44294,7 +44369,7 @@ function CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistan
 		end
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44367,7 +44442,7 @@ function CA__SetValue(SVA1,String,Mask,Index,Preserve,utf8flag)
 			CA__SetValue_StringSize_Overflow()
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					NVar(Index,AtLeast,(SVA1[6]-Size+1)*604);
@@ -44382,7 +44457,7 @@ function CA__SetValue(SVA1,String,Mask,Index,Preserve,utf8flag)
 			Index[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44415,7 +44490,7 @@ function CA__SetValue(SVA1,String,Mask,Index,Preserve,utf8flag)
 		RecoverCp(PlayerID)
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc+1);
 				},
@@ -44457,7 +44532,7 @@ function CA__SetMask(SVA1,Mask,Start,End,Preserve)
 	else
 		if type(Start) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44471,7 +44546,7 @@ function CA__SetMask(SVA1,Mask,Start,End,Preserve)
 				Start[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44487,7 +44562,7 @@ function CA__SetMask(SVA1,Mask,Start,End,Preserve)
 		end
 		if type(End) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44501,7 +44576,7 @@ function CA__SetMask(SVA1,Mask,Start,End,Preserve)
 				End[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44552,7 +44627,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 	else
 		if type(Start) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44566,7 +44641,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 				Start[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44583,7 +44658,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 		if type(End) == "number" then
 			if type(Value) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44598,7 +44673,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 					Value[5] = 0
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44619,7 +44694,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 					End[5] = 0
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44641,7 +44716,7 @@ function CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
 					End[5] = 0
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -44707,7 +44782,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 				DestDistance[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44742,7 +44817,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 				DestDistance[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44760,7 +44835,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 
 		if type(Start) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44774,7 +44849,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 				Start[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44790,7 +44865,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 		end
 		if type(End) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44804,7 +44879,7 @@ function CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
 				End[5] = 0
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -44872,7 +44947,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							v[1][5] = 0
 						end
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -44887,7 +44962,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							}
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label();
 							},
@@ -44911,7 +44986,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 				else
 					if type(v[1]) == "number" then
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -44925,7 +45000,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							v[1][5] = 0
 						end
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -44941,7 +45016,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 					end
 
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -44968,7 +45043,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							v[1][5] = 0
 						end
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label(0);
 								},
@@ -44983,7 +45058,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							}
 
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label();
 							},
@@ -45003,7 +45078,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 				else
 					if type(v[1]) == "number" then
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -45017,7 +45092,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							v[1][5] = 0
 						end
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -45034,7 +45109,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 
 					if type(v[2]) == "number" then
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -45048,7 +45123,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 							v[2][5] = 0
 						end
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -45064,7 +45139,7 @@ function CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
 					end
 
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -45131,7 +45206,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 	if SVA1[4] == "V" then
 		if type(Output) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -45146,7 +45221,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		elseif Output[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -45161,7 +45236,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -45176,7 +45251,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -45193,7 +45268,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			SVA1[5][5] = 0
 		end
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45210,7 +45285,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 				flag = {Preserved}
 			}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45220,7 +45295,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 				flag = {Preserved}
 			}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45242,7 +45317,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		if type(Output) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45263,7 +45338,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		elseif Output[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45284,7 +45359,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45305,7 +45380,7 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -45342,7 +45417,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 
 	if type(Output) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45353,7 +45428,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 		}
 	elseif Output[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45365,7 +45440,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 		DestDistance = DestDistance*604
 	else -- Mem
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45378,7 +45453,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45392,7 +45467,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45409,7 +45484,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 	
 	if SVA1[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45425,7 +45500,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 		end
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45443,7 +45518,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45454,7 +45529,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45465,7 +45540,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45479,7 +45554,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 
 	CWhile(PlayerID,CVar("X",CRet[1],AtLeast,1),SetCVar("X",CRet[1],Subtract,1))
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 				},
@@ -45499,7 +45574,7 @@ function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -45535,7 +45610,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 
 	if type(Index) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45551,7 +45626,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					NVar(CB[2],AtMost,Index+SVA32[6]-1); -- Strid Size < SVA32 Size + Index
@@ -45562,7 +45637,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					NVar(CB[2],Exactly,Index+SVA32[6]); -- Strid Size == SVA32 Size + Index [SameSize]
@@ -45577,7 +45652,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 			Index[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45610,7 +45685,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 		CIfOnce(PlayerID,Condition,Action)
 	end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45625,7 +45700,7 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 			NullAct = {SetDeaths(CurrentPlayer,SetTo,0,0)}
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					CVar("X",CRet[1],Exactly,0);
@@ -45762,7 +45837,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45778,7 +45853,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45795,7 +45870,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 
 	if type(Offset) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45811,7 +45886,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 			Offset = TempRet
 		elseif Offset[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -45831,7 +45906,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -45846,7 +45921,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 	if Output ~= nil then
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -45861,7 +45936,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 
 		elseif Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -45875,7 +45950,7 @@ function f_ChatOffset(PlayerID,Line,Offset,Output)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46084,7 +46159,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -46100,7 +46175,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46120,7 +46195,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -46136,7 +46211,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 	if Output ~= nil then
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46151,7 +46226,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 
 		elseif Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46165,7 +46240,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46182,7 +46257,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 	if EPDXOutput ~= nil then
 		if type(EPDXOutput) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46197,7 +46272,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 	
 		elseif EPDXOutput[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46211,7 +46286,7 @@ function f_Strlen(PlayerID,Line,Output,EPDXOutput)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46234,7 +46309,7 @@ function f_Strcat(PlayerID,Line,Output)
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -46250,7 +46325,7 @@ function f_Strcat(PlayerID,Line,Output)
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46270,7 +46345,7 @@ function f_Strcat(PlayerID,Line,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -46286,7 +46361,7 @@ function f_Strcat(PlayerID,Line,Output)
 	if Output ~= nil then
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46301,7 +46376,7 @@ function f_Strcat(PlayerID,Line,Output)
 
 		elseif Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46315,7 +46390,7 @@ function f_Strcat(PlayerID,Line,Output)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46350,7 +46425,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 
 	if type(Start) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46364,7 +46439,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 			Start[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46380,7 +46455,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 	end
 	if type(End) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46394,7 +46469,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 			End[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46429,7 +46504,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 					v[1][5] = 0
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46451,7 +46526,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 					v[2][5] = 0
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46475,7 +46550,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 						v[3][1][5] = 0
 					end
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -46512,7 +46587,7 @@ function CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) -- <A,B> : A->B
 			if MaskArr[2] ~= nil then Mask2 = MaskArr[2] end
 			if MaskArr[3] ~= nil then Mask3 = MaskArr[3] end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(Data[k]);
 					DeathsX(CurrentPlayer,Exactly,ColorCode[k],0,Mask1);
@@ -46550,7 +46625,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 
 	if type(Start) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46564,7 +46639,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 			Start[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46580,7 +46655,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 	end
 	if type(End) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46594,7 +46669,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 			End[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -46645,7 +46720,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 						v[1][1][5] = 0
 					end
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -46675,7 +46750,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 						v[1][2][5] = 0
 					end
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -46708,7 +46783,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 						v[1][5] = 0
 					end
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -46738,7 +46813,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 					v[2][5] = 0
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -46777,7 +46852,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 						v[3][1][5] = 0
 					end
 					Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -46834,7 +46909,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 				local Mask3 = Add
 				if MaskArr[3] ~= nil then Mask3 = MaskArr[3] end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(Data[k]);
 						DeathsX(CurrentPlayer,AtLeast,ColorCode1[k],0,Mask1);
@@ -46854,7 +46929,7 @@ function CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) -- <<A,
 				local Mask3 = SetTo
 				if MaskArr[3] ~= nil then Mask3 = MaskArr[3] end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(Data[k]);
 						DeathsX(CurrentPlayer,Exactly,ColorCode3[k],0,Mask1);
@@ -46906,7 +46981,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		Input[5] = 0
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label();
 		},
@@ -46978,7 +47053,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		
 		if Size3 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[1],Exactly,0);
@@ -47060,7 +47135,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		if type(Sign[1]) == "string" then
 			if Size1 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[1],Exactly,0,0x80000000);
@@ -47087,7 +47162,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		if type(Sign[2]) == "string" then
 			if Size2 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[1],Exactly,0x80000000,0x80000000);
@@ -47113,7 +47188,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		if type(Sign[3]) == "string" then
 			if Size3 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[1],Exactly,0);
@@ -47138,7 +47213,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 		end
 		CIf(PlayerID,CVar("X",CRet[1],AtLeast,0x80000000))
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -47152,7 +47227,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -47303,7 +47378,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 			end
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[2],Exactly,0);
@@ -47486,7 +47561,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 						end
 						TriggerX(PlayerID,{CVar("X",CRet[3],AtLeast,v[1][1]),CVar("X",CRet[3],AtMost,v[1][2])},{SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+IndexArr[k],SetTo,Arr[1]+Arr[2]*256+Arr[3]*65536+Arr[4]*16777216,Mask2)},{Preserved})
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(iBox[ptr][1]);
 								CVar("X",CRet[3],AtLeast,v[1][1]);
@@ -47521,7 +47596,7 @@ function CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,Ind
 						end
 						Trigger2X(PlayerID,{CVar("X",CRet[3],AtLeast,v[1][1]),CVar("X",CRet[3],AtMost,v[1][2])},Box,{Preserved})
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(iBox[ptr][1]);
 								CVar("X",CRet[3],AtLeast,v[1][1]);
@@ -47607,7 +47682,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 		Input[5] = I64(Input[5])
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label();
 		},
@@ -47685,7 +47760,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 		
 		if Size3 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,0);
@@ -47769,7 +47844,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 			if Size1 == 1 then
 				DoActionsX(PlayerID,SetCVar("X",CRet[1],SetTo,1))
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,0);
@@ -47781,7 +47856,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,{0},0x80000000);
@@ -47804,7 +47879,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 				end
 				DoActionsX(PlayerID,SetCVar("X",CRet[1],SetTo,1))
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,0);
@@ -47821,7 +47896,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 		if type(Sign[2]) == "string" then
 			if Size2 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,{0x80000000},0x80000000);
@@ -47847,7 +47922,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 		if type(Sign[3]) == "string" then
 			if Size3 == 1 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CWar("X",WRet[1],Exactly,0);
@@ -47873,7 +47948,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 		end
 		CIf(PlayerID,CWar("X",WRet[1],Exactly,{0x80000000},0x80000000))
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -47891,7 +47966,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 						CtrigX("X",WRet[2],0x15C,0,Exactly,0xFFFFFFFF);
@@ -47902,7 +47977,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 					flag = {Preserved}
 				}	
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -48099,7 +48174,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 			end
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CVar("X",CRet[2],Exactly,0);
@@ -48263,7 +48338,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 						end
 						TriggerX(PlayerID,{CVar("X",CRet[3],AtLeast,v[1][1]),CVar("X",CRet[3],AtMost,v[1][2])},{SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+IndexArr[k],SetTo,Arr[1]+Arr[2]*256+Arr[3]*65536+Arr[4]*16777216,Mask2)},{Preserved})
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(iBox[ptr][1]);
 								CVar("X",CRet[3],AtLeast,v[1][1]);
@@ -48298,7 +48373,7 @@ function CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,In
 						end
 						Trigger2X(PlayerID,{CVar("X",CRet[3],AtLeast,v[1][1]),CVar("X",CRet[3],AtMost,v[1][2])},Box,{Preserved})
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(iBox[ptr][1]);
 								CVar("X",CRet[3],AtLeast,v[1][1]);
@@ -48447,7 +48522,7 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 		end
 		
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					MemoryB(Base+i,Exactly,0);
@@ -48458,7 +48533,7 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 				flag = {Preserved}
 		}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					MemoryB(Base+i,AtLeast,1);
@@ -48472,7 +48547,7 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 
 		if FullWidth == 1 then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					MemoryB(Base+i,AtLeast,1);
@@ -48484,7 +48559,7 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					MemoryB(Base+i,AtLeast,1);
@@ -48522,7 +48597,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48539,7 +48614,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 	
 	if Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -48554,7 +48629,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 			Dest[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -48571,7 +48646,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 
 	if Source[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -48586,7 +48661,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 			Source[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -48605,7 +48680,7 @@ function CA__Encode(Dest,Source,Size,cp949flag) -- 1 : ->cp949 / 0 : ->utf8
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -48674,7 +48749,7 @@ CIf(PlayerID,Condition,Action)
 	DoActionsX(PlayerID,{SetNVar(CB[3],SetTo,0),SetNVar(CB[2],SetTo,604*11)})
 	for i = 0, 3 do
 		local CBit = 2^i
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(CB[3],Add,CBit)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(CB[3],Add,CBit)},flag = {Preserved}}
 	end
 
 	CAPrintPlayerID = PlayerID
@@ -48686,7 +48761,7 @@ CIf(PlayerID,Condition,Action)
 			CDPrint__InputData_Error()
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48701,7 +48776,7 @@ CIf(PlayerID,Condition,Action)
 			Line[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48717,7 +48792,7 @@ CIf(PlayerID,Condition,Action)
 		}
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 				NVar(CA[1],AtLeast,11);
@@ -48730,12 +48805,12 @@ CIf(PlayerID,Condition,Action)
 
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetNVar(CB[1],Add,CBit*604)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetNVar(CB[1],Add,CBit*604)},flag = {Preserved}}
 		end
 	else -- DisplayLine Mode
 		CD__GetLine(Line[1],CA[1])
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48746,7 +48821,7 @@ CIf(PlayerID,Condition,Action)
 		}
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetNVar(CB[1],Add,CBit*604)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetNVar(CB[1],Add,CBit*604)},flag = {Preserved}}
 		end
 	end
 
@@ -48755,7 +48830,7 @@ CIf(PlayerID,Condition,Action)
 			CDPrint__InputData_Error()
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48767,7 +48842,7 @@ CIf(PlayerID,Condition,Action)
 		}
 	elseif Size[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48780,10 +48855,10 @@ CIf(PlayerID,Condition,Action)
 			},
 			flag = {Preserved}
 		}
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(CA[6],AtLeast,12)},actions = {SetNVar(CA[6],SetTo,11)},flag = {Preserved}}
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(CA[6],Exactly,0)},actions = {SetNVar(CA[6],SetTo,1)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),NVar(CA[6],AtLeast,12)},actions = {SetNVar(CA[6],SetTo,11)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),NVar(CA[6],Exactly,0)},actions = {SetNVar(CA[6],SetTo,1)},flag = {Preserved}}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48799,7 +48874,7 @@ CIf(PlayerID,Condition,Action)
 
 	-- Clear SVA54
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -48819,6 +48894,15 @@ CIf(PlayerID,Condition,Action)
 		CValue = Init[1]
 	end
 	CMask = Init[2]
+	local SMask = Init[3]
+	local SMaskAct = {}
+	if SMask ~= nil then
+		SMaskAct = {
+			SetMemory(0x6509B0,Add,-5),
+			SetDeaths(CurrentPlayer,SetTo,SMask,0),
+			SetMemory(0x6509B0,Add,5),
+		}
+	end
 	CWhile(PlayerID,CVar("X",CRet[1],AtLeast,1))
 		local Box = {}
 		for i = 0, 15 do
@@ -48829,7 +48913,7 @@ CIf(PlayerID,Condition,Action)
 		end
 		for i = 0, 2 do
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -48840,7 +48924,7 @@ CIf(PlayerID,Condition,Action)
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -48870,6 +48954,8 @@ CIf(PlayerID,Condition,Action)
 				SetMemory(0x6509B0,Add,-5);
 				SetDeaths(CurrentPlayer,SetTo,0xFFFFFFFF,0),
 				SetMemory(0x6509B0,Add,13),
+
+				SMaskAct,
 			},
 			flag = {Preserved}
 		}
@@ -48890,12 +48976,12 @@ CIf(PlayerID,Condition,Action)
 				CDoActions(PlayerID,{TSetNVar(CA[2],SetTo,CA[3]),SetNVar(CA[4],SetTo,0),SetNext("X",CAPrintVarAlloc)})
 			NIfXEnd()
 		NWhileEnd()
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
 		CAPrintVarAlloc = CAPrintVarAlloc + 1
 
 		CIf(PlayerID,{NVar(CB[4],Exactly,0),NVar(CA[7],Exactly,0)},{TSetNVar(CA[7],SetTo,CA[8])})
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -48914,7 +49000,7 @@ CIf(PlayerID,Condition,Action)
 			}
 			for i = 0, 3 do
 				local CBit = 2^i
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetCtrig1X("X",FuncAlloc,0x15C,0,Add,CBit*0x970)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),NVar(CA[1],Exactly,CBit,CBit)},actions = {SetCtrig1X("X",FuncAlloc,0x15C,0,Add,CBit*0x970)},flag = {Preserved}}
 			end
 
 			local Input = PlayerConvert2X(DisplayPlayer)
@@ -48922,7 +49008,7 @@ CIf(PlayerID,Condition,Action)
 				if Input[i+1] == 0 then
 					if i <= 8 then
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label();
 									LocalPlayerID(i);
@@ -48935,7 +49021,7 @@ CIf(PlayerID,Condition,Action)
 					else
 						local k = i-8
 						Trigger {
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 								conditions = {
 									Label();
 									LocalPlayerID("Ob"..k);
@@ -48951,7 +49037,7 @@ CIf(PlayerID,Condition,Action)
 
 			CWhile(PlayerID,CVar("X",CRet[1],AtLeast,1),SetCVar("X",CRet[1],Subtract,1))
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(FuncAlloc);
 					},
@@ -49036,7 +49122,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 				Line[5] = 0
 			end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49047,13 +49133,13 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 				for i = 0, 3 do
 					local CBit = 2^i
-					Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
+					Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
 				end
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49070,7 +49156,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49091,7 +49177,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					CD__SetMemoryX_InputData_Error()
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49112,7 +49198,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49122,7 +49208,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49132,7 +49218,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49144,7 +49230,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,53);
@@ -49159,7 +49245,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					Line[5] = 0
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49170,13 +49256,13 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 				for i = 0, 3 do
 					local CBit = 2^i
-					Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
+					Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
 				end
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49199,7 +49285,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49209,7 +49295,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49219,7 +49305,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49231,7 +49317,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,53);
@@ -49252,7 +49338,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					CD__SetMemoryX_InputData_Error()
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49273,7 +49359,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49283,7 +49369,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49293,7 +49379,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49309,7 +49395,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,53);
@@ -49324,7 +49410,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					Line[5] = 0
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49335,13 +49421,13 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 				for i = 0, 3 do
 					local CBit = 2^i
-					Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
+					Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
 				end
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49364,7 +49450,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49374,7 +49460,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49384,7 +49470,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -49400,7 +49486,7 @@ function CD__SetMemoryX(index,Line,Value,Mask)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,53);
@@ -49429,7 +49515,7 @@ function CD__Read(Index,Line,Output,Mask)
 			CD__Read_InputData_Error()
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -49443,7 +49529,7 @@ function CD__Read(Index,Line,Output,Mask)
 			Line[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -49454,10 +49540,10 @@ function CD__Read(Index,Line,Output,Mask)
 			}
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
 		end
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
 	end
 
 	f_Read(PlayerID,_Add(_Add(CB[1],_lShift(Index,3)),V(CRet[2])),Output,nil,Mask)
@@ -49477,7 +49563,7 @@ function CD__ReadX(Index,Line,Output,Multiplier,Mask)
 			CD__ReadX_InputData_Error()
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -49491,7 +49577,7 @@ function CD__ReadX(Index,Line,Output,Multiplier,Mask)
 			Line[5] = 0
 		end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -49502,10 +49588,10 @@ function CD__ReadX(Index,Line,Output,Multiplier,Mask)
 			}
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)},actions = {SetCVar("X",CRet[2],Add,CBit*604)},flag = {Preserved}}
 		end
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],AtLeast,12*604)},actions = {SetCVar("X",CRet[2],SetTo,11*604)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),CVar("X",CRet[2],Exactly,0)},actions = {SetCVar("X",CRet[2],SetTo,1*604)},flag = {Preserved}}
 	end
 
 	f_ReadX(PlayerID,_Add(_Add(CB[1],_lShift(Index,3)),V(CRet[2])),Output,Multiplier,Mask)
@@ -49532,7 +49618,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 	-- Input Var
 	if type(Size) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49546,7 +49632,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49564,7 +49650,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 	-- Get Start Curindex
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49582,7 +49668,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			Index[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49603,7 +49689,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 	-- Get Start & END
 	if type(Start) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49621,7 +49707,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			Start[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49641,7 +49727,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 
 	if type(End) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49659,7 +49745,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			End[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -49681,7 +49767,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 	if SVA1[4] == "V" then
 		if Mask == nil then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -49699,7 +49785,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -49722,7 +49808,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 		end
 		if Mask == nil then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49747,7 +49833,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49758,7 +49844,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49771,7 +49857,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49783,7 +49869,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49797,7 +49883,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 				}
 		else
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49822,7 +49908,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49833,7 +49919,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49846,7 +49932,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49858,7 +49944,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -49876,7 +49962,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 	CWhile(PlayerID,{CVar("X",INVA[1],AtLeast,1)},{SetCVar("X",INVA[1],Subtract,1)})
 		if Mask == nil then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -49893,7 +49979,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 			}
 		else
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 					FMemory(0x6509B0,AtLeast,0); -- Cp >= Start+CB[1]
@@ -49909,7 +49995,7 @@ function CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) --
 		end
 		-- Ctrig->Ctrig->Ctrig Version : CpªÁøÎ X
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -49940,7 +50026,7 @@ function CD__InputMask(Line,Mask,Start,End)
 	STPopTrigArr(PlayerID)
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -49953,7 +50039,7 @@ function CD__InputMask(Line,Mask,Start,End)
 			flag = {Preserved}
 		}
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -49970,7 +50056,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				CD__InputMask_Error()
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -49984,7 +50070,7 @@ function CD__InputMask(Line,Mask,Start,End)
 			for i = 0, 3 do
 				local CBit = 2^i
 				local NBit = CBit*604
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)}
+				Trigger {players = {PlayerID},conditions = {Label(),NVar(Line,Exactly,CBit,CBit)}
 					,actions = {SetMemory(0x6509B0,Add,NBit),SetCtrig1X("X",IndexAlloc,0x24,0,Add,NBit)},flag = {Preserved}}
 			end
 		end
@@ -49994,7 +50080,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				CD__InputMask_Error()
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50005,7 +50091,7 @@ function CD__InputMask(Line,Mask,Start,End)
 			}
 		elseif Start[4] == "V" then -- Start8
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50021,7 +50107,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50031,7 +50117,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50041,7 +50127,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50060,7 +50146,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				CD__InputMask_Error()
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50071,7 +50157,7 @@ function CD__InputMask(Line,Mask,Start,End)
 			}
 		elseif End[4] == "V" then -- End8
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50087,7 +50173,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50097,7 +50183,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50107,7 +50193,7 @@ function CD__InputMask(Line,Mask,Start,End)
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50123,7 +50209,7 @@ function CD__InputMask(Line,Mask,Start,End)
 		end
 		if type(Mask) == "number" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50134,7 +50220,7 @@ function CD__InputMask(Line,Mask,Start,End)
 			}
 		elseif Mask[4] == "V" then -- Mask
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50164,7 +50250,7 @@ function CD__Resize(Line,Status) -- 0x0D0D0A -> Letter
 		CA__SetMemoryX(_GIndex2(Line,0),0x0D0D0D0D,0xFFFFFFFF)
 	elseif Status[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 					NVar(Status,Exactly,0);
@@ -50175,7 +50261,7 @@ function CD__Resize(Line,Status) -- 0x0D0D0A -> Letter
 				flag = {Preserved}
 			}
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 					NVar(Status,AtLeast,1);
@@ -50209,7 +50295,7 @@ function CD__SetMaskX(index,Mask)
 		end
 		if type(Mask) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -50231,7 +50317,7 @@ function CD__SetMaskX(index,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -50248,7 +50334,7 @@ function CD__SetMaskX(index,Mask)
 				CDeviation = 0
 			end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -50274,7 +50360,7 @@ function CD__SetMaskX(index,Mask)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -50303,7 +50389,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50325,7 +50411,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			Base[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50347,7 +50433,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			Sign[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50364,7 +50450,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 
 	if SVA1[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50380,7 +50466,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			SVA1[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50394,7 +50480,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50411,7 +50497,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50432,7 +50518,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			table.insert(Box,SetCtrigX("X",FSCANV[4],0x158,0,SetTo,Variable[1],Variable[2],Variable[3],1,Variable[4]))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50455,7 +50541,7 @@ function CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) -- iutf8(SVA1) -> V
 			table.insert(Box,SetCtrigX("X",FSCANV[5],0x158,0,SetTo,Output[1],Output[2],Output[3],1,Output[4]))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50486,7 +50572,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50508,7 +50594,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			Base[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50530,7 +50616,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			Sign[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50547,7 +50633,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 
 	if SVA1[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50563,7 +50649,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			SVA1[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50577,7 +50663,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50594,7 +50680,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50605,7 +50691,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 				flag = {Preserved}
 			}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50631,7 +50717,7 @@ function CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) -- iutf8(SVA1) -> W
 			table.insert(Box,SetCtrigX("X",FSCANW[5],0x158,0,SetTo,Output[1],Output[2],Output[3],1,Output[4]))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50656,7 +50742,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 
 	if SVA1[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50671,7 +50757,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 			SVA1[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50685,7 +50771,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50705,7 +50791,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 			Size = 25
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50721,7 +50807,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50736,7 +50822,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 			},
 			flag = {Preserved}
 		}
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),CVar("X",FNAME[1],AtLeast,25)},actions = {SetCVar("X",FNAME[1],SetTo,25)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(),CVar("X",FNAME[1],AtLeast,25)},actions = {SetCVar("X",FNAME[1],SetTo,25)},flag = {Preserved}}
 	end
 
 	if DestDistance == nil then
@@ -50744,7 +50830,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 	end
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50755,7 +50841,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 		}
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50767,7 +50853,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 		DestDistance = 604*DestDistance
 	else
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50780,7 +50866,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 
 	-- Call f_ScanName
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50797,7 +50883,7 @@ function CD__ScanName(SVA1,Size,Output,Dest,DestDistance) -- icp949 -> cp949(Let
 	end
 
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50823,7 +50909,7 @@ function CA__GetName(SVA1,TargetPlayer,Output)
 		CD__ScanChat(SVA1,0x6D0FDC + 0x24*TargetPlayer,16,Output)
 	elseif TargetPlayer[4] == "V" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50835,7 +50921,7 @@ function CA__GetName(SVA1,TargetPlayer,Output)
 		for i = 0, 2 do
 			local CBit = 2^i
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						NVar(TargetPlayer,Exactly,CBit,CBit);
@@ -50864,7 +50950,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 			Offset[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50886,7 +50972,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 			Size[5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -50903,7 +50989,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 
 	if SVA1[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50917,7 +51003,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 			SVA1[5][5] = 0
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -50944,7 +51030,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 		Skip = 16
 	end
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -50968,7 +51054,7 @@ function CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) -- utf8(Offset) -> 
 			table.insert(Box,SetCtrigX("X",FCHAT[6],0x158,0,SetTo,Output[1],Output[2],Output[3],1,Output[4]))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label();
 			},
@@ -51211,7 +51297,7 @@ function TimerX(PlayerID,Index,Repeat,Init,Start,End,Step,Ratio,Order,InitAction
 
 						if Ret[i] >= 1 then
 							Trigger { -- Loop
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 									conditions = {
 										Label();
 										LoopCond,
@@ -51284,7 +51370,7 @@ function TimerX(PlayerID,Index,Repeat,Init,Start,End,Step,Ratio,Order,InitAction
 						end
 						if Ret[i] >= 1 then
 							Trigger { -- Loop
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 									conditions = {
 										Label();
 										LoopCond,
@@ -51389,7 +51475,7 @@ function TimerX(PlayerID,Index,Repeat,Init,Start,End,Step,Ratio,Order,InitAction
 						end
 						if Ret[i] >= 1 then
 							Trigger { -- Loop
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 									conditions = {
 										Label();
 										LoopCond,
@@ -51463,7 +51549,7 @@ function TimerX(PlayerID,Index,Repeat,Init,Start,End,Step,Ratio,Order,InitAction
 						end
 						if Ret[i] >= 1 then
 							Trigger { -- Loop
-								players = {ParsePlayer(PlayerID)},
+								players = {PlayerID},
 									conditions = {
 										Label();
 										LoopCond,
@@ -51516,7 +51602,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 		end
 		if type(Value) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51537,7 +51623,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51552,7 +51638,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51568,7 +51654,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51585,7 +51671,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 				CDeviation = 0
 			end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51610,7 +51696,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51625,7 +51711,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51645,7 +51731,7 @@ function CA__SetMemoryX(index,Value,Mask,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51693,7 +51779,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 		end
 		if type(Letter) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51714,7 +51800,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51729,7 +51815,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51745,7 +51831,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51762,7 +51848,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 				CDeviation = 0
 			end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51787,7 +51873,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51802,7 +51888,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51822,7 +51908,7 @@ function CA__SetLetter(index,Letter,utf8flag)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51854,7 +51940,7 @@ function CA__SetColor(index,ColorCode)
 		end
 		if type(ColorCode) == "number" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51875,7 +51961,7 @@ function CA__SetColor(index,ColorCode)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51890,7 +51976,7 @@ function CA__SetColor(index,ColorCode)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51906,7 +51992,7 @@ function CA__SetColor(index,ColorCode)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51924,7 +52010,7 @@ function CA__SetColor(index,ColorCode)
 			end
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51949,7 +52035,7 @@ function CA__SetColor(index,ColorCode)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 							NVar(index,AtMost,0);
@@ -51964,7 +52050,7 @@ function CA__SetColor(index,ColorCode)
 				DoActionsX(PlayerID,SetCtrig1X(index[1],index[2],0x15C,index[3],Add,Deviation))
 				f_iMod(PlayerID,V(NRet[1]),index,CB[2])
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -51984,7 +52070,7 @@ function CA__SetColor(index,ColorCode)
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -52000,7 +52086,7 @@ function CA__SetColor(index,ColorCode)
 end
 --[[
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -52020,7 +52106,7 @@ end
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -52033,7 +52119,7 @@ end
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 						NVar(index,AtLeast,0);
@@ -52044,7 +52130,7 @@ end
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 					},
@@ -52106,12 +52192,13 @@ end
 
 ARet = {"X",0xF000,0,"V"} -- FixText Temp
 CAPrintVarAlloc = 0xF002
+CAPrintVarLimit = 0xF300
 CAPrintPlayerID = {}
 CAPrintDataArr = {}
 CAPrintCreateArr = {}
 
 function CAPrintAllocCheck()
-	if CAPrintVarAlloc >= 0xF400 then
+	if CAPrintVarAlloc >= CAPrintVarLimit then
 		CAPrintAllocation_Overflow()
 	end
 end 
@@ -52174,7 +52261,7 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 	CIf(PlayerID,NVar(CA[1],AtLeast,1))
 		if iStrid[1][4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -52192,7 +52279,7 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 		else
 			for i = 1, #iStrid do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 						NVar(CA[1],Exactly,i);
@@ -52230,13 +52317,13 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 				CDoActions(PlayerID,{TSetNVar(CA[2],SetTo,CA[3]),SetNVar(CA[4],SetTo,0),SetNext("X",CAPrintVarAlloc)})
 			NIfXEnd()
 		NWhileEnd()
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
 		CAPrintVarAlloc = CAPrintVarAlloc + 1
 
 		CIf(PlayerID,NVar(CA[6],Exactly,0x1,0x1),SetNVar(ARet,SetTo,0)) -- 0x1 : Save Line
 			for i = 0, 3 do
 				local CBit = 2^i
-				Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
+				Trigger {players = {PlayerID},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
 			end
 		CIfEnd()
 
@@ -52312,7 +52399,7 @@ function CBPrint(iTblid,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
 	CIf(PlayerID,NVar(CA[1],AtLeast,1))
 		if iTblid[1][4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -52330,7 +52417,7 @@ function CBPrint(iTblid,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
 		else
 			for i = 1, #iTblid do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 						NVar(CA[1],Exactly,i);
@@ -52368,7 +52455,7 @@ function CBPrint(iTblid,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
 				CDoActions(PlayerID,{TSetNVar(CA[2],SetTo,CA[3]),SetNVar(CA[4],SetTo,0),SetNext("X",CAPrintVarAlloc)})
 			NIfXEnd()
 		NWhileEnd()
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
 		CAPrintVarAlloc = CAPrintVarAlloc + 1
 
 	CIfEnd({SetNVar(CA[2],Subtract,1)})
@@ -52385,12 +52472,12 @@ function FixText(PlayerID,Preset)
 		DoActionsX(PlayerID,SetNVar(ARet,SetTo,0))
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
 		end
 	end
 
 	if bit32.band(Preset, 2) == 2 then -- 0x2 : Recover Line
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label()},actions = {
+		Trigger {players = {PlayerID},conditions = {Label()},actions = {
 			SetCtrig1X(ARet[1],ARet[2],0x158,ARet[3],SetTo,EPD(0x640B58));
 			SetCtrig1X(ARet[1],ARet[2],0x148,ARet[3],SetTo,0xFFFFFFFF);
 			SetCtrig1X(ARet[1],ARet[2],0x160,ARet[3],SetTo,SetTo*16777216,0xFF000000);
@@ -52427,7 +52514,7 @@ function CSPrint(iStrid,SVA32,DisplayPlayer,FixText,PlayerID,Condition,CpAction,
 		DoActionsX(PlayerID,SetNVar(ARet,SetTo,0))
 		for i = 0, 3 do
 			local CBit = 2^i
-			Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
+			Trigger {players = {PlayerID},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(ARet,Add,CBit)},flag = {Preserved}}
 		end
 	end
 
@@ -52437,7 +52524,7 @@ function CSPrint(iStrid,SVA32,DisplayPlayer,FixText,PlayerID,Condition,CpAction,
 		CIf(PlayerID,Condition,Action)
 	end
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -52524,7 +52611,7 @@ function Print_String(PlayerID, Dest, String, InitBytes) -- EPD / CPRead
 	STPopTrigArr(PlayerID)
 	if type(Dest) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -52535,7 +52622,7 @@ function Print_String(PlayerID, Dest, String, InitBytes) -- EPD / CPRead
 		}
 	elseif Dest[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -52552,7 +52639,7 @@ function Print_String(PlayerID, Dest, String, InitBytes) -- EPD / CPRead
 		MovX(PlayerID,TempRet,Dest)
 		Dest = TempRet
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -52630,7 +52717,7 @@ function Print_StringX(PlayerID, DestVA, String, InitBytes) -- EPD / CPRead
 	STPopTrigArr(PlayerID)
 	if DestVA[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -52643,7 +52730,7 @@ function Print_StringX(PlayerID, DestVA, String, InitBytes) -- EPD / CPRead
 		local TempRet = {"X",CRet[1],0,"V"}
 		MovZ(PlayerID,TempRet,DestVA,0x15C)
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -52777,7 +52864,7 @@ function GetPlayerLength(PlayerID,TargetPlayer,Output,Multiplier)
 	end
 	for i = 2, 15 do
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				MemoryB(0x6D0FDC+i+0x24*TargetPlayer,AtLeast,1);
@@ -52815,7 +52902,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x60BCEF00+Color[4])})
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*1,0xFF);
@@ -52829,7 +52916,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		for i = 7, 0, -1 do -- 1 -> £±
  			CBit = 2^i 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -52841,7 +52928,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*1,0xFF);
@@ -52852,7 +52939,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x1,0xFF);
@@ -52863,7 +52950,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*1,0xFF);
@@ -52874,7 +52961,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*1,0xFF);
@@ -52886,7 +52973,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		}
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x100,0xFF00);
@@ -52900,7 +52987,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		for i = 15, 8, -1 do -- 2 -> £≤
  			CBit = 2^i 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -52912,7 +52999,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x100,0xFF00);
@@ -52923,7 +53010,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x100,0xFF00);
@@ -52934,7 +53021,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x100,0xFF00);
@@ -52945,7 +53032,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x100,0xFF00);
@@ -52956,7 +53043,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x100,0xFF00);
@@ -52969,7 +53056,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x10000,0xFF0000);
@@ -52983,7 +53070,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		for i = 23, 16, -1 do -- 3 -> £≥
  			CBit = 2^i 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -52995,7 +53082,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x10000,0xFF0000);
@@ -53006,7 +53093,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x10000,0xFF0000);
@@ -53017,7 +53104,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x10000,0xFF0000);
@@ -53028,7 +53115,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x10000,0xFF0000);
@@ -53039,7 +53126,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x10000,0xFF0000);
@@ -53052,7 +53139,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x1000000,0xFF000000);
@@ -53066,7 +53153,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 		for i = 31, 24, -1 do -- 4 -> £¥
  			CBit = 2^i 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -53078,7 +53165,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			}
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x1000000,0xFF000000);
@@ -53089,7 +53176,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x1000000,0xFF000000);
@@ -53100,7 +53187,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x1000000,0xFF000000);
@@ -53111,7 +53198,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x1000000,0xFF000000);
@@ -53122,7 +53209,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x1000000,0xFF000000);
@@ -53138,7 +53225,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1][1],OutputVA[1][2],0x15C,OutputVA[1][3],SetTo,0x60BCEF00+Color[1])})
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*1,0xFF);
@@ -53152,7 +53239,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			for i = 7, 0, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -53164,7 +53251,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				}
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*1,0xFF);
@@ -53175,7 +53262,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x1,0xFF);
@@ -53186,7 +53273,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x1,0xFF);
@@ -53197,7 +53284,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x1,0xFF);
@@ -53213,7 +53300,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			DoActionsX(PlayerID,{SetCtrig1X(OutputVA[2][1],OutputVA[2][2],0x15C,OutputVA[2][3],SetTo,0x60BCEF00+Color[2])})
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x100,0xFF00);
@@ -53227,7 +53314,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			for i = 15, 8, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -53239,7 +53326,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				}
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x100,0xFF00);
@@ -53250,7 +53337,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x100,0xFF00);
@@ -53261,7 +53348,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x100,0xFF00);
@@ -53272,7 +53359,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x100,0xFF00);
@@ -53288,7 +53375,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			DoActionsX(PlayerID,{SetCtrig1X(OutputVA[3][1],OutputVA[3][2],0x15C,OutputVA[3][3],SetTo,0x60BCEF00+Color[3])})
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x10000,0xFF0000);
@@ -53302,7 +53389,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			for i = 23, 16, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -53314,7 +53401,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				}
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x10000,0xFF0000);
@@ -53325,7 +53412,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x10000,0xFF0000);
@@ -53336,7 +53423,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x10000,0xFF0000);
@@ -53347,7 +53434,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x10000,0xFF0000);
@@ -53363,7 +53450,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			DoActionsX(PlayerID,{SetCtrig1X(OutputVA[4][1],OutputVA[4][2],0x15C,OutputVA[4][3],SetTo,0x60BCEF00+Color[4])})
 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x60*0x1000000,0xFF000000);
@@ -53377,7 +53464,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 			for i = 31, 24, -1 do -- 1 -> £±
 	 			CBit = 2^i 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,CBit,CBit);
@@ -53389,7 +53476,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				}
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x5C*0x1000000,0xFF000000);
@@ -53400,7 +53487,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],Exactly,0x20*0x1000000,0xFF000000);
@@ -53411,7 +53498,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x1F*0x1000000,0xFF000000);
@@ -53422,7 +53509,7 @@ function ItoX(PlayerID,Input,OutputVA,Color) -- VA[0~3]
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x7F*0x1000000,0xFF000000);
@@ -53498,7 +53585,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
  	local X = {}
  	if Sign == 0 then
 	 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -53513,7 +53600,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	else
 		CIfX(PlayerID, CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF))
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -53527,7 +53614,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 			}
 		CElseX()
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -53541,7 +53628,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -53563,31 +53650,31 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x00000D00 + Color*0x00000001),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002B00,0x0000FF00)},flag = {Preserved}}
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002D00,0x0000FF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002B00,0x0000FF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002D00,0x0000FF00)},flag = {Preserved}}
 	 elseif Sign == 2 then
 	 	DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x000D0D0D + Color * 0x01000000),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x0000200D),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002B,0x000000FF)},flag = {Preserved}}
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002D,0x000000FF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002B,0x000000FF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002D,0x000000FF)},flag = {Preserved}}
 	 end
 
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
 	 	
  	for i = 2, 0, -1 do
  			CBit = 2^i * 1000000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53603,7 +53690,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53619,7 +53706,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53635,7 +53722,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53651,7 +53738,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53667,7 +53754,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53683,7 +53770,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53699,7 +53786,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53715,7 +53802,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53731,7 +53818,7 @@ function ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53839,7 +53926,7 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 
  	local X = {}
  	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -53857,18 +53944,18 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010101),
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101)})
 
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
 	 	
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53880,11 +53967,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA,0x0000000F);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00000001*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA,0x0000000F);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00000001*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53896,11 +53983,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA00,0x00000F00);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00000100*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA00,0x00000F00);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00000100*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x100000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53912,11 +53999,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA0000,0x000F0000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00010000*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA0000,0x000F0000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x00010000*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53928,11 +54015,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x01000000*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0xA000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,0x01000000*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53944,11 +54031,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA,0x0000000F);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00000001*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA,0x0000000F);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00000001*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x100
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53960,11 +54047,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA00,0x00000F00);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00000100*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA00,0x00000F00);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00000100*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53976,11 +54063,11 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA0000,0x000F0000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00010000*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA0000,0x000F0000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x00010000*Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -53992,7 +54079,7 @@ function ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) -
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x01000000*Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0xA000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,0x01000000*Case)},flag = {Preserved}}
 	if DigitMax == 7 then
 	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0x000000FF))
 	 elseif DigitMax == 6 then
@@ -54085,7 +54172,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
  	local X = {}
  	if Sign == 0 then
 	 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -54100,7 +54187,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	else
 		CIfX(PlayerID, CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF))
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -54114,7 +54201,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 			}
 		CElseX()
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -54128,7 +54215,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -54171,8 +54258,8 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+9,SetTo, 0x90BCEF00+Color[3]),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+10,SetTo,0x90BCEF00+Color[2]),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+11,SetTo,0x90BCEF00+Color[1])})
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x8BBCEF00,0xFFFFFF00)},flag = {Preserved}}
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x8DBCEF00,0xFFFFFF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x8BBCEF00,0xFFFFFF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x8DBCEF00,0xFFFFFF00)},flag = {Preserved}}
 	 elseif Sign == 2 then
 	 	DoActionsX(PlayerID,{
 	 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+0,SetTo, 0x000D0D0D+Color[11]*0x01000000),
@@ -54187,24 +54274,24 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+9,SetTo, 0x90BCEF00+Color[3]),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+10,SetTo,0x90BCEF00+Color[2]),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+11,SetTo,0x90BCEF00+Color[1])})
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x008BBCEF,0x00FFFFFF)},flag = {Preserved}}
-	 	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x008DBCEF,0x00FFFFFF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x008BBCEF,0x00FFFFFF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x008DBCEF,0x00FFFFFF)},flag = {Preserved}}
 	 end
 	
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+9,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+10,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+9,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+10,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
 	
  	for i = 2, 0, -1 do
  			CBit = 2^i * 1000000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54220,7 +54307,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54236,7 +54323,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54252,7 +54339,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54268,7 +54355,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54284,7 +54371,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54300,7 +54387,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54316,7 +54403,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 100
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54332,7 +54419,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 10
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54348,7 +54435,7 @@ function ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) 
 	for i = 3, 0, -1 do
  			CBit = 2^i * 1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54524,7 +54611,7 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 
  	local X = {}
  	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -54549,18 +54636,18 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,SetTo, 0x90BCEF00+Color[2]),
 			SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,SetTo, 0x90BCEF00+Color[1])})
 	
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
-	 Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,0xF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,SetTo,ZeroMode,0xFFFFFF00)},flag = {Preserved}}
 	
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54572,11 +54659,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1000000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54588,11 +54675,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x100000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54604,11 +54691,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54620,11 +54707,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+4,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1000
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54636,11 +54723,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+5,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x100
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54652,11 +54739,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+6,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x10
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54668,11 +54755,11 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+7,Add,Case)},flag = {Preserved}}
 	for i = 3, 0, -1 do
  			CBit = 2^i * 0x1
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
@@ -54684,7 +54771,7 @@ function ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) 
 				flag = {Preserved}
 			}
 	end
-	Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,Add,Case)},flag = {Preserved}}
+	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,AtLeast,0x0A000000,0x0F000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+8,Add,Case)},flag = {Preserved}}
 	if DigitMax == 7 then
 	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFFFF00))
 	 elseif DigitMax == 6 then
@@ -55469,7 +55556,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 	if SourceArr == "W" then -- 8bytes 
 		if DestArr == "W" then -- 8 << 8
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -55488,7 +55575,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 				}
 		elseif DestArr[1] == "Cp" then -- Cp << 8
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -55510,7 +55597,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -55533,7 +55620,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 				end
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -55565,7 +55652,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 					end
 				end
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55578,7 +55665,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 				local Box = {}
 				if DestArr == "W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55606,7 +55693,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 						table.insert(Box,SetCtrigX(Source[2][1],Source[2][2],0x158,Source[2][3],SetTo,Dest[2][1],Dest[2][2],Dest[2][3],1,Dest[2][4]))
 					end
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55625,7 +55712,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 				local Box = {}
 				if DestArr == "W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55654,7 +55741,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 					end
 					
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55671,7 +55758,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 				local Box = {}
 				if DestArr == "W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55705,7 +55792,7 @@ function f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- << (∏≈≈©∑Œ«¸)
 					end
 					
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -55756,7 +55843,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 			table.insert(Box0,SetCtrig1X(Dest[1],Dest[2],0x19C,Dest[3],SetTo,0,Mask2))
 		end
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55783,7 +55870,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55810,7 +55897,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 		RecoverCp(PlayerID)
 	elseif #Dest == 2 and Dest[1][4] == "V" and Dest[2][4] == "V" and Source[4] == "WA" then -- Mov Vx2, WA / {Index[1],Index[2],Index[3],"WA",WArray(WAPlayer,WAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55836,7 +55923,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55863,7 +55950,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 		RecoverCp(PlayerID)
 	elseif #Dest == 2 and Source[4] == "WA" then -- Mov Memx2, WA / {Index[1],Index[2],Index[3],"WA",WArray(WAPlayer,WAIndex,0),Index[5]}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55889,7 +55976,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55916,7 +56003,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 		RecoverCp(PlayerID)
 	elseif Dest[4] == "WA" and Source[4] == "W" then -- Mov WA, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55942,7 +56029,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 			}
 	elseif Dest[4] == "LA_V" and Source[4] == "W" then -- Mov LA_V, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55956,7 +56043,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -55974,7 +56061,7 @@ function MovW(PlayerID,Dest,Source,Mode,Mask,Clear) -- W << WA / WA,LA << W (Val
 
 	elseif Dest[4] == "LA_W" and Source[4] == "W" then -- Mov LA_W, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -56207,7 +56294,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 	if SourceArr == "WA" then -- 8bytes 
 		if DestArr == "W" then -- 8 << 8
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56235,7 +56322,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56260,7 +56347,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 		elseif DestArr == "WA" then -- WA << WA
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56297,7 +56384,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56325,7 +56412,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56338,7 +56425,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 		elseif DestArr == "LA_V" then -- LA_V << WA
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56353,7 +56440,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56382,7 +56469,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56410,7 +56497,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56423,7 +56510,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 		elseif DestArr == "LA_W" then -- LA_W << WA
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56458,7 +56545,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56486,7 +56573,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56519,7 +56606,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 			end
 
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56545,7 +56632,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -56573,7 +56660,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 	elseif SourceArr == "W" then
 		if DestArr == "WA" then -- Mov WA, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -56600,7 +56687,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				flag = {Preserved}
 			}
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56612,7 +56699,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 		elseif DestArr == "LA_V" then-- Mov LA_V, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -56626,7 +56713,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -56644,7 +56731,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				flag = {Preserved}
 			}
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56656,7 +56743,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				}
 		elseif DestArr == "LA_W" then -- Mov LA_W, W 
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -56681,7 +56768,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 				flag = {Preserved}
 			}
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56697,7 +56784,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 			if type(SourceArr[2]) == "number" then -- 4/Mem << {4,4}
 				if DestArr == "WA" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56717,7 +56804,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56729,7 +56816,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_V" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56743,7 +56830,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56755,7 +56842,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56767,7 +56854,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56785,7 +56872,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56799,7 +56886,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 			else -- 4/Mem << {4,V}
 				if DestArr == "WA" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56822,7 +56909,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56834,7 +56921,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_V" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56848,7 +56935,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56863,7 +56950,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56875,7 +56962,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56896,7 +56983,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56912,7 +56999,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 			if type(SourceArr[2]) == "number" then -- 4/Mem << {V,4}
 				if DestArr == "WA" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56935,7 +57022,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56947,7 +57034,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_V" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56961,7 +57048,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56976,7 +57063,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -56988,7 +57075,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57009,7 +57096,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57023,7 +57110,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 			else -- 4/Mem << {v,V}
 				if DestArr == "WA" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57050,7 +57137,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57062,7 +57149,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_V" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57076,7 +57163,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57095,7 +57182,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57107,7 +57194,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 					}
 				elseif DestArr == "LA_W" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57132,7 +57219,7 @@ function f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) -- W,Cp,{4/Mem,
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57202,7 +57289,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 		if Dest[1][4] == "V" then 
 			if Dest[2] == 0 then -- lower 32bit
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57218,7 +57305,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				}
 			elseif Dest[2] == 1 then -- upper 32bit
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57238,7 +57325,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 		elseif Dest[1][4] == "VA" then -- W -> VA
 			if Dest[2] == 0 then -- lower 32bit
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57257,7 +57344,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57268,7 +57355,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				}
 			elseif Dest[2] == 1 then -- upper 32bit
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57287,7 +57374,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57306,7 +57393,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 		if Dest[1][4] == "V" then 
 			if Dest[2] == 0 then -- lower 32bit
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57330,7 +57417,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57356,7 +57443,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				RecoverCp(PlayerID)
 			elseif Dest[2] == 1 then -- upper 32bit
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57380,7 +57467,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57410,7 +57497,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 		elseif Dest[1][4] == "VA" then -- WA -> VA
 			if Dest[2] == 0 then -- lower 32bit
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57439,7 +57526,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57468,7 +57555,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57482,7 +57569,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				RecoverCp(PlayerID)
 			elseif Dest[2] == 1 then -- upper 32bit
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57511,7 +57598,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57540,7 +57627,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57560,7 +57647,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 	elseif Source[4] == "V" then -- V -> W  
 		if Dest[4] == "W" then 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57580,7 +57667,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				}
 		elseif Dest[4] == "WA" then -- V -> WA 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57600,7 +57687,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57611,7 +57698,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57626,7 +57713,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 	elseif Source[4] == "VA" then
 		if Dest[4] == "W" then -- VA -> W
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57651,7 +57738,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57678,7 +57765,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 			RecoverCp(PlayerID)
 		elseif Dest[4] == "WA" then -- VA -> WA 
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57707,7 +57794,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57732,7 +57819,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57746,7 +57833,7 @@ function f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í W Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57782,7 +57869,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 	if Source[4] == "W" then -- W -> V 
 		if Dest[4] == "V" then 
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57797,7 +57884,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 				}
 		elseif Dest[4] == "VA" then -- W -> VA
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57819,7 +57906,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 	elseif Source[4] == "WA" then -- WA -> V
 		if Dest[4] == "V" then 
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57842,7 +57929,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57868,7 +57955,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 				RecoverCp(PlayerID)
 		elseif Dest[4] == "VA" then -- WA -> VA
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57897,7 +57984,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -57927,7 +58014,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 	elseif Source[4] == "V" then -- V -> W  
 		if Dest[4] == "W" then 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57941,7 +58028,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000);
@@ -57953,7 +58040,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 				}
 		elseif Dest[4] == "WA" then -- V -> WA 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -57977,7 +58064,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Source[1],Source[2],0x15C,Source[3],AtLeast,0x80000000);
@@ -57988,7 +58075,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58003,7 +58090,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 	elseif Source[4] == "VA" then
 		if Dest[4] == "W" then -- VA -> W
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58027,7 +58114,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58047,7 +58134,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0x80000000);
@@ -58061,7 +58148,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 			RecoverCp(PlayerID)
 		elseif Dest[4] == "WA" then -- VA -> WA 
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58091,7 +58178,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58112,7 +58199,7 @@ function f_iCast(PlayerID,Dest,Source) -- V °Í W Type iCasting (Signed Number)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						Deaths(CurrentPlayer,AtLeast,0x80000000,0);
@@ -58281,7 +58368,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 		if SourceArr == "W" then -- Write  W, W : EPD(W) << W
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58308,7 +58395,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58322,7 +58409,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 			if type(SourceArr[1]) == "number" then
 				if type(SourceArr[2]) == "number" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58340,7 +58427,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58352,7 +58439,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58375,7 +58462,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58389,7 +58476,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 			else
 				if type(SourceArr[2]) == "number" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58412,7 +58499,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58424,7 +58511,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58451,7 +58538,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58467,7 +58554,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 	else -- {V,V}
 		if SourceArr == "W" then -- Write  Vx2, W : EPD(Vx2) << W
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58494,7 +58581,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -58508,7 +58595,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 			if type(SourceArr[1]) == "number" then
 				if type(SourceArr[2]) == "number" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58526,7 +58613,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58538,7 +58625,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58561,7 +58648,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58575,7 +58662,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 			else
 				if type(SourceArr[2]) == "number" then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58598,7 +58685,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58610,7 +58697,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 					}
 				else
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58637,7 +58724,7 @@ function f_LWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead ¥Î¿¿)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -58905,7 +58992,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 	-- Input Data CRet[1],CRet[2] << EPD 
 	if InputArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -58930,7 +59017,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 		for i = 1, 2 do
 			if type(InputArr[i]) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrig1X("X",CRet[i],0x15C,0,SetTo,EPD(Input[i]));
@@ -58939,7 +59026,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 				}
 			elseif InputArr[i] == "Mem" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrigX("X",CRet[i],0x15C,0,SetTo,Input[i][1],Input[i][2],Input[i][3],1,Input[i][4]);
@@ -58948,7 +59035,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 				}
 			elseif InputArr[i] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrigX(Input[i][1],Input[i][2],0x158,Input[i][3],SetTo,"X",CRet[i],0x15C,1,0);
@@ -58968,7 +59055,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 
 	-- Call f_LRead
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -58991,7 +59078,7 @@ function f_LRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) πÊΩƒ¿∏∑Œ ¿–¿Ω
 			table.insert(ClearAct,SetCtrig1X(Output[1],Output[2],0x19C,Output[3],SetTo,0))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -59275,7 +59362,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 	-- Input Data CRet[1],CRet[2] << EPD 
 	if InputArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -59300,7 +59387,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 		for i = 1, 2 do
 			if type(InputArr[i]) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrig1X("X",CRet[i],0x15C,0,SetTo,EPD(Input[i]));
@@ -59309,7 +59396,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 				}
 			elseif InputArr[i] == "Mem" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrigX("X",CRet[i],0x15C,0,SetTo,Input[i][1],Input[i][2],Input[i][3],1,Input[i][4]);
@@ -59318,7 +59405,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 				}
 			elseif InputArr[i] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SetCtrigX(Input[i][1],Input[i][2],0x158,Input[i][3],SetTo,"X",CRet[i],0x15C,1,0);
@@ -59340,7 +59427,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 	FLReadXCheck = 1
 	if Multiplier == 0 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59352,7 +59439,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 1 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59364,7 +59451,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 2 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59376,7 +59463,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 3 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59388,7 +59475,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 4 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59400,7 +59487,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 5 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59412,7 +59499,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 6 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59424,7 +59511,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == 7 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59436,7 +59523,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -1 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59448,7 +59535,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -2 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59460,7 +59547,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -3 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59472,7 +59559,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -4 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59484,7 +59571,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -5 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59496,7 +59583,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -6 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59508,7 +59595,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			}
 	elseif Multiplier == -7 then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -59535,7 +59622,7 @@ function f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) -- (CPRead) πÊΩƒ¿
 			table.insert(ClearAct,SetCtrig1X(Output[1],Output[2],0x19C,Output[3],SetTo,0))
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -59872,7 +59959,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -59904,7 +59991,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -59913,7 +60000,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -59924,7 +60011,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -59941,7 +60028,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -59973,7 +60060,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -59982,7 +60069,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -59993,7 +60080,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -60007,7 +60094,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LAnd
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -60025,7 +60112,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60048,7 +60135,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60065,7 +60152,7 @@ function f_LAnd(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60387,7 +60474,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60419,7 +60506,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60428,7 +60515,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60439,7 +60526,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60456,7 +60543,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60488,7 +60575,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -60497,7 +60584,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -60508,7 +60595,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -60522,7 +60609,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LOr
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -60540,7 +60627,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60563,7 +60650,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60580,7 +60667,7 @@ function f_LOr(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60902,7 +60989,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -60934,7 +61021,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60943,7 +61030,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60954,7 +61041,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -60971,7 +61058,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61003,7 +61090,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61012,7 +61099,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61023,7 +61110,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61037,7 +61124,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LXor
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -61055,7 +61142,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61078,7 +61165,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61095,7 +61182,7 @@ function f_LXor(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61333,7 +61420,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61365,7 +61452,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61374,7 +61461,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61385,7 +61472,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61399,7 +61486,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 
 	-- Call f_LNot
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -61417,7 +61504,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61440,7 +61527,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61457,7 +61544,7 @@ function f_LNot(PlayerID,Dest,Source,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61785,7 +61872,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61817,7 +61904,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61826,7 +61913,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61837,7 +61924,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -61854,7 +61941,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61886,7 +61973,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61895,7 +61982,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61906,7 +61993,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -61920,7 +62007,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LAdd
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -61938,7 +62025,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61961,7 +62048,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -61978,7 +62065,7 @@ function f_LAdd(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62300,7 +62387,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62332,7 +62419,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62341,7 +62428,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62352,7 +62439,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62369,7 +62456,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62401,7 +62488,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -62410,7 +62497,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -62421,7 +62508,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -62435,7 +62522,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LSub
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -62453,7 +62540,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62476,7 +62563,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62493,7 +62580,7 @@ function f_LSub(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62731,7 +62818,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62763,7 +62850,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62772,7 +62859,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62783,7 +62870,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -62797,7 +62884,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 
 	-- Call f_LNeg
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -62815,7 +62902,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62838,7 +62925,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -62855,7 +62942,7 @@ function f_LNeg(PlayerID,Dest,Source,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63177,7 +63264,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63209,7 +63296,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63218,7 +63305,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63229,7 +63316,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63246,7 +63333,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63278,7 +63365,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -63287,7 +63374,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -63298,7 +63385,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -63312,7 +63399,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LiSub
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -63330,7 +63417,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63353,7 +63440,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63370,7 +63457,7 @@ function f_LiSub(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63608,7 +63695,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63640,7 +63727,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63649,7 +63736,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63660,7 +63747,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -63674,7 +63761,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 
 	-- Call f_LAbs
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -63692,7 +63779,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63715,7 +63802,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63732,7 +63819,7 @@ function f_LAbs(PlayerID,Dest,Source,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63882,7 +63969,7 @@ function f_LRand(PlayerID,Dest,Mask)
 
 	-- Call f_LRand
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -63900,7 +63987,7 @@ function f_LRand(PlayerID,Dest,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63923,7 +64010,7 @@ function f_LRand(PlayerID,Dest,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -63940,7 +64027,7 @@ function f_LRand(PlayerID,Dest,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64179,7 +64266,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64211,7 +64298,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64220,7 +64307,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64231,7 +64318,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64246,7 +64333,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 	-- Input Data CRet[1] << Value
 	if type(Operand) == "number" then
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {Label(0);},
 				actions = {
 					SetCtrig1X("X",CRet[1],0x15C,0,SetTo,Operand,0x3F);
@@ -64255,7 +64342,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 			}
 	elseif Operand[4] == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64272,7 +64359,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 		f_Cast(PlayerID,{{"X",CRet[1],0,"V"},0},Operand,0,{0x3F,0})
 	elseif Operand[4] == "V" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64290,7 +64377,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LlShift
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -64309,7 +64396,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64332,7 +64419,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64349,7 +64436,7 @@ function f_LlShift(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64673,7 +64760,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64705,7 +64792,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64714,7 +64801,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64725,7 +64812,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -64743,7 +64830,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64775,7 +64862,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -64784,7 +64871,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -64795,7 +64882,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -64809,7 +64896,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LDiv
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -64828,7 +64915,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64851,7 +64938,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -64868,7 +64955,7 @@ function f_LDiv(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65191,7 +65278,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65223,7 +65310,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65232,7 +65319,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65243,7 +65330,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65261,7 +65348,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65293,7 +65380,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65302,7 +65389,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65313,7 +65400,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65327,7 +65414,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LMod
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -65346,7 +65433,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65369,7 +65456,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65386,7 +65473,7 @@ function f_LMod(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65710,7 +65797,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65742,7 +65829,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65751,7 +65838,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65762,7 +65849,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -65780,7 +65867,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65812,7 +65899,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65821,7 +65908,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65832,7 +65919,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -65846,7 +65933,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LiDiv
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -65864,7 +65951,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65887,7 +65974,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[4],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -65904,7 +65991,7 @@ function f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66228,7 +66315,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66260,7 +66347,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66269,7 +66356,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66280,7 +66367,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66298,7 +66385,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66330,7 +66417,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66339,7 +66426,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66350,7 +66437,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66364,7 +66451,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LiMod
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -66382,7 +66469,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66405,7 +66492,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[4],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66422,7 +66509,7 @@ function f_LiMod(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66745,7 +66832,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66777,7 +66864,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66786,7 +66873,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66797,7 +66884,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -66814,7 +66901,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66846,7 +66933,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66855,7 +66942,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66866,7 +66953,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -66880,7 +66967,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LMul
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -66899,7 +66986,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66922,7 +67009,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[1],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -66939,7 +67026,7 @@ function f_LMul(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -67261,7 +67348,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 	local SourceC = {}
 	if SourceArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -67293,7 +67380,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #SourceC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -67302,7 +67389,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -67313,7 +67400,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #SourceC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						SourceN,
@@ -67331,7 +67418,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 	local OperandC = {}
 	if OperandArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -67363,7 +67450,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 		end
 		if #OperandC == 0 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -67372,7 +67459,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 1 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -67383,7 +67470,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 				}
 		elseif #OperandC == 2 then
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {Label(0);},
 					actions = {
 						OperandN,
@@ -67397,7 +67484,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 
 	-- Call f_LiMul
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -67416,7 +67503,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 	
 	if DestArr == "W" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -67439,7 +67526,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 		MovW(PlayerID,Dest,{"X",WRet[2],0,"W"},SetTo,Mask)
 	elseif DestArr == "Cp" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -67456,7 +67543,7 @@ function f_LiMul(PlayerID,Dest,Source,Operand,Mask)
 			flag = {Preserved}
 		}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -68300,7 +68387,7 @@ end
 
 --[[ ¿Ã∞… ø≠æÓ∫ª ªÁ∂˜ø°∞‘ ¡÷¥¬ º±π∞.txt
 Trigger { -- ∞™ ¥Î¿‘ TRIG
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -68313,7 +68400,7 @@ Trigger { -- ∞™ ¥Î¿‘ TRIG
 			flag = {Preserved}
 		}
 Trigger { -- ∞™ ¡ıΩƒ TRIG
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -68331,7 +68418,7 @@ Trigger { -- ∞™ ¡ıΩƒ TRIG
 		}
 
 Trigger { --  Switch Actions for SLoopN 
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -68359,7 +68446,7 @@ function _SLoop(PlayerID,Repeat,Conditions,Actions,EndActions) -- √ º“«¸ π›∫ππÆ 
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions, -- ∑Á«¡ µµ¡ﬂ ¡∂∞« ∫“∏∏¡∑Ω√ π´«— ∑Á«¡ πﬂª˝ (∑Á«¡ Ω√¿€ ¡∂∞«¿∏∑Œ∏∏ ªÁøÎ)
@@ -68374,7 +68461,7 @@ function _SLoop(PlayerID,Repeat,Conditions,Actions,EndActions) -- √ º“«¸ π›∫ππÆ 
 			flag = {Preserved}
 		}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -68400,7 +68487,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 			SLoop_InputError()
 		end
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc);
 					Conditions,
@@ -68413,7 +68500,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 				flag = {Preserved}
 			}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc+1);
 				},
@@ -68426,7 +68513,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 					flag = {Preserved}
 				}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc+2);
 				},
@@ -68466,7 +68553,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 		STPopTrigArr(PlayerID)
 
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc);
 					NVar(Repeat,AtLeast,min*8,0xFFFFFFF8);
@@ -68486,7 +68573,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 				flag = {Preserved}
 			}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc+1);
 				},
@@ -68499,7 +68586,7 @@ function SLoop(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ º
 					flag = {Preserved}
 				}
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 				conditions = {
 					Label(IndexAlloc+2);
 				},
@@ -68527,7 +68614,7 @@ function SLoopX(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ 
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 			conditions = {
 				Label(IndexAlloc);
 				Conditions,
@@ -68540,7 +68627,7 @@ function SLoopX(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ 
 			flag = {Preserved}
 		}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 			conditions = {
 				Label(IndexAlloc+1);
 			},
@@ -68553,7 +68640,7 @@ function SLoopX(PlayerID,Repeat,Conditions,Actions,InitActions,EndActions) -- √ 
 				flag = {Preserved}
 			}
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 			conditions = {
 				Label(IndexAlloc+2);
 			},
@@ -68643,7 +68730,7 @@ function SCopy(PlayerID,SVData,DestLine,SourceLine) -- ¡ıΩƒ
 		end
 		DoActions2X(PlayerID,Box)
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68708,7 +68795,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 		end
 		if Dest[4] == "V" then 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68723,7 +68810,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68734,7 +68821,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				}
 		elseif Dest[4] == "VA" then -- SV -> VA
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68753,7 +68840,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68788,7 +68875,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 		end
 		if Dest[4] == "V" then -- {"X",Temp,0,"SVA",{"X",Index,0,"SA",Number,Size,Line},0,"X",Temp+1,0},
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68810,7 +68897,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68829,7 +68916,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68839,7 +68926,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68849,7 +68936,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68861,7 +68948,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				RecoverCp(PlayerID)
 		elseif Dest[4] == "VA" then -- SVA -> VA
 				Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68888,7 +68975,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					}
 
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68909,7 +68996,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68919,7 +69006,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68929,7 +69016,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68939,7 +69026,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 						flag = {Preserved}
 					}
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -68962,7 +69049,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				table.insert(DestLine,i)
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -68985,7 +69072,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				table.insert(DestLine,i)
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69004,7 +69091,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69027,7 +69114,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				table.insert(DestLine,i)
 			end
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69052,7 +69139,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				}
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69080,7 +69167,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 				table.insert(DestLine,i)
 			end
 			Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69109,7 +69196,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69129,7 +69216,7 @@ function SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) -- V °Í SV Type Castin
 					flag = {Preserved}
 				}
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69289,7 +69376,7 @@ function SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear) -- <<
 		end
 		DoActions2X(PlayerID,Box)
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69299,7 +69386,7 @@ function SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear) -- <<
 					flag = {Preserved}
 				}
 		Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69444,7 +69531,7 @@ function SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear) -- <<
 		if SourceV[1] ~= nil then
 			DoActions2X(PlayerID,Box2)
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69522,7 +69609,7 @@ function SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear) -- <<
 		if SourceVA[1] ~= nil then
 			DoActions2X(PlayerID,Box3)
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69583,7 +69670,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 		table.insert(Box2,SetMemory(0x6509B0,Add,(-0x40*Dest[5])/4))
 		table.insert(Box3,SetMemory(0x6509B0,Add,(-0x40*Dest[5])/4))
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69607,7 +69694,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 				flag = {Preserved}
 			}
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69621,7 +69708,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 			}
 		DoActions2X(PlayerID,Box1)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69632,7 +69719,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 			}
 		DoActions2X(PlayerID,Box2)
 		Trigger {--(CPRead)∑Œ ∞™ √‚∑¬
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69688,7 +69775,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 					Box1,
 		})
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69699,7 +69786,7 @@ function MovS(PlayerID,Dest,Source,Mode,Mask,Clear) -- SV << SVA / SVA << SV (Va
 			}
 		DoActions2X(PlayerID,Box2)
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -69732,7 +69819,7 @@ function TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << SV_EPD/Offs
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69743,7 +69830,7 @@ function TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << SV_EPD/Offs
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69756,7 +69843,7 @@ function TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << SV_EPD/Offs
 		elseif Source[4] == "SVA" then
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69772,7 +69859,7 @@ function TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) -- V << SV_EPD/Offs
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69822,7 +69909,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 		if Source[4] == "V" then -- Diff V, X : V << •ƒX
 			if Time == 0 then
 				Trigger {-- Z << X - Y
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69847,7 +69934,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}
 				Trigger { -- Temp V
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69858,7 +69945,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}
 				Trigger {-- Y << X
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -69871,7 +69958,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 				}
 				if Init ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69883,7 +69970,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 			else
 				if Delay ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69893,7 +69980,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					}
 				end
 				Trigger { -- Temp Z
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69904,7 +69991,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					}
 				CIf(PlayerID,CtrigX("X","X",0x19C,2,Exactly,0),SetCtrig1X("X","X",0x19C,2,Add,Time))
 					Trigger {-- Z << X - Y
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69929,7 +70016,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}
 					Trigger { -- Temp V
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69941,7 +70028,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}
 					Trigger {-- Y << X
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -69955,7 +70042,7 @@ function f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 				CIfEnd(SetCtrig1X("X","X",0x19C,-2,Subtract,1))
 				if Init ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX("X","X",0x15C,0,AtMost,Time+Delay);
@@ -70012,7 +70099,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 		if Source[4] == "W" then -- LDiff V, X : V << •ƒX
 			if Time == 0 then
 				Trigger {-- Z << X - Y
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70055,7 +70142,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}
 				Trigger { -- Temp V
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70069,7 +70156,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX("X",WRet[1],0x15C,0,Exactly,0);
@@ -70080,7 +70167,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}	
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 						CtrigX(Dest[1],Dest[2],0x15C,Dest[3],AtLeast,0); -- X2 >= X2(¿¸) : X1 -= 1 (No Carry)
@@ -70091,7 +70178,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					flag = {Preserved}
 				}
 				Trigger {-- Y << X
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70106,7 +70193,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 				}
 				if Init ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70119,7 +70206,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 			else
 				if Delay ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70129,7 +70216,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					}
 				end
 				Trigger { -- Temp Z
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70142,7 +70229,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 					}
 				CIf(PlayerID,CtrigX("X","X",0x17C,2,Exactly,0),SetCtrig1X("X","X",0x17C,2,Add,Time))
 					Trigger {-- Z << X - Y
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70183,7 +70270,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}
 					Trigger { -- Temp V
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70197,7 +70284,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX("X",WRet[1],0x15C,0,Exactly,0);
@@ -70208,7 +70295,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}	
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX("X","X",0x15C,-5,AtLeast,0); -- X2 >= X2(¿¸) : X1 -= 1 (No Carry)
@@ -70219,7 +70306,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 						flag = {Preserved}
 					}
 					Trigger {-- Y << X
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70238,7 +70325,7 @@ function f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
 				CIfEnd(SetCtrig1X("X","X",0x17C,-4,Subtract,1))
 				if Init ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX("X","X",0x15C,0,AtMost,Time+Delay);
@@ -70318,7 +70405,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					table.insert(Box11b,SetCtrig1X("X","X",0x160+0x40*(i-1),3,SetTo,Subtract*16777216,0xFF000000))
 				end
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70328,7 +70415,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70346,7 +70433,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					table.insert(Box12b,SetCtrig1X("X",SRet[Number][1],0x160+0x40*(i-1),0,SetTo,Add*16777216,0xFF000000))
 				end
 				Trigger {-- Z << X - Y
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70356,7 +70443,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					flag = {Preserved}
 				}
 				Trigger {-- Z << X - Y
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70375,7 +70462,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					table.insert(Box2,SetCtrig1X("X",SRet[Number][1],0x15C+0x40*(i-1),0,Add,1))
 				end
 				Trigger { -- Temp V
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70390,7 +70477,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					table.insert(Box3,SetCtrigX(Source[1],Source[2],0x158+0x40*(i-1),Source[3],SetTo,"X","X",0x15C+0x40*(i-1),1,-1))
 				end
 				Trigger {-- Y << X
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70400,7 +70487,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					flag = {Preserved}
 				}
 				Trigger {-- Y << X
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -70415,7 +70502,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box4,SetCtrig1X(Dest[1],Dest[2],0x15C+0x40*(i-1),Dest[3],SetTo,0))
 					end
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70427,7 +70514,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 			else
 				if Delay ~= 0 then
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70442,7 +70529,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 					table.insert(Box0,Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)))
 				end
 				Trigger { -- Temp Z
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70462,7 +70549,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box10b,SetCtrig1X(Source[1],Source[2],0x160+0x40*(i-1),Source[3],SetTo,SetTo*16777216,0xFF000000))
 					end
 					Trigger {-- Clear
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70472,7 +70559,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						flag = {Preserved}
 					}
 					Trigger {-- Clear
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70492,7 +70579,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box11b,SetCtrig1X("X","X",0x160+0x40*(i-1),3,SetTo,Subtract*16777216,0xFF000000))	
 					end
 					Trigger {-- Clear
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70502,7 +70589,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						flag = {Preserved}
 					}
 					Trigger {-- Clear
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70520,7 +70607,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box12b,SetCtrig1X("X",SRet[Number][1],0x160+0x40*(i-1),0,SetTo,Add*16777216,0xFF000000))
 					end
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70530,7 +70617,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						flag = {Preserved}
 					}
 					Trigger {-- Z << X - Y
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70549,7 +70636,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box2,SetCtrig1X("X",SRet[Number][1],0x15C+0x40*(i-1),0,Add,1))
 					end
 					Trigger { -- Temp V
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70564,7 +70651,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box3,SetCtrigX(Source[1],Source[2],0x158+0x40*(i-1),Source[3],SetTo,"X","X",0x15C+0x40*(i-1),1,-1))
 					end 
 					Trigger {-- Y << X
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70574,7 +70661,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						flag = {Preserved}
 					} 
 					Trigger {-- Y << X
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -70591,7 +70678,7 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 						table.insert(Box4,SetCtrig1X(Dest[1],Dest[2],0x15C+0x40*(i-1),Dest[3],SetTo,0))
 					end
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 							CtrigX("X","X",0x15C,0,AtMost,Time+Delay);
@@ -70614,14 +70701,6 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << •ƒSV(A)
 	if PDest ~= nil then
 		MovS(PlayerID,PDest,Dest,SetTo)
 	end
-end
-
-function SetCreateVarIndex(Init,Max,Ccode,NCode)
-	CreateVarInitIndex = Init
-	CreateVarXAlloc = Init-1
-	CreateMaxVAlloc = Max
-	CreateCCodeVarXAlloc = Max-Ccode
-	CreateNCodeVarXAlloc = Max-NCode-Ccode
 end
 
 function CreateVar(PlayerID)
@@ -71773,18 +71852,33 @@ function SaveFileArr(FileArray,ElementSize,FileName)
 	if Fileptr == nil then
 		PushErrorMsg(FilePath.."\nCan't be Open!")
 	end
+
+	local FileSTR = ""
+	local STRLength = 0
     for i = 1, #FileArray do
     	if ElementSize == 1 then
-	    	Fileptr:write(string.char(FileArray[i]))
+	    	FileSTR = FileSTR .. string.char(FileArray[i])
+	    	STRLength = STRLength + 1
 	    elseif ElementSize == 2 then
-	    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8)))
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8))
+	    	STRLength = STRLength + 2
 	    elseif ElementSize == 3 then
-	    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16)))
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16))
+	    	STRLength = STRLength + 3
 	    elseif ElementSize == 4 then
-	    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24)))
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24))
+	    	STRLength = STRLength + 4
 	    else
 	    	SaveFileArr_InputData_Error()
 		end
+		if STRLength >= 4096 then
+    		Fileptr:write(FileSTR)
+    		STRLength = 0
+    		FileSTR = ""
+    	end
+    end
+    if STRLength >= 1 then
+    	Fileptr:write(FileSTR)
     end
     local size = Fileptr:seek("end")
 	io.close(Fileptr)
@@ -71917,7 +72011,60 @@ function f_GetFileArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	return Ret
 end
 
+__VArrSTR = {"","","",""}
+__VArrCheck = 0 
+__WArrSTR = {"","","","","",""}
+__WArrCheck = 0 
+__SVArrSTR = {"","","","","","","",""}
+__SVArrCheck = 0 
 function f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
+	if __VArrCheck == 0 then
+		__VArrCheck = 1
+		for j = 1, 0x16 do
+			__VArrSTR[1] = __VArrSTR[1] .. "\0"
+		end
+		__VArrSTR[1] = __VArrSTR[1] .. "\x0A\xFE\x00\x02"
+		for j = 1, 0x12E do
+			__VArrSTR[1] = __VArrSTR[1] .. "\0"
+		end
+
+		__VArrSTR[2] = __VArrSTR[2] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+		__VArrSTR[3] = __VArrSTR[3] .. "\0\0\x2D\x07\x16\0\x53\x43\xFF\xFF\xFF\xFF"
+
+		for j = 1, 0x16 do
+			__VArrSTR[2] = __VArrSTR[2] .. "\0"
+		end
+		for j = 1, 0xC do
+			__VArrSTR[3] = __VArrSTR[3] .. "\0"
+		end
+
+		__VArrSTR[2] = __VArrSTR[2] .. "\x2D\x07\x16\0\x53\x43"
+		__VArrSTR[3] = __VArrSTR[3] .. "\x93\x19\x03\0\x01\0\0\0\0\0\0\x2D\x08\x14\0\x53\x43\x02"
+
+		for j = 1, 7 do
+			__VArrSTR[3] = __VArrSTR[3] .. "\0"
+		end
+		__VArrSTR[3] = __VArrSTR[3] .. "\x20"
+		for j = 1, 7 do
+			__VArrSTR[3] = __VArrSTR[3] .. "\0"
+		end
+		__VArrSTR[3] = __VArrSTR[3] .. "\x59\0\0\0\x02\0\0\0\0\0\x05\x07\x14\0\x53\x43"
+
+		for j = 1, 0x7C0 do
+			__VArrSTR[2] = __VArrSTR[2] .. "\0"
+		end
+		for j = 1, 0x7A0 do
+			__VArrSTR[3] = __VArrSTR[3] .. "\0"
+		end
+
+		__VArrSTR[2] = __VArrSTR[2] .. "\x04\0\0\0"
+		__VArrSTR[3] = __VArrSTR[3] .. "\x04\0\0\0"
+
+		for j = 1, 0x1C do
+			__VArrSTR[4] = __VArrSTR[4] .. "\0"
+		end
+	end
+
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -71950,215 +72097,94 @@ function f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	local i = 1
 	local TCount = 0
 	while true do
-		for j = 1, 0x16 do
-			Fileptr:write(string.char(0))
-		end
-		Fileptr:write(string.char(0xA))
-		Fileptr:write(string.char(0xFE))
-		Fileptr:write(string.char(0x0))
-		Fileptr:write(string.char(0x2))
-		for j = 1, 0x12E do
-			Fileptr:write(string.char(0))
-		end
+		local VArrSTR = ""
+		VArrSTR = VArrSTR .. __VArrSTR[1]
 
 		if ElementSize == 1 then
 			if i == #FileArray then
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
+				VArrSTR = VArrSTR .. "\xFF\0\0\0"
 			elseif i+1 == #FileArray then
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
+				VArrSTR = VArrSTR .. "\xFF\xFF\0\0"
 			elseif i+2 == #FileArray then
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0))
+				VArrSTR = VArrSTR .. "\xFF\xFF\xFF\0"
 			else
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
+				VArrSTR = VArrSTR .. "\xFF\xFF\xFF\xFF"
 			end
 		elseif ElementSize == 2 then
 			if i == #FileArray then
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
+				VArrSTR = VArrSTR .. "\xFF\xFF\0\0"
 			else
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
+				VArrSTR = VArrSTR .. "\xFF\xFF\xFF\xFF"
 			end
 		elseif ElementSize == 4 then
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
+			VArrSTR = VArrSTR .. "\xFF\xFF\xFF\xFF"
 		else
 			f_GetFileVArrptrN_InputData_Error()
 		end
 
 		if SVA1 == 0 then
-			for j = 1, 0x10 do
-				Fileptr:write(string.char(0))
-			end
+			VArrSTR = VArrSTR .. "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 		else
-			for j = 1, 0xC do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(13))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
+			VArrSTR = VArrSTR .. "\0\0\0\0\0\0\0\0\0\0\0\0\x0D\0\0\0"
 		end
 
 		if ElementSize == 1 then
 			local addr = 1 
-	    	Fileptr:write(string.char(FileArray[i]))
+	    	VArrSTR = VArrSTR .. string.char(FileArray[i])
 	    	if FileArray[i+1] ~= nil then
-		    	Fileptr:write(string.char(FileArray[i+1]))
+		    	VArrSTR = VArrSTR .. string.char(FileArray[i+1])
 		    	addr = 2
 		    else
-		    	Fileptr:write(string.char(0))
+		    	VArrSTR = VArrSTR .. "\0"
 		    end
 		    if FileArray[i+2] ~= nil then
-		    	Fileptr:write(string.char(FileArray[i+2]))
+		    	VArrSTR = VArrSTR .. string.char(FileArray[i+2])
 		    	addr = 3
 		    else
-		    	Fileptr:write(string.char(0))
+		    	VArrSTR = VArrSTR .. "\0"
 		    end
 		    if FileArray[i+3] ~= nil then
-		    	Fileptr:write(string.char(FileArray[i+3]))
+		    	VArrSTR = VArrSTR .. string.char(FileArray[i+3])
 		    	addr = 4
 		    else
-		    	Fileptr:write(string.char(0))
+		    	VArrSTR = VArrSTR .. "\0"
 		    end
 		    i = i + addr
 	    elseif ElementSize == 2 then
 	    	local addr = 1 
-	    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8)))
+	    	VArrSTR = VArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8))
 	    	if FileArray[i+1] ~= nil then
-		    	Fileptr:write(string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8)))
+		    	VArrSTR = VArrSTR .. string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8))
 		    	addr = 2
 		    else
-		    	Fileptr:write(string.char(0))
-		    	Fileptr:write(string.char(0))
+		    	VArrSTR = VArrSTR .. "\0\0"
 		    end
 		    i = i + addr
 	    elseif ElementSize == 4 then
-	    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24)))
+	    	VArrSTR = VArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24))
 	    	i = i + 1
 	    else
 	    	f_GetFileVArrptrN_InputData_Error()
 		end
 
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0x2D))
-		Fileptr:write(string.char(0x07))
 		if SVA1 == 0 then
-			Fileptr:write(string.char(0x14))
+			VArrSTR = VArrSTR .. __VArrSTR[2]
 		else
-			Fileptr:write(string.char(0x16))
+			VArrSTR = VArrSTR .. __VArrSTR[3]
 		end
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0x53))
-		Fileptr:write(string.char(0x43))
-
-		if SVA1 == 0 then
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			for j = 1, 0x16 do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x2D))
-			Fileptr:write(string.char(0x07))
-			Fileptr:write(string.char(0x16))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0x53))
-			Fileptr:write(string.char(0x43))
-
-			for j = 1, 0x7C0 do
-				Fileptr:write(string.char(0))
-			end
-		else
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			Fileptr:write(string.char(0xFF))
-			for j = 1, 0xC do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x93))
-			Fileptr:write(string.char(0x19))
-			Fileptr:write(string.char(0x03))
-			Fileptr:write(string.char(0x00))
-			Fileptr:write(string.char(1))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
-			for j = 1, 2 do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x2D))
-			Fileptr:write(string.char(0x08))
-			Fileptr:write(string.char(0x14))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0x53))
-			Fileptr:write(string.char(0x43))
-
-			Fileptr:write(string.char(0x2))
-			for j = 1, 7 do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x20))
-			for j = 1, 7 do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x59))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0))
-			Fileptr:write(string.char(0x2))
-			for j = 1, 5 do
-				Fileptr:write(string.char(0))
-			end
-			Fileptr:write(string.char(0x5))
-			Fileptr:write(string.char(0x7))
-			Fileptr:write(string.char(0x14))
-			Fileptr:write(string.char(0x0))
-			Fileptr:write(string.char(0x53))
-			Fileptr:write(string.char(0x43))
-
-			for j = 1, 0x7A0 do
-				Fileptr:write(string.char(0))
-			end
-		end
-
-		Fileptr:write(string.char(0x4))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
 		
 		local PlayerArr = PlayerConvert2(PlayerID)
 		for j = 1, 8 do
 			if (PlayerArr[j] == 0) then
-				Fileptr:write(string.char(1))
+				VArrSTR = VArrSTR .. "\x01"
 			else
-				Fileptr:write(string.char(0))
+				VArrSTR = VArrSTR .."\0"
 			end
 		end
-		for j = 1, 0x1C do
-			Fileptr:write(string.char(0))
-		end
+
+		VArrSTR = VArrSTR .. __VArrSTR[4]
+		Fileptr:write(VArrSTR)
+
 		TCount = TCount + 1
 		if i > #FileArray then break end
 	end
@@ -72178,6 +72204,50 @@ function f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 end
 
 function f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
+	if __WArrCheck == 0 then
+		__WArrCheck = 1
+		for j = 1, 0x16 do
+			__WArrSTR[1] = __WArrSTR[1] .. "\0"
+		end
+		__WArrSTR[1] = __WArrSTR[1] .. "\x0A\xFE\x00\x02"
+		for j = 1, 0x12E do
+			__WArrSTR[1] = __WArrSTR[1] .. "\0"
+		end
+
+		__WArrSTR[2] = __WArrSTR[2] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+		__WArrSTR[3] = __WArrSTR[3] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+
+		for j = 1, 0xC do
+			__WArrSTR[2] = __WArrSTR[2] .. "\0"
+		end
+		for j = 1, 0xC do
+			__WArrSTR[3] = __WArrSTR[3] .. "\0"
+		end
+
+		__WArrSTR[2] = __WArrSTR[2] .. "\0\0\0\0\0\0\0\0\0\0\x2D\x07\x16\0\x53\x43"
+		__WArrSTR[3] = __WArrSTR[3] .. "\x93\x19\x03\0\x01\0\0\0\0\0\x2D\x08\x16\0\x53\x43"
+
+		for j = 1, 0x1A do
+			__WArrSTR[4] = __WArrSTR[4] .. "\0"
+		end
+		__WArrSTR[4] = __WArrSTR[4] .. "\x2D\x07\x16\0\x53\x43\xFF\xFF\xFF\xFF"
+		for j = 1, 0xC do
+			__WArrSTR[4] = __WArrSTR[4] .. "\0"
+		end
+		__WArrSTR[4] = __WArrSTR[4] .. "\x93\x19\x03\0\x01\0\0\0\0\0\x2D\x08\x16\0\x53\x43"
+
+		local R = 0x800 - 0x40*2
+		for j = 1, R do
+			__WArrSTR[5] = __WArrSTR[5] .. "\0"
+		end
+		__WArrSTR[5] = __WArrSTR[5] .. "\x04\0\0\0"
+
+		for j = 1, 0x1C do
+			__WArrSTR[6] = __WArrSTR[6] .. "\0"
+		end
+	end
+
+
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -72205,212 +72275,99 @@ function f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	local i = 1
 	local TCount = 0
 	while true do
-		for j = 1, 0x16 do
-			Fileptr:write(string.char(0))
-		end
-		Fileptr:write(string.char(0xA))
-		Fileptr:write(string.char(0xFE))
-		Fileptr:write(string.char(0x0))
-		Fileptr:write(string.char(0x2))
-		for j = 1, 0x12E do
-			Fileptr:write(string.char(0))
-		end
+		local WArrSTR = ""
+		WArrSTR = WArrSTR .. __WArrSTR[1]
+		
 ---------------------------------------------------------
 		for k = 1, 2 do 
 			if i <= #FileArray then
 				if ElementSize == 1 then
 					if i == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						WArrSTR = WArrSTR .. "\xFF\0\0\0"
 					elseif i+1 == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						WArrSTR = WArrSTR .. "\xFF\xFF\0\0"
 					elseif i+2 == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
+						WArrSTR = WArrSTR .. "\xFF\xFF\xFF\0"
 					else
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
+						WArrSTR = WArrSTR .. "\xFF\xFF\xFF\xFF"
 					end
 				elseif ElementSize == 2 then
 					if i == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						WArrSTR = WArrSTR .. "\xFF\xFF\0\0"
 					else
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
+						WArrSTR = WArrSTR .. "\xFF\xFF\xFF\xFF"
 					end
 				elseif ElementSize == 4 then
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
+					WArrSTR = WArrSTR .. "\xFF\xFF\xFF\xFF"
 				else
 					f_GetFileWArrptrN_InputData_Error()
 				end
 
-				for j = 1, 0x10 do
-					Fileptr:write(string.char(0))
-				end
+				WArrSTR = WArrSTR .. "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 
 				if ElementSize == 1 then
 					local addr = 1 
-			    	Fileptr:write(string.char(FileArray[i]))
+			    	WArrSTR = WArrSTR .. string.char(FileArray[i])
 			    	if FileArray[i+1] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+1]))
+				    	WArrSTR = WArrSTR .. string.char(FileArray[i+1])
 				    	addr = 2
 				    else
-				    	Fileptr:write(string.char(0))
+				    	WArrSTR = WArrSTR .. "\0"
 				    end
 				    if FileArray[i+2] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+2]))
+				    	WArrSTR = WArrSTR .. string.char(FileArray[i+2])
 				    	addr = 3
 				    else
-				    	Fileptr:write(string.char(0))
+				    	WArrSTR = WArrSTR .. "\0"
 				    end
 				    if FileArray[i+3] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+3]))
+				    	WArrSTR = WArrSTR .. string.char(FileArray[i+3])
 				    	addr = 4
 				    else
-				    	Fileptr:write(string.char(0))
+				    	WArrSTR = WArrSTR .. "\0"
 				    end
 				    i = i + addr
 			    elseif ElementSize == 2 then
 			    	local addr = 1 
-			    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8)))
+			    	WArrSTR = WArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8))
 			    	if FileArray[i+1] ~= nil then
-				    	Fileptr:write(string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8)))
+				    	WArrSTR = WArrSTR .. string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8))
 				    	addr = 2
 				    else
-				    	Fileptr:write(string.char(0))
-				    	Fileptr:write(string.char(0))
+				    	WArrSTR = WArrSTR .. "\0\0"
 				    end
 				    i = i + addr
 			    elseif ElementSize == 4 then
-			    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24)))
+			    	WArrSTR = WArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24))
 			    	i = i + 1
 			    else
 			    	f_GetFileWArrptrN_InputData_Error()
 				end
 
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x07))
-				Fileptr:write(string.char(0x14))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
-
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				for j = 1, 0xC do
-					Fileptr:write(string.char(0))
-				end
-
 				if k == 2 then
-					for j = 1, 0x8 do
-						Fileptr:write(string.char(0))
-					end
+					WArrSTR = WArrSTR .. __WArrSTR[2]
 				else
-					Fileptr:write(string.char(0x93))
-					Fileptr:write(string.char(0x19))
-					Fileptr:write(string.char(0x03))
-					Fileptr:write(string.char(0x00))
-					Fileptr:write(string.char(1))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
+					WArrSTR = WArrSTR .. __WArrSTR[3]
 				end
-
-				for j = 1, 0x2 do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x2D))
-				if k == 2 then
-					Fileptr:write(string.char(0x07))
-				else
-					Fileptr:write(string.char(0x08))
-				end
-				Fileptr:write(string.char(0x16))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
 			else
-				for j = 1, 0x1A do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x07))
-				Fileptr:write(string.char(0x16))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
-
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				for j = 1, 0xC do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x93))
-				Fileptr:write(string.char(0x19))
-				Fileptr:write(string.char(0x03))
-				Fileptr:write(string.char(0x00))
-				Fileptr:write(string.char(1))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				for j = 1, 0x2 do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x08))
-				Fileptr:write(string.char(0x16))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
+				WArrSTR = WArrSTR .. __WArrSTR[4]
 			end
 		end
-		local R = 0x800 - 0x40*2
-		for j = 1, R do
-			Fileptr:write(string.char(0))
-		end
-		Fileptr:write(string.char(0x4))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
-
+		WArrSTR = WArrSTR .. __WArrSTR[5]
+		
 		local PlayerArr = PlayerConvert2(PlayerID)
 		for j = 1, 8 do
 			if (PlayerArr[j] == 1) then
-				Fileptr:write(string.char(1))
+				WArrSTR = WArrSTR .. "\x01"
 			else
-				Fileptr:write(string.char(0))
+				WArrSTR = WArrSTR .."\0"
 			end
 		end
-		for j = 1, 0x1C do
-			Fileptr:write(string.char(0))
-		end
+		WArrSTR = WArrSTR .. __WArrSTR[6]
+		Fileptr:write(WArrSTR)
 		TCount = TCount + 1
 		if i > #FileArray then break end
 	end
-
 	io.close(Fileptr)
 	Ret = f_GetFileptrN(PlayerID,FileName,Repeat,LoadCheck)
 	FileNameIndex = FileNameIndex + 1
@@ -72422,6 +72379,50 @@ function f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 end
 
 function f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadCheck)
+	if __SVArrCheck == 0 then
+		__SVArrCheck = 1
+		for j = 1, 0x16 do
+			__SVArrSTR[1] = __SVArrSTR[1] .. "\0"
+		end
+		__SVArrSTR[1] = __SVArrSTR[1] .. "\x0A\xFE\x00\x02"
+		for j = 1, 0x12E do
+			__SVArrSTR[1] = __SVArrSTR[1] .. "\0"
+		end
+
+		__SVArrSTR[2] = __SVArrSTR[2] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+		__SVArrSTR[3] = __SVArrSTR[3] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+		__SVArrSTR[4] = __SVArrSTR[4] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+		__SVArrSTR[5] = __SVArrSTR[5] .. "\0\0\x2D\x07\x14\0\x53\x43\xFF\xFF\xFF\xFF"
+
+		for j = 1, 0xC do
+			__SVArrSTR[2] = __SVArrSTR[2] .. "\0"
+			__SVArrSTR[3] = __SVArrSTR[3] .. "\0"
+			__SVArrSTR[4] = __SVArrSTR[4] .. "\0"
+			__SVArrSTR[5] = __SVArrSTR[5] .. "\0"
+		end
+		__SVArrSTR[4] = __SVArrSTR[4] .. "\x93\x19\x03\0\x01\0\0\0\0\0\x2D\x08\x14\0\x53\x43"
+		__SVArrSTR[5] = __SVArrSTR[5] .. "\x93\x19\x03\0\x08\0\0\0\0\0\x2D\x08\x14\0\x53\x43"
+		__SVArrSTR[2] = __SVArrSTR[2] .. "\0\0\0\0\0\0\0\0\0\0\x2D\x07\x16\0\x53\x43"
+		__SVArrSTR[3] = __SVArrSTR[3] .. "\x93\x19\x03\0\x01\0\0\0\0\0\x2D\x08\x16\0\x53\x43"
+
+		for j = 1, 0x1A do
+			__SVArrSTR[6] = __SVArrSTR[6] .. "\0"
+		end
+		__SVArrSTR[6] = __SVArrSTR[6] .. "\x2D\x07\x16\0\x53\x43\xFF\xFF\xFF\xFF"
+		for j = 1, 0xC do
+			__SVArrSTR[6] = __SVArrSTR[6] .. "\0"
+		end
+		__SVArrSTR[6] = __SVArrSTR[6] .. "\x93\x19\x03\0\x01\0\0\0\0\0\x2D\x08\x16\0\x53\x43"
+
+		for j = 1, 0x40 do
+			__SVArrSTR[7] = __SVArrSTR[7] .. "\0"
+		end
+
+		for j = 1, 0x1C do
+			__SVArrSTR[8] = __SVArrSTR[8] .. "\0"
+		end
+	end
+
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -72460,238 +72461,113 @@ function f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadChe
 	local i = 1
 	local TCount = 0
 	while true do
-		for j = 1, 0x16 do
-			Fileptr:write(string.char(0))
-		end
-		Fileptr:write(string.char(0xA))
-		Fileptr:write(string.char(0xFE))
-		Fileptr:write(string.char(0x0))
-		Fileptr:write(string.char(0x2))
-		for j = 1, 0x12E do
-			Fileptr:write(string.char(0))
-		end
+		local SVArrSTR = ""
+		SVArrSTR = SVArrSTR .. __SVArrSTR[1]
+
 ---------------------------------------------------------
 		for k = 1, Number do 
 			if i <= #FileArray then
 				if ElementSize == 1 then
 					if i == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						SVArrSTR = SVArrSTR .. "\xFF\0\0\0"
 					elseif i+1 == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						SVArrSTR = SVArrSTR .. "\xFF\xFF\0\0"
 					elseif i+2 == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
+						SVArrSTR = SVArrSTR .. "\xFF\xFF\xFF\0"
 					else
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
+						SVArrSTR = SVArrSTR .. "\xFF\xFF\xFF\xFF"
 					end
 				elseif ElementSize == 2 then
 					if i == #FileArray then
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						SVArrSTR = SVArrSTR .. "\xFF\xFF\0\0"
 					else
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
-						Fileptr:write(string.char(0xFF))
+						SVArrSTR = SVArrSTR .. "\xFF\xFF\xFF\xFF"
 					end
 				elseif ElementSize == 4 then
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
-					Fileptr:write(string.char(0xFF))
+					SVArrSTR = SVArrSTR .. "\xFF\xFF\xFF\xFF"
 				else
 					f_GetFileSVArrptrN_InputData_Error()
 				end
 
 				if SVA32 == 0 then
-					for j = 1, 0x10 do
-						Fileptr:write(string.char(0))
-					end
+					SVArrSTR = SVArrSTR .. "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 				else
-					for j = 1, 0xC do
-						Fileptr:write(string.char(0))
-					end
-					Fileptr:write(string.char(13))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
+					SVArrSTR = SVArrSTR .. "\0\0\0\0\0\0\0\0\0\0\0\0\x0D\0\0\0"
 				end
 
 				if ElementSize == 1 then
 					local addr = 1 
-			    	Fileptr:write(string.char(FileArray[i]))
+			    	SVArrSTR = SVArrSTR .. string.char(FileArray[i])
 			    	if FileArray[i+1] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+1]))
+				    	SVArrSTR = SVArrSTR .. string.char(FileArray[i+1])
 				    	addr = 2
 				    else
-				    	Fileptr:write(string.char(0))
+				    	SVArrSTR = SVArrSTR .. "\0"
 				    end
 				    if FileArray[i+2] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+2]))
+				    	SVArrSTR = SVArrSTR .. string.char(FileArray[i+2])
 				    	addr = 3
 				    else
-				    	Fileptr:write(string.char(0))
+				    	SVArrSTR = SVArrSTR .. "\0"
 				    end
 				    if FileArray[i+3] ~= nil then
-				    	Fileptr:write(string.char(FileArray[i+3]))
+				    	SVArrSTR = SVArrSTR .. string.char(FileArray[i+3])
 				    	addr = 4
 				    else
-				    	Fileptr:write(string.char(0))
+				    	SVArrSTR = SVArrSTR .. "\0"
 				    end
 				    i = i + addr
 			    elseif ElementSize == 2 then
 			    	local addr = 1 
-			    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8)))
+			    	SVArrSTR = SVArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8))
 			    	if FileArray[i+1] ~= nil then
-				    	Fileptr:write(string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8)))
+				    	SVArrSTR = SVArrSTR .. string.char(bit32.band(FileArray[i+1], 0xFF),bit32.rshift(bit32.band(FileArray[i+1], 0xFF00),8))
 				    	addr = 2
 				    else
-				    	Fileptr:write(string.char(0))
-				    	Fileptr:write(string.char(0))
+				    	SVArrSTR = SVArrSTR .. "\0\0"
 				    end
 				    i = i + addr
 			    elseif ElementSize == 4 then
-			    	Fileptr:write(string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24)))
+			    	SVArrSTR = SVArrSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24))
 			    	i = i + 1
 			    else
 			    	f_GetFileSVArrptrN_InputData_Error()
 				end
 
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x07))
-				Fileptr:write(string.char(0x14))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
-
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				for j = 1, 0xC do
-					Fileptr:write(string.char(0))
-				end
-
 				if SVA32 == 0 then
 					if k == Number then
-						for j = 1, 0x8 do
-							Fileptr:write(string.char(0))
-						end
+						SVArrSTR = SVArrSTR .. __SVArrSTR[2]
 					else
-						Fileptr:write(string.char(0x93))
-						Fileptr:write(string.char(0x19))
-						Fileptr:write(string.char(0x03))
-						Fileptr:write(string.char(0x00))
-						Fileptr:write(string.char(1))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
-						Fileptr:write(string.char(0))
+						SVArrSTR = SVArrSTR .. __SVArrSTR[3]
 					end
-
-					for j = 1, 0x2 do
-						Fileptr:write(string.char(0))
-					end
-					Fileptr:write(string.char(0x2D))
-					if k == Number then
-						Fileptr:write(string.char(0x07))
-					else
-						Fileptr:write(string.char(0x08))
-					end
-					Fileptr:write(string.char(0x16))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0x53))
-					Fileptr:write(string.char(0x43))
 				else
-					Fileptr:write(string.char(0x93))
-					Fileptr:write(string.char(0x19))
-					Fileptr:write(string.char(0x03))
-					Fileptr:write(string.char(0x00))
-					Fileptr:write(string.char(SVA32X))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0))
-					for j = 1, 0x2 do
-						Fileptr:write(string.char(0))
+					if SVA32X == 1 then
+						SVArrSTR = SVArrSTR .. __SVArrSTR[4]
+					else
+						SVArrSTR = SVArrSTR .. __SVArrSTR[5]
 					end
-					Fileptr:write(string.char(0x2D))
-					Fileptr:write(string.char(0x08))
-					Fileptr:write(string.char(0x14))
-					Fileptr:write(string.char(0))
-					Fileptr:write(string.char(0x53))
-					Fileptr:write(string.char(0x43))
 				end
 			else
-				for j = 1, 0x1A do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x07))
-				Fileptr:write(string.char(0x16))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
-
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				Fileptr:write(string.char(0xFF))
-				for j = 1, 0xC do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x93))
-				Fileptr:write(string.char(0x19))
-				Fileptr:write(string.char(0x03))
-				Fileptr:write(string.char(0x00))
-				Fileptr:write(string.char(1))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0))
-				for j = 1, 0x2 do
-					Fileptr:write(string.char(0))
-				end
-				Fileptr:write(string.char(0x2D))
-				Fileptr:write(string.char(0x08))
-				Fileptr:write(string.char(0x16))
-				Fileptr:write(string.char(0))
-				Fileptr:write(string.char(0x53))
-				Fileptr:write(string.char(0x43))
+				SVArrSTR = SVArrSTR .. __SVArrSTR[6]
 			end
 		end
-		local R = 0x800 - 0x40*Number
+
+		local R = 32 - Number
 		for j = 1, R do
-			Fileptr:write(string.char(0))
+			SVArrSTR = SVArrSTR .. __SVArrSTR[7]
 		end
-		Fileptr:write(string.char(0x4))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
-		Fileptr:write(string.char(0))
+		SVArrSTR = SVArrSTR .. "\x04\0\0\0"
 
 		local PlayerArr = PlayerConvert2(PlayerID)
 		for j = 1, 8 do
 			if (PlayerArr[j] == 1) then
-				Fileptr:write(string.char(1))
+				SVArrSTR = SVArrSTR .. "\x01"
 			else
-				Fileptr:write(string.char(0))
+				SVArrSTR = SVArrSTR .. "\0"
 			end
 		end
-		for j = 1, 0x1C do
-			Fileptr:write(string.char(0))
-		end
+		SVArrSTR = SVArrSTR .. __SVArrSTR[8]
+		Fileptr:write(SVArrSTR)
 		TCount = TCount + 1
 		if i > #FileArray then break end
 	end
@@ -72852,7 +72728,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -72887,7 +72763,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 	if SourceN[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -72910,7 +72786,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 	if SourceV[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -72922,7 +72798,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 		}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -72951,7 +72827,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 
 	if Return[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -72964,7 +72840,7 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+1);
 		},
@@ -73007,7 +72883,7 @@ function CallCFuncX(PlayerID,CFunction,Parameter,Return)
 	end
 	if SourceN[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73030,7 +72906,7 @@ function CallCFuncX(PlayerID,CFunction,Parameter,Return)
 	end
 	if SourceV[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73042,7 +72918,7 @@ function CallCFuncX(PlayerID,CFunction,Parameter,Return)
 		}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -73070,7 +72946,7 @@ function CallCFuncX(PlayerID,CFunction,Parameter,Return)
 
 	if Return[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73235,7 +73111,7 @@ function CDoActionsX(PlayerID,Actions,Flags,Index)
 		Flags = {Preserved}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -73279,7 +73155,7 @@ function CTriggerX(PlayerID, Conditions, Actions, Flags, Index)
 	end
 
 	Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(Index);
 					Conditions,
@@ -73321,7 +73197,7 @@ function CDoActions2X(PlayerID,Actions,Flags)
 			PopTrigArr(PlayerID)
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73349,7 +73225,7 @@ function CDoActions2X(PlayerID,Actions,Flags)
 			PopTrigArr(PlayerID)
 
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73397,7 +73273,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73408,7 +73284,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73424,7 +73300,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 			end
 			if OffsetFlag == 0 then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73439,7 +73315,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 				}
 			else
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73456,7 +73332,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73466,7 +73342,7 @@ function TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) -- V << SVA1_EPD/Offset
 					flag = {Preserved}
 				}
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -73836,7 +73712,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73852,7 +73728,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 			Index = TempRet
 		elseif Index[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -73872,7 +73748,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73887,7 +73763,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 -- Output Data CRet[2] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -73902,7 +73778,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -73922,7 +73798,7 @@ function CS__GetIndex(PlayerID,Index,Output)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -73945,7 +73821,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73961,7 +73837,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 			Index = TempRet
 		elseif Index[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -73978,7 +73854,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -73994,7 +73870,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74014,7 +73890,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74029,7 +73905,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 -- Output Data CRet[3] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74044,7 +73920,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74064,7 +73940,7 @@ function CS__GetIndex2(PlayerID,Line,Index,Output)
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74087,7 +73963,7 @@ function CS__GetMask(PlayerID,Index,Output)
 
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74103,7 +73979,7 @@ function CS__GetMask(PlayerID,Index,Output)
 			Index = TempRet
 		elseif Index[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74123,7 +73999,7 @@ function CS__GetMask(PlayerID,Index,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74138,7 +74014,7 @@ function CS__GetMask(PlayerID,Index,Output)
 -- Output Data CRet[2] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74154,7 +74030,7 @@ function CS__GetMask(PlayerID,Index,Output)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74169,7 +74045,7 @@ function CS__GetMask(PlayerID,Index,Output)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74193,7 +74069,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 
 	if type(Index) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74209,7 +74085,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 			Index = TempRet
 		elseif Index[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74226,7 +74102,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74242,7 +74118,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74262,7 +74138,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74277,7 +74153,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 -- Output Data CRet[3] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74293,7 +74169,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74308,7 +74184,7 @@ function CS__GetMask2(PlayerID,Line,Index,Output)
 					}
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74335,7 +74211,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 
 	if type(DisplayLine) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74351,7 +74227,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 			DisplayLine = TempRet
 		elseif DisplayLine[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74371,7 +74247,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74385,7 +74261,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 -- Output Data CRet[2] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74400,7 +74276,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74420,7 +74296,7 @@ function CS__GetLine(PlayerID,DisplayLine,Output) -- DisplayLine = ªÛºˆ(0~10) / 
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74446,7 +74322,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 
 	if type(Line) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74462,7 +74338,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 			Line = TempRet
 		elseif Line[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -74482,7 +74358,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -74496,7 +74372,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 -- Output Data CRet[2] = Output
 	if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74511,7 +74387,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 	else
 		if Output[4] == "V" then
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74531,7 +74407,7 @@ function CS__GetDisplayLine(PlayerID,Line,Output) -- Line = ªÛºˆ(0~10) / Output 
 				MovX(PlayerID,Output,TempRet,SetTo,0xFFFFFFFF)
 		else
 				Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -74585,7 +74461,7 @@ function CreateSV54(PlayerID,String)
 	end
 	table.insert(Box,SetMemoryX(0x641670,SetTo,0x0000,0xFFFF))
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(FuncAlloc);
 		},
@@ -74661,7 +74537,7 @@ CIf(PlayerID,Condition,Action)
 	CIf(PlayerID,NVar(CA[1],AtLeast,1))
 		if SV54[4] == "SV54" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 				},
@@ -74676,7 +74552,7 @@ CIf(PlayerID,Condition,Action)
 		else
 			for i = 1, #SV54 do
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label();
 						NVar(CA[1],Exactly,i);
@@ -74713,7 +74589,7 @@ CIf(PlayerID,Condition,Action)
 				CDoActions(PlayerID,{TSetNVar(CA[2],SetTo,CA[3]),SetNVar(CA[4],SetTo,0),SetNext("X",CAPrintVarAlloc)})
 			NIfXEnd()
 		NWhileEnd()
-		Trigger {players = {ParsePlayer(PlayerID)},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
+		Trigger {players = {PlayerID},conditions = {Label(CAPrintVarAlloc)},flag = {Preserved}}
 		CAPrintVarAlloc = CAPrintVarAlloc + 1
 
 		local CpActions = {CpAction}
@@ -74731,7 +74607,7 @@ CIf(PlayerID,Condition,Action)
 				for i = 0, 7 do
 					if DisplayPlayer[i+1] == 0 then
 						Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label();
 								LocalPlayerID(i);
@@ -74745,7 +74621,7 @@ CIf(PlayerID,Condition,Action)
 				end
 				CIf(PlayerID,CVar("X",CRet[1],Exactly,1))
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -74762,7 +74638,7 @@ CIf(PlayerID,Condition,Action)
 						flag = {Preserved}
 					}
 					Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label();
 						},
@@ -74958,7 +74834,7 @@ function GetHostLength(PlayerID,Output,Multiplier)
 	end
 	for i = 2, 15 do
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 				MemoryB(0x6D0F78+i,AtLeast,1);
@@ -75272,7 +75148,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 	-- Input Data 
 	if type(Input) == "number" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75283,7 +75159,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 					}
 	elseif Input[4] == "V" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75299,7 +75175,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 
 		-- Call f_OTI
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75316,7 +75192,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75330,7 +75206,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 					}
 		elseif Output[4] == "V" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75344,7 +75220,7 @@ function f_OffsetToAlphaID(PlayerID,Input,Output)
 					}
 		else
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75366,7 +75242,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 	-- Input Data 
 	if type(Input) == "number" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75377,7 +75253,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 					}
 	elseif Input[4] == "V" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75393,7 +75269,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 
 		-- Call f_ETI
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75410,7 +75286,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 
 		if type(Output) == "number" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75424,7 +75300,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 					}
 		elseif Output[4] == "V" then
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75438,7 +75314,7 @@ function f_EPDToAlphaID(PlayerID,Input,Output)
 					}
 		else
 			Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75460,7 +75336,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 	-- Input Data 
 	if type(Input) == "number" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75471,7 +75347,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 					}
 	elseif Input[4] == "V" then
 		Trigger {
-						players = {ParsePlayer(PlayerID)},
+						players = {PlayerID},
 						conditions = {
 							Label(0);
 						},
@@ -75486,7 +75362,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 	end
 		-- Call f_ITC
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75502,7 +75378,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 		if Output ~= nil then
 			if type(Output) == "number" then
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75516,7 +75392,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 						}
 			elseif Output[4] == "V" then
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75530,7 +75406,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 						}
 			else
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75547,7 +75423,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 		if EPDOutput ~= nil then
 			if type(EPDOutput) == "number" then
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75561,7 +75437,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 						}
 			elseif EPDOutput[4] == "V" then
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75575,7 +75451,7 @@ function f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput) -- Index = 3749-Cunit
 						}
 			else
 				Trigger {
-							players = {ParsePlayer(PlayerID)},
+							players = {PlayerID},
 							conditions = {
 								Label(0);
 							},
@@ -75662,7 +75538,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 		if SourceVA[4] == "V" then
 			if type(Size) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75678,7 +75554,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 				}
 			elseif Size[4] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75700,7 +75576,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 		elseif SourceVA[4] == "VA" then
 			if type(Size) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75723,7 +75599,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 				}
 			elseif Size[4] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75749,7 +75625,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 				}
 			end
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75760,7 +75636,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75771,7 +75647,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 				flag = {Preserved}
 			}
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -75786,7 +75662,7 @@ function NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAc
 
 	CIfX(PlayerID,{NVar(Length,AtLeast,2)},{SetNVar(Length,Subtract,1)})
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 				},
@@ -75832,7 +75708,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 		if DestVA[4] == "V" then
 			if type(Size) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75845,7 +75721,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 				}
 			elseif Size[4] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75863,7 +75739,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 		elseif DestVA[4] == "VA" then
 			if type(Size) == "number" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75880,7 +75756,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 				}
 			elseif Size[4] == "V" then
 				Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -75903,7 +75779,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 
 	CIfX(PlayerID,{NVar(Length,AtLeast,1)},{SetNVar(Length,Subtract,1)},{SetNVar(ErrorCheck,SetTo,0)})	
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 					CVAar(VArr(NSQCVArray[NSQCIndex],TargetPlayer,FixPlayer),Exactly,ErrorCode);
@@ -75916,7 +75792,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 			}
 
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(FuncAlloc);
 				},
@@ -75934,7 +75810,7 @@ function NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,Error
 		FuncAlloc = FuncAlloc+1
 	CElseX({SetNVar(ErrorCheck,SetTo,1)})
 		Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label();
 					CDeaths("X",Exactly,1,CC);
@@ -76750,7 +76626,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			else
 				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
 			end
-			Trigger {players = {ParsePlayer(PlayerID)},
+			Trigger {players = {PlayerID},
 				conditions = {
 					Label(0);
 					Cond2;
@@ -76765,7 +76641,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 		end
 	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
 		if AlertWav ~= nil then
-			Trigger {players = {ParsePlayer(PlayerID)},
+			Trigger {players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -76797,7 +76673,7 @@ function IBGM_EPDX(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav"}
 
 	CIfX(PlayerID,{NVar(Arr[3],Exactly,0),NVar(Arr[4],AtLeast,1)})
 		for k, v in pairs(WAVData) do
-			Trigger {players = {ParsePlayer(PlayerID)},
+			Trigger {players = {PlayerID},
 				conditions = {
 					Label(0);
 					NVar(Arr[4],Exactly,v[1]);
@@ -76812,7 +76688,7 @@ function IBGM_EPDX(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav"}
 		end
 	CElseIfX({NVar(Arr[3],AtLeast,1),NVar(Arr[4],AtLeast,1),NVar(Input,AtLeast,1)},SetNVar(Input,SetTo,0))
 		if AlertWav ~= nil then
-			Trigger {players = {ParsePlayer(PlayerID)},
+			Trigger {players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -77291,7 +77167,7 @@ function CPush(PlayerID,Parameter) -- VA << V[]
 	})
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77331,7 +77207,7 @@ function CPop(PlayerID,Return) -- VA >> Offset / Mem / V
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77362,7 +77238,7 @@ function CPop(PlayerID,Return) -- VA >> Offset / Mem / V
 	})
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(FuncAlloc);
 		},
@@ -77374,7 +77250,7 @@ function CPop(PlayerID,Return) -- VA >> Offset / Mem / V
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77427,7 +77303,7 @@ function LPush(PlayerID,Parameter) -- WA << W[]
 	})
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77487,7 +77363,7 @@ function LPop(PlayerID,Return) -- WA >> LMem/Offsetx2 / W
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77518,7 +77394,7 @@ function LPop(PlayerID,Return) -- WA >> LMem/Offsetx2 / W
 	})
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(FuncAlloc);
 		},
@@ -77530,7 +77406,7 @@ function LPop(PlayerID,Return) -- WA >> LMem/Offsetx2 / W
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 		},
@@ -77558,7 +77434,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 
 	if type(UnitPtr) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77573,7 +77449,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 			MovX(PlayerID,TempRet,UnitPtr)
 		elseif UnitPtr[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -77590,7 +77466,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 
 	if type(UnitEPD) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77605,7 +77481,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 			MovX(PlayerID,TempRet,UnitEPD)
 		elseif UnitEPD[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -77622,7 +77498,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 
 	if type(NewOwner) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77637,7 +77513,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 			MovX(PlayerID,TempRet,NewOwner)
 		elseif NewOwner[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -77656,7 +77532,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 
 	if type(PrevOwner) == "number" then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77671,7 +77547,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 			MovX(PlayerID,TempRet,PrevOwner)
 		elseif PrevOwner[4] == "V" then
 			Trigger {
-				players = {ParsePlayer(PlayerID)},
+				players = {PlayerID},
 				conditions = {
 					Label(0);
 				},
@@ -77693,7 +77569,7 @@ function f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) -- Cunit Giveunits
 		Need_Include_DataTransfer()
 	end
 	Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77761,7 +77637,7 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc);
 			Conditions,
@@ -77796,7 +77672,7 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 	if SourceN[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77819,7 +77695,7 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 	if SourceV[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77862,7 +77738,7 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 
 	if Return[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77875,7 +77751,7 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(IndexAlloc+2);
 		},
@@ -77924,7 +77800,7 @@ function CallVFuncX(PlayerID,Wariable,Parameter,Return)
 	end
 	if SourceN[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77947,7 +77823,7 @@ function CallVFuncX(PlayerID,Wariable,Parameter,Return)
 	end
 	if SourceV[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -77990,7 +77866,7 @@ function CallVFuncX(PlayerID,Wariable,Parameter,Return)
 
 	if Return[1] ~= nil then
 		Trigger {
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			conditions = {
 				Label(0);
 			},
@@ -78053,7 +77929,7 @@ function ExitDrop(PlayerID,DropPlayer)
 		Need_STRCTRIGASM()
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			LocalPlayerID(DropPlayer);
@@ -87102,7 +86978,7 @@ function LoopDrop(PlayerID,DropPlayer,ErrorCode) -- trigend πÃø¨∞·Ω√ eudø°∑Ø+π´«
 		ErrorCodeAct = {SetMemory(0xFFFFFFFF-ErrorCode,SetTo,0)}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			LocalPlayerID(DropPlayer);
@@ -87116,7 +86992,7 @@ function LoopDrop(PlayerID,DropPlayer,ErrorCode) -- trigend πÃø¨∞·Ω√ eudø°∑Ø+π´«
 end
 function ExitDrop(PlayerID,DropPlayer)
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			LocalPlayerID(DropPlayer);
@@ -87128,7 +87004,7 @@ function ExitDrop(PlayerID,DropPlayer)
 	}
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(0);
 			LocalPlayerID(DropPlayer);

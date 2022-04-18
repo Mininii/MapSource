@@ -21,7 +21,7 @@ function s2b(Str, Start)
 end
 
 function isname(player, name)
-    local p = ParsePlayer(player)
+    local p = player
     local t = {}
     t[#t+1] = Memory(0x57EEE8 + 36 * p, AtLeast, lshift(string.byte(name, 1), 24))
     t[#t+1] = Memory(0x57EEE8 + 36 * p, AtMost, lshift(string.byte(name, 1), 24) + 16777215)
@@ -32,7 +32,7 @@ function isname(player, name)
 end
 
 function setname(player, Type, Race, Force, name)
-    local p = ParsePlayer(player)
+    local p = player
     local t = {}
         function EncodeType(x)
             if string.lower(x) == "inactive" then

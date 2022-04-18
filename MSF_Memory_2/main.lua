@@ -4,10 +4,18 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\St	ormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\MSF_UE_RE"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -90,3 +98,9 @@ CIfEnd()
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
+
+
+if LD2XOption == 1 then
+	__PopStringArray()
+	io.close(__TRIGchkptr)
+	end

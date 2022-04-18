@@ -133,7 +133,7 @@ function EXCC_Part1(EXCC_init,Actions)
 	EXCC_TempHeader = CreateVar(EXCC_Player)
 	PlayerID = PlayerConvert(PlayerID)
 	Trigger { -- Cunit Ctrig Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		},
@@ -143,7 +143,7 @@ function EXCC_Part1(EXCC_init,Actions)
 		flag = {preserved}
 	}	
 	Trigger { -- Cunit Calc Selector
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(EXCC_Index);
 		},
@@ -177,7 +177,7 @@ function EXCC_Part3X()
 	MoveCpValue = 0
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc Start
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(EXCC_Index+2);
 		},
@@ -189,7 +189,7 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 	MoveCpValue = 0
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc Main
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,
@@ -213,7 +213,7 @@ end
 function EXCC_ClearCalc(Actions)
 	PlayerID = EXCC_Player
 	Trigger { -- Cunit Calc End
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 		}, 
@@ -234,7 +234,7 @@ function EXCC_BreakCalc(Conditions,Actions)
 	PopTrigArr(PlayerID,3)
 
 	Trigger { -- Cunit Calc Break
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = { 
 			Label(0);
 			Conditions,

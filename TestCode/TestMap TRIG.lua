@@ -1,6 +1,6 @@
 
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
-for dir in io.popen(EXTLUA):HLines() do
+for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
@@ -21,55 +21,31 @@ Include_CBPaint()
 CJumpEnd(AllPlayers,0x9FF)
 --↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
 CJump(AllPlayers,0) 
-HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
-HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
---HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
-HVA3 = CVArray(FP,4*5) 
+Include_CtrigPlib(360,"Switch 1",1) 
+WA1 = CWArray(P1,10) 
+CWariable2(P1,0x12,"X","X",{5,5}) 
+CWariable(P1,0x13) CWariable(P1,0x14) 
+CVariable2(P1,0x10,"X","X",5) 
+CWariable(P1,0x11) CWariable(P1,0x15) 
 CJumpEnd(AllPlayers,0) 
-HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
-CIfOnce(FP) 
- CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"!H")) 
-CIfEnd()
-SpCodeBase = 0x8080E200 
-SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
-SpCode3 = 0x8B80E200 -- !H
-function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
-CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
-CA__SetNext(HStr4,8,SetTo,0,54*11-1,0)
-CMov(FP,HLine,0)
-CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
-	f_ChatOffset(FP,HLine,0,ChatOff) 
-	CTrigger(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"!H"))},{SetNVar(HCheck,SetTo,3)},{preserved}) 
-	CurLiV = CreateVar(FP)
-	EffCV = CreateVArr(11, FP)
-	CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
-		CMovX(FP,VArr(EffCV,HLine),0)
-		CMov(FP,CurLiV, _Mul(HLine,54*604))
-		CA__SetValue(HStr2,MakeiStrLetter(" ",53),0xFFFFFFFF,CurLiV,1,1) 
-		CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
-		CIfX(FP,NVar(HCheck,Exactly,3))
-			CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
-			CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
-		CElseX()
-			CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
-		CIfXEnd()
-		CIf(FP,{TTNVar(HCheck, NotSame, 3)})
-		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CIfEnd()
-		CD__InputMask(HLine,0xFFFFFFFF,0,52) 
-	CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
-	TempEC = CreateVar(FP)
-		CMov(FP,CurLiV, _Mul(HLine,54*604))
-		CMovX(FP,TempEC,VArr(EffCV,HLine))
-		CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
-		CIf(FP,NVar(TempEC,AtMost,51),SetNVar(TempEC, Add, 1))
-			CMovX(FP,VArr(EffCV,HLine),TempEC)
-		CIfEnd()
-	CIfXEnd()
-CWhileEnd(SetNVar(HLine,Add,1)) 
-end 
-CDPrint(0,11,{" ",0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+f_LMov(P1,WArr(WA1,0),"0x1234567890AB") 
+f_LMov(P1,0x58F480,WArr(WA1,0)) 
+f_LMov(P1,WArr(WA1,Wi(0x12,1)),"0x567890ABCDEF") 
+f_LMov(P1,0x58F488,WArr(WA1,6)) 
+f_LMov(P1,0x58F490,WArr(WA1,Wi(0x12,1))) 
+f_LMov(P1,WArr(WA1,V(0x10)),"0x90ABCDEF1234") 
+f_LMov(P1,0x58F498,WArr(WA1,V(0x10))) 
+ConvertWArr(P1,W(0x13),W(0x14),W(0x12),10) 
+f_LMov(P1,WArrX(WA1,W(0x13),W(0x14)),"0xCDEF12345678") 
+f_LMov(P1,0x58F4A0,WArrX(WA1,W(0x13),W(0x14))) 
+ConvertWArr(P1,W(0x11),W(0x15),V(0x10),10) 
+f_LMov(P1,WArrX(WA1,W(0x11),W(0x15)),"0x111222333444") 
+f_LMov(P1,0x58F4A8,WArrX(WA1,W(0x11),W(0x15))) 
+f_LMov(P1,WArrX(WA1,Wi(0x13,3),W(0x14)),"0x555666777888") 
+f_LMov(P1,0x58F4B0,WArrX(WA1,Wi(0x13,3),W(0x14))) 
+f_LMov(P1,0x58F4B8,WArrX(WA1,Wi(0x11,3),W(0x15)))
+
+-------------------------------
 ------------------------------------------------------------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------
 Trigger {
@@ -398,7 +374,7 @@ Trigger { -- No comment (B3442EB7)
 	},
 	actions = {
 		CreateUnit(1, "Zerg Broodling", "broodling", P1);
-		--SetMemoryX(0x58F448,SetTo,255,255);
+		SetMemoryX(0x58F448,SetTo,255,255);
 	},
 }
 Trigger { -- No comment (EC7DF1DE)
@@ -437,5 +413,5 @@ Trigger { -- No comment (43CD0280)
 
 EUDTurbo(P1)
 EndCtrig()
-ErrorHCheck()
+ErrorCheck()
 --↑ Tep에 그대로 붙여넣기 -----------------------------------------------------------------

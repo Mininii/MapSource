@@ -89,7 +89,7 @@ function DoActionsXI(PlayerID,Index,Actions,flag) -- CtrigAsm 5.1
 		Index = 0
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -107,7 +107,7 @@ end
 function SetCall(Player) -- CtrigAsm 5.1
 	SetCallPlayer = Player
 	Trigger {
-		players = {ParsePlayer(SetCallPlayer)},
+		players = {SetCallPlayer},
 		conditions = {
 			Label(CallIndexAlloc);
 		},
@@ -125,7 +125,7 @@ end
 
 function SetCallEnd() -- CtrigAsm 5.1
 	Trigger {
-		players = {ParsePlayer(SetCallPlayer)},
+		players = {SetCallPlayer},
 		conditions = {
 			Label(CallIndexAlloc);
 		},
@@ -511,7 +511,7 @@ for i = 128, 131 do
 end
 
 if InitBGMP == 12 then
-InitBGMP = ParsePlayer(Player)
+InitBGMP = Player
 else
 	PushErrorMsg("already_Installed_BGMSystem")
 end
@@ -992,7 +992,7 @@ function DoActions(PlayerID,Actions,Flags)
 		Flags = {}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		actions = {
 			Actions,
 		},
@@ -1033,7 +1033,7 @@ function DoActions2(PlayerID,Actions,Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					actions = {
 						X,
 					},
@@ -1048,7 +1048,7 @@ function DoActions2(PlayerID,Actions,Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					actions = {
 						X,
 					},
@@ -1070,7 +1070,7 @@ function DoActionsX(PlayerID,Actions,Flags,Index)
 		Flags = {}
 	end
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},
@@ -1113,7 +1113,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 				k = k + 1
 			end
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -1131,7 +1131,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 				k = k + 1
 			until k == Size + 1
 			Trigger {
-					players = {ParsePlayer(PlayerID)},
+					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
@@ -1165,7 +1165,7 @@ function CDoActions(PlayerID,Actions,Flags,Index)
 	end
 
 	Trigger {
-		players = {ParsePlayer(PlayerID)},
+		players = {PlayerID},
 		conditions = {
 			Label(Index);
 		},

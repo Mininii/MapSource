@@ -1,8 +1,11 @@
+
+
+
+
+-- бщ Prev functions (v1.0) ---------------------------------------------------------------------------------------------------------------------
+
 function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -16,11 +19,11 @@ function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX
 	local Case = 0
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
@@ -53,14 +56,14 @@ function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 				table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -79,7 +82,7 @@ function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -103,10 +106,7 @@ function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX
 end
 
 function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -120,11 +120,11 @@ function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,
 	local Case = 0
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
@@ -157,14 +157,14 @@ function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 				table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -183,7 +183,7 @@ function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -207,10 +207,7 @@ function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,
 end
 
 function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -225,12 +222,12 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 	SizeofLoc = bit32.band(SizeofLoc, 0xFFFFFFFF)
 	local TempSize = 0xFFFFFFFF - SizeofLoc + 1
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
 
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -271,12 +268,12 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,(65536-dY)-SizeofLoc))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
 
 	local k = {}
@@ -293,7 +290,7 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -317,10 +314,7 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 end
 
 function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -335,12 +329,12 @@ function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,Lo
 	SizeofLoc = bit32.band(SizeofLoc, 0xFFFFFFFF)
 	local TempSize = 0xFFFFFFFF - SizeofLoc + 1
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
 
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -381,12 +375,12 @@ function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,Lo
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,(65536-dY)-SizeofLoc))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
 
 	local k = {}
@@ -403,7 +397,7 @@ function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,Lo
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -427,10 +421,7 @@ function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,Lo
 end
 
 function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local PLocId = LocId+1
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -470,17 +461,17 @@ function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 			table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer))
-		            
-		    Case = Case - 1
+					
+			Case = Case - 1
 
 		end
 
 		Remain = Remain - 1
 		Level = Level + 1
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -499,7 +490,7 @@ function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -523,10 +514,7 @@ function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 end
 
 function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -566,17 +554,17 @@ function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 			table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
-		            
-		    Case = Case - 1
+					
+			Case = Case - 1
 
 		end
 
 		Remain = Remain - 1
 		Level = Level + 1
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -595,7 +583,7 @@ function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -619,10 +607,7 @@ function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 end
 
 function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local PLocId = LocId-1
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -672,15 +657,15 @@ function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
 			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize-dY))
-		            
-		    Case = Case - 1
+					
+			Case = Case - 1
 
 		end
 
 		Remain = Remain - 1
 		Level = Level + 1
 
-    end 
+	end 
 
 	local k = {}
 
@@ -696,7 +681,7 @@ function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -720,10 +705,7 @@ function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 end
 
 function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local PLocId = LocId-1
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -773,15 +755,15 @@ function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
 			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize-dY))
-		            
-		    Case = Case - 1
+					
+			Case = Case - 1
 
 		end
 
 		Remain = Remain - 1
 		Level = Level + 1
 
-    end 
+	end 
 
 	local k = {}
 
@@ -797,7 +779,7 @@ function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -821,10 +803,7 @@ function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 end
 
 function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -841,11 +820,11 @@ function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 	Points = Points * 2
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
@@ -886,14 +865,14 @@ function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 				table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -912,7 +891,7 @@ function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -936,10 +915,7 @@ function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 end
 
 function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -956,11 +932,11 @@ function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 	Points = Points * 2
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
@@ -1001,14 +977,14 @@ function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 				table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -1027,7 +1003,7 @@ function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1051,10 +1027,7 @@ function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 end
 
 function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -1073,11 +1046,11 @@ function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 	Points = Points * 2
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -1126,12 +1099,12 @@ function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,(65536-dY)-SizeofLoc))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
 	local k = {}
 
@@ -1147,7 +1120,7 @@ function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1171,10 +1144,7 @@ function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 end
 
 function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -1193,11 +1163,11 @@ function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 	Points = Points * 2
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -1246,12 +1216,12 @@ function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,(65536-dX)-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,(65536-dY)+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,(65536-dY)-SizeofLoc))
-	            Remain = Remain - 1
-	            Main = Main + 1
+				Remain = Remain - 1
+				Main = Main + 1
 
 			end
 
-    end 
+	end 
 
 	local k = {}
 
@@ -1267,7 +1237,7 @@ function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1291,10 +1261,7 @@ function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 end
 
 function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1318,12 +1285,12 @@ function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,
 	local Part = Partition
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	if CenterPoint == 1 then
-			    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				if CenterPoint == 1 then
+					table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 					table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
@@ -1350,15 +1317,15 @@ function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
 				table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer))
-	            Remain = Remain - 1
-	            Main = Main + 1
-	            Case = Case + 1
+				Remain = Remain - 1
+				Main = Main + 1
+				Case = Case + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -1377,7 +1344,7 @@ function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1401,10 +1368,7 @@ function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,
 end
 
 function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1428,16 +1392,16 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 	local Part = Partition
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	if CenterPoint == 1 then
-			    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				if CenterPoint == 1 then
+					table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX+dX-SizeofLoc))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX+dX+SizeofLoc))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY+dY-SizeofLoc))
 					table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY+dY+SizeofLoc))
-					table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
+					table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer,Properties))
 					Remain = Remain - 1
 				end
 				Main = 2
@@ -1459,16 +1423,16 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,dX+SizeofLoc))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,dY-SizeofLoc))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,dY+SizeofLoc))
-				table.insert(X,CreateUnitWithProperties(PerUnit,UnitId,PLocId,ForPlayer,Properties))
-	            Remain = Remain - 1
-	            Main = Main + 1
-	            Case = Case + 1
+				table.insert(X,CreateUnit(PerUnit,UnitId,PLocId,ForPlayer,Properties))
+				Remain = Remain - 1
+				Main = Main + 1
+				Case = Case + 1
 
 			end
 
-    end 
+	end 
 
-    table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
+	table.insert(X,SetMemory(0x58DC60+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC68+0x14*LocId,SetTo,LocX))
 	table.insert(X,SetMemory(0x58DC64+0x14*LocId,SetTo,LocY))
 	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,SetTo,LocY))
@@ -1487,7 +1451,7 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1511,10 +1475,7 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 end
 
 function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1540,12 +1501,12 @@ function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,P
 	local Part = Partition
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	if CenterPoint == 1 then
-			    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				if CenterPoint == 1 then
+					table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -1580,13 +1541,13 @@ function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,P
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize-dY))
-	            Remain = Remain - 1
-	            Main = Main + 1
-	            Case = Case + 1
+				Remain = Remain - 1
+				Main = Main + 1
+				Case = Case + 1
 
 			end
 
-    end 
+	end 
 
 	local k = {}
 
@@ -1602,7 +1563,7 @@ function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,P
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
@@ -1626,10 +1587,7 @@ function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,P
 end
 
 function CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve,Properties)
-	local PLocId = LocId
-	if type(LocId) == "string" then
-		LocId = EncodeLocation(LocId)-1
-	end
+	local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1655,12 +1613,12 @@ function CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,Loc
 	local Part = Partition
 
 	while true do
-		    if Remain == 0 then break end
-		    if Main == 1 then
-		    	dX = 0
-		    	dY = 0
-		    	if CenterPoint == 1 then
-			    	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
+			if Remain == 0 then break end
+			if Main == 1 then
+				dX = 0
+				dY = 0
+				if CenterPoint == 1 then
+					table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
 					table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
 					table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
@@ -1695,13 +1653,13 @@ function CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,Loc
 				table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
 				table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
 				table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize-dY))
-	            Remain = Remain - 1
-	            Main = Main + 1
-	            Case = Case + 1
+				Remain = Remain - 1
+				Main = Main + 1
+				Case = Case + 1
 
 			end
 
-    end 
+	end 
 
 	local k = {}
 
@@ -1717,7 +1675,7 @@ function CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,Loc
 		end
 
 		Trigger { 
-			players = {ParsePlayer(PlayerID)},
+			players = {PlayerID},
 			
 			conditions = {
 				Condition,
