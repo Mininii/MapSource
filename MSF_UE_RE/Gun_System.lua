@@ -2,13 +2,13 @@ function Gun_System()
 
 
     --[[
-    EXCunit ì ìš©
-    1ë²ˆì¤„ : ê±´ì‘ì˜ ë ˆë²¨
-    9ë²ˆì¤„ : ì˜ì‘ìœ ë‹› í‘œì‹
-    10ë²ˆì¤„ : ë§ˆë¦° ë°ìŠ¤ê°’ ì¤‘ë³µì ìš© ë°©ì§€ìš©
+    EXCunit Àû¿ë
+    1¹øÁÙ : °ÇÀÛÀÇ ·¹º§
+    9¹øÁÙ : ¿µÀÛÀ¯´Ö Ç¥½Ä
+    10¹øÁÙ : ¸¶¸° µ¥½º°ª Áßº¹Àû¿ë ¹æÁö¿ë
     ]]
     EXCC_Part1(DUnitCalc)
-    --CunitCtrig_Part1(FP) -- ì£½ì€ìœ ë‹› ì¸ì‹ ë‹¨ë½ ì‹œì‘
+    --CunitCtrig_Part1(FP) -- Á×ÀºÀ¯´Ö ÀÎ½Ä ´Ü¶ô ½ÃÀÛ
     DoActions(FP,MoveCp(Subtract,6*4))
     Check_P8 = def_sIndex()
     NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
@@ -19,14 +19,14 @@ function Gun_System()
 
     NJumpEnd(FP,Check_P8)
     DoActions(FP,MoveCp(Add,6*4))
-    CIf(FP,Cond_EXCC(8,AtLeast,1)) -- ì˜ì‘ìœ ë‹›ì¸ì‹
+    CIf(FP,Cond_EXCC(8,AtLeast,1)) -- ¿µÀÛÀ¯´ÖÀÎ½Ä
     f_SaveCp()
     InstallHeroPoint()
     CIfEnd()
     CMov(FP,Gun_Type,0)
     CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
-    for j, k in pairs({142,135,140,141,138,139,137}) do -- ì¡ê±´ì‘ ëª©ë¡
-        f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = ì¡ê±´ì‘ í”Œë˜ê·¸
+    for j, k in pairs({142,135,140,141,138,139,137}) do -- Àâ°ÇÀÛ ¸ñ·Ï
+        f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = Àâ°ÇÀÛ ÇÃ·¡±×
     end
     CIfEnd()
 
@@ -39,7 +39,7 @@ function Gun_System()
     f_GSend(148)
     f_GSend(173)
     f_GSend(152)
-    CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- ë‹¤í¬ì•„ì¹¸ í­ë°œì´í™íŠ¸
+    CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- ´ÙÅ©¾ÆÄ­ Æø¹ßÀÌÆåÆ®
         f_SaveCp()
         f_Read(FP,_Sub(BackupCp,15),CPos)
         Convert_CPosXY()
@@ -63,7 +63,7 @@ function Gun_System()
     --DoActionsXI(FP,EXCC_Forward)
     EXCC_Part3X()
     --CunitCtrig_Part3X()
-    for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
+    for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
     EXCC_Part4X(i,{
     DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
     DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
@@ -130,7 +130,7 @@ function Gun_System()
     EXCC_Part2()
     EXCC_Part3X()
     
-    for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
+    for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
     EXCC_Part4X(i,{
         
         CVar("X", "X", AtLeast, 1);
@@ -159,7 +159,7 @@ function Gun_System()
         SetCDeaths(FP,SetTo,0,SoundLimit[7]),
         SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 
-    CIfX(FP,{Memory(0x628438,AtLeast,1),CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- ê±´ì‘í•¨ìˆ˜ ì œì–´
+    CIfX(FP,{Memory(0x628438,AtLeast,1),CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- °ÇÀÛÇÔ¼ö Á¦¾î
         DoActions(FP,{
             SetInvincibility(Disable,"Buildings",FP,64);
         })
