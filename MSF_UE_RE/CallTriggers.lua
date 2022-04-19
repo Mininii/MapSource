@@ -504,8 +504,7 @@ end
 	
 	f_Mod(FP,LevelT,Level,_Mov(10))
 	f_Div(FP,LevelT2,Level,_Mov(10))
-	CAdd(FP,LevelT2,1)
-	CAdd(FP,Diff,LevelT2)
+	CMov(FP,Diff,LevelT2)
 	TriggerX(FP,{CVar(FP,Diff[2],AtLeast,4)},{SetCVar(FP,Diff[2],SetTo,3)},{preserved})
 	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{preserved})
 	TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,5)},{SetCVar(FP,LevelT2[2],SetTo,4)},{preserved})
@@ -519,7 +518,13 @@ end
 	
 	CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-		CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0),TSetMemoryX(_Add(_Mul(CunitIndex,84),19025+40), SetTo, 0,0xFF000000)})
+		CDoActions(FP,{
+			Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo, 0),
+		TSetMemoryX(_Add(_Mul(CunitIndex,84),19025+40), SetTo, 0,0xFF000000),
+	})
 		CAdd(FP,CunitIndex,1)
 	CWhileEnd()
 

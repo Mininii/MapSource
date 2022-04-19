@@ -9,7 +9,7 @@ function Objects()
 	AtkFactor = 5
 	DefFactor = 10
 	GunLimit = 1500
-	Ex1= {20,23,26,29,32,35,38}
+	Ex1= {20,25,30,35,40,45,50}
 	NK= {30,18,13,9,7,6,5}
 
 	--Shop
