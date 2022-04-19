@@ -31,9 +31,15 @@ function Var_init()
 	NMCost = 5000
 	HMCost = 8500
 	LMCost = 45000
-
+	function Create_VoidEPDHeaderV(Player,Size)
+		local Void = f_GetVoidptr(Player,Size)
+		local Header =  CreateVar(Player)
+		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
+		return Header
+	end
 	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
 	UnitDataPtr = CreateVar(FP)
+	CGiveH = {Create_VoidEPDHeaderV(FP,1700*2),Create_VoidEPDHeaderV(FP,1700*2)}
 	table.insert(CtrigInitArr[FP+1],SetCtrigX(UnitDataPtr[1],UnitDataPtr[2],0x15C,UnitDataPtr[3],SetTo,UnitDataPtrVoid[1],UnitDataPtrVoid[2],UnitDataPtrVoid[3],1,UnitDataPtrVoid[4]))
 	MaxHPBackUp = CreateArr(228,FP)
 	BdDimArr = CreateArr(228,FP)
@@ -216,7 +222,7 @@ function Var_init()
 	
 	HTextStrReset = CreateCText(FP,HTextStr)
 	Str122 = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
-	Str12 = CreateCText(FP,"!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
+	Str12 = CreateCText(FP,"\x0D\x0D!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
 	Str03 = {}
 	Str02 = {}
 	NMT = CreateCText(FP,"\x04ÀÇ £Í\x04£á£ò£é£î£åÀÌ \x16ºû\x04À» \x04ÀÒ¾ú½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤")

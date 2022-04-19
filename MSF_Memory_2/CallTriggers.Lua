@@ -453,6 +453,44 @@ for i = 0, 1699 do
 		},{preserved})
 end
 SetCallEnd()
+				--0x00XXXXXX 
+				--0x0000NPUU 
+local CallCGArr = SetCallForward()
+SetCall(FP)
+local CGTemp = CreateVarArr(3, FP)
+local CGTemp2 = CreateVarArr(3, FP)
+local CGivePtr = CreateVar(FP)
+local CGJump = def_sIndex()
+CMov(FP,CGivePtr,0)
+CJumpEnd(FP,CGJump)
+CRead(FP,CGTemp[1],_Add(CGiveH[1],CGivePtr))
+CRead(FP,CGTemp[2],_Add(CGiveH[2],CGivePtr))
+--DoActions2(FP, RotatePlayer({DisplayTextX("TGCheckAc",4)}, HumanPlayers, FP))
+NIf(FP,CV(CGTemp[1],1,AtLeast))
+CMov(FP,CGTemp2[1],CGTemp[2],nil,0xFF,1)
+
+CIf(FP,{TCVar(FP,CGTemp2[1][2],Exactly,CGTemp[3],0xFF)})
+CMov(FP,CGTemp2[2],CGTemp[2],nil,0xF00,1)
+CMov(FP,CGTemp2[3],CGTemp[2],nil,0xF000,1)
+f_Div(FP, CGTemp2[2], 0x100)
+f_Div(FP, CGTemp2[3], 0x1000)
+
+--f_Read(FP,_Add(CGTemp[1],10),CPos) -- 생성유닛 위치 불러오기
+--Convert_CPosXY()
+--Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayTextX("TGCheck",4)}, HumanPlayers, FP)})
+--CDoActions(FP, {TGiveUnits(1,CGTemp[3],P9,1,CGTemp2[3])})
+f_CGive(FP, CGTemp[1], nil, CGTemp2[3], CGTemp2[2])
+CIfEnd()
+
+CAdd(FP,CGivePtr,1)
+CJump(FP,CGJump)
+NIfEnd()
+SetCallEnd()
+
+function NUGive(Var,UnitID)
+	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayTextX("TGCheckPr",4)}, HumanPlayers, FP)
+	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{Order(UnitID,Force2,64,Attack,64),SetInvincibility(Disable,UnitID,Force2,64)})
+end
 
 	
 end

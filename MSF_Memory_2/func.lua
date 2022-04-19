@@ -459,7 +459,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("!H"..StrDesignX2(CT),4);},HumanPlayers,FP)})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("\x0D\x0D!H"..StrDesignX2(CT),4);},HumanPlayers,FP)})
 			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
 			f_LoadCp()
 			if index == 68 then
@@ -827,16 +827,26 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
-			
+				--0x00XXXXXX 
+				--0x0000NPUU 
+				CGPtr2 = CreateVar(FP)
+				
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
 					--TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),
 					TCreateUnitWithProperties(1,33,1,CurrentOP,{energy = 100}),
 					TKillUnit(33,CurrentOP);
+					TSetMemoryX(_Add(CGiveH[1],CGPtr2), SetTo, G_CA_Nextptrs,0xFFFFFF),
+					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, Gun_TempSpawnSet1,0xFF),
+					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, 0x100*P9,0xF00),
+					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, _Mul(CreatePlayer,0x1000),0xF000),
 					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
 				})
+				--CMov(FP,0x57f0f0,CGPtr2)
+				--CMov(FP,0x57f120,G_CA_Nextptrs)
 				f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
+				CAdd(FP,CGPtr2,1)
 				DoActions(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
@@ -1605,7 +1615,7 @@ function InvDisable(UnitID,Owner,Condition,Str)
             MinimapPing(1),
             PlayWAVX("staredit\\wav\\start.ogg"),
             PlayWAVX("staredit\\wav\\start.ogg"),
-            DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x0D\x0D\n!H"..StrDesignX2(Str).."\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x0D\x0D\x13\x04",4)
+            DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x0D\x0D\n\x0D\x0D!H"..StrDesignX2(Str).."\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x0D\x0D\x13\x04",4)
         },HumanPlayers,FP);
         SetInvincibility(Disable,UnitID,Owner,1);
     })
@@ -1660,7 +1670,7 @@ function StoryPrint(T,Text,AddTrig)
 			RotatePlayer({
 				DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
 				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("―", 56),4),
-				DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
+				DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
 				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("―", 56),4),
 			},HumanPlayers,FP);
 			SetCDeaths(FP,Add,1,ButtonSound);

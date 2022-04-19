@@ -6,7 +6,7 @@
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
 if LD2XOption == 1 then
-	Mapdir="C:\\euddraft0.9.2.0\\MSF_UE_RE"
+	Mapdir="C:\\euddraft0.9.2.0\\MSF_Memory2"
 	__StringArray = {}
 	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
 	Loader2XFName = "Loader.lua"
