@@ -241,13 +241,18 @@ end
 		}, HumanPlayers, FP))
 		FixText(FP,2)
 
-
-		SetLevelUpHP(148)
+		if Limit == 1 then
+			CIf(FP,CD(TestMode,1))
+			SetLevelUpHP(148)
+			CIfEnd()
+		end
 		CMov(FP,0x6509B0,CurrentOP)
 		
-		CIfOnce(FP, {Deaths(CurrentPlayer,AtLeast,1,221)},{SetCD(StartC,1),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)})
-		DoActions2(FP, RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E▶ \x04모든 설정이 완료되었습니다. 잠시 후 게임이 시작됩니다. \x1E◀", 4)}, HumanPlayers, FP), 1)
-		CallTrigger(FP, LevelReset)
+		CIfOnce(FP, {Deaths(CurrentPlayer,AtLeast,1,221)})
+		DoActions2X(FP, {RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E▶ \x04모든 설정이 완료되었습니다. 잠시 후 게임이 시작됩니다. \x1E◀", 4)}, HumanPlayers, FP),
+		SetCD(StartC,1),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)
+	}, 1)
+		CallTriggerX(FP, LevelReset,nil,nil,1)
 		CIfEnd()
 
 		
