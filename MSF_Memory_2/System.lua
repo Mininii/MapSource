@@ -774,7 +774,7 @@ Trigger { -- Äµ³´ °æ°í
 	players = {FP},
 	conditions = {
 		Label(0);
-        Command(FP,AtLeast,1,190);
+        Command(FP,AtLeast,1,173);
         CDeaths(FP,AtMost,0,CanCT);
 		CDeaths(FP,Exactly,0,CanWT);
         CVar(FP,count[2],AtLeast,1500);

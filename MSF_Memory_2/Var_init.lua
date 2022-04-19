@@ -13,8 +13,8 @@ function Var_init()
 		MarAtk2 = 100*2
 		MarAtkFactor2 = 12*2
 	else
-		GTAtk = 50*2
-		GTAtkFactor = 10*2
+		GTAtk = 50
+		GTAtkFactor = 10
 		NMAtk = 15
 		NMAtkFactor = 1
 		HMAtk = 50

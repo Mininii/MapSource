@@ -450,7 +450,8 @@ function SetStr1Data(Index,ConActTable,Flags) --{{{"CD"or "V",CDVIndex,CType,CVa
 	end
 end
 
-TriggerX(FP,{Command(FP,AtMost,0,190)},{
+TriggerX(FP,{
+	Command(FP,AtLeast,1,173);},{
 	SetCSVA1(SVA1(Str1,18),SetTo,0x0D0D0D0D,0xFFFFFFFF),
 	SetCSVA1(SVA1(Str1,19),SetTo,0x0D0D0D0D,0xFFFFFFFF),
 	SetCSVA1(SVA1(Str1,20),SetTo,0x0D0D0D0D,0xFFFFFFFF),

@@ -1669,9 +1669,7 @@ function StoryPrint(T,Text,AddTrig)
 		actions = {
 			RotatePlayer({
 				DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
-				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("¡ª", 56),4),
 				DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
-				DisplayTextX("\x0D\x0D\x13\x04"..string.rep("¡ª", 56),4),
 			},HumanPlayers,FP);
 			SetCDeaths(FP,Add,1,ButtonSound);
 			AddTrig
