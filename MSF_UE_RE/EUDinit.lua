@@ -85,6 +85,7 @@ end
 for j = 0, 6 do
 	table.insert(PatchArr,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
 	end
+	--194
 function SetUnitClassType(UnitID,Type)
 	if Type == 1 then 
 		Class = 198
@@ -92,7 +93,7 @@ function SetUnitClassType(UnitID,Type)
 		Class = 197
 	end
 	table.insert(PatchArr,SetMemoryB(0x6637A0 + UnitID,SetTo,0x02+0x08))
-	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,Class))
+	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,199))
 end
 
 function onInit_EUD()
@@ -152,16 +153,27 @@ function onInit_EUD()
 	SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
 	DefTypePatch(i,7) -- 방어타입 전부 7로 설정
 	SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
-	end
+end
+GunList = {131,132,133,130,151,201,148,173,152,142,135,140,141,138,139,137}
+for j,k in pairs(GunList) do
+	SetUnitAdvFlag(k,0x8000,0x8000)
+end
+
+
+
+
+
+
+
 	UnitEnable2(71)
 	UnitEnable2(19)
 
 	for i = 0, 129 do
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
-	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90}
-	NormalClassTable = {84,30,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
-	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11}
+	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27}
+	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
+	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11,30}
 	for j, k in pairs(PercentTable) do
 		WeaponTypePatch(k,2) -- 무기 타입 퍼딜
 	end

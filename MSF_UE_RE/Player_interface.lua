@@ -141,7 +141,7 @@ function PlayerInterface()
 		ItoDec(FP,TempVT[1],VArr(AvailableStatVA,0),2,nil,0)
 		ItoDec(FP,TempVT[2],VArr(CurrentStatVA,0),2,nil,0)
 		ItoDec(FP,TempVT[3],VArr(MaxLevelVA,0),2,0x1F,0)
-		ItoDec(FP,TempVT[4],VArr(MaxScoreVA,0),2,0x07,0)
+		ItoDec(FP,TempVT[4],VArr(MaxScoreVA,0),2,0x07,2)
 		
 		
 		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]),VArr(AvailableStatVA,0),4*4)
@@ -1192,8 +1192,13 @@ end
 	
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 체력표기
 	SelPTR,SelEPD,SelSh,SelPl,SelMaxHP,PercentCalc = CreateVariables(7)
+	SelWepT =CreateVar(FP)
 	SelHPV =CreateVar(FP)
 	SelHPW =CreateWar(FP)
+	
+	CMov(FP,SelPl,0)
+	CMov(FP,SelUID,0)
+	CMov(FP,SelSh,0)
 	f_Read(FP,0x6284B8,SelPTR,SelEPD)
 	f_Read(FP,_Add(SelEPD,2),SelHPV)
 	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
@@ -1201,7 +1206,6 @@ end
 	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(SelEPD,19025),_Mov(84)))
 	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
-	CTrigger(FP,{CVar(FP,SelPl[2],Exactly,7),CVar(FP,B1_H[2],AtLeast,1)},{TSetCVar(FP,SelHPV[2],Add,B1_K)},1)
 	f_Div(FP,SelHPV,_Mov(256))
 	
 	CIf(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
@@ -1216,7 +1220,6 @@ end
 	f_LMov(FP, {TempV1, TempV2}, TempW3, nil,nil,1)
 	CAdd(FP,SelHPV,TempV1)
 	CIfEnd()
-
 	f_Div(FP,SelSh,_Mov(256))
 	f_Div(FP,SelMaxHP,_Mov(256))
 	CMov(FP,PercentCalc,_Div(_Mul(SelHPV,3),SelMaxHP))
@@ -1242,9 +1245,45 @@ end
 		--DoActionsX(FP,SetCSVA1(SVA1(Str4,Str4s-1),SetTo,0,0xFFFFFFFF))
 		CS__InputVA(FP,iTbl3,0,Str4,Str4s,nil,0,Str4s)
 	CIfEnd()
-	CS__ItoCustom(FP,SVA1(Str3,13),SelMaxHP,nil,0xFFFF0000,10,1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,10,1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25,26,27,28,30})
+
+	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
+	
+	local CurUID = CreateVar(FP)
+	CIf(FP,{CV(SelPl,7),TTCVar(FP, CurUID[2], NotSame, SelUID)})
+		CMov(FP,CurUID,SelUID)
+		CIfX(FP, {TTOR({
+			CVar(FP, SelUID, Exactly, 121),
+			CVar(FP, SelUID, Exactly, 186),
+		})
+		})
+			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,23)
+		CElseX()
+		local SelWepID = CreateVar(FP)
+		local SelTmpUID = CreateVar(FP)
+
+		TriggerX(FP,CV(SelUID,5),SetV(SelTmpUID,6),{preserved})
+		TriggerX(FP,CV(SelUID,23),SetV(SelTmpUID,24),{preserved})
+		TriggerX(FP,CV(SelUID,25),SetV(SelTmpUID,26),{preserved})
+		TriggerX(FP,CV(SelUID,30),SetV(SelTmpUID,31),{preserved})
+		TriggerX(FP,CV(SelUID,3),SetV(SelTmpUID,4),{preserved})
+		TriggerX(FP,CV(SelUID,17),SetV(SelTmpUID,18),{preserved})
+		CMov(FP,SelWepID,0)
+		CMov(FP,SelWepID,Act_BRead(_Add(SelTmpUID,0x6636B8)))
+			CIfX(FP,{TBread(_Add(SelWepID,0x657258), Exactly, 0)})--N
+				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,23)
+			CElseIfX({TBread(_Add(SelWepID,0x657258), Exactly, 2)})--%
+				CS__SetValue(FP, Str3, "\x1FPercent T\x04ype", 0xFFFFFFFF,23)
+			CIfXEnd()
+
+		CIfXEnd()
+
+	CIfEnd()
+
+
+
+	
+	CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,{10,9},1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
+	CS__ItoCustom(FP,SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
 	TBLN1T = {}
 	TBLN2T = {}
 	TBLN1T1 = {}
@@ -1253,18 +1292,16 @@ end
 	for i = 0, 9 do
 --			table.insert(TBLN1T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 --			table.insert(TBLN2T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,13+i),SetTo,0x04,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,13+i),SetTo,0x1C,0xFF))
 		table.insert(TBLN1T1, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 		table.insert(TBLN1T2, SetCSVA1(SVA1(Str3,i),SetTo,0x17,0xFF))
 		table.insert(TBLN1T3, SetCSVA1(SVA1(Str3,i),SetTo,0x08,0xFF))
 	end
 	for i = 0, 3 do
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i),SetTo,0x1C,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i),SetTo,0x1F,0xFF))
+		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1C,0xFF))
+		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1F,0xFF))
 	end
-	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30),SetTo,0x1C,0xFF))
-	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30),SetTo,0x1F,0xFF))
+	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1C,0xFF))
+	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1F,0xFF))
 
 	TriggerX(FP,{CV(PercentCalc,2,AtLeast)},TBLN1T1,{preserved})
 	TriggerX(FP,{CV(PercentCalc,1)},TBLN1T2,{preserved})

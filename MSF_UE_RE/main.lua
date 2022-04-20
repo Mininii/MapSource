@@ -65,6 +65,7 @@ end
 			Include_64BitLibrary("Switch 100")
 			DUnitCalc = Install_EXCC(FP,25,1)
 			LHPCunit = Install_EXCC(FP,25)
+			Install_TMemoryBW(FP)
 			Objects()
 			HPoints()
 			Var_init()

@@ -209,20 +209,20 @@ TempLvHP = CreateVar(FP)
 TempLvHP2 = CreateVar(FP)
 TempLvHP_L = CreateWar(FP)
 TempLvHP_L3 = CreateWar(FP)
+TempBakHP = CreateVar(FP)
+TempBakHP2 = CreateVar(FP)
 HPMul = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 
-
-
-
-
-		f_LMul(FP,TempLvHP_L,_LDiv({VArr(MaxHPBackUp,UnitIDV),0}, _LMov(10)),{_Add(Level,_Mov(9)),0})
+		CMovX(FP, TempBakHP, VArr(MaxHPBackUp,UnitIDV), SetTo, nil, nil, 1)
+		f_Div(FP,TempBakHP2,TempBakHP,2)
+		f_LAdd(FP, TempLvHP_L, _LMul({TempBakHP2,0}, {_Div(Level,_Mov(10)),0}), {TempBakHP,0})
 		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L,SetTo,nil,nil,1)
 		CTrigger(FP,{TTCWar(FP,TempLvHP_L[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L[2],SetTo,"2129920000")},{preserved})
 		TriggerX(FP,{CWar(FP,TempLvHP_L[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L[2],SetTo,"256")},{preserved})
 		f_Cast(FP,{TempLvHP2,0},TempLvHP_L,nil,nil,1) 
-		CMov(FP,0x57f120+(4*0),TempLvHP2)
+		--CMov(FP,0x57f120+(4*0),TempLvHP2)
 		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPDF(0x662350)),SetTo,TempLvHP2)})
 SetCallEnd()
 
@@ -559,8 +559,7 @@ end
 
 	DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
 	local UpVar = CreateVar(FP)
-	CMov(FP,UpVar,Level)
-	f_Div(FP,UpVar,_Mov(2))
+	CMov(FP,UpVar,_Div(Level,10))
 --		for i = 1, 3 do
 --		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{preserved})
 --		end
@@ -571,9 +570,14 @@ end
 	
 	
 
+
 	SetCallEnd()
-	iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04 \x1C000.0%\x04 ")
-	iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F \x1F000.0%\x04 ")
+	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
+	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
+	iStrSize2 = GetiStrSize(0,t01)
+	iStrSize3 = GetiStrSize(0,t02)
+
+
 	iStrSize4 = GetiStrSize(0,"\x07『 \x08뉴클리어 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize5 = GetiStrSize(0,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
@@ -583,8 +587,6 @@ end
 	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- 단축키없음
 	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- 단축키없음
 	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
-	-- ↑ TBLString.txt에서 == 사이에 들어있는 텍스트를 그대로 복사해서 
-	-- EUDEditor2,3의 372번 TBL스트링에 붙여넣고 해당 tbl파일을 맵에 삽입해야함
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
@@ -594,7 +596,7 @@ end
 		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
 
 	end
-	Str3, Str3a, Str3s = SaveiStrArr(FP,"0000000000 \x04/ 0000000000 \x04 \x1C0000.0%\x04 ")
+	Str3, Str3a, Str3s = SaveiStrArr(FP,t01)
 	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04남은 \x08뉴클리어\x04 : 0000000000  \x05-")
 	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	MarStr = {}
