@@ -96,27 +96,6 @@ function Install_DeathNotice()
 		end
 		DoActions(FP,MoveCp(Add,6*4))
 	CIfEnd()
-	
-	CIf(FP,DeathsX(CurrentPlayer,Exactly,12,0,0xFF))
-		DoActions(FP,MoveCp(Subtract,6*4))
-		for j = 1, 7 do
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
-				f_SaveCp()
-				Install_CText1(HTextStrPtr,Str12,Str03,Names[j])
-				DoActionsX(FP,{
-					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,1000,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-1000);
-				})
-				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
-				end
-				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
-				f_LoadCp()
-			CIfEnd()
-		end
-		DoActions(FP,MoveCp(Add,6*4))
-	CIfEnd()
 
 	for j = 1, 7 do
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
@@ -166,6 +145,7 @@ function BGMManager()
 	AddBGM(3,"staredit\\wav\\BGM5_2.ogg",48*1000,{9,10})
 	AddBGM(4,"staredit\\wav\\BGM5_3.ogg",50*1000,{9,10})
 	AddBGM(5,"staredit\\wav\\BGM5_4.ogg",59*1000,{9,10})
+	AddBGM(12,"staredit\\wav\\ExceedOP.ogg",99000)
 
 	
 	roka7BGM = AddBGM(8,"staredit\\wav\\roka7boss.ogg",197*1000)
@@ -189,7 +169,6 @@ function Install_RandPlaceHero()
 	local RandW2 = CreateVar(FP)
 	local HeroID = CreateVar(FP)
 	local HPosX,HPosY = CreateVariables(2)
-	DoActionsX(FP,SetCVar(FP,RandW[2],SetTo,100),1)
 	CWhile(FP,CVar(FP,RandW[2],AtLeast,1),SetCVar(FP,RandW[2],Subtract,1))
 		Check_Spawn = def_sIndex()
 		NJumpXEnd(FP,Check_Spawn)

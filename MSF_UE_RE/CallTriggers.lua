@@ -250,6 +250,7 @@ SetCall(FP)
 			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
 			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
 			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+			
 	})
 	CIfEnd()
 
@@ -261,7 +262,9 @@ SetCall(FP)
 	})
 	CDoActions(FP,{
 		Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo,1),
-		Set_EXCC2(DUnitCalc, CunitIndex, 0, SetTo,Gun_LV),})
+		Set_EXCC2(DUnitCalc, CunitIndex, 0, SetTo,Gun_LV),
+		Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo,1)
+	})
 	CIfX(FP,CVar(FP,RepHeroIndex[2],Exactly,111))
 	CDoActions(FP,{
 	TCreateUnitWithProperties(1, RepHeroIndex, 1, P8,{energy = 100}),TSetMemoryX(_Add(Nextptrs,19),SetTo,CunitP,0xFF)})
@@ -414,14 +417,46 @@ local CB_P = CreateVar(FP)
 		CIfEnd()
 		end
 		CIf(FP,CDeaths(FP,AtLeast,1,Win))
+			ReadScore = CreateVar(FP)
 			for i = 0, 6 do
-					CTrigger(FP,{HumanCheck(i,1),TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
+				CIf(FP,{HumanCheck(i,1)})
+				CMov(FP,ReadScore,0)
+					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
+					
+					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+					CElseX()
+					f_Div(FP,ReadScore,ExScore[i+1],1000)
+					CIfXEnd()
+					CElseX()
+					CMov(FP,ReadScore,0)
+					CIfXEnd()
+					CMul(FP,ReadScore,_Div(Level,_Mov(10)))
+					if Limit == 1 then
+						f_Mul(FP,ReadScore,_Mov(2))
+					end
+					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
+					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
 					DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
-					SetDeaths(i,SetTo,1,14),
 					SetMemory(0x6509B0,SetTo,FP)},1)
+					GetPVA = CreateVArray(FP,13)
+					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
+					_0DPatchX(FP,GetPVA,12)
+					CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
+					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+					CElseX()
+					f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+					CIfXEnd()
+
+					DoActions(FP,{
+						SetMemory(0x6509B0,SetTo,i),
+						DisplayText("\x0D\x0D\x0DKillP".._0D,4),
+						SetMemory(0x6509B0,SetTo,FP)
+					})
+				CIfEnd()
 			end
 
 		CIfEnd()
@@ -487,7 +522,8 @@ end
 		CAdd(FP,0x6509B0,2)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
-	TriggerX(FP,{},{SetCVar(FP,RandW[2],Add,30)},{preserved})
+	TriggerX(FP,{CV(LevelT,1)},{SetCVar(FP,RandW[2],Add,60)},{preserved})
+	TriggerX(FP,{CV(LevelT,2,AtLeast)},{SetCVar(FP,RandW[2],Add,30)},{preserved})
 	SetCallEnd()
 
 	LevelReset = SetCallForward()

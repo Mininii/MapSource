@@ -119,10 +119,17 @@ function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
 end
 	local StartC = CreateCcode()
 	local StartT = CreateCcode()
+	local LoadingC = CreateCcode()
+	
 	CMov(FP,0x6509B0,CurrentOP)
 	KeyCP = CurrentPlayer
-	CIf(FP,{CD(StartC,0),Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole)})
-	TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
+	CIf(FP,{CD(StartC,0),Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCD(LoadingC,0)})
+	if TestStart == 1 then
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
+	else
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
+	end
+
 	local iStrInit = def_sIndex()
 	CJump(FP, iStrInit)
 	local NCCalc = CreateVar(FP)
@@ -160,7 +167,7 @@ end
 	for k = 1, 7 do
 		-- 미션 오브젝트, 환전률 셋팅
 		TriggerX(FP, CVar(FP,SetPlayers[2],Exactly,k), {
-			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..PlayersN[k].." \x07플레이중입니다. \x0F환전률 : \x04"..Ex1[k].."%\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
+			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..PlayersN[k].." \x07플레이중입니다.\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
 				SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
 		}, {preserved})
 	end
@@ -187,7 +194,7 @@ end
 		CA__SetValue(OPStr,initStr2,nil,0) 
 		CIfX(FP,HumanCheck(i,1))
 		f_Div(FP,NukesUsage[i+1],NCCalc,SetPlayers)
-		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtMost, 199)},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
+		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtMost, LvLimit-1)},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
 		CA__ItoName(SVA1(OPStr,0), i, nil, nil, ColorCode[i+1])
 
 		
@@ -205,10 +212,10 @@ end
 
 		CElseIfX(Deaths(i,Exactly,0,23))
 		CA__SetValue(OPStr,NonSCAStr,nil,23) 
-		CElseIfX(Deaths(i,Exactly,3,23))
+		CElseIfX(Deaths(i,Exactly,3,23),SetCD(LoadingC,1))
 		CA__SetValue(OPStr,SCAStat1,nil,23) 
 		CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,23),0x04,0xFF)
-		CElseIfX(Deaths(i,Exactly,1,23))
+		CElseIfX(Deaths(i,Exactly,1,23),SetCD(LoadingC,1))
 		CA__SetValue(OPStr,SCAStat2,nil,23) 
 		CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,23),0x04,0xFF)
 		CIfXEnd()
@@ -233,7 +240,7 @@ end
 		end 
 		CAPrint(OPiStr,{Force1,Force5},{1,0,0,0,1,1,0,0},"CA_OPText",FP,{}) 
 		
-		local IntroT1 = "\x13\x1E▶ \x04상위 플레이어는 시작 레벨 선택 후 Y를 눌러주세요.(좌우버튼) 현재 \x07LV.200 \x04까지 선택가능합니다. \x1E◀"
+		local IntroT1 = "\x13\x1E▶ \x04상위 플레이어는 시작 레벨 선택 후 Y를 눌러주세요.(좌우버튼) 현재 \x07LV."..LvLimit.." \x04까지 선택가능합니다. \x1E◀"
 		local IntroT2 = "\x13\x1E▶ \x08게임이 시작되면 SCA에서 데이터를 불러올 수 없습니다. \x1E◀"
 		DoActions2(FP, RotatePlayer({
 			DisplayTextX(IntroT1,4),
@@ -247,20 +254,22 @@ end
 			CIfEnd()
 		end
 		CMov(FP,0x6509B0,CurrentOP)
-		
-		CIfOnce(FP, {Deaths(CurrentPlayer,AtLeast,1,221)})
+		StartJumpV = def_sIndex()
+		NJump(FP, StartJumpV, {Deaths(CurrentPlayer,AtLeast,1,221),CD(LoadingC,1,AtLeast)}, {TSetMemory(0x6509B0, SetTo, CurrentOP),PlayWAV("sound\\Misc\\PError.WAV");PlayWAV("sound\\Misc\\PError.WAV");DisplayText("\x13\x07『 \x08ERROR \x04: 현재 로드중인 플레이어가 있어 시작할 수 없습니다. \x07』", 4)})
+		CIfOnce(FP, {ElapsedTime(AtLeast, 15),Deaths(CurrentPlayer,AtLeast,1,221)})
 		DoActions2X(FP, {RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E▶ \x04모든 설정이 완료되었습니다. 잠시 후 게임이 시작됩니다. \x1E◀", 4)}, HumanPlayers, FP),
-		SetCD(StartC,1),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)
+		SetCD(StartC,1)
 	}, 1)
 		CallTriggerX(FP, LevelReset,nil,nil,1)
 		CIfEnd()
+		NJumpEnd(FP,StartJumpV)
 
 		
 
 
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
-	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,1)}, 1)
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
 
 	CMov(FP,0x6509B0,CurrentOP)
 

@@ -9,7 +9,7 @@ function LeaderBoardTFunc()
 			CDeaths(FP,AtMost,0,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Kills, "\x07[ \x1DP\x04oints\x07 ] \x04- ");
+			LeaderBoardScore(Kills, "\x07[ \x1DP\x04oints\x07 ]");
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
@@ -24,7 +24,7 @@ function LeaderBoardTFunc()
 			CDeaths(FP,Exactly,400,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Custom, "\x07[ \x08D\x04eaths\x07 ] \x04- ");
+			LeaderBoardScore(Custom, "\x07[ \x08D\x04eaths\x07 ]");
 			LeaderBoardComputerPlayers(Disable);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 			PreserveTrigger();
@@ -50,7 +50,7 @@ function LeaderBoardTFunc()
 			CDeaths(FP,Exactly,200,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardKills("Any unit","\x07[ \x11K\x04ills\x07 ] \x04- ");
+			LeaderBoardKills("Any unit","\x07[ \x11K\x04ills\x07 ]");
 			LeaderBoardComputerPlayers(Disable);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 			PreserveTrigger();

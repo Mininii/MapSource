@@ -280,10 +280,10 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	table.insert(PatchArr,SetMemory(0x582144 + (4*i),SetTo,GunLimit*2))
 	table.insert(PatchArr,SetMemory(0x5822C4 + (4*i),SetTo,1000))
 	table.insert(PatchArr,SetMemory(0x582264 + (4*i),SetTo,1000))
-	table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
-	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,2))
-	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,6))
-	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,10))
+--	table.insert(PatchArr,SetMemoryB(0x6566F8 + (MarWep[i+1]),SetTo,3))
+--	table.insert(PatchArr,SetMemoryW(0x656888 + (MarWep[i+1]*2),SetTo,2))
+--	table.insert(PatchArr,SetMemoryW(0x6570C8 + (MarWep[i+1]*2),SetTo,6))
+--	table.insert(PatchArr,SetMemoryW(0x657780 + (MarWep[i+1]*2),SetTo,10))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
@@ -314,8 +314,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- 공중무기
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
-		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
-		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,7)) -- 부가사거리
+		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*6))
+		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- 부가사거리
 	end
 	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
@@ -419,13 +419,13 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형 
 			SetMemory(0x515BA8,SetTo,256);---------크기 8 일반형
 			SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
-			SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드 마린
-			SetMemory(0x515BB4,SetTo,256);---------크기 1 진동형 P2 익시드 마린
-			SetMemory(0x515BB8,SetTo,256);---------크기 2 진동형 P3 익시드 마린
-			SetMemory(0x515BBC,SetTo,256);---------크기 3 진동형 P4 익시드 마린
-			SetMemory(0x515BC0,SetTo,256);---------크기 4 진동형 P5 익시드 마린
-			SetMemory(0x515BC4,SetTo,256);---------크기 5 진동형 P6 익시드 마린
-			SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드 마린
+			SetMemory(0x515BB0,SetTo,256*2);---------크기 0 진동형 P1 익시드 마린
+			SetMemory(0x515BB4,SetTo,256*2);---------크기 1 진동형 P2 익시드 마린
+			SetMemory(0x515BB8,SetTo,256*2);---------크기 2 진동형 P3 익시드 마린
+			SetMemory(0x515BBC,SetTo,256*2);---------크기 3 진동형 P4 익시드 마린
+			SetMemory(0x515BC0,SetTo,256*2);---------크기 4 진동형 P5 익시드 마린
+			SetMemory(0x515BC4,SetTo,256*2);---------크기 5 진동형 P6 익시드 마린
+			SetMemory(0x515BC8,SetTo,256*2);---------크기 6 진동형 P7 익시드 마린
 			SetMemory(0x515BCC,SetTo,256*10);---------크기 7 진동형 일반마린
 			SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
 			SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV, 진동형 퍼뎀유닛한텐 죽음 ㅅㄱ
@@ -611,7 +611,13 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 				Memory(0x57F0B4, Exactly, 0);
 		},
 			actions = {
-				SetCDeaths(FP,SetTo,1,isSingle);
+				--SetCDeaths(FP,SetTo,1,isSingle);
+					RotatePlayer({
+					DisplayTextX("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+					Defeat();
+					},HumanPlayers,FP);
+					Defeat();
+					SetMemory(0xCDDDCDDC,SetTo,1);
 		},
 		}
 	--	
@@ -619,14 +625,14 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	local SinglePatch = {}
 	for i = 0, 6 do
 		table.insert(SinglePatch,SetMemoryB(0x57F27C + (i * 228) + 70,SetTo,0))
-		table.insert(SinglePatch2,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		--table.insert(SinglePatch2,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 	end
 	CIfX(FP,CDeaths(FP,AtLeast,1,isSingle))
 
 		DoActions(FP,{
 			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8컬러f
 			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 미니맵
-			SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000)
+			--SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000)
 		})
 	CElseX()
 	DoActions(FP,SinglePatch)
@@ -677,9 +683,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	
 
 	f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
-	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
+	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),4*4)
 	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
-	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
+	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),4*4)
 	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
 
 	f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
@@ -698,27 +704,15 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	
 
 	f_Memcpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
-	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
-	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
+	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)+DBossT2[2]+(4*4)),_TMem(Arr(StatPT2[3],0),"X","X",1),StatPT2[2])
+	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)+DBossT2[2]+(4*4)+StatPT2[2]+(4*4)),_TMem(Arr(StatPT3[3],0),"X","X",1),StatPT3[2])
 
 
 	f_Memcpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
-	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(5*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
-	f_Memcpy(FP,_Add(HiScoreStrPtr,StatPT[2]+(5*4)+HiScoreT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
+	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(4*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
+	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(4*4)+HiScoreT2[2]+(4*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 
-	
-	f_Memcpy(FP,NukeStrPtr,_TMem(Arr(NukeT[3],0),"X","X",1),NukeT[2])
-	f_Memcpy(FP,_Add(NukeStrPtr,NukeT[2]+(5*4)),_TMem(Arr(NukeEndT[3],0),"X","X",1),NukeEndT[2])
-
-	f_Memcpy(FP,AHPStrPtr,_TMem(Arr(EnemyHPT1[3],0),"X","X",1),EnemyHPT1[2])
-	f_Memcpy(FP,_Add(AHPStrPtr,EnemyHPT1[2]+(5*4)),_TMem(Arr(EnemyHPT2[3],0),"X","X",1),EnemyHPT2[2])
-
-	
-
-
-	f_Memcpy(FP,ArmorStrPtr,_TMem(Arr(ArmorT[3],0),"X","X",1),ArmorT[2])
-	f_Memcpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)),_TMem(Arr(ArmorT2[3],0),"X","X",1),ArmorT2[2])
-	f_Memcpy(FP,_Add(ArmorStrPtr,ArmorT[2]+(5*4)+ArmorT2[2]+(5*4)),_TMem(Arr(ArmorT3[3],0),"X","X",1),ArmorT3[2])
 
 	
 	

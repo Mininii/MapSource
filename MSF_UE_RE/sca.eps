@@ -8,7 +8,7 @@
 		sca.Exec();
 		const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 		const s=StringBuffer();
-		const Nick1 = PVariable(); // 칭호 식별자
+		const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
 		const LoadCheck = PVariable();
 		const SCA_Stat1 = PVariable(list(1,1,1,1,1,1,1,1));
 		const SCA_GLoadSw = PVariable();
@@ -63,35 +63,38 @@
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
 			if(<?ChatEvent("cp","@칭호 3")?>){
+			if(Deaths(CurrentPlayer,AtLeast,1,11)){
 					Nick1[cp] = 3;
 					f_eprintln("\x03칭호\x04가 \x07 ",3," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
+			else{
+					f_eprintln("\x03칭호\x07 사용 권한\x04이 없습니다.");
+					SetDeaths(CurrentPlayer,SetTo,150,15);
+			}
+			}
 
 			T1[cp] ++;
 			if(Nick1[cp]== 2){
-			if(Deaths(CurrentPlayer,AtLeast,1,11)){
-			SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
-			}
-			else if (OldPLV==1000) {
+			if (OldPLV>=1000) {
 			SetPNamef(cp,"\x07[\x10IMPERIAL \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==500) {
+			else if (OldPLV>=500) {
 			SetPNamef(cp,"\x07[\x08CRIMSON \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==100) {
+			else if (OldPLV>=100) {
 			SetPNamef(cp,"\x07[\x17E\x04LDORA \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==50) {
+			else if (OldPLV>=50) {
 			SetPNamef(cp,"\x07[\x16A\x04RGENTIO \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==40) {
+			else if (OldPLV>=40) {
 			SetPNamef(cp,"\x07[\x10C\x04ORAL \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==30) {
+			else if (OldPLV>=30) {
 			SetPNamef(cp,"\x07[\x06S\x04CARLET \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
-			else if (OldPLV==20) {
+			else if (OldPLV>=20) {
 			SetPNamef(cp,"\x07[\x0FC\x04IAN \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
 			else if (OldPLV>=10) {
@@ -107,6 +110,10 @@
 			}
 			
 			else if(Nick1[cp]== 1){
+			SetPNamef(cp,"\x07[\x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			}
+
+			else if(Nick1[cp]== 3){
 			
 			if(Deaths(CurrentPlayer,AtLeast,1,11)){
 			SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
@@ -115,7 +122,6 @@
 			SetPNamef(cp,"\x07[\x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
 			}
-
 
 
 			if(Switch("Switch 240",Cleared)){
