@@ -5433,17 +5433,9 @@ for i=0,4 do
 			CIfXEnd()
 			
 			CIfX(P6,{CDeaths(P6,AtMost,0,EVMode)})
-				CIfX(FP,BYD)
-					CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--ºñ¿æµåÀÓ
-				CElseX()
-					CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))--ºñ¿æµå¾Æ´Ô
-				CIfXEnd()
+			CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)),100),_Sub(_Mov(100),PerArmor[i+1])))--ºñ¿æµåÀÓ
 			CElseX()
-				CIfX(FP,BYD)
-					CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)),100),_Sub(_Mov(100),PerArmor[i+1])))--ºñ¿æµåÀÓ
-				CElseX()
-					CMov(P6,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)))
-				CIfXEnd()
+			CMov(P6,0x515BB0+(i*4),_Mul(_Div(_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(3000)),100),_Sub(_Mov(100),PerArmor[i+1])))--ºñ¿æµåÀÓ
 			CIfXEnd()
 			
 			CMov(P6,0x582204+(i*4),_Div(MarHP[i+1],_Mov(50)))
