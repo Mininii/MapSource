@@ -24,23 +24,36 @@ table.insert(PatchArr,SetMemoryW(0x660E00 + (UnitID *2), SetTo, 1000))
 table.insert(PatchArr,SetMemoryB(0x6647B0 + (UnitID), SetTo, 255))
 end
 
-function UnitEnable(UnitID)
-table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
-table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0))
-table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0))
-table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1))
-table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
+function UnitEnableX(UnitID,MinCost,GasCost,BuildTime,SuppCost)
+	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
+	if MinCost ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- 미네랄
+	else
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0)) -- 미네랄
+	end
+	if GasCost ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,GasCost)) -- 가스
+	else
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0)) -- 가스
+	end
+	if BuildTime ~= nil then
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,BuildTime)) -- 생산속도
+	else
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1)) -- 생산속도
+	end
+	if SuppCost ~= nil then
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,SuppCost)) -- 서플
+	else
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0)) -- 서플
+	end
+
 end
 function UnitEnable2(UnitID)
 table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
-table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
-end
-
-function UnitEnable3(UnitID,Tick)
-table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,Tick))
 table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
 table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0))
 end
@@ -142,8 +155,13 @@ function onInit_EUD()
 
 	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
+
+	
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+	
+	CTrigger(FP,{TMemoryB(0x6647B0, CurrentUID, AtMost,0)},{TSetMemoryW(0x660E00, CurrentUID, SetTo, 0)},1) -- if Has Shield == 0 then Shield Amount = 0
+	
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
@@ -165,7 +183,7 @@ end
 
 
 
-	UnitEnable2(71)
+	UnitEnableX(71,400)
 	UnitEnable2(19)
 
 	for i = 0, 129 do
@@ -336,21 +354,20 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		UnitEnable2(7)
 		UnitEnable2(1)
 	for i = 1, 4 do
-		UnitEnable3(MedicTrig[i],i)
-		SetUnitCost(MedicTrig[i],200+(i*50))
+		UnitEnableX(MedicTrig[i],200+(i*50),nil,i)
 	end
-	UnitEnable(72)
-	UnitEnable(22)
-	UnitEnable(29)
-	UnitEnable(70)
-	UnitEnable(64)
-	UnitEnable(65)
-	UnitEnable(66)
-	UnitEnable(67)
-	UnitEnable(68)
-	UnitEnable(48)
+	UnitEnableX(72)
+	UnitEnableX(22)
+	UnitEnableX(29)
+	UnitEnableX(70)
+	UnitEnableX(64)
+	UnitEnableX(65,1200)
+	UnitEnableX(66)
+	UnitEnableX(67,1200)
+	UnitEnableX(68)
+	UnitEnableX(48)
 	for i = 37, 45 do
-		UnitEnable(i)
+		UnitEnableX(i)
 		
 	end
 
@@ -470,18 +487,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		conditions = {
 			Label(0);
 			isname(i,"RonaRonaChan");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"(+=.=+)");
 			CDeaths(FP,AtLeast,1,LimitX);
 		},
 		actions = {

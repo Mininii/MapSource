@@ -2,7 +2,7 @@
 function Objects()
 
 
-	LvLimit = 100
+	LvLimit = 1
 	-- Balance
 	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
@@ -254,17 +254,17 @@ function Var_init()
 	PCheck = CreateCcode()
 	TestMode = CreateCcode()
 	FuncT = Create_CCTable(7)
-	OPFuncT, IntroT, ReplaceDelayT = CreateCCodes(4)
-	RandomHeroPlace = CreateCCodes(1)
-	Continue, Continue2 = CreateCCodes(2)
-	PExitFlag, ScorePrint, countdownSound = CreateCCodes(3)
+	OPFuncT, IntroT, ReplaceDelayT = CreateCcodeArr(4)
+	RandomHeroPlace = CreateCcodeArr(1)
+	Continue, Continue2 = CreateCcodeArr(2)
+	PExitFlag, ScorePrint, countdownSound = CreateCcodeArr(3)
 	BarrackPtr = Create_VTable(7)
 	BarPos = Create_VTable(7)
 	ExScore = Create_VTable(7)
 	PScoreSTrPtr = Create_VTable(7)
 	NukeUseStrPtr = Create_VTable(7)
 	AMUseStrPtr = Create_VTable(7)
-	f_GunNumT = CreateVarr(5,FP)
+	f_GunNumT = CreateVArr(5,FP)
 	Names = Create_VArrTable(7,7)
 	BanToken = Create_CCTable(7) -- {"X",EXCC_Forward,0x15C,1,2}
 	rokaClear = CreateCcode()
@@ -275,10 +275,10 @@ function Var_init()
 	DemClear = CreateCcode()
 	StoryT4 = CreateCcode()
 	Win = CreateCcode()
-	AutoJYDFlag = CreateCCodeArr(7)
+	AutoJYDFlag = CreateCcodeArr(7)
 	BiteCalc,InputPoint,OutputPoint,UnitPoint = CreateVariables(4)
 	SoundLimitT = CreateCcode()
-	SoundLimit = CreateCCodeArr(7)
+	SoundLimit = CreateCcodeArr(7)
 	WaitT = CreateCcode()
 	Destr0yerClear = CreateCcode()
 	Destr0yerClear2 = CreateCcode()

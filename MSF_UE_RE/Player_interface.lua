@@ -892,7 +892,9 @@ function PlayerInterface()
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
 		CIfEnd()
-		
+		CIf(FP,CD(TestMode,1))
+		CMov(FP,0x57f0f0,AtkUpCompCount[i+1],100000000)
+		CIfEnd()
 		CIf(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,255*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))},{SetMemoryX(DefUpgradePtrArr[i+1],SetTo,0*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))})
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
@@ -905,7 +907,9 @@ function PlayerInterface()
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
 		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,DefFactorV[i+1][2],Add,4)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
-
+		CIf(FP,CD(TestMode,1))
+		CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
+		CIfEnd()
 		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- 체력값 초기화
 		for Bit = 0, 7 do
 		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
@@ -1247,6 +1251,7 @@ end
 	local CurUID = CreateVar(FP)
 	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
 	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
+	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
 	CIf(FP,{CV(SelPl,7)})
 		CMov(FP,CurUID,SelUID)
 		CIfX(FP, {TTOR({
@@ -1258,6 +1263,7 @@ end
 		CElseX()
 		local SelWepID = CreateVar(FP)
 		local SelTmpUID = CreateVar(FP)
+		CMov(FP,SelTmpUID,SelUID)
 
 		TriggerX(FP,CV(SelUID,5),SetV(SelTmpUID,6),{preserved})
 		TriggerX(FP,CV(SelUID,23),SetV(SelTmpUID,24),{preserved})
@@ -1275,6 +1281,7 @@ end
 
 		CIfXEnd()
 
+	CIfEnd()
 	CIfEnd()
 	CIfEnd()
 

@@ -2197,6 +2197,7 @@ function Install_DLBoss()
 	}
 	
 	CAdd(FP,VO(8),Dt_NT)
+
 	
 	Trigger { -- 무브로케 스킬
 		players = {P8},
@@ -2206,6 +2207,7 @@ function Install_DLBoss()
 			Void(1, Exactly, 8);
 			Void(2, Exactly, 31);
 			Void(3, Exactly, 15);
+			Void(10,Exactly,0);
 		},
 		actions = {
 			PreserveTrigger();
@@ -2238,6 +2240,7 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
+			SetVoid(10,SetTo,1);
 			SetVoid(8, SetTo, 0);
 			Wait(0);
 			Comment("무브로케 스킬");

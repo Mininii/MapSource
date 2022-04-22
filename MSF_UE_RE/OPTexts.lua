@@ -86,7 +86,7 @@ function OPText()
 	for i = 1, 3 do
 	--TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,i)},{SetResources(Force1,Add,50000*i,ore),SetMemoryW(0x656EB0, Add, 500*i)})
 	end
-	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV2})
 
 	--local Formation = "\n\n\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(ªÄ>¤µ<)ªÄ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04ÀÌ ¹®±¸°¡ ¶ã °æ¿ì \x07Á¤½Ä¹öÀü\x04ÀÔ´Ï´Ù. \n\x13\x04¹«´Ü ¼öÁ¤¸ÊÀ» ÁÖÀÇÇØÁÖ¼¼¿ä.\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"

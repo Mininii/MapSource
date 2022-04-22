@@ -1,6 +1,6 @@
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\MSF_UE\\main.lua")
+--dofile(Curdir.."MapSource\\MSF_UE_RE\\main.lua")
 
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
