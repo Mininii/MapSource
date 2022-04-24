@@ -70,6 +70,11 @@ CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
 	CMov(FP,0x582234 + (4*i),SuppMax) -- 인구수 상시 업데이트(맥스)
 	CMov(FP,0x5821D4 + (4*i),SuppMax) -- 인구수 상시 업데이트(사용가능)
 	end
+	for k = 1, 7 do
+	CIf(FP,{CV(PCheckV,k)})
+	CAdd(FP,ExchangeRate,_Mul(LevelFactor,ExchangeRateT[k]),ExchangeRateT[k])
+	CIfEnd()
+end
 CIfEnd()
 
 CIfEnd()

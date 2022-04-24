@@ -425,12 +425,12 @@ local CB_P = CreateVar(FP)
 					
 					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
 					CElseX()
-					f_Div(FP,ReadScore,ExScore[i+1],1000)
+					f_Div(FP,ReadScore,ExScore[i+1],100)
 					CIfXEnd()
 					CElseX()
 					CMov(FP,ReadScore,0)
 					CIfXEnd()
-					CMul(FP,ReadScore,_Div(Level,_Mov(10)))
+					--CMul(FP,ReadScore,_Div(Level,_Mov(10)))
 					if Limit == 1 then
 						f_Mul(FP,ReadScore,_Mov(2))
 					end
@@ -610,6 +610,8 @@ end
 	SetCallEnd()
 	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
 	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
+	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(S) \x07』"
+	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(D) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
 
@@ -617,16 +619,24 @@ end
 	iStrSize4 = GetiStrSize(0,"\x07『 \x08뉴클리어 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize5 = GetiStrSize(0,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
+	
+	iStrSize7 = GetiStrSize(0,"\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(S) \x07』")
+	iStrSize8 = GetiStrSize(0,"\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(D) \x07』")
+	
 
 	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
 	S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- 단축키없음
 	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- 단축키없음
 	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- 단축키없음
 	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
+	S6 = MakeiTblString(1480,"일반명령",'S',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
+	S7 = MakeiTblString(1481,"일반명령",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
 	iTbl4 = GetiTblId(FP,129,S4) 
+	iTbl5 = GetiTblId(FP,1480,S6) 
+	iTbl6 = GetiTblId(FP,1481,S7) 
 	PMariTbl = {}
 	for i = 0, 6 do
 		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
@@ -641,6 +651,8 @@ end
 	for i = 0, 6 do
 		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D")
 	end
+	Str6, Str6a, Str6s = SaveiStrArr(FP,t03)
+	Str7, Str7a, Str7s = SaveiStrArr(FP,t04)
 	
 
 	

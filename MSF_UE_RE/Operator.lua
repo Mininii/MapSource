@@ -158,21 +158,31 @@ end
 	CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP, CurLevel[2], AtLeast, 11)},{SetCVar(FP,CurLevel[2],Subtract,10)},1)
 
 	CTrigger(FP, {TTCVar(FP,Level[2],NotSame,CurLevel)}, {TSetCVar(FP, Level[2], SetTo, CurLevel),RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg")},HumanPlayers,FP)}, 1)
-
-	
+	CMov(FP,LevelFactor,_Div(Level,10))
 	CMov(FP,SetPlayers,0)
+	DoActionsX(FP, {
+		SetCVar(FP,ExchangeRateT[1][2],SetTo,Ex1[1]);
+		SetCVar(FP,ExchangeRateT[2][2],SetTo,Ex1[2]);
+		SetCVar(FP,ExchangeRateT[3][2],SetTo,Ex1[3]);
+		SetCVar(FP,ExchangeRateT[4][2],SetTo,Ex1[4]);
+		SetCVar(FP,ExchangeRateT[5][2],SetTo,Ex1[5]);
+		SetCVar(FP,ExchangeRateT[6][2],SetTo,Ex1[6]);
+		SetCVar(FP,ExchangeRateT[7][2],SetTo,Ex1[7]);
+	})
 	for i = 0, 6 do
 		TriggerX(FP, HumanCheck(i,1), SetCVar(FP,SetPlayers[2],Add,1), {preserved})
 	end
 	for k = 1, 7 do
+		CIf(FP, CVar(FP,SetPlayers[2],Exactly,k))
 		-- 미션 오브젝트, 환전률 셋팅
-		TriggerX(FP, CVar(FP,SetPlayers[2],Exactly,k), {
+		TriggerX(FP, {}, {
 			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..PlayersN[k].." \x07플레이중입니다.\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
-				SetCVar(FP,ExchangeRate[2],SetTo,Ex1[k]);
 		}, {preserved})
+			CAdd(FP,ExchangeRate,_Mul(LevelFactor,ExchangeRateT[k]),ExchangeRateT[k])
+		CIfEnd()
 	end
 
-	CMov(FP,NCCalc,_Mul(_Div(Level,10),7),7)
+	CMov(FP,NCCalc,_Mul(LevelFactor,7),7)
 
 
 

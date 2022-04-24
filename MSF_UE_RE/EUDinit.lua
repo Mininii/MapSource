@@ -366,7 +366,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(67,1200)
 	UnitEnableX(68)
 	UnitEnableX(48)
-	for i = 37, 45 do
+	for i = 37, 47 do
 		UnitEnableX(i)
 		
 	end

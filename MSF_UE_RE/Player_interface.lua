@@ -11,7 +11,8 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	
+	local AtkExceed = Create_VTable(7,20,FP)
+	local HPExceed = Create_VTable(7,15,FP)	
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
@@ -837,47 +838,67 @@ function PlayerInterface()
 					})
 			NIfEnd()
 		
-		
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,AtLeast,1)) -- 공업 255회
+		CIfX(FP,{CV(AtkExceed[i+1],AtkUpCompCount[i+1],AtLeast)})
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,Exactly,4)) -- 공업 255회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,255),
-				SetMemoryB(0x58D2B0+(46*i)+18,SetTo,0)})
+				SetMemoryB(0x58D2B0+(46*i)+18,SetTo,3)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+17,AtLeast,1)) -- 공업 10회
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+17,Exactly,4)) -- 공업 10회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,AtkFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,10),
-				SetMemoryB(0x58D2B0+(46*i)+17,SetTo,0)})
+				SetMemoryB(0x58D2B0+(46*i)+17,SetTo,3)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,AtLeast,1)) -- 체업 255회
+		DoActions(FP, {
+			SetMemoryB(0x58D2B0+(46*i)+18,SetTo,3),
+			SetMemoryB(0x58D2B0+(46*i)+17,SetTo,3),
+		})
+		CElseX({
+			SetMemoryB(0x58D2B0+(46*i)+18,SetTo,2),
+			SetMemoryB(0x58D2B0+(46*i)+17,SetTo,2),
+		})
+		CIfXEnd()
+
+		CIfX(FP,{CV(HPExceed[i+1],DefUpCompCount[i+1],AtLeast)})
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,4)) -- 체업 255회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,DefFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,255),
-				SetMemoryB(0x58D2B0+(46*i)+19,SetTo,0)})
+				SetMemoryB(0x58D2B0+(46*i)+19,SetTo,3)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
-		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,AtLeast,1)) -- 체업 10회
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+20,Exactly,4)) -- 체업 10회
 			CDoActions(FP,{
 				SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(DefUpgradePtrArr[i+1])),
 				SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^DefUpgradeMaskRetArr[i+1]),
 				TSetCVar(FP,UpgradeFactor[2],SetTo,DefFactorV[i+1]),
 				SetCVar(FP,UpgradeCP[2],SetTo,i),
 				SetCVar(FP,UpgradeMax[2],SetTo,10),
-				SetMemoryB(0x58D2B0+(46*i)+20,SetTo,0)})
+				SetMemoryB(0x58D2B0+(46*i)+20,SetTo,3)})
 			CallTrigger(FP,OneClickUpgrade)
 		NIfEnd()
+		DoActions(FP, {
+			SetMemoryB(0x58D2B0+(46*i)+19,SetTo,3),
+			SetMemoryB(0x58D2B0+(46*i)+20,SetTo,3),
+		})
+		CElseX({
+			SetMemoryB(0x58D2B0+(46*i)+19,SetTo,2),
+			SetMemoryB(0x58D2B0+(46*i)+20,SetTo,2),
+		})
+		CIfXEnd()
 		
 		CIf(FP,{MemoryX(AtkUpgradePtrArr[i+1],AtLeast,255*(256^AtkUpgradeMaskRetArr[i+1]),255*(256^AtkUpgradeMaskRetArr[i+1]))},{SetMemoryX(AtkUpgradePtrArr[i+1],SetTo,0*(256^AtkUpgradeMaskRetArr[i+1]),255*(256^AtkUpgradeMaskRetArr[i+1]))})
 		DoActionsX(FP,{
@@ -905,7 +926,7 @@ function PlayerInterface()
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,DefFactorV[i+1][2],Add,4)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,15)},{SetCVar(FP,DefFactorV[i+1][2],Add,4)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
 		CIf(FP,CD(TestMode,1))
 		CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
@@ -1027,12 +1048,18 @@ end
 		CIfEnd()
 		CIfShopOld(i,45,P_ExcOldP,"\x07[ \x07구입 성공, \x1B구버전 포인트\x04가 전환되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",nil,{SetDeaths(i, Add, 1, 35)})
 		CIfEnd()
+		CIfShop(i,46,P_AtkExceed,"\x07[ \x07구입 성공, \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
+		CIfEnd()
+		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],74,AtMost)},AddV(HPExceed[i+1],1))
+		CIfEnd()
 		CDoActions(FP,{
 			TSetMemory(_Add(MenuPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 			TSetMemory(_Add(MenuPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
 			TSetMemoryX(_Add(MenuPtr[i+1],0xA0/4),SetTo,228,0xFFFF);
 			SetCDeaths(FP,SetTo,0,ShopSw[i+1])})
 		CIfEnd()
+		TriggerX(FP,CV(AtkExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,0)},{preserved})
+		TriggerX(FP,CV(HPExceed[i+1],74+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1},
 			{MultiStimPack[i+1],{42},1},
@@ -1224,16 +1251,25 @@ end
 	f_Div(FP,SelSh,_Mov(256))
 	f_Div(FP,SelMaxHP,_Mov(256))
 	CMov(FP,PercentCalc,_Div(_Mul(SelHPV,3),SelMaxHP))
-	CIf(FP,{CV(SelUID,128)})
+	CIf(FP,{CV(SelUID,128)}) -- 상점 디스플레이
 	PointTamp = CreateVar(FP)
+	AtkExceedTemp = CreateVar(FP)
+	HPExceedTemp = CreateVar(FP)
 		for i = 0, 6 do
 			CIf(FP,{CV(SelPl,i)})
-			CTrigger(FP, CV(SelPl,i), {TSetCVar(FP,PointTamp[2],SetTo,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],_Mov(P_ExcOldP))))}, 1)
+			CTrigger(FP, {}, {TSetCVar(FP,PointTamp[2],SetTo,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],_Mov(P_ExcOldP))))}, 1)
+			CMov(FP,AtkExceedTemp,AtkExceed[i+1])
+			CMov(FP,HPExceedTemp,HPExceed[i+1])
+
 			CIfEnd()
 		end
 		CS__ItoCustom(FP,SVA1(Str5,16),PointTamp,nil,nil,10,1,nil,"\x070",0x07,{0,1,2,3,4,5,6,7,8,9})
+		CS__ItoCustom(FP,SVA1(Str6,16),AtkExceedTemp,nil,nil,{10,3},1,nil,"\x070",0x1D)
+		CS__ItoCustom(FP,SVA1(Str7,15),HPExceedTemp,nil,nil,{10,3},1,nil,"\x070",0x1D)
 		
 	CS__InputVA(FP,iTbl4,0,Str5,Str5s,nil,0,Str5s)
+	CS__InputVA(FP,iTbl5,0,Str6,Str6s,nil,0,Str6s)
+	CS__InputVA(FP,iTbl6,0,Str7,Str7s,nil,0,Str7s)
 
 
 	CIfEnd()

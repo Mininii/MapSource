@@ -2,7 +2,7 @@
 function Objects()
 
 
-	LvLimit = 1
+	LvLimit = 100
 	-- Balance
 	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
@@ -19,6 +19,8 @@ function Objects()
 	P_MultiHoldCost = 20
 	P_StimCost = 10 -- 원격 스팀팩 사용가능
 	P_ExcOldP = 10000
+	P_AtkExceed = 15
+	P_HPExceed = 15
 	
 	--System
 	MarID = {0,1,16,20,32,99,100}  
@@ -254,10 +256,10 @@ function Var_init()
 	PCheck = CreateCcode()
 	TestMode = CreateCcode()
 	FuncT = Create_CCTable(7)
-	OPFuncT, IntroT, ReplaceDelayT = CreateCcodeArr(4)
-	RandomHeroPlace = CreateCcodeArr(1)
-	Continue, Continue2 = CreateCcodeArr(2)
-	PExitFlag, ScorePrint, countdownSound = CreateCcodeArr(3)
+	OPFuncT, IntroT, ReplaceDelayT = CreateCcodes(4)
+	RandomHeroPlace = CreateCcode()
+	Continue, Continue2 = CreateCcodes(2)
+	PExitFlag, ScorePrint, countdownSound = CreateCcodes(3)
 	BarrackPtr = Create_VTable(7)
 	BarPos = Create_VTable(7)
 	ExScore = Create_VTable(7)
@@ -322,6 +324,7 @@ function Var_init()
 	Repeat_TempV = CreateVar(FP)
 	TempBarPos = CreateVar(FP)
 	ExchangeRate = CreateVar(FP)
+	ExchangeRateT = CreateVarArr(7, FP)
 	Actived_Gun = CreateVar(FP)
 	HTextStrPtr = CreateVar(FP)
 	UnitDataPtr = CreateVar(FP)
@@ -381,6 +384,7 @@ function Var_init()
 	RandV = CreateVar(FP)
 	TempX = CreateVar(FP)
 	TempY = CreateVar(FP)
+	LevelFactor = CreateVar(FP)
 	end
 
 function HPoints()
