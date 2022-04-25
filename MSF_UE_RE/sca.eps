@@ -58,9 +58,14 @@
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
 			if(<?ChatEvent("cp","@칭호 2")?>){
+			if (OldPLV>=2) {
 					Nick1[cp] = 2;
 					f_eprintln("\x03칭호\x04가 \x07 ",2," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
+			}
+			else {
+					f_eprintln("\x03구 레벨데이터\x04가 존재하지 않습니다.");
+			}
 			}
 			if(<?ChatEvent("cp","@칭호 3")?>){
 			if(Deaths(CurrentPlayer,AtLeast,1,11)){
@@ -77,34 +82,34 @@
 			T1[cp] ++;
 			if(Nick1[cp]== 2){
 			if (OldPLV>=1000) {
-			SetPNamef(cp,"\x07[\x10IMPERIAL \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x10IMPERIAL \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=500) {
-			SetPNamef(cp,"\x07[\x08CRIMSON \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x08CRIMSON \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=100) {
-			SetPNamef(cp,"\x07[\x17E\x04LDORA \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x17E\x04LDORA \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=50) {
-			SetPNamef(cp,"\x07[\x16A\x04RGENTIO \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x16A\x04RGENTIO \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=40) {
-			SetPNamef(cp,"\x07[\x10C\x04ORAL \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x10C\x04ORAL \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=30) {
-			SetPNamef(cp,"\x07[\x06S\x04CARLET \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x06S\x04CARLET \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=20) {
-			SetPNamef(cp,"\x07[\x0FC\x04IAN \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x0FC\x04IAN \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=10) {
-			SetPNamef(cp,"\x07[\x11D\x04ANDELION \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x11D\x04ANDELION \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 			else if (OldPLV>=5) {
-			SetPNamef(cp,"\x07[\x0EC\x04OBALT \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			SetPNamef(cp,"\x07[\x0EC\x04OBALT \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
-			else if (OldPLV>=1) {
-			SetPNamef(cp,"\x07[\x15S\x04IENNA \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			else if (OldPLV>=2) {
+			SetPNamef(cp,"\x07[\x15S\x04IENNA \x04- \x17Old \x1FLV.\x04{}\x07] {:c}{:n}",OldPLV,cp,cp);
 			}
 
 			}
@@ -125,9 +130,9 @@
 
 
 			if(Switch("Switch 240",Cleared)){
+				
 				switch(sca.GetLastMessage()){
 					case 1:
-						sca.ResetLastMessage();
 						SCA_GLoadSw[cp] = 1;
 						SCA_Stat1[cp] = 0;
 						SetDeaths(CurrentPlayer, SetTo, 3, 23);
@@ -136,7 +141,6 @@
 				once (LoadCheck[cp] == 1 && sca.GetLastMessage() == 4 &&SCA_LLoadCheck[cp]==1) {
 					SetDeaths(CurrentPlayer, SetTo, 2, 23);
 				}
-				sca.ResetLastMessage();
 				if(SCA_GLoadSw[cp] == 1 && Memory(0x58f900,AtMost,1)){ // Data Load
 					SetDeaths(CurrentPlayer,SetTo,350,15);
 					sca.LoadGlobalData();
@@ -203,7 +207,7 @@
 				}
 			}
 
-			if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
+			if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1 && sca.GetLastMessage() == 4){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
 			var CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
 				if(sca.GlobalData[10] != CurVer && LoadCheck[cp] == 0 && CurVer >= sca.GlobalData[11]){ // 구버전, 허나 지원됨
 					f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");

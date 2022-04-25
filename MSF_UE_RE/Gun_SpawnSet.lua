@@ -247,7 +247,7 @@ function InstallGunData()
 		CIf(FP,Gun_Line(0,Exactly,130))--°¨Ä¿
 			CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,15000)})
-				TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10)},{SetCDeaths(FP,Add,45000,GCT)},{preserved})
+				TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10)},{SetCDeaths(FP,Add,25000,GCT)},{preserved})
 				CMov(FP,ReserveBGM,5)
 				GunBreak("\x07£Ç£ò£á£ö£é£ô£ù¡¡£Ã£å£î£ô£å£ò",150000)
 			CIfEnd()

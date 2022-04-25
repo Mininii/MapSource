@@ -110,7 +110,6 @@ function SetUnitClassType(UnitID,Type)
 end
 
 function onInit_EUD()
-	local LimitX, LimitC = CreateCcodes(2)
 	local ShTStrPtr = Create_VTable(7)
 	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SetMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
 --	f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
@@ -189,7 +188,7 @@ end
 	for i = 0, 129 do
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
-	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27}
+	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27,30}
 	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
 	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11,30}
 	for j, k in pairs(PercentTable) do
@@ -457,45 +456,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		DoActions(FP,SetSwitch("Switch 231",Set))
 	end
 
-	for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"GALAXY_BURST");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"_Mininii");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"RonaRonaChan");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-	}
-	end
-
 	T_YY = 2021
 	T_MM = 12
 	T_DD = 02
@@ -520,23 +480,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		}
 	}
 	end
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,Exactly,1,LimitX);
-			CDeaths(FP,Exactly,0,LimitC);
-			
-		},
-		actions = {
-			RotatePlayer({
-			DisplayTextX("\x13\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요. \n\x13\x04실행 방지 코드 0x32223223 작동.",4);
-			Defeat();
-			},HumanPlayers,FP);
-			Defeat();
-			SetMemory(0xCDDDCDDC,SetTo,1);
-		}
-	}
 	
 	Trigger { -- 배속방지
 		players = {FP},

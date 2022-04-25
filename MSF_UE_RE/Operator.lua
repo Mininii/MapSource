@@ -129,6 +129,8 @@ end
 	else
 		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
 	end
+	TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(LimitC,1);})
+	
 
 	local iStrInit = def_sIndex()
 	CJump(FP, iStrInit)
@@ -279,8 +281,28 @@ end
 
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
-	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
-
+	CIfOnce(FP, CD(StartT,100,AtLeast))
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
+	if Limit == 1 then
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,1,LimitX);
+			CDeaths(FP,Exactly,0,LimitC);
+			
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요. \n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+	end
+	CIfEnd()
 	CMov(FP,0x6509B0,CurrentOP)
 
 	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07『 \x1F기부 ON \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)

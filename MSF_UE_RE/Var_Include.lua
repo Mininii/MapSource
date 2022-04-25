@@ -385,6 +385,8 @@ function Var_init()
 	TempX = CreateVar(FP)
 	TempY = CreateVar(FP)
 	LevelFactor = CreateVar(FP)
+	
+	LimitX, LimitC = CreateCcodes(2)
 	end
 
 function HPoints()
