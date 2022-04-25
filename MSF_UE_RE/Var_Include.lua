@@ -11,7 +11,7 @@ function Objects()
 	AtkFactor = 5
 	DefFactor = 10
 	GunLimit = 1500
-	Ex1= {20,25,30,35,40,45,50}
+	Ex1= {10,15,20,25,30,35,40}
 	NK= {30,18,13,9,7,6,5}
 
 	--Shop
@@ -202,7 +202,7 @@ function Var_init()
 	HiScoreT1 = CreateCText(FP,"\x10【 \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
 	HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
 	NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	
+
 	GiveSendT = CreateCText(FP,"\x07『 \x0d\x0d\x0d\x0d")
 	GiveT2 = CreateCText(FP,"\x04에게 \x0d\x0d\x0d\x0d")
 	GiveSendT2 = CreateCText(FP," Ore\x04를 기부하였습니다. \x07』")
@@ -359,20 +359,16 @@ function Var_init()
 	RecallPosX = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
 	HiScoreStrPtr = CreateVar(FP)
-	NukeStrPtr = CreateVar(FP)
-	SupplyStrPtr = CreateVar(FP)
 	SuppMax = CreateVar(FP)
 	MulPoint = CreateVar(FP)
-	ArmorStrPtr = CreateVar(FP)
 	GiveStrPtr = CreateVar(FP)
 	QCUnits = CreateVar(FP)
 	SpeedBackup = CreateVar(FP)
-	AHPStrPtr = CreateVar(FP)
 	NukesUsage = CreateVarArr(7,FP)
 	OldStat = Create_VTable(7,nil,FP)
 	UsedOldP = Create_VTable(7,nil,FP)
 	OldMaxLevel = Create_VTable(7,nil,FP)
-	NewMaxLevel = Create_VTable(7,1,FP)
+	NewMaxLevel = Create_VTable(7,nil,FP)
 	OldMaxScore = Create_VTable(7,nil,FP)
 	AtkLV = Create_VTable(7,nil,FP)
 	HPLV = Create_VTable(7,nil,FP)
@@ -386,6 +382,12 @@ function Var_init()
 	TempY = CreateVar(FP)
 	LevelFactor = CreateVar(FP)
 	
+	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
+	--HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HVA3 = CVArray(FP,4*5) 
+
+	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	LimitX, LimitC = CreateCcodes(2)
 	end
 

@@ -79,7 +79,7 @@ CIfEnd()
 
 CIfEnd()
 	for i = 0, 6 do
-	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{preserved})
+	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부모드\x04 : F9, \x1F수동저장 \x04: HOME키\x07 ]")},{preserved})
 	end
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({

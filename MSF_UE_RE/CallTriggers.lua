@@ -522,8 +522,8 @@ end
 		CAdd(FP,0x6509B0,2)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
-	TriggerX(FP,{CV(LevelT,1)},{SetCVar(FP,RandW[2],Add,60)},{preserved})
-	TriggerX(FP,{CV(LevelT,2,AtLeast)},{SetCVar(FP,RandW[2],Add,30)},{preserved})
+	TriggerX(FP,{CV(LevelT,1)},{SetCVar(FP,RandW[2],Add,100)},{preserved})
+	TriggerX(FP,{CV(LevelT,2,AtLeast)},{SetCVar(FP,RandW[2],Add,50)},{preserved})
 	SetCallEnd()
 
 	LevelReset = SetCallForward()
@@ -540,6 +540,7 @@ end
 	
 	f_Mod(FP,LevelT,Level,_Mov(10))
 	f_Div(FP,LevelT2,Level,_Mov(10))
+	CAdd(FP,LevelT2,1)
 	CMov(FP,Diff,LevelT2)
 	TriggerX(FP,{CVar(FP,Diff[2],AtLeast,4)},{SetCVar(FP,Diff[2],SetTo,3)},{preserved})
 	TriggerX(FP,{CVar(FP,LevelT[2],Exactly,0)},{SetCVar(FP,LevelT[2],SetTo,10)},{preserved})
@@ -610,7 +611,7 @@ end
 	SetCallEnd()
 	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
 	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
-	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(S) \x07』"
+	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(A) \x07』"
 	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(D) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
@@ -620,7 +621,7 @@ end
 	iStrSize5 = GetiStrSize(0,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
 	
-	iStrSize7 = GetiStrSize(0,"\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(S) \x07』")
+	iStrSize7 = GetiStrSize(0,"\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(A) \x07』")
 	iStrSize8 = GetiStrSize(0,"\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:15) \x03(D) \x07』")
 	
 
@@ -629,7 +630,7 @@ end
 	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- 단축키없음
 	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- 단축키없음
 	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
-	S6 = MakeiTblString(1480,"일반명령",'S',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
+	S6 = MakeiTblString(1480,"일반명령",'A',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
 	S7 = MakeiTblString(1481,"일반명령",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 

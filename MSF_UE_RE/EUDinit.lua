@@ -26,9 +26,6 @@ end
 
 function UnitEnableX(UnitID,MinCost,GasCost,BuildTime,SuppCost)
 	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
 	if MinCost ~= nil then
 	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- 미네랄
@@ -164,6 +161,8 @@ function onInit_EUD()
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
+	table.insert(PatchArr,SetMemoryW(0x660E00+(173*2), SetTo, 10000)) -- 포메이션 쉴드 1만으로 설정
+
 
 	for i = 0, 227 do
 	SetUnitDefUpType(i,60) -- 방업 적용 방지
@@ -175,6 +174,8 @@ GunList = {131,132,133,130,151,201,148,173,152,142,135,140,141,138,139,137}
 for j,k in pairs(GunList) do
 	SetUnitAdvFlag(k,0x8000,0x8000)
 end
+
+
 
 
 
@@ -225,14 +226,11 @@ EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
 UnitSizePatch(121,10)
-
 UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 -------
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
 	--0~6 공업용??
 	--8~14 방업용??
-
-		
 
 	for i = 0, 6 do
 	table.insert(PatchArr,SetMemoryW(0x655AC0 + (i*2),SetTo,288)) -- 아이콘
@@ -599,6 +597,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 	end
 
+	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
 	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
@@ -619,13 +618,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_GetStrXptr(FP,DBoss_PrintScore2,"\x0D\x0D\x0DDBossDMG".._0D)
 	f_GetStrXptr(FP,PointStrPtr,"\x0D\x0D\x0DGetP".._0D)
 	f_GetStrXptr(FP,KillScStrPtr,"\x0D\x0D\x0DKillP".._0D)
-	f_GetStrXptr(FP,StatusStrPtr1,"\x0D\x0D\x0DUStat".._0D)
-	f_GetStrXptr(FP,HiScoreStrPtr,"\x0D\x0D\x0DHiSc".._0D)
-	f_GetStrXptr(FP,NukeStrPtr,"\x0D\x0D\x0DNuke".._0D)
-	f_GetStrXptr(FP,SupplyStrPtr,"\x0D\x0D\x0DSupp".._0D)
-	f_GetStrXptr(FP,ArmorStrPtr,"\x0D\x0D\x0DArmor".._0D)
 	f_GetStrXptr(FP,GiveStrPtr,"\x0D\x0D\x0DGive".._0D)
-	f_GetStrXptr(FP,AHPStrPtr,"\x0D\x0D\x0DAHP".._0D)
 	
 	
 	
@@ -642,24 +635,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
 	f_Memcpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
 
-	CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
-	f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
-	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
-	CElseX()
-	f_Memcpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-	CIfXEnd()
 	
 
-	f_Memcpy(FP,StatusStrPtr1,_TMem(Arr(StatPT[3],0),"X","X",1),StatPT[2])
-	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
-	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)+DBossT2[2]+(4*4)),_TMem(Arr(StatPT2[3],0),"X","X",1),StatPT2[2])
-	f_Memcpy(FP,_Add(StatusStrPtr1,StatPT[2]+(4*4)+DBossT2[2]+(4*4)+StatPT2[2]+(4*4)),_TMem(Arr(StatPT3[3],0),"X","X",1),StatPT3[2])
 
-
-	f_Memcpy(FP,HiScoreStrPtr,_TMem(Arr(HiScoreT1[3],0),"X","X",1),HiScoreT1[2])
-	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(4*4)),_TMem(Arr(HiScoreT2[3],0),"X","X",1),HiScoreT2[2])
-	f_Memcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+(4*4)+HiScoreT2[2]+(4*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 
 
 	

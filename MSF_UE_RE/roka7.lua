@@ -533,7 +533,9 @@ end
 					Simple_SetLoc(164,4096,352,4160,480);
 					SetMemory(0x6509B0,SetTo,FP);
 					RunAIScriptAt(JYD, 64);
-					KillUnit(125,Force1);
+					KillUnitAt(All,125,17,Force1),
+					KillUnitAt(All,125,18,Force1),
+					KillUnitAt(All,125,19,Force1),
 					PreserveTrigger();
 				}
 			}

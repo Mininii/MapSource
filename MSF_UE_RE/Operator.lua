@@ -5,7 +5,7 @@ function OPTrig()
 		CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
 		f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부, 스탯 창\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
+		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부모드\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
 	CIfXEnd()
 	for i = 0, 6 do
@@ -99,24 +99,6 @@ function OPTrig()
 	end
 	SetRecoverCp()
 		
-	--상위플레이어 단락이지만 LV과 시간 표기시에 13번줄 조작은 문제없음. 따라서 이곳에 작성함
-	--		SetMemory(0x641598, SetTo, 0x4C205B07);
-	--		SetMemory(0x64159C, SetTo, 0x30302E56);--FFFF0000
-	--		SetMemory(0x6415A0, SetTo, 0x2D200430);--000000FF
-	--		SetMemory(0x6415A4, SetTo, 0x30301F20);--FFFF0000
-	--		SetMemory(0x6415A8, SetTo, 0x30112068);--FF000000
-	--		SetMemory(0x6415AC, SetTo, 0x0F206D30);--000000FF
-	--		SetMemory(0x6415B0, SetTo, 0x20733030);--0000FFFF
-	--		SetMemory(0x6415B4, SetTo, 0x07202D04);
-	--		SetMemory(0x6415B8, SetTo, 0xEBB0B8EA);
-	--		SetMemory(0x6415BC, SetTo, 0x200480B6);
-	--		SetMemory(0x6415C0, SetTo, 0x3946203A);
-	--		SetMemory(0x6415C4, SetTo, 0x005D2007);
-		
-function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
-	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
-	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
-end
 	local StartC = CreateCcode()
 	local StartT = CreateCcode()
 	local LoadingC = CreateCcode()
@@ -129,7 +111,9 @@ end
 	else
 		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
 	end
+	if Limit == 1 then
 	TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(LimitC,1);})
+	end
 	
 
 	local iStrInit = def_sIndex()
@@ -172,6 +156,9 @@ end
 		SetCVar(FP,ExchangeRateT[7][2],SetTo,Ex1[7]);
 	})
 	for i = 0, 6 do
+		if Limit == 1 then
+		TriggerX(FP, {Deaths(i,AtLeast,1,38)}, {SetCD(LimitC,1);}) -- 테스터플래그
+		end
 		TriggerX(FP, HumanCheck(i,1), SetCVar(FP,SetPlayers[2],Add,1), {preserved})
 	end
 	for k = 1, 7 do
@@ -273,6 +260,14 @@ end
 		SetCD(StartC,1)
 	}, 1)
 		CallTriggerX(FP, LevelReset,nil,nil,1)
+		
+	CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+	f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
+	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
+	CElseX()
+	f_Memcpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+	CIfXEnd()
 		CIfEnd()
 		NJumpEnd(FP,StartJumpV)
 
@@ -282,7 +277,6 @@ end
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
 	CIfOnce(FP, CD(StartT,100,AtLeast))
-	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
 	if Limit == 1 then
 	Trigger {
 		players = {FP},
@@ -301,6 +295,10 @@ end
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);CD(TestMode,1)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);CD(TestMode,0)}, {SetCD(initStart,0),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
+	else
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
 	end
 	CIfEnd()
 	CMov(FP,0x6509B0,CurrentOP)

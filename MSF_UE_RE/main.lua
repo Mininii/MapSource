@@ -29,7 +29,6 @@ for dir in io.popen(EXTLUA):lines() do
 		InitEXTLua()
      end
 end
-
 ------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -52,6 +51,7 @@ GiveT = {}
 for i = 0, 6 do
 	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
 	table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
+	table.insert(GiveT,GiveUnits(All, 125, P12, 2+i, i))
 end
 DoActions(FP,GiveT,1)
 for i = 0, 6 do

@@ -178,7 +178,7 @@ function Install_RandPlaceHero()
 		Simple_SetLocX(FP,0,HPosX,HPosY,HPosX,HPosY,Simple_CalcLoc(0,-64,-64,64,64))
 		Check_Cannot = def_sIndex()
 		NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- Äµ³´. °­Á¦Äµ½½
-		CMov(FP,RandW2,6)
+		CMov(FP,RandW2,1)
 		CMov(FP,HeroID,VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))))
 		NWhile(FP,CVar(FP,RandW2[2],AtLeast,1),SetCVar(FP,RandW2[2],Subtract,1))
 			NJumpX(FP,Check_Cannot,{Memory(0x628438,Exactly,0)}) -- Äµ³´. °­Á¦Äµ½½
@@ -796,7 +796,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	
-
+		
+		CTrigger(FP, {TMemoryX(_Add(Repeat_UnitIDV,EPDF(0x664080)), Exactly, 4,4),CD(CB_Repeat_Check,1)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- °øÁßÀ¯´Ö+CBRepeat ¼ÒÈ¯ = °ãÄ¡±â ON
 		local TempW = CreateWar(FP)
 		f_LMovX(FP, TempW, WArr(MaxHPWArr,RepHeroIndex), SetTo, nil, nil, 1)
 		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
@@ -925,36 +926,6 @@ function f_TempRepeatX(UnitID,Number,Condition,Type,Owner,CenterXY)
 		TSetCVar(FP,TRepeatY[2],SetTo,SetY),
 		SetCVar(FP,RepeatType[2],SetTo,Type),
 		SetCDeaths(FP,SetTo,0,CB_Repeat_Check),
-		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
-	CallTriggerX(FP,Call_Repeat,Condition)
-end
-
-function f_TempRepeat2X(Condition,UnitID,Number,EffType,Owner,CenterXY,Flags)
-	if Owner == nil then Owner = 0xFFFFFFFF
-	elseif Owner == "CP" then Owner = 0x7FFFFFFF end
-	if Type == nil then Type = 0 end
-	local SetXY = {}
-	if CenterXY == nil then 
-		SetXY = {
-		SetCVar(FP,TRepeatX[2],SetTo,0xFFFFFFFF),
-		SetCVar(FP,TRepeatY[2],SetTo,0xFFFFFFFF),
-		}
-	elseif type(CenterXY) == "table" then
-		SetXY = {
-		SetCVar(FP,TRepeatX[2],SetTo,CenterXY[1]),
-		SetCVar(FP,TRepeatY[2],SetTo,CenterXY[2]),
-		}
-	elseif CenterXY ~= "X" then 
-		PushErrorMsg("TRepeat_CenterXY_Error")
-	end
-	CDoActions(FP,{
-		TSetCVar(FP,Repeat_UnitIDV[2],SetTo,UnitID),
-		TSetCVar(FP,Spawn_TempW[2],SetTo,Number),
-		SetXY,
-		SetCVar(FP,RepeatType[2],SetTo,100),
-		SetCDeaths(FP,SetTo,0,CB_Repeat_Check),
-		SetCVar(FP,G_CB_TempTable[15][2],SetTo,EffType),
-		SetCVar(FP,G_CB_TempTable[17][2],SetTo,Flags),
 		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
 	CallTriggerX(FP,Call_Repeat,Condition)
 end
@@ -1704,4 +1675,9 @@ function Install_TMemoryBW(PlayerID)
 	end
 
 	
+end
+
+function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
+	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
+	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end

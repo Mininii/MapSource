@@ -69,39 +69,15 @@ function PlayerInterface()
 	local InsertKey = {}
 	InsertKey[1] = "\x13\x04이 맵은 각 플레이마다 \x0710레벨 단위로 플레이가 가능하며 \n\x13\x08게임 종료 \x04이후 \x1F다음 게임\x04에서 \x07이어하기\x04를 통한 도전이 가능합니다.\n\x13\x04당신의 한계를 시험해 보세요! \x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[2] = "\x13\x04\x1CSCArchive \x04설명 (문의는 마공카를 찾아주세요.)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 보조 아이템을 사용할 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D게임 시작 전\x04에만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	InsertKey[3] = "\n\n\n\n\x13\x07구버전 데이터 관련 설명\n\x13\x04구버전의 스탯포인트는 \x1F크리스탈\x04에서 확인 가능하며 환전률은 1:10000 입니다. \n\x13\x04@칭호 1, 2, 3 등의 명령어로 구버전 레벨에 따라 부여되는 칭호를 사용할 수 있습니다.\n\x13\x04자세한 칭호 부여 레벨 목록은 마공카에서 확인해주시기 바랍니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[3] = "\n\n\n\n\x13\x07구버전 데이터 관련 설명\n\x13\x04구버전의 스탯포인트는 \x1F크리스탈\x04에서 확인 가능하며 환전률은 1:10000 입니다. \n\x13\x04@칭호 1, 2, 3, 4 등의 명령어로 구버전 레벨, 권한에 따라 부여되는 칭호를 사용할 수 있습니다.\n\x13\x04자세한 칭호 부여 레벨 목록은 마공카에서 확인해주시기 바랍니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	local InsertPage = CreateCcode()
 	local KeyToggle = CreateCcode()
 	--
 
---	PlayerInfoT = "\x12\x10【 \x08Y\x04our \x0FL\x04evel :\x1F 0000000000 \x04◈ Score :\x07 0000000000 \x04◈ \x07StatPoint \x04: 0000000000 / 0000000000 \x10】"
---	PlayerItemT = "\x12\x10【 \x0FI\x04tems ＃ \x0E퍼센트 \x1E방어력 : 000 / 255 \x04◈ 적 체력 약화 : 000 / 255 \x04◈ 상정 : F9\x10】"
---	--
-
---	function InterfaceFunc() 
---		CA__SetValue(Str1,PlayerInfoT,nil,0) 
---		--CA__ItoCustom(SVA1(Str1,0),TimeV,nil,nil,{10,6},1,{"\x07０","\x07０","\x0F０","\x0F０","\x1F０","\x1F０"},nil,{0x07,0x07,0x0F,0x0F,0x1F,0x1F},{11,12,14,15,17,18})
---		CA__InputVA(102*0,Str1,Str1s,nil,102*0,102*1-3)
---		CA__SetValue(Str1,MakeiStrVoid(100),0xFFFFFFFF,0) 
---		CA__SetValue(Str1,PlayerItemT,nil,0) 
---		CA__InputVA(102*1,Str1,Str1s,nil,102*1,102*2-3)
---		CA__SetValue(Str1,MakeiStrVoid(100),0xFFFFFFFF,0) 
---	end
---CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"InterfaceFunc",FP,{LocalPlayerID(6,AtMost)}) --
 
 	for i = 0, 6 do
 		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{preserved})
 	end
-
---	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
---	PlayWAV("sound\\Misc\\Buzz.wav"),},{preserved})
---	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),MemoryX(0x596A38, Exactly, 0x00010000,0x10000),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
---	PlayWAV("sound\\Misc\\Buzz.wav"),},{preserved})
---	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,CPConsole),Memory(0x596A44, Exactly, 0x00000100),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,SetTo,1,KeyToggle),PlayWAV("sound\\Misc\\Buzz.wav"),
---	PlayWAV("sound\\Misc\\Buzz.wav"),},{preserved})
-	
-
-
 
 	Trigger2X(FP,{Switch("Switch 242",Set);MemoryX(0x596A38, Exactly, 0x00000100,0x100),CDeaths(FP,Exactly,0,KeyToggle),CDeaths(FP,AtMost,1,InsertPage)},{SetCDeaths(FP,Add,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{preserved})
 	Trigger2X(FP,{Switch("Switch 242",Set);MemoryX(0x596A38, Exactly, 0x00010000,0x10000),CDeaths(FP,Exactly,0,KeyToggle)},{SetCDeaths(FP,Subtract,1,InsertPage),SetCDeaths(FP,SetTo,1,DeleteToggle),SetCDeaths(FP,SetTo,1,KeyToggle)},{preserved})
@@ -115,16 +91,8 @@ function PlayerInterface()
 	Trigger2X(FP,{Memory(0x596A44, Exactly, 65536)},{SetCDeaths(FP,SetTo,0,DeleteToggle),DisplayText(string.rep("\n", 20),4)},{preserved})
 	CIfX(FP,{Switch("Switch 242", Set)})
 
+	 
 	
-
-	local AvailableStatVA = CreateVArray(FP,4)
-	local CurrentStatVA = CreateVArray(FP,4)
-	local MaxLevelVA = CreateVArray(FP,4)
-	local MaxScoreVA = CreateVArray(FP,4)
-	local ExchangeVA = CreateVArray(FP,4)
-	
-		--PlayerInfoT = "\x12\x10【 \x08Y\x04our \x0FL\x04evel :\x1F 0000000000 \x04◈ Score :\x07 0000000000 \x04◈ \x07StatPoint \x04: 0000000000 / 0000000000 \x10】\r\n"
-		--PlayerItemT = "\x12\x10【 \x0FI\x04tems ＃ \x0E퍼센트 \x1E방어력 : 000 / 255 \x04◈ 적 체력 약화 : 000 / 255 \x04◈ 상정 : F9\x10】"
 	
 		TempVT = CreateVarArr(7,FP)
 		for i = 0, 6 do
@@ -133,191 +101,48 @@ function PlayerInterface()
 		CMov(FP,TempVT[2],NewStat[i+1])
 		CMov(FP,TempVT[3],NewMaxLevel[i+1])
 		CMov(FP,TempVT[4],NewMaxScore[i+1])
-		
 		CIfEnd({SetMemory(0x6509B0,SetTo,FP)})
 		end
-		ItoDec(FP,TempVT[1],VArr(AvailableStatVA,0),2,nil,0)
-		ItoDec(FP,TempVT[2],VArr(CurrentStatVA,0),2,nil,0)
-		ItoDec(FP,TempVT[3],VArr(MaxLevelVA,0),2,0x1F,0)
-		ItoDec(FP,TempVT[4],VArr(MaxScoreVA,0),2,0x07,2)
-		ItoDec(FP,ExchangeRate,VArr(ExchangeVA,0),2,0x1F,0)
-		
-		
-		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]),VArr(AvailableStatVA,0),4*4)
-		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]+DBossT2[2]+(4*4)),VArr(CurrentStatVA,0),4*4)
-		f_Movcpy(FP,_Add(StatusStrPtr1,StatPT[2]+DBossT2[2]+(4*4)+StatPT2[2]+(4*4)),VArr(ExchangeVA,0),4*4)
-		f_Movcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]),VArr(MaxLevelVA,0),4*4)
-		f_Movcpy(FP,_Add(HiScoreStrPtr,HiScoreT1[2]+HiScoreT2[2]+(4*4)),VArr(MaxScoreVA,0),4*4)
+		local iStrInit = def_sIndex()
+		CJump(FP,iStrInit)
+		local Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
+		local iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",2)..MakeiStrVoid(56)) 
 
+		local StatusT1 = "\x10【 \x08M\x04ax \x0FL\x04evel : 000 \x04/ \x08M\x04ax \x18S\x04core : 0000000000 \x10】"
+		local StatusT2 = "\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: 0000000000 \x04/ 0000000000 \x10】"
+		local StatusT3 = "\x10【 \x1FE\x04xchange \x07R\x04ate : 0000\x18% \x10】"
+		CJumpEnd(FP,iStrInit)
 
 
 		for i = 0, 6 do
 			TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{preserved})
 		end
-		TextRet = CreateVar()
-		CMov(FP,TextRet,0)
-			for i = 0, 3 do
-				local CBit = 2^i
-				Trigger {players = {FP},conditions = {Label(),MemoryX(0x640B58,Exactly,CBit,CBit)},actions = {SetNVar(TextRet,Add,CBit)},flag = {preserved}}
-			end
-		
-		DoActions(FP,{--DisplayText(string.rep("\n", 20),4),
-		DisplayText("\x0D\x0D\x0DHiSc".._0D,4),
-		DisplayText("\x0D\x0D\x0DUStat".._0D,4),
-		--DisplayText("\x0D\x0D\x0DNuke".._0D,4),
-		
-	})
 
---	function TEST() --
+	function StatusInterface() --
+	local PlayerID = CAPrintPlayerID 
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,StatusT1,nil,0) 
+	CA__ItoCustom(SVA1(Str1,13),TempVT[3],nil,nil,{10,3},1,"\x0D",nil,0x1F)--"\x1F0"
+	CA__ItoCustom(SVA1(Str1,31),TempVT[4],nil,nil,{10,10},1,"\x0D",nil,0x07)--"\x070"
+	CA__InputVA(56*0,Str1,Str1s,nil,56*0,56*1-3)
 
---	local PlayerID = CAPrintPlayerID 
---	local Data = {{{0,9},{"０",{0x1000000}}}} 
---	CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x10【 \x07LV\x04. 000 \x04◈ Stat : 0000000000 \x10】",nil,0) 
---	CA__SetValue(Str1,"\x10【 UnitCount : 0000 \x04◈ Cannot 0\x04/\x104 \x10】",nil,0) 
---	CA__ItoCustom(SVA1(Str1,0),RedNumber,nil,nil,{10,3},1,"\x06０",nil,0x06,{5,6,7},Data) 
---	CA__ItoCustom(SVA1(Str1,0),count,nil,nil,{10,4},1,"０",nil,nil,{11,12,13,14},Data) 
---	CA__ItoCustom(SVA1(Str1,0),CanC,nil,nil,{10,1},1,"\x04０",nil,0x04,{18},Data) 
---	
---	function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
---		if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
---		TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
---	end
---	function SetStr1Data(Index,ConActTable,Flags) --{{{"CD"or "V",CDVIndex,CType,CValue},...},Value,Mask}
---		for j, k in pairs(ConActTable) do
---			local X = {}
---			for l, m in pairs(k[1]) do
---				if m[1] == "CD" then
---					table.insert(X,CD(m[2],m[4],m[3]))
---				elseif m[1] == "V" then
---					table.insert(X,CV(m[2],m[4],m[3]))
---				else PushErrorMsg("SetStr1Data_InputData_Error") end
---			end
---	
---			CS__InputTA(FP,{X},SVA1(Str1,Index),k[2],k[3],Flags)
---		end
---	end
---	
---	TriggerX(FP,{Command(FP,AtMost,0,190)},{
---		SetCSVA1(SVA1(Str1,18),SetTo,0x0D0D0D0D,0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,19),SetTo,0x0D0D0D0D,0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,20),SetTo,0x0D0D0D0D,0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,21),SetTo,0x0D0D0D0D,0xFFFFFFFF),
---	},{preserved})
---	
---	
---	CanCTC = CreateCcode()
---	SetStr1Data(10,
---	{
---		{
---			{
---				{"V",count,AtMost,399}
---			},14,0xFF
---		},
---		{
---			{
---				{"V",count,AtLeast,400},
---				{"V",count,AtMost,799}
---			},15,0xFF
---		},
---		{
---			{
---				{"V",count,AtLeast,800},
---				{"V",count,AtMost,1199}
---			},0x11,0xFF
---		},
---		{
---			{
---				{"V",count,AtLeast,1200},
---				{"V",count,AtMost,1499}
---			},08,0xFF
---		},
---		{
---			{
---				{"V",count,AtLeast,1500},
---				{"CD",CanCTC,Exactly,1}
---			},0x11,0xFF
---		}
---	})
---	
---	CanColorT = {0x0E,0x0F,0x11,0x08,0x1F}
---	for j, k in pairs(CanColorT) do
---		CS__InputTA(PlayerID,{CV(CanC,j-1)},SVA1(Str1,18),k,0xFF)
---	end
---	CS__InputTA(PlayerID,{CD(CanCT,1,AtLeast),CD(CanCTC,1)},SVA1(Str1,18),0x04,0xFF)
---	TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
---	
---	 CA__InputVA(40*1,Str1,Str1s,nil,40*1,40*2-3)
---	 CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
---	
---	CIfX(FP,{CDeaths(FP,AtMost,0,Theorist)})
---	
---	 CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．０００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：０００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,0) 
---	 CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 
---	 CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,4},1,"\x04０",nil,{0x04,0x04,0x04,0x04},{20,21,22,24},Data) 
---	
---	 TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
---	 function LevelIStrColor(Color,ValueArr)
---		TriggerX(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])},{
---			SetCSVA1(SVA1(Str1,8),SetTo,Color,0xFF),
---			SetCSVA1(SVA1(Str1,9),SetTo,Color,0xFF),
---		},{preserved})
---	 end
---	
---	 LevelIStrColor(0x0E,{0,9})
---	 LevelIStrColor(0x0F,{10,19})
---	 LevelIStrColor(0x18,{20,29})
---	 LevelIStrColor(0x11,{30,39})
---	 LevelIStrColor(0x08,{40,49})
---	 LevelIStrColor(0x1F,{50,50})
---	
---	CElseX()
---	CIfOnce(FP)
---	CA__SetMemoryX((40*2)-1,0x0D0D0D0D,0xFFFFFFFF,1)
---	CA__SetMemoryX((40*2)-2,0x0D0D0D0D,0xFFFFFFFF,1)
---	CA__SetMemoryX((40*3)-1,0x0D0D0D0D,0xFFFFFFFF,1)
---	CA__SetMemoryX((40*3)-2,0x0D0D0D0D,0xFFFFFFFF,1)
---	CIfEnd()
---	CIfXEnd()
---	CIf(FP,CV(LevelUpEff,1,AtLeast))
---	local LevelUpEffTmp2 = CreateVar(FP)
---	local LevelUpEffTmp = CreateVarArr(8,FP)
---	LVEFT = {}
---	for i = 1, 8 do
---		CMov(FP,LevelUpEffTmp[i],LevelUpEffTmp2)
---		table.insert(LVEFT,{SubV(LevelUpEffTmp[i],604*i)})
---	end
---	DoActionsX(FP,LVEFT)
---	
---	LVUpEffArr = {0x08,0x0E,0x0F,0x10,0x11,0x18,0x16,0x17}
---	for j,k in pairs(LVUpEffArr) do
---		CA__Input(k,SVA1(Str1,LevelUpEffTmp[j]),0xFF) 
---	end
---	TriggerX(FP,{CD(CanCTC,1)},{
---		SetCSVA1(SVA1(Str1,8),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,9),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,20),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,21),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,22),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
---		SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
---	},{preserved})
---	LVUPEffT= CreateCcode()
---	CAdd(FP,_Ccode(FP,LVUPEffT),1)
---	
---	TriggerX(FP,{CD(LVUPEffT,3,AtLeast)},{AddV(LevelUpEffTmp2,604),SetCD(LVUPEffT,0)},{preserved})
---	TriggerX(FP,{CV(LevelUpEffTmp2,40*604,AtLeast)},{SetV(LevelUpEff,0),SetV(LevelUpEffTmp2,0)},{preserved})
---	CIfEnd()
---	DoActionsX(FP,{AddCD(CanCTC,1)})
---	 CA__InputVA(40*2,Str1,Str1s,nil,40*2,40*3)
---	 CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
---	end 
---	CAPrint(iStr1,{Force1,Force5},{1,0,0,0,1,0,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}) --
---
---
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,StatusT2,nil,0) 
+	CA__ItoCustom(SVA1(Str1,20),TempVT[1],nil,nil,{10,10},1,"\x0D",nil,0x04)--"\x040"
+	CA__ItoCustom(SVA1(Str1,33),TempVT[2],nil,nil,{10,10},1,"\x0D",nil,0x08)--"\x080"
+	CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-3)
+	
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,StatusT3,nil,0) 
+	CA__ItoCustom(SVA1(Str1,17),ExchangeRate,nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
+	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-3)
+	
+	
+	end 
+	CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"StatusInterface",FP) --
 
-	CMov(FP,0x640B58,TextRet)
+
+
 	CIfXEnd()
 
 
@@ -327,6 +152,13 @@ function PlayerInterface()
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
+		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 맵 맥스레벨+10 = 비정상 데이터
+		Trigger2(i, {Deaths(i,AtLeast,1000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯백만이상 = 비정상 데이터
+		Trigger2(i, {Deaths(i,AtLeast,10000,6)}, {SetDeaths(i, SetTo, 1, 149)}) -- 구레벨 1만이상 = 비정상 데이터
+		Trigger2(i, {Deaths(i,AtLeast,LvLimit+10,18)}, {SetDeaths(i, SetTo, 1, 149)}) -- 맵 맥스레벨+10 = 비정상 데이터
+		
+
+
 		Trigger2(i,{Deaths(i,AtLeast,1,149),LocalPlayerID(i)},{
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
@@ -557,7 +389,7 @@ function PlayerInterface()
 				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,0)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15)},1)
 				TriggerX(FP,{Deaths(i,Exactly,j+1,151),HumanCheck(j,0)},{SetDeaths(i,SetTo,0,151)},{preserved})
 			end
-			CIfX(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,150),Deaths(i,AtMost,220000,150),Deaths(i,AtLeast,1,151)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15);})
+			CIfX(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,150),Deaths(i,AtMost,8320000,150),Deaths(i,AtLeast,1,151)},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15);})
 
 				f_Read(FP,0x58A364+(48*150)+(4*i),TempGiveV)
 				f_Read(FP,0x58A364+(48*151)+(4*i),TempGivePV)
@@ -1158,9 +990,9 @@ end
 					Deaths(i,AtLeast,1,71);
 				},
 				actions = {
-					MoveCp(Add,50*4);
-					SetDeathsX(i,SetTo,30*256,0,0xFF00);
-					MoveCp(Subtract,50*4);
+					SetMemory(0x6509B0,Add,50);
+					SetDeathsX(CurrentPlayer,SetTo,30*256,0,0xFF00);
+					SetMemory(0x6509B0,Subtract,50);
 					PreserveTrigger();
 				}
 			}

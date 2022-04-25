@@ -35,15 +35,6 @@ function LevelUp()
 	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
 		
 		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- 레벨 클리어 후 1회 실행 트리거들
-		DoActionsX(FP,{
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[1]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[2]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[3]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[4]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[5]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[6]);
-			SetCDeaths(FP,SetTo,1,HeroPointNotice[7]);
-		},1)
 			--TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{preserved})--19
 			DoActions(FP,{
 			--SetDeathsX(AllPlayers,SetTo,0,12,0xFFFFFF),
@@ -176,8 +167,8 @@ function LevelUp()
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
-		local ClearScoreT1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07클리어\x04 하셨습니다."
-		local ClearScoreT2 = "\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		local ClearScoreT1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07클리어\x04 하셨습니다."
+		local ClearScoreT2 = "\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{
 		RotatePlayer({DisplayTextX(ClearScoreT1,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),DisplayTextX(ClearScoreT2,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
@@ -215,10 +206,8 @@ function LevelUp()
 			SetDeaths(5,SetTo,1,14),
 			SetDeaths(6,SetTo,1,14),
 		})
-		CAdd(FP,Level,1)
-		CMov(FP,0x58f900,Level)
 		for i = 0, 6 do
-			CTrigger(FP,{TDeaths(i,AtMost,Level,6)},{SetDeaths(i,Add,1,6),SetMemory(0x6509B0,SetTo,i),
+			CTrigger(FP,{TDeaths(i,AtMost,Level,18)},{SetDeaths(i,Add,1,18),SetMemory(0x6509B0,SetTo,i),
 			DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 레벨이 올랐습니다! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
@@ -227,6 +216,8 @@ function LevelUp()
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
 		end
+		CAdd(FP,Level,1)
+		CMov(FP,0x58f900,Level)
 
 		TriggerX(FP,{},{SetCVar(FP,ReserveBGM[2],SetTo,1)},{preserved})
 
@@ -247,7 +238,7 @@ function LevelUp()
 	CMov(FP,0x6509B0,FP)
 	
 	for i = 0, 4 do
-		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0F다음 레벨 시작\x04까지 \x07"..5-i.."\x04초 남았습니다.\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP),
+		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.\n\x13\x0F다음 레벨 시작\x04까지 \x07"..5-i.."\x04초 남았습니다.\n\x14\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4)},HumanPlayers,FP),
 		SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{preserved})
 	end
 
