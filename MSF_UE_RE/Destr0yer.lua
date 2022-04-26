@@ -730,7 +730,7 @@ CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP)
 			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),
 			DisplayTextX("\n",4),
-			DisplayTextX("\x13\x15점수가 충분하지 않아 다음 단계 진입이 불가능합니다...\n",4);
+			DisplayTextX("\x13\x15점수가 충분하지 않아 게임을 클리어하지 못했습니다....\n",4);
 			DisplayTextX("\x13\x05게임을 종료합니다.",4);
 			DisplayTextX("\n",4),
 			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),

@@ -11,8 +11,8 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,20,FP)
-	local HPExceed = Create_VTable(7,15,FP)	
+	local AtkExceed = Create_VTable(7,40,FP)
+	local HPExceed = Create_VTable(7,35,FP)	
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
@@ -431,7 +431,7 @@ function PlayerInterface()
 
 				CIfXEnd()
 			DoActions(FP,SetMemory(0x6509B0,SetTo,i))
-			CElseIfX({Deaths(i,AtLeast,1,150),Deaths(i,AtMost,220000,150),Deaths(i,AtMost,0,151)},{SetDeaths(i,SetTo,150,15)})
+			CElseIfX({Deaths(i,AtLeast,1,150),Deaths(i,AtMost,8320000,150),Deaths(i,AtMost,0,151)},{SetDeaths(i,SetTo,150,15)})
 			CallTriggerX(FP,Call_Print13[i+1])
 			TriggerX(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x1F기부 플레이어\x04가 설정되지 않았습니다. \x07』")},{preserved})
 			CIfXEnd()
@@ -998,14 +998,15 @@ end
 			}
 			f_SaveCp()
 			local ValCancle = def_sIndex()
-			NJump(FP,ValCancle,{TMemory(_Add(BackupCp,6),Exactly,58)})
+			NJumpX(FP,ValCancle,{TMemory(_Add(BackupCp,6),Exactly,58)})
+			NJumpX(FP,ValCancle,{TMemoryX(BackupCp,Exactly,5*256,0xFF00)})
 			CTrigger(FP,{Deaths(i,AtLeast,1,65)}, -- Stop
 			{TSetDeathsX(BackupCp,SetTo,1*256,0,0xFF00)},{preserved})
 			CIf(FP,{Deaths(i,AtLeast,1,67)}) -- Hold
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
 			CIfEnd()
-			NJumpEnd(FP,ValCancle)
+			NJumpXEnd(FP,ValCancle)
 			f_LoadCp()
 			CIfEnd()
 			end

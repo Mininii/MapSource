@@ -118,7 +118,6 @@ function OPTrig()
 
 	local iStrInit = def_sIndex()
 	CJump(FP, iStrInit)
-	local NCCalc = CreateVar(FP)
 	local initStr = "\x07LV.0000" 
 	local initStr2 = MakeiStrVoid(20).." \x04: " 
 	local SCAStat1 = "\x07연결 되었습니다!" 
@@ -296,7 +295,7 @@ function OPTrig()
 		}
 	}
 	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);CD(TestMode,1)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
-	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);CD(TestMode,0)}, {SetCD(initStart,0),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
+	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);CD(TestMode,0)}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
 	else
 	CallTriggerX(FP, ComputerReplace, {CD(StartT,100,AtLeast);}, {SetCD(initStart,1),SetSwitch("Switch 240",Set),SetV(ReserveBGM,12),SetDeaths(CurrentPlayer,SetTo,0,OPConsole)}, 1)
 	end

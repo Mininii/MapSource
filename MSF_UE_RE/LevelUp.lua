@@ -139,6 +139,13 @@ function LevelUp()
 		CIfXEnd()
 		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 			f_Mul(FP,GetP,_Mov(2))
+			for i = 0, 6 do
+				CIf(FP,{HumanCheck(i, 1)},{SetDeaths(i, SetTo, 150, 15)})
+				CAdd(FP,NukesUsage[i+1],_Div(NCCalc,PCheckV))
+				CallTriggerX(FP,Call_Print13[i+1],{})
+				CIfEnd()
+			end
+			TriggerX(FP,{},{print_utf8(12,0,"\x07『 \x04추가 \x08뉴클리어\x04가 지급되었습니다. \x07』")},{preserved})
 		CIfEnd()
 		if Limit == 1 then
 			f_Mul(FP,GetP,_Mov(TestPMul))

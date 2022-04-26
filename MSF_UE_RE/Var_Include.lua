@@ -381,6 +381,7 @@ function Var_init()
 	TempX = CreateVar(FP)
 	TempY = CreateVar(FP)
 	LevelFactor = CreateVar(FP)
+	NCCalc = CreateVar(FP)
 	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 

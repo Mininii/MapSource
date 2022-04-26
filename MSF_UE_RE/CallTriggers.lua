@@ -460,11 +460,11 @@ local CB_P = CreateVar(FP)
 			end
 
 		CIfEnd()
-if Limit == 1 then
-	CIf(FP,{CD(TestMode,1),CDeaths(FP,AtLeast,0,isDBossClear)},{SetCDeaths(FP,SetTo,0,isDBossClear),SetCVar(FP,OutputPoint[2],SetTo,0)})
-else
+--if Limit == 1 then
+	--CIf(FP,{CD(TestMode,1),CDeaths(FP,AtLeast,0,isDBossClear)},{SetCDeaths(FP,SetTo,0,isDBossClear),SetCVar(FP,OutputPoint[2],SetTo,0)})
+--else
 	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
-end
+--end
 		ItoDec(FP,TotalScore,VArr(TotalScoreVA,0),2,nil,2)
 		ItoDec(FP,OutputPoint,VArr(DBossScoreVA,0),2,nil,2)
 		_0DPatchX(FP,TotalScoreVA,6)
