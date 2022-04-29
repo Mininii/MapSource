@@ -188,6 +188,21 @@ function Install_RandPlaceHero()
 				CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 				--CTrigger(FP,{CVar(FP,Level[2],AtMost,10)},{TSetMemory(_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(CC_Header,((0x20*8)/4))),SetTo,1)},1) -- 10레벨 이하는 영작포인트 적용됨
 				CTrigger(FP,{},{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo,1)},1) -- 
+				
+				local TempW = CreateWar(FP)
+				f_LMovX(FP, TempW, WArr(MaxHPWArr,HeroID), SetTo, nil, nil, 1)
+				CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+				local TempV1 = CreateVar(FP)
+				local TempV2 = CreateVar(FP)
+				f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
+					CDoActions(FP, {
+						Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+						Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
+						Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+						
+				})
+				CIfEnd()
+
 				f_Mod(FP,BiteCalc,HeroID,_Mov(2),0xFF)
 				f_Read(FP,_Add(_Div(HeroID,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
 				NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
@@ -799,11 +814,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		
 		CTrigger(FP, {TMemoryX(_Add(Repeat_UnitIDV,EPDF(0x664080)), Exactly, 4,4),CD(CB_Repeat_Check,1)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- 공중유닛+CBRepeat 소환 = 겹치기 ON
 		local TempW = CreateWar(FP)
-		f_LMovX(FP, TempW, WArr(MaxHPWArr,RepHeroIndex), SetTo, nil, nil, 1)
+		f_LMovX(FP, TempW, WArr(MaxHPWArr,Repeat_UnitIDV), SetTo, nil, nil, 1)
 		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
 		local TempV1 = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
-		f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+		f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
 			CDoActions(FP, {
 				Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
 				Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
