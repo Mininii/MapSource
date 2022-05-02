@@ -361,6 +361,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(65,1200)
 	UnitEnableX(66)
 	UnitEnableX(67,1200)
+	UnitEnableX(70)
 	UnitEnableX(68)
 	UnitEnableX(48)
 	for i = 37, 47 do
@@ -370,6 +371,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 	for i = 0, 6 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+70,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))

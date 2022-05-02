@@ -107,9 +107,9 @@ function OPTrig()
 	KeyCP = CurrentPlayer
 	CIf(FP,{CD(StartC,0),Switch("Switch 240",Cleared),CDeaths(FP,AtMost,0,IntroT)},{SetDeaths(CurrentPlayer,SetTo,1,OPConsole),SetCD(LoadingC,0)})
 	if TestStart == 1 then
-		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226)}, {SetCD(TestMode,1),})--SetResources(CurrentPlayer, Add, 0x55555555, Ore)
 	else
-		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),SetResources(CurrentPlayer, Add, 0x55555555, Ore)})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,226),Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(TestMode,1),})--SetResources(CurrentPlayer, Add, 0x55555555, Ore)
 	end
 	if Limit == 1 then
 	TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,11)}, {SetCD(LimitC,1);})

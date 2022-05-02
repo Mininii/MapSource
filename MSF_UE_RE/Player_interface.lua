@@ -454,7 +454,9 @@ function PlayerInterface()
 				SetMemoryB(0x57F27C+(228*i)+MedicTrig[4],SetTo,0),
 			})
 			for j = 0, 3 do
-			TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
+				TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1]),CD(TestMode,0)},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
+				TriggerX(i,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+70,SetTo,1)},{preserved})
+			
 			TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
 				DisplayText(DelayMedicT[j+1],4),
 				SetCDeaths(FP,Add,1,DelayMedic[i+1]),
@@ -489,8 +491,15 @@ function PlayerInterface()
 				DisplayText("\x07『 \x1F영작 알림소리\x04를 듣습니다. \x07』",4);
 				SetCDeaths(FP,SetTo,0,HeroPointNotice[i+1]);
 			},{preserved})
-
-			
+			if Limit == 1 then
+			TriggerX(i,{Command(i,AtLeast,1,70);},{
+				GiveUnits(All,70,i,"Anywhere",P12);
+				RemoveUnitAt(All,70,"Anywhere",P12);
+				DisplayText("\x07『 \x03TESTMODE OP \x04: \x1C모든 유닛\x04에 \x1D자율공격명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
+				SetDeaths(i,SetTo,1,70);
+				SetCDeaths(FP,Add,1,CUnitFlag);
+			},{preserved})
+			end
 
 		UnitLimit(i,7,25,"SCV는",500)
 		UnitLimit(i,125,15,"벙커는",8000)
@@ -652,10 +661,11 @@ function PlayerInterface()
 		CIfEnd()
 		
 		local MedicTrigJump = def_sIndex()
+		
 		for j = 1, 4 do
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
 		end
-
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1)})
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
 					DoActionsX(FP,{
@@ -741,15 +751,15 @@ function PlayerInterface()
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,AtkFactorV[i+1][2],Add,3)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
 		CIfEnd()
-		CIf(FP,CD(TestMode,1))
-		mtttest = CreateVar2(FP,nil,nil,123456789)
-		mtttest2 = CreateVar2(FP,nil,nil,123456789)
-		CMov(FP,0x57f0f0,mtttest+mtttest2)
-		CIfEnd()
+		--CIf(FP,CD(TestMode,1))
+		--mtttest = CreateVar2(FP,nil,nil,123456789)
+		--mtttest2 = CreateVar2(FP,nil,nil,123456789)
+		--CMov(FP,0x57f0f0,mtttest+mtttest2)
+		--CIfEnd()
 		CIf(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,255*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))},{SetMemoryX(DefUpgradePtrArr[i+1],SetTo,0*(256^DefUpgradeMaskRetArr[i+1]),255*(256^DefUpgradeMaskRetArr[i+1]))})
 		DoActionsX(FP,{
 			SetMemory(0x6509B0,SetTo,i),
@@ -760,11 +770,13 @@ function PlayerInterface()
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,15)},{SetCVar(FP,DefFactorV[i+1][2],Add,4)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,15)},{SetCVar(FP,DefFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
+		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
 		CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
 		CIfEnd()
+		end
 		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- 체력값 초기화
 		for Bit = 0, 7 do
 		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
@@ -1007,6 +1019,13 @@ end
 			CIf(FP,{Deaths(i,AtLeast,1,67)}) -- Hold
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
+			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,66)}) -- Attack
+				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCp,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCp,15),SetTo,MulCon[i+1],0)})
+			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
+				f_Read(FP,_Sub(BackupCp,9),TempPos)
+				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,187*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
 			CIfEnd()
 			NJumpXEnd(FP,ValCancle)
 			f_LoadCp()

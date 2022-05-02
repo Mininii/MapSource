@@ -56,7 +56,7 @@ function LevelUp()
 						CreateUnit(1,87,29,FP),
 						TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
-						TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(1000*256)),_Mov(5000*256))),
+						TSetMemory(_Add(Nextptrs,2),SetTo,6000*256),
 						SetCDeaths(FP,Add,1,isBossStage),
 						SetCVar(FP,ReserveBGM[2],SetTo,roka7BGM)})
 				CIfEnd()
@@ -67,7 +67,7 @@ function LevelUp()
 					KillUnitAt(All,"Men","Center",Force1),
 					CreateUnit(1,74,64,FP),
 					MoveLocation("Boss", "Dark Templar (Hero)", FP, "Anywhere");
-					TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(2000*256)),_Mov(1500*256))),
+					TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(750*256)),_Mov(1000*256))),
 					SetCDeaths(FP,Add,1,isBossStage),
 					SetCVar(FP,ReserveBGM[2],SetTo,DLBossBGM),
 				})

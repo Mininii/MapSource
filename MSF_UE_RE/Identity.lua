@@ -79,10 +79,11 @@ CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2)) -- 소환
 f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
 	CreateUnit(1,68,29,FP),
+	SetInvincibility(Enable,"Tarim, Lord Of Regal Castle", FP, 64),
 	TSetMemory(B_Id_C,SetTo,Nextptrs),
 	TSetMemory(0x58F558,SetTo,7),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
-	TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(1000*256)),_Mov(2000*256))),
+	TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(500*256)),_Mov(1000*256))),
 	KillUnitAt(All,"Men",29,Force1),
 })
 DoActions2(FP,
@@ -491,6 +492,7 @@ Trigger { -- No comment (4347C6C8)
 		GiveUnits(All,60,P9,"Anywhere",FP);
 		SetMemory(0x6509B0,SetTo,FP);
 		RunAIScriptAt(JYD, "Anywhere");
+		SetInvincibility(Disable,"Tarim, Lord Of Regal Castle", FP, 64),
 		RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11진진 \x1B짜라의 주인 \x08타\x15림 \x08::\r\n\x1B줴거하라.\r\n\r\n ",4),TalkingPortrait(68, 2000),
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);
 		PreserveTrigger();

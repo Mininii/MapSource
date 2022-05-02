@@ -11,8 +11,7 @@ function Objects()
 	AtkFactor = 5
 	DefFactor = 10
 	GunLimit = 1500
-	Ex1= {10,15,20,25,30,35,40}
-	NK= {30,18,13,9,7,6,5}
+	Ex1= {25,34,42,50,59,65,75}
 
 	--Shop
 	P_MultiStopCost = 20

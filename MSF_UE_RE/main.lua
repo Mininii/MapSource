@@ -63,6 +63,7 @@ end
 
 			Include_CtrigPlib(360,"Switch 100")
 			Include_64BitLibrary("Switch 100")
+			Include_CBPaint()
 			DUnitCalc = Install_EXCC(FP,25,1)
 			LHPCunit = Install_EXCC(FP,25)
 			Install_TMemoryBW(FP)

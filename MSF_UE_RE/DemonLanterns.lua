@@ -1772,8 +1772,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Boss");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("스킬 / 이쪽 방향 스킬 (대각선)");
 		},
 	}
@@ -1818,8 +1816,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -1911,8 +1907,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("스킬 ㅣ 이쪽 방향 스킬 (직선)");
 		},
 	}
@@ -1957,8 +1951,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -2051,8 +2043,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(4, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("스킬 11시 대각선 이쪽 방향 스킬 (대각선)");
 		},
 	}
@@ -2097,8 +2087,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -2190,8 +2178,6 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
-			Wait(0);
-			SetVoid(0, Add, 1);
 			Comment("스킬 ㅡ 이쪽 방향 스킬 (직선)");
 		},
 	}
@@ -2241,12 +2227,17 @@ function Install_DLBoss()
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			SetVoid(10,SetTo,1);
-			SetVoid(8, SetTo, 0);
-			Wait(0);
 			Comment("무브로케 스킬");
 		},
 	}
 	
+	Trigger2(FP, {
+		Void(0, AtLeast, 3);
+		Void(0, AtMost, 9);
+		Void(1, Exactly, 8);
+		Void(2, Exactly, 31);
+		Void(3, Exactly, 15);
+	}, {SetVoid(0,Add,1),SetVoid(8, SetTo, 0);}, {preserved})
 	Trigger { -- 무브로케 스킬
 		players = {P8},
 		conditions = {

@@ -1,11 +1,11 @@
+
+
 function f_SaveCp()
 	CallTrigger(FP,SaveCp_CallIndex,nil)
 end
 function f_LoadCp()
 	CallTrigger(FP,LoadCp_CallIndex,nil)
 end
-
-
 
 function TestSet(val)
 if val == 1 then 
@@ -741,6 +741,8 @@ local G_CB_EffType = CreateVar(FP)
 local G_CB_XPos = CreateVar(FP)
 local G_CB_YPos = CreateVar(FP)
 local G_CB_FNTV = CreateVar(FP)
+local G_CB_PFTV = CreateVar(FP)
+
 local TRepeatX = TRefeatXYV[1]
 local TRepeatY = TRefeatXYV[2]
 local G_CB_CenterX = DefCenterXYV[1]
@@ -968,16 +970,15 @@ SetCall(FP)
 -- Line12 = CA[6] 데이터 인덱스 (k입력시 Shape[k+1]의 데이터를 출력함
 
 
-
 CMov(FP,G_CB_LineV,0)
 CJumpEnd(FP,Write_SpawnSet_Jump)
 
 CAdd(FP,G_CB_LineTemp,G_CB_LineV,G_CB_InputH)
 NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
 
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 _0D = string.rep("\x0D",200)
 if Limit == 1 then
+	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 	--	CIf(FP,CD(TestMode,1))
 --		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_CUTV,VArr(G_CB_WSTestVA,0),0,nil,0)
@@ -1010,6 +1011,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,10*(0x20/4)),SetTo,0),
 	TSetMemory(_Add(G_CB_LineTemp,11*(0x20/4)),SetTo,G_CB_DLTV),
 	TSetMemory(_Add(G_CB_LineTemp,12*(0x20/4)),SetTo,0),
+	TSetMemory(_Add(G_CB_LineTemp,13*(0x20/4)),SetTo,G_CB_PFTV),
 	
 	
 })
@@ -1126,6 +1128,57 @@ G_CB_ShapeTable = {}
 			X[j] = CS_TMakeAuto(_G[k])
 		end
 	end
+	local STSize = #ShapeTable
+	table.insert(Y,CS_InputVoid(1699))
+	table.insert(Y,CS_InputVoid(1699))
+	for i = 1, G_CB_ArrSize do
+		table.insert(Y,CS_InputVoid(1699))
+	end
+
+	function CBRandSort()
+		local Ret = f_CRandNum(11)
+		CIf(FP,CV(Ret,0))
+		CIfEnd()
+	end
+
+	G_CB_PrefuncArr = {
+		
+	} --{index,funcname}
+
+
+
+	function G_CB_Prefunc()
+		local CA = CAPlotDataArr
+		local CB = CAPlotCreateArr
+		local TempFunc = CreateVar(FP)
+		
+		CMov(FP,TempFunc,G_CB_TempTable[14],nil,0xFF,1)
+		
+		CIf(FP,CV(TempFunc,1,AtLeast))
+
+		for i = 1, STSize do
+		CIf(FP,CV(V(CA[1]),i))
+		CB_Copy(i,STSize+1)
+		CIfEnd()
+		end
+		for j, k in pairs(G_CB_PrefuncArr) do
+			CIf(FP,CV(TempFunc,k[1]))
+				_G[k[2]]()
+			CIfEnd()
+		end
+
+		for i = 1, G_CB_ArrSize do
+			CIf(FP,CV(G_CB_Num,i))
+			CB_Copy(STSize+2,STSize+2+i)
+			CMov(FP,V(CA[1]),STSize+2+i)
+			CMov(FP,G_CB_TempTable[4],STSize+2+i)
+			CIfEnd()
+		end
+		CMov(FP,TempFunc,0)
+		CMov(FP,G_CB_TempTable[14],TempFunc,nil,0xFF,1)
+		
+		CIfEnd()
+	end
 
 
 	Load_CBPlot = SetCallForward()
@@ -1140,7 +1193,7 @@ G_CB_ShapeTable = {}
 	TriggerX(FP, {CVar(FP,G_CB_TempTable[10][2],AtMost,0,0xFF)}, {SetV(V(CA[5]),1)}, {preserved})
 
 
-	CBPlot(Y,nil,FP,nilunit,0,{G_CB_TempTable[8],G_CB_TempTable[9]},1,32,{0,0,0,0,0,1},"G_CB_Func",nil,FP,nil,nil,{SetCDeaths(FP,Add,1,G_CB_Suspend)}) 
+	CBPlot(Y,nil,FP,nilunit,0,{G_CB_TempTable[8],G_CB_TempTable[9]},1,32,{0,0,0,0,0,1},"G_CB_Func","G_CB_Prefunc",FP,nil,nil,{SetCDeaths(FP,Add,1,G_CB_Suspend)}) 
 	CDoActions(FP,{TSetCVar(FP,G_CB_TempTable[13][2],SetTo,V(CA[6])),TSetCVar(FP,G_CB_TempTable[11][2],SetTo,V(CA[2]))})
 	--CMov(FP,0x57f0f0,V(CA[6]))
 	--CMov(FP,0x57f120,V(CA[10]))
@@ -1166,7 +1219,7 @@ end
 
 
 
-function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPTable,G_CB_FNTable,Delay,CenterXY,Owner,PreserveFlag)
+function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPTable,G_CB_FNTable,Delay,CenterXY,Owner,G_CB_PFTable,PreserveFlag)
 	if type(G_CB_CUTable) ~= "table" then
 		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
@@ -1217,6 +1270,11 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 	elseif G_CB_FNTable == nil then 
 		G_CB_FNTable = {0,0,0,0}
 	end
+	if type(G_CB_PFTable) ~= "table" then
+		G_CB_PFTable = {G_CB_PFTable,G_CB_PFTable,G_CB_PFTable,G_CB_PFTable}
+	elseif G_CB_PFTable == nil then 
+		G_CB_PFTable = {0,0,0,0}
+	end
 	if type(G_CB_RPTable) ~= "table" then
 		G_CB_RPTable = {G_CB_RPTable,G_CB_RPTable,G_CB_RPTable,G_CB_RPTable}
 	elseif G_CB_RPTable == nil then 
@@ -1254,6 +1312,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 		SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_BiteBuffer(G_CB_RPTable)),Y,
 		SetCVar(FP,G_CB_Owner[2],SetTo,Owner),
 		SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_BiteBuffer(G_CB_FNTable)),
+		SetCVar(FP,G_CB_PFTV[2],SetTo,T_to_BiteBuffer(G_CB_PFTable)),
 		SetCVar(FP,G_CB_EffType[2],SetTo,0),
 		
 	},PreserveFlag)
@@ -1290,6 +1349,7 @@ end
 			CMov(FP,G_CB_TempTable[11],0)
 			CMov(FP,G_CB_TempTable[12],0)
 			CMov(FP,G_CB_TempTable[13],0)
+			CMov(FP,G_CB_TempTable[14],0)
 			if Limit == 1 then
 				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --
 			end
@@ -1317,6 +1377,7 @@ end
 		CMov(FP,G_CB_TempTable[11],0)
 		CMov(FP,G_CB_TempTable[12],0)
 		CMov(FP,G_CB_TempTable[13],0)
+		CMov(FP,G_CB_TempTable[14],0)
 		if Limit == 1 then
 			TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
