@@ -37,6 +37,9 @@ function V(Index,Player,Next) -- metatable testfunc
 	return X
 end
 
+function PushErrorMsg(Message)
+	return error(Message,1)
+end
 
 ---@param Str? string
 ---@return string
