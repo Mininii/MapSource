@@ -1,7 +1,18 @@
 
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\TestMap"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
+
+
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -20,31 +31,52 @@ Include_64BitLibrary("Switch 1")
 Include_CBPaint()
 CJumpEnd(AllPlayers,0x9FF)
 --↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
-CJump(AllPlayers,0) 
-Include_CtrigPlib(360,"Switch 1",1) 
-WA1 = CWArray(P1,10) 
-CWariable2(P1,0x12,"X","X",{5,5}) 
-CWariable(P1,0x13) CWariable(P1,0x14) 
-CVariable2(P1,0x10,"X","X",5) 
-CWariable(P1,0x11) CWariable(P1,0x15) 
-CJumpEnd(AllPlayers,0) 
-f_LMov(P1,WArr(WA1,0),"0x1234567890AB") 
-f_LMov(P1,0x58F480,WArr(WA1,0)) 
-f_LMov(P1,WArr(WA1,Wi(0x12,1)),"0x567890ABCDEF") 
-f_LMov(P1,0x58F488,WArr(WA1,6)) 
-f_LMov(P1,0x58F490,WArr(WA1,Wi(0x12,1))) 
-f_LMov(P1,WArr(WA1,V(0x10)),"0x90ABCDEF1234") 
-f_LMov(P1,0x58F498,WArr(WA1,V(0x10))) 
-ConvertWArr(P1,W(0x13),W(0x14),W(0x12),10) 
-f_LMov(P1,WArrX(WA1,W(0x13),W(0x14)),"0xCDEF12345678") 
-f_LMov(P1,0x58F4A0,WArrX(WA1,W(0x13),W(0x14))) 
-ConvertWArr(P1,W(0x11),W(0x15),V(0x10),10) 
-f_LMov(P1,WArrX(WA1,W(0x11),W(0x15)),"0x111222333444") 
-f_LMov(P1,0x58F4A8,WArrX(WA1,W(0x11),W(0x15))) 
-f_LMov(P1,WArrX(WA1,Wi(0x13,3),W(0x14)),"0x555666777888") 
-f_LMov(P1,0x58F4B0,WArrX(WA1,Wi(0x13,3),W(0x14))) 
-f_LMov(P1,0x58F4B8,WArrX(WA1,Wi(0x11,3),W(0x15)))
 
+DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
+X, Y, Z, Ret = CreateVars(4,P1)
+DR = CreateVar(FP)
+NG = CreateVar(FP)
+S1 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
+CIf(P1,Switch("Switch 2",Cleared))
+DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)})
+CMov(FP,X,_Mod(_Rand(),200),-100)
+CMov(FP,Y,_Mod(_Rand(),200),-100)
+DoActions(FP,SetSwitch("Switch 1",Random))
+TriggerX(FP,Switch("Switch 1",Cleared),{SetV(DR,1)},{preserved})
+TriggerX(FP,Switch("Switch 1",Set),{SetV(DR,0)},{preserved})
+DoActions(FP,SetSwitch("Switch 1",Random))
+TriggerX(FP,Switch("Switch 1",Cleared),{SetV(NG,1)},{preserved})
+TriggerX(FP,Switch("Switch 1",Set),{SetV(NG,0)},{preserved})
+TriggerX(P1,{Memory(0x58F45C,Exactly,1)},{SetNVar(Z,SetTo,0)},{preserved})
+CIfEnd()
+CFunc1 = InitCFunc(P1)
+Para = CFunc(CFunc1)
+-- n*X + (10-n)*Y - 100 = k
+CiSub(P1,Ret,_Add(_iMul(Para[1],X),_iMul(Para[2],Y)),100)
+CIf(FP,{CV(NG,1),CV(Ret,0x80000000,AtLeast)})
+CNeg(FP,Ret)
+CIfEnd()
+CFuncReturn({Ret})
+CFuncEnd()
+CFunc2 = InitCFunc(P1)
+Para = CFunc(CFunc2)
+-- I - n = k (음수의 우선순위를 양수보다 뒤로함)
+CiSub(P1,Ret,Para[1],Z)
+TriggerX(P1,{NVar(Ret,AtLeast,0x80000000)},{SetNVar(Ret,Add,S1[1])},{preserved})
+CFuncReturn({Ret})
+CFuncEnd()
+function func1()
+CIfX(P1,{Memory(0x58F450,Exactly,0),Switch("Switch 2",Cleared)}
+,SetSwitch("Switch 2",Set))
+CB_Sort(CFunc1,DR,1,2)
+CElseIfX({Memory(0x58F450,AtLeast,1),Switch("Switch 2",Cleared)}
+,SetSwitch("Switch 2",Set))
+CB_SortI(CFunc2,_Read(0x58F454),1,2)
+CIfXEnd()
+end
+CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,64,nil,1,32
+,{2,0,0,0,1,0},nil,"func1",P1,nil,nil,{KillUnit(0,P1),SetSwitch("Switch 2",Clear)})
+CMov(P1,0x58F460,X) CMov(P1,0x58F464,Y) CMov(P1,0x58F468,Z)
 -------------------------------
 ------------------------------------------------------------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------
@@ -415,3 +447,8 @@ EUDTurbo(P1)
 EndCtrig()
 ErrorCheck()
 --↑ Tep에 그대로 붙여넣기 -----------------------------------------------------------------
+
+if LD2XOption == 1 then
+	__PopStringArray()
+	io.close(__TRIGchkptr)
+	end

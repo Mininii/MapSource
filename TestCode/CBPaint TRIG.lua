@@ -1,7 +1,19 @@
 
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\CBTest"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
+
+
+
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -31,40 +43,46 @@ Include_CtrigPlib(360,"Switch 1")
 Include_CBPaint()
 CJumpEnd(AllPlayers,0)
 NoAirCollisionX(P1)
-DoActions(P1,{SetMemoryX(0x581D74,SetTo,0x75750000,0xFFFF0000),SetMemory(0x581D78,SetTo,0x75757575),SetMemoryX(0x581DD4,SetTo,0x750000,0xFF0000)})
-
-S0 = CS_FillXY({1,1},{0,6},{0,6},2,2) -- Base 도형 (4x4 정사각형) 
-function func1(X,Y) return {X+Y} end 
-S1, TS1 = CS_NSortXY(S0,nil,5,"func1",nil,1) 
-CBPlot(CS_RatioXY(S1,32,32),TS1,P1,0,"Location 7",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(0,P1)}) 
-function func2(X,Y) return {X,Y} end 
-function func2a(I) return 2*I-1 end 
-S1, TS1 = CS_NSortXY(S0,"func2a",4,"func2",{0},0) 
-CBPlot(CS_RatioXY(S1,32,32),TS1,P1,1,"Location 8",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(1,P1)}) 
-S0 = CS_FillXY({1,1},{-3,3},{-3,3},2,2) -- Base 도형 (4x4 정사각형) 
-function func3(R,A) return {R,A} end 
-function func3a(I) 
- if I<=4 or I>=9 then 
- return 1 
- else 
- return 2 
+DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
+X, Y, Z, Ret = CreateVars(4,P1)
+S1 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
+CIf(P1,Switch("Switch 2",Cleared))
+DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)})
+TriggerX(P1,{Memory(0x58F458,Exactly,1)},{SetNVar(X,SetTo,-5),SetNVar(Y,SetTo,15)},{PReserved})
+TriggerX(P1,{Memory(0x58F45C,Exactly,1)},{SetNVar(Z,SetTo,0)},{PReserved})
+CIfEnd()
+CFunc1 = InitCFunc(P1)
+Para = CFunc(CFunc1)
+-- n*X + (10-n)*Y - 100 = k
+CiSub(P1,Ret,_Add(_iMul(Para[1],X),_iMul(Para[2],Y)),100)
+CFuncReturn({Ret})
+CFuncEnd()
+CFunc2 = InitCFunc(P1)
+Para = CFunc(CFunc2)
+-- I - n = k (음수의 우선순위를 양수보다 뒤로함)
+CiSub(P1,Ret,Para[1],Z)
+TriggerX(P1,{NVar(Ret,AtLeast,0x80000000)},{SetNVar(Ret,Add,S1[1])},{Preserved})
+CFuncReturn({Ret})
+CFuncEnd()
+function func1()
+CIfX(P1,{Memory(0x58F450,Exactly,0),Switch("Switch 2",Cleared)}
+,SetSwitch("Switch 2",Set))
+CB_Sort(CFunc1,_Read(0x58F454),1,2)
+CElseIfX({Memory(0x58F450,AtLeast,1),Switch("Switch 2",Cleared)}
+,SetSwitch("Switch 2",Set))
+CB_SortI(CFunc2,_Read(0x58F454),1,2)
+CIfXEnd()
 end
-end
-S1, TS1 = CS_NSortRA(S0,"func3a",12,"func3",{0},0) 
-CBPlot(CS_RatioXY(S1,32,32),TS1,P1,16,"Location 17",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(16,P1)}) 
-S0 = CSMakeCircle(12,128,0,13,1) 
-function func4(I) 
- return {math.floor((I-1)/4),I} 
-end
-function func4a(I) 
- if I<=4 then return 1 
- elseif I==7 then return 4 
- else return 2 end 
-end
-S1, TS1 = CS_NSortI(S0,"func4a",7,"func4",{0},{0,1}) 
-CBPlot(S1,TS1,P1,15,"Location 18",nil,1,32,{1,0,6,0,1,0},nil,nil,P1,nil,nil,{KillUnit(15,P1)})
+CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,"Location 13",nil,1,32
+,{2,0,0,0,1,0},nil,"func1",P1,nil,nil,{KillUnit(0,P1),SetSwitch("Switch 2",Clear)})
+CMov(P1,0x58F460,X) CMov(P1,0x58F464,Y) CMov(P1,0x58F468,Z)
 EndCtrig()
 -- 에러 체크 함수 선언 위치 --
 --↑Tep에 그대로 붙여넣기----------------------------------------
 ErrorCheck()
 EUDTurbo(P1)
+
+if LD2XOption == 1 then
+__PopStringArray()
+io.close(__TRIGchkptr)
+end
