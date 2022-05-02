@@ -7,9 +7,22 @@
 
 --Library Loader
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+
+
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\MSF_Memory_New"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
+
+
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -17,7 +30,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.8F"
+VerText = "\x04Ver. 3.9"
 Limit = 0
 RedMode = 0
 FP = P6
@@ -73,10 +86,10 @@ MapPlayers = {0,1,2,3,4}
 ObPlayers = {P9,P10,P11,P12}
 Ex1= {25,27,29,31,33}--노말 일반모드
 Ex2= {23,26,29,32,35}--하드 일반모드
-Ex2_1= {30,35,40,45,50}--퓨어모드 환전률
 Ex3= {27,30,33,36,39} -- 퓨쳐 일반모드
-Ex4= {40,45,50,55,60} -- 비욘드
-Ex5= {50,55,60,65,70} -- 이론치
+Ex2_1= {25,40,55,60,75}--퓨어모드 환전률
+Ex4= {20,32,45,60,75} -- 비욘드
+Ex5= {27,40,55,70,85} -- 이론치
 UpCostTable = {500000,300000,400000}
 
 AtkFactorArr = {30,15,20}
@@ -4004,7 +4017,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				})
 				CIfEnd()
 			end
-				CAPlot({CSMakePolygon(4,128,0,5,0)},FP,181,23,nil,1,1,{1,0,0,0,6,0},nil,FP,nil,nil,1,"MarListSkillUnitFunc")
+				CAPlot({CSMakePolygon(4,128,0,5,0)},FP,181,23,{MarListTempPosX,MarListTempPosY},1,1,{1,0,0,0,6,0},nil,FP,nil,nil,1,"MarListSkillUnitFunc")
 			--CreateUnitPolygonSafe2Gun(FP,Bring(Force2,Exactly,0+j,150,64),5-j,23,32,128,0,4,1,i-1, {1,179})
 
 			CAdd(FP,BackupCp,9)
@@ -9343,31 +9356,6 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 			
 		}
 	}
-	Trigger {
-		players = {P6},
-		conditions = {
-			Label(0);
-			isname(i,"UnusedTypeGB");
-			CDeaths(P6,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(P6,SetTo,1,LimitC);
-			
-		}
-	}
-	Trigger {
-		players = {P6},
-		conditions = {
-			Label(0);
-			isname(i,"UnusedTypeDemon");
-			CDeaths(P6,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(P6,SetTo,1,LimitC);
-			
-		}
-	}
-	
 	
 	YY = 2021
 	MM = 12
@@ -19072,3 +19060,11 @@ CIfEnd()
 
 EndCtrig()
 ErrorCheck()
+
+
+
+
+if LD2XOption == 1 then
+	__PopStringArray()
+	io.close(__TRIGchkptr)
+	end
