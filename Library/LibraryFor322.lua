@@ -11,6 +11,32 @@ BGMArr = {}
 VArrStackArr = {}
 InitBGMP = 12
 sindexAlloc = 0x700
+ASM_MT={}
+ASM_MT_Func={}
+ASM_MT_Func.__add=_Add
+ASM_MT_Func.__sub=_Sub
+ASM_MT_Func.__mul=_Mul
+ASM_MT_Func.__div=_Div
+ASM_MT_Func.__unm=_Neg
+
+
+function V(Index,Player,Next) -- metatable testfunc
+	if Player == nil then
+		Player = "X"
+	end
+	local X
+	if Index >= 1 then
+		if ASM_MT[Index] == nil then
+			X = {Player,Index,Next,"V"}
+			setmetatable(X,ASM_MT_Func)
+			ASM_MT[Index] = X
+		else
+			X = ASM_MT[Index]
+		end
+	end
+	return X
+end
+
 
 ---@param Str? string
 ---@return string
