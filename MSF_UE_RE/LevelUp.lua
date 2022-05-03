@@ -114,7 +114,7 @@ function LevelUp()
 		end
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
-			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 0)})
+			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0)})
 			CAdd(FP,CunitIndex,1)
 		CWhileEnd()
 	

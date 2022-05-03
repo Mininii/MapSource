@@ -92,7 +92,7 @@ function SetUnitClassType(UnitID,Type)
 		Class = 197
 	end
 	table.insert(PatchArr,SetMemoryB(0x6637A0 + UnitID,SetTo,0x02+0x08))
-	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,Class))
+	table.insert(PatchArr,SetMemoryB(0x663DD0 + UnitID,SetTo,199))
 end
 
 function onInit_EUD()
@@ -143,10 +143,18 @@ function onInit_EUD()
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
+	CTrigger(FP,{TMemoryB(0x6647B0, CurrentUID, AtMost,0)},{TSetMemoryW(0x660E00, CurrentUID, SetTo, 0)},1) -- if Has Shield == 0 then Shield Amount = 0
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
+	table.insert(PatchArr,SetMemoryW(0x660E00+(173*2), SetTo, 10000)) -- 포메이션 쉴드 1만으로 설정
 
+	GunList = {131,132,133,130,151,201,148,173,152,142,135,140,141,138,139,137}
+	for j,k in pairs(GunList) do
+		SetUnitAdvFlag(k,0x8000,0x8000)
+	end
+	
+	
 	for i = 0, 227 do
 	SetUnitDefUpType(i,60) -- 방업 적용 방지
 	SetToUnitDef(i,0) -- 방어력 전부 0으로 설정 
@@ -661,6 +669,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 	end
 
+	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
 	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)

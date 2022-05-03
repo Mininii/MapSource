@@ -1089,18 +1089,17 @@ CIfEnd()
 		local PlayerID = CAPlotPlayerID
 		local CA = CAPlotDataArr
 		local CB = CAPlotCreateArr
+		local TempX,TempY=CreateVars(2,FP)
 		CA_Rotate3D(SY,SZ,SW) -- XY : SY, YZ : SZ, ZX : SW 만큼 회전
-	end
-	function CA_Recall()
-		local PlayerID = CAPlotPlayerID
-		local CA = CAPlotDataArr
-		local CB = CAPlotCreateArr
-		f_Recall(nil,V(CA[8]),V(CA[9]))
+		CAdd(FP,TempX,CPosX,V(CA[8]))
+		CAdd(FP,TempY,CPosY,V(CA[9]))
+		Simple_SetLocX(FP,0, TempX, TempY, TempX, TempY,Simple_CalcLoc(0, -32, -32, 32, 32))
+		f_Recall(nil,TempX,TempY)
 		Trigger2(FP,{Void(41,AtLeast,4)},{KillUnitAt(All,"Men","Location 1",Force1)},{preserved})
 	end
 	DoActionsX(FP,{SetCVar("X",SY[2],Add,1),SetCVar("X",SZ[2],Add,1),SetCVar("X",SW[2],Add,1)})
 	GetLocCenter("Battlecruiser4",CPosX,CPosY)
-	CAPlot2({CSMakePolygon(4,150,90,PlotSizeCalc(4,1),PlotSizeCalc(4,0))},FP,nilunit,"Location 1",{CPosX,CPosY},1,32,{1,0,0,0,20,0},"S2_CAfunc2",FP,nil,nil,1,"CA_Recall")
+	CAPlot2({CSMakePolygon(4,150,90,PlotSizeCalc(4,1),PlotSizeCalc(4,0))},FP,nilunit,"Location 1",{CPosX,CPosY},1,32,{1,0,0,0,20,0},"S2_CAfunc2",FP,nil,nil,1)
 	Trigger {
 		players = {P8},
 		conditions = {

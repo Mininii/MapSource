@@ -52,7 +52,7 @@ function GameOver()
 --            },
 --        }
     CIf({Force1,FP},CDeaths(FP,AtLeast,1,Win)) -- ½Â¸®Æ®¸®°Å
-    
+    CMov(FP,SpeedVar,4)
         for i=0, 56 do
         Trigger {
             players = {Force1},

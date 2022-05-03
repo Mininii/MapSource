@@ -5,9 +5,19 @@
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\MSF_UE"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
+
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -52,14 +62,17 @@ end
 		init_func = def_sIndex()
 		CJump(AllPlayers,init_func)
 
-			Include_CtrigPlib(360,"Switch 100",1,FP)
-			Include_64BitLibrary("Switch 100",FP)
-			DUnitCalc = Install_EXCC(FP,25,nil)
+			Include_CtrigPlib(360,"Switch 100")
+			Include_64BitLibrary("Switch 100")
+			Include_CBPaint()
+			DUnitCalc = Install_EXCC(FP,25,1)
+			LHPCunit = Install_EXCC(FP,25)
 			Objects()
 			HPoints()
 			Var_init()
 			Include_Conv_CPosXY(FP)
 			Install_GetCLoc(FP,0,nilunit)
+			Install_TMemoryBW(FP)
 			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT,G_CB_LoopMaxT)
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
@@ -93,3 +106,9 @@ end
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
+
+
+if LD2XOption == 1 then
+__PopStringArray()
+io.close(__TRIGchkptr)
+end

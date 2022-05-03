@@ -115,11 +115,6 @@ function Install_ShapeData()
 	Hive_3 = CS_MoveXY(Hive_3,-(48*32),-(96*32))
 	GC1 = CS_MoveXY(GC1,-(48*32),-(96*32))
 	GC2 = CS_MoveXY(GC2,-(48*32),-(96*32))
-	Form = CS_MoveXY(Form,-(48*32),-(96*32))
-	Form2 = CS_MoveXY(Form2,-(48*32),-(96*32))
-	FormF1 = CS_MoveXY(FormF1,-(48*32),-(96*32))
-	FormF2 = CS_MoveXY(FormF2,-(48*32),-(96*32))
-	FormF3 = CS_MoveXY(FormF3,-(48*32),-(96*32))
 
 
 	G_CB_LoopMaxT = {}

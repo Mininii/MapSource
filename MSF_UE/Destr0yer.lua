@@ -3,43 +3,43 @@ function Install_Destr0yer()
 	--from. MSF_UE
 	local IdenSiege,SMine,YamatoShuttle,HackBattle = CreateCcodes(4)
 	local ResetCodeT = {IdenSiege,SMine,YamatoShuttle,HackBattle}
-local Lyrics = {
-	{"\x13\x06※ \x04Ladies and Gentlemen \x06※",2,222},
-	{"\x13\x06※ \x07Let's start \x06※",5,0},
-	{"\x13\x06※ \x04Only is in Memories \x06※",8,0},
-	{"\x13\x06※ \x08Tonight. \x06※",12,333},
-	{"\x13\x07♪\x04 I wonder why things have \x03happened\x04. \x07♪\n\x13\x07♪\x04 왜 \x03이런 일들\x04이 일어났는지 궁금해. \x07♪",60-3,0},
-	{"\x13\x07♪\x04 \x1DCould you imagine \x04the world is \x1Cboring\x04? \x07♪\n\x13\x07♪\x04 이 세상은 \x1C따분한 \x04걸, \x1D넌 알고 있니? \x07♪",68-3,0},
-	{"\x13\x07♪\x08 Stereotype \x07♪\n\x13\x07♪\x08 고정관념 \x07♪",76-3,0},
-	{"\x13\x07♪\x0E Sham \x07♪\n\x13\x07♪\x0E 엉터리 \x07♪",78-3,444},
-	{"\x13\x07♪\x0F Brain Freeze \x07♪\n\x13\x07♪\x0F 브레인 프리즈 \x07♪",79-3,444},
-	{"\x13\x07♪\x10 Collusion \x07♪\n\x13\x07♪\x10 공모 \x07♪",80-3,222},
-	{"\x13\x07♪\x1F Mental block \x07♪\n\x13\x07♪\x1F 정신적 블록 \x07♪",82-3,333},
-	{"\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x13\x07♪\x04 세계는 \x1B사라져 가고\x04, \x07♪",83-3,222},
-	{"\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x13\x07♪\x04 그 \x08( \x11운\x04명 \x08)\x04 은 난 알고 있어. \x07♪",86-3,333},
-	{"\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x13\x07♪\x04 세계는 \x1B사라지고\x04, \x07♪",88-3,444},
-	{"\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x13\x07♪\x04 나는 그 \x08( \x11운\x04명 \x08)\x04 을 아는걸. \x07♪",90-3,444},
-	{"\x13\x07♪\x04 I know \x07all of you\x04. \x07♪\n\x13\x07♪\x04 나는 너희를 \x07모두 아는데\x04, \x07♪",91-3,0},
-	{"\x13\x07♪\x04 Have you, you, \x10followed me\x04? \x07♪\n\x13\x07♪\x04 너희는, 너희는, 날 \x10쫓아오기라도 했니\x04? \x07♪",95-3,444},
-	{"\x13\x07♪\x04 Me in your mind is the \x1Fdream\x04. \x07♪\n\x13\x07♪\x04 너희 마음 속의 나는 \x1F꿈\x04인걸. \x07♪",99-3,0},
-	{"\x13\x07♪\x04 The dream of the \x10 ( \x11Ｐ\x04ａｓｔ \x10) \x04. \x07♪\n\x13\x07♪\x04 \x10 ( \x11과\x04거 \x10) \x04의 꿈. \x07♪",105-3,333},
-	{"\x13\x07♪\x04 So I would \x08forget \x04you. \x07♪\n\x13\x07♪\x04 난 너희를 \x08잊을\x04테니, \x07♪",107-3,0},
-	{"\x13\x07♪\x11 Let you forget me. \x07♪\n\x13\x07♪\x11 너희도 날 잊어줘. \x07♪",111-3,0},
-	{"\x13\x07♪\x04 'Cause I'm \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x07♪\n\x13\x07♪\x04 왜냐면 나는 \x07『 \x08파\x10괴\x04자\x07 』 \x04이니까. \x07♪",115-3,333},
-	{"\x13\x07♪\x08 I kill us all. \x07♪\n\x13\x07♪\x08 다 끝장내겠어. \x07♪",138-3,0},
-	{"\x13\x07♪\x10 It's the only way. \x07♪\n\x13\x07♪\x10 이 길 뿐이야. \x07♪",151-3,333},
-	{"\x13\x07♪\x06 It's over. \x07♪\n\x13\x07♪\x06 다 끝났어. \x07♪",153-3,0},
-	{"\x13\x07♪\x08 I will kill. \x07♪\n\x13\x07♪\x08 끝장내겠어. \x07♪",159-3,333},
-	{"\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",161-3,333},
-	{"\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",165-3,500},
-	{"\x13\x07♪\x04 I'm the only one \x1Fwho's right\x04. \x07♪\n\x13\x07♪\x04 나만이 \x1F진리\x04이기에. \x07♪",168-3,0},
-	{"\x13\x07♪\x08 I will kill. \x07♪\n\x13\x07♪\x08 끝장내겠어. \x07♪",175-3,333},
-	{"\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",177-3,444},
-	{"\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",181-3,500},
-	{"\x13\x07♪\x15 It is what it is. \x07♪\n\x13\x07♪\x15 뭐 어쩌겠어. \x07♪",184-3,0},
-	{"\x13\x07♪\x1E It is what it is. \x07♪\n\x13\x07♪\x1E 원래 이랬는걸. \x07♪",188-3,0},
-	{"\x13\x07♪\x04 It is not. It's not \x08my fault\x04. \x07♪\n\x13\x07♪\x04 아냐. \x08내 잘못\x04이 아냐. \x07♪",192-3,0},
-	}
+	local Lyrics = {
+		{"\x0D\x0D!H\x13\x06※ \x04Ladies and Gentlemen \x06※",2,222},
+		{"\x0D\x0D!H\x13\x06※ \x07Let's start \x06※",5,0},
+		{"\x0D\x0D!H\x13\x06※ \x04Only is in Memories \x06※",8,0},
+		{"\x0D\x0D!H\x13\x06※ \x08Tonight. \x06※",12,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 I wonder why things have \x03happened\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 왜 \x03이런 일들\x04이 일어났는지 궁금해. \x07♪",60-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1DCould you imagine \x04the world is \x1Cboring\x04? \x07♪\n\x0D\x0D!H\x13\x07♪\x04 이 세상은 \x1C따분한 \x04걸, \x1D넌 알고 있니? \x07♪",68-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x08 Stereotype \x07♪\n\x0D\x0D!H\x13\x07♪\x08 고정관념 \x07♪",76-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x0E Sham \x07♪\n\x0D\x0D!H\x13\x07♪\x0E 엉터리 \x07♪",78-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x0F Brain Freeze \x07♪\n\x0D\x0D!H\x13\x07♪\x0F 브레인 프리즈 \x07♪",79-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x10 Collusion \x07♪\n\x0D\x0D!H\x13\x07♪\x10 공모 \x07♪",80-3,222},
+		{"\x0D\x0D!H\x13\x07♪\x1F Mental block \x07♪\n\x0D\x0D!H\x13\x07♪\x1F 정신적 블록 \x07♪",82-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 세계는 \x1B사라져 가고\x04, \x07♪",83-3,222},
+		{"\x0D\x0D!H\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 그 \x08( \x11운\x04명 \x08)\x04 은 난 알고 있어. \x07♪",86-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 The world is \x1Bfading\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 세계는 \x1B사라지고\x04, \x07♪",88-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x04 I know the \x08( \x11Ｆ\x04ａｔｅ \x08)\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 나는 그 \x08( \x11운\x04명 \x08)\x04 을 아는걸. \x07♪",90-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x04 I know \x07all of you\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 나는 너희를 \x07모두 아는데\x04, \x07♪",91-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x04 Have you, you, \x10followed me\x04? \x07♪\n\x0D\x0D!H\x13\x07♪\x04 너희는, 너희는, 날 \x10쫓아오기라도 했니\x04? \x07♪",95-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x04 Me in your mind is the \x1Fdream\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 너희 마음 속의 나는 \x1F꿈\x04인걸. \x07♪",99-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x04 The dream of the \x10 ( \x11Ｐ\x04ａｓｔ \x10) \x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 \x10 ( \x11과\x04거 \x10) \x04의 꿈. \x07♪",105-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 So I would \x08forget \x04you. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 난 너희를 \x08잊을\x04테니, \x07♪",107-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x11 Let you forget me. \x07♪\n\x0D\x0D!H\x13\x07♪\x11 너희도 날 잊어줘. \x07♪",111-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x04 'Cause I'm \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x07♪\n\x0D\x0D!H\x13\x07♪\x04 왜냐면 나는 \x07『 \x08파\x10괴\x04자\x07 』 \x04이니까. \x07♪",115-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x08 I kill us all. \x07♪\n\x0D\x0D!H\x13\x07♪\x08 다 끝장내겠어. \x07♪",138-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x10 It's the only way. \x07♪\n\x0D\x0D!H\x13\x07♪\x10 이 길 뿐이야. \x07♪",151-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x06 It's over. \x07♪\n\x0D\x0D!H\x13\x07♪\x06 다 끝났어. \x07♪",153-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x08 I will kill. \x07♪\n\x0D\x0D!H\x13\x07♪\x08 끝장내겠어. \x07♪",159-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",161-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",165-3,500},
+		{"\x0D\x0D!H\x13\x07♪\x04 I'm the only one \x1Fwho's right\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 나만이 \x1F진리\x04이기에. \x07♪",168-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x08 I will kill. \x07♪\n\x0D\x0D!H\x13\x07♪\x08 끝장내겠어. \x07♪",175-3,333},
+		{"\x0D\x0D!H\x13\x07♪\x04 I will \x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙ\x07 』\x04 the world. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 내가 세상을 \x07『 \x08파\x10괴\x07 』 \x04하겠어. \x07♪",177-3,444},
+		{"\x0D\x0D!H\x13\x07♪\x04 No matter what you do, \x0FI don't stop\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 너희가 뭐래도, \x0F멈추지 않아\x04. \x07♪",181-3,500},
+		{"\x0D\x0D!H\x13\x07♪\x15 It is what it is. \x07♪\n\x0D\x0D!H\x13\x07♪\x15 뭐 어쩌겠어. \x07♪",184-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x1E It is what it is. \x07♪\n\x0D\x0D!H\x13\x07♪\x1E 원래 이랬는걸. \x07♪",188-3,0},
+		{"\x0D\x0D!H\x13\x07♪\x04 It is not. It's not \x08my fault\x04. \x07♪\n\x0D\x0D!H\x13\x07♪\x04 아냐. \x08내 잘못\x04이 아냐. \x07♪",192-3,0},
+		}
 	local BGMArr = {}
 	for i = 1, 272 do
 		if i <= 9 then
@@ -101,9 +101,9 @@ local Lyrics = {
 			CMov(FP,DcurHP,DHP)
 		CIfEnd()
 	CIfEnd()
-	if TestStart == 1 then
+	if Limit == 1 then
 		for i = 0, 6 do
-			CMov(FP,0x57f120 + (4*i),DTotalDmg)
+			CTrigger(FP,{CD(TestMode,1)},{TSetResources(i, SetTo, DTotalDmg, Gas)},1)
 		end
 	end
 	local PatternCcode = {}
@@ -473,7 +473,7 @@ Trigger {
 		DoActionsX(FP,{SetCVar("X",TSize,Add,100);})
 		CIf(FP,{CDeaths(FP,AtLeast,1,WhileLaunch)},{SetCDeaths(FP,SetTo,0,WhileLaunch)})
 			CMov(FP,SkillW2,SkillW)
-		CifEnd()
+		CIfEnd()
 		CWhile(FP,{CVar(FP,SkillW2[2],AtLeast,1),CVar(FP,SkillW2[2],AtMost,100)},{SetCVar(FP,SkillW3[2],Add,100),SetCVar(FP,SkillW2[2],Subtract,1)})
 			local Randnum = f_CRandNum(360)
 			CMov(FP,RandRet2,Randnum)
@@ -525,14 +525,13 @@ Trigger {
 	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BursterCall),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(59*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BlackBox),SetCDeaths(FP,SetTo,0,BursterCall),SetCVar("X",TSize,SetTo,0)},{preserved})
-	local Pat1 = Create_PatternCcode(PatternCcode)
 	local N_R,N_A,N_X,N_Y,N_A2,N_A3 = CreateVariables(6)
 	CIf(FP,{CDeaths(FP,AtLeast,1,BursterCall)},{SetCVar(FP,N_R[2],Add,2),SetCVar("X",TSize,Add,100)})
 	CMov(FP,N_A,0)
 	CAdd(FP,N_A2,1)
 	CAdd(FP,N_A3,N_A2)
 	CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
-	f_lengthdir(FP,N_R,_Add(N_A,N_A3),N_X,N_Y)
+	f_Lengthdir(FP,N_R,_Add(N_A,N_A3),N_X,N_Y)
 	GetLocCenter("DCenter",CPosX,CPosY)
 	CAdd(FP,N_X,CPosX)
 	CAdd(FP,N_Y,CPosY)
@@ -570,7 +569,7 @@ Trigger {
 		end
 		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
 		DoActions(FP,RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossDMG".._0D,4)},HumanPlayers,FP))
-		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),killUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
+		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),KillUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
 	CIfEnd()
 
 	for i = 0, #BGMArr-1 do
@@ -593,6 +592,64 @@ Trigger {
 	end
 	TriggerX(FP,{CDeaths(FP,AtMost,0,CBulletT)},{SetCDeaths(FP,Add,7,CBulletT)},{preserved})
 	DoActionsX(FP,SetCDeaths(FP,Subtract,1,CBulletT))
+	
+SpCodeBase = 0x8080E200 
+SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
+SpCode3 = 0x8B80E200 -- \x0D\x0D!H
+function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
+CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
+CA__SetNext(HStr4,8,SetTo,0,54-1,0)
+CMov(FP,HLine,0)
+EffCV2 = CreateVArr(11, FP)
+CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
+	f_ChatOffset(FP,HLine,0,ChatOff) 
+    CMovX(FP,HCheck,VArr(EffCV2,HLine))
+    CIfX(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"\x0D\x0D!H"))},{SetNVar(HCheck,SetTo,3)})
+--    for i = 0, 3 do
+--        CElseIfX({HumanCheck(i, 1),TTbytecmp(ChatOff,VArr(Names2[i+1],0),PLength[i+1])},{SetNVar(HCheck,SetTo,4)})
+--    end
+    CElseIfX({TTDisplayX(HLine,0,NotSame,SpCode3,0xFFFFFF00)},{SetNVar(HCheck,SetTo,0)})
+    CIfXEnd()
+
+	CurLiV = CreateVar(FP)
+	EffCV = CreateVArr(11, FP)
+    CIf(FP,{NVar(HCheck,AtLeast,3),NVar(HCheck,AtMost,4)})
+	CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
+		CMovX(FP,VArr(EffCV,HLine),0)
+		CMov(FP,CurLiV, _Mul(HLine,54*604))
+		CA__SetValue(HStr2,MakeiStrLetter("\x0D",53),0xFFFFFFFF,CurLiV,1,1) 
+		CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
+		CIfX(FP,NVar(HCheck,Exactly,3))
+			CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
+			CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
+		CElseX()
+			CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
+		CIfXEnd()
+
+		CIf(FP,{TTNVar(HCheck, NotSame, 3)})
+		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CIfEnd()
+		CD__InputMask(HLine,0xFFFFFFFF,0,52) 
+	CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
+	TempEC = CreateVar(FP)
+		CMov(FP,CurLiV, _Mul(HLine,54*604))
+		CMovX(FP,TempEC,VArr(EffCV,HLine))
+		CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+		CIf(FP,NVar(TempEC,AtMost,51),SetNVar(TempEC, Add, 1))
+			CMovX(FP,VArr(EffCV,HLine),TempEC)
+		CIfEnd()
+	CIfXEnd()
+    CIfEnd()
+
+
+    CMovX(FP,VArr(EffCV2,HLine),HCheck)
+CWhileEnd(SetNVar(HLine,Add,1)) 
+end 
+CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+
+
+
 	CElseIfX(CVar(FP,VResetSw5[2],Exactly,0),SetCVar(FP,VResetSw5[2],SetTo,1))
 	local DResetTable = {}
 	for j, k in pairs(LyricsCCode) do
@@ -648,8 +705,8 @@ Trigger {
 	f_ArrReset()
 	CIfXEnd()
 	CIf(FP,CDeaths(FP,AtLeast,1,Destr0yerClear))
-		local ClearText1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x14\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\x13\n\x14\n\n\x14\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
-		local ClearText2 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\x14\n\x14\n\n\x13\x04점수를 계산중입니다...\n\x14\n\x14\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		local ClearText1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\x14\n\n\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+		local ClearText2 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x14\n\x14\n\x13\x04점수를 계산중입니다...\n\x14\n\x14\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 		local ClearTimer = CreateCcode()
 		local ClearSw1 = CreateCcode()
 		local ClearSw2 = CreateCcode()
@@ -673,7 +730,7 @@ Trigger {
 			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),
 			DisplayTextX("\n",4),
-			DisplayTextX("\x13\x15점수가 충분하지 않아 다음 단계 진입이 불가능합니다...\n",4);
+			DisplayTextX("\x13\x15점수가 충분하지 않아 게임을 클리어하지 못했습니다....\n",4);
 			DisplayTextX("\x13\x05게임을 종료합니다.",4);
 			DisplayTextX("\n",4),
 			DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4),

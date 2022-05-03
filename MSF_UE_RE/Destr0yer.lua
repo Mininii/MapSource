@@ -554,7 +554,7 @@ Trigger {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		f_Div(FP,DTotalDmg,_Mov(256))
-		f_Mul(FP,DTotalDmg,_Mov(7))
+		f_Mul(FP,DTotalDmg,_Mov(25))
 		
 		f_Div(FP,DTotalDmg,SetPlayers)
 		

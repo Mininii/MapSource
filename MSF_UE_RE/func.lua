@@ -717,17 +717,13 @@ end
 function Include_G_CB_Library(StartIndex,G_CB_ArrSize,G_CB_Lines,DefCenterXYV,TRefeatXYV,ShapeTable,LoopMaxTable)
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end
 local f_RepeatTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-local f_RepeatErr = "\x07『 \x08ERROR : \x04f_Repeat에서 문제가 발생했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-local f_RepeatErr2 = "\x07『 \x08ERROR : \x04Call_Repeat에서 잘못된 UnitID(0)을 입력받았습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 local f_GunSendErrT = "\x07『 \x08ERROR \x04: G_CB_SpawnSet 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
-local G_CB_PosErr = "\x07『 \x03CAUCTION : \x04생성 좌표가 맵 밖을 벗어났습니다.\x07 』"
 local f_GunErrT = "\x07『 \x08ERROR \x04: G_CBPlot Not Found. \x07』"
 local f_GunErrT2 = "\x07『 \x08ERROR \x04: G_CBPlot Suspend Error. \x07』"
 local f_GunFuncT = "\x07『 \x03TESTMODE OP \x04: G_CBPlot Suspended. \x07』"
 local f_GunFuncT2 = "\x07『 \x03TESTMODE OP \x04: G_CBPlot Sended. \x07』"
 local Repeat_UnitIDV = CreateVar(FP)
 local RepeatType = CreateVar(FP)
-local G_CB_Nextptrs = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local CreatePlayer = CreateVar(FP)
 local G_CB_LineV = CreateVar(FP)
@@ -748,7 +744,6 @@ local TRepeatY = TRefeatXYV[2]
 local G_CB_CenterX = DefCenterXYV[1]
 local G_CB_CenterY = DefCenterXYV[2]
 
-local G_CB_UnitIndex = CreateVar(FP)
 local Write_SpawnSet_Jump = def_sIndex()
 local G_CB_Arr_IndexAlloc = StartIndex
 local G_CB_TempTable = CreateVarArr(G_CB_Lines,FP)
@@ -769,7 +764,6 @@ local G_CB_WSTestVA = CreateVArr(5,FP)
 
 
 
-local CheckTemp = CreateVar(FP)
 local isScore = CreateCcode()
 local Call_Repeat = SetCallForward()
 SetCall(FP)
@@ -1183,9 +1177,9 @@ G_CB_ShapeTable = {}
 		CMov(FP,TempFunc2,G_CB_TempTable[3],nil,0xFF,1)
 		
 		CIfX(FP,{TTOR({CV(TempFunc,1,AtLeast),TTAND({CV(TempFunc2,1,AtLeast),CV(TempFunc2,8,AtMost)})})})
-		ItoDec(FP,TempFunc2,VArr(G_CB_WSTestVA,0),0,nil,0)
-		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
-		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+		--ItoDec(FP,TempFunc2,VArr(G_CB_WSTestVA,0),0,nil,0)
+		--f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
+		--TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		--CIfX(FP,{Never()})
 
 		for i = 1, STSize do
@@ -1309,7 +1303,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 						end
 					end
 					if G_CB_ShapeTable_Check ~= "OK" then
-						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
+						PushErrorMsg("G_CB_SetSpawn_String_Shape_NotFound")
 					end
 				else
 					PushErrorMsg("G_CB_SNTable_InputData_Error")
@@ -1330,7 +1324,7 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 			end
 		end
 		if G_CB_ShapeTable_Check ~= "OK" then
-			PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
+			PushErrorMsg("G_CB_SetSpawn_String_Shape_NotFound")
 		end
 	else
 		PushErrorMsg("G_CB_SNTable_InputData_Error")

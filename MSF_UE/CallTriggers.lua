@@ -200,26 +200,29 @@ SetCall(FP)
 	CIfXEnd()
 	f_LoadCp()
 SetCallEnd()
+
 UnitIDV = CreateVar(FP)
 TempLvHP = CreateVar(FP)
 TempLvHP2 = CreateVar(FP)
-MultiplierV = CreateVar(FP)
 TempLvHP_L = CreateWar(FP)
-TempLvHP_L2 = CreateWar(FP)
 TempLvHP_L3 = CreateWar(FP)
+TempLvHP_L4 = CreateWar(FP)
+TempLvHP_L5 = CreateWar(FP)
+TempLvHP_L6 = CreateWar(FP)
+TempBakHP = CreateVar(FP)
+TempBakHP2 = CreateVar(FP)
 HPMul = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
-
-		f_LMul(FP,TempLvHP_L,{VArr(MaxHPBackUp,UnitIDV),0},{_Mul(MultiplierV,_Sub(Level,_Mov(1))),0})
-		CMov(FP,HPMul,_Sub(_Mov(256),TotalAHP))
-		f_LMul(FP,TempLvHP_L2,_LDiv(TempLvHP_L,"256"),{HPMul,0})
-		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L2)
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"2129920000")},{preserved})
-		TriggerX(FP,{CWar(FP,TempLvHP_L2[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L2[2],SetTo,"256")},{preserved})
-		f_Cast(FP,{TempLvHP2,0},TempLvHP_L2) 
-		
-		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPD(0x662350)),SetTo,_Add(TempLvHP2,TempLvHP))})
+		CMovX(FP, TempBakHP, VArr(MaxHPBackUp,UnitIDV), SetTo, nil, nil, 1)
+		f_Div(FP,TempBakHP2,TempBakHP,4)
+		f_LAdd(FP, TempLvHP_L4, _LMul({TempBakHP2,0}, {_Sub(Level,1),0}), {TempBakHP,0})
+		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L4,SetTo,nil,nil,1)
+		CTrigger(FP,{TTCWar(FP,TempLvHP_L4[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L4[2],SetTo,"2129920000")},{preserved})
+		CTrigger(FP,{TTCWar(FP,TempLvHP_L4[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L4[2],SetTo,"256")},{preserved})
+		f_Cast(FP,{TempLvHP2,0},TempLvHP_L4,nil,nil,1) 
+		--CMov(FP,0x57f120+(4*0),TempLvHP2)
+		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPDF(0x662350)),SetTo,TempLvHP2)})
 SetCallEnd()
 
 f_Replace = SetCallForward()
@@ -236,6 +239,20 @@ SetCall(FP)
 	f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+	local TempW = CreateWar(FP)
+	f_LMovX(FP, TempW, WArr(MaxHPWArr,RepHeroIndex), SetTo, nil, nil, 1)
+	CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
+		CDoActions(FP, {
+			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
+			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+			
+	})
+	CIfEnd()
+
 	CDoActions(FP,{
 	TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
 	TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(CPosX,18)),
@@ -244,7 +261,9 @@ SetCall(FP)
 	})
 	CDoActions(FP,{
 		Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo,1),
-		Set_EXCC2(DUnitCalc, CunitIndex, 0, SetTo,Gun_LV),})
+		Set_EXCC2(DUnitCalc, CunitIndex, 0, SetTo,Gun_LV),
+		Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo,1)
+	})
 	CIfX(FP,CVar(FP,RepHeroIndex[2],Exactly,111))
 	CDoActions(FP,{
 	TCreateUnitWithProperties(1, RepHeroIndex, 1, P8,{energy = 100}),TSetMemoryX(_Add(Nextptrs,19),SetTo,CunitP,0xFF)})
@@ -472,7 +491,106 @@ end
 			},
 		}
 	CIfEnd()
+	SetCallEnd()
 	
+	ComputerReplace = SetCallForward()
+	SetCall(FP)
+	CMov(FP,0x6509B0,UnitDataPtr)
+	CWhile(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
+		CAdd(FP,0x6509B0,1)
+		CIf(FP,DeathsX(CurrentPlayer,Exactly,7*256,0,0xFF00))
+			local PointJump = def_sIndex()
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- 포인트유닛 리젠 삭제
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- 포인트유닛 리젠 삭제
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,221,0,0xFF)}) -- 포인트유닛 리젠 삭제
+--			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],AtLeast,7),DeathsX(CurrentPlayer,Exactly,131,0,0xFF)}) -- 해처리레어 리젠없음
+--			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],Exactly,10),DeathsX(CurrentPlayer,Exactly,132,0,0xFF)}) -- 해처리레어 리젠없음
+			CSub(FP,0x6509B0,1)
+			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드.
+			CAdd(FP,0x6509B0,1)
+			NJumpXEnd(FP,PointJump)
+		CIfEnd()
+		CSub(FP,0x6509B0,1)
+		CAdd(FP,0x6509B0,2)
+	CWhileEnd()
+	CMov(FP,0x6509B0,FP)
+	TriggerX(FP,{CV(LevelT,2,AtLeast)},{SetCVar(FP,RandW[2],Add,30)},{preserved})
+	SetCallEnd()
+
+	LevelReset = SetCallForward()
+	SetCall(FP)
+	
+	DoActions(FP,{
+		ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
+		KillUnitAt(All,124,17,Force1),
+		KillUnitAt(All,124,18,Force1),
+		KillUnitAt(All,124,19,Force1),
+		KillUnitAt(All,125,17,Force1),
+		KillUnitAt(All,125,18,Force1),
+		KillUnitAt(All,125,19,Force1),})
+	
+	if TestStart == 1 then
+		--CMov(FP,LevelT2,4)
+	end
+	--TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,MarNumberLimit[2],Add,84*2),SetCDeaths(FP,Add,100,PExitFlag)},{preserved})
+	--TriggerX(FP,{CVar(FP,LevelT[2],AtMost,8)},{ShUnitLimitT},{preserved})--19
+	--TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{preserved})
+
+	
+	CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
+	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
+		CDoActions(FP,{
+			Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo, 0),
+			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo, 0),
+		TSetMemoryX(_Add(_Mul(CunitIndex,84),19025+40), SetTo, 0,0xFF000000),
+	})
+		CAdd(FP,CunitIndex,1)
+	CWhileEnd()
+
+	function SetLevelUpHP(UnitID)
+		CallTrigger(FP,f_SetLvHP,{SetCVar(FP,UnitIDV[2],SetTo,UnitID)})
+	end
+
+	--TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{preserved})
+	
+	for i = 2, 10 do
+		TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*16*i),SetMemory(0x662350+(4*125),SetTo,16000*256*i),SetMemory(0x662350+(4*124),SetTo,16000*256*i)},{preserved})
+	end
+
+	
+	for i = 37, 57 do
+		SetLevelUpHP(i,1)
+	end
+		SetLevelUpHP(104,1)
+	for j, k in pairs(HeroArr) do
+		SetLevelUpHP(k,1)
+	end
+	BdArr = {130,131,132,133,135,136,137,138,139,140,141,142,143,144,146,147,148,151,152,201}
+	
+	for j, k in pairs(BdArr) do
+		SetLevelUpHP(k,1)
+	end
+	SetLevelUpHP(11,1)
+	SetLevelUpHP(13,1)
+	SetLevelUpHP(193,1)
+
+
+	DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
+	local UpVar = CreateVar(FP)
+	CMov(FP,UpVar,Level)
+	f_Div(FP,UpVar,_Mov(2))
+	for i = 1, 3 do
+	TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{preserved})
+	end
+	for i = 0, 7 do
+		TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{preserved})
+	end
+	TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,255)},{preserved})
+	
+	
+
 
 	SetCallEnd()
 	Call_Print13 = {}
@@ -483,20 +601,23 @@ end
 	SetCallEnd()
 	end
 
-	
-	iStrSize2 = GetiStrSize(0,"0000000000 \x04/ 0000000000 \x04 \x1C000.0%\x04 ")
-	iStrSize3 = GetiStrSize(0,"0000000000 \x1C/ 0000000000 \x1F \x1F000.0%\x04 ")
+	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
+	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
+	iStrSize2 = GetiStrSize(0,t01)
+	iStrSize3 = GetiStrSize(0,t02)
+
+
 	iStrSize4 = GetiStrSize(0,"\x07『 \x08뉴클리어 \x04보유량 :\x04 0000000000 \x07』")
-	iStrSize5 = GetiStrSize(0,"\x07『 \x08포인트 \x04보유량 :\x04 0000000000 \x07』")
+	iStrSize5 = GetiStrSize(0,"\x07『 \x07포인트 \x04보유량 :\x04 0000000000 \x07』")
 	iStrSize6 = GetiStrSize(0,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D\x0D")
+	
+	
 
 	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
 	S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- 단축키없음
 	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- 단축키없음
 	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- 단축키없음
 	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
-	-- ↑ TBLString.txt에서 == 사이에 들어있는 텍스트를 그대로 복사해서 
-	-- EUDEditor2,3의 372번 TBL스트링에 붙여넣고 해당 tbl파일을 맵에 삽입해야함
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
@@ -506,16 +627,15 @@ end
 		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
 
 	end
-	Str3, Str3a, Str3s = SaveiStrArr(FP,"0000000000 \x04/ 0000000000 \x04 \x1C0000.0%\x04 ")
-	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x08뉴클리어 \x04보유량 : 0000000000  \x05-")
-	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07포인트 \x04보유량 :\x04 0000000000  \x07』 ")
+	Str3, Str3a, Str3s = SaveiStrArr(FP,t01)
+	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04남은 \x08뉴클리어\x04 : 0000000000  \x05-")
+	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07포인트 \x04보유량 :\x04 0000000000 \x07』")
 	MarStr = {}
 	MarStra = {}
 	MarStrs = {}
 	for i = 0, 6 do
 		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07『 "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07』\x0D\x0D\x0D\x0D\x0D")
 	end
-	
 
 	
 end

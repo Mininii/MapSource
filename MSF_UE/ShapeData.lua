@@ -102,6 +102,20 @@ function Install_ShapeData()
 
 	
 
+	Hive_1 = CS_MoveXY(Hive_1,-(48*32),-(96*32))
+	Ovrm = CS_MoveXY(Ovrm,-(48*32),-(96*32))
+	CC_L = CS_MoveXY(CC_L,-(48*32),-(96*32))
+	CC_R = CS_MoveXY(CC_R,-(48*32),-(96*32))
+	Hive_2 = CS_MoveXY(Hive_2,-(48*32),-(96*32))
+	Hive_3F = CS_MoveXY(Hive_3F,-(48*32),-(96*32))
+	Cere_L = CS_MoveXY(Cere_L,-(48*32),-(96*32))
+	Cere_R = CS_MoveXY(Cere_R,-(48*32),-(96*32))
+	CC_LF = CS_MoveXY(CC_LF,-(48*32),-(96*32))
+	CC_RF = CS_MoveXY(CC_RF,-(48*32),-(96*32))
+	OvrmF = CS_MoveXY(OvrmF,-(48*32),-(96*32))
+	Hive_3 = CS_MoveXY(Hive_3,-(48*32),-(96*32))
+	GC1 = CS_MoveXY(GC1,-(48*32),-(96*32))
+	GC2 = CS_MoveXY(GC2,-(48*32),-(96*32))
 
 	G_CB_LoopMaxT = {}
 	G_CB_ShapeT = {

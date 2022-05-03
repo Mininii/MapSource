@@ -1144,7 +1144,7 @@ end
 		CIf(FP,{Deaths(i,AtLeast,1,48)},{SetDeaths(i,SetTo,0,48),SetCD(WBreak,0)})
 			
 		for j = 17, 19 do
-			CWhile(FP,{Bring(i,AtLeast,1,"Men",j),CV(WBreak,1000,AtMost)},AddCD(WBreak,1))
+			CWhile(FP,{Bring(i,AtLeast,1,"Men",j),CD(WBreak,1000,AtMost)},AddCD(WBreak,1))
 			f_Rand(FP,RandV)
 			CAdd(FP,TempX,_Mod(RandV,2272-800),800)
 			CAdd(FP,TempY,_Mod(RandV,6080-5440),5440)
@@ -1430,6 +1430,7 @@ end
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoHeal[i+1]),CDeaths(FP,AtLeast,1,TelCool2[i+1])},{TelCooltime2},{preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoHeal[i+1]),CDeaths(FP,Exactly,0,TelCool2[i+1])},{TelCooltimeRecover2},{preserved})
 		Trigger2(FP,{Deaths(i,AtLeast,1,197),Deaths(i,AtMost,0,14),Deaths(i,AtMost,0,16)},{SetDeaths(i,SetTo,1,14)},{preserved})
+		TriggerX(FP, {CD(MultiCommand[i+1],1),CD(LVResetStartFlag,1)}, {SetDeaths(i,SetTo,1,70),SetCDeaths(FP,Add,1,CUnitFlag)}, {preserved})
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,12)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
 			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
@@ -1457,7 +1458,7 @@ end
 				},
 				actions = {
 					MoveCp(Add,50*4);
-					SetDeathsX(i,SetTo,255*256,0,0xFF00);
+					SetDeathsX(CurrentPlayer,SetTo,255*256,0,0xFF00);
 					MoveCp(Subtract,50*4);
 					PreserveTrigger();
 				}
@@ -1489,7 +1490,7 @@ end
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
 		CMov(FP,0x6509B0,FP)
-		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetCDeaths(FP,SetTo,0,CUnitFlag)})
+		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetCDeaths(FP,SetTo,0,CUnitFlag),SetCDeaths(FP,SetTo,0,LVResetStartFlag)})
 	CIfEnd()
 	local HealT = CreateCcode()
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
@@ -1541,27 +1542,48 @@ end
 	})
 	CIfEnd()
 	
+
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 체력표기
-	SelPTR,SelEPD,SelHP,SelSh,SelPl,SelMaxHP,PercentCalc = CreateVariables(7)
+	SelPTR,SelEPD,SelSh,SelPl,SelMaxHP,PercentCalc = CreateVariables(7)
+	SelWepT =CreateVar(FP)
+	SelHPV =CreateVar(FP)
+	SelHPW =CreateWar(FP)
+	
+	CMov(FP,SelPl,0)
+	CMov(FP,SelUID,0)
+	CMov(FP,SelSh,0)
 	f_Read(FP,0x6284B8,SelPTR,SelEPD)
-	f_Read(FP,_Add(SelEPD,2),SelHP)
+	f_Read(FP,_Add(SelEPD,2),SelHPV)
 	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
 	f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
 	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+	CMov(FP,CunitIndex,_Div(_Sub(SelEPD,19025),_Mov(84)))
 	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
-	CTrigger(FP,{CVar(FP,SelPl[2],Exactly,7),CVar(FP,B1_H[2],AtLeast,1)},{TSetCVar(FP,SelHP[2],Add,B1_K)},1)
-	f_Div(FP,SelHP,_Mov(256))
+	f_Div(FP,SelHPV,_Mov(256))
+	
+	CIf(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	local TempW2 = CreateWar(FP)
+	local TempW3 = CreateWar(FP)
+	f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(LHPCunit[3],((0x20*1)/4))), TempV1)
+	f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(LHPCunit[3],((0x20*2)/4))), TempV2)
+	f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
+	f_LDiv(FP,TempW3, TempW2, _LMov(256))
+	f_LMov(FP, {TempV1, TempV2}, TempW3, nil,nil,1)
+	CAdd(FP,SelHPV,TempV1)
+	CIfEnd()
 	f_Div(FP,SelSh,_Mov(256))
 	f_Div(FP,SelMaxHP,_Mov(256))
-	CMov(FP,PercentCalc,_Div(_Mul(SelHP,3),SelMaxHP))
-	CIf(FP,{CV(SelUID,128)})
+	CMov(FP,PercentCalc,_Div(_Mul(SelHPV,3),SelMaxHP))
+	CIf(FP,{CV(SelUID,128)}) -- 상점 디스플레이
 	PointTamp = CreateVar(FP)
 		for i = 0, 6 do
 			CIf(FP,{CV(SelPl,i)})
-			CTrigger(FP, CV(SelPl,i), {TSetCVar(FP,PointTamp[2],SetTo,AvailableStat[i+1])}, 1)
+			CTrigger(FP, {}, {TSetCVar(FP,PointTamp[2],SetTo,AvailableStat[i+1])}, 1)
 			CIfEnd()
 		end
-		CS__ItoCustom(FP,SVA1(Str5,12),PointTamp,nil,nil,10,1,nil,"\x070",0x07,{0,1,2,3,4,5,6,7,8,9})
+		CS__ItoCustom(FP,SVA1(Str5,12),PointTamp,nil,nil,{10,10},1,nil,"\x070",0x07,{0,1,2,3,4,5,6,7,8,9})
 		
 	CS__InputVA(FP,iTbl4,0,Str5,Str5s,nil,0,Str5s)
 
@@ -1572,13 +1594,54 @@ end
 		for i = 0, 6 do
 			CTrigger(FP, CV(SelPl,i), {TSetCVar(FP,NukesTmp[2],SetTo,Nukes[i+1])}, 1)
 		end
-		CS__ItoCustom(FP,SVA1(Str4,11),NukesTmp,nil,nil,10,1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
+		CS__ItoCustom(FP,SVA1(Str4,10),NukesTmp,nil,nil,{10,10},1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
 		--DoActionsX(FP,SetCSVA1(SVA1(Str4,Str4s-1),SetTo,0,0xFFFFFFFF))
 		CS__InputVA(FP,iTbl3,0,Str4,Str4s,nil,0,Str4s)
 	CIfEnd()
-	CS__ItoCustom(FP,SVA1(Str3,13),SelMaxHP,nil,0xFFFF0000,10,1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,0),SelHP,nil,0xFFFF0000,10,1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25,26,27,28,30})
+
+	
+	local CurUID = CreateVar(FP)
+	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
+	CMov(FP,CurUID,SelUID)
+	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
+	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
+	CIf(FP,{CV(SelPl,7)})
+		CIfX(FP, {TTOR({
+			CVar(FP, SelUID, Exactly, 121),
+			CVar(FP, SelUID, Exactly, 186),
+		})
+		})
+			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,23)
+		CElseX()
+		local SelWepID = CreateVar(FP)
+		local SelTmpUID = CreateVar(FP)
+		CMov(FP,SelTmpUID,SelUID)
+
+		TriggerX(FP,CV(SelUID,5),SetV(SelTmpUID,6),{preserved})
+		TriggerX(FP,CV(SelUID,23),SetV(SelTmpUID,24),{preserved})
+		TriggerX(FP,CV(SelUID,25),SetV(SelTmpUID,26),{preserved})
+		TriggerX(FP,CV(SelUID,30),SetV(SelTmpUID,31),{preserved})
+		TriggerX(FP,CV(SelUID,3),SetV(SelTmpUID,4),{preserved})
+		TriggerX(FP,CV(SelUID,17),SetV(SelTmpUID,18),{preserved})
+		CMov(FP,SelWepID,0)
+		CMov(FP,SelWepID,Act_BRead(_Add(SelTmpUID,0x6636B8)))
+			CIfX(FP,{TBread(_Add(SelWepID,0x657258), Exactly, 0)})--N
+				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,23)
+			CElseIfX({TBread(_Add(SelWepID,0x657258), Exactly, 2)})--%
+				CS__SetValue(FP, Str3, "\x1FPercent T\x04ype", 0xFFFFFFFF,23)
+			CIfXEnd()
+
+		CIfXEnd()
+
+	CIfEnd()
+	CIfEnd()
+	CIfEnd()
+
+
+
+	
+	CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,{10,9},1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
+	CS__ItoCustom(FP,SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
 	TBLN1T = {}
 	TBLN2T = {}
 	TBLN1T1 = {}
@@ -1587,18 +1650,16 @@ end
 	for i = 0, 9 do
 --			table.insert(TBLN1T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 --			table.insert(TBLN2T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,13+i),SetTo,0x04,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,13+i),SetTo,0x1C,0xFF))
 		table.insert(TBLN1T1, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 		table.insert(TBLN1T2, SetCSVA1(SVA1(Str3,i),SetTo,0x17,0xFF))
 		table.insert(TBLN1T3, SetCSVA1(SVA1(Str3,i),SetTo,0x08,0xFF))
 	end
 	for i = 0, 3 do
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i),SetTo,0x1C,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i),SetTo,0x1F,0xFF))
+		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1C,0xFF))
+		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1F,0xFF))
 	end
-	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30),SetTo,0x1C,0xFF))
-	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30),SetTo,0x1F,0xFF))
+	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1C,0xFF))
+	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1F,0xFF))
 
 	TriggerX(FP,{CV(PercentCalc,2,AtLeast)},TBLN1T1,{preserved})
 	TriggerX(FP,{CV(PercentCalc,1)},TBLN1T2,{preserved})

@@ -1,17 +1,11 @@
 function Install_DLBoss()
 	--Boss : DemonLanterns Made By LucasSpia, Arrenged By Mininii
 	--Thanks to LucasSpia
-	local SpeedBackupCcode = CreateCcode()
 	CIf(FP,NTCond())
 	CIfX(FP,Bring(FP, AtLeast, 1, "Dark Templar (Hero)", "Anywhere"),{SetCVar(FP,VResetSw4[2],SetTo,0),SetMemory(0x6509B0,SetTo,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
-	CIf(FP,{CDeaths(FP,AtMost,0,SpeedBackupCcode)},{SetCDeaths(FP,SetTo,1,SpeedBackupCcode)})
-	CMov(FP,SpeedBackup,SpeedVar)
-	CIfEnd()
-
-	CMov(FP,SpeedVar,4)
 	CMov(FP,0x6509B0,FP)
 	Trigger { -- 보스 무브 로케
 		players = {P8},
@@ -206,7 +200,7 @@ function Install_DLBoss()
 		},
 		actions = {
 			PreserveTrigger();
-			Wait(100);
+			Wait(0);
 			MoveLocation("C1", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			CreateUnit(6, "Zerg Devourer", "C1", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "C1", CurrentPlayer);
@@ -263,7 +257,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C1");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬 11");
 		},
@@ -335,7 +329,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C2");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬3");
 		},
@@ -407,7 +401,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C3");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬5");
 		},
@@ -483,7 +477,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C4");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬6");
 		},
@@ -586,7 +580,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C5");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬");
 		},
@@ -690,7 +684,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C6");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬");
 		},
@@ -786,7 +780,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Protoss Dark Archon", CurrentPlayer, "Create", "C7");
 			KillUnit("Danimoth (Arbiter)", AllPlayers);
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
-			Wait(10);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬");
 		},
@@ -897,7 +891,7 @@ function Install_DLBoss()
 			MoveLocation("C6", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C7", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
-			Wait(100);
+			Wait(0);
 			SetVoid(2, Add, 1);
 			Comment("이펙트 스킬");
 		},
@@ -1537,7 +1531,7 @@ function Install_DLBoss()
 				NElseIfX(Void(5,AtMost,200))
 					f_TempRepeat(80,1,nil,5)
 				NIfXEnd()
-				CifEnd()
+				CIfEnd()
 
 
 				CAdd(FP,CurArr,1)
@@ -1603,7 +1597,7 @@ function Install_DLBoss()
 			KillUnit("Artanis (Scout)", CurrentPlayer);
 			KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
 			KillUnit("Zerg Lurker", CurrentPlayer);
-			Wait(100);
+			Wait(0);
 			SetVoid(0, Add, 1);
 			Comment("스킬 초기화");
 		},
@@ -1631,6 +1625,8 @@ function Install_DLBoss()
 		},
 	}
 	
+	CSub(FP,VO(7),Dt_NT)
+	
 	Trigger { -- 카카루 트리거
 		players = {P8},
 		conditions = {
@@ -1640,6 +1636,7 @@ function Install_DLBoss()
 			Void(2, Exactly, 31);
 			Void(3, AtLeast, 4);
 			Void(3, AtMost, 14);
+			Void(7, AtMost, 0);
 		},
 		actions = {
 			PreserveTrigger();
@@ -1647,7 +1644,8 @@ function Install_DLBoss()
 			MoveUnit(All, 91, CurrentPlayer, "Create", "Boss");
 			KillUnit(91, CurrentPlayer);
 			ModifyUnitHitPoints(All, "Men", Foes, "Anywhere", 0);
-			Wait(1000);
+			SetVoid(7, Add, 1000);
+			SetVoid(3, Add, 1);
 			MoveLocation("C1", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C2", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C3", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
@@ -1656,7 +1654,6 @@ function Install_DLBoss()
 			MoveLocation("C6", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C7", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
-			SetVoid(3, Add, 1);
 			Comment("카카루 트리거");
 		},
 	}
@@ -1775,7 +1772,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Boss");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			SetVoid(0, Add, 1);
 			Comment("스킬 / 이쪽 방향 스킬 (대각선)");
 		},
 	}
@@ -1820,8 +1816,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Wait(10);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -1913,7 +1907,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			SetVoid(0, Add, 1);
 			Comment("스킬 ㅣ 이쪽 방향 스킬 (직선)");
 		},
 	}
@@ -1958,8 +1951,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Wait(10);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -2052,7 +2043,6 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(4, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			SetVoid(0, Add, 1);
 			Comment("스킬 11시 대각선 이쪽 방향 스킬 (대각선)");
 		},
 	}
@@ -2097,8 +2087,6 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Wait(10);
-			SetVoid(0, Add, 1);
 			Comment("무브로케 스킬");
 		},
 	}
@@ -2190,10 +2178,12 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
-			SetVoid(0, Add, 1);
 			Comment("스킬 ㅡ 이쪽 방향 스킬 (직선)");
 		},
 	}
+	
+	CAdd(FP,VO(8),Dt_NT)
+
 	
 	Trigger { -- 무브로케 스킬
 		players = {P8},
@@ -2203,6 +2193,7 @@ function Install_DLBoss()
 			Void(1, Exactly, 8);
 			Void(2, Exactly, 31);
 			Void(3, Exactly, 15);
+			Void(10,Exactly,0);
 		},
 		actions = {
 			PreserveTrigger();
@@ -2235,9 +2226,32 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Wait(3500);
+			SetVoid(10,SetTo,1);
+			Comment("무브로케 스킬");
+		},
+	}
+	
+	Trigger2(FP, {
+		Void(0, AtLeast, 3);
+		Void(0, AtMost, 9);
+		Void(1, Exactly, 8);
+		Void(2, Exactly, 31);
+		Void(3, Exactly, 15);
+	}, {SetVoid(0,Add,1),SetVoid(8, SetTo, 0);}, {preserved})
+	Trigger { -- 무브로케 스킬
+		players = {P8},
+		conditions = {
+			
+			Void(0, Exactly, 10);
+			Void(1, Exactly, 8);
+			Void(2, Exactly, 31);
+			Void(3, Exactly, 15);
+			Void(8, AtLeast, 3500);
+
+		},
+		actions = {
+			PreserveTrigger();
 			KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
-			Wait(0);
 			MoveLocation("C1", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C2", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C3", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
@@ -2247,10 +2261,13 @@ function Install_DLBoss()
 			MoveLocation("C7", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			SetVoid(0, Add, 1);
+			SetVoid(8, SetTo, 0);
 			Comment("무브로케 스킬");
 		},
 	}
-	
+
+
+
 	Trigger { -- 8각형 이펙트 내기
 		players = {P8},
 		conditions = {
@@ -2403,7 +2420,7 @@ function Install_DLBoss()
 	Trigger { -- 헤으응 미니니? 삼니니 유닛 소환 밑 무브로케
 		players = {P8},
 		conditions = {
-			
+			Label();
 			Void(0, Exactly, 11);
 			Void(1, Exactly, 8);
 			Void(2, Exactly, 31);
@@ -2434,30 +2451,25 @@ function Install_DLBoss()
 			MoveUnit(1, 30, CurrentPlayer, "Create", "C8");
 			MoveUnit(1, 30, CurrentPlayer, "Create", "C1");
 			SetVoid(3, Add, 1);
+			SetCD(WaitT,0),
 			Comment("헤으응 미니니? 삼니니 유닛 소환 밑 무브로케");
 		},
 	}
-	
-	Trigger { -- 유닛 킬
-		players = {P8},
-		conditions = {
-			
-			Void(0, Exactly, 11);
-			Void(1, Exactly, 8);
-			Void(2, Exactly, 31);
-			Void(3, Exactly, 40);
-		},
-		actions = {
-			PreserveTrigger();
-			Wait(5000);
-			SetVoid(3, Add, 1);
-			KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
-			KillUnit(30, CurrentPlayer);
-			KillUnit("Alan Schezar (Goliath)", CurrentPlayer);
-			Comment("유닛 킬");
-		},
-	}
-	
+	CIf(FP,{
+		Void(0, Exactly, 11);
+		Void(1, Exactly, 8);
+		Void(2, Exactly, 31);
+		Void(3, Exactly, 40);
+	})
+	CAdd(FP,_Ccode("X",WaitT),Dt_NT)
+	TriggerX(FP,{CDeaths(FP,AtLeast,5000,WaitT)},{
+		SetVoid(3, Add, 1);
+		KillUnit("Edmund Duke (Siege Mode)", CurrentPlayer);
+		KillUnit(30, CurrentPlayer);
+		KillUnit("Alan Schezar (Goliath)", CurrentPlayer);
+		SetCD(WaitT,0),
+	},{preserved})
+	CIfEnd()
 	Trigger { -- 네반 스킬 작성 구간
 		players = {P8},
 		conditions = {
@@ -2487,11 +2499,10 @@ function Install_DLBoss()
 	Void(2, Exactly, 31);
 	Void(3, Exactly, 41);})
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
-	CMov(FP,SpeedVar,SpeedBackup)
 	CallTrigger(FP,Call_VoidReset)
 	DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P11),KillUnit("Any unit",P12),
 	SetCDeaths(FP,SetTo,1,DLClear);
-	SetCDeaths(FP,SetTo,0,SpeedBackupCcode);
+	SetCDeaths(FP,SetTo,0,WaitT);
 		DL_Recover;
 	})
 	
