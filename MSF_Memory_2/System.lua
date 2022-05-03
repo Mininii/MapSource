@@ -547,6 +547,8 @@ HPRegenTable = {64}
                 CTrigger(FP,{CVar(FP,CPlayer[2],Exactly,j+4,0xFF)},{TCreateUnitWithProperties(1,_Mov(EXCC_TempVarArr[i+1],0xFF),22+j,CPlayer,{energy = 100}),TMoveUnit(1,_Mov(EXCC_TempVarArr[i+1],0xFF),_Mov(CPlayer,0xFF),22+j,1)},1)
                 end
                 CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+		            CTrigger(FP, {TMemoryX(_Add(Nextptrs,25),Exactly,63,0xFF)},
+                    {TSetMemoryX(_Add(Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
                     f_Read(FP,_Add(Nextptrs,10),CPos)
                     Convert_CPosXY()
                     Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)

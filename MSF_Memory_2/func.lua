@@ -747,6 +747,11 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 
+		
+		CTrigger(FP, {TMemoryX(_Add(G_CA_Nextptrs,25),Exactly,63,0xFF)},
+		 {TSetMemoryX(_Add(G_CA_Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
+
+
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0)) -- 어택 일반
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
