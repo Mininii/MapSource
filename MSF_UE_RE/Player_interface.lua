@@ -1140,10 +1140,10 @@ end
 	
 	local CurUID = CreateVar(FP)
 	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
+	CMov(FP,CurUID,SelUID)
 	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
 	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
 	CIf(FP,{CV(SelPl,7)})
-		CMov(FP,CurUID,SelUID)
 		CIfX(FP, {TTOR({
 			CVar(FP, SelUID, Exactly, 121),
 			CVar(FP, SelUID, Exactly, 186),

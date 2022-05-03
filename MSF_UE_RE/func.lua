@@ -979,7 +979,7 @@ NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
 _0D = string.rep("\x0D",200)
 if Limit == 1 then
 	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
-	--	CIf(FP,CD(TestMode,1))
+		CIf(FP,CD(TestMode,1))
 --		TriggerX(FP,{},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 --		ItoDec(FP,G_CB_CUTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
@@ -996,7 +996,7 @@ if Limit == 1 then
 --		ItoDec(FP,G_CB_LMTV,VArr(G_CB_WSTestVA,0),0,nil,0)
 --		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
 --		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
-	--	CIfEnd()
+		CIfEnd()
 	
 	end
 CDoActions(FP,{
@@ -1056,27 +1056,10 @@ function G_CB_Func()
 	
 	CMov(FP,TempFunc,G_CB_TempTable[3],nil,0xFF,1)
 
-	CIf(FP,{CV(TempFunc,1,AtLeast),CV(TempFunc,8,AtMost)})
-		
-		INumJump = def_sIndex()
-		for j = 3, 8 do
-			for i = 1, 8 do
-			NJumpX(FP,INumJump,{CV(V(CA[10]),_G["P_"..j][1]),CV(TempFunc,i)},{SetV(V(CA[10]),PlotSizeCalc(j,i))})
-			end
-			for i = 1, 4 do
-			NJumpX(FP,INumJump,{CV(V(CA[10]),_G["S_"..j][1]),CV(TempFunc,i)},{SetV(V(CA[10]),PlotSizeCalc(j*2,i))})
-			end
-		end
-		NJumpEnd(FP, INumJump)
-		for i = 1, 8 do
-			CIf(FP,CV(TempFunc,i))
-				CA_RatioXY(5000-(350*i), 1000, 5000-(350*i), 1000)
-			CIfEnd()
-		end
-	CIfEnd()
-	
+
+
 	CIf(FP,CVar(FP,G_CB_TempTable[10][2],AtMost,0,0xFF))
-	local TempLM = CreateVar(FP)
+		local TempLM = CreateVar(FP)
 		f_Div(FP,TempLM,V(CA[10]),50)
 		CMov(FP,G_CB_TempTable[10],TempLM,1,0xFF)
 	CIfEnd()
@@ -1131,6 +1114,7 @@ G_CB_ShapeTable = {}
 	local STSize = #ShapeTable
 	table.insert(Y,CS_InputVoid(1699))
 	table.insert(Y,CS_InputVoid(1699))
+	table.insert(Y,CS_InputVoid(1699))
 	for i = 1, G_CB_ArrSize do
 		table.insert(Y,CS_InputVoid(1699))
 	end
@@ -1141,9 +1125,47 @@ G_CB_ShapeTable = {}
 		CIfEnd()
 	end
 
-	G_CB_PrefuncArr = {
+	local EndRetShape = STSize+3 -- 최종 연산 ShapeNum
+
+
+	
+	local Sh_X, Sh_Y, CFRet = CreateVars(4,FP)
+	local DR = CreateVar(FP)
+	local NG = CreateVar(FP)
+
+
+	CFunc1 = InitCFunc(FP)
+	Para = CFunc(CFunc1)
+	-- n*X + (10-n)*Y - 100 = k
+	CiSub(FP,CFRet,_Add(_iMul(Para[1],Sh_X),_iMul(Para[2],Sh_Y)),100)
+	CIf(FP,{CV(NG,1),CV(CFRet,0x80000000,AtLeast)})
+	CNeg(FP,CFRet)
+	CIfEnd()
+	CFuncReturn({CFRet})
+	CFuncEnd()
+
+
+
+	function CB_RandSort()
 		
+		CMov(FP,Sh_X,_Mod(_Rand(),200),-100)
+		CMov(FP,Sh_Y,_Mod(_Rand(),200),-100)
+		DoActions(FP,SetSwitch("Switch 1",Random))
+		TriggerX(FP,Switch("Switch 1",Cleared),{SetV(DR,1)},{preserved})
+		TriggerX(FP,Switch("Switch 1",Set),{SetV(DR,0)},{preserved})
+		DoActions(FP,SetSwitch("Switch 1",Random))
+		TriggerX(FP,Switch("Switch 1",Cleared),{SetV(NG,1)},{preserved})
+		TriggerX(FP,Switch("Switch 1",Set),{SetV(NG,0)},{preserved})
+		CB_Sort(CFunc1,DR,STSize+1,STSize+3)
+
+	end
+
+
+	G_CB_PrefuncArr = {
+		{1,"CB_RandSort"}
 	} --{index,funcname}
+
+
 
 
 
@@ -1151,33 +1173,81 @@ G_CB_ShapeTable = {}
 		local CA = CAPlotDataArr
 		local CB = CAPlotCreateArr
 		local TempFunc = CreateVar(FP)
+		local TempFunc2 = CreateVar(FP)
+		
+
+
+
 		
 		CMov(FP,TempFunc,G_CB_TempTable[14],nil,0xFF,1)
+		CMov(FP,TempFunc2,G_CB_TempTable[3],nil,0xFF,1)
 		
-		CIf(FP,CV(TempFunc,1,AtLeast))
+		CIfX(FP,{TTOR({CV(TempFunc,1,AtLeast),TTAND({CV(TempFunc2,1,AtLeast),CV(TempFunc2,8,AtMost)})})})
+		ItoDec(FP,TempFunc2,VArr(G_CB_WSTestVA,0),0,nil,0)
+		f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
+		TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+		--CIfX(FP,{Never()})
 
 		for i = 1, STSize do
 		CIf(FP,CV(V(CA[1]),i))
 		CB_Copy(i,STSize+1)
 		CIfEnd()
 		end
+
+
+		CIf(FP,{CV(TempFunc2,1,AtLeast),CV(TempFunc2,8,AtMost)})
+		local CurShNum = CreateVar(FP)
+			CB_GetNumber(STSize+1, CurShNum)
+			INumJump = def_sIndex()
+			for j = 3, 8 do
+				for i = 1, 8 do
+				NJumpX(FP,INumJump,{CV(CurShNum,_G["P_"..j][1]),CV(TempFunc2,i)},{SetV(CurShNum,PlotSizeCalc(j,i))})
+				end
+				for i = 1, 4 do
+				NJumpX(FP,INumJump,{CV(CurShNum,_G["S_"..j][1]),CV(TempFunc2,i)},{SetV(CurShNum,PlotSizeCalc(j*2,i))})
+				end
+			end
+			NJumpEnd(FP, INumJump)
+			CB_SetNumber(CurShNum, STSize+1)
+			local CurShDL = CreateVar(FP)
+			CDiv(FP,CurShDL,_Mov(50),CurShNum)
+			
+			CMov(FP,V(CA[3]),CurShDL)
+			CMov(FP,G_CB_TempTable[12],CurShDL)
+	
+			for i = 1, 8 do
+				CIf(FP,CV(TempFunc2,i))
+					CB_Ratio(5000-(350*i), 1000, 5000-(350*i), 1000, STSize+1, STSize+2)
+				CIfEnd()
+			end
+			CMov(FP,Sh_X,_Mod(_Rand(),200),-100)
+			CMov(FP,Sh_Y,_Mod(_Rand(),200),-100)
+			DoActions(FP,SetSwitch("Switch 1",Random))
+			TriggerX(FP,Switch("Switch 1",Cleared),{SetV(DR,1)},{preserved})
+			TriggerX(FP,Switch("Switch 1",Set),{SetV(DR,0)},{preserved})
+			DoActions(FP,SetSwitch("Switch 1",Random))
+			TriggerX(FP,Switch("Switch 1",Cleared),{SetV(NG,1)},{preserved})
+			TriggerX(FP,Switch("Switch 1",Set),{SetV(NG,0)},{preserved})
+			CB_Sort(CFunc1,DR,STSize+2,STSize+3)
+		CIfEnd()
+
 		for j, k in pairs(G_CB_PrefuncArr) do
 			CIf(FP,CV(TempFunc,k[1]))
 				_G[k[2]]()
 			CIfEnd()
 		end
-
+		
 		for i = 1, G_CB_ArrSize do
 			CIf(FP,CV(G_CB_Num,i))
-			CB_Copy(STSize+2,STSize+2+i)
-			CMov(FP,V(CA[1]),STSize+2+i)
-			CMov(FP,G_CB_TempTable[4],STSize+2+i)
+			CB_Copy(EndRetShape,EndRetShape+i)
+			CMov(FP,V(CA[1]),EndRetShape+i)
+			CMov(FP,G_CB_TempTable[4],EndRetShape+i)
 			CIfEnd()
 		end
-		CMov(FP,TempFunc,0)
-		CMov(FP,G_CB_TempTable[14],TempFunc,nil,0xFF,1)
+		CMov(FP,G_CB_TempTable[14],0,nil,0xFF)
+		CMov(FP,G_CB_TempTable[3],0,nil,0xFF)
 		
-		CIfEnd()
+		CIfXEnd()
 	end
 
 
@@ -1349,7 +1419,7 @@ end
 			CMov(FP,G_CB_TempTable[11],0)
 			CMov(FP,G_CB_TempTable[12],0)
 			CMov(FP,G_CB_TempTable[13],0)
-			CMov(FP,G_CB_TempTable[14],0)
+			CDiv(FP,G_CB_TempTable[14],256)
 			if Limit == 1 then
 				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --
 			end
@@ -1377,7 +1447,7 @@ end
 		CMov(FP,G_CB_TempTable[11],0)
 		CMov(FP,G_CB_TempTable[12],0)
 		CMov(FP,G_CB_TempTable[13],0)
-		CMov(FP,G_CB_TempTable[14],0)
+		CDiv(FP,G_CB_TempTable[14],256)
 		if Limit == 1 then
 			TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
@@ -1399,7 +1469,7 @@ function Create_G_CB_Arr()
 		CTrigger(FP, {CVar("X","X",AtLeast,1),Memory(0x628438,AtLeast,1)}, {
 			G_CB_InputCVar,
 			SetCtrigX("X",G_CB_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
-			SetCVar(FP,G_CB_Num[2],SetTo,i),
+			SetCVar(FP,G_CB_Num[2],SetTo,i+1),
 			SetCVar(FP,Actived_G_CB[2],Add,1),
 			SetNext("X",Call_G_CB,0),SetNext(Call_G_CB+1,"X",1), -- Call f_Gun
 			SetCtrigX("X",Call_G_CB+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
