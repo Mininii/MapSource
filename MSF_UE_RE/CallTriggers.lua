@@ -649,7 +649,7 @@ local CB_P = CreateVar(FP)
 	end
 	Str3, Str3a, Str3s = SaveiStrArr(FP,t01)
 	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04남은 \x08뉴클리어\x04 : 0000000000  \x05-")
-	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 포인트 \x04보유량 :\x04 0000000000 \x07』")
+	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
 	MarStr = {}
 	MarStra = {}
 	MarStrs = {}
