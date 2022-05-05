@@ -12,7 +12,9 @@ function PlayerInterface()
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
 	local AtkExceed = Create_VTable(7,40,FP)
-	local HPExceed = Create_VTable(7,35,FP)	
+	local HPExceed = Create_VTable(7,7,FP)	
+	local ShUp = Create_VTable(7,nil,FP)	
+	local ShPoint = Create_VTable(7,nil,FP)	
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
 	AtkFactorPtrArr,DefFactorMaskRetArr,DefFactorPtrArr,MarShMaskRetArr,MarShPtrArr = CreateTables(12)
@@ -677,6 +679,8 @@ function PlayerInterface()
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
 						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
+						SetDeaths(i, SetTo, 1, 34);
+						SetCD(CUnitFlag,1)
 					})
 			NIfEnd()
 		
@@ -751,7 +755,7 @@ function PlayerInterface()
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,AtkFactorV[i+1][2],Add,3)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,6)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
 		CIfEnd()
@@ -766,11 +770,11 @@ function PlayerInterface()
 			DisplayText("\x13\x04！！！　\x08체력 업그레이드\x04가 255를 넘어 한계를 돌파합니다.\x04　！！！\n\x13\x04！！！　\x07업그레이드를 \x040으로 재설정하고 \x17체력 수치가 전승\x04되었습니다.\x04　！！！",4),
 			SetMemory(0x6509B0,SetTo,FP),
 			--SetCVar(FP,DefFactorV[i+1][2],Add,1),
-			SetCVar(FP,MarMaxHP[i+1][2],Add,2000*256),
+			SetCVar(FP,MarMaxHP[i+1][2],Add,10000*256),
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,15)},{SetCVar(FP,DefFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,5)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
 		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
@@ -780,7 +784,7 @@ function PlayerInterface()
 		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- 체력값 초기화
 		for Bit = 0, 7 do
 		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
-			{SetCVar(FP,CurrentHP[i+1][2],Add,2008*(2^Bit))},{preserved})
+			{SetCVar(FP,CurrentHP[i+1][2],Add,10008*(2^Bit))},{preserved})
 		end
 		CMov(FP,MarHP[i+1],_Add(CurrentHP[i+1],MarMaxHP[i+1]))
 		
@@ -817,12 +821,12 @@ function PlayerInterface()
 			SetMemory(0x6509B0,SetTo,FP)
 		})
 		
-		TriggerX(FP,{CVar(FP,MarHP[i+1][2],AtLeast,160000*256)},{
+		TriggerX(FP,{CVar(FP,MarHP[i+1][2],AtLeast,760000*256)},{
 			SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,0),
 			SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0),
 			SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07[ \x08체력\x04이 16만 넘어가면 \x1F%퍼뎀\x04 시스템 박살나서 더이상 체업 못해요 죄송합니다............................. \x07]",4),
+			DisplayText("\x07[ \x04구현이 덜 되서 더이상 체업 못해요 죄송합니다............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
@@ -898,6 +902,10 @@ end
 		CIfEnd()
 		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],74,AtMost)},AddV(HPExceed[i+1],1))
 		CIfEnd()
+		CIfShop(i,48,P_ShUpgrade,"\x07[ \x07구입 성공, \x1C쉴드 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
+		CIfEnd()
+
+		
 		CDoActions(FP,{
 			TSetMemory(_Add(MenuPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 			TSetMemory(_Add(MenuPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
@@ -906,6 +914,7 @@ end
 		CIfEnd()
 		TriggerX(FP,CV(AtkExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,0)},{preserved})
 		TriggerX(FP,CV(HPExceed[i+1],74+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
+		TriggerX(FP,CV(ShUp[i+1],54+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1},
 			{MultiStimPack[i+1],{42},1},
@@ -935,7 +944,7 @@ end
 		CIf(FP,{TTCVar(FP,MarHP[i+1][2],"!=",MarHP2[i+1])})
 			CMov(FP,MarHP2[i+1],MarHP[i+1])
 			CMov(FP,0x662350 + (MarID[i+1]*4),MarHP2[i+1])
-			CMov(FP,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))
+			--CMov(FP,0x515BB0+(i*4),_Div(_ReadF(0x662350 + (MarID[i+1]*4)),_Mov(1000)))
 		CIfEnd()
 		
 		CIf(FP,Score(i,Kills,AtLeast,1000))
@@ -974,7 +983,7 @@ end
 				},
 			}
 		CElseX()
-			DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
+			--DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 			TriggerX(FP,{CDeaths(FP,AtMost,0,isSingle)},{SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000);},{preserved})
 		CIfXEnd()
 		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,NukeCool[i+1]),SetDeaths(i,Subtract,1,15),SetCDeaths(FP,Subtract,1,ArmorT3[i+1])})
@@ -995,7 +1004,6 @@ end
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
-			f_SaveCp()
 			for i = 0, 6 do
 			CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
 			Trigger {
@@ -1023,6 +1031,9 @@ end
 			CIf(FP,{Deaths(i,AtLeast,1,66)}) -- Attack
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCp,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCp,15),SetTo,MulCon[i+1],0)})
 			CIfEnd()
+			CIf(FP,{Deaths(i,AtLeast,1,34)}) -- Heal
+				CTrigger(FP, {TMemory(_Add(BackupCp,6),Exactly,MarID[i+1])}, {TSetMemory(_Sub(BackupCp,17), SetTo, MarHP[i+1])}, 1)
+			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,187*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
@@ -1035,7 +1046,7 @@ end
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
 		CMov(FP,0x6509B0,FP)
-		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetCDeaths(FP,SetTo,0,CUnitFlag)})
+		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetDeaths(Force1,SetTo,0,34),SetCDeaths(FP,SetTo,0,CUnitFlag)})
 	CIfEnd()
 	local HealT = CreateCcode()
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
@@ -1147,6 +1158,7 @@ end
 		CIfX(FP, {TTOR({
 			CVar(FP, SelUID, Exactly, 121),
 			CVar(FP, SelUID, Exactly, 186),
+			CVar(FP, SelUID, Exactly, 84),
 		})
 		})
 			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,23)
@@ -1166,7 +1178,7 @@ end
 			CIfX(FP,{TBread(_Add(SelWepID,0x657258), Exactly, 0)})--N
 				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,23)
 			CElseIfX({TBread(_Add(SelWepID,0x657258), Exactly, 2)})--%
-				CS__SetValue(FP, Str3, "\x1FPercent T\x04ype", 0xFFFFFFFF,23)
+				CS__SetValue(FP, Str3, "\x1FSolidity T\x04ype", 0xFFFFFFFF,23)
 			CIfXEnd()
 
 		CIfXEnd()

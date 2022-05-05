@@ -9,7 +9,7 @@ function Objects()
 	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	AtkFactor = 5
-	DefFactor = 10
+	DefFactor = 25
 	GunLimit = 1500
 	Ex1= {25,34,42,50,59,65,75}
 
@@ -18,9 +18,9 @@ function Objects()
 	P_MultiHoldCost = 20
 	P_StimCost = 10 -- 원격 스팀팩 사용가능
 	P_ExcOldP = 10000
-	P_AtkExceed = 15
-	P_HPExceed = 15
-	
+	P_AtkExceed = 10
+	P_HPExceed = 35
+	P_ShUpgrade = 5
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 
@@ -238,7 +238,7 @@ function Var_init()
 	LevelT = CreateVar3(FP,1,nil,nil)
 
 
-	MarNumberLimit = CreateVar3(FP,(48*2)*7)
+	MarNumberLimit = CreateVar3(FP,(60)*7)
 	MaxHPBackUp = f_GetVArrptr(FP,228)
 	
 	MaxHPWArr = f_GetWArrptr(FP, 228)

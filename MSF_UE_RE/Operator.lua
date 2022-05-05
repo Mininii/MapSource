@@ -166,7 +166,7 @@ function OPTrig()
 		TriggerX(FP, {}, {
 			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04마린키우기 \x1FＵｍＬｉｍｉｔ ＥｘｃｅｅＤ\n\x13"..PlayersN[k].." \x07플레이중입니다.\n\x13\x04설명은 Insert키 또는 PgUp, PgDn 키로 확인 \n\x13\x1F===================================");
 		}, {preserved})
-			CAdd(FP,ExchangeRate,_Mul(LevelFactor,ExchangeRateT[k]),ExchangeRateT[k])
+			CAdd(FP,ExchangeRate,_Div(_Mul(LevelFactor,ExchangeRateT[k]),2),ExchangeRateT[k])
 		CIfEnd()
 	end
 

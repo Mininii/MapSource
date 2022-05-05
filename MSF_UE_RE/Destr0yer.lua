@@ -59,6 +59,7 @@ function Install_Destr0yer()
 		--CIfX(FP,{Bring(FP,AtLeast,1,186,64)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
 	--else	
 		CIfX(FP,{TTOR({Bring(FP,AtLeast,1,186,64),TTAND({DeathsX(FP,AtLeast,1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,271,BGMLength,0xFFFFFF)})}),CDeaths(FP,Exactly,0,Win)},{SetMemoryX(0x66655C, SetTo, 65536*210,0xFFFF0000),SetCVar(FP,VResetSw5[2],SetTo,0)})
+		TriggerX(FP, {Void(1, AtLeast, 1)}, {ModifyUnitHitPoints(All, "Men", Force1, 64, 35)}, {preserved})
 	--end
 	
 			
@@ -325,9 +326,9 @@ Trigger {
 		--CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,17,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000),SetVoid(1, SetTo, 1)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,20,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(208*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,20,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(208*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetVoid(1, SetTo, 0)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,21,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{preserved})
 
@@ -365,9 +366,9 @@ Trigger {
 		--CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),KillUnit(94,P11),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000),SetVoid(1, SetTo, 1)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetVoid(1, SetTo, 0)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(30*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{preserved})
 	CIf(FP,{DeathsX(FP,AtLeast,(31*4)+1,BGMLength,0xFFFFFF),DeathsX(FP,AtMost,(31*4)+1+2,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,CBulletT)},{SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)})
@@ -518,9 +519,9 @@ Trigger {
 		--CreateBullet(208,20,Angle6,CPosX,CPosY)
 	CIfEnd()
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{KillUnit(94,P11),SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{KillUnit(94,P11),SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 3);SetMemoryX(0x665E44, SetTo, 16777216,0xFF000000),SetVoid(1, SetTo, 1)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
-	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64)},{preserved})
+	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+3,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetMemoryW(0x657998+(127*2), SetTo, 0);SetMemoryX(0x665E44, SetTo, 0,0xFF000000),SetMemory(0x6509B0, SetTo, FP),GiveUnits(All,193,P11,64,P8),RunAIScriptAt(JYD,64),SetVoid(1, SetTo, 0)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	TriggerX(FP,{DeathsX(FP,Exactly,(49*4)+1+4,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1),SetCDeaths(FP,SetTo,1,BursterCall),SetMemoryB(0x6636B8 + 193, SetTo, 55),SetInvincibility(Disable,193,P8,64)},{preserved})
 	local Pat1 = Create_PatternCcode(PatternCcode)
@@ -554,7 +555,7 @@ Trigger {
 	local Pat1 = Create_PatternCcode(PatternCcode)
 	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		f_Div(FP,DTotalDmg,_Mov(256))
-		f_Mul(FP,DTotalDmg,_Mov(25))
+		f_Mul(FP,DTotalDmg,_Mov(10))
 		
 		f_Div(FP,DTotalDmg,SetPlayers)
 		

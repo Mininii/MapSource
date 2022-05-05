@@ -20,7 +20,7 @@ table.insert(PatchArr,SetMemoryB(0x662180 + UnitID,SetTo,Value))
 end
 
 function SetShield(UnitID)
-table.insert(PatchArr,SetMemoryW(0x660E00 + (UnitID *2), SetTo, 1000))
+table.insert(PatchArr,SetMemoryW(0x660E00 + (UnitID *2), SetTo, 10000))
 table.insert(PatchArr,SetMemoryB(0x6647B0 + (UnitID), SetTo, 255))
 end
 
@@ -190,10 +190,13 @@ end
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
 	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27,30}
+	PercentTable2 = {4000,5000,9999,3333,4444,11111,11111,6666,10000,22222,39999,1234,1000,6666,9602,9602}
 	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
 	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11,30}
 	for j, k in pairs(PercentTable) do
 		WeaponTypePatch(k,2) -- 무기 타입 퍼딜
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (k*2),SetTo,PercentTable2[j])) -- 기본공격력
+		table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,0)) -- 추가공격력
 	end
 	for j, k in pairs(NormalClassTable) do
 		SetUnitClassType(k)
@@ -228,7 +231,7 @@ UnitSizePatch(60,1)
 UnitSizePatch(121,10)
 UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 -------
-		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
+--		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
 	--0~6 공업용??
 	--8~14 방업용??
 
@@ -331,6 +334,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
 		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*6))
 		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- 부가사거리
+		--table.insert(PatchArr,SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,10000)) -- 쉴드
 	end
 	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	SetUnitAdvFlag(10,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
@@ -373,7 +377,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+70,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
-		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
+		--table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
@@ -413,7 +417,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 	DefTypePatch(15,9)
 	DefTypePatch(68,9)
-	DefTypePatch(7,9)
 	DefTypePatch(87,9)
 	DefTypePatch(150,9)
 	DefTypePatch(74,9)
@@ -435,15 +438,15 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			SetMemory(0x515BA4,SetTo,256);---------크기 7 일반형 
 			SetMemory(0x515BA8,SetTo,256);---------크기 8 일반형
 			SetMemory(0x515BAC,SetTo,0);---------크기 9 일반형 보너스 자원류 딜 무조건 1로 들어가게 설정할것. 
-			SetMemory(0x515BB0,SetTo,256*2);---------크기 0 진동형 P1 익시드 마린
-			SetMemory(0x515BB4,SetTo,256*2);---------크기 1 진동형 P2 익시드 마린
-			SetMemory(0x515BB8,SetTo,256*2);---------크기 2 진동형 P3 익시드 마린
-			SetMemory(0x515BBC,SetTo,256*2);---------크기 3 진동형 P4 익시드 마린
-			SetMemory(0x515BC0,SetTo,256*2);---------크기 4 진동형 P5 익시드 마린
-			SetMemory(0x515BC4,SetTo,256*2);---------크기 5 진동형 P6 익시드 마린
-			SetMemory(0x515BC8,SetTo,256*2);---------크기 6 진동형 P7 익시드 마린
-			SetMemory(0x515BCC,SetTo,256*10);---------크기 7 진동형 일반마린
-			SetMemory(0x515BD0,SetTo,256*8);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
+			SetMemory(0x515BB0,SetTo,256);---------크기 0 진동형 P1 익시드 마린
+			SetMemory(0x515BB4,SetTo,256);---------크기 1 진동형 P2 익시드 마린
+			SetMemory(0x515BB8,SetTo,256);---------크기 2 진동형 P3 익시드 마린
+			SetMemory(0x515BBC,SetTo,256);---------크기 3 진동형 P4 익시드 마린
+			SetMemory(0x515BC0,SetTo,256);---------크기 4 진동형 P5 익시드 마린
+			SetMemory(0x515BC4,SetTo,256);---------크기 5 진동형 P6 익시드 마린
+			SetMemory(0x515BC8,SetTo,256);---------크기 6 진동형 P7 익시드 마린
+			SetMemory(0x515BCC,SetTo,256);---------크기 7 진동형 일반마린
+			SetMemory(0x515BD0,SetTo,256);---------크기 8 진동형 벙커 터렛 등으로 쓸듯
 			SetMemory(0x515BD4,SetTo,256);---------크기 9 진동형	SCV, 진동형 퍼뎀유닛한텐 죽음 ㅅㄱ
 			SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러f
 			SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵

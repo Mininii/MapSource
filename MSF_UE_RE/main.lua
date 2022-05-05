@@ -39,7 +39,7 @@ DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),R
 TestSet(1)
 TestPMul=2
 VerText = "\x04Ver. TEST"
-LimitVer = 0
+LimitVer = 1
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

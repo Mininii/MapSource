@@ -54,13 +54,13 @@
 			var NewPLV = dwread_epd(216+cp);
 			if(<?ChatEvent("cp","@칭호 1")?>){
 					Nick1[cp] = 1;
-					f_eprintln("\x03칭호\x04가 \x07 ",1," \x04번으로 변경되었습니다.");
+					f_eprintln("\x03칭호\x04가 \x07",1," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
 			if(<?ChatEvent("cp","@칭호 2")?>){
 			if (OldPLV>=2) {
 					Nick1[cp] = 2;
-					f_eprintln("\x03칭호\x04가 \x07 ",2," \x04번으로 변경되었습니다.");
+					f_eprintln("\x03칭호\x04가 \x07",2," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
 			else {
@@ -70,7 +70,19 @@
 			if(<?ChatEvent("cp","@칭호 3")?>){
 			if(Deaths(CurrentPlayer,AtLeast,1,11)){
 					Nick1[cp] = 3;
-					f_eprintln("\x03칭호\x04가 \x07 ",3," \x04번으로 변경되었습니다.");
+					f_eprintln("\x03칭호\x04가 \x07",3," \x04번으로 변경되었습니다.");
+					SetDeaths(CurrentPlayer,SetTo,150,15);
+			}
+			else{
+					f_eprintln("\x03칭호\x07 사용 권한\x04이 없습니다.");
+					SetDeaths(CurrentPlayer,SetTo,150,15);
+			}
+			}
+			
+			if(<?ChatEvent("cp","@칭호 4")?>){
+			if(Deaths(CurrentPlayer,AtLeast,1,38)){
+					Nick1[cp] = 4;
+					f_eprintln("\x03칭호\x04가 \x07",4," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 			}
 			else{
@@ -115,19 +127,23 @@
 			}
 			
 			else if(Nick1[cp]== 1){
-			SetPNamef(cp,"\x07[\x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
-			}
-
-			else if(Nick1[cp]== 3){
-			
-			if(Deaths(CurrentPlayer,AtLeast,1,11)){
-			SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			if(SCA_LLoadCheck[cp]==0)
+			{
+			SetPNamef(cp,"\x07[\x0EG\x04UEST -  \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
 			else{
 			SetPNamef(cp,"\x07[\x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
 			}
 			}
 
+			else if(Nick1[cp]== 3){
+			
+			SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			}
+
+			else if(Nick1[cp]== 4){
+			SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser \x04- \x1FLV.\x04{}\x07] {:c}{:n}",NewPLV,cp,cp);
+			}
 
 			if(Switch("Switch 240",Cleared)){
 				
@@ -138,7 +154,7 @@
 						SetDeaths(CurrentPlayer, SetTo, 3, 23);
 					break;
 				}
-				once (LoadCheck[cp] == 1 && sca.GetLastMessage() == 4 &&SCA_LLoadCheck[cp]==1) {
+				if (LoadCheck[cp] == 1 && sca.GetLastMessage() == 4 &&SCA_LLoadCheck[cp]==1) {
 					SetDeaths(CurrentPlayer, SetTo, 2, 23);
 				}
 				if(SCA_GLoadSw[cp] == 1 && Memory(0x58f900,AtMost,1)){ // Data Load
@@ -150,12 +166,16 @@
 
 			}
 
+			const T2 = PVariable(); // 타임아웃타이머
+			const T3 = PVariable(); // 타임아웃타이머
 			if(Deaths(CurrentPlayer, Exactly, 1,14) && Switch("Switch 240",Set)){ // Data Save
+				T2[cp] ++;
 				if(SCA_Stat1[cp] == 1||LoadCheck[cp]==0) {
 					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
 					SetDeaths(CurrentPlayer,SetTo,150,15);
 					PlayWAV("sound\\Bullet\\tscFir00.wav");
 					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+					T2[cp] = 0;
 				}
 				else if(Deaths(CurrentPlayer, Exactly, 2,16)){
 					SetDeaths(CurrentPlayer,SetTo,350,15);
@@ -166,15 +186,19 @@
 					sca.SaveData(0);
 					SetDeaths(CurrentPlayer, SetTo, 0, 14);
 					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+					T2[cp] = 0;
 				}
 				else if(Deaths(CurrentPlayer, Exactly, 0,16)){
 					SetDeaths(CurrentPlayer,SetTo,350,15);
 					sca.LoadTime();
 					SetDeaths(CurrentPlayer, SetTo, 1, 16);
+					T2[cp] = 0;
 				}
+				
 			}
 			
 			if(Deaths(CurrentPlayer, Exactly, 1,16)){
+				T2[cp] ++;
 				switch(sca.GetLastMessage()){
 					case 2:
 						SetDeaths(CurrentPlayer, SetTo, 0, 16);
@@ -205,6 +229,15 @@
 					default:
 					sca.ResetLastMessage();
 				}
+			}
+			if (T2[cp]>= 800) {
+					f_eprintln("\x08타임아웃\x04입니다. \x07다시 저장 \x04해주시기 바랍니다.");
+					PlayWAV("sound\\Bullet\\tscFir00.wav");
+					SetDeaths(CurrentPlayer,SetTo,150,15);
+					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+					sca.ResetLastMessage();
+					T2[cp] = 0;
 			}
 
 			if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1 && sca.GetLastMessage() == 4){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
