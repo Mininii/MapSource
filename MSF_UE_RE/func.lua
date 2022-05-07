@@ -852,8 +852,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			Convert_CPosXY()
 			Simple_SetLocX(FP,59,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(59,-32,-32,32,32)})
 			CDoActions(FP,{
-				TSetInvincibility(Enable,Repeat_UnitIDV,FP,60),TGiveUnits(1,Repeat_UnitIDV,P8,60,P9),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000),CreateUnit(1,ObEff,60,FP),KillUnit(ObEff, FP)
+				TSetInvincibility(Enable,Repeat_UnitIDV,FP,60),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000),CreateUnit(1,ObEff,60,FP),KillUnit(ObEff, FP)
 			})
+			f_CGive(FP, Nextptrs,nil, P9, FP)
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
 		CElseIfX(CVar(FP,RepeatType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 공중 충돌판정 삭제 루카스보스 전용 RepeatType
 		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})

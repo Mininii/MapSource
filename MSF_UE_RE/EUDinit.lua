@@ -152,7 +152,6 @@ function onInit_EUD()
 	CTrigger(FP,{TDeathsX(VRet,Exactly,0x1,0,0x1)},{TSetDeaths(VRet2,SetTo,65537,0)},1) -- if Advanced Flags = Building then Building Dimensions SetTo 1x1
 	CDoActions(FP,{TSetDeathsX(VRet,SetTo,0x200000,0,0x200000),}) -- All Unit SetTo Spellcaster
 
-	
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,0)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7,0,0x1C7)},1) -- Set All Units StarEdit Av Flags
 	CTrigger(FP,{CVar(FP,VRet3[2],Exactly,1)},{TSetDeathsX(_Add(VRet4,EPDF(0x661518)),SetTo,0x1C7*0x10000,0,0x1C7*0x10000)},1) -- Set All Units StarEdit Av Flags
 	
@@ -179,10 +178,9 @@ end
 
 
 
-
-
-
-
+DTypeArr = {
+	27,30,6,129,126
+}
 	UnitEnableX(71,400)
 	UnitEnable2(19)
 
@@ -190,13 +188,18 @@ end
 	WeaponTypePatch(i,0) -- 무기 타입 전부 0으로 설정(방갈림 방지)
 	end
 	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27,30}
-	PercentTable2 = {4000,5000,9999,3333,4444,11111,11111,6666,10000,22222,39999,1234,1000,6666,9602,9602}
-	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150}
+	PercentTable2 = {4000,5000,9999,3333,4444,11111,11111,6666,10000,22222,39999,1234,777,6666,9602/2,9602/2}
+	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150,52,62}
 	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11,30}
 	for j, k in pairs(PercentTable) do
-		WeaponTypePatch(k,2) -- 무기 타입 퍼딜
+		WeaponTypePatch(k,2) -- 무기 타입 고정형
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (k*2),SetTo,PercentTable2[j])) -- 기본공격력
 		table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,0)) -- 추가공격력
+		for l, m in pairs(DTypeArr) do
+			if k==m then
+				table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,PercentTable2[j])) -- 추가공격력
+			end
+		end
 	end
 	for j, k in pairs(NormalClassTable) do
 		SetUnitClassType(k)
@@ -390,6 +393,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 	SetWepUpType(92,59)
 	SetWepUpType(93,59)
+	SetWepUpType(129,3)
 
 	local ZergArr = {37,38,39,45,44,43,48,49,56,55,53,57,51,54,104}
 	for j, k in pairs(ZergArr) do
@@ -498,6 +502,23 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
+	for i = 0, 6 do
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+	end
 	Trigger { -- 게임오버
 		players = {FP},
 		conditions = {
@@ -656,6 +677,17 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
 	Install_CText1(NukeUseStrPtr[i],Str12,NukeUseT,Names[i])
 	end
+
+	
+	CFor(FP, 0, 130, 1) -- 공격력 정보 백업
+	CI = CForVariable()
+	local CI2 = CreateVar(FP)
+	CMul(FP,CI2,CI,2)
+	CMovX(FP,VArr(AtkFactorBackUp,CI),Act_WRead(_Add(CI2,0x657678)),nil,nil,nil,1)--factor
+	CMovX(FP,VArr(AtkBackUp,CI),Act_WRead(_Add(CI2,0x656EB0)),nil,nil,nil,1)--amount
+	CForEnd()
+
+
 
 --	DoActions(FP,{GiveUnits(1,133,P8,11,0),GiveUnits(1,133,P8,12,1),GiveUnits(1,133,P8,13,2)})
 	CMov(FP,0x6509B0,19025+19)

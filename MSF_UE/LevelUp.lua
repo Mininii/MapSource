@@ -270,7 +270,7 @@ function LevelUp()
 		KillUnitAt(All,125,19,Force1),})
 	CIfEnd()
 	
-	
+	local ContinueT = CreateCcode()
 
 	CIfX(FP,{Never()})
 
@@ -278,7 +278,7 @@ function LevelUp()
 	CElseIfX({CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtMost,4,NoCcode),HumanCheck(i,1),CDeaths(FP,AtMost,500,ConCP[i+1])},{SetCDeaths(FP,Add,1,ConCP[i+1])})
 	local CSelT = "\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！\n\n\n\n\x13\x04薄仙 識澱亜管 巴傾戚嬢澗"..PlayerString[i+1].."\x04脊艦陥.\n\x13\x04陥製 傾婚稽 遭楳馬獣畏柔艦猿?\n\x13\x04(\x07Y \x04/ \x11N\x04)\n\n\n\x13\x04！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！"
 	CTrigger(FP,{CDeaths(FP,Exactly,2,ConCP[i+1])},{
-		RotatePlayer({DisplayTextX(CSelT,4),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue2)
+		RotatePlayer({DisplayTextX(CSelT,4),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue2),SetCDeaths(FP,Add,1,ContinueT);
 	},1)
 	CMov(FP,0x6509B0,i)
 	end
@@ -291,12 +291,13 @@ function LevelUp()
 		SetCDeaths(FP,SetTo,0,ConCP[5]);
 		SetCDeaths(FP,SetTo,0,ConCP[6]);
 		SetCDeaths(FP,SetTo,0,ConCP[7]);
-		SetCDeaths(FP,SetTo,1,Continue);
+		
 	})
 	CIfXEnd()
 	NoB = 220
 	YesB = 221
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,2),CVar(FP,LevelT[2],AtMost,10),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{preserved})
+	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,10),CDeaths(FP,AtLeast,7,ContinueT)},{SetCDeaths(FP,SetTo,1,Continue);},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),CDeaths(FP,AtLeast,5,NoCcode)},{RotatePlayer({DisplayTextX(NoText2,4),PlayWAVX("sound\\glue\\bnetclick.wav");PlayWAVX("sound\\glue\\bnetclick.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,YesB)},{RotatePlayer({DisplayTextX(ClearT2,4),PlayWAVX("staredit\\wav\\LimitBreak.ogg")},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Continue)},{preserved})
@@ -358,6 +359,7 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,TextSwitch[5]),
 	SetCDeaths(FP,SetTo,0,Continue),
 	SetCDeaths(FP,SetTo,0,Continue2),
+	SetCDeaths(FP,SetTo,0,ContinueT),
 	SetCDeaths(FP,SetTo,0,rokaClear),
 	SetCDeaths(FP,SetTo,0,DemClear),
 	SetCDeaths(FP,SetTo,0,DLClear),

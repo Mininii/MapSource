@@ -273,12 +273,13 @@ for i =0, 6 do
 end
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
---		Trigger2(i,{Deaths(i,AtLeast,1,ㅈ),LocalPlayerID(i)},{
---			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
---			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
---			DisplayText("\x13\x07『 \x04채널 A10 을 방문하여 제작자에게 문의해주시기 바랍니다.\x07 』",4);
---			SetMemory(0xCDDDCDDC,SetTo,1);
---		})
+		Trigger2(i,{Deaths(i,AtLeast,1,149),LocalPlayerID(i)},{
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("\x13\x07『 \x04채널 A10 을 방문하여 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		})
 		if i ~= 0 then --강퇴트리거는 1플레이어 제외
 		
 		Trigger { -- 강퇴

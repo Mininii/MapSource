@@ -73,6 +73,28 @@ SetCall(FP)
 	})
 SetCallEnd()
 
+CGiveUnitID = CreateVar(FP)
+Call_CGiveP9 = SetCallForward()
+function CGiveJYD_P9(Condition,UnitID)
+	CallTriggerX(FP,Call_CGiveP9,Condition,{SetCVar(FP,CGiveUnitID[2],SetTo,UnitID)})
+end
+SetCall(FP)
+CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
+CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
+CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})
+	DoActions(FP,MoveCp(Add,6*4))
+	f_SaveCp()
+	CIf(FP,{TMemoryX(BackupCp, Exactly, CGiveUnitID,0xFF)})
+	f_CGive(FP, _Sub(BackupCp,25), nil, FP, P9)
+	CDoActions(FP,{TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),TSetDeathsX(_Add(BackupCp,30),SetTo,0,0,0x04000000)})
+	CIfEnd()
+	f_LoadCp()
+	DoActions(FP,MoveCp(Subtract,6*4))
+CIfEnd()
+CAdd(FP,0x6509B0,84)
+CWhileEnd()
+CMov(FP,0x6509B0,FP)
+SetCallEnd()
 TempRandRet = CreateVar(FP)
 InputMaxRand = CreateVar(FP)
 Oprnd = CreateVar(FP)
@@ -230,6 +252,27 @@ SetCall(FP)
 		--CMov(FP,0x57f120+(4*0),TempLvHP2)
 		CDoActions(FP,{TSetMemory(_Add(UnitIDV,EPDF(0x662350)),SetTo,TempLvHP2)})
 SetCallEnd()
+WepIDV = CreateVar(FP)
+TempLVWp=CreateVarArr(5,FP)
+local UpVar = CreateVar(FP)
+f_SetLvAtk = SetCallForward()
+SetCall(FP)
+CMovX(FP, TempLVWp[1], VArr(AtkBackUp, WepIDV), nil, nil, nil, 1)
+CMovX(FP, TempLVWp[2], VArr(AtkFactorBackUp, WepIDV), nil, nil, nil, 1)
+CMul(FP,TempLVWp[3],UpVar,TempLVWp[2])
+CAdd(FP,TempLVWp[4],TempLVWp[3],TempLVWp[1])
+CIf(FP,CV(TempLVWp[4],65535,AtLeast),SubV(TempLVWp[4],65535))
+	CDoActions(FP, {
+		TSetMemoryW(0x657678,WepIDV,SetTo,0),
+		TSetMemoryW(0x656EB0,WepIDV,SetTo,65535),
+	})
+	
+
+
+CIfEnd()
+
+SetCallEnd()
+
 
 f_Replace = SetCallForward()
 SetCall(FP)
@@ -599,7 +642,6 @@ local CB_P = CreateVar(FP)
 
 
 	DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
-	local UpVar = CreateVar(FP)
 	CMov(FP,UpVar,_Div(Level,10))
 --		for i = 1, 3 do
 --		TriggerX(FP,{CVar(FP,Diff[2],AtLeast,i)},{SetCVar(FP,UpVar[2],Add,5)},{preserved})
@@ -608,11 +650,18 @@ local CB_P = CreateVar(FP)
 		TriggerX(FP,{CVar(FP,UpVar[2],Exactly,2^i,2^i)},{SetMemoryB(0x58D2B0+(46*7)+3,Add,2^i)},{preserved})
 	end
 	TriggerX(FP,{CVar(FP,UpVar[2],AtLeast,256)},{SetMemoryB(0x58D2B0+(46*7)+3,SetTo,255)},{preserved})
-	
-	
+
+	UpVarWepArr = {6,9,18,22,23,27,51,30,71,65,67,69,75,78,114,109,113,129}
+	function SetLevelUpAtk(WepID)
+		CallTrigger(FP,f_SetLvAtk,{SetCVar(FP,WepIDV[2],SetTo,WepID)})
+	end
+	for j, k in pairs(UpVarWepArr) do
+		SetLevelUpAtk(k)
+	end
 
 
 	SetCallEnd()
+
 	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
 	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"

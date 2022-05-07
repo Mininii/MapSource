@@ -110,7 +110,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 	-- DefAttackLoc = 89
 	-- DefCreateLoc = 90
 		CIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함. 이거안하면 캔낫 제한 줄어들면서 맵이 망가짐
-		f_Read(FP,_Sub(BackupCp,6),CPos) -- 생성유닛 위치 불러오기
+		f_Read(FP,_Sub(BackupCp,15),CPos) -- 생성유닛 위치 불러오기
 		Convert_CPosXY()
 		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
 		CMov(FP,CPos,TempBarPos)
@@ -126,7 +126,7 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 		local TempCPCheck = CreateVar()
 		CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 		f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
-		NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc, TempCPCheck, 1, AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
+		NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc, TempCPCheck, 8, AtMost,0)}) -- 영작유닛이 아닐 경우 위쪽의 명령주는 트리거로 점프함.
 		CJumpEnd(FP,HeroPointCheck)
 		f_LoadCp()
 		DoActions(FP,MoveCp(Subtract,6*4))

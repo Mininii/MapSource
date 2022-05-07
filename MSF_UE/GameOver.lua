@@ -145,7 +145,7 @@ function GameOver()
             conditions = {
                 Label(0);
                 CDeaths(FP,AtMost,0,TestMode);
-                CDeaths(FP,AtLeast,1350,Win);
+                CDeaths(FP,AtLeast,1850,Win);
             },
             actions = {
                 RotatePlayer({Victory()},MapPlayers,FP);

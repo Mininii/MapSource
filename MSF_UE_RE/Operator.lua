@@ -193,6 +193,7 @@ function OPTrig()
 		CIfX(FP,HumanCheck(i,1))
 		f_Div(FP,NukesUsage[i+1],NCCalc,SetPlayers)
 		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtMost, LvLimit-1)},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
+		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtLeast, LvLimit)},{TSetCVar(FP, MapMaxLevel[2], SetTo, LvLimit)},1)
 		CA__ItoName(SVA1(OPStr,0), i, nil, nil, ColorCode[i+1])
 
 		

@@ -571,6 +571,23 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
+	for i = 0, 6 do
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+	end
 	Trigger { -- 게임오버
 		players = {FP},
 		conditions = {

@@ -11,7 +11,7 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,40,FP)
+	local AtkExceed = Create_VTable(7,80,FP)
 	local HPExceed = Create_VTable(7,7,FP)	
 	local ShUp = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
@@ -165,6 +165,7 @@ function PlayerInterface()
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 			DisplayText("\x13\x07『 \x04채널 A10 을 방문하여 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 		if i ~= 0 then --강퇴트리거는 1플레이어 제외
@@ -774,7 +775,7 @@ function PlayerInterface()
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,5)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,7)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
 		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
@@ -821,12 +822,12 @@ function PlayerInterface()
 			SetMemory(0x6509B0,SetTo,FP)
 		})
 		
-		TriggerX(FP,{CVar(FP,MarHP[i+1][2],AtLeast,760000*256)},{
+		TriggerX(FP,{CVar(FP,MarHP[i+1][2],AtLeast,2560000*256)},{
 			SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,0),
 			SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0),
 			SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07[ \x04구현이 덜 되서 더이상 체업 못해요 죄송합니다............................. \x07]",4),
+			DisplayText("\x07[ \x04밸런스 문제로 인해 더이상 체업 못해요 죄송합니다............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
@@ -900,7 +901,7 @@ end
 		CIfEnd()
 		CIfShop(i,46,P_AtkExceed,"\x07[ \x07구입 성공, \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
 		CIfEnd()
-		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],74,AtMost)},AddV(HPExceed[i+1],1))
+		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],255,AtMost)},AddV(HPExceed[i+1],1))
 		CIfEnd()
 		CIfShop(i,48,P_ShUpgrade,"\x07[ \x07구입 성공, \x1C쉴드 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
 		CIfEnd()
@@ -913,7 +914,7 @@ end
 			SetCDeaths(FP,SetTo,0,ShopSw[i+1])})
 		CIfEnd()
 		TriggerX(FP,CV(AtkExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,0)},{preserved})
-		TriggerX(FP,CV(HPExceed[i+1],74+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
+		TriggerX(FP,CV(HPExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
 		TriggerX(FP,CV(ShUp[i+1],54+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1},
@@ -1147,7 +1148,15 @@ end
 		--DoActionsX(FP,SetCSVA1(SVA1(Str4,Str4s-1),SetTo,0,0xFFFFFFFF))
 		CS__InputVA(FP,iTbl3,0,Str4,Str4s,nil,0,Str4s)
 	CIfEnd()
-
+	DTypeArr3 ={69,30,13}
+DTypeCondArr = {
+	CVar(FP, SelUID, Exactly, 121),
+	CVar(FP, SelUID, Exactly, 186),
+	CVar(FP, SelUID, Exactly, 84),
+}
+for j, k in pairs(DTypeArr3) do
+	table.insert(DTypeCondArr,CVar(FP, SelUID, Exactly, k))
+end
 	
 	local CurUID = CreateVar(FP)
 	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
@@ -1155,11 +1164,7 @@ end
 	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
 	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
 	CIf(FP,{CV(SelPl,7)})
-		CIfX(FP, {TTOR({
-			CVar(FP, SelUID, Exactly, 121),
-			CVar(FP, SelUID, Exactly, 186),
-			CVar(FP, SelUID, Exactly, 84),
-		})
+		CIfX(FP, {TTOR(DTypeCondArr)
 		})
 			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,23)
 		CElseX()
