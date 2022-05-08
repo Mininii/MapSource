@@ -201,8 +201,7 @@ function Enable_HumanCheck(Offset)
 		Trigger {
 			players = {AllPlayers},
 			conditions = {
-				FMemoryX(0x57EEE8 + 36*i,AtLeast,0x1,0xFF);
-				FMemoryX(0x57EEE8 + 36*i,AtMost,0x2,0xFF);
+				FMemoryX(0x57EEE8 + 36*i,Exactly,0x2,0xFF);
 			},
 			actions = {
 				FSetMemoryX(Offset,SetTo,2^i,2^i);
