@@ -71,7 +71,7 @@ function PlayerInterface()
 	local InsertKey = {}
 	InsertKey[1] = "\x13\x04이 맵은 각 플레이마다 \x0710레벨 단위로 플레이가 가능하며 \n\x13\x08게임 종료 \x04이후 \x1F다음 게임\x04에서 \x07이어하기\x04를 통한 도전이 가능합니다.\n\x13\x04당신의 한계를 시험해 보세요! \x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[2] = "\x13\x04\x1CSCArchive \x04설명 (문의는 마공카를 찾아주세요.)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 보조 아이템을 사용할 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D게임 시작 전\x04에만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	InsertKey[3] = "\n\n\n\n\x13\x07구버전 데이터 관련 설명\n\x13\x04구버전의 스탯포인트는 \x1F크리스탈\x04에서 확인 가능하며 환전률은 1:10000 입니다. \n\x13\x04@칭호 1, 2, 3, 4 등의 명령어로 구버전 레벨, 권한에 따라 부여되는 칭호를 사용할 수 있습니다.\n\x13\x04자세한 칭호 부여 레벨 목록은 마공카에서 확인해주시기 바랍니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[3] = "\n\n\n\n\x13\x07구버전 데이터 관련 설명\n\x13\x04구버전의 스탯포인트는 \x1F크리스탈\x04에서 확인 가능하며 환전률은 1:"..P_ExcOldP.." 입니다. \n\x13\x04@칭호 1, 2, 3, 4 등의 명령어로 구버전 레벨, 권한에 따라 부여되는 칭호를 사용할 수 있습니다.\n\x13\x04자세한 칭호 부여 레벨 목록은 마공카에서 확인해주시기 바랍니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	local InsertPage = CreateCcode()
 	local KeyToggle = CreateCcode()
 	--
@@ -154,8 +154,8 @@ function PlayerInterface()
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
-		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 맵 맥스레벨+10 = 비정상 데이터
-		Trigger2(i, {Deaths(i,AtLeast,1000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯백만이상 = 비정상 데이터
+		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 게임 시작시 레벨0일경우 1로 변경
+		Trigger2(i, {Deaths(i,AtLeast,100000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,10000,6)}, {SetDeaths(i, SetTo, 1, 149)}) -- 구레벨 1만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,LvLimit+10,18)}, {SetDeaths(i, SetTo, 1, 149)}) -- 맵 맥스레벨+10 = 비정상 데이터
 		
@@ -775,7 +775,7 @@ function PlayerInterface()
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,7)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,4)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
 		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
@@ -864,26 +864,10 @@ function CIfShop(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	TriggerX(FP,{CVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	TriggerX(FP,{CVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
+	TriggerX(FP,{CVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
 
 	TriggerX(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
 	TriggerX(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
-end
-ShopTempV = CreateVar(FP)
-function CIfShopOld(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
-	CIf(FP,{TMemory(_Add(MenuPtr[CP+1],0x98/4),Exactly,0 + ID*65536)})
-	CurShopCost = Cost
-	CurShopCP = CP
-	CurShopCond = Conditions
-	
-	
-	CallTrigger(FP,Call_Print13[CP+1])
-	CMov(FP,ShopTempV,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],P_ExcOldP)),nil,nil,1)
-	CTrigger(FP,{CVar(FP,ShopTempV[2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CVar(FP,ShopTempV[2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCVar(FP, UsedOldP[i+1][2], Add, 1),SetDeaths(CP,Add,1,37),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
-
-	CTrigger(FP,{CVar(FP,ShopTempV[2],AtMost,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CVar(FP,ShopTempV[2],AtMost,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
 end
 		CIf(FP,CVar(FP,MenuPtr[i+1][2],AtLeast,1))
 		for m = 0, 0 do
@@ -897,13 +881,32 @@ end
 		CIfEnd()
 		CIfShop(i,44,P_MultiHoldCost,"\x07[ \x07구입 성공, \x07멀티 홀드 \x04기능을 사용할 수 있습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStop[i+1][2],AtMost,0)},{SetCVar(FP,MultiStop[i+1][2],SetTo,1)})
 		CIfEnd()
-		CIfShopOld(i,45,P_ExcOldP,"\x07[ \x07구입 성공, \x1B구버전 포인트\x04가 전환되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",nil,{SetDeaths(i, Add, 1, 35)})
-		CIfEnd()
 		CIfShop(i,46,P_AtkExceed,"\x07[ \x07구입 성공, \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
 		CIfEnd()
 		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],255,AtMost)},AddV(HPExceed[i+1],1))
 		CIfEnd()
 		CIfShop(i,48,P_ShUpgrade,"\x07[ \x07구입 성공, \x1C쉴드 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
+		CIfEnd()
+		CIf(FP,{TMemory(_Add(MenuPtr[i+1],0x98/4),Exactly,0 + 45*65536)})
+		CIf(FP,{CDeaths(FP,AtMost,0,ShopSw[i+1]),})
+		CallTrigger(FP,Call_Print13[i+1])
+		local ShopTempV = CreateVar(FP)
+		CMov(FP,ShopTempV,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],P_ExcOldP)),nil,nil,1)
+			CIfX(FP, {CV(ShopTempV, P_ExcOldP, AtLeast)})
+				local TempPV = CreateVarArr(3, FP)
+				CDiv(FP,TempPV[1],ShopTempV,P_ExcOldP)
+				CDoActions(FP,{
+					TSetDeaths(i, Add, TempPV[1], 35),AddV(UsedOldP[i+1],TempPV[1]),TSetDeaths(i,Add,TempPV[1],37),SetDeaths(i,SetTo,150,15),
+					SetCp(i),PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP),SetCDeaths(FP,SetTo,1,ShopSw[i+1]),
+				})
+				CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x1B구버전 포인트\x04가 전환되었습니다. \x07]")},{preserved})
+			CElseX()
+				CDoActions(FP, {
+					SetDeaths(i,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[i+1]),SetCp(i),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)
+				})
+				CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},{preserved})
+			CIfXEnd()
+		CIfEnd()
 		CIfEnd()
 
 		

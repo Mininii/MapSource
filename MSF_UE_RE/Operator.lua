@@ -261,7 +261,7 @@ function OPTrig()
 	}, 1)
 		CallTriggerX(FP, LevelReset,nil,nil,1)
 		
-	CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+	CIfX(FP,CVar(FP,PCheckV[2],AtLeast,2))
 	f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
 	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
 	CElseX()

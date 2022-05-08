@@ -76,7 +76,7 @@ SetCallEnd()
 CGiveUnitID = CreateVar(FP)
 Call_CGiveP9 = SetCallForward()
 function CGiveJYD_P9(Condition,UnitID)
-	CallTriggerX(FP,Call_CGiveP9,Condition,{SetCVar(FP,CGiveUnitID[2],SetTo,UnitID)})
+	CallTriggerX(FP,Call_CGiveP9,Condition,{SetCVar(FP,CGiveUnitID[2],SetTo,UnitID),SetInvincibility(Disable, UnitID, P9, 64)})
 end
 SetCall(FP)
 CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
@@ -84,9 +84,17 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})
 	DoActions(FP,MoveCp(Add,6*4))
 	f_SaveCp()
+	local TempPos = CreateVar(FP)
 	CIf(FP,{TMemoryX(BackupCp, Exactly, CGiveUnitID,0xFF)})
 	f_CGive(FP, _Sub(BackupCp,25), nil, FP, P9)
-	CDoActions(FP,{TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),TSetDeathsX(_Add(BackupCp,30),SetTo,0,0,0x04000000)})
+	f_Read(FP,_Sub(BackupCp,15),TempPos)
+	CDoActions(FP,{
+	TSetDeaths(_Sub(BackupCp,2),SetTo,0,0),
+	TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+	TSetDeaths(_Sub(BackupCp,19),SetTo,TempPos,0),
+	TSetDeaths(_Sub(BackupCp,3),SetTo,TempPos,0),
+	TSetDeaths(_Sub(BackupCp,21),SetTo,TempPos,0),
+	TSetDeathsX(_Add(BackupCp,30),SetTo,0,0,0x04000000)})
 	CIfEnd()
 	f_LoadCp()
 	DoActions(FP,MoveCp(Subtract,6*4))
@@ -471,17 +479,15 @@ local CB_P = CreateVar(FP)
 				CMov(FP,ReadScore,0)
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
 					
-					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+					CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})
 					CElseX()
 					f_Div(FP,ReadScore,ExScore[i+1],100)
 					CIfXEnd()
 					CElseX()
 					CMov(FP,ReadScore,0)
 					CIfXEnd()
+					f_Mul(FP,ReadScore,_Mov(2))
 					--CMul(FP,ReadScore,_Div(Level,_Mov(10)))
-					if Limit == 1 then
-						f_Mul(FP,ReadScore,_Mov(2))
-					end
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
 					DisplayText("\x13\x1F!!!ＮＥＷ ＲＥＣＯＲＤ \x07～ 킬 스코어 기록갱신! ～ \x1FＮＥＷ ＲＥＣＯＲＤ !!!",4),
@@ -492,7 +498,7 @@ local CB_P = CreateVar(FP)
 					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
-					CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+					CIfX(FP,CVar(FP,PCheckV[2],AtLeast,2))
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
 					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 					CElseX()

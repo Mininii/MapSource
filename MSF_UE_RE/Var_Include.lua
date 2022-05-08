@@ -9,7 +9,7 @@ function Objects()
 	NMarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	NMarDamageAmount = 20 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	AtkFactor = 5
-	DefFactor = 100
+	DefFactor = 30
 	GunLimit = 1500
 	Ex1= {25,34,42,50,59,65,75}
 

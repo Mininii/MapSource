@@ -139,28 +139,22 @@ function LevelUp()
 		CIfXEnd()
 		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 			f_Mul(FP,GetP,_Mov(2))
-			for i = 0, 6 do
-				CIf(FP,{HumanCheck(i, 1)},{SetDeaths(i, SetTo, 150, 15)})
-				CAdd(FP,NukesUsage[i+1],_Div(NCCalc,PCheckV))
-				CallTriggerX(FP,Call_Print13[i+1],{})
-				CIfEnd()
-			end
-			TriggerX(FP,{},{print_utf8(12,0,"\x07『 \x04추가 \x08뉴클리어\x04가 지급되었습니다. \x07』")},{preserved})
 		CIfEnd()
-		if Limit == 1 then
-			f_Mul(FP,GetP,_Mov(TestPMul))
-		end
+		f_Mul(FP,GetP,_Mov(2))
 		CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
 			f_Mul(FP,GetP,MulPoint)
 		CIfEnd()
 		
+		
+		CIfX(FP,CVar(FP,PCheckV[2],AtLeast,2))
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)
-		
-		CIf(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+		f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
 		f_Movcpy(FP,_Add(PointStrPtr,StPT[2]),VArr(GetPVA,0),12*4)
-		f_Memcpy(FP,_Add(PointStrPtr,StPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-		CIfEnd()
+		CElseX()
+		DoActions(FP, {SetV(GetP,0)})
+		f_Memcpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
+		CIfXEnd()
 		
 
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},
@@ -292,6 +286,15 @@ function LevelUp()
 --	TriggerX(FP,{CVar(FP,Level[2],AtMost,10)},{SetCVar(FP,RandW[2],Add,30)},{preserved})
 --	TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{SetCVar(FP,RandW[2],Add,100)},{preserved})
 	
+	CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
+		for i = 0, 6 do
+			CIf(FP,{HumanCheck(i, 1)},{SetDeaths(i, SetTo, 150, 15)})
+			CAdd(FP,NukesUsage[i+1],_Div(NCCalc,PCheckV))
+			CallTriggerX(FP,Call_Print13[i+1],{})
+			CIfEnd()
+		end
+		TriggerX(FP,{},{print_utf8(12,0,"\x07『 \x04추가 \x08뉴클리어\x04가 지급되었습니다. \x07』")},{preserved})
+	CIfEnd()
 
 	DoActions2X(FP,{SetDeaths(FP,Subtract,1,147),
 	SetCDeaths(FP,SetTo,0,ReplaceDelayT),
