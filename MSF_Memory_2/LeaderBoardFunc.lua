@@ -61,6 +61,7 @@ function LeaderBoardF()
 		DeathsX(CurrentPlayer,Exactly,160*256,0,0xFF00),
 	})})
 			local L_Gun_Order = def_sIndex()
+			local L_Gun_Jump = def_sIndex()
 			local TargetRotation = CreateVar(FP)
 			local TargetUID = CreateVar(FP)
 			local TargerXY = CreateVarArr(2,FP)
@@ -70,11 +71,35 @@ function LeaderBoardF()
 			for j, k in pairs(HeroPointArr) do
 				NJumpX(FP,Check_Hero,DeathsX(CurrentPlayer,Exactly,k[2],0,0xFF))
 			end
+
+			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
+			local TargetArr2 = { 
+				{0,0,160+(32*8),144+(32*8)},
+				{3936-(32*8),4096,4096,144+(32*8)},
+				{0,3952-(32*8),160+(32*8),4096},
+				{3936-(32*8),3952-(32*8),4096,4096} }
+				
+			DoActions(FP,MoveCp(Subtract,15*4))--10
+			for i = 0, 3 do
+				NJump(FP, L_Gun_Jump, {HumanCheck(i, 1),
+				DeathsX(CurrentPlayer,AtMost,TargetArr2[i+1][1],0,0xFFFF),
+				DeathsX(CurrentPlayer,AtLeast,TargetArr2[i+1][3],0,0xFFFF),
+				DeathsX(CurrentPlayer,AtMost,TargetArr2[i+1][2]*65536,0,0xFFFF0000),
+				DeathsX(CurrentPlayer,AtLeast,TargetArr2[i+1][4]*65536,0,0xFFFF0000),
+			},MoveCp(Add,15*4))
+			end
+
+			DoActions(FP,MoveCp(Add,15*4))--25
 			f_SaveCp()
 			NJumpXEnd(FP,L_Gun_Order)
+
+
+
 			CMov(FP,TargetUID,_Read(BackupCp),nil,0xFF)
 			CMov(FP,TargetRotation,_Read(_Sub(BackupCp,6)),nil,0xFF)
 			NIf(FP,{TMemoryX(_Add(BackupCp,15),AtLeast,150*16777216,0xFF000000)}) -- 막혀서 유닛 안나올 경우에 명령이 들어가지 않도록 설정함.
+
+
 	
 			for i = 0, 3 do
 				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,0)})
@@ -88,7 +113,6 @@ function LeaderBoardF()
 			for j = 0, 3 do
 			NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
 			end
-			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			
 			
 			for i = 0, 3 do
@@ -113,8 +137,10 @@ function LeaderBoardF()
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtLeast,2),CD(Theorist,0)})
 				CJumpEnd(FP,HeroOrder)
 				
+				
 			NIfEnd()
 			f_LoadCp()
+			NJumpEnd(FP,L_Gun_Jump)
 			DoActions(FP,MoveCp(Subtract,6*4))
 		CIfEnd()
 	CIfEnd()
