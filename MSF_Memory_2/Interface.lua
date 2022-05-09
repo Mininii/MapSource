@@ -190,6 +190,10 @@ Trigger { -- 조합 루미아마린
 			SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0);
 			SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0);
 			SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0);
+			SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0);
 			PreserveTrigger();
 		},
 	}

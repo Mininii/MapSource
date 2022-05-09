@@ -282,13 +282,16 @@ HPRegenTable = {64}
 	CAdd(FP,0x6509B0,17)
 
     
-    NIf(FP,{Cond_EXCC(2,AtLeast,1)})
-        CSub(FP,0x6509B0,17)
-        CDoActions(FP,{TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
-        CAdd(FP,0x6509B0,22)
-        DoActions(FP,SetDeathsX(CurrentPlayer,SetTo,5000*256,0,0xFFFFFF))
-        CSub(FP,0x6509B0,5)
-
+    NIfX(FP,{Cond_EXCC(2,AtLeast,1)})--무적상태일경우
+        CDoActions(FP,{
+            SetMemory(0x6509B0, Subtract,17),
+            TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0),--2
+            SetMemory(0x6509B0, Add,22),
+            SetDeathsX(CurrentPlayer,SetTo,5000*256,0,0xFFFFFF),--24
+            SetMemory(0x6509B0, Add,31),
+            SetDeathsX(CurrentPlayer,SetTo,0x04000000,0,0x04000000),--55
+            SetMemory(0x6509B0, Subtract,36),
+        })--2
         NIf(FP,{TTOR({
             Cond_EXCC(2,Exactly,50),
             Cond_EXCC(2,Exactly,100),
@@ -303,7 +306,13 @@ HPRegenTable = {64}
             f_LoadCp()
             CAdd(FP,0x6509B0,9)
         NIfEnd()
-    NIfEnd()
+    NElseX()--무적상태가 아닐경우
+        CDoActions(FP,{
+            SetMemory(0x6509B0, Add,36),
+            SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000),--55
+            SetMemory(0x6509B0, Subtract,36),
+        })--2
+    NIfXEnd()
 
     
 	CIf(FP,{CV(Level,40,AtLeast),Cond_EXCC(3,AtMost,0)})

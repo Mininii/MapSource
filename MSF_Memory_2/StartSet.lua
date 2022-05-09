@@ -1,3 +1,4 @@
+-- NonCtrigArea
 Trigger {
 	players = {Force2},
 	conditions = {  
@@ -18,6 +19,18 @@ Trigger {
 	},
 	actions = {
 		KillUnit(35,CurrentPlayer);
+		PreserveTrigger();
+		
+	},
+}
+Trigger {
+	players = {Force2},
+	conditions = {
+		Command(CurrentPlayer,AtLeast,25,37);
+		
+	},
+	actions = {
+		RemoveUnitAt(1, 37, 64, CurrentPlayer);
 		PreserveTrigger();
 		
 	},
@@ -52,14 +65,14 @@ Trigger { -- 퍼센트 데미지 세팅
 		SetMemory(0x515BB4,SetTo,256);--1 PlayerMarine
 		SetMemory(0x515BB8,SetTo,256);--2 PlayerMarine
 		SetMemory(0x515BBC,SetTo,256);--3 PlayerMarine
-		SetMemory(0x515BC0,SetTo,256*10);--4
-		SetMemory(0x515BC4,SetTo,256*5);--5
+		SetMemory(0x515BC0,SetTo,256*120);--4
+		SetMemory(0x515BC4,SetTo,256*80);--5
 		SetMemory(0x515BC8,SetTo,256);--6
 		SetMemory(0x515BCC,SetTo,256);--7 default
-		SetMemory(0x515BD0,SetTo,256*2);--8
-		SetMemory(0x515BD4,SetTo,256*4);--9
+		SetMemory(0x515BD0,SetTo,256*2);--8 노멀마린
+		SetMemory(0x515BD4,SetTo,256*4);--9 영웅마린
 		SetMemory(0x6616B0, SetTo, 2097615);
 		SetMemory(0x6643B0, SetTo, 536870916);
-		SetMemory(0x666460, SetTo, 32965359);-- 204번유닛 이펙트유닛으로 사용},1)
+		SetMemory(0x666460, SetTo, 32965359);-- 204번유닛 이펙트유닛으로 사용
 	},
 }
