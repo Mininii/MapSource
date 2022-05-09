@@ -38,8 +38,8 @@ DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(210,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
 TestSet(0)
 TestPMul=2
-VerText = "\x04Ver. Beta. 0.2"
-LimitVer = 2
+VerText = "\x04Ver. Beta. 0.3"
+LimitVer = 3
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

@@ -480,6 +480,7 @@ local CB_P = CreateVar(FP)
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
 					
 					CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})
+					CMov(FP,ReadScore,0)
 					CElseX()
 					f_Div(FP,ReadScore,ExScore[i+1],100)
 					CIfXEnd()

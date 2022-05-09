@@ -151,8 +151,8 @@ function PlayerInterface()
 
 
 
+	DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
 	for i = 0, 6 do -- 각플레이어
-		DoActions(FP,SetMemory(0x6509B0,SetTo,FP)) -- CP 복구 
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
 		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 게임 시작시 레벨0일경우 1로 변경
 		Trigger2(i, {Deaths(i,AtLeast,100000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터

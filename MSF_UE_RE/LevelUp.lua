@@ -132,7 +132,7 @@ function LevelUp()
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+		CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})
 		CMov(FP,GetP,0)
 		CElseX()
 		CMov(FP,GetP,_Div(Level, 10),1)
