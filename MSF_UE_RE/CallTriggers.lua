@@ -94,7 +94,9 @@ CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exac
 	TSetDeaths(_Sub(BackupCp,19),SetTo,TempPos,0),
 	TSetDeaths(_Sub(BackupCp,3),SetTo,TempPos,0),
 	TSetDeaths(_Sub(BackupCp,21),SetTo,TempPos,0),
-	TSetDeathsX(_Add(BackupCp,30),SetTo,0,0,0x04000000)})
+	TSetMemoryX(_Add(BackupCp,30),SetTo,0,0x04000000),
+	TSetDeathsX(_Add(BackupCp,47),SetTo,0,0,0xFF00),
+})
 	CIfEnd()
 	f_LoadCp()
 	DoActions(FP,MoveCp(Subtract,6*4))

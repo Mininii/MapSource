@@ -24,7 +24,9 @@ function Install_Roka7Boss()
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
 	DoActions(FP,{RemoveUnit(203,FP),RemoveUnit(204,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
-	Trigger2(FP,{Memory(0x58F524,Exactly,3)},{ModifyUnitHitPoints(All, "Men", Force1, 64, 35),
+	Trigger2(FP,{Memory(0x58F524,Exactly,3)},{
+		ModifyUnitHitPoints(All, "Men", Force1, 64, 35),
+		ModifyUnitShields(All, "Men", Force1, 64, 0),
 	Simple_SetLoc(0,0,0,32*96,5),
 	RemoveUnitAt(All,84,1,FP);
 	Simple_SetLoc(0,3072-5,0,3072,6144),
