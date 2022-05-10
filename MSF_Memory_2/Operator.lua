@@ -27,6 +27,13 @@ function Operator_Trig()
 			CIf(FP,{TTDeaths(CurrentPlayer,NotSame,BarRally[i+1],0)}) --배럭랠리 갱신
 				f_SaveCp()
 				f_Read(FP,BackupCp,BarRally[i+1])
+				if Limit == 1 then
+				CIf(FP,CD(TestMode,1))
+				CMov(FP,CPos,BarRally[i+1])
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{CreateUnit(1,"Dark Swarm",1,P8)})
+				CIfEnd()
+				end
 				f_LoadCp()
 			CIfEnd()
 			CSub(FP,0x6509B0,62-25)
@@ -84,7 +91,7 @@ function Operator_Trig()
 	
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
-	TargetTestGun = 190
+	TargetTestGun = 173
     for j, k in pairs(f_GunTable) do
 		if k ~= TargetTestGun then
         table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))

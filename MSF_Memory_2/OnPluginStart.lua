@@ -119,6 +119,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 			SetUnitClass(k,162) -- ÆÛµ©À¯´Ö
 		end
 	end
+	UnitSizePatch(202,4,4,4,4)
 	SetUnitClass(94,161) -- ÆÛµ©À¯´Ö
 
 	SetUnitClass(11,162) -- ÆÛµ©À¯´Ö

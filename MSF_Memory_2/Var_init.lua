@@ -164,6 +164,9 @@ function Var_init()
 	CUnitRefrash = CreateCcode()
 	Theorist = CreateCcode() -- 이론치모드 Ccode
 	
+	CUnitFlag = CreateCcode()
+	MarDup = CreateCcode()
+	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
 	--HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 

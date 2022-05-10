@@ -1,5 +1,4 @@
 function Interface()
-	local CUnitFlag = CreateCcode()
 	local DelayMedic = CreateCcodeArr(4)
 	local GiveRate = CreateCcodeArr(4)
 	local CurAtk = CreateVarArr(#MapPlayers,FP)
@@ -46,7 +45,8 @@ function Interface()
 			
 			CIf(FP,{Deaths(i,AtLeast,1,"Terran Wraith"),Memory(0x628438,AtLeast,1)},SetDeaths(i,Subtract,1,"Terran Wraith"))
 				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-				DoActions(FP,{CreateUnitWithProperties(1,32,2+i,i,{energy = 100})})
+				DoActionsX(FP,{CreateUnitWithProperties(1,32,2+i,i,{energy = 100}),
+				SetCD(CUnitFlag,1);})
 				CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
 				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0)})
@@ -114,6 +114,7 @@ actions = {
 Trigger { -- 조합 영웅마린
 players = {i},
 conditions = {
+	Label(0);
 	Bring(i,AtLeast,1,32,26+i); 
 	Accumulate(i,AtLeast,HMCost,Ore);
 	Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -125,6 +126,7 @@ actions = {
 	CreateUnitWithProperties(1,20,2+i,i,{energy = 100});
 	DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x04Ｍａｒｉｎｅ을 \x1BＨ \x04Ｍａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..HMCost.." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
+	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
@@ -144,6 +146,7 @@ Trigger { -- 조합 루미아마린
 		CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
+		SetCD(CUnitFlag,1);
 		PreserveTrigger();
 	},
 }
@@ -544,6 +547,10 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 	CIf(FP,{CV(SelUID,64)})
 	CAdd(FP,SelHP,B2H)
 	CIfEnd()
+	CIf(FP,{CV(SelUID,12)})
+	CAdd(FP,SelHP,BPHRetTest)
+	CIfEnd()
+	
 	ItoDec(FP,SelHP,VArr(SelHPVA,0),2,0x08,0)--체
 	ItoDec(FP,SelSh,VArr(SelShVA,0),2,0x1C,0)--쉴
 
@@ -573,7 +580,7 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 
 
 		
-	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀
+	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,3,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
@@ -608,6 +615,24 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 					TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),
 					TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),
 					TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
+				f_LoadCp()
+			CIfEnd()
+			CIf(FP,CD(MarDup,1))--겹치기실행
+				f_SaveCp()
+				CIf(FP,{TTMemoryX(_Add(BackupCp,6), NotSame, 111,0xFF),TMemoryX(_Add(BackupCp,36),Exactly,0,0xA00000)})
+					CDoActions(FP,{
+						TSetDeathsX(_Add(BackupCp,36),SetTo,0xA00000,0,0xA00000),
+					})
+				CIfEnd()
+				f_LoadCp()
+			CIfEnd()
+			CIf(FP,CD(MarDup,2))--겹치기해제
+				f_SaveCp()
+				CIf(FP,{TTMemoryX(_Add(BackupCp,6), NotSame, 111,0xFF),TMemoryX(_Add(BackupCp,36),Exactly,0xA00000,0xA00000)})
+					CDoActions(FP,{
+						TSetDeathsX(_Add(BackupCp,36),SetTo,0,0,0xA00000),
+					})
+				CIfEnd()
 				f_LoadCp()
 			CIfEnd()
 			end

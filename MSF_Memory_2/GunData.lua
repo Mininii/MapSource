@@ -1253,64 +1253,88 @@ end
 --	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
 --	CIfEnd()
 --	CIf(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)})
-    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
-	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
-	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
-	f_Mul(FP,Var_TempTable[11],Var_TempTable[10],Var_TempTable[10])
-	f_Div(FP,Var_TempTable[11],195674)
-	CMov(FP,N_A,0)
-	CWhile(FP,{CV(N_A,359,AtMost)})
-	f_Lengthdir(FP,Var_TempTable[11],_Add(N_A,Var_TempTable[12]),N_X,N_Y)
-	CAdd(FP,N_X,G_CA_CenterX)
-	CAdd(FP,N_Y,G_CA_CenterY)
-	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
-	CAdd(FP,N_A,12)
-	CWhileEnd()
-
-	
-
-	CIfOnce(FP,{Gun_Line(9,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),SetMemoryB(0x6636B8+64,SetTo,130)})
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	CSub(FP,CurCunitI,Nextptrs,19025)
-	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,20000000-8320000)})
-	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
-
-
-	CTrigger(FP,{},{SetV(BPtrArr[5],Nextptrs),CreateUnitWithProperties(1,64,64,FP,{energy=100, invincible = true})})
-	CIfEnd()
-	CIfEnd()
-	
-	CIf(FP,{CD(ED2Clear,0)})
-	local SpawnSet = {{22580,{77,88}},{33880,{25,21}},{45170,{15,56}},{56470,{17,28}},{68480,{75,80}},{79760,{22,76}},{91050,{100,57}},{102350,{63,29}},{113640,{10,8}},{124940,{86,79}},{136240,{98,52}},{147520,{70,65}}}
-for j, k in pairs(SpawnSet) do
-	G_CA_SetSpawn({Gun_Line(13,AtLeast,k[1])},k[2],"ACAS","EllipseMirror1",nil,0,nil,nil,nil,nil,1)
-end
-	CIfEnd()
-
+--    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
+--	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
+--	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
+--	f_Mul(FP,Var_TempTable[11],Var_TempTable[10],Var_TempTable[10])
+--	f_Div(FP,Var_TempTable[11],195674)
+--	CMov(FP,N_A,0)
+--	CWhile(FP,{CV(N_A,359,AtMost)})
+--	f_Lengthdir(FP,Var_TempTable[11],_Add(N_A,Var_TempTable[12]),N_X,N_Y)
+--	CAdd(FP,N_X,G_CA_CenterX)
+--	CAdd(FP,N_Y,G_CA_CenterY)
+--	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+--	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
+--	CAdd(FP,N_A,12)
+--	CWhileEnd()
 --
-	CIf(FP,{CD(ED2Clear,1)})
-	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
-Trigger2X(FP,{},{RotatePlayer({
-	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
-	PlayWAVX("staredit\\wav\\Clear1.ogg"),
-	PlayWAVX("staredit\\wav\\Clear1.ogg"),
-	PlayWAVX("staredit\\wav\\Clear1.ogg"),
-	PlayWAVX("staredit\\wav\\Clear1.ogg"),
-	PlayWAVX("staredit\\wav\\Clear1.ogg")
-	},HumanPlayers,FP);})
-		StoryPrint(4000*1,"\x04마침내, 과거의 기억을 되찾아 내었다.")
-		StoryPrint(4000*2,"\x04하지만, 어째서일까, \x10슬픈 \x18감정\x04이 \x08폭풍\x04처럼 몰아친다.")
-		StoryPrint(4000*3,"\x04아아, 이것은 그녀와 함께했던 \x1C추억\x04의 \x17기억\x04인가..?")
-		StoryPrint(4000*4,"\x04지금은 이 세상에 존재하지 않는 그녀와의 \x0E소중한 기억\x04.")
-		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
-		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
-		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
-		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,2)})
-		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
-	CIfEnd()
+--	
+--
+--	CIfOnce(FP,{Gun_Line(9,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),SetMemoryB(0x6636B8+64,SetTo,130)})
+--	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+--	CSub(FP,CurCunitI,Nextptrs,19025)
+--	f_Div(FP,CurCunitI,_Mov(84))
+--	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,20000000-8320000)})
+--	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+--
+--
+--	CTrigger(FP,{},{SetV(BPtrArr[5],Nextptrs),CreateUnitWithProperties(1,64,64,FP,{energy=100, invincible = true})})
 --	CIfEnd()
+--	CIfEnd()
+--	
+--	CIf(FP,{CD(ED2Clear,0)})
+--	local SpawnSet = {{22580,{77,88}},{33880,{25,21}},{45170,{15,56}},{56470,{17,28}},{68480,{75,80}},{79760,{22,76}},{91050,{100,57}},{102350,{63,29}},{113640,{10,8}},{124940,{86,79}},{136240,{98,52}},{147520,{70,65}}}
+--for j, k in pairs(SpawnSet) do
+--	G_CA_SetSpawn({Gun_Line(13,AtLeast,k[1])},k[2],"ACAS","EllipseMirror1",nil,0,nil,nil,nil,nil,1)
+--end
+--	CIfEnd()
+--
+----
+--	CIf(FP,{CD(ED2Clear,1)})
+--	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+--Trigger2X(FP,{},{RotatePlayer({
+--	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
+--	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+--	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+--	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+--	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+--	PlayWAVX("staredit\\wav\\Clear1.ogg")
+--	},HumanPlayers,FP);})
+--		StoryPrint(4000*1,"\x04마침내, 과거의 기억을 되찾아 내었다.")
+--		StoryPrint(4000*2,"\x04하지만, 어째서일까, \x10슬픈 \x18감정\x04이 \x08폭풍\x04처럼 몰아친다.")
+--		StoryPrint(4000*3,"\x04아아, 이것은 그녀와 함께했던 \x1C추억\x04의 \x17기억\x04인가..?")
+--		StoryPrint(4000*4,"\x04지금은 이 세상에 존재하지 않는 그녀와의 \x0E소중한 기억\x04.")
+--		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
+--		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
+--		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
+--		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,2)})
+--		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+--	CIfEnd()
+--	CIfEnd()
+	CIf(FP,{})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
+	CIfOnce(FP)
+	DoActionsX(FP,{
+		MoveUnit(All, "Men", 0, 15, 2),
+		MoveUnit(All, "Men", 1, 15, 3),
+		MoveUnit(All, "Men", 2, 15, 4),
+		MoveUnit(All, "Men", 3, 15, 5),
+		Order("Men",0,15,Move,2),
+		Order("Men",1,15,Move,3),
+		Order("Men",2,15,Move,4),
+		Order("Men",3,15,Move,5),
+		SetCD(MarDup,1),
+		SetCD(CUnitFlag,1),
+	},1)
+	BPTest = CreateVar(FP)	
+	BPHRetTest = CreateVar(FP)	
+	f_Read(FP,0x628438,"X",BPTest,0xFFFFFF)
+	DoActions(FP,CreateUnit(1,12,64,FP),1)
+	CIfEnd()
+	
+
+	CABoss(BPTest,BPHRetTest,8000000,{0,300},nil,FP)
+	CIfEnd()
+
 
 
 CDoActions(FP,{TGun_SetLine(9,Subtract,Dt)})
