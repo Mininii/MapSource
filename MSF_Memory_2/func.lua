@@ -684,6 +684,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_Y,TRepeatY)
 			CIfEnd()
 		CIfEnd()
+		CMov(FP,TargetRotation,CreatePlayer)
 		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- 생성플레이어가 설정되지 않았을경우
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,4)},{preserved})
 		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,5)},{preserved})
@@ -697,8 +698,36 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 					Simple_SetLocX(FP,DefaultAttackLoc,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2)
 			end
-				CElseX() -- 해당플레이어가 존재하지 않을 경우 생성 중심점에 어택
-					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+				CElseX() -- 해당플레이어가 존재하지 않을 경우 
+				CTrigger(FP, {TTCVar(FP,TargetRotation[2],NotSame,0xFFFFFFFF)}, SetV(TargetRotation,CreatePlayer), 1)
+					CIfX(FP,{CD(Theorist,0)})--이론치모드가 아닐 경우 현존하는 플레이어에게 어택
+						local L_Gun_Order2 = def_sIndex()
+						NJumpXEnd(FP,L_Gun_Order2)
+
+						for i = 0, 3 do
+							CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,0)})
+							DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+							TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,4)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,5)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,6)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,7)},{preserved})
+							CIfEnd()
+						end
+						for j = 0, 3 do
+						NJumpX(FP,L_Gun_Order2,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+						end
+						
+						CIfX(FP,Never())
+						for i = 0, 3 do
+							CElseIfX({CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,1)})
+							Simple_SetLocX(FP,DefaultAttackLoc,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2)
+						end
+						CElseX() -- TargetRotation이 0xFFFFFFFF일 경우 생성 중심점에 어택
+						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+						CIfXEnd()
+					CElseX()--이론치모드일 경우 생성 중심점에 어택
+						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+					CIfXEnd()
 				CIfXEnd()
 			CElseIfX({CVar(FP,RepeatType[2],Exactly,100)}) 
 
@@ -711,8 +740,43 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 						CMov(FP,G_CA_TempTable[8],TargetArr[i+1][1])
 						CMov(FP,G_CA_TempTable[9],TargetArr[i+1][2])
 				end
-				CElseX() -- 해당플레이어가 존재하지 않을 경우 생성 중심점에 어택
+				CElseX() -- 해당플레이어가 존재하지 않을 경우
+				CTrigger(FP, {TTCVar(FP,TargetRotation[2],NotSame,0xFFFFFFFF)}, SetV(TargetRotation,CreatePlayer), 1)
+				
+					CIfX(FP,{CD(Theorist,0)})--이론치모드가 아닐 경우 현존하는 플레이어에게 어택
+
+						local L_Gun_Order = def_sIndex()
+						NJumpXEnd(FP,L_Gun_Order)
+
+						for i = 0, 3 do
+							CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,0)})
+							DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+							TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,4)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetV(TargetRotation,5)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetV(TargetRotation,6)},{preserved})
+							TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetV(TargetRotation,7)},{preserved})
+							CIfEnd()
+						end
+						for j = 0, 3 do
+						NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- 타겟 설정 시 플레이어가 없을 경우 다시 연산함
+						end
+						
+						CIfX(FP,Never())
+						for i = 0, 3 do
+							CElseIfX({CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,1)})
+								Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+								CMov(FP,G_CA_BakX,G_CA_TempTable[8])
+								CMov(FP,G_CA_BakY,G_CA_TempTable[9])
+								CMov(FP,G_CA_TempTable[8],TargetArr[i+1][1])
+								CMov(FP,G_CA_TempTable[9],TargetArr[i+1][2])
+						end
+						CElseX() -- TargetRotation이 0xFFFFFFFF일 경우 생성 중심점에 어택
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+						CIfXEnd()
+
+					CElseX()--이론치모드일 경우 생성 중심점에 어택
+						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+					CIfXEnd()
 				CIfXEnd()
 			CElseX() -- 어택 일반 도형중심점
 			Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])

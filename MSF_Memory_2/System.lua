@@ -606,7 +606,7 @@ HPRegenTable = {64}
     end
 
     C_UID = CreateVar(FP)
-
+    TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,1),{preserved})
     EXCC_ClearCalc(AddV(CurEXP,1))
     NJumpXEnd(FP,OtherG)
     f_SaveCp()
@@ -656,18 +656,24 @@ HPRegenTable = {64}
         else
             PushErrorMsg("LVTable_TypeError")
         end
+        CIf(FP,{CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)})
         if type(CUTable)=="table" then
             for j, k in pairs(CUTable) do
                 --f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},k[1],k[2],1,Player)--
-                CTrigger(FP,{CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},{TCreateUnit(k[2],k[1],1,f_CRandNum(4,4))},1)
-
+                --CTrigger(FP,{CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},{TCreateUnit(k[2],k[1],1,f_CRandNum(4,4))},1)
+                f_TempRepeatX(nil,k[1],k[2],1,nil,{CPosX,CPosY})
             end
         else
             PushErrorMsg("CUTable_TypeError")
         end
+        CIfEnd()
         
     end
     CIf(FP,{Bring(AllPlayers,AtLeast,1,"Dark Swarm",64)},{Simple_SetLoc(0,0,0,0,0),MoveLocation(1,"Dark Swarm",AllPlayers,"Anywhere"),RemoveUnitAt(1,"Dark Swarm",1,AllPlayers),CreateUnit(1,84,1,FP),KillUnit(84,FP)}) -- 다크스웜 트리거
+    f_Read(FP, 0x58DC60, CPosX, nil, nil, 1)
+    f_Read(FP, 0x58DC64, CPosY, nil, nil, 1)
+    
+    
 
     SwarmSet({0,9},{{53,5},{54,5}})
     SwarmSet({10,19},{{48,3},{53,3},{55,4}})
