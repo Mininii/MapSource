@@ -11,7 +11,7 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,80,FP)
+	local AtkExceed = Create_VTable(7,60,FP)
 	local HPExceed = Create_VTable(7,7,FP)	
 	local ShUp = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
@@ -98,7 +98,7 @@ function PlayerInterface()
 	
 		TempVT = CreateVarArr(7,FP)
 		for i = 0, 6 do
-		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP)}) -- 스테이터스 전송=
+		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP)}) -- 스테이터스 전송
 		CMov(FP,TempVT[1],NewAvStat[i+1])
 		CMov(FP,TempVT[2],NewStat[i+1])
 		CMov(FP,TempVT[3],NewMaxLevel[i+1])
@@ -664,11 +664,13 @@ function PlayerInterface()
 		CIfEnd()
 		
 		local MedicTrigJump = def_sIndex()
-		
+		local TestT = CreateCcode()
+		TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
 		for j = 1, 4 do
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
 		end
-			NJumpX(FP,MedicTrigJump,{CD(TestMode,1)})
+
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
 					DoActionsX(FP,{
@@ -676,7 +678,9 @@ function PlayerInterface()
 						RemoveUnit(MedicTrig[2],i),
 						RemoveUnit(MedicTrig[3],i),
 						RemoveUnit(MedicTrig[4],i),
-						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+						ModifyUnitHitPoints(All,7,i,"Anywhere",100),
+						ModifyUnitHitPoints(All,10,i,"Anywhere",100),
+						SetInvincibility(Enable, MarID[i+1], i, 64),
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
 						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
@@ -684,6 +688,7 @@ function PlayerInterface()
 						SetCD(CUnitFlag,1)
 					})
 			NIfEnd()
+
 		
 		CIfX(FP,{CV(AtkExceed[i+1],AtkUpCompCount[i+1],AtLeast)})
 		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,Exactly,4)) -- 공업 255회
@@ -998,13 +1003,38 @@ end
 	end
 	DoActions(FP,{SetDeaths(9,SetTo,0,12),SetDeaths(10,SetTo,0,12),SetDeaths(11,SetTo,0,12),SetDeaths(12,SetTo,0,12)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
 	
+	local HealT = CreateCcode()
+	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
+	CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
+	
+	for i = 0, 6 do
+		HealZActT = {}
+		for j = 0, 6 do
+			table.insert(HealZActT,ModifyUnitHitPoints(All,MarID[j+1],Force1,i+2,100))
+			table.insert(HealZActT,SetInvincibility(Enable, MarID[j+1], Force1, i+2))
+			table.insert(HealZActT,SetInvincibility(Enable, MarID[j+1], Force1, i+2))
+		end
+		Trigger2X(FP,{HumanCheck(i,1)},{
+			HealZActT,
+			ModifyUnitHitPoints(All,10,Force1,i+2,100),
+			ModifyUnitShields(All,10,Force1,i+2,100),
+			ModifyUnitHitPoints(All,7,Force1,i+2,100),
+			ModifyUnitShields(All,7,Force1,i+2,100),
+			ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
+			ModifyUnitShields(All,"Buildings",Force1,i+2,100),
+			SetDeaths(Force1, SetTo, 1, 34);
+			SetCD(CUnitFlag,1)
+		},{preserved})
+	end
+	CIfEnd()
+
 	local TempPos = CreateVar(FP)
 
 	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀 외 기능들
-		for i = 0, 6 do
-			GetLocCenter(73+i,CPosX,CPosY)
-			CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
-		end
+		--for i = 0, 6 do
+		--	GetLocCenter(73+i,CPosX,CPosY)
+		--	CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
+		--end
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
@@ -1036,7 +1066,7 @@ end
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,14*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,MulCon[i+1],0),TSetDeaths(_Add(BackupCp,3),SetTo,MulCon[i+1],0),TSetDeaths(_Sub(BackupCp,15),SetTo,MulCon[i+1],0)})
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,34)}) -- Heal
-				CTrigger(FP, {TMemory(_Add(BackupCp,6),Exactly,MarID[i+1])}, {TSetMemory(_Sub(BackupCp,17), SetTo, MarHP[i+1])}, 1)
+			CTrigger(FP, {TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000),TMemory(_Add(BackupCp,6),Exactly,MarID[i+1])}, {TSetMemory(_Sub(BackupCp,17), SetTo, MarHP[i+1]),TSetMemoryX(_Add(BackupCp,36),SetTo,0,0x04000000)}, 1)
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
@@ -1051,33 +1081,6 @@ end
 		CWhileEnd()
 		CMov(FP,0x6509B0,FP)
 		DoActionsX(FP,{SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,64),SetDeaths(Force1,SetTo,0,65),SetDeaths(Force1,SetTo,0,66),SetDeaths(Force1,SetTo,0,67),SetDeaths(Force1,SetTo,0,70),SetDeaths(Force1,SetTo,0,34),SetCDeaths(FP,SetTo,0,CUnitFlag)})
-	CIfEnd()
-	local HealT = CreateCcode()
-	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT)})
-	CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
-	for i = 0, 6 do
-		Trigger2(FP,{HumanCheck(i,1)},{
-			ModifyUnitHitPoints(All,MarID[1],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[1],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[2],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[2],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[3],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[3],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[4],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[4],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[5],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[5],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[6],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[6],Force1,i+2,100),
-			ModifyUnitHitPoints(All,MarID[7],Force1,i+2,100),
-			ModifyUnitShields(All,MarID[7],Force1,i+2,100),
-			ModifyUnitHitPoints(All,10,Force1,i+2,100),
-			ModifyUnitShields(All,10,Force1,i+2,100),
-			ModifyUnitHitPoints(All,7,Force1,i+2,100),
-			ModifyUnitShields(All,7,Force1,i+2,100),
-			ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
-			ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{preserved})
-	end
 	CIfEnd()
 
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{preserved})

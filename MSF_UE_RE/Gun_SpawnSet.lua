@@ -701,7 +701,14 @@ function InstallGunData()
 					CMov(FP,0x58DC64,_Add(V(CA[9]),Var_TempTable[3]))
 					CMov(FP,0x58DC68,_Add(V(CA[8]),Var_TempTable[2]))
 					CMov(FP,0x58DC6C,_Add(V(CA[9]),Var_TempTable[3]))
-					f_TempRepeatX(VArr(HeroVArr,_Mod(_Rand(),_Mov(#HeroArr))),1)
+					local TempRandV = CreateVar(FP)
+					local TempRandV2 = CreateVar(FP)
+					local RandCheck = def_sIndex()
+					NJumpXEnd(FP, RandCheck)
+					CMov(FP,TempRandV,_Mod(_Rand(),_Mov(#HeroArr)))
+					CMovX(FP,TempRandV2,VArr(HeroVArr,TempRandV),nil,nil,1)
+					NJumpX(FP, RandCheck, {CV(TempRandV2,121)})--핵배틀 잡건작 스폰 방지
+					f_TempRepeatX(TempRandV2,1)
 					
 					end
 					

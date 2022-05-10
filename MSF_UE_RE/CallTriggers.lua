@@ -250,9 +250,9 @@ HPMul = CreateVar(FP)
 f_SetLvHP = SetCallForward()
 SetCall(FP)
 		CMovX(FP, TempBakHP, VArr(MaxHPBackUp,UnitIDV), SetTo, nil, nil, 1)
-		f_Div(FP,TempBakHP2,TempBakHP,2)
+		f_Div(FP,TempBakHP2,TempBakHP,4)
 		f_LAdd(FP, TempLvHP_L, _LMul({TempBakHP2,0}, {_Div(Level,_Mov(10)),0}), {TempBakHP,0})
-		f_LDiv(FP, TempLvHP_L6, TempLvHP_L,"4")
+		f_LDiv(FP, TempLvHP_L6, TempLvHP_L,"2")
 		f_LMul(FP, TempLvHP_L5, TempLvHP_L6, _LMov({LevelT-1,0}))
 		f_LAdd(FP,TempLvHP_L4,TempLvHP_L,TempLvHP_L5)
 		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L4,SetTo,nil,nil,1)
@@ -638,7 +638,9 @@ local CB_P = CreateVar(FP)
 	end
 		SetLevelUpHP(104,1)
 	for j, k in pairs(HeroArr) do
+		if k ~= 121 then
 		SetLevelUpHP(k,1)
+		end
 	end
 	BdArr = {130,131,132,133,135,136,137,138,139,140,141,142,143,144,146,147,148,151,152,201}
 	
