@@ -18,6 +18,9 @@ function LeaderBoardF()
         TriggerX(FP,{HumanCheck(i,1),ElapsedTime(AtLeast,60*3),CDeaths(FP,AtMost,0,LeaderBoardT);},{
 			Order("Factories",4+i,64,Attack,2+i)
         },{preserved})
+        TriggerX(FP,{HumanCheck(i,1),ElapsedTime(AtLeast,60*5),CDeaths(FP,AtMost,0,LeaderBoardT);},{
+			Order("Men",Force2,40+i,Attack,2+i)
+        },{preserved})
         TriggerX(FP,{HumanCheck(i,0)},{
 			RemoveUnit(35,4+i),RemoveUnit(42,4+i)
         },{preserved})
@@ -79,17 +82,6 @@ function LeaderBoardF()
 				{0,3952-(32*8),160+(32*8),4096},
 				{3936-(32*8),3952-(32*8),4096,4096} }
 				
-			DoActions(FP,MoveCp(Subtract,15*4))--10
-			for i = 0, 3 do
-				NJump(FP, L_Gun_Jump, {HumanCheck(i, 1),
-				DeathsX(CurrentPlayer,AtMost,TargetArr2[i+1][1],0,0xFFFF),
-				DeathsX(CurrentPlayer,AtLeast,TargetArr2[i+1][3],0,0xFFFF),
-				DeathsX(CurrentPlayer,AtMost,TargetArr2[i+1][2]*65536,0,0xFFFF0000),
-				DeathsX(CurrentPlayer,AtLeast,TargetArr2[i+1][4]*65536,0,0xFFFF0000),
-			},MoveCp(Add,15*4))
-			end
-
-			DoActions(FP,MoveCp(Add,15*4))--25
 			f_SaveCp()
 			NJumpXEnd(FP,L_Gun_Order)
 
@@ -115,13 +107,23 @@ function LeaderBoardF()
 			end
 			
 			
-			for i = 0, 3 do
-				CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4)}) -- ¼³Á¤µÈ Å¸°ÙÀÇ ¹è·° ÁÂÇ¥¸¦ °¡Á®¿È
-					CMov(FP,TargerXY[1],TargetArr[i+1][1],2)
-					CMov(FP,TargerXY[2],TargetArr[i+1][2],2)
-				CIfEnd()
-			end
 				f_Read(FP,_Sub(BackupCp,15),CurXY)
+				
+				for i = 0, 3 do
+					NJumpX(FP, L_Gun_Jump, {HumanCheck(i, 1),
+					CVar(FP,CurXY[2],AtLeast,TargetArr2[i+1][1],0xFFFF),
+					CVar(FP,CurXY[2],AtMost,TargetArr2[i+1][3],0xFFFF),
+					CVar(FP,CurXY[2],AtLeast,TargetArr2[i+1][2]*65536,0xFFFF0000),
+					CVar(FP,CurXY[2],AtMost,TargetArr2[i+1][4]*65536,0xFFFF0000),
+				})
+				end
+
+				for i = 0, 3 do
+					CIf(FP,{CVar(FP,TargetRotation[2],Exactly,i+4)}) -- ¼³Á¤µÈ Å¸°ÙÀÇ ¹è·° ÁÂÇ¥¸¦ °¡Á®¿È
+						CMov(FP,TargerXY[1],TargetArr[i+1][1],2)
+						CMov(FP,TargerXY[2],TargetArr[i+1][2],2)
+					CIfEnd()
+				end
 				CurX,CurY = Convert_CPosXY(CurXY,1)
 				Simple_SetLocX(FP,9,TargerXY[1],TargerXY[2],TargerXY[1],TargerXY[2])
 				Simple_SetLocX(FP,0,CurX,CurY,CurX,CurY)
@@ -136,11 +138,11 @@ function LeaderBoardF()
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtLeast,2),CD(Theorist,0)})
 				CJumpEnd(FP,HeroOrder)
+				NJumpXEnd(FP,L_Gun_Jump)
 				
 				
 			NIfEnd()
 			f_LoadCp()
-			NJumpEnd(FP,L_Gun_Jump)
 			DoActions(FP,MoveCp(Subtract,6*4))
 		CIfEnd()
 	CIfEnd()
