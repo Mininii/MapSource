@@ -522,6 +522,11 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 end
 
 function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag)
+	if InitBGMP == 12 then
+	InitBGMP = Player
+	else
+		PushErrorMsg("already_Installed_BGMSystem")
+	end
 	if ObConFlag ~= nil then
 		ObCcode1 = CreateCcode()
 		ObCcode2 = CreateCcode()
@@ -538,11 +543,6 @@ for i = 128, 131 do
 	end
 end
 
-if InitBGMP == 12 then
-InitBGMP = Player
-else
-	PushErrorMsg("already_Installed_BGMSystem")
-end
 if #BGMArr == 0 then
 	PushErrorMsg("BGM_List_does_not_exist")
 end
