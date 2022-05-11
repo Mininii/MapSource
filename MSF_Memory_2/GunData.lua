@@ -1240,17 +1240,17 @@ end
 
 --	CIf(FP,CD(EEggCode,9,AtMost))
 --	
-    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
-	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
-	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
-	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
-	StoryPrint(4000*5,"\x04...라는.. 혹독한 \x1F절망\x04감에 다시한번 사로잡히게 된다.")
-	StoryPrint(4000*6,"\x0F잃어버린 \x17기억\x04의 \x0E멋지고 \x1F아름다운 \x1D추상화\x04는, 도대체 어디에 있단 말인가?")
-	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
-	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
-	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
-	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
-	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+--    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
+--	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
+--	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
+--	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
+--	StoryPrint(4000*5,"\x04...라는.. 혹독한 \x1F절망\x04감에 다시한번 사로잡히게 된다.")
+--	StoryPrint(4000*6,"\x0F잃어버린 \x17기억\x04의 \x0E멋지고 \x1F아름다운 \x1D추상화\x04는, 도대체 어디에 있단 말인가?")
+--	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
+--	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
+--	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
+--	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
+--	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 --	CIfEnd()
 --	CIf(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)})
 --    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
@@ -1311,29 +1311,42 @@ end
 --		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 --	CIfEnd()
 --	CIfEnd()
---	CIf(FP,{})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
---	CIfOnce(FP)
---	DoActionsX(FP,{
---		MoveUnit(All, "Men", 0, 15, 2),
---		MoveUnit(All, "Men", 1, 15, 3),
---		MoveUnit(All, "Men", 2, 15, 4),
---		MoveUnit(All, "Men", 3, 15, 5),
---		Order("Men",0,15,Move,2),
---		Order("Men",1,15,Move,3),
---		Order("Men",2,15,Move,4),
---		Order("Men",3,15,Move,5),
---		SetCD(MarDup,1),
---		SetCD(CUnitFlag,1),
---	},1)
+	CIf(FP,{})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
+	CallTrigger(FP, Call_CreateBullet_EPD)--탄막 구조체 불러오기
+	
+	
+	CIfOnce(FP)
+	G_CA_SetSpawn({},{204},"ACAS",{"Warp4"},"MAX",3,nil,"CP")
+	DoActionsX(FP,{
+		MoveUnit(All, "Men", 0, 15, 2),
+		MoveUnit(All, "Men", 1, 15, 3),
+		MoveUnit(All, "Men", 2, 15, 4),
+		MoveUnit(All, "Men", 3, 15, 5),
+		Order("Men",0,15,Move,2),
+		Order("Men",1,15,Move,3),
+		Order("Men",2,15,Move,4),
+		Order("Men",3,15,Move,5),
+		SetCD(MarDup,1),
+		SetCD(CUnitFlag,1),
+		SetMemory(0x66EC48+(318*4), SetTo, 133),--핵터지는모션살리기
+		RemoveUnit(60, AllPlayers)--핵배틀삭제
+	},1)
+	
 	BPTest = CreateVar(FP)	
 	BPHRetTest = CreateVar(FP)	
---	f_Read(FP,0x628438,"X",BPTest,0xFFFFFF)
---	DoActions(FP,CreateUnit(1,12,64,FP),1)
---	CIfEnd()
---	--
-
---	CABoss(BPTest,BPHRetTest,8000000,{0,300},nil,FP)
---	CIfEnd()
+	f_Read(FP,0x628438,"X",BPTest,0xFFFFFF)
+	DoActions(FP,CreateUnit(1,12,64,FP),SetMemoryB(0x665C48+511,SetTo,0),1)--가시 보이기 삭제
+	CIfEnd()
+	function CABossFunc()
+		local UnitPtr = CABossPtr
+		local PlayerID = CABossPlayerID
+		local CA = CABossDataArr
+		local CB = CABossTempArr
+		
+		
+	end
+	CABoss(BPTest,BPHRetTest,8000000,{0,300,1},"CABossFunc",FP)
+	CIfEnd()
 
 
 

@@ -475,6 +475,10 @@ HPRegenTable = {64}
             TSetMemory(_Add(Nextptrs,0x10/4),SetTo,TempTarget),
             TSetMemoryX(_Add(Nextptrs,19),SetTo,107*256,0xFF00),
         })
+        CTrigger(FP, {CD(MarDup,1)},{
+            TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
+
+        } ,1)
         CIfEnd()
         --TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{preserved})
         --CMov(FP,BackupCp,Nextptrs,40)

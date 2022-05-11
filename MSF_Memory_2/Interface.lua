@@ -512,70 +512,90 @@ for i = 0, 3 do
 		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{preserved})
 end
 CIfEnd({SetCDeaths(FP,Add,1,HealT)})
-	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)},{SetCD(AFlag,0),SetCD(BFlag,2)})
-	f_Read(FP,0x6284B8,nil,SelEPD)
-	f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
-	SelClass = Act_BRead(_Add(SelUID,0x663DD0))
-	CTrigger(FP,{CVar(FP,SelClass[2],Exactly,162)},{SetCD(BFlag,1)},1)
-	CTrigger(FP,{CVar(FP,SelClass[2],Exactly,161)},{SetCD(BFlag,0)},1)
-	CIf(FP,{TMemoryX(_Add(SelEPD,19),AtLeast,4,0xFF),CD(BFlag,1,AtMost)})
-	f_Read(FP,_Add(SelEPD,2),SelHP)
-	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
-
-	
-	TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{preserved})
-	TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{preserved})
-	TriggerX(FP,CV(SelUID,25),SetV(SelUID,26),{preserved})
-	TriggerX(FP,CV(SelUID,30),SetV(SelUID,31),{preserved})
-	TriggerX(FP,CV(SelUID,3),SetV(SelUID,4),{preserved})
-	TriggerX(FP,CV(SelUID,17),SetV(SelUID,18),{preserved})
-	TriggerX(FP,CV(SelUID,77),SetCD(AFlag,1),{preserved})
-	TriggerX(FP,CV(SelUID,65),SetCD(AFlag,1),{preserved})
-	TriggerX(FP,CV(SelUID,10),SetCD(AFlag,1),{preserved})
-	local SelWepID = CreateVar(FP)
-	CMov(FP,SelWepID,Act_BRead(_Add(SelUID,0x6636B8)))
-	local SelATK = CreateVar(FP)
-	local R = Act_WRead(_Add(_Mul(SelWepID,2),0x656EB0))
-	CMov(FP,SelATK,R)
-	local R = Act_BRead(_Add(SelWepID,0x6564E0))
-	CTrigger(FP,{CVar(FP,R[2],Exactly,2)},{SetCD(AFlag,1)},1)
-	CIf(FP,{CD(AFlag,1)})
-		CAdd(FP,SelATK,SelATK)
-	CIfEnd()
-	f_Div(FP,SelHP,_Mov(256))
-	f_Div(FP,SelSh,_Mov(256))
-	CIf(FP,{CV(SelUID,64)})
-	CAdd(FP,SelHP,B2H)
-	CIfEnd()
-	CIf(FP,{CV(SelUID,12)})
-	CAdd(FP,SelHP,BPHRetTest)
-	CIfEnd()
-	
-	ItoDec(FP,SelHP,VArr(SelHPVA,0),2,0x08,0)--체
-	ItoDec(FP,SelSh,VArr(SelShVA,0),2,0x1C,0)--쉴
-
-	CIfX(FP,CD(BFlag,0))
-	ItoDec(FP,SelATK,VArr(SelATKVA,0),2,0x1B,0)--일반딜
-	f_Movcpy(FP,NMDMGTblPtr,VArr(SelHPVA,0),4*4)
-	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
-	f_Movcpy(FP,_Add(NMDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
-	CElseX()
-	CIfX(FP,{TTOR({CV(SelUID,12),CV(SelUID,82)})})
-	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x06,0)--퍼딜1
-	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x06,0)--퍼딜2
-	CElseX()
-	ItoDec(FP,_Div(SelATK,10),VArr(SelATKVA,0),2,0x1F,0)--퍼딜1
-	ItoDec(FP,_Mod(SelATK,10),VArr(SelATKVA2,0),2,0x1F,0)--퍼딜2
-	CIfXEnd()
-	f_Movcpy(FP,PerDMGTblPtr,VArr(SelHPVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]),VArr(SelShVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]),VArr(SelATKVA,0),4*4)
-	f_Movcpy(FP,_Add(PerDMGTblPtr,(4*4)+(4*4)+ClassInfo2[2]+(4*4)+ClassInfo3[2]+(4*4)+ClassInfo6[2]),VArr(SelATKVA2,0),4*4)
-	CIfXEnd()
 
 
+local iStrinit = def_sIndex()
+CJump(FP, iStrinit)
+t01 = " 0000000000 \x04(00000\x0D\x04) - 00000  \x1BＤｍｇ"
+t02 = " 0000000000 \x04(00000\x0D\x04) - 00\x1F.0 ％"
+iStrSize1 = GetiStrSize(0,t01)
+iStrSize2 = GetiStrSize(0,t02)
+S1 = MakeiTblString(1463,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
+S2 = MakeiTblString(1464,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
+iTbl1 = GetiTblId(FP,1463,S1) --NMDMG
+iTbl2 = GetiTblId(FP,1464,S2) --PerDMG
+Str1, Str1a, Str1s = SaveiStrArr(FP,t01)
+Str2, Str2a, Str2s = SaveiStrArr(FP,t02)
+CJumpEnd(FP, iStrinit)
+local CurEPD = CreateVar(FP)
+local SelWepID = CreateVar(FP)
+local AFlag = CreateCcode()
+local BFlag = CreateCcode()
+local SelATK = CreateVar(FP)
 
-	CIfEnd()
+
+	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+		f_Read(FP,0x6284B8,nil,SelEPD)
+		f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
+		f_Read(FP,_Add(SelEPD,2),SelHP)
+		f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+		f_Div(FP,SelHP,_Mov(256))
+		f_Div(FP,SelSh,_Mov(256))
+
+		CTrigger(FP,{CV(SelUID,64)},{AddV(SelHP,B2H)},1)
+
+		CIf(FP,{CV(SelUID,12)})
+			CAdd(FP,SelHP,BPHRetTest)
+			CMov(FP,SelATK,_Mod(_Rand(),1000))
+		CIfEnd()
+
+		CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)})
+			CMov(FP,CurEPD,SelEPD)
+			SelClass = Act_BRead(_Add(SelUID,0x663DD0))
+			CTrigger(FP,{CVar(FP,SelClass[2],Exactly,162)},{SetCD(BFlag,1)},1)
+			CTrigger(FP,{CVar(FP,SelClass[2],Exactly,161)},{SetCD(BFlag,0)},1)
+			CIf(FP,{TMemoryX(_Add(SelEPD,19),AtLeast,4,0xFF),CD(BFlag,1,AtMost)})
+				TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{preserved})
+				TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{preserved})
+				TriggerX(FP,CV(SelUID,25),SetV(SelUID,26),{preserved})
+				TriggerX(FP,CV(SelUID,30),SetV(SelUID,31),{preserved})
+				TriggerX(FP,CV(SelUID,3),SetV(SelUID,4),{preserved})
+				TriggerX(FP,CV(SelUID,17),SetV(SelUID,18),{preserved})
+				TriggerX(FP,CV(SelUID,77),SetCD(AFlag,1),{preserved})
+				TriggerX(FP,CV(SelUID,65),SetCD(AFlag,1),{preserved})
+				TriggerX(FP,CV(SelUID,10),SetCD(AFlag,1),{preserved})
+				CMov(FP,SelWepID,Act_BRead(_Add(SelUID,0x6636B8)))
+				local R = Act_WRead(_Add(_Mul(SelWepID,2),0x656EB0))
+				CMov(FP,SelATK,R)
+				local R = Act_BRead(_Add(SelWepID,0x6564E0))
+				CTrigger(FP,{CVar(FP,R[2],Exactly,2)},{SetCD(AFlag,1)},1)
+				CIf(FP,{CD(AFlag,1)})
+					CAdd(FP,SelATK,SelATK)
+				CIfEnd()
+			CIfEnd()
+		CIfEnd()
+		
+		CIfX(FP,CD(BFlag,0))
+			CS__ItoCustom(FP,SVA1(Str1,0),SelHP,nil,nil,{10,10},1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
+			CS__ItoCustom(FP,SVA1(Str1,13),SelSh,nil,nil,{10,5},1,nil,"\x1C0",0x1C,{0,1,2,3,4})
+			CS__ItoCustom(FP,SVA1(Str1,23),SelATK,nil,nil,{10,5},1,nil,"\x1B0",0x1B,{0,1,2,3,4})
+			CS__InputVA(FP,iTbl1,0,Str1,Str1s,nil,0,Str1s)
+		CElseX()
+		
+			CS__ItoCustom(FP,SVA1(Str2,0),SelHP,nil,nil,{10,10},1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
+			CS__ItoCustom(FP,SVA1(Str2,13),SelSh,nil,nil,{10,5},1,nil,"\x1C0",0x1C,{0,1,2,3,4})
+			CS__ItoCustom(FP,SVA1(Str2,23),SelATK,nil,nil,{10,3},1,{"\x0D","\x1F0","\x1F0"},nil,0x1F,{0,1,3})
+			CIfX(FP,{TTOR({CV(SelUID,12),CV(SelUID,82)})},{
+				SetCSVA1(SVA1(Str2,23),SetTo,0x08,0xFF),
+				SetCSVA1(SVA1(Str2,24),SetTo,0x08,0xFF),
+				SetCSVA1(SVA1(Str2,26),SetTo,0x08,0xFF),})
+			CElseX({
+				SetCSVA1(SVA1(Str2,23),SetTo,0x1F,0xFF),
+				SetCSVA1(SVA1(Str2,24),SetTo,0x1F,0xFF),
+				SetCSVA1(SVA1(Str2,26),SetTo,0x1F,0xFF),})
+			CIfXEnd()
+			CS__InputVA(FP,iTbl2,0,Str2,Str2s,nil,0,Str2s)
+		CIfXEnd()
 	CIfEnd()
 
 
@@ -643,6 +663,52 @@ CIfEnd({SetCDeaths(FP,Add,1,HealT)})
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
 	CIfEnd({SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,74),SetDeaths(Force1,SetTo,0,75),SetCDeaths(FP,SetTo,0,CUnitFlag)})
+
+	CIf(FP,CD(MarDup2,1)) -- 뭉치기 실행
+	
+for i=0, 3 do
+
+	CIf(FP,{HumanCheck(i,1)})
+	Player_0x4D = CreateVarArr(4,FP)
+	Player_0x18 = CreateVarArr(4,FP)
+	Player_0x58 = CreateVarArr(4,FP)
+	Player_0x5C = CreateVarArr(4,FP)
+	Player_S = CreateVarArr(4,FP)
+	Player_T = CreateVarArr(4,FP)
+	Player_C = CreateVarArr(4,FP)
+
+		f_Read(FP,0x6284E8+(0x30*i),"X",Player_S[i+1],0xFFFFFF)
+		CIf(FP,Memory(0x6284E8+(0x30*i),AtLeast,1))
+			CMov(FP,Player_0x4D[i+1],_ReadF(_Add(Player_S[i+1],0x4C/4),0xFF00),nil,0xFF00)
+			CMov(FP,Player_0x18[i+1],_ReadF(_Add(Player_S[i+1],0x18/4)))
+			CMov(FP,Player_0x58[i+1],_ReadF(_Add(Player_S[i+1],0x58/4)))
+			CMov(FP,Player_0x5C[i+1],_ReadF(_Add(Player_S[i+1],0x5C/4)))
+			CIf(FP,{CVar(FP,Player_0x4D[i+1][2],AtLeast,256)})
+				CMov(FP,Player_C[i+1],1)
+				CWhile(FP,{CVar(FP,Player_C[i+1][2],AtMost,11)})
+					CIf(FP,{TDeaths(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))),AtLeast,1,0)})
+						--CMov(FP,0x6509B0,_EPD(_Read(BackupCp,0xFFFFFF)))
+						--CRead(FP,0x6509B0,BackupCp,0,0xFFFFFF,1)
+						CMov(FP,Player_T[i+1],_EPD(_ReadF(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))))))
+						CTrigger(FP,{
+							TDeaths(_Add(Player_T[i+1],0x8/4),AtLeast,256,0),
+							TDeathsX(_Add(Player_T[i+1],0x4C/4),AtLeast,1*256,0,0xFF00)
+							},
+						{
+							TSetDeathsX(_Add(Player_T[i+1],0x4C/4),SetTo,Player_0x4D[i+1],0,0xFF00),
+							TSetDeaths(_Add(Player_T[i+1],0x18/4),SetTo,Player_0x18[i+1],0),
+							TSetDeaths(_Add(Player_T[i+1],0x58/4),SetTo,Player_0x58[i+1],0),
+							TSetDeaths(_Add(Player_T[i+1],0x5C/4),SetTo,Player_0x5C[i+1],0)
+							},1)
+					CIfEnd()
+					CAdd(FP,Player_C[i+1],1)
+				CWhileEnd()
+			CIfEnd()
+		CIfEnd()
+	CIfEnd()
+	end
+	
+	CIfEnd()
 
 	for i = 128,131 do
 		ObserverChatToOb(FP,0x58D740+(20*59),i,"END",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x1C채팅→관전자\x04에게 메세지를 보냅니다.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})

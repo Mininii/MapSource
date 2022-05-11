@@ -277,7 +277,7 @@ if Limit == 1 then
 		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
 	end
 end
-	
+
 	table.insert(PatchArr,SetMemory(0x657A9C,SetTo,0)) -- 화면꺼트리기
 	DoActions2(FP,PatchArr,1)
 	DoActions2(Force1,PatchArrPrsv)
@@ -301,8 +301,6 @@ end
 	end
 	
 
-	f_GetTblptr(FP,NMDMGTblPtr,1463)
-	f_GetTblptr(FP,PerDMGTblPtr,1464)
 	f_GetTblptr(FP,AtkCondTblPtr,1413)
 	f_GetTblptr(FP,HPCondTblPtr,1414)
 	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
@@ -311,15 +309,6 @@ end
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
-
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*8)),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
-	f_Memcpy(FP,_Add(NMDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo4[3],0),"X","X",1),ClassInfo4[2])
-	
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*8)),_TMem(Arr(ClassInfo2[3],0),"X","X",1),ClassInfo2[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*12)+ClassInfo2[2]),_TMem(Arr(ClassInfo3[3],0),"X","X",1),ClassInfo3[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*16)+ClassInfo2[2]+ClassInfo3[2]),_TMem(Arr(ClassInfo6[3],0),"X","X",1),ClassInfo6[2])
-	f_Memcpy(FP,_Add(PerDMGTblPtr,(4*20)+ClassInfo2[2]+ClassInfo3[2]+ClassInfo6[2]),_TMem(Arr(ClassInfo5[3],0),"X","X",1),ClassInfo5[2])
 	G_init()
 	G_CA_init()
 

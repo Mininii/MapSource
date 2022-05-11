@@ -534,40 +534,6 @@ end
 end
 
 
-function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
-	CDoActions(FP,{
-		TSetCVar(FP,CBY[2],SetTo,Y),
-		TSetCVar(FP,CBX[2],SetTo,X),
-		TSetCVar(FP,CBAngle[2],SetTo,Angle),
-		TSetCVar(FP,CBHeight[2],SetTo,Height),
-		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-		SetNextTrigger(Call_CBullet_PosCalc)
-	})
-	end
-		
-		
-	function SetBullet(UnitId,Height,XY)
-		if XY ~= nil and type(XY) == "table" then
-			CDoActions(FP,{
-				TSetCVar(FP,CBY[2],SetTo,XY[2]),
-				TSetCVar(FP,CBX[2],SetTo,XY[1]),
-				TSetCVar(FP,CBHeight[2],SetTo,Height),
-				TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-				SetNextTrigger(Call_SetBulletXY)
-			})
-		elseif XY == nil then
-			CDoActions(FP,{
-				TSetCVar(FP,CBY[2],SetTo,0),
-				TSetCVar(FP,CBX[2],SetTo,0),
-				TSetCVar(FP,CBHeight[2],SetTo,Height),
-				TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-				SetNextTrigger(Call_SetBulletXY)
-			})
-		else
-			PushErrorMsg("SetBullet_XY_Error")
-		end
-	end
-
 	
 
 function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
@@ -598,6 +564,7 @@ local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
 local G_CA_Nextptrs = CreateVar(FP)
+local G_CA_Nextptrs2 = CreateVar(FP)
 local Repeat_TempV = CreateVar(FP)
 local CreatePlayer = CreateVar(FP)
 local G_CA_LineV = CreateVar(FP)
@@ -643,15 +610,29 @@ Call_Repeat = SetCallForward() -- 유닛생성부
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CIfX(FP,{CVar(FP,Gun_TempSpawnSet1[2],AtLeast,204),CVar(FP,Gun_TempSpawnSet1[2],AtMost,220)}) -- 이펙트유닛 or 탄막유닛일 경우
---		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
---			SetBullet(Gun_TempSpawnSet1,20)
---		CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
---			CreateBullet(Gun_TempSpawnSet1,20,0)
---		CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
---			CreateBullet(Gun_TempSpawnSet1,20,0)
---		CElseX()
---			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
---		CIfXEnd()
+		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
+			SetBullet(Gun_TempSpawnSet1,20)
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
+			CreateBullet(Gun_TempSpawnSet1,20,0,nil,FP)
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
+			CreateBullet(Gun_TempSpawnSet1,20,0,nil,FP)
+		CElseIfX(CVar(FP,RepeatType[2],Exactly,3))--뉴클리어런치
+		f_Read(FP,0x628438,G_CA_Nextptrs2,G_CA_Nextptrs,0xFFFFFF)
+		CDoActions(FP,{CreateUnit(1,215,1,FP),
+			TSetMemoryX(_Add(G_CA_Nextptrs,0x110/4), SetTo, 420,0xFFFF),
+		})
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+		f_Read(FP,0x628438,nil,G_CA_Nextptrs,0xFFFFFF)
+		CDoActions(FP,{CreateUnit(1,14,1,FP),
+		TSetMemory(_Add(G_CA_Nextptrs,0x80/4), SetTo, G_CA_Nextptrs2),
+		TSetMemoryX(_Add(G_CA_Nextptrs,19), SetTo, 125*256,0xFF00),
+		TSetMemory(_Add(G_CA_Nextptrs,0x58/4), SetTo, CPos),
+
+		})
+
+		CElseX()
+			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+		CIfXEnd()
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
@@ -1664,6 +1645,7 @@ CallTriggerX(FP,Call_EffUnit,Condition,{
 })
 end
 
+
 function CreateScanEff(EffType)
 	T ={
 		SetMemoryX(0x666458, SetTo, EffType,0xFFFF),
@@ -1777,9 +1759,14 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		end
 		--Preset[1] = PattNum
 		--Preset[2] = initPattT
+		--Preset[3] = Lock type
 		CB = CreateVarArr(6,PlayerID)
 		CIfOnce(PlayerID)--init
-		CDoActions(PlayerID,{SetV(CB[3],CA[2]),SetV(CB[2],initHP)},1)
+		CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],initHP)},1)
+		CTrigger(FP,{CV(CA[3],1,AtLeast)},{
+			TSetMemory(_Add(UnitPtr,13), SetTo, 0),
+			TSetMemoryX(_Add(UnitPtr,18), SetTo, 0,0xFFFF),
+		})
 		CIfEnd()
 		--CB[1] = HPReadV
 		--CB[2] = ExHP
@@ -1832,3 +1819,207 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		CABossTempArr = {}
 		return Ret
 	end
+	
+function Include_CBulletLib()
+	
+Call_CBullet = SetCallForward()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+
+CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
+
+CDoActions(FP,{
+TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+})
+CIfEnd()
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF);
+	TCreateUnit(1, 205, 1, CBPlayer),
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFFFF)
+})
+f_Read(FP,_Add(Nextptrs,10),Locs)
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+})
+NIfEnd()
+SetCallEnd()
+CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+
+Call_CBulletA = SetCallForward()
+SetCall(FP)
+CIf(FP,{CVar(FP,TempEPD[2],AtLeast,19025),CVar(FP,TempEPD[2],AtMost,19025+(84*1699))})
+
+--CIf(FP,CVar(FP,AngleA[2],AtLeast,1*256))
+--CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x40/4),SetTo,AngleA)})
+--CIfEnd()
+CIfX(FP,CVar(FP,TempT[2],Exactly,0))
+f_Read(FP,_Add(TempEPD,8),AngleA,nil,0xFF00)
+f_Read(FP,_Add(TempEPD,10),LocsA)
+CDoActions(FP,{
+	TSetMemoryX(_Add(TempEPD,4),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,6),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,7),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,22),SetTo,LocsA,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,8),SetTo,_Add(AngleA,32768),0xFF00),
+	TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(CB_TempH,SetTo,0,0xFFFFFFFF)})
+CIfEnd()
+CElseX()
+CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x20/4),Subtract,1)})
+CIfXEnd()
+
+SetCallEnd()
+
+
+Call_CreateBullet_EPD = SetCallForward()
+SetCall(FP)
+
+local CBulletIndex = 0x1100
+for i = 0, 127 do
+	local Index = 0
+	if i == 0 then Index = CBulletIndex end
+	CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
+		SetCVar(FP,TempEPD[2],SetTo,0),
+		SetCVar(FP,TempT[2],SetTo,0),
+		SetCVar(FP,TempA[2],SetTo,0),
+		SetCtrigX("X",CB_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+		SetNext("X",Call_CBulletA,0),SetNext(Call_CBulletA+1,"X",1), -- Call f_Gun
+		SetCtrigX("X",Call_CBulletA+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+		SetCtrigX("X",Call_CBulletA+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+		SetCtrig1X("X",Call_CBulletA+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+	}, 1, Index)
+end
+table.insert(CtrigInitArr[7],SetCtrigX(FP,CBullet_InputH[2],0x15C,0,SetTo,FP,CBulletIndex,0x15C,1,0))
+
+SetCallEnd()
+Call_SetBulletXY = SetCallForward()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+local Cur_CBulletArr = CreateVar(FP)
+
+local CBullet_ArrCheck = def_sIndex()
+
+CMov(FP,Cur_CBulletArr,0)
+CJumpEnd(FP,CBullet_ArrCheck)
+CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
+
+CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
+
+CDoActions(FP,{
+TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+})
+CIfEnd()
+
+NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
+CDoActions(FP,{
+	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
+	CreateUnit(1, 204, 1, FP),
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+})
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,_Add(BPosX,_Mul(BPosY,_Mov(65536))),0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+	TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
+	TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,1,0xFFFFFFFF),
+})
+
+NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
+CAdd(FP,Cur_CBulletArr,0x970/4)
+CJump(FP,CBullet_ArrCheck)
+NElseX()
+
+DoActions(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+
+NIfXEnd()
+
+NIfEnd()
+SetCallEnd()
+
+
+
+Call_CBullet_PosCalc = SetCallForward()
+SetCall(FP)
+NIf(FP,Memory(0x628438,AtLeast,1))
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+CDoActions(FP,{TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF)})
+CDoActions(FP,{
+	TSetMemory(0x58DC60 + 0x14*0,Add,CBX),
+	TSetMemory(0x58DC68 + 0x14*0,Add,CBX),
+	TSetMemory(0x58DC64 + 0x14*0,Add,_Add(CBY,10)),
+	TSetMemory(0x58DC6C + 0x14*0,Add,_Add(CBY,10)),
+	CreateUnit(1, 204, 1, FP),
+	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+})
+f_Read(FP,_Add(Nextptrs,10),Locs)
+CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
+	TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+	TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+})
+NIfEnd()
+SetCallEnd()
+
+function SetBulletSpeed(Value,BreakDis) -- 야마토건 Flingy Speed
+	if BreakDis ~= nil then
+		return {
+			SetMemory(0x6CA170, SetTo,0xFFFFFFFF-Value);
+			SetMemoryX(0x6C9DB4, SetTo, Value,0xFFFF);
+			SetMemory(0x6C9BA8, SetTo, BreakDis);
+		}
+	else
+		return {
+			SetMemory(0x6CA170, SetTo, 0xFFFFFFFF-Value);
+			SetMemoryX(0x6C9DB4, SetTo, Value,0xFFFF);
+		}
+	end
+end
+
+
+function CreateBulletPosCalc(UnitId,Height,Angle,X,Y)
+	CDoActions(FP,{
+		TSetCVar(FP,CBY[2],SetTo,Y),
+		TSetCVar(FP,CBX[2],SetTo,X),
+		TSetCVar(FP,CBAngle[2],SetTo,Angle),
+		TSetCVar(FP,CBHeight[2],SetTo,Height),
+		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+		SetNextTrigger(Call_CBullet_PosCalc)
+	})
+	end
+		
+		
+function SetBullet(UnitId,Height,XY)
+	if XY ~= nil and type(XY) == "table" then
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,XY[2]),
+			TSetCVar(FP,CBX[2],SetTo,XY[1]),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_SetBulletXY)
+		})
+	elseif XY == nil then
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,0),
+			TSetCVar(FP,CBX[2],SetTo,0),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_SetBulletXY)
+		})
+	else
+		PushErrorMsg("SetBullet_XY_Error")
+	end
+end
+
+end
