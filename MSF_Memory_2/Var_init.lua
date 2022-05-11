@@ -102,16 +102,7 @@ function Var_init()
 	HTextStrPtr = CreateVar(FP)
 	CA_Create = CreateVar(FP)
 	EEggCode = CreateCcode()
-
-	if STRCTRIGASM == 1 then
-		CA2ArrX = f_GetVArrptr(FP,1700)
-		CA2ArrY = f_GetVArrptr(FP,1700)
-		CA2ArrZ = f_GetVArrptr(FP,1700)
-	else
-		CA2ArrX = CreateVArr(1700,FP)
-		CA2ArrY = CreateVArr(1700,FP)
-		CA2ArrZ = CreateVArr(1700,FP)
-	end
+	
 	MarHPRegen = CreateVar2(FP,nil,nil,256)
 	LVVA = CreateVArr(4,FP)
 	CurrentOP = CreateVar(FP)

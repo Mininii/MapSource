@@ -274,7 +274,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 if Limit == 1 then
 
 	for i = 0, 516 do
-		--table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
+		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
 	end
 end
 	

@@ -575,7 +575,6 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	if FP == nil then PushErrorMsg("Need_Define_Fixed_Player ( ex : FP = P8 )") end
 	if GLocC == nil then PushErrorMsg("Need_Install_GetCLoc") end
 	if TempRandRet == nil then PushErrorMsg("Need_Include_CRandNum") end
-	if CA2ArrX == nil or CA2ArrY == nil or CA2ArrZ == nil then PushErrorMsg("Need_Include_CAPlot2_VArr") end
 
 	CXPlotVAI = CreateVar(FP)
 	CXPlotVAI4 = CreateVar(FP)
