@@ -119,6 +119,7 @@ function Var_init()
 	LocsA = CreateVar(FP)
 	BPosX = CreateVar(FP)
 	BPosY = CreateVar(FP)
+	BossAtkRand = CreateVar(FP)
 	
 	MarHPRegen = CreateVar2(FP,nil,nil,256)
 	LVVA = CreateVArr(4,FP)

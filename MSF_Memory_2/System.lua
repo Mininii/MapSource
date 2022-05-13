@@ -21,6 +21,7 @@ function System()
     AddBGM(6,"staredit\\wav\\MBoss.ogg",133*1000)--워프
     AddBGM(7,"staredit\\wav\\story.ogg",83*1000)--스토리
     AddBGM(8,"staredit\\wav\\ED2Boss.ogg",165*1000)--엔딩2
+    AddBGM(9,"staredit\\wav\\ED3Boss.ogg",222*1000)--엔딩3
     Install_BGMSystem(FP,3,BGMType,12,1)
 
     BGMArr = {}
@@ -359,7 +360,13 @@ HPRegenTable = {64}
         CJumpEnd(FP,MarSkill)
 
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00))
-			CallTrigger(FP,CallMarSkill)
+            CAdd(FP,0x6509B0,4)
+            CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+                CSub(FP,0x6509B0,4)
+                CallTrigger(FP,CallMarSkill)
+                CAdd(FP,0x6509B0,4)
+            CIfEnd()
+            CSub(FP,0x6509B0,4)
 		CIfEnd()
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00))
 			CAdd(FP,0x6509B0,4)

@@ -228,6 +228,9 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(62)
 	UnitEnable(23) -- 이론치모드 ON
 	UnitEnable(61)
+	UnitEnable(50) -- 컬러스킨
+	UnitEnable(54) -- 컬러스킨
+	UnitEnable(53) -- 컬러스킨
 	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
 	for i= 0,3 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
@@ -277,7 +280,12 @@ if Limit == 1 then
 		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
 	end
 end
-
+CTable = {23,46,36,161}
+for i = 0, 3 do
+	table.insert(PatchArr,SetPlayerColor(i+4, SetTo, CTable[i+1]))
+	table.insert(PatchArr,SetMinimapColor(i+4, SetTo, CTable[i+1]))
+end
+	
 	table.insert(PatchArr,SetMemory(0x657A9C,SetTo,0)) -- 화면꺼트리기
 	DoActions2(FP,PatchArr,1)
 	DoActions2(Force1,PatchArrPrsv)

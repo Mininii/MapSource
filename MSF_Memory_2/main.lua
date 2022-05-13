@@ -32,7 +32,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-TestSet(1)
+TestSet(0)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 1
@@ -40,9 +40,9 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.8T"
+VerText = "\x04Ver. Beta 0.8"
 if EVFFlag == 1 then
-	VerText = VerText.." - EVF"
+	VerText = VerText.."T - EVF"
 end
 FP = P8
 nilunit = 181

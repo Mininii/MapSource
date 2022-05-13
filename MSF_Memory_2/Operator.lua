@@ -83,12 +83,18 @@ function Operator_Trig()
 		CAdd(FP,RedNumberT,Dt)
 	end
     CIfXEnd()
+	TestVar = CreateVar(FP)
 	if Limit == 1 then
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
-	
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	
+	CDoActions(FP, {
+		TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
+		TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
+		TSetResources(0, SetTo, TestVar, Gas)
+	})
+	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
 	TargetTestGun = 173
@@ -293,12 +299,18 @@ actions = {
 },
 }
 CIfEnd()
-
 TriggerX(FP,{Command(Force1,AtLeast,1,62);},{ModifyUnitEnergy(1,62,Force1,64,0);
-SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);},{preserved})
+SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);SetCVar(FP,TestVar[2],Add,1);},{preserved})
 TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
-SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);},{preserved})
+SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
+
+	
+	
+	
+
+
+
 CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})

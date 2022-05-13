@@ -5,6 +5,23 @@ function Interface()
 	local CurHP = CreateVarArr(#MapPlayers,FP)
 	AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0+7,46)
 	HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0,46)
+	local P1 = { 0x581d74, 0x581d7C, 0x581d84, 0x581d8C}
+	local P2 = { 0x581DD4, 0x581DD4, 0x581DD8, 0x581DD8}
+	local P3 = { 65536, 16777216, 1, 256}
+	local P4 = { 111, 165, 159, 164}
+	local P5 = { 0xFF0000, 0xFF000000, 0xFF, 0xFF00 }
+	local P6 = {
+	StrDesign("\x04컬러 스킨 단위가 \x1F+10\x04 \x04로 변경되었습니다."),
+	StrDesign("\x04컬러 스킨 단위가 \x02초기화 \x04로 변경되었습니다."),
+	StrDesign("\x04컬러 스킨 단위가 \x1C+1 \x04로 변경되었습니다."),}
+	local PCMode = CreateCcodeArr(4)
+	local PC1=CreateVar2(FP,nil,nil,P4[1])
+	local PC2=CreateVar2(FP,nil,nil,P4[2])
+	local PC3=CreateVar2(FP,nil,nil,P4[3])
+	local PC4=CreateVar2(FP,nil,nil,P4[4])
+	local PCVar = {PC1,PC2,PC3,PC4}
+	local CurPC = CreateVarArr(4,FP)
+
 	if Limit== 1 then
 		for i = 0, 3 do
 			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),})--SetV(CurEXP,0x7FFFFFFF)
@@ -25,6 +42,7 @@ function Interface()
 	StrDesign("\x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.")}
 	for i = 0, 3 do
+		local PCMode2 = {1,10,P4[i+1]}
 		CIf(FP,HumanCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(5000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256*5),SetV(MarHPRead[i+1],(5000*256)-255)})
 
 			for CBit = 0, 7 do
@@ -52,6 +70,14 @@ function Interface()
 				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0)})
 				CIfEnd()
 			CIfEnd()
+			CIf(FP,{TTCVar(FP,PCVar[i+1][2],NotSame,CurPC[i+1])})
+			CMov(FP,CurPC[i+1],PCVar[i+1])
+			CMov(FP,0x57f120+(4*i),PCVar[i+1])
+			CDoActions(FP, {
+				TSetMemoryX(P2[i+1], SetTo, _Mul(PCVar[i+1],P3[i+1]), P5[i+1]),
+				TSetMemoryX(P1[i+1], SetTo, _Mul(PCVar[i+1],65536), 0xFF0000)
+			})
+			CIfEnd()
 		CIfEnd()
 
 		
@@ -74,6 +100,24 @@ function Interface()
 			},
 	}
 	end
+	for k = 0, 2 do
+	UnitButton(i, 54, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
+		DisplayText("\x0D\x0D"..P6[k+1],4);
+		SetCDeaths(FP,Add,1,PCMode[i+1]);})
+	if k == 2 then
+	UnitButton(i, 50, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
+		SetV(PCVar[i+1],PCMode2[k+1])})
+	UnitButton(i, 53, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
+		SetV(PCVar[i+1],PCMode2[k+1])})
+	else
+	UnitButton(i, 50, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
+		SubV(PCVar[i+1],PCMode2[k+1])})
+	UnitButton(i, 53, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
+		AddV(PCVar[i+1],PCMode2[k+1])})
+	end
+	end
+	TriggerX(i, {CV(PCVar[i+1],256,AtLeast)}, {SubV(PCVar[i+1],256)}, {preserved})
+	
 	local ExchangeP = CreateVar(FP)
 	for i=0, 3 do
 		ExJump = def_sIndex()
@@ -95,7 +139,7 @@ Trigger { -- 소환 마린
 players = {i},
 conditions = {
 	Label(0);
-	Bring(i,AtLeast,1,"Terran Wraith",64);
+	Command(i,AtLeast,1,"Terran Wraith");
 
 },
 actions = {
@@ -307,7 +351,8 @@ Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,3
 Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
 Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
 
-	TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
+TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
+TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[i+1])},{preserved})
 	for j=0, 3 do
 		if i~=j then
 		for l=0, 5 do
@@ -393,12 +438,12 @@ Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,3
 	local MedicTrigJump = def_sIndex()
 	for j = 1, 4 do
 		if TestStart == 1 then
-			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)},{AddV(CurEXP,10^(j-1))})
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
 		elseif Limit == 1 then
-			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)},{AddV(CurEXP,10^(j-1))})
-			NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)},{})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
 		else
-			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])})
 		end
 	end
 	
@@ -546,10 +591,10 @@ local SelATK = CreateVar(FP)
 
 		CIf(FP,{CV(SelUID,12)})
 			CAdd(FP,SelHP,BPHRetTest)
-			CMov(FP,SelATK,_Mod(_Rand(),1000))
+			CMov(FP,SelATK,BossAtkRand)
 		CIfEnd()
 
-		CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)})
+		CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(AFlag,0)})
 			CMov(FP,CurEPD,SelEPD)
 			SelClass = Act_BRead(_Add(SelUID,0x663DD0))
 			CTrigger(FP,{CVar(FP,SelClass[2],Exactly,162)},{SetCD(BFlag,1)},1)

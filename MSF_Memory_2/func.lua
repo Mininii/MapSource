@@ -1772,6 +1772,7 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		--CB[2] = ExHP
 		--CB[3] = PattT
 		--CB[4] = TempHPDiff
+		--CB[5] = DeathFlag
 
 		-------- Preset Limit --------------------------------
 		for i = 1, 8 do
@@ -1809,7 +1810,7 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		-------------------------------------------------------------------------
 
 			CElseX() -- Á×Àº°æ¿ì
-				CDoActions(PlayerID,{SetV(UnitPtr,0)})
+				CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
 			CIfXEnd()
 		CIfEnd()
 		local Ret = CA
@@ -2022,4 +2023,24 @@ function SetBullet(UnitId,Height,XY)
 	end
 end
 
+end
+
+
+function UnitButton(Player,UnitID,Condition,Action)
+	Trigger { 
+		players = {Player},
+		conditions = {
+			Label(0);
+			Command(Player,AtLeast,1,UnitID);
+			Condition
+		},
+		actions = {
+			ModifyUnitEnergy(All,UnitID,Player,64,0);
+			GiveUnits(All,UnitID,Player,"Anywhere",11);
+			RemoveUnitAt(All,UnitID,"Anywhere",11);
+			SetCDeaths(FP,Add,1,CUnitRefrash);
+			Action;
+			PreserveTrigger();
+			},
+	}
 end
