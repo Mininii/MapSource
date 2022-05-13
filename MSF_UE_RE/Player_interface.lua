@@ -11,7 +11,7 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,60,FP)
+	local AtkExceed = Create_VTable(7,100,FP)
 	local HPExceed = Create_VTable(7,7,FP)	
 	local ShUp = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
@@ -267,24 +267,7 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				Memory(0x582294+(4*i),AtLeast,1);
-				Memory(0x582294+(4*i),AtMost,1000);
-				Bring(i,AtLeast,1,19,64);
-			},
-			actions = {
-				SetResources(i,Add,65000,Ore);
-				RemoveUnitAt(1,19,"Anywhere",i);
-				DisplayText("\x07『 \x04현재 \x1C수정 보호막\x04이 쿨타임중입니다. 자원 반환 + \x1F65000 Ore\x07』",4);
-				PlayWAV("sound\\Misc\\PError.WAV");
-				PlayWAV("sound\\Misc\\PError.WAV");
-				PreserveTrigger();
-			},
-		}
-		Trigger { -- 보호막 가동
-			players = {i},
-			conditions = {
-				Label(0);
-				Memory(0x582294+(4*i),AtLeast,1001);
+				Memory(0x582294+(4*i),AtLeast,250);
 				Bring(i,AtLeast,1,19,64);
 			},
 			actions = {
@@ -301,11 +284,11 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				Memory(0x582294+(4*i),AtMost,0);
+				Memory(0x582294+(4*i),AtMost,249);
 				Bring(i,AtLeast,1,19,64);
 			},
 			actions = {
-				SetMemory(0x582294+(4*i),SetTo,2000);
+				SetMemory(0x582294+(4*i),SetTo,1000);
 				RemoveUnitAt(1,19,"Anywhere",i);
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
 				SetCDeaths(FP,SetTo,1,ShUsed[i+1]);
@@ -317,45 +300,17 @@ function PlayerInterface()
 			players = {i},
 			conditions = {
 				Label(0);
-				Memory(0x582294+(4*i),Exactly,1000);
-			},
-			actions = {
-				DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4);
-				PlayWAV("staredit\\wav\\GMode.ogg");
-				PlayWAV("staredit\\wav\\GMode.ogg");
-				PreserveTrigger();
-			},
-		}
-		Trigger { -- 보호막 가동
-			players = {i},
-			conditions = {
-				Label(0);
 				CDeaths(FP,AtLeast,1,ShUsed[i+1]);
 				Memory(0x582294+(4*i),Exactly,0);
 			},
 			actions = {
-				DisplayText("\x07『 \x1C수정 보호막\x04 쿨타임이 종료되었습니다. \x07』",4);
+				DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4);
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				PlayWAV("staredit\\wav\\GMode.ogg");
 				SetCDeaths(FP,SetTo,0,ShUsed[i+1]);
 				PreserveTrigger();
 			},
 		}
-		for j = 1, 5 do
-		Trigger { -- 보호막 사용
-			players = {i},
-			conditions = {
-				Label(0);
-				Memory(0x582294+(4*i),Exactly,50*j+(1000));
-			},
-			actions = {
-				DisplayText("\x07『 \x1C수정 보호막\x04이 "..j.."초 남았습니다. \x07』",4);
-				PlayWAV("staredit\\wav\\sel_m.ogg");
-				PlayWAV("staredit\\wav\\sel_m.ogg");
-				PreserveTrigger();
-			},
-		}
-		end
 		for j = 1, 5 do
 		Trigger { -- 보호막 쿨타임
 			players = {i},
@@ -364,7 +319,7 @@ function PlayerInterface()
 				Memory(0x582294+(4*i),Exactly,50*j);
 			},
 			actions = {
-				DisplayText("\x07『 \x1C수정 보호막\x04 쿨타임이 "..j.."초 남았습니다. \x07』",4);
+				DisplayText("\x07『 \x1C수정 보호막\x04이 "..j.."초 남았습니다. \x07』",4);
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PlayWAV("staredit\\wav\\sel_m.ogg");
 				PreserveTrigger();
@@ -761,7 +716,7 @@ function PlayerInterface()
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,6)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
 		CIfEnd()
@@ -978,7 +933,7 @@ end
 		end
 		Trigger2(FP,{Memory(0x57f120+(4*i),AtLeast,0x80000000)},{SetMemory(0x57f120+(4*i),SetTo,0)},{preserved}) -- 가스 마이너스 방지
 		
-		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1001))
+		CIfX(FP,Memory(0x582294+(4*i),AtLeast,1))
 		
 			Trigger { -- 보호막 가동
 				players = {FP},

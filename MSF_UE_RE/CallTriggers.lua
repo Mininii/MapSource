@@ -638,9 +638,7 @@ local CB_P = CreateVar(FP)
 	end
 		SetLevelUpHP(104,1)
 	for j, k in pairs(HeroArr) do
-		if k ~= 121 then
 		SetLevelUpHP(k,1)
-		end
 	end
 	BdArr = {130,131,132,133,135,136,137,138,139,140,141,142,143,144,146,147,148,151,152,201}
 	

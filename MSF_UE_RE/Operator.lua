@@ -140,7 +140,6 @@ function OPTrig()
 	
 	CTrigger(FP,{CD(TestMode,0),TCVar(FP,MapMaxLevel[2],AtLeast,_Add(CurLevel,10)),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
 	CTrigger(FP,{CD(TestMode,1),Deaths(CurrentPlayer,AtLeast,1,RIGHT)},{SetCVar(FP,CurLevel[2],Add,10)},1)
-
 	CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,LEFT),CVar(FP, CurLevel[2], AtLeast, 11)},{SetCVar(FP,CurLevel[2],Subtract,10)},1)
 
 	CTrigger(FP, {TTCVar(FP,Level[2],NotSame,CurLevel)}, {TSetCVar(FP, Level[2], SetTo, CurLevel),RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg")},HumanPlayers,FP)}, 1)
@@ -194,7 +193,7 @@ function OPTrig()
 		CIfX(FP,HumanCheck(i,1))
 		f_Div(FP,NukesUsage[i+1],NCCalc,SetPlayers)
 		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtMost, LvLimit-1)},{TSetCVar(FP, MapMaxLevel[2], SetTo, NewMaxLevel[i+1])},1)
-		CTrigger(FP,{TTCVar(FP, MapMaxLevel[2], "<", NewMaxLevel[i+1]),CVar(FP, MapMaxLevel[2], AtLeast, LvLimit)},{TSetCVar(FP, MapMaxLevel[2], SetTo, LvLimit)},1)
+		CTrigger(FP,{CVar(FP, MapMaxLevel[2], AtLeast, LvLimit)},{TSetCVar(FP, MapMaxLevel[2], SetTo, LvLimit)},1)
 		CA__ItoName(SVA1(OPStr,0), i, nil, nil, ColorCode[i+1])
 
 		

@@ -425,7 +425,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	DefTypePatch(150,9)
 	DefTypePatch(74,9)
 	DefTypePatch(186,9)
-	DefTypePatch(121,9)
+	--DefTypePatch(121,9)
 	DefTypePatch(173,9)
 
 
