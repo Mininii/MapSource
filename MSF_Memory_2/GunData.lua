@@ -1237,8 +1237,59 @@ end
 
 	CIf_GCase(173)
 --    DoActionsX(FP,{KillUnit("Men",Force2)},1)
-	CIf(FP)--CD(EEggCode,9,AtMost)
-    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
+	SetPCArr = {}
+	for i = 0, 11 do
+		table.insert(SetPCArr,SetPlayerColor(i, SetTo, 0))
+		table.insert(SetPCArr,SetMinimapColor(i, SetTo, 0))
+	end
+	CIfOnce(FP)
+	TriggerX(FP,{CD(TestMode,1)},{--CD(DCCcode,500,AtLeast)
+		SetCD(EDNum,1),SetPCArr
+	})
+	TriggerX(FP,{CD(TestMode,1)},{--CD(DCCcode,500,AtLeast)
+		SetCD(EDNum,4)
+	})
+	CIfEnd()
+
+	CIf(FP,CD(EDNum,1))--CD(EEggCode,9,AtMost)
+	CIfOnce(FP)
+	CFor(FP,0,228,1)
+	CI = CForVariable()
+	CMov(FP,BdDimPtr,CI,EPDF(0x662860)) --BdDim
+	CTrigger(FP,{TTCVar(FP,CI[2],NotSame,58)},{TSetMemory(BdDimPtr,SetTo,1+(1*65536))},1)
+	CForEnd()
+	CIfEnd()
+	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
+		ReplaceV =CreateVar(FP)
+		ReplaceV2 =CreateVar(FP)
+		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CurPlace)})
+		CAdd(FP,ReplaceV,ReplaceV2,UnitDataPtr)
+		CIf(FP,{TMemory(ReplaceV,AtLeast,1)},{SetMemoryX(0x664080 + (162*4),SetTo,1,1)}) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
+			CMov(FP,0x6509B0,ReplaceV)
+			CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
+			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
+			DoActionsX(FP,{SetCDeaths(FP,Add,1,CurPlace),})
+			CWhileEnd()
+		CAdd(FP,ReplaceV2,2)
+		CIfEnd({SetMemoryX(0x664080 + (162*4),SetTo,0,1)})
+		CMov(FP,0x6509B0,FP)
+		DoActionsX(FP,{SetV(BGMType,10),SetCD(Fin,1)},1)
+		DoActions(FP,{SetInvincibility(Enable, "Any unit", AllPlayers, 64),ModifyUnitEnergy(All, "Men", Force1, 64, 0),RemoveUnitAt(1, "Men", 64, Force1),ModifyUnitEnergy(All, "Men", Force2, 64, 0),GiveUnits(All,"Buildings",Force1,64,P12)})
+		StoryPrint(4000*1,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
+		StoryPrint(4000*2,"\x04하지만, 또 다시 \x10혼돈\x04이 모든 것을 뒤덮고 있었고,")
+		StoryPrint(4000*3,"\x04아무 일 없었다는 듯, 모든것이 그대로였다.")
+		StoryPrint(4000*4,"\x04이 때, 나 자신은 깨달았다. 이 \x10혼돈\x04을 정화하기엔 \x07빛\x04이 충분하지 않았다는 것을.")
+		StoryPrint(4000*5,"\x04...\x0F너무 많은 \x07빛\x04을 \x08허비\x04하였던 걸까...?")
+		StoryPrint(4000*6,"\x04결국 그 어떤 것도 해결하지 못한 채")
+		StoryPrint(4000*7,"\x08고통\x04스러운 기억을 또 다시 맞이하며")
+		StoryPrint(4000*8,"\x07당신\x04은 \x1F절망\x04 \x07기억\x04속에서 \x11끝없는 혼돈\x04에 시달리게 되었다.")
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{SetMemory(0x657A9C,Subtract,1)},{preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*9)},{Gun_DoSuspend(),SetCD(Win,1)})
+		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+	CIfEnd()
+
+	CIf(FP,CD(EDNum,2))--CD(EEggCode,4,AtMost)
+    DoActionsX(FP,{SetV(BGMType,9),SetCD(Fin,1)},1)
 	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
 	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
 	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
@@ -1247,10 +1298,10 @@ end
 	StoryPrint(4000*7,"\x04어쩌면, 그 기억은 \x10허구\x04의 존재가 아닐까...?")
 	StoryPrint(4000*8,"\x04수많은 생각이 당신의 머릿속을 스쳐 지나가며")
 	StoryPrint(4000*9,"\x08넓디 넓은 \x07기억\x04속에서 \x11끝없는 여정\x04이 계속된다.")
-	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,1)})
+	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1)})
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
---	CIf(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)})
+--	CIf(FP,{CD(EDNum,3)})--CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)
 --    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
 --	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
 --	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
@@ -1305,7 +1356,7 @@ end
 --		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
 --		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
 --		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
---		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,2)})
+--		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
 --		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 --	CIfEnd()
 --	CIfEnd()
@@ -1313,16 +1364,16 @@ end
 
 
 
-	CIf(FP,{Never()})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
+	CIf(FP,{CD(EDNum,4)})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
 	TriggerX(FP,{
-		Deaths(P1,AtMost,0,12),
-		Deaths(P2,AtMost,0,12),
-		Deaths(P3,AtMost,0,12),
-		Deaths(P4,AtMost,0,12),
-		Deaths(FP,AtMost,0,12),
+		DeathsX(P1,AtMost,0,12,0xFFFFFF),
+		DeathsX(P2,AtMost,0,12,0xFFFFFF),
+		DeathsX(P3,AtMost,0,12,0xFFFFFF),
+		DeathsX(P4,AtMost,0,12,0xFFFFFF),
+		DeathsX(FP,AtMost,0,12,0xFFFFFF),
 	},{SetV(BGMType,9)},{preserved})
 	CallTrigger(FP, Call_CreateBullet_EPD)--유도탄막 구조체 불러오기
-	G_CA_SetSpawn({},{204},"ACAS",{"Hp2"},1,3,nil,"CP",nil,nil,1)--도형으로 핵떨구기. UnitID는 아무 이펙트유닛, RepeatType 3 하면 발사됨
+	G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--도형으로 핵떨구기. 아무 UnitID입력가능, RepeatType 3 하면 발사됨
 	DoActionsX(FP,{
 		MoveUnit(All, "Men", 0, 15, 2),
 		MoveUnit(All, "Men", 1, 15, 3),
@@ -1344,6 +1395,7 @@ end
 	BPHRetTest = CreateVar(FP)	
 	f_Read(FP,0x628438,"X",BPTest,0xFFFFFF)
 	DoActions(FP,CreateUnit(1,12,64,FP),1)
+	CDoActions(FP,{TSetMemory(_Add(BPTest,2), SetTo, 4000000*256)})
 	CIfEnd()
 	function CABossFunc()
 		local UnitPtr = CABossPtr
@@ -1352,8 +1404,82 @@ end
 		local CB = CABossTempArr
 		CMov(FP,BossAtkRand,_Mod(_Rand(),1000))
 		DoActions(FP, {SetCD(MarDup2,1)})
+		local PattV = CreateVarArr(4,FP)
+		local PattC = CreateCcodeArr(4)
+		local PattC2 = CreateCcodeArr(49)
+		CIf(FP,CV(CA[1],0),{SetBulletSpeed(500)})
+		local TempA = CreateVar(FP)
+		CMov(FP,TempA,PattV[1])
+		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
+		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
+		SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		--CMov(FP,TempA,PattV[1],90)
+		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
+		--DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
+		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		CMov(FP,TempA,PattV[1],180)
+		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
+		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
+		SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		--CMov(FP,TempA,PattV[1],270)
+		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
+		--DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
+		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		
+
+		CAdd(FP,PattV[1],1)
+		TriggerX(FP,{CV(PattV[1],180,AtLeast)},{SetV(PattV[1],0),AddV(PattV[2],1)},{preserved})
+		TriggerX(FP,{CV(PattV[2],4,AtLeast)},{SetCD(PattC[1],1),SetV(PattV[1],0),SetV(PattV[2],0)},{preserved})
+		CIfEnd()
+		CIf(FP,CV(CA[1],1),{SetBulletSpeed(2000),SetFlingySpeed(174, 2000)})
+		CIf(FP,CV(PattV[1],1))
+			for i = 1, 49 do 
+				DoActions(FP,{SetSwitch("Switch 100",Random)})
+				TriggerX(FP,{Switch("Switch 100",Cleared)},{SetCD(PattC2[i],0)},{preserved})
+				TriggerX(FP,{Switch("Switch 100",Set)},{SetCD(PattC2[i],1)},{preserved})
+			end
+		CIfEnd()
+		CIf(FP,CV(PattV[1],1,AtLeast),{SetBulletSpeed(2000),SetFlingySpeed(174, 2000)})
+		CIf(FP,CV(PattV[2],10,AtLeast),SetV(PattV[2],0))
+		for i = 1, 49 do
+			CreateBulletCond(207,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],1,AtLeast),CV(PattV[1],249,AtLeast),CD(PattC2[i],1)})
+			CreateBulletCond(206,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],250,AtLeast),CV(PattV[1],500,AtLeast),CD(PattC2[i],1)})
+		end
+		
+		CIfEnd()
+		CAdd(FP,PattV[2],1)	
+		CIfEnd()
+		CAdd(FP,PattV[1],1)
+		TriggerX(FP,{CV(PattV[1],500,AtLeast)},{SetV(PattV[1],0),AddV(PattV[3],1)},{preserved})
+		TriggerX(FP,{CV(PattV[3],5,AtLeast)},{SetV(PattV[3],0),AddCD(PattC[1],1)},{preserved})
+		CIfEnd()
+
+
+		if Limit == 1 then
+			CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
+		end
+		CIf(FP,CD(PattC[1],1,AtLeast),{SetV(CB[3],250),SetCD(PattC[1],0)})
+			CIfX(FP,{CV(CB[2],0,AtMost),CV(CA[1],9,AtMost)},{AddV(CB[2],2000000),AddV(CA[1],1)})
+				DoActions(FP,{CreateUnit(3,84,64,FP),KillUnit(84, FP),RotatePlayer({PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP)})
+			CElseX()
+
+			CIfXEnd()
+			ResetActT = {}
+			for j,k in pairs(PattV) do
+				table.insert(ResetActT,SetV(k,0))
+			end
+			for j,k in pairs(PattC) do
+				table.insert(ResetActT,SetCD(k,0))
+			end
+			for j,k in pairs(PattC2) do
+				table.insert(ResetActT,SetCD(k,0))
+			end
+			
+			DoActions2X(FP,ResetActT)
+		CIfEnd()
+		CTrigger(FP,{CV(CA[1],9,AtMost),CV(CB[2],0,AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
 	end
-	CABoss(BPTest,BPHRetTest,8000000,{0,300,1},"CABossFunc",FP)
+	CABoss(BPTest,BPHRetTest,2000000,{0,300,1},"CABossFunc",FP)
 	CIfEnd()
 
 

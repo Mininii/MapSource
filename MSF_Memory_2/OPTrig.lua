@@ -3,7 +3,7 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    DoActionsX(FP,{SetV(BGMType,1)},1)
+    --DoActionsX(FP,{SetV(BGMType,1)},1)
     if Limit == 0 then
     
     end
@@ -120,11 +120,13 @@ DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\H_Clear.ogg"),PlayWAVX("st
     
 	end
 EDText = {
-    "\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ １ ： \x18잃어버린 \x07빛\x04의 \x17기억",
-    "\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ２ ： \x11과거\x04의 \x17기억"
+    "\x08Ｂａｄ　\x0FＥ\x04ｎｄｉｎｇ ０ ： \x1F절망\x04과 \x10혼돈\x04의 \x17기억 ",
+    "\x08Ｎｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ １ ： \x18잃어버린 \x07빛\x04의 \x17기억",
+    "\x0EＮｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ２ ： \x11과거\x04의 \x17기억",
+    "\x10Ｎｏｒｍａｌ　\x0FＥ\x04ｎｄｉｎｇ ３ ： \x10혼돈\x04의 \x08운명"
 }
 
-for i=1, 2 do
+for i=1, 4 do
 Trigger2X(FP,{CD(Win,500,AtLeast),CD(EDNum,i)},
     RotatePlayer({
         DisplayTextX(string.rep("\x0D\x0D\n", 10),4),
@@ -136,6 +138,15 @@ Trigger2X(FP,{CD(Win,500,AtLeast),CD(EDNum,i)},
         DisplayTextX("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ",4),
     },HumanPlayers,FP))
 end
+
+
+
+Trigger2X(FP,{CD(Win,5000,AtLeast),CD(EDNum,1)},
+RotatePlayer({DisplayTextX(StrDesignX("\x04총합 \x08데스 카운트\x04가 \x06500 이상\x04입니다. 다시 도전해주세요."),4),
+PlayWAVX("staredit\\wav\\button3.wav"),
+PlayWAVX("staredit\\wav\\button3.wav"),
+PlayWAVX("staredit\\wav\\button3.wav")
+},HumanPlayers,FP))
 Trigger2X(FP,{CD(Win,5000,AtLeast),CD(TestMode,0)},
 RotatePlayer({Victory()
 },HumanPlayers,FP))

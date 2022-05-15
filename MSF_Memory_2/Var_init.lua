@@ -117,6 +117,7 @@ function Var_init()
 	CBullet_InputH = CreateVar(FP)
 	AngleA = CreateVar(FP)
 	LocsA = CreateVar(FP)
+	BPos = CreateVar(FP)
 	BPosX = CreateVar(FP)
 	BPosY = CreateVar(FP)
 	BossAtkRand = CreateVar(FP)
@@ -172,7 +173,7 @@ function Var_init()
 	WarpCheck = CreateCcode()
 	CUnitRefrash = CreateCcode()
 	Theorist = CreateCcode() -- 이론치모드 Ccode
-	
+	DCCcode = CreateCcode()--데카저장Ccode
 	CUnitFlag = CreateCcode()
 	MarDup = CreateCcode()
 	MarDup2 = CreateCcode()
@@ -185,7 +186,6 @@ function Var_init()
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(38).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
-
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")

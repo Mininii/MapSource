@@ -459,3 +459,7 @@ end
 
 	
 end
+
+--CBulletJump = SetCallForward()
+--SetCall(FP)
+--SetCallEnd()
