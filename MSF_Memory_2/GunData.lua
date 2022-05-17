@@ -1633,9 +1633,6 @@ Trigger2X(FP,{},{RotatePlayer({
 		CIf(FP,CV(CA[1],5),{
 			SetInvincibility(Enable, 185, Force2, 64),
 			SetMemory(0x662350+(185*4),SetTo,400*256),
-			SetCD(MarDup,2),
-			SetCD(MarDup2,0),
-			SetCD(CUnitFlag,1),
 		})
 		CIfOnce(FP)
 		BP5ActArr = {}
@@ -1797,7 +1794,7 @@ Trigger2X(FP,{},{RotatePlayer({
 				TriggerX(FP,{CV(CA[1],2)},{AddV(CB[2],2000000)})
 				TriggerX(FP,{CV(CA[1],1)},{AddV(CB[2],3000000)})
 				TriggerX(FP,{CV(CA[1],4)},{AddV(CB[2],2000000)})
-				CTrigger(FP,{CV(CA[1],5)},{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),AddV(CB[3],250),SetCD(CUnitFlag,1)})
+				CTrigger(FP,{CV(CA[1],5)},{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),AddV(CB[3],250),SetCD(MarDup,2),SetCD(MarDup2,0),SetCD(CUnitFlag,1),SetMemoryW(0x656EB0 + (30*2),SetTo,0)})
 				CTrigger(FP,{CV(CA[1],6)},{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),SetV(CB[3],0)})
 				TriggerX(FP,{CV(CA[1],7)},{AddV(CB[2],1000000)})
 				CTrigger(FP,{CV(CA[1],8)},{SetV(CB[2],5000000),TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),TSetMemory(_Add(UnitPtr,2), SetTo, 5000000*256)})
