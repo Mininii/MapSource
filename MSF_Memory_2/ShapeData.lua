@@ -300,6 +300,13 @@ GB_P4 = CS_MoveXY(CSMakeCircle(180,2008,270,47,1),2008,2008)
 Hp2 = CS_RatioXY(Hp1,4,2)
 HCD2 = CS_RatioXY(HCD,10,10)
 GBAir = CSMakePolygon(4,64,45,PlotSizeCalc(4,20),PlotSizeCalc(4,19))
+
+B1S = CS_RatioXY(CSMakeStar(4, 180, 64, 45, PlotSizeCalc(4*2, 10), PlotSizeCalc(4*2, 5)), 1, 0.5)
+B2S1 = CSMakeTornado(4, 96, 15, 4)
+B2S2 = CSMakeTornado(4, 96, 30, 4)
+B2S3 = CSMakeTornado(4, 96, 45, 4)
+B2S4 = CSMakeTornado(4, 96, 60, 4)
+B2S5 = CSMakeTornado(4, 96, 75, 4)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -372,6 +379,12 @@ GBAir = CSMakePolygon(4,64,45,PlotSizeCalc(4,20),PlotSizeCalc(4,19))
 		"HCD2",
 		"Hp2",
 		"GBAir",
+		"B1S",
+		"B2S1",
+		"B2S2",
+		"B2S3",
+		"B2S4",
+		"B2S5",
 
 	}
 	)

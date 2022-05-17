@@ -495,7 +495,7 @@ function Install_DeathNotice()
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,3,Custom);
-			AddCD(DCCcode,3);
+			AddV(DCV,3);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
@@ -511,7 +511,7 @@ function Install_DeathNotice()
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,1,Custom);
-			AddCD(DCCcode,1);
+			AddV(DCV,1);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
@@ -523,7 +523,7 @@ function Install_DeathNotice()
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,2,Custom);
-			AddCD(DCCcode,2);
+			AddV(DCV,2);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
@@ -612,27 +612,17 @@ local TargetRotation = CreateVar(FP)
 Call_Repeat = SetCallForward() -- 유닛생성부
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+
 	CIfX(FP,{CVar(FP,RepeatType[2],Exactly,101)}) -- 이펙트유닛 or 탄막유닛
+
 		CIfX(FP,CVar(FP,G_CA_TempTable[13][2],Exactly,0))
 			SetBullet(Gun_TempSpawnSet1,20,nil,{G_CA_TempTable[11],G_CA_TempTable[12]}) -- 위치로 쏘기
 		CElseIfX(CVar(FP,G_CA_TempTable[13][2],Exactly,1))
 			CreateBullet(Gun_TempSpawnSet1,20,0,nil,FP) -- 각도없이 쏘기
 		CElseIfX(CVar(FP,G_CA_TempTable[13][2],Exactly,2))
 			CreateBullet(Gun_TempSpawnSet1,20,G_CA_TempTable[14],nil,FP)--각도로 쏘기
-		CElseIfX(CVar(FP,G_CA_TempTable[13][2],Exactly,3))--뉴클리어런치
-		f_Read(FP,0x628438,G_CA_Nextptrs2,G_CA_Nextptrs,0xFFFFFF)
-		CDoActions(FP,{CreateUnit(1,215,1,FP),
-			TSetMemoryX(_Add(G_CA_Nextptrs,0x110/4), SetTo, 420,0xFFFF),
-		})
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
-		f_Read(FP,0x628438,nil,G_CA_Nextptrs,0xFFFFFF)
-		CDoActions(FP,{CreateUnit(1,14,1,FP),
-		TSetMemory(_Add(G_CA_Nextptrs,0x80/4), SetTo, G_CA_Nextptrs2),
-		TSetMemoryX(_Add(G_CA_Nextptrs,19), SetTo, 125*256,0xFF00),
-		TSetMemory(_Add(G_CA_Nextptrs,0x58/4), SetTo, CPos),
-
-		})
-
+		CElseIfX({CVar(FP,G_CA_TempTable[13][2],Exactly,3)})--뉴클리어런치
+			CallTrigger(FP, Call_Nuke)
 		CElseX()
 			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
@@ -717,6 +707,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_BakY,G_CA_TempTable[9])
 
 				CIfX(FP,Never())
+					CElseIfX({CD(EDNum,1,AtLeast)})--보스전 우선. 어택지점 = 생산중심점
+					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
+
 				for i = 0, 3 do
 					CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
@@ -1157,6 +1150,9 @@ function CA_Func()
 	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x30000000,0xF0000000)})
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 	CIfXEnd()
+	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x40000000,0xF0000000)})
+		CA_RatioXY(_Mov(G_CA_Temp[12],0xFFFF), 256, _Mov(G_CA_Temp[12],0xFFFF), 256)
+	CIfXEnd()
 	CAdd(FP,G_CA_X,V(CA[8]),G_CA_TempTable[8])
 	CAdd(FP,G_CA_Y,V(CA[9]),G_CA_TempTable[9])
 	CMov(FP,0x58DC60,G_CA_X)
@@ -1456,6 +1452,9 @@ function G_CA_LoopTimer(num)
 end
 function G_CA_Rotate3D()
 	return 0x30000000
+end
+function G_CA_Ratio(num)
+	return 0x40000000+num
 end
 
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
@@ -1792,14 +1791,13 @@ function CreateBullet(UnitId,Height,Angle,XY,Player)
 end
 
 function CreateBulletCond(UnitId,Height,Angle,XY,Player,Cond,Act)
-	CTrigger(FP,Cond,{Act,
-		TSetCVar(FP,CBY[2],SetTo,XY[2]),
-		TSetCVar(FP,CBX[2],SetTo,XY[1]),
-		TSetCVar(FP,CBAngle[2],SetTo,Angle),
-		TSetCVar(FP,CBHeight[2],SetTo,Height),
-		TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
-		TSetCVar(FP,CBPlayer[2],SetTo,Player),
-		SetNextTrigger(Call_CBullet)},1)
+	CallTriggerX(FP,Call_CBullet,Cond,{Act,
+	SetCVar(FP,CBY[2],SetTo,XY[2]),
+	SetCVar(FP,CBX[2],SetTo,XY[1]),
+	SetCVar(FP,CBAngle[2],SetTo,Angle),
+	SetCVar(FP,CBHeight[2],SetTo,Height),
+	SetCVar(FP,CBUnitId[2],SetTo,UnitId),
+	SetCVar(FP,CBPlayer[2],SetTo,Player),})
 end
 
 function CreateBulletLoc(UnitId,Height,Angle,Player)
@@ -1866,7 +1864,7 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		--Preset[1] = PattNum
 		--Preset[2] = initPattT
 		--Preset[3] = Lock type
-		CB = CreateVarArr(6,PlayerID)
+		CB = CreateVarArr(9,PlayerID)
 		CIfOnce(PlayerID)--init
 		CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],initHP)},1)
 		CTrigger(FP,{CV(CA[3],1,AtLeast)},{
@@ -1879,6 +1877,10 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 		--CB[3] = PattT
 		--CB[4] = TempHPDiff
 		--CB[5] = DeathFlag
+		--CB[6] = EnableDeathFlag
+		--CB[7] = Temp
+		--CB[8] = Temp
+		--CB[9] = Temp
 
 		-------- Preset Limit --------------------------------
 		for i = 1, 8 do
@@ -1892,17 +1894,26 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 
 			CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
 			
+				CTrigger(FP,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
 				CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(4000000-1)*256)})
-					CIfX(PlayerID,CV(CB[2],1000000,AtLeast),SubV(CB[2],1000000))
-						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,1000000*256)})
-					CElseX(SetV(CB[2],0))
-						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,CB[2])})
-					CIfXEnd()
+					CIf(PlayerID,CV(CB[2],1,AtLeast))
+						f_Read(FP,_Add(UnitPtr,2),CB[7])
+						f_Div(FP,CB[7],256)
+						CSub(FP,CB[8],_Mov(4000000),CB[7])
+						CIfX(FP,{TTCVar(FP,CB[2][2],">",CB[8])})
+						CSub(FP,CB[2],CB[8])
+						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),SetTo,4000000*256)})
+						CElseX()
+						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
+						CMov(FP,CB[2],0)
+						CIfXEnd()
+
+					CIfEnd()
 				CWhileEnd()
 				CMov(PlayerID,UnitHPRetV,CB[2])
 		-------------------------------------------------------------------------
 				CIfX(PlayerID,CV(CB[3],0))
-					CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0,0x04000000),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})
+					CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})--TSetMemoryX(_Add(UnitPtr,70), SetTo, 0*256,0xFF00)
 					CABossPtr = UnitPtr
 					CABossPlayerID = PlayerID
 					CABossDataArr = CA
@@ -1910,8 +1921,7 @@ function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Actio
 					if CAfunc ~= nil then -- 패턴작성단락
 						_G[CAfunc]()
 					end
-				CElseX()--패턴타이머 1이상일 경우 무적, 패턴작동정지
-					CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),SubV(CB[3],1)})
+				CElseX({SubV(CB[3],1)})--패턴타이머 1이상일 경우 무적, 패턴작동정지
 				CIfXEnd()
 		-------------------------------------------------------------------------
 
@@ -1945,11 +1955,14 @@ TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
 CIfEnd()
 CDoActions(FP,{
 	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF);
-	TCreateUnit(1, 205, 1, CBPlayer),
+	TCreateUnit(1, CBUnitId, 1, CBPlayer),
 	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFFFF)
 })
 f_Read(FP,_Add(Nextptrs,10),Locs)
 CDoActions(FP,{
+	TSetMemoryX(_Add(Nextptrs,4),SetTo,Locs,0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,6),SetTo,Locs,0xFFFFFFFF),
+	TSetMemoryX(_Add(Nextptrs,7),SetTo,Locs,0xFFFFFFFF),
 	TSetMemoryX(_Add(Nextptrs,22),SetTo,Locs,0xFFFFFFFF),
 	TSetMemoryX(_Add(Nextptrs,8),SetTo,_Mul(CBAngle,_Mov(256)),0xFF00),
 	TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
@@ -2043,7 +2056,7 @@ CIfEnd()
 NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
 CDoActions(FP,{
 	TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
-	CreateUnit(1, 205, 1, FP),
+	TCreateUnit(1, CBUnitId, 1, FP),
 	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
 })
 local TempBPos = CreateVar(FP)
@@ -2085,7 +2098,7 @@ CDoActions(FP,{
 	TSetMemory(0x58DC68 + 0x14*0,Add,CBX),
 	TSetMemory(0x58DC64 + 0x14*0,Add,_Add(CBY,10)),
 	TSetMemory(0x58DC6C + 0x14*0,Add,_Add(CBY,10)),
-	CreateUnit(1, 205, 1, FP),
+	TCreateUnit(1, CBUnitId, 1, FP),
 	TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
 })
 f_Read(FP,_Add(Nextptrs,10),Locs)
@@ -2114,7 +2127,7 @@ function SetBulletSpeed(Value,BreakDis) -- 야마토건 Flingy Speed
 end
 function SetFlingySpeed(FID,Value)
 	return {
-		SetMemory(0x6C9EF8+(4*FID),SetTo,Value),--최고속도
+		SetMemory(0x6C9EF8+(4*FID),SetTo,0xFFFFFFFF-Value),--최고속도
 		SetMemoryW(0x6C9C78+(2*FID),SetTo,Value)--가속도
 	}
 end
@@ -2176,4 +2189,23 @@ function UnitButton(Player,UnitID,Condition,Action)
 			PreserveTrigger();
 			},
 	}
+end
+
+
+function Install_NukeLibrary()
+	Call_Nuke = SetCallForward()
+	SetCall(FP)
+	local Nextptrs,NextEPD = CreateVars(2,FP)
+	f_Read(FP,0x628438,Nextptrs,NextEPD,0xFFFFFF)
+	CDoActions(FP,{CreateUnit(1,215,1,FP),
+		TSetMemoryX(_Add(NextEPD,0x110/4), SetTo, 420,0xFFFF),
+	})
+	f_Read(FP,_Add(NextEPD,10),CPos) -- 생성유닛 위치 불러오기
+	f_Read(FP,0x628438,nil,NextEPD,0xFFFFFF)
+	CDoActions(FP,{CreateUnit(1,14,1,FP),
+	TSetMemory(_Add(NextEPD,0x80/4), SetTo, Nextptrs),
+	TSetMemoryX(_Add(NextEPD,19), SetTo, 125*256,0xFF00),
+	TSetMemory(_Add(NextEPD,0x58/4), SetTo, CPos),
+	})
+	SetCallEnd()
 end

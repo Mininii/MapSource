@@ -231,6 +231,12 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(50) -- 컬러스킨
 	UnitEnable(54) -- 컬러스킨
 	UnitEnable(53) -- 컬러스킨
+	
+	--table.insert(PatchArr,SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0)) -- 이론치모드 임시 삭제
+	--table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0))
+	--table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0))
+	--table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0))
+
 	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
 	for i= 0,3 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
@@ -239,7 +245,6 @@ BossUIDP = {87,74,5,2,64,12,82}
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 2,SetTo,0))
-		table.insert(PatchArr,SetMemory(0x5821D4+(i*4),SetTo,24*2))--이스터에그총갯수
 			
 	end
 
@@ -277,7 +282,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 if Limit == 1 then
 
 	for i = 0, 516 do
-		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
+		--table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
 	end
 end
 CTable = {23,46,36,161}
@@ -702,6 +707,11 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,CurPlace)})
 	CWhileEnd()
 	--CIfEnd()
+	
+	for i = 0, 3 do
+		CMov(FP,0x5821D4+(i*4),EEggV)
+		CAdd(FP,0x5821D4+(i*4),EEggV)
+	end
 	DoActions(P8,SetResources(Force1,SetTo,0,Gas),1)
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227))

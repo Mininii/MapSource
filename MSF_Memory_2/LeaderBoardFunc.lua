@@ -1,4 +1,21 @@
 function LeaderBoardF()
+	LeaderBoardiStrinit = def_sIndex()
+	CJump(FP, LeaderBoardiStrinit)
+	ls01 = "\x07·\x11·\x08·\x07【 \x1DP\x04oints - \x1FExRate\x04:"..MakeiStrVoid(4).."%\x07 \x07】\x08·\x11·\x07·"
+	ls02 = "\x07·\x11·\x08·\x07【 \x08D\x04eaths - \x1FM\x04AX "..MakeiStrVoid(7).."\x04/\x08500 \x07】\x08·\x11·\x07·"
+	PtiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10)) 
+	DthiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls02)+10)) 
+	TempiS1, TempiS1a, TempiS1s = SaveiStrArr(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10))
+	TempiS2, TempiS2a, TempiS2s = SaveiStrArr(FP,MakeiStrVoid(GetiStrSize(0, ls02)+10))
+	CJumpEnd(FP, LeaderBoardiStrinit)
+	CS__SetValue(FP,TempiS1,MakeiStrVoid(GetiStrSize(0, ls01)+10),nil,0) 
+	CS__SetValue(FP,TempiS1,ls01,nil,0) 
+	CS__ItoCustom(FP,SVA1(TempiS1,21),ExRateV,nil,nil,{10,2},1,nil,"\x0F0",0x0F)
+	CS__InputVA(FP,PtiStr,0,TempiS1,TempiS1s,nil,0,TempiS1s)
+	CS__SetValue(FP,TempiS2,MakeiStrVoid(GetiStrSize(0, ls02)+10),nil,0) 
+	CS__SetValue(FP,TempiS2,ls02,nil,0) 
+	CS__ItoCustom(FP,SVA1(TempiS2,18),DCV,nil,nil,{10,5},1,nil,"\x060",0x06)
+	CS__InputVA(FP,DthiStr,0,TempiS2,TempiS2s,nil,0,TempiS2s)
     
 	local LeaderBoardT = CreateCcode()
     CIf(FP,{CD(OPJump,1)})
@@ -7,7 +24,7 @@ function LeaderBoardF()
 		SetMemoryW(0x656380+(17*2),SetTo,255)
 	},{preserved}) -- 스웜인스 사용제한
 	TriggerX(FP,ElapsedTime(AtLeast,(60*3)),{
-		SetMemoryW(0x656380+(14*2),SetTo,100),
+		SetMemoryW(0x656380+(14*2),SetTo,180),
 		SetMemoryW(0x656380+(17*2),SetTo,75)
 	},{preserved}) -- 스웜인스 사용제한
 	
@@ -159,7 +176,7 @@ function LeaderBoardF()
 			CDeaths(FP,AtMost,0,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Kills, StrDesign("\x1DP\x04oints\x07"));
+			LeaderBoardScore(Kills, PtiStr[4]);
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
@@ -174,7 +191,7 @@ function LeaderBoardF()
 			CDeaths(FP,Exactly,400,LeaderBoardT);
 		},
 		actions = {
-			LeaderBoardScore(Custom,StrDesign("\x08D\x04eath \x10C\x04ounts"));
+			LeaderBoardScore(Custom,DthiStr[4]);
 			LeaderBoardComputerPlayers(Disable);
 			PreserveTrigger();
 	},

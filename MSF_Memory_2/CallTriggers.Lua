@@ -61,7 +61,7 @@ function Install_CallTriggers()
 			Set_EXCC2(DUnitCalc,CunitIndex,0,SetTo,Gun_LV),
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
 		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
-		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CUnitIndex,13,SetTo,0x1,0x1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
+		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CunitIndex,13,SetTo,0x1,0x1),AddV(EEggV,1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
 		f_LoadCp()
 		CElseX()
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -276,6 +276,12 @@ function Install_CallTriggers()
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,29,6,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,8,7,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,22,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,3)},{CreateOrder(3,88,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,3)},{CreateOrder(3,21,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,4)},{CreateOrder(3,27,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,4)},{CreateOrder(3,57,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,5)},{CreateOrder(3,69,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,5)},{CreateOrder(3,11,7,1,Attack,64)},{preserved})
 
 	------ 원점 대칭 -------------------------------------------------------------
 	CMov(FP,V(CA[8]),V(CA[12]))
@@ -299,6 +305,12 @@ function Install_CallTriggers()
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,86,6,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,70,7,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,2)},{CreateOrder(3,69,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,3)},{CreateOrder(3,86,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,3)},{CreateOrder(3,28,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,4)},{CreateOrder(3,22,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,4)},{CreateOrder(3,80,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,5)},{CreateOrder(3,102,7,1,Attack,64)},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,5)},{CreateOrder(3,70,7,1,Attack,64)},{preserved})
 
 	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640);},{preserved})
 
@@ -456,10 +468,5 @@ function NUGive(Var,UnitID)
 	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayTextX("TGCheckPr",4)}, HumanPlayers, FP)
 	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{Order(UnitID,Force2,64,Attack,64),SetInvincibility(Disable,UnitID,Force2,64)})
 end
-
 	
 end
-
---CBulletJump = SetCallForward()
---SetCall(FP)
---SetCallEnd()

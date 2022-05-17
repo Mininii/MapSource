@@ -27,13 +27,13 @@ function Operator_Trig()
 			CIf(FP,{TTDeaths(CurrentPlayer,NotSame,BarRally[i+1],0)}) --배럭랠리 갱신
 				f_SaveCp()
 				f_Read(FP,BackupCp,BarRally[i+1])
-				if Limit == 1 then
-				CIf(FP,CD(TestMode,1))
-				CMov(FP,CPos,BarRally[i+1])
-				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{CreateUnit(1,"Dark Swarm",1,P8)})
-				CIfEnd()
-				end
+				--if Limit == 1 then
+				--CIf(FP,CD(TestMode,1))
+				--CMov(FP,CPos,BarRally[i+1])
+				--Convert_CPosXY()
+				--Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{CreateUnit(1,"Dark Swarm",1,P8)})
+				--CIfEnd()
+				--end
 				f_LoadCp()
 			CIfEnd()
 			CSub(FP,0x6509B0,62-25)
@@ -51,7 +51,7 @@ function Operator_Trig()
 
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)})
 			DoActionsX(FP,{
-                SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*25,0),
+                SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*75,0),
 			})
 			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{preserved})
 
@@ -65,7 +65,6 @@ function Operator_Trig()
 				SetMemory(0x582204+(3*4),Add,2),
 				SetCDeaths(FP,Add,1,EEggCode),
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
-			
 		CIfEnd()
 
 		CIfEnd()
@@ -190,6 +189,7 @@ function Operator_Trig()
 CSub(FP,ShieldEnV,Dt)
 CIf(FP,CD(Fin,0))
 CAdd(FP,Time1,Dt)
+CAdd(FP,Time2,Dt)
 CIfEnd()
 CDoActions(FP,{TSetCDeaths(FP,Add,Dt,GeneT)})
 TriggerX(FP,{ElapsedTime(AtLeast,60)},{

@@ -6,7 +6,6 @@ function Include_GunData(Size,LineNum)
 	f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_A = CreateVar(FP)
 	FuncAlloc = FuncAlloc + 1
-	G_Send = SetCallForward()
 	G_InputH = CreateVar(FP)
 	f_GunStrPtr = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
@@ -22,6 +21,7 @@ function Include_GunData(Size,LineNum)
 	f_GunSendStrPtr = CreateVar(FP)
 	f_GunSendStrPtr2 = CreateVar(FP)
 	
+	G_Send = SetCallForward()
 	function G_init()
 		table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,CIndex,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
 		f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
@@ -44,7 +44,7 @@ function Include_GunData(Size,LineNum)
 			if Type == nil then
 				TriggerX(FP,{CV(GunID,ID)},{RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
 			else
-				TriggerX(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
+				TriggerX(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg");DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
 			end
 		end
 		--\x1B기억의 기둥 \x1D【 Conv_HStr2("") \x1D】
@@ -101,12 +101,55 @@ function Include_GunData(Size,LineNum)
 		CIfXEnd()
 		f_LoadCp()
 	SetCallEnd()
-
-
-	
 	function f_GSend(UnitID,Actions)
 		CallTriggerX(FP,G_Send,{DeathsX(CurrentPlayer,Exactly,UnitID,0,0xFF)},Actions)
 	end
+
+	G_ForceSend = SetCallForward()
+	SetCall(FP)
+		CMov(FP,G_A,0)
+		G_SkipJump = def_sIndex()
+		CJumpEnd(FP,G_SkipJump)
+		CAdd(FP,G_TempV,_Mul(G_A,_Mov(0x970/4)),G_InputH)
+		NIf(FP,{TMemory(G_TempV,AtLeast,1),CVar(FP,G_A[2],AtMost,Size-1)},{SetCVar(FP,G_A[2],Add,1)})
+			CJump(FP,G_SkipJump)
+		NIfEnd()
+	
+		CIfX(FP,{CVar(FP,G_A[2],AtMost,Size-1)})
+		CDoActions(FP,{
+			TSetMemory(G_TempV,SetTo,GunID),
+			TSetMemory(_Add(G_TempV,1*(0x20/4)),SetTo,CPosX),
+			TSetMemory(_Add(G_TempV,2*(0x20/4)),SetTo,CPosY),
+			TSetMemory(_Add(G_TempV,3*(0x20/4)),SetTo,DUnitCalc[4][1]),
+			TSetMemory(_Add(G_TempV,4*(0x20/4)),SetTo,GunPlayer),
+		})
+		
+		if Limit == 1 then
+			CIf(FP,CD(TestMode,1))
+			ItoDec(FP,G_A,VArr(f_GunNumT,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),4*4)
+			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+			ItoDec(FP,DUnitCalc[4][1],VArr(f_GunNumT,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(f_GunSendStrPtr2,f_GunSendT2[2]),VArr(f_GunNumT,0),4*4)
+			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend2".._0D,4)},HumanPlayers,FP)})
+			CIfEnd()
+		end
+		CElseX()
+		DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		CIfXEnd()
+		f_LoadCp()
+	SetCallEnd()
+	function f_GForceSend(Condition,UnitID,GunNum,GPlayer,CenterXY,Actions)
+		CallTriggerX(FP,G_ForceSend,Condition,{
+			SetCVar(FP,GunID[2],SetTo,UnitID),
+			SetCVar(FP,CPosX[2],SetTo,CenterXY[1]),
+			SetCVar(FP,CPosY[2],SetTo,CenterXY[2]),
+			SetCVar(FP,GunPlayer[2],SetTo,GPlayer),
+			SetCVar(FP,DUnitCalc[4][1][2],SetTo,GunNum),
+			Actions})
+	end
+
+	
 	for i = 1, Var_Lines do
 		table.insert(Var_InputCVar,SetCVar(FP,Var_TempTable[i][2],SetTo,0))
 	end
@@ -176,7 +219,7 @@ function Include_GunData(Size,LineNum)
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
 	CMov(FP,G_CA_CenterX,Var_TempTable[2])
 	CMov(FP,G_CA_CenterY,Var_TempTable[3])
-	CMov(FP,G_CA_Player,Var_TempTable[5])
+	CMov(FP,G_CA_Player,Var_TempTable[5],nil,0xFF,1)
 	DoActionsX(FP,{SetSwitch(RandSwitch,Random),SetCD(GunCaseCheck,0)})
 	CDoActions(FP,{Gun_SetLine(7,Add,1)})
 
@@ -549,7 +592,7 @@ function Include_GunData(Size,LineNum)
 	CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0)})
 	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
 	CTrigger(FP,{CD(GeneT,30000,AtLeast)},{Gun_SetLine(10,Subtract,540/6)},1)
-	CTrigger(FP,{CD(GeneT,30000,AtLeast),Gun_Line(10,AtMost,0)},{Gun_DoSuspend(),AddCD(GeneCcode,1),SetInvincibility(Disable,"Men",Force2,64),RotatePlayer({PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")},HumanPlayers,FP);},1)
+	CTrigger(FP,{CD(GeneT,30000,AtLeast),Gun_Line(10,AtMost,0)},{Gun_DoSuspend(),AddCD(GeneCcode,1),SetInvincibility(Disable,"Men",Force2,64),RotatePlayer({PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")},HumanPlayers,FP);},1)
 
 	
 	CIfEnd()
@@ -601,8 +644,8 @@ function Include_GunData(Size,LineNum)
 			f_Read(FP,_Add(Nextptrs,10),CPos)
 			Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+				f_CGive(FP, Nextptrs, nil, P9, G_CA_Player)
 				CDoActions(FP,{
-					TGiveUnits(1,CenterUIDV,G_CA_Player,1,P9);
 					TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetDeaths(_Add(Nextptrs,13),SetTo,1,0),
 					TSetDeathsX(_Add(Nextptrs,18),SetTo,1,0,0xFFFF),
@@ -640,8 +683,8 @@ function Include_GunData(Size,LineNum)
 				CMov(FP,CPos,TempPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0, -2, -2, 2, 2))
+				f_CGive(FP, CenterPtrs, nil, G_CA_Player, P9)
 				CDoActions(FP,{
-					TGiveUnits(1,CenterUIDV,P9,1,G_CA_Player);
 					TSetDeathsX(_Add(CenterPtrs,72),SetTo,0,0,0xFF00),
 					TSetDeathsX(_Add(CenterPtrs,55),SetTo,0,0,0x04000000),
 					TSetDeaths(_Add(CenterPtrs,23),SetTo,0,0),
@@ -649,11 +692,15 @@ function Include_GunData(Size,LineNum)
 					TSetDeaths(_Add(CenterPtrs,6),SetTo,TempPos,0),
 					TSetDeaths(_Add(CenterPtrs,22),SetTo,TempPos,0),
 					TSetDeaths(_Add(CenterPtrs,4),SetTo,TempPos,0),
+					TSetDeaths(_Add(CenterPtrs,13),SetTo,1280,0),
+					TSetDeathsX(_Add(CenterPtrs,18),SetTo,1280,0,0xFFFF),
 					--TSetMemory(0x6509B0,SetTo,G_CA_Player),
 					--KillUnitAt(1, nilunit, 1, FP),
 					--RunAIScriptAt(JYD,1),SetCp(FP),
 					Gun_DoSuspend(),AddCD(CenCcode,1)
 				})
+				TriggerX(FP,Gun_Line(3, AtLeast, 1),{SetCD(BossCenTrig,1)})
+				
 				for i = 4, 7 do
 					TriggerX(FP,{GCP(i)},{AddCD(CenCcode2[i-3],1)},{preserved})
 				end
@@ -663,7 +710,7 @@ function Include_GunData(Size,LineNum)
 			CWhileEnd()
 			
 			
-			CTrigger(FP,{Gun_Line(8,Exactly,360)},{Gun_SeTLine(8,SetTo,361)},1)
+			CTrigger(FP,{Gun_Line(8,Exactly,360)},{Gun_SetLine(8,SetTo,361)},1)
 	CIfEnd()
 
 
@@ -1243,16 +1290,23 @@ end
 		table.insert(SetPCArr,SetMinimapColor(i, SetTo, 0))
 	end
 	CIfOnce(FP)
-	TriggerX(FP,{CD(TestMode,1)},{--CD(DCCcode,500,AtLeast)
-		SetCD(EDNum,1),SetPCArr
+	
+	TriggerX(FP,{CD(EEggCode,4,AtMost)},{--CV(DCV,500,AtLeast)
+		SetCD(EDNum,2)
 	})
-	TriggerX(FP,{CD(TestMode,1)},{--CD(DCCcode,500,AtLeast)
+	TriggerX(FP,{CD(EEggCode,5,AtLeast),CD(EEggCode,9,AtMost)},{--CV(DCV,500,AtLeast)
+		SetCD(EDNum,3)
+	})
+	TriggerX(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,19,AtMost)},{--CV(DCV,500,AtLeast)
 		SetCD(EDNum,4)
+	})
+	TriggerX(FP,{CV(DCV,500,AtLeast)},{--CV(DCV,500,AtLeast)
+		SetCD(EDNum,1)
 	})
 	CIfEnd()
 
 	CIf(FP,CD(EDNum,1))--CD(EEggCode,9,AtMost)
-	CIfOnce(FP)
+	CIfOnce(FP,nil,SetPCArr)
 	CFor(FP,0,228,1)
 	CI = CForVariable()
 	CMov(FP,BdDimPtr,CI,EPDF(0x662860)) --BdDim
@@ -1288,8 +1342,8 @@ end
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
 
-	CIf(FP,CD(EDNum,2))--CD(EEggCode,4,AtMost)
-    DoActionsX(FP,{SetV(BGMType,9),SetCD(Fin,1)},1)
+	CIf(FP,CD(EDNum,2))--
+    DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
 	StoryPrint(4000*2,"\x04마침내 이 혼돈의 기억을 모두 정화하였다.")
 	StoryPrint(4000*3,"\x04하지만, 잃어버린 \x07빛\x04의 \x17기억\x04은 찾을 수 없었고")
 	StoryPrint(4000*4,"\x04머지않아 이 기억은 다시 \x10혼돈\x04에 잠길 것이겠지..")
@@ -1301,70 +1355,70 @@ end
 	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1)})
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
---	CIf(FP,{CD(EDNum,3)})--CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)
---    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
---	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
---	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
---	f_Mul(FP,Var_TempTable[11],Var_TempTable[10],Var_TempTable[10])
---	f_Div(FP,Var_TempTable[11],195674)
---	CMov(FP,N_A,0)
---	CWhile(FP,{CV(N_A,359,AtMost)})
---	f_Lengthdir(FP,Var_TempTable[11],_Add(N_A,Var_TempTable[12]),N_X,N_Y)
---	CAdd(FP,N_X,G_CA_CenterX)
---	CAdd(FP,N_Y,G_CA_CenterY)
---	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
---	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
---	CAdd(FP,N_A,12)
---	CWhileEnd()
+	CIf(FP,{CD(EDNum,3)})--CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)
+    DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
+	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
+	CIf(FP,{Gun_Line(12,Exactly,0)},{Gun_SetLine(11,Add,1)})
+	f_Mul(FP,Var_TempTable[11],Var_TempTable[10],Var_TempTable[10])
+	f_Div(FP,Var_TempTable[11],195674)
+	CMov(FP,N_A,0)
+	CWhile(FP,{CV(N_A,359,AtMost)})
+	f_Lengthdir(FP,Var_TempTable[11],_Add(N_A,Var_TempTable[12]),N_X,N_Y)
+	CAdd(FP,N_X,G_CA_CenterX)
+	CAdd(FP,N_Y,G_CA_CenterY)
+	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
+	CAdd(FP,N_A,12)
+	CWhileEnd()
+
+	
+
+	CIfOnce(FP,{Gun_Line(9,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),SetMemoryB(0x6636B8+64,SetTo,130)})
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,20000000-8320000)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+
+
+	CTrigger(FP,{},{SetV(BPtrArr[5],Nextptrs),CreateUnitWithProperties(1,64,64,FP,{energy=100, invincible = true})})
+	CIfEnd()
+	CIfEnd()
+	
+	CIf(FP,{CD(ED2Clear,0)})
+	local SpawnSet = {{22580,{77,88}},{33880,{25,21}},{45170,{15,56}},{56470,{17,28}},{68480,{75,80}},{79760,{22,76}},{91050,{100,57}},{102350,{63,29}},{113640,{10,8}},{124940,{86,79}},{136240,{98,52}},{147520,{70,65}}}
+for j, k in pairs(SpawnSet) do
+	G_CA_SetSpawn({Gun_Line(13,AtLeast,k[1])},k[2],"ACAS","EllipseMirror1",nil,0,nil,nil,nil,nil,1)
+end
+	CIfEnd()
+
 --
---	
---
---	CIfOnce(FP,{Gun_Line(9,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),SetMemoryB(0x6636B8+64,SetTo,130)})
---	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
---	CSub(FP,CurCunitI,Nextptrs,19025)
---	f_Div(FP,CurCunitI,_Mov(84))
---	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,4,SetTo,20000000-8320000)})
---	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
---
---
---	CTrigger(FP,{},{SetV(BPtrArr[5],Nextptrs),CreateUnitWithProperties(1,64,64,FP,{energy=100, invincible = true})})
---	CIfEnd()
---	CIfEnd()
---	
---	CIf(FP,{CD(ED2Clear,0)})
---	local SpawnSet = {{22580,{77,88}},{33880,{25,21}},{45170,{15,56}},{56470,{17,28}},{68480,{75,80}},{79760,{22,76}},{91050,{100,57}},{102350,{63,29}},{113640,{10,8}},{124940,{86,79}},{136240,{98,52}},{147520,{70,65}}}
---for j, k in pairs(SpawnSet) do
---	G_CA_SetSpawn({Gun_Line(13,AtLeast,k[1])},k[2],"ACAS","EllipseMirror1",nil,0,nil,nil,nil,nil,1)
---end
---	CIfEnd()
---
-----
---	CIf(FP,{CD(ED2Clear,1)})
---	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
---Trigger2X(FP,{},{RotatePlayer({
---	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
---	PlayWAVX("staredit\\wav\\Clear1.ogg"),
---	PlayWAVX("staredit\\wav\\Clear1.ogg"),
---	PlayWAVX("staredit\\wav\\Clear1.ogg"),
---	PlayWAVX("staredit\\wav\\Clear1.ogg"),
---	PlayWAVX("staredit\\wav\\Clear1.ogg")
---	},HumanPlayers,FP);})
---		StoryPrint(4000*1,"\x04마침내, 과거의 기억을 되찾아 내었다.")
---		StoryPrint(4000*2,"\x04하지만, 어째서일까, \x10슬픈 \x18감정\x04이 \x08폭풍\x04처럼 몰아친다.")
---		StoryPrint(4000*3,"\x04아아, 이것은 그녀와 함께했던 \x1C추억\x04의 \x17기억\x04인가..?")
---		StoryPrint(4000*4,"\x04지금은 이 세상에 존재하지 않는 그녀와의 \x0E소중한 기억\x04.")
---		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
---		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
---		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
---		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
---		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
---	CIfEnd()
---	CIfEnd()
+	CIf(FP,{CD(ED2Clear,1)},{SetCD(Fin,1)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+Trigger2X(FP,{},{RotatePlayer({
+	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg"),
+	PlayWAVX("staredit\\wav\\Clear1.ogg")
+	},HumanPlayers,FP);})
+		StoryPrint(4000*1,"\x04마침내, 과거의 기억을 되찾아 내었다.")
+		StoryPrint(4000*2,"\x04하지만, 어째서일까, \x10슬픈 \x18감정\x04이 \x08폭풍\x04처럼 몰아친다.")
+		StoryPrint(4000*3,"\x04아아, 이것은 그녀와 함께했던 \x1C추억\x04의 \x17기억\x04인가..?")
+		StoryPrint(4000*4,"\x04지금은 이 세상에 존재하지 않는 그녀와의 \x0E소중한 기억\x04.")
+		StoryPrint(4000*5,"\x04지금쯤, 그녀는 어디서 무엇을 하고 있을까?")
+		StoryPrint(4000*6,"\x04부디 좋은 곳으로 잘 떠났기를 빌며...")
+		StoryPrint(4000*7,"\x04당신은 또다른 \x07빛\x04의 \x17기억을 찾아 \x11끝없는 여정\x04이 계속된다.")
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
+		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+	CIfEnd()
+	CIfEnd()
 
 
 
 
-	CIf(FP,{CD(EDNum,4)})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
+	CIf(FP,{CD(EDNum,4)},{})--CD(EEggCode,17,AtLeast),CD(EEggCode,24,AtMost)
 	TriggerX(FP,{
 		DeathsX(P1,AtMost,0,12,0xFFFFFF),
 		DeathsX(P2,AtMost,0,12,0xFFFFFF),
@@ -1372,8 +1426,27 @@ end
 		DeathsX(P4,AtMost,0,12,0xFFFFFF),
 		DeathsX(FP,AtMost,0,12,0xFFFFFF),
 	},{SetV(BGMType,9)},{preserved})
-	CallTrigger(FP, Call_CreateBullet_EPD)--유도탄막 구조체 불러오기
-	G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--도형으로 핵떨구기. 아무 UnitID입력가능, RepeatType 3 하면 발사됨
+	CallTrigger(FP, Call_CreateBullet_EPD,{})--유도탄막 구조체 불러오기
+
+	BossPhaseTestMode = 0
+	BossPhaseTestNum = 4
+	if BossPhaseTestMode == 0 then
+		G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--도형으로 핵떨구기. 아무 UnitID입력가능, RepeatType 3 하면 발사됨 --CD(TestMode,0)
+	end
+	StartV = CreateVarArr(4,FP)
+	CIf(FP,{Gun_Line(13,AtMost,16700)})
+	CMov(FP,StartV[3],StartV[2],1)
+	CWhile(FP,{CV(StartV[3],1,AtLeast)},SubV(StartV[3],1))
+		f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
+		CiDiv(FP, T_Y, 2)
+		DoActionsX(FP,{AddV(T_X,2048),AddV(T_Y,2048)})
+		Simple_SetLocX(FP, 0, T_X,T_Y,T_X,T_Y,{CreateUnit(1,84,1,FP),KillUnit(84, FP)})
+	CWhileEnd()
+	TriggerX(FP,{Gun_Line(13,AtLeast,14500)},{AddV(StartV[2],1)},{preserved})
+	CIfEnd()
+
+
+
 	DoActionsX(FP,{
 		MoveUnit(All, "Men", 0, 15, 2),
 		MoveUnit(All, "Men", 1, 15, 3),
@@ -1389,13 +1462,18 @@ end
 		RemoveUnit(60, AllPlayers),--핵배틀삭제
 		SetMemoryB(0x665C48+511,SetTo,0)--가시 보이기 삭제
 	},1)
+
+	if BossPhaseTestMode == 1 then
+		TriggerX(FP,CD(TestMode,1),{Gun_SetLine(13, SetTo, 18000)})
+	end
 	CIfOnce(FP,{Gun_Line(13,AtLeast,18000)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 	
 	BPTest = CreateVar(FP)	
 	BPHRetTest = CreateVar(FP)	
 	f_Read(FP,0x628438,"X",BPTest,0xFFFFFF)
 	DoActions(FP,CreateUnit(1,12,64,FP),1)
-	CDoActions(FP,{TSetMemory(_Add(BPTest,2), SetTo, 4000000*256)})
+	CDoActions(FP,{TSetMemory(_Add(BPTest,2), SetTo, 4000000*256),TSetMemoryX(_Add(BPTest,55), SetTo, 0x04000000,0x04000000)})
 	CIfEnd()
 	function CABossFunc()
 		local UnitPtr = CABossPtr
@@ -1403,11 +1481,19 @@ end
 		local CA = CABossDataArr
 		local CB = CABossTempArr
 		CMov(FP,BossAtkRand,_Mod(_Rand(),1000))
-		DoActions(FP, {SetCD(MarDup2,1)})
+		CIfOnce(FP)
+		TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
+		CDoActions(FP, {TSetMemoryX(_Add(BPTest,55), SetTo, 0,0x04000000)})
+		CIfEnd()
+		DoActionsX(FP, {SetCD(MarDup2,1)},1)
 		local PattV = CreateVarArr(4,FP)
 		local PattC = CreateCcodeArr(4)
 		local PattC2 = CreateCcodeArr(49)
+		if BossPhaseTestMode == 1 then
+		TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
+		end
 		CIf(FP,CV(CA[1],0),{SetBulletSpeed(500)})
+		CIf(FP,{CV(PattV[2],3,AtMost)})
 		local TempA = CreateVar(FP)
 		CMov(FP,TempA,PattV[1])
 		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
@@ -1425,13 +1511,27 @@ end
 		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		--DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
 		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		CIfEnd()
+
 		
 
 		CAdd(FP,PattV[1],1)
 		TriggerX(FP,{CV(PattV[1],180,AtLeast)},{SetV(PattV[1],0),AddV(PattV[2],1)},{preserved})
-		TriggerX(FP,{CV(PattV[2],4,AtLeast)},{SetCD(PattC[1],1),SetV(PattV[1],0),SetV(PattV[2],0)},{preserved})
+		TriggerX(FP,{CV(PattV[2],4,AtLeast)},{AddV(PattV[3],1)},{preserved})
+
+		TriggerX(FP,{CV(PattV[3],300,AtLeast)},{SetCD(PattC[1],1),SetV(PattV[1],0),SetV(PattV[2],0)},{preserved})
+
+
+		
 		CIfEnd()
-		CIf(FP,CV(CA[1],1),{SetBulletSpeed(2000),SetFlingySpeed(174, 2000)})
+		CIf(FP,CV(CA[1],1),{
+			SetBulletSpeed(8000),
+			SetFlingySpeed(174, 8000),
+			WeaponTimeLeft(127,32),
+			WeaponTimeLeft(30,32),
+			SetMemory(0x66EC48+(533*4), SetTo, 242),
+			SetMemoryB(0x669E28+(533), SetTo, 16)
+		})
 		CIf(FP,CV(PattV[1],1))
 			for i = 1, 49 do 
 				DoActions(FP,{SetSwitch("Switch 100",Random)})
@@ -1439,28 +1539,268 @@ end
 				TriggerX(FP,{Switch("Switch 100",Set)},{SetCD(PattC2[i],1)},{preserved})
 			end
 		CIfEnd()
-		CIf(FP,CV(PattV[1],1,AtLeast),{SetBulletSpeed(2000),SetFlingySpeed(174, 2000)})
-		CIf(FP,CV(PattV[2],10,AtLeast),SetV(PattV[2],0))
+		
+		CIf(FP,CV(PattV[1],1,AtLeast),{
+		--RemoveUnit(205, FP),
+		--RemoveUnit(207, FP),
+		--RemoveUnit(206, FP),
+	})
+		CIf(FP,{CV(PattV[2],1,AtLeast),CV(PattV[3],4,AtMost)},SetV(PattV[2],0))
 		for i = 1, 49 do
-			CreateBulletCond(207,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],1,AtLeast),CV(PattV[1],249,AtLeast),CD(PattC2[i],1)})
-			CreateBulletCond(206,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],250,AtLeast),CV(PattV[1],500,AtLeast),CD(PattC2[i],1)})
+			CreateBulletCond(207,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],1,AtLeast),CV(PattV[1],149,AtMost),CD(PattC2[i],1)})
+			CreateBulletCond(206,20,0,{2048-(24*32)+(32*i),2048-500},FP,{CV(PattV[1],150,AtLeast),CV(PattV[1],300,AtMost),CD(PattC2[i],1)})
 		end
 		
 		CIfEnd()
 		CAdd(FP,PattV[2],1)	
 		CIfEnd()
 		CAdd(FP,PattV[1],1)
-		TriggerX(FP,{CV(PattV[1],500,AtLeast)},{SetV(PattV[1],0),AddV(PattV[3],1)},{preserved})
-		TriggerX(FP,{CV(PattV[3],5,AtLeast)},{SetV(PattV[3],0),AddCD(PattC[1],1)},{preserved})
+		TriggerX(FP,{CV(PattV[1],300,AtLeast)},{SetV(PattV[1],0),AddV(PattV[3],1)},{preserved})
+		TriggerX(FP,{CV(PattV[3],5,AtLeast)},{AddV(PattV[4],1)},{preserved})
+
+		TriggerX(FP,{CV(PattV[4],32,AtLeast)},{SetV(PattV[3],0),AddCD(PattC[1],1)},{preserved})
+		CIfEnd()--
+
+
+		CIf(FP,CV(CA[1],2),{
+			SetMemoryB(0x6636B8+207, SetTo, 83),
+			SetInvincibility(Enable, 185, Force2, 64),
+			SetInvincibility(Disable, "Men", Force1, 64),
+			SetMemory(0x662350+(185*4),SetTo,400*256),
+			SetInvincibility(Disable, 12, Force2, 64),
+		})
+		CIfX(FP,{CV(PattV[1],350,AtMost)})
+		CFor(FP,0,360,120)
+		local CI = CForVariable()
+			CAdd(FP,TempA,PattV[2],CI)
+			f_Lengthdir(FP, PattV[1], TempA, CPosX, CPosY)
+			DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
+			CreateBullet(207, 20, 0,{CPosX,CPosY},FP)
+			DoActions(FP,{CreateUnit(1,95,1,FP),KillUnit(95, FP)})
+		CForEnd()
+		CAdd(FP,PattV[3],PattV[1])
+		CAdd(FP,PattV[1],1)
+		CMov(FP,PattV[2],_Div(PattV[3],75))
+		
+		
+		CElseIfX({CV(PattV[1],1200,AtLeast)},{AddCD(PattC[1],1),KillUnit(102,FP),KillUnit(57,FP),KillUnit(162,FP)})
+		CIfXEnd()
+		CAdd(FP,PattV[1],1)
+		G_CA_SetSpawn2X({CV(PattV[1],350,Exactly)},{102,57,162},"ACAS","Sp1",1,984,nil,"CP",G_CA_Ratio(256+128))
+
+		CIfEnd()--
+		CIf(FP,CV(CA[1],3),{
+			SetCD(NCBullet,1),
+			SetBulletSpeed(350),
+			SetFlingySpeed(174, 350),
+			WeaponTimeLeft(127,255),
+			WeaponTimeLeft(30,255),
+			SetMemoryB(0x669E28+(541), SetTo, 13)
+		})
+		CIf(FP,{CV(PattV[2],100,AtLeast),{CV(PattV[1],9,AtMost)}},{SetV(PattV[2],0),AddV(PattV[1],1)})
+		f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
+		CiDiv(FP, T_Y, 2)
+		DoActionsX(FP,{AddV(T_X,2048),AddV(T_Y,2048)})
+		Simple_SetLocX(FP, 0, T_X,T_Y,T_X,T_Y)
+		CallTrigger(FP, Call_Nuke)
 		CIfEnd()
+		CAdd(FP,PattV[2],1)
+		TriggerX(FP,{CV(PattV[1],10,AtLeast),CV(PattV[2],300,AtLeast)},{SetV(PattV[3],0),AddCD(PattC[1],1)},{preserved})
+		CIfEnd()--
+		CIf(FP,CV(CA[1],4),{
+			SetCD(NCBullet,0),
+			SetBulletSpeed(500),
+			SetFlingySpeed(174, 500),
+			WeaponTimeLeft(127,255),
+			WeaponTimeLeft(30,255),
+			SetMemoryB(0x669E28+(541), SetTo, 10)
+		})
+		G_CA_Bullet({CV(PattV[1],0)}, 205, "ACAS", "B1S", 1, 1,  {2048,2048})
+		G_CA_Bullet({CV(PattV[1],256)}, 205, "ACAS", "B1S", 1, 1,  {2048,2048})
+		TriggerX(FP,{Bring(Force1,AtLeast,1,"Men",15)},{AddV(PattV[2],1)},{preserved})
+		CIf(FP,{CV(PattV[2],15,AtLeast)},{SetV(PattV[2],0)})
+			for i = 0, 3 do
+			CIf(FP,Bring(i,AtLeast,1,"Men",15),{Simple_SetLoc(9, 0, 0, 16, 16),MoveLocation(10, "Men", i, 15)})
+			GetLocCenter(9, CPosX, CPosY)
+			SetBullet(206, 20, {2048,2048}, {CPosX,CPosY})
+			CIfEnd()
+			end
+		CIfEnd()
+		CAdd(FP,PattV[1],1)
+		TriggerX(FP,{CV(PattV[1],512,AtLeast)},{SetV(PattV[1],0)},{preserved})
+		CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
+		CIfEnd()
+		CIf(FP,CV(CA[1],5),{
+			SetInvincibility(Enable, 185, Force2, 64),
+			SetMemory(0x662350+(185*4),SetTo,400*256),
+			SetCD(MarDup,2),
+			SetCD(MarDup2,0),
+			SetCD(CUnitFlag,1),
+		})
+		CIfOnce(FP)
+		BP5ActArr = {}
+		for i = 0, 3 do
+			table.insert(BP5ActArr,MoveUnit(All,"Men",i,64,44+i))
+			table.insert(BP5ActArr,Order("Men",i,64,Attack,64))
+		end
+		table.insert(BP5ActArr,SetMemory(0x66EC48+(533*4), SetTo, 246))
+		
+		f_GForceSend({}, 130, 1, 5, {2048,2048})
+		f_GForceSend({}, 130, 1, 7, {2048,2048})
+		DoActions2(FP, BP5ActArr)
+		CIfEnd()
+		TriggerX(FP,CD(BossCenTrig,1),{AddV(PattV[1],1)},{preserved})
+		G_CA_SetSpawn2X({CV(PattV[1],360,AtLeast)}, {10, 22,25,28}, "ACAS", "Hp2", "MAX", 925, nil,"CP", nil,nil, 1)
+
+		TriggerX(FP,{CV(PattV[1],760,AtLeast)},{SetInvincibility(Disable, 12, FP, 64)})
+		
+		CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
+		CIfEnd()
+
+
+		CIf(FP,{CV(CA[1],6)})
+
+		CDoActions(FP,{
+			Gun_SetLine(21,Add,11); --SetCVar("X",XAngle,Add,11);
+			Gun_SetLine(22,Add,8); --SetCVar("X",YAngle,Add,8);
+			Gun_SetLine(23,Add,5); --SetCVar("X",ZAngle,Add,5);
+		})
+		CTrigger(FP,{
+			Gun_Line(24,Exactly,0) --CVar("X",Move1,Exactly,0);
+		},{
+			Gun_SetLine(25,Add,1); -- SetCVar("X",Move2,Add,1);
+		},{preserved})
+		CTrigger(FP,{
+			Gun_Line(24,Exactly,1) --CVar("X",Move1,Exactly,1);
+		},{
+			Gun_SetLine(25,Subtract,9); -- SetCVar("X",Move2,Subtract,9);
+		},{preserved})
+		CTrigger(FP,{
+			Gun_Line(24,Exactly,1); --CVar("X",Move1,Exactly,1);
+			Gun_Line(25,Exactly,0); --CVar("X",Move2,Exactly,0);
+		},{
+			Gun_SetLine(24,SetTo,0); -- SetCVar("X",Move1,SetTo,0);
+		},{preserved})
+		CTrigger(FP,{
+			Gun_Line(24,Exactly,0); --CVar("X",Move1,Exactly,0);
+			Gun_Line(25,AtLeast,1280); --CVar("X",Move2,AtLeast,1280);
+		},{
+			Gun_SetLine(24,SetTo,1); -- SetCVar("X",Move1,SetTo,1);
+		},{preserved})
+		CMov(FP,V(TSize),Var_TempTable[20+1])
+		CMov(FP,V(XAngle),Var_TempTable[21+1])
+		CMov(FP,V(YAngle),Var_TempTable[22+1])
+		CMov(FP,V(ZAngle),Var_TempTable[23+1])
+		CMov(FP,V(Move1),Var_TempTable[24+1])
+		CMov(FP,V(Move2),Var_TempTable[25+1])
+		CMov(FP,SHLX,G_CA_CenterX)
+		CMov(FP,SHLY,G_CA_CenterY)
+		DoActions2X(FP,{Gun_SetLine(20,SetTo,540),RotatePlayer({PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav"),}, HumanPlayers, FP)},1)
+		CTrigger(FP,{Gun_Line(20,AtMost,540*3*6), --CVar(FP,TSize,AtMost,540*3*6)
+		CV(PattV[1],2000,AtMost),
+		},{Gun_SetLine(20,Add,540/4); -- SetCVar("X",TSize,Add,540/4);
+		},{preserved})
+		CAdd(FP,PattV[1],1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1000,AtLeast)},{SetCD(CXEffType,3)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1100,AtLeast)},{SetCD(CXEffType,3)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1200,AtLeast)},{SetCD(CXEffType,4)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1300,AtLeast)},{SetCD(CXEffType,4)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1400,AtLeast)},{SetCD(CXEffType,1)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1500,AtLeast)},{SetCD(CXEffType,1)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1600,AtLeast)},{SetCD(CXEffType,2)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1700,AtLeast)},{SetCD(CXEffType,2)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1800,AtLeast)},{SetCD(CXEffType,5)},1)
+		CallTriggerX(FP,CallCXPlot,{CV(PattV[1],1900,AtLeast)},{SetCD(CXEffType,5)},1)
+		TriggerX(FP,CV(PattV[1],2000,AtLeast),{Gun_SetLine(20, Subtract, 540/6)},{preserved})
+		CallTriggerX(FP,CallCXPlot,{Gun_Line(20,AtLeast,1)},{SetCD(CXEffType,0)})
+		
+		TriggerX(FP,{CV(PattV[1],2000,AtLeast),Gun_Line(20,AtMost,0)},{SetInvincibility(Disable, 12, FP, 64)},{preserved})
+		CTrigger(FP, {CV(PattV[1],2000,AtLeast),Gun_Line(20,AtMost,0),TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
+		CIfEnd()
+		CIf(FP,{CV(CA[1],7)})
+			CIf(FP,{CV(PattV[1],25)},SetV(PattV[1],0))
+			CMov(FP,PattV[3],PattV[2],1)
+			CWhile(FP,{CV(PattV[3],1,AtLeast)},SubV(PattV[3],1))
+				f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
+				CiDiv(FP, T_Y, 2)
+				DoActionsX(FP,{AddV(T_X,2048),AddV(T_Y,2048)})
+				Simple_SetLocX(FP, 0, T_X,T_Y,T_X,T_Y,{CreateUnit(1,84,1,FP),KillUnit(84, FP)})
+				f_TempRepeatX({}, 128, 1, 0, FP, {T_X,T_Y})
+			CWhileEnd()
+			CAdd(FP,PattV[2],2)
+			CIfEnd()
+			CAdd(FP,PattV[1],1)
+			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
+		CIfEnd()
+		CIf(FP,{CV(CA[1],8)},{
+			SetBulletSpeed(2000),
+			SetFlingySpeed(174, 2000),
+			WeaponTimeLeft(127,64),
+			WeaponTimeLeft(30,64),
+			SetMemory(0x66EC48+(533*4), SetTo, 242),
+			SetMemoryB(0x669E28+(533), SetTo, 16),
+			SetMemoryB(0x6636B8+207, SetTo, 127),
+			SetInvincibility(Enable, 185, Force2, 64),
+			SetMemory(0x662350+(185*4),SetTo,100*256),
+			SetCD(MarDup,2),
+			SetCD(MarDup2,0),
+			SetCD(CUnitFlag,1),
+			SetMemory(0x66EC48+(318*4), SetTo, 246),--핵터지는모션살리기
+			KillUnit(25, Force2),
+			KillUnit(30, Force2),
+
+		})	
+			DoActionsX(FP,{SetV(PattV[1],6),Order("Men",Force2,64,Attack,64)},1)
+			CIf(FP,{CV(PattV[1],4,AtMost)})
+			TierArr = {{17,19,77,78,76,63,21,88,28,86,75},Tier2,Tier3,{102,61,67,23,81},Tier5}
+			EffArr = {982,559,983,964,984}
+				for i = 0, 4 do
+					TriggerX(FP,{CV(PattV[1],i)},{WeaponTimeLeft(127,64-(i*12))},{preserved})
+				end
+				CFor(FP,0,256,4)
+				local CI = CForVariable()
+				CreateBullet(207, 20, CI, {2048,2048}, FP)
+				CForEnd()
+
+				--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
+				--	Tier2 = {79,80,52,10,22,65,70}
+				--	Tier3 = {27,66,29,98,57,3,8,11,69}
+				--	Tier4 = {102,61,67,23,81,30}
+				--	Tier5 = {60,68}
+
+
+			CIfEnd()
+			for i = 1, 5 do
+			G_CA_SetSpawn2X({CV(PattV[2],i)}, TierArr[i], "ACAS", "B2S"..i, "MAX", EffArr[i], {2048,2048}, nil, nil, nil, 1)
+			end
+			TriggerX(FP,{Bring(Force2,AtMost,10,"Men",64)},{SetInvincibility(Disable, 12, FP,64)},{preserved})
+			TriggerX(FP,{Bring(Force2,AtLeast,11,"Men",64)},{SetInvincibility(Enable, 12, FP,64)},{preserved})
+			TriggerX(FP,{CV(PattV[1], 0)},{SetV(PattV[1],150)},{preserved})
+			CSub(FP,PattV[1],1)
+			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(PattV[2],4,AtMost)}, {AddV(CB[2],5000000),AddV(PattV[2],1)}, 1)
+			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(PattV[2],5,AtLeast)}, {SetV(CB[6],1)}, 1)
+		CIfEnd()
+
+		
+
+		
 
 
 		if Limit == 1 then
 			CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
 		end
-		CIf(FP,CD(PattC[1],1,AtLeast),{SetV(CB[3],250),SetCD(PattC[1],0)})
-			CIfX(FP,{CV(CB[2],0,AtMost),CV(CA[1],9,AtMost)},{AddV(CB[2],2000000),AddV(CA[1],1)})
+		CIf(FP,CD(PattC[1],1,AtLeast),{SetCD(PattC[1],0)})
+			TriggerX(FP,{},SetV(CB[3],250),{preserved})--CD(TestMode,1),
+			CIfX(FP,{TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(CA[1],9,AtMost)},{AddV(CB[2],3000000),AddV(CA[1],1)})
 				DoActions(FP,{CreateUnit(3,84,64,FP),KillUnit(84, FP),RotatePlayer({PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP)})
+				TriggerX(FP,{CV(CA[1],3)},{AddV(CB[2],3000000)})
+				TriggerX(FP,{CV(CA[1],2)},{AddV(CB[2],2000000)})
+				TriggerX(FP,{CV(CA[1],1)},{AddV(CB[2],3000000)})
+				TriggerX(FP,{CV(CA[1],4)},{AddV(CB[2],2000000)})
+				CTrigger(FP,{CV(CA[1],5)},{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),AddV(CB[3],250),SetCD(CUnitFlag,1)})
+				CTrigger(FP,{CV(CA[1],6)},{TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),SetV(CB[3],0)})
+				TriggerX(FP,{CV(CA[1],7)},{AddV(CB[2],1000000)})
+				CTrigger(FP,{CV(CA[1],8)},{SetV(CB[2],5000000),TSetMemoryX(_Add(UnitPtr,55), SetTo, 0x04000000,0x04000000),TSetMemory(_Add(UnitPtr,2), SetTo, 5000000*256)})
 			CElseX()
 
 			CIfXEnd()
@@ -1474,12 +1814,45 @@ end
 			for j,k in pairs(PattC2) do
 				table.insert(ResetActT,SetCD(k,0))
 			end
+			--table.insert(ResetActT,SetMemory(0x66EC48+(533*4), SetTo, 246))
+			--table.insert(ResetActT,SetMemoryB(0x669E28+(533), SetTo, 9))
+			
+			
+			
 			
 			DoActions2X(FP,ResetActT)
 		CIfEnd()
-		CTrigger(FP,{CV(CA[1],9,AtMost),CV(CB[2],0,AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
+		CTrigger(FP,{TMemory(_Add(UnitPtr,2), AtMost, 4000000*256),CV(CB[2],0,AtMost),CV(CB[6],0,AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
+	B3DeathCheck = CB[5]
 	end
-	CABoss(BPTest,BPHRetTest,2000000,{0,300,1},"CABossFunc",FP)
+	if BossPhaseTestMode == 1 then
+		BinitT = CreateVar2(FP,nil,nil,300)
+		TriggerX(FP, {CD(TestMode,1)}, {SetV(BinitT,0)})
+	else
+		BinitT = 300
+	end
+	CABoss(BPTest,BPHRetTest,3000000,{0,BinitT,1},"CABossFunc",FP)
+	
+	CIf(FP,{CV(B3DeathCheck,1)},{SetCD(Fin,1)})
+	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
+	Trigger2X(FP,{},{RotatePlayer({
+	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x06Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x08Ｆ\x04ａｔｅ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	PlayWAVX("staredit\\wav\\Clear2.ogg"),
+	PlayWAVX("staredit\\wav\\Clear2.ogg"),
+	PlayWAVX("staredit\\wav\\Clear2.ogg"),
+	PlayWAVX("staredit\\wav\\Clear2.ogg"),
+	PlayWAVX("staredit\\wav\\Clear2.ogg")
+	},HumanPlayers,FP);})
+		StoryPrint(4000*1,"\x04운명\x08( \x11Ｆ\x04ａｔｅ \x08)\x04")
+		StoryPrint(4000*2,"\x04아주 먼 과거\x10 ( \x11Ｐ\x04ａｓｔ \x10)\x04의 운명은 참으로 비참했었지.")
+		StoryPrint(4000*3,"\x04하지만, 이번에는 과거와 다르게도.. \x08비참\x04한 운명으로부터 벗어났어.")
+		StoryPrint(4000*4,"\x04그런데.. 무엇일까? 무언가 잊어버린듯한... 허전한 이 느낌은..?")
+		StoryPrint(4000*5,"\x04우리는 어쩌면, \x07멋지고 아름다운 것\x04을 잊어버렸을 터인데...")
+		StoryPrint(4000*6,"\x04수많은 기억을 헤짚으며 생각해보았지만 \x08정답\x04은 나오지 않았고,")
+		StoryPrint(4000*7,"\x04당신은 또다른 \x07망각\x04 속에서 \02기약\04없는 여정이 계속된다.")
+		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
+		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
+	CIfEnd()
 	CIfEnd()
 
 

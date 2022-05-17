@@ -31,8 +31,7 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-
-TestSet(1)
+TestSet(0)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 1
@@ -40,7 +39,7 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.8"
+VerText = "\x04Ver. Beta 0.9"
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end
@@ -63,6 +62,7 @@ CJump(AllPlayers,init_func)
 	Install_TMemoryBW(FP)
 	Install_BackupCP(FP)
 	Install_UnitCount(FP)
+	Install_NukeLibrary()
 	Include_CBulletLib()
 	DUnitCalc = Install_EXCC(FP,15,1)
 	UnivCunit = Install_EXCC(FP,10,{nil,{1,Subtract},{1,Subtract},{1,Subtract}})
@@ -80,7 +80,6 @@ CJump(AllPlayers,init_func)
 	Include_GunData(128,55)
 	
 CJumpEnd(AllPlayers,init_func)
-NoAirCollisionX(FP)
 init()
 --DoActions2(FP,PatchArrPrsv)
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
@@ -95,6 +94,7 @@ CIf(AllPlayers,ElapsedTime(AtLeast,3))
 	BossTrig()
 CIfEnd()
 
+NoAirCollisionX(FP)
 --Enable_HideErrorMessage(FP)
 EndCtrig()
 ErrorCheck()

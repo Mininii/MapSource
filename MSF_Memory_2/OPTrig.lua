@@ -3,7 +3,7 @@ function Opening()
     
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
-    --DoActionsX(FP,{SetV(BGMType,1)},1)
+    DoActionsX(FP,{SetV(BGMType,1)},1)
     if Limit == 0 then
     
     end
@@ -69,7 +69,7 @@ DoActions(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 CIfEnd()
 if Limit == 1 then
     TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})
-    TriggerX(FP,{CD(TestMode,1)},{ModifyUnitShields(All,"Men",Force1,64,100),ModifyUnitHitPoints(All,"Men",Force1,64,100)},{preserved})
+    --TriggerX(FP,{CD(TestMode,1)},{ModifyUnitShields(All,"Men",Force1,64,100),ModifyUnitHitPoints(All,"Men",Force1,64,100)},{preserved})
 end
 CIfOnce(FP,CD(OPJump,1))
 
@@ -123,7 +123,7 @@ EDText = {
     "\x08£Â£á£ä¡¡\x0F£Å\x04£î£ä£é£î£ç £° £º \x1FÀý¸Á\x04°ú \x10È¥µ·\x04ÀÇ \x17±â¾ï ",
     "\x08£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £± £º \x18ÀÒ¾î¹ö¸° \x07ºû\x04ÀÇ \x17±â¾ï",
     "\x0E£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £² £º \x11°ú°Å\x04ÀÇ \x17±â¾ï",
-    "\x10£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £³ £º \x10È¥µ·\x04ÀÇ \x08¿î¸í"
+    "\x10£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £³ £º \x10¸Á°¢\x04ÀÇ \x08¿î¸í"
 }
 
 for i=1, 4 do
