@@ -521,7 +521,7 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	return BGMTypeNum
 end
 
-function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag)
+function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag,BGMSkipSEFlag)
 	if InitBGMP == 12 then
 	InitBGMP = Player
 	else
@@ -572,6 +572,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
 		}
 	end
 CElseX()
+if BGMSkipSEFlag == nil then
 Trigger { -- 브금????????? ??????
 	players = {InitBGMP},
 		actions = {
@@ -581,6 +582,7 @@ Trigger { -- 브금????????? ??????
 		PreserveTrigger();
 	},
 }
+end
 CIfXEnd()
 CAdd(InitBGMP,0x6509B0,1)
 CWhileEnd()
@@ -610,6 +612,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 					PreserveTrigger();
 				},
 			}
+			if BGMSkipSEFlag == nil then
 			Trigger { -- 브금?????? j??
 				players = {InitBGMP},
 				conditions = {
@@ -623,6 +626,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 					PreserveTrigger();
 				},
 			}
+			end
 			Trigger { -- 브금?????? j??
 				players = {InitBGMP},
 				conditions = {
@@ -658,6 +662,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 
 	end
 CElseX()
+if BGMSkipSEFlag == nil then
 Trigger { -- 브금????????? ?????? ????????
 	players = {InitBGMP},
 	conditions = {
@@ -667,6 +672,7 @@ Trigger { -- 브금????????? ?????? ????????
 		PreserveTrigger();
 	},
 }
+end
 CIfXEnd()
 DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMTypeV[2],SetTo,0)})
 CIfEnd()
