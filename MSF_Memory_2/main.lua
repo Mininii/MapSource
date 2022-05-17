@@ -39,7 +39,7 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.9"
+VerText = "\x04Ver. Beta 0.9A"
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end

@@ -1336,7 +1336,7 @@ end
 		StoryPrint(4000*5,"\x04...\x0F너무 많은 \x07빛\x04을 \x08허비\x04하였던 걸까...?")
 		StoryPrint(4000*6,"\x04결국 그 어떤 것도 해결하지 못한 채")
 		StoryPrint(4000*7,"\x08고통\x04스러운 기억을 또 다시 맞이하며")
-		StoryPrint(4000*8,"\x07당신\x04은 \x1F절망\x04 \x07기억\x04속에서 \x11끝없는 혼돈\x04에 시달리게 되었다.")
+		StoryPrint(4000*8,"\x07당신\x04은 \x1F절망\x04의 \x07기억\x04속에서 \x11끝없는 혼돈\x04에 시달리게 되었다.")
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{SetMemory(0x657A9C,Subtract,1)},{preserved})
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*9)},{Gun_DoSuspend(),SetCD(Win,1)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
@@ -1739,9 +1739,6 @@ Trigger2X(FP,{},{RotatePlayer({
 			SetMemoryB(0x6636B8+207, SetTo, 127),
 			SetInvincibility(Enable, 185, Force2, 64),
 			SetMemory(0x662350+(185*4),SetTo,100*256),
-			SetCD(MarDup,2),
-			SetCD(MarDup2,0),
-			SetCD(CUnitFlag,1),
 			SetMemory(0x66EC48+(318*4), SetTo, 246),--핵터지는모션살리기
 			KillUnit(25, Force2),
 			KillUnit(30, Force2),
