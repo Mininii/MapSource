@@ -1243,7 +1243,14 @@ function Include_Conv_CPosXY(Player)
 end
 
 
-
+---@param UnitPtr? table -- 보스 유닛의 EPD가 담긴 주소
+---@param UnitHPRetV? table -- 보스 유닛의 확장 HP를 리턴받는 V/VA
+---@param Preset? table -- 6개의 프리셋 입력공간. {} 형태로 입력
+---@param CAfunc? string -- 보스 패턴 등의 CAFunc 입력공간. CB[3]이 1이상일 경우 해당 함수가 작동되지 않음
+---@param PlayerID? number -- 트리거 플레이어
+---@param Condition? table -- CABoss 발동 조건
+---@param Action? table -- 조건이 만족될때 실행할 액션
+---@return table,table -- 해당함수의 리턴값 = CA,CB
 function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
 	
@@ -1277,13 +1284,6 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 		table.insert(CA,CTemp)
 	end
 	CB = CreateVarArr(9,PlayerID)
-	--UnitPtr -- 보스 유닛의 EPD가 담긴 주소
-	--UnitHPRetV -- 보스 유닛의 확장 HP를 리턴받는 V/VA
-	--Preset -- 5개의 프리셋 입력 공간. {} 형태로 입력
-	--CAfunc -- 보스 패턴 등의 CAFunc 입력공간. CB[3]이 1이상일 경우 해당 함수가 작동되지 않음
-	--PlayerID -- 트리거 플레이어
-	--Condition -- CABoss 발동 조건
-	--Action -- 조건이 만족될때 실행할 액션
 
 	--이하 프리셋
 	--Preset[1] = PattNum -- 시작 패턴 넘버 결정. 0에서 시작시 nil입력해도됨
@@ -1291,6 +1291,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	--Preset[3] = Lock type -- 보스를 고정시킬지 결정함. 1 입력시 부분고정됨(미세하게 이동함). 마린, 고스트류 모두 사용가능. 단, 2 이상 입력시 완전고정되는데 가속도 조작시 튕김
 	--Preset[4] = initHP -- 초기 HP 입력(실제값은 MaxHP + InitHP)
 	--Preset[5] = MaxHP -- 무적상태로 만들때 최대체력값. 마린 공격력이 너무 높을 경우 800만쯤으로 잡아줘야됨
+	--Preset[6] = ExtendHPFlag -- 확장 체력 기능 사용 여부. 1일 경우 사용안함
 	-- 이하 내부변수
 	--CB[1] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
 	--CB[2] = ExHP -- 현재 확장된 HP값이 저장된 변수. 이 값을 변경하면 체력을 자유롭게 늘렸다 줄였다 할 수 있음
@@ -1316,7 +1317,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CIfEnd()
 
 	-------- Preset Limit --------------------------------
-	for i = 1, 8 do
+	for i = 1, 6 do
 		if type(Preset[i]) ~= "number" then
 			CMov(PlayerID,CA[i],Preset[i])
 		end
@@ -1327,8 +1328,9 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 
 		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
 		
-			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, 4000000*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
+			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, (Preset[5])*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
 			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
+			if Preset[6] == 0 then
 			CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
 				CIf(PlayerID,CV(CB[2],1,AtLeast))
 					f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
@@ -1341,9 +1343,9 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 					CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
 					CMov(PlayerID,CB[2],0)
 					CIfXEnd()
-
 				CIfEnd()
 			CWhileEnd()
+			end
 			
 			if UnitHPRetV ~= nil then
 				if UnitHPRetV[4]== "V" then
@@ -1372,10 +1374,10 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 			CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
 		CIfXEnd()
 	CIfEnd()
-	local Ret = CA
+	local Ret,Ret2 = CA,CB
 	CABossPtr = nil
 	CABossPlayerID = {}
 	CABossDataArr = {}
 	CABossTempArr = {}
-	return Ret
+	return Ret,Ret2
 end
