@@ -690,11 +690,11 @@ function IBGM_EPD(Player,MaxPlayer,Option_NT,BGMDeathsT)
 	CMov(Player,Du,Dy)
 	if Option_NT ~= nil then
 		if type(Option_NT) == "table" then
-		CIf(FP,{NTCond2()})
-			CMov(FP,Option_NT[1],DtP)
+		CIf(Player,{NTCond2()})
+			CMov(Player,Option_NT[1],DtP)
 		CIfEnd()
-		CIf(FP,{NTCond()})
-			CAdd(FP,Option_NT[2],DtP,Option_NT[1])
+		CIf(Player,{NTCond()})
+			CAdd(Player,Option_NT[2],DtP,Option_NT[1])
 		CIfEnd()
 		else
 			PushErrorMsg("OPtion_NT_InputData_Error")
@@ -877,7 +877,7 @@ function Install_TMemoryBW(PlayerID)
 		CIfXEnd()
 		f_Mod(PlayerID,RetV,MaskV2)
 		f_Div(PlayerID,RetV,MaskV)
-		CIf(FP,CVar(PlayerID,MaskV2[2],AtLeast,1))
+		CIf(PlayerID,CVar(PlayerID,MaskV2[2],AtLeast,1))
 		CIfEnd()
 	SetCallEnd()
 
@@ -1221,9 +1221,9 @@ function Include_Conv_CPosXY(Player)
 	CMov(Player,CPosX,CPos,0,0XFFFF,1)
 	CMov(Player,CPosY,CPos,0,0XFFFF0000,1)
 	f_Div(Player,CPosY,_Mov(0x10000))
-	CIf(FP,CVar(FP,CPosDeviation[2],AtLeast,1))
-		CAdd(FP,CPosX,CPosDeviation)
-		CAdd(FP,CPosY,CPosDeviation)
+	CIf(Player,CVar(Player,CPosDeviation[2],AtLeast,1))
+		CAdd(Player,CPosX,CPosDeviation)
+		CAdd(Player,CPosY,CPosDeviation)
 	CIfEnd()
 	SetCallEnd()
 	function Convert_CPosXY(Value,Deviation)
@@ -1240,4 +1240,142 @@ function Include_Conv_CPosXY(Player)
 		end
 		return CPosX,CPosY
 	end
+end
+
+
+
+function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
+	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
+	
+	if UnitPtr == nil then
+		PushErrorMsg("CA_InputError")
+	elseif UnitPtr[4] ~= "V" then
+		PushErrorMsg("CA_InputError")
+	end
+
+	local CA = {} -- 8
+	local CB = {} -- 4
+	local CTemp
+	for i = 1, 8 do -- Preset Setting
+		if i == 5 then
+			if Preset[i] == nil then
+				Preset[i] = 4000000
+			end
+		else
+			if Preset[i] == nil then
+				Preset[i] = 0
+			end
+		end
+	end
+
+	for i = 1, 8 do -- CA : Preset
+		if type(Preset[i]) == "number" then 
+			CTemp = CreateVar2(PlayerID,nil,SetTo,Preset[i])
+		else
+			CTemp = CreateVar(PlayerID)
+		end
+		table.insert(CA,CTemp)
+	end
+	CB = CreateVarArr(9,PlayerID)
+	--UnitPtr -- 보스 유닛의 EPD가 담긴 주소
+	--UnitHPRetV -- 보스 유닛의 확장 HP를 리턴받는 V/VA
+	--Preset -- 5개의 프리셋 입력 공간. {} 형태로 입력
+	--CAfunc -- 보스 패턴 등의 CAFunc 입력공간. CB[3]이 1이상일 경우 해당 함수가 작동되지 않음
+	--PlayerID -- 트리거 플레이어
+	--Condition -- CABoss 발동 조건
+	--Action -- 조건이 만족될때 실행할 액션
+
+	--이하 프리셋
+	--Preset[1] = PattNum -- 시작 패턴 넘버 결정. 0에서 시작시 nil입력해도됨
+	--Preset[2] = initPattT -- 보스 소환 후 작동 대기시간. 1프레임 단위
+	--Preset[3] = Lock type -- 보스를 고정시킬지 결정함. 1 입력시 부분고정됨(미세하게 이동함). 마린, 고스트류 모두 사용가능. 단, 2 이상 입력시 완전고정되는데 가속도 조작시 튕김
+	--Preset[4] = initHP -- 초기 HP 입력(실제값은 MaxHP + InitHP)
+	--Preset[5] = MaxHP -- 무적상태로 만들때 최대체력값. 마린 공격력이 너무 높을 경우 800만쯤으로 잡아줘야됨
+	-- 이하 내부변수
+	--CB[1] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	--CB[2] = ExHP -- 현재 확장된 HP값이 저장된 변수. 이 값을 변경하면 체력을 자유롭게 늘렸다 줄였다 할 수 있음
+	--CB[3] = PattT -- 보스 작동 대기시간. 이 값이 1 이상일 경우 무적. 1프레임 단위로 1씩 감소됨
+	--CB[4] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	--CB[5] = DeathFlag -- 죽엇을 경우 이 값이 1이 됨.
+	--CB[6] = Enable BossKill -- 이 값이 0일 경우 보스를 죽일수 있는 상태가 됨. 아직 죽이기 싫을때 이 값을 1로 바꾸면 됨
+	--CB[7] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
+	--CB[8] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
+	--CB[9] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	CIfOnce(PlayerID)--init
+	CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],CA[4])},1)
+	CTrigger(PlayerID,{CV(CA[3],1,AtLeast)},{
+		TSetMemory(_Add(UnitPtr,13), SetTo, 1),
+		TSetMemoryX(_Add(UnitPtr,18), SetTo, 1,0xFFFF),
+		TSetMemoryX(_Add(UnitPtr,9), SetTo, 0,0xFF000000),
+		TSetMemoryX(_Add(UnitPtr,8), SetTo, 127*65536,0xFF0000),
+	})
+	CTrigger(PlayerID,{CV(CA[3],2,AtLeast)},{
+		TSetMemory(_Add(UnitPtr,13), SetTo, 0),
+		TSetMemoryX(_Add(UnitPtr,18), SetTo, 0,0xFFFF),
+	})
+	CIfEnd()
+
+	-------- Preset Limit --------------------------------
+	for i = 1, 8 do
+		if type(Preset[i]) ~= "number" then
+			CMov(PlayerID,CA[i],Preset[i])
+		end
+	end
+
+
+
+
+		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
+		
+			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, 4000000*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
+			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
+			CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
+				CIf(PlayerID,CV(CB[2],1,AtLeast))
+					f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
+					f_Div(PlayerID,CB[7],256)
+					CSub(PlayerID,CB[8],_Mov(Preset[5]),CB[7])
+					CIfX(PlayerID,{TTCVar(PlayerID,CB[2][2],">",CB[8])})
+					CSub(PlayerID,CB[2],CB[8])
+					CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),SetTo,(Preset[5]*256))})
+					CElseX()
+					CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
+					CMov(PlayerID,CB[2],0)
+					CIfXEnd()
+
+				CIfEnd()
+			CWhileEnd()
+			
+			if UnitHPRetV ~= nil then
+				if UnitHPRetV[4]== "V" then
+				CMov(PlayerID,UnitHPRetV,CB[2])
+				elseif UnitHPRetV[4]== "VA" then
+				CMovX(PlayerID,UnitHPRetV,CB[2])
+				else
+					PushErrorMsg("CA_InputError")
+				end
+			end
+	-------------------------------------------------------------------------
+			CIfX(PlayerID,CV(CB[3],0))
+				CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})--TSetMemoryX(_Add(UnitPtr,70), SetTo, 0*256,0xFF00)
+				CABossPtr = UnitPtr
+				CABossPlayerID = PlayerID
+				CABossDataArr = CA
+				CABossTempArr = CB
+				if CAfunc ~= nil then -- 패턴작성단락
+					_G[CAfunc]()
+				end
+			CElseX({SubV(CB[3],1)})--패턴타이머 1이상일 경우 무적, 패턴작동정지
+			CIfXEnd()
+	-------------------------------------------------------------------------
+
+		CElseX() -- 죽은경우
+			CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
+		CIfXEnd()
+	CIfEnd()
+	local Ret = CA
+	CABossPtr = nil
+	CABossPlayerID = {}
+	CABossDataArr = {}
+	CABossTempArr = {}
+	return Ret
 end

@@ -1481,7 +1481,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		local CA = CABossDataArr
 		local CB = CABossTempArr
 		CMov(FP,BossAtkRand,_Mod(_Rand(),1000))
-		CIfOnce(FP)
+		CIfOnce(FP,nil,{SetV(CB[6],1)})
 		TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
 		CDoActions(FP, {TSetMemoryX(_Add(BPTest,55), SetTo, 0,0x04000000)})
 		CIfEnd()
@@ -1772,7 +1772,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			TriggerX(FP,{CV(PattV[1], 0)},{SetV(PattV[1],150)},{preserved})
 			CSub(FP,PattV[1],1)
 			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(PattV[2],4,AtMost)}, {AddV(CB[2],5000000),AddV(PattV[2],1)}, 1)
-			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(PattV[2],5,AtLeast)}, {SetV(CB[6],1)}, 1)
+			CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost),CV(PattV[2],5,AtLeast)}, {SetV(CB[6],0)}, 1)
 		CIfEnd()
 
 		
@@ -1816,7 +1816,6 @@ Trigger2X(FP,{},{RotatePlayer({
 			
 			DoActions2X(FP,ResetActT)
 		CIfEnd()
-		CTrigger(FP,{TMemory(_Add(UnitPtr,2), AtMost, 4000000*256),CV(CB[2],0,AtMost),CV(CB[6],0,AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256)},1)
 	B3DeathCheck = CB[5]
 	end
 	if BossPhaseTestMode == 1 then
@@ -1825,7 +1824,7 @@ Trigger2X(FP,{},{RotatePlayer({
 	else
 		BinitT = 300
 	end
-	CABoss(BPTest,BPHRetTest,3000000,{0,BinitT,1},"CABossFunc",FP)
+	CABoss(BPTest,BPHRetTest,{0,BinitT,2,3000000},"CABossFunc",FP)
 	
 	CIf(FP,{CV(B3DeathCheck,1)},{SetCD(Fin,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
