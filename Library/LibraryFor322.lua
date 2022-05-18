@@ -1288,7 +1288,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	--이하 프리셋
 	--Preset[1] = PattNum -- 시작 패턴 넘버 결정. 0에서 시작시 nil입력해도됨
 	--Preset[2] = initPattT -- 보스 소환 후 작동 대기시간. 1프레임 단위
-	--Preset[3] = Lock type -- 보스를 고정시킬지 결정함. 1 입력시 부분고정됨(미세하게 이동함). 마린, 고스트류 모두 사용가능. 단, 2 이상 입력시 완전고정되는데 가속도 조작시 튕김
+	--Preset[3] = Lock type -- 보스를 고정시킬지 결정함. 1 입력시 부분고정됨(미세하게 이동함). 마린, 고스트류 모두 사용가능. 단, 2 이상 입력시 완전고정되는데 최고속도, 가속도 조작시 튕김
 	--Preset[4] = initHP -- 초기 HP 입력(실제값은 MaxHP + InitHP)
 	--Preset[5] = MaxHP -- 무적상태로 만들때 최대체력값. 마린 공격력이 너무 높을 경우 800만쯤으로 잡아줘야됨
 	--Preset[6] = ExtendHPFlag -- 확장 체력 기능 사용 여부. 1일 경우 사용안함
