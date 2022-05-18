@@ -2,7 +2,7 @@ function LeaderBoardF()
 	LeaderBoardiStrinit = def_sIndex()
 	CJump(FP, LeaderBoardiStrinit)
 	ls01 = "\x07，\x11，\x08，\x07ー \x1DP\x04oints - \x1FExRate\x04:"..MakeiStrVoid(4).."%\x07 \x07―\x08，\x11，\x07，"
-	ls02 = "\x07，\x11，\x08，\x07ー \x08D\x04eaths - \x1FM\x04AX "..MakeiStrVoid(7).."\x04/\x08500 \x07―\x08，\x11，\x07，"
+	ls02 = "\x07，\x11，\x08，\x07ー \x08D\x04eaths - \x1FM\x04AX "..MakeiStrVoid(7).."\x04/\x08400 \x07―\x08，\x11，\x07，"
 	PtiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10)) 
 	DthiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls02)+10)) 
 	TempiS1, TempiS1a, TempiS1s = SaveiStrArr(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10))

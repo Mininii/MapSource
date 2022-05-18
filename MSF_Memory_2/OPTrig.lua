@@ -78,8 +78,8 @@ CIfOnce(FP,CD(OPJump,1))
 if Limit == 1 then
 
 
-	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
-	TriggerX(FP,{CD(TestMode,0)},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
+	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VOFF),RunAIScript(P7VOFF),RunAIScript(P6VOFF),RunAIScript(P5VOFF)},MapPlayers,FP)})
+	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	for i = 0, 3 do
 	TriggerX(FP,{CD(TestMode,1),HumanCheck(i)},{CreateUnitWithProperties(24,MarID[i+1],i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
 	TriggerX(FP,{HumanCheck(i)},{CreateUnitWithProperties(3,32,i+2,i,{energy = 100}),CreateUnitWithProperties(1,20,i+2,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
@@ -142,7 +142,7 @@ end
 
 
 Trigger2X(FP,{CD(Win,5000,AtLeast),CD(EDNum,1)},
-RotatePlayer({DisplayTextX(StrDesignX("\x04총합 \x08데스 카운트\x04가 \x06500 이상\x04입니다. 다시 도전해주세요."),4),
+RotatePlayer({DisplayTextX(StrDesignX("\x04총합 \x08데스 카운트\x04가 \x06400 이상\x04입니다. 다시 도전해주세요."),4),
 PlayWAVX("staredit\\wav\\button3.wav"),
 PlayWAVX("staredit\\wav\\button3.wav"),
 PlayWAVX("staredit\\wav\\button3.wav")

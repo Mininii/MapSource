@@ -1291,16 +1291,16 @@ end
 	end
 	CIfOnce(FP)
 	
-	TriggerX(FP,{CD(EEggCode,4,AtMost)},{--CV(DCV,500,AtLeast)
+	TriggerX(FP,{CD(EEggCode,4,AtMost)},{
 		SetCD(EDNum,2)
 	})
-	TriggerX(FP,{CD(EEggCode,5,AtLeast),CD(EEggCode,9,AtMost)},{--CV(DCV,500,AtLeast)
+	TriggerX(FP,{CD(EEggCode,5,AtLeast),CD(EEggCode,9,AtMost)},{
 		SetCD(EDNum,3)
 	})
-	TriggerX(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,19,AtMost)},{--CV(DCV,500,AtLeast)
+	TriggerX(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,19,AtMost)},{
 		SetCD(EDNum,4)
 	})
-	TriggerX(FP,{CV(DCV,500,AtLeast)},{--CV(DCV,500,AtLeast)
+	TriggerX(FP,{CV(DCV,400,AtLeast)},{
 		SetCD(EDNum,1)
 	})
 	CIfEnd()
@@ -1466,7 +1466,7 @@ Trigger2X(FP,{},{RotatePlayer({
 	if BossPhaseTestMode == 1 then
 		TriggerX(FP,CD(TestMode,1),{Gun_SetLine(13, SetTo, 18000)})
 	end
-	CIfOnce(FP,{Gun_Line(13,AtLeast,18000)})
+	CIfOnce(FP,{Memory(0x628438,AtLeast,1),Gun_Line(13,AtLeast,18000)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 	
 	BPTest = CreateVar(FP)	

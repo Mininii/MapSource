@@ -1,7 +1,7 @@
 
 
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
--- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\St	ormcoast Fortress\\ScmDraft 2\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
@@ -31,7 +31,7 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-TestSet(0)
+TestSet(1)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 1
