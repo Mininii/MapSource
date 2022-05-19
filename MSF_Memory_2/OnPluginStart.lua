@@ -469,6 +469,23 @@ end
 		}
 	end
 
+	Trigger { -- 혹시 싱글이신가요?
+	players = {FP},
+	conditions = {
+		Label(0);
+		Memory(0x57F0B4, Exactly, 0);
+},
+	actions = {
+		--SetCDeaths(FP,SetTo,1,isSingle);
+			RotatePlayer({
+			DisplayTextX(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+},
+}
+--	
 
 
 	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
