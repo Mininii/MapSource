@@ -38,11 +38,43 @@ function LevelUp()
 			--TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{preserved})--19
 			DoActions(FP,{
 			--SetDeathsX(AllPlayers,SetTo,0,12,0xFFFFFF),
+			MoveUnit(All, "Men", FP, "Center", 34),
 			ModifyUnitEnergy(All,"Any unit",P8,64,0),KillUnit("Any unit",P8),
-			KillUnitAt(All,125,17,Force1),
+			KillUnitAt(All,125,17,Force1), 
 			KillUnitAt(All,125,18,Force1),
 			KillUnitAt(All,125,19,Force1),})
-			CIfX(FP,CVar(FP,LevelT[2],Exactly,2))
+			CIfX(FP, {Never()})
+			-- 보스소환 테스트
+			if Limit == 1 then
+				
+		        CElseIfX({CD(TestMode,1)})
+				
+				CIf(FP,Memory(0x628438,AtLeast,1))
+					f_Read(FP,0x628438,nil,Boss6Ptr,0xFFFFFF)
+					CMov(FP,CunitIndex,_Div(_Sub(Boss6Ptr,19025),_Mov(84)))
+					local TempHP1, TempHP2 = CreateVars(2,FP)
+					f_LMov(FP,{TempHP1, TempHP2},"2560000000000") --100억
+					CDoActions(FP,{
+						Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+						Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempHP1),
+						Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempHP2),
+						SetMemoryX(0x669FB4, SetTo, 16777216*17,0xFFFFFFFF),
+						KillUnitAt(All,"Men","Center",Force1),
+						CreateUnit(1,186,64,FP),
+						SetCDeaths(FP,Add,1,isBossStage),
+						TSetMemory(_Add(Boss6Ptr,2),SetTo,8320000*256),
+					})
+				CIfEnd()
+		--        CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
+		--        
+	
+		--        
+		--        CIfXEnd()
+	
+	
+	
+			end
+			CElseIfX({CVar(FP,LevelT[2],Exactly,2)})
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT),
 				SetCDeaths(FP,Add,1,isBossStage),})
 			CElseIfX(CVar(FP,LevelT[2],Exactly,4))
@@ -88,8 +120,6 @@ function LevelUp()
 				TSetCVar(FP,DPtr[2],SetTo,Nextptrs),
 				SetCDeaths(FP,Add,1,isBossStage),
 				TSetMemory(_Add(Nextptrs,2),SetTo,8320000*256),
-			})
-			DoActions(FP,{
 				SetCVar(FP,DcurHP[2],SetTo,8320000*256)
 			})
 			
@@ -98,20 +128,6 @@ function LevelUp()
 			CElseX()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,1,BClear))
 			CIfXEnd()
-		-- 보스소환 테스트
-		if TestStart == 1 then
-			
-	--        
-			
-	--        CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
-	--        
-
-	--        
-	--        CIfXEnd()
-
-
-
-		end
 		CMov(FP,CunitIndex,0)-- 모든 유닛 영작유닛 플래그 리셋
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
 			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0)})
