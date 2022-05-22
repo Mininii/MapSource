@@ -59,7 +59,7 @@ function Var_init()
 	HiveCcode= CreateCcodeArr(4)
 	B2H = CreateVar(FP)
 	CurCunitI = CreateVar(FP)
-
+	RedNumPanelty = CreateCcode()
 
 	BarRally = CreateVarArr(4,FP)
 	BarPos = CreateVarArr(4,FP)

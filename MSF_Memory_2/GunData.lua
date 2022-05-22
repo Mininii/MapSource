@@ -430,6 +430,16 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
 	CTrigger(FP,{Gun_Line(8,AtLeast,1000)},{Gun_SetLine(9,Add,1),Gun_SetLine(20,SetTo,0),Gun_SetLine(8,Subtract,1000)},1)
+	local CurTime = CreateVar(FP)
+	CIf(FP,{CD(Theorist,1),Gun_Line(9,AtLeast,13)})
+	CMov(FP,CurTime,_Div(_Mod(Time1,3600000)),10000)
+	f_Lengthdir(FP, 1000, _Add(CurTime,270), CPosX, CPosY)
+	local TempX = CreateVar(FP)
+	local TempY = CreateVar(FP)
+	CAdd(FP,TempX,G_CA_CenterX,CPosX)
+	CAdd(FP,TempY,G_CA_CenterY,CPosY)
+	Simple_SetLocX(FP, 0, TempX,TempY,TempX,TempY,TOrder("Men",G_CA_Player,64,Attack,1))
+	CIfEnd()
 	CTrigger(FP,{Gun_Line(9,AtLeast,13)},{Gun_DoSuspend(),AddCD(TempleCcode,1)},1)
 	CIfEnd()
 	CIf_GCase(147)
@@ -625,6 +635,8 @@ function Include_GunData(Size,LineNum)
 	C_FS2 = CreateVar(FP)
 	CenterCUT = {88,21,86,28}--{11,69,22,47}--
 	N_X,N_Y,L_X,L_Y,C_A = CreateVars(5,FP)
+	CenterUCnt,CenterUCnt2,CenCurX,CenCurY = CreateVars(4,FP)
+
 		
 	CIf(FP,{Gun_Line(8,AtMost,359)})
 		CIf(FP,{Memory(0x628438,AtLeast,1)})
@@ -653,6 +665,55 @@ function Include_GunData(Size,LineNum)
 		CIfEnd()
 	CIfEnd()
 	CIf(FP,{TTOR({Gun_Line(8,Exactly,360),TTAND({Gun_Line(8,AtLeast,361),Gun_Line(7,Exactly,500)})})},{Gun_SetLine(7,SetTo,0)})
+	CIf(FP,{CD(Theorist,1),Gun_Line(8,AtLeast,361)},{
+		SetV(CPosX,0),
+		SetV(CPosY,0),
+		SetV(CenterUCnt2,0),
+		SetV(CenCurX,0),
+		SetV(CenCurY,0),
+	})
+	local CenJump = def_sIndex()
+	local CenJump2 = def_sIndex()
+	for i = 0, 3 do
+		NJumpX(FP,CenJump2,{HumanCheck(i,1)})
+	end
+	CJump(FP,CenJump)
+	NJumpXEnd(FP, CenJump2)
+	CFor(FP, 0, 29, 1) -- Y
+		local CY = CForVariable()
+		CMov(FP,CPosX,0)
+		CFor(FP, 0, 29, 1) -- X
+		local CX = CForVariable()
+		--ConvertArr(FP,C_ArrConv,_Add(CI2,_Mul(CI1,24)))
+		
+		Simple_SetLocX(FP,0,CPosX,CPosY,_Add(CPosX,512),_Add(CPosY,512))
+		for i = 0, 3 do
+			CIf(FP,GCP(i+4),{KillUnitAt(1, nilunit, 1, FP),SetV(CenterUCnt,0)})
+			UnitReadX(FP, i, "Men", 1, CenterUCnt)
+			CIfEnd()
+		end
+		CTrigger(FP,{CV(CenterUCnt,1,AtLeast),CV(CenterUCnt,CenterUCnt2,AtLeast)},{
+			SetV(CenterUCnt2,CenterUCnt),
+			SetV(CenCurX,CPosX),
+			SetV(CenCurY,CPosY)
+		},1)
+
+
+		CAdd(FP,CPosX,128)
+		CForEnd()
+	CAdd(FP,CPosY,128)
+	CForEnd()
+	CJumpEnd(FP, CenJump)
+	CTrigger(FP,{CV(CenterUCnt2,1,AtLeast)},{SetV(G_CA_CenterX,_Add(CenCurX,256)),SetV(G_CA_CenterY,_Add(CenCurY,256))},1)
+	local CenSpawnSetArr1 = {11,22,69,98}
+	local CenSpawnSetArr2 = {27,57,29,70}
+	for i = 0, 3 do
+		G_CA_SetSpawn({GCP(i+4)}, {CenSpawnSetArr1[i+1]}, "ACAS", "CenLineX", "MAX", 6, nil, "CP", G_CA_MapLimit())
+		G_CA_SetSpawn({GCP(i+4)}, {CenSpawnSetArr2[i+1]}, "ACAS", "CenLineY", "MAX", 6, nil, "CP", G_CA_MapLimit())
+	end
+
+	CIfEnd()
+
 			
 			CMov(FP,C_FS,1)
 			CMov(FP,C_W,0)
@@ -699,7 +760,7 @@ function Include_GunData(Size,LineNum)
 					--RunAIScriptAt(JYD,1),SetCp(FP),
 					Gun_DoSuspend(),AddCD(CenCcode,1)
 				})
-				TriggerX(FP,Gun_Line(3, AtLeast, 1),{SetCD(BossCenTrig,1)})
+				TriggerX(FP,Gun_Line(3, AtLeast, 1),{SetCD(BossCenTrig,1)},{preserved})
 				
 				for i = 4, 7 do
 					TriggerX(FP,{GCP(i)},{AddCD(CenCcode2[i-3],1)},{preserved})
@@ -822,6 +883,28 @@ function Include_GunData(Size,LineNum)
 	CDoActions(FP,{TKillUnit("Factories",G_CA_Player)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
 	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+	CIf(FP,CD(Theorist,1))
+	for i = 0,3 do
+		local Opr = 0
+		if i%2 == 1 then
+			Opr = 2048
+		end
+		RandR = f_CRandNum(2048, Opr,GCP(i+4))
+	end
+	CMov(FP,G_CA_CenterX,RandR)
+	for i = 0,3 do
+		local Opr = 0
+		if i >= 2 then
+			Opr = 2048
+		end
+		RandR = f_CRandNum(2048, Opr,GCP(i+4))
+	end
+	CMov(FP,G_CA_CenterY,RandR)
+	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",1,nil,"CP")
+
+	
+	
+	CIfEnd()
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	--중간보스 소환 
 BossUID = {87,74,5,2}
@@ -856,7 +939,7 @@ BossUID = {87,74,5,2}
 	CIf_GCase(190)
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,G_CA_LoopTimer(2),nil,1)
-	DoActionsX(FP,{Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	TriggerX(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
 
 	CIf(FP,Gun_Line(7,AtLeast,400))
@@ -1297,7 +1380,7 @@ end
 	TriggerX(FP,{CD(EEggCode,5,AtLeast),CD(EEggCode,9,AtMost)},{
 		SetCD(EDNum,3)
 	})
-	TriggerX(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,19,AtMost)},{
+	TriggerX(FP,{CD(EEggCode,10,AtLeast)},{--CD(EEggCode,19,AtMost)
 		SetCD(EDNum,4)
 	})
 	TriggerX(FP,{CV(DCV,400,AtLeast)},{
@@ -1649,7 +1732,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		TriggerX(FP,CD(BossCenTrig,1),{AddV(PattV[1],1)},{preserved})
 		G_CA_SetSpawn2X({CV(PattV[1],360,AtLeast)}, {10, 22,25,28}, "ACAS", "Hp2", "MAX", 925, nil,"CP", nil,nil, 1)
 
-		TriggerX(FP,{CV(PattV[1],760,AtLeast)},{SetInvincibility(Disable, 12, FP, 64)})
+		TriggerX(FP,{CV(PattV[1],760,AtLeast)},{SetInvincibility(Disable, 12, FP, 64)},{preserved})
 		
 		CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
 		CIfEnd()
@@ -1744,6 +1827,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			KillUnit(30, Force2),
 
 		})	
+			TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 			DoActionsX(FP,{SetV(PattV[1],6),Order("Men",Force2,64,Attack,64)},1)
 			CIf(FP,{CV(PattV[1],4,AtMost)})
 			TierArr = {{17,19,77,78,76,63,21,88,28,86,75},Tier2,Tier3,{102,61,67,23,81},Tier5}

@@ -807,6 +807,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemoryX(_Add(G_CA_Nextptrs,19),SetTo,0,0xFF00)
 			})
 
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- 어택 해당플레이어 위치
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
 
 			CDoActions(FP,{
@@ -1164,7 +1170,11 @@ function CA_Func()
 			CMov(FP,V(CA[10]),G_CA_Temp[11])
 		CIfEnd()
 	CIfEnd()
+	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x50000000,0xF0000000)})
+	CallTriggerX(FP,Call_CA_Repeat,{CV(G_CA_X,4096,AtMost),CV(G_CA_Y,4096,AtMost)})
+	CElseX()
 	CallTrigger(FP,Call_CA_Repeat,{})
+	CIfXEnd()
 	
 end
 local G_CA_CallStack = {}
@@ -1455,6 +1465,9 @@ function G_CA_Rotate3D()
 end
 function G_CA_Ratio(num)
 	return 0x40000000+num
+end
+function G_CA_MapLimit()
+	return 0x50000000
 end
 
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
