@@ -869,7 +869,7 @@ Command(FP,AtLeast,1,173);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
 		AddV(CanC,1);
-		AddV(RedNumPanelty,1);
+		AddCD(RedNumPanelty,1);
 		KillUnit("Factories",Force2);
 },{preserved})
 

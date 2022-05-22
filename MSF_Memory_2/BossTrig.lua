@@ -66,7 +66,7 @@ function BossTrig()
 		
 		
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),Simple_SetLoc(9,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),MoveLocation(10,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
-		CIf(FP,{Bring(P6,AtLeast,1,49,1)},{AddCD(B2V[1],1)})
+		CIf(FP,{Bring(P6,AtLeast,1,49,1)},{AddV(B2V[1],1)})
 			GetLocCenter(10,CPosX,CPosY)
 			TriggerX(FP,{CD(Theorist,0)},{SetCD(B2C[1],100)},{preserved})
 			f_TempRepeatX(CD(Theorist,1), 61, B2V[1], 1, P6, {CPosX,CPosY})
@@ -131,7 +131,7 @@ function BossTrig()
 			CIfEnd()
 			CAdd(FP,B3V[2],60)
 			CWhileEnd()
-			CAdd(FP,B3V[4],60)
+			CAdd(FP,B3V[4],12)
 		CIfEnd()
 		TriggerX(FP,{CD(B3C[2],5,AtLeast)},{SetCD(B3C[2],0)},{preserved})
 

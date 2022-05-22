@@ -197,14 +197,14 @@ CAdd(FP,Time1,Dt)
 CAdd(FP,Time2,Dt)
 CIfEnd()
 CDoActions(FP,{TSetCDeaths(FP,Add,Dt,GeneT)})
-TriggerX(FP,{ElapsedTime(AtLeast,60)},{
+TriggerX(FP,{},{--ElapsedTime(AtLeast,60)
 	SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
 },{preserved})
 
-TriggerX(FP,{CV(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*50)},{preserved})
+TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*50)},{preserved})
 Trigger { -- »¡°£¼ýÀÚ
 	players = {FP},
 	conditions = {
