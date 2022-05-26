@@ -807,6 +807,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemoryX(_Add(G_CA_Nextptrs,19),SetTo,0,0xFF00)
 			})
 
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- 어택 해당플레이어 위치
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
 
 			CDoActions(FP,{
@@ -1164,7 +1170,11 @@ function CA_Func()
 			CMov(FP,V(CA[10]),G_CA_Temp[11])
 		CIfEnd()
 	CIfEnd()
+	CIfX(FP,{CVar(FP,G_CA_Temp[12][2],Exactly,0x50000000,0xF0000000)})
+	CallTriggerX(FP,Call_CA_Repeat,{CV(G_CA_X,4096,AtMost),CV(G_CA_Y,4096,AtMost)})
+	CElseX()
 	CallTrigger(FP,Call_CA_Repeat,{})
+	CIfXEnd()
 	
 end
 local G_CA_CallStack = {}
@@ -1455,6 +1465,9 @@ function G_CA_Rotate3D()
 end
 function G_CA_Ratio(num)
 	return 0x40000000+num
+end
+function G_CA_MapLimit()
+	return 0x50000000
 end
 
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
@@ -1830,112 +1843,6 @@ function StoryPrint(T,Text,AddTrig)
 end
 
 
-function CABoss(UnitPtr,UnitHPRetV,initHP,Preset,CAfunc,PlayerID,Condition,Action)
-		CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
-		
-		if UnitPtr == nil then
-			PushErrorMsg("CA_InputError")
-		elseif UnitPtr[4] ~= "V" then
-			PushErrorMsg("CA_InputError")
-		end
-		if UnitHPRetV == nil then
-			PushErrorMsg("CA_InputError")
-		elseif UnitHPRetV[4] ~= "V" then
-			PushErrorMsg("CA_InputError")
-		end
-	
-		local CA = {} -- 8
-		local CB = {} -- 4
-		local CTemp
-		for i = 1, 8 do -- Preset Setting
-			if Preset[i] == nil then
-				Preset[i] = 0
-			end
-		end
-	
-		for i = 1, 8 do -- CA : Preset
-			if type(Preset[i]) == "number" then 
-				CTemp = CreateVar2(PlayerID,nil,SetTo,Preset[i])
-			else
-				CTemp = CreateVar(PlayerID)
-			end
-			table.insert(CA,CTemp)
-		end
-		--Preset[1] = PattNum
-		--Preset[2] = initPattT
-		--Preset[3] = Lock type
-		CB = CreateVarArr(9,PlayerID)
-		CIfOnce(PlayerID)--init
-		CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],initHP)},1)
-		CTrigger(FP,{CV(CA[3],1,AtLeast)},{
-			TSetMemory(_Add(UnitPtr,13), SetTo, 0),
-			TSetMemoryX(_Add(UnitPtr,18), SetTo, 0,0xFFFF),
-		})
-		CIfEnd()
-		--CB[1] = HPReadV
-		--CB[2] = ExHP
-		--CB[3] = PattT
-		--CB[4] = TempHPDiff
-		--CB[5] = DeathFlag
-		--CB[6] = EnableDeathFlag
-		--CB[7] = Temp
-		--CB[8] = Temp
-		--CB[9] = Temp
-
-		-------- Preset Limit --------------------------------
-		for i = 1, 8 do
-			if type(Preset[i]) ~= "number" then
-				CMov(PlayerID,CA[i],Preset[i])
-			end
-		end
-	
-	
-
-
-			CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
-			
-				CTrigger(FP,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, 4000000*256),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
-				CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(4000000-1)*256)})
-					CIf(PlayerID,CV(CB[2],1,AtLeast))
-						f_Read(FP,_Add(UnitPtr,2),CB[7])
-						f_Div(FP,CB[7],256)
-						CSub(FP,CB[8],_Mov(4000000),CB[7])
-						CIfX(FP,{TTCVar(FP,CB[2][2],">",CB[8])})
-						CSub(FP,CB[2],CB[8])
-						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),SetTo,4000000*256)})
-						CElseX()
-						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
-						CMov(FP,CB[2],0)
-						CIfXEnd()
-
-					CIfEnd()
-				CWhileEnd()
-				CMov(PlayerID,UnitHPRetV,CB[2])
-		-------------------------------------------------------------------------
-				CIfX(PlayerID,CV(CB[3],0))
-					CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})--TSetMemoryX(_Add(UnitPtr,70), SetTo, 0*256,0xFF00)
-					CABossPtr = UnitPtr
-					CABossPlayerID = PlayerID
-					CABossDataArr = CA
-					CABossTempArr = CB
-					if CAfunc ~= nil then -- 패턴작성단락
-						_G[CAfunc]()
-					end
-				CElseX({SubV(CB[3],1)})--패턴타이머 1이상일 경우 무적, 패턴작동정지
-				CIfXEnd()
-		-------------------------------------------------------------------------
-
-			CElseX() -- 죽은경우
-				CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
-			CIfXEnd()
-		CIfEnd()
-		local Ret = CA
-		CABossPtr = nil
-		CABossPlayerID = {}
-		CABossDataArr = {}
-		CABossTempArr = {}
-		return Ret
-	end
 	
 function Include_CBulletLib()
 	

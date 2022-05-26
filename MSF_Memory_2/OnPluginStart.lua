@@ -215,6 +215,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(2) -- 자환
 	UnitEnable(19,ShCost) -- 수정보호막
 	UnitEnable(8,NMCost,nil,5) -- 마린
+	UnitEnable(28,NMCost+HMCost+LMCost,nil,5) -- 마린
 	UnitEnable(7,500) -- SCV
 	
 	UnitEnable(125,8000)
@@ -232,10 +233,10 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(54) -- 컬러스킨
 	UnitEnable(53) -- 컬러스킨
 	
-	--table.insert(PatchArr,SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0)) -- 이론치모드 임시 삭제
-	--table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0))
-	--table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0))
-	--table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0)) -- 이론치모드 임시 삭제
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0))
 
 	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
 	for i= 0,3 do
@@ -470,6 +471,23 @@ end
 		}
 	end
 
+	Trigger { -- 혹시 싱글이신가요?
+	players = {FP},
+	conditions = {
+		Label(0);
+		Memory(0x57F0B4, Exactly, 0);
+},
+	actions = {
+		--SetCDeaths(FP,SetTo,1,isSingle);
+			RotatePlayer({
+			DisplayTextX(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+},
+}
+--	
 
 
 	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 

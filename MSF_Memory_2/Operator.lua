@@ -99,6 +99,12 @@ function Operator_Trig()
 			SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0);
 			SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0);},1)
 	end
+	DoActions(FP, {
+		SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,1),
+		SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,1),
+		SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,1),
+		SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,1),
+	},1)
 	CDoActions(FP, {
 		TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
 		TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
@@ -203,12 +209,14 @@ CAdd(FP,Time1,Dt)
 CAdd(FP,Time2,Dt)
 CIfEnd()
 CDoActions(FP,{TSetCDeaths(FP,Add,Dt,GeneT)})
-TriggerX(FP,{ElapsedTime(AtLeast,60)},{
+TriggerX(FP,{ElapsedTime(AtLeast,60)},{--
 	SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0),
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
 },{preserved})
+
+TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*50)},{preserved})
 Trigger { -- »¡°£¼ýÀÚ
 	players = {FP},
 	conditions = {
@@ -527,6 +535,13 @@ CanColorT = {0x0E,0x0F,0x11,0x08,0x1F}
 for j, k in pairs(CanColorT) do
 	CS__InputTA(PlayerID,{CV(CanC,j-1)},SVA1(Str1,18),k,0xFF)
 end
+
+TriggerX(FP,{CD(Theorist,1),CD(CanCTC,1),CD(CanCT,1,AtLeast)},{
+	SetCSVA1(SVA1(Str1,5),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,6),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,7),SetTo,0x04,0xFF),
+},{preserved})
+
 CS__InputTA(PlayerID,{CD(CanCT,1,AtLeast),CD(CanCTC,1)},SVA1(Str1,18),0x04,0xFF)
 TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
 
@@ -586,6 +601,7 @@ TriggerX(FP,{CD(CanCTC,1)},{
 	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
 },{preserved})
+
 LVUPEffT= CreateCcode()
 CAdd(FP,_Ccode(FP,LVUPEffT),1)
 

@@ -2,7 +2,8 @@ function LeaderBoardF()
 	LeaderBoardiStrinit = def_sIndex()
 	CJump(FP, LeaderBoardiStrinit)
 	ls01 = "\x07，\x11，\x08，\x07ー \x1DP\x04oints - \x1FExRate\x04:"..MakeiStrVoid(4).."%\x07 \x07―\x08，\x11，\x07，"
-	ls02 = "\x07，\x11，\x08，\x07ー \x08D\x04eaths - \x1FM\x04AX "..MakeiStrVoid(7).."\x04/\x08500 \x07―\x08，\x11，\x07，"
+	ls02 = "\x07，\x11，\x08，\x07ー \x08D\x04eaths - \x1FM\x04AX "..MakeiStrVoid(7).."\x04/\x08400 \x07―\x08，\x11，\x07，"
+	ls03 = "\x07，\x11，\x08，\x07ー \x08D\x04eaths - "..MakeiStrVoid(11).." \x07―\x08，\x11，\x07，"
 	PtiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10)) 
 	DthiStr = GetiStrId(FP,MakeiStrVoid(GetiStrSize(0, ls02)+10)) 
 	TempiS1, TempiS1a, TempiS1s = SaveiStrArr(FP,MakeiStrVoid(GetiStrSize(0, ls01)+10))
@@ -13,7 +14,11 @@ function LeaderBoardF()
 	CS__ItoCustom(FP,SVA1(TempiS1,21),ExRateV,nil,nil,{10,2},1,nil,"\x0F0",0x0F)
 	CS__InputVA(FP,PtiStr,0,TempiS1,TempiS1s,nil,0,TempiS1s)
 	CS__SetValue(FP,TempiS2,MakeiStrVoid(GetiStrSize(0, ls02)+10),nil,0) 
+	CIfX(FP,Command(FP,AtLeast,1,173))
 	CS__SetValue(FP,TempiS2,ls02,nil,0) 
+	CElseX()
+	CS__SetValue(FP,TempiS2,ls03,nil,0) 
+	CIfXEnd()
 	CS__ItoCustom(FP,SVA1(TempiS2,18),DCV,nil,nil,{10,5},1,nil,"\x060",0x06)
 	CS__InputVA(FP,DthiStr,0,TempiS2,TempiS2s,nil,0,TempiS2s)
     

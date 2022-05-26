@@ -465,7 +465,7 @@ HPRegenTable = {64}
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 			for i = 0, 3 do
 				TriggerX(FP,{CV(CPlayer,i)},{
-				CreateUnitWithProperties(1,MarID[i+1],1,i,{energy = 100}),
+				CreateUnitWithProperties(1,MarID[i+1],1,i,{energy = 100,invincible = true}),
 				SetMemory(0x6509B0,SetTo,i),
 				PlayWAV("staredit\\wav\\revive.ogg"),
 				DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
@@ -637,10 +637,10 @@ HPRegenTable = {64}
 		--f_GSend(136)
 	end
 
-	C_UID = CreateVar(FP)
 	TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,1),{preserved})
 	EXCC_ClearCalc(AddV(CurEXP,1))
 	NJumpXEnd(FP,OtherG)
+	C_UID = CreateVar(FP)
 	f_SaveCp()
 	f_Read(FP,_Sub(BackupCp,15),CPos)
 	f_Read(FP,BackupCp,C_UID)
@@ -648,6 +648,18 @@ HPRegenTable = {64}
 	Convert_CPosXY()
 	CMov(FP,G_CA_CenterX,CPosX)
 	CMov(FP,G_CA_CenterY,CPosY)
+	CIf(FP,CD(Theorist,1))
+	CMov(FP,UnitIDV1,VArr(Tier1VA,f_CRandNum(#Tier1,0)))
+	f_TempRepeat2X({CV(Time1,300000,AtLeast)},UID1I,_Div(Time1,_Mov(300000)),233,"CP","X",2)
+	CMov(FP,UnitIDV1,VArr(Tier2VA,f_CRandNum(#Tier2,0)))
+	f_TempRepeat2X({CV(Time1,600000,AtLeast)},UID1I,_Div(Time1,_Mov(600000)),233,"CP","X",2)
+	CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0)))
+	f_TempRepeat2X({CV(Time1,1200000,AtLeast)},UID1I,_Div(Time1,_Mov(1200000)),233,"CP","X",2)
+	CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0)))
+	f_TempRepeat2X({CV(Time1,1800000,AtLeast)},UID1I,_Div(Time1,_Mov(1800000)),233,"CP","X",2)
+	CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0)))
+	f_TempRepeat2X({CV(Time1,3600000,AtLeast)},UID1I,_Div(Time1,_Mov(3600000)),233,"CP","X",2)
+	CIfEnd()
 	for j, k in pairs(OtherGunT) do
 		for l,m in pairs(k[2]) do
 			G_CA_SetSpawn2X(CVar(FP,C_UID[2],Exactly,k[1],0xFF),m,"ACAS",k[3][l],1,k[4][l],nil,"CP")
@@ -857,6 +869,7 @@ Command(FP,AtLeast,1,173);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
 		AddV(CanC,1);
+		AddCD(RedNumPanelty,1);
 		KillUnit("Factories",Force2);
 },{preserved})
 

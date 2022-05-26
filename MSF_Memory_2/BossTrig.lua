@@ -1,8 +1,9 @@
 function BossTrig()
 	B1C = CreateCcodeArr(10)
 	B2C = CreateCcodeArr(10)
+	B2V = CreateVarArr(2,FP)
 	B3C = CreateCcodeArr(10)
-	B3V = CreateVarArr(5,FP)
+	B3V = CreateVarArr(7,FP)
 	B4C = CreateCcodeArr(10)
 	B4V = CreateVarArr(5,FP)
 	B5C = CreateCcodeArr(3)
@@ -13,6 +14,7 @@ function BossTrig()
 
 
 	CIf(FP,CV(BPtrArr[1],1,AtLeast),{AddCD(B1C[2],1)})--하템보스
+		TriggerX(FP,{CD(Theorist,1)},{SetInvincibility(Enable, 87, P5, 64)})
 		CIf(FP,CD(B1C[1],0))
 			TriggerX(FP,{CD(B1C[2],15,AtLeast)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
 			CWhile(FP,CD(TC[1],1,AtLeast),SubCD(TC[1],1))
@@ -25,7 +27,7 @@ function BossTrig()
 			DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
 			DoActions(FP,{Order(94,P5,64,Move,1),})
 		CIfEnd()
-		TriggerX(FP,{Bring(P5,AtLeast,100,94,64)},{SetCD(B1C[1],1)},{preserved})
+		TriggerX(FP,{Bring(P5,AtLeast,100,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
 		CIf(FP,CD(B1C[1],1),AddCD(B1C[3],1))
 			CIf(FP,CD(B1C[3],1),{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64)}) --100~500
 				
@@ -61,10 +63,16 @@ function BossTrig()
 
 
 	CIf(FP,CV(BPtrArr[2],1,AtLeast))--닼템보스
-		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
-		CIf(FP,{Bring(P6,AtLeast,1,49,1)},{SetCD(B2C[1],100)})
-			CTrigger(FP,{TMemory(_Add(BPtrArr[2],2),AtMost,7319999*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,1000000*256),},{preserved})
+		
+		
+		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),Simple_SetLoc(9,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),MoveLocation(10,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
+		CIf(FP,{Bring(P6,AtLeast,1,49,1)},{AddV(B2V[1],1)})
+			GetLocCenter(10,CPosX,CPosY)
+			TriggerX(FP,{CD(Theorist,0)},{SetCD(B2C[1],100)},{preserved})
+			f_TempRepeatX(CD(Theorist,1), 61, B2V[1], 1, P6, {CPosX,CPosY})
 			CTrigger(FP,{TMemory(_Add(BPtrArr[2],2),AtLeast,7320000*256)},{TSetMemory(_Add(BPtrArr[2],2),SetTo,8320000*256),},{preserved})
+			CTrigger(FP,{TMemory(_Add(BPtrArr[2],2),AtMost,7319999*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,1000000*256),},{preserved})
+			CTrigger(FP,{CD(Theorist,1),TMemory(_Add(BPtrArr[2],2),AtMost,8320000*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,2500*256),},{preserved})
 			DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg"),PlayWAVX("staredit\\wav\\Gun_Penalty.ogg"),PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP)})
 		CIfEnd()
 		TriggerX(FP,{CD(B2C[1],1,AtLeast)},{KillUnit(49,P6)},{preserved})
@@ -77,9 +85,13 @@ function BossTrig()
 
 
 
-	CIf(FP,CV(BPtrArr[3],1,AtLeast),{SetMemoryX(0x665E44, SetTo, 0,0xFF000000);})--탱크보스
+	CIf(FP,CV(BPtrArr[3],1,AtLeast),{SetMemoryX(0x665E44, SetTo, 0,0xFF000000);SetBulletSpeed(250),AddCD(B3C[3],1)})--탱크보스
 		f_Read(FP,_Add(BPtrArr[3],10),CPos)
 		Convert_CPosXY()
+		CIf(FP,{CD(Theorist,1),CD(B3C[3],25,AtLeast)},{SetCD(B3C[3],0)})
+		CreateBullet(206,20,f_CRandNum(256),{CPosX,CPosY},P7)
+		--CAdd(FP,B3V[6],8)
+		CIfEnd()
 		TriggerX(FP,CD(B3C[1],0),{SetCD(B3C[1],1),SetV(B3V[1],0),SetV(B3V[2],0)},{preserved})
 		CIf(FP,CD(B3C[1],1))
 
@@ -105,7 +117,6 @@ function BossTrig()
 			CMov(FP,B3V[5],f_CRandNum(60))
 		CIfEnd()
 		DoActionsX(FP,{AddCD(B3C[2],1)})
-		CIf(FP,{CD(B3C[2],5,AtLeast)},{SetCD(B3C[2],0)})
 		CIf(FP,CV(B3V[4],512,AtMost))
 			CMov(FP,B3V[2],0)
 			CWhile(FP,{CVar(FP,B3V[2][2],AtMost,359)})
@@ -115,22 +126,20 @@ function BossTrig()
 			CAdd(FP,N_Y,CPosY)
 			Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
 			CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,17)
+			CIf(FP,CD(B3C[2],5,AtLeast))
 			CreateBulletLoc(205,20,f_CRandNum(256),P7)
-
+			CIfEnd()
 			CAdd(FP,B3V[2],60)
 			CWhileEnd()
-			CAdd(FP,B3V[4],60)
+			CAdd(FP,B3V[4],12)
 		CIfEnd()
-		CIfEnd()
+		TriggerX(FP,{CD(B3C[2],5,AtLeast)},{SetCD(B3C[2],0)},{preserved})
 
 		CIfEnd()
 
 		TriggerX(FP,{CV(B3V[4],512,AtLeast)},{
 			SetCD(B3C[1],0),
 			SetCD(B3C[2],0),
-			SetCD(B3C[3],0),
-			SetCD(B3C[4],0),
-			SetCD(B3C[5],0),
 			SetCD(B3C[6],0),
 			SetCD(B3C[7],0),
 			SetCD(B3C[8],0),
@@ -162,13 +171,14 @@ function BossTrig()
 			CMov(FP,B4V[2],N_Y)
 		CIfEnd()
 		CIf(FP,Bring(P9,AtLeast,1,191,64))
-			Simple_SetLocX(FP,9,B4V[1],B4V[2],B4V[1],B4V[2],{Simple_CalcLoc(9,-8,-8,8,8),CreateUnitWithProperties(1,84,10,P8,{hallucinated=true}),KillUnit(84,P8),Order(191,P9,64,Move,10)})
+			Simple_SetLocX(FP,9,B4V[1],B4V[2],B4V[1],B4V[2],{Simple_CalcLoc(9,-8,-8,8,8),KillUnitAt(All, nilunit, 10, FP),CreateUnitWithProperties(1,84,10,P8,{hallucinated=true}),KillUnit(84,P8),Order(191,P9,64,Move,10)})
 		CIfEnd()
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[4],P8,64)})
 		CIf(FP,Bring(P9,AtLeast,1,191,10),{KillUnit(191,P9),SetCD(B4C[2],1)})
 			CMov(FP,G_CA_CenterX,B4V[1])
 			CMov(FP,G_CA_CenterY,B4V[2])
 			G_CA_SetSpawn({},{128},"ACAS","Warp1",nil,3,nil,P8,nil,6+12+18)
+			TriggerX(FP,{CD(Theorist,1)},{ModifyUnitHitPoints(All, 128, P8, 64, 50)},{preserved})
 		CIfEnd()
 		TriggerX(FP,{CD(B4C[2],1,AtLeast)},{AddCD(B4C[2],1)},{preserved})
 		TriggerX(FP,{CD(B4C[2],200,AtLeast)},{SetCD(B4C[1],0),SetCD(B4C[2],0)},{preserved})

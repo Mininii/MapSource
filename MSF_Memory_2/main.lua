@@ -1,7 +1,7 @@
 
 
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
--- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\St	ormcoast Fortress\\ScmDraft 2\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
@@ -40,7 +40,7 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.9A"
+VerText = "\x04Ver. Beta 0.9B"
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end

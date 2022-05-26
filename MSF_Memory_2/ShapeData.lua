@@ -307,6 +307,9 @@ B2S2 = CSMakeTornado(4, 96, 30, 4)
 B2S3 = CSMakeTornado(4, 96, 45, 4)
 B2S4 = CSMakeTornado(4, 96, 60, 4)
 B2S5 = CSMakeTornado(4, 96, 75, 4)
+
+CenLineY = CSMakeLine(2,48,0,86*2,0)
+CenLineX = CSMakeLine(2,48,90,86*2,0)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -385,6 +388,8 @@ B2S5 = CSMakeTornado(4, 96, 75, 4)
 		"B2S3",
 		"B2S4",
 		"B2S5",
+		"CenLineY",
+		"CenLineX",
 
 	}
 	)
