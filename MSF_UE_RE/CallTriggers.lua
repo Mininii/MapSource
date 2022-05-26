@@ -671,8 +671,8 @@ local CB_P = CreateVar(FP)
 
 	SetCallEnd()
 
-	t01 = "0000000000\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
-	t02 = "0000000000\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
+	t01 = MakeiStrVoid(20).."\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
+	t02 = MakeiStrVoid(20).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"
 	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)

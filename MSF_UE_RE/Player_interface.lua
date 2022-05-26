@@ -1063,18 +1063,22 @@ end
 	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
 	f_Div(FP,SelHPV,_Mov(256))
 	
-	CIf(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
+	CIfX(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
 	local TempV1 = CreateVar(FP)
 	local TempV2 = CreateVar(FP)
 	local TempW2 = CreateWar(FP)
 	local TempW3 = CreateWar(FP)
+	local TempW4 = CreateWar(FP)
+	local TempW5 = CreateWar(FP)
 	f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(LHPCunit[3],((0x20*1)/4))), TempV1)
 	f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(LHPCunit[3],((0x20*2)/4))), TempV2)
 	f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
 	f_LDiv(FP,TempW3, TempW2, _LMov(256))
-	f_LMov(FP, {TempV1, TempV2}, TempW3, nil,nil,1)
-	CAdd(FP,SelHPV,TempV1)
-	CIfEnd()
+	f_LMov(FP, TempW4, TempW3, nil,nil,1)
+	f_LAdd(FP, TempW5,TempW4, {SelHPV,0})
+	CElseX()
+	f_LMov(FP,TempW5,{SelHPV,0},nil,nil,1)
+	CIfXEnd()
 	f_Div(FP,SelSh,_Mov(256))
 	f_Div(FP,SelMaxHP,_Mov(256))
 	CMov(FP,PercentCalc,_Div(_Mul(SelHPV,3),SelMaxHP))
@@ -1122,12 +1126,12 @@ end
 	local CurUID = CreateVar(FP)
 	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
 	CMov(FP,CurUID,SelUID)
-	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,23)
+	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,33)
 	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
 	CIf(FP,{CV(SelPl,7)})
 		CIfX(FP, {TTOR(DTypeCondArr)
 		})
-			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,23)
+			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,33)
 		CElseX()
 		local SelWepID = CreateVar(FP)
 		local SelTmpUID = CreateVar(FP)
@@ -1142,9 +1146,9 @@ end
 		CMov(FP,SelWepID,0)
 		CMov(FP,SelWepID,Act_BRead(_Add(SelTmpUID,0x6636B8)))
 			CIfX(FP,{TBread(_Add(SelWepID,0x657258), Exactly, 0)})--N
-				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,23)
+				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,33)
 			CElseIfX({TBread(_Add(SelWepID,0x657258), Exactly, 2)})--%
-				CS__SetValue(FP, Str3, "\x1FSolidity T\x04ype", 0xFFFFFFFF,23)
+				CS__SetValue(FP, Str3, "\x1FSolidity T\x04ype", 0xFFFFFFFF,33)
 			CIfXEnd()
 
 		CIfXEnd()
@@ -1155,15 +1159,15 @@ end
 
 
 
-	
-	CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,{10,9},1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,0),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
+	CS__lItoCustom(FP, SVA1(Str3,0), TempW5, nil, 0xFFFF0000, {10,18}, 1, nil, "0")
+	--CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,{10,9},1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
+	CS__ItoCustom(FP,SVA1(Str3,10),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
 	TBLN1T = {}
 	TBLN2T = {}
 	TBLN1T1 = {}
 	TBLN1T2 = {}
 	TBLN1T3 = {}
-	for i = 0, 9 do
+	for i = 0, 19 do
 --			table.insert(TBLN1T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 --			table.insert(TBLN2T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 		table.insert(TBLN1T1, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
@@ -1171,11 +1175,11 @@ end
 		table.insert(TBLN1T3, SetCSVA1(SVA1(Str3,i),SetTo,0x08,0xFF))
 	end
 	for i = 0, 3 do
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1C,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i-12),SetTo,0x1F,0xFF))
+		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i-2),SetTo,0x1C,0xFF))
+		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i-2),SetTo,0x1F,0xFF))
 	end
-	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1C,0xFF))
-	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30-12),SetTo,0x1F,0xFF))
+	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30-2),SetTo,0x1C,0xFF))
+	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30-2),SetTo,0x1F,0xFF))
 
 	TriggerX(FP,{CV(PercentCalc,2,AtLeast)},TBLN1T1,{preserved})
 	TriggerX(FP,{CV(PercentCalc,1)},TBLN1T2,{preserved})
