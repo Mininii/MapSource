@@ -909,7 +909,7 @@ CWhileEnd()
 CMov(FP,RepeatType,0)
 SetCallEnd()
 
-function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY)
+function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,PreserveFlag)
 	if Owner == nil then Owner = 0xFFFFFFFF end
 	if Type == nil then Type = 0 end
 	local SetX = 0 
@@ -933,7 +933,7 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY)
 		SetCVar(FP,CreatePlayer[2],SetTo,Owner),
 		SetCVar(FP,TRepeatX[2],SetTo,SetX),
 		SetCVar(FP,TRepeatY[2],SetTo,SetY),
-	})
+	},PreserveFlag)
 end
 
 function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)

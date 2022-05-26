@@ -627,7 +627,7 @@ local SelATK = CreateVar(FP)
 		f_Div(FP,SelHP,_Mov(256))
 		f_Div(FP,SelSh,_Mov(256))
 
-		CTrigger(FP,{CV(SelUID,64)},{AddV(SelHP,B2H)},1)
+		CTrigger(FP,{CV(SelUID,64),CD(EDNum,3)},{AddV(SelHP,B2H)},1)
 
 		CIf(FP,{CV(SelUID,12)})
 			CAdd(FP,SelHP,BPHRetTest)

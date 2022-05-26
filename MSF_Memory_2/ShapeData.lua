@@ -215,6 +215,8 @@ function CSMinimap_Inverse4X(Shape,X,Y,RetType)
 end
 MinHiveTemp = {16  ,{64, 1088},{128, 1120},{192, 1152},{256, 1184},{320, 1216},{384, 1248},{448, 1280},{512, 1312},{576, 1344},{640, 1376},{704, 1408},{640, 1440},{576, 1472},{512, 1504},{448, 1536},{384, 1568}}
 MinHiveP5 ,MinHiveP6 ,MinHiveP7 ,MinHiveP8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
+MinHiveTemp2 = {8  ,{64, 1088},{192, 1152},{320, 1216},{448, 1280},{576, 1344},{704, 1408},{576, 1472},{448, 1536}}
+MinHive2P5 ,MinHive2P6 ,MinHive2P7 ,MinHive2P8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
 
 
 function CSMakeKaleidoPolygon(PolygonPoint,KaleidoPoint,KaleidoRadius,PolygonRadius,Angle,StartAngle,Numner,Hallow)
@@ -348,6 +350,10 @@ CenLineX = CSMakeLine(2,48,90,86*2,0)
 		"MinHiveP6",
 		"MinHiveP7",
 		"MinHiveP8",
+		"MinHive2P5",
+		"MinHive2P6",
+		"MinHive2P7",
+		"MinHive2P8",
 		"SqKal1",
 		"SqKal2",
 		"Polygon6_2",
