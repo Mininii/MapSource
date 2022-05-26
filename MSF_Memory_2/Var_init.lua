@@ -2,16 +2,16 @@ function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	if EVFFlag == 1 then
-		GTAtk = 50*2
-		GTAtkFactor = 10*2
-		NMAtk = 15*2
-		NMAtkFactor = 1*2
-		HMAtk = 50*2
-		HMAtkFactor = 3*2
-		MarAtk = 50*2
-		MarAtkFactor = 4*2
-		MarAtk2 = 100*2
-		MarAtkFactor2 = 12*2
+		GTAtk = 50*1.5
+		GTAtkFactor = 10*1.5
+		NMAtk = 15*1.5
+		NMAtkFactor = 1*1.5
+		HMAtk = 50*1.5
+		HMAtkFactor = 3*1.5
+		MarAtk = 50*1.5
+		MarAtkFactor = 4*1.5
+		MarAtk2 = 100*1.5
+		MarAtkFactor2 = 12*1.5
 	else
 		GTAtk = 50
 		GTAtkFactor = 10

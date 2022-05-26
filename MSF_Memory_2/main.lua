@@ -31,10 +31,11 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-TestSet(0)
+TestSet(1)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 1
+	TheoristTestMode = 1
 else
 	EVFFlag = 0
 end

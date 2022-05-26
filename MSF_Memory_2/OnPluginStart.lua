@@ -368,6 +368,7 @@ end
 		InputTesterID(i,"Hybrid)_GOD60")
 		InputTesterID(i,"lptime106")
 		InputTesterID(i,"IIII(uood)IIIII")
+		InputTesterID(i,"Azusawa_Kohane")
 		
 	end
 	

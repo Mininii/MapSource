@@ -87,7 +87,18 @@ function Operator_Trig()
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
-	
+	if TheoristTestMode == 1 then
+		DoActionsX(FP, {
+			SetCD(Theorist,1);
+			SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0);
+			SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0);
+			SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0);
+			SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0);
+			SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0);
+			SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0);},1)
+	end
 	CDoActions(FP, {
 		TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
 		TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
