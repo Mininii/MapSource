@@ -69,11 +69,8 @@ CJump(AllPlayers,init_func)
 	DUnitCalc = Install_EXCC(FP,15,1)
 	UnivCunit = Install_EXCC(FP,10,{nil,{1,Subtract},{1,Subtract},{1,Subtract}})
 	Install_f_Sqrd(FP)
-	Include_G_CA_Library(0,0x600,256)
+	Include_G_CA_Library(0,0x600,128)
 	M2_Install_Shape()
-	if #G_CAPlot_Shape_InputTable >= 256 then
-		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
-	end
 	G_CAPlot2(G_CAPlot_Shape_InputTable)
 	Install_Load_CAPlot()
 	Install_Call_G_CA()
