@@ -32,9 +32,6 @@ end
 
 DoActions2(P1,PatchStack,1)--유닛크기변경
 
-
---↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제 또는 교체) ----------------------
-
 SetForces({P1},{P2},{},{},{P1,P2}) 
 SetFixedPlayer(P2)
 StartCtrig(1,nil,nil,1,"C:\\Temp")
@@ -43,42 +40,88 @@ Include_CtrigPlib(360,"Switch 1")
 Include_CBPaint()
 CJumpEnd(AllPlayers,0)
 NoAirCollisionX(P1)
+
+--↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제 또는 교체) ----------------------
+
 DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
-X, Y, Z, Ret = CreateVars(4,P1)
-S1 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
-CIf(P1,Switch("Switch 2",Cleared))
-DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)})
-TriggerX(P1,{Memory(0x58F458,Exactly,1)},{SetNVar(X,SetTo,-5),SetNVar(Y,SetTo,15)},{PReserved})
-TriggerX(P1,{Memory(0x58F45C,Exactly,1)},{SetNVar(Z,SetTo,0)},{PReserved})
-CIfEnd()
-CFunc1 = InitCFunc(P1)
-Para = CFunc(CFunc1)
--- n*X + (10-n)*Y - 100 = k
-CiSub(P1,Ret,_Add(_iMul(Para[1],X),_iMul(Para[2],Y)),100)
-CFuncReturn({Ret})
-CFuncEnd()
-CFunc2 = InitCFunc(P1)
-Para = CFunc(CFunc2)
--- I - n = k (음수의 우선순위를 양수보다 뒤로함)
-CiSub(P1,Ret,Para[1],Z)
-TriggerX(P1,{NVar(Ret,AtLeast,0x80000000)},{SetNVar(Ret,Add,S1[1])},{Preserved})
-CFuncReturn({Ret})
-CFuncEnd()
+S1 = CS_FillXY({1,1},256,256,32,32)
+DoActions(P1,{RemoveUnit(0,P1)})
+X, Y = CreateVars(2,P1)
+DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-2)})
+TriggerX(P1,Memory(0x58F45C,Exactly,1),{SetNVar(X,SetTo,0),SetNVar(Y,SetTo,0)},{Preserved})
 function func1()
-CIfX(P1,{Memory(0x58F450,Exactly,0),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_Sort(CFunc1,_Read(0x58F454),1,2)
-CElseIfX({Memory(0x58F450,AtLeast,1),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_SortI(CFunc2,_Read(0x58F454),1,2)
+CIfX(P1,Memory(0x58F454,Exactly,0))
+CB_MirrorX(X,_Read(0x58F458),1,2)
+CElseX()
+CB_MirrorY(Y,_Read(0x58F458),1,2)
+CIfXEnd()
+end
+CBPlot({S1,CS_InputVoid(S1[1]*2)},nil,P1,0,"Location 13",nil,1,32
+,{2,0,0,0,S1[1]*2,0},nil,"func1",P1,Memory(0x58F450,Exactly,0),nil,1)
+TriggerX(P1,{Memory(0x58F450,Exactly,1)}
+,{SetMemory(0x58F458,SetTo,1),SetMemory(0x58F45C,SetTo,1),SetMemory(0x58F460,SetTo,1)
+,SetMemory(0x58F464,SetTo,1),SetMemory(0x58F468,SetTo,1),SetMemory(0x58F46C,SetTo,1),
+SetMemory(0x58F470,SetTo,1),SetMemory(0x58F474,SetTo,1),SetMemory(0x58F478,SetTo,0),
+SetMemory(0x58F47C,SetTo,0)})
+TriggerX(P1,{KeyPress("Q", "Down")},{SetMemory(0x58F458, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("W", "Down")},{SetMemory(0x58F460, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("E", "Down")},{SetMemory(0x58F468, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("R", "Down")},{SetMemory(0x58F470, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("T", "Down")},{SetMemory(0x58F478, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("A", "Down")},{SetMemory(0x58F45C, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("S", "Down")},{SetMemory(0x58F464, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("D", "Down")},{SetMemory(0x58F46C, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("F", "Down")},{SetMemory(0x58F474, Add, 1)},{preserved})
+TriggerX(P1,{KeyPress("G", "Down")},{SetMemory(0x58F47C, Add, 1)},{preserved})
+
+
+TriggerX(P1,{KeyPress("Y", "Down")},{SetMemory(0x58F458, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("U", "Down")},{SetMemory(0x58F460, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("I", "Down")},{SetMemory(0x58F468, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("O", "Down")},{SetMemory(0x58F470, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("P", "Down")},{SetMemory(0x58F478, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("H", "Down")},{SetMemory(0x58F45C, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("J", "Down")},{SetMemory(0x58F464, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("K", "Down")},{SetMemory(0x58F46C, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("L", "Down")},{SetMemory(0x58F474, Add, -1)},{preserved})
+TriggerX(P1,{KeyPress("SEMICOLON", "Down")},{SetMemory(0x58F47C, Add, -1)},{preserved})
+
+CIf(P1,KeyPress("1", "Down"),{SetMemory(0x58F450,SetTo,1),SetMemory(0x58F454,SetTo,1)})
+CMov(P1,0x58F458,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F460,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F468,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F470,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F478,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F45C,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F464,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F46C,_iSub(_Mod(_Rand(),800),400))
+CMov(P1,0x58F474,_iSub(_Mod(_Rand(),800),400))
+
+CIfEnd()
+
+
+function func2()
+CIfX(P1,Memory(0x58F454,Exactly,0))
+CB_Distortion({_ReadF(0x58F458),_ReadF(0x58F45C)},
+{_ReadF(0x58F460),_ReadF(0x58F464)},
+{_ReadF(0x58F468),_ReadF(0x58F46C)},
+{_ReadF(0x58F470),_ReadF(0x58F474)},
+{_ReadF(0x58F478),_ReadF(0x58F47C)},1,2)
+CElseX()
+CB_Distortion2({_ReadF(0x58F458),_ReadF(0x58F45C)}, -- 좌하
+{_ReadF(0x58F460),_ReadF(0x58F464)}, -- 좌상
+{_ReadF(0x58F468),_ReadF(0x58F46C)}, -- 우하
+{_ReadF(0x58F470),_ReadF(0x58F474)}, -- 우상
+{_ReadF(0x58F478),_ReadF(0x58F47C)},1,2) -- 중심점
 CIfXEnd()
 end
 CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,"Location 13",nil,1,32
-,{2,0,0,0,1,0},nil,"func1",P1,nil,nil,{KillUnit(0,P1),SetSwitch("Switch 2",Clear)})
-CMov(P1,0x58F460,X) CMov(P1,0x58F464,Y) CMov(P1,0x58F468,Z)
-EndCtrig()
+,{2,0,0,0,S1[1],0},nil,"func2",P1,Memory(0x58F450,Exactly,1),nil,1)
+
+
 -- 에러 체크 함수 선언 위치 --
 --↑Tep에 그대로 붙여넣기----------------------------------------
+EndCtrig()
 ErrorCheck()
 EUDTurbo(P1)
 
