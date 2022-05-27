@@ -385,16 +385,22 @@ function Include_GunData(Size,LineNum)
 
 	
 	CIf_GCase(154)
+	NexUIDArr = {21,88,86,22,80,98}
+	NexEffArr = {429,424,427,337,951,549}
+	NexUIDArr2 = {17,77,78,10,3,100}
+	NexEffArr2 = {332,213,214,493,442,231}
 		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},1)
 		CTrigger(FP,{Gun_Line(6,AtLeast,5)},{Gun_DoSuspend(),AddCD(NexCcode,1)},1)
 		for i = 5, 8 do
 			TriggerX(FP,{Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,5)},{Simple_CalcLoc(0,-128,-128,128,128),SetCp(i-1),RunAIScriptAt(JYD,1)})
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1)},{21},"ACAS","NexP"..i,"MAX",429,nil,"CP",nil,nil,1)
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,1)},{88},"ACAS","NexP"..i,"MAX",424,nil,"CP",nil,nil,1)
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,2)},{86},"ACAS","NexP"..i,"MAX",427,nil,"CP",nil,nil,1)
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,3)},{22},"ACAS","NexP"..i,"MAX",337,nil,"CP",nil,nil,1)
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,4)},{80},"ACAS","NexP"..i,"MAX",951,nil,"CP",nil,nil,1)
-			G_CA_SetSpawn2X({Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,5)},{98},"ACAS","NexP"..i,"MAX",549,nil,"CP",nil,nil,1)
+			for j = 0, 5 do
+				local cond = {Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,j)}
+				if i == 0 then cond = {Gun_Line(4,Exactly,i-1)} end
+				G_CA_SetSpawn2X(cond,{NexUIDArr[j+1]},"ACAS","NexP"..i,"MAX",NexEffArr[j+1],nil,"CP",nil,nil,1)
+				table.insert(cond,CD(Theorist,1))
+				G_CA_SetSpawn2X(cond,{NexUIDArr2[j+1]},"ACAS","Nex2P"..i,"MAX",NexEffArr2[j+1],nil,"CP",G_CA_Ratio(128),nil,1)
+
+			end
 		end
 	CIfEnd()
 	UID1I = 221
@@ -416,6 +422,7 @@ function Include_GunData(Size,LineNum)
 
 	WV = CreateVar(FP)
 	CIf_GCase(148)
+		CTrigger(FP,{CD(Theorist,1)},{TGun_SetLine(7, Add, _Div(_Sub(_Mov(400),RedNumber),12))},1)
 		CTrigger(FP,{Gun_Line(10,AtMost,0)},{Gun_SetLine(7,SetTo,50),Gun_SetLine(10,SetTo,1)},1)
 		CMov(FP,TRepeatX,G_CA_CenterX)
 		CMov(FP,TRepeatY,G_CA_CenterY)
@@ -437,16 +444,15 @@ function Include_GunData(Size,LineNum)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",211,nil,"CP",2,nil)
 		CIfEnd()
 		CIf(FP,{Gun_Line(6,AtLeast,5)},{Gun_SetLine(8,Add,1),Gun_SetLine(6,SetTo,0)})
-		CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- 티어3
+		CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- 티어4
 		f_TempRepeat2X(nil,UID1I,1,548,"CP","X",2)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",548,nil,"CP",2,nil)
 
 		CIfEnd()
 		CIf(FP,{Gun_Line(8,AtLeast,2)},{Gun_SetLine(9,Add,1),Gun_SetLine(8,SetTo,0)})
-		CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- 티어3
+		CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- 티어5
 		f_TempRepeat2X(nil,UID1I,1,984,"CP","X",2)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",984,nil,"CP",2,nil)
-
 		CIfEnd()
 	CTrigger(FP,{Gun_Line(9,AtLeast,5)},{Gun_DoSuspend(),AddCD(OvCcode,1)},1)
 	
@@ -504,7 +510,10 @@ function Include_GunData(Size,LineNum)
 	--	Tier3 = {27,66,29,98,57,3,8,11,69,100}
 	--	Tier4 = {102,61,67,23,81,30}
 	--	Tier5 = {60,68}
+
 	OvGCUT = {88,21,80,8,11,29,69,98}
+
+	CIfX(FP,CD(Theorist,0))
 	for i = 0, 7 do
 		local cond = {Gun_Line(7,AtLeast,(#OvG-1)*3),Gun_Line(6,Exactly,i-1)}
 		if i == 0 then
@@ -512,7 +521,6 @@ function Include_GunData(Size,LineNum)
 		end
 	G_CA_SetSpawn(cond,{OvGCUT[i+1]},"ACAS","OvG"..i+1,1,3,nil,"CP",G_CA_LoopTimer(3))
 	end
-
 	for i = 0, 7 do
 		local cond = {Gun_Line(7,AtLeast,(#OvG-1)*3),Gun_Line(6,Exactly,i)}
 		for j = 4, 7 do
@@ -525,6 +533,29 @@ function Include_GunData(Size,LineNum)
 	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
 	CTrigger(FP,{Gun_Line(7,AtLeast,(#OvG-1)*3)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},{preserved})
 	CTrigger(FP,{Gun_Line(6,AtLeast,8)},{Gun_DoSuspend(),AddCD(OvGCcode,1)},1)
+	CElseX()
+	for i = 0, 7 do
+		local cond = {Gun_Line(7,AtLeast,#OvG-1),Gun_Line(6,Exactly,i-1)}
+		if i == 0 then
+		cond = {Gun_Line(30,Exactly,0)} 
+		end
+	G_CA_SetSpawn(cond,{OvGCUT[i+1]},"ACAS","OvG"..i+1,1,3,nil,"CP",G_CA_Ratio(128))
+	end
+	for i = 0, 7 do
+		local cond = {Gun_Line(7,AtLeast,#OvG-1),Gun_Line(6,Exactly,i)}
+		for j = 4, 7 do
+			TriggerX(FP,{cond,GCP(j)},{Order(OvGCUT[i+1],j,64,Attack,1)},{preserved})
+			if i == 7 then
+				Trigger2X(FP,{cond,GCP(j)},{Simple_CalcLoc(0,-128,-128,128,128),SetCp(j),RunAIScriptAt(JYD,1)},{preserved})
+			end
+		end
+	end
+	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
+	CTrigger(FP,{Gun_Line(7,AtLeast,#OvG-1)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},{preserved})
+	CTrigger(FP,{Gun_Line(6,AtLeast,8)},{Gun_DoSuspend(),AddCD(OvGCcode,1)},1)
+	
+	CIfXEnd()
+	
 	
 	CIfEnd()
 
@@ -541,9 +572,34 @@ function Include_GunData(Size,LineNum)
 			G_CA_SetSpawn(cond,{CereT[j]},"ACAS","Cere1","MAX",0,nil,"CP",G_CA_Rotate(270+(i*45)))
 		end
 		end
+
+		for i = 4, 7 do
+			CTrigger(FP,{CD(Theorist,1),GCP(i)},{
+				SetV(G_CA_CenterX,OvArrX[i-3]),
+				SetV(G_CA_CenterY,OvArrY[i-3]),
+				TSetMemory(0x58DC60+(20*0),SetTo,OvArrX[i-3]),
+				TSetMemory(0x58DC64+(20*0),SetTo,OvArrY[i-3]),
+				TSetMemory(0x58DC68+(20*0),SetTo,OvArrX[i-3]),
+				TSetMemory(0x58DC6C+(20*0),SetTo,OvArrY[i-3]),
+				TCreateUnit(1,84,1,G_CA_Player)
+			},1)
+		end
+		
+		CereT2 = {{78,88},{25,28}}
+		CereT3 = {444,440}
+		for j = 1, 2 do
+			for i = 0, 7 do
+			local cond = {CD(Theorist,1),Gun_Line(3,Exactly,j),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+			if i == 0 then cond = {CD(Theorist,1),Gun_Line(3,Exactly,j),Gun_Line(30,Exactly,0)} end
+				G_CA_SetSpawn2X(cond, CereT2[j], "ACAS","Cere2","MAX", CereT3[j], nil, "CP", G_CA_Rotate(270-(i*45)))
+			end
+		end
+
 		for i = 0, 3 do
 			TriggerX(FP,{GCP(i+4),Gun_Line(6,AtLeast,8)},{AddCD(CereCond[i+1],1)},{preserved})
 		end
+		
+
 	--Gun_Line(3,Exactly,1),
 		CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
 		DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
@@ -556,15 +612,22 @@ function Include_GunData(Size,LineNum)
 	Ion_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
 	Ion_CUTable2={{21,17},{28,19},{22,10},{8,3}}
 	Ion_CUTable3={{55,53,54,48},{104,56,53,47},{56,53,54,48},{104,62,51,15}}
+	Ion_CUTable4={{55,53,54,48,21},{104,56,53,47,88},{56,53,54,48,28},{104,62,51,15,80}}
 	for j = 1, 4 do
 	for i = 0, 3 do
 	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
 	if i == 0 then cond = {GCP(j+3),Gun_Line(8,AtMost,0)} end
 --	if j == 2 then PushErrorMsg(table.concat(Ion_CUTable3[i+1])) end
-		G_CA_SetSpawn2X(cond,Ion_CUTable3[i+1],"ACAS","ion2_P"..j+4,"MAX",974,nil,"CP")
 		G_CA_SetSpawn(cond,Ion_CUTable1[i+1],"ACAS","ion1_P"..j+4,1,0,nil,"CP")
 		G_CA_SetSpawn(cond,Ion_CUTable2[i+1],"ACAS","ion3_P"..j+4,nil,0,nil,"CP")
+		local cond = {CD(Theorist,0),GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+		if i == 0 then cond = {CD(Theorist,0),GCP(j+3),Gun_Line(8,AtMost,0)} end
+		G_CA_SetSpawn2X(cond,Ion_CUTable3[i+1],"ACAS","ion2_P"..j+4,"MAX",974,nil,"CP")
+		local cond = {CD(Theorist,1),GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+		if i == 0 then cond = {CD(Theorist,1),GCP(j+3),Gun_Line(8,AtMost,0)} end
+		G_CA_SetSpawn2X(cond,Ion_CUTable4[i+1],"ACAS","ion2_P"..j+4,"MAX",974,nil,"CP")
 	end
+
 	end
 	CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
 	for i = 0, 3 do
@@ -583,6 +646,7 @@ function Include_GunData(Size,LineNum)
 	Norad_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
 	Norad_CUTable2={{88,77},{80,78},{57,66},{98,52}}
 	Norad_CUTable3={{55,53,54,48},{104,56,53,47},{56,53,54,48},{104,62,51,15}}
+	Norad_CUTable4={{55,53,54,48,21},{104,56,53,47,88},{56,53,54,48,28},{104,62,51,15,80}}
 	for j = 1, 4 do
 	for i = 0, 3 do
 	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
@@ -591,6 +655,13 @@ function Include_GunData(Size,LineNum)
 		G_CA_SetSpawn2X(cond,Norad_CUTable3[i+1],"ACAS","norad2_P"..j+4,"MAX",974,nil,"CP")
 		G_CA_SetSpawn(cond,Norad_CUTable1[i+1],"ACAS","norad1_P"..j+4,1,0,nil,"CP")
 		G_CA_SetSpawn(cond,Norad_CUTable2[i+1],"ACAS","norad3_P"..j+4,nil,0,nil,"CP")
+		local cond = {CD(Theorist,0),GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+		if i == 0 then cond = {CD(Theorist,0),GCP(j+3),Gun_Line(8,AtMost,0)} end
+		G_CA_SetSpawn2X(cond,Norad_CUTable3[i+1],"ACAS","norad2_P"..j+4,"MAX",974,nil,"CP")
+		local cond = {CD(Theorist,1),GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
+		if i == 0 then cond = {CD(Theorist,1),GCP(j+3),Gun_Line(8,AtMost,0)} end
+		G_CA_SetSpawn2X(cond,Norad_CUTable4[i+1],"ACAS","norad2_P"..j+4,"MAX",974,nil,"CP")
+
 	end
 	end
 	CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
@@ -655,7 +726,7 @@ function Include_GunData(Size,LineNum)
 	},{preserved})
 	
 	
-	CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0)})
+	CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0),SetCD(CXGeneFlag,1)})
 	DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})
 	CTrigger(FP,{CD(GeneT,30000,AtLeast)},{Gun_SetLine(10,Subtract,540/6)},1)
 	TriggerX(FP,{CD(Theorist,1),CD(GeneT,30000-1,AtMost),Gun_Line(10,AtLeast,1)},{SetInvincibility(Enable,"Men",Force2,64);},{preserved})
@@ -669,7 +740,7 @@ function Include_GunData(Size,LineNum)
 		CIf(FP,{Gun_Line(7,AtLeast,241),Gun_Line(7,AtLeast,240)},{Gun_SetLine(10,Add,540/2)})
 		CTrigger(FP,{GCP(6)},{Gun_SetLine(1,Add,12)},{preserved})
 		CTrigger(FP,{GCP(7),Gun_Line(7,AtLeast,241),Gun_Line(7,AtLeast,240)},{Gun_SetLine(1,Subtract,12)},{preserved})
-		CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0)})
+		CallTrigger(FP,CallCXPlot,{SetCD(CXEffType,0),SetCD(CXGeneFlag,1)})
 		CIfEnd()
 		CIf(FP,{Gun_Line(7,AtLeast,290)},{Gun_DoSuspend(),AddCD(DGCcode,1)})
 			CallTriggerX(FP,CallCXPlot,{GCP(6)},{SetCD(CXEffType,1)})
@@ -836,6 +907,31 @@ function Include_GunData(Size,LineNum)
 	CIfEnd()
 	N_R,N_A = CreateVars(2,FP)
 	CIf_GCase(168)
+	CIf(FP,{CD(Theorist,1),Gun_Line(20,AtMost,0)},Gun_SetLine(20,SetTo,1))
+	
+	CMov(FP,TRepeatX,G_CA_CenterX)
+	CMov(FP,TRepeatY,G_CA_CenterY)
+	CFor(FP,0,65,1)
+	CMov(FP,UnitIDV1,VArr(Tier1VA,f_CRandNum(#Tier1,0)))
+	f_TempRepeat2X(nil,UID1I,1,233,"CP","X",2)
+	CForEnd()
+	CFor(FP,0,35,1)
+	CMov(FP,UnitIDV1,VArr(Tier2VA,f_CRandNum(#Tier2,0)))
+	f_TempRepeat2X(nil,UID1I,1,545,"CP","X",2)
+	CForEnd()
+	CFor(FP,0,25,1)
+	CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- 티어3
+	f_TempRepeat2X(nil,UID1I,1,211,"CP","X",2)
+	CForEnd()
+	CFor(FP,0,13,1)
+	CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- 티어4
+	f_TempRepeat2X(nil,UID1I,1,548,"CP","X",2)
+	CForEnd()
+	CFor(FP,0,6,1)
+	CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- 티어5
+	f_TempRepeat2X(nil,UID1I,1,984,"CP","X",2)
+	CForEnd()
+	CIfEnd()
 	N_Check = CreateCcode()
 	CMov(FP,N_R,Var_TempTable[10])
 	CMov(FP,N_A,0)
@@ -863,6 +959,7 @@ function Include_GunData(Size,LineNum)
 			KillUnitAt(All,141,1,i);
 			KillUnitAt(All,142,1,i);
 		},{preserved})
+		TriggerX(FP,{GCP(i),CD(Theorist,1)},{KillUnitAt(All,131,1,i);},{preserved})
 	end
 	
 	TriggerX(FP,{CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},{SetCD(N_Check,1)},{preserved})
@@ -888,7 +985,11 @@ function Include_GunData(Size,LineNum)
 
 	CIfEnd()
 	CIf_GCase(201)
-		Simple_SetLoc2X(FP,0,_Neg(Var_TempTable[8]),_Neg(Var_TempTable[8]),Var_TempTable[8],Var_TempTable[8])
+		Simple_SetLoc2X(FP,0,_Neg(Var_TempTable[8]),_Neg(Var_TempTable[8]),Var_TempTable[8],Var_TempTable[8],{KillUnitAt(All, nilunit, 1, FP)})
+		G_CA_SetSpawn({CD(Theorist,1),GCP(4)}, {22}, "ACAS", "CCS1", 1, 192, {0,0}, "CP", nil, nil, 1)
+		G_CA_SetSpawn({CD(Theorist,1),GCP(5)}, {98}, "ACAS", "CCS2", 1, 192, {0,0}, "CP", nil, nil, 1)
+		TriggerX(FP,{CD(Theorist,1),GCP(4),Gun_Line(7,AtLeast,1000)},{SetInvincibility(Disable, 22, 4, 64)})
+		TriggerX(FP,{CD(Theorist,1),GCP(5),Gun_Line(7,AtLeast,1000)},{SetInvincibility(Disable, 98, 5, 64)})
 		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		TriggerX(FP,{Gun_Line(8,AtLeast,10)},{Gun_SetLine(8,SetTo,0),Order("Men",Force1,1,Move,1),CreateScanEff(58)},{preserved})
 		TriggerX(FP,{Gun_Line(7,AtLeast,1000)},{Gun_DoSuspend(),AddCD(OcCcode,1),},{preserved})
@@ -957,7 +1058,7 @@ function Include_GunData(Size,LineNum)
 		RandR = f_CRandNum(2048, Opr,GCP(i+4))
 	end
 	CMov(FP,G_CA_CenterY,RandR)
-	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",1,nil,"CP")
+	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
 
 	
 	

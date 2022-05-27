@@ -22,7 +22,6 @@ function Install_CallTriggers()
 		TriggerX(FP,{CDeaths(FP,Exactly,1,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,0,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,5)},{preserved})
 		TriggerX(FP,{CDeaths(FP,Exactly,2,CurPlace)},{SetCDeaths(FP,SetTo,0,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,6)},{preserved})
 		TriggerX(FP,{CDeaths(FP,Exactly,3,CurPlace)},{SetCDeaths(FP,SetTo,1,InverseOptionX),SetCDeaths(FP,SetTo,1,InverseOptionY),SetCVar(FP,CunitP[2],SetTo,7)},{preserved})
-
 		CIf(FP,CDeaths(FP,Exactly,1,InverseOptionX))
 			CNeg(FP,CPosX)
 			CAdd(FP,CPosX,4096)
@@ -39,8 +38,12 @@ function Install_CallTriggers()
 			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,151)},{SetCVar(FP,CPosY[2],Add,-32)},{preserved})
 			TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,147)},{SetCVar(FP,CPosY[2],Add,-32)},{preserved})
 		CIfEnd()
-
-
+		CIf(FP,CV(RepHeroIndex,148))
+		for i = 4, 7 do
+			CTrigger(FP,{CV(CunitP,i)},{SetV(OvArrX[i-3],CPosX)},1)
+			CTrigger(FP,{CV(CunitP,i)},{SetV(OvArrY[i-3],CPosY)},1)
+		end
+		CIfEnd()
 
 
 		for i = 0, 3 do
@@ -87,7 +90,7 @@ function Install_CallTriggers()
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,5)})
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,6)})
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,7)})
-			CDoActions(FP,{SetMemory(0x66EC48+(936*4),SetTo,165),TCreateUnitWithProperties(1,184,1,CPlayer,{energy = 100}),SetMemory(0x66EC48+(936*4),SetTo,409)})
+			CDoActions(FP,{SetMemory(0x66EC48+(936*4),SetTo,165),TCreateUnitWithProperties(1,184,1,CPlayer,{energy = 100,invincible = true}),SetMemory(0x66EC48+(936*4),SetTo,409)})
 		
 		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
 			f_Read(FP,_Sub(BackupCp,15),CPos)
@@ -249,7 +252,7 @@ function Install_CallTriggers()
 	CMov(FP,V(CA[13]),_iSub( _Read(Arr(CXArrY,0)),V(CA[9])))
 	CMov(FP,V(CA[14]),_iSub( _Read(Arr(CXArrZ,0)),V(CA[11])))
 	CIfXEnd()
-	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-128,-128,128,128))
+	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-32,-32,32,32))
 
 
 	CIf(FP,CD(CXEffType,0))
@@ -272,6 +275,7 @@ function Install_CallTriggers()
 		return {CreateUnit(Number,UnitID,Start,Player),Order(UnitID,Player,Start,OrderType,Dest)}
 	end
 	TriggerX(FP,{},{SetMemory(0x6CA010, SetTo, 640*3);},{preserved})
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXGeneFlag,1),CD(Theorist,1)},{KillUnitAt(All, "Men", 1, Force1)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,11,6,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,29,6,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,2)},{CreateOrder(3,8,7,1,Attack,64)},{preserved})
@@ -287,7 +291,7 @@ function Install_CallTriggers()
 	CMov(FP,V(CA[8]),V(CA[12]))
 	CMov(FP,V(CA[9]),V(CA[13]))
 	CMov(FP,V(CA[11]),V(CA[14]))
-	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-128,-128,128,128))
+	Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-32,-32,32,32))
 
 
 	CIf(FP,CD(CXEffType,0))
@@ -300,6 +304,7 @@ function Install_CallTriggers()
 	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},19,984,16)
 	CreateEffUnit({CVar("X",CA[11],AtLeast,128);CVar("X",CA[11],AtMost,0x7FFFFFFF);},18,984,13)
 	CIfEnd()
+	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXGeneFlag,1),CD(Theorist,1)},{KillUnitAt(All, "Men", 1, Force1)},{preserved})
 
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,1)},{CreateOrder(3,98,6,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,1)},{CreateOrder(3,86,6,1,Attack,64)},{preserved})
@@ -318,7 +323,8 @@ function Install_CallTriggers()
 	DoActionsXI(FP,CallCXPlotEff+1)
 	CJumpEnd(FP,0x1)
 	end
-	CXPlot(TShape,FP,nilunit,"Location 1",{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",FP,Always(),{SetNext("X",CallCXPlotEff),SetNext(CallCXPlotEff+1,"X",1)},nil)
+	CXPlot(TShape,FP,nilunit,"Location 1",{SHLX,SHLY},1,16,{1,0,0,0,TShape[1],V(TCount)},"CXfunc",FP,Always(),{SetNext("X",CallCXPlotEff),SetNext(CallCXPlotEff+1,"X",1)})
+	DoActionsX(FP,SetCD(CXGeneFlag,0))
 
 	SetCallEnd()
 

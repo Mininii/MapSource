@@ -216,7 +216,7 @@ end
 MinHiveTemp = {16  ,{64, 1088},{128, 1120},{192, 1152},{256, 1184},{320, 1216},{384, 1248},{448, 1280},{512, 1312},{576, 1344},{640, 1376},{704, 1408},{640, 1440},{576, 1472},{512, 1504},{448, 1536},{384, 1568}}
 MinHiveP5 ,MinHiveP6 ,MinHiveP7 ,MinHiveP8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
 MinHiveTemp2 = {8  ,{64, 1088},{192, 1152},{320, 1216},{448, 1280},{576, 1344},{704, 1408},{576, 1472},{448, 1536}}
-MinHive2P5 ,MinHive2P6 ,MinHive2P7 ,MinHive2P8 = CSMinimap_Inverse4X(MinHiveTemp,256,1440)
+MinHive2P5 ,MinHive2P6 ,MinHive2P7 ,MinHive2P8 = CSMinimap_Inverse4X(MinHiveTemp2,256,1440)
 
 
 function CSMakeKaleidoPolygon(PolygonPoint,KaleidoPoint,KaleidoRadius,PolygonRadius,Angle,StartAngle,Numner,Hallow)
@@ -227,6 +227,7 @@ function CSMakeKaleidoPolygon(PolygonPoint,KaleidoPoint,KaleidoRadius,PolygonRad
 end
 
 NexP5,NexP6,NexP7,NexP8 = CSMinimap_Inverse4X(CS_ConnectPathX({3,{1856, 800},{1856, 96},{480, 800}},32,1),1344,608)
+Nex2P5,Nex2P6,Nex2P7,Nex2P8 = CSMinimap_Inverse4X(CS_ConnectPathX({3,{1856, 800},{1856, 96},{480, 800}},96,1),1344,608)
 
 SqKal1 = CSMakeKaleidoPolygon(4,8,145,24,45,0,5,1)
 SqKal2 = CSMakeKaleidoPolygon(4,8,145,24,45,0,1,0)
@@ -246,6 +247,7 @@ for i = 1, 8 do
 end
 
 Cere1 = CS_MoveXY(CSMakeStar(4,135,64,45,PlotSizeCalc(4*2,3),0),128)
+Cere2 = CS_MoveXY(CSMakeStar(6,135,96,45,PlotSizeCalc(6*2,2),0),128)
 
 ion1 = {4   ,{1440, 1056},{1888, 832},{1888, 1568},{1440, 1344}}
 ion2 = CS_FillPathHX2(ion1,1,72,48,1,0,26.57,5)
@@ -312,6 +314,11 @@ B2S5 = CSMakeTornado(4, 96, 75, 4)
 
 CenLineY = CSMakeLine(2,48,0,86*2,0)
 CenLineX = CSMakeLine(2,48,90,86*2,0)
+
+
+
+CCS1 = CS_ConnectPathX({3   ,{32, 2240},{416, 2048},{32, 1856}},8,1)
+CCS2 = CS_ConnectPathX({3   ,{4096-32, 2240},{4096-416, 2048},{4096-32, 1856}},8,1)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -369,12 +376,17 @@ CenLineX = CSMakeLine(2,48,90,86*2,0)
 		"NexP6",
 		"NexP7",
 		"NexP8",
+		"Nex2P5",
+		"Nex2P6",
+		"Nex2P7",
+		"Nex2P8",
 		"Spi2",
 		"Spi3",
 		"Tor2",
 		"Tor3",
 		"TempleG",
 		"Cere1",
+		"Cere2",
 		"Warp1",
 		"Warp2",
 		"Warp3",
@@ -396,6 +408,8 @@ CenLineX = CSMakeLine(2,48,90,86*2,0)
 		"B2S5",
 		"CenLineY",
 		"CenLineX",
+		"CCS1",
+		"CCS2",
 
 	}
 	)

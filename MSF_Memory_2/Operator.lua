@@ -54,17 +54,21 @@ function Operator_Trig()
                 SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*75,0),
 			})
 			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{preserved})
-
-			CAdd(FP,0x6509B0,7)
 			
-			TriggerX(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
+			CAdd(FP,0x6509B0,53)
+			DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
+			CSub(FP,0x6509B0,53-7)
+			Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
 				SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
 				SetMemory(0x582204+(0*4),Add,2),
 				SetMemory(0x582204+(1*4),Add,2),
 				SetMemory(0x582204+(2*4),Add,2),
 				SetMemory(0x582204+(3*4),Add,2),
 				SetCDeaths(FP,Add,1,EEggCode),
+				AddV(RedNumber,20),
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
+			
+
 		CIfEnd()
 
 		CIfEnd()
@@ -87,6 +91,13 @@ function Operator_Trig()
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
+	local TestStim = CreateCcode()
+	TriggerX(FP,{CD(TestStim,0)},{SetCD(CUnitFlag,1);
+	SetCD(TestStim,50),
+	SetDeaths(Force1,Add,1,71);},{preserved})
+	DoActionsX(FP,{SubCD(TestStim,1)})
+	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,209)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
+	TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,210)},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	
 	if TheoristTestMode == 1 then
 		DoActionsX(FP, {
@@ -219,20 +230,21 @@ TriggerX(FP,{ElapsedTime(AtLeast,60)},{--
 },{preserved})
 
 TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*50)},{preserved})
-Trigger { -- 빨간숫자
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,RedNumberT[2],AtLeast,9000*2);
-		CVar(FP,RedNumber[2],AtLeast,1);
-	},
-	actions = {
-		SetCVar(FP,RedNumberT[2],Subtract,9000*2);
-		SetCVar(FP,RedNumber[2],Subtract,1);
-		SetMemory(0x662350+(185*4),Subtract,256);
-		PreserveTrigger();
-	},
-}
+CWhile(FP,{
+	CVar(FP,RedNumberT[2],AtLeast,9000*2);
+	CVar(FP,RedNumber[2],AtLeast,1);},{
+	SetCVar(FP,RedNumberT[2],Subtract,9000*2);
+	SetCVar(FP,RedNumber[2],Subtract,1);})
+CWhileEnd()
+local CurRM = CreateVar(FP)
+TriggerX(FP,{CV(RedNumber,401,AtLeast)},{SetV(RedNumber,400)},{preserved})
+CIf(FP,{Command(Force2,AtLeast,1,173),TTCVar(FP,CurRM[2],NotSame,RedNumber)})
+CMov(FP,CurRM,RedNumber)
+CMov(FP,0x662350+(185*4),_Mul(RedNumber,256),256*100)
+CIfEnd()
+if Limit == 1 then
+	TriggerX(FP,{CD(TestMode,1)},{SetV(RedNumber,0)})
+end
 
 local CurExpTmp = CreateVar()
 --local MaxExpTmp = CreateVar()

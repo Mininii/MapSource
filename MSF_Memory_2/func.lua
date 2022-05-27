@@ -805,7 +805,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemoryX(_Add(G_CA_Nextptrs,19),SetTo,0,0xFF00)
 			})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- 어택 해당플레이어 위치
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- 어택 해당플레이어 위치 + 패러사이트
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
@@ -831,19 +831,19 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CMov(FP,G_CA_TempTable[8],G_CA_BakX)
 			CMov(FP,G_CA_TempTable[9],G_CA_BakY)
 
-			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1)})
+			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,1,1+0xF0000000)})
 			CDoActions(FP,{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,1,1),
 			Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
 			Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),})
 
 			CIfEnd()
-			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2)})
+			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2+0xF0000000)})
 				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
 				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536))),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),})
 			CIfEnd()
-			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
+			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4+0xF0000000)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
 				
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- 정야독
@@ -895,6 +895,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
 				CAdd(FP,CGPtr2,1)
 				DoActions(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,192)) -- 무적유닛으로 생성하기
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -1056,13 +1060,25 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,19*(0x20/4)),SetTo,G_CB_SNTV[2]),
 	TSetMemory(_Add(G_CA_LineTemp,20*(0x20/4)),SetTo,G_CB_SNTV[3]),
 	TSetMemory(_Add(G_CA_LineTemp,21*(0x20/4)),SetTo,G_CB_SNTV[4]),
-	
-
-
-
-
-	
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,7*(0x20/4)),SetTo,G_CA_CenterX),
@@ -1104,6 +1120,27 @@ NElseX()
 DoActions(FP,{RotatePlayer({DisplayTextX(f_GunSendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 
 NIfXEnd()
+
+DoActionsX(FP,{
+	SetV(G_CA_SNTV,0),
+	SetV(G_CA_LMTV,0),
+	SetV(G_CA_RPTV,0),
+	SetV(G_CA_Owner,0),
+	SetV(G_CA_CUTV[1],0),
+	SetV(G_CA_CUTV[2],0),
+	SetV(G_CA_CUTV[3],0),
+	SetV(G_CA_CUTV[4],0),
+	SetV(G_CA_CUTV[5],0),
+	SetV(G_CA_EffType,0),
+	SetV(G_CA_MaxNum,0),
+	SetV(G_CA_FuncNum,0),
+	SetV(G_CB_SNTV[1],0),
+	SetV(G_CB_SNTV[2],0),
+	SetV(G_CB_SNTV[3],0),
+	SetV(G_CB_SNTV[4],0),
+})
+
+
 SetCallEnd()
 
 
@@ -1153,9 +1190,9 @@ function CA_Func()
 	CMov(FP,0x58DC64,G_CA_Y)
 	CMov(FP,0x58DC68,G_CA_X)
 	CMov(FP,0x58DC6C,G_CA_Y)
-	CIf(FP,{CVar(FP,G_CA_TempTable[11][2],AtLeast,1)})
-		CIf(FP,{TTCVar(FP,G_CA_TempTable[11][2],"<",V(CA[10]))})
-			CMov(FP,V(CA[10]),G_CA_TempTable[11])
+	CIf(FP,{CVar(FP,G_CA_TempTable[16][2],AtLeast,1)})
+		CIf(FP,{TTCVar(FP,G_CA_TempTable[16][2],"<",V(CA[10]))})
+			CMov(FP,V(CA[10]),G_CA_TempTable[16])
 		CIfEnd()
 	CIfEnd()
 	CIfX(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,0x50000000,0xF0000000)})

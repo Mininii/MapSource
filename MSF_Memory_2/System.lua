@@ -1066,6 +1066,8 @@ SetMemoryW(0x657780 + (2*62), SetTo, 32), -- 프로브스플
 SetMemoryX(0x664080 + (22*4),SetTo,0x00400200,0x00400200),
 SetMemoryX(0x664080 + (70*4),SetTo,0x00400200,0x00400200),
 SetMemoryX(0x664080 + (98*4),SetTo,0x00400200,0x00400200),
+SetMemoryX(0x664080 + (13*4),SetTo,0x00400200,0x00400200),
+SetMemoryB(0x669E28+(974), SetTo, 16),
 SetMemory(0x662350+(64*4),SetTo,1200000*256)
 })
 TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"

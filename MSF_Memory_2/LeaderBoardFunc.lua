@@ -96,6 +96,8 @@ function LeaderBoardF()
 			for j, k in pairs(HeroPointArr) do
 				NJumpX(FP,Check_Hero,DeathsX(CurrentPlayer,Exactly,k[2],0,0xFF))
 			end
+			NJumpX(FP,Check_Hero,DeathsX(CurrentPlayer,Exactly,11,0,0xFF)) --  셔틀 드랍쉽 별도 추가
+			NJumpX(FP,Check_Hero,DeathsX(CurrentPlayer,Exactly,69,0,0xFF)) --  셔틀 드랍쉽 별도 추가
 
 			local TargetArr = { {160,144},{3936,144},{160,3952},{3936,3952} }
 			local TargetArr2 = { 

@@ -479,11 +479,21 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		if TestStart == 1 then
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
 		elseif Limit == 1 then
+			
+			local TestT = CreateCcode()
+			TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
 			--NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
 			--NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
-			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])})
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{
+				SetCp(i);
+				PlayWAV("staredit\\wav\\heal.ogg");
+				SetCp(FP);})
 		else
-			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])})
+			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{
+				SetCp(i);
+				PlayWAV("staredit\\wav\\heal.ogg");
+				SetCp(FP);})
 		end
 	end
 	
@@ -503,9 +513,6 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 					ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 					ModifyUnitShields(All,"Men",i,"Anywhere",100),
 					ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
-					SetCp(i);
-					PlayWAV("staredit\\wav\\heal.ogg");
-					SetCp(FP);
 				})
 		NIfEnd()
 
