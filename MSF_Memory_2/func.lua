@@ -846,10 +846,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4+0xF0000000)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
 				
 				
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,186))-- 정야독+충돌판정삭제
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- 정야독
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- 정야독 + 옵저버이펙트
 			CDoActions(FP,{

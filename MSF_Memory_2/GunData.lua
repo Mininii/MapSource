@@ -229,9 +229,9 @@ function Include_GunData(Size,LineNum)
 		Bring(Force2, AtLeast, 6, "Men", 1);
 		Bring(Force1, AtMost, 2, "Men", 1);
 	},Gun_SetLine(26,Add,1))
-	f_TempRepeatX(Gun_Line(26,AtLeast,25),11,1,0,0x7FFFFFFF,{G_CA_CenterX,G_CA_CenterY})
-	f_TempRepeatX(Gun_Line(26,AtLeast,25),69,1,0,0x7FFFFFFF,{G_CA_CenterX,G_CA_CenterY})
-	Trigger2X(FP,{Gun_Line(26,AtLeast,25)},{Gun_SetLine(26,SetTo,0),RotatePlayer({MinimapPing(1)},HumanPlayers,FP)},{preserved})
+	f_TempRepeatX(Gun_Line(26,AtLeast,10),11,1,0,0x7FFFFFFF,{G_CA_CenterX,G_CA_CenterY})
+	f_TempRepeatX(Gun_Line(26,AtLeast,10),69,1,0,0x7FFFFFFF,{G_CA_CenterX,G_CA_CenterY})
+	Trigger2X(FP,{Gun_Line(26,AtLeast,10)},{Gun_SetLine(26,SetTo,0),RotatePlayer({MinimapPing(1)},HumanPlayers,FP)},{preserved})
 
 	CIfEnd()
 
@@ -328,17 +328,17 @@ function Include_GunData(Size,LineNum)
 
 	
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Spi2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,8},"ACAS","Spi3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(5,Exactly,0)},{65,8},"ACAS","Spi3",1,384,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{104,62,51,15},"ACAS","Spi2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{66,8},"ACAS","Spi3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{66,8},"ACAS","Spi3",1,384,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{104,62,51,15},"ACAS","Spi2",1,559,nil,"CP",G_CA_Ratio(256+96))
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{66,8},"ACAS","Spi3",1,445,nil,"CP",G_CA_Ratio(256+96))
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,7),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{66,8},"ACAS","Spi3",1,384,nil,"CP",G_CA_Ratio(256+96))
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{56,53,54,48},"ACAS","Tor2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,8},"ACAS","Tor3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(5,Exactly,0)},{65,8},"ACAS","Tor3",1,384,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{104,62,51,15},"ACAS","Tor2",1,559,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{66,8},"ACAS","Tor3",1,445,nil,"CP")
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{66,8},"ACAS","Tor3",1,384,nil,"CP")
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{104,62,51,15},"ACAS","Tor2",1,559,nil,"CP",G_CA_Ratio(256+96))
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{66,8},"ACAS","Tor3",1,445,nil,"CP",G_CA_Ratio(256+96))
+	G_CA_SetSpawn2X({Gun_Line(3,Exactly,8),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{66,8},"ACAS","Tor3",1,384,nil,"CP",G_CA_Ratio(256+96))
 
 
 	
@@ -348,16 +348,24 @@ function Include_GunData(Size,LineNum)
 
 	CIfEnd()
 	CIf_GCase(133)
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0)},{76},"ACAS","HCA",1,215,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{63,28},"ACAS","HCA",1,60,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{63,28},"ACAS","HCA",1,60,nil,"CP",G_CA_Ratio(256+96))
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(5,Exactly,0)},{17},"ACAS","CirAX",1,333,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{19,86},"ACAS","CirAX",1,318,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{19,86},"ACAS","CirAX",1,318,nil,"CP",G_CA_Ratio(256+96))
+	--
+	for i = 0, 1 do
+		local X = CD(Theorist,1)
+		local Y = G_CA_Ratio(512)
+		if i == 0 then X = nil Y= nil end
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0),X},{76},"ACAS","HCA",1,215,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1),X},{63,28},"ACAS","HCA",1,60,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(5,Exactly,0),X},{17},"ACAS","CirAX",1,333,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1),X},{19,86},"ACAS","CirAX",1,318,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0),X},{25},"ACAS","MinHive",1,398,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),X},{25,100},"ACAS","MinHive",1,397,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0),X},{52},"ACAS","Sp1",1,389,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1),X},{10,22},"ACAS","Sp1",1,474,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0),X},{75},"ACAS","Tornado",1,974,nil,"CP",Y)
+		G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1),X},{79,80},"ACAS","Tornado",1,545,nil,"CP",Y)
+	end
 
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)},{25},"ACAS","MinHive",1,398,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{25,100},"ACAS","MinHive",1,397,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{25,100},"ACAS","MinHive",1,397,nil,"CP",G_CA_Ratio(256+96))
+
 	for i = 4, 7 do
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0),GCP(i)},{27},"ACAS","MinHiveP"..i+1,1,983,nil,"CP",1)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),GCP(i),CD(Theorist,0)},{102},"ACAS","MinHiveP"..i+1,1,984,nil,"CP",1)
@@ -366,12 +374,6 @@ function Include_GunData(Size,LineNum)
 	G_CA_SetSpawn2X({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1),GCP(i),CD(Theorist,1),CD(EEggCode,10,AtLeast)},{64},"ACAS","MinHive2P"..i+1,1,503,nil,"CP",1)
 	
 	end
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)},{52},"ACAS","Sp1",1,389,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{10,22},"ACAS","Sp1",1,474,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{10,22},"ACAS","Sp1",1,474,nil,"CP",G_CA_Ratio(256+96))
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)},{75},"ACAS","Tornado",1,974,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1),CD(Theorist,0)},{79,80},"ACAS","Tornado",1,545,nil,"CP")
-	G_CA_SetSpawn2X({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1),CD(Theorist,1)},{79,80},"ACAS","Tornado",1,545,nil,"CP",G_CA_Ratio(256+96))
 	CIfEnd()
 	CIf(FP,{Gun_Line(0,AtLeast,131),Gun_Line(0,AtMost,133),Gun_Line(54,AtMost,0)},{Gun_SetLine(5,SetTo,1)})
 		for i = 0, 3 do
@@ -979,8 +981,29 @@ function Include_GunData(Size,LineNum)
 	CTrigger(FP,{Gun_Line(7,Exactly,1)},{TCreateUnitWithProperties(5,13,1,G_CA_Player,{energy=100})},1)
 	CIf(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_DoSuspend(),AddCD(XelCcode,1),RotatePlayer({PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")},HumanPlayers,FP)})
 		for i = 4, 7 do
-			TriggerX(FP,{GCP(i)},{Order("Men",i,64,Attack,2+i-4)},{preserved})
+			TriggerX(FP,{CD(Theorist,0),GCP(i)},{Order("Men",i,64,Attack,2+i-4)},{preserved})
+			CTrigger(FP,{CD(Theorist,1),GCP(i)},{
+				SetV(G_CA_CenterX,NexArrX[i-3]),
+				SetV(G_CA_CenterY,NexArrY[i-3]),
+				TSetMemory(0x58DC60+(20*0),SetTo,NexArrX[i-3]),
+				TSetMemory(0x58DC64+(20*0),SetTo,NexArrY[i-3]),
+				TSetMemory(0x58DC68+(20*0),SetTo,NexArrX[i-3]),
+				TSetMemory(0x58DC6C+(20*0),SetTo,NexArrY[i-3]),
+				Order("Men",i,64,Attack,1)
+			},1)
 		end
+		CIf(FP,CD(Theorist,1))
+			CFor(FP,0,1700,1)
+				local CI = CForVariable()
+				local CUnitEPD = CreateVar(FP)
+				CMov(FP,CUnitEPD,_Mul(CI,84),19025+19)
+				CTrigger(FP,{
+					TMemoryX(CUnitEPD,Exactly,G_CA_Player,0xFF),
+					TMemoryX(CUnitEPD,AtLeast,1*256,0xFF00),
+					Cond_EXCC2(DUnitCalc, CI, 1, Exactly, 0)},{
+					Set_EXCC2(DUnitCalc, CI, 1, SetTo, 2)},1)
+			CForEnd()
+		CIfEnd()
 	CIfEnd()
 
 	CIfEnd()
@@ -1523,7 +1546,7 @@ end
 	CIfEnd()
 	CIfEnd()
 	if Limit == 1 then
-		BossPhaseTestMode = 1
+		BossPhaseTestMode = 0
 		BossPhaseTestNum = 1
 	else
 		
@@ -1695,7 +1718,11 @@ Trigger2X(FP,{},{RotatePlayer({
 		f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
 		CiDiv(FP, T_Y, 2)
 		DoActionsX(FP,{AddV(T_X,2048),AddV(T_Y,2048)})
-		Simple_SetLocX(FP, 0, T_X,T_Y,T_X,T_Y,{CreateUnit(1,84,1,FP),KillUnit(84, FP)})
+		Simple_SetLocX(FP, 0, T_X,T_Y,T_X,T_Y,{SetSwitch("Switch 100", Random),SetSwitch("Switch 101", Random)})
+		CreateEffUnit({Switch("Switch 100", Cleared),Switch("Switch 101", Cleared)},20,548,0)
+		CreateEffUnit({Switch("Switch 100", Set),Switch("Switch 101", Cleared)},20,548,13)
+		CreateEffUnit({Switch("Switch 100", Cleared),Switch("Switch 101", Set)},20,548,17)
+		CreateEffUnit({Switch("Switch 100", Set),Switch("Switch 101", Set)},20,548,10)
 	CWhileEnd()
 	TriggerX(FP,{Gun_Line(13,AtLeast,14500)},{AddV(StartV[2],1)},{preserved})
 	CIfEnd()

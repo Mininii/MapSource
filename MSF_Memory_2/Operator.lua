@@ -65,7 +65,7 @@ function Operator_Trig()
 				SetMemory(0x582204+(2*4),Add,2),
 				SetMemory(0x582204+(3*4),Add,2),
 				SetCDeaths(FP,Add,1,EEggCode),
-				AddV(RedNumber,20),
+				AddV(RedNumberT,-9000*20),
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
 			
 
@@ -229,12 +229,22 @@ TriggerX(FP,{ElapsedTime(AtLeast,60)},{--
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
 },{preserved})
 
-TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*50)},{preserved})
+TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*125)},{preserved})
 CWhile(FP,{
 	CVar(FP,RedNumberT[2],AtLeast,9000*2);
-	CVar(FP,RedNumber[2],AtLeast,1);},{
-	SetCVar(FP,RedNumberT[2],Subtract,9000*2);
+	CVar(FP,RedNumberT[2],AtMost,0x7FFFFFFF);
+	CVar(FP,RedNumber[2],AtLeast,1);
+},{
+	SetCVar(FP,RedNumberT[2],Add,-9000*2);
 	SetCVar(FP,RedNumber[2],Subtract,1);})
+CWhileEnd()
+CWhile(FP,{
+	CVar(FP,RedNumberT[2],AtMost,-(9000*2));
+	CVar(FP,RedNumberT[2],AtLeast,0x80000000);
+	CVar(FP,RedNumber[2],AtMost,399);
+},{
+	SetCVar(FP,RedNumberT[2],Add,9000*2);
+	SetCVar(FP,RedNumber[2],Add,1);})
 CWhileEnd()
 local CurRM = CreateVar(FP)
 TriggerX(FP,{CV(RedNumber,401,AtLeast)},{SetV(RedNumber,400)},{preserved})
@@ -243,7 +253,7 @@ CMov(FP,CurRM,RedNumber)
 CMov(FP,0x662350+(185*4),_Mul(RedNumber,256),256*100)
 CIfEnd()
 if Limit == 1 then
-	TriggerX(FP,{CD(TestMode,1)},{SetV(RedNumber,0)})
+	--TriggerX(FP,{CD(TestMode,1)},{SetV(RedNumber,100)})
 end
 
 local CurExpTmp = CreateVar()

@@ -755,31 +755,70 @@ HPRegenTable = {64}
 		else
 			PushErrorMsg("CUTable_TypeError")
 		end
-		
+	end
+	function WaveSet2(RMTable,CUTable)
+		local RMLeast
+		local RMMost
+		if type(RMTable)=="table" then
+			RMLeast = RMTable[1]
+			RMMost = RMTable[2]
+		else
+			PushErrorMsg("LVTable_TypeError")
+		end
+		if type(CUTable)=="table" then
+			for j, k in pairs(CUTable) do
+				for i = 0, 3 do
+					f_TempRepeat({CV(RedNumber,RMLeast,AtLeast),CV(RedNumber,RMMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
+				end
+			end
+		else
+			PushErrorMsg("CUTable_TypeError")
+		end
 	end
 	CIf(FP,{Command(FP,AtLeast,1,173),CV(Time1,(60*30)*1000,AtMost),CD(WaveT,1800,AtLeast)},SetCD(WaveT,0))
+		CIf(FP,{CD(Theorist,1)})
+			WaveSet2({0,300},{{3,10},{27,15},{100,10},{57,10},{66,15},{65,15}})
+			WaveSet2({300,315},{{3,10},{27,15},{100,10},{57,10}})
+			WaveSet2({316,330},{{52,10},{10,15},{98,10},{70,10}})
+			WaveSet2({331,350},{{79,7},{80,5},{22,5},{19,5}})
+			WaveSet2({350,370},{{28,15},{17,15},{75,10}})
+			WaveSet2({371,390},{{88,5},{21,5},{17,5},{77,5},{78,5}})
+		CIfEnd()
 		WaveSet({0,9},{{53,15},{54,20}})
 		WaveSet({10,19},{{48,8},{53,10},{55,10}})
 		WaveSet({20,24},{{55,10},{48,8},{54,7},{53,6}})
 		WaveSet({25,50},{{56,15},{51,5},{104,5},{48,5},{53,5},{54,5}})
+
+		--Tier1 = {17,77,78,76,63,21,88,28,86,75,25}
+		--Tier2 = {79,80,52,10,22,19}
+		--Tier3 = {27,66,29,98,57,3,8,11,69,100,70,65}
+		--Tier4 = {102,61,67,23,81,30}
+		--Tier5 = {60,68}
 	CIfEnd(AddCD(WaveT,1))
-	CIf(FP,CD(Theorist,1))
+	CIf(FP,{Memory(0x628438,AtLeast,1),CD(Theorist,1),CD(ThCallT,0)})
 		TheoristCallArr = {
-			{350,15},
-			{300,30},
-			{250,45},
-			{200,60},
-			{150,75},
-			{100,90},
-			{50,115},
-			{0,130},
+			{322,50},
+			{285,70},
+			{250,100},
+			{222,110},
+			{197,100},
+			{165,150},
+			{133,110},
+			{102,85},
+			{84,100},
+			{56,70},
+			{37,200},
+			{10,100},
+			{0,350},
 		}
 		for j, k in pairs(TheoristCallArr) do
-			f_TempRepeat(CV(RedNumber,k[1],AtMost), 69, k[2], 187, nil, {2048,2048},1)
-			f_TempRepeat(CV(RedNumber,k[1],AtMost), 11, k[2], 187, nil, {2048,2048},1)
-			TriggerX(FP,CV(RedNumber,k[1],AtMost),{CreateUnit(10,84,64,FP),KillUnit(84,FP)})
+			local TempCc = CreateCcode()
+			f_TempRepeat({CV(RedNumber,k[1],AtMost),CD(TempCc,0)}, 69, k[2], 186, nil, {2048,2048})
+			f_TempRepeat({CV(RedNumber,k[1],AtMost),CD(TempCc,0)}, 11, k[2], 186, nil, {2048,2048})
+			TriggerX(FP,{CV(RedNumber,k[1],AtMost),CD(TempCc,0)},{CreateUnit(10,84,64,FP),KillUnit(84,FP),SetCD(TempCc,1)},{preserved})
+			TriggerX(FP,{CV(RedNumber,k[1]+1,AtLeast),CD(TempCc,1)},{SetCD(TempCc,0)},{preserved})
 		end
-	CIfEnd()
+	CIfEnd({SubCD(ThCallT,1)})
 
 	CMov(FP,0x6509B0,FP)
 for i = 0, 3 do
@@ -889,6 +928,7 @@ Command(FP,AtLeast,1,173);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
 		AddV(CanC,1);
+		SetCD(ThCallT,50);
 		AddCD(RedNumPanelty,1);
 		KillUnit("Factories",Force2);
 },{preserved})
@@ -908,6 +948,7 @@ Command(FP,AtLeast,1,173);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,SetTo,24*30,CanCT);
 		AddV(CanC,1);
+		SetCD(ThCallT,50);
 		KillUnit("Factories",Force2);
 		SetCDeaths(FP,Add,1,DefeatCC);
 },{preserved})
@@ -1049,7 +1090,7 @@ function TheoristFlingyPatch(FlingyID,TunRad)
 	table.insert(TheoristPatchArr, SetMemory(0x6C9EF8 + (FlingyID*4),SetTo,20000))
 end
 
-TheoristFlingyPatch(44,127)--¼ÅÆ²
+TheoristFlingyPatch(44,40)--¼ÅÆ²
 TheoristFlingyPatch(72,127)--µå¶ø½±
 DoActions2X(FP,{
 RemoveUnit(203,AllPlayers),

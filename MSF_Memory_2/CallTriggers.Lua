@@ -46,6 +46,14 @@ function Install_CallTriggers()
 		CIfEnd()
 
 
+		CIf(FP,CV(RepHeroIndex,154))
+		for i = 4, 7 do
+			CTrigger(FP,{CV(CunitP,i)},{SetV(NexArrX[i-3],CPosX)},1)
+			CTrigger(FP,{CV(CunitP,i)},{SetV(NexArrY[i-3],CPosY)},1)
+		end
+		CIfEnd()
+
+
 		for i = 0, 3 do
 			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,131)},{AddCD(HactCcode[i+1],1)},{preserved})
 			TriggerX(FP,{CV(CunitP,i+4),CV(RepHeroIndex,132)},{AddCD(LairCcode[i+1],1)},{preserved})
