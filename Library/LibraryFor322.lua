@@ -426,7 +426,7 @@ end
 
 
 function AddCD(Code,Value)
-
+	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
 		return SetCDeaths(FP,Add,Value,Code)
@@ -435,6 +435,7 @@ function AddCD(Code,Value)
 	end
 end
 function SubCD(Code,Value)
+	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
 		return SetCDeaths(FP,Subtract,Value,Code)
@@ -443,6 +444,7 @@ function SubCD(Code,Value)
 	end
 end
 function SetCD(Code,Value)
+	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
 		return SetCDeaths(FP,SetTo,Value,Code)
@@ -451,6 +453,7 @@ function SetCD(Code,Value)
 	end
 end
 function AddV(V,Value)
+	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
 		return SetCVar(FP,V[2],Add,Value)
@@ -459,6 +462,7 @@ function AddV(V,Value)
 	end
 end
 function SubV(V,Value)
+	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
 		return SetCVar(FP,V[2],Subtract,Value)
@@ -467,6 +471,7 @@ function SubV(V,Value)
 	end
 end
 function SetV(V,Value,Type)
+	if Value == nil then Value = 1 end
 	if Type == nil then Type = SetTo end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -476,6 +481,7 @@ function SetV(V,Value,Type)
 	end
 end
 function CD(Code,Value,Type)
+	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -485,6 +491,7 @@ function CD(Code,Value,Type)
 	end
 end
 function CV(V,Value,Type)
+	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
