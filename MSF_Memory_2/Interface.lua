@@ -455,7 +455,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		end 
 		
 	end
-
+	
 	DoActions(i,{
 		SetMemoryB(0x57F27C+(228*i)+MedicTrig[1],SetTo,0),
 		SetMemoryB(0x57F27C+(228*i)+MedicTrig[2],SetTo,0),
@@ -482,7 +482,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 			
 			local TestT = CreateCcode()
 			TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
-			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
+			--NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
 			--NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
 			--NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{

@@ -65,7 +65,7 @@ function Operator_Trig()
 				SetMemory(0x582204+(2*4),Add,2),
 				SetMemory(0x582204+(3*4),Add,2),
 				SetCDeaths(FP,Add,1,EEggCode),
-				AddV(RedNumberT,-9000*20),
+				AddV(RedNumberT,-9000*10),
 				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
 			
 

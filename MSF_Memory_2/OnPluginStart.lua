@@ -25,8 +25,11 @@ function init() -- 맵 실행시 1회 실행 트리거
 	table.insert(PatchArr,SetMemoryB(0x6647B0 + (UnitID), SetTo, 255))
 	end
 	
-	function UnitEnable(UnitID,MinCost,GasCost,BuildTime,SuppCost)
-	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
+	function UnitEnable(UnitID,MinCost,GasCost,BuildTime,SuppCost,StartDistance)
+		if StartDistance == nil then StartDistance = 5 end
+	if StartDistance ~= "X" then
+		table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,StartDistance))
+	end
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
@@ -211,20 +214,20 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(133) -- 건작Disable
 
 	
-	UnitEnable(71) -- 원격스팀팩
-	UnitEnable(2) -- 자환
-	UnitEnable(19,ShCost) -- 수정보호막
-	UnitEnable(8,NMCost,nil,5) -- 마린
-	UnitEnable(28,NMCost+HMCost+LMCost,nil,5) -- 마린
-	UnitEnable(7,500) -- SCV
+	UnitEnable(71,nil,nil,nil,nil,2) -- 원격스팀팩
+	UnitEnable(2,nil,nil,nil,nil,2) -- 자환
+	UnitEnable(19,ShCost,nil,nil,nil,2) -- 수정보호막
+	UnitEnable(8,NMCost,nil,2,nil,2) -- 마린
+	UnitEnable(28,NMCost+HMCost+LMCost,nil,5,nil,2) -- 마린
+	UnitEnable(7,500,nil,nil,nil,2) -- SCV
 	
-	UnitEnable(125,8000)
-	UnitEnable(124,4000)
-	UnitEnable(109,1000)
+	UnitEnable(125,8000,nil,nil,nil,271)
+	UnitEnable(124,4000,nil,nil,nil,271)
+	UnitEnable(109,1000,nil,nil,nil,271)
 	UnitEnable(22) -- 브금
 	UnitEnable(72) -- 예약메딕
-	UnitEnable(74) -- 멀티스탑
-	UnitEnable(75) -- 멀티홀드
+	UnitEnable(74,nil,nil,nil,nil,2) -- 멀티스탑
+	UnitEnable(75,nil,nil,nil,nil,2) -- 멀티홀드
 	UnitEnable(60)
 	UnitEnable(62)
 	UnitEnable(23) -- 이론치모드 ON
@@ -238,7 +241,6 @@ BossUIDP = {87,74,5,2,64,12,82}
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0))
 
-	table.insert(PatchArrPrsv,SetMemoryW(0x660B68 + (125 *2),SetTo,271)) -- 8벙
 	for i= 0,3 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 19,SetTo,0))
@@ -251,11 +253,11 @@ BossUIDP = {87,74,5,2,64,12,82}
 
 	for i = 1, 4 do
 		
-		UnitEnable(MedicTrig[i],200+(i*50),nil,i) -- 메딕
+		UnitEnable(MedicTrig[i],200+(i*50),nil,i,nil,2) -- 메딕
 		DefTypePatch(MarID[i],i-1) -- 마린의 방어타입을 P1부터 차례대로 배분
 		SetShield(MarID[i]) -- 마린 쉴드 설정. 쉴드 활성화 + 쉴드 1000 설정
 		UnitSizePatch(MarID[i],7,10,7,11) -- 마린 크기 설정
-		UnitEnable(MarID[i],0,nil,5)
+		UnitEnable(MarID[i],0,nil,5,nil,2)
 		SetUnitGrpToMarine(MarID[i]) -- 마린 그래픽 전부 마린으로 설정
 		SetUnitAdvFlag(MarID[i],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
