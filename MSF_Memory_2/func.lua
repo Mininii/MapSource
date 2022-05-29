@@ -781,6 +781,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfXEnd()
 		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,3)},{TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TKillUnit(84,CreatePlayer)},1)-- 어택없음+옵저버이펙트
 		
+		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 
 		
@@ -847,15 +848,35 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				
 				
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,186))-- 정야독+충돌판정삭제
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,6),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- 정야독
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- 정야독 + 옵저버이펙트
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,6),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
+			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- 정야독 + 옵저버이펙트
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+			Convert_CPosXY()
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,6),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,190)) -- 생성 일반어택 + 정야독이펙트
@@ -891,6 +912,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, 0x100*P9,0xF00),
 					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, _Mul(CreatePlayer,0x1000),0xF000),
 					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
+					
 				})
 				--CMov(FP,0x57f0f0,CGPtr2)
 				--CMov(FP,0x57f120,G_CA_Nextptrs)
@@ -901,6 +923,22 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
 			})
+			
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,193))-- 정야독+충돌판정삭제, 최대체력 10퍼센트로 너프
+			
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+			Convert_CPosXY()
+			CDoActions(FP,{
+				TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,_Div(_Read(Gun_TempSpawnSet1,EPDF(0x662350)),10));
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,6),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
+			})
+
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -959,9 +997,9 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
 		TSetCVar(FP,Repeat_TempV[2],SetTo,Number),
 		TSetCVar(FP,TRepeatX[2],SetTo,SetX),
 		TSetCVar(FP,TRepeatY[2],SetTo,SetY),
+		TSetCVar(FP,CreatePlayer[2],SetTo,Owner),
 		SetCVar(FP,RepeatType[2],SetTo,Type),
-		SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
+		SetCDeaths(FP,SetTo,0,CA_Repeat_Check),})
 	CallTriggerX(FP,Set_Repeat,Condition)
 end
 

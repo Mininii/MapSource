@@ -345,7 +345,9 @@ function Install_CallTriggers()
 		local PlayerID = CAPlotPlayerID
 		CA_RatioXY(CA_Eff_Rat,186000,CA_Eff_Rat,186000)
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
-		Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),_Add(V(CA[8]),SHLX),_Add(V(CA[9]),SHLY),Simple_CalcLoc(0,-32,-32,32,32))
+		CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
+		CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
+		Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
 		
 		CIf(FP,{CV(CA_Create,0)},{
 			SetMemoryW(0x666462, SetTo, 936),
@@ -400,8 +402,10 @@ function Install_CallTriggers()
 			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{preserved})
 			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{preserved})
 			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,7)},{preserved})
-			CDoActions(FP,{TCreateUnitWithProperties(1,CA_Create,1,CA_CP,{energy = 100, hitpoint = 1}),TSetMemory(0x6509B0,SetTo,CA_CP),RunAIScriptAt(JYD,1)})
-			
+			CMov(FP,TRepeatX,CPosX)
+			CMov(FP,TRepeatY,CPosY)
+			f_TempRepeatX({CD(Theorist,0)}, CA_Create, 1, 193, CA_CP)
+			f_TempRepeatX({CD(Theorist,1)}, CA_Create, 1, 186, CA_CP)
 		CIfEnd()
 		CIf(FP,{CV(CA_Create,1000,AtLeast)})
 			CDoActions(FP,{
