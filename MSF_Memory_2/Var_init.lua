@@ -39,7 +39,6 @@ function Var_init()
 	end
 	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
 	UnitDataPtr = CreateVar(FP)
-	CGiveH = {Create_VoidEPDHeaderV(FP,1700*2),Create_VoidEPDHeaderV(FP,1700*2)}
 	table.insert(CtrigInitArr[FP+1],SetCtrigX(UnitDataPtr[1],UnitDataPtr[2],0x15C,UnitDataPtr[3],SetTo,UnitDataPtrVoid[1],UnitDataPtrVoid[2],UnitDataPtrVoid[3],1,UnitDataPtrVoid[4]))
 	MaxHPBackUp = CreateArr(228,FP)
 	BdDimArr = CreateArr(228,FP)

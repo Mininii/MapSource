@@ -221,9 +221,9 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(28,NMCost+HMCost+LMCost,nil,5,nil,2) -- 마린
 	UnitEnable(7,500,nil,nil,nil,2) -- SCV
 	
-	UnitEnable(125,8000,nil,nil,nil,271)
-	UnitEnable(124,4000,nil,nil,nil,271)
-	UnitEnable(109,1000,nil,nil,nil,271)
+	UnitEnable(125,8000)
+	UnitEnable(124,4000)
+	UnitEnable(109,1000)
 	UnitEnable(22) -- 브금
 	UnitEnable(72) -- 예약메딕
 	UnitEnable(74,nil,nil,nil,nil,2) -- 멀티스탑
@@ -236,10 +236,6 @@ BossUIDP = {87,74,5,2,64,12,82}
 	UnitEnable(54) -- 컬러스킨
 	UnitEnable(53) -- 컬러스킨
 	
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0)) -- 이론치모드 임시 삭제
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0))
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0))
-	table.insert(PatchArr,SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0))
 
 	for i= 0,3 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + GiveUnitID[i+1],SetTo,0))
@@ -710,7 +706,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			CVar(FP,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : 정식 1.0 출시 시 작성예정")},HumanPlayers,FP);
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
 			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
 			
 		},

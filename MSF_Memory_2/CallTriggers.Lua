@@ -456,30 +456,47 @@ local CGTemp = CreateVarArr(3, FP)
 local CGTemp2 = CreateVarArr(3, FP)
 local CGivePtr = CreateVar(FP)
 local CGJump = def_sIndex()
-CMov(FP,CGivePtr,0)
-CJumpEnd(FP,CGJump)
-CRead(FP,CGTemp[1],_Add(CGiveH[1],CGivePtr))
-CRead(FP,CGTemp[2],_Add(CGiveH[2],CGivePtr))
---DoActions2(FP, RotatePlayer({DisplayTextX("TGCheckAc",4)}, HumanPlayers, FP))
-NIf(FP,CV(CGTemp[1],1,AtLeast))
-CMov(FP,CGTemp2[1],CGTemp[2],nil,0xFF,1)
+--CMov(FP,CGivePtr,0)
+--CJumpEnd(FP,CGJump)
+--CRead(FP,CGTemp[1],_Add(CGiveH[1],CGivePtr))
+--CRead(FP,CGTemp[2],_Add(CGiveH[2],CGivePtr))
+----DoActions2(FP, RotatePlayer({DisplayTextX("TGCheckAc",4)}, HumanPlayers, FP))
+--NIf(FP,CV(CGTemp[1],1,AtLeast))
+--CMov(FP,CGTemp2[1],CGTemp[2],nil,0xFF,1)--
 
-CIf(FP,{TCVar(FP,CGTemp2[1][2],Exactly,CGTemp[3],0xFF)})
-CMov(FP,CGTemp2[2],CGTemp[2],nil,0xF00,1)
-CMov(FP,CGTemp2[3],CGTemp[2],nil,0xF000,1)
-f_Div(FP, CGTemp2[2], 0x100)
-f_Div(FP, CGTemp2[3], 0x1000)
+--CIf(FP,{TCVar(FP,CGTemp2[1][2],Exactly,CGTemp[3],0xFF)})
+--CMov(FP,CGTemp2[2],CGTemp[2],nil,0xF00,1)
+--CMov(FP,CGTemp2[3],CGTemp[2],nil,0xF000,1)
+--f_Div(FP, CGTemp2[2], 0x100)
+--f_Div(FP, CGTemp2[3], 0x1000)--
 
---f_Read(FP,_Add(CGTemp[1],10),CPos) -- 생성유닛 위치 불러오기
---Convert_CPosXY()
---Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayTextX("TGCheck",4)}, HumanPlayers, FP)})
---CDoActions(FP, {TGiveUnits(1,CGTemp[3],P9,1,CGTemp2[3])})
-f_CGive(FP, CGTemp[1], nil, CGTemp2[3], CGTemp2[2])
-CIfEnd()
+----f_Read(FP,_Add(CGTemp[1],10),CPos) -- 생성유닛 위치 불러오기
+----Convert_CPosXY()
+----Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayTextX("TGCheck",4)}, HumanPlayers, FP)})
+----CDoActions(FP, {TGiveUnits(1,CGTemp[3],P9,1,CGTemp2[3])})
+--f_CGive(FP, CGTemp[1], nil, CGTemp2[3], CGTemp2[2])
+--CIfEnd()--
 
-CAdd(FP,CGivePtr,1)
-CJump(FP,CGJump)
-NIfEnd()
+--CAdd(FP,CGivePtr,1)
+--CJump(FP,CGJump)
+--NIfEnd()
+
+CFor(FP,19025,19025+(84*1700),84)
+	local CI = CForVariable()
+	CIf(FP,{
+		TMemoryX(_Add(CI,19),Exactly,P9,0xFF),
+		TMemoryX(_Add(CI,25),Exactly,CGTemp[3],0xFF),
+	})
+	CMov(FP,CGTemp[1],_Read(_Add(CI,35)),nil,0xFF)
+	--f_CGive(FP, CI, nil, CGTemp[1], P9)
+	f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
+	Convert_CPosXY()
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+	CDoActions(FP,{TSetMemoryX(_Add(CI,35), SetTo, 0, 0xFF),TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
+	CIfEnd()
+CForEnd()
+
+
 SetCallEnd()
 
 function NUGive(Var,UnitID)

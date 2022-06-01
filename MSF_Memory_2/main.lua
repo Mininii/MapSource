@@ -34,14 +34,14 @@ end
 TestSet(0)
 	EVFFlag = 0
 if Limit == 1 then
-	EVFFlag = 1
-	TheoristTestMode = 1
+	EVFFlag = 0
+	TheoristTestMode = 0
 	EEggTestNum = 10
 else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.9C"
+VerText = "\x04Ver. Beta 0.9X"
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end

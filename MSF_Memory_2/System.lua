@@ -10,7 +10,8 @@ function System()
 		RemoveUnit(MarID[3],P12),
 		RemoveUnit(MarID[4],P12),
 		ModifyUnitEnergy(All,"Men",P12,64,0),
-		RemoveUnit(204,FP),RemoveUnit(205,Force2)})
+		RemoveUnit(204,Force2),
+		RemoveUnit(205,Force2),})
 
 	Cast_UnitCount()
 	AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)--오프닝
@@ -707,7 +708,7 @@ HPRegenTable = {64}
 			for j, k in pairs(CUTable) do
 				--f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},k[1],k[2],1,Player)--
 				--CTrigger(FP,{CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost)},{TCreateUnit(k[2],k[1],1,f_CRandNum(4,4))},1)
-				f_TempRepeatX(nil,k[1],k[2],1,nil,{CPosX,CPosY})
+				f_TempRepeatX(nil,k[1],k[2],194,nil,{CPosX,CPosY})
 			end
 		else
 			PushErrorMsg("CUTable_TypeError")
@@ -749,7 +750,7 @@ HPRegenTable = {64}
 		if type(CUTable)=="table" then
 			for j, k in pairs(CUTable) do
 				for i = 0, 3 do
-					f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
+					f_TempRepeat({CV(Level,LvLeast,AtLeast),CV(Level,LVMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],194,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
 				end
 			end
 		else
@@ -768,7 +769,7 @@ HPRegenTable = {64}
 		if type(CUTable)=="table" then
 			for j, k in pairs(CUTable) do
 				for i = 0, 3 do
-					f_TempRepeat({CV(RedNumber,RMLeast,AtLeast),CV(RedNumber,RMMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],1,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
+					f_TempRepeat({CV(RedNumber,RMLeast,AtLeast),CV(RedNumber,RMMost,AtMost),HumanCheck(i,1),Command(i+4,AtLeast,1,189)},k[1],k[2],194,i+4,{WarpXY[i+1][1],WarpXY[i+1][2]})--
 				end
 			end
 		else
@@ -776,6 +777,7 @@ HPRegenTable = {64}
 		end
 	end
 	CIf(FP,{Command(FP,AtLeast,1,173),CV(Time1,(60*30)*1000,AtMost),CD(WaveT,1800,AtLeast)},SetCD(WaveT,0))
+
 		CIf(FP,{CD(Theorist,1)})
 			WaveSet2({0,300},{{3,10},{27,15},{100,10},{57,10},{66,15},{65,15}})
 			WaveSet2({300,315},{{3,10},{27,15},{100,10},{57,10}})
@@ -788,6 +790,7 @@ HPRegenTable = {64}
 		WaveSet({10,19},{{48,8},{53,10},{55,10}})
 		WaveSet({20,24},{{55,10},{48,8},{54,7},{53,6}})
 		WaveSet({25,50},{{56,15},{51,5},{104,5},{48,5},{53,5},{54,5}})
+		
 
 		--Tier1 = {17,77,78,76,63,21,88,28,86,75,25}
 		--Tier2 = {79,80,52,10,22,19}
@@ -886,7 +889,7 @@ InvDisable(190,FP,{
 	CD(OcCcode,2,AtLeast);
 	CD(DgCcode,2,AtLeast); 
 	CD(GeneCcode,2,AtLeast);
-},"\x17중앙 \x10"..Conv_HStr("<08>C<1D>Ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+},"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
 CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 

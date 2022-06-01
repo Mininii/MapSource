@@ -50,24 +50,28 @@ function Operator_Trig()
 
 
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)})
-			DoActionsX(FP,{
-                SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256*75,0),
-			})
-			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{preserved})
-			
-			CAdd(FP,0x6509B0,53)
-			DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
-			CSub(FP,0x6509B0,53-7)
-			Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
-				SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
-				SetMemory(0x582204+(0*4),Add,2),
-				SetMemory(0x582204+(1*4),Add,2),
-				SetMemory(0x582204+(2*4),Add,2),
-				SetMemory(0x582204+(3*4),Add,2),
-				SetCDeaths(FP,Add,1,EEggCode),
-				AddV(RedNumberT,-9000*10),
-				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
-			
+			CSub(FP,0x6509B0,6)
+			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
+
+				DoActionsX(FP,{
+					SetMemory(0x6509B0,Subtract,17),SetDeaths(CurrentPlayer,Subtract,256*75,0),
+				})
+				TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),SetMemory(0x6509B0,Subtract,17)},{preserved})
+				
+				CAdd(FP,0x6509B0,53)
+				DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
+				CSub(FP,0x6509B0,53-7)
+				Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
+					SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
+					SetMemory(0x582204+(0*4),Add,2),
+					SetMemory(0x582204+(1*4),Add,2),
+					SetMemory(0x582204+(2*4),Add,2),
+					SetMemory(0x582204+(3*4),Add,2),
+					SetCDeaths(FP,Add,1,EEggCode),
+					AddV(RedNumberT,-9000*10),
+					RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
+				
+			CIfEnd()
 
 		CIfEnd()
 
@@ -126,7 +130,7 @@ function Operator_Trig()
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
-	TargetTestGun = 173
+	TargetTestGun = 190
     for j, k in pairs(f_GunTable) do
 		if k ~= TargetTestGun then
         table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
@@ -229,7 +233,7 @@ TriggerX(FP,{ElapsedTime(AtLeast,60)},{--
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
 },{preserved})
 
-TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*125)},{preserved})
+TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*(400-322))})
 CWhile(FP,{
 	CVar(FP,RedNumberT[2],AtLeast,9000*2);
 	CVar(FP,RedNumberT[2],AtMost,0x7FFFFFFF);

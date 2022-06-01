@@ -663,7 +663,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
 		CIfXEnd()
 		if DefaultAttackLocCheck == 1 then -- 디폴트 로케이션이 0일 경우 RepeatType에 따라 중심점으로 어택
-			CIfX(FP,CVar(FP,RepeatType[2],Exactly,1)) -- 어택 일반 해당플레이어 위치로
+			CIfX(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,1),CVar(FP,RepeatType[2],Exactly,194)})}) -- 어택 일반 해당플레이어 위치로
 				CIfX(FP,Never())
 			for i = 0, 3 do
 				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
@@ -868,6 +868,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
 				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,188)) -- 유닛 랜덤 속도 설정 + 정야독
+				TempSpeedVar = f_CRandNum(4000)
+				CDoActions(FP,{
+					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
+					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
+				CDoActions(FP,{
+					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- 정야독 + 옵저버이펙트
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
 			Convert_CPosXY()
@@ -888,36 +896,20 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 				})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,188)) -- 유닛 랜덤 속도 설정 + 정야독
-				TempSpeedVar = f_CRandNum(4000)
-				CDoActions(FP,{
-					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
-					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- 건작보스전용 : 패러사이트 + P9 무적유닛 + 전플레이어 센터뷰
-				--0x00XXXXXX 
-				--0x0000NPUU 
-				CGPtr2 = CreateVar(FP)
-				
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
 					--TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),
 					TCreateUnitWithProperties(1,33,1,CurrentOP,{energy = 100}),
 					TKillUnit(33,CurrentOP);
-					TSetMemoryX(_Add(CGiveH[1],CGPtr2), SetTo, G_CA_Nextptrs,0xFFFFFF),
-					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, Gun_TempSpawnSet1,0xFF),
-					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, 0x100*P9,0xF00),
-					TSetMemoryX(_Add(CGiveH[2],CGPtr2), SetTo, _Mul(CreatePlayer,0x1000),0xF000),
+					TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,CreatePlayer,0xFF),
 					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
 					
 				})
 				--CMov(FP,0x57f0f0,CGPtr2)
 				--CMov(FP,0x57f120,G_CA_Nextptrs)
 				f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
-				CAdd(FP,CGPtr2,1)
 				DoActions(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,192)) -- 무적유닛으로 생성하기
 			CDoActions(FP,{
@@ -929,7 +921,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
 			Convert_CPosXY()
 			CDoActions(FP,{
-				TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,_Div(_Read(Gun_TempSpawnSet1,EPDF(0x662350)),10));
+				TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,_Div(_Read(_Add(Gun_TempSpawnSet1,EPDF(0x662350))),10));
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
@@ -937,7 +929,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
 				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 			})
+			CTrigger(FP,{TMemory(_Add(G_CA_Nextptrs,2),AtMost,255)},{TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,256)},1)
 
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,194))-- 웨이브 어택
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
+				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,0);
+			})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
