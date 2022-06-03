@@ -706,7 +706,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			CVar(FP,SetPlayers[2],Exactly,k);
 		},
 		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCosT.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
 			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
 			
 		},

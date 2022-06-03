@@ -614,7 +614,7 @@ function Include_GunData(Size,LineNum)
 	Ion_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
 	Ion_CUTable2={{21,17},{28,19},{22,10},{8,3}}
 	Ion_CUTable3={{55,53,54,48},{104,56,53,47},{56,53,54,48},{104,62,51,15}}
-	Ion_CUTable4={{55,53,54,48,21},{104,56,53,47,88},{56,53,54,48,28},{104,62,51,15,80}}
+	Ion_CUTable4={{51,48,21},{104,51,88},{51,48,28},{104,51,80}}
 	for j = 1, 4 do
 	for i = 0, 3 do
 	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
@@ -648,7 +648,7 @@ function Include_GunData(Size,LineNum)
 	Norad_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
 	Norad_CUTable2={{88,77},{80,78},{57,66},{98,52}}
 	Norad_CUTable3={{55,53,54,48},{104,56,53,47},{56,53,54,48},{104,62,51,15}}
-	Norad_CUTable4={{55,53,54,48,21},{104,56,53,47,88},{56,53,54,48,28},{104,62,51,15,80}}
+	Norad_CUTable4={{51,48,21},{104,51,88},{51,48,28},{104,51,80}}
 	for j = 1, 4 do
 	for i = 0, 3 do
 	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
@@ -1568,15 +1568,18 @@ end
 	TriggerX(FP,{CD(EEggCode,5,AtLeast),CD(EEggCode,9,AtMost)},{
 		SetCD(EDNum,3)
 	})
-	TriggerX(FP,{CD(EEggCode,10,AtLeast)},{--CD(EEggCode,19,AtMost)
+	TriggerX(FP,{CD(EEggCode,10,AtLeast),CD(EEggCode,20,AtMost)},{--
 		SetCD(EDNum,4)
 	})
+	--TriggerX(FP,{CD(EEggCode,20,AtLeast)},{--
+	--	SetCD(EDNum,4)
+	--})
 	TriggerX(FP,{CV(DCV,400,AtLeast)},{
 		SetCD(EDNum,1)
 	})
 	if BossPhaseTestMode == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{--CD(EEggCode,19,AtMost)
-			SetCD(EDNum,4)
+			SetCD(EDNum,5)
 		})
 	end
 	CIfEnd()
@@ -2194,6 +2197,10 @@ Trigger2X(FP,{},{RotatePlayer({
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
+	CIfEnd()
+	
+	CIf(FP,{CD(EDNum,5)},{})
+	
 	CIfEnd()
 
 

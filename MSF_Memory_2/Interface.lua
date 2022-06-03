@@ -179,6 +179,7 @@ Trigger { -- 조합 루미아마린
 	players = {i},
 	conditions = {
 		Label(0);
+		CD(Theorist,0);
 		Bring(i,AtLeast,1,20,26+i); 
 		Accumulate(i,AtLeast,LMCost,Ore);
 		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -197,10 +198,34 @@ Trigger { -- 조합 루미아마린
 	},
 }
 
+Trigger { -- 조합 루미아마린
+	players = {i},
+	conditions = {
+		Label(0);
+		CD(Theorist,1);
+		Bring(i,AtLeast,1,20,26+i); 
+		Accumulate(i,AtLeast,LMCost2,Ore);
+		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+
+	},
+	actions = {
+		SetResources(i,Subtract,LMCost2,Ore);
+		ModifyUnitEnergy(1,20,i,26+i,0);
+		RemoveUnitAt(1,20,26+i,i);
+		CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost2.." O r e"),4);
+		SetCDeaths(FP,Add,1,CUnitRefrash);
+		SetCDeaths(FP,Add,1,FastMarine[i+1]);
+		SetCD(CUnitFlag,1);
+		PreserveTrigger();
+	},
+}
+
 Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
+	CD(Theorist,0);
 	CDeaths(FP,AtMost,11,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -219,6 +244,26 @@ Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
+	CD(Theorist,1);
+	CDeaths(FP,AtMost,11,FastMarine[i+1]);
+	Command(i,AtLeast,1,28);
+
+},
+actions = {
+	ModifyUnitEnergy(1,28,i,64,0);
+	RemoveUnitAt(1,28,64,i);
+	SetResources(i,Add,NMCost+HMCost+LMCost2,Ore);
+	DisplayText(StrDesign(Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ12기 조합) \x1F자원 \x04반환 + \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
+	SetCDeaths(FP,Add,1,CUnitRefrash);
+	SetCD(CUnitFlag,1);
+	PreserveTrigger();
+},
+}
+Trigger { -- 소환 루미아마린
+players = {i},
+conditions = {
+	Label(0);
+	CD(Theorist,0);
 	CDeaths(FP,AtLeast,12,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -228,6 +273,25 @@ actions = {
 	RemoveUnitAt(1,28,64,i);
 	CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
+	SetCDeaths(FP,Add,1,CUnitRefrash);
+	SetCD(CUnitFlag,1);
+	PreserveTrigger();
+},
+}
+Trigger { -- 소환 루미아마린
+players = {i},
+conditions = {
+	Label(0);
+	CD(Theorist,1);
+	CDeaths(FP,AtLeast,12,FastMarine[i+1]);
+	Command(i,AtLeast,1,28);
+
+},
+actions = {
+	ModifyUnitEnergy(1,28,i,64,0);
+	RemoveUnitAt(1,28,64,i);
+	CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();

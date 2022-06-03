@@ -35,8 +35,8 @@ TestSet(1)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 0
-	TheoristTestMode = 0
-	EEggTestNum = 10
+	TheoristTestMode = 1
+	EEggTestNum = 20
 else
 	EVFFlag = 0
 end

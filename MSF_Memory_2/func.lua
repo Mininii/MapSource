@@ -495,7 +495,7 @@ function Install_DeathNotice()
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,3,Custom);
-			AddV(DCV,3);
+			AddV(DCV,2);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
@@ -523,7 +523,7 @@ function Install_DeathNotice()
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,2,Custom);
-			AddV(DCV,2);
+			AddV(DCV,1);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])

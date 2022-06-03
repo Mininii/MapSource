@@ -1112,11 +1112,28 @@ SetMemoryX(0x664080 + (70*4),SetTo,0x00400200,0x00400200),
 SetMemoryX(0x664080 + (98*4),SetTo,0x00400200,0x00400200),
 SetMemoryX(0x664080 + (13*4),SetTo,0x00400200,0x00400200),
 SetMemoryB(0x669E28+(974), SetTo, 16),
-SetMemory(0x662350+(64*4),SetTo,1200000*256)
+SetMemory(0x662350+(64*4),SetTo,1200000*256),
+SetMemoryX(0x656EBC, SetTo, 999,0xFFFF);--마인딜
+SetMemoryX(0x662DC4, SetTo, 256*6,0xFF00);--마인SeekRange
+SetMemoryW(0x663888 + (28 *2),SetTo,NMCost+HMCost+LMCost2);--루미마린 가격 재설정
+
 })
 TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
 DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
+for k = 1, 4 do
+	Trigger { -- 미션 오브젝트 이지n인
+		players = {FP},
+		conditions = {
+			Label(0);
+			CVar(FP,SetPlayers[2],Exactly,k);
+		},
+		actions = {
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost2.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
+			
+		},
+	}
+	end
 
 
 CIfEnd()
