@@ -66,20 +66,21 @@ function BossTrig()
 		
 		
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),Simple_SetLoc(9,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),MoveLocation(10,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
+		CTrigger(FP,{CD(Theorist,1),TMemory(_Add(BPtrArr[2],2),AtMost,8320000*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,2500*256),},{preserved})
 		CIf(FP,{Bring(P6,AtLeast,1,49,1)},{AddV(B2V[1],1),KillUnitAt(1,49,1,P6)})
 			GetLocCenter(9,CPosX,CPosY)
 			TriggerX(FP,{CD(Theorist,0)},{SetCD(B2C[1],100)},{preserved})
-			f_TempRepeatX(CD(Theorist,1), 61, B2V[1], 1, P6, {CPosX,CPosY})
-			CTrigger(FP,{TMemory(_Add(BPtrArr[2],2),AtLeast,7320000*256)},{TSetMemory(_Add(BPtrArr[2],2),SetTo,8320000*256),},{preserved})
-			CTrigger(FP,{TMemory(_Add(BPtrArr[2],2),AtMost,7319999*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,1000000*256),},{preserved})
-			CTrigger(FP,{CD(Theorist,1),TMemory(_Add(BPtrArr[2],2),AtMost,8320000*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,2500*256),},{preserved})
+			f_TempRepeatX(CD(Theorist,1), 61, B2V[1], 192, P6, {CPosX,CPosY})
+			CTrigger(FP,{CD(Theorist,0),TMemory(_Add(BPtrArr[2],2),AtLeast,7320000*256)},{TSetMemory(_Add(BPtrArr[2],2),SetTo,8320000*256),},{preserved})
+			CTrigger(FP,{CD(Theorist,0),TMemory(_Add(BPtrArr[2],2),AtMost,7319999*256)},{TSetMemory(_Add(BPtrArr[2],2),Add,1000000*256),},{preserved})
+			CTrigger(FP,{CD(Theorist,1),TMemory(_Add(BPtrArr[2],2),AtMost,8320000*256)},{TSetMemory(_Add(BPtrArr[2],2),SetTo,8320000*256),},{preserved})
 			DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg"),PlayWAVX("staredit\\wav\\Gun_Penalty.ogg"),PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP)})
 		CIfEnd()
 		TriggerX(FP,{CD(B2C[1],1,AtLeast)},{KillUnit(49,P6)},{preserved})
 		DoActionsX(FP,SubCD(B2C[1],1))
 		
 
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0)},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6)},1)
 	CIfEnd()
 
 

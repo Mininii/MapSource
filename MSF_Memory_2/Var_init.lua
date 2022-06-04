@@ -31,7 +31,7 @@ function Var_init()
 	NMCost = 5000
 	HMCost = 8500
 	LMCost = 45000
-	LMCost2 = 35000
+	LMCost2 = 45000-8500
 	function Create_VoidEPDHeaderV(Player,Size)
 		local Void = f_GetVoidptr(Player,Size)
 		local Header =  CreateVar(Player)

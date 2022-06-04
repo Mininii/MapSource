@@ -494,7 +494,7 @@ function Install_DeathNotice()
 		Install_CText1(HTextStrPtr,Str12,Str03[j],Names[j])
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-			SetScore(j-1,Add,3,Custom);
+			SetScore(j-1,Add,2,Custom);
 			AddV(DCV,2);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
@@ -522,7 +522,7 @@ function Install_DeathNotice()
 		Install_CText1(HTextStrPtr,Str12,HMT,Names[j])
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-			SetScore(j-1,Add,2,Custom);
+			SetScore(j-1,Add,1,Custom);
 			AddV(DCV,1);
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
