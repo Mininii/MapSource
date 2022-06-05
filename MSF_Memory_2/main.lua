@@ -31,7 +31,7 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-TestSet(1)
+TestSet(0)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 0
@@ -41,7 +41,7 @@ else
 	EVFFlag = 0
 end
 
-VerText = "\x04Ver. Beta 0.9X"
+VerText = "\x04Ver. Beta 0.9Z"
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end

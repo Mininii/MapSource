@@ -602,6 +602,9 @@ function Include_GunData(Size,LineNum)
 		end
 		
 
+		CMov(FP,G_CA_CenterX,Var_TempTable[2])
+		CMov(FP,G_CA_CenterY,Var_TempTable[3])
+		Simple_SetLocX(FP,0,_Sub(Var_TempTable[2],32*8),_Sub(Var_TempTable[3],32*8),_Add(Var_TempTable[2],32*8),_Add(Var_TempTable[3],32*8),{KillUnitAt(All,nilunit,1,FP)})
 	--Gun_Line(3,Exactly,1),
 		CTrigger(FP,{Gun_Line(9,AtLeast,1)},{Gun_SetLine(9,SetTo,0)},1)
 		DoActionsX(FP,{Gun_SetLine(30,SetTo,1),Gun_SetLine(31,SetTo,1)})

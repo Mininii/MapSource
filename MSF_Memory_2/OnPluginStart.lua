@@ -247,6 +247,12 @@ BossUIDP = {87,74,5,2,64,12,82}
 			
 	end
 
+	SetUnitAdvFlag(7,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(20,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(32,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(109,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(124,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
+	SetUnitAdvFlag(125,0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 	for i = 1, 4 do
 		
 		UnitEnable(MedicTrig[i],200+(i*50),nil,i,nil,2) -- 메딕
