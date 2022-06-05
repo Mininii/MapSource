@@ -3,29 +3,29 @@ function Var_init()
 	RandSwitch2 = "Switch 101"
 	if EVFFlag == 1 then
 		GTAtk = 50*1.5
-		GTAtkFactor = 10*1.5
+		GTAtkFactor = 25*1.5
 		NMAtk = 15*1.5
-		NMAtkFactor = 1*1.5
+		NMAtkFactor = 2*1.5
 		HMAtk = 50*1.5
-		HMAtkFactor = 3*1.5
+		HMAtkFactor = 7*1.5
 		MarAtk = 50*1.5
-		MarAtkFactor = 4*1.5
+		MarAtkFactor = 10*1.5
 		MarAtk2 = 100*1.5
-		MarAtkFactor2 = 12*1.5
+		MarAtkFactor2 = 30*1.5
 	else
 		GTAtk = 50
-		GTAtkFactor = 10
+		GTAtkFactor = 25
 		NMAtk = 15
-		NMAtkFactor = 1
+		NMAtkFactor = 2
 		HMAtk = 50
-		HMAtkFactor = 3
+		HMAtkFactor = 7
 		MarAtk = 50
-		MarAtkFactor = 4
+		MarAtkFactor = 10
 		MarAtk2 = 100
-		MarAtkFactor2 = 12
+		MarAtkFactor2 = 30
 	end
-	AtkUpgradeFactor = 15
-	DefUpgradeFactor = 20
+	AtkUpgradeFactor = 95
+	DefUpgradeFactor = 490
 	GunLimit = 1450
 	ShCost = 50000
 	NMCost = 5000
@@ -128,8 +128,8 @@ function Var_init()
 	LVVA = CreateVArr(4,FP)
 	CurrentOP = CreateVar(FP)
 	MarHPRead = CreateVarArr(4,FP)
-	AtkCondTmp = CreateVar2(FP,nil,nil,54)
-	HPCondTmp = CreateVar2(FP,nil,nil,5)
+	AtkCondTmp = CreateVar2(FP,nil,nil,50)
+	HPCondTmp = CreateVar2(FP,nil,nil,0)
 	SelEPD,SelHP,SelSh,SelMaxHP,SelI = CreateVars(5,FP)
 	UnitIDV1,UnitIDV2,UnitIDV3,UnitIDV4 = CreateVars(4,FP)
 	SelWepID_Mask = CreateVar(FP)

@@ -654,7 +654,6 @@ function Include_GunData(Size,LineNum)
 	local cond = {GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}
 	if i == 0 then cond = {GCP(j+3),Gun_Line(8,AtMost,0)} end
 --	if j == 2 then PushErrorMsg(table.concat(Ion_CUTable3[i+1])) end
-		G_CA_SetSpawn2X(cond,Norad_CUTable3[i+1],"ACAS","norad2_P"..j+4,"MAX",974,nil,"CP")
 		G_CA_SetSpawn(cond,Norad_CUTable1[i+1],"ACAS","norad1_P"..j+4,1,0,nil,"CP")
 		G_CA_SetSpawn(cond,Norad_CUTable2[i+1],"ACAS","norad3_P"..j+4,nil,0,nil,"CP")
 		local cond = {CD(Theorist,0),GCP(j+3),Gun_Line(6,Exactly,i),Gun_Line(9,AtLeast,1)}

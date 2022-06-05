@@ -1102,8 +1102,8 @@ SetMemoryW(0x657678+(0*2),Add,1);
 SetMemoryW(0x656EB0+(1*2),Add,50);
 SetMemoryW(0x657678+(1*2),Add,3);TheoristPatchArr,
 SetV(Level,50),
-SetV(AtkCondTmp,250),
-SetV(HPCondTmp,250),
+SetV(AtkCondTmp,100),
+SetV(HPCondTmp,50),
 SetMemoryW(0x656888 + (2*62), SetTo, 32), -- 프로브스플
 SetMemoryW(0x6570C8 + (2*62), SetTo, 32), -- 프로브스플
 SetMemoryW(0x657780 + (2*62), SetTo, 32), -- 프로브스플

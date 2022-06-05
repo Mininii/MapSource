@@ -313,8 +313,8 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
 	
 	f_Mul(FP,MarHPRegen,Level,256)
-	CMov(FP,AtkCondTmp,_Mul(Level,4),50)
-	CMov(FP,HPCondTmp,_Mul(Level,5))
+	CMov(FP,AtkCondTmp,Level,49)
+	CMov(FP,HPCondTmp,_Sub(Level,1))
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--·¾
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)

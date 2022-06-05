@@ -277,6 +277,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 	DefTypePatch(20,9) -- 
 	DefTypePatch(32,8) -- 
 	DefTypePatch(124,5) -- 
+	DefTypePatch(109,5) -- 
 	DefTypePatch(125,4) -- 
 if Limit == 1 then
 

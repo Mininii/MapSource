@@ -25,7 +25,7 @@ function Interface()
 
 	if Limit== 1 then
 		for i = 0, 3 do
-			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),})--SetV(CurEXP,0x7FFFFFFF)
+			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),})--SetV(CurEXP,0x7FFFFFFF)
 		end
 	end
 	DoActions(Force1,{SetAllianceStatus(Force1,Ally),SetAllianceStatus(P12,Enemy),
@@ -48,14 +48,14 @@ function Interface()
 
 			for CBit = 0, 7 do
 				TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],Exactly,(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit),(256^AtkUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurAtk[i+1],2^CBit)},{preserved})
-				TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,5120*(2^CBit)),AddV(MarHPRead[i+1],5120*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,5*(2^CBit))},{preserved})
+				TriggerX(FP,{MemoryX(HPUpgradePtrArr[i+1],Exactly,(256^HPUpgradeMaskRetArr[i+1])*(2^CBit),(256^HPUpgradeMaskRetArr[i+1])*(2^CBit))},{AddV(CurHP[i+1],2^CBit),SetMemory(0x662350+(MarID[i+1]*4),Add,(5120*5)*(2^CBit)),AddV(MarHPRead[i+1],(5120*5)*(2^CBit)),SetMemory(0x515BB0+(i*4),Add,25*(2^CBit))},{preserved})
 			end
-			CIfX(FP,{CV(CurAtk[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,1)})
-			CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,250),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3)})
+			CIfX(FP,{CV(CurAtk[i+1],100)},{SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3),SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,1)})
+			CElseIfX({CV(CurAtk[i+1],AtkCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i)+7,SetTo,100),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,3)})
 			CElseX({SetMemoryB(0x58D088+(46*i)+7,SetTo,0),SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0)})
 			CIfXEnd()
-			CIfX(FP,{CV(CurHP[i+1],250)},{SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(9999*256)+1),SetMemory(0x515BB0+(i*4),SetTo,2560),SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,1)})
-			CElseIfX({CV(CurHP[i+1],HPCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i),SetTo,250),SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3)})
+			CIfX(FP,{CV(CurHP[i+1],50)},{SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3),SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(9999*256)+1),SetMemory(0x515BB0+(i*4),SetTo,2560),SetMemoryB(0x57F27C + (i * 228) + 75,SetTo,1)})
+			CElseIfX({CV(CurHP[i+1],HPCondTmp,AtMost)},{SetMemoryB(0x58D088+(46*i),SetTo,50),SetMemoryB(0x58D2B0+(46*i)+1,SetTo,3)})
 			CElseX({SetMemoryB(0x58D088+(46*i),SetTo,0),SetMemoryB(0x58D2B0+(46*i)+1,SetTo,0)})
 			CIfXEnd()
 			
