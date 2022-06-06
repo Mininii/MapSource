@@ -321,15 +321,12 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 	CIfEnd()
 
 
-
-Trigger { -- 공업완료시 수정보호막 활성화
-players = {FP},
-conditions = {
+Trigger2X(FP,{
 	Label(0);
 	CDeaths(FP,AtLeast,1,ShieldUnlock);
 	CV(ShieldEnV,0);
-},
-actions = {
+},{
+	
 	RotatePlayer({DisplayTextX(ShieldUnlockT,4);},HumanPlayers,FP);
 	SetMemory(0x5822C4+(0*4),SetTo,1200);
 	SetMemory(0x582264+(0*4),SetTo,1200);
@@ -343,8 +340,7 @@ actions = {
 	SetMemory(0x5822C4+(3*4),SetTo,1200);
 	SetMemory(0x582264+(3*4),SetTo,1200);
 	SetMemoryB(0x57F27C+(228*3)+19,SetTo,1);
-},
-}
+})
 CIfEnd()
 TriggerX(FP,{Command(Force1,AtLeast,1,62);},{ModifyUnitEnergy(1,62,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);SetCVar(FP,TestVar[2],Add,1);},{preserved})
@@ -364,18 +360,13 @@ TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
 CMov(FP,CurrentSpeed,SpeedVar)
 for i = 1, 11 do
-	Trigger { -- No comment (E93EF7A9)
-		players = {FP},
-		conditions = {
-			Label(0);
-			CVar(FP,SpeedVar[2],Exactly,i);
-		},
-		actions = {PreserveTrigger();
-			RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x0F게임 \x10속도\x04를 \x10- "..XSpeed[i].."\x04로 \x0F변경\x04하였습니다."), 0)},HumanPlayers,FP);
-			SetMemory(0x5124F0,SetTo,SpeedV[i]);
-		},
-	}
+	Trigger2X(FP,{
+		Label(0);
+		CVar(FP,SpeedVar[2],Exactly,i);
+	},{
+		RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
+		DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x0F게임 \x10속도\x04를 \x10- "..XSpeed[i].."\x04로 \x0F변경\x04하였습니다."), 0)},HumanPlayers,FP);
+		SetMemory(0x5124F0,SetTo,SpeedV[i]);},{preserved})
 end
 CIfEnd()
 
@@ -432,7 +423,7 @@ CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
     CMovX(FP,VArr(EffCV2,HLine),HCheck)
 CWhileEnd(SetNVar(HLine,Add,1)) 
 end 
-CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+CDPrint(0,11,{"\x0D",0,0},{Force1,Force2,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
 
 
 
@@ -640,7 +631,7 @@ DoActionsX(FP,{AddCD(CanCTC,1)})
  CA__InputVA(40*2,Str1,Str1s,nil,40*2,40*3)
  CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
 end 
-CAPrint(iStr1,{Force1,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}) 
+CAPrint(iStr1,{Force1,Force2,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}) 
 
 
 
@@ -648,18 +639,10 @@ CAPrint(iStr1,{Force1,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,AtLeast)}
 		TriggerX(FP,{Command(Force1,AtLeast,1,BanToken[i]);},{ModifyUnitEnergy(1,BanToken[i],Force1,64,0);
 		SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,BanToken[i],"Anywhere",Force1);SetCDeaths(FP,Add,1,BanCode[i]);},{preserved})
 		for j = 1, 4 do
-			TriggerX(i,{CDeaths(FP,Exactly,j,BanCode[i])},{RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i)})
+			Trigger2X(i,{CDeaths(FP,Exactly,j,BanCode[i])},{RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i)})
 		end
-		Trigger { -- 강퇴
-		players = {i},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,5,BanCode[i]);
-		},
-		actions = {
-			RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-			},
-		}
+		Trigger2X(i,{CDeaths(FP,AtLeast,5,BanCode[i]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+	})
 		local WAVT = {}
 		for k = 0, 9 do
 			table.insert(WAVT,PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV"))

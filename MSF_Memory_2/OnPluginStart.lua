@@ -340,7 +340,8 @@ end
 		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
 		f_GetStrXptr(FP,ReadCPStrPtr,"\x0d\x0d\x0dReadCPStrPtr : ".._0D)
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
-		DoActions(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
+		DoActions(FP,{RotatePlayer({SetAllianceStatus(Force2,Ally)}, {P5,P6,P7,P8}, FP)})
+		DoActions2(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
         
 	end
@@ -359,7 +360,7 @@ function InputTesterID(Player,ID)
 		}
 	}
 end
-	for i = 0, 3 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
+	for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"LucasSpia")
 		InputTesterID(i,"_Mininii")
@@ -397,101 +398,147 @@ end
 		}
 	}
 	end
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CDeaths(FP,Exactly,1,LimitX);
-			CDeaths(FP,Exactly,0,LimitC);
-			
-		},
-		actions = {
+	Trigger2X(FP, {
+		CDeaths(FP,Exactly,1,LimitX);
+		CDeaths(FP,Exactly,0,LimitC);}, {
 			RotatePlayer({
 				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
-			SetMemory(0xCDDDCDDC,SetTo,1);
-		}
-	}
+			SetMemory(0xCDDDCDDC,SetTo,1);})
+	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
+		RotatePlayer({
+			DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);})
 	
-	Trigger { -- 배속방지
-		players = {FP},
-		conditions = {
-			Memory(0x51CE84,AtLeast,1001);
-		},
-		actions = {
-			RotatePlayer({
-				DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
-			Defeat();
-			},HumanPlayers,FP);
-			Defeat();
-			SetMemory(0xCDDDCDDC,SetTo,1);
-		}
-	}
+--[[
+
+DoActions2(P9,X)
+
+
+
+
+DoActions2(P9,X)
+
+
+local Data = {
+1,1,1,1,1,1,1,1,1,1,
+1,1,1,0,1,2,1,1,1,1,
+1,1,1,1,1,3,1,1,1,1,
+3,1,1,0,2,0,0,1,1,1,
+1,4,2,1,1,2,2,1,1,2,
+1,1,2,1,1,1,1,2,1,0,
+1,1,1,2,2,1,1,2,1,2,
+1,1,1,0,1,1,1,1,1,1,
+1,1,1,1,2,0,1,1,1,2,
+2,0,0,2,2,2,2,0,1,1,
+1,0,1,2,1,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,}
+
+
+local X = {}
+for i = 0, 227 do
+	if i ~= 0 and i ~= 7 and i ~= 15 and i ~= 20 and i ~= 107 and i ~= 108 and i ~= 111 and i ~= 125 then
+		if i%4 == 0 then
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,Data[i+1],0xFF))
+		elseif i%4 == 1 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,Data[i+1]*256,0xFF00))
+		elseif i%4 == 2 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,Data[i+1]*65536,0xFF0000))
+		elseif i%4 == 3 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,Data[i+1]*16777216,0xFF000000))
+		end
+	end
+end
+
+DoActions2(P9,X)
+
+
+
+]]--
+for i = 0, 56 do
+	f_Read(FP,0x662098+(i*4),RCV[i+1])
+end
+
 
 
 	for i = 4, 7 do
 		Trigger { -- 게임오버
 			players = {FP},
 			conditions = {
-				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
-			},
-			actions = {
-				RotatePlayer({
-				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
-				Defeat();
-				},HumanPlayers,FP);
-				Defeat();
-				SetMemory(0xCDDDCDDC,SetTo,1);
-			}
-		}
-		Trigger { -- 게임오버
-			players = {FP},
-			conditions = {
+				Label();
 				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
 			},
 			actions = {
-				RotatePlayer({
-					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
-				Defeat();
-				},HumanPlayers,FP);
-				Defeat();
-				SetMemory(0xCDDDCDDC,SetTo,1);
+				SetCD(CHuman[i-3],1);
 			}
 		}
-		Trigger { -- 게임오버
-			players = {FP},
-			conditions = {
-				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
-			},
-			actions = {
-				RotatePlayer({
-					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
-				Defeat();
-				},HumanPlayers,FP);
-				Defeat();
-				SetMemory(0xCDDDCDDC,SetTo,1);
-			}
-		}
+--		Trigger { -- 게임오버
+--			players = {FP},
+--			conditions = {
+--				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+--			},
+--			actions = {
+--				RotatePlayer({
+--				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+--				Defeat();
+--				},HumanPlayers,FP);
+--				Defeat();
+--				SetMemory(0xCDDDCDDC,SetTo,1);
+--			}
+--		}
+--		Trigger { -- 게임오버
+--			players = {FP},
+--			conditions = {
+--				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+--			},
+--			actions = {
+--				RotatePlayer({
+--					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+--				Defeat();
+--				},HumanPlayers,FP);
+--				Defeat();
+--				SetMemory(0xCDDDCDDC,SetTo,1);
+--			}
+--		}
+--		Trigger { -- 게임오버
+--			players = {FP},
+--			conditions = {
+--				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
+--			},
+--			actions = {
+--				RotatePlayer({
+--					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+--				Defeat();
+--				},HumanPlayers,FP);
+--				Defeat();
+--				SetMemory(0xCDDDCDDC,SetTo,1);
+--			}
+--		}
 	end
-
-	Trigger { -- 혹시 싱글이신가요?
-	players = {FP},
-	conditions = {
-		Label(0);
-		Memory(0x57F0B4, Exactly, 0);
-},
-	actions = {
-		--SetCDeaths(FP,SetTo,1,isSingle);
-			RotatePlayer({
-			DisplayTextX(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
-			Defeat();
-			},HumanPlayers,FP);
-			Defeat();
-			SetMemory(0xCDDDCDDC,SetTo,1);
-},
-}
+Trigger2X(FP,{Memory(0x57F0B4, Exactly, 0);},{
+	RotatePlayer({
+	DisplayTextX(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+	Defeat();
+	},HumanPlayers,FP);
+	Defeat();
+	SetMemory(0xCDDDCDDC,SetTo,1);})
 --	
 
 
@@ -617,6 +664,15 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		-- 0xYYYYXXXX 0xLLIIPPUU
 		-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 		CAdd(FP,0x6509B0,6)
+
+		CIf(FP,{TTOR({_TDeathsX(CurrentPlayer, Exactly, 201,0, 0xFF),_TDeathsX(CurrentPlayer, Exactly, 168,0, 0xFF)})})
+		f_SaveCp()
+		local TempP = CreateVar(FP)
+		CMov(FP,TempP,_Read(_Sub(BackupCp,6),0xFF),nil,0xFF,1)
+		CDoActions(FP, {TSetMemoryX(_Add(BackupCp,10),SetTo,TempP,0xFF)})
+		f_LoadCp()
+		CIfEnd()
+
 		
 		local Rep_Jump4 = def_sIndex()
 		for j, k in pairs(Replace_JumpUnitArr) do
@@ -702,22 +758,20 @@ CWhileEnd()
 CDoActions(FP,{KillUnit(35,P5)})
 TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 CIfEnd({SetMemory(0x6509B0,SetTo,FP)}) -- OnPluginStart End
+
+	for j,k in pairs(RCV) do
+		CMov(FP,0x662098+((j-1)*4),k)
+	end
+
+
 end
 function init_Start() -- 게임 시작시 1회 실행 트리거
 	CIfOnce(FP)
 	for k = 1, 4 do
-	Trigger { -- 미션 오브젝트 이지n인
-		players = {FP},
-		conditions = {
-			Label(0);
-			CVar(FP,SetPlayers[2],Exactly,k);
-		},
-		actions = {
+		Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);}, {
 			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
-			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);
-			
-		},
-	}
+			SetCVar(FP,ExRateV[2],SetTo,ExRate[k]);})
+
 	end
 	CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
 	CMov(FP,0x6509B0,UnitDataPtr)

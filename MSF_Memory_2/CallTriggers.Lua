@@ -70,12 +70,14 @@ function Install_CallTriggers()
 		CDoActions(FP,{
 			Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
 			Set_EXCC2(DUnitCalc,CunitIndex,0,SetTo,Gun_LV),
-			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
+			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100}),
+			TSetMemoryX(_Add(Nextptrs,35),SetTo,CunitP,0xFF),
+		})
 		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- 무적플래그 1일경우 무적상태로 바꿈
 		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CunitIndex,13,SetTo,0x1,0x1),AddV(EEggV,1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
 		f_LoadCp()
 		CElseX()
-		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 	SetCallEnd()
 
@@ -160,8 +162,8 @@ function Install_CallTriggers()
 	ItoDec(FP,ReadCP,VArr(ReadCPVA,0),2,nil,0)
 	f_Movcpy(FP,_Add(CurCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dCurCPStrPtr : ")),VArr(CurCPVA,0),4*4)
 	f_Movcpy(FP,_Add(ReadCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dReadCPStrPtr : ")),VArr(ReadCPVA,0),4*4)
-	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
-	TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
+	Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
+	Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
 	f_LoadCp()
 	SetCallEnd()
 	end
@@ -459,6 +461,8 @@ for i = 0, 1699 do
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00)},
 	{
 		SetDeathsX(19025+(84*i)+9,SetTo,0,0,0xFF0000);
+		SetDeathsX(19025+(84*i)+35,SetTo,0,0,0xFF);
+
 		},{preserved})
 end
 SetCallEnd()

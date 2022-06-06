@@ -3,6 +3,34 @@ function System()
 	local BCPos = CreateVar(FP)
 	local CurCunitI2 = CreateVar(FP)
 	local TempTarget = CreateVar(FP)
+	local X = {}
+	for i = 0, 249 do
+		if 
+		i ~= 0 and 
+		i ~= 1 and 
+		i ~= 7 and 
+		i ~= 16 and 
+		i ~= 20 and 
+		i ~= 32 and 
+		i ~= 99 and 
+		i ~= 107 and 
+		i ~= 108 and 
+		i ~= 111 and 
+		i ~= 125 and 
+		i ~= 239 and 
+		i ~= 240 and 
+		i ~= 243 and 
+		i ~= 244 and 
+		i ~= 246 and 
+		i ~= 245 then
+			table.insert(X,SetMemory(0x5187E8+0xC*i,SetTo,0))
+		end
+	end
+	for i = 4, 7 do
+		Trigger2X(FP,{LocalPlayerID(i)},X,{preserved})
+	end
+
+	
 	DoActions(FP,{
 		RemoveUnit(7,P12),
 		RemoveUnit(MarID[1],P12),
@@ -24,7 +52,7 @@ function System()
 	AddBGM(8,"staredit\\wav\\ED2Boss.ogg",165*1000)--엔딩2
 	AddBGM(9,"staredit\\wav\\ED3Boss.ogg",150*1000)--엔딩3
 	AddBGM(10,"staredit\\wav\\BadEnd.ogg",36*1000)--엔딩3
-	Install_BGMSystem(FP,3,BGMType,12,1,1)
+	Install_BGMSystem(FP,3,BGMType,12,1,1,ObPlayers)
 
 	BGMArr = {}
 	for i = 1, 364 do
@@ -892,28 +920,17 @@ InvDisable(190,FP,{
 },"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 
 CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
-
-Trigger { -- 캔낫 경고
-	players = {FP},
-	conditions = {
-		Label(0);
-		Command(FP,AtLeast,1,173);
-		CDeaths(FP,AtMost,0,CanCT);
-		CDeaths(FP,Exactly,0,CanWT);
-		CVar(FP,count[2],AtLeast,1500);
-},
-	actions = {
-		RotatePlayer({
-			DisplayTextX(CanText,4),
-			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
-			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV")
-		},HumanPlayers,FP);
-		SetCDeaths(FP,Add,24*10,CanWT);
-		PreserveTrigger();
-		
-		},
-	}
-
+Trigger2X(FP, {
+	Command(FP,AtLeast,1,173);
+	CDeaths(FP,AtMost,0,CanCT);
+	CDeaths(FP,Exactly,0,CanWT);
+	CVar(FP,count[2],AtLeast,1500);}, {
+	RotatePlayer({
+		DisplayTextX(CanText,4),
+		PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
+		PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV")
+	},HumanPlayers,FP);
+	SetCDeaths(FP,Add,24*10,CanWT);}, {preserved})
 
 
 Trigger2X(FP,{--캔발동
@@ -1122,17 +1139,8 @@ TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0
 DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
 for k = 1, 4 do
-	Trigger { -- 미션 오브젝트 이지n인
-		players = {FP},
-		conditions = {
-			Label(0);
-			CVar(FP,SetPlayers[2],Exactly,k);
-		},
-		actions = {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost2.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
-			
-		},
-	}
+	Trigger2X(FP,{CVar(FP,SetPlayers[2],Exactly,k);},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost2.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
+})
 	end
 
 
@@ -1141,4 +1149,78 @@ CIfEnd()
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})
 
+end
+
+function Sys2()
+	
+local X = {}
+for i = 0, 227 do
+	if 
+	i ~= 0 and 
+	i ~= 1 and 
+	i ~= 7 and 
+	i ~= 32 and 
+	i ~= 58 and 
+	i ~= 16 and 
+	i ~= 20 and 
+	i ~= 99 and 
+	i ~= 107 and 
+	i ~= 108 and 
+	i ~= 111 and 
+	i ~= 125 then
+		if i%4 == 0 then
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,0,0xFF))
+		elseif i%4 == 1 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,0,0xFF00))
+		elseif i%4 == 2 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,0,0xFF0000))
+		elseif i%4 == 3 then 
+			table.insert(X,SetMemoryX(0x662098+0x4*math.floor(i/4),SetTo,0,0xFF000000))
+		end
+	end
+end
+DoActions2(FP,X)
+ComExitFlag = CreateCcode()
+for i = 0,3 do
+	TriggerX(FP,{CD(CHuman[i+1],1)},{
+		SetMemoryX(0x664080 + (184*4),SetTo,0x00000800,0x00000800),
+		SetMemoryX(0x664080 + (185*4),SetTo,0x00000800,0x00000800),
+	},{preserved})
+	TriggerX(FP,{CD(CHuman[i+1],1),HumanCheck(i+4, 0)},{SetCD(ComExitFlag,1)})
+end
+
+CIf(FP,CD(ComExitFlag,1),SetCD(ComExitFlag,0))
+CFor(FP, 19025, 19025+(84*1700), 84)
+CI = CForVariable()
+CIf(FP,{
+	TMemoryX(_Add(CI,19), Exactly, 11,0xFF),
+	TMemoryX(_Add(CI,19), AtLeast, 1*256,0xFF00),
+	TTMemoryX(_Add(CI,25), NotSame, 58,0xFF),
+	TTMemoryX(_Add(CI,25), NotSame, 125,0xFF),
+	TTMemoryX(_Add(CI,25), NotSame, 111,0xFF),
+	TTMemoryX(_Add(CI,25), NotSame, 107,0xFF),
+	TTMemoryX(_Add(CI,25), NotSame, 203,0xFF),
+	TMemoryX(_Add(CI,35),AtLeast,4,0xFF),
+	TMemoryX(_Add(CI,35),AtMost,7,0xFF),
+
+})
+local TempP = CreateVar(FP)
+--local TempU = CreateVar(FP)
+CMov(FP,CunitIndex,_Div(_Sub(CI,19025),_Mov(84)))
+local HeroJump = def_sIndex()
+NJump(FP, HeroJump, {TMemoryX(_Add(CI,25), Exactly, 68,0xFF),Cond_EXCC2(DUnitCalc, CunitIndex, 1, Exactly, 1)})
+
+CMov(FP,TempP,_Read(_Add(CI,35),0xFF),nil,0xFF,1)
+--CMov(FP,TempU,_Read(_Add(CI,25)),nil,0xFF)
+--f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
+--Convert_CPosXY()
+--Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+--CDoActions(FP,{TGiveUnits(1,TempU,P12,1,TempP)})
+f_CGive(FP, CI, nil, TempP, P12)
+NJumpEnd(FP,HeroJump)
+
+
+CIfEnd()
+CForEnd()
+CIfEnd()
 end

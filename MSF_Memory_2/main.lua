@@ -31,7 +31,7 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-TestSet(0)
+TestSet(1)
 	EVFFlag = 0
 if Limit == 1 then
 	EVFFlag = 0
@@ -91,6 +91,7 @@ CIf(AllPlayers,ElapsedTime(AtLeast,3))
 	Interface()
 	InputStory()
 	BossTrig()
+	Sys2()
 CIfEnd()
 
 NoAirCollisionX(FP)

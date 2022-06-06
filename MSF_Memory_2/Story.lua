@@ -36,7 +36,7 @@ function InputStory()
 CIfEnd()
 
 
-TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
+Trigger2X(FP,{CD(ButtonSound,1,AtLeast)},{
     RotatePlayer({
     PlayWAVX("staredit\\wav\\button3.wav"),
     PlayWAVX("staredit\\wav\\button3.wav"),

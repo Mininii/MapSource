@@ -459,8 +459,9 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF),{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("\x0D\x0D!H"..StrDesignX2(CT),4);},HumanPlayers,FP)})
-			TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
+			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
+			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("\x0D\x0D!H"..StrDesignX2(CT),4);},HumanPlayers,FP)})
+			Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
 			f_LoadCp()
 			if index == 68 then
 				DoActions(FP,{MoveCp(Subtract,4*6)})
@@ -492,12 +493,12 @@ function Install_DeathNotice()
 		EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,11,0,0xFF)})
 		f_SaveCp()
 		Install_CText1(HTextStrPtr,Str12,Str03[j],Names[j])
-		DoActionsX(FP,{
+		DoActions2X(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,2,Custom);
 			AddV(DCV,2);
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 		f_LoadCp()
 		DoActions(FP,MoveCp(Add,6*4))
@@ -508,24 +509,24 @@ function Install_DeathNotice()
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
 		f_SaveCp()
 		Install_CText1(HTextStrPtr,Str12,NMT,Names[j])
-		DoActionsX(FP,{
+		DoActions2X(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,1,Custom);
 			AddV(DCV,1);
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 		f_LoadCp()
 	CIfEnd()
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 		f_SaveCp()
 		Install_CText1(HTextStrPtr,Str12,HMT,Names[j])
-		DoActionsX(FP,{
+		DoActions2X(FP,{
 			RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
 			SetScore(j-1,Add,1,Custom);
 			AddV(DCV,1);
 		})
-		TriggerX(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 		f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 		f_LoadCp()
 	CIfEnd()
@@ -622,13 +623,13 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CElseIfX({CVar(FP,G_CA_TempTable[13][2],Exactly,3)})--뉴클리어런치
 			CallTrigger(FP, Call_Nuke)
 		CElseX()
-			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+			DoActions2(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
 		f_Div(FP,G_CA_UnitIndex,_Mov(84))
-		CDoActions(FP,{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,2),})
+		CDoActions(FP,{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,2),TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,CreatePlayer,0xFF),})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
 		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,128)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),},1)
 
@@ -903,14 +904,13 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					--TGiveUnits(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),1,P9),
 					TCreateUnitWithProperties(1,33,1,CurrentOP,{energy = 100}),
 					TKillUnit(33,CurrentOP);
-					TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,CreatePlayer,0xFF),
 					SetMemoryX(0x666458, SetTo, 546,0xFFFF),
 					
 				})
 				--CMov(FP,0x57f0f0,CGPtr2)
 				--CMov(FP,0x57f120,G_CA_Nextptrs)
 				f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
-				DoActions(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
+				DoActions2(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,192)) -- 무적유닛으로 생성하기
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
@@ -941,7 +941,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
-				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+				DoActions2(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
 		CIfEnd()
 	CIfXEnd()
@@ -1037,7 +1037,7 @@ end
 
 Set_Repeat = SetCallForward()
 SetCall(FP)
-TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
+Trigger2X(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
 TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,256)},{SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
 CIf(FP,CVar(FP,Repeat_TempV[2],AtLeast,1))
 	CMov(FP,Spawn_TempW,Repeat_TempV)
@@ -1157,7 +1157,7 @@ CAdd(FP,G_CA_LineV,0x970/4)
 CJump(FP,Write_SpawnSet_Jump)
 NElseX()
 
-DoActions(FP,{RotatePlayer({DisplayTextX(f_GunSendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+DoActions2(FP,{RotatePlayer({DisplayTextX(f_GunSendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 
 NIfXEnd()
 
@@ -1676,7 +1676,7 @@ function Install_Call_G_CA()
 				SetCVar(FP, G_CA_TempTable[18][2], SetTo, 0),
 			})
 			if Limit == 1 then
-				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseIfX({CVar(FP,G_CA_TempTable[6][2],Exactly,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			
@@ -1686,11 +1686,11 @@ function Install_Call_G_CA()
 			end
 				CDoActions(FP,G_CB_InputCAct)
 			if Limit == 1 then
-				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseX()
 			if Limit == 1 then
-				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 			end
 			
 				DoActionsX(FP,{
@@ -1867,21 +1867,14 @@ function CreateBulletLoc(UnitId,Height,Angle,Player)
 		})
 end
 function StoryPrint(T,Text,AddTrig)
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			Gun_Line(8,AtLeast,T)
-		},
-		actions = {
-			RotatePlayer({
-				DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
-				DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
-			},HumanPlayers,FP);
-			SetCDeaths(FP,Add,1,ButtonSound);
-			AddTrig
-		},
-	}
+	Trigger2X(FP,{Gun_Line(8,AtLeast,T)},{
+		RotatePlayer({
+			DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
+			DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
+		},HumanPlayers,FP);
+		SetCDeaths(FP,Add,1,ButtonSound);
+		AddTrig
+	})
 end
 
 
@@ -2028,7 +2021,7 @@ CAdd(FP,Cur_CBulletArr,0x970/4)
 CJump(FP,CBullet_ArrCheck)
 NElseX()
 
-DoActions(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+DoActions2(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 
 NIfXEnd()
 

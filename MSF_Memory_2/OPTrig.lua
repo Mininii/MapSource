@@ -65,7 +65,7 @@ Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
     DisplayTextX("\x0D\x0D\x13\x04\x0D\x0D\n\x0D\x0D\n",4);
     PlayWAVX("sound\\Bullet\\pshield.wav");
 },HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31),SetSwitch("Switch 253",Clear)})
-DoActions(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
+DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 CIfEnd()
 if Limit == 1 then
     TriggerX(FP,{CD(TestMode,1)},{SetCD(OPCCode,5900+(4*1000))})

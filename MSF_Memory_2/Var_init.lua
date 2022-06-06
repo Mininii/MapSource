@@ -199,9 +199,9 @@ function Var_init()
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
 	f_ReplaceErrT = StrDesign("\x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")
 	CurPlace = CreateCcode()
-	HumanPlayers = {P1,P2,P3,P4,P9,P10,P11,P12}
+	HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 	MapPlayers = {P1,P2,P3,P4}
-	ObPlayers = {P9,P10,P11,P12}
+	ObPlayers = {P5,P6,P7,P8,P9,P10,P11,P12}
 	Players = {"\x081인","\x0E2인","\x0F3인","\x104인"}
 	MarID = {0,1,16,99}
 	MarWep = {117,118,119,120} 
@@ -285,7 +285,9 @@ function Var_init()
 	Move2 = CreateVarA(FP)
 	SHLX = CreateVar(FP)
 	SHLY = CreateVar(FP)
+	RCV = CreateVarArr(57,FP)
 	CXGeneFlag = CreateCcode()
+	CHuman = CreateCcodeArr(4)
 	
 
 	TTemp = CXMakePolyhedron(20,512) -- 한변의 크기가 512 정20면체 (Z>0 하양 / Z=0 파랑 / Z<0 검정) 
