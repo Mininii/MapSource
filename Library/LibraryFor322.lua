@@ -528,7 +528,8 @@ function AddBGM(BGMTypeNum,WavFile,Value,StyleFlag)
 	return BGMTypeNum
 end
 
-function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag,BGMSkipSEFlag)
+function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag,BGMSkipSEFlag,ObPlayers)
+	if ObPlayers == nil then ObPlayers= {P9,P10,P11,P12} end
 	if InitBGMP == 12 then
 	InitBGMP = Player
 	else
@@ -615,7 +616,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 					RotatePlayer({
 						PlayWAVX(BGMArr[i][2]),
 						PlayWAVX(BGMArr[i][2])
-					},{P9,P10,P11,P12},InitBGMP);
+					},ObPlayers,InitBGMP);
 					PreserveTrigger();
 				},
 			}
@@ -629,7 +630,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 					X;
 				},
 					actions = {
-					RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},InitBGMP);
+					RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},ObPlayers,InitBGMP);
 					PreserveTrigger();
 				},
 			}
@@ -659,7 +660,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 					RotatePlayer({
 						PlayWAVX(BGMArr[i][2]),
 						PlayWAVX(BGMArr[i][2])
-					},{P9,P10,P11,P12},InitBGMP);
+					},ObPlayers,InitBGMP);
 					SetDeathsX(InitBGMP,SetTo,BGMArr[i][3],DeathUnit,0xFFFFFF);
 					PreserveTrigger();
 				},
@@ -675,7 +676,7 @@ Trigger { -- ºê±Ý????????? ?????? ????????
 	conditions = {
 	},
 		actions = {
-		RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},InitBGMP);
+		RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg"),PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},ObPlayers,InitBGMP);
 		PreserveTrigger();
 	},
 }
