@@ -1601,14 +1601,14 @@ end
 		ReplaceV2 =CreateVar(FP)
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CurPlace)})
 		CAdd(FP,ReplaceV,ReplaceV2,UnitDataPtr)
-		CIf(FP,{TMemory(ReplaceV,AtLeast,1)},{SetMemoryX(0x664080 + (162*4),SetTo,1,1)}) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
+		CIf(FP,{TMemory(ReplaceV,AtLeast,1)},{SetMemoryX(0x664080 + (118*4),SetTo,1,1)}) -- 배열에서 데이터가 발견되지 않을때까지 순환한다.
 			CMov(FP,0x6509B0,ReplaceV)
 			CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
 			CallTrigger(FP,f_Replace)-- 데이터화 한 유닛 재배치하는 코드
 			DoActionsX(FP,{SetCDeaths(FP,Add,1,CurPlace),})
 			CWhileEnd()
 		CAdd(FP,ReplaceV2,2)
-		CIfEnd({SetMemoryX(0x664080 + (162*4),SetTo,0,1)})
+		CIfEnd({SetMemoryX(0x664080 + (118*4),SetTo,0,1)})
 		CMov(FP,0x6509B0,FP)
 		DoActionsX(FP,{SetV(BGMType,10),SetCD(Fin,1)},1)
 		DoActions(FP,{SetInvincibility(Enable, "Any unit", AllPlayers, 64),ModifyUnitEnergy(All, "Men", Force1, 64, 0),RemoveUnitAt(1, "Men", 64, Force1),ModifyUnitEnergy(All, "Men", Force2, 64, 0),GiveUnits(All,"Buildings",Force1,64,P12)})
@@ -1856,9 +1856,9 @@ Trigger2X(FP,{},{RotatePlayer({
 
 		CIf(FP,CV(CA[1],2),{
 			SetMemoryB(0x6636B8+207, SetTo, 83),
-			SetInvincibility(Enable, 185, Force2, 64),
+			SetInvincibility(Enable, 116, Force2, 64),
 			SetInvincibility(Disable, "Men", Force1, 64),
-			SetMemory(0x662350+(185*4),SetTo,400*256),
+			SetMemory(0x662350+(116*4),SetTo,400*256),
 			SetInvincibility(Disable, 12, Force2, 64),
 		})
 		CIfX(FP,{CV(PattV[1],350,AtMost)})
@@ -1875,10 +1875,10 @@ Trigger2X(FP,{},{RotatePlayer({
 		CMov(FP,PattV[2],_Div(PattV[3],75))
 		
 		
-		CElseIfX({CV(PattV[1],1200,AtLeast)},{AddCD(PattC[1],1),KillUnit(102,FP),KillUnit(57,FP),KillUnit(162,FP)})
+		CElseIfX({CV(PattV[1],1200,AtLeast)},{AddCD(PattC[1],1),KillUnit(102,FP),KillUnit(57,FP),KillUnit(118,FP)})
 		CIfXEnd()
 		CAdd(FP,PattV[1],1)
-		G_CA_SetSpawn2X({CV(PattV[1],350,Exactly)},{102,57,162},"ACAS","Sp1",1,984,nil,"CP",G_CA_Ratio(256+128))
+		G_CA_SetSpawn2X({CV(PattV[1],350,Exactly)},{102,57,118},"ACAS","Sp1",1,984,nil,"CP",G_CA_Ratio(256+128))
 
 		CIfEnd()--
 		CIf(FP,CV(CA[1],3),{
@@ -1985,8 +1985,8 @@ Trigger2X(FP,{},{RotatePlayer({
 		CTrigger(FP, {TMemory(_Add(UnitPtr,2),AtMost,4000000*256),CV(CB[2],0,AtMost)}, {SetCD(PattC[1],1)}, 1)
 		CIfEnd()
 		CIf(FP,CV(CA[1],5),{
-			SetInvincibility(Enable, 185, Force2, 64),
-			SetMemory(0x662350+(185*4),SetTo,400*256),
+			SetInvincibility(Enable, 116, Force2, 64),
+			SetMemory(0x662350+(116*4),SetTo,400*256),
 		})
 		CIfOnce(FP)
 		BP5ActArr = {}
@@ -2091,8 +2091,8 @@ Trigger2X(FP,{},{RotatePlayer({
 			SetMemory(0x66EC48+(533*4), SetTo, 242),
 			SetMemoryB(0x669E28+(533), SetTo, 16),
 			SetMemoryB(0x6636B8+207, SetTo, 127),
-			SetInvincibility(Enable, 185, Force2, 64),
-			SetMemory(0x662350+(185*4),SetTo,100*256),
+			SetInvincibility(Enable, 116, Force2, 64),
+			SetMemory(0x662350+(116*4),SetTo,100*256),
 			SetMemory(0x66EC48+(318*4), SetTo, 246),--핵터지는모션살리기
 			KillUnit(25, Force2),
 			KillUnit(30, Force2),

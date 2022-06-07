@@ -5,30 +5,16 @@ function System()
 	local TempTarget = CreateVar(FP)
 	local X = {}
 	for i = 0, 249 do
-		if 
-		i ~= 0 and 
-		i ~= 1 and 
-		i ~= 7 and 
-		i ~= 16 and 
-		i ~= 20 and 
-		i ~= 32 and 
-		i ~= 99 and 
-		i ~= 107 and 
-		i ~= 108 and 
-		i ~= 111 and 
-		i ~= 125 and 
-		i ~= 239 and 
-		i ~= 240 and 
-		i ~= 243 and 
-		i ~= 244 and 
-		i ~= 246 and 
-		i ~= 245 then
-			table.insert(X,SetMemory(0x5187E8+0xC*i,SetTo,0))
-		end
+		table.insert(X,SetMemory(0x5187E8+0xC*i,SetTo,0))
+		table.insert(X,SetMemory(0x5187EC+0xC*i,SetTo,0))
 	end
+	CIfOnce(FP)
 	for i = 4, 7 do
-		Trigger2X(FP,{LocalPlayerID(i)},X,{preserved})
+		CIf(FP,{LocalPlayerID(i)})
+		Trigger2X(FP,{},X,{preserved})
+		CIfEnd()
 	end
+	CIfEnd()
 
 	
 	DoActions(FP,{
@@ -168,7 +154,7 @@ HPRegenTable = {64}
 --    })
 
 	
-	CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,184,0,0xFF),DeathsX(CurrentPlayer,AtMost,185,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+	CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
 
 --    local HPJump = def_sIndex()
 --    NJumpX(FP,HPJump,{CV(count,1450,AtLeast)})
@@ -599,7 +585,7 @@ HPRegenTable = {64}
 	f_SaveCp()
 	InstallHeroPoint()
 	CIfEnd()
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,185,0,0xFF)}) -- 건작유닛인식
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,116,0,0xFF)}) -- 건작유닛인식
 		f_SaveCp()
 		f_Read(FP,_Sub(BackupCp,15),BCPos)
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
@@ -611,7 +597,7 @@ HPRegenTable = {64}
 				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 				Convert_CPosXY(BCPos)
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,162,0xFF),{SetMemoryX(0x664080 + (162*4),SetTo,1,1),SetMemory(0x662860+(162*4),SetTo,65537)},{preserved})
+				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,1,1),SetMemory(0x662860+(118*4),SetTo,65537)},{preserved})
 				for j = 0, 3 do
 				CTrigger(FP,{CVar(FP,CPlayer[2],Exactly,j+4,0xFF)},{TCreateUnitWithProperties(1,_Mov(EXCC_TempVarArr[i+1],0xFF),22+j,CPlayer,{energy = 100}),TMoveUnit(1,_Mov(EXCC_TempVarArr[i+1],0xFF),_Mov(CPlayer,0xFF),22+j,1)},1)
 				end
@@ -620,12 +606,13 @@ HPRegenTable = {64}
 					{TSetMemoryX(_Add(Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
 					f_Read(FP,_Add(Nextptrs,10),CPos)
 					Convert_CPosXY()
+					CDoActions(FP,{TSetMemoryX(_Add(Nextptrs,35), SetTo, CPlayer, 0xFF),})
 					Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 					DoActions2(FP,{Order("Men",Force2,1,Attack,10),Simple_CalcLoc(0,-64,-64,64,64)})
 					CTrigger(FP,{Cond_EXCC(12,Exactly,1,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
 					--CTrigger(FP,{Cond_EXCC(12,Exactly,4,4)},{TSetMemory(0x6509B0,SetTo,_Mov(CPlayer,0xFF)),RunAIScriptAt(JYD,1)},1)
 				CIfEnd()
-				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,162,0xFF),{SetMemoryX(0x664080 + (162*4),SetTo,0,1),SetMemory(0x662860+(162*4),SetTo,64+(64*65536))},{preserved})
+				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,0,1),SetMemory(0x662860+(118*4),SetTo,64+(64*65536))},{preserved})
 			CIfEnd()
 			CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
 		CWhileEnd()
@@ -1183,12 +1170,13 @@ DoActions2(FP,X)
 ComExitFlag = CreateCcode()
 for i = 0,3 do
 	TriggerX(FP,{CD(CHuman[i+1],1)},{
-		SetMemoryX(0x664080 + (184*4),SetTo,0x00000800,0x00000800),
-		SetMemoryX(0x664080 + (185*4),SetTo,0x00000800,0x00000800),
+		--SetMemoryX(0x664080 + (162*4),SetTo,1,1),
+		--SetMemoryX(0x664080 + (184*4),SetTo,0x00000800,0x00000800),
+		--SetMemoryX(0x664080 + (185*4),SetTo,0x00000800,0x00000800),
 	},{preserved})
 	TriggerX(FP,{CD(CHuman[i+1],1),HumanCheck(i+4, 0)},{SetCD(ComExitFlag,1)})
 end
-
+DoActions2X(FP,{RotatePlayer({SetAllianceStatus(Force1, Enemy),RunAIScript(P1VON),RunAIScript(P2VON),RunAIScript(P3VON),RunAIScript(P4VON)}, {P5,P6,P7,P8}, FP)})
 CIf(FP,CD(ComExitFlag,1),SetCD(ComExitFlag,0))
 CFor(FP, 19025, 19025+(84*1700), 84)
 CI = CForVariable()

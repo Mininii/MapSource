@@ -49,7 +49,7 @@ function Operator_Trig()
 		CIfEnd()
 
 
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,184,0,0xFF)})
+		CIf(FP,{DeathsX(CurrentPlayer,Exactly,117,0,0xFF)})
 			CSub(FP,0x6509B0,6)
 			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
 
@@ -254,7 +254,7 @@ local CurRM = CreateVar(FP)
 TriggerX(FP,{CV(RedNumber,401,AtLeast)},{SetV(RedNumber,400)},{preserved})
 CIf(FP,{Command(Force2,AtLeast,1,173),TTCVar(FP,CurRM[2],NotSame,RedNumber)})
 CMov(FP,CurRM,RedNumber)
-CMov(FP,0x662350+(185*4),_Mul(RedNumber,256),256*100)
+CMov(FP,0x662350+(116*4),_Mul(RedNumber,256),256*100)
 CIfEnd()
 if Limit == 1 then
 	--TriggerX(FP,{CD(TestMode,1)},{SetV(RedNumber,100)})

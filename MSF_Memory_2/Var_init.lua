@@ -225,6 +225,14 @@ function Var_init()
 		StrDesign("\x1D예약메딕\x04을 \x1B비활성화(1Tick)\x04하였습니다. - \x1F250 Ore\x07")}
 	ResetSwitch = "Switch 250"
 	WaveSwitch = "Switch 150"
+	P1VOFF = "Turn OFF Shared Vision for Player 1"
+	P1VON = "Turn ON Shared Vision for Player 1"
+	P2VOFF = "Turn OFF Shared Vision for Player 2"
+	P2VON = "Turn ON Shared Vision for Player 2"
+	P3VOFF = "Turn OFF Shared Vision for Player 3"
+	P3VON = "Turn ON Shared Vision for Player 3"
+	P4VOFF = "Turn OFF Shared Vision for Player 4"
+	P4VON = "Turn ON Shared Vision for Player 4"
 	P5VOFF = "Turn OFF Shared Vision for Player 5"
 	P5VON = "Turn ON Shared Vision for Player 5"
 	P6VOFF = "Turn OFF Shared Vision for Player 6"
@@ -356,7 +364,7 @@ CreateHeroPointArr(30,nil,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),
 CreateHeroPointArr(60,nil,110000,60000,"\x08적\x04대자 "..Conv_HStr("<08>A<4>ntagonism"),322000)
 CreateHeroPointArr(68,nil,250000,64000,"\x1F집\x04행관 "..Conv_HStr("<1F>J<4>udgement"),110000,nil,1)
 
-CreateHeroPointArr(162,nil,20000,30000,"\x1F증\x04오자 "..Conv_HStr("<1F>H<4>ate"),65000,nil,1)
+CreateHeroPointArr(118,nil,20000,30000,"\x1F증\x04오자 "..Conv_HStr("<1F>H<4>ate"),65000,nil,1)
 CreateHeroPointArr(71,nil,1,60000,"\x1F고\x04통 "..Conv_HStr("<1F>P<4>ain"),55000,nil,1)
 
 

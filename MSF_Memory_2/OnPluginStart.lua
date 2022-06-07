@@ -489,48 +489,50 @@ end
 				SetCD(CHuman[i-3],1);
 			}
 		}
---		Trigger { -- 게임오버
---			players = {FP},
---			conditions = {
---				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
---			},
---			actions = {
---				RotatePlayer({
---				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
---				Defeat();
---				},HumanPlayers,FP);
---				Defeat();
---				SetMemory(0xCDDDCDDC,SetTo,1);
---			}
---		}
---		Trigger { -- 게임오버
---			players = {FP},
---			conditions = {
---				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
---			},
---			actions = {
---				RotatePlayer({
---					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
---				Defeat();
---				},HumanPlayers,FP);
---				Defeat();
---				SetMemory(0xCDDDCDDC,SetTo,1);
---			}
---		}
---		Trigger { -- 게임오버
---			players = {FP},
---			conditions = {
---				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
---			},
---			actions = {
---				RotatePlayer({
---					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
---				Defeat();
---				},HumanPlayers,FP);
---				Defeat();
---				SetMemory(0xCDDDCDDC,SetTo,1);
---			}
---		}
+		if i == 7 then
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX(StrDesignX("\x1BP8 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x1BP8 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		Trigger { -- 게임오버
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX("\x13"..StrDesign("\x1BP8 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			}
+		}
+		end
 	end
 Trigger2X(FP,{Memory(0x57F0B4, Exactly, 0);},{
 	RotatePlayer({
@@ -688,6 +690,7 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			f_Div(FP,CunitHP,_Mov(256))
 			f_Read(FP,_Add(BackupCp,6),RepHeroIndex)
 			CMov(FP,Gun_LV,0)
+			CTrigger(FP,{CV(RepHeroIndex,162)},{SetV(RepHeroIndex,118)},1)
 			CTrigger(FP,{TTOR({
 				CVar(FP,RepHeroIndex[2],Exactly,151),
 				CVar(FP,RepHeroIndex[2],Exactly,133),
@@ -828,7 +831,7 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 	end
 
 	
-	CIfEnd({SetMemoryX(0x664080 + (162*4),SetTo,0,1)})
+	CIfEnd({SetMemoryX(0x664080 + (118*4),SetTo,0,1)})
 	DoActions(FP,GiveUnits(All,68,Force2,"Anywhere",P12),1)
 end
 

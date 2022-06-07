@@ -629,7 +629,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		CSub(FP,G_CA_UnitIndex,G_CA_Nextptrs,19025)
 		f_Div(FP,G_CA_UnitIndex,_Mov(84))
-		CDoActions(FP,{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,2),TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,CreatePlayer,0xFF),})
+		CDoActions(FP,{Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,2)})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,100)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,1*65536,0xFF0000),},1)
 		CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,128)},{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),},1)
 
@@ -769,7 +769,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CDoActions(FP,{TSetMemoryX(0x6663C4, SetTo, EffType1,0xFFFF),
 		
 			TSetMemory(Script2,SetTo,165),--131
-			TCreateUnitWithProperties(1,185,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),
+			TCreateUnitWithProperties(1,116,DefaultAttackLoc+1,CreatePlayer,{energy = 100}),
 			TSetMemory(Script2,SetTo,ScriptBak)
 		})
 		CElseX()
@@ -784,6 +784,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+		CDoActions(FP,{TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,CreatePlayer,0xFF),})
 
 		
 		CTrigger(FP, {TMemoryX(_Add(G_CA_Nextptrs,25),Exactly,63,0xFF)},
