@@ -479,16 +479,6 @@ end
 
 
 	for i = 4, 7 do
-		Trigger { -- 게임오버
-			players = {FP},
-			conditions = {
-				Label();
-				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
-			},
-			actions = {
-				SetCD(CHuman[i-3],1);
-			}
-		}
 		if i == 7 then
 		Trigger { -- 게임오버
 			players = {FP},
@@ -761,7 +751,6 @@ CWhileEnd()
 CDoActions(FP,{KillUnit(35,P5)})
 TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 CIfEnd({SetMemory(0x6509B0,SetTo,FP)}) -- OnPluginStart End
-
 	for j,k in pairs(RCV) do
 		CMov(FP,0x662098+((j-1)*4),k)
 	end
@@ -814,9 +803,6 @@ function init_Start() -- 게임 시작시 1회 실행 트리거
 			SetInvincibility(Disable,"Mineral Field (Type 1)",AllPlayers,"Anywhere");
 			SetInvincibility(Disable,"Mineral Field (Type 2)",AllPlayers,"Anywhere");
 			SetInvincibility(Disable,"Mineral Field (Type 3)",AllPlayers,"Anywhere");
-			GiveUnits(All,"Mineral Field (Type 1)",P12,6+i,i);
-			GiveUnits(All,"Mineral Field (Type 2)",P12,6+i,i);
-			GiveUnits(All,"Mineral Field (Type 3)",P12,6+i,i);
 			RunAIScript("Turn ON Shared Vision for Player 5");
 			RunAIScript("Turn ON Shared Vision for Player 6");
 			RunAIScript("Turn ON Shared Vision for Player 7");

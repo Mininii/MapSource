@@ -19,6 +19,8 @@ function System()
 	
 	DoActions(FP,{
 		RemoveUnit(7,P12),
+		RemoveUnit(20,P12),
+		RemoveUnit(32,P12),
 		RemoveUnit(MarID[1],P12),
 		RemoveUnit(MarID[2],P12),
 		RemoveUnit(MarID[3],P12),
@@ -1134,6 +1136,19 @@ for k = 1, 4 do
 CIfEnd()
 
 
+EraUngmeojulCT = CreateCcodeArr(#EraUngmeojulT)
+
+CIf(FP,{CD(CheatMode,1)})
+	CIfOnce(FP)
+	CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+	DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+	CIfEnd()
+	for j, k in pairs(EraUngmeojulT) do
+		TriggerX(FP,{ElapsedTime(AtLeast, 30*j)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),RotatePlayer({DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을(를) 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
+	end
+CIfEnd()
+
+
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})
 
 end
@@ -1168,14 +1183,7 @@ for i = 0, 227 do
 end
 DoActions2(FP,X)
 ComExitFlag = CreateCcode()
-for i = 0,3 do
-	TriggerX(FP,{CD(CHuman[i+1],1)},{
-		--SetMemoryX(0x664080 + (162*4),SetTo,1,1),
-		--SetMemoryX(0x664080 + (184*4),SetTo,0x00000800,0x00000800),
-		--SetMemoryX(0x664080 + (185*4),SetTo,0x00000800,0x00000800),
-	},{preserved})
-	TriggerX(FP,{CD(CHuman[i+1],1),HumanCheck(i+4, 0)},{SetCD(ComExitFlag,1)})
-end
+TriggerX(FP,{CD(OPJump,1),Bring(P12,AtLeast,1,"Buildings",64)},{SetCD(ComExitFlag,1)},{preserved})
 DoActions2X(FP,{RotatePlayer({SetAllianceStatus(Force1, Enemy),RunAIScript(P1VON),RunAIScript(P2VON),RunAIScript(P3VON),RunAIScript(P4VON)}, {P5,P6,P7,P8}, FP)})
 CIf(FP,CD(ComExitFlag,1),SetCD(ComExitFlag,0))
 CFor(FP, 19025, 19025+(84*1700), 84)

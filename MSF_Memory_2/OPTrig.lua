@@ -151,4 +151,12 @@ Trigger2X(FP,{CD(Win,5000,AtLeast),CD(TestMode,0)},
 RotatePlayer({Victory()
 },HumanPlayers,FP))
 CIfEnd()
+
+TriggerX(FP,{CD(OPJump,1)},{
+    RemoveUnit(111,P12),
+    RemoveUnit(125,P12),
+    RemoveUnit(124,P12),
+    RemoveUnit(107,P12),
+    RemoveUnit(109,P12),},{preserved})
+    
 end

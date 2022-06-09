@@ -429,7 +429,7 @@ function Convert_StrCode(Str)
 	return Str
 end
 HeroPointArr = {}
-function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,DmgType) --  영작 유닛 설정 함수
+function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,DmgType,EraUngmeojulFlag) --  영작 유닛 설정 함수
 	if DmgType == nil then DmgType = 0 end
 	local TextType1 = " \x08처치\x04"
 	local TextType2 = " \x07획득\x04"
@@ -444,6 +444,9 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	else
 		PushErrorMsg("Need_Input_TextType")
 	end
+	if EraUngmeojulFlag ~= nil then
+		table.insert(EraUngmeojulT,{Index,N_to_EmN("\x10기억\x04의 "..Name..""..Name2)})
+	end
 	local Text = "\x10기억\x04의 "..Name..""..Name2.." \x1F＋"..N_to_EmN(Point).."\x1FＰｔｓ"
 	local X = {}
 	table.insert(X,Text)
@@ -453,6 +456,7 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	table.insert(X,HPRate*256) -- HPoint
 	table.insert(X,ShieldRate) -- HPoint
 	table.insert(HeroPointArr,X)
+	
 end
 function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 설치 함수. CunitCtrig 단락에 포함됨.
 	for i = 1, #HeroPointArr do

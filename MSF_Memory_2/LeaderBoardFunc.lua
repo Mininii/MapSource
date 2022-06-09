@@ -53,9 +53,9 @@ function LeaderBoardF()
 --            Order("Factories",P5+i,11+i,Attack,64),--트리거 인식상 Factories 처리 유닛들만 이동시킴
 --        },{preserved})
     end
-
-	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
-		,CDeaths(FP,Exactly,0,LeaderBoardT)},{})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
+	--EraUngmeojulT
+	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),CD(EraUngmeojulC,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
+		,CDeaths(FP,Exactly,0,LeaderBoardT)},{SetCD(EraUngmeojulC, 0)})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	
@@ -156,10 +156,14 @@ function LeaderBoardF()
 				CJump(FP,HeroOrder)
 				NJumpXEnd(FP,Check_Hero)
 				f_SaveCp()
+				CMov(FP,TargetUID,_Read(BackupCp),nil,0xFF)
 				local TempCPCheck = CreateVar()
 				CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 				f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
+				for j,k in pairs(EraUngmeojulT) do
+					NJumpX(FP,L_Gun_Order,{CV(TargetUID,k[1]),CD(EraUngmeojulCT[j],1)})
+				end
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtLeast,2),CD(Theorist,0)})
 				CJumpEnd(FP,HeroOrder)
 				NJumpXEnd(FP,L_Gun_Jump)
@@ -175,6 +179,11 @@ function LeaderBoardF()
 	CAdd(FP,0x6509B0,84)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)
+	local ActT={}
+	for j, k in pairs(EraUngmeojulCT) do
+		table.insert(ActT,SetCD(k,0))
+	end
+	DoActions2X(FP, ActT)
 	CIfEnd()
 	Trigger { -- 킬 포인트 리더보드, 집근처 유닛 오더시키기, 쉴드 회복, 저글링 히드라 어택땅
 		players = {FP},

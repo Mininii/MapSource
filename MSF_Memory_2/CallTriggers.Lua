@@ -510,7 +510,7 @@ CFor(FP,19025,19025+(84*1700),84)
 	f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
 	Convert_CPosXY()
 	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-	CDoActions(FP,{TSetMemoryX(_Add(CI,35), SetTo, 0, 0xFF),TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
+	CDoActions(FP,{TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
 	CIfEnd()
 CForEnd()
 

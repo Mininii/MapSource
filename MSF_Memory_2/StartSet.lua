@@ -1,4 +1,19 @@
 -- NonCtrigArea
+
+
+Trigger {
+	players = {AllPlayers},
+	conditions = {  
+		
+	},
+	actions = {
+		SetMemoryX(0x57EEE8 + 36*4,SetTo,1,0xFF);
+		SetMemoryX(0x57EEE8 + 36*5,SetTo,1,0xFF);
+		SetMemoryX(0x57EEE8 + 36*6,SetTo,1,0xFF);
+		PreserveTrigger();
+		
+	},
+}
 Trigger {
 	players = {Force2},
 	conditions = {  
