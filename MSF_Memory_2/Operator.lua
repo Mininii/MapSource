@@ -93,7 +93,7 @@ function Operator_Trig()
 	TestVar = CreateVar(FP)
 	if Limit == 1 then
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
-	TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(CheatMode,1)})--에라응머즐 활성화
+	TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(CurrentPlayer,AtLeast,1,198)},{SetCD(CheatMode,1)})--에라응머즐 활성화
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	local TestStim = CreateCcode()

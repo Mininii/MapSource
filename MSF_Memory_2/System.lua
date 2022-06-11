@@ -1140,11 +1140,16 @@ EraUngmeojulCT = CreateCcodeArr(#EraUngmeojulT)
 
 CIf(FP,{CD(CheatMode,1)})
 	CIfOnce(FP)
-	CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+	CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
 	DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	CIfEnd()
 	for j, k in pairs(EraUngmeojulT) do
-		TriggerX(FP,{ElapsedTime(AtLeast, 30*j)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),RotatePlayer({DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),DisplayTextX(StrDesignX2("\x0D\x0D!H\x13\x07\x07·\x11·\x08·\x07【 \x07에라 응 머 즐 "..k[2].."을(를) 끌어당깁니다. \x07】\x08·\x11·\x07·"),4),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
+		Trigger2X(FP,{ElapsedTime(AtLeast, (10*j)+300)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
+		RotatePlayer({
+			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+			PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
 	end
 CIfEnd()
 
@@ -1201,18 +1206,18 @@ CIf(FP,{
 
 })
 local TempP = CreateVar(FP)
---local TempU = CreateVar(FP)
+local TempU = CreateVar(FP)
 CMov(FP,CunitIndex,_Div(_Sub(CI,19025),_Mov(84)))
 local HeroJump = def_sIndex()
 NJump(FP, HeroJump, {TMemoryX(_Add(CI,25), Exactly, 68,0xFF),Cond_EXCC2(DUnitCalc, CunitIndex, 1, Exactly, 1)})
 
 CMov(FP,TempP,_Read(_Add(CI,35),0xFF),nil,0xFF,1)
---CMov(FP,TempU,_Read(_Add(CI,25)),nil,0xFF)
---f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
---Convert_CPosXY()
---Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
---CDoActions(FP,{TGiveUnits(1,TempU,P12,1,TempP)})
-f_CGive(FP, CI, nil, TempP, P12)
+CMov(FP,TempU,_Read(_Add(CI,25)),nil,0xFF)
+f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
+Convert_CPosXY()
+Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+CDoActions(FP,{TGiveUnits(1,TempU,P12,1,TempP)})
+--f_CGive(FP, CI, nil, TempP, P12)
 NJumpEnd(FP,HeroJump)
 
 

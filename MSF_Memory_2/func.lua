@@ -444,10 +444,10 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	else
 		PushErrorMsg("Need_Input_TextType")
 	end
-	if EraUngmeojulFlag ~= nil then
-		table.insert(EraUngmeojulT,{Index,N_to_EmN("\x10기억\x04의 "..Name..""..Name2)})
-	end
 	local Text = "\x10기억\x04의 "..Name..""..Name2.." \x1F＋"..N_to_EmN(Point).."\x1FＰｔｓ"
+	if EraUngmeojulFlag ~= nil then
+		table.insert(EraUngmeojulT,{Index,"\x10기억\x04의 "..Name})
+	end
 	local X = {}
 	table.insert(X,Text)
 	table.insert(X,Index)

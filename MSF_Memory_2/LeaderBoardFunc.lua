@@ -54,8 +54,8 @@ function LeaderBoardF()
 --        },{preserved})
     end
 	--EraUngmeojulT
-	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),CD(EraUngmeojulC,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
-		,CDeaths(FP,Exactly,0,LeaderBoardT)},{SetCD(EraUngmeojulC, 0)})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
+	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
+		,TTOR({CDeaths(FP,Exactly,0,LeaderBoardT),CD(EraUngmeojulC,1)})},{SetCD(EraUngmeojulC, 0)})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	
