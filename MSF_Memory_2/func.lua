@@ -819,7 +819,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- 특수생성트리거
-
+			local LPos= CreateVar(FP)
+			CMov(FP,LPos,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
+			TriggerX(FP,{CVar(FP,LPos[2],AtLeast,32768,0xFFFF)},{SetCVar(FP, LPos[2], SetTo, 0, 0xFFFF)},{preserved})
+			TriggerX(FP,{CVar(FP,LPos[2],AtLeast,4096,0xFFFF),CVar(FP,LPos[2],AtMost,32768,0xFFFF)},{SetCVar(FP, LPos[2], SetTo, 4095, 0xFFFF)},{preserved})
+			TriggerX(FP,{CVar(FP,LPos[2],AtLeast,32768*0x10000,0xFFFF0000)},{SetCVar(FP, LPos[2], SetTo, 0, 0xFFFF0000)},{preserved})
+			TriggerX(FP,{CVar(FP,LPos[2],AtLeast,4096*0x10000,0xFFFF0000),CVar(FP,LPos[2],AtMost,32768*0x10000,0xFFFF0000)},{SetCVar(FP, LPos[2], SetTo, 4095*0x10000, 0xFFFF0000)},{preserved})
 			CDoActions(FP,{
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,7,SetTo,G_CA_TempTable[1]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,8,SetTo,G_CA_TempTable[11]),
@@ -828,7 +833,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,11,SetTo,G_CA_TempTable[14]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
-				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
+				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,LPos)
 			})
 			CIfX(FP,Never())
 			for i = 0, 3 do
@@ -846,7 +851,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CIfEnd()
 			CIf(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,2,2+0xF0000000)})
 				f_Lengthdir(FP,_Mod(_Rand(),256),_Mod(_Rand(),360),LDrX,LDrY)
-				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,Add,_Add(LDrX,_Mul(LDrY,65536))),
+				CAdd(FP,LPos,_Add(LDrX,_Mul(LDrY,65536)))
+				TriggerX(FP,{CVar(FP,LPos[2],AtLeast,32768,0xFFFF)},{SetCVar(FP, LPos[2], SetTo, 0, 0xFFFF)},{preserved})
+				TriggerX(FP,{CVar(FP,LPos[2],AtLeast,4096,0xFFFF),CVar(FP,LPos[2],AtMost,32768,0xFFFF)},{SetCVar(FP, LPos[2], SetTo, 4095, 0xFFFF)},{preserved})
+				TriggerX(FP,{CVar(FP,LPos[2],AtLeast,32768*0x10000,0xFFFF0000)},{SetCVar(FP, LPos[2], SetTo, 0, 0xFFFF0000)},{preserved})
+				TriggerX(FP,{CVar(FP,LPos[2],AtLeast,4096*0x10000,0xFFFF0000),CVar(FP,LPos[2],AtMost,32768*0x10000,0xFFFF0000)},{SetCVar(FP, LPos[2], SetTo, 4095*0x10000, 0xFFFF0000)},{preserved})
+				CDoActions(FP,{Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,LPos),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,5,SetTo,G_CA_TempTable[8]),
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),})
 			CIfEnd()
@@ -1241,8 +1251,18 @@ function CA_Func()
 		CIfEnd()
 	CIfEnd()
 	CIfX(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,0x50000000,0xF0000000)})
-	CallTriggerX(FP,Call_CA_Repeat,{CV(G_CA_X,4096,AtMost),CV(G_CA_Y,4096,AtMost)})
+	CallTriggerX(FP,Call_CA_Repeat,{CV(G_CA_X,4095,AtMost),CV(G_CA_Y,4095,AtMost)})
 	CElseX()
+	TriggerX(FP,{CV(G_CA_X,0x80000000,AtLeast)},{SetV(G_CA_X,0)},{preserved})
+	TriggerX(FP,{CV(G_CA_Y,0x80000000,AtLeast)},{SetV(G_CA_Y,0)},{preserved})
+	TriggerX(FP,{CV(G_CA_X,4096,AtLeast),CV(G_CA_X,0x7FFFFFFF,AtMost)},{SetV(G_CA_X,4095)},{preserved})
+	TriggerX(FP,{CV(G_CA_Y,4096,AtLeast),CV(G_CA_Y,0x7FFFFFFF,AtMost)},{SetV(G_CA_Y,4095)},{preserved})
+
+	CMov(FP,0x58DC60,G_CA_X)
+	CMov(FP,0x58DC64,G_CA_Y)
+	CMov(FP,0x58DC68,G_CA_X)
+	CMov(FP,0x58DC6C,G_CA_Y)
+
 	CallTrigger(FP,Call_CA_Repeat,{})
 	CIfXEnd()
 	

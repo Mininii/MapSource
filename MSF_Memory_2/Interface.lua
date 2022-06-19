@@ -2,6 +2,8 @@ function Interface()
 	local DelayMedic = CreateCcodeArr(4)
 	local GiveRate = CreateCcodeArr(4)
 	local FastMarine = CreateCcodeArr(4)
+	local CreateMarine1 = CreateCcodeArr(4)
+	local CreateMarine2 = CreateCcodeArr(4)
 	local CurAtk = CreateVarArr(#MapPlayers,FP)
 	local CurHP = CreateVarArr(#MapPlayers,FP)
 	AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(3,0x58D2B0+7,46)
@@ -64,13 +66,31 @@ function Interface()
 			
 			CIf(FP,{Deaths(i,AtLeast,1,"Terran Wraith"),Memory(0x628438,AtLeast,1)},SetDeaths(i,Subtract,1,"Terran Wraith"))
 				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-				DoActionsX(FP,{CreateUnitWithProperties(1,32,2+i,i,{energy = 100}),
-				SetCD(CUnitFlag,1);})
+				DoActionsX(FP,{CreateUnitWithProperties(1,32,2+i,i,{energy = 100}),SetCD(CUnitFlag,1);})
 				CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
 				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0)})
 				CIfEnd()
 			CIfEnd()
+
+			CIf(FP,{CD(CreateMarine1[i+1],1,AtLeast),Memory(0x628438,AtLeast,1)},SubCD(CreateMarine1[i+1],1))
+				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+				DoActionsX(FP,{CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}),SetCD(CUnitFlag,1);})
+				CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+				CDoActions(FP,{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
+				CIfEnd()
+			CIfEnd()
+			CIf(FP,{CD(CreateMarine2[i+1],1,AtLeast),Memory(0x628438,AtLeast,1)},SubCD(CreateMarine2[i+1],1))
+				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+				DoActionsX(FP,{CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}),SetCD(CUnitFlag,1);})
+				CIf(FP,{TTCVar(FP,BarPos[i+1][2],NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1),TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+				CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
+				TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0),TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
+				CIfEnd()
+			CIfEnd()
+
+
+
 			CIf(FP,{TTCVar(FP,PCVar[i+1][2],NotSame,CurPC[i+1])})
 			CMov(FP,CurPC[i+1],PCVar[i+1])
 			CMov(FP,0x57f120+(4*i),PCVar[i+1])
@@ -189,10 +209,11 @@ Trigger { -- 조합 루미아마린
 		SetResources(i,Subtract,LMCost,Ore);
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
-		CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
+		AddCD(CreateMarine1[i+1],1);
 		SetCD(CUnitFlag,1);
 		PreserveTrigger();
 	},
@@ -212,9 +233,10 @@ Trigger { -- 조합 루미아마린
 		SetResources(i,Subtract,LMCost2,Ore);
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
-		CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost2.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
+		AddCD(CreateMarine1[i+1],1);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
 		SetCD(CUnitFlag,1);
 		PreserveTrigger();
@@ -271,9 +293,10 @@ conditions = {
 actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
-	CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+	--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
+	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
@@ -293,6 +316,7 @@ actions = {
 	CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
 	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
+	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
@@ -308,7 +332,8 @@ actions = {
 		},
 		actions = {
 			SetDeaths(i,Subtract,1,178);
-			CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+			--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
+			AddCD(CreateMarine1[i+1],1);
 			PreserveTrigger();
 		},
 	}

@@ -329,7 +329,7 @@ CreateHeroPointArr(21,nil,9999,0,"\x1B망\x04령 "..Conv_HStr("<1B>T<04>om <1B>K<0
 CreateHeroPointArr(88,nil,9000,3000,"\x1B정\x04찰기 "..Conv_HStr("<1B>A<4>rtanis"),32000,nil,nil,1) --
 CreateHeroPointArr(28,nil,9999,0,"\x1B전\x04함 "..Conv_HStr("<1B>H<4>yperion"),35000,nil,nil,1) --
 CreateHeroPointArr(86,nil,9999,7000,"\x1B망\x04토 "..Conv_HStr("<1B>D<4>animoth"),42000,nil,nil,1) --
-CreateHeroPointArr(25,nil,9999,0,"\x1B대\x04포 "..Conv_HStr("<1B>M<4>ortal"),38000,nil,nil,1) --
+CreateHeroPointArr(25,nil,9999,0,"\x1B대\x04포 "..Conv_HStr("<1B>M<4>ortal"),38000) --
 CreateHeroPointArr(75,nil,7000,9000,"\x1B그\x04림자 "..Conv_HStr("<1B>Z<4>eratul"),40000,nil,nil,1) --
 CreateHeroPointArr(63,nil,5000,9000,"\x1F보\x04주 "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),50000,nil,1,1) --
 
@@ -357,7 +357,7 @@ CreateHeroPointArr(61,nil,70000,10000,"\x1F변\x04명자 "..Conv_HStr("<1F>V<4>indi
 CreateHeroPointArr(67,nil,120000,10000,"\x1F창\x04세자 "..Conv_HStr("<1F>G<4>enesis"),115000,nil,1,1)
 CreateHeroPointArr(23,nil,250000,0,"\x1F우\x04상 "..Conv_HStr("<1F>I<4>conoclasm"),66600,nil,1,1)
 CreateHeroPointArr(81,nil,100000,50000,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1,1)
-CreateHeroPointArr(30,nil,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1,1)
+CreateHeroPointArr(30,nil,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)
 
 
 

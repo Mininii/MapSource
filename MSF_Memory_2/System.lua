@@ -464,6 +464,7 @@ HPRegenTable = {64}
 			CSub(FP,CurCunitI,Nextptrs,19025)
 			f_Div(FP,CurCunitI,_Mov(84))
 		CDoActions(FP,{
+			TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000);
 			Set_EXCC2(UnivCunit,CurCunitI2,1,SetTo,0),
 			Set_EXCC2(UnivCunit,CurCunitI2,2,SetTo,0),
 			Set_EXCC2(UnivCunit,CurCunitI,0,SetTo,0),
@@ -1137,21 +1138,22 @@ CIfEnd()
 
 
 EraUngmeojulCT = CreateCcodeArr(#EraUngmeojulT)
-
-CIf(FP,{CD(CheatMode,1)})
-	CIfOnce(FP)
-	CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
-	DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+if CheatEnableFlag== 1 then
+	CIf(FP,{CD(CheatMode,1)})
+		CIfOnce(FP)
+		CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+		DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+		CIfEnd()
+		for j, k in pairs(EraUngmeojulT) do
+			Trigger2X(FP,{ElapsedTime(AtLeast, (10*j)+300)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
+			RotatePlayer({
+				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+				PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
+		end
 	CIfEnd()
-	for j, k in pairs(EraUngmeojulT) do
-		Trigger2X(FP,{ElapsedTime(AtLeast, (10*j)+300)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
-		RotatePlayer({
-			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
-			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
-			DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
-			PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
-	end
-CIfEnd()
+end
 
 
 CallTriggerX(FP,Call_CunitRefrash,{CD(CUnitRefrash,1,AtLeast)},{SetCD(CUnitRefrash,0)})

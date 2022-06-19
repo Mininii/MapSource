@@ -33,8 +33,10 @@ end
 
 TestSet(1)
 	EVFFlag = 0
+	CheatEnableFlag = 0
 if Limit == 1 then
 	EVFFlag = 1
+	CheatEnableFlag = 1
 	TheoristTestMode = 0
 	EEggTestNum = 20
 else
@@ -58,7 +60,7 @@ CJump(AllPlayers,init_func)
 	Var_init()
 	Include_CtrigPlib(360,RandSwitch)
 	--Include_64BitLibrary(RandSwitch2,FP)
-	Include_Conv_CPosXY(FP)
+	Include_Conv_CPosXY(FP,{4096,4096})
 	Include_CRandNum(FP)
 	Install_GetCLoc(FP,0,nilunit)
 	Install_TMemoryBW(FP)

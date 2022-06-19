@@ -1222,7 +1222,9 @@ end
 
 
 
-function Include_Conv_CPosXY(Player)
+function Include_Conv_CPosXY(Player,MapSize)
+	if MapSize == nil or type(MapSize)~="table" then PushErrorMsg("MapSize_InputData_Error") end
+	GMapSize=MapSize
 	CPos,CPosDeviation,CPosX,CPosY = CreateVars(4,Player)
 	Call_CPosXY = SetCallForward()
 	SetCall(Player)
@@ -1233,6 +1235,11 @@ function Include_Conv_CPosXY(Player)
 		CAdd(Player,CPosX,CPosDeviation)
 		CAdd(Player,CPosY,CPosDeviation)
 	CIfEnd()
+	TriggerX(Player, {CV(CPosX,0x80000000,AtLeast)}, {SetV(CPosX,0)}, {preserved})
+	TriggerX(Player, {CV(CPosY,0x80000000,AtLeast)}, {SetV(CPosY,0)}, {preserved})
+	TriggerX(Player, {CV(CPosX,MapSize[1],AtLeast),CV(CPosX,0x7FFFFFFF,AtMost)}, {SetV(CPosX,MapSize[1]-1)}, {preserved})
+	TriggerX(Player, {CV(CPosY,MapSize[2],AtLeast),CV(CPosY,0x7FFFFFFF,AtMost)}, {SetV(CPosY,MapSize[2]-1)}, {preserved})
+
 	SetCallEnd()
 	function Convert_CPosXY(Value,Deviation)
 		if Deviation == nil then 

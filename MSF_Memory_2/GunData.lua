@@ -948,10 +948,10 @@ function Include_GunData(Size,LineNum)
 	CAdd(FP,N_Y,G_CA_CenterY)
 
 	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(4)},20,548,0)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(5)},20,548,13)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(6)},20,548,17)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(7)},20,548,10)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(4)},20,548,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(5)},20,548,13)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(6)},20,548,17)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(7)},20,548,10)
 	DoActions(FP,Simple_CalcLoc(0,-96,-96,96,96))
 	for i = 4, 7 do
 		TriggerX(FP,{GCP(i)},{
@@ -967,7 +967,7 @@ function Include_GunData(Size,LineNum)
 		TriggerX(FP,{GCP(i),CD(Theorist,1)},{KillUnitAt(All,131,1,i);},{preserved})
 	end
 	
-	TriggerX(FP,{CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},{SetCD(N_Check,1)},{preserved})
+	TriggerX(FP,{CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},{SetCD(N_Check,1)},{preserved})
 	CAdd(FP,N_A,12)
 	CWhileEnd()
 	Trigger2X(FP,{Gun_Line(7,Exactly,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav")},HumanPlayers,FP)},{preserved})
@@ -1044,13 +1044,13 @@ function Include_GunData(Size,LineNum)
 		CAdd(FP,N_Y,G_CA_CenterY)
 
 		Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-		CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(4)},20,548,0)
-		CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(5)},20,548,13)
-		CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(6)},20,548,17)
-		CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost),GCP(7)},20,548,10)
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(4)},20,548,0)
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(5)},20,548,13)
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(6)},20,548,17)
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(7)},20,548,10)
 
 		
-		TriggerX(FP,{CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},{SetCD(N_Check,1)},{preserved})
+		TriggerX(FP,{CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},{SetCD(N_Check,1)},{preserved})
 		CAdd(FP,N_A,12)
 		CWhileEnd()
 
@@ -1654,7 +1654,7 @@ end
 	CAdd(FP,N_X,G_CA_CenterX)
 	CAdd(FP,N_Y,G_CA_CenterY)
 	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-	CreateEffUnit({CV(N_X,4096,AtMost),CV(N_Y,4096,AtMost)},20,548,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,0)
 	CAdd(FP,N_A,12)
 	CWhileEnd()
 
