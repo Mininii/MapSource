@@ -85,7 +85,7 @@ DoActions(FP,ModifyUnitHangarCount(5, All, 83, Force1, 64) )
 for i = 0, 7 do
 	PatchInsert(SetMemory(0x5821A4 + (i*4),SetTo,800))--9
 	PatchInsert(SetMemory(0x582234 + (i*4),SetTo,800))--9
-	PatchInsert(SetMemory(0x5821A4 + (i*4),SetTo,800))--9
+	PatchInsert(SetMemory(0x5822C4 + (i*4),SetTo,800))--9
 end
 
 	function SetTechTime(Tech,Value)
@@ -130,9 +130,13 @@ end
 
 		DefTypePatch(i,0) -- 방어타입 전부 0으로 설정
 		SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
-		if i~=65 and i~=77 and i~=85 and i~=108 then
+		if i~=85 and i~=108 then
 		SetUnitAdvFlag(i,0x4000,0x4000+0x20000+0x80000) -- 모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
-		SetUnitsDat(i,nil,nil,5)
+		if i==106 then
+			SetUnitsDat(i,nil,nil,7)
+		else
+			SetUnitsDat(i,nil,nil,5)
+		end
 		else
 			SetUnitAdvFlag(i,0,0x4000) -- 모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
 			SetUnitsDat(i,nil,nil,nil,nil,nil,1)
@@ -159,4 +163,13 @@ end
 
 	DoActions2(AllPlayers,PatchArr,1)
 	DoActions2(AllPlayers,PatchArrPrsv)
+	DoActions2(FP,{--EUD Editor 1
+		SetMemoryX(0x6640BC, SetTo, 4,4); -- 시민 공중유닛, 스캐럽으로 외형전환
+		SetMemory(0x664504, Subtract, 385875968); -- 시민 공중유닛, 스캐럽으로 외형전환
+
+		SetMemory(0x6C9908, Subtract, 512); -- Substructure Opening Hole
+		SetMemory(0x6C9DD8, Add, 65536); -- Substructure Opening Hole
+		SetMemory(0x6C9ED0, Add, 20480); -- Substructure Opening Hole
+		SetMemory(0x6CA1BC, Add, 1); -- Substructure Opening Hole
+	})
 end

@@ -1,5 +1,29 @@
 function System()
-	DoActions(FP, RemoveUnit(204, FP))
+	BCFlag=CreateCcode()
+	DoActions2X(FP, {
+		CreateUnit(1,"Terran Beacon","T",FP),
+		CreateUnit(1,"Zerg Beacon","P",FP),
+		CreateUnit(1,"Protoss Beacon","Z",FP),
+		CreateUnitWithProperties(1,"Terran Civilian","Center",Force1,{invincible = true}),SetCD(BCFlag,1),
+		SetCountdownTimer(SetTo, 210);
+		RotatePlayer({RunAIScript(P8VON)}, MapPlayers, FP);
+		RotatePlayer({DisplayTextX("\x13\x1F100 \x04Billion Zealots\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\n\x13\x04Please select your Race\n", 4),PlayWAVX("sound\\Protoss\\Advisor\\PAdUpd01.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP)
+	}, 1)
+	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
+	
+	for i = 0, 7 do
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","P")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", "Center", i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","T")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", "Center", i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","Z")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", "Center", i)},{preserved})
+	end
+	CIfEnd()
+	TriggerX(FP, {Bring(Force1,AtMost,0,"Terran Civilian",64)},{SetCD(BCFlag,0),
+	RemoveUnit("Terran Beacon", FP),
+	RemoveUnit("Zerg Beacon", FP),
+	RemoveUnit("Protoss Beacon", FP),
+	RemoveUnit("Terran Civilian", AllPlayers),
+})
+	DoActions(FP, {RemoveUnit(204, FP),RemoveUnit("Any unit", P12)})
 	--CMov(FP,CA_Eff_Rat,Var_TempTable[11])
 
 	--function CA_3DAcc(Time,XY,YZ,ZX)
@@ -15,12 +39,13 @@ function System()
 	--CA_3DAcc(112420,2,1,1)
 	--CA_3DAcc(142730,2,1,1)
 
+ZSVar=CreateVar(FP)
 CA_Eff_Rat = CreateVar2(FP,nil,nil,80000)
 CA_Eff_XY = CreateVar(FP)
 CA_Eff_YZ = CreateVar(FP)
 CA_Eff_ZX = CreateVar(FP)
 DoActionsX(FP,{
-	AddV(CA_Eff_Rat,15);
+	--AddV(CA_Eff_Rat,15);
 	AddV(CA_Eff_XY,1);
 	AddV(CA_Eff_YZ,1);
 	AddV(CA_Eff_ZX,1);
@@ -54,15 +79,14 @@ CA_Create = CreateVar(FP)
 			}},{preserved})
 		end
 
-		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},13,6)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},14,17)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,2);},14,13)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},15,16)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},16,9)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},17,17)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},18,13)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,9)
-		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},20,16)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,1);},13,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,2);},14,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,3);},15,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,4);},16,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,5);},17,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,6);},18,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,15)
+		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},20,15)
 
 		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
 		CA_CP = CreateVar(FP)
