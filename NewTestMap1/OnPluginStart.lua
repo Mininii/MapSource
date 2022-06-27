@@ -182,7 +182,7 @@ end
 		SetUnitAdvFlag(i,0,0x4000) -- 모든유닛 어드밴스드 플래그 중 로보틱 전부제거
 		if i~=85 and i~=144 and i~=84 and i~=108 then
 		SetUnitAdvFlag(i,0x4000,0x4000+0x20000+0x80000) -- 모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
-		if i==106 or i==124 then
+		if i==106 or i==124 or i==125 then
 			SetUnitsDat(i,nil,nil,7)
 		else
 			SetUnitsDat(i,nil,nil,5)
@@ -191,7 +191,7 @@ end
 		end
 	end
 
-	UnusedUnitArr = {85,144,84,108,159}
+	UnusedUnitArr = {85,144,84,108,159,47}
 	for j,k in pairs(UnusedUnitArr) do
 		SetUnitAdvFlag(k,0,0x4000) -- 모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
 		SetUnitsDat(k,nil,nil,nil,nil,nil,1)
@@ -231,28 +231,68 @@ end
 	for j, k in pairs(ZBuildingArr) do
 		SetUnitDefUpType(k, 4)
 	end
-
+	function SetWeaponsDat(WepID,DmgBase,DmgFactor,Cooldown,SplashFlag,RangeMin,RangeMax)
+		if DmgBase ~= nil then
+			PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,DmgBase)) -- 공격력
+		end
+		if DmgFactor ~=nil then
+			PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,DmgFactor)) -- 추가공격력
+		end
+		if RangeMin ~=nil then
+			PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,RangeMin)) -- 사거리 최소
+		end
+		if RangeMax ~=nil then
+			PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,RangeMax)) -- 사거리 최대
+		end
+		if Cooldown ~=nil then
+			PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,Cooldown)) -- 공속
+		end
+		if type(SplashFlag)=="table" then
+			if type(SplashFlag[1])~="number" or type(SplashFlag[2])~="number" or type(SplashFlag[3])~="number" then
+				PushErrorMsg("Splash_Inputdata_Error")
+			else
+				PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- 스플타입(일방형)
+				PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,SplashFlag[1])) --스플 안
+				PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,SplashFlag[2])) --스플 중
+				PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,SplashFlag[3])) --스플 밖
+				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, 0x020 + 1 + 2))--스플 대상 비 로보틱 설정
+			end
+		elseif SplashFlag~=nil then
+			PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- 스플타입(스플없음)
+		end
+		
+		
+	end
 
 	SetUnitAdvFlag(204, 536870916, 0xFFFFFFFF) -- 이펙트유닛
 	UnitSizePatch(204,1,1,1,1) -- 이펙트유닛
 	SetBuildingDim(204, 1, 1) -- 이펙트유닛
 	SetUnitsDat(124,75*10,nil,nil,10,nil,nil,1500)
-	PatchInsert(SetMemoryW(0x656EB0+(29 *2),SetTo,20*10)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(29 *2),SetTo,120)) -- 추가공격력
-	PatchInsert(SetMemoryB(0x6616E0+124,SetTo,130))
-	PatchInsert(SetMemoryB(0x6636B8+124,SetTo,29))
+	SetUnitsDat(125,300,nil,nil,nil,nil,nil,1500)
+	SetWeaponsDat(29,20*10,120)
+	PatchInsert(SetMemoryB(0x6616E0+124,SetTo,130)) -- 무기변경
+	PatchInsert(SetMemoryB(0x6636B8+124,SetTo,29)) -- 무기변경
 	SetUnitsDat(143,75*10,nil,nil,10,nil,nil,2500)
 	SetUnitsDat(146,50*10,nil,nil,10,nil,nil,2000)
-	PatchInsert(SetMemoryW(0x656EB0+(53 *2),SetTo,40*10)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(53 *2),SetTo,200)) -- 추가공격력
+	SetWeaponsDat(53,40*10,250)
 	SetUnitsDat(0,50*2,nil,nil,2,nil,nil,85)
-	PatchInsert(SetMemoryW(0x656EB0+(0 *2),SetTo,12)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(0 *2),SetTo,5)) -- 추가공격력
+	SetUnitsDat(1,50,75*2,nil,2,nil,nil,65)
+	SetWeaponsDat(0,35,12)
+	SetWeaponsDat(2,100,45)
 	SetUnitsDat(162,150*3,nil,nil,3,nil,nil,400,400)
-	PatchInsert(SetMemoryW(0x656EB0+(80 *2),SetTo,60)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(80 *2),SetTo,7)) -- 추가공격력
-	PatchInsert(SetMemoryW(0x656EB0+(81 *2),SetTo,60)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(81 *2),SetTo,7)) -- 추가공격력
+	SetWeaponsDat(81,95,37)
+	SetWeaponsDat(80,95,37)
+	SetUnitsDat(32,100,50,nil,2,nil,nil,540)
+	SetWeaponsDat(25,32,15)
+
+	SetUnitsDat(37,200,nil,nil,1,nil,nil,350)
+	SetWeaponsDat(35,50,41)
+
+
+
+
+
+
 	SetWepUpType(29,8)
 	SetWepUpType(53,11)
 	SetWepUpType(80,13)

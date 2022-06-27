@@ -37,9 +37,17 @@ function Var_init()
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 	KillW =CreateWar(FP)
 	
-	EXPArr = CreateArr(2500,FP)
-	for i = 1, 2500 do
-		table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i-1),SetTo,(i*3)*(6*i)))
+	if LD2XOption==0 then
+		EXPArr = CreateArr(2500,FP)
+		for i = 1, 2500 do
+			table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i-1),SetTo,(i*3)*(6*i)))
+		end
+	else
+		local EXPTable = {}
+		for i = 1, 2500 do
+			EXPTable[i]= (i*3)*(6*i)
+		end
+		EXPArr = f_GetFileArrptr(FP,EXPTable,4,1)
 	end
 
 	

@@ -11,10 +11,10 @@ function System()
 	CAdd(FP,Zcount,ZcountT[4])
 	CAdd(FP,Zcount,ZcountT[5])
 	DoActionsX(FP, {
-		CreateUnit(1,"Terran Beacon","T",FP),
-		CreateUnit(1,"Protoss Beacon","P",FP),
-		CreateUnit(1,"Zerg Beacon","Z",FP),
-		CreateUnitWithProperties(1,"Terran Civilian","Center",Force1,{invincible = true}),
+		CreateUnit(1,"Terran Beacon",3,FP),
+		CreateUnit(1,"Protoss Beacon",5,FP),
+		CreateUnit(1,"Zerg Beacon",4,FP),
+		CreateUnitWithProperties(1,"Terran Civilian",2,Force1,{invincible = true}),
 		SetCD(BCFlag,1),
 		SetCountdownTimer(SetTo, 210);
 	},1)
@@ -26,9 +26,9 @@ function System()
 	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
 	
 	for i = 0, 7 do
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","P")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", "Center", i)},{preserved})
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","T")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", "Center", i)},{preserved})
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian","Z")},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", "Center", i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
 	end
 	CIfEnd()
 	GameStart = CreateCcode()
