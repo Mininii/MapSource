@@ -4,7 +4,7 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\NewTestMap1\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-LD2XOption = 1
+LD2XOption = 0
 if LD2XOption == 1 then
 	MapFolder = "NewTestMap1"
 	Mapdir="C:\\euddraft0.9.2.0\\"..MapFolder
@@ -42,17 +42,22 @@ end
 --if EVFFlag == 1 then
 --	VerText = VerText.."T - EVF"
 --end
+	TestMode=0
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
-Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0)},{RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
-StartCtrig(1,FP,nil,1,"C:\\Temp")
+if LD2XOption == 1 then
+	StartCtrig(1,FP,nil,1,"C:\\Temp")
+else
+	StartCtrig(1)
+end
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Var_init()
+	Include_64BitLibrary(RandSwitch2)
 	Include_CtrigPlib(360,RandSwitch)
 	Include_Conv_CPosXY(FP,{4096,4096})
 	Include_CRandNum(FP)
@@ -62,12 +67,8 @@ CJump(AllPlayers,init_func)
 	--Install_CallTriggers()
 CJumpEnd(AllPlayers,init_func)
 init()
---DoActions2(FP,PatchArrPrsv)
---CIf(AllPlayers,ElapsedTime(AtLeast,3))
-	System()
-	--IBGM_EPDX(FP,3,Dt,nil,{12,14})
---CIfEnd()
-DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreandGas)})
+System()
+Interface()
 NoAirCollisionX(FP)
 --Enable_HideErrorMessage(FP)
 EndCtrig()
