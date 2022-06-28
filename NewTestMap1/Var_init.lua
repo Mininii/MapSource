@@ -36,6 +36,7 @@ function Var_init()
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",4)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 	KillW =CreateWar(FP)
+	LocalPlayerV=CreateVar(FP)
 	
 	if LD2XOption==0 then
 		EXPArr = CreateArr(2500,FP)

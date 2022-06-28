@@ -5,12 +5,14 @@ function Interface()
     local MinLoc = CreateVar(FP)
     local GasLoc = CreateVar(FP)
     local KillReadTemp = CreateVar(FP)
+    local IncomeT = CreateCcodeArr(7)
     for i = 0, 6 do
         local p = i+1
         table.insert(CtrigInitArr[8],SetV(MaxEXP[p],18))
         table.insert(CtrigInitArr[8],SetV(Minpsec[p],3000))
         table.insert(CtrigInitArr[8],SetV(Gaspsec[p],1500))
         CIf(FP,HumanCheck(i, 1))
+
 		for j=1, 5 do
 			CIf(FP,Kills(i,AtLeast,1,ZealotUIDArr[j][1]))
 				f_Read(FP, 0x5878A4+(ZealotUIDArr[j][1]*48)+(i*4), KillReadTemp)
@@ -36,9 +38,10 @@ function Interface()
                 f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP[p],nil,nil,1)
                 CAdd(FP,Level[p],1)
                 CAdd(FP,Pts[p],1)
+                CDoActions(FP,{TSetScore(i, SetTo, Level[p], Custom),SetCp(i),PlayWAV("staredit\\wav\\LevelUp.ogg"),SetCp(FP)})
             CIfEnd()
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],100),SubV(Pts[p],1)},{preserved})
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],50),SubV(Pts[p],1)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],100),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],50),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
             TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],100),AddV(Gaspsec[p],50),SubV(Pts[p],2)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             CMov(FP,CurExpLoc,CurExpTmp[p])
@@ -47,7 +50,9 @@ function Interface()
             CMov(FP,MinLoc,Minpsec[p])
             CMov(FP,GasLoc,Gaspsec[p])
             CIfEnd()
-
+            DoActionsX(FP,{AddCD(IncomeT[p],1)})
+            CTrigger(FP, {CD(IncomeT[p],24,AtLeast)},{TSetResources(i,Add,Minpsec[p],Ore),TSetResources(i,Add,Gaspsec[p],Gas),SubCD(IncomeT[p],24)},1)
+            TriggerX(FP,{Deaths(i,AtLeast,1,202)},{SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)},{preserved})
         CIfEnd()
     end
 
@@ -56,7 +61,7 @@ function Interface()
 function TEST() 
     local PlayerID = CAPrintPlayerID 
     --local Data = {{{0,9},{"０",{0x1000000}}}} 
-    CA__SetValue(Str1,"12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123 \x04Kills",nil,1)
+    CA__SetValue(Str1,"12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123 \x05Kills",nil,1)
     CA__lItoCustom(SVA1(Str1,0),KillW,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
     ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
     CA__InputVA(56*0,Str1,Str1s,nil,56*0,56*1-3)

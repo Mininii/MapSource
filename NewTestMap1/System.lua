@@ -1,6 +1,29 @@
 function System()
+	BGMTimer = CreateVar(FP)
+	BGMType = CreateVar(FP)
+	BGMOnOff=CreateCcode()
+	ObCcode1 = CreateCcode()
+	GameStart = CreateCcode()
+	CIfX(FP,{Memory(0x596A44, Exactly, 65536),CD(ObCcode1,0)})
+	CTrigger(FP,{CD(BGMOnOff,0),CD(ObCcode1,0)},{SetCD(BGMOnOff,1),SetCD(ObCcode1,1),
+	TSetMemory(0x6509B0,SetTo,LocalPlayerV),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04Turn \x08Off \x04BGM."),4),SetCp(FP)},1)
+	CTrigger(FP,{CD(BGMOnOff,1),CD(ObCcode1,0)},{SetCD(BGMOnOff,0),SetCD(ObCcode1,1),
+	TSetMemory(0x6509B0,SetTo,LocalPlayerV),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04Turn \x07On \x04BGM."),4),SetCp(FP)},1)
+	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
+	CElseX(SetCD(ObCcode1,0))
+	CIfXEnd()
+	DoActions(FP,{SetCp(FP)})
+
+
+	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,0)},{SetV(BGMType,1)},{preserved})
+	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,1)},{SetV(BGMType,0)},{preserved})
+
+	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}, BGMType, {
+		{1,"staredit\\wav\\BGMFile.ogg",0}
+	})
+	
 	Cast_UnitCount()
-	DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreandGas)},1)
+	DoActions(FP,ModifyUnitHangarCount(5, All, 83, Force1, 64))
 	for i = 1, 5 do
 	UnitReadX(FP, FP, ZealotUIDArr[i][1], 64, 	ZcountT[i])
 	end
@@ -20,18 +43,19 @@ function System()
 	},1)
 	
 	DoActions2X(FP, {
-		RotatePlayer({RunAIScript(P8VON)}, MapPlayers, FP);
-		RotatePlayer({DisplayTextX("\x13\x1F100 \x04Billion Zealots\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\n\x13\x04Please select your Race\n", 4),PlayWAVX("sound\\Protoss\\Advisor\\PAdUpd01.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP)
+		RotatePlayer({RunAIScript(P8VON),
+		SetMissionObjectivesX("\x13\x07Delete \x04Key : \x04BGM \x07On\x04/\08Off\x13\x07All \x04Unit \x0FLoad \x04Bunker(\x08Terran Only\x04) : \x07F12 \x04Key");
+	}, MapPlayers, FP);
+		RotatePlayer({DisplayTextX("\x13\x1F100 \x04Billion Zealots\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\x13\x04Please select your Race\n\x13\x04And \x07PLEASE READ \x04Mission Objectives (F10 + J)", 4),PlayWAVX("sound\\Protoss\\Advisor\\PAdUpd01.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP)
 	}, 1)
 	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
 	
 	for i = 0, 7 do
 		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
 		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
 	end
 	CIfEnd()
-	GameStart = CreateCcode()
 	TriggerX(FP,{CountdownTimer(AtMost, 1)},{SetCD(BCFlag,0),SetCD(GameStart,1)})
 	TriggerX(FP, {CountdownTimer(AtMost, 200),Bring(Force1,AtMost,0,"Terran Civilian",64)},{SetCD(BCFlag,0)})
 	TriggerX(FP,{CD(BCFlag,0)},{
@@ -76,7 +100,7 @@ function System()
 	ZSVar2=CreateVar(FP)
 	ZSVar3=CreateVar(FP)
 	ZSVar = CreateVar(FP)
-	Waves = {1,2,5,10,20,30,50,100,120,130,150,200,300,500,1000,1200,2000,3000,5000,8000,10000,13800,27600,56900,130000,280000,870000,1900000,2890000,5000000,10000000}
+	Waves = {10,20,30,50,100,120,130,150,200,300,500,1000,1200,2000,3000,5000,8000,10000,13800,27600,56900,130000,280000,870000,1900000,2890000,5000000,10000000}
 	for j, k in pairs(Waves) do
 		Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(90*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..(k*24).." Zealot/s",4)}, HumanPlayers, FP)})
 	end
@@ -84,13 +108,16 @@ function System()
 	TriggerX(FP,{CV(ZSVar2,100000000,AtLeast)},{AddV(ZSVar3,1),SubV(ZSVar2, 100000000)},{preserved})
 --	Call_CA_Effect = SetCallForward()
 	if TestMode == 1 then
-		DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
-		CreateUnit(1,ZealotUIDArr[1][1],1,FP),
-		CreateUnit(1,ZealotUIDArr[2][1],1,FP),
-		CreateUnit(1,ZealotUIDArr[3][1],1,FP),
-		CreateUnit(1,ZealotUIDArr[4][1],1,FP),
-		CreateUnit(1,ZealotUIDArr[5][1],1,FP),
-	},1)
+		
+		--f_LMov(FP,KillW,_LAdd(KillW,"1000000000"))
+		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas)},1)
+	--	DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
+	--	CreateUnit(1,ZealotUIDArr[1][1],1,FP),
+	--	CreateUnit(1,ZealotUIDArr[2][1],1,FP),
+	--	CreateUnit(1,ZealotUIDArr[3][1],1,FP),
+	--	CreateUnit(1,ZealotUIDArr[4][1],1,FP),
+	--	CreateUnit(1,ZealotUIDArr[5][1],1,FP),
+	--},1)
 		
 	end
 NextPoint= CreateVarArr(5, FP)
@@ -209,9 +236,10 @@ NextPoint= CreateVarArr(5, FP)
 WinCD=CreateCcode()
 CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"100000000000")},{
 	SetCD(WinCD,1);
+	KillUnit("Any unit",FP);
 })
 Trigger2X(FP,{CD(WinCD,1)},{
-	RotatePlayer({DisplayTextX("\x13\x04You Are \x1F100 \x04Billion Zealots \x08SLAYER\n\n\x13\x08C \x0EO \x1FN \x11G \x1DR \x1BA \x17T \x16U \x18L \x10A \x0FT \x1CI \x04O \x07N\n\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n", 4),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP);
+	RotatePlayer({DisplayTextX("\x13\x04You Are \x1F100 \x04Billion Zealots \x08SLAYER\n\n\x13\x08C \x0EO \x1FN \x11G \x1DR \x1BA \x17T \x16U \x18L \x10A \x0FT \x1CI \x04O \x07N \x0BS\n\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n", 4),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP);
 	RotatePlayer({Victory()}, MapPlayers, FP);
 })
 end
