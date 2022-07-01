@@ -237,6 +237,11 @@ function SetWeaponsDatX(WepID,Property)
 			elseif j=="UpgradeType" then
 				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
 
+			elseif j=="ObjectNum" then
+				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- 투사체수
+				
+			elseif j=="IconType" then
+				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- 아이콘
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -377,7 +382,20 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x6636B8+UnitID,SetTo,k))
 			elseif j=="SpaceProv"  then
 				PatchInsert(SetMemoryB(0x660988+(UnitID*1),SetTo,k))
-				
+			elseif j=="SpaceReq"  then
+			PatchInsert(SetMemoryB(0x664410+(UnitID*1),SetTo,k))
+			elseif j=="RClickAct" then
+				PatchInsert(SetMemoryB(0x662098+UnitID,SetTo,k))--RClickAct
+			elseif j=="HumanInitAct" then
+				PatchInsert(SetMemoryB(0x662268+UnitID,SetTo,k))--HumanInitAct
+			elseif j=="ComputerInitAct" then
+				PatchInsert(SetMemoryB(0x662EA0+UnitID,SetTo,k))--ComputerInitAct
+			elseif j=="AttackOrder" then
+				PatchInsert(SetMemoryB(0x663320+UnitID,SetTo,k))--AttackOrder
+			elseif j=="AttackMoveOrder" then
+				PatchInsert(SetMemoryB(0x663A50+UnitID,SetTo,k))--AttackMoveOrder
+			elseif j=="IdleOrder" then
+				PatchInsert(SetMemoryB(0x664898+UnitID,SetTo,k))--IdleOrder
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end

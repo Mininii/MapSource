@@ -12,7 +12,15 @@ function System()
 	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
 	CElseX(SetCD(ObCcode1,0))
 	CIfXEnd()
-	DoActions(FP,{SetCp(FP)})
+	DoActions(FP,{SetCp(FP),
+	RunAIScript(P1VON),
+	RunAIScript(P2VON),
+	RunAIScript(P3VON),
+	RunAIScript(P4VON),
+	RunAIScript(P5VON),
+	RunAIScript(P6VON),
+	RunAIScript(P7VON),
+})
 
 
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,0)},{SetV(BGMType,1)},{preserved})
@@ -64,7 +72,18 @@ function System()
 		RemoveUnit("Protoss Beacon", FP),
 		RemoveUnit("Terran Civilian", AllPlayers)})
 	
-	DoActions(FP, {RemoveUnit(204, FP),RemoveUnit("Any unit", P12),ModifyUnitShields(All, "Men", FP, 64, 100)})
+	DoActions(FP, {RemoveUnit(204, FP),RemoveUnit("Any unit", P12),
+	--ModifyUnitShields(All, ZealotUIDArr[1][1], FP, 64, 100),
+	--ModifyUnitShields(All, ZealotUIDArr[2][1], FP, 64, 100),
+	--ModifyUnitShields(All, ZealotUIDArr[3][1], FP, 64, 100),
+	--ModifyUnitShields(All, ZealotUIDArr[4][1], FP, 64, 100),
+	--ModifyUnitShields(All, ZealotUIDArr[5][1], FP, 64, 100),
+	SetInvincibility(Disable, ZealotUIDArr[1][1], FP, 64),
+	SetInvincibility(Disable, ZealotUIDArr[2][1], FP, 64),
+	SetInvincibility(Disable, ZealotUIDArr[3][1], FP, 64),
+	SetInvincibility(Disable, ZealotUIDArr[4][1], FP, 64),
+	SetInvincibility(Disable, ZealotUIDArr[5][1], FP, 64),
+})
 
 	
 	function CA_3DAcc(Time,Type,XY,YZ,ZX)
@@ -100,9 +119,9 @@ function System()
 	ZSVar2=CreateVar(FP)
 	ZSVar3=CreateVar(FP)
 	ZSVar = CreateVar(FP)
-	Waves = {10,20,30,50,100,120,130,150,200,300,500,1000,1200,2000,3000,5000,8000,10000,13800,27600,56900,130000,280000,870000,1900000,2890000,5000000,10000000}
+	Waves = {10,20,30,50,100,350,700,1400,2800,5600,13000,19000,28000,46000,80000,175000,280000,400000,730000,1000000,1600000,2700000,3800000,5000000,6790000,8500000,13800000,20000000,29000000,35600000,50000000,66666666,78000000,100000000,127650000,200150000,376800000,500000000,695600000,832479000,1000000000}
 	for j, k in pairs(Waves) do
-		Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(90*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..(k*24).." Zealot/s",4)}, HumanPlayers, FP)})
+		Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(35*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..(k*24).." Zealot/s",4)}, HumanPlayers, FP)})
 	end
 	CTrigger(FP,{CD(GameStart,1)},{AddV(ZSVar2,ZSVar)},1)
 	TriggerX(FP,{CV(ZSVar2,100000000,AtLeast)},{AddV(ZSVar3,1),SubV(ZSVar2, 100000000)},{preserved})

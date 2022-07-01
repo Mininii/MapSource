@@ -4,7 +4,7 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\NewTestMap1\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-LD2XOption = 0
+LD2XOption = 1
 if LD2XOption == 1 then
 	MapFolder = "NewTestMap1"
 	Mapdir="C:\\euddraft0.9.2.0\\"..MapFolder

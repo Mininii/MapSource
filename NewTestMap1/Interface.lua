@@ -9,8 +9,8 @@ function Interface()
     for i = 0, 6 do
         local p = i+1
         table.insert(CtrigInitArr[8],SetV(MaxEXP[p],18))
-        table.insert(CtrigInitArr[8],SetV(Minpsec[p],3000))
-        table.insert(CtrigInitArr[8],SetV(Gaspsec[p],1500))
+        table.insert(CtrigInitArr[8],SetV(Minpsec[p],1700))
+        table.insert(CtrigInitArr[8],SetV(Gaspsec[p],800))
         CIf(FP,HumanCheck(i, 1))
 
 		for j=1, 5 do
@@ -34,8 +34,12 @@ function Interface()
 
             CIf(FP,{CV(CurExpTmp[p],1000,AtLeast),CV(Level[p],2499,AtMost)},{SubV(CurExpTmp[p],1000)})
                 CSub(FP,CurEXP[p],MaxEXP[p])
-                ConvertArr(FP,ArrI,Level[p])
-                f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP[p],nil,nil,1)
+                if LD2XOption==0 then
+                    ConvertArr(FP,ArrI,Level[p])
+                    f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP[p],nil,nil,1)
+                else
+                    f_Read(FP,FArr(EXPArr,Level[p]),MaxEXP[p],nil,nil,1)
+                end
                 CAdd(FP,Level[p],1)
                 CAdd(FP,Pts[p],1)
                 CDoActions(FP,{TSetScore(i, SetTo, Level[p], Custom),SetCp(i),PlayWAV("staredit\\wav\\LevelUp.ogg"),SetCp(FP)})
