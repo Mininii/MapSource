@@ -85,6 +85,32 @@ function System()
 	SetInvincibility(Disable, ZealotUIDArr[5][1], FP, 64),
 })
 
+
+CunitCtrig_Part1(FP)
+
+for j,k in pairs(HeroArr) do
+	
+TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{
+	SetMemory(0x6509B0, Subtract, 4),
+	SetDeaths(CurrentPlayer,SetTo,0,0),
+	SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+	SetMemory(0x6509B0, Add, 4)
+},{preserved})
+end
+
+
+
+ClearCalc()
+CunitCtrig_Part2()
+CunitCtrig_Part3X()
+for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+CunitCtrig_Part4X(i,{
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
+	DeathsX(EPDF(0x628298-0x150*i+(0x54/4)),AtLeast,1*256,0,0xFF00),
+},
+{MoveCp(Add,25*4)})
+end
+CunitCtrig_End()
 	
 	function CA_3DAcc(Time,Type,XY,YZ,ZX)
 		TriggerX(FP,{CV(CA_Eff_Rat,Time,Type)},{
