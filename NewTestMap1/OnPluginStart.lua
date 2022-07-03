@@ -32,6 +32,7 @@ function init()
 	UpMaxArr = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,35}
 	for j, k in pairs(UpMaxArr) do
 		SetUpgradeMax(k,255)
+		SetUpgradeInit(k,3)
 	end
 
 	function TechAvailable(Player,TechID,Type)
@@ -40,7 +41,6 @@ function init()
 		else
 			PatchInsert(SetMemory(0x58F050+(Player*20)+ TechID-24,SetTo,Type))--BW Tech 24~43
 		end
-		
 	end
 	
 	
@@ -54,10 +54,10 @@ function init()
 		--모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
 	end
 
-	for j,k in pairs({85,144,84,108,159,47,63,47}) do -- 비사용 유닛
+	for j,k in pairs({85,144,84,108,159,47,47}) do -- 비사용 유닛
 		SetUnitsDatX(k, {Playerable=false})
 	end
-	for j, k in pairs({1,12,14,27,28,29,}) do -- 비사용 마법
+	for j, k in pairs({1,12,14,28,29,}) do -- 비사용 마법
 		for i = 0, 6 do
 			TechAvailable(i,k,0)
 		end
@@ -161,6 +161,8 @@ function init()
 	SetUnitsDatX(195, {BdDimX=1,BdDimY=1})--비콘
 	SetUnitsDatX(196, {BdDimX=1,BdDimY=1})--비콘
 
+
+	HeroArr={}
 
 
 	SetZealotUnit(89,20,30,117,8,nil,1400,0) -- 1

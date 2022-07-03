@@ -199,7 +199,12 @@ end
 
 
 
-
+function SetWeaponGrp(WepID,FlingyID,SpriteID,ImageID,IscriptID)
+	PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,FlingyID))
+	PatchInsert(SetMemoryW(0x6CA318+(WepID *2),SetTo,SpriteID))
+	PatchInsert(SetMemoryW(0x666160+(SpriteID*2),SetTo,ImageID))
+	PatchInsert(SetMemory(0x66EC48+(ImageID*4),SetTo,IscriptID))
+end
 --DatEdit
 
 function SetWeaponsDatX(WepID,Property)
@@ -236,12 +241,24 @@ function SetWeaponsDatX(WepID,Property)
 				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
 			elseif j=="UpgradeType" then
 				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
-
 			elseif j=="ObjectNum" then
 				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- 투사체수
-				
 			elseif j=="IconType" then
 				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- 아이콘
+			elseif j== "Behavior" then
+				PatchInsert(SetMemoryB(0x656670+WepID,SetTo,k))
+			elseif j== "LaunchX" then
+				PatchInsert(SetMemoryB(0x657910+WepID,SetTo,k))
+			elseif j== "LaunchY" then
+				PatchInsert(SetMemoryB(0x656C20+WepID,SetTo,k))
+			elseif j== "LaunchSpin" then
+				PatchInsert(SetMemoryB(0x657888+WepID,SetTo,k))
+			elseif j== "AttackAngle" then
+				PatchInsert(SetMemoryB(0x656990+WepID,SetTo,k))
+			elseif j== "RemoveAfter" then
+				PatchInsert(SetMemoryB(0x657040+WepID,SetTo,k))
+			elseif j== "FlingyID" then
+				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -306,6 +323,7 @@ function SetUnitsDatX(UnitID,Property)
 	if type(UnitID) == "string" then
 		UnitID = ParseUnit(UnitID) -- 스트링으로 유닛이름 입력가능
 	end
+	if UnitID>=228 then PushErrorMsg("UnitID Index Overflow") end
 	if type(Property)~= "table" then
 		PushErrorMsg("Property Inputdata Error")
 	else
@@ -396,6 +414,24 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x663A50+UnitID,SetTo,k))--AttackMoveOrder
 			elseif j=="IdleOrder" then
 				PatchInsert(SetMemoryB(0x664898+UnitID,SetTo,k))--IdleOrder
+			elseif j=="RdySnd" then
+				PatchInsert(SetMemoryW(0x661FC0+(UnitID*2),SetTo,k))
+			elseif j=="WhatSndInit" then
+				PatchInsert(SetMemoryW(0x662BF0+(UnitID*2),SetTo,k))
+			elseif j=="WhatSndEnd" then
+				PatchInsert(SetMemoryW(0x65FFB0+(UnitID*2),SetTo,k))
+			elseif j=="YesInit" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x663C10+(UnitID*2),SetTo,k))
+			elseif j=="YesEnd" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x661440+(UnitID*2),SetTo,k))
+			elseif j=="PissedInit" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x663B38+(UnitID*2),SetTo,k))
+			elseif j=="PissedEnd" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x661EE8+(UnitID*2),SetTo,k))
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -420,7 +456,17 @@ function SetUpgradeMax(Upgrade,Value)
 	PatchInsert(SetMemoryB(0x58D088+(Upgrade)+(46*5),SetTo,Value)) -- 최대업글렙
 	PatchInsert(SetMemoryB(0x58D088+(Upgrade)+(46*6),SetTo,Value)) -- 최대업글렙
 	PatchInsert(SetMemoryB(0x58D088+(Upgrade)+(46*7),SetTo,Value)) -- 최대업글렙
-	
+end
+
+function SetUpgradeInit(Upgrade,Value)
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*0),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*1),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*2),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*3),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*4),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*5),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*6),SetTo,Value)) -- 최대업글렙
+	PatchInsert(SetMemoryB(0x58D2B0+(Upgrade)+(46*7),SetTo,Value)) -- 최대업글렙
 end
 
 
