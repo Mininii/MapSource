@@ -42,7 +42,7 @@ end
 --if EVFFlag == 1 then
 --	VerText = VerText.."T - EVF"
 --end
-	TestMode=1
+	TestMode=0
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
@@ -64,7 +64,7 @@ CJump(AllPlayers,init_func)
 	Install_GetCLoc(FP,0,nilunit)
 	Install_BackupCP(FP)
 	Install_UnitCount(FP)
-	--Install_CallTriggers()
+	Install_CallTriggers()
 CJumpEnd(AllPlayers,init_func)
 init()
 System()

@@ -98,7 +98,6 @@ function init()
 	SetUnitsDatX("Zerg Creep Colony", {MinCost=75*10,SuppCost=10,HP=2500})
 	SetUnitsDatX("Zerg Sunken Colony", {MinCost=50*10,SuppCost=10,HP=2000})
 	SetWeaponsDatX(53, {DmgBase=40*10,DmgFactor=250,UpgradeType=11}) -- Zerg Sunken Colony
-	SetUnitsDatX("Terran Marine", {HP=95,MinCost=50*2,SuppCost=2}) 
 	SetWeaponsDatX(0, {DmgBase=35,DmgFactor=30}) --Terran Marine
 	SetUnitsDatX("Terran Firebat", {MinCost=100,GasCost=50,SuppCost=2,HP=540})
 	SetWeaponsDatX(25, {DmgBase=32,DmgFactor=25}) -- Terran Firebat
@@ -179,6 +178,9 @@ function init()
 	DoActions2(FP,PatchArr,1)
 	DoActions2(AllPlayers,PatchArrPrsv)
 	CIfOnce(FP)
+	for j,k in pairs({0,1,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,27,28,29,30,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,9,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,86,87,88,97,98,99,100,102,103,104}) do
+		CallTrigger(FP,Call_UnitSizePatch,{SetV(UIndex,k*2)})
+	end
 	f_Read(FP, 0x512684, LocalPlayerV)
 	CIfEnd()
 end

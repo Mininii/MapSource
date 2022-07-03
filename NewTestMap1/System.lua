@@ -27,7 +27,7 @@ function System()
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,1)},{SetV(BGMType,0)},{preserved})
 
 	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}, BGMType, {
-		{1,"staredit\\wav\\BGMFile.ogg",0}
+		{1,"staredit\\wav\\BGMFile.ogg",165*1000}
 	})
 	
 	Cast_UnitCount()
@@ -72,7 +72,7 @@ function System()
 		RemoveUnit("Protoss Beacon", FP),
 		RemoveUnit("Terran Civilian", AllPlayers)})
 	
-	DoActions(FP, {RemoveUnit(204, FP),RemoveUnit("Any unit", P12),
+	DoActions(FP, {RemoveUnit(204, FP),KillUnit("Any unit", P12),
 	--ModifyUnitShields(All, ZealotUIDArr[1][1], FP, 64, 100),
 	--ModifyUnitShields(All, ZealotUIDArr[2][1], FP, 64, 100),
 	--ModifyUnitShields(All, ZealotUIDArr[3][1], FP, 64, 100),
@@ -110,7 +110,6 @@ function System()
 	CA_3DAcc(186000+138000,AtLeast,10,1,1)
 	CA_Eff_Mode = CreateCcode()
 	GameTime = CreateCcode()
-	CMov(FP,0x57f120,CA_Eff_Rat)
 	TriggerX(FP,{CD(CA_Eff_Mode,1),CV(CA_Eff_Rat,80000,AtMost)},{SetCD(CA_Eff_Mode,0)},{preserved})
 	TriggerX(FP,{CD(CA_Eff_Mode,0),CV(CA_Eff_Rat,372000,AtLeast)},{SetCD(CA_Eff_Mode,1)},{preserved})
 	TriggerX(FP,{CD(CA_Eff_Mode,1),CD(GameStart,1)},{SubV(CA_Eff_Rat,120)},{preserved})
@@ -128,6 +127,7 @@ function System()
 --	Call_CA_Effect = SetCallForward()
 	if TestMode == 1 then
 		
+	CMov(FP,0x57f120,CA_Eff_Rat)
 		--f_LMov(FP,KillW,_LAdd(KillW,"1000000000"))
 		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas)},1)
 	--	DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
