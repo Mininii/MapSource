@@ -144,9 +144,13 @@ function init()
 	SetUnitsDatX("Zerg Defiler", {GroundWeapon=50})
 	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=25,TargetFlag=0x020 + 1 + 2,Splash={10,15,20}}) -- Zerg Defiler
 	SetWeaponsDatX(39, {DmgBase=125,DmgFactor=170}) -- Zerg Ultralisk
+
+	
 	
 
 
+	SetUnitsDatX(20, {Reqptr=2,isHero=true,RdySnd=421,HP=350,Shield=250,MinCost=10000,GasCost=5000,SuppCost=6})
+	SetWeaponsDatX(1, {Cooldown=1,DmgBase=1250,DmgFactor=65,ObjectNum=2}) -- Jim Raynor
 
 
 
@@ -162,7 +166,6 @@ function init()
 	SetUnitsDatX(196, {BdDimX=1,BdDimY=1})--ºñÄÜ
 
 
-	HeroArr={}
 
 
 	SetZealotUnit(89,20,30,117,8,nil,1400,0) -- 1
@@ -180,7 +183,46 @@ function init()
 	DoActions2(FP,PatchArr,1)
 	DoActions2(AllPlayers,PatchArrPrsv)
 	CIfOnce(FP)
-	for j,k in pairs({0,1,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,27,28,29,30,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,9,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,86,87,88,97,98,99,100,102,103,104}) do
+	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
+	CDoActions(FP, {
+		TSetMemory(0x5187EC, SetTo, FArr(btnptr0,0)),
+		TSetMemory(0x5187E8, SetTo, 6),
+		TSetMemory(0x518990, SetTo, FArr(btnptr35,0)),
+		TSetMemory(0x51898C, SetTo, 9),
+		TSetMemory(0x518AC8, SetTo, FArr(btnptr61,0)),
+		TSetMemory(0x518AC4, SetTo, 5),
+		TSetMemory(0x518B40, SetTo, FArr(btnptr71,0)),
+		TSetMemory(0x518B3C, SetTo, 6),
+		TSetMemory(0x518BB8, SetTo, FArr(btnptr81,0)),
+		TSetMemory(0x518BB4, SetTo, 6),
+		TSetMemory(0x518D20, SetTo, FArr(btnptr111,0)),
+		TSetMemory(0x518D1C, SetTo, 14),
+		TSetMemory(0x518D38, SetTo, FArr(btnptr113,0)),
+		TSetMemory(0x518D34, SetTo, 15),
+		TSetMemory(0x518D44, SetTo, FArr(btnptr114,0)),
+		TSetMemory(0x518D40, SetTo, 15),
+		TSetMemory(0x518E40, SetTo, FArr(btnptr135,0)),
+		TSetMemory(0x518E3C, SetTo, 6),
+		TSetMemory(0x518E4C, SetTo, FArr(btnptr136,0)),
+		TSetMemory(0x518E48, SetTo, 6),
+		TSetMemory(0x518E58, SetTo, FArr(btnptr137,0)),
+		TSetMemory(0x518E54, SetTo, 5),
+		TSetMemory(0x518E64, SetTo, FArr(btnptr138,0)),
+		TSetMemory(0x518E60, SetTo, 6),
+		TSetMemory(0x518E7C, SetTo, FArr(btnptr140,0)),
+		TSetMemory(0x518E78, SetTo, 4),
+		TSetMemory(0x518E88, SetTo, FArr(btnptr141,0)),
+		TSetMemory(0x518E84, SetTo, 5),
+		TSetMemory(0x518E94, SetTo, FArr(btnptr142,0)),
+		TSetMemory(0x518E90, SetTo, 4),
+		TSetMemory(0x518F30, SetTo, FArr(btnptr155,0)),
+		TSetMemory(0x518F2C, SetTo, 7),
+		TSetMemory(0x518F6C, SetTo, FArr(btnptr160,0)),
+		TSetMemory(0x518F68, SetTo, 10),
+		TSetMemory(0x518FC0, SetTo, FArr(btnptr167,0)),
+		TSetMemory(0x518FBC, SetTo, 8)
+	})
+	for j,k in pairs({0,1,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,27,28,29,30,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,86,87,88,97,98,99,100,102,103,104}) do
 		CallTrigger(FP,Call_UnitSizePatch,{SetV(UIndex,k*2)})
 	end
 	f_Read(FP, 0x512684, LocalPlayerV)

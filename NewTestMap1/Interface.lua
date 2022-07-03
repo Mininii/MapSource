@@ -46,7 +46,7 @@ function Interface()
             CIfEnd()
             TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],100),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
             TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],50),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
-            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],100),AddV(Gaspsec[p],50),SubV(Pts[p],2)},{preserved})
+            TriggerX(FP,{CV(Pts[p],20,AtLeast)},{AddV(Minpsec[p],100),AddV(Gaspsec[p],50),SubV(Pts[p],2)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             CMov(FP,CurExpLoc,CurExpTmp[p])
             CMov(FP,LVLoc,Level[p])

@@ -87,7 +87,7 @@ function System()
 
 
 CunitCtrig_Part1(FP)
-
+HeroShieldArr={}
 for j,k in pairs(HeroArr) do
 	
 TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{
@@ -96,6 +96,7 @@ TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{
 	SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 	SetMemory(0x6509B0, Add, 4)
 },{preserved})
+table.insert(HeroShieldArr,ModifyUnitShields(All, k, Force1, 64, 100))
 end
 
 
@@ -277,7 +278,7 @@ NextPoint= CreateVarArr(5, FP)
 			CIfEnd()
 		end
 	
-
+DoActions(FP,HeroShieldArr)
 WinCD=CreateCcode()
 CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"100000000000")},{
 	SetCD(WinCD,1);

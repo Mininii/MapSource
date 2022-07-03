@@ -432,6 +432,16 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="PissedEnd" then
 				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
 				PatchInsert(SetMemoryW(0x661EE8+(UnitID*2),SetTo,k))
+			elseif j=="isHero" then
+				if type(k)=="boolean" then
+					if k==true then
+						table.insert(HeroArr,UnitID)
+					end
+				else
+					PushErrorMsg("isHero TypeError")
+				end
+			elseif j=="Reqptr" then
+				PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
