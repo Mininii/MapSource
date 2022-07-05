@@ -201,7 +201,7 @@ end
 
 function SetWeaponGrp(WepID,FlingyID,SpriteID,ImageID,IscriptID)
 	PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,FlingyID))
-	PatchInsert(SetMemoryW(0x6CA318+(WepID *2),SetTo,SpriteID))
+	PatchInsert(SetMemoryW(0x6CA318+(FlingyID *2),SetTo,SpriteID))
 	PatchInsert(SetMemoryW(0x666160+(SpriteID*2),SetTo,ImageID))
 	PatchInsert(SetMemory(0x66EC48+(ImageID*4),SetTo,IscriptID))
 end
@@ -259,6 +259,9 @@ function SetWeaponsDatX(WepID,Property)
 				PatchInsert(SetMemoryB(0x657040+WepID,SetTo,k))
 			elseif j== "FlingyID" then
 				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
+				
+			elseif j== "WepName" then
+				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- 이름
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -306,7 +309,7 @@ function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,C
 	PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,283)) -- 이름
 	PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,353)) -- 아이콘
 	PatchInsert(SetMemoryB(0x656670+WepID,SetTo,5)) -- 공격유닛에서나옴
-	PatchInsert(SetMemoryB(0x656FB8+WepID,SetTo,30)) -- 공속
+	PatchInsert(SetMemoryB(0x656FB8+WepID,SetTo,1)) -- 공속
 	PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,2)) -- 투사체수
 	table.insert(ZealotUIDArr,{UnitID,HighSpeed,Color})
 end
@@ -442,6 +445,8 @@ function SetUnitsDatX(UnitID,Property)
 				end
 			elseif j=="Reqptr" then
 				PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
+			elseif j== "SeekRange" then
+				PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,k)) -- SeekRange
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -542,4 +547,18 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			}
 		end
 	CIfXEnd()
+end
+
+function UnitLimit(Player,UID,Limit)
+	Trigger {
+		players = {Player},
+		conditions = {
+			Bring(Player,AtLeast,Limit+1,UID,64);
+			},
+		
+		actions = {
+			KillUnitAt(1,UID,"Anywhere",Player);
+			PreserveTrigger();
+		},
+	}
 end
