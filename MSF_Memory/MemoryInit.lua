@@ -23,12 +23,12 @@ end
 function HeroSpawnSetForBYD(Player,Level,UnitID1,UnitID2,Sw1,Sw2,BYDOutPut)
 	local Sw1Status1 = Sw1
 	local Sw1Status2 = Sw2
-	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,Level*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+1)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status1)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID1)}, {Preserved})
-	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,Level*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+1)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {Preserved})
+	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,Level*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+1)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status1)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID1)}, {preserved})
+	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,Level*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+1)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {preserved})
 	local Sw1Status1 = Sw2
 	local Sw1Status2 = Sw1
-	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status1)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID1)}, {Preserved})
-	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {Preserved})
+	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status1)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID1)}, {preserved})
+	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {preserved})
 end
 
 function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag)
@@ -368,7 +368,7 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 	CIf(PlayerID,CVar("X",CA[1],AtLeast,1))
 		if type(Shape[1]) ~= "number" then
 			for i = 1, #Shape do
-				Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
+				Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{preserved})
 			end
 		else
 			DoActions2X(PlayerID,TempAct)
@@ -431,9 +431,9 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 	DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 	if Preserve ~= nil then
 		if type(Preserve) == "number" then
-			CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{Preserved})
+			CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{preserved})
 		else
-			CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{Preserved})
+			CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{preserved})
 		end
 	end
 	local Ret = {CA[1],CA[2],CA[3],CA[4],CA[5],CA[6],CB[1],CB[2],CB[3]}

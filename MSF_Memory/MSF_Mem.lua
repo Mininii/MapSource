@@ -482,7 +482,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 						PreserveTrigger();
 					},
 				}
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 
 				f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
@@ -503,7 +503,7 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 						PreserveTrigger();
 					},
 				}
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 				f_Memcpy(P6,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
 				Call_LoadCp()
 			CIfEnd()
@@ -899,12 +899,12 @@ SetCall(FP)
 CMov(FP,ColorRandom,0)
 for i = 0, 7 do
 	DoActions(FP,SetSwitch("Switch 100",Random))
-	TriggerX(FP,{Switch("Switch 100",Set)},{SetCVar(FP,RangeValue[2],Add,((2^i)*256))},{Preserved})
+	TriggerX(FP,{Switch("Switch 100",Set)},{SetCVar(FP,RangeValue[2],Add,((2^i)*256))},{preserved})
 end
 
 for i = 0, 1 do
 	DoActions(FP,SetSwitch("Switch 100",Random))
-	TriggerX(FP,{Switch("Switch 100",Set)},{SetCVar(FP,ColorRandom[2],Add,(2^i))},{Preserved})
+	TriggerX(FP,{Switch("Switch 100",Set)},{SetCVar(FP,ColorRandom[2],Add,(2^i))},{preserved})
 end
 
 CDoActions(FP,{TSetMemoryX(0x6570C0, SetTo, RangeValue,0xFF00)})
@@ -912,7 +912,7 @@ CDoActions(FP,{TSetMemoryX(0x6570C0, SetTo, RangeValue,0xFF00)})
 ColorTable = {9,10,13,16}
 for i = 0, 3 do
 	
-TriggerX(FP,{CVar(FP,ColorRandom[2],Exactly,i)},{SetMemoryX(0x66A1F8, SetTo, ColorTable[i+1]*256,0xFF00)},{Preserved})
+TriggerX(FP,{CVar(FP,ColorRandom[2],Exactly,i)},{SetMemoryX(0x66A1F8, SetTo, ColorTable[i+1]*256,0xFF00)},{preserved})
 end
 
 SetCallEnd()
@@ -1520,7 +1520,7 @@ CIfX(P6,{CVar(FP,B2_H[2],AtLeast,1)})
 						CIfXEnd()
 					CIfXEnd()
 					CMul(P6,B2_SH,_Add(_Mod(_Rand(),200),50),256)
-					TriggerX(FP,{BYD,CVar(FP,B2_P2[2],Exactly,1)},{SetMemoryX(0x669E9C,SetTo,16,0xFF)},{Preserved})
+					TriggerX(FP,{BYD,CVar(FP,B2_P2[2],Exactly,1)},{SetMemoryX(0x669E9C,SetTo,16,0xFF)},{preserved})
 					CDoActions(P6,{
 						MoveLocation(24,87,P6,"Anywhere"),
 						CreateUnit(1,180,24,P6),
@@ -1633,8 +1633,8 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 
 
 	DoActions(FP,RotatePlayer({RunAIScript("Turn OFF Shared Vision for Player 6")},MapPlayers,FP))
-	Trigger2(P6, {Command(P6,AtMost,49,"【 Darkness 】")}, {SetInvincibility(Disable,74,P6,"Anywhere")}, {Preserved})
-	Trigger2(P6, {Command(P6,AtLeast,50,"【 Darkness 】")}, {SetInvincibility(Enable,74,P6,"Anywhere")}, {Preserved})
+	Trigger2(P6, {Command(P6,AtMost,49,"【 Darkness 】")}, {SetInvincibility(Disable,74,P6,"Anywhere")}, {preserved})
+	Trigger2(P6, {Command(P6,AtLeast,50,"【 Darkness 】")}, {SetInvincibility(Enable,74,P6,"Anywhere")}, {preserved})
 	CIf(P6,FTRBYD)
 		DoActions(P6,{
 			Simple_SetLoc(23,0,0,0,0),
@@ -1678,7 +1678,7 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+25 + (84*1699)))
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,214,0,0xFF))
 			DoActions(P6,{MoveCp(Subtract,23*4),SetDeaths(CurrentPlayer,Subtract,1*256,0)})
-			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{MoveCp(Add,23*4),SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF),MoveCp(Subtract,23*4)},{Preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{MoveCp(Add,23*4),SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF),MoveCp(Subtract,23*4)},{preserved})
 			DoActions(P6,{MoveCp(Add,23*4)})
 		CIfEnd()
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,33,0,0xFF))
@@ -1687,7 +1687,7 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 				DoActions(P6,{MoveCp(Add,50*4)})
 				CIf(P6,DeathsX(CurrentPlayer,AtMost,0,0,0xFF00))
 					DoActions(P6,{SetDeathsX(CurrentPlayer,SetTo,6*256,0,0xFF00)})
-					Trigger2(FP,{BYD},{SetDeathsX(CurrentPlayer,SetTo,9*256,0,0xFF00)},{Preserved})
+					Trigger2(FP,{BYD},{SetDeathsX(CurrentPlayer,SetTo,9*256,0,0xFF00)},{preserved})
 					CIf(P6,FTRBYD)
 						DoActions(P6,MoveCp(Subtract,59*4))
 						Call_SaveCp()
@@ -1833,8 +1833,8 @@ CIfX(P6,{Command(P6,AtLeast,1,2),CVar(FP,B5_H[2],AtLeast,1)})
 	CSub(P6,B5_T,1)
 	CIf(P6,Deaths(P7,AtLeast,1,"【 Anomaly 】"))
 	DoActionsP({MoveLocation(24,"【 Anomaly 】",P6,"Anywhere")},P6)
-	Trigger2(FP,NBYD,{SetMemory(0x66239C,SetTo,768000000)},{Preserved})
-	Trigger2(FP,BYD,{SetMemory(0x66239C,SetTo,8320000*256)},{Preserved})
+	Trigger2(FP,NBYD,{SetMemory(0x66239C,SetTo,768000000)},{preserved})
+	Trigger2(FP,BYD,{SetMemory(0x66239C,SetTo,8320000*256)},{preserved})
 	Points = 3
 	SizeofPolygon = 1
 	Radius = 32*3
@@ -1901,7 +1901,7 @@ CIf(P6,CDeaths(P6,AtLeast,1,HDStart)) -- 미구현 Once처리
 		end
 	CIfEnd()
 	
-	TriggerX(FP,{Deaths(P6,AtLeast,1,12)},{SetCVar(FP,HDEnd[2],Add,1),SetCVar(FP,B2_P[2],SetTo,0)},{Preserved})
+	TriggerX(FP,{Deaths(P6,AtLeast,1,12)},{SetCVar(FP,HDEnd[2],Add,1),SetCVar(FP,B2_P[2],SetTo,0)},{preserved})
 	CIf(P6,{CVar(FP,HDEnd[2],AtLeast,200)})
 		CAdd(P6,HDEnd2,Dt)
 		
@@ -2117,7 +2117,7 @@ MarCreate = CreateCcode()
 		CDeaths(FP,AtLeast,1,MarCreate)
 		},{   
 		SetCJump(0x700,0),SetCDeaths(FP,SetTo,0,MarCreate)
-		},{Preserved})
+		},{preserved})
 
 	TriggerX(P6,{
 		CVar(FP,B6_K[2],AtLeast,7)
@@ -2178,7 +2178,7 @@ MarCreate = CreateCcode()
 		SetCVar(FP,B6_T[2],SetTo,250),
 		SetCVar(FP,B6_C[2],SetTo,0),
 		CreateUnit(5,84,64,P6)
-		},{Preserved})
+		},{preserved})
 	
 	CIfX(P6,{CVar(FP,B6_R[2],AtLeast,1)})
 		CWhile(P6,{CVar(FP,B6_W[2],AtMost,3)},{SetCVar(FP,B6_W[2],Add,1)})
@@ -2222,9 +2222,9 @@ MarCreate = CreateCcode()
 			MoveUnit(All,12,P6,"Anywhere","Anywhere"),
 			--SetInvincibility(Disable,12,P6,"Anywhere")
 		},1)
-		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7)},{SetCDeaths(FP,Add,1,MarineStackSystem)},{Preserved})
-		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtMost,0)},{SetCDeaths(FP,SetTo,1,PatternProvider)},{Preserved})
-		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtLeast,1)},{SetCDeaths(FP,SetTo,0,PatternProvider)},{Preserved})
+		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7)},{SetCDeaths(FP,Add,1,MarineStackSystem)},{preserved})
+		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtMost,0)},{SetCDeaths(FP,SetTo,1,PatternProvider)},{preserved})
+		TriggerX(FP,{CVar(FP,B6_K[2],AtMost,24),CVar(FP,B6_K[2],AtLeast,7),CVar(FP,B6_T[2],AtLeast,1)},{SetCDeaths(FP,SetTo,0,PatternProvider)},{preserved})
 		NIfX(P6,{CVar(FP,B6_T[2],AtMost,0)})
 			CSub(P6,B6_T2,1)
 			DoActionsX(P6,SetCDeaths(P6,SetTo,1,B5_Av))
@@ -2264,7 +2264,7 @@ MarCreate = CreateCcode()
 			{
 				SetInvincibility(Disable,12,P6,"Anywhere"),
 				ModifyUnitShields(All,12,P6,64,0)
-			},{Preserved})
+			},{preserved})
 
 			NJumpX(P6,0x301,{
 				CVar(FP,B6_T2[2],AtMost,0),
@@ -2353,7 +2353,7 @@ MarCreate = CreateCcode()
 							GiveUnits(1,49,P8,"Anywhere",P12),
 							KillUnit(49,P12)
 						})
-						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{KillUnitAt(All,"Factories",24,Force1)},{Preserved})
+						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{KillUnitAt(All,"Factories",24,Force1)},{preserved})
 					NWhileEnd()
 					CMov(P6,B6_T,200)
 					NElseX()
@@ -2569,8 +2569,8 @@ MarCreate = CreateCcode()
 				}
 				NIf(P6,{CVar(FP,B6_K[2],AtLeast,52),CVar(FP,Time1[2],AtLeast,60000*6)})
 					CSub(P6,B6_K,1)
-					TriggerX(FP,{NBYD},{SetCVar(FP,Time1[2],Subtract,60000*6)},{Preserved})
-					TriggerX(FP,{BYD},{SetCVar(FP,Time1[2],Subtract,20000*6)},{Preserved})
+					TriggerX(FP,{NBYD},{SetCVar(FP,Time1[2],Subtract,60000*6)},{preserved})
+					TriggerX(FP,{BYD},{SetCVar(FP,Time1[2],Subtract,20000*6)},{preserved})
 					CMov(P6,B6_X,_Mod(_Rand(),300))
 					CMov(P6,B6_Y,_Mod(_Rand(),200))
 					Simple_SetLocX(P6,23,_Add(B6_X,2048-300),_Add(B6_Y,2048-200),_Add(B6_X,2048-300),_Add(B6_Y,2048-200))
@@ -2582,7 +2582,7 @@ MarCreate = CreateCcode()
 						CTrigger(P6,{Switch("Switch 1",Cleared)},{TCreateUnit(_Mul(_Add(_Div(Time1,_Mov(900000)),1),_Mov(16777216)),VArr(UArr1,_Mod(_Rand(),_Mov(16))),24,P8)},1)
 						CTrigger(P6,{Switch("Switch 1",Set)},{TCreateUnit(_Mul(_Add(_Div(Time1,_Mov(900000)),1),_Mov(16777216)),VArr(UArr2,_Mod(_Rand(),_Mov(16))),24,P8)},1)
 					CIfEnd()
-					Trigger2(FP,{BYD},{CreateUnit(1,49,192,P6),CreateUnit(1,49,193,P6),RunAIScriptAt(JYD,192),RunAIScriptAt(JYD,193)},{Preserved})
+					Trigger2(FP,{BYD},{CreateUnit(1,49,192,P6),CreateUnit(1,49,193,P6),RunAIScriptAt(JYD,192),RunAIScriptAt(JYD,193)},{preserved})
 					DoActions(P6,{
 						CreateUnitWithProperties(1,84,24,P8,{hallucinated = true}),
 						KillUnit(84,P8),
@@ -3011,10 +3011,10 @@ MarCreate = CreateCcode()
 	BStartJumpC = CreateCcode()
 	NJump(FP,BStartJump,{CDeaths(FP,AtLeast,1,BStartJumpC)},{SetCVar(FP,B6_T[2],Subtract,1)})
 	DoActionsX(P6,{SetCDeaths(P6,Add,1,ColorT)})
-	TriggerX(FP,{Bring(FP,AtMost,0,150,64)},{SetCVar(FP,B6_T[2],Subtract,1)},{Preserved})
-	Trigger2(FP,{Bring(Force1,AtMost,0,"Men",224)},{SetInvincibility(Enable,150,FP,223)},{Preserved})
-	Trigger2(FP,{Bring(Force1,AtLeast,1,"Men",224)},{SetInvincibility(Disable,150,FP,223)},{Preserved})
-	Trigger2(FP,{Bring(FP,AtLeast,1,150,64)},{RotatePlayer({MinimapPing(223)},HumanPlayers,FP)},{Preserved})
+	TriggerX(FP,{Bring(FP,AtMost,0,150,64)},{SetCVar(FP,B6_T[2],Subtract,1)},{preserved})
+	Trigger2(FP,{Bring(Force1,AtMost,0,"Men",224)},{SetInvincibility(Enable,150,FP,223)},{preserved})
+	Trigger2(FP,{Bring(Force1,AtLeast,1,"Men",224)},{SetInvincibility(Disable,150,FP,223)},{preserved})
+	Trigger2(FP,{Bring(FP,AtLeast,1,150,64)},{RotatePlayer({MinimapPing(223)},HumanPlayers,FP)},{preserved})
 	DisplayCTextToAll(FP,{Bring(FP,AtMost,0,150,64),Bring(FP,AtLeast,1,12,64)},{SetCDeaths(FP,Add,1,BStartJumpC)},HDB_StT,{PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")},HumanPlayers)
 	NJumpEnd(FP,BStartJump)
 	Trigger {
@@ -3099,8 +3099,8 @@ MarCreate = CreateCcode()
 
 ValLimit = CreateCcode()
 
-	TriggerX(FP,{NBYD},{SetCVar(FP,B6_DPase[2],Subtract,1)},{Preserved})
-	TriggerX(FP,{BYD,CVar(FP,B6_DPase2[2],AtLeast,1)},{SetCVar(FP,B6_DPase[2],Subtract,10),SetCVar(FP,B6_DPase2[2],SetTo,0)},{Preserved})
+	TriggerX(FP,{NBYD},{SetCVar(FP,B6_DPase[2],Subtract,1)},{preserved})
+	TriggerX(FP,{BYD,CVar(FP,B6_DPase2[2],AtLeast,1)},{SetCVar(FP,B6_DPase[2],Subtract,10),SetCVar(FP,B6_DPase2[2],SetTo,0)},{preserved})
 	CIf(P6,{CVar(P6,B6_T[2],AtMost,0),CVar(P6,B6_DPase[2],AtMost,0),CVar(P6,B6_K[2],AtLeast,37),CVar(P6,B6_K[2],AtMost,50)},{SetCVar(FP,B6_DPase[2],Add,10)})
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,ValLimit)})
@@ -3154,7 +3154,7 @@ ValLimit = CreateCcode()
 	CMov(P6,CPosX,_Mov(CPos,0xFFFF))
 	CMov(P6,CPosY,_Div(_Mov(CPos,0xFFFF0000),_Mov(65536)))
 	Simple_SetLocX(P6,23,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,47,24,P6),SetSwitch("Switch 100",Random)})
-	TriggerX(FP,{Switch("Switch 100",Set),CDeaths(FP,AtMost,150,ValLimit)},{CreateUnit(1,22,24,P8),SetCDeaths(FP,Add,1,ValLimit)},{Preserved})
+	TriggerX(FP,{Switch("Switch 100",Set),CDeaths(FP,AtMost,150,ValLimit)},{CreateUnit(1,22,24,P8),SetCDeaths(FP,Add,1,ValLimit)},{preserved})
 	Call_LoadCP()
 	DoActions(P6,{MoveCp(Add,15*4)})
 
@@ -3191,7 +3191,7 @@ CIf(P6,Switch("Switch 130",Set))
 		DoActionsX(P6,{SetMemory(0x58F528,SetTo,1),CreateUnit(1,84,24,P6),KillUnit(84,P6),SetCVar(FP,N_A[2],Add,5)})
 	CWhileEnd()
 	DoActionsX(FP,{SetCVar(FP,N_A[2],SetTo,0),SetCVar(FP,S_N_R[2],Add,20)})
-	TriggerX(FP,{CVar(FP,S_N_R[2],AtLeast,2400)},{SetSwitch("Switch 130",Clear),SetCVar(FP,S_N_R[2],SetTo,0)},{Preserved})
+	TriggerX(FP,{CVar(FP,S_N_R[2],AtLeast,2400)},{SetSwitch("Switch 130",Clear),SetCVar(FP,S_N_R[2],SetTo,0)},{preserved})
 CIfEnd()
 
 CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
@@ -3804,7 +3804,7 @@ initBYDTable = {}
 	CMov(FP,0x6509B0,FP)
 
 	for i = 0, 2 do
-		TriggerX(FP,{CDeaths(FP,Exactly,i,GMode)},{SetMemoryX(0x6559CC, SetTo, (AtkFactorArr[i+1])*65536,0xFFFF0000);},{Preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,i,GMode)},{SetMemoryX(0x6559CC, SetTo, (AtkFactorArr[i+1])*65536,0xFFFF0000);},{preserved})
 		
 		
 	CIf(FP,CDeaths(FP,Exactly,i,GMode))
@@ -3968,7 +3968,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 					SetCtrigX("X",MarListSkillLv[i][2],0x158,"X",SetTo,"X",TempMarListSkillLv[2],0x15C,1,"X");
 					CallLabel1("X",MarListSkillLv[i][2],"X")
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 			Trigger {
 				players = {FP},
@@ -3979,7 +3979,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				actions = {
 					CallLabel2("X",MarListSkillLv[i][2],"X")
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 			end
 
@@ -3998,7 +3998,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 			CMov(FP,V(MarSkillCA[6]),1)
 			CMov(FP,V(MarSkillCA[5]),6)
 			for i = 0, 4 do
-			TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{Preserved})
+			TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{preserved})
 			end
 			SkillShape = {}
 			function MarListSkillUnitFunc()
@@ -4006,7 +4006,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 				local UnitID = CreateVar(FP)
 				CIf(FP,Memory(0x628438,AtLeast,1))
 				for i = 0, 4 do
-					TriggerX(FP,{CVar(FP,MarListCurrentPlayer[2],Exactly,i)},{SetCVar(FP,UnitID[2],SetTo,MarListCPUnitID[i+1])},{Preserved})
+					TriggerX(FP,{CVar(FP,MarListCurrentPlayer[2],Exactly,i)},{SetCVar(FP,UnitID[2],SetTo,MarListCPUnitID[i+1])},{preserved})
 				end
 				f_Read(P6,0x628438,"X",Nextptrs,0xFFFFFF)
 				CDoActions(FP,{
@@ -4058,7 +4058,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 					CAdd(FP,BackupCp,30)
 					CMov(FP,MarListTempPosX,MarListTempPos,0,0xFFF)
 					CMov(FP,MarListTempPosY,_Div(MarListTempPos,_Mov(65536)))
-					TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{preserved})
 					Simple_SetLocX(FP,23,_Sub(MarListTempPosX,32),_Sub(MarListTempPosY,32),_Add(MarListTempPosX,32),_Add(MarListTempPosY,32))
 						CDoActions(FP,{TCreateUnitWithProperties(1,VArr(MarIDV,MarListCurrentPlayer),24,MarListCurrentPlayer,{energy = 1}),
 						TSetMemory(0x6509B0,SetTo,MarListCurrentPlayer),
@@ -4077,7 +4077,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 						TSetMemoryX(_Add(Nextptrs,19),SetTo,107*256,0xFF00),
 					})
 					CIfEnd()
-					TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{Preserved})
+					TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{preserved})
 					CMov(FP,BackupCp,Nextptrs,40)
 					Call_LoadCp()
 					NElseX()
@@ -4271,9 +4271,9 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 					TSetMemory(_Add(MarListTempVar,7*(0x20/4)),SetTo,0),
 					TSetMemory(_Add(MarListTempVar,8*(0x20/4)),SetTo,0),
 				})
-				TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{preserved})
 				DoActions(FP,{CreateUnitWithProperties(1,MarID[i],203+i,i-1,{energy = 100}),SetCDeaths(FP,SetTo,1,MarCreate)})
-				TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{preserved})
 				DoActionsX(FP,SetCVAar(VArr(PlayerMarCreateToken,i-1),Subtract,1))
 				NJumpEnd(FP,0x635+i)
 			CIfEnd()
@@ -4307,7 +4307,7 @@ ShText = "\n\n\n\n\x13\x04―――――――――――――――――――――――――――
 	
 			DoActions2X(FP,VariableSetTable[i])
 		CIfEnd()
-		Trigger2(FP,{Deaths(i-1,AtLeast,1,34)},{SetDeaths(i-1,SetTo,0,34)},{Preserved})
+		Trigger2(FP,{Deaths(i-1,AtLeast,1,34)},{SetDeaths(i-1,SetTo,0,34)},{preserved})
 	end
 	SkillUnitP = CreateVar(FP)
 	--CMov(FP,0x6509B0,19025+19)
@@ -4564,7 +4564,7 @@ CIf(P6,{TMemory(_Mem(_Mod(_Rand(),100)),AtLeast,50)})
 			CMov(P6,CPosX,_Mov(CPos,0xFFFF))
 			CMov(P6,CPosY,_Div(_Mov(CPos,0xFFFF0000),_Mov(65536)))
 			Simple_SetLocX(P6,23,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,47,24,P6)})
-			Trigger2(FP,{BYD},{CreateUnit(1,22,24,P8)},{Preserved})
+			Trigger2(FP,{BYD},{CreateUnit(1,22,24,P8)},{preserved})
 			Call_LoadCp()
 			DoActions(P6,{MoveCp(Add,15*4)})
 		CIfXEnd()
@@ -4763,7 +4763,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
 					PreserveTrigger();
 					},
 				}
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4790,7 +4790,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 					PreserveTrigger();
 					},
 				}
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4817,7 +4817,7 @@ CIf(P6,DeathsX(CurrentPlayer,Exactly,27,0,0xFF))
 					PreserveTrigger();
 					},
 				}
-				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			Call_LoadCp()
 		CIfEnd()
@@ -4843,7 +4843,7 @@ for j=1, 5 do
 				PreserveTrigger();
 				},
 			}
-			TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+			TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 			f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 		Call_LoadCp()
 		DoActions(P6,MoveCp(Add,6*4))
@@ -4873,7 +4873,7 @@ Trigger {
 		PreserveTrigger();
 	},
 }
-TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,4,SELimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\tap.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SELimit)},{preserved})
 Call_LoadCp()
 DoActions(P6,MoveCp(Add,16*4))
 CIfEnd()
@@ -5317,7 +5317,7 @@ for i = 0, 4 do
 	f_Mod(P6,TPanelty,_Mov(3))
 	f_Mod(P6,Panelty[i+1],_Mov(400))
 	CMov(P6,_Ccode("X",PaneltyP[i+1]),0)
-	TriggerX(FP,CDeaths(FP,AtMost,0,TPaneltyP[i+1]),{SetCDeaths(FP,SetTo,100,TPaneltyP[i+1]),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText("\x07『 \x17뿌튀 \x08패널티\x04 작동! \x1F미네랄\x04이 차감됩니다. 건작 위치를 지켜주세요. \x07』",4),SetCp(FP)},{Preserved})
+	TriggerX(FP,CDeaths(FP,AtMost,0,TPaneltyP[i+1]),{SetCDeaths(FP,SetTo,100,TPaneltyP[i+1]),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText("\x07『 \x17뿌튀 \x08패널티\x04 작동! \x1F미네랄\x04이 차감됩니다. 건작 위치를 지켜주세요. \x07』",4),SetCp(FP)},{preserved})
 	CIfEnd(SetCDeaths(FP,Subtract,1,TPaneltyP[i+1]))
 end
 
@@ -5516,9 +5516,9 @@ PosLoad = CreateVar(FP)
 			Bring(Force2, AtLeast, 6, "Men", 24);
 			Bring(Force1, AtMost, 2, "Factories", 24);
 		})
-		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{preserved})
 		for i = 0, 4 do
-		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,2,PaneltyP[i+1])},{Preserved})
+		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,2,PaneltyP[i+1])},{preserved})
 		end
 		CIfEnd()
 		CIf(FP,{
@@ -5528,9 +5528,9 @@ PosLoad = CreateVar(FP)
 			Bring(Force2, AtLeast, 6, "Men", 24);
 			Bring(Force1, AtMost, 2, "Factories", 24);
 		})
-		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,300,TimerPenalty)},{RotatePlayer({MinimapPing(24)},HumanPlayers,FP)},{preserved})
 		for i = 0, 4 do
-		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,1,PaneltyP[i+1])},{Preserved})
+		TriggerX(FP,{CVar(FP,ExcuteLaunch[2],Exactly,i+1)},{SetCDeaths(P6,Add,1,PaneltyP[i+1])},{preserved})
 		end
 		CIfEnd()
 		Call_LoadCp()
@@ -6136,7 +6136,7 @@ PosLoad = CreateVar(FP)
 			})
 			function SetBYDShape(Level,Shape,ShapeNum)
 			TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,Level*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000)},
-				{SetCVar(FP,BYDPlotSize[2],SetTo,Shape[ShapeNum][1]),SetCVar(FP,BYDPlotNum[2],SetTo,ShapeNum)},{Preserved})
+				{SetCVar(FP,BYDPlotSize[2],SetTo,Shape[ShapeNum][1]),SetCVar(FP,BYDPlotNum[2],SetTo,ShapeNum)},{preserved})
 			end
 			CIf(FP,{TMemoryX(BackupCp,Exactly,0x0000,0xF000)}) -- Lair
 				CIf(FP,{TMemory(_Add(BackupCp,5),Exactly,0)},{TSetMemory(0x6509B0,SetTo,_Add(BackupCp,1))})
@@ -6204,8 +6204,8 @@ PosLoad = CreateVar(FP)
 
 
 
-			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,666666*256)},{Preserved})
-			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,450000*256)},{Preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,666666*256)},{preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,450000*256)},{preserved})
 
 			NIfX(FP,{TMemory(_Mem(RedNumberX),AtLeast,BYDPlotSize)})
 				CMov(FP,V(BYDGunCA1[5]),1)
@@ -6227,8 +6227,8 @@ PosLoad = CreateVar(FP)
 			CTrigger(FP, {CVar(FP,BYDGunTimer[2],Exactly,0)}, {TSetCVar(FP,BYDGunTimer[2],SetTo,BYDGunX)}, 1)
 			CSub(FP,BYDGunTimer,1)
 			CTrigger(FP,{CVar(FP,BYDGunPhase[2],AtLeast,1)},{TSetMemory(_Add(BackupCp,5),Add,1),SetCVar(FP,BYDGunPhase[2],SetTo,0)},1)
-			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,6666666*256)},{Preserved})
-			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,4500000*256)},{Preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,61)},{SetMemory(0x662350+(61*4),SetTo,6666666*256)},{preserved})
+			TriggerX(FP,{CVar(FP,BYDGunCA1[8],Exactly,67)},{SetMemory(0x662350+(67*4),SetTo,4500000*256)},{preserved})
 			ZergGunCAPlot = {}
 
 			for i = 1, 4 do
@@ -6822,7 +6822,7 @@ CIf(P6,Switch("Switch 203",Set))
 			CMov(P6,B3_HV,_Add(_Div(_ReadF(B3_H),_Mov(256)),B3_K))
 			CMov(P6,B3_HV2,B3_K2)
 
-			TriggerX(FP,{CVar(FP,B3_K[2],AtLeast,1000000000)},{SetCVar(FP,B3_HV2[2],Add,1)},{Preserved})
+			TriggerX(FP,{CVar(FP,B3_K[2],AtLeast,1000000000)},{SetCVar(FP,B3_HV2[2],Add,1)},{preserved})
 			
 
 			ItoDec(P6,B3_HV,VArr(B3_HT,0),0,0x08,0,9)
@@ -7140,7 +7140,7 @@ CIf(P6,Switch("Switch 203",Set))
 --	LineBak = CreateVar(FP)
 --	CMov(FP,LineBak,0)
 --	for i = 0, 3 do
---		TriggerX(FP,{Memory(0x640B58,AtLeast,(2^i))},{SetMemory(0x640B58,Subtract,(2^i));SetCVar(FP,LineBak[2],Add,2^i)},{Preserved})
+--		TriggerX(FP,{Memory(0x640B58,AtLeast,(2^i))},{SetMemory(0x640B58,Subtract,(2^i));SetCVar(FP,LineBak[2],Add,2^i)},{preserved})
 --	end
 --	DoActions(FP,{SetMemory(0x640B58,SetTo,0),RotatePlayer({DisplayTextX("Test",4)},HumanPlayers,FP)})
 --	CMov(FP,0x640B58,LineBak)
@@ -12252,7 +12252,7 @@ function BYDSCoutPatch()
 		TSetDeaths(_Add(Nextptrs,13),SetTo,128,0),
 		TSetDeathsX(_Add(Nextptrs,18),SetTo,128,0,0xFFFF)})
 	NIfEnd()
-	Trigger2(FP,{BYD},{CreateUnit(1,84,LocationID+1,5)},{Preserved})
+	Trigger2(FP,{BYD},{CreateUnit(1,84,LocationID+1,5)},{preserved})
 end
 
 for i=0, 1 do -- CIf 0x58~0x59 EX2 12~13 L164~L165 NEX
@@ -13100,7 +13100,7 @@ function DGSpawnSet()
 	CA_RatioXY(DGInfection,100,DGInfection,100)
 
 	CIf(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
-		TriggerX(FP,{CDeaths("X", AtMost, 350, T)},{CreateUnit(1,84,24,P6)},{Preserved})
+		TriggerX(FP,{CDeaths("X", AtMost, 350, T)},{CreateUnit(1,84,24,P6)},{preserved})
 		CIf(FP,CDeaths("X", AtLeast, 351, T))
 			DoActions(CPlayer,{CreateUnit(1,86,24,P8),CreateUnit(1,98,24,P8),Order(86,P8,24,Attack,LocationID-1),Order(98,P8,24,Attack,LocationID-1)})
 			DoActions(CPlayer,{CreateUnit(1,8,24,P8),CreateUnit(1,102,24,P8),Order(8,P8,24,Attack,LocationID-1),Order(102,P8,24,Attack,LocationID-1)})
@@ -14473,7 +14473,7 @@ function CoreSpawnSet()
 	local SpawnSet = {78, 76, 81, 75, 79, 17, 75, 52, 10, 19} 
 	local SpawnSet2 = {28, 57, 86, 29, 88, 8, 80, 22, 98, 29} 
 	for i = 1, 10 do
-		TriggerX(FP,{CDeaths(FP,Exactly,i,CoreSwitch)},{CreateUnit(1,SpawnSet[i],191,P8),CreateUnit(1,SpawnSet2[i],191,P8),Order("Men",Force2,191,Attack,5)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,Exactly,i,CoreSwitch)},{CreateUnit(1,SpawnSet[i],191,P8),CreateUnit(1,SpawnSet2[i],191,P8),Order("Men",Force2,191,Attack,5)},{preserved})
 	end
 end
 
@@ -14485,12 +14485,12 @@ RecallSpriteShape = CreateVar(FP)
 DoActionsX(FP,SetCVar(FP,RecallSpriteShape[2],SetTo,1),1)
 TriggerX(FP,{CDeaths(FP,Exactly,2,B7_Ph)},{SetCVar(FP,RecallSpriteShape[2],SetTo,2)})
 CAPlot({S1,S3},FP,181,190,nil,1,1,{RecallSpriteShape,0,0,0,9999,0},"S2_CAfunc",FP,nil,nil,{RemoveUnit(33,FP),SetCDeaths(FP,Subtract,4,EffT)},"RecallHere")
-Trigger2(FP,{NBYD},{SetMemoryX(0x666458, SetTo, 546,0xFFFF)},{Preserved})
+Trigger2(FP,{NBYD},{SetMemoryX(0x666458, SetTo, 546,0xFFFF)},{preserved})
 S2 = CSMakePolygon(6,96,0,PlotSizeCalc(6,6),1)
 CAPlot(S2,P8,181,190,nil,1,32,{1,0,0,0,9999,0},"S2_CAfunc2",FP,{CDeaths(FP,AtLeast,1,CoreSwitch),BYD},nil,{SetCDeaths(FP,SetTo,0,CoreSwitch)},"CoreSpawnSet")
 
 DoActionsX(FP,{SetCDeaths(FP,Add,1,EffT)})
-TriggerX(FP,{NBYD},{SetCDeaths(FP,SetTo,10,EffT)},{Preserved})
+TriggerX(FP,{NBYD},{SetCDeaths(FP,SetTo,10,EffT)},{preserved})
 CIfEnd()
 
 CIndex = 0x91
@@ -14861,7 +14861,7 @@ DoActionsX(FP,{RemoveUnit(204,Force2)})
 		CDeaths(FP,AtLeast,1,MarCreate)
 		},{
 		SetCJump(0x700,0),SetCDeaths(FP,SetTo,0,MarCreate)
-		},{Preserved})
+		},{preserved})
 
 CAdd(FP,_Ccode("X",StoryT),Dt)
 DoActionsX(FP,{RemoveUnit(41,Force2),SetCDeaths(P6,SetTo,1,BYDBossStart),Order(82,FP,64,Move,64)})
@@ -14968,7 +14968,7 @@ BYDBossPT1 = CreateCcode()
 BPatternBreak = CreateCcode()
 
 
-TriggerX(FP,{CDeaths(FP,AtMost,4,B7_Ph)},{SetCDeaths(P6,SetTo,1,MarineStackSystem)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,4,B7_Ph)},{SetCDeaths(P6,SetTo,1,MarineStackSystem)},{preserved})
 CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 	CIf(FP,CDeaths(FP,AtLeast,1,BYDBossP1))
 	CAdd(FP,_Ccode("X",BYDBossPT1),Dt)
@@ -14986,7 +14986,7 @@ CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 	for i = 0, 5 do
 		table.insert(BPatternBreakTable,CreateCcode())
 		table.insert(BPatternResetTable,SetCDeaths(FP,SetTo,0,BPatternBreakTable[i+1]))
-		TriggerX(FP,{CDeaths(FP,AtLeast,(2+i)*1000,BYDBossPT1),CDeaths(FP,AtMost,8*1000,BYDBossPT1),CDeaths(FP,AtMost,0,BPatternBreakTable[i+1])},{RunAIScriptAt(JYD,64),SetCDeaths(FP,Add,1,BPatternBreakTable[i+1])},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,(2+i)*1000,BYDBossPT1),CDeaths(FP,AtMost,8*1000,BYDBossPT1),CDeaths(FP,AtMost,0,BPatternBreakTable[i+1])},{RunAIScriptAt(JYD,64),SetCDeaths(FP,Add,1,BPatternBreakTable[i+1])},{preserved})
 	end
 	CIf(FP,{CDeaths(FP,AtLeast,8*1000,BYDBossPT1),CDeaths(FP,AtMost,0,BPatternBreak)},SetCDeaths(FP,Add,1,BPatternBreak))
 		CWhile(FP,Bring(FP,AtLeast,1,49,64))
@@ -15000,7 +15000,7 @@ CIf(FP,CDeaths(FP,Exactly,0,B7_Ph)) -- 0페이즈
 		SetCDeaths(FP,SetTo,0,BPatternBreak),
 		SetCDeaths(FP,SetTo,0,BYDBossPT1),
 		BPatternResetTable
-	},{Preserved})
+	},{preserved})
 CIfEnd()
 
 CIf(FP,CDeaths(FP,Exactly,1,B7_Ph),SetCJump(0x648,0)) -- 1페이즈
@@ -15088,7 +15088,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x04이런 비극은.. \x0
 			CWhileEnd()
 			CMov(FP,0x6509B0,FP)
 		CIfEnd()
-		TriggerX(FP,{CDeaths(FP,AtLeast,36,B7_T),Bring(FP,AtMost,0,128,64)},{SetCDeaths(FP,SetTo,0,B7_T)},{Preserved})
+		TriggerX(FP,{CDeaths(FP,AtLeast,36,B7_T),Bring(FP,AtMost,0,128,64)},{SetCDeaths(FP,SetTo,0,B7_T)},{preserved})
 	CIfEnd()
 CIfEnd()
 B7_X = CreateVar(FP)
@@ -15138,8 +15138,8 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들
 						CAdd(FP,B7_X,2048)
 						CAdd(FP,B7_Y,2048)
 						Simple_SetLocX(FP,23,B7_X,B7_Y,B7_X,B7_Y,{KillUnit(49,P6)})
-						TriggerX(FP,{CDeaths(FP,AtMost,0,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
-						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),KillUnitAt(All,"Factories",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{Preserved})
+						TriggerX(FP,{CDeaths(FP,AtMost,0,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{preserved})
+						TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(FP,B7_X[2],AtMost,4096),CVar(FP,B7_Y[2],AtMost,4096)},{Simple_CalcLoc(23,-10,-10,10,10),CreateUnit(1,84,24,P6),KillUnitAt(All,"Factories",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1),CreateUnit(1,128,24,P6)},{preserved})
 					CWhileEnd()
 					CAdd(FP,B7_R,24)
 				CWhileEnd()
@@ -15147,7 +15147,7 @@ StoryPrint("\x12\n\n\n\x13\x08【 \x10對\x04 立 \x06】\n\x13\x10운명\x04을 받아들
 				TriggerX(FP,{Bring(FP,AtMost,0,128,64)},{
 				SetCDeaths(FP,SetTo,0,B7_T2),
 				SetCVar(FP,B7_R[2],SetTo,0)
-			},{Preserved})
+			},{preserved})
 			CIfXEnd()
 		CIfEnd()
 	CIfEnd()
@@ -15198,15 +15198,15 @@ CIfEnd()
 	CTrigger(FP,{CVar(FP,B6_5_M[2],Exactly,1)},
 		{TSetCVar(FP,B6_5_A[2],Add,_Sub(_Mov(256),B6_5_D))},1)
 	TriggerX(FP,{CVar(FP,B6_5_T[2],AtLeast,36),CVar(FP,B6_5_N[2],Exactly,0)},
-		{SetCVar(FP,B6_5_D[2],Add,1),SetCVar(FP,B6_5_T[2],SetTo,0)},{Preserved})
+		{SetCVar(FP,B6_5_D[2],Add,1),SetCVar(FP,B6_5_T[2],SetTo,0)},{preserved})
 	TriggerX(FP,{CVar(FP,B6_5_T[2],AtLeast,36),CVar(FP,B6_5_N[2],Exactly,1)},
-		{SetCVar(FP,B6_5_D[2],Subtract,1),SetCVar(FP,B6_5_T[2],SetTo,0)},{Preserved})
+		{SetCVar(FP,B6_5_D[2],Subtract,1),SetCVar(FP,B6_5_T[2],SetTo,0)},{preserved})
 	TriggerX(FP,{CVar(FP,B6_5_D[2],Exactly,16),CVar(FP,B6_5_N[2],Exactly,0)},
-		{SetCVar(FP,B6_5_N[2],SetTo,1)},{Preserved})
+		{SetCVar(FP,B6_5_N[2],SetTo,1)},{preserved})
 	TriggerX(FP,{CVar(FP,B6_5_D[2],Exactly,0),CVar(FP,B6_5_N[2],Exactly,1),CVar(FP,B6_5_M[2],Exactly,1)},
-		{SetCVar(FP,B6_5_N[2],SetTo,0),SetCVar(FP,B6_5_M[2],SetTo,0)},{Preserved})
+		{SetCVar(FP,B6_5_N[2],SetTo,0),SetCVar(FP,B6_5_M[2],SetTo,0)},{preserved})
 	TriggerX(FP,{CVar(FP,B6_5_D[2],Exactly,0),CVar(FP,B6_5_N[2],Exactly,1),CVar(FP,B6_5_M[2],Exactly,0)},
-		{SetCVar(FP,B6_5_N[2],SetTo,0),SetCVar(FP,B6_5_M[2],SetTo,1)},{Preserved})
+		{SetCVar(FP,B6_5_N[2],SetTo,0),SetCVar(FP,B6_5_M[2],SetTo,1)},{preserved})
 	CAdd(FP,B6_5_T,1)
 
 
@@ -15221,7 +15221,7 @@ CIfEnd()
 	LocXTable = {1696,2400,1696,2400}
 	LocYTable = {1792,1792,2304,2304}
 	for i = 0, 3 do
-	TriggerX(FP,{CVar(FP,B7_W[2],Exactly,i)},{Simple_SetLoc(23,LocXTable[i+1],LocYTable[i+1],LocXTable[i+1],LocYTable[i+1])},{Preserved})
+	TriggerX(FP,{CVar(FP,B7_W[2],Exactly,i)},{Simple_SetLoc(23,LocXTable[i+1],LocYTable[i+1],LocXTable[i+1],LocYTable[i+1])},{preserved})
 	end
 	CreateUnitPolygonSafe2Gun(P6,{Label(0),CVar(FP,B7_K[2],Exactly,310)},19,23,32,128,0,6,1,P6,{1,65,1,84})
 	CreateUnitPolygonSafe2Gun(P6,{Label(0),CVar(FP,B7_K[2],Exactly,320)},PlotSizeCalc(5,3),23,32,128,0,5,1,P6,{1,66,1,84})
@@ -15240,7 +15240,7 @@ CIfEnd()
 	DoActionsX(FP,{SetCJump(0x306,1)})
 	TriggerX(FP,{CVar(FP,B7_K[2],Exactly,420)},{SetInvincibility(Enable,82,FP,64)})
 	CJumpEnd(FP,0x306)
-	TriggerX(FP,{Bring(FP,AtMost,15,"Men",64)},{SetInvincibility(Disable,82,FP,64)},{Preserved})
+	TriggerX(FP,{Bring(FP,AtMost,15,"Men",64)},{SetInvincibility(Disable,82,FP,64)},{preserved})
 CIfEnd()
 
 
@@ -15249,8 +15249,8 @@ CIfEnd()
 CJump(FP,0x648)
 CWhile(FP,Bring(FP,AtLeast,1,128,64)) -- 죽음의 수정
 DoActions(FP,{Simple_SetLoc(23,0,0,20,20),MoveLocation(24,128,FP,64),GiveUnits(1,128,FP,64,P8)})
-TriggerX(FP,{CDeaths(FP,Exactly,0,Theorist)},{SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
-TriggerX(FP,{CDeaths(FP,Exactly,1,Theorist)},{KillUnitAt(All,"Men",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{Preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,0,Theorist)},{SetInvincibility(Enable,"Factories",Force1,24),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,1,Theorist)},{KillUnitAt(All,"Men",24,Force1),KillUnitAt(All,20,24,Force1),KillUnitAt(All,32,24,Force1)},{preserved})
 CWhileEnd()
 CJumpEnd(FP,0x648)
 DoActions(FP,GiveUnits(All,128,P8,64,FP))
@@ -15414,7 +15414,7 @@ Trigger { --
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Subtract,1,ButtonSound);
 	},
-	flag = {Preserved}
+	flag = {preserved}
 }
 
 
@@ -17826,16 +17826,16 @@ for i=0, 4 do
 			SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
 		}
 	}
-	TriggerX(FP,{CDeaths(FP,AtMost,1,GMode);},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,1,GMode);},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{preserved})
 	end
 	DoActionsX(FP,{SetCVar(FP,CurPerAttack[i+1][2],SetTo,0)})
 	DoActionsX(FP,{SetCVar(FP,CurPerArmor[i+1][2],SetTo,0)})
 	
 	for j = 0, 7 do
-		TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{Preserved})
+		TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{preserved})
 	end
 	for j = 0, 7 do
-		TriggerX(FP,{MemoryX(PAPtrArr[i+1],Exactly,2^(j+(8*PAMaskRetArr[i+1])),2^(j+(8*PAMaskRetArr[i+1])))},{SetCVar(FP,CurPerArmor[i+1][2],SetTo,2^j,2^j)},{Preserved})
+		TriggerX(FP,{MemoryX(PAPtrArr[i+1],Exactly,2^(j+(8*PAMaskRetArr[i+1])),2^(j+(8*PAMaskRetArr[i+1])))},{SetCVar(FP,CurPerArmor[i+1][2],SetTo,2^j,2^j)},{preserved})
 	end
 end
 
@@ -18877,7 +18877,7 @@ Trigger { -- 브금재생 인트로 - 관전자
 CIfEnd()
 --]]
 SETimer = CreateCcode()
-TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{Preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
 
 DoActionsP({KillUnit(84,Force2),KillUnit(47,P6)},P6)
 DoActionsPX({

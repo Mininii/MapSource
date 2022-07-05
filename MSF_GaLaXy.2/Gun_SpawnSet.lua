@@ -12,14 +12,14 @@ function GunData()
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0),Gun_Line(0,Exactly,132)})
 			CDoActions(FP,{Gun_SetLine(4,Add,f_CRandNum(80,395))})
 			GunBreak("기지 \x18Lair \x04를",20000,2)
-			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{Preserved})
+			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 --			G_CA_SetSpawn(nil,{54},"ACAS",{"NBYD"})
 --			G_CA_SetSpawn(nil,{54},{S_5},{2})
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0),Gun_Line(0,Exactly,133)})
 			CDoActions(FP,{Gun_SetLine(4,Add,f_CRandNum(80,395))})
 			GunBreak("기지 \x18Hive \x04를",30000,4)
-			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{Preserved})
+			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 --			G_CA_SetSpawn(nil,{55},"ACAS",{"NBYD"})
 			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,0,"Stasis Cell/Prison")},{23,74,88},{P_6,S_3,P_3},{1,1,4},"MAX",nil,nil,{3776,3808})
 			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,1,"Stasis Cell/Prison")},{74,88},{S_3,P_3},{1,4},"MAX",nil,nil,{3776,3808})
@@ -88,12 +88,12 @@ function GunData()
 				CMov(FP,UnitIDV3,0)
 				CMov(FP,UnitIDV4,0)
 				
-				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,0)},{SetCVar(FP,UnitIDV4[2],SetTo,55)},{Preserved})
-				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,1)},{SetCVar(FP,UnitIDV4[2],SetTo,56)},{Preserved})
-				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,2)},{SetCVar(FP,UnitIDV4[2],SetTo,57)},{Preserved})
-				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,0)},{SetCVar(FP,UnitIDV4[2],SetTo,56)},{Preserved})
-				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,1)},{SetCVar(FP,UnitIDV4[2],SetTo,57)},{Preserved})
-				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,2)},{SetCVar(FP,UnitIDV4[2],SetTo,62)},{Preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,0)},{SetCVar(FP,UnitIDV4[2],SetTo,55)},{preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,1)},{SetCVar(FP,UnitIDV4[2],SetTo,56)},{preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(5,Exactly,2)},{SetCVar(FP,UnitIDV4[2],SetTo,57)},{preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,0)},{SetCVar(FP,UnitIDV4[2],SetTo,56)},{preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,1)},{SetCVar(FP,UnitIDV4[2],SetTo,57)},{preserved})
+				TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(5,Exactly,2)},{SetCVar(FP,UnitIDV4[2],SetTo,62)},{preserved})
 				DoActions(FP,{
 					SetSwitch("Switch 2",Random);
 					SetSwitch("Switch 3",Random);
@@ -101,58 +101,58 @@ function GunData()
 				TriggerX(FP,{Gun_Line(5,Exactly,1),Gun_Line(3,Exactly,0)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,80);
 					SetCVar(FP,UnitIDV2[2],SetTo,87);
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,Exactly,2),Gun_Line(3,Exactly,0)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,21);
 					SetCVar(FP,UnitIDV2[2],SetTo,15);
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,1)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,28);
 					SetCVar(FP,UnitIDV2[2],SetTo,17);
-				},{Preserved})
+				},{preserved})
 				UnitIDV1Table = {77,10,75,76,65,32,79,89}
 				UnitIDV2Table = {78,19,79,81,66,52,50,25}
 				for i = 1, 8 do
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i+1)},{
 						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV1Table[i]);-- 레어
-					},{Preserved})
+					},{preserved})
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i+1)},{
 						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV2Table[i]);-- 하이브
-					},{Preserved})
+					},{preserved})
 				end
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,AtLeast,2),Gun_Line(3,AtMost,5)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,56);
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,AtLeast,6),Gun_Line(3,AtMost,9)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,57);
-				},{Preserved})
+				},{preserved})
 
 				for i = 0, 1 do
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,(2+(i*4))),Switch("Switch 2",Cleared),Switch("Switch 3",Cleared)},{
 						SetCVar(FP,UnitIDV3[2],SetTo,86);
-					},{Preserved})
+					},{preserved})
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,(3+(i*4))),Switch("Switch 2",Cleared),Switch("Switch 3",Set)},{
 						SetCVar(FP,UnitIDV3[2],SetTo,86);
-					},{Preserved})
+					},{preserved})
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,(4+(i*4))),Switch("Switch 2",Set),Switch("Switch 3",Cleared)},{
 						SetCVar(FP,UnitIDV3[2],SetTo,86);
-					},{Preserved})
+					},{preserved})
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,(5+(i*4))),Switch("Switch 2",Set),Switch("Switch 3",Set)},{
 						SetCVar(FP,UnitIDV3[2],SetTo,86);
-					},{Preserved})
+					},{preserved})
 				end
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,10)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,27); -- 나머지 레어
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,10)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,102); -- 외곽 하이브
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,11)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,98); -- 안쪽 레어
-				},{Preserved})
+				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,11)},{
 					SetCVar(FP,UnitIDV1[2],SetTo,29); -- 안쪽 하이브
-				},{Preserved})
+				},{preserved})
 				local BreakCcode = CreateCcode()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,0,BreakCcode))
 				LV_10_11_AirTable = {21,80,28,86,98,27,88,21,80,28,86,98,27,88,21,80,28,86,98,27,88,21,80,28,86,98,27,88}
@@ -164,14 +164,14 @@ function GunData()
 						SetCVar(FP,UnitIDV2[2],SetTo,LV_10_UnitTable[i]);
 						SetCVar(FP,UnitIDV3[2],SetTo,LV_10_11_AirTable[i]);
 						SetCDeaths(FP,Add,1,LV_10_UnitTableCode);SetCDeaths(FP,SetTo,1,BreakCcode)
-					},{Preserved})
+					},{preserved})
 				end
 				for i = 1, #LV_11_UnitTable do
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,Exactly,11),CDeaths(FP,Exactly,i-1,LV_11_UnitTableCode),CDeaths(FP,Exactly,0,BreakCcode)},{
 						SetCVar(FP,UnitIDV2[2],SetTo,LV_11_UnitTable[i]);
 						SetCVar(FP,UnitIDV3[2],SetTo,LV_10_11_AirTable[i]);
 						SetCDeaths(FP,Add,1,LV_11_UnitTableCode);SetCDeaths(FP,SetTo,1,BreakCcode)
-					},{Preserved})
+					},{preserved})
 				end
 				
 
@@ -322,8 +322,8 @@ function GunData()
 					CIfEnd()
 				CIfEnd()
 			for i = 0, 11 do
-				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1001,i))},{Preserved})
-				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1002,i))},{Preserved})
+				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1001,i))},{preserved})
+				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1002,i))},{preserved})
 			end
 			CIfEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
@@ -335,11 +335,11 @@ function GunData()
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,10)})
 			GunBreak("번데기 \x18Small Chrysalis \x04를",45000,3)
-			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{Preserved})
+			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,AtLeast,5),Gun_Line(5,AtMost,39)})
-			TriggerX(FP,{Gun_Line(3,Exactly,0)},{SetCVar(FP,UnitIDV1[2],SetTo,80)},{Preserved})
-			TriggerX(FP,{Gun_Line(3,Exactly,1)},{SetCVar(FP,UnitIDV1[2],SetTo,21)},{Preserved})
+			TriggerX(FP,{Gun_Line(3,Exactly,0)},{SetCVar(FP,UnitIDV1[2],SetTo,80)},{preserved})
+			TriggerX(FP,{Gun_Line(3,Exactly,1)},{SetCVar(FP,UnitIDV1[2],SetTo,21)},{preserved})
 			f_TempRepeatX(nil,84,1)
 			f_TempRepeatX({CGMode(1)},UnitIDV1,1,188)
 			f_TempRepeatX({CGMode(2)},UnitIDV1,3,188)
@@ -562,13 +562,13 @@ function GunData()
 			SetCVar(FP,Gun_UID[2],SetTo,16);
 			SetCVar(FP,Gun_UID2[2],SetTo,193);
 			SetCVar(FP,Gun_UID3[2],SetTo,179);
-			SetCVar(FP,Gun_UID4[2],SetTo,80);},{Preserved})
+			SetCVar(FP,Gun_UID4[2],SetTo,80);},{preserved})
 		TriggerX(FP,{Gun_Line(0,Exactly,109)},{
 			SetCVar(FP,Gun_UID[2],SetTo,17);
 			SetCVar(FP,Gun_UID2[2],SetTo,192);
 			SetCVar(FP,Gun_UID3[2],SetTo,180);
-			SetCVar(FP,Gun_UID4[2],SetTo,21);},{Preserved})
---		TriggerX(FP,{},{},{Preserved})
+			SetCVar(FP,Gun_UID4[2],SetTo,21);},{preserved})
+--		TriggerX(FP,{},{},{preserved})
 --		Angle = Var_TempTable[53]
 --		Radius = Var_TempTable[52]
 
@@ -665,13 +665,13 @@ function GunData()
 				PlayWAVX("staredit\\wav\\H-020.wav"),
 				PlayWAVX("staredit\\wav\\H-020.wav"),
 				PlayWAVX("staredit\\wav\\H-020.wav")},HumanPlayers,FP),
-				SetCDeaths(FP,Add,1,Py_Cond)},{Preserved})
+				SetCDeaths(FP,Add,1,Py_Cond)},{preserved})
 		TriggerX(FP,{Gun_Line(3,AtLeast,7),Gun_Line(0,Exactly,109)},{
 			CopyCpAction({
 				PlayWAVX("staredit\\wav\\H-020.wav"),
 				PlayWAVX("staredit\\wav\\H-020.wav"),
 				PlayWAVX("staredit\\wav\\H-020.wav")},HumanPlayers,FP),
-				SetCDeaths(FP,Add,1,Sup_Cond)},{Preserved})
+				SetCDeaths(FP,Add,1,Sup_Cond)},{preserved})
 		TriggerX(FP,{Gun_Line(3,AtLeast,7),Gun_Line(0,Exactly,173)},{
 			CopyCpAction({
 				PlayWAVX("staredit\\wav\\seeya.ogg"),
@@ -679,7 +679,7 @@ function GunData()
 				PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),
 				SetCDeaths(FP,Add,1,FormCon);
 				Order("Men",Force2,64,Attack,2);
-				KillUnitAt(1,125,47,Force1);},{Preserved})
+				KillUnitAt(1,125,47,Force1);},{preserved})
 		CIfEnd()
 		DoActionsX(FP,SetCDeaths(FP,SetTo,0,PS_Create))
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(3,AtLeast,7),},{Gun_DoSuspend()},1)
@@ -779,20 +779,20 @@ function GunData()
 			SetAllianceStatus(force1,Ally);
 			SetMemory(0x6509B0,SetTo,7),
 			SetAllianceStatus(force1,Ally);
-		},{Preserved})
+		},{preserved})
 		for i = 0, 9 do
 			TriggerX(FP,{Gun_Line(4,Exactly,481+(10*i))},{
 				SetMemory(0x6509B0,SetTo,6),
 				Cocoon_JYD,
 				SetMemory(0x6509B0,SetTo,7),
-				Cocoon_JYD},{Preserved})
+				Cocoon_JYD},{preserved})
 		end
 		TriggerX(FP,{Gun_Line(4,Exactly,481+(10*9))},{
 			SetMemory(0x6509B0,SetTo,6),
 			SetAllianceStatus(force1,Enemy);
 			SetMemory(0x6509B0,SetTo,7),
 			SetAllianceStatus(force1,Enemy);
-		},{Preserved})
+		},{preserved})
 		
 		NIf(FP,{Gun_Line(4,AtLeast,482),Gun_Line(4,AtMost,579),CVar(FP,CurrentChunk[2],AtMost,63)})
 			CAdd(FP,CurrentChunk,1)
@@ -866,8 +866,8 @@ function GunData()
 		CreateUnit(1,29,1,FP),
 		CreateUnit(1,84,1,FP),
 		})
-		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,0)},{SetMemory(0x6CA010, SetTo, 640)},{Preserved})
-		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,1)},{SetMemory(0x6CA010, SetTo, 20000)},{Preserved})
+		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,0)},{SetMemory(0x6CA010, SetTo, 640)},{preserved})
+		TriggerX(FP,{CVar(FP,HondonMode[2],Exactly,1)},{SetMemory(0x6CA010, SetTo, 20000)},{preserved})
 
 		for i = 1, 3 do
 			CTrigger(FP,{Gun_Line(54,AtMost,0),CDeaths(FP,Exactly,i,GMode);Gun_Line(4,AtLeast,((8*(i+1))+7)),Gun_Line(5,AtLeast,(i+1)+1)},{
@@ -917,9 +917,9 @@ function GunData()
 				Memory(0x58DC64 + 0x14*0,AtMost,4096),
 				Memory(0x58DC6C + 0x14*0,AtMost,4096)},{
 					CreateUnit(1,84,1,FP),})
-					TriggerX(FP,{CGMode(1)},{SetCVar(FP,Gun_W2[2],SetTo,1)},{Preserved})
-					TriggerX(FP,{CGMode(2)},{SetCVar(FP,Gun_W2[2],SetTo,2)},{Preserved})
-					TriggerX(FP,{CGMode(3)},{SetCVar(FP,Gun_W2[2],SetTo,4)},{Preserved})
+					TriggerX(FP,{CGMode(1)},{SetCVar(FP,Gun_W2[2],SetTo,1)},{preserved})
+					TriggerX(FP,{CGMode(2)},{SetCVar(FP,Gun_W2[2],SetTo,2)},{preserved})
+					TriggerX(FP,{CGMode(3)},{SetCVar(FP,Gun_W2[2],SetTo,4)},{preserved})
 
 					NWhile(FP,CVar(FP,Gun_W2[2],AtLeast,1),SetCVar(FP,Gun_W2[2],Subtract,1))
 						NIfX(FP,{Gun_Line(3,Exactly,1)})

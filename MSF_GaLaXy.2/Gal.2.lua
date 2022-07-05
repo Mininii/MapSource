@@ -20,9 +20,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 FP = P8
 DoActions(FP,{RemoveUnit(205,FP)})
-Trigger2(Force2,{Command(CurrentPlayer,AtLeast,10,42)},{KillUnitAt(1,42,"Anywhere",CurrentPlayer)},{Preserved})
-Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,35)},{KillUnit(35,CurrentPlayer)},{Preserved})
-Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,37)},{RemoveUnitAt(1,37,64,CurrentPlayer)},{Preserved})
+Trigger2(Force2,{Command(CurrentPlayer,AtLeast,10,42)},{KillUnitAt(1,42,"Anywhere",CurrentPlayer)},{preserved})
+Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,35)},{KillUnit(35,CurrentPlayer)},{preserved})
+Trigger2(Force2,{Command(CurrentPlayer,AtLeast,20,37)},{RemoveUnitAt(1,37,64,CurrentPlayer)},{preserved})
 DoActions(Force1,{SetDeaths(CurrentPlayer,SetTo,1,217)},1)
 HumanPlayers = {P1,P2,P3,P4,P5,P6,P9,P10,P11,P12}
 MapPlayers = {P1,P2,P3,P4,P5,P6}
@@ -1892,7 +1892,7 @@ f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19L),_Add(_Mul(HIndex,_Mov(0x20)),UnitNamePtr)
 CDoActions(FP,{TSetScore(Force1,Add,HPoint10,Kills)})
 HText = "\x0D\x0D\x0DHK".._0D
 DoActions(FP,CopyCpAction({DisplayTextX(HText,4)},HumanPlayers,FP))
-TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 
 f_LoadCP()
 SetCallEnd()
@@ -2394,9 +2394,9 @@ Trigger {
 CIfEnd()
 CIf(FP,CDeaths(FP,Exactly,1,BGMSel))
 
-TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,67)},{SetCDeaths(FP,Subtract,1,BGMMode)},{Preserved})
-TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,68)},{SetCDeaths(FP,Add,1,BGMMode)},{Preserved})
-TriggerX(FP,{CDeaths(FP,AtLeast,#BModeArr+1,BGMMode)},{SetCDeaths(FP,SetTo,#BModeArr,BGMMode)},{Preserved})
+TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,67)},{SetCDeaths(FP,Subtract,1,BGMMode)},{preserved})
+TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,68)},{SetCDeaths(FP,Add,1,BGMMode)},{preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,#BModeArr+1,BGMMode)},{SetCDeaths(FP,SetTo,#BModeArr,BGMMode)},{preserved})
 
 Trigger {
 	players = {FP},
@@ -4530,10 +4530,10 @@ CMov(FP,Du,Dy)
 --]]
 local TGiveComplete = CreateCcode()
 NWhile(FP,CDeaths(FP,AtLeast,1,TGiveforCoCoon),{SetCDeaths(FP,Subtract,1,TGiveforCoCoon),SetCDeaths(FP,SetTo,1,TGiveComplete)})
-Trigger2(FP,{Command(11,AtLeast,1,80)},{GiveUnits(1,80,11,64,7)},{Preserved})
-Trigger2(FP,{Command(11,AtLeast,1,21)},{GiveUnits(1,21,11,64,7)},{Preserved})
-Trigger2(FP,{Command(11,AtLeast,1,80)},{GiveUnits(1,80,11,64,6)},{Preserved})
-Trigger2(FP,{Command(11,AtLeast,1,21)},{GiveUnits(1,21,11,64,6)},{Preserved})
+Trigger2(FP,{Command(11,AtLeast,1,80)},{GiveUnits(1,80,11,64,7)},{preserved})
+Trigger2(FP,{Command(11,AtLeast,1,21)},{GiveUnits(1,21,11,64,7)},{preserved})
+Trigger2(FP,{Command(11,AtLeast,1,80)},{GiveUnits(1,80,11,64,6)},{preserved})
+Trigger2(FP,{Command(11,AtLeast,1,21)},{GiveUnits(1,21,11,64,6)},{preserved})
 NWhileEnd()
 TriggerX(FP,{CDeaths(FP,AtLeast,1,TGiveComplete)},{
 	GiveUnits(All,80,11,64,7);
@@ -4814,10 +4814,10 @@ DeathsX(EPDF(0x628298-0x150*i+(19*4)),Exactly,0*256,0,0xFF00),
 end
 CunitCtrig_End()
 CWhile(FP,CDeaths(FP,AtLeast,1,Die_SEC),SetCDeaths(FP,Subtract,1,Die_SEC))
-TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 CWhileEnd()
 DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
-TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 
 Install_boss()
 CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
@@ -5271,14 +5271,14 @@ CreateUnit(2,53,1,6),
 CreateUnit(1,54,1,7),
 CreateUnit(1,55,1,7),
 CreateUnit(1,56,1,7),
-CreateUnit(1,104,1,6),},{Preserved})
+CreateUnit(1,104,1,6),},{preserved})
 
 TriggerX(FP,CDeaths(FP,Exactly,1,NBMode),{MoveLocation(1,217,FP,64),GiveUnits(1,217,FP,1,8),RemoveUnit(217,8),
 CreateUnit(1,48,1,6),
 CreateUnit(1,53,1,6),
 CreateUnit(1,54,1,7),
 CreateUnit(1,55,1,7),
-},{Preserved})
+},{preserved})
 
 NWhileEnd()
 
@@ -5762,7 +5762,7 @@ G_CA_SetSpawn({CDeaths(FP,Exactly,1,WaveC)},{55,53, 39},P_7,3,"MAX")
 G_CA_SetSpawn({CDeaths(FP,Exactly,2,WaveC)},{56,54, 53},P_6,3,"MAX")
 G_CA_SetSpawn({CDeaths(FP,Exactly,3,WaveC)},{56,104, 48, 51},P_8,3,"MAX")
 DoActionsX(FP,SetCDeaths(FP,Add,1,WaveC))
-TriggerX(FP,{CDeaths(FP,AtLeast,4,WaveC)},{SetCDeaths(FP,SetTo,0,WaveC)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,4,WaveC)},{SetCDeaths(FP,SetTo,0,WaveC)},{preserved})
 CIfEnd()
 
 CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",81)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
@@ -6889,9 +6889,9 @@ end
 		},
 	}
 NIf(FP,CVar(FP,Cell_R[2],Exactly,0))
-TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
-TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
-TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{Preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^1)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{preserved})
+TriggerX(FP,{CGMode(1),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^2)*(0x10000))},{SetCDeaths(FP,Add,1,BossKill)},{preserved})
 CIfOnce(FP,{Memory(0x628438,AtLeast,1),CDeaths(FP,AtMost,5999,GunBossAct),CDeaths(FP,AtLeast,2,GMode),DeathsX(FP,Exactly,(2^0)*0x10000,168,(2^0)*(0x10000))})
 f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
 CMov(FP,TBossHPPtr,Nextptrs,2)
@@ -7123,13 +7123,13 @@ Trigger2X(FP,{CDeaths(FP,Exactly,50,TBossT)},{CopyCpAction({
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV");
 	DisplayTextX(TBossTxt1,4)
-},HumanPlayers,FP)},{Preserved})
+},HumanPlayers,FP)},{preserved})
 Trigger2X(FP,{CDeaths(FP,Exactly,250,TBossT)},{CopyCpAction({
 	TalkingPortrait(5, 6100),
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV");
 	DisplayTextX(TBossTxt2,4)
-},HumanPlayers,FP)},{Preserved})
+},HumanPlayers,FP)},{preserved})
 Simple_SetLocX(FP,"TBossLoc",0,0,480,480,{MoveLocation("TBossLoc",5,FP,64)})
 CIf(FP,CDeaths(FP,AtLeast,250,TBossT),{SetCDeaths(FP,SetTo,0,TBossT)})
 UnitReadX(FP,Force1,"Men","TBossLoc",B1_Calc)
@@ -7888,7 +7888,7 @@ CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 	local ValCancle = def_sIndex()
 	NJump(FP,ValCancle,{TMemory(_Add(BackupCP,6),Exactly,58)})
 	CTrigger(FP,{Deaths(i,AtLeast,1,53)}, -- Stop
-	{TSetDeathsX(BackupCP,SetTo,1*256,0,0xFF00)},{Preserved})
+	{TSetDeathsX(BackupCP,SetTo,1*256,0,0xFF00)},{preserved})
 	CIf(FP,{Deaths(i,AtLeast,1,52)}) -- Hold
 		f_Read(FP,_Sub(BackupCP,9),TempPos)
 		CDoActions(FP,{TSetDeaths(_Add(BackupCP,4),SetTo,0,0),TSetDeathsX(BackupCP,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCP,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCP,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCP,15),SetTo,TempPos,0)})
@@ -7925,8 +7925,8 @@ table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+48,SetTo,1)) -- 9,
 table.insert(OrderCooltimeRecover,SetMemoryB(0x57F27C+(228*i)+49,SetTo,1)) -- 9, 34 활성화하고 비활성화할 유닛 인덱스
 table.insert(OrderCooltime2,SetCDeaths(FP,Subtract,1,OrderCool[i+1]))
 
-TriggerX(FP,{CDeaths(FP,AtLeast,1,OrderCool[i+1])},{OrderCooltime},{Preserved})
-TriggerX(FP,{CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,1,OrderCool[i+1])},{OrderCooltime},{preserved})
+TriggerX(FP,{CDeaths(FP,Exactly,0,OrderCool[i+1])},{OrderCooltimeRecover},{preserved})
 end
 DoActionsX(FP,OrderCooltime2)
 
@@ -8705,7 +8705,7 @@ CTrigger(FP,{TMemory(_Add(NePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	
 CIfX(FP,{Bring(j,AtLeast,1,16,64),CDeaths(FP,Exactly,0,NeSkill[j+1])})
 	DoActions(FP,{Simple_SetLoc("S"..j+1,0,0,32*5,32*5),MoveLocation("S"..j+1,16,j,64)})
-	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{RemoveUnit(182,j)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT2[j+1])},{RemoveUnit(182,j)},{preserved})
 	CIf(FP,{
 		_TP(_TOR(
 			_TAND(
@@ -8745,7 +8745,7 @@ CTrigger(FP,{TMemory(_Add(TePtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	},1)
 CIfX(FP,{Bring(j,AtLeast,1,0,64),CDeaths(FP,Exactly,0,TeSkill[j+1])})
 	DoActions(FP,{Simple_SetLoc("G"..j+1,0,0,32*5,32*5),MoveLocation("G"..j+1,0,j,64)})
-	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{RemoveUnit(183,j)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT3[j+1])},{RemoveUnit(183,j)},{preserved})
 	CIf(FP,{
 		_TP(_TOR(
 			_TAND(
@@ -8786,7 +8786,7 @@ CTrigger(FP,{TMemory(_Add(SuPtr[j+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactl
 	
 CIfX(FP,{Bring(j,AtLeast,1,12,64),CDeaths(FP,Exactly,0,SuSkill[j+1])})
 DoActions(FP,{Simple_SetLoc("P"..j+1,0,0,32*10,32*10),MoveLocation("P"..j+1,12,j,64)})
-TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT[j+1])},{RemoveUnit(1,j)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BSkillT[j+1])},{RemoveUnit(1,j)},{preserved})
 CIf(FP,{
 	_TP(_TOR(
 		_TAND(
@@ -9962,7 +9962,7 @@ Trigger { -- 기부 금액 변경
 		},
 }
 end
-TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
+TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
 end
 
 
@@ -10164,8 +10164,8 @@ Trigger {
 }
 end
 
-TriggerX(FP,{CDeaths(FP,AtLeast,#LV_10_UnitTable,LV_10_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_10_UnitTableCode)},{Preserved})
-TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_11_UnitTableCode)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,#LV_10_UnitTable,LV_10_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_10_UnitTableCode)},{preserved})
+TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_11_UnitTableCode)},{preserved})
 
 
 CIfEnd()-- GameStart End
@@ -10279,7 +10279,7 @@ for l, m in pairs(BGMArr) do
 end
 
 CElseX()
-TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},FP)},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg")},{P9,P10,P11,P12},FP)},{preserved})
 CIfXEnd()
 CMov(FP,0x6509B0,0)
 CWhile(FP,Memory(0x6509B0,AtMost,5))
@@ -10307,7 +10307,7 @@ for l, m in pairs(BGMArr) do
 	end
 end
 CElseX()
-TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{PlayWAV("staredit\\wav\\BGM_Skip.ogg");PlayWAV("staredit\\wav\\BGM_Skip.ogg");},{Preserved})
+TriggerX(FP,{CDeaths(FP,AtMost,0,BossStart)},{PlayWAV("staredit\\wav\\BGM_Skip.ogg");PlayWAV("staredit\\wav\\BGM_Skip.ogg");},{preserved})
 CIfXEnd()
 CIfEnd()
 CAdd(FP,0x6509B0,1)

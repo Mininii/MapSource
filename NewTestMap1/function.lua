@@ -73,7 +73,7 @@ function DoActionsX(PlayerID,Actions,Flags,Index)
 		Index = 0
 	end
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -110,7 +110,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 	local Size = #Actions
 
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -532,7 +532,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 					CopyCpActionX({PlayWAVX(v[2])},TargetPlayer);
 					SetNVar(Arr[3],Add,v[3]);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 		end
 	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
@@ -544,7 +544,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 				actions = {
 					CopyCpActionX({PlayWAVX(AlertWav)},TargetPlayer);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 		end
 	CIfXEnd()
