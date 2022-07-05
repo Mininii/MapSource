@@ -5,34 +5,50 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_GaLaXy.R\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-
+LD2XOption = 1
+if LD2XOption == 1 then
+	MapFolder = "MSF_GaLaXy.R"
+	Mapdir="C:\\euddraft0.9.2.0\\"..MapFolder
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+	MapFolder = "MSF_GaLaXy.R"
+end
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
 end
 
-EXTLUA = "dir \""..Curdir.."\\MapSource\\MSF_GaLaXy.R\\\" /b"
+EXTLUA = "dir \""..Curdir.."\\MapSource\\"..MapFolder.."\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "main.lua" then
-		InitEXTLua = assert(loadfile(Curdir.."MapSource\\MSF_GaLaXy.R\\"..dir))
+		InitEXTLua = assert(loadfile(Curdir.."MapSource\\"..MapFolder.."\\"..dir))
 		InitEXTLua()
      end
 end
+
+
 
 ------------------------------------------------------------------------------------------------------------------------------
 
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(1)
-X2_Mode = 1
+TestSet(0)
+X2_Mode = 0
+Test=""
+if Limit == 1 then Test="T" end
 if X2_Mode == 1 then
-	VName = "1.7_2X"
+	VName = "1.7_2X"..Test
+	MapSize = {256*32,256*32}
 else
-	VName = "1.7"
+	VName = "2.0"..Test
+	MapSize = {128*32,128*32}
 end
 FP = P8
 EUDTurbo(FP)
@@ -40,7 +56,7 @@ SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
-StartCtrig(1,FP,nil,1)
+StartCtrig(1,FP,nil,1,"C:\\Temp")
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100")
@@ -48,9 +64,9 @@ CJump(AllPlayers,init_func)
 	DUnitCalc = Install_EXCC(FP,15,1)
 	Install_CallTriggers()
 	Install_GetCLoc(FP,0,nilunit)
-	Include_Conv_CPosXY(FP)
+	Include_Conv_CPosXY(FP,MapSize)
 	Include_CRandNum(FP)
-	Include_G_CA_Library(4,0x600,32,STRCTRIGASM)
+	Include_G_CA_Library(4,0x600,32)
 	G3_Install_Shape()
 	G_CAPlot2(G_CAPlot_Shape_InputTable)
 	Install_Load_CAPlot()
@@ -78,3 +94,9 @@ Enable_HideErrorMessage(FP)
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
+
+
+if LD2XOption == 1 then
+	__PopStringArray()
+	io.close(__TRIGchkptr)
+end

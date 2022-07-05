@@ -104,6 +104,12 @@ CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[
 CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료"),
 CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07선택완료"),
 }
+Str27 = {
+CreateCText(FP,"\x04 : \x04[Q] \x0E쫄보\x04의 \x04일반모드 \x04[W] \x08상남자\x04의 \x06드랍모드 \x04[E] \x10돌아이\x04의 \x11응답없음모드 \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x03[Q] \x0E쫄보\x04의 \x04일반모드 \x04[W] \x08상남자\x04의 \x06드랍모드 \x04[E] \x10돌아이\x04의 \x11응답없음모드 \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0E쫄보\x04의 \x04일반모드 \x03[W] \x08상남자\x04의 \x06드랍모드 \x04[E] \x10돌아이\x04의 \x11응답없음모드 \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0E쫄보\x04의 \x04일반모드 \x04[W] \x08상남자\x04의 \x06드랍모드 \x03[E] \x10돌아이\x04의 \x11응답없음모드 \x04[Y] \x07선택완료"),
+}
 
 DifLeaderBoard = {
 	"\x04 - \x0EEASY \x04Mode",
@@ -123,9 +129,12 @@ DifLeaderBoard = {
 	ToggleSound = CreateCcode()
 	ToggleSound2 = CreateCcode()
 	ModeSel = CreateCcode()
-	Gmode = CreateCcode()
+	GMode = CreateCcode()
 	SelectorT = CreateCcode()
 	IntroT = CreateCcode()
+	IntroT2 = CreateCcode()
+	DMode = CreateCcode()
+
 	ModeT = CreateCcode()
 	ModeT2 = CreateCcode()
 	ModeO = CreateCcode()

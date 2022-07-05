@@ -25,6 +25,21 @@ Trigger { -- 데스 스코어 리더보드
 	conditions = {
 		Label(0);
 		CD(GMode,i),
+		CD(DMode,2,AtLeast),
+		CDeaths(FP,Exactly,400,LeaderBoardT);
+	},
+	actions = {
+		LeaderBoardScore(Custom, "\x08Deaths...\x04(\x06MAX \x07100\x04)"..DifLeaderBoard[i]);
+		LeaderBoardComputerPlayers(Disable);
+		PreserveTrigger();
+},
+}
+Trigger { -- 데스 스코어 리더보드
+	players = {FP},
+	conditions = {
+		Label(0);
+		CD(GMode,i),
+		CD(DMode,1,AtMost),
 		CDeaths(FP,Exactly,400,LeaderBoardT);
 	},
 	actions = {

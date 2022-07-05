@@ -304,6 +304,7 @@ function init()
 			InputTesterID(i,"_Mininii")
 			InputTesterID(i,"RonaRonaChan")
 			InputTesterID(i,"RonaRonaTTang")
+			InputTesterID(i,"Azusawa_Kohane")
 			
 			
 		end
@@ -519,14 +520,14 @@ function init()
 			CMov(FP,CurrentUID,0)
 			CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- 아 발키리 좀 저리가요
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,nilunit)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Cantina = nil
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,4)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,6)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,18)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,24)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,26)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
-			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,31)},{SetCVar(FP,CurrentUID[2],Add,1)},{Preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- 아 발키리 좀 저리가요
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,nilunit)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Cantina = nil
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,4)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,6)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,18)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,24)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,26)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
+			TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,31)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Unit Turret
 			CMov(FP,VRet,CurrentUID,EPD(0x664080)) -- SpecialAdvFlag
 			CMov(FP,VRet2,CurrentUID,EPD(0x662860)) --BdDim
 			ConvertArr(FP,ArrID,CurrentUID)

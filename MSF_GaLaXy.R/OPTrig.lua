@@ -24,7 +24,7 @@ for i = 1, #HiddenCommand do
 end
 
 function KeyInput(Key,Condition,Action)
-	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},{SetDeaths(CurrentPlayer,SetTo,0,Key),Action},{Preserved})	
+	Trigger2X(FP,{Deaths(CurrentPlayer,AtLeast,1,Key),Condition},{SetDeaths(CurrentPlayer,SetTo,0,Key),Action},{preserved})	
 	end
 if Limit == 1 then
 	KeyInput(200,nil,{SetCDeaths(FP,SetTo,1,TestMode)})
@@ -39,9 +39,16 @@ KeyInput(61,{CVar(FP,HiddenATK[2],AtMost,4);},{SetCVar(FP,HiddenATK[2],Add,1);Se
 KeyInput(64,{CVar(FP,HiddenATKM[2],AtMost,4);},{SetCVar(FP,HiddenATKM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(62,{CVar(FP,HiddenPts[2],AtMost,4);},{SetCVar(FP,HiddenPts[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(65,{CVar(FP,HiddenPtsM[2],AtMost,4);},{SetCVar(FP,HiddenPtsM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
-TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],Subtract,1);SetCVar(FP,HiddenHPM[2],Subtract,1);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],Subtract,1);SetCVar(FP,HiddenATKM[2],Subtract,1);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],Subtract,1);SetCVar(FP,HiddenPtsM[2],Subtract,1);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],Subtract,1);SetCVar(FP,HiddenHPM[2],Subtract,1);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],Subtract,1);SetCVar(FP,HiddenATKM[2],Subtract,1);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],Subtract,1);SetCVar(FP,HiddenPtsM[2],Subtract,1);},{preserved})
+
+--플러스 옵션 이용불가
+TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],SetTo,0)},{preserved})
+TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],SetTo,0)},{preserved})
+TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],SetTo,0)},{preserved})
+
+
 HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"
 HiddenModeStr2 = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x08: ON) \x10]\x0D\x0D\x0D\x0D\x0D"
 CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
@@ -49,8 +56,8 @@ Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr,0)
 CElseX()
 Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr2,0)
 CIfXEnd()
-HiddenModeL = GetStrSize(0,HiddenModeStr)
-HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~버튼"
+HiddenModeL = GetStrSize(0,HiddenModeStr)--
+HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~ 버튼\n\x13\x04현재 플러스 옵션 이용불가. 마이너스 옵션 선택가능"
 WavFile = "staredit\\wav\\Unlock.ogg"
 DoActions2X(FP,{
 	RotatePlayer({
@@ -59,45 +66,58 @@ DoActions2X(FP,{
 		DisplayTextX("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);},HumanPlayers,FP)
 },1)
 for i = 2, 0, -1 do
-	TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{Preserved})
-	TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{Preserved})
-	TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{Preserved})
-	TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{Preserved})
-	TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{Preserved})
-	TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{Preserved})
+	TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{preserved})
+	TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{preserved})
+	TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{preserved})
+	TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{preserved})
+	TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{preserved})
+	TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{preserved})
 end
-TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x2D*256,0xFF00);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenHPM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x0D*256,0xFF00);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x2D*65536,0xFF0000);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenATKM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x0D*65536,0xFF0000);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x2D*16777216,0xFF000000);},{Preserved})
-TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x0D*16777216,0xFF000000);},{Preserved})
+TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x2D*256,0xFF00);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenHPM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x0D*256,0xFF00);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x2D*65536,0xFF0000);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenATKM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x0D*65536,0xFF0000);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x2D*16777216,0xFF000000);},{preserved})
+TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x0D*16777216,0xFF000000);},{preserved})
 
 f_Movcpy(FP,HiddenModeStrPtr,VArr(HiddenModeT,0),HiddenModeL)
 WavFile = "staredit\\wav\\sel_g.ogg"
-Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{RotatePlayer({PlayWAVX(WavFile);DisplayTextX("HD".._0D,4);},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound);},{Preserved})
+Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{RotatePlayer({PlayWAVX(WavFile);DisplayTextX("HD".._0D,4);},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound);},{preserved})
 CIfEnd()
 
-CIf(FP,{CDeaths(FP,AtMost,0,ModeSel)})
-KeyInput(210,nil,{SetCDeaths(FP,SetTo,1,Gmode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
-KeyInput(211,nil,{SetCDeaths(FP,SetTo,2,Gmode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
-KeyInput(212,nil,{SetCDeaths(FP,SetTo,3,Gmode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+CIf(FP,{CDeaths(FP,Exactly,0,ModeSel)})
+KeyInput(210,nil,{SetCDeaths(FP,SetTo,1,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(211,nil,{SetCDeaths(FP,SetTo,2,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(212,nil,{SetCDeaths(FP,SetTo,3,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
 KeyInput(213,{CDeaths(FP,AtLeast,1,GMode);},{SetCDeaths(FP,SetTo,1,ModeSel);SetCDeaths(FP,SetTo,1,SelectorT);})
+CIfEnd()	
+CIf(FP,{CDeaths(FP,Exactly,2,ModeSel)})
+KeyInput(210,nil,{SetCDeaths(FP,SetTo,1,DMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(211,nil,{SetCDeaths(FP,SetTo,2,DMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(212,nil,{SetCDeaths(FP,SetTo,3,DMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(213,{CDeaths(FP,AtLeast,1,DMode);},{SetCDeaths(FP,SetTo,3,ModeSel);SetCDeaths(FP,SetTo,3,SelectorT);})
 CIfEnd()	
 CMov(FP,0x6509B0,FP)
 
-Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound2);},{RotatePlayer({PlayWAVX(WavFile)},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound2);},{Preserved})
+Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound2);},{RotatePlayer({PlayWAVX(WavFile)},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound2);},{preserved})
 		
 for j = 1, 7 do
-CIf(FP,{CDeaths(FP,Exactly,0,SelectorT),CVar(FP,SelCP[2],Exactly,j-1)})
+CIf(FP,{TTOR({CDeaths(FP,Exactly,0,SelectorT),CDeaths(FP,Exactly,2,SelectorT)}),CVar(FP,SelCP[2],Exactly,j-1)})
 f_Memcpy(FP,0x641598,_TMem(Arr(Str26[3],0),"X","X",1),Str26[2])
 f_Movcpy(FP,0x641598+Str26[2],VArr(Names[j],0),4*6)
 CIfEnd()
 end
 CIf(FP,{CDeaths(FP,Exactly,0,ModeSel)})
 for i = 0, 3 do
-CIf(FP,CDeaths(FP,Exactly,i,Gmode))
+CIf(FP,CDeaths(FP,Exactly,i,GMode))
 f_Memcpy(FP,0x641598+Str26[2]+(4*6)-5,_TMem(Arr(Str25[i+1][3],0),"X","X",1),Str25[i+1][2])
+CIfEnd()
+end
+CIfEnd()
+CIf(FP,{CDeaths(FP,Exactly,2,ModeSel)})
+for i = 0, 3 do
+CIf(FP,CDeaths(FP,Exactly,i,DMode))
+f_Memcpy(FP,0x641598+Str26[2]+(4*6)-5,_TMem(Arr(Str27[i+1][3],0),"X","X",1),Str27[i+1][2])
 CIfEnd()
 end
 CIfEnd()
@@ -119,8 +139,19 @@ Trigger {
 		PreserveTrigger();
 	}
 	}
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,2,SelectorT);
+	},
+	actions = {
+		SetCDeaths(FP,Add,1,IntroT2);
+		PreserveTrigger();
+	}
+	}
 
-	Trigger {
+Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -134,6 +165,21 @@ Trigger {
 		SetCDeaths(FP,SetTo,0,IntroT);
 	}
 	}
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,24*30,IntroT2);
+			CDeaths(FP,Exactly,2,ModeSel);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,DMode);
+			SetCDeaths(FP,SetTo,3,ModeSel);
+			SetCDeaths(FP,SetTo,3,SelectorT);
+			SetCDeaths(FP,SetTo,0,IntroT);
+		}
+		}
 
 
 	Text1 = "\x13\x07난이도\x04를 선택해주세요.\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 30초 후 자동으로 \x0EEASY\x04모드가 선택됩니다."
@@ -149,6 +195,18 @@ players = {FP},
 conditions = {
 	Label(0);
 	CDeaths(FP,Exactly,56*2,ModeT2);
+},
+actions = {
+	--SetCDeaths(FP,Add,1,ModeO);
+	SetCDeaths(FP,SetTo,2,SelectorT);
+	SetCDeaths(FP,SetTo,2,ModeSel);
+}
+}
+Trigger {
+players = {FP},
+conditions = {
+	Label(0);
+	CDeaths(FP,Exactly,56*4,ModeT2);
 },
 actions = {
 	SetCDeaths(FP,Add,1,ModeO);
@@ -167,11 +225,42 @@ actions = {
 	PreserveTrigger();
 }
 }
+Trigger {
+players = {FP},
+conditions = {
+	Label(0);
+	CDeaths(FP,Exactly,0,ModeO);
+	CDeaths(FP,Exactly,3,SelectorT);
+},
+actions = {
+	SetCDeaths(FP,Add,1,ModeT2);
+	_0DPatchforT13;
+	PreserveTrigger();
+}
+}
 for i = 1, 3 do
-Trigger2X(FP,{CDeaths(FP,AtLeast,1,ModeSel);CDeaths(FP,Exactly,i,Gmode);},{
+Trigger2X(FP,{CDeaths(FP,Exactly,1,ModeSel);CDeaths(FP,Exactly,i,GMode);},{
 	RotatePlayer({DisplayTextX(Text1[i]),PlayWAVX(WavFile)},HumanPlayers,FP)
 })
 end
+
+
+Text1 = "\x13\x08드랍모드\x04를 선택해주세요.\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 30초 후 자동으로 \x0E일반\x04모드가 선택됩니다."
+WavFile = "staredit\\wav\\Sel2.ogg"
+Trigger2X(FP,{CDeaths(FP,Exactly,2,ModeSel)},{RotatePlayer({DisplayTextX(Text1,4);PlayWAVX(WavFile)},HumanPlayers,FP)})
+Text2 = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+Text1 = {"\x13\x07\n\x13\x04[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x05[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x07모드 선택\x04이 완료되었습니다.",
+"\x13\x07\n\x13\x05[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x04[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x07모드 선택\x04이 완료되었습니다.\n\x13\x08드랍 또는 \x11응답없음모드 \x04선택으로 \x06공격력\x04이 \x072배 \x04증가하였습니다.",
+"\x13\x07\n\x13\x05[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x05[W] \x08상남자\x04의 \x06드랍모드\n\x13\x04[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x07모드 선택\x04이 완료되었습니다.\n\x13\x08드랍 또는 \x11응답없음모드 \x04선택으로 \x06공격력\x04이 \x072배 \x04증가하였습니다."}
+WavFile = "staredit\\wav\\Select.ogg"
+
+for i = 1, 3 do
+	Trigger2X(FP,{CDeaths(FP,Exactly,3,ModeSel);CDeaths(FP,Exactly,i,DMode);},{
+		RotatePlayer({DisplayTextX(Text1[i]),PlayWAVX(WavFile)},HumanPlayers,FP)
+	})
+	end
+	
+
 Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
@@ -207,8 +296,6 @@ end
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 
 NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),{
-	SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
-	SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
 })
 HiddenCancel = def_sIndex()
 NJump(FP,HiddenCancel,{
@@ -220,6 +307,10 @@ NJump(FP,HiddenCancel,{
 	CVar(FP,HiddenATKM[2],Exactly,0);
 	CVar(FP,HondonMode[2],Exactly,0);
 },{SetCDeaths(FP,SetTo,0,HiddenMode);})
+TriggerX(FP,{SetCDeaths(FP,AtLeast,#HiddenCommand,HiddenMode);},{
+	SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
+	SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
+})
 Trigger2X(FP,{CV(HiddenHPM,1,AtLeast)},HiddenHPMPatchArr)
 for i = 1, 5 do
 	TriggerX(FP,{
@@ -243,6 +334,28 @@ for i = 1, 5 do
 		players = {FP},
 		conditions = {
 			Label(0);
+			CVar(FP,HiddenATK[2],Exactly,0);
+			CDeaths(FP,AtLeast,2,DMode); -- 드랍 or 응없모드시 공2배 적용
+		},
+		actions = {		
+			SetMemoryW(0x656EB0+(0*2),Add,70);
+			SetMemoryW(0x657678+(0*2),Add,3);
+			SetMemoryW(0x656EB0+(1*2),Add,88);
+			SetMemoryW(0x657678+(1*2),Add,4);
+			SetMemoryW(0x656EB0+(117*2),Add,70);
+			SetMemoryW(0x657678+(117*2),Add,6);
+			SetMemoryW(0x656EB0+(3*2),Add,150);
+			SetMemoryW(0x657678+(3*2),Add,5);
+			SetMemoryW(0x656EB0+(13*2),Add,5);
+			SetMemoryW(0x657678+(13*2),Add,2);
+		}
+	}
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtMost,1,DMode); -- 드랍 or 응없모드 없을경우
 			CVar(FP,HiddenATK[2],Exactly,i);
 		},
 		actions = {		
@@ -256,6 +369,26 @@ for i = 1, 5 do
 			SetMemoryW(0x657678+(3*2),Add,5*i);
 			SetMemoryW(0x656EB0+(13*2),Add,5*i);
 			SetMemoryW(0x657678+(13*2),Add,2*i);
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtLeast,2,DMode); -- 드랍 or 응없모드시 공2배 적용
+			CVar(FP,HiddenATK[2],Exactly,i);
+		},
+		actions = {		
+			SetMemoryW(0x656EB0+(0*2),Add,(70*i)+(70*i));
+			SetMemoryW(0x657678+(0*2),Add,(3*i)+(3*i));
+			SetMemoryW(0x656EB0+(1*2),Add,(88*i)+(88*i));
+			SetMemoryW(0x657678+(1*2),Add,(4*i)+(4*i));
+			SetMemoryW(0x656EB0+(117*2),Add,(70*i)+(70*i));
+			SetMemoryW(0x657678+(117*2),Add,(6*i)+(6*i));
+			SetMemoryW(0x656EB0+(3*2),Add,(150*i)+(150*i));
+			SetMemoryW(0x657678+(3*2),Add,(5*i)+(5*i));
+			SetMemoryW(0x656EB0+(13*2),Add,(5*i)+(5*i));
+			SetMemoryW(0x657678+(13*2),Add,(2*i)+(2*i));
 		}
 	}
 	Trigger {

@@ -5,7 +5,7 @@ function Gun_System()
 	if X2_Mode == 1 then
 		X2Cancel = Never()
 	else
-		X2Cancel = nil
+		X2Cancel = Disabled(Never())
 	end
 	CIf(FP,{X2Cancel,Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 
@@ -35,7 +35,7 @@ function Gun_System()
 			KillUnit(54,FP);
 			KillUnit(55,FP);
 			KillUnit(56,FP);
-			CanDisplayT;},{Preserved})
+			CanDisplayT;},{preserved})
 	Trigger2X(FP,{--캔발동
 	Memory(0x628438,AtMost,0);
 		CDeaths(FP,AtMost,2,CanC);
@@ -49,7 +49,7 @@ function Gun_System()
 			},HumanPlayers,FP);
 			SetCDeaths(FP,SetTo,24*30,CanCT);
 			SetCDeaths(FP,Add,1,CanC);
-	},{Preserved})
+	},{preserved})
 	
 	Trigger2X(FP,{--캔발동
 		Memory(0x628438,AtMost,0);
@@ -65,14 +65,19 @@ function Gun_System()
 			SetCDeaths(FP,SetTo,24*30,CanCT);
 			SetCDeaths(FP,Add,1,CanC);
 			SetCDeaths(FP,Add,1,DefeatCC);
-	},{Preserved})
+	},{preserved})
 
 	
 
 
-	TriggerX(FP,CD(DefeatCC,1,AtLeast),{AddCD(DefeatCC,1)},{Preserved})
+	TriggerX(FP,CD(DefeatCC,1,AtLeast),{AddCD(DefeatCC,1)},{preserved})
 	TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(TestMode,0)},{
-		RotatePlayer({Defeat()},HumanPlayers,FP);},{Preserved})
+		RotatePlayer({Defeat()},HumanPlayers,FP);},{preserved})
+	TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,2)},{ -- 캔아웃 드랍
+		RotatePlayer({RunAIScript(P8VON)},{8,9,10,11},FP)
+	},{preserved})
+	CWhile(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,3)}) -- 캔아웃 응없
+	CWhileEnd()
 
 	CIfEnd()
 	count4 = CreateVar(FP)
@@ -90,9 +95,9 @@ function Gun_System()
 	CAdd(FP,count,count5)
 	local CurCunitI2 = CreateVar(FP)
 	CIf(FP,{CD(NosBGM,1)},SetCD(NosBGM,0))
-	TriggerX(FP,DeathsX(AllPlayers,AtLeast,1,12,0xFFFFFF),{SetV(BGMType,99)},{Preserved})
-	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,0),CV(BGMType,0)},{SetV(BGMType,2),SetCD(NextNosBGM,1)},{Preserved})
-	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,1),CV(BGMType,0)},{SetV(BGMType,3),SetCD(NextNosBGM,0)},{Preserved})
+	TriggerX(FP,DeathsX(AllPlayers,AtLeast,1,12,0xFFFFFF),{SetV(BGMType,99)},{preserved})
+	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,0),CV(BGMType,0)},{SetV(BGMType,2),SetCD(NextNosBGM,1)},{preserved})
+	TriggerX(FP,{DeathsX(AllPlayers,Exactly,0,12,0xFFFFFF),CD(NextNosBGM,1),CV(BGMType,0)},{SetV(BGMType,3),SetCD(NextNosBGM,0)},{preserved})
 	CIfEnd()
 
 	IBGM_EPD(FP,6,nil,{12})
@@ -131,7 +136,7 @@ function Gun_System()
 		for j= 1, 5 do
 			CIf(FP,{DeathsX(CurrentPlayer,Exactly,DUArr[j],0,0xFF)})
 			f_SaveCp()
-			Trigger2X(FP,{},{SetScore(i,Add,DCArr[j],Custom),SetCD(DSound,1),RotatePlayer({DisplayTextX(DUStrArr[j],4)},HumanPlayers,FP)},{Preserved})
+			Trigger2X(FP,{},{SetScore(i,Add,DCArr[j],Custom),SetCD(DSound,1),RotatePlayer({DisplayTextX(DUStrArr[j],4)},HumanPlayers,FP)},{preserved})
 			f_LoadCp()
 			CIfEnd()
 		end
@@ -188,7 +193,7 @@ function Gun_System()
 	CDoActions(FP,{TSetScore(Force1,Add,HPoint10,Kills)})
 	HText = "\x0D\x0D\x0DHK".._0D
 	DoActions(FP,CopyCpAction({DisplayTextX(HText,4)},HumanPlayers,FP))
-	TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{Preserved})
+	TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 	
 	f_LoadCp()
     CIfEnd()
@@ -215,9 +220,9 @@ function Gun_System()
 	
 	
 
-	TriggerX(FP,{CD(SoundLimit,5,AtMost),CD(DSound,1,AtLeast)},{SetCD(DSound,0),AddCD(SoundLimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP)},{Preserved})
+	TriggerX(FP,{CD(SoundLimit,5,AtMost),CD(DSound,1,AtLeast)},{SetCD(DSound,0),AddCD(SoundLimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP)},{preserved})
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
-    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCD(DSound,0),SetCDeaths(FP,SetTo,0,SoundLimitT)},{Preserved})
+    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCD(DSound,0),SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 	Install_GunStack()
 	Create_G_CA_Arr()
 	CMov(FP,0x6509B0,FP)
@@ -234,11 +239,11 @@ function Gun_System()
 	DoActions(FP,{ModifyUnitHangarCount(1,All,82,P8,64),SetInvincibility(Enable,73,P8,64)})
 	HangerT=CreateCcode()
 	DoActionsX(FP,{AddCD(HangerT,1)})
-	TriggerX(FP,{CD(HangerT,50,AtLeast)},{SetCD(HangerT,0),RemoveUnit(85,P8),ModifyUnitHangarCount(1,All,81,P8,64)},{Preserved})
+	TriggerX(FP,{CD(HangerT,50,AtLeast)},{SetCD(HangerT,0),RemoveUnit(85,P8),ModifyUnitHangarCount(1,All,81,P8,64)},{preserved})
 	DoActions(FP,{SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane",17);
 	RunAIScriptAt("Value This Area Higher",4);},1)
-	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{Preserved})
-	Trigger2(FP,{Command(FP,AtLeast,30,35)},{KillUnit(35,FP)},{Preserved})
+	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{preserved})
+	Trigger2(FP,{Command(FP,AtLeast,30,35)},{KillUnit(35,FP)},{preserved})
 	
 	for i=1,10 do -- 파일런 갯수마다 벙커 체력 설정
 	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(9*i));},{preserved})
@@ -287,7 +292,7 @@ for i = 0, 3 do
 	if i == 1 then RS1 = Set RS2=Cleared end
 	if i == 2 then RS1 = Cleared RS2=Set end
 	if i == 3 then RS1 = Set RS2=Set end
-	TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{Preserved})
+	TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{preserved})
 end
 CIfEnd()
 CIfEnd()
@@ -328,7 +333,7 @@ for i = 0, 3 do
 	if i == 1 then RS1 = Set RS2=Cleared end
 	if i == 2 then RS1 = Cleared RS2=Set end
 	if i == 3 then RS1 = Set RS2=Set end
-	Trigger2X(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{Preserved})
+	Trigger2X(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{RotatePlayer({PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1]),PlayWAVX(WaveArr[i+1])},HumanPlayers,FP)},{preserved})
 end
 CIfEnd()
 CIfEnd()
@@ -381,9 +386,9 @@ CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)},{ModifyUnitShields(All,65,FP,64,
 DoActions(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,65,FP,64)})
 BossT = CreateCcode()
 DoActionsX(FP,{SubCD(BossT,1)})
-TriggerX(FP,{CD(GMode,2,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(9,70,1,FP),Order(70,FP,64,Patrol,1)},{Preserved})
-TriggerX(FP,{CD(GMode,3,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(20,70,1,FP),Order(70,FP,64,Patrol,1)},{Preserved})
-TriggerX(FP,{CD(GMode,2,AtLeast),CD(BossT,5)},{KillUnit(70,FP)},{Preserved})
+TriggerX(FP,{CD(GMode,2,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(9,70,1,FP),Order(70,FP,64,Patrol,1)},{preserved})
+TriggerX(FP,{CD(GMode,3,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(20,70,1,FP),Order(70,FP,64,Patrol,1)},{preserved})
+TriggerX(FP,{CD(GMode,2,AtLeast),CD(BossT,5)},{KillUnit(70,FP)},{preserved})
 
 Trigger2X(FP,{Bring(FP,AtMost,0,65,64)},{AddCD(BossCcode,1),SetScore(Force1,Add,1000000,Kills),KillUnit(70,FP),RotatePlayer({PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x04적의 \x08수호자 \x07Nought \x04가 쓰러졌습니다.\n\x13\x10+\x17 1000000 P t s \n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※",4)},HumanPlayers,FP)})
 CIfEnd()
@@ -394,7 +399,7 @@ PlayWAVX("staredit\\wav\\E_Clear.ogg");
 PlayWAVX("staredit\\wav\\E_Clear.ogg");
 PlayWAVX("staredit\\wav\\E_Clear.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,Win)})
 
-CIf(FP,CDeaths(FP,AtLeast,1,Win))
+CIfX(FP,CDeaths(FP,AtLeast,1,Win))
 DoActionsX(FP,SetCDeaths(FP,Add,1,Win))
 
 ClearTextArr = {
@@ -533,8 +538,8 @@ end
 
 
 
-
-CIfEnd()
+CElseIfX(CD(DMode,2,AtLeast),{SetMemory(0x59CC80,SetTo,0),SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)})--관전이고 뭐고 모두 ExitDrop 실행
+CIfXEnd()
 DoActions(FP,{SetResources(FP,Add,0x12345678,OreAndGas)},1)
 TriggerX(FP,{Deaths(FP,AtLeast,4,10)},{SetMemoryX(0x663ECC, SetTo, 400,0xFFFF);
 })
@@ -542,5 +547,5 @@ TriggerX(FP,{ElapsedTimeX(AtMost,390)},{
 	ModifyUnitEnergy(All,71,FP,64,20),
 	ModifyUnitEnergy(All,63,FP,64,20),
 	ModifyUnitEnergy(All,67,FP,64,20),
-},{Preserved})
+},{preserved})
 end

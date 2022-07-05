@@ -43,9 +43,9 @@ function Include_GunData(Size,LineNum)
 		function GunBGM(ID,Type,Text,Point,OtherTrig)
 			local GText = "\n\n\n\n\n\x13\x08！ ！ ！ \x04적의 "..Text.." 파괴하였다!\x17 + "..Point.." P t s\x08 ！ ！ ！\n\n"
 			if Type == nil then
-				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{Preserved})
+				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			else
-				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{Preserved})
+				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			end
 		end
 		GunBGM(131,nil,"기지 \x18Hatchery \x04를",25000,{SetCD(NosBGM,1)})
@@ -234,7 +234,7 @@ function Include_GunData(Size,LineNum)
 		NIfEnd()
 		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(HactCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(HactCcode,1)},{preserved})
 	CIfEnd()
 	
 	CIf_GCase(132)
@@ -299,7 +299,7 @@ function Include_GunData(Size,LineNum)
 		NIfEnd()
 		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(LairCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(LairCcode,1)},{preserved})
 	CIfEnd()
 	
 	CIf_GCase(133)
@@ -362,15 +362,15 @@ function Include_GunData(Size,LineNum)
 		CIfEnd()
 		if X2_Mode == 1 then
 			PSIHiveShape = CS_ConnectPathX({3   ,{480*2, 1600*2},{1152*2, 1216*2},{448*2, 864*2}},148)
-			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
+			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{preserved})
 		else
 			PSIHiveShape = CS_ConnectPathX({3   ,{480, 1600},{1152, 1216},{448, 864}},148)
-			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{Preserved})
+			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{preserved})
 		end
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
 		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
-		TriggerX(FP,{CV(HondonMode,0)},{SetMemory(0x6CA010, SetTo, 640)},{Preserved})
-		TriggerX(FP,{CV(HondonMode,1,AtLeast)},{SetMemory(0x6CA010, SetTo, 20000)},{Preserved})
+		TriggerX(FP,{CV(HondonMode,0)},{SetMemory(0x6CA010, SetTo, 640)},{preserved})
+		TriggerX(FP,{CV(HondonMode,1,AtLeast)},{SetMemory(0x6CA010, SetTo, 20000)},{preserved})
 		HiveCUTable2 = {
 			{ -- Index 4
 				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{104,25,4},{48,15,4},{19,{5,10,20},5}
@@ -470,11 +470,11 @@ function Include_GunData(Size,LineNum)
 		DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
 		
-		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(HiveCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),SubCD(HiveCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(156)
 		DoActions(FP,{CreateUnit(1,84,1,FP),KillUnit(84,FP)})
-		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{Preserved})
+		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{preserved})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
 			if X2_Mode==1 then
@@ -485,18 +485,18 @@ function Include_GunData(Size,LineNum)
 			CSPlot(PySuShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(PySuShape,FP,84,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(84,FP)},1)
-		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,193,1,FP)},{Preserved})
+		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,193,1,FP)},{preserved})
 	CIfEnd()
 	CIf_GCase(109)
 		DoActions(FP,{CreateUnit(1,22,1,FP),KillUnit(22,FP)})
-		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{Preserved})
+		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{preserved})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
 			PySuShape = {4,{-6*32,0},{0,-3*32},{6*32,0},{0,3*32}}
 			CSPlot(PySuShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(PySuShape,FP,22,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(22,FP)},1)
-		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,192,1,FP)},{Preserved})
+		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,192,1,FP)},{preserved})
 	CIfEnd()
 	CIf_GCase(175)
 	XelCUTable = {3,6,11}
@@ -508,7 +508,7 @@ function Include_GunData(Size,LineNum)
 				end
 			DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(XelCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(XelCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(127)
 	IonCUTable = {1,6,25}
@@ -538,7 +538,7 @@ function Include_GunData(Size,LineNum)
 			end
 			DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 		CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(IonCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(IonCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(116)
 	
@@ -553,9 +553,9 @@ function Include_GunData(Size,LineNum)
 	end
 	Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,{CreateUnit(5,84,1,FP),KillUnit(84,FP),})
 	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
-	TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{Preserved})
+	TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{preserved})
 	CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,10)},{Gun_DoSuspend(),AddCD(FaciCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,10)},{Gun_DoSuspend(),AddCD(FaciCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(150)
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,360))
@@ -579,7 +579,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(ChryCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(ChryCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(154)
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,90))
@@ -591,7 +591,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,6)},{Gun_DoSuspend(),AddCD(NexCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,6)},{Gun_DoSuspend(),AddCD(NexCcode,1)},{preserved})
 
 	CIfEnd()
 
@@ -603,7 +603,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,20)},{Gun_DoSuspend(),AddCD(CereCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,20)},{Gun_DoSuspend(),AddCD(CereCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(130)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,20),CreateUnit(5,84,1,FP),KillUnit(84,FP)})
@@ -613,7 +613,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,20)},{Gun_DoSuspend(),AddCD(CenCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,20)},{Gun_DoSuspend(),AddCD(CenCcode,1)},{preserved})
 	CIfEnd()
 
 
@@ -631,7 +631,7 @@ function Include_GunData(Size,LineNum)
 		SetMemoryX(0x666458, SetTo, 391,0xFFFF),CreateUnit(1,33,36,FP),
 		KillUnit(33,FP),
 		SetMemoryX(0x666458, SetTo, 546,0xFFFF)
-	},Preserved)
+	},preserved)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,10)})
 	if X2_Mode == 1 then
 		Shape8130 = {{4032*2, 3392*2},{3392*2, 3072*2},{3392*2, 3712*2},{2752*2, 3392*2}}
@@ -653,12 +653,12 @@ function Include_GunData(Size,LineNum)
 		DoActions(FP,{Simple_SetLoc(0,Shape8151[i][1]-128,Shape8151[i][2]-128,Shape8151[i][1]+128,Shape8151[i][2]+128),CreateUnit(1,72,1,FP),KillUnit(72,FP)})
 		f_TempRepeat({Gun_Line(8,AtMost,39)},88,1,201,nil,"CG")
 	end
-	TriggerX(FP,{Gun_Line(8,AtLeast,63),Gun_Line(8,AtMost,68)},{SetCp(FP),RunAIScriptAt(JYD,36)},{Preserved})
-	TriggerX(FP,{Gun_Line(8,Exactly,69)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,63),Gun_Line(8,AtMost,68)},{SetCp(FP),RunAIScriptAt(JYD,36)},{preserved})
+	TriggerX(FP,{Gun_Line(8,Exactly,69)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,70)},{Gun_DoSuspend(),AddCD(CocoonCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,70)},{Gun_DoSuspend(),AddCD(CocoonCcode,1)},{preserved})
 	CIfEnd()
 
 	CIf_GCase(200)
@@ -701,7 +701,7 @@ function Include_GunData(Size,LineNum)
 			end
 			
 			DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
-			TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{Preserved})
+			TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{preserved})
 		CIfEnd()
 		GeneActArr={}
 		for j, k in pairs(FaciPosArr) do
@@ -709,7 +709,7 @@ function Include_GunData(Size,LineNum)
 			table.insert(GeneActArr,CreateUnit(1,84,1,FP))
 		end
 		DoActions(FP,{GeneActArr,KillUnit(84,FP)})
-		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),AddCD(GeneCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,5)},{Gun_DoSuspend(),AddCD(GeneCcode,1)},{preserved})
 
 	CIfEnd()
 	CIf_GCase(147)
@@ -844,11 +844,11 @@ function Include_GunData(Size,LineNum)
 					table.insert(OvrMineActArr2,CreateUnit(1,13,1,FP))
 				end
 			end
-			Trigger2X(FP,{Gun_Line(3,Exactly,1)},OvrMineActArr,{Preserved})
-			Trigger2X(FP,{Gun_Line(3,Exactly,2)},OvrMineActArr2,{Preserved})
+			Trigger2X(FP,{Gun_Line(3,Exactly,1)},OvrMineActArr,{preserved})
+			Trigger2X(FP,{Gun_Line(3,Exactly,2)},OvrMineActArr2,{preserved})
 		DoActionsX(FP,{Gun_SetLine(10,Add,1)})
 		CIfEnd()
-		TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(OvrmCcode,1)},{Preserved})
+		TriggerX(FP,{Gun_Line(8,AtLeast,3)},{Gun_DoSuspend(),AddCD(OvrmCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(190)
 	PsiCUTable = {
@@ -878,7 +878,7 @@ function Include_GunData(Size,LineNum)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,6)},{Gun_DoSuspend(),AddCD(PsiCcode,1)},{Preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,6)},{Gun_DoSuspend(),AddCD(PsiCcode,1)},{preserved})
 		
 	CIfEnd()
 	CIf_GCase(173)
@@ -895,7 +895,7 @@ function Include_GunData(Size,LineNum)
 			CSPlot(FormShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(FormShape,FP,72,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(72,FP)},1)
-		Trigger2X(FP,{Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\seeya.ogg"),PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),Gun_DoSuspend(),KillUnitAt(All,125,21,AllPlayers),AddCD(FormCcode,1)},{Preserved})
+		Trigger2X(FP,{Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\seeya.ogg"),PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),Gun_DoSuspend(),KillUnitAt(All,125,21,AllPlayers),AddCD(FormCcode,1)},{preserved})
 	CIfEnd()
 	
 	CIf_GCase(168)

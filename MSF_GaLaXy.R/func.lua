@@ -126,7 +126,7 @@ function EXCC_Part1(EXCC_init,Actions)
 		actions = {
 			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+2,0,0,1); 
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 	Trigger { -- Cunit Calc Selector
 		players = {ParsePlayer(PlayerID)},
@@ -137,7 +137,7 @@ function EXCC_Part1(EXCC_init,Actions)
 			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
 			Actions,
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 	
 end
@@ -155,7 +155,7 @@ function EXCC_Part2()
 				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
 				SetMemory(0x6509B0,SetTo,P);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}	
 	end
 end
@@ -167,7 +167,7 @@ function EXCC_Part3X()
 		conditions = { 
 			Label(EXCC_Index+2);
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 
@@ -191,7 +191,7 @@ function EXCC_Part4X(LoopIndex,Conditions,Actions)
 		Actions,
 		EXCC_initArr[6]
 			},
-		flag = {Preserved}
+		flag = {preserved}
 	}		
 end
 
@@ -207,7 +207,7 @@ function EXCC_ClearCalc(Actions)
 			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
 			Actions
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 
@@ -231,7 +231,7 @@ function EXCC_BreakCalc(Conditions,Actions)
 			SetCtrigX("X",EXCC_Index+1,0x15C,0,SetTo,"X","X",0,0,1);
 			Actions,
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}	
 end
 
@@ -411,7 +411,7 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		CIf(PlayerID,CVar("X",CA[1],AtLeast,1))
 			if type(Shape[1]) ~= "number" then
 				for i = 1, #Shape do
-					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
+					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{preserved})
 				end
 			else
 				DoActions2X(PlayerID,TempAct)
@@ -471,9 +471,9 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 		if Preserve ~= nil then
 			if type(Preserve) == "number" then
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{preserved})
 			else
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{preserved})
 			end
 		end
 		local Ret = {CA[1],CA[2],CA[3],CA[4],CA[5],CA[6],CB[1],CB[2],CB[3]}
@@ -607,7 +607,7 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		CIf(PlayerID,CVar("X",CA[1],AtLeast,1))
 			if type(Shape[1]) ~= "number" then
 				for i = 1, #Shape do
-					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{Preserved})
+					Trigger2X(PlayerID,CVar("X",CA[1],Exactly,i),TempAct[i],{preserved})
 				end
 			else
 				DoActions2X(PlayerID,TempAct)
@@ -668,9 +668,9 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 		if Preserve ~= nil then
 			if type(Preserve) == "number" then
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},SetCVar("X",CA[6],SetTo,1),{preserved})
 			else
-				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{Preserved})
+				CTrigger(PlayerID,{TCVar("X",CA[6],AtLeast,Vi(CA[10],1))},{SetCVar("X",CA[6],SetTo,1),Preserve},{preserved})
 			end
 		end
 		local Ret = {CA[1],CA[2],CA[3],CA[4],CA[5],CA[6],CB[1],CB[2],CB[3]}
@@ -717,7 +717,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			if i == 1 then RS1 = Set RS2=Cleared end
 			if i == 2 then RS1 = Cleared RS2=Set end
 			if i == 3 then RS1 = Set RS2=Set end
-			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,11+i)},{Preserved})
+			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,11+i)},{preserved})
 		end
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
@@ -746,7 +746,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfEnd()
 
 
-		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{Preserved})
+		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,FuncAlloc)
 		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,FuncAlloc+1)
 		FuncAlloc=FuncAlloc+2
@@ -948,8 +948,8 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
 end
 Set_Repeat = SetCallForward()
 SetCall(FP)
-TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{Preserved})
-TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,256)},{SetCVar(FP,Repeat_TempV[2],SetTo,0)},{Preserved})
+TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
+TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,256)},{SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
 CIf(FP,CVar(FP,Repeat_TempV[2],AtLeast,1))
 	CMov(FP,Spawn_TempW,Repeat_TempV)
 	CMov(FP,Repeat_TempV,0)
@@ -1075,7 +1075,7 @@ local G_CA_Temp = Create_VTable(10)
 
 Call_CA_Repeat = SetCallForward()
 SetCall(FP)
-TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo,0)},{Preserved})
+TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo,0)},{preserved})
 DoActionsX(FP,{SetCDeaths(FP,SetTo,1,CA_Repeat_Check)})
 CMov(FP,Gun_TempSpawnSet1,CA_TempUID)
 CMov(FP,Repeat_TempV,1)

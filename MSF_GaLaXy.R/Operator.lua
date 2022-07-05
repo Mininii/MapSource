@@ -64,11 +64,11 @@ function Operator_Trig()
 				if X2_Mode == 1 then
 					TriggerX(FP,{
 						DeathsX(CurrentPlayer,AtLeast,(3744*2)+(64*(i-1)),0,0xFFFF),
-						DeathsX(CurrentPlayer,AtMost,(3744*2)+(64*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{Preserved})
+						DeathsX(CurrentPlayer,AtMost,(3744*2)+(64*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{preserved})
 				else
 					TriggerX(FP,{
 						DeathsX(CurrentPlayer,AtLeast,3744+(32*(i-1)),0,0xFFFF),
-						DeathsX(CurrentPlayer,AtMost,3744+(32*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{Preserved})
+						DeathsX(CurrentPlayer,AtMost,3744+(32*((i-1)+1)),0,0xFFFF)},{SetCVar(FP,SpeedVar[2],SetTo,i)},{preserved})
 				end
 			end
 		CIfEnd()

@@ -1,4 +1,7 @@
 function Interface()
+	local InfWhile = CreateCcode()
+	local Drop = CreateCcode()
+	
 	Trigger { -- 조합법 insert키
 		players = {Force1},
 		conditions = {
@@ -107,8 +110,103 @@ function Interface()
 					
 					},
 				}
+				
+			
 			end
 	for i = 0, 6 do
+		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(FP, AtLeast, 2, DMode);
+			Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+		},
+		actions = {
+			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 데스카운트 아웃으로 강퇴당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			},
+		}
+		Trigger { -- 강퇴 드랍
+			players = {i},
+			conditions = {
+				Label(0);
+				CDeaths(FP, Exactly, 2, DMode);--드랍모드
+				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				SetCD(Drop, 1),--드랍
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);--ExitDrop
+				},
+			}
+		Trigger { -- 강퇴 응없
+			players = {i},
+			conditions = {
+				Label(0);
+				CDeaths(FP, Exactly, 3, DMode);--드랍모드
+				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				SetCD(InfWhile, 1),--응답없음
+				},
+			}
+
+
 		DoActions(i,{
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[1],SetTo,0),
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[2],SetTo,0),
@@ -116,28 +214,28 @@ function Interface()
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[4],SetTo,0),
 		})
 		for j = 0, 3 do
-			TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{Preserved})
+			TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
 			TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
 				DisplayText(DelayMedicT[j+1],4),
 				SetCDeaths(FP,Add,1,DelayMedic[i+1]),
 				GiveUnits(All,72,i,"Anywhere",P12),
-				RemoveUnitAt(1,72,"Anywhere",P12)},{Preserved})
+				RemoveUnitAt(1,72,"Anywhere",P12)},{preserved})
 		end
-			TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{Preserved})
+			TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{preserved})
 		
 			Trigger2(i,{DeathsX(i,Exactly,0,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
 				DisplayText("\x07『 \x1CBGM\x04을 듣지 않습니다. \x07』",4);
 				SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
-			},{Preserved})
+			},{preserved})
 
 			Trigger2(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
 				DisplayText("\x07『 \x1CBGM\x04을 듣습니다. \x07』",4);
 				SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
-			},{Preserved})
+			},{preserved})
 
 			for k = 0, 5 do
 				Trigger { -- 기부 금액 변경
@@ -156,7 +254,7 @@ function Interface()
 						},
 				}
 			end
-		TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{Preserved})
+		TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
 
 		
 Trigger {
@@ -183,6 +281,7 @@ actions = {
 },
 }
 CIf(FP,{HumanCheck(i,1)})
+
 
 
 local ExchangeP = CreateVar(FP)
@@ -260,7 +359,7 @@ NIf(FP,Never())
 		ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 		ModifyUnitShields(All,"Men",i,"Anywhere",100),
 		ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
-	},{Preserved})
+	},{preserved})
 	TriggerX(FP,{CV(HiddenHPM,1,AtLeast)},{
 		RemoveUnit(MedicTrig[1],i),
 		RemoveUnit(MedicTrig[2],i),
@@ -268,12 +367,12 @@ NIf(FP,Never())
 		RemoveUnit(MedicTrig[4],i),
 		SetDeaths(i,SetTo,1,34);
 		SetCD(CUnitFlag,1)
-	},{Preserved})
+	},{preserved})
 
 		
 --				TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,3),Bring(FP, AtMost, 0, 147, 64)},{
 --					ModifyUnitShields(All,"Men",i,"Anywhere",0),
---					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{Preserved})
+--					ModifyUnitShields(All,"Buildings",i,"Anywhere",0)},{preserved})
 NIfEnd()
 DoActionsX(FP,{
 SetV(TempUpgradeMaskRet,0),
@@ -514,7 +613,7 @@ actions = {
 		PlayWAVX("staredit\\wav\\button3.wav")
 		},HumanPlayers,FP);
 		SetCD(ButtonSound,0);
-	},{Preserved})
+	},{preserved})
 	TriggerX(FP,{CD(NoticeCD,1,AtLeast)},{
 		RotatePlayer({
 		PlayWAVX("staredit\\wav\\notice.wav"),
@@ -522,9 +621,9 @@ actions = {
 		DisplayTextX(CallTxt,4)
 		},HumanPlayers,FP);
 		SetCD(NoticeCD,0);SetResources(Force1,Add,2000,Ore)
-	},{Preserved})
+	},{preserved})
 	if Limit == 1 then
-		--TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{Preserved})
+		--TriggerX(FP,{CD(TestMode,1)},{ModifyUnitHitPoints(All,"Men",Force1,64,100)},{preserved})
 	end
 
 
@@ -542,7 +641,7 @@ actions = {
 				SetMemory(0x6509B0,Add,22),
 				SetDeathsX(CurrentPlayer,Add,(MedicFuncArr3[j]-(MedicFuncArr3[j]*(0.16*i)))*256,0,0xFFFFFF);
 				SetMemory(0x6509B0,Add,1),
-			},{Preserved})
+			},{preserved})
 		end
 	end
 
@@ -562,5 +661,12 @@ actions = {
 	DoActions(FP,{SetDeaths(Force1,SetTo,0,34)})
 	CIfEnd()
 	
+	CIf(FP, CD(Drop,1,AtLeast),{AddCD(Drop,1),KillUnit("Any unit",Force1)}) -- 데카아웃시 자기모든유닛 터짐. 3틱후 드랍
+		TriggerX(FP,{CD(Drop,3,AtLeast)},{SetCp(8),RunAIScript(P8VON),SetCp(9),RunAIScript(P8VON),SetCp(10),RunAIScript(P8VON),SetCp(11),RunAIScript(P8VON)})
+	CIfEnd()
+	CIf(FP,{CD(InfWhile,1,AtLeast)},{AddCD(InfWhile,1),KillUnit("Any unit",Force1)}) -- 데카아웃시 자기모든유닛 터짐. 3틱후 응없
+	CWhile(FP, CD(InfWhile,4,AtLeast))
+	CWhileEnd()
+	CIfEnd()
 
 end 
