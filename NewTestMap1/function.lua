@@ -252,6 +252,7 @@ end
 
 function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,Color)
 
+	PatchInsert(SetMemoryB(0x662180 + UnitID,SetTo,0))
 	PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,49)) -- Graphic
 	PatchInsert(SetMemoryB(0x662098+UnitID,SetTo,1))--RClickAct
 	PatchInsert(SetMemoryB(0x662268+UnitID,SetTo,2))--Human InitAct
