@@ -30,11 +30,15 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-VerText = "\x04Ver. 3.9"
 Limit = 0
-RedMode = 0
+RedMode = 1
 FP = P6
 TestStartToBYD = 0
+if RedMode == 0 then
+	VerText = "\x04Ver. 3.9"
+else
+	VerText = "\x04Ver. 3.9R"
+end
 
 
 --Literally Unused Offset Alloc

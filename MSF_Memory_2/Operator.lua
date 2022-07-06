@@ -61,6 +61,8 @@ function Operator_Trig()
 				CAdd(FP,0x6509B0,53)
 				DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
 				CSub(FP,0x6509B0,53-7)
+				local RMRecover = -9000*10
+				if RedMode == 1 then RMRecover = 0 end
 				Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
 					SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
 					SetMemory(0x582204+(0*4),Add,2),
@@ -68,7 +70,7 @@ function Operator_Trig()
 					SetMemory(0x582204+(2*4),Add,2),
 					SetMemory(0x582204+(3*4),Add,2),
 					SetCDeaths(FP,Add,1,EEggCode),
-					AddV(RedNumberT,-9000*10),
+					AddV(RedNumberT,RMRecover),
 					RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
 				
 			CIfEnd()
@@ -255,7 +257,11 @@ local CurRM = CreateVar(FP)
 TriggerX(FP,{CV(RedNumber,401,AtLeast)},{SetV(RedNumber,400)},{preserved})
 CIf(FP,{Command(Force2,AtLeast,1,173),TTCVar(FP,CurRM[2],NotSame,RedNumber)})
 CMov(FP,CurRM,RedNumber)
-CMov(FP,0x662350+(116*4),_Mul(RedNumber,256),256*100)
+if RedMode == 1 then
+	CMov(FP,0x662350+(116*4),256*100)
+else
+	CMov(FP,0x662350+(116*4),_Mul(RedNumber,256),256*100)
+end
 CIfEnd()
 if Limit == 1 then
 	--TriggerX(FP,{CD(TestMode,1)},{SetV(RedNumber,100)})
