@@ -95,23 +95,28 @@ for j,k in pairs(HeroArr) do
 		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 		SetMemory(0x6509B0, Add, 4)
 	}
+	if k==19 then
+		LocAct={
+			SetMemory(0x6509B0, Add, 23),
+			SetDeathsX(CurrentPlayer,SetTo,255,0,0xFF),
+			SetMemory(0x6509B0, Subtract, 27),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		}
+	elseif k == 17 then
+		LocAct={
+			SetMemory(0x6509B0, Subtract, 23),
+			SetDeaths(CurrentPlayer,Add,1*256,0),
+			SetMemory(0x6509B0, Add, 19),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		}
+	end
 TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},LocAct,{preserved})
 table.insert(HeroShieldArr,ModifyUnitShields(All, k, Force1, 64, 100))
 end
-TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, 19, 0, 0xFF)},{
-	SetMemory(0x6509B0, Add, 23),
-	SetDeathsX(CurrentPlayer,SetTo,255,0,0xFF),
-	SetMemory(0x6509B0, Subtract, 23)
-},{preserved})
-TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, 17, 0, 0xFF)},{
-	SetMemory(0x6509B0, Subtract, 23),
-	SetDeaths(CurrentPlayer,Add,1*256,0),
-	SetMemory(0x6509B0, Add, 23)
-},{preserved})
-
-
-
-
 ClearCalc()
 CunitCtrig_Part2()
 CunitCtrig_Part3X()
@@ -242,7 +247,7 @@ NextPoint= CreateVarArr(5, FP)
 		for j = 1, #ZealotUIDArr-1 do
 			CZNJ=def_sIndex()
 			NJumpEnd(FP,CZNJ)
-			NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast),CV(ZSVar2,  100^(j),AtMost)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
+			NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
 				f_Read(FP, 0x628438, nil, Nextptrs)
 				CDoActions(FP, {
 					SetMemoryB(0x669E28+151, SetTo, ZealotUIDArr[j][3]);

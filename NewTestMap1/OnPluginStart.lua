@@ -60,7 +60,7 @@ function init()
 	for j,k in pairs({85,144,84,108,159,47,47}) do -- 비사용 유닛
 		SetUnitsDatX(k, {Playerable=false})
 	end
-	for j, k in pairs({1,12,14,28,29}) do -- 비사용 마법
+	for j, k in pairs({1,8,12,14,28,29}) do -- 비사용 마법
 		for i = 0, 6 do
 			TechAvailable(i,k,0)
 		end
@@ -154,7 +154,8 @@ function init()
 
 	SetUnitsDatX(20, {Reqptr=2,isHero=true,RdySnd=421,HP=350,Shield=250,MinCost=25000,GasCost=15000,SuppCost=6,BuildTime=85})
 	SetWeaponsDatX(1, {Cooldown=1,DmgBase=1250,DmgFactor=28,Splash={15,35,55}}) -- Jim Raynor
-	SetWeaponGrp(1,173,416,970,231)
+	SetWeaponGrp(1,173,416,963,231)
+	PatchInsert(SetMemoryB(0x669E28+963, SetTo, 16)) --짐레이너 공격 할루시네이션으로
 	SetUnitsDatX(10, {Reqptr=75,isHero=true,HP=560,Shield=750,MinCost=15000,GasCost=30000,SuppCost=10,BuildTime=85,SeekRange=5})
 	SetWeaponsDatX(26, {Cooldown=1,DmgBase=650,DmgFactor=40,Splash={15,20,25},RangeMax=32*5,FlingyID=145,Behavior=1}) -- Gui Montag
 	SetUnitsDatX(100, {Reqptr=8,isHero=true,RdySnd=229,HP=100,Shield=255,MinCost=10000,GasCost=40000,SuppCost=12,BuildTime=85,SeekRange=128})
@@ -168,18 +169,19 @@ function init()
 	SetUnitsDatX(23, {Reqptr=29,isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
 	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
 	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=75,Splash={10,25,40},FlingyID=150,IconType=336}) --Edmund Duke Tank
-	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=311,WepName=258,RangeMin=0}) --Edmund Duke SiegeMode
-	SetWeaponGrp(28,174,267,318,246)
+	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=311,WepName=258,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
+	--SetWeaponGrp(28,174,267,318,246)
+	SetFlingySpeed(151,8533)--이엠피 탄환 속도 최대로
 	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=1000,Shield=500,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetWeaponsDatX(9, {Cooldown=1,DmgBase=250,DmgFactor=100}) --Alan Schezar
 
 	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=4,BuildTime=85})
 	SetWeaponsDatX(18, {Cooldown=1,DmgBase=5000,DmgFactor=120,Behavior=2}) --Tom Kazansky
 	SetUnitsDatX(28, {Reqptr=66,isHero=true,RdySnd=421,MinCost=50000,GasCost=50000,SuppCost=30,BuildTime=85,SeekRange=9})
-	SetWeaponsDatX(23, {Cooldown=1,DmgBase=1000,DmgFactor=75,Splash={10,25,40},FlingyID=158,RangeMax=32*9}) --Hyperion
-
+	SetWeaponsDatX(23, {Cooldown=1,DmgBase=250,DmgFactor=34,Splash={10,25,40},FlingyID=158,RangeMax=32*9,Behavior=9}) --Hyperion
+	SetFlingySpeed(158,4800)--야마토 탄환 속도 
+	PatchInsert(SetMemory(0x66EC48+(4*541), SetTo, 395))--야마토 럴커탄막으로
 	
-
 	
 
 
