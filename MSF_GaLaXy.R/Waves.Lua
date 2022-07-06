@@ -89,6 +89,9 @@ function Waves()
 	Trigger2X(FP,{CommandLeastAt(152,19)},{AddCD(DGDeath,1),SetScore(Force1,Add,100000,Kills),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08！ ！ ！ \x04적의 생산기지 \x18Daggoth\x04를 파괴하였다!\x17 + 100000 P t s\x08 ！ ！ ！\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(DGDeath,1,AtMost)},{AddCD(WaveT2,1)})
+	TriggerX(FP,{Bring(FP, AtLeast, 1, 48, 32)},{MoveUnit(1, 48, FP, 32, 2),Order(48,FP,38,Attack,4)},{preserved})
+	TriggerX(FP,{Bring(FP, AtLeast, 1, 53, 32)},{MoveUnit(1, 53, FP, 32, 2),Order(53,FP,38,Attack,4)},{preserved})
+	TriggerX(FP,{Bring(FP, AtLeast, 1, 54, 32)},{MoveUnit(1, 54, FP, 32, 2),Order(54,FP,38,Attack,4)},{preserved})
 		CIf(FP,CD(WaveT2,250,AtLeast),SetCD(WaveT2,0))
 		if X2_Mode == 1 then
 			DG1XY2 = {3360*2,272*2}
@@ -133,6 +136,7 @@ function Waves()
 			{53,10},{54,15}
 		},
 	}
+	CIf(FP,{CD(GMode,2,AtLeast)})
 	for j, k in pairs(TTCUTable) do
 		CIfOnce(FP,Bring(Force1,AtLeast,1,"Men",TTArr[j]))
 		DoActions2(FP,{RotatePlayer({DisplayTextX("\x13\x04누군가가 \x08적의 \x07영역\x04을 침범하였습니다."),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
@@ -142,4 +146,5 @@ function Waves()
 		end
 		CIfEnd()
 	end
+	CIfEnd()
 end

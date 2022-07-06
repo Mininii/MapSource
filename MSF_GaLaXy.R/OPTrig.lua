@@ -293,7 +293,7 @@ for j, k in pairs(OPArr) do
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,ModeO);CDeaths(FP,AtLeast,k[2],ModeT);},{RotatePlayer({DisplayTextX(k[1],4),PlayWAVX(k[3])},HumanPlayers,FP)})
 	end
 end
-CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
+CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)},{SetCD(GStart,1)})
 
 NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),{
 })

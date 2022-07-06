@@ -123,9 +123,23 @@ function Interface()
 			Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
 		},
 		actions = {
-			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 데스카운트 아웃으로 강퇴당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 데스카운트 아웃으로 인해 \x06드랍 \x04당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 			},
 		}
+		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(FP, AtLeast, 2, DMode);
+			CDeaths(FP,AtLeast,1,GStart),
+			Bring(i, Exactly, 0, "Men", 64);
+		},
+		actions = {
+			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 모든유닛 전멸로 인해 \x06드랍 \x04당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			},
+		}
+		
 		Trigger { -- 강퇴 드랍
 			players = {i},
 			conditions = {
@@ -172,6 +186,88 @@ function Interface()
 				Label(0);
 				CDeaths(FP, Exactly, 3, DMode);--드랍모드
 				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				SetCD(InfWhile, 1),--응답없음
+				},
+			}
+			
+		Trigger { -- 강퇴 드랍
+			players = {i},
+			conditions = {
+				Label(0);
+				CDeaths(FP, Exactly, 2, DMode);--드랍모드
+				CDeaths(FP,AtLeast,1,GStart),
+				Bring(i, Exactly, 0, "Men", 64);
+				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				SetCD(Drop, 1),--드랍
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);--ExitDrop
+				},
+			}
+		Trigger { -- 강퇴 응없
+			players = {i},
+			conditions = {
+				Label(0);
+				CDeaths(FP, Exactly, 3, DMode);--드랍모드
+				CDeaths(FP,AtLeast,1,GStart),
+				Bring(i, Exactly, 0, "Men", 64);
 				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
 				
 			},
@@ -280,6 +376,9 @@ actions = {
 	PreserveTrigger();
 },
 }
+for j = 176,178 do
+	Trigger2(i, {Kills(i,AtLeast,1,j)}, {SetKills(i, Subtract, 1, j),SetScore(i, Add, 90000, Kills)},{preserved})
+end
 CIf(FP,{HumanCheck(i,1)})
 
 
@@ -288,7 +387,7 @@ local ExchangeP = CreateVar(FP)
 local TempScore=CreateVar(FP)
 local TempOre=CreateVar(FP)
 	ExJump = def_sIndex()
-	NJump(FP,ExJump,{Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",2)})
+	NJump(FP,ExJump,{Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",36),Bring(i,AtMost,0,"Men",2),Bring(i,AtMost,0,"Men",37)})
 	CIf(FP,Score(i,Kills,AtLeast,1000))
 	f_Read(FP,0x581F04+(i*4),TempScore)
 	f_Div(FP,ExchangeP,TempScore,1000)

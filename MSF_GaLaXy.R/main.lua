@@ -47,7 +47,7 @@ if X2_Mode == 1 then
 	VName = "1.7_2X"..Test
 	MapSize = {256*32,256*32}
 else
-	VName = "2.0"..Test
+	VName = "2.2"..Test
 	MapSize = {128*32,128*32}
 end
 FP = P8
@@ -55,7 +55,6 @@ EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
-Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
@@ -94,6 +93,8 @@ Enable_HideErrorMessage(FP)
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
+
+Trigger2X(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat()})
 
 
 if LD2XOption == 1 then
