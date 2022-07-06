@@ -124,6 +124,7 @@ CunitCtrig_Part4X(i,{
 {MoveCp(Add,25*4)})
 end
 CunitCtrig_End()
+CMov(FP,0x6509B0,FP)
 	function CA_3DAcc(Time,Type,XY,YZ,ZX)
 		TriggerX(FP,{CV(CA_Eff_Rat,Time,Type)},{
 			--AddV(CA_Eff_XY,XY);
