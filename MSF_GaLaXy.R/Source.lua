@@ -134,7 +134,7 @@ DifLeaderBoard = {
 	IntroT = CreateCcode()
 	IntroT2 = CreateCcode()
 	DMode = CreateCcode()
-
+	GStart = CreateCcode()
 	ModeT = CreateCcode()
 	ModeT2 = CreateCcode()
 	ModeO = CreateCcode()

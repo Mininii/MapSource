@@ -42,8 +42,12 @@ if Limit == 1 then
 else
 	EVFFlag = 0
 end
-
-VerText = "\x04Ver. Beta 0.9Z"
+RedMode = 1
+if RedMode == 1 then
+	VerText = "\x04Ver. Beta 0.9R"
+else
+	VerText = "\x04Ver. Beta 0.9Z"
+end
 if EVFFlag == 1 then
 	VerText = VerText.."T - EVF"
 end

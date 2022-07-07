@@ -31,9 +31,13 @@ function init()
 		for i = 0, 6 do
 		Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
 		end
-	
 		PatchArrPrsv = {}	
 		PatchArr = {}
+		for j = 176,178 do
+			table.insert(PatchArr,SetInvincibility(Disable, j, P12, 64))
+			table.insert(PatchArr,SetMemory(0x662350+(j*4),SetTo,322*256))
+			
+		end
 
 		function SetUnitAdvFlag(UnitID,Value,Mask)
 			table.insert(PatchArr,SetMemoryX(0x664080 + (UnitID*4),SetTo,Value,Mask))

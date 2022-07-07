@@ -486,6 +486,10 @@ function SetUpgradeInit(Upgrade,Value)
 end
 
 
+function SetFlingySpeed(FID,Value)
+	PatchInsert(SetMemory(0x6C9EF8+(4*FID),SetTo,Value))--최고속도
+	PatchInsert(SetMemoryW(0x6C9C78+(2*FID),SetTo,Value))--가속도
+end
 
 
 

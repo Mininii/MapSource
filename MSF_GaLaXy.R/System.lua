@@ -216,6 +216,8 @@ function Gun_System()
 		})
 	end
 	EXCC_End()
+	CMov(FP,0x6509B0,FP)
+	DoActions(FP, {KillUnit(188,P12)})
 	
 	
 

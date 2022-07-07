@@ -42,7 +42,7 @@ end
 --if EVFFlag == 1 then
 --	VerText = VerText.."T - EVF"
 --end
-	TestMode=0
+	TestMode=1
 FP = P8
 nilunit = 181
 EUDTurbo(FP)

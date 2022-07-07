@@ -2,6 +2,11 @@ function Include_GunData(Size,LineNum)
 	local G_TempV,G_A,GunID = CreateVariables(3,FP)
 	local GunPlayer = CreateVar(FP)
 	local CIndex = FuncAlloc
+	local RMBak = RedNumber
+	local RedNumber = RMBak
+	if RedMode == 1 then
+		RedNumber=1
+	end
 	f_GunSendT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_A = CreateVar(FP)
