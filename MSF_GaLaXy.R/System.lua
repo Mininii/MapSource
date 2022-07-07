@@ -3,11 +3,10 @@ function Gun_System()
 	CanCT = CreateCcode()
 	DefeatCC = CreateCcode()
 	if X2_Mode == 1 then
-		X2Cancel = Never()
+		CIf(FP,{Never(),Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 	else
-		X2Cancel = Disabled(Never())
+		CIf(FP,{Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 	end
-	CIf(FP,{X2Cancel,Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 
 	CanDisplayT = {}
 	CanDisplayT2 = {}

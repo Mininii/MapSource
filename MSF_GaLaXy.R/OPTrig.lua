@@ -295,6 +295,27 @@ for j, k in pairs(OPArr) do
 end
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)})
 
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		CVar(FP,HiddenATK[2],Exactly,0);--히든모드 적용없을시
+		CDeaths(FP,AtLeast,2,DMode); -- 드랍 or 응없모드시 공2배 적용
+	},
+	actions = {		
+		SetMemoryW(0x656EB0+(0*2),Add,70);
+		SetMemoryW(0x657678+(0*2),Add,3);
+		SetMemoryW(0x656EB0+(1*2),Add,88);
+		SetMemoryW(0x657678+(1*2),Add,4);
+		SetMemoryW(0x656EB0+(117*2),Add,70);
+		SetMemoryW(0x657678+(117*2),Add,6);
+		SetMemoryW(0x656EB0+(3*2),Add,150);
+		SetMemoryW(0x657678+(3*2),Add,5);
+		SetMemoryW(0x656EB0+(13*2),Add,5);
+		SetMemoryW(0x657678+(13*2),Add,2);
+	}
+}
+
 NIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),{
 })
 HiddenCancel = def_sIndex()
@@ -330,26 +351,6 @@ for i = 1, 5 do
 	TriggerX(FP,{CVar(FP,HiddenPts[2],Exactly,i);},{SetCVar(FP,HPointVar[2],Add,100*i);})
 	TriggerX(FP,{CVar(FP,HiddenPtsM[2],Exactly,i);},{SetCVar(FP,HPointVar[2],SetTo,100-(16*i));})
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			CVar(FP,HiddenATK[2],Exactly,0);
-			CDeaths(FP,AtLeast,2,DMode); -- 드랍 or 응없모드시 공2배 적용
-		},
-		actions = {		
-			SetMemoryW(0x656EB0+(0*2),Add,70);
-			SetMemoryW(0x657678+(0*2),Add,3);
-			SetMemoryW(0x656EB0+(1*2),Add,88);
-			SetMemoryW(0x657678+(1*2),Add,4);
-			SetMemoryW(0x656EB0+(117*2),Add,70);
-			SetMemoryW(0x657678+(117*2),Add,6);
-			SetMemoryW(0x656EB0+(3*2),Add,150);
-			SetMemoryW(0x657678+(3*2),Add,5);
-			SetMemoryW(0x656EB0+(13*2),Add,5);
-			SetMemoryW(0x657678+(13*2),Add,2);
-		}
-	}
 
 	Trigger {
 		players = {FP},

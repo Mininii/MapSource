@@ -47,7 +47,7 @@ if X2_Mode == 1 then
 	VName = "1.7_2X"..Test
 	MapSize = {256*32,256*32}
 else
-	VName = "2.0"..Test
+	VName = "2.1"..Test
 	MapSize = {128*32,128*32}
 end
 FP = P8
