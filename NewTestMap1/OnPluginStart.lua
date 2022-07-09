@@ -194,9 +194,9 @@ function init()
 	SetWeaponsDatX(85, {Cooldown=1,DmgBase=0,DmgFactor=257,ObjectNum=2,RangeMax=7*32}) --Zeratul
 	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=16,BuildTime=85})
 	SetWeaponsDatX(82, {DmgBase=0,DmgFactor=257,ObjectNum=2,Splash={64,96,128}}) --Warbringer Scarab
-	SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=85})
+	--SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=85})
 	SetWeaponsDatX(71, {Cooldown=1,DmgBase=1500,DmgFactor=84}) --Tassadar/Zeratul
-	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=60000,GasCost=20000,SuppCost=16,BuildTime=85,GroundWeapon=71})
+	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=85,GroundWeapon=71})
 	
 	SetUnitsDatX(75, {Reqptr=201,isHero=true,RdySnd=1130,MinCost=30000,GasCost=30000,SuppCost=12,BuildTime=85})
 	SetWeaponsDatX(114, {Cooldown=1,DmgBase=470,DmgFactor=54,Splash={10,20,30}}) --Artanis
