@@ -31,7 +31,7 @@ function System()
 	})
 	
 	Cast_UnitCount()
-	DoActions(FP,ModifyUnitHangarCount(5, All, 83, Force1, 64))
+	DoActions(FP,ModifyUnitHangarCount(5, All, 85, Force1, 64))
 	for i = 1, 5 do
 	UnitReadX(FP, FP, ZealotUIDArr[i][1], 64, 	ZcountT[i])
 	end
@@ -112,6 +112,24 @@ for j,k in pairs(HeroArr) do
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
+		}
+	elseif k == 48 then
+		LocAct={
+			SetMemory(0x6509B0, Subtract, 23),
+			SetDeaths(CurrentPlayer,Add,1*256,0),
+			SetMemory(0x6509B0, Add, 19),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		}
+	elseif k == 81 then
+		LocAct={
+			SetMemory(0x6509B0, Subtract, 4),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 28),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetMemory(0x6509B0, Subtract, 24)
 		}
 	end
 TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},LocAct,{preserved})

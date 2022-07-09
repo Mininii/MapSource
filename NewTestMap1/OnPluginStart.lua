@@ -57,7 +57,7 @@ function init()
 		--모든 유닛(딱딱이, 사용불가유닛 제외) 로보틱 부여, 크립, 파일런 필요X
 	end
 
-	for j,k in pairs({85,144,84,108,159,47,47}) do -- 비사용 유닛
+	for j,k in pairs({144,84,108,159,47,47}) do -- 비사용 유닛
 		SetUnitsDatX(k, {Playerable=false})
 	end
 	for j, k in pairs({1,8,12,14,28,29}) do -- 비사용 마법
@@ -144,8 +144,8 @@ function init()
 	SetWeaponsDatX(46, {DmgBase=70,DmgFactor=80}) -- Zerg Guardian
 	SetUnitsDatX("Zerg Devourer", {GroundWeapon=104})
 	SetWeaponsDatX(104, {DmgBase=200,DmgFactor=200,TargetFlag=0x020 + 1 + 2}) -- Zerg Devourer
-	SetUnitsDatX("Zerg Defiler", {GroundWeapon=50})
-	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=25,TargetFlag=0x020 + 1 + 2,Splash={10,15,20}}) -- Zerg Defiler
+	SetUnitsDatX("Zerg Defiler", {GroundWeapon=50,SeekRange=7})
+	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=25,TargetFlag=0x020 + 1 + 2,Splash={10,15,20},RangeMax=7*32}) -- Zerg Defiler
 	SetWeaponsDatX(39, {DmgBase=125,DmgFactor=170}) -- Zerg Ultralisk
 
 	
@@ -153,8 +153,8 @@ function init()
 
 
 	SetUnitsDatX(20, {Reqptr=2,isHero=true,RdySnd=421,HP=350,Shield=250,MinCost=25000,GasCost=15000,SuppCost=6,BuildTime=85})
-	SetWeaponsDatX(1, {Cooldown=1,DmgBase=1250,DmgFactor=28,Splash={15,35,55}}) -- Jim Raynor
-	SetWeaponGrp(1,173,416,963,231)
+	SetWeaponsDatX(1, {Cooldown=1,DmgBase=1250,DmgFactor=28,Splash={15,35,55},FlingyID=204}) -- Jim Raynor
+	--SetWeaponGrp(1,173,416,963,231)
 	PatchInsert(SetMemoryB(0x669E28+963, SetTo, 16)) --짐레이너 공격 할루시네이션으로
 	SetUnitsDatX(10, {Reqptr=75,isHero=true,HP=560,Shield=750,MinCost=15000,GasCost=30000,SuppCost=10,BuildTime=85,SeekRange=5})
 	SetWeaponsDatX(26, {Cooldown=1,DmgBase=650,DmgFactor=40,Splash={15,20,25},RangeMax=32*5,FlingyID=145,Behavior=1}) -- Gui Montag
@@ -170,9 +170,8 @@ function init()
 	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
 	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=75,Splash={10,25,40},FlingyID=150,IconType=336}) --Edmund Duke Tank
 	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=311,WepName=258,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
-	--SetWeaponGrp(28,174,267,318,246)
 	SetFlingySpeed(151,8533)--이엠피 탄환 속도 최대로
-	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=1000,Shield=500,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
+	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=1000,Shield=1000,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetWeaponsDatX(9, {Cooldown=1,DmgBase=250,DmgFactor=100}) --Alan Schezar
 
 	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=4,BuildTime=85})
@@ -180,14 +179,58 @@ function init()
 	SetUnitsDatX(28, {Reqptr=66,isHero=true,RdySnd=421,MinCost=50000,GasCost=50000,SuppCost=30,BuildTime=85,SeekRange=9})
 	SetWeaponsDatX(23, {Cooldown=1,DmgBase=250,DmgFactor=34,Splash={10,25,40},FlingyID=158,RangeMax=32*9,Behavior=9}) --Hyperion
 	SetFlingySpeed(158,4800)--야마토 탄환 속도 
-	PatchInsert(SetMemory(0x66EC48+(4*541), SetTo, 395))--야마토 럴커탄막으로
+	PatchInsert(SetMemory(0x66EC48+(4*541), SetTo, 395))--야마토 스크립트 럴커탄막으로
+
+
+
 	
+	SetUnitsDatX(77, {Reqptr=183,isHero=true,RdySnd=694,HP=500,Shield=3,MinCost=25000,GasCost=12500,SuppCost=8,BuildTime=85})
+	SetWeaponsDatX(65, {Cooldown=1,DmgBase=3500,DmgFactor=127}) --Fenix Z
+	SetUnitsDatX(78, {Reqptr=187,isHero=true,RdySnd=682,HP=350,Shield=2,MinCost=30000,GasCost=25000,SuppCost=10,BuildTime=85})
+	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=850,DmgFactor=40,Splash={15,25,40},Behavior=8}) --Fenix D
+	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=12,BuildTime=85,SeekRange=9})
+	SetWeaponsDatX(69, {Cooldown=1,DmgBase=850,DmgFactor=40,Splash={5,10,15},RangeMax=9*32}) --Tassadar
+	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=10,BuildTime=85,SeekRange=7})
+	SetWeaponsDatX(85, {Cooldown=1,DmgBase=0,DmgFactor=257,ObjectNum=2,RangeMax=7*32}) --Zeratul
+	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=16,BuildTime=85})
+	SetWeaponsDatX(82, {DmgBase=0,DmgFactor=257,ObjectNum=2,Splash={64,96,128}}) --Warbringer Scarab
+	SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=85})
+	SetWeaponsDatX(71, {Cooldown=1,DmgBase=1500,DmgFactor=84}) --Tassadar/Zeratul
+	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=60000,GasCost=20000,SuppCost=16,BuildTime=85,GroundWeapon=71})
+	
+	SetUnitsDatX(75, {Reqptr=201,isHero=true,RdySnd=1130,MinCost=30000,GasCost=30000,SuppCost=12,BuildTime=85})
+	SetWeaponsDatX(114, {Cooldown=1,DmgBase=470,DmgFactor=54,Splash={10,20,30}}) --Artanis
+	SetWeaponGrp(114,174,132,4,231)
+	PatchInsert(SetMemoryB(0x669E28+4, SetTo, 16)) --알타 공격 할루시네이션으로
+
+	SetUnitsDatX(82, {Reqptr=210,isHero=true,RdySnd=703,MinCost=60000,GasCost=60000,SuppCost=30,BuildTime=85})
+	SetUnitsDatX(73, {isHero=true})
+	SetWeaponsDatX(79, {Cooldown=1,DmgBase=650,DmgFactor=84}) --Gantrithor Interceptor
+	PatchInsert(SetMemory(0x66EC48+(4*522), SetTo, 247))--펄스캐논 스크립트 야마토건으로
+
+
+
+	SetUnitsDatX(54, {Reqptr=106,isHero=true,HP=300,Shield=400,MinCost=15000,GasCost=15000,SuppCost=4,BuildTime=85})
+	SetWeaponsDatX(36, {Cooldown=1,DmgBase=800,DmgFactor=120}) --Devouring One
+	SetUnitsDatX(53, {Reqptr=111,isHero=true,HP=250,Shield=500,MinCost=40000,GasCost=21000,SuppCost=10,BuildTime=85})
+	SetWeaponsDatX(39, {Cooldown=1,DmgBase=230,DmgFactor=40,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer
+	
+	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=15,BuildTime=85})
+	SetWeaponsDatX(49, {Cooldown=1,DmgBase=4000,DmgFactor=150}) --Kukulza M
+	SetUnitsDatX(56, {Reqptr=137,isHero=true,MinCost=15000,GasCost=15000,SuppCost=15,BuildTime=85})
+	SetWeaponsDatX(47, {Cooldown=1,DmgBase=0,DmgFactor=257}) --Kukulza G
+	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=9,BuildTime=85,SeekRange=7})
+	SetWeaponsDatX(51, {Cooldown=1,DmgBase=750,DmgFactor=41,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
+	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=2500,Shield=2000,MinCost=50000,GasCost=50000,SuppCost=30,BuildTime=170})
+	SetWeaponsDatX(41, {Cooldown=1,DmgBase=0,DmgFactor=257}) --Torrasque
+	--SetWeaponGrp(51,175,132,4,231)
+
+
 	
 
 
 
-
-	--
+	
 
 
 
@@ -213,43 +256,47 @@ function init()
 	DoActions2(AllPlayers,PatchArrPrsv)
 	CIfOnce(FP)
 	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
+	
+
 	CDoActions(FP, {
-		TSetMemory(0x5187EC, SetTo, FArr(btnptr0,0)),
-		TSetMemory(0x5187E8, SetTo, 6),
 		TSetMemory(0x518990, SetTo, FArr(btnptr35,0)),
 		TSetMemory(0x51898C, SetTo, 9),
+		TSetMemory(0x518A14, SetTo, FArr(btnptr46,0)),
+		TSetMemory(0x518A10, SetTo, 6),
+		TSetMemory(0x518A5C, SetTo, FArr(btnptr52,0)),
+		TSetMemory(0x518A58, SetTo, 6),
+		TSetMemory(0x518A80, SetTo, FArr(btnptr55,0)),
+		TSetMemory(0x518A7C, SetTo, 6),
 		TSetMemory(0x518AC8, SetTo, FArr(btnptr61,0)),
 		TSetMemory(0x518AC4, SetTo, 5),
+		TSetMemory(0x518AE0, SetTo, FArr(btnptr63,0)),
+		TSetMemory(0x518ADC, SetTo, 8),
 		TSetMemory(0x518B40, SetTo, FArr(btnptr71,0)),
 		TSetMemory(0x518B3C, SetTo, 6),
-		TSetMemory(0x518BB8, SetTo, FArr(btnptr81,0)),
-		TSetMemory(0x518BB4, SetTo, 6),
+		TSetMemory(0x518BD0, SetTo, FArr(btnptr83,0)),
+		TSetMemory(0x518BCC, SetTo, 5),
 		TSetMemory(0x518D20, SetTo, FArr(btnptr111,0)),
 		TSetMemory(0x518D1C, SetTo, 14),
 		TSetMemory(0x518D38, SetTo, FArr(btnptr113,0)),
 		TSetMemory(0x518D34, SetTo, 15),
 		TSetMemory(0x518D44, SetTo, FArr(btnptr114,0)),
-		TSetMemory(0x518D40, SetTo, 15),
-		TSetMemory(0x518E40, SetTo, FArr(btnptr135,0)),
-		TSetMemory(0x518E3C, SetTo, 6),
-		TSetMemory(0x518E4C, SetTo, FArr(btnptr136,0)),
-		TSetMemory(0x518E48, SetTo, 6),
-		TSetMemory(0x518E58, SetTo, FArr(btnptr137,0)),
-		TSetMemory(0x518E54, SetTo, 5),
-		TSetMemory(0x518E64, SetTo, FArr(btnptr138,0)),
-		TSetMemory(0x518E60, SetTo, 6),
-		TSetMemory(0x518E7C, SetTo, FArr(btnptr140,0)),
-		TSetMemory(0x518E78, SetTo, 4),
-		TSetMemory(0x518E88, SetTo, FArr(btnptr141,0)),
-		TSetMemory(0x518E84, SetTo, 5),
-		TSetMemory(0x518E94, SetTo, FArr(btnptr142,0)),
-		TSetMemory(0x518E90, SetTo, 4),
+		TSetMemory(0x518D40, SetTo, 14),
+		TSetMemory(0x518D8C, SetTo, FArr(btnptr120,0)),
+		TSetMemory(0x518D88, SetTo, 5),
 		TSetMemory(0x518F30, SetTo, FArr(btnptr155,0)),
 		TSetMemory(0x518F2C, SetTo, 7),
 		TSetMemory(0x518F6C, SetTo, FArr(btnptr160,0)),
 		TSetMemory(0x518F68, SetTo, 10),
+		TSetMemory(0x518FA8, SetTo, FArr(btnptr165,0)),
+		TSetMemory(0x518FA4, SetTo, 6),
 		TSetMemory(0x518FC0, SetTo, FArr(btnptr167,0)),
-		TSetMemory(0x518FBC, SetTo, 8)
+		TSetMemory(0x518FBC, SetTo, 8),
+		TSetMemory(0x518FD8, SetTo, FArr(btnptr169,0)),
+		TSetMemory(0x518FD4, SetTo, 6),
+		TSetMemory(0x518FE4, SetTo, FArr(btnptr170,0)),
+		TSetMemory(0x518FE0, SetTo, 4),
+		TSetMemory(0x519158, SetTo, FArr(btnptr201,0)),
+		TSetMemory(0x519154, SetTo, 6),
 	})
 	for j,k in pairs({0,1,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,27,28,29,30,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,86,87,88,97,98,99,100,102,103,104}) do
 		CallTrigger(FP,Call_UnitSizePatch,{SetV(UIndex,k*2)})

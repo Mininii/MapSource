@@ -79,4 +79,4 @@ SetCallErrorCheck()
 if LD2XOption == 1 then
 	__PopStringArray()
 	io.close(__TRIGchkptr)
-	end
+end
