@@ -59,7 +59,12 @@ function System()
 	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
 	
 	for i = 0, 7 do
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
+		if TestMode == 1 then
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i),SetMemoryB(0x58D2B0+(15)+(46*i),SetTo,255)},{preserved})
+		else
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
+		end
+		
 		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
 		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
 	end
@@ -86,17 +91,7 @@ function System()
 })
 
 
-
-
-CunitCP = CreateVar(FP)
-CMov(FP,0x6509B0,19025+19)
-CMov(FP,CunitCP,0)
-CWhile(FP, {Memory(0x6509B0,AtMost,19025+(84*1699)+19)})
-
-CIf(FP,{
-	DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),
-	DeathsX(CurrentPlayer,AtMost,6,0,0xFF),
-},{SetMemory(0x6509B0, Add, 6)})
+CunitCtrig_Part1(FP)
 HeroShieldArr={}
 for j,k in pairs(HeroArr) do
 	local LocAct={
@@ -116,34 +111,19 @@ for j,k in pairs(HeroArr) do
 		}
 	elseif k == 17 then
 		LocAct={
-			SetMemory(0x6509B0, Subtract, 23),
-			SetDeaths(CurrentPlayer,Add,1*256,0),
-			SetMemory(0x6509B0, Add, 19),
+			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 48 then
 		LocAct={
-			SetMemory(0x6509B0, Subtract, 23),
-			SetDeaths(CurrentPlayer,Add,1*256,0),
-			SetMemory(0x6509B0, Add, 19),
+			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 81 then
-		CIf(FP, {DeathsX(CurrentPlayer,Exactly,k,0,0xFF)},SetMemory(0x6509B0, Add, 24))
-
-		CIf(FP, {Deaths(CurrentPlayer,AtLeast,1,0)})
-			f_SaveCp()
-			f_Read(FP,BackupCp,FArr(CUnitArr, CunitCP))
-			CMov(FP,0x57f0f0,_Read(BackupCp))
-			f_LoadCp()
-		CIfEnd()
-
-		CSub(FP,0x6509B0,24)
-		CIfEnd()
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
@@ -158,37 +138,35 @@ for j,k in pairs(HeroArr) do
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Subtract, 13),
-			SetDeathsX(CurrentPlayer,SetTo,127*65536,1,0xFF0000),
+			SetDeathsX(CurrentPlayer,SetTo,127*65536,0,0xFF0000),
 			SetMemory(0x6509B0, Add, 17),
 		}
 	end
 TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},LocAct,{preserved})
 table.insert(HeroShieldArr,ModifyUnitShields(All, k, Force1, 64, 100))
 end
+CIf(FP, {DeathsX(CurrentPlayer, AtLeast, 131, 0, 0xFF),DeathsX(CurrentPlayer, AtMost, 133, 0, 0xFF)},{SetMemory(0x6509B0, Add, 25)})
 
-
-
-CSub(FP,0x6509B0,6)
-CIfEnd()
-
-CIf(FP,{
-	TMemory(_TMem(FArr(CUnitArr,CunitCP)), AtLeast, 1),
-	DeathsX(CurrentPlayer,Exactly,0*256,0,0xFF00),
-	DeathsX(CurrentPlayer,AtMost,6,0,0xFF),
-},{SetMemory(0x6509B0, Add, 30)})
-f_SaveCp()
-CDoActions(FP,{TSetMemory(BackupCp, SetTo, _Read(FArr(CUnitArr,CunitCP)))})
-f_LoadCp()
-CSub(FP,0x6509B0,30)
+TriggerX(FP,{DeathsX(CurrentPlayer, AtLeast, 3*65536, 0, 0xFF0000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)},{preserved})
+CSub(FP, 0x6509B0, 25)
 CIfEnd()
 
 
+ClearCalc()
+CunitCtrig_Part2()
+CunitCtrig_Part3X()
+for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+CunitCtrig_Part4X(i,{
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
+--	DeathsX(EPDF(0x628298-0x150*i+(0x54)),AtLeast,1*256,0,0xFF00),
+},
+{MoveCp(Add,25*4)})
+end
+CunitCtrig_End()
 
 
 
-CAdd(FP,CunitCP,1)
-CAdd(FP,0x6509B0,84)
-CWhileEnd()
 
 
 
@@ -354,7 +332,8 @@ NextPoint= CreateVarArr(5, FP)
 		CIfEnd()
 		
 	end
-		CAPlot(CSMakePolygon(8,256,0,9,1),FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,{SetV(CA_Create,0)})
+	
+		CAPlot(CSMakeStar(4, 180, 256, 0, 9, 1),FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,{SetV(CA_Create,0)})
 		AIT=CreateCcode()
 		DoActionsX(FP, AddCD(AIT,1))
 		TriggerX(FP,{CD(AIT,4,AtLeast)},{SetCD(AIT,0)},{preserved})

@@ -115,7 +115,7 @@ function init()
 	SetWeaponsDatX(33, {DmgBase=65535,Splash={64,64,64},TargetFlag=0x020 + 1 + 2+ 0x040}) --EMP
 	SetWeaponsDatX(19, {DmgBase=250,DmgFactor=130}) --Terran Battlecruiser
 	SetUnitsDatX("Terran Valkyrie", {GroundWeapon=103})
-	SetWeaponsDatX(103, {TargetFlag=0x020 + 1 + 2,DmgBase=12,DmgFactor=15}) --Terran Valkyrie
+	SetWeaponsDatX(103, {TargetFlag=0x020 + 1 + 2,DmgBase=12,DmgFactor=15,Cooldown=15}) --Terran Valkyrie
 
 	
 	SetWeaponsDatX(64, {DmgBase=33,DmgFactor=40}) --Protoss Zealot
@@ -127,7 +127,7 @@ function init()
 	SetWeaponsDatX(115, {RangeMax=32*8,DmgBase=37,DmgFactor=19,Splash={20,40,60},TargetFlag=0x020 + 1 + 2,ObjectNum=1,UpgradeType=35,IconType=314}) -- Protoss Reaver
 	SetWeaponsDatX(73, {DmgBase=25,DmgFactor=55}) --Protoss Scout
 	SetWeaponsDatX(79, {DmgBase=7,DmgFactor=20}) --Protoss Carrier
-	SetWeaponsDatX(77, {DmgBase=35,DmgFactor=200}) --Protoss Arbiter
+	SetWeaponsDatX(77, {DmgBase=35,DmgFactor=200,Cooldown=30}) --Protoss Arbiter
 	SetUnitsDatX("Protoss Corsair", {GroundWeapon=100})
 	SetWeaponsDatX(100, {DmgBase=7,DmgFactor=15,TargetFlag=0x020 + 1 + 2}) --Protoss Corsair
 	SetUnitsDatX("Protoss Photon Cannon", {MinCost=150*3,SuppCost=3,HP=400,Shield=400})
@@ -169,9 +169,9 @@ function init()
 	SetUnitsDatX(23, {Reqptr=29,isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
 	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
 	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=75,Splash={10,25,40},FlingyID=150,IconType=336}) --Edmund Duke Tank
-	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=311,WepName=258,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
+	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
 	SetFlingySpeed(151,8533)--이엠피 탄환 속도 최대로
-	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=1000,Shield=1000,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
+	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=2000,Shield=3000,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetWeaponsDatX(9, {Cooldown=1,DmgBase=250,DmgFactor=100}) --Alan Schezar
 
 	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=4,BuildTime=85})
@@ -189,15 +189,15 @@ function init()
 	SetUnitsDatX(78, {Reqptr=187,isHero=true,RdySnd=682,HP=350,Shield=2,MinCost=30000,GasCost=25000,SuppCost=10,BuildTime=85})
 	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=850,DmgFactor=40,Splash={15,25,40},Behavior=8}) --Fenix D
 	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=12,BuildTime=85,SeekRange=9})
-	SetWeaponsDatX(69, {Cooldown=1,DmgBase=850,DmgFactor=40,Splash={5,10,15},RangeMax=9*32}) --Tassadar
+	SetWeaponsDatX(69, {Cooldown=1,DmgBase=850,DmgFactor=75,Splash={5,10,15},RangeMax=9*32}) --Tassadar
 	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=10,BuildTime=85,SeekRange=7})
 	SetWeaponsDatX(85, {Cooldown=1,DmgBase=0,DmgFactor=257,ObjectNum=2,RangeMax=7*32}) --Zeratul
-	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=16,BuildTime=85})
+	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=30,BuildTime=85,AdvFlag={4+0x20000000 ,4+0x20000000 }})
 	SetUnitsDatX(85, {AdvFlag={4,4}})
-	SetWeaponsDatX(82, {DmgBase=0,DmgFactor=257,ObjectNum=2,Splash={64,96,128}}) --Warbringer Scarab
+	SetWeaponsDatX(82, {DmgBase=2500,DmgFactor=85,Splash={64,96,128}}) --Warbringer Scarab
 	--SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=85})
 	SetWeaponsDatX(71, {Cooldown=1,DmgBase=1500,DmgFactor=84}) --Tassadar/Zeratul
-	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=85,GroundWeapon=71})
+	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=85,GroundWeapon=71,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
 	
 	SetUnitsDatX(88, {Reqptr=201,isHero=true,RdySnd=1130,MinCost=30000,GasCost=30000,SuppCost=12,BuildTime=85,AirWeapon=114})
 	SetWeaponsDatX(114, {Cooldown=1,DmgBase=470,DmgFactor=54,Splash={10,20,30}}) --Artanis
@@ -206,7 +206,7 @@ function init()
 
 	SetUnitsDatX(82, {Reqptr=210,isHero=true,RdySnd=703,MinCost=60000,GasCost=60000,SuppCost=30,BuildTime=85})
 	SetUnitsDatX(73, {isHero=true})
-	SetWeaponsDatX(79, {Cooldown=1,DmgBase=650,DmgFactor=84}) --Gantrithor Interceptor
+	SetWeaponsDatX(79, {Cooldown=1,DmgBase=650,DmgFactor=70}) --Gantrithor Interceptor
 	PatchInsert(SetMemory(0x66EC48+(4*522), SetTo, 247))--펄스캐논 스크립트 야마토건으로
 
 
@@ -216,13 +216,13 @@ function init()
 	SetUnitsDatX(53, {Reqptr=111,isHero=true,HP=250,Shield=500,MinCost=40000,GasCost=21000,SuppCost=10,BuildTime=85})
 	SetWeaponsDatX(39, {Cooldown=1,DmgBase=230,DmgFactor=40,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer
 	
-	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=15,BuildTime=85})
+	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=25000,GasCost=25000,SuppCost=14,BuildTime=85})
 	SetWeaponsDatX(49, {Cooldown=1,DmgBase=4000,DmgFactor=150}) --Kukulza M
-	SetUnitsDatX(56, {Reqptr=137,isHero=true,MinCost=15000,GasCost=15000,SuppCost=15,BuildTime=85})
-	SetWeaponsDatX(47, {Cooldown=1,DmgBase=0,DmgFactor=257}) --Kukulza G
-	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=9,BuildTime=85,SeekRange=7})
-	SetWeaponsDatX(51, {Cooldown=1,DmgBase=750,DmgFactor=41,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
-	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=2500,Shield=2000,MinCost=50000,GasCost=50000,SuppCost=30,BuildTime=170})
+	SetUnitsDatX(56, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=21,BuildTime=85})
+	SetWeaponsDatX(47, {Cooldown=1,DmgBase=400,DmgFactor=110,Splash={10,20,30}}) --Kukulza G
+	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=16,BuildTime=85,SeekRange=7,GroundWeapon=51})
+	SetWeaponsDatX(51, {Cooldown=1,DmgBase=150,DmgFactor=34,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
+	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=2500,Shield=500,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170})
 	SetWeaponsDatX(41, {Cooldown=1,DmgBase=0,DmgFactor=257}) --Torrasque
 	--SetWeaponGrp(51,175,132,4,231)
 
@@ -259,45 +259,46 @@ function init()
 	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 	
 
+
 	CDoActions(FP, {
-		TSetMemory(0x518990, SetTo, FArr(btnptr35,0)),
+		TSetMemory(0x518990, SetTo, btnptr35),
 		TSetMemory(0x51898C, SetTo, 9),
-		TSetMemory(0x518A14, SetTo, FArr(btnptr46,0)),
-		TSetMemory(0x518A10, SetTo, 6),
-		TSetMemory(0x518A5C, SetTo, FArr(btnptr52,0)),
-		TSetMemory(0x518A58, SetTo, 6),
-		TSetMemory(0x518A80, SetTo, FArr(btnptr55,0)),
-		TSetMemory(0x518A7C, SetTo, 6),
-		TSetMemory(0x518AC8, SetTo, FArr(btnptr61,0)),
+		TSetMemory(0x5189F0, SetTo, btnptr43),
+		TSetMemory(0x5189EC, SetTo, 7),
+		TSetMemory(0x518A14, SetTo, btnptr46),
+		TSetMemory(0x518A10, SetTo, 7),
+		TSetMemory(0x518A5C, SetTo, btnptr52),
+		TSetMemory(0x518A58, SetTo, 7),
+		TSetMemory(0x518AC8, SetTo, btnptr61),
 		TSetMemory(0x518AC4, SetTo, 5),
-		TSetMemory(0x518AE0, SetTo, FArr(btnptr63,0)),
+		TSetMemory(0x518AE0, SetTo, btnptr63),
 		TSetMemory(0x518ADC, SetTo, 8),
-		TSetMemory(0x518B40, SetTo, FArr(btnptr71,0)),
+		TSetMemory(0x518B40, SetTo, btnptr71),
 		TSetMemory(0x518B3C, SetTo, 6),
-		TSetMemory(0x518BD0, SetTo, FArr(btnptr83,0)),
+		TSetMemory(0x518BD0, SetTo, btnptr83),
 		TSetMemory(0x518BCC, SetTo, 5),
-		TSetMemory(0x518D20, SetTo, FArr(btnptr111,0)),
+		TSetMemory(0x518D20, SetTo, btnptr111),
 		TSetMemory(0x518D1C, SetTo, 14),
-		TSetMemory(0x518D38, SetTo, FArr(btnptr113,0)),
+		TSetMemory(0x518D38, SetTo, btnptr113),
 		TSetMemory(0x518D34, SetTo, 15),
-		TSetMemory(0x518D44, SetTo, FArr(btnptr114,0)),
+		TSetMemory(0x518D44, SetTo, btnptr114),
 		TSetMemory(0x518D40, SetTo, 14),
-		TSetMemory(0x518D8C, SetTo, FArr(btnptr120,0)),
+		TSetMemory(0x518D8C, SetTo, btnptr120),
 		TSetMemory(0x518D88, SetTo, 5),
-		TSetMemory(0x518F30, SetTo, FArr(btnptr155,0)),
+		TSetMemory(0x518F30, SetTo, btnptr155),
 		TSetMemory(0x518F2C, SetTo, 7),
-		TSetMemory(0x518F6C, SetTo, FArr(btnptr160,0)),
+		TSetMemory(0x518F6C, SetTo, btnptr160),
 		TSetMemory(0x518F68, SetTo, 10),
-		TSetMemory(0x518FA8, SetTo, FArr(btnptr165,0)),
+		TSetMemory(0x518FA8, SetTo, btnptr165),
 		TSetMemory(0x518FA4, SetTo, 6),
-		TSetMemory(0x518FC0, SetTo, FArr(btnptr167,0)),
+		TSetMemory(0x518FC0, SetTo, btnptr167),
 		TSetMemory(0x518FBC, SetTo, 8),
-		TSetMemory(0x518FD8, SetTo, FArr(btnptr169,0)),
+		TSetMemory(0x518FD8, SetTo, btnptr169),
 		TSetMemory(0x518FD4, SetTo, 6),
-		TSetMemory(0x518FE4, SetTo, FArr(btnptr170,0)),
+		TSetMemory(0x518FE4, SetTo, btnptr170),
 		TSetMemory(0x518FE0, SetTo, 4),
-		TSetMemory(0x519158, SetTo, FArr(btnptr201,0)),
-		TSetMemory(0x519154, SetTo, 6),
+		TSetMemory(0x519158, SetTo, btnptr201),
+		TSetMemory(0x519154, SetTo, 7),
 	})
 	for j,k in pairs({0,1,2,3,5,7,8,9,10,11,12,16,17,18,19,20,21,22,23,25,27,28,29,30,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,86,87,88,97,98,99,100,102,103,104}) do
 		CallTrigger(FP,Call_UnitSizePatch,{SetV(UIndex,k*2)})
