@@ -67,7 +67,7 @@ function init()
 	end
 
 	for i = 0, 116 do
-		SetWeaponsDatX(i, {TargetFlag=0x020 + 1 + 2})
+		SetWeaponsDatX(i, {TargetFlag=0x020 + 1 + 2+ 0x040})
 	end
 	for j, k in pairs({6,27,28,50,51,54,84,103,100}) do -- 일방형 스플래시로 설정
 		SetWeaponsDatX(k, {Splash=true})
@@ -111,11 +111,11 @@ function init()
 	SetWeaponsDatX(4, {DmgBase=70,DmgFactor=65}) --Terran Vulture
 	SetWeaponsDatX(7, {DmgBase=45,DmgFactor=45}) --Terran Goliath
 	SetWeaponsDatX(16, {DmgBase=50,DmgFactor=40}) --Terran Wraith
-	SetWeaponsDatX(34, {DmgBase=65535,TargetFlag=0x020 + 1 + 2+ 0x040}) --Irradiate
-	SetWeaponsDatX(33, {DmgBase=65535,Splash={64,64,64},TargetFlag=0x020 + 1 + 2+ 0x040}) --EMP
+	SetWeaponsDatX(34, {DmgBase=65535}) --Irradiate
+	SetWeaponsDatX(33, {DmgBase=65535,Splash={64,64,64}}) --EMP
 	SetWeaponsDatX(19, {DmgBase=250,DmgFactor=130}) --Terran Battlecruiser
 	SetUnitsDatX("Terran Valkyrie", {GroundWeapon=103})
-	SetWeaponsDatX(103, {TargetFlag=0x020 + 1 + 2,DmgBase=12,DmgFactor=15,Cooldown=15}) --Terran Valkyrie
+	SetWeaponsDatX(103, {DmgBase=12,DmgFactor=15,Cooldown=15}) --Terran Valkyrie
 
 	
 	SetWeaponsDatX(64, {DmgBase=33,DmgFactor=40}) --Protoss Zealot
@@ -124,12 +124,12 @@ function init()
 	SetWeaponsDatX(111, {DmgBase=100,DmgFactor=120}) --Protoss Dark Templar
 	SetWeaponsDatX(70, {DmgBase=65,DmgFactor=35,RangeMax=110}) --Protoss Archon
 	SetUnitsDatX("Protoss Reaver", {GroundWeapon=115,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
-	SetWeaponsDatX(115, {RangeMax=32*8,DmgBase=37,DmgFactor=19,Splash={20,40,60},TargetFlag=0x020 + 1 + 2,ObjectNum=1,UpgradeType=35,IconType=314}) -- Protoss Reaver
+	SetWeaponsDatX(115, {RangeMax=32*8,DmgBase=37,DmgFactor=19,Splash={20,40,60},ObjectNum=1,UpgradeType=35,IconType=314}) -- Protoss Reaver
 	SetWeaponsDatX(73, {DmgBase=25,DmgFactor=55}) --Protoss Scout
 	SetWeaponsDatX(79, {DmgBase=7,DmgFactor=20}) --Protoss Carrier
 	SetWeaponsDatX(77, {DmgBase=35,DmgFactor=200,Cooldown=30}) --Protoss Arbiter
 	SetUnitsDatX("Protoss Corsair", {GroundWeapon=100})
-	SetWeaponsDatX(100, {DmgBase=7,DmgFactor=15,TargetFlag=0x020 + 1 + 2}) --Protoss Corsair
+	SetWeaponsDatX(100, {DmgBase=7,DmgFactor=15}) --Protoss Corsair
 	SetUnitsDatX("Protoss Photon Cannon", {MinCost=150*3,SuppCost=3,HP=400,Shield=400})
 	SetWeaponsDatX(81, {DmgBase=95,DmgFactor=54,UpgradeType=13}) -- Protoss Photon Cannon
 	SetWeaponsDatX(80, {DmgBase=95,DmgFactor=54,UpgradeType=13}) -- Protoss Photon Cannon
@@ -143,9 +143,9 @@ function init()
 	SetWeaponsDatX(48, {DmgBase=28,DmgFactor=32}) -- Zerg Mutalisk
 	SetWeaponsDatX(46, {DmgBase=70,DmgFactor=80}) -- Zerg Guardian
 	SetUnitsDatX("Zerg Devourer", {GroundWeapon=104})
-	SetWeaponsDatX(104, {DmgBase=200,DmgFactor=200,TargetFlag=0x020 + 1 + 2}) -- Zerg Devourer
+	SetWeaponsDatX(104, {DmgBase=200,DmgFactor=200}) -- Zerg Devourer
 	SetUnitsDatX("Zerg Defiler", {GroundWeapon=50,SeekRange=7})
-	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=25,TargetFlag=0x020 + 1 + 2,Splash={10,15,20},RangeMax=7*32}) -- Zerg Defiler
+	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=25,Splash={10,15,20},RangeMax=7*32}) -- Zerg Defiler
 	SetWeaponsDatX(39, {DmgBase=125,DmgFactor=170}) -- Zerg Ultralisk
 
 	
