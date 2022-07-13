@@ -917,6 +917,9 @@ function Include_GunData(Size,LineNum)
 	CIfEnd()
 	N_R,N_A = CreateVars(2,FP)
 	CIf_GCase(168)
+	for i = 4, 7 do
+		TriggerX(FP,{GCP(i)},{SetCD(ResNumT[i-3],1)},{preserved})
+	end
 	CIf(FP,{CD(Theorist,1),Gun_Line(20,AtMost,0)},Gun_SetLine(20,SetTo,1))
 	
 	CMov(FP,TRepeatX,G_CA_CenterX)
@@ -975,6 +978,8 @@ function Include_GunData(Size,LineNum)
 	TriggerX(FP,{CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},{SetCD(N_Check,1)},{preserved})
 	CAdd(FP,N_A,12)
 	CWhileEnd()
+	
+
 	Trigger2X(FP,{Gun_Line(7,Exactly,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav"),PlayWAVX("staredit\\wav\\res1.wav")},HumanPlayers,FP)},{preserved})
 	Trigger2X(FP,{Gun_Line(7,Exactly,100)},{RotatePlayer({PlayWAVX("staredit\\wav\\res2.wav"),PlayWAVX("staredit\\wav\\res2.wav"),PlayWAVX("staredit\\wav\\res2.wav"),PlayWAVX("staredit\\wav\\res2.wav")},HumanPlayers,FP)},{preserved})
 	CIf(FP,{TTOR({Gun_Line(7,AtMost,15),Gun_Line(7,AtLeast,100)})})

@@ -1,6 +1,7 @@
 function Operator_Trig()
     Cunit2 = CreateVar(FP)
 	local DtX = CreateVar(FP)
+	local RMRecover = -9000*10
 	
 	BanCode = CreateCcodeArr(3)
 	DoActions(FP,{
@@ -61,7 +62,6 @@ function Operator_Trig()
 				CAdd(FP,0x6509B0,53)
 				DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
 				CSub(FP,0x6509B0,53-7)
-				local RMRecover = -9000*10
 				if RedMode == 1 then RMRecover = 0 end
 				Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
 					SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
@@ -355,6 +355,37 @@ TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
+
+Trigger2X(FP, {Bring(P7,AtLeast,1,60,34)}, {AddCD(SpecialEEggCcode,1),
+RotatePlayer({
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	DisplayTextX(string.rep("\n", 20),4),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.\n\n\n",0),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+})
+CIfOnce(FP,CD(SpecialEEggCcode,4,AtLeast))--Axiom of the End 전부 발견시
+local TempRMCalc = CreateVar(FP)
+local TempRMCalc2 = CreateVar(FP)
+f_Read(FP,_Ccode(FP, EEggCode),TempRMCalc)
+CMov(FP,TempRMCalc2,_Sub(_Mov(20),TempRMCalc))
+f_iMul(FP,TempRMCalc2,RMRecover)
+CDoActions(FP, {
+	AddV(RedNumberT,TempRMCalc2),--이전까지 획득하지 못한 레드넘버 회복 계산수치 대입
+	SetMemory(0x582204+(0*4),SetTo,40),
+	SetMemory(0x582204+(1*4),SetTo,40),
+	SetMemory(0x582204+(2*4),SetTo,40),
+	SetMemory(0x582204+(3*4),SetTo,40),
+	SetCDeaths(FP,SetTo,20,EEggCode),--빛의 기억 찾은개수 20개로 설정
+	KillUnit(117,AllPlayers)
+})
+CFor(FP,0,1700,1)
+
+local CI = CForVariable()
+CDoActions(FP,{Set_EXCC2(DUnitCalc, CI, 13, SetTo, 0)})--모든 빛의기억 삭제
+CForEnd()
+CIfEnd()
 	
 	
 	
@@ -438,8 +469,10 @@ function TEST()
 
 	TimeTmp = CreateCcode()
 	TimeV = CreateVar(FP)
+	TimeV2 = CreateVar(FP)
 	CMov(FP,_Ccode(FP,TimeTmp),Time1)
 	CMov(FP,TimeV,0)
+	CMov(FP,TimeV2,0)
 	for i = 6, 0, -1 do
 		Trigger {
 			players = {FP},
@@ -477,11 +510,24 @@ function TEST()
 			},
 			actions = {
 				SetCVar(FP,TimeV[2],Add,(2^i)*1);
+				SetCVar(FP,TimeV2[2],Add,(2^i)*1);
 				SetCDeaths(FP,Subtract,(2^i)*1000,TimeTmp);
 				PreserveTrigger();
 			}
 		}
 	end
+	
+Trigger2X(FP, {CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {AddCD(SpecialEEggCcode,1),
+RotatePlayer({
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	DisplayTextX(string.rep("\n", 20),4),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각\n\n\n",0),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+})
+DoActionsX(FP,{SetCD(PyCcodeAxiom,0)})
+
 
 
 local PlayerID = CAPrintPlayerID 
