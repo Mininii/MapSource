@@ -28,14 +28,14 @@ function Interface()
 		end
 
 
-            CIfX(FP,{CV(Level[p],2499,AtMost),TTCWar(FP,DiffCheck[p][2], NotSame, CurEXP[p])})
+            CIfX(FP,{CV(Level[p],499,AtMost),TTCWar(FP,DiffCheck[p][2], NotSame, CurEXP[p])})
             CMov(FP,DiffCheck[p],CurEXP[p])
             f_LMul(FP, CurExpTmp[p], {CurEXP[p],0}, "1000")
             f_LMov(FP, CurExpTmp[p], _LDiv(CurExpTmp[p],{MaxEXP[p],0}))
             CElseX({TSetCWar(FP, CurExpTmp[p][2], SetTo, "1000")})
             CIfXEnd()
 
-            CIf(FP,{TCWar(FP, CurExpTmp[p][2], AtLeast, "1000"),CV(Level[p],2499,AtMost)},{TSetCWar(FP, CurExpTmp[p][2], Subtract,"1000")})
+            CIf(FP,{TCWar(FP, CurExpTmp[p][2], AtLeast, "1000"),CV(Level[p],499,AtMost)},{TSetCWar(FP, CurExpTmp[p][2], Subtract,"1000")})
                 CSub(FP,CurEXP[p],MaxEXP[p])
                 if LD2XOption==0 then
                     ConvertArr(FP,ArrI,Level[p])
@@ -47,9 +47,9 @@ function Interface()
                 CAdd(FP,Pts[p],1)
                 CDoActions(FP,{TSetScore(i, SetTo, Level[p], Custom),SetCp(i),PlayWAV("staredit\\wav\\LevelUp.ogg"),SetCp(FP)})
             CIfEnd()
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],65),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
-            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65),AddV(Gaspsec[p],60),SubV(Pts[p],3)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],65*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*2),AddV(Gaspsec[p],60*2),SubV(Pts[p],3)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             f_Cast(FP,{CurExpLoc,0},CurExpTmp[p])
             CMov(FP,LVLoc,Level[p])

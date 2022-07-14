@@ -358,7 +358,7 @@ NextPoint= CreateVarArr(5, FP)
 	
 DoActions(FP,HeroShieldArr)
 WinCD=CreateCcode()
-CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"1000000000000")},{
+CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"100000000000")},{
 	SetCD(WinCD,1);
 	KillUnit("Any unit",FP);
 })
