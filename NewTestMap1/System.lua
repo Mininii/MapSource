@@ -213,7 +213,11 @@ CMov(FP,0x6509B0,FP)
 	ZSVar2=CreateVar(FP)
 	ZSVar3=CreateVar(FP)
 	ZSVar = CreateVar(FP)
-	Waves = {10,20,30,50,100,350,700,1400,2800,5600,13000,19000,28000,46000,80000,175000,280000,400000,730000,1000000,1600000,2700000,3800000,5000000,6790000,8500000,13800000,20000000,29000000,35600000,50000000,66666666,78000000,100000000,127650000,200150000,376800000,500000000,695600000,832479000,1000000000}
+
+	Waves = {}
+	for i = 1, 60 do
+		Waves[i]=i*i*i*i*i
+	end
 	for j, k in pairs(Waves) do
 		if j==#Waves then
 			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(35*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."(End)] : "..(k*24).." Zealot/s",4)}, HumanPlayers, FP)})
