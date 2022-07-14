@@ -40,6 +40,7 @@ function System()
 	AddBGM(8,"staredit\\wav\\ED2Boss.ogg",165*1000)--엔딩2
 	AddBGM(9,"staredit\\wav\\ED3Boss.ogg",150*1000)--엔딩3
 	AddBGM(10,"staredit\\wav\\BadEnd.ogg",36*1000)--엔딩3
+	AddBGM(11,"staredit\\wav\\Axiom.ogg",118*1000)--스토리
 	Install_BGMSystem(FP,3,BGMType,12,1,1,ObPlayers)
 
 	BGMArr = {}
@@ -566,6 +567,10 @@ HPRegenTable = {64}
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
 		for i = 4, 7 do
 			TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCCode[i-3],1)},{preserved})
+			if i ==4 then
+				TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCcodeAxiom,1)},{preserved})
+			end
+			
 		end
 		
 		f_LoadCp()
@@ -747,6 +752,27 @@ HPRegenTable = {64}
 	CIfEnd()
 	CIfEnd()
 	Install_GunStack()
+	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[1],1)},{SetCD(ResNum,1)})
+	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[3],1)},{SetCD(ResNum,1)})
+	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
+
+	Trigger2X(FP, {CD(ResNum,1,AtLeast)}, {AddCD(SpecialEEggCcode,1),
+	RotatePlayer({
+		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+		DisplayTextX(string.rep("\n", 20),4),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+		DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x042. \x18공명\x04과 \x10공명\x04의 \x1F공명\n\n\n",0),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+	})
+	DoActionsX(FP,{
+		SetCD(ResNum,0),
+		SetCD(ResNumT[1],0),
+		SetCD(ResNumT[2],0),
+		SetCD(ResNumT[3],0),
+		SetCD(ResNumT[4],0),
+	})
+
 	CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
 		Create_G_CA_Arr()
 	CIfEnd()
@@ -856,6 +882,9 @@ TriggerX(FP,{CD(PyCCode[i+1],3)},{
 	KillUnit(144,i+4);
 	KillUnit(143,i+4);})
 end
+
+
+
 
 	--
 GunSPStr = {
