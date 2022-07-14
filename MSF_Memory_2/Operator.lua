@@ -51,6 +51,11 @@ function Operator_Trig()
 
 
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,117,0,0xFF)})
+			f_SaveCp()
+				CSub(FP,CurCunitI,_Sub(BackupCp,25),19025)
+				f_Div(FP,CurCunitI,_Mov(84))
+				CDoActions(FP, {Set_EXCC2(DUnitCalc,CurCunitI,13,SetTo,0)})
+				f_LoadCp()
 			CSub(FP,0x6509B0,6)
 			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
 
@@ -355,8 +360,24 @@ TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
+Trigger2X(FP, {CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
+RotatePlayer({
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+	DisplayTextX(string.rep("\n", 20),4),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x044. \x10고통\x04의 \x07기억\x04에서의 \x1F해방\n\n\n",0),
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+})
 
-Trigger2X(FP, {Bring(P7,AtLeast,1,60,34)}, {AddCD(SpecialEEggCcode,1),
+local Ax3Jump = def_sIndex()
+NJump(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
+local Ax3 = CreateCcode()
+for i = 0,3 do
+	Trigger2X(FP,{Bring(P7,AtLeast,1,60,32+i)},{SetCD(Ax3, 1)})
+end
+Trigger2X(FP, {CD(Ax3,1)}, {AddCD(SpecialEEggCcode,1),
+SetCD(AxiomCcode[3],1),
 RotatePlayer({
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
@@ -365,6 +386,7 @@ RotatePlayer({
 	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.\n\n\n",0),
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
+NJumpEnd(FP, Ax3Jump)
 CIfOnce(FP,CD(SpecialEEggCcode,4,AtLeast))--Axiom of the End 전부 발견시
 local TempRMCalc = CreateVar(FP)
 local TempRMCalc2 = CreateVar(FP)
@@ -517,14 +539,16 @@ function TEST()
 		}
 	end
 	
-Trigger2X(FP, {CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {AddCD(SpecialEEggCcode,1),
-RotatePlayer({
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	DisplayTextX(string.rep("\n", 20),4),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각\n\n\n",0),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+Trigger2X(FP, {CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {
+	AddCD(SpecialEEggCcode,1),
+	SetCD(AxiomCcode[1],1),
+	RotatePlayer({
+		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+		DisplayTextX(string.rep("\n", 20),4),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+		DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각\n\n\n",0),
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 DoActionsX(FP,{SetCD(PyCcodeAxiom,0)})
 

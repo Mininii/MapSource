@@ -449,7 +449,8 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 		table.insert(EraUngmeojulT,{Index,"\x10기억\x04의 "..Name})
 	end
 	local X = {}
-	table.insert(X,Text)
+	
+	table.insert(X,CreateCText(FP, "\x0D\x0D!H"..StrDesignX2(Text)))
 	table.insert(X,Index)
 	table.insert(X,Point) -- HPoint
 	table.insert(X,DmgType) -- HPoint
@@ -464,8 +465,10 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
-			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX("\x0D\x0D!H"..StrDesignX2(CT),4);},HumanPlayers,FP)})
+			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(CT[3],0),"X","X",1),CT[2])
+			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(UnivToString,4);},HumanPlayers,FP)})
 			Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
+			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			f_LoadCp()
 			if index == 68 then
 				DoActions(FP,{MoveCp(Subtract,4*6)})

@@ -101,7 +101,10 @@ function Install_CallTriggers()
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,6)})
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,7)})
 			CDoActions(FP,{SetMemory(0x66EC48+(936*4),SetTo,165),TCreateUnitWithProperties(1,117,1,CPlayer,{energy = 100,invincible = true}),SetMemory(0x66EC48+(936*4),SetTo,409)})
-		
+		CTrigger(FP,{TMemoryX(BackupCp,Exactly,71,0xFF),TMemoryX(_Sub(BackupCp,6),Exactly,7,0xFF)},{
+			TSetMemory(_Add(Nextptrs,2),SetTo,10000*256),TSetMemoryX(_Add(Nextptrs,55),SetTo,0,0x04000000),
+			Set_EXCC2(DUnitCalc,CurCunitI,13,SetTo,2)
+		},1)
 		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
 			f_Read(FP,_Sub(BackupCp,15),CPos)
 			CiSub(FP,CPos,256+(65536*256))

@@ -4,6 +4,7 @@ function System()
 	local CurCunitI2 = CreateVar(FP)
 	local TempTarget = CreateVar(FP)
 	local X = {}
+	local ToggleCcode = CreateCcode()
 	for i = 0, 249 do
 		table.insert(X,SetMemory(0x5187E8+0xC*i,SetTo,0))
 		table.insert(X,SetMemory(0x5187EC+0xC*i,SetTo,0))
@@ -16,6 +17,35 @@ function System()
 	end
 	CIfEnd()
 
+	CIf(FP,{CD(SpecialEEggCcode,3,AtMost)})
+	CIfX(FP,{Memory(0x596A44, Exactly, 0x00000100),CD(ToggleCcode,0)})
+	CTrigger(FP,{},{
+	TSetMemory(0x6509B0,SetTo,LocalPlayerV),
+	DisplayText("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ",4),
+	PlayWAV("staredit\\wav\\AxiomPreview2.wav"),
+	PlayWAV("staredit\\wav\\AxiomPreview2.wav"),},1)
+	local FoundArr = {
+		"\x0D\x0D!H\x13\x057IS46rOE64qUIOybgOyngeydtOq4sCDsi5zsnpHtlojri6Qu",
+		"\x0D\x0D!H\x13\x056rO166qF7J2EIOuniOyjvO2VmOuLpC4=",
+		"\x0D\x0D!H\x13\x057KCB64yA6rCQ7J2YIOqzte2PrA==",
+		"\x0D\x0D!H\x13\x056riw7Ja17IaN7J2YIOqzoO2GtQ=="
+	}
+	local NotFoundArr = {
+		"\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각",
+		"\x0D\x0D!H\x13\x042. \x18공명\x04과 \x10공명\x04의 \x1F공명",
+		"\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.",
+		"\x0D\x0D!H\x13\x044. \x10고통\x04의 \x07기억\x04에서의 \x1F해방"
+	}
+	for i = 0,3 do
+		CTrigger(FP, {CD(AxiomCcode[i+1],1)},{DisplayText(FoundArr[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],0)},{DisplayText(NotFoundArr[i+1],4)},1)
+	end
+
+	DoActionsX(FP, {SetCp(FP),SetCD(ToggleCcode,1),})
+	CElseIfX({Memory(0x596A44, Exactly, 0x00000100)},SetCD(ToggleCcode,1))
+	CElseX(SetCD(ToggleCcode,0))
+	CIfXEnd()
+	CIfEnd()
 	
 	DoActions(FP,{
 		RemoveUnit(7,P12),
@@ -41,6 +71,7 @@ function System()
 	AddBGM(9,"staredit\\wav\\ED3Boss.ogg",150*1000)--엔딩3
 	AddBGM(10,"staredit\\wav\\BadEnd.ogg",36*1000)--엔딩3
 	AddBGM(11,"staredit\\wav\\Axiom.ogg",118*1000)--스토리
+	AddBGM(12,"staredit\\wav\\WorldEnder1.ogg",36*1000)--스토리2
 	Install_BGMSystem(FP,3,BGMType,12,1,1,ObPlayers)
 
 	BGMArr = {}
@@ -589,6 +620,7 @@ HPRegenTable = {64}
 
 
 	CallTriggerX(FP,MakeEisEgg,{Command(FP,AtLeast,1,190),Cond_EXCC(13,Exactly,1,1)})
+	TriggerX(FP,{Cond_EXCC(13,Exactly,2,2)},{SetCD(AxiomCcode[4],1)})
 	CIf(FP,{Cond_EXCC(1,Exactly,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
 	f_SaveCp()
 	InstallHeroPoint()
@@ -757,6 +789,7 @@ HPRegenTable = {64}
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
 
 	Trigger2X(FP, {CD(ResNum,1,AtLeast)}, {AddCD(SpecialEEggCcode,1),
+	SetCD(AxiomCcode[2],1),
 	RotatePlayer({
 		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
