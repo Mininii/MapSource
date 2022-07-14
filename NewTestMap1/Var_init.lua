@@ -39,14 +39,14 @@ function Var_init()
 	LocalPlayerV=CreateVar(FP)
 	
 	if LD2XOption==0 then
-		EXPArr = CreateArr(2500,FP)
-		for i = 1, 2500 do
-			table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i-1),SetTo,(i*3)*(6*i)))
+		EXPArr = CreateArr(500,FP)
+		for i = 1, 500 do
+			table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i-1),SetTo,i*i*i))
 		end
 	else
 		local EXPTable = {}
-		for i = 1, 2500 do
-			EXPTable[i]= (i*3)*(6*i)
+		for i = 1, 500 do
+			EXPTable[i]= i*i*i
 		end
 		EXPArr = f_GetFileArrptr(FP,EXPTable,4,1)
 		TBLFile = f_GetFileptr(FP,"custom_txt.tbl",1) -- 제작했던 아무 TBL이나 AbsolutePath에 넣고 로드

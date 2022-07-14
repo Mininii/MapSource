@@ -188,7 +188,7 @@ HPRegenTable = {64}
 --    })
 
 	
-	CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+	CIfX(FP,{Memory(0x628438,AtLeast,1),DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
 
 --    local HPJump = def_sIndex()
 --    NJumpX(FP,HPJump,{CV(count,1450,AtLeast)})
