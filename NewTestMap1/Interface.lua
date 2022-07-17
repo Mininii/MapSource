@@ -61,6 +61,8 @@ function Interface()
             DoActionsX(FP,{AddCD(IncomeT[p],1)})
             CTrigger(FP, {CD(IncomeT[p],24,AtLeast)},{TSetResources(i,Add,Minpsec[p],Ore),TSetResources(i,Add,Gaspsec[p],Gas),SubCD(IncomeT[p],24)},1)
             TriggerX(FP,{Deaths(i,AtLeast,1,202)},{SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)},{preserved})
+            TriggerX(FP,{Memory(0x582174+(4*i),AtLeast,801),Bring(i,AtLeast,1,56,64)},{KillUnitAt(1, 56, 64, i),SetResources(i, Add, 40000, OreAndGas),SetCp(i),DisplayText("\x04Underling limit exceeded. (return \x1FOre\x04And\07Gas \x04+ 40000)", 4),PlayWAV("sound\\Zerg\\Drone\\ZDrErr00.WAV"),SetCp(FP)},{preserved})
+           
         CIfEnd()
     end
 

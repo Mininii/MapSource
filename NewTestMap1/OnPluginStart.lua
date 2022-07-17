@@ -94,12 +94,12 @@ function init()
 	--Balance
 
 	SetUnitsDatX(219, {AdvFlag={536870916, 0xFFFFFFFF},SizeL=1,SizeU=1,SizeR=1,SizeD=1,BdDimX=1,BdDimY=1,HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23})--¿Ã∆Â∆Æ¿Ø¥÷
-	SetUnitsDatX("Terran Missile Turret", {MinCost=75*10,SuppCost=10,HP=1500,GroundWeapon=29,AirWeapon=130})
+	SetUnitsDatX("Terran Missile Turret", {MinCost=75*10,SuppCost=10,HP=1250,GroundWeapon=29,AirWeapon=130})
 	SetUnitsDatX("Terran Bunker", {SpaceProv=8})
 	SetUnitsDatX("Terran SCV", {SpaceReq=2})
 	SetWeaponsDatX(29, {DmgBase=20*10,DmgFactor=120,UpgradeType=8})-- Terran Missile Turret
-	SetUnitsDatX("Zerg Creep Colony", {MinCost=75*10,SuppCost=10,HP=2500})
-	SetUnitsDatX("Zerg Sunken Colony", {MinCost=50*10,SuppCost=10,HP=2000})
+	SetUnitsDatX("Zerg Creep Colony", {MinCost=75*10,SuppCost=10,HP=2000})
+	SetUnitsDatX("Zerg Sunken Colony", {MinCost=50*10,SuppCost=10,HP=1500})
 	SetWeaponsDatX(53, {DmgBase=40*10,DmgFactor=250,UpgradeType=11}) -- Zerg Sunken Colony
 	SetWeaponsDatX(0, {DmgBase=35,DmgFactor=30}) --Terran Marine
 	SetUnitsDatX("Terran Firebat", {MinCost=100,GasCost=50,SuppCost=2,HP=540})
@@ -130,7 +130,7 @@ function init()
 	SetWeaponsDatX(77, {DmgBase=35,DmgFactor=200,Cooldown=30}) --Protoss Arbiter
 	SetUnitsDatX("Protoss Corsair", {GroundWeapon=100})
 	SetWeaponsDatX(100, {DmgBase=7,DmgFactor=15}) --Protoss Corsair
-	SetUnitsDatX("Protoss Photon Cannon", {MinCost=150*3,SuppCost=3,HP=400,Shield=400})
+	SetUnitsDatX("Protoss Photon Cannon", {MinCost=150*3,SuppCost=3,HP=350,Shield=250})
 	SetWeaponsDatX(81, {DmgBase=95,DmgFactor=54,UpgradeType=13}) -- Protoss Photon Cannon
 	SetWeaponsDatX(80, {DmgBase=95,DmgFactor=54,UpgradeType=13}) -- Protoss Photon Cannon
 
