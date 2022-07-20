@@ -1,7 +1,4 @@
 function init()
-	PatchArr = {}
-	PatchArrPrsv={}
-	ZealotUIDArr = {}
 	for i = 0, 19 do
 		PatchInsert(SetMemory(0x515B88+(i*4),SetTo,256))--퍼센트 데미지 세팅
 	end
@@ -243,11 +240,6 @@ function init()
 
 
 
-	SetZealotUnit(89,20,30,117,8,nil,1400,0,7) -- 1
-	SetZealotUnit(90,1600,500,118,40,1,2000,0,7) -- 100 
-	SetZealotUnit(93,179000,3500,119,65,nil,2350,0,6) -- 10000
-	SetZealotUnit(95,1280000,15000,120,120,nil,2700,0,5) -- 1000000
-	SetZealotUnit(96,8320000,65535,121,255,nil,3500,0,4) -- 100000000
 	SetUnitsDatX(nilunit, {StarEditFlag=0})--공백유닛,QC유닛처리
 	SetUnitsDatX(84, {StarEditFlag=0})--공백유닛,QC유닛처리
 	PatchInsertPrsv(SetMemoryW(0x660A70+(125*2),SetTo,287))--8벙

@@ -56,6 +56,7 @@ else
 end
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
+	LHPCunit = Install_EXCC(FP,3)
 	Var_init()
 	Include_64BitLibrary(RandSwitch2)
 	Include_CtrigPlib(360,RandSwitch)

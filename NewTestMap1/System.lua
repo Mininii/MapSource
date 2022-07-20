@@ -118,6 +118,7 @@ for j,k in pairs(HeroArr) do
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 17 then
+
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
@@ -125,12 +126,42 @@ for j,k in pairs(HeroArr) do
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 48 then
+		
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
+		local TorrSkillEPD = CreateVar(FP)
+		local TorrSkillUID = CreateVar(FP)
+		local TorrSkillP = CreateVar(FP)
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{SetMemory(0x6509B0, Subtract, 4),})
+			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFFFFFF00)})
+				f_SaveCp()
+					CIf(FP,{TMemory(_Add(BackupCp,2), AtLeast, 1)})
+						CMov(FP,TorrSkillP,_Read(_Sub(BackupCp,2)),nil,0xFF,1)
+						f_Read(FP, _Add(BackupCp,2), nil, TorrSkillEPD)
+						CMov(FP,TorrSkillUID,_Read(_Add(TorrSkillEPD,25)),nil,0xFF,1)
+						CMov(FP,CunitIndex,_Div(_Sub(TorrSkillEPD,19025),_Mov(84)))
+						CDoActions(FP, {
+							Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,0),
+							Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,0),
+							Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,0),
+							TSetMemoryX(_Add(TorrSkillEPD,19), SetTo, 0, 0xFF00)
+						})
+						f_Read(FP,_Add(TorrSkillEPD,10),CPos)
+						Convert_CPosXY()
+						Simple_SetLocX(FP,0, CPosX, CPosY, CPosX, CPosY)
+						CDoActions(FP, {TCreateUnit(1,"Zerg Scourge",1,TorrSkillP),TKillUnit("Zerg Scourge",TorrSkillP)})
+						for z = 1, #ZealotUIDArr do
+							CTrigger(FP,{CV(TorrSkillUID,ZealotUIDArr[z][1])},{TSetKills(TorrSkillP, Add, 1, ZealotUIDArr[z][1])},1)
+						end
+					CIfEnd()
+				f_LoadCp()
+			CIfEnd()
+			DoActions(FP,{SetMemory(0x6509B0, Add, 4)})
+		CIfEnd()
 	elseif k == 81 then
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
@@ -182,6 +213,76 @@ for i = 0, 1699 do
 
 		},{preserved})
 end
+
+
+
+
+    
+EXCC_Part1(LHPCunit)
+f_SaveCp()
+local ReadHP = CreateVar(FP)
+local TempV1 = CreateVar(FP)
+local TempV2 = CreateVar(FP)
+local TempW = CreateWar(FP)
+local TempW2 = CreateWar(FP)
+local TempW3 = CreateWar(FP)
+local TempW4 = CreateWar(FP)
+local TempW5 = CreateWar(FP)
+local VoidV = CreateVar(FP)
+
+
+f_Read(FP, BackupCp, ReadHP)
+
+f_LMov(FP, TempW, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]}, nil, nil, 1)
+f_LMov(FP, TempW2, {ReadHP,VoidV}, nil, nil, 1)
+
+
+f_LAdd(FP, TempW3, TempW, TempW2)
+
+CIfX(FP, {TTCWar(FP, TempW3[2], AtLeast, tostring(8320000*256))})
+
+	f_LSub(FP, TempW4, _LMov(tostring(8320000*256)), TempW2)
+	f_LSub(FP, TempW5, TempW, TempW4)
+
+
+	f_LMov(FP, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]},TempW5, nil, nil, 1)
+CDoActions(FP, {
+	TSetMemory(BackupCp, SetTo, 8320000*256),
+	Set_EXCCX(0, SetTo, 1),
+	Set_EXCCX(1, SetTo, EXCC_TempVarArr[2]),
+	Set_EXCCX(2, SetTo, EXCC_TempVarArr[3]),
+})
+CElseX()
+	f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+	CDoActions(FP, {
+		TSetMemory(BackupCp, Add, TempV1),
+		Set_EXCCX(0, SetTo, 0),
+		Set_EXCCX(1, SetTo, 0),
+		Set_EXCCX(2, SetTo, 0),
+	})
+CIfXEnd()
+
+
+f_LoadCp()
+EXCC_ClearCalc()
+EXCC_Part2()
+EXCC_Part3X()
+
+for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+EXCC_Part4X(i,{
+	
+	CVar("X", "X", AtLeast, 1);
+	Deaths(19025+(84*i)+2,AtMost,(8320000*256)-256,0),
+	DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+	DeathsX(19025+(84*i)+19,AtLeast,4,0,0xFF),
+},
+{
+	SetCVar(FP,CurCunitI[2],SetTo,i),
+	SetCVar(FP, BackupCp[2], SetTo, 19025+(84*i)+2);
+	MoveCp(Add,2*4),
+})--
+end
+EXCC_End()
 
 
 
@@ -346,46 +447,19 @@ NextPoint= CreateVarArr(5, FP)
 		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,13)
 		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},20,17)
 
-		for j = 1, #ZealotUIDArr-1 do
+		for j = 1, #ZealotUIDArr do
 			CZNJ=def_sIndex()
 			NJumpEnd(FP,CZNJ)
-			NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
-				f_Read(FP, 0x628438, nil, Nextptrs)
-				CDoActions(FP, {
-					SetMemoryB(0x669E28+151, SetTo, ZealotUIDArr[j][3]);
-					CreateUnitWithProperties(1,ZealotUIDArr[j][1],1,ZealotUIDArr[j][4],{energy = 100}),
-					SetMemoryB(0x669E28+151, SetTo, 0);
-
-				TSetDeaths(_Add(Nextptrs,13),SetTo,ZealotUIDArr[j][2],0),
-				TSetDeathsX(_Add(Nextptrs,18),SetTo,ZealotUIDArr[j][2],0,0xFFFF),
-				TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-				TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
-				TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
-				TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-			})
-			NJump(FP,CZNJ,{CV(NextPoint[j],8,AtMost)})
+			if j == 5 then
+				NIf(FP,{TCVar("X",CA[6],Exactly,NextPoint[5]),Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar3,  1,AtLeast)},{SubV(ZSVar3,1),AddV(NextPoint[5],1)})
+			else
+				NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
+			end
+				CallTrigger(FP,ZSpawnCallTable[j])
+				NJump(FP,CZNJ,{CV(NextPoint[j],8,AtMost)})
 			NIfEnd()
 			TriggerX(FP,{CV(NextPoint[j],9,AtLeast)},{SetV(NextPoint[j],1)},{preserved})
 		end
-		CZNJ=def_sIndex()
-		NJumpEnd(FP,CZNJ)
-		NIf(FP,{TCVar("X",CA[6],Exactly,NextPoint[5]),Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar3,  1,AtLeast)},{SubV(ZSVar3,1),AddV(NextPoint[5],1)})
-			f_Read(FP, 0x628438, nil, Nextptrs)
-			CDoActions(FP, {
-				SetMemoryB(0x669E28+151, SetTo, ZealotUIDArr[5][3]);
-				CreateUnitWithProperties(1,ZealotUIDArr[5][1],1,ZealotUIDArr[5][4],{energy = 100}),
-				SetMemoryB(0x669E28+151, SetTo, 0);
-			TSetDeaths(_Add(Nextptrs,13),SetTo,ZealotUIDArr[5][2],0),
-			TSetDeathsX(_Add(Nextptrs,18),SetTo,ZealotUIDArr[5][2],0,0xFFFF),
-			TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-			TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
-			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
-			TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-		})
-
-		NJump(FP,CZNJ,{CV(NextPoint[5],8,AtMost)})
-		NIfEnd()
-		TriggerX(FP,{CV(NextPoint[5],9,AtLeast)},{SetV(NextPoint[5],1)},{preserved})
 
 
 		CIfEnd()
@@ -420,8 +494,34 @@ NextPoint= CreateVarArr(5, FP)
 	f_Div(FP,SelHP,_Mov(256))
 	f_Div(FP,SelSh,_Mov(256))
 	CMov(FP,SelATK,0)
-	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
-	f_Div(FP,SelMaxHP,_Mov(256))
+	CMov(FP,SelMaxHP,0)
+--	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
+	for i = 1, 5 do
+		TriggerX(FP,{CV(SelUID,ZealotUIDArr[i][1])},{SetV(SelMaxHP,ZealotUIDArr[i][6])},{preserved})
+	end
+	CMov(FP,CunitIndex,_Div(_Sub(SelEPD,19025),_Mov(84)))
+	
+	CIfX(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	local TempW2 = CreateWar(FP)
+	local TempW3 = CreateWar(FP)
+	local TempW4 = CreateWar(FP)
+	local TempW5 = CreateWar(FP)
+	local TempV = CreateVar(FP)
+	CMul(FP,TempV, CunitIndex, 0x970/4)
+	CAdd(FP,TempV,LHPCunit[3])
+	f_Read(FP, _Add(TempV,(0x20*1)/4), TempV1)
+	f_Read(FP, _Add(TempV,(0x20*2)/4), TempV2)
+	f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
+	f_LDiv(FP,TempW3, TempW2, _LMov(256))
+	f_LMov(FP, TempW4, TempW3, nil,nil,1)
+	f_LAdd(FP, TempW5,TempW4, {SelHP,0})
+	CElseX()
+	f_LMov(FP,TempW5,{SelHP,0},nil,nil,1)
+	CIfXEnd()
+
+
 	CMov(FP,PercentCalc,_Div(_Mul(SelHP,3),SelMaxHP))
 	TBLN1T1 = {}
 	TBLN1T2 = {}

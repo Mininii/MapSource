@@ -1,4 +1,12 @@
 function Var_init()
+	PatchArr = {}
+	PatchArrPrsv={}
+	ZealotUIDArr = {}
+	SetZealotUnit(89,20,30,117,8,nil,1400,0,7,"20") -- 1
+	SetZealotUnit(90,2000,500,118,40,1,2000,0,7,"2000") -- 100 
+	SetZealotUnit(93,200000,3500,119,65,nil,2350,0,6,"200000") -- 10000
+	SetZealotUnit(95,20000000,15000,120,120,nil,2700,0,5,"20000000") -- 1000000
+	SetZealotUnit(96,2000000000,65535,121,255,nil,3500,0,4,"2000000000") -- 100000000
 	
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
@@ -113,6 +121,7 @@ function Var_init()
 	S1 = MakeiTblString(827,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
 	iTbl1 = GetiTblId(FP,827,S1) --
 	TblStr1, TblStr1a, TblStr1s = SaveiStrArr(FP,t01)
-
+	CurCunitI= CreateVar(FP)
+	CunitIndex = CreateVar(FP)
 
 end
