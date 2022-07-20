@@ -22,7 +22,7 @@ function Var_init()
 	Nextptrs = CreateVar(FP)
 	Dt = CreateVar(FP)
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
-	MapPlayers={P1,P2,P3,P4,P5,P6,P7}
+	MapPlayers={P1,P2,P3,P4}
 	CA_Eff_Rat = CreateVar2(FP,nil,nil,80000)
 	CA_Eff_XY = CreateVar(FP)
 	CA_Eff_YZ = CreateVar(FP)
@@ -95,15 +95,24 @@ function Var_init()
 	end
 
 	
-	Level=CreateVarArr(7, FP)
-	Pts=CreateVarArr(7, FP)
-	CurExpTmp = CreateWarArr(7, FP)
-	CurEXP = CreateVarArr(7, FP)
-	MaxEXP = CreateVarArr(7, FP)
+	Level=CreateVarArr(4, FP)
+	Pts=CreateVarArr(4, FP)
+	CurExpTmp = CreateWarArr(4, FP)
+	CurEXP = CreateVarArr(4, FP)
+	MaxEXP = CreateVarArr(4, FP)
 	ArrI = CreateVar(FP)
-	Minpsec = CreateVarArr(7, FP)
-	Gaspsec = CreateVarArr(7, FP)
+	Minpsec = CreateVarArr(4, FP)
+	Gaspsec = CreateVarArr(4, FP)
 
 	HeroArr={}
+	TestCD = CreateCcode()
+
+		
+	t01 = " 0000000000 \x04(00000\x0D\x04) - 00000  \x1BＤｍｇ"
+	iStrSize1 = GetiStrSize(0,t01)
+	S1 = MakeiTblString(827,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
+	iTbl1 = GetiTblId(FP,827,S1) --
+	TblStr1, TblStr1a, TblStr1s = SaveiStrArr(FP,t01)
+
 
 end

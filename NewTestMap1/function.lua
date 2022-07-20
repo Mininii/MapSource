@@ -20,15 +20,15 @@ function Install_BackupCP(Player)
 	end
 end
 function Install_UnitCount(Player)
-	count,count1,count2,count3 = CreateVars(4,FP)
+	count = CreateVar(FP)
+	local ExUArr={5,30,17,3,23,25}
+	local countT=CreateVarArr(6, FP)
 	function Cast_UnitCount()
 		UnitReadX(Player,AllPlayers,229,64,count)
-		UnitReadX(Player,AllPlayers,17,nil,count1)
-		UnitReadX(Player,AllPlayers,23,nil,count2)
-		UnitReadX(Player,AllPlayers,25,nil,count3)
-		CAdd(Player,count,count1)
-		CAdd(Player,count,count2)
-		CAdd(Player,count,count3)
+		for j,k in pairs(ExUArr) do
+			UnitReadX(Player,AllPlayers,k,nil,countT[j])
+			CAdd(Player,count,countT[j])
+		end
 	end
 end
 
@@ -270,7 +270,7 @@ function SetWeaponsDatX(WepID,Property)
 
 end
 
-function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,Color)
+function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,Color,ForPlayer)
 
 	PatchInsert(SetMemoryB(0x662180 + UnitID,SetTo,0))
 	PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,49)) -- Graphic
@@ -312,7 +312,7 @@ function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,C
 	PatchInsert(SetMemoryB(0x656670+WepID,SetTo,5)) -- 공격유닛에서나옴
 	PatchInsert(SetMemoryB(0x656FB8+WepID,SetTo,1)) -- 공속
 	PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,2)) -- 투사체수
-	table.insert(ZealotUIDArr,{UnitID,HighSpeed,Color})
+	table.insert(ZealotUIDArr,{UnitID,HighSpeed,Color,ForPlayer,WepDamage*2})
 end
 
 function PatchInsert(Act)
@@ -533,7 +533,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 				},
 				actions = {
 					Act1;
-					CopyCpActionX({PlayWAVX(v[2])},TargetPlayer);
+					CopyCpActionX({PlayWAVX(v[2]),PlayWAVX(v[2])},TargetPlayer);
 					SetNVar(Arr[3],Add,v[3]);
 				},
 				flag = {preserved}
@@ -566,4 +566,11 @@ function UnitLimit(Player,UID,Limit)
 			PreserveTrigger();
 		},
 	}
+end
+
+
+function GetiTblId(PlayerId,TBLIndex,Size)
+	local V = CreateVar(PlayerId)
+	table.insert(iTBLIndexArr,{TBLIndex,PlayerId,V,Size})
+	return {V,TBLIndex,Size}
 end

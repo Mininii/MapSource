@@ -8,7 +8,9 @@ function Interface()
     local IncomeT = CreateCcodeArr(7)
     local DiffCheck = CreateVarArr(7, FP)
     local TerranFlagLoc = CreateCcode()
-    for i = 0, 6 do
+    WinCD=CreateCcode()
+
+    for i = 0, 3 do
         local p = i+1
         UnitLimit(i,13,50)
         table.insert(CtrigInitArr[8],SetV(MaxEXP[p],18))
@@ -23,6 +25,7 @@ function Interface()
 					f_Mul(FP,KillReadTemp, 100^(j-1))
 				end
 				CAdd(FP,CurEXP[p],KillReadTemp)
+                f_LMov(FP,KillW,_LAdd(KillW,{KillReadTemp,0}))
 				DoActions(FP,{SetKills(i, SetTo, 0, ZealotUIDArr[j][1])})
 			CIfEnd()
 		end
@@ -49,6 +52,10 @@ function Interface()
             CIfEnd()
             TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],65*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
             TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            if TestMode == 1 then
+                TriggerX(FP,{Deaths(i,AtLeast,1,200)},{SubCD(TestCD,1)},{preserved})
+                TriggerX(FP,{Deaths(i,AtLeast,1,201)},{AddCD(TestCD,1)},{preserved})
+            end
             TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*2),AddV(Gaspsec[p],60*2),SubV(Pts[p],3)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             f_Cast(FP,{CurExpLoc,0},CurExpTmp[p])
@@ -59,13 +66,24 @@ function Interface()
             TriggerX(FP,{Deaths(i,AtLeast,1,210)},{SetCD(TerranFlagLoc,1)},{preserved})
             CIfEnd()
             DoActionsX(FP,{AddCD(IncomeT[p],1)})
+            
+        	if TestMode == 0 then
             CTrigger(FP, {CD(IncomeT[p],24,AtLeast)},{TSetResources(i,Add,Minpsec[p],Ore),TSetResources(i,Add,Gaspsec[p],Gas),SubCD(IncomeT[p],24)},1)
+            end
             TriggerX(FP,{Deaths(i,AtLeast,1,202)},{SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)},{preserved})
             TriggerX(FP,{Memory(0x582174+(4*i),AtLeast,801),Bring(i,AtLeast,1,56,64)},{KillUnitAt(1, 56, 64, i),SetResources(i, Add, 40000, OreAndGas),SetCp(i),DisplayText("\x04Underling limit exceeded. (return \x1FOre\x04And\07Gas \x04+ 40000)", 4),PlayWAV("sound\\Zerg\\Drone\\ZDrErr00.WAV"),SetCp(FP)},{preserved})
            
         CIfEnd()
     end
 
+    CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"100000000000")},{
+        SetCD(WinCD,1);
+        KillUnit("Any unit",Force2);
+        })
+        Trigger2X(FP,{CD(WinCD,1)},{
+        RotatePlayer({DisplayTextX("\x13\x04You Are \x1F100 \x04Billion Zealots \x08SLAYER\n\n\x13\x08C \x0EO \x1FN \x11G \x1DR \x1BA \x17T \x16U \x18L \x10A \x0FT \x1CI \x04O \x07N \x0BS\n\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ\n", 4),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP);
+        RotatePlayer({Victory()}, MapPlayers, FP);
+        })
 
     
 function TEST() 

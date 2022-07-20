@@ -60,7 +60,7 @@ function init()
 	for j,k in pairs({144,84,108,159,47,47}) do -- 비사용 유닛
 		SetUnitsDatX(k, {Playerable=false})
 	end
-	for j, k in pairs({1,8,12,14,28,29}) do -- 비사용 마법
+	for j, k in pairs({1,8,12,14,18,28,29}) do -- 비사용 마법
 		for i = 0, 6 do
 			TechAvailable(i,k,0)
 		end
@@ -76,7 +76,7 @@ function init()
 		SetUnitsDatX(k,{SuppProv=250})
 	end
 	for j,k in pairs({131,132,133,106,154,156,109,162,124,143,144,146,125}) do -- 건설크기
-		SetUnitsDatX(k, {BdDimX=1,BdDimY=1})
+		SetUnitsDatX(k, {BdDimX=1,BdDimY=1,SuppCost=1})
 	end
 	TBuildingArr = {106,107,108,109,110,111,112,113,114,115,116,117,118,120,122,123,124,125}
 	PBuildingArr = {154,155,156,157,159,160,162,163,164,165,166,167,169,170,171,172}
@@ -92,6 +92,7 @@ function init()
 	end
 
 	--Balance
+
 
 	SetUnitsDatX(219, {AdvFlag={536870916, 0xFFFFFFFF},SizeL=1,SizeU=1,SizeR=1,SizeD=1,BdDimX=1,BdDimY=1,HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23})--이펙트유닛
 	SetUnitsDatX("Terran Missile Turret", {MinCost=75*10,SuppCost=10,HP=1250,GroundWeapon=29,AirWeapon=130})
@@ -167,11 +168,11 @@ function init()
 
 	
 	SetUnitsDatX(23, {Reqptr=29,isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
-	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=15,BuildTime=85})
+	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=21,BuildTime=85})
 	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=75,Splash={10,25,40},FlingyID=150,IconType=336}) --Edmund Duke Tank
-	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=35,Splash={64,96,128},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
+	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=21,Splash={64,96,128},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151}) --Edmund Duke SiegeMode
 	SetFlingySpeed(151,8533)--이엠피 탄환 속도 최대로
-	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=2000,Shield=3000,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
+	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=250,Shield=3500,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetWeaponsDatX(9, {Cooldown=1,DmgBase=250,DmgFactor=100}) --Alan Schezar
 
 	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=4,BuildTime=85})
@@ -184,20 +185,20 @@ function init()
 
 
 	
-	SetUnitsDatX(77, {Reqptr=183,isHero=true,RdySnd=694,HP=500,Shield=3,MinCost=25000,GasCost=12500,SuppCost=8,BuildTime=85})
+	SetUnitsDatX(77, {Reqptr=183,isHero=true,RdySnd=694,HP=500,Shield=3,MinCost=25000,GasCost=12500,SuppCost=5,BuildTime=35})
 	SetWeaponsDatX(65, {Cooldown=1,DmgBase=3500,DmgFactor=127}) --Fenix Z
 	SetUnitsDatX(78, {Reqptr=187,isHero=true,RdySnd=682,HP=350,Shield=2,MinCost=30000,GasCost=25000,SuppCost=10,BuildTime=85})
-	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=850,DmgFactor=40,Splash={15,25,40},Behavior=8}) --Fenix D
-	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=12,BuildTime=85,SeekRange=9})
-	SetWeaponsDatX(69, {Cooldown=1,DmgBase=850,DmgFactor=75,Splash={5,10,15},RangeMax=9*32}) --Tassadar
-	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=10,BuildTime=85,SeekRange=7})
-	SetWeaponsDatX(85, {Cooldown=1,DmgBase=0,DmgFactor=257,ObjectNum=2,RangeMax=7*32}) --Zeratul
-	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=30,BuildTime=85,AdvFlag={4+0x20000000 ,4+0x20000000 }})
+	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=850,DmgFactor=24,Splash={5,10,15},Behavior=8}) --Fenix D
+	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=24,BuildTime=85,SeekRange=9})
+	SetWeaponsDatX(69, {Cooldown=1,DmgBase=850,DmgFactor=31,Splash={5,10,15},RangeMax=9*32}) --Tassadar
+	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=10,BuildTime=85,SeekRange=120})
+	SetWeaponsDatX(85, {Cooldown=1,DmgBase=0,DmgFactor=257,ObjectNum=2,RangeMax=120*32}) --Zeratul
+	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=35,BuildTime=85,AdvFlag={4+0x20000000 ,4+0x20000000 }})
 	SetUnitsDatX(85, {AdvFlag={4,4}})
-	SetWeaponsDatX(82, {DmgBase=2500,DmgFactor=85,Splash={64,96,128}}) --Warbringer Scarab
+	SetWeaponsDatX(82, {DmgBase=2500,DmgFactor=17,Splash={64,96,128}}) --Warbringer Scarab
 	--SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=85})
-	SetWeaponsDatX(71, {Cooldown=1,DmgBase=1500,DmgFactor=84}) --Tassadar/Zeratul
-	SetUnitsDatX(63, {Reqptr=223,isHero=true,HP=450,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=85,GroundWeapon=71,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
+	SetUnitsDatX(63, {Reqptr=223,SeekRange=3,isHero=true,HP=1000,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=85,GroundWeapon=71,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
+	SetWeaponsDatX(71, {Cooldown=1,DmgBase=1500,DmgFactor=54,RangeMax=3*32}) --Tassadar/Zeratul
 	
 	SetUnitsDatX(88, {Reqptr=201,isHero=true,RdySnd=1130,MinCost=30000,GasCost=30000,SuppCost=12,BuildTime=85,AirWeapon=114})
 	SetWeaponsDatX(114, {Cooldown=1,DmgBase=470,DmgFactor=54,Splash={10,20,30}}) --Artanis
@@ -206,7 +207,8 @@ function init()
 
 	SetUnitsDatX(82, {Reqptr=210,isHero=true,RdySnd=703,MinCost=60000,GasCost=60000,SuppCost=30,BuildTime=85})
 	SetUnitsDatX(73, {isHero=true})
-	SetWeaponsDatX(79, {Cooldown=1,DmgBase=650,DmgFactor=70}) --Gantrithor Interceptor
+	SetWeaponsDatX(79, {Cooldown=1,DmgBase=650,DmgFactor=7,Splash={7,15,25}}) --Gantrithor Interceptor
+
 	PatchInsert(SetMemory(0x66EC48+(4*522), SetTo, 247))--펄스캐논 스크립트 야마토건으로
 
 
@@ -214,14 +216,14 @@ function init()
 	SetUnitsDatX(54, {Reqptr=106,isHero=true,HP=300,Shield=400,MinCost=15000,GasCost=15000,SuppCost=4,BuildTime=85})
 	SetWeaponsDatX(36, {Cooldown=1,DmgBase=800,DmgFactor=120}) --Devouring One
 	SetUnitsDatX(53, {Reqptr=111,isHero=true,HP=250,Shield=500,MinCost=40000,GasCost=21000,SuppCost=10,BuildTime=85})
-	SetWeaponsDatX(39, {Cooldown=1,DmgBase=230,DmgFactor=40,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer
+	SetWeaponsDatX(39, {Cooldown=1,DmgBase=230,DmgFactor=42,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer
 	
 	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=25000,GasCost=25000,SuppCost=14,BuildTime=85})
-	SetWeaponsDatX(49, {Cooldown=1,DmgBase=4000,DmgFactor=150}) --Kukulza M
+	SetWeaponsDatX(49, {Cooldown=1,DmgBase=4000,DmgFactor=175}) --Kukulza M
 	SetUnitsDatX(56, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=21,BuildTime=85})
-	SetWeaponsDatX(47, {Cooldown=1,DmgBase=400,DmgFactor=110,Splash={10,20,30}}) --Kukulza G
-	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=16,BuildTime=85,SeekRange=7,GroundWeapon=51})
-	SetWeaponsDatX(51, {Cooldown=1,DmgBase=150,DmgFactor=34,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
+	SetWeaponsDatX(47, {Cooldown=1,DmgBase=400,DmgFactor=24,Splash={10,20,30}}) --Kukulza G
+	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=24,BuildTime=85,SeekRange=7,GroundWeapon=51})
+	SetWeaponsDatX(51, {Cooldown=1,DmgBase=150,DmgFactor=14,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
 	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=2500,Shield=500,MinCost=60000,GasCost=60000,SuppCost=60,BuildTime=170})
 	SetWeaponsDatX(41, {Cooldown=1,DmgBase=0,DmgFactor=257}) --Torrasque
 	--SetWeaponGrp(51,175,132,4,231)
@@ -241,11 +243,11 @@ function init()
 
 
 
-	SetZealotUnit(89,20,30,117,8,nil,1400,0) -- 1
-	SetZealotUnit(90,1600,500,118,40,nil,2000,10) -- 100 
-	SetZealotUnit(93,179000,3500,119,65,nil,2350,16) -- 10000
-	SetZealotUnit(95,1280000,15000,120,120,nil,2700,13) -- 1000000
-	SetZealotUnit(96,8320000,65535,121,255,nil,3500,15) -- 100000000
+	SetZealotUnit(89,20,30,117,8,nil,1400,0,7) -- 1
+	SetZealotUnit(90,1600,500,118,40,1,2000,0,7) -- 100 
+	SetZealotUnit(93,179000,3500,119,65,nil,2350,0,6) -- 10000
+	SetZealotUnit(95,1280000,15000,120,120,nil,2700,0,5) -- 1000000
+	SetZealotUnit(96,8320000,65535,121,255,nil,3500,0,4) -- 100000000
 	SetUnitsDatX(nilunit, {StarEditFlag=0})--공백유닛,QC유닛처리
 	SetUnitsDatX(84, {StarEditFlag=0})--공백유닛,QC유닛처리
 	PatchInsertPrsv(SetMemoryW(0x660A70+(125*2),SetTo,287))--8벙
@@ -257,7 +259,10 @@ function init()
 	DoActions2(AllPlayers,PatchArrPrsv)
 	CIfOnce(FP)
 	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
-	
+	DoActions(FP, {
+		SetMinimapColor(P8, SetTo, 0),
+		SetPlayerColor(P8, SetTo, 0),
+	})	
 
 
 	CDoActions(FP, {
@@ -304,5 +309,11 @@ function init()
 		CallTrigger(FP,Call_UnitSizePatch,{SetV(UIndex,k*2)})
 	end
 	f_Read(FP, 0x512684, LocalPlayerV)
+	f_GetTblptr(FP,iTbl1[1],iTbl1[2]) 
+	f_InitiTblptr(FP,iTbl1[1],iTbl1[1],iTbl1[3],iTbl1[2])
+
+	
+
+
 	CIfEnd()
 end

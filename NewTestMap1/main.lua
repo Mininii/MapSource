@@ -46,7 +46,7 @@ end
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
-SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
+SetForces({P1,P2,P3,P4},{P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
 if LD2XOption == 1 then
