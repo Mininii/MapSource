@@ -35,7 +35,8 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
         PlayWAVX("staredit\\wav\\AxiomPreview.wav"),
         DisplayTextX(string.rep("\n", 20),4),
         DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-        DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각\n\x0D\x0D!H\x13\x042. \x18공명\x04과 \x10공명\x04의 \x1F공명\n\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.\n\x0D\x0D!H\x13\x044. \x10고통\x04의 \x07기억\x04에서의 \x1F해방\n\x0D\x0D!H\x13\x04Insert키를 눌러 진행상황을 확인할 수 있습니다.",0),
+        DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\x0D\x0D!H\x13\x04Insert키를 눌러 진행상황을 확인할 수 있습니다.",0),
+        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
     },HumanPlayers,FP);
 })
 
@@ -73,6 +74,7 @@ RotatePlayer({
     DisplayTextX(string.rep("\n", 20),4),
     DisplayTextX("\x13\x04"..string.rep("―", 56),4),
     DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\n\x0D\x0D!H\x13\x07～Ｃｏｍｍｉｎｇ　Ｓｏｏｎ～\n\x0D\x0D!H\x13\x04to Ver. 1.0\n\n\n",0),
+    DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 },HumanPlayers,FP);
 })
 

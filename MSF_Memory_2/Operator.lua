@@ -68,15 +68,17 @@ function Operator_Trig()
 				DoActions(FP, SetDeathsX(CurrentPlayer,SetTo,0,0,0x04000000))
 				CSub(FP,0x6509B0,53-7)
 				if RedMode == 1 then RMRecover = 0 end
-				Trigger2X(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{
-					SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
+				CIf(FP,{DeathsX(CurrentPlayer,Exactly,0,0,0xFF0000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
+				Trigger2X(FP,{},{
 					SetMemory(0x582204+(0*4),Add,2),
 					SetMemory(0x582204+(1*4),Add,2),
 					SetMemory(0x582204+(2*4),Add,2),
 					SetMemory(0x582204+(3*4),Add,2),
 					SetCDeaths(FP,Add,1,EEggCode),
 					AddV(RedNumberT,RMRecover),
-					RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP)},{preserved})
+					RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D,4),PlayWAVX("staredit\\wav\\EEgg.ogg")},HumanPlayers,FP),
+				},{preserved})
+				CIfEnd()
 				
 			CIfEnd()
 
@@ -366,7 +368,7 @@ RotatePlayer({
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 	DisplayTextX(string.rep("\n", 20),4),
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x044. \x10고통\x04의 \x07기억\x04에서의 \x1F해방\n\n\n",0),
+	DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\n\n",0),
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 
@@ -383,7 +385,7 @@ RotatePlayer({
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 	DisplayTextX(string.rep("\n", 20),4),
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-	DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.\n\n\n",0),
+	DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\n\n",0),
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 NJumpEnd(FP, Ax3Jump)
@@ -547,7 +549,7 @@ Trigger2X(FP, {CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {
 		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 		DisplayTextX(string.rep("\n", 20),4),
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-		DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각\n\n\n",0),
+		DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\n\n",0),
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 DoActionsX(FP,{SetCD(PyCcodeAxiom,0)})

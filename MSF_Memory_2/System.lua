@@ -31,10 +31,10 @@ function System()
 		"\x0D\x0D!H\x13\x056riw7Ja17IaN7J2YIOqzoO2GtQ=="
 	}
 	local NotFoundArr = {
-		"\x0D\x0D!H\x13\x041. \x07세계의 시작\x04에서 \x1F되찾은 \x07기억\x04의 \x17조각",
-		"\x0D\x0D!H\x13\x042. \x18공명\x04과 \x10공명\x04의 \x1F공명",
-		"\x0D\x0D!H\x13\x043. \x08적대\x04의 \x10위협\x04에 \x07무릅쓰다.",
-		"\x0D\x0D!H\x13\x044. \x10고통\x04의 \x07기억\x04에서의 \x1F해방"
+		"\x0D\x0D!H\x13"..AxStrArr[1],
+		"\x0D\x0D!H\x13"..AxStrArr[2],
+		"\x0D\x0D!H\x13"..AxStrArr[3],
+		"\x0D\x0D!H\x13"..AxStrArr[4],
 	}
 	for i = 0,3 do
 		CTrigger(FP, {CD(AxiomCcode[i+1],1)},{DisplayText(FoundArr[i+1],4)},1)
@@ -188,7 +188,7 @@ HPRegenTable = {64}
 --    })
 
 	
-	CIfX(FP,{Memory(0x628438,AtLeast,1),DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+	CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
 
 --    local HPJump = def_sIndex()
 --    NJumpX(FP,HPJump,{CV(count,1450,AtLeast)})
@@ -197,7 +197,7 @@ HPRegenTable = {64}
 
 
 
-	EXCC_BreakCalc({Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
+	EXCC_BreakCalc({Memory(0x628438,AtLeast,1),Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
 		CAdd(FP,0x6509B0,38)--40
 		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,150*16777216,0,0xFF000000)})
 			CDoActions(FP,{
@@ -795,7 +795,7 @@ HPRegenTable = {64}
 		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 		DisplayTextX(string.rep("\n", 20),4),
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-		DisplayTextX("\x12\n\n\x0D\x0D!H\x13\x042. \x18공명\x04과 \x10공명\x04의 \x1F공명\n\n\n",0),
+		DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\n\n",0),
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 	})
 	DoActionsX(FP,{
@@ -984,46 +984,50 @@ Trigger2X(FP, {
 	},HumanPlayers,FP);
 	SetCDeaths(FP,Add,24*10,CanWT);}, {preserved})
 
-
-Trigger2X(FP,{--캔발동
+CIf(FP,{--캔발동
 Command(FP,AtLeast,1,173);
 	CV(CanC,2,AtMost);
 	CDeaths(FP,AtMost,0,CanCT);
 	CVar(FP,count[2],AtLeast,1500);
 	Memory(0x628438,AtMost,0);
 },{
+	SetCD(ThCallT,50);
+	AddCD(RedNumPanelty,1);
+	KillUnit("Factories",Force2);
+	SetCDeaths(FP,SetTo,24*30,CanCT);
+	AddV(CanC,1);})
+
+Trigger2X(FP,{},{
 	RotatePlayer({
 		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
 		PlayWAVX("staredit\\wav\\warn.wav"),
 		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
 		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
 		},HumanPlayers,FP);
-		SetCDeaths(FP,SetTo,24*30,CanCT);
-		AddV(CanC,1);
-		SetCD(ThCallT,50);
-		AddCD(RedNumPanelty,1);
-		KillUnit("Factories",Force2);
 },{preserved})
-
-Trigger2X(FP,{--캔발동
+CIfEnd()
+CIf(FP, {--캔발동
 Command(FP,AtLeast,1,173);
 	CV(CanC,3,AtLeast);
 	CDeaths(FP,AtMost,0,CanCT);
 	CVar(FP,count[2],AtLeast,1500);
 	Memory(0x628438,AtMost,0);
 },{
-	RotatePlayer({
-		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
-		PlayWAVX("staredit\\wav\\CanOver.ogg"),
-		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
-		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
-		},HumanPlayers,FP);
-		SetCDeaths(FP,SetTo,24*30,CanCT);
-		AddV(CanC,1);
-		SetCD(ThCallT,50);
-		KillUnit("Factories",Force2);
-		SetCDeaths(FP,Add,1,DefeatCC);
-},{preserved})
+	AddV(CanC,1);
+	SetCD(ThCallT,50);
+	KillUnit("Factories",Force2);
+	SetCDeaths(FP,Add,1,DefeatCC);
+	SetCDeaths(FP,SetTo,24*30,CanCT);})
+	
+	Trigger2X(FP,{},{
+		RotatePlayer({
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\CanOver.ogg"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+			},HumanPlayers,FP);
+	},{preserved})
+CIfEnd()
 
 DoActions2X(FP,{SubCD(CanWT,1),SubCD(CanCT,1)})
 CIf(FP,CD(DefeatCC,1,AtLeast))

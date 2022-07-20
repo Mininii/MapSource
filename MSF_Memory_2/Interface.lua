@@ -415,11 +415,11 @@ Trigger2X(i,{
 	Memory(0x582294+(4*i),Exactly,0);
 	Command(i,AtLeast,1,19);
 },{
+	RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
 	SetMemory(0x582294+(4*i),SetTo,2000);
+	SetCDeaths(FP,Add,1,CUnitRefrash);
 	ModifyUnitEnergy(1,19,i,64,0);
 	RemoveUnitAt(1,19,"Anywhere",i);
-	SetCDeaths(FP,Add,1,CUnitRefrash);
-	RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
 },{preserved})
 Trigger { -- 보호막 가동
 	players = {i},

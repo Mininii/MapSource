@@ -202,9 +202,15 @@ function Var_init()
 	UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
 	StrReset = CreateCText(FP,UnivToString)
 
+	AxStrArr = {
+		"\x041. \x07세계의 시작\x04에서 \x07꿈\x04의 \x17조각\x04을 \x1F되찾아라.",
+		"\x042. \x18공명\x04과 \x10공명\x04을 \x1F공명\x04하라.",
+		"\x043. \x08적대\x04의 \x10위협\x04을 \x07극복하라.",
+		"\x044. \x10고통\x04의 \x07기억\x04에서 \x1F해방하라."
+	}
 
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(38).."\r\n",4)) 
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(38).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
