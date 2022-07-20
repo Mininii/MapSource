@@ -4,6 +4,23 @@ function System()
 	BGMOnOff=CreateCcode()
 	ObCcode1 = CreateCcode()
 	GameStart = CreateCcode()
+
+	for i = 0, 7 do
+		DoActions(i,{SetCp(i),
+		RunAIScript(P1VON),
+		RunAIScript(P2VON),
+		RunAIScript(P3VON),
+		RunAIScript(P4VON),
+		RunAIScript(P5VON),
+		RunAIScript(P6VON),
+		RunAIScript(P7VON),
+		RunAIScript(P8VON),
+	})
+	end
+
+
+
+
 	CIfX(FP,{Memory(0x596A44, Exactly, 65536),CD(ObCcode1,0)})
 	CTrigger(FP,{CD(BGMOnOff,0),CD(ObCcode1,0)},{SetCD(BGMOnOff,1),SetCD(ObCcode1,1),
 	TSetMemory(0x6509B0,SetTo,LocalPlayerV),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04Turn \x08Off \x04BGM."),4),SetCp(FP)},1)
@@ -12,28 +29,19 @@ function System()
 	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
 	CElseX(SetCD(ObCcode1,0))
 	CIfXEnd()
-	DoActions(FP,{SetCp(FP),
-	RunAIScript(P1VON),
-	RunAIScript(P2VON),
-	RunAIScript(P3VON),
-	RunAIScript(P4VON),
-	RunAIScript(P5VON),
-	RunAIScript(P6VON),
-	RunAIScript(P7VON),
-})
 
 
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,0)},{SetV(BGMType,1)},{preserved})
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,1)},{SetV(BGMType,0)},{preserved})
 
-	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}, BGMType, {
+	IBGM_EPD(FP, {P1,P2,P3,P4,P9,P10,P11,P12}, BGMType, {
 		{1,"staredit\\wav\\BGMFile.ogg",165*1000}
 	})
 	
 	Cast_UnitCount()
 	DoActions(FP,{ModifyUnitHangarCount(5, All, 81, Force1, 64),ModifyUnitHangarCount(4, All, 82, Force1, 64)})
 	for i = 1, 5 do
-	UnitReadX(FP, FP, ZealotUIDArr[i][1], 64, 	ZcountT[i])
+	UnitReadX(FP, ZealotUIDArr[i][4], ZealotUIDArr[i][1], 64, 	ZcountT[i])
 	end
 	CMov(FP,Zcount,0)
 	CAdd(FP,Zcount,ZcountT[1])
@@ -58,23 +66,23 @@ function System()
 	}, 1)
 	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
 	
-	for i = 0, 7 do
+	for i = 0, 3 do
 		if TestMode == 1 then
-			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i),SetMemoryB(0x58D2B0+(15)+(46*i),SetTo,255)},{preserved})
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i),SetMemoryB(0x58D2B0+(15)+(46*i),SetTo,255)},{preserved})
 		else
-			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
 		end
 		
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{SetMemory(0x5821D4,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{SetMemory(0x582144,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
 	end
 	CIfEnd()
 	TriggerX(FP,{CountdownTimer(AtMost, 1)},{SetCD(BCFlag,0),SetCD(GameStart,1)})
 	TriggerX(FP, {CountdownTimer(AtMost, 200),Bring(Force1,AtMost,0,"Terran Civilian",64)},{SetCD(BCFlag,0)})
 	TriggerX(FP,{CD(BCFlag,0)},{
-		RemoveUnit("Terran Beacon", FP),
-		RemoveUnit("Zerg Beacon", FP),
-		RemoveUnit("Protoss Beacon", FP),
+		RemoveUnit("Terran Beacon", AllPlayers),
+		RemoveUnit("Zerg Beacon", AllPlayers),
+		RemoveUnit("Protoss Beacon", AllPlayers),
 		RemoveUnit("Terran Civilian", AllPlayers)})
 	
 	DoActions(FP, {RemoveUnit(219, FP),KillUnit("Any unit", P12),
@@ -83,11 +91,11 @@ function System()
 	--ModifyUnitShields(All, ZealotUIDArr[3][1], FP, 64, 100),
 	--ModifyUnitShields(All, ZealotUIDArr[4][1], FP, 64, 100),
 	--ModifyUnitShields(All, ZealotUIDArr[5][1], FP, 64, 100),
-	SetInvincibility(Disable, ZealotUIDArr[1][1], FP, 64),
-	SetInvincibility(Disable, ZealotUIDArr[2][1], FP, 64),
-	SetInvincibility(Disable, ZealotUIDArr[3][1], FP, 64),
-	SetInvincibility(Disable, ZealotUIDArr[4][1], FP, 64),
-	SetInvincibility(Disable, ZealotUIDArr[5][1], FP, 64),
+	SetInvincibility(Disable, ZealotUIDArr[1][1], Force2, 64),
+	SetInvincibility(Disable, ZealotUIDArr[2][1], Force2, 64),
+	SetInvincibility(Disable, ZealotUIDArr[3][1], Force2, 64),
+	SetInvincibility(Disable, ZealotUIDArr[4][1], Force2, 64),
+	SetInvincibility(Disable, ZealotUIDArr[5][1], Force2, 64),
 })
 
 
@@ -110,6 +118,7 @@ for j,k in pairs(HeroArr) do
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 17 then
+
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
@@ -117,12 +126,42 @@ for j,k in pairs(HeroArr) do
 			SetMemory(0x6509B0, Add, 4)
 		}
 	elseif k == 48 then
+		
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
+		local TorrSkillEPD = CreateVar(FP)
+		local TorrSkillUID = CreateVar(FP)
+		local TorrSkillP = CreateVar(FP)
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{SetMemory(0x6509B0, Subtract, 4),})
+			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFFFFFF00)})
+				f_SaveCp()
+					CIf(FP,{TMemory(_Add(BackupCp,2), AtLeast, 1)})
+						CMov(FP,TorrSkillP,_Read(_Sub(BackupCp,2)),nil,0xFF,1)
+						f_Read(FP, _Add(BackupCp,2), nil, TorrSkillEPD)
+						CMov(FP,TorrSkillUID,_Read(_Add(TorrSkillEPD,25)),nil,0xFF,1)
+						CMov(FP,CunitIndex,_Div(_Sub(TorrSkillEPD,19025),_Mov(84)))
+						CDoActions(FP, {
+							Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,0),
+							Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,0),
+							Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,0),
+							TSetMemoryX(_Add(TorrSkillEPD,19), SetTo, 0, 0xFF00)
+						})
+						f_Read(FP,_Add(TorrSkillEPD,10),CPos)
+						Convert_CPosXY()
+						Simple_SetLocX(FP,0, CPosX, CPosY, CPosX, CPosY)
+						CDoActions(FP, {TCreateUnit(1,"Zerg Scourge",1,TorrSkillP),TKillUnit("Zerg Scourge",TorrSkillP)})
+						for z = 1, #ZealotUIDArr do
+							CTrigger(FP,{CV(TorrSkillUID,ZealotUIDArr[z][1])},{TSetKills(TorrSkillP, Add, 1, ZealotUIDArr[z][1])},1)
+						end
+					CIfEnd()
+				f_LoadCp()
+			CIfEnd()
+			DoActions(FP,{SetMemory(0x6509B0, Add, 4)})
+		CIfEnd()
 	elseif k == 81 then
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
@@ -142,28 +181,108 @@ for j,k in pairs(HeroArr) do
 			SetMemory(0x6509B0, Add, 17),
 		}
 	end
-TriggerX(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},LocAct,{preserved})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},LocAct)
 table.insert(HeroShieldArr,ModifyUnitShields(All, k, Force1, 64, 100))
 end
-CIf(FP, {DeathsX(CurrentPlayer, AtLeast, 131, 0, 0xFF),DeathsX(CurrentPlayer, AtMost, 133, 0, 0xFF)},{SetMemory(0x6509B0, Add, 25)})
+BreakCalc({DeathsX(CurrentPlayer, AtLeast, 131, 0, 0xFF),DeathsX(CurrentPlayer, AtMost, 133, 0, 0xFF)},{SetMemory(0x6509B0, Add, 25),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
 
-TriggerX(FP,{DeathsX(CurrentPlayer, AtLeast, 3*65536, 0, 0xFF0000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)},{preserved})
-CSub(FP, 0x6509B0, 25)
-CIfEnd()
+BreakCalc({},{SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
 
-
-ClearCalc()
 CunitCtrig_Part2()
 CunitCtrig_Part3X()
 for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
+	DeathsX(EPDF(0x628298-0x150*i+(9*4)),AtMost,0,0,0xFF0000),
 --	DeathsX(EPDF(0x628298-0x150*i+(0x54)),AtLeast,1*256,0,0xFF00),
 },
 {MoveCp(Add,25*4)})
 end
 CunitCtrig_End()
+
+
+for i = 0, 1699 do
+	Trigger2(FP,{
+		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
+		DeathsX(19025+(84*i)+19,AtMost,6,0,0xFF),
+		DeathsX(19025+(84*i)+9,Exactly,1*65536,0,0xFF0000),
+	},
+	{
+		SetDeathsX(19025+(84*i)+9,SetTo,0,0,0xFF0000);
+
+		},{preserved})
+end
+
+
+
+
+    
+EXCC_Part1(LHPCunit)
+f_SaveCp()
+local ReadHP = CreateVar(FP)
+local TempV1 = CreateVar(FP)
+local TempV2 = CreateVar(FP)
+local TempW = CreateWar(FP)
+local TempW2 = CreateWar(FP)
+local TempW3 = CreateWar(FP)
+local TempW4 = CreateWar(FP)
+local TempW5 = CreateWar(FP)
+local VoidV = CreateVar(FP)
+
+
+f_Read(FP, BackupCp, ReadHP)
+
+f_LMov(FP, TempW, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]}, nil, nil, 1)
+f_LMov(FP, TempW2, {ReadHP,VoidV}, nil, nil, 1)
+
+
+f_LAdd(FP, TempW3, TempW, TempW2)
+
+CIfX(FP, {TTCWar(FP, TempW3[2], AtLeast, tostring(8320000*256))})
+
+	f_LSub(FP, TempW4, _LMov(tostring(8320000*256)), TempW2)
+	f_LSub(FP, TempW5, TempW, TempW4)
+
+
+	f_LMov(FP, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]},TempW5, nil, nil, 1)
+CDoActions(FP, {
+	TSetMemory(BackupCp, SetTo, 8320000*256),
+	Set_EXCCX(0, SetTo, 1),
+	Set_EXCCX(1, SetTo, EXCC_TempVarArr[2]),
+	Set_EXCCX(2, SetTo, EXCC_TempVarArr[3]),
+})
+CElseX()
+	f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+	CDoActions(FP, {
+		TSetMemory(BackupCp, Add, TempV1),
+		Set_EXCCX(0, SetTo, 0),
+		Set_EXCCX(1, SetTo, 0),
+		Set_EXCCX(2, SetTo, 0),
+	})
+CIfXEnd()
+
+
+f_LoadCp()
+EXCC_ClearCalc()
+EXCC_Part2()
+EXCC_Part3X()
+
+for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+EXCC_Part4X(i,{
+	
+	CVar("X", "X", AtLeast, 1);
+	Deaths(19025+(84*i)+2,AtMost,(8320000*256)-256,0),
+	DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+	DeathsX(19025+(84*i)+19,AtLeast,4,0,0xFF),
+},
+{
+	SetCVar(FP,CurCunitI[2],SetTo,i),
+	SetCVar(FP, BackupCp[2], SetTo, 19025+(84*i)+2);
+	MoveCp(Add,2*4),
+})--
+end
+EXCC_End()
 
 
 
@@ -193,6 +312,41 @@ CMov(FP,0x6509B0,FP)
 	--CA_3DAcc(186000+28000,AtLeast,5,1,1)
 	--CA_3DAcc(186000+67000,AtLeast,6,1,1)
 	--CA_3DAcc(186000+138000,AtLeast,10,1,1)
+ColorMode = CreateCcode()
+ColorCcode = CreateCcode()
+ColorT = CreateCcode()
+
+for i = 0, 9 do
+	TriggerX(FP,{CD(ColorCcode,i)},{
+		SetPlayerColor(P6, SetTo, 182+i),
+		SetMinimapColor(P6, SetTo, 182+i),
+	},{preserved})
+end
+DoActionsX(FP, {SubCD(ColorT,1)})
+TriggerX(FP,{CD(ColorMode,1),CD(ColorT,0)},{SubCD(ColorCcode,1),SetCD(ColorT,7)},{preserved})
+TriggerX(FP,{CD(ColorMode,0),CD(ColorT,0)},{AddCD(ColorCcode,1),SetCD(ColorT,7)},{preserved})
+TriggerX(FP,{CD(ColorMode,1),CD(ColorCcode,0,AtMost)},{SetCD(ColorMode,0)},{preserved})
+TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{preserved})
+
+
+ColorMode = CreateCcode()
+ColorCcode = CreateCcode()
+ColorT = CreateCcode()
+
+for i = 0, 9 do
+	TriggerX(FP,{CD(ColorCcode,i)},{
+		SetPlayerColor(P5, SetTo, 169+i),
+		SetMinimapColor(P5, SetTo, 169+i),
+	},{preserved})
+end
+DoActionsX(FP, {SubCD(ColorT,1)})
+TriggerX(FP,{CD(ColorMode,1),CD(ColorT,0)},{SubCD(ColorCcode,1),SetCD(ColorT,5)},{preserved})
+TriggerX(FP,{CD(ColorMode,0),CD(ColorT,0)},{AddCD(ColorCcode,1),SetCD(ColorT,5)},{preserved})
+TriggerX(FP,{CD(ColorMode,1),CD(ColorCcode,0,AtMost)},{SetCD(ColorMode,0)},{preserved})
+TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{preserved})
+
+
+
 	CA_Eff_Mode = CreateCcode()
 	GameTime = CreateCcode()
 	CA_XY_Mode = CreateCcode()
@@ -232,8 +386,12 @@ CMov(FP,0x6509B0,FP)
 	CIfEnd()
 --	Call_CA_Effect = SetCallForward()
 	if TestMode == 1 then
-		
-	CMov(FP,0x57f120,CA_Eff_Rat)
+	--	for i = 0, 255 do
+	--		TriggerX(FP,{CD(TestCD,i)},{SetResources(P1, SetTo, i, Gas),SetCountdownTimer(SetTo, 60),
+	--			SetMinimapColor(P8, SetTo, i),
+	--			SetPlayerColor(P8, SetTo, i)},{preserved})
+	--	end
+	--CMov(FP,0x57f120,CA_Eff_Rat)
 		--f_LMov(FP,KillW,_LAdd(KillW,"1000000000"))
 		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas)},1)
 	--	DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
@@ -272,7 +430,7 @@ NextPoint= CreateVarArr(5, FP)
 		
 
 
-		function CreateEffUnitA(Condition,Height,Color)
+		function CreateEffUnitA(Condition,Height,Color,ForPlayer)
 			TriggerX(FP,Condition,{{
 				SetMemoryB(0x66321C, SetTo, Height); -- 높이
 				SetMemoryB(0x669E28+396, SetTo, Color); -- 색상
@@ -289,47 +447,22 @@ NextPoint= CreateVarArr(5, FP)
 		CreateEffUnitA({CVar("X",CA[6],Exactly,7);},19,13)
 		CreateEffUnitA({CVar("X",CA[6],Exactly,8);},20,17)
 
-		for j = 1, #ZealotUIDArr-1 do
+		for j = 1, #ZealotUIDArr do
 			CZNJ=def_sIndex()
 			NJumpEnd(FP,CZNJ)
-			NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
-				f_Read(FP, 0x628438, nil, Nextptrs)
-				CDoActions(FP, {
-					SetMemoryB(0x669E28+151, SetTo, ZealotUIDArr[j][3]);
-					CreateUnitWithProperties(1,ZealotUIDArr[j][1],1,FP,{energy = 100}),
-					SetMemoryB(0x669E28+151, SetTo, 0);
-
-				TSetDeaths(_Add(Nextptrs,13),SetTo,ZealotUIDArr[j][2],0),
-				TSetDeathsX(_Add(Nextptrs,18),SetTo,ZealotUIDArr[j][2],0,0xFFFF),
-				TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-				TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
-				TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
-			})
-			NJump(FP,CZNJ,{CV(NextPoint[j],8,AtMost)})
+			if j == 5 then
+				NIf(FP,{TCVar("X",CA[6],Exactly,NextPoint[5]),Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar3,  1,AtLeast)},{SubV(ZSVar3,1),AddV(NextPoint[5],1)})
+			else
+				NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
+			end
+				CallTrigger(FP,ZSpawnCallTable[j])
+				NJump(FP,CZNJ,{CV(NextPoint[j],8,AtMost)})
 			NIfEnd()
 			TriggerX(FP,{CV(NextPoint[j],9,AtLeast)},{SetV(NextPoint[j],1)},{preserved})
 		end
-		CZNJ=def_sIndex()
-		NJumpEnd(FP,CZNJ)
-		NIf(FP,{TCVar("X",CA[6],Exactly,NextPoint[5]),Memory(0x628438,AtLeast,1),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar3,  1,AtLeast)},{SubV(ZSVar3,1),AddV(NextPoint[5],1)})
-			f_Read(FP, 0x628438, nil, Nextptrs)
-			CDoActions(FP, {
-				SetMemoryB(0x669E28+151, SetTo, ZealotUIDArr[5][3]);
-				CreateUnitWithProperties(1,ZealotUIDArr[5][1],1,FP,{energy = 100}),
-				SetMemoryB(0x669E28+151, SetTo, 0);
-			TSetDeaths(_Add(Nextptrs,13),SetTo,ZealotUIDArr[5][2],0),
-			TSetDeathsX(_Add(Nextptrs,18),SetTo,ZealotUIDArr[5][2],0,0xFFFF),
-			TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-			TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
-			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
-		})
-
-		NJump(FP,CZNJ,{CV(NextPoint[5],8,AtMost)})
-		NIfEnd()
-		TriggerX(FP,{CV(NextPoint[5],9,AtLeast)},{SetV(NextPoint[5],1)},{preserved})
 
 
-		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
+		CIfEnd()
 		CA_CP = CreateVar(FP)
 		CIf(FP,{CV(CA_Create,1,AtLeast)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
 
@@ -341,33 +474,80 @@ NextPoint= CreateVarArr(5, FP)
 		AIT=CreateCcode()
 		DoActionsX(FP, AddCD(AIT,1))
 		TriggerX(FP,{CD(AIT,4,AtLeast)},{SetCD(AIT,0)},{preserved})
-		TriggerX(FP,{CD(GameStart,1),CD(AIT,0)},{SetCp(FP),RunAIScript("Send All Units on Random Suicide Missions")},{preserved})
+		TriggerX(FP,{CD(GameStart,1),CD(AIT,0)},{RotatePlayer({
+			RunAIScript("Clear Previous Combat Data"),
+			RunAIScript("Send All Units on Random Suicide Missions")}, {P5,P6,P7,P8}, FP)
+			},{preserved})
 
 
-		local KillReadTemp = CreateVar(FP)
-		local KillCalcTemp = CreateWar(FP)
 
-		for j=1, 5 do
-			CIf(FP,Deaths(FP,AtLeast,1,ZealotUIDArr[j][1]))
-				f_Read(FP, 0x58A364+(ZealotUIDArr[j][1]*48)+(FP*4), KillReadTemp)
-				if j==1 then
-					f_LMov(FP,KillCalcTemp,{KillReadTemp,0},nil,nil,1)
-				else
-					f_LMul(FP,KillCalcTemp, {KillReadTemp,0}, {100^(j-1),0})
-				end
-				f_LMov(FP,KillW,_LAdd(KillW,KillCalcTemp))
-				DoActions(FP,{SetDeaths(FP, SetTo, 0, ZealotUIDArr[j][1])})
-			CIfEnd()
-		end
+	local SelATK = CreateVar(FP)
+	SelEPD,SelHP,SelSh,SelMaxHP,PercentCalc = CreateVars(5,FP)
+	SelWep = CreateVar(FP)
+	SelUID = CreateVar(FP)
+			
+	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+	f_Read(FP,0x6284B8,nil,SelEPD)
+	f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
+	f_Read(FP,_Add(SelEPD,2),SelHP)
+	f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+	f_Div(FP,SelHP,_Mov(256))
+	f_Div(FP,SelSh,_Mov(256))
+	CMov(FP,SelATK,0)
+	CMov(FP,SelMaxHP,0)
+--	CMov(FP,SelMaxHP,_ReadF(_Add(SelUID,_Mov(EPD(0x662350)))))
+	for i = 1, 5 do
+		TriggerX(FP,{CV(SelUID,ZealotUIDArr[i][1])},{SetV(SelMaxHP,ZealotUIDArr[i][6])},{preserved})
+	end
+	CMov(FP,CunitIndex,_Div(_Sub(SelEPD,19025),_Mov(84)))
 	
+	CIfX(FP, {Cond_EXCC2(LHPCunit,CunitIndex,0,AtLeast,1)})
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	local TempW2 = CreateWar(FP)
+	local TempW3 = CreateWar(FP)
+	local TempW4 = CreateWar(FP)
+	local TempW5 = CreateWar(FP)
+	local TempV = CreateVar(FP)
+	CMul(FP,TempV, CunitIndex, 0x970/4)
+	CAdd(FP,TempV,LHPCunit[3])
+	f_Read(FP, _Add(TempV,(0x20*1)/4), TempV1)
+	f_Read(FP, _Add(TempV,(0x20*2)/4), TempV2)
+	f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
+	f_LDiv(FP,TempW3, TempW2, _LMov(256))
+	f_LMov(FP, TempW4, TempW3, nil,nil,1)
+	f_LAdd(FP, TempW5,TempW4, {SelHP,0})
+	CElseX()
+	f_LMov(FP,TempW5,{SelHP,0},nil,nil,1)
+	CIfXEnd()
+
+
+	CMov(FP,PercentCalc,_Div(_Mul(SelHP,3),SelMaxHP))
+	TBLN1T1 = {}
+	TBLN1T2 = {}
+	TBLN1T3 = {}
+	for i = 0, 10 do
+--			table.insert(TBLN1T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
+--			table.insert(TBLN2T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
+		table.insert(TBLN1T1, SetCSVA1(SVA1(TblStr1,i),SetTo,0x07,0xFF))
+		table.insert(TBLN1T2, SetCSVA1(SVA1(TblStr1,i),SetTo,0x17,0xFF))
+		table.insert(TBLN1T3, SetCSVA1(SVA1(TblStr1,i),SetTo,0x08,0xFF))
+	end
+
+
+	for i = 1, 5 do
+		TriggerX(FP,{CV(SelUID,ZealotUIDArr[i][1])},{SetV(SelATK,ZealotUIDArr[i][5])},{preserved})
+	end
+	CS__ItoCustom(FP,SVA1(TblStr1,0),SelHP,nil,nil,{10,10},1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
+	CS__ItoCustom(FP,SVA1(TblStr1,13),SelSh,nil,nil,{10,5},1,nil,"\x1C0",0x1C,{0,1,2,3,4})
+	CS__ItoCustom(FP,SVA1(TblStr1,23),SelATK,nil,nil,{10,5},1,nil,"\x1B0",0x1B,{0,1,2,3,4})
+	TriggerX(FP,{CV(PercentCalc,2,AtLeast)},TBLN1T1,{preserved})
+	TriggerX(FP,{CV(PercentCalc,1)},TBLN1T2,{preserved})
+	TriggerX(FP,{CV(PercentCalc,0)},TBLN1T3,{preserved})
+	CS__InputVA(FP,iTbl1,0,TblStr1,TblStr1s,nil,0,TblStr1s)
+	CIfEnd()
+
+
+
 DoActions(FP,HeroShieldArr)
-WinCD=CreateCcode()
-CTrigger(FP,{TTCWar(FP,KillW[2],AtLeast,"100000000000")},{
-	SetCD(WinCD,1);
-	KillUnit("Any unit",FP);
-})
-Trigger2X(FP,{CD(WinCD,1)},{
-	RotatePlayer({DisplayTextX("\x13\x04You Are \x1F100 \x04Billion Zealots \x08SLAYER\n\n\x13\x08C \x0EO \x1FN \x11G \x1DR \x1BA \x17T \x16U \x18L \x10A \x0FT \x1CI \x04O \x07N \x0BS\n\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ\n", 4),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP);
-	RotatePlayer({Victory()}, MapPlayers, FP);
-})
 end

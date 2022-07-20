@@ -1,4 +1,12 @@
 function Var_init()
+	PatchArr = {}
+	PatchArrPrsv={}
+	ZealotUIDArr = {}
+	SetZealotUnit(89,20,30,117,8,nil,1400,0,7,"20") -- 1
+	SetZealotUnit(90,2000,500,118,40,1,2000,0,7,"2000") -- 100 
+	SetZealotUnit(93,200000,3500,119,65,nil,2350,0,6,"200000") -- 10000
+	SetZealotUnit(95,20000000,15000,120,120,nil,2700,0,5,"20000000") -- 1000000
+	SetZealotUnit(96,2000000000,65535,121,255,nil,3500,0,4,"2000000000") -- 100000000
 	
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
@@ -22,7 +30,7 @@ function Var_init()
 	Nextptrs = CreateVar(FP)
 	Dt = CreateVar(FP)
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
-	MapPlayers={P1,P2,P3,P4,P5,P6,P7}
+	MapPlayers={P1,P2,P3,P4}
 	CA_Eff_Rat = CreateVar2(FP,nil,nil,80000)
 	CA_Eff_XY = CreateVar(FP)
 	CA_Eff_YZ = CreateVar(FP)
@@ -95,15 +103,25 @@ function Var_init()
 	end
 
 	
-	Level=CreateVarArr(7, FP)
-	Pts=CreateVarArr(7, FP)
-	CurExpTmp = CreateWarArr(7, FP)
-	CurEXP = CreateVarArr(7, FP)
-	MaxEXP = CreateVarArr(7, FP)
+	Level=CreateVarArr(4, FP)
+	Pts=CreateVarArr(4, FP)
+	CurExpTmp = CreateWarArr(4, FP)
+	CurEXP = CreateVarArr(4, FP)
+	MaxEXP = CreateVarArr(4, FP)
 	ArrI = CreateVar(FP)
-	Minpsec = CreateVarArr(7, FP)
-	Gaspsec = CreateVarArr(7, FP)
+	Minpsec = CreateVarArr(4, FP)
+	Gaspsec = CreateVarArr(4, FP)
 
 	HeroArr={}
+	TestCD = CreateCcode()
+
+		
+	t01 = " 0000000000 \x04(00000\x0D\x04) - 00000  \x1BＤｍｇ"
+	iStrSize1 = GetiStrSize(0,t01)
+	S1 = MakeiTblString(827,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
+	iTbl1 = GetiTblId(FP,827,S1) --
+	TblStr1, TblStr1a, TblStr1s = SaveiStrArr(FP,t01)
+	CurCunitI= CreateVar(FP)
+	CunitIndex = CreateVar(FP)
 
 end

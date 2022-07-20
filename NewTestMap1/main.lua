@@ -42,11 +42,11 @@ end
 --if EVFFlag == 1 then
 --	VerText = VerText.."T - EVF"
 --end
-	TestMode=0
+	TestMode=1
 FP = P8
 nilunit = 181
 EUDTurbo(FP)
-SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
+SetForces({P1,P2,P3,P4},{P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
 if LD2XOption == 1 then
@@ -56,6 +56,7 @@ else
 end
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
+	LHPCunit = Install_EXCC(FP,3)
 	Var_init()
 	Include_64BitLibrary(RandSwitch2)
 	Include_CtrigPlib(360,RandSwitch)
