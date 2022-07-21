@@ -254,8 +254,8 @@ function init()
 	CIfOnce(FP)
 	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 	DoActions(FP, {
-		SetMinimapColor(P8, SetTo, 0),
-		SetPlayerColor(P8, SetTo, 0),
+		SetMinimapColor(P8, SetTo, 128),
+		SetPlayerColor(P8, SetTo, 128),
 	})	
 
 

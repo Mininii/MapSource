@@ -50,15 +50,15 @@ function Interface()
                 CAdd(FP,Pts[p],1)
                 CDoActions(FP,{TSetScore(i, SetTo, Level[p], Custom),SetCp(i),PlayWAV("staredit\\wav\\LevelUp.ogg"),SetCp(FP)})
             CIfEnd()
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],65*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
-            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,200)},{AddV(Minpsec[p],65*3),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
+            TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30*3),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
             if TestMode == 1 then
                 TriggerX(FP,{Deaths(i,AtLeast,1,200)},{SubCD(TestCD,1)},{preserved})
                 --CallTriggerX(FP, ZSpawnCallTable[5],{Deaths(i,AtLeast,1,200)})
                 --CallTriggerX(FP, ZSpawnCallTable[4],{Deaths(i,AtLeast,1,201)})
                 TriggerX(FP,{Deaths(i,AtLeast,1,201)},{AddCD(TestCD,1)},{preserved})
             end
-            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*2),AddV(Gaspsec[p],60*2),SubV(Pts[p],3)},{preserved})
+            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*3),AddV(Gaspsec[p],60*3),SubV(Pts[p],3)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             f_Cast(FP,{CurExpLoc,0},CurExpTmp[p])
             CMov(FP,LVLoc,Level[p])

@@ -76,12 +76,109 @@ function System()
 			35360,
 			36310,
 			37260,--31
-			39150,
+			39150,--32
+			40150,--33
+			41050,--34
+			42000,--35
+			42940,--36
+			43890,--37
+			44840,--38
+			45780,
+			46730,
+			47680,
+			48630,
+			49570,------------------------
+			50520,
+			51470,
+			52420,
+			53360,----47
+			54310,--48
+			55260,
+			55570,
+			55890,
+			56210,
+			57470,
+			57630,
+			57780,
+			57940,
+			58100,
+			59360,
+			59680,
+			60000,
+
+			61260,
+			61420,
+			61570,
+			61730,
+			61890,
+			62520,
+			62840,
+			63150,
+			63470,
+			63780,
+
+			64730,
+			64890,
+			65050,
+			65210,
+			65360,
+			65520,
+			65680,
+			66150,
+			66630,
+			66940,
+			67260,
+			67570, ---
+			68050,
+			68210, ---84
+			68520,
+			68840,
+			69150,-- 87
+			69470, --88
+			70420,
+			71360,
+			72310,
+			73260,--92
+			73570,
+			73890,
+			74210,
+			74520,
+			74840,
+			75150,
+			76100,--99
+			76340,
+			76570,
+			76810,
+			77050,--103
+			77680,
+			78000,
+			78310,
+			78630,
+			78940,
+			79260,
+			79570,
+			79890,
+			80520,
+			80840,--113
+			81780,--114
+			82420,
+			82730,
+			83680,
+			84630,---118
+			85570,
+			86520,
+			87470,
+			88420,
+			89360,
+			90310,
+			91260,--125
+
 
 
 		}
 		DoActions(FP,{SetMemory(0x58F500,SetTo,0)})
 		for j, k in pairs(SendArr) do
+			--if k == 69150 then PushErrorMsg(j) end
 			TriggerX(FP,{CV(EffBGMV,k,AtLeast)},{SetMemory(0x58F500, SetTo, j)})
 		end
 		
@@ -129,14 +226,16 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 	TriggerX(FP,{CV(EffBGMVRecive,2)},{SetV(V(ObEffCA[6]),1),SetMinimapColor(P8, SetTo, 128),SetPlayerColor(P8, SetTo, 128)})
 	
 	
-
+	PattPT = {7,6,5,7,6,5,4}
 	for i = 0, 6 do
 		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,2+i)}, {
 			SetV(CARX,2000),
 			SetV(CARY,2000),
 			SetV(CARo,10*i),
 			SetV(ShNm,1),
-			SetV(CA_ZUID,1)
+			SetV(CA_ZUID,1),
+			SetV(CA_SpawnOptionV,4000),
+			SetV(CA_SpawnOptionV2,PattPT[i+1])
 		}, 1)
 	end
 	TriggerX(FP,{CV(EffBGMVRecive,9)},{SetCD(PattT[2],1),SetV(V(ObEffCA[6]),1),SetMinimapColor(P8, SetTo, 129),SetPlayerColor(P8, SetTo, 129)})
@@ -155,16 +254,20 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 	CAdd(FP,P1V,36)
 	CIfEnd()
 
-	
+	CSPlot(CSMakeCircle(90, 2048-64, 0, 91, 1), P5, 128, 0, {2048,2048}, 1, 32, FP, {Label(),CV(EffBGMVRecive,10)})
+	PattPT = {7,6,5,7,6,5,7,6,5,7,6,5,7,6,5,7,6,5}
 	for i = 10, 24 do
 		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,i)}, {
 			SetV(CARX,2000),
 			SetV(CARY,2000),
 			SetV(CARo,24*(i-10)),
 			SetV(ShNm,2),
-			SetV(CA_ZUID,1)
+			SetV(CA_ZUID,1),
+			SetV(CA_SpawnOptionV,4000),
+			SetV(CA_SpawnOptionV2,PattPT[i-9])
 		}, 1)
 	end
+	TriggerX(FP,{CV(EffBGMVRecive,24)},{KillUnit(128,P5)})
 
 	TriggerX(FP,{CV(EffBGMVRecive,21)},{SetV(V(ObEffCA[6]),1),SetMinimapColor(P8, SetTo, 199),SetPlayerColor(P8, SetTo, 199)})
 	TriggerX(FP,{CV(EffBGMVRecive,24)},{SetCD(PattT[3],1)})
@@ -172,6 +275,7 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 	TriggerX(FP,{CV(EffBGMVRecive,25)},{SetCD(SuiOrderCancel,1),SetCD(MoveOrder,1)})
 
 
+	PattPT = {7,6,5,7,6,5}
 	for i = 0, 5 do
 		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,25+i)}, {
 			SetV(CARX,2000),
@@ -180,21 +284,174 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 			SetV(ShNm,3),
 			SetV(CA_ZUID,2),
 			SetV(CA_SpawnOptionV,12000),
-			SetCD(CAXYRand,1)
+			SetCD(CAXYRand,1),
+			SetV(CA_SpawnOptionV2,PattPT[i+1])
 		}, 1)
 	end
 	TriggerX(FP,{CV(EffBGMVRecive,31)},{SetCD(MoveOrder,0),RotatePlayer({RunAIScriptAt(JYD,64)}, {P5,P6,P7,P8},FP)})
-	TriggerX(FP,{CV(EffBGMVRecive,32)},{SetCD(SuiOrderCancel,0),SetCD(MoveOrder,0)})
+	TriggerX(FP,{CV(EffBGMVRecive,32)},{SetV(V(ObEffCA[6]),1),SetCD(SuiOrderCancel,0),SetCD(MoveOrder,0)})
 
 
 
 
+	CSPlot(CSMakeCircle(90, 2048-64, 0, 91, 1), P5, 128, 0, {2048,2048}, 1, 32, FP, {Label(),CV(EffBGMVRecive,32)})
+	PattPT = {7,6,5,7,6,5,7,6,5,7,6,5,7,6,5,7,6,5}
+	for i = 0, 14 do
+		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,32+i)}, {
+			SetV(CARX,2000),
+			SetV(CARY,2000),
+			SetV(CARo,(360-(24*(i-10)))+96),
+			SetV(ShNm,2),
+			SetV(CA_ZUID,2),
+			SetV(CA_SpawnOptionV,4000),
+			SetV(CA_SpawnOptionV2,PattPT[i+1])
+		}, 1)
+	end
+	TriggerX(FP,{CV(EffBGMVRecive,43)},{SetV(V(ObEffCA[6]),1),SetMinimapColor(P8, SetTo, 129),SetPlayerColor(P8, SetTo, 129)})
 
+	TriggerX(FP,{CV(EffBGMVRecive,47)},{KillUnit(128,P5)})
+	for i = 1, 4 do
+		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,47)}, {
+			SetV(CARX,2000),
+			SetV(CARY,2000),
+			SetV(CARo,0),
+			SetV(ShNm,4),
+			SetV(CA_ZUID,2),
+			SetV(CA_SpawnOptionV,3000+(i*1200)),
+			SetV(CA_SpawnOptionV2,4)
+		}, 1)
+	end
 
-
+	TriggerX(FP,{CV(EffBGMVRecive,48)},{SetCD(PattT[4],1)})
+	TriggerX(FP,{CV(EffBGMVRecive,88)},{SetCD(PattT[4],0),SetCD(PattT[5],1)})
+	TriggerX(FP,{CV(EffBGMVRecive,89)},{SetCD(PattT[4],0),SetCD(PattT[6],1)})
+	CallTriggerX(FP, Call_CAPlot, {CD(PattT[4],1)}, {
+		SetV(CARX,2000),
+		SetV(CARY,2000),
+		SetV(CARo,0),
+		SetV(ShNm,5),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,4500),
+		SetV(CA_SpawnOptionV2,7),
+		SetV(CA_SpawnOptionV3,1)
+	})
 	
 
+
+PattPT = {4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7}
 	
+for i = 0,39 do
+	if i~= 36 then
+		CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,48+i)}, {
+			SetV(CARX,2000),
+			SetV(CARY,2000),
+			SetV(CARo,0),
+			SetV(ShNm,5),
+			SetV(CA_ZUID,2),
+			SetV(CA_SpawnOptionV,0),
+			SetV(CA_SpawnOptionV2,PattPT[i+1]),
+			SetV(CA_SpawnOptionV3,1),
+			SetV(CA_SpawnOptionV4,1)
+		},1)
+	end
+end
+
+LI = CreateVar(FP)
+LI2 = CreateVar(FP)
+TriggerX(FP,{CV(EffBGMVRecive,90)},{SetV(LI,0)})
+TriggerX(FP,{CV(EffBGMVRecive,91)},{SetV(LI2,0)})
+TriggerX(FP,{CV(EffBGMVRecive,114)},{SetV(LI,0)})
+TriggerX(FP,{CV(EffBGMVRecive,113)},{SetV(LI2,0)})
+CIf(FP,{CD(PattT[5],1),CV(LI,360,AtMost)},{AddV(LI,15)})
+CFor(FP, 0, 2000, 200)
+CI=CForVariable()
+f_Lengthdir(FP, CI, LI, CPosX, CPosY)
+Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
+CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,3000)})
+CForEnd()
+CIfEnd()
+CIf(FP,{CD(PattT[6],1),CV(LI2,360,AtMost)},{AddV(LI2,15)})
+CFor(FP, 0, 2000, 200)
+CI=CForVariable()
+f_Lengthdir(FP, CI, _Sub(_Mov(360),LI2), CPosX, CPosY)
+Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
+CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,3000)})
+CForEnd()
+CIfEnd()
+
+PattPT = {7,6,5,7,6,5,4}
+for i = 0, 6 do
+	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,92+i)}, {
+		SetV(CARX,2000),
+		SetV(CARY,2000),
+		SetV(CARo,0),
+		SetV(ShNm,6),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,8000),
+		SetCD(CAXYRand,1),
+		SetV(CA_SpawnOptionV2,PattPT[i+1])
+	}, 1)
+end
+PattPT = {7,6,5,4}
+for i = 0, 3 do
+	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,99+i)}, {
+		SetV(CARX,4000),
+		SetV(CARY,4000),
+		SetV(CARo,0),
+		SetV(ShNm,7),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,3000+(3000*i)),
+		SetCD(CAXYRand,1),
+		SetV(CA_SpawnOptionV2,PattPT[i+1])
+	}, 1)
+end
+TriggerX(FP,{CV(EffBGMVRecive,99)},{SetCD(SuiOrderCancel,1),SetCD(MoveOrder,1)})
+TriggerX(FP,{CV(EffBGMVRecive,103)},{SetCD(SuiOrderCancel,0),SetCD(MoveOrder,0),SetCD(PattT[4],1)})
+
+TriggerX(FP,{CV(EffBGMVRecive,118)},{SetCD(PattT[4],0)})
+PattPT = {7,6,5,4,7,6,5,4,7,6,5,4,7,6,5,4}
+
+for i = 0, 15 do
+	
+	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,103+i)}, {
+		SetV(CARX,2000),
+		SetV(CARY,2000),
+		SetV(CARo,0),
+		SetV(ShNm,5),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,0),
+		SetV(CA_SpawnOptionV2,PattPT[i+1]),
+		SetV(CA_SpawnOptionV3,1),
+		SetV(CA_SpawnOptionV4,1)
+	},1)
+end
+	
+CSPlot(CSMakeCircle(90, 2048-64, 0, 91, 1), P5, 128, 0, {2048,2048}, 1, 32, FP, {Label(),CV(EffBGMVRecive,118)})
+
+PattPT = {7,6,5,4,7,6,5,4}
+PattPT2 = {4,5,6,7,4,5,6,7}
+for i = 0, 6 do
+	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,118+i)}, {
+		SetV(CARX,2000),
+		SetV(CARY,2000),
+		SetV(CARo,25*i),
+		SetV(ShNm,2),
+		SetV(CA_ZUID,3),
+		SetV(CA_SpawnOptionV2,PattPT[i+1])
+	}, 1)
+	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,118+i)}, {
+		SetV(CARX,2000),
+		SetV(CARY,2000),
+		SetV(CARo,(25*i)+180),
+		SetV(ShNm,2),
+		SetV(CA_ZUID,3),
+		SetV(CA_SpawnOptionV2,PattPT2[i+1])
+	}, 1)
+end
+TriggerX(FP,{CV(EffBGMVRecive,125)},{KillUnit(128,P5),SetCD(GameStart,1),SetV(V(ObEffCA[6]),1),
+SetMinimapColor(P8, SetTo, 0),
+SetPlayerColor(P8, SetTo, 0),})
+
 	for i = 0, 7 do
 		DoActions(i,{SetCp(i),
 		RunAIScript(P1VON),
@@ -227,7 +484,7 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 
 	IBGM_EPD(FP, {P1,P2,P3,P4,P9,P10,P11,P12}, BGMType, {
 		{1,"staredit\\wav\\BGMFile.ogg",165*1000},
-		{2,"staredit\\wav\\BGMFile2.ogg",133*1000}
+		{2,"staredit\\wav\\BGMFile2.ogg",93*1000}
 	})
 	
 	Cast_UnitCount()
@@ -381,7 +638,12 @@ BreakCalc({DeathsX(CurrentPlayer, Exactly, 146, 0, 0xFF)},{--¼ºÅ«
 	SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 	SetMemory(0x6509B0, Add, 4)
 })
-BreakCalc({DeathsX(CurrentPlayer, AtLeast, 131, 0, 0xFF),DeathsX(CurrentPlayer, AtMost, 133, 0, 0xFF)},{SetMemory(0x6509B0, Add, 25),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 35, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 144, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 41, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 36, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 59, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, AtLeast, 131, 0, 0xFF),DeathsX(CurrentPlayer, AtMost, 133, 0, 0xFF)},{SetMemory(0x6509B0, Add, 25),SetDeathsX(CurrentPlayer,SetTo,0*65536,0,0xFF0000)})
 
 BreakCalc({},{SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
 
@@ -390,7 +652,7 @@ CunitCtrig_Part3X()
 for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
-	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,3,0,0xFF),
 	DeathsX(EPDF(0x628298-0x150*i+(9*4)),AtMost,0,0,0xFF0000),
 --	DeathsX(EPDF(0x628298-0x150*i+(0x54)),AtLeast,1*256,0,0xFF00),
 },
@@ -402,7 +664,6 @@ CunitCtrig_End()
 for i = 0, 1699 do
 	Trigger2(FP,{
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
-		DeathsX(19025+(84*i)+19,AtMost,6,0,0xFF),
 		DeathsX(19025+(84*i)+9,Exactly,1*65536,0,0xFF0000),
 	},
 	{
@@ -496,6 +757,7 @@ CMov(FP,0x6509B0,FP)
 	end
 
 	Trigger2X(FP, {CD(GameStart,1),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x08Game Over")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
+	Trigger2X(FP, {CD(GameStart2,1),CD(GameStart,0),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x08Game Over")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
 	--CA_3DAcc(32840,AtLeast,2,2,2)
 	--CA_3DAcc(112420,AtLeast,2,1,1)
 	--CA_3DAcc(142730,AtLeast,3,1,1)
@@ -561,7 +823,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 
 	Waves = {}
 	for i = 6, 55 do
-		Waves[i-10]=i*i*i*i*i
+		Waves[i-5]=i*i*i*i*i
 	end
 	for j, k in pairs(Waves) do
 		local WStr = tostring(k*24)
