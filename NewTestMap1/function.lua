@@ -272,55 +272,58 @@ end
 
 function SetZealotUnit(UnitID,HP,Shield,WepID,WepDamage,ClockingFlag,HighSpeed,Color,ForPlayer,LHPStr)
 
-	PatchInsert(SetMemoryB(0x662180 + UnitID,SetTo,0))
-	PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,49)) -- Graphic
-	PatchInsert(SetMemoryB(0x662098+UnitID,SetTo,1))--RClickAct
-	PatchInsert(SetMemoryB(0x662268+UnitID,SetTo,2))--Human InitAct
-	PatchInsert(SetMemoryB(0x662EA0+UnitID,SetTo,2))--Computer InitAct
-	PatchInsert(SetMemoryB(0x663320+UnitID,SetTo,10))--AttackOrder
-	PatchInsert(SetMemoryB(0x663A50+UnitID,SetTo,2))--AttackMoveOrder
-	PatchInsert(SetMemoryB(0x664898+UnitID,SetTo,2))--IdleOrder
+	PatchInsert2(SetMemoryB(0x662180 + UnitID,SetTo,0))
+	PatchInsert2(SetMemoryB(0x6644F8+UnitID,SetTo,49)) -- Graphic
+	PatchInsert2(SetMemoryB(0x662098+UnitID,SetTo,1))--RClickAct
+	PatchInsert2(SetMemoryB(0x662268+UnitID,SetTo,2))--Human InitAct
+	PatchInsert2(SetMemoryB(0x662EA0+UnitID,SetTo,2))--Computer InitAct
+	PatchInsert2(SetMemoryB(0x663320+UnitID,SetTo,10))--AttackOrder
+	PatchInsert2(SetMemoryB(0x663A50+UnitID,SetTo,2))--AttackMoveOrder
+	PatchInsert2(SetMemoryB(0x664898+UnitID,SetTo,2))--IdleOrder
 	if ClockingFlag == 1 then
-		PatchInsert(SetMemoryX(0x664080 + (UnitID*4),SetTo,402653184+4194816,0xFFFFFFFF))
+		PatchInsert2(SetMemoryX(0x664080 + (UnitID*4),SetTo,402653184+4194816,0xFFFFFFFF))
 	else
-		PatchInsert(SetMemoryX(0x664080 + (UnitID*4),SetTo,402653184,0xFFFFFFFF))
+		PatchInsert2(SetMemoryX(0x664080 + (UnitID*4),SetTo,402653184,0xFFFFFFFF))
 	end
-	PatchInsert(SetMemoryB(0x65FEC8 + UnitID,SetTo,0)) -- Armor
+	PatchInsert2(SetMemoryB(0x65FEC8 + UnitID,SetTo,0)) -- Armor
 	if HP>=8320000 then
-		PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,8320000*256)) -- HP
+		PatchInsert2(SetMemory(0x662350 + (UnitID*4),SetTo,8320000*256)) -- HP
 	else
-		PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,HP*256)) -- HP
+		PatchInsert2(SetMemory(0x662350 + (UnitID*4),SetTo,HP*256)) -- HP
 	end
-	PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, Shield))--Shield
-	PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))--ShieldUsage
-	PatchInsert(SetMemoryB(0x6637A0+UnitID,SetTo,4)) -- GroupFlag
-	PatchInsert(SetMemoryW(0x663408+(UnitID *2),SetTo,0))--BuildScore
-	PatchInsert(SetMemoryW(0x663EB8+(UnitID *2),SetTo,0))--KillScore
-	PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,3)) -- SeekRange
-	PatchInsert(SetMemoryB(0x663238+UnitID,SetTo,7)) -- SightRange
-	PatchInsert(SetMemoryB(0x660FC8+UnitID,SetTo,0x41))--MovementFlag
-	PatchInsert(SetMemoryW(0x662F88+(UnitID *2),SetTo,40)) --Portrait
-	PatchInsert(SetMemory(0x662860 + (UnitID*4),SetTo,23+(27*65536))) -- 건설크기
-	PatchInsert(SetMemoryB(0x6616E0+UnitID,SetTo,130))--AirWeapon
-	PatchInsert(SetMemoryB(0x6636B8+UnitID,SetTo,WepID)) -- GndWeapon
-	PatchInsert(SetMemory(0x6617C8 + (UnitID*8),SetTo,(2)+(2*65536))) --Size
-	PatchInsert(SetMemory(0x6617CC + (UnitID*8),SetTo,(2)+(2*65536))) --Size
-	PatchInsert(SetMemoryB(0x663150+UnitID,SetTo,4))--Elevation
-	PatchInsert(SetMemoryB(0x6605F0+UnitID,SetTo,32)) -- StartDirection
-	PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,32)) -- 사거리
-	PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,0)) -- 그래픽
-	PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,WepDamage)) -- 공격력
-	PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,0)) -- 추가공격력
-	PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,283)) -- 이름
-	PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,353)) -- 아이콘
-	PatchInsert(SetMemoryB(0x656670+WepID,SetTo,5)) -- 공격유닛에서나옴
-	PatchInsert(SetMemoryB(0x656FB8+WepID,SetTo,1)) -- 공속
-	PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,2)) -- 투사체수
+	PatchInsert2(SetMemoryW(0x660E00 + (UnitID *2), SetTo, Shield))--Shield
+	PatchInsert2(SetMemoryB(0x6647B0 + UnitID,SetTo,1))--ShieldUsage
+	PatchInsert2(SetMemoryB(0x6637A0+UnitID,SetTo,4)) -- GroupFlag
+	PatchInsert2(SetMemoryW(0x663408+(UnitID *2),SetTo,0))--BuildScore
+	PatchInsert2(SetMemoryW(0x663EB8+(UnitID *2),SetTo,0))--KillScore
+	PatchInsert2(SetMemoryB(0x662DB8+UnitID,SetTo,3)) -- SeekRange
+	PatchInsert2(SetMemoryB(0x663238+UnitID,SetTo,7)) -- SightRange
+	PatchInsert2(SetMemoryB(0x660FC8+UnitID,SetTo,0x41))--MovementFlag
+	PatchInsert2(SetMemoryW(0x662F88+(UnitID *2),SetTo,40)) --Portrait
+	PatchInsert2(SetMemory(0x662860 + (UnitID*4),SetTo,23+(27*65536))) -- 건설크기
+	PatchInsert2(SetMemoryB(0x6616E0+UnitID,SetTo,130))--AirWeapon
+	PatchInsert2(SetMemoryB(0x6636B8+UnitID,SetTo,WepID)) -- GndWeapon
+	PatchInsert2(SetMemory(0x6617C8 + (UnitID*8),SetTo,(2)+(2*65536))) --Size
+	PatchInsert2(SetMemory(0x6617CC + (UnitID*8),SetTo,(2)+(2*65536))) --Size
+	PatchInsert2(SetMemoryB(0x663150+UnitID,SetTo,4))--Elevation
+	PatchInsert2(SetMemoryB(0x6605F0+UnitID,SetTo,32)) -- StartDirection
+	PatchInsert2(SetMemory(0x657470+(WepID *4),SetTo,32)) -- 사거리
+	PatchInsert2(SetMemory(0x656CA8+(WepID *4),SetTo,0)) -- 그래픽
+	PatchInsert2(SetMemoryW(0x656EB0+(WepID *2),SetTo,WepDamage)) -- 공격력
+	PatchInsert2(SetMemoryW(0x657678+(WepID *2),SetTo,0)) -- 추가공격력
+	PatchInsert2(SetMemoryW(0x6572E0+(WepID *2),SetTo,283)) -- 이름
+	PatchInsert2(SetMemoryW(0x656780+(WepID *2),SetTo,353)) -- 아이콘
+	PatchInsert2(SetMemoryB(0x656670+WepID,SetTo,5)) -- 공격유닛에서나옴
+	PatchInsert2(SetMemoryB(0x656FB8+WepID,SetTo,1)) -- 공속
+	PatchInsert2(SetMemoryB(0x6564E0+WepID,SetTo,2)) -- 투사체수
 	table.insert(ZealotUIDArr,{UnitID,HighSpeed,Color,ForPlayer,WepDamage*2,HP,LHPStr})
 end
 
 function PatchInsert(Act)
 	table.insert(PatchArr,Act)
+end
+function PatchInsert2(Act)
+	table.insert(PatchArr2,Act)
 end
 function PatchInsertPrsv(Act)
 	table.insert(PatchArrPrsv,Act)
@@ -452,6 +455,8 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
 			elseif j== "SeekRange" then
 				PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,k)) -- SeekRange
+			elseif j== "Graphic" then
+				PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,k)) -- Graphic
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end

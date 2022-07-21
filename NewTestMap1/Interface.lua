@@ -54,8 +54,8 @@ function Interface()
             TriggerX(FP,{CV(Pts[p],1,AtLeast),Deaths(i,AtLeast,1,201)},{AddV(Gaspsec[p],30*2),SubV(Pts[p],1),SetCp(i),PlayWAV("staredit\\wav\\UseStat.ogg"),SetCp(FP)},{preserved})
             if TestMode == 1 then
                 TriggerX(FP,{Deaths(i,AtLeast,1,200)},{SubCD(TestCD,1)},{preserved})
-                CallTriggerX(FP, ZSpawnCallTable[5],{Deaths(i,AtLeast,1,200)})
-                CallTriggerX(FP, ZSpawnCallTable[4],{Deaths(i,AtLeast,1,201)})
+                --CallTriggerX(FP, ZSpawnCallTable[5],{Deaths(i,AtLeast,1,200)})
+                --CallTriggerX(FP, ZSpawnCallTable[4],{Deaths(i,AtLeast,1,201)})
                 TriggerX(FP,{Deaths(i,AtLeast,1,201)},{AddCD(TestCD,1)},{preserved})
             end
             TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*2),AddV(Gaspsec[p],60*2),SubV(Pts[p],3)},{preserved})
