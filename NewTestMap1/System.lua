@@ -549,7 +549,7 @@ for j,k in pairs(HeroArr) do
 	if k==19 then
 		LocAct={
 			SetMemory(0x6509B0, Add, 23),
-			SetDeathsX(CurrentPlayer,SetTo,255,0,0xFF),
+			SetDeathsX(CurrentPlayer,SetTo,3,0,0xFF),
 			SetMemory(0x6509B0, Subtract, 27),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
@@ -850,7 +850,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		end
 		end
 	CTrigger(FP,{CD(GameStart,1)},{AddV(ZSVar2,ZSVar)},1)
-	CIf(FP,{CV(ZSVar2,100000000,AtLeast)})
+	CIf(FP,{CV(ZSVar2,1000000000,AtLeast)})
 		CAdd(FP,ZSVar3,_Div(ZSVar2,100000000))
 		f_Mod(FP,ZSVar2,100000000)
 	CIfEnd()
@@ -922,10 +922,12 @@ NextPoint= CreateVarArr(5, FP)
 		for j = 1, #ZealotUIDArr do
 			CZNJ=def_sIndex()
 			NJumpEnd(FP,CZNJ)
+			local BrCond = CV(ZSVar2,  100^(j)-1,AtMost)
+			if j == 4 then BrCond = nil end
 			if j == 5 then
 				NIf(FP,{TCVar("X",CA[6],Exactly,NextPoint[5]),Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar3,  1,AtLeast)},{SubV(ZSVar3,1),AddV(NextPoint[5],1)})
 			else
-				NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast)},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
+				NIf(FP,{CV(ZSVar3,  0,AtMost),TCVar("X",CA[6],Exactly,NextPoint[j]);CVar("X",CA[6],AtMost,8);Memory(0x628438,AtLeast,1),CV(count,1500,AtMost),CV(Zcount,700,AtMost),CD(GameStart,1),CV(ZSVar2,  100^(j-1),AtLeast),BrCond},{SubV(ZSVar2,100^(j-1)),AddV(NextPoint[j],1)})
 			end
 				CallTrigger(FP,ZSpawnCallTable[j])
 				NJump(FP,CZNJ,{CV(NextPoint[j],8,AtMost)})

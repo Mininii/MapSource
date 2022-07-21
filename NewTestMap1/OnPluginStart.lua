@@ -104,7 +104,7 @@ function init()
 	SetUnitsDatX("Zerg Sunken Colony", {MinCost=50*10,SuppCost=10,HP=1500})
 	SetWeaponsDatX(53, {DmgBase=65535,DmgFactor=0}) -- Zerg Sunken Colony
 	SetWeaponsDatX(0, {DmgBase=35,DmgFactor=120}) --Terran Marine
-	SetUnitsDatX("Terran Firebat", {MinCost=100,GasCost=50,SuppCost=2,HP=540})
+	SetUnitsDatX("Terran Firebat", {MinCost=100,GasCost=50,SuppCost=2,HP=200})
 	SetWeaponsDatX(25, {DmgBase=32,DmgFactor=80}) -- Terran Firebat
 	SetUnitsDatX("Terran Ghost", {MinCost=50,GasCost=75*2,SuppCost=2,HP=60})
 	SetWeaponsDatX(2, {DmgBase=100,DmgFactor=250}) --Terran Ghost
@@ -120,6 +120,7 @@ function init()
 	SetWeaponsDatX(103, {DmgBase=12,DmgFactor=90,Cooldown=15}) --Terran Valkyrie
 
 	
+	SetUnitsDatX("Protoss Zealot", {HP=120,Shield=100})
 	SetWeaponsDatX(64, {DmgBase=500,DmgFactor=127}) --Protoss Zealot
 	SetWeaponsDatX(66, {DmgBase=1000,DmgFactor=127,ObjectNum=2}) --Protoss Dragoon
 	SetWeaponsDatX(84, {DmgBase=65535}) --PSI Storm
@@ -173,7 +174,7 @@ function init()
 	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=90,Splash={10,25,40},FlingyID=150,IconType=336,ObjectNum=2}) --Edmund Duke Tank
 	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=65,Splash={64,96,128},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151,ObjectNum=2}) --Edmund Duke SiegeMode
 	SetFlingySpeed(151,8533)--¿Ãø•«« ≈∫»Ø º”µµ √÷¥Î∑Œ
-	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=250,Shield=1500,MinCost=30000,GasCost=60000,SuppCost=30,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
+	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=250,Shield=1500,MinCost=30000,GasCost=60000,SuppCost=25,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetUnitsDatX(18, {isHero=true})
 	SetWeaponsDatX(9, {Cooldown=1,DmgBase=32767,DmgFactor=128,ObjectNum=2}) --Alan Schezar
 
@@ -193,7 +194,7 @@ function init()
 	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=9000,DmgFactor=127,Splash={5,10,15},Behavior=8}) --Fenix D
 	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=8,BuildTime=35,SeekRange=9})
 	SetWeaponsDatX(69, {Cooldown=1,DmgBase=8500,DmgFactor=120,ObjectNum=2,Splash={10,20,30},RangeMax=9*32}) --Tassadar
-	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=35,BuildTime=35})
+	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=25,BuildTime=35})
 	SetWeaponsDatX(85, {DmgBase=65535,DmgFactor=0}) --Zeratul
 	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=30,BuildTime=35,AdvFlag={4+0x20000000 ,4+0x20000000 }})
 	SetUnitsDatX(85, {AdvFlag={4,4}})
@@ -226,8 +227,9 @@ function init()
 	SetWeaponsDatX(47, {Cooldown=1,DmgBase=400,DmgFactor=90,Splash={5,10,15}}) --Kukulza G
 	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=20,BuildTime=35,SeekRange=7,GroundWeapon=51})
 	SetWeaponsDatX(51, {Cooldown=1,DmgBase=150,DmgFactor=60,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
-	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=900,Shield=500,MinCost=30000,GasCost=60000,SuppCost=35,BuildTime=170})
+	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=900,Shield=500,MinCost=30000,GasCost=60000,SuppCost=25,BuildTime=170})
 	SetWeaponsDatX(41, {DmgBase=65535,DmgFactor=0}) --Torrasque
+	PatchInsert2(SetMemoryB(0x65FEC8 + 48,SetTo,255)) -- Armor
 	--SetWeaponGrp(51,175,132,4,231)
 
 
