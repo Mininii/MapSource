@@ -234,7 +234,7 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 			SetV(CARo,10*i),
 			SetV(ShNm,1),
 			SetV(CA_ZUID,1),
-			SetV(CA_SpawnOptionV,4000),
+			SetV(CA_SpawnOptionV,6000),
 			SetV(CA_SpawnOptionV2,PattPT[i+1])
 		}, 1)
 	end
@@ -331,7 +331,7 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 		SetV(CARo,0),
 		SetV(ShNm,5),
 		SetV(CA_ZUID,2),
-		SetV(CA_SpawnOptionV,4500),
+		SetV(CA_SpawnOptionV,6500),
 		SetV(CA_SpawnOptionV2,7),
 		SetV(CA_SpawnOptionV3,1)
 	})
@@ -348,7 +348,7 @@ for i = 0,39 do
 			SetV(CARo,0),
 			SetV(ShNm,5),
 			SetV(CA_ZUID,2),
-			SetV(CA_SpawnOptionV,0),
+			SetV(CA_SpawnOptionV,6500),
 			SetV(CA_SpawnOptionV2,PattPT[i+1]),
 			SetV(CA_SpawnOptionV3,1),
 			SetV(CA_SpawnOptionV4,1)
@@ -367,7 +367,7 @@ CFor(FP, 0, 2000, 200)
 CI=CForVariable()
 f_Lengthdir(FP, CI, LI, CPosX, CPosY)
 Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
-CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,3000)})
+CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,7500)})
 CForEnd()
 CIfEnd()
 CIf(FP,{CD(PattT[6],1),CV(LI2,360,AtMost)},{AddV(LI2,15)})
@@ -375,7 +375,7 @@ CFor(FP, 0, 2000, 200)
 CI=CForVariable()
 f_Lengthdir(FP, CI, _Sub(_Mov(360),LI2), CPosX, CPosY)
 Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
-CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,3000)})
+CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,7500)})
 CForEnd()
 CIfEnd()
 
@@ -419,7 +419,7 @@ for i = 0, 15 do
 		SetV(CARo,0),
 		SetV(ShNm,5),
 		SetV(CA_ZUID,2),
-		SetV(CA_SpawnOptionV,0),
+		SetV(CA_SpawnOptionV,6000),
 		SetV(CA_SpawnOptionV2,PattPT[i+1]),
 		SetV(CA_SpawnOptionV3,1),
 		SetV(CA_SpawnOptionV4,1)
@@ -436,7 +436,8 @@ for i = 0, 6 do
 		SetV(CARY,2000),
 		SetV(CARo,25*i),
 		SetV(ShNm,2),
-		SetV(CA_ZUID,3),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,6000),
 		SetV(CA_SpawnOptionV2,PattPT[i+1])
 	}, 1)
 	CallTriggerX(FP, Call_CAPlot, {CV(EffBGMVRecive,118+i)}, {
@@ -444,7 +445,8 @@ for i = 0, 6 do
 		SetV(CARY,2000),
 		SetV(CARo,(25*i)+180),
 		SetV(ShNm,2),
-		SetV(CA_ZUID,3),
+		SetV(CA_ZUID,2),
+		SetV(CA_SpawnOptionV,6000),
 		SetV(CA_SpawnOptionV2,PattPT2[i+1])
 	}, 1)
 end
@@ -517,13 +519,13 @@ SetPlayerColor(P8, SetTo, 0),})
 	
 	for i = 0, 3 do
 		if TestMode == 1 then
-			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i),SetMemoryB(0x58D2B0+(15)+(46*i),SetTo,255)},{preserved})
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264+(4*i),Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i),SetMemoryB(0x58D2B0+(15)+(46*i),SetTo,255)},{preserved})
 		else
-			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
+			TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",5)},{SetMemory(0x582264+(4*i),Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Protoss Probe", 2, i)},{preserved})
 		end
 		
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{SetMemory(0x5821D4,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
-		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{SetMemory(0x582144,Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",3)},{SetMemory(0x5821D4+(4*i),Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Terran SCV", 2, i),SetDeaths(i,SetTo,1,210)},{preserved})
+		TriggerX(FP,{Bring(i,AtLeast,1,"Terran Civilian",4)},{SetMemory(0x582144+(4*i),Add,50),KillUnitAt(All, "Terran Civilian", 64, i),CreateUnit(1, "Zerg Drone", 2, i)},{preserved})
 	end
 	CIfEnd()
 	TriggerX(FP,{CountdownTimer(AtMost, 1)},{SetCD(BCFlag,0),SetCD(GameStart2,1)})
@@ -561,7 +563,7 @@ for j,k in pairs(HeroArr) do
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
-	elseif k == 48 or k == 75 then
+	elseif k == 48 or k == 75 or k == 146 or k == 17 or k == 18 then
 		
 		LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
@@ -573,8 +575,12 @@ for j,k in pairs(HeroArr) do
 		local TorrSkillUID = CreateVar(FP)
 		local TorrSkillP = CreateVar(FP)
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, k, 0, 0xFF)},{SetMemory(0x6509B0, Subtract, 4),})
-			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFFFFFF00)})
+			CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFFFFFF00)},{SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFFFFFF00)})
 				f_SaveCp()
+					if k ==17 or k ==18 then
+						DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+						CIf(FP,{Switch(RandSwitch, Set),Switch(RandSwitch2, Set)})
+					end
 					CIf(FP,{TMemory(_Add(BackupCp,2), AtLeast, 1)})
 						CMov(FP,TorrSkillP,_Read(_Sub(BackupCp,2)),nil,0xFF,1)
 						f_Read(FP, _Add(BackupCp,2), nil, TorrSkillEPD)
@@ -594,6 +600,9 @@ for j,k in pairs(HeroArr) do
 							CTrigger(FP,{CV(TorrSkillUID,ZealotUIDArr[z][1])},{TSetKills(TorrSkillP, Add, 1, ZealotUIDArr[z][1])},1)
 						end
 					CIfEnd()
+					if k ==17 or k ==18 then
+						CIfEnd()
+					end
 				f_LoadCp()
 			CIfEnd()
 			DoActions(FP,{SetMemory(0x6509B0, Add, 4)})
@@ -639,7 +648,7 @@ BreakCalc({DeathsX(CurrentPlayer, Exactly, 146, 0, 0xFF)},{--¼ºÅ«
 	SetMemory(0x6509B0, Add, 4)
 })
 BreakCalc({DeathsX(CurrentPlayer, Exactly, 35, 0, 0xFF)})
-BreakCalc({DeathsX(CurrentPlayer, Exactly, 144, 0, 0xFF)})
+BreakCalc({DeathsX(CurrentPlayer, Exactly, 143, 0, 0xFF)})
 BreakCalc({DeathsX(CurrentPlayer, Exactly, 41, 0, 0xFF)})
 BreakCalc({DeathsX(CurrentPlayer, Exactly, 36, 0, 0xFF)})
 BreakCalc({DeathsX(CurrentPlayer, Exactly, 59, 0, 0xFF)})
@@ -822,8 +831,8 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 	ZSVar = CreateVar(FP)
 
 	Waves = {}
-	for i = 6, 55 do
-		Waves[i-5]=i*i*i*i*i
+	for i = 3, 52 do
+		Waves[i-2]=i*i*i*i*i
 	end
 	for j, k in pairs(Waves) do
 		local WStr = tostring(k*24)
