@@ -833,6 +833,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 	Waves = {}
 	for i = 3, 52 do
 		Waves[i-2]=i*i*i*i*i
+		if i == 25+2 then break end
 	end
 	for j, k in pairs(Waves) do
 		local WStr = tostring(k*24)
@@ -844,9 +845,9 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 			WStr = string.sub(WStr,1,#WStr-9)..","..string.sub(WStr,#WStr-8,#WStr-6)..","..string.sub(WStr,#WStr-5,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
 		end
 		if j==#Waves then
-			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(35*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."(End)] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
+			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."(End)] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
 		else
-			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(35*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
+			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
 		end
 		end
 	CTrigger(FP,{CD(GameStart,1)},{AddV(ZSVar2,ZSVar)},1)
@@ -863,7 +864,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		--end
 	--CMov(FP,0x57f120,CA_Eff_Rat)
 		--f_LMov(FP,KillW,_LAdd(KillW,"1000000000"))
-		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas),SetCountdownTimer(SetTo, 30)},1)
+		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas),},1)--SetCountdownTimer(SetTo, 30)
 	--	DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
 	--	CreateUnit(1,ZealotUIDArr[1][1],1,FP),
 	--	CreateUnit(1,ZealotUIDArr[2][1],1,FP),

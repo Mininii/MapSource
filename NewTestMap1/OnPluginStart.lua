@@ -96,7 +96,7 @@ function init()
 
 
 	SetUnitsDatX(219, {AdvFlag={536870916, 0xFFFFFFFF},SizeL=1,SizeU=1,SizeR=1,SizeD=1,BdDimX=1,BdDimY=1,HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23})--ÀÌÆåÆ®À¯´Ö
-	SetUnitsDatX("Terran Missile Turret", {MinCost=75*10,SuppCost=10,HP=1250,GroundWeapon=29,AirWeapon=130})
+	SetUnitsDatX("Terran Missile Turret", {MinCost=75*10,SuppCost=10,HP=1750,GroundWeapon=29,AirWeapon=130})
 	SetUnitsDatX("Terran Bunker", {SpaceProv=8,HP=2000,MinCost=10000})
 	SetUnitsDatX("Terran SCV", {SpaceReq=2})
 	SetWeaponsDatX(29, {Cooldown=1,DmgBase=20*10,DmgFactor=120,UpgradeType=8,Behavior=2})-- Terran Missile Turret
@@ -117,7 +117,7 @@ function init()
 	SetWeaponsDatX(33, {DmgBase=65535,Splash={64,64,64}}) --EMP
 	SetWeaponsDatX(19, {DmgBase=250,DmgFactor=256}) --Terran Battlecruiser
 	SetUnitsDatX("Terran Valkyrie", {GroundWeapon=103})
-	SetWeaponsDatX(103, {DmgBase=12,DmgFactor=90,Cooldown=15}) --Terran Valkyrie
+	SetWeaponsDatX(103, {DmgBase=700,DmgFactor=65,Cooldown=15}) --Terran Valkyrie
 
 	
 	SetUnitsDatX("Protoss Zealot", {HP=120,Shield=100})
@@ -128,107 +128,107 @@ function init()
 	SetUnitsDatX("Protoss Archon", {SeekRange=4})
 	SetWeaponsDatX(70, {DmgBase=65,DmgFactor=95,ObjectNum=2,RangeMax=32*4}) --Protoss Archon
 	SetUnitsDatX("Protoss Reaver", {GroundWeapon=115,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
-	SetWeaponsDatX(115, {RangeMax=32*8,Cooldown=1,DmgBase=750,DmgFactor=130,Splash={20,40,60},ObjectNum=1,UpgradeType=35,IconType=314}) -- Protoss Reaver
-	SetWeaponsDatX(73, {DmgBase=1200,DmgFactor=128,ObjectNum=2,Cooldown=1}) --Protoss Scout
+	SetWeaponsDatX(115, {RangeMax=32*8,Cooldown=15,DmgBase=750,DmgFactor=130,Splash={20,40,60},ObjectNum=1,UpgradeType=35,IconType=314}) -- Protoss Reaver
+	SetWeaponsDatX(73, {DmgBase=1200,DmgFactor=127,ObjectNum=2,Cooldown=1}) --Protoss Scout
 	SetWeaponsDatX(77, {DmgBase=2000,DmgFactor=200,Cooldown=1}) --Protoss Arbiter
 	SetUnitsDatX("Protoss Corsair", {GroundWeapon=100})
-	SetWeaponsDatX(100, {DmgBase=500,DmgFactor=76}) --Protoss Corsair
+	SetWeaponsDatX(100, {DmgBase=500,DmgFactor=67}) --Protoss Corsair
 	SetUnitsDatX("Protoss Photon Cannon", {MinCost=150*3,SuppCost=3,HP=350,Shield=250})
-	SetWeaponsDatX(81, {DmgBase=10000,DmgFactor=128,ObjectNum=2,Cooldown=1,UpgradeType=13,Behavior=2}) -- Protoss Photon Cannon
-	SetWeaponsDatX(80, {DmgBase=10000,DmgFactor=128,ObjectNum=2,Cooldown=1,UpgradeType=13,Behavior=2}) -- Protoss Photon Cannon
+	SetWeaponsDatX(81, {DmgBase=10000,DmgFactor=127,ObjectNum=2,Cooldown=1,UpgradeType=13,Behavior=2}) -- Protoss Photon Cannon
+	SetWeaponsDatX(80, {DmgBase=10000,DmgFactor=127,ObjectNum=2,Cooldown=1,UpgradeType=13,Behavior=2}) -- Protoss Photon Cannon
 
 
 
 	SetUnitsDatX("Zerg Zergling", {MinCost=200,GasCost=50,SuppCost=2,HP=350})
 	SetWeaponsDatX(35, {DmgBase=250,DmgFactor=256}) -- Zerg Zergling
-	SetWeaponsDatX(38, {DmgBase=38,DmgFactor=128,ObjectNum=2}) -- Zerg Hydralisk
+	SetWeaponsDatX(38, {DmgBase=38,DmgFactor=127,ObjectNum=2}) -- Zerg Hydralisk
 	SetWeaponsDatX(109, {DmgBase=60,DmgFactor=90,RangeMax=224,ObjectNum=2}) -- Zerg Lurker
-	SetWeaponsDatX(48, {DmgBase=1000,DmgFactor=128,ObjectNum=2}) -- Zerg Mutalisk
-	SetWeaponsDatX(46, {DmgBase=250,DmgFactor=100,ObjectNum=2,Splash={10,20,30}}) -- Zerg Guardian
+	SetWeaponsDatX(48, {DmgBase=1000,DmgFactor=127,ObjectNum=2}) -- Zerg Mutalisk
+	SetWeaponsDatX(46, {DmgBase=250,DmgFactor=127,ObjectNum=2,Splash={10,20,30}}) -- Zerg Guardian
 	SetUnitsDatX("Zerg Devourer", {GroundWeapon=104})
-	SetWeaponsDatX(104, {DmgBase=50000,DmgFactor=200,Cooldown=1}) -- Zerg Devourer
+	SetWeaponsDatX(104, {DmgBase=25000,DmgFactor=100,ObjectNum=2,Cooldown=1}) -- Zerg Devourer
 	SetUnitsDatX("Zerg Defiler", {GroundWeapon=50,SeekRange=7})
-	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=128,ObjectNum=2,Splash={10,15,20},RangeMax=7*32}) -- Zerg Defiler
-	SetWeaponsDatX(39, {DmgBase=30000,DmgFactor=128}) -- Zerg Ultralisk
+	SetWeaponsDatX(50, {DmgBase=12,DmgFactor=127,ObjectNum=2,Splash={10,15,20},RangeMax=7*32}) -- Zerg Defiler
+	SetWeaponsDatX(39, {DmgBase=30000,DmgFactor=127}) -- Zerg Ultralisk
 
 	
 	
 
 
 	SetUnitsDatX(20, {Reqptr=2,isHero=true,RdySnd=421,HP=350,Shield=250,MinCost=25000,GasCost=15000,SuppCost=5,BuildTime=35})
-	SetWeaponsDatX(1, {Cooldown=1,DmgBase=1250,DmgFactor=90,Splash={15,35,55},FlingyID=204}) -- Jim Raynor
+	SetWeaponsDatX(1, {Cooldown=1,DmgBase=12700,DmgFactor=127,Splash={20,46,68},FlingyID=204,ObjectNum=2}) -- Jim Raynor--7Æ½
 	--SetWeaponGrp(1,173,416,963,231)
 	PatchInsert(SetMemoryB(0x669E28+963, SetTo, 16)) --Áü·¹ÀÌ³Ê °ø°Ý ÇÒ·ç½Ã³×ÀÌ¼ÇÀ¸·Î
-	SetUnitsDatX(10, {Reqptr=75,isHero=true,HP=560,Shield=750,MinCost=15000,GasCost=30000,SuppCost=10,BuildTime=35,SeekRange=3})
-	SetWeaponsDatX(26, {Cooldown=1,DmgBase=6500,DmgFactor=127,Splash={15,20,25},RangeMax=32*3,FlingyID=145,Behavior=1}) -- Gui Montag
+	SetUnitsDatX(10, {Reqptr=75,isHero=true,HP=560,Shield=750,MinCost=15000,GasCost=30000,SuppCost=8,BuildTime=35,SeekRange=3})
+	SetWeaponsDatX(26, {Cooldown=1,DmgBase=6500,DmgFactor=127,Splash={15,20,25},RangeMax=32*3,FlingyID=145,Behavior=1}) -- Gui Montag --3.33..Æ½
 	SetUnitsDatX(100, {Reqptr=8,isHero=true,RdySnd=229,HP=100,Shield=255,MinCost=10000,GasCost=40000,SuppCost=10,BuildTime=35,SeekRange=128})
-	SetWeaponsDatX(116, {Cooldown=1,DmgBase=32767,ObjectNum=2,DmgFactor=128,RangeMax=128*32}) -- Alexei Stukov
+	SetWeaponsDatX(116, {Cooldown=1,DmgBase=32767,ObjectNum=2,DmgFactor=128,RangeMax=128*32}) -- Alexei Stukov -- 2Æ½
 	SetUnitsDatX(19, {Reqptr=16,isHero=true,RdySnd=421,HP=300,Shield=450,MinCost=27000,GasCost=27000,SuppCost=12,BuildTime=35})
-	SetWeaponsDatX(5, {Cooldown=1,DmgBase=32767,DmgFactor=128,ObjectNum=2}) --Jim Raynor Vulture
+	SetWeaponsDatX(5, {Cooldown=1,DmgBase=32767,DmgFactor=127,ObjectNum=2}) --Jim Raynor Vulture
 	SetUnitsDatX(13, {AdvFlag={0x20000004,0x20000004},SeekRange=9})
-	SetWeaponsDatX(6, {DmgBase=65535,DmgFactor=0,ObjectNum=2,Splash={1024,1024,1024}}) --Spider Mine
+	SetWeaponsDatX(6, {DmgBase=65535,DmgFactor=0,ObjectNum=2,Splash={8192,8192,8192}}) --Spider Mine
 
 	
-	SetUnitsDatX(23, {Reqptr=29,isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=19,BuildTime=35})
-	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=256,MinCost=30000,GasCost=30000,SuppCost=19,BuildTime=35})
-	SetWeaponsDatX(12, {Cooldown=1,DmgBase=800,DmgFactor=90,Splash={10,25,40},FlingyID=150,IconType=336,ObjectNum=2}) --Edmund Duke Tank
-	SetWeaponsDatX(28, {Cooldown=1,DmgBase=300,DmgFactor=65,Splash={64,96,128},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151,ObjectNum=2}) --Edmund Duke SiegeMode
+	SetUnitsDatX(23, {Reqptr=29,isHero=true,RdySnd=431,HP=400,Shield=450,MinCost=30000,GasCost=30000,SuppCost=9,BuildTime=35})
+	SetUnitsDatX(25, {isHero=true,RdySnd=431,HP=400,Shield=450,MinCost=30000,GasCost=30000,SuppCost=9,BuildTime=35})
+	SetWeaponsDatX(12, {Cooldown=1,DmgBase=60000,DmgFactor=127,Splash={10,25,40},FlingyID=150,IconType=336,ObjectNum=2}) --Edmund Duke Tank -- 3Æ½
+	SetWeaponsDatX(28, {Cooldown=1,DmgBase=20000,DmgFactor=100,Splash={96,128,192},IconType=241,WepName=259,RangeMin=0,Behavior=1,FlingyID=151,ObjectNum=2}) --Edmund Duke SiegeMode--4Æ½
 	SetFlingySpeed(151,8533)--ÀÌ¿¥ÇÇ ÅºÈ¯ ¼Óµµ ÃÖ´ë·Î
-	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=250,Shield=1500,MinCost=30000,GasCost=60000,SuppCost=25,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
+	SetUnitsDatX(17, {Reqptr=22,isHero=true,HP=250,Shield=1200,MinCost=30000,GasCost=60000,SuppCost=15,BuildTime=170,AdvFlag={0x00000080,0x00000080}})
 	SetUnitsDatX(18, {isHero=true})
-	SetWeaponsDatX(9, {Cooldown=1,DmgBase=32767,DmgFactor=128,ObjectNum=2}) --Alan Schezar
+	SetWeaponsDatX(9, {Cooldown=1,DmgBase=32767,DmgFactor=128,ObjectNum=2}) --Alan Schezar -- 5Æ½ 1/4 Áï»ç
 
-	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=12,BuildTime=35})
-	SetWeaponsDatX(18, {Cooldown=1,DmgBase=10000,ObjectNum=2,DmgFactor=90,Behavior=2,Splash={10,15,20}}) --Tom Kazansky
-	SetUnitsDatX(28, {Reqptr=66,isHero=true,RdySnd=421,MinCost=50000,GasCost=50000,SuppCost=30,BuildTime=35,SeekRange=12})
-	SetWeaponsDatX(23, {Cooldown=1,DmgBase=20000,ObjectNum=2,DmgFactor=127,Splash={10,25,40},FlingyID=158,RangeMax=32*12,Behavior=9}) --Hyperion
+	SetUnitsDatX(21, {Reqptr=43,isHero=true,MinCost=21000,GasCost=21000,SuppCost=13,BuildTime=35})
+	SetWeaponsDatX(18, {Cooldown=1,DmgBase=10000,ObjectNum=2,DmgFactor=120,Behavior=2,Splash={10,15,20}}) --Tom Kazansky -- 1Æ½
+	SetUnitsDatX(28, {Reqptr=66,isHero=true,RdySnd=421,MinCost=50000,GasCost=50000,SuppCost=21,BuildTime=35,SeekRange=12})
+	SetWeaponsDatX(23, {Cooldown=1,DmgBase=40000,ObjectNum=2,DmgFactor=127,Splash={40,40,40},FlingyID=158,RangeMax=32*12,Behavior=9}) --Hyperion
 	SetFlingySpeed(158,4800)--¾ß¸¶Åä ÅºÈ¯ ¼Óµµ 
 	PatchInsert(SetMemory(0x66EC48+(4*541), SetTo, 395))--¾ß¸¶Åä ½ºÅ©¸³Æ® ·²Ä¿Åº¸·À¸·Î
 
 
 
 	
-	SetUnitsDatX(77, {Reqptr=183,isHero=true,RdySnd=694,HP=500,Shield=3,MinCost=25000,GasCost=12500,SuppCost=5,BuildTime=35})
-	SetWeaponsDatX(65, {Cooldown=1,DmgBase=32767,DmgFactor=128}) --Fenix Z
-	SetUnitsDatX(78, {Reqptr=187,isHero=true,RdySnd=682,HP=350,Shield=2,MinCost=30000,GasCost=25000,SuppCost=10,BuildTime=35})
-	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=9000,DmgFactor=127,Splash={5,10,15},Behavior=8}) --Fenix D
-	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=8,BuildTime=35,SeekRange=9})
-	SetWeaponsDatX(69, {Cooldown=1,DmgBase=8500,DmgFactor=120,ObjectNum=2,Splash={10,20,30},RangeMax=9*32}) --Tassadar
-	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=400,Shield=3,MinCost=25000,GasCost=40000,SuppCost=25,BuildTime=35})
-	SetWeaponsDatX(85, {DmgBase=65535,DmgFactor=0}) --Zeratul
+	SetUnitsDatX(77, {Reqptr=183,isHero=true,RdySnd=694,HP=500,Shield=4,MinCost=25000,GasCost=12500,SuppCost=5,BuildTime=35})
+	SetWeaponsDatX(65, {Cooldown=1,DmgBase=32767,DmgFactor=128}) --Fenix Z -- 3.5Æ½ ½ºÇÃºÒ°¡
+	SetUnitsDatX(78, {Reqptr=187,isHero=true,RdySnd=682,HP=350,Shield=2,MinCost=30000,GasCost=25000,SuppCost=8,BuildTime=35})
+	SetWeaponsDatX(67, {Cooldown=1,ObjectNum=2,DmgBase=35000,DmgFactor=127,Splash={5,10,15},Behavior=8}) --Fenix D  -- 3Æ½
+	SetUnitsDatX(79, {Reqptr=192,isHero=true,RdySnd=715,HP=250,Shield=2,MinCost=10000,GasCost=35000,SuppCost=10,BuildTime=35,SeekRange=9})
+	SetWeaponsDatX(69, {Cooldown=1,DmgBase=8500,DmgFactor=120,ObjectNum=2,Splash={10,20,30},RangeMax=9*32}) --Tassadar -- 5Æ½
+	SetUnitsDatX(75, {Reqptr=246,isHero=true,RdySnd=744,HP=800,Shield=3,MinCost=25000,GasCost=40000,SuppCost=25,BuildTime=35,SeekRange=7})
+	SetWeaponsDatX(85, {DmgBase=65535,DmgFactor=0,RangeMax=7*32}) --Zeratul -- 10Æ½ Áï»ç
 	SetUnitsDatX(81, {Reqptr=223,isHero=true,HP=250,Shield=3,MinCost=35000,GasCost=35000,SuppCost=30,BuildTime=35,AdvFlag={4+0x20000000 ,4+0x20000000 }})
 	SetUnitsDatX(85, {AdvFlag={4,4}})
-	SetWeaponsDatX(82, {DmgBase=2500,DmgFactor=120,Splash={64,96,128}}) --Warbringer Scarab
+	SetWeaponsDatX(82, {DmgBase=2500,DmgFactor=120,Splash={64,96,128}}) --Warbringer Scarab -- 1Æ½
 	--SetUnitsDatX(76, {Reqptr=223,isHero=true,HP=350,Shield=6,MinCost=25000,GasCost=50000,SuppCost=10,BuildTime=35})
-	SetUnitsDatX(63, {Reqptr=223,SeekRange=3,isHero=true,HP=1000,Shield=6,MinCost=45000,GasCost=45000,SuppCost=16,BuildTime=35,GroundWeapon=71,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
-	SetWeaponsDatX(71, {Cooldown=1,ObjectNum=2,DmgBase=27000,DmgFactor=127,RangeMax=3*32,Splash={30,30,30}}) --Tassadar/Zeratul
+	SetUnitsDatX(63, {Reqptr=223,SeekRange=5,isHero=true,HP=600,Shield=6,MinCost=45000,GasCost=45000,SuppCost=25,BuildTime=35,GroundWeapon=71,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
+	SetWeaponsDatX(71, {Cooldown=1,ObjectNum=2,DmgBase=27000,DmgFactor=127,RangeMax=5*32,Splash={30,30,30}}) --Tassadar/Zeratul -- 2Æ½
 	
 	SetUnitsDatX(88, {Reqptr=201,isHero=true,RdySnd=1130,MinCost=30000,GasCost=30000,SuppCost=10,BuildTime=35,AirWeapon=114})
-	SetWeaponsDatX(114, {Cooldown=1,DmgBase=1500,DmgFactor=120,Splash={10,20,30}}) --Artanis
+	SetWeaponsDatX(114, {Cooldown=1,DmgBase=15000,DmgFactor=120,Splash={10,20,30},ObjectNum=2}) --Artanis -- 5Æ½
 	SetWeaponGrp(114,174,132,4,231)
 	PatchInsert(SetMemoryB(0x669E28+4, SetTo, 16)) --¾ËÅ¸ °ø°Ý ÇÒ·ç½Ã³×ÀÌ¼ÇÀ¸·Î
 
-	SetUnitsDatX(82, {Reqptr=210,isHero=true,RdySnd=703,MinCost=60000,GasCost=60000,SuppCost=30,BuildTime=35})
+	SetUnitsDatX(82, {Reqptr=210,isHero=true,RdySnd=703,MinCost=60000,GasCost=60000,SuppCost=25,BuildTime=35})
 	SetUnitsDatX(73, {isHero=true,RClickAct=1,HumanInitAct=2,ComputerInitAct=2,AttackOrder=10,AttackMoveOrder=2,IdleOrder=2})
-	SetWeaponsDatX(79, {Cooldown=1,ObjectNum=2,DmgBase=7500,DmgFactor=76,Splash={7,14,20}}) --Gantrithor Interceptor
+	SetWeaponsDatX(79, {Cooldown=1,DmgBase=7500,DmgFactor=85,Splash={7,14,20}}) --Gantrithor Interceptor -- 2Æ½*8 = 0.25Æ½
 
 	PatchInsert(SetMemory(0x66EC48+(4*522), SetTo, 247))--ÆÞ½ºÄ³³í ½ºÅ©¸³Æ® ¾ß¸¶Åä°ÇÀ¸·Î
 
 
 
-	SetUnitsDatX(54, {Reqptr=106,isHero=true,HP=300,Shield=400,MinCost=15000,GasCost=15000,SuppCost=4,BuildTime=35})
-	SetWeaponsDatX(36, {Cooldown=1,DmgBase=32767,DmgFactor=128}) --Devouring One
+	SetUnitsDatX(54, {Reqptr=106,isHero=true,HP=750,Shield=400,MinCost=7500,GasCost=7500,SuppCost=4,BuildTime=35})
+	SetWeaponsDatX(36, {Cooldown=1,DmgBase=32767,DmgFactor=127}) --Devouring One -- 5Æ½ ½ºÇÃºÒ°¡
 	SetUnitsDatX(53, {Reqptr=111,isHero=true,HP=250,Shield=500,MinCost=40000,GasCost=21000,SuppCost=10,BuildTime=35})
-	SetWeaponsDatX(39, {Cooldown=1,ObjectNum=2,DmgBase=230,DmgFactor=65,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer
+	SetWeaponsDatX(39, {Cooldown=1,ObjectNum=2,DmgBase=230,DmgFactor=65,Splash={35,35,35},FlingyID=203,Behavior=9,WepName=1239,IconType=382,RangeMax=224}) --Hunter Killer 3Æ½
 	
-	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=25000,GasCost=25000,SuppCost=14,BuildTime=35})
-	SetWeaponsDatX(49, {Cooldown=1,ObjectNum=2,DmgBase=32767,DmgFactor=128}) --Kukulza M
-	SetUnitsDatX(56, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=21,BuildTime=35})
-	SetWeaponsDatX(47, {Cooldown=1,DmgBase=400,DmgFactor=90,Splash={5,10,15}}) --Kukulza G
-	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=450,Shield=500,MinCost=35000,GasCost=35000,SuppCost=20,BuildTime=35,SeekRange=7,GroundWeapon=51})
-	SetWeaponsDatX(51, {Cooldown=1,DmgBase=150,DmgFactor=60,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One
-	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=900,Shield=500,MinCost=30000,GasCost=60000,SuppCost=25,BuildTime=170})
-	SetWeaponsDatX(41, {DmgBase=65535,DmgFactor=0}) --Torrasque
+	SetUnitsDatX(55, {Reqptr=129,isHero=true,MinCost=25000,GasCost=25000,SuppCost=10,BuildTime=35})
+	SetWeaponsDatX(49, {Cooldown=1,ObjectNum=2,DmgBase=32767,DmgFactor=127}) --Kukulza M -- 1Æ½
+	SetUnitsDatX(56, {Reqptr=129,isHero=true,MinCost=40000,GasCost=40000,SuppCost=20,BuildTime=35})
+	SetWeaponsDatX(47, {Cooldown=1,DmgBase=9000,DmgFactor=90,Splash={5,10,15}}) --Kukulza G -- 1Æ½
+	SetUnitsDatX(52, {Reqptr=147,isHero=true,HP=150,Shield=500,MinCost=35000,GasCost=35000,SuppCost=20,BuildTime=35,SeekRange=7,GroundWeapon=51})
+	SetWeaponsDatX(51, {Cooldown=1,DmgBase=3500,DmgFactor=127,FlingyID=168,Behavior=2,Splash={20,40,60},RangeMax=7*32}) --Unclean One -- 1Æ½
+	SetUnitsDatX(48, {Reqptr=116,isHero=true,HP=700,Shield=500,MinCost=30000,GasCost=60000,SuppCost=20,BuildTime=170,SeekRange=6})
+	SetWeaponsDatX(41, {DmgBase=65535,DmgFactor=0,RangeMax=32*6}) --Torrasque -- 15Æ½ Áï»ç
 	PatchInsert2(SetMemoryB(0x65FEC8 + 48,SetTo,255)) -- Armor
 	--SetWeaponGrp(51,175,132,4,231)
 
