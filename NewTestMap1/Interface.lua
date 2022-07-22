@@ -58,7 +58,7 @@ function Interface()
                 --CallTriggerX(FP, ZSpawnCallTable[4],{Deaths(i,AtLeast,1,201)})
                 TriggerX(FP,{Deaths(i,AtLeast,1,201)},{AddCD(TestCD,1)},{preserved})
             end
-            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*3),AddV(Gaspsec[p],60*3),SubV(Pts[p],3)},{preserved})
+            TriggerX(FP,{CV(Pts[p],50,AtLeast)},{AddV(Minpsec[p],65*3),AddV(Gaspsec[p],60*2),SubV(Pts[p],3)},{preserved})
             CIf(FP,LocalPlayerID(i)) -- 로컬 데이터 전송
             f_Cast(FP,{CurExpLoc,0},CurExpTmp[p])
             CMov(FP,LVLoc,Level[p])

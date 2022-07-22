@@ -7,7 +7,7 @@ function Var_init()
 	SetZealotUnit(90,500,500,118,40,1,2000,0,7,tostring(5*256)..string.rep("0",2)) -- 100 
 	SetZealotUnit(93,50000,3500,119,65,nil,2350,0,6,tostring(5*256)..string.rep("0",4)) -- 10000
 	SetZealotUnit(95,5000000,15000,120,120,nil,2700,0,5,tostring(5*256)..string.rep("0",6)) -- 1000000
-	SetZealotUnit(96,500000000,65535,121,255,nil,3500,0,4,tostring(5*256)..string.rep("0",8)) -- 100000000
+	SetZealotUnit(96,500000000,65535,121,260,nil,3500,0,4,tostring(5*256)..string.rep("0",8)) -- 100000000
 	
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"

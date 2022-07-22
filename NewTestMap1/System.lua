@@ -322,9 +322,11 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 		}, 1)
 	end
 
+	TmpEff1 = CreateVar(FP)
+	TmpEff2 = CreateVar(FP)
 	TriggerX(FP,{CV(EffBGMVRecive,48)},{SetCD(PattT[4],1)})
-	TriggerX(FP,{CV(EffBGMVRecive,88)},{SetCD(PattT[4],0),SetCD(PattT[5],1)})
-	TriggerX(FP,{CV(EffBGMVRecive,89)},{SetCD(PattT[4],0),SetCD(PattT[6],1)})
+	TriggerX(FP,{CV(EffBGMVRecive,88)},{SetCD(PattT[4],0),SetCD(PattT[5],1),SetV(TmpEff1,7)})
+	TriggerX(FP,{CV(EffBGMVRecive,89)},{SetCD(PattT[4],0),SetCD(PattT[6],1),SetV(TmpEff2,6)})
 	CallTriggerX(FP, Call_CAPlot, {CD(PattT[4],1)}, {
 		SetV(CARX,2000),
 		SetV(CARY,2000),
@@ -358,8 +360,8 @@ end
 
 LI = CreateVar(FP)
 LI2 = CreateVar(FP)
-TriggerX(FP,{CV(EffBGMVRecive,90)},{SetV(LI,0)})
-TriggerX(FP,{CV(EffBGMVRecive,91)},{SetV(LI2,0)})
+TriggerX(FP,{CV(EffBGMVRecive,90)},{SetV(LI,0),SetV(TmpEff1,5)})
+TriggerX(FP,{CV(EffBGMVRecive,91)},{SetV(LI2,0),SetV(TmpEff2,4)})
 TriggerX(FP,{CV(EffBGMVRecive,114)},{SetV(LI,0)})
 TriggerX(FP,{CV(EffBGMVRecive,113)},{SetV(LI2,0)})
 CIf(FP,{CD(PattT[5],1),CV(LI,360,AtMost)},{AddV(LI,15)})
@@ -367,6 +369,7 @@ CFor(FP, 0, 2000, 200)
 CI=CForVariable()
 f_Lengthdir(FP, CI, LI, CPosX, CPosY)
 Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
+CDoActions(FP,{SetV(SpawnOptionV2,TmpEff1)})
 CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,7500)})
 CForEnd()
 CIfEnd()
@@ -375,6 +378,7 @@ CFor(FP, 0, 2000, 200)
 CI=CForVariable()
 f_Lengthdir(FP, CI, _Sub(_Mov(360),LI2), CPosX, CPosY)
 Simple_SetLocX(FP, 0, CPosX, CPosY ,CPosX, CPosY,Simple_CalcLoc(0, 2048, 2048, 2048, 2048))
+CDoActions(FP,{SetV(SpawnOptionV2,TmpEff2)})
 CallTriggerX(FP,ZSpawnCallTable[2],{},{SetV(SpawnOptionV,7500)})
 CForEnd()
 CIfEnd()
@@ -829,12 +833,20 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 	ZSVar2=CreateVar(FP)
 	ZSVar3=CreateVar(FP)
 	ZSVar = CreateVar(FP)
-
 	Waves = {}
-	for i = 3, 52 do
-		Waves[i-2]=i*i*i*i*i
-		if i == 25+2 then break end
+
+	if TestMode == 1 then
+		for i = 20, 52 do
+			Waves[i-19]=i*i*i*i*i
+		end
+	else
+		for i = 3, 52 do
+			Waves[i-2]=i*i*i*i*i
+			if i == 25+2 then break end
+		end
+		
 	end
+
 	for j, k in pairs(Waves) do
 		local WStr = tostring(k*24)
 		if #WStr>3 and 6>=#WStr then
@@ -851,7 +863,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		end
 		end
 	CTrigger(FP,{CD(GameStart,1)},{AddV(ZSVar2,ZSVar)},1)
-	CIf(FP,{CV(ZSVar2,1000000000,AtLeast)})
+	CIf(FP,{CV(ZSVar2,100000000,AtLeast)})
 		CAdd(FP,ZSVar3,_Div(ZSVar2,100000000))
 		f_Mod(FP,ZSVar2,100000000)
 	CIfEnd()
@@ -864,7 +876,7 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		--end
 	--CMov(FP,0x57f120,CA_Eff_Rat)
 		--f_LMov(FP,KillW,_LAdd(KillW,"1000000000"))
-		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas),},1)--SetCountdownTimer(SetTo, 30)
+		DoActions(FP,{SetResources(AllPlayers,SetTo,0x44444444,OreAndGas),SetCountdownTimer(SetTo, 90)},1)--
 	--	DoActions(FP, {Simple_SetLoc(0,3000,3000,3000,3000),
 	--	CreateUnit(1,ZealotUIDArr[1][1],1,FP),
 	--	CreateUnit(1,ZealotUIDArr[2][1],1,FP),
