@@ -1384,6 +1384,120 @@ function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_LMTable,G_CB_RPT
 end
 
 
+function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_SNTable,Property)
+	if type(G_CB_CUTable) ~= "table" then
+		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
+	end
+	local X = {}
+	if type(G_CB_SNTable) == "table" then
+		if #G_CB_SNTable >= 5 then
+			PushErrorMsg("BiteStack_is_Over_5")
+		end
+		for i = 1, 4 do
+			if G_CB_SNTable[i] ~= nil then
+				if type(G_CB_SNTable[i]) == "string" then
+					local G_CB_ShapeTable_Check = ""
+					for j, k in pairs(G_CB_ShapeTable) do
+						if G_CB_SNTable[i] == k then
+							table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,j))
+							G_CB_ShapeTable_Check = "OK"
+						end
+					end
+					if G_CB_ShapeTable_Check ~= "OK" then
+						PushErrorMsg("G_CB_SetSpawn_String_Shape_NotFound")
+					end
+				else
+					PushErrorMsg("G_CB_SNTable_InputData_Error")
+				end
+			else
+				table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,0))
+			end
+		end
+	elseif type(G_CB_SNTable) == "string" then
+		local G_CB_ShapeTable_Check = ""
+		for j, k in pairs(G_CB_ShapeTable) do
+			if G_CB_SNTable == k then
+				table.insert(X,SetCVar(FP,G_CB_SNTV[1][2],SetTo,j))
+				table.insert(X,SetCVar(FP,G_CB_SNTV[2][2],SetTo,j))
+				table.insert(X,SetCVar(FP,G_CB_SNTV[3][2],SetTo,j))
+				table.insert(X,SetCVar(FP,G_CB_SNTV[4][2],SetTo,j))
+				G_CB_ShapeTable_Check = "OK"
+			end
+		end
+		if G_CB_ShapeTable_Check ~= "OK" then
+			PushErrorMsg("G_CB_SetSpawn_String_Shape_NotFound")
+		end
+	else
+		PushErrorMsg("G_CB_SNTable_InputData_Error")
+	end
+	local G_CB_FNTable
+	local G_CB_PFTable
+	local G_CB_RPTable
+	local LMRet = 0
+	local G_CB_LMTable
+	local Y = {}
+	local Owner = 0xFFFFFFFF
+	local Delay = 0
+	local PreserveFlag
+	if Property ~= nil then
+		if type(Property) ~= "table" then
+			PushErrorMsg("G_CB_SetSpawn_Property_Error")
+		else
+			if type(Property.FNTable) ~= "table" then
+				G_CB_FNTable = {G_CB_FNTable,G_CB_FNTable,G_CB_FNTable,G_CB_FNTable}
+			elseif Property.FNTable == nil then 
+				G_CB_FNTable = {0,0,0,0}
+			end
+			if type(Property.PFTable) ~= "table" then
+				G_CB_PFTable = {G_CB_PFTable,G_CB_PFTable,G_CB_PFTable,G_CB_PFTable}
+			elseif Property.PFTable == nil then 
+				G_CB_PFTable = {0,0,0,0}
+			end
+			if type(Property.RPTable) ~= "table" then
+				G_CB_RPTable = {G_CB_RPTable,G_CB_RPTable,G_CB_RPTable,G_CB_RPTable}
+			elseif Property.RPTable == nil then 
+				G_CB_RPTable = {0,0,0,0}
+			end
+			if Property.LMTable == "MAX" then
+				LMRet = T_to_BiteBuffer({255,255,255,255})
+			elseif type(Property.LMTable) == "table" then
+				LMRet = T_to_BiteBuffer(G_CB_LMTable)
+			elseif type(Property.LMTable) == "number" then
+				LMRet = T_to_BiteBuffer({G_CB_LMTable,G_CB_LMTable,G_CB_LMTable,G_CB_LMTable})
+			elseif Property.LMTable == nil then
+				LMRet = T_to_BiteBuffer({0,0,0,0})
+			end
+			if Property.CenterXY == nil then
+				table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF))
+				table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF))
+			elseif type(Property.CenterXY) == "table" then
+				table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,CenterXY[1]))
+				table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,CenterXY[2]))
+			else
+				PushErrorMsg("G_CB_SetSpawn_CenterXY_Inputdata_Error")
+			end
+			
+			if Property.Owner ~= nil then Owner = Property.Owner end
+			if Property.Delay ~= nil then Delay = Property.Delay end
+			if Property.PreserveFlag ~= nil then PreserveFlag = Property.PreserveFlag end
+		end
+	end 
+
+
+	CallTriggerX(FP,Write_SpawnSet,Condition,{
+		SetCVar(FP,G_CB_CUTV[2],SetTo,T_to_BiteBuffer(G_CB_CUTable)),
+		X,
+		
+		SetCVar(FP,G_CB_DLTV[2],SetTo,Delay),
+		SetCVar(FP,G_CB_LMTV[2],SetTo,LMRet),
+		SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_BiteBuffer(G_CB_RPTable)),Y,
+		SetCVar(FP,G_CB_Owner[2],SetTo,Owner),
+		SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_BiteBuffer(G_CB_FNTable)),
+		SetCVar(FP,G_CB_PFTV[2],SetTo,T_to_BiteBuffer(G_CB_PFTable)),
+		SetCVar(FP,G_CB_EffType[2],SetTo,0),
+		
+	},PreserveFlag)
+end
 -- Line0 = UnitIDTable 0xFF
 -- Line1 = RepeatTypeTable 0xFF
 -- Line2 = G_CB_FNTableTable 0xFF
