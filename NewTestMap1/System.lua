@@ -30,6 +30,7 @@ function System()
 	SetInvincibility(Disable, ZealotUIDArr[3][1], Force2, 64),
 	SetInvincibility(Disable, ZealotUIDArr[4][1], Force2, 64),
 	SetInvincibility(Disable, ZealotUIDArr[5][1], Force2, 64),
+	SetInvincibility(Enable, 13, Force1, 64),
 })
 
 	f_Read(FP,0x51CE8C,Dx)
@@ -325,8 +326,8 @@ Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
 	TmpEff1 = CreateVar(FP)
 	TmpEff2 = CreateVar(FP)
 	TriggerX(FP,{CV(EffBGMVRecive,48)},{SetCD(PattT[4],1)})
-	TriggerX(FP,{CV(EffBGMVRecive,88)},{SetCD(PattT[4],0),SetCD(PattT[5],1),SetV(TmpEff1,7)})
-	TriggerX(FP,{CV(EffBGMVRecive,89)},{SetCD(PattT[4],0),SetCD(PattT[6],1),SetV(TmpEff2,6)})
+	TriggerX(FP,{CV(EffBGMVRecive,88)},{SetCD(PattT[4],0),SetCD(PattT[5],1),SetV(TmpEff1,7),RemoveUnit("Any unit", 7)})
+	TriggerX(FP,{CV(EffBGMVRecive,89)},{SetCD(PattT[4],0),SetCD(PattT[6],1),SetV(TmpEff2,6),RemoveUnit("Any unit", 6)})
 	CallTriggerX(FP, Call_CAPlot, {CD(PattT[4],1)}, {
 		SetV(CARX,2000),
 		SetV(CARY,2000),
@@ -360,10 +361,10 @@ end
 
 LI = CreateVar(FP)
 LI2 = CreateVar(FP)
-TriggerX(FP,{CV(EffBGMVRecive,90)},{SetV(LI,0),SetV(TmpEff1,5)})
-TriggerX(FP,{CV(EffBGMVRecive,91)},{SetV(LI2,0),SetV(TmpEff2,4)})
-TriggerX(FP,{CV(EffBGMVRecive,114)},{SetV(LI,0)})
-TriggerX(FP,{CV(EffBGMVRecive,113)},{SetV(LI2,0)})
+TriggerX(FP,{CV(EffBGMVRecive,90)},{SetV(LI,0),SetV(TmpEff1,5),RemoveUnit("Any unit", 5)})
+TriggerX(FP,{CV(EffBGMVRecive,91)},{SetV(LI2,0),SetV(TmpEff2,4),RemoveUnit("Any unit", 4)})
+TriggerX(FP,{CV(EffBGMVRecive,114)},{SetV(LI,0),RemoveUnit("Any unit", 5)})
+TriggerX(FP,{CV(EffBGMVRecive,113)},{SetV(LI2,0),RemoveUnit("Any unit", 4)})
 CIf(FP,{CD(PattT[5],1),CV(LI,360,AtMost)},{AddV(LI,15)})
 CFor(FP, 0, 2000, 200)
 CI=CForVariable()
@@ -484,6 +485,53 @@ SetPlayerColor(P8, SetTo, 0),})
 	CIfXEnd()
 
 
+	ObCcode2 = CreateCcode()
+	ObChatMode = CreateCcode()
+	for i = 128, 131 do
+		CIf(FP,LocalPlayerID(i))
+		CIfX(FP,{KeyPress("HOME", "Down"),CD(ObCcode2,0)})
+		TriggerX(FP,{CD(ObChatMode,0),CD(ObCcode2,0)},{SetCD(ObChatMode,1),SetCD(ObCcode2,1),
+		SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x07채팅→전체\x04에게 메세지를 보냅니다."),4),SetCp(FP)},{preserved})
+		TriggerX(FP,{CD(ObChatMode,1),CD(ObCcode2,0)},{SetCD(ObChatMode,0),SetCD(ObCcode2,1),
+		SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x1C채팅→관전자\x04에게 메세지를 보냅니다."),4),SetCp(FP)},{preserved})
+		CElseIfX({KeyPress("HOME", "Down")},SetCD(ObCcode2,1))
+		CElseX(SetCD(ObCcode2,0))
+		CIfXEnd()
+		Trigger { --ObserverChatToOb
+			players = {FP},
+			conditions = {
+				Label();
+				CD(ObChatMode,0);
+				Memory(0x68C144,AtLeast,1);
+			},
+			actions = {
+				SetMemory(0x68C144,SetTo,5);
+				PreserveTrigger();
+			},
+		}
+		Trigger { --ObserverChatToAll
+			players = {FP},
+			conditions = {
+				Label();
+				CD(ObChatMode,1);
+				Memory(0x68C144,AtLeast,1);
+			},
+			actions = {
+				SetMemory(0x68C144,SetTo,2);
+				PreserveTrigger();
+			},
+		}
+		CIfEnd()
+
+
+	end
+
+
+
+
+
+
+
 	TriggerX(FP,{CD(GameStart2,1)},{SetV(BGMType,2)},{preserved})
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,0)},{SetV(BGMType,1)},{preserved})
 	TriggerX(FP,{CD(GameStart,1),CD(BGMOnOff,1)},{SetV(BGMType,0)},{preserved})
@@ -517,7 +565,7 @@ SetPlayerColor(P8, SetTo, 0),})
 		RotatePlayer({RunAIScript(P8VON),
 		SetMissionObjectivesX("\x13\x07Delete \x04Key : \x04BGM \x07On\x04/\08Off\n\x13\x07All \x04Unit \x0FLoad \x04Bunker(\x08Terran Only\x04) : \x07F12 \x04Key");
 	}, MapPlayers, FP);
-		RotatePlayer({DisplayTextX("\x13\x1F100 \x04Billion Zealots\n\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ\n\x13\x04Please select your Race\n\x13\x04And \x07PLEASE READ \x04Mission Objectives (F10 + J)", 4),PlayWAVX("sound\\Protoss\\Advisor\\PAdUpd01.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP)
+		RotatePlayer({DisplayTextX("\x0D\x0D!H\x13\x1F100 \x04Billion Zealots. \x07"..VText.."\n\x0D\x0D!H\x13\x04- Made by \x08GALAXY_BURST \x04-\n\n\x0D\x0D!H\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ\n\x0D\x0D!H\x13\x04Please select your Race\n\x0D\x0D!H\x13\x04And \x07PLEASE READ \x04Mission Objectives (F10 + J)", 4),PlayWAVX("sound\\Protoss\\Advisor\\PAdUpd01.WAV"),PlayWAVX("sound\\Misc\\UTmWht00.WAV")}, HumanPlayers, FP)
 	}, 1)
 	CIf(FP,{CD(BCFlag,1),Bring(Force1,AtLeast,1,"Terran Civilian",64)})
 	
@@ -586,10 +634,12 @@ for j,k in pairs(HeroArr) do
 						CIf(FP,{Switch(RandSwitch, Set),Switch(RandSwitch2, Set)})
 					end
 					CIf(FP,{TMemory(_Add(BackupCp,2), AtLeast, 1)})
-						CMov(FP,TorrSkillP,_Read(_Sub(BackupCp,2)),nil,0xFF,1)
 						f_Read(FP, _Add(BackupCp,2), nil, TorrSkillEPD)
+						CIf(FP,{TMemoryX(_Add(TorrSkillEPD,19),AtLeast,1*256,0xFF00)})--살아있어야 스킬발동
 						CMov(FP,TorrSkillUID,_Read(_Add(TorrSkillEPD,25)),nil,0xFF,1)
 						CMov(FP,CunitIndex,_Div(_Sub(TorrSkillEPD,19025),_Mov(84)))
+						CMov(FP,TorrSkillP,_Read(_Sub(BackupCp,2)),nil,0xFF,1)
+
 						CDoActions(FP, {
 							Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,0),
 							Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,0),
@@ -603,6 +653,7 @@ for j,k in pairs(HeroArr) do
 						for z = 1, #ZealotUIDArr do
 							CTrigger(FP,{CV(TorrSkillUID,ZealotUIDArr[z][1])},{TSetKills(TorrSkillP, Add, 1, ZealotUIDArr[z][1])},1)
 						end
+						CIfEnd()
 					CIfEnd()
 					if k ==17 or k ==18 then
 						CIfEnd()
@@ -769,8 +820,8 @@ CMov(FP,0x6509B0,FP)
 		},{preserved})
 	end
 
-	Trigger2X(FP, {CD(GameStart,1),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x08Game Over")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
-	Trigger2X(FP, {CD(GameStart2,1),CD(GameStart,0),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x08Game Over")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
+	Trigger2X(FP, {CD(GameStart,1),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x0D\x0D!H\x08Game Over...")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
+	Trigger2X(FP, {CD(GameStart2,1),CD(GameStart,0),Bring(Force1, AtMost, 0, "Any unit", 7)},{RotatePlayer({DisplayTextX("\x0D\x0D!H\x08Game Over...")}, HumanPlayers, FP),RotatePlayer({Defeat()}, MapPlayers, FP)})
 	--CA_3DAcc(32840,AtLeast,2,2,2)
 	--CA_3DAcc(112420,AtLeast,2,1,1)
 	--CA_3DAcc(142730,AtLeast,3,1,1)
@@ -846,9 +897,8 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		end
 		
 	end
-
-	for j, k in pairs(Waves) do
-		local WStr = tostring(k*24)
+	function Convert_Number(Num)
+		local WStr = tostring(Num)
 		if #WStr>3 and 6>=#WStr then
 			WStr = string.sub(WStr,1,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
 		elseif  #WStr>6 and 9>=#WStr then
@@ -856,12 +906,17 @@ TriggerX(FP,{CD(ColorMode,0),CD(ColorCcode,9,AtLeast)},{SetCD(ColorMode,1)},{pre
 		elseif  #WStr>9 and 12>=#WStr then
 			WStr = string.sub(WStr,1,#WStr-9)..","..string.sub(WStr,#WStr-8,#WStr-6)..","..string.sub(WStr,#WStr-5,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
 		end
+		return WStr
+	end
+
+	for j, k in pairs(Waves) do
+		local WStr = Convert_Number(k*24)
 		if j==#Waves then
-			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."(End)] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
+			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x0D\x0D!H\x04[Wave "..j.."(End)] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
 		else
-			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x04[Wave "..j.."] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
+			Trigger2X(FP,{CD(GameStart,1),CD(GameTime,(j-1)*(50*24),AtLeast)},{SetV(ZSVar,k),RotatePlayer({DisplayTextX("\x0D\x0D!H\x04[Wave "..j.."] : "..WStr.." Zealot/s",4)}, HumanPlayers, FP)})
 		end
-		end
+	end
 	CTrigger(FP,{CD(GameStart,1)},{AddV(ZSVar2,ZSVar)},1)
 	CIf(FP,{CV(ZSVar2,100000000,AtLeast)})
 		CAdd(FP,ZSVar3,_Div(ZSVar2,100000000))

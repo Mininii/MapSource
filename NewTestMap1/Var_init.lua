@@ -61,6 +61,7 @@ function Var_init()
 		TBLFile = f_GetFileptr(FP,"custom_txt.tbl",1) -- 제작했던 아무 TBL이나 AbsolutePath에 넣고 로드
 		TBLFiles = f_GetFileSize("custom_txt.tbl") -- 예제에 사용된 tbl은 뎡디터2의 Data폴더에서 가져옴
 		CUnitArr = f_GetVoidptr(FP,1700)
+		VA1 = f_GetVArrptr(FP, 100)
 
 		-- 버튼셋		
 		bytebuffer = {1,0,41,0,96,142,66,0,144,55,66,0,41,0,41,0,66,2,0,0,2,0,37,0,96,142,66,0,144,55,66,0,37,0,37,0,63,2,226,2,3,0,42,0,96,142,66,0,144,55,66,0,42,0,42,0,67,2,0,0,4,0,38,0,96,142,66,0,144,55,66,0,38,0,38,0,64,2,227,2,5,0,43,0,96,142,66,0,144,55,66,0,43,0,43,0,68,2,229,2,6,0,130,1,208,130,66,0,240,154,69,0,0,0,201,0,90,5,10,6,7,0,45,0,96,142,66,0,144,55,66,0,45,0,45,0,70,2,231,2,8,0,39,0,96,142,66,0,144,55,66,0,39,0,39,0,65,2,228,2,9,0,46,0,96,142,66,0,144,55,66,0,46,0,46,0,71,2,232,2}
@@ -127,4 +128,9 @@ function Var_init()
 	CurCunitI= CreateVar(FP)
 	CunitIndex = CreateVar(FP)
 
+	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
+	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
+	HVA3 = CVArray(FP,4*5) 
+	EfStr1 = SaveiStrArrX(P1,MakeiStrWord("\x0E \x1C \x1F \x0F \x1D \x16 \x04 \x1B ",4)) -- 26+6
 end
