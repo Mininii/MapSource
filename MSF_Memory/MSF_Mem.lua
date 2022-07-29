@@ -30,7 +30,7 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-Limit = 0
+Limit = 1
 RedMode = 1
 FP = P6
 TestStartToBYD = 0
@@ -5028,6 +5028,19 @@ MoveCp(Add,25*4),
 end
 CunitCtrig_End()
 
+if Limit == 1 then
+
+	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+		Trigger2(FP,{
+		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtLeast,1*256,0,0xFF00),
+		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtMost,4,0,0xFF),
+		},
+		{
+			SetDeaths(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,0),
+			SetDeathsX(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,1,0xFF00),
+	},{preserved})
+		end
+end
 
 
 --¼öÁ¤±¤»ê

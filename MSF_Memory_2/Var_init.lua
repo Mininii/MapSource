@@ -2,27 +2,57 @@ function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	if EVFFlag == 1 then
-		GTAtk = 50*1.5
-		GTAtkFactor = 25*1.5
+		if Limit == 1 then
+			--GTAtk = 5*1.5
+			--GTAtkFactor = 2*1.5
+			--MarAtk = 15*1.5
+			--MarAtkFactor = 3*1.5
+			--MarAtk2 = 50*1.5
+			--MarAtkFactor2 = 15*1.5
+			GTAtk = 50*1.5
+			GTAtkFactor = 25*1.5
+			MarAtk = 50*1.5
+			MarAtkFactor = 10*1.5
+			MarAtk2 = 100*1.5
+			MarAtkFactor2 = 30*1.5
+		else
+			GTAtk = 50*1.5
+			GTAtkFactor = 25*1.5
+			MarAtk = 50*1.5
+			MarAtkFactor = 10*1.5
+			MarAtk2 = 100*1.5
+			MarAtkFactor2 = 30*1.5
+		end
 		NMAtk = 15*1.5
 		NMAtkFactor = 2*1.5
 		HMAtk = 50*1.5
 		HMAtkFactor = 7*1.5
-		MarAtk = 50*1.5
-		MarAtkFactor = 10*1.5
-		MarAtk2 = 100*1.5
-		MarAtkFactor2 = 30*1.5
 	else
-		GTAtk = 50
-		GTAtkFactor = 25
+		if Limit == 1 then
+			--GTAtk = 5
+			--GTAtkFactor = 2
+			--MarAtk = 15
+			--MarAtkFactor = 3
+			--MarAtk2 = 50
+			--MarAtkFactor2 = 15
+			GTAtk = 50
+			GTAtkFactor = 25
+			MarAtk = 50
+			MarAtkFactor = 10
+			MarAtk2 = 100
+			MarAtkFactor2 = 30
+		else
+			GTAtk = 50
+			GTAtkFactor = 25
+			MarAtk = 50
+			MarAtkFactor = 10
+			MarAtk2 = 100
+			MarAtkFactor2 = 30
+		end
 		NMAtk = 15
 		NMAtkFactor = 2
 		HMAtk = 50
 		HMAtkFactor = 7
-		MarAtk = 50
-		MarAtkFactor = 10
-		MarAtk2 = 100
-		MarAtkFactor2 = 30
 	end
 	AtkUpgradeFactor = 95
 	DefUpgradeFactor = 490

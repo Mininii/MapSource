@@ -165,6 +165,14 @@ HPRegenTable = {64}
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 	WhiteList = def_sIndex()
 	HPRList = def_sIndex()
+	if Limit == 1 then
+		EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,203,0,0xFF), {
+			SetMemory(0x6509B0, Subtract, 4),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		})
+	end
 	for j, i in pairs(MarID) do
 		NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
 	end
@@ -245,7 +253,28 @@ HPRegenTable = {64}
 
 
 	EXCC_ClearCalc()
+
 	NJumpXEnd(FP,SkillUnit)
+
+	if Limit == 1 then
+		local LocAct={
+			SetMemory(0x6509B0, Subtract, 4),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		}
+		DoActions(FP, LocAct)
+	end
+
+	--if Limit==1 then
+	--	DoActions(FP, SetMemory(0x6509B0, Subtract, 4))
+	--	local LocAct={
+	--		SetDeaths(CurrentPlayer,SetTo,0,0),
+	--		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+	--	}
+	--	TriggerX(FP, {DeathsX(FP, AtLeast, 1*256, 0, 0xFFFFFF00)}, LocAct, {preserved})
+	--	DoActions(FP, SetMemory(0x6509B0, Add, 4))
+	--end
 
 	DoActions(FP,{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
 	CIf(FP,Deaths(CurrentPlayer,Exactly,0,0))
@@ -297,8 +326,17 @@ HPRegenTable = {64}
 		TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,21*256,0,0xFF00)},{SetDeathsX(CurrentPlayer, SetTo, 20*256,0, 0xFF00)},{preserved})
 	CSub(FP,0x6509B0,70-25)
 	CIfEnd()
-	
+	if Limit == 1 then
+		local LocAct={
+			SetMemory(0x6509B0, Subtract, 4),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
+		}
+		DoActions(FP, LocAct)
+	end
 	EXCC_BreakCalc({CD(Theorist,1)})
+	
 	
 	CSub(FP,0x6509B0,6)
 	
@@ -371,7 +409,6 @@ HPRegenTable = {64}
 			SetMemory(0x6509B0, Subtract,36),
 		})--2
 	NIfXEnd()
-
 	
 	CIf(FP,{CV(Level,40,AtLeast),Cond_EXCC(3,AtMost,0)})
 		MarSkill = def_sIndex()
@@ -418,7 +455,7 @@ HPRegenTable = {64}
 
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00))
 			CAdd(FP,0x6509B0,4)
-			CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(CurrentPlayer,AtLeast,1,0)})
 				CSub(FP,0x6509B0,4)
 				CallTrigger(FP,CallMarSkill)
 				CAdd(FP,0x6509B0,4)
@@ -427,7 +464,7 @@ HPRegenTable = {64}
 		CIfEnd()
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00))
 			CAdd(FP,0x6509B0,4)
-			CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(CurrentPlayer,AtLeast,1,0)})
 				CSub(FP,0x6509B0,4)
 				CallTrigger(FP,CallMarSkill)
 				CAdd(FP,0x6509B0,4)
@@ -436,7 +473,7 @@ HPRegenTable = {64}
 		CIfEnd()
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00))
 			CAdd(FP,0x6509B0,4)
-			CIf(FP,Deaths(CurrentPlayer,AtLeast,1,0))
+			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(CurrentPlayer,AtLeast,1,0)})
 				CSub(FP,0x6509B0,4)
 				CallTrigger(FP,CallMarSkill)
 				CAdd(FP,0x6509B0,4)
