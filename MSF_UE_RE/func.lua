@@ -1430,56 +1430,66 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_SNTable,Property)
 	else
 		PushErrorMsg("G_CB_SNTable_InputData_Error")
 	end
-	local G_CB_FNTable
-	local G_CB_PFTable
-	local G_CB_RPTable
-	local LMRet = 0
-	local G_CB_LMTable
-	local Y = {}
+	local G_CB_FNTable = {0,0,0,0}
+	local G_CB_PFTable = {0,0,0,0}
+	local G_CB_RPTable = {0,0,0,0}
+	local G_CB_LMTable = {255,255,255,255}
+	local Y = {SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF),SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF)}
 	local Owner = 0xFFFFFFFF
 	local Delay = 0
 	local PreserveFlag
+
+
+	
 	if Property ~= nil then
 		if type(Property) ~= "table" then
 			PushErrorMsg("G_CB_SetSpawn_Property_Error")
 		else
-			if type(Property.FNTable) ~= "table" then
-				G_CB_FNTable = {G_CB_FNTable,G_CB_FNTable,G_CB_FNTable,G_CB_FNTable}
-			elseif Property.FNTable == nil then 
-				G_CB_FNTable = {0,0,0,0}
+			for j,k in pairs(Property) do
+				if j == "FNTable" then
+					if type(k) ~= "table" then
+						G_CB_FNTable = {k,k,k,k}
+					else
+						G_CB_FNTable = k
+					end
+				elseif j == "PFTable" then
+					if type(k) ~= "table" then
+						G_CB_PFTable = {k,k,k,k}
+					else
+						G_CB_PFTable = k
+					end
+				elseif j == "RPTable" then
+					if type(k) ~= "table" then
+						G_CB_RPTable = {k,k,k,k}
+					else
+						G_CB_RPTable = k
+					end
+				elseif j == "LMTable" then
+					if k == "MAX" then
+						G_CB_LMTable = {255,255,255,255}
+					elseif type(k) ~= "table" then
+						G_CB_LMTable = {k,k,k,k}
+					else
+						G_CB_LMTable = k
+					end
+					
+				elseif j == "CenterXY" then
+					if type(k) == "table" then
+						Y = {SetCVar(FP,G_CB_XPos[2],SetTo,k[1]),
+						SetCVar(FP,G_CB_YPos[2],SetTo,k[2])}
+					else
+						PushErrorMsg("G_CB_SetSpawn_CenterXY_Inputdata_Error")
+					end
+				elseif j == "Owner" then
+					Owner = k
+				elseif j == "Delay" then
+					Delay = k
+				elseif j == "PreserveFlag" then
+					PreserveFlag = k
+				else
+					PushErrorMsg("Wrong Property Name Detected!! : "..j)
+				end
 			end
-			if type(Property.PFTable) ~= "table" then
-				G_CB_PFTable = {G_CB_PFTable,G_CB_PFTable,G_CB_PFTable,G_CB_PFTable}
-			elseif Property.PFTable == nil then 
-				G_CB_PFTable = {0,0,0,0}
-			end
-			if type(Property.RPTable) ~= "table" then
-				G_CB_RPTable = {G_CB_RPTable,G_CB_RPTable,G_CB_RPTable,G_CB_RPTable}
-			elseif Property.RPTable == nil then 
-				G_CB_RPTable = {0,0,0,0}
-			end
-			if Property.LMTable == "MAX" then
-				LMRet = T_to_BiteBuffer({255,255,255,255})
-			elseif type(Property.LMTable) == "table" then
-				LMRet = T_to_BiteBuffer(G_CB_LMTable)
-			elseif type(Property.LMTable) == "number" then
-				LMRet = T_to_BiteBuffer({G_CB_LMTable,G_CB_LMTable,G_CB_LMTable,G_CB_LMTable})
-			elseif Property.LMTable == nil then
-				LMRet = T_to_BiteBuffer({0,0,0,0})
-			end
-			if Property.CenterXY == nil then
-				table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF))
-				table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF))
-			elseif type(Property.CenterXY) == "table" then
-				table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,CenterXY[1]))
-				table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,CenterXY[2]))
-			else
-				PushErrorMsg("G_CB_SetSpawn_CenterXY_Inputdata_Error")
-			end
-			
-			if Property.Owner ~= nil then Owner = Property.Owner end
-			if Property.Delay ~= nil then Delay = Property.Delay end
-			if Property.PreserveFlag ~= nil then PreserveFlag = Property.PreserveFlag end
 		end
 	end 
 
@@ -1489,7 +1499,7 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_SNTable,Property)
 		X,
 		
 		SetCVar(FP,G_CB_DLTV[2],SetTo,Delay),
-		SetCVar(FP,G_CB_LMTV[2],SetTo,LMRet),
+		SetCVar(FP,G_CB_LMTV[2],SetTo,T_to_BiteBuffer(G_CB_LMTable)),
 		SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_BiteBuffer(G_CB_RPTable)),Y,
 		SetCVar(FP,G_CB_Owner[2],SetTo,Owner),
 		SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_BiteBuffer(G_CB_FNTable)),
