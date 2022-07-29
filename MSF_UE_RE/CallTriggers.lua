@@ -675,6 +675,7 @@ local CB_P = CreateVar(FP)
 	t02 = MakeiStrVoid(20).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"
 	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
+	t05 = "\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
 
@@ -685,6 +686,7 @@ local CB_P = CreateVar(FP)
 	
 	iStrSize7 = GetiStrSize(0,"\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:10) \x03(A) \x07』")
 	iStrSize8 = GetiStrSize(0,"\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:35) \x03(D) \x07』")
+	iStrSize9 = GetiStrSize(0,"\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07』")
 	
 
 	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
@@ -694,12 +696,14 @@ local CB_P = CreateVar(FP)
 	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
 	S6 = MakeiTblString(1480,"일반명령",'A',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
 	S7 = MakeiTblString(1481,"일반명령",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
+	S8 = MakeiTblString(1478,"일반명령",'Q',MakeiStrLetter("\x0D",iStrSize9+5),"Base",1)
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
 	iTbl4 = GetiTblId(FP,129,S4) 
 	iTbl5 = GetiTblId(FP,1480,S6) 
 	iTbl6 = GetiTblId(FP,1481,S7) 
+	iTbl7 = GetiTblId(FP,1478,S8) 
 	PMariTbl = {}
 	for i = 0, 6 do
 		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
@@ -716,6 +720,7 @@ local CB_P = CreateVar(FP)
 	end
 	Str6, Str6a, Str6s = SaveiStrArr(FP,t03)
 	Str7, Str7a, Str7s = SaveiStrArr(FP,t04)
+	Str8, Str8a, Str8s = SaveiStrArr(FP,t05)
 	
 
 	

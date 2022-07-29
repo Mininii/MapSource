@@ -73,7 +73,7 @@ end
 			Objects()
 			HPoints()
 			Var_init()
-			Include_Conv_CPosXY(FP)
+			Include_Conv_CPosXY(FP,{96*32,192*32})
 			Install_GetCLoc(FP,0,nilunit)
 			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT,G_CB_LoopMaxT)
 			Install_CallTriggers()

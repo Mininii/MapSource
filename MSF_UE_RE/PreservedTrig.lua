@@ -57,7 +57,6 @@ function MapPreserves()
 CMov(FP,LevelPtr,Level)
 CIf(FP,Switch("Switch 240",Set))
 	CIf(FP,CVar(FP,Dt[2],AtMost,2500))
-		CAdd(FP,WaveT,Dt)
 		CAdd(FP,Time,Dt)
 		IBGM_EPDX(FP,6,Dt,{Dt_NT2,Dt_NT})
 

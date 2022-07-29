@@ -78,7 +78,10 @@ function OPText()
 	table.insert(CV1,CenterView("Anywhere"))
 	table.insert(CV2,SetMemory(0x6509B0,SetTo,i))
 	table.insert(CV2,CenterView(2+i))
-	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CreateUnitWithProperties(4,10,2+i,i,{energy = 100}),SetResources(i,Add,30000,Ore)})
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}),SetResources(i,Add,5000,Ore)})
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CV(SetPlayers,1)},{CreateUnitWithProperties(3,MarID[i+1],2+i,i,{energy = 100}),SetResources(i,Add,15000,Ore)})
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CV(SetPlayers,2)},{CreateUnitWithProperties(2,MarID[i+1],2+i,i,{energy = 100}),SetResources(i,Add,10000,Ore)})
+	TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CV(SetPlayers,3)},{CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100}),SetResources(i,Add,5000,Ore)})
 	for j = 1, 3 do
 	--TriggerX(i,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CVar(FP,Diff[2],Exactly,j)},{CreateUnitWithProperties(4*j,10,2+i,i,{energy = 100})})
 	end

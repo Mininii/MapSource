@@ -1169,6 +1169,11 @@ G_CB_ShapeTable = {}
 		local CB = CAPlotCreateArr
 		local TempFunc = CreateVar(FP)
 		local TempFunc2 = CreateVar(FP)
+
+		CB_PrfcInit = def_sIndex()
+		CJump(FP,CB_PrfcInit)
+			CB_initTCopy()
+		CJumpEnd(FP,CB_PrfcInit)
 		
 
 
@@ -1183,12 +1188,7 @@ G_CB_ShapeTable = {}
 		--TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		--CIfX(FP,{Never()})
 
-		for i = 1, STSize do
-		CIf(FP,CV(V(CA[1]),i))
-		CB_Copy(i,STSize+1)
-		CIfEnd()
-		end
-
+		CB_TCopy(V(CA[1]),STSize+1)
 
 		CIf(FP,{CV(TempFunc2,1,AtLeast),CV(TempFunc2,8,AtMost)})
 		local CurShNum = CreateVar(FP)
@@ -1231,14 +1231,11 @@ G_CB_ShapeTable = {}
 				_G[k[2]]()
 			CIfEnd()
 		end
-		
-		for i = 1, G_CB_ArrSize do
-			CIf(FP,CV(G_CB_Num,i))
-			CB_Copy(EndRetShape,EndRetShape+i)
-			CMov(FP,V(CA[1]),EndRetShape+i)
-			CMov(FP,G_CB_TempTable[4],EndRetShape+i)
-			CIfEnd()
-		end
+		CB_TCopy(EndRetShape,_Add(G_CB_Num,EndRetShape))
+		CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
+		CMov(FP,G_CB_TempTable[4],G_CB_Num,EndRetShape)
+
+
 		CMov(FP,G_CB_TempTable[14],0,nil,0xFF)
 		CMov(FP,G_CB_TempTable[3],0,nil,0xFF)
 		
@@ -1945,4 +1942,102 @@ end
 function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
 	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
 	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
+end
+
+
+function CB_initTCopy()
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local FXAddrT = {}
+	local FYAddrT = {}
+	CBPlotFXArr = f_GetVoidptr(PlayerID,#FX)
+	CBPlotFYArr = f_GetVoidptr(PlayerID,#FY)
+	CBPlotFNum = f_GetFileArrptr(PlayerID,Num,4,1)
+	for i = 1, #FX do
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFXArr[2],(i)*4+2416,0, SetTo, PlayerID, FX[i][2], 2416, 1, 0))
+	end
+	for i = 1, #FY do
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFYArr[2],(i)*4+2416,0, SetTo, PlayerID, FY[i][2], 2416, 1, 0))
+	end
+	
+	
+
+
+end
+function CB_TCopy(Shape,RetShape)
+	FCBCOPYCheck = 1
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	STPopTrigArr(PlayerID)
+	local LShNextV = CreateVar(PlayerID)
+	local LRShNextV2 = CreateVar(PlayerID)
+	if type(Shape) == "number" then
+		CMov(FP,LShNextV,Shape*0x970/4)
+		CMov(FP,CV[2],_Read(FArr(CBPlotFNum,Shape+1)))
+		CMov(FP,V(CA[10]),_Read(FArr(CBPlotFNum,Shape+1)))
+	else
+	CMul(PlayerID,LShNextV,Shape,0x970/4)
+	CMov(FP,CV[2],_Read(FArr(CBPlotFNum,_Add(Shape,1))))
+	CMov(FP,V(CA[10]),_Read(FArr(CBPlotFNum,_Add(Shape,1))))
+	end
+	if type(RetShape) == "number" then
+		CMov(FP,LRShNextV2,RetShape*0x970/4)
+	else
+	CMul(PlayerID,LRShNextV2,RetShape,0x970/4)
+	end
+	
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetNVar(CV[1],SetTo,0);
+				SetNVar(CV[3],SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+	TMem(PlayerID,CV[5],FArr(CBPlotFXArr,Shape))
+	TMem(PlayerID,CV[6],FArr(CBPlotFYArr,Shape))
+	TMem(PlayerID,CV[7],FArr(CBPlotFXArr,RetShape))
+	TMem(PlayerID,CV[8],FArr(CBPlotFYArr,RetShape))
+	if type(RetShape) == "number" then
+		CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _Read(FArr(CBPlotFNum,RetShape+1))),})
+	else
+		CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _Read(FArr(CBPlotFNum,_Add(RetShape,1)))),})
+	end
+	-- Call f_CBMove
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+				NVar(CV[2],AtLeast,1);
+			},
+			actions = {
+				SetNVar(CV[2],Subtract,1);
+				SetNVar(CV[4],SetTo,0);
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCOPYCall1,0x0,0,0);
+				SetCtrigX("X",FCBCOPYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
+				SetCtrigX("X",FCBCOPYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
+				SetCtrigX("X",FCBCOPYCall2,0x15C,0,SetTo,"X","X",0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+	CDoActions(PlayerID,{TSetMemory(_Add(Mem("X",CA[7],0x15C,0),LRShNextV2),SetTo,CV[1])})
 end

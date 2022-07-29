@@ -30,7 +30,7 @@ function Objects()
 	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4,5,6}
 	ObPlayers = {P9,P10,P11,P12}
-	MedicTrig = {34,9,2,3}
+	MedicTrig = {34,9,88,80}
 	EXCC_Forward = 0x2FFF
 	ObEff = 94
 	nilunit = 181
@@ -384,6 +384,8 @@ function Var_init()
 	TempY = CreateVar(FP)
 	LevelFactor = CreateVar(FP)
 	NCCalc = CreateVar(FP)
+
+	MCoolDown = Create_VTable(7, 15*256, FP)
 	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 

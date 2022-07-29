@@ -89,7 +89,7 @@ table.insert(PatchArr,SetMemoryW(0x65FFB0+(UnitID*2), SetTo, 411))
 table.insert(PatchArr,SetMemoryW(0x662BF0+(UnitID*2), SetTo, 414))
 table.insert(PatchArr,SetMemoryW(0x663B38+(UnitID*2), SetTo, 407))
 table.insert(PatchArr,SetMemoryW(0x661EE8+(UnitID*2), SetTo, 410))
-table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 78))
+table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 74))--외형 고스트로 변경
 table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 end
 for j = 0, 6 do
@@ -328,6 +328,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 
 		SetWepTargetFlags(MarWep[i+1],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 		SetWepUpType(MarWep[i+1],0+i) -- 플레이어 마린무기에 각각 다른 공업 적용
+		table.insert(PatchArr,SetMemoryB(0x656FB8+(MarWep[i+1] *1),SetTo,255)) -- 공속 기본 255
 		
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i+1]*2),SetTo,MarDamageAmount)) -- 기본공격력
 		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i+1]*2),SetTo,MarDamageFactor)) -- 추가공격력
@@ -350,8 +351,11 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	SetWepTargetFlags(93,0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 
 		table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
-		table.insert(PatchArr,SetMemoryW(0x656EB0,SetTo,NMarDamageAmount)) -- 기본공격력
-		table.insert(PatchArr,SetMemoryW(0x657678,SetTo,NMarDamageFactor)) -- 추가공격력
+	--for i = 0, 6 do
+	--	table.insert(PatchArr,SetMemoryB(0x58D2B0+(i*46)+0+i,SetTo,NMarDamageAmount)) -- 기본공격력
+	--end
+	table.insert(PatchArr,SetMemoryW(0x663888 + (28 *2),SetTo,50000)) -- 마린가격
+
 
 		UnitEnable2(15)
 		UnitEnable2(28)
@@ -370,8 +374,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(67,1200)
 	UnitEnableX(70)
 	UnitEnableX(68)
-	UnitEnableX(48)
-	for i = 37, 47 do
+	for i = 37, 49 do
 		UnitEnableX(i)
 		
 	end

@@ -146,6 +146,37 @@ function Gun_System()
     end
     EXCC_End()
 
+CunitCtrig_Part1(FP)
+
+
+MJ = def_sIndexArr(7)
+
+for i = 1, 7 do
+    NJump(FP, MJ[i], DeathsX(CurrentPlayer,Exactly,MarID[i],0,0xFF),{SetMemory(0x6509B0, Subtract, 4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF),
+    SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})
+end
+ClearCalc()
+for i = 1, 7 do-- 조건부 CMov. 중간연산자 사용불가능
+    NJumpEnd(FP, MJ[i])
+    BreakCalc(DeathsX(CurrentPlayer,AtMost,15*256,0,0xFFFFFF00))
+    CTrigger(FP, {DeathsX(CurrentPlayer,AtLeast,16*256,0,0xFFFFFF00)}, {TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFFFF00),SetMemory(0x6509B0, Add, 48)}, 1)
+    TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, 5*256, 0, 0xFFFFFF00)},{preserved})
+    ClearCalc()
+end
+
+
+
+CunitCtrig_Part2()
+CunitCtrig_Part3X()
+for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+CunitCtrig_Part4X(i,{
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
+	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
+},
+{MoveCp(Add,25*4)})
+end
+CunitCtrig_End()
+
 
     
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
