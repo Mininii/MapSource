@@ -779,6 +779,14 @@ function def_sIndex()
 	sindexAlloc = sindexAlloc + 1
 	return X
 end
+function def_sIndexArr(Size)
+	local Y ={}
+	for i = 1, Size do
+		Y[i] = sindexAlloc
+		sindexAlloc = sindexAlloc + 1
+	end
+	return Y
+end
 
 function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 for j=0, VArrLength do
