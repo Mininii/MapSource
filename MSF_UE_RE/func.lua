@@ -1187,7 +1187,6 @@ G_CB_ShapeTable = {}
 		--f_Movcpy(FP,G_CB_WSTestStrPtr,VArr(G_CB_WSTestVA,0),4*4)
 		--TriggerX(FP,{},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CB_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 		--CIfX(FP,{Never()})
-
 		CB_TCopy(V(CA[1]),STSize+1)
 
 		CIf(FP,{CV(TempFunc2,1,AtLeast),CV(TempFunc2,8,AtMost)})
@@ -1231,7 +1230,9 @@ G_CB_ShapeTable = {}
 				_G[k[2]]()
 			CIfEnd()
 		end
-		CB_TCopy(EndRetShape,_Add(G_CB_Num,EndRetShape))
+		local TempRetShape = CreateVar(FP)
+		CMov(FP,TempRetShape,G_CB_Num,EndRetShape)
+		CB_TCopy(EndRetShape,TempRetShape)
 		CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
 		CMov(FP,G_CB_TempTable[4],G_CB_Num,EndRetShape)
 
@@ -1959,13 +1960,13 @@ function CB_initTCopy()
 	CBPlotFYArr = f_GetVoidptr(PlayerID,#FY+1)
 	CBPlotFNum = f_GetVoidptr(PlayerID,#Num+1)
 	for i = 1, #FX do
-		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFXArr[2],(i)*4+2416,0, SetTo, PlayerID, FX[i][2], 2416, 1, 0))
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFXArr[2],(i*4)+2416,0, SetTo, PlayerID, FX[i][2], 2416, 1, 0))
 	end
 	for i = 1, #FY do
-		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFYArr[2],(i)*4+2416,0, SetTo, PlayerID, FY[i][2], 2416, 1, 0))
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFYArr[2],(i*4)+2416,0, SetTo, PlayerID, FY[i][2], 2416, 1, 0))
 	end
 	for i = 1, #Num do
-		table.insert(CtrigInitArr[PlayerID+1],SetCtrig1X(PlayerID,CBPlotFNum[2],(i)*4+2416,0, SetTo, Num[i]))
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrig1X(PlayerID,CBPlotFNum[2],(i*4)+2416,0, SetTo, Num[i]))
 	end
 	CBPlotNumHeader = CreateVar(PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotNumHeader[2],0x15C,0, SetTo, PlayerID, CA[7], 0x15C, 1, 0))
@@ -2002,8 +2003,6 @@ function CB_TCopy(Shape,RetShape)
 	CMul(PlayerID,LRShNextV2,RetShape,(0x970/4))
 	end
 	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CV[2])
-	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CA[10])
-	
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -2018,9 +2017,13 @@ function CB_TCopy(Shape,RetShape)
 
 	CMov(PlayerID,CV[5],_Read(FArr(CBPlotFXArr,Shape)))
 	CMov(PlayerID,CV[6],_Read(FArr(CBPlotFYArr,Shape)))
-	CMov(PlayerID,CV[7],_Read(FArr(CBPlotFXArr,RetShape)))
+ 	CMov(PlayerID,CV[7],_Read(FArr(CBPlotFXArr,RetShape)))
 	CMov(PlayerID,CV[8],_Read(FArr(CBPlotFYArr,RetShape)))
-	CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _SHRead(FArr(CBPlotFNum,RetShape))),})
+	if type(RetShape) == "number" then
+		CDoActions(PlayerID,{SetV(CV[4],_SHRead(FArr(CBPlotFNum,RetShape-1)))})
+	else
+		CDoActions(PlayerID,{SetV(CV[4],_SHRead(FArr(CBPlotFNum,_Sub(RetShape,1))))})
+	end
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -2030,7 +2033,6 @@ function CB_TCopy(Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,0);
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCOPYCall1,0x0,0,0);
 				SetCtrigX("X",FCBCOPYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCOPYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
