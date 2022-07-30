@@ -376,6 +376,7 @@ end
 		InputTesterID(i,"lptime106")
 		InputTesterID(i,"IIII(uood)IIIII")
 		InputTesterID(i,"Azusawa_Kohane")
+		InputTesterID(i,"T_PanTi")
 		
 	end
 	
