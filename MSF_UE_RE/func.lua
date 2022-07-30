@@ -1970,9 +1970,6 @@ function CB_initTCopy()
 	end
 	CBPlotNumHeader = CreateVar(PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotNumHeader[2],0x15C,0, SetTo, PlayerID, CA[7], 0x15C, 1, 0))
-	
-
-
 end
 function CB_TCopy(Shape,RetShape)
 	FCBCOPYCheck = 1

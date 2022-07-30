@@ -156,11 +156,11 @@ for i = 1, 7 do
     SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})
 end
 ClearCalc()
-for i = 1, 7 do-- 조건부 CMov. 중간연산자 사용불가능
+for i = 1, 7 do
     NJumpEnd(FP, MJ[i])
-    BreakCalc(DeathsX(CurrentPlayer,AtMost,15*256,0,0xFFFFFF00))
-    CTrigger(FP, {DeathsX(CurrentPlayer,AtLeast,16*256,0,0xFFFFFF00)}, {TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFFFF00),SetMemory(0x6509B0, Add, 48)}, 1)
-    TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, 5*256, 0, 0xFFFFFF00)},{preserved})
+    BreakCalc({DeathsX(CurrentPlayer,AtMost,15*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,15*65536,0,0xFF0000)})
+    CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
+    TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00)},{preserved})
     ClearCalc()
 end
 
@@ -195,7 +195,7 @@ CunitCtrig_End()
             SetInvincibility(Disable,"Buildings",FP,64);
         })
         CMov(FP,Actived_Gun,0)
-		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,Dt,GCT)},1)
+		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,1,GCT)},1)
         for i = 0, 127 do
             CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
                 Var_InputCVar,

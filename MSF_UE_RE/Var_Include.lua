@@ -385,7 +385,7 @@ function Var_init()
 	LevelFactor = CreateVar(FP)
 	NCCalc = CreateVar(FP)
 
-	MCoolDown = Create_VTable(7, 15*256, FP)
+	MCoolDown = Create_VTable(7, (15*256)+(15*65536), FP)
 	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 

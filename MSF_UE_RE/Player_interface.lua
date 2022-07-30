@@ -11,7 +11,7 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,100,FP)
+	local AtkExceed = Create_VTable(7,20,FP)
 	local HPExceed = Create_VTable(7,7,FP)	
 	local ShUp = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
@@ -40,7 +40,7 @@ function PlayerInterface()
 	local ArmorT3 = CreateCcodeArr(7)
 	local ShopSw = CreateCcodeArr(7)
 	local MCoolDownP = CreateVarArr(7,FP)
-	local MCoolDownCost = Create_VTable(7,20,FP)
+	local MCoolDownCost = Create_VTable(7,100,FP)
 	
 	local NsW = CreateCcode()
 	
@@ -681,7 +681,10 @@ function PlayerInterface()
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,20)},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		TriggerX(FP,{},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		for i = 1, 25 do
+			TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,i*10)},{SetCVar(FP,AtkFactorV[i+1][2],Add,15)})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		end
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
 		CIfEnd()
@@ -700,7 +703,7 @@ function PlayerInterface()
 			SetCVar(FP,DefUpCompCount[i+1][2],Add,1),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
-		TriggerX(FP,{CVar(FP,DefUpCompCount[i+1][2],AtLeast,4)},{SetCVar(FP,DefFactorV[i+1][2],Add,11)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
+		TriggerX(FP,{},{SetCVar(FP,DefFactorV[i+1][2],Add,7)},{preserved})--CVar(FP,DefUpCompCount[i+1][2],AtLeast,51)
 		CIfEnd()
 		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
@@ -838,7 +841,7 @@ end
 			CIfXEnd()
 		CIfEnd()
 		CIfEnd()
-		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x07구입 성공, \x08공격\x1F속도 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],20),SubV(MCoolDown[i+1],256)})
+		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x07구입 성공, \x08공격\x1F속도 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],100),SubV(MCoolDown[i+1],256+65536)})
 		CIfEnd()
 		CIfEnd()--ShopEnd
 

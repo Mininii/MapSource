@@ -171,7 +171,7 @@ SetCall(FP)
 		
 	CIfEnd()
 	Case_Various()
-	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{Gun_SetLineX(4,Add,Dt)},1)
+	CTrigger(FP,{},{Gun_SetLineX(4,Add,1)},1)
 
 	
 	GunPushTrig = {}
