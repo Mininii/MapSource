@@ -1954,16 +1954,21 @@ function CB_initTCopy()
 	local Num = CBPlotNum
 	local FXAddrT = {}
 	local FYAddrT = {}
-	CBPlotFXArr = f_GetVoidptr(PlayerID,#FX)
-	CBPlotFYArr = f_GetVoidptr(PlayerID,#FY)
-	CBPlotFNum = f_GetFileArrptr(PlayerID,Num,4,1)
+	CBPlotFXArr = f_GetVoidptr(PlayerID,#FX+1)
+	CBPlotFYArr = f_GetVoidptr(PlayerID,#FY+1)
+	CBPlotFYArr = f_GetVoidptr(PlayerID,#FY+1)
+	CBPlotFNum = f_GetVoidptr(PlayerID,#Num+1)
 	for i = 1, #FX do
 		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFXArr[2],(i)*4+2416,0, SetTo, PlayerID, FX[i][2], 2416, 1, 0))
 	end
 	for i = 1, #FY do
 		table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotFYArr[2],(i)*4+2416,0, SetTo, PlayerID, FY[i][2], 2416, 1, 0))
 	end
-	
+	for i = 1, #Num do
+		table.insert(CtrigInitArr[PlayerID+1],SetCtrig1X(PlayerID,CBPlotFNum[2],(i)*4+2416,0, SetTo, Num[i]))
+	end
+	CBPlotNumHeader = CreateVar(PlayerID)
+	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotNumHeader[2],0x15C,0, SetTo, PlayerID, CA[7], 0x15C, 1, 0))
 	
 
 
@@ -1987,19 +1992,17 @@ function CB_TCopy(Shape,RetShape)
 	local LShNextV = CreateVar(PlayerID)
 	local LRShNextV2 = CreateVar(PlayerID)
 	if type(Shape) == "number" then
-		CMov(FP,LShNextV,Shape*0x970/4)
-		CMov(FP,CV[2],_Read(FArr(CBPlotFNum,Shape+1)))
-		CMov(FP,V(CA[10]),_Read(FArr(CBPlotFNum,Shape+1)))
+		CMov(PlayerID,LShNextV,Shape*(0x970/4))
 	else
-	CMul(PlayerID,LShNextV,Shape,0x970/4)
-	CMov(FP,CV[2],_Read(FArr(CBPlotFNum,_Add(Shape,1))))
-	CMov(FP,V(CA[10]),_Read(FArr(CBPlotFNum,_Add(Shape,1))))
+	CMul(PlayerID,LShNextV,Shape,(0x970/4))
 	end
 	if type(RetShape) == "number" then
-		CMov(FP,LRShNextV2,RetShape*0x970/4)
+		CMov(PlayerID,LRShNextV2,RetShape*(0x970/4))
 	else
-	CMul(PlayerID,LRShNextV2,RetShape,0x970/4)
+	CMul(PlayerID,LRShNextV2,RetShape,(0x970/4))
 	end
+	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CV[2])
+	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CA[10])
 	
 	Trigger {
 			players = {PlayerID},
@@ -2013,15 +2016,11 @@ function CB_TCopy(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(CBPlotFXArr,Shape))
-	TMem(PlayerID,CV[6],FArr(CBPlotFYArr,Shape))
-	TMem(PlayerID,CV[7],FArr(CBPlotFXArr,RetShape))
-	TMem(PlayerID,CV[8],FArr(CBPlotFYArr,RetShape))
-	if type(RetShape) == "number" then
-		CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _Read(FArr(CBPlotFNum,RetShape+1))),})
-	else
-		CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _Read(FArr(CBPlotFNum,_Add(RetShape,1)))),})
-	end
+	CMov(PlayerID,CV[5],_Read(FArr(CBPlotFXArr,Shape)))
+	CMov(PlayerID,CV[6],_Read(FArr(CBPlotFYArr,Shape)))
+	CMov(PlayerID,CV[7],_Read(FArr(CBPlotFXArr,RetShape)))
+	CMov(PlayerID,CV[8],_Read(FArr(CBPlotFYArr,RetShape)))
+	CDoActions(PlayerID,{TSetCtrig1X("X", "X", CAddr("Value",2), 1, SetTo, _SHRead(FArr(CBPlotFNum,RetShape))),})
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -2039,5 +2038,5 @@ function CB_TCopy(Shape,RetShape)
 			},
 			flag = {Preserved}
 		}
-	CDoActions(PlayerID,{TSetMemory(_Add(Mem("X",CA[7],0x15C,0),LRShNextV2),SetTo,CV[1])})
+	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
 end
