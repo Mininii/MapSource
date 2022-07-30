@@ -259,7 +259,6 @@ function SetWeaponsDatX(WepID,Property)
 				PatchInsert(SetMemoryB(0x657040+WepID,SetTo,k))
 			elseif j== "FlingyID" then
 				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
-				
 			elseif j== "WepName" then
 				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ¿Ã∏ß
 			else
@@ -457,6 +456,10 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,k)) -- SeekRange
 			elseif j== "Graphic" then
 				PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,k)) -- Graphic
+			elseif j== "BuildScore" then
+				PatchInsert(SetMemoryW(0x663408+(UnitID *2),SetTo,k))--BuildScore
+			elseif j== "KillScore" then
+				PatchInsert(SetMemoryW(0x663EB8+(UnitID *2),SetTo,k))--KillScore
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -542,7 +545,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 				},
 				actions = {
 					Act1;
-					CopyCpActionX({PlayWAVX(v[2]),PlayWAVX(v[2])},TargetPlayer);
+					CopyCpActionX({PlayWAVX(v[2])},TargetPlayer);
 					SetNVar(Arr[3],Add,v[3]);
 				},
 				flag = {preserved}

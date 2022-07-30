@@ -131,12 +131,13 @@ function Install_CallTriggers()
     local ShapeData = {
         CSMakePolygon(6, 72, 0, PlotSizeCalc(6,13), PlotSizeCalc(6,12)),
         CSMakeLine(1, 32, 0, (2048/32)-1, 0),
-        CSMakeSpiral(6,0.2,0.9,32,0,(12*7)+1,0),
+        CSMakeCircle(36, 750, 0, 37, 1),
         CSMakeCircle(90, 2048-64, 0, 91, 1),
         CSMakeCircle(2, 1500-64, 0, 3, 1),
         CSMakeStar(5,120,150,180,PlotSizeCalc(5*2,2),0),
         CSMakeTornado(6,48,12,4,1)
     }
+    
     CIf(FP,CD(CAXYRand,1),SetCD(CAXYRand,0))
     CMov(FP,CACX,f_CRandNum(2000, 1000,{}))
     CMov(FP,CACY,f_CRandNum(2000, 1000,{}))
