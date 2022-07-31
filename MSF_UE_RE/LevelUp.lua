@@ -53,7 +53,8 @@ function LevelUp()
 					f_Read(FP,0x628438,nil,Boss6Ptr,0xFFFFFF)
 					CMov(FP,CunitIndex,_Div(_Sub(Boss6Ptr,19025),_Mov(84)))
 					local TempHP1, TempHP2 = CreateVars(2,FP)
-					f_LMov(FP,{TempHP1, TempHP2},"2560000000000") --100¾ï
+					
+					f_LMov(FP,{TempHP1, TempHP2},"82512384594432") --322322322322
 					CDoActions(FP,{
 						Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
 						Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempHP1),

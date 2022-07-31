@@ -667,15 +667,23 @@ local CB_P = CreateVar(FP)
 	for j, k in pairs(UpVarWepArr) do
 		SetLevelUpAtk(k)
 	end
+	OAtk1 = "\x07★ \x19원클릭 \x0F공격력 \x04업그레이드 255회 \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore)\x04(\x03A\x04) \x07★"
+	OAtk2 = "\x07★ \x19원클릭 \x0F공격력 \x04업그레이드 10회 \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore)\x04(\x03Q\x04) \x07★"
+	OHP1 = "\x07★ \x19원클릭 \x08체력 \x04업그레이드 255회 \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore)\x04(\x03D\x04) \x07★"
+	OHP2 = "\x07★ \x19원클릭 \x08체력 \x04업그레이드 10회 \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore)\x04(\x03E\x04) \x07★"
+	
+	
+	
+	
 
 
 	SetCallEnd()
 
-	t01 = MakeiStrVoid(20).."\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
-	t02 = MakeiStrVoid(20).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
+	t01 = MakeiStrVoid(30).."\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
+	t02 = MakeiStrVoid(30).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"
 	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
-	t05 = "\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07』"
+	t05 = "\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D) \x03(Q) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
 
@@ -697,6 +705,11 @@ local CB_P = CreateVar(FP)
 	S6 = MakeiTblString(1480,"일반명령",'A',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
 	S7 = MakeiTblString(1481,"일반명령",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
 	S8 = MakeiTblString(1478,"일반명령",'Q',MakeiStrLetter("\x0D",iStrSize9+5),"Base",1)
+
+	S9 = MakeiTblString(1370,"일반명령",'A',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk1)+5),"Base",1)
+	S10 = MakeiTblString(1368,"일반명령",'Q',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk2)+5),"Base",1)
+	S11 = MakeiTblString(1372,"일반명령",'D',MakeiStrLetter("\x0D",GetiStrSize(0,OHP1)+5),"Base",1)
+	S12 = MakeiTblString(1371,"일반명령",'E',MakeiStrLetter("\x0D",GetiStrSize(0,OHP2)+5),"Base",1)
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
@@ -704,11 +717,22 @@ local CB_P = CreateVar(FP)
 	iTbl5 = GetiTblId(FP,1480,S6) 
 	iTbl6 = GetiTblId(FP,1481,S7) 
 	iTbl7 = GetiTblId(FP,1478,S8) 
+	 
+	 
+	iTbl8 = GetiTblId(FP,1370,S9)
+	iTbl9 = GetiTblId(FP,1368,S10)
+	iTbl10 = GetiTblId(FP,1372,S11)
+	iTbl11 = GetiTblId(FP,1371,S12)
+
 	PMariTbl = {}
 	for i = 0, 6 do
 		PMariTbl[i+1] = GetiTblId(FP,MarID[i+1]+1,S5) 
 
 	end
+	
+	--CA__SetValue(Str1,"12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123 \x05Kills",nil,1)
+	--CA__lItoCustom(SVA1(Str1,0),KillW,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+	--,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 	Str3, Str3a, Str3s = SaveiStrArr(FP,t01)
 	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04남은 \x08뉴클리어\x04 : 0000000000  \x05-")
 	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07『 \x07구버전 포인트 \x04보유량 :\x04 0000000000 \x07』")
@@ -722,6 +746,32 @@ local CB_P = CreateVar(FP)
 	Str7, Str7a, Str7s = SaveiStrArr(FP,t04)
 	Str8, Str8a, Str8s = SaveiStrArr(FP,t05)
 	
-
+	iStr9, iStr9a, iStr9s = SaveiStrArr(FP,OAtk1)
+	iStr10, iStr10a, iStr10s = SaveiStrArr(FP,OAtk2)
+	iStr11, iStr11a, iStr11s = SaveiStrArr(FP,OHP1)
+	iStr12, iStr12a, iStr12s = SaveiStrArr(FP,OHP2)
 	
+	local Sinit = CreateVar(FP)
+	local SEnd = CreateVar(FP)
+	local SValue = CreateVar(FP)
+	local SiRet = CreateVar(FP)
+	CallSigmaCalc = SetCallForward()
+
+	SetCall(FP)
+	CMov(FP,SiRet,0)
+	CWhile(FP, {TCVar(FP,Sinit[2],AtMost,SEnd)})
+	CAdd(FP,SiRet,_Mul(SValue,Sinit))
+	
+	DoActionsX(FP,{AddV(Sinit,1)})
+	CWhileEnd()
+	SetCallEnd()
+	function f_Sigma(Init,End,Value)
+		CDoActions(FP, {
+			SetV(Sinit,Init),
+			SetV(SEnd,End),
+			SetV(SValue,Value),
+		})
+		CallTrigger(FP, CallSigmaCalc)
+		return SiRet
+	end
 end

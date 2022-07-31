@@ -1975,7 +1975,7 @@ function CB_TCopy(Shape,RetShape)
 	FCBCOPYCheck = 1
 	local CV
 	if CBPlotTempArr == 0 then
-		Need_Include_CBPaint()
+		PushErrorMsg("Need_Include_CBPaint")
 	else
 		CV = CBPlotTempArr
 	end
@@ -2009,7 +2009,7 @@ function CB_TCopy(Shape,RetShape)
 				SetNVar(CV[1],SetTo,0);
 				SetNVar(CV[3],SetTo,0);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}
 
 	CMov(PlayerID,CV[5],_Read(FArr(CBPlotFXArr,Shape)))
@@ -2035,7 +2035,7 @@ function CB_TCopy(Shape,RetShape)
 				SetCtrigX("X",FCBCOPYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
 				SetCtrigX("X",FCBCOPYCall2,0x15C,0,SetTo,"X","X",0x0,0,1);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}
 	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
 end

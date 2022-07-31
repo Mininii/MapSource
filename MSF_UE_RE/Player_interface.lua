@@ -40,6 +40,8 @@ function PlayerInterface()
 	local ArmorT3 = CreateCcodeArr(7)
 	local ShopSw = CreateCcodeArr(7)
 	local MCoolDownP = CreateVarArr(7,FP)
+	local AtkUpCount = CreateVarArr(7, FP)
+	local HPUpCount = CreateVarArr(7, FP)
 	local MCoolDownCost = Create_VTable(7,100,FP)
 	
 	local NsW = CreateCcode()
@@ -682,8 +684,8 @@ function PlayerInterface()
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
 		TriggerX(FP,{},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
-		for i = 1, 25 do
-			TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,i*10)},{SetCVar(FP,AtkFactorV[i+1][2],Add,15)})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
+		for j = 1, 25 do
+			TriggerX(FP,{CVar(FP,AtkUpCompCount[i+1][2],AtLeast,j*10)},{SetCVar(FP,AtkFactorV[i+1][2],Add,15)})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
 		end
 			DoActions(FP,{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,Add,1)})
 			TriggerX(FP,{CVar(FP,AtkFactorV[i+1][2],AtLeast,255)},{SetMemoryB(0x58F32C + (59 - 46)+ 15*i,SetTo,255)},{preserved})
@@ -710,10 +712,17 @@ function PlayerInterface()
 		CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
 		CIfEnd()
 		end
-		DoActionsX(FP,{SetCVar(FP,CurrentHP[i+1][2],SetTo,0)})-- 체력값 초기화
+		DoActionsX(FP,{
+			SetCVar(FP,CurrentHP[i+1][2],SetTo,0),
+			SetCVar(FP,AtkUpCount[i+1][2],SetTo,0),
+			SetCVar(FP,HPUpCount[i+1][2],SetTo,0),
+
+	})-- 체력값 초기화
 		for Bit = 0, 7 do
-		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
-			{SetCVar(FP,CurrentHP[i+1][2],Add,10008*(2^Bit))},{preserved})
+		TriggerX(FP,{MemoryX(DefUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^DefUpgradeMaskRetArr[i+1]),(2^Bit)*(256^DefUpgradeMaskRetArr[i+1]))},
+			{SetCVar(FP,CurrentHP[i+1][2],Add,10008*(2^Bit)),AddV(HPUpCount[i+1],2^Bit)},{preserved})
+		TriggerX(FP,{MemoryX(AtkUpgradePtrArr[i+1],AtLeast,(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]),(2^Bit)*(256^AtkUpgradeMaskRetArr[i+1]))},
+			{AddV(AtkUpCount[i+1],2^Bit)},{preserved})
 		end
 		CMov(FP,MarHP[i+1],_Add(CurrentHP[i+1],MarMaxHP[i+1]))
 		
@@ -1089,15 +1098,94 @@ end
 
 
 	CIfEnd()
+
 	CIf(FP,{CV(SelUID,111)})
 	NukesTmp = CreateVar(FP)
 		for i = 0, 6 do
-			CTrigger(FP, CV(SelPl,i), {TSetCVar(FP,NukesTmp[2],SetTo,NukesUsage[i+1])}, 1)
+			CIf(FP,{LocalPlayerID(i),CV(SelPl,i)})
+			CMov(FP,NukesTmp,NukesUsage[i+1])
+			CIfEnd()
 		end
 		CS__ItoCustom(FP,SVA1(Str4,10),NukesTmp,nil,nil,10,1,nil,"\x080",0x08,{0,1,2,3,4,5,6,7,8,9})
 		--DoActionsX(FP,SetCSVA1(SVA1(Str4,Str4s-1),SetTo,0,0xFFFFFFFF))
 		CS__InputVA(FP,iTbl3,0,Str4,Str4s,nil,0,Str4s)
 	CIfEnd()
+	
+	CIf(FP,{CV(SelUID,107)})
+	TempHPUpCount = CreateVar(FP)
+	TempAtkUpCount = CreateVar(FP)
+	TempHPUpCountChk = CreateVar(FP)
+	TempAtkUpCountChk = CreateVar(FP)
+	TempHPFactor = CreateVar(FP)
+	TempAtkFactor = CreateVar(FP)
+	TempDefUpCompCount = CreateVar(FP)
+	TempAtkUpCompCount = CreateVar(FP)
+	TempDefUpCompCountChk = CreateVar2(FP,nil,nil,1)
+	TempAtkUpCompCountChk = CreateVar2(FP,nil,nil,1)
+		for i = 0, 6 do
+			CIf(FP,{LocalPlayerID(i),CV(SelPl,i)})
+			CMov(FP,TempHPUpCount,HPUpCount[i+1])
+			CMov(FP,TempAtkUpCount,AtkUpCount[i+1])
+			CMov(FP,TempAtkFactor,AtkFactorV[i+1])
+			CMov(FP,TempHPFactor,DefFactorV[i+1])
+			CMov(FP,TempDefUpCompCount,DefUpCompCount[i+1])
+			CMov(FP,TempAtkUpCompCount,AtkUpCompCount[i+1])
+			CIfEnd()
+		end
+		AtkButtonsIndex = def_sIndex()
+		NJumpX(FP,AtkButtonsIndex,{TTCVar(FP,TempAtkUpCountChk[2],NotSame,TempAtkUpCount)})
+		NJumpX(FP,AtkButtonsIndex,{TTCVar(FP,TempAtkUpCompCountChk[2],NotSame,TempAtkUpCompCount)})
+		NIf(FP,{Never()})
+		NJumpXEnd(FP, AtkButtonsIndex)
+		CMov(FP,TempAtkUpCountChk,TempAtkUpCount)
+		CMov(FP,TempAtkUpCompCountChk,TempAtkUpCompCount)
+		local TempCalcV = CreateVar(FP)
+		CMov(FP,TempCalcV,TempAtkUpCount,9)
+		TriggerX(FP, {CV(TempCalcV,255,AtLeast)}, {SetV(TempCalcV,254)}, {preserved})
+		-- 255업 버튼
+		function RetSVA(ValueSV,Index)
+			TriggerX(FP,{CV(RetSigma,999,AtMost)},{SetCSVA1(SVA1(ValueSV,Index+10),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
+			TriggerX(FP,{CV(RetSigma,999999,AtMost)},{SetCSVA1(SVA1(ValueSV,Index+6),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
+			TriggerX(FP,{CV(RetSigma,999999999,AtMost)},{SetCSVA1(SVA1(ValueSV,Index+2),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
+			TriggerX(FP,{CV(RetSigma,999+1,AtLeast)},{SetCSVA1(SVA1(ValueSV,Index+10),SetTo,0x0D0D2C0D,0xFFFFFFFF)},{preserved})
+			TriggerX(FP,{CV(RetSigma,999999+1,AtLeast)},{SetCSVA1(SVA1(ValueSV,Index+6),SetTo,0x0D0D2C0D,0xFFFFFFFF)},{preserved})
+			TriggerX(FP,{CV(RetSigma,999999999+1,AtLeast)},{SetCSVA1(SVA1(ValueSV,Index+2),SetTo,0x0D0D2C0D,0xFFFFFFFF)},{preserved})
+			
+		end
+
+		RetSigma = f_Sigma(TempAtkUpCount,254,TempAtkFactor)
+		RetSVA(iStr9,22)
+		CS__ItoCustom(FP,SVA1(iStr9,22),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		RetSigma = f_Sigma(TempAtkUpCount,TempCalcV,TempAtkFactor)
+		RetSVA(iStr10,21)
+		CS__ItoCustom(FP,SVA1(iStr10,21),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__InputVA(FP,iTbl8,0,iStr9,iStr9s,nil,0,iStr9s)
+		CS__InputVA(FP,iTbl9,0,iStr10,iStr10s,nil,0,iStr10s)
+		NIfEnd()
+
+		HPButtonsIndex = def_sIndex()
+		NJumpX(FP,HPButtonsIndex,{TTCVar(FP,TempHPUpCountChk[2],NotSame,TempHPUpCount)})
+		NJumpX(FP,HPButtonsIndex,{TTCVar(FP,TempDefUpCompCountChk[2],NotSame,TempDefUpCompCount)})
+		NIf(FP,{Never()})
+		NJumpXEnd(FP, HPButtonsIndex)
+		CMov(FP,TempHPUpCountChk,TempHPUpCount)
+		CMov(FP,TempDefUpCompCountChk,TempDefUpCompCount)
+		CMov(FP,TempCalcV,TempHPUpCount,9)
+		TriggerX(FP, {CV(TempCalcV,255,AtLeast)}, {SetV(TempCalcV,254)}, {preserved})
+		
+		-- 255업 버튼
+		RetSigma = f_Sigma(TempHPUpCount,254,TempHPFactor)
+		RetSVA(iStr11,21)
+		CS__ItoCustom(FP,SVA1(iStr11,21),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		RetSigma = f_Sigma(TempHPUpCount,TempCalcV,TempHPFactor)
+		RetSVA(iStr12,20)
+		CS__ItoCustom(FP,SVA1(iStr12,20),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__InputVA(FP,iTbl10,0,iStr11,iStr11s,nil,0,iStr11s)
+		CS__InputVA(FP,iTbl11,0,iStr12,iStr12s,nil,0,iStr12s)
+		NIfEnd()
+
+	CIfEnd()
+
 	DTypeArr3 ={69,30,13}
 DTypeCondArr = {
 	CVar(FP, SelUID, Exactly, 121),
@@ -1111,12 +1199,13 @@ end
 	local CurUID = CreateVar(FP)
 	CIf(FP,{TTCVar(FP, CurUID[2], NotSame, SelUID)})
 	CMov(FP,CurUID,SelUID)
-	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,33)
+	
+	CS__SetValue(FP, Str3, MakeiStrVoid(20), 0xFFFFFFFF,43)
 	CIf(FP,{TMemoryX(_Add(SelUID,EPDF(0x664080)),Exactly,0x00,0x01)})
 	CIf(FP,{CV(SelPl,7)})
 		CIfX(FP, {TTOR(DTypeCondArr)
 		})
-			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,33)
+			CS__SetValue(FP, Str3, "\x08Destroy T\x04ype", 0xFFFFFFFF,43)
 		CElseX()
 		local SelWepID = CreateVar(FP)
 		local SelTmpUID = CreateVar(FP)
@@ -1131,9 +1220,9 @@ end
 		CMov(FP,SelWepID,0)
 		CMov(FP,SelWepID,Act_BRead(_Add(SelTmpUID,0x6636B8)))
 			CIfX(FP,{TBread(_Add(SelWepID,0x657258), Exactly, 0)})--N
-				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,33)
+				CS__SetValue(FP, Str3, "\x1DNormal T\x04ype", 0xFFFFFFFF,43)
 			CElseIfX({TBread(_Add(SelWepID,0x657258), Exactly, 2)})--%
-				CS__SetValue(FP, Str3, "\x1FSolidity T\x04ype", 0xFFFFFFFF,33)
+				CS__SetValue(FP, Str3, "\x1FSolidity T\x04ype", 0xFFFFFFFF,43)
 			CIfXEnd()
 
 		CIfXEnd()
@@ -1143,16 +1232,19 @@ end
 	CIfEnd()
 
 
+	CS__SetValue(FP,Str3,"00\x04,000\x04,000\x04,000\x04,000\x04,000\x04,000",nil,1)
+	CS__lItoCustom(FP, SVA1(Str3,0), TempW5, nil, 0xFFFFFF00,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},nil
+	,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 
-	CS__lItoCustom(FP, SVA1(Str3,0), TempW5, nil, 0xFFFF0000, {10,18}, 1, nil, "0")
+--	CS__lItoCustom(FP, SVA1(Str3,0), TempW5, nil, 0xFFFF0000, {10,18}, 1, nil, "0")
 	--CS__ItoCustom(FP,SVA1(Str3,0),SelHPV,nil,0xFFFF0000,{10,9},1,nil,"0",nil,{0,1,2,3,4,5,6,7,8,9})
-	CS__ItoCustom(FP,SVA1(Str3,10),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
+	CS__ItoCustom(FP,SVA1(Str3,20),SelSh,nil,0xFFFF0000,{10,5},1,{"\x0D","\x0D","\x0D","0","0"},nil,nil,{25-12,26-12,27-12,28-12,30-12})
 	TBLN1T = {}
 	TBLN2T = {}
 	TBLN1T1 = {}
 	TBLN1T2 = {}
 	TBLN1T3 = {}
-	for i = 0, 19 do
+	for i = 0, 29 do
 --			table.insert(TBLN1T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 --			table.insert(TBLN2T, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
 		table.insert(TBLN1T1, SetCSVA1(SVA1(Str3,i),SetTo,0x07,0xFF))
@@ -1160,11 +1252,11 @@ end
 		table.insert(TBLN1T3, SetCSVA1(SVA1(Str3,i),SetTo,0x08,0xFF))
 	end
 	for i = 0, 3 do
-		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,25+i-2),SetTo,0x1C,0xFF))
-		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,25+i-2),SetTo,0x1F,0xFF))
+		table.insert(TBLN1T, SetCSVA1(SVA1(Str3,35+i-2),SetTo,0x1C,0xFF))
+		table.insert(TBLN2T, SetCSVA1(SVA1(Str3,35+i-2),SetTo,0x1F,0xFF))
 	end
-	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,30-2),SetTo,0x1C,0xFF))
-	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,30-2),SetTo,0x1F,0xFF))
+	table.insert(TBLN1T, SetCSVA1(SVA1(Str3,40-2),SetTo,0x1C,0xFF))
+	table.insert(TBLN2T, SetCSVA1(SVA1(Str3,40-2),SetTo,0x1F,0xFF))
 
 	TriggerX(FP,{CV(PercentCalc,2,AtLeast)},TBLN1T1,{preserved})
 	TriggerX(FP,{CV(PercentCalc,1)},TBLN1T2,{preserved})
