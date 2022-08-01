@@ -11,8 +11,8 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,20,FP)
-	local HPExceed = Create_VTable(7,7,FP)	
+	local AtkExceed = Create_VTable(7,32,FP)
+	local HPExceed = Create_VTable(7,16,FP)	
 	local ShUp = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
@@ -42,7 +42,7 @@ function PlayerInterface()
 	local MCoolDownP = CreateVarArr(7,FP)
 	local AtkUpCount = CreateVarArr(7, FP)
 	local HPUpCount = CreateVarArr(7, FP)
-	local MCoolDownCost = Create_VTable(7,100,FP)
+	local MCoolDownCost = Create_VTable(7,P_MCooldown,FP)
 	
 	local NsW = CreateCcode()
 	
@@ -850,7 +850,7 @@ end
 			CIfXEnd()
 		CIfEnd()
 		CIfEnd()
-		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x07구입 성공, \x08공격\x1F속도 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],100),SubV(MCoolDown[i+1],256+65536)})
+		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x07구입 성공, \x08공격\x1F속도 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],P_MCooldown),SubV(MCoolDown[i+1],256+65536)})
 		CIfEnd()
 		CIfEnd()--ShopEnd
 

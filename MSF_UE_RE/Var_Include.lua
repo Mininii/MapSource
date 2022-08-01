@@ -21,6 +21,7 @@ function Objects()
 	P_AtkExceed = 10
 	P_HPExceed = 25
 	P_ShUpgrade = 15
+	P_MCooldown = 20
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 

@@ -149,17 +149,24 @@ function LevelUp()
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})
+		CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})-- 싱글플레이 포인트 없음
 		CMov(FP,GetP,0)
 		CElseX()
-		CMov(FP,GetP,_Div(Level, 10),1)
+		CMov(FP,GetP,_Div(Level, 10),1) -- 포인트 공식 : P = (Level//10)+1
 		CIfXEnd()
-		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
+
+		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)}) -- 보스 스테이지 클리어시 추가포인트
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
+
 		f_Mul(FP,GetP,_Mov(2))
+		
+		CIf(FP,CVar(FP,LevelT[2],Exactly,0))--10렙 클리어시 추가포인트
+			f_Mul(FP,GetP,_Mov(2))
+		CIfEnd()
+
 		CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
-			f_Mul(FP,GetP,MulPoint)
+			f_Mul(FP,GetP,MulPoint)--추가 포인트 지급
 		CIfEnd()
 		
 		
