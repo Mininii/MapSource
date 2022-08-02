@@ -2039,8 +2039,10 @@ function CB_TCopy(Shape,RetShape)
 		}
 	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
 end
-function CRandNum(PlayerID,Bit,DestV) -- 경량화 랜덤숫자 생성기
-	DoActionsX(PlayerID,{SetNVar(DestV,SetTo,0)})
+function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
+	if ResetFlag == nil then
+		DoActionsX(PlayerID,{SetNVar(DestV,SetTo,0)})
+	end
 	for i = 0, Bit do
 		DoActions(PlayerID,{SetSwitch("Switch 100",Random)})
 		TriggerX(PlayerID,{Switch("Switch 255",Set)},{SetNVar(DestV,Add,2^i)},{preserved})

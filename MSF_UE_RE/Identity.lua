@@ -1,7 +1,7 @@
 function Install_IdenBoss()
 
 
-	-- Boss : Tarim, Lord Of Regal Castle, Made By Ninfia. Arrenged By Mininii
+	-- B_Id_C : Tarim, Lord Of Regal Castle, Made By Ninfia. Arrenged By Mininii
 	-- from MSF Identity OpenSource
 	-- Thanks to Ninfia
 	--------0x58F55C : BossCunit
@@ -13,6 +13,9 @@ Id_T3C = CreateCcode()
 Id_T4C = CreateCcode()
 Id_T5C = CreateCcode()
 StoryT2 = CreateCcode()
+Type = CreateVar(FP)
+Seed = CreateVar(FP)
+Check = CreateVar(FP)
 function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
 	if StoryCcode == nil then
 		StoryCcode = StoryT
@@ -80,7 +83,8 @@ f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
 	CreateUnit(1,68,29,FP),
 	SetInvincibility(Enable,"Tarim, Lord Of Regal Castle", FP, 64),
-	TSetMemory(B_Id_C,SetTo,Nextptrs),
+	SetV(B_Id_C,Nextptrs),
+	--TSetMemory(B_Id_C,SetTo,Nextptrs),
 	TSetMemory(0x58F558,SetTo,7),
 	SetCVar(FP,ReserveBGM[2],SetTo,IdenBGM),
 	TSetMemory(_Add(Nextptrs,2),SetTo,_Add(_Mul(PCheckV,_Mov(500*256)),_Mov(1000*256))),
@@ -99,6 +103,96 @@ CIfEnd()
 
 CIf(FP,NTCond())
 CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw2[2],SetTo,0))
+
+
+	CIf(FP,{CV(B_Id_C,19025,AtLeast)})
+		CTrigger(FP,{TMemory(_Add(B_Id_C,2,AtMost,100*256))},{TSetMemory(_Add(B_Id_C,2),Add,770*256)},1)
+		CTrigger(FP,{Void(41,Exactly, 1)},{TSetMemory(_Add(B_Id_C,13),SetTo,427)},1)
+		CTrigger(FP,{Void(41,Exactly, 2)},{TSetMemory(_Add(B_Id_C,13),SetTo,640)},1)
+		CTrigger(FP,{Void(41,Exactly, 3)},{TSetMemory(_Add(B_Id_C,13),SetTo,853)},1)
+		CTrigger(FP,{Void(41,Exactly, 4)},{TSetMemory(_Add(B_Id_C,13),SetTo,1280)},1)
+	CIfEnd()
+	
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),Memory(0x58F564,Exactly,0),Switch("Switch 34",Cleared)},{SetV(Check,0)},{preserved})
+	CIf(FP,{Memory(0x58F564,Exactly,1),CV(Check,0)},{SetV(Check,1)})
+	CRandNum(FP,15,Seed)
+
+	TriggerX(FP,{CV(Seed,0,AtLeast),CV(Seed,2730*1,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051234)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*1+1,AtLeast),CV(Seed,2730*2,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051243)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*2+1,AtLeast),CV(Seed,2730*3,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051324)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*3+1,AtLeast),CV(Seed,2730*4,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051342)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*4+1,AtLeast),CV(Seed,2730*5,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051423)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*5+1,AtLeast),CV(Seed,2730*6,AtMost)},{SetMemory(0x58F56C,SetTo,0x00051432)},{preserved})
+
+	TriggerX(FP,{CV(Seed,2730*6+1,AtLeast),CV(Seed,2730*7,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052134)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*7+1,AtLeast),CV(Seed,2730*8,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052143)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*8+1,AtLeast),CV(Seed,2730*9,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052314)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*9+1,AtLeast),CV(Seed,2730*10,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052341)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*10+1,AtLeast),CV(Seed,2730*11,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052413)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*11+1,AtLeast),CV(Seed,2730*12,AtMost)},{SetMemory(0x58F56C,SetTo,0x00052431)},{preserved})
+
+	TriggerX(FP,{CV(Seed,2730*12+1,AtLeast),CV(Seed,2730*13,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053124)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*13+1,AtLeast),CV(Seed,2730*14,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053142)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*14+1,AtLeast),CV(Seed,2730*15,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053214)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*15+1,AtLeast),CV(Seed,2730*16,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053241)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*16+1,AtLeast),CV(Seed,2730*17,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053124)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*17+1,AtLeast),CV(Seed,2730*18,AtMost)},{SetMemory(0x58F56C,SetTo,0x00053142)},{preserved})
+
+	TriggerX(FP,{CV(Seed,2730*18+1,AtLeast),CV(Seed,2730*19,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054123)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*19+1,AtLeast),CV(Seed,2730*20,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054132)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*20+1,AtLeast),CV(Seed,2730*21,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054213)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*21+1,AtLeast),CV(Seed,2730*22,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054231)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*22+1,AtLeast),CV(Seed,2730*23,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054312)},{preserved})
+	TriggerX(FP,{CV(Seed,2730*23+1,AtLeast),CV(Seed,65535,AtMost)},{SetMemory(0x58F56C,SetTo,0x00054321)},{preserved})
+
+	CIfEnd()
+
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),MemoryX(0x58F56C,Exactly,1*1,0xF)},{SetV(Type,1)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,1),MemoryX(0x58F56C,Exactly,1*16,0xF0)},{SetV(Type,1)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,2),MemoryX(0x58F56C,Exactly,1*256,0xF00)},{SetV(Type,1)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,1*4096,0xF000)},{SetV(Type,1)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,1*65536,0xF0000)},{SetV(Type,1)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),MemoryX(0x58F56C,Exactly,2*1,0xF)},{SetV(Type,2)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,1),MemoryX(0x58F56C,Exactly,2*16,0xF0)},{SetV(Type,2)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,2),MemoryX(0x58F56C,Exactly,2*256,0xF00)},{SetV(Type,2)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,2*4096,0xF000)},{SetV(Type,2)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,2*65536,0xF0000)},{SetV(Type,2)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),MemoryX(0x58F56C,Exactly,3*1,0xF)},{SetV(Type,3)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,1),MemoryX(0x58F56C,Exactly,3*16,0xF0)},{SetV(Type,3)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,2),MemoryX(0x58F56C,Exactly,3*256,0xF00)},{SetV(Type,3)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,3*4096,0xF000)},{SetV(Type,3)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,3*65536,0xF0000)},{SetV(Type,3)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),MemoryX(0x58F56C,Exactly,4*1,0xF)},{SetV(Type,4)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,1),MemoryX(0x58F56C,Exactly,4*16,0xF0)},{SetV(Type,4)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,2),MemoryX(0x58F56C,Exactly,4*256,0xF00)},{SetV(Type,4)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,4*4096,0xF000)},{SetV(Type,4)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,4*65536,0xF0000)},{SetV(Type,4)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,0),MemoryX(0x58F56C,Exactly,5*1,0xF)},{SetV(Type,5)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,1),MemoryX(0x58F56C,Exactly,5*16,0xF0)},{SetV(Type,5)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,2),MemoryX(0x58F56C,Exactly,5*256,0xF00)},{SetV(Type,5)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,5*4096,0xF000)},{SetV(Type,5)},{preserved})
+	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,5*65536,0xF0000)},{SetV(Type,5)},{preserved})
+	CIf(FP,{Memory(0x58F564,Exactly,1)})
+		Trigger(FP,{Void(41, Exactly, 1)},{SetV(Seed,400)},{preserved})
+		Trigger(FP,{Void(41, Exactly, 2)},{SetV(Seed,500)},{preserved})
+		Trigger(FP,{Void(41, Exactly, 3)},{SetV(Seed,600)},{preserved})
+		Trigger(FP,{Void(41, Exactly, 4)},{SetV(Seed,800)},{preserved})
+		CRandNum(FP,11,Seed,1)
+		CDoActions(FP,{TSetMemory(0x6CA1F4, SetTo, Seed),TSetMemoryX(0x6C9DF4, SetTo, _Mul(_Div(Seed,10),65536),0xFFFF0000)})
+	CIfEnd()
+
+	TriggerX(FP,{CV(Type,1)},{SetMemoryX(0x669FAC, SetTo, 13*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
+	TriggerX(FP,{CV(Type,2)},{SetMemoryX(0x669FAC, SetTo, 16*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
+	TriggerX(FP,{CV(Type,3)},{SetMemoryX(0x669FAC, SetTo, 17*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
+	TriggerX(FP,{CV(Type,4)},{SetMemoryX(0x669FAC, SetTo, 10*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
+	TriggerX(FP,{CV(Type,5)},{SetMemoryX(0x669FAC, SetTo, 12*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
+EUDEndIf()
+CDoActions(FP,{SetMemory(0x594000+4*42,SetTo,Type)})
+
+
+
+
+
 CMov(FP,VO(41),LevelT2) -- Diff
 DoActions2(FP,{
 	Simple_SetLoc(0,0,0,32*96,5),
@@ -1815,6 +1909,9 @@ SetVoid(4,SetTo,0);
 SetVoid(5,SetTo,0);
 SetVoid(6,SetTo,0);
 SetVoid(42,SetTo,0);
+SetV(Type,0),
+SetV(Seed,0),
+SetV(Check,0),
 })
 CIfXEnd()
 CIfEnd()
