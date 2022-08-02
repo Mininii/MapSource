@@ -13,15 +13,106 @@ function Install_Roka7Boss()
 	VONM = (SHIndex-1)*5
 	SHLX = 2480+4736        
 	SHLY = 1256
-	local XColor = CreateVar() local XColor = XColor[2]
-	local XType = CreateVar() local XType = XType[2]
-	local XTemp = CreateVar() local XTemp = XTemp[2]
-	B5_XY = CreateVar()
-	B5_YZ = CreateVar()
-	B5_ZX = CreateVar()
+	local XColor = CreateVar(FP) local XColor = XColor[2]
+	local XType = CreateVar(FP) local XType = XType[2]
+	local XTemp = CreateVar(FP) local XTemp = XTemp[2]
+	local B5_XY = CreateVar(FP)
+	local B5_YZ = CreateVar(FP)
+	local B5_ZX = CreateVar(FP)
+	local F2BHP = CreateVar(FP)
+	local F2BSH = CreateVar(FP)
+	local F2BDX = CreateVar(FP)
+	local F2BDT = CreateVar(FP)
+	local F2BDY = CreateVar(FP)
+	local F2BRT = CreateVar(FP)
+	local F2BRU = CreateVar(FP)
+	local F2BRS = CreateVar(FP)
+	local F2BRV = CreateVar(FP)
+	local F2BSD = CreateVar(FP)
+
+	local F2XT1 = CreateVar(FP)
+	local F2XT2 = CreateVar(FP)
+	local F2XT3 = CreateVar(FP)
+
+	local F1Del2 = CreateVar(FP)
+	local Seed2 = CreateVar(FP)
+	local CunitX2 = CreateVar(FP)
+	local CunitX219 = CreateVar(FP)
+	local CunitX225 = CreateVar(FP)
 
 
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
+	CIf(FP,{CV(B_5_C,1,AtLeast)})
+		
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 3333*256, 0),CV(F2BHP,0),CV(F2BSH,0)},{SetV(F2BSH,1),SetMemory(0x58F518,SetTo,1)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 2000*256, 0),CV(F2BHP,0),CV(F2BSH,1)},{SetV(F2BSH,2),SetMemory(0x58F518,SetTo,2)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 5000*256, 0),CV(F2BHP,1),CV(F2BSH,2)},{SetV(F2BSH,3),SetMemory(0x58F518,SetTo,3)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 4000*256, 0),CV(F2BHP,1),CV(F2BSH,3)},{SetV(F2BSH,4),SetMemory(0x58F518,SetTo,4)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 2600*256, 0),CV(F2BHP,1),CV(F2BSH,4)},{SetV(F2BSH,5),SetMemory(0x58F518,SetTo,5)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 1300*256, 0),CV(F2BHP,1),CV(F2BSH,5)},{SetV(F2BSH,6),SetMemory(0x58F518,SetTo,6)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 1300*256, 0),CV(F2BHP,2),CV(F2BSH,6)},{SetV(F2BSH,7),SetMemory(0x58F518,SetTo,7)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 650*256, 0),CV(F2BHP,0)},{SetV(F2BHP,1),TSetDeaths(B_5_C+2,SetTo,5555*256,0),SetMemory(0x58F51C,SetTo,1)},1)
+	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 650*256, 0),CV(F2BHP,1)},{SetV(F2BHP,2),TSetDeaths(B_5_C+2,SetTo,2000*256,0),SetMemory(0x58F51C,SetTo,2)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,1)},{SetV(F2BRU,36*1),TSetDeaths(B_5_C+13,SetTo,640,0),TSetDeathsX(B_5_C+18,SetTo,27,0,0xFFFF)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,2)},{SetV(F2BRU,36*4),TSetDeaths(B_5_C+13,SetTo,853,0),TSetDeathsX(B_5_C+18,SetTo,27,0,0xFFFF)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,3)},{SetV(F2BRU,36*7),TSetDeaths(B_5_C+13,SetTo,1024,0),TSetDeathsX(B_5_C+18,SetTo,67,0,0xFFFF)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,4)},{SetV(F2BRU,36*10),TSetDeaths(B_5_C+13,SetTo,1280,0),TSetDeathsX(B_5_C+18,SetTo,160,0,0xFFFF)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,1)},{SetV(F2XT2,18*1),SetV(F2XT3,36*61)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,2)},{SetV(F2XT2,18*2),SetV(F2XT3,36*53)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,3)},{SetV(F2XT2,18*3),SetV(F2XT3,36*45)},1)
+	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,4)},{SetV(F2XT2,18*4),SetV(F2XT3,36*37)},1)
+	CTrigger(FP,{TDeathsX(B_5_C+19, AtMost, 0*256, 0,0xFF00)},{SetV(B_5_C,0)})
+
+	
+	CIf(FP,CV(F2BRS,0),SetV(F2BSD,72))--Random
+	CRandNum(FP,10,F2BSD)
+	DoActionsX(FP,{SetV(F2BRS,1)})
+	CMov(FP,F2BRT,F2BSD)
+	CIfEnd()
+
+	CIf(FP,{CV(F2BRV,0)})
+	f_Read(FP,_Add(B_5_C,2),F2BDX)
+	CSub(FP,F2BDT,F2BDY,F2BDX)
+	CIf(FP,{TTOR({_TNVar(F2BRT, AtMost, F2BRU),_TNVar(F2XT1, AtMost, F2XT2)})})
+		CIf(FP,{CV(F2BDT,1*256,AtLeast),CV(F2BDT,0x7FFFFFFF,AtMost)},{
+			SetMemory(0x58DC60,SetTo,0),
+			SetMemory(0x58DC64,SetTo,0),
+			SetMemory(0x58DC68,SetTo,640),
+			SetMemory(0x58DC6C,SetTo,640),
+			MoveLocation(1, 87,P8,"Anywhere")})
+			TriggerX(FP,{CV(F2BDT,640*256,AtLeast)},{SubV(F2BDT,640*256),KillUnitAt(64,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,320*256,AtLeast)},{SubV(F2BDT,320*256),KillUnitAt(32,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,160*256,AtLeast)},{SubV(F2BDT,160*256),KillUnitAt(16,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,80*256,AtLeast)},{SubV(F2BDT,80*256),KillUnitAt(8,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,40*256,AtLeast)},{SubV(F2BDT,40*256),KillUnitAt(4,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,20*256,AtLeast)},{SubV(F2BDT,20*256),KillUnitAt(2,"Men",1,Force1)},{preserved})
+			TriggerX(FP,{CV(F2BDT,10*256,AtLeast)},{SubV(F2BDT,10*256),KillUnitAt(1,"Men",1,Force1)},{preserved})
+			CDoActions(FP,{TSetDeaths(B_5_C+2,SetTo,F2BDY,0)})
+		CIfEnd()
+	CIfEnd()
+	CMov(FP,F2BDY,F2BDX)
+	CMov(FP,F2BRV,12)
+	CIfEnd()
+	CTrigger(FP,{CV(F2BRV,1,AtLeast)},{SubV(F2BRV,1)},1)
+	CTrigger(FP,{CV(F2BRT,61*36,AtLeast)},{SetV(F2BRT,0)},1)
+	CTrigger(FP,{CV(F2XT1,F2XT3,AtLeast)},{SetV(F2XT1,0)},1)
+	DoActionsX(FP,{
+		AddV(F2BRT,1),
+		AddV(F2XT1,1),
+	})
+	CIfEnd()
+
+
+	CIf(FP,{Memory(0x594000+4*1545,AtLeast,1),Memory(0x594000+4*1545,AtMost,4)})
+		CTrigger(FP,{Memory(0x58F524,Exactly,2),CV(F1Del2,0)},{SetCp(7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog", 64),SetMemoryX(0x66370C, SetTo, 130*1,0xFF)},1)
+		CTrigger(FP,{Memory(0x58F524,Exactly,2)},{AddV(F1Del2,1)},1)
+		CTrigger(FP,{Memory(0x58F524,Exactly,2),CV(F1Del2,24*3,AtLeast)},{SetV(F1Del2,0),SetMemory(0x58F524,SetTo,3),SetMemoryX(0x66370C, SetTo, 124*1,0xFF)},1)
+		CTrigger(FP,{Memory(0x58F524,Exactly,3),Command(P8,Exactly,0,84)},{SetMemory(0x58F524,SetTo,4),KillUnit(84,P8)},1)
+
+	CIfEnd()
+	
+
+
 	DoActions(FP,{RemoveUnit(203,FP),RemoveUnit(204,FP)})
 	CMov(FP,VO(41),LevelT2) -- Diff
 	Trigger2(FP,{Memory(0x58F524,Exactly,3)},{
@@ -34,6 +125,8 @@ function Install_Roka7Boss()
 	Simple_SetLoc(0,0,0,5,6144),
 	RemoveUnitAt(All,84,1,FP);},{preserved})
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)})
+
+
 	
 	
 	CJump(FP,11)
@@ -71,8 +164,8 @@ end
 	
 	X1func2 = SetCallForward()
 	SetCall(FP)
-	B5_V1 = CreateVar()
-	B5_V2 = CreateVar()
+	B5_V1 = CreateVar(FP)
+	B5_V2 = CreateVar(FP)
 	
 	CIf(FP,CVar("X",B5_V1[2],Exactly,0))
 		CIfX(FP,CVar("X",XColor,Exactly,0))
@@ -2465,13 +2558,13 @@ end
 		CIfXEnd()
 		]]--
 		
-	local Del = CreateVar()
-	local Loc = CreateVar()
-	local Num = CreateVar()
-	local LocX = CreateVar()
-	local LocY = CreateVar()
-	local F1LocX = CreateVar()
-	local F1LocY = CreateVar()
+	local Del = CreateVar(FP)
+	local Loc = CreateVar(FP)
+	local Num = CreateVar(FP)
+	local LocX = CreateVar(FP)
+	local LocY = CreateVar(FP)
+	local F1LocX = CreateVar(FP)
+	local F1LocY = CreateVar(FP)
 	
 		CIf(FP,{Memory(0x594000+4*1545,AtLeast,1),Memory(0x594000+4*1545,AtMost,4),Memory(0x58F524,Exactly,3)})
 			TriggerX(FP,{Memory(0x594000+4*1545,Exactly,2)},{SetMemoryX(0x66A054, SetTo, 17*0x01010100,0xFFFFFF00)},{preserved})
@@ -3018,28 +3111,77 @@ end
 	CIfEnd()
 
 
-	CMov(FP,0x6509B0,19025+19)
-	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 
-	CIf(FP,DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00))
-	CAdd(FP,0x6509B0,6)
+	CunitCtrig_Part1(FP)
 
-	Trigger2(FP,{
+	local PN1 = def_sIndex()
+	local PN2 = def_sIndex()
+	local PN3 = def_sIndex()
+
+	NJump(FP, PN2,{DeathsX(CurrentPlayer,Exactly,84,0,0xFF),Memory(0x594000+4*1545,Exactly,1),Memory(0x58F524,Exactly,2),CV(F1Del2,0)},{SetV(Seed2,-128)} )
+	NJump(FP, PN1,{DeathsX(CurrentPlayer,Exactly,84,0,0xFF),Memory(0x594000+4*1545,Exactly,2),Memory(0x58F524,Exactly,2),CV(F1Del2,0)} )
+	NJump(FP, PN3,{DeathsX(CurrentPlayer,Exactly,84,0,0xFF),Memory(0x594000+4*1545,AtLeast,3),Memory(0x594000+4*1545,AtMost,4),Memory(0x58F524,Exactly,2),CV(F1Del2,0)},{SetV(Seed2,0)} )
+
+	BreakCalc({
 		DeathsX(CurrentPlayer,AtLeast,203,0,0xFF),
 		DeathsX(CurrentPlayer,AtMost,204,0,0xFF),
-	},{
-		SetMemory(0x6509B0,Add,55-25),
-		SetDeathsX(CurrentPlayer,SetTo,0x200104,0,0x300104),
-		SetMemory(0x6509B0,Add,2),
-		SetDeaths(CurrentPlayer,SetTo,0,0),
-		SetMemory(0x6509B0,Add,25-57),
-	},{preserved})
+	}, {
+	SetMemory(0x6509B0,Add,55-25),
+	SetDeathsX(CurrentPlayer,SetTo,0x200104,0,0x300104),
+	SetMemory(0x6509B0,Add,2),
+	SetDeaths(CurrentPlayer,SetTo,0,0),
+	SetMemory(0x6509B0,Add,25-57)})
+	ClearCalc()
+	NJumpEnd(FP, PN1)
+	CRandNum(FP,8,Seed2,1)
+		DoActions(FP,{SetSwitch("Switch 100",Random)})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,1)},{AddV(Seed2,128)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,2)},{AddV(Seed2,256)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,3)},{AddV(Seed2,384)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,4)},{AddV(Seed2,512)},{preserved})
+		DoActions(FP,{SetSwitch("Switch 100",Random)})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,1)},{AddV(Seed2,256)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,2)},{AddV(Seed2,512)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,3)},{AddV(Seed2,768)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,4)},{AddV(Seed2,1024)},{preserved})
+		CDoActions(FP,{SetMemory(0x6509B0, Subtract, 12),TSetDeaths(CurrentPlayer,SetTo,Seed2,0)})
+	ClearCalc()
+	NJumpEnd(FP, PN2)
+		TriggerX(FP,{Memory(0x594000+4*41,Exactly,1)},{SetV(Seed2,1536)},{preserved})
+		TriggerX(FP,{Memory(0x594000+4*41,Exactly,2)},{SetV(Seed2,1280)},{preserved})
+		TriggerX(FP,{Memory(0x594000+4*41,Exactly,3)},{SetV(Seed2,1024)},{preserved})
+		TriggerX(FP,{Memory(0x594000+4*41,Exactly,4)},{SetV(Seed2,768)},{preserved})
+		CRandNum(FP,11,Seed2,1)
+		CDoActions(FP,{SetMemory(0x6509B0, Subtract, 12),TSetDeaths(CurrentPlayer,SetTo,Seed2,0)})
+	ClearCalc()
+	NJumpEnd(FP, PN3)
+	CRandNum(FP,10,Seed2,1)
+		DoActions(FP,{SetSwitch("Switch 100",Random)})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,1)},{AddV(Seed2,256+1024)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,2)},{AddV(Seed2,512+1024)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,3)},{AddV(Seed2,768+1021)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,4)},{AddV(Seed2,1024+1024)},{preserved})
+		DoActions(FP,{SetSwitch("Switch 100",Random)})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,1)},{AddV(Seed2,256)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,2)},{AddV(Seed2,512)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,3)},{AddV(Seed2,768)},{preserved})
+		TriggerX(FP,{Switch("Switch 100",Set),Memory(0x594000+4*41,Exactly,4)},{AddV(Seed2,1024)},{preserved})
+		CDoActions(FP,{SetMemory(0x6509B0, Subtract, 12),TSetDeaths(CurrentPlayer,SetTo,Seed2,0)})
+	ClearCalc()
 
-	CSub(FP,0x6509B0,6)
-	CIfEnd()
-	CAdd(FP,0x6509B0,84)
-	CWhileEnd()
 	
+	
+	CunitCtrig_Part2()
+	CunitCtrig_Part3X()
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+	CunitCtrig_Part4X(i,{
+		DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
+		DeathsX(EPDF(0x628298-0x150*i+(19*4)),Exactly,7,0,0xFF),
+		--DeathsX(EPDF(0x628298-0x150*i+(25*4)),Exactly,84,0,0xFF),
+	},
+	{MoveCp(Add,25*4)})
+	end
+	CunitCtrig_End()
 	
 	
 	
@@ -3077,6 +3219,28 @@ end
 	for j, k in pairs(VTable) do
 		table.insert(roka7ResetTable,(SetCVar(FP,k,SetTo,0)))
 	end
+	
+	table.insert(roka7ResetTable,SetV(F2BSH,0))
+	table.insert(roka7ResetTable,SetV(F1Del2,0))
+	table.insert(roka7ResetTable,SetV(Seed2,0))
+	table.insert(roka7ResetTable,SetV(CunitX2,0))
+	table.insert(roka7ResetTable,SetV(CunitX219,0))
+	table.insert(roka7ResetTable,SetV(CunitX225,0))
+	table.insert(roka7ResetTable,SetV(F2BHP,0))
+	table.insert(roka7ResetTable,SetV(F2BSH,0))
+	table.insert(roka7ResetTable,SetV(F2BDX,0))
+	table.insert(roka7ResetTable,SetV(F2BDT,0))
+	table.insert(roka7ResetTable,SetV(F2BDY,0))
+	table.insert(roka7ResetTable,SetV(F2BRT,0))
+	table.insert(roka7ResetTable,SetV(F2BRU,0))
+	table.insert(roka7ResetTable,SetV(F2BRS,0))
+	table.insert(roka7ResetTable,SetV(F2BRV,0))
+	table.insert(roka7ResetTable,SetV(F2BSD,0))
+	table.insert(roka7ResetTable,SetV(F2XT1,0))
+	table.insert(roka7ResetTable,SetV(F2XT2,0))
+	table.insert(roka7ResetTable,SetV(F2XT3,0))
+	table.insert(roka7ResetTable,SetV(B_5_C,0))
+
 	DoActions2X(FP,roka7ResetTable)
 	DoActions(FP,{
 		SetMemory(0x58F524,SetTo,0);

@@ -108,13 +108,18 @@ end
 
 function onInit_EUD()
 	local ShTStrPtr = Create_VTable(7)
+	local VoidResetPtr = CreateVar2(FP, nil, nil, EPD(0x58F44A))
 	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SetMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
+	CWhile(FP,CV(VoidResetPtr,EPD(0x5967E8),AtMost))
+		CDoActions(FP,{TSetDeaths(VoidResetPtr,SetTo,0,0),AddV(VoidResetPtr,1)})
+	CWhileEnd()
+
 --	f_Read(FP,0x58F500,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F504,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F508,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F50C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	--f_Read(FP,0x58F510,"X",UnitDataPtr) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
-	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+--	f_Read(FP,0x58F528,"X",B_5_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 --	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	--f_Read(FP,0x58F55C,"X",B_Id_C) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 	

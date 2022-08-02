@@ -45,27 +45,27 @@ function LevelUp()
 			KillUnitAt(All,125,19,Force1),})
 			CIfX(FP, {Never()})
 			-- 보스소환 테스트
-			if Limit == 1 then
-				
-		        CElseIfX({CD(TestMode,1)})
-				
-				CIf(FP,Memory(0x628438,AtLeast,1))
-					f_Read(FP,0x628438,nil,Boss6Ptr,0xFFFFFF)
-					CMov(FP,CunitIndex,_Div(_Sub(Boss6Ptr,19025),_Mov(84)))
-					local TempHP1, TempHP2 = CreateVars(2,FP)
-					
-					f_LMov(FP,{TempHP1, TempHP2},"82512384594432") --322322322322
-					CDoActions(FP,{
-						Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
-						Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempHP1),
-						Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempHP2),
-						SetMemoryX(0x669FB4, SetTo, 16777216*17,0xFFFFFFFF),
-						KillUnitAt(All,"Men","Center",Force1),
-						CreateUnit(1,186,64,FP),
-						SetCDeaths(FP,Add,1,isBossStage),
-						TSetMemory(_Add(Boss6Ptr,2),SetTo,8320000*256),
-					})
-				CIfEnd()
+			--if Limit == 1 then
+			--	
+		    --    CElseIfX({CD(TestMode,1)})
+			--	
+			--	CIf(FP,Memory(0x628438,AtLeast,1))
+			--		f_Read(FP,0x628438,nil,Boss6Ptr,0xFFFFFF)
+			--		CMov(FP,CunitIndex,_Div(_Sub(Boss6Ptr,19025),_Mov(84)))
+			--		local TempHP1, TempHP2 = CreateVars(2,FP)
+			--		
+			--		f_LMov(FP,{TempHP1, TempHP2},"82512384594432") --322322322322
+			--		CDoActions(FP,{
+			--			Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+			--			Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempHP1),
+			--			Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempHP2),
+			--			SetMemoryX(0x669FB4, SetTo, 16777216*17,0xFFFFFFFF),
+			--			KillUnitAt(All,"Men","Center",Force1),
+			--			CreateUnit(1,186,64,FP),
+			--			SetCDeaths(FP,Add,1,isBossStage),
+			--			TSetMemory(_Add(Boss6Ptr,2),SetTo,8320000*256),
+			--		})
+			--	CIfEnd()
 		--        CIfX(FP,{TTOR({CVar(FP,LevelT[2],Exactly,1),CVar(FP,LevelT[2],Exactly,3),CVar(FP,LevelT[2],Exactly,5),CVar(FP,LevelT[2],Exactly,7),CVar(FP,LevelT[2],Exactly,9)})})
 		--        
 	
@@ -74,7 +74,7 @@ function LevelUp()
 	
 	
 	
-			end
+			--end
 			CElseIfX({CVar(FP,LevelT[2],Exactly,2)})
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT),
 				SetCDeaths(FP,Add,1,isBossStage),})
@@ -87,7 +87,8 @@ function LevelUp()
 					CDoActions(FP,{
 						KillUnitAt(All,"Men",29,Force1),
 						CreateUnit(1,87,29,FP),
-						TSetMemory(B_5_C,SetTo,Nextptrs),
+						SetV(B_5_C,Nextptrs),
+						--TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
 						TSetMemory(_Add(Nextptrs,2),SetTo,6000*256),
 						SetCDeaths(FP,Add,1,isBossStage),
