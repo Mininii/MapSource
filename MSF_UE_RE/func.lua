@@ -413,7 +413,7 @@ end
 function f_CRandNum(Max,Operand,Condition)
 	if Operand == nil then Operand = 0 end
 	local RandRet = TempRandRet
-	CallTriggerX(FP,CRandNum,Condition,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
+	CallTriggerX(FP,Call_CRandNum,Condition,{SetCVar(FP,InputMaxRand[2],SetTo,Max),SetCVar(FP,Oprnd[2],SetTo,Operand)})
 	return RandRet
 end
 
@@ -2038,4 +2038,13 @@ function CB_TCopy(Shape,RetShape)
 			flag = {preserved}
 		}
 	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
+end
+function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
+	if ResetFlag == nil then
+		DoActionsX(PlayerID,{SetNVar(DestV,SetTo,0)})
+	end
+	for i = 0, Bit do
+		DoActions(PlayerID,{SetSwitch("Switch 100",Random)})
+		TriggerX(PlayerID,{Switch("Switch 255",Set)},{SetNVar(DestV,Add,2^i)},{preserved})
+	end
 end
