@@ -1,10 +1,10 @@
 function Install_IdenBoss()
 
 
-	-- B_Id_C : Tarim, Lord Of Regal Castle, Made By Ninfia. Arrenged By Mininii
+	-- Tarim, Lord Of Regal Castle, Made By Ninfia. Arrenged By Mininii
 	-- from MSF Identity OpenSource
 	-- Thanks to Ninfia
-	--------0x58F55C : BossCunit
+	--------B_Id_C : 0x58F55C : BossCunit
 	--"CLoc109" : 30
 Id_T0C = CreateCcode()
 Id_T1C = CreateCcode()
@@ -106,7 +106,7 @@ CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw
 
 
 	CIf(FP,{CV(B_Id_C,19025,AtLeast)})
-		CTrigger(FP,{TMemory(_Add(B_Id_C,2,AtMost,100*256))},{TSetMemory(_Add(B_Id_C,2),Add,770*256)},1)
+		CTrigger(FP,{TMemory(_Add(B_Id_C,2),AtMost,100*256)},{TSetMemory(_Add(B_Id_C,2),Add,770*256)},1)
 		CTrigger(FP,{Void(41,Exactly, 1)},{TSetMemory(_Add(B_Id_C,13),SetTo,427)},1)
 		CTrigger(FP,{Void(41,Exactly, 2)},{TSetMemory(_Add(B_Id_C,13),SetTo,640)},1)
 		CTrigger(FP,{Void(41,Exactly, 3)},{TSetMemory(_Add(B_Id_C,13),SetTo,853)},1)
@@ -173,10 +173,10 @@ CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw
 	TriggerX(FP,{Memory(0x58F570,Exactly,3),MemoryX(0x58F56C,Exactly,5*4096,0xF000)},{SetV(Type,5)},{preserved})
 	TriggerX(FP,{Memory(0x58F570,Exactly,4),MemoryX(0x58F56C,Exactly,5*65536,0xF0000)},{SetV(Type,5)},{preserved})
 	CIf(FP,{Memory(0x58F564,Exactly,1)})
-		Trigger(FP,{Void(41, Exactly, 1)},{SetV(Seed,400)},{preserved})
-		Trigger(FP,{Void(41, Exactly, 2)},{SetV(Seed,500)},{preserved})
-		Trigger(FP,{Void(41, Exactly, 3)},{SetV(Seed,600)},{preserved})
-		Trigger(FP,{Void(41, Exactly, 4)},{SetV(Seed,800)},{preserved})
+		TriggerX(FP,{Void(41, Exactly, 1)},{SetV(Seed,400)},{preserved})
+		TriggerX(FP,{Void(41, Exactly, 2)},{SetV(Seed,500)},{preserved})
+		TriggerX(FP,{Void(41, Exactly, 3)},{SetV(Seed,600)},{preserved})
+		TriggerX(FP,{Void(41, Exactly, 4)},{SetV(Seed,800)},{preserved})
 		CRandNum(FP,11,Seed,1)
 		CDoActions(FP,{TSetMemory(0x6CA1F4, SetTo, Seed),TSetMemoryX(0x6C9DF4, SetTo, _Mul(_Div(Seed,10),65536),0xFFFF0000)})
 	CIfEnd()
@@ -186,7 +186,6 @@ CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw
 	TriggerX(FP,{CV(Type,3)},{SetMemoryX(0x669FAC, SetTo, 17*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
 	TriggerX(FP,{CV(Type,4)},{SetMemoryX(0x669FAC, SetTo, 10*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
 	TriggerX(FP,{CV(Type,5)},{SetMemoryX(0x669FAC, SetTo, 12*16777216,0xFF000000),SetMemoryX(0x666458, SetTo, 391, 0xFFFF)},{preserved})
-EUDEndIf()
 CDoActions(FP,{SetMemory(0x594000+4*42,SetTo,Type)})
 
 

@@ -2045,6 +2045,6 @@ function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
 	end
 	for i = 0, Bit do
 		DoActions(PlayerID,{SetSwitch("Switch 100",Random)})
-		TriggerX(PlayerID,{Switch("Switch 255",Set)},{SetNVar(DestV,Add,2^i)},{preserved})
+		TriggerX(PlayerID,{Switch("Switch 100",Set)},{SetNVar(DestV,Add,2^i)},{preserved})
 	end
 end
