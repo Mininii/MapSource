@@ -479,7 +479,7 @@ Trigger {
 			local Randnum = f_CRandNum(360)
 			CMov(FP,RandRet2,Randnum)
 			f_Mod(FP,InputMaxRand,_Rand(),_Mov(30*32))
-			CallTriggerX(FP,CRandNum,nil,{SetCVar(FP,Oprnd[2],SetTo,0)})
+			CallTriggerX(FP,Call_CRandNum,nil,{SetCVar(FP,Oprnd[2],SetTo,0)})
 			f_Lengthdir(FP,TempRandRet,RandRet2,CPosX2,CPosY2)
 			GetLocCenter("DCenter",CPosX,CPosY)
 			CAdd(FP,CPosX,CPosX2)
