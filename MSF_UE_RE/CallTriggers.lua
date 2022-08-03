@@ -634,20 +634,20 @@ local CB_P = CreateVar(FP)
 
 	
 	for i = 37, 57 do
-		SetLevelUpHP(i,1)
+		SetLevelUpHP(i)
 	end
-		SetLevelUpHP(104,1)
+		SetLevelUpHP(104)
 	for j, k in pairs(HeroArr) do
-		SetLevelUpHP(k,1)
+		SetLevelUpHP(k)
 	end
 	BdArr = {130,131,132,133,135,136,137,138,139,140,141,142,143,144,146,147,148,151,152,201}
 	
 	for j, k in pairs(BdArr) do
-		SetLevelUpHP(k,1)
+		SetLevelUpHP(k)
 	end
-	SetLevelUpHP(11,1)
-	SetLevelUpHP(13,1)
-	SetLevelUpHP(193,1)
+	SetLevelUpHP(11)
+	SetLevelUpHP(13)
+	SetLevelUpHP(193)
 
 
 	DoActions(FP,SetMemoryB(0x58D2B0+(46*7)+3,SetTo,0))
@@ -682,7 +682,7 @@ local CB_P = CreateVar(FP)
 	t01 = MakeiStrVoid(30).."\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
 	t02 = MakeiStrVoid(30).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"
-	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
+	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C832\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
 	t05 = "\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D) \x03(Q) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
@@ -774,4 +774,12 @@ local CB_P = CreateVar(FP)
 		CallTrigger(FP, CallSigmaCalc)
 		return SiRet
 	end
+
+	TStr_Func(BlasterBullet)
+	
+	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {CreateUnit(1, 37, 1, FP),SetTSLine(1, Add, 1)})
+
+	TS_Suspend({TSLine(1, AtLeast, 25)})
+	TStr_EndFunc()
+
 end

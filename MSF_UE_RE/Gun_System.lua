@@ -215,7 +215,11 @@ CunitCtrig_End()
             SetInvincibility(Enable,"Buildings",FP,64);
         })
     CIfXEnd()
-    if Limit == 1 then
-        TriggerX(FP,CD(TestMode,1), RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
-    end
+    --if Limit == 1 then
+    --    TriggerX(FP,CD(TestMode,1), RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
+    --    GetLocCenter(73, CPosX, CPosY)
+    --    TS_SendX(CD(TestMode,1), BlasterBullet, {CPosX,CPosY})
+    --end
+    --TS_CreateArr(BlasterBullet)
+
 end

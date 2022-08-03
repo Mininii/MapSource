@@ -106,7 +106,7 @@ CIfX(FP,Bring(FP,AtLeast,1,"Tarim, Lord Of Regal Castle",64),SetCVar(FP,VResetSw
 
 
 	CIf(FP,{CV(B_Id_C,19025,AtLeast)})
-		CTrigger(FP,{TMemory(_Add(B_Id_C,2),AtMost,100*256)},{TSetMemory(_Add(B_Id_C,2),Add,770*256)},1)
+		CTrigger(FP,{Memory(0x58F558,AtLeast,1),TMemory(_Add(B_Id_C,2),AtMost,100*256)},{TSetMemory(_Add(B_Id_C,2),Add,770*256),SetMemory(0x58F558,Subtract,1),},1)
 		CTrigger(FP,{Void(41,Exactly, 1)},{TSetMemory(_Add(B_Id_C,13),SetTo,427)},1)
 		CTrigger(FP,{Void(41,Exactly, 2)},{TSetMemory(_Add(B_Id_C,13),SetTo,640)},1)
 		CTrigger(FP,{Void(41,Exactly, 3)},{TSetMemory(_Add(B_Id_C,13),SetTo,853)},1)

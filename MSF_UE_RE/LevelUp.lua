@@ -162,7 +162,7 @@ function LevelUp()
 
 		f_Mul(FP,GetP,_Mov(2))
 		
-		CIf(FP,CVar(FP,LevelT[2],Exactly,0))--10렙 클리어시 추가포인트
+		CIf(FP,CVar(FP,LevelT[2],Exactly,10))--10렙 클리어시 추가포인트
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 

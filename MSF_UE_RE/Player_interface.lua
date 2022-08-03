@@ -888,7 +888,7 @@ end
 			SetCDeaths(FP,SetTo,0,ShopSw[i+1])})
 		CIfEnd()
 		TriggerX(FP,CV(AtkExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,0)},{preserved})
-		TriggerX(FP,CV(HPExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
+		TriggerX(FP,CV(HPExceed[i+1],831+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
 		TriggerX(FP,CV(ShUp[i+1],54+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1,1},
@@ -1025,9 +1025,9 @@ end
 			local ValCancle = def_sIndex()
 			NJumpX(FP,ValCancle,{TMemory(_Add(BackupCp,6),Exactly,58)})
 			NJumpX(FP,ValCancle,{TMemoryX(BackupCp,Exactly,5*256,0xFF00)})
-			CTrigger(FP,{Deaths(i,AtLeast,1,65)}, -- Stop
+			CTrigger(FP,{Deaths(i,AtLeast,1,65),TTDeathsX(BackupCp,NotSame,5*256,0,0xFF00)}, -- Stop
 			{TSetDeathsX(BackupCp,SetTo,1*256,0,0xFF00)},{preserved})
-			CIf(FP,{Deaths(i,AtLeast,1,67)}) -- Hold
+			CIf(FP,{Deaths(i,AtLeast,1,67),TTDeathsX(BackupCp,NotSame,5*256,0,0xFF00)}) -- Hold
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,107*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
 			CIfEnd()
