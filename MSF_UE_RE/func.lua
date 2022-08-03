@@ -2085,7 +2085,7 @@ function TStr_CreateArr(TStructData)
 		CTrigger(TStr_PlayerID, {CVar("X","X",AtLeast,1)}, {
 			TStr_InputCVar,
 			SetCtrigX("X",TStr_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
-			SetNext("X",TStr_SetCallIndex,0),SetNext(TStr_SetCallIndex+1,"X",1), -- Call f_Gun
+			SetNext("X",TStr_SetCallIndex,0),SetNext(TStr_SetCallIndex+1,"X",1), -- Call TStrFunc
 			SetCtrigX("X",TStr_SetCallIndex+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
 			SetCtrigX("X",TStr_SetCallIndex+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
 			SetCtrig1X("X",TStr_SetCallIndex+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
@@ -2103,4 +2103,17 @@ function TStr_SendData(TStructData)
 		table.insert(TStr_InputTAct,TSetMemory(Vi(TStr_TempH[2],(i-1)*(0x20/4)),SetTo,TStr_VarArr[i]))
 	end
 	CDoActions(FP,TStr_InputTAct)
+end
+function TStr_Func(TStructData)
+	TS_Data = TStructData
+	TS_Player = TStructData[1]
+	TS_CallIndex = TStructData[4]
+	SetCall2(TS_Player,TS_CallIndex)
+end
+function TStr_EndFunc()
+	TStr_SendData(TS_Data)
+	SetCallEnd()
+	TS_Data = nil
+	TS_Player = nil
+	TS_CallIndex = nil
 end
