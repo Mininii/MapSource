@@ -2048,3 +2048,59 @@ function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
 		TriggerX(PlayerID,{Switch("Switch 100",Set)},{SetNVar(DestV,Add,2^i)},{preserved})
 	end
 end
+
+function TStruct_init(PlayerID,Number,Line)
+	if Line>= 56 then PushErrorMsg("TStruct Line Overflow") end
+	local StartIndex = FuncAlloc -- FuncAlloc에서 라벨 받아옴
+	FuncAlloc = FuncAlloc + 1
+	VarArr = CreateVarArr(Line,PlayerID)
+	local InputH = CreateVar(PlayerID)
+	local TempH = CreateVar(TStr_PlayerID)
+	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,InputH[2],0x15C,0,SetTo,PlayerID,StartIndex,0x15C,1,0))
+	SetCallIndex = CreateCallIndex()
+	--[1] = PlayerID
+	--[2] = VarArr
+	--[3] = Number
+	--[4] = SetCallIndex
+	--[5] = StartIndex
+	--[6] = InputH
+	--[7] = TempH
+	return {PlayerID,VarArr,Number,SetCallIndex,StartIndex,InputH,TempH}
+end
+
+
+function TStr_CreateArr(TStructData)
+	local TStr_PlayerID = TStructData[1]
+	local TStr_VarArr = TStructData[2]
+	local TStr_Number = TStructData[3]
+	local TStr_StartIndex
+	local TStr_SetCallIndex = TStructData[4]
+	local TStr_InputCVar = {}
+	local TStr_TempH = TStructData[7]
+	for i = 1, #TStr_VarArr do
+		table.insert(TStr_InputCVar,SetCVar(TStr_PlayerID,TStr_VarArr[i][2],SetTo,0))
+	end
+	for i = 0, TStr_Number-1 do
+		if i == 0 then TStr_StartIndex = TStructData[5] else TStr_StartIndex=nil end
+		CTrigger(TStr_PlayerID, {CVar("X","X",AtLeast,1)}, {
+			TStr_InputCVar,
+			SetCtrigX("X",TStr_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+			SetNext("X",TStr_SetCallIndex,0),SetNext(TStr_SetCallIndex+1,"X",1), -- Call f_Gun
+			SetCtrigX("X",TStr_SetCallIndex+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+			SetCtrigX("X",TStr_SetCallIndex+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+			SetCtrig1X("X",TStr_SetCallIndex+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+		}, 1, TStr_StartIndex)
+	end
+end
+function TStr_SendData(TStructData)
+	local TStr_PlayerID = TStructData[1]
+	local TStr_VarArr = TStructData[2]
+	local TStr_Number = TStructData[3]
+	local TStr_SetCallIndex = TStructData[4]
+	local TStr_TempH = TStructData[7]
+	local TStr_InputTAct = {}
+	for i = 1, #TStr_VarArr do
+		table.insert(TStr_InputTAct,TSetMemory(Vi(TStr_TempH[2],(i-1)*(0x20/4)),SetTo,TStr_VarArr[i]))
+	end
+	CDoActions(FP,TStr_InputTAct)
+end

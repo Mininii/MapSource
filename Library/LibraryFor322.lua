@@ -152,6 +152,27 @@ function SetCall(Player) -- CtrigAsm 5.1
 	end
 end
 
+function CreateCallIndex()
+	CallIndexAlloc = CallIndexAlloc+1
+	return CallIndexAlloc-1
+end
+function SetCall2(Player,CallIndex) -- CtrigAsm 5.1
+	SetCallPlayer = Player
+	Trigger {
+		players = {SetCallPlayer},
+		conditions = {
+			Label(CallIndex);
+		},
+		actions = {
+		},
+		flag = {Preserved}
+	}
+	if SetCallOpen == 0 then
+		SetCallOpen = 1
+	else
+		PushErrorMsg("SetCall_Already_Open")
+	end
+end
 function SetCallEnd() -- CtrigAsm 5.1
 	Trigger {
 		players = {SetCallPlayer},
