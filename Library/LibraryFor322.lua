@@ -1445,3 +1445,177 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CABossTempArr = {}
 	return Ret,Ret2
 end
+
+function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
+	if Line>= 56 then PushErrorMsg("TStruct Line Overflow") end
+	local TStr_SendErrT = "\x07『 \x08ERROR \x04: Trigger Struct 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	local StartIndex = FuncAlloc -- FuncAlloc에서 라벨 받아옴
+	FuncAlloc = FuncAlloc + 1
+	local VarArr = CreateVarArr(Line,PlayerID)
+	local InputH = CreateVar(PlayerID)
+	local TempH = CreateVar(PlayerID)
+	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,InputH[2],0x15C,0,SetTo,PlayerID,StartIndex,0x15C,1,0))
+	SetCallIndex = CreateCallIndex()
+
+	local SendVarArr = CreateVarArr(Line,PlayerID)
+
+	local TStr_LineV = CreateVar(PlayerID)
+	local TStr_LineTemp = CreateVar(PlayerID)
+	local TStr_SendJump = def_sIndex()
+	local Send_CallIndex = CreateCallIndex()
+	SetCall(PlayerID)
+	
+	CMov(PlayerID,TStr_LineV,0)
+	CJumpEnd(PlayerID,TStr_SendJump)
+	
+	CAdd(PlayerID,TStr_LineTemp,TStr_LineV,InputH)
+	NIfX(PlayerID,{TMemory(TStr_LineTemp,AtMost,0)})
+	local TStr_SendTAct = {}
+	for i = 0, #SendVarArr-1 do
+		table.insert(TStr_SendTAct,TSetMemory(_Add(TStr_LineTemp,i*(0x20/4)),SetTo,SendVarArr[i+1]))
+		
+	end
+	CDoActions(PlayerID,TStr_SendTAct)
+
+	NElseIfX({CVar(PlayerID,TStr_LineV[2],AtMost,((0x970/4)*Number-1))})
+	CAdd(PlayerID,TStr_LineV,0x970/4)
+	CJump(PlayerID,TStr_SendJump)
+	NElseX()
+	if HumanPlayersArr~=nil then
+		if type(HumanPlayersArr) ~= "table" then PushErrorMsg("HumanPlayersArr InputData Error") end
+		DoActions(PlayerID,{CopyCpAction({DisplayTextX(TStr_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayersArr,PlayerID)})
+	end
+	NIfXEnd()
+	SetCallEnd()
+
+	--[1] = PlayerID
+	--[2] = VarArr
+	--[3] = Number
+	--[4] = SetCallIndex
+	--[5] = StartIndex
+	--[6] = InputH
+	--[7] = TempH
+	--[8] = SendVarArr
+	return {PlayerID,VarArr,Number,SetCallIndex,StartIndex,InputH,TempH,SendVarArr,Send_CallIndex}
+end
+
+
+function TS_CreateArr(TStructData)
+	local TStr_PlayerID = TStructData[1]
+	local TStr_VarArr = TStructData[2]
+	local TStr_Number = TStructData[3]
+	local TStr_StartIndex
+	local TStr_SetCallIndex = TStructData[4]
+	local TStr_InputCVar = {}
+	local TStr_TempH = TStructData[7]
+	for i = 1, #TStr_VarArr do
+		table.insert(TStr_InputCVar,SetCVar(TStr_PlayerID,TStr_VarArr[i][2],SetTo,0))
+	end
+	for i = 0, TStr_Number-1 do
+		if i == 0 then TStr_StartIndex = TStructData[5] else TStr_StartIndex=nil end
+		CTrigger(TStr_PlayerID, {CVar("X","X",AtLeast,1)}, {
+			TStr_InputCVar,
+			SetCtrigX("X",TStr_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+			SetNext("X",TStr_SetCallIndex,0),SetNext(TStr_SetCallIndex+1,"X",1), -- Call TStrFunc
+			SetCtrigX("X",TStr_SetCallIndex+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+			SetCtrigX("X",TStr_SetCallIndex+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+			SetCtrig1X("X",TStr_SetCallIndex+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+		}, 1, TStr_StartIndex)
+	end
+end
+function TStr_WriteData(TStructData)
+	local TStr_PlayerID = TStructData[1]
+	local TStr_VarArr = TStructData[2]
+	local TStr_Number = TStructData[3]
+	local TStr_SetCallIndex = TStructData[4]
+	local TStr_TempH = TStructData[7]
+	local TStr_InputTAct = {}
+	for i = 1, #TStr_VarArr do
+		table.insert(TStr_InputTAct,TSetMemory(Vi(TStr_TempH[2],(i-1)*(0x20/4)),SetTo,TStr_VarArr[i]))
+	end
+	CDoActions(TStr_PlayerID,TStr_InputTAct)
+end
+function TStr_Func(TStructData)
+	TS_Data = TStructData
+	TS_Player = TStructData[1]
+	TS_VarArr = TStructData[2]
+	TS_CallIndex = TStructData[4]
+	SetCall2(TS_Player,TS_CallIndex)
+end
+function TStr_EndFunc()
+	TStr_WriteData(TS_Data)
+	SetCallEnd2()
+	TS_Data = nil
+	TS_Player = nil
+	TS_CallIndex = nil
+	TS_VarArr = nil
+end
+function TS_Suspend(Condition,Flags)
+	if TS_Data==nil then PushErrorMsg("Not Found TStr Parameter") end
+	local TSAct = {}
+	for i = 1, #TS_VarArr do
+		table.insert(TSAct,SetCVar(TS_Player, TS_VarArr[i][2], SetTo, 0))
+	end
+	if Flags == nil then Flags = {preserved} else Flags=nil end
+	TriggerX(TS_Player,Condition,TSAct,Flags)
+	DoActionsX(TS_Player,TSAct)
+	
+end
+function TSLine(Line,Type,Value,Mask)
+	if TS_Data==nil then PushErrorMsg("Not Found TStr Parameter") end
+	return CVar(TS_Player, TS_VarArr[Line][2], Type, Value, Mask)
+end
+function TTSLine(Line,Type,Value,Mask)
+	if TS_Data==nil then PushErrorMsg("Not Found TStr Parameter") end
+	return TCVar(TS_Player, TS_VarArr[Line][2], Type, Value, Mask)
+end
+function SetTSLine(Line,Type,Value,Mask)
+	if TS_Data==nil then PushErrorMsg("Not Found TStr Parameter") end
+	return SetCVar(TS_Player, TS_VarArr[Line][2], Type, Value, Mask)
+end
+function TSetTSLine(Line,Type,Value,Mask)
+	if TS_Data==nil then PushErrorMsg("Not Found TStr Parameter") end
+	return TSetCVar(TS_Player, TS_VarArr[Line][2], Type, Value, Mask)
+end
+
+function TS_Send(Condition,TStructData,SendProperty,PreserveFlag)--상수만 입력하고 싶을때
+	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
+	local TStr_PlayerID = TStructData[1]
+	local TStr_SendVarArr = TStructData[8]
+	local TStr_SendCallIndex = TStructData[9]
+	local Line = #TStr_SendVarArr
+	local TStr_SendArr = {}
+	for i = 1, Line do
+		if SendProperty[i]~= nil then
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
+		else
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
+		end
+	end
+	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr,PreserveFlag)
+
+end
+function TS_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- 변수 V 를 입력하고 싶을때(중간연산자, 다른 데이터형 등 입력시 버그남)
+	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
+	local TStr_PlayerID = TStructData[1]
+	local TStr_SendVarArr = TStructData[8]
+	local TStr_SendCallIndex = TStructData[9]
+	local Line = #TStr_SendVarArr
+	local TStr_SendArr = {}
+	for i = 1, Line do
+		if SendProperty[i]~= nil then
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
+		else
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
+		end
+	end
+	if PreserveFlag == nil then
+		CIf(TStr_PlayerID,Condition)
+	else
+		CIfOnce(TStr_PlayerID,Condition)
+	end
+	CDoActions(TStr_PlayerID,TStr_SendArr)
+	CallTrigger(TStr_PlayerID,TStr_SendCallIndex)
+	CIfEnd()
+
+end
