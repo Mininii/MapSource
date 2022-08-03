@@ -666,31 +666,20 @@ HPRegenTable = {64}
 		f_SaveCp()
 		f_Read(FP,_Sub(BackupCp,15),BCPos)
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
-		Simple_SetLocX(FP,9,EXCC_TempVarArr[6],EXCC_TempVarArr[7],EXCC_TempVarArr[6],EXCC_TempVarArr[7])
 
 		for i = 7, 11 do
 		CWhile(FP,{Cond_EXCC(i,AtLeast,1)})
-			CIf(FP,Memory(0x628438,AtLeast,1))
-				f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 				Convert_CPosXY(BCPos)
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,1,1),SetMemory(0x662860+(118*4),SetTo,65537)},{preserved})
-				for j = 0, 3 do
-				CTrigger(FP,{CVar(FP,CPlayer[2],Exactly,j+4,0xFF)},{TCreateUnitWithProperties(1,_Mov(EXCC_TempVarArr[i+1],0xFF),22+j,CPlayer,{energy = 100}),TMoveUnit(1,_Mov(EXCC_TempVarArr[i+1],0xFF),_Mov(CPlayer,0xFF),22+j,1)},1)
-				end
-				CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-					CTrigger(FP, {TMemoryX(_Add(Nextptrs,25),Exactly,63,0xFF)},
-					{TSetMemoryX(_Add(Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
-					f_Read(FP,_Add(Nextptrs,10),CPos)
-					Convert_CPosXY()
-					CDoActions(FP,{TSetMemoryX(_Add(Nextptrs,35), SetTo, CPlayer, 0xFF),})
-					Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-					DoActions2(FP,{Order("Men",Force2,1,Attack,10),Simple_CalcLoc(0,-64,-64,64,64)})
-					CTrigger(FP,{Cond_EXCC(12,Exactly,1,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
-					--CTrigger(FP,{Cond_EXCC(12,Exactly,4,4)},{TSetMemory(0x6509B0,SetTo,_Mov(CPlayer,0xFF)),RunAIScriptAt(JYD,1)},1)
-				CIfEnd()
-				TriggerX(FP,CVar(FP,EXCC_TempVarArr[i+1][2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,0,1),SetMemory(0x662860+(118*4),SetTo,64+(64*65536))},{preserved})
-			CIfEnd()
+				CAdd(FP,CreateUnitQuePtr,1)
+				CDoActions(FP,{
+					TSetMemory(_Add(CreateUnitQueXPosArr,CreateUnitQuePtr),SetTo,CPosX),
+					TSetMemory(_Add(CreateUnitQueYPosArr,CreateUnitQuePtr),SetTo,CPosY),
+					TSetMemory(_Add(CreateUnitQueUIDArr,CreateUnitQuePtr),SetTo,_Mov(EXCC_TempVarArr[i+1],0xFF)),
+					TSetMemory(_Add(CreateUnitQuePlayerArr,CreateUnitQuePtr),SetTo,CPlayer),
+					TSetMemory(_Add(CreateUnitQueOXPosArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[6]),
+					TSetMemory(_Add(CreateUnitQueOYPosArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[7]),
+				})
+				CTrigger(FP,{},{TSetMemory(_Add(CreateUnitQueFlagArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[13])},1)
 			CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
 		CWhileEnd()
 		end
@@ -779,6 +768,44 @@ HPRegenTable = {64}
 		})
 	end
 	EXCC_End()
+	local TempUID = CreateVar(FP)
+	local TempPID = CreateVar(FP)
+	local OPosX = CreateVar(FP)
+	local OPosY = CreateVar(FP)
+	local TempFlag = CreateVar(FP)
+	NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{SetV(TempFlag,0)})
+	f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
+	f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)
+	f_SHRead(FP, _Add(CreateUnitQueOXPosArr,CreateUnitQuePtr), OPosX)
+	f_SHRead(FP, _Add(CreateUnitQueOYPosArr,CreateUnitQuePtr), OPosY)
+	f_SHRead(FP, _Add(CreateUnitQueUIDArr,CreateUnitQuePtr), TempUID)
+	f_SHRead(FP, _Add(CreateUnitQuePlayerArr,CreateUnitQuePtr), TempPID)
+	CTrigger(FP,{TMemory(_Add(CreateUnitQueFlagArr,CreateUnitQuePtr),AtLeast,1)},{SetV(TempFlag,1)},1)
+	DoActionsX(FP,{SubV(CreateUnitQuePtr,1)})
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	NIf(FP,{CV(TempUID,1,AtLeast)})
+	
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+	TriggerX(FP,CVar(FP,TempUID[2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,1,1),SetMemory(0x662860+(118*4),SetTo,65537)},{preserved})
+	for j = 0, 3 do
+	CTrigger(FP,{CVar(FP,TempPID[2],Exactly,j+4,0xFF)},{TCreateUnitWithProperties(1,_Mov(TempUID,0xFF),22+j,TempPID,{energy = 100}),TMoveUnit(1,_Mov(TempUID,0xFF),_Mov(TempPID,0xFF),22+j,1)},1)
+	end
+	NIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+		CTrigger(FP, {TMemoryX(_Add(Nextptrs,25),Exactly,63,0xFF)},
+		{TSetMemoryX(_Add(Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
+		f_Read(FP,_Add(Nextptrs,10),CPos)
+		Convert_CPosXY()
+		CDoActions(FP,{TSetMemoryX(_Add(Nextptrs,35), SetTo, TempPID, 0xFF),})
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+		Simple_SetLocX(FP,9,OPosX,OPosY,OPosX,OPosY)
+		DoActions2(FP,{Order("Men",Force2,1,Attack,10),Simple_CalcLoc(0,-64,-64,64,64)})
+		CTrigger(FP,{CV(TempFlag,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
+		--CTrigger(FP,{Cond_EXCC(12,Exactly,4,4)},{TSetMemory(0x6509B0,SetTo,_Mov(CPlayer,0xFF)),RunAIScriptAt(JYD,1)},1)
+	NIfEnd()
+	TriggerX(FP,CVar(FP,TempUID[2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,0,1),SetMemory(0x662860+(118*4),SetTo,64+(64*65536))},{preserved})
+	NIfEnd()
+
+	NWhileEnd()
 	
 	
 	
@@ -1007,7 +1034,8 @@ InvDisable(190,FP,{
 	CD(DgCcode,2,AtLeast); 
 	CD(GeneCcode,2,AtLeast);
 },"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
-
+if RedMode == 0 then
+	
 CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 Trigger2X(FP, {
 	Command(FP,AtLeast,1,173);
@@ -1067,6 +1095,8 @@ Command(FP,AtLeast,1,173);
 CIfEnd()
 
 DoActions2X(FP,{SubCD(CanWT,1),SubCD(CanCT,1)})
+
+end
 CIf(FP,CD(DefeatCC,1,AtLeast))
 DoActionsX(FP,{AddCD(DefeatCC,1)})
 DoActions2(FP,{RotatePlayer({
