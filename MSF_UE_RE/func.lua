@@ -2065,7 +2065,7 @@ function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 	local TStr_LineV = CreateVar(TStr_PlayerID)
 	local TStr_LineTemp = CreateVar(TStr_PlayerID)
 	local TStr_SendJump = def_sIndex()
-	local Send_CallIndex = SetCallForward()
+	local Send_CallIndex = CreateCallIndex()
 	SetCall(TStr_PlayerID)
 	
 	CMov(PlayerID,TStr_LineV,0)
@@ -2126,7 +2126,7 @@ function TStr_CreateArr(TStructData)
 		}, 1, TStr_StartIndex)
 	end
 end
-function TStr_SendData(TStructData)
+function TStr_WriteData(TStructData)
 	local TStr_PlayerID = TStructData[1]
 	local TStr_VarArr = TStructData[2]
 	local TStr_Number = TStructData[3]
@@ -2136,7 +2136,7 @@ function TStr_SendData(TStructData)
 	for i = 1, #TStr_VarArr do
 		table.insert(TStr_InputTAct,TSetMemory(Vi(TStr_TempH[2],(i-1)*(0x20/4)),SetTo,TStr_VarArr[i]))
 	end
-	CDoActions(FP,TStr_InputTAct)
+	CDoActions(TStr_PlayerID,TStr_InputTAct)
 end
 function TStr_Func(TStructData)
 	TS_Data = TStructData
@@ -2145,13 +2145,13 @@ function TStr_Func(TStructData)
 	SetCall2(TS_Player,TS_CallIndex)
 end
 function TStr_EndFunc()
-	TStr_SendData(TS_Data)
-	SetCallEnd()
+	TStr_WriteData(TS_Data)
+	SetCallEnd2()
 	TS_Data = nil
 	TS_Player = nil
 	TS_CallIndex = nil
 end
-function TStr_Send(Condition,TStructData,SendProperty)
+function TStr_Send(Condition,TStructData,SendProperty,PreserveFlag)--상수만 입력하고 싶을때
 	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
 	local TStr_PlayerID = TStructData[1]
 	local TStr_SendVarArr = TStructData[8]
@@ -2160,11 +2160,35 @@ function TStr_Send(Condition,TStructData,SendProperty)
 	local TStr_SendArr = {}
 	for i = 1, Line do
 		if SendProperty[i]~= nil then
-			TStr_SendArr[i] = SetCVar(TStr_PlayerID,TStr_PlayerID[i],SetTo,SendProperty[i])
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
 		else
-			TStr_SendArr[i] = SetCVar(TStr_PlayerID,TStr_PlayerID[i],SetTo,0)
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
 		end
 	end
-	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr)
+	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr,PreserveFlag)
+
+end
+function TStr_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- 변수 V 를 입력하고 싶을때(중간연산자, 다른 데이터형 등 입력시 버그남)
+	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
+	local TStr_PlayerID = TStructData[1]
+	local TStr_SendVarArr = TStructData[8]
+	local TStr_SendCallIndex = TStructData[9]
+	local Line = #TStr_SendVarArr
+	local TStr_SendArr = {}
+	for i = 1, Line do
+		if SendProperty[i]~= nil then
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
+		else
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
+		end
+	end
+	if PreserveFlag == nil then
+		CIf(TStr_PlayerID,Condition)
+	else
+		CIfOnce(TStr_PlayerID,Condition)
+	end
+	CDoActions(TStr_PlayerID,TStr_SendArr)
+	CallTrigger(TStr_PlayerID,TStr_SendCallIndex)
+	CIfEnd()
 
 end

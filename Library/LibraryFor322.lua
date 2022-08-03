@@ -153,22 +153,23 @@ function SetCall(Player) -- CtrigAsm 5.1
 end
 
 function CreateCallIndex()
-	CallIndexAlloc = CallIndexAlloc+1
-	return CallIndexAlloc-1
+	CallIndexAlloc = CallIndexAlloc+2
+	return CallIndexAlloc-2
 end
 function SetCall2(Player,CallIndex) -- CtrigAsm 5.1
 	SetCallPlayer = Player
+	CurSCIndex = CallIndex
 	Trigger {
 		players = {SetCallPlayer},
 		conditions = {
-			Label(CallIndex);
+			Label(CurSCIndex);
 		},
 		actions = {
 		},
 		flag = {Preserved}
 	}
 	if SetCallOpen == 0 then
-		SetCallOpen = 1
+		SetCallOpen = 2
 	else
 		PushErrorMsg("SetCall_Already_Open")
 	end
@@ -189,7 +190,26 @@ function SetCallEnd() -- CtrigAsm 5.1
 	if SetCallOpen == 1 then
 		SetCallOpen = 0
 	else
-		PushErrorMsg("SetCall_Not_Open")
+		PushErrorMsg("SetCall_Not_Open_or_Wrong_SetCall_Func")
+	end
+end
+
+function SetCallEnd2() -- CtrigAsm 5.1
+	Trigger {
+		players = {SetCallPlayer},
+		conditions = {
+			Label(CurSCIndex+1);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Recover Next
+			SetCtrig1X("X","X",0x164,0,SetTo,0x2,0x2);
+		},
+		flag = {Preserved}
+	}
+	if SetCallOpen == 2 then
+		SetCallOpen = 0
+	else
+		PushErrorMsg("SetCall_Not_Open_or_Wrong_SetCall_Func")
 	end
 end
 
