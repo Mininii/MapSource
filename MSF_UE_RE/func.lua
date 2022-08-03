@@ -2049,15 +2049,48 @@ function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
 	end
 end
 
-function TStruct_init(PlayerID,Number,Line)
+function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 	if Line>= 56 then PushErrorMsg("TStruct Line Overflow") end
+	local TStr_SendErrT = "\x07『 \x08ERROR \x04: Trigger Struct 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	local StartIndex = FuncAlloc -- FuncAlloc에서 라벨 받아옴
 	FuncAlloc = FuncAlloc + 1
-	VarArr = CreateVarArr(Line,PlayerID)
+	local VarArr = CreateVarArr(Line,PlayerID)
 	local InputH = CreateVar(PlayerID)
 	local TempH = CreateVar(TStr_PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,InputH[2],0x15C,0,SetTo,PlayerID,StartIndex,0x15C,1,0))
 	SetCallIndex = CreateCallIndex()
+
+	local SendVarArr = CreateVarArr(Line,PlayerID)
+
+	local TStr_LineV = CreateVar(TStr_PlayerID)
+	local TStr_LineTemp = CreateVar(TStr_PlayerID)
+	local TStr_SendJump = def_sIndex()
+	local Send_CallIndex = SetCallForward()
+	SetCall(TStr_PlayerID)
+	
+	CMov(PlayerID,TStr_LineV,0)
+	CJumpEnd(PlayerID,TStr_SendJump)
+	
+	CAdd(PlayerID,TStr_LineTemp,TStr_LineV,InputH)
+	NIfX(PlayerID,{TMemory(TStr_LineTemp,AtMost,0)})
+	local TStr_SendTAct = {}
+	for i = 0, #SendVarArr-1 do
+		table.insert(TStr_SendTAct,TSetMemory(_Add(G_CB_LineTemp,i*(0x20/4)),SetTo,SendVarArr[i+1]))
+		
+	end
+	CDoActions(PlayerID,TStr_SendTAct)
+
+	NElseIfX({CVar(PlayerID,TStr_LineV[2],AtMost,((0x970/4)*Number-1))})
+	CAdd(PlayerID,TStr_LineV,0x970/4)
+	CJump(PlayerID,TStr_SendJump)
+	NElseX()
+	if HumanPlayersArr~=nil then
+		if type(HumanPlayersArr) ~= "table" then PushErrorMsg("HumanPlayersArr InputData Error") end
+		DoActions(PlayerID,{CopyCpAction({DisplayTextX(TStr_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayersArr,PlayerID)})
+	end
+	NIfXEnd()
+	SetCallEnd()
+
 	--[1] = PlayerID
 	--[2] = VarArr
 	--[3] = Number
@@ -2065,7 +2098,8 @@ function TStruct_init(PlayerID,Number,Line)
 	--[5] = StartIndex
 	--[6] = InputH
 	--[7] = TempH
-	return {PlayerID,VarArr,Number,SetCallIndex,StartIndex,InputH,TempH}
+	--[8] = SendVarArr
+	return {PlayerID,VarArr,Number,SetCallIndex,StartIndex,InputH,TempH,SendVarArr,Send_CallIndex}
 end
 
 
@@ -2116,4 +2150,21 @@ function TStr_EndFunc()
 	TS_Data = nil
 	TS_Player = nil
 	TS_CallIndex = nil
+end
+function TStr_Send(Condition,TStructData,SendProperty)
+	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
+	local TStr_PlayerID = TStructData[1]
+	local TStr_SendVarArr = TStructData[8]
+	local TStr_SendCallIndex = TStructData[9]
+	local Line = #TStr_SendVarArr
+	local TStr_SendArr = {}
+	for i = 1, Line do
+		if SendProperty[i]~= nil then
+			TStr_SendArr[i] = SetCVar(TStr_PlayerID,TStr_PlayerID[i],SetTo,SendProperty[i])
+		else
+			TStr_SendArr[i] = SetCVar(TStr_PlayerID,TStr_PlayerID[i],SetTo,0)
+		end
+	end
+	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr)
+
 end
