@@ -10943,7 +10943,7 @@ end
 
 function CXSaveWithName(FileName,Local,...)
 	CSSaveInit()
-	local CSfile = io.open("CS/" .. FileName .. ".txt", "w")
+	local CSfile = io.open(FileDirectory.."CS/" .. FileName .. ".txt", "w")
 	io.output(CSfile)
 	local arg = table.pack(...)
 	for k = 1, (arg.n-1), 2 do
@@ -14969,6 +14969,7 @@ FCBRVRSAlloc = 0
 FCBPAINTCheck = 0
 FCBPAINTCVoid = 0
 FCBPAINTCVArr = 0
+CheckInclude_CBPaint = 0
 function Include_CBLast(IncludePlayer)
 	local CVoid = FCBPAINTCVoid
 	local CV = FCBPAINTCVArr
@@ -17744,6 +17745,8 @@ end
 end
 
 function Include_CBPaint()
+	if CheckInclude_CBPaint == 0 then
+		CheckInclude_CBPaint = 1
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -18141,6 +18144,7 @@ function Include_CBPaint()
 	FCBSPLTCall2 = FuncAlloc
 	FuncAlloc = FuncAlloc + 1
 end
+end
 
 function CB_Shuffle(Start,End,Shape)
 	FCBSHFLCheck = 1
@@ -18164,20 +18168,35 @@ function CB_Shuffle(Start,End,Shape)
 	CMov(PlayerID,CV[1],Start)
 	CMov(PlayerID,CV[2],End)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	local RetAct = {}
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[Shape]-1))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -18188,7 +18207,7 @@ function CB_Shuffle(Start,End,Shape)
 			},
 			actions = {
 				SetNVar(CV[3],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[Shape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSHFLCall1,0x0,0,0);
 				SetCtrigX("X",FCBSHFLCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSHFLCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18220,20 +18239,35 @@ function CB_Reverse(Start,End,Shape)
 	CMov(PlayerID,CV[1],Start)
 	CMov(PlayerID,CV[2],End)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	local RetAct = {}
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[Shape]-1))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -18244,7 +18278,7 @@ function CB_Reverse(Start,End,Shape)
 			},
 			actions = {
 				SetNVar(CV[3],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[Shape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBRVRSCall1,0x0,0,0);
 				SetCtrigX("X",FCBRVRSCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBRVRSCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18273,17 +18307,48 @@ function CB_ConvertRA(Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18296,11 +18361,6 @@ function CB_ConvertRA(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBCONVRA
 	Trigger {
 			players = {PlayerID},
@@ -18310,7 +18370,7 @@ function CB_ConvertRA(Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCONVRACall1,0x0,0,0);
 				SetCtrigX("X",FCBCONVRACall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCONVRACall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18319,7 +18379,16 @@ function CB_ConvertRA(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_ConvertXY(Shape,RetShape)
@@ -18341,17 +18410,48 @@ function CB_ConvertXY(Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18364,11 +18464,6 @@ function CB_ConvertXY(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBCONVXY
 	Trigger {
 			players = {PlayerID},
@@ -18378,7 +18473,7 @@ function CB_ConvertXY(Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCONVXYCall1,0x0,0,0);
 				SetCtrigX("X",FCBCONVXYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCONVXYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18387,7 +18482,94 @@ function CB_ConvertXY(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
+end
+
+function CB_InitVShape(Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+
+	local Temp = CreateSVar(3,PlayerID)[1]
+	local Temp2 = CreateSVar(4,PlayerID)[1]
+	local Temp3 = CreateSVar(3,PlayerID)[1]
+	local Ret = {{Temp[1],Temp[2],0,"V"},CreateVar(PlayerID),nil,CreateVar(PlayerID),{Temp2[1],Temp2[2],0,"V"},{Temp3[1],Temp3[2],0,"V"}}
+	local FXData = FArr(FX[Shape],0)
+	local FYData = FArr(FY[Shape],0)
+	DoActionsX(PlayerID,{ -- Recover
+		SetCtrig1X("X",Ret[1][2],0x15C,0,SetTo,Num[Shape]);
+		SetCtrig1X("X",Ret[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+		SetCtrigX("X",Ret[1][2],0x19C,0,SetTo,FXData[1],FXData[2],FXData[3],1,FXData[4]); 
+		SetCtrigX("X",Ret[1][2],0x1DC,0,SetTo,FYData[1],FYData[2],FYData[3],1,FYData[4]); 
+		SetCtrigX("X",Ret[2][2],0x158,0,SetTo,"X",CA[7],0x15C,1,Shape);
+		SetCtrigX("X",Ret[4][2],0x15C,0,SetTo,"X",CA[7],0x15C,1,Shape);
+
+		SetCtrigX("X",Ret[5][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape);
+		SetCtrigX("X",Ret[5][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[5][2],0x19C,0,SetTo,0x200,0x200);
+		SetCtrigX("X",Ret[5][2],0x1D8,0,SetTo,"X",Ret[5][2],0x4,1,0); SetCtrigX("X",Ret[5][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape);
+		SetCtrigX("X",Ret[5][2],0x218,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[5][2],0x21C,0,SetTo,"X",Ret[6][2],0x0,0,0);
+
+		SetCtrigX("X",Ret[6][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape); SetCtrigX("X",Ret[6][2],0x15C,0,SetTo,"X",CA[10],0x15C,1,0);
+		SetCtrigX("X",Ret[6][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[6][2],0x19C,0,SetTo,0x000,0x200);
+		SetCtrigX("X",Ret[6][2],0x1D8,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[6][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape+1);
+	})
+	return Ret
+end
+
+function CB_VShape(VShape,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local Ret = VShape
+
+	local FXData = FArr(FX[Shape],0)
+	local FYData = FArr(FY[Shape],0)
+	DoActionsX(PlayerID,{ -- Recover
+		SetCtrig1X("X",Ret[1][2],0x15C,0,SetTo,Num[Shape]);
+		SetCtrig1X("X",Ret[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+		SetCtrigX("X",Ret[1][2],0x19C,0,SetTo,FXData[1],FXData[2],FXData[3],1,FXData[4]); 
+		SetCtrigX("X",Ret[1][2],0x1DC,0,SetTo,FYData[1],FYData[2],FYData[3],1,FYData[4]); 
+		SetCtrigX("X",Ret[2][2],0x158,0,SetTo,"X",CA[7],0x15C,1,Shape);
+		SetCtrigX("X",Ret[4][2],0x15C,0,SetTo,"X",CA[7],0x15C,1,Shape);
+
+		SetCtrigX("X",Ret[5][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape);
+		SetCtrigX("X",Ret[5][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[5][2],0x19C,0,SetTo,0x200,0x200);
+		SetCtrigX("X",Ret[5][2],0x1D8,0,SetTo,"X",Ret[5][2],0x4,1,0); SetCtrigX("X",Ret[5][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape);
+		SetCtrigX("X",Ret[5][2],0x218,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[5][2],0x21C,0,SetTo,"X",Ret[6][2],0x0,0,0);
+
+		SetCtrigX("X",Ret[6][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape); SetCtrigX("X",Ret[6][2],0x15C,0,SetTo,"X",CA[10],0x15C,1,0);
+		SetCtrigX("X",Ret[6][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[6][2],0x19C,0,SetTo,0x000,0x200);
+		SetCtrigX("X",Ret[6][2],0x1D8,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[6][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape+1);
+	})
 end
 
 function CB_Move(X,Y,Shape,RetShape)
@@ -18411,18 +18593,49 @@ function CB_Move(X,Y,Shape,RetShape)
 
 	CMov(PlayerID,CV[11],X)
 	CMov(PlayerID,CV[12],Y)
+	
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18435,11 +18648,6 @@ function CB_Move(X,Y,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18449,7 +18657,7 @@ function CB_Move(X,Y,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMOVECall1,0x0,0,0);
 				SetCtrigX("X",FCBMOVECall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMOVECall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18458,7 +18666,16 @@ function CB_Move(X,Y,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_MoveCenter(X,Y,Shape,RetShape)
@@ -18484,17 +18701,48 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 	CMov(PlayerID,CV[11],X)
 	CMov(PlayerID,CV[12],Y)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18507,11 +18755,6 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18521,7 +18764,7 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMOVECNTRCall1,0x0,0,0);
 				SetCtrigX("X",FCBMOVECNTRCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMOVECNTRCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18529,7 +18772,17 @@ function CB_MoveCenter(X,Y,Shape,RetShape)
 			},
 			flag = {Preserved}
 		}
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 
 	RecoverCp(PlayerID)
 end
@@ -18567,17 +18820,48 @@ function CB_Invert(X,Y,Shape,RetShape)
 		CMov(PlayerID,CV[14],0)
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18590,11 +18874,6 @@ function CB_Invert(X,Y,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18604,7 +18883,7 @@ function CB_Invert(X,Y,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBINVTCall1,0x0,0,0);
 				SetCtrigX("X",FCBINVTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBINVTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18613,7 +18892,16 @@ function CB_Invert(X,Y,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
@@ -18662,17 +18950,48 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 		CMov(PlayerID,CV[18],0)
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18685,11 +19004,6 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18699,7 +19013,7 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBRATOCall1,0x0,0,0);
 				SetCtrigX("X",FCBRATOCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBRATOCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18719,7 +19033,16 @@ function CB_Ratio(imulX,idivX,imulY,idivY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Rotate(Angle,Shape,RetShape)
@@ -18744,17 +19067,48 @@ function CB_Rotate(Angle,Shape,RetShape)
 
 	CMov(PlayerID,CV[11],Angle)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18767,11 +19121,6 @@ function CB_Rotate(Angle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18781,7 +19130,7 @@ function CB_Rotate(Angle,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBROTACall1,0x0,0,0);
 				SetCtrigX("X",FCBROTACall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBROTACall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18801,7 +19150,16 @@ function CB_Rotate(Angle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
@@ -18839,17 +19197,49 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 	else
 		CMov(PlayerID,CV[14],0)
 	end
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18862,11 +19252,6 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18876,7 +19261,7 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBROTA3DCall1,0x0,0,0);
 				SetCtrigX("X",FCBROTA3DCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBROTA3DCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18885,7 +19270,16 @@ function CB_Rotate3D(XYAngle,YZAngle,ZXAngle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
@@ -18934,17 +19328,48 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 		CMov(PlayerID,CV[18],0)
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -18957,11 +19382,6 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -18971,7 +19391,7 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCROPCall1,0x0,0,0);
 				SetCtrigX("X",FCBCROPCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCROPCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -18980,7 +19400,16 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_MirrorX(X,Side,Shape,RetShape)
@@ -19006,17 +19435,48 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 	CMov(PlayerID,CV[11],X)
 	CMov(PlayerID,CV[12],Side)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-2))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-2);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19029,11 +19489,6 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19043,7 +19498,7 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-2);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMIRXCall1,0x0,0,0);
 				SetCtrigX("X",FCBMIRXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMIRXCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19052,7 +19507,16 @@ function CB_MirrorX(X,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_MirrorY(Y,Side,Shape,RetShape)
@@ -19078,17 +19542,48 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 	CMov(PlayerID,CV[11],Y)
 	CMov(PlayerID,CV[12],Side)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-2))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-2);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19101,10 +19596,6 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -19115,7 +19606,7 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-2);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMIRYCall1,0x0,0,0);
 				SetCtrigX("X",FCBMIRYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMIRYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19124,7 +19615,16 @@ function CB_MirrorY(Y,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
@@ -19232,17 +19732,48 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 		end
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19255,11 +19786,6 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19269,7 +19795,7 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBDTRNCall1,0x0,0,0);
 				SetCtrigX("X",FCBDTRNCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBDTRNCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19278,7 +19804,16 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 
 	RecoverCp(PlayerID)
 end
@@ -19388,17 +19923,48 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 		end
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19411,11 +19977,6 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19425,7 +19986,7 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBDTRN2Call1,0x0,0,0);
 				SetCtrigX("X",FCBDTRN2Call2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBDTRN2Call2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19434,7 +19995,16 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 
 	RecoverCp(PlayerID)
 end
@@ -19505,17 +20075,48 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 		end
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19528,10 +20129,6 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -19542,7 +20139,7 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBWARPCall1,0x0,0,0);
 				SetCtrigX("X",FCBWARPCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBWARPCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19551,7 +20148,16 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 
 	RecoverCp(PlayerID)
 end
@@ -19589,17 +20195,48 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 		CMov(PlayerID,CV[13],0)
 	end
 	
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19612,11 +20249,6 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19626,7 +20258,7 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBKADSXCall1,0x0,0,0);
 				SetCtrigX("X",FCBKADSXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBKADSXCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19635,7 +20267,16 @@ function CB_KaleidoscopeX(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
@@ -19671,17 +20312,48 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 		CMov(PlayerID,CV[13],0)
 	end
 	
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19694,11 +20366,6 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19708,7 +20375,7 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBKADSX2Call1,0x0,0,0);
 				SetCtrigX("X",FCBKADSX2Call2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBKADSX2Call2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19717,7 +20384,16 @@ function CB_Kaleidoscope2X(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
@@ -19753,17 +20429,48 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 		CMov(PlayerID,CV[13],0)
 	end
 	
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19776,11 +20483,6 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19790,7 +20492,7 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBKADSCall1,0x0,0,0);
 				SetCtrigX("X",FCBKADSCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBKADSCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19799,7 +20501,16 @@ function CB_Kaleidoscope(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
@@ -19836,17 +20547,48 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 		CMov(PlayerID,CV[13],0)
 	end
 	
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19859,11 +20601,6 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19873,7 +20610,7 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBKADS2Call1,0x0,0,0);
 				SetCtrigX("X",FCBKADS2Call2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBKADS2Call2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19882,7 +20619,16 @@ function CB_Kaleidoscope2(Point,StartAngle,Side,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Vector2D(VectorFunc,Shape,RetShape)
@@ -19909,17 +20655,48 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 	DoActionsX(PlayerID,{SetCtrigX("X",CV[11][2],0x15C,0,SetTo,VectorFunc[1],VectorFunc[2],0x0,0,1),
 	SetCtrigX("X",CV[12][2],0x15C,0,SetTo,VectorFunc[1],VectorFunc[2]+1,0x4,1,0)})
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -19932,11 +20709,6 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -19946,7 +20718,7 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBVECTCall1,0x0,0,0);
 				SetCtrigX("X",FCBVECTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBVECTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -19955,7 +20727,16 @@ function CB_Vector2D(VectorFunc,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
@@ -19996,23 +20777,75 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 		CMov(PlayerID,CV[14],0)
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,InShape,SetTo,"X",CV[16][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,InShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,InShape),
-		SetCtrigX("X",CA[7],0x4,InShape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,InShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,InShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-		SetCtrigX("X",CA[7],0x4,InShape,SetTo,"X",CA[7],0x0,0,InShape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(InShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,InShape,SetTo,"X",CV[16][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,InShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,InShape),
+			SetCtrigX("X",CA[7],0x4,InShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,InShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,InShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,InShape,SetTo,"X",CA[7],0x0,0,InShape+1),
+		})
+		TMem(PlayerID,CV[11],FArr(FX[InShape],0))
+		TMem(PlayerID,CV[12],FArr(FY[InShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,InShape[1][1],InShape[1][2],0x0,0,0);
+			SetCtrigX(InShape[1][1],InShape[1][2],0x4,0,SetTo,InShape[5][1],InShape[5][2],0x0,0,0);
+			SetCtrigX(InShape[6][1],InShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(InShape[5][1],InShape[5][2],0x15C,InShape[5][3],SetTo,"X",CV[16][2],0x15C,1,0),
+			SetCtrig1X(InShape[1][1],InShape[1][2],0x158,InShape[1][3],SetTo,0),
+			SetCtrigX(InShape[1][1],InShape[1][2],0x198,InShape[1][3],SetTo,"X",CV[11][2],0x15C,1,0),
+			SetCtrigX(InShape[1][1],InShape[1][2],0x1D8,InShape[1][3],SetTo,"X",CV[12][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -20025,13 +20858,6 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[11],FArr(FX[InShape],0))
-	TMem(PlayerID,CV[12],FArr(FY[InShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20043,7 +20869,7 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 			actions = {
 				SetNVar(CV[16],Subtract,1);
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSHISCall1,0x0,0,0);
 				SetCtrigX("X",FCBSHISCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSHISCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20052,7 +20878,16 @@ function CB_ShapeInShape(InShape,Rotate,Angle,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_CropPath(Path,OutSide,Shape,RetShape)
@@ -20082,23 +20917,69 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 		CMov(PlayerID,CV[13],0)
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,Path,SetTo,"X",CV[15][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Path,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Path),
-		SetCtrigX("X",CA[7],0x4,Path,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,Path,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Path,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-		SetCtrigX("X",CA[7],0x4,Path,SetTo,"X",CA[7],0x0,0,Path+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[1][1],Shape[1][2],Shape[1][3]);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x218,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+	if type(Path) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Path,SetTo,"X",CV[15][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Path,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Path),
+			SetCtrigX("X",CA[7],0x4,Path,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Path,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Path,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Path,SetTo,"X",CA[7],0x0,0,Path+1),
+		})
+		TMem(PlayerID,CV[11],FArr(FX[Path],0))
+		TMem(PlayerID,CV[12],FArr(FY[Path],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Path[1][1],Path[1][2],Path[1][3]);
+			SetCtrigX(Path[1][1],Path[1][2],0x158,Path[1][3],SetTo,"X",CV[15][2],0x15C,1,0),
+			SetCtrig1X(Path[1][1],Path[1][2],0x198,Path[1][3],SetTo,0),
+			SetCtrigX(Path[1][1],Path[1][2],0x1D8,Path[1][3],SetTo,"X",CV[11][2],0x15C,1,0),
+			SetCtrigX(Path[1][1],Path[1][2],0x218,Path[1][3],SetTo,"X",CV[12][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrig1X(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x218,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -20111,13 +20992,6 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[11],FArr(FX[Path],0))
-	TMem(PlayerID,CV[12],FArr(FY[Path],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20128,7 +21002,7 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[15],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCROPACall1,0x0,0,0);
 				SetCtrigX("X",FCBCROPACall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCROPACall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20137,7 +21011,16 @@ function CB_CropPath(Path,OutSide,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
@@ -20170,17 +21053,48 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 	DoActionsX(PlayerID,{SetCtrigX("X",CV[11][2],0x15C,0,SetTo,CropFunc[1],CropFunc[2],0x0,0,1),
 	SetCtrigX("X",CV[12][2],0x15C,0,SetTo,CropFunc[1],CropFunc[2]+1,0x4,1,0)})
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -20193,11 +21107,6 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20207,7 +21116,7 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCROPGCall1,0x0,0,0);
 				SetCtrigX("X",FCBCROPGCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCROPGCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20216,7 +21125,16 @@ function CB_CropGraph(CropFunc,Sign,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_SetNumber(Number,Shape)
@@ -20224,7 +21142,14 @@ function CB_SetNumber(Number,Shape)
 	local CA = CAPlotDataArr
 	STPopTrigArr(PlayerID)
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),Number)
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),Number)
+	else
+		CDoActions(PlayerID,{
+			CallLabelAlways(Shape[2][1],Shape[2][2],Shape[2][3]);
+			TSetCtrig1X(Shape[2][1],Shape[2][2],0x15C,Shape[2][3],SetTo,Number),
+		})
+	end
 end
 
 function CB_Set(Index,X,Y,Shape)
@@ -20248,10 +21173,42 @@ function CB_Set(Index,X,Y,Shape)
 	CMov(PlayerID,CV[3],Y)
 
 	if X ~= nil then
-		CWrite(PlayerID,_TMem(FArr(FX[Shape],CV[1])),CV[2]) -- X
+		if type(Shape) == "number" then
+			CWrite(PlayerID,_TMem(FArr(FX[Shape],CV[1])),CV[2]) -- X
+		else
+			DoActionsX(PlayerID,{
+				CallLabelAlways3(Shape[1][1],Shape[1][2],Shape[1][3],CV[1][1],CV[1][2],CV[1][3],CV[2][1],CV[2][2],CV[2][3]);
+				SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+				SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X","X",0x158,1,1),
+				SetCtrig1X(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,0),
+				SetCtrigX("X",CV[1][2],0x158,0,SetTo,"X","X",0x158,1,1),
+				SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",CV[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+				SetCtrigX("X",CV[2][2],0x158,0,SetTo,"X","X",0x15C,1,1),
+				SetCtrig1X("X",CV[2][2],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",CV[2][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+			})
+			DoActionsX(PlayerID,{SetDeaths(0,SetTo,0,0)})
+		end
 	end
 	if Y ~= nil then
-		CWrite(PlayerID,_TMem(FArr(FY[Shape],CV[1])),CV[3]) -- Y
+		if type(Shape) == "number" then
+			CWrite(PlayerID,_TMem(FArr(FY[Shape],CV[1])),CV[3]) -- Y
+		else
+			DoActionsX(PlayerID,{
+				CallLabelAlways3(Shape[1][1],Shape[1][2],Shape[1][3],CV[1][1],CV[1][2],CV[1][3],CV[3][1],CV[3][2],CV[3][3]);
+				SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+				SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0),
+				SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X","X",0x158,1,1),
+				SetCtrigX("X",CV[1][2],0x158,0,SetTo,"X","X",0x158,1,1),
+				SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",CV[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+				SetCtrigX("X",CV[3][2],0x158,0,SetTo,"X","X",0x15C,1,1),
+				SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+			})
+			DoActionsX(PlayerID,{SetDeaths(0,SetTo,0,0)})
+		end
 	end
 end
 
@@ -20272,17 +21229,47 @@ function CB_Copy(Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20296,11 +21283,6 @@ function CB_Copy(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20310,7 +21292,7 @@ function CB_Copy(Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBCOPYCall1,0x0,0,0);
 				SetCtrigX("X",FCBCOPYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCOPYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20319,7 +21301,16 @@ function CB_Copy(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Add(X,Y,Shape)
@@ -20338,26 +21329,46 @@ function CB_Add(X,Y,Shape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
-
 	CMov(PlayerID,CV[2],X)
 	CMov(PlayerID,CV[3],Y)
 
-	CIf(PlayerID,{TTNVar(CV[1],iAtMost,Num[Shape]-1)})	
-		CWrite(PlayerID,_TMem(FArr(FX[Shape],CV[1])),CV[2]) -- X
-		CWrite(PlayerID,_TMem(FArr(FY[Shape],CV[1])),CV[3]) -- Y
-		CAdd(PlayerID,Mem("X",CA[7],0x15C,Shape),1)
-	CIfEnd()
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+
+		CIf(PlayerID,{TTNVar(CV[1],iAtMost,Num[Shape]-1)})	
+			CWrite(PlayerID,_TMem(FArr(FX[Shape],CV[1])),CV[2]) -- X
+			CWrite(PlayerID,_TMem(FArr(FY[Shape],CV[1])),CV[3]) -- Y
+			CAdd(PlayerID,Mem("X",CA[7],0x15C,Shape),1)
+		CIfEnd()
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+
+		CIf(PlayerID,{TTNVar(CV[1],iAtMost,CV[4])})	
+			CWrite(PlayerID,_Add(CV[5],CV[1]),CV[2]) -- X
+			CWrite(PlayerID,_Add(CV[6],CV[1]),CV[3]) -- Y
+			CDoActions(PlayerID,{TSetMemory(Shape[4],Add,1)})
+		CIfEnd()
+	end
 end
 
 function CB_Fill(startX,startY,sizeX,sizeY,numX,numY,Shape)
@@ -20384,8 +21395,20 @@ function CB_Fill(startX,startY,sizeX,sizeY,numX,numY,Shape)
 	CMov(PlayerID,CV[9],numX)
 	CMov(PlayerID,CV[10],numY)
 
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	local RetAct = {}
+	if type(Shape) == "number" then
+		table.insert(RetAct,SetNVar(CV[2],SetTo,Num[Shape]))
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[1][1],Shape[1][2],Shape[1][3]);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetNVar(CV[2],SetTo,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -20394,7 +21417,7 @@ function CB_Fill(startX,startY,sizeX,sizeY,numX,numY,Shape)
 				Label(0);
 			},
 			actions = {
-				SetNVar(CV[2],SetTo,Num[Shape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBFILLCall1,0x0,0,0);
 				SetCtrigX("X",FCBFILLCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBFILLCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20403,7 +21426,16 @@ function CB_Fill(startX,startY,sizeX,sizeY,numX,numY,Shape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],Shape[2][1],Shape[2][2],Shape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,Shape[2][1],Shape[2][2],0x15C,1,Shape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Draw(startX,startY,sizeX,sizeY,num,Shape)
@@ -20423,26 +21455,42 @@ function CB_Draw(startX,startY,sizeX,sizeY,num,Shape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
-
 	CMov(PlayerID,CV[5],startX)
 	CMov(PlayerID,CV[6],startY)
 	CMov(PlayerID,CV[7],sizeX)
 	CMov(PlayerID,CV[8],sizeY)
 	CMov(PlayerID,CV[9],num)
 
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	local RetAct = {}
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+
+		table.insert(RetAct,SetNVar(CV[2],SetTo,Num[Shape]-1))
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetNVar(CV[2],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -20451,7 +21499,7 @@ function CB_Draw(startX,startY,sizeX,sizeY,num,Shape)
 				Label(0);
 			},
 			actions = {
-				SetNVar(CV[2],SetTo,Num[Shape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBDRAWCall1,0x0,0,0);
 				SetCtrigX("X",FCBDRAWCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBDRAWCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20460,7 +21508,16 @@ function CB_Draw(startX,startY,sizeX,sizeY,num,Shape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],Shape[2][1],Shape[2][2],Shape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,Shape[2][1],Shape[2][2],0x15C,1,Shape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Draw2(startX,startY,sizeX,sizeY,num,Shape)
@@ -20480,26 +21537,42 @@ function CB_Draw2(startX,startY,sizeX,sizeY,num,Shape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
-
 	CMov(PlayerID,CV[5],startX)
 	CMov(PlayerID,CV[6],startY)
 	CMov(PlayerID,CV[7],sizeX)
 	CMov(PlayerID,CV[8],sizeY)
 	CMov(PlayerID,CV[9],num)
 
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	local RetAct = {}
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+
+		table.insert(RetAct,SetNVar(CV[2],SetTo,Num[Shape]-2))
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetNVar(CV[2],SetTo,-2);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -20508,7 +21581,7 @@ function CB_Draw2(startX,startY,sizeX,sizeY,num,Shape)
 				Label(0);
 			},
 			actions = {
-				SetNVar(CV[2],SetTo,Num[Shape]-2);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBDRAW2Call1,0x0,0,0);
 				SetCtrigX("X",FCBDRAW2Call2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBDRAW2Call2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20517,7 +21590,16 @@ function CB_Draw2(startX,startY,sizeX,sizeY,num,Shape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],Shape[2][1],Shape[2][2],Shape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,Shape[2][1],Shape[2][2],0x15C,1,Shape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Delete(X,Y,SizeX,SizeY,Shape)
@@ -20537,25 +21619,39 @@ function CB_Delete(X,Y,SizeX,SizeY,Shape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
-
 	CMov(PlayerID,CV[5],X)
 	CMov(PlayerID,CV[6],Y)
 	CMov(PlayerID,CV[7],SizeX)
 	CMov(PlayerID,CV[8],SizeY)
 
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	local RetAct = {}
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[4],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[1][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+		})
+	end
 
 	-- Call f_CBMove
 	Trigger {
@@ -20573,7 +21669,16 @@ function CB_Delete(X,Y,SizeX,SizeY,Shape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],Shape[2][1],Shape[2][2],Shape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,Shape[2][1],Shape[2][2],0x15C,1,Shape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Overlap(Shape,RetShape)
@@ -20593,23 +21698,62 @@ function CB_Overlap(Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20622,11 +21766,6 @@ function CB_Overlap(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20636,7 +21775,7 @@ function CB_Overlap(Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBOVERCall1,0x0,0,0);
 				SetCtrigX("X",FCBOVERCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBOVERCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20645,7 +21784,16 @@ function CB_Overlap(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_OverlapX(ShapeA,ShapeB,RetShape)
@@ -20665,29 +21813,89 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[12][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,ShapeB),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
-	})
+	if type(ShapeA) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
+		TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeA[1][1],ShapeA[1][2],0x0,0,0);
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x4,0,SetTo,ShapeA[5][1],ShapeA[5][2],0x0,0,0);
+			SetCtrigX(ShapeA[6][1],ShapeA[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeA[5][1],ShapeA[5][2],0x15C,ShapeA[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(ShapeA[1][1],ShapeA[1][2],0x158,ShapeA[1][3],SetTo,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x198,ShapeA[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x1D8,ShapeA[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(ShapeB) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[12][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeB),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
+		})
+		TMem(PlayerID,CV[13],FArr(FX[ShapeB],0))
+		TMem(PlayerID,CV[14],FArr(FY[ShapeB],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeB[1][1],ShapeB[1][2],0x0,0,0);
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x4,0,SetTo,ShapeB[5][1],ShapeB[5][2],0x0,0,0);
+			SetCtrigX(ShapeB[6][1],ShapeB[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeB[5][1],ShapeB[5][2],0x15C,ShapeB[5][3],SetTo,"X",CV[12][2],0x15C,1,0),
+			SetCtrig1X(ShapeB[1][1],ShapeB[1][2],0x158,ShapeB[1][3],SetTo,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x198,ShapeB[1][3],SetTo,"X",CV[13][2],0x15C,1,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x1D8,ShapeB[1][3],SetTo,"X",CV[14][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20702,13 +21910,6 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
-	TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[13],FArr(FX[ShapeB],0))
-	TMem(PlayerID,CV[14],FArr(FY[ShapeB],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20720,7 +21921,7 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[12],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBOVERXCall1,0x0,0,0);
 				SetCtrigX("X",FCBOVERXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBOVERXCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20729,7 +21930,16 @@ function CB_OverlapX(ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Merge(SizeX,SizeY,Shape,RetShape)
@@ -20749,26 +21959,65 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-	})
-
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20781,11 +22030,6 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20795,7 +22039,7 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMERGCall1,0x0,0,0);
 				SetCtrigX("X",FCBMERGCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMERGCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20804,7 +22048,16 @@ function CB_Merge(SizeX,SizeY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
@@ -20824,32 +22077,92 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,ShapeB),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
-	})
-
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
+
+	if type(ShapeA) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
+		TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeA[1][1],ShapeA[1][2],0x0,0,0);
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x4,0,SetTo,ShapeA[5][1],ShapeA[5][2],0x0,0,0);
+			SetCtrigX(ShapeA[6][1],ShapeA[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeA[5][1],ShapeA[5][2],0x15C,ShapeA[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(ShapeA[1][1],ShapeA[1][2],0x158,ShapeA[1][3],SetTo,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x198,ShapeA[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x1D8,ShapeA[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(ShapeB) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeB),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
+		})
+		TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
+		TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeB[1][1],ShapeB[1][2],0x0,0,0);
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x4,0,SetTo,ShapeB[5][1],ShapeB[5][2],0x0,0,0);
+			SetCtrigX(ShapeB[6][1],ShapeB[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeB[5][1],ShapeB[5][2],0x15C,ShapeB[5][3],SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X(ShapeB[1][1],ShapeB[1][2],0x158,ShapeB[1][3],SetTo,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x198,ShapeB[1][3],SetTo,"X",CV[23][2],0x15C,1,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x1D8,ShapeB[1][3],SetTo,"X",CV[24][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-2))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-2);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20864,13 +22177,6 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
-	TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
-	TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20882,7 +22188,7 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[22],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-2);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBMERGXCall1,0x0,0,0);
 				SetCtrigX("X",FCBMERGXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBMERGXCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20891,7 +22197,16 @@ function CB_MergeX(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
@@ -20911,32 +22226,92 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,ShapeB),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
-	})
-
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
+
+	if type(ShapeA) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
+		TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeA[1][1],ShapeA[1][2],0x0,0,0);
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x4,0,SetTo,ShapeA[5][1],ShapeA[5][2],0x0,0,0);
+			SetCtrigX(ShapeA[6][1],ShapeA[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeA[5][1],ShapeA[5][2],0x15C,ShapeA[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(ShapeA[1][1],ShapeA[1][2],0x158,ShapeA[1][3],SetTo,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x198,ShapeA[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x1D8,ShapeA[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(ShapeB) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeB),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
+		})
+		TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
+		TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeB[1][1],ShapeB[1][2],0x0,0,0);
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x4,0,SetTo,ShapeB[5][1],ShapeB[5][2],0x0,0,0);
+			SetCtrigX(ShapeB[6][1],ShapeB[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeB[5][1],ShapeB[5][2],0x15C,ShapeB[5][3],SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X(ShapeB[1][1],ShapeB[1][2],0x158,ShapeB[1][3],SetTo,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x198,ShapeB[1][3],SetTo,"X",CV[23][2],0x15C,1,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x1D8,ShapeB[1][3],SetTo,"X",CV[24][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -20951,13 +22326,6 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
-	TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
-	TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -20969,7 +22337,7 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[22],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBINTSCall1,0x0,0,0);
 				SetCtrigX("X",FCBINTSCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBINTSCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -20978,7 +22346,16 @@ function CB_Intersect(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
@@ -20998,32 +22375,92 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,ShapeB),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
-	})
-
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
+
+	if type(ShapeA) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
+		TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeA[1][1],ShapeA[1][2],0x0,0,0);
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x4,0,SetTo,ShapeA[5][1],ShapeA[5][2],0x0,0,0);
+			SetCtrigX(ShapeA[6][1],ShapeA[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeA[5][1],ShapeA[5][2],0x15C,ShapeA[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(ShapeA[1][1],ShapeA[1][2],0x158,ShapeA[1][3],SetTo,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x198,ShapeA[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x1D8,ShapeA[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(ShapeB) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeB),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
+		})
+		TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
+		TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeB[1][1],ShapeB[1][2],0x0,0,0);
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x4,0,SetTo,ShapeB[5][1],ShapeB[5][2],0x0,0,0);
+			SetCtrigX(ShapeB[6][1],ShapeB[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeB[5][1],ShapeB[5][2],0x15C,ShapeB[5][3],SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X(ShapeB[1][1],ShapeB[1][2],0x158,ShapeB[1][3],SetTo,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x198,ShapeB[1][3],SetTo,"X",CV[23][2],0x15C,1,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x1D8,ShapeB[1][3],SetTo,"X",CV[24][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21038,13 +22475,6 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
-	TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
-	TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -21056,7 +22486,7 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[22],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSUBTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSUBTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSUBTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -21065,7 +22495,16 @@ function CB_Subtract(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
@@ -21085,32 +22524,92 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,ShapeB),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-		SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
-	})
-
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
+
+	if type(ShapeA) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeA),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeA,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeA,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeA,SetTo,"X",CA[7],0x0,0,ShapeA+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
+		TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeA[1][1],ShapeA[1][2],0x0,0,0);
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x4,0,SetTo,ShapeA[5][1],ShapeA[5][2],0x0,0,0);
+			SetCtrigX(ShapeA[6][1],ShapeA[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeA[5][1],ShapeA[5][2],0x15C,ShapeA[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(ShapeA[1][1],ShapeA[1][2],0x158,ShapeA[1][3],SetTo,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x198,ShapeA[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(ShapeA[1][1],ShapeA[1][2],0x1D8,ShapeA[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	if type(ShapeB) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,ShapeB),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,ShapeB,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,ShapeB,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,ShapeB,SetTo,"X",CA[7],0x0,0,ShapeB+1),
+		})
+		TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
+		TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,ShapeB[1][1],ShapeB[1][2],0x0,0,0);
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x4,0,SetTo,ShapeB[5][1],ShapeB[5][2],0x0,0,0);
+			SetCtrigX(ShapeB[6][1],ShapeB[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(ShapeB[5][1],ShapeB[5][2],0x15C,ShapeB[5][3],SetTo,"X",CV[22][2],0x15C,1,0),
+			SetCtrig1X(ShapeB[1][1],ShapeB[1][2],0x158,ShapeB[1][3],SetTo,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x198,ShapeB[1][3],SetTo,"X",CV[23][2],0x15C,1,0),
+			SetCtrigX(ShapeB[1][1],ShapeB[1][2],0x1D8,ShapeB[1][3],SetTo,"X",CV[24][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21125,13 +22624,6 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[ShapeA],0))
-	TMem(PlayerID,CV[6],FArr(FY[ShapeA],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[23],FArr(FX[ShapeB],0))
-	TMem(PlayerID,CV[24],FArr(FY[ShapeB],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -21143,7 +22635,7 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			actions = {
 				SetNVar(CV[2],Subtract,1);
 				SetNVar(CV[22],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBXORCall1,0x0,0,0);
 				SetCtrigX("X",FCBXORCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBXORCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -21152,7 +22644,16 @@ function CB_Xor(SizeX,SizeY,ShapeA,ShapeB,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
@@ -21172,23 +22673,6 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,RetShape),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-		SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
-	})
 
 	CMov(PlayerID,CV[11],SizeX)
 	CMov(PlayerID,CV[12],SizeY)
@@ -21197,6 +22681,64 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 	else
 		CMov(PlayerID,CV[14],Priority)
 	end 
+
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,RetShape),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,RetShape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,RetShape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,RetShape,SetTo,"X",CA[7],0x0,0,RetShape+1),
+		})
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,RetShape[1][1],RetShape[1][2],0x0,0,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x4,0,SetTo,RetShape[5][1],RetShape[5][2],0x0,0,0);
+			SetCtrigX(RetShape[6][1],RetShape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(RetShape[5][1],RetShape[5][2],0x15C,RetShape[5][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21210,11 +22752,6 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -21224,7 +22761,7 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBRMSTCall1,0x0,0,0);
 				SetCtrigX("X",FCBRMSTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBRMSTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -21233,7 +22770,16 @@ function CB_RemoveStack(Priority,SizeX,SizeY,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_GetXmax(Shape,Output)
@@ -21253,17 +22799,31 @@ function CB_GetXmax(Shape,Output)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21275,8 +22835,6 @@ function CB_GetXmax(Shape,Output)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21317,17 +22875,31 @@ function CB_GetXmin(Shape,Output)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21339,8 +22911,6 @@ function CB_GetXmin(Shape,Output)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21381,17 +22951,31 @@ function CB_GetXCntr(Shape,Output,maxOutput,minOutput)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FX[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21403,8 +22987,6 @@ function CB_GetXCntr(Shape,Output,maxOutput,minOutput)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FX[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21451,17 +23033,31 @@ function CB_GetYmax(Shape,Output)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21473,8 +23069,6 @@ function CB_GetYmax(Shape,Output)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FY[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21515,17 +23109,31 @@ function CB_GetYmin(Shape,Output)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21537,8 +23145,6 @@ function CB_GetYmin(Shape,Output)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FY[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21579,17 +23185,31 @@ function CB_GetYCntr(Shape,Output,maxOutput,minOutput)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[3],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[3][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -21601,8 +23221,6 @@ function CB_GetYCntr(Shape,Output,maxOutput,minOutput)
 			},
 			flag = {Preserved}
 		}
-
-	TMem(PlayerID,CV[3],FArr(FY[Shape],0))
 
 	-- Call f_CBMove
 	Trigger {
@@ -21649,7 +23267,16 @@ function CB_GetXLoc(Index,Shape,Output)
 	STPopTrigArr(PlayerID)
 
 	CMov(PlayerID,CV[1],Index)
-	TMem(PlayerID,CV[2],FArr(FX[Shape],0))
+	if type(Shape) == "number" then
+		TMem(PlayerID,CV[2],FArr(FX[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[1][1],Shape[1][2],Shape[1][3]);
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,0);
+		})
+	end
 	f_SHRead(PlayerID,_Add(CV[2],CV[1]),Output) -- XLoc
 end
 
@@ -21670,7 +23297,16 @@ function CB_GetYLoc(Index,Shape,Output)
 	STPopTrigArr(PlayerID)
 
 	CMov(PlayerID,CV[1],Index)
-	TMem(PlayerID,CV[2],FArr(FY[Shape],0))
+	if type(Shape) == "number" then
+		TMem(PlayerID,CV[2],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[1][1],Shape[1][2],Shape[1][3]);
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[2][2],0x15C,1,0),
+		})
+	end
 	f_SHRead(PlayerID,_Add(CV[2],CV[1]),Output) -- YLoc
 end
 
@@ -21690,33 +23326,150 @@ function CB_GetNumber(Shape,Output)
 	local Num = CBPlotNum
 	STPopTrigArr(PlayerID)
 
-	if type(Output) == "number" then
- 	DoActionsX(PlayerID,{
-		SetCtrig1X("X",CA[7],0x158,Shape,SetTo,EPD(Output)),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
- 	elseif Output[4] == "V" then
- 	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,Output[1],Output[2],0x15C,1,Output[3]),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
+	if type(Shape) == "number" then
+		if type(Output) == "number" then
+	 	DoActionsX(PlayerID,{
+			SetCtrig1X("X",CA[7],0x158,Shape,SetTo,EPD(Output)),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+	 	elseif Output[4] == "V" then
+	 	DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,Output[1],Output[2],0x15C,1,Output[3]),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,Output[1],Output[2],Output[3],1,Output[4]),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		end
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
 	else
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,Output[1],Output[2],Output[3],1,Output[4]),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
+		if type(Output) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+			SetCtrig1X(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,EPD(Output)),
+		})
+	 	elseif Output[4] == "V" then
+	 	DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,Output[1],Output[2],0x15C,1,Output[3]),
+		})
+		else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,Output[1],Output[2],Output[3],1,Output[4]),
+		})
+		end
 	end
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+end
+
+
+function CB_InitVShapeX(Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local FN = CBPlotFArrN
+	local TNum = CBPlotTNum
+
+	local Temp = CreateSVar(3,PlayerID)[1]
+	local Temp2 = CreateSVar(4,PlayerID)[1]
+	local Temp3 = CreateSVar(3,PlayerID)[1]
+	local Ret = {{Temp[1],Temp[2],0,"V"},CreateVar(PlayerID),CreateWar(PlayerID),CreateVar(PlayerID),{Temp2[1],Temp2[2],0,"V"},{Temp3[1],Temp3[2],0,"V"}}
+	local FXData = FArr(FX[Shape],0)
+	local FYData = FArr(FY[Shape],0)
+	local FNData = FArr(FN[Shape],0)
+	DoActionsX(PlayerID,{ -- Recover
+		SetCtrig1X("X",Ret[1][2],0x15C,0,SetTo,Num[Shape]);
+		SetCtrig1X("X",Ret[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+		SetCtrigX("X",Ret[1][2],0x19C,0,SetTo,FXData[1],FXData[2],FXData[3],1,FXData[4]); 
+		SetCtrigX("X",Ret[1][2],0x1DC,0,SetTo,FYData[1],FYData[2],FYData[3],1,FYData[4]); 
+		SetCtrigX("X",Ret[2][2],0x158,0,SetTo,"X",CA[7],0x15C,1,Shape);
+		SetCtrigX("X",Ret[4][2],0x15C,0,SetTo,"X",CA[7],0x15C,1,Shape);
+
+		SetCtrigX("X",Ret[3][2],0x15C,0,SetTo,FNData[1],FNData[2],FNData[3],1,FNData[4]);
+		SetCtrig1X("X",Ret[3][2],0x19C,0,SetTo,TNum[Shape]);
+		SetCtrig1X("X",Ret[3][2],0x1A0,0,SetTo,Add*16777216,0xFF000000);
+
+		SetCtrigX("X",Ret[5][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape);
+		SetCtrigX("X",Ret[5][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[5][2],0x19C,0,SetTo,0x200,0x200);
+		SetCtrigX("X",Ret[5][2],0x1D8,0,SetTo,"X",Ret[5][2],0x4,1,0); SetCtrigX("X",Ret[5][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape);
+		SetCtrigX("X",Ret[5][2],0x218,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[5][2],0x21C,0,SetTo,"X",Ret[6][2],0x0,0,0);
+
+		SetCtrigX("X",Ret[6][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape); SetCtrigX("X",Ret[6][2],0x15C,0,SetTo,"X",CA[10],0x15C,1,0);
+		SetCtrigX("X",Ret[6][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[6][2],0x19C,0,SetTo,0x000,0x200);
+		SetCtrigX("X",Ret[6][2],0x1D8,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[6][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape+1);
 	})
+
+	return Ret
+end
+
+function CB_VShapeX(VShapeX,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local FN = CBPlotFArrN
+	local TNum = CBPlotTNum
+	local Ret = VShapeX
+
+	local FXData = FArr(FX[Shape],0)
+	local FYData = FArr(FY[Shape],0)
+	local FNData = FArr(FN[Shape],0)
+	DoActionsX(PlayerID,{ -- Recover
+		SetCtrig1X("X",Ret[1][2],0x15C,0,SetTo,Num[Shape]);
+		SetCtrig1X("X",Ret[1][2],0x160,0,SetTo,Add*16777216,0xFF000000);
+		SetCtrigX("X",Ret[1][2],0x19C,0,SetTo,FXData[1],FXData[2],FXData[3],1,FXData[4]); 
+		SetCtrigX("X",Ret[1][2],0x1DC,0,SetTo,FYData[1],FYData[2],FYData[3],1,FYData[4]); 
+		SetCtrigX("X",Ret[2][2],0x158,0,SetTo,"X",CA[7],0x15C,1,Shape);
+		SetCtrigX("X",Ret[4][2],0x15C,0,SetTo,"X",CA[7],0x15C,1,Shape);
+
+		SetCtrigX("X",Ret[3][2],0x15C,0,SetTo,FNData[1],FNData[2],FNData[3],1,FNData[4]);
+		SetCtrig1X("X",Ret[3][2],0x19C,0,SetTo,TNum[Shape]);
+		SetCtrig1X("X",Ret[3][2],0x1A0,0,SetTo,Add*16777216,0xFF000000);
+
+		SetCtrigX("X",Ret[5][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape);
+		SetCtrigX("X",Ret[5][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[5][2],0x19C,0,SetTo,0x200,0x200);
+		SetCtrigX("X",Ret[5][2],0x1D8,0,SetTo,"X",Ret[5][2],0x4,1,0); SetCtrigX("X",Ret[5][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape);
+		SetCtrigX("X",Ret[5][2],0x218,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[5][2],0x21C,0,SetTo,"X",Ret[6][2],0x0,0,0);
+
+		SetCtrigX("X",Ret[6][2],0x158,0,SetTo,"X",CA[7],0x158,1,Shape); SetCtrigX("X",Ret[6][2],0x15C,0,SetTo,"X",CA[10],0x15C,1,0);
+		SetCtrigX("X",Ret[6][2],0x198,0,SetTo,"X",CA[7],0x2C,1,Shape); SetCtrig1X("X",Ret[6][2],0x19C,0,SetTo,0x000,0x200);
+		SetCtrigX("X",Ret[6][2],0x1D8,0,SetTo,"X",CA[7],0x4,1,Shape); SetCtrigX("X",Ret[6][2],0x1DC,0,SetTo,"X",CA[7],0x0,0,Shape+1);
+	})
+
 end
 
 function CB_TGetNumber(Shape,Output)
@@ -21736,7 +23489,16 @@ function CB_TGetNumber(Shape,Output)
 	local FN = CBPlotFArrN
 	STPopTrigArr(PlayerID)
 
-	f_SHRead(PlayerID,FArr(FN[Shape],0),Output) -- TNum
+	if type(Shape) == "number" then
+		f_SHRead(PlayerID,FArr(FN[Shape],0),Output) -- TNum
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		f_SHRead(PlayerID,CV[2],Output) -- TNum
+	end
 end
 
 function CB_TGetLoc(Index,Shape,Output)
@@ -21757,7 +23519,17 @@ function CB_TGetLoc(Index,Shape,Output)
 	STPopTrigArr(PlayerID)
 
 	CMov(PlayerID,CV[1],Index)
-	f_SHRead(PlayerID,_TMem(FArr(FN[Shape],CV[1])),Output) -- TLoc
+
+	if type(Shape) == "number" then
+		f_SHRead(PlayerID,_TMem(FArr(FN[Shape],CV[1])),Output) -- TLoc
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		f_SHRead(PlayerID,_Add(CV[1],CV[2]),Output) -- TNum
+	end
 end
 
 function CB_TSetNumber(Number,Shape)
@@ -21778,7 +23550,16 @@ function CB_TSetNumber(Number,Shape)
 	STPopTrigArr(PlayerID)
 
 	CMov(PlayerID,CV[1],Number)
-	CWrite(PlayerID,_TMem(FArr(FN[Shape],0)),CV[1]) -- L
+	if type(Shape) == "number" then
+		CWrite(PlayerID,_TMem(FArr(FN[Shape],0)),CV[1]) -- L
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		CWrite(PlayerID,CV[2],CV[1]) -- L
+	end
 end
 
 function CB_TSet(Index,LoopMax,Shape)
@@ -21801,7 +23582,16 @@ function CB_TSet(Index,LoopMax,Shape)
 	CMov(PlayerID,CV[1],Index)
 	CMov(PlayerID,CV[2],LoopMax)
 	
-	CWrite(PlayerID,_TMem(FArr(FN[Shape],CV[1])),CV[2]) -- L
+	if type(Shape) == "number" then
+		CWrite(PlayerID,_TMem(FArr(FN[Shape],CV[1])),CV[2]) -- L
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		CWrite(PlayerID,_Add(CV[3],CV[1]),CV[2]) -- L
+	end
 end
 
 function CB_TAdd(LoopMax,Shape)
@@ -21822,13 +23612,29 @@ function CB_TAdd(LoopMax,Shape)
 	local TNum = CBPlotTNum
 	STPopTrigArr(PlayerID)
 
-	f_SHRead(PlayerID,FArr(FN[Shape],0),CV[1]) -- TNum
+	if type(Shape) == "number" then
+		f_SHRead(PlayerID,FArr(FN[Shape],0),CV[1]) -- TNum
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[3][2],0x15C,1,0),
+			SetCtrigX(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+		})
+		f_SHRead(PlayerID,CV[3],CV[1]) -- TNum
+	end
 
 	CMov(PlayerID,CV[2],LoopMax)
 
-	CIf(PlayerID,{TTNVar(CV[1],iAtMost,TNum[Shape]-1)},SetMemX(FArr(FN[Shape],0),Add,1))	
-		CWrite(PlayerID,_TMem(FArr(FN[Shape],CV[1])),CV[2]) -- X
-	CIfEnd()
+	if type(Shape) == "number" then
+		CIf(PlayerID,{TTNVar(CV[1],iAtMost,TNum[Shape]-1)},SetMemX(FArr(FN[Shape],0),Add,1))	
+			CWrite(PlayerID,_TMem(FArr(FN[Shape],CV[1])),CV[2]) -- X
+		CIfEnd()
+	else
+		CIf(PlayerID,{TTNVar(CV[1],iAtMost,CV[4])},{TSetMemory(CV[3],Add,1)})	
+			CWrite(PlayerID,_Add(CV[3],CV[1]),CV[2]) -- X
+		CIfEnd()
+	end
 end
 
 function CB_TDelete(Index,Shape)
@@ -21850,10 +23656,19 @@ function CB_TDelete(Index,Shape)
 	local TNum = CBPlotTNum
 	STPopTrigArr(PlayerID)
 
-	f_SHRead(PlayerID,FArr(FN[Shape],0),CV[1]) -- TNum
-
 	CMov(PlayerID,CV[3],Index)
-	TMem(PlayerID,CV[2],FArr(FN[Shape],0))
+
+	if type(Shape) == "number" then
+		f_SHRead(PlayerID,FArr(FN[Shape],0),CV[1]) -- TNum
+		TMem(PlayerID,CV[2],FArr(FN[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		f_SHRead(PlayerID,CV[2],CV[1]) -- TNum
+	end	
 
 	-- Call f_CBMove
 	Trigger {
@@ -21871,7 +23686,16 @@ function CB_TDelete(Index,Shape)
 			flag = {Preserved}
 		}
 
-	CWrite(PlayerID,_TMem(FArr(FN[Shape],0)),CV[1]) --
+	if type(Shape) == "number" then
+		CWrite(PlayerID,_TMem(FArr(FN[Shape],0)),CV[1]) --
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		CWrite(PlayerID,CV[2],CV[1]) --
+	end
 end
 
 function CB_TCopy(Shape,RetShape)
@@ -21893,7 +23717,30 @@ function CB_TCopy(Shape,RetShape)
 	local TNum = CBPlotTNum
 	STPopTrigArr(PlayerID)
 
-	f_SHRead(PlayerID,FArr(FN[Shape],0),CV[2]) -- TNum
+	if type(Shape) == "number" then
+		f_SHRead(PlayerID,FArr(FN[Shape],0),CV[2]) -- TNum
+		TMem(PlayerID,CV[5],FArr(FN[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrig1X(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,0),
+		})
+		f_SHRead(PlayerID,CV[5],CV[2]) -- TNum
+	end	
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		TMem(PlayerID,CV[6],FArr(FN[RetShape],0))
+		table.insert(RetAct,SetNVar(CV[4],SetTo,TNum[RetShape]-1))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[6][2],0x15C,1,0),
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+		})
+	end	
 
 	Trigger {
 			players = {PlayerID},
@@ -21907,9 +23754,6 @@ function CB_TCopy(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FN[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FN[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -21918,7 +23762,7 @@ function CB_TCopy(Shape,RetShape)
 				NVar(CV[2],AtLeast,1);
 			},
 			actions = {
-				SetNVar(CV[4],SetTo,TNum[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBTCPYCall1,0x0,0,0);
 				SetCtrigX("X",FCBTCPYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBTCPYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -21927,7 +23771,16 @@ function CB_TCopy(Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CWrite(PlayerID,_TMem(FArr(FN[RetShape],0)),CV[1]) -- 
+	if type(RetShape) == "number" then
+		CWrite(PlayerID,_TMem(FArr(FN[RetShape],0)),CV[1]) --
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,0),
+		})
+		CWrite(PlayerID,CV[2],CV[1]) --
+	end
 end
 
 function CB_Sort(Sfunc,Direction,Shape,RetShape)
@@ -21953,17 +23806,48 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 	DoActionsX(PlayerID,{SetCtrigX("X",CV[12][2],0x15C,0,SetTo,Sfunc[1],Sfunc[2],0x0,0,1),
 	SetCtrigX("X",CV[13][2],0x15C,0,SetTo,Sfunc[1],Sfunc[2]+1,0x4,1,0)})
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -21976,11 +23860,6 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -21992,7 +23871,7 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,0); -- SortXY/RA
 				SetNVar(CV[24],SetTo,0); -- Sort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22001,7 +23880,16 @@ function CB_Sort(Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_SortI(Sfunc,Direction,Shape,RetShape)
@@ -22027,17 +23915,48 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 	DoActionsX(PlayerID,{SetCtrigX("X",CV[12][2],0x15C,0,SetTo,Sfunc[1],Sfunc[2],0x0,0,1),
 	SetCtrigX("X",CV[13][2],0x15C,0,SetTo,Sfunc[1],Sfunc[2]+1,0x4,1,0)})
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -22050,11 +23969,6 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22066,7 +23980,7 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,1); -- SortI
 				SetNVar(CV[24],SetTo,0); -- Sort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22075,7 +23989,16 @@ function CB_SortI(Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
@@ -22110,17 +24033,54 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 		DoActionsX(PlayerID,{SetNVar(CV[22],SetTo,0)})
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		table.insert(RetAct,SetNVar(CV[32],SetTo,TNum[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+		TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(RetShape[1][1],RetShape[1][2],RetShape[1][3],RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[31][2],0x15C,1,0),
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,"X",CV[32][2],0x15C,1,0),
+			SetNVar(CV[32],SetTo,0);
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -22133,12 +24093,6 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22150,8 +24104,7 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,0); -- SortXY/RA
 				SetNVar(CV[24],SetTo,1); -- NSort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
-				SetNVar(CV[32],SetTo,TNum[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22160,7 +24113,16 @@ function CB_NSort(Func,Step,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
@@ -22195,17 +24157,54 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 		DoActionsX(PlayerID,{SetNVar(CV[22],SetTo,0)})
 	end
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		table.insert(RetAct,SetNVar(CV[32],SetTo,TNum[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+		TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(RetShape[1][1],RetShape[1][2],RetShape[1][3],RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[31][2],0x15C,1,0),
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,"X",CV[32][2],0x15C,1,0),
+			SetNVar(CV[32],SetTo,0);
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -22218,12 +24217,6 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22235,8 +24228,7 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,1); -- SortI
 				SetNVar(CV[24],SetTo,1); -- NSort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
-				SetNVar(CV[32],SetTo,TNum[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22245,7 +24237,16 @@ function CB_NSortI(Func,Step,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
@@ -22281,17 +24282,54 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 	end
 	CMov(PlayerID,CV[35],Void)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		table.insert(RetAct,SetNVar(CV[32],SetTo,TNum[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+		TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(RetShape[1][1],RetShape[1][2],RetShape[1][3],RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[31][2],0x15C,1,0),
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,"X",CV[32][2],0x15C,1,0),
+			SetNVar(CV[32],SetTo,0);
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -22304,12 +24342,6 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22321,8 +24353,7 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,0); -- SortXY/RA
 				SetNVar(CV[24],SetTo,2); -- TSort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
-				SetNVar(CV[32],SetTo,TNum[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22331,7 +24362,16 @@ function CB_TSort(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
@@ -22367,17 +24407,54 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 	end
 	CMov(PlayerID,CV[35],Void)
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		table.insert(RetAct,SetNVar(CV[32],SetTo,TNum[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+		TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(RetShape[1][1],RetShape[1][2],RetShape[1][3],RetShape[3][1],RetShape[3][2],RetShape[3][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x158,RetShape[3][3],SetTo,"X",CV[31][2],0x15C,1,0),
+			SetCtrigX(RetShape[3][1],RetShape[3][2],0x198,RetShape[3][3],SetTo,"X",CV[32][2],0x15C,1,0),
+			SetNVar(CV[32],SetTo,0);
+		})
+	end
+
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -22390,12 +24467,6 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-	TMem(PlayerID,CV[31],FArr(FN[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22407,8 +24478,7 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 				SetNVar(CV[20],SetTo,1); -- SortI
 				SetNVar(CV[24],SetTo,2); -- TSort
 				SetNVar(CV[2],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
-				SetNVar(CV[32],SetTo,TNum[RetShape]);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSORTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSORTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSORTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22417,7 +24487,16 @@ function CB_TSortI(Func,Step,Void,Sfunc,Direction,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
@@ -22453,17 +24532,47 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 	DoActionsX(PlayerID,{SetCtrigX("X",CV[14][2],0x15C,0,SetTo,Preset[2][1],Preset[2][2],0x0,0,1),
 	SetCtrigX("X",CV[15][2],0x15C,0,SetTo,Preset[2][1],Preset[2][2]+1,0x4,1,0)})
 
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
-		SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
-	})
-	DoActionsX(PlayerID,{
-		SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
-		SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
-		SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
-	})
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]-1))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
 
 	Trigger {
 			players = {PlayerID},
@@ -22477,11 +24586,6 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	TMem(PlayerID,CV[5],FArr(FX[Shape],0))
-	TMem(PlayerID,CV[6],FArr(FY[Shape],0))
-	TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
-	TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
-
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -22491,7 +24595,7 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 			},
 			actions = {
 				SetNVar(CV[13],Subtract,1);
-				SetNVar(CV[4],SetTo,Num[RetShape]-1);
+				RetAct;
 				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSPLTCall1,0x0,0,0);
 				SetCtrigX("X",FCBSPLTCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBSPLTCall2,0x158,0,SetTo,"X","X",0x4,1,0);
@@ -22500,7 +24604,16 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 			flag = {Preserved}
 		}
 
-	CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
 end
 
 function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(¥È-A))

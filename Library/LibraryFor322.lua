@@ -152,6 +152,26 @@ function SetCall(Player) -- CtrigAsm 5.1
 	end
 end
 
+function SetCallEnd() -- CtrigAsm 5.1
+	Trigger {
+		players = {SetCallPlayer},
+		conditions = {
+			Label(CallIndexAlloc);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Recover Next
+			SetCtrig1X("X","X",0x164,0,SetTo,0x2,0x2);
+		},
+		flag = {Preserved}
+	}
+	CallIndexAlloc = CallIndexAlloc + 1
+	if SetCallOpen == 1 then
+		SetCallOpen = 0
+	else
+		PushErrorMsg("SetCall_Not_Open_or_Wrong_SetCall_Func")
+	end
+end
+
 function CreateCallIndex()
 	CallIndexAlloc = CallIndexAlloc+2
 	return CallIndexAlloc-2
@@ -174,26 +194,6 @@ function SetCall2(Player,CallIndex) -- CtrigAsm 5.1
 		PushErrorMsg("SetCall_Already_Open")
 	end
 end
-function SetCallEnd() -- CtrigAsm 5.1
-	Trigger {
-		players = {SetCallPlayer},
-		conditions = {
-			Label(CallIndexAlloc);
-		},
-		actions = {
-			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Recover Next
-			SetCtrig1X("X","X",0x164,0,SetTo,0x2,0x2);
-		},
-		flag = {Preserved}
-	}
-	CallIndexAlloc = CallIndexAlloc + 1
-	if SetCallOpen == 1 then
-		SetCallOpen = 0
-	else
-		PushErrorMsg("SetCall_Not_Open_or_Wrong_SetCall_Func")
-	end
-end
-
 function SetCallEnd2() -- CtrigAsm 5.1
 	Trigger {
 		players = {SetCallPlayer},
@@ -208,6 +208,7 @@ function SetCallEnd2() -- CtrigAsm 5.1
 	}
 	if SetCallOpen == 2 then
 		SetCallOpen = 0
+		CurSCIndex = nil
 	else
 		PushErrorMsg("SetCall_Not_Open_or_Wrong_SetCall_Func")
 	end
@@ -1455,7 +1456,7 @@ function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 	local InputH = CreateVar(PlayerID)
 	local TempH = CreateVar(PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,InputH[2],0x15C,0,SetTo,PlayerID,StartIndex,0x15C,1,0))
-	SetCallIndex = CreateCallIndex()
+	local SetCallIndex = CreateCallIndex()
 
 	local SendVarArr = CreateVarArr(Line,PlayerID)
 
@@ -1463,7 +1464,7 @@ function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 	local TStr_LineTemp = CreateVar(PlayerID)
 	local TStr_SendJump = def_sIndex()
 	local Send_CallIndex = CreateCallIndex()
-	SetCall(PlayerID)
+	SetCall2(PlayerID,Send_CallIndex)
 	
 	CMov(PlayerID,TStr_LineV,0)
 	CJumpEnd(PlayerID,TStr_SendJump)
@@ -1486,7 +1487,7 @@ function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 		DoActions(PlayerID,{CopyCpAction({DisplayTextX(TStr_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayersArr,PlayerID)})
 	end
 	NIfXEnd()
-	SetCallEnd()
+	SetCallEnd2()
 
 	--[1] = PlayerID
 	--[2] = VarArr
@@ -1558,7 +1559,6 @@ function TS_Suspend(Condition,Flags)
 	end
 	if Flags == nil then Flags = {preserved} else Flags=nil end
 	TriggerX(TS_Player,Condition,TSAct,Flags)
-	DoActionsX(TS_Player,TSAct)
 	
 end
 function TSLine(Line,Type,Value,Mask)
@@ -1587,9 +1587,9 @@ function TS_Send(Condition,TStructData,SendProperty,PreserveFlag)--상수만 입력하
 	local TStr_SendArr = {}
 	for i = 1, Line do
 		if SendProperty[i]~= nil then
-			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i][2],SetTo,SendProperty[i]))
 		else
-			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
+			table.insert(TStr_SendArr,SetCVar(TStr_PlayerID,TStr_SendVarArr[i][2],SetTo,0))
 		end
 	end
 	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr,PreserveFlag)
@@ -1601,18 +1601,18 @@ function TS_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- 변수 V 를 
 	local TStr_SendVarArr = TStructData[8]
 	local TStr_SendCallIndex = TStructData[9]
 	local Line = #TStr_SendVarArr
-	local TStr_SendArr = {}
-	for i = 1, Line do
-		if SendProperty[i]~= nil then
-			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,SendProperty[i]))
-		else
-			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i],SetTo,0))
-		end
-	end
 	if PreserveFlag == nil then
 		CIf(TStr_PlayerID,Condition)
 	else
 		CIfOnce(TStr_PlayerID,Condition)
+	end
+	local TStr_SendArr = {}
+	for i = 1, Line do
+		if SendProperty[i]~= nil then
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i][2],SetTo,SendProperty[i]))
+		else
+			table.insert(TStr_SendArr,TSetCVar(TStr_PlayerID,TStr_SendVarArr[i][2],SetTo,0))
+		end
 	end
 	CDoActions(TStr_PlayerID,TStr_SendArr)
 	CallTrigger(TStr_PlayerID,TStr_SendCallIndex)
