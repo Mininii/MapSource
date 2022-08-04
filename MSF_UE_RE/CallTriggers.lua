@@ -777,9 +777,9 @@ local CB_P = CreateVar(FP)
 
 	TStr_Func(BlasterBullet)
 	
-	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {CreateUnit(1, 37, 1, FP),SetTSLine(1, Add, 1)})
+	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {CreateUnit(1, 37, 1, FP),SetTSLine(3, Add, 1)})
 
-	TS_Suspend({TSLine(1, AtLeast, 25)})
+	TS_Suspend({TSLine(3, AtLeast, 25)})
 	TStr_EndFunc()
 
 end
