@@ -58,7 +58,7 @@ function BossTrig()
 			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0)},{preserved})
 			CIfEnd()
 		
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2)},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1])},1)
 	CIfEnd()
 
 
@@ -80,7 +80,7 @@ function BossTrig()
 		DoActionsX(FP,SubCD(B2C[1],1))
 		
 
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6)},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6),SetDeaths(5,SetTo,1,BossUID[2])},1)
 	CIfEnd()
 
 
@@ -152,7 +152,7 @@ function BossTrig()
 			SetV(B3V[4],0),
 			SetV(B3V[5],0),
 		},{preserved})
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[3],19),Exactly,0,0xFF00)},{SetV(BPtrArr[3],0)},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[3],19),Exactly,0,0xFF00)},{SetV(BPtrArr[3],0),SetDeaths(6,SetTo,1,BossUID[3])},1)
 	CIfEnd()
 
 
@@ -183,7 +183,7 @@ function BossTrig()
 		TriggerX(FP,{CD(B4C[2],1,AtLeast)},{AddCD(B4C[2],1)},{preserved})
 		TriggerX(FP,{CD(Theorist,0),CD(B4C[2],200,AtLeast)},{SetCD(B4C[1],0),SetCD(B4C[2],0)},{preserved})
 		TriggerX(FP,{CD(Theorist,1),CD(B4C[2],100,AtLeast)},{SetCD(B4C[1],0),SetCD(B4C[2],0),ModifyUnitHitPoints(All, 128, P8, 64, 0)},{preserved})
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),SetDeaths(7,SetTo,1,BossUID[4])},1)
 	CIfEnd()
 
 	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force2,64)})--프로브보스

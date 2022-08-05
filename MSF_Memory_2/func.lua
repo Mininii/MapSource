@@ -1560,7 +1560,26 @@ end
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
 	local Z = {}
 	local CUTable = {}
-	local CUTable2 = G_CA_CUTable
+	local CUTable2
+	if RedMode == 1 then
+		CUTable2 = {}
+		local CUTi=0
+		while #CUTable2~=20 do
+			if #CUTable2>=20 then break end
+
+			for j,k in pairs(G_CA_CUTable) do
+				if #CUTable2>=20 then break end
+				table.insert(CUTable2,k)
+			end
+			CUTi=CUTi+1
+			if CUTi==2 then break end
+
+		end
+		
+	else
+		CUTable2 = G_CA_CUTable
+	end
+
 
 	if type(CUTable2) ~= "table" then
 		G_CA_SetSpawn_Inputdata_Error()

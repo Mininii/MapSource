@@ -31,7 +31,7 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-TestSet(0)
+TestSet(1)
 	EVFFlag = 0
 	CheatEnableFlag = 0
 if Limit == 1 then
@@ -42,7 +42,7 @@ if Limit == 1 then
 else
 	EVFFlag = 0
 end
-RedMode = 0
+RedMode = 1
 if RedMode == 1 then
 	VerText = "\x04Ver. Beta 0.ZR"
 else
