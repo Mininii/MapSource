@@ -114,6 +114,19 @@ function Interface()
 			
 			end
 	for i = 0, 6 do
+		Trigger { -- °­Åð
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(FP, AtLeast, 2, DMode);
+		},
+		actions = {
+			SetMemory(0x59CC78, SetTo, -1048576),
+			SetMemory(0x59CC80, SetTo, 2),
+			PreserveTrigger()
+			},
+		}
+		
 		
 		Trigger { -- °­Åð
 		players = {i},
