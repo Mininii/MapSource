@@ -481,7 +481,7 @@ local CB_P = CreateVar(FP)
 				CMov(FP,ReadScore,0)
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
 					
-					CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})
+					CIfX(FP,{CD(SoloNoPointC,1)})
 					CMov(FP,ReadScore,0)
 					CElseX()
 					f_Div(FP,ReadScore,ExScore[i+1],100)
@@ -501,7 +501,7 @@ local CB_P = CreateVar(FP)
 					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
-					CIfX(FP,CVar(FP,PCheckV[2],AtLeast,2))
+					CIfX(FP,CD(SoloNoPointC,0))
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
 					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 					CElseX()
@@ -776,10 +776,61 @@ local CB_P = CreateVar(FP)
 	end
 
 	TStr_Func(BlasterBullet)
-	
-	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {CreateUnit(1, 37, 1, FP),SetTSLine(3, Add, 1)})
 
-	TS_Suspend({TSLine(3, AtLeast, 25)})
+	--Line1 = StartX
+	--Line2 = StartY
+
+	--Line3 = DestX
+	--Line4 = DestY
+
+	--Line5 = TempCalcX
+	--Line6 = TempCalcY
+	--도착점 -(iSub) 시작점
+	NIfNot(FP,{CV(TS_VarArr[1],TS_VarArr[3])})
+	CIfX(FP,{TTNVar(TS_VarArr[1], "<", TS_VarArr[3])})
+		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),3),1)
+		CAdd(FP,TS_VarArr[1],TS_VarArr[5])
+	CElseIfX({TTNVar(TS_VarArr[1], ">", TS_VarArr[3])})
+		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[1], TS_VarArr[3]),3),1)
+		CSub(FP,TS_VarArr[1],TS_VarArr[5])
+	CIfXEnd()
+	NIfNotEnd()
+
+	NIfNot(FP,{CV(TS_VarArr[2],TS_VarArr[4])})
+	CIfX(FP,{TTNVar(TS_VarArr[2], "<", TS_VarArr[4])})
+		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[4], TS_VarArr[2]),3),1)
+		CAdd(FP,TS_VarArr[2],TS_VarArr[6])
+	CElseIfX({TTNVar(TS_VarArr[2], ">", TS_VarArr[4])})
+		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[2], TS_VarArr[4]),3),1)
+		CSub(FP,TS_VarArr[2],TS_VarArr[6])
+	CIfXEnd()
+	NIfNotEnd()
+	--,SetTo,928 이미지
+	--, SetTo, 131 스크립트 
+	--SetMemoryB(0x666160+(294*2), SetTo, 928),--이미지
+	--SetMemoryB(0x66EC48+(4*928), SetTo, 131),--스크립트
+	--SetMemoryB(0x669E28+928, SetTo, 17),--색상
+
+
+	--SetMemoryB(0x669E28+928, SetTo, 9),--색상복구
+
+
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Read(FP,0x628438,nil,Nextptrs)
+	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {})--
+	CDoActions(FP,{
+		CreateUnit(1,207, 1,FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+	})
+	CIfEnd()
+
+
+--	TS_Suspend({TSLine(3, AtLeast, 25)})
+	
+	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])})
+	TS_Suspend({})
+	CIfEnd()
 	TStr_EndFunc()
 
 end

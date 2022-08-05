@@ -341,7 +341,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- 지상무기
 		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- 공중무기
 		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- 시야
-		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*6))
+		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*10))
 		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- 부가사거리
 		--table.insert(PatchArr,SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,10000)) -- 쉴드
 	end

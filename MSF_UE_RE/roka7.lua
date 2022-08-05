@@ -69,7 +69,7 @@ function Install_Roka7Boss()
 	DoActionsX(FP,{SetV(F2BRS,1)})
 	CMov(FP,F2BRT,F2BSD)
 	CIfEnd()
-
+	CTrigger(FP,{TTOR({_TNVar(F2BRT, AtMost, F2BRU),_TNVar(F2XT1, AtMost, F2XT2)})},{SetMemory(0x58F520,SetTo,1)},1)
 	CIf(FP,{CV(F2BRV,0)})
 	f_Read(FP,_Add(B_5_C,2),F2BDX)
 	CSub(FP,F2BDT,F2BDY,F2BDX)

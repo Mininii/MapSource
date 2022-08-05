@@ -188,70 +188,36 @@ Trigger {
 		}
 
 	function CXfunc()
-				local CA = CAPlotDataArr
-				local CB = CAPlotCreateArr
-				local PlayerID = CAPlotPlayerID
-				
+		local CA = CAPlotDataArr
+		local CB = CAPlotCreateArr
+		local PlayerID = CAPlotPlayerID
 
-				CX_Ratio(TSize,CXTemp1,TSize,CXTemp1,TSize,CXTemp1)
-				CX_Rotate(_Div(XAngle,CXTemp2),_Div(YAngle,CXTemp2),_Div(ZAngle,CXTemp2))
-
-				Trigger {
-					players = {FP},
-					conditions = {
-						Label(0);
-						CVar("X",CA[11],AtLeast,0x80000000);
-					},
-					actions = {
-						SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
-						SetMemoryX(0x66321C, SetTo, 0*16777216,0xFF000000); -- 높이
-						PreserveTrigger();
-					}
-				}
-			
-		Trigger {
-					players = {FP},
-					conditions = {
-						Label(0);
-						CVar("X",CA[11],AtMost,0x7FFFFFFF);
-					},
-					actions = {
-						SetMemoryX(0x669FB4, SetTo, 16*16777216,0xFF000000); -- 화면출력
-						SetMemoryX(0x66321C, SetTo, 20*16777216,0xFF000000); -- 높이
-						PreserveTrigger();
-					}
-				}
-		Trigger {
-					players = {FP},
-					conditions = {
-						Label(0);
-						CDeaths(FP,Exactly,0,BlackBox);
-						CVar("X",CA[11],Exactly,0x0);
-					},
-					actions = {
-						SetMemoryX(0x669FB4, SetTo, 17*16777216,0xFF000000); -- 화면출력
-						SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
-						PreserveTrigger();
-					}
-				}
-		Trigger {
-					players = {FP},
-					conditions = {
-						Label(0);
-						CDeaths(FP,Exactly,1,BlackBox);
-						CVar("X",CA[11],Exactly,0x0);
-					},
-					actions = {
-						SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
-						SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
-						PreserveTrigger();
-					}
-				}
-	end
-
-	function CXfunc2()
+		CX_Ratio(TSize,CXTemp1,TSize,CXTemp1,TSize,CXTemp1)
+		CX_Rotate(_Div(XAngle,CXTemp2),_Div(YAngle,CXTemp2),_Div(ZAngle,CXTemp2))
+		
+		TriggerX(FP, {CVar("X",CA[11],AtLeast,0x80000000)},{
+			SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
+			SetMemoryX(0x66321C, SetTo, 0*16777216,0xFF000000); -- 높이
+		},{preserved})
+		TriggerX(FP, {CVar("X",CA[11],AtMost,0x7FFFFFFF)},{
+			SetMemoryX(0x669FB4, SetTo, 16*16777216,0xFF000000); -- 화면출력
+			SetMemoryX(0x66321C, SetTo, 20*16777216,0xFF000000); -- 높이
+		},{preserved})
+		TriggerX(FP, {
+			CDeaths(FP,Exactly,0,BlackBox);
+			CVar("X",CA[11],Exactly,0x0);}, {
+				SetMemoryX(0x669FB4, SetTo, 17*16777216,0xFF000000); -- 화면출력
+				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
+			},{preserved})
+		TriggerX(FP, {
+			CDeaths(FP,Exactly,1,BlackBox);
+			CVar("X",CA[11],Exactly,0x0);}, {
+				SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- 화면출력
+				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- 높이
+			},{preserved})
 		CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,nil,Nextptrs)
+		Simple_SetLocX(FP,"Location 1",_Add(V(CA[8]),CPosX),_Add(V(CA[9]),CPosY),_Add(V(CA[8]),CPosX),_Add(V(CA[9]),CPosY),Simple_CalcLoc(0,-32,-32,32,32))
 		CDoActions(FP,{
 			CreateUnit(1,207, 1,FP),
 			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
@@ -263,9 +229,10 @@ Trigger {
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,YamatoShuttle)},{CreateUnit(1,69, 1,FP),SetMemory(0x6509B0,SetTo,FP),RunAIScriptAt(JYD,64)},{preserved})
 		CIfEnd()
 	end
+
 	DoActions(FP,{Simple_CalcLoc("DCenter",0,-16,0,-16)})
 	GetLocCenter("DCenter",CPosX,CPosY)
-	CXPlot2(TShape,FP,nilunit,0,{CPosX,CPosY},1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1,"CXfunc2")
+	CXPlot(TShape,FP,nilunit,0,{CPosX,CPosY},1,16,{1,0,0,0,9999,0},"CXfunc",FP,Always(),nil,1)
 	local ResetActT = {}
 	for j, k in pairs(ResetCodeT) do
 		table.insert(ResetActT,SetCDeaths(FP,SetTo,0,k))

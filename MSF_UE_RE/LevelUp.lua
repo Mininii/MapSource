@@ -150,7 +150,7 @@ function LevelUp()
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CIfX(FP,{CVar(FP,PCheckV[2],Exactly,1)})-- 싱글플레이 포인트 없음
+		CIfX(FP,{CD(SoloNoPointC,1)})-- 싱글플레이 포인트 없음
 		CMov(FP,GetP,0)
 		CElseX()
 		CMov(FP,GetP,_Div(Level, 10),1) -- 포인트 공식 : P = (Level//10)+1
@@ -171,7 +171,7 @@ function LevelUp()
 		CIfEnd()
 		
 		
-		CIfX(FP,CVar(FP,PCheckV[2],AtLeast,2))
+		CIfX(FP,CD(SoloNoPointC,0))
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)
 		f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])

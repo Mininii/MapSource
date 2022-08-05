@@ -158,7 +158,7 @@ end
 ClearCalc()
 for i = 1, 7 do
     NJumpEnd(FP, MJ[i])
-    BreakCalc({DeathsX(CurrentPlayer,AtMost,15*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,15*65536,0,0xFF0000)})
+    BreakCalc({DeathsX(CurrentPlayer,AtMost,18*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,18*65536,0,0xFF0000)})
     CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
     TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00)},{preserved})
     ClearCalc()
@@ -220,8 +220,8 @@ CunitCtrig_End()
         TriggerX(FP,{}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
         GetLocCenter(73, CPosX, CPosY)
 
-        TS_SendX(Deaths(P1,AtLeast,1,41), BlasterBullet, {CPosX,CPosY})
-        DoActions(FP, SetDeaths(P1,SetTo,0,41))
+        TS_SendX(Deaths(Force1,AtLeast,1,41), BlasterBullet, {96*16,192*16,CPosX,CPosY})
+        DoActions(FP, SetDeaths(Force1,SetTo,0,41))
         
         CIfEnd()
     end
