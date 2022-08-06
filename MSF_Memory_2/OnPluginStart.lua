@@ -765,10 +765,11 @@ CDoActions(FP,{KillUnit(35,P5)})
 TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 f_Read(FP, 0x512684, LocalPlayerV)
 f_GetStrXptr(FP,UnivStrPtr,UnivToString)
-CIfEnd({SetMemory(0x6509B0,SetTo,FP)}) -- OnPluginStart End
-	for j,k in pairs(RCV) do
-		CMov(FP,0x662098+((j-1)*4),k)
-	end
+CIfEnd() -- OnPluginStart End
+DoActionsX(FP, SetMemory(0x6509B0,SetTo,FP))
+	--for j,k in pairs(RCV) do
+	--	CMov(FP,0x662098+((j-1)*4),k)
+	--end
 
 
 end

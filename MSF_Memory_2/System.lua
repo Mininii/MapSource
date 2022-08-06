@@ -938,7 +938,7 @@ HPRegenTable = {64}
 		--Tier3 = {27,66,29,98,57,3,8,11,69,100,70,65}
 		--Tier4 = {102,61,67,23,81,30}
 		--Tier5 = {60,68}
-	CIfEnd(AddCD(WaveT,1))
+	CIfEnd()
 	CIf(FP,{Memory(0x628438,AtLeast,1),CD(Theorist,1),CD(ThCallT,0)})
 		TheoristCallArr = {
 			{322,50},
@@ -962,7 +962,10 @@ HPRegenTable = {64}
 			TriggerX(FP,{CV(RedNumber,k[1],AtMost),CD(TempCc,0)},{CreateUnit(10,84,64,FP),KillUnit(84,FP),SetCD(TempCc,1)},{preserved})
 			TriggerX(FP,{CV(RedNumber,k[1]+1,AtLeast),CD(TempCc,1)},{SetCD(TempCc,0)},{preserved})
 		end
-	CIfEnd({SubCD(ThCallT,1)})
+	CIfEnd()
+	
+	DoActionsX(FP, {AddCD(WaveT,1),
+	SubCD(ThCallT,1)})
 
 	CMov(FP,0x6509B0,FP)
 for i = 0, 3 do

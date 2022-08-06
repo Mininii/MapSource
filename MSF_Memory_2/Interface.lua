@@ -687,8 +687,8 @@ for i = 0, 3 do
 		ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
 		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{preserved})
 end
-CIfEnd({SetCDeaths(FP,Add,1,HealT)})
-
+CIfEnd()
+DoActionsX(FP,SetCDeaths(FP,Add,1,HealT))
 
 local iStrinit = def_sIndex()
 CJump(FP, iStrinit)
@@ -838,8 +838,8 @@ local SelATK = CreateVar(FP)
 			CIfEnd()
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
-	CIfEnd({SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,74),SetDeaths(Force1,SetTo,0,75),SetCDeaths(FP,SetTo,0,CUnitFlag)})
-
+	CIfEnd()
+	DoActionsX(FP,{SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,74),SetDeaths(Force1,SetTo,0,75),SetCDeaths(FP,SetTo,0,CUnitFlag)})
 	CIf(FP,CD(MarDup2,1)) -- ¹¶Ä¡±â ½ÇÇà
 	
 	Player_0x4D = CreateVarArr(4,FP)

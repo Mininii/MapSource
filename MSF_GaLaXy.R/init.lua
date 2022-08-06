@@ -615,6 +615,7 @@ function init()
 		CWhileEnd()
 		CDoActions(FP,{KillUnit(35,P8)})
 		CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
+		CMov(FP,0x6509B0,FP)
 	end
 	
 	function onInit_EUD2()

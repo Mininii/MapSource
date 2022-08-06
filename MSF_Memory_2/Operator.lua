@@ -105,6 +105,7 @@ function Operator_Trig()
 	TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(CurrentPlayer,AtLeast,1,198)},{SetCD(CheatMode,1)})--에라응머즐 활성화
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
+	CMov(FP,0x57f120,CreateUnitQuePtr)
 	local TestStim = CreateCcode()
 	TriggerX(FP,{CD(TestStim,0)},{SetCD(CUnitFlag,1);
 	SetCD(TestStim,50),
