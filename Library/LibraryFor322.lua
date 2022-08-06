@@ -110,7 +110,7 @@ end
 function DoActionsXI(PlayerID,Index,Actions,flag) -- CtrigAsm 5.1
 	local X = {}
 	if flag == nil then
-		flag = {Preserved}
+		flag = {preserved}
 	else
 		flag = nil
 	end
@@ -142,7 +142,7 @@ function SetCall(Player) -- CtrigAsm 5.1
 		},
 		actions = {
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	CallIndexAlloc = CallIndexAlloc + 1
 	if SetCallOpen == 0 then
@@ -162,7 +162,7 @@ function SetCallEnd() -- CtrigAsm 5.1
 			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Recover Next
 			SetCtrig1X("X","X",0x164,0,SetTo,0x2,0x2);
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	CallIndexAlloc = CallIndexAlloc + 1
 	if SetCallOpen == 1 then
@@ -186,7 +186,7 @@ function SetCall2(Player,CallIndex) -- CtrigAsm 5.1
 		},
 		actions = {
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	if SetCallOpen == 0 then
 		SetCallOpen = 2
@@ -204,7 +204,7 @@ function SetCallEnd2() -- CtrigAsm 5.1
 			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- Recover Next
 			SetCtrig1X("X","X",0x164,0,SetTo,0x2,0x2);
 		},
-		flag = {Preserved}
+		flag = {preserved}
 	}
 	if SetCallOpen == 2 then
 		SetCallOpen = 0
@@ -224,7 +224,7 @@ end
 
 function CallTriggerX(Player,Index,Condition,AddonTrigger,Flags) -- CtrigAsm 5.1
 	local Y
-	if Flags == nil then Y = {Preserved} elseif Flags == "X" or Flags == 1 then Y = {} else PushErrorMsg("CallTriggerX_FlagError") end
+	if Flags == nil then Y = {preserved} elseif Flags == "X" or Flags == 1 then Y = {} else PushErrorMsg("CallTriggerX_FlagError") end
 	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
 	table.insert(X,SetCtrigX("X",Index+1,0x158,0,SetTo,"X","X",0x4,1,0))
 	table.insert(X,SetCtrigX("X",Index+1,0x15C,0,SetTo,"X","X",0,0,1))
@@ -248,17 +248,17 @@ function Enable_HumanCheck(Offset)
 			actions = {
 				FSetMemoryX(Offset,SetTo,2^i,2^i);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}
 	end
 end
 
 function HumanCheck(Player,Status)
 	if HumanCheckOffset == 0 then
-		Need_Enable_HumanCheck()
+		PushErrorMsg("Need_Enable_HumanCheck")
 	end
 	if Player >= 8  or Player < 0 then
-		HumanCheck_InputData_Error()
+		PushErrorMsg("HumanCheck_InputData_Error")
 	end
 	if Status == "X" or Status == 0 then
 		Status = 0
@@ -459,9 +459,9 @@ function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
             CIfXEnd()
         CIfEnd()
         TriggerX(Player,{CVar(Player,HP_K[2],AtMost,1000000000),CVar(Player,HP_K2[2],AtLeast,1)},
-        	{SetCVar(Player,HP_K[2],Add,1000000000),SetCVar(Player,HP_K2[2],Subtract,1)},{Preserved})
+        	{SetCVar(Player,HP_K[2],Add,1000000000),SetCVar(Player,HP_K2[2],Subtract,1)},{preserved})
         TriggerX(Player,{CVar(Player,HP_K[2],AtLeast,2000000000)},
-        	{SetCVar(Player,HP_K[2],Subtract,1000000000),SetCVar(Player,HP_K2[2],Add,1)},{Preserved})
+        	{SetCVar(Player,HP_K[2],Subtract,1000000000),SetCVar(Player,HP_K2[2],Add,1)},{preserved})
         CTrigger(Player,{TMemoryX(_Add(Cunit_HPV,17),Exactly,0,0xFF00)},{SetCVar(Player,Cunit_HPV[2],SetTo,0)},1)
     CIfEnd()
 end
@@ -584,8 +584,8 @@ function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag,BGMSki
 for i = 128, 131 do
 	CIf(InitBGMP,{LocalPlayerID(i)})
 	CIfX(InitBGMP,{Memory(0x596A44, Exactly, 65536),CD(ObCcode1,0)})
-	TriggerX(InitBGMP,{CD(ObCcode2,0),CD(ObCcode1,0)},{SetCD(ObCcode2,1),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 Off했습니다."),4),SetCp(InitBGMP)},{Preserved})
-	TriggerX(InitBGMP,{CD(ObCcode2,1),CD(ObCcode1,0)},{SetCD(ObCcode2,0),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 On했습니다."),4),SetCp(InitBGMP)},{Preserved})
+	TriggerX(InitBGMP,{CD(ObCcode2,0),CD(ObCcode1,0)},{SetCD(ObCcode2,1),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 Off했습니다."),4),SetCp(InitBGMP)},{preserved})
+	TriggerX(InitBGMP,{CD(ObCcode2,1),CD(ObCcode1,0)},{SetCD(ObCcode2,0),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04관전자 브금을 On했습니다."),4),SetCp(InitBGMP)},{preserved})
 	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
 	CElseX(SetCD(ObCcode1,0))
 	CIfXEnd()
@@ -728,6 +728,19 @@ DoActionsX(InitBGMP,{SetCVar(InitBGMP,BGMTypeV[2],SetTo,0)})
 CIfEnd()
 end
 
+
+function NormalTurboSet(Player,DeathUnitID)
+	local NTUID = DeathUnitID
+	DoActions(Player,SetDeaths(Player,Add,1,DeathUnitID))
+	Trigger2(Player,{Deaths(Player,AtLeast,2,DeathUnitID)},{SetDeaths(Player,SetTo,0,DeathUnitID)},{preserved})
+	
+	function NTCond()
+		return Deaths(Player,Exactly,1,NTUID)
+	end
+	function NTCond2()
+		return Deaths(Player,Exactly,0,NTUID)
+	end
+end
 
 --Dx,Dy,Du,DtP,Dv = CreateVariables(5)
 function IBGM_EPD(Player,MaxPlayer,Option_NT,BGMDeathsT)
@@ -1079,7 +1092,7 @@ end
 
 function DoActions(PlayerID,Actions,Flags)
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -1100,7 +1113,7 @@ function DoActions2(PlayerID,Actions,Flags)
 
 
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -1157,7 +1170,7 @@ function DoActionsX(PlayerID,Actions,Flags,Index)
 		Index = 0
 	end
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -1180,7 +1193,7 @@ function DoActions2X(PlayerID,Actions,Flags)
 	local Size = #Actions
 
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -1247,7 +1260,7 @@ function CDoActions(PlayerID,Actions,Flags,Index)
 	PopTrigArr(PlayerID)
 
 	if Flags == nil then
-		Flags = {Preserved}
+		Flags = {preserved}
 	elseif Flags == 1 then
 		Flags = {}
 	end
@@ -1316,7 +1329,7 @@ end
 ---@param Condition? table -- CABoss 발동 조건
 ---@param Action? table -- 조건이 만족될때 실행할 액션
 ---@return table,table -- 해당함수의 리턴값 = CA,CB
-function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
+function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_LHPData)
 	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
 	
 	if UnitPtr == nil then
@@ -1359,16 +1372,37 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	--Preset[6] = ExtendHPFlag -- 확장 체력 기능 사용 여부. 1일 경우 사용안함
 	-- 이하 내부변수
 	--CB[1] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
-	--CB[2] = ExHP -- 현재 확장된 HP값이 저장된 변수. 이 값을 변경하면 체력을 자유롭게 늘렸다 줄였다 할 수 있음
+	--CB[2] = ExHP -- 현재 확장된 HP값이 저장된 변수. 이 값을 변경하면 체력을 자유롭게 늘렸다 줄였다 할 수 있음. EXCC_LHP 데이터 입력시 최대 42억까지 출력됨(읽기전용)
 	--CB[3] = PattT -- 보스 작동 대기시간. 이 값이 1 이상일 경우 무적. 1프레임 단위로 1씩 감소됨
-	--CB[4] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	--CB[4] = Unused -- EXCC LHP용 유닛 인덱스. EXCC_LHP 데이터를 입력하지 않을 경우 사용안됨
 	--CB[5] = DeathFlag -- 죽엇을 경우 이 값이 1이 됨.
 	--CB[6] = Enable BossKill -- 이 값이 0일 경우 보스를 죽일수 있는 상태가 됨. 아직 죽이기 싫을때 이 값을 1로 바꾸면 됨
 	--CB[7] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
 	--CB[8] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
 	--CB[9] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	local TempW2 = CreateWar(FP)
+	local TempW3 = CreateWar(FP)
+	local TempW4 = CreateWar(FP)
+	local TempW5 = CreateWar(FP)
+
 	CIfOnce(PlayerID)--init
-	CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],CA[4])},1)
+	if EXCC_LHPData==nil then
+		CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],CA[4])},1)
+	else
+		CMov(FP,CB[4],_Div(_Sub(UnitPtr,19025),_Mov(84)))
+		
+	f_LMov(FP, {TempV1,TempV2}, _LSub(Preset[4],tostring(8320000*256)), nil, nil, 1)
+		CDoActions(FP, {
+			Set_EXCC2(EXCC_LHPData, CB[4], 0, SetTo,1),
+			Set_EXCC2(EXCC_LHPData, CB[4], 1, SetTo,TempV1),
+			Set_EXCC2(EXCC_LHPData, CB[4], 2, SetTo,TempV2),
+			
+	})
+
+
+	end
 	CTrigger(PlayerID,{CV(CA[3],1,AtLeast)},{
 		TSetMemory(_Add(UnitPtr,13), SetTo, 1),
 		TSetMemoryX(_Add(UnitPtr,18), SetTo, 1,0xFFFF),
@@ -1383,19 +1417,34 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 
 	-------- Preset Limit --------------------------------
 	for i = 1, 6 do
-		if type(Preset[i]) ~= "number" then
+		if type(Preset[i]) == "table"  then
 			CMov(PlayerID,CA[i],Preset[i])
 		end
 	end
-
+	
 
 
 
 		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
 		
+		if EXCC_LHPData~=nil then
+			f_Div(FP,CB[2],_Read(UnitPtr,2),_Mov(256))
+			f_Read(FP, _Add(_Mul(CB[4],_Mov(0x970/4)),_Add(EXCC_LHPData[3],((0x20*1)/4))), TempV1)
+			f_Read(FP, _Add(_Mul(CB[4],_Mov(0x970/4)),_Add(EXCC_LHPData[3],((0x20*2)/4))), TempV2)
+			f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
+			f_LDiv(FP,TempW3, TempW2, _LMov(256))
+			f_LMov(FP, TempW4, TempW3, nil,nil,1)
+			f_LAdd(FP, TempW5,TempW4, {CB[2],0})
+			CIfX(FP,{TCWar(FP, TempW5[2], AtLeast, "4294967295")})
+				CMov(FP,CB[2],0xFFFFFFFF)
+			CElseX()
+				f_Cast(FP, {CB[2],0}, TempW5, nil, nil, 1)
+			CIfXEnd()
+
+		end
 			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, (Preset[5])*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
 			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
-			if Preset[6] == 0 then
+			if Preset[6] == 0 or EXCC_LHPData==nil then
 			CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
 				CIf(PlayerID,CV(CB[2],1,AtLeast))
 					f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
@@ -1411,6 +1460,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 				CIfEnd()
 			CWhileEnd()
 			end
+
 			
 			if UnitHPRetV ~= nil then
 				if UnitHPRetV[4]== "V" then
@@ -1428,6 +1478,11 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 				CABossPlayerID = PlayerID
 				CABossDataArr = CA
 				CABossTempArr = CB
+				if EXCC_LHPData ~= nil then
+					CABossTempV1 = TempV1
+					CABossTempV2 = TempV2
+					CABossLHPData=EXCC_LHPData
+				end
 				if CAfunc ~= nil then -- 패턴작성단락
 					_G[CAfunc]()
 				end
@@ -1441,10 +1496,24 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CIfEnd()
 	local Ret,Ret2 = CA,CB
 	CABossPtr = nil
+	CABossLHPData = nil
+	CABossTempV1 = nil
+	CABossTempV2 = nil
 	CABossPlayerID = {}
 	CABossDataArr = {}
 	CABossTempArr = {}
 	return Ret,Ret2
+end
+function CA_SetLHP(Value)
+
+	f_LMov(FP, {CABossTempV1,CABossTempV2}, _LSub(Value,tostring(8320000*256)), nil, nil, 1)
+		CDoActions(FP, {
+			Set_EXCC2(CABossLHPData, CABossTempArr[4], 0, SetTo,1),
+			Set_EXCC2(CABossLHPData, CABossTempArr[4], 1, SetTo,CABossTempV1),
+			Set_EXCC2(CABossLHPData, CABossTempArr[4], 2, SetTo,CABossTempV2),
+			
+	})
+	
 end
 
 function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
@@ -1558,7 +1627,7 @@ function TS_Suspend(Condition,Flags)
 		table.insert(TSAct,SetCVar(TS_Player, TS_VarArr[i][2], SetTo, 0))
 	end
 	if Flags == nil then Flags = {preserved} else Flags=nil end
-	TriggerX(TS_Player,Condition,TSAct,Flags)
+	CTrigger(TS_Player,Condition,TSAct,Flags)
 	
 end
 function TSLine(Line,Type,Value,Mask)
