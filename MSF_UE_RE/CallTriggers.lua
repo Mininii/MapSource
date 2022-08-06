@@ -785,51 +785,140 @@ local CB_P = CreateVar(FP)
 
 	--Line5 = TempCalcX
 	--Line6 = TempCalcY
+	--Line7 = Angle
+	--Line8 = NukeDot CForInit
+
+	GBl1SE = CreateCcode()
+	GBl2SE = CreateCcode()
+	--Line15 = init
+	CIf(FP,TSLine(15, Exactly, 0),{SetTSLine(15, SetTo, 1),SetCD(GBl1SE,1)})
+	f_Lengthdir(FP, 32*10, TS_VarArr[7], CPosX, CPosY)
+	CAdd(FP,TS_VarArr[1],CPosX)
+	CAdd(FP,TS_VarArr[2],CPosY)
+
+	CIfEnd()
 	--도착점 -(iSub) 시작점
 	NIfNot(FP,{CV(TS_VarArr[1],TS_VarArr[3])})
 	CIfX(FP,{TTNVar(TS_VarArr[1], "<", TS_VarArr[3])})
-		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),3),1)
+		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),5),1)
 		CAdd(FP,TS_VarArr[1],TS_VarArr[5])
 	CElseIfX({TTNVar(TS_VarArr[1], ">", TS_VarArr[3])})
-		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[1], TS_VarArr[3]),3),1)
+		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[1], TS_VarArr[3]),5),1)
 		CSub(FP,TS_VarArr[1],TS_VarArr[5])
 	CIfXEnd()
 	NIfNotEnd()
 
 	NIfNot(FP,{CV(TS_VarArr[2],TS_VarArr[4])})
 	CIfX(FP,{TTNVar(TS_VarArr[2], "<", TS_VarArr[4])})
-		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[4], TS_VarArr[2]),3),1)
+		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[4], TS_VarArr[2]),5),1)
 		CAdd(FP,TS_VarArr[2],TS_VarArr[6])
 	CElseIfX({TTNVar(TS_VarArr[2], ">", TS_VarArr[4])})
-		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[2], TS_VarArr[4]),3),1)
+		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[2], TS_VarArr[4]),5),1)
 		CSub(FP,TS_VarArr[2],TS_VarArr[6])
 	CIfXEnd()
 	NIfNotEnd()
 	--,SetTo,928 이미지
 	--, SetTo, 131 스크립트 
-	--SetMemoryB(0x666160+(294*2), SetTo, 928),--이미지
-	--SetMemoryB(0x66EC48+(4*928), SetTo, 131),--스크립트
+	--머리 이미지
+	--SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
+	--SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
 	--SetMemoryB(0x669E28+928, SetTo, 17),--색상
 
 
+	--뉴크닷이미지
+	--SetMemoryW(0x666160+(294*2), SetTo, 233),--이미지
+	--SetMemory(0x66EC48+(4*233), SetTo, 131),--스크립트
+
+
+	--SetMemoryW(0x666160+(294*2), SetTo, 399),--이미지복구
+	--SetMemory(0x66EC48+(4*928), SetTo, 368),--스크립트복구
+	--SetMemory(0x66EC48+(4*233), SetTo, 74),--스크립트복구
 	--SetMemoryB(0x669E28+928, SetTo, 9),--색상복구
 
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*10), TS_VarArr[7], CPosX, CPosY)
+	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
-	Simple_SetLocX(FP, 0, TS_VarArr[1], TS_VarArr[2], TS_VarArr[1], TS_VarArr[2], {})--
 	CDoActions(FP,{
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
+		SetMemoryB(0x669E28+928, SetTo, 17),--색상
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
 	})
 	CIfEnd()
 
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[7],6), CPosX, CPosY)
+	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
+	f_Read(FP,0x628438,nil,Nextptrs)
+	CDoActions(FP,{
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
+		SetMemoryB(0x669E28+928, SetTo, 17),--색상
+		CreateUnit(1,207, 1,FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+	})
+	CIfEnd()
+
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[7],-6), CPosX, CPosY)
+	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
+	f_Read(FP,0x628438,nil,Nextptrs)
+	CDoActions(FP,{
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
+		SetMemoryB(0x669E28+928, SetTo, 17),--색상
+		CreateUnit(1,207, 1,FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+	})
+	CIfEnd()
+	
+	CFor3(FP,TS_VarArr[8],32*18,32)
+	local GBCI=CForVariable()
+	
+
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Lengthdir(FP, _Add(GBCI,-32*9), TS_VarArr[7], CPosX, CPosY)
+	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[3]), _Add(CPosY,TS_VarArr[4]), _Add(CPosX,TS_VarArr[3]), _Add(CPosY,TS_VarArr[4]), {})--
+
+	f_Read(FP,0x628438,nil,Nextptrs)
+	CDoActions(FP,{
+		SetMemoryW(0x666160+(294*2), SetTo, 233),--이미지
+		SetMemory(0x66EC48+(4*233), SetTo, 131),--스크립트
+		CreateUnit(1,207, 1,FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+	})
+	
+	CIfEnd()
+	CForEnd()
+
+	DoActions(FP, {
+		SetMemoryW(0x666160+(294*2), SetTo, 399),--이미지복구
+		SetMemory(0x66EC48+(4*928), SetTo, 368),--스크립트복구
+		SetMemory(0x66EC48+(4*233), SetTo, 74),--스크립트복구
+		SetMemoryB(0x669E28+928, SetTo, 9),--색상복구
+	})
+
 
 --	TS_Suspend({TSLine(3, AtLeast, 25)})
 	
-	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])})
-	TS_Suspend({})
+	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])},{SetMemoryB(0x669E28+533, SetTo, 17),SetMemoryB(0x6636B8+208,SetTo,116)})--파괴자에서 썻던 데이터 수정후 재사용
+	TriggerX(FP,{CV(TS_VarArr[8],0)},{SetCD(GBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
+	
+	f_Lengthdir(FP, _Add(TS_VarArr[8],-32*9), TS_VarArr[7], CPosX, CPosY)
+	CreateBullet(208,20,0,_Add(CPosX,TS_VarArr[3]),_Add(CPosY,TS_VarArr[4]))
+
+
+	CAdd(FP,TS_VarArr[8],32)
+
+	CAdd(FP,TS_VarArr[9],_Mul(TS_VarArr[9],2))
+	TS_Suspend({CV(TS_VarArr[8],32*17,AtLeast)})
 	CIfEnd()
 	TStr_EndFunc()
 

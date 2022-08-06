@@ -215,16 +215,117 @@ CunitCtrig_End()
             SetInvincibility(Enable,"Buildings",FP,64);
         })
     CIfXEnd()
+
+
+
+	function CABossFunc()
+		local UnitPtr = CABossPtr
+		local PlayerID = CABossPlayerID
+		local CA = CABossDataArr
+		local CB = CABossTempArr
+		local PattV = CreateVarArr(4,FP)
+		local PattC = CreateCcodeArr(4)
+		local PattC2 = CreateCcodeArr(49)
+
+		
+
+
+		if Limit == 1 then
+			--CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
+		end
+
+
+		CIf(FP,CD(PattC[1],1,AtLeast),{SetCD(PattC[1],0)})
+			TriggerX(FP,{},SetV(CB[3],250),{preserved})--CD(TestMode,1),
+			CIfX(FP,{TMemory(_Add(UnitPtr,2),AtMost,(8320000*256)),CV(CA[1],9,AtMost)},{AddV(CA[1],1)})
+				--DoActions2(FP,{CreateUnit(3,84,64,FP),KillUnit(84, FP),RotatePlayer({PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP)})
+			CElseX()
+
+			CIfXEnd()
+			ResetActT = {}
+			for j,k in pairs(PattV) do
+				table.insert(ResetActT,SetV(k,0))
+			end
+			for j,k in pairs(PattC) do
+				table.insert(ResetActT,SetCD(k,0))
+			end
+			for j,k in pairs(PattC2) do
+				table.insert(ResetActT,SetCD(k,0))
+			end
+			
+			
+			
+			
+			DoActions2X(FP,ResetActT)
+		CIfEnd()
+	B3DeathCheck = CB[5]
+	end--CABossFunc end
+
+
+	if BossPhaseTestMode == 1 then
+		BinitT = CreateVar2(FP,nil,nil,300)
+		TriggerX(FP, {CD(TestMode,1)}, {SetV(BinitT,0)})
+	else
+		BinitT = 300
+	end
+
+
+
+    function SetBright(Time,Value)
+        TriggerX(FP,{CD(SBossStart,Time,AtLeast)},{SetMemory(0x657A9C,SetTo,Value)})
+    end
+    CIf(FP,{CD(SBossStart,1,AtLeast)},{AddCD(SBossStart,Dt)})
+    DoActionsX(FP,{SetCVar(FP,ReserveBGM[2],SetTo,SBossBGM),})
+    for i = 30,0,-1 do
+        SetBright(3000-(i*100),i)
+    end
+    SetBright(3100,31)
+    BossP=CreateVar(FP)
+
+    CIf(FP,{CD(SBossStart,3100,AtLeast),CV(BossP,32*11,AtMost)})
+        CFor(FP,0,360,15)
+        local CI = CForVariable()
+        CIf(FP,Memory(0x628438,AtLeast,1))
+        f_Read(FP,0x628438,nil,Nextptrs)
+        f_Lengthdir(FP, BossP, CI, CPosX, CPosY)
+        Simple_SetLocX(FP, 0, _Add(CPosX,(96*16)-32), _Add(CPosY,(192*16)-32), _Add(CPosX,(96*16)+32), _Add(CPosY,(192*16)+32), {})--
+        CDoActions(FP, {CreateUnit(1,13,1,FP),
+        TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+        TSetMemory(_Add(Nextptrs,57),SetTo,0),
+        KillUnitAt(All, "Men", 1, Force1),KillUnit(13, FP),
+        })
+        CIfEnd()
+        CForEnd()
+        CAdd(FP,BossP,32)
+    CIfEnd()
+    CIfOnce(FP,{CD(SBossStart,3500,AtLeast)})
+	f_Read(FP,0x628438,nil,Nextptrs)
+    CMov(FP,SBossPtr,Nextptrs)
+    CDoActions(FP, {
+		SetMemoryB(0x669E28+151, SetTo, 16),--색상
+        CreateUnit(1,96,64,FP),RotatePlayer({CenterView(64)},HumanPlayers,FP),
+		SetMemoryB(0x669E28+151, SetTo, 0),--색상복구
+    })
+    CIfEnd()
+        
     if Limit == 1 then
         CIf(FP,CD(TestMode,1))
         TriggerX(FP,{}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
         GetLocCenter(73, CPosX, CPosY)
+        AngleRand = f_CRandNum(360)
 
-        TS_SendX(Deaths(Force1,AtLeast,1,41), BlasterBullet, {96*16,192*16,CPosX,CPosY})
+        TS_SendX(Deaths(Force1,AtLeast,1,41), BlasterBullet, {96*16,192*16,CPosX,CPosY,nil,nil,AngleRand})
         DoActions(FP, SetDeaths(Force1,SetTo,0,41))
         
         CIfEnd()
     end
     TS_CreateArr(BlasterBullet)
+    Trigger2X(FP,{CD(GBl1SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl1.ogg")},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
+    Trigger2X(FP,{CD(GBl2SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP),SetCD(GBl2SE,0)},{preserved})
+    CIfEnd()
+	CABoss(SBossPtr,nil,{0,BinitT,2,"128000000000",8320000,1},"CABossFunc",FP,nil,nil,LHPCunit)
 
+    if Limit == 1 then
+        TriggerX(FP,{CD(TestMode,1)}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
+    end
 end

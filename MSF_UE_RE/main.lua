@@ -41,7 +41,10 @@ TestPMul=2
 VerText = "\x04Ver. Beta. 0.61"
 if Limit == 1 then
 	VerText = VerText.."T"
+	BossPhaseTestMode = 0
+	
 end
+BossPhaseTestMode = 0
 LimitVer = 6
 FP = P8
 EUDTurbo(FP)

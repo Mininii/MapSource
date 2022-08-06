@@ -393,6 +393,11 @@ function Var_init()
 
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	LimitX, LimitC = CreateCcodes(2)
+	SBossStart = CreateCcode()
+	SBossPtr = CreateVar(FP)
+	MarDup = CreateCcode()
+	MarDup2 = CreateCcode()
+
 	end
 
 function HPoints()

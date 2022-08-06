@@ -152,6 +152,7 @@ function BGMManager()
 	IdenBGM = AddBGM(9,"staredit\\wav\\JinjinZzara.ogg",220*1000)
 	Akasha = AddBGM(10,"staredit\\wav\\Akasha.ogg",262*1000)
 	DLBossBGM = AddBGM(11,"staredit\\wav\\Lanterns.ogg",231*1000)
+	SBossBGM = AddBGM(13,"staredit\\wav\\SBoss.ogg",368*1000)
 	
 	CIf(FP,{CVar(FP,ReserveBGM[2],AtLeast,1),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)})
 		CMov(FP,BGMTypeV,ReserveBGM)
@@ -1852,4 +1853,53 @@ function CRandNum(PlayerID,Bit,DestV,ResetFlag) -- 경량화 랜덤숫자 생성기
 		DoActions(PlayerID,{SetSwitch("Switch 100",Random)})
 		TriggerX(PlayerID,{Switch("Switch 100",Set)},{SetNVar(DestV,Add,2^i)},{preserved})
 	end
+end
+
+
+function CFor3(PlayerID,Init,End,Step,Actions,UnPack) -- DoWhile x CJump
+	CDoActions(PlayerID,{TSetVariableX("X",IndexAlloc+1,"Value",SetTo,Init)}) -- Calc Init
+	if UnPack == 1 then
+		if Actions ~= nil then
+		for k, v in pairs(Actions) do
+			local Temp = CunPack(v)
+			Actions[k] = Temp
+		end
+	end
+	end
+	Actions = __FlattenCAct(Actions)
+
+	STPopTrigArr(PlayerID)
+	Actions = PopActArr(Actions)
+	PopTrigArr(PlayerID,1,1)
+	Trigger {
+		players = {PlayerID},
+		conditions = {
+			Label(IndexAlloc);
+			VariableX("X",IndexAlloc+1,"Value",Exactly,End); -- Calc Last
+		},
+		actions = {
+			SetDeaths(0,SetTo,0,0);
+			Actions,
+	   		PreserveTrigger();
+		},
+	}
+	CVariable(PlayerID,IndexAlloc+1)
+	Trigger {
+		players = {PlayerID},
+		conditions = {
+			Label(IndexAlloc+2);
+		},
+		actions = {
+			SetDeaths(0,SetTo,0,0);
+	   		PreserveTrigger();
+		},
+	}
+	PlayerID = PlayerConvert(PlayerID)
+	table.insert(CForArr, IndexAlloc)
+	table.insert(CForPArr, PlayerID)
+	table.insert(CForStep, Step)
+	CForptr = CForptr + 1
+	IndexAlloc = IndexAlloc + 0x4
+
+	return {"X",IndexAlloc-3,0,"V"}
 end

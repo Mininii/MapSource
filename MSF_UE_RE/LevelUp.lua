@@ -45,10 +45,13 @@ function LevelUp()
 			KillUnitAt(All,125,19,Force1),})
 			CIfX(FP, {Never()})
 			-- 보스소환 테스트
-			--if Limit == 1 then
+			if Limit == 1 then
 			--	
-		    --    CElseIfX({CD(TestMode,1)})
-			--	
+		        --CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
+
+				
+			--	SBossPtr
+			
 			--	CIf(FP,Memory(0x628438,AtLeast,1))
 			--		f_Read(FP,0x628438,nil,Boss6Ptr,0xFFFFFF)
 			--		CMov(FP,CunitIndex,_Div(_Sub(Boss6Ptr,19025),_Mov(84)))
@@ -70,11 +73,11 @@ function LevelUp()
 		--        
 	
 		--        
-		--        CIfXEnd()
+		        --CIfXEnd()
 	
 	
 	
-			--end
+			end
 			CElseIfX({CVar(FP,LevelT[2],Exactly,2)})
 				DoActionsX(FP,{SetCDeaths(FP,Add,1,StoryT),
 				SetCDeaths(FP,Add,1,isBossStage),})
@@ -87,6 +90,7 @@ function LevelUp()
 					CDoActions(FP,{
 						KillUnitAt(All,"Men",29,Force1),
 						CreateUnit(1,87,29,FP),
+						SetInvincibility(Enable, 87, FP, 64),
 						SetV(B_5_C,Nextptrs),
 						--TSetMemory(B_5_C,SetTo,Nextptrs),
 						TSetMemory(0x58D744,SetTo,Vi(Nextptrs[2],55)),
@@ -141,11 +145,14 @@ function LevelUp()
 
 	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02코스크 충들의 \x11레갈(Regal) \x04성 \x1F진진짜라 주인 \x10T\x1Earim\x04이 \x07진진짜라\x04를 \x08모두 \x04털렸습니다.\r\n\r\n\x13\x05\"네놈들이 어떻게 내 라면을...\"\r\n "
 	Dem_T6 = "\n\n\x13\x04『 \x06\x17D\x04emonic\x08Emperor \x04: \x06난 돌아올 것이다. \x04』\n\n"
+	SClearT = "\n\n\x13\x04『 \x06\x08??? \x04: \x06!!! \x04』\n\n"
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DemClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{SetCDeaths(FP,SetTo,1,BClear),SetCDeaths(FP,SetTo,1,StoryT3)},{preserved})
+	TriggerX(FP,{CV(B3DeathCheck,1)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
+	
 	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- 보스클리어시 1회실행 트리거
 
 		GetP = CreateVar(FP)
@@ -187,6 +194,8 @@ function LevelUp()
 			{RotatePlayer({DisplayTextX(Id_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,DemClear)},
 			{RotatePlayer({DisplayTextX(Dem_T6,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\statyoudieEND.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
+		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CV(B3DeathCheck,1)},
+			{RotatePlayer({DisplayTextX(SClearT,4),DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\UTKill.wav"),PlayWAVX("staredit\\wav\\UTKill.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({
 			DisplayTextX("\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x1FＬＥＶＥＬ　ＣＬＥＡＲ\x04　！！！\n\x14\n\x13\x04최후의 건물 \x03OverMind \x1DShell \x04을 파괴하셨습니다.",4),
 			DisplayTextX("\x0D\x0D\x0DGetP".._0D,4),
@@ -194,6 +203,7 @@ function LevelUp()
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
+			
 		local ClearScoreT1 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04\x07『 \x08Ｄ\x04ｅｓｔｒ\x10０\x04ｙｅｒ\x07 』 \x04에게서 살아남으셨습니다.\n\x13\x1F축하합니다! \x04점수가 충분하여 \x07클리어\x04 하셨습니다."
 		local ClearScoreT2 = "\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 
