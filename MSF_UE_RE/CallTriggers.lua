@@ -787,10 +787,10 @@ local CB_P = CreateVar(FP)
 	--Line6 = TempCalcY
 	--Line7 = Angle
 	--Line8 = NukeDot CForInit
+	--Line15 = init
 
 	GBl1SE = CreateCcode()
 	GBl2SE = CreateCcode()
-	--Line15 = init
 	CIf(FP,TSLine(15, Exactly, 0),{SetTSLine(15, SetTo, 1),SetCD(GBl1SE,1)})
 	f_Lengthdir(FP, 32*10, TS_VarArr[7], CPosX, CPosY)
 	CAdd(FP,TS_VarArr[1],CPosX)
@@ -922,6 +922,11 @@ local CB_P = CreateVar(FP)
 	CIfEnd()
 	TStr_EndFunc()
 
+	TStr_Func(BoneBullet)
+	--"staredit\\wav\\WR.ogg"
+	--"staredit\\wav\\BS.ogg"
+	TStr_EndFunc()
+
 
 	Call_CDPrint = SetCallForward()
 	SetCall(FP)
@@ -1010,5 +1015,9 @@ local CB_P = CreateVar(FP)
 	CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
 	CTrigger(FP,{CD(TC,0)},{SetCD(TC,TalkTimer)},1)
 	SetCallEnd()
+
+
+
+	
 
 end

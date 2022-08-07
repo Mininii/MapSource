@@ -57,15 +57,14 @@ function Install_SansBoss()
 
 
     CIf(FP,{CD(SBossStart,1,AtLeast)},{AddCD(SBossStart,Dt)})
+    Trigger2X(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\SE4.ogg"),PlayWAVX("staredit\\wav\\SE4.ogg")},HumanPlayers,FP)})
     DoActions(FP,{MoveUnit(All,96,FP,64,64)})--보스위치고정
-    DoActionsX(FP,{SetCD(BWait,1)},1)
+    DoActionsX(FP,{SetCD(BWait,1),SetCD(CUnitFlag,1),SetCD(MarDup,1)},1)
     local TempActT = {}
-    local TempCond2 = {}
-    local TempActT2 = {}
         for i = 0, 6 do
             table.insert(TempActT,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*7))
             table.insert(TempActT,MoveUnit(All, "Men", i, "Center", 2+i))
-            Trigger2X(FP,{HumanCheck(i, 1),Bring(i,AtLeast,13,"Men",89)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg")},HumanPlayers,FP),SetCD(TalkCond,1),MoveUnit(All, "Men", i, 89, 2+i)},{preserved})
+            Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+5000,AtLeast),HumanCheck(i, 1),Bring(i,AtLeast,13,"Men",89)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg")},HumanPlayers,FP),SetCD(TalkCond,1),MoveUnit(All, "Men", i, 89, 2+i)},{preserved})
         end
         DoActions(FP,TempActT,1)
 	DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP)},1)
@@ -152,6 +151,8 @@ function Install_SansBoss()
         
         CIfEnd()
     end
+    
+    TS_CreateArr(BoneBullet)
     TS_CreateArr(BlasterBullet)
     Trigger2X(FP,{CD(GBl1SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl1.ogg")},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
     Trigger2X(FP,{CD(GBl2SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP),SetCD(GBl2SE,0)},{preserved})
