@@ -712,7 +712,7 @@ function PlayerInterface()
 		CIfEnd()
 		if Limit == 1 then
 		CIf(FP,CD(TestMode,1))
-		CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
+		--CMov(FP,0x57f120,DefUpCompCount[i+1],100000000)
 		CIfEnd()
 		end
 		DoActionsX(FP,{
@@ -1283,6 +1283,7 @@ DTypeCondArr = {
 	CVar(FP, SelUID, Exactly, 121),
 	CVar(FP, SelUID, Exactly, 186),
 	CVar(FP, SelUID, Exactly, 84),
+	CVar(FP, SelUID, Exactly, 96),
 }
 for j, k in pairs(DTypeArr3) do
 	table.insert(DTypeCondArr,CVar(FP, SelUID, Exactly, k))

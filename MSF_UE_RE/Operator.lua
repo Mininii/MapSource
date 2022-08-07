@@ -337,6 +337,8 @@ function OPTrig()
 		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{preserved})
 	CIfEnd()
 	CMov(FP,0x6509B0,FP) -- RecoverCP 상위플레이어 단락 끝
+	
+    TriggerX(FP,{CD(SBossStart,1,AtLeast),CV(SpeedVar,4,AtMost)},{SetV(SpeedVar,5)},{preserved})
 	CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 		CMov(FP,CurrentSpeed,SpeedVar)
 		for i = 1, 10 do

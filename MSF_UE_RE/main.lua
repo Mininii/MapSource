@@ -98,6 +98,7 @@ end
 			SetWave()
 			GameOver()
 			ObDisplay()
+			Install_SansBoss()
 			LevelUp()
 			PlayerInterface()
 			LeaderBoardTFunc()

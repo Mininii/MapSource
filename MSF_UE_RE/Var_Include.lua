@@ -397,6 +397,8 @@ function Var_init()
 	SBossPtr = CreateVar(FP)
 	MarDup = CreateCcode()
 	MarDup2 = CreateCcode()
+	TalkTimer = CreateVar2(FP,nil,nil,3)
+
 
 	end
 

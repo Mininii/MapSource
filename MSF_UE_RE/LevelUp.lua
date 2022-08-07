@@ -47,7 +47,7 @@ function LevelUp()
 			-- 보스소환 테스트
 			if Limit == 1 then
 			--	
-		        --CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
+		        CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
 
 				
 			--	SBossPtr

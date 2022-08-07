@@ -922,4 +922,93 @@ local CB_P = CreateVar(FP)
 	CIfEnd()
 	TStr_EndFunc()
 
+
+	Call_CDPrint = SetCallForward()
+	SetCall(FP)
+	SpCodeBase = 0x8080E200 
+	SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
+	SpCode3 = 0x8B80E200 -- \x0D\x0D!H
+	TC = CreateCcode()
+	DoActionsX(FP,{SubCD(TC,1)})
+	function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
+	CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
+	CA__SetNext(HStr4,8,SetTo,0,54-1,0)
+	CMov(FP,HLine,0)
+	EffCV2 = CreateVArr(11, FP)
+	CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
+		f_ChatOffset(FP,HLine,0,ChatOff) 
+		CMovX(FP,HCheck,VArr(EffCV2,HLine))
+		CIfX(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"\x0D\x0D!H"))},{SetNVar(HCheck,SetTo,3)})
+	--    for i = 0, 3 do
+	--        CElseIfX({HumanCheck(i, 1),TTbytecmp(ChatOff,VArr(Names2[i+1],0),PLength[i+1])},{SetNVar(HCheck,SetTo,4)})
+	--    end
+		CElseIfX({TTDisplayX(HLine,0,NotSame,SpCode3,0xFFFFFF00)},{SetNVar(HCheck,SetTo,0)})
+		CIfXEnd()
+
+		CurLiV = CreateVar(FP)
+		EffCV = CreateVArr(11, FP)
+		CIf(FP,{NVar(HCheck,AtLeast,3),NVar(HCheck,AtMost,4)})
+		CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
+			CMovX(FP,VArr(EffCV,HLine),0)
+			CMov(FP,CurLiV, _Mul(HLine,54*604))
+			CA__SetValue(HStr2,MakeiStrLetter("\x0D",53),0xFFFFFFFF,CurLiV,1,1) 
+			CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
+			CIfX(FP,NVar(HCheck,Exactly,3))
+				CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
+				CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
+			CElseX()
+				CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
+			CIfXEnd()
+
+			CIf(FP,{TTNVar(HCheck, NotSame, 3)})
+
+			CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+			CIfEnd()
+			CD__InputMask(HLine,0xFFFFFFFF,0,52) 
+		CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
+		TempEC = CreateVar(FP)
+			CMov(FP,CurLiV, _Mul(HLine,54*604))
+			CMovX(FP,TempEC,VArr(EffCV,HLine))
+			CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+
+			CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+			
+			
+
+			CIf(FP,NVar(TempEC,AtMost,51))
+				CIfX(FP,{CD(SBossStart,1,AtLeast)})
+				CIf(FP,{CD(TC,0,AtMost)})
+
+				local TempSEV = CreateVar(FP)
+				CA__Read(_GIndex2(HLine,TempEC),TempSEV)
+				--CMov(FP,0x57f0f0,TempSEV)
+				NIfNot(FP,{TTOR({CVar(FP,TempSEV[2],Exactly,0x0D0D0D00, 0xFFFFFF00),CVar(FP,TempSEV[2],Exactly,0x20000000, 0xFF000000)})})
+				--NIfNot(FP,{TTOR({TCSVA1(SVA1(HStr2,TempSEV), Exactly, 0x0D0D0D0D, 0xFFFFFF00),_TCSVA1(SVA1(HStr2,TempSEV), Exactly, 0x200D0D0D, 0xFF000000)})})
+				--NIfNot(FP,{TCSVA1(SVA1(HStr2,TempSEV), Exactly, 0x0D0D0D0D, 0xFFFFFF00)})
+					
+					DoActions(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\STalk.ogg")},HumanPlayers,FP)})
+				NIfNotEnd()
+				CAdd(FP,TempEC,1)
+				CIfEnd()
+
+
+				CMovX(FP,VArr(EffCV,HLine),TempEC)
+				CElseX()
+				CAdd(FP,TempEC,1)
+
+				CMovX(FP,VArr(EffCV,HLine),TempEC)
+				CIfXEnd()
+				
+			CIfEnd()
+		CIfXEnd()
+		CIfEnd()
+
+
+		CMovX(FP,VArr(EffCV2,HLine),HCheck)
+	CWhileEnd(SetNVar(HLine,Add,1)) 
+	end 
+	CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+	CTrigger(FP,{CD(TC,0)},{SetCD(TC,TalkTimer)},1)
+	SetCallEnd()
+
 end
