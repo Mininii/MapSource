@@ -1073,41 +1073,41 @@ end
 	CIfEnd()
 	CIf(FP,CD(MarDup2,1)) -- ¹¶Ä¡±â ½ÇÇà
 	
-	Player_0x4D = CreateVarArr(4,FP)
-	Player_0x18 = CreateVarArr(4,FP)
-	Player_0x58 = CreateVarArr(4,FP)
-	Player_0x5C = CreateVarArr(4,FP)
-	Player_S = CreateVarArr(4,FP)
-	Player_T = CreateVarArr(4,FP)
-	Player_C = CreateVarArr(4,FP)
-for i=0, 3 do
+	Player_0x4D = CreateVar(FP)
+	Player_0x18 = CreateVar(FP)
+	Player_0x58 = CreateVar(FP)
+	Player_0x5C = CreateVar(FP)
+	Player_S = CreateVar(FP)
+	Player_T = CreateVar(FP)
+	Player_C = CreateVar(FP)
+for i=0, 6 do
 	CIf(FP,{HumanCheck(i,1)})
 
-		f_Read(FP,0x6284E8+(0x30*i),"X",Player_S[i+1],0xFFFFFF)
+		f_Read(FP,0x6284E8+(0x30*i),"X",Player_S,0xFFFFFF)
 		CIf(FP,Memory(0x6284E8+(0x30*i),AtLeast,1))
-			CMov(FP,Player_0x4D[i+1],_ReadF(_Add(Player_S[i+1],0x4C/4),0xFF00),nil,0xFF00)
-			CMov(FP,Player_0x18[i+1],_ReadF(_Add(Player_S[i+1],0x18/4)))
-			CMov(FP,Player_0x58[i+1],_ReadF(_Add(Player_S[i+1],0x58/4)))
-			CMov(FP,Player_0x5C[i+1],_ReadF(_Add(Player_S[i+1],0x5C/4)))
-			CIf(FP,{CVar(FP,Player_0x4D[i+1][2],AtLeast,256)})
-				CMov(FP,Player_C[i+1],1)
-				CWhile(FP,{CVar(FP,Player_C[i+1][2],AtMost,11)})
-					CIf(FP,{TDeaths(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))),AtLeast,1,0)})
+			CMov(FP,Player_0x4D,_ReadF(_Add(Player_S,0x4C/4),0xFF00),nil,0xFF00)
+			CMov(FP,Player_0x18,_ReadF(_Add(Player_S,0x18/4)))
+			CMov(FP,Player_0x58,_ReadF(_Add(Player_S,0x58/4)))
+			CMov(FP,Player_0x5C,_ReadF(_Add(Player_S,0x5C/4)))
+			CIf(FP,{CVar(FP,Player_0x4D[2],AtLeast,256)})
+				CMov(FP,Player_C,1)
+				CWhile(FP,{CVar(FP,Player_C[2],AtMost,11)})
+					CIf(FP,{TDeaths(_Add(Player_C,EPDF(0x6284E8+(0x30*i))),AtLeast,1,0)})
 						--CMov(FP,0x6509B0,_EPD(_Read(BackupCp,0xFFFFFF)))
 						--CRead(FP,0x6509B0,BackupCp,0,0xFFFFFF,1)
-						CMov(FP,Player_T[i+1],_EPD(_ReadF(_Add(Player_C[i+1],EPDF(0x6284E8+(0x30*i))))))
+						CMov(FP,Player_T,_EPD(_ReadF(_Add(Player_C,EPDF(0x6284E8+(0x30*i))))))
 						CTrigger(FP,{
-							TDeaths(_Add(Player_T[i+1],0x8/4),AtLeast,256,0),
-							TDeathsX(_Add(Player_T[i+1],0x4C/4),AtLeast,1*256,0,0xFF00)
+							TDeaths(_Add(Player_T,0x8/4),AtLeast,256,0),
+							TDeathsX(_Add(Player_T,0x4C/4),AtLeast,1*256,0,0xFF00)
 							},
 						{
-							TSetDeathsX(_Add(Player_T[i+1],0x4C/4),SetTo,Player_0x4D[i+1],0,0xFF00),
-							TSetDeaths(_Add(Player_T[i+1],0x18/4),SetTo,Player_0x18[i+1],0),
-							TSetDeaths(_Add(Player_T[i+1],0x58/4),SetTo,Player_0x58[i+1],0),
-							TSetDeaths(_Add(Player_T[i+1],0x5C/4),SetTo,Player_0x5C[i+1],0)
+							TSetDeathsX(_Add(Player_T,0x4C/4),SetTo,Player_0x4D,0,0xFF00),
+							TSetDeaths(_Add(Player_T,0x18/4),SetTo,Player_0x18,0),
+							TSetDeaths(_Add(Player_T,0x58/4),SetTo,Player_0x58,0),
+							TSetDeaths(_Add(Player_T,0x5C/4),SetTo,Player_0x5C,0)
 							},1)
 					CIfEnd()
-					CAdd(FP,Player_C[i+1],1)
+					CAdd(FP,Player_C,1)
 				CWhileEnd()
 			CIfEnd()
 		CIfEnd()

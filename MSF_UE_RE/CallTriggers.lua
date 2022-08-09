@@ -359,52 +359,6 @@ SetCall(FP)
 	CForEnd()
 SetCallEnd()
 
-local CB_UnitIDV =CreateVar(FP)
-local Height_V = CreateVar(FP)
-local Angle_V = CreateVar(FP)
-local CB_X = CreateVar(FP)
-local CB_Y = CreateVar(FP)
-local CB_P = CreateVar(FP)
-	function CreateBullet(UnitID,Height,Angle,X,Y,ForPlayer)
-		if ForPlayer == nil then ForPlayer = FP end
-	CDoActions(FP,{
-		TSetCVar(FP,CB_UnitIDV[2],SetTo,UnitID),
-		TSetCVar(FP,Height_V[2],SetTo,Height),
-		TSetCVar(FP,Angle_V[2],SetTo,Angle),
-		TSetCVar(FP,CB_X[2],SetTo,X),
-		TSetCVar(FP,CB_Y[2],SetTo,Y),
-		TSetCVar(FP,CB_P[2],SetTo,ForPlayer),
-		SetNext("X",CallCBullet,0),SetNext(CallCBullet+1,"X",1)
-	})
-	end
-	
-	CallCBullet = SetCallForward()
-	SetCall(FP)
-	CIf(FP,Memory(0x628438,AtLeast,1))
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		CAdd(FP,CB_Y,10)
-		CIf(FP,{CVar(FP,Angle_V[2],AtLeast,0x80000000)})
-			CNeg(FP,Angle_V)
-			CSub(FP,Angle_V,_Mov(256),Angle_V)
-		CIfEnd()
-		f_Mod(FP,Angle_V,_Mov(256))
-		CDoActions(FP,{
-			TSetMemoryX(0x66321C, SetTo, Height_V,0xFF),
-			TSetMemory(0x58DC60 + 0x14*0,SetTo,CB_X),
-			TSetMemory(0x58DC68 + 0x14*0,SetTo,CB_X),
-			TSetMemory(0x58DC64 + 0x14*0,SetTo,CB_Y),
-			TSetMemory(0x58DC6C + 0x14*0,SetTo,CB_Y),
-			TCreateUnit(1, CB_UnitIDV, 1, CB_P)})
-		CDoActions(FP,{
-			TSetMemoryX(_Add(Nextptrs,0x58/4),SetTo,_ReadF(_Add(Nextptrs,(0x28/4))),0xFFFFFFFF),
-			TSetMemoryX(_Add(Nextptrs,0x20/4),SetTo,_Mul(Angle_V,256),0xFF00),
-			TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,135*256,0xFF00),
-			TSetMemoryX(_Add(Nextptrs,40),SetTo,0,0xFF000000),
-			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
-			TSetMemory(_Add(Nextptrs,57),SetTo,0),
-		})
-	CIfEnd()
-	SetCallEnd()
 	local IndexJump = def_sIndex()
 	WrPosSave = SetCallForward()
 	SetCall(FP)
@@ -783,16 +737,16 @@ local CB_P = CreateVar(FP)
 	--Line3 = DestX
 	--Line4 = DestY
 
-	--Line5 = TempCalcX
-	--Line6 = TempCalcY
-	--Line7 = Angle
+	--Line5 = Mode
+	--Line6 = Angle
 	--Line8 = NukeDot CForInit
 	--Line15 = init
+	--16~20 Temp
 
 	GBl1SE = CreateCcode()
 	GBl2SE = CreateCcode()
 	CIf(FP,TSLine(15, Exactly, 0),{SetTSLine(15, SetTo, 1),SetCD(GBl1SE,1)})
-	f_Lengthdir(FP, 32*10, TS_VarArr[7], CPosX, CPosY)
+	f_Lengthdir(FP, 32*10, TS_VarArr[6], CPosX, CPosY)
 	CAdd(FP,TS_VarArr[1],CPosX)
 	CAdd(FP,TS_VarArr[2],CPosY)
 
@@ -800,21 +754,21 @@ local CB_P = CreateVar(FP)
 	--도착점 -(iSub) 시작점
 	NIfNot(FP,{CV(TS_VarArr[1],TS_VarArr[3])})
 	CIfX(FP,{TTNVar(TS_VarArr[1], "<", TS_VarArr[3])})
-		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),5),1)
-		CAdd(FP,TS_VarArr[1],TS_VarArr[5])
+		CMov(FP,TS_VarArr[17],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),5),1)
+		CAdd(FP,TS_VarArr[1],TS_VarArr[17])
 	CElseIfX({TTNVar(TS_VarArr[1], ">", TS_VarArr[3])})
-		CMov(FP,TS_VarArr[5],_Div(_Sub(TS_VarArr[1], TS_VarArr[3]),5),1)
-		CSub(FP,TS_VarArr[1],TS_VarArr[5])
+		CMov(FP,TS_VarArr[17],_Div(_Sub(TS_VarArr[1], TS_VarArr[3]),5),1)
+		CSub(FP,TS_VarArr[1],TS_VarArr[17])
 	CIfXEnd()
 	NIfNotEnd()
 
 	NIfNot(FP,{CV(TS_VarArr[2],TS_VarArr[4])})
 	CIfX(FP,{TTNVar(TS_VarArr[2], "<", TS_VarArr[4])})
-		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[4], TS_VarArr[2]),5),1)
-		CAdd(FP,TS_VarArr[2],TS_VarArr[6])
+		CMov(FP,TS_VarArr[18],_Div(_Sub(TS_VarArr[4], TS_VarArr[2]),5),1)
+		CAdd(FP,TS_VarArr[2],TS_VarArr[18])
 	CElseIfX({TTNVar(TS_VarArr[2], ">", TS_VarArr[4])})
-		CMov(FP,TS_VarArr[6],_Div(_Sub(TS_VarArr[2], TS_VarArr[4]),5),1)
-		CSub(FP,TS_VarArr[2],TS_VarArr[6])
+		CMov(FP,TS_VarArr[18],_Div(_Sub(TS_VarArr[2], TS_VarArr[4]),5),1)
+		CSub(FP,TS_VarArr[2],TS_VarArr[18])
 	CIfXEnd()
 	NIfNotEnd()
 	--,SetTo,928 이미지
@@ -837,13 +791,14 @@ local CB_P = CreateVar(FP)
 
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
-	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*10), TS_VarArr[7], CPosX, CPosY)
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*10), TS_VarArr[6], CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
-		SetMemoryB(0x669E28+928, SetTo, 17),--색상
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
@@ -851,13 +806,14 @@ local CB_P = CreateVar(FP)
 	CIfEnd()
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
-	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[7],6), CPosX, CPosY)
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[6],6), CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
-		SetMemoryB(0x669E28+928, SetTo, 17),--색상
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
@@ -865,25 +821,28 @@ local CB_P = CreateVar(FP)
 	CIfEnd()
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
-	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[7],-6), CPosX, CPosY)
+	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[6],-6), CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
-		SetMemoryB(0x669E28+928, SetTo, 17),--색상
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
 	})
 	CIfEnd()
 	
-	CFor3(FP,TS_VarArr[8],32*18,32)
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+233, SetTo, 15)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+233, SetTo, 0)},{preserved})--색상
+	CFor3(FP,TS_VarArr[8],32*19  ,32)
 	local GBCI=CForVariable()
 	
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
-	f_Lengthdir(FP, _Add(GBCI,-32*9), TS_VarArr[7], CPosX, CPosY)
+	f_Lengthdir(FP, _Add(GBCI,-32*9), TS_VarArr[6], CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[3]), _Add(CPosY,TS_VarArr[4]), _Add(CPosX,TS_VarArr[3]), _Add(CPosY,TS_VarArr[4]), {})--
 
 	f_Read(FP,0x628438,nil,Nextptrs)
@@ -905,26 +864,85 @@ local CB_P = CreateVar(FP)
 		SetMemoryB(0x669E28+928, SetTo, 9),--색상복구
 	})
 
-
 --	TS_Suspend({TSLine(3, AtLeast, 25)})
 	
 	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])},{SetMemoryB(0x669E28+533, SetTo, 17),SetMemoryB(0x6636B8+208,SetTo,116)})--파괴자에서 썻던 데이터 수정후 재사용
 	TriggerX(FP,{CV(TS_VarArr[8],0)},{SetCD(GBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
 	
-	f_Lengthdir(FP, _Add(TS_VarArr[8],-32*9), TS_VarArr[7], CPosX, CPosY)
+	f_Lengthdir(FP, _Add(TS_VarArr[8],-32*9), TS_VarArr[6], CPosX, CPosY)
+	CIfX(FP,{CV(TS_VarArr[5],1)})
+	for i = 0, 4 do
+		local ii = -64+(i*32)
+		f_Lengthdir(FP, ii, TS_VarArr[6], TS_VarArr[19],TS_VarArr[20])
+		CreateBullet(208,20,0,_iSub(_Add(CPosX,TS_VarArr[3]),TS_VarArr[20]),_Add(_Add(CPosY,TS_VarArr[4]),TS_VarArr[19]))
+	end
+	CElseX()
 	CreateBullet(208,20,0,_Add(CPosX,TS_VarArr[3]),_Add(CPosY,TS_VarArr[4]))
+	
+	CIfXEnd()
 
 
 	CAdd(FP,TS_VarArr[8],32)
+	CAdd(FP,TS_VarArr[16],-1)
 
-	CAdd(FP,TS_VarArr[9],_Mul(TS_VarArr[9],2))
-	TS_Suspend({CV(TS_VarArr[8],32*17,AtLeast)})
+	CAdd(FP,TS_VarArr[9],TS_VarArr[16])
+	TS_Suspend({CV(TS_VarArr[8],32*19,AtLeast)})
 	CIfEnd()
 	TStr_EndFunc()
 
+
+
+
+
+
+	WRSE = CreateCcode()
+	BSSE = CreateCcode()
 	TStr_Func(BoneBullet)
-	--"staredit\\wav\\WR.ogg"
-	--"staredit\\wav\\BS.ogg"
+	Simple_SetLocX(FP,0, TS_VarArr[1], TS_VarArr[2],TS_VarArr[1], TS_VarArr[2],Simple_CalcLoc(0, -10, -10, 10, 10))
+	CIf(FP,{TSLine(3, AtMost, 0)},{SetCD(WRSE,1)})
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Read(FP,0x628438,nil,Nextptrs)
+	CTrigger(FP, {}, {
+		SetMemoryB(0x669E28+396, SetTo, 15),
+		CreateUnit(1, 219, 1, FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+		TSetMemoryX(_Add(Nextptrs,68),SetTo,25,0xFFFF),
+	}, 1)--케이다린크리스탈색상
+	CIfEnd()
+	CIfEnd()
+	
+
+		
+	
+
+	DoActionsX(FP,{SetTSLine(3, Add, 1)})
+	
+	
+
+	CIf(FP,{TSLine(3, AtLeast, 30)},{SetCD(BSSE,1)})
+	DoActions(FP, {
+		Simple_CalcLoc(0, 9, 9, -9, -9),
+		KillUnitAt(All, nilunit, 1, FP),
+		RemoveUnitAt(All, 219, 1, FP),
+		Simple_CalcLoc(0, -9, -9, 9, 9),
+	})
+	CIf(FP,Memory(0x628438,AtLeast,1))
+	f_Read(FP,0x628438,nil,Nextptrs)
+	CTrigger(FP, {}, {
+		SetMemoryB(0x669E28+396, SetTo, 17),
+		CreateUnit(1, 219, 1, FP),
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
+		TSetMemory(_Add(Nextptrs,57),SetTo,0),
+		TSetMemoryX(_Add(Nextptrs,68),SetTo,10,0xFFFF),
+		KillUnitAt(All, "Men", 1, Force1)
+	}, 1)--케이다린크리스탈색상
+
+	CIfEnd()
+	CIfEnd()
+
+	TriggerX(FP,{TSLine(3, AtLeast, 30)},{SetCD(BSSE,1)},{preserved})
+	TS_Suspend({TSLine(3, AtLeast, 30)})
 	TStr_EndFunc()
 
 
@@ -1015,6 +1033,8 @@ local CB_P = CreateVar(FP)
 	CDPrint(0,11,{"\x0D",0,0},{Force1,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
 	CTrigger(FP,{CD(TC,0)},{SetCD(TC,TalkTimer)},1)
 	SetCallEnd()
+
+	
 
 
 

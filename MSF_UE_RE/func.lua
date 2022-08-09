@@ -1,5 +1,62 @@
 
+function Install_CBullet()
 
+local CB_UnitIDV =CreateVar(FP)
+local Height_V = CreateVar(FP)
+local Angle_V = CreateVar(FP)
+local CB_X = CreateVar(FP)
+local CB_Y = CreateVar(FP)
+local CB_P = CreateVar(FP)
+function CreateBulletCond(UnitId,Height,Angle,XY,Player,Cond,Act)
+	CallTriggerX(FP,CallCBullet,Cond,{Act,
+	SetCVar(FP,CB_X[2],SetTo,XY[2]),
+	SetCVar(FP,CB_Y[2],SetTo,XY[1]),
+	SetCVar(FP,Angle_V[2],SetTo,Angle),
+	SetCVar(FP,Height_V[2],SetTo,Height),
+	SetCVar(FP,CB_UnitIDV[2],SetTo,UnitId),
+	SetCVar(FP,CB_P[2],SetTo,Player),})
+end
+	function CreateBullet(UnitID,Height,Angle,X,Y,ForPlayer)
+		if ForPlayer == nil then ForPlayer = FP end
+	CDoActions(FP,{
+		TSetCVar(FP,CB_UnitIDV[2],SetTo,UnitID),
+		TSetCVar(FP,Height_V[2],SetTo,Height),
+		TSetCVar(FP,Angle_V[2],SetTo,Angle),
+		TSetCVar(FP,CB_X[2],SetTo,X),
+		TSetCVar(FP,CB_Y[2],SetTo,Y),
+		TSetCVar(FP,CB_P[2],SetTo,ForPlayer),
+		SetNext("X",CallCBullet,0),SetNext(CallCBullet+1,"X",1)
+	})
+	end
+	
+	CallCBullet = SetCallForward()
+	SetCall(FP)
+	CIf(FP,Memory(0x628438,AtLeast,1))
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		CAdd(FP,CB_Y,10)
+		CIf(FP,{CVar(FP,Angle_V[2],AtLeast,0x80000000)})
+			CNeg(FP,Angle_V)
+			CSub(FP,Angle_V,_Mov(256),Angle_V)
+		CIfEnd()
+		f_Mod(FP,Angle_V,_Mov(256))
+		CDoActions(FP,{
+			TSetMemoryX(0x66321C, SetTo, Height_V,0xFF),
+			TSetMemory(0x58DC60 + 0x14*0,SetTo,CB_X),
+			TSetMemory(0x58DC68 + 0x14*0,SetTo,CB_X),
+			TSetMemory(0x58DC64 + 0x14*0,SetTo,CB_Y),
+			TSetMemory(0x58DC6C + 0x14*0,SetTo,CB_Y),
+			TCreateUnit(1, CB_UnitIDV, 1, CB_P)})
+		CDoActions(FP,{
+			TSetMemoryX(_Add(Nextptrs,0x58/4),SetTo,_ReadF(_Add(Nextptrs,(0x28/4))),0xFFFFFFFF),
+			TSetMemoryX(_Add(Nextptrs,0x20/4),SetTo,_Mul(Angle_V,256),0xFF00),
+			TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,135*256,0xFF00),
+			TSetMemoryX(_Add(Nextptrs,40),SetTo,0,0xFF000000),
+			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
+			TSetMemory(_Add(Nextptrs,57),SetTo,0),
+		})
+	CIfEnd()
+	SetCallEnd()
+end
 function f_SaveCp()
 	CallTrigger(FP,SaveCp_CallIndex,nil)
 end
@@ -567,10 +624,12 @@ local Repeat_X = CreateVar(FP)
 local Repeat_Y = CreateVar(FP)
 local G_CB_WSTestStrPtr = CreateVar(FP)
 local G_CB_WSTestVA = CreateVArr(5,FP)
+local TempAngle = CreateVar(FP)
 
 
 
 local isScore = CreateCcode()
+
 local Call_Repeat = SetCallForward()
 SetCall(FP)
 --RandZ = 227
@@ -579,6 +638,9 @@ SetCall(FP)
 --CMovX(FP,Repeat_UnitIDV,VArr(ZergGndVArr,RetRand),nil,0xFF)
 --CIfXEnd()
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+	CIfX(FP,{CV(RepeatType,100)})--탄막유닛 전용 RepeatType
+	CreateBullet(Repeat_UnitIDV, 20, TempAngle, Repeat_X, Repeat_Y, FP)
+	CElseX()
 	CIf(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,0),CVar(FP,RepeatType[2],Exactly,4)})})
 		local Gun_Order = def_sIndex()
 		CJumpXEnd(FP,Gun_Order)
@@ -690,6 +752,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfEnd()
 		
 	CIfEnd()
+	CIfXEnd()
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 CMov(FP,RepeatType,0)
@@ -874,6 +937,8 @@ function G_CB_Func()
 	CMov(FP,Repeat_UnitIDV,G_CB_TempTable[1],nil,0xFF,1)
 	CMov(FP,RepeatType,G_CB_TempTable[2],nil,0xFF,1)
 	CMov(FP,Spawn_TempW,1)
+	CMov(FP,TempAngle,G_CB_TempTable[15],nil,0xFF,1)
+
 	CallTrigger(FP,Call_Repeat,{SetCDeaths(FP,SetTo,1,CB_Repeat_Check)})
 	
 end
@@ -1325,6 +1390,7 @@ end
 -- Line10 = CA[2] 남은 대기 시간 (Tick 단위 / 0일때 유닛 소환) 
 -- Line11 = CA[3] 소환후 대기시간 증가량 (Tick 단위/ k입력시 1회 루프후 대기시간 k추가()
 -- Line12 = CA[6] 데이터 인덱스 (k입력시 Shape[k+1]의 데이터를 출력함
+-- Line14 = Bullet Repeat Angle
 
 	Call_G_CB = SetCallForward()
 	SetCall(FP)
@@ -1343,6 +1409,7 @@ end
 			CMov(FP,G_CB_TempTable[12],0)
 			CMov(FP,G_CB_TempTable[13],0)
 			CDiv(FP,G_CB_TempTable[14],256)
+			CDiv(FP,G_CB_TempTable[15],256)
 			if Limit == 1 then
 				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved}) --
 			end
@@ -1371,6 +1438,7 @@ end
 		CMov(FP,G_CB_TempTable[12],0)
 		CMov(FP,G_CB_TempTable[13],0)
 		CDiv(FP,G_CB_TempTable[14],256)
+		CDiv(FP,G_CB_TempTable[15],256)
 		if Limit == 1 then
 			TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 		end
@@ -1902,4 +1970,73 @@ function CFor3(PlayerID,Init,End,Step,Actions,UnPack) -- DoWhile x CJump
 	IndexAlloc = IndexAlloc + 0x4
 
 	return {"X",IndexAlloc-3,0,"V"}
+end
+
+
+
+
+function SetWeaponsDat(Condition,WepID,Property,Flag)
+	local Action = {}
+	function PatchInsert(Act)
+		table.insert(Action,Act)
+	end
+	if type(Property)~= "table" then
+		PushErrorMsg("Property Inputdata Error")
+	else
+		for j,k in pairs(Property) do
+			if j=="DmgBase" then
+				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- 공격력
+			elseif j=="DmgFactor" then
+				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- 추가공격력
+			elseif j=="Cooldown" then
+				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- 공속
+			elseif j=="Splash" then
+				if type(k)=="boolean" then
+					if k == true then
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- 스플타입(일방형)
+					else
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- 스플타입(스플없음)
+					end
+				elseif type(k)~="table" or #k~=3 then
+					PushErrorMsg("Splash Inputdata Error")
+				else
+					PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- 스플타입(일방형)
+					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --스플 안
+					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --스플 중
+					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --스플 밖
+				end
+			elseif j=="RangeMin" then
+				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- 사거리 최소
+			elseif j=="RangeMax" then
+				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- 사거리 최대
+			elseif j=="TargetFlag" then
+				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
+			elseif j=="UpgradeType" then
+				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
+			elseif j=="ObjectNum" then
+				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- 투사체수
+			elseif j=="IconType" then
+				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- 아이콘
+			elseif j== "Behavior" then
+				PatchInsert(SetMemoryB(0x656670+WepID,SetTo,k))
+			elseif j== "LaunchX" then
+				PatchInsert(SetMemoryB(0x657910+WepID,SetTo,k))
+			elseif j== "LaunchY" then
+				PatchInsert(SetMemoryB(0x656C20+WepID,SetTo,k))
+			elseif j== "LaunchSpin" then
+				PatchInsert(SetMemoryB(0x657888+WepID,SetTo,k))
+			elseif j== "AttackAngle" then
+				PatchInsert(SetMemoryB(0x656990+WepID,SetTo,k))
+			elseif j== "RemoveAfter" then
+				PatchInsert(SetMemoryB(0x657040+WepID,SetTo,k))
+			elseif j== "FlingyID" then
+				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
+			elseif j== "WepName" then
+				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- 이름
+			else
+				PushErrorMsg("Wrong Property Name Detected!! : "..j)
+			end
+		end
+	end
+	Trigger2(FP,Condition,Action,Flag)
 end
