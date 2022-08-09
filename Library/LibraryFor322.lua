@@ -1331,6 +1331,7 @@ end
 ---@return table,table -- 해당함수의 리턴값 = CA,CB
 function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_LHPData)
 	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
+	local FP = PlayerID
 	
 	if UnitPtr == nil then
 		PushErrorMsg("CA_InputError")
@@ -1379,13 +1380,16 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 	--CB[6] = Enable BossKill -- 이 값이 0일 경우 보스를 죽일수 있는 상태가 됨. 아직 죽이기 싫을때 이 값을 1로 바꾸면 됨
 	--CB[7] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
 	--CB[8] = Temp -- 내부 사용 변수. 사용자가 값 변경 금지
-	--CB[9] = Unused -- 사용안됨. 사용자가 자유롭게 사용 가능
+	--CB[9] = Unused -- EXCC LHP용 계산TempV. EXCC_LHP 데이터를 입력하지 않을 경우 사용안됨
 	local TempV1 = CreateVar(FP)
 	local TempV2 = CreateVar(FP)
 	local TempW2 = CreateWar(FP)
 	local TempW3 = CreateWar(FP)
 	local TempW4 = CreateWar(FP)
 	local TempW5 = CreateWar(FP)
+	local TempBakV1 = CreateVar(FP)
+	local TempBakV2 = CreateVar(FP)
+	local TempCcode = CreateCcode()
 
 	CIfOnce(PlayerID)--init
 	if EXCC_LHPData==nil then
@@ -1398,7 +1402,6 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 			Set_EXCC2(EXCC_LHPData, CB[4], 0, SetTo,1),
 			Set_EXCC2(EXCC_LHPData, CB[4], 1, SetTo,TempV1),
 			Set_EXCC2(EXCC_LHPData, CB[4], 2, SetTo,TempV2),
-			
 	})
 
 
@@ -1422,29 +1425,56 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 		end
 	end
 	
-
+	if EXCC_LHPData~=nil then
+		f_Div(FP,CB[2],_Read(UnitPtr,2),_Mov(256))
+		CMov(FP,CB[9],_Mul(CB[4],_Mov(0x970/4)))
+		f_Read(FP, _Add(CB[9],_Add(EXCC_LHPData[3],((0x20*1)/4))), TempV1)
+		f_Read(FP, _Add(CB[9],_Add(EXCC_LHPData[3],((0x20*2)/4))), TempV2)
+		f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
+		f_LDiv(FP,TempW3, TempW2, "256")
+		f_LAdd(FP, TempW5,TempW3, {CB[2],0})
+		CIfX(FP,{TCWar(FP, TempW5[2], AtLeast, "4294967295")})
+			CMov(FP,CB[2],0xFFFFFFFF)
+		CElseX()
+			f_Cast(FP, {CB[2],0}, TempW5, nil, nil, 1)
+		CIfXEnd()
+	end
 
 
 		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--살아있는경우
 		
-		if EXCC_LHPData~=nil then
-			f_Div(FP,CB[2],_Read(UnitPtr,2),_Mov(256))
-			f_Read(FP, _Add(_Mul(CB[4],_Mov(0x970/4)),_Add(EXCC_LHPData[3],((0x20*1)/4))), TempV1)
-			f_Read(FP, _Add(_Mul(CB[4],_Mov(0x970/4)),_Add(EXCC_LHPData[3],((0x20*2)/4))), TempV2)
-			f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
-			f_LDiv(FP,TempW3, TempW2, _LMov(256))
-			f_LMov(FP, TempW4, TempW3, nil,nil,1)
-			f_LAdd(FP, TempW5,TempW4, {CB[2],0})
-			CIfX(FP,{TCWar(FP, TempW5[2], AtLeast, "4294967295")})
-				CMov(FP,CB[2],0xFFFFFFFF)
-			CElseX()
-				f_Cast(FP, {CB[2],0}, TempW5, nil, nil, 1)
+			if EXCC_LHPData~=nil then
+				CTrigger(PlayerID,{CV(CB[6],1,AtLeast),CV(CB[2],Preset[5],AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
+			else
+				CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, (Preset[5])*256),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
+			end
+
+			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{},1)
+
+
+			CIfX(FP,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)})
+
+			if EXCC_LHPData~=nil then
+
+			CIf(FP,{CD(TempCcode,0)},{SetCD(TempCcode,1)})
+			
+			f_LMov(FP, TempW4, TempW2, nil,nil,1)
+			CIfEnd()
+
+
+			f_LMov(FP, {TempV1,TempV2}, TempW4, nil, nil, 1)
+				CDoActions(FP, {
+					Set_EXCC2(EXCC_LHPData, CB[4], 0, SetTo,1),
+					Set_EXCC2(EXCC_LHPData, CB[4], 1, SetTo,TempV1),
+					Set_EXCC2(EXCC_LHPData, CB[4], 2, SetTo,TempV2),
+			})
+			CElseX({SetCD(TempCcode,0)})
+
+			end
 			CIfXEnd()
 
-		end
-			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, (Preset[5])*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
-			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
 			if Preset[6] == 0 or EXCC_LHPData==nil then
+
 			CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
 				CIf(PlayerID,CV(CB[2],1,AtLeast))
 					f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
@@ -1473,7 +1503,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 			end
 	-------------------------------------------------------------------------
 			CIfX(PlayerID,CV(CB[3],0))
-				CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF),TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})--TSetMemoryX(_Add(UnitPtr,70), SetTo, 0*256,0xFF00)
+				CDoActions(PlayerID,{TSetMemoryX(_Add(UnitPtr,24), SetTo, 0*256,0xFFFFFF)})--TSetMemoryX(_Add(UnitPtr,70), SetTo, 0*256,0xFF00)
 				CABossPtr = UnitPtr
 				CABossPlayerID = PlayerID
 				CABossDataArr = CA
