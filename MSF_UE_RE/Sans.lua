@@ -1,5 +1,6 @@
 function Install_SansBoss()
-	
+	--Boss : Sans, Judge OF Level. Made By Mininii
+	--from. MSF_UE
 
 	function SetBright(Time,Value)
 		TriggerX(FP,{CD(SBossStart,Time,AtLeast)},{SetMemory(0x657A9C,SetTo,Value)})
@@ -40,6 +41,18 @@ function Install_SansBoss()
 		DoActionsX(FP,SetV(CB[6],1))
 		CIf(FP,{CV(CB[3],0)}) -- 보스패턴 작성구간
 
+		if Limit == 1 then
+			BossPhaseTestNum = 3
+			CIf(FP,{CD(TestMode,1)})
+			CMov(FP,0x6509B0,CurrentOP)
+			TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
+			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Add,1)},{preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Subtract,1)},{preserved})
+			CMov(FP,0x6509B0,FP)
+			CMov(FP,0x57f120,CA[1])
+			CIfEnd()
+		end
+
 
 			CIf(FP,{CV(CA[1],0)})
 			TriggerX(FP,{Bring(Force1,AtLeast,1,"Men",91)},{SetCD(PattC2[1],1)},{preserved})
@@ -68,67 +81,118 @@ function Install_SansBoss()
 				
 				Trigger2X(FP,{CD(PattC[3],100)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg")},HumanPlayers,FP)},{preserved})
 				CIf(FP,{CD(PattC[3],100,AtLeast),CD(PattC[3],100+180,AtMost)},{SetFlingySpeed(158,(20*32)*4)})
-					SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={8,8,8},RemoveAfter=64})--210번 탄막유닛 무기 전반 설정
-					f_Lengthdir(FP, 5*32, PattV[1], CPosX, CPosY)
+					SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={8,8,8},RemoveAfter=64},{preserved})--210번 탄막유닛 무기 전반 설정
+					f_Lengthdir(FP, 5*32, _Add(PattV[1],90), CPosX, CPosY)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,2912), FP)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,3232), FP)
 					CAdd(FP,PattV[1],2)
 				CIfEnd()
 				
-				TS_SendX(CD(PattC[3],200+180), BlasterBullet, {96*16,192*16,96*16,2848,1,0})
-				TS_SendX(CD(PattC[3],200+180), BlasterBullet, {96*16,192*16,96*16,3296,1,180})
-				TS_SendX(CD(PattC[3],250+180), BlasterBullet, {96*16,192*16,1472,192*16,1,90})
-				TS_SendX(CD(PattC[3],250+180), BlasterBullet, {96*16,192*16,1600,192*16,1,270})
-				TS_SendX(CD(PattC[3],300+180), BlasterBullet, {96*16,192*16,96*16,3008,1,0})
-				TS_SendX(CD(PattC[3],300+180), BlasterBullet, {96*16,192*16,96*16,3136,1,180})
-				TS_SendX(CD(PattC[3],350+180), BlasterBullet, {96*16,192*16,1312,192*16,1,90})
-				TS_SendX(CD(PattC[3],350+180), BlasterBullet, {96*16,192*16,1760,192*16,1,270})
-				TS_SendX(CD(PattC[3],400+180), BlasterBullet, {96*16,192*16,96*16,192*16,1,45})
-				TS_SendX(CD(PattC[3],400+180), BlasterBullet, {96*16,192*16,96*16,192*16,1,45+90})
-				TS_SendX(CD(PattC[3],450+180), BlasterBullet, {96*16,192*16,96*16,192*16,1,45+180})
-				TS_SendX(CD(PattC[3],450+180), BlasterBullet, {96*16,192*16,96*16,192*16,1,45+180+90})
+				TS_SendX(CD(PattC[3],200+80), BlasterBullet, {96*16,192*16,96*16,2848,1,0})
+				TS_SendX(CD(PattC[3],200+80), BlasterBullet, {96*16,192*16,96*16,3296,1,180})
+				TS_SendX(CD(PattC[3],250+80), BlasterBullet, {96*16,192*16,1472,192*16,1,90})
+				TS_SendX(CD(PattC[3],250+80), BlasterBullet, {96*16,192*16,1600,192*16,1,270})
+				TS_SendX(CD(PattC[3],300+80), BlasterBullet, {96*16,192*16,96*16,3008,1,0})
+				TS_SendX(CD(PattC[3],300+80), BlasterBullet, {96*16,192*16,96*16,3136,1,180})
+				TS_SendX(CD(PattC[3],350+80), BlasterBullet, {96*16,192*16,1312,192*16,1,90})
+				TS_SendX(CD(PattC[3],350+80), BlasterBullet, {96*16,192*16,1760,192*16,1,270})
+				TS_SendX(CD(PattC[3],400+80), BlasterBullet, {96*16,192*16,96*16,192*16,1,45})
+				TS_SendX(CD(PattC[3],400+80), BlasterBullet, {96*16,192*16,96*16,192*16,1,45+90})
+				TS_SendX(CD(PattC[3],450+80), BlasterBullet, {96*16,192*16,96*16,192*16,1,180})
+				TS_SendX(CD(PattC[3],450+80), BlasterBullet, {96*16,192*16,96*16,192*16,1,180+90})
 				TriggerX(FP,{CD(PattC[3],500+180,AtLeast)},{SetCD(PattC[1],1)},{preserved})
 
 			CIfEnd()
 		--			
 			CIfEnd()
+
+
 			CIf(FP,{CV(CA[1],1)},{SetFlingySpeed(158,(20*32))})
+				DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
+				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210번 탄막유닛 무기 전반 설정
+				CIf(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 150)})
+
+					local P2Act={} 
+					for i = 1, 41 do
+						table.insert(P2Act,SetCD(PattC3[i],1))
+
+					end
+						DoActions2X(FP,P2Act)
+						local RS = f_CRandNum(41)
+						for i = 1, 41 do
+							local BSw = {}
+							if PattC3[i-2] ~= nil then
+								table.insert(BSw,SetCD(PattC3[i-2],0))
+							end
+							if PattC3[i-1] ~= nil then
+								table.insert(BSw,SetCD(PattC3[i-1],0))
+							end
+							table.insert(BSw,SetCD(PattC3[i],0))
+							if PattC3[i+1] ~= nil then
+								table.insert(BSw,SetCD(PattC3[i+1],0))
+							end
+							if PattC3[i+2] ~= nil then
+								table.insert(BSw,SetCD(PattC3[i+2],0))
+							end
+							
+							TriggerX(FP,{CV(RS,i-1)},BSw,{preserved})
+						end
+					for i = 1, 41 do
+						CreateBulletCond(210,20,192,{1216+16,2752-16+(i*16)},FP,{CD(PattC3[i],1)})
+						CreateBulletCond(210,20,64,{1824+16,2752-16+(i*16)},FP,{CD(PattC3[i],1)})
+					end
+				CIfEnd()
+				TriggerX(FP,{CD(PattC[3],1050,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+			CIfEnd()
+
+			CIf(FP,{CV(CA[1],2)},{SetFlingySpeed(158,(20*32))})
 			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255})--210번 탄막유닛 무기 전반 설정
-			CIf(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 150)})
-
-			local P2Act={} 
-			for i = 1, 41 do
-				table.insert(P2Act,SetCD(PattC3[i],1))
-
+			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210번 탄막유닛 무기 전반 설정
+			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 150)},{preserved})
+			DoActions(FP, {SetSwitch("Switch 100",Random),SetSwitch("Switch 1",Random)})
+			for i = 0, 3 do
+				local SW1 = Cleared
+				local SW2 = Cleared
+				if i == 1 then SW1 = Set end if i == 2 then SW2 = Set end if i==3 then SW1 = Set SW2 = Set end
+				TriggerX(FP,{Switch("Switch 100",SW1),Switch("Switch 1",SW2)},{SetV(PattV[1],i*90)},{preserved})
 			end
-				DoActions2X(FP,P2Act)
-				local RS = f_CRandNum(41)
-				for i = 1, 41 do
-					local BSw = {}
-					if PattC3[i-2] ~= nil then
-						table.insert(BSw,SetCD(PattC3[i-2],0))
-					end
-					if PattC3[i-1] ~= nil then
-						table.insert(BSw,SetCD(PattC3[i-1],0))
-					end
-					table.insert(BSw,SetCD(PattC3[i],0))
-					if PattC3[i+1] ~= nil then
-						table.insert(BSw,SetCD(PattC3[i+1],0))
-					end
-					if PattC3[i+2] ~= nil then
-						table.insert(BSw,SetCD(PattC3[i+2],0))
-					end
-					
-					TriggerX(FP,{CV(RS,i-1)},BSw,{preserved})
-				end
-			for i = 1, 41 do
-				CreateBulletCond(210,20,192,{2752-16+(i*16),1216+16},FP,{CD(PattC3[i],1)})
-				CreateBulletCond(210,20,64,{2752-16+(i*16),1824+16},FP,{CD(PattC3[i],1)})
+			TS_SendX({TTOR({CD(PattC[2],75),CD(PattC[2],150)})}, BlasterBullet, {96*16,192*16,96*16,192*16,0,PattV[1]})
+			for i = 0, 20 do
+				CreateBulletCond(210,20,0,{1216+(i*16),2752},FP,{CD(PattC[2],75)})
+				CreateBulletCond(210,20,128,{1856-(i*16),2752+(20*32)},FP,{CD(PattC[2],150)})
 			end
-			CIfEnd()
-			CIfEnd()
 			TriggerX(FP,{CD(PattC[3],1050,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+			CIfEnd()
+
+			
+			CIf(FP,{CV(CA[1],3)},{SetFlingySpeed(158,(20*32)*2)})
+			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
+			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=128},{preserved})--210번 탄막유닛 무기 전반 설정
+			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 70)},{preserved})
+			
+			DoActions(FP, {SetSwitch("Switch 100",Random),SetSwitch("Switch 1",Random),SetSwitch("Switch 101",Random)})
+			for i = 0, 3 do
+				local SW1 = Cleared
+				local SW2 = Cleared
+				if i == 1 then SW1 = Set end if i == 2 then SW2 = Set end if i==3 then SW1 = Set SW2 = Set end
+				TriggerX(FP,{Switch("Switch 100",SW1),Switch("Switch 1",SW2)},{SetV(PattV[2],2752-16+((3+(i*5))*32))},{preserved})
+			end
+			
+			TriggerX(FP,{Switch("Switch 101",Cleared)},{SetV(PattV[1],0)},{preserved})
+			TriggerX(FP,{Switch("Switch 101",Set)},{SetV(PattV[1],180)},{preserved})
+			TS_SendX({TTOR({CD(PattC[2],35),CD(PattC[2],70)})}, BlasterBullet, {96*16,192*16,1536,PattV[2],1,PattV[1]})
+
+			
+			CreateBulletCond(210,20,192,{1216,2752+(5*32)},FP,{CD(PattC[2],15,AtMost)})
+			CreateBulletCond(210,20,64,{1856,2752+(10*32)},FP,{CD(PattC[2],15,AtMost)})
+			CreateBulletCond(210,20,192,{1216,2752+(15*32)},FP,{CD(PattC[2],15,AtMost)})
+
+
+			
+			TriggerX(FP,{CD(PattC[3],1000,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+			CIfEnd()
+
+
 		CIfEnd()
 		if Limit == 1 then
 			--CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
@@ -230,16 +294,16 @@ function Install_SansBoss()
 	local CRY = 3408
 	
 	for i =0, 10 do
-		table.insert(OrderLocAct,Simple_SetLoc(0, 1216+(i*64)-32, 2736-16, 1216+(i*64)+32, 2736+16))
-		table.insert(OrderLocAct,Simple_SetLoc(80, 1216+(i*64)-32, 2736-16+32, 1216+(i*64)+32, 2736+16+32))
+		table.insert(OrderLocAct,Simple_SetLoc(0, 1216+(i*64)-32, 2752-16, 1216+(i*64)+32, 2752+16))
+		table.insert(OrderLocAct,Simple_SetLoc(80, 1216+(i*64)-32, 2752-16+32, 1216+(i*64)+32, 2752+16+32))
 		table.insert(OrderLocAct,Order("Men",Force1,1,Move,81))
-		table.insert(OrderLocAct,Simple_SetLoc(0, 1216+(i*64)-32, 3408-16, 1216+(i*64)+32, 3408+16))
-		table.insert(OrderLocAct,Simple_SetLoc(80, 1216+(i*64)-32, 3408-16-32, 1216+(i*64)+32, 3408+16-32))
+		table.insert(OrderLocAct,Simple_SetLoc(0, 1216+(i*64)-32, 3392-16, 1216+(i*64)+32, 3392+16))
+		table.insert(OrderLocAct,Simple_SetLoc(80, 1216+(i*64)-32, 3392-16-32, 1216+(i*64)+32, 3392+16-32))
 		table.insert(OrderLocAct,Order("Men",Force1,1,Move,81))
 
-		table.insert(CryAct,Simple_SetLoc(0, 1216+(i*64), 2736, 1216+(i*64), 2736))
+		table.insert(CryAct,Simple_SetLoc(0, 1216+(i*64), 2752, 1216+(i*64), 2752))
 		table.insert(CryAct,CreateUnit(1,129,1,FP))
-		table.insert(CryAct,Simple_SetLoc(0, 1216+(i*64), 3408, 1216+(i*64), 3408))
+		table.insert(CryAct,Simple_SetLoc(0, 1216+(i*64), 3392, 1216+(i*64), 3392))
 		table.insert(CryAct,CreateUnit(1,129,1,FP))
 
 		

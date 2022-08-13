@@ -9,8 +9,8 @@ local CB_Y = CreateVar(FP)
 local CB_P = CreateVar(FP)
 function CreateBulletCond(UnitId,Height,Angle,XY,Player,Cond,Act)
 	CallTriggerX(FP,CallCBullet,Cond,{Act,
-	SetCVar(FP,CB_X[2],SetTo,XY[2]),
-	SetCVar(FP,CB_Y[2],SetTo,XY[1]),
+	SetCVar(FP,CB_X[2],SetTo,XY[1]),
+	SetCVar(FP,CB_Y[2],SetTo,XY[2]),
 	SetCVar(FP,Angle_V[2],SetTo,Angle),
 	SetCVar(FP,Height_V[2],SetTo,Height),
 	SetCVar(FP,CB_UnitIDV[2],SetTo,UnitId),
