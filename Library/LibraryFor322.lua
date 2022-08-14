@@ -1433,7 +1433,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 		f_LMov(FP, TempW2, {TempV1, TempV2}, nil,nil,1)
 		f_LDiv(FP,TempW3, TempW2, "256")
 		f_LAdd(FP, TempW5,TempW3, {CB[2],0})
-		CIfX(FP,{TCWar(FP, TempW5[2], AtLeast, "4294967295")})
+		CIfX(FP,{TTCWar(FP, TempW5[2], AtLeast, "4294967295")})
 			CMov(FP,CB[2],0xFFFFFFFF)
 		CElseX()
 			f_Cast(FP, {CB[2],0}, TempW5, nil, nil, 1)

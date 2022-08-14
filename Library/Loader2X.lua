@@ -5,6 +5,10 @@
 __StringArray = {} __UPUSCheckArray = {}
 __VoidCondArr = {} -- 20bytes
 __VoidActArr = {} -- 32bytes
+local Strchar = string.char
+local b32band = bit32.band
+local b32rshift = bit32.rshift
+local tconcat = table.concat
 
 function __InitTrigger()
 	__TRIGChkptr:write("TRIG\0\0\0\0") -- Header
@@ -26,29 +30,23 @@ function __InitTrigger()
 	end
 end
 
+local TI=1
+local TRIGStr = {}
+local function bwrite(byte)
+	TRIGStr[TI] = Strchar(byte)
+	TI=TI+1
+end
+local function wwrite(word)
+	TRIGStr[TI] = Strchar(b32band(word,0xFF),b32rshift(b32band(word,0xFF00),8))
+	TI=TI+1
+end
+local function dwwrite(dword)
+	TRIGStr[TI] = Strchar(b32band(dword,0xFF),b32rshift(b32band(dword,0xFF00),8),b32rshift(b32band(dword,0xFF0000),16),b32rshift(b32band(dword,0xFF000000),24))
+	TI=TI+1
+end
 function Trigger(args)
-	local TI=1
-	local TRIGStr = {}
-	local function bwrite(byte)
-		TRIGStr[TI] = string.char(byte)
-		TI=TI+1
-	end
-	local function wwrite(word)
-		TRIGStr[TI] = string.char(bit32.band(word,0xFF))
-		TI=TI+1
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(word,0xFF00),8))
-		TI=TI+1
-	end
-	local function dwwrite(dword)
-		TRIGStr[TI] = string.char(bit32.band(dword,0xFF))
-		TI=TI+1
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF00),8))
-		TI=TI+1
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF0000),16))
-		TI=TI+1
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF000000),24))
-		TI=TI+1
-	end
+	TI=1
+	TRIGStr = {}
 
 	local CCount = 16 
 	if args.conditions then
@@ -64,7 +62,7 @@ function Trigger(args)
 			bwrite(v[7])
 			if v["disabled"] == true then v[8] = bit32.bor(v[8],0x2) end
 			if v[8] >= 0x80 then
-				bwrite(bit32.band(v[8],0x7F))
+				bwrite(b32band(v[8],0x7F))
 				TRIGStr[TI] = "SC"
 				TI=TI+1
 			else
@@ -95,7 +93,7 @@ function Trigger(args)
 			bwrite(v[9])
 			if v["disabled"] == true then v[10] = bit32.bor(v[10],0x2) end
 			if v[10] >= 0x80 then
-				bwrite(bit32.band(v[10],0x7F))
+				bwrite(b32band(v[10],0x7F))
 				TRIGStr[TI] = "\0SC"
 				TI=TI+1
 			else
@@ -178,7 +176,8 @@ function Trigger(args)
 		end
 		TRIGStr[TI] = "\0\0\0\0\0\0"
 		TI=TI+1
-		local TrigStr2 = table.concat(TRIGStr)
+		local TrigStr2 = tconcat(TRIGStr)
+		--assert(#TrigStr2==0x960, "TRIG Size Not Correct. Current Size : "..#TrigStr2)
 		__TRIGChkptr:write(TrigStr2)
 	end
 	
@@ -426,19 +425,12 @@ function __DoActions2(PlayerID,Actions,Flags)
 		end
 	end
 end
-
 function __PopStringArray()
-	local TI=1
-	local TRIGStr = {}
-	local function dwwrite(dword)
-		TRIGStr[TI] = string.char(bit32.band(dword,0xFF))
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF00),8))
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF0000),16))
-		TRIGStr[TI] = string.char(bit32.rshift(bit32.band(dword,0xFF000000),24))
-	end
+	TI=1
+	TRIGStr = {}
 	dwwrite(__TRIGChkptr:seek("end")-8)
 	__TRIGChkptr:seek("set",4)
-	local TrigStr2 = table.concat(TRIGStr)
+	local TrigStr2 = tconcat(TRIGStr)
 	__TRIGChkptr:write(TrigStr2)
 
 	local ActArr = {}

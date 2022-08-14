@@ -94042,7 +94042,7 @@ function NBagLoop(PlayerID,Bag,Dest,Actions,UnPack)
 		table.insert(Box0,SetCtrigX(Bag[7][1],Bag[7][2],0x198+0x20*(i-1),Bag[7][3],SetTo,Bag[1][1],Bag[1][2],0x158+0x40*(i-1),1,1))
 	end
 
-	DoActionsX(PlayerID,Box0)
+	DoActions2X(PlayerID,Box0)
 
 	Trigger { 
 		players = {PlayerID},
@@ -94207,7 +94207,7 @@ function NReset(PlayerID,Header) -- Stack Queue Bag 공통
 			table.insert(Box0,SetCtrigX(Stack[2][1],Stack[2][2],0x178+0x40*(i-1),Stack[2][3],SetTo,Stack[1][1],Stack[1][2],0x15C+0x40*(i-1),1,0))
 			table.insert(Box0,SetCtrigX(Stack[3][1],Stack[3][2],0x198+0x20*(i-1),Stack[3][3],SetTo,Stack[1][1],Stack[1][2],0x158+0x40*(i-1),1,0))
 		end
-		DoActionsX(PlayerID,Box0)
+		DoActions2X(PlayerID,Box0)
 	elseif Header[4] == "Queue" then
 		local Queue = Header
 		local Number = Queue[1][5]
@@ -94220,7 +94220,7 @@ function NReset(PlayerID,Header) -- Stack Queue Bag 공통
 			table.insert(Box0,SetCtrigX(Queue[2][1],Queue[2][2],0x178+0x40*(i-1),Queue[2][3],SetTo,Queue[1][1],Queue[1][2],0x15C+0x40*(i-1),1,0))
 			table.insert(Box0,SetCtrigX(Queue[3][1],Queue[3][2],0x198+0x20*(i-1),Queue[3][3],SetTo,Queue[1][1],Queue[1][2],0x158+0x40*(i-1),1,0))
 		end
-		DoActionsX(PlayerID,Box0)
+		DoActions2X(PlayerID,Box0)
 	elseif Header[4] == "Bag" then
 		local Bag = Header
 		local Number = Bag[1][5]
@@ -94232,7 +94232,7 @@ function NReset(PlayerID,Header) -- Stack Queue Bag 공통
 			table.insert(Box0,SetCtrigX(Bag[2][1],Bag[2][2],0x178+0x40*(i-1),Bag[2][3],SetTo,Bag[1][1],Bag[1][2],0x15C+0x40*(i-1),1,0))
 			table.insert(Box0,SetCtrigX(Bag[3][1],Bag[3][2],0x198+0x20*(i-1),Bag[3][3],SetTo,Bag[1][1],Bag[1][2],0x158+0x40*(i-1),1,0))
 		end
-		DoActionsX(PlayerID,Box0)
+		DoActions2X(PlayerID,Box0)
 	else
 		NReset_InputData_Error()
 	end
@@ -95974,6 +95974,26 @@ function TogglePlayerModerate(PlayerID,State,Timer,TargetPlayer,Condition,Action
 end
 
 function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,ActionOn,ActionOff) -- Player→Ob
+	function LocalPlayerID2(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,0),Memory(0x512684,AtMost,7)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
+
 	local KeyCond = {}
 	if KeyName ~= nil then
 		KeyCond = {KeyPress(KeyName,"Down");Memory(0x68C144,Exactly,0)}
@@ -95988,7 +96008,7 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID2(TargetPlayer);
 			KeyCond;
 			DelayCond[1];
 			Condition;
@@ -96003,7 +96023,7 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID2(TargetPlayer);
 			KeyCond;
 			DelayCond[2];
 			Condition;
@@ -96018,7 +96038,7 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID2(TargetPlayer);
 			MemoryX(Timer,Exactly,0x80,0x80);
 			Memory(0x68C144,AtLeast,1);
 		},
@@ -96031,7 +96051,7 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID2(TargetPlayer);
 			MemoryX(Timer,AtLeast,1,0x7F);
 		},
 		actions = {
@@ -96042,10 +96062,29 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 end
 
 function ObserverDrop(PlayerID,Timer,TargetPlayer,Delay,Condition,Action) -- "Ob1"~"Ob4"
+	function LocalPlayerID3(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,Exactly,0,0xFFF0);
 			Condition;
 		},
@@ -96058,7 +96097,7 @@ function ObserverDrop(PlayerID,Timer,TargetPlayer,Delay,Condition,Action) -- "Ob
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,AtLeast,1*16,0xFFF0);
 			MemoryX(Timer,AtMost,0xFFE0,0xFFF0);
 		},
@@ -96072,7 +96111,7 @@ function ObserverDrop(PlayerID,Timer,TargetPlayer,Delay,Condition,Action) -- "Ob
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,AtLeast,Delay*16,0xFFF0);
 		},
 		actions = {
@@ -96093,6 +96132,25 @@ end
 ObserverChatCheck = 0
 
 function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Action)
+	function LocalPlayerID3(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
 	local KeyCond = {}
 	if KeyName ~= nil then
 		KeyCond = {KeyPress(KeyName,"Down");Memory(0x68C144,Exactly,0)}
@@ -96106,7 +96164,7 @@ function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,A
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			KeyCond;
 			DelayCond;
 			Condition;
@@ -96121,7 +96179,7 @@ function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,A
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,Exactly,0x20000000,0x70000000);
 			Memory(0x68C144,AtLeast,1);
 		},
@@ -96135,7 +96193,7 @@ function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,A
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,AtLeast,1*65536,0xFF0000);
 			},
 			actions = {
@@ -96148,6 +96206,25 @@ function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,A
 end
 
 function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Action)
+	function LocalPlayerID3(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
 	local KeyCond = {}
 	if KeyName ~= nil then
 		KeyCond = {KeyPress(KeyName,"Down");Memory(0x68C144,Exactly,0)}
@@ -96161,7 +96238,7 @@ function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			KeyCond;
 			DelayCond;
 			Condition;
@@ -96176,7 +96253,7 @@ function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,Exactly,0x30000000,0x70000000);
 			Memory(0x68C144,AtLeast,1);
 		},
@@ -96190,7 +96267,7 @@ function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,AtLeast,1*65536,0xFF0000);
 			},
 			actions = {
@@ -96203,6 +96280,25 @@ function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,
 end
 
 function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,ActionArray)
+	function LocalPlayerID3(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
 	local KeyCond = {}
 	if KeyName ~= nil then
 		KeyCond = {KeyPress(KeyName,"Down");Memory(0x68C144,Exactly,0)}
@@ -96224,7 +96320,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				KeyCond;
 				DelayCond;
 				Condition;
@@ -96240,7 +96336,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 			Trigger { 
 				players = {PlayerID},
 				conditions = {
-					LocalPlayerID(TargetPlayer);
+					LocalPlayerID3(TargetPlayer);
 					MemoryX(Timer,Exactly,0x80000000,0x80000000);
 					Memory(0x57EEE4+0x24*l,AtMost,0x0F);
 				},
@@ -96256,7 +96352,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,Exactly,i+1+0x40000000,0x4000000F);
 			},
 			actions = {
@@ -96272,7 +96368,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 			Trigger { 
 				players = {PlayerID},
 				conditions = {
-					LocalPlayerID(TargetPlayer);
+					LocalPlayerID3(TargetPlayer);
 					MemoryX(Timer,Exactly,0x40000000+i*0x01000000,0x7F000000);
 					MemoryX(0x57EEE4+0x24*i,Exactly,2^j,2^j);
 				},
@@ -96288,7 +96384,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,Exactly,0x40000000+i,0x7000000F);
 			},
 			actions = {
@@ -96302,7 +96398,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,Exactly,0x40000000,0x70000000);
 			Memory(0x68C144,AtLeast,1);
 		},
@@ -96316,7 +96412,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,AtLeast,1*65536,0xFF0000);
 			},
 			actions = {
@@ -96329,6 +96425,25 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 end
 
 function ObserverChatToOb(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Action)
+	function LocalPlayerID3(Player,Type)
+		if Type == nil then
+			Type = Exactly
+		end
+		if Player == nil then
+			return {Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)}
+		else
+			if Player == "Ob1" then
+				Player = 128
+			elseif Player == "Ob2" then
+				Player = 129
+			elseif Player == "Ob3" then
+				Player = 130
+			elseif Player == "Ob4" then
+				Player = 131
+			end
+			return Memory(0x512684,Type,Player)
+		end
+	end
 	local KeyCond = {}
 	if KeyName ~= nil then
 		KeyCond = {KeyPress(KeyName,"Down");Memory(0x68C144,Exactly,0)}
@@ -96342,7 +96457,7 @@ function ObserverChatToOb(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			KeyCond;
 			DelayCond;
 			Condition;
@@ -96357,7 +96472,7 @@ function ObserverChatToOb(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 	Trigger { 
 		players = {PlayerID},
 		conditions = {
-			LocalPlayerID(TargetPlayer);
+			LocalPlayerID3(TargetPlayer);
 			MemoryX(Timer,Exactly,0x50000000,0x70000000);
 			Memory(0x68C144,AtLeast,1);
 		},
@@ -96371,7 +96486,7 @@ function ObserverChatToOb(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 		Trigger { 
 			players = {PlayerID},
 			conditions = {
-				LocalPlayerID(TargetPlayer);
+				LocalPlayerID3(TargetPlayer);
 				MemoryX(Timer,AtLeast,1*65536,0xFF0000);
 			},
 			actions = {
