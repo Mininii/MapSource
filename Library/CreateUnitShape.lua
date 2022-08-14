@@ -5,7 +5,7 @@
 -- бщ Prev functions (v1.0) ---------------------------------------------------------------------------------------------------------------------
 
 function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -106,7 +106,7 @@ function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX
 end
 
 function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -207,7 +207,7 @@ function CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,
 end
 
 function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -314,7 +314,7 @@ function CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,
 end
 
 function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -421,7 +421,7 @@ function CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,Lo
 end
 
 function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -514,7 +514,7 @@ function CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 end
 
 function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -607,7 +607,7 @@ function CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 end
 
 function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -705,7 +705,7 @@ function CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 end
 
 function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local X = {}
 	local Main = 1
@@ -803,7 +803,7 @@ function CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 end
 
 function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -915,7 +915,7 @@ function CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,Lo
 end
 
 function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -1027,7 +1027,7 @@ function CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,For
 end
 
 function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -1144,7 +1144,7 @@ function CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,Per
 end
 
 function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Distance = Radius
 	local StarRadius = Radius * (math.cos(math.rad(180/Points))-math.sin(math.rad(180/Points))/math.tan(math.rad(StarAngle/2)))
 	local X = {}
@@ -1261,7 +1261,7 @@ function CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId
 end
 
 function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1368,7 +1368,7 @@ function CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,
 end
 
 function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1475,7 +1475,7 @@ function CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,F
 end
 
 function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
@@ -1587,7 +1587,7 @@ function CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,P
 end
 
 function CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,Radius,Angle,PolarPointsNumerator,PolarPointsDenominator,Partition,RadiusConstant,CenterPoint,Halfdomain,Preserve,Properties)
-	local LocId,PLocId = ConvertLocation(LocId)
+    local LocId,PLocId = ConvertLocation(LocId)
 	local Draw = 0
 	if Halfdomain == 0 then
 		Draw = 360
