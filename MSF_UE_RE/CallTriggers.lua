@@ -434,16 +434,17 @@ SetCallEnd()
 				CIf(FP,{HumanCheck(i,1)})
 				CMov(FP,ReadScore,0)
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
-					
-					CIfX(FP,{CD(SoloNoPointC,1)})
-					CMov(FP,ReadScore,0)
+						f_Div(FP,ReadScore,ExScore[i+1],100)
 					CElseX()
-					f_Div(FP,ReadScore,ExScore[i+1],100)
-					CIfXEnd()
-					CElseX()
-					CMov(FP,ReadScore,0)
+						CMov(FP,ReadScore,0)
 					CIfXEnd()
 					f_Mul(FP,ReadScore,_Mov(2))
+
+					
+					CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --아마 이벤트용
+						f_Mul(FP,ReadScore,MulPoint)--추가 포인트 지급
+					CIfEnd()
+
 					--CMul(FP,ReadScore,_Div(Level,_Mov(10)))
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
@@ -455,13 +456,8 @@ SetCallEnd()
 					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
-					CIfX(FP,CD(SoloNoPointC,0))
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
 					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-					CElseX()
-					f_Memcpy(FP,KillScStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-					CIfXEnd()
-
 					DoActions(FP,{
 						SetMemory(0x6509B0,SetTo,i),
 						DisplayText("\x0D\x0D\x0DKillP".._0D,4),

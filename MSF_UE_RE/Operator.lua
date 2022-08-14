@@ -170,7 +170,7 @@ function OPTrig()
 		CIfEnd()
 	end
 
-	CMov(FP,NCCalc,_Mul(LevelFactor,7),7)
+	CMov(FP,NCCalc,_Mul(LevelFactor,3),14)
 
 
 

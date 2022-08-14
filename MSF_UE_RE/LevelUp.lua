@@ -156,37 +156,36 @@ function LevelUp()
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CIfX(FP,{CD(SoloNoPointC,1)})-- 싱글플레이 포인트 없음
-		CMov(FP,GetP,0)
-		CElseX()
-		CMov(FP,GetP,_Div(Level, 10),1) -- 포인트 공식 : P = (Level//10)+1
-		CIfXEnd()
+		CMov(FP,GetP,_Div(Level, 10),1) -- 기본 포인트 공식 : P = (Level//10)+1
 
 		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)}) -- 보스 스테이지 클리어시 추가포인트
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 
-		f_Mul(FP,GetP,_Mov(2))
-		
 		CIf(FP,CVar(FP,LevelT[2],Exactly,10))--10렙 클리어시 추가포인트
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 
-		CIf(FP,CVar(FP,MulPoint[2],AtLeast,1))
+		CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --아마 이벤트용
 			f_Mul(FP,GetP,MulPoint)--추가 포인트 지급
 		CIfEnd()
+
+		CIfX(FP,{CD(SoloNoPointC,1)})
+			f_Div(FP,GetP,_Mov(2))-- 싱글플레이 포인트 절반으로
+		CElseX()
+			f_Mul(FP,GetP,_Mov(2))--싱글아니면 포인트 보너스
+		CIfXEnd()
+
+		TriggerX(FP,{CV(GetP,0)},{SetV(GetP,1)},{preserved})--계산된 포인트가 0일 경우 최소 1은 얻게함
+
+
 		
 		
-		CIfX(FP,CD(SoloNoPointC,0))
 		ItoDecX(FP,GetP,VArr(GetPVA,0),2,0x7,2)
 		_0DPatchX(FP,GetPVA,12)
 		f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
 		f_Movcpy(FP,_Add(PointStrPtr,StPT[2]),VArr(GetPVA,0),12*4)
 		f_Memcpy(FP,_Add(PointStrPtr,StPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-		CElseX()
-		DoActions(FP, {SetV(GetP,0)})
-		f_Memcpy(FP,PointStrPtr,_TMem(Arr(SoloNoPointT[3],0),"X","X",1),SoloNoPointT[2])
-		CIfXEnd()
 		
 
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},

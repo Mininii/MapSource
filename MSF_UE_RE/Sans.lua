@@ -42,7 +42,7 @@ function Install_SansBoss()
 		CIf(FP,{CV(CB[3],0)}) -- 보스패턴 작성구간
 
 		if Limit == 1 then
-			BossPhaseTestNum = 3
+			BossPhaseTestNum = 0
 			CIf(FP,{CD(TestMode,1)})
 			CMov(FP,0x6509B0,CurrentOP)
 			TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
@@ -50,13 +50,13 @@ function Install_SansBoss()
 			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Subtract,1)},{preserved})
 			CMov(FP,0x6509B0,FP)
 			CMov(FP,0x57f120,CA[1])
+			for i = 0, 6 do
+				CMov(FP,0x57f0f0+(i*4),0x70000000)
+			end
 			CIfEnd()
 		end
-
-
 			CIf(FP,{CV(CA[1],0)})
 			TriggerX(FP,{Bring(Force1,AtLeast,1,"Men",91)},{SetCD(PattC2[1],1)},{preserved})
-
 			CIf(FP,{CD(PattC2[1])})
 				DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
 				CIf(FP,{CD(PattC[2],0),CD(PattC[3],100,AtMost)},SetCD(PattC[2], 25))
@@ -351,7 +351,7 @@ function Install_SansBoss()
 	SetBright(5000+(2500*3)+4200,32)
 	TriggerX(FP,{CD(SBossStart,5000+(2500*3)+1000,AtLeast)},{SetCVar(FP,ReserveBGM[2],SetTo,SBossBGM)},{preserved})
 	if Limit == 1 then
-		TriggerX(FP,{CD(TestMode)},{SetCD(SBossStart,5000+(2500*3)+4200)})
+		--TriggerX(FP,{CD(TestMode)},{SetCD(SBossStart,5000+(2500*3)+4200)})
 	end
 	StoryPrintS(5000+(2500*3)+4200,"\x04뭐? 내가 딜찍누를 허용할 거라 생각했어?",CD(TalkCond,1))
 	Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+4200,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP)})
@@ -416,7 +416,7 @@ function Install_SansBoss()
 	CAPlot(Shape9215, FP, nilunit, 0, {CPosX,CPosY},1, 32, {1,0,0,0,9999,0}, "SDeathFunc", FP, {}, {}, 1)
 	CAdd(FP,TempDv,-1)
 	CIfEnd()
-	CTrigger(FP, {CD(DCheck,1,AtLeast)}, {AddCD(DTimer,Dt),SetV(TalkTimer,5)}, 1)
+	CTrigger(FP, {CD(DCheck,1,AtLeast)}, {AddCD(DTimer,Dt),SetV(TalkTimer,4)}, 1)
 	StoryPrintS2(6000,"...그래...")
 	StoryPrintS2(6000+(3000*1),"결국... 이렇게, 되는건가?")
 	StoryPrintS2(6000+(3000*2),"뭐.. 그릴비나 가야겠군.")

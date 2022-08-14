@@ -8,6 +8,8 @@ if LD2XOption == 1 then
 	Mapdir="C:\\euddraft0.9.2.0\\MSF_UE_RE"
 	__StringArray = {}
 	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	__TRIGChkptrT = {}
+	__TTI = 1
 	Loader2XFName = "Loader.lua"
 else
 	Loader2XFName = "Loader2X.lua"
@@ -36,16 +38,16 @@ NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(210,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
-TestSet(1)
+TestSet(0)
 TestPMul=2
-VerText = "\x04Ver. Beta. 0.61"
+VerText = "\x04Ver. Beta. 0.7"
 if Limit == 1 then
 	VerText = VerText.."T"
 	BossPhaseTestMode = 0
 	
 end
 BossPhaseTestMode = 0
-LimitVer = 6
+LimitVer = 7
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

@@ -116,6 +116,11 @@ function PlayerInterface()
 		local StatusT1 = "\x10【 \x08M\x04ax \x0FL\x04evel : 000 \x04/ \x08M\x04ax \x18S\x04core : 0000000000 \x10】"
 		local StatusT2 = "\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: 0000000000 \x04/ 0000000000 \x10】"
 		local StatusT3 = "\x10【 \x1FE\x04xchange \x07R\x04ate : 0000\x18% \x10】"
+		local StatusT3E = "\x10【 \x1FE\x04xchange \x07R\x04ate : 0000\x18% ▶▶▶EVENT 진행중! 포인트 \x0D\x0D\x0D배 \x10】"
+
+		local EC = CreateVar(FP)
+		local ET = CreateCcode()
+		local EffStr1 = SaveiStrArrX(FP,MakeiStrWord("\x0E \x1C \x1F \x0F \x1D \x16 \x04 \x1B ",6)) -- 26+6 
 		CJumpEnd(FP,iStrInit)
 
 
@@ -123,6 +128,9 @@ function PlayerInterface()
 			TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,i)},{preserved})
 		end
 
+		DoActionsX(FP, {AddCD(ET,1)})
+		TriggerX(FP,{CD(ET,6,AtLeast)},{SetNVar(EC,Add,604),SetCD(ET,0)},{preserved})
+		TriggerX(FP,NVar(EC,AtLeast,8*604),SetNVar(EC,SetTo,0),{preserved}) 
 	function StatusInterface() --
 	local PlayerID = CAPrintPlayerID 
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
@@ -136,11 +144,19 @@ function PlayerInterface()
 	CA__ItoCustom(SVA1(Str1,20),TempVT[1],nil,nil,{10,10},1,"\x0D",nil,0x04)--"\x040"
 	CA__ItoCustom(SVA1(Str1,33),TempVT[2],nil,nil,{10,10},1,"\x0D",nil,0x08)--"\x080"
 	CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-3)
-	
+	CIfX(FP,{CV(MulPoint,2,AtLeast)})
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,StatusT3E,nil,0) 
+	CA__InputSVA1(SVA1(Str1,24),SVA1(EffStr1,EC),22,0xFF,0,54)
+	CA__ItoCustom(SVA1(Str1,17),ExchangeRate,nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
+	CA__ItoCustom(SVA1(Str1,42),MulPoint,nil,nil,{10,2},1,"\x0D",nil,0x07)--"\x1F0"
+	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-3)
+	CElseX()
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,StatusT3,nil,0) 
 	CA__ItoCustom(SVA1(Str1,17),ExchangeRate,nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
 	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-3)
+	CIfXEnd()
 	
 	
 	end 
@@ -1361,11 +1377,11 @@ end
 	CS__InputVA(FP,iTbl2,0,Str3,Str3s,nil,0,Str3s)
 
 	CIfEnd()
+	
 
-
---	CIfOnce(FP,{Memory(EvCheckPtr,AtLeast,2)})
---	DoActions(FP,{CopyCpAction({DisplayTextX("\t\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x1F！！！　ＥＶＥＮＴ　！！！\n\n\n\x13\x1F이벤트\x04가 감지되었습니다.\n\x13\x07스탯 포인트 획득량\x04이 일정배율 \x1F증가\x04하였습니다.\n\n\n\x13\x1F！！！　ＥＶＥＮＴ　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――",4),
---	PlayWAVX("staredit\\wav\\LimitBreak.ogg"),PlayWAVX("staredit\\wav\\LimitBreak.ogg"),},HumanPlayers,FP)})
---	CMov(FP,MulPoint,_ReadF(EvCheckPtr))
---	CIfEnd()
+	CIfOnce(FP,{Memory(EvCheckPtr,AtLeast,2)})
+	DoActions(FP,{CopyCpAction({DisplayTextX(StrDesignX("\x1F이벤트\x04가 감지되었습니다. \x07스탯 포인트 획득량\x04이 일정배율 \x1F증가\x04하였습니다."),4),
+	PlayWAVX("staredit\\wav\\LimitBreak.ogg"),PlayWAVX("staredit\\wav\\LimitBreak.ogg"),},HumanPlayers,FP)})
+	CMov(FP,MulPoint,_ReadF(EvCheckPtr))
+	CIfEnd()
 end
