@@ -209,7 +209,6 @@ function Var_init()
 	GiveReciveT = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d")
 	GiveReciveT2 = CreateCText(FP," Ore\x04를 기부받았습니다.\x02 \x07』")
 	GiveTReset = CreateCText(FP,"\x0D\x0D\x0DGive".._0D)
-	SoloNoPointT = CreateCText(FP,"\x13\x10【 \x07솔로 플레이\x04에서는 \x08포인트를 획득할 수 없습니다. \x10】")
 	
 
 	StatPT = CreateCText(FP,"\x10【 \x07사용가능 / \x08최대 \07스탯 포인트 \x04: \x0d\x0d\x0d\x0d\x0d\x0d")

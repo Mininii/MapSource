@@ -2,6 +2,8 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_UE_RE\\main.lua")
 
+--속도측정용
+--local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
 if LD2XOption == 1 then
@@ -123,3 +125,5 @@ if LD2XOption == 1 then
 __PopStringArray()
 io.close(__TRIGchkptr)
 end
+--속도측정용 2
+--error(string.format("elapsed time: %.3f\n", os.clock() - x))
