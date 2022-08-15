@@ -40,7 +40,7 @@ end
 		CIfEnd()
 		f_Mod(FP,Angle_V,_Mov(256))
 		CDoActions(FP,{
-			TSetMemoryX(0x66321C, SetTo, Height_V,0xFF),
+			TSetMemoryB(0x656990, CB_UnitIDV, SetTo, Height_V),
 			TSetMemory(0x58DC60 + 0x14*0,SetTo,CB_X),
 			TSetMemory(0x58DC68 + 0x14*0,SetTo,CB_X),
 			TSetMemory(0x58DC64 + 0x14*0,SetTo,CB_Y),
@@ -53,6 +53,7 @@ end
 			TSetMemoryX(_Add(Nextptrs,40),SetTo,0,0xFF000000),
 			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
 			TSetMemory(_Add(Nextptrs,57),SetTo,0),
+			TSetMemoryX(_Add(Nextptrs,68),SetTo,12,0xFFFF)
 		})
 	CIfEnd()
 	SetCallEnd()

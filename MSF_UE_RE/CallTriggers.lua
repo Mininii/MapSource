@@ -870,10 +870,13 @@ SetCallEnd()
 	for i = 0, 4 do
 		local ii = -64+(i*32)
 		f_Lengthdir(FP, ii, TS_VarArr[6], TS_VarArr[19],TS_VarArr[20])
+
 		CreateBullet(208,20,0,_iSub(_Add(CPosX,TS_VarArr[3]),TS_VarArr[20]),_Add(_Add(CPosY,TS_VarArr[4]),TS_VarArr[19]))
+		Simple_SetLocX(FP, 0, _iSub(_Add(CPosX,TS_VarArr[3]),TS_VarArr[20]), _Add(_Add(CPosY,TS_VarArr[4]),TS_VarArr[19]), _iSub(_Add(CPosX,TS_VarArr[3]),TS_VarArr[20]), _Add(_Add(CPosY,TS_VarArr[4]),TS_VarArr[19]), {Simple_SetLoc(0, -12, -12, 12, 12),KillUnitAt(All, "Men", 1, Force1)})
 	end
 	CElseX()
 	CreateBullet(208,20,0,_Add(CPosX,TS_VarArr[3]),_Add(CPosY,TS_VarArr[4]))
+	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[3]),	_Add(CPosY,TS_VarArr[4]),_Add(CPosX,TS_VarArr[3]),_Add(CPosY,TS_VarArr[4]), {Simple_SetLoc(0, -12, -12, 12, 12),KillUnitAt(All, "Men", 1, Force1)})
 	
 	CIfXEnd()
 
@@ -1030,10 +1033,159 @@ SetCallEnd()
 	CTrigger(FP,{CD(TC,0)},{SetCD(TC,TalkTimer)},1)
 	SetCallEnd()
 
+
+	CBY = CreateVar()
+	CBX = CreateVar()
+	CBAngle = CreateVar()
+	CBHeight = CreateVar()
+	CBUnitId = CreateVar()
+	CBPlayer = CreateVar()
+	Locs = CreateVar()
+	TempEPD = CreateVar(FP)
+	TempT = CreateVar(FP)
+	TempA = CreateVar(FP)
+	CB_TempH = CreateVar(FP)
+	CBullet_ArrTemp = CreateVar(FP)
+	CBullet_InputH = CreateVar(FP)
+	AngleA = CreateVar(FP)
+	LocsA = CreateVar(FP)
+	BPos = CreateVar(FP)
+	BPosX = CreateVar(FP)
+	BPosY = CreateVar(FP)
+
+	Call_CBulletA = SetCallForward()
+	SetCall(FP)
+	CIf(FP,{CVar(FP,TempEPD[2],AtLeast,19025),CVar(FP,TempEPD[2],AtMost,19025+(84*1699))})
 	
-
-
-
+	--CIf(FP,CVar(FP,AngleA[2],AtLeast,1*256))
+	--CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x40/4),SetTo,AngleA)})
+	--CIfEnd()
+	CIfX(FP,CVar(FP,TempT[2],Exactly,0))
+	f_Read(FP,_Add(TempEPD,10),LocsA)
+	CDoActions(FP,{
+		TSetMemoryX(_Add(TempEPD,4),SetTo,LocsA,0xFFFFFFFF),
+		TSetMemoryX(_Add(TempEPD,6),SetTo,LocsA,0xFFFFFFFF),
+		TSetMemoryX(_Add(TempEPD,7),SetTo,LocsA,0xFFFFFFFF),
+		TSetMemoryX(_Add(TempEPD,22),SetTo,LocsA,0xFFFFFFFF),
+		TSetMemoryX(_Add(TempEPD,8),Add,32768,0xFF00),
+		TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
+		TSetMemoryX(CB_TempH,SetTo,0,0xFFFFFFFF)})
+	CElseX()
+	CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x20/4),Subtract,1),
+	TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
+	TSetMemory(_Add(TempEPD,13),SetTo,1),
+	TSetMemoryX(_Add(TempEPD,18),SetTo,1,0xFFFF),
+	TSetMemoryX(_Add(TempEPD,68),SetTo,30,0xFFFF),
+	TSetMemoryX(_Add(TempEPD,4),SetTo,BPos,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,6),SetTo,BPos,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,7),SetTo,BPos,0xFFFFFFFF),
+	TSetMemoryX(_Add(TempEPD,22),SetTo,BPos,0xFFFFFFFF),
+	})
+	CIfXEnd()
+	CIfEnd()
 	
+	SetCallEnd()
+	Call_CreateBullet_EPD = SetCallForward()
+	
+	SetCall(FP)
+	
+	local CBulletIndex = 0x1100
+	for i = 0, 127 do
+		local Index = 0
+		if i == 0 then Index = CBulletIndex end
+		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
+			SetCVar(FP,TempEPD[2],SetTo,0),
+			SetCVar(FP,TempT[2],SetTo,0),
+			SetCVar(FP,TempA[2],SetTo,0),
+			SetCVar(FP,BPos[2],SetTo,0),
+			SetCtrigX("X",CB_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+			SetNext("X",Call_CBulletA,0),SetNext(Call_CBulletA+1,"X",1), -- Call f_Gun
+			SetCtrigX("X",Call_CBulletA+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+			SetCtrigX("X",Call_CBulletA+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+			SetCtrig1X("X",Call_CBulletA+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+		}, 1, Index)
+	end
+	table.insert(CtrigInitArr[8],SetCtrigX(FP,CBullet_InputH[2],0x15C,0,SetTo,FP,CBulletIndex,0x15C,1,0))
+	
+	SetCallEnd()
+	Call_SetBulletXY = SetCallForward()
+	SetCall(FP)
+	NIf(FP,Memory(0x628438,AtLeast,1))
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF,1)
+	local Cur_CBulletArr = CreateVar(FP)
+	
+	local CBullet_ArrCheck = def_sIndex()
+	
+	CMov(FP,Cur_CBulletArr,0)
+	CJumpEnd(FP,CBullet_ArrCheck)
+	CAdd(FP,CBullet_ArrTemp,CBullet_InputH,Cur_CBulletArr)
+	
+	CIf(FP,{TTOR({CVar(FP,CBX[2],AtLeast,1),CVar(FP,CBY[2],AtLeast,1)})})
+	
+	CDoActions(FP,{
+	TSetMemory(0x58DC60 + 0x14*0,SetTo,CBX),
+	TSetMemory(0x58DC68 + 0x14*0,SetTo,CBX),
+	TSetMemory(0x58DC64 + 0x14*0,SetTo,_Add(CBY,10)),
+	TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CBY,10)),
+	})
+	CIfEnd()
+	
+	NIfX(FP,{TMemory(CBullet_ArrTemp,AtMost,0)})
+	CDoActions(FP,{
+		TSetMemoryX(0x66321C, SetTo, CBHeight,0xFF),
+		TCreateUnit(1, CBUnitId, 1, FP),
+		TSetMemoryX(_Add(Nextptrs,25),SetTo,CBUnitId,0xFF),
+	})
+	local TempBPos = CreateVar(FP)
+	CMov(FP,TempBPos,_Add(BPosX,_Mul(BPosY,_Mov(65536))))
+	
+	CDoActions(FP,{
+		TSetMemoryX(_Add(Nextptrs,22),SetTo,TempBPos,0xFFFFFFFF),
+		TSetMemoryX(_Add(Nextptrs,19),SetTo,135*256,0xFF00),
+		TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
+		TSetMemory(_Add(Nextptrs,13),SetTo,1),
+		TSetMemoryX(_Add(Nextptrs,18),SetTo,1,0xFFFF),
+		TSetMemoryX(_Add(Nextptrs,68),SetTo,30,0xFFFF),
+		TSetMemoryX(CBullet_ArrTemp,SetTo,Nextptrs,0xFFFFFFFF),
+		TSetMemoryX(_Add(CBullet_ArrTemp,0x20/4),SetTo,3,0xFFFFFFFF),
+		TSetMemoryX(_Add(CBullet_ArrTemp,(0x20/4)*3),SetTo,TempBPos,0xFFFFFFFF),
+	})
+	
+	NElseIfX({CVar(FP,Cur_CBulletArr[2],AtMost,((0x970/4)*126))})
+	CAdd(FP,Cur_CBulletArr,0x970/4)
+	CJump(FP,CBullet_ArrCheck)
+	NElseX()
+	
+	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	DoActions2(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+	
+	NIfXEnd()
+	
+	NIfEnd()
+	SetCallEnd()
+	
+	
+function SetBullet(UnitId,Height,XY,TargetXY)
+	if XY == nil then
+		XY={0,0}
+	elseif type(XY) ~= "table" then
+		PushErrorMsg("SetBullet_XY_Error")
+	end
+	if TargetXY == nil then
+		TargetXY={0,0}
+	elseif type(TargetXY) ~= "table" then
+		PushErrorMsg("SetBullet_XY_Error")
+	end
+
+		CDoActions(FP,{
+			TSetCVar(FP,CBY[2],SetTo,XY[2]),
+			TSetCVar(FP,CBX[2],SetTo,XY[1]),
+			TSetCVar(FP,BPosY[2],SetTo,TargetXY[2]),
+			TSetCVar(FP,BPosX[2],SetTo,TargetXY[1]),
+			TSetCVar(FP,CBHeight[2],SetTo,Height),
+			TSetCVar(FP,CBUnitId[2],SetTo,UnitId),
+			SetNextTrigger(Call_SetBulletXY)
+		})
+end
 
 end

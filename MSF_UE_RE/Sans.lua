@@ -42,12 +42,12 @@ function Install_SansBoss()
 		CIf(FP,{CV(CB[3],0)}) -- 보스패턴 작성구간
 
 		if Limit == 1 then
-			BossPhaseTestNum = 0
+			BossPhaseTestNum = 4
 			CIf(FP,{CD(TestMode,1)})
 			CMov(FP,0x6509B0,CurrentOP)
 			TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
-			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Add,1)},{preserved})
-			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Subtract,1)},{preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,224)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Add,1),SetCD(SBossStart,5000+(2500*3)+4200)},{preserved})
+			TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,223)},{SetCD(PattC[1],1),SetCVar(FP,CA[1][2],Subtract,1),SetCD(SBossStart,5000+(2500*3)+4200)},{preserved})
 			CMov(FP,0x6509B0,FP)
 			CMov(FP,0x57f120,CA[1])
 			for i = 0, 6 do
@@ -82,7 +82,7 @@ function Install_SansBoss()
 				Trigger2X(FP,{CD(PattC[3],100)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg")},HumanPlayers,FP)},{preserved})
 				CIf(FP,{CD(PattC[3],100,AtLeast),CD(PattC[3],100+180,AtMost)},{SetFlingySpeed(158,(20*32)*4)})
 					SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={8,8,8},RemoveAfter=64},{preserved})--210번 탄막유닛 무기 전반 설정
-					f_Lengthdir(FP, 5*32, _Add(PattV[1],90), CPosX, CPosY)
+					f_Lengthdir(FP, 5*32, PattV[1], CPosX, CPosY)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,2912), FP)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,3232), FP)
 					CAdd(FP,PattV[1],2)
@@ -180,7 +180,7 @@ function Install_SansBoss()
 			
 			TriggerX(FP,{Switch("Switch 101",Cleared)},{SetV(PattV[1],0)},{preserved})
 			TriggerX(FP,{Switch("Switch 101",Set)},{SetV(PattV[1],180)},{preserved})
-			TS_SendX({TTOR({CD(PattC[2],35),CD(PattC[2],70)})}, BlasterBullet, {96*16,192*16,1536,PattV[2],1,PattV[1]})
+			TS_SendX({CD(PattC[2],70)}, BlasterBullet, {96*16,192*16,1536,PattV[2],1,PattV[1]})
 
 			
 			CreateBulletCond(210,20,192,{1216,2752+(5*32)},FP,{CD(PattC[2],15,AtMost)})
@@ -190,6 +190,54 @@ function Install_SansBoss()
 
 			
 			TriggerX(FP,{CD(PattC[3],1000,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+			CIfEnd()
+
+
+
+			CIf(FP,{CV(CA[1],4)},{SetFlingySpeed(158,(20*32)*6)})
+			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
+			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210번 탄막유닛 무기 전반 설정
+			--CallTrigger(FP, Call_CreateBullet_EPD) -- 타겟 탄막 작동
+			CIf(FP,{CD(PattC[3],1)})
+			CMov(FP,PattV[1],f_CRandNum(360))
+
+			CMov(FP,PattV[2],_Div(_Mul(_Div(_Mul(PattV[1],100000),360),256),100000))
+
+			
+			local CI = CFor(FP,0,25*32,32)
+			f_Lengthdir(FP, CI, PattV[1], CPosX, CPosY)
+			Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
+			f_Lengthdir(FP, CI, _Add(PattV[1],90), CPosX, CPosY)
+			Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
+			CForEnd()
+			CIfEnd()
+
+			CIf(FP,{CD(PattC[3],100,AtLeast)})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],100,AtLeast),CD(PattC[3],200-1,AtMost)},{AddV(PattV[2],6)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],200,AtLeast),CD(PattC[3],300-1,AtMost)},{SubV(PattV[2],9)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],300,AtLeast),CD(PattC[3],450-1,AtMost)},{AddV(PattV[2],4)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],450,AtLeast),CD(PattC[3],500-1,AtMost)},{SubV(PattV[2],12)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],500,AtLeast),CD(PattC[3],600-1,AtMost)},{AddV(PattV[2],6)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],600,AtLeast),CD(PattC[3],650-1,AtMost)},{SubV(PattV[2],3)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],650,AtLeast),CD(PattC[3],700-1,AtMost)},{AddV(PattV[2],12)},{preserved})
+			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 4)},{preserved})
+
+			CIf(FP,{CD(PattC[2],4)})
+
+			local CI = CFor(FP,0,192,6)
+
+			CreateBullet(210, 20, _Add(CI,PattV[2]), 96*16, 192*16, FP)
+
+			CForEnd()
+
+				
+			CIfEnd()
+
+			CIfEnd()
+
+
+			
+			TriggerX(FP,{CD(PattC[3],700,AtLeast)},{SetCD(PattC[1],1)},{preserved})
 			CIfEnd()
 
 
@@ -232,6 +280,7 @@ function Install_SansBoss()
 
 
 	CIf(FP,{CD(SBossStart,1,AtLeast)},{AddCD(SBossStart,Dt)})
+
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\SE4.ogg"),PlayWAVX("staredit\\wav\\SE4.ogg")},HumanPlayers,FP)})
 	DoActions(FP,{MoveUnit(All,96,FP,64,64)})--보스위치고정
 	DoActionsX(FP,{SetCD(BWait,1),SetCD(CUnitFlag,1),SetCD(MarDup,1),SetCD(MarDup2,1),
@@ -351,7 +400,7 @@ function Install_SansBoss()
 	SetBright(5000+(2500*3)+4200,32)
 	TriggerX(FP,{CD(SBossStart,5000+(2500*3)+1000,AtLeast)},{SetCVar(FP,ReserveBGM[2],SetTo,SBossBGM)},{preserved})
 	if Limit == 1 then
-		--TriggerX(FP,{CD(TestMode)},{SetCD(SBossStart,5000+(2500*3)+4200)})
+		TriggerX(FP,{CD(TestMode)},{SetCD(SBossStart,5000+(2500*3)+4200)})
 	end
 	StoryPrintS(5000+(2500*3)+4200,"\x04뭐? 내가 딜찍누를 허용할 거라 생각했어?",CD(TalkCond,1))
 	Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+4200,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP)})
