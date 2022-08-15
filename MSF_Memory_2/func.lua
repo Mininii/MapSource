@@ -1977,13 +1977,12 @@ CDoActions(FP,{
 	TSetMemoryX(_Add(TempEPD,6),SetTo,LocsA,0xFFFFFFFF),
 	TSetMemoryX(_Add(TempEPD,7),SetTo,LocsA,0xFFFFFFFF),
 	TSetMemoryX(_Add(TempEPD,22),SetTo,LocsA,0xFFFFFFFF),
-	TSetMemoryX(_Add(TempEPD,8),SetTo,_Add(AngleA,32768),0xFF00),
+	TSetMemoryX(_Add(TempEPD,8),Add,32768,0xFF00),
 	TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
 	TSetMemoryX(CB_TempH,SetTo,0,0xFFFFFFFF)})
 CElseX()
 CDoActions(FP,{TSetMemory(_Add(CB_TempH,0x20/4),Subtract,1),
 TSetMemoryX(_Add(TempEPD,19),SetTo,135*256,0xFF00),
-TSetMemoryX(_Add(TempEPD,8),SetTo,127*65536,0xFF0000),
 TSetMemory(_Add(TempEPD,13),SetTo,1),
 TSetMemoryX(_Add(TempEPD,18),SetTo,1,0xFFFF),
 TSetMemoryX(_Add(TempEPD,68),SetTo,30,0xFFFF),
