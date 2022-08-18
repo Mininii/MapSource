@@ -23,10 +23,21 @@ function OPTrig()
 		CIfEnd()
 	end
 	if Limit == 1 then
-		CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
-		--local TestTemp = CreateVar(FP)
-		--f_Read(FP,_Add(Cunit2,19),TestTemp,nil,0xFF00)
-		--CTrigger(FP,{CVar(FP,Cunit2[2],AtLeast,1)},{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(TestTemp,_Mov(65536)),0xFF000000)},1)
+		CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)},{})
+		--SetFlingySpeed(158,(20*32)*6)
+		--SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹Ý ¼³Á¤
+
+
+		--GetLocCenter(73, CPosX, CPosY)
+		--CallTrigger(FP, Call_CreateBullet_EPD) -- Å¸°Ù Åº¸· ÀÛµ¿
+		--SetBullet(210, 20, {CPosX,CPosY}, {96*16,192*16})
+		--CreateBulletXY(210, 20,{CPosX,CPosY},{96*16,192*16},FP)
+
+
+		
+		local TestTemp = CreateVar(FP)
+		f_Read(FP,_Add(Cunit2,19),TestTemp,nil,0xFF00)
+		CTrigger(FP,{CVar(FP,Cunit2[2],AtLeast,1)},{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(TestTemp,_Mov(65536)),0xFF000000)},1)
 
 
 

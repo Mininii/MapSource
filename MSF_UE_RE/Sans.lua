@@ -15,12 +15,6 @@ function Install_SansBoss()
 		Trigger2X(FP,{CDeaths(FP,AtLeast,T,DTimer),Cond},{RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\x13\x06 :: \x1CSans, \x08Judge \x04Of \x11The \x07Level \x06::\r\n\x0D\x0D!H\x13"..Talk.."\r\n\r\n",4)},HumanPlayers,FP);})
 	end
 	
-	function SetFlingySpeed(FID,Value)
-		return {
-			SetMemory(0x6C9EF8+(4*FID),SetTo,0xFFFFFFFF-Value),--최고속도
-			SetMemoryW(0x6C9C78+(2*FID),SetTo,Value)--가속도
-		}
-	end
 	Shape9215 = {84,{1528, 2977},{1536, 2977},{1544, 2977},{1528, 2985},{1528, 2993},{1536, 2993},{1544, 2993},{1544, 2985},{1544, 3001},{1544, 3009},{1536, 3009},{1528, 3009},{1568, 2977},{1576, 2977},{1584, 2977},{1568, 2985},{1568, 2993},{1576, 2993},{1584, 2993},{1584, 2985},{1584, 3001},{1584, 3009},{1576, 3009},{1568, 3009},{1608, 2977},{1616, 2977},{1624, 2977},{1608, 2985},{1608, 2993},{1616, 2993},{1624, 2993},{1624, 2985},{1624, 3001},{1624, 3009},{1616, 3009},{1608, 3009},{1488, 2977},{1496, 2977},{1504, 2977},{1488, 2985},{1488, 2993},{1496, 2993},{1504, 2993},{1504, 2985},{1504, 3001},{1504, 3009},{1496, 3009},{1488, 3009},{1448, 2977},{1456, 2977},{1464, 2977},{1448, 2985},{1448, 2993},{1456, 2993},{1464, 2993},{1464, 2985},{1464, 3001},{1464, 3009},{1456, 3009},{1448, 3009},{1648, 2977},{1656, 2977},{1664, 2977},{1648, 2985},{1648, 2993},{1656, 2993},{1664, 2993},{1664, 2985},{1664, 3001},{1664, 3009},{1656, 3009},{1648, 3009},{1408, 2977},{1416, 2977},{1424, 2977},{1408, 2985},{1408, 2993},{1416, 2993},{1424, 2993},{1424, 2985},{1424, 3001},{1424, 3009},{1416, 3009},{1408, 3009}}
 
 	BWait = CreateCcode()
@@ -42,7 +36,7 @@ function Install_SansBoss()
 		CIf(FP,{CV(CB[3],0)}) -- 보스패턴 작성구간
 
 		if Limit == 1 then
-			BossPhaseTestNum = 4
+			BossPhaseTestNum = 5
 			CIf(FP,{CD(TestMode,1)})
 			CMov(FP,0x6509B0,CurrentOP)
 			TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
@@ -194,53 +188,56 @@ function Install_SansBoss()
 
 
 
-			CIf(FP,{CV(CA[1],4)},{SetFlingySpeed(158,(20*32)*6)})
+			CIf(FP,{CV(CA[1],4)},{SetFlingySpeed(158,(20*32)*6),
+				SetMemoryB(0x669E28+541, SetTo, 10),--야마토색상
+			})
+				DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
+				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210번 탄막유닛 무기 전반 설정
+				--CallTrigger(FP, Call_CreateBullet_EPD) -- 타겟 탄막 작동
+				CIf(FP,{CD(PattC[3],1)},{SetCD(WRSE,1)})
+					CMov(FP,PattV[1],f_CRandNum(360))
+					CMov(FP,PattV[2],_Div(_Mul(_Div(_Mul(PattV[1],100000),360),256),100000))
+					local CI = CFor(FP,0,15*32,32)
+					f_Lengthdir(FP, CI, PattV[1], CPosX, CPosY)
+					Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
+					f_Lengthdir(FP, CI, _Add(PattV[1],90), CPosX, CPosY)
+					Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
+					CForEnd()
+					local CI = CFor(FP,0,90,2)
+					f_Lengthdir(FP, 15*32, _Add(CI,PattV[1]), CPosX, CPosY)
+					Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
+					CForEnd()
+				CIfEnd()
+				CIf(FP,{CD(PattC[3],100,AtLeast)})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],100,AtLeast),CD(PattC[3],200-1,AtMost)},{AddV(PattV[2],3)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],200,AtLeast),CD(PattC[3],300-1,AtMost)},{SubV(PattV[2],5)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],300,AtLeast),CD(PattC[3],450-1,AtMost)},{AddV(PattV[2],2)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],450,AtLeast),CD(PattC[3],500-1,AtMost)},{SubV(PattV[2],7)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],500,AtLeast),CD(PattC[3],600-1,AtMost)},{AddV(PattV[2],5)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],600,AtLeast),CD(PattC[3],650-1,AtMost)},{SubV(PattV[2],3)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],650,AtLeast),CD(PattC[3],700-1,AtMost)},{AddV(PattV[2],8)},{preserved})
+					TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 4)},{preserved})
+
+					CIf(FP,{CD(PattC[2],4)})
+						local CI = CFor(FP,0,192,6)
+						CreateBullet(210, 20, _Add(CI,PattV[2]), 96*16, 192*16, FP)
+						CForEnd()
+					CIfEnd()
+				CIfEnd()
+				TriggerX(FP,{CD(PattC[3],700,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+			CIfEnd()
+
+
+			CIf(FP,{CV(CA[1],5)},{})
 			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210번 탄막유닛 무기 전반 설정
-			--CallTrigger(FP, Call_CreateBullet_EPD) -- 타겟 탄막 작동
-			CIf(FP,{CD(PattC[3],1)})
-			CMov(FP,PattV[1],f_CRandNum(360))
 
-			CMov(FP,PattV[2],_Div(_Mul(_Div(_Mul(PattV[1],100000),360),256),100000))
-
-			
-			local CI = CFor(FP,0,25*32,32)
-			f_Lengthdir(FP, CI, PattV[1], CPosX, CPosY)
-			Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
-			f_Lengthdir(FP, CI, _Add(PattV[1],90), CPosX, CPosY)
-			Simple_SetLocX(FP, 0, _Add(CPosX,96*16), _Add(CPosY,192*16), _Add(CPosX,96*16), _Add(CPosY,192*16), {CreateUnitWithProperties(1, 94, 1, FP, {hallucinated = true}),KillUnit(94,FP)})
-			CForEnd()
+				CIf(FP,{CD(PattC[2],0)},{SetCD(PattC[2],3)})
+				TS_SendX({CV(PattV[1],1800-6,AtMost)}, BlasterBullet, {96*16,192*16,96*16,192*16,2,PattV[1]})
+				TS_SendX({CV(PattV[1],1800)}, BlasterBullet, {(48*32)-(35*32),192*16,96*16,192*16,0,PattV[1]})
+				CAdd(FP,PattV[1],6)
+				TriggerX(FP,{CV(PattV[1],1806,AtLeast)},{SetCD(PattC[1],1)},{preserved})
+				CIfEnd()
 			CIfEnd()
-
-			CIf(FP,{CD(PattC[3],100,AtLeast)})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],100,AtLeast),CD(PattC[3],200-1,AtMost)},{AddV(PattV[2],6)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],200,AtLeast),CD(PattC[3],300-1,AtMost)},{SubV(PattV[2],9)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],300,AtLeast),CD(PattC[3],450-1,AtMost)},{AddV(PattV[2],4)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],450,AtLeast),CD(PattC[3],500-1,AtMost)},{SubV(PattV[2],12)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],500,AtLeast),CD(PattC[3],600-1,AtMost)},{AddV(PattV[2],6)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],600,AtLeast),CD(PattC[3],650-1,AtMost)},{SubV(PattV[2],3)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost),CD(PattC[3],650,AtLeast),CD(PattC[3],700-1,AtMost)},{AddV(PattV[2],12)},{preserved})
-			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 4)},{preserved})
-
-			CIf(FP,{CD(PattC[2],4)})
-
-			local CI = CFor(FP,0,192,6)
-
-			CreateBullet(210, 20, _Add(CI,PattV[2]), 96*16, 192*16, FP)
-
-			CForEnd()
-
-				
-			CIfEnd()
-
-			CIfEnd()
-
-
-			
-			TriggerX(FP,{CD(PattC[3],700,AtLeast)},{SetCD(PattC[1],1)},{preserved})
-			CIfEnd()
-
-
 		CIfEnd()
 		if Limit == 1 then
 			--CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
@@ -494,6 +491,8 @@ function Install_SansBoss()
 	
 	TS_CreateArr(BoneBullet)
 	TS_CreateArr(BlasterBullet)
+	Trigger2X(FP,{CD(SGBl1SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\SGBl1.ogg")},HumanPlayers,FP),SetCD(SGBl1SE,0)},{preserved})
+	Trigger2X(FP,{CD(SGBl2SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\SGBl2.ogg")},HumanPlayers,FP),SetCD(SGBl2SE,0)},{preserved})
 	Trigger2X(FP,{CD(GBl1SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl1.ogg"),PlayWAVX("staredit\\wav\\GBl1.ogg")},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
 	Trigger2X(FP,{CD(GBl2SE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP),SetCD(GBl2SE,0)},{preserved})
 	Trigger2X(FP,{CD(WRSE,1)},{RotatePlayer({PlayWAVX("staredit\\wav\\WR.ogg"),PlayWAVX("staredit\\wav\\WR.ogg")},HumanPlayers,FP),SetCD(WRSE,0)},{preserved})

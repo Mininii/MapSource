@@ -6,6 +6,8 @@ local Height_V = CreateVar(FP)
 local Angle_V = CreateVar(FP)
 local CB_X = CreateVar(FP)
 local CB_Y = CreateVar(FP)
+local CB_TX = CreateVar(FP)
+local CB_TY = CreateVar(FP)
 local CB_P = CreateVar(FP)
 function CreateBulletCond(UnitId,Height,Angle,XY,Player,Cond,Act)
 	CallTriggerX(FP,CallCBullet,Cond,{Act,
@@ -33,7 +35,6 @@ end
 	SetCall(FP)
 	CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		CAdd(FP,CB_Y,10)
 		CIf(FP,{CVar(FP,Angle_V[2],AtLeast,0x80000000)})
 			CNeg(FP,Angle_V)
 			CSub(FP,Angle_V,_Mov(256),Angle_V)
@@ -57,6 +58,59 @@ end
 		})
 	CIfEnd()
 	SetCallEnd()
+
+	function CreateBulletXY(UnitID,Height,XY,TargetXY,ForPlayer)
+		if ForPlayer == nil then ForPlayer = FP end
+		if XY == nil then
+			XY={0,0}
+		elseif type(XY) ~= "table" then
+			PushErrorMsg("SetBullet_XY_Error")
+		end
+		if TargetXY == nil then
+			TargetXY={0,0}
+		elseif type(TargetXY) ~= "table" then
+			PushErrorMsg("SetBullet_XY_Error")
+		end
+	CDoActions(FP,{
+		TSetCVar(FP,CB_UnitIDV[2],SetTo,UnitID),
+		TSetCVar(FP,Height_V[2],SetTo,Height),
+		TSetCVar(FP,CB_X[2],SetTo,XY[1]),
+		TSetCVar(FP,CB_Y[2],SetTo,XY[2]),
+		TSetCVar(FP,CB_TX[2],SetTo,TargetXY[1]),
+		TSetCVar(FP,CB_TY[2],SetTo,TargetXY[2]),
+		TSetCVar(FP,CB_P[2],SetTo,ForPlayer),
+		SetNext("X",Call_CreateBulletXY,0),SetNext(Call_CreateBulletXY+1,"X",1)
+	})
+	end
+	
+	Call_CreateBulletXY = SetCallForward()
+	local Angle_T=CreateVar(FP)
+	SetCall(FP)
+	CIf(FP,Memory(0x628438,AtLeast,1))
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		f_Atan2(FP, _iSub(CB_Y,CB_TY), _iSub(CB_X,CB_TX), Angle_T)
+		CMov(FP,Angle_V,_Div(_Mul(_Div(_Mul(Angle_T,100000),360),256),100000),64)
+		f_Mod(FP,Angle_V,_Mov(256))
+		CDoActions(FP,{
+			TSetMemoryB(0x656990, CB_UnitIDV, SetTo, Height_V),
+			TSetMemory(0x58DC60 + 0x14*0,SetTo,CB_X),
+			TSetMemory(0x58DC68 + 0x14*0,SetTo,CB_X),
+			TSetMemory(0x58DC64 + 0x14*0,SetTo,CB_Y),
+			TSetMemory(0x58DC6C + 0x14*0,SetTo,CB_Y),
+			TCreateUnit(1, CB_UnitIDV, 1, CB_P)})
+		CDoActions(FP,{
+			TSetMemoryX(_Add(Nextptrs,0x58/4),SetTo,_ReadF(_Add(Nextptrs,(0x28/4))),0xFFFFFFFF),
+			TSetMemoryX(_Add(Nextptrs,0x20/4),SetTo,_Mul(Angle_V,256),0xFF00),
+			TSetMemoryX(_Add(Nextptrs,0x4C/4),SetTo,135*256,0xFF00),
+			TSetMemoryX(_Add(Nextptrs,40),SetTo,0,0xFF000000),
+			TSetMemoryX(_Add(Nextptrs,55),SetTo,0x200104,0x300104),
+			TSetMemory(_Add(Nextptrs,57),SetTo,0),
+			TSetMemoryX(_Add(Nextptrs,68),SetTo,12,0xFFFF)
+		})
+	CIfEnd()
+	SetCallEnd()
+
+
 end
 function f_SaveCp()
 	CallTrigger(FP,SaveCp_CallIndex,nil)
@@ -1974,6 +2028,12 @@ function CFor3(PlayerID,Init,End,Step,Actions,UnPack) -- DoWhile x CJump
 end
 
 
+function SetFlingySpeed(FID,Value)
+	return {
+		SetMemory(0x6C9EF8+(4*FID),SetTo,0xFFFFFFFF-Value),--최고속도
+		SetMemoryW(0x6C9C78+(2*FID),SetTo,Value)--가속도
+	}
+end
 
 
 function SetWeaponsDat(Condition,WepID,Property,Flag)

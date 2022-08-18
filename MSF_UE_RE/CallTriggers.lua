@@ -739,12 +739,25 @@ SetCallEnd()
 	--Line15 = init
 	--16~20 Temp
 
+	SGBl1SE = CreateCcode()
+	SGBl2SE = CreateCcode()
 	GBl1SE = CreateCcode()
 	GBl2SE = CreateCcode()
-	CIf(FP,TSLine(15, Exactly, 0),{SetTSLine(15, SetTo, 1),SetCD(GBl1SE,1)})
+	CIf(FP,TSLine(15, Exactly, 0),{SetTSLine(15, SetTo, 1),})
+	TriggerX(FP,CV(TS_VarArr[5],1,AtMost),{SetCD(GBl1SE,1)},{preserved})
+	TriggerX(FP,CV(TS_VarArr[5],2),{SetCD(SGBl1SE,1)},{preserved})
+	CIfX(FP,{CV(TS_VarArr[5],2)})
+
+	f_Lengthdir(FP, -32*25, TS_VarArr[6], CPosX, CPosY)
+	CAdd(FP,TS_VarArr[1],CPosX)
+	CAdd(FP,TS_VarArr[2],CPosY)
+
+
+	CElseX()
 	f_Lengthdir(FP, 32*10, TS_VarArr[6], CPosX, CPosY)
 	CAdd(FP,TS_VarArr[1],CPosX)
 	CAdd(FP,TS_VarArr[2],CPosY)
+	CIfXEnd()
 
 	CIfEnd()
 	--도착점 -(iSub) 시작점
@@ -792,6 +805,7 @@ SetCallEnd()
 	f_Read(FP,0x628438,nil,Nextptrs)
 	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
 	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
@@ -807,6 +821,7 @@ SetCallEnd()
 	f_Read(FP,0x628438,nil,Nextptrs)
 	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
 	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
@@ -822,6 +837,7 @@ SetCallEnd()
 	f_Read(FP,0x628438,nil,Nextptrs)
 	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--색상
 	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--색상
 	CDoActions(FP,{
 		SetMemoryW(0x666160+(294*2), SetTo, 928),--이미지
 		SetMemory(0x66EC48+(4*928), SetTo, 131),--스크립트
@@ -833,6 +849,10 @@ SetCallEnd()
 	
 	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+233, SetTo, 15)},{preserved})--색상
 	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+233, SetTo, 0)},{preserved})--색상
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+233, SetTo, 17)},{preserved})--색상
+
+
+	--NIfNot(FP, {CV(TS_VarArr[5],2)})
 	CFor3(FP,TS_VarArr[8],32*19  ,32)
 	local GBCI=CForVariable()
 	
@@ -852,6 +872,8 @@ SetCallEnd()
 	
 	CIfEnd()
 	CForEnd()
+	--NIfNotEnd()
+
 
 	DoActions(FP, {
 		SetMemoryW(0x666160+(294*2), SetTo, 399),--이미지복구
@@ -863,7 +885,8 @@ SetCallEnd()
 --	TS_Suspend({TSLine(3, AtLeast, 25)})
 	
 	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])},{SetMemoryB(0x669E28+533, SetTo, 17),SetMemoryB(0x6636B8+208,SetTo,116)})--파괴자에서 썻던 데이터 수정후 재사용
-	TriggerX(FP,{CV(TS_VarArr[8],0)},{SetCD(GBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
+	TriggerX(FP,{CV(TS_VarArr[8],0),CV(TS_VarArr[5],1,AtMost)},{SetCD(GBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
+	TriggerX(FP,{CV(TS_VarArr[8],0),CV(TS_VarArr[5],2)},{SetCD(SGBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
 	
 	f_Lengthdir(FP, _Add(TS_VarArr[8],-32*9), TS_VarArr[6], CPosX, CPosY)
 	CIfX(FP,{CV(TS_VarArr[5],1)})
