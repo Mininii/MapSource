@@ -1211,50 +1211,50 @@ SetCallEnd()
 --		})
 --end
 
-function lengthdir(Radius, Angle)
-	Angle = math.rad(Angle)
-	return math.floor((math.cos(Angle) * Radius)+0.5),math.floor((-math.sin(Angle) * Radius)+0.5)
-end
-function lengthdirT(Radius, Angle)
-	Angle = math.rad(Angle)
-	return {math.floor((math.cos(Angle) * Radius)+0.5),math.floor((-math.sin(Angle) * Radius)+0.5)}
-end
-FLDTX = {}
-FLDTY = {}
-for i = 0, 359 do
-	local FI = 1
-	local LTX = {}
-	local LTY = {}
-	for j=0, 65535 do
-		local ree = lengthdirT(j, i)
-		LTX[FI] = ree[1]
-		LTY[FI] = ree[2]
-	end
-	table.insert(FLDTX,f_GetFileArrptr(FP,LTX,4,1))
-	table.insert(FLDTY,f_GetFileArrptr(FP,LTY,4,1))
-end
+--function lengthdir(Radius, Angle)
+--	Angle = math.rad(Angle)
+--	return math.floor((math.cos(Angle) * Radius)+0.5),math.floor((-math.sin(Angle) * Radius)+0.5)
+--end
+--function lengthdirT(Radius, Angle)
+--	Angle = math.rad(Angle)
+--	return {math.floor((math.cos(Angle) * Radius)+0.5),math.floor((-math.sin(Angle) * Radius)+0.5)}
+--end
+--FLDTX = {}
+--FLDTY = {}
+--for i = 0, 359 do
+--	local FI = 1
+--	local LTX = {}
+--	local LTY = {}
+--	for j=0, 65535 do
+--		local ree = lengthdirT(j, i)
+--		LTX[FI] = ree[1]
+--		LTY[FI] = ree[2]
+--	end
+--	table.insert(FLDTX,f_GetFileArrptr(FP,LTX,4,1))
+--	table.insert(FLDTY,f_GetFileArrptr(FP,LTY,4,1))
+--end
 
-FLNegCallX = SetCallForward()
-SetCall(FP)
+--FLNegCallX = SetCallForward()
+--SetCall(FP)
 
-CIf(FP,{CVar(FP,FLENG[2],AtLeast,360)})
-CMod(FP,V(FLENG[2]),360)
-CIfEnd()
-CIf(FP,{CVar(FP,FLENG[1],AtLeast,65536)})
-CMod(FP,V(FLENG[1]),65536)
-CIfEnd()
+--CIf(FP,{CVar(FP,FLENG[2],AtLeast,360)})
+--CMod(FP,V(FLENG[2]),360)
+--CIfEnd()
+--CIf(FP,{CVar(FP,FLENG[1],AtLeast,65536)})
+--CMod(FP,V(FLENG[1]),65536)
+--CIfEnd()
 
-NSwitch(FP,V(FLENG[2]))
-for i = 0, 359 do
-NSwitchCase(i) 
-CMov(FP,V(FLENG[3]),_SHRead(FArr(FLDTX[i+1], V(FLENG[1]))))
-CMov(FP,V(FLENG[4]),_SHRead(FArr(FLDTY[i+1], V(FLENG[1]))))
-NSwitchBreak()
-end
-NSwitchEnd()
+--NSwitch(FP,V(FLENG[2]))
+--for i = 0, 359 do
+--NSwitchCase(i) 
+--CMov(FP,V(FLENG[3]),_SHRead(FArr(FLDTX[i+1], V(FLENG[1]))))
+--CMov(FP,V(FLENG[4]),_SHRead(FArr(FLDTY[i+1], V(FLENG[1]))))
+--NSwitchBreak()
+--end
+--NSwitchEnd()
+--
 
-
-SetCallEnd()
+--SetCallEnd()
 
 
 end
