@@ -92,7 +92,7 @@ function Operator_Trig()
 	for i = 0, 3 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
 		
-		TriggerX(FP,{CD(Theorist,0),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{preserved})
+		TriggerX(FP,{CD(Theorist,1,AtMost),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{preserved})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
         f_Read(FP,0x58A364+(48*181)+(4*i),DtX) -- MSQC val Recive. 181
 		CTrigger(FP,{CV(DtX,2500,AtMost)},{SetV(Dt,DtX)},1)
@@ -244,7 +244,7 @@ TriggerX(FP,{ElapsedTime(AtLeast,60)},{--
 	SetMemoryB(0x57F27C + (3 * 228) + 23,SetTo,0),
 },{preserved})
 
-TriggerX(FP,{CD(Theorist,1),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*(400-322))})
+TriggerX(FP,{CD(Theorist,1,AtLeast),CD(RedNumPanelty,1,AtLeast)},{SubCD(RedNumPanelty,1),AddV(RedNumberT,(9000*2)*(400-322))})
 CWhile(FP,{
 	CVar(FP,RedNumberT[2],AtLeast,9000*2);
 	CVar(FP,RedNumberT[2],AtMost,0x7FFFFFFF);
@@ -285,7 +285,7 @@ local LevelUpEff = CreateVar(FP)
 
 
 
-CIf(FP,CD(Theorist,0))
+CIf(FP,CD(Theorist,1,AtMost))
 CIfX(FP,{CV(Level,49,AtMost)})
 	f_Mul(FP,CurExpTmp,CurEXP,1000)
 	f_Div(FP,CurExpTmp,MaxEXP)
@@ -300,7 +300,11 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 
 	CSub(FP,CurEXP,MaxEXP)
 	ConvertArr(FP,ArrI,Level)
+	CIfX(FP,{CD(Theorist,0)})
 	f_Read(FP,ArrX(EXPArr,ArrI),MaxEXP,nil,nil,1)
+	CElseX()
+	f_Read(FP,ArrX(EXPArr2,ArrI),MaxEXP,nil,nil,1)
+	CIfXEnd()
 	CAdd(FP,Level,1)
 	Trigger2X(FP,{CV(Level,10,AtLeast)},{RotatePlayer({DisplayTextX(StimUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
 
@@ -363,7 +367,7 @@ TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
-Trigger2X(FP, {CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
+Trigger2X(FP, {CD(Theorist,1,AtLeast),CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
 RotatePlayer({
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
@@ -373,6 +377,8 @@ RotatePlayer({
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 
+local Ax3Jump2 = def_sIndex()
+NJump(FP, Ax3Jump2, {CD(Theorist,0)})
 local Ax3Jump = def_sIndex()
 NJump(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
 local Ax3 = CreateCcode()
@@ -390,7 +396,8 @@ RotatePlayer({
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 NJumpEnd(FP, Ax3Jump)
-CIfOnce(FP,CD(SpecialEEggCcode,4,AtLeast))--Axiom of the End 전부 발견시
+NJumpEnd(FP, Ax3Jump2)
+CIfOnce(FP,{CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,4,AtLeast)})--이론치모드 1 이상에서 Axiom of the End 전부 발견시
 local TempRMCalc = CreateVar(FP)
 local TempRMCalc2 = CreateVar(FP)
 f_Read(FP,_Ccode(FP, EEggCode),TempRMCalc)
@@ -542,7 +549,7 @@ function TEST()
 		}
 	end
 	
-Trigger2X(FP, {CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {
+Trigger2X(FP, {CD(Theorist,1,AtLeast),CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {
 	AddCD(SpecialEEggCcode,1),
 	SetCD(AxiomCcode[1],1),
 	RotatePlayer({
@@ -645,7 +652,7 @@ for j, k in pairs(CanColorT) do
 	CS__InputTA(PlayerID,{CV(CanC,j-1)},SVA1(Str1,18),k,0xFF)
 end
 
-TriggerX(FP,{CD(Theorist,1),CD(CanCTC,1),CD(CanCT,1,AtLeast)},{
+TriggerX(FP,{CD(Theorist,1,AtLeast),CD(CanCTC,1),CD(CanCT,1,AtLeast)},{
 	SetCSVA1(SVA1(Str1,5),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,6),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,7),SetTo,0x04,0xFF),
@@ -657,7 +664,7 @@ TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
  CA__InputVA(40*1,Str1,Str1s,nil,40*1,40*2-3)
  CA__SetValue(Str1,MakeiStrVoid(38),0xFFFFFFFF,0) 
 
-CIfX(FP,{CDeaths(FP,AtMost,0,Theorist)})
+CIfX(FP,{CDeaths(FP,AtMost,1,Theorist)})
 
  CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：０００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,0) 
  CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 

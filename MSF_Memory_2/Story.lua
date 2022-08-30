@@ -3,7 +3,7 @@ function InputStory()
     local StartStoryTelling2 = CreateCcode()
     local StoryT = CreateCcode()
     local StoryT2 = CreateCcode()
-    TriggerX(FP,{CD(OPJump,1),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
+    TriggerX(FP,{CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
     CIf(FP,{CD(StartStoryTelling,1)})
     CAdd(FP,_Ccode(FP,StoryT),Dt)
     DoActionsX(FP,SetV(BGMType,11),1)
@@ -42,7 +42,7 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
 
 CIfEnd()
 
-TriggerX(FP,{CD(SpecialEEggCcode,4,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling2,1)})
+TriggerX(FP,{CD(SpecialEEggCcode,4,AtLeast),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling2,1)})
 CIf(FP,{CD(StartStoryTelling2,1)})
 CAdd(FP,_Ccode(FP,StoryT2),Dt)
 DoActionsX(FP,SetV(BGMType,12),1)

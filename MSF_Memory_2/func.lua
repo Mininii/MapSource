@@ -346,27 +346,6 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
 end
 
 
-function Print13_NumSetC(Ptr,Ptr2,DivNum,Mask,flag)
-	local X = {}
-
-	if flag ~= nil then X=CD(Theorist,0); end
-	for i = 3, 0, -1 do
-		Trigger {
-			players = {FP},
-			conditions = {
-				Label();
-				X;
-				CDeaths(FP,AtLeast,(2^i)*DivNum,Ptr);
-			},
-			actions = {
-				SetMemoryX(Ptr2,SetTo,(2^i)*Mask,2^i*Mask);
-				SetCDeaths(FP,Subtract,(2^i)*DivNum,Ptr);
-				PreserveTrigger();
-			}
-		}
-	end
-end
-
 
 function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
 	local X = {}
@@ -2160,7 +2139,7 @@ end
 end
 
 
-function UnitButton(Player,UnitID,Condition,Action)
+function UnitButton(Player,UnitID,Condition,Actions)
 	Trigger { 
 		players = {Player},
 		conditions = {
@@ -2173,7 +2152,7 @@ function UnitButton(Player,UnitID,Condition,Action)
 			GiveUnits(All,UnitID,Player,"Anywhere",11);
 			RemoveUnitAt(All,UnitID,"Anywhere",11);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
-			Action;
+			Actions;
 			PreserveTrigger();
 			},
 	}
