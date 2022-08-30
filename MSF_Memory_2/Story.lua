@@ -42,7 +42,7 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
 
 CIfEnd()
 
-TriggerX(FP,{CD(SpecialEEggCcode,4,AtLeast),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling2,1)})
+TriggerX(FP,{CD(SpecialEEggCcode,4,AtLeast),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling2,1),SetCD(AxiomEnable,1)})
 CIf(FP,{CD(StartStoryTelling2,1)})
 CAdd(FP,_Ccode(FP,StoryT2),Dt)
 DoActionsX(FP,SetV(BGMType,12),1)

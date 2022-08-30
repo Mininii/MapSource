@@ -391,6 +391,12 @@ end
 		InputTesterID(i,"IIII(uood)IIIII")
 		InputTesterID(i,"Azusawa_Kohane")
 		InputTesterID(i,"T_PanTi")
+		InputTesterID(i,"A..K")
+		InputTesterID(i,"Tana_")
+		InputTesterID(i,"Hybrid)_GOD60")
+		InputTesterID(i,"roka7")
+
+		
 		
 	end
 	
@@ -484,12 +490,12 @@ end
 
 DoActions2(P9,X)
 
-
-
-]]--
 for i = 0, 56 do
 	f_Read(FP,0x662098+(i*4),RCV[i+1])
 end
+
+
+]]--
 
 
 

@@ -1333,7 +1333,7 @@ for i = 0, 227 do
 		end
 	end
 end
-DoActions2(FP,X)
+--DoActions2(FP,X)
 ComExitFlag = CreateCcode()
 TriggerX(FP,{CD(OPJump,1),Bring(P12,AtLeast,1,"Buildings",64)},{SetCD(ComExitFlag,1)},{preserved})
 DoActions2X(FP,{RotatePlayer({SetAllianceStatus(Force1, Enemy),RunAIScript(P1VON),RunAIScript(P2VON),RunAIScript(P3VON),RunAIScript(P4VON)}, {P5,P6,P7,P8}, FP)})
