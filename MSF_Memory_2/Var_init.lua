@@ -68,6 +68,16 @@ function Var_init()
 		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
 		return Header
 	end
+		local Angle360to256={}
+		for i = 0, 359 do
+			Angle360to256[i+1] = (i/360)*256
+		end
+		local Angle256to360={}
+		for i = 0, 255 do
+			Angle256to360[i+1] = (i/256)*360
+		end
+		DCtoSCFArr = f_GetFileArrptr(FP,Angle360to256,4,1)
+		SCtoDCFArr = f_GetFileArrptr(FP,Angle256to360,4,1)--
 	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*500000)
 	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*500000)
 	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*500000)

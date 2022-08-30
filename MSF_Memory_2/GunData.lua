@@ -1723,7 +1723,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		DeathsX(P4,AtMost,0,12,0xFFFFFF),
 		DeathsX(FP,AtMost,0,12,0xFFFFFF),
 	},{SetV(BGMType,9)},{preserved})
-	CallTrigger(FP, Call_CreateBullet_EPD,{})--유도탄막 구조체 불러오기
+	--CallTrigger(FP, Call_CreateBullet_EPD,{})--유도탄막 구조체 불러오기
 
 	if BossPhaseTestMode == 0 then
 		G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--도형으로 핵떨구기. 아무 UnitID입력가능, RepeatType 3 하면 발사됨 --CD(TestMode,0)
@@ -1797,7 +1797,8 @@ Trigger2X(FP,{},{RotatePlayer({
 		CMov(FP,TempA,PattV[1])
 		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
-		SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- 위치로 쏘기
+		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
 		--CMov(FP,TempA,PattV[1],90)
 		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		--DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
@@ -1805,7 +1806,8 @@ Trigger2X(FP,{},{RotatePlayer({
 		CMov(FP,TempA,PattV[1],180)
 		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
-		SetBullet(206,20,{CPosX,CPosY},{2048,2048})
+		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- 위치로 쏘기
+		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
 		--CMov(FP,TempA,PattV[1],270)
 		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		--DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
@@ -1957,7 +1959,8 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			SetBullet(206, 20, {2048-128,2048}, {CPosX,CPosY})
+			CreateBulletXY(206,20,{2048-128,2048},{CPosX,CPosY},FP)-- 위치로 쏘기
+			--SetBullet(206, 20, {2048-128,2048}, {CPosX,CPosY})
 
 
 			Simple_SetLocX(FP,9,_Sub(LocRV,32),LocUV,LocRV,LocDV)
@@ -1966,7 +1969,8 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			SetBullet(206, 20, {2048+128,2048}, {CPosX,CPosY})
+			CreateBulletXY(206,20,{2048+128,2048},{CPosX,CPosY},FP)-- 위치로 쏘기
+			--SetBullet(206, 20, {2048+128,2048}, {CPosX,CPosY})
 
 
 			Simple_SetLocX(FP,9,LocLV,_Sub(LocDV,32),LocRV,LocDV)
@@ -1975,7 +1979,8 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			SetBullet(206, 20, {2048,2048+64}, {CPosX,CPosY})
+			CreateBulletXY(206,20,{2048,2048+64}, {CPosX,CPosY},FP)-- 위치로 쏘기
+			--SetBullet(206, 20, {2048,2048+64}, {CPosX,CPosY})
 
 
 			Simple_SetLocX(FP,9,LocLV,LocUV,LocRV,_Add(LocUV,32))
@@ -1984,7 +1989,8 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			SetBullet(206, 20, {2048,2048-64}, {CPosX,CPosY})
+			CreateBulletXY(206,20,{2048,2048-64}, {CPosX,CPosY},FP)-- 위치로 쏘기
+			--SetBullet(206, 20, {2048,2048-64}, {CPosX,CPosY})
 
 
 			CIfEnd()

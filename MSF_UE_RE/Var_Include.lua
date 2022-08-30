@@ -432,16 +432,16 @@ function HPoints()
 	CreateHeroPointArr(121,999999,"\x07¡º \x08A\x04ntagonism \x07¡»",1)
 	CreateHeroPointArr(220,123456,"\x07¡º \x1DP\x04oint \x1DBOX(ñé) \x07¡»",2)
 	CreateHeroPointArr(150,322322,"\x07¡º \x1DP\x04oint \x1DBOX(ÓÞ) \x07¡»",2)
---	CreateHeroPointArr(221,4999999,"\x07¡º \x1DP\x04oint \x1DBOX \x08EX \x07¡»",2)
---	local Angle360to256={}
---	for i = 0, 359 do
---		Angle360to256p[i+1] = (i/360)*256
---	end
---	local Angle256to360={}
---	for i = 0, 255 do
---		Angle256to360[i+1] = (i/256)*360
---	end
---	DCtoSCFArr = f_GetFileArrptr(FP,Angle360to256p,4,1)
---	SCtoDCFArr = f_GetFileArrptr(FP,Angle256to360,4,1)--
+	CreateHeroPointArr(221,4999999,"\x07¡º \x1DP\x04oint \x1DBOX \x08EX \x07¡»",2)
+	local Angle360to256={}
+	for i = 0, 359 do
+		Angle360to256[i+1] = (i/360)*256
+	end
+	local Angle256to360={}
+	for i = 0, 255 do
+		Angle256to360[i+1] = (i/256)*360
+	end
+	DCtoSCFArr = f_GetFileArrptr(FP,Angle360to256,4,1)
+	SCtoDCFArr = f_GetFileArrptr(FP,Angle256to360,4,1)--
 
 end
