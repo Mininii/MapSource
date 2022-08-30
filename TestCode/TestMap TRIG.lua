@@ -32,51 +32,37 @@ Include_CBPaint()
 CJumpEnd(AllPlayers,0x9FF)
 --↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
 
-DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
-X, Y, Z, Ret = CreateVars(4,P1)
-DR = CreateVar(FP)
-NG = CreateVar(FP)
-S1 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
-CIf(P1,Switch("Switch 2",Cleared))
-DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)})
-CMov(FP,X,_Mod(_Rand(),200),-100)
-CMov(FP,Y,_Mod(_Rand(),200),-100)
-DoActions(FP,SetSwitch("Switch 1",Random))
-TriggerX(FP,Switch("Switch 1",Cleared),{SetV(DR,1)},{preserved})
-TriggerX(FP,Switch("Switch 1",Set),{SetV(DR,0)},{preserved})
-DoActions(FP,SetSwitch("Switch 1",Random))
-TriggerX(FP,Switch("Switch 1",Cleared),{SetV(NG,1)},{preserved})
-TriggerX(FP,Switch("Switch 1",Set),{SetV(NG,0)},{preserved})
-TriggerX(P1,{Memory(0x58F45C,Exactly,1)},{SetNVar(Z,SetTo,0)},{preserved})
-CIfEnd()
-CFunc1 = InitCFunc(P1)
-Para = CFunc(CFunc1)
--- n*X + (10-n)*Y - 100 = k
-CiSub(P1,Ret,_Add(_iMul(Para[1],X),_iMul(Para[2],Y)),100)
-CIf(FP,{CV(NG,1),CV(Ret,0x80000000,AtLeast)})
-CNeg(FP,Ret)
-CIfEnd()
-CFuncReturn({Ret})
-CFuncEnd()
-CFunc2 = InitCFunc(P1)
-Para = CFunc(CFunc2)
--- I - n = k (음수의 우선순위를 양수보다 뒤로함)
-CiSub(P1,Ret,Para[1],Z)
-TriggerX(P1,{NVar(Ret,AtLeast,0x80000000)},{SetNVar(Ret,Add,S1[1])},{preserved})
-CFuncReturn({Ret})
-CFuncEnd()
-function func1()
-CIfX(P1,{Memory(0x58F450,Exactly,0),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_Sort(CFunc1,DR,1,2)
-CElseIfX({Memory(0x58F450,AtLeast,1),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_SortI(CFunc2,_Read(0x58F454),1,2)
-CIfXEnd()
+
+CJump(AllPlayers,0)
+Include_CtrigPlib(720,"Switch 1",1) -- 720도 각도계
+CVariable(P1,0x10) -- 변수
+CVariable(P1,0x11) -- 변수
+CVariable(P1,0x12) -- 변수
+CVariable(P1,0x13) -- 변수
+CVariable(P1,0x14) -- 변수
+A1 = CArray(P1,1000) -- 배열
+VA1 = CVArray(P1,10) -- 변수배열
+CVariable2(P1,0x20,"X","X",1) i = 0x20 -- 인덱스 변수
+CVariable2(P1,0x30,"X","X",2) j = 0x30
+CVariable2(P1,0x40,"X","X",3) k = 0x40
+CVariable2(P1,0x50,"X","X",4) l = 0x50
+CVariable2(P1,0x60,"X","X",5) m = 0x60
+VA2 = CVArray(P1,10) -- 변수배열
+for i = 0x100, 0x105 do
+CVariable(P1,i)
 end
-CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,64,nil,1,32
-,{2,0,0,0,1,0},nil,"func1",P1,nil,nil,{KillUnit(0,P1),SetSwitch("Switch 2",Clear)})
-CMov(P1,0x58F460,X) CMov(P1,0x58F464,Y) CMov(P1,0x58F468,Z)
+CJumpEnd(AllPlayers,0)
+CMov(P1,V(0x10),_Read(0x57f0f0))
+CMov(P1,V(0x11),_Read(0x57f120))
+CMovX(P1,VArr(VA1,V(i)),_Read(0x57f0f0))
+CMovX(P1,VArr(VA1,V(j)),_Read(0x57f120))
+f_Atan2(P1,0x10000,0x1000,V(0x100))
+f_Atan2(P1,V(0x10),V(0x11),V(0x101))
+f_Atan2(P1,VArr(VA1,V(i)),VArr(VA1,V(j)),VArr(VA1,V(k)))
+CMov(P1,0x58F450,V(0x100))
+CMov(P1,0x58F454,V(0x101))
+CMovX(P1,0x58F458,VArr(VA1,V(k)))
+CMov(P1,0x58F4E0,_Atan2(_Read(0x57F0F0),_Read(0x57F120)))
 -------------------------------
 ------------------------------------------------------------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------
