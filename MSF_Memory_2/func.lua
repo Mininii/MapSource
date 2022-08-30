@@ -2119,7 +2119,7 @@ CIf(FP,Memory(0x628438,AtLeast,1))
 	CIf(FP,{CV(Angle_T,360,AtLeast)})
 	CMod(FP, Angle_T, 360)
 	CIfEnd()
-	CMov(FP,Angle_V,_SHRead(FArr(DCtoSCFArr,Angle_T)))
+	CMov(FP,Angle_V,_SHRead(FArr(DCtoSCFArr,Angle_T)),64)
 	--CMov(FP,Angle_V,_Div(_Mul(_Div(_Mul(Angle_T,100000),360),256),100000),64)
 	f_Mod(FP,Angle_V,_Mov(256))
 	CDoActions(FP,{
