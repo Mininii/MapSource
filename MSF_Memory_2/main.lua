@@ -35,21 +35,21 @@ TestSet(1)
 	EVFFlag = 0
 	CheatEnableFlag = 0
 if Limit == 1 then
-	EVFFlag = 1
-	CheatEnableFlag = 1
+	EVFFlag = 0
+	CheatEnableFlag = 0
 	TheoristTestMode = 0
 	EEggTestNum = 20
 else
 	EVFFlag = 0
 end
-RedMode = 1
+RedMode = 0
 if RedMode == 1 then
-	VerText = "\x04Ver. Beta 0.ZR"
+	VerText = "\x04Ver. Test"
 else
-	VerText = "\x04Ver. Beta 0.Z"
+	VerText = "\x04Ver. Test"
 end
 if EVFFlag == 1 then
-	VerText = VerText.."T - EVF"
+	VerText = VerText.." - EVF"
 end
 FP = P8
 nilunit = 181
@@ -86,6 +86,7 @@ CJump(AllPlayers,init_func)
 	
 CJumpEnd(AllPlayers,init_func)
 init()
+
 --DoActions2(FP,PatchArrPrsv)
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
 	IBGM_EPDX(FP,3,Dt,nil,{12,14})

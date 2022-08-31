@@ -68,13 +68,23 @@ function Var_init()
 		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
 		return Header
 	end
-	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQueOXPosArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQueOYPosArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQuePlayerArr = Create_VoidEPDHeaderV(FP,4*500000)
-	CreateUnitQueFlagArr = Create_VoidEPDHeaderV(FP,4*500000)
+	local Angle360to256={}
+	for i = 0, 359 do
+		Angle360to256[i+1] = (i/360)*256
+	end
+	local Angle256to360={}
+	for i = 0, 255 do
+		Angle256to360[i+1] = (i/256)*360
+	end
+	DCtoSCFArr = f_GetFileArrptr(FP,Angle360to256,4,1)
+	SCtoDCFArr = f_GetFileArrptr(FP,Angle256to360,4,1)--
+	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueOXPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueOYPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQuePlayerArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueFlagArr = Create_VoidEPDHeaderV(FP,4*50000)
 	CreateUnitQuePtr = CreateVar(FP)
 	UnitDataPtrVoid = f_GetVoidptr(FP,1700*12)
 	UnitDataPtr = CreateVar(FP)
@@ -82,8 +92,10 @@ function Var_init()
 	MaxHPBackUp = CreateArr(228,FP)
 	BdDimArr = CreateArr(228,FP)
 	EXPArr = CreateArr(50,FP)
+	EXPArr2 = CreateArr(50,FP)
 	for i = 0, 49 do
 		table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr,i),SetTo,50*(i+1)))
+		table.insert(CtrigInitArr[8],SetMemX(Arr(EXPArr2,i),SetTo,(50*1.5)*(i+1)))
 	end
 	MarTblPtr = CreateVarArr(4,FP)
 	ShieldEnV = CreateVar(FP)
@@ -228,6 +240,7 @@ function Var_init()
 	PyCcodeAxiom = CreateCcode()
 	LocalPlayerV=CreateVar(FP)
 	AxiomCcode = CreateCcodeArr(4)
+	AxiomEnable = CreateCcode()
 	ResNum = CreateCcode()
 	ResNumT = CreateCcodeArr(4)
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 

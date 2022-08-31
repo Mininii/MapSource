@@ -199,7 +199,7 @@ Trigger { -- 조합 루미아마린
 	players = {i},
 	conditions = {
 		Label(0);
-		CD(Theorist,0);
+		CD(Theorist,1,AtMost);
 		Bring(i,AtLeast,1,20,26+i); 
 		Accumulate(i,AtLeast,LMCost,Ore);
 		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -223,7 +223,7 @@ Trigger { -- 조합 루미아마린
 	players = {i},
 	conditions = {
 		Label(0);
-		CD(Theorist,1);
+		CD(Theorist,2,AtLeast);
 		Bring(i,AtLeast,1,20,26+i); 
 		Accumulate(i,AtLeast,LMCost2,Ore);
 		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
@@ -247,7 +247,7 @@ Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
-	CD(Theorist,0);
+	CD(Theorist,1,AtMost);
 	CDeaths(FP,AtMost,11,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -266,7 +266,7 @@ Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
-	CD(Theorist,1);
+	CD(Theorist,2,AtLeast);
 	CDeaths(FP,AtMost,11,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -285,7 +285,7 @@ Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
-	CD(Theorist,0);
+	CD(Theorist,1,AtMost);
 	CDeaths(FP,AtLeast,12,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -305,7 +305,7 @@ Trigger { -- 소환 루미아마린
 players = {i},
 conditions = {
 	Label(0);
-	CD(Theorist,1);
+	CD(Theorist,2,AtLeast);
 	CDeaths(FP,AtLeast,12,FastMarine[i+1]);
 	Command(i,AtLeast,1,28);
 
@@ -355,12 +355,13 @@ actions = {
 		players = {i},
 		conditions = {
 			Label();
+			CD(Theorist,1);
 			Command(i,AtLeast,1,23);
 		},
 		actions = {
 			ModifyUnitEnergy(1,23,i,64,0);
 			RemoveUnitAt(1,23,"Anywhere",i);
-			SetCD(Theorist,1);
+			SetCD(Theorist,2);
 			SetMemoryB(0x57F27C + (0 * 228) + 23,SetTo,0);
 			SetMemoryB(0x57F27C + (1 * 228) + 23,SetTo,0);
 			SetMemoryB(0x57F27C + (2 * 228) + 23,SetTo,0);
@@ -369,6 +370,20 @@ actions = {
 			SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0);
 			SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0);
 			SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0);
+			PreserveTrigger();
+		},
+	}
+	Trigger {
+		players = {i},
+		conditions = {
+			Label();
+			CD(Theorist,0);
+			Command(i,AtLeast,1,23);
+		},
+		actions = {
+			ModifyUnitEnergy(1,23,i,64,0);
+			RemoveUnitAt(1,23,"Anywhere",i);
+			SetCD(Theorist,1);
 			PreserveTrigger();
 		},
 	}

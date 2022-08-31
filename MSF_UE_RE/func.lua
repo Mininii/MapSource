@@ -89,7 +89,10 @@ end
 	CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 		f_Atan2(FP, _iSub(CB_Y,CB_TY), _iSub(CB_X,CB_TX), Angle_T)
-		CMov(FP,Angle_V,_Div(_Mul(_Div(_Mul(Angle_T,100000),360),256),100000),64)
+		CIf(FP,{CV(Angle_T,360,AtLeast)})
+		CMod(FP, Angle_T, 360)
+		CIfEnd()
+		CMov(FP,Angle_V,_SHRead(FArr(DCtoSCFArr,Angle_T)),64)
 		f_Mod(FP,Angle_V,_Mov(256))
 		CDoActions(FP,{
 			TSetMemoryB(0x656990, CB_UnitIDV, SetTo, Height_V),
