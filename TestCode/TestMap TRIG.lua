@@ -30,53 +30,92 @@ Include_CtrigPlib(360,"Switch 1")
 Include_64BitLibrary("Switch 1")
 Include_CBPaint()
 CJumpEnd(AllPlayers,0x9FF)
---↓ 이곳에 예제를 붙여넣기 (예제에 Include_CtrigPlib가 존재하는경우 삭제) ----------------------
+CJump(AllPlayers,0)
+Str1 = SaveiStrArrX(P1,"\x04<갤뻥등장>") -- 5x11
+Str4 = SaveiStrArrX(P1,"\x04<최고귀염뽀짝 천사 초텐쨩>") -- 5x11
+Str2 = SaveiStrArrX(P1,MakeiStrVoid(54*11))
+Str3 = SaveiStrArrX(P1,MakeiStrVoid(54))
+VA1 = CVArray(P1,100)
+VA2 = CVArray(P1,100)
+NickCcode = CreateCcode()
+CJumpEnd(AllPlayers,0)
+Line, ChatSize, ChatOff, Check, DLine = CreateVars(6,P1)
+PLength = CreateVarArr(4, P1)
+CIfOnce(P1)
+GetPlayerLength(P1,P1,PLength[1])
+f_byteConvert(P1,VArr(VA1,0),0x6D0FDC,PLength[1])
+TriggerX(FP, {isname(0, "GALAXY_BURST")},{SetCD(NickCcode,1)})
+TriggerX(FP, {isname(0, "NEEDY_BURST")},{SetCD(NickCcode,2)})
 
-DoActions(P1,SetMemory(0x58F448,SetTo,0x25)) -- Debug.py 세팅
-X, Y, Z, Ret = CreateVars(4,P1)
-DR = CreateVar(FP)
-NG = CreateVar(FP)
-S1 = CSMakePolygon(6,64,0,PlotSizeCalc(6,4),0)
-CIf(P1,Switch("Switch 2",Cleared))
-DoActionsX(P1,{SetNVar(X,Add,1),SetNVar(Y,Add,-1),SetNVar(Z,Add,1)})
-CMov(FP,X,_Mod(_Rand(),200),-100)
-CMov(FP,Y,_Mod(_Rand(),200),-100)
-DoActions(FP,SetSwitch("Switch 1",Random))
-TriggerX(FP,Switch("Switch 1",Cleared),{SetV(DR,1)},{preserved})
-TriggerX(FP,Switch("Switch 1",Set),{SetV(DR,0)},{preserved})
-DoActions(FP,SetSwitch("Switch 1",Random))
-TriggerX(FP,Switch("Switch 1",Cleared),{SetV(NG,1)},{preserved})
-TriggerX(FP,Switch("Switch 1",Set),{SetV(NG,0)},{preserved})
-TriggerX(P1,{Memory(0x58F45C,Exactly,1)},{SetNVar(Z,SetTo,0)},{preserved})
 CIfEnd()
-CFunc1 = InitCFunc(P1)
-Para = CFunc(CFunc1)
--- n*X + (10-n)*Y - 100 = k
-CiSub(P1,Ret,_Add(_iMul(Para[1],X),_iMul(Para[2],Y)),100)
-CIf(FP,{CV(NG,1),CV(Ret,0x80000000,AtLeast)})
-CNeg(FP,Ret)
-CIfEnd()
-CFuncReturn({Ret})
-CFuncEnd()
-CFunc2 = InitCFunc(P1)
-Para = CFunc(CFunc2)
--- I - n = k (음수의 우선순위를 양수보다 뒤로함)
-CiSub(P1,Ret,Para[1],Z)
-TriggerX(P1,{NVar(Ret,AtLeast,0x80000000)},{SetNVar(Ret,Add,S1[1])},{preserved})
-CFuncReturn({Ret})
-CFuncEnd()
-function func1()
-CIfX(P1,{Memory(0x58F450,Exactly,0),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_Sort(CFunc1,DR,1,2)
-CElseIfX({Memory(0x58F450,AtLeast,1),Switch("Switch 2",Cleared)}
-,SetSwitch("Switch 2",Set))
-CB_SortI(CFunc2,_Read(0x58F454),1,2)
-CIfXEnd()
+SpCodeBase = 0x8080E200
+SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨)
+SpCode1 = 0x8980E200 -- P1 아이디
+SpCode2 = 0x8A80E200 -- P1 아이디2
+-- 0 : Resize / 1 : 식별자 / 2~6 : 칭호 / 7 ~ 52 : 채팅내용 / 53 : Null
+function TEST() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지)
+CA__SetNext(Str2,8,SetTo,0,54*11-1,0)
+CMov(P1,Line,0)
+CWhile(P1,NVar(Line,AtMost,10),SetNVar(Check,SetTo,0))
+f_ChatOffset(P1,Line,0,ChatOff)
+
+for i = 0, 3 do
+	CTrigger(P1,{TTbytecmp(ChatOff,VArr(VA1,0),PLength[i+1]),CD(NickCcode,1)},{SetNVar(Check,SetTo,1)},{Preserved})
+	CTrigger(P1,{TTbytecmp(ChatOff,VArr(VA1,0),PLength[i+1]),CD(NickCcode,2)},{SetNVar(Check,SetTo,2)},{Preserved})
 end
-CBPlot({S1,CS_InputVoid(S1[1])},nil,P1,0,64,nil,1,32
-,{2,0,0,0,1,0},nil,"func1",P1,nil,nil,{KillUnit(0,P1),SetSwitch("Switch 2",Clear)})
-CMov(P1,0x58F460,X) CMov(P1,0x58F464,Y) CMov(P1,0x58F468,Z)
+
+
+
+CIfX(P1,{TTDisplayX(Line,1,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
+CA__SetValue(Str2,MakeiStrLetter(" ",53),0xFFFFFFFF,_Mul(Line,54*604),1,1)
+CIfX(P1,NVar(Check,Exactly,1))
+CD__ScanChat(SVA1(Str2,_Mul(_Add(_Mul(Line,54),6),604)),ChatOff,45,ChatSize,0,1)
+CA__SetValue(Str2,MakeiStrLetter("\x0D",6),0xFFFFFFFF,_Mul(Line,54*604),1,1)
+CA__Input(0x08,SVA1(Str2,_Mul(_Add(_Mul(Line,54),6),604)),0xFF)
+CA__SetMemoryX(_GIndex2(Line,1),SpCode1+0x0D,0xFFFFFFFF,1)
+CElseIfX(NVar(Check,Exactly,2))
+CD__ScanChat(SVA1(Str2,_Mul(_Add(_Mul(Line,54),15),604)),ChatOff,31,ChatSize,0,1)
+CA__SetValue(Str2,MakeiStrLetter("\x0D",15),0xFFFFFFFF,_Mul(Line,54*604),1,1)
+CA__Input(0x08,SVA1(Str2,_Mul(_Add(_Mul(Line,54),15),604)),0xFF)
+CA__SetMemoryX(_GIndex2(Line,1),SpCode2+0x0D,0xFFFFFFFF,1)
+CElseX()
+CD__ScanChat(SVA1(Str2,_Mul(Line,604*54)),ChatOff,51,ChatSize,0,1)
+CA__SetMemoryX(_GIndex2(Line,1),SpCode0+0x0D,0xFFFFFFFF,1)
+CIfXEnd()
+
+
+
+
+CD__InputVAX(_GIndex2(Line,2),SVA1(Str2,_Mul(Line,604*54)),51,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+CA__SetMemoryX(_GIndex2(Line,0),0x0D0D0D0D,0xFFFFFFFF,1) CD__InputMask(Line,0xFFFFFFFF,0,52)
+CElseIfX({TTDisplay(Line,"On")})
+CIf(P1,{TTDisplayX(Line,1,Exactly,SpCode1,0xFFFFFF00)})
+CD__Resize(Line,_Read(0x57F0F0)) 
+CD__InputMask(Line,0xFFFFFFFF,0,0)
+CD__GetDisplayLine(Line,DLine)
+CA__InputSVA1(SVA1(Str2,_Mul(Line,54*604)),SVA1(Str1,0),6,0xFFFFFFFF,0,54*11-1)
+CIfEnd()
+CIf(P1,{TTDisplayX(Line,1,Exactly,SpCode2,0xFFFFFF00)})
+CD__Resize(Line,_Read(0x57F0F0)) 
+CD__InputMask(Line,0xFFFFFFFF,0,0)
+CD__GetDisplayLine(Line,DLine)
+CA__InputSVA1(SVA1(Str2,_Mul(Line,54*604)),SVA1(Str2,0),15,0xFFFFFFFF,0,54*11-1)
+CIfEnd()
+CD__InputVAX(_GIndex2(Line,2),SVA1(Str2,_Mul(Line,604*54)),51,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+
+
+
+
+
+
+
+CIfXEnd()
+
+
+CWhileEnd(SetNVar(Line,Add,1))
+end
+CDPrint(0,11,{" ",0},{P1,P2},{1,0,0,0,1,1,0,0},"TEST",P1)
+-----------------------------------------------------------
 -------------------------------
 ------------------------------------------------------------------------------------------
 --↑ 이곳에 예제를 붙여넣기 -----------------------------------------------------------------

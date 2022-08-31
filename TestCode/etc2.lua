@@ -4,7 +4,7 @@
 Curdir="C:\\Users\\USER\\Documents\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader2X.lua" then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -297,5 +297,7 @@ Spi2 = CSMakeSpiral(6,0.2,0.9,32,0,(12*4)+1,0)
 Tor2 = CSMakeTornado(6,48,12,4,1)
 CirA = CSMakeCircle(5,32,0,6,1)
 CirAX = CS_KaleidoscopeX(CS_MoveXY(CirA,x,y),6,0,1)
-print(Sp1[1])
-SaveShapeXY("Test",Sp1)
+
+B2S = CSMakeTornado(4, 96, 15, 4)
+print(B2S[1])
+SaveShapeXY("Test",B2S)
