@@ -1128,10 +1128,146 @@ BossUID = {87,74,5,2}
 
 
 
+	local Lyrics = {
+		{"\x0D\x0D!H\x13\x07♪\x04 Darkest night, \x07♪",3370},
+		{"\x0D\x0D!H\x13\x07♪\x04 이 어두운 밤, \x07♪",3370},
+		{"\x0D\x0D!H\x13\x07♪\x04 I'll confront you here.... \x07♪",5390},
+		{"\x0D\x0D!H\x13\x07♪\x04 바로 여기서 내가 너와 맞설지어니... \x07♪",5390},
 
+		{"\x0D\x0D!H\x13\x07♪\x04 Such a destiny was not desired. \x07♪",34040},
+		{"\x0D\x0D!H\x13\x07♪\x04 이런 운명은 바라지 않았어. \x07♪",34040},
+		{"\x0D\x0D!H\x13\x07♪\x04 In this place, I never wished to see that side of you. \x07♪",38420},
+		{"\x0D\x0D!H\x13\x07♪\x04 이곳에서, 나는 네 그런 면을 보고 싶지 않았는데. \x07♪",38420},
+		{"\x0D\x0D!H\x13\x07♪\x04 And raise different colors for one another. \x07♪",44150},
+		{"\x0D\x0D!H\x13\x07♪\x04 서로의 다른 색채들이 피어나고 있구나. \x07♪",44150},
+		{"\x0D\x0D!H\x13\x07♪\x04 Never notice me. \x07♪",49550},
+		{"\x0D\x0D!H\x13\x07♪\x04 절대 날 눈치채지 마. \x07♪",49550},
+		{"\x0D\x0D!H\x13\x07♪\x04 Never call my name with your voice. \x07♪",52240},
+		{"\x0D\x0D!H\x13\x07♪\x04 절대 네 목소리로 내 이름을 속삭이지 마. \x07♪",52240},
 
+		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget everything \x07♪",75840},
+		{"\x0D\x0D!H\x13\x07♪\x04 모든 것을 잊게 해줘.\x07♪",75840},
+		{"\x0D\x0D!H\x13\x07♪\x04 and leave no trace of you. \x07♪",78870},
+		{"\x0D\x0D!H\x13\x07♪\x04 네 흔적 하나 남기지 말아줘. \x07♪",78870},
+		{"\x0D\x0D!H\x13\x07♪\x04 What am I carrying out \x07♪",81570},
+		{"\x0D\x0D!H\x13\x07♪\x04 이 절망의 지평선에서 \x07♪",81570},
+		{"\x0D\x0D!H\x13\x07♪\x04 in this horizon of despair? \x07♪",83930},
+		{"\x0D\x0D!H\x13\x07♪\x04 나는 무엇을 하고 있는 거지? \x07♪",83930},
 
+		{"\x0D\x0D!H\x13\x07♪\x04 If it's not you, I can hurt \x07♪",87300},
+		{"\x0D\x0D!H\x13\x07♪\x04 너만 아니라면, 난 정의라는 이름 아래 \x07♪",87300},
+		{"\x0D\x0D!H\x13\x07♪\x04 anyone in the name of justice. \x07♪",89320},
+		{"\x0D\x0D!H\x13\x07♪\x04 누구든 상처입힐 수 있어. \x07♪",89320},
+		{"\x0D\x0D!H\x13\x07♪\x04 Your shadow gets in the way of my light. \x07♪",92690},
+		{"\x0D\x0D!H\x13\x07♪\x04 네 그림자가 내 빛을 가로막고 있네. \x07♪",92690},
+		{"\x0D\x0D!H\x13\x07♪\x04 And testify.... \x07♪",98090},
+		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 간증해... \x07♪",98090},
+
+		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget everything, \x07♪",135000},
+		{"\x0D\x0D!H\x13\x07♪\x04 모든 것을 잊게 해줘, \x07♪",135000},
+		{"\x0D\x0D!H\x13\x07♪\x04 still moonlight shines on us. \x07♪",138200},
+		{"\x0D\x0D!H\x13\x07♪\x04 여전히 달빛은 우리를 비추네. \x07♪",138200},
+		{"\x0D\x0D!H\x13\x07♪\x04 Broken heart, I don't want you \x07♪",140890},
+		{"\x0D\x0D!H\x13\x07♪\x04 부서진 마음, 난 네가 찾지도, \x07♪",140890},
+		{"\x0D\x0D!H\x13\x07♪\x04 to find and take a look at. \x07♪",143250},
+		{"\x0D\x0D!H\x13\x07♪\x04 바라보지도 않았으면 해. \x07♪",143250},
+		{"\x0D\x0D!H\x13\x07♪\x04 So I'll sin more and destroy my thoughts, \x07♪",146620},
+		{"\x0D\x0D!H\x13\x07♪\x04 그러니 잡념들은 잊은 채로, 내가 더 죄를 짓고, \x07♪",146620},
+		{"\x0D\x0D!H\x13\x07♪\x04 make a mess of my hand. \x07♪",149660},
+		{"\x0D\x0D!H\x13\x07♪\x04 내 손만을 더 엉망으로 만들게. \x07♪",149660},
+		{"\x0D\x0D!H\x13\x07♪\x04 I swear on the darkest night I'll end it all. \x07♪",152020},
+		{"\x0D\x0D!H\x13\x07♪\x04 이 어두운 밤에 스스로 모든 걸 끝내리라 맹세할게. \x07♪",152020},
+		{"\x0D\x0D!H\x13\x07♪\x04 And testify.... \x07♪",157410},
+		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 간증하지... \x07♪",157410},
+
+		{"\x0D\x0D!H\x13\x07♪\x04 All that I'm left with is your reminiscences. \x07♪",180000},
+		{"\x0D\x0D!H\x13\x07♪\x04 내게 남겨진 거라곤, 너의 추억뿐. \x07♪",180000},
+		{"\x0D\x0D!H\x13\x07♪\x04 Take me to where you are, won't you? \x07♪",185050},
+		{"\x0D\x0D!H\x13\x07♪\x04 네가 있는 곳으로 날 데려다 줘, 그럴 거지? \x07♪",185050},
+		{"\x0D\x0D!H\x13\x07♪\x04 Till then I'll keep struggling. \x07♪",189430},
+		{"\x0D\x0D!H\x13\x07♪\x04 그때까지, 내가 계속 분투하고 있을게. \x07♪",189430},
+		{"\x0D\x0D!H\x13\x07♪\x04 Curse of justice you don't know. \x07♪",194830},
+		{"\x0D\x0D!H\x13\x07♪\x04 네가 알 리 없는 이 정의의 저주 속에서. \x07♪",194830},
+
+	}
 	CIf_GCase(190)
+	CIfX(FP,{CD(AxiomEnable,1)},SetV(CCA_ShNm,2))--testify
+	CTrigger(FP,{},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
+	DoActionsX(FP,{SubV(ExRateV,10),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+	
+	function CA_3DAcc(Time,XY,YZ,ZX)
+		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
+			Gun_SetLine(11,Add,XY),
+			Gun_SetLine(12,Add,YZ),
+			Gun_SetLine(13,Add,ZX),
+		},{preserved})
+	end
+	function CA_3DAcc2(Time,XY,YZ,ZX)
+		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
+			Gun_SetLine(17-1,Add,XY),
+			Gun_SetLine(18-1,Add,YZ),
+			Gun_SetLine(19-1,Add,ZX),
+		},{preserved})
+	end
+	function SetBright(Time,Value)
+		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{SetMemory(0x657A9C,SetTo,Value)})
+	end
+    GunBGMArr2 = {}
+    for i = 1, 78 do
+        if i <= 9 then
+            table.insert(GunBGMArr2,"staredit\\wav\\tes00"..i..".ogg")
+        elseif i >= 10 and i<= 99 then
+            table.insert(GunBGMArr2,"staredit\\wav\\tes0"..i..".ogg")
+        else
+            table.insert(GunBGMArr2,"staredit\\wav\\tes"..i..".ogg")
+        end
+		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*2700)},{RotatePlayer({PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i])},HumanPlayers,FP)})
+    end
+	SetBright(0,0)
+
+	for i = 1,31 do
+		SetBright(2700-(i*43),31-i)
+	end 
+	SetBright(2700,15)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	CIf(FP,Gun_Line(8,AtMost,8090))
+	CA_3DAcc(0,1,1,0)
+	CA_3DAcc2(0,-1,-1,0)
+	CA_ACCR=CreateVar2(FP,nil,nil,1)
+	CA_ACCV=CreateVar2(FP,nil,nil,1)
+	CA_ACCV2=CreateVar2(FP,nil,nil,-1)
+	TriggerX(FP,{Gun_Line(8,AtLeast,5390)},{AddV(CA_ACCR,1)},{preserved})
+	CMov(FP,CA_ACCV,_Div(CA_ACCR,4))
+	CMov(FP,CA_ACCV2,_Neg(CA_ACCV))
+	CDoActions(FP,{
+		TGun_SetLine(11,Add,CA_ACCV),
+		TGun_SetLine(12,Add,CA_ACCV),
+		TGun_SetLine(17-1,Add,CA_ACCV2),
+		TGun_SetLine(18-1,Add,CA_ACCV2),
+	})
+	CIfEnd()
+
+	
+
+
+	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
+
+	CAdd(FP,CA_Eff_Rat2,Var_TempTable[15],CA_Eff_Rat)
+	CAdd(FP,CA_Eff_Rat3,Var_TempTable[16],CA_Eff_Rat)
+
+	CMov(FP,CA_Eff_XY,Var_TempTable[12])
+	CMov(FP,CA_Eff_YZ,Var_TempTable[13])
+	CMov(FP,CA_Eff_ZX,Var_TempTable[14])
+	CMov(FP,CA_Eff_XY2,Var_TempTable[17])
+	CMov(FP,CA_Eff_YZ2,Var_TempTable[18])
+	CMov(FP,CA_Eff_ZX2,Var_TempTable[19])
+	CA_EffSWArr = CreateCcodeArr(8)--이펙트 켜고끌건지 결정하는 CcodeArr. 0일경우에만 켜짐
+	CA_EffSWArr2 = CreateVarArr(8,FP)--커스텀 JYD Repeat를 어디에 쏠지 결정하는 항목. 1 이상일 경우 숫자만큼 해당지점에 쏨. 다른점에 중복선택 가능
+	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
+	CallTrigger(FP,EffUnitLoop)
+
+	CElseX()--ikasu
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,G_CA_LoopTimer(2),nil,1)
 	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
@@ -1160,13 +1296,6 @@ BossUID = {87,74,5,2}
 		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*1263)},{RotatePlayer({PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i])},HumanPlayers,FP)})
     end
 
-	function CA_3DAcc(Time,XY,YZ,ZX)
-		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
-			Gun_SetLine(11,Add,XY),
-			Gun_SetLine(12,Add,YZ),
-			Gun_SetLine(13,Add,ZX),
-		},{preserved})
-	end
 	DoActionsX(FP,{
 		Gun_SetLine(11,Add,1),
 		Gun_SetLine(12,Add,1),
@@ -1253,9 +1382,6 @@ BossUID = {87,74,5,2}
 	
 
 	
-function SetBright(Time,Value)
-	TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{SetMemory(0x657A9C,SetTo,Value)})
-	end
 	SetBright(0,0)
 	SetBright(15780,31)
 	SetBright(23360,15)
@@ -1558,6 +1684,8 @@ end
 	TriggerX(FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},{Gun_DoSuspend()})
 	
 	CIfEnd()
+	CIfXEnd()
+
 	CIfEnd()
 	if Limit == 1 then
 		BossPhaseTestMode = 0

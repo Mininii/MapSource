@@ -376,7 +376,10 @@ function Var_init()
 
 	
 	CA_Eff_Rat = CreateVar(FP)
+	CA_Eff_Rat2 = CreateVar(FP)
+	CA_Eff_Rat3 = CreateVar(FP)
 	CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX = CreateVars(3,FP)
+	CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2 = CreateVars(3,FP)
 --	CreateHeroPointArr(15,"\x1B¿‹\x04«ÿ "..Conv_HStr("<1B>C<04>ivilian"),30000)
 
 

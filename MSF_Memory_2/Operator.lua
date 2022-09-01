@@ -367,7 +367,7 @@ TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
-Trigger2X(FP, {CD(Theorist,1,AtLeast),CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
+Trigger2X(FP, {Command(FP, AtLeast, 1, 190),CD(Theorist,1,AtLeast),CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
 RotatePlayer({
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
@@ -377,6 +377,8 @@ RotatePlayer({
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 })
 
+local Ax3Jump3 = def_sIndex()
+NJump(FP, Ax3Jump3, {Command(FP, AtLeast, 1, 190),})
 local Ax3Jump2 = def_sIndex()
 NJump(FP, Ax3Jump2, {CD(Theorist,0)})
 local Ax3Jump = def_sIndex()
@@ -397,7 +399,8 @@ RotatePlayer({
 })
 NJumpEnd(FP, Ax3Jump)
 NJumpEnd(FP, Ax3Jump2)
-CIfOnce(FP,{CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,4,AtLeast)})--이론치모드 1 이상에서 Axiom of the End 전부 발견시
+NJumpEnd(FP, Ax3Jump3)
+CIfOnce(FP,{Command(FP, AtLeast, 1, 190),CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,4,AtLeast)})--이론치모드 1 이상에서 Axiom of the End 전부 발견시
 local TempRMCalc = CreateVar(FP)
 local TempRMCalc2 = CreateVar(FP)
 f_Read(FP,_Ccode(FP, EEggCode),TempRMCalc)

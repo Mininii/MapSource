@@ -1219,6 +1219,9 @@ function CA_Func()
 	CIfX(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,0x30000000,0xF0000000)})
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 	CIfXEnd()
+	CIfX(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,0x60000000,0xF0000000)})
+		CA_Rotate3D(CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2)
+	CIfXEnd()
 	CIfX(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,0x40000000,0xF0000000)})
 		CA_RatioXY(_Mov(G_CA_TempTable[17],0xFFFF), 256, _Mov(G_CA_TempTable[17],0xFFFF), 256)
 	CIfXEnd()
@@ -1535,6 +1538,9 @@ function G_CA_Ratio(num)
 end
 function G_CA_MapLimit()
 	return 0x50000000
+end
+function G_CA_Rotate3D2()
+	return 0x60000000
 end
 
 function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,EffType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
