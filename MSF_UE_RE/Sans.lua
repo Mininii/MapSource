@@ -36,7 +36,7 @@ function Install_SansBoss()
 		CIf(FP,{CV(CB[3],0)}) -- 보스패턴 작성구간
 
 		if Limit == 1 then
-			BossPhaseTestNum = 5
+			BossPhaseTestNum = 0
 			CIf(FP,{CD(TestMode,1)})
 			CMov(FP,0x6509B0,CurrentOP)
 			TriggerX(FP, {CD(TestMode,1)}, {SetV(CA[1],BossPhaseTestNum)})
