@@ -1472,25 +1472,27 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 
 			end
 			CIfXEnd()
+			if EXCC_LHPData==nil then
+				
+			if Preset[6] ~= 1 then
 
-			if Preset[6] == 0 or EXCC_LHPData==nil then
-
-			CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
-				CIf(PlayerID,CV(CB[2],1,AtLeast))
-					f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
-					f_Div(PlayerID,CB[7],256)
-					CSub(PlayerID,CB[8],_Mov(Preset[5]),CB[7])
-					CIfX(PlayerID,{TTCVar(PlayerID,CB[2][2],">",CB[8])})
-					CSub(PlayerID,CB[2],CB[8])
-					CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),SetTo,(Preset[5]*256))})
-					CElseX()
-					CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
-					CMov(PlayerID,CB[2],0)
-					CIfXEnd()
-				CIfEnd()
-			CWhileEnd()
+				CWhile(PlayerID,{CV(CB[2],1,AtLeast),TMemory(_Add(UnitPtr,2),AtMost,(Preset[5]*256)-256)})
+					CIf(PlayerID,CV(CB[2],1,AtLeast))
+						f_Read(PlayerID,_Add(UnitPtr,2),CB[7])
+						f_Div(PlayerID,CB[7],256)
+						CSub(PlayerID,CB[8],_Mov(Preset[5]),CB[7])
+						CIfX(PlayerID,{TTCVar(PlayerID,CB[2][2],">",CB[8])})
+						CSub(PlayerID,CB[2],CB[8])
+						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),SetTo,(Preset[5]*256))})
+						CElseX()
+						CDoActions(PlayerID, {TSetMemory(_Add(UnitPtr,2),Add,_Mul(CB[2],256))})
+						CMov(PlayerID,CB[2],0)
+						CIfXEnd()
+					CIfEnd()
+				CWhileEnd()
+				end
+	
 			end
-
 			
 			if UnitHPRetV ~= nil then
 				if UnitHPRetV[4]== "V" then
