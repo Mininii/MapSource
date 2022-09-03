@@ -1191,9 +1191,14 @@ BossUID = {87,74,5,2}
 
 	}
 	CIf_GCase(190)
+	
+	if Limit == 1 then
+		TriggerX(FP,{CD(TestMode,1)},{SetCD(AxiomEnable,GBossTestMode)})
+	end
 	CIfX(FP,{CD(AxiomEnable,1)},SetV(CCA_ShNm,2))--testify
+	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	CTrigger(FP,{},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
-	DoActionsX(FP,{SubV(ExRateV,10),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,35000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
 	function CA_3DAcc(Time,XY,YZ,ZX)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
@@ -1215,30 +1220,34 @@ BossUID = {87,74,5,2}
     GunBGMArr2 = {}
     for i = 1, 78 do
         if i <= 9 then
-            table.insert(GunBGMArr2,"staredit\\wav\\tes00"..i..".ogg")
+            table.insert(GunBGMArr2,"staredit\\wav\\tes_00"..i..".ogg")
         elseif i >= 10 and i<= 99 then
-            table.insert(GunBGMArr2,"staredit\\wav\\tes0"..i..".ogg")
+            table.insert(GunBGMArr2,"staredit\\wav\\tes_0"..i..".ogg")
         else
-            table.insert(GunBGMArr2,"staredit\\wav\\tes"..i..".ogg")
+            table.insert(GunBGMArr2,"staredit\\wav\\tes_"..i..".ogg")
         end
 		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*2700)},{RotatePlayer({PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i])},HumanPlayers,FP)})
     end
+	for j, k in pairs(Lyrics) do
+		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
+	end
 	SetBright(0,0)
 
 	for i = 1,31 do
 		SetBright(2700-(i*43),31-i)
 	end 
 	SetBright(2700,15)
+	SetBright(8090,31)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	CIf(FP,Gun_Line(8,AtMost,8090))
 	CA_3DAcc(0,1,1,0)
-	CA_3DAcc2(0,-1,-1,0)
+	CA_3DAcc2(0,-1,0,-1)
 	CA_ACCR=CreateVar2(FP,nil,nil,1)
 	CA_ACCV=CreateVar2(FP,nil,nil,1)
 	CA_ACCV2=CreateVar2(FP,nil,nil,-1)
 	TriggerX(FP,{Gun_Line(8,AtLeast,5390)},{AddV(CA_ACCR,1)},{preserved})
-	CMov(FP,CA_ACCV,_Div(CA_ACCR,4))
+	CMov(FP,CA_ACCV,_Div(CA_ACCR,15))
 	CMov(FP,CA_ACCV2,_Neg(CA_ACCV))
 	CDoActions(FP,{
 		TGun_SetLine(11,Add,CA_ACCV),
@@ -1247,25 +1256,91 @@ BossUID = {87,74,5,2}
 		TGun_SetLine(18-1,Add,CA_ACCV2),
 	})
 	CIfEnd()
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 4 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],8))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
+	end
+	for i = 5, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
+	end
+	TriggerX(FP,{Gun_Line(8,AtLeast,12130)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
+	TriggerX(FP,{Gun_Line(8,AtLeast,12800)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
+	TriggerX(FP,{Gun_Line(8,AtLeast,13480)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
+	TriggerX(FP,{Gun_Line(8,AtLeast,14150)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
+	TriggerX(FP,{Gun_Line(8,AtLeast,14830)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
+	TriggerX(FP,{Gun_Line(8,AtLeast,15500)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
+	TriggerX(FP,{Gun_Line(8,AtLeast,16180)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
+	TriggerX(FP,{Gun_Line(8,AtLeast,16850)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
 
 	
+	TriggerX(FP,{Gun_Line(8,AtLeast,8090)},{SetV(CA_ACCR,0)})
+
+	CIf(FP,Gun_Line(8,AtLeast,17520))
+	TriggerX(FP,{Gun_Line(8,AtLeast,17520),Gun_Line(8,AtMost,22920)},{AddV(CA_ACCR,1)},{preserved})
+	CMov(FP,CA_ACCV,_Div(CA_ACCR,9))
+	CMov(FP,CA_ACCV2,_Neg(CA_ACCV))
+	
+	CDoActions(FP,{
+		TGun_SetLine(11,Add,CA_ACCV),
+		TGun_SetLine(17-1,Add,CA_ACCV2),
+	})
+	TriggerX(FP,{Gun_Line(8,AtLeast,22920)},{
+		Gun_SetLine(12,Add,1),
+		Gun_SetLine(13,Add,1),
+		Gun_SetLine(18-1,Add,1),
+		Gun_SetLine(19-1,Add,1),},{preserved})
+	CIfEnd()
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,12130)},{SetV(CA_Create,2000+55)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,12800)},{SetV(CA_Create,2000+55)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,13480)},{SetV(CA_Create,2000+55)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,14150)},{SetV(CA_Create,2000+55)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,14830)},{SetV(CA_Create,2000+56)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,15500)},{SetV(CA_Create,2000+56)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,16180)},{SetV(CA_Create,2000+56)},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,16850)},{SetV(CA_Create,2000+56)},1)
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 4 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],1))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
+	end
+	for i = 5, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],1))
+	end
+	for i = 0, 31 do
+		local nsw
+		if i%8==0 then nsw = SWEffArr1 end
+		if (i+4)%8==0 then nsw = SWEffArr2 end
+		local cuid
+		if i<=7 then cuid = 55 end  
+		if i>=8 and i<=15 then cuid = 56 end  
+		if i>=16 and i<=23 then cuid = 21 end  
+		if i>=24 and i<=31 then cuid = 88 end  
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,22920+(337*i))},{SetV(CA_Create,2000+cuid),nsw},1)
+		
+		
+	end
 
 
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
-
 	CAdd(FP,CA_Eff_Rat2,Var_TempTable[15],CA_Eff_Rat)
 	CAdd(FP,CA_Eff_Rat3,Var_TempTable[16],CA_Eff_Rat)
-
 	CMov(FP,CA_Eff_XY,Var_TempTable[12])
 	CMov(FP,CA_Eff_YZ,Var_TempTable[13])
 	CMov(FP,CA_Eff_ZX,Var_TempTable[14])
 	CMov(FP,CA_Eff_XY2,Var_TempTable[17])
 	CMov(FP,CA_Eff_YZ2,Var_TempTable[18])
 	CMov(FP,CA_Eff_ZX2,Var_TempTable[19])
-	CA_EffSWArr = CreateCcodeArr(8)--이펙트 켜고끌건지 결정하는 CcodeArr. 0일경우에만 켜짐
-	CA_EffSWArr2 = CreateVarArr(8,FP)--커스텀 JYD Repeat를 어디에 쏠지 결정하는 항목. 1 이상일 경우 숫자만큼 해당지점에 쏨. 다른점에 중복선택 가능
+	CMov(FP,SHLX,G_CA_CenterX)
+	CMov(FP,SHLY,G_CA_CenterY)
 	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
 	CallTrigger(FP,EffUnitLoop)
+	CSub(FP,CA_Eff_DRat2,2500)
+	CSub(FP,CA_Eff_DRat3,2500)
 
 	CElseX()--ikasu
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})

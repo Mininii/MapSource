@@ -378,6 +378,12 @@ function Var_init()
 	CA_Eff_Rat = CreateVar(FP)
 	CA_Eff_Rat2 = CreateVar(FP)
 	CA_Eff_Rat3 = CreateVar(FP)
+	CA_Eff_DRat2 = CreateVar(FP)
+	CA_Eff_DRat3 = CreateVar(FP)
+	CA_Eff_RRat2 = CreateVar(FP)
+	CA_Eff_RRat3 = CreateVar(FP)
+	CA_EffSWArr = CreateCcodeArr(8)--이펙트 켜고끌건지 결정하는 CcodeArr. 0일경우에만 켜짐
+	CA_EffSWArr2 = CreateVarArr(8,FP)--커스텀 JYD Repeat를 어디에 쏠지 결정하는 항목. 1 이상일 경우 숫자만큼 해당지점에 쏨. 다른점에 중복선택 가능
 	CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX = CreateVars(3,FP)
 	CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2 = CreateVars(3,FP)
 --	CreateHeroPointArr(15,"\x1B잔\x04해 "..Conv_HStr("<1B>C<04>ivilian"),30000)

@@ -369,16 +369,19 @@ function Install_CallTriggers()
 		local CA = CAPlotDataArr
 		local CB = CAPlotCreateArr
 		local PlayerID = CAPlotPlayerID
-		CIf(FP,{CV(V(CA[9]),1)})--ikasu
+		CIf(FP,{CD(AxiomEnable,0)})--ikasu
 		CA_RatioXY(CA_Eff_Rat,186000,CA_Eff_Rat,186000)
+		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 		CIfEnd()
-		CIf(FP,{CV(V(CA[9]),2)})--testify
+		CIf(FP,{CD(AxiomEnable,1)})--testify
 			CIf(FP,{CVar("X",CA[6],AtLeast,1),CVar("X",CA[6],AtMost,4)})
-			CA_RatioXY(CA_Eff_Rat2,210600,CA_Eff_Rat2,210600)
+			CAdd(FP,CA_Eff_RRat2,CA_Eff_DRat2,CA_Eff_Rat2)
+			CA_RatioXY(CA_Eff_RRat2,210600,CA_Eff_RRat2,210600)
 			CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 			CIfEnd()
 			CIf(FP,{CVar("X",CA[6],AtLeast,5),CVar("X",CA[6],AtMost,8)})
-			CA_RatioXY(CA_Eff_Rat3,210600,CA_Eff_Rat3,210600)
+			CAdd(FP,CA_Eff_RRat3,CA_Eff_DRat3,CA_Eff_Rat3)
+			CA_RatioXY(CA_Eff_RRat3,210600,CA_Eff_RRat3,210600)
 			CA_Rotate3D(CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2)
 			CIfEnd()
 		CIfEnd()
@@ -469,18 +472,21 @@ function Install_CallTriggers()
 	TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{preserved})
 	TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{preserved})
 	TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,7)},{preserved})
+	
 	CMov(FP,TRepeatX,CPosX)
 	CMov(FP,TRepeatY,CPosY)
-	
-	CMov(FP,Temp_CA_Create, CA_Create,nil,0xFF,1)
+	CMov(FP,Temp_CA_Create, _Sub(CA_Create,2000))
 		for i = 1,8 do
+			CIf(FP,CVar("X",CA[6],Exactly,i))
 			f_TempRepeatX({CV(CA_EffSWArr2[i],1,AtLeast)}, Temp_CA_Create, CA_EffSWArr2[i], 193, CA_CP)
+			CIfEnd()
 		end
 	CIfEnd()
-		
 	end
 	SetCall(FP)
-		CAPlot({CSMakePolygon(8,256,0,9,1),CS_OverlapX(CSMakeCircle(4,128,0,5,1),CSMakeCircle(4,256,45,5,1))},FP,nilunit,0,{SHLX,SHLY},1,16,{CCA_ShNm,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
+		local CA = CAPlotForward()
+		CMov(FP,V(CA[1]),CCA_ShNm)
+		CAPlot({CSMakePolygon(8,256,0,9,1),CS_OverlapX(CSMakeCircle(4,128,0,5,1),CSMakeCircle(4,256,45,5,1))},FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
 	SetCallEnd()
 	EffUnitLoop = SetCallForward()
 	SetCall(FP)

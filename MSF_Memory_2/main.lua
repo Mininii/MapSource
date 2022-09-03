@@ -38,6 +38,7 @@ if Limit == 1 then
 	EVFFlag = 0
 	CheatEnableFlag = 0
 	TheoristTestMode = 0
+	GBossTestMode = 1
 	EEggTestNum = 20
 else
 	EVFFlag = 0
