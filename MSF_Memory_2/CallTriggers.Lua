@@ -478,7 +478,18 @@ function Install_CallTriggers()
 	CMov(FP,Temp_CA_Create, _Sub(CA_Create,2000))
 		for i = 1,8 do
 			CIf(FP,CVar("X",CA[6],Exactly,i))
-			f_TempRepeatX({CV(CA_EffSWArr2[i],1,AtLeast)}, Temp_CA_Create, CA_EffSWArr2[i], 193, CA_CP)
+			local NI = CreateVar(FP)
+			CIf(FP,{CV(CA_EffSWArr2[i],1,AtLeast)})
+			NFor(FP, NI, 0, {{TTNVar,NI,"<",CA_EffSWArr2[i]}}, 1)
+			CA_RatioXY(_Add(NI,4), 4, _Add(NI,4), 4)
+			CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
+			CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
+			Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
+			f_TempRepeatX({}, Temp_CA_Create, 1, 193, CA_CP)
+			NForEnd()
+
+			CIfEnd()
+
 			CIfEnd()
 		end
 	CIfEnd()

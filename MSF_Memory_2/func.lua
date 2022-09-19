@@ -551,6 +551,10 @@ f_GunErrT = "\x07¡º \x08ERROR \x04: G_CAPlot Not Found. \x07¡»"
 f_GunFuncT = "\x07¡º \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07¡»"
 f_GunFuncT2 = "\x07¡º \x03TESTMODE OP \x04: G_CAPlot Sended. \x07¡»"
 local Gun_TempSpawnSet1 = CreateVar(FP)
+local Gun_TempSpawnSet2 = CreateVar(FP)
+local Gun_TempSpawnSet3 = CreateVar(FP)
+local Gun_TempSpawnSet4 = CreateVar(FP)
+local Gun_TempSpawnSet5 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
 local G_CA_Nextptrs = CreateVar(FP)
@@ -634,7 +638,18 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
 			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,223)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV3)},1)
 			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,224)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV4)},1)
+			CIf(FP,{CVar(FP,RepeatType[2],Exactly,100)})
 			CMov(FP,G_CA_TempTable[1],Gun_TempSpawnSet1)
+			CMov(FP,G_CA_TempTable[11],Gun_TempSpawnSet2)
+			CMov(FP,G_CA_TempTable[12],Gun_TempSpawnSet3)
+			CMov(FP,G_CA_TempTable[13],Gun_TempSpawnSet4)
+			CMov(FP,G_CA_TempTable[14],Gun_TempSpawnSet5)
+			CMov(FP,Gun_TempSpawnSet1,0)
+			CMov(FP,Gun_TempSpawnSet2,0)
+			CMov(FP,Gun_TempSpawnSet3,0)
+			CMov(FP,Gun_TempSpawnSet4,0)
+			CMov(FP,Gun_TempSpawnSet5,0)
+			CIfEnd()
 			CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,0x7FFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,0),TSetCVar(FP,CreatePlayer[2],SetTo,G_CA_Player,0xFF)},1)
 			CIf(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF)})
 				Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
@@ -1001,7 +1016,66 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY)
 	CallTriggerX(FP,Set_Repeat,Condition)
 end
 
-function f_TempRepeat2X(Condition,UnitID,Number,EffType,Owner,CenterXY,Flags)
+TempRepeat2X_CUTV = {
+	Gun_TempSpawnSet1,
+	Gun_TempSpawnSet2,
+	Gun_TempSpawnSet3,
+	Gun_TempSpawnSet4,
+	Gun_TempSpawnSet5,
+}
+
+function f_TempRepeat2X(Condition,G_CA_CUTable,Number,EffType,Owner,CenterXY,Flags)
+	if type(G_CA_CUTable)=="number"then G_CA_CUTable={G_CA_CUTable} end
+	
+local Z = {}
+local CUTable = {}
+local CUTable2
+if RedMode == 1 then
+	CUTable2 = {}
+	local CUTi=0
+	while #CUTable2~=20 do
+		if #CUTable2>=20 then break end
+
+		for j,k in pairs(G_CA_CUTable) do
+			if #CUTable2>=20 then break end
+			table.insert(CUTable2,k)
+		end
+		CUTi=CUTi+1
+		if CUTi==2 then break end
+
+	end
+	
+else
+	CUTable2 = G_CA_CUTable
+end
+
+
+if type(CUTable2) ~= "table" then
+	G_CA_SetSpawn_Inputdata_Error()
+else
+	if #CUTable2 <= 4 then
+		Z = {SetCVar(FP,TempRepeat2X_CUTV[1][2],SetTo,T_to_BiteBuffer(CUTable2))}
+
+	elseif #CUTable2 >= 5 and #CUTable2 <= 20 then
+		local TempT = {}
+		
+		for j, k in pairs(CUTable2) do
+			if #TempT > 3 then table.insert(CUTable,TempT) TempT = {} end
+			table.insert(TempT,k)
+		end
+		if #TempT > 0 then table.insert(CUTable,TempT) TempT = {} end
+
+		for j, k in pairs(CUTable) do
+			table.insert(Z,SetCVar(FP,TempRepeat2X_CUTV[j][2],SetTo,T_to_BiteBuffer(k)))
+		end
+		
+	else 
+		PushErrorMsg("G_CA_CUTable_Size_OverFlow")
+	end
+end
+
+
+
 	if Owner == nil then Owner = 0xFFFFFFFF
 	elseif Owner == "CP" then Owner = 0x7FFFFFFF end
 	if Type == nil then Type = 0 end
@@ -1019,8 +1093,7 @@ function f_TempRepeat2X(Condition,UnitID,Number,EffType,Owner,CenterXY,Flags)
 	elseif CenterXY ~= "X" then 
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
-	CDoActions(FP,{
-		TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+	CDoActions(FP,{Z,
 		TSetCVar(FP,Repeat_TempV[2],SetTo,Number),
 		SetXY,
 		SetCVar(FP,RepeatType[2],SetTo,100),
