@@ -880,6 +880,7 @@ function EndCtrig()
 				}
 			end
 		elseif CreateVarPArr[k][1] == "FA" then
+			if CreateVarPArr[k][4] == nil then CreateVarPArr[k][4] = 0 end
 			local TNum = math.ceil(CreateVarPArr[k][3]/0x970)
 			Trigger {
 				players = {P10,CreateVarPArr[k][2]},
@@ -888,7 +889,7 @@ function EndCtrig()
 					Never();
 				},
 				actions = {
-					SetDeathsX(0,SetTo,TNum,0,0);
+					SetDeathsX(0,SetTo,TNum,0,CreateVarPArr[k][4]);
 				},
 				flag = {Preserved}
 			}
@@ -20261,13 +20262,20 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
 			Dest[5] = 0
 		end
 		if type(Source) == "number" then -- Write X, 1 : EPD(X) << 1
+			local ConstAct
+			if type(Dest[5]) == "number" then
+				ConstAct = SetCtrig1X("X","X",0x158,1,SetTo,Dest[5])
+			else
+				ConstAct = SetCtrigX("X","X",0x158,1,SetTo,Dest[5][1],Dest[5][2],Dest[5][3],1,Dest[5][4])
+			end
+
 			Trigger {
 					players = {PlayerID},
 					conditions = {
 						Label(0);
 					},
 					actions = {
-						SetCtrig1X("X","X",0x158,1,SetTo,Dest[5]);
+						ConstAct;
 						SetCtrig1X(Dest[1],Dest[2],0x148,Dest[3],SetTo,0xFFFFFFFF);
 						SetCtrig1X(Dest[1],Dest[2],0x160,Dest[3],SetTo,Add*16777216,0xFF000000);
 						SetCtrigX(Dest[1],Dest[2],0x158,Dest[3],SetTo,"X","X",0x158,1,1);
@@ -20286,6 +20294,13 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
 					flag = {Preserved}
 				}
 		elseif Source[4] == "V" then -- Write X, Y : EPD(X) << Y + D
+			local ConstAct
+			if type(Dest[5]) == "number" then
+				ConstAct = SetCtrig1X("X","X",0x158,1,SetTo,Dest[5])
+			else
+				ConstAct = SetCtrigX("X","X",0x158,1,SetTo,Dest[5][1],Dest[5][2],Dest[5][3],1,Dest[5][4])
+			end
+
 			Trigger {
 					players = {PlayerID},
 					conditions = {
@@ -20296,7 +20311,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
 						SetCtrig1X(Source[1],Source[2],0x148,Source[3],SetTo,0xFFFFFFFF);
 						SetCtrig1X(Source[1],Source[2],0x160,Source[3],SetTo,Add*16777216,0xFF000000);
 						SetCtrigX(Source[1],Source[2],0x158,Source[3],SetTo,"X","X",0x15C,1,1);
-						SetCtrig1X("X","X",0x158,1,SetTo,Dest[5]);
+						ConstAct;
 						SetCtrig1X(Dest[1],Dest[2],0x148,Dest[3],SetTo,0xFFFFFFFF);
 						SetCtrig1X(Dest[1],Dest[2],0x160,Dest[3],SetTo,Add*16777216,0xFF000000);
 						SetCtrigX(Dest[1],Dest[2],0x158,Dest[3],SetTo,"X","X",0x158,1,1);
@@ -28355,12 +28370,12 @@ end
 
 -- 함수 호출형 함수 정의 선언 (Include) -------------------------------------------------
 
-function Include_CtrigPlib(Cycle,SeedSwitch)
+function Include_CtrigPlib(Cycle,SeedSwitch,LengthdirX)
 	if CheckInclude_CtrigPlib == 0 then
 		CheckInclude_CtrigPlib = 1
 		Include_DataTransfer()
 		Include_ArithMetic()
-		Include_MatheMatics(Cycle)
+		Include_MatheMatics(Cycle,LengthdirX)
 		Include_MiscFunctions(SeedSwitch)
 	end
 end
@@ -30167,15 +30182,33 @@ FATANCall1 = 0
 FATANCall2 = 0
 FATANCheck = 0
 FATAN = {}
+FATANXCall1 = 0
+FATANXCall2 = 0
+FATANXCheck = 0
+FATANX = {}
 FLOG2Call1 = 0
 FLOG2Call2 = 0
 FLOG2Check = 0
 FLOG2 = {}
+FSQURCall1 = 0
+FSQURCall2 = 0
+FSQURCheck = 0
+FSQUR = {}
+
 AngleCycle = 0
-function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 | Cycle = 2*pi, 4의 배수여야함
+LengthdirMode = 0
+function Include_MatheMatics(Cycle,LengthdirX) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 / f_Square | Cycle = 2*pi, 4의 배수여야함
 	if CheckInclude_MatheMatics == 0 then
 		CheckInclude_MatheMatics = 1
 	AngleCycle = Cycle
+	if LengthdirX == nil or LengthdirX == 0 then
+		LengthdirMode = 0
+	else
+		if STRCTRIGASM == 0 then
+			Need_STRCTRIGASM()
+		end
+		LengthdirMode = 1
+	end
 	local IncludePlayer = IncludePlayerID
 
 -- f_Sqrt - Ret[1] : Input Value / Ret[2] = Output | Ret = √X 
@@ -30191,11 +30224,11 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 |
 	FuncAlloc = FuncAlloc + 1
 
 -- f_Lengthdir - Ret[1] : Input R  Ret[2] = Θ | Ret[3] = RCosΘ  Ret[4] = RSinΘ
-	for i = 0, 7 do
+	for i = 0, 8 do
 		CVariable(IncludePlayer,FuncAlloc+i) -- Local Variable
 		table.insert(FLENG,FuncAlloc+i)
 	end
-	FuncAlloc = FuncAlloc + 8
+	FuncAlloc = FuncAlloc + 9
 
 	FLENGCall1 = FuncAlloc
 	FLENGCall2 = FuncAlloc+1
@@ -30212,6 +30245,17 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 |
 	FuncAlloc = FuncAlloc + 1
 	FATANCall2 = FuncAlloc
 	FuncAlloc = FuncAlloc + 1
+-- f_Atan2X - Ret[1] : Input Y  Ret[2] = X | Ret[3] = Θ  
+	for i = 0, 3 do
+		CVariable(IncludePlayer,FuncAlloc+i) -- Local Variable
+		table.insert(FATANX,FuncAlloc+i)
+	end
+	FuncAlloc = FuncAlloc + 4
+
+	FATANXCall1 = FuncAlloc
+	FuncAlloc = FuncAlloc + 1
+	FATANXCall2 = FuncAlloc
+	FuncAlloc = FuncAlloc + 1
 
 	-- f_Log2 - Ret[1] : Input Value / Ret[2] = Output | Ret = log2(X) 
 	CVariable(IncludePlayer,FuncAlloc) -- Local Variable
@@ -30221,6 +30265,16 @@ function Include_MatheMatics(Cycle) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 |
 
 	FLOG2Call1 = FuncAlloc
 	FLOG2Call2 = FuncAlloc+1
+	FuncAlloc = FuncAlloc + 2
+
+	-- f_Square - Ret[1] : Input Value / Ret[2] = Output | Ret = X^2 
+	CVariable(IncludePlayer,FuncAlloc) -- Local Variable
+	CVariable(IncludePlayer,FuncAlloc+1)
+	FSQUR = {FuncAlloc,FuncAlloc+1}
+	FuncAlloc = FuncAlloc + 2
+
+	FSQURCall1 = FuncAlloc
+	FSQURCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 end
 end
@@ -33560,6 +33614,113 @@ end
 
 -- Include MatheMatics
 
+function f_Square(PlayerID,Dest,Source)
+	FSQURCheck = 1
+	STPopTrigArr(PlayerID)
+	-- Input Data CRet[1] << X 
+	if type(Source) == "number" then
+			Trigger {
+					players = {PlayerID},
+					conditions = {
+						Label(0);
+					},
+					actions = {
+						SetCtrig1X("X",FSQUR[1],0x15C,0,SetTo,Source);
+					},
+					flag = {Preserved}
+				}
+	else
+		if Source[4] == "VA" then
+			local TempRet = {"X",FSQUR[1],0,"V"}
+			MovX(PlayerID,TempRet,Source)
+			Source = TempRet
+		elseif Source[4] == "V" then
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					SetCtrigX(Source[1],Source[2],0x158,Source[3],SetTo,"X",FSQUR[1],0x15C,1,0);
+					SetCtrig1X(Source[1],Source[2],0x148,Source[3],SetTo,0xFFFFFFFF);
+					SetCtrig1X(Source[1],Source[2],0x160,Source[3],SetTo,SetTo*16777216,0xFF000000);
+					CallLabelAlways(Source[1],Source[2],Source[3]);
+				},
+				flag = {Preserved}
+			}
+		end
+	end
+
+-- Call f_Square
+	if FSQURCall1 == 0 then
+		Need_Include_MatheMatics()
+	end
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FSQURCall1,0x0,0,0);
+				SetCtrigX("X",FSQURCall2,0x4,0,SetTo,"X","X",0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+
+-- Output Data CRet[2] = Output 
+	if type(Dest) == "number" then
+			Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrig1X("X",FSQUR[2],0x158,0,SetTo,EPD(Dest));
+						SetCtrig1X("X",FSQUR[2],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FSQUR[2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FSQUR[2],0);
+						},
+						flag = {Preserved}
+					}
+	else
+		if Dest[4] == "V" then
+				Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrigX("X",FSQUR[2],0x158,0,SetTo,Dest[1],Dest[2],0x15C,1,Dest[3]);
+						SetCtrig1X("X",FSQUR[2],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FSQUR[2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FSQUR[2],0);
+						},
+						flag = {Preserved}
+					}
+		elseif Dest[4] == "VA" then
+				local TempRet = {"X",FSQUR[2],0,"V"}
+				MovX(PlayerID,Dest,TempRet,SetTo,0xFFFFFFFF)
+		elseif Dest[4] == "A" then
+				local TempRet = {"X",FSQUR[2],0,"V"}
+				MovX(PlayerID,Dest,TempRet,SetTo,0xFFFFFFFF)
+		else
+				Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrigX("X",FSQUR[2],0x158,0,SetTo,Dest[1],Dest[2],Dest[3],1,Dest[4]);
+						SetCtrig1X("X",FSQUR[2],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FSQUR[2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FSQUR[2],0);
+						},
+						flag = {Preserved}
+					}
+		end
+	end
+end
+
 function f_Log2(PlayerID,Dest,Source)
 	FLOG2Check = 1
 	STPopTrigArr(PlayerID)
@@ -33804,6 +33965,143 @@ function f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x
 	end
 end
 
+function f_Atan2X(PlayerID,DeltaY,DeltaX,AngleOutput) -- 0xFFFF8000 <= X, Y <= 0x7FFF (-32768~+32767)
+	FATANXCheck = 1
+	STPopTrigArr(PlayerID)
+	-- Input Data CRet[1] << DeltaY
+	if type(DeltaY) == "number" then
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrig1X("X",FATANX[1],0x15C,0,SetTo,DeltaY);
+			},
+			flag = {Preserved}
+		}
+	elseif DeltaY[4] == "VA" then
+		local TempRet = {"X",FATANX[1],0,"V"}
+		MovX(PlayerID,TempRet,DeltaY)
+		DeltaY = TempRet
+	elseif DeltaY[4] == "V" then
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrigX(DeltaY[1],DeltaY[2],0x158,DeltaY[3],SetTo,"X",FATANX[1],0x15C,1,0);
+				SetCtrig1X(DeltaY[1],DeltaY[2],0x148,DeltaY[3],SetTo,0xFFFFFFFF);
+				SetCtrig1X(DeltaY[1],DeltaY[2],0x160,DeltaY[3],SetTo,SetTo*16777216,0xFF000000);
+				CallLabelAlways(DeltaY[1],DeltaY[2],DeltaY[3]);
+			},
+			flag = {Preserved}
+		}
+	end
+
+	-- Input Data CRet[2] << DeltaX 
+	if type(DeltaX) == "number" then
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrig1X("X",FATANX[2],0x15C,0,SetTo,DeltaX);
+			},
+			flag = {Preserved}
+		}
+	elseif DeltaX[4] == "VA" then
+		local TempRet = {"X",FATANX[2],0,"V"}
+		MovX(PlayerID,TempRet,DeltaX)
+		DeltaX = TempRet
+	elseif DeltaX[4] == "V" then
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrigX(DeltaX[1],DeltaX[2],0x158,DeltaX[3],SetTo,"X",FATANX[2],0x15C,1,0);
+				SetCtrig1X(DeltaX[1],DeltaX[2],0x148,DeltaX[3],SetTo,0xFFFFFFFF);
+				SetCtrig1X(DeltaX[1],DeltaX[2],0x160,DeltaX[3],SetTo,SetTo*16777216,0xFF000000);
+				CallLabelAlways(DeltaX[1],DeltaX[2],DeltaX[3]);
+			},
+			flag = {Preserved}
+		}
+	end
+
+-- Call f_Atan2
+	if FATANXCall1 == 0 then
+		Need_Include_MatheMatics()
+	end
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FATANXCall1,0x0,0,0);
+				SetCtrigX("X",FATANXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+
+-- Output Data CRet[3] = AngleOutput 
+	if type(AngleOutput) == "number" then
+			Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrig1X("X",FATANX[4],0x158,0,SetTo,EPD(AngleOutput));
+						SetCtrig1X("X",FATANX[4],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FATANX[4],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FATANX[4],0);
+						},
+						flag = {Preserved}
+					}
+	else
+		if AngleOutput[4] == "V" then
+				Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrigX("X",FATANX[4],0x158,0,SetTo,AngleOutput[1],AngleOutput[2],0x15C,1,AngleOutput[3]);
+						SetCtrig1X("X",FATANX[4],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FATANX[4],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FATANX[4],0);
+						},
+						flag = {Preserved}
+					}
+		elseif AngleOutput[4] == "VA" then
+				local TempRet = {"X",FATANX[4],0,"V"}
+				MovX(PlayerID,AngleOutput,TempRet,SetTo,0xFFFFFFFF)
+		elseif AngleOutput[4] == "A" then
+				local TempRet = {"X",FATANX[4],0,"V"}
+				MovX(PlayerID,AngleOutput,TempRet,SetTo,0xFFFFFFFF)
+		else
+				Trigger {
+						players = {PlayerID},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+						SetCtrigX("X",FATANX[4],0x158,0,SetTo,AngleOutput[1],AngleOutput[2],AngleOutput[3],1,AngleOutput[4]);
+						SetCtrig1X("X",FATANX[4],0x148,0,SetTo,0xFFFFFFFF);
+						SetCtrig1X("X",FATANX[4],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+						CallLabelAlways("X",FATANX[4],0);
+						},
+						flag = {Preserved}
+					}
+		end
+	end
+end
+
 function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <= Radius <= 0x7FFF (-32768~+32767)
 	FLENGCheck = 1
 	STPopTrigArr(PlayerID)
@@ -33990,6 +34288,9 @@ function f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput) -- 0xFFFF8000 <=
 						flag = {Preserved}
 					}
 		end
+	end
+	if LengthdirMode == 1 then
+		RecoverCp(PlayerID)
 	end
 end
 
@@ -41408,6 +41709,33 @@ function _Log2(Source)
 	return TempData
 end
 
+function _Square(Source)
+	if Source == nil then
+		Source = "X"
+	end
+	local Temp = VarXAlloc
+	local TempData = {"X",Temp,0,"V"}
+
+	if type(Source) == "number" then
+		Square_InputData_Error()
+	elseif Source == "Cp" then
+		Square_InputData_Error()
+	elseif Source[4] == "V" then
+		table.insert(STPushTrigArr,{"f_Square",TempData,Source}) -- A << Log2(X)
+	elseif Source[4] == "VA" then
+		table.insert(STPushTrigArr,{"f_Square",TempData,Source}) -- A << Log2(VA)
+	elseif Source[4] == "A" then
+		Square_InputData_Error()
+	else
+		Square_InputData_Error()
+	end
+	VarXAlloc = VarXAlloc + 1
+	if VarXAlloc > MAXVAlloc then
+		MAXVAlloc = VarXAlloc
+	end
+	return TempData
+end
+
 function _Atan2(DeltaY,DeltaX)
 	if DeltaY == nil then
 		DeltaY = "X"
@@ -41428,6 +41756,35 @@ function _Atan2(DeltaY,DeltaX)
 		table.insert(STPushTrigArr,{"f_Atan2",DeltaY,DeltaX,TempData})
 	else
 		Atan2_InputData_Error()
+	end
+
+	VarXAlloc = VarXAlloc + 1
+	if VarXAlloc > MAXVAlloc then
+		MAXVAlloc = VarXAlloc
+	end
+	return TempData
+end
+
+function _Atan2X(DeltaY,DeltaX)
+	if DeltaY == nil then
+		DeltaY = "X"
+	end
+	if DeltaX == nil then
+		DeltaX = "X"
+	end
+	local Temp = VarXAlloc
+	local TempData = {"X",Temp,0,"V"}
+
+	if DeltaY[4] == "V" and DeltaX[4] == "V" then
+		table.insert(STPushTrigArr,{"f_Atan2X",DeltaY,DeltaX,TempData})
+	elseif DeltaY[4] == "VA" and DeltaX[4] == "V" then
+		table.insert(STPushTrigArr,{"f_Atan2X",DeltaY,DeltaX,TempData})
+	elseif DeltaY[4] == "V" and DeltaX[4] == "VA" then
+		table.insert(STPushTrigArr,{"f_Atan2X",DeltaY,DeltaX,TempData})
+	elseif DeltaY[4] == "VA" and DeltaX[4] == "VA" then
+		table.insert(STPushTrigArr,{"f_Atan2X",DeltaY,DeltaX,TempData})
+	else
+		Atan2X_InputData_Error()
 	end
 
 	VarXAlloc = VarXAlloc + 1
@@ -51103,6 +51460,9 @@ CIf(PlayerID,Condition,Action)
 
 			local VariableTrig = {}
 			local DisplayPlayers = {}
+			if type(DisplayPlayer) == "number" then
+				DisplayPlayer = {DisplayPlayer}
+			end
 			if DisplayPlayer ~= nil then
 				for k, v in pairs(DisplayPlayer) do
 					if type(v) == "table" and v[4] == "V" then
@@ -55163,6 +55523,9 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 		CIfEnd()
 
 		local VariableTrig = {{TSetNVar,CA[7],SetTo,CA[8]}}
+		if type(DisplayPlayer) == "number" then
+			DisplayPlayer = {DisplayPlayer}
+		end
 		local DisplayPlayers = {}
 		if DisplayPlayer ~= nil then
 			for k, v in pairs(DisplayPlayer) do
@@ -55409,6 +55772,9 @@ function CSPrint(iStrid,SVA32,DisplayPlayer,FixText,PlayerID,Condition,CpAction,
 		end
 
 		local DisplayPlayers = {}
+		if type(DisplayPlayer) == "number" then
+			DisplayPlayer = {DisplayPlayer}
+		end
 		if DisplayPlayer ~= nil then
 			for k, v in pairs(DisplayPlayer) do
 				if type(v) == "table" and v[4] == "V" then
@@ -74437,10 +74803,11 @@ function CreateLDbArr(Number,ByteSize,PlayerID)
 	return CreateLArrArr(Number,ByteSize/4,PlayerID)
 end
 
-function f_GetVoidptr(PlayerID,Size)
+function f_GetVoidptr(PlayerID,Size,Fill)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	if Fill == nil then Fill = 0 end
 	if Size < 1 then f_GetVoidptr_InputData_Error() end
 	local Number = math.ceil(Size/0x970)
 	Trigger {
@@ -74450,7 +74817,7 @@ function f_GetVoidptr(PlayerID,Size)
 			Never();
 		},
 		actions = {
-			SetDeathsX(0,SetTo,Number,0,0);
+			SetDeathsX(0,SetTo,Number,0,Fill);
 		},
 	}
 	FuncAlloc = FuncAlloc + 1
@@ -77647,6 +78014,9 @@ CIf(PlayerID,Condition,Action)
 
 		local VariableTrig = {}
 		local DisplayPlayers = {}
+		if type(DisplayPlayer) == "number" then
+			DisplayPlayer = {DisplayPlayer}
+		end
 		local Box = {SetMemory(0x628438,SetTo,0),SetCVar("X",CRet[1],SetTo,0)}
 		if DisplayPlayer ~= nil then
 			for k, v in pairs(DisplayPlayer) do
@@ -79168,7 +79538,7 @@ function BulletInitSetting(PlayerID,UnitId,Weapon,Flingy,Sprite,Image,Script,Col
 		SetMemory(0x6C9EF8+BulletUnitFlingy*4, SetTo, 0), -- 최대속도
 		SetMemoryW(0x6C9C78+BulletUnitFlingy*2, SetTo, 1), -- 가속도
 		SetMemory(0x6C9930+BulletUnitFlingy*4, SetTo, 0), -- 멈추는거리
-		SetMemoryB(0x6C9E20+BulletUnitFlingy, SetTo, 40), -- 회전반경
+		SetMemoryB(0x6C9E20+BulletUnitFlingy, SetTo, 128), -- 회전반경
 		SetMemoryB(0x6C9858+BulletUnitFlingy, SetTo, 0), -- 이동제어
 		SetMemoryW(0x6CA318+BulletUnitFlingy*2, SetTo, BulletUnitSprite), -- 스프라이트
 		SetMemoryW(0x666160+BulletUnitSprite*2, SetTo, 256), -- 이미지
@@ -79275,7 +79645,7 @@ function CreateBullet(PlayerID,Owner,UnitId,Height,Angle,Speed,Time,Location,Con
 		CDoActions(PlayerID,{
 			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
 			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
-			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
 			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,6,0xFFFF),
 		})
 	CIfEnd()
@@ -79461,7 +79831,7 @@ function CreateStorm(PlayerID,Owner,UnitId,Height,Angle,ImageID,Time,Location,Co
 		CDoActions(PlayerID,{
 			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
 			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
-			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
 			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,6,0xFFFF),
 		})
 	CIfEnd()
@@ -79532,7 +79902,7 @@ function CreateSprite(PlayerID,Owner,UnitId,Height,Angle,Speed,Location,Conditio
 		CDoActions(PlayerID,{
 			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
 			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
-			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
 			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,6,0xFFFF),
 		})
 	CIfEnd()
@@ -79859,11 +80229,16 @@ function VisionTurbo(PlayerID) -- 0으로 고정시 시야 갱신 X
 	DoActions(PlayerID,SetMemory(0x51CE98,SetTo,1))
 end
 
-function CMathFunc(PlayerID,Func,Start,End,Exception,T,TException,Magnificent)
+function CMathFunc(PlayerID,Func,Start,End,Exception,T,TException,Magnificent,Localflag)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
-	local CMath = InitCFunc(PlayerID)
+	local CMath
+	if Localflag == 1 then
+		CMath = InitCFunc(PlayerID,2)
+	else
+		CMath = InitCFunc(PlayerID)
+	end
 	local Para = CFunc(CMath)
 		local Check = 0
 		if Exception ~= nil then
@@ -79937,11 +80312,16 @@ function CMathFunc(PlayerID,Func,Start,End,Exception,T,TException,Magnificent)
 	return CMath 
 end
 
-function CMathFunc2(PlayerID,Func,Start,End,Exception,T,TException,Magnificent)
+function CMathFunc2(PlayerID,Func,Start,End,Exception,T,TException,Magnificent,Localflag)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
-	local CMath = InitCFunc(PlayerID)
+	local CMath
+	if Localflag == 1 then
+		CMath = InitCFunc(PlayerID,3)
+	else
+		CMath = InitCFunc(PlayerID)
+	end
 	local Para = CFunc(CMath)
 		local Check = 0
 		local CheckT = 0
@@ -82033,105 +82413,264 @@ end
 	end
 	local Range = AngleCycle/4
 if FLENGCheck == 1 then
-	for i = 0, Range do
-		if i == 0 then
-			Trigger {
-				players = {IncludePlayer},
-				conditions = {
-					Label(FuncAlloc);
-				},
-				actions = {
-					SetDeathsX(0,SetTo,0x10000*math.sin(math.rad(i*90/Range)),0,0xFFFFFFFF); -- Full Variable
-					Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
-				},
-				flag = {Preserved}
-			}
+	if LengthdirMode == 0 then
+		for i = 0, Range do
+			if i == 0 then
+				Trigger {
+					players = {IncludePlayer},
+					conditions = {
+						Label(FuncAlloc);
+					},
+					actions = {
+						SetDeathsX(0,SetTo,0x10000*math.sin(math.rad(i*90/Range)),0,0xFFFFFFFF); -- Full Variable
+						Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+					},
+					flag = {Preserved}
+				}
+			else
+				Trigger {
+					players = {IncludePlayer},
+					conditions = {
+						Label();
+					},
+					actions = {
+						SetDeathsX(0,SetTo,0x10000*math.sin(math.rad(i*90/Range)),0,0xFFFFFFFF); -- Full Variable
+						Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+					},
+					flag = {Preserved}
+				}
+			end
+		end
+		local FLENGVA = GetVArray(V(FuncAlloc))
+		FuncAlloc = FuncAlloc + 1
+
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(FLENGCall1);
+			},
+			flag = {Preserved}
+		}
+
+	 	CIfX(IncludePlayer,CVar("X",FLENG[2],AtLeast,AngleCycle))
+			CiMod(IncludePlayer,V(FLENG[2]),AngleCycle)
+		CIfXEnd()
+
+		CIfX(IncludePlayer,CVar("X",FLENG[2],AtLeast,0x80000000))
+			CAdd(IncludePlayer,V(FLENG[2]),AngleCycle)
+		CIfXEnd()
+
+		-- FLENG[5] = Cos Signflag / FLENG[6] = Sin Signflag / FLENG[7] = Cos VAindex / FLENG[8] = Sin VAindex
+		CIfX(IncludePlayer,CVar("X",FLENG[2],AtMost,Range-1)) 
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,0)})
+			CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i
+			CMov(IncludePlayer,V(FLENG[7]),Range)
+			CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << pi/2 - i
+		CElseIfX(CVar("X",FLENG[2],AtMost,Range*2-1))
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,0)})
+			CMov(IncludePlayer,V(FLENG[8]),Range*2) -- Sin.i << pi - i
+			CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2]))
+			CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << i - pi/2
+			CSub(IncludePlayer,V(FLENG[7]),Range)
+		CElseIfX(CVar("X",FLENG[2],AtMost,Range*3-1))
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,1)})
+			CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i - pi
+			CSub(IncludePlayer,V(FLENG[8]),Range*2)
+			CMov(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << 3pi/2 - i
+			CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
+		CElseX()
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,1)})
+			CMov(IncludePlayer,V(FLENG[8]),Range*4)
+			CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << 2pi - i
+			CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
+			CSub(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << i - 3pi/2
+		CIfXEnd()
+
+		CMov(IncludePlayer,V(FLENG[4]),VArr(FLENGVA,V(FLENG[8])))
+		CMov(IncludePlayer,V(FLENG[3]),VArr(FLENGVA,V(FLENG[7])))
+
+		f_Mul(IncludePlayer,V(FLENG[4]),V(FLENG[1]))
+		f_Mul(IncludePlayer,V(FLENG[3]),V(FLENG[1]))
+
+		CiDiv(IncludePlayer,V(FLENG[4]),0x10000)
+		CiDiv(IncludePlayer,V(FLENG[3]),0x10000)
+
+		CIfX(IncludePlayer,CVar("X",FLENG[5],Exactly,1))
+			CNeg(IncludePlayer,V(FLENG[3]))
+		CIfXEnd()
+
+		CIfX(IncludePlayer,CVar("X",FLENG[6],Exactly,1))
+			CNeg(IncludePlayer,V(FLENG[4]))
+		CIfXEnd()
+
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(FLENGCall2);
+			},
+			flag = {Preserved}
+		}
+	else
+		local FilePath = FileDirectory.."f_Lengthdir"..Range..".CMathTable"
+		local Fileptr = io.open(FilePath, "rb")
+		if Fileptr == nil then
+			local Fileptr = io.open(FilePath, "wb")
+			for l = 0, Range do
+				for k = 0, 0x7FFF do
+					local Ret = k*math.sin(math.rad(l*90/Range))
+					Fileptr:write(string.char(bit32.band(Ret,0xFF)))
+					Fileptr:write(string.char(bit32.rshift(bit32.band(Ret,0xFF00),8)))
+					Fileptr:write(string.char(bit32.rshift(bit32.band(Ret,0xFF0000),16)))
+					Fileptr:write(string.char(bit32.rshift(bit32.band(Ret,0xFF000000),24)))
+				end
+			end
+			io.close(Fileptr)
 		else
+			io.close(Fileptr)
+		end
+
+		local fptr = f_GetFileptr(IncludePlayer,"f_Lengthdir"..Range..".CMathTable")
+
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(FLENGCall1);
+			},
+			actions = {
+				SetCVar("X",FLENG[9],SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+		CIf(IncludePlayer,CVar("X",FLENG[1],AtLeast,0x80000000),SetCVar("X",FLENG[9],SetTo,1))
+			CNeg(IncludePlayer,V(FLENG[1]))
+		CIfEnd()
+
+		CIf(IncludePlayer,CVar("X",FLENG[2],AtLeast,AngleCycle))
+			CiMod(IncludePlayer,V(FLENG[2]),AngleCycle)
+		CIfEnd()
+
+		CIf(IncludePlayer,CVar("X",FLENG[2],AtLeast,0x80000000))
+			CAdd(IncludePlayer,V(FLENG[2]),AngleCycle)
+		CIfEnd()
+
+		-- FLENG[5] = Cos Signflag / FLENG[6] = Sin Signflag / FLENG[7] = Cos VAindex / FLENG[8] = Sin VAindex
+		CIfX(IncludePlayer,CVar("X",FLENG[2],AtMost,Range-1)) 
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,0)})
+			CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i
+			CMov(IncludePlayer,V(FLENG[7]),Range)
+			CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << pi/2 - i
+		CElseIfX(CVar("X",FLENG[2],AtMost,Range*2-1))
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,0)})
+			CMov(IncludePlayer,V(FLENG[8]),Range*2) -- Sin.i << pi - i
+			CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2]))
+			CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << i - pi/2
+			CSub(IncludePlayer,V(FLENG[7]),Range)
+		CElseIfX(CVar("X",FLENG[2],AtMost,Range*3-1))
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,1)})
+			CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i - pi
+			CSub(IncludePlayer,V(FLENG[8]),Range*2)
+			CMov(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << 3pi/2 - i
+			CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
+		CElseX()
+			DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,1)})
+			CMov(IncludePlayer,V(FLENG[8]),Range*4)
+			CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << 2pi - i
+			CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
+			CSub(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << i - 3pi/2
+		CIfXEnd()
+
+		ClShift2(IncludePlayer,V(FLENG[7]),15)
+		ClShift2(IncludePlayer,V(FLENG[8]),15)
+
+		Trigger {
+			players = {IncludePlayer},
+			conditions = { -- Init Calc
+				Label(0);
+			},
+			actions = {
+				SetCVar("X",FLENG[1],SetTo,0,0xFFFF8000);
+				SetCtrig2X(0x6509B0,SetTo,fptr[1],fptr[2],fptr[3],1,fptr[4]);
+				SetCtrig1X("X",FLENG[1],0x158,0,SetTo,EPD(0x6509B0));
+				SetCtrig1X("X",FLENG[1],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",FLENG[1],0x160,0,SetTo,Add*16777216,0xFF000000);
+				SetCtrig1X("X",FLENG[7],0x158,0,SetTo,EPD(0x6509B0));
+				SetCtrig1X("X",FLENG[7],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",FLENG[7],0x160,0,SetTo,Add*16777216,0xFF000000);
+				CallLabelAlways2("X",FLENG[1],0,"X",FLENG[7],0);
+				SetCtrig1X("X",FLENG[3],0x15C,0,SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+		for i = 31, 0, -1 do
 			Trigger {
 				players = {IncludePlayer},
 				conditions = {
-					Label();
+					Label(0);
+					DeathsX(CurrentPlayer,Exactly,2^i,0,2^i);
 				},
 				actions = {
-					SetDeathsX(0,SetTo,0x10000*math.sin(math.rad(i*90/Range)),0,0xFFFFFFFF); -- Full Variable
-					Disabled(SetDeathsX(0,SetTo,0,0,0xFFFFFFFF)); -- Recover Next
+					SetCtrig1X("X",FLENG[3],0x15C,0,SetTo,2^i,2^i);
 				},
 				flag = {Preserved}
 			}
 		end
+
+		Trigger {
+			players = {IncludePlayer},
+			conditions = { -- Init Calc
+				Label(0);
+			},
+			actions = {
+				SetCtrig2X(0x6509B0,SetTo,fptr[1],fptr[2],fptr[3],1,fptr[4]);
+				SetCtrig1X("X",FLENG[8],0x158,0,SetTo,EPD(0x6509B0));
+				SetCtrig1X("X",FLENG[8],0x148,0,SetTo,0xFFFFFFFF);
+				SetCtrig1X("X",FLENG[8],0x160,0,SetTo,Add*16777216,0xFF000000);
+				CallLabelAlways2("X",FLENG[1],0,"X",FLENG[8],0);
+				SetCtrig1X("X",FLENG[4],0x15C,0,SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+		for i = 31, 0, -1 do
+			Trigger {
+				players = {IncludePlayer},
+				conditions = {
+					Label(0);
+					DeathsX(CurrentPlayer,Exactly,2^i,0,2^i);
+				},
+				actions = {
+					SetCtrig1X("X",FLENG[4],0x15C,0,SetTo,2^i,2^i);
+				},
+				flag = {Preserved}
+			}
+		end
+
+		CIf(IncludePlayer,CVar("X",FLENG[5],Exactly,1))
+			CNeg(IncludePlayer,V(FLENG[3]))
+		CIfEnd()
+
+		CIf(IncludePlayer,CVar("X",FLENG[6],Exactly,1))
+			CNeg(IncludePlayer,V(FLENG[4]))
+		CIfEnd()
+
+		CIf(IncludePlayer,CVar("X",FLENG[9],Exactly,1))
+			CNeg(IncludePlayer,V(FLENG[3]))
+			CNeg(IncludePlayer,V(FLENG[4]))
+		CIfEnd()
+
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(FLENGCall2);
+			},
+			flag = {Preserved}
+		}
 	end
-	local FLENGVA = GetVArray(V(FuncAlloc))
-	FuncAlloc = FuncAlloc + 1
-
-	Trigger { 
-		players = {IncludePlayer},
-		conditions = {
-			Label(FLENGCall1);
-		},
-		flag = {Preserved}
-	}
-
- 	CIfX(IncludePlayer,CVar("X",FLENG[2],AtLeast,AngleCycle))
-		CiMod(IncludePlayer,V(FLENG[2]),AngleCycle)
-	CIfXEnd()
-
-	CIfX(IncludePlayer,CVar("X",FLENG[2],AtLeast,0x80000000))
-		CAdd(IncludePlayer,V(FLENG[2]),AngleCycle)
-	CIfXEnd()
-
-	-- FLENG[5] = Cos Signflag / FLENG[6] = Sin Signflag / FLENG[7] = Cos VAindex / FLENG[8] = Sin VAindex
-	CIfX(IncludePlayer,CVar("X",FLENG[2],AtMost,Range-1)) 
-		DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,0)})
-		CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i
-		CMov(IncludePlayer,V(FLENG[7]),Range)
-		CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << pi/2 - i
-	CElseIfX(CVar("X",FLENG[2],AtMost,Range*2-1))
-		DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,0)})
-		CMov(IncludePlayer,V(FLENG[8]),Range*2) -- Sin.i << pi - i
-		CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2]))
-		CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2])) -- Cos.i << i - pi/2
-		CSub(IncludePlayer,V(FLENG[7]),Range)
-	CElseIfX(CVar("X",FLENG[2],AtMost,Range*3-1))
-		DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,1),SetCVar("X",FLENG[6],SetTo,1)})
-		CMov(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << i - pi
-		CSub(IncludePlayer,V(FLENG[8]),Range*2)
-		CMov(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << 3pi/2 - i
-		CSub(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
-	CElseX()
-		DoActionsX(IncludePlayer,{SetCVar("X",FLENG[5],SetTo,0),SetCVar("X",FLENG[6],SetTo,1)})
-		CMov(IncludePlayer,V(FLENG[8]),Range*4)
-		CSub(IncludePlayer,V(FLENG[8]),V(FLENG[2])) -- Sin.i << 2pi - i
-		CMov(IncludePlayer,V(FLENG[7]),V(FLENG[2]))
-		CSub(IncludePlayer,V(FLENG[7]),Range*3) -- Cos.i << i - 3pi/2
-	CIfXEnd()
-
-	CMov(IncludePlayer,V(FLENG[4]),VArr(FLENGVA,V(FLENG[8])))
-	CMov(IncludePlayer,V(FLENG[3]),VArr(FLENGVA,V(FLENG[7])))
-
-	f_Mul(IncludePlayer,V(FLENG[4]),V(FLENG[1]))
-	f_Mul(IncludePlayer,V(FLENG[3]),V(FLENG[1]))
-
-	CiDiv(IncludePlayer,V(FLENG[4]),0x10000)
-	CiDiv(IncludePlayer,V(FLENG[3]),0x10000)
-
-	CIfX(IncludePlayer,CVar("X",FLENG[5],Exactly,1))
-		CNeg(IncludePlayer,V(FLENG[3]))
-	CIfXEnd()
-
-	CIfX(IncludePlayer,CVar("X",FLENG[6],Exactly,1))
-		CNeg(IncludePlayer,V(FLENG[4]))
-	CIfXEnd()
-
-	Trigger { 
-		players = {IncludePlayer},
-		conditions = {
-			Label(FLENGCall2);
-		},
-		flag = {Preserved}
-	}
 end
 -----------------------------------------------------------
--- f_Atan2 - Ret[1] : Input Y  Ret[2] = X | Ret[3] = Θ  
+-- f_Atan2 - Ret[1] : Input Y  Ret[2] = X | Ret[3] = Θ 
 if FATANCheck == 1 then
 	Trigger { 
 		players = {IncludePlayer},
@@ -82159,7 +82698,7 @@ if FATANCheck == 1 then
 		CIfXEnd()
 	CIfXEnd()
 
-	CMul(IncludePlayer,V(FATAN[1]),0x10000,"X","X",0xFFFFF)
+	ClShift2(IncludePlayer,V(FATAN[1]),16) --CMul(IncludePlayer,V(FATAN[1]),0x10000,"X","X",0xFFFFF)
 
 	f_Div(IncludePlayer,V(FATAN[1]),V(FATAN[2]))
 
@@ -82333,7 +82872,284 @@ if FATANCheck == 1 then
 		flag = {Preserved}
 	}
 end
+
+-- f_Atan2X - Ret[1] : Input Y  Ret[2] = X | Ret[3] = Θ  / Ret[4] : 256 Mode
+if FATANXCheck == 1 then
+	RangeX = 256/4
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(FATANXCall1);
+		},
+		flag = {Preserved}
+	}
+
+	CIfX(IncludePlayer,CVar("X",FATANX[1],AtLeast,0x80000000)) 
+		CIfX(IncludePlayer,CVar("X",FATANX[2],AtLeast,0x80000000)) -- 3사분면
+			DoActionsX(IncludePlayer,{SetCVar("X",FATANX[4],SetTo,3)}) -- Θ + pi
+			CNeg(IncludePlayer,V(FATANX[1]))
+			CNeg(IncludePlayer,V(FATANX[2]))
+		CElseX() -- 4사분면
+			DoActionsX(IncludePlayer,{SetCVar("X",FATANX[4],SetTo,4)}) -- 2pi - Θ
+			CNeg(IncludePlayer,V(FATANX[1]))
+		CIfXEnd()
+	CElseX()
+		CIfX(IncludePlayer,CVar("X",FATANX[2],AtLeast,0x80000000)) -- 2사분면
+			DoActionsX(IncludePlayer,{SetCVar("X",FATANX[4],SetTo,2)}) -- pi - Θ
+			CNeg(IncludePlayer,V(FATANX[2]))
+		CElseX() -- 1사분면
+			DoActionsX(IncludePlayer,{SetCVar("X",FATANX[4],SetTo,1)}) -- Θ
+		CIfXEnd()
+	CIfXEnd()
+
+	ClShift2(IncludePlayer,V(FATANX[1]),16) --CMul(IncludePlayer,V(FATANX[1]),0x10000,"X","X",0xFFFFF)
+
+	f_Div(IncludePlayer,V(FATANX[1]),V(FATANX[2]))
+
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(1*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,1);
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(2*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(3*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(2*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(4*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(3*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(5*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(4*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(6*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(5*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+			CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(7*90/8)));
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(6*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(0);
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,math.floor(7*RangeX/8));
+			SetCtrigX("X",FuncAlloc+1,0x178,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",FuncAlloc+1,0x17C,0,SetTo,"X","X",0,0,1);
+		},
+		flag = {Preserved}
+	}
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(FuncAlloc);
+		},
+		flag = {Preserved}
+	}
+	FuncAlloc = FuncAlloc + 1
+	for i = 0, RangeX-1 do
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(0);
+				CVar("X",FATANX[1],AtMost,0x10000*math.tan(math.rad(i*90/RangeX)));
+			},
+			actions = {
+				SetCVar("X",FATANX[3],SetTo,i);
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,0);
+				SetCtrigX("X",FuncAlloc,0x158,0,SetTo,"X","X",0x4,1,0);
+				SetCtrigX("X",FuncAlloc,0x15C,0,SetTo,"X","X",0,0,1);
+			},
+			flag = {Preserved}
+		}
+	end
+		Trigger { 
+			players = {IncludePlayer},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCVar("X",FATANX[3],SetTo,RangeX);
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FuncAlloc,0,0,0);
+				SetCtrigX("X",FuncAlloc,0x158,0,SetTo,"X","X",0x4,1,0);
+				SetCtrigX("X",FuncAlloc,0x15C,0,SetTo,"X","X",0,0,1);
+			},
+			flag = {Preserved}
+		}
+
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(FuncAlloc);
+		},
+		actions = {
+			SetDeaths(0,SetTo,0,0);
+			SetDeaths(0,SetTo,0,0);
+		},
+		flag = {Preserved}
+	}
+	FuncAlloc = FuncAlloc + 1
+
+	CIfX(IncludePlayer,CVar("X",FATANX[4],Exactly,2))
+		CMov(IncludePlayer,V(FATANX[3]),_Sub(_Mov(RangeX*2),V(FATANX[3])))
+	CElseIfX(CVar("X",FATANX[4],Exactly,3))
+		CAdd(IncludePlayer,V(FATANX[3]),RangeX*2)
+	CElseIfX(CVar("X",FATANX[4],Exactly,4))
+		CMov(IncludePlayer,V(FATANX[3]),_Sub(_Mov(RangeX*4),V(FATANX[3])))
+	CIfXEnd()
+
+	CAdd(IncludePlayer,V(FATANX[4]),V(FATANX[3]),RangeX)
+	TriggerX(IncludePlayer,{CVar("X",FATANX[4],AtLeast,RangeX*4)},{SetCVar("X",FATANX[4],Subtract,RangeX*4)},{Preserved})
+
+	Trigger { 
+		players = {IncludePlayer},
+		conditions = {
+			Label(FATANXCall2);
+		},
+		flag = {Preserved}
+	}
+end
 -----------------------------------------------------------
+-- f_Square - Ret[1] : Input Value / Ret[2] = Output | Ret = X^2 
+if FSQURCheck == 1 then
+	Trigger {
+		players = {IncludePlayer},
+		conditions = { -- Init Calc
+			Label(FSQURCall1);
+		},
+		actions = {
+			SetCtrig1X("X",FSQUR[2],0x15C,0,SetTo,0);
+		},
+		flag = {Preserved}
+	}
+
+	for i = 0, 30 do
+		local ActArr = {}
+		if i < 16 then
+			table.insert(ActArr,SetCtrig1X("X",FSQUR[2],0x15C,0,Add,bit32.lshift(1,2*i)))
+		end
+
+		if i > 15 then
+			for j = i, 30 do
+				table.insert(ActArr,SetCtrig1X("X",FSQURCall1,0x15C,j-i+32,Add,bit32.lshift(1,j+1)))
+			end
+		elseif i >= 1 then
+			for j = 1, i do
+				table.insert(ActArr,SetCtrig1X("X",FSQURCall1,0x15C,j+31,Add,bit32.lshift(1,j+i)))
+			end
+		end
+
+		Trigger { -- 1~31
+			players = {IncludePlayer},
+			conditions = {
+				Label(0);
+				CtrigX("X",FSQUR[1],0x15C,0,Exactly,2^i,2^i);
+			},
+			actions = {
+				ActArr;
+			},
+			flag = {Preserved}
+		}
+	end
+
+	local ClearArr = {}
+	for i = 0, 14 do
+		table.insert(ClearArr,SetCtrig1X("X","X",0x15C,-i-1,SetTo,0))
+		Trigger { -- 32~46
+			players = {IncludePlayer},
+			conditions = {
+				Label(0);
+				CtrigX("X",FSQUR[1],0x15C,0,Exactly,2^i,2^i);
+			},
+			actions = {
+				SetCtrig1X("X",FSQUR[2],0x15C,0,Add,0);
+			},
+			flag = {Preserved}
+		}
+	end
+
+	Trigger {
+		players = {IncludePlayer},
+		conditions = { -- End Calc
+			Label(FSQURCall2);
+		},
+		actions = {
+			ClearArr;
+		},
+		flag = {Preserved}
+	}
+end
+
 -- f_Log2 - Ret[1] : Input Value / Ret[2] = Output | Ret = log2(X) 
 if FLOG2Check == 1 then
 	Trigger {
@@ -95874,6 +96690,28 @@ function CreateFArr(Size,PlayerID)
 	return Ret
 end
 
+function CreateFArrX(Fill,Size,PlayerID)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if Fill == nil then Fill = 0 end
+	if Size < 1 then CreateFArr_InputData_Error() end
+
+	CreateVarXAlloc = CreateVarXAlloc + 1
+	if CreateVarXAlloc > CreateMaxVAlloc then
+		CreateVariable_IndexAllocation_Overflow()
+	end
+	if PlayerID == nil then
+		PlayerID = AllPlayers
+	end
+	table.insert(CreateVarPArr,{"FA",PlayerID,Size,Fill})
+	local Ret = {"X",CreateVarXAlloc,0x970,0}
+	if type(PlayerID) == "number" then
+		Ret[1] = PlayerID
+	end
+	return Ret
+end
+
 function FastDrop(PlayerID,DropPlayer)
 	Trigger {
 		players = {PlayerID},
@@ -97009,13 +97847,46 @@ __grpwire32 = {0x00070020, 0x041E2014, 0x01030000, 0x068D1E17, 0x03000000, 0x087
 __grpwire64 = {0x00070020, 0x062A2014, 0x01030000, 0x08991E17, 0x03000000, 0x0A8A1C20, 0x00030000, 0x0CE1201C, 0x05010000, 0x0FAE091D, 0x00010000, 0x10B2201F, 0x05010000, 0x1382091D, 0x00030000, 0x1489201C, 0x04000000, 0x17561920, 0x00000000, 0x19F21F1F, 0x00040000, 0x1CFE2018, 0x00000000, 0x1FB51F20, 0x01000000, 0x22F41E20, 0x00020000, 0x263E201C, 0x05010000, 0x2980091D, 0x02060000, 0x2A871E12, 0x00030000, 0x2C5F2017, 0x00030000, 0x0CE1201C, 0x05010000, 0x2E6C091D, 0x03000000, 0x0A8A1C20, 0x00070000, 0x2F732014, 0x04000000, 0x31E41920, 0x00000000, 0x19F21F1F, 0x00010000, 0x10B2201F, 0x05010000, 0x3482091D, 0x00010000, 0x35891F1D, 0x05010000, 0x2E6C091D, 0x05010000, 0x2E6C091D, 0x01000000, 0x22F41E20, 0x01000000, 0x22F41E20, 0x00010000, 0x35891F1D, 0x05010000, 0x3876091D, 0x00040000, 0x39802018, 0x00070000, 0x3C3B2014, 0x00060000, 0x3EAA2017, 0x00020000, 0x4168201D, 0x02000000, 0x43581C20, 0x00040000, 0x45C32018, 0x00030000, 0x47AD201C, 0x03000000, 0x49C91B20, 0x01030000, 0x4BED1E1B, 0x01000000, 0x4DDB1E20, 0x00030000, 0x5057201C, 0x02000000, 0x534E1C20, 0x02000000, 0x55571C20, 0x00000000, 0x57602020, 0x01000000, 0x59F91F20, 0x02010000, 0x5BBF1C1E, 0x03000000, 0x49C91B20, 0x00000000, 0x57602020, 0x00010000, 0x5D9F201C, 0x01020000, 0x60211F1B, 0x01000000, 0x59F91F20, 0x00030000, 0x47AD201C, 0x00040000, 0x62392018, 0x02000000, 0x64231C20, 0x02000000, 0x55571C20, 0x00030000, 0x5057201C, 0x02000000, 0x662B1D20, 0x02000000, 0x68EA1C20, 0x02010000, 0x6B631B1D, 0x00000000, 0x6DAA201E, 0x01000000, 0x70601E1E, 0x01020000, 0x72D11F1E, 0x00010000, 0x75A2201F, 0x00010000, 0x78A8201F, 0x01040000, 0x7BFD1F18, 0x00000000, 0x7E922020, 0x00000000, 0x81E82020, 0x04000000, 0x853A1B20, 0x00000000, 0x87E41F20, 0x00000000, 0x8AA1201F, 0x00000000, 0x8D892020, 0x04000000, 0x90C21920, 0x00000000, 0x6DAA201E, 0x00000000, 0x6DAA201E, 0x00000000, 0x81E82020, 0x00010000, 0x78A8201F, 0x01040000, 0x7BFD1F18, 0x00000000, 0x7E922020, 0x00000000, 0x92CE1F20, 0x02000000, 0x958D1D1F, 0x00000000, 0x8D892020, 0x02000000, 0x958D1D1F, 0x01010000, 0x98291D1C, 0x05010000, 0x9A89091D, 0x00000000, 0x8AA1201F, 0x05010000, 0x3876091D, 0x00000000, 0x87E41F20, 0x03000000, 0x9B901B20, 0x04000000, 0x9E2C181F, 0x03000000, 0x9FA21A20, 0x03000000, 0x9FA21A20, 0x00010000, 0xA1891F1B, 0x00000000, 0xA36E1F20, 0x05000000, 0xA5181520, 0x05010000, 0xA6CC1A19, 0x08020000, 0xA89E0E1A, 0x00000000, 0x6DAA201E, 0x01030000, 0x08991E17, 0x01030000, 0x08991E17, 0x03000000, 0x9FA21A20, 0x01000000, 0x22F41E20, 0x03000000, 0x9FA21A20, 0x01030000, 0x08991E17, 0x05010000, 0xA9B5091D, 0x02000000, 0xAABF1D20, 0x05010000, 0xADBB091D, 0x05010000, 0xADBB091D, 0x05010000, 0xADBB091D, 0x05010000, 0xADBB091D, 0x01000000, 0xAEC21F20, 0x05010000, 0xB203091D, 0x01000000, 0xB3091F20, 0x00000000, 0xB66C2020, 0x05010000, 0xB9B1091D, 0x05000000, 0xBAB71820, 0x05010000, 0xBD46091D, 0x05010000, 0xBD46091D, 0x05010000, 0xBD46091D, 0x05010000, 0xBD46091D, 0x05010000, 0xBD46091D, 0x05000000, 0xBE4F1720, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x05010000, 0x3876091D, 0x00400000, 0x00510047}
 __wireframe32 = {0x000D0040, 0x07263F28, 0x02070000, 0x0E473C2E, 0x06000000, 0x138F3540, 0x00050000, 0x19A54037, 0x05010000, 0x21A4091D, 0x00010000, 0x22AE403F, 0x05010000, 0x2B47091D, 0x00050000, 0x2C464039, 0x07000000, 0x34AF3440, 0x00000000, 0x3C654040, 0x00060000, 0x45FC4030, 0x02000000, 0x4E013C40, 0x01000000, 0x569D3840, 0x06010000, 0x5F51353F, 0x05010000, 0x6560091D, 0x030D0000, 0x66613C23, 0x01070000, 0x6B223F2E, 0x00050000, 0x709D4037, 0x05010000, 0x789C091D, 0x06000000, 0x138F3540, 0x000D0000, 0x79A03F28, 0x07000000, 0x80BB3440, 0x00000000, 0x3C654040, 0x00010000, 0x8871403F, 0x05010000, 0x9106091D, 0x00000000, 0x9204403C, 0x05010000, 0x9B81091D, 0x05010000, 0x9B81091D, 0x01000000, 0x9C843840, 0x01000000, 0x9C843840, 0x00000000, 0xA53A403C, 0x05010000, 0xAEBB091D, 0x00060000, 0xAFC54030, 0x000D0000, 0xB7CA3F28, 0x000C0000, 0xBEED402E, 0x080A0000, 0xC72D2D2A, 0x0B070000, 0xCA632732, 0x000B0000, 0xCE713F2E, 0x050B0000, 0xD383352F, 0x06000000, 0xD7A73440, 0x05030000, 0xDCBF3A35, 0x0C050000, 0xE2062E36, 0x01070000, 0xE7093D31, 0x07020000, 0xEE803139, 0x08000000, 0xF35C3140, 0x06040000, 0xF8A03537, 0x06010000, 0xFEB7323F, 0x04010000, 0x0259393E, 0x06000001, 0xD7A73440, 0x06040000, 0xF8A03537, 0x01090000, 0x07D43A2F, 0x00000001, 0x0E943D37, 0x06010001, 0xFEB7323F, 0x050B0000, 0xD383352F, 0x000B0000, 0xCE713F2E, 0x07020000, 0xEE803139, 0x08000000, 0xF35C3140, 0x01070000, 0xE7093D31, 0x03000000, 0x14913B40, 0x0F0B0001, 0x1C6D282D, 0x04020001, 0x20DB363A, 0x00000001, 0x2736403D, 0x01000001, 0x2E773D3C, 0x00030001, 0x35F7403C, 0x01030001, 0x3EE23E3A, 0x00010001, 0x45F3403E, 0x01070001, 0x50023E31, 0x00000001, 0x57B34040, 0x03010001, 0x61413D3C, 0x03000001, 0x6A5E3840, 0x02000001, 0x723C3D40, 0x00000001, 0x79784040, 0x00010001, 0x826D403F, 0x05000001, 0x8C203340, 0x00000001, 0x2736403D, 0x00000001, 0x2736403D, 0x03010001, 0x61413D3C, 0x00010001, 0x928E403E, 0x01070001, 0x50023E31, 0x00000001, 0x57B34040, 0x02000001, 0x9C9E3D40, 0x06030001, 0xA3D9383A, 0x00010001, 0xAAF4403F, 0x06030001, 0xB4A7383A, 0x04050001, 0xBBC23635, 0x05010001, 0xC1EC091D, 0x00000001, 0xC2ED4040, 0x05010001, 0xCBE4091D, 0x02000001, 0xCCE03D40, 0x06010001, 0xD41B373F, 0x09000001, 0xDC072F3E, 0x06000001, 0xE03E3340, 0x03000001, 0xE8683B40, 0x00030001, 0xF0814036, 0x01000001, 0xF6393E40, 0x0A000001, 0xFB052B40, 0x0A020001, 0x005C3433, 0x10050002, 0x05911C35, 0x00000002, 0x2736403D, 0x02070001, 0x0E473C2E, 0x02070000, 0x0E473C2E, 0x05010000, 0x08D0091D, 0x01000002, 0x09D13840, 0x06000002, 0x12873440, 0x02080002, 0x0E473C2E, 0x05010000, 0x08D0091D, 0x03000002, 0x18343A40, 0x01000002, 0x219E3F40, 0x00000002, 0x29F84040, 0x06000002, 0x336D3540, 0x06000002, 0x3B713540, 0x02000002, 0x442A3D40, 0x00000002, 0x4E4A3F40, 0x00000002, 0x57703F40, 0x00000002, 0x625C4040, 0x00000002, 0x6BFB3F40, 0x09000002, 0x75BB3140, 0x04000002, 0x7D793640, 0x00000002, 0x85254040, 0x05010002, 0x8DFE091D, 0x01010002, 0x8F023D3C, 0x01000002, 0x97DE3F40, 0x09000002, 0xA1902E40, 0x00000002, 0xA76B4040, 0x00070002, 0xB20C4032, 0x0B000002, 0xBACA2B40, 0x07000002, 0xC1C93240, 0x0E040002, 0xC8422633, 0x070D0002, 0xCBBA3423, 0x070D0002, 0xCBBA3423, 0x04000002, 0xCEBA3340, 0x0B030002, 0xD7C2353A, 0x00000002, 0xDE8C4040, 0x00020002, 0xE78C403D, 0x00000002, 0xF0A53F40, 0x01000002, 0xFA143E40, 0x06010002, 0x033F303F, 0x00080003, 0x098F4032, 0x01000003, 0x11D7393E, 0x01000003, 0x19C13C3F, 0x01000003, 0x22463C40, 0x00070003, 0x2AE14032, 0x0A000003, 0x32EF2C40, 0x08010003, 0x3984363D, 0x00020003, 0x41D3403D, 0x05010003, 0x4A20091D, 0x06000003, 0x4B2A2E40, 0x06000003, 0x511F3240, 0x0A000003, 0x5A152E40, 0x01020003, 0x60EB3B3C, 0x01010003, 0x69103B3E, 0x0A000003, 0x6EC12A40, 0x0A000003, 0x6EC12A40, 0x05010003, 0x7590091D, 0x00000003, 0x769A4040, 0x00000003, 0x81AB4040, 0x00030003, 0x8AE8403A, 0x05000003, 0x94893540, 0x05010003, 0x9C57091D, 0x04000003, 0x9D573740, 0x02000003, 0xA5F23C40, 0x05010003, 0xAFB8091D, 0x0B000003, 0xB0BF2D40, 0x00000003, 0xB6F54040, 0x00000003, 0xC1264040, 0x00000003, 0xCB334040, 0x00000003, 0xD3114040, 0x00000003, 0xDCA33F40, 0x00000003, 0xE4A14040, 0x07000003, 0xEDA53340, 0x04000003, 0xF52B3840, 0x02000003, 0xFD4F3C40, 0x0A000003, 0x06A72D40, 0x00000004, 0x0DEF3F40, 0x06000004, 0x15EC3240, 0x00050004, 0x1DB34037, 0x07000004, 0x252A3540, 0x07000004, 0x252A3540, 0x07000004, 0x252A3540, 0x1A140004, 0x2E0A0717, 0x1A140004, 0x2E0A0717, 0x1D0D0004, 0x2E7D0725, 0x05010004, 0x2F46091D, 0x1F080004, 0x3050082D, 0x05010004, 0x2F46091D, 0x1F080004, 0x313F0836, 0x05020004, 0x324C353D, 0x00000004, 0x38833F40, 0x0C000004, 0x40812A40, 0x00050004, 0x47294034, 0x00000004, 0x4E8D3F40, 0x05010004, 0x2F46091D, 0x05010004, 0x2F46091D, 0x05010004, 0x2F46091D, 0x0F000004, 0x57F42340, 0x08000004, 0x5D122C40, 0x07010004, 0x61AB293F, 0x0F000004, 0x65E72340, 0x08000004, 0x5D122C40, 0x07010004, 0x61AB293F, 0x06000004, 0x6B053640, 0x10010004, 0x7221243E, 0x05010004, 0x7590091D, 0x0B000003, 0x779D2C40, 0x05010004, 0x7590091D, 0x05010003, 0x7590091D, 0x05010003, 0x7590091D, 0x05010003, 0x7590091D, 0x05010003, 0x7590091D, 0x090B0003, 0x7C802E2B, 0x0D0E0004, 0x80692725, 0x0A120004, 0x84402D1C, 0x0D0E0004, 0x80692725, 0x0A120004, 0x84402D1C, 0x05010004, 0x2F46091D, 0x02080004, 0x87653D2D, 0x04100004, 0x8B623323, 0x070A0004, 0x8F66322D, 0x11040004, 0x94592239, 0x070D0004, 0xCBBA3423, 0x00000002, 0x97804040, 0x00000004, 0x97804040, 0x06070004, 0x9F033633, 0x06070004, 0x9F033633, 0x05070004, 0xA2D23734, 0x05070004, 0xA2D23734, 0x03060004, 0xAA223B33, 0x03060004, 0xAA223B33, 0x007E0004, 0x008C0082}
 __wireframe64 = {0x000D0040, 0x0AB63F28, 0x02070000, 0x11D73C2E, 0x06000000, 0x171F3540, 0x00050000, 0x1D354037, 0x05010000, 0x2534091D, 0x00010000, 0x263E403F, 0x05010000, 0x2ED7091D, 0x00050000, 0x2FD64039, 0x07000000, 0x383F3440, 0x00000000, 0x3FF54040, 0x00060000, 0x498C4030, 0x02000000, 0x51913C40, 0x01000000, 0x5A2D3840, 0x06010000, 0x62E1353F, 0x05010000, 0x68F0091D, 0x030D0000, 0x69F13C23, 0x01070000, 0x6EB23F2E, 0x00050000, 0x742D4037, 0x05010000, 0x7C2C091D, 0x06000000, 0x171F3540, 0x000D0000, 0x7D303F28, 0x07000000, 0x844B3440, 0x00000000, 0x3FF54040, 0x00010000, 0x8C01403F, 0x05010000, 0x9496091D, 0x00000000, 0x9594403C, 0x05010000, 0x9F11091D, 0x05010000, 0x9F11091D, 0x01000000, 0xA0143840, 0x01000000, 0xA0143840, 0x00000000, 0xA8CA403C, 0x05010000, 0xB24B091D, 0x00060000, 0xB3554030, 0x000D0000, 0xBB5A3F28, 0x000C0000, 0xC27D402E, 0x080A0000, 0xCABD2D2A, 0x0B070000, 0xCDF32732, 0x000B0000, 0xD2013F2E, 0x050B0000, 0xD713352F, 0x06000000, 0xDB373440, 0x05030000, 0xE04F3A35, 0x0C050000, 0xE5962E36, 0x01070000, 0xEA993D31, 0x07020000, 0xF2103139, 0x08000000, 0xF6EC3140, 0x06040000, 0xFC303537, 0x06010000, 0x0247323F, 0x04010001, 0x05E9393E, 0x06000001, 0xDB373440, 0x06040000, 0xFC303537, 0x01090000, 0x0B643A2F, 0x00000001, 0x12243D37, 0x06010001, 0x0247323F, 0x050B0001, 0xD713352F, 0x000B0000, 0xD2013F2E, 0x07020000, 0xF2103139, 0x08000000, 0xF6EC3140, 0x01070000, 0xEA993D31, 0x03000000, 0x18213B40, 0x0F0B0001, 0x1FFD282D, 0x04020001, 0x246B363A, 0x00000001, 0x2AC6403D, 0x01000001, 0x32073D3C, 0x00030001, 0x3987403C, 0x01030001, 0x42723E3A, 0x00010001, 0x4983403E, 0x01070001, 0x53923E31, 0x00000001, 0x5B434040, 0x03010001, 0x64D13D3C, 0x03000001, 0x6DEE3840, 0x02000001, 0x75CC3D40, 0x00000001, 0x7D084040, 0x00010001, 0x85FD403F, 0x05000001, 0x8FB03340, 0x00000001, 0x2AC6403D, 0x00000001, 0x2AC6403D, 0x03010001, 0x64D13D3C, 0x00010001, 0x961E403E, 0x01070001, 0x53923E31, 0x00000001, 0x5B434040, 0x02000001, 0xA02E3D40, 0x06030001, 0xA769383A, 0x00010001, 0xAE84403F, 0x06030001, 0xB837383A, 0x04050001, 0xBF523635, 0x05010001, 0xC57C091D, 0x00000001, 0xC67D4040, 0x05010001, 0xCF74091D, 0x02000001, 0xD0703D40, 0x06010001, 0xD7AB373F, 0x09000001, 0xDF972F3E, 0x06000001, 0xE3CE3340, 0x03000001, 0xEBF83B40, 0x00030001, 0xF4114036, 0x01000001, 0xF9C93E40, 0x0A000001, 0xFE952B40, 0x0A020001, 0x03EC3433, 0x10050002, 0x09211C35, 0x00000002, 0x2AC6403D, 0x02070001, 0x11D73C2E, 0x02070000, 0x11D73C2E, 0x05010000, 0x0C60091D, 0x01000002, 0x0D613840, 0x06000002, 0x16173440, 0x02080002, 0x11D73C2E, 0x05010000, 0x0C60091D, 0x03000002, 0x1BC43A40, 0x01000002, 0x252E3F40, 0x00000002, 0x2D884040, 0x06000002, 0x36FD3540, 0x06000002, 0x3F013540, 0x02000002, 0x47BA3D40, 0x00000002, 0x51DA3F40, 0x00000002, 0x5B003F40, 0x00000002, 0x65EC4040, 0x00000002, 0x6F8B3F40, 0x09000002, 0x794B3140, 0x04000002, 0x81093640, 0x00000002, 0x88B54040, 0x05010002, 0x918E091D, 0x01010002, 0x92923D3C, 0x01000002, 0x9B6E3F40, 0x09000002, 0xA5202E40, 0x00000002, 0xAAFB4040, 0x00070002, 0xB59C4032, 0x0B000002, 0xBE5A2B40, 0x07000002, 0xC5593240, 0x0E040002, 0xCBD22633, 0x070D0002, 0xCF4A3423, 0x070D0002, 0xCF4A3423, 0x04000002, 0xD24A3340, 0x0B030002, 0xDB52353A, 0x00000002, 0xE21C4040, 0x00020002, 0xEB1C403D, 0x00000002, 0xF4353F40, 0x01000002, 0xFDA43E40, 0x06010002, 0x06CF303F, 0x00080003, 0x0D1F4032, 0x01000003, 0x1567393E, 0x01000003, 0x1D513C3F, 0x01000003, 0x25D63C40, 0x00070003, 0x2E714032, 0x0A000003, 0x367F2C40, 0x08010003, 0x3D14363D, 0x00020003, 0x4563403D, 0x05010003, 0x4DB0091D, 0x06000003, 0x4EBA2E40, 0x06000003, 0x54AF3240, 0x0A000003, 0x5DA52E40, 0x01020003, 0x647B3B3C, 0x01010003, 0x6CA03B3E, 0x0A000003, 0x72512A40, 0x0A000003, 0x72512A40, 0x05010003, 0x7920091D, 0x00000003, 0x7A2A4040, 0x00000003, 0x853B4040, 0x00030003, 0x8E78403A, 0x05000003, 0x98193540, 0x05010003, 0x9FE7091D, 0x04000003, 0xA0E73740, 0x02000003, 0xA9823C40, 0x05010003, 0xB348091D, 0x0B000003, 0xB44F2D40, 0x00000003, 0xBA854040, 0x00000003, 0xC4B64040, 0x00000003, 0xCEC34040, 0x00000003, 0xD6A14040, 0x00000003, 0xE0333F40, 0x00000003, 0xE8314040, 0x07000003, 0xF1353340, 0x04000003, 0xF8BB3840, 0x02000003, 0x00DF3C40, 0x0A000004, 0x0A372D40, 0x00000004, 0x117F3F40, 0x06000004, 0x197C3240, 0x00050004, 0x21434037, 0x07000004, 0x28BA3540, 0x07000004, 0x28BA3540, 0x07000004, 0x28BA3540, 0x1A140004, 0x319A0717, 0x1A140004, 0x319A0717, 0x1D0D0004, 0x320D0725, 0x05010004, 0x32D6091D, 0x1F080004, 0x33E0082D, 0x05010004, 0x32D6091D, 0x1F080004, 0x34CF0836, 0x05020004, 0x35DC353D, 0x00000004, 0x3C133F40, 0x0C000004, 0x44112A40, 0x00050004, 0x4AB94034, 0x00000004, 0x521D3F40, 0x05010004, 0x32D6091D, 0x05010004, 0x32D6091D, 0x05010004, 0x32D6091D, 0x0F000004, 0x5B842340, 0x08000004, 0x60A22C40, 0x07010004, 0x653B293F, 0x0F000004, 0x69772340, 0x08000004, 0x60A22C40, 0x07010004, 0x653B293F, 0x06000004, 0x6E953640, 0x10010004, 0x75B1243E, 0x05010004, 0x7920091D, 0x0B000003, 0x7B2D2C40, 0x05010004, 0x7920091D, 0x05010003, 0x7920091D, 0x05010003, 0x7920091D, 0x05010003, 0x7920091D, 0x05010003, 0x7920091D, 0x090B0003, 0x80102E2B, 0x0D0E0004, 0x83F92725, 0x0A120004, 0x87D02D1C, 0x0D0E0004, 0x83F92725, 0x0A120004, 0x87D02D1C, 0x05010004, 0x32D6091D, 0x02080004, 0x8AF53D2D, 0x04100004, 0x8EF23323, 0x070A0004, 0x92F6322D, 0x11040004, 0x97E92239, 0x070D0004, 0xCF4A3423, 0x00000002, 0x9B104040, 0x00000004, 0x9B104040, 0x06070004, 0xA2933633, 0x06070004, 0xA2933633, 0x05070004, 0xA6623734, 0x05070004, 0xA6623734, 0x03060004, 0xADB23B33, 0x03060004, 0xADB23B33, 0x007E0004, 0x008C0082}
+
 FWIRE = {}
 FWIREINITCall1 = 0
 FWIREINITCall2 = 0
 CheckInclude_Wireframe = 0
-function Include_Wireframe()
+function Include_Wireframe(Init)
 if CheckInclude_Wireframe == 0 then
 	CheckInclude_Wireframe = 1
+
+	__grpwire32[5*2+1] = bit32.band(__grpwire32[5*2+1],0xFFFF)
+	__grpwire32[5*2+2] = bit32.band(__grpwire32[5*2+2],0)
+	__grpwire32[5*2+3] = bit32.band(__grpwire32[5*2+3],0xFFFF0000)
+
+	__grpwire32[23*2+1] = bit32.band(__grpwire32[23*2+1],0xFFFF)
+	__grpwire32[23*2+2] = bit32.band(__grpwire32[23*2+2],0)
+	__grpwire32[23*2+3] = bit32.band(__grpwire32[23*2+3],0xFFFF0000)
+
+	__grpwire32[67*2+1] = bit32.band(__grpwire32[67*2+1],0xFFFF)
+	__grpwire32[67*2+2] = bit32.band(__grpwire32[67*2+2],0)
+	__grpwire32[67*2+3] = bit32.band(__grpwire32[67*2+3],0xFFFF0000)
+
+	__grpwire32[79*2+1] = bit32.band(__grpwire32[79*2+1],0xFFFF)
+	__grpwire32[79*2+2] = bit32.band(__grpwire32[79*2+2],0)
+	__grpwire32[79*2+3] = bit32.band(__grpwire32[79*2+3],0xFFFF0000)
+
+	__grpwire64[5*2+1] = bit32.band(__grpwire64[5*2+1],0xFFFF)
+	__grpwire64[5*2+2] = bit32.band(__grpwire64[5*2+2],0)
+	__grpwire64[5*2+3] = bit32.band(__grpwire64[5*2+3],0xFFFF0000)
+
+	__grpwire64[23*2+1] = bit32.band(__grpwire64[23*2+1],0xFFFF)
+	__grpwire64[23*2+2] = bit32.band(__grpwire64[23*2+2],0)
+	__grpwire64[23*2+3] = bit32.band(__grpwire64[23*2+3],0xFFFF0000)
+
+	__grpwire64[67*2+1] = bit32.band(__grpwire64[67*2+1],0xFFFF)
+	__grpwire64[67*2+2] = bit32.band(__grpwire64[67*2+2],0)
+	__grpwire64[67*2+3] = bit32.band(__grpwire64[67*2+3],0xFFFF0000)
+
+	__grpwire64[79*2+1] = bit32.band(__grpwire64[79*2+1],0xFFFF)
+	__grpwire64[79*2+2] = bit32.band(__grpwire64[79*2+2],0)
+	__grpwire64[79*2+3] = bit32.band(__grpwire64[79*2+3],0xFFFF0000)
 
 	local IncludePlayer = FixPlayer
 	for i = 0, 3 do
@@ -97044,30 +97915,57 @@ if CheckInclude_Wireframe == 0 then
 	})
 
 	CIfX(IncludePlayer,{TMemory(Vi(FWIRE[3],2),Exactly,0)},{SetCVar("X",FWIRE[4],SetTo,1)}) -- 64bit
-		CMov(IncludePlayer,0x6509B0,V(FWIRE[1]))
-		local tranwireAct = {}
-		for k, v in pairs(__tranwire64) do
-			table.insert(tranwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
-			table.insert(tranwireAct,SetMemory(0x6509B0,Add,1))
-		end	
-		DoActions2(IncludePlayer,tranwireAct)
+		if Init ~= 0 then
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[1]))
+			local tranwireAct = {}
+			for k, v in pairs(__tranwire64) do
+				table.insert(tranwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(tranwireAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,tranwireAct)
 
-		CMov(IncludePlayer,0x6509B0,V(FWIRE[2]))
-		local grpwireAct = {}
-		for k, v in pairs(__grpwire64) do
-			table.insert(grpwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
-			table.insert(grpwireAct,SetMemory(0x6509B0,Add,1))
-		end	
-		DoActions2(IncludePlayer,grpwireAct)
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[2]))
+			local grpwireAct = {}
+			for k, v in pairs(__grpwire64) do
+				table.insert(grpwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(grpwireAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,grpwireAct)
 
-		CMov(IncludePlayer,0x6509B0,V(FWIRE[3]))
-		local wireframeAct = {}
-		for k, v in pairs(__wireframe64) do
-			table.insert(wireframeAct,SetDeaths(CurrentPlayer,SetTo,v,0))
-			table.insert(wireframeAct,SetMemory(0x6509B0,Add,1))
-		end	
-		DoActions2(IncludePlayer,wireframeAct)
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[3]))
+			local wireframeAct = {}
+			for k, v in pairs(__wireframe64) do
+				table.insert(wireframeAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(wireframeAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,wireframeAct)
+		end
 	CElseX({SetCVar("X",FWIRE[4],SetTo,0)}) -- 32bit
+		if Init ~= 0 then
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[1]))
+			local tranwireAct = {}
+			for k, v in pairs(__tranwire32) do
+				table.insert(tranwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(tranwireAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,tranwireAct)
+
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[2]))
+			local grpwireAct = {}
+			for k, v in pairs(__grpwire32) do
+				table.insert(grpwireAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(grpwireAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,grpwireAct)
+
+			CMov(IncludePlayer,0x6509B0,V(FWIRE[3]))
+			local wireframeAct = {}
+			for k, v in pairs(__wireframe32) do
+				table.insert(wireframeAct,SetDeaths(CurrentPlayer,SetTo,v,0))
+				table.insert(wireframeAct,SetMemory(0x6509B0,Add,1))
+			end	
+			DoActions2(IncludePlayer,wireframeAct)
+		end
 	CIfXEnd()
 
 	Trigger {
@@ -97299,7 +98197,6 @@ function CreateBulletTargetXEnd(PlayerID,Bag,UnitId,Angle,Speed,Time,Conditions,
 			end
 
 			table.insert(Act2,{TSetMemory,Vi(NRet[15],0x58/4),SetTo,V(NRet[16])})
-			table.insert(Act2,{TSetMemoryX,Vi(NRet[15],0x20/4),Add,Angle,0xFF00})
 			table.insert(Act2,{TSetMemoryX,Vi(NRet[15],0x4C/4),SetTo,135*256,0xFFFFFF00})
 			CDoActionsX(PlayerID,Act2)
 		NBagLoopEnd()
@@ -97307,120 +98204,154 @@ function CreateBulletTargetXEnd(PlayerID,Bag,UnitId,Angle,Speed,Time,Conditions,
 	CIfEnd()
 end
 
---[[
-function AttackGroundInitSetting(PlayerID,UnitId,HitUnitId,Weapon,Flingy,Sprite,Image,Script,Color,Cooldown,Damage,DamageUp,UpgradeID,BulletNumber,DamageType,Special,Splash,Preserve)
-	local X = {Preserved}
+function CreateBulletTargetXEnd2(PlayerID,Bag,UnitId,Angle,Speed,Time,Conditions,Actions,Preserve) -- XY->Angle
+	local Cond2 = {}
+	if Conditions == nil then Conditions = {} end
+	for k, v in pairs(Conditions) do
+		table.insert(Cond2,v)
+	end
+
+	local Act2 = {}
 	if Preserve == 0 then
-		X = {}
+		CIfOnce2(PlayerID,Cond2,Actions)
+	else
+		CIf2(PlayerID,Cond2,Actions)
 	end
-	if Cooldown == nil then
-		Cooldown = 255
-	end
+		NBagLoop(PlayerID,Bag,{V(NRet[15])})
+			NIfX(PlayerID,{TMemoryX(Vi(NRet[15],0x4C/4),AtLeast,1*256,0xFF00)})
+				f_Read(PlayerID,_Add(V(NRet[15]),10),V(NRet[16]))
+			
+				if type(Angle) == "number" then
+					table.insert(Act2,SetMemoryB(0x657888+BulletTable[UnitId][1], SetTo, Angle))
+				else
+					table.insert(Act2,{TSetMemoryB,0x657888,BulletTable[UnitId][1], SetTo, Angle})
+				end
 
-	local HitUnitFlingy = HitUnitId[2]
-	local HitUnitSprite = HitUnitId[3]
-	local HitUnitImage = HitUnitId[4]
+				if type(Speed) == "number" then
+					table.insert(Act2,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
+				else
+					table.insert(Act2,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
+				end
 
-	local BulletUnitFlingy = UnitId[2]
-	local BulletUnitSprite = UnitId[3]
-	local BulletUnitImage = UnitId[4]
-	local TrapAct, TrapAct2, TrapAct3
+				table.insert(Act2,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,9))
 
-	TrapAct = SetMemory(0x664080+UnitId[1]*4, SetTo, 939524100) -- 스패셜 어빌리티
-	TrapAct2 = SetMemoryB(0x660FC8+UnitId[1], SetTo, 197) -- 이동플래그
-	TrapAct3 = {SetMemory(0x664080+HitUnitId[1]*4, SetTo, 4),SetMemoryB(0x660FC8+HitUnitId[1], SetTo, 0)}
+				if type(Time) == "number" then
+					table.insert(Act2,SetMemoryB(0x657040+BulletTable[UnitId][1], SetTo, Time))
+				else
+					table.insert(Act2,{TSetMemoryB,0x657040,BulletTable[UnitId][1], SetTo, Time})
+				end
 
-	UnitId = UnitId[1]
-	HitUnitId = HitUnitId[1]
-	BulletTable[UnitId]={Weapon,Flingy,Sprite}
-
-	DoActions2(PlayerID,{
-		SetMemory(0x662350+HitUnitId*4,SetTo,8380000*256), -- 체력
-		SetMemoryB(0x6636B8+UnitId, SetTo, Weapon), -- 지상무기
-		SetMemoryB(0x6616E0+UnitId, SetTo, Weapon), -- 공중무기
-		SetMemoryB(0x6636B8+HitUnitId, SetTo, 130), -- 지상무기
-		SetMemoryB(0x6616E0+HitUnitId, SetTo, 130), -- 공중무기
-		SetMemoryB(0x662DB8+UnitId, SetTo, 255), -- 부가사거리
-		SetMemoryB(0x662DB8+HitUnitId, SetTo, 0), -- 부가사거리
-		TrapAct,
-		TrapAct2,
-		TrapAct3,
-		SetMemory(0x6617C8+UnitId*8, SetTo, 65537), -- 유닛크기
-		SetMemory(0x6617CC+UnitId*8, SetTo, 0), -- 버터쿠키
-		SetMemory(0x6617C8+HitUnitId*8, SetTo, 65537), -- 유닛크기
-		SetMemory(0x6617CC+HitUnitId*8, SetTo, 0), -- 버터쿠키
-		SetMemoryB(0x6644F8+UnitId, SetTo, BulletUnitFlingy), -- 비행정보
-		SetMemoryB(0x6644F8+HitUnitId, SetTo, HitUnitFlingy), -- 비행정보
-		SetMemoryB(0x6637A0+UnitId, SetTo, 2), -- 소속그룹
-		SetMemoryB(0x6637A0+HitUnitId, SetTo, 2), -- 소속그룹
-		SetMemoryW(0x661518+UnitId*2, SetTo, 0x1CF), -- 에디터 어빌리티
-		SetMemoryW(0x661518+HitUnitId*2, SetTo, 0x1CF), -- 에디터 어빌리티
-		--SetMemory(0x662860+UnitId*4, SetTo, 1), -- 생산크기
-		--SetMemory(0x662860+HitUnitId*4, SetTo, 1), -- 생산크기
-		SetMemoryB(0x662EA0+UnitId, SetTo, 2), -- 컴퓨터 기본 Ai
-		SetMemoryB(0x662268+UnitId, SetTo, 2), -- 사람 기본 Ai
-		SetMemoryB(0x664898+UnitId, SetTo, 2), -- 평상시 Ai
-		SetMemoryB(0x663320+UnitId, SetTo, 10), -- 유닛공격 Ai
-		SetMemoryB(0x663A50+UnitId, SetTo, 2), -- 공격과 이동 Ai
-		SetMemoryB(0x662098+UnitId, SetTo, 1), -- 우클릭 행동
-		SetMemoryB(0x662EA0+HitUnitId, SetTo, 23), -- 컴퓨터 기본 Ai
-		SetMemoryB(0x662268+HitUnitId, SetTo, 23), -- 사람 기본 Ai
-		SetMemoryB(0x664898+HitUnitId, SetTo, 23), -- 평상시 Ai
-		SetMemoryB(0x663320+HitUnitId, SetTo, 23), -- 유닛공격 Ai
-		SetMemoryB(0x663A50+HitUnitId, SetTo, 23), -- 공격과 이동 Ai
-		SetMemoryB(0x662098+HitUnitId, SetTo, 0), -- 우클릭 행동
-
-		SetMemory(0x6C9EF8+BulletUnitFlingy*4, SetTo, 1700), -- 최대속도
-		SetMemoryW(0x6C9C78+BulletUnitFlingy*2, SetTo, 70), -- 가속도
-		SetMemory(0x6C9930+BulletUnitFlingy*4, SetTo, 0), -- 멈추는거리
-		SetMemoryB(0x6C9E20+BulletUnitFlingy, SetTo, 40), -- 회전반경
-		SetMemoryB(0x6C9858+BulletUnitFlingy, SetTo, 0), -- 이동제어
-		SetMemory(0x6C9EF8+HitUnitFlingy*4, SetTo, 0), -- 최대속도
-		SetMemoryW(0x6C9C78+HitUnitFlingy*2, SetTo, 1), -- 가속도
-		SetMemory(0x6C9930+HitUnitFlingy*4, SetTo, 0), -- 멈추는거리
-		SetMemoryB(0x6C9E20+HitUnitFlingy, SetTo, 40), -- 회전반경
-		SetMemoryB(0x6C9858+HitUnitFlingy, SetTo, 0), -- 이동제어
-		SetMemoryW(0x6CA318+BulletUnitFlingy*2, SetTo, BulletUnitSprite), -- 스프라이트
-		SetMemoryW(0x6CA318+HitUnitFlingy*2, SetTo, HitUnitSprite), -- 스프라이트
-		SetMemoryW(0x666160+BulletUnitSprite*2, SetTo, BulletUnitImage), -- 이미지
-		SetMemoryW(0x666160+HitUnitSprite*2, SetTo, HitUnitImage), -- 이미지
-
-		SetMemoryB(0x656FB8+Weapon,SetTo,Cooldown), --  공격속도
-		SetMemoryW(0x656EB0+Weapon*2,SetTo,Damage), -- 데미지
-		SetMemoryW(0x657678+Weapon*2,SetTo,DamageUp), -- 추가데미지
-		SetMemoryB(0x6564E0+Weapon, SetTo, BulletNumber), -- 총알갯수
-		SetMemoryB(0x6571D0+Weapon, SetTo, UpgradeID), -- 업그레이드
-		SetMemoryB(0x657258+Weapon, SetTo, DamageType), -- 데미지형식
-		SetMemoryB(0x6566F8+Weapon, SetTo, Special), -- 폭발형
-		SetMemoryW(0x656888+Weapon*2, SetTo, Splash[1]), -- 스플안쪽
-		SetMemoryW(0x6570C8+Weapon*2, SetTo, Splash[2]), -- 스플중간
-		SetMemoryW(0x657780+Weapon*2, SetTo, Splash[3]), -- 스플외각
-		SetMemoryB(0x657888+Weapon, SetTo, 0), -- 발사회전값 
-		SetMemory(0x656A18+Weapon*4, SetTo, 0), -- 최소사거리
-		SetMemory(0x657470+Weapon*4, SetTo, 65536), -- 최대사거리
-		SetMemory(0x656CA8+Weapon*4, SetTo, Flingy), -- 무기 비행정보
-		SetMemoryB(0x657910+Weapon, SetTo, 0), -- 발사위치X
-		SetMemoryB(0x656C20+Weapon, SetTo, 0), -- 발사위치Y
-		SetMemoryB(0x656990+Weapon, SetTo, 0), -- 공격 가능 각도
-
-		SetMemoryW(0x6CA318+Flingy*2, SetTo, Sprite), -- 스프라이트
-		SetMemoryW(0x6C9C78+Flingy*2, SetTo, 50000), -- 가속도
-		SetMemory(0x6C9930+Flingy*4, SetTo, 0), -- 멈추는거리
-		SetMemoryB(0x6C9E20+Flingy, SetTo, 127), -- 회전반경
-		SetMemoryB(0x6C9858+Flingy, SetTo, 0), -- 이동제어
-
-		SetMemoryW(0x666160+Sprite*2, SetTo, Image), -- 이미지
-
-		SetMemoryB(0x669E28+Image, SetTo, Color), -- 화면출력
-		SetMemory(0x66EC48+Image*4,SetTo,Script), -- 스크립트
-	},X)
+				table.insert(Act2,{TSetMemory,Vi(NRet[15],0x58/4),SetTo,V(NRet[16])})
+				table.insert(Act2,{TSetMemoryX,Vi(NRet[15],0x4C/4),SetTo,135*256,0xFFFFFF00})
+				CDoActionsX(PlayerID,Act2)
+			NElseX()
+				NRemove(PlayerID,Bag)
+			NIfXEnd()
+		NBagLoopEnd()
+	CIfEnd()
 end
 
-function AttackGround(PlayerID,Owner,UnitId,HitUnitId,Height,Speed,Time,RemoveTime,FireType,Start,End,Conditions,Actions,Preserve)
-	local PointToDir = 1
-	if RemoveTime == nil then
-		RemoveTime = 16
+function CreateBulletXY(PlayerID,Owner,UnitId,Height,XLoc,YLoc,Angle,Speed,Time,Location,Conditions,Actions,Preserve)
+	local Act = {}
+	if Conditions == nil then Conditions = {} end
+	table.insert(Conditions,Memory(0x628438,AtLeast,1))
+	if Preserve == 0 then
+		CIfOnce2(PlayerID,Conditions)
+	else
+		CIf2(PlayerID,Conditions)
 	end
+		local X = Location[2]
+		local Y = Location[3]
+		if type(Location) == "table" then
+			if type(Location[2]) == "number" then
+				table.insert(Act,SetLoc(Location[1],0,SetTo,X))
+				table.insert(Act,SetLoc(Location[1],8,SetTo,X))
+			elseif Location[2][4] == "V" then
+				table.insert(Act,{TSetLoc,Location[1],0,SetTo,X})
+				table.insert(Act,{TSetLoc,Location[1],8,SetTo,X})
+			else
+				CreateBulletXY_InputData_Error()
+			end
+			if type(Location[3]) == "number" then
+				table.insert(Act,SetLoc(Location[1],4,SetTo,Y-2))
+				table.insert(Act,SetLoc(Location[1],12,SetTo,Y-2))
+			elseif Location[3][4] == "V" then
+				if Y[5] == nil then
+					Y[5] = 0
+				end
+				table.insert(Act,{TSetLoc,Location[1],4,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+				table.insert(Act,{TSetLoc,Location[1],12,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+			else
+				CreateBulletXY_InputData_Error()
+			end
+			Location = Location[1]
+		end
+
+		if type(YLoc) == "number" then
+			if type(XLoc) == "number" then 
+				f_Atan2X(PlayerID,_iSub(_Mov(YLoc),Y),_iSub(_Mov(XLoc),X),V(NRet[14]))
+			else
+				f_Atan2X(PlayerID,_iSub(_Mov(YLoc),Y),_iSub(XLoc,X),V(NRet[14]))
+			end
+		else
+			if type(XLoc) == "number" then 
+				f_Atan2X(PlayerID,_iSub(YLoc,Y),_iSub(_Mov(XLoc),X),V(NRet[14]))
+			else
+				f_Atan2X(PlayerID,_iSub(YLoc,Y),_iSub(XLoc,X),V(NRet[14]))
+			end
+		end
+
+		if Angle ~= nil then
+			CAdd(PlayerID,V(NRet[14]),Angle,nil,0xFF)
+		end
+
+		f_Read(PlayerID,0x628438,nil,V(NRet[16]))
+
+		table.insert(Act,SetMemory(0x66F048, SetTo, 86))
+
+		if type(Height) == "number" then
+			table.insert(Act,SetMemoryB(0x663150+UnitId,SetTo,Height))
+		elseif Height[4] == "V" then 
+			table.insert(Act,{TSetMemoryB,0x663150,UnitId,SetTo,Height})
+		end
+
+		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,9))
+
+		if Actions ~= nil then
+			for k, v in pairs(Actions) do
+				table.insert(Act,v)
+			end
+		end
+
+		table.insert(Act,CreateUnit(1,UnitId,Location,Owner))
+
+		if type(Speed) == "number" then
+			table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
+		else
+			table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
+		end
+
+		if type(Time) == "number" then
+			table.insert(Act,SetMemoryB(0x657040+BulletTable[UnitId][1], SetTo, Time))
+		else
+			table.insert(Act,{TSetMemoryB,0x657040,BulletTable[UnitId][1], SetTo, Time})
+		end
+
+		CDoActionsX(PlayerID,Act)
+		f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+
+		ClShift2(PlayerID,V(NRet[14]),8)
+
+		CDoActions(PlayerID,{
+			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
+			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Vi(NRet[14],128*256),0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
+			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,6,0xFFFF),
+		})
+	CIfEnd()
+end
+
+function CreateBullet2(PlayerID,Bag,Owner,UnitId,Height,Angle,Speed,Time,Location,Conditions,Actions,Preserve)
 	local Act = {}
 	if Conditions == nil then Conditions = {} end
 	table.insert(Conditions,Memory(0x628438,AtLeast,1))
@@ -97431,72 +98362,38 @@ function AttackGround(PlayerID,Owner,UnitId,HitUnitId,Height,Speed,Time,RemoveTi
 	end
 		f_Read(PlayerID,0x628438,nil,V(NRet[16]))
 
-		if type(Height) == "number" then -- 쏘는 유닛에게만 적용
+		table.insert(Act,SetMemory(0x66F048, SetTo, 86))
+
+		if type(Height) == "number" then
 			table.insert(Act,SetMemoryB(0x663150+UnitId,SetTo,Height))
 		elseif Height[4] == "V" then 
 			table.insert(Act,{TSetMemoryB,0x663150,UnitId,SetTo,Height})
 		end
 
-		local StartLoc, EndLoc 
-
-		if type(Start) == "table" then
-			local X = Start[2]
-			if type(Start[2]) == "number" then
-				table.insert(Act,SetLoc(Start[1],0,SetTo,X))
-				table.insert(Act,SetLoc(Start[1],8,SetTo,X))
-			elseif Start[2][4] == "V" then
-				table.insert(Act,{TSetLoc,Start[1],0,SetTo,X})
-				table.insert(Act,{TSetLoc,Start[1],8,SetTo,X})
+		if type(Location) == "table" then
+			local X = Location[2]
+			if type(Location[2]) == "number" then
+				table.insert(Act,SetLoc(Location[1],0,SetTo,X))
+				table.insert(Act,SetLoc(Location[1],8,SetTo,X))
+			elseif Location[2][4] == "V" then
+				table.insert(Act,{TSetLoc,Location[1],0,SetTo,X})
+				table.insert(Act,{TSetLoc,Location[1],8,SetTo,X})
 			end
-			local Y = Start[3]
-			if type(Start[3]) == "number" then
-				table.insert(Act,SetLoc(Start[1],4,SetTo,Y))
-				table.insert(Act,SetLoc(Start[1],12,SetTo,Y))
-			elseif Start[3][4] == "V" then
+			local Y = Location[3]
+			if type(Location[3]) == "number" then
+				table.insert(Act,SetLoc(Location[1],4,SetTo,Y-2))
+				table.insert(Act,SetLoc(Location[1],12,SetTo,Y-2))
+			elseif Location[3][4] == "V" then
 				if Y[5] == nil then
 					Y[5] = 0
 				end
-				table.insert(Act,{TSetLoc,Start[1],4,SetTo,Y})
-				table.insert(Act,{TSetLoc,Start[1],12,SetTo,Y})
+				table.insert(Act,{TSetLoc,Location[1],4,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+				table.insert(Act,{TSetLoc,Location[1],12,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
 			end
-			StartLoc = Start[1]
-		else
-			StartLoc = Start
+			Location = Location[1]
 		end
 
-		if type(End) == "table" then
-			local X = End[2]
-			if type(End[2]) == "number" then
-				table.insert(Act,SetLoc(End[1],0,SetTo,X))
-				table.insert(Act,SetLoc(End[1],8,SetTo,X))
-			elseif End[2][4] == "V" then
-				table.insert(Act,{TSetLoc,End[1],0,SetTo,X})
-				table.insert(Act,{TSetLoc,End[1],8,SetTo,X})
-			end
-			local Y = End[3]
-			if type(End[3]) == "number" then
-				table.insert(Act,SetLoc(End[1],4,SetTo,Y))
-				table.insert(Act,SetLoc(End[1],12,SetTo,Y))
-			elseif End[3][4] == "V" then
-				if Y[5] == nil then
-					Y[5] = 0
-				end
-				table.insert(Act,{TSetLoc,End[1],4,SetTo,Y})
-				table.insert(Act,{TSetLoc,End[1],12,SetTo,Y})
-			end
-			EndLoc = End[1]
-		else
-			EndLoc = End
-		end
-
-
-		if PointToDir == 1 then
-			table.insert(Act,SetMemoryB(0x657888+BulletTable[UnitId][1],SetTo,0))
-		else
-			table.insert(Act,SetMemoryB(0x657888+BulletTable[UnitId][1],SetTo,128))
-		end
-
-		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,FireType))
+		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,9))
 
 		if Actions ~= nil then
 			for k, v in pairs(Actions) do
@@ -97504,40 +98401,12 @@ function AttackGround(PlayerID,Owner,UnitId,HitUnitId,Height,Speed,Time,RemoveTi
 			end
 		end
 
-		if PointToDir == 1 then
-			if type(Speed) == "number" then
-				table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
-			else
-				table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
-			end
-			--table.insert(Act,SetMemoryW(0x6C9C78+BulletTable[UnitId][2]*2,SetTo,50000))
-			--table.insert(Act,SetMemoryB(0x6C9E20+BulletTable[UnitId][2],SetTo,127))
-			--table.insert(Act,SetMemory(0x6C9930+BulletTable[UnitId][2]*4,SetTo,0))
+		table.insert(Act,CreateUnit(1,UnitId,Location,Owner))
+
+		if type(Speed) == "number" then
+			table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
 		else
-			if type(Speed) == "number" then
-				table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,Speed))
-			else
-				table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,Speed})
-			end
-
-			if type(Acceleration) == "number" then
-				table.insert(Act,SetMemoryW(0x6C9C78+BulletTable[UnitId][2]*2,SetTo,Acceleration))
-			else
-				table.insert(Act,{TSetMemoryW,0x6C9C78+BulletTable[UnitId][2]*2,SetTo,Acceleration})
-			end
-
-			if type(TurnRadius) == "number" then
-				table.insert(Act,SetMemoryB(0x6C9E20+BulletTable[UnitId][2],SetTo,TurnRadius))
-			else
-				table.insert(Act,{TSetMemoryB,0x6C9E20+BulletTable[UnitId][2],SetTo,TurnRadius})
-			end
-
-			if type(Halt) == "number" then
-				table.insert(Act,SetMemory(0x6C9930+BulletTable[UnitId][2]*4,SetTo,Halt))
-			else
-				table.insert(Act,{TSetMemory,0x6C9930+BulletTable[UnitId][2]*4,SetTo,Halt})
-			end
-
+			table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
 		end
 
 		if type(Time) == "number" then
@@ -97546,37 +98415,798 @@ function AttackGround(PlayerID,Owner,UnitId,HitUnitId,Height,Speed,Time,RemoveTi
 			table.insert(Act,{TSetMemoryB,0x657040,BulletTable[UnitId][1], SetTo, Time})
 		end
 
-		if type(Owner) == "number" then
-			Owner = {Owner,Owner}
-		end
-
-		table.insert(Act,CreateUnit(1,UnitId,StartLoc,Owner[1]))
-
 		CDoActionsX(PlayerID,Act)
+		f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+		if type(Angle) == "number" then
+			Angle = Angle * 256
+		end
+		CDoActions(PlayerID,{
+			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
+			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
+			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,12,0xFFFF),
+		})
 
-		CIfX(PlayerID,Memory(0x628438,AtLeast,1))
-			f_Read(PlayerID,0x628438,V(NRet[14]),V(NRet[15]))
-
-			if RemoveTime == "X" then
-				CDoActions(PlayerID,{
-					CreateUnit(1,HitUnitId,EndLoc,Owner[2]),
-					TSetMemory(Vi(NRet[16],0x5C/4),SetTo,V(NRet[14])),
-					TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,10*256,0xFF00),
-				})
-			else
-				CDoActions(PlayerID,{
-					CreateUnit(1,HitUnitId,EndLoc,Owner[2]),
-					TSetMemory(Vi(NRet[16],0x5C/4),SetTo,V(NRet[14])),
-					TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,10*256,0xFF00),
-					TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,RemoveTime,0xFFFF),
-					TSetMemoryX(Vi(NRet[15],0x110/4),SetTo,RemoveTime,0xFFFF),
-				})
-			end
-		CElseX()
-			CDoActions(PlayerID,{
-				TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,1,0xFFFF),
-			})
-		CIfXEnd()
+		NAppend(PlayerID,Bag,_LMov({Angle,V(NRet[16])}))
 	CIfEnd()
 end
-]]--
+
+function CreateStorm2(PlayerID,Bag,Owner,UnitId,Height,Angle,ImageID,Time,Location,Conditions,Actions,Preserve) -- 스톰방식
+	local Act = {}
+	if Conditions == nil then Conditions = {} end
+	table.insert(Conditions,Memory(0x628438,AtLeast,1))
+	if Preserve == 0 then
+		CIfOnce2(PlayerID,Conditions)
+	else
+		CIf2(PlayerID,Conditions)
+	end
+		f_Read(PlayerID,0x628438,nil,V(NRet[16]))
+
+		table.insert(Act,SetMemory(0x66F048, SetTo, 86))
+
+		if type(Height) == "number" then
+			table.insert(Act,SetMemoryB(0x663150+UnitId,SetTo,Height))
+		elseif Height[4] == "V" then 
+			table.insert(Act,{TSetMemoryB,0x663150,UnitId,SetTo,Height})
+		end
+
+		if type(Location) == "table" then
+			local X = Location[2]
+			if type(Location[2]) == "number" then
+				table.insert(Act,SetLoc(Location[1],0,SetTo,X))
+				table.insert(Act,SetLoc(Location[1],8,SetTo,X))
+			elseif Location[2][4] == "V" then
+				table.insert(Act,{TSetLoc,Location[1],0,SetTo,X})
+				table.insert(Act,{TSetLoc,Location[1],8,SetTo,X})
+			end
+			local Y = Location[3]
+			if type(Location[3]) == "number" then
+				table.insert(Act,SetLoc(Location[1],4,SetTo,Y-2))
+				table.insert(Act,SetLoc(Location[1],12,SetTo,Y-2))
+			elseif Location[3][4] == "V" then
+				if Y[5] == nil then
+					Y[5] = 0
+				end
+				table.insert(Act,{TSetLoc,Location[1],4,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+				table.insert(Act,{TSetLoc,Location[1],12,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+			end
+			Location = Location[1]
+		end
+
+		if Actions ~= nil then
+			for k, v in pairs(Actions) do
+				table.insert(Act,v)
+			end
+		end
+
+		table.insert(Act,CreateUnit(1,UnitId,Location,Owner))
+		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,3))
+
+		if type(ImageID) == "number" then
+			table.insert(Act,SetMemory(0x66EC48+ImageID*4,SetTo,236))
+			table.insert(Act,SetMemoryB(0x66D4D8+ImageID, SetTo, 1))
+		else
+			table.insert(Act,{TSetMemory,Vi(ImageID[2],EPD(0x66EC48),ImageID[1],ImageID[3]),SetTo,236})
+			table.insert(Act,{TSetMemoryB,0x66D4D8,ImageID,SetTo,1})
+		end
+
+		if type(Time) == "number" then
+			table.insert(Act,SetMemoryB(0x657040+BulletTable[UnitId][1], SetTo, Time))
+		else
+			table.insert(Act,{TSetMemoryB,0x657040,BulletTable[UnitId][1], SetTo, Time})
+		end
+
+		CDoActionsX(PlayerID,Act)
+		f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+		if type(Angle) == "number" then
+			Angle = Angle * 256
+		end
+		CDoActions(PlayerID,{
+			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
+			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
+			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,12,0xFFFF),
+		})
+
+		NAppend(PlayerID,Bag,_LMov({Angle,V(NRet[16])}))
+	CIfEnd()
+end
+
+function CreateSprite2(PlayerID,Bag,Owner,UnitId,Height,Angle,Speed,Location,Conditions,Actions,Preserve) -- 영구 스프라이트
+		local Act = {}
+	if Conditions == nil then Conditions = {} end
+	table.insert(Conditions,Memory(0x628438,AtLeast,1))
+	if Preserve == 0 then
+		CIfOnce2(PlayerID,Conditions)
+	else
+		CIf2(PlayerID,Conditions)
+	end
+		f_Read(PlayerID,0x628438,nil,V(NRet[16]))
+
+		table.insert(Act,SetMemory(0x66F048, SetTo, 86))
+
+		if type(Height) == "number" then
+			table.insert(Act,SetMemoryB(0x663150+UnitId,SetTo,Height))
+		elseif Height[4] == "V" then 
+			table.insert(Act,{TSetMemoryB,0x663150,UnitId,SetTo,Height})
+		end
+
+		if type(Location) == "table" then
+			local X = Location[2]
+			if type(Location[2]) == "number" then
+				table.insert(Act,SetLoc(Location[1],0,SetTo,X))
+				table.insert(Act,SetLoc(Location[1],8,SetTo,X))
+			elseif Location[2][4] == "V" then
+				table.insert(Act,{TSetLoc,Location[1],0,SetTo,X})
+				table.insert(Act,{TSetLoc,Location[1],8,SetTo,X})
+			end
+			local Y = Location[3]
+			if type(Location[3]) == "number" then
+				table.insert(Act,SetLoc(Location[1],4,SetTo,Y-2))
+				table.insert(Act,SetLoc(Location[1],12,SetTo,Y-2))
+			elseif Location[3][4] == "V" then
+				if Y[5] == nil then
+					Y[5] = 0
+				end
+				table.insert(Act,{TSetLoc,Location[1],4,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+				table.insert(Act,{TSetLoc,Location[1],12,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+			end
+			Location = Location[1]
+		end
+
+		if Actions ~= nil then
+			for k, v in pairs(Actions) do
+				table.insert(Act,v)
+			end
+		end
+
+		table.insert(Act,CreateUnit(1,UnitId,Location,Owner))
+		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,7))
+
+		if type(Speed) == "number" then
+			table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
+		else
+			table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
+		end
+
+		CDoActionsX(PlayerID,Act)
+		f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+		if type(Angle) == "number" then
+			Angle = Angle * 256
+		end
+		CDoActions(PlayerID,{
+			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
+			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Angle,0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
+			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,12,0xFFFF),
+		})
+
+		NAppend(PlayerID,Bag,_LMov({Angle,V(NRet[16])}))
+	CIfEnd()
+end
+
+function CreateBulletXY2(PlayerID,Bag,Owner,UnitId,Height,XLoc,YLoc,Angle,Speed,Time,Location,Conditions,Actions,Preserve)
+	local Act = {}
+	if Conditions == nil then Conditions = {} end
+	table.insert(Conditions,Memory(0x628438,AtLeast,1))
+	if Preserve == 0 then
+		CIfOnce2(PlayerID,Conditions)
+	else
+		CIf2(PlayerID,Conditions)
+	end
+		local X = Location[2]
+		local Y = Location[3]
+		if type(Location) == "table" then
+			if type(Location[2]) == "number" then
+				table.insert(Act,SetLoc(Location[1],0,SetTo,X))
+				table.insert(Act,SetLoc(Location[1],8,SetTo,X))
+			elseif Location[2][4] == "V" then
+				table.insert(Act,{TSetLoc,Location[1],0,SetTo,X})
+				table.insert(Act,{TSetLoc,Location[1],8,SetTo,X})
+			else
+				CreateBulletXY_InputData_Error()
+			end
+			if type(Location[3]) == "number" then
+				table.insert(Act,SetLoc(Location[1],4,SetTo,Y-2))
+				table.insert(Act,SetLoc(Location[1],12,SetTo,Y-2))
+			elseif Location[3][4] == "V" then
+				if Y[5] == nil then
+					Y[5] = 0
+				end
+				table.insert(Act,{TSetLoc,Location[1],4,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+				table.insert(Act,{TSetLoc,Location[1],12,SetTo,Vi(Y[2],-2+Y[5],Y[1],Y[3])})
+			else
+				CreateBulletXY_InputData_Error()
+			end
+			Location = Location[1]
+		end
+
+		if type(YLoc) == "number" then
+			if type(XLoc) == "number" then 
+				f_Atan2X(PlayerID,_iSub(_Mov(YLoc),Y),_iSub(_Mov(XLoc),X),V(NRet[14]))
+			else
+				f_Atan2X(PlayerID,_iSub(_Mov(YLoc),Y),_iSub(XLoc,X),V(NRet[14]))
+			end
+		else
+			if type(XLoc) == "number" then 
+				f_Atan2X(PlayerID,_iSub(YLoc,Y),_iSub(_Mov(XLoc),X),V(NRet[14]))
+			else
+				f_Atan2X(PlayerID,_iSub(YLoc,Y),_iSub(XLoc,X),V(NRet[14]))
+			end
+		end
+
+		if Angle ~= nil then
+			CAdd(PlayerID,V(NRet[14]),Angle,nil,0xFF)
+		end
+
+		f_Read(PlayerID,0x628438,nil,V(NRet[16]))
+
+		table.insert(Act,SetMemory(0x66F048, SetTo, 86))
+
+		if type(Height) == "number" then
+			table.insert(Act,SetMemoryB(0x663150+UnitId,SetTo,Height))
+		elseif Height[4] == "V" then 
+			table.insert(Act,{TSetMemoryB,0x663150,UnitId,SetTo,Height})
+		end
+
+		table.insert(Act,SetMemoryB(0x656670+BulletTable[UnitId][1],SetTo,9))
+
+		if Actions ~= nil then
+			for k, v in pairs(Actions) do
+				table.insert(Act,v)
+			end
+		end
+
+		table.insert(Act,CreateUnit(1,UnitId,Location,Owner))
+
+		if type(Speed) == "number" then
+			table.insert(Act,SetMemory(0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,-Speed))
+		else
+			table.insert(Act,{TSetMemory,0x6C9EF8+BulletTable[UnitId][2]*4,SetTo,{_Neg,Speed}})
+		end
+
+		if type(Time) == "number" then
+			table.insert(Act,SetMemoryB(0x657040+BulletTable[UnitId][1], SetTo, Time))
+		else
+			table.insert(Act,{TSetMemoryB,0x657040,BulletTable[UnitId][1], SetTo, Time})
+		end
+
+		CDoActionsX(PlayerID,Act)
+		f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+
+		ClShift2(PlayerID,V(NRet[14]),8)
+
+		CDoActions(PlayerID,{
+			TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15])),
+			TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Vi(NRet[14],128*256),0xFF00),
+			TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFF00),
+			TSetMemoryX(Vi(NRet[16],0x110/4),SetTo,12,0xFFFF),
+		})
+
+		NAppend(PlayerID,Bag,_LMov({V(NRet[14]),V(NRet[16])}))
+	CIfEnd()
+end
+
+function CreateBullet2End(PlayerID,Bag,Conditions,Actions,Preserve) -- XY->Angle
+	local Cond2 = {}
+	if Conditions == nil then Conditions = {} end
+	for k, v in pairs(Conditions) do
+		table.insert(Cond2,v)
+	end
+
+	local Act2 = {}
+	if Preserve == 0 then
+		CIfOnce2(PlayerID,Cond2,Actions)
+	else
+		CIf2(PlayerID,Cond2,Actions)
+	end
+		NBagLoop(PlayerID,Bag,{V(NRet[14]),V(NRet[16])})
+			NIfX(PlayerID,{TMemoryX(Vi(NRet[16],0x4C/4),AtLeast,1*256,0xFF00)})
+				f_Read(PlayerID,_Add(V(NRet[16]),10),V(NRet[15]))
+				CDoActions(PlayerID,{TSetMemoryX(Vi(NRet[16],0x4C/4),SetTo,135*256,0xFFFFFF00),
+									TSetMemoryX(Vi(NRet[16],0x20/4),SetTo,Vi(NRet[14],128*256),0xFF00),
+									TSetMemory(Vi(NRet[16],0x58/4),SetTo,V(NRet[15]))})
+			NElseX()
+				NRemove(PlayerID,Bag)
+			NIfXEnd()
+		NBagLoopEnd()
+	CIfEnd()
+end
+
+function CMathFuncN(PlayerID,Func,Range,Null,Short,Localflag,Limit)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	if Null == nil then
+		CMathFuncN_InputData_Error()
+	end
+	
+	local Total = 1
+	local SubTotal = {}
+	local SubTotalN = {}
+	local SubTotalStack = {}
+	local SubSize = {}
+	for i = 1, #Range do
+		SubTotal[i] = Range[i][2] - Range[i][1] + 1 -- Max - min
+		SubSize[i] = SubTotal[i]
+		if SubTotal[i] < 0 then
+			CMathFuncN_InputData_Error()
+		end
+		for j = 0, 31 do
+			local Temp = bit32.lshift(1,j)
+			if Temp >= SubTotal[i] then
+				SubTotal[i] = Temp
+				SubTotalN[i] = j
+				break
+			end
+		end
+		SubTotalStack[i] = Total
+		Total = Total * SubTotal[i]
+	end
+
+	if Total*4 > Limit then
+		CMathFuncN_Limit_Overflow()
+	end
+
+	local CMath
+	if Localflag == 1 then
+		CMath = InitCFunc(PlayerID,#Range)
+	else
+		CMath = InitCFunc(PlayerID)
+	end
+	local Para = CFunc(CMath)
+	
+		local MathArr = {}
+		local CountArr = {}
+		for i = 1, #Range do
+			table.insert(CountArr,0)
+		end
+
+		for j = 1, Total do
+			local Check = 0
+			for i = 1, #Range do
+				if CountArr[i] >= SubSize[i] then
+					Check = 1
+				end
+			end
+
+			local ParaArr = {}
+			for i = 1, #Range do
+				table.insert(ParaArr,Range[i][1]+CountArr[i])
+			end
+
+			if Check == 0 then
+				table.insert(MathArr,_G[Func](table.unpack(ParaArr)))
+			else
+				table.insert(MathArr,0)
+			end
+
+			for i = 1, #Range do
+				if j%SubTotalStack[i] == 0 then
+					CountArr[i] = CountArr[i] + 1
+					if CountArr[i] >= SubTotal[i] then
+						CountArr[i] = 0
+					end
+				end
+			end
+		end
+
+		local ParaCond = {}
+		local ParaAct = {}
+		for i = 1, #Range do
+			table.insert(ParaCond,NVar(Para[i],AtMost,Range[i][2]-Range[i][1]))
+			table.insert(ParaAct,SetNVar(Para[i],Add,-Range[i][1]))	
+		end
+		DoActionsX(PlayerID,ParaAct)
+
+		NIfX(PlayerID,Never())
+			 local MathFArr = f_GetFileArrptrN(PlayerID,MathArr,4,1) 
+		NElseIfX(ParaCond)
+			local Stack = 0		
+			for i = 2, #Range do
+				Stack = Stack + SubTotalN[i-1]
+				CAdd(PlayerID,Para[1],_lShift2(Para[i],Stack))
+			end
+
+			if Short == 1 then
+				f_SHRead(PlayerID,FArr(MathFArr,Para[1]),Para[1],nil,1)
+			else
+				f_Read(PlayerID,FArr(MathFArr,Para[1]),Para[1],"X",0xFFFFFFFF,1)
+	 		end
+			
+		 	CFuncReturn({Para[1]})
+	 	NElseX()
+	 		CFuncReturn({Null})
+	 	NIfXEnd()
+	CFuncEnd()
+	return CMath 
+end
+
+function InitCache(PlayerID,Size,Null)
+	return {CreateFArrX(Null,Size*4,PlayerID),Size,Null}
+end
+
+function SaveCache(PlayerID,Cache,Time,Input)
+	STPopTrigArr(PlayerID)
+	local Size = Cache[2]
+	if type(Time) == "number" and Time >= 0 and Time < Size then
+		if type(Input) == "number" then
+			DoActionsX(PlayerID,{SetMemX(FArr(Cache[1],Time),SetTo,Input)})
+		else
+			CDoActions(PlayerID,{TSetMemory(FArr(Cache[1],Time),SetTo,Input)})
+		end
+	elseif Time[4] == "V" then
+		CIf(PlayerID,{NVar(Time,AtMost,Size-1)})
+			CWrite(PlayerID,Vi(Time[2],Cache[1],Time[1],Time[3]),Input)
+		CIfEnd()
+	else
+		SaveCache_InputData_Error()
+	end
+end
+
+function LoadCache(PlayerID,Cache,Time,Output,Short)
+	STPopTrigArr(PlayerID)
+	local Null = Cache[3]
+	local Size = Cache[2]
+	
+	if type(Time) == "number" and Time < Size then
+		if Short == 1 then
+			f_SHRead(PlayerID,FArr(Cache[1],Time),Output)
+		else
+			f_Read(PlayerID,FArr(Cache[1],Time),Output)
+ 		end
+	elseif Time[4] == "V" then
+		CIfX(PlayerID,{NVar(Time,AtMost,Size-1)})
+			if Short == 1 then
+				f_SHRead(PlayerID,FArr(Cache[1],Time),Output)
+			else
+				f_Read(PlayerID,FArr(Cache[1],Time),Output)
+	 		end
+		CElseX()
+			if type(Output) == "number" then
+				DoActionsX(PlayerID,SetMemory(Output,SetTo,Null))
+			elseif Output[4] == "V" then
+				DoActionsX(PlayerID,SetNVar(Output,SetTo,Null))
+			else
+				DoActionsX(PlayerID,SetMemX(Output,SetTo,Null))
+			end
+		CIfXEnd()
+	else
+		LoadCache_InputData_Error()	
+	end
+end
+
+function ResetCache(PlayerID,Cache,Start,End)
+	STPopTrigArr(PlayerID)
+	local Null = Cache[3]
+	local Size = Cache[2]
+	if type(Start) == "number" and Start < Size-1 then
+		if type(End) == "number" and End < Size-1 then
+			DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+			CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+				CWrite(PlayerID,Vi(NRet[16],Cache[1]),Null)
+			CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(End,AtMost,Size-1)})
+				DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],Cache[1]),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			ResetCache_InputData_Error()
+		end
+	elseif Start[4] == "V" then
+		if type(End) == "number" and End < Size-1 then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],Cache[1]),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],Cache[1]),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			ResetCache_InputData_Error()
+		end
+	else
+		ResetCache_InputData_Error()
+	end
+end
+
+function InitCache2(PlayerID,Number,Size,Null)
+	local LSBit = 0
+	for j = 0, 31 do
+		local Temp = bit32.lshift(1,j)
+		if Temp >= Size then
+			Size = Temp
+			LSBit = j
+			break
+		end
+	end
+	return {CreateFArrX(Null,Size*Number*4,PlayerID),Size,Null,Number,LSBit}
+end
+
+function SaveCache2(PlayerID,Cache2,Number,Time,Input)
+	STPopTrigArr(PlayerID)
+	local Header = Cache2[1]
+	local Size = Cache2[2]
+	local BaseNum = Cache2[4]
+	local LSBit = Cache2[5]
+	if type(Time) == "number" and Time >= 0 and Time < Size then
+		if type(Number) == "number" and Number < BaseNum then
+			if type(Input) == "number" then
+				DoActionsX(PlayerID,{SetMemX(FArr(Header,Time+Number*Size),SetTo,Input)})
+			else
+				CDoActions(PlayerID,{TSetMemory(FArr(Header,Time+Number*Size),SetTo,Input)})
+			end
+		elseif Number[4] == "V" then
+			CIf(PlayerID,{NVar(Number,AtMost,BaseNum-1)})
+				ClShift2(PlayerID,V(NRet[16]),Number,LSBit)
+				CWrite(PlayerID,Vi(NRet[16],{Header[1],Header[2],Header[3]+0x4*Time,0}),Input)
+			CIfEnd()
+		else
+			SaveCache2_InputData_Error()
+		end
+	elseif Time[4] == "V" then
+		if type(Number) == "number" and Number < BaseNum then
+			CIf(PlayerID,{NVar(Time,AtMost,Size-1)})
+				CWrite(PlayerID,Vi(Time[2],{Header[1],Header[2],Header[3]+0x4*Number*Size,0},Time[1],Time[3]),Input)
+			CIfEnd()
+		elseif Number[4] == "V" then
+			CIf(PlayerID,{NVar(Time,AtMost,Size-1),NVar(Number,AtMost,BaseNum-1)})
+				ClShift2(PlayerID,V(NRet[16]),Number,LSBit)
+				CAdd(PlayerID,V(NRet[16]),Time)
+				CWrite(PlayerID,Vi(NRet[16],Header),Input)
+			CIfEnd()
+		else
+			SaveCache2_InputData_Error()
+		end
+	else
+		SaveCache2_InputData_Error()
+	end
+end
+
+function LoadCache2(PlayerID,Cache2,Number,Time,Output,Short)
+	STPopTrigArr(PlayerID)
+	local Null = Cache2[3]
+	local Header = Cache2[1]
+	local Size = Cache2[2]
+	local BaseNum = Cache2[4]
+	local LSBit = Cache2[5]
+	
+	if type(Time) == "number" and Time < Size then
+		if type(Number) == "number" and Number < BaseNum then
+			if Short == 1 then
+				f_SHRead(PlayerID,FArr(Header,Time+Number*Size),Output)
+			else
+				f_Read(PlayerID,FArr(Header,Time+Number*Size),Output)
+	 		end	
+		elseif Number[4] == "V" then
+			CIfX(PlayerID,{NVar(Number,AtMost,BaseNum-1)})
+				ClShift2(PlayerID,V(NRet[16]),Number,LSBit)
+				if Short == 1 then
+					f_SHRead(PlayerID,FArr({Header[1],Header[2],Header[3]+0x4*Time,0},V(NRet[16])),Output)
+				else
+					f_Read(PlayerID,FArr({Header[1],Header[2],Header[3]+0x4*Time,0},V(NRet[16])),Output)
+		 		end
+			CElseX()
+				if type(Output) == "number" then
+					DoActionsX(PlayerID,SetMemory(Output,SetTo,Null))
+				elseif Output[4] == "V" then
+					DoActionsX(PlayerID,SetNVar(Output,SetTo,Null))
+				else
+					DoActionsX(PlayerID,SetMemX(Output,SetTo,Null))
+				end
+			CIfXEnd()
+		else
+			LoadCache2_InputData_Error()
+		end
+	elseif Time[4] == "V" then
+		if type(Number) == "number" and Number < BaseNum then
+			CIfX(PlayerID,{NVar(Time,AtMost,Size-1)})
+				if Short == 1 then
+					f_SHRead(PlayerID,FArr({Header[1],Header[2],Header[3]+0x4*Number*Size,0},Time),Output)
+				else
+					f_Read(PlayerID,FArr({Header[1],Header[2],Header[3]+0x4*Number*Size,0},Time),Output)
+		 		end
+			CElseX()
+				if type(Output) == "number" then
+					DoActionsX(PlayerID,SetMemory(Output,SetTo,Null))
+				elseif Output[4] == "V" then
+					DoActionsX(PlayerID,SetNVar(Output,SetTo,Null))
+				else
+					DoActionsX(PlayerID,SetMemX(Output,SetTo,Null))
+				end
+			CIfXEnd()
+		elseif Number[4] == "V" then
+			CIfX(PlayerID,{NVar(Time,AtMost,Size-1),NVar(Number,AtMost,BaseNum-1)})
+				ClShift2(PlayerID,V(NRet[16]),Number,LSBit)
+				CAdd(PlayerID,V(NRet[16]),Time)
+				if Short == 1 then
+					f_SHRead(PlayerID,FArr(Header,V(NRet[16])),Output)
+				else
+					f_Read(PlayerID,FArr(Header,V(NRet[16])),Output)
+		 		end
+			CElseX()
+				if type(Output) == "number" then
+					DoActionsX(PlayerID,SetMemory(Output,SetTo,Null))
+				elseif Output[4] == "V" then
+					DoActionsX(PlayerID,SetNVar(Output,SetTo,Null))
+				else
+					DoActionsX(PlayerID,SetMemX(Output,SetTo,Null))
+				end
+			CIfXEnd()
+		else
+			LoadCache2_InputData_Error()
+		end
+	else
+		LoadCache2_InputData_Error()
+	end
+end
+
+function ResetCache2(PlayerID,Cache2,Number,Start,End)
+	STPopTrigArr(PlayerID)
+	local Null = Cache2[3]
+	local Header = Cache2[1]
+	local Size = Cache2[2]
+	local BaseNum = Cache2[4]
+	local LSBit = Cache2[5]
+
+	if Number == nil then
+		if type(Start) == "number" and Start < Size-1 then
+			if type(End) == "number" and End < Size-1 then
+				DoActionsX(PlayerID,{SetNVar(V(NRet[14]),SetTo,0)})
+				CWhileX(PlayerID,{NVar(V(NRet[14]),AtMost,BaseNum-1)})
+					ClShift2(PlayerID,V(NRet[15]),V(NRet[14]),LSBit)
+					DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+					CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[15],Header),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+				CWhileXEnd({SetNVar(V(NRet[14]),Add,1)})
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(End,AtMost,Size-1)})
+					DoActionsX(PlayerID,{SetNVar(V(NRet[14]),SetTo,0)})
+					CWhileX(PlayerID,{NVar(V(NRet[14]),AtMost,BaseNum-1)})
+						ClShift2(PlayerID,V(NRet[15]),V(NRet[14]),LSBit)
+						DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+						CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+						CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+							CWrite(PlayerID,Vi(NRet[15],Header),Null)
+						CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+					CWhileXEnd({SetNVar(V(NRet[14]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		elseif Start[4] == "V" then
+			if type(End) == "number" and End < Size-1 then
+				CIf(PlayerID,{NVar(Start,AtMost,Size-1)})
+					DoActionsX(PlayerID,{SetNVar(V(NRet[14]),SetTo,0)})
+					CWhileX(PlayerID,{NVar(V(NRet[14]),AtMost,BaseNum-1)})
+						ClShift2(PlayerID,V(NRet[15]),V(NRet[14]),LSBit)
+						CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+						CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+						CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+							CWrite(PlayerID,Vi(NRet[15],Header),Null)
+						CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+					CWhileXEnd({SetNVar(V(NRet[14]),Add,1)})
+				CIfEnd()
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+					DoActionsX(PlayerID,{SetNVar(V(NRet[14]),SetTo,0)})
+					CWhileX(PlayerID,{NVar(V(NRet[14]),AtMost,BaseNum-1)})
+						ClShift2(PlayerID,V(NRet[15]),V(NRet[14]),LSBit)
+						CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+						CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+						CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+							CWrite(PlayerID,Vi(NRet[15],Header),Null)
+						CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+					CWhileXEnd({SetNVar(V(NRet[14]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		else
+			ResetCache2_InputData_Error()
+		end
+	elseif type(Number) == "number" and Number < BaseNum-1 then
+		if type(Start) == "number" and Start < Size-1 then
+			if type(End) == "number" and End < Size-1 then
+				DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],{Header[1],Header[2],Header[3]+0x4*Number*Size,0}),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(End,AtMost,Size-1)})
+					DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[16],{Header[1],Header[2],Header[3]+0x4*Number*Size,0}),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		elseif Start[4] == "V" then
+			if type(End) == "number" and End < Size-1 then
+				CIf(PlayerID,{NVar(Start,AtMost,Size-1)})
+					CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[16],{Header[1],Header[2],Header[3]+0x4*Number*Size,0}),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+				CIfEnd()
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+					CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[16],{Header[1],Header[2],Header[3]+0x4*Number*Size,0}),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		else
+			ResetCache2_InputData_Error()
+		end
+	elseif Number[4] == "V" then
+		if type(Start) == "number" and Start < Size-1 then
+			if type(End) == "number" and End < Size-1 then
+				CIf(PlayerID,{NVar(Number,AtMost,BaseNum-1)})
+					ClShift2(PlayerID,V(NRet[15]),Number,LSBit)
+					DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+					CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[15],Header),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+				CIfEnd()
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(Number,AtMost,BaseNum-1),NVar(End,AtMost,Size-1)})
+					ClShift2(PlayerID,V(NRet[15]),Number,LSBit)
+					DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+					CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[15],Header),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		elseif Start[4] == "V" then
+			if type(End) == "number" and End < Size-1 then
+				CIf(PlayerID,{NVar(Number,AtMost,BaseNum-1),NVar(Start,AtMost,Size-1)})
+					ClShift2(PlayerID,V(NRet[15]),Number,LSBit)
+					CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+					CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[15],Header),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+				CIfEnd()
+			elseif End[4] == "V" then
+				CIf(PlayerID,{NVar(Number,AtMost,BaseNum-1),NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+					ClShift2(PlayerID,V(NRet[15]),Number,LSBit)
+					CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+					CAdd(PlayerID,V(NRet[15]),V(NRet[16]))
+					CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+						CWrite(PlayerID,Vi(NRet[15],Header),Null)
+					CWhileXEnd({SetNVar(V(NRet[16]),Add,1),SetNVar(V(NRet[15]),Add,1)})
+				CIfEnd()
+			else
+				ResetCache2_InputData_Error()
+			end
+		else
+			ResetCache2_InputData_Error()
+		end
+	else
+		ResetCache2_InputData_Error()
+	end
+end

@@ -1171,6 +1171,202 @@ function CS_Rotate3D(Shape,XYAngle,YZAngle,ZXAngle)
 	return RetShape	
 end
 
+function CS_SymmetryX(Shape,Number,Xmin,Xmax)
+	if Shape == nil then
+		CS_InputError()
+	end
+	Number = math.floor(Number)
+	if Number < 1 then
+		CS_InputError()
+	end
+
+	if Xmin == nil then
+		Xmin = CS_GetXmin(Shape)
+	end
+	if Xmax == nil then
+		Xmax = CS_GetXmax(Shape)
+	end
+
+	local XSize = Xmax-Xmin
+	local XStep = XSize/Number
+
+	local RetShape = {Shape[1]*Number}
+	for j = 1, Shape[1] do
+		for i = 0, Number-1 do
+			local PX = (Shape[j+1][1] + XStep*i - Xmin)%XSize+Xmin
+			local PY = Shape[j+1][2]
+			table.insert(RetShape,{PX,PY})
+		end
+	end
+
+	return RetShape
+end
+
+function CS_SymmetryY(Shape,Number,Ymin,Ymax)
+	if Shape == nil then
+		CS_InputError()
+	end
+	Number = math.floor(Number)
+	if Number < 1 then
+		CS_InputError()
+	end
+
+	if Ymin == nil then
+		Ymin = CS_GetYmin(Shape)
+	end
+	if Ymax == nil then
+		Ymax = CS_GetYmax(Shape)
+	end
+
+	local YSize = Ymax-Ymin
+	local YStep = YSize/Number
+
+	local RetShape = {Shape[1]*Number}
+	for j = 1, Shape[1] do
+		for i = 0, Number-1 do
+			local PX = Shape[j+1][1]
+			local PY = (Shape[j+1][2] + YStep*i - Ymin)%YSize+Ymin
+			table.insert(RetShape,{PX,PY})
+		end
+	end
+
+	return RetShape
+end
+
+function CS_SymmetryR(Shape,Number,Rmin,Rmax)
+	if Shape == nil then
+		CS_InputError()
+	end
+	Number = math.floor(Number)
+	if Number < 1 then
+		CS_InputError()
+	end
+
+	if Rmin == nil then
+		Rmin = CS_GetRmin(Shape)
+	end
+	if Rmax == nil then
+		Rmax = CS_GetRmax(Shape)
+	end
+
+	local RSize = Rmax-Rmin
+	local RStep = RSize/Number
+
+	local RetShape = {Shape[1]*Number}
+	for j = 1, Shape[1] do
+		local NX, NY, PR, PA, NR
+		NX = Shape[j+1][1]
+		NY = Shape[j+1][2]
+
+		PR = math.sqrt(NX^2+NY^2)
+		if NX>=0 and NY>=0 then
+			PA = math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY>=0 then
+			PA = math.pi - math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY<0 then
+			PA = math.pi + math.abs(math.atan(NY/NX))
+		elseif NX>=0 and NY<0 then
+			PA = 2*math.pi - math.abs(math.atan(NY/NX))
+		end
+
+		for i = 0, Number-1 do
+			NR = (PR + RStep*i - Rmin)%RSize+Rmin
+			NX = NR*math.cos(PA)
+			NY = NR*math.sin(PA)
+			table.insert(RetShape,{NX,NY})
+		end
+	end
+
+	return RetShape
+end
+
+function CS_SymmetryA(Shape,Number,Amin,Amax)
+	if Shape == nil then
+		CS_InputError()
+	end
+	Number = math.floor(Number)
+	if Number < 1 then
+		CS_InputError()
+	end
+
+	if Amin == nil then
+		Amin = CS_GetAmin(Shape)
+	else
+		Amin = math.rad(Amin)
+	end
+	if Amax == nil then
+		Amax = CS_GetAmax(Shape)
+	else
+		Amax = math.rad(Amax)
+	end
+	
+	local ASize = Amax-Amin
+	local AStep = ASize/Number
+
+	local RetShape = {Shape[1]*Number}
+	for j = 1, Shape[1] do
+		local NX, NY
+		NX = Shape[j+1][1]
+		NY = Shape[j+1][2]
+		local PR, PA, NA
+
+		PR = math.sqrt(NX^2+NY^2)
+		if NX>=0 and NY>=0 then
+			PA = math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY>=0 then
+			PA = math.pi - math.abs(math.atan(NY/NX))
+		elseif NX<0 and NY<0 then
+			PA = math.pi + math.abs(math.atan(NY/NX))
+		elseif NX>=0 and NY<0 then
+			PA = 2*math.pi - math.abs(math.atan(NY/NX))
+		end
+
+		for i = 0, Number-1 do
+			NA = (PA + AStep*i - Amin)%ASize+Amin
+			NX = PR*math.cos(NA)
+			NY = PR*math.sin(NA)
+			table.insert(RetShape,{NX,NY})
+		end
+	end
+
+	return RetShape
+end
+
+function CS_GetPolar(X,Y,CenterAngle)
+	local PR, PA
+	PR = math.sqrt(X^2+Y^2)
+	if X == 0 and Y == 0 then
+		PA = CenterAngle
+	else
+		if X>=0 and Y>=0 then
+			PA = math.abs(math.atan(Y/X))
+		elseif X<0 and Y>=0 then
+			PA = math.pi - math.abs(math.atan(Y/X))
+		elseif X<0 and Y<0 then
+			PA = math.pi + math.abs(math.atan(Y/X))
+		elseif X>=0 and Y<0 then
+			PA = 2*math.pi - math.abs(math.atan(Y/X))
+		end
+	end
+
+	return PR, PA
+end
+
+function CS_FixShape(Shape)
+	for i = 1, Shape[1] do
+		local NX, NY
+		NX = Shape[i+1][1]
+		if NX ~= NX then
+			Shape[i+1][1] = 0
+		end
+		NY = Shape[i+1][2]
+		if NY ~= NY then
+			Shape[i+1][2] = 0
+		end
+	end
+	return Shape
+end
+
 function CS_InvertXY(Shape,X,Y)
 	if Shape == nil then
 		CS_InputError()
@@ -2470,6 +2666,17 @@ function CS_OverlapX(...)
 		end
 	end
 	return RetShape	
+end
+
+function CS_AddShapeX(Shape,...)
+	local arg = table.pack(...)
+	for k = 1, arg.n do
+		Shape[1] = Shape[1] + arg[k][1]
+		for i = 1, arg[k][1] do
+			table.insert(Shape,{arg[k][i+1][1],arg[k][i+1][2]})
+		end
+	end
+	return Shape	
 end
 
 function CS_Merge(ShapeA,ShapeB,Size,Priority)
@@ -3850,7 +4057,7 @@ function CS_CropPath(Shape,Path,Outside)
 	local GA = {}
 	local GB = {}
 	for i = 1, Path[1]  do
-		if Domain[i][1] == Domain[i][2] then
+		if math.abs(Domain[i][1] - Domain[i][2]) < 0.00001 then
 			GA[i] = "X"
 			GB[i] = Domain[i][1]
 		else
@@ -5123,7 +5330,10 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId =  ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5222,7 +5432,10 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5323,7 +5536,10 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId =  ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5432,7 +5648,10 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5539,7 +5758,10 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5656,7 +5878,10 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5780,7 +6005,10 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 		Direction = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5995,7 +6223,10 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Direction = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6370,9 +6601,9 @@ function CS_ConnectPath(Path,PerNumber,EndLine,Index)
 			CS_InputError()
 		end
 
-		local RetShape = {Shape[1]}
-		for i = 1, Shape[1] do
-			table.insert(RetShape,Shape[i+1])
+		local RetShape = {Path[1]}
+		for i = 1, Path[1] do
+			table.insert(RetShape,Path[i+1])
 		end
 
 		for k, v in pairs(Index) do
@@ -6441,9 +6672,9 @@ function CS_ConnectPathX(Path,PerSize,EndLine,Index)
 		end
 		PerSize = PerSize^2
 
-		local RetShape = {Shape[1]}
-		for i = 1, Shape[1] do
-			table.insert(RetShape,Shape[i+1])
+		local RetShape = {Path[1]}
+		for i = 1, Path[1] do
+			table.insert(RetShape,Path[i+1])
 		end
 
 		for k, v in pairs(Index) do
@@ -6476,16 +6707,6 @@ function CS_GetRmax(Shape)
 		local PR, PA
 
 		PR = math.sqrt(NX^2+NY^2)
-		if NX>=0 and NY>=0 then
-			PA = math.abs(math.atan(NY/NX))
-		elseif NX<0 and NY>=0 then
-			PA = math.pi - math.abs(math.atan(NY/NX))
-		elseif NX<0 and NY<0 then
-			PA = math.pi + math.abs(math.atan(NY/NX))
-		elseif NX>=0 and NY<0 then
-			PA = 2*math.pi - math.abs(math.atan(NY/NX))
-		end
-
 		if PR > Rmax then
 			Rmax = PR
 		end
@@ -6506,16 +6727,6 @@ function CS_GetRmin(Shape)
 		local PR, PA
 
 		PR = math.sqrt(NX^2+NY^2)
-		if NX>=0 and NY>=0 then
-			PA = math.abs(math.atan(NY/NX))
-		elseif NX<0 and NY>=0 then
-			PA = math.pi - math.abs(math.atan(NY/NX))
-		elseif NX<0 and NY<0 then
-			PA = math.pi + math.abs(math.atan(NY/NX))
-		elseif NX>=0 and NY<0 then
-			PA = 2*math.pi - math.abs(math.atan(NY/NX))
-		end
-
 		if PR < Rmin then
 			Rmin = PR
 		end
@@ -6545,7 +6756,6 @@ function CS_GetAmax(Shape)
 		NY = Shape[i+1][2]
 		local PR, PA
 
-		PR = math.sqrt(NX^2+NY^2)
 		if NX>=0 and NY>=0 then
 			PA = math.abs(math.atan(NY/NX))
 		elseif NX<0 and NY>=0 then
@@ -6556,8 +6766,8 @@ function CS_GetAmax(Shape)
 			PA = 2*math.pi - math.abs(math.atan(NY/NX))
 		end
 
-		if PR > Amax then
-			Amax = PR
+		if PA > Amax then
+			Amax = PA
 		end
 	end
 	return Amax
@@ -6585,7 +6795,6 @@ function CS_GetAmin(Shape)
 		NY = Shape[i+1][2]
 		local PR, PA
 
-		PR = math.sqrt(NX^2+NY^2)
 		if NX>=0 and NY>=0 then
 			PA = math.abs(math.atan(NY/NX))
 		elseif NX<0 and NY>=0 then
@@ -6596,8 +6805,8 @@ function CS_GetAmin(Shape)
 			PA = 2*math.pi - math.abs(math.atan(NY/NX))
 		end
 
-		if PR < Amin then
-			Amin = PR
+		if PA < Amin then
+			Amin = PA
 		end
 	end
 	return Amin
@@ -7763,7 +7972,7 @@ function CA_ConvertRA(DestR,DestA,SourceX,SourceY)
 	CMov(PlayerID,V(CB[6]),SourceX)
 	CMov(PlayerID,V(CB[7]),SourceY)
 	f_Atan2(PlayerID,V(CB[7]),V(CB[6]),V(CB[4]))
-	f_Sqrt(PlayerID,V(CB[5]),_Add(_mul(V(CB[6]),V(CB[6])),_mul(V(CB[7]),V(CB[7]))))
+	f_Sqrt(PlayerID,V(CB[5]),_Add(_Square(V(CB[6])),_Square(V(CB[7]))))
 	CMov(PlayerID,DestR,V(CB[5]))
 	CMov(PlayerID,DestA,V(CB[4]))	
 end
@@ -8220,7 +8429,10 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8421,7 +8633,10 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8624,7 +8839,10 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8941,7 +9159,10 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9257,7 +9478,10 @@ function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CA
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9476,7 +9700,10 @@ function CAPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9697,7 +9924,10 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -10032,7 +10262,10 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -11670,7 +11903,10 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -11876,7 +12112,10 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12082,7 +12321,10 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12306,7 +12548,10 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13187,7 +13432,10 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13540,7 +13788,10 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13892,7 +14143,10 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -14351,7 +14605,10 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -14974,6 +15231,14 @@ FCBRVRSCall1 = 0
 FCBRVRSCall2 = 0
 FCBRVRSCheck = 0
 FCBRVRSAlloc = 0
+FCBSYMXCall1 = 0
+FCBSYMXCall2 = 0
+FCBSYMXCheck = 0
+FCBSYMXAlloc = 0
+FCBSYMYCall1 = 0
+FCBSYMYCall2 = 0
+FCBSYMYCheck = 0
+FCBSYMYAlloc = 0
 
 FCBPAINTCheck = 0
 FCBPAINTCVoid = 0
@@ -15076,7 +15341,7 @@ if FCBCONVRACheck == 1 then
 		f_SHRead(IncludePlayer,_Add(CV[5],CV[1]),CV[9])
 		f_SHRead(IncludePlayer,_Add(CV[6],CV[1]),CV[10])
 		
-		f_Sqrt(IncludePlayer,CV[11],_Add(_iMul(CV[9],CV[9]),_iMul(CV[10],CV[10])))
+		f_Sqrt(IncludePlayer,CV[11],_Add(_Square(CV[9]),_Square(CV[10])))
 		f_Atan2(IncludePlayer,CV[10],CV[9],CV[12])
 
 		CWrite(IncludePlayer,_Add(CV[7],CV[1]),CV[11]) -- R
@@ -15394,6 +15659,92 @@ if FCBROTA3DCheck == 1 then
 		players = {IncludePlayer},
 			conditions = {
 				Label(FCBROTA3DAlloc+1);
+			},
+			actions = {SetDeaths(0,SetTo,0,0)},
+			flag = {Preserved}
+		}
+end
+
+if FCBSYMXCheck == 1 then
+	-- CB_SymmetryX - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : Xmin / CV[12] : Xmax / CV[13] : Number / CV[14] : Number Loop / CV[15] : XSize / CV[16] : XStep*i 
+	Trigger { 
+		players = {IncludePlayer},
+			conditions = {
+				Label(FCBSYMXAlloc);
+			},
+			actions = {
+				SetNVar(CV[14],SetTo,1);
+			},
+			flag = {Preserved}
+		}
+
+	CiSub(IncludePlayer,CV[15],CV[12],CV[11])
+
+	CWhileX(IncludePlayer,{TNVar(CV[14],AtMost,CV[13])},{SetNVar(CV[1],SetTo,0)})
+
+		CiDiv(IncludePlayer,CV[16],_iMul(CV[15],_Sub(CV[14],1)),CV[13]) -- XStep * i  
+
+		CWhileX(IncludePlayer,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4])})
+			f_SHRead(IncludePlayer,_Add(CV[5],CV[1]),CV[9])
+			f_SHRead(IncludePlayer,_Add(CV[6],CV[1]),CV[10])
+
+			CAdd(IncludePlayer,CV[9],_iMod(_iSub(_Add(CV[9],CV[16]),CV[11]),CV[15]),CV[11]) -- (Shape[j+1][1] + XStep*i - Xmin)%XSize+Xmin
+
+			CWrite(IncludePlayer,_Add(CV[7],CV[3]),CV[9]) -- X 
+			CWrite(IncludePlayer,_Add(CV[8],CV[3]),CV[10]) -- Y
+		CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+
+	CWhileXEnd({SetNVar(CV[14],Add,1)})
+
+	Trigger { 
+		players = {IncludePlayer},
+			conditions = {
+				Label(FCBSYMXAlloc+1);
+			},
+			actions = {SetDeaths(0,SetTo,0,0)},
+			flag = {Preserved}
+		}
+end
+
+if FCBSYMYCheck == 1 then
+	-- CB_SymmetryY - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : Ymin / CV[12] : Ymax / CV[13] : Number / CV[14] : Number Loop / CV[15] : YSize / CV[16] : YStep*i 
+	Trigger { 
+		players = {IncludePlayer},
+			conditions = {
+				Label(FCBSYMYAlloc);
+			},
+			actions = {
+				SetNVar(CV[14],SetTo,1);
+			},
+			flag = {Preserved}
+		}
+
+	CiSub(IncludePlayer,CV[15],CV[12],CV[11])
+
+	CWhileX(IncludePlayer,{TNVar(CV[14],AtMost,CV[13])},{SetNVar(CV[1],SetTo,0)})
+
+		CiDiv(IncludePlayer,CV[16],_iMul(CV[15],_Sub(CV[14],1)),CV[13]) -- XStep * i  
+
+		CWhileX(IncludePlayer,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4])})
+			f_SHRead(IncludePlayer,_Add(CV[5],CV[1]),CV[9])
+			f_SHRead(IncludePlayer,_Add(CV[6],CV[1]),CV[10])
+
+			CAdd(IncludePlayer,CV[10],_iMod(_iSub(_Add(CV[10],CV[16]),CV[11]),CV[15]),CV[11]) -- (Shape[j+1][2] + YStep*i - Ymin)%YSize+Ymin
+
+			CWrite(IncludePlayer,_Add(CV[7],CV[3]),CV[9]) -- X 
+			CWrite(IncludePlayer,_Add(CV[8],CV[3]),CV[10]) -- Y
+		CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+
+	CWhileXEnd({SetNVar(CV[14],Add,1)})
+
+	Trigger { 
+		players = {IncludePlayer},
+			conditions = {
+				Label(FCBSYMYAlloc+1);
 			},
 			actions = {SetDeaths(0,SetTo,0,0)},
 			flag = {Preserved}
@@ -17648,7 +17999,7 @@ if FCBSPLTCheck == 1 then
 	-- CB_Split - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
 	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y
 	-- CV[11] : Overwrite / CV[12] : Looper / CV[13] : N / CV[14~15] : Func / CV[16] : CVoid / CV[17] : temp 
-	-- CV[18] : k / CV[19] : Loop+1 / CV[20] : Shape[1]+1 / CV[21] : Retshape[1]
+	-- CV[18] : k / CV[19] : Loop+1 / CV[20] : Shape[1]+1 / CV[21] : RetShape[1]
 	Trigger { -- {N,f(i)} : 1~N -> f(i)를 추가함
 		players = {IncludePlayer},
 			conditions = {
@@ -17852,6 +18203,22 @@ function Include_CBPaint()
 	FCBCROPAlloc = FuncAlloc
 	FCBCROPCall1 = FuncAlloc
 	FCBCROPCall2 = FuncAlloc+1
+	FuncAlloc = FuncAlloc + 2
+
+	-- CB_SymmetryX - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : x=X / CV[12] : Side / CV[13] : 2X 
+	FCBSYMXAlloc = FuncAlloc
+	FCBSYMXCall1 = FuncAlloc
+	FCBSYMXCall2 = FuncAlloc+1
+	FuncAlloc = FuncAlloc + 2
+
+	-- CB_SymmetryY - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : x=X / CV[12] : Side / CV[13] : 2X 
+	FCBSYMYAlloc = FuncAlloc
+	FCBSYMYCall1 = FuncAlloc
+	FCBSYMYCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 
 	-- CB_MirrorX - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
@@ -19405,6 +19772,240 @@ function CB_Crop(X1,X2,Y1,Y2,Shape,RetShape)
 				SetCtrigX("X",FCBCROPCall2,0x4,0,SetTo,"X","X",0x0,0,1);
 				SetCtrigX("X",FCBCROPCall2,0x158,0,SetTo,"X","X",0x4,1,0);
 				SetCtrigX("X",FCBCROPCall2,0x15C,0,SetTo,"X","X",0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
+end
+
+function CB_SymmetryX(Number,Xmin,Xmax,Shape,RetShape)
+	FCBSYMXCheck = 1
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_SymmetryX - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : Xmin / CV[12] : Xmax / CV[13] : Number 
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	STPopTrigArr(PlayerID)
+
+	CMov(PlayerID,CV[13],Number)
+
+	if Xmin ~= nil then
+		CMov(PlayerID,CV[11],Xmin)
+	else
+		CB_GetXmax(Shape,CV[11])
+	end
+	if Xmax ~= nil then
+		CMov(PlayerID,CV[12],Xmax)
+	else
+		CB_GetXmax(Shape,CV[12])
+	end
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetNVar(CV[1],SetTo,0);
+				SetNVar(CV[3],SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+	-- Call f_CBMove
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+				NVar(CV[2],AtLeast,1);
+			},
+			actions = {
+				SetNVar(CV[2],Subtract,1);
+				RetAct;
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSYMXCall1,0x0,0,0);
+				SetCtrigX("X",FCBSYMXCall2,0x4,0,SetTo,"X","X",0x0,0,1);
+				SetCtrigX("X",FCBSYMXCall2,0x158,0,SetTo,"X","X",0x4,1,0);
+				SetCtrigX("X",FCBSYMXCall2,0x15C,0,SetTo,"X","X",0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+
+	if type(RetShape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,RetShape),CV[3])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[3][1],CV[3][2],CV[3][3],RetShape[2][1],RetShape[2][2],RetShape[2][3]);
+			SetCtrigX("X",CV[3][2],0x158,0,SetTo,RetShape[2][1],RetShape[2][2],0x15C,1,RetShape[2][3]),
+			SetCtrig1X("X",CV[3][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[3][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
+end
+
+function CB_SymmetryY(Number,Ymin,Ymax,Shape,RetShape)
+	FCBSYMYCheck = 1
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_SymmetryY - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y 
+	-- CV[11] : Ymin / CV[12] : Ymax / CV[13] : Number 
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	STPopTrigArr(PlayerID)
+
+	CMov(PlayerID,CV[13],Number)
+
+	if Ymin ~= nil then
+		CMov(PlayerID,CV[11],Ymin)
+	else
+		CB_GetYmax(Shape,CV[11])
+	end
+	if Ymax ~= nil then
+		CMov(PlayerID,CV[12],Ymax)
+	else
+		CB_GetYmax(Shape,CV[12])
+	end
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local RetAct = {}
+	if type(RetShape) == "number" then
+		table.insert(RetAct,SetNVar(CV[4],SetTo,Num[RetShape]))
+		TMem(PlayerID,CV[7],FArr(FX[RetShape],0))
+		TMem(PlayerID,CV[8],FArr(FY[RetShape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(RetShape[1][1],RetShape[1][2],RetShape[1][3]);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x158,RetShape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x198,RetShape[1][3],SetTo,"X",CV[7][2],0x15C,1,0),
+			SetCtrigX(RetShape[1][1],RetShape[1][2],0x1D8,RetShape[1][3],SetTo,"X",CV[8][2],0x15C,1,0),
+		})
+	end
+
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetNVar(CV[1],SetTo,0);
+				SetNVar(CV[3],SetTo,0);
+			},
+			flag = {Preserved}
+		}
+
+	-- Call f_CBMove
+	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+				NVar(CV[2],AtLeast,1);
+			},
+			actions = {
+				SetNVar(CV[2],Subtract,1);
+				RetAct;
+				SetCtrigX("X","X",0x4,0,SetTo,"X",FCBSYMYCall1,0x0,0,0);
+				SetCtrigX("X",FCBSYMYCall2,0x4,0,SetTo,"X","X",0x0,0,1);
+				SetCtrigX("X",FCBSYMYCall2,0x158,0,SetTo,"X","X",0x4,1,0);
+				SetCtrigX("X",FCBSYMYCall2,0x15C,0,SetTo,"X","X",0x0,0,1);
 			},
 			flag = {Preserved}
 		}
@@ -28093,6 +28694,207 @@ function CS_TArrange(Shape,Preset,Looper,Overwrite) -- {N,f(i),f(j)} : 1~N -> f(
 	return NShape, RetLoopArr
 end
 
+function CS_BMPConvertColor(Shape,ColorArr,FileName,Xpx,Ypx,Limit) -- Shape -> GRP 
+	if Limit == nil then
+		Limit = 100000000
+	end
+	local NShape = CS_RatioXY(Shape,1/Xpx,1/Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = FileDirectory..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+	
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0xD0,0xE0,0xCC},
+		{0x38,0xFC,0xFC},
+		
+		{0x08,0x80,0x08},
+		{0x7C,0xFC,0xFC},
+		{0xB0,0xC4,0xEC},
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+
+		if ColorArr[k-1] == nil then
+			GRPFile:write(string.char(RGBArr[Num][1]))
+			GRPFile:write(string.char(RGBArr[Num][2]))
+			GRPFile:write(string.char(RGBArr[Num][3]))
+		else
+			GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+		end
+
+		Num = Num + 1
+		if Num > 16 then
+			Num = 1
+		end
+	end
+
+	io.close(GRPFile)
+end
+
+function CS_BMPConvertColorX(Shape,ColorArr,FileName,TargetXpx,TargetYpx,Limit) -- Shape -> GRP 
+	if Limit == nil then
+		Limit = 100000000
+	end
+	TargetXpx = TargetXpx - 1
+	TargetYpx = TargetYpx - 1
+	local XSize = CS_GetXmax(Shape)-CS_GetXmin(Shape)
+	local YSize = CS_GetYmax(Shape)-CS_GetYmin(Shape)
+
+	local Xpx = (TargetXpx)/XSize
+	local Ypx = (TargetYpx)/YSize
+	local NShape = CS_RatioXY(Shape,Xpx,Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = FileDirectory..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0xD0,0xE0,0xCC},
+		{0x38,0xFC,0xFC},
+		
+		{0x08,0x80,0x08},
+		{0x7C,0xFC,0xFC},
+		{0xB0,0xC4,0xEC},
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+
+		if ColorArr[k-1] == nil then
+			GRPFile:write(string.char(RGBArr[Num][1]))
+			GRPFile:write(string.char(RGBArr[Num][2]))
+			GRPFile:write(string.char(RGBArr[Num][3]))
+		else
+			GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+		end
+
+		Num = Num + 1
+		if Num > 16 then
+			Num = 1
+		end
+	end
+
+	io.close(GRPFile)
+end
+
 function CS_BMPConvert(Shape,FileName,Xpx,Ypx,Limit) -- Shape -> GRP 
 	if Limit == nil then
 		Limit = 100000000
@@ -28226,6 +29028,2068 @@ function CS_BMPConvertX(Shape,FileName,TargetXpx,TargetYpx,Limit) -- Shape -> GR
 	io.close(GRPFile)
 end
 
+function CS_CompassA(Center,Point1,Point2,Direction,Number,AddShape)
+	if Number < 2 then
+		CS_InputError()
+	end
+
+	local Shape = {0}
+	local R = math.sqrt((Point1[1]-Center[1])^2+(Point1[2]-Center[2])^2)
+
+	local P1, P2, A1, A2, R1, R2, NA, AStep
+	P1 = {Point1[1]-Center[1],Point1[2]-Center[2]}
+	P2 = {Point2[1]-Center[1],Point2[2]-Center[2]}
+
+	R1, A1 = CS_GetPolar(P1[1],P1[2])
+	R2, A2 = CS_GetPolar(P2[1],P2[2])
+
+	if Direction == 0 then
+		if A1 >= A2 then
+			AStep = (A2-A1)/(Number-1)
+		else
+			AStep = (A1-A2)/(Number-1)
+		end
+		if Point1[1] == Point2[1] and Point1[2] == Point2[2] then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	else
+		if A1 >= A2 then
+			AStep = (2*math.pi+A2-A1)/(Number-1)
+		else
+			AStep = (2*math.pi-A2+A1)/(Number-1)
+		end
+		if Point1[1] == Point2[1] and Point1[2] == Point2[2] then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = -AStep*i+A2
+				else
+					NA = -AStep*i+A1
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = -AStep*i+A2
+				else
+					NA = -AStep*i+A1
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	end
+
+	if AddShape ~= nil then
+		AddShape[1] = AddShape[1] + Shape[1]
+		for i = 1, Shape[1] do
+			table.insert(AddShape,Shape[i+1])
+		end
+	end
+
+	return Shape
+end
+
+function CS_CompassB(Center,Point,Angle,Direction,Number,Hollow,AddShape)
+	if Number < 2 then
+		CS_InputError()
+	end
+
+	local Shape = {0}
+	local R = math.sqrt((Point[1]-Center[1])^2+(Point[2]-Center[2])^2)
+
+	local P1, P2, A1, A2, R1, R2, NA, AStep
+	P1 = {Point[1]-Center[1],Point[2]-Center[2]}
+	
+	Angle = math.rad(Angle)	
+	R1, A1 = CS_GetPolar(P1[1],P1[2])
+	
+	if Direction == 0 then
+		A2 = A1 - Angle
+		if A2 < 0 then
+			A2 = A2 + 2*math.pi
+		end
+
+		if A1 >= A2 then
+			AStep = (A2-A1)/(Number-1)
+			
+		else
+			AStep = (2*math.pi+A1-A2)/(Number-1)
+		end
+		if A1 == A2 or Hollow == 1 then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	else
+		A2 = A1 + Angle
+		if A2 > 2*math.pi then
+			A2 = A2 - 2*math.pi
+		end
+
+		if A1 >= A2 then
+			AStep = (2*math.pi+A2-A1)/(Number-1)
+		else
+			AStep = (A1-A2)/(Number-1)
+		end
+		if A1 == A2 or Hollow == 1 then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	end
+
+	if AddShape ~= nil then
+		AddShape[1] = AddShape[1] + Shape[1]
+		for i = 1, Shape[1] do
+			table.insert(AddShape,Shape[i+1])
+		end
+	end
+
+	return Shape
+end
+
+function CS_CompassC(Center,Radius,Angle1,Angle2,Direction,Number,AddShape)
+	if Number < 2 then
+		CS_InputError()
+	end
+
+	local Shape = {0}
+	local R = Radius
+	local P1, P2, A1, A2, R1, R2, NA, AStep
+
+	A1 = math.rad(Angle1)
+	A2 = math.rad(Angle2)	
+
+	if Direction == 0 then
+		if A1 >= A2 then
+			AStep = (A2-A1)/(Number-1)
+		else
+			AStep = (A1-A2)/(Number-1)
+		end
+		if Angle1 == Angle2 or (Angle1-Angle2)%360 == 0 then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = AStep*i+A1
+				else
+					NA = AStep*i+A2
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	else
+		if A1 >= A2 then
+			AStep = (2*math.pi+A2-A1)/(Number-1)
+		else
+			AStep = (2*math.pi-A2+A1)/(Number-1)
+		end
+		if Angle1 == Angle2 or (Angle1-Angle2)%360 == 0 then
+			for i = 0, Number-2 do
+				if A1 >= A2 then
+					NA = -AStep*i+A2
+				else
+					NA = -AStep*i+A1
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		else
+			for i = 0, Number-1 do
+				if A1 >= A2 then
+					NA = -AStep*i+A2
+				else
+					NA = -AStep*i+A1
+				end
+				Shape[1] = Shape[1] + 1
+				table.insert(Shape,{R*math.cos(NA)+Center[1],R*math.sin(NA)+Center[2]})
+			end
+		end
+	end
+
+	if AddShape ~= nil then
+		AddShape[1] = AddShape[1] + Shape[1]
+		for i = 1, Shape[1] do
+			table.insert(AddShape,Shape[i+1])
+		end
+	end
+
+	return Shape
+end
+
+function CS_CompassD(Point1,Point2,Point3,Angle,Number,AddShape)
+	if Number < 1 then
+		CS_InputError()
+	end
+	local R, C, Ret
+	R, C = CS_GetCircle(Point1,Point2,Point3)
+	Ret = CS_CompassC(C,R,0,360,0,Number+1)
+
+	if Angle ~= nil then
+		Ret = CS_MoveXY(Ret,-C[1],-C[2])
+		Ret = CS_Rotate(Ret,Angle)
+		Ret = CS_MoveXY(Ret,C[1],C[2])
+	end
+
+	if AddShape ~= nil then
+		AddShape[1] = AddShape[1] + Ret[1]
+		for i = 1, Ret[1] do
+			table.insert(AddShape,Ret[i+1])
+		end
+	end
+
+	return Ret
+end
+
+function CS_Copy(Shape)
+	local RetShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		table.insert(RetShape,{Shape[i+1][1],Shape[i+1][2]})
+	end
+	return RetShape
+end
+
+function CS_TCopy(LoopMax)
+	local RetLoopMax = {LoopMax[1]}
+	for i = 1, LoopMax[1] do
+		table.insert(RetLoopMax,LoopMax[i+1])
+	end
+	return RetLoopMax
+end
+
+function CS_GetCircle(Point1,Point2,Point3)
+	local R, cx, cy, d1, d2, Temp
+
+	if Point1[2] == Point2[2] then
+		Temp = Point2[1]
+		Point2[1] = Point3[1]
+		Point3[1] = Temp
+
+		Temp = Point2[2]
+		Point2[2] = Point3[2]
+		Point3[2] = Temp
+	end
+	
+	if Point2[2] == Point3[2] then
+		Temp = Point1[1]
+		Point1[1] = Point2[1]
+		Point2[1] = Temp
+
+		Temp = Point1[2]
+		Point1[2] = Point2[2]
+		Point2[2] = Temp
+	end
+
+	d1 = (Point2[1] - Point1[1])/(Point2[2] - Point1[2]) 
+	d2 = (Point3[1] - Point2[1])/(Point3[2] - Point2[2]) 
+ 
+	cx = ((Point3[2] - Point1[2]) + (Point2[1] + Point3[1]) * d2 - (Point1[1] + Point2[1]) * d1)/(2 * (d2 - d1)) 
+	cy = (-d1 * (cx-(Point1[1] + Point2[1])/2) + (Point1[2] + Point2[2])/2)
+ 
+	R = math.sqrt((Point1[1] - cx)^2 + (Point1[2] - cy)^2)
+
+	return R, {cx,cy}
+end
+
+function CS_GetCircleX(Point1,Point2,Radius,Direction)
+	local R, cx1, cx2, cy1, cy2, k, l1, l2, mx, my, cx, cy
+	R = Radius
+	mx = (Point1[1]+Point2[1])/2
+	my = (Point1[2]+Point2[2])/2
+	if Point1[1] == Point2[1] then
+		cy1 = my
+		cy2 = my
+		cx1 = Point1[1]+math.sqrt(R^2-(Point1[2]-my)^2)
+		cx2 = Point1[1]-math.sqrt(R^2-(Point1[2]-my)^2)
+	elseif Point1[2] == Point2[2] then
+		cx1 = mx
+		cx2 = mx
+		cy1 = Point1[2]+math.sqrt(R^2-(Point1[1]-mx)^2)
+		cy2 = Point1[2]-math.sqrt(R^2-(Point1[1]-mx)^2)
+	else
+		k = (Point2[2] - Point1[2])/(Point2[1] - Point1[1])
+		l1 = math.sqrt(R^2 - ((Point2[1]-Point1[1])^2+(Point2[2]-Point1[2])^2)/4)
+		l2 = -l1
+		cx1 = mx-(k*l1)/(math.sqrt(k^2+1))
+		cx2 = mx-(k*l2)/(math.sqrt(k^2+1))
+		cy1 = my+l1/(math.sqrt(k^2+1))
+		cy2 = my+l2/(math.sqrt(k^2+1))
+	end
+ 
+	local px, py, dx1, dx2, dy1, dy2, pr, pa, dr1, dr2, da1, da2
+	px = Point1[1] - mx
+	py = Point1[2] - my
+	pr, pa = CS_GetPolar(px,py,0)
+
+	dx1 = cx1 - mx
+	dy1 = cy1 - my
+	dr1, da1 = CS_GetPolar(dx1,dy1,0)
+
+	dx2 = cx2 - mx
+	dy2 = cy2 - my
+	dr2, da2 = CS_GetPolar(dx2,dy2,0)
+
+	pa = (pa-math.pi/2)
+	if pa < 0 then pa = pa + math.pi*2 end
+
+	if math.abs(da1 - pa) < math.pi/4 then -- da1 == dir : 0
+		if Direction == 0 then -- 시계방향
+			cx = cx1
+			cy = cy1
+		else -- 반시계방향
+			cx = cx2
+			cy = cy2
+		end
+	else
+		if Direction == 0 then
+			cx = cx2
+			cy = cy2
+		else
+			cx = cx1
+			cy = cy1
+		end
+	end
+
+	return {cx,cy}
+end
+
+function CS_GetIntersection(CircleData,MaxError)
+	if MaxError == nil then
+		MaxError = 0.01
+	else
+		MaxError = math.abs(MaxError)
+	end
+	-- {"A",1,2} : Angle (각도제한/미지원)
+	-- {"R",1} : 반지름
+	-- {"C",{1,2}} : 중심좌표
+	-- {"P",{1,2}} : 원 위의 점
+
+	local CircleArr = {}
+	for k, v in pairs (CircleData) do
+		local C, R, PN, P, Dir
+		PN = 0
+		P = {}
+		for p, q in pairs(v) do
+			if q[1] == "C" then
+				C = {q[2][1],q[2][2]}
+			elseif q[1] == "R" then
+				R = q[2]
+			elseif q[1] == "P" then
+				PN = PN + 1
+				table.insert(P,{q[2][1],q[2][2]})
+			elseif q[1] == "D" then
+				if q[2] == 0 then
+					Dir = 0
+				else
+					Dir = 1
+				end
+			end 			
+		end
+		-- type : C+R / C+P / Px3 / R+Px2+Dir
+		if PN == 3 then
+			R, C = CS_GetCircle(P[1],P[2],P[3])
+		elseif PN == 1 and C ~= nil then
+			R = math.sqrt((P[1][1]-C[1])^2+(P[1][2]-C[2])^2)
+		elseif PN == 2 and R ~= nil and Dir ~= nil then
+			C = CS_GetCircleX(P[1],P[2],R,Dir)
+		end
+		table.insert(CircleArr,{C,R})
+	end
+
+	local RetShape = {0}
+	local RetShapeArr = {}
+	for i = 1, #CircleData do
+		for j = 1, #CircleData do
+			if i < j then
+				local a1, a2, b1, b2, c1, c2, k, l, a3, b3, c3, D, x1, x2, y1, y2
+				a1 = CircleArr[i][1][1] a2 = CircleArr[j][1][1]
+				b1 = CircleArr[i][1][2] b2 = CircleArr[j][1][2]
+				c1 = CircleArr[i][2] c2 = CircleArr[j][2]
+				if b1 == b2 then
+					if a1 == a2 then
+						CS_InputError()
+					end
+					x1 = (a1^2-a2^2-c1^2+c2^2)/(2*(a1-a2))
+					x2 = x1
+
+					D = c1^2-(x1-a1)^2
+					if D < -MaxError then
+						table.insert(RetShapeArr,{0})
+					elseif math.abs(D) <= MaxError then
+						y1 = b1
+						RetShape[1] = RetShape[1] + 1
+						table.insert(RetShape,{x1,y1})
+						table.insert(RetShapeArr,{1,{x1,y1}})
+					else
+						y1 = b1+math.sqrt(D)
+						y2 = b1-math.sqrt(D)
+						RetShape[1] = RetShape[1] + 2
+						table.insert(RetShape,{x1,y1})
+						table.insert(RetShape,{x2,y2})
+						table.insert(RetShapeArr,{2,{x1,y1},{x2,y2}})
+					end
+				else
+					l = (a2-a1)/(b1-b2)
+					k = (a1^2+b1^2-c1^2-a2^2-b2^2+c2^2)/(2*(b1-b2))-b1
+
+					a3 = 1+l^2
+					b3 = 2*(k*l-a1)
+					c3 = k^2+a1^2-c1^2
+
+					D = b3^2-4*a3*c3
+					if D < -MaxError then
+						table.insert(RetShapeArr,{0})
+					elseif math.abs(D) <= MaxError then
+						x1 = -b3/(2*a3)
+						y1 = l*x1+k+b1
+						RetShape[1] = RetShape[1] + 1
+						table.insert(RetShape,{x1,y1})
+						table.insert(RetShapeArr,{1,{x1,y1}})
+					else
+						x1 = (-b3+math.sqrt(D))/(2*a3)
+						x2 = (-b3-math.sqrt(D))/(2*a3)
+						y1 = l*x1+k+b1
+						y2 = l*x2+k+b1
+						RetShape[1] = RetShape[1] + 2
+						table.insert(RetShape,{x1,y1})
+						table.insert(RetShape,{x2,y2})
+						table.insert(RetShapeArr,{2,{x1,y1},{x2,y2}})
+					end
+				end
+			end
+		end
+	end
+	return RetShape, RetShapeArr
+end
+
+function CB_InitCache(Length,MaxSize,Null)
+	local PlayerID = CAPlotPlayerID
+	return {InitCache(PlayerID,Length,Null),InitCache2(PlayerID,Length,MaxSize,Null),InitCache2(PlayerID,Length,MaxSize,Null)}
+end
+
+function CB_SaveCache(ShapeCache,Time,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_SaveCache - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[11] : +X / CV[12] : +Y  
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	STPopTrigArr(PlayerID)
+	
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+			SetNVar(CV[4],SetTo,Num[Shape]-1);
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local Null = ShapeCache[2][3]
+	local HeaderN = ShapeCache[1][1]
+	local HeaderX = ShapeCache[2][1]
+	local HeaderY = ShapeCache[3][1]
+	local Size = ShapeCache[2][2]
+	local BaseNum = ShapeCache[2][4]
+	local LSBit = ShapeCache[2][5]
+
+	if type(Time) == "number" and Time < BaseNum then
+		CWrite(PlayerID,FArr(HeaderN,Time),CV[2])
+		TMem(PlayerID,CV[7],FArr(HeaderX,Time*Size))
+		TMem(PlayerID,CV[8],FArr(HeaderY,Time*Size))
+
+		DoActionsX(PlayerID,{SetNVar(CV[1],SetTo,0),SetNVar(CV[3],SetTo,0)})
+		CWhileX(PlayerID,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[1],AtMost,Size-1)})
+			f_SHRead(PlayerID,_Add(CV[5],CV[1]),CV[9])
+			f_SHRead(PlayerID,_Add(CV[6],CV[1]),CV[10])
+			
+			CWrite(PlayerID,_Add(CV[7],CV[1]),CV[9]) -- X
+			CWrite(PlayerID,_Add(CV[8],CV[1]),CV[10]) -- Y
+		CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+	elseif Time[4] == "V" then
+		CIf(PlayerID,{NVar(Time,AtMost,BaseNum-1)})
+			CMov(PlayerID,CV[11],Time)
+
+			CWrite(PlayerID,Vi(CV[11][2],HeaderN,CV[11][1],CV[11][3]),CV[2])
+			ClShift2(PlayerID,V(NRet[16]),CV[11],LSBit)
+			TMem(PlayerID,CV[7],FArr(HeaderX,V(NRet[16])))
+			TMem(PlayerID,CV[8],FArr(HeaderY,V(NRet[16])))
+
+			DoActionsX(PlayerID,{SetNVar(CV[1],SetTo,0),SetNVar(CV[3],SetTo,0)})
+			CWhileX(PlayerID,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[1],AtMost,Size-1)})
+				f_SHRead(PlayerID,_Add(CV[5],CV[1]),CV[9])
+				f_SHRead(PlayerID,_Add(CV[6],CV[1]),CV[10])
+				
+				CWrite(PlayerID,_Add(CV[7],CV[1]),CV[9]) -- X
+				CWrite(PlayerID,_Add(CV[8],CV[1]),CV[10]) -- Y
+			CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+		CIfEnd()
+	else
+		CB_SaveCache_InputData_Error()
+	end
+end
+
+function CB_LoadCache(ShapeCache,Time,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_LoadCache - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[11] : +X / CV[12] : +Y  
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	STPopTrigArr(PlayerID)
+	
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0200,0x0200),
+			SetCtrigX("X","X",0x4,0,SetTo,"X",CA[7],0x0,0,Shape),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X","X",0x0,0,1),
+		})
+		DoActionsX(PlayerID,{
+			SetCtrigX("X",CA[7],0x158,Shape,SetTo,"X",CA[10],0x15C,1,0),
+			SetCtrig1X("X",CA[7],0x2C,Shape,SetTo,0x0000,0x0200),
+			SetCtrigX("X",CA[7],0x4,Shape,SetTo,"X",CA[7],0x0,0,Shape+1),
+			SetNVar(CV[4],SetTo,Num[Shape]-1);
+		})
+		TMem(PlayerID,CV[5],FArr(FX[Shape],0))
+		TMem(PlayerID,CV[6],FArr(FY[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			SetCtrigX("X","X",0x4,0,SetTo,Shape[1][1],Shape[1][2],0x0,0,0);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x4,0,SetTo,Shape[5][1],Shape[5][2],0x0,0,0);
+			SetCtrigX(Shape[6][1],Shape[6][2],0x4,0,SetTo,"X","X",0x0,0,1);
+
+			SetCtrigX(Shape[5][1],Shape[5][2],0x15C,Shape[5][3],SetTo,"X",CV[2][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x158,Shape[1][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,-1);
+			SetCtrigX(Shape[1][1],Shape[1][2],0x198,Shape[1][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[1][1],Shape[1][2],0x1D8,Shape[1][3],SetTo,"X",CV[6][2],0x15C,1,0),
+		})
+	end
+
+	local Null = ShapeCache[2][3]
+	local HeaderN = ShapeCache[1][1]
+	local HeaderX = ShapeCache[2][1]
+	local HeaderY = ShapeCache[3][1]
+	local Size = ShapeCache[2][2]
+	local BaseNum = ShapeCache[2][4]
+	local LSBit = ShapeCache[2][5]
+
+	if type(Time) == "number" and Time < BaseNum then
+		TMem(PlayerID,CV[7],FArr(HeaderX,Time*Size))
+		TMem(PlayerID,CV[8],FArr(HeaderY,Time*Size))
+
+		DoActionsX(PlayerID,{SetNVar(CV[1],SetTo,0),SetNVar(CV[3],SetTo,0)})
+		CWhileX(PlayerID,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[1],AtMost,Size-1)})
+			f_SHRead(PlayerID,_Add(CV[7],CV[1]),CV[9])
+			f_SHRead(PlayerID,_Add(CV[8],CV[1]),CV[10])
+			
+			CWrite(PlayerID,_Add(CV[5],CV[1]),CV[9]) -- X
+			CWrite(PlayerID,_Add(CV[6],CV[1]),CV[10]) -- Y
+		CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+
+		f_Read(PlayerID,FArr(HeaderN,Time),CV[1])
+	elseif Time[4] == "V" then
+		CIf(PlayerID,{NVar(Time,AtMost,BaseNum-1)})
+			CMov(PlayerID,CV[11],Time)
+
+			ClShift2(PlayerID,V(NRet[16]),CV[11],LSBit)
+			TMem(PlayerID,CV[7],FArr(HeaderX,V(NRet[16])))
+			TMem(PlayerID,CV[8],FArr(HeaderY,V(NRet[16])))
+
+			DoActionsX(PlayerID,{SetNVar(CV[1],SetTo,0),SetNVar(CV[3],SetTo,0)})
+			CWhileX(PlayerID,{TNVar(CV[1],AtMost,CV[2]),TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[1],AtMost,Size-1)})
+				f_SHRead(PlayerID,_Add(CV[7],CV[1]),CV[9])
+				f_SHRead(PlayerID,_Add(CV[8],CV[1]),CV[10])
+				
+				CWrite(PlayerID,_Add(CV[5],CV[1]),CV[9]) -- X
+				CWrite(PlayerID,_Add(CV[6],CV[1]),CV[10]) -- Y
+			CWhileXEnd({SetNVar(CV[1],Add,1),SetNVar(CV[3],Add,1)})
+
+			f_Read(PlayerID,FArr(HeaderN,CV[11]),CV[1])
+		CIfEnd()
+	else
+		CB_SaveCache_InputData_Error()
+	end
+
+	if type(Shape) == "number" then
+		CMov(PlayerID,Mem("X",CA[7],0x15C,Shape),CV[1])
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways2(CV[1][1],CV[1][2],CV[1][3],Shape[2][1],Shape[2][2],Shape[2][3]);
+			SetCtrigX("X",CV[1][2],0x158,0,SetTo,Shape[2][1],Shape[2][2],0x15C,1,Shape[2][3]),
+			SetCtrig1X("X",CV[1][2],0x148,0,SetTo,0xFFFFFFFF);
+			SetCtrig1X("X",CV[1][2],0x160,0,SetTo,SetTo*16777216,0xFF000000);
+		})
+	end
+end
+
+function CB_ResetCache(ShapeCache,Start,End)
+	local PlayerID = CAPlotPlayerID
+	STPopTrigArr(PlayerID)
+	local Null = ShapeCache[1][3]
+	local HeaderN = ShapeCache[1][1]
+	local Size = ShapeCache[1][2]
+
+	if type(Start) == "number" and Start < Size-1 then
+		if type(End) == "number" and End < Size-1 then
+			DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+			CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+				CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+			CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(End,AtMost,Size-1)})
+				DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			CB_ResetCache_InputData_Error()
+		end
+	elseif Start[4] == "V" then
+		if type(End) == "number" and End < Size-1 then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			CB_ResetCache_InputData_Error()
+		end
+	else
+		CB_ResetCache_InputData_Error()
+	end
+end
+
+function CB_InitCacheX(Length,MaxSize,Null)
+	local PlayerID = CAPlotPlayerID
+	return {InitCache(PlayerID,Length,Null),InitCache2(PlayerID,Length,MaxSize,Null)}
+end
+
+function CB_SaveCacheX(LoopMaxCache,Time,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_TSort - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[11] : +X / CV[12] : +Y  
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local FN = CBPlotFArrN
+	local TNum = CBPlotTNum
+	STPopTrigArr(PlayerID)
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{SetNVar(CV[4],SetTo,TNum[Shape])})
+		TMem(PlayerID,CV[5],FArr(FN[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+		})
+	end
+
+	local HeaderN = LoopMaxCache[1][1]
+	local Null = LoopMaxCache[2][3]
+	local Header = LoopMaxCache[2][1]
+	local Size = LoopMaxCache[2][2]
+	local BaseNum = LoopMaxCache[2][4]
+	local LSBit = LoopMaxCache[2][5]
+
+	if type(Time) == "number" and Time < BaseNum then
+		CWrite(PlayerID,FArr(HeaderN,Time),_Read(CV[5]))
+		TMem(PlayerID,CV[7],FArr(Header,Time*Size))
+
+		DoActionsX(PlayerID,{SetNVar(CV[3],SetTo,0)})
+		CWhileX(PlayerID,{TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[3],AtMost,Size-1)})
+			f_SHRead(PlayerID,_Add(CV[5],CV[3]),CV[9])
+			
+			CWrite(PlayerID,_Add(CV[7],CV[3]),CV[9]) -- X
+		CWhileXEnd({SetNVar(CV[3],Add,1)})
+	elseif Time[4] == "V" then
+		CIf(PlayerID,{NVar(Time,AtMost,BaseNum-1)})
+			CMov(PlayerID,CV[11],Time)
+
+			CWrite(PlayerID,Vi(CV[11][2],HeaderN,CV[11][1],CV[11][3]),_Read(CV[5]))
+			ClShift2(PlayerID,V(NRet[16]),CV[11],LSBit)
+			TMem(PlayerID,CV[7],FArr(Header,V(NRet[16])))
+
+			DoActionsX(PlayerID,{SetNVar(CV[3],SetTo,0)})
+			CWhileX(PlayerID,{TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[3],AtMost,Size-1)})
+				f_SHRead(PlayerID,_Add(CV[5],CV[3]),CV[9])
+				
+				CWrite(PlayerID,_Add(CV[7],CV[3]),CV[9]) -- X
+			CWhileXEnd({SetNVar(CV[3],Add,1)})
+		CIfEnd()
+	else
+		CB_SaveCacheX_InputData_Error()
+	end
+end
+
+function CB_LoadCacheX(LoopMaxCache,Time,Shape)
+	local CV
+	if CBPlotTempArr == 0 then
+		Need_Include_CBPaint()
+	else
+		CV = CBPlotTempArr
+	end
+
+	-- CB_TSort - CV[1] = Shape Loop / CV[2] = Shape Limit / CV[3] = RetShape Loop / CV[4] = RetShape Limit 
+	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[11] : +X / CV[12] : +Y  
+	local PlayerID = CAPlotPlayerID
+	local CA = CAPlotDataArr
+	local CB = CAPlotCreateArr
+	local FX = CBPlotFArrX
+	local FY = CBPlotFArrY
+	local Num = CBPlotNum
+	local FN = CBPlotFArrN
+	local TNum = CBPlotTNum
+	STPopTrigArr(PlayerID)
+
+	if type(Shape) == "number" then
+		DoActionsX(PlayerID,{SetNVar(CV[4],SetTo,TNum[Shape])})
+		TMem(PlayerID,CV[5],FArr(FN[Shape],0))
+	else
+		DoActionsX(PlayerID,{
+			CallLabelAlways(Shape[3][1],Shape[3][2],Shape[3][3]);
+			SetCtrigX(Shape[3][1],Shape[3][2],0x158,Shape[3][3],SetTo,"X",CV[5][2],0x15C,1,0),
+			SetCtrigX(Shape[3][1],Shape[3][2],0x198,Shape[3][3],SetTo,"X",CV[4][2],0x15C,1,0),
+			SetNVar(CV[4],SetTo,0);
+		})
+	end
+
+	local HeaderN = LoopMaxCache[1][1]
+	local Null = LoopMaxCache[2][3]
+	local Header = LoopMaxCache[2][1]
+	local Size = LoopMaxCache[2][2]
+	local BaseNum = LoopMaxCache[2][4]
+	local LSBit = LoopMaxCache[2][5]
+
+	if type(Time) == "number" and Time < BaseNum then
+		TMem(PlayerID,CV[7],FArr(Header,Time*Size))
+
+		DoActionsX(PlayerID,{SetNVar(CV[3],SetTo,0)})
+		CWhileX(PlayerID,{TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[3],AtMost,Size-1)})
+			f_SHRead(PlayerID,_Add(CV[7],CV[3]),CV[9])
+			
+			CWrite(PlayerID,_Add(CV[5],CV[3]),CV[9]) -- X
+		CWhileXEnd({SetNVar(CV[3],Add,1)})
+
+		CWrite(PlayerID,CV[5],_Read(FArr(HeaderN,Time)))
+	elseif Time[4] == "V" then
+		CIf(PlayerID,{NVar(Time,AtMost,BaseNum-1)})
+			CMov(PlayerID,CV[11],Time)
+
+			ClShift2(PlayerID,V(NRet[16]),CV[11],LSBit)
+			TMem(PlayerID,CV[7],FArr(Header,V(NRet[16])))
+
+			DoActionsX(PlayerID,{SetNVar(CV[3],SetTo,0)})
+			CWhileX(PlayerID,{TTNVar(CV[3],iAtMost,CV[4]),NVar(CV[3],AtMost,Size-1)})
+				f_SHRead(PlayerID,_Add(CV[7],CV[3]),CV[9])
+				
+				CWrite(PlayerID,_Add(CV[5],CV[3]),CV[9]) -- X
+			CWhileXEnd({SetNVar(CV[3],Add,1)})
+
+			CWrite(PlayerID,CV[5],_Read(FArr(HeaderN,CV[11])))
+		CIfEnd()
+	else
+		CB_LoadCacheX_InputData_Error()
+	end
+end
+
+function CB_ResetCacheX(LoopMaxCache,Start,End)
+	local PlayerID = CAPlotPlayerID
+	STPopTrigArr(PlayerID)
+	local Null = LoopMaxCache[1][3]
+	local HeaderN = LoopMaxCache[1][1]
+	local Size = LoopMaxCache[1][2]
+
+	if type(Start) == "number" and Start < Size-1 then
+		if type(End) == "number" and End < Size-1 then
+			DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+			CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+				CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+			CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(End,AtMost,Size-1)})
+				DoActionsX(PlayerID,{SetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			CB_ResetCacheX_InputData_Error()
+		end
+	elseif Start[4] == "V" then
+		if type(End) == "number" and End < Size-1 then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		elseif End[4] == "V" then
+			CIf(PlayerID,{NVar(Start,AtMost,Size-1),NVar(End,AtMost,Size-1)})
+				CDoActions(PlayerID,{TSetNVar(V(NRet[16]),SetTo,Start)})
+				CWhileX(PlayerID,{TTNVar(V(NRet[16]),Below,End)})
+					CWrite(PlayerID,Vi(NRet[16],HeaderN),Null)
+				CWhileXEnd({SetNVar(V(NRet[16]),Add,1)})
+			CIfEnd()
+		else
+			CB_ResetCacheX_InputData_Error()
+		end
+	else
+		CB_ResetCacheX_InputData_Error()
+	end
+end
+
+function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisColor,DotSize,Xpx,Ypx,Alert,Limit) -- Shape -> GRP 
+	if DotSize == nil or DotSize < 1 then DotSize = 1 end
+	if Limit == nil then
+		Limit = 100000000
+	end
+	if Xpx == nil then Xpx = 1 end
+	if Ypx == nil then Ypx = 1 end
+	local NShape = CS_RatioXY(Shape,1/Xpx,1/Ypx)
+
+	local MainX, MainY, SubX, SubY, YLoc, XLoc
+	if AxisColor == nil then
+		AxisColor = {}
+	end
+	if MainSize ~= nil then 
+		MainSize = math.abs(MainSize)
+		MainX = MainSize/Xpx
+		MainY = MainSize/Ypx
+		if AxisColor[2] == nil then
+			AxisColor[2] = {}
+			AxisColor[2][1] = 0xC0
+			AxisColor[2][2] = 0xC0
+			AxisColor[2][3] = 0xC0
+		else
+			local AxisTemp = AxisColor[2]
+			AxisColor[2] = {}
+			AxisColor[2][1] = bit32.band(AxisTemp,0xFF)
+			AxisColor[2][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+			AxisColor[2][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+		end
+	end
+	if SubSize ~= nil then 
+		SubSize = math.abs(SubSize)
+		SubX = SubSize/Xpx
+		SubY = SubSize/Ypx
+		if AxisColor[3] == nil then
+			AxisColor[3] = {}
+			AxisColor[3][1] = 0xE8
+			AxisColor[3][2] = 0xE8
+			AxisColor[3][3] = 0xE8
+		else
+			local AxisTemp = AxisColor[3]
+			AxisColor[3] = {}
+			AxisColor[3][1] = bit32.band(AxisTemp,0xFF)
+			AxisColor[3][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+			AxisColor[3][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+		end
+	end
+
+	local Xmin = math.floor(CS_GetXmin(NShape))
+	local Ymin = math.floor(CS_GetYmin(NShape))
+	local Xmax = math.floor(CS_GetXmax(NShape)+1)
+	local Ymax = math.floor(CS_GetYmax(NShape)+1)
+
+	if areaX == nil then
+		areaX = {}
+	end
+	if areaY == nil then
+		areaY = {}
+	end
+	if type(areaX) == "number" then areaX = {-areaX/2,areaX/2} end
+	if type(areaY) == "number" then areaY = {-areaY/2,areaY/2} end
+
+	if areaX[1] == nil then areaX[1] = Xmin end
+	if areaX[2] == nil then areaX[2] = Xmax end
+	if areaY[1] == nil then areaY[1] = Ymin end
+	if areaY[2] == nil then areaY[2] = Ymax end
+
+	if type(areaX[1]) == "table" then areaX[1] = areaX[1][1]+Xmin end
+	if type(areaX[2]) == "table" then areaX[2] = areaX[2][1]+Xmax end
+	if type(areaY[1]) == "table" then areaY[1] = areaY[1][1]+Ymin end
+	if type(areaY[2]) == "table" then areaY[2] = areaY[2][1]+Ymax end
+
+	NShape = CS_MoveXY(NShape,-areaX[1],-areaY[1])
+	NShape = CS_Round(NShape,0)
+
+	local XMax = areaX[2] - areaX[1]
+	local YMax = areaY[2] - areaY[1]
+
+	local FilePath = FileDirectory..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0xFF))
+		end
+	end
+
+	if SubSize ~= nil then
+		YLoc = SubY - areaY[1]%SubY 
+		while true do
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)-YLoc)*XFill))
+				GRPFile:write(string.char(AxisColor[3][1]))
+				GRPFile:write(string.char(AxisColor[3][2]))
+				GRPFile:write(string.char(AxisColor[3][3]))
+			end
+			YLoc = YLoc + SubY
+			if YLoc > YNum then break end
+		end
+
+		XLoc = SubX - areaX[1]%SubX 
+		while true do
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54+3*XLoc+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[3][1]))
+				GRPFile:write(string.char(AxisColor[3][2]))
+				GRPFile:write(string.char(AxisColor[3][3]))
+			end
+			XLoc = XLoc + SubX
+			if XLoc > XNum then break end
+		end
+	end
+
+	if MainSize ~= nil then
+		YLoc = MainY - areaY[1]%MainY 
+		while true do
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)-YLoc)*XFill))
+				GRPFile:write(string.char(AxisColor[2][1]))
+				GRPFile:write(string.char(AxisColor[2][2]))
+				GRPFile:write(string.char(AxisColor[2][3]))
+			end
+			YLoc = YLoc + MainY
+			if YLoc > YNum then break end
+		end
+
+		XLoc = MainX - areaX[1]%MainX 
+		while true do
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54+3*XLoc+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[2][1]))
+				GRPFile:write(string.char(AxisColor[2][2]))
+				GRPFile:write(string.char(AxisColor[2][3]))
+			end
+			XLoc = XLoc + MainX
+			if XLoc > XNum then break end
+		end
+	end
+
+	if AxisColor[1] == nil then
+		AxisColor[1] = {}
+		AxisColor[1][1] = 0
+		AxisColor[1][2] = 0
+		AxisColor[1][3] = 0
+	else
+		local AxisTemp = AxisColor[1]
+		AxisColor[1] = {}
+		AxisColor[1][1] = bit32.band(AxisTemp,0xFF)
+		AxisColor[1][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+		AxisColor[1][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+	end
+
+	if areaY[1] <= 0 then -- X축
+		for i = 0, XNum do
+			GRPFile:seek("set",math.floor(54+3*i+((YNum)+areaY[1])*XFill))
+			GRPFile:write(string.char(AxisColor[1][1]))
+			GRPFile:write(string.char(AxisColor[1][2]))
+			GRPFile:write(string.char(AxisColor[1][3]))
+		end
+	end
+
+	if areaX[1] <= 0 then -- Y축
+		for i = 0, YNum do
+			GRPFile:seek("set",math.floor(54-3*areaX[1]+((YNum)-i)*XFill))
+			GRPFile:write(string.char(AxisColor[1][1]))
+			GRPFile:write(string.char(AxisColor[1][2]))
+			GRPFile:write(string.char(AxisColor[1][3]))
+		end
+	end
+
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0x80,0x80,0x80}, -- Grey
+		{0x00,0xFF,0xFF}, -- Pure Yellow
+		
+		{0x08,0x80,0x08},
+		{0x00,0x80,0x80}, -- Olive
+		{0xFF,0x00,0xFF}, -- Magenta
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		if NShape[k][1] <= XNum and NShape[k][1] >= 0 and NShape[k][2] <= YNum and NShape[k][2] >= 0 then
+			if DotSize == 1 then
+				GRPFile:seek("set",54+3*(NShape[k][1])+((YNum)-(NShape[k][2]))*XFill)
+
+				if ColorArr[k-1] == nil then
+					GRPFile:write(string.char(RGBArr[Num][1]))
+					GRPFile:write(string.char(RGBArr[Num][2]))
+					GRPFile:write(string.char(RGBArr[Num][3]))
+				else
+					GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+					GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+					GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+				end
+			else
+				local StX = NShape[k][1]-DotSize+1
+				local StY = NShape[k][2]-DotSize+1
+				if StX < 0 then StX = 0 end
+				if StY < 0 then StY = 0 end
+
+				local EnX = NShape[k][1]+DotSize-1
+				local EnY = NShape[k][2]+DotSize-1
+				if EnX > XNum then EnX = XNum end
+				if EnY > YNum then EnY = YNum end
+
+				for p = StX, EnX, 1 do
+					for q = StY, EnY, 1 do 
+						GRPFile:seek("set",54+3*(p)+((YNum)-(q))*XFill)
+
+						if ColorArr[k-1] == nil then
+							GRPFile:write(string.char(RGBArr[Num][1]))
+							GRPFile:write(string.char(RGBArr[Num][2]))
+							GRPFile:write(string.char(RGBArr[Num][3]))
+						else
+							GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+							GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+							GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+						end
+					end
+				end
+			end
+
+			Num = Num + 1
+			if Num > 16 then
+				Num = 1
+			end
+		else
+			if Alert == 1 then
+				CS_BMPGraph_Shape_is_outside_the_region_shown()
+			end
+		end
+	end
+
+	io.close(GRPFile)
+end
+
+function CSMakeTile(Point,Radius,Angle,Level,Number,flag) -- P2 / P3 Pentagon
+	if Number == nil then Number = 0 end
+	if Point == nil then Point = 5 end
+	local Size = 1
+	local TileArr = {{"K",{math.cos(math.rad(36)),math.sin(math.rad(36))},{0,0},{1,0}},{"K",{math.cos(math.rad(36)),-math.sin(math.rad(36))},{0,0},{1,0}}}
+
+	if flag == 0 or flag == nil then
+		local c = 0.25/(math.cos(math.rad(36))^2)
+		local b = 1-4*(math.cos(math.rad(72))^2)
+		local a = 1-2*math.cos(math.rad(72))
+		for i = 1, Level do
+			if i%2 == 0 then
+				Size = Size*(1-c)
+			else
+				Size = Size*b
+			end
+
+			local TempArr = {}
+			for k, v in pairs(TileArr) do
+				if v[1] == "K" then
+					local XLoc = v[3][1]
+					local YLoc = v[3][2]
+
+					local Pa = {(v[2][1]-XLoc)*a+XLoc,(v[2][2]-YLoc)*a+YLoc}
+					local Pb = {(v[4][1]-XLoc)*b+XLoc,(v[4][2]-YLoc)*b+YLoc}
+
+					table.insert(TempArr,{"K",{v[4][1],v[4][2]},{v[2][1],v[2][2]},{Pb[1],Pb[2]}})
+					table.insert(TempArr,{"K",{Pa[1],Pa[2]},{v[2][1],v[2][2]},{Pb[1],Pb[2]}})
+					table.insert(TempArr,{"D",{Pa[1],Pa[2]},{Pb[1],Pb[2]},{v[3][1],v[3][2]}})
+				else -- "D"
+					local XLoc = v[3][1]
+					local YLoc = v[3][2]
+
+					local Pc = {(v[4][1]-XLoc)*c+XLoc,(v[4][2]-YLoc)*c+YLoc}
+
+					table.insert(TempArr,{"D",{Pc[1],Pc[2]},{v[2][1],v[2][2]},{v[3][1],v[3][2]}})
+					table.insert(TempArr,{"K",{Pc[1],Pc[2]},{v[4][1],v[4][2]},{v[2][1],v[2][2]}})
+				end
+			end
+			TileArr = TempArr
+		end
+	else
+		local b = 1-0.25/(math.sin(math.rad(54))^2)
+		local a = 0.5/(math.cos(math.rad(36)))
+		for i = 1, Level do
+			Size = Size*b
+
+			local TempArr = {}
+			for k, v in pairs(TileArr) do
+				if v[1] == "K" then
+					local XLoc = v[3][1]
+					local YLoc = v[3][2]
+
+					local Pa = {(v[4][1]-XLoc)*a+XLoc,(v[4][2]-YLoc)*a+YLoc}
+
+					table.insert(TempArr,{"K",{v[4][1],v[4][2]},{v[2][1],v[2][2]},{Pa[1],Pa[2]}})
+					table.insert(TempArr,{"D",{Pa[1],Pa[2]},{v[2][1],v[2][2]},{v[3][1],v[3][2]}})
+				else -- "D"
+					local XLoc = v[3][1]
+					local YLoc = v[3][2]
+
+					local Pb = {(v[4][1]-XLoc)*b+XLoc,(v[4][2]-YLoc)*b+YLoc}
+					local Pc = {(v[2][1]-XLoc)*b+XLoc,(v[2][2]-YLoc)*b+YLoc}
+
+					table.insert(TempArr,{"K",{v[2][1],v[2][2]},{Pb[1],Pb[2]},{Pc[1],Pc[2]}})
+					table.insert(TempArr,{"D",{Pb[1],Pb[2]},{v[4][1],v[4][2]},{v[2][1],v[2][2]}})
+					table.insert(TempArr,{"D",{Pc[1],Pc[2]},{Pb[1],Pb[2]},{v[3][1],v[3][2]}})
+				end
+			end
+			TileArr = TempArr
+		end
+	end
+
+
+	local Shape = {#TileArr*3}
+	if flag == 0 or flag == nil then
+		for k, v in pairs(TileArr) do
+			if v[1] == "K" then -- 2 1 3
+				if v[3][1] == 0 and v[3][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[3][1],v[3][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[3][1]+l*v[2][1])/(Number+1)
+					local MY = ((Number-l+1)*v[3][2]+l*v[2][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+			
+				if v[2][1] == 0 and v[2][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[2][1],v[2][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[2][1]+l*v[4][1])/(Number+1)
+					local MY = ((Number-l+1)*v[2][2]+l*v[4][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[4][1] == 0 and v[4][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[4][1],v[4][2]})
+				end
+			else -- 1 2 3 
+				if v[2][1] == 0 and v[2][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[2][1],v[2][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[2][1]+l*v[3][1])/(Number+1)
+					local MY = ((Number-l+1)*v[2][2]+l*v[3][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[3][1] == 0 and v[3][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[3][1],v[3][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[3][1]+l*v[4][1])/(Number+1)
+					local MY = ((Number-l+1)*v[3][2]+l*v[4][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[4][1] == 0 and v[4][2] == 0 then
+					Shape[1] = Shape[1] - 1
+					else
+					table.insert(Shape,{v[4][1],v[4][2]})
+				end
+			end
+		end
+	else
+		for k, v in pairs(TileArr) do
+			if v[1] == "K" then -- 1 2 3
+				if v[2][1] == 0 and v[2][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[2][1],v[2][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[2][1]+l*v[3][1])/(Number+1)
+					local MY = ((Number-l+1)*v[2][2]+l*v[3][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[3][1] == 0 and v[3][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[3][1],v[3][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[3][1]+l*v[4][1])/(Number+1)
+					local MY = ((Number-l+1)*v[3][2]+l*v[4][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[4][1] == 0 and v[4][2] == 0 then
+					Shape[1] = Shape[1] - 1
+					else
+					table.insert(Shape,{v[4][1],v[4][2]})
+				end
+			else -- 2 1 3
+				if v[3][1] == 0 and v[3][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[3][1],v[3][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[3][1]+l*v[2][1])/(Number+1)
+					local MY = ((Number-l+1)*v[3][2]+l*v[2][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+			
+				if v[2][1] == 0 and v[2][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[2][1],v[2][2]})
+				end
+
+				for l = 1, Number do
+					local MX = ((Number-l+1)*v[2][1]+l*v[4][1])/(Number+1)
+					local MY = ((Number-l+1)*v[2][2]+l*v[4][2])/(Number+1)
+					if not(MX == 0 and MY == 0) then
+						table.insert(Shape,{MX,MY})
+						Shape[1] = Shape[1] + 1
+					end
+				end
+
+				if v[4][1] == 0 and v[4][2] == 0 then
+					Shape[1] = Shape[1] - 1
+				else
+					table.insert(Shape,{v[4][1],v[4][2]})
+				end
+			end
+		end
+	end
+
+	Shape = CS_RatioRA(Shape,Radius/Size,5/Point)
+	Shape = CS_SymmetryA(Shape,Point,0,360)
+	Shape = CS_RemoveStack(Shape,0.0001)
+	if Angle ~= 0 then
+		Shape = CS_Rotate(Shape,Angle)
+	end
+	table.insert(Shape,{0,0}) Shape[1] = Shape[1] + 1
+
+	return Shape
+end
+
+function CSMakeTileX(Point,Radius,Angle,Level,Number) -- P3 Octagon
+	if Number == nil then Number = 0 end
+	if Point == nil then Point = 5 end
+	local Size = 1
+	local k = math.sqrt(2) 
+	local TileArr = {{"D",{1+1/k,1/k},{1,0},{0,0},{1/k,1/k}},{"K",{1,0},{1+1/k,1/k},{1+k,0}},{"K",{1,0},{1+1/k,-1/k},{1+k,0}}}
+	local b = k-1 -- √2-1
+	local a = 2-k -- 2-√2
+ 
+	for i = 1, Level do
+		Size = Size*b
+
+		local TempArr = {}
+		for _, v in pairs(TileArr) do
+			if v[1] == "K" then
+				local XLoc = v[3][1]
+				local YLoc = v[3][2]
+
+				local Pa = {(v[2][1]-XLoc)*b+XLoc,(v[2][2]-YLoc)*b+YLoc}
+				local Pb = {(v[4][1]-XLoc)*a+XLoc,(v[4][2]-YLoc)*a+YLoc}
+				local Pc = {((v[2][1]-XLoc)*b+(v[4][1]-XLoc))/k+XLoc,((v[2][2]-YLoc)*b+(v[4][2]-YLoc))/k+YLoc}
+				local Pd = {((v[4][1]-XLoc)*b+(v[2][1]-XLoc))/k+XLoc,((v[4][2]-YLoc)*b+(v[2][2]-YLoc))/k+YLoc}
+				local Pe = {(((v[2][1]-XLoc)+(v[4][1]-XLoc))*b)/k+XLoc,(((v[2][2]-YLoc)+(v[4][2]-YLoc))*b)/k+YLoc}
+
+				table.insert(TempArr,{"K",{Pa[1],Pa[2]},{Pd[1],Pd[2]},{v[2][1],v[2][2]}})
+				table.insert(TempArr,{"K",{Pb[1],Pb[2]},{Pe[1],Pe[2]},{v[3][1],v[3][2]}})
+				table.insert(TempArr,{"K",{Pc[1],Pc[2]},{Pe[1],Pe[2]},{Pd[1],Pd[2]}})
+				table.insert(TempArr,{"D",{Pe[1],Pe[2]},{Pb[1],Pb[2]},{v[4][1],v[4][2]},{Pc[1],Pc[2]}})
+				table.insert(TempArr,{"D",{Pd[1],Pd[2]},{Pa[1],Pa[2]},{v[3][1],v[3][2]},{Pe[1],Pe[2]}})
+			else -- "D"
+				local XLoc = v[3][1]
+				local YLoc = v[3][2]
+
+				local Pa = {(v[2][1]-XLoc)*a+XLoc,(v[2][2]-YLoc)*a+YLoc}
+				local Pb = {(v[4][1]-XLoc)*a+XLoc,(v[4][2]-YLoc)*a+YLoc}
+				local Pc = {((v[4][1]-XLoc)*a+(v[5][1]-XLoc)*b)+XLoc,((v[4][2]-YLoc)*a+(v[5][2]-YLoc)*b)+YLoc}
+				local Pd = {((v[2][1]-XLoc)*a+(v[5][1]-XLoc)*b)+XLoc,((v[2][2]-YLoc)*a+(v[5][2]-YLoc)*b)+YLoc}
+				local Pe = {((v[2][1]-XLoc)*a+(v[4][1]-XLoc)*b)+XLoc,((v[2][2]-YLoc)*a+(v[4][2]-YLoc)*b)+YLoc}
+				local Pf = {((v[4][1]-XLoc)*a+(v[2][1]-XLoc)*b)+XLoc,((v[4][2]-YLoc)*a+(v[2][2]-YLoc)*b)+YLoc}
+
+				table.insert(TempArr,{"K",{Pd[1],Pd[2]},{Pe[1],Pe[2]},{v[5][1],v[5][2]}})
+				table.insert(TempArr,{"K",{Pa[1],Pa[2]},{Pe[1],Pe[2]},{v[3][1],v[3][2]}})
+				table.insert(TempArr,{"K",{Pc[1],Pc[2]},{Pf[1],Pf[2]},{v[5][1],v[5][2]}})
+				table.insert(TempArr,{"K",{Pb[1],Pb[2]},{Pf[1],Pf[2]},{v[3][1],v[3][2]}})
+				table.insert(TempArr,{"D",{v[2][1],v[2][2]},{Pa[1],Pa[2]},{Pe[1],Pe[2]},{Pd[1],Pd[2]}})
+				table.insert(TempArr,{"D",{v[4][1],v[4][2]},{Pc[1],Pc[2]},{Pf[1],Pf[2]},{Pb[1],Pb[2]}})
+				table.insert(TempArr,{"D",{v[3][1],v[3][2]},{Pf[1],Pf[2]},{v[5][1],v[5][2]},{Pe[1],Pe[2]}})
+			end
+		end
+		TileArr = TempArr
+	end
+
+
+	local Shape = {0}
+	for k, v in pairs(TileArr) do
+		if v[1] == "K" then -- 1 2 3
+			Shape[1] = Shape[1] + 3
+			if v[2][1] == 0 and v[2][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[2][1],v[2][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[2][1]+l*v[3][1])/(Number+1)
+				local MY = ((Number-l+1)*v[2][2]+l*v[3][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+
+			if v[3][1] == 0 and v[3][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[3][1],v[3][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[3][1]+l*v[4][1])/(Number+1)
+				local MY = ((Number-l+1)*v[3][2]+l*v[4][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+
+			if v[4][1] == 0 and v[4][2] == 0 then
+				Shape[1] = Shape[1] - 1
+				else
+				table.insert(Shape,{v[4][1],v[4][2]})
+			end
+		else -- 1 2 3 4(->1)
+			Shape[1] = Shape[1] + 4
+			if v[2][1] == 0 and v[2][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[2][1],v[2][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[2][1]+l*v[3][1])/(Number+1)
+				local MY = ((Number-l+1)*v[2][2]+l*v[3][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+
+			if v[3][1] == 0 and v[3][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[3][1],v[3][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[3][1]+l*v[4][1])/(Number+1)
+				local MY = ((Number-l+1)*v[3][2]+l*v[4][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+
+			if v[4][1] == 0 and v[4][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[4][1],v[4][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[4][1]+l*v[5][1])/(Number+1)
+				local MY = ((Number-l+1)*v[4][2]+l*v[5][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+
+			if v[5][1] == 0 and v[5][2] == 0 then
+				Shape[1] = Shape[1] - 1
+			else
+				table.insert(Shape,{v[5][1],v[5][2]})
+			end
+
+			for l = 1, Number do
+				local MX = ((Number-l+1)*v[5][1]+l*v[2][1])/(Number+1)
+				local MY = ((Number-l+1)*v[5][2]+l*v[2][2])/(Number+1)
+				if not(MX == 0 and MY == 0) then
+					table.insert(Shape,{MX,MY})
+					Shape[1] = Shape[1] + 1
+				end
+			end
+		end
+	end
+
+	Shape = CS_RatioRA(Shape,Radius/Size,8/Point)
+	Shape = CS_SymmetryA(Shape,Point,0,360)
+	Shape = CS_RemoveStack(Shape,0.0001)
+	if Angle ~= 0 then
+		Shape = CS_Rotate(Shape,Angle)
+	end
+	table.insert(Shape,{0,0}) Shape[1] = Shape[1] + 1
+
+	return Shape
+end
+
+function CS_FillPattern(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- 직각
+	if VectorX[1] == 0 and VectorX[2] == 0 then
+		CS_InputError()
+	end
+	if VectorY[1] == 0 and VectorY[2] == 0 then
+		CS_InputError()
+	end
+	if math.abs(VectorX[1]*VectorY[1]+VectorX[2]*VectorY[2]) > 0.1 then
+		CS_InputError()
+	end
+
+	if Angle == nil then
+		Angle = 0
+	end
+	if offsetX == nil then
+		offsetX = 0
+	end
+	if offsetY == nil then
+		offsetY = 0
+	end
+
+	local X1,X2,Y1,Y2,SX,SY,DX,DY,NX,NY,PX,PY
+	if areaX == nil then
+		CS_InputError()
+	elseif type(areaX) == "number" then
+		DX = areaX
+		X2 = DX/2
+		X1 = 0-X2
+		areaX = {X1,X2}	
+	end
+
+	if areaY == nil then
+		CS_InputError()
+	elseif type(areaY) == "number" then
+		DY = areaY
+		Y2 = DY/2
+		Y1 = 0-Y2	
+		areaY = {Y1,Y2}
+	end
+
+	X1 = areaX[1]
+	X2 = areaX[2]
+	Y1 = areaY[1]
+	Y2 = areaY[2]
+
+	local sizeX = math.sqrt(VectorX[1]^2+VectorX[2]^2)
+	local sizeY = math.sqrt(VectorY[1]^2+VectorY[2]^2)
+	local axisX = {VectorX[1],VectorX[2]}
+	local axisY = {VectorY[1],VectorY[2]}
+
+	local NewX, NewY
+	NewX = axisX[1]*math.cos(math.rad(Angle))+axisX[2]*math.sin(math.rad(Angle))
+	NewY = -axisX[1]*math.sin(math.rad(Angle))+axisX[2]*math.cos(math.rad(Angle))
+	axisX[1] = NewX axisX[2] = NewY
+
+	NewX = axisY[1]*math.cos(math.rad(Angle))+axisY[2]*math.sin(math.rad(Angle))
+	NewY = -axisY[1]*math.sin(math.rad(Angle))+axisY[2]*math.cos(math.rad(Angle))
+	axisY[1] = NewX axisY[2] = NewY
+
+	PShape = CS_Rotate(Pattern,-Angle)
+
+	areaX[1] = areaX[1] + offsetX
+	areaY[1] = areaY[1] + offsetY
+	if areaX[1] > areaX[2] then CS_InputError() end
+	if areaY[1] > areaY[2] then CS_InputError() end
+
+	local LX, LY = {}, {}
+	for i = 1, 2 do
+		for j = 1, 2 do
+			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k 순
+			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k 순
+		end
+	end
+
+	local LXmin = LX[1]
+	local LXmax = LX[1]
+	local LYmin = LY[1]
+	local LYmax = LY[1]
+
+	for i = 2, 4 do
+		if LXmin[3] > LX[i][3] then
+			LXmin = LX[i]
+		end
+		if LXmax[3] < LX[i][3] then
+			LXmax = LX[i]
+		end
+		if LYmin[3] > LY[i][3] then
+			LYmin = LY[i]
+		end
+		if LYmax[3] < LY[i][3] then
+			LYmax = LY[i]
+		end
+	end
+
+	function Intersect(L1,L2)
+		local NX, NY
+		if math.abs(L1[2]) <= 0.0001 then
+			NX = -L1[3]/L1[1]
+			NY = -(NX*L2[1]+L2[3])/L2[2]
+		else
+			NX = (L1[2]*L2[3]-L2[2]*L1[3])/(L1[1]*L2[2]-L2[1]*L1[2])
+			NY = -(NX*L1[1]+L1[3])/L1[2]
+		end
+		return {NX,NY}
+	end
+
+	local Points = {Intersect(LXmin,LYmin),Intersect(LXmax,LYmin),Intersect(LXmin,LYmax),Intersect(LXmax,LYmax)}
+	local Pa = Points[1]
+	local Index = 1
+	if (axisX[1]>0 and axisX[2]>0) and (axisY[1]<0 and axisY[2]>0) or (axisX[1]<0 and axisX[2]>0) and (axisY[1]>0 and axisY[2]>0) then 
+		for i = 2, 4 do
+			if Pa[2] > Points[i][2] then -- Ymin
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]>0 and axisX[2]>0) and (axisY[1]>0 and axisY[2]<0) or (axisX[1]>0 and axisX[2]<0) and (axisY[1]>0 and axisY[2]>0) then 
+		for i = 2, 4 do
+			if Pa[1] > Points[i][1] then -- Xmin
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]<0 and axisX[2]<0) and (axisY[1]<0 and axisY[2]>0) or (axisX[1]<0 and axisX[2]>0) and (axisY[1]<0 and axisY[2]<0) then 
+		for i = 2, 4 do
+			if Pa[1] < Points[i][1] then -- Xmax
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]<0 and axisX[2]<0) and (axisY[1]>0 and axisY[2]<0) or (axisX[1]>0 and axisX[2]<0) and (axisY[1]<0 and axisY[2]<0) then 
+		for i = 2, 4 do
+			if Pa[2] < Points[i][2] then -- Ymax
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]>0 and axisX[2]==0) and (axisY[1]==0 and axisY[2]>0) or (axisX[1]==0 and axisX[2]>0) and (axisY[1]>0 and axisY[2]==0) then
+		for i = 2, 4 do
+			if Pa[1]+Pa[2] > Points[i][1]+Points[i][2] then -- Xmin Ymin
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]>0 and axisX[2]==0) and (axisY[1]==0 and axisY[2]<0) or (axisX[1]==0 and axisX[2]<0) and (axisY[1]>0 and axisY[2]==0) then
+		for i = 2, 4 do
+			if Pa[1]-Pa[2] > Points[i][1]-Points[i][2] then -- Xmin Ymax
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]<0 and axisX[2]==0) and (axisY[1]==0 and axisY[2]>0) or (axisX[1]==0 and axisX[2]>0) and (axisY[1]<0 and axisY[2]==0) then
+		for i = 2, 4 do
+			if Pa[1]-Pa[2] < Points[i][1]-Points[i][2] then -- Xmax Ymin
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	elseif (axisX[1]<0 and axisX[2]==0) and (axisY[1]==0 and axisY[2]<0) or (axisX[1]==0 and axisX[2]<0) and (axisY[1]<0 and axisY[2]==0) then
+		for i = 2, 4 do
+			if Pa[1]+Pa[2] < Points[i][1]+Points[i][2] then -- Xmax Ymax
+				Pa = Points[i]
+				Index = i
+			end
+		end
+	end
+
+	local LengthY, LengthX
+	if Index == 1 then -- LXmin(1,3) LYmin(1,2)
+		LengthX = math.sqrt((Points[3][1] - Pa[1])^2+(Points[3][2]-Pa[2])^2)
+		LengthY = math.sqrt((Points[2][1] - Pa[1])^2+(Points[2][2]-Pa[2])^2)
+	elseif Index == 2 then -- LXmax(2,4) LYmin(1,2)
+		LengthX = math.sqrt((Points[4][1] - Pa[1])^2+(Points[4][2]-Pa[2])^2)
+		LengthY = math.sqrt((Points[1][1] - Pa[1])^2+(Points[1][2]-Pa[2])^2)
+	elseif Index == 3 then -- LXmin(1,3) LYmax(3,4)
+		LengthX = math.sqrt((Points[1][1] - Pa[1])^2+(Points[1][2]-Pa[2])^2)
+		LengthY = math.sqrt((Points[4][1] - Pa[1])^2+(Points[4][2]-Pa[2])^2)
+	elseif Index == 4 then -- LXmax(2,4) LYmax(3,4)
+		LengthX = math.sqrt((Points[2][1] - Pa[1])^2+(Points[2][2]-Pa[2])^2)
+		LengthY = math.sqrt((Points[3][1] - Pa[1])^2+(Points[3][2]-Pa[2])^2)
+	end
+
+	SX = LengthX/sizeX+1
+	SY = LengthY/sizeY+1
+	
+	local RetShape = {0}
+	local Count3 = 0
+	for j = 1, SY do
+		for i = 1, SX do
+			NX = axisX[1]*(i-1) + (j-1)*axisY[1] + Pa[1]
+			NY = axisX[2]*(i-1) + (j-1)*axisY[2] + Pa[2]
+			RetShape = CS_Overlap(RetShape,CS_MoveCenter(PShape,NX,NY))
+			Count3 = Count3 + 1
+		end
+	end
+
+	local mSize
+	if sizeX > sizeY then
+		mSize = sizeY
+	else
+		mSize = sizeX
+	end
+	RetShape = CS_RemoveStack(RetShape,mSize/100)
+
+	local NShape = {0}
+	for i = 2, RetShape[1]+1 do
+		if RetShape[i][1] >= X1 and RetShape[i][1] <= X2 and RetShape[i][2] >= Y1 and RetShape[i][2] <= Y2 then
+			table.insert(NShape,{RetShape[i][1],RetShape[i][2]})
+			NShape[1] = NShape[1] + 1
+		end
+	end
+	return NShape
+end
+
+function CS_FillPatternX(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- 삼각
+	if VectorX[1] == 0 and VectorX[2] == 0 then
+		CS_InputError()
+	end
+	if VectorY[1] == 0 and VectorY[2] == 0 then
+		CS_InputError()
+	end
+
+	if Angle == nil then
+		Angle = 0
+	end
+	if offsetX == nil then
+		offsetX = 0
+	end
+	if offsetY == nil then
+		offsetY = 0
+	end
+
+	local X1,X2,Y1,Y2,SX,SY,DX,DY,NX,NY,PX,PY
+	if areaX == nil then
+		CS_InputError()
+	elseif type(areaX) == "number" then
+		DX = areaX
+		X2 = DX/2
+		X1 = 0-X2
+		areaX = {X1,X2}	
+	end
+
+	if areaY == nil then
+		CS_InputError()
+	elseif type(areaY) == "number" then
+		DY = areaY
+		Y2 = DY/2
+		Y1 = 0-Y2	
+		areaY = {Y1,Y2}
+	end
+
+	X1 = areaX[1]
+	X2 = areaX[2]
+	Y1 = areaY[1]
+	Y2 = areaY[2]
+
+	local sizeX = math.sqrt(VectorX[1]^2+VectorX[2]^2)
+	local sizeY = math.sqrt(VectorY[1]^2+VectorY[2]^2)
+	local axisX = {VectorX[1],VectorX[2]}
+	local axisY = {VectorY[1],VectorY[2]}
+
+	local NewX, NewY
+	NewX = axisX[1]*math.cos(math.rad(Angle))+axisX[2]*math.sin(math.rad(Angle))
+	NewY = -axisX[1]*math.sin(math.rad(Angle))+axisX[2]*math.cos(math.rad(Angle))
+	axisX[1] = NewX axisX[2] = NewY
+
+	NewX = axisY[1]*math.cos(math.rad(Angle))+axisY[2]*math.sin(math.rad(Angle))
+	NewY = -axisY[1]*math.sin(math.rad(Angle))+axisY[2]*math.cos(math.rad(Angle))
+	axisY[1] = NewX axisY[2] = NewY
+
+	PShape = CS_Rotate(Pattern,-Angle)
+
+	areaX[1] = areaX[1] + offsetX
+	areaY[1] = areaY[1] + offsetY
+	if areaX[1] > areaX[2] then CS_InputError() end
+	if areaY[1] > areaY[2] then CS_InputError() end
+
+	local LX, LY = {}, {}
+	for i = 1, 2 do
+		for j = 1, 2 do
+			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k 순
+			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k 순
+		end
+	end
+
+	local LXmin = LX[1]
+	local LXmax = LX[1]
+	local LYmin = LY[1]
+	local LYmax = LY[1]
+
+	for i = 2, 4 do
+		if LXmin[3] > LX[i][3] then
+			LXmin = LX[i]
+		end
+		if LXmax[3] < LX[i][3] then
+			LXmax = LX[i]
+		end
+		if LYmin[3] > LY[i][3] then
+			LYmin = LY[i]
+		end
+		if LYmax[3] < LY[i][3] then
+			LYmax = LY[i]
+		end
+	end
+
+	function Intersect(L1,L2)
+		local NX, NY
+		if math.abs(L1[2]) <= 0.0001 then
+			NX = -L1[3]/L1[1]
+			NY = -(NX*L2[1]+L2[3])/L2[2]
+		else
+			NX = (L1[2]*L2[3]-L2[2]*L1[3])/(L1[1]*L2[2]-L2[1]*L1[2])
+			NY = -(NX*L1[1]+L1[3])/L1[2]
+		end
+		return {NX,NY}
+	end
+
+	local Points = {Intersect(LXmin,LYmin),Intersect(LXmax,LYmin),Intersect(LXmin,LYmax),Intersect(LXmax,LYmax)}
+	local LengthArr = {}
+	local LengthY, LengthX, Pa
+	local TempArr = {}
+	local RetShapeArr = {}
+	local CountArr = {0,0,0,0}
+	for i = 1, 4 do
+		Pa = Points[i]
+		if i == 1 then -- LXmin(1,3) LYmin(1,2)
+			LengthX = math.sqrt((Points[3][1] - Pa[1])^2+(Points[3][2]-Pa[2])^2)
+			LengthY = math.sqrt((Points[2][1] - Pa[1])^2+(Points[2][2]-Pa[2])^2)
+		elseif i == 2 then -- LXmax(2,4) LYmin(1,2)
+			LengthX = math.sqrt((Points[4][1] - Pa[1])^2+(Points[4][2]-Pa[2])^2)
+			LengthY = math.sqrt((Points[1][1] - Pa[1])^2+(Points[1][2]-Pa[2])^2)
+		elseif i == 3 then -- LXmin(1,3) LYmax(3,4)
+			LengthX = math.sqrt((Points[1][1] - Pa[1])^2+(Points[1][2]-Pa[2])^2)
+			LengthY = math.sqrt((Points[4][1] - Pa[1])^2+(Points[4][2]-Pa[2])^2)
+		elseif i == 4 then -- LXmax(2,4) LYmax(3,4)
+			LengthX = math.sqrt((Points[2][1] - Pa[1])^2+(Points[2][2]-Pa[2])^2)
+			LengthY = math.sqrt((Points[3][1] - Pa[1])^2+(Points[3][2]-Pa[2])^2)
+		end
+		SX = LengthX/sizeX+1
+		SY = LengthY/sizeY+1
+
+		RetShapeArr[i] = {0}
+		for j = 1, SY do
+			if TempArr[j] == nil then TempArr[j] = {} end
+			for k = 1, SX do
+				if TempArr[j][k] == nil then
+					TempArr[j][k] = {axisX[1]*(k-1) + (j-1)*axisY[1],axisX[2]*(k-1) + (j-1)*axisY[2]}
+				end
+				NX = TempArr[j][k][1] + Pa[1]
+				NY = TempArr[j][k][2] + Pa[2]
+				
+				if NX >= X1 and NX <= X2 and NY >= Y1 and NY <= Y2 then
+					CountArr[i] = CountArr[i] + 1
+				end
+				table.insert(RetShapeArr[i],{NX,NY})
+				RetShapeArr[i][1] = RetShapeArr[i][1] + 1
+			end
+		end
+	end
+
+	local Index = 1
+	for i = 2, 4 do
+		if CountArr[Index] < CountArr[i] then
+			Index = i
+		end 
+	end
+
+	local RetShape = {0}
+	for i = 2, RetShapeArr[Index][1]+1 do
+		local NX = RetShapeArr[Index][i][1]
+		local NY = RetShapeArr[Index][i][2]
+		RetShape = CS_Overlap(RetShape,CS_MoveCenter(PShape,NX,NY))
+	end
+				
+	local mSize
+	if sizeX > sizeY then
+		mSize = sizeY
+	else
+		mSize = sizeX
+	end
+	RetShape = CS_RemoveStack(RetShape,mSize/100)
+
+	local NShape = {0}
+	for i = 2, RetShape[1]+1 do
+		if RetShape[i][1] >= X1 and RetShape[i][1] <= X2 and RetShape[i][2] >= Y1 and RetShape[i][2] <= Y2 then
+			table.insert(NShape,{RetShape[i][1],RetShape[i][2]})
+			NShape[1] = NShape[1] + 1
+		end
+	end
+	return NShape
+end
+
+function CS_FillPatternPath(Path,Outside,Pattern,VectorX,VectorY,offsetX,offsetY,Angle)
+	if Path == nil then
+		CS_InputError()
+	end
+	local Xmax,Xmin,Ymax,Ymin
+	Xmin = Path[2][1]
+	Xmax = Path[2][1]
+	Ymin = Path[2][2]
+	Ymax = Path[2][2]
+	for i = 1, Path[1] do
+		if Path[i+1][1] > Xmax then
+			Xmax = Path[i+1][1]
+		end
+		if Path[i+1][1] < Xmin then
+			Xmin = Path[i+1][1]
+		end
+		if Path[i+1][2] > Ymax then
+			Ymax = Path[i+1][2]
+		end
+		if Path[i+1][2] < Ymin then
+			Ymin = Path[i+1][2]
+		end
+	end
+
+	return CS_CropPath(CS_FillPattern(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),Path,Outside)
+end
+
+function CS_FillPatternPathX(Path,Outside,Pattern,VectorX,VectorY,offsetX,offsetY,Angle)
+	if Path == nil then
+		CS_InputError()
+	end
+	local Xmax,Xmin,Ymax,Ymin
+	Xmin = Path[2][1]
+	Xmax = Path[2][1]
+	Ymin = Path[2][2]
+	Ymax = Path[2][2]
+	for i = 1, Path[1] do
+		if Path[i+1][1] > Xmax then
+			Xmax = Path[i+1][1]
+		end
+		if Path[i+1][1] < Xmin then
+			Xmin = Path[i+1][1]
+		end
+		if Path[i+1][2] > Ymax then
+			Ymax = Path[i+1][2]
+		end
+		if Path[i+1][2] < Ymin then
+			Ymin = Path[i+1][2]
+		end
+	end
+
+	return CS_CropPath(CS_FillPatternX(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),Path,Outside)
+end
+
 --[[ 미구현 함수들 (Update 예정)
  Include_CVPaint
  CVPlot
@@ -28251,7 +31115,10 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-    local LocId,Location = ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
