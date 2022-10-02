@@ -112,6 +112,11 @@ CRead(P1,MarPrev,0x58A364)
 	CIfEnd()
 	table.insert(PatchArrPrsv, SetCp(FP))
 	table.insert(PatchArrPrsv, RemoveUnitAt(All, "Dark Swarm", 2, AllPlayers))
+	table.insert(PatchArrPrsv, SetMemory(0x6562F8, SetTo, 1179664))
+	
+	
+
+
 	DoActions2(FP, PatchArrPrsv)
 	
 	Trigger {

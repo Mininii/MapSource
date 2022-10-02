@@ -24,6 +24,7 @@ function Interface()
 		{2,"staredit\\wav\\BGM1.ogg",81*1000},
 		{3,"staredit\\wav\\BGM2.ogg",76*1000},
 		{4,"staredit\\wav\\BGM3.ogg",66*1000},
+		{5,"staredit\\wav\\BGM4.ogg",98*1000},
 	})
 	
 	DoActionsX(FP, {SetV(BGMType,1)},1)

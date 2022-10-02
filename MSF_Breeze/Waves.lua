@@ -45,26 +45,26 @@ end
 	GunWave(133,22,{{38,25},{39,15},{44,25}},4)
 	GunWave(133,23,{{38,25},{39,15},{44,25}},4)
 
-	GunWave(131,24,{{54,20},{53,15}},4)
-	GunWave(131,25,{{54,20},{53,15}},4)
+	GunWave(131,24,{{54,20},{53,15}},2)
+	GunWave(131,25,{{54,20},{53,15}},2)
 
 	GunWave(132,26,{{53,10},{54,15},{48,10},{54,16},{55,9}},3)
 	GunWave(132,27,{{53,10},{54,15},{48,10},{54,16},{55,9}},3)
 	for i = 28, 33 do
 		GunWave(133,i,{{53,25},{48,15},{55,25}},4)
 	end
-	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},3)
-	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},3)
+	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},5)
+	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},5)
 
 	for i = 36, 40 do
-		GunWave(150,i,{{51,3},{104,5},{56,25},{53,15},{54,20}},4)
+		GunWave(150,i,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
 	end
 	--TriggerX(FP, {}, {}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 10000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07부화장 파괴! \x1F+ 10,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 132)}, {SetDeaths(FP, Subtract, 1, 132),SetScore(Force1, Add, 20000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07번식지 파괴! \x1F+ 20,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 133)}, {SetDeaths(FP, Subtract, 1, 133),SetScore(Force1, Add, 30000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07군락 파괴! \x1F+ 30,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 148)}, {SetDeaths(FP, Subtract, 1, 148),SetScore(Force1, Add, 60000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07초월체 파괴! \x1F+ 60,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 150)}, {SetDeaths(FP, Subtract, 1, 150),SetScore(Force1, Add, 40000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07다 자란 번데기 파괴! \x1F+ 40,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 25000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07부화장 파괴! \x1F+ 25,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 132)}, {SetDeaths(FP, Subtract, 1, 132),SetScore(Force1, Add, 35000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07번식지 파괴! \x1F+ 35,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 133)}, {SetDeaths(FP, Subtract, 1, 133),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07군락 파괴! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 148)}, {SetDeaths(FP, Subtract, 1, 148),SetScore(Force1, Add, 80000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07초월체 파괴! \x1F+ 80,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 150)}, {SetDeaths(FP, Subtract, 1, 150),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07다 자란 번데기 파괴! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
 
 
 	Trigger2X(FP,{Bring(FP, AtMost, 0, 130, 5)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04감염된 사령부 파괴! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04이제부터 더 강력한 몬스터가 출현합니다."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[1],1),SetInvincibility(Disable, 151, FP, 8),SetInvincibility(Disable, 151, FP, 9)})
@@ -89,6 +89,9 @@ end
 	f_TempRepeat({CD(WaveS[6],1)},104,15,nil,FP,{1280,1968},1)
 	f_TempRepeat({CD(WaveS[7],1)},51,15,nil,FP,{1792,1968},1)
 	f_TempRepeat({CD(WaveS[7],1)},104,15,nil,FP,{1792,1968},1)
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 147, 64)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 모든 괴물들을 처치하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4),Victory()}, MapPlayers,FP)})
-	
+	WinCcode = CreateCcode()
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 147, 64)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 모든 괴물들을 처치하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, MapPlayers,FP),AddCD(WinCcode,1)})
+	TriggerX(FP,{CD(WinCcode,1,AtLeast)},{AddCD(WinCcode,1)},{preserved})
+	Trigger2X(FP,{CD(WinCcode,150,AtLeast)},{RotatePlayer({Victory()}, MapPlayers,FP)})
+
 end
