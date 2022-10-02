@@ -45,7 +45,6 @@ end
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
-
 SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
@@ -61,11 +60,15 @@ CJump(AllPlayers,init_func)
 	Include_CRandNum(FP)
 	Include_G_CA_Library(2,0x600,32)
 CJumpEnd(AllPlayers,init_func)
+
 onInit_EUD() -- onPluginStart
 
 
 Interface()
 Waves()
+
+-- 마지막 플레이어가 P8일 경우 (아닐경우 P8을 다른 플레이어로 바꿔야함)
+-- 바로 아래에 EndCtrig() 있어야함 --
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()

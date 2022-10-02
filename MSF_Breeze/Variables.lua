@@ -5,7 +5,7 @@ function Include_Vars()
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
 	HumanPlayers = {0,1,2,3,4,5,6,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4,5,6}
-	ObPlayers = {P9,P10,P11,P12}
+	ObPlayers = {P8,P9,P10,P11,P12}
 	MedicTrig = {34,9,88,80}
 	ObEff = 84
 	nilunit = 181
@@ -15,9 +15,14 @@ function Include_Vars()
 	BGMType = CreateVar(FP)
 	Dt = CreateVar(FP)
 	TestMode = CreateCcode()
+	Names = CreateVArrArr(7,7,FP)
+	
+	NMStrPtrArr = {CreateVarArr(7,FP),CreateVarArr(7,FP),CreateVarArr(7,FP),CreateVarArr(7,FP)}
+	HMStrPtrArr = {CreateVarArr(7,FP),CreateVarArr(7,FP),CreateVarArr(7,FP),CreateVarArr(7,FP)}
 
 	--strings
 	
+	_0D = string.rep("\x0D",200) 
 	RandSwitch1 = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	DelayMedicT = {
@@ -36,6 +41,17 @@ function Include_Vars()
 	BanToken = {84,69,70,60,71,98}
 
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
+
+	Str00 = CreateCText(FP,"\x12\x07『 ")
+	Str01 = CreateCText(FP,"\x04의 마린\x04이 산책하다가 \x08발을 삐끗했습니다... \x07』")
+	Str02 = CreateCText(FP,"\x04의 마린\x04이 \x08벌에 쏘였습니다... \x07』")
+	Str03 = CreateCText(FP,"\x04의 마린\x04이 산들바람을 이기지 못하고 \x08날라갔습니다... \x07』")
+	Str04 = CreateCText(FP,"\x04의 마린\x04이 \x08뱀에게 물렸습니다... \x07』")
+	Str05 = CreateCText(FP,"\x04의 \x1B영웅마린\x04이 산책하다가 \x08발을 삐끗했습니다... \x07』")
+	Str06 = CreateCText(FP,"\x04의 \x1B영웅마린\x04이 \x08벌에 쏘였습니다... \x07』")
+	Str07 = CreateCText(FP,"\x04의 \x1B영웅마린\x04이 산들바람을 이기지 못하고 \x08날라갔습니다... \x07』")
+	Str08 = CreateCText(FP,"\x04의 \x1B영웅마린\x04이 \x08뱀에게 물렸습니다... \x07』")
+
 
 	
 	--ButtonSet, TBL

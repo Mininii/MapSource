@@ -244,39 +244,65 @@ function SetUnitsDatX(UnitID,Property)
 	end
 end
 
-function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
-	local Dx,Dy,Dv,Du,DtP = CreateVariables(5)
-	
-	f_Read(Player,0x51CE8C,Dx)
-	CiSub(Player,Dy,_Mov(0xFFFFFFFF),Dx)
-	CiSub(Player,DtP,Dy,Du)
-	CMov(Player,Dv,DtP) 
-	CMov(Player,0x58F500,DtP) -- MSQC val Send. 180
-	CMov(Player,Du,Dy)
-	
+function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",Length1},{2,"2.Wav",Length2},...,{N,"N.Wav",LengthN}}
+	STPopTrigArr(PlayerID)	
+	local Arr = CreateVarArr(3,PlayerID) -- Temp / ΔT / Delay 
 
-	if Option_NT ~= nil then
-		if type(Option_NT) == "table" then
-		CIf(FP,{NTCond2()})
-			CMov(FP,Option_NT[1],MSQC_Recives)
-		CIfEnd()
-		CIf(FP,{NTCond()})
-			CAdd(FP,Option_NT[2],MSQC_Recives,Option_NT[1])
-		CIfEnd()
-		else
-			PushErrorMsg("OPtion_NT_InputData_Error")
-		end
+	f_Read(PlayerID,0x51CE8C,Arr[1])
+
+	CNeg(PlayerID,Arr[1])
+
+	f_Diff(PlayerID,Arr[2],Arr[1],nil,nil,nil,1)
+
+	CSub(PlayerID,Arr[3],Arr[2])
+
+	local Cond1, Act1, Cond2
+	if type(Input) == "number" then
+		Cond1 = Memory(Input,AtLeast,1)
+		Act1 = SetMemory(Input,SetTo,0)
+	elseif Input[4] == "V" then
+		Cond1 = NVar(Input,AtLeast,1)
+		Act1 = SetNVar(Input,SetTo,0)
+	else
+		Cond1 = CtrigX(Input[1],Input[2],Input[3],Input[4],AtLeast,1)
+		Act1 = SetCtrig1X(Input[1],Input[2],Input[3],Input[4],SetTo,0)
 	end
 
-	for j, k in pairs(BGMDeathsT) do
-		for i = 0, MaxPlayer do
-			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- 브금타이머
-			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- 브금타이머
+	CIfX(PlayerID,{NVar(Arr[3],Exactly,0),Cond1})
+		for k, v in pairs(WAVData) do
+			if type(Input) == "number" then
+				Cond2 = Memory(Input,Exactly,v[1])
+			elseif Input[4] == "V" then
+				Cond2 = NVar(Input,Exactly,v[1])
+			else
+				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
+			end
+			Trigger {players = {PlayerID},
+				conditions = {
+					Label(0);
+					Cond2;
+				},
+				actions = {
+					Act1;
+					CopyCpActionX({PlayWAVX(v[2])},TargetPlayer);
+					SetNVar(Arr[3],Add,v[3]);
+				},
+				flag = {preserved}
+			}
 		end
-		CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,k,0xFFFFFF),
-		SetDeathsX(Player,SetTo,0,k,0xFF000000),
-		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- 브금타이머
-	end
+	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
+		if AlertWav ~= nil then
+			Trigger {players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					CopyCpActionX({PlayWAVX(AlertWav)},TargetPlayer);
+				},
+				flag = {preserved}
+			}
+		end
+	CIfXEnd()
 end
 
 function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
@@ -1371,4 +1397,12 @@ end
 	function G_CA_Lib_ErrorCheck()
 		if Load_CAPlot_Shape == nil then PushErrorMsg("Need_Install_Load_CAPlot") end
 	end
+end
+
+function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
+
+	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+	f_Movcpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*5)
+	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+
 end

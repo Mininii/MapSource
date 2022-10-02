@@ -3,11 +3,27 @@ function Interface()
 	local GiveRate = CreateCcodeArr(7)
 	local BanCode = CreateCcodeArr(6)
 	local CurrentOP = CreateVar(FP)
-	AddBGM(1,"staredit\\wav\\BrOP.ogg",152*1000)--오프닝
-	IBGM_EPDX(FP,6,Dt,nil,{12})
-	Install_BGMSystem(FP,6,BGMType,12,1,1,ObPlayers)
-	DoActionsX(FP, {SetV(BGMType,1)},1)
+	function Install_UnitCount(Player)
+		count,count1,count2,count3,count4,count5 = CreateVars(6,FP)
+			UnitReadX(Player,AllPlayers,229,64,count)
+			UnitReadX(Player,AllPlayers,17,nil,count1)
+			UnitReadX(Player,AllPlayers,23,nil,count2)
+			UnitReadX(Player,AllPlayers,25,nil,count3)
+			UnitReadX(Player,AllPlayers,73,nil,count4)
+			UnitReadX(Player,AllPlayers,65,nil,count5)
+			CAdd(FP,count,count1)
+			CAdd(FP,count,count2)
+			CAdd(FP,count,count3)
+			CAdd(FP,count,count4)
+			CAdd(FP,count,count5)
+	end
+	Install_UnitCount(FP)
 
+	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
+		{1,"staredit\\wav\\BrOP.ogg",152*1000}
+	})
+	DoActionsX(FP, {SetV(BGMType,1)},1)
+	
 
 	
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
@@ -99,7 +115,33 @@ for i = 1, 6 do -- 강퇴기능
 
 	local ExchangeP = CreateVar(FP)
 	for i = 0, 6 do
+		DoActions(i, {SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+		local DeathCond
+		local DeathAct
+		if i == 0 then
+			DeathCond = NVar(MarValue,AtLeast,1);
+			DeathAct = SetNVar(MarValue,Subtract,1);
+		else
+			DeathCond = Deaths(i, AtLeast, 1, 0)
+			DeathAct = SetDeaths(i, Subtract, 1, 0)
+		end
+		DeathCond2 = Deaths(i, AtLeast, 1, 20)
+		DeathAct2 = SetDeaths(i, Subtract, 1, 20)
+		
+		for j = 1, 4 do
+			local SW1 = Cleared
+			local SW2 = Cleared
+			if j == 2 then SW1 = Set end if j == 3 then SW2 = Set end if j==4 then SW1 = Set SW2 = Set end
+
+			Trigger2X(i,{DeathCond,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..ColorCode[i+1].."NM"..(j).._0D,4)}, HumanPlayers, FP),DeathAct,SetScore(i, Add, 1, Custom)},{preserved})
+			Trigger2X(i,{DeathCond2,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..ColorCode[i+1].."HM"..(j).._0D,4)}, HumanPlayers, FP),DeathAct2,SetScore(i, Add, 1, Custom)},{preserved})
+			
+		end
+
 		CIf(FP,HumanCheck(i,1))
+		
+			CMov(FP,0x582174+(4*i),count)
+			CAdd(FP,0x582174+(4*i),count)
 		ExJump = def_sIndex()
 		NJump(FP,ExJump,{Deaths(i,AtMost,0,111),Bring(i,AtMost,0,"Men",3),Bring(i,AtMost,0,"Men",4)})
 		CIf(FP,Score(i,Kills,AtLeast,1000))
@@ -313,12 +355,70 @@ RunAIScript("Turn ON Shared Vision for Player 7");
 			CDeaths(FP,AtMost,0,LeaderBoardT);
 		},
 		actions = {
-			Order(37, FP, 64, Attack, 2),
-			Order(38, FP, 64, Attack, 2),
 			LeaderBoardScore(Kills, "\x07[ \x1DP\x04oints\x07 ]");
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			ElapsedTime(AtLeast, 90);
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			Order(37, FP, 64, Attack, 2);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			ElapsedTime(AtLeast, 180);
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			Order(38, FP, 64, Attack, 2);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			ElapsedTime(AtLeast, 300);
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			Order(43, FP, 64, Attack, 2);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			ElapsedTime(AtLeast, 600);
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			Order(39, FP, 64, Attack, 2);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			ElapsedTime(AtLeast, 600);
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			Order(44, FP, 64, Attack, 2);
 			PreserveTrigger();
 		},
 	}
