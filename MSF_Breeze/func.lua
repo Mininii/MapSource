@@ -277,18 +277,25 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			else
 				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
 			end
-			Trigger {players = {PlayerID},
-				conditions = {
-					Label(0);
-					Cond2;
-				},
-				actions = {
-					Act1;
-					CopyCpActionX({PlayWAVX(v[2])},TargetPlayer);
-					SetNVar(Arr[3],Add,v[3]);
-				},
-				flag = {preserved}
-			}
+			for j, k in pairs(TargetPlayer) do
+				Trigger {players = {PlayerID},
+					conditions = {
+						Label(0);
+						Cond2;
+						LocalPlayerID(k);
+						DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+					},
+					actions = {
+						Act1;
+						SetCp(k);
+						PlayWAV(v[2]);
+						PlayWAV(v[2]);
+						SetCp(PlayerID);
+						SetNVar(Arr[3],Add,v[3]);
+					},
+					flag = {preserved}
+				}
+			end
 		end
 	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
 		if AlertWav ~= nil then

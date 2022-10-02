@@ -53,13 +53,45 @@ CRead(P1,MarPrev,0x58A364)
 	SetUnitsDatX(115,{AdvFlag={1677721601,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 
 	CIfOnce(FP)
+	local LimitX = CreateCcode()
+	local LimitC = CreateCcode()
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+	function InputTesterID(Player,ID)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+	end
+		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
+			InputTesterID(i,"GALAXY_BURST") 
+			InputTesterID(i,"RonaRonaTTang") 
+		end
+		
+	
+		Trigger2X(FP, {
+			CDeaths(FP,Exactly,1,LimitX);
+			CDeaths(FP,Exactly,0,LimitC);}, {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);})
 	DoActions2(FP, PatchArr)
 	DoActions2(FP, PatchArr2)
 	if TestStart == 1 then
 		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1)})
 	
 	end
-	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(Force1, Add, 500, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
+	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 500, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
 	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 
 	

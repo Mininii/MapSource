@@ -20,11 +20,19 @@ function Interface()
 	Install_UnitCount(FP)
 
 	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
-		{1,"staredit\\wav\\BrOP.ogg",152*1000}
+		{1,"staredit\\wav\\BrOP.ogg",215*1000},
+		{2,"staredit\\wav\\BGM1.ogg",81*1000},
+		{3,"staredit\\wav\\BGM2.ogg",76*1000},
+		{4,"staredit\\wav\\BGM3.ogg",66*1000},
 	})
-	DoActionsX(FP, {SetV(BGMType,1)},1)
 	
-
+	DoActionsX(FP, {SetV(BGMType,1)},1)
+	OPCcode = CreateCcode()
+	DoActionsX(FP, {AddCD(OPCcode,1)})
+	Trigger2X(FP,{CD(OPCcode,1,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04심심한 마린들은 인근의 들판으로 산책나가기로 했다."))}, HumanPlayers, FP)})
+	Trigger2X(FP,{CD(OPCcode,150,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x08아니근데 들판에 저그들이 왜이렇게 많아???"))}, HumanPlayers, FP)})
+	Trigger2X(FP,{CD(OPCcode,300,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04마린들은 결심했다. 얼른 이 \x08저그놈들의 머리통을 날려버리고 집으로 돌아가자고!"))}, HumanPlayers, FP)})
+	Trigger2X(FP,{CD(OPCcode,450,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),DisplayTextX(StrDesignX("\x04승리 조건 : 모든 저그를 처치하고 6시의 초월체를 파괴하세요."))}, HumanPlayers, FP)})
 	
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
@@ -115,7 +123,7 @@ for i = 1, 6 do -- 강퇴기능
 
 	local ExchangeP = CreateVar(FP)
 	for i = 0, 6 do
-		DoActions(i, {SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+		DoActions(i, {SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCp(i)})
 		local DeathCond
 		local DeathAct
 		if i == 0 then
@@ -134,7 +142,7 @@ for i = 1, 6 do -- 강퇴기능
 			if j == 2 then SW1 = Set end if j == 3 then SW2 = Set end if j==4 then SW1 = Set SW2 = Set end
 
 			Trigger2X(i,{DeathCond,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..ColorCode[i+1].."NM"..(j).._0D,4)}, HumanPlayers, FP),DeathAct,SetScore(i, Add, 1, Custom)},{preserved})
-			Trigger2X(i,{DeathCond2,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..ColorCode[i+1].."HM"..(j).._0D,4)}, HumanPlayers, FP),DeathAct2,SetScore(i, Add, 1, Custom)},{preserved})
+			Trigger2X(i,{DeathCond2,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..ColorCode[i+1].."HM"..(j).._0D,4)}, HumanPlayers, FP),DeathAct2,SetScore(i, Add, 2, Custom)},{preserved})
 			
 		end
 
@@ -258,22 +266,22 @@ players = {i},
 conditions = {
 	Label(0);
 	Bring(i,AtLeast,1,0,5); 
-	Accumulate(i,AtLeast,8500,Ore);
+	Accumulate(i,AtLeast,4500,Ore);
 	Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 },
 actions = {
 	ModifyUnitEnergy(1,0,i,5,0);
 	RemoveUnitAt(1,0,5,i);
-	SetResources(i,Subtract,8500,Ore);
+	SetResources(i,Subtract,4500,Ore);
 	CreateUnitWithProperties(1,20,2,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F8500 O r e"),4);
+	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F4500 O r e"),4);
 	--SetCDeaths(FP,Add,1,CUnitRefrash);
 	--SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
 	
-DoActions(i,{SetAllianceStatus(Force1,Ally),--팀킬방지
+DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
 RunAIScript("Turn ON Shared Vision for Player 1");
 RunAIScript("Turn ON Shared Vision for Player 2");
 RunAIScript("Turn ON Shared Vision for Player 3");
@@ -359,66 +367,6 @@ RunAIScript("Turn ON Shared Vision for Player 7");
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
-			PreserveTrigger();
-		},
-	}
-	Trigger { -- 킬 포인트 리더보드,
-		players = {FP},
-		conditions = {
-			Label(0);
-			ElapsedTime(AtLeast, 90);
-			CDeaths(FP,AtMost,0,LeaderBoardT);
-		},
-		actions = {
-			Order(37, FP, 64, Attack, 2);
-			PreserveTrigger();
-		},
-	}
-	Trigger { -- 킬 포인트 리더보드,
-		players = {FP},
-		conditions = {
-			Label(0);
-			ElapsedTime(AtLeast, 180);
-			CDeaths(FP,AtMost,0,LeaderBoardT);
-		},
-		actions = {
-			Order(38, FP, 64, Attack, 2);
-			PreserveTrigger();
-		},
-	}
-	Trigger { -- 킬 포인트 리더보드,
-		players = {FP},
-		conditions = {
-			Label(0);
-			ElapsedTime(AtLeast, 300);
-			CDeaths(FP,AtMost,0,LeaderBoardT);
-		},
-		actions = {
-			Order(43, FP, 64, Attack, 2);
-			PreserveTrigger();
-		},
-	}
-	Trigger { -- 킬 포인트 리더보드,
-		players = {FP},
-		conditions = {
-			Label(0);
-			ElapsedTime(AtLeast, 600);
-			CDeaths(FP,AtMost,0,LeaderBoardT);
-		},
-		actions = {
-			Order(39, FP, 64, Attack, 2);
-			PreserveTrigger();
-		},
-	}
-	Trigger { -- 킬 포인트 리더보드,
-		players = {FP},
-		conditions = {
-			Label(0);
-			ElapsedTime(AtLeast, 600);
-			CDeaths(FP,AtMost,0,LeaderBoardT);
-		},
-		actions = {
-			Order(44, FP, 64, Attack, 2);
 			PreserveTrigger();
 		},
 	}
