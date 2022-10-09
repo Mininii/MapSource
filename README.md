@@ -16,6 +16,7 @@
 + 마린키우기 GaLaXy.2
 + 마린키우기 UnLimit ExceeD
 + 마린키우기 GaLaXy:ReB∞t
++ 마린키우기 산들바람(Breeze)
 
 ## 베타버전을 출시했으나 완성되지 못한 작품
 + 마린키우기 Memory 2

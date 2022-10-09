@@ -2,32 +2,63 @@
 -- 이 맵은 CTrigAsm의 도움을 받아 제작되었습니다.
 -- CtrgAsm 제작자 -  Ninfia
 
-TestModeOnOff=0
-Curdir="C:\\Users\\USER\\Documents\\"
+-- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
+-- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+--dofile(Curdir.."MapSource\\MSF_GaLaXy\\Gal.lua")
+----------------------------------------------Loader Space ---------------------------------------------------------------------
+LD2XOption = 1
+if LD2XOption == 1 then
+	Mapdir="C:\\euddraft0.9.2.0\\MSF_GaLaXy"
+	__StringArray = {}
+	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
+	Loader2XFName = "Loader.lua"
+else
+	Loader2XFName = "Loader2X.lua"
+end
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Loader.lua" then
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
 end
 
+EXTLUA = "dir \""..Curdir.."\\MapSource\\MSF_GaLaXy\\\" /b"
+for dir in io.popen(EXTLUA):lines() do
+     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "Gal.lua" then
+		InitEXTLua = assert(loadfile(Curdir.."MapSource\\MSF_GaLaXy\\"..dir))
+		InitEXTLua()
+     end
+end
+
+
+
+isSingleMap = 0
+TestModeOnOff=0
+if isSingleMap == 1 then -- 싱글맵 센터뷰 전부 삭제
+	function CenterView(Location)
+	end
+end
+
 FP = P6
 _0D = string.rep("\x0D",200)
 function Damage(Player,EPD,Amount)
-CMov(Player,UnitId,_ReadX(_Add(EPD,25),0xFF))
+CMov(Player,UnitID,_ReadX(_Add(EPD,25),0xFF),nil,0xFF,1)
 CIfX(Player,{TDeaths(_Add(EPD,2),AtLeast,Amount,0)})
 CDoActions(Player,{TSetDeaths(_Add(EPD,2),Subtract,Amount,0)})
 CElseX()
-CMov(Player,DPlayerId,_ReadX(_Add(EPD,19),0xFF))
-CDoActions(Player,{TSetDeathsX(_Add(EPD,19),SetTo,0,0,0xFF00),TSetDeathsX(_Add(EPD,70),SetTo,0,0,0xFF0000),TSetDeaths(_Add(_Mul(UnitId,12),DPlayerId),Add,1,0)})
+CMov(Player,DPlayerID,_ReadX(_Add(EPD,19),0xFF),nil,0xFF,1)
+CDoActions(Player,{
+	TSetDeathsX(_Add(EPD,19),SetTo,0,0,0xFF00),
+	TSetDeathsX(_Add(EPD,70),SetTo,0,0,0xFF0000),
+	TSetDeaths(_Add(_Mul(UnitID,12),DPlayerID),Add,1,0)})
 CIfXEnd()
 end
 
 function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
 	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2]-3)
-	f_MovCpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
+	f_Movcpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*6)
 	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
 end
@@ -106,26 +137,26 @@ Trigger { -- 동맹 세팅 트리거
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetAllianceStatus(P12,Enemy);
 		SetMemory(0x6509B0,SetTo,1);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetAllianceStatus(P12,Enemy);
 		SetMemory(0x6509B0,SetTo,2);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetAllianceStatus(P12,Enemy);
 		SetMemory(0x6509B0,SetTo,3);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetAllianceStatus(P12,Enemy);
 		SetMemory(0x6509B0,SetTo,4);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetAllianceStatus(P12,Enemy);
 		SetMemory(0x6509B0,SetTo,6);
 		SetAllianceStatus(Force1,Ally);
 		SetMemory(0x6509B0,SetTo,7);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		SetMemory(0x6509B0,SetTo,5);
-		SetAllianceStatus(force2,Ally);
+		SetAllianceStatus(Force2,Ally);
 		},
 	}
 
@@ -142,7 +173,7 @@ Trigger { -- 기본 세팅 트리거
 		SetMemory(0x58F514,SetTo,3);
 		SetMemory(0x58F5F8,SetTo,200);
 		SetMemory(0x58F5FC,SetTo,5);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 	},
 }
 
@@ -293,7 +324,10 @@ CJumpEnd(AllPlayers,2)
 
 Enable_HumanCheck()
 NoAirCollisionX(FP)
-VName = "Ver. 1.7X"
+VName = "Ver. 1.8"
+if isSingleMap == 1 then
+	VName = VName.."S"
+end
 ModeO = 0x00010001
 Intro = 0x00010002
 IntroT = 0x00010003
@@ -364,7 +398,7 @@ TempUpgradeMaskRet = V(TempUpgradeMaskRetP)
 IsUpgradeP = 0x11
 IsUpgrade = V(IsUpgradeP)
 DoActionsPX({SetCDeathsF(P6,Subtract,1,CanCT),SetCDeathsF(P6,Subtract,1,ArbT),
-		setcdeathsF(P6,Subtract,1,DropShip);},P6)
+		SetCDeathsF(P6,Subtract,1,DropShip);},P6)
 local XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
 Trigger {
 	players = {P6},
@@ -384,7 +418,7 @@ Trigger {
 		Command(P6,AtLeast,1,"DropDead");
 	},
 	actions = {
-		setcdeathsF(P6,Add,1,DropShip);
+		SetCDeathsF(P6,Add,1,DropShip);
 		PreserveTrigger();
 	}
 }
@@ -411,7 +445,7 @@ Trigger {
 
 -- CTrigPlib Start
 Ctrig_Clear = def_sIndex()
-CIf(P6,cdeathsF(P6,AtLeast,100,LoopT),SetCDeathsF(P6,Subtract,100,LoopT))
+CIf(P6,CDeathsF(P6,AtLeast,100,LoopT),SetCDeathsF(P6,Subtract,100,LoopT))
 
 CMov(FP,0x6509B0,19025+19)
 CWhile(FP,{CDeathsF(FP,AtLeast,1,ModeO),Memory(0x6509B0,AtMost,19025+19 + (84*1699))})
@@ -438,7 +472,7 @@ for i=0, 4 do
 	CIf(P6,DeathsX(CurrentPlayer,Exactly,100,0,0xFF))
 	SaveCp(P6,BackupCp)
 	CDoActions(P6,{TSetDeaths(_Sub(BackupCp,23),SetTo,_ReadF(0x662350+(100*4)),0)})
-	LoadCp(P6,BackupCP)
+	LoadCp(P6,BackupCp)
 	CIfEnd()
 	DoActions(P6,MoveCp(Subtract,6*4))
 	
@@ -490,14 +524,14 @@ CAdd(FP,0x6509B0,FP)
 
 CIfEnd()
 
-CIf(P6,CDeathsF(P6,AtLeast,1,Dropship))
+CIf(P6,CDeathsF(P6,AtLeast,1,DropShip))
 
 
 CMov(FP,0x6509B0,19025+19)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 MoveCp("X",19*4)
 CIf(FP,{DeathsX(CurrentPlayer,AtMost,4,0,0xFF),DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)})
-DoACtions(FP,MoveCP(SetTo,70*4))
+DoActions(FP,MoveCp(SetTo,70*4))
 CIf(FP,DeathsX(CurrentPlayer,AtLeast,1*65536,0,0xFF0000))
 Trigger {
 	players = {P6},
@@ -509,13 +543,15 @@ Trigger {
 		PreserveTrigger();
 	}
 }
-DoACtions(FP,{MoveCP(SetTo,69*4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),MoveCP(SetTo,0*4)})
+DoActions(FP,{MoveCp(SetTo,69*4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),MoveCp(SetTo,0*4)})
 SaveCp(P6,BackupCp)
+CMov(FP,0x57f120,0)
 Damage(P6,BackupCp,5000*256)
-LoadCp(P6,BackupCP)
-DoACtions(FP,MoveCP(SetTo,70*4))
+CMov(FP,0x57f120,1)
+LoadCp(P6,BackupCp)
+DoActions(FP,MoveCp(SetTo,70*4))
 CIfEnd()
-DoACtions(FP,MoveCP(SetTo,19*4))
+DoActions(FP,MoveCp(SetTo,19*4))
 
 CIfEnd()
 
@@ -533,12 +569,17 @@ CIfEnd()
 			SetSwitch("Switch 13",Clear),
 			SetSwitch("Switch 228",Clear),
 			SetDeaths(Force1,SetTo,0,"Terran Medic"),
+			SetCp(FP),
 			})
-
+for i = 0, 7 do
+	DoActions(i,{SetCp(i)})
+end
 
 -- CTrigPlib End
 
-CIf(P6,{Label(0),CDeathsF(P6,Exactly,1,TestMode)});
+CIf(P6,{Label(0),CDeathsF(P6,Exactly,1,TestMode)},{SetResources(Force1,SetTo,0x10000000,Ore)});
+
+
 
 for i=1, 100 do
 Trigger {
@@ -572,7 +613,7 @@ Trigger {
 	},
 	actions = {
 		SetMemory(0x6CA038, SetTo, 9876);
-		CreateUnit(255,8,"Heal",P1);
+		CreateUnit(100,8,"Heal",P1);
 		SetMemory(0x6CA038, SetTo, 1707);
 		SetMemory(0x5821A4,SetTo,1600);
 		CopyCpAction({RunAIScript("Turn ON Shared Vision for Player 7"),RunAIScript("Turn ON Shared Vision for Player 8")},{P1,P2,P3,P4,P5},FP);
@@ -598,7 +639,6 @@ CIfEnd()
 CIf(P6,CDeathsF(P6,Exactly,0,ModeO))
 
 CIfOnce(P6)
-Print_All_CTextString(FP)
 DeathStrPtr1 = CreateVarArr(5,FP)
 DeathStrPtr2 = CreateVarArr(5,FP)
 DeathStrPtr3 = CreateVarArr(5,FP)
@@ -629,6 +669,19 @@ end
 CIfEnd()
 
 DoActionsPX(SetCDeathsF(P6,Add,1,ModeT),P6)
+if isSingleMap == 0 then
+Trigger { -- 멀티플 불가능 맵
+players = {AllPlayers},
+conditions = {
+Memory(0x57F0B4, Exactly, 0);
+},
+actions = {
+		DisplayText("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.",4);
+		PlayWAV("sound\\Misc\\TPwrDown.wav");
+		Victory();
+},
+}
+else
 Trigger { -- 멀티플 불가능 맵
 players = {AllPlayers},
 conditions = {
@@ -640,6 +693,7 @@ actions = {
 		Victory();
 },
 }
+end
 Trigger {
 	players = {P6},
 	conditions = {
@@ -831,7 +885,7 @@ Trigger { -- 모드선택유닛 이탈금지
 	PreserveTrigger();
 	},
 }
-Trigger { -- 모드 선택 타임오버
+Trigger { -- 모드 선택 타임오버 
 	players = {P6},
 	conditions = {
 		Label(0);
@@ -841,31 +895,31 @@ Trigger { -- 모드 선택 타임오버
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		RemoveUnit("Bengalaas (Jungle)",AllPlayers);
 		RemoveUnit("▶ Unknown ◀",AllPlayers);
@@ -1280,19 +1334,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1319,19 +1373,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1357,19 +1411,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1396,19 +1450,19 @@ Trigger { -- 모드 고르는중 화면고정,동맹상태 고정
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,1);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,2);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,3);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,4);
 		DisplayText(Text,4);
-		--centerview("Location 8");
+		CenterView("Location 8");
 		SetMemory(0x6509B0,SetTo,128);
 		DisplayText(Text,4);
 		SetMemory(0x6509B0,SetTo,129);
@@ -1432,31 +1486,31 @@ Trigger { -- 갤럭시 이지모드 선택
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,Intro);
 		RemoveUnit("Bengalaas (Jungle)",AllPlayers);
@@ -1479,31 +1533,31 @@ Trigger { -- 갤럭시 하드모드 선택
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,128);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,129);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,130);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,131);
 		PlayWAV("sound\\glue\\bnetclick.wav");
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,Intro);
 		SetCDeathsF(P6,SetTo,1,GMode);
@@ -1590,7 +1644,9 @@ CIfEnd()
 
 
 CIf(P6,{Label(0),CDeathsF(P6,Exactly,1,ModeO),CDeathsF(P6,Exactly,1,Chaos)})
-DoActionsPX(SetCDeathsF(P6,Add,1,ScoutFPatch),P6)
+TurboSeekT = CreateCcode()
+DoActionsPX({SetCDeathsF(P6,Add,1,ScoutFPatch),AddCD(TurboSeekT,1)},P6)
+TriggerX(FP,{CD(TurboSeekT,2,AtLeast)},{SetDeaths(-111923, SetTo, 1, 0),SubCD(TurboSeekT,2)},{preserved})
 Trigger {
 	players = {P6},
 	conditions = {
@@ -1840,7 +1896,8 @@ Trigger { -- EUD Editor
 		PreserveTrigger();
 	},
 }
-DoActionsP({SetMemory(0x58F520,Subtract,1),SetMemory(0x58F524,Subtract,1),SetDeaths(-111923, SetTo, 1, 0)},P6)
+
+DoActionsP({SetMemory(0x58F520,Subtract,1),SetMemory(0x58F524,Subtract,1)},P6)
 Trigger { -- 혼돈모드 스카웃 패치
 	players = {P6},
 	conditions = {
@@ -1994,15 +2051,15 @@ Trigger { -- 인트로 작동중 화면 중앙고정
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,0);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,1);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,2);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,3);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,4);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		SetMemory(0x6509B0,SetTo,5);
 		PreserveTrigger();
 		},
@@ -2168,7 +2225,7 @@ Trigger { -- 3
 		CDeathsF(P6,AtLeast,50,IntroT);
 	},
 	actions = {
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		SetMemory(0x5124F0, SetTo, 0x0000001D);
 		PlayWAV("sound\\glue\\countdown.wav");
@@ -2182,19 +2239,19 @@ Trigger { -- 3 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x043 3 3 3 3 3 3 3 \x07C O U N T \x043 3 3 3 3 3 3 3 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2208,7 +2265,7 @@ Trigger { -- 2
 		CDeathsF(P6,AtLeast,80,IntroT);
 	},
 	actions = {
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		
@@ -2222,19 +2279,19 @@ Trigger { -- 2 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x042 2 2 2 2 2 2 2 \x07C O U N T \x042 2 2 2 2 2 2 2 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2248,7 +2305,7 @@ Trigger { -- 1
 		CDeathsF(P6,AtLeast,110,IntroT);
 	},
 	actions = {
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 	},
@@ -2261,19 +2318,19 @@ Trigger { -- 1 관전자
 	},
 	actions = {
 		SetMemory(0x6509B0,SetTo,128);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,129);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,130);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,131);
-		--centerview("Anywhere");
+		CenterView("Anywhere");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\x13\x04Creator - GALAXY_BURST\n\x13\x04"..VName.."\n\x13\x04설명은 Insert 키를 눌러주세요\n\x13\x041 1 1 1 1 1 1 1 \x07C O U N T \x041 1 1 1 1 1 1 1 ",4);
 		PlayWAV("sound\\glue\\countdown.wav");
 		SetMemory(0x6509B0,SetTo,5);
@@ -2291,31 +2348,31 @@ Trigger { -- 시작, 스타트 세팅
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		--centerview("Heal");
+		CenterView("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,1);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		--centerview("Heal");
+		CenterView("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,2);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		--centerview("Heal");
+		CenterView("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,3);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		--centerview("Heal");
+		CenterView("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,4);
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\x13\x03★ \x04마 린 키 우 기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04: \x1FRE \x03★\n\n\x13\x04"..VName.."\n\n\x13\x040 0 0 0 0 0 0 0 \x1FS T A R T \x040 0 0 0 0 0 0 0 ",4);
 		SetAllianceStatus(Force2,Enemy);
-		--centerview("Heal");
+		CenterView("Heal");
 		PlayWAV("sound\\glue\\bnetclick.wav");
 		SetMemory(0x6509B0,SetTo,5);
 		SetCDeathsF(P6,SetTo,1,MarineMove);
@@ -2422,7 +2479,7 @@ Trigger { -- 영작유닛,각종세팅 트리거
 		CreateUnit(4,75,"Location 90",P7);
 		CreateUnit(1,21,"Location 91",P7);
 		CreateUnit(1,21,"Location 92",P7);
-		--killunit("Men",Force2); -- 테스트 트리거
+		--KillUnit("Men",Force2); -- 테스트 트리거
 		SetInvincibility(Enable,21,P1,"Heal");
 		SetInvincibility(Enable,71,P6,"Location 8");
 		--SetDeaths(P10,SetTo,0,0);	-- 테스트 트리거	
@@ -2608,9 +2665,9 @@ Trigger { -- 하프타임 설치
 	},
 	actions = {
 		SetMemoryX(0x656EB0,SetTo,(50*3)+(300*3*65536),0xFFFFFFFF);
-		SetMemory(0x657678,SetTo,(15*3)+(35*3*65536),0xFFFFFFFF);
-		SetMemory(0x656F98, SetTo, 600*3,0xFFFF);
-		SetMemory(0x657760, SetTo, 65*3,0xFFFF);
+		SetMemoryX(0x657678,SetTo,(15*3)+(35*3*65536),0xFFFFFFFF);
+		SetMemoryX(0x656F98, SetTo, 600*3,0xFFFF);
+		SetMemoryX(0x657760, SetTo, 65*3,0xFFFF);
 		
 },
 }
@@ -2892,21 +2949,21 @@ Trigger { -- 캔낫시 가스 패널티, 모든 저그유닛 삭제
 		KillUnit("Guardian",Force2);
 		KillUnit("Zergling",Force2);
 		KillUnit("Larva",Force2);
-		killunit("Hydralisk",force2);
+		KillUnit("Hydralisk",Force2);
 		KillUnit("Mutalisk",Force2);
-		KillUnit("Lurker",force2);
-		killunit("Ultralisk",force2);
-		killunit("Devourer",force2);
-		killunit("Scourge",force2);
-		killunit("Kukulza G",force2);
-		killunit("Kukulza M",force2);
-		killunit("Torrasque (40)",force2);
-		killunit("Torrasque (48)",force2);
-		killunit("Devouring One",force2);
-		killunit("Hunter Killer",force2);
-		killunit(121,force2);
-		killunit("Infested Duran",force2);
-		killunit("Infested Kerrigan",force2);
+		KillUnit("Lurker",Force2);
+		KillUnit("Ultralisk",Force2);
+		KillUnit("Devourer",Force2);
+		KillUnit("Scourge",Force2);
+		KillUnit("Kukulza G",Force2);
+		KillUnit("Kukulza M",Force2);
+		KillUnit("Torrasque (40)",Force2);
+		KillUnit("Torrasque (48)",Force2);
+		KillUnit("Devouring One",Force2);
+		KillUnit("Hunter Killer",Force2);
+		KillUnit(121,Force2);
+		KillUnit("Infested Duran",Force2);
+		KillUnit("Infested Kerrigan",Force2);
 		SetCDeathsF(P6,SetTo,400,CanCT);
 		PreserveTrigger();
 	},
@@ -10865,7 +10922,7 @@ Trigger { -- 조합 영웅마린
 		Accumulate(CurrentPlayer,AtLeast,10000,Ore);
 	},
 	actions = {
-		SetResources(CurrentPlayer,Subtract,10000,ore);
+		SetResources(CurrentPlayer,Subtract,10000,Ore);
 		RemoveUnitAt(1,0,"hero",CurrentPlayer);
 		CreateUnit(1,"H Marine","Location 255",CurrentPlayer);
 		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x04Marine을 \x1BH \x04Marine으로 \x19변환\x04하였습니다. - \x1F10000 O r e",4);
@@ -10882,7 +10939,7 @@ Trigger { -- 조합 갤럭시 마린
 		Accumulate(CurrentPlayer,AtLeast,30000,Ore);
 	},
 	actions = {
-		SetResources(CurrentPlayer,Subtract,30000,ore);
+		SetResources(CurrentPlayer,Subtract,30000,Ore);
 		RemoveUnitAt(1,20,"hero",CurrentPlayer);
 		CreateUnit(1,"GaLaXy Marine","Location 255",CurrentPlayer);
 		SetDeaths(CurrentPlayer,Add,1,"GaLaXy Bunker");
@@ -10899,7 +10956,7 @@ Trigger { -- 조합 갤럭시 마린
 		Deaths(CurrentPlayer,AtMost,23,"GaLaXy Bunker");
 	},
 	actions = {
-		SetResources(CurrentPlayer,Add,45000,ore);
+		SetResources(CurrentPlayer,Add,45000,Ore);
 		RemoveUnitAt(1,"Terran Vulture","Anywhere",CurrentPlayer);
 		DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x0424기 조합) 자원 반환 + \x1F45000 O r e",4);
 		PreserveTrigger();
@@ -11184,1986 +11241,380 @@ end
 
 
 
+HArr = {}
 HPoint = 35000
 HName = "Fenix Z"
 HIndex = 77
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 질럿영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--질럿영작
 HPoint = 35000
 HName = "Fenix Z"
 HIndex = 77
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 질럿영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--질럿영작
 HPoint = 35000
 HName = "Fenix D"
 HIndex = 78
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 드라영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--드라영작
 HPoint = 35000
 HName = "Fenix D"
 HIndex = 78
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 드라영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--드라영작
 HPoint = 40000
 HName = "Mojo"
 HIndex = 80
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 모조영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--모조영작
 HPoint = 40000
 HName = "Mojo"
 HIndex = 80
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 모조영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--모조영작
 HPoint = 100000
 HName = "Frozen Master"
 HIndex = 71
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아비터영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아비터영작
 HPoint = 100000
 HName = "Frozen Master"
 HIndex = 71
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아비터영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아비터영작
 HPoint = 100000
 HName = "Time Dominator"
 HIndex = 63
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 다크아콘영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--다크아콘영작
 HPoint = 100000
 HName = "Time Dominator"
 HIndex = 63
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 다크아콘영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--다크아콘영작
 HPoint = 100000
 HName = "Lightning Magician"
 HIndex = 67
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 하템영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--하템영작
 HPoint = 100000
 HName = "Lightning Magician"
 HIndex = 67
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 하템영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--하템영작
 HPoint = 50000
 HName = "Hyperion"
 HIndex = 28
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 히페영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--히페영작
 HPoint = 50000
 HName = "Hyperion"
 HIndex = 28
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 히페영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--히페영작
 HPoint = 50000
 HName = "Alan Schezar"
 HIndex = 17
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 골럇영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--골럇영작
 HPoint = 50000
 HName = "Alan Schezar"
 HIndex = 17
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 골럇영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--골럇영작
 HPoint = 90000
 HName = "Jim Raynor V"
 HIndex = 19
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 벌쳐영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--벌쳐영작
 HPoint = 90000
 HName = "Jim Raynor V"
 HIndex = 19
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 벌쳐영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--벌쳐영작
 HPoint = 35000
 HName = "Tom Kazansky"
 HIndex = 21
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 레이스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--레이스영작
 HPoint = 35000
 HName = "Tom Kazansky"
 HIndex = 21
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 레이스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--레이스영작
 HPoint = 60000
 HName = "Danimoth"
 HIndex = 86
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 다니모스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--다니모스영작
 HPoint = 60000
 HName = "Danimoth"
 HIndex = 86
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 다니모스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--다니모스영작
 HPoint = 35000
 HName = "Zeratul"
 HIndex = 75
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 제라툴영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--제라툴영작
 HPoint = 35000
 HName = "Zeratul"
 HIndex = 75
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 제라툴영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--제라툴영작
 HPoint = 200000
 HName = "Dark Templar G"
 HIndex = 74
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 강다크영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--강다크영작
 HPoint = 200000
 HName = "Dark Templar G"
 HIndex = 74
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 강다크영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--강다크영작
 HPoint = 100000
 HName = "Artanis"
 HIndex = 88
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아르타니스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아르타니스영작
 HPoint = 100000
 HName = "Artanis"
 HIndex = 88
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아르타니스영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아르타니스영작
 HPoint = 55000
 HName = "Gui Montag"
 HIndex = 10
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 파벳영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--파벳영웅영작
 HPoint = 55000
 HName = "Gui Montag"
 HIndex = 10
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 파벳영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--파벳영웅영작
 HPoint = 35000
 HName = "Edmund Duke M"
 HIndex = 25
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 듀크시즈영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--듀크시즈영작
 HPoint = 35000
 HName = "Edmund Duke M"
 HIndex = 25
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 듀크시즈영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--듀크시즈영작
 HPoint = 90000
 HName = "Norad II"
 HIndex = 29
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 노라드영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--노라드영작
 HPoint = 90000
 HName = "Norad II"
 HIndex = 29
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 노라드영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--노라드영작
 HPoint = 150000
 HName = "Edmund Duke T"
 HIndex = 23
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 탱크영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--탱크영작
 HPoint = 150000
 HName = "Edmund Duke T"
 HIndex = 23
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 탱크영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--탱크영작
 HPoint = 35000
 HName = "Tassadar/Zeratul"
 HIndex = 76
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아칸영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아칸영웅영작
 HPoint = 35000
 HName = "Tassadar/Zeratul"
 HIndex = 76
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 아칸영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--아칸영웅영작
 HPoint = 55000
 HName = "Tassadar"
 HIndex = 79
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 하템영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--하템영웅영작
 HPoint = 55000
 HName = "Tassadar"
 HIndex = 79
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 하템영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--하템영웅영작
 HPoint = 65000
 HName = "Warbringer"
 HIndex = 81
 Mode = 0
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 리버영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
-}
-
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--리버영웅영작
 HPoint = 65000
 HName = "Warbringer"
 HIndex = 81
 Mode = 1
 HText = "\x13\x15▶ ▶ ▶ [\x04 "..HName.." \x11사살\x10 +\x17 "..HPoint+((Mode*2)*HPoint).." P t s \x15] \x15◀ ◀ ◀"
-Trigger { -- 리버영웅영작
-	players = {P6},
-	conditions = {
-		Label(0);
-		CDeathsF(P6,Exactly,Mode,NoFail);
-		Deaths(P7,AtMost,0,"Temple");
-		Deaths(P7, AtLeast,1,HIndex);
-	},
-	actions = {
-		SetDeaths(P7,Subtract,1,HIndex);
-		SetScore(Force1,Add,HPoint+((Mode*2)*HPoint),Kills);
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(HText,4);
-		PlayWAV("sound\\Bullet\\TNsHit00.wav");
-		SetMemory(0x6509B0, SetTo, 5);
-		PreserveTrigger();
-	},
+table.insert(HArr,{HIndex,HText,HPoint+((Mode*2)*HPoint),HName,Mode})
+--리버영웅영작
+
+
+HKillArr = {}
+--영작 전처리
+for j,k in pairs(HArr) do
+	
+Trigger {
+players = {P6},
+conditions = {
+	Label(0);
+	CDeathsF(P6,Exactly,k[5],NoFail);
+	Deaths(P7,AtMost,0,"Temple");
+	Deaths(P7, AtLeast,1,k[1]);
+},
+actions = {
+	SetDeaths(P7,Subtract,1,k[1]);
+	SetScore(Force1,Add,k[3],Kills);
+	SetMemory(0x6509B0, SetTo, 0);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 1);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 2);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 3);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 4);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 128);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 129);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 130);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 131);
+	DisplayText(k[2],4);
+	PlayWAV("sound\\Bullet\\TNsHit00.wav");
+	SetMemory(0x6509B0, SetTo, 5);
+	PreserveTrigger();
+},
 }
+table.insert(HKillArr,KillUnit(k[1],Force2))
+end
+if TestModeOnOff == 1 then
+	Trigger2X(FP,{CDeathsF(P6,Exactly,1,TestMode),KeyPress('TAB',"Down")},{
+		KillUnit("Guardian",Force2);
+		KillUnit("Zergling",Force2);
+		KillUnit("Larva",Force2);
+		KillUnit("Hydralisk",Force2);
+		KillUnit("Mutalisk",Force2);
+		KillUnit("Lurker",Force2);
+		KillUnit("Ultralisk",Force2);
+		KillUnit("Devourer",Force2);
+		KillUnit("Scourge",Force2);
+		KillUnit("Kukulza G",Force2);
+		KillUnit("Kukulza M",Force2);
+		KillUnit("Torrasque (40)",Force2);
+		KillUnit("Torrasque (48)",Force2);
+		KillUnit("Devouring One",Force2);
+		KillUnit("Hunter Killer",Force2);
+		KillUnit(121,Force2);
+		KillUnit("Infested Duran",Force2);
+		KillUnit("Infested Kerrigan",Force2);
+		KillUnit(131,Force2);
+		KillUnit(132,Force2);
+		KillUnit(133,Force2);
+	
+	
+	},{preserved})
+
+end
+
 BIndex = 5
 BPoint = 1000000
 BClear = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x04신전의 \x08첫번째 수호자 \x11C\x04alculator \x04가 쓰러졌습니다.\n\x13\x10+\x17 "..BPoint.." P t s \n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※"
@@ -13284,7 +11735,7 @@ Trigger {
 		PlayWAV("staredit\\wav\\sel_enter_blaster.ogg");
 		PlayWAV("staredit\\wav\\sel_enter_blaster.ogg");
 		SetMemory(0x6509B0, SetTo, 5);
-		SetCDeathsF(P6,SetTo,100,Dropship);
+		SetCDeathsF(P6,SetTo,100,DropShip);
 
 	},
 }
@@ -13497,6 +11948,7 @@ Trigger { -- BGM On Off
 Trigger { -- 마린겹치기 On Off
 	players = {Force1},
 	conditions = {
+		Command(Force2,AtLeast,1,"Temple");
 		Deaths(CurrentPlayer,Exactly,0,"Eff2");
 		Command(CurrentPlayer,AtLeast,1,"Eff2");
 	},
@@ -13513,6 +11965,7 @@ Trigger { -- 마린겹치기 On Off
 Trigger { -- 마린겹치기 On Off
 	players = {Force1},
 	conditions = {
+		Command(Force2,AtLeast,1,"Temple");
 		Deaths(CurrentPlayer,Exactly,1,"Eff2");
 		Command(CurrentPlayer,AtLeast,1,"Eff2");
 	},
@@ -13521,6 +11974,22 @@ Trigger { -- 마린겹치기 On Off
 		SetDeaths(CurrentPlayer,SetTo,0,49);
 		SetDeaths(CurrentPlayer,SetTo,1,50);
 		DisplayText("\x02▶ \x1C마린 겹치기\x04를 끕니다.",4);
+		GiveUnits(1,"Eff2",CurrentPlayer,"Anywhere",P6);
+		RemoveUnitAt(1,"Eff2","Anywhere",P6);
+		PreserveTrigger();
+		},
+	}
+Trigger { -- 마린겹치기 강제 On
+	players = {Force1},
+	conditions = {
+		Command(Force2,AtMost,0,"Temple");
+		Command(CurrentPlayer,AtLeast,1,"Eff2");
+	},
+	actions = {
+		SetDeaths(CurrentPlayer,SetTo,1,"Eff2");
+		SetDeaths(CurrentPlayer,SetTo,1,49);
+		SetDeaths(CurrentPlayer,SetTo,1,50);
+		DisplayText("\x02▶ \x07최종 보스전\x04에서는 \x1C마린 겹치기\x04를 끌 수 없습니다.",4);
 		GiveUnits(1,"Eff2",CurrentPlayer,"Anywhere",P6);
 		RemoveUnitAt(1,"Eff2","Anywhere",P6);
 		PreserveTrigger();
@@ -13674,9 +12143,9 @@ Trigger { -- 동맹상태 고정, 중립마린 제거
 		RunAIScript("Turn ON Shared Vision for Player 3");
 		RunAIScript("Turn ON Shared Vision for Player 4");
 		RunAIScript("Turn ON Shared Vision for Player 5");
-		KillUnitAt(all,0,"Location 37",P12);
-		KillUnitAt(all,20,"Location 37",P12);
-		KillUnitAt(all,100,"Location 37",P12);
+		KillUnitAt(All,0,"Location 37",P12);
+		KillUnitAt(All,20,"Location 37",P12);
+		KillUnitAt(All,100,"Location 37",P12);
 		PreserveTrigger();
 	},
 }
@@ -13689,7 +12158,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\x13\x03〓〓〓〓〓〓〓〓〓〓〓〓〓\x04게임 방법\x03〓〓〓〓〓〓〓〓〓〓〓〓〓\n\x13\x04적을 처치해 포인트를 얻고 환전하여 \x1F광물\x04을 모읍시다!\n\x13\x04모은 \x1F광물\x04로 마린을 모으고 업그레이드 하여 적을 \x06섬멸\x04합시다!\n\x13\x04 조  합  법\n\x13\x1BH \x04Marine = Marine + \x1F10000 ore\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04= \x1BH \x04Marine + \x1F30000 ore\n\x13\x04조합소는 하단 \x07워프게이트 \x04입니다.\n\x13\x04  Tip - \x0E통합 \x04방어력 \x18업그레이드\x04는 마린들을 저그로부터 보다 안전하게 보호해줍니다.\n\x13\x03〓〓〓〓〓〓〓〓〓〓〓\x04창 닫기는 Delete키\x03〓〓〓〓〓〓〓〓〓〓〓",4);
+		DisplayText("\n\n\n\n\x13\x03〓〓〓〓〓〓〓〓〓〓〓〓〓\x04게임 방법\x03〓〓〓〓〓〓〓〓〓〓〓〓〓\n\x13\x04적을 처치해 포인트를 얻고 환전하여 \x1F광물\x04을 모읍시다!\n\x13\x04모은 \x1F광물\x04로 마린을 모으고 업그레이드 하여 적을 \x06섬멸\x04합시다!\n\x13\x04 조  합  법\n\x13\x1BH \x04Marine = Marine + \x1F10000 Ore\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04= \x1BH \x04Marine + \x1F30000 Ore\n\x13\x04조합소는 하단 \x07워프게이트 \x04입니다.\n\x13\x04  Tip - \x0E통합 \x04방어력 \x18업그레이드\x04는 마린들을 저그로부터 보다 안전하게 보호해줍니다.\n\x13\x03〓〓〓〓〓〓〓〓〓〓〓\x04창 닫기는 Delete키\x03〓〓〓〓〓〓〓〓〓〓〓",4);
 		PreserveTrigger();
 		},
 	}
@@ -13841,7 +12310,7 @@ Trigger { -- 파일런 건작 스폰 완료시 포메이션 무적 해제
 	CDeathsF(P6, AtLeast,4,FormCon);
 		},
 	actions = {
-		SetInvincibility(Disable,"Khaydarin Crystal Formation",force2,"Anywhere");
+		SetInvincibility(Disable,"Khaydarin Crystal Formation",Force2,"Anywhere");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
@@ -13891,7 +12360,7 @@ Trigger { -- 번데기 건작 스폰 완료시 오버마인드 G 무적 해제
 	CDeathsF(P6, AtLeast,4,OvrGCon);
 		},
 	actions = {
-		SetInvincibility(Disable,"Zerg Overmind (With Shell)",force2,"Anywhere");
+		SetInvincibility(Disable,"Zerg Overmind (With Shell)",Force2,"Anywhere");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
@@ -13940,7 +12409,7 @@ Trigger { -- 젤나가 근처 건작 스폰 완료시 젤나가 신전 무적 해제
 	CDeathsF(P6, AtLeast,4,NagaCon);
 		},
 	actions = {
-		SetInvincibility(Disable,"Xel'Naga Temple",force2,"Anywhere");
+		SetInvincibility(Disable,"Xel'Naga Temple",Force2,"Anywhere");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		PlayWAV("staredit\\wav\\title_enter.ogg");
@@ -14135,7 +12604,7 @@ Trigger { -- 셀 전부 파괴시 캐리어보스 동작
 		SetMemoryX(0x663784,SetTo,121,0xFF);
 		GiveUnits(1,"Gantrithor (Carrier)",P12,"Anywhere",P6);
 		MoveUnit(1,"Gantrithor (Carrier)",P6,"Anywhere","gant");
-		SetInvincibility(Disable,"Gantrithor (Carrier)",force2,"Anywhere");
+		SetInvincibility(Disable,"Gantrithor (Carrier)",Force2,"Anywhere");
 		PlayWAV("sound\\Terran\\MARINE\\TMaPss06.WAV");
 		PlayWAV("sound\\Terran\\MARINE\\TMaPss06.WAV");
 		PlayWAV("sound\\Terran\\MARINE\\TMaPss06.WAV");
@@ -14207,6 +12676,9 @@ Trigger { -- 특수건작, 캐리어 처치 완료시 템플 무적 해제
 		PlayWAV("staredit\\wav\\title_enter.ogg");
 		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 건물 \x04Temple의 \x02무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※",4);
 		MinimapPing("Temple");
+		SetDeaths(Force1,SetTo,1,"Eff2");--마린겹치기 강제ON
+		SetDeaths(Force1,SetTo,1,49);--마린겹치기 강제ON
+		SetDeaths(Force1,SetTo,1,50);--마린겹치기 강제ON
 		SetCDeathsF(P6,Add,500,LoopT);
 },
 }
@@ -14469,6 +12941,9 @@ Trigger { -- 템플 파괴시
 		KillUnitAt(3,215,"Anywhere",AllPlayers);
 		KillUnit("Men",Force2);
 		KillUnit("Scarab",Force2);
+		SetDeaths(Force1,SetTo,1,"Eff2");--마린겹치기 강제ON
+		SetDeaths(Force1,SetTo,1,49);--마린겹치기 강제ON
+		SetDeaths(Force1,SetTo,1,50);--마린겹치기 강제ON
 },
 }
 Trigger { -- 템플 파괴시
@@ -16980,3 +15455,8 @@ EndCtrig()
 ErrorCheck()
 Enable_HideErrorMessage(FP)
 
+
+if LD2XOption == 1 then
+	__PopStringArray()
+	io.close(__TRIGchkptr)
+	end
