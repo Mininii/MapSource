@@ -44,9 +44,9 @@ TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);CVar(FP,HiddenATK[2],AtLeast,1);},
 TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],Subtract,1);SetCVar(FP,HiddenPtsM[2],Subtract,1);},{preserved})
 
 --플러스 옵션 이용불가
-TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],SetTo,0)},{preserved})
-TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],SetTo,0)},{preserved})
-TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],SetTo,0)},{preserved})
+--TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,1);},{SetCVar(FP,HiddenHP[2],SetTo,0)},{preserved})
+--TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,1);},{SetCVar(FP,HiddenATK[2],SetTo,0)},{preserved})
+--TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],SetTo,0)},{preserved})
 
 
 HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"

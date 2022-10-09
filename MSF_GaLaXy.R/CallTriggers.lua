@@ -226,5 +226,24 @@ CDoActions(FP,{
 		})
 NJumpEnd(FP,OCU_Jump2)
 SetCallEnd()
+MinGachaP = CreateVar(FP)
+MinGacha = SetCallForward()
+SetCall(FP)
+	DoActions(FP, {SetSwitch(RandSwitch1,Random)})
+	CIfX(FP,{Switch(RandSwitch1, Set)})
+	MinGachaRandT = CreateVArr(4,FP)
+		MinGachaRand = f_CRandNum(100001)
+		ItoDec(FP,MinGachaRand,VArr(MinGachaRandT,0),2,0x1F,0)
+		f_Movcpy(FP,_Add(MinGachaPStrPtr,MGPStr1[2]),VArr(MinGachaRandT,0),16)
+		CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MinGachaP),PlayWAV("staredit\\wav\\MMinus.wav"),DisplayText("\x0D\x0D\x0DMGaP".._0D,4),TSetResources(MinGachaP, Add, MinGachaRand, Ore)})
 
+	CElseX()
+		MinGachaRand = f_CRandNum(100001)
+		ItoDec(FP,MinGachaRand,VArr(MinGachaRandT,0),2,0x1F,0)
+		f_Movcpy(FP,_Add(MinGachaMStrPtr,MGPStr1[2]),VArr(MinGachaRandT,0),16)
+		CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MinGachaP),PlayWAV("staredit\\wav\\MPlus.wav"),DisplayText("\x0D\x0D\x0DMGaM".._0D,4),TSetResources(MinGachaP, Subtract, MinGachaRand, Ore)})
+		
+	CIfXEnd()
+
+SetCallEnd()
 end

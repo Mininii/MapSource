@@ -60,6 +60,11 @@ function Source()
 	Str23 = CreateCText(FP,"\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str24 = CreateCText(FP,"\x07』\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str26 = CreateCText(FP,"\x04현재 선택가능 플레이어는...")
+	MGPStr1 = CreateCText(FP,"\x13\x07『 \x1F미네랄 박스\x04를 개봉하여 ")
+	MGPStr2 = CreateCText(FP," 미네랄을 \x07얻었습니다. \x04축하드립니다! \x07』")
+	MGPStr3 = CreateCText(FP," 미네랄을 \x08잃었습니다. \x04저런... \x07』")
+
+	
 
 	
 
@@ -241,7 +246,8 @@ DifLeaderBoard = {
 	Gun_TempSpawnSet1,Repeat_TempV,RepeatType = CreateVars(3,FP)
 	f_GunSendStrPtr,f_GunSendStrPtr2,G_CA_StrPtr,G_CA_StrPtr2,G_CA_StrPtr3,f_GunStrPtr,UPCompStrPtr = CreateVars(7,FP)
 	RepHeroIndex,Gun_LV,CunitHP,CunitIndex = CreateVars(4,FP)
-
+	MinGachaPStrPtr = CreateVar(FP)
+	MinGachaMStrPtr = CreateVar(FP)
 	AtkUpgradePtrArr = {}
 	AtkUpgradeMaskRetArr = {}
 	DefUpgradePtrArr = {}

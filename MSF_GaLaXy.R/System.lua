@@ -2,6 +2,14 @@ function Gun_System()
 	CanC = CreateCcode()
 	CanCT = CreateCcode()
 	DefeatCC = CreateCcode()
+
+	CIf(FP,{CV(HondonMode,1,AtLeast)})
+	TurboSeekT = CreateCcode()
+	DoActionsX(FP,{AddCD(TurboSeekT,1)})
+	TriggerX(FP,{CD(TurboSeekT,2,AtLeast)},{SetDeaths(-111923, SetTo, 1, 0),SubCD(TurboSeekT,2)},{preserved})
+	CIfEnd()
+
+
 	if X2_Mode == 1 then
 		CIf(FP,{Never(),Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
 	else

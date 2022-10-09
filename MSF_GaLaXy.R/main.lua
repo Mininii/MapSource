@@ -47,7 +47,7 @@ if X2_Mode == 1 then
 	VName = "1.7_2X"..Test
 	MapSize = {256*32,256*32}
 else
-	VName = "2.3"..Test
+	VName = "2.4"..Test
 	MapSize = {128*32,128*32}
 end
 FP = P8
@@ -61,10 +61,10 @@ CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100")
 	Source()
 	DUnitCalc = Install_EXCC(FP,15,1)
+	Include_CRandNum(FP)
 	Install_CallTriggers()
 	Install_GetCLoc(FP,0,nilunit)
 	Include_Conv_CPosXY(FP,MapSize)
-	Include_CRandNum(FP)
 	Include_G_CA_Library(4,0x600,32)
 	G3_Install_Shape()
 	G_CAPlot2(G_CAPlot_Shape_InputTable)

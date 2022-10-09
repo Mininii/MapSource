@@ -444,6 +444,14 @@ function init()
 			--table.insert(CtrigInitArr[FP],SetCtrigX(FP,CC_Header[2],0x15C,0,SetTo,FP,EXCC_Forward,0x15C,1,2))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 			--table.insert(CtrigInitArr[FP],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,0x500,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
 	
+			f_GetStrXptr(FP,MinGachaPStrPtr,"\x0D\x0D\x0DMGaP".._0D)
+			f_GetStrXptr(FP,MinGachaMStrPtr,"\x0D\x0D\x0DMGaM".._0D)
+			
+			f_Memcpy(FP,MinGachaPStrPtr,_TMem(Arr(MGPStr1[3],0),"X","X",1),MGPStr1[2])
+			f_Memcpy(FP,_Add(MinGachaPStrPtr,MGPStr1[2]+0x40),_TMem(Arr(MGPStr2[3],0),"X","X",1),MGPStr2[2])
+			f_Memcpy(FP,MinGachaMStrPtr,_TMem(Arr(MGPStr1[3],0),"X","X",1),MGPStr1[2])
+			f_Memcpy(FP,_Add(MinGachaMStrPtr,MGPStr1[2]+0x40),_TMem(Arr(MGPStr3[3],0),"X","X",1),MGPStr3[2])
+			
 			
 			
 	
@@ -614,7 +622,7 @@ function init()
 			CAdd(FP,CurrentUID,1)
 		CWhileEnd()
 		CDoActions(FP,{KillUnit(35,P8)})
-		CIfEnd(SetMemory(0x6509B0,SetTo,FP)) -- OnPluginStart End
+		CIfEnd({SetMemory(0x6509B0,SetTo,FP),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64)}) -- OnPluginStart End
 		CMov(FP,0x6509B0,FP)
 	end
 	

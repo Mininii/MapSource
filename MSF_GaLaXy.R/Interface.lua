@@ -389,10 +389,13 @@ actions = {
 	PreserveTrigger();
 },
 }
-for j = 176,178 do
-	Trigger2(i, {Kills(i,AtLeast,1,j)}, {SetKills(i, Subtract, 1, j),SetScore(i, Add, 90000, Kills)},{preserved})
-end
 CIf(FP,{HumanCheck(i,1)})
+
+CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetV(MinGachaP,i)})
+CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetV(MinGachaP,i)})
+CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetV(MinGachaP,i)})
+
+
 
 
 
