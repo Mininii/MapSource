@@ -324,7 +324,7 @@ CJumpEnd(AllPlayers,2)
 
 Enable_HumanCheck()
 NoAirCollisionX(FP)
-VName = "Ver. 1.8"
+VName = "Ver. 1.9"
 if isSingleMap == 1 then
 	VName = VName.."S"
 end
@@ -545,9 +545,7 @@ Trigger {
 }
 DoActions(FP,{MoveCp(SetTo,69*4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00),MoveCp(SetTo,0*4)})
 SaveCp(P6,BackupCp)
-CMov(FP,0x57f120,0)
 Damage(P6,BackupCp,5000*256)
-CMov(FP,0x57f120,1)
 LoadCp(P6,BackupCp)
 DoActions(FP,MoveCp(SetTo,70*4))
 CIfEnd()

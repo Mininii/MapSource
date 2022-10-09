@@ -1074,7 +1074,7 @@ dataDumper_iscript_f : 0
 extraedssetting : [STRCtrig Assembler v5.4]
 Path : C:\euddraft0.9.2.0\
 [Galaxy]
-[MarDup]
+[Gal_MarDup]
 [freeze]
 freeze = 0
 [CPLP]
