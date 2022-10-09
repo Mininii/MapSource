@@ -1796,7 +1796,7 @@ end
 	})
 	if BossPhaseTestMode == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{--CD(EEggCode,19,AtMost)
-			SetCD(EDNum,4)
+			SetCD(EDNum,3)
 		})
 	end
 	CIfEnd()

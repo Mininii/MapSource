@@ -141,7 +141,7 @@ function Operator_Trig()
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150}
-	TargetTestGun = 190
+	TargetTestGun = 173
     for j, k in pairs(f_GunTable) do
 		if k ~= TargetTestGun then
         table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
