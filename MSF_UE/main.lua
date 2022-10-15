@@ -40,8 +40,8 @@ DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(210,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
 TestSet(0)
 TestPMul=3
-VerText = "\x04Ver. 3.7"
-LimitVer = 37
+VerText = "\x04Ver. 3.8"
+LimitVer = 38
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
@@ -70,7 +70,7 @@ end
 			Objects()
 			HPoints()
 			Var_init()
-			Include_Conv_CPosXY(FP)
+			Include_Conv_CPosXY(FP,{96*32,192*32})
 			Install_GetCLoc(FP,0,nilunit)
 			Install_TMemoryBW(FP)
 			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT,G_CB_LoopMaxT)
