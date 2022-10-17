@@ -5330,10 +5330,7 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId =  ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5432,10 +5429,7 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5536,10 +5530,7 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId =  ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5648,10 +5639,7 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5758,10 +5746,7 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5878,10 +5863,7 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6005,10 +5987,7 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 		Direction = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6017,11 +5996,8 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	if OrderShape == nil then
 		CS_InputError()
 	end
-
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -6223,10 +6199,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Direction = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6236,10 +6209,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		CS_InputError()
 	end
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -8429,10 +8399,7 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8633,10 +8600,7 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8839,19 +8803,13 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -9159,19 +9117,13 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -9478,10 +9430,7 @@ function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CA
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9700,10 +9649,7 @@ function CAPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9924,19 +9870,13 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -10262,19 +10202,13 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -11903,10 +11837,7 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12112,10 +12043,7 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12321,10 +12249,7 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12548,10 +12473,7 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13432,10 +13354,7 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13788,10 +13707,7 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -14143,19 +14059,13 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -14605,19 +14515,13 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId = OrderLocation
-	if type(OrderLocation) == "string" then
-		OLocId = ParseLocation(OLocId)-1
-	end
+	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -31115,10 +31019,7 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId = Location
-	if type(Location) == "string" then
-		LocId = ParseLocation(LocId)-1
-	end
+	local LocId,Location=ConvertLocation(Location)
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
