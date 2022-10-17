@@ -489,14 +489,29 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfX(FP,CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF))
 		TriggerX(FP,{Switch(RandSwitch,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{preserved})
 		TriggerX(FP,{Switch(RandSwitch,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
-		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
-		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
-		CElseX()
-		CTrigger(FP,{},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
+
+		
+		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+		for i = 0, 3 do
+			if i == 0 then RS1 = Cleared RS2=Cleared end
+			if i == 1 then RS1 = Set RS2=Cleared end
+			if i == 2 then RS1 = Cleared RS2=Set end
+			if i == 3 then RS1 = Set RS2=Set end
+			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,26+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,26+i)},{preserved})
+		end
+
 		CIfXEnd()
+		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,FuncAlloc)
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,FuncAlloc+1)
+		FuncAlloc=FuncAlloc+2
 
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+		CDoActions(FP,{TMoveUnit(1,Gun_TempSpawnSet1,CreatePlayer,89,1)})
+
 
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)

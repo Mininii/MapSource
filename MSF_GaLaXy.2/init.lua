@@ -1,7 +1,9 @@
 function onInit()
 	RandSwitch = "Switch 1"
+	RandSwitch1 ="Switch 6"
+	RandSwitch2 ="Switch 7"
 	_0D = string.rep("\x0D",200)
-	BanToken = {84,69,70,60,71}
+	BanToken = {84,69,70,98,71}
 	GiveUnitID = {64,65,66,67,61,63}
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1}
@@ -61,6 +63,7 @@ function onInit()
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	QuaText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06500\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	TeText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x065\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	SuT00 = CreateCText(FP,"\x0d\x0d\x0d\x12\x02◆ \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	
@@ -75,17 +78,23 @@ function onInit()
 	--Balance
 	AtkFactor = 15
 	DefFactor = 20
-	SuFactor = 200
+	SuFactor = 150
+	QuaFactor = 255
 	MarCost = 10000
 	GMCost = 30000
 	NeCost = 30000
 	TeCost = 50000
 	SuCost = 400000
+	QuaCost = 1000000
 	HPointFactor = 30
-	ExRate = 5
-	EasyEx1P = 100
-	HDEx1P = 100
-	BurEx1P = 90
+	ExRate = 15
+    EasyEx1P = 120
+    HDEx1P = 120
+    BurEx1P = 100
+	ExRate2 = 5
+    EasyEx1P2 = 100
+    HDEx1P2 = 100
+    BurEx1P2 = 90
 	GunLimit = 1450
 	--Patch
 	for j = 0, 5 do
@@ -216,6 +225,7 @@ function SetZergGroupFlags(UnitID)
 	SetUnitClass(11)
 	SetUnitClass(5)
 	SetUnitClass(12)
+	SetUnitClass(60)
 	SetUnitClass(186)
 	
 	for i = 0, 227 do
@@ -228,6 +238,7 @@ function SetZergGroupFlags(UnitID)
 	table.insert(PatchArr2,SetMemoryX(0x6559CC, SetTo, AtkFactor*65536,0xFFFF0000))
 	table.insert(PatchArr2,SetMemoryX(0x6559C0, SetTo, DefFactor,0xFFFF))
 	table.insert(PatchArr2,SetMemoryX(0x6559DC, SetTo, SuFactor,0xFFFF))
+	table.insert(PatchArr2,SetMemoryW(0x6559C0+(12*2), SetTo, QuaFactor))
 	
 	
 	HondonPatchArr = {}
@@ -337,7 +348,7 @@ function SetZergGroupFlags(UnitID)
 	TempUpgradeMaskRet = CreateVar()
 	DisGun = CreateVar()
 	BdIndex = CreateVar()
-	NextPtrs = CreateVar()
+	Nextptrs = CreateVar()
 	Gun_HS = CreateVar()
 	UnitIDV = CreateVar()
 	CryUID= CreateVar()
@@ -532,9 +543,13 @@ function SetZergGroupFlags(UnitID)
 	BSkillT = CreateCcodeArr(6)
 	BSkillT2 = CreateCcodeArr(6)
 	BSkillT3 = CreateCcodeArr(6)
+	QSkillT = CreateCcodeArr(6)
+	QSkillT2 = CreateCcodeArr(6)
+	QSkillT3 = CreateCcodeArr(6)
 	OneStim = CreateCcodeArr(6)
 	SuStrPtr = CreateVarArr(6,FP)
 	TeStrPtr = CreateVarArr(6,FP)
+	QuaStrPtr = CreateVarArr(6,FP)
 	function Objects()
 	CVariable(AllPlayers,0x1000)
 	CVariable(AllPlayers,0x1001)

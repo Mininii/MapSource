@@ -60,6 +60,34 @@ function Install_Shape()
 	--CS_Distortion()
 	BattleShape = CSMakeStar(5,165-(12*(5-2)),((36*6)-(36*2))/2,180,PlotSizeCalc(5*2,2),PlotSizeCalc(5*2,1))
 
+	
+function CS_OverlapShape(Shape,...)
+	local RetShape = Shape
+
+	local arg = table.pack(...)
+	for k = 1, arg.n do
+		RetShape[1] = RetShape[1] + arg[k][1]
+		for i = 1, arg[k][1] do
+			table.insert(RetShape,{arg[k][i+1][1],arg[k][i+1][2]})
+		end
+	end
+	return RetShape	
+end
+function CSMakeTornado(Point,Radius,Angle,Numner,Outside,StartNumber)
+	local Shape = {0}
+	if StartNumber == nil then StartNumber = 1 end
+	for i = StartNumber, Numner do
+		CS_OverlapShape(Shape,CSMakePolygon(Point,i*Radius,i*Angle,Point+1,0))
+	end
+	if Outside~=nil then
+		return CS_Rotate((CS_OverlapShape(Shape,CSMakePolygon(Point,Radius,Numner*Angle,PlotSizeCalc(Point,Numner),PlotSizeCalc(Point,Numner-1)))),-Numner*Angle)
+	else
+		return Shape
+	end
+end
+
+	QuaShape = CSMakeTornado(4, 24, 15, 8)
+
 	NeShape = CSMakePolygon(4,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(4,1),1)
 
 	TeShape = CSMakePolygon(3,(((16*9)-(16*1))+24)/2,0,PlotSizeCalc(3,1),1)
