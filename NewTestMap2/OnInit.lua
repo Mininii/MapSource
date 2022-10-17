@@ -1,124 +1,22 @@
 function onInit_EUD()
-	PatchInit()
-	function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
-		SetUnitsDatX(UnitID, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=60,SeekRange=7,GroupFlag=0xA,
-		HumanInitAct = 2,
-		ComputerInitAct = 2,
-		AttackOrder = 10,
-		AttackMoveOrder = 2,
-		IdleOrder = 2,
-		RClickAct = 1,
-	})
-	if ObjNum~=nil then
-		SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
-	else
-		SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
-	end
-	end
-	function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
-		SetUnitsDatX(UnitID, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=60,SeekRange=7,GroupFlag=0xA,
-		HumanInitAct = 2,
-		ComputerInitAct = 2,
-		AttackOrder = 10,
-		AttackMoveOrder = 2,
-		IdleOrder = 2,
-		RClickAct = 1,
-	})
-	if ObjNum~=nil then
-		SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
-	else
-		SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
-	end
-	end
-	LevelUnitArr = {}
-	GetUnitArr = {}
-	function InputLevelUnit(Level,Per,UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ifTType,ObjNum)
-		if ifTType ~= nil then
-			SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
-		else
-			SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
-		end
-		table.insert(LevelUnitArr,{Level,UnitID,Per})
-		table.insert(GetUnitArr,CreateVarArr(7, FP))
-	end
-	InputLevelUnit(1,75000,0,0,24*1,1,0,60)--마린
-	InputLevelUnit(2,75000,1,2,24*3,10,1,59)--고스트
-	InputLevelUnit(3,75000,2,4,24*3,20,2,59)--벌쳐
-	InputLevelUnit(4,75000,7,13,24*2,20,2,59)--에씨비
-	InputLevelUnit(5,65000,8,16,24*2,30,3,59)--레이스
-	InputLevelUnit(6,65000,5,11,24*2,50,5,59,1)--탱크
-	InputLevelUnit(7,65000,3,7,24*2,80,8,59,1)--골럇
-	InputLevelUnit(8,65000,32,25,24*3,60,6,59)--파벳 3타
-	InputLevelUnit(9,60000,58,103,24*2,80,8,59)--발키리 2타
-	InputLevelUnit(10,60000,12,19,24*2,250,25,59)--배틀
-
-
-
-	InputLevelUnit(11,55000,65,64,24*3,250,25,59)--질럿 2타
-	InputLevelUnit(12,55000,66,66,24*2,400,40,59)--드라군
-	InputLevelUnit(13,50000,67,68,24*2,550,55,59)--하템
-	InputLevelUnit(14,50000,61,111,24*3,1000,100,59)--닥템
-	InputLevelUnit(15,45000,83,115,24*3,1300,130,59,nil,1)--리버
-	InputLevelUnit(16,45000,70,73,24*2,1000,100,59)--스카웃
-	InputLevelUnit(17,40000,60,100,24*2,1300,130,59)--커세어
-	InputLevelUnit(18,40000,71,77,24*2,1800,180,59)--아비터
 
 
 	
-	InputLevelUnit(19,50000,37,35,12,600,60,59)--저글링
-	InputLevelUnit(20,50000,38,38,24,2000,200,59)--히드라
-	InputLevelUnit(21,45000,43,48,24,2700,270,59)--뮤탈
-	InputLevelUnit(22,45000,44,46,24*2,7000,700,59)--가디언
-	InputLevelUnit(23,40000,62,104,24*2,10000,1000,59)--디바우러
-	InputLevelUnit(24,40000,39,40,24*2,13000,1300,59)--울트라
-	InputLevelUnit(25,35000,46,50,24,10000,1000,59)--디파
-
-
-
-	InputLevelUnit(25+1,35000,20,1,24*1,10,1,60)--짐레
-	InputLevelUnit(25+2,30000,16,3,24*2,30,3,59)--사라
-	InputLevelUnit(25+3,30000,19,5,24*1,20,2,59)--짐레벌쳐
-	InputLevelUnit(25+4,25000,17,10,24*1,30,3,59,1,1)--알랜
-	InputLevelUnit(25+5,25000,23,12,24*2,100,10,59,1)--듀크
-	InputLevelUnit(25+6,20000,53,39,24,80,8,59)--헌터
-	InputLevelUnit(25+7,20000,52,51,24,150,15,59)--언클린
-	InputLevelUnit(25+8,15000,69,53,24*3,700,70,59)--셔틀
-	InputLevelUnit(25+9,15000,41,43,24,350,35,59)--드론
-	InputLevelUnit(25+10,10000,96,42,24*2,800,80,59)--곰
-
-
-
-	InputLevelUnit(25+11,10000,10,26,24*3,600,60,59)--파벳영웅 3타
-	InputLevelUnit(25+12,8000,75,85,24,1200,120,59)--제라툴
-	InputLevelUnit(25+13,8000,29,21,24*2,6000,600,59)--노라드
-	InputLevelUnit(25+14,6000,86,78,24*2,10000,1000,59)--다니모스
-	InputLevelUnit(25+15,6000,54,36,1,5000,500,59,nil,1)--디버링원 공속최대
-
-
-	--이하 밸런스 미정
-	--InputLevelUnit(25+16,4000,70,73,24*2,1000,100,59)--스카웃
-	--InputLevelUnit(25+17,4000,60,100,24*2,1300,130,59)--커세어
-	--InputLevelUnit(25+18,3000,71,77,24*2,1800,180,59)--아비터
-	--InputLevelUnit(25+19,3000,37,35,12,600,60,59)--저글링
-	--InputLevelUnit(25+20,2000,38,38,24,2000,200,59)--히드라
-	--InputLevelUnit(25+21,2000,43,48,24,2700,270,59)--뮤탈
-	--InputLevelUnit(25+22,1000,44,46,24*2,7000,700,59)--가디언
-	--InputLevelUnit(25+23,1000,62,104,24*4,20000,2000,59)--디바우러
-	--InputLevelUnit(25+24,500,39,40,24*2,13000,1300,59)--울트라
-	--InputLevelUnit(25+25,500,46,50,24*2,18000,1800,59)--디파
-
-
 	SetWeaponsDatX(103,{Behavior=1,Splash=false})
 	SetWeaponsDatX(25,{Behavior=2,Splash=false})
 	SetWeaponsDatX(26,{Behavior=2,Splash=false})
 	SetUnitsDatX(62, {AirWeapon=104})
+	SetUnitsDatX(40, {Graphic=200})
 	--SetWeaponsDatX(104,{Behavior=1,Splash=false})
 
 
-	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,HP=8320000,Armor = 0})
+	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
+	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	
-	
-	SetUnitsDatX(128, {HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23})
+	for j,k in pairs({128,92,91}) do--상점, 설정유닛용
+		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7})
+		
+	end
 	DoActions(AllPlayers, {SetAllianceStatus(Force1, Ally),
 	RunAIScript(P1VON),
 	RunAIScript(P2VON),
@@ -128,8 +26,10 @@ function onInit_EUD()
 	RunAIScript(P6VON),
 	RunAIScript(P7VON),
 	RunAIScript(P8VON),
-})
-	
+})	
+	for i = 0, 24 do
+		SetUnitsDatX(i, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0})
+	end
 	
 	
 	
@@ -145,15 +45,38 @@ function onInit_EUD()
 		
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(TestShop[i+1], SetTo, Nextptrs),CreateUnit(1,128,1+i,i)})
-
 	f_Read(FP, 0x628438, nil, Nextptrs)
-	CDoActions(FP, {TSetNVar(TestDps[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,57+i,FP)})
+	CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,57+i,FP)})
+	DoActions(FP, {SetLoc("Location "..(57+i),"U",Add,13*32),SetLoc("Location "..(57+i),"D",Add,13*32)})
 	
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(DpsLV2[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,190,57+i,FP)})
+	DoActions(FP, {SetLoc("Location "..(57+i),"L",Add,6*32),SetLoc("Location "..(57+i),"R",Add,6*32)})
 
+
+
+	DoActions(FP, {SetLoc("Location "..(1+i),"L",Subtract,10*32),SetLoc("Location "..(1+i),"R",Subtract,11*32)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(SettingUnit1[i+1], SetTo, Nextptrs),CreateUnit(1,91,1+i,i)})
+	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(SettingUnit2[i+1], SetTo, Nextptrs),CreateUnit(1,92,1+i,i)})
 
 	CIfEnd()
 
 	end
+	
+	if TestStart == 1 then -- 테스트용 결과 출력
+		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
+		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
+		f_Memcpy(FP,ETestStrPtr1,_TMem(Arr(ETestTxt1[3],0),"X","X",1),ETestTxt1[2])
+		f_Memcpy(FP,ETestStrPtr2,_TMem(Arr(ETestTxt2[3],0),"X","X",1),ETestTxt2[2])
+
+			
+	end
+	
+
+
 	CIfEnd()
 
 	

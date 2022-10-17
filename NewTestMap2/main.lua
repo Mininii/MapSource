@@ -37,7 +37,7 @@ end
 
 VerText = "\x04Beta. 0.1"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	

@@ -112,11 +112,14 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x6635D0 + UnitID,SetTo,k))
 			elseif j=="StarEditFlag"  then
 				PatchInsert(SetMemoryW(0x661518+(UnitID*2),SetTo,k))
+			elseif j=="Class"  then
+				PatchInsert(SetMemoryB(0x663DD0+(UnitID),SetTo,k))
 
 			elseif j=="AirWeapon"  then
 				PatchInsert(SetMemoryB(0x6616E0+UnitID,SetTo,k))
 			elseif j=="GroundWeapon"  then
 				PatchInsert(SetMemoryB(0x6636B8+UnitID,SetTo,k))
+				
 			elseif j=="SpaceProv"  then
 				PatchInsert(SetMemoryB(0x660988+(UnitID*1),SetTo,k))
 			elseif j=="SpaceReq"  then
@@ -261,4 +264,136 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 		CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
 	CIfEnd()
 	FuncAlloc = FuncAlloc + 1
+end
+
+function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=60,SeekRange=7,GroupFlag=0xA,
+	HumanInitAct = 2,
+	ComputerInitAct = 2,
+	AttackOrder = 10,
+	AttackMoveOrder = 2,
+	IdleOrder = 2,
+	RClickAct = 1,
+})
+if ObjNum~=nil then
+	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+else
+	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+end
+end
+function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=60,SeekRange=7,GroupFlag=0xA,
+	HumanInitAct = 2,
+	ComputerInitAct = 2,
+	AttackOrder = 10,
+	AttackMoveOrder = 2,
+	IdleOrder = 2,
+	RClickAct = 1,
+})
+if ObjNum~=nil then
+	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+else
+	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+end
+end
+function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ifTType,ObjNum)
+	if ifTType ~= nil then
+		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+	else
+		SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+	end
+	if Level>=26 and Level<=40 then
+		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
+	end
+	SetUnitsDatX(UnitID, {Class=193})--Factories
+	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
+	table.insert(AutoEnchArr,CreateCcodeArr(7))
+end
+function PopLevelUnit()
+	LevelDataArr = CreateArr(#LevelUnitArr, FP)
+	for j,k in pairs(LevelUnitArr) do
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
+	end
+end
+
+function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCondActions)
+	CIf(FP,{TMemory(_Add(MenuPtrData[CP+1],0x98/4),Exactly,0 + ID*65536)})
+	CurShopCP = CP
+	CurShopCond = Conditions
+	CallTrigger(FP,Call_Print13[CP+1])
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),CondActions},{preserved})	-- 조건이 만족할 경우
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP),DisCondActions},{preserved})	-- 조건이 만족하지 않을 경우
+end
+
+function BtnSetInit(CP,MenuPtr)
+	CIf(FP,{CVar(FP,MenuPtr[CP+1][2],AtLeast,19025),CVar(FP,MenuPtr[CP+1][2],AtMost,19025+(1699*84))})
+	CIf(FP,{TMemory(_Add(MenuPtr[CP+1],0x98/4),AtMost,0 + 227*65536)})
+	MenuPtrData = MenuPtr
+	MenuPtrPlayer = CP
+	
+end
+
+function BtnSetEnd()
+	CIfEnd()--ShopEnd
+	CDoActions(FP,{
+		TSetMemory(_Add(MenuPtrData[MenuPtrPlayer+1],0x98/4),SetTo,0 + 228*65536);
+		TSetMemory(_Add(MenuPtrData[MenuPtrPlayer+1],0x9C/4),SetTo,228 + 228*65536);
+		TSetMemoryX(_Add(MenuPtrData[MenuPtrPlayer+1],0xA0/4),SetTo,228,0xFFFF);
+		SetCDeaths(FP,SetTo,0,ShopSw[MenuPtrPlayer+1])})
+	CIfEnd()
+	MenuPtrData = nil
+	MenuPtrPlayer = nil
+end
+
+
+function DPSBuilding(CP,UnitPtr,Multiplier,TotalDPSDest,MoneyV)
+	local DPS = CreateVarArr(24, FP)
+	local TotalDPS = CreateVar(FP)
+	local DPSCheckV = CreateVar(FP)
+	local DpsDest = CreateVar(FP)
+	local DPSCheck = CreateCcode()
+	CIf(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1)})
+	f_Read(FP, UnitPtr, DPSCheckV)
+	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
+	CrShift(FP, DpsDest, 8)
+	CTrigger(FP,{TMemory(UnitPtr,AtMost,8319999*256)},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
+	CMov(FP,TotalDPS,0)
+	for j = 1, 24 do
+		CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
+		CAdd(FP,TotalDPS,DPS[j])
+	end
+	if type(TotalDPSDest) == "table" then
+		for j,k in pairs(TotalDPSDest) do
+			if type(k) == "number" then
+				CDoActions(FP,{TSetMemory(k, SetTo, TotalDPS)})
+			elseif k[4] == "V" then
+				CMov(FP,k,TotalDPS)
+			elseif k == Ore or k == Gas then
+				CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS, k)})
+			elseif k == nil then return nil
+			else
+				PushErrorMsg("TotalDPSDest InputError")
+			end 
+		end
+	elseif type(TotalDPSDest) == "number" then
+		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, TotalDPS)})
+	elseif TotalDPSDest[4] == "V" then
+		CMov(FP,TotalDPSDest,TotalDPS)
+	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
+		CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS, TotalDPSDest)})
+	elseif TotalDPSDest == nil then return nil
+	else
+		PushErrorMsg("TotalDPSDest InputError")
+	end 
+	
+	TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
+		CIf(FP,{CV(DpsDest,1,AtLeast)})
+		if Multiplier ~=  nil then
+			CMul(FP,DpsDest,Multiplier)
+		end
+		f_LAdd(FP,MoneyV,MoneyV,{DpsDest,0})
+		CIfEnd()
+	CIfEnd()
 end
