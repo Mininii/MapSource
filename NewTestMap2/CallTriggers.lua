@@ -14,7 +14,7 @@ function Install_CallTriggers()
 	SAmount = CreateVar(FP)
 	SetCall(FP)
 	CWhile(FP,{CV(SAmount,1,AtLeast)},{SubV(SAmount,1)})
-	CIf(FP,{Memory(0x628438, AtLeast, 1)})
+	CIf(FP,{Memory(0x628438, AtLeast, 1)},{SetCD(TBLFlag,1)})
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		CDoActions(FP, {TCreateUnit(1,SUnitID,SLocation,SPlayer),
 		TSetDeaths(_Add(Nextptrs,13),SetTo,2000,0),
@@ -92,13 +92,12 @@ function Install_CallTriggers()
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
 	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})
-	local ArrI = CreateVar(FP)
-	ConvertArr(FP,ArrI,ELevel)
-	CMov(FP,SUnitID,_Read(ArrX(LevelDataArr,ArrI)))
-	CMov(FP,SPlayer,ECP)
-	CMov(FP,SLocation,ECP,36)
-	CallTriggerX(FP, CreateStackedUnit, nil, { --CreateUnitStacked
-	SetNVar(SAmount,SetTo,1)})
+
+		for i = 0, 6 do
+			CIf(FP,{CV(ECP,i)})
+				CMovX(FP,VArr(GetUnitVArr[i+1], ELevel),1,Add)
+			CIfEnd()
+		end
 	CIfEnd()
 	
 	SetCallEnd()

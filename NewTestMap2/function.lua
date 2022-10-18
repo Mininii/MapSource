@@ -296,11 +296,11 @@ else
 	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
 end
 end
-function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ifTType,ObjNum)
+function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
 	if ifTType ~= nil then
-		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum)
 	else
-		SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+		SetUnitAbility(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum)
 	end
 	if Level>=26 and Level<=40 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
@@ -308,12 +308,15 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,DamageFactor,U
 	SetUnitsDatX(UnitID, {Class=193})--Factories
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
 	table.insert(AutoEnchArr,CreateCcodeArr(7))
+	table.insert(AutoEnchArr2,CreateCcodeArr(7))
+	
 end
 function PopLevelUnit()
 	LevelDataArr = CreateArr(#LevelUnitArr, FP)
 	for j,k in pairs(LevelUnitArr) do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
 	end
+	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
 end
 
 function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCondActions)
@@ -322,9 +325,9 @@ function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCon
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),CondActions},{preserved})	-- 조건이 만족할 경우
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),CondActions},{preserved})	-- 조건이 만족할 경우
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP),DisCondActions},{preserved})	-- 조건이 만족하지 않을 경우
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),DisCondActions},{preserved})	-- 조건이 만족하지 않을 경우
 end
 
 function BtnSetInit(CP,MenuPtr)
