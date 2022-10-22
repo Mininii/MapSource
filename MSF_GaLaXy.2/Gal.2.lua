@@ -40,7 +40,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver.2.0"
+VName = "Ver.2.1"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 onInit()
@@ -5824,6 +5824,9 @@ CIf(AllPlayers,{Switch("Switch 201",Set)}) -- GameStart
 DoActions2(FP,ButtonSetPatch2,1)
 DoActionsX(FP,{SetCDeaths(FP,Add,1,WaveT)})
 DoActionsX(FP,{SetCDeaths(FP,Add,24*75,WaveT)},1)
+
+
+
 local WaveC = CreateCcode()
 
 CIf(FP,{CDeaths(FP,AtMost,0,BossStart),ElapsedTime(AtMost,3600),CDeaths(FP,AtLeast,24*100,WaveT)},SetCDeaths(FP,Subtract,24*300,WaveT))
@@ -5869,10 +5872,26 @@ CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",88)},{CopyCPAction({PlayWAVX("staredit\
 GetLocCenter("Location 88",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
 CIfEnd()
-
-
 CMov(FP,Var_TempTable[2],0)
 CMov(FP,Var_TempTable[3],0)
+
+
+local TempUID = CreateVar(FP)
+NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{})
+f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
+f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)
+f_SHRead(FP, _Add(CreateUnitQueUIDArr,CreateUnitQuePtr), TempUID)
+DoActionsX(FP,{SubV(CreateUnitQuePtr,1)})
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+NIf(FP,{CV(TempUID,1,AtLeast)})
+Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+CDoActions(FP,{TCreateUnitWithProperties(1,_Mov(TempUID,0xFF),1,FP,{energy = 100})})
+NIfEnd()
+NWhileEnd()
+
+
+
+
 Trigger {
 	players = {FP},
 	conditions = {
@@ -7899,20 +7918,6 @@ CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+11,Exactly,1),{
 })
 
 
---선택인식 피통 보임
-SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
-SelUID = CreateVar(FP)
-CIf(FP,{Memory(0x6284E8+(0x30*i) ,AtLeast,1),Memory(0x6284E8+(0x30*i) + 4,AtMost,0),Memory(0x57F1B0, Exactly, i)})
-f_Read(FP,0x6284E8+(0x30*i),nil,SelEPD)
-CDoActions(FP,{TSetMemory(SelOPEPD,Add,1)})
-f_Read(FP,_Add(SelEPD,2),SelHP)
-f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
-f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
-CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPDF(0x662350)))),_Mov(256)))
-f_Div(FP,SelHP,_Mov(256))
-f_Div(FP,SelSh,_Mov(256))
-CDoActions(FP,{TSetMemory(SelHPEPD,SetTo,SelHP),TSetMemory(MarHPEPD,SetTo,SelMaxHP),TSetMemory(SelShEPD,SetTo,SelSh)})
-CIfEnd()
 CIfEnd()
 end
 
@@ -8356,7 +8361,7 @@ Trigger { -- 조합법 insert키
 		Memory(0x596A44, Exactly, 0x00000100);
 	},
 	actions = {
-		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F30000원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F30000원 + \x076 Gas \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F50000원 + \x0712 Gas \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x08공\x1C방\x04업*255, \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 \x04조합횟수*36 달성시\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*10 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04+ \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 = \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\n\x12\x04\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04공업 255 달성시\n\x12\x04\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04+ \x1F100만원 \x04= \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x04 (보유시 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04생산 불가)\n\x12\x04방업할 시 \x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
+		DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04일반모드 조합법\n\x12\x1BH \x04Marine + \x1F30000원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*3 + \x1F30000원 + \x076 Gas \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 \n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*2 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04 +  SCV*3 + \x1F50000원 + \x0712 Gas \x04= \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\n\x12\x08공\x1C방\x04업*255, \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 \x04조합횟수*36 달성시\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04*10 + \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04+ \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 + \x1F40만원 \x04= \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\n\x12\x04\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04공업 255 달성시\n\x12\x04\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04+ \x1F100만원 \x04= \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x04 (보유시 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04생산 불가)\n\x12\x04방업할 시 \x12\x04환전 : \x03F12키\n\x12\x04닫기 : \x03Delete",4);
 		PreserveTrigger();
 	},
 }
@@ -8749,7 +8754,7 @@ Trigger { -- 조합 퀘이사
 		ModifyUnitEnergy(1,12,j,3,0);
 		SetResources(j,Subtract,QuaCost,Ore);
 		RemoveUnitAt(1,12,3,j);
-		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x04, SCV를 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ 로 \x19변환\x04하였습니다. - \x1F"..SuCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
+		DisplayText("\x02▶ \x1F광물\x04을 소모하여 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04로 \x19변환\x04하였습니다. - \x1F".. QuaCost.." O r e\n",4); -- \x02▶ \x04모든 옵션 적용으로 \x11얼마든지 \x04보유 가능"
 		--SetMemoryB(0x58D088+(46*j)+14,SetTo,255);
 		SetCDeaths(FP,Add,1,CreateQua[j+1]);
 		SetCDeaths(FP,Add,1,QUpEnable[j+1]);
@@ -10362,7 +10367,7 @@ Trigger {
 CIfEnd()
 end
 end
-CifEnd()
+CIfEnd()
 for i=0, 5 do
 NJump(FP,0x500+i,Deaths(i,Exactly,0,111))
 CIf(FP,Score(i,Kills,AtLeast,1000))
@@ -10401,6 +10406,21 @@ end
 TriggerX(FP,{CDeaths(FP,AtLeast,#LV_10_UnitTable,LV_10_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_10_UnitTableCode)},{preserved})
 TriggerX(FP,{CDeaths(FP,AtLeast,#LV_11_UnitTable,LV_11_UnitTableCode)},{SetCDeaths(FP,SetTo,0,LV_11_UnitTableCode)},{preserved})
 
+
+--선택인식 피통 보임
+SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
+SelUID = CreateVar(FP)
+CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+f_Read(FP,0x6284B8,nil,SelEPD)
+CDoActions(FP,{TSetMemory(SelOPEPD,Add,1)})
+f_Read(FP,_Add(SelEPD,2),SelHP)
+f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
+f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+CMov(FP,SelMaxHP,_Div(_ReadF(_Add(SelUID,_Mov(EPDF(0x662350)))),_Mov(256)))
+f_Div(FP,SelHP,_Mov(256))
+f_Div(FP,SelSh,_Mov(256))
+CDoActions(FP,{TSetMemory(SelHPEPD,SetTo,SelHP),TSetMemory(MarHPEPD,SetTo,SelMaxHP),TSetMemory(SelShEPD,SetTo,SelSh)})
+CIfEnd()
 
 CIfEnd()-- GameStart End
 --]]

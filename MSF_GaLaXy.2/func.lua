@@ -507,10 +507,25 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
 		CDoActions(FP,{TMoveUnit(1,Gun_TempSpawnSet1,CreatePlayer,89,1)})
+
+		NIf(FP,{CV(Gun_TempSpawnSet1,25)})
+			local CPos2 = CreateVar(FP)
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos2)
+
+			NIf(FP,{CV(CPos,CPos2)})
+				CTrigger(FP, {},{TRemoveUnitAt(1, 25, 89, CreatePlayer)},1)
+				local SiegeModeJump = def_sIndex()
+				CJump(FP, SiegeModeJump)
+			NIfEnd()
+			
+		NIfEnd()
+
+
 
 
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
@@ -572,7 +587,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
 					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
-				CelseX()
+				CElseX()
 				CDoActions(FP,{
 					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
 					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
@@ -593,6 +608,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
 				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
 				},1)
+			CJumpEnd(FP, SiegeModeJump)
 		CIfEnd()
 	CIfXEnd()
 

@@ -577,7 +577,7 @@ function GunData()
 			f_Lengthdir(FP,_Div(Var_TempTable[52],_Mov(7)),_Add(Var_TempTable[53],_Mul(Gun_W,_Mov(72))),Gun_X,Gun_Y)
 			f_Div(FP,Gun_Y,2)
 			Call_Gun_LocPos()
-			Nif(FP,{TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
+			NIf(FP,{TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
 				CDoActions(FP,{
 					TSetMemoryX(0x669FA4, SetTo, Gun_UID,0xFF),
 					TSetMemoryX(0x669FA4, SetTo, _Mul(Gun_UID,_Mov(256)),0xFF00),
@@ -596,7 +596,7 @@ function GunData()
 					SetMemory(0x58DC6C + 0x14*0,Add,128),
 					SetMemory(0x6509B0,SetTo,7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog",1)},1)
 			NIfEnd()
-			Nif(FP,{Gun_Line(0,Exactly,173)})
+			NIf(FP,{Gun_Line(0,Exactly,173)})
 				DoActions(FP,{
 					SetMemoryX(0x669FAC, SetTo, 16*16777216,0xFF000000);
 					SetMemoryX(0x669FA4, SetTo, 16,0xFF),
@@ -615,12 +615,16 @@ function GunData()
 			NIfEnd()
 		NWhileEnd()
 		CIf(FP,{Gun_Line(54,AtMost,0)})
-		CTrigger(FP,{Gun_Line(3,AtLeast,7),CDeaths(FP,AtLeast,2,GMode),TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})},{
-			TSetMemory(0x58DC60 + 0x14*0,SetTo,Var_TempTable[2]),
-			TSetMemory(0x58DC68 + 0x14*0,SetTo,Var_TempTable[2]),
-			TSetMemory(0x58DC64 + 0x14*0,SetTo,Var_TempTable[3]),
-			TSetMemory(0x58DC6C + 0x14*0,SetTo,Var_TempTable[3]),
-			TCreateUnit(1,Gun_UID2,1,FP)},1)
+		CIf(FP,{Gun_Line(3,AtLeast,7),CDeaths(FP,AtLeast,2,GMode),TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
+		CAdd(FP,CreateUnitQuePtr,1)
+		CTrigger(FP,{},{
+			TSetMemory(_Add(CreateUnitQueXPosArr,CreateUnitQuePtr),SetTo,Var_TempTable[2]),
+			TSetMemory(_Add(CreateUnitQueYPosArr,CreateUnitQuePtr),SetTo,Var_TempTable[3]),
+			TSetMemory(_Add(CreateUnitQueUIDArr,CreateUnitQuePtr),SetTo,_Mov(Gun_UID2,0xFF)),},1)
+		CIfEnd()
+
+
+
 		NIf(FP,{Gun_Line(3,AtLeast,7)})
 			NWhile(FP,CVar(FP,Var_TempTable[52][2],AtLeast,15),SetCVar(FP,Var_TempTable[52][2],Subtract,140))
 				CMov(FP,Gun_W,0)
@@ -628,7 +632,7 @@ function GunData()
 					f_Lengthdir(FP,_Div(Var_TempTable[52],7),_Add(Var_TempTable[53],_Mul(Gun_W,72)),Gun_X,Gun_Y)
 					CDiv(FP,Gun_Y,2)
 					Call_Gun_LocPos()
-					Nif(FP,{TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
+					NIf(FP,{TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
 						CDoActions(FP,{
 							SetMemoryX(0x666458, SetTo, 391,0xFFFF);
 							TSetMemoryX(0x669FA4, SetTo, Gun_UID,0xFF),
@@ -637,7 +641,7 @@ function GunData()
 							TSetMemoryX(0x669FAC, SetTo, _Mul(Gun_UID,_Mov(16777216)),0xFF000000);
 							CreateUnit(1,33,1,FP)})
 					NIfEnd()
-					Nif(FP,{Gun_Line(0,Exactly,173)})
+					NIf(FP,{Gun_Line(0,Exactly,173)})
 						DoActions(FP,{
 							SetMemoryX(0x666458, SetTo, 391,0xFFFF);
 							SetMemoryX(0x669FA4, SetTo, 16,0xFF),
@@ -718,7 +722,8 @@ function GunData()
 			players = {FP},
 			conditions = {
 				Label(0);
-				Memory(0x628438,Exactly,0)
+				Bring(Force1, AtLeast, 500, "Any unit",	64);
+				Memory(0x628438,Exactly,0);
 		},
 			actions = {
 				SetCDeaths(FP,Add,1,CocoonGunCon);

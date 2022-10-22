@@ -617,10 +617,19 @@ function SetZergGroupFlags(UnitID)
 	UArr1 = CVArray(FP,16)
 	UArr2 = CVArray(FP,16)
 	LocChunkVArr = CVArray(FP,64)
+	function Create_VoidEPDHeaderV(Player,Size)
+		local Void = f_GetVoidptr(Player,Size)
+		local Header =  CreateVar(Player)
+		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
+		return Header
+	end
+	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitQuePtr = CreateVar(FP)
 	for i = 0, 5 do
 	Str03[i+1] = CArray(FP,50)
 	Names[i+1] = CVArray(FP,7)
 	end
 	end
-
 end

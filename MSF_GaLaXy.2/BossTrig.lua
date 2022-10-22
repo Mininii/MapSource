@@ -1,5 +1,20 @@
 function Install_boss()
 	CIf({Force1,FP},{Deaths(P12,AtMost,0,186),CGMode(2,AtLeast),CDeaths(FP,AtLeast,6000,GunBossAct),Bring(Force2, AtMost, 0, "Protoss Temple", 64)},{SetCDeaths(FP,SetTo,1,BossStart),ModifyUnitShields(All,186,FP,64,100)})
+		for i = 0, 5 do
+		
+			Trigger {
+				players = {FP},
+				conditions = {
+					Label(0);
+					CVar(FP,HiddenATK[2],Exactly,i);
+				},
+				actions = {		
+					SetMemoryW(0x656EB0+(92*2),SetTo,40+(27*i));
+					SetMemoryW(0x657678+(92*2),SetTo,5+(4*i));
+					
+				}
+			}
+		end
 
 		local CBulletIndex = 0x1100
 		for i = 0, 127 do
@@ -61,7 +76,7 @@ function Install_boss()
 		CIfEnd()
 
 		Trigger2(FP,{CountdownTimer(AtMost,20)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 적 \x0FU\x04nknown\x08.2 \x04와의 전투가 곧 시작됩니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP)})
-		Trigger2(FP,{CountdownTimer(AtMost,0)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※\n\n\x04\x13적 이름 : \x0FU\x04nknown\x08.2\n\x13\x10능력 : \x04강력한 광범위 탄막 공격, 대상에게 강한 적대감을 느낀다.\n\x13\x0E처치방법 : \x04탄막 파훼 컨트롤\n\x13\x04당신의 \x03진정한 컨트롤\x04을 보여주세요!\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP),
+		Trigger2(FP,{CountdownTimer(AtMost,0)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※\n\n\x04\x13적 이름 : \x0FU\x04nknown\x08.2\n\x13\x10능력 : \x04강력한 광범위 탄막 공격, \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04스킬 약화, \x08대상에게 강한 적대감을 느낀다.\n\x13\x0E처치방법 : \x04탄막 파훼 컨트롤\n\x13\x04당신의 \x03진정한 컨트롤\x04을 보여주세요!\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP),
 			GiveUnits(1,186,11,64,FP),SetInvincibility(Disable,186,FP,64),SetDeaths(Force1,SetTo,1,48)})
 		local BT_Ready = CreateCcode()
 		local BT_Ready2 = CreateCcode()
