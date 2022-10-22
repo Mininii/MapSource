@@ -17,7 +17,7 @@ function Interface()
 		CIf(FP,{Memory(0x628438,AtLeast,1),CD(AutoBuyCode[CP+1],LvUniit)})
 			CIf(FP, {TNWar(Money[CP+1],AtLeast,Cost)})
 				f_LSub(FP, Money[CP+1], Money[CP+1], Cost)
-				CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP, CP)
+				CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 			CIfEnd()
 		CIfEnd()
 		
@@ -26,13 +26,13 @@ for i = 0, 6 do -- 각플레이어
 	CIf(FP,{HumanCheck(i,1)})
 	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
 	if TestStart == 1 then
-		f_LAdd(FP, PEXP[i+1], PEXP[i+1], "1")
-		f_LMul(FP, PEXP[i+1], PEXP[i+1], "2")
-		f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], "1")
-		f_LMul(FP, TotalExp[i+1], TotalExp[i+1], "2")
+		--f_LAdd(FP, PEXP[i+1], PEXP[i+1], "1")
+		--f_LMul(FP, PEXP[i+1], PEXP[i+1], "2")
+		--f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], "1")
+		--f_LMul(FP, TotalExp[i+1], TotalExp[i+1], "2")
 	end
 
-	CreateUnitStacked(nil,1, 88, 36+i, i, nil, 1)--기본유닛지급
+	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 
 	DPSBuilding(i,DpsLV1[i+1],nil,{Ore},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],1000,{Gas},Money[i+1])
@@ -115,7 +115,7 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 	--강화성공한 유닛 생성하기(캔낫씹힘방지)
 	for j, k in pairs(LevelUnitArr) do
-		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 	end
 
 
@@ -161,6 +161,32 @@ CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
 CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
 CElseX()--그외
 CS__ItoCustom(FP,SVA1(TStr1,5),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+CIfX(FP,{
+	CSVA1(SVA1(TStr1,5+4), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	CSVA1(SVA1(TStr1,5+5), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	CSVA1(SVA1(TStr1,5+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+},{
+	SetCSVA1(SVA1(TStr1,5+3),SetTo,0x0D*0x1000000,0xFF000000),
+	SetCSVA1(SVA1(TStr1,5+4),SetTo,0x0D*0x1000000,0xFF000000),
+	SetCSVA1(SVA1(TStr1,5+5),SetTo,0x0D*0x1000000,0xFF000000),
+	SetCSVA1(SVA1(TStr1,5+6),SetTo,0x0D*0x1000000,0xFF000000),
+})
+CElseIfX({
+	CSVA1(SVA1(TStr1,5+5), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	CSVA1(SVA1(TStr1,5+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+},{
+	SetCSVA1(SVA1(TStr1,5+5),SetTo,0x0D*0x1000000,0xFF000000),
+	SetCSVA1(SVA1(TStr1,5+6),SetTo,0x0D*0x1000000,0xFF000000),
+})
+CElseIfX({
+	CSVA1(SVA1(TStr1,5+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+},{
+	SetCSVA1(SVA1(TStr1,5+6),SetTo,0x0D*0x1000000,0xFF000000),
+})
+CIfXEnd()
+
+
+
 CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 CIfXEnd()
 
@@ -197,6 +223,6 @@ function TEST()
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"TEST",FP,{}) 
 	TriggerX(FP, {CD(TBLFlag,0)}, {CreateUnit(1,94,64,FP),RemoveUnit(94,FP)}, {preserved})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 	DoActionsX(FP, {SetCD(TBLFlag,0)})
-	TriggerX(FP, ElapsedTime(AtLeast,240), {RemoveUnit(88,AllPlayers)}) -- 3분뒤 사라지는 기본유닛
+	TriggerX(FP, ElapsedTime(AtLeast,180*1.5), {RemoveUnit(88,AllPlayers)}) -- 3분뒤 사라지는 기본유닛
 	
 end

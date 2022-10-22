@@ -10,6 +10,7 @@ function Install_CallTriggers()
 	CreateStackedUnit = SetCallForward()
 	SUnitID = CreateVar(FP)
 	SLocation = CreateVar(FP)
+	DLocation = CreateVar(FP)
 	SPlayer = CreateVar(FP)
 	SAmount = CreateVar(FP)
 	SetCall(FP)
@@ -23,15 +24,18 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
+	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)})
 	CWhileEnd()
 
 	CIfEnd()
 	SetCallEnd()
-	function CreateUnitStacked(Condition,Amount,UnitID,Location,Player,AddTrig,Preserved)
+	function CreateUnitStacked(Condition,Amount,UnitID,Location,DestLocation,Player,AddTrig,Preserved)
+		if DestLocation == nil then DestLocation = 0 end
 		CallTriggerX(FP, CreateStackedUnit, Condition, {
 			SetNVar(SAmount,SetTo,Amount),
 			SetNVar(SUnitID,SetTo,UnitID),
 			SetNVar(SLocation,SetTo,Location),
+			SetNVar(DLocation,SetTo,DestLocation),
 			SetNVar(SPlayer,SetTo,Player),AddTrig
 		}, Preserved)
 		
@@ -83,6 +87,7 @@ function Install_CallTriggers()
 		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +1 성공", 4)})
 	CAdd(FP,ELevel,1)
 	CElseX()--실패시 경험치 지급
+		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : 실패", 4)})
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
 				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
