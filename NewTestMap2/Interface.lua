@@ -32,10 +32,7 @@ for i = 0, 6 do -- 각플레이어
 		f_LMul(FP, TotalExp[i+1], TotalExp[i+1], "2")
 	end
 
-	for j,k in pairs(LevelUnitArr) do
-		
-	end
-	CreateUnitStacked(nil,3, LevelUnitArr[1][2], 36+i, i, nil, 1)--테스트용
+	CreateUnitStacked(nil,1, 88, 36+i, i, nil, 1)--기본유닛지급
 
 	DPSBuilding(i,DpsLV1[i+1],nil,{Ore},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],1000,{Gas},Money[i+1])
@@ -85,7 +82,7 @@ for i = 0, 6 do -- 각플레이어
 		CIf(FP,CD(AutoEnchArr[j][i+1],1))
 			
 		CallTriggerX(FP,Call_Print13[i+1],{CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)})
-		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesignX("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
 		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)}, {SetCD(AutoEnchArr[j][i+1],0)}, {preserved})
 		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
 		CIfEnd()
@@ -96,7 +93,7 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CElseIfX({Command(i,AtLeast,200,"Men")})
 	CallTrigger(FP,Call_Print13[i+1])
-	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesignX("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입을 할 수 없습니다.\x08 (최대 200기)"))},{preserved})
+	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입을 할 수 없습니다.\x08 (최대 200기)"))},{preserved})
 	
 	CIfXEnd()
 
@@ -147,7 +144,7 @@ SelEPD,SelPer,SelUID,SelMaxHP,SelI = CreateVars(5,FP)
 CJumpEnd(FP, iStrinit)
 
 
-CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 클릭유닛인식(로컬)
 f_Read(FP,0x6284B8,nil,SelEPD)
 CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
 
@@ -200,5 +197,6 @@ function TEST()
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"TEST",FP,{}) 
 	TriggerX(FP, {CD(TBLFlag,0)}, {CreateUnit(1,94,64,FP),RemoveUnit(94,FP)}, {preserved})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 	DoActionsX(FP, {SetCD(TBLFlag,0)})
+	TriggerX(FP, ElapsedTime(AtLeast,240), {RemoveUnit(88,AllPlayers)}) -- 3분뒤 사라지는 기본유닛
 	
 end
