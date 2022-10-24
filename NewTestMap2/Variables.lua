@@ -46,12 +46,22 @@ function Include_Vars()
 
 	--String
 	
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",2)) 
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
+	
+
 
 
 
 	--Balance
+
+
+	EXPArr = {}
+	for i = 1, 10000 do
+		EXPArr[i] = 10+(10*(i-1)*(i*0.1))
+	end
+	EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
+
 	LevelUnitArr = {} -- Level,UnitID,Per,Exp
 	AutoEnchArr = {}
 	AutoEnchArr2 = {}
@@ -118,7 +128,7 @@ function Include_Vars()
 	PushLevelUnit(25+12,16000,100000,75,85,24,1200,59)--제라툴
 	PushLevelUnit(25+13,13000,128000,29,21,48,6000,59)--노라드
 	PushLevelUnit(25+14,13000,170000,86,78,48,10000,59)--다니모스
-	PushLevelUnit(25+15,5000,200000,54,36,1,5000,59,nil,1)--디버링원 공속최대
+	PushLevelUnit(25+15,5000,500000,54,36,1,5000,59,nil,1)--디버링원 공속최대
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃

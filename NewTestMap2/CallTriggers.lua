@@ -24,7 +24,7 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
-	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)})
+	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
 	CWhileEnd()
 
 	CIfEnd()
@@ -46,15 +46,15 @@ function Install_CallTriggers()
 	Call_Enchant = SetCallForward()
 	--100000 = 100%
 	SetCall(FP)
-	GetEPer = f_CRandNum(100001) -- 랜덤 난수 생성
+	GetEPer = f_CRandNum(100001) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper2 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper3 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	--ELevel = 현재 강화중인 레벨
 	CAdd(FP,TotalEper,UEper,GEper) -- +1강 확률
-	CDiv(FP,TotalEper2,_Add(UEper,GEper2),10) -- +2강 확률
-	CDiv(FP,TotalEper3,_Add(UEper,GEper3),100) -- +3강 확률
+	CAdd(FP,TotalEper2,_Div(UEper,10),GEper2)
+	CAdd(FP,TotalEper3,_Div(UEper,100),GEper3)
 	
 	
 	if TestStart == 1 then -- 테스트용 결과 출력
@@ -90,7 +90,7 @@ function Install_CallTriggers()
 		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : 실패", 4)})
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
-				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
+			f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
 			CIfEnd()
 		end
 	CMov(FP,ELevel,0)
