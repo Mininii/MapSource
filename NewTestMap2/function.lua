@@ -266,7 +266,7 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 
-function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
 	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=60,SeekRange=7,GroupFlag=0xA,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
@@ -276,12 +276,12 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	RClickAct = 1,
 })
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
 else
-	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
 end
 end
-function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum)
+function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
 	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=60,SeekRange=7,GroupFlag=0xA,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
@@ -291,16 +291,23 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 	RClickAct = 1,
 })
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
 else
-	SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
 end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
+	local WepName = {}
+	WepName[1] = 1446
+	WepName[12] = 1445
+	WepName[24] = 1444
+	WepName[48] = 1443
+	WepName[72] = 1442
+
 	if ifTType ~= nil then
-		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum)
+		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
 	else
-		SetUnitAbility(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum)
+		SetUnitAbility(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
 	end
 	if Level>=26 and Level<=40 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
@@ -319,6 +326,35 @@ function PopLevelUnit()
 	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
 end
 
+function CIfKeyFunc(CP,Key,ContentStr,DisContentStr,Conditions,CondActions,DisCondActions)
+	CIf(FP,{MSQC_KeyInput(CP, Key)})
+	CallTrigger(FP,Call_Print13[CP+1])
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),CondActions},{preserved})	-- 조건이 만족할 경우
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1])},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),DisCondActions},{preserved})	-- 조건이 만족하지 않을 경우
+end
+function KeyFunc(CP,Key,ContentArgs) --{{1차조건배열,액션배열,출력할텍스트},...}
+	CIf(FP,{MSQC_KeyInput(CP, Key)})
+	for o,p in pairs(ContentArgs) do
+		if o == 1 then
+			CIfX(FP,p[1],p[2])
+		else
+			if p[1]~=nil then
+				CElseIfX(p[1], p[2])
+			else
+				CElseX(p[2])
+			end
+		end
+		CallTrigger(FP,Call_Print13[CP+1])
+		TriggerX(FP, {LocalPlayerID(CP)},print_utf8(12,0,p[3]) ,{preserved})
+
+	end
+	CIfXEnd()
+	CIfEnd()
+	
+
+end
 function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCondActions)
 	CIf(FP,{TMemory(_Add(MenuPtrData[CP+1],0x98/4),Exactly,0 + ID*65536)})
 	CurShopCP = CP
@@ -399,4 +435,23 @@ function DPSBuilding(CP,UnitPtr,Multiplier,TotalDPSDest,MoneyV)
 		f_LAdd(FP,MoneyV,MoneyV,{DpsDest,0})
 		CIfEnd()
 	CIfEnd()
+end
+function MSQC_KeySet(KeyName,DeathUnit) -- 키인식용 데스값 등록
+	MSQC_KeyArr[KeyName] = DeathUnit
+end
+
+function MSQC_KeyInput(Player,KeyName) -- 키인식용 조건
+	return Deaths(Player, AtLeast, 1, MSQC_KeyArr[KeyName])
+end
+function MSQC_ExportEdsTxt()
+	
+	os.execute("mkdir " .. "MSQC")
+	local CSfile = io.open(FileDirectory .. "exmap1" .. ".txt", "w")
+	io.output(CSfile)
+	io.write("[MSQC]\n")
+	for j,k in pairs(MSQC_KeyArr) do
+		io.write(j.." = "..k..",1".."\n")
+	end
+	io.close(CSfile)
+	
 end

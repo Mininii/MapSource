@@ -1,8 +1,10 @@
 function Interface()
 	local Money = CreateWarArr(7,FP)
+	local Credit = CreateWarArr(7,FP)
 	local TotalExp = CreateWarArr2(7,"10",FP)
 	local CurEXP = CreateWarArr(7,FP)
 	local MoneyLoc = CreateWar(FP)
+	local CredLoc = CreateWar(FP)
 	local ExpLoc = CreateVar(FP)
 	local TotalExpLoc = CreateVar(FP)
 	local IncomeMax = CreateVarArr2(7,12,FP)
@@ -14,9 +16,24 @@ function Interface()
 	local TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
 	local TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	local TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	
+	local TotalEPerLoc = CreateVar(FP)
+	local TotalEPer2Loc = CreateVar(FP)
+	local TotalEPer3Loc = CreateVar(FP)
+
 	local AutoBuyCode = CreateCcodeArr(7)
+	local StatP = CreateVarArr(7,FP)
+	local StatPLoc = CreateVar(FP)
+	local StatEff = CreateCcodeArr(7)
+	local StatEffT2 = CreateCcodeArr(7)
+	local StatEffLoc = CreateCcode()
 
 	local TempReadV = CreateVar(FP)
+
+
+	local InterfaceNum = CreateVarArr(7,FP)
+	local InterfaceNumLoc = CreateVar(FP)
+
 
 	function AutoBuy(CP,LvUniit,Cost)--Cost==String
 		CIf(FP,{Memory(0x628438,AtLeast,1),CD(AutoBuyCode[CP+1],LvUniit)})
@@ -38,13 +55,19 @@ for i = 0, 6 do -- 각플레이어
 	end
 
 	
-	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],9999,AtMost)},{AddV(PLevel[i+1],1)})
+	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],9999,AtMost)},{AddV(PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
 
 	f_Read(FP,FArr(EXPArr,_Sub(PLevel[i+1],1)),TempReadV,nil,nil,1)
 	f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], {TempReadV,0})
 	f_Read(FP,FArr(EXPArr,_Sub(PLevel[i+1],2)),TempReadV,nil,nil,1)
 	f_LAdd(FP, CurEXP[i+1], CurEXP[i+1], {TempReadV,0})
+	CAdd(FP,StatP[i+1],5)
+	CallTrigger(FP,Call_Print13[i+1])
+	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x1F레벨이 올랐습니다! \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요."))}, {preserved})
+		
 	NIfEnd()
+	DoActionsX(FP, {AddCD(StatEffT2[i+1],1)})
+	TriggerX(FP,{CD(StatEffT2[i+1],500,AtLeast)},{SetCD(StatEff[i+1],0)},{preserved})
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
@@ -62,6 +85,11 @@ for i = 0, 6 do -- 각플레이어
 	})
 
 
+
+	--강화성공한 유닛 생성하기(캔낫씹힘방지)
+	for j, k in pairs(LevelUnitArr) do
+		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+	end
 
 
 	BtnSetInit(i,TestShop) -- 유닛 자동구매기
@@ -108,10 +136,10 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CElseIfX({Command(i,AtLeast,200,"Men")})
 	CallTrigger(FP,Call_Print13[i+1])
-	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입을 할 수 없습니다.\x08 (최대 200기)"))},{preserved})
+	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 200기)"))},{preserved})
 	
 	CIfXEnd()
-
+	
 
 
 	BringJumpCcode = CreateCcode()
@@ -135,19 +163,37 @@ for i = 0, 6 do -- 각플레이어
 
 	
 	CIfEnd()
-	--강화성공한 유닛 생성하기(캔낫씹힘방지)
-	for j, k in pairs(LevelUnitArr) do
-		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-	end
+	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1])})--키인식부 시작
+	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O")}, {SetV(InterfaceNum[i+1],1)},{preserved})
+	CIfX(FP,{CV(InterfaceNum[i+1],1,AtLeast)},{SetCp(i),CenterView(72),SetCp(FP)})
+	KeyFunc(i,"1",{
+		{{CV(StatP[i+1],5,AtLeast),CV(IncomeMax[i+1],47,AtMost)},{SubV(StatP[i+1],5),AddV(IncomeMax[i+1],1)},StrDesign("\x1B사냥터 최대 유닛수가 증가하였습니다.")},
+		{{CV(IncomeMax[i+1],48,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 최대 유닛수를 늘릴 수 없습니다.")},
+		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+	})
+	KeyFunc(i,"2",{
+		{{CV(StatP[i+1],5,AtLeast),CV(TotalEPer[i+1],9999,AtMost)},{SubV(StatP[i+1],5),AddV(TotalEPer[i+1],100)},StrDesign("\x07총 \x08강화 확률\x04이 증가하였습니다.")},
+		{{CV(TotalEPer[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07총 \x08강화 확률\x04을 올릴 수 없습니다.")},
+		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+	})
+	TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4),CenterView(36+i)},{preserved})
+	CIfXEnd()
+	DoActions(FP, SetCp(FP))--키인식부 종료
 
-
-	CIf(FP,LocalPlayerID(i)) -- CAPrint에 전송할 값들
+	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0)}) -- CAPrint에 전송할 값들
+	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
+	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
+	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
 	f_LMov(FP,MoneyLoc,Money[i+1])
+	f_LMov(FP,CredLoc,Credit[i+1])
 	CMov(FP,IncomeLoc,Income[i+1])
 	CMov(FP,IncomeMaxLoc,IncomeMax[i+1])
 	f_Cast(FP,{ExpLoc,0},_LSub(PEXP[i+1], CurEXP[i+1]))
 	f_Cast(FP,{TotalExpLoc,0},_LSub(TotalExp[i+1], CurEXP[i+1]))
 	CMov(FP,LevelLoc,PLevel[i+1])
+	CMov(FP,StatPLoc,StatP[i+1])
+	CMov(FP,InterfaceNumLoc,InterfaceNum[i+1])
+	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
 	CIfEnd()
 	
 	CIfEnd()
@@ -218,6 +264,9 @@ CIfEnd()
 function TEST() 
 	local PlayerID = CAPrintPlayerID 
 	local LVData = {{{0,9},{"０",{0x1000000}}}} 
+	local StatEffT = CreateCcode()
+	local InterfaceNumLoc2 = CreateCcode()
+	DoActionsX(FP,AddCD(StatEffT,1))
 	CA__SetValue(Str1,"\x07보유금액 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123 \x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 	--43
 	--49
@@ -228,6 +277,7 @@ function TEST()
 	CA__InputVA(56*0,Str1,Str1s,nil,56*0,56*1-2)
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
+	
 	CS__ItoCustom(FP,SVA1(Str1,4),LevelLoc,nil,nil,{10,5},1,nil,"\x1B0",0x1B,nil, LVData)
 	CIfX(FP,{KeyPress("TAB", "Down")})--수치표기
 	CA__ItoCustom(SVA1(Str1,16),ExpLoc,nil,nil,10,nil,nil,"\x040",{0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
@@ -249,12 +299,59 @@ function TEST()
 		CS__InputTA(FP,{CV(CurExpTmp,i+1,AtLeast)},SVA1(Str1,16+i),0x07,0xFF)
 	end
 	CIfXEnd()
+	TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,1,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 	CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x12크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
+	CA__lItoCustom(SVA1(Str1,8),CredLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+	,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
+	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-2)
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+
+	CIfX(FP,{CV(InterfaceNumLoc,1)},{SetCD(InterfaceNumLoc2,0)}) -- 상점 페이지 제어
+	
+	CA__SetValue(Str1,"\x07능력치 \x04설정. \x10숫자키\x04를 눌러 \x07업그레이드. \x08나가기:ESC\x12\x1C보유 포인트 :\x07 ",nil,1)
+	CA__ItoCustom(SVA1(Str1,41),StatPLoc,nil,nil,{10,5},nil,nil,"\x040")
+	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x071. \x07사냥터 \x1F최대 유닛수 \x04증가\x17(최대 48) - \x1F5 Point\x12\x04 \x0D\x0D\x0D\x0D\x0D / \x1948",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,36),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
+	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x072. \x07총 \x08강화확률 \x04증가 \x0F+0.1%p \x04- \x1F1 Point\x12\x04 \x0D00.000 %p",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,32),TotalEPerLoc,nil,nil,{10,5},1,nil,"\x0F0",0x0F,{0,1,3,4,5},nil,{})
+	CS__InputTA(FP,CV(TotalEPerLoc,999,AtMost),SVA1(Str1,33),string.byte("0")*0x1000000, 0xFF000000)
+	CS__InputTA(FP,CV(TotalEPerLoc,99,AtMost),SVA1(Str1,35),string.byte("0")*0x1000000, 0xFF000000)
+	CS__InputTA(FP,CV(TotalEPerLoc,9,AtMost),SVA1(Str1,36),string.byte("0")*0x1000000, 0xFF000000)
+	CS__InputTA(FP,CV(TotalEPerLoc,0,AtMost),SVA1(Str1,37),string.byte("0")*0x1000000, 0xFF000000)
+	CA__InputVA(56*5,Str1,Str1s,nil,56*5,56*6-2)
+
+	
+	for i = 3, 11 do
+		CA__SetMemoryX((56*i)-1,0x0A0D0D0D,0xFFFFFFFF,1)
+	end
+
+	CElseX()--표기할 상점 페이지가 없을시
+	CIf(FP,{CD(InterfaceNumLoc2,0)},{SetCD(InterfaceNumLoc2,1)})
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
+	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)	
+	for i = 3, 11 do
+		CA__SetMemoryX((56*i)-1,0x0D0D0D0D,0xFFFFFFFF,1)
+	end
+	CIfEnd()
+
+
+
+	CIfXEnd()
+
+
+
 
 	
 	end 
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"TEST",FP,{}) 
+
 	TriggerX(FP, {CD(TBLFlag,0)}, {CreateUnit(1,94,64,FP),RemoveUnit(94,FP)}, {preserved})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 	DoActionsX(FP, {SetCD(TBLFlag,0)})
 	TriggerX(FP, ElapsedTime(AtLeast,180*1.5), {RemoveUnit(88,AllPlayers)}) -- 3분뒤 사라지는 기본유닛

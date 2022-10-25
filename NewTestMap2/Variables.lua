@@ -1,6 +1,13 @@
 function Include_Vars()
 	--System
 	LimitVerPtr = 0x58f608
+	--MSQC_init(0x590004)
+	MSQC_KeyArr = {}
+	MSQC_KeySet("O",494)
+	MSQC_KeySet("ESC",495)
+	MSQC_KeySet("1",496)
+	MSQC_KeySet("2",497)
+	MSQC_ExportEdsTxt()
 	Nextptrs = CreateVar(FP)
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
 	P1VON = "Turn ON Shared Vision for Player 1"
@@ -43,10 +50,11 @@ function Include_Vars()
 	end
 
 	ShopSw = CreateCcodeArr(7)
+	ShopKey = CreateCcodeArr(7)
 
 	--String
 	
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",11)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 	
 
@@ -129,6 +137,11 @@ function Include_Vars()
 	PushLevelUnit(25+13,13000,128000,29,21,48,6000,59)--노라드
 	PushLevelUnit(25+14,13000,170000,86,78,48,10000,59)--다니모스
 	PushLevelUnit(25+15,5000,500000,54,36,1,5000,59,nil,1)--디버링원 공속최대
+	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
+	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
+	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
+	SetWeaponsDatX(26,{WepName=1441})--파벳3연타 예외처리
+
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
