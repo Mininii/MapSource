@@ -290,6 +290,7 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 	IdleOrder = 2,
 	RClickAct = 1,
 })
+
 if ObjNum~=nil then
 	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
 else
@@ -387,11 +388,12 @@ function BtnSetEnd()
 end
 
 
-function DPSBuilding(CP,UnitPtr,Multiplier,TotalDPSDest,MoneyV)
+function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	local DPS = CreateVarArr(24, FP)
 	local TotalDPS = CreateVar(FP)
 	local DPSCheckV = CreateVar(FP)
 	local DpsDest = CreateVar(FP)
+	local GetMoney = CreateWar(FP)
 	local DPSCheck = CreateCcode()
 	CIf(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1)})
 	f_Read(FP, UnitPtr, DPSCheckV)
@@ -430,9 +432,14 @@ function DPSBuilding(CP,UnitPtr,Multiplier,TotalDPSDest,MoneyV)
 	TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 		if Multiplier ~=  nil then
-			CMul(FP,DpsDest,Multiplier)
+			f_LMov(FP, GetMoney, {_Mul(DpsDest,Multiplier),0}, nil, nil, 1)
+		else
+			f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
 		end
-		f_LAdd(FP,MoneyV,MoneyV,{DpsDest,0})
+		if MultiplierV ~= nil then
+			f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
+		end
+		f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 		CIfEnd()
 	CIfEnd()
 end
@@ -454,4 +461,14 @@ function MSQC_ExportEdsTxt()
 	end
 	io.close(CSfile)
 	
+end
+
+function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
+	local X = {}
+	local Y = {}
+	for i = 0, MaxPlayer do
+		table.insert(X,(Ptr+(i*Multiplier))%4)
+		table.insert(Y,(Ptr+(i*Multiplier))-X[i+1])
+	end
+	return X,Y
 end

@@ -58,39 +58,59 @@ function Install_CallTriggers()
 	
 	
 	if TestStart == 1 then -- 테스트용 결과 출력
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
-		
-		TestVA = CreateVArr(4, FP)
-		TestVA2 = CreateVArr(4, FP)
-		ItoDec(FP,GetEPer,VArr(TestVA,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(ETestStrPtr1,ETestTxt1[2]),VArr(TestVA,0),4*4)
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET1".._0D, 4)})
-		ItoDec(FP,TotalEper,VArr(TestVA2,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
-		ItoDec(FP,TotalEper2,VArr(TestVA2,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
-		ItoDec(FP,TotalEper3,VArr(TestVA2,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
+		CIf(FP,{KeyPress("F12", "Down")})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
+			TestVA = CreateVArr(4, FP)
+			TestVA2 = CreateVArr(4, FP)
+			ItoDec(FP,GetEPer,VArr(TestVA,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(ETestStrPtr1,ETestTxt1[2]),VArr(TestVA,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET1".._0D, 4)})
+			ItoDec(FP,TotalEper,VArr(TestVA2,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
+			ItoDec(FP,TotalEper2,VArr(TestVA2,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
+			ItoDec(FP,TotalEper3,VArr(TestVA2,0),2,0x1F,0)
+			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
+		CIfEnd()
 	end
 	
 	--강화 성공 또는 실패 결정. TotalEper가 랜덤난수보다 더 클경우 성공
 	CIfX(FP,{CV(TotalEper3,GetEPer,AtLeast)})--+3강 성공시
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +3 성공", 4)})
+		if TestStart == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +3 성공", 4)})
+			CIfEnd()
+		end
 	CAdd(FP,ELevel,3)
 	CElseIfX({CV(TotalEper2,GetEPer,AtLeast)})--+2강 성공시
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +2 성공", 4)})
+		if TestStart == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +2 성공", 4)})
+			CIfEnd()
+		end
 	CAdd(FP,ELevel,2)
 	CElseIfX({CV(TotalEper,GetEPer,AtLeast)})--+1강 성공시
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +1 성공", 4)})
+		if TestStart == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +1 성공", 4)})
+			CIfEnd()
+		end
 	CAdd(FP,ELevel,1)
 	CElseX()--실패시 경험치 지급
-		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : 실패", 4)})
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
 			f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
+			CIfEnd()
+		end
+
+		if TestStart == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				ItoDec(FP,EExp,VArr(TestVA2,0),2,0x1F,0)
+				f_Movcpy(FP,_Add(ETestStrPtr3,ETestTxt3[2]),VArr(TestVA2,0),4*4)
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET3".._0D, 4)})
 			CIfEnd()
 		end
 	CMov(FP,ELevel,0)

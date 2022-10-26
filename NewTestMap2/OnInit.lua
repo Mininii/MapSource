@@ -36,8 +36,11 @@ function onInit_EUD()
 	
 	PatchInput()
 
-	
-	CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
+	if TestStart == 1 then
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,1)}) -- 테스트모드 최대배속
+	else
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
+	end
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	for i = 0, 6 do
 		
@@ -69,8 +72,10 @@ function onInit_EUD()
 	if TestStart == 1 then -- 테스트용 결과 출력
 		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
 		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
+		f_GetStrXptr(FP,ETestStrPtr3,"\x0D\x0D\x0DET3".._0D)
 		f_Memcpy(FP,ETestStrPtr1,_TMem(Arr(ETestTxt1[3],0),"X","X",1),ETestTxt1[2])
 		f_Memcpy(FP,ETestStrPtr2,_TMem(Arr(ETestTxt2[3],0),"X","X",1),ETestTxt2[2])
+		f_Memcpy(FP,ETestStrPtr3,_TMem(Arr(ETestTxt3[3],0),"X","X",1),ETestTxt3[2])
 
 			
 	end

@@ -7,6 +7,9 @@ function Include_Vars()
 	MSQC_KeySet("ESC",495)
 	MSQC_KeySet("1",496)
 	MSQC_KeySet("2",497)
+	MSQC_KeySet("3",498)
+	MSQC_KeySet("4",499)
+	MSQC_KeySet("5",500)
 	MSQC_ExportEdsTxt()
 	Nextptrs = CreateVar(FP)
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -45,8 +48,10 @@ function Include_Vars()
 	if TestStart == 1 then 
 		ETestTxt1 = CreateCText(FP,"출력된 난수 : ")
 		ETestTxt2 = CreateCText(FP,"계산된 확률 : ")
+		ETestTxt3 = CreateCText(FP,"실패, 얻은 경험치 : ")
 		ETestStrPtr1 = CreateVar(FP)
 		ETestStrPtr2 = CreateVar(FP)
+		ETestStrPtr3 = CreateVar(FP)
 	end
 
 	ShopSw = CreateCcodeArr(7)
@@ -74,12 +79,18 @@ function Include_Vars()
 	AutoEnchArr = {}
 	AutoEnchArr2 = {}
 	AutoBuyArr = {
-		{1,"100"},
-		{7,"4000"},
-		{11,"100000"},
-		{14,"500000"},
-		{17,"2000000"},
-		{20,"5000000"},
+		{1,"50"},
+		{7,"1000"},
+		{11,"20000"},
+		{15,"700000"},
+		{18,"9000000"},
+		{20,"50000000"},
+		{22,"400000000"},
+		{24,"3500000000"},
+		{26,"50000000000"},
+		{28,"900000000000"},
+		{30,"10000000000000"},
+		{32,"300000000000000"},
 	}
 	PatchInit()
 
@@ -119,7 +130,7 @@ function Include_Vars()
 
 
 
-	PushLevelUnit(25+1,25000,500,20,1,24,10,60)--짐레
+	PushLevelUnit(25+1,25000,500,20,1,24,10,59)--짐레
 	PushLevelUnit(25+2,25000,1000,16,3,48,30,59)--사라
 	PushLevelUnit(25+3,25000,1750,19,5,24,20,59)--짐레벌쳐
 	PushLevelUnit(25+4,25000,2500,17,10,24,30,59,1,1)--알랜
