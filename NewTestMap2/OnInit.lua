@@ -41,10 +41,58 @@ function onInit_EUD()
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
 	end
+
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit설정
+
+	function InputTesterID(Player,ID)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+	end
+	for i = 0, 6 do -- 내부 테스터 유저 트리거
+		InputTesterID(i,"GALAXY_BURST")
+		InputTesterID(i,"_Mininii")
+		InputTesterID(i,"RonaRonaChan")
+	end
+	
+
+	
+	Trigger2X(FP, {
+		CDeaths(FP,Exactly,1,LimitX);
+		CDeaths(FP,Exactly,0,LimitC);}, {
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			Defeat();
+			},Force1,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);})
+	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
+		RotatePlayer({
+			DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+		Defeat();
+		},Force1,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+	
+
+
+
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	for i = 0, 6 do
 		
 	CIf(FP,{HumanCheck(i,1)})
+
+
+	
 		
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(TestShop[i+1], SetTo, Nextptrs),CreateUnit(1,128,1+i,i)})

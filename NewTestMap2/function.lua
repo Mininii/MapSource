@@ -432,7 +432,8 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 		if Multiplier ~=  nil then
-			f_LMov(FP, GetMoney, {_Mul(DpsDest,Multiplier),0}, nil, nil, 1)
+			
+			f_LMov(FP, GetMoney, _LMul({DpsDest,0}, Multiplier), nil, nil, 1)
 		else
 			f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
 		end

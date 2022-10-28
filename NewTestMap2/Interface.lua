@@ -10,6 +10,7 @@ function Interface()
 	local TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
 	local TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	local TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	local CurEXP = CreateWarArr(7,FP)
 	
 	--Setting, Effect
 	local StatEff = CreateCcodeArr(7)
@@ -17,9 +18,10 @@ function Interface()
 	local InterfaceNum = CreateVarArr(7,FP)
 	local Stat_Upgrade_UI = CreateVarArr(7,FP)
 	local AutoBuyCode = CreateCcodeArr(7)
+
+	local PCheckV = CreateVar(FP)
 	
 	--PlayData(SCA)
-	local CurEXP = CreateWarArr(7,FP)
 	local Credit = CreateWarArr(7,FP)
 	local PLevel = CreateVarArr2(7,1,FP)
 	local StatP = CreateVarArr(7,FP)
@@ -27,6 +29,8 @@ function Interface()
 	local Stat_TotalEPer = CreateVarArr(7,FP)
 	local Stat_TotalEPer2 = CreateVarArr(7,FP)
 	local Stat_TotalEPer3 = CreateVarArr(7,FP)
+	local Stat_EXPIncome = CreateVarArr(7,FP)
+	
 	local Stat_Upgrade = CreateVarArr(7,FP)
 
 
@@ -45,6 +49,7 @@ function Interface()
 	local TotalExpLoc = CreateVar(FP)
 	local InterfaceNumLoc = CreateVar(FP)
 	local UpgradeLoc = CreateVar(FP)
+	local EXPIncomeLoc = CreateVar(FP)
 	local StatEffLoc = CreateCcode()
 
 
@@ -60,6 +65,10 @@ function Interface()
 			CIfEnd()
 		CIfEnd()
 		
+	end
+	CMov(FP,PCheckV,0)
+	for i = 0, 6 do
+		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 	end
 for i = 0, 6 do -- 각플레이어
 	CIf(FP,{HumanCheck(i,1)})
@@ -89,13 +98,16 @@ for i = 0, 6 do -- 각플레이어
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
+	if TestStart == 1 then 
+		--CMov(FP,StatP[i+1],500)
+	end
 	for NBit = 2,7 do
 		TriggerX(FP,{Accumulate(i, AtLeast, 10^NBit, Ore)},{SetV(BuildMul1[i+1],2^(NBit-1)),SetCp(i),DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..10^NBit.." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..(2^(NBit-1)).."배\x04로 증가하였습니다.")),SetCp(FP)})--1번건물
 		TriggerX(FP,{Accumulate(i, AtLeast, 10^NBit, Gas)},{SetV(BuildMul2[i+1],2^(NBit-1)),SetCp(i),DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..10^NBit.." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..(2^(NBit-1)).."배\x04로 증가하였습니다.")),SetCp(FP)})--2번건물
 	end
 
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore},Money[i+1])
-	DPSBuilding(i,DpsLV2[i+1],100000,BuildMul2[i+1],{Gas},Money[i+1])
+	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas},Money[i+1])
 
 
 
@@ -170,26 +182,38 @@ for i = 0, 6 do -- 각플레이어
 		{{CV(Stat_Income[i+1],36,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 최대 유닛수를 늘릴 수 없습니다.")},
 		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
-	KeyFunc(i,"2",{
+--	if TestStart == 1 then
+--		KeyFunc(i,"2",{
+--			{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],89,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
+--			{{CV(Stat_Upgrade[i+1],90,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
+--			{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+--		})
+--	else
+		KeyFunc(i,"2",{
+			{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],19,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
+			{{CV(Stat_Upgrade[i+1],20,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+--	end
+	KeyFunc(i,"3",{
 		{{CV(StatP[i+1],5,AtLeast),CV(Stat_TotalEPer[i+1],9999,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_TotalEPer[i+1],100)},StrDesign("\x07총 \x08강화 확률\x04이 증가하였습니다.")},
 		{{CV(Stat_TotalEPer[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07총 \x08강화 확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
-	KeyFunc(i,"3",{
-		{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],19,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
-		{{CV(Stat_Upgrade[i+1],20,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],0,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
-	})
 	KeyFunc(i,"4",{
-		{{CV(StatP[i+1],20,AtLeast),CV(Stat_TotalEPer[i+1],999,AtMost)},{SubV(StatP[i+1],20),AddV(Stat_TotalEPer[i+1],10)},StrDesign("\x07+2강 강화확률\x04이 \x0810% \x04증가하였습니다.")},
-		{{CV(Stat_TotalEPer[i+1],1000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다.")},
+		{{CV(StatP[i+1],20,AtLeast),CV(Stat_TotalEPer2[i+1],9999,AtMost)},{SubV(StatP[i+1],20),AddV(Stat_TotalEPer2[i+1],100)},StrDesign("\x07+2강 강화확률\x04이 \x0810% \x04증가하였습니다.")},
+		{{CV(Stat_TotalEPer2[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],19,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 	KeyFunc(i,"5",{
-		{{CV(StatP[i+1],100,AtLeast),CV(Stat_TotalEPer3[i+1],99,AtMost)},{SubV(StatP[i+1],100),AddV(Stat_TotalEPer3[i+1],1)},StrDesign("\x07+3강 강화확률\x04이 \x0810% \x04증가하였습니다.")},
-		{{CV(Stat_TotalEPer3[i+1],100,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다.")},
+		{{CV(StatP[i+1],100,AtLeast),CV(Stat_TotalEPer3[i+1],9999,AtMost)},{SubV(StatP[i+1],50),AddV(Stat_TotalEPer3[i+1],100)},StrDesign("\x07+3강 강화확률\x04이 \x0810% \x04증가하였습니다.")},
+		{{CV(Stat_TotalEPer3[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],99,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
+	--KeyFunc(i,"6",{
+	--	{{CV(StatP[i+1],5,AtLeast)},{SubV(StatP[i+1],5),AddV(Stat_EXPIncome[i+1],1)},StrDesign("\x07경험치 획등량\x04이 \x0810% \x04증가하였습니다.")},
+	--	{{CV(StatP[i+1],0,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+	--})
 	TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4),CenterView(36+i)},{preserved})
 	CIfXEnd()
 	DoActions(FP, SetCp(FP))--키인식부 종료
@@ -204,11 +228,17 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
 	end
 
+	for j = 2, 7 do -- 팀워크 버프 적용, 관리부분
+		TriggerX(FP,{NVar(PCheckV,Exactly,j)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
+	end
+	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
+	
 	BringJumpCcode = CreateCcode()
 	CIf(FP,{Bring(i,AtLeast,1,"Men",8+i)},{SetCD(BringJumpCcode,0)}) --  유닛 강화시도하기
 	CMov(FP,GEper,TotalEPer[i+1])
 	CMov(FP,GEper2,TotalEPer2[i+1])
 	CMov(FP,GEper3,TotalEPer3[i+1])
+	CMov(FP,GEXP,Stat_EXPIncome[i+1])
 	for j = #LevelUnitArr, 1, -1 do
 		local LV = LevelUnitArr[j][1]
 		local UID = LevelUnitArr[j][2]
@@ -217,6 +247,11 @@ for i = 0, 6 do -- 각플레이어
 		if j == #LevelUnitArr then
 			CIf(FP,{Bring(i,AtLeast,1,UID,8+i)},{KillUnitAt(1, UID, 8+i, i),})
 			f_LAdd(FP, PEXP[i+1], PEXP[i+1], tostring(EXP))
+			CIf(FP,{CV(GEXP,1,AtLeast)})
+				CAdd(FP,PEXP2[i+1],_Mul(EExp,GEXP))
+				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {_Div(PEXP2[i+1],10),0})
+				CMod(FP, PEXP2[i+1], 10)
+			CIfEnd()
 			CIfEnd()
 		else
 			CallTriggerX(FP, Call_Enchant, {Bring(i,AtLeast,1,UID,8+i)}, {KillUnitAt(1, UID, 8+i, i),SetV(EExp,EXP),SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetCD(BringJumpCcode,1)})
@@ -224,9 +259,8 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CIfEnd()
 	
-
-
-
+	
+	
 	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0)}) -- CAPrint에 전송할 값들
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
@@ -242,11 +276,14 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,InterfaceNumLoc,InterfaceNum[i+1])
 	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
 	CMov(FP,UpgradeLoc,Stat_Upgrade_UI[i+1])
+	CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
 	CIfEnd()
 	
+
+
+
 	CIfEnd()
 end
-
 
 local iStrinit = def_sIndex()
 CJump(FP, iStrinit)
@@ -362,20 +399,44 @@ function TEST()
 	CA__ItoCustom(SVA1(Str1,41),StatPLoc,nil,nil,{10,5},nil,nil,"\x040")
 	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
-	CA__SetValue(Str1,"\x071. \x07사냥터 \x1F최대유닛 1\x04증가\x08(최대 48) - \x1F5 Point\x12\x04 \x0D\x0D\x0D\x0D\x0D / \x1948",nil,1)
-	CS__ItoCustom(FP,SVA1(Str1,35),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
+	CA__SetValue(Str1,"\x071. \x07사냥터 \x1F최대유닛\x04+1 \x08(최대 48) - \x1F5 Point\x12\x04 \x0D\x0D\x0D\x0D\x0D / \x1948",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,34),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
 	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
-	CA__SetValue(Str1,"\x072. \x07총 \x08강화확률 \x04증가 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Point\x12\x04 \x0D00.000 %p",nil,1)
-	CS__ItoCustom(FP,SVA1(Str1,39),TotalEPerLoc,nil,nil,{10,5},1,nil,"\x0F00.000",0x0F,{0,1,3,4,5},nil,{})
+	CA__SetValue(Str1,"\x072. \x1B유닛 데미지 \x08(최대 +200%) - \x1F5 Point\x12\x07+ \x0D\x0D\x0D\x0D\x0D %",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,34),UpgradeLoc,nil,nil,{10,3},1,nil,"\x080",0x08)
 	CA__InputVA(56*5,Str1,Str1s,nil,56*5,56*6-2)
-	CA__SetValue(Str1,"\x073. \x06유닛 데미지 10%\x04증가 \x08(최대 +400%) - \x1F5 Point\x12\x07+ \x0D\x0D\x0D\x0D\x0D %",nil,1)
-	CS__ItoCustom(FP,SVA1(Str1,40),UpgradeLoc,nil,nil,{10,3},1,nil,"\x080",0x08,{0,1,3,4,5},nil,{})
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x073. \x07총 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Point\x12\x07+ \x0F\x0D00.000 %p",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,37),TotalEPerLoc,nil,nil,{10,5},1,nil,"\x0F0",0x0F,{0,1,3,4,5},nil,{})
+	CS__InputTA(FP,CV(TotalEPerLoc,999,AtMost),SVA1(Str1,37+1),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,nil,SVA1(Str1,37+2),string.byte(".")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPerLoc,99,AtMost),SVA1(Str1,37+3),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPerLoc,9,AtMost),SVA1(Str1,37+4),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPerLoc,0,AtMost),SVA1(Str1,37+5),string.byte("0")*0x1000000, 0xFF000000)
 	CA__InputVA(56*6,Str1,Str1s,nil,56*6,56*7-2)
-	CA__SetValue(Str1,"\x074. \x07+2 \x08강화확률 \x04증가 0.01%p \x08MAX 100\x04 - \x1F20 Point\x12\x07+ \x0D00.000 %",nil,1)
-	CA__SetValue(Str1,"\x075. \x10+3 \x08강화확률 \x04증가 0.001%p \x08MAX 100\x04 - \x1F100 Point\x12\x07+ \x0D00.000 %",nil,1)
-	CS__ItoCustom(FP,SVA1(Str1,43),TotalEPer2Loc,nil,nil,{10,5},1,nil,"\x0F00.000",0x0F,{0,1,3,4,5},nil,{})
-	CS__ItoCustom(FP,SVA1(Str1,44),TotalEPer3Loc,nil,nil,{10,5},1,nil,"\x0F00.000",0x0F,{0,1,3,4,5},nil,{})
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x074. \x07+2 \x08강화확률 \x070.1%p \x04 - \x1F20 Point\x12\x07+ \x0F\x0D00.000 %p",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,32),TotalEPer2Loc,nil,nil,{10,5},1,nil,"\x0F0",0x0F,{0,1,3,4,5},nil,{})
+	CS__InputTA(FP,CV(TotalEPer2Loc,999,AtMost),SVA1(Str1,32+1),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,nil,SVA1(Str1,32+2),string.byte(".")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer2Loc,99,AtMost),SVA1(Str1,32+3),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer2Loc,9,AtMost),SVA1(Str1,32+4),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer2Loc,0,AtMost),SVA1(Str1,32+5),string.byte("0")*0x1000000, 0xFF000000)
+	CA__InputVA(56*7,Str1,Str1s,nil,56*7,56*8-2)
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	CA__SetValue(Str1,"\x075. \x10+3 \x08강화확률 \x070.1%p \x04 - \x1F100 Point\x12\x07+ \x0F\x0D00.000 %p",nil,1)
+	CS__ItoCustom(FP,SVA1(Str1,33),TotalEPer3Loc,nil,nil,{10,5},1,nil,"\x0F0",0x0F,{0,1,3,4,5},nil,{})
+	CS__InputTA(FP,CV(TotalEPer3Loc,999,AtMost),SVA1(Str1,33+1),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,nil,SVA1(Str1,33+2),string.byte(".")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer3Loc,99,AtMost),SVA1(Str1,33+3),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer3Loc,9,AtMost),SVA1(Str1,33+4),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,CV(TotalEPer3Loc,0,AtMost),SVA1(Str1,33+5),string.byte("0")*0x1000000, 0xFF000000)
+	CA__InputVA(56*8,Str1,Str1s,nil,56*8,56*9-2)
+	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
+	--CA__SetValue(Str1,"\x076. \x1C경험치 획득량 \x0710% \x04 - \x1F5 Point\x12\x07+ \x1C\x0D\x0D\x0D\x0D\x0D\x0D\x0D0 %",nil,1)
+	--CS__ItoCustom(FP,SVA1(Str1,29),EXPIncomeLoc,nil,nil,{10,5},1,nil,"\x0D",0x1C)
+	--CA__InputVA(56*9,Str1,Str1s,nil,56*9,56*10-2)
 
 	
 	for i = 3, 11 do
@@ -387,6 +448,12 @@ function TEST()
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
 	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)	
+	CA__InputVA(56*5,Str1,Str1s,nil,56*5,56*6-2)	
+	CA__InputVA(56*6,Str1,Str1s,nil,56*6,56*7-2)	
+	CA__InputVA(56*7,Str1,Str1s,nil,56*7,56*8-2)	
+	CA__InputVA(56*8,Str1,Str1s,nil,56*8,56*9-2)	
+	CA__InputVA(56*9,Str1,Str1s,nil,56*9,56*10-2)	
+	CA__InputVA(56*10,Str1,Str1s,nil,56*10,56*11-2)	
 	for i = 3, 11 do
 		CA__SetMemoryX((56*i)-1,0x0D0D0D0D,0xFFFFFFFF,1)
 	end

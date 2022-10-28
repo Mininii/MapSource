@@ -10,6 +10,7 @@ function Include_Vars()
 	MSQC_KeySet("3",498)
 	MSQC_KeySet("4",499)
 	MSQC_KeySet("5",500)
+	MSQC_KeySet("6",501)
 	MSQC_ExportEdsTxt()
 	Nextptrs = CreateVar(FP)
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -29,6 +30,7 @@ function Include_Vars()
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	_0D = string.rep("\x0D",200) 
+	LimitX, LimitC,TestMode = CreateCcodes(3)
 	--Interface
 	TestShop = CreateVarArr(7, FP)
 	TBLFlag = CreateCcode()
@@ -38,8 +40,11 @@ function Include_Vars()
 	DpsLV1 = CreateVarArr(7, FP)
 	DpsLV2 = CreateVarArr(7, FP)
 	PEXP = CreateWarArr(7, FP)
+	PEXP2 = CreateVarArr(7, FP)
 	ELevel = CreateVar(FP)
 	EExp = CreateVar(FP)
+	EExp2 = CreateVar(FP)
+	GEXP = CreateVar(FP)
 	ECP = CreateVar(FP)
 	GEper = CreateVar(FP)
 	GEper2 = CreateVar(FP)
@@ -123,9 +128,9 @@ function Include_Vars()
 	PushLevelUnit(19,30000,15,37,35,12,600,59)--저글링
 	PushLevelUnit(20,25000,25,38,38,24,2000,59)--히드라
 	PushLevelUnit(21,25000,40,43,48,24,2700,59)--뮤탈
-	PushLevelUnit(22,25000,75,44,46,48,7000,59)--가디언
-	PushLevelUnit(23,25000,100,62,104,48,10000,59)--디바우러
-	PushLevelUnit(24,25000,125,39,40,48,13000,59)--울트라
+	PushLevelUnit(22,25000,75,44,46,24,3500,59)--가디언
+	PushLevelUnit(23,25000,100,62,104,24,5000,59)--디바우러
+	PushLevelUnit(24,25000,125,39,40,24,6500,59)--울트라
 	PushLevelUnit(25,10000,250,46,50,12,5000,59)--디파
 
 
@@ -146,7 +151,7 @@ function Include_Vars()
 	PushLevelUnit(25+11,16000,70000,10,26,72,600,59)--파벳영웅 3타
 	PushLevelUnit(25+12,16000,100000,75,85,24,1200,59)--제라툴
 	PushLevelUnit(25+13,13000,128000,29,21,48,6000,59)--노라드
-	PushLevelUnit(25+14,13000,170000,86,78,48,10000,59)--다니모스
+	PushLevelUnit(25+14,13000,170000,86,78,12,3000,59)--다니모스
 	PushLevelUnit(25+15,5000,500000,54,36,1,5000,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
