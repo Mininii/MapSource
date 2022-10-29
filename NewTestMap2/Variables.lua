@@ -41,13 +41,10 @@ function Include_Vars()
 	DpsLV1 = CreateVarArr(7, FP)
 	DpsLV2 = CreateVarArr(7, FP)
 	
-	Credit = CreateWarArr(7,FP) -- SCA Data
-	PEXP = CreateWarArr(7, FP) -- SCA Data
 
 	PEXP2 = CreateVarArr(7, FP)
 	ELevel = CreateVar(FP)--현재 강화중인 레벨
-	EExp = CreateVar(FP)
-	GEXP = CreateVar(FP)
+	--EExp = CreateVar(FP)
 	ECP = CreateVar(FP)
 	GEper = CreateVar(FP)
 	GEper2 = CreateVar(FP)

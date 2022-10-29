@@ -102,26 +102,26 @@ function Install_CallTriggers()
 	CElseX()--실패시 Never(경험치 지급)
 		local TempEXP = CreateVar(FP)
 		for i = 0, 6 do
-			CIf(FP,{Never(),CV(ECP,i)})
-			f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
-			--f_LAdd(FP, Credit[i+1], Credit[i+1], {EExp,0})
-			CIf(FP,{CV(GEXP,1,AtLeast)})
-			
-				CAdd(FP,PEXP2[i+1],_Mul(EExp,GEXP))
-				CMov(FP,TempEXP,_Div(PEXP2[i+1],10),nil,nil,1)
-				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXP,0})
-				CMod(FP, PEXP2[i+1], 10)
-			CIfEnd()
-			CIfEnd()
+			--CIf(FP,{Never(),CV(ECP,i)})
+			--f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})
+			----f_LAdd(FP, Credit[i+1], Credit[i+1], {EExp,0})
+			--CIf(FP,{CV(GEXP,1,AtLeast)})
+		--	
+			--	CAdd(FP,PEXP2[i+1],_Mul(EExp,GEXP))
+			--	CMov(FP,TempEXP,_Div(PEXP2[i+1],10),nil,nil,1)
+			--	f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXP,0})
+			--	CMod(FP, PEXP2[i+1], 10)
+			--CIfEnd()
+			--CIfEnd()
 		end
 
-		if TestStart == 1 then
-			CIf(FP,{KeyPress("F12", "Down")})
-				ItoDec(FP,_Add(EExp,TempEXP),VArr(TestVA2,0),2,0x1F,0)
-				f_Movcpy(FP,_Add(ETestStrPtr3,ETestTxt3[2]),VArr(TestVA2,0),4*4)
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET3".._0D, 4)})
-			CIfEnd()
-		end
+		--if TestStart == 1 then
+		--	CIf(FP,{KeyPress("F12", "Down")})
+		--		ItoDec(FP,_Add(EExp,TempEXP),VArr(TestVA2,0),2,0x1F,0)
+		--		f_Movcpy(FP,_Add(ETestStrPtr3,ETestTxt3[2]),VArr(TestVA2,0),4*4)
+		--		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET3".._0D, 4)})
+		--	CIfEnd()
+		--end
 	CMov(FP,ELevel,0)
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
@@ -135,4 +135,5 @@ function Install_CallTriggers()
 	CIfEnd()
 	
 	SetCallEnd()
+	
 end
