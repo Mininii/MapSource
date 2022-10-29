@@ -11,6 +11,7 @@ function Include_Vars()
 	MSQC_KeySet("4",499)
 	MSQC_KeySet("5",500)
 	MSQC_KeySet("6",501)
+	MSQC_KeySet("P",502)
 	MSQC_ExportEdsTxt()
 	Nextptrs = CreateVar(FP)
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -39,11 +40,13 @@ function Include_Vars()
 
 	DpsLV1 = CreateVarArr(7, FP)
 	DpsLV2 = CreateVarArr(7, FP)
-	PEXP = CreateWarArr(7, FP)
+	
+	Credit = CreateWarArr(7,FP) -- SCA Data
+	PEXP = CreateWarArr(7, FP) -- SCA Data
+
 	PEXP2 = CreateVarArr(7, FP)
-	ELevel = CreateVar(FP)
+	ELevel = CreateVar(FP)--현재 강화중인 레벨
 	EExp = CreateVar(FP)
-	EExp2 = CreateVar(FP)
 	GEXP = CreateVar(FP)
 	ECP = CreateVar(FP)
 	GEper = CreateVar(FP)
@@ -66,6 +69,8 @@ function Include_Vars()
 	
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",11)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
+	iStr2 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",8)) 
+	Str2, Str2a, Str2s = SaveiStrArr(FP,MakeiStrVoid(54))
 	
 
 

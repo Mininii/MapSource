@@ -473,3 +473,9 @@ function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
 	end
 	return X,Y
 end
+
+function CIf_KeyFunc(KeyName)
+	local KeyToggle = CreateCcode()
+	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	CIf(FP,{KeyPress(KeyName, "Down"),CD(KeyToggle,0)},{SetCD(KeyToggle,1)})
+end
