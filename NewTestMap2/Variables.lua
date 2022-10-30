@@ -51,16 +51,23 @@ function Include_Vars()
 	GEper3 = CreateVar(FP)
 	UEper = CreateVar(FP)
 	if TestStart == 1 then 
-		ETestTxt1 = CreateCText(FP,"출력된 난수 : ")
-		ETestTxt2 = CreateCText(FP,"계산된 확률 : ")
+		ETestTxt1 = CreateCText(FP,"\x10출력된 난수 : ")
+		ETestTxt2 = CreateCText(FP,"\x0F계산된 +1 확률 : ")
+		ETestTxt2_2 = CreateCText(FP,"\x1C계산된 +2 확률 : ")
+		ETestTxt2_3 = CreateCText(FP,"\x1F계산된 +3 확률 : ")
 		ETestTxt3 = CreateCText(FP,"실패, 얻은 경험치 : ")
+		ETestTxt4 = CreateCText(FP,"\x0D\x04 ~ \x0D")
 		ETestStrPtr1 = CreateVar(FP)
 		ETestStrPtr2 = CreateVar(FP)
 		ETestStrPtr3 = CreateVar(FP)
+		ETestStrPtr4 = CreateVar(FP)
+		ETestStrPtr5 = CreateVar(FP)
 	end
 
 	ShopSw = CreateCcodeArr(7)
 	ShopKey = CreateCcodeArr(7)
+
+	Etbl = CreateVar(FP)
 
 	--String
 	
@@ -101,6 +108,7 @@ function Include_Vars()
 	}
 	PatchInit()
 
+	--EnchInterface = CreateCText(FP, "\x08\x08강화확률\n\x0F+1 : 00.000 %\n\x1C+2 : 00.000 %\n\x1F+3 : 00.000 %")
 	
 	--1,12,24,48,72 (매우빠름 ,빠름, 보통, 느림, 매우느림)
 	PushLevelUnit(1,75000,0,0,0,24,1,60)--마린 10원
@@ -151,9 +159,9 @@ function Include_Vars()
 
 
 	PushLevelUnit(25+11,16000,70000,10,26,72,600,59)--파벳영웅 3타
-	PushLevelUnit(25+12,16000,100000,75,85,24,1200,59)--제라툴
-	PushLevelUnit(25+13,13000,128000,29,21,48,6000,59)--노라드
-	PushLevelUnit(25+14,13000,170000,86,78,12,3000,59)--다니모스
+	PushLevelUnit(25+12,12000,100000,75,85,24,1200,59)--제라툴
+	PushLevelUnit(25+13,10000,128000,29,21,48,6000,59)--노라드
+	PushLevelUnit(25+14,5000,170000,86,78,12,3000,59)--다니모스
 	PushLevelUnit(25+15,5000,500000,54,36,1,5000,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
@@ -173,7 +181,7 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,12,2,0,59,1) -- 기본유닛
+	SetUnitAbility(88,114,12,2,0,59,1,nil,60) -- 기본유닛
 
 
 	PopLevelUnit()

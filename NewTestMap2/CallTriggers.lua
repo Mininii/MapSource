@@ -46,7 +46,7 @@ function Install_CallTriggers()
 	Call_Enchant = SetCallForward()
 	--100000 = 100%
 	SetCall(FP)
-	GetEPer = f_CRandNum(100001) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper2 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
@@ -55,52 +55,82 @@ function Install_CallTriggers()
 	CAdd(FP,TotalEper,UEper,GEper) -- +1강 확률
 	CAdd(FP,TotalEper2,_Div(UEper,10),GEper2)
 	CAdd(FP,TotalEper3,_Div(UEper,100),GEper3)
-	
-	
+
+	E3Range = CreateVarArr(2, FP)
+	E2Range = CreateVarArr(2, FP)
+	E1Range = CreateVarArr(2, FP)
+	CMov(FP,E3Range[1],1)
+	CMov(FP,E3Range[2],TotalEper3)
+	CMov(FP,E2Range[1],E3Range[2],1)
+	CMov(FP,E2Range[2],_Add(E3Range[2],TotalEper2))
+	CMov(FP,E1Range[1],E2Range[2],1)
+	CMov(FP,E1Range[2],_Add(E2Range[2],TotalEper))
+
 	if TestStart == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
+			for i = 1, 39 do
+				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+			end
+
 			TestVA = CreateVArr(4, FP)
 			TestVA2 = CreateVArr(4, FP)
 			ItoDec(FP,GetEPer,VArr(TestVA,0),2,0x1F,0)
 			f_Movcpy(FP,_Add(ETestStrPtr1,ETestTxt1[2]),VArr(TestVA,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET1".._0D, 4)})
-			ItoDec(FP,TotalEper,VArr(TestVA2,0),2,0x1F,0)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET1".._0D, 4)})--랜덤난수
+
+			ItoDec(FP,E3Range[1],VArr(TestVA2,0),2,0x1D,0)
+			f_Movcpy(FP,_Add(ETestStrPtr5,ETestTxt2[2]),VArr(TestVA2,0),4*4)
+			ItoDec(FP,E3Range[2],VArr(TestVA2,0),2,0x1D,0)
+			f_Movcpy(FP,_Add(ETestStrPtr5,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET5".._0D, 4)})-- +3 확률범위
+
+			ItoDec(FP,E2Range[1],VArr(TestVA2,0),2,0x1D,0)
+			f_Movcpy(FP,_Add(ETestStrPtr4,ETestTxt2[2]),VArr(TestVA2,0),4*4)
+			ItoDec(FP,E2Range[2],VArr(TestVA2,0),2,0x1D,0)
+			f_Movcpy(FP,_Add(ETestStrPtr4,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET4".._0D, 4)})-- +2 확률범위
+
+			ItoDec(FP,E1Range[1],VArr(TestVA2,0),2,0x1D,0)
 			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
-			ItoDec(FP,TotalEper2,VArr(TestVA2,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
-			ItoDec(FP,TotalEper3,VArr(TestVA2,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})
+			ItoDec(FP,E1Range[2],VArr(TestVA2,0),2,0x1D,0)
+			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})-- +1 확률범위
+			
 		CIfEnd()
 	end
+
+	
 	
 	--강화 성공 또는 실패 결정. TotalEper가 랜덤난수보다 더 클경우 성공
-	CIfX(FP,{CV(TotalEper3,GetEPer,AtLeast)})--+3강 성공시
+	CIfX(FP,{TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])})--+3강 성공시
 		if TestStart == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +3 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
 	CAdd(FP,ELevel,3)
-	CElseIfX({CV(TotalEper2,GetEPer,AtLeast)})--+2강 성공시
+	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2강 성공시
 		if TestStart == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +2 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
 	CAdd(FP,ELevel,2)
-	CElseIfX({CV(TotalEper,GetEPer,AtLeast)})--+1강 성공시
+	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1강 성공시
 		if TestStart == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("결과 : +1 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
 		end
 	CAdd(FP,ELevel,1)
 	CElseX()--실패시 Never(경험치 지급)
 		local TempEXP = CreateVar(FP)
+		if TestStart == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
+			CIfEnd()
+		end
 		for i = 0, 6 do
 			--CIf(FP,{Never(),CV(ECP,i)})
 			--f_LAdd(FP, PEXP[i+1], PEXP[i+1], {EExp,0})

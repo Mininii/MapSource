@@ -87,6 +87,7 @@ function onInit_EUD()
 
 
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
+	f_GetTblptr(FP, Etbl, 1438)
 	for i = 0, 6 do
 		
 	CIf(FP,{HumanCheck(i,1)})
@@ -121,8 +122,18 @@ function onInit_EUD()
 		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
 		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
 		f_GetStrXptr(FP,ETestStrPtr3,"\x0D\x0D\x0DET3".._0D)
+		f_GetStrXptr(FP,ETestStrPtr4,"\x0D\x0D\x0DET4".._0D)
+		f_GetStrXptr(FP,ETestStrPtr5,"\x0D\x0D\x0DET5".._0D)
 		f_Memcpy(FP,ETestStrPtr1,_TMem(Arr(ETestTxt1[3],0),"X","X",1),ETestTxt1[2])
 		f_Memcpy(FP,ETestStrPtr2,_TMem(Arr(ETestTxt2[3],0),"X","X",1),ETestTxt2[2])
+		f_Memcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
+		
+		f_Memcpy(FP,ETestStrPtr4,_TMem(Arr(ETestTxt2_2[3],0),"X","X",1),ETestTxt2_2[2])
+		f_Memcpy(FP,_Add(ETestStrPtr4,ETestTxt2_2[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
+		
+		f_Memcpy(FP,ETestStrPtr5,_TMem(Arr(ETestTxt2_3[3],0),"X","X",1),ETestTxt2_3[2])
+		f_Memcpy(FP,_Add(ETestStrPtr5,ETestTxt2_3[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
+
 		f_Memcpy(FP,ETestStrPtr3,_TMem(Arr(ETestTxt3[3],0),"X","X",1),ETestTxt3[2])
 
 			

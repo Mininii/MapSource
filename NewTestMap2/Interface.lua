@@ -274,9 +274,14 @@ for i = 0, 6 do -- 각플레이어
 		if EXP>=1 then
 			TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP)},{preserved})
 		else
-			TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다.."), 4),SetCp(FP)},{preserved})
+			
+			--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
+			TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{MoveUnit(1,UID,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
 		end
+
+		
 	end
+	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
 	CIf(FP,{CV(TempEXPV,1,AtLeast)})
 	f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXPV,0})
 	CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
@@ -316,65 +321,176 @@ end
 
 local iStrinit = def_sIndex()
 CJump(FP, iStrinit)
-t01 = "\x07확률 \x04: \x0D000.000\x08%\x0D\x0D"
+t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
+t01 = "\x07기준확률 \x04: \x0D000.000\x08%\x0D\x0D"
 t02 = "\x08!!! \x1F최 강 유 닛 \x08!!!"
+t03 = "\x04강화 불가 유닛"
+
 iStrSize1 = GetiStrSize(0,t01)
-S1 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
-iTbl1 = GetiTblId(FP,1495,S1) --NMDMG
+S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
+iTbl1 = GetiTblId(FP,1495,S0)
+TStr0, TStr0a, TStr0s = SaveiStrArr(FP,t00)
 TStr1, TStr1a, TStr1s = SaveiStrArr(FP,t01)
 TStr2, TStr2a, TStr2s = SaveiStrArr(FP,t02)
-SelEPD,SelPer,SelUID,SelMaxHP,SelI = CreateVars(5,FP)
+TStr3, TStr3a, TStr3s = SaveiStrArr(FP,t03)
+
+t04 = "\x19판매시 경험치 : \x0d000,000\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+t05 = "\x08판매 불가 유닛"
+S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
+iTbl2 = GetiTblId(FP,764,S1)
+EStr0, EStr0a, EStr0s = SaveiStrArr(FP,t04)
+EStr1, EStr1a, EStr1s = SaveiStrArr(FP,t05)
+
+
+SelEPD,SelPer,SelUID,SelMaxHP,SelPl,SelI,CurEPD,SelEXP = CreateVars(8,FP)
 CJumpEnd(FP, iStrinit)
 
 
+
+
 CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 클릭유닛인식(로컬)
+CMov(FP,SelPl,0)
 f_Read(FP,0x6284B8,nil,SelEPD)
+f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
 CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
 
-CaseJump = def_sIndex()
-for j, k in pairs(LevelUnitArr) do
-	NIf(FP,{CV(SelUID,k[2])})
-	CMov(FP,SelPer,k[3])
-	CJumpX(FP,CaseJump)
-	NIfEnd()
-end
-CJumpXEnd(FP, CaseJump)
+CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{}) -- 유닛선택시 1회만 실행
+
+CMov(FP,CurEPD,SelEPD)
+
+NIfX(FP,{Never()})
+	for j, k in pairs(LevelUnitArr) do
+		NElseIfX({CV(SelUID,k[2])})
+		CMov(FP,SelPer,k[3])
+		CMov(FP,SelEXP,k[4])
+	end
+NElseX()
+	CMov(FP,SelPer,0)
+	CMov(FP,SelEXP,0)
+NIfXEnd()
+
+CIfX(FP,{CV(SelEXP,1,AtLeast)})--경험치가 있을경우
+	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
+	CS__SetValue(FP,EStr0,t04,nil,0)
+	CS__ItoCustom(FP,SVA1(EStr0,10),SelEXP,nil,nil,{10,6},1,nil,"\x080",0x1B,{0,1,2,4,5,6},nil,{0,0,{0},0,0,{0}})
+	CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
+CElseX()--경험치가 없을경우
+	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
+	CS__InputVA(FP,iTbl2,0,EStr1,EStr1s,nil,0,EStr1s)
+CIfXEnd()
 
 CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
-CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
+	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+	CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
+CElseIfX({CV(SelPer,0)})--강화유닛이 아닐 경우
+	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+	CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
 CElseX()--그외
-CS__ItoCustom(FP,SVA1(TStr1,5),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
+	CS__ItoCustom(FP,SVA1(TStr1,7),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
 
 
-CIfX(FP,{
-	CSVA1(SVA1(TStr1,5+5), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	CSVA1(SVA1(TStr1,5+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	CSVA1(SVA1(TStr1,5+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-},{
-	SetCSVA1(SVA1(TStr1,5+4),SetTo,0x0D*0x1000000,0xFF000000),
-	SetCSVA1(SVA1(TStr1,5+5),SetTo,0x0D*0x1000000,0xFF000000),
-	SetCSVA1(SVA1(TStr1,5+6),SetTo,0x0D*0x1000000,0xFF000000),
-	SetCSVA1(SVA1(TStr1,5+7),SetTo,0x0D*0x1000000,0xFF000000),
-})
-CElseIfX({
-	CSVA1(SVA1(TStr1,5+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	CSVA1(SVA1(TStr1,5+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-},{
-	SetCSVA1(SVA1(TStr1,5+6),SetTo,0x0D*0x1000000,0xFF000000),
-	SetCSVA1(SVA1(TStr1,5+7),SetTo,0x0D*0x1000000,0xFF000000),
-})
-CElseIfX({
-	CSVA1(SVA1(TStr1,5+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-},{
-	SetCSVA1(SVA1(TStr1,5+7),SetTo,0x0D*0x1000000,0xFF000000),
-})
+	CIfX(FP,{
+		CSVA1(SVA1(TStr1,7+5), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,7+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	},{
+		SetCSVA1(SVA1(TStr1,7+4),SetTo,0x0D*0x1000000,0xFF000000),
+		SetCSVA1(SVA1(TStr1,7+5),SetTo,0x0D*0x1000000,0xFF000000),
+		SetCSVA1(SVA1(TStr1,7+6),SetTo,0x0D*0x1000000,0xFF000000),
+		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
+	})
+	CElseIfX({
+		CSVA1(SVA1(TStr1,7+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	},{
+		SetCSVA1(SVA1(TStr1,7+6),SetTo,0x0D*0x1000000,0xFF000000),
+		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
+	})
+	CElseIfX({
+		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+	},{
+		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
+	})
+	CIfXEnd()
+	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 CIfXEnd()
 
 
 
-CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
-CIfXEnd()
+for i = 0, 6 do
+	CIf(FP,CV(SelPl,i))
+	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
+	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
+	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
+	CIfEnd()
+end
+local TotalEPer4Loc = CreateVar(FP)
+CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
+CAdd(FP,TotalEPer2Loc,_Div(SelPer,10))
+CAdd(FP,TotalEPer3Loc,_Div(SelPer,100))
+CSub(FP,TotalEPer4Loc,_Mov(100000),_Add(_Add(TotalEPerLoc,TotalEPer3Loc),TotalEPer2Loc))
 
+
+function Byte_NumSet(Var,DestVar,DivNum,Mask)
+	CMov(FP,DestVar,0)
+	for i = 3, 0, -1 do
+		TriggerX(FP,{NVar(Var,AtLeast,(2^i)*DivNum)},{SetNVar(Var,Subtract,(2^i)*DivNum),SetNVar(DestVar, SetTo, (2^i)*Mask,(2^i)*Mask)},{preserved})
+	end
+end
+local E1VarArr = CreateVarArr(6, FP)
+local E2VarArr = CreateVarArr(6, FP)
+local E3VarArr = CreateVarArr(6, FP)
+local E4VarArr = CreateVarArr(6, FP)
+for i = 1, 6 do
+	Byte_NumSet(TotalEPerLoc,E3VarArr[i],10^(6-i),1)
+	Byte_NumSet(TotalEPer2Loc,E2VarArr[i],10^(6-i),1)
+	Byte_NumSet(TotalEPer3Loc,E1VarArr[i],10^(6-i),1)
+	Byte_NumSet(TotalEPer4Loc,E4VarArr[i],10^(6-i),1)
+end
+
+
+
+
+for i = 0, 2 do
+	CDoActions(FP,{TBwrite(_Add(Etbl,18+5+i),SetTo,_Add(E1VarArr[i+1],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,18+5+4+i),SetTo,_Add(E1VarArr[i+4],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,35+5+i),SetTo,_Add(E2VarArr[i+1],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,35+5+4+i),SetTo,_Add(E2VarArr[i+4],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,52+5+i),SetTo,_Add(E3VarArr[i+1],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,52+5+4+i),SetTo,_Add(E3VarArr[i+4],0x30))})
+	
+	CDoActions(FP,{TBwrite(_Add(Etbl,72+5+i),SetTo,_Add(E4VarArr[i+1],0x30))})
+	CDoActions(FP,{TBwrite(_Add(Etbl,72+5+4+i),SetTo,_Add(E4VarArr[i+4],0x30))})
+end
+
+CTrigger(FP,{CV(E1VarArr[1],0)},{TBwrite(_Add(Etbl,18+5+0),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E1VarArr[1],0),CV(E1VarArr[2],0)},{TBwrite(_Add(Etbl,18+5+1),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E1VarArr[6],0)},{TBwrite(_Add(Etbl,18+5+4+2),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E1VarArr[6],0),CV(E1VarArr[5],0)},{TBwrite(_Add(Etbl,18+5+4+1),SetTo,0x0D)},{preserved})
+
+
+CTrigger(FP,{CV(E2VarArr[1],0)},{TBwrite(_Add(Etbl,35+5+0),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E2VarArr[1],0),CV(E2VarArr[2],0)},{TBwrite(_Add(Etbl,35+5+1),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E2VarArr[6],0)},{TBwrite(_Add(Etbl,35+5+4+2),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E2VarArr[6],0),CV(E2VarArr[5],0)},{TBwrite(_Add(Etbl,35+5+4+1),SetTo,0x0D)},{preserved})
+
+CTrigger(FP,{CV(E3VarArr[1],0)},{TBwrite(_Add(Etbl,52+5+0),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E3VarArr[1],0),CV(E3VarArr[2],0)},{TBwrite(_Add(Etbl,52+5+1),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E3VarArr[6],0)},{TBwrite(_Add(Etbl,52+5+4+2),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E3VarArr[6],0),CV(E3VarArr[5],0)},{TBwrite(_Add(Etbl,52+5+4+1),SetTo,0x0D)},{preserved})
+
+
+CTrigger(FP,{CV(E4VarArr[1],0)},{TBwrite(_Add(Etbl,72+5+0),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E4VarArr[1],0),CV(E4VarArr[2],0)},{TBwrite(_Add(Etbl,72+5+1),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E4VarArr[6],0)},{TBwrite(_Add(Etbl,72+5+4+2),SetTo,0x0D)},{preserved})
+CTrigger(FP,{CV(E4VarArr[6],0),CV(E4VarArr[5],0)},{TBwrite(_Add(Etbl,72+5+4+1),SetTo,0x0D)},{preserved})
+
+
+
+
+CIfEnd()
 CIfEnd()
 
 function TEST() 

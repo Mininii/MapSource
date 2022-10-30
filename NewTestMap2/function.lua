@@ -76,6 +76,7 @@ function SetUnitsDatX(UnitID,Property)
 						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
 					else
 						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,0))
+						PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, 0))
 					end
 				else
 					PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
@@ -266,8 +267,9 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 
-function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
-	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=60,SeekRange=7,GroupFlag=0xA,
+function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType)
+	if DefType == nil then DefType = 0 end
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=DefType,SeekRange=7,GroupFlag=0xA,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
@@ -282,7 +284,7 @@ else
 end
 end
 function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
-	SetUnitsDatX(UnitID, {MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=60,SeekRange=7,GroupFlag=0xA,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=0,SeekRange=7,GroupFlag=0xA,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
@@ -324,6 +326,9 @@ function PopLevelUnit()
 	for j,k in pairs(LevelUnitArr) do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
 	end
+	
+	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- 최강유닛 강화확률 감추기
+
 	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
 end
 
