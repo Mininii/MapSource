@@ -395,21 +395,30 @@ end
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	local DPS = CreateVarArr(24, FP)
+	local DPSArr = CreateVArr(72, FP)
+	local VArrI = CreateVar(FP)
+	local VArrI4 = CreateVar(FP)
 	local TotalDPS = CreateVar(FP)
 	local DPSCheckV = CreateVar(FP)
 	local DpsDest = CreateVar(FP)
 	local GetMoney = CreateWar(FP)
 	local DPSCheck = CreateCcode()
+	local DPSCheck2 = CreateVar(FP)
 	CIf(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1)})
 	f_Read(FP, UnitPtr, DPSCheckV)
+	TriggerX(FP,{CV(DPSCheck2,72,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
 	CrShift(FP, DpsDest, 8)
 	CTrigger(FP,{TMemory(UnitPtr,AtMost,8319999*256)},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
-	CMov(FP,TotalDPS,0)
-	for j = 1, 24 do
-		CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
-		CAdd(FP,TotalDPS,DPS[j])
-	end
+	--CMov(FP,TotalDPS,0)
+	ConvertVArr(FP,VArrI,VArrI4,DPSCheck2,72)
+	CAdd(FP,TotalDPS,DpsDest)
+	CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
+	CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
+	--for j = 1, 24 do
+	--	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
+	--	CAdd(FP,TotalDPS,DPS[j])
+	--end
 	if type(TotalDPSDest) == "table" then
 		for j,k in pairs(TotalDPSDest) do
 			if type(k) == "number" then
@@ -433,7 +442,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	else
 		PushErrorMsg("TotalDPSDest InputError")
 	end 
-	
+	DoActionsX(FP,{AddV(DPSCheck2,1)})
 	TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 		if Multiplier ~=  nil then
