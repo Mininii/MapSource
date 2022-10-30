@@ -116,7 +116,7 @@ for i = 0, 6 do -- 각플레이어
 
 
 
-	CTrigger(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65)},{MoveUnit(1, "Men", i, 15+i, 22+i),},1)
+	CTrigger(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i)},{MoveUnit(1, "Men", i, 15+i, 22+i),},1)
 	DoActions(FP,{
 		MoveUnit(1, "Men", i, 29+i, 36+i),
 		MoveUnit(1, "Factories", i, 22+i, 57+i),
@@ -250,8 +250,8 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
 	end
 
-	for j = 2, 7 do -- 팀워크 버프 적용, 관리부분
-		TriggerX(FP,{NVar(PCheckV,Exactly,j)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
+	for j = 2, 6, 2 do -- 팀워크 버프 적용, 관리부분
+		TriggerX(FP,{NVar(PCheckV,AtLeast,j)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
 	end
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
 	
@@ -492,6 +492,12 @@ CTrigger(FP,{CV(E4VarArr[6],0),CV(E4VarArr[5],0)},{TBwrite(_Add(Etbl,72+5+4+1),S
 
 CIfEnd()
 CIfEnd()
+--CA__Input(MakeiStrData("\x04경",1),SVA1(Str1,3+2))
+--CA__Input(MakeiStrData("\x04조",1),SVA1(Str1,3+2))
+--CA__Input(MakeiStrData("\x04억",1),SVA1(Str1,3+2))
+--CA__Input(MakeiStrData("\x04만",1),SVA1(Str1,3+7))
+--CA__ItoCustom(SVA1(Str1,0),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1E,0x1E,0x1E,0x1E,0x04,0x04,0x04,0x04},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0})
+
 
 function TEST() 
 	local PlayerID = CAPrintPlayerID 
@@ -499,13 +505,15 @@ function TEST()
 	local StatEffT = CreateCcode()
 	local InterfaceNumLoc2 = CreateCcode()
 	DoActionsX(FP,AddCD(StatEffT,1))
-	CA__SetValue(Str1,"\x07보유금액 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123 \x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+	
+	CA__SetValue(Str1,"\x07보유금액 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000 \x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 	--43
 	--49
-	CS__ItoCustom(FP,SVA1(Str1,42),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
-	CS__ItoCustom(FP,SVA1(Str1,48),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x190",0x19,{0,1})
-	CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x04,0x04,0x04}
-	,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
+	CS__ItoCustom(FP,SVA1(Str1,40),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
+	CS__ItoCustom(FP,SVA1(Str1,46),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x190",0x19,{0,1})
+	CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+
+	--CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x04,0x04,0x04},{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 	CA__InputVA(56*0,Str1,Str1s,nil,56*0,56*1-2)
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)

@@ -12,6 +12,7 @@ function Include_Vars()
 	MSQC_KeySet("5",500)
 	MSQC_KeySet("6",501)
 	MSQC_KeySet("P",502)
+	MSQC_KeySet("F9",14)
 	MSQC_ExportEdsTxt()
 	Nextptrs = CreateVar(FP)
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -111,10 +112,10 @@ function Include_Vars()
 	--EnchInterface = CreateCText(FP, "\x08\x08강화확률\n\x0F+1 : 00.000 %\n\x1C+2 : 00.000 %\n\x1F+3 : 00.000 %")
 	
 	--1,12,24,48,72 (매우빠름 ,빠름, 보통, 느림, 매우느림)
-	PushLevelUnit(1,75000,0,0,0,24,1,60)--마린 10원
-	PushLevelUnit(2,65000,0,1,2,72,10,59)--고스트
-	PushLevelUnit(3,60000,0,2,4,72,20,59)--벌쳐 300원
-	PushLevelUnit(4,60000,0,7,13,48,20,59)--에씨비 
+	PushLevelUnit(1,60000,0,0,0,24,1,60)--마린 10원
+	PushLevelUnit(2,60000,0,1,2,72,10,59)--고스트
+	PushLevelUnit(3,57500,0,2,4,72,20,59)--벌쳐 300원
+	PushLevelUnit(4,54300,0,7,13,48,20,59)--에씨비 
 	PushLevelUnit(5,50000,0,8,16,48,30,59)--레이스 4000원
 	PushLevelUnit(6,40000,0,5,11,48,50,59,1)--탱크
 	PushLevelUnit(7,43000,0,3,7,48,80,59,1)--골럇 

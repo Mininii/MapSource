@@ -37,7 +37,7 @@ function onInit_EUD()
 	PatchInput()
 
 	if TestStart == 1 then
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,1)}) -- 테스트모드 최대배속
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 테스트모드 최대배속
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
 	end
@@ -54,6 +54,7 @@ function onInit_EUD()
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
+				--SetDeaths(Player, SetTo, 1, 151);
 				
 			}
 		}
