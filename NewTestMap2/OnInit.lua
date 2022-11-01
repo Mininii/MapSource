@@ -37,7 +37,7 @@ function onInit_EUD()
 	PatchInput()
 
 	if TestStart == 1 then
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 테스트모드 최대배속
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,1)}) -- 테스트모드 최대배속
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
 	end
@@ -59,10 +59,12 @@ function onInit_EUD()
 			}
 		}
 	end
-	for i = 0, 6 do -- 내부 테스터 유저 트리거
+	for i = 0, 6 do -- 내부 관리자 판별 트리거
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"_Mininii")
 		InputTesterID(i,"RonaRonaChan")
+		InputTesterID(i,"Azusawa_Kohane")
+
 	end
 	
 
@@ -85,7 +87,66 @@ function onInit_EUD()
 		SetMemory(0xCDDDCDDC,SetTo,1);})
 	
 
+		for i = 0, 6 do
+			Trigger { -- 게임오버
+				players = {FP},
+				conditions = {
+					MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
+				},
+				actions = {
+					RotatePlayer({
+					DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+					Defeat();
+					},HumanPlayers,FP);
+					Defeat();
+					SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
+					SetMemory(0xCDDDCDDC,SetTo,1);
+				}
+			}
+		end
 
+		Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*7,Exactly,2,0xFF);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE0 + (36*7)+8,AtLeast,1*256,0xFF00);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
 
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	f_GetTblptr(FP, Etbl, 1438)
@@ -94,6 +155,7 @@ function onInit_EUD()
 	CIf(FP,{HumanCheck(i,1)})
 
 
+	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 	
 		
 	f_Read(FP, 0x628438, nil, Nextptrs)
@@ -101,7 +163,6 @@ function onInit_EUD()
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,57+i,FP)})
 	DoActions(FP, {SetLoc("Location "..(57+i),"U",Add,13*32),SetLoc("Location "..(57+i),"D",Add,13*32)})
-	
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(DpsLV2[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,190,57+i,FP)})
 	DoActions(FP, {SetLoc("Location "..(57+i),"L",Add,6*32),SetLoc("Location "..(57+i),"R",Add,6*32)})
@@ -118,8 +179,15 @@ function onInit_EUD()
 	CIfEnd()
 
 	end
+	local LocSet = 0
+	for j, k in pairs(LevelUnitArr) do
+		CreateUnitStacked({}, 1, k[2], 87, nil, FP, {SetLoc("Location 87", "L", Add, 64),SetLoc("Location 87", "R", Add, 64)}, 1)
+
+		LocSet = LocSet+1
+		if LocSet == 10 then LocSet=0 DoActions(FP, {SetLoc("Location 87","U",Add,64),SetLoc("Location 87","D",Add,64),SetLoc("Location 87", "L", Subtract, 64*10),SetLoc("Location 87", "R", Subtract, 64*10)}) end
+	end
 	
-	if TestStart == 1 then -- 테스트용 결과 출력
+	if TestStart == 1 then -- 테스트용 결과 출력용
 		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
 		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
 		f_GetStrXptr(FP,ETestStrPtr3,"\x0D\x0D\x0DET3".._0D)

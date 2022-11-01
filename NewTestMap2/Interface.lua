@@ -1,37 +1,60 @@
 function Interface()
 
 	--PlayData(NonSCA)
-	local Money = CreateWarArr(7,FP)
-	local TotalExp = CreateWarArr2(7,"10",FP)
-	local IncomeMax = CreateVarArr2(7,12,FP)
-	local Income = CreateVarArr(7,FP)
-	local BuildMul1 = CreateVarArr2(7,1,FP)
-	local BuildMul2 = CreateVarArr2(7,1,FP)
+	local Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	local IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
+	local Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
+	local BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	local BuildMul2 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
 	local TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
 	local TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	local TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
-	local CurEXP = CreateWarArr(7,FP)
 	
 	--Setting, Effect
-	local StatEff = CreateCcodeArr(7)
-	local StatEffT2 = CreateCcodeArr(7)
-	local InterfaceNum = CreateVarArr(7,FP)
-	local Stat_Upgrade_UI = CreateVarArr(7,FP)
-	local AutoBuyCode = CreateCcodeArr(7)
-
-	local PCheckV = CreateVar(FP)
+	local StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
+	local StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
+	local InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
+	local Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	local AutoBuyCode = CreateCcodeArr(7)-- 자동 구입 제어 데스값
+	local PCheckV = CreateVar(FP)--플레이어 수 체크
 	
 	--PlayData(SCA)
-	local PLevel = CreateVarArr2(7,1,FP)
-	local StatP = CreateVarArr(7,FP)
-	local Stat_Income = CreateVarArr(7,FP)
-	local Stat_TotalEPer = CreateVarArr(7,FP)
-	local Stat_TotalEPer2 = CreateVarArr(7,FP)
-	local Stat_TotalEPer3 = CreateVarArr(7,FP)
-	local Stat_EXPIncome = CreateVarArr(7,FP)
-	local Stat_Upgrade = CreateVarArr(7,FP)
-	local Credit = CreateWarArr(7,FP) -- SCA Data
-	local PEXP = CreateWarArr(7, FP) -- SCA Data
+	local PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
+	local StatP = CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
+	local Stat_Income = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	local Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
+	local Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
+	local Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
+	local Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
+	local Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
+	local PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
+	local TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
+	local CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+
+
+	function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
+		if Dest[4]=="V" then
+			f_Read(FP,0x58A364+(48*SourceUnit)+(4*Player),Dest)
+		elseif Dest[4]=="W" then
+			f_LRead(FP, {0x58A364+(48*SourceUnit)+(4*Player),0x58A364+(48*(SourceUnit+1))+(4*Player)}, Dest, nil, 1)
+		else
+			PushErrorMsg("SCA_Dest_Inputdata_Error")
+		end
+	end
+	function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, DestUnit+1
+		if Source[4]=="V" then
+			CMov(FP,0x58A364+(48*DestUnit)+(4*Player),Source,nil,nil,1)
+		elseif Source[4]=="W" then
+			f_LMov(FP, {0x58A364+(48*DestUnit)+(4*Player),0x58A364+(48*(DestUnit+1))+(4*Player)}, Source, nil, nil, 1)
+		else
+			PushErrorMsg("SCA_Source_Inputdata_Error")
+		end
+		
+	end
+	
+	--PlayData(NotSureSCA)
+	local Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	local PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
 
@@ -61,6 +84,16 @@ function Interface()
 	--local GEXP = CreateVar(FP)
 	local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
 
+	
+	local Dx,Dy,Dv,Du,DtP,Time = CreateVariables(6,FP)
+	
+	f_Read(FP,0x51CE8C,Dx)
+	CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
+	CiSub(FP,DtP,Dy,Du)
+	CMov(FP,Dv,DtP) 
+	CMov(FP,Du,Dy)
+	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP)},1)--맨처음 시간값 튐 방지
+
 	function AutoBuy(CP,LvUniit,Cost)--Cost==String
 		CIf(FP,{Memory(0x628438,AtLeast,1),CD(AutoBuyCode[CP+1],LvUniit)})
 			CIf(FP, {TTNWar(Money[CP+1],AtLeast,Cost)})
@@ -68,14 +101,48 @@ function Interface()
 				CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 			CIfEnd()
 		CIfEnd()
-		
 	end
 	CMov(FP,PCheckV,0)
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 	end
-for i = 0, 6 do -- 각플레이어
-	CIf(FP,{HumanCheck(i,1)})
+	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
+	local LoadCheck = CreateCcodeArr(7)
+for i = 0, 6 do -- 각플레이어 
+	CIf(FP,{HumanCheck(i,1)},{SetCp(i)})
+	
+	TriggerX(FP,{LocalPlayerID(i),CV(Time,60000,AtLeast),CD(LoadCheck[i+1],1)},{SubV(Time,60000),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
+
+	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1)})--로드 완료시 첫 실행 트리거
+		CIf(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주
+		SCA_DataLoad(i,PLevel[i+1],101)
+		SCA_DataLoad(i,StatP[i+1],102)
+		SCA_DataLoad(i,Stat_Income[i+1],103)
+		SCA_DataLoad(i,Stat_TotalEPer[i+1],104)
+		SCA_DataLoad(i,Stat_TotalEPer2[i+1],105)
+		SCA_DataLoad(i,Stat_TotalEPer3[i+1],106)
+		SCA_DataLoad(i,Stat_Upgrade[i+1],107)
+		SCA_DataLoad(i,Credit[i+1],108)
+		SCA_DataLoad(i,PEXP[i+1],110)
+		SCA_DataLoad(i,TotalExp[i+1],112)
+		SCA_DataLoad(i,CurEXP[i+1],114)
+		CIfEnd()
+	CIfEnd()
+	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
+		SCA_DataSave(i,PLevel[i+1],101)
+		SCA_DataSave(i,StatP[i+1],102)
+		SCA_DataSave(i,Stat_Income[i+1],103)
+		SCA_DataSave(i,Stat_TotalEPer[i+1],104)
+		SCA_DataSave(i,Stat_TotalEPer2[i+1],105)
+		SCA_DataSave(i,Stat_TotalEPer3[i+1],106)
+		SCA_DataSave(i,Stat_Upgrade[i+1],107)
+		SCA_DataSave(i,Credit[i+1],108)
+		SCA_DataSave(i,PEXP[i+1],110)
+		SCA_DataSave(i,TotalExp[i+1],112)
+		SCA_DataSave(i,CurEXP[i+1],114)
+	NIfEnd()
+
 	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
 	if TestStart == 1 then
 		--f_LAdd(FP, PEXP[i+1], PEXP[i+1], "1")
@@ -93,8 +160,8 @@ for i = 0, 6 do -- 각플레이어
 	f_Read(FP,FArr(EXPArr,_Sub(PLevel[i+1],2)),TempReadV,nil,nil,1)
 	f_LAdd(FP, CurEXP[i+1], CurEXP[i+1], {TempReadV,0})
 	CAdd(FP,StatP[i+1],5)
-	CallTrigger(FP,Call_Print13[i+1])
-	TriggerX(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x1F레벨이 올랐습니다! \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요."))}, {preserved})
+	CallTriggerX(FP,Call_Print13[i+1])
+	TriggerX(FP, {CV(PLevel[i+1],9,AtMost),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x1F레벨이 올랐습니다! \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요."))}, {preserved})
 	CJump(FP, LevelUpJump)
 	NIfEnd()
 	DoActionsX(FP, {AddCD(StatEffT2[i+1],1)})
@@ -112,6 +179,8 @@ for i = 0, 6 do -- 각플레이어
 
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas},Money[i+1])
+	Debug_DPSBuilding(DpsLV1[i+1],127,95+i)
+	Debug_DPSBuilding(DpsLV2[i+1],190,88+i)
 
 
 
@@ -250,9 +319,9 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
 	end
 
-	for j = 2, 6, 2 do -- 팀워크 버프 적용, 관리부분
-		TriggerX(FP,{NVar(PCheckV,AtLeast,j)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
-	end
+	TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
+	TriggerX(FP,{NVar(PCheckV,AtLeast,5)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
+	TriggerX(FP,{NVar(PCheckV,AtLeast,7)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 20),AddV(TotalEPer[i+1],1000)},{preserved})
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
 	
 	CIf(FP,{Bring(i,AtLeast,1,"Men",8+i)},{}) --  유닛 강화시도하기
@@ -387,45 +456,34 @@ CElseIfX({CV(SelPer,0)})--강화유닛이 아닐 경우
 	CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
 CElseX()--그외
 	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
-	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
+	CS__SetValue(FP,TStr1,t01,nil,0)
 	CS__ItoCustom(FP,SVA1(TStr1,7),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+--8 9 10
+--12 13 14
+--CS__InputTA(FP,{CSVA1(SVA1(TStr1,10), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
+--CS__InputTA(FP,{CSVA1(SVA1(TStr1,12), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,12),string.byte("0")*0x1000000, 0xFF000000)
+--CS__InputTA(FP,{CSVA1(SVA1(TStr1,13), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,13),string.byte("0")*0x1000000, 0xFF000000)
+--CS__InputTA(FP,{CSVA1(SVA1(TStr1,14), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,14),string.byte("0")*0x1000000, 0xFF000000)
 
 
-	CIfX(FP,{
-		CSVA1(SVA1(TStr1,7+5), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-		CSVA1(SVA1(TStr1,7+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	},{
-		SetCSVA1(SVA1(TStr1,7+4),SetTo,0x0D*0x1000000,0xFF000000),
-		SetCSVA1(SVA1(TStr1,7+5),SetTo,0x0D*0x1000000,0xFF000000),
-		SetCSVA1(SVA1(TStr1,7+6),SetTo,0x0D*0x1000000,0xFF000000),
-		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
-	})
-	CElseIfX({
-		CSVA1(SVA1(TStr1,7+6), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	},{
-		SetCSVA1(SVA1(TStr1,7+6),SetTo,0x0D*0x1000000,0xFF000000),
-		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
-	})
-	CElseIfX({
-		CSVA1(SVA1(TStr1,7+7), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-	},{
-		SetCSVA1(SVA1(TStr1,7+7),SetTo,0x0D*0x1000000,0xFF000000),
-	})
-	CIfXEnd()
 	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 CIfXEnd()
 
 
 
+CIfX(FP,{Never()})
 for i = 0, 6 do
-	CIf(FP,CV(SelPl,i))
+	CElseIfX({CV(SelPl,i)})
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
 	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
-	CIfEnd()
 end
+CElseX()
+CMov(FP,TotalEPerLoc,0)
+CMov(FP,TotalEPer2Loc,0)
+CMov(FP,TotalEPer3Loc,0)
+CIfXEnd()
+
 local TotalEPer4Loc = CreateVar(FP)
 CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
 CAdd(FP,TotalEPer2Loc,_Div(SelPer,10))
@@ -639,27 +697,27 @@ function TEST()
 	DoActionsX(FP, {SetCD(TBLFlag,0)})
 	TriggerX(FP, ElapsedTime(AtLeast,180*1.5), {RemoveUnit(88,AllPlayers)}) -- 3분뒤 사라지는 기본유닛
 
-	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
-		L = CreateVar()
-		CIfOnce(FP)
-		GetPlayerLength(FP,P1,L)
-		CIfEnd()
-		N = CreateVar()
-		local CU = CreateCcodeArr(40)
-		local CUCool = CreateCcodeArr(40)
-		SLoopN(FP,11,Always(),{SetNVar(N,Add,218)},{SetNVar(N,SetTo,0x640B63-218),TSetNVar(N,Add,L)})
-		for i = 1, 40 do
-			f_bytecmp(FP,{CU[i]},N,_byteConvert(GetStrArr(0,"@"..i.."강")),GetStrSize(0,"@"..i.."강"))
-		end
+--	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
+--		L = CreateVar()
+--		CIfOnce(FP)
+--		GetPlayerLength(FP,P1,L)
+--		CIfEnd()
+--		N = CreateVar()
+--		local CU = CreateCcodeArr(40)
+--		local CUCool = CreateCcodeArr(40)
+--		SLoopN(FP,11,Always(),{SetNVar(N,Add,218)},{SetNVar(N,SetTo,0x640B63-218),TSetNVar(N,Add,L)})
+--		for i = 1, 40 do
+--			f_bytecmp(FP,{CU[i]},N,_byteConvert(GetStrArr(0,"@"..i.."강")),GetStrSize(0,"@"..i.."강"))
+--		end--
 
-		SLoopNEnd()
-		CUCoolT = {}
-		for i = 1, 40 do
-			CreateUnitStacked({CDeaths(FP,AtLeast,1,CU[i]),CDeaths(FP,AtMost,0,CUCool[i])}, 1, LevelUnitArr[i][2], 36, nil, P1, {SetCDeaths(FP,SetTo,0,CU[i]),SetCDeaths(FP,SetTo,24*30,CUCool[i])})
-			CUCoolT[i] = SubCD(CUCool[i],1)
-		end
-		DoActions2X(FP,CUCoolT)
+--		SLoopNEnd()
+--		CUCoolT = {}
+--		for i = 1, 40 do
+--			CreateUnitStacked({CDeaths(FP,AtLeast,1,CU[i]),CDeaths(FP,AtMost,0,CUCool[i])}, 1, LevelUnitArr[i][2], 36, nil, P1, {SetCDeaths(FP,SetTo,0,CU[i]),SetCDeaths(FP,SetTo,24*30,CUCool[i])})
+--			CUCoolT[i] = SubCD(CUCool[i],1)
+--		end
+--		DoActions2X(FP,CUCoolT)--
 
-	end
+--	end
 	
 end

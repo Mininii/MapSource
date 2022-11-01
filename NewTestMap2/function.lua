@@ -275,7 +275,7 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	AttackOrder = 10,
 	AttackMoveOrder = 2,
 	IdleOrder = 2,
-	RClickAct = 1,
+	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
 if ObjNum~=nil then
 	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
@@ -290,7 +290,7 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 	AttackOrder = 10,
 	AttackMoveOrder = 2,
 	IdleOrder = 2,
-	RClickAct = 1,
+	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
 
 if ObjNum~=nil then
@@ -395,55 +395,68 @@ end
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	local DPS = CreateVarArr(24, FP)
-	local DPSArr = CreateVArr(72, FP)
+	local DPSArr = CreateVArr(96, FP)
 	local VArrI = CreateVar(FP)
 	local VArrI4 = CreateVar(FP)
 	local TotalDPS = CreateVar(FP)
+	local TotalDPS2 = CreateVar(FP)
 	local DPSCheckV = CreateVar(FP)
 	local DpsDest = CreateVar(FP)
 	local GetMoney = CreateWar(FP)
 	local DPSCheck = CreateCcode()
 	local DPSCheck2 = CreateVar(FP)
 	CIf(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1)})
+	TriggerX(FP,{CV(DPSCheck2,96,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
+
+	CIfX(FP,{TMemory(UnitPtr,AtMost,8319999*256)})
 	f_Read(FP, UnitPtr, DPSCheckV)
-	TriggerX(FP,{CV(DPSCheck2,72,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
+	CTrigger(FP,{},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
 	CrShift(FP, DpsDest, 8)
-	CTrigger(FP,{TMemory(UnitPtr,AtMost,8319999*256)},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
-	CMov(FP,TotalDPS,0)
-	--ConvertVArr(FP,VArrI,VArrI4,DPSCheck2,72)
-	--CAdd(FP,TotalDPS,DpsDest)
-	--CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
-	--CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
-	for j = 1, 24 do
-		CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
-		CAdd(FP,TotalDPS,DPS[j])
-	end
+	CElseX()
+	CMov(FP,DpsDest,0)
+	CIfXEnd()
+
+
+	
+	ConvertVArr(FP,VArrI,VArrI4,DPSCheck2,96)
+	CAdd(FP,TotalDPS,DpsDest)
+	CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
+	CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
+	CDiv(FP,TotalDPS2,TotalDPS,4)
+	--CMov(FP,TotalDPS,0)
+	--for j = 1, 24 do
+	--	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
+	--	CAdd(FP,TotalDPS,DPS[j])
+	--end
+
+
+
 	if type(TotalDPSDest) == "table" then
 		for j,k in pairs(TotalDPSDest) do
 			if type(k) == "number" then
-				CDoActions(FP,{TSetMemory(k, SetTo, TotalDPS)})
+				CDoActions(FP,{TSetMemory(k, SetTo, TotalDPS2)})
 			elseif k[4] == "V" then
-				CMov(FP,k,TotalDPS)
+				CMov(FP,k,TotalDPS2)
 			elseif k == Ore or k == Gas then
-				CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS, k)})
+				CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS2, k)})
 			elseif k == nil then return nil
 			else
 				PushErrorMsg("TotalDPSDest InputError")
 			end 
 		end
 	elseif type(TotalDPSDest) == "number" then
-		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, TotalDPS)})
+		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, TotalDPS2)})
 	elseif TotalDPSDest[4] == "V" then
-		CMov(FP,TotalDPSDest,TotalDPS)
+		CMov(FP,TotalDPSDest,TotalDPS2)
 	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
-		CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS, TotalDPSDest)})
+		CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS2, TotalDPSDest)})
 	elseif TotalDPSDest == nil then return nil
 	else
 		PushErrorMsg("TotalDPSDest InputError")
 	end 
 	DoActionsX(FP,{AddV(DPSCheck2,1)})
-	TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
+	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 		if Multiplier ~=  nil then
 			
@@ -456,7 +469,17 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 		end
 		f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 		CIfEnd()
+	CTrigger(FP, {TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)}, {SetV(UnitPtr,0)},1)
 	CIfEnd()
+end
+
+function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
+	CIf(FP,{CV(UnitPtrDest,0),Memory(0x628438, AtLeast, 1)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
+
+	CIfEnd()
+
 end
 function MSQC_KeySet(KeyName,DeathUnit) -- 키인식용 데스값 등록
 	MSQC_KeyArr[KeyName] = DeathUnit

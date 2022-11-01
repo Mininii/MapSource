@@ -1,9 +1,10 @@
 function Include_Vars()
 	--System
+	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
 	--MSQC_init(0x590004)
-	MSQC_KeyArr = {}
-	MSQC_KeySet("O",494)
+	MSQC_KeyArr = {} 
+	MSQC_KeySet("O",494) -- MSQC eds텍스트 입력
 	MSQC_KeySet("ESC",495)
 	MSQC_KeySet("1",496)
 	MSQC_KeySet("2",497)
@@ -13,8 +14,8 @@ function Include_Vars()
 	MSQC_KeySet("6",501)
 	MSQC_KeySet("P",502)
 	MSQC_KeySet("F9",14)
-	MSQC_ExportEdsTxt()
-	Nextptrs = CreateVar(FP)
+	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
+	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
 	P1VON = "Turn ON Shared Vision for Player 1"
 	P2VOFF = "Turn OFF Shared Vision for Player 2"
@@ -31,27 +32,29 @@ function Include_Vars()
 	P7VON = "Turn ON Shared Vision for Player 7"
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
+	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
 	_0D = string.rep("\x0D",200) 
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	--Interface
-	TestShop = CreateVarArr(7, FP)
-	TBLFlag = CreateCcode()
-	SettingUnit1 = CreateVarArr(7, FP)
-	SettingUnit2 = CreateVarArr(7, FP)
+	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
+	TBLFlag = CreateCcode() -- TBL 갱신 여부 판별용 데스값. 유닛 생성이 감지되면 동작안함
+	SettingUnit1 = CreateVarArr(7, FP)-- 1~25강 유닛 자동강화 설정기
+	SettingUnit2 = CreateVarArr(7, FP)-- 26~39강 유닛 자동강화 설정기
 
-	DpsLV1 = CreateVarArr(7, FP)
-	DpsLV2 = CreateVarArr(7, FP)
+	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
+	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
 	
+	Names = CreateVArrArr(7, 7, FP) -- 각 플레이어 이름 저장용
 
-	PEXP2 = CreateVarArr(7, FP)
 	ELevel = CreateVar(FP)--현재 강화중인 레벨
 	--EExp = CreateVar(FP)
-	ECP = CreateVar(FP)
-	GEper = CreateVar(FP)
-	GEper2 = CreateVar(FP)
-	GEper3 = CreateVar(FP)
-	UEper = CreateVar(FP)
-	if TestStart == 1 then 
+	ECP = CreateVar(FP) -- 강화 제어용 변수. 현재 강화중인 플레이어를 저장함
+	GEper = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +1강 확률을 저장함
+	GEper2 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +2강 확률을 저장함
+	GEper3 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +3강 확률을 저장함
+	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
+
+	if TestStart == 1 then --테스트용 출력 트리거
 		ETestTxt1 = CreateCText(FP,"\x10출력된 난수 : ")
 		ETestTxt2 = CreateCText(FP,"\x0F계산된 +1 확률 : ")
 		ETestTxt2_2 = CreateCText(FP,"\x1C계산된 +2 확률 : ")
@@ -65,10 +68,10 @@ function Include_Vars()
 		ETestStrPtr5 = CreateVar(FP)
 	end
 
-	ShopSw = CreateCcodeArr(7)
-	ShopKey = CreateCcodeArr(7)
+	ShopSw = CreateCcodeArr(7) -- 
+	ShopKey = CreateCcodeArr(7) -- 
 
-	Etbl = CreateVar(FP)
+	Etbl = CreateVar(FP) -- 방어력측 tblPtr저장용 변수. 세부 강화확률 표기용
 
 	--String
 	
@@ -90,10 +93,10 @@ function Include_Vars()
 	end
 	EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
-	LevelUnitArr = {} -- Level,UnitID,Per,Exp
-	AutoEnchArr = {}
-	AutoEnchArr2 = {}
-	AutoBuyArr = {
+	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
+	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
+	AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
+	AutoBuyArr = { -- 자동구입 가격 설정용 테이블
 		{1,"50"},
 		{7,"1000"},
 		{11,"20000"},
@@ -107,11 +110,10 @@ function Include_Vars()
 		{30,"10000000000000"},
 		{32,"300000000000000"},
 	}
-	PatchInit()
+	PatchInit() -- 유닛 패치 테이블 초기화
 
-	--EnchInterface = CreateCText(FP, "\x08\x08강화확률\n\x0F+1 : 00.000 %\n\x1C+2 : 00.000 %\n\x1F+3 : 00.000 %")
-	
-	--1,12,24,48,72 (매우빠름 ,빠름, 보통, 느림, 매우느림)
+	--PushLevelUnit(레벨, 강화확률, 판매시_경험치량, 유닛ID, 무기ID, 공격속도, 데미지, 공격력증가 사용여부, 데가리_있는유닛or없는유닛, 무기투사체수)
+	--공격속도 : 1,12,24,48,72 (매우빠름 ,빠름, 보통, 느림, 매우느림)
 	PushLevelUnit(1,60000,0,0,0,24,1,60)--마린 10원
 	PushLevelUnit(2,60000,0,1,2,72,10,59)--고스트
 	PushLevelUnit(3,57500,0,2,4,72,20,59)--벌쳐 300원
@@ -185,7 +187,7 @@ function Include_Vars()
 	SetUnitAbility(88,114,12,2,0,59,1,nil,60) -- 기본유닛
 
 
-	PopLevelUnit()
+	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 
 
 end

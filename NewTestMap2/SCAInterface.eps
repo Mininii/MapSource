@@ -92,18 +92,20 @@ function beforeTriggerExec(){
 
 	foreach(cp : EUDLoopPlayer("Human")){
 	setcurpl(cp);
-		if(Deaths(CurrentPlayer, Exactly, 1,151)){
+		if(Deaths(CurrentPlayer, Exactly, 1,100)){
 		
 		SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
 		}
 		T1[cp] ++;
 
-		switch(sca.GetLastMessage()){
-			case 1:
-				SCA_GLoadSw[cp] = 1;
-				SCA_Stat1[cp] = 0;
-				SetDeaths(CurrentPlayer, SetTo, 3, 23);
-			break;
+		if (SCA_Stat1[cp] == 1){
+			switch(sca.GetLastMessage()){
+				case 1:
+					SCA_GLoadSw[cp] = 1;
+					SCA_Stat1[cp] = 0;
+					SetDeaths(CurrentPlayer, SetTo, 3, 23);
+				break;
+			}
 		}
 		if (LoadCheck[cp] == 1 && sca.GetLastMessage() == 4 &&SCA_LLoadCheck[cp]==1) {
 			SetDeaths(CurrentPlayer, SetTo, 2, 23);
@@ -114,10 +116,8 @@ function beforeTriggerExec(){
 			SCA_GLoaded[cp] = 1;
 		}
 
-		if(Deaths(CurrentPlayer, Exactly, 1,13)){
-			SetDeaths(CurrentPlayer,SetTo,1,14);
-		}
-		if(Deaths(CurrentPlayer, Exactly, 1,14)){ // Data Save
+		if(Deaths(CurrentPlayer, AtLeast, 1,14)){ // Data Save
+
 			T2[cp] ++;
 			if(SCA_Stat1[cp] == 1||LoadCheck[cp]==0) {
 				f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
@@ -125,54 +125,150 @@ function beforeTriggerExec(){
 				SetDeaths(CurrentPlayer, SetTo, 0, 14);
 				T2[cp] = 0;
 			}
-			else if(Deaths(CurrentPlayer, Exactly, 2,16)){
-				SetDeaths(CurrentPlayer,SetTo,(sca.Year*10000)+(sca.Month*100)+sca.Day,148);
-				SetDeaths(CurrentPlayer,SetTo,(sca.Hour*100)+sca.Min,147);
-				f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+			else {
+				switch(sca.GetLastMessage()){
+					case 1:
+						f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+						sca.SaveData(0);
+						T2[cp] = 0;
+						break;
+					case 2:
+						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+						PlayWAV("sound\\Bullet\\tscFir00.wav");
+						SetDeaths(CurrentPlayer, SetTo, 0, 14);
+						T2[cp] = 0;
+						break;
+					case 3:
+						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
+						PlayWAV("sound\\Bullet\\tscFir00.wav");
+						SetDeaths(CurrentPlayer, SetTo, 0, 14);
+						T2[cp] = 0;
+						break;
+					case 4:
+						if(Deaths(CurrentPlayer, Exactly, 1,14)) {
+							SetDeaths(CurrentPlayer, Add, 1, 14);
+							f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+							sca.SaveData(0);
+							T2[cp] = 0;
+						}
+						else {
+							SetDeaths(CurrentPlayer, SetTo, 0, 14);
+							T2[cp] = 0;
+						}
+						break;
+					case 6:
+						if(Deaths(CurrentPlayer, Exactly, 1,14)) {
+							SetDeaths(CurrentPlayer, Add, 1, 14);
+							f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+							sca.SaveData(0);
+							T2[cp] = 0;
+						}
+						else {
+							SetDeaths(CurrentPlayer, SetTo, 0, 14);
+							T2[cp] = 0;
+						}
+						break;
+					break;
+					case 7:
+						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+						PlayWAV("sound\\Bullet\\tscFir00.wav");
+						SetDeaths(CurrentPlayer, SetTo, 0, 14);
+						T2[cp] = 0;
+					break;
+					case 8:
+						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
+						PlayWAV("sound\\Bullet\\tscFir00.wav");
+						SetDeaths(CurrentPlayer, SetTo, 0, 14);
+						T2[cp] = 0;
+					break;
+					case 9:
+					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
+					PlayWAV("sound\\Bullet\\tscFir00.wav");
+						SetDeaths(CurrentPlayer, SetTo, 0, 14);
+						T2[cp] = 0;
+					break;
+					default:
+				}
 				
-				
-				sca.SaveData(0);
-				SetDeaths(CurrentPlayer, SetTo, 0, 14);
-				SetDeaths(CurrentPlayer, SetTo, 0, 16);
-				T2[cp] = 0;
 			}
-			else if(Deaths(CurrentPlayer, Exactly, 0,16)){
-				sca.LoadTime();
-				SetDeaths(CurrentPlayer, SetTo, 1, 16);
-				T2[cp] = 0;
-			}
+			//else if(Deaths(CurrentPlayer, Exactly, 2,16)){
+			//	SetDeaths(CurrentPlayer,SetTo,(sca.Year*10000)+(sca.Month*100)+sca.Day,148);
+			//	SetDeaths(CurrentPlayer,SetTo,(sca.Hour*100)+sca.Min,147);
+			//	f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+			//	
+			//	
+			//	SetDeaths(CurrentPlayer, SetTo, 0, 14);
+			//	SetDeaths(CurrentPlayer, SetTo, 3, 16);
+			//	T2[cp] = 0;
+			//}
+			//else if(Deaths(CurrentPlayer, Exactly, 0,16)){
+			//	sca.LoadTime();
+			//	SetDeaths(CurrentPlayer, SetTo, 1, 16);
+			//	T2[cp] = 0;
+			//}
 			
 		}
 		
-		if(Deaths(CurrentPlayer, Exactly, 1,16)){
-			T2[cp] ++;
-			switch(sca.GetLastMessage()){
-				case 2:
-					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-					PlayWAV("sound\\Bullet\\tscFir00.wav");
-				case 4:
-					SetDeaths(CurrentPlayer, SetTo, 2, 16);
-					break;
-				case 6:
-					SetDeaths(CurrentPlayer, SetTo, 2, 16);
-					break;
-				case 7:
-					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-					PlayWAV("sound\\Bullet\\tscFir00.wav");
-					break;
-				case 9:
-					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
-					PlayWAV("sound\\Bullet\\tscFir00.wav");
-					break;
-				default:
-			}
-		}
+//		if(Deaths(CurrentPlayer, Exactly, 1,16)){
+//			T2[cp] ++;
+//			switch(sca.GetLastMessage()){
+//				case 2:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//				case 4:
+//					SetDeaths(CurrentPlayer, SetTo, 2, 16);
+//					break;
+//				case 6:
+//					SetDeaths(CurrentPlayer, SetTo, 2, 16);
+//					break;
+//				case 7:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//					break;
+//				case 9:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//					break;
+//				default:
+//			}
+//		}
+//		
+//		if(Deaths(CurrentPlayer, Exactly, 3,16)){
+//			T2[cp] ++;
+//			switch(sca.GetLastMessage()){
+//				case 1:
+//					sca.SaveData(0);
+//				case 2:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//					break;
+//				case 6:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					break;
+//				case 7:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//					break;
+//				case 9:
+//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
+//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
+//					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
+//					PlayWAV("sound\\Bullet\\tscFir00.wav");
+//					break;
+//				default:
+//			}
+//		}
 		if (T2[cp]>= 800) {
 				f_eprintln("\x08타임아웃\x04입니다. \x07다시 저장 \x04해주시기 바랍니다.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
