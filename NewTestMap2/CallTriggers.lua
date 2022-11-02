@@ -66,7 +66,7 @@ function Install_CallTriggers()
 	CMov(FP,E1Range[1],E2Range[2],1)
 	CMov(FP,E1Range[2],_Add(E2Range[2],TotalEper))
 
-	if TestStart == 1 then -- 테스트용 결과 출력
+	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
 			for i = 1, 39 do
@@ -104,21 +104,21 @@ function Install_CallTriggers()
 	
 	--강화 성공 또는 실패 결정. TotalEper가 랜덤난수보다 더 클경우 성공
 	CIfX(FP,{TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])})--+3강 성공시
-		if TestStart == 1 then
+		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
 	CAdd(FP,ELevel,3)
 	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2강 성공시
-		if TestStart == 1 then
+		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
 	CAdd(FP,ELevel,2)
 	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1강 성공시
-		if TestStart == 1 then
+		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
@@ -126,7 +126,7 @@ function Install_CallTriggers()
 	CAdd(FP,ELevel,1)
 	CElseX()--실패시 Never(경험치 지급)
 		local TempEXP = CreateVar(FP)
-		if TestStart == 1 then
+		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
 			CIfEnd()

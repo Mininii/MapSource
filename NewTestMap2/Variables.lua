@@ -14,6 +14,7 @@ function Include_Vars()
 	MSQC_KeySet("6",501)
 	MSQC_KeySet("P",502)
 	MSQC_KeySet("F9",14)
+	MSQC_KeySet("F12",503)--테스트용
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
 	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -54,7 +55,7 @@ function Include_Vars()
 	GEper3 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +3강 확률을 저장함
 	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
 
-	if TestStart == 1 then --테스트용 출력 트리거
+	if Limit == 1 then --테스트용 출력 트리거
 		ETestTxt1 = CreateCText(FP,"\x10출력된 난수 : ")
 		ETestTxt2 = CreateCText(FP,"\x0F계산된 +1 확률 : ")
 		ETestTxt2_2 = CreateCText(FP,"\x1C계산된 +2 확률 : ")
@@ -97,18 +98,18 @@ function Include_Vars()
 	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
 	AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
 	AutoBuyArr = { -- 자동구입 가격 설정용 테이블
-		{1,"50"},
+		{1,"100"},
 		{7,"1000"},
-		{11,"20000"},
-		{15,"700000"},
+		{11,"60000"},
+		{15,"1500000"},
 		{18,"9000000"},
-		{20,"50000000"},
-		{22,"400000000"},
-		{24,"3500000000"},
-		{26,"50000000000"},
-		{28,"900000000000"},
-		{30,"10000000000000"},
-		{32,"300000000000000"},
+		{20,"60000000"},
+		{22,"360000000"},
+		{24,"1500000000"},
+		{26,"10000000000"},
+		{28,"90000000000"},
+		{30,"1000000000000"},
+		{32,"8000000000000"},
 	}
 	PatchInit() -- 유닛 패치 테이블 초기화
 
@@ -184,8 +185,8 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,12,2,0,59,1,nil,60) -- 기본유닛
-
+	SetUnitAbility(88,114,12,2,1000,58,1,nil,60) -- 기본유닛
+	BossArr = {}--{,""},--보스 건물 아이디, DPM 요구수치
 
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 

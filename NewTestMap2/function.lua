@@ -394,7 +394,6 @@ end
 
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
-	local DPS = CreateVarArr(24, FP)
 	local DPSArr = CreateVArr(96, FP)
 	local VArrI = CreateVar(FP)
 	local VArrI4 = CreateVar(FP)
@@ -423,7 +422,9 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	CAdd(FP,TotalDPS,DpsDest)
 	CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
 	CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
+	CIf(FP,{CV(TotalDPS,4,AtLeast)})
 	CDiv(FP,TotalDPS2,TotalDPS,4)
+	CIfEnd()
 	--CMov(FP,TotalDPS,0)
 	--for j = 1, 24 do
 	--	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
@@ -515,4 +516,25 @@ function CIf_KeyFunc(KeyName)
 	local KeyToggle = CreateCcode()
 	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
 	CIf(FP,{KeyPress(KeyName, "Down"),CD(KeyToggle,0)},{SetCD(KeyToggle,1)})
+end
+function KeyToggleFunc(KeyName)
+	local KeyToggle = CreateCcode()
+	local KeyToggle2 = CreateCcode()
+	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	return KeyToggle
+end
+function KeyToggleOnce(KeyName)
+	local KeyToggle = CreateCcode()
+	local KeyToggle2 = CreateCcode()
+	DoActionsX(FP, {SetCD(KeyToggle2,0)})
+	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	return KeyToggle
+end
+
+function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
+	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
+	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end

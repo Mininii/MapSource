@@ -8,10 +8,14 @@ function onInit_EUD()
 	SetUnitsDatX(62, {AirWeapon=104})
 	SetUnitsDatX(40, {Graphic=200})
 	--SetWeaponsDatX(104,{Behavior=1,Splash=false})
+	
 
 
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
+	for j,k in pairs(BossArr) do
+		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})--보스건물 세팅
+	end
 	
 	for j,k in pairs({128,92,91}) do--상점, 설정유닛용
 		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7})
@@ -54,7 +58,7 @@ function onInit_EUD()
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
-				--SetDeaths(Player, SetTo, 1, 151);
+				SetDeaths(Player, SetTo, 1, 100); -- 맵제작자 플래그
 				
 			}
 		}
@@ -78,6 +82,7 @@ function onInit_EUD()
 			},Force1,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);})
+	if TestStart == 0 then
 	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
 		RotatePlayer({
 			DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
@@ -85,7 +90,7 @@ function onInit_EUD()
 		},Force1,FP);
 		Defeat();
 		SetMemory(0xCDDDCDDC,SetTo,1);})
-	
+	end
 
 		for i = 0, 6 do
 			Trigger { -- 게임오버
@@ -187,7 +192,7 @@ function onInit_EUD()
 		if LocSet == 10 then LocSet=0 DoActions(FP, {SetLoc("Location 87","U",Add,64),SetLoc("Location 87","D",Add,64),SetLoc("Location 87", "L", Subtract, 64*10),SetLoc("Location 87", "R", Subtract, 64*10)}) end
 	end
 	
-	if TestStart == 1 then -- 테스트용 결과 출력용
+	if Limit == 1 then -- 테스트용 결과 출력용
 		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
 		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
 		f_GetStrXptr(FP,ETestStrPtr3,"\x0D\x0D\x0DET3".._0D)
