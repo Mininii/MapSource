@@ -388,6 +388,22 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,TotalEPer[i+1],Stat_TotalEPer[i+1],nil,nil,1)
 	CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
+	CIf(FP,{CV(BossLV,1,AtLeast)}) -- 각보스 클리어시
+		CAdd(FP,IncomeMax[i+1],12) -- 사냥터 유닛수 +12 증가
+		CAdd(FP,TotalEPer[i+1],1500) -- 강화확률 +1.5%p
+	CIfEnd()
+
+	CIf(FP,{CV(BossLV,2,AtLeast)}) -- 각보스 클리어시
+		CAdd(FP,IncomeMax[i+1],8) -- 사냥터 유닛수 +8 증가
+		CAdd(FP,TotalEPer[i+1],2500) -- 강화확률 +2.5%p
+	CIfEnd()
+
+	CIf(FP,{CV(BossLV,3,AtLeast)}) -- 각보스 클리어시
+		CAdd(FP,IncomeMax[i+1],8) -- 사냥터 유닛수 +8 증가
+		CAdd(FP,TotalEPer[i+1],3500) -- 강화확률 +3.5%p
+		CAdd(FP,Stat_EXPIncome[i+1],3) -- 판매시 경험치 30% 증가
+	CIfEnd()
+
 	DoActionsX(FP,{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 0),SetMemoryB(0x58F32C+(i*15)+12, SetTo, 0),SetV(Stat_Upgrade_UI[i+1],0)})
 	for CBit = 0, 7 do
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
@@ -418,31 +434,31 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CIfEnd()
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
-	CMov(FP,TempEXPV,0)
-	for j = #LevelUnitArr, 1, -1 do
-		local UID = LevelUnitArr[j][2]
-		local EXP = LevelUnitArr[j][4]
-		if EXP>=1 then
-			TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP)},{preserved})
-		else
+		CMov(FP,TempEXPV,0)
+		for j = #LevelUnitArr, 1, -1 do
+			local UID = LevelUnitArr[j][2]
+			local EXP = LevelUnitArr[j][4]
+			if EXP>=1 then
+				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP)},{preserved})
+			else
+				
+				--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
+				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{MoveUnit(1,UID,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
+			end
+
 			
-			--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
-			TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{MoveUnit(1,UID,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
 		end
-
-		
-	end
-	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-	CIf(FP,{CV(TempEXPV,1,AtLeast)})
-	f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXPV,0})
-	CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
-		CAdd(FP,PEXP2[i+1],_Mul(TempEXPV,Stat_EXPIncome[i+1]))
-		f_LAdd(FP, PEXP[i+1], PEXP[i+1], {_Div(PEXP2[i+1],_Mov(10)),0})
-		f_Mod(FP, PEXP2[i+1], 10)
-	CIfEnd()
+		TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
+		CIf(FP,{CV(TempEXPV,1,AtLeast)})
+			f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXPV,0})
+			CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
+				CAdd(FP,PEXP2[i+1],_Mul(TempEXPV,Stat_EXPIncome[i+1]))
+				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {_Div(PEXP2[i+1],_Mov(10)),0})
+				f_Mod(FP, PEXP2[i+1], 10)
+			CIfEnd()
+		CIfEnd()
 	CIfEnd()
 
-	CIfEnd()
 	
 	
 	
@@ -461,7 +477,6 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,InterfaceNumLoc,InterfaceNum[i+1])
 	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
 	CMov(FP,UpgradeLoc,Stat_Upgrade_UI[i+1])
-	CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
 	CMov(FP,ScoutDmgLoc,ScoutDmg[i+1])
 	
 	CIfEnd()
@@ -548,7 +563,7 @@ TStr1, TStr1a, TStr1s = SaveiStrArr(FP,t01)
 TStr2, TStr2a, TStr2s = SaveiStrArr(FP,t02)
 TStr3, TStr3a, TStr3s = SaveiStrArr(FP,t03)
 
-t04 = "\x19판매시 경험치 : \x0d000,000\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+t04 = "\x19판매시 경험치 : \x0d0,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 t05 = "\x08판매 불가 유닛"
 S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
 iTbl2 = GetiTblId(FP,764,S1)
@@ -572,6 +587,21 @@ CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{}) -- 유닛선택시 1회만 실행
 
 CMov(FP,CurEPD,SelEPD)
 
+CIfX(FP,{Never()})
+for i = 0, 6 do
+	CElseIfX({CV(SelPl,i)})
+	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
+	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
+	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
+	CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
+end
+CElseX()
+CMov(FP,TotalEPerLoc,0)
+CMov(FP,TotalEPer2Loc,0)
+CMov(FP,TotalEPer3Loc,0)
+CMov(FP,EXPIncomeLoc,0)
+CIfXEnd()
+
 NIfX(FP,{Never()})
 	for j, k in pairs(LevelUnitArr) do
 		NElseIfX({CV(SelUID,k[2])})
@@ -586,7 +616,14 @@ NIfXEnd()
 CIfX(FP,{CV(SelEXP,1,AtLeast)})--경험치가 있을경우
 	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
 	CS__SetValue(FP,EStr0,t04,nil,0)
-	CS__ItoCustom(FP,SVA1(EStr0,10),SelEXP,nil,nil,{10,6},1,nil,"\x080",0x1B,{0,1,2,4,5,6},nil,{0,0,{0},0,0,{0}})
+	f_Mul(FP,SelEXP,_Add(EXPIncomeLoc,10))
+	CS__ItoCustom(FP,SVA1(EStr0,10),SelEXP,nil,nil,{10,8},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10},nil,{{0},0,0,{0},0,0,{0},0})
+	
+	TriggerX(FP, {
+		CSVA1(SVA1(EStr0,19), Exactly, 0x0D*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,19), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
 	CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
 CElseX()--경험치가 없을경우
 	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
@@ -636,18 +673,6 @@ CIfXEnd()
 
 
 
-CIfX(FP,{Never()})
-for i = 0, 6 do
-	CElseIfX({CV(SelPl,i)})
-	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
-	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
-	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
-end
-CElseX()
-CMov(FP,TotalEPerLoc,0)
-CMov(FP,TotalEPer2Loc,0)
-CMov(FP,TotalEPer3Loc,0)
-CIfXEnd()
 
 local TotalEPer4Loc = CreateVar(FP)
 CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
