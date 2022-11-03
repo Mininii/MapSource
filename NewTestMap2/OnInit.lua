@@ -14,11 +14,20 @@ function onInit_EUD()
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	for j,k in pairs(BossArr) do
-		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})--보스건물 세팅
+		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,
+		HP=8320000,Armor = 0,StarEditFlag=0x1C7,AdvFlag={0,0x20008004},GroundWeapon=117,AirWeapon=130,Class=193,GroupFlag=0xA,DefUpType=60,Shield=false,Height=4,
+		HumanInitAct = 23,
+		ComputerInitAct = 23,
+		AttackOrder = 23,
+		AttackMoveOrder = 23,
+		IdleOrder = 23,
+		RClickAct = 0
+
+	})--보스건물 세팅
 	end
 	
 	for j,k in pairs({128,92,91}) do--상점, 설정유닛용
-		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7})
+		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7,})
 		
 	end
 	DoActions(AllPlayers, {SetAllianceStatus(Force1, Ally),

@@ -183,7 +183,7 @@ for i = 0, 6 do -- 각플레이어
 		
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
-		CIf(FP,CD(Stat_ScDmg[i+1],1,AtLeast))--스카 공격력 증가량 데이터 존재여부
+		CIf(FP,CV(Stat_ScDmg[i+1],1,AtLeast))--스카 공격력 증가량 데이터 존재여부
 		DoActionsX(FP, {SetCD(ScTimer[i+1],0)})--로드성공시 스카타이머 초기화
 		CreateUnitStacked({Command(i,AtMost,0,88)},1, 88, 36+i,15+i, i, nil, 1)--스카 터졌을경우 다시 지급
 		CIfEnd()
@@ -245,7 +245,7 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{Accumulate(i, AtLeast, 10^NBit, Gas)},{SetV(BuildMul2[i+1],2^(NBit-1)),SetCp(i),DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..10^NBit.." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..(2^(NBit-1)).."배\x04로 증가하였습니다.")),SetCp(FP)})--2번건물
 	end
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
-	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F15강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없습니다.")),SetCp(FP)})
+	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F15강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),SetCp(FP)})
 
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas},Money[i+1])
@@ -260,7 +260,7 @@ for i = 0, 6 do -- 각플레이어
 		MoveUnit(1, "Men", i, 29+i, 36+i),
 		MoveUnit(1, "Factories", i, 22+i, 57+i),
 	})
-	TriggerX(FP, {Bring(i, AtMost, 0, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
+	TriggerX(FP, {Bring(i, AtMost, 3, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
 	TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 36+i)}, {preserved})--보스방 퇴장
 
 
@@ -502,9 +502,12 @@ local DPSCheckV = CreateVar(FP)
 local DpsDest = CreateVar(FP)
 local DPSCheck = CreateCcode()
 local DPSCheck2 = CreateVar(FP)
-local TotalDPSW = CreateWar(FP)
+local TotalDPM = CreateWar(FP)
 local TotalDPSW2 = CreateWar(FP)
 CIf(FP,CV(BossEPD,19025,AtLeast),AddCD(DPSCheck,1))
+local BossClearCheck = def_sIndex()
+NJump(FP, BossClearCheck, {TMemoryX(_Add(BossEPD,17), Exactly, 0, 0xFF00)}, {SetV(BossEPD,0)})
+
 TriggerX(FP,{CV(DPSCheck2,1440,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 CIfX(FP,{TMemory(BossEPD,AtMost,8319999*256)})
 f_Read(FP, BossEPD, DPSCheckV)
@@ -518,42 +521,58 @@ CIfXEnd()
 
 
 ConvertVArr(FP,VArrI,VArrI4,DPSCheck2,96)
-f_LAdd()
-f_LAdd(FP,TotalDPSW,TotalDPSW,{DpsDest,0})
-f_LSub(FP,TotalDPSW,TotalDPSW,{_Read(FArr(DPSArr2,DPSCheck2)),0})
+f_LAdd(FP,TotalDPM,TotalDPM,{DpsDest,0})
+f_LSub(FP,TotalDPM,TotalDPM,{_Read(FArr(DPSArr2,DPSCheck2)),0})
 CMov(FP,FArr(DPSArr2,DPSCheck2),DpsDest,nil,nil,1)
 --CMov(FP,TotalDPS,0)
 --for j = 1, 24 do
 --	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
 --	CAdd(FP,TotalDPS,DPS[j])
 --end
-
 DoActionsX(FP,{AddV(DPSCheck2,1)})
-CTrigger(FP, {TMemoryX(_Add(BossEPD,17), Exactly, 0, 0xFF00)}, {SetV(BossEPD,0)},1)
+NJumpEnd(FP, BossClearCheck)
 CIfEnd()
 
+BossFuncJump = def_sIndex()
+CJump(FP, BossFuncJump)
+ResetBDPMArr=SetCallForward()
+SetCall(FP)
+
+f_LMov(FP,TotalDPM,"0")
+CFor(FP, 0, 1440, 1)
+local CI = CForVariable()
+CMov(FP,FArr(DPSArr2,CI),0,nil,nil,1)
+CForEnd()
 
 
+
+SetCallEnd()
+CJumpEnd(FP, BossFuncJump)
 for j,k in pairs(BossArr) do
-	CIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)})--보스방 건물 세팅
+	NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)})--보스방 건물 세팅
 	f_Read(FP, 0x628438, nil, BossEPD)
 	DoActionsX(FP, {CreateUnit(1,k[1],110,FP),AddV(BossEPD,2)})
 	f_LMov(FP,BossDPM,k[2])
-	CIfEnd()
+	CallTrigger(FP, ResetBDPMArr)
+	NIfEnd()
 	local ClearJump = def_sIndex()
 	NJump(FP,ClearJump,{CV(BossLV,j,AtLeast)})
-	CIf(FP,{TTNWar(TotalDPSW, AtLeast, BossDPM)})
-	DoActions(FP,{KillUnit(k[1],FP),AddV(BossLV,1)})
+	CIf(FP,{TTNWar(TotalDPM, AtLeast, BossDPM)})
+	DoActionsX(FP,{KillUnit(k[1],FP),AddV(BossLV,1),SetV(BossEPD,0)})
 	CIfEnd()
 	NJumpEnd(FP,ClearJump)
 end
 
 local iStrinit = def_sIndex()
 CJump(FP, iStrinit)
-t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
+t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 t01 = "\x07기준확률 \x04: \x0D000.000\x08%\x0D\x0D"
 t02 = "\x08!!! \x1F최 강 유 닛 \x08!!!"
 t03 = "\x04강화 불가 유닛"
+t04 = "\x19판매시 경험치 : \x0d000,000\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+t05 = "\x08판매 불가 유닛"
+t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
+t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
 
 iStrSize1 = GetiStrSize(0,t01)
 S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
@@ -562,16 +581,17 @@ TStr0, TStr0a, TStr0s = SaveiStrArr(FP,t00)
 TStr1, TStr1a, TStr1s = SaveiStrArr(FP,t01)
 TStr2, TStr2a, TStr2s = SaveiStrArr(FP,t02)
 TStr3, TStr3a, TStr3s = SaveiStrArr(FP,t03)
+TStr4, TStr4a, TStr4s = SaveiStrArr(FP,t06)
 
-t04 = "\x19판매시 경험치 : \x0d0,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-t05 = "\x08판매 불가 유닛"
 S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
 iTbl2 = GetiTblId(FP,764,S1)
 EStr0, EStr0a, EStr0s = SaveiStrArr(FP,t04)
 EStr1, EStr1a, EStr1s = SaveiStrArr(FP,t05)
+EStr2, EStr2a, EStr2s = SaveiStrArr(FP,t07)
 
 
 SelEPD,SelPer,SelUID,SelMaxHP,SelPl,SelI,CurEPD,SelEXP = CreateVars(8,FP)
+BossFlag = CreateCcode()
 CJumpEnd(FP, iStrinit)
 
 
@@ -583,10 +603,28 @@ f_Read(FP,0x6284B8,nil,SelEPD)
 f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
 CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
 
-CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{}) -- 유닛선택시 1회만 실행
+CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(BossFlag,0)}) -- 유닛선택시 1회만 실행
 
 CMov(FP,CurEPD,SelEPD)
 
+
+NIfX(FP,{Never()})
+for j, k in pairs(LevelUnitArr) do
+	NElseIfX({CV(SelUID,k[2])})
+	CMov(FP,SelPer,k[3])
+	CMov(FP,SelEXP,k[4])
+end
+for j, k in pairs(BossArr) do
+	NElseIfX({CV(SelUID,k[1])},{SetCD(BossFlag,1)})
+	CMov(FP,SelPer,0)
+	CMov(FP,SelEXP,0)
+end
+NElseX()
+	CMov(FP,SelPer,0)
+	CMov(FP,SelEXP,0)
+NIfXEnd()
+
+CIf(FP,{CD(BossFlag,0)})
 CIfX(FP,{Never()})
 for i = 0, 6 do
 	CElseIfX({CV(SelPl,i)})
@@ -601,17 +639,8 @@ CMov(FP,TotalEPer2Loc,0)
 CMov(FP,TotalEPer3Loc,0)
 CMov(FP,EXPIncomeLoc,0)
 CIfXEnd()
+CIfEnd()
 
-NIfX(FP,{Never()})
-	for j, k in pairs(LevelUnitArr) do
-		NElseIfX({CV(SelUID,k[2])})
-		CMov(FP,SelPer,k[3])
-		CMov(FP,SelEXP,k[4])
-	end
-NElseX()
-	CMov(FP,SelPer,0)
-	CMov(FP,SelEXP,0)
-NIfXEnd()
 
 CIfX(FP,{CV(SelEXP,1,AtLeast)})--경험치가 있을경우
 	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
@@ -625,6 +654,9 @@ CIfX(FP,{CV(SelEXP,1,AtLeast)})--경험치가 있을경우
 		SetCSVA1(SVA1(TStr1,19), SetTo, string.byte("0")*0x1000000,0xFF000000),
 	}, {preserved})
 	CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
+	CElseIfX({CD(BossFlag,1)})--보스건물일경우
+	--현재 DPS 게이지 표기는 별도
+	
 CElseX()--경험치가 없을경우
 	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
 	CS__InputVA(FP,iTbl2,0,EStr1,EStr1s,nil,0,EStr1s)
@@ -636,6 +668,8 @@ CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
 CElseIfX({CV(SelPer,0)})--강화유닛이 아닐 경우
 	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 	CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
+	CElseIfX({CD(BossFlag,1)})--보스건물일경우
+	--현재 DPS 요구치 표기는 별도
 CElseX()--그외
 	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 	CS__SetValue(FP,TStr1,t01,nil,0)
@@ -671,9 +705,7 @@ TriggerX(FP, {
 	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 CIfXEnd()
 
-
-
-
+CIf(FP,{CD(BossFlag,0)})
 local TotalEPer4Loc = CreateVar(FP)
 CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
 CAdd(FP,TotalEPer2Loc,_Div(SelPer,10))
@@ -734,11 +766,33 @@ CTrigger(FP,{CV(E4VarArr[1],0)},{TBwrite(_Add(Etbl,72+5+0),SetTo,0x0D)},{preserv
 CTrigger(FP,{CV(E4VarArr[1],0),CV(E4VarArr[2],0)},{TBwrite(_Add(Etbl,72+5+1),SetTo,0x0D)},{preserved})
 CTrigger(FP,{CV(E4VarArr[6],0)},{TBwrite(_Add(Etbl,72+5+4+2),SetTo,0x0D)},{preserved})
 CTrigger(FP,{CV(E4VarArr[6],0),CV(E4VarArr[5],0)},{TBwrite(_Add(Etbl,72+5+4+1),SetTo,0x0D)},{preserved})
+CIfEnd()
+CIfEnd()
+
+CIf(FP, {CD(BossFlag,1)}) -- 보스건물 정보 상시갱신
+CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)--DPS 수치
+
+CS__SetValue(FP,TStr4,t06,nil,0)
+CS__lItoCustom(FP,SVA1(TStr4,9),TotalDPM,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+CS__InputVA(FP,iTbl1,0,TStr4,TStr4s,nil,0,TStr4s)
+
+CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)--DPS 게이지
+local TotalDPMTemp = CreateWar(FP)
+local TempGauge = CreateVar(FP)
+local TempGaugeT = CreateVar(FP)
+f_LMul(FP, TotalDPMTemp, TotalDPM, "25")
+f_LDiv(FP, {TempGauge,TempGaugeT}, TotalDPMTemp, BossDPM)
 
 
+CS__SetValue(FP,EStr2,t07,nil,0)
+for i = 0, 24 do
+	CS__InputTA(FP,{CV(TempGauge,i+1,AtLeast)},SVA1(EStr2,0+i),0x07,0xFF)
+end
+CS__InputVA(FP,iTbl2,0,EStr2,EStr2s,nil,0,EStr2s)
 
 
 CIfEnd()
+
 CIfEnd()
 --CA__Input(MakeiStrData("\x04경",1),SVA1(Str1,3+2))
 --CA__Input(MakeiStrData("\x04조",1),SVA1(Str1,3+2))

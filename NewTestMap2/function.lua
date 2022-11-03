@@ -315,7 +315,7 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	if Level>=26 and Level<=40 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
 	end
-	SetUnitsDatX(UnitID, {Class=193})--Factories
+	SetUnitsDatX(UnitID, {Class=193})
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
 	table.insert(AutoEnchArr,CreateCcodeArr(7))
 	table.insert(AutoEnchArr2,CreateCcodeArr(7))
@@ -523,7 +523,7 @@ function KeyToggleFunc(KeyName)
 	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
 	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
 	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
-	return KeyToggle
+	return KeyToggle2
 end
 function KeyToggleOnce(KeyName)
 	local KeyToggle = CreateCcode()
