@@ -523,7 +523,7 @@ function KeyToggleFunc(KeyName)
 	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
 	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
 	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
-	return KeyToggle2
+	return KeyToggle2,KeyToggle
 end
 function KeyToggleOnce(KeyName)
 	local KeyToggle = CreateCcode()
