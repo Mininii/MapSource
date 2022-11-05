@@ -234,12 +234,12 @@ for i = 0, 6 do -- 각플레이어
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
-	--if Limit == 1 then 
-	--	CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
-	--	CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
-	--	f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
-	--	CIfEnd()
-	--end
+	if Limit == 1 then 
+		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
+		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
+		CIfEnd()
+	end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 
@@ -397,7 +397,7 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
 	CIf(FP,{CV(BossLV,1,AtLeast)}) -- 각보스 클리어시 자동저장
 		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"10")
+		f_LAdd(FP,Credit[i+1],Credit[i+1],"10") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],12) -- 사냥터 유닛수 +12 증가
 		CAdd(FP,TotalEPer[i+1],1500) -- 강화확률 +1.5%p
@@ -405,7 +405,7 @@ for i = 0, 6 do -- 각플레이어
 
 	CIf(FP,{CV(BossLV,2,AtLeast)}) -- 각보스 클리어시 자동저장
 		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"200")
+		f_LAdd(FP,Credit[i+1],Credit[i+1],"200") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],9) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],2500) -- 강화확률 +2.5%p
@@ -413,7 +413,7 @@ for i = 0, 6 do -- 각플레이어
 
 	CIf(FP,{CV(BossLV,3,AtLeast)}) -- 각보스 클리어시 자동저장
 		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"500")
+		f_LAdd(FP,Credit[i+1],Credit[i+1],"500") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],6) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3500) -- 강화확률 +3.5%p
@@ -421,7 +421,7 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 	CIf(FP,{CV(BossLV,4,AtLeast)}) -- 각보스 클리어시 자동저장
 		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"2000")
+		f_LAdd(FP,Credit[i+1],Credit[i+1],"2000") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],6) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
@@ -431,7 +431,7 @@ for i = 0, 6 do -- 각플레이어
 
 	CIf(FP,{CV(BossLV,5,AtLeast)}) -- 각보스 클리어시 자동저장
 		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"10000")
+		f_LAdd(FP,Credit[i+1],Credit[i+1],"10000") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],3) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
@@ -440,10 +440,10 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 
 	DoActionsX(FP,{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 0),SetMemoryB(0x58F32C+(i*15)+12, SetTo, 0),SetV(Stat_Upgrade_UI[i+1],0)})
-	for CBit = 0, 7 do
+	for CBit = 0, 7 do -- 8비트 연산을 통한 업글수치 복사
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
 	end
-	for CBit = 0, 7 do
+	for CBit = 0, 7 do -- 8비트 연산을 통한 업글수치 복사
 		TriggerX(FP,{NVar(Stat_ScDmg[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+12, Add, 2^CBit)},{preserved})
 	end
 
@@ -453,9 +453,9 @@ for i = 0, 6 do -- 각플레이어
 	--	CIfEnd()
 	--end
 
-	TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
-	TriggerX(FP,{NVar(PCheckV,AtLeast,4)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})
-	TriggerX(FP,{NVar(PCheckV,AtLeast,7)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 20),AddV(TotalEPer[i+1],1000)},{preserved})
+	TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{NVar(PCheckV,AtLeast,4)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{NVar(PCheckV,AtLeast,7)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 20),AddV(TotalEPer[i+1],1000)},{preserved})-- 인원수 버프 보너스
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
 	
 	CIf(FP,{Bring(i,AtLeast,1,"Men",8+i)},{}) --  유닛 강화시도하기
@@ -707,7 +707,7 @@ FixText(FP, 2)
 
 local BossEPD = CreateVar(FP)
 local BossDPM = CreateWar(FP)
-local DPSArr2 = CreateFArr(1441, FP)
+local DPSArr2 = CreateArr(1441, FP)
 local DPSCheckV = CreateVar(FP)
 local DpsDest = CreateVar(FP)
 local DPSCheck = CreateCcode()
@@ -718,6 +718,9 @@ local BossClearCheck = def_sIndex()
 NJump(FP, BossClearCheck, {TMemoryX(_Add(BossEPD,17), Exactly, 0, 0xFF00)}, {SetV(BossEPD,0)})
 
 TriggerX(FP,{CV(DPSCheck2,1440,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
+
+
+
 CIfX(FP,{TMemory(BossEPD,AtMost,8319999*256)})
 f_Read(FP, BossEPD, DPSCheckV)
 CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
@@ -727,10 +730,13 @@ CElseX()
 CMov(FP,DpsDest,0)
 CIfXEnd()
 
-
-f_LAdd(FP,TotalDPM,TotalDPM,{DpsDest,0})
-f_LSub(FP,TotalDPM,TotalDPM,{_Read(FArr(DPSArr2,DPSCheck2)),0})
-CMov(FP,FArr(DPSArr2,DPSCheck2),DpsDest,nil,nil,1)
+if TestStart == 1 then
+	CMov(FP,0x57f0f0,DpsDest)
+	CMov(FP,0x57f120,_Read(ArrX(DPSArr2,DPSCheck2)))
+end
+f_LMov(FP,TotalDPM,_LAdd(TotalDPM,{DpsDest,0}))
+f_LMov(FP,TotalDPM,_LSub(TotalDPM,{_Read(ArrX(DPSArr2,DPSCheck2)),0}))
+CMovX(FP,ArrX(DPSArr2,DPSCheck2),DpsDest,nil,nil,nil,1)
 DoActionsX(FP,{AddV(DPSCheck2,1)})
 NJumpEnd(FP, BossClearCheck)
 CIfEnd()
@@ -743,7 +749,8 @@ SetCall(FP)
 f_LMov(FP,TotalDPM,"0")
 CFor(FP, 0, 1441, 1)
 local CI = CForVariable()
-CMov(FP,FArr(DPSArr2,CI),0,nil,nil,1)
+CMovX(FP,ArrX(DPSArr2,DPSCheck2),DpsDest,nil,nil,nil,1)
+CMov(FP,ArrX(DPSArr2,CI),0,nil,nil,1)
 CForEnd()
 
 
