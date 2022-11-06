@@ -88,14 +88,11 @@ function Interface()
 
 
 	--Temp
+	local CTStatP2 = CreateVar(FP)
+
 	local TempReadV = CreateVar(FP)
 	local TempEXPV = CreateVar(FP)
-	local CTPEXP = CreateWar(FP)
-	local CTPLevel = CreateVar(FP)
-	local CTStatP = CreateVar(FP)
-	local CTStatP2 = CreateVar(FP)
-	local CTCurEXP = CreateWar(FP)
-	local CTTotalExp = CreateWar(FP)
+
 	local CheatDetect = CreateCcode()
 	--local GEXP = CreateVar(FP)
 	local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
@@ -148,24 +145,16 @@ for i = 0, 6 do -- 각플레이어
 		SCA_DataLoad(i,PEXP[i+1],110)
 		SCA_DataLoad(i,TotalExp[i+1],112)
 		SCA_DataLoad(i,CurEXP[i+1],114)
-
+		--치팅 테스트 변수 초기화
 		f_LMov(FP, CTPEXP, PEXP[i+1])
 		CMov(FP, CTPLevel, 1)
 		CMov(FP,CTStatP,0)
 		CMov(FP,CTStatP2,StatP[i+1])
 		f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 		f_LMov(FP, CTTotalExp, "10",nil,nil,1)
-		local CheatTestJump = def_sIndex()
-		CJumpEnd(FP, CheatTestJump)
-		NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,9999,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
-	
-		f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,1)),TempReadV,nil,nil,1)
-		f_LAdd(FP, CTTotalExp, CTTotalExp, {TempReadV,0})
-		f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,2)),TempReadV,nil,nil,1)
-		f_LAdd(FP, CTCurEXP, CTCurEXP, {TempReadV,0})
-		CAdd(FP,CTStatP,5)
-		CJump(FP, CheatTestJump)
-		NIfEnd()
+
+		CallTrigger(FP,Call_CT)
+
 		CAdd(FP,CTStatP2,Stat_ScDmg[i+1])
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(5)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(200)))
@@ -193,7 +182,8 @@ for i = 0, 6 do -- 각플레이어
 		
 		CIfEnd()
 	CIfEnd()
-	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	local CTSwitch = CreateCcode()
+	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
 		SCA_DataSave(i,PLevel[i+1],101)
 		SCA_DataSave(i,StatP[i+1],102)
@@ -207,6 +197,41 @@ for i = 0, 6 do -- 각플레이어
 		SCA_DataSave(i,TotalExp[i+1],112)
 		SCA_DataSave(i,CurEXP[i+1],114)
 	NIfEnd()
+	CIf(FP,{Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
+	--if TestStart == 1 then
+	--	f_LAdd(FP,Credit[i+1],Credit[i+1],"1") -- 진입했냐?
+	--end
+	f_LMov(FP, CTPEXP, PEXP[i+1])
+	CMov(FP, CTPLevel, 1)
+	CMov(FP,CTStatP,0)
+	CMov(FP,CTStatP2,StatP[i+1])
+	f_LMov(FP, CTCurEXP, 0,nil,nil,1)
+	f_LMov(FP, CTTotalExp, "10",nil,nil,1)
+	CallTrigger(FP,Call_CT)
+
+	CAdd(FP,CTStatP2,Stat_ScDmg[i+1])
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(5)))
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(200)))
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(1000)))
+	CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(5)))
+	CMov(FP,0x57f0f0+(i*4),CTStatP)--치팅감지시 스탯정보 표기용 미네랄
+	CMov(FP,0x57f120+(i*4),CTStatP2)--치팅감지시 스탯정보 표기용 가스
+	CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+	TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+	
+	CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
+	CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
+
+	
+	CIfEnd()
 
 	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
 	if TestStart == 1 then
@@ -395,45 +420,43 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,TotalEPer[i+1],Stat_TotalEPer[i+1],nil,nil,1)
 	CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
-	CIf(FP,{CV(BossLV,1,AtLeast)}) -- 각보스 클리어시 자동저장
-		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"10") -- 크레딧 지급
+	CIf(FP,{CV(BossLV,1,AtLeast)}) -- 각보스 클리어시
+		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],12) -- 사냥터 유닛수 +12 증가
 		CAdd(FP,TotalEPer[i+1],1500) -- 강화확률 +1.5%p
 	CIfEnd()
 
-	CIf(FP,{CV(BossLV,2,AtLeast)}) -- 각보스 클리어시 자동저장
-		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
+	CIf(FP,{CV(BossLV,2,AtLeast)}) -- 각보스 클리어시
+		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 		f_LAdd(FP,Credit[i+1],Credit[i+1],"200") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],9) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],2500) -- 강화확률 +2.5%p
 	CIfEnd()
 
-	CIf(FP,{CV(BossLV,3,AtLeast)}) -- 각보스 클리어시 자동저장
-		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
+	CIf(FP,{CV(BossLV,3,AtLeast)}) -- 각보스 클리어시
+		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 		f_LAdd(FP,Credit[i+1],Credit[i+1],"500") -- 크레딧 지급
 		CIfEnd()
 		CAdd(FP,IncomeMax[i+1],6) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3500) -- 강화확률 +3.5%p
 		CAdd(FP,Stat_EXPIncome[i+1],3) -- 판매시 경험치 30% 증가
 	CIfEnd()
-	CIf(FP,{CV(BossLV,4,AtLeast)}) -- 각보스 클리어시 자동저장
-		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
+	CIf(FP,{CV(BossLV,4,AtLeast)}) -- 각보스 클리어시
+		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 		f_LAdd(FP,Credit[i+1],Credit[i+1],"2000") -- 크레딧 지급
 		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],6) -- 사냥터 유닛수 +8 증가
+		CAdd(FP,IncomeMax[i+1],9) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
 		CAdd(FP,TotalEPer2[i+1],1000) -- +2 강화확률 +1.0%p
 		CAdd(FP,Stat_EXPIncome[i+1],2) -- 판매시 경험치 20% 증가
 	CIfEnd()
 
-	CIf(FP,{CV(BossLV,5,AtLeast)}) -- 각보스 클리어시 자동저장
-		CIfOnce(FP,{},{SetMemory(0x58F500, SetTo, 1),SetV(Time,0)})
+	CIf(FP,{CV(BossLV,5,AtLeast)}) -- 각보스 클리어시
+		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 		f_LAdd(FP,Credit[i+1],Credit[i+1],"10000") -- 크레딧 지급
 		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],3) -- 사냥터 유닛수 +8 증가
 		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
 		CAdd(FP,TotalEPer3[i+1],500) -- +3 강화확률 +0.5%p
 		CAdd(FP,Stat_EXPIncome[i+1],2) -- 판매시 경험치 20% 증가
@@ -731,8 +754,8 @@ CMov(FP,DpsDest,0)
 CIfXEnd()
 
 if TestStart == 1 then
-	CMov(FP,0x57f0f0,DpsDest)
-	CMov(FP,0x57f120,_Read(ArrX(DPSArr2,DPSCheck2)))
+	--CMov(FP,0x57f0f0,DpsDest)
+	--CMov(FP,0x57f120,_Read(ArrX(DPSArr2,DPSCheck2)))
 end
 f_LMov(FP,TotalDPM,_LAdd(TotalDPM,{DpsDest,0}))
 f_LMov(FP,TotalDPM,_LSub(TotalDPM,{_Read(ArrX(DPSArr2,DPSCheck2)),0}))
@@ -819,24 +842,26 @@ CMov(FP,CurEPD,SelEPD)
 
 NIfX(FP,{Never()})
 for j, k in pairs(LevelUnitArr) do
-	NElseIfX({CV(SelUID,k[2])})
-	CMov(FP,SelPer,k[3])
-	CMov(FP,SelEXP,k[4])
+	NElseIfX({CV(SelUID,k[2])},{
+		SetV(SelPer,k[3]);
+		SetV(SelEXP,k[4]);
+	})
 end
 for j, k in pairs(BossArr) do
-	NElseIfX({CV(SelUID,k[1])},{SetCD(BossFlag,1)})
-	CMov(FP,SelPer,0)
-	CMov(FP,SelEXP,0)
+	NElseIfX({CV(SelUID,k[1])},{SetCD(BossFlag,1);
+	SetV(SelPer,0);
+	SetV(SelEXP,0);})
 end
-NElseX()
-	CMov(FP,SelPer,0)
-	CMov(FP,SelEXP,0)
+NElseX({
+	SetV(SelPer,0);
+	SetV(SelEXP,0);
+})
 NIfXEnd()
 
 CIf(FP,{CD(BossFlag,0)})
 CIfX(FP,{Never()})
 for i = 0, 6 do
-	CElseIfX({CV(SelPl,i)})
+	CElseIfX({CV(SelPl,i)},{})
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
 	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])

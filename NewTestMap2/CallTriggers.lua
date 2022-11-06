@@ -109,21 +109,33 @@ function Install_CallTriggers()
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
-	CAdd(FP,ELevel,3)
+		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 37강부터 +2 +3 적용안됨
+		CAdd(FP,ELevel,3)
+		CElseIfX({CV(ELevel,35,AtLeast),CV(ELevel,36,AtMost)})
+		CMov(FP,ELevel,37)
+		CElseX()
+		CAdd(FP,ELevel,1)
+		CIfXEnd()
 	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2강 성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
-	CAdd(FP,ELevel,2)
+		CIfX(FP, {CV(ELevel,35,AtMost)}) -- 37강부터 +2 +3 적용안됨
+		CAdd(FP,ELevel,2)
+		CElseIfX({CV(ELevel,36)})
+		CMov(FP,ELevel,37)
+		CElseX()
+		CAdd(FP,ELevel,1)
+		CIfXEnd()
 	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1강 성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
 		end
-	CAdd(FP,ELevel,1)
+		CAdd(FP,ELevel,1)
 	CElseX()--실패시 Never(경험치 지급)
 		local TempEXP = CreateVar(FP)
 		if Limit == 1 then
@@ -165,5 +177,28 @@ function Install_CallTriggers()
 	CIfEnd()
 	
 	SetCallEnd()
+	Call_CT = SetCallForward()
+	SetCall(FP)
 	
+	CTPEXP = CreateWar(FP)
+	CTPLevel = CreateVar(FP)
+	CTStatP = CreateVar(FP)
+	CTCurEXP = CreateWar(FP)
+	CTTotalExp = CreateWar(FP)
+	local TempReadV = CreateVar(FP)
+
+	local CheatTestJump = def_sIndex()
+	CJumpEnd(FP, CheatTestJump)
+	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,9999,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
+
+	f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,1)),TempReadV,nil,nil,1)
+	f_LAdd(FP, CTTotalExp, CTTotalExp, {TempReadV,0})
+	f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,2)),TempReadV,nil,nil,1)
+	f_LAdd(FP, CTCurEXP, CTCurEXP, {TempReadV,0})
+	CAdd(FP,CTStatP,5)
+	CJump(FP, CheatTestJump)
+	NIfEnd()
+
+
+	SetCallEnd()
 end
