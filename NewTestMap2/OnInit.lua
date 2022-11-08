@@ -22,11 +22,11 @@ function onInit_EUD()
 		AttackMoveOrder = 23,
 		IdleOrder = 23,
 		RClickAct = 0
-		
-
 	})--보스건물 세팅
 	end
-	
+	for j,k in pairs({128,91,92,129,219}) do
+		SetUnitsDatX(k, {GroupFlag=0x0})
+	end
 	for j,k in pairs({128,92,91}) do--상점, 설정유닛용
 		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7,})
 		
@@ -101,7 +101,7 @@ function onInit_EUD()
 		Defeat();
 		SetMemory(0xCDDDCDDC,SetTo,1);})
 	end
-
+	if TestStart == 0 then
 		for i = 0, 6 do
 			Trigger { -- 게임오버
 				players = {FP},
@@ -119,6 +119,7 @@ function onInit_EUD()
 				}
 			}
 		end
+	end
 
 		Trigger { -- 게임오버
 		players = {FP},
@@ -187,9 +188,17 @@ function onInit_EUD()
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Subtract,10*32),SetLoc("Location "..(1+i),"R",Subtract,11*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit1[i+1], SetTo, Nextptrs),CreateUnit(1,91,1+i,i)})
+
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit2[i+1], SetTo, Nextptrs),CreateUnit(1,92,1+i,i)})
+	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(SettingUnit3[i+1], SetTo, Nextptrs),CreateUnit(1,129,1+i,i)})
+	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(SettingUnit4[i+1], SetTo, Nextptrs),CreateUnit(1,219,1+i,i)})
+
 
 	CIfEnd()
 

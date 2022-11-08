@@ -42,6 +42,9 @@ function Include_Vars()
 	SettingUnit1 = CreateVarArr(7, FP)-- 1~25강 유닛 자동강화 설정기
 	SettingUnit2 = CreateVarArr(7, FP)-- 26~39강 유닛 자동강화 설정기
 
+	SettingUnit3 = CreateVarArr(7, FP)-- 15~25강 유닛 자동판매 설정기
+	SettingUnit4 = CreateVarArr(7, FP)-- 26~39강 유닛 자동판매 설정기
+
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
 	
@@ -78,7 +81,7 @@ function Include_Vars()
 	
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",11)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
-	iStr2 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
+	iStr2 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",4)) 
 	Str2, Str2a, Str2s = SaveiStrArr(FP,MakeiStrVoid(54))
 	
 
@@ -97,19 +100,20 @@ function Include_Vars()
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
 	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
 	AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
+	AutoSellArr = {} -- 자동강화 설정용 데스값 태아불
 	AutoBuyArr = { -- 자동구입 가격 설정용 테이블
 		{1,"100"},
-		{7,"1000"},
-		{11,"60000"},
-		{15,"1500000"},
-		{18,"9000000"},
-		{20,"60000000"},
-		{22,"360000000"},
-		{24,"1500000000"},
-		{26,"10000000000"},
-		{28,"90000000000"},
-		{30,"1000000000000"},
-		{32,"8000000000000"},
+		{7,"4000"},
+		{11,"200000"},
+		{15,"5000000"},
+		{18,"100000000"},
+		{20,"600000000"},
+		{22,"3500000000"},
+		{24,"20000000000"},
+		{26,"100000000000"},
+		{28,"600000000000"},
+		{30,"3500000000000"},
+		{32,"20000000000000"},
 	}
 	PatchInit() -- 유닛 패치 테이블 초기화
 
@@ -140,33 +144,33 @@ function Include_Vars()
 
 	
 	PushLevelUnit(19,35000,15,37,35,12,600,59)--저글링
-	PushLevelUnit(20,35000,25,38,38,24,2000,59)--히드라
-	PushLevelUnit(21,35000,40,43,48,24,2700,59)--뮤탈
-	PushLevelUnit(22,35000,75,44,46,24,3500,59)--가디언
-	PushLevelUnit(23,30000,100,62,104,24,5000,59)--디바우러
-	PushLevelUnit(24,30000,125,39,40,24,6500,59)--울트라
-	PushLevelUnit(25,20000,250,46,50,12,5000,59)--디파
+	PushLevelUnit(20,35000,27,38,38,24,2000,59)--히드라
+	PushLevelUnit(21,35000,45,43,48,24,2700,59)--뮤탈
+	PushLevelUnit(22,35000,80,44,46,24,3500,59)--가디언
+	PushLevelUnit(23,30000,160,62,104,24,5000,59)--디바우러
+	PushLevelUnit(24,30000,335,39,40,24,6500,59)--울트라
+	PushLevelUnit(25,20000,750,46,50,12,5000,59)--디파
 
 
 
-	PushLevelUnit(25+1,25000,500,20,1,24,10,59)--짐레
-	PushLevelUnit(25+2,25000,1000,16,3,48,30,59)--사라
-	PushLevelUnit(25+3,25000,1750,19,5,24,20,59)--짐레벌쳐
-	PushLevelUnit(25+4,25000,2500,17,10,24,30,59,1,1)--알랜
-	PushLevelUnit(25+5,25000,3380,23,12,48,100,59,1)--듀크
-	PushLevelUnit(25+6,25000,5800,53,39,24,80,59)--헌터
-	PushLevelUnit(25+7,20000,10000,52,51,24,150,59)--언클린
-	PushLevelUnit(25+8,20000,13700,69,53,72,700,59)--셔틀
-	PushLevelUnit(25+9,20000,30000,41,43,24,350,59)--드론
-	PushLevelUnit(25+10,20000,49000,40,42,48,800,59)--곰
+	PushLevelUnit(25+1,25000,1500,20,1,24,10,59)--짐레
+	PushLevelUnit(25+2,25000,2100,16,3,48,30,59)--사라
+	PushLevelUnit(25+3,25000,3750,19,5,24,20,59)--짐레벌쳐
+	PushLevelUnit(25+4,25000,6000,17,10,24,30,59,1,1)--알랜
+	PushLevelUnit(25+5,25000,10200,23,12,48,100,59,1)--듀크
+	PushLevelUnit(25+6,25000,18800,53,39,24,80,59)--헌터
+	PushLevelUnit(25+7,20000,30000,52,51,24,150,59)--언클린
+	PushLevelUnit(25+8,20000,50000,69,53,72,700,59)--셔틀
+	PushLevelUnit(25+9,20000,100000,41,43,24,350,59)--드론
+	PushLevelUnit(25+10,20000,160000,40,42,48,800,59)--곰
 
 
 
-	PushLevelUnit(25+11,16000,70000,10,26,72,600,59)--파벳영웅 3타
-	PushLevelUnit(25+12,12000,100000,75,85,24,1200,59)--제라툴
-	PushLevelUnit(25+13,10000,128000,29,21,24,4000,59)--노라드
-	PushLevelUnit(25+14,1000,170000,86,78,12,3500,59)--다니모스
-	PushLevelUnit(25+15,1000,500000,54,36,1,5000,59,nil,1)--디버링원 공속최대
+	PushLevelUnit(25+11,16000,300000,10,26,72,600,59)--파벳영웅 3타
+	PushLevelUnit(25+12,12000,800000,75,85,24,1200,59)--제라툴
+	PushLevelUnit(25+13,10000,1200000,29,21,24,4000,59)--노라드
+	PushLevelUnit(25+14,5000,2000000,86,78,12,3500,59)--다니모스
+	PushLevelUnit(25+15,1000,5000000,54,36,1,4200,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
@@ -185,7 +189,7 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,12,2,1000,58,1,nil,60) -- 기본유닛
+	SetUnitAbility(88,114,5,10,1000,58,1,nil,60) -- 기본유닛
 	BossArr = {
 		{87,"5000"},
 		{25,"20000"},

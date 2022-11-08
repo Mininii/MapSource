@@ -319,6 +319,8 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
 	table.insert(AutoEnchArr,CreateCcodeArr(7))
 	table.insert(AutoEnchArr2,CreateCcodeArr(7))
+	table.insert(AutoSellArr,CreateCcodeArr(7))
+	
 	
 end
 function PopLevelUnit()
