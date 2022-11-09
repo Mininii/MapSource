@@ -34,6 +34,7 @@ function Include_Vars()
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
+	ColorT = {"\x08","\x0E","\x0F","\x10","\x11","\x15","\x16"}
 	_0D = string.rep("\x0D",200) 
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	--Interface
@@ -189,12 +190,12 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,5,10,1000,58,1,nil,60) -- 기본유닛
+	SetUnitAbility(88,114,5,2,1000,58,1,nil,60) -- 기본유닛
 	BossArr = {
-		{87,"5000"},
-		{25,"20000"},
-		{80,"500000"},
-		{57,"3000000"},
+		{87,"10000"},
+		{25,"150000"},
+		{80,"900000"},
+		{57,"6300000"},
 		{72,"20000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 

@@ -230,6 +230,7 @@ for i = 0, 6 do -- 각플레이어
 		SCA_DataSave(i,TotalExp[i+1],112)
 		SCA_DataSave(i,CurEXP[i+1],114)
 	NIfEnd()
+
 	CIf(FP,{Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
 	--if TestStart == 1 then
 	--	f_LAdd(FP,Credit[i+1],Credit[i+1],"1") -- 진입했냐?
@@ -277,12 +278,12 @@ for i = 0, 6 do -- 각플레이어
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
-	if Limit == 1 then 
-		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
-		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
-		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
-		CIfEnd()
-	end
+	--if Limit == 1 then 
+	--	CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
+	--	CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+	--	--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
+	--	CIfEnd()
+	--end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 
@@ -593,6 +594,34 @@ for i = 0, 6 do -- 각플레이어
 
 	CIfEnd()
 end
+SpeedV = CreateVar(FP)
+SPJump = def_sIndex()
+NJump(FP,SPJump,{CV(SpeedV,2)})
+CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
+	for i= 0, 6 do
+		CIf(FP,{CV(SpeedV,0),HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
+			CIfX(FP,{TTNWar(Credit[i+1], AtLeast, "500")},{SetMemory(0x5124F0,SetTo,11),KillUnit(166, FP),SetV(SpeedV,1),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x086배속 \x04아이템을 구입하였습니다. 이제부터 \x086배속\x04이 적용됩니다."),4)}, Force1, FP)})
+				f_LSub(FP, Credit[i+1], Credit[i+1], "500")
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
+
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,114)},{MoveUnit(1, 15, i, 114, 116)})
+		local NeedSp = def_sIndex()
+			NJump(FP, NeedSp, {CV(SpeedV,0)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x085배속 \x04아이템을 먼저 구입해주세요."), 4),SetCp(FP)})
+			CIfX(FP,{TTNWar(Credit[i+1], AtLeast, "5000")},{SetMemory(0x5124F0,SetTo,3),KillUnit(169, FP),SetV(SpeedV,2),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F최대배속 \x04아이템을 구입하였습니다. 이제부터 \x1F최대배속\x04이 적용됩니다."),4)}, Force1, FP)})
+				f_LSub(FP, Credit[i+1], Credit[i+1], "5000")
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+			NJumpEnd(FP, NeedSp)
+		CIfEnd()
+	end
+CIfEnd()
+NJumpEnd(FP, SPJump)
+
+
 
 
 
@@ -766,10 +795,11 @@ function TEST2()
 	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
 
 	CA__SetValue(Str2,"\x04당신의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C\x0D\x0D\x0D\x0D\x0D\x0D\x0D0%",nil,1)
+
 	CIf(FP,{CV(EXPIncomeLoc2,1,AtLeast)})
-	CA__ItoCustom(SVA1(Str2,21),EXPIncomeLoc2,nil,nil,{10,2},1,nil,"\x0D",0x1C,nil,nil,{})
+	CA__ItoCustom(SVA1(Str2,21),EXPIncomeLoc2,nil,nil,{10,2},1,nil,"\x0D",0x1C)
 	CIfEnd()
-	PercentStrFix(Str2,EXPIncomeLoc2,21)
+	
 	CA__InputVA(56*3,Str2,Str2s,nil,56*3,56*4-2)
 	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	

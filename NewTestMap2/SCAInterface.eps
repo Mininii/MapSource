@@ -4,7 +4,7 @@ function onPluginStart(){
 sca.Init();
 }
 
-function beforeTriggerExec(){
+function afterTriggerExec(){
 	sca.Exec();
 	const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 	const s=StringBuffer();
@@ -145,16 +145,9 @@ function beforeTriggerExec(){
 						T2[cp] = 0;
 						break;
 					case 4:
-						if(Deaths(CurrentPlayer, Exactly, 1,14)) {
-							SetDeaths(CurrentPlayer, Add, 1, 14);
-							f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
-							sca.SaveData(0);
-							T2[cp] = 0;
-						}
-						else {
-							SetDeaths(CurrentPlayer, SetTo, 0, 14);
-							T2[cp] = 0;
-						}
+						f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+						sca.SaveData(0);
+						T2[cp] = 0;
 						break;
 					case 6:
 						if(Deaths(CurrentPlayer, Exactly, 1,14)) {
@@ -269,7 +262,7 @@ function beforeTriggerExec(){
 //				default:
 //			}
 //		}
-		if (T2[cp]>= 800) {
+		if (T2[cp]>= 1500) {
 				f_eprintln("\x08타임아웃\x04입니다. \x07다시 저장 \x04해주시기 바랍니다.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
 				SetDeaths(CurrentPlayer, SetTo, 0, 14);
