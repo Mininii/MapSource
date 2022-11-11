@@ -168,7 +168,7 @@ function onInit_EUD()
 	f_GetTblptr(FP, Etbl, 1438)
 	for i = 0, 6 do
 		
-	CIf(FP,{HumanCheck(i,1)},{CreateUnit(1, 15, 116, i)})
+	CIf(FP,{HumanCheck(i,1)},{})
 
 
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
@@ -198,6 +198,10 @@ function onInit_EUD()
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit4[i+1], SetTo, Nextptrs),CreateUnit(1,219,1+i,i)})
+
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	
+	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i)})
 
 
 	CIfEnd()

@@ -45,6 +45,7 @@ function Include_Vars()
 
 	SettingUnit3 = CreateVarArr(7, FP)-- 15~25강 유닛 자동판매 설정기
 	SettingUnit4 = CreateVarArr(7, FP)-- 26~39강 유닛 자동판매 설정기
+	ShopUnit = CreateVarArr(7, FP) -- 시민설정기
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
