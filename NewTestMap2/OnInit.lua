@@ -73,12 +73,27 @@ function onInit_EUD()
 			}
 		}
 	end
+	function InputTesterID2(Player,ID)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+	end
 	for i = 0, 6 do -- 내부 관리자 판별 트리거
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"_Mininii")
 		InputTesterID(i,"RonaRonaChan")
 		InputTesterID(i,"Azusawa_Kohane")
-
+		InputTesterID2(i,"rhegb")
+		InputTesterID2(i,"Hybrid)_GOD60")
 	end
 	
 
