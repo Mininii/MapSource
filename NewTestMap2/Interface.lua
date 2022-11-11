@@ -22,6 +22,7 @@ function Interface()
 	local Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	local AutoBuyCode = CreateCcodeArr(7)-- 자동 구입 제어 데스값
 	local PCheckV = CreateVar(FP)--플레이어 수 체크
+	local MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
 	--PlayData(SCA)
 	local PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
@@ -90,7 +91,7 @@ function Interface()
 	local StatEffLoc = CreateCcode()
 	local ScoutDmgLoc = CreateVar(FP)
 	local AddScLoc = CreateVar(FP)
-
+	local MulOpLoc = CreateVar(FP)
 
 	--Temp
 	local CTStatP2 = CreateVar(FP)
@@ -385,6 +386,33 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 	end
 	BtnSetEnd()
+	
+	BtnSetInit(i,ShopUnit) -- 1~25강유닛 자동강화 설정
+
+	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 0*65536)}) -- 배율 올림
+	CallTrigger(FP,Call_Print13[i+1])
+	CIfX(FP,{CV(MulOp[i+1],10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+	f_Mul(FP,MulOp[i+1],10)
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()
+	
+	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 1*65536)}) -- 배율 내림
+	CallTrigger(FP,Call_Print13[i+1])
+	CIfX(FP,{CV(MulOp[i+1],2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+	f_Div(FP,MulOp[i+1],10)
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()
+
+
+
+	BtnSetEnd()
+
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})
 			
@@ -612,14 +640,14 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 end
 SpeedV = CreateVar(FP)
-SPJump = def_sIndex()
-NJump(FP,SPJump,{CV(SpeedV,2)})
 CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 	for i= 0, 6 do
-		CIf(FP,{CV(SpeedV,0),HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
-			CIfX(FP,{TTNWar(Credit[i+1], AtLeast, "500")},{SetMemory(0x5124F0,SetTo,11),KillUnit(166, FP),SetV(SpeedV,1),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x086배속 \x04아이템을 구입하였습니다. 이제부터 \x086배속\x04이 적용됩니다."),4)}, Force1, FP)})
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
+			CIfX(FP,{CV(SpeedV,0),TTNWar(Credit[i+1], AtLeast, "500")},{SetMemory(0x5124F0,SetTo,11),KillUnit(166, FP),SetV(SpeedV,1),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x086배속 \x04아이템을 구입하였습니다. 이제부터 \x086배속\x04이 적용됩니다."),4)}, Force1, FP)})
 				f_LSub(FP, Credit[i+1], Credit[i+1], "500")
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+				
+			CElseIfX({CV(SpeedV,1)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 구입되었습니다."), 4),SetCp(FP)})
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 		CIfEnd()
@@ -627,16 +655,17 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,114)},{MoveUnit(1, 15, i, 114, 116)})
 		local NeedSp = def_sIndex()
 			NJump(FP, NeedSp, {CV(SpeedV,0)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x085배속 \x04아이템을 먼저 구입해주세요."), 4),SetCp(FP)})
-			CIfX(FP,{TTNWar(Credit[i+1], AtLeast, "5000")},{SetMemory(0x5124F0,SetTo,1),KillUnit(169, FP),SetV(SpeedV,2),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F최대배속 \x04아이템을 구입하였습니다. 이제부터 \x1F최대배속\x04이 적용됩니다."),4)}, Force1, FP)})
+			CIfX(FP,{CV(SpeedV,1),TTNWar(Credit[i+1], AtLeast, "5000")},{SetMemory(0x5124F0,SetTo,3),KillUnit(169, FP),SetV(SpeedV,2),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F최대배속 \x04아이템을 구입하였습니다. 이제부터 \x1F최대배속\x04이 적용됩니다."),4)}, Force1, FP)})
 				f_LSub(FP, Credit[i+1], Credit[i+1], "5000")
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
-			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+				CElseIfX({CV(SpeedV,2)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 구입되었습니다."), 4),SetCp(FP)})
+				CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 			NJumpEnd(FP, NeedSp)
 		CIfEnd()
+
 	end
 CIfEnd()
-NJumpEnd(FP, SPJump)
 
 
 
@@ -906,7 +935,7 @@ t04 = "\x19판매시 경험치 : \x0d0,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x
 t05 = "\x08판매 불가 유닛"
 t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
-
+t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
 iStrSize1 = GetiStrSize(0,t01)
 S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
 iTbl1 = GetiTblId(FP,1495,S0)
@@ -915,9 +944,12 @@ TStr1, TStr1a, TStr1s = SaveiStrArr(FP,t01)
 TStr2, TStr2a, TStr2s = SaveiStrArr(FP,t02)
 TStr3, TStr3a, TStr3s = SaveiStrArr(FP,t03)
 TStr4, TStr4a, TStr4s = SaveiStrArr(FP,t06)
+TStr5, TStr5a, TStr5s = SaveiStrArr(FP,t08)
 
 S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
 iTbl2 = GetiTblId(FP,764,S1)
+S2 = MakeiTblString(16,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t08)+5),"Base",1) -- 단축키없음
+iTbl3 = GetiTblId(FP,16,S1)
 EStr0, EStr0a, EStr0s = SaveiStrArr(FP,t04)
 EStr1, EStr1a, EStr1s = SaveiStrArr(FP,t05)
 EStr2, EStr2a, EStr2s = SaveiStrArr(FP,t07)
@@ -975,6 +1007,8 @@ CMov(FP,TotalEPer3Loc,0)
 CMov(FP,EXPIncomeLoc,0)
 CIfXEnd()
 CIfEnd()
+
+
 
 
 CIfX(FP,{CV(SelEXP,1,AtLeast)})--경험치가 있을경우
@@ -1115,6 +1149,7 @@ CTrigger(FP,{CV(E4VarArr[6],0),CV(E4VarArr[5],0)},{TBwrite(_Add(Etbl,72+5+4+1),S
 CIfEnd()
 CIfEnd()
 
+
 CIf(FP, {CD(BossFlag,1)}) -- 보스건물 정보 상시갱신
 TotalDPMLoc = CreateWar(FP)
 f_LMov(FP,TotalDPMLoc,TotalDPM)
@@ -1140,6 +1175,31 @@ CS__InputVA(FP,iTbl2,0,EStr2,EStr2s,nil,0,EStr2s)
 
 
 CIfEnd()
+
+CIf(FP,{CV(SelUID,15)}) -- 시민 정보 상시갱신
+CIfX(FP,{Never()})
+for i = 0, 6 do
+	CElseIfX({CV(SelPl,i)},{})
+	CMov(FP,MulOpLoc,MulOp[i+1])
+end
+CElseX()
+CMov(FP,MulOpLoc,0)
+CIfXEnd()
+CS__SetValue(FP,TStr5,t08,nil,0)
+
+CS__ItoCustom(FP,SVA1(TStr5,12),MulOpLoc,nil,nil,{10,8},nil,nil,"\x040",nil,{0,1,2,3,5,6,7,8},nil,{0,0,0,{0},0,0,0,{0}})
+TriggerX(FP, {CV(MulOpLoc,10000,AtLeast)
+}, {
+	SetCSVA1(SVA1(TStr5,18), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(TStr5,19), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(TStr5,20), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	SetCSVA1(SVA1(TStr5,21), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+}, {preserved})
+CS__InputVA(FP,iTbl3,0,TStr5,TStr5s,nil,0,TStr5s)
+
+CIfEnd()
+
+
 
 CIfEnd()
 --CA__Input(MakeiStrData("\x04경",1),SVA1(Str1,3+2))
