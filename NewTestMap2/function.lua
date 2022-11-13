@@ -425,7 +425,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
 	CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
 	CIfX(FP,{CV(TotalDPS,4,AtLeast)})
-	CDiv(FP,TotalDPS2,TotalDPS,4)
+	f_Div(FP, TotalDPS2,TotalDPS,4)
 	CElseX()
 	CMov(FP,TotalDPS2,0)
 	CIfXEnd()
@@ -460,6 +460,9 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	else
 		PushErrorMsg("TotalDPSDest InputError")
 	end 
+
+
+	
 	DoActionsX(FP,{AddV(DPSCheck2,1)})
 	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})

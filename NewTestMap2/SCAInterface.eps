@@ -92,10 +92,14 @@ function afterTriggerExec(){
 
 	foreach(cp : EUDLoopPlayer("Human")){
 	setcurpl(cp);
-		if(Deaths(CurrentPlayer, Exactly, 1,100)){
+		if(Deaths(CurrentPlayer, AtLeast, 1,100)){
 		
 		SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
 		}
+		else if (Deaths(CurrentPlayer, AtLeast, 1,99)) {
+		SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser\x07] {:c}{:n}",cp,cp);
+		}
+
 		T1[cp] ++;
 
 		if (SCA_Stat1[cp] == 1){
