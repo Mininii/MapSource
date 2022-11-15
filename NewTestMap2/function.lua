@@ -577,7 +577,7 @@ function DisplayPrint(StrBufferSize,TargetPlayers,arg)
 			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
 		else
-			PushErrorMsg(k)
+			PushErrorMsg("Print_Inputdata_Error")
 		end
 	end
 	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
@@ -588,6 +588,60 @@ function DisplayPrint(StrBufferSize,TargetPlayers,arg)
 	else
 		DoActions2(FP,{RotatePlayer({DisplayText(StrT,4)},TargetPlayers,FP)})
 	end
+end
+
+function print_utf8_2(line, offset, string)
+    local ret = {}
+    local dst = 0x640B60 + line * 218 + offset
+	
+    if type(string) == "string" then
+        local str = string
+        local n = 1
+        if dst % 4 >= 1 then
+            for i = 1, dst % 4 do str = '\x0d'..str end
+        end
+        local t = cp949_to_utf8(str)
+        while n <= #t do
+			
+            ret[#ret+1] = SetMemory(dst - dst % 4 +n-1, SetTo, _dw(t, n))
+            n = n + 4
+        end
+    elseif type(string) == "number" then
+        PushErrorMsg("print_utf8_InputError")
+    end
+    return ret
+end
+
+
+function DisplayPrintEr(TargetPlayer,arg)
+	local Dev = 0
+	local RetAct = {}
+	local ItoDecKey = {}
+	for j,k in pairs(arg) do
+		if type(k) == "string" then
+			local Strl = GetStrSize(0,k)
+			if Strl%4~=0 then k=string.rep("\x0D", (4-Strl%4))..k Strl=Strl+(4-Strl%4) end
+			table.insert(RetAct,print_utf8_2(12, Dev, k))
+			
+			Dev=Dev+Strl
+		elseif type(k)=="table" and k[4]=="V" then
+			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 16)))
+			--V,Dev
+			table.insert(ItoDecKey,{k,Dev})
+			Dev=Dev+(4*4)
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	CallTrigger(FP, Call_Print13[TargetPlayer+1])
+	CIf(FP, {TMemory(0x512684,AtLeast,TargetPlayer)})
+	DoActions2(FP, RetAct)
+	for j,k in pairs(ItoDecKey) do
+		ItoDec(FP,k[1],VArr(publicItoDecVArr,0),2,nil,0)
+		f_Movcpy(FP,0x640B60 + (12 * 218)+k[2],VArr(publicItoDecVArr,0),4*4)
+	end
+	CIfEnd()
+
 end
 function init_StrX()
 	for k, v in pairs(StrXKeyArr) do
@@ -605,6 +659,10 @@ function init_Setting()
 	CJump(FP, CustominitJump)
 	init_StrX()
 	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
+
+	
+
+
 	CJumpEnd(FP, CustominitJump)
 end
 function Start_init()
@@ -618,4 +676,13 @@ function Start_init()
 	StrXIndex = 0
 	publicItoDecVArr =CreateVArr(4,FP)
 	DoActionsX(FP, {SetNext("X", CustominitJump+JumpStartAlloc,1),SetNext(lastTrigIndex, "X",1)}, 1,initTrigIndex)
+end
+function dwread_epd(Ptr,EPDFlag) -- v=EPD
+	local RetV= CreateVar(FP)
+	if EPDFlag == 1 then
+		f_Read(FP,Ptr,nil,RetV,nil,1)
+	else
+		f_Read(FP,Ptr,RetV,nil,nil,1)
+	end
+	return RetV
 end

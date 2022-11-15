@@ -106,7 +106,6 @@ function Interface()
 
 	
 	local Dx,Dy,Dv,Du,DtP,Time2,Time = CreateVariables(7,FP)
-	
 	f_Read(FP,0x51CE8C,Dx)
 	CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(FP,DtP,Dy,Du)
@@ -214,6 +213,32 @@ end
 		
 		CIfEnd()
 	CIfEnd()
+	
+	if TestStart == 1 then
+        mouseX = dwread_epd(0x6CDDC4)
+        mouseY = dwread_epd(0x6CDDC8)
+        screenGridX = dwread_epd(0x62848C)
+        screenGridY = dwread_epd(0x6284A8)
+        Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --¡ﬂæ” (∏ ªÁ¿Ã¡Ó*16, ∏ ªÁ¿Ã¡Ó*16)
+        DoActions(FP,{SetCp(i),CenterView(118)})
+        ScreenX2 = dwread_epd(0x62848C);
+        ScreenY2 = dwread_epd(0x6284A8);
+		screenSizeX = CreateVar(FP)
+		screenSizeY = CreateVar(FP)
+        CMov(FP,screenSizeX,_iSub(_Mov(256*16),ScreenX2))
+        CMov(FP,screenSizeY,_iSub(_Mov(256*16),ScreenY2))
+		screenX = CreateVar(FP)
+		screenY = CreateVar(FP)
+        CAdd(FP,screenX,screenGridX,screenSizeX)
+        CAdd(FP,screenY,screenGridY,screenSizeY)
+        Simple_SetLocX(FP,117, screenX, screenY,screenX, screenY)
+        DoActions(FP,{SetCp(i),CenterView(118)})
+        Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --¡ﬂæ” (∏ ªÁ¿Ã¡Ó*16, ∏ ªÁ¿Ã¡Ó*16)
+		CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
+
+
+		DisplayPrintEr(i, {"mouseX : ", mouseX, "  mouseY : ", mouseY, "  screenSizeX : ", screenSizeX, "  screenX : ", screenX, "  screenY : ", mouseY});
+	end
 
 	
 	local LevelUpJump = def_sIndex()
