@@ -1,4 +1,24 @@
 
+function Install_BackupCP(Player)
+	BackupCp = CreateVar(Player)
+	SaveCp_CallIndex = SetCallForward()
+	SetCall(Player)
+		SaveCp(Player,BackupCp)
+	SetCallEnd()
+
+	LoadCp_CallIndex = SetCallForward()
+	SetCall(Player)
+		LoadCp(Player,BackupCp)
+		SetRecoverCp()
+	SetCallEnd()
+
+	function f_SaveCp()
+		CallTrigger(Player,SaveCp_CallIndex,nil)
+	end
+	function f_LoadCp()
+		CallTrigger(Player,LoadCp_CallIndex,nil)
+	end
+end
 function TestSet(val)
 	if val == 1 then 
 		Limit = 1
@@ -65,7 +85,7 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="GasCost"  then
 				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- ����
 			elseif j=="BuildTime"  then
-				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ����ӵ�
+				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ����ӵ�?
 			elseif j=="SuppCost"  then
 				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ����
 			elseif j=="HP"  then
@@ -155,14 +175,6 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="PissedEnd" then
 				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
 				PatchInsert(SetMemoryW(0x661EE8+(UnitID*2),SetTo,k))
-			elseif j=="isHero" then
-				if type(k)=="boolean" then
-					if k==true then
-						table.insert(HeroArr,UnitID)
-					end
-				else
-					PushErrorMsg("isHero TypeError")
-				end
 			elseif j=="Reqptr" then
 				PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
 			elseif j== "SeekRange" then
@@ -208,9 +220,9 @@ function SetWeaponsDatX(WepID,Property)
 					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --���� ��
 				end
 			elseif j=="RangeMin" then
-				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ��Ÿ� �ּ�
+				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ��Ÿ�? �ּ�
 			elseif j=="RangeMax" then
-				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ��Ÿ� �ִ�
+				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ��Ÿ�? �ִ�
 			elseif j=="TargetFlag" then
 				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
 			elseif j=="UpgradeType" then
@@ -338,11 +350,11 @@ function CIfKeyFunc(CP,Key,ContentStr,DisContentStr,Conditions,CondActions,DisCo
 	CIf(FP,{MSQC_KeyInput(CP, Key)})
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),CondActions},{preserved})	-- ������ ������ ���
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),CondActions},{preserved})	-- ������ ������ ���?
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1])},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),DisCondActions},{preserved})	-- ������ �������� ���� ���
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1])},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),DisCondActions},{preserved})	-- ������ �������� ���� ���?
 end
-function KeyFunc(CP,Key,ContentArgs) --{{1�����ǹ迭,�׼ǹ迭,������ؽ�Ʈ},...}
+function KeyFunc(CP,Key,ContentArgs) --{{1�����ǹ迭,�׼ǹ迭,������ؽ��?},...}
 	CIf(FP,{MSQC_KeyInput(CP, Key)})
 	for o,p in pairs(ContentArgs) do
 		if o == 1 then
@@ -369,9 +381,9 @@ function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCon
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),CondActions},{preserved})	-- ������ ������ ���
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),CondActions},{preserved})	-- ������ ������ ���?
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),DisCondActions},{preserved})	-- ������ �������� ���� ���
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),DisCondActions},{preserved})	-- ������ �������� ���� ���?
 end
 
 function BtnSetInit(CP,MenuPtr)
@@ -489,7 +501,7 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIfEnd()
 
 end
-function MSQC_KeySet(KeyName,DeathUnit) -- Ű�νĿ� ������ ���
+function MSQC_KeySet(KeyName,DeathUnit) -- Ű�νĿ� ������ ���?
 	MSQC_KeyArr[KeyName] = DeathUnit
 end
 
@@ -545,41 +557,65 @@ function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
 	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
 	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end
-StrXKeyArr = {}
-StrXPatchArr = {}
-function CreateStrXptr(Text) -- return {V,String}
+function DisplayPrint(StrBufferSize,TargetPlayers,arg)
+	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
+		f_SaveCp()
+	end
 	local RetV = CreateVar(FP)
-	table.insert(StrXKeyArr,{RetV,Text})
-	return {RetV,Text}
-end
-publicItoDecVArr = =CreateVArr(4,FP)
-function DisplayPrint(StrXData,TargetPlayers,...)
-	local arg = table.pack(...)
+	local StrT = "\x0D\x0D\x0DSI"..StrXIndex..string.rep("\x0D", StrBufferSize)
+	table.insert(StrXKeyArr,{RetV,StrT})
+	StrXIndex=StrXIndex+1
+	
 	local Dev = 0
 	for j,k in pairs(arg) do
 		if type(k) == "string" then
 			local CT = CreateCText(FP,k)
-			table.insert(StrXPatchArr,{StrXData[1],Dev,CT})
+			table.insert(StrXPatchArr,{RetV,Dev,CT})
 			Dev=Dev+CT[2]
-		elseif k[4]=="V" then
+		elseif type(k)=="table" and k[4]=="V" then
 			ItoDec(FP,k,VArr(publicItoDecVArr,0),2,nil,0)
-			f_Movcpy(FP,_Add(StrXData[1],Dev),VArr(publicItoDecVArr,0),4*4)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
 		else
-			PushErrorMsg("Print_Inputdata_Error")
+			PushErrorMsg(k)
 		end
 	end
-	DoActions2(FP,{RotatePlayer({DisplayText(StrXData[2],4)},TargetPlayers,FP)})
+	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)})
+	elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)})
+
+	else
+		DoActions2(FP,{RotatePlayer({DisplayText(StrT,4)},TargetPlayers,FP)})
+	end
 end
 function init_StrX()
 	for k, v in pairs(StrXKeyArr) do
 		f_GetStrXptr(FP,v[1],v[2])
 	end
 	for k, v in pairs(StrXPatchArr) do -- STRXPtr,Deviation,CTextData
-		if v[2]~=0 then
+		if v[2]==0 then
 			f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
 		else
 			f_Memcpy(FP,_Add(v[1],v[2]),_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
 		end
 	end
+end
+function init_Setting()
+	CJump(FP, CustominitJump)
+	init_StrX()
+	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
+	CJumpEnd(FP, CustominitJump)
+end
+function Start_init()
+	CustominitJump = def_sIndex()
+	initTrigIndex = FuncAlloc
+	FuncAlloc=FuncAlloc+1
+	lastTrigIndex = FuncAlloc
+	FuncAlloc=FuncAlloc+1
+	StrXKeyArr = {}
+	StrXPatchArr = {}
+	StrXIndex = 0
+	publicItoDecVArr =CreateVArr(4,FP)
+	DoActionsX(FP, {SetNext("X", CustominitJump+JumpStartAlloc,1),SetNext(lastTrigIndex, "X",1)}, 1,initTrigIndex)
 end

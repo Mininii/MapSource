@@ -65,7 +65,6 @@ function Install_CallTriggers()
 	CMov(FP,E2Range[2],_Add(E3Range[2],TotalEper2))
 	CMov(FP,E1Range[1],E2Range[2],1)
 	CMov(FP,E1Range[2],_Add(E2Range[2],TotalEper))
-
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
@@ -73,29 +72,10 @@ function Install_CallTriggers()
 				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
 
-			TestVA = CreateVArr(4, FP)
-			TestVA2 = CreateVArr(4, FP)
-			ItoDec(FP,GetEPer,VArr(TestVA,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(ETestStrPtr1,ETestTxt1[2]),VArr(TestVA,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET1".._0D, 4)})--랜덤난수
-
-			ItoDec(FP,E3Range[1],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr5,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			ItoDec(FP,E3Range[2],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr5,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET5".._0D, 4)})-- +3 확률범위
-
-			ItoDec(FP,E2Range[1],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr4,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			ItoDec(FP,E2Range[2],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr4,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET4".._0D, 4)})-- +2 확률범위
-
-			ItoDec(FP,E1Range[1],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]),VArr(TestVA2,0),4*4)
-			ItoDec(FP,E1Range[2],VArr(TestVA2,0),2,0x1D,0)
-			f_Movcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]+16+ETestTxt4[2]),VArr(TestVA2,0),4*4)
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET2".._0D, 4)})-- +1 확률범위
+			DisplayPrint(100,ECP,{"\x04출력된 난수 : ",GetEPer})
+			DisplayPrint(100,ECP,{"\x1F계산된 +3 확률 : \x04",E3Range[1]," \x04~ ",E3Range[2]})
+			DisplayPrint(100,ECP,{"\x1F계산된 +2 확률 : \x04",E2Range[1]," \x04~ ",E2Range[2]})
+			DisplayPrint(100,ECP,{"\x1F계산된 +1 확률 : \x04",E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end

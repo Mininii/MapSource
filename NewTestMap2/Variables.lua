@@ -60,20 +60,6 @@ function Include_Vars()
 	GEper3 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +3강 확률을 저장함
 	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
 
-	if Limit == 1 then --테스트용 출력 트리거
-		ETestTxt1 = CreateCText(FP,"\x10출력된 난수 : ")
-		ETestTxt2 = CreateCText(FP,"\x0F계산된 +1 확률 : ")
-		ETestTxt2_2 = CreateCText(FP,"\x1C계산된 +2 확률 : ")
-		ETestTxt2_3 = CreateCText(FP,"\x1F계산된 +3 확률 : ")
-		ETestTxt3 = CreateCText(FP,"실패, 얻은 경험치 : ")
-		ETestTxt4 = CreateCText(FP,"\x0D\x04 ~ \x0D")
-		ETestStrPtr1 = CreateVar(FP)
-		ETestStrPtr2 = CreateVar(FP)
-		ETestStrPtr3 = CreateVar(FP)
-		ETestStrPtr4 = CreateVar(FP)
-		ETestStrPtr5 = CreateVar(FP)
-	end
-
 	ShopSw = CreateCcodeArr(7) -- 
 	ShopKey = CreateCcodeArr(7) -- 
 

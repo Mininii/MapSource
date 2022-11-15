@@ -51,22 +51,26 @@ Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 
+Start_init()
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100")
 	Include_64BitLibrary("Switch 100")
+	Install_BackupCP(FP)
 	Include_Vars()
+
 	Include_CRandNum(FP)
 	Install_CallTriggers()
 	
 CJumpEnd(AllPlayers,init_func)
-
 onInit_EUD() -- onPluginStart
 
 
 Interface()
 
 
+
+init_Setting()
 -- 마지막 플레이어가 P8일 경우 (아닐경우 P8을 다른 플레이어로 바꿔야함)
 -- 바로 아래에 EndCtrig() 있어야함 --
 EndCtrig()

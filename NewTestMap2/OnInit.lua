@@ -230,29 +230,6 @@ function onInit_EUD()
 		if LocSet == 10 then LocSet=0 DoActions(FP, {SetLoc("Location 87","U",Add,64),SetLoc("Location 87","D",Add,64),SetLoc("Location 87", "L", Subtract, 64*10),SetLoc("Location 87", "R", Subtract, 64*10)}) end
 	end
 	
-	if Limit == 1 then -- 테스트용 결과 출력용
-		f_GetStrXptr(FP,ETestStrPtr1,"\x0D\x0D\x0DET1".._0D)
-		f_GetStrXptr(FP,ETestStrPtr2,"\x0D\x0D\x0DET2".._0D)
-		f_GetStrXptr(FP,ETestStrPtr3,"\x0D\x0D\x0DET3".._0D)
-		f_GetStrXptr(FP,ETestStrPtr4,"\x0D\x0D\x0DET4".._0D)
-		f_GetStrXptr(FP,ETestStrPtr5,"\x0D\x0D\x0DET5".._0D)
-		f_Memcpy(FP,ETestStrPtr1,_TMem(Arr(ETestTxt1[3],0),"X","X",1),ETestTxt1[2])
-		f_Memcpy(FP,ETestStrPtr2,_TMem(Arr(ETestTxt2[3],0),"X","X",1),ETestTxt2[2])
-		f_Memcpy(FP,_Add(ETestStrPtr2,ETestTxt2[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
-		
-		f_Memcpy(FP,ETestStrPtr4,_TMem(Arr(ETestTxt2_2[3],0),"X","X",1),ETestTxt2_2[2])
-		f_Memcpy(FP,_Add(ETestStrPtr4,ETestTxt2_2[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
-		
-		f_Memcpy(FP,ETestStrPtr5,_TMem(Arr(ETestTxt2_3[3],0),"X","X",1),ETestTxt2_3[2])
-		f_Memcpy(FP,_Add(ETestStrPtr5,ETestTxt2_3[2]+16),_TMem(Arr(ETestTxt4[3],0),"X","X",1),ETestTxt4[2])
-
-		f_Memcpy(FP,ETestStrPtr3,_TMem(Arr(ETestTxt3[3],0),"X","X",1),ETestTxt3[2])
-
-			
-	end
-	
-
-
 	CIfEnd()
 
 	
