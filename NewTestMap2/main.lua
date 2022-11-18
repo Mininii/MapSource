@@ -71,8 +71,6 @@ Interface()
 
 
 init_Setting()
--- 마지막 플레이어가 P8일 경우 (아닐경우 P8을 다른 플레이어로 바꿔야함)
--- 바로 아래에 EndCtrig() 있어야함 --
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()

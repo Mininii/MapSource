@@ -557,16 +557,30 @@ function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
 	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
 	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end
-function DisplayPrint(StrBufferSize,TargetPlayers,arg)
+function DisplayPrint(TargetPlayers,arg)
 	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
 		f_SaveCp()
 	end
+
+	local BSize = 0
+	for j,k in pairs(arg) do -- StrSizeCalc
+		if type(k) == "string" then
+			local CT = GetStrSize(0,k)
+			BSize=BSize+CT
+		elseif type(k)=="table" and k[4]=="V" then
+			BSize=BSize+(4*4)
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			BSize=BSize+1
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	
+	local StrT = "\x0D\x0D\x0DSI"..StrXIndex..string.rep("\x0D", BSize+3)
 	local RetV = CreateVar(FP)
-	local StrT = "\x0D\x0D\x0DSI"..StrXIndex..string.rep("\x0D", StrBufferSize)
+	local Dev = 0
 	table.insert(StrXKeyArr,{RetV,StrT})
 	StrXIndex=StrXIndex+1
-	
-	local Dev = 0
 	for j,k in pairs(arg) do
 		if type(k) == "string" then
 			local CT = CreateCText(FP,k)
@@ -576,6 +590,10 @@ function DisplayPrint(StrBufferSize,TargetPlayers,arg)
 			ItoDec(FP,k,VArr(publicItoDecVArr,0),2,nil,0)
 			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(GetVArray(V(k), 0),0),1)
+			Dev=Dev+(1)
+
 		else
 			PushErrorMsg("Print_Inputdata_Error")
 		end

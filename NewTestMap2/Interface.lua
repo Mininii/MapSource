@@ -236,7 +236,6 @@ end
         Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --¡ﬂæ” (∏ ªÁ¿Ã¡Ó*16, ∏ ªÁ¿Ã¡Ó*16)
 		CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
 
-
 		DisplayPrintEr(i, {"mouseX : ", mouseX, "  mouseY : ", mouseY, "  screenSizeX : ", screenSizeX, "  screenX : ", screenX, "  screenY : ", mouseY});
 	end
 

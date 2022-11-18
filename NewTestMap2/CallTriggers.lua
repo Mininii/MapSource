@@ -71,11 +71,15 @@ function Install_CallTriggers()
 			for i = 1, 39 do
 				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
+			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
+			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
+			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
+			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
 
-			DisplayPrint(100,ECP,{"\x04출력된 난수 : ",GetEPer})
-			DisplayPrint(100,ECP,{"\x1F계산된 +3 확률 : \x04",E3Range[1]," \x04~ ",E3Range[2]})
-			DisplayPrint(100,ECP,{"\x1F계산된 +2 확률 : \x04",E2Range[1]," \x04~ ",E2Range[2]})
-			DisplayPrint(100,ECP,{"\x1F계산된 +1 확률 : \x04",E1Range[1]," \x04~ ",E1Range[2]})
+			DisplayPrint(ECP,{"\x04출력된 난수 : ",ColorCodeV[2],GetEPer})
+			DisplayPrint(ECP,{"\x1F계산된 +3 확률 : ",ColorCodeV2[2],E3Range[1]," \x04~ ",E3Range[2]})
+			DisplayPrint(ECP,{"\x1F계산된 +2 확률 : ",ColorCodeV3[2],E2Range[1]," \x04~ ",E2Range[2]})
+			DisplayPrint(ECP,{"\x1F계산된 +1 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end
