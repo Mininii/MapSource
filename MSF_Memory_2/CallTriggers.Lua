@@ -164,7 +164,7 @@ function Install_CallTriggers()
 	SetCall(FP)
 	f_SaveCp()
 
-	f_Read(FP,BackupCp,ReadCp)
+	f_Read(FP,BackupCp,ReadCP)
 	CMov(FP,CurCP,BackupCp,-19025)
 	f_Mod(FP,CurCP,84)
 	ItoDec(FP,CurCP,VArr(CurCPVA,0),2,nil,0)
