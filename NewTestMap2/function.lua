@@ -588,7 +588,8 @@ function DisplayPrint(TargetPlayers,arg)
 			table.insert(StrXPatchArr,{RetV,Dev,CT})
 			Dev=Dev+CT[2]
 		elseif type(k)=="table" and k[4]=="V" then
-			ItoDec(FP,k,VArr(publicItoDecVArr,0),2,nil,0)
+			CMov(FP,publicItoDecV,k)
+			CallTrigger(FP,Call_IToDec)
 			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
 		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
@@ -655,9 +656,11 @@ function DisplayPrintEr(TargetPlayer,arg)
 	CallTrigger(FP, Call_Print13[TargetPlayer+1])
 	CIf(FP, {TMemory(0x512684,AtLeast,TargetPlayer)})
 	DoActions2(FP, RetAct)
-	for j,k in pairs(ItoDecKey) do
-		ItoDec(FP,k[1],VArr(publicItoDecVArr,0),2,nil,0)
-		f_Movcpy(FP,0x640B60 + (12 * 218)+k[2],VArr(publicItoDecVArr,0),4*4)
+	for j,p in pairs(ItoDecKey) do
+		local k = p[1]
+		CMov(FP,publicItoDecV,k)
+		CallTrigger(FP,Call_IToDec)
+		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(publicItoDecVArr,0),4*4)
 	end
 	CIfEnd()
 
@@ -678,7 +681,10 @@ function init_Setting()
 	CJump(FP, CustominitJump)
 	init_StrX()
 	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
+	SetCall2(FP, Call_IToDec)
 
+	ItoDec(FP,publicItoDecV,VArr(publicItoDecVArr,0),2,nil,0)
+	SetCallEnd2()
 	
 
 
@@ -694,6 +700,9 @@ function Start_init()
 	StrXPatchArr = {}
 	StrXIndex = 0
 	publicItoDecVArr =CreateVArr(4,FP)
+	publicItoDecV = CreateVar(FP)
+	Call_IToDec = CreateCallIndex()
+	
 	DoActionsX(FP, {SetNext("X", CustominitJump+JumpStartAlloc,1),SetNext(lastTrigIndex, "X",1)}, 1,initTrigIndex)
 end
 function dwread_epd(Ptr,EPDFlag) -- v=EPD
@@ -704,4 +713,25 @@ function dwread_epd(Ptr,EPDFlag) -- v=EPD
 		f_Read(FP,Ptr,RetV,nil,nil,1)
 	end
 	return RetV
+end
+
+function VRange(Var,Left,Right)
+	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
+	
+end
+
+function Byte_NumSet(Var,DestVar,DivNum,Mask,DestInitVar)
+	if DestInitVar==nil then DestInitVar=0 end
+	CMov(FP,DestVar,DestInitVar)
+	for i = 3, 0, -1 do
+		TriggerX(FP,{NVar(Var,AtLeast,(2^i)*DivNum)},{SetNVar(Var,Subtract,(2^i)*DivNum),SetNVar(DestVar, Add, (2^i)*Mask,(2^i)*Mask)},{preserved})
+	end
+end
+
+function SetEPerStr(VarArr)
+	TriggerX(FP,{CV(VarArr[1],0x30,AtMost)},{SetV(VarArr[1],0x0D)},{preserved})
+	TriggerX(FP,{CV(VarArr[1],0x30,AtMost),CV(VarArr[2],0x30,AtMost)},{SetV(VarArr[2],0x0D)},{preserved})
+	TriggerX(FP,{CV(VarArr[6],0x30,AtMost)},{SetV(VarArr[6],0x0D)},{preserved})
+	TriggerX(FP,{CV(VarArr[6],0x30,AtMost),CV(VarArr[5],0x30,AtMost)},{SetV(VarArr[5],0x0D)},{preserved})
+	
 end

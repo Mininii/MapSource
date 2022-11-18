@@ -185,4 +185,33 @@ function Install_CallTriggers()
 
 
 	SetCallEnd()
+
+	MCP = CreateVar(FP)
+	Call_SetScrMouse = SetCallForward()
+	SetCall(FP)
+	mouseX = dwread_epd(0x6CDDC4)
+	mouseY = dwread_epd(0x6CDDC8)
+	screenGridX = dwread_epd(0x62848C)
+	screenGridY = dwread_epd(0x6284A8)
+	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --¡ﬂæ” (∏ ªÁ¿Ã¡Ó*16, ∏ ªÁ¿Ã¡Ó*16)
+	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MCP),CenterView(118)})
+	ScreenX2 = dwread_epd(0x62848C);
+	ScreenY2 = dwread_epd(0x6284A8);
+	screenSizeX = CreateVar(FP)
+	screenSizeY = CreateVar(FP)
+	CMov(FP,screenSizeX,_iSub(_Mov(256*16),ScreenX2))
+	CMov(FP,screenSizeY,_iSub(_Mov(256*16),ScreenY2))
+	screenX = CreateVar(FP)
+	screenY = CreateVar(FP)
+	CAdd(FP,screenX,screenGridX,screenSizeX)
+	CAdd(FP,screenY,screenGridY,screenSizeY)
+	Simple_SetLocX(FP,117, screenX, screenY,screenX, screenY)
+	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MCP),CenterView(118)})
+	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --¡ﬂæ” (∏ ªÁ¿Ã¡Ó*16, ∏ ªÁ¿Ã¡Ó*16)
+	CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
+
+	screenX2 = CreateVar(FP)
+	CiSub(FP,screenX2,screenX,screenSizeX)
+
+	SetCallEnd()
 end
