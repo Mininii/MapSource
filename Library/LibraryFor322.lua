@@ -302,16 +302,14 @@ function CreateCText(Player,Text) -- CtrigAsm 5.1
 	if (StrSize)/4>601 then PushErrorMsg("StrSize_OverFlow") end
 	table.insert(X,Text)
 	table.insert(X,StrSize)
-	table.insert(X,CreateCArray(Player,((StrSize)/4)+1))
+	
+	table.insert(X,CreateArr(((StrSize)/4)+1,Player))
 	local Z = print_utf8A(X[3],0, Text)
 	for j, k in pairs(Z) do
 		table.insert(CtrigInitArr[Player+1],k)
 	end
 	return X
 end
-
-
-
 function print_utf8A(Array,pos, string)
     local ret = {}
     local dst = pos*4
