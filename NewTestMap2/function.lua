@@ -545,6 +545,15 @@ function KeyToggleFunc(KeyName)
 	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
 	return KeyToggle2,KeyToggle
 end
+
+function CDToggleFunc(Ccode)
+	local KeyToggle = CreateCcode()
+	local KeyToggle2 = CreateCcode()
+	TriggerX(FP, {CD(Ccode,0)}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {CD(Ccode,1),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {CD(Ccode,1),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	return KeyToggle2,KeyToggle
+end
 function KeyToggleOnce(KeyName)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
@@ -570,6 +579,8 @@ function DisplayPrint(TargetPlayers,arg)
 			BSize=BSize+CT
 		elseif type(k)=="table" and k[4]=="V" then
 			BSize=BSize+(4*4)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			BSize = BSize+#k
 		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 			BSize=BSize+1
 		else
@@ -592,8 +603,14 @@ function DisplayPrint(TargetPlayers,arg)
 			CallTrigger(FP,Call_IToDec)
 			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			for o,p in pairs(k) do
+				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
+				Dev=Dev+(1)
+			end
+
 		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
-			f_Movcpy(FP,_Add(RetV,Dev),VArr(GetVArray(V(k), 0),0),1)
+			CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
 			Dev=Dev+(1)
 
 		else
@@ -637,6 +654,10 @@ function DisplayPrintEr(TargetPlayer,arg)
 	local Dev = 0
 	local RetAct = {}
 	local ItoDecKey = {}
+	local VCharKey = {}
+	
+
+
 	for j,k in pairs(arg) do
 		if type(k) == "string" then
 			local Strl = GetStrSize(0,k)
@@ -649,6 +670,11 @@ function DisplayPrintEr(TargetPlayer,arg)
 			--V,Dev
 			table.insert(ItoDecKey,{k,Dev})
 			Dev=Dev+(4*4)
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
+			table.insert(VCharKey,{k,Dev})
+			Dev=Dev+(1)
+
 		else
 			PushErrorMsg("Print_Inputdata_Error")
 		end
@@ -662,6 +688,10 @@ function DisplayPrintEr(TargetPlayer,arg)
 		CallTrigger(FP,Call_IToDec)
 		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(publicItoDecVArr,0),4*4)
 	end
+	for j,p in pairs(VCharKey) do
+		CDoActions(FP,{TBwrite(0x640B60+p[2],SetTo,V(p[1]))})
+	end
+	
 	CIfEnd()
 
 end
@@ -681,10 +711,13 @@ function init_Setting()
 	CJump(FP, CustominitJump)
 	init_StrX()
 	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
-	SetCall2(FP, Call_IToDec)
 
+	local SCJump = def_sIndex()
+	CJump(FP,SCJump)
+	SetCall2(FP, Call_IToDec)
 	ItoDec(FP,publicItoDecV,VArr(publicItoDecVArr,0),2,nil,0)
 	SetCallEnd2()
+	CJumpEnd(FP,SCJump)
 	
 
 
@@ -724,7 +757,7 @@ function Byte_NumSet(Var,DestVar,DivNum,Mask,DestInitVar)
 	if DestInitVar==nil then DestInitVar=0 end
 	CMov(FP,DestVar,DestInitVar)
 	for i = 3, 0, -1 do
-		TriggerX(FP,{NVar(Var,AtLeast,(2^i)*DivNum)},{SetNVar(Var,Subtract,(2^i)*DivNum),SetNVar(DestVar, Add, (2^i)*Mask,(2^i)*Mask)},{preserved})
+		TriggerX(FP,{NVar(Var,AtLeast,(2^i)*DivNum)},{SetNVar(Var,Subtract,(2^i)*DivNum),SetNVar(DestVar, Add, (2^i)*Mask)},{preserved})
 	end
 end
 
@@ -734,4 +767,11 @@ function SetEPerStr(VarArr)
 	TriggerX(FP,{CV(VarArr[6],0x30,AtMost)},{SetV(VarArr[6],0x0D)},{preserved})
 	TriggerX(FP,{CV(VarArr[6],0x30,AtMost),CV(VarArr[5],0x30,AtMost)},{SetV(VarArr[5],0x0D)},{preserved})
 	
+end
+local MLT = {}
+for i = 1, 11 do
+	MLT[i] = 112+((i-1)*16)
+end
+function MLine(Var,Line)--1~11
+	return {CV(Var,MLT[Line],AtLeast),CV(Var,MLT[Line]+12,AtMost)}
 end

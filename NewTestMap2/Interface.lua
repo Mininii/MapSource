@@ -216,16 +216,6 @@ end
 		CIfEnd()
 	CIfEnd()
 	
-	if TestStart == 1 then
-		CallTriggerX(FP,Call_SetScrMouse,{LocalPlayerID(i)},{SetV(MCP,i)})
-		mmX = mouseX -- 상대좌표 좌측정렬
-		mmY = mouseY
-		mmX2 = screenX -- 중앙정렬
-		mmX3 = screenX2 -- 중앙정렬
-
-
-		DisplayPrintEr(i, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
-	end
 
 	
 	local LevelUpJump = def_sIndex()
@@ -486,24 +476,24 @@ end
 	})
 --	end
 	KeyFunc(i,"3",{
+		{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],49,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
+		{{CV(Stat_Upgrade[i+1],50,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
+		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+	})
+	KeyFunc(i,"4",{
 		{{CV(StatP[i+1],5,AtLeast),CV(Stat_TotalEPer[i+1],9999,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_TotalEPer[i+1],100)},StrDesign("\x07총 \x08강화 확률\x04이 증가하였습니다.")},
 		{{CV(Stat_TotalEPer[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07총 \x08강화 확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
-	KeyFunc(i,"4",{
+	KeyFunc(i,"5",{
 		{{CV(StatP[i+1],200,AtLeast),CV(Stat_TotalEPer2[i+1],4999,AtMost)},{SubV(StatP[i+1],200),AddV(Stat_TotalEPer2[i+1],100)},StrDesign("\x07+2강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
 		{{CV(Stat_TotalEPer2[i+1],5000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],199,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
-	KeyFunc(i,"5",{
+	KeyFunc(i,"6",{
 		{{CV(StatP[i+1],1000,AtLeast),CV(Stat_TotalEPer3[i+1],2999,AtMost)},{SubV(StatP[i+1],1000),AddV(Stat_TotalEPer3[i+1],100)},StrDesign("\x07+3강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
 		{{CV(Stat_TotalEPer3[i+1],3000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다.")},
 		{{CV(StatP[i+1],999,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
-	})
-	KeyFunc(i,"6",{
-		{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],49,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
-		{{CV(Stat_Upgrade[i+1],50,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 	--KeyFunc(i,"6",{
 	--	{{CV(StatP[i+1],5,AtLeast)},{SubV(StatP[i+1],5),AddV(Stat_EXPIncome[i+1],1)},StrDesign("\x07경험치 획등량\x04이 \x0810% \x04증가하였습니다.")},
@@ -862,35 +852,79 @@ function TEST()
 	end 
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"TEST",FP,{}) 
 
-	
+	DoActions(FP,{SetMemory(0x58F504, SetTo, 0)})
 	CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- 상점 페이지 제어
+	CMov(FP,MCP,LCP)
+	CallTriggerX(FP,Call_SetScrMouse,{},{})
+	mmX = mouseX -- 상대좌표 좌측정렬
+	mmY = mouseY
+	mmX2 = screenX -- 중앙정렬
+	mmX3 = screenX2 -- 중앙정렬
+	if TestStart == 1 then
+		--DisplayPrintEr(LCP, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+	end
 	
-	
-local E1VarArr = CreateVarArr(6, FP)
-local E2VarArr = CreateVarArr(6, FP)
-local E3VarArr = CreateVarArr(6, FP)
+local E1VarArr1 = CreateVarArr(6, FP)
+local E2VarArr1 = CreateVarArr(6, FP)
+local E3VarArr1 = CreateVarArr(6, FP)
 for i = 1, 6 do
-	Byte_NumSet(S_TotalEPerLoc,E3VarArr[i],10^(6-i),1,0x30)
-	Byte_NumSet(S_TotalEPer2Loc,E2VarArr[i],10^(6-i),1,0x30)
-	Byte_NumSet(S_TotalEPer3Loc,E1VarArr[i],10^(6-i),1,0x30)
+	Byte_NumSet(S_TotalEPerLoc,E1VarArr1[i],10^(6-i),1,0x30)
+	Byte_NumSet(S_TotalEPer2Loc,E2VarArr1[i],10^(6-i),1,0x30)
+	Byte_NumSet(S_TotalEPer3Loc,E3VarArr1[i],10^(6-i),1,0x30)
 end
-	
-	
-	
+SetEPerStr(E1VarArr1)
+SetEPerStr(E2VarArr1)
+SetEPerStr(E3VarArr1)
+E1VarArr2 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
+E2VarArr2 = {E2VarArr1[1],E2VarArr1[2],E2VarArr1[3]}
+E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
+E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
+E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
+E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
+BColor = CreateVarArr(6,FP)
+MToggle = CreateCcodeArr(6)
+DoActionsX(FP, {
+	SetV(BColor[1],0x04),
+	SetV(BColor[2],0x1C),
+	SetV(BColor[3],0x08),
+	SetV(BColor[4],0x0F),
+	SetV(BColor[5],0x0F),
+	SetV(BColor[6],0x0F),
+	SetCD(MToggle[1],0),
+	SetCD(MToggle[2],0),
+	SetCD(MToggle[3],0),
+	SetCD(MToggle[4],0),
+	SetCD(MToggle[5],0),
+	SetCD(MToggle[6],0),
+})
 
+local CDFncArr={}
+	for i = 0, 5 do
+		TriggerX(FP,{MLine(mmY,5+i)},{SetV(BColor[i+1],0x07),SetCD(MToggle[i+1],1)},{preserved})
+		local temp,CDFnc = CDToggleFunc(MToggle[i+1])--
+		TriggerX(FP,{CD(CDFnc,1)},{SetMemory(0x58F504,SetTo,i+1)},{preserved})
+	end
 
-
-	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. \x08[나가기 버튼]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
-	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - \x1F1 Pts\x12\x04 + ",ScoutDmgLoc,"k [+]"})
-	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - \x1F10 Pts\x12\x07+ \x1C",AddScLoc,"기 [+]"})
-	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - \x1F5 Pts\x12\x07+ ",UpgradeLoc," % [+]"})
-	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Pts\x12\x07+ \x0F\x0D000.000 %p"})
-	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- \x1F200 Pts\x12\x07+ \x0F\x0D000.000 %p"})
-	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- \x1F1000 Pts\x12\x07+ \x0F\x0D000.000 %p"})
+	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. \x08[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
+	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - \x1F1 Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k [+]"})
+	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - \x1F10 Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 [+]"})
+	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - \x1F5 Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % [+]"})
+	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p [+]"})
+	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- \x1F200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p [+]"})
+	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- \x1F1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p [+]"})
 	
 	CIfXEnd()
 	DoActions(FP,{SetCp(FP)})
 
+	for i = 0,6 do
+		CIf(FP,{PlayerCheck(i, 1)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,0x10000,20)})
+			for j = 1, 6 do
+				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StrDesign(j.."번줄 설명서"))}, {preserved})
+			end
+		CIfEnd()
+	end
+	
 	
 function TEST2() 
 	local PlayerID = CAPrintPlayerID 
