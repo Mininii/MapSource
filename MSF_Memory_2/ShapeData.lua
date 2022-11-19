@@ -322,7 +322,7 @@ CCS2 = CS_ConnectPathX({3   ,{4096-32, 2240},{4096-416, 2048},{4096-32, 1856}},8
 
 
 tesSh01 = CSMakeTornado(12,128,18,4,1)
-tesSh02 = CS_Rotate(CS_SortR(CS_FillPathXY(HCC, 0, 72, 72, 0), 1), 180)
+tesSh02 = CS_Rotate(CS_SortR(CS_FillPathXY(CS_RatioXY(HCC, 4, 4), 0, 72, 72, 0), 1), 180)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)

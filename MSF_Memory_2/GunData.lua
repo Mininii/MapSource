@@ -1287,8 +1287,9 @@ BossUID = {87,74,5,2}
 	end
 	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
 		local RetT
-		if j%2 == 1 then RetT = SWEffArr1 else RetT = SWEffArr2 end
-		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(CA_Eff_DRat2,150000),RetT})
+		local RetT2
+		if j%2 == 1 then RetT2 = CA_Eff_DRat2 RetT = SWEffArr1 else RetT2 = CA_Eff_DRat3 RetT = SWEffArr2 end
+		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,150000),RetT})
 	end
 
 	
