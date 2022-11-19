@@ -327,12 +327,12 @@ end
 	Debug_DPSBuilding(DpsLV2[i+1],190,88+i)
 
 	
-	--UnitReadX(FP, i, "Men", 65+i, Income[i+1])
+	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
 
 
-	CTrigger(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)},{MoveUnit(1, "Men", i, 15+i, 22+i),AddV(Income[i+1],1),MoveUnit(1, "Factories", i, 22+i, 57+i)},1)--사냥터 입장
+	CTrigger(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)},{MoveUnit(1, "Men", i, 15+i, 22+i),MoveUnit(1, "Factories", i, 22+i, 57+i)},1)--사냥터 입장
 
-	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 36+i),SubV(Income[i+1],1)}, {preserved})--사냥터 퇴장
+	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 36+i)}, {preserved})--사냥터 퇴장
 
 	TriggerX(FP, {CV(BossLV,4,AtMost),Bring(i, AtMost, 3, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
 	TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 36+i)}, {preserved})--보스방 퇴장
@@ -457,6 +457,9 @@ end
 	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1])})--키인식부 시작
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O")}, {SetV(InterfaceNum[i+1],1)},{preserved})
 	CIfX(FP,{CV(InterfaceNum[i+1],1)},{})
+	for j = 0, 6 do
+		TriggerX(FP, {Deaths(i,Exactly,0x10000+j,20)}, {SetDeaths(i,SetTo,1,495+j)}, {preserved})
+	end
 	KeyFunc(i,"1",{
 		{{CV(StatP[i+1],1,AtLeast),CV(Stat_ScDmg[i+1],49,AtMost)},{SubV(StatP[i+1],1),AddV(Stat_ScDmg[i+1],1)},StrDesign("\x07기본유닛\x1B의 데미지가 증가하였습니다.")},
 		{{CV(Stat_ScDmg[i+1],50,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 \x08데미지\x04를 올릴 수 없습니다.")},
@@ -752,103 +755,7 @@ function TEST()
 	
 
 
-	function PercentStrFix(SVA,Var,Distance)
-	TriggerX(FP, {
-		CSVA1(SVA1(SVA,Distance+0), Exactly, 0x0D*0x1000000, 0xFF000000),
-		CSVA1(SVA1(SVA,Distance+1), Exactly, 0x0D*0x1000000, 0xFF000000)
-	}, {
-		SetCSVA1(SVA1(SVA,Distance+1), SetTo, string.byte("0")*0x1000000, 0xFF000000),
-	}, {preserved})
-	TriggerX(FP, {
-		CSVA1(SVA1(SVA,Distance+3), Exactly, 0x0D*0x1000000, 0xFF000000),
-		CSVA1(SVA1(SVA,Distance+4), Exactly, 0x0D*0x1000000, 0xFF000000),
-		CSVA1(SVA1(SVA,Distance+5), Exactly, 0x0D*0x1000000, 0xFF000000)
-	}, {
-		SetCSVA1(SVA1(SVA,Distance+3), SetTo, string.byte("0")*0x1000000, 0xFF000000),
-	}, {preserved})
-	TriggerX(FP, {
-		CSVA1(SVA1(SVA,Distance+4), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-		CSVA1(SVA1(SVA,Distance+5), Exactly, string.byte("0")*0x1000000, 0xFF000000)
-	}, {
-		SetCSVA1(SVA1(SVA,Distance+4), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-		SetCSVA1(SVA1(SVA,Distance+5), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-	}, {preserved})
-	TriggerX(FP, {
-		CSVA1(SVA1(SVA,Distance+5), Exactly, string.byte("0")*0x1000000, 0xFF000000)
-	}, {
-		SetCSVA1(SVA1(SVA,Distance+5), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-	}, {preserved})
-	end--
-
---	CIfX(FP,{CV(InterfaceNumLoc,1)},{SetCD(InterfaceNumLoc2,0)}) -- 상점 페이지 제어--
-
---	CA__SetValue(Str1,"\x07능력치 \x04설정. \x10숫자키\x04를 눌러 \x07업그레이드. \x08나가기:ESC\x12\x1C보유 포인트 :\x07 ",nil,1)
---	CA__ItoCustom(SVA1(Str1,41),StatPLoc,nil,nil,{10,5},nil,nil,"\x040")
---	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - \x1F1 Pts\x12\x04 + \x0D\x0D\x0D\x0D\x0D\x0D000",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,38),ScoutDmgLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B)
---	TriggerX(FP, {CV(ScoutDmgLoc,0)}, {
---		SetCSVA1(SVA1(Str1,46-2), SetTo, 0x0D0D0D0D, 0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,47-2), SetTo, 0x0D0D0D0D, 0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,48-2), SetTo, 0x0D0D0D0D, 0xFFFFFFFF),
---		SetCSVA1(SVA1(Str1,49-2), SetTo, 0x0D0D0D0D, 0xFFFFFFFF),
---	}, {preserved})
---	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - \x1F10 Pts\x12\x07+ \x1C\x0D\x0D\x0D\x0D\x0D\x0D\x0D기",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,38),AddScLoc,nil,nil,{10,1},1,nil,"\x070",0x07)
---	CA__InputVA(56*5,Str1,Str1s,nil,56*5,56*6-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
-
---	CA__SetValue(Str1,"\x073. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Pts\x12\x07+ \x0F\x0D00.000 %p",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,37),S_TotalEPerLoc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
---	PercentStrFix(Str1,S_TotalEPerLoc,37)
---	CA__InputVA(56*6,Str1,Str1s,nil,56*6,56*7-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x074. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- \x1F200 Pts\x12\x07+ \x0F\x0D00.000 %p",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,38),S_TotalEPer2Loc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
---	PercentStrFix(Str1,S_TotalEPer2Loc,38)
---	CA__InputVA(56*7,Str1,Str1s,nil,56*7,56*8-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x075. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- \x1F1000 Pts\x12\x07+ \x0F\x0D00.000 %p",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,39),S_TotalEPer3Loc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
---	PercentStrFix(Str1,S_TotalEPer3Loc,39)
---	CA__InputVA(56*8,Str1,Str1s,nil,56*8,56*9-2)
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__SetValue(Str1,"\x076. \x1B유닛 데미지 \x08(최대 +500%) - \x1F5 Pts\x12\x07+ \x0D\x0D\x0D\x0D\x0D %",nil,1)
---	CS__ItoCustom(FP,SVA1(Str1,34),UpgradeLoc,nil,nil,{10,3},1,nil,"\x080",0x08)
---	CA__InputVA(56*9,Str1,Str1s,nil,56*9,56*10-2)--
-
---	
---	for i = 3, 11 do
---		CA__SetMemoryX((56*i)-1,0x0A0D0D0D,0xFFFFFFFF,1)
---	end--
-
---	CElseX()--표기할 상점 페이지가 없을시
---	CIf(FP,{CD(InterfaceNumLoc2,0)},{SetCD(InterfaceNumLoc2,1)})
---	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
---	CA__InputVA(56*3,Str1,Str1s,nil,56*3,56*4-2)
---	CA__InputVA(56*4,Str1,Str1s,nil,56*4,56*5-2)	
---	CA__InputVA(56*5,Str1,Str1s,nil,56*5,56*6-2)	
---	CA__InputVA(56*6,Str1,Str1s,nil,56*6,56*7-2)	
---	CA__InputVA(56*7,Str1,Str1s,nil,56*7,56*8-2)	
---	CA__InputVA(56*8,Str1,Str1s,nil,56*8,56*9-2)	
---	CA__InputVA(56*9,Str1,Str1s,nil,56*9,56*10-2)	
---	CA__InputVA(56*10,Str1,Str1s,nil,56*10,56*11-2)	
---	CIfEnd()--
---
---
-
---	CIfXEnd()
-
-
-
-	for i = 3, 11 do
-		CA__SetMemoryX((56*i)-1,0x0D0D0D0D,0xFFFFFFFF,1)
-	end
-
-	
+CA__SetMemoryX((56*3)-1,0x0D0D0D0D,0xFFFFFFFF,1)
 	end 
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"TEST",FP,{}) 
 
@@ -861,7 +768,7 @@ function TEST()
 	mmX2 = screenX -- 중앙정렬
 	mmX3 = screenX2 -- 중앙정렬
 	if TestStart == 1 then
-		--DisplayPrintEr(LCP, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+		--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 	end
 	
 local E1VarArr1 = CreateVarArr(6, FP)
@@ -882,43 +789,54 @@ E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
 E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
 E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
 BColor = CreateVarArr(6,FP)
+BColor2 = CreateVarArr(6,FP)
+BColor3 = CreateVarArr(6,FP)
 MToggle = CreateCcodeArr(6)
-DoActionsX(FP, {
-	SetV(BColor[1],0x04),
-	SetV(BColor[2],0x1C),
-	SetV(BColor[3],0x08),
-	SetV(BColor[4],0x0F),
-	SetV(BColor[5],0x0F),
-	SetV(BColor[6],0x0F),
-	SetCD(MToggle[1],0),
-	SetCD(MToggle[2],0),
-	SetCD(MToggle[3],0),
-	SetCD(MToggle[4],0),
-	SetCD(MToggle[5],0),
-	SetCD(MToggle[6],0),
-})
-
+MToggle2 = CreateCcodeArr(6)
+local ESCB = CreateVar(FP)
+local BAct = {}
+for j,p in pairs({0x04,0x1C,0x08,0x0F,0x0F,0x0F}) do
+	table.insert(BAct,SetV(BColor[j],p))
+	table.insert(BAct,SetV(BColor2[j],0x04))
+	table.insert(BAct,SetV(BColor3[j],0x1F))
+	table.insert(BAct,SetCD(MToggle[j],0))
+	table.insert(BAct,SetCD(MToggle2[j],0))
+end
+table.insert(BAct,SetV(ESCB,0x08))
+DoActions2X(FP, BAct)
 local CDFncArr={}
-	for i = 0, 5 do
-		TriggerX(FP,{MLine(mmY,5+i)},{SetV(BColor[i+1],0x07),SetCD(MToggle[i+1],1)},{preserved})
-		local temp,CDFnc = CDToggleFunc(MToggle[i+1])--
-		TriggerX(FP,{CD(CDFnc,1)},{SetMemory(0x58F504,SetTo,i+1)},{preserved})
-	end
+--296~310 각 스탯찍기 버튼
+--274~388 상대좌표 나가기버튼
 
-	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. \x08[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
-	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - \x1F1 Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k [+]"})
-	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - \x1F10 Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 [+]"})
-	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - \x1F5 Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % [+]"})
-	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- \x1F5 Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p [+]"})
-	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- \x1F200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p [+]"})
-	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- \x1F1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p [+]"})
+local MStat,CDFnc2 = ToggleFunc({Memory(0x6CDDC0,Exactly,0),Memory(0x6CDDC0,Exactly,2)},1)--
+TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388)},{SetV(ESCB,0x07)},{preserved})
+TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
+TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000)},{preserved})
+
+	for i = 0, 5 do
+		TriggerX(FP,{MLine(mmY,5+i)},{SetV(BColor[i+1],0x07),SetV(BColor3[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})
+		TriggerX(FP,{MLine(mmY,5+i),VRange(mmX3, 296, 310)},{SetV(BColor2[i+1],0x07),SetCD(MToggle2[i+1],1)},{preserved})
+
+		local temp,CDFnc = ToggleFunc({CD(MToggle[i+1],0),CD(MToggle[i+1],1)})--
+		TriggerX(FP,{CD(MToggle2[i+1],1),CD(MStat,1)},{SetV(BColor2[i+1],0x08)},{preserved})
+		TriggerX(FP,{KeyPress(tostring(i+1), "Down")},{SetV(BColor2[i+1],0x08)},{preserved})
+		TriggerX(FP,{CD(CDFnc,1)},{SetMemory(0x58F504,SetTo,i+1)},{preserved})
+		TriggerX(FP,{CD(MToggle2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000+i+1)},{preserved})
+	end
+	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
+	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - ",BColor3[1][2],"1 Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k ",BColor2[1][2],"[+]"})
+	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],"10 Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
+	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],"5 Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
+	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],"5 Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
+	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- ",BColor3[5][2],"200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
+	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- ",BColor3[6][2],"1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
 	
 	CIfXEnd()
 	DoActions(FP,{SetCp(FP)})
 
 	for i = 0,6 do
 		CIf(FP,{PlayerCheck(i, 1)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,0x10000,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,0x10000-1,20)})
 			for j = 1, 6 do
 				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StrDesign(j.."번줄 설명서"))}, {preserved})
 			end
@@ -926,40 +844,31 @@ local CDFncArr={}
 	end
 	
 	
-function TEST2() 
-	local PlayerID = CAPrintPlayerID 
-	CA__SetValue(Str2,"\x04당신의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F\x0D00.000%p",nil,1)
-	CA__ItoCustom(SVA1(Str2,24),TotalEPerLoc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
-	PercentStrFix(Str2,TotalEPerLoc,24)
-	CA__InputVA(56*0,Str2,Str2s,nil,56*0,56*1-2)
-	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
-	
-	CA__SetValue(Str2,"\x04당신의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F\x0D00.000%p",nil,1)
-	CA__ItoCustom(SVA1(Str2,24),TotalEPer2Loc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
-	PercentStrFix(Str2,TotalEPer2Loc,24)
-	CA__InputVA(56*1,Str2,Str2s,nil,56*1,56*2-2)
-	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
-	
-	CA__SetValue(Str2,"\x04당신의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F\x0D00.000%p",nil,1)
-	CA__ItoCustom(SVA1(Str2,24),TotalEPer3Loc,nil,nil,{10,5},1,nil,nil,0x0F,{0,1,3,4,5},nil,{})
-	PercentStrFix(Str2,TotalEPer3Loc,24)
-	CA__InputVA(56*2,Str2,Str2s,nil,56*2,56*3-2)
-	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
+local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")})--O를 누를 경우 현재 적용중인 버프 상세 표기
+CIf(FP,{CD(PKey,1),CV(InterfaceNumLoc,0)})
 
-	CA__SetValue(Str2,"\x04당신의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C\x0D\x0D\x0D\x0D\x0D\x0D\x0D0%",nil,1)
-
-	CIf(FP,{CV(EXPIncomeLoc2,1,AtLeast)})
-	CA__ItoCustom(SVA1(Str2,21),EXPIncomeLoc2,nil,nil,{10,2},1,nil,"\x0D",0x1C)
-	CIfEnd()
-	
-	CA__InputVA(56*3,Str2,Str2s,nil,56*3,56*4-2)
-	CA__SetValue(Str2,MakeiStrVoid(54),0xFFFFFFFF,0) 
-	
-	
+for i = 1, 6 do
+	Byte_NumSet(TotalEPerLoc,E1VarArr1[i],10^(6-i),1,0x30)
+	Byte_NumSet(TotalEPer2Loc,E2VarArr1[i],10^(6-i),1,0x30)
+	Byte_NumSet(TotalEPer3Loc,E3VarArr1[i],10^(6-i),1,0x30)
 end
-local temp,PKey = KeyToggleFunc("P")--O를 누를 경우 현재 적용중인 버프 상세 표기
-CAPrint(iStr2,{Force1},{1,0,0,0,1,0,0,0},"TEST2",FP,{CD(PKey,1),CV(InterfaceNumLoc,0)}) 
+SetEPerStr(E1VarArr1)
+SetEPerStr(E2VarArr1)
+SetEPerStr(E3VarArr1)
+E1VarArr2 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
+E2VarArr2 = {E2VarArr1[1],E2VarArr1[2],E2VarArr1[3]}
+E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
+E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
+E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
+E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
+DisplayPrint(LCP, {"\x04당신의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E1VarArr2,".",E1VarArr3,"%p"})
+DisplayPrint(LCP, {"\x04당신의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
+DisplayPrint(LCP, {"\x04당신의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
+f_Mul(FP,EXPIncomeLoc2,10)
+DisplayPrint(LCP, {"\x04당신의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
+CIfEnd()
 FixText(FP, 2)
+
 
 
 

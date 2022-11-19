@@ -502,12 +502,13 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIfEnd()
 
 end
-function MSQC_KeySet(KeyName,DeathUnit) -- 키인식용 데스값 등록
-	MSQC_KeyArr[KeyName] = DeathUnit
+function MSQC_KeySet(KeyName,DeathUnit,KeyNum) -- 키인식용 데스값 등록
+	if KeyNum == nil then KeyNum = 1 end
+	MSQC_KeyArr[KeyName] = {DeathUnit,KeyNum}
 end
 
 function MSQC_KeyInput(Player,KeyName) -- 키인식용 조건
-	return Deaths(Player, AtLeast, 1, MSQC_KeyArr[KeyName])
+	return Deaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
 function MSQC_ExportEdsTxt()
 	
@@ -516,7 +517,7 @@ function MSQC_ExportEdsTxt()
 	io.output(CSfile)
 	io.write("[MSQC]\n")
 	for j,k in pairs(MSQC_KeyArr) do
-		io.write(j.." = "..k..",1".."\n")
+		io.write(j.." = "..k[1]..","..k[2].."\n")
 	end
 	io.close(CSfile)
 	
@@ -546,12 +547,19 @@ function KeyToggleFunc(KeyName)
 	return KeyToggle2,KeyToggle
 end
 
-function CDToggleFunc(Ccode)
+function ToggleFunc(CondArr,Mode)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
-	TriggerX(FP, {CD(Ccode,0)}, {SetCD(KeyToggle,0)}, {preserved})
-	TriggerX(FP, {CD(Ccode,1),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
-	TriggerX(FP, {CD(Ccode,1),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	if Mode ~= nil then
+		DoActionsX(FP,{SetCD(KeyToggle,0)})
+		TriggerX(FP, {CondArr[1],CD(KeyToggle2,1)}, {SetCD(KeyToggle2,0),SetCD(KeyToggle,1)}, {preserved})
+		TriggerX(FP, {CondArr[2]}, {SetCD(KeyToggle2,1)}, {preserved})
+	else
+		DoActionsX(FP,{SetCD(KeyToggle,0)})
+		TriggerX(FP, {CondArr[2],CD(KeyToggle2,0)}, {SetCD(KeyToggle2,1),SetCD(KeyToggle,1)}, {preserved})
+		TriggerX(FP, {CondArr[1]}, {SetCD(KeyToggle2,0)}, {preserved})
+	end
+
 	return KeyToggle2,KeyToggle
 end
 function KeyToggleOnce(KeyName)

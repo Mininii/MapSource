@@ -67,11 +67,9 @@ function Include_Vars()
 
 	--String
 	
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",11)) 
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
-	iStr2 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",4)) 
-	Str2, Str2a, Str2s = SaveiStrArr(FP,MakeiStrVoid(54))
-	
+
 
 
 
