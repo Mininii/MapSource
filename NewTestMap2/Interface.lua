@@ -73,12 +73,12 @@ function Interface()
 
 	local CheatDetect = iv.CheatDetect--CreateCcode()
 
-	B_IncomeMax = iv.B_IncomeMax--CreateVar(FP)
-	B_TotalEPer = iv.B_TotalEPer--CreateVar(FP)
-	B_TotalEPer2 = iv.B_TotalEPer2--CreateVar(FP)
-	B_TotalEPer3 = iv.B_TotalEPer3--CreateVar(FP)
-	B_Stat_EXPIncome = iv.B_Stat_EXPIncome--CreateVar(FP)
-	B_Credit = iv.B_Credit--CreateVar(FP)
+	local B_IncomeMax = iv.B_IncomeMax--CreateVar(FP)
+	local B_TotalEPer = iv.B_TotalEPer--CreateVar(FP)
+	local B_TotalEPer2 = iv.B_TotalEPer2--CreateVar(FP)
+	local B_TotalEPer3 = iv.B_TotalEPer3--CreateVar(FP)
+	local B_Stat_EXPIncome = iv.B_Stat_EXPIncome--CreateVar(FP)
+	local B_Credit = iv.B_Credit--CreateVar(FP)
 
 
 
@@ -785,14 +785,14 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],"10 Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
 	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],"5 Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
 	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],"5 Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
-	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x070.1%p \x08MAX 50 \x04- ",BColor3[5][2],"200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
-	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x070.1%p \x08MAX 30 \x04- ",BColor3[6][2],"1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
+	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],"200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
+	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],"1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
 	
 	CIfXEnd()
 	DoActions(FP,{SetCp(FP)})
 
 	for i = 0,6 do
-		CIf(FP,{PlayerCheck(i, 1)})
+		CIf(FP,{HumanCheck(i, 1)})
 			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,0x10000-1,20)})
 			for j = 1, 6 do
 				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StrDesign(j.."번줄 설명서"))}, {preserved})
