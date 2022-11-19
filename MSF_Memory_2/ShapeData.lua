@@ -319,6 +319,10 @@ CenLineX = CSMakeLine(2,48,90,86*2,0)
 
 CCS1 = CS_ConnectPathX({3   ,{32, 2240},{416, 2048},{32, 1856}},8,1)
 CCS2 = CS_ConnectPathX({3   ,{4096-32, 2240},{4096-416, 2048},{4096-32, 1856}},8,1)
+
+
+tesSh01 = CSMakeTornado(12,128,18,4,1)
+tesSh02 = CS_Rotate(CS_SortR(CS_FillPathXY(HCC, 0, 72, 72, 0), 1), 180)
 --------------------------------------------------------------
 
 	function G_CA_Shape(t)
@@ -410,7 +414,8 @@ CCS2 = CS_ConnectPathX({3   ,{4096-32, 2240},{4096-416, 2048},{4096-32, 1856}},8
 		"CenLineX",
 		"CCS1",
 		"CCS2",
-
+		"tesSh01",
+		"tesSh02",
 	}
 	)
 

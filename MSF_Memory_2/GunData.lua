@@ -1259,6 +1259,25 @@ BossUID = {87,74,5,2}
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 4 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
+	end
+	for i = 5, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],12))
+	end
+
+
+	TriggerX(FP,{Gun_Line(8,AtLeast,8090)},{SetV(CA_ACCR,0)})
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,8090)},{SetV(CA_Create,2000+55),SWEffArr1},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,8090)},{SetV(CA_Create,2000+56),SWEffArr2},1)
+	--G_CA_SetSpawn({Gun_Line(8,AtLeast,8090)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	--G_CA_SetSpawn({Gun_Line(8,AtLeast,8090)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+
+
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 4 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],8))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
 	end
@@ -1266,17 +1285,13 @@ BossUID = {87,74,5,2}
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
 	end
-	TriggerX(FP,{Gun_Line(8,AtLeast,12130)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
-	TriggerX(FP,{Gun_Line(8,AtLeast,12800)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
-	TriggerX(FP,{Gun_Line(8,AtLeast,13480)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
-	TriggerX(FP,{Gun_Line(8,AtLeast,14150)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
-	TriggerX(FP,{Gun_Line(8,AtLeast,14830)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
-	TriggerX(FP,{Gun_Line(8,AtLeast,15500)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
-	TriggerX(FP,{Gun_Line(8,AtLeast,16180)},{SetV(CA_Eff_DRat2,100000),SWEffArr1})
-	TriggerX(FP,{Gun_Line(8,AtLeast,16850)},{SetV(CA_Eff_DRat3,100000),SWEffArr2})
+	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
+		local RetT
+		if j%2 == 1 then RetT = SWEffArr1 else RetT = SWEffArr2 end
+		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(CA_Eff_DRat2,150000),RetT})
+	end
 
 	
-	TriggerX(FP,{Gun_Line(8,AtLeast,8090)},{SetV(CA_ACCR,0)})
 
 	CIf(FP,Gun_Line(8,AtLeast,17520))
 	TriggerX(FP,{Gun_Line(8,AtLeast,17520),Gun_Line(8,AtMost,22920)},{AddV(CA_ACCR,1)},{preserved})
@@ -1293,37 +1308,37 @@ BossUID = {87,74,5,2}
 		Gun_SetLine(18-1,Add,1),
 		Gun_SetLine(19-1,Add,1),},{preserved})
 	CIfEnd()
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,12130)},{SetV(CA_Create,2000+55)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,12800)},{SetV(CA_Create,2000+55)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,13480)},{SetV(CA_Create,2000+55)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,14150)},{SetV(CA_Create,2000+55)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,14830)},{SetV(CA_Create,2000+56)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,15500)},{SetV(CA_Create,2000+56)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,16180)},{SetV(CA_Create,2000+56)},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,16850)},{SetV(CA_Create,2000+56)},1)
+	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
+		local RetT
+		if j <= 4 then RetT = 2000+21 else RetT = 2000+88 end
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT)},1)
+	end
+
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 4 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],1))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],4))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
 	end
 	for i = 5, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
-		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],1))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],4))
 	end
 	for i = 0, 31 do
 		local nsw
 		if i%8==0 then nsw = SWEffArr1 end
 		if (i+4)%8==0 then nsw = SWEffArr2 end
 		local cuid
-		if i<=7 then cuid = 55 end  
-		if i>=8 and i<=15 then cuid = 56 end  
-		if i>=16 and i<=23 then cuid = 21 end  
-		if i>=24 and i<=31 then cuid = 88 end  
+		if i<=7 then cuid = 21 end  
+		if i>=8 and i<=15 then cuid = 88 end  
+		if i>=16 and i<=23 then cuid = 22 end  
+		if i>=24 and i<=31 then cuid = 70 end  
 		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,22920+(337*i))},{SetV(CA_Create,2000+cuid),nsw},1)
-		
-		
 	end
+	--34040
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,34040)},{15,56},"ACAS","tesSh01",8,0,nil,nil,nil,nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,44150)},{17,28},"ACAS","tesSh02",8,0,nil,nil,nil,nil,1)
+	
 
 
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
