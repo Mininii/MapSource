@@ -214,4 +214,128 @@ function Install_CallTriggers()
 	CiSub(FP,screenX2,screenX,screenSizeX)
 
 	SetCallEnd()
+	G_Btnptr = CreateVar(FP)
+	G_BtnFnm = CreateVar(FP)
+	G_PushBtnm = CreateVar(FP)
+	G_BtnCP = CreateVar(FP)
+	local VArrI,VArrI4 = CreateVars(2,FP)
+
+	Call_BtnFnc = SetCallForward()
+	SetCall(FP)
+	CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
+	CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
+	--Print_13X(FP,G_BtnCP)
+
+	f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
+	CrShift(FP,G_PushBtnm,16)
+
+	CIfX(FP,{Never()})
+	CElseIfX(CV(G_BtnFnm,1))--자동구매
+	local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 7)
+	local GetNum = CreateVar(FP)
+	local GetABData = CreateVar(FP)
+	local PBJump = def_sIndex()
+	local PBJump2 = def_sIndex()
+	NJump(FP, PBJump, CV(G_PushBtnm,24))
+	CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
+	CMovX(FP,GetABData,VArrX(AutoBuyVArr,VArrI,VArrI4))
+	CIfX(FP,{TNVar(GetNum, Exactly, GetABData)})
+	DisplayPrintEr(G_BtnCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+	CElseX()
+	DisplayPrintEr(G_BtnCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
+	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
+	CIfXEnd()
+	CJump(FP, PBJump2)
+	NJumpEnd(FP, PBJump)
+	DisplayPrintEr(G_BtnCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+	CJumpEnd(FP,PBJump2)
+
+
+
+
+	CElseIfX({CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,5,AtMost)})--자동강화 1~25
+	TriggerX(FP, {CV(G_BtnFnm,3)}, AddV(G_PushBtnm,25), {preserved})
+	TriggerX(FP, {CV(G_BtnFnm,5)}, AddV(G_PushBtnm,25), {preserved})
+	local GetArrNum = CreateVar(FP)
+	local GetArrNum2 = CreateVar(FP)
+	local TxtColor = CreateVar(FP)
+	f_Mul(FP, GetArrNum2, G_PushBtnm, 7)
+	CAdd(FP,GetArrNum2,G_BtnCP)
+	ConvertArr(FP,GetArrNum,GetArrNum2)
+
+	DoActionsX(FP,{SetV(TxtColor,0x06),AddV(G_PushBtnm,1)})
+	TriggerX(FP, {CV(G_PushBtnm,26,AtLeast)}, SetV(TxtColor,0x0F), {preserved})
+
+	CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
+	CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』"})
+	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
+	CElseX()
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』"})
+	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
+	CIfXEnd()
+	CIfEnd()
+	CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
+	CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』"})
+	CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
+
+	CElseX()
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』"})
+	CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
+	CIfXEnd()
+	CIfEnd()
+	
+
+	
+
+
+
+
+
+	CIfXEnd()
+
+
+
+	CIfEnd()--ShopEnd
+	CDoActions(FP,{
+		TSetMemory(_Add(G_Btnptr,0x98/4),SetTo,0 + 228*65536);
+		TSetMemory(_Add(G_Btnptr,0x9C/4),SetTo,228 + 228*65536);
+		TSetMemoryX(_Add(G_Btnptr,0xA0/4),SetTo,228,0xFFFF)})
+	CIfEnd()
+
+
+		
+	SetCallEnd()
+
+
+
+	Call_BtnInit = SetCallForward()
+
+	local BtnFncArr = {
+		TestShop[1], -- 유닛 자동구매기
+		SettingUnit1[1], -- 1~25강유닛 자동강화 설정
+		SettingUnit2[1], -- 26~39유닛 자동강화 설정
+		SettingUnit3[1], -- 15~25강유닛 자동판매 설정
+		SettingUnit4[1], -- 26~39유닛 자동판매 설정
+		ShopUnit[1], -- 배율설정
+	}
+	SetCall(FP)
+	ConvertVArr(FP,VArrI,VArrI4,G_BtnCP,7)
+	for j,k in pairs(BtnFncArr) do
+		local BtnVA = GetVArray(k, 7)
+		CMovX(FP,G_Btnptr,VArrX(BtnVA,VArrI,VArrI4),nil,nil,nil,1)
+		CallTrigger(FP,Call_BtnFnc,{SetV(G_BtnFnm,j)})
+	end
+	
+
+
+
+		
+	SetCallEnd()
+
+
+
 end

@@ -71,8 +71,94 @@ function Include_Vars()
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 
 
+	-- Interface Variable
+
+	iv={} -- 전역 변수 테이블
+
+	--PlayData(NonSCA)
+	iv.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	iv.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
+	iv.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
+	iv.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	iv.BuildMul2 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	iv.TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
+	iv.TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
+	iv.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	iv.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
+	iv.ScTimer = CreateCcodeArr(7)
+
+	--General
+	iv.BossLV = CreateVar(FP)
+	
+	--Setting, Effect
+	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
+	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
+	iv.InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
+	iv.Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	iv.AutoBuyCode = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
+	iv.PCheckV = CreateVar(FP)--플레이어 수 체크
+	iv.MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	
+	--PlayData(SCA)
+	iv.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
+	iv.StatP = CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
+	iv.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	iv.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	
+	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
+	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
+	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
+	iv.Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
+	iv.Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
+	iv.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
+	iv.TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
+	iv.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	--Local Data Variable
+	iv.IncomeMaxLoc = CreateVar(FP)
+	iv.IncomeLoc = CreateVar(FP)
+	iv.LevelLoc = CreateVar(FP)
+	iv.LevelLoc2 = CreateVar(FP)
+	iv.TotalEPerLoc = CreateVar(FP)
+	iv.TotalEPer2Loc = CreateVar(FP)
+	iv.TotalEPer3Loc = CreateVar(FP)
+	iv.S_TotalEPerLoc = CreateVar(FP)
+	iv.S_TotalEPer2Loc = CreateVar(FP)
+	iv.S_TotalEPer3Loc = CreateVar(FP)
+	iv.StatPLoc = CreateVar(FP)
+	iv.MoneyLoc = CreateWar(FP)
+	iv.CredLoc = CreateWar(FP)
+	iv.ExpLoc = CreateVar(FP)
+	iv.TotalExpLoc = CreateVar(FP)
+	iv.InterfaceNumLoc = CreateVar(FP)
+	iv.UpgradeLoc = CreateVar(FP)
+	iv.EXPIncomeLoc = CreateVar(FP)
+	iv.EXPIncomeLoc2 = CreateVar(FP)
+	iv.StatEffLoc = CreateCcode()
+	iv.ScoutDmgLoc = CreateVar(FP)
+	iv.AddScLoc = CreateVar(FP)
+	iv.MulOpLoc = CreateVar(FP)
+	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
+	iv.LCP = CreateVar(FP)
+
+	--Temp
+	iv.CTStatP2 = CreateVar(FP)
+
+	iv.TempReadV = CreateVar(FP)
+	iv.TempEXPV = CreateVar(FP)
+
+	iv.CheatDetect = CreateCcode()
+
+	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
+
+	iv.B_IncomeMax = CreateVar(FP)
+	iv.B_TotalEPer = CreateVar(FP)
+	iv.B_TotalEPer2 = CreateVar(FP)
+	iv.B_TotalEPer3 = CreateVar(FP)
+	iv.B_Stat_EXPIncome = CreateVar(FP)
+	iv.B_Credit = CreateVar(FP)
 
 	--Balance
 

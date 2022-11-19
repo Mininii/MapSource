@@ -1,43 +1,85 @@
 function Interface()
 
 	--PlayData(NonSCA)
-	local Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
-	local IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
-	local Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
-	local BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
-	local BuildMul2 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
-	local TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
-	local TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
-	local TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
-	local ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
-	local ScTimer = CreateCcodeArr(7)
+	local Money = iv.Money-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	local IncomeMax = iv.IncomeMax-- CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
+	local Income = iv.Income-- CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
+	local BuildMul1 = iv.BuildMul1-- CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	local BuildMul2 = iv.BuildMul2-- CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--총 강화확률(기본 1강)
+	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--총 강화확률(+2강)
+	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--총 강화확률(+3강)
+	local ScoutDmg = iv.ScoutDmg-- CreateVarArr(7,FP) -- 기본유닛 데미지
+	local ScTimer = iv.ScTimer-- CreateCcodeArr(7)
 
 	--General
-	local BossLV = CreateVar(FP)
+	local BossLV = iv.BossLV-- CreateVar(FP)
 	
 	--Setting, Effect
-	local StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
-	local StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
-	local InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
-	local Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
-	local AutoBuyCode = CreateCcodeArr(7)-- 자동 구입 제어 데스값
-	local PCheckV = CreateVar(FP)--플레이어 수 체크
-	local MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	local StatEff = iv.StatEff--CreateCcodeArr(7) -- 레벨업 이펙트
+	local StatEffT2 = iv.StatEffT2--CreateCcodeArr(7) -- 레벨업 이펙트
+	local InterfaceNum = iv.InterfaceNum--CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
+	local Stat_Upgrade_UI = iv.Stat_Upgrade_UI--CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	local AutoBuyCode = iv.AutoBuyCode--CreateCcodeArr(7)-- 자동 구입 제어 데스값
+	local PCheckV = iv.PCheckV--CreateVar(FP)--플레이어 수 체크
+	local MulOp = iv.MulOp--CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
 	--PlayData(SCA)
-	local PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
-	local StatP = CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
-	local Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	local Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
+	local StatP = iv.StatP--CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
+	local Stat_ScDmg = iv.Stat_ScDmg--CreateVarArr(7,FP)-- 사냥터 업글 수치
+	local Stat_AddSc = iv.Stat_AddSc--CreateVarArr(7,FP)-- 사냥터 업글 수치
 	
-	local Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
-	local Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
-	local Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
-	local Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
-	local Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
-	local PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
-	local TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
-	local CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	local Stat_TotalEPer = iv.Stat_TotalEPer--CreateVarArr(7,FP)-- +1강 확업 수치
+	local Stat_TotalEPer2 = iv.Stat_TotalEPer2--CreateVarArr(7,FP)-- +2강 확업 수치
+	local Stat_TotalEPer3 = iv.Stat_TotalEPer3--CreateVarArr(7,FP)-- +3강 확업 수치
+	local Stat_Upgrade = iv.Stat_Upgrade--CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
+	local Credit = iv.Credit--CreateWarArr(7,FP) -- 보유중인 크레딧
+	local PEXP = iv.PEXP--CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
+	local TotalExp = iv.TotalExp--CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
+	local CurEXP = iv.CurEXP--CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	--Local Data Variable
+	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
+	local IncomeLoc = iv.IncomeLoc--CreateVar(FP)
+	local LevelLoc = iv.LevelLoc--CreateVar(FP)
+	local LevelLoc2 = iv.LevelLoc2--CreateVar(FP)
+	local TotalEPerLoc = iv.TotalEPerLoc--CreateVar(FP)
+	local TotalEPer2Loc = iv.TotalEPer2Loc--CreateVar(FP)
+	local TotalEPer3Loc = iv.TotalEPer3Loc--CreateVar(FP)
+	local S_TotalEPerLoc = iv.S_TotalEPerLoc--CreateVar(FP)
+	local S_TotalEPer2Loc = iv.S_TotalEPer2Loc--CreateVar(FP)
+	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
+	local StatPLoc = iv.StatPLoc--CreateVar(FP)
+	local MoneyLoc = iv.MoneyLoc--CreateWar(FP)
+	local CredLoc = iv.CredLoc--CreateWar(FP)
+	local ExpLoc = iv.ExpLoc--CreateVar(FP)
+	local TotalExpLoc = iv.TotalExpLoc--CreateVar(FP)
+	local InterfaceNumLoc = iv.InterfaceNumLoc--CreateVar(FP)
+	local UpgradeLoc = iv.UpgradeLoc--CreateVar(FP)
+	local EXPIncomeLoc = iv.EXPIncomeLoc--CreateVar(FP)
+	local EXPIncomeLoc2 = iv.EXPIncomeLoc2--CreateVar(FP)
+	local StatEffLoc = iv.StatEffLoc--CreateCcode()
+	local ScoutDmgLoc = iv.ScoutDmgLoc--CreateVar(FP)
+	local AddScLoc = iv.AddScLoc--CreateVar(FP)
+	local MulOpLoc = iv.MulOpLoc--CreateVar(FP)
+	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
+	local LCP = iv.LCP--CreateVar(FP)
+
+	--Temp
+	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
+
+	local TempReadV = iv.TempReadV--CreateVar(FP)
+	local TempEXPV = iv.TempEXPV--CreateVar(FP)
+
+	local CheatDetect = iv.CheatDetect--CreateCcode()
+
+	B_IncomeMax = iv.B_IncomeMax--CreateVar(FP)
+	B_TotalEPer = iv.B_TotalEPer--CreateVar(FP)
+	B_TotalEPer2 = iv.B_TotalEPer2--CreateVar(FP)
+	B_TotalEPer3 = iv.B_TotalEPer3--CreateVar(FP)
+	B_Stat_EXPIncome = iv.B_Stat_EXPIncome--CreateVar(FP)
+	B_Credit = iv.B_Credit--CreateVar(FP)
+
 
 
 
@@ -62,47 +104,13 @@ function Interface()
 	end
 	
 	--PlayData(NotSureSCA)
-	local Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
-	local PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
+	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
 
 
 
-	--Local Data Variable
-	local IncomeMaxLoc = CreateVar(FP)
-	local IncomeLoc = CreateVar(FP)
-	local LevelLoc = CreateVar(FP)
-	local LevelLoc2 = CreateVar(FP)
-	local TotalEPerLoc = CreateVar(FP)
-	local TotalEPer2Loc = CreateVar(FP)
-	local TotalEPer3Loc = CreateVar(FP)
-	local S_TotalEPerLoc = CreateVar(FP)
-	local S_TotalEPer2Loc = CreateVar(FP)
-	local S_TotalEPer3Loc = CreateVar(FP)
-	local StatPLoc = CreateVar(FP)
-	local MoneyLoc = CreateWar(FP)
-	local CredLoc = CreateWar(FP)
-	local ExpLoc = CreateVar(FP)
-	local TotalExpLoc = CreateVar(FP)
-	local InterfaceNumLoc = CreateVar(FP)
-	local UpgradeLoc = CreateVar(FP)
-	local EXPIncomeLoc = CreateVar(FP)
-	local EXPIncomeLoc2 = CreateVar(FP)
-	local StatEffLoc = CreateCcode()
-	local ScoutDmgLoc = CreateVar(FP)
-	local AddScLoc = CreateVar(FP)
-	local MulOpLoc = CreateVar(FP)
-	local BrightLoc = CreateVar2(FP,nil,nil,31)
-	local LCP = CreateVar(FP)
-
-	--Temp
-	local CTStatP2 = CreateVar(FP)
-
-	local TempReadV = CreateVar(FP)
-	local TempEXPV = CreateVar(FP)
-
-	local CheatDetect = CreateCcode()
 	--local GEXP = CreateVar(FP)
 	local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
 
@@ -114,14 +122,6 @@ function Interface()
 	CMov(FP,Dv,DtP) 
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP)},1)--맨처음 시간값 튐 방지
-	function AutoBuy(CP,LvUniit,Cost)--Cost==String
-		CIf(FP,{Memory(0x628438,AtLeast,1),CD(AutoBuyCode[CP+1],LvUniit)})
-			CIf(FP, {TTNWar(Money[CP+1],AtLeast,Cost)})
-				f_LSub(FP, Money[CP+1], Money[CP+1], Cost)
-				CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-			CIfEnd()
-		CIfEnd()
-	end
 	CMov(FP,PCheckV,0)
 	ULimitArr = {500,350,300,250,200,200,200}
 	ULimitV = CreateVar(FP)
@@ -300,12 +300,12 @@ end
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
-	--if Limit == 1 then 
-	--	CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
-	--	CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
-	--	--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
-	--	CIfEnd()
-	--end
+	if Limit == 1 then 
+		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
+		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
+		CIfEnd()
+	end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 
@@ -344,104 +344,53 @@ end
 		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 	end
 
-
-	BtnSetInit(i,TestShop) -- 유닛 자동구매기
-		for j, k in pairs(AutoBuyArr) do
-			CIfBtnFunc(i,j-1,StrDesign("\x06"..k[1].."강 \x04유닛 \x1B자동구입 \x08OFF"),StrDesign("\x06"..k[1].."강 \x04유닛 \x1B자동구입 \x07ON"),CD(AutoBuyCode[i+1],k[1]),SetCD(AutoBuyCode[i+1],0),SetCD(AutoBuyCode[i+1],k[1]))
-			CIfEnd()
-		end
-	
-		CIfBtnFunc(i,24,StrDesign("\x04유닛 \x1B자동구입 \x08OFF"),StrDesign("\x04유닛 \x1B자동구입 \x07OFF"),nil,SetCD(AutoBuyCode[i+1],0),SetCD(AutoBuyCode[i+1],0))
-		CIfEnd()
-	BtnSetEnd()
-
-	BtnSetInit(i,SettingUnit1) -- 1~25강유닛 자동강화 설정
-
-	for j = 1, 25 do
-		local ContentStr1 = "\x06"..j.."강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨)"
-		local ContentStr2 = "\x06"..j.."강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨)"
-		CIfBtnFunc(i,j-1,StrDesign(ContentStr1),StrDesign(ContentStr2),CD(AutoEnchArr[j][i+1],0),{SetCD(AutoEnchArr[j][i+1],1)},SetCD(AutoEnchArr[j][i+1],0))--SetCD(AutoSellArr[j][i+1],0)
-	
-		CIfEnd()
-	end
-	BtnSetEnd()
-
-	BtnSetInit(i,SettingUnit2) -- 26~39유닛 자동강화 설정
-
-	for j = 26, 39 do
-		local ContentStr1 = "\x0F"..j.."강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨)"
-		local ContentStr2 = "\x0F"..j.."강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨)"
-		CIfBtnFunc(i,j-26,StrDesign(ContentStr1),StrDesign(ContentStr2),CD(AutoEnchArr[j][i+1],0),{SetCD(AutoEnchArr[j][i+1],1)},SetCD(AutoEnchArr[j][i+1],0))--SetCD(AutoSellArr[j][i+1],0)
-	
-		CIfEnd()
-	end
-	BtnSetEnd()
+	CallTrigger(FP,Call_BtnInit,{SetV(G_BtnCP,i)})
 
 	
-	BtnSetInit(i,SettingUnit3) -- 15~25강유닛 자동판매 설정
-	for j = 15, 25 do
-		local ContentStr1 = "\x06"..j.."강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨)"
-		local ContentStr2 = "\x06"..j.."강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨)"
-		CIfBtnFunc(i,j-1,StrDesign(ContentStr1),StrDesign(ContentStr2),CD(AutoSellArr[j][i+1],0),{SetCD(AutoSellArr[j][i+1],1)},SetCD(AutoSellArr[j][i+1],0))--SetCD(AutoEnchArr[j][i+1],0)
-	
-		CIfEnd()
-	end
-	BtnSetEnd()
-	
-	BtnSetInit(i,SettingUnit4) -- 26~39유닛 자동판매 설정
-	for j = 26, 40 do
-		local ContentStr1 = "\x0F"..j.."강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨)"
-		local ContentStr2 = "\x0F"..j.."강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨)"
-		CIfBtnFunc(i,j-26,StrDesign(ContentStr1),StrDesign(ContentStr2),CD(AutoSellArr[j][i+1],0),{SetCD(AutoSellArr[j][i+1],1)},SetCD(AutoSellArr[j][i+1],0))--SetCD(AutoEnchArr[j][i+1],0)
-	
-		CIfEnd()
-	end
-	BtnSetEnd()
-	
-	BtnSetInit(i,ShopUnit) -- 1~25강유닛 자동강화 설정
+--	BtnSetInit(i,ShopUnit) -- 1~25강유닛 자동강화 설정--
 
-	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 0*65536)}) -- 배율 올림
-	CallTrigger(FP,Call_Print13[i+1])
-	CIfX(FP,{CV(MulOp[i+1],10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
-	f_Mul(FP,MulOp[i+1],10)
-	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
-	CElseX()--조건이 만족하지 않을 경우
-	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
-	CIfXEnd()
-	CIfEnd()
-	
-	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 1*65536)}) -- 배율 내림
-	CallTrigger(FP,Call_Print13[i+1])
-	CIfX(FP,{CV(MulOp[i+1],2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
-	f_Div(FP,MulOp[i+1],10)
-	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
-	CElseX()--조건이 만족하지 않을 경우
-	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
-	CIfXEnd()
-	CIfEnd()
+--	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 0*65536)}) -- 배율 올림
+--	CallTrigger(FP,Call_Print13[i+1])
+--	CIfX(FP,{CV(MulOp[i+1],10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+--	f_Mul(FP,MulOp[i+1],10)
+--	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+--	CElseX()--조건이 만족하지 않을 경우
+--	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+--	CIfXEnd()
+--	CIfEnd()
+--	
+--	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 1*65536)}) -- 배율 내림
+--	CallTrigger(FP,Call_Print13[i+1])
+--	CIfX(FP,{CV(MulOp[i+1],2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+--	f_Div(FP,MulOp[i+1],10)
+--	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+--	CElseX()--조건이 만족하지 않을 경우
+--	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+--	CIfXEnd()
+--	CIfEnd()--
+--
+--
 
-
-
-	BtnSetEnd()
+--	BtnSetEnd()
 
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})
 			
-		CIf(FP,CD(AutoEnchArr[j][i+1],1))
-		CallTriggerX(FP,Call_Print13[i+1],{CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)})
-		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)}, {SetCD(AutoEnchArr[j][i+1],0)}, {preserved})
-		TriggerX(FP, {CD(AutoEnchArr[j][i+1],1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
+		CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
+		CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
+		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0)}, {preserved}) 
+		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
 		CIfEnd()
 
-		CIf(FP,CD(AutoSellArr[j][i+1],1))
-		CallTriggerX(FP,Call_Print13[i+1],{CD(AutoSellArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)})
-		TriggerX(FP, {CD(AutoSellArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		TriggerX(FP, {CD(AutoSellArr[j][i+1],1),CD(AutoEnchArr2[j][i+1],0)}, {SetCD(AutoSellArr[j][i+1],0)}, {preserved})
-		TriggerX(FP, {CD(AutoSellArr[j][i+1],1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
+		CIf(FP,MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1))
+		CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
+		TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0)}, {preserved})
+		TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		CIfEnd()
 	end
-	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),CD(AutoBuyCode[i+1],1,AtLeast)}) -- 자동구매 관리
+	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),CV(AutoBuyCode[i+1],1,AtLeast)}) -- 자동구매 관리
 	for j, k in pairs(AutoBuyArr) do
 		AutoBuy(i,k[1],k[2])
 	end
@@ -526,48 +475,20 @@ end
 	CMov(FP,TotalEPer[i+1],Stat_TotalEPer[i+1],nil,nil,1)
 	CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
-	CIf(FP,{CV(BossLV,1,AtLeast)}) -- 각보스 클리어시
-		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
-		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],12) -- 사냥터 유닛수 +12 증가
-		CAdd(FP,TotalEPer[i+1],1500) -- 강화확률 +1.5%p
-	CIfEnd()
 
-	CIf(FP,{CV(BossLV,2,AtLeast)}) -- 각보스 클리어시
-		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"200") -- 크레딧 지급
-		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],9) -- 사냥터 유닛수 +8 증가
-		CAdd(FP,TotalEPer[i+1],2500) -- 강화확률 +2.5%p
-	CIfEnd()
 
-	CIf(FP,{CV(BossLV,3,AtLeast)}) -- 각보스 클리어시
-		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"500") -- 크레딧 지급
-		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],6) -- 사냥터 유닛수 +8 증가
-		CAdd(FP,TotalEPer[i+1],3500) -- 강화확률 +3.5%p
-		CAdd(FP,Stat_EXPIncome[i+1],3) -- 판매시 경험치 30% 증가
-	CIfEnd()
-	CIf(FP,{CV(BossLV,4,AtLeast)}) -- 각보스 클리어시
-		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"2000") -- 크레딧 지급
-		CIfEnd()
-		CAdd(FP,IncomeMax[i+1],9) -- 사냥터 유닛수 +8 증가
-		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
-		CAdd(FP,TotalEPer2[i+1],1000) -- +2 강화확률 +1.0%p
-		CAdd(FP,Stat_EXPIncome[i+1],2) -- 판매시 경험치 20% 증가
-	CIfEnd()
 
-	CIf(FP,{CV(BossLV,5,AtLeast)}) -- 각보스 클리어시
-		CIfOnce(FP,{},{SetV(Time,55000),SetCp(i),DisplayText(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4),SetCp(FP)})
-		f_LAdd(FP,Credit[i+1],Credit[i+1],"10000") -- 크레딧 지급
-		CIfEnd()
-		CAdd(FP,TotalEPer[i+1],3000) -- 강화확률 +3.0%p
-		CAdd(FP,TotalEPer3[i+1],500) -- +3 강화확률 +0.5%p
-		CAdd(FP,Stat_EXPIncome[i+1],2) -- 판매시 경험치 20% 증가
-	CIfEnd()
+	CAdd(FP,IncomeMax[i+1],B_IncomeMax)
+	CAdd(FP,TotalEPer[i+1],B_TotalEPer)
+	CAdd(FP,TotalEPer2[i+1],B_TotalEPer2)
+	CAdd(FP,TotalEPer3[i+1],B_TotalEPer3)
+	CAdd(FP,Stat_EXPIncome[i+1],B_Stat_EXPIncome)
 
+	CIf(FP,{CV(B_Credit,1,AtLeast)})
+	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_Credit,0}) -- 크레딧 지급
+	CIfEnd({})
+
+	
 	DoActionsX(FP,{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 0),SetMemoryB(0x58F32C+(i*15)+12, SetTo, 0),SetV(Stat_Upgrade_UI[i+1],0)})
 	for CBit = 0, 7 do -- 8비트 연산을 통한 업글수치 복사
 		TriggerX(FP,{NVar(Stat_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit),AddV(Stat_Upgrade_UI[i+1],(2^CBit)*10)},{preserved})
@@ -623,16 +544,15 @@ end
 			
 		end
 		TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-		CIf(FP,{CV(TempEXPV,1,AtLeast)})
-			f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXPV,0})
-			CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
-				CAdd(FP,PEXP2[i+1],_Mul(TempEXPV,Stat_EXPIncome[i+1]))
-				f_LAdd(FP, PEXP[i+1], PEXP[i+1], {_Div(PEXP2[i+1],_Mov(10)),0})
-				f_Mod(FP, PEXP2[i+1], 10)
-			CIfEnd()
-		CIfEnd()
+        CIf(FP,{CV(TempEXPV,1,AtLeast)})
+            f_LAdd(FP, PEXP[i+1], PEXP[i+1], {TempEXPV,0})
+            CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
+                CAdd(FP,PEXP2[i+1],_Mul(TempEXPV,Stat_EXPIncome[i+1]))
+                f_LAdd(FP, PEXP[i+1], PEXP[i+1], {_Div(PEXP2[i+1],_Mov(10)),0})
+                f_Mod(FP, PEXP2[i+1], 10)
+            CIfEnd()
+        CIfEnd()
 		CIfXEnd()
-
 	CIfEnd()
 
 	
@@ -699,6 +619,43 @@ Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlay
 TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,1)},{preserved})--카운트다운 타이머 존재시
 TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--5배속템 안삿을경우
 TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--5배속템 삿을경우
+
+CMov(FP,B_Credit,0)
+
+Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
+	AddV(B_IncomeMax,12),--사냥터 유닛수 12 증가
+	AddV(B_TotalEPer,1500),--강화확률 +1.5%p
+	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+})
+Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
+	AddV(B_IncomeMax,9),--사냥터 유닛수 9 증가
+	AddV(B_TotalEPer,2500),--강화확률 +2.5%p
+	AddV(B_Credit,200),--크레딧 200
+	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+})
+Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
+	AddV(B_IncomeMax,6), -- 사냥터 유닛수 +6 증가
+	AddV(B_TotalEPer,3500), -- 강화확률 +3.5%p
+	AddV(B_Credit,500),--크레딧 500
+	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
+	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+})
+Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
+	AddV(B_IncomeMax,9),-- 사냥터 유닛수 +9 증가
+	AddV(B_TotalEPer,3000),-- 강화확률 +3.0%p
+	AddV(B_TotalEPer2,1000), -- +2 강화확률 +1.0%p
+	AddV(B_Credit,2000),--크레딧 2000
+	AddV(B_Stat_EXPIncome,2), -- 판매시 경험치 20% 증가
+	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+})
+Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
+	AddV(B_TotalEPer,3000),
+	AddV(B_TotalEPer3,500),
+	AddV(B_Credit,10000),
+	AddV(B_Stat_EXPIncome,2), -- 판매시 경험치 20% 증가
+	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+})
+
 
 
 
@@ -1100,8 +1057,8 @@ CIfXEnd()
 
 CIf(FP,{CD(BossFlag,0)})
 local TotalEPer4Loc = CreateVar(FP)
-CAdd(FP,TotalEPer3Loc,_Div(SelPer,100))
-CAdd(FP,TotalEPer2Loc,_Div(SelPer,10))
+CAdd(FP,TotalEPer3Loc,_Div(SelPer,_Mov(100)))
+CAdd(FP,TotalEPer2Loc,_Div(SelPer,_Mov(10)))
 CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
 
 CSub(FP,TotalEPer4Loc,_Mov(100000),_Add(_Add(TotalEPerLoc,TotalEPer3Loc),TotalEPer2Loc))

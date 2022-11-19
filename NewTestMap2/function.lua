@@ -279,6 +279,18 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 	CIfEnd()
 	FuncAlloc = FuncAlloc + 1
 end
+function Print_13X(PlayerID,TargetPlayer,String)
+	local Y = {}
+	if String ~= nil then
+		table.insert(Y,print_utf8(12, 0, String))
+	end
+	CIf(PlayerID,Memory(0x628438,AtLeast,1))
+		f_ReadX(PlayerID,0x628438,V(FuncAlloc),1,0xFFFFFF)
+		CDoActions(PlayerID,{SetMemory(0x628438,SetTo,0),TCreateUnit(1,0,"Anywhere",TargetPlayer),Y})
+		CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
+	CIfEnd()
+	FuncAlloc = FuncAlloc + 1
+end
 
 function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType)
 	if DefType == nil then DefType = 0 end
@@ -330,18 +342,25 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	end
 	SetUnitsDatX(UnitID, {Class=193})
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
-	table.insert(AutoEnchArr,CreateCcodeArr(7))
+	AutoEnchArr = CreateArr(7*#LevelUnitArr, FP)
+	--AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	table.insert(AutoEnchArr2,CreateCcodeArr(7))
-	table.insert(AutoSellArr,CreateCcodeArr(7))
+	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
 	
 	
 end
 function PopLevelUnit()
 	LevelDataArr = CreateArr(#LevelUnitArr, FP)
+	BuyDataArr = CreateArr(#AutoBuyArr,FP)
+	BuyDataWArr = CreateWArr(#AutoBuyArr,FP)
 	for j,k in pairs(LevelUnitArr) do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
 	end
 	
+	for j,k in pairs(AutoBuyArr) do
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j-1),SetTo,k[1]))
+		--table.insert(CtrigInitArr[FP+1],SetCWAar(WArr(BuyDataWArr,j-1),SetTo,k[2]))
+	end
 	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- 최강유닛 강화확률 감추기
 
 	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
@@ -687,8 +706,12 @@ function DisplayPrintEr(TargetPlayer,arg)
 			PushErrorMsg("Print_Inputdata_Error")
 		end
 	end
-	CallTrigger(FP, Call_Print13[TargetPlayer+1])
-	CIf(FP, {TMemory(0x512684,AtLeast,TargetPlayer)})
+	if type(TargetPlayer) == "table" and TargetPlayer[4] == "V" then
+		Print_13X(FP, TargetPlayer)
+	else
+		CallTrigger(FP, Call_Print13[TargetPlayer+1])
+	end
+	CIf(FP, {TMemory(0x512684,Exactly,TargetPlayer)})
 	DoActions2(FP, RetAct)
 	for j,p in pairs(ItoDecKey) do
 		local k = p[1]
@@ -782,4 +805,14 @@ for i = 1, 11 do
 end
 function MLine(Var,Line)--1~11
 	return {CV(Var,MLT[Line],AtLeast),CV(Var,MLT[Line]+12,AtMost)}
+end
+
+
+function AutoBuy(CP,LvUniit,Cost)--Cost==String
+	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
+		CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
+			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+		CIfEnd()
+	CIfEnd()
 end
