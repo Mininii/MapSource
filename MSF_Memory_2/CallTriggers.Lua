@@ -135,16 +135,19 @@ function Install_CallTriggers()
 	f_Read(FP,SendEff[1],RecoverEff1)
 	f_Read(FP,SendEff2[1],RecoverEff2)
 	CDoActions(FP,{
-		TSetMemory(SendEff2[1],SetTo,131);
-		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]);
+		TSetMemory(SendEff2[1],SetTo,131); -- 스크립트
+		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]); --컬러
 		TCreateUnit(1,204,"Location 1",CurrentOP);
-		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]);
-		TSetMemory(SendEff2[1],SetTo,RecoverEff2);
+		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]); --컬러 복구
+		TSetMemory(SendEff2[1],SetTo,RecoverEff2); -- 스크립트 복구
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
 		TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);
 	})
 	CIfEnd()
 	SetCallEnd()
+
+
+
 
 	function CheckCP()
 			
@@ -465,9 +468,9 @@ function Install_CallTriggers()
 			SetMemoryX(0x666458, SetTo, 546,0xFFFF)
 		})
 	CIfEnd()
-	--커스텀 JYD Repeat 생성구간 2000~3000 . CA_EffSWArr2와 연계하여 사용해야됨
+	--커스텀 JYD Repeat 생성구간 2000~4000 . CA_EffSWArr2와 연계하여 사용해야됨
 	local Temp_CA_Create = CreateVar(FP)
-	CIf(FP,{CV(CA_Create,2000,AtLeast),CV(CA_Create,2227,AtMost)},{SetV(Temp_CA_Create,0)})
+	CIf(FP,{CV(CA_Create,2000,AtLeast),CV(CA_Create,3999,AtMost)},{SetV(Temp_CA_Create,0)})
 	TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{preserved})
 	TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,5)},{preserved})
 	TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CA_CP[2],SetTo,6)},{preserved})
@@ -476,20 +479,34 @@ function Install_CallTriggers()
 	CMov(FP,TRepeatX,CPosX)
 	CMov(FP,TRepeatY,CPosY)
 	CMov(FP,Temp_CA_Create, _Sub(CA_Create,2000))
+	local BackupX = CreateVar(FP)
+	local BackupY = CreateVar(FP)
+	local Temp_CA_Create2 = CreateVar(FP)
+	
+	CMov(FP,BackupX,V(CA[8]))
+	CMov(FP,BackupY,V(CA[9]))
 		for i = 1,8 do
-			CIf(FP,CVar("X",CA[6],Exactly,i))
-			local NI = CreateVar(FP)
-			CIf(FP,{CV(CA_EffSWArr2[i],1,AtLeast)})
-			NFor(FP, NI, 0, {{TTNVar,NI,"<",CA_EffSWArr2[i]}}, 1)
-			CA_RatioXY(_Add(NI,4), 6, _Add(NI,4), 6)
-			CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
-			CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
-			--Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
-			f_TempRepeatX({}, Temp_CA_Create, 1, 186, CA_CP,{CPosX,CPosY})
-			NForEnd()
+			CIf(FP,{CVar("X",CA[6],Exactly,i),CV(CA_EffSWArr2[i],1,AtLeast)})
+				local NI = CreateVar(FP)
+				local NR = CreateVar(FP)
+				CMov(FP, NR, 210600)
+				NFor(FP, NI, 0, {{TTNVar,NI,"<",CA_EffSWArr2[i]}}, 1)
+					CMov(FP,V(CA[8]),BackupX)
+					CMov(FP,V(CA[9]),BackupY)
+					CA_RatioXY(NR, 210600, NR, 210600)
+					CAdd(FP,NR,100000)
+					CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
+					CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
 
-			CIfEnd()
+					CIfX(FP,{CV(Temp_CA_Create,1000,AtLeast)})
+					CSub(FP,Temp_CA_Create2, Temp_CA_Create, 1000)
+					Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
+					CreateEffUnitX({},Temp_CA_Create2,CA_Color)
+					CElseX()
+					f_TempRepeatX({}, Temp_CA_Create, 1, 186, CA_CP,{CPosX,CPosY})
+					CIfXEnd()
 
+				NForEnd()
 			CIfEnd()
 		end
 	CIfEnd()
@@ -497,7 +514,7 @@ function Install_CallTriggers()
 	SetCall(FP)
 		local CA = CAPlotForward()
 		CMov(FP,V(CA[1]),CCA_ShNm)
-		CAPlot({CSMakePolygon(8,256,0,9,1),CS_OverlapX(CSMakeCircle(4,128,0,5,1),CSMakeCircle(4,256,45,5,1))},FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
+		CAPlot({CSMakePolygon(8,256,0,9,1),CS_OverlapX(CSMakeCircle(4,128,0,5,1),CSMakeCircle(4,128,45,5,1))},FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
 	SetCallEnd()
 	EffUnitLoop = SetCallForward()
 	SetCall(FP)

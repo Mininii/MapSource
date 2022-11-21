@@ -167,10 +167,10 @@ HPRegenTable = {64}
 	HPRList = def_sIndex()
 	if Limit == 1 then
 		EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,203,0,0xFF), {
-			SetMemory(0x6509B0, Subtract, 4),
-			SetDeaths(CurrentPlayer,SetTo,0,0),
-			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
-			SetMemory(0x6509B0, Add, 4)
+			--SetMemory(0x6509B0, Subtract, 4),
+			--SetDeaths(CurrentPlayer,SetTo,0,0),
+			--SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			--SetMemory(0x6509B0, Add, 4)
 		})
 	end
 	for j, i in pairs(MarID) do
@@ -263,7 +263,7 @@ HPRegenTable = {64}
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
-		DoActions(FP, LocAct)
+		--DoActions(FP, LocAct)
 	end
 
 	--if Limit==1 then
@@ -333,7 +333,7 @@ HPRegenTable = {64}
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
-		DoActions(FP, LocAct)
+	--	DoActions(FP, LocAct)
 	end
 	EXCC_BreakCalc({CD(Theorist,2,AtLeast)})
 	

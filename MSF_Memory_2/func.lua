@@ -952,6 +952,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,0);
 			})
 
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,195))-- 어택 일반 충돌판정삭제
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions2(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -1901,6 +1907,42 @@ CallTriggerX(FP,Call_EffUnit,Condition,{
 end
 
 
+function CreateEffUnitX(Condition,EffType,Color)
+
+	local ret2 = CreateVar(FP)
+	CAdd(FP,ret2,EffType,0x669E28)
+	local ret = CreateVar(FP)
+	f_Mod(FP,ret,ret2,4)
+	local ret3 = CreateVar(FP) -- ColorRet
+	local Mask = CreateVar(FP)
+
+	CIfX(FP, {CV(ret,0)})
+		CMov(FP,Mask,0xFF)
+		CMov(FP,ret3, Color)
+	CElseIfX({CV(ret,1)})
+		CMov(FP,Mask,0xFF00)
+		f_Mul(FP,ret3, Color,0x100)
+	CElseIfX({CV(ret,2)})
+		CMov(FP,Mask,0xFF0000)
+		f_Mul(FP,ret3, Color,0x10000)
+	CElseIfX({CV(ret,3)})
+		CMov(FP,Mask,0xFF000000)
+		f_Mul(FP,ret3, Color,0x1000000)
+	CIfXEnd()
+	CSub(FP,ret2,ret)
+
+	CDoActions(FP, {
+		TSetMemoryW(0x666460, 1, SetTo, EffType);
+		SetMemoryB(0x66321C, SetTo, 20); -- 높이
+		TSetCVar(FP,SendEff[1][2],SetTo,_EPD(ret2));
+		TSetCVar(FP,SendEff[2][2],SetTo,ret3);
+		TSetCVar(FP,SendEff[3][2],SetTo,Mask);
+		TSetCVar(FP,SendEff2[1][2],SetTo,_Add(EffType,EPDF(0x66EC48)));
+	})
+CallTriggerX(FP,Call_EffUnit,Condition)
+end
+
+
 function CreateScanEff(EffType)
 	T ={
 		SetMemoryX(0x666458, SetTo, EffType,0xFFFF),
@@ -2459,4 +2501,9 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CABossDataArr = {}
 	CABossTempArr = {}
 	return Ret,Ret2
+end
+
+function VRange(Var,Left,Right)
+	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
+	
 end

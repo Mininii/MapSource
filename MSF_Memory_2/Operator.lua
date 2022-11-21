@@ -103,7 +103,7 @@ function Operator_Trig()
 	if Limit == 1 then
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 	TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(CurrentPlayer,AtLeast,1,198)},{SetCD(CheatMode,1)})--에라응머즐 활성화
-	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31)})
+	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	CMov(FP,0x57f120,CreateUnitQuePtr)
 	local TestStim = CreateCcode()
@@ -134,8 +134,8 @@ function Operator_Trig()
 		SetCD(EEggCode,EEggTestNum)
 	},1)
 	CDoActions(FP, {
-		TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
-		TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
+		--TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
+		--TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
 		--TSetResources(0, SetTo, TestVar, Gas)
 	})
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
@@ -164,7 +164,7 @@ function Operator_Trig()
 	CIfEnd()
 
 		for i = 0, 3 do
-			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],2+i,i,{energy=100})},{preserved})
+			TriggerX(FP,{Deaths(i,AtLeast,1,199)},{CreateUnitWithProperties(12,MarID[i+1],"ML"..i+1,i,{energy=100})},{preserved})
 		end
 		Trigger {
 			players = {FP},

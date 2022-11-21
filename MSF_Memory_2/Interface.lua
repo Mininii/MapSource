@@ -27,7 +27,7 @@ function Interface()
 
 	if Limit== 1 then
 		for i = 0, 3 do
-			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,250),SetMemoryB(0x58D2B0+(i*46),SetTo,250),})--SetV(CurEXP,0x7FFFFFFF)
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,100),SetMemoryB(0x58D2B0+(i*46),SetTo,50),})--SetV(CurEXP,0x7FFFFFFF)
 		end
 	end
 	DoActions(Force1,{SetAllianceStatus(Force1,Ally),SetAllianceStatus(P12,Enemy),
@@ -581,9 +581,9 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 			
 			local TestT = CreateCcode()
 			TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
-			--NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
-			--NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
-			--NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,8,AtLeast)},{SetCD(TestT,0)})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{AddV(CurEXP,10^(j-1))})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{
 				SetCp(i);
 				PlayWAV("staredit\\wav\\heal.ogg");

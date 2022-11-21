@@ -175,6 +175,11 @@ function Include_GunData(Size,LineNum)
 		return SetCVar(FP,Var_TempTable[55][2],Add,1)
 	end
 	
+function Gun_LineRange(Line,Left,Right)
+	return {CVar(FP,Var_TempTable[Line+1][2],AtLeast,Left),CVar(FP,Var_TempTable[Line+1][2],AtMost,Right)}
+	
+end
+
 	function Gun_Line(Line,Type,Value,Mask)
 		if Mask == nil then
 			Mask = 0xFFFFFFFF
@@ -1289,13 +1294,14 @@ BossUID = {87,74,5,2}
 		local RetT
 		local RetT2
 		if j%2 == 1 then RetT2 = CA_Eff_DRat2 RetT = SWEffArr1 else RetT2 = CA_Eff_DRat3 RetT = SWEffArr2 end
-		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,150000),RetT})
+		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,210000),RetT})
 	end
 
 	
 
 	CIf(FP,Gun_Line(8,AtLeast,17520))
-	TriggerX(FP,{Gun_Line(8,AtLeast,17520),Gun_Line(8,AtMost,22920)},{AddV(CA_ACCR,1)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,17520,22920),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,1)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,53930,55280),CV(CA_ACCR,30,AtLeast)},{SubV(CA_ACCR,5)},{preserved})
 	CMov(FP,CA_ACCV,_Div(CA_ACCR,9))
 	CMov(FP,CA_ACCV2,_Neg(CA_ACCV))
 	
@@ -1333,15 +1339,160 @@ BossUID = {87,74,5,2}
 		if i<=7 then cuid = 21 end  
 		if i>=8 and i<=15 then cuid = 88 end  
 		if i>=16 and i<=23 then cuid = 22 end  
-		if i>=24 and i<=31 then cuid = 70 end  
+		if i>=24 and i<=31 then cuid = 80 end  
 		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,22920+(337*i))},{SetV(CA_Create,2000+cuid),nsw},1)
 	end
 	--34040
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,34040)},{15,56},"ACAS","tesSh01",8,0,nil,nil,nil,nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,44150)},{17,28},"ACAS","tesSh02",8,0,nil,nil,nil,nil,1)
+	local tesP1 = {55280,55440,55950,56120,56620,56790,57130,57300,57640,57970,58140,58650,58820,59320,59490,59830,60000,60250,60500,55280+5390,55440+5390,55950+5390,56120+5390,56620+5390,56790+5390,57130+5390,57300+5390,57640+5390,57970+5390,58140+5390,58650+5390,58820+5390,59320+5390,59490+5390,59830+5390,60000+5390,60250+5390,60500+5390}
+	local tesP2 = {}
+	for i = 1, 9 do
+		table.insert(tesP2,86)
+	end
+	for i = 1, 10 do
+		table.insert(tesP2,80)
+	end
+	for i = 1, 9 do
+		table.insert(tesP2,8)
+	end
+	for i = 1, 10 do
+		table.insert(tesP2,27)
+	end
 	
+	CIf(FP,Gun_LineRange(8,55280,76850))
+	--9 + 10 + 9 + 10
+	
+	local SWEffArr2 = {}
+	local e = 1
+	for i = 1, 8 do
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
+	end
+	TriggerX(FP, {}, SWEffArr2, {preserved})
+	for j,k in pairs(tesP1) do
+		if j%2 == 1 then RetT2 = CA_Eff_DRat2 else RetT2 = CA_Eff_DRat3 end
+
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,50000),SetV(CA_Create,2000+tesP2[j]),SetV(CA_EffSWArr2[e],24)},1)
+		e=e+1
+		if e >= 9 then e=e-8 end
+	end
+	--66060
+	local e = 1
+	local CreateSwArr = CreateCcodeArr(8)
+	local CreateSwArr2 = CreateCcodeArr(8)
+	local CAEF = CreateVar(FP)
+	local CACR = CreateVar(FP)
+	local CAEF2 = CreateVar(FP)
+	local CACR2 = CreateVar(FP)
+	local EfT = {
+		{982,9},
+		{982,10},
+		{982,9},
+		{982,13},
+		{982,10},
+		{982,16},
+		{982,10},
+		{982,15},
+		{982,9},
+		{982,17},
+		{982,9},
+		{982,16},
+		{982,10},
+		{982,16},
+		{982,17},
+	}
+	local EfT2 = {
+		{975,9},
+		{975,10},
+		{975,9},
+		{975,13},
+		{975,10},
+		{975,16},
+		{975,10},
+		{975,15},
+		{975,9},
+		{975,17},
+		{975,9},
+		{975,16},
+		{975,10},
+		{975,16},
+		{975,17},
+	}
+		local RT = {}
+	for j = 1, 8 do
+		RT[j] = SetCD(CreateSwArr[j],0)
+	end
+	DoActionsX(FP,RT)
+	for i = 0, 14 do--
+		TriggerX(FP, Gun_Line(8,AtLeast,66060+(i*680)), {AddCD(CreateSwArr2[e],8),SetV(CAEF,3000+EfT[i+1][1]),SetV(CACR,EfT[i+1][2]),SetV(CAEF2,3000+EfT2[i+1][1]),SetV(CACR2,EfT2[i+1][2])})
+		
+		e=e+1
+		if e >= 9 then e=e-8 end
+	end
+	for i = 1, 8 do
+		CallTriggerX(FP,Call_CA_Effect,{CD(CreateSwArr2[i],1,AtLeast)},{SubCD(CreateSwArr2[i], 1),SetCD(CreateSwArr[i], 1),SetV(CA_EffSWArr2[i],8),SetV(CA_Create,2000+55)})
+	end
+	local CA_EffSWArr3 = CreateVarArr(8, FP)
+	local CF1 = {}
+	local CF2 = {}
+	for j = 1, 8 do
+		CF1[j] = SetV(CA_EffSWArr3[j],8)
+	end
+	for i = 0, 0 do--
+		TriggerX(FP, Gun_Line(8,AtLeast,66060+(i*680)), {CF1})
+		
+	end
+	local CAFF = CreateCcode()
 
 
+	CF2[9] = AddCD(CAFF,1)
+	for j = 1, 8 do
+		CF2[j] = SetCD(CA_EffSWArr[j],0)
+		CMov(FP,CA_EffSWArr2[j],CA_EffSWArr3[j])
+	end
+
+
+
+	local CR={}
+	local CR2={}
+	for k = 1,4 do
+		CR2[k] = SetV(CA_EffSWArr2[k],0)
+		CR[k] = SetV(CA_EffSWArr2[k+4],0)
+	end
+
+	CMov(FP,CA_Create,CAEF)
+	CMov(FP,CA_Color,CACR)
+	for j = 1, 4 do
+		CMov(FP,CA_EffSWArr2[j],CA_EffSWArr3[j])
+	end
+	DoActionsX(FP, CR)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,66060+(0*680))})
+	CMov(FP,CA_Create,CAEF2)
+	CMov(FP,CA_Color,CACR2)
+	for j = 5, 8 do
+		CMov(FP,CA_EffSWArr2[j],CA_EffSWArr3[j])
+	end
+	DoActionsX(FP, CR2)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,66060+(0*680))})
+	DoActionsX(FP, CF2)
+	for j = 1, 8 do
+		local ret = ((j-1)%8)+1
+		TriggerX(FP, {CD(CAFF,ret)}, {SetCD(CA_EffSWArr[j],1)},{preserved})
+		local ret = ((j)%8)+1
+		TriggerX(FP, {CD(CAFF,ret)}, {SetCD(CA_EffSWArr[j],1)},{preserved})
+		local ret = ((j+1)%8)+1
+		TriggerX(FP, {CD(CAFF,ret)}, {SetCD(CA_EffSWArr[j],1)},{preserved})
+
+	end
+	TriggerX(FP,{CD(CAFF,8,AtLeast)},{SetCD(CAFF,0)},{preserved})
+	CIfEnd()
+	TriggerX(FP, Gun_Line(8,AtLeast,76850),{CF2})
+
+	
+--CA_Color
+
+
+	
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
 	CAdd(FP,CA_Eff_Rat2,Var_TempTable[15],CA_Eff_Rat)
 	CAdd(FP,CA_Eff_Rat3,Var_TempTable[16],CA_Eff_Rat)
