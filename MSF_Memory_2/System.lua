@@ -453,6 +453,9 @@ HPRegenTable = {64}
 		SetCallEnd()
 		CJumpEnd(FP,MarSkill)
 
+		local SkillLocksIndex = def_sIndex()
+		NJump(FP, SkillLocksIndex, {CD(tesStart,1)})
+
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00))
 			CAdd(FP,0x6509B0,4)
 			CIf(FP,{Memory(0x628438,AtLeast,1),Deaths(CurrentPlayer,AtLeast,1,0)})
@@ -480,6 +483,7 @@ HPRegenTable = {64}
 			CIfEnd()
 			CSub(FP,0x6509B0,4)
 		CIfEnd()
+		NJumpEnd(FP, SkillLocksIndex)
 		
 	CIfEnd()
 
@@ -1258,8 +1262,8 @@ for i = 1, 4 do
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (0*2),SetTo,NMAtkFactor*2)) -- 추가공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (1*2),SetTo,HMAtk*2)) -- 기본공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (1*2),SetTo,HMAtkFactor*2)) -- 추가공격력
-		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*2)) -- 기본공격력
-		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*2)) -- 추가공격력
+		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*3)) -- 기본공격력
+		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*3)) -- 추가공격력
 end
 DoActions2X(FP,{RemoveUnit(203,AllPlayers),
 SetMemoryW(0x656EB0+(0*2),Add,15);
@@ -1272,7 +1276,7 @@ SetV(HPCondTmp,50),
 SetV(Level,50),
 SetMemoryW(0x663888 + (28 *2),SetTo,NMCost+HMCost+LMCost2);--루미마린 가격 재설정
 })
-TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 3배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
 DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg")},HumanPlayers,FP)})
 
 for k = 1, 4 do

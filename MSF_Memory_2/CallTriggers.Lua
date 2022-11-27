@@ -603,3 +603,19 @@ function NUGive(Var,UnitID)
 end
 	
 end
+
+--Call_tesEff = SetCallForward()
+--SetCall(FP)
+--tesEffMode = CreateCcode()--
+
+--function CA_Eff2()
+--	CIfX(FP,{CD(tesEffMode,1)})
+--	CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
+--	CElseX()
+--	CA_Rotate3D(CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2)
+--	CIfXEnd()
+--end--
+
+--CAPlot({CSMakeLine(4,16,0,17+28,1+16)},FP,nilunit,0,{G_CA_CenterX,G_CA_CenterY},1,16,{1,0,0,0,9999,1},"CA_Eff2",FP,{Gun_LineRange(8, 66060, 76850)},nil,1)--
+
+--SetCallEnd()

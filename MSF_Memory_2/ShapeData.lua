@@ -325,7 +325,7 @@ tesSh01 = CS_SortR(CS_FillPathXY(CS_RatioXY(HCC, 4, 4), 0, 72, 72, 0), 1)
 
 tesSh02=CS_Overlap(CS_MoveXY(CS_CropXY(tesSh01,{-4096,0},{-4096,4096}), -480),CS_MoveXY(CS_CropXY(tesSh01,{0,4096},{-4096,4096}), 480))
 
-
+TesCircleSh = CSMakeCircle(90, 384, 0, 91, 1)
 
 
 --------------------------------------------------------------
@@ -421,6 +421,7 @@ tesSh02=CS_Overlap(CS_MoveXY(CS_CropXY(tesSh01,{-4096,0},{-4096,4096}), -480),CS
 		"CCS2",
 		"tesSh01",
 		"tesSh02",
+		"TesCircleSh",
 	}
 	)
 
