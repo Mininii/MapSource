@@ -52,6 +52,7 @@ function Trigger(args)
 	if args.conditions then
 		args.conditions = FlattenList(args.conditions)
 		CCount = 16-#args.conditions
+		assert(#args.conditions<=16, "TRIG Conditions Was Too Many. Current Conditions : "..#args.conditions)
 		for k, v in pairs(args.conditions) do
 			dwwrite(v[1])
 			dwwrite(v[2])
@@ -80,6 +81,7 @@ function Trigger(args)
 	local ACount = 64
 	if args.actions then
 		args.actions = FlattenList(args.actions)
+		assert(#args.actions<=64, "TRIG Actions Was Too Many. Current Actions : "..#args.actions)
 		ACount = 64-#args.actions
 		for k, v in pairs(args.actions) do
 			dwwrite(v[1])
@@ -177,7 +179,7 @@ function Trigger(args)
 		TRIGStr[TI] = "\0\0\0\0\0\0"
 		TI=TI+1
 		local TrigStr2 = tconcat(TRIGStr)
-		--assert(#TrigStr2==0x960, "TRIG Size Not Correct. Current Size : "..#TrigStr2)
+		assert(#TrigStr2==0x960, "TRIG Size Not Correct. Current Size : "..#TrigStr2)
 		__TRIGChkptr:write(TrigStr2)
 	end
 	
