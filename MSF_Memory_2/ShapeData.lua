@@ -326,7 +326,8 @@ tesSh01 = CS_SortR(CS_FillPathXY(CS_RatioXY(HCC, 4, 4), 0, 72, 72, 0), 1)
 tesSh02=CS_Overlap(CS_MoveXY(CS_CropXY(tesSh01,{-4096,0},{-4096,4096}), -480),CS_MoveXY(CS_CropXY(tesSh01,{0,4096},{-4096,4096}), 480))
 
 TesCircleSh = CSMakeCircle(90, 384, 0, 91, 1)
-
+TesLine=CSMakeLine(1, 64, 0, 25, 0)
+TesCircleShL = CSMakeCircle(180, 32*50, 0, 181, 1)
 
 --------------------------------------------------------------
 
@@ -422,8 +423,19 @@ TesCircleSh = CSMakeCircle(90, 384, 0, 91, 1)
 		"tesSh01",
 		"tesSh02",
 		"TesCircleSh",
+		"TesLine",
+		"TesCircleShL"
 	}
 	)
+	tesSh = {}
+	G_GBShT = {}
+	for i = 12, 4, -1 do
+		_G["tesCSh"..i] = CSMakePolygon(i, 64, 0, PlotSizeCalc(i, 9), PlotSizeCalc(i, 8))
+		table.insert(tesSh,_G["tesCSh"..i])
+		table.insert(G_CAPlot_Shape_InputTable,"tesCSh"..i)
+		table.insert(G_GBShT,"tesCSh"..i)
+		
+	end
 
 
 	

@@ -527,7 +527,8 @@ HPRegenTable = {64}
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,21)),nil,0xFF)
 		CCMU_Check = def_sIndex()
 		NJump(FP,CCMU_Check,{Memory(0x628438,AtMost,0)},{TSetMemory(0x6509B0,SetTo,CPlayer),
-			PlayWAV("staredit\\wav\\revive.ogg"),
+			--PlayWAV("staredit\\wav\\revive.ogg"),
+			TSetDeaths(CPlayer, SetTo, 1, 110);
 			DisplayText(StrDesign("\x08ERROR : \x04변수(Nextptrs)를 찾을 수 없습니다. \x07소생 \x04위치를 본진으로 설정합니다."),4),
 			SetMemory(0x6509B0,SetTo,FP),
 			TSetDeaths(CPlayer,Add,1,178)
@@ -555,10 +556,12 @@ HPRegenTable = {64}
 		--TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPRecover},{preserved})
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 			for i = 0, 3 do
+				TriggerX(FP, {CV(CPlayer,i),CD(SoundLimitP[i+1],5,AtMost)}, {AddCD(SoundLimitP[i+1], 1),SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),SetCp(FP)},{preserved})
 				TriggerX(FP,{CV(CPlayer,i)},{
 				CreateUnitWithProperties(1,MarID[i+1],1,i,{energy = 100,invincible = true}),
 				SetMemory(0x6509B0,SetTo,i),
-				PlayWAV("staredit\\wav\\revive.ogg"),
+				--PlayWAV("staredit\\wav\\revive.ogg"),
+				SetDeaths(i, SetTo, 1, 110);
 				DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
 				SetMemory(0x6509B0,SetTo,FP),
 				--RunAIScriptAt("Recall Here",24)
@@ -589,6 +592,9 @@ HPRegenTable = {64}
 		--TriggerX(FP,{CDeaths(FP,AtLeast,1,BYDBossStart2)},{BYDBossMarHPPatch},{preserved})
 		--CMov(FP,BackupCp,Nextptrs,40)
 		NJumpEnd(FP,CCMU_Check)
+		for i = 0, 3 do
+			TriggerX(FP, {CV(CPlayer,i),CD(SoundLimitP[i+1],5,AtMost)}, {AddCD(SoundLimitP[i+1], 1),SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),SetCp(FP)},{preserved})
+		end
 		CDoActions(FP,{
 			Set_EXCC2(UnivCunit,CurCunitI2,1,SetTo,0),
 			Set_EXCC2(UnivCunit,CurCunitI2,2,SetTo,0),
@@ -625,6 +631,19 @@ HPRegenTable = {64}
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,191,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,128,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,205,0,0xFF))
+	
+
+	CIf(FP,{CD(tesStart,1),CD(tesFlag,1),DeathsX(CurrentPlayer,Exactly,60,0,0xFF)},{SetMemory(0x662350+(64*4), SetTo, 3854862*256)}) -- testify probe pattern
+
+		f_SaveCp()
+		CIf(FP,{TMemoryX(_Add(BackupCp,30), Exactly, 0,0x40000000)})--할루시가 아닐경우 발동
+		f_Read(FP,_Sub(BackupCp,15),CPos)
+		Convert_CPosXY()
+		f_TempRepeatX({}, 64, 2, 186, nil,{CPosX,CPosY})
+		CIfEnd()
+		f_LoadCp()
+		DoActions(FP, SetMemory(0x662350+(64*4), SetTo, 1200000*256))
+	CIfEnd()
 
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,156,0,0xFF)) -- 파일런 인식
 		f_SaveCp()
@@ -758,6 +777,7 @@ HPRegenTable = {64}
 
 
 	EXCC_ClearCalc()
+
 	EXCC_Part2()
 	EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
@@ -815,7 +835,7 @@ HPRegenTable = {64}
 	
 	
 	SETimer = CreateCcode()
-	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
+	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCD(SoundLimitP[1], 0),SetCD(SoundLimitP[2], 0),SetCD(SoundLimitP[3], 0),SetCD(SoundLimitP[4], 0),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
 
 	function SwarmSet(LVTable,CUTable)
 		local LvLeast

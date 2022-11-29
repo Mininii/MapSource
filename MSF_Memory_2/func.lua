@@ -958,6 +958,19 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,196))-- testify 전용 정야독+충돌판정삭제, 이속1
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+			Convert_CPosXY()
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				TSetDeaths(_Add(G_CA_Nextptrs,23),SetTo,0,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,6),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
+				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,1,0xFFFF),
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions2(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))

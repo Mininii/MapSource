@@ -1141,8 +1141,10 @@ BossUID = {87,74,5,2}
 
 		{"\x0D\x0D!H\x13\x07♪\x04 Such a destiny was not desired. \x07♪",34040},
 		{"\x0D\x0D!H\x13\x07♪\x04 이런 운명은 바라지 않았어. \x07♪",34040},
-		{"\x0D\x0D!H\x13\x07♪\x04 In this place, I never wished to see that side of you. \x07♪",38420},
-		{"\x0D\x0D!H\x13\x07♪\x04 이곳에서, 나는 네 그런 면을 보고 싶지 않았는데. \x07♪",38420},
+		{"\x0D\x0D!H\x13\x07♪\x04 In this place, \x07♪",38420},
+		{"\x0D\x0D!H\x13\x07♪\x04 이곳에서, \x07♪",38420},
+		{"\x0D\x0D!H\x13\x07♪\x04 I never wished to see that side of you. \x07♪",39770},
+		{"\x0D\x0D!H\x13\x07♪\x04 나는 네 그런 면을 보고 싶지 않았는데. \x07♪",39770},
 		{"\x0D\x0D!H\x13\x07♪\x04 And raise different colors for one another. \x07♪",44150},
 		{"\x0D\x0D!H\x13\x07♪\x04 서로의 다른 색채들이 피어나고 있구나. \x07♪",44150},
 		{"\x0D\x0D!H\x13\x07♪\x04 Never notice me. \x07♪",49550},
@@ -1204,11 +1206,13 @@ BossUID = {87,74,5,2}
 	
 	CIfX(FP,{CD(AxiomEnable,1)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
 	local tesPatchT = {}
-	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16})
+	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- 스킬유닛무기 재설정
+	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--핵배틀딜너프
+	SetWeaponsDat2X(tesPatchT,62,{DmgBase=999})--프로브딜버프
 
 	for j,k in pairs({Tier1,Tier2,Tier3,Tier4,Tier5}) do
 		for p, o in pairs(k) do
-			SetUnitsDat2X(tesPatchT,o,{AdvFlag={4,4},Height=12})
+			SetUnitsDat2X(tesPatchT,o,{AdvFlag={4,4},Height=12}) -- 모든 적유닛을 공중으로
 		end
 	end
 
@@ -1219,8 +1223,10 @@ BossUID = {87,74,5,2}
 
 	DoActions2(FP, tesPatchT,1)
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
-	CTrigger(FP,{},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
-	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,35000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+
+	CTrigger(FP,{CV(Dt,50,AtMost)},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
+	CTrigger(FP,{CV(Dt,51,AtLeast)},{TGun_SetLine(10,Add,50),TGun_SetLine(8,Add,50)},1)--CV(Dt,0x2A,AtMost)
+	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
 	function CA_3DAcc(Time,XY,YZ,ZX)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
@@ -1312,6 +1318,9 @@ BossUID = {87,74,5,2}
 		local RetT2
 		if j%2 == 1 then RetT2 = CA_Eff_DRat2 RetT = SWEffArr1 else RetT2 = CA_Eff_DRat3 RetT = SWEffArr2 end
 		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,210000),RetT})
+		local RetT3
+		if j <= 4 then RetT3 = 2000+21 else RetT3 = 2000+88 end
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT3)},1)
 	end
 
 	
@@ -1326,17 +1335,12 @@ BossUID = {87,74,5,2}
 		TGun_SetLine(11,Add,CA_ACCV),
 		TGun_SetLine(17-1,Add,CA_ACCV2),
 	})
-	TriggerX(FP,{Gun_Line(8,AtLeast,22920)},{
+	CTrigger(FP,{TTOR({Gun_LineRange(8,22920,119660),Gun_Line(8,AtLeast,135500)})},{
 		Gun_SetLine(12,Add,1),
 		Gun_SetLine(13,Add,1),
 		Gun_SetLine(18-1,Add,1),
 		Gun_SetLine(19-1,Add,1),},{preserved})
 	CIfEnd()
-	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
-		local RetT
-		if j <= 4 then RetT = 2000+21 else RetT = 2000+88 end
-		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT)},1)
-	end
 
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
@@ -1507,6 +1511,8 @@ BossUID = {87,74,5,2}
 	local TesCircleL = CreateVar(FP)
 	local TesCircleR = CreateVar(FP)
 	local TesCircleC = CreateCcode()
+	local TesEffFlag = CreateCcode()
+	
 	for j = 5, 8 do
 		CMov(FP,CA_EffSWArr2[j],CA_EffSWArr3[j])
 	end
@@ -1539,32 +1545,33 @@ BossUID = {87,74,5,2}
 
 	CTrigger(FP,{CV(CA_Eff_RatF,CA_Eff_RatF2,AtMost)},{AddV(CA_Eff_RatF,1000)},1)
 	CTrigger(FP,{CV(CA_Eff_RatFM,CA_Eff_RatF3,AtMost)},{AddV(CA_Eff_RatFM,1000)},1)
+	TriggerX(FP,{Gun_Line(8,AtLeast,107520)},{SetV(CA_Eff_RatF3,200000)})
 	--CTrigger(FP,{CV(CA_Eff_RatF,CA_Eff_RatF2,AtLeast)},{SubV(CA_Eff_RatF,500)},1)
 --CA_Color
 	--for j,k in pairs({CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX,CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2}) do
 	--end
 	
---Tier1 = {17,77,78,76,63,21,88,28,86,75,25}
---Tier2 = {79,80,52,10,22,19}
---Tier3 = {27,66,29,98,57,3,8,11,69,100,70,65}
---Tier4 = {102,61,67,23,81,30}
---Tier5 = {60,68}
-
-	local tes_CT = {0,10,13,15,16,17,16,0}
-	local tes_TT = {76850,78200,79550,80890,82240,83590,84940,86290,87640}
+	local bit = 675*2
+	local tes_CT = {0,10,13,15,16,17,16,0,0,10,13,15,16,17,16,0}
+	local tes_TT = {76850,78200,}
+	for i = 1, 9+8 do
+		tes_TT[i]=76850+(bit*(i-1))
+	end
+	TriggerX(FP,{Gun_Line(8,AtLeast,tes_TT[9])},{SetCD(TesEffFlag,1)})
 	local tes_ShT = {
 		{{78,77,88},361},
 		{{10,19,80},377},
 		{{70,57,100},363},
 		{{69,11,3},379}
 	}
-	TriggerX(FP,{Gun_Line(8,AtLeast,tes_TT[1])},{SetV(TesCircleR,87640)})
+	TriggerX(FP,{Gun_Line(8,AtLeast,tes_TT[1])},{SetV(TesCircleR,tes_TT[#tes_TT]+(bit*2))})
 	local TesCircleFlag = CreateCcode()
 	local li = 1
 	for j,k in pairs(tes_CT) do
 		if j%2 == 1 then
-			
-			G_CA_SetSpawn2X({Gun_Line(8,AtLeast,tes_TT[j])},tes_ShT[li][1],"ACAS","TesCircleSh","MAX",tes_ShT[li][2],nil,nil,nil,nil,1)
+			if j<=8 then
+				G_CA_SetSpawn2X({Gun_Line(8,AtLeast,tes_TT[j])},tes_ShT[li][1],"ACAS","TesCircleSh","MAX",tes_ShT[li][2],nil,nil,nil,nil,1)
+			end
 			TriggerX(FP,Gun_Line(8,AtLeast,tes_TT[j]),{SetV(TesCircleL,tes_TT[j+1])})
 			li=li+1
 		end
@@ -1573,6 +1580,114 @@ BossUID = {87,74,5,2}
 		end
 		TriggerX(FP,Gun_Line(8,AtLeast,tes_TT[j]),{SetCD(TesCircleC,k)})
 	end
+	local GBAirT = {{55,53},{56,48},{62,51},{88,78},{21,25},{28,17},{86,76},{22,19},{70,79}}
+	local GBShT = G_GBShT
+	--error((_G[GBShT[1]][1]/48)+1)
+	for j, k in pairs(GBAirT) do
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,87640+((j-1)*(bit)))},k,"ACAS",GBShT[j],1,0,nil,nil,G_CA_Rotate(10*(j-1)),nil,1)
+	end
+	TriggerX(FP,{Gun_LineRange(8,95730,98420),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,3)},{preserved})
+	--
+	--
+	--
+	--
+	--
+	--
+	--
+	--
+	--Tier1 = {17,77,78,76,63,21,88,28,86,75,25}
+	--Tier2 = {79,80,52,10,22,19}
+	--Tier3 = {27,66,29,98,57,3,8,11,69,100,70,65}
+	--Tier4 = {102,61,67,23,81,30}
+	--Tier5 = {60,68}
+
+	local tesLineArr = {98420,98930,99430,99770,100280,100780,101120,101620}
+	local GBLineT = {{98,66},{98,66},{98,66},{57,100},{57,100},{57,100},{29,10},{29,10}}
+	for j,k in pairs(tesLineArr) do
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},GBLineT[j],"ACAS","TesLine","MAX",0,nil,nil,G_CA_Rotate((360/(#tesLineArr))*j),nil,1)
+	end
+	TriggerX(FP,{Gun_LineRange(8,tesLineArr[#tesLineArr],98420+5400),CV(CA_ACCR,30,AtLeast)},{SubV(CA_ACCR,3)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,98420+5400,107520),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,3)},{preserved})
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,tesLineArr[#tesLineArr])},{88},"ACAS","TesCircleShL",1,0,nil,nil,nil,nil,1)
+	local tesLineArr = {98420+5400,98930+5400,99430+5400,99770+5400,100280+5400,100780+5400,101120+5400,101620+5400,107520}
+	local GBLineT = {{70,65},{70,65},{70,65},{27,19},{27,19},{27,19},{8,10},{8,10},{8,10}}
+	for j,k in pairs(tesLineArr) do
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},GBLineT[j],"ACAS","TesLine","MAX",0,nil,nil,G_CA_Rotate((360/(#tesLineArr))*j),nil,1)
+	end
+	TriggerX(FP,{Gun_LineRange(8,107520,109040),CV(CA_ACCR,30,AtLeast)},{SubV(CA_ACCR,3)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,109210,109210+((bit/2)*(8-1))),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,3)},{preserved})
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,tesLineArr[#tesLineArr])},{21},"ACAS","TesCircleShL",1,0,nil,nil,nil,nil,1)
+	local tesLineArr = {}
+	for i = 1,16 do
+		tesLineArr[i] = 109210+((bit/2)*(i-1))
+	end
+	
+
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 4 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
+	end
+	for i = 5, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],12))
+	end
+	
+	for j,k in pairs(tesLineArr) do
+		local RetT
+		local RetT2
+		if j%2 == 1 then RetT2 = CA_Eff_DRat2 RetT = SWEffArr1 else RetT2 = CA_Eff_DRat3 RetT = SWEffArr2 end
+		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,110000)})
+		local RetT3
+		if j <= 4 then RetT3 = 2000+21 elseif j <= 8 then RetT3 = 2000+88 elseif j <= 12 then RetT3 = 2000+88 else RetT3 = 2000+88 end
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT3),RetT},1)
+	end
+
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],1))
+	end
+
+	CIfOnce(FP, {Gun_Line(8,AtLeast,119660)},{Order("Any unit", Force2, 64, Attack, 64)})
+	
+	CTrigger(FP,{},{SetV(CA_ACCR,0),
+	--bak
+	TGun_SetLine(24,SetTo,Var_TempTable[11+1]),
+	TGun_SetLine(25,SetTo,Var_TempTable[12+1]),
+	TGun_SetLine(26,SetTo,Var_TempTable[13+1]),
+	TGun_SetLine(27,SetTo,Var_TempTable[16+1]),
+	TGun_SetLine(28,SetTo,Var_TempTable[17+1]),
+	TGun_SetLine(29,SetTo,Var_TempTable[18+1]),
+	Gun_SetLine(11, SetTo, 0),
+	Gun_SetLine(12, SetTo, 0),
+	Gun_SetLine(13, SetTo, 0),
+	Gun_SetLine(16, SetTo, 90),
+	Gun_SetLine(17, SetTo, 0),
+	Gun_SetLine(18, SetTo, 0),
+	SetV(CA_Eff_RatF2,400000),
+	SetV(CA_Eff_RatF,400000),
+	})
+	CIfEnd()
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
+	--CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,2000+60),SWEffArr1},1)
+	TriggerX(FP,{Gun_LineRange(8,135500,135500+5000),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1)})
+	--
+
+	--
+	--
+	--
+	--
+	--
+	--
+	--
+	--
+	--
+
+	
+
 	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
 	
 	CIf(FP,{CV(Var_TempTable[9],TesCircleR,AtMost)})
@@ -1589,12 +1704,18 @@ BossUID = {87,74,5,2}
 
 	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
 	
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,0)},20,548,0)
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,10)},20,548,10)
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,13)},20,548,13)
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,15)},20,548,15)
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,16)},20,548,16)
-	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesCircleC,17)},20,548,17)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,0)},20,548,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,10)},20,548,10)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,13)},20,548,13)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,15)},20,548,15)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,16)},20,548,16)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,17)},20,548,17)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,0)},20,925,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,10)},20,925,10)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,13)},20,925,13)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,15)},20,925,15)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,16)},20,925,16)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,17)},20,925,17)
 
 	
 	TriggerX(FP,{CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},{SetCD(N_Check,1)},{preserved})

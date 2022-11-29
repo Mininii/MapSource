@@ -469,6 +469,10 @@ function Install_CallTriggers()
 		})
 	CIfEnd()
 	--커스텀 JYD Repeat 생성구간 2000~4000 . CA_EffSWArr2와 연계하여 사용해야됨
+	local BackupX = CreateVar(FP)
+	local BackupY = CreateVar(FP)
+	CMov(FP,BackupX,V(CA[8]))
+	CMov(FP,BackupY,V(CA[9]))
 	local Temp_CA_Create = CreateVar(FP)
 	CIf(FP,{CV(CA_Create,2000,AtLeast),CV(CA_Create,3999,AtMost)},{SetV(Temp_CA_Create,0)})
 	TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{preserved})
@@ -479,12 +483,8 @@ function Install_CallTriggers()
 	CMov(FP,TRepeatX,CPosX)
 	CMov(FP,TRepeatY,CPosY)
 	CMov(FP,Temp_CA_Create, _Sub(CA_Create,2000))
-	local BackupX = CreateVar(FP)
-	local BackupY = CreateVar(FP)
 	local Temp_CA_Create2 = CreateVar(FP)
 	
-	CMov(FP,BackupX,V(CA[8]))
-	CMov(FP,BackupY,V(CA[9]))
 		for i = 1,8 do
 			CIf(FP,{CVar("X",CA[6],Exactly,i),CV(CA_EffSWArr2[i],1,AtLeast)})
 				local NI = CreateVar(FP)
@@ -509,6 +509,57 @@ function Install_CallTriggers()
 				NForEnd()
 			CIfEnd()
 		end
+	CIfEnd()
+	CIf(FP,{CV(CA_Create,0xFFFFFFFF)})
+
+	local NR = CreateVar(FP)
+	CMov(FP, NR, 210600)
+	
+	CFor(FP, 0, 3, 1)
+	local CK = CForVariable()
+	CFor(FP, 0, 45, 15)
+	local CI = CForVariable()
+	CMov(FP,V(CA[8]),BackupX)
+	CMov(FP,V(CA[9]),BackupY)
+	CA_Rotate(_Add(CI,_Mul(CK,2)))
+	CA_RatioXY(NR, 210600, NR, 210600*2)
+	CAdd(FP,NR,25000)
+	CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
+	CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
+	Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
+	DoActionsX(FP, {CreateUnitWithProperties(1, 84, 1, FP, {hallucinated=true}),KillUnit(84, FP)})
+
+	CIfX(FP,CV(CI,1,AtLeast))
+	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 8320000*256),SetMemoryB(0x669E28+218, SetTo, 16)}, {preserved})
+	CIf(FP,Memory(0x628438, AtLeast, 1))
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	DoActions(FP, CreateUnitWithProperties(1, 60, 1, FP, {hallucinated=true}))
+	f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+	Convert_CPosXY()
+	CDoActions(FP,{
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
+		TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),
+		TSetDeaths(_Add(Nextptrs,23),SetTo,0,0),
+		TSetDeaths(_Add(Nextptrs,6),SetTo,CPos,0),
+		TSetDeaths(_Add(Nextptrs,22),SetTo,CPos,0),
+		TSetDeaths(_Add(Nextptrs,4),SetTo,CPos,0),
+		TSetMemory(_Add(Nextptrs,13),SetTo,1),
+		TSetMemoryX(_Add(Nextptrs,18),SetTo,1,0xFFFF),
+	})
+	CIfEnd()
+	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 110000*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
+	CElseX()
+	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 666666*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
+	f_TempRepeatX({}, 60, 1, 196, FP,{CPosX,CPosY})
+	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 110000*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
+	CIfXEnd()
+
+
+
+	CForEnd()
+	CForEnd()
+				
+		
 	CIfEnd()
 	end
 	SetCall(FP)
