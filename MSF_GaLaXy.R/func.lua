@@ -297,13 +297,7 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		if Preserve == 0 then
 			Preserve = nil
 		end
-	
-		local LocId = Location
-		if type(LocId) == "string" then
-			LocId = ParseLocation(LocId)-1
-		elseif type(LocId) == "number" then
-			Location = Location + 1
-		end
+		local LocId, Location = ConvertLocation(Location)
 		local LocL = 0x58DC60+0x14*LocId
 		local LocU = 0x58DC64+0x14*LocId
 		local LocR = 0x58DC68+0x14*LocId
@@ -709,144 +703,51 @@ if X2_Mode==1 then
 		{-128,-128},{128,-128},{-128,128},{128,128},
 	}
 end
-CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
-		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
-		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+local QueX = CreateVar(FP)
+local QueY = CreateVar(FP)
+CWhile(FP,{CV(CreateUnitQuePtr,50000-2,AtMost),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+	CIfX(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
+	CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
+		CMov(FP,QueX,TRepeatX)
+		CMov(FP,QueY,TRepeatY)
+
+	CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
+	if X2_Mode == 1 then
+		CIfX(FP,Never())
 		for i = 0, 3 do
-			if i == 0 then RS1 = Cleared RS2=Cleared end
-			if i == 1 then RS1 = Set RS2=Cleared end
-			if i == 2 then RS1 = Cleared RS2=Set end
-			if i == 3 then RS1 = Set RS2=Set end
-			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,11+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,11+i)},{preserved})
-		end
-		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
-		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
-
-			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
-
-		CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
-		if X2_Mode == 1 then
-			CIfX(FP,Never())
-			for i = 0, 3 do
-				CElseIfX({CVar(FP,TRepeatX[2],Exactly,0x80000000-i)})
-				Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,Simple_CalcLoc(0,X2_XYArr[i+1][1],X2_XYArr[i+1][2],X2_XYArr[i+1][1],X2_XYArr[i+1][2]))
-			end
-			CIfXEnd()
-		else
-			Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
-		end
-
-		CElseX()
-		if X2_Mode == 1 then
-			Simple_SetLocX(FP,0,3712*2,288*2,3712*2,288*2)
-		else
-			Simple_SetLocX(FP,0,3712,288,3712,288)
+			CElseIfX({CVar(FP,TRepeatX[2],Exactly,0x80000000-i)})
+			CMov(FP,QueX,G_CA_X,X2_XYArr[i+1][1])
+			CMov(FP,QueY,G_CA_Y,X2_XYArr[i+1][2])
 		end
 		CIfXEnd()
-		CIfEnd()
+	else
+		CMov(FP,QueX,G_CA_X)
+		CMov(FP,QueY,G_CA_Y)
+	end
 
+	CElseX()
+	if X2_Mode == 1 then
+		CMov(FP,QueX,3712*2)
+		CMov(FP,QueY,288*2)
+	else
+		CMov(FP,QueX,3712)
+		CMov(FP,QueY,288)
+	end
+	CIfXEnd()
+	CElseX()
+	CMov(FP,QueX,CPosX)
+	CMov(FP,QueY,CPosY)
+	
+	CIfXEnd()
 
-		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
-		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,FuncAlloc)
-		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,FuncAlloc+1)
-		FuncAlloc=FuncAlloc+2
-		
-		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-		CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
-			TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
-			TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
-			},1)
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-		Convert_CPosXY()
-		Simple_SetLocX(FP,15,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(15,-4,-4,4,4)})
-		CDoActions(FP,{TMoveUnit(1,Gun_TempSpawnSet1,Force2,16,1)})
-
-			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
-				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLoc);
-				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,189))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TRemoveUnit(84,CreatePlayer)
-			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,190))
-				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP,{CVar(FP,HondonMode[2],Exactly,0)},{
-					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920),
-					},1)
-				CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-					TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
-					},1)
-				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLoc);
-					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
-					
-				})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
-				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-				TempSpeedVar = f_CRandNum(4000)
-				CDoActions(FP,{
-					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
-					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
-				--CElseX()
-				--CDoActions(FP,{
-				--	TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
-				--	TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-				--CIfXEnd()
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,147))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, 23);
-				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,128),
-				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,128,0xFFFF),
-				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
-				CreateUnit(1,84,1,FP),KillUnit(84,FP)
-			})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,84))
-			CDoActions(FP,{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
-			})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,201))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Move, 36);
-			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
-			CElseX()
-				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
-			CIfXEnd()
-			
-		CIfEnd()
-
+	CAdd(FP,CreateUnitQuePtr,1)
+	CDoActions(FP,{
+		TSetMemory(_Add(CreateUnitQueXPosArr,CreateUnitQuePtr),SetTo,QueX),
+		TSetMemory(_Add(CreateUnitQueYPosArr,CreateUnitQuePtr),SetTo,QueY),
+		TSetMemory(_Add(CreateUnitQueUIDArr,CreateUnitQuePtr),SetTo,_Mov(Gun_TempSpawnSet1,0xFF)),
+		TSetMemory(_Add(CreateUnitQuePIDArr,CreateUnitQuePtr),SetTo,CreatePlayer),
+		TSetMemory(_Add(CreateUnitQueTypeArr,CreateUnitQuePtr),SetTo,RepeatType),
+	})
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 CMov(FP,RepeatType,0)
@@ -1086,21 +987,22 @@ SetCallEnd()
 
 local G_CA_Launch = CreateCcode()
 function CA_Repeat()
-	local CA = CAPlotDataArr
-	local CB = CAPlotCreateArr
-	if X2_Mode == 1 then 
-		CIfX(FP,{CVar(FP,CA[8],AtMost,4096*2),CVar(FP,CA[9],AtMost,4096*2)})
-	else
-		CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
-	end
-	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
-	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})
-	CIfXEnd()
 end
 
 function CA_Func1()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
+	--if X2_Mode == 1 then 
+	--	CIfX(FP,{CVar(FP,CA[8],AtMost,4096*2),CVar(FP,CA[9],AtMost,4096*2)})
+	--else
+	--	CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
+	--end
+	--CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})
+	--CIfXEnd()
+	CMov(FP,CPosX,_Add(V(CA[8]),G_CA_TempTable[8]))
+	CMov(FP,CPosY,_Add(V(CA[9]),G_CA_TempTable[9]))
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
+	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 end
 local G_CA_CallStack = {}
 local G_CA_IndexAlloc = 1
@@ -1375,4 +1277,9 @@ end
 	function G_CA_Lib_ErrorCheck()
 		if Load_CAPlot_Shape == nil then PushErrorMsg("Need_Install_Load_CAPlot") end
 	end
+end
+
+function VRange(Var,Left,Right)
+	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
+	
 end

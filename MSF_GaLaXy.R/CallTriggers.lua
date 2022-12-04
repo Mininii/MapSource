@@ -229,21 +229,87 @@ SetCallEnd()
 MinGachaP = CreateVar(FP)
 MinGacha = SetCallForward()
 SetCall(FP)
-	DoActions(FP, {SetSwitch(RandSwitch1,Random)})
-	CIfX(FP,{Switch(RandSwitch1, Set)})
-	MinGachaRandT = CreateVArr(4,FP)
-		MinGachaRand = f_CRandNum(100001)
-		ItoDec(FP,MinGachaRand,VArr(MinGachaRandT,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(MinGachaPStrPtr,MGPStr1[2]),VArr(MinGachaRandT,0),16)
-		CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MinGachaP),PlayWAV("staredit\\wav\\MMinus.wav"),DisplayText("\x0D\x0D\x0DMGaP".._0D,4),TSetResources(MinGachaP, Add, MinGachaRand, Ore)})
+MinGachaRand = f_CRandNum(100000)
+local MGAmount = {5000,10000,100000,300000,1000000}
+local MGPerX = {0,50000,35000,13000,1500,500}
+local TotalGPer = 0
+local MGT = {
+	StrDesignX("\x1F미네랄 박스\x04를 개봉하여 50.0% 확률로 \x1F 5,000 미네랄\x04을 \x07얻었습니다..."),
+	StrDesignX("\x1F미네랄 박스\x04를 개봉하여 35.0% 확률로 \x1F 10,000 미네랄\x04을 \x07얻었습니다."),
+	StrDesignX("\x1F미네랄 박스\x04를 개봉하여 13.0% 확률로 \x1F 100,000 미네랄\x04을 \x07얻었습니다."),
+	StrDesignX("\x1F미네랄 박스\x04를 개봉하여 1.5% 확률로 \x1F 300,000 미네랄\x04을 \x07얻었습니다. \x04축하드립니다!"),
+	StrDesignX("\x1F미네랄 박스\x04를 개봉하여 0.5% 확률로 \x1F 1,000,000 미네랄\x04을 \x07얻었습니다. \x04축하드립니다!"),
+}
+local errt = ""
+for j,k in pairs(MGAmount) do
+	local WAVRet = PlayWAV("staredit\\wav\\MMinus.wav")
+	TotalGPer = TotalGPer+MGPerX[j]
+	errt = errt..TotalGPer.."  "..MGPerX[j+1]-1+TotalGPer.."\n"
+	if j == 1 then WAVRet = PlayWAV("staredit\\wav\\MPlus.wav") end
+	if j == 5 then WAVRet = PlayWAV("staredit\\wav\\button3.wav") end
+	if j == 5 then
+		for p = 0, 6 do
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer),CV(MinGachaP,p)}, {RotatePlayer({DisplayTextX(string.rep(StrDesignX(PlayerString[p+1].."\x04가 \x1F미네랄 박스\x04에서 0.5% 확률로 \x1F1,000,000 미네랄\x04을 얻었습니다. 축하드립니다!!!!").."\n", 7), 4),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+		end
+	end
+	CTrigger(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer)}, {TSetMemory(0x6509B0, SetTo, MinGachaP),TSetResources(MinGachaP, Add, MGAmount[j], Ore),WAVRet,DisplayText(MGT[j], 4)}, {preserved})
 
-	CElseX()
-		MinGachaRand = f_CRandNum(100001)
-		ItoDec(FP,MinGachaRand,VArr(MinGachaRandT,0),2,0x1F,0)
-		f_Movcpy(FP,_Add(MinGachaMStrPtr,MGPStr1[2]),VArr(MinGachaRandT,0),16)
-		CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MinGachaP),PlayWAV("staredit\\wav\\MPlus.wav"),DisplayText("\x0D\x0D\x0DMGaM".._0D,4),TSetResources(MinGachaP, Subtract, MinGachaRand, Ore)})
-		
-	CIfXEnd()
+end
+--PushErrorMsg(errt)
+SetCallEnd()
+MarGachaP = CreateVar(FP)
+MarGacha = SetCallForward()
+ELevel = CreateVar(FP)
+SetCall(FP)
+MinGachaRand = f_CRandNum(100000)
+local MarGPer = {100000,50000,35000,10000,3500,1000,490,10}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
+local MarGPerX = {0,65000,20000,8900,4100,1500,450,50}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
+local TotalGPer = 0
+local MarGUID = {0,20,100,16,99,12,60}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
+-- 각유닛은 테라부터 제외, 6기 합칠경우 상위유닛 1기로 변환가능
+local MGT = {
+	StrDesign("\x0465.00% 확률로 Marine \x04을 \x07얻었습니다."),
+	StrDesign("\x0420.00% 확률로 \x1BH \x04Marine \x04을 \x07얻었습니다."),
+	StrDesign("\x048.90% 확률로 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04을 \x07얻었습니다."),
+	StrDesign("\x044.10% 확률로 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04를 \x07얻었습니다. \x11축하드립니다!"),
+	StrDesign("\x041.50% 확률로 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04를 \x07얻었습니다. \x11축하드립니다!"),
+	StrDesign("\x040.45% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07얻었습니다. \x11축하드립니다!"),
+	StrDesign("\x040.05% 확률로 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04를\x07얻었습니다. \x11축하드립니다!"),
+}
+
+
+local errt = ""
+-- 
+for j = 1, #MarGPerX-1 do
+	WAVRet = PlayWAV("staredit\\wav\\button3.wav")
+	TotalGPer = TotalGPer+MarGPerX[j]
+	if j == 4 or j == 5 then WAVRet = PlayWAV("staredit\\wav\\seeya.ogg") end
+	if j == 6 or j == 7 then WAVRet = PlayWAV("staredit\\wav\\button3.wav") end
+	errt = errt..TotalGPer.."  "..MarGPerX[j+1]-1+TotalGPer.."\n"
+	if j == 6 then
+		for p = 0, 6 do
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.45% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+		end
+	end
+	if j == 7 then
+		for p = 0, 6 do
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.05% 확률로 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+		end
+	end
+	CTrigger(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer)}, {TSetMemory(0x6509B0, SetTo, MarGachaP),SetV(ELevel,j-1),WAVRet,DisplayText(MGT[j], 4)}, {preserved})
+	
+
+end
+--PushErrorMsg(errt)
+TotalGPer = TotalGPer+MarGPerX[8]
+--PushErrorMsg(TotalGPer)
+for p = 0, 6 do
+	CIf(FP,{CV(MarGachaP,p)})
+		CMovX(FP,VArr(MarCreateVArr[p+1], ELevel),1,Add)
+	CIfEnd()
+end
+
+
 
 SetCallEnd()
 end

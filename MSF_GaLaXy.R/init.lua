@@ -9,6 +9,12 @@ function init()
 	local ArrID = CreateVar(FP)
 	function onInit_EUD()
 		CIfOnce(FP)
+		SelHPEPD,MarHPEPD,SelShEPD,SelOPEPD = CreateVars(4)
+		
+		f_Read(FP,0x590000,"X",SelHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+		f_Read(FP,0x590004,"X",MarHPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+		f_Read(FP,0x590008,"X",SelShEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
+		f_Read(FP,0x59000C,"X",SelOPEPD) -- 플립에서 전송받은 플립 변수 주소를 V에 입력
 		GiveT = {}
 		for i = 6, 0, -1 do
 			table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
@@ -28,11 +34,18 @@ function init()
 		end
 		end
 		DoActions(FP,GiveT)
-		for i = 0, 6 do
-		Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
-		end
 		PatchArrPrsv = {}	
 		PatchArr = {}
+		for i = 0, 6 do
+		Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(111,i)})
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 50,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 51,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 53,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 54,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + 1,SetTo,0))
+
+		
+		end
 		for j = 176,178 do
 			table.insert(PatchArr,SetInvincibility(Disable, j, P12, 64))
 			table.insert(PatchArr,SetMemory(0x662350+(j*4),SetTo,322*256))
@@ -158,11 +171,14 @@ function init()
 			end
 			WeaponTypePatch(27,1) -- 아덴시즈
 			WeaponTypePatch(84,4) -- 스톰
-			PUnitR = {0,1,16,20,100,7,125,124}
+			PUnitR = {0,1,16,20,100,7,125,124,60,12,99}
 			HiddenHPMPatchArr = {}
 			for j, k in pairs(PUnitR) do
-				SetUnitAdvFlag(k,0x4000,0x4000)
-				table.insert(HiddenHPMPatchArr,SetMemoryX(0x664080 + (k*4),SetTo,0x80,0x80))
+				SetUnitAdvFlag(k,0x4000,0x4004)--공중제거 + 로보틱 적용
+				table.insert(HiddenHPMPatchArr,SetMemoryX(0x664080 + (k*4),SetTo,0x80,0x80)) -- 히든모드 체젠 적용
+				if k ~= 125 then
+					SetUnitClass(k)
+				end
 			end
 			
 			
@@ -177,21 +193,26 @@ function init()
 			UnitEnable(83)
 			UnitEnable(3)
 			UnitEnable(8)
-			UnitEnable(54)
+			UnitEnable(50)
+			UnitEnable(51)
+			UnitEnable(52)
 			UnitEnable(53)
+			UnitEnable(54)
 			UnitEnable(48)
 			UnitEnable(52)
 			UnitEnable(49)
+			
+			
 			if X2_Mode == 1 then
 				UnitEnableX(2,1000,nil,1,nil)
 				UnitEnableX(0,NMCost,nil,1,nil)
 				UnitEnableX(32,NMCost,nil,1,nil)
-				UnitEnableX(1,NMCost+HMCost+GMCost,nil,1)
+				UnitEnableX(1,0,nil,1)
 			else
 				UnitEnableX(2,1000,nil,3,nil)
 				UnitEnableX(0,NMCost,nil,4,nil)
 				UnitEnableX(32,NMCost,nil,4,nil)
-				UnitEnableX(1,NMCost+HMCost+GMCost,nil,12)
+				UnitEnableX(1,0,nil,12)
 			end
 			UnitEnableX(7,500)
 			UnitEnableX(125,5000)
@@ -286,9 +307,9 @@ function init()
 
 			
 	T_YY = 2022
-	T_MM = 04
-	T_DD = 20
-	T_HH = 12
+	T_MM = 12
+	T_DD = 06
+	T_HH = 00
 	function InputTesterID(Player,ID)
 		Trigger {
 			players = {FP},
@@ -475,11 +496,17 @@ function init()
 				f_GetStrXptr(FP,GMStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D)
 				f_GetStrXptr(FP,NBStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D)
 				f_GetStrXptr(FP,SVStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D)
+				f_GetStrXptr(FP,TRStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."TR".._0D)
+				f_GetStrXptr(FP,SNStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."SN".._0D)
+				f_GetStrXptr(FP,QSStrPtr[i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."QS".._0D)
 				Install_CText1(NMStrPtr[i+1],Str00,Str01,Names[i+1])
 				Install_CText1(HMStrPtr[i+1],Str00,Str02,Names[i+1])
 				Install_CText1(GMStrPtr[i+1],Str00,Str03,Names[i+1])
 				Install_CText1(NBStrPtr[i+1],Str00,Str04,Names[i+1])
 				Install_CText1(SVStrPtr[i+1],Str00,Str05,Names[i+1])
+				Install_CText1(TRStrPtr[i+1],Str00,TeText,Names[i+1])
+				Install_CText1(SNStrPtr[i+1],Str00,SuText,Names[i+1])
+				Install_CText1(QSStrPtr[i+1],Str00,QuaText,Names[i+1])
 			end
 			G_init()
 			table.insert(PatchArr,ModifyUnitHitPoints(All,125,AllPlayers,64,100))

@@ -1,14 +1,19 @@
 
 --dofile("C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\MapSource\\MSF_GaLaXy.2\\Gal.2.lua")
 
+--X2_Mode = 0
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_GaLaXy.R\\main.lua")
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
 if LD2XOption == 1 then
+	if X2_Mode == 1 then
+		Mapdir="C:\\euddraft0.9.2.0\\MSF_GaLaXy_R_2X"
+	else
+		Mapdir="C:\\euddraft0.9.2.0\\MSF_GaLaXy.R"
+	end 
 	MapFolder = "MSF_GaLaXy.R"
-	Mapdir="C:\\euddraft0.9.2.0\\"..MapFolder
 	__StringArray = {}
 	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
 	Loader2XFName = "Loader.lua"
@@ -40,11 +45,10 @@ end
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(0)
-X2_Mode = 0
 Test=""
 if Limit == 1 then Test="T" end
 if X2_Mode == 1 then
-	VName = "1.7_2X"..Test
+	VName = "3.0_2X"..Test
 	MapSize = {256*32,256*32}
 else
 	VName = "2.4"..Test
@@ -86,6 +90,7 @@ NIf(FP,ElapsedTime(AtLeast,3))
 	Operator_Trig()
 	Waves()
 	Interface()
+	CreateUnitQueue()
 	LeaderBoardF()
 NIfEnd()
 

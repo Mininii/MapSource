@@ -122,6 +122,10 @@ function Gun_System()
     Install_BGMSystem(FP,6,BGMType,12)
 
 	
+
+
+
+	
     EXCC_Part1(DUnitCalc) -- Á×ÀºÀ¯´Ö ÀÎ½Ä ´Ü¶ô ½ÃÀÛ
     Check_Enemy = def_sIndex()
     NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,7,0,0xFF)})
@@ -134,13 +138,13 @@ function Gun_System()
 --	CMov(FP,TempV,BackupCP,6)
 --	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
 
-	DUArr={0,20,100,16,7}
-	DCArr = {1,2,4,5,1}
+	DUArr={0,20,100,16,7,99,12,60}
+	DCArr = {1,2,4,5,1,8,15,30}
 	for i = 0, 6 do
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
 		DoActions(FP,MoveCp(Add,6*4))
-		DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,}
-		for j= 1, 5 do
+		DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."TR".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SN".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."QS".._0D,}
+		for j= 1, 8 do
 			CIf(FP,{DeathsX(CurrentPlayer,Exactly,DUArr[j],0,0xFF)})
 			f_SaveCp()
 			Trigger2X(FP,{},{SetScore(i,Add,DCArr[j],Custom),SetCD(DSound,1),RotatePlayer({DisplayTextX(DUStrArr[j],4)},HumanPlayers,FP)},{preserved})
@@ -356,6 +360,7 @@ Trigger2X(FP,Cond,{
 	RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)
 })
 end
+TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 88, FP, 64)},{preserved})
 InvDisable({CDeaths(FP,AtLeast,4,ChryCcode),CD(GeneCcode,1,AtLeast)},147,Force2,64,"£Ï£ö£å£ò£í£é£î£ä¡¡£Ç")
 InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"£Ç£å£î£å£ò£á£ô£ï£ò")
 InvDisable({CDeaths(FP,AtLeast,10,PyCCode)},173,Force2,64,"£Æ£ï£ò£í£á£ô£é£ï£î")
@@ -557,4 +562,153 @@ TriggerX(FP,{ElapsedTimeX(AtMost,390)},{
 	ModifyUnitEnergy(All,63,FP,64,20),
 	ModifyUnitEnergy(All,67,FP,64,20),
 },{preserved})
+end
+
+function CreateUnitQueue()
+	
+	local G_CA_Nextptrs = CreateVar(FP)
+	local TempUID = CreateVar(FP)
+	local TempPID = CreateVar(FP)
+	local TempType = CreateVar(FP)
+	NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{})
+	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+	f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
+	f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)
+	f_SHRead(FP, _Add(CreateUnitQueUIDArr,CreateUnitQuePtr), TempUID)
+	f_SHRead(FP, _Add(CreateUnitQuePIDArr,CreateUnitQuePtr), TempPID)
+	f_SHRead(FP, _Add(CreateUnitQueTypeArr,CreateUnitQuePtr), TempType)
+	DoActionsX(FP,{SubV(CreateUnitQuePtr,1)})
+
+
+
+
+
+	NIf(FP,{CV(TempUID,1,AtLeast)})
+	local CRLID = CreateVar(FP)
+
+	
+	DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+	for i = 0, 3 do
+		if i == 0 then RS1 = Cleared RS2=Cleared end
+		if i == 1 then RS1 = Set RS2=Cleared end
+		if i == 2 then RS1 = Cleared RS2=Set end
+		if i == 3 then RS1 = Set RS2=Set end
+		TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetV(CRLID,11+i)},{preserved})
+	end
+
+
+	TriggerX(FP,{CVar(FP,TempPID[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,TempPID[2],SetTo,7)},{preserved})
+	CTrigger(FP,{TTCVar(FP,TempType[2],NotSame,2)},{TCreateUnitWithProperties(1,TempUID,CRLID,TempPID,{energy = 100})},1)
+	CTrigger(FP,{CVar(FP,TempType[2],Exactly,2)},{TCreateUnitWithProperties(1,TempUID,CRLID,TempPID,{energy = 100, burrowed = true})},1)
+	
+
+
+
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+
+	
+
+
+
+	NIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	
+	CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+		TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+		TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+		TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,4000,0xFFFF),
+		},1)
+	f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+	Convert_CPosXY()
+	Simple_SetLocX(FP,15,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(15,-4,-4,4,4)})
+	CDoActions(FP,{TMoveUnit(1,TempUID,Force2,16,1)})
+
+		CIfX(FP,CVar(FP,TempType[2],Exactly,0))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TOrder(TempUID, Force2, 1, Attack, 4);
+			})
+		CElseIfX(CVar(FP,TempType[2],Exactly,187))
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+			})
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,189))
+		CDoActions(FP,{
+			TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+			TCreateUnitWithProperties(1,84,1,TempPID,{energy = 100}),TRemoveUnit(84,TempPID)
+		})
+		CElseIfX(CVar(FP,TempType[2],Exactly,190))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP,{CVar(FP,HondonMode[2],Exactly,0)},{
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920),
+				},1)
+			CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,20000),
+				},1)
+			CDoActions(FP,{
+				TOrder(TempUID, Force2, 1, Attack, 4);
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+				
+			})
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,188))
+			--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+			TempSpeedVar = f_CRandNum(4000)
+			CDoActions(FP,{
+				TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
+				TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,TempSpeedVar,0,0xFFFF)})
+			--CElseX()
+			--CDoActions(FP,{
+			--	TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
+			--	TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
+			--CIfXEnd()
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+			})
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,147))
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP,{
+			TOrder(TempUID, Force2, 1, Attack, 23);
+			TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,128),
+			TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,128,0xFFFF),
+			TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+			TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
+			CreateUnit(1,84,1,FP),KillUnit(84,FP)
+		})
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,3))
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
+		CElseIfX(CVar(FP,TempType[2],Exactly,84))
+		CDoActions(FP,{
+			TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
+		})
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,201))
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP,{
+			TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
+			TOrder(TempUID, Force2, 1, Move, 36);
+		})
+		CElseIfX(CVar(FP,TempType[2],Exactly,2))
+		CElseX()
+			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+		CIfXEnd()
+		
+
+
+	NIfEnd()
+	NIfEnd()
+
+	NWhileEnd()
 end

@@ -3,7 +3,8 @@ function Source()
 	AtkFactor = 15
 	DefFactor = 20
 	SuFactor = 200
-	NMCost = 7000
+	NMCost = 30000
+	NMCost10X = 300000
 	HMCost = 10000
 	GMCost = 25000
 	NeCost = 20000
@@ -37,9 +38,9 @@ function Source()
 	CC_Header = CreateVar(FP)
 	ObEff = 84
 	nilunit = 181
-	MedicFuncArr = {0,16,7,100,124,125,20}
-	MedicFuncArr2 = {3500,9000,2000,10000,10000,10000,6500}
-	MedicFuncArr3 = {0,0,0,0,10000,10000,0}
+	MedicFuncArr = {0,16,7,100,124,125,20,60,99,12}
+	MedicFuncArr2 = {3500,9000,2000,10000,10000,10000,6500,167772,30000,50000}
+	MedicFuncArr3 = {0,0,0,0,10000,10000,0,65535,30000,50000}
 	ZergGndUArr = {51,53,54,48,104}
 	HondonFlingyArr = {88,73,72,4,188,187,49,40,45,38,44,43,37,46,47,191,15,8,14,1,5,12,11,7,13,0,2,9,41,190,186,74}
 
@@ -51,6 +52,9 @@ function Source()
 	Str02 = CreateCText(FP,"\x04의 \x1BH \x04Marine\x04이 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
 	Str03 = CreateCText(FP,"\x04의 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04이 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
 	Str04 = CreateCText(FP,"\x04의 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
+	TeText = CreateCText(FP,"의 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
+	SuText = CreateCText(FP,"의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
+	QuaText = CreateCText(FP,"의 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
 	Str05 = CreateCText(FP,"\x04의 \x04SCV\x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆")
 	Str12 = CreateCText(FP,"\x12\x07『 \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	Str19 = CreateCText(FP,"\x13\x15▶ ▶ ▶ [\x04 ")
@@ -75,7 +79,7 @@ function Source()
 	_0D = string.rep("\x0D",200) 
 	HTextStr = _0D
 	GiveUnitID = {64,65,66,67,61,63,68}
-	BanToken = {84,69,70,60,71,98}
+	BanToken = {84,69,70,88,71,98}
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
 	P = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x186인","\x167인"}
@@ -124,6 +128,7 @@ DifLeaderBoard = {
 	RandSwitch2 = "Switch 101"
 	--Gun_SVA = CreateSVArr(16,64,FP)
 	--G_CA_SVA = CreateSVArr(16,64,FP)
+	RandMarCcode = CreateCcodeArr(7)
 	BGMType=CreateVar(FP)
 	ExRateV = CreateVar(FP)
 	SelCP=CreateVar(FP)
@@ -150,6 +155,9 @@ DifLeaderBoard = {
 	GMStrPtr = CreateVarArr(7,FP)
 	NBStrPtr = CreateVarArr(7,FP)
 	SVStrPtr = CreateVarArr(7,FP)
+	TRStrPtr = CreateVarArr(7,FP)
+	SNStrPtr = CreateVarArr(7,FP)
+	QSStrPtr = CreateVarArr(7,FP)
 	Names = CreateVArrArr(7,7,FP)
 	BdDimArr = CreateArr(228,FP)
 	f_GunNum = CreateVar(FP)
@@ -223,6 +231,18 @@ DifLeaderBoard = {
 	FormCcode = CreateCcode() -- 1일경우
 	CellCcode = CreateCcode() -- 3일경우
 	BossCcode = CreateCcode()
+	function Create_VoidEPDHeaderV(Player,Size)
+		local Void = f_GetVoidptr(Player,Size)
+		local Header =  CreateVar(Player)
+		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
+		return Header
+	end
+	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQuePIDArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQueTypeArr = Create_VoidEPDHeaderV(FP,4*50000)
+	CreateUnitQuePtr = CreateVar(FP)
 	if STRCTRIGASM == 1 then
 		
 		--UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC
@@ -258,6 +278,8 @@ DifLeaderBoard = {
 	table.insert(DefUpgradeMaskRetArr,(0x58D2B0+(i*46))%4)
 	table.insert(DefUpgradePtrArr,0x58D2B0+(i*46) - DefUpgradeMaskRetArr[i+1])
 	end
+
+	MarCreateVArr = CreateVArrArr(7, 7, FP)
 
 	
 

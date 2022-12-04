@@ -309,6 +309,12 @@ Trigger {
 		SetMemoryW(0x657678+(1*2),Add,4);
 		SetMemoryW(0x656EB0+(117*2),Add,70);
 		SetMemoryW(0x657678+(117*2),Add,6);
+		SetMemoryW(0x656EB0+(118*2),Add,300);
+		SetMemoryW(0x657678+(118*2),Add,15);
+		SetMemoryW(0x656EB0+(119*2),Add,1000);
+		SetMemoryW(0x657678+(119*2),Add,40);
+		SetMemoryW(0x656EB0+(120*2),Add,150);
+		SetMemoryW(0x657678+(120*2),Add,41);
 		SetMemoryW(0x656EB0+(3*2),Add,150);
 		SetMemoryW(0x657678+(3*2),Add,5);
 		SetMemoryW(0x656EB0+(13*2),Add,5);
@@ -344,8 +350,13 @@ for i = 1, 5 do
 		SetMemory(0x662350 + (4*124), Add, (i*10000*256)-1);
 		SetMemory(0x662350 + (4*125), Add, (i*10000*256)-1);
 		SetMemory(0x662350 + (4*20), Add, i*6500*256);
+		SetMemory(0x662350 + (4*99), Add, i*30000*256);
+		SetMemory(0x662350 + (4*12), Add, i*50000*256);
+		SetMemory(0x662350 + (4*60), Add, i*167772*256);
 		SetMemoryW(0x660E00 + (2*124), Add, i*10000);
 		SetMemoryW(0x660E00 + (2*125), Add, i*10000);
+		SetMemoryW(0x660E00 + (2*99), Add, i*6000);
+		SetMemoryW(0x660E00 + (2*12), Add, i*2000);
 	})
 	
 	TriggerX(FP,{CVar(FP,HiddenPts[2],Exactly,i);},{SetCVar(FP,HPointVar[2],Add,100*i);})
@@ -366,6 +377,12 @@ for i = 1, 5 do
 			SetMemoryW(0x657678+(1*2),Add,4*i);
 			SetMemoryW(0x656EB0+(117*2),Add,70*i);
 			SetMemoryW(0x657678+(117*2),Add,6*i);
+			SetMemoryW(0x656EB0+(118*2),Add,300*i);
+			SetMemoryW(0x657678+(118*2),Add,15*i);
+			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
+			SetMemoryW(0x657678+(119*2),Add,40*i);
+			SetMemoryW(0x656EB0+(120*2),Add,150*i);
+			SetMemoryW(0x657678+(120*2),Add,41*i);
 			SetMemoryW(0x656EB0+(3*2),Add,150*i);
 			SetMemoryW(0x657678+(3*2),Add,5*i);
 			SetMemoryW(0x656EB0+(13*2),Add,5*i);
@@ -390,6 +407,15 @@ for i = 1, 5 do
 			SetMemoryW(0x657678+(3*2),Add,(5*i)+(5*i));
 			SetMemoryW(0x656EB0+(13*2),Add,(5*i)+(5*i));
 			SetMemoryW(0x657678+(13*2),Add,(2*i)+(2*i));
+			SetMemoryW(0x656EB0+(118*2),Add,300*i);
+			SetMemoryW(0x657678+(118*2),Add,15*i);
+			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
+			SetMemoryW(0x657678+(119*2),Add,40*i);
+			SetMemoryW(0x656EB0+(120*2),Add,150*i);
+			SetMemoryW(0x657678+(120*2),Add,41*i);
+			SetMemoryB(0x6564E0+118,SetTo,2);--공격력 오버플로우 문제로 인한 투사체수로 대체 패치
+			SetMemoryB(0x6564E0+119,SetTo,2);--공격력 오버플로우 문제로 인한 투사체수로 대체 패치
+			SetMemoryB(0x6564E0+120,SetTo,2);--공격력 오버플로우 문제로 인한 투사체수로 대체 패치
 		}
 	}
 	Trigger {
@@ -436,14 +462,14 @@ CIfEnd()
 NIfEnd()
 NJumpEnd(FP,HiddenCancel)
 
-TriggerX(FP,{},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,5000,Ore),CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100})})
-TriggerX(FP,{CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100}),SetResources(Force1,Add,75000,Ore)})
-TriggerX(FP,{CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(2,20,4,Force1,{energy = 100}),SetResources(Force1,Add,55000,Ore)})
-TriggerX(FP,{CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,35000,Ore)})
-TriggerX(FP,{CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,15000,Ore)})
+TriggerX(FP,{},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,350000,Ore),CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100})})
+TriggerX(FP,{CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,4,Force1,{energy = 100}),CreateUnitWithProperties(3,20,4,Force1,{energy = 100}),SetResources(Force1,Add,300000,Ore)})
+TriggerX(FP,{CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,4,Force1,{energy = 100}),CreateUnitWithProperties(2,20,4,Force1,{energy = 100}),SetResources(Force1,Add,250000,Ore)})
+TriggerX(FP,{CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,175000,Ore)})
+TriggerX(FP,{CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,100000,Ore)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[50.00%]  \x1BH \x04Marine\x0F[35.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[10.00%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[3.00%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.00%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.45%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
 
@@ -454,7 +480,7 @@ CIfEnd({SetCp(FP)})
 CIfOnce(FP,{Switch("Switch 201",Set),CommandLeastAt(189,20)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x07==================\n\x13\x04간단 조합법\n\x13\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x13\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ")},HumanPlayers,FP)})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[50.00%]  \x1BH \x04Marine\x0F[35.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[10.00%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[3.00%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.00%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.45%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP)})
 	end
 end
 CIfEnd()
