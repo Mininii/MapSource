@@ -971,6 +971,31 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1),
 				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,1,0xFFFF),
 			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,197))-- testify 전용 비행체 이동속도 중앙비례 일정하게, 공격지점은 중앙
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			local TPosX, TPosY,SRet = CreateVars(3,FP)
+			DoActions(FP, Order("Men", Force2, 1, Attack, DefaultAttackLoc+1))
+			CiSub(FP,TPosX,CPosX,G_CA_TempTable[8])
+			CiSub(FP,TPosY,CPosY,G_CA_TempTable[9])
+			f_Sqrt(FP, SRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
+			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,198))-- testify 전용 비행체 이동속도 중앙비례 일정하게, P9 대기상태
+			local TPosX, TPosY,SRet = CreateVars(3,FP)
+			CiSub(FP,TPosX,CPosX,G_CA_TempTable[8])
+			CiSub(FP,TPosY,CPosY,G_CA_TempTable[9])
+			f_Sqrt(FP, SRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
+			f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
+			CDoActions(FP,{
+				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
+				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
+			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
 				DoActions2(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -1070,7 +1095,7 @@ end
 
 
 if type(CUTable2) ~= "table" then
-	G_CA_SetSpawn_Inputdata_Error()
+	PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 else
 	if #CUTable2 <= 4 then
 		Z = {SetCVar(FP,TempRepeat2X_CUTV[1][2],SetTo,T_to_BiteBuffer(CUTable2))}
@@ -1393,7 +1418,7 @@ function T_to_BiteBuffer(Table)
 	if type(Table) == "table" then
 		local ret = 0
 		if #Table >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i, j in pairs(Table) do
 			if type(j) == "string" and j =="ACAS" then
@@ -1410,17 +1435,18 @@ end
 
 function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,CenterXY,Owner,FuncNum,MaxNum,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_SNTable) ~= "table" then
 		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
 	elseif G_CA_SNTable == nil then 
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
+		
 	end
 	if type(G_CA_SLTable) ~= "table" then
 		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
 	elseif G_CA_SLTable == nil then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_RepeatType) ~= "table" then
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
@@ -1428,7 +1454,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CA_SLTable[i] ~= nil then
@@ -1444,7 +1470,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
-					G_CB_SNTable_InputData_Error()
+					PushErrorMsg("G_CB_SNTable_InputData_Error")
 				end
 			else
 				table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,0))
@@ -1465,7 +1491,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 			PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 		end
 	else
-		G_CB_SNTable_InputData_Error()
+		PushErrorMsg("G_CB_SNTable_InputData_Error")
 	end
 
 
@@ -1515,18 +1541,18 @@ function G_CA_Bullet(Condition,UnitID,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_C
 	if type(G_CA_SNTable) ~= "table" then
 		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
 	elseif G_CA_SNTable == nil then 
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_SLTable) ~= "table" then
 		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
 	elseif G_CA_SLTable == nil then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CA_SLTable[i] ~= nil then
@@ -1542,7 +1568,7 @@ function G_CA_Bullet(Condition,UnitID,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_C
 						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
-					G_CB_SNTable_InputData_Error()
+					PushErrorMsg("G_CB_SNTable_InputData_Error")
 				end
 			else
 				table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,0))
@@ -1563,7 +1589,7 @@ function G_CA_Bullet(Condition,UnitID,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_C
 			PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 		end
 	else
-		G_CB_SNTable_InputData_Error()
+		PushErrorMsg("G_CB_SNTable_InputData_Error")
 	end
 	local LMRet = 0
 	if G_CA_LMTable == "MAX" then
@@ -1660,7 +1686,7 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 
 
 	if type(CUTable2) ~= "table" then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	else
 		if #CUTable2 <= 4 then
 			Z = {SetCVar(FP,G_CA_CUTV[1][2],SetTo,T_to_BiteBuffer(CUTable2))}
@@ -1683,12 +1709,12 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 		end
 	end
 	if type(G_CA_SNTable) == "table" then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	else
 		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
 	end
 	if type(G_CA_SLTable) == "table" then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	else
 		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
 	end
@@ -1696,7 +1722,7 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CA_SLTable[i] ~= nil then
@@ -1712,7 +1738,7 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
-					G_CB_SNTable_InputData_Error()
+					PushErrorMsg("G_CB_SNTable_InputData_Error")
 				end
 			else
 				table.insert(X,SetCVar(FP,G_CB_SNTV[i][2],SetTo,0))
@@ -1733,7 +1759,7 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 			PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 		end
 	else
-		G_CB_SNTable_InputData_Error()
+		PushErrorMsg("G_CB_SNTable_InputData_Error")
 	end
 	local LMRet = 0
 	if G_CA_LMTable == "MAX" then
@@ -1742,7 +1768,7 @@ function G_CA_SetSpawn2X(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_L
 		local NumRet = G_CA_LMTable
 		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
 	else
-		G_CA_LMTable_InputData_Error()
+		PushErrorMsg("G_CA_LMTable_InputData_Error")
 	end
 	local Y = {}
 	if CenterXY == nil then 

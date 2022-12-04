@@ -637,11 +637,11 @@ CFor(FP,19025,19025+(84*1700),84)
 		TMemoryX(_Add(CI,25),Exactly,CGTemp[3],0xFF),
 	})
 	CMov(FP,CGTemp[1],_Read(_Add(CI,35)),nil,0xFF)
-	--f_CGive(FP, CI, nil, CGTemp[1], P9)
+	f_CGive(FP, CI, nil, CGTemp[1], P9)
 	f_Read(FP,_Add(CI,10),CPos) -- 생성유닛 위치 불러오기
-	Convert_CPosXY()
-	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-	CDoActions(FP,{TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
+	--Convert_CPosXY()
+	--Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+	--CDoActions(FP,{TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
 	CIfEnd()
 CForEnd()
 

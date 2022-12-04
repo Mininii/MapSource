@@ -1266,6 +1266,7 @@ BossUID = {87,74,5,2}
 	end 
 	SetBright(2700,15)
 	SetBright(8090,31)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{29},"ACAS","tes_SF","MAX",198,nil,nil,nil,nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	CIf(FP,Gun_Line(8,AtMost,8090))
@@ -1287,12 +1288,12 @@ BossUID = {87,74,5,2}
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 4 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],36))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
 	end
 	for i = 5, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
-		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],36))
 	end
 
 
@@ -1313,18 +1314,22 @@ BossUID = {87,74,5,2}
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
 	end
+	NUGive(12130,29)
 	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
 		local RetT
 		local RetT2
 		if j%2 == 1 then RetT2 = CA_Eff_DRat2 RetT = SWEffArr1 else RetT2 = CA_Eff_DRat3 RetT = SWEffArr2 end
 		TriggerX(FP,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,210000),RetT})
-		local RetT3
-		if j <= 4 then RetT3 = 2000+21 else RetT3 = 2000+88 end
-		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT3)},1)
+		local RetT4
+		if j <= 4 then RetT4 = 21 else RetT4 = 88 end
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,RetT4+2000)},1)
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},{RetT4},"ACAS","TesSquare","MAX",198,nil,nil,G_CA_Ratio(256-((j-1)*8)),nil,1)
 	end
 
 	
 
+	NUGive(17520,21)
+	NUGive(17520,88)
 	CIf(FP,Gun_Line(8,AtLeast,17520))
 	TriggerX(FP,{Gun_LineRange(8,17520,22920),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,1)},{preserved})
 	TriggerX(FP,{Gun_LineRange(8,53930,55280),CV(CA_ACCR,30,AtLeast)},{SubV(CA_ACCR,5)},{preserved})
@@ -1612,7 +1617,7 @@ BossUID = {87,74,5,2}
 	local tesLineArr = {98420+5400,98930+5400,99430+5400,99770+5400,100280+5400,100780+5400,101120+5400,101620+5400,107520}
 	local GBLineT = {{70,65},{70,65},{70,65},{27,19},{27,19},{27,19},{8,10},{8,10},{8,10}}
 	for j,k in pairs(tesLineArr) do
-		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},GBLineT[j],"ACAS","TesLine","MAX",0,nil,nil,G_CA_Rotate((360/(#tesLineArr))*j),nil,1)
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},GBLineT[j],"ACAS","TesLine","MAX",0,nil,nil,G_CA_Rotate((360-(360/(#tesLineArr))*j)),nil,1)
 	end
 	TriggerX(FP,{Gun_LineRange(8,107520,109040),CV(CA_ACCR,30,AtLeast)},{SubV(CA_ACCR,3)},{preserved})
 	TriggerX(FP,{Gun_LineRange(8,109210,109210+((bit/2)*(8-1))),CV(CA_ACCR,150,AtMost)},{AddV(CA_ACCR,3)},{preserved})
@@ -1670,22 +1675,10 @@ BossUID = {87,74,5,2}
 	SetV(CA_Eff_RatF,400000),
 	})
 	CIfEnd()
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
 	--CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,2000+60),SWEffArr1},1)
 	TriggerX(FP,{Gun_LineRange(8,135500,135500+5000),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
 	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1)})
-	--
-
-	--
-	--
-	--
-	--
-	--
-	--
-	--
-	--
-	--
-
+	
 	
 
 	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
@@ -1743,6 +1736,7 @@ BossUID = {87,74,5,2}
 	CMov(FP,SHLY,G_CA_CenterY)
 	--Gun_LineRange(8, 66060, 76850)
 	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
 	CallTrigger(FP,EffUnitLoop)
 	CSub(FP,CA_Eff_DRat2,2500)
 	CSub(FP,CA_Eff_DRat3,2500)
