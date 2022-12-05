@@ -562,6 +562,46 @@ TriggerX(FP,{ElapsedTimeX(AtMost,390)},{
 	ModifyUnitEnergy(All,63,FP,64,20),
 	ModifyUnitEnergy(All,67,FP,64,20),
 },{preserved})
+
+
+ObCcode2 = CreateCcode()
+ObChatMode = CreateCcode()
+	CIf(FP,Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131))
+	CIfX(FP,{KeyPress("HOME", "Down"),CD(ObCcode2,0)})
+	CTrigger(FP,{CD(ObChatMode,0),CD(ObCcode2,0)},{SetCD(ObChatMode,1),SetCD(ObCcode2,1),
+	TSetMemory(0x6509B0,SetTo,_Read(0x512684)),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x07채팅→전체\x04에게 메세지를 보냅니다."),4),SetCp(FP)},{preserved})
+	CTrigger(FP,{CD(ObChatMode,1),CD(ObCcode2,0)},{SetCD(ObChatMode,0),SetCD(ObCcode2,1),
+	TSetMemory(0x6509B0,SetTo,_Read(0x512684)),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x1C채팅→관전자\x04에게 메세지를 보냅니다."),4),SetCp(FP)},{preserved})
+	CElseIfX({KeyPress("HOME", "Down")},SetCD(ObCcode2,1))
+	CElseX(SetCD(ObCcode2,0))
+	CIfXEnd()
+	Trigger { --ObserverChatToOb
+		players = {FP},
+		conditions = {
+			Label();
+			CD(ObChatMode,0);
+			Memory(0x68C144,AtLeast,1);
+		},
+		actions = {
+			SetMemory(0x68C144,SetTo,5);
+			PreserveTrigger();
+		},
+	}
+	Trigger { --ObserverChatToAll
+		players = {FP},
+		conditions = {
+			Label();
+			CD(ObChatMode,1);
+			Memory(0x68C144,AtLeast,1);
+		},
+		actions = {
+			SetMemory(0x68C144,SetTo,2);
+			PreserveTrigger();
+		},
+	}
+	CIfEnd()
+
+
 end
 
 function CreateUnitQueue()

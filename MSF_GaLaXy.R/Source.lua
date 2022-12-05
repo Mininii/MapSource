@@ -129,6 +129,7 @@ DifLeaderBoard = {
 	--Gun_SVA = CreateSVArr(16,64,FP)
 	--G_CA_SVA = CreateSVArr(16,64,FP)
 	RandMarCcode = CreateCcodeArr(7)
+	AutoCombiCcode = CreateCcodeArr(7)
 	BGMType=CreateVar(FP)
 	ExRateV = CreateVar(FP)
 	SelCP=CreateVar(FP)
@@ -231,6 +232,7 @@ DifLeaderBoard = {
 	FormCcode = CreateCcode() -- 1老版快
 	CellCcode = CreateCcode() -- 3老版快
 	BossCcode = CreateCcode()
+	TempUnitReadV = CreateVar(FP)
 	function Create_VoidEPDHeaderV(Player,Size)
 		local Void = f_GetVoidptr(Player,Size)
 		local Header =  CreateVar(Player)

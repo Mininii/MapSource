@@ -310,7 +310,7 @@ Trigger {
 		SetMemoryW(0x656EB0+(117*2),Add,70);
 		SetMemoryW(0x657678+(117*2),Add,6);
 		SetMemoryW(0x656EB0+(118*2),Add,300);
-		SetMemoryW(0x657678+(118*2),Add,15);
+		SetMemoryW(0x657678+(118*2),Add,10);
 		SetMemoryW(0x656EB0+(119*2),Add,1000);
 		SetMemoryW(0x657678+(119*2),Add,40);
 		SetMemoryW(0x656EB0+(120*2),Add,150);
@@ -350,12 +350,12 @@ for i = 1, 5 do
 		SetMemory(0x662350 + (4*124), Add, (i*10000*256)-1);
 		SetMemory(0x662350 + (4*125), Add, (i*10000*256)-1);
 		SetMemory(0x662350 + (4*20), Add, i*6500*256);
-		SetMemory(0x662350 + (4*99), Add, i*30000*256);
+		SetMemory(0x662350 + (4*99), Add, i*20000*256);
 		SetMemory(0x662350 + (4*12), Add, i*50000*256);
 		SetMemory(0x662350 + (4*60), Add, i*167772*256);
 		SetMemoryW(0x660E00 + (2*124), Add, i*10000);
 		SetMemoryW(0x660E00 + (2*125), Add, i*10000);
-		SetMemoryW(0x660E00 + (2*99), Add, i*6000);
+		SetMemoryW(0x660E00 + (2*99), Add, i*8000);
 		SetMemoryW(0x660E00 + (2*12), Add, i*2000);
 	})
 	
@@ -378,7 +378,7 @@ for i = 1, 5 do
 			SetMemoryW(0x656EB0+(117*2),Add,70*i);
 			SetMemoryW(0x657678+(117*2),Add,6*i);
 			SetMemoryW(0x656EB0+(118*2),Add,300*i);
-			SetMemoryW(0x657678+(118*2),Add,15*i);
+			SetMemoryW(0x657678+(118*2),Add,10*i);
 			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
 			SetMemoryW(0x657678+(119*2),Add,40*i);
 			SetMemoryW(0x656EB0+(120*2),Add,150*i);
@@ -408,7 +408,7 @@ for i = 1, 5 do
 			SetMemoryW(0x656EB0+(13*2),Add,(5*i)+(5*i));
 			SetMemoryW(0x657678+(13*2),Add,(2*i)+(2*i));
 			SetMemoryW(0x656EB0+(118*2),Add,300*i);
-			SetMemoryW(0x657678+(118*2),Add,15*i);
+			SetMemoryW(0x657678+(118*2),Add,10*i);
 			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
 			SetMemoryW(0x657678+(119*2),Add,40*i);
 			SetMemoryW(0x656EB0+(120*2),Add,150*i);

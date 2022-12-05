@@ -412,6 +412,8 @@ actions = {
 
 
 
+CIf(FP,{HumanCheck(i,1)})
+
 local ACArr = {0,20,100,16}
 local ACArr2 = {
 	StrDesign("\x04본진 근처의 모든 \x04Marine \x04을 조합합니다."),
@@ -422,22 +424,25 @@ local ACArr2 = {
 
 for j,k in pairs({50,51,53,54}) do
 	Trigger { -- 자동조합
-	players = {i},
+	players = {FP},
 	conditions = {
+		Label();
 		Command(i,AtLeast,1,k);
 	},
 	actions = {
 		RemoveUnitAt(1,k,"Anywhere",i);
 		MoveUnit(All, ACArr[j], i, 21, 3);
 		DisplayText(ACArr2[j],4);
+		SetCD(AutoCombiCcode[i+1], 1);
 		PreserveTrigger();
 	},
 	}
 
 end
 Trigger { -- 자동조합
-players = {i},
+players = {FP},
 conditions = {
+	Label();
 	Command(i,AtLeast,1,52);
 },
 actions = {
@@ -446,12 +451,23 @@ actions = {
 	MoveUnit(All, 20, i, 21, 3);
 	MoveUnit(All, 100, i, 21, 3);
 	MoveUnit(All, 16, i, 21, 3);
+	SetCD(AutoCombiCcode[i+1], 1);
 	DisplayText(StrDesign("\x04본진 근처의 모든 \x1F조합 가능 유닛 \x04을 조합합니다."),4);
 	PreserveTrigger();
 },
 }
-CIf(FP,{HumanCheck(i,1)})
-
+TriggerX(FP, {
+	CD(AutoCombiCcode[i+1], 1);
+	Bring(i, AtMost, 2, 0, 3);
+	Bring(i, AtMost, 2, 20, 3);
+	Bring(i, AtMost, 2, 100, 3);
+	Bring(i, AtMost, 2, 16, 3);
+}, {SetCD(AutoCombiCcode[i+1], 0),
+MoveUnit(All, 0, i, 3, 4);
+MoveUnit(All, 20, i, 3, 4);
+MoveUnit(All, 100, i, 3, 4);
+MoveUnit(All, 16, i, 3, 4);
+}, {preserved})
 CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetV(MinGachaP,i)})
 CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetV(MinGachaP,i)})
 CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetV(MinGachaP,i)})
@@ -748,7 +764,6 @@ conditions = {
 	Deaths(j,AtMost,29,125);
 },
 actions = {
-	SetResources(j,Add,NMCost10X,Ore);
 	RemoveUnitAt(1,1,"Anywhere",j);
 	DisplayText("\x02▶ \x07랜덤 마린 뽑기 10회 \x04조건이 맞지 않습니다. (조건 - \x07랜덤 마린 뽑기 \x0430회 이상 실행)",4);
 	PreserveTrigger();
