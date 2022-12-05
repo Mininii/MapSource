@@ -9,7 +9,7 @@ function Interface()
 		},
 		actions = {
 			--DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 조합법\n\x12\x04Marine + \x1F"..HMCost.."원 \x04= \x1BH \x04Marine\n\x12\x1BH \x04Marine + \x1F"..GMCost.."원 \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."원 \x04= \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\n\x12\x04히든조합은 없습니다.\n\x12\x04환전 : \x03배럭에서 F를 누르세요.\n\x12\x04닫기 : \x03Delete\n\n\n",4);
-			DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 확률표\n\x12\x04Marine \x07- \x0E50.00%\n\x12\x1BH \x04Marine \x07- \x0F35.00%\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x07- \x1010.00%\n\x12\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x07- \x113.00%\n\x12\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x07- \x081.00%\n\x12\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x07- \x1D0.45%\n\x12\x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x07- \x1F0.05%\n\x12\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x12\x04환전 : \x03배럭에서 F를 누르세요. \x04닫기 : \x03Delete",4);
+			DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04간단 확률표\n\x12\x04Marine \x07- \x0E65.00%\n\x12\x1BH \x04Marine \x07- \x0F20.00%\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x07- \x108.90%\n\x12\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x07- \x114.10%\n\x12\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x07- \x081.70%\n\x12\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x07- \x1D0.25%\n\x12\x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x07- \x1F0.05%\n\x12\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x12\x04환전 : \x03배럭에서 F를 누르세요. \x04닫기 : \x03Delete",4);
 			PreserveTrigger();
 		},
 	}
@@ -432,8 +432,10 @@ for j,k in pairs({50,51,53,54}) do
 	actions = {
 		RemoveUnitAt(1,k,"Anywhere",i);
 		MoveUnit(All, ACArr[j], i, 21, 3);
+		SetCp(i);
 		DisplayText(ACArr2[j],4);
 		SetCD(AutoCombiCcode[i+1], 1);
+		SetCp(FP);
 		PreserveTrigger();
 	},
 	}
@@ -452,7 +454,9 @@ actions = {
 	MoveUnit(All, 100, i, 21, 3);
 	MoveUnit(All, 16, i, 21, 3);
 	SetCD(AutoCombiCcode[i+1], 1);
+	SetCp(i);
 	DisplayText(StrDesign("\x04본진 근처의 모든 \x1F조합 가능 유닛 \x04을 조합합니다."),4);
+	SetCp(FP);
 	PreserveTrigger();
 },
 }
@@ -861,7 +865,7 @@ conditions = {
 actions = {
 	ModifyUnitEnergy(3,16,j,3,0);
 	RemoveUnitAt(3,16,3,j);
-	DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043기를 조합하여 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다.",4);
+	DisplayText("\x02▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x043기를 조합하여 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다.",4);
 	CreateUnitWithProperties(1,99,4,j,{energy = 100});
 	PreserveTrigger();
 },

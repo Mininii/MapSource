@@ -2,6 +2,7 @@ function Gun_System()
 	CanC = CreateCcode()
 	CanCT = CreateCcode()
 	DefeatCC = CreateCcode()
+	DoActions(FP, {RemoveUnitAt(All,"Men",4,P12)})
 
 	CIf(FP,{CV(HondonMode,1,AtLeast)})
 	TurboSeekT = CreateCcode()
@@ -139,11 +140,11 @@ function Gun_System()
 --	CMov(FP,DPlayer,_ReadF(TempV),nil,0xFF)
 
 	DUArr={0,20,100,16,7,99,12,60}
-	DCArr = {1,2,4,5,1,8,15,30}
+	DCArr = {1,1,2,3,0,5,10,20}
 	for i = 0, 6 do
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
 		DoActions(FP,MoveCp(Add,6*4))
-		DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."TR".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SN".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."QS".._0D,}
+		local DUStrArr = {"\x0D\x0D\x0D"..ColorCode[i+1].."NM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."HM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."GM".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."NB".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SV".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."TR".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."SN".._0D,"\x0D\x0D\x0D"..ColorCode[i+1].."QS".._0D,}
 		for j= 1, 8 do
 			CIf(FP,{DeathsX(CurrentPlayer,Exactly,DUArr[j],0,0xFF)})
 			f_SaveCp()
@@ -179,7 +180,7 @@ function Gun_System()
 
 	f_SaveCp()
 	HIndex,HIndex2,HPoint,HPoint10 = CreateVars(4,FP)
-	CMov(FP,HIndex,_ReadF(BackupCP),nil,0xFF,1)
+	CMov(FP,HIndex,_ReadF(BackupCp),nil,0xFF,1)
 	HPointEPD = CreateVar(FP)
 	CMov(FP,HPointEPD,_Div(HIndex,2),EPDF(0x663408))
 	CMov(FP,HPoint,_ReadF(HPointEPD),nil,nil,1)
@@ -204,7 +205,15 @@ function Gun_System()
 	CDoActions(FP,{TSetScore(Force1,Add,HPoint10,Kills)})
 	HText = "\x0D\x0D\x0DHK".._0D
 	DoActions(FP,CopyCpAction({DisplayTextX(HText,4)},HumanPlayers,FP))
-	TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+	--
+	CIfX(FP,{Never()})
+	for j,k in pairs({27,61,68}) do
+		CElseIfX({CV(HIndex,k)})
+		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\JRHKill.ogg"),PlayWAVX("staredit\\wav\\JRHKill.ogg"),PlayWAVX("staredit\\wav\\JRHKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+	end
+	CElseX()
+	Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
+	CIfXEnd()
 	
 	f_LoadCp()
     CIfEnd()
@@ -566,7 +575,7 @@ TriggerX(FP,{ElapsedTimeX(AtMost,390)},{
 
 ObCcode2 = CreateCcode()
 ObChatMode = CreateCcode()
-	CIf(FP,Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131))
+	CIf(FP,{Memory(0x512684,AtLeast,128),Memory(0x512684,AtMost,131)})
 	CIfX(FP,{KeyPress("HOME", "Down"),CD(ObCcode2,0)})
 	CTrigger(FP,{CD(ObChatMode,0),CD(ObCcode2,0)},{SetCD(ObChatMode,1),SetCD(ObCcode2,1),
 	TSetMemory(0x6509B0,SetTo,_Read(0x512684)),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x07채팅→전체\x04에게 메세지를 보냅니다."),4),SetCp(FP)},{preserved})
@@ -610,7 +619,7 @@ function CreateUnitQueue()
 	local TempUID = CreateVar(FP)
 	local TempPID = CreateVar(FP)
 	local TempType = CreateVar(FP)
-	NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{})
+	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{})
 	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 	f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
 	f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)

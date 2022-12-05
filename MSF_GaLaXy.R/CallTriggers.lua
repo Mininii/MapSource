@@ -263,7 +263,7 @@ ELevel = CreateVar(FP)
 SetCall(FP)
 MinGachaRand = f_CRandNum(100000)
 local MarGPer = {100000,50000,35000,10000,3500,1000,490,10}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
-local MarGPerX = {0,65000,20000,8900,4100,1500,450,50}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
+local MarGPerX = {0,65000,20000,8900,4100,1700,250,50}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
 local TotalGPer = 0
 local MarGUID = {0,20,100,16,99,12,60}--일마 영마 갤마 네뷸라 테라 슈퍼노바 퀘이사
 -- 각유닛은 테라부터 제외, 6기 합칠경우 상위유닛 1기로 변환가능
@@ -272,8 +272,8 @@ local MGT = {
 	StrDesign("\x0420.00% 확률로 \x1BH \x04Marine \x04을 \x07얻었습니다."),
 	StrDesign("\x048.90% 확률로 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04을 \x07얻었습니다."),
 	StrDesign("\x044.10% 확률로 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x04를 \x07얻었습니다. \x11축하드립니다!"),
-	StrDesign("\x041.50% 확률로 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04를 \x07얻었습니다. \x11축하드립니다!"),
-	StrDesign("\x040.45% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07얻었습니다. \x11축하드립니다!"),
+	StrDesign("\x041.70% 확률로 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04를 \x07얻었습니다. \x11축하드립니다!"),
+	StrDesign("\x040.25% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07얻었습니다. \x11축하드립니다!"),
 	StrDesign("\x040.05% 확률로 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04를\x07얻었습니다. \x11축하드립니다!"),
 }
 
@@ -288,12 +288,12 @@ for j = 1, #MarGPerX-1 do
 	errt = errt..TotalGPer.."  "..MarGPerX[j+1]-1+TotalGPer.."\n"
 	if j == 6 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.45% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.25% 확률로 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
 		end
 	end
 	if j == 7 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.05% 확률로 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.05% 확률로 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04를\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP)}, {preserved})
 		end
 	end
 	CTrigger(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer)}, {TSetMemory(0x6509B0, SetTo, MarGachaP),SetV(ELevel,j-1),WAVRet,DisplayText(MGT[j], 4)}, {preserved})

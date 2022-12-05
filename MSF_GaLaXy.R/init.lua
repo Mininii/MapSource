@@ -21,15 +21,16 @@ function init()
 			table.insert(GiveT,GiveUnits(1, 111, P12, 64, i))
 		end
 		if X2_Mode == 1 then
-			table.insert(GiveT,Simple_SetLoc(0,7237,370,7357,400))
+			table.insert(GiveT,Simple_SetLoc(0,7237,370,7374,400))
 		else
 			table.insert(GiveT,Simple_SetLoc(0,3634,182,3634+1,182+1))
 		end
 		for i = 0, 6 do
-		table.insert(GiveT,GiveUnits(2, 125, P12, 1, i))
 		if X2_Mode == 1 then
+			table.insert(GiveT,GiveUnits(4, 125, P12, 1, i))
 			table.insert(GiveT,Simple_CalcLoc(0,0,32*2,0,32*2))
 		else
+			table.insert(GiveT,GiveUnits(2, 125, P12, 1, i))
 			table.insert(GiveT,Simple_CalcLoc(0,0,32,0,32))
 		end
 		end

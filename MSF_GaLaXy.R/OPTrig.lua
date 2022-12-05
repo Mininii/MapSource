@@ -469,7 +469,7 @@ TriggerX(FP,{CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,4,Force1,{energy = 
 TriggerX(FP,{CV(SetPlayers,4)},{CreateUnitWithProperties(1,0,4,Force1,{energy = 100}),CreateUnitWithProperties(1,20,4,Force1,{energy = 100}),SetResources(Force1,Add,100000,Ore)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[50.00%]  \x1BH \x04Marine\x0F[35.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[10.00%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[3.00%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.00%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.45%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[65.00%]  \x1BH \x04Marine\x0F[20.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[8.90%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[4.10%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.70%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.25%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
 end
 
@@ -480,7 +480,7 @@ CIfEnd({SetCp(FP)})
 CIfOnce(FP,{Switch("Switch 201",Set),CommandLeastAt(189,20)})
 for i = 1, 3 do
 	for j = 1, 7 do
-		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[50.00%]  \x1BH \x04Marine\x0F[35.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[10.00%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[3.00%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.00%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.45%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP)})
+		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[65.00%]  \x1BH \x04Marine\x0F[20.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[8.90%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[4.10%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.70%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.25%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP)})
 	end
 end
 CIfEnd()

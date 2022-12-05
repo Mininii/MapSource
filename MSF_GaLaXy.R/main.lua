@@ -45,13 +45,14 @@ end
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(0)
+VNum = "3.2"
 Test=""
 if Limit == 1 then Test="T" end
 if X2_Mode == 1 then
-	VName = "3.0_2X"..Test
+	VName = VNum.."_2X"..Test
 	MapSize = {256*32,256*32}
 else
-	VName = "2.4"..Test
+	VName = VNum..Test
 	MapSize = {128*32,128*32}
 end
 FP = P8
