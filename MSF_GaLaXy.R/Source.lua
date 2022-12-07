@@ -9,9 +9,9 @@ function Source()
 	GMCost = 25000
 	NeCost = 20000
 	ExRate = 15
-	EasyEx1P = 170
-	HDEx1P = 195
-	BurEx1P = 210
+	EasyEx1P = 160
+	HDEx1P = 175
+	BurEx1P = 190
 	GunLimit = 1500
 
 	ExArr = {--È¯Àü·ü
@@ -239,12 +239,14 @@ DifLeaderBoard = {
 		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
 		return Header
 	end
-	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*50000)
-	CreateUnitQuePIDArr = Create_VoidEPDHeaderV(FP,4*50000)
-	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*50000)
-	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*50000)
-	CreateUnitQueTypeArr = Create_VoidEPDHeaderV(FP,4*50000)
-	CreateUnitQuePtr = CreateVar(FP)
+	CreateUnitQueueUIDArr = Create_VoidEPDHeaderV(FP,4*50005)
+	CreateUnitQueuePIDArr = Create_VoidEPDHeaderV(FP,4*50005)
+	CreateUnitQueueXPosArr = Create_VoidEPDHeaderV(FP,4*50005)
+	CreateUnitQueueYPosArr = Create_VoidEPDHeaderV(FP,4*50005)
+	CreateUnitQueueTypeArr = Create_VoidEPDHeaderV(FP,4*50005)
+	CreateUnitQueuePtr = CreateVar(FP)
+	CreateUnitQueueNum = CreateVar(FP)
+	CreateUnitQueuePtr2 = CreateVar(FP)
 	if STRCTRIGASM == 1 then
 		
 		--UnitDataPtr = EPDF(0x5967EC-(1700*4)) --0x594D5C~0x5967EC

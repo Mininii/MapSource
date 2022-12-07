@@ -485,7 +485,10 @@ function Include_GunData(Size,LineNum)
 			CSPlot(PySuShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(PySuShape,FP,84,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(84,FP)},1)
-		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),SetMemory(0x6C9EF8+(4*41),SetTo,7280),CreateUnit(1,193,1,FP),SetMemory(0x6C9EF8+(4*41),SetTo,3413)},{preserved})
+		TriggerX(FP, {CV(HondonMode,0)},{SetMemory(0x6C9EF8+(4*41),SetTo,7280)},{preserved})
+		TriggerX(FP, {CV(HondonMode,1,AtLeast)},{SetMemory(0x6C9EF8+(4*41),SetTo,20000)},{preserved})
+		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,193,1,FP),},{preserved})
+		TriggerX(FP, {CV(HondonMode,0)},{SetMemory(0x6C9EF8+(4*41),SetTo,3413)},{preserved})
 	CIfEnd()
 	CIf_GCase(109)
 		DoActions(FP,{CreateUnit(1,22,1,FP),KillUnit(22,FP)})
@@ -515,13 +518,6 @@ function Include_GunData(Size,LineNum)
 	IonCUTable2 = {28,27,27}
 	IonCUTable3 = {75,19,61}
 	
-	if X2_Mode==1 then
-		IonShape =  CS_ConnectPathX({4   ,{2816*2, 1280*2},{2272*2, 1568*2},{2880*2, 1888*2},{3456*2, 1600*2}},148)
-		IonShape2 = CS_ConnectPathX({4   ,{2880*2, 1456*2},{2656*2, 1568*2},{2880*2, 1680*2},{3120*2, 1568*2}},96,1)
-	else
-		IonShape =  CS_ConnectPathX({4   ,{2816, 1280},{2272, 1568},{2880, 1888},{3456, 1600}},148)
-		IonShape2 = CS_ConnectPathX({4   ,{2880, 1456},{2656, 1568},{2880, 1680},{3120, 1568}},96,1)
-	end
 
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
 		if X2_Mode == 1 then
@@ -532,8 +528,13 @@ function Include_GunData(Size,LineNum)
 			for i = 0, 1 do
 				for l = 1, 3 do
 					f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},68,IonCUTable[l],nil,nil,"CG")
-					CSPlotAct(IonShape,FP,IonCUTable2[l],0,{0,0},1,32,256,{Order(IonCUTable2[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
-					CSPlotAct(IonShape2,FP,IonCUTable3[l],0,{0,0},1,32,256,{Order(IonCUTable3[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
+					--CSPlotAct(IonShape,FP,IonCUTable2[l],0,{0,0},1,32,256,{Order(IonCUTable2[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
+					--CSPlotAct(IonShape2,FP,IonCUTable3[l],0,{0,0},1,32,256,{Order(IonCUTable3[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
+					
+					
+					G_CA_SetSpawn({Gun_Line(8,Exactly,i),CD(GMode,l)},{IonCUTable2[l]},"ACAS","IonShape","MAX",nil,{0,0},FP)
+					G_CA_SetSpawn({Gun_Line(8,Exactly,i),CD(GMode,l)},{IonCUTable3[l]},"ACAS","IonShape2","MAX",nil,{0,0},FP)
+
 				end
 			end
 			DoActionsX(FP,{Gun_SetLine(8,Add,1)})
@@ -559,23 +560,18 @@ function Include_GunData(Size,LineNum)
 	CIfEnd()
 	CIf_GCase(150)
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,360))
-	ChryShape1 = CSMakePolygon(4,192,0,PlotSizeCalc(4,2),0)
-	ChryShape2 = CSMakePolygon(4,164,0,PlotSizeCalc(4,3),0)
-	ChryShape3 = CSMakePolygon(4,96,0,PlotSizeCalc(4,5),0)
 	if X2_Mode==1 then
-		X2_XYArr2 = {
-			{-256,-256},{256,-256},{-256,256},{256,256},
-		}
 
 		for i = 0, 3 do
-			CSPlot(CS_MoveXY(ChryShape1,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,1)},nil,1)
-			CSPlot(CS_MoveXY(ChryShape2,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,2)},nil,1)
-			CSPlot(CS_MoveXY(ChryShape3,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),CD(GMode,3)},nil,1)
+			
+			G_CA_SetSpawn({CD(GMode,1)},{25},"ACAS","ChryShape1_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({CD(GMode,2)},{25},"ACAS","ChryShape2_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({CD(GMode,3)},{25},"ACAS","ChryShape3_"..i+1,"MAX",nil,nil,FP)
 		end
 	else
-		CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,1)},nil,1)
-		CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,2)},nil,1)
-		CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),CD(GMode,3)},nil,1)
+		G_CA_SetSpawn({CD(GMode,1)},{25},"ACAS","ChryShape1","MAX",nil,nil,FP)
+		G_CA_SetSpawn({CD(GMode,2)},{25},"ACAS","ChryShape2","MAX",nil,nil,FP)
+		G_CA_SetSpawn({CD(GMode,3)},{25},"ACAS","ChryShape3","MAX",nil,nil,FP)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
@@ -636,9 +632,11 @@ function Include_GunData(Size,LineNum)
 	if X2_Mode == 1 then
 		Shape8130 = {{4032*2, 3392*2},{3392*2, 3072*2},{3392*2, 3712*2},{2752*2, 3392*2}}
 		Shape8151 = {{3072*2, 3232*2},{3072*2, 3552*2},{3712*2, 3552*2},{3712*2, 3232*2}}
+		CCDelayT = 63
 	else
 		Shape8130 = {{4032, 3392},{3392, 3072},{3392, 3712},{2752, 3392}}
 		Shape8151 = {{3072, 3232},{3072, 3552},{3712, 3552},{3712, 3232}}
+		CCDelayT = 86
 	end
 	
 
@@ -653,12 +651,12 @@ function Include_GunData(Size,LineNum)
 		DoActions(FP,{Simple_SetLoc(0,Shape8151[i][1]-128,Shape8151[i][2]-128,Shape8151[i][1]+128,Shape8151[i][2]+128),CreateUnit(1,72,1,FP),KillUnit(72,FP)})
 		f_TempRepeat({Gun_Line(8,AtMost,39)},88,1,201,nil,"CG")
 	end
-	TriggerX(FP,{Gun_Line(8,AtLeast,63),Gun_Line(8,AtMost,68)},{SetCp(FP),RunAIScriptAt(JYD,36)},{preserved})
-	TriggerX(FP,{Gun_Line(8,Exactly,69)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,CCDelayT),Gun_Line(8,AtMost,CCDelayT+5)},{SetCp(FP),RunAIScriptAt(JYD,36)},{preserved})
+	TriggerX(FP,{Gun_Line(8,Exactly,CCDelayT+6)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
-	TriggerX(FP,{Gun_Line(8,AtLeast,70)},{Gun_DoSuspend(),AddCD(CocoonCcode,1)},{preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,CCDelayT+7)},{Gun_DoSuspend(),AddCD(CocoonCcode,1)},{preserved})
 	CIfEnd()
 
 	CIf_GCase(200)
@@ -677,19 +675,16 @@ function Include_GunData(Size,LineNum)
 			end
 			
 	if X2_Mode==1 then
-		X2_XYArr2 = {
-			{-256,-256},{256,-256},{-256,256},{256,256},
-		}
 
 		for i = 0, 3 do
-			CSPlot(CS_MoveXY(ChryShape1,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
-			CSPlot(CS_MoveXY(ChryShape2,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
-			CSPlot(CS_MoveXY(ChryShape3,X2_XYArr2[i+1][1],X2_XYArr2[i+1][2]),FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,1)},{25},"ACAS","ChryShape1_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,2)},{25},"ACAS","ChryShape2_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,3)},{25},"ACAS","ChryShape3_"..i+1,"MAX",nil,nil,FP)
 		end
 	else
-		CSPlot(ChryShape1,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,1)},nil,1)
-		CSPlot(ChryShape2,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,2)},nil,1)
-		CSPlot(ChryShape3,FP,25,0,nil,1,32,FP,{Label(),Gun_Line(8,Exactly,4),CD(GMode,3)},nil,1)
+		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,1)},{25},"ACAS","ChryShape1","MAX",nil,nil,FP)
+		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,2)},{25},"ACAS","ChryShape2","MAX",nil,nil,FP)
+		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,3)},{25},"ACAS","ChryShape3","MAX",nil,nil,FP)
 	end
 	
 			for l = 1, 3 do
@@ -895,7 +890,7 @@ function Include_GunData(Size,LineNum)
 			CSPlot(FormShape,FP,33,0,nil,1,32,FP,nil,{KillUnit(33,FP)},1)
 		CIfEnd(SetMemoryX(0x666458, SetTo, 546,0xFFFF))
 		CSPlot(FormShape,FP,72,0,nil,1,32,FP,{Label(),Gun_Line(8,AtLeast,20)},{KillUnit(72,FP)},1)
-		Trigger2X(FP,{Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\seeya.ogg"),PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),Gun_DoSuspend(),KillUnitAt(All,125,21,AllPlayers),AddCD(FormCcode,1)},{preserved})
+		Trigger2X(FP,{Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\seeya.ogg"),PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP),Gun_DoSuspend(),KillUnitAt(All,125,21,AllPlayers),Order("Any unit", FP, 64, Attack, 4),AddCD(FormCcode,1)},{preserved})
 	CIfEnd()
 	
 	CIf_GCase(168)

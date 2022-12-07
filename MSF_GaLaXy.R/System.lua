@@ -2,7 +2,7 @@ function Gun_System()
 	CanC = CreateCcode()
 	CanCT = CreateCcode()
 	DefeatCC = CreateCcode()
-	DoActions(FP, {RemoveUnitAt(All,"Men",4,P12)})
+	DoActions(FP, {RemoveUnitAt(All,"Any unit",4,P12),KillUnit(84,FP)})
 
 	CIf(FP,{CV(HondonMode,1,AtLeast)})
 	TurboSeekT = CreateCcode()
@@ -10,97 +10,121 @@ function Gun_System()
 	TriggerX(FP,{CD(TurboSeekT,2,AtLeast)},{SetDeaths(-111923, SetTo, 1, 0),SubCD(TurboSeekT,2)},{preserved})
 	CIfEnd()
 
-
-	if X2_Mode == 1 then
-		CIf(FP,{Never(),Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
-	else
-		CIf(FP,{Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
+	CanWarn = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n\x13\x04캔낫을 의도적으로 걸 경우 게임에서 \x08패배\x04합니다.\n\x13\x04\x07유닛 생성 큐\x04에 유닛이 \x08５０，０００\x04이상 \x10증가\x04하지 않도록 \x08주의\x04해 주시기 바랍니다.\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+	for j = 1, 9 do
+		Trigger2X(FP, {CVar(FP,CreateUnitQueueNum[2],AtLeast,5000*j);}, {
+			RotatePlayer({
+			DisplayTextX(CanWarn,4);
+			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+			},HumanPlayers,FP);})
 	end
+	Trigger2X(FP,{--유닛생성 큐 데이터 5만개이상 패배
+	CV(CreateUnitQueueNum,50000,AtLeast);
+},{
+	RotatePlayer({
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\CanOver.ogg"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+		},HumanPlayers,FP);
+		SetCDeaths(FP,SetTo,24*30,CanCT);
+		SetCDeaths(FP,Add,1,DefeatCC);
+})
 
-	CanDisplayT = {}
-	CanDisplayT2 = {}
+TriggerX(FP,CD(DefeatCC,1,AtLeast),{AddCD(DefeatCC,1)},{preserved})
+TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(TestMode,0)},{
+	RotatePlayer({Defeat()},HumanPlayers,FP);},{preserved})
+TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,2)},{ -- 캔아웃 드랍
+	RotatePlayer({RunAIScript(P8VON)},{8,9,10,11},FP)
+},{preserved})
+CWhile(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,3)}) -- 캔아웃 응없
+CWhileEnd()
 
-	for i = 0, 6 do
-	table.insert(CanDisplayT,SetMemory(0x582174+(4*i),Add,2))
-	table.insert(CanDisplayT2,SetMemory(0x582144+(4*i),Add,8))
-	table.insert(CanDisplayT2,SetMemory(0x5821A4+(4*i),Add,8))
-	end
-	DoActions(FP,CanDisplayT2,1)
-	DoActionsX(FP,{SubCD(CanCT,1)})
-	Trigger2X(FP,{
-		CDeaths(FP,AtMost,0,CanCT);
-		Memory(0x628438,AtMost,0)},{
-			KillUnit(37,FP);
-			KillUnit(38,FP);
-			KillUnit(39,FP);
-			KillUnit(43,FP);
-			KillUnit(44,FP);
-			KillUnit(47,FP);
-			KillUnit(48,FP);
-			KillUnit(50,FP);
-			KillUnit(51,FP);
-			KillUnit(53,FP);
-			KillUnit(54,FP);
-			KillUnit(55,FP);
-			KillUnit(56,FP);
-			CanDisplayT;},{preserved})
-	Trigger2X(FP,{--캔발동
-	Memory(0x628438,AtMost,0);
-		CDeaths(FP,AtMost,2,CanC);
-		CDeaths(FP,AtMost,0,CanCT);
-	},{
-		RotatePlayer({
-			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
-			PlayWAVX("staredit\\wav\\warn.wav"),
-			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
-			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
-			},HumanPlayers,FP);
-			SetCDeaths(FP,SetTo,24*30,CanCT);
-			SetCDeaths(FP,Add,1,CanC);
-	},{preserved})
+	CIf(FP,{Switch("Switch 201",Set),CD(GMode,2,AtLeast)})
+
 	
-	Trigger2X(FP,{--캔발동
+	if X2_Mode == 0 then
+		
+		CanDisplayT = {}
+		CanDisplayT2 = {}
+	
+		for i = 0, 6 do
+		table.insert(CanDisplayT,SetMemory(0x582174+(4*i),Add,2))
+		table.insert(CanDisplayT2,SetMemory(0x582144+(4*i),Add,8))
+		table.insert(CanDisplayT2,SetMemory(0x5821A4+(4*i),Add,8))
+		end
+		DoActions(FP,CanDisplayT2,1)
+		DoActionsX(FP,{SubCD(CanCT,1)})
+		Trigger2X(FP,{
+			CDeaths(FP,AtMost,0,CanCT);
+			Memory(0x628438,AtMost,0)},{
+				KillUnit(37,FP);
+				KillUnit(38,FP);
+				KillUnit(39,FP);
+				KillUnit(43,FP);
+				KillUnit(44,FP);
+				KillUnit(47,FP);
+				KillUnit(48,FP);
+				KillUnit(50,FP);
+				KillUnit(51,FP);
+				KillUnit(53,FP);
+				KillUnit(54,FP);
+				KillUnit(55,FP);
+				KillUnit(56,FP);
+				CanDisplayT;},{preserved})
+		Trigger2X(FP,{--캔발동
 		Memory(0x628438,AtMost,0);
-		CDeaths(FP,AtLeast,3,CanC);
-		CDeaths(FP,AtMost,0,CanCT);
-	},{
-		RotatePlayer({
-			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
-			PlayWAVX("staredit\\wav\\CanOver.ogg"),
-			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
-			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
-			},HumanPlayers,FP);
-			SetCDeaths(FP,SetTo,24*30,CanCT);
-			SetCDeaths(FP,Add,1,CanC);
-			SetCDeaths(FP,Add,1,DefeatCC);
-	},{preserved})
+			CDeaths(FP,AtMost,2,CanC);
+			CDeaths(FP,AtMost,0,CanCT);
+		},{
+			RotatePlayer({
+				PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+				PlayWAVX("staredit\\wav\\warn.wav"),
+				PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+				PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+				},HumanPlayers,FP);
+				SetCDeaths(FP,SetTo,24*30,CanCT);
+				SetCDeaths(FP,Add,1,CanC);
+		},{preserved})
+		
+		Trigger2X(FP,{--캔발동
+			Memory(0x628438,AtMost,0);
+			CDeaths(FP,AtLeast,3,CanC);
+			CDeaths(FP,AtMost,0,CanCT);
+		},{
+			RotatePlayer({
+				PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+				PlayWAVX("staredit\\wav\\CanOver.ogg"),
+				PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+				PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+				},HumanPlayers,FP);
+				SetCDeaths(FP,SetTo,24*30,CanCT);
+				SetCDeaths(FP,Add,1,CanC);
+				SetCDeaths(FP,Add,1,DefeatCC);
+		},{preserved})
+	end
 
-	
-
-
-	TriggerX(FP,CD(DefeatCC,1,AtLeast),{AddCD(DefeatCC,1)},{preserved})
-	TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(TestMode,0)},{
-		RotatePlayer({Defeat()},HumanPlayers,FP);},{preserved})
-	TriggerX(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,2)},{ -- 캔아웃 드랍
-		RotatePlayer({RunAIScript(P8VON)},{8,9,10,11},FP)
-	},{preserved})
-	CWhile(FP,{CD(DefeatCC,150,AtLeast),CD(DMode,3)}) -- 캔아웃 응없
-	CWhileEnd()
 
 	CIfEnd()
 	count4 = CreateVar(FP)
 	count5 = CreateVar(FP)
+	count6 = CreateVar(FP)
 	UnitReadX(FP,AllPlayers,229,64,count)
 	UnitReadX(FP,AllPlayers,17,nil,count1)
 	UnitReadX(FP,AllPlayers,23,nil,count2)
 	UnitReadX(FP,AllPlayers,25,nil,count3)
 	UnitReadX(FP,AllPlayers,73,nil,count4)
 	UnitReadX(FP,AllPlayers,65,nil,count5)
+	UnitReadX(FP,AllPlayers,30,nil,count6)
 	CAdd(FP,count,count1)
 	CAdd(FP,count,count2)
 	CAdd(FP,count,count3)
 	CAdd(FP,count,count4)
 	CAdd(FP,count,count5)
+	CAdd(FP,count,count6)
 	local CurCunitI2 = CreateVar(FP)
 	CIf(FP,{CD(NosBGM,1)},SetCD(NosBGM,0))
 	TriggerX(FP,DeathsX(AllPlayers,AtLeast,1,12,0xFFFFFF),{SetV(BGMType,99)},{preserved})
@@ -191,7 +215,7 @@ function Gun_System()
 	f_Mod(FP,HPoint,65536)
 	NIfXEnd()
 	CIfX(FP,{CV(HiddenPts,0),CV(HiddenPtsM,0)})
-	CMov(FP,HPoint10,_Mul(HPoint,100))
+	CMov(FP,HPoint10,_Mul(HPoint,200))
 	CElseX()
 	CMov(FP,HPoint10,_Mul(HPoint,HPointVar))
 	CIfXEnd()
@@ -267,9 +291,6 @@ function Gun_System()
 	Trigger2(FP,{Command(FP,AtLeast,15,42)},{KillUnit(42,FP)},{preserved})
 	Trigger2(FP,{Command(FP,AtLeast,30,35)},{KillUnit(35,FP)},{preserved})
 	
-	for i=1,10 do -- 파일런 갯수마다 벙커 체력 설정
-	TriggerX(FP,{CD(PyCCode,i)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(9*i));},{preserved})
-	end
 	PyT = CreateCcode()
 -- 193번 오브젝트 존재시 처리
 CIf(FP,Command(AllPlayers,AtLeast,1,193))
@@ -299,9 +320,9 @@ for j, k in pairs(HealZoneSpawnArr) do
 end
 CMov(FP,0x6509B0,FP)
 if X2_Mode==1 then
-	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712*2,288*2},1,32,FP,nil,{KillUnit(84,FP)},1)
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
 else
-	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
 end
 WaveArr = {
 "staredit\\wav\\zealot1.ogg",
@@ -340,9 +361,9 @@ for j, k in pairs(HealZoneSpawnArr) do
 end
 CMov(FP,0x6509B0,FP)
 if X2_Mode==1 then
-	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712*2,288*2},1,32,FP,nil,{KillUnit(84,FP)},1)
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
 else
-	CSPlot(CSMakeStar(5,108,128,126,PlotSizeCalc(5*2,2),0),FP,84,0,{3712,288},1,32,FP,nil,{KillUnit(84,FP)},1)
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
 end
 WaveArr = {
 "sound\\Zerg\\BUGGUY\\ZBGPss00.wav",
@@ -369,7 +390,7 @@ Trigger2X(FP,Cond,{
 	RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)
 })
 end
-TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 88, FP, 64)},{preserved})
+TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 88, FP, 64),Order(88, FP, 23, Attack, 4),Order(21, FP, 23, Attack, 4)},{preserved})
 InvDisable({CDeaths(FP,AtLeast,4,ChryCcode),CD(GeneCcode,1,AtLeast)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
 InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
 InvDisable({CDeaths(FP,AtLeast,10,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
@@ -388,6 +409,7 @@ InvDisable({
 	CD(OvrmCcode,2,AtLeast), -- 2일경우
 	CD(PsiCcode,1,AtLeast), -- 1일경우
 	CD(BossCcode,1,AtLeast), -- 1일경우
+	CV(CreateUnitQueueNum,0,AtMost) -- 유닛생성 큐에 아무것도 없어야됨
 	
 },174,Force2,64,"최후의 Ｔｅｍｐｌｅ")
 function InvDisable2(Cond,UnitID,Player,Locs,Name)
@@ -561,7 +583,7 @@ end
 
 
 
-CElseIfX(CD(DMode,2,AtLeast),{SetMemory(0x59CC80,SetTo,0),SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)})--관전이고 뭐고 모두 ExitDrop 실행
+CElseIfX({Switch("Switch 201",Set),CD(DMode,2,AtLeast)},{SetMemory(0x59CC80,SetTo,0),SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)})--관전이고 뭐고 모두 ExitDrop 실행
 CIfXEnd()
 DoActions(FP,{SetResources(FP,Add,0x12345678,OreAndGas)},1)
 TriggerX(FP,{Deaths(FP,AtLeast,4,10)},{SetMemoryX(0x663ECC, SetTo, 400,0xFFFF);
@@ -619,20 +641,41 @@ function CreateUnitQueue()
 	local TempUID = CreateVar(FP)
 	local TempPID = CreateVar(FP)
 	local TempType = CreateVar(FP)
-	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{})
+	if Limit == 1 then
+--		CIf(FP,{CD(TestMode,1)})
+--		--DisplayPrintEr(0,{"\x07『 \x03TESTMODE OP \x04: CreateUnitQueuePtr : ",CreateUnitQueuePtr," || CreateUnitQueuePtr2 : ",CreateUnitQueuePtr2," \x07』"})
+--		local TestV = CreateVar()
+--		CMov(FP,TestV,0)
+--		CFor(FP, 19025+19, 19025+19 + (84*1700), 84)
+--			local CI = CForVariable()
+--			CTrigger(FP, {TMemoryX(CI,AtLeast,1*256,0xFF00)}, {AddV(TestV,1)},1)
+--		CForEnd()
+		--DisplayPrintEr(0,{"\x07『 \x03TESTMODE OP \x04: CUnit Count : ",TestV," \x07』"})--
+
+--		CIfEnd()
+	end
+	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
 	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
-	f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
-	f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)
-	f_SHRead(FP, _Add(CreateUnitQueUIDArr,CreateUnitQuePtr), TempUID)
-	f_SHRead(FP, _Add(CreateUnitQuePIDArr,CreateUnitQuePtr), TempPID)
-	f_SHRead(FP, _Add(CreateUnitQueTypeArr,CreateUnitQuePtr), TempType)
-	DoActionsX(FP,{SubV(CreateUnitQuePtr,1)})
+	f_SHRead(FP, _Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), CPosX)
+	f_SHRead(FP, _Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), CPosY)
+	f_SHRead(FP, _Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), TempUID)
+	f_SHRead(FP, _Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), TempPID)
+	f_SHRead(FP, _Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), TempType)
+	CDoActions(FP, {
+		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), SetTo, 0)
+	})
+	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
+	TriggerX(FP, {CV(CreateUnitQueuePtr2,50000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
 
 
 
 
 
-	NIf(FP,{CV(TempUID,1,AtLeast)})
+	NIf(FP,{CV(TempUID,1,AtLeast),CV(TempUID,226,AtMost)})
 	local CRLID = CreateVar(FP)
 
 	
@@ -760,4 +803,10 @@ function CreateUnitQueue()
 	NIfEnd()
 
 	NWhileEnd()
+	
+CIf(FP,{Switch("Switch 201",Set)})
+FixText(FP, 1)
+DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x0850000 \x07』"})
+FixText(FP, 2)
+CIfEnd()
 end

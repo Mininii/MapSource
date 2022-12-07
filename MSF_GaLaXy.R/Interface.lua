@@ -414,6 +414,36 @@ actions = {
 
 CIf(FP,{HumanCheck(i,1)})
 
+local MarGUID = {0,20,100,16,99,12,60}
+
+CallTriggerX(FP, MarGacha, {Command(i,AtLeast,1,"Terran Firebat");}, {SetV(MarGachaP,i),RemoveUnitAt(1,"Terran Firebat","Anywhere",i);SetDeaths(i,SetTo,1,101);SetDeaths(i,Add,1,125);})
+
+CWhile(FP, {CD(RandMarCcode[i+1],1,AtLeast)}, {SubCD(RandMarCcode[i+1],1)})
+CallTriggerX(FP, MarGacha, {}, {SetV(MarGachaP,i),SetDeaths(i,SetTo,1,101);SetDeaths(i,Add,1,125);})
+TriggerX(FP, {Bring(i, AtLeast, 1, "Men", 39)}, {SetCD(AutoCombiCcode[i+1], 2);}, {preserved})
+CWhileEnd()
+
+for j = 0, 6 do
+TriggerX(FP,{Memory(0x628438,AtLeast,1),CVAar(VArr(MarCreateVArr[i+1], j), AtLeast, 1)},{SetCVAar(VArr(MarCreateVArr[i+1], j), Subtract, 1),
+SetMemoryB(0x6C9E20 + 74,SetTo,40);
+SetMemoryB(0x6C9858 + 74,SetTo,2);
+SetMemory(0x6C9930 + (74*4),SetTo,1);
+SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
+SetMemory(0x6C9EF8 + (74*4),SetTo,1);
+
+CreateUnitWithProperties(1, MarGUID[j+1], 39, i, {energy=100}),
+Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))));
+MoveUnit(1, MarGUID[j+1], i, 39, 1),Order(MarGUID[j+1], i, 39, Attack, 4),
+SetMemoryB(0x6C9E20 + 74,SetTo,40);
+SetMemoryB(0x6C9858 + 74,SetTo,0);
+SetMemory(0x6C9930 + (74*4),SetTo,0);
+SetMemoryW(0x6C9C78 + (74*2),SetTo,4000);
+SetMemory(0x6C9EF8 + (74*4),SetTo,18000);
+},{preserved})
+
+end
+
+
 local ACArr = {0,20,100,16}
 local ACArr2 = {
 	StrDesign("\x04본진 근처의 모든 \x04Marine \x04을 조합합니다."),
@@ -460,6 +490,25 @@ actions = {
 	PreserveTrigger();
 },
 }
+
+Trigger { -- 자동조합
+players = {FP},
+conditions = {
+	Label();
+	CD(AutoCombiCcode[i+1],2);
+},
+actions = {
+	RemoveUnitAt(1,52,"Anywhere",i);
+	MoveUnit(All, 0, i, 21, 3);
+	MoveUnit(All, 20, i, 21, 3);
+	MoveUnit(All, 100, i, 21, 3);
+	MoveUnit(All, 16, i, 21, 3);
+	SetCD(AutoCombiCcode[i+1], 1);
+	PreserveTrigger();
+},
+}
+
+
 TriggerX(FP, {
 	CD(AutoCombiCcode[i+1], 1);
 	Bring(i, AtMost, 2, 0, 3);
@@ -467,10 +516,11 @@ TriggerX(FP, {
 	Bring(i, AtMost, 2, 100, 3);
 	Bring(i, AtMost, 2, 16, 3);
 }, {SetCD(AutoCombiCcode[i+1], 0),
-MoveUnit(All, 0, i, 3, 4);
-MoveUnit(All, 20, i, 3, 4);
-MoveUnit(All, 100, i, 3, 4);
-MoveUnit(All, 16, i, 3, 4);
+Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))));
+MoveUnit(All, 0, i, 3, 1);
+MoveUnit(All, 20, i, 3, 1);
+MoveUnit(All, 100, i, 3, 1);
+MoveUnit(All, 16, i, 3, 1);
 }, {preserved})
 CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetV(MinGachaP,i)})
 CallTriggerX(FP,MinGacha,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetV(MinGachaP,i)})
@@ -516,7 +566,13 @@ players = {FP},
 
 
 
-CIf(FP,{CDeaths(FP,Exactly,50,HealT),CV(HiddenHP,1,AtLeast)})
+CIf(FP,{CDeaths(FP,Exactly,50,HealT)})
+
+for j=0,10 do -- 파일런 갯수마다 벙커 체력 설정
+	TriggerX(FP,{CD(PyCCode,j)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(9*j));},{preserved})
+end
+
+
 
 HealFuncJump = def_sIndex()
 CJump(FP,HealFuncJump)
@@ -528,8 +584,10 @@ CAdd(FP,0x6509B0,15)
 
 
 f_SaveCp()
+CIf(FP,{TMemoryX(_Sub(BackupCp,6), AtMost, 6, 0xFF)})
 CMov(FP,CUnitID,_Read(BackupCp,0xFF),nil,0xFF,1)
 CDoActions(FP,{TSetMemory(_Sub(BackupCp,23),SetTo,_Read(_Add(CUnitID,EPDF(0x662350))))})
+CIfEnd()
 f_LoadCp()
 CSub(FP,0x6509B0,15)
 
@@ -542,7 +600,7 @@ function DeathsXRange(Player, Left,Right, Unit,Mask)
 	return {DeathsX(Player, AtLeast, Left, Unit, Mask),DeathsX(Player, AtMost, Right, Unit, Mask)}
 end
 
-
+CIf(FP,CV(HiddenHP,1,AtLeast))
 
 CMov(FP,0x6509B0,19025+10)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+10 + (84*1699)))
@@ -556,6 +614,7 @@ end
 CAdd(FP,0x6509B0,84)
 CWhileEnd()
 CMov(FP,0x6509B0,FP)
+CIfEnd()
 
 
 CIfEnd()
@@ -594,6 +653,8 @@ for j = 1, 4 do
 end
 NIf(FP,Never())
 	NJumpXEnd(FP,MedicTrigJump)
+	
+
 	TriggerX(FP,{CV(HiddenHPM,0)},{
 		RemoveUnit(MedicTrig[1],i),
 		RemoveUnit(MedicTrig[2],i),
@@ -604,6 +665,9 @@ NIf(FP,Never())
 		ModifyUnitShields(All,"Men",i,"Anywhere",100),
 		ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
 	},{preserved})
+	for j=0,10 do -- 파일런 갯수마다 벙커 체력 설정
+		TriggerX(FP,{CD(PyCCode,j)},{ModifyUnitHitPoints(All,125,i,21,100-(9*j));},{preserved})
+	end
 	TriggerX(FP,{CV(HiddenHPM,1,AtLeast)},{
 		RemoveUnit(MedicTrig[1],i),
 		RemoveUnit(MedicTrig[2],i),
@@ -701,20 +765,15 @@ CIf(FP,{CD(FormCcode,0)})
 	DoActions(FP,{GiveUnits(All,125,P12,64,P10),GiveUnits(All,125,P8,64,P10)})
 CIfEnd()
 
-local MarGUID = {0,20,100,16,99,12,60}
-
-CallTriggerX(FP, MarGacha, {Command(i,AtLeast,1,"Terran Firebat");}, {SetV(MarGachaP,i),RemoveUnitAt(1,"Terran Firebat","Anywhere",i);SetDeaths(i,SetTo,1,101);SetDeaths(i,Add,1,125);})
-
-CWhile(FP, {CD(RandMarCcode[i+1],1,AtLeast)}, SubCD(RandMarCcode[i+1],1))
-CallTriggerX(FP, MarGacha, {}, {SetV(MarGachaP,i),SetDeaths(i,SetTo,1,101);SetDeaths(i,Add,1,125);})
-CWhileEnd()
-
-for j = 0, 6 do
-TriggerX(FP,{Memory(0x628438,AtLeast,1),CVAar(VArr(MarCreateVArr[i+1], j), AtLeast, 1)},{SetCVAar(VArr(MarCreateVArr[i+1], j), Subtract, 1),CreateUnitWithProperties(1, MarGUID[j+1], 39, i, {energy=100}),MoveUnit(1, MarGUID[j+1], i, 39, 4),Order(MarGUID[j+1], i, 39, Attack, 4)},{preserved})
-end
 
 CIfEnd()
 	end
+TriggerX(FP,{CV(HondonMode,0)},{
+	SetMemoryB(0x6C9E20 + 74,SetTo,40);
+	SetMemoryB(0x6C9858 + 74,SetTo,2);
+	SetMemory(0x6C9930 + (74*4),SetTo,1);
+	SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
+	SetMemory(0x6C9EF8 + (74*4),SetTo,1);},{preserved})
 	for j=0, 6 do
 
 --	Trigger { -- 소환 마린
@@ -815,7 +874,9 @@ conditions = {
 actions = {
 	ModifyUnitEnergy(3,0,j,3,0);
 	RemoveUnitAt(3,0,3,j);
-	CreateUnitWithProperties(1,20,4,j,{energy = 100});
+	CreateUnitWithProperties(1,20,39,j,{energy = 100});
+	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	MoveUnit(1, 20, j, 39, 1),Order(20, j, 39, Attack, 4);
 	DisplayText("\x02▶ \x04Marine \x043기를 조합하여 \x1BH \x04Marine으로 \x19변환\x04하였습니다.",4);
 	PreserveTrigger();
 },
@@ -829,7 +890,9 @@ conditions = {
 actions = {
 	ModifyUnitEnergy(3,20,j,3,0);
 	RemoveUnitAt(3,20,3,j);
-	CreateUnitWithProperties(1,100,4,j,{energy = 100});
+	CreateUnitWithProperties(1,100,39,j,{energy = 100});
+	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	MoveUnit(1, 100, j, 39, 1),Order(100, j, 39, Attack, 4);
 	SetDeaths(j,Add,1,125);
 	DisplayText("\x02▶ \x1BH \x04Marine \x043기를 조합하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다.",4);
 	PreserveTrigger();
@@ -850,7 +913,9 @@ actions = {
 	ModifyUnitEnergy(3,100,j,3,0);
 	RemoveUnitAt(3,100,3,j);
 	DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043기를 조합하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다.",4);
-	CreateUnitWithProperties(1,16,4,j,{energy = 100});
+	CreateUnitWithProperties(1,16,39,j,{energy = 100});
+	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	MoveUnit(1, 16, j, 39, 1),Order(16, j, 39, Attack, 4);
 	PreserveTrigger();
 },
 }
@@ -863,13 +928,32 @@ conditions = {
 	Bring(j,AtLeast,3,16,3);
 },
 actions = {
+	SetMemoryB(0x6C9E20 + 74,SetTo,40);
+	SetMemoryB(0x6C9858 + 74,SetTo,2);
+	SetMemory(0x6C9930 + (74*4),SetTo,1);
+	SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
+	SetMemory(0x6C9EF8 + (74*4),SetTo,1);
 	ModifyUnitEnergy(3,16,j,3,0);
 	RemoveUnitAt(3,16,3,j);
 	DisplayText("\x02▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x043기를 조합하여 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다.",4);
-	CreateUnitWithProperties(1,99,4,j,{energy = 100});
+	CreateUnitWithProperties(1,99,39,j,{energy = 100});
+	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	MoveUnit(1, 99, j, 39, 1),Order(99, j, 39, Attack, 4);
+	SetMemoryB(0x6C9E20 + 74,SetTo,40);
+	SetMemoryB(0x6C9858 + 74,SetTo,0);
+	SetMemory(0x6C9930 + (74*4),SetTo,0);
+	SetMemoryW(0x6C9C78 + (74*2),SetTo,4000);
+	SetMemory(0x6C9EF8 + (74*4),SetTo,18000);
 	PreserveTrigger();
 },
 }
+TriggerX(j,{CV(HondonMode,0)},{
+	SetMemoryB(0x6C9E20 + 74,SetTo,40);
+	SetMemoryB(0x6C9858 + 74,SetTo,2);
+	SetMemory(0x6C9930 + (74*4),SetTo,1);
+	SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
+	SetMemory(0x6C9EF8 + (74*4),SetTo,1);},{preserved})
+
 
 
 

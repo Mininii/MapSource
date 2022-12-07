@@ -242,6 +242,7 @@ function init()
 			end
 			
 			table.insert( HondonPatchArr,SetMemory(0x656A18+(4*28), SetTo, 0)) -- 듀크최소사거리
+			table.insert( HondonPatchArr,SetMemoryW(0x656EB0+(27*2), SetTo, 4800)) -- 아덴시즈공
 			table.insert( HondonPatchArr,SetMemoryW(0x656EB0+(28*2), SetTo, 627)) -- 듀크공
 			table.insert( HondonPatchArr,SetMemoryB(0x656FB8+27, SetTo, 1))
 			table.insert( HondonPatchArr,SetMemoryB(0x656FB8+28, SetTo, 1))
@@ -309,7 +310,7 @@ function init()
 			
 	T_YY = 2022
 	T_MM = 12
-	T_DD = 06
+	T_DD = 08
 	T_HH = 00
 	function InputTesterID(Player,ID)
 		Trigger {

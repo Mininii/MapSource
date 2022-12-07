@@ -72,6 +72,8 @@ Trigger { -- 킬 스코어 리더보드
 		Order(54,FP,64,Attack,4);
 		Order(55,FP,64,Attack,4);
 		Order(56,FP,64,Attack,4);
+		Order("Any unit",FP,41,Attack,4);
+		Order("Any unit",FP,42,Attack,4);
 		PreserveTrigger();
 },
 }

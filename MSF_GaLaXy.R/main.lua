@@ -45,7 +45,7 @@ end
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(0)
-VNum = "3.2"
+VNum = "3.4"
 Test=""
 if Limit == 1 then Test="T" end
 if X2_Mode == 1 then
@@ -79,6 +79,7 @@ CJump(AllPlayers,init_func)
 	Include_GunData(64,55)
 	init()
 CJumpEnd(AllPlayers,init_func)
+Start_init()
 onInit_EUD()
 DoActions2(AllPlayers,PatchArrPrsv)
 --DoActionsX(FP,{SetCtrigX("X",IndexAlloc,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0),SetCtrig1X("X",IndexAlloc,CAddr("CEPD",2),0,SetTo,EPD(0x58D6F8)),SetCtrigX("X",IndexAlloc,0x15C,0,SetTo,"X",IndexAlloc,0x0,0,1)})
@@ -94,7 +95,7 @@ NIf(FP,ElapsedTime(AtLeast,3))
 	CreateUnitQueue()
 	LeaderBoardF()
 NIfEnd()
-
+init_Setting()
 Enable_HideErrorMessage(FP)
 EndCtrig()
 ErrorCheck()
