@@ -623,10 +623,10 @@ function SetZergGroupFlags(UnitID)
 		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
 		return Header
 	end
-	CreateUnitQueUIDArr = Create_VoidEPDHeaderV(FP,4*10)
-	CreateUnitQueXPosArr = Create_VoidEPDHeaderV(FP,4*10)
-	CreateUnitQueYPosArr = Create_VoidEPDHeaderV(FP,4*10)
-	CreateUnitQuePtr = CreateVar(FP)
+	CreateUnitStackUIDArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitStackXPosArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitStackYPosArr = Create_VoidEPDHeaderV(FP,4*10)
+	CreateUnitStackPtr = CreateVar(FP)
 	for i = 0, 5 do
 	Str03[i+1] = CArray(FP,50)
 	Names[i+1] = CVArray(FP,7)

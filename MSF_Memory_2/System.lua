@@ -693,16 +693,16 @@ HPRegenTable = {64}
 		for i = 7, 11 do
 		CWhile(FP,{Cond_EXCC(i,AtLeast,1)})
 				Convert_CPosXY(BCPos)
-				CAdd(FP,CreateUnitQuePtr,1)
+				CAdd(FP,CreateUnitStackPtr,1)
 				CDoActions(FP,{
-					TSetMemory(_Add(CreateUnitQueXPosArr,CreateUnitQuePtr),SetTo,CPosX),
-					TSetMemory(_Add(CreateUnitQueYPosArr,CreateUnitQuePtr),SetTo,CPosY),
-					TSetMemory(_Add(CreateUnitQueUIDArr,CreateUnitQuePtr),SetTo,_Mov(EXCC_TempVarArr[i+1],0xFF)),
-					TSetMemory(_Add(CreateUnitQuePlayerArr,CreateUnitQuePtr),SetTo,CPlayer),
-					TSetMemory(_Add(CreateUnitQueOXPosArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[6]),
-					TSetMemory(_Add(CreateUnitQueOYPosArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[7]),
+					TSetMemory(_Add(CreateUnitStackXPosArr,CreateUnitStackPtr),SetTo,CPosX),
+					TSetMemory(_Add(CreateUnitStackYPosArr,CreateUnitStackPtr),SetTo,CPosY),
+					TSetMemory(_Add(CreateUnitStackUIDArr,CreateUnitStackPtr),SetTo,_Mov(EXCC_TempVarArr[i+1],0xFF)),
+					TSetMemory(_Add(CreateUnitStackPlayerArr,CreateUnitStackPtr),SetTo,CPlayer),
+					TSetMemory(_Add(CreateUnitStackOXPosArr,CreateUnitStackPtr),SetTo,EXCC_TempVarArr[6]),
+					TSetMemory(_Add(CreateUnitStackOYPosArr,CreateUnitStackPtr),SetTo,EXCC_TempVarArr[7]),
 				})
-				CTrigger(FP,{},{TSetMemory(_Add(CreateUnitQueFlagArr,CreateUnitQuePtr),SetTo,EXCC_TempVarArr[13])},1)
+				CTrigger(FP,{},{TSetMemory(_Add(CreateUnitStackFlagArr,CreateUnitStackPtr),SetTo,EXCC_TempVarArr[13])},1)
 			CDoActions(FP,{Set_EXCC(i,SetTo,_Div(EXCC_TempVarArr[i+1],256))})
 		CWhileEnd()
 		end
@@ -797,15 +797,15 @@ HPRegenTable = {64}
 	local OPosX = CreateVar(FP)
 	local OPosY = CreateVar(FP)
 	local TempFlag = CreateVar(FP)
-	NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitQuePtr,1,AtLeast)},{SetV(TempFlag,0)})
-	f_SHRead(FP, _Add(CreateUnitQueXPosArr,CreateUnitQuePtr), CPosX)
-	f_SHRead(FP, _Add(CreateUnitQueYPosArr,CreateUnitQuePtr), CPosY)
-	f_SHRead(FP, _Add(CreateUnitQueOXPosArr,CreateUnitQuePtr), OPosX)
-	f_SHRead(FP, _Add(CreateUnitQueOYPosArr,CreateUnitQuePtr), OPosY)
-	f_SHRead(FP, _Add(CreateUnitQueUIDArr,CreateUnitQuePtr), TempUID)
-	f_SHRead(FP, _Add(CreateUnitQuePlayerArr,CreateUnitQuePtr), TempPID)
-	CTrigger(FP,{TMemory(_Add(CreateUnitQueFlagArr,CreateUnitQuePtr),AtLeast,1)},{SetV(TempFlag,1)},1)
-	DoActionsX(FP,{SubV(CreateUnitQuePtr,1)})
+	NWhile(FP,{Memory(0x628438,AtLeast,1),CV(CreateUnitStackPtr,1,AtLeast)},{SetV(TempFlag,0)})
+	f_SHRead(FP, _Add(CreateUnitStackXPosArr,CreateUnitStackPtr), CPosX)
+	f_SHRead(FP, _Add(CreateUnitStackYPosArr,CreateUnitStackPtr), CPosY)
+	f_SHRead(FP, _Add(CreateUnitStackOXPosArr,CreateUnitStackPtr), OPosX)
+	f_SHRead(FP, _Add(CreateUnitStackOYPosArr,CreateUnitStackPtr), OPosY)
+	f_SHRead(FP, _Add(CreateUnitStackUIDArr,CreateUnitStackPtr), TempUID)
+	f_SHRead(FP, _Add(CreateUnitStackPlayerArr,CreateUnitStackPtr), TempPID)
+	CTrigger(FP,{TMemory(_Add(CreateUnitStackFlagArr,CreateUnitStackPtr),AtLeast,1)},{SetV(TempFlag,1)},1)
+	DoActionsX(FP,{SubV(CreateUnitStackPtr,1)})
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	NIf(FP,{CV(TempUID,1,AtLeast)})
 	

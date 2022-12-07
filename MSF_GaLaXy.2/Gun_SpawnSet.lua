@@ -616,11 +616,11 @@ function GunData()
 		NWhileEnd()
 		CIf(FP,{Gun_Line(54,AtMost,0)})
 		CIf(FP,{Gun_Line(3,AtLeast,7),CDeaths(FP,AtLeast,2,GMode),TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109)})})
-		CAdd(FP,CreateUnitQuePtr,1)
+		CAdd(FP,CreateUnitStackPtr,1)
 		CTrigger(FP,{},{
-			TSetMemory(_Add(CreateUnitQueXPosArr,CreateUnitQuePtr),SetTo,Var_TempTable[2]),
-			TSetMemory(_Add(CreateUnitQueYPosArr,CreateUnitQuePtr),SetTo,Var_TempTable[3]),
-			TSetMemory(_Add(CreateUnitQueUIDArr,CreateUnitQuePtr),SetTo,_Mov(Gun_UID2,0xFF)),},1)
+			TSetMemory(_Add(CreateUnitStackXPosArr,CreateUnitStackPtr),SetTo,Var_TempTable[2]),
+			TSetMemory(_Add(CreateUnitStackYPosArr,CreateUnitStackPtr),SetTo,Var_TempTable[3]),
+			TSetMemory(_Add(CreateUnitStackUIDArr,CreateUnitStackPtr),SetTo,_Mov(Gun_UID2,0xFF)),},1)
 		CIfEnd()
 
 
