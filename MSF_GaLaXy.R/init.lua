@@ -310,7 +310,7 @@ function init()
 			
 	T_YY = 2022
 	T_MM = 12
-	T_DD = 08
+	T_DD = 15
 	T_HH = 00
 	function InputTesterID(Player,ID)
 		Trigger {

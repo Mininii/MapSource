@@ -1,6 +1,75 @@
 function OPTrig()
 CIf(FP,Switch("Switch 201",Cleared))
 DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
+if AutoSettingMode == true then
+	am={}
+	am.GMode = 3
+	am.DMode = 1
+	am.HiddenATK = 1
+	am.HiddenHP = 0
+	am.HiddenPts = 1
+	am.HondonMode = 1
+	am.Timer = CreateCcode()
+	am.ErrorFlag = CreateCcode()
+	
+	HondonTxt = {"\x04: OFF","\x08: ON"}
+	Text1 = {
+	"\x13\x07\n\x13\x04[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x05[E] \x11BURST",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x04[E] \x11BURST"}
+	Text2 = {
+	"\x13\x07\n\x13\x04[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x05[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드",
+	"\x13\x07\n\x13\x05[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x04[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x08드랍 또는 \x11응답없음모드 \x04선택으로 \x06공격력\x04이 \x072배 \x04증가하였습니다.",
+	"\x13\x07\n\x13\x05[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x05[W] \x08상남자\x04의 \x06드랍모드\n\x13\x04[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x08드랍 또는 \x11응답없음모드 \x04선택으로 \x06공격력\x04이 \x072배 \x04증가하였습니다."}
+	SettingArr = {}
+	for j,k in pairs({{am.HiddenATK,HiddenATK,HiddenATKM},{am.HiddenHP,HiddenHP,HiddenHPM},{am.HiddenPts,HiddenPts,HiddenPtsM}}) do
+		if math.abs(k[1])>=6 then PushErrorMsg("Hidden Option has Overflowed") end
+		if k[1]<0 then
+			table.insert(SettingArr, {SetV(k[3],math.abs(k[1]))})
+		else
+			table.insert(SettingArr, {SetV(k[2],math.abs(k[1]))})
+		end
+
+	end
+	if am.HiddenATK >= 1 or am.HiddenHP >= 1 or am.HiddenPts >= 1 or am.HondonMode >= 1 then HiddenCommand = {50} DoActionsX(FP,{SetCD(HiddenMode,1)}) else HiddenCommand = {} end
+	DoActions2X(FP, {
+		AddCD(am.Timer,1),
+		SetCD(GMode,am.GMode),
+		SetCD(DMode,am.DMode),
+		SetV(HondonMode,am.HondonMode),
+		SettingArr
+})
+
+	TriggerX(FP,{CD(GMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
+	TriggerX(FP,{CD(DMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
+	TriggerX(FP,{CV(HondonMode,2,AtLeast)},{SetCD(am.ErrorFlag,1)})
+
+
+	CIfX(FP,{CD(am.ErrorFlag,1)},{{
+		RotatePlayer({
+			DisplayTextX(StrDesignX("\x1B맵 설정에 문제가 발생했습니다. 맵 설정을 다시한번 확인해주세요.").."\n"..StrDesignX("GMode : "..am.GMode.." || DMode : "..am.DMode.." || HondonMode : "..am.HondonMode),4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);}})
+		
+	CElseX()
+
+	DoActions(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\Select.ogg"),DisplayTextX(StrDesignX("맵 설정에 의해 모든 옵션이 자동으로 설정되었습니다."), 4)}, HumanPlayers, FP)},1)
+	TriggerX(FP,{CD(am.Timer,24*3)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX("\x13\x10[ \x04(\x08HP \x04: "..am.HiddenHP..") (\x1BATK \x04: "..am.HiddenATK..") (\x1FPts \x04: "..am.HiddenPts..") (\x10혼돈 옵션 \x04: "..HondonTxt[am.HondonMode+1]..") \x10]", 4)}, HumanPlayers, FP)})
+	TriggerX(FP,{CD(am.Timer,24*6)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX(Text1[am.GMode], 4)}, HumanPlayers, FP)})
+	TriggerX(FP,{CD(am.Timer,24*9)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX(Text2[am.DMode], 4)}, HumanPlayers, FP)})
+	TriggerX(FP,{CD(am.Timer,24*12)},{SetCD(ModeO,1)})
+	CIfXEnd()
+
+	
+
+	
+
+
+
+
+else
 CIf(FP,{Memory(0x628438, AtLeast, 0x00000001),CDeaths(FP,Exactly,0,Print13)},SetCDeaths(FP,Add,88,Print13))
 Print_13(FP,{P1,P2,P3,P4,P5,P6,P7},nil)
 CIfEnd()
@@ -57,7 +126,7 @@ CElseX()
 Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr2,0)
 CIfXEnd()
 HiddenModeL = GetStrSize(0,HiddenModeStr)--
-HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~ 버튼\n\x13\x04현재 플러스 옵션 이용불가. 마이너스 옵션 선택가능"
+HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~ 버튼"
 WavFile = "staredit\\wav\\Unlock.ogg"
 DoActions2X(FP,{
 	RotatePlayer({
@@ -260,6 +329,7 @@ for i = 1, 3 do
 	})
 	end
 	
+end
 
 Trigger { -- 인트로1
 	players = {FP},
