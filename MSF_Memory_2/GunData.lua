@@ -1134,23 +1134,23 @@ BossUID = {87,74,5,2}
 
 
 	local Lyrics = {
-		{"\x0D\x0D!H\x13\x07♪\x04 Darkest night, \x07♪",3370},
-		{"\x0D\x0D!H\x13\x07♪\x04 이 어두운 밤, \x07♪",3370},
-		{"\x0D\x0D!H\x13\x07♪\x04 I'll confront you here.... \x07♪",5390},
-		{"\x0D\x0D!H\x13\x07♪\x04 바로 여기서 내가 너와 맞설지어니... \x07♪",5390},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08Darkest night, \x07♪",3370},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08이 어두운 밤, \x07♪",3370},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08I'll confront you here.... \x07♪",5390},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08바로 여기서 내가 너와 맞설지어니... \x07♪",5390},
 
-		{"\x0D\x0D!H\x13\x07♪\x04 Such a destiny was not desired. \x07♪",34040},
-		{"\x0D\x0D!H\x13\x07♪\x04 이런 운명은 바라지 않았어. \x07♪",34040},
+		{"\x0D\x0D!H\x13\x07♪\x04 Such a \x08destiny \x04was not desired. \x07♪",34040},
+		{"\x0D\x0D!H\x13\x07♪\x04 이런 \x08운명\x04은 바라지 않았어. \x07♪",34040},
 		{"\x0D\x0D!H\x13\x07♪\x04 In this place, \x07♪",38420},
 		{"\x0D\x0D!H\x13\x07♪\x04 이곳에서, \x07♪",38420},
 		{"\x0D\x0D!H\x13\x07♪\x04 I never wished to see that side of you. \x07♪",39770},
 		{"\x0D\x0D!H\x13\x07♪\x04 나는 네 그런 면을 보고 싶지 않았는데. \x07♪",39770},
-		{"\x0D\x0D!H\x13\x07♪\x04 And raise different colors for one another. \x07♪",44150},
-		{"\x0D\x0D!H\x13\x07♪\x04 서로의 다른 색채들이 피어나고 있구나. \x07♪",44150},
-		{"\x0D\x0D!H\x13\x07♪\x04 Never notice me. \x07♪",49550},
-		{"\x0D\x0D!H\x13\x07♪\x04 절대 날 눈치채지 마. \x07♪",49550},
-		{"\x0D\x0D!H\x13\x07♪\x04 Never call my name with your voice. \x07♪",52240},
-		{"\x0D\x0D!H\x13\x07♪\x04 절대 네 목소리로 내 이름을 속삭이지 마. \x07♪",52240},
+		{"\x0D\x0D!H\x13\x07♪\x04 And raise different \x08c\x0Eo\x0Fl\x10o\x11r\x18s \x04for one another. \x07♪",44150},
+		{"\x0D\x0D!H\x13\x07♪\x04 서로의 \x08다\x0E른 \x0F색\x10채\x11들\x18이 \x04피어나고 있구나. \x07♪",44150},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08Never notice me. \x07♪",49550},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08절대 날 눈치채지 마. \x07♪",49550},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10Never call my name with your voice. \x07♪",52240},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10절대 네 목소리로 내 이름을 속삭이지 마. \x07♪",52240},
 
 		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget everything \x07♪",75840},
 		{"\x0D\x0D!H\x13\x07♪\x04 모든 것을 잊게 해줘.\x07♪",75840},
@@ -1340,11 +1340,16 @@ BossUID = {87,74,5,2}
 		TGun_SetLine(11,Add,CA_ACCV),
 		TGun_SetLine(17-1,Add,CA_ACCV2),
 	})
-	CTrigger(FP,{TTOR({Gun_LineRange(8,22920,119660),Gun_Line(8,AtLeast,135500)})},{
+	CTrigger(FP,{Gun_LineRange(8,22920,119660)},{
 		Gun_SetLine(12,Add,1),
 		Gun_SetLine(13,Add,1),
 		Gun_SetLine(18-1,Add,1),
 		Gun_SetLine(19-1,Add,1),},{preserved})
+	CTrigger(FP,{Gun_Line(8,AtLeast,135500)},{
+		Gun_SetLine(12,Add,1),
+		Gun_SetLine(13,Add,1),
+		Gun_SetLine(18-1,Add,-1),
+		Gun_SetLine(19-1,Add,-1),},{preserved})
 	CIfEnd()
 
 	local SWEffArr1 = {}
@@ -1675,16 +1680,63 @@ BossUID = {87,74,5,2}
 	SetV(CA_Eff_RatF,400000),
 	})
 	CIfEnd()
+	local TesTArr = {}
+	for i = 0, 7 do
+		table.insert(TesTArr,130780+((bit/4)*i))
+	end
+	for i = 0, 3 do
+		table.insert(TesTArr,133480+((bit/8)*i))
+	end
+	for i = 0, 7 do
+		table.insert(TesTArr,134150+((bit/16)*i))
+	end
+	for j,k in pairs(TesTArr) do
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,2000+84),SWEffArr1},1)
+	end
+	local TesTArr = {}
+	for i = 0, 6 do
+		table.insert(TesTArr,138870+((bit/4)*i))
+	end
+	local SWEffArr1 = {}
+	local SWEffArr2 = {}
+	for i = 1, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],3))
+	end
+	for j,k in pairs(TesTArr) do
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,2000+80),SWEffArr1},1)
+	end
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	
+	
 	--CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,2000+60),SWEffArr1},1)
 	TriggerX(FP,{Gun_LineRange(8,135500,135500+5000),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
-	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1)})
+	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1),SetMemory(0x662350+(116*4),SetTo,9999*256),})
+
+	TriggerX(FP,{Gun_LineRange(8,135500,138870)},{SetInvincibility(Enable, 116, Force2, 64),},{preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,138870)},{SetInvincibility(Disable, 116, Force2, 64),},{preserved})
+	TriggerX(FP,{Gun_Line(8,AtLeast,158090)},{KillUnit(116,Force2)})
+	
+	G_CA_SetSpawn2X({Gun_Line(8,AtLeast,135500)},{3,57,52,102,61},"ACAS","Hp2","MAX",984,nil,nil,G_CA_Ratio(128),nil,1)
+	--G_CA_SetSpawn({Gun_Line(8,AtLeast,32840)},{15,56},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+
+	local TesCircleDiv = CreateVar2(FP,nil,nil,5)
+	
+	CTrigger(FP,{Gun_Line(8,AtLeast,137520),CV(CA_Eff_RatFM,CA_Eff_RatF3,AtMost)},{AddV(CA_Eff_RatFM,5000)},1)
+	TriggerX(FP,{Gun_Line(8,AtLeast,137520)},{SetV(CA_Eff_RatF3,500000)})
+
+
+	TriggerX(FP,{Gun_Line(8,AtLeast,163140)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,0),SetV(TesCircleL,163820),SetV(TesCircleR,164490)})
+	TriggerX(FP,{Gun_Line(8,AtLeast,164490)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,165160),SetV(TesCircleR,165840)})
+	
+	
 	
 	
 
 	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
 	
 	CIf(FP,{CV(Var_TempTable[9],TesCircleR,AtMost)})
-	f_iDiv(FP,N_R,5)
+	f_iDiv(FP,N_R,TesCircleDiv)
 
 	CMov(FP,N_A,0)
 	TempRand = f_CRandNum(360)
@@ -1698,12 +1750,14 @@ BossUID = {87,74,5,2}
 	Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
 	
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,0)},20,548,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,8)},20,548,8)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,10)},20,548,10)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,13)},20,548,13)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,15)},20,548,15)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,16)},20,548,16)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,0),CD(TesCircleC,17)},20,548,17)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,0)},20,925,0)
+	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,8)},20,925,8)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,10)},20,925,10)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,13)},20,925,13)
 	CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),CD(TesEffFlag,1),CD(TesCircleC,15)},20,925,15)
