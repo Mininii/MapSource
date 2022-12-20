@@ -652,7 +652,7 @@ function Include_GunData(Size,LineNum)
 		f_TempRepeat({Gun_Line(8,AtMost,39)},88,1,201,nil,"CG")
 	end
 	TriggerX(FP,{Gun_Line(8,AtLeast,CCDelayT),Gun_Line(8,AtMost,CCDelayT+5)},{SetCp(FP),RunAIScriptAt(JYD,36)},{preserved})
-	TriggerX(FP,{Gun_Line(8,Exactly,CCDelayT+6)},{Order(88,FP,36,Attack,4),Order(21,FP,36,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
+	TriggerX(FP,{Gun_Line(8,Exactly,CCDelayT+6)},{Order(88,FP,64,Attack,4),Order(21,FP,64,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()

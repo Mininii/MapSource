@@ -31,6 +31,8 @@ Trigger { -- 데스 스코어 리더보드
 	actions = {
 		LeaderBoardScore(Custom, "\x08Deaths...\x04(\x06MAX \x07100\x04)"..DifLeaderBoard[i]);
 		LeaderBoardComputerPlayers(Disable);
+		Order("Any unit",FP,41,Attack,4);
+		Order("Any unit",FP,42,Attack,4);
 		PreserveTrigger();
 },
 }
@@ -45,6 +47,8 @@ Trigger { -- 데스 스코어 리더보드
 	actions = {
 		LeaderBoardScore(Custom, "\x08Deaths..."..DifLeaderBoard[i]);
 		LeaderBoardComputerPlayers(Disable);
+		Order("Any unit",FP,41,Attack,4);
+		Order("Any unit",FP,42,Attack,4);
 		PreserveTrigger();
 },
 }

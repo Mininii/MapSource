@@ -4,8 +4,8 @@ DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 if AutoSettingMode == true then
 	am={}
 	am.GMode = 3
-	am.DMode = 1
-	am.HiddenATK = 1
+	am.DMode = 3
+	am.HiddenATK = 0
 	am.HiddenHP = 0
 	am.HiddenPts = 1
 	am.HondonMode = 1
@@ -37,6 +37,7 @@ if AutoSettingMode == true then
 		SetCD(GMode,am.GMode),
 		SetCD(DMode,am.DMode),
 		SetV(HondonMode,am.HondonMode),
+		--RemoveUnit(115, AllPlayers);
 		SettingArr
 })
 
@@ -365,7 +366,11 @@ for j, k in pairs(OPArr) do
 end
 CIfOnce(FP,{CDeaths(FP,AtLeast,35+(36*5),ModeT)},{SetCD(GStart,1)})
 
-TriggerX(FP, {CD(GMode,3)}, SetMemoryW(0x656EB0+(6*2),SetTo,7777))
+TriggerX(FP, {CD(GMode,3)}, {SetMemoryW(0x656EB0+(6*2),SetTo,7777),
+SetMemoryW(0x656888+(6*2), SetTo, 96),
+SetMemoryW(0x6570C8+(6*2), SetTo, 96),
+SetMemoryW(0x657780+(6*2), SetTo, 96),
+})
 
 Trigger {
 	players = {FP},
@@ -481,7 +486,7 @@ for i = 1, 5 do
 			SetMemoryW(0x657678+(13*2),Add,(2*i)+(2*i));
 			SetMemoryW(0x656EB0+(118*2),Add,300*i);
 			SetMemoryW(0x657678+(118*2),Add,10*i);
-			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
+			SetMemoryW(0x656EB0+(119*2),Add,600*i);
 			SetMemoryW(0x657678+(119*2),Add,40*i);
 			SetMemoryW(0x656EB0+(120*2),Add,150*i);
 			SetMemoryW(0x657678+(120*2),Add,41*i);

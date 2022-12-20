@@ -99,12 +99,25 @@ NIf(FP,ElapsedTime(AtLeast,3))
 	LeaderBoardF()
 NIfEnd()
 init_Setting()
-Enable_HideErrorMessage(FP)
+if Limit == 0 then
+	Enable_HideErrorMessage(FP)
+end
+
+Trigger2X(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat()})
+	
+if Limit == 1 then
+	for i = 0, 6 do
+		Trigger2X(FP,{CD(Emer_EscapeC[i+1],1),LocalPlayerID(i),KeyPress("ESC", "Down"),KeyPress("ENTER", "Down")},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat(),RotatePlayer({Victory()},MapPlayers,FP)})
+	end
+	for i = 128, 131 do
+		Trigger2X(FP,{LocalPlayerID(i),KeyPress("ESC", "Down"),KeyPress("ENTER", "Down")},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat(),RotatePlayer({Victory()},MapPlayers,FP)})
+	end
+end
+
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
 
-Trigger2X(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat()})
 
 
 if LD2XOption == 1 then

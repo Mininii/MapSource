@@ -18,6 +18,7 @@ function Operator_Trig()
 		}
     end
     CIfXEnd()
+	
 	CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)})
 		CMov(FP,0x6509B0,CurrentOP)
 	

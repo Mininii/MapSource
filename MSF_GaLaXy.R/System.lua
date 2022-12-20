@@ -21,6 +21,23 @@ function Gun_System()
 			PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV");
 			},HumanPlayers,FP);})
 	end
+
+	InvTable = {131,132,133,156,109,175,116,150,154,151,130,148,190}
+	InvDisTable = {}
+	InvEnvTable = {}
+	for j,k in pairs(InvTable) do
+		table.insert(InvDisTable,SetInvincibility(Disable, k, FP, 64))
+		table.insert(InvEnvTable,SetInvincibility(Enable, k, FP, 64))
+	end
+
+	Trigger2X(FP,{--유닛생성 큐 데이터 5000이상 건작무적
+	CV(CreateUnitQueueNum,5000,AtLeast);
+},InvEnvTable,{preserved})
+Trigger2X(FP,{--유닛생성 큐 데이터 4999이하 건작무적해제
+CV(CreateUnitQueueNum,4999,AtMost);
+},InvDisTable,{preserved})
+
+
 	Trigger2X(FP,{--유닛생성 큐 데이터 5만개이상 패배
 	CV(CreateUnitQueueNum,50000,AtLeast);
 },{
@@ -308,6 +325,11 @@ else
 	HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
 end
 
+if X2_Mode==1 then
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
+else
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
+end
 for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,2)},77,2,nil,nil,k)
 	f_TempRepeat({CD(GMode,2)},78,2,nil,nil,k)
@@ -319,11 +341,6 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},88,15,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
-if X2_Mode==1 then
-	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
-else
-	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
-end
 WaveArr = {
 "staredit\\wav\\zealot1.ogg",
 "staredit\\wav\\zealot2.ogg",
@@ -349,6 +366,12 @@ CWhile(FP,Bring(FP,AtLeast,1,192,64),{
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,192,8,"Anywhere",FP),Order(192,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
 CIf(FP,{Bring(FP,AtLeast,1,192,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,192,FP,4,8),KillUnitAt(1,192,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
+
+if X2_Mode==1 then
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
+else
+	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
+end
 for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,2)},10,2,nil,nil,k)
 	f_TempRepeat({CD(GMode,2)},17,2,nil,nil,k)
@@ -360,11 +383,6 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},21,15,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
-if X2_Mode==1 then
-	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
-else
-	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
-end
 WaveArr = {
 "sound\\Zerg\\BUGGUY\\ZBGPss00.wav",
 "sound\\Zerg\\BUGGUY\\ZBGPss01.wav",
@@ -685,7 +703,7 @@ function CreateUnitQueue()
 		if i == 1 then RS1 = Set RS2=Cleared end
 		if i == 2 then RS1 = Cleared RS2=Set end
 		if i == 3 then RS1 = Set RS2=Set end
-		TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetV(CRLID,11+i)},{preserved})
+		TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetV(CRLID,43+i)},{preserved})
 	end
 
 
@@ -703,6 +721,11 @@ function CreateUnitQueue()
 
 
 	NIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+
+	CIf(FP,{TTOR({CV(TempUID,25),CV(TempUID,30)})})
+		CDoActions(FP,{
+			TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),})
+	CIfEnd()
 	
 	CTrigger(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
 		TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),

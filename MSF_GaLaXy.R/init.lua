@@ -300,6 +300,17 @@ function init()
 			for i = 1, #ZergGndUArr do
 				table.insert(CtrigInitArr[FP+1],SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
 			end
+			
+			if Limit == 1 then
+				for j,k in pairs(ZergGndUArr) do
+					SetUnitsDat2X(PatchArr,k,{AdvFlag={4,4},Height=12})
+				end
+				
+			end
+			SetUnitsDat2X(PatchArr,13,{AdvFlag={4,4}})
+
+			--SetUnitsDat2X(PatchArr,25,{AdvFlag={4,4}})
+			--SetUnitsDat2X(PatchArr,30,{AdvFlag={4,4}})
 --			for i = 0, 6 do
 --				table.insert(PatchArr,SetMemory(0x5821A4 + (4*i),SetTo,GunLimit*2))
 --				table.insert(PatchArr,SetMemory(0x582144 + (4*i),SetTo,GunLimit*2))
@@ -310,7 +321,7 @@ function init()
 			
 	T_YY = 2022
 	T_MM = 12
-	T_DD = 15
+	T_DD = 22
 	T_HH = 00
 	function InputTesterID(Player,ID)
 		Trigger {
@@ -322,6 +333,7 @@ function init()
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
+				SetCD(Emer_EscapeC[Player+1],1);
 				
 			}
 		}
