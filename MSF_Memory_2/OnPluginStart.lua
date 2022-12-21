@@ -304,6 +304,8 @@ if Limit == 1 then
 	for i = 0, 516 do
 		table.insert(PatchArr,SetMemoryB(0x665C48+i,SetTo,1))
 	end
+	--table.insert(PatchArr,SetMemoryB(0x669E28+210, SetTo, 0))
+	
 end
 CTable = {23,46,36,161}
 for i = 0, 3 do

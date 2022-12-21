@@ -57,6 +57,7 @@ function System()
 		RemoveUnit(MarID[4],P12),
 		ModifyUnitEnergy(All,"Men",P12,64,0),
 		RemoveUnit(204,AllPlayers),
+		--RemoveUnit(222,AllPlayers),
 		RemoveUnit(205,AllPlayers),})
 
 	Cast_UnitCount()

@@ -1143,8 +1143,8 @@ BossUID = {87,74,5,2}
 		{"\x0D\x0D!H\x13\x07♪\x04 이런 \x08운명\x04은 바라지 않았어. \x07♪",34040},
 		{"\x0D\x0D!H\x13\x07♪\x04 In this place, \x07♪",38420},
 		{"\x0D\x0D!H\x13\x07♪\x04 이곳에서, \x07♪",38420},
-		{"\x0D\x0D!H\x13\x07♪\x04 I never wished to see that side of you. \x07♪",39770},
-		{"\x0D\x0D!H\x13\x07♪\x04 나는 네 그런 면을 보고 싶지 않았는데. \x07♪",39770},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10I never wished to see that side of you. \x07♪",39770},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10나는 네 그런 면을 보고 싶지 않았는데. \x07♪",39770},
 		{"\x0D\x0D!H\x13\x07♪\x04 And raise different \x08c\x0Eo\x0Fl\x10o\x11r\x18s \x04for one another. \x07♪",44150},
 		{"\x0D\x0D!H\x13\x07♪\x04 서로의 \x08다\x0E른 \x0F색\x10채\x11들\x18이 \x04피어나고 있구나. \x07♪",44150},
 		{"\x0D\x0D!H\x13\x07♪\x04 \x08Never notice me. \x07♪",49550},
@@ -1152,49 +1152,49 @@ BossUID = {87,74,5,2}
 		{"\x0D\x0D!H\x13\x07♪\x04 \x10Never call my name with your voice. \x07♪",52240},
 		{"\x0D\x0D!H\x13\x07♪\x04 \x10절대 네 목소리로 내 이름을 속삭이지 마. \x07♪",52240},
 
-		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget everything \x07♪",75840},
-		{"\x0D\x0D!H\x13\x07♪\x04 모든 것을 잊게 해줘.\x07♪",75840},
-		{"\x0D\x0D!H\x13\x07♪\x04 and leave no trace of you. \x07♪",78870},
-		{"\x0D\x0D!H\x13\x07♪\x04 네 흔적 하나 남기지 말아줘. \x07♪",78870},
-		{"\x0D\x0D!H\x13\x07♪\x04 What am I carrying out \x07♪",81570},
-		{"\x0D\x0D!H\x13\x07♪\x04 이 절망의 지평선에서 \x07♪",81570},
-		{"\x0D\x0D!H\x13\x07♪\x04 in this horizon of despair? \x07♪",83930},
-		{"\x0D\x0D!H\x13\x07♪\x04 나는 무엇을 하고 있는 거지? \x07♪",83930},
+		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget \x07everything \x07♪",75840},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x07모든 것\x04을 잊게 해줘.\x07♪",75840},
+		{"\x0D\x0D!H\x13\x07♪\x04 and \x08leave no \x10trace of you. \x07♪",78870},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10네 흔적 하나 \x08남기지 말아줘. \x07♪",78870},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08What am I carrying out \x07♪",81570},
+		{"\x0D\x0D!H\x13\x07♪\x04 이 \x11절망\x04의 \x0F지평선에서 \x07♪",81570},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08in this \x0Fhorizon \x04of \x11despair? \x07♪",83930},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08나는 무엇을 하고 있는 거지? \x07♪",83930},
 
 		{"\x0D\x0D!H\x13\x07♪\x04 If it's not you, I can hurt \x07♪",87300},
 		{"\x0D\x0D!H\x13\x07♪\x04 너만 아니라면, 난 정의라는 이름 아래 \x07♪",87300},
-		{"\x0D\x0D!H\x13\x07♪\x04 anyone in the name of justice. \x07♪",89320},
-		{"\x0D\x0D!H\x13\x07♪\x04 누구든 상처입힐 수 있어. \x07♪",89320},
-		{"\x0D\x0D!H\x13\x07♪\x04 Your shadow gets in the way of my light. \x07♪",92690},
-		{"\x0D\x0D!H\x13\x07♪\x04 네 그림자가 내 빛을 가로막고 있네. \x07♪",92690},
-		{"\x0D\x0D!H\x13\x07♪\x04 And testify.... \x07♪",98090},
-		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 간증해... \x07♪",98090},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08anyone in the name of justice. \x07♪",89320},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08누구든 상처입힐 수 있어. \x07♪",89320},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1EYour shadow \x04gets in the way of \x07my light. \x07♪",92690},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1E네 그림자\x04가 \x07내 빛\x04을 가로막고 있네. \x07♪",92690},
+		{"\x0D\x0D!H\x13\x07♪\x04 And \x07「\x08Ｔ\x11ｅｓｔｉｆｙ\x07」\x04.... \x07♪",98090},
+		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 \x07「\x08증\x11언\x07」 \x04해... \x07♪",98090},
 
-		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget everything, \x07♪",135000},
-		{"\x0D\x0D!H\x13\x07♪\x04 모든 것을 잊게 해줘, \x07♪",135000},
-		{"\x0D\x0D!H\x13\x07♪\x04 still moonlight shines on us. \x07♪",138200},
-		{"\x0D\x0D!H\x13\x07♪\x04 여전히 달빛은 우리를 비추네. \x07♪",138200},
-		{"\x0D\x0D!H\x13\x07♪\x04 Broken heart, I don't want you \x07♪",140890},
-		{"\x0D\x0D!H\x13\x07♪\x04 부서진 마음, 난 네가 찾지도, \x07♪",140890},
-		{"\x0D\x0D!H\x13\x07♪\x04 to find and take a look at. \x07♪",143250},
-		{"\x0D\x0D!H\x13\x07♪\x04 바라보지도 않았으면 해. \x07♪",143250},
-		{"\x0D\x0D!H\x13\x07♪\x04 So I'll sin more and destroy my thoughts, \x07♪",146620},
-		{"\x0D\x0D!H\x13\x07♪\x04 그러니 잡념들은 잊은 채로, 내가 더 죄를 짓고, \x07♪",146620},
-		{"\x0D\x0D!H\x13\x07♪\x04 make a mess of my hand. \x07♪",149660},
-		{"\x0D\x0D!H\x13\x07♪\x04 내 손만을 더 엉망으로 만들게. \x07♪",149660},
-		{"\x0D\x0D!H\x13\x07♪\x04 I swear on the darkest night I'll end it all. \x07♪",152020},
-		{"\x0D\x0D!H\x13\x07♪\x04 이 어두운 밤에 스스로 모든 걸 끝내리라 맹세할게. \x07♪",152020},
-		{"\x0D\x0D!H\x13\x07♪\x04 And testify.... \x07♪",157410},
-		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 간증하지... \x07♪",157410},
+		{"\x0D\x0D!H\x13\x07♪\x04 Let me forget \x07everything, \x07♪",135000},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x07모든 것\x04을 잊게 해줘, \x07♪",135000},
+		{"\x0D\x0D!H\x13\x07♪\x04 still \x17moonlight \x07shines on us. \x07♪",138200},
+		{"\x0D\x0D!H\x13\x07♪\x04 여전히 \x17달빛\x04은 \x07우리를 비추네. \x07♪",138200},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08Broken heart, \x04I don't want you \x07♪",140890},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08부서진 마음, \x04난 네가 \x11찾지도\x04, \x07♪",140890},
+		{"\x0D\x0D!H\x13\x07♪\x04 to \x11find \x04and \x10take a look at. \x07♪",143250},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10바라보지도 \x04않았으면 해. \x07♪",143250},
+		{"\x0D\x0D!H\x13\x07♪\x04 So I'll \x08sin \x04more and \x11destroy my thoughts, \x07♪",146620},
+		{"\x0D\x0D!H\x13\x07♪\x04 그러니 \x11잡념들은 잊은 채로\x04, 내가 더 \x08죄\x04를 짓고, \x07♪",146620},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08make a mess of my hand. \x07♪",149660},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08내 손만을 더 엉망으로 만들게. \x07♪",149660},
+		{"\x0D\x0D!H\x13\x05♪\x04 I swear on the darkest night I'll end it all. \x07♪",152020},
+		{"\x0D\x0D!H\x13\x05♪\x04 이 어두운 밤에 스스로 모든 걸 끝내리라 맹세할게. \x07♪",152020},
+		{"\x0D\x0D!H\x13\x07♪\x04 And \x07「\x08Ｔ\x11ｅｓｔｉｆｙ\x07」\x04.... \x07♪",157410},
+		{"\x0D\x0D!H\x13\x07♪\x04 그리곤 \x07「\x08증\x11언\x07」 \x04 하지... \x07♪",157410},
 
-		{"\x0D\x0D!H\x13\x07♪\x04 All that I'm left with is your reminiscences. \x07♪",180000},
-		{"\x0D\x0D!H\x13\x07♪\x04 내게 남겨진 거라곤, 너의 추억뿐. \x07♪",180000},
-		{"\x0D\x0D!H\x13\x07♪\x04 Take me to where you are, won't you? \x07♪",185050},
-		{"\x0D\x0D!H\x13\x07♪\x04 네가 있는 곳으로 날 데려다 줘, 그럴 거지? \x07♪",185050},
-		{"\x0D\x0D!H\x13\x07♪\x04 Till then I'll keep struggling. \x07♪",189430},
-		{"\x0D\x0D!H\x13\x07♪\x04 그때까지, 내가 계속 분투하고 있을게. \x07♪",189430},
-		{"\x0D\x0D!H\x13\x07♪\x04 Curse of justice you don't know. \x07♪",194830},
-		{"\x0D\x0D!H\x13\x07♪\x04 네가 알 리 없는 이 정의의 저주 속에서. \x07♪",194830},
+		{"\x0D\x0D!H\x13\x07♪\x04 All that I'm left with is \x18your reminiscences. \x07♪",180000},
+		{"\x0D\x0D!H\x13\x07♪\x04 내게 남겨진 거라곤, \x18너의 추억뿐. \x07♪",180000},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1FTake me to where you are, \x08won't you? \x07♪",185050},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1F네가 있는 곳으로 날 데려다 줘, \x08그럴 거지? \x07♪",185050},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10Till then I'll keep \x1Cstruggling. \x07♪",189430},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x10그때까지, 내가 계속 \x1C분투\x10하고 있을게. \x07♪",189430},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x08Curse \x04of \x11justice \x1Fyou don't know. \x07♪",194830},
+		{"\x0D\x0D!H\x13\x07♪\x04 \x1F네가 알 리 없는 \x04이 \x11정의\x04의 \x08저주 \x04속에서. \x07♪",194830},
 
 	}
 	CIf_GCase(190)
@@ -1215,6 +1215,11 @@ BossUID = {87,74,5,2}
 			SetUnitsDat2X(tesPatchT,o,{AdvFlag={4,4},Height=12}) -- 모든 적유닛을 공중으로
 		end
 	end
+
+	table.insert(tesPatchT,SetMemoryB(0x669E28+440, SetTo, 8))
+	table.insert(tesPatchT,SetMemoryB(0x669E28+441, SetTo, 8))
+	
+	
 
 
 	for i = 1,4 do
@@ -1304,6 +1309,13 @@ BossUID = {87,74,5,2}
 	--G_CA_SetSpawn({Gun_Line(8,AtLeast,8090)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 
 
+	local TesCircleL = CreateVar(FP)
+	local TesCircleR = CreateVar(FP)
+	local TesCircleC = CreateCcode()
+	local TesEffFlag = CreateCcode()
+	local TesCircleDiv = CreateVar2(FP,nil,nil,5)
+
+
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 4 do
@@ -1315,6 +1327,7 @@ BossUID = {87,74,5,2}
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
 	end
 	NUGive(12130,29)
+	TriggerX(FP,{Gun_Line(8,AtLeast,12130-670)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,12130),SetV(TesCircleR,12130)})
 	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
 		local RetT
 		local RetT2
@@ -1397,7 +1410,9 @@ BossUID = {87,74,5,2}
 	
 
 	CIf(FP,Gun_LineRange(8,55280,76850))
-
+	G_CA_Bullet({Gun_Line(8,AtLeast,55280)},220,"ACAS","tes_Eff",20,1,{2048,2048},nil,0,nil,nil,1)
+	G_CA_Bullet({Gun_Line(8,AtLeast,55280+5390)},220,"ACAS","tes_Eff",20,1,{2048,2048},nil,0,nil,nil,1)
+	G_CA_Bullet({Gun_Line(8,AtLeast,55280+5390+5390)},220,"ACAS","tes_Eff",20,1,{2048,2048},nil,0,nil,nil,1)
 	
 
 
@@ -1469,6 +1484,11 @@ BossUID = {87,74,5,2}
 		EFSW[i] = SetV(CA_EffSWArr2[i],8)
 	end
 	DoActionsX(FP,RT)
+	
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+
+
 	for i = 0, 14 do--
 		TriggerX(FP, Gun_Line(8,AtLeast,66060+(i*680)), {SetV(CAEF,3000+EfT[i+1][1]),SetV(CACR,EfT[i+1][2]),SetV(CAEF2,3000+EfT2[i+1][1]),SetV(CACR2,EfT2[i+1][2])})
 		
@@ -1518,17 +1538,15 @@ BossUID = {87,74,5,2}
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,66060+(0*680))})
 	CMov(FP,CA_Create,CAEF2)
 	CMov(FP,CA_Color,CACR2)
-	local TesCircleL = CreateVar(FP)
-	local TesCircleR = CreateVar(FP)
-	local TesCircleC = CreateCcode()
-	local TesEffFlag = CreateCcode()
 	
 	for j = 5, 8 do
 		CMov(FP,CA_EffSWArr2[j],CA_EffSWArr3[j])
 	end
 	DoActionsX(FP, CR2)
 	
-	DoActionsX(FP, {SetV(TesCircleL,66060),SetV(TesCircleR,66060)})
+
+	
+	DoActionsX(FP, {SetV(TesCircleL,66060),SetV(TesCircleR,66060),SetV(TesCircleDiv,5),SetCD(TesCircleC,0),SetCD(TesEffFlag,0),})
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,66060+(0*680))})
 	DoActionsX(FP, CF2)
 	for j = 1, 8 do
@@ -1561,7 +1579,7 @@ BossUID = {87,74,5,2}
 	--for j,k in pairs({CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX,CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2}) do
 	--end
 	
-	local bit = 675*2
+	local bit = 674.1573*2
 	local tes_CT = {0,10,13,15,16,17,16,0,0,10,13,15,16,17,16,0}
 	local tes_TT = {76850,78200,}
 	for i = 1, 9+8 do
@@ -1717,10 +1735,9 @@ BossUID = {87,74,5,2}
 	TriggerX(FP,{Gun_Line(8,AtLeast,138870)},{SetInvincibility(Disable, 116, Force2, 64),},{preserved})
 	TriggerX(FP,{Gun_Line(8,AtLeast,158090)},{KillUnit(116,Force2)})
 	
-	G_CA_SetSpawn2X({Gun_Line(8,AtLeast,135500)},{3,57,52,102,61},"ACAS","Hp2","MAX",984,nil,nil,G_CA_Ratio(128),nil,1)
+	G_CA_SetSpawn2X({Gun_Line(8,AtLeast,135500)},{57,52,102,61,76},"ACAS","Hp2","MAX",984,nil,nil,nil,nil,1)
 	--G_CA_SetSpawn({Gun_Line(8,AtLeast,32840)},{15,56},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 
-	local TesCircleDiv = CreateVar2(FP,nil,nil,5)
 	
 	CTrigger(FP,{Gun_Line(8,AtLeast,137520),CV(CA_Eff_RatFM,CA_Eff_RatF3,AtMost)},{AddV(CA_Eff_RatFM,5000)},1)
 	TriggerX(FP,{Gun_Line(8,AtLeast,137520)},{SetV(CA_Eff_RatF3,500000)})
@@ -1728,13 +1745,17 @@ BossUID = {87,74,5,2}
 
 	TriggerX(FP,{Gun_Line(8,AtLeast,163140)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,0),SetV(TesCircleL,163820),SetV(TesCircleR,164490)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,164490)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,165160),SetV(TesCircleR,165840)})
+
+	for i = 0, 31 do
+		G_CA_Bullet({Gun_Line(8,AtLeast,120000+(i*(bit*2)))},220,"ACAS","tes_Eff",20,1,{2048,2048},nil,0,nil,nil,1)
+	end
 	
 	
 	
 	
 
-	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
 	
+	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
 	CIf(FP,{CV(Var_TempTable[9],TesCircleR,AtMost)})
 	f_iDiv(FP,N_R,TesCircleDiv)
 
@@ -1873,8 +1894,6 @@ BossUID = {87,74,5,2}
 
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,174000),CD(Theorist,0)},{19,27},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,174000),CD(Theorist,1,AtLeast)},{19,29},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
-
-	
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,30940)},{84},"ACAS","EllipseMirror1","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,31570)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,31650)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
