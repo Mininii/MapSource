@@ -1,6 +1,5 @@
 function Interface()
 	local InfWhile = CreateCcode()
-	local Drop = CreateCcode()
 	
 	Trigger { -- 조합법 insert키
 		players = {Force1},
@@ -1077,7 +1076,7 @@ TriggerX(j,{CV(HondonMode,0)},{
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 
 	for i = 0, 6 do
-		CallTriggerX(FP,MedicFunc,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF),Deaths(i,AtLeast,1,34)})
+		CallTriggerX(FP,MedicFunc,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,i,0,0xFF),Deaths(i,AtLeast,1,34)})
 	end
 	
 

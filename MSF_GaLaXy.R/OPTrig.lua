@@ -4,11 +4,11 @@ DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 if AutoSettingMode == true then
 	am={}
 	am.GMode = 3
-	am.DMode = 3
-	am.HiddenATK = 0
+	am.DMode = 1
+	am.HiddenATK = 1
 	am.HiddenHP = 0
 	am.HiddenPts = 1
-	am.HondonMode = 1
+	am.HondonMode = 0
 	am.Timer = CreateCcode()
 	am.ErrorFlag = CreateCcode()
 	

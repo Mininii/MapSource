@@ -303,7 +303,7 @@ function init()
 			
 			if Limit == 1 then
 				for j,k in pairs(ZergGndUArr) do
-					SetUnitsDat2X(PatchArr,k,{AdvFlag={4,4},Height=12})
+					SetUnitsDat2X(PatchArr,k,{Height=12})
 				end
 				
 			end
@@ -321,7 +321,7 @@ function init()
 			
 	T_YY = 2022
 	T_MM = 12
-	T_DD = 22
+	T_DD = 23
 	T_HH = 00
 	function InputTesterID(Player,ID)
 		Trigger {

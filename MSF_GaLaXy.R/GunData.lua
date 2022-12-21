@@ -547,12 +547,17 @@ function Include_GunData(Size,LineNum)
 	FaciCUTable = {3,6,11}
 	FaciCUTable2 = {7,15,30}
 	FaciCUTable3 = {1,3,10}
+	if X2_Mode == 1 then
+		FactTankXY = {1600*2,2144*2}
+	else
+		FactTankXY = {1600,2144}
+	end
 	for l = 1, 3 do
 		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},28,FaciCUTable[l],187,nil,"CG")
 		f_TempRepeat({Gun_Line(9,Exactly,1),CD(GMode,l)},21,FaciCUTable2[l],187,nil,"CG")
-		f_TempRepeat({CD(GMode,l)},25,FaciCUTable3[l],nil,nil,{1600,2144})
+		f_TempRepeat({CD(GMode,l)},25,FaciCUTable3[l],nil,nil,FactTankXY)
 	end
-	Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,{CreateUnit(5,84,1,FP),KillUnit(84,FP),})
+	Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,{CreateUnit(5,84,1,FP),KillUnit(84,FP)})
 	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
 	TriggerX(FP,{Gun_Line(9,AtLeast,2)},{Gun_SetLine(9,SetTo,0)},{preserved})
 	CIfEnd()

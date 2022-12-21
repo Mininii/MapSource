@@ -167,7 +167,7 @@ CWhileEnd()
 
 
 
-	
+	CIf(FP,{CD(Drop, 0)})
     EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
     Check_Enemy = def_sIndex()
     NJump(FP,Check_Enemy,{DeathsX(CurrentPlayer,AtLeast,7,0,0xFF)})
@@ -279,6 +279,7 @@ CWhileEnd()
 	end
 	EXCC_End()
 	CMov(FP,0x6509B0,FP)
+	CIfEnd()
 	DoActions(FP, {KillUnit(188,P12)})
 	
 	
