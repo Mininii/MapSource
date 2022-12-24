@@ -708,7 +708,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_BakY,G_CA_TempTable[9])
 
 				CIfX(FP,Never())
-					CElseIfX({CD(tesFlag,1,AtLeast)})--testify 발동시 우선. 어택지점 = 생산중심점
+					CElseIfX({CD(tesFlagX,1,AtLeast)})--testify 발동시 우선. 어택지점 = 생산중심점
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 					CElseIfX({CD(EDNum,1,AtLeast)})--보스전 우선. 어택지점 = 생산중심점
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
