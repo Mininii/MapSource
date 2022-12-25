@@ -527,8 +527,11 @@ function Install_CallTriggers()
 	CMov(FP,CPosX,_Add(V(CA[8]),SHLX))
 	CMov(FP,CPosY,_Add(V(CA[9]),SHLY))
 	Simple_SetLocX(FP,"Location 1",CPosX,CPosY,CPosX,CPosY,Simple_CalcLoc(0,-32,-32,32,32))
-	DoActionsX(FP, {CreateUnitWithProperties(1, 84, 1, FP, {hallucinated=true}),KillUnit(84, FP)})
+	
+	TriggerX(FP,{CV(CI,1,AtLeast)}, {CreateUnitWithProperties(1, 84, 1, FP, {hallucinated=true}),KillUnit(84, FP)},{preserved})
+	TriggerX(FP,{CV(CI,0)}, {CreateUnitWithProperties(1, 84, 1, FP, {hallucinated=false}),KillUnit(84, FP)},{preserved})
 
+	
 	CIfX(FP,CV(CI,1,AtLeast))
 	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 8320000*256),SetMemoryB(0x669E28+218, SetTo, 16)}, {preserved})
 	CIf(FP,Memory(0x628438, AtLeast, 1))

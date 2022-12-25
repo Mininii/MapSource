@@ -1198,6 +1198,7 @@ BossUID = {87,74,5,2}
 
 	}
 	CIf_GCase(190)
+	DoActions(FP,{KillUnit(125,Force1)},1)--건작보스 작동시 모든 벙커 폭발
 	local tesTestmode = 0
 	
 	if Limit == 1 then
@@ -1209,6 +1210,7 @@ BossUID = {87,74,5,2}
 	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- 스킬유닛무기 재설정
 	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--핵배틀딜너프
 	SetWeaponsDat2X(tesPatchT,62,{DmgBase=999})--프로브딜버프
+	
 
 	for j,k in pairs({Tier1,Tier2,Tier3,Tier4,Tier5}) do
 		for p, o in pairs(k) do
@@ -1228,12 +1230,12 @@ BossUID = {87,74,5,2}
 	end
 
 	DoActions2(FP, tesPatchT,1)
-	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP),SetCD(tesFlagX,1)},1)
+	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 
 	CTrigger(FP,{CV(Dt,79,AtMost)},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
 	CTrigger(FP,{CV(Dt,80,AtLeast)},{TGun_SetLine(10,Add,80),TGun_SetLine(8,Add,80)},1)--CV(Dt,0x2A,AtMost)
-	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
+	DoActionsX(FP,{SubV(ExRateV,13),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
 	function CA_3DAcc(Time,XY,YZ,ZX)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
@@ -1780,7 +1782,8 @@ BossUID = {87,74,5,2}
 
 	TriggerX(FP,{Gun_Line(8, AtLeast, (60000*2)+59320)},{KillUnit(88,Force2),KillUnit(21,Force2)})
 	TriggerX(FP,{Gun_LineRange(8,(60000*2)+59320,(60000*3)+2020),CV(CA_ACCR,10,AtLeast)},{SubV(CA_ACCR,3)},{preserved})
-	TriggerX(FP,{Gun_LineRange(8,(60000*3)+9430,(60000*3)+11460),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3),AddV(CA_Eff_RatFM2,150000)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,(60000*3)+9430,(60000*3)+11460),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8,(60000*3)+9430,(60000*3)+11460)},{AddV(CA_Eff_RatFM2,150000)})
 
 	
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*2)+43140)},{SetV(CA_ACCR,0),SetV(CA_Eff_RatFM,250000),SetV(CA_Eff_RatFM2,250000)})
@@ -1845,7 +1848,7 @@ BossUID = {87,74,5,2}
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+21570)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22240)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22920)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
-	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+23590)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+60),SetCD(tesFlag,0),SWEffArr1},1)
+	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+23590)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+60),SetMemoryW(0x656EB0+(121 *2),SetTo,3000),SetCD(tesFlag,0),SWEffArr1},1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	local SWEffArr1 = {}

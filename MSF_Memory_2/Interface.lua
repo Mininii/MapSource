@@ -688,7 +688,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 	end
 	
 	if Limit == 1 then
-		TriggerX(FP,{CD(TestMode,1)},{SetResources(Force1,SetTo,0x66666666,Ore)})
+		--TriggerX(FP,{CD(TestMode,1)},{SetResources(Force1,SetTo,0x66666666,Ore)})
 	end
 	--선택인식 피통 보임 비공유
 --DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))

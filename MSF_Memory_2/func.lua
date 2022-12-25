@@ -708,7 +708,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_BakY,G_CA_TempTable[9])
 
 				CIfX(FP,Never())
-					CElseIfX({CD(tesFlagX,1,AtLeast)})--testify 발동시 우선. 어택지점 = 생산중심점
+					CElseIfX({CD(tesStart,1,AtLeast)})--testify 발동시 우선. 어택지점 = 생산중심점
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 					CElseIfX({CD(EDNum,1,AtLeast)})--보스전 우선. 어택지점 = 생산중심점
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
@@ -1829,7 +1829,7 @@ function Install_Call_G_CA()
 				SetCVar(FP, G_CA_TempTable[18][2], SetTo, 0),
 			})
 			if Limit == 1 then
-				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseIfX({CVar(FP,G_CA_TempTable[6][2],Exactly,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			
@@ -1839,7 +1839,7 @@ function Install_Call_G_CA()
 			end
 				CDoActions(FP,G_CB_InputCAct)
 			if Limit == 1 then
-				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseX()
 			if Limit == 1 then
