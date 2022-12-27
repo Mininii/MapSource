@@ -378,27 +378,9 @@ function InputTesterID(Player,ID)
 end
 	for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 		InputTesterID(i,"GALAXY_BURST")
-		InputTesterID(i,"LucasSpia")
-		InputTesterID(i,"_Mininii")
 		InputTesterID(i,"RonaRonaChan")
-		InputTesterID(i,"+=.=+")
-		InputTesterID(i,"UnusedTypeQ")
-		InputTesterID(i,"DemonLanterns")
-		InputTesterID(i,"UnusedTypeW")
-		InputTesterID(i,"seeiogion")
-		InputTesterID(i,"Hakuyou")
-		InputTesterID(i,"cairan")
-		InputTesterID(i,"Hybrid)_GOD60")
-		InputTesterID(i,"lptime106")
-		InputTesterID(i,"IIII(uood)IIIII")
 		InputTesterID(i,"Azusawa_Kohane")
-		InputTesterID(i,"T_PanTi")
-		InputTesterID(i,"A..K")
-		InputTesterID(i,"Tana_")
-		InputTesterID(i,"Hybrid)_GOD60")
-		InputTesterID(i,"roka7")
-
-		
+		InputTesterID(i,"RonaRonaTTang")
 		
 	end
 	

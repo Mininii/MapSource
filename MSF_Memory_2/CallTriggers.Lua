@@ -106,6 +106,7 @@ function Install_CallTriggers()
 			Set_EXCC2(DUnitCalc,CurCunitI,13,SetTo,2)
 		},1)
 		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
+		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),})
 			f_Read(FP,_Sub(BackupCp,15),CPos)
 			CiSub(FP,CPos,256+(65536*256))
 			CAdd(FP,CPos,f_CRandNum(512,0))
@@ -121,6 +122,53 @@ function Install_CallTriggers()
 	CIfEnd()
 	f_LoadCp()
 	SetCallEnd()
+	
+	MaketesEffEisEgg = SetCallForward()
+	tesEffW = CreateVar(FP)
+	SetCall(FP)
+	CWhile(FP, CV(tesEffW,1,AtLeast), SubV(tesEffW,1))
+	CIf(FP,Memory(0x628438,AtLeast,1))
+			DoActions(FP,{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CPlayer[2],SetTo,4)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CPlayer[2],SetTo,5)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CPlayer[2],SetTo,6)},{preserved})
+			TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CPlayer[2],SetTo,7)},{preserved})
+			Simple_SetLocX(FP,0,2048,2048,2048,2048)
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			CSub(FP,CurCunitI,Nextptrs,19025)
+			f_Div(FP,CurCunitI,_Mov(84))
+			RandColor = f_CRandNum(5)
+			for j,k in pairs({0,10,13,15,16}) do
+				TriggerX(FP, {CV(RandColor,j-1)}, {SetMemoryB(0x669E28+936, SetTo, k);}, {preserved}) -- 색상
+				
+			end
+			
+			CDoActions(FP,{SetMemory(0x66EC48+(936*4),SetTo,165),TCreateUnitWithProperties(1,117,1,CPlayer,{energy = 100,invincible = true}),SetMemory(0x66EC48+(936*4),SetTo,409)})
+		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
+			TempSpeedVar = f_CRandNum(1680,1)
+			CDoActions(FP, {TSetDeaths(_Add(Nextptrs,13),SetTo,TempSpeedVar,0),
+			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),})
+			--AngleR = f_CRandNum(360,0)
+			--f_Lengthdir(FP, 1024, AngleR, N_X, N_Y)
+			--f_iDiv(FP, N_Y, 2)
+			CMov(FP, CPos, 2048+(2048*65536))
+			CiSub(FP,CPos,256+(65536*256))
+			CAdd(FP,CPos,f_CRandNum(512*2,0))
+			CAdd(FP,CPos,_Mul(f_CRandNum(256*2,0),65536))
+			TriggerX(FP,{CVar(FP,CPos[2],AtLeast,32768,0xFFFF)},{SetCVar(FP, CPos[2], SetTo, 128, 0xFFFF)},{preserved})
+			TriggerX(FP,{CVar(FP,CPos[2],AtMost,128,0xFFFF)},{SetCVar(FP, CPos[2], SetTo, 128, 0xFFFF)},{preserved})
+			TriggerX(FP,{CVar(FP,CPos[2],AtLeast,3968,0xFFFF),CVar(FP,CPos[2],AtMost,32768,0xFFFF)},{SetCVar(FP, CPos[2], SetTo, 3967, 0xFFFF)},{preserved})
+			TriggerX(FP,{CVar(FP,CPos[2],AtLeast,32768*0x10000,0xFFFF0000)},{SetCVar(FP, CPos[2], SetTo, 128*0x10000, 0xFFFF0000)},{preserved})
+			TriggerX(FP,{CVar(FP,CPos[2],AtMost,128*0x10000,0xFFFF0000)},{SetCVar(FP, CPos[2], SetTo, 128*0x10000, 0xFFFF0000)},{preserved})
+			TriggerX(FP,{CVar(FP,CPos[2],AtLeast,3968*0x10000,0xFFFF0000),CVar(FP,CPos[2],AtMost,32768*0x10000,0xFFFF0000)},{SetCVar(FP, CPos[2], SetTo, 3967*0x10000, 0xFFFF0000)},{preserved})
+			CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI,0,SetTo,CPos)})
+		CIfEnd()
+	CIfEnd()
+	CWhileEnd()
+	
+	SetCallEnd()
+
+
 
 
 	SendEff = CreateVarArr(3,FP)
@@ -376,7 +424,7 @@ function Install_CallTriggers()
 		CA_RatioXY(CA_Eff_Rat,186000,CA_Eff_Rat,186000)
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 		CIfEnd()
-		CIf(FP,{CD(AxiomEnable,1)})--testify
+		CIf(FP,{CD(AxiomEnable,1,AtLeast)})--testify
 			CIf(FP,{CVar("X",CA[6],AtLeast,1),CVar("X",CA[6],AtMost,4)})
 			CAdd(FP,CA_Eff_RRat2,CA_Eff_DRat2,CA_Eff_Rat2)
 			CA_RatioXY(CA_Eff_RRat2,210600,CA_Eff_RRat2,210600)
@@ -400,11 +448,15 @@ function Install_CallTriggers()
 
 
 		function CreateEffUnitA(Condition,Height,Color)
-			TriggerX(FP,Condition,{{
+			CIf(FP,{Memory(0x628438, AtLeast, 1),Condition})
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			CDoActions(FP, {
 				SetMemoryB(0x66321C, SetTo, Height); -- 높이
 				SetMemoryB(0x669E28+936, SetTo, Color); -- 색상
-				CreateUnitWithProperties(1,204,1,FP,{energy = 100})
-			}},{preserved})
+				CreateUnitWithProperties(1,204,1,FP,{energy = 100});
+				TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
+				TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);})
+			CIfEnd()
 		end
 		
 		CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},19,6)
@@ -552,7 +604,8 @@ function Install_CallTriggers()
 	CIfEnd()
 	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 110000*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
 	CElseX()
-	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 322322*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
+	TriggerX(FP, {CD(Theorist,1)}, {SetMemory(0x662350+(60*4), SetTo, (322322*256/2)),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
+	TriggerX(FP, {CD(Theorist,2)}, {SetMemory(0x662350+(60*4), SetTo, 322322*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
 	f_TempRepeatX({}, 60, 1, 196, FP,{CPosX,CPosY})
 	TriggerX(FP, {}, {SetMemory(0x662350+(60*4), SetTo, 110000*256),SetMemoryB(0x669E28+218, SetTo, 0)}, {preserved})
 	CIfXEnd()

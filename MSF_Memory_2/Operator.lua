@@ -50,7 +50,7 @@ function Operator_Trig()
 		CIfEnd()
 
 
-		CIf(FP,{DeathsX(CurrentPlayer,Exactly,117,0,0xFF)})
+		CIf(FP,{CD(tesStart,0),DeathsX(CurrentPlayer,Exactly,117,0,0xFF)})
 			f_SaveCp()
 				CSub(FP,CurCunitI,_Sub(BackupCp,25),19025)
 				f_Div(FP,CurCunitI,_Mov(84))
@@ -430,6 +430,8 @@ CIfEnd()
 CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
+TriggerX(FP,{Command(FP,AtMost,0,190),CD(tesStart,1),CVar(FP,SpeedVar[2],AtLeast,5)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
+
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
 CMov(FP,CurrentSpeed,SpeedVar)
 for i = 1, 11 do

@@ -777,7 +777,6 @@ end
 	C_FS = CreateVar(FP)
 	C_FS2 = CreateVar(FP)
 	CenterCUT = {88,21,86,28}--{11,69,22,47}--
-	N_X,N_Y,L_X,L_Y,C_A = CreateVars(5,FP)
 	CenterUCnt,CenterUCnt2,CenCurX,CenCurY = CreateVars(4,FP)
 
 		
@@ -1199,13 +1198,17 @@ BossUID = {87,74,5,2}
 	}
 	CIf_GCase(190)
 	DoActions(FP,{KillUnit(125,Force1)},1)--건작보스 작동시 모든 벙커 폭발
+	
 	local tesTestmode = 0
 	
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{SetCD(AxiomEnable,GBossTestMode)})
 	end
-	
-	CIfX(FP,{CD(AxiomEnable,1)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
+	if GBossTestMode == 2 then
+		CIfX(FP,{Always()},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
+	else
+		CIfX(FP,{CD(AxiomEnable,1,AtLeast)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
+	end
 	local tesPatchT = {}
 	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- 스킬유닛무기 재설정
 	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--핵배틀딜너프
@@ -1233,8 +1236,8 @@ BossUID = {87,74,5,2}
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 
-	CTrigger(FP,{CV(Dt,79,AtMost)},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
-	CTrigger(FP,{CV(Dt,80,AtLeast)},{TGun_SetLine(10,Add,80),TGun_SetLine(8,Add,80)},1)--CV(Dt,0x2A,AtMost)
+	CTrigger(FP,{CV(Dt,39,AtMost)},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
+	CTrigger(FP,{CV(Dt,40,AtLeast)},{TGun_SetLine(10,Add,40),TGun_SetLine(8,Add,40)},1)--CV(Dt,0x2A,AtMost)
 	DoActionsX(FP,{SubV(ExRateV,13),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
 	function CA_3DAcc(Time,XY,YZ,ZX)
@@ -1914,7 +1917,32 @@ BossUID = {87,74,5,2}
 	CIf(FP,{Gun_Line(8,AtLeast,(60000*3)+23590)})
 	CSub(FP,CA_Eff_Rat2,CA_EffFin)
 	CSub(FP,CA_Eff_Rat3,CA_EffFin)
-	TriggerX(FP,{CV(CA_Eff_Rat2,0),CV(CA_Eff_Rat3,0),Gun_Line(8,AtLeast,(60000*3)+30000)},{Gun_DoSuspend()})
+	CIf(FP,{CV(CA_Eff_Rat2,0),CV(CA_Eff_Rat3,0),Gun_Line(8,AtLeast,(60000*3)+30000)},{SetV(CA_ACCR,0),SetMemoryB(0x669E28+210, SetTo, 17),SetMemoryB(0x657040+129,SetTo,42)})
+		CAdd(FP,tesEndt,Dt)
+		--42
+		DoActions2(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\tesEnd.ogg"),PlayWAVX("staredit\\wav\\tesEnd.ogg"),PlayWAVX("staredit\\wav\\tesEnd.ogg")},HumanPlayers,FP)},1)
+		TriggerX(FP,{CV(tesEndt,830,AtLeast)},{AddV(CA_Eff_Rat2,50000),AddV(CA_Eff_Rat3,50000)},{preserved})
+		CallTriggerX(FP, MaketesEffEisEgg, {CV(tesEndt,830,AtLeast)}, {SetV(tesEffW, 10)}, 1)
+		TriggerX(FP,{CV(tesEndt,2470,AtLeast)},{AddV(CA_Eff_Rat2,75000),AddV(CA_Eff_Rat3,75000)},{preserved})
+		CallTriggerX(FP, MaketesEffEisEgg, {CV(tesEndt,2470,AtLeast)}, {SetV(tesEffW, 20)}, 1)
+		TriggerX(FP,{CV(tesEndt,3930,AtLeast)},{AddV(CA_Eff_Rat2,100000),AddV(CA_Eff_Rat3,100000)},{preserved})
+		CallTriggerX(FP, MaketesEffEisEgg, {CV(tesEndt,3930,AtLeast)}, {SetV(tesEffW, 50)}, 1)
+		G_CA_Bullet({CV(tesEndt,3930,AtLeast)},220,"ACAS","tes_Eff2",35,1,{2048,2048},nil,0,nil,nil,1)
+
+		CIf(FP,{CV(tesEndt,6000,AtLeast)})
+		for i = 0, 31 do
+			TriggerX(FP,{CV(tesEndt,6000+(i*83),AtLeast)},{SetMemory(0x657A9C,SetTo,31-i)})
+		end
+		TriggerX(FP,{CV(tesEndt,6000+(40*83),AtLeast)},{Gun_DoSuspend(),SetCD(Win,1),SetCD(EDNum,5)})
+		
+		CIfEnd()
+
+	CIfEnd()
+	--
+	--InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08최후\x04의 \x10기억 \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04의 \x02무적상태\x04가 해제되었습니다.")
+--tesEnd.ogg
+--,
+
 	CIfEnd()
 	CMov(FP,CA_Eff_XY,Var_TempTable[12])
 	CMov(FP,CA_Eff_YZ,Var_TempTable[13])
@@ -1927,7 +1955,7 @@ BossUID = {87,74,5,2}
 	--Gun_LineRange(8, 66060, 76850)
 	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
-	CallTrigger(FP,EffUnitLoop)
+	--CallTrigger(FP,EffUnitLoop)
 
 	CSub(FP,CA_Eff_DRat2,CA_Eff_DRat2Dt)
 	CSub(FP,CA_Eff_DRat3,CA_Eff_DRat3Dt)
@@ -2340,7 +2368,7 @@ end
 	end
 	CMov(FP,SHLX,G_CA_CenterX)
 	CMov(FP,SHLY,G_CA_CenterY)
-	CallTrigger(FP,EffUnitLoop)
+	--CallTrigger(FP,EffUnitLoop)
 	TriggerX(FP,{Gun_Line(8,AtLeast,186000)},{Gun_SetLine(10,Subtract,4000)},{preserved})
 	
 	InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08최후\x04의 \x10기억 \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04의 \x02무적상태\x04가 해제되었습니다.")

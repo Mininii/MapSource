@@ -166,12 +166,12 @@ HPRegenTable = {64}
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 	WhiteList = def_sIndex()
 	HPRList = def_sIndex()
-	if Limit == 1 then
-		EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,203,0,0xFF), {
-			--SetMemory(0x6509B0, Subtract, 4),
-			--SetDeaths(CurrentPlayer,SetTo,0,0),
-			--SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
-			--SetMemory(0x6509B0, Add, 4)
+	if AtkSpeedMode == 1 then
+		EXCC_BreakCalc({CD(tesStart,0),DeathsX(CurrentPlayer,Exactly,203,0,0xFF)}, {
+			SetMemory(0x6509B0, Subtract, 4),
+			SetDeaths(CurrentPlayer,SetTo,0,0),
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+			SetMemory(0x6509B0, Add, 4)
 		})
 	end
 	for j, i in pairs(MarID) do
@@ -257,14 +257,14 @@ HPRegenTable = {64}
 
 	NJumpXEnd(FP,SkillUnit)
 
-	if Limit == 1 then
+	if AtkSpeedMode == 1 then
 		local LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
-		--DoActions(FP, LocAct)
+		TriggerX(FP, CD(tesStart,0),LocAct ,{preserved})
 	end
 
 	--if Limit==1 then
@@ -327,14 +327,14 @@ HPRegenTable = {64}
 		TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,21*256,0,0xFF00)},{SetDeathsX(CurrentPlayer, SetTo, 20*256,0, 0xFF00)},{preserved})
 	CSub(FP,0x6509B0,70-25)
 	CIfEnd()
-	if Limit == 1 then
+	if AtkSpeedMode == 1 then
 		local LocAct={
 			SetMemory(0x6509B0, Subtract, 4),
 			SetDeaths(CurrentPlayer,SetTo,0,0),
 			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
 			SetMemory(0x6509B0, Add, 4)
 		}
-	--	DoActions(FP, LocAct)
+		TriggerX(FP, CD(tesStart,0),LocAct ,{preserved})
 	end
 	EXCC_BreakCalc({CD(Theorist,2,AtLeast)})
 	
@@ -964,7 +964,7 @@ HPRegenTable = {64}
 		--Tier4 = {102,61,67,23,81,30}
 		--Tier5 = {60,68}
 	CIfEnd()
-	CIf(FP,{Memory(0x628438,AtLeast,1),CD(Theorist,1,AtLeast),CD(ThCallT,0)})
+	CIf(FP,{Command(FP, AtLeast, 1, 173),Memory(0x628438,AtLeast,1),CD(Theorist,1,AtLeast),CD(ThCallT,0)})
 		TheoristCallArr = {
 			{322,50},
 			{285,70},
@@ -1283,7 +1283,7 @@ for i = 1, 4 do
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (0*2),SetTo,NMAtkFactor*2)) -- 추가공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (1*2),SetTo,HMAtk*2)) -- 기본공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (1*2),SetTo,HMAtkFactor*2)) -- 추가공격력
-		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (123*2),SetTo,MarAtkFactor2+10)) -- 추가공격력
+		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (123*2),Add,MarAtkFactor2/3)) -- 추가공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*3)) -- 기본공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*3)) -- 추가공격력
 end
@@ -1316,12 +1316,17 @@ if CheatEnableFlag== 1 then
 		DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 		CIfEnd()
 		for j, k in pairs(EraUngmeojulT) do
-			Trigger2X(FP,{ElapsedTime(AtLeast, (10*j)+300)},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
+			CIfOnce(FP,ElapsedTime(AtLeast, (10*j)+300))
+			local CT = CreateCText(FP, "\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."))
+			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(CT[3],0),"X","X",1),CT[2])
+			Trigger2X(FP,{},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
 			RotatePlayer({
-				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
-				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
-				DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."),4),
+				DisplayTextX(UnivToString,4),
+				DisplayTextX(UnivToString,4),
+				DisplayTextX(UnivToString,4),
 				PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
+			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+			CIfEnd()
 		end
 	CIfEnd()
 end
