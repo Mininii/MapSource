@@ -178,7 +178,6 @@ function Install_CallTriggers()
 	Call_EffUnit = SetCallForward()
 	SetCall(FP)
 	CIf(FP,Memory(0x628438,AtLeast,1))
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	
 	f_Read(FP,SendEff[1],RecoverEff1)
 	f_Read(FP,SendEff2[1],RecoverEff2)
@@ -188,8 +187,6 @@ function Install_CallTriggers()
 		TCreateUnit(1,204,"Location 1",CurrentOP);
 		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]); --컬러 복구
 		TSetMemory(SendEff2[1],SetTo,RecoverEff2); -- 스크립트 복구
-		TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
-		TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);
 	})
 	CIfEnd()
 	SetCallEnd()
@@ -448,15 +445,10 @@ function Install_CallTriggers()
 
 
 		function CreateEffUnitA(Condition,Height,Color)
-			CIf(FP,{Memory(0x628438, AtLeast, 1),Condition})
-			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-			CDoActions(FP, {
+			TriggerX(FP,{Condition},{
 				SetMemoryB(0x66321C, SetTo, Height); -- 높이
 				SetMemoryB(0x669E28+936, SetTo, Color); -- 색상
-				CreateUnitWithProperties(1,204,1,FP,{energy = 100});
-				TSetMemoryX(_Add(Nextptrs,55),SetTo,0x104,0x104);
-				TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFF);})
-			CIfEnd()
+				CreateUnitWithProperties(1,204,1,FP,{energy = 100})},{preserved})
 		end
 		
 		CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},19,6)

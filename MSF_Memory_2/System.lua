@@ -159,6 +159,7 @@ function System()
 	CIfEnd()
 	CIfEnd()
 
+	Install_GunStack()
 CurBID = CreateCcode()
 HPRegenTable = {64}
 --    CMov(FP,0x57f120,0)
@@ -166,6 +167,13 @@ HPRegenTable = {64}
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 	WhiteList = def_sIndex()
 	HPRList = def_sIndex()
+
+    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF),{
+        SetMemory(0x6509B0,Add,55-25),
+        SetDeathsX(CurrentPlayer,SetTo,0x104,0,0x104);
+        SetMemory(0x6509B0,Add,2),
+        SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF);
+    })
 	if AtkSpeedMode == 1 then
 		EXCC_BreakCalc({CD(tesStart,0),DeathsX(CurrentPlayer,Exactly,203,0,0xFF)}, {
 			SetMemory(0x6509B0, Subtract, 4),
@@ -187,14 +195,6 @@ HPRegenTable = {64}
 	NJumpX(FP,DarkSkill,{Command(P6,AtLeast,1,BossUID[2]),DeathsX(CurrentPlayer,Exactly,33,0,0xFF)})
 	Crystal = def_sIndex()
 	NJumpX(FP,Crystal,{DeathsX(CurrentPlayer,Exactly,128,0,0xFF)})
-
-
---    EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF),{
---        SetMemory(0x6509B0,Add,55-25),
---        TSetMemoryX(CurrentPlayer,SetTo,0x104,0x104);
---        SetMemory(0x6509B0,Add,57),
---        TSetMemoryX(CurrentPlayer,SetTo,0,0xFF);
---    })
 
 	
 	CIfX(FP,{DeathsX(CurrentPlayer,AtLeast,116,0,0xFF),DeathsX(CurrentPlayer,AtMost,117,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
@@ -872,7 +872,6 @@ HPRegenTable = {64}
 	SwarmSet({25,50},{{56,4},{51,2},{104,2},{48,2},{53,2},{54,2},{88,2},{21,2}})
 	CIfEnd()
 	CIfEnd()
-	Install_GunStack()
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[1],1)},{SetCD(ResNum,1)})
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[3],1)},{SetCD(ResNum,1)})
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
