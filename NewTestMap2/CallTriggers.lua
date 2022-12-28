@@ -151,7 +151,7 @@ function Install_CallTriggers()
 	CMov(FP,ELevel,0)
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
-	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--오버플로우 방지
 
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})

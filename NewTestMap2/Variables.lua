@@ -12,7 +12,7 @@ function Include_Vars()
 	MSQC_KeySet("4",499)
 	MSQC_KeySet("5",500)
 	MSQC_KeySet("6",501)
-	MSQC_KeySet("P",502)
+	--MSQC_KeySet("P",502)
 	MSQC_KeySet("F9",13)
 	MSQC_KeySet("F12",503)--테스트용
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력

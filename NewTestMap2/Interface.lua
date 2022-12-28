@@ -123,7 +123,7 @@ function Interface()
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP)},1)--맨처음 시간값 튐 방지
 	CMov(FP,PCheckV,0)
-	ULimitArr = {500,350,300,250,200,200,200}
+	ULimitArr = {500,350,300,250,200,180,150}
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
 	for i = 0, 6 do
@@ -199,7 +199,7 @@ end
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
@@ -347,31 +347,29 @@ end
 	CallTrigger(FP,Call_BtnInit,{SetV(G_BtnCP,i)})
 
 	
---	BtnSetInit(i,ShopUnit) -- 1~25강유닛 자동강화 설정--
+	BtnSetInit(i,ShopUnit) -- 
+	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 0*65536)}) -- 배율 올림
+	CallTrigger(FP,Call_Print13[i+1])
+	CIfX(FP,{CV(MulOp[i+1],10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+	f_Mul(FP,MulOp[i+1],10)
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()
+	
+	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 1*65536)}) -- 배율 내림
+	CallTrigger(FP,Call_Print13[i+1])
+	CIfX(FP,{CV(MulOp[i+1],2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+	f_Div(FP,MulOp[i+1],10)
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()--
 
---	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 0*65536)}) -- 배율 올림
---	CallTrigger(FP,Call_Print13[i+1])
---	CIfX(FP,{CV(MulOp[i+1],10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
---	f_Mul(FP,MulOp[i+1],10)
---	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
---	CElseX()--조건이 만족하지 않을 경우
---	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
---	CIfXEnd()
---	CIfEnd()
---	
---	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 1*65536)}) -- 배율 내림
---	CallTrigger(FP,Call_Print13[i+1])
---	CIfX(FP,{CV(MulOp[i+1],2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
---	f_Div(FP,MulOp[i+1],10)
---	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
---	CElseX()--조건이 만족하지 않을 경우
---	CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
---	CIfXEnd()
---	CIfEnd()--
---
---
 
---	BtnSetEnd()
+	BtnSetEnd()
 
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})
@@ -637,22 +635,21 @@ Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
 	AddV(B_IncomeMax,6), -- 사냥터 유닛수 +6 증가
 	AddV(B_TotalEPer,3500), -- 강화확률 +3.5%p
 	AddV(B_Credit,500),--크레딧 500
-	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
+	--AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
 	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_IncomeMax,9),-- 사냥터 유닛수 +9 증가
-	AddV(B_TotalEPer,3000),-- 강화확률 +3.0%p
-	AddV(B_TotalEPer2,1000), -- +2 강화확률 +1.0%p
+	AddV(B_TotalEPer,2000),-- 강화확률 +2.0%p
+	AddV(B_TotalEPer2,500), -- +2 강화확률 +0.5%p
 	AddV(B_Credit,2000),--크레딧 2000
-	AddV(B_Stat_EXPIncome,2), -- 판매시 경험치 20% 증가
+	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
 	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
 	AddV(B_TotalEPer,3000),
-	AddV(B_TotalEPer3,500),
 	AddV(B_Credit,10000),
-	AddV(B_Stat_EXPIncome,2), -- 판매시 경험치 20% 증가
+	AddV(B_Stat_EXPIncome,4), -- 판매시 경험치 40% 증가
 	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 
@@ -790,19 +787,28 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	
 	CIfXEnd()
 	DoActions(FP,{SetCp(FP)})
+	local StatPrintEr = {
+		StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
+		StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
+		StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
+		StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다."),
+		StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F37강 \x04유닛 이상부터 +1만 적용됩니다."),
+		StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F37강 \x04유닛 이상부터 +1만 적용됩니다."),
+}
 
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
 			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,0x10000-1,20)})
 			for j = 1, 6 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StrDesign(j.."번줄 설명서"))}, {preserved})
+				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
 			end
 		CIfEnd()
 	end
 	
 	
-local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")})--O를 누를 경우 현재 적용중인 버프 상세 표기
-CIf(FP,{CD(PKey,1),CV(InterfaceNumLoc,0)})
+CIf(FP,{CV(InterfaceNumLoc,0)})--아무 설정창도 켜져있지 않을 경우 작동함
+local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")})--누를 경우 현재 적용중인 버프 상세 표기
+CIf(FP,{CD(PKey,1)})
 
 for i = 1, 6 do
 	Byte_NumSet(TotalEPerLoc,E1VarArr1[i],10^(6-i),1,0x30)
@@ -824,6 +830,89 @@ DisplayPrint(LCP, {"\x04당신의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E
 f_Mul(FP,EXPIncomeLoc2,10)
 DisplayPrint(LCP, {"\x04당신의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
 CIfEnd()
+
+local PageNumLoc = CreateVar(FP)
+--[[
+
+게임 설명서
+1페이지
+
+<13><04>DPS 강화하기 게임에 오신것을 환영합니다.
+<13><04>이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.
+<13><04>맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.
+<13><04>해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.
+<13><04>벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)
+<13><04>마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.
+<13><04>만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.
+
+2페이지
+
+<13><04>LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며
+<13><04>각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.
+<13><04>각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며
+<13><04>다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다.
+
+
+3페이지
+
+<13><04>각 강화 유닛은 기준확률이 부여되어 있습니다.
+<13><04>기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며
+<13><04>기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.
+<13><04>예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%
+<13><04>37~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.
+
+4페이지
+
+<13><04>레벨 시스템, SCA 관련 설명
+<13><04>이 게임에는 레벨 시스템이 존재합니다.
+<13><04>특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.
+<13><04>획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.
+<13><04>이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.
+<13><04>현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 그 외의 항목은 저장할 수 없습니다.
+<13><04>현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.
+
+5페이지
+
+<13><04>보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.
+<13><04>각 보스 처치시 얻는 보상은 다음과 같습니다.
+<13><04>1단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12
+<13><04>2단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200
+<13><04>3단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500
+<13><04>4단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000
+<13><04>5단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000
+]]
+local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")})--누를 경우 설명서 출력
+local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")})--누를 경우 설명서 출력
+local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")})--누를 경우 설명서 출력
+local PageT = {"\x13\x04DPS 강화하기 게임에 오신것을 환영합니다.\n\x13\x04이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.\n\x13\x04맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.\n\x13\x04해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.\n\x13\x04벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)\n\x13\x04마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.\n\x13\x04만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.",
+"\x13\x04LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며\n\x13\x04각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.\n\x13\x04각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며\n\x13\x04다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다.",
+"\x13\x04각 강화 유닛은 기준확률이 부여되어 있습니다.\n\x13\x04기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며\n\x13\x04기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.\n\x13\x04예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%\n\x13\x0437~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.",
+"\x13\x04특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.\n\x13\x04획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 \n\x13\x04스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.\n\x13\x04이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.\n\x13\x04현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 \n\x13\x04그 외의 항목은 저장할 수 없습니다.\n\x13\x04현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.",
+"\x13\x04보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.\n\x13\x04각 보스 처치시 얻는 보상은 다음과 같습니다.\n\x13\x041단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12\n\x13\x042단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200\n\x13\x043단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500\n\x13\x044단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000\n\x13\x045단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000"
+
+}
+CIf(FP,TTOR({CD(BKey,1),CD(MKey,1)}))
+
+TriggerX(FP,{CD(BKey,1)},{SubV(PageNumLoc,1)},{preserved})
+TriggerX(FP,{CD(MKey,1)},{AddV(PageNumLoc,1)},{preserved})
+
+TriggerX(FP,{CV(PageNumLoc,0)},{SetV(PageNumLoc,1)},{preserved})
+TriggerX(FP,{CV(PageNumLoc,#PageT+1,AtLeast)},{SetV(PageNumLoc,#PageT)},{preserved})
+DisplayPrint(LCP, {"\x13\x04[\x0FPrev \x04: \x17B\x04] [\x07Page \x04: \x10",PageNumLoc," \x08닫기\x04 : \x17N\x04] [\x11Next \x04: \x17M\x04]"})
+CTrigger(FP,{CD(NKey,1)},{TSetMemory(0x6509B0,SetTo,LCP)},1)
+for j,k in pairs(PageT) do
+TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText(k, 4)}, {preserved})
+end
+
+
+CIfEnd()
+
+CTrigger(FP,{CD(NKey,1)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n",4)},1)
+
+
+CIfEnd()
+
+CMov(FP,0x6509B0,FP)
 FixText(FP, 2)
 
 
@@ -1054,12 +1143,31 @@ TriggerX(FP, {
 
 	CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 CIfXEnd()
-
 CIf(FP,{CD(BossFlag,0)})
 local TotalEPer4Loc = CreateVar(FP)
 CAdd(FP,TotalEPer3Loc,_Div(SelPer,_Mov(100)))
 CAdd(FP,TotalEPer2Loc,_Div(SelPer,_Mov(10)))
 CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
+
+
+--35~39 +3 수치가 +2로
+
+for i = 35, 39 do
+	CIf(FP,{CV(SelUID,LevelUnitArr[i][2])})
+		CAdd(FP,TotalEPer2Loc,TotalEPer3Loc)
+		CMov(FP,TotalEPer3Loc,0)
+	CIfEnd()
+end
+
+--36~39 +2 수치가 +1로
+
+
+for i = 36, 39 do
+	CIf(FP,{CV(SelUID,LevelUnitArr[i][2])})
+		CAdd(FP,TotalEPerLoc,TotalEPer2Loc)
+		CMov(FP,TotalEPer2Loc,0)
+	CIfEnd()
+end
 
 CSub(FP,TotalEPer4Loc,_Mov(100000),_Add(_Add(TotalEPerLoc,TotalEPer3Loc),TotalEPer2Loc))
 CIf(FP,{CV(TotalEPer4Loc,0)})
