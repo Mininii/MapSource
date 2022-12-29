@@ -24,6 +24,14 @@ function Operator_Trig()
 
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,111,0,0xFF)})
 		
+			CIfOnce(FP) -- 배럭위치 초기세팅
+			CSub(FP,0x6509B0,15)
+			f_SaveCp()
+			f_Read(FP,BackupCp,BarPos[i+1])
+			f_LoadCp()
+			CAdd(FP,0x6509B0,15)
+			CIfEnd()
+
 			CAdd(FP,0x6509B0,62-25)
 			CIf(FP,{TTDeaths(CurrentPlayer,NotSame,BarRally[i+1],0)}) --배럭랠리 갱신
 				f_SaveCp()
@@ -39,13 +47,6 @@ function Operator_Trig()
 			CIfEnd()
 			CSub(FP,0x6509B0,62-25)
 
-			CIfOnce(FP) -- 배럭위치 초기세팅
-				CSub(FP,0x6509B0,15)
-				f_SaveCp()
-				f_Read(FP,BackupCp,BarPos[i+1])
-				f_LoadCp()
-				CAdd(FP,0x6509B0,15)
-			CIfEnd()
 
 		CIfEnd()
 
@@ -54,6 +55,7 @@ function Operator_Trig()
 			f_SaveCp()
 				CSub(FP,CurCunitI,_Sub(BackupCp,25),19025)
 				f_Div(FP,CurCunitI,_Mov(84))
+				CTrigger(FP, {Cond_EXCC2X(DUnitCalc,CurCunitI,13,Exactly,2,2),},{SetCD(AxiomFailCcode[4],1)})
 				CDoActions(FP, {Set_EXCC2(DUnitCalc,CurCunitI,13,SetTo,0)})
 				f_LoadCp()
 			CSub(FP,0x6509B0,6)
@@ -367,39 +369,19 @@ TriggerX(FP,{Command(Force1,AtLeast,1,61);},{ModifyUnitEnergy(1,61,Force1,64,0);
 SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,61,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
 TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
-Trigger2X(FP, {Command(FP, AtLeast, 1, 190),CD(Theorist,1,AtLeast),CD(AxiomCcode[4],1)}, {AddCD(SpecialEEggCcode,1),
-RotatePlayer({
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	DisplayTextX(string.rep("\n", 20),4),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-	DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\n\n",0),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
-})
 
-local Ax3Jump3 = def_sIndex()
-NJump(FP, Ax3Jump3, {Command(FP, AtLeast, 1, 190),})
-local Ax3Jump2 = def_sIndex()
-NJump(FP, Ax3Jump2, {CD(Theorist,0)})
 local Ax3Jump = def_sIndex()
-NJump(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
+NJumpX(FP, Ax3Jump, {Command(P7, AtMost, 0, 189)})
+NJumpX(FP, Ax3Jump, {CD(AxiomFailCcode[3],1)})
+NJumpX(FP, Ax3Jump, {CD(Theorist,0)})
+NJumpX(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
 local Ax3 = CreateCcode()
 for i = 0,3 do
 	Trigger2X(FP,{Bring(P7,AtLeast,1,60,32+i)},{SetCD(Ax3, 1)})
 end
-Trigger2X(FP, {CD(Ax3,1)}, {AddCD(SpecialEEggCcode,1),
-SetCD(AxiomCcode[3],1),
-RotatePlayer({
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-	DisplayTextX(string.rep("\n", 20),4),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-	DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\n\n",0),
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
-})
+Trigger2X(FP, {CD(Ax3,1)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[3],1),})
 NJumpEnd(FP, Ax3Jump)
-NJumpEnd(FP, Ax3Jump2)
-NJumpEnd(FP, Ax3Jump3)
+TriggerX(FP,{Deaths(P7, AtLeast, 1, 60),CD(AxiomCcode[3],0)},{SetCD(AxiomFailCcode[3],1)})
 CIfOnce(FP,{Command(FP, AtLeast, 1, 190),CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,4,AtLeast)})--이론치모드 1 이상에서 Axiom of the End 전부 발견시
 local TempRMCalc = CreateVar(FP)
 local TempRMCalc2 = CreateVar(FP)
@@ -504,9 +486,6 @@ CDPrint(0,11,{"\x0D",0,0},{Force1,Force2,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP
 
 function TEST() 
 
-	TimeTmp = CreateCcode()
-	TimeV = CreateVar(FP)
-	TimeV2 = CreateVar(FP)
 	CMov(FP,_Ccode(FP,TimeTmp),Time1)
 	CMov(FP,TimeV,0)
 	CMov(FP,TimeV2,0)
@@ -554,18 +533,6 @@ function TEST()
 		}
 	end
 	
-Trigger2X(FP, {CD(Theorist,1,AtLeast),CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost),CD(PyCcodeAxiom,1)}, {
-	AddCD(SpecialEEggCcode,1),
-	SetCD(AxiomCcode[1],1),
-	RotatePlayer({
-		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-		DisplayTextX(string.rep("\n", 20),4),
-		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-		DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\n\n",0),
-		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
-})
-DoActionsX(FP,{SetCD(PyCcodeAxiom,0)})
 
 
 

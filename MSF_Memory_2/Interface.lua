@@ -717,7 +717,53 @@ iTbl1 = GetiTblId(FP,1463,S1) --NMDMG
 iTbl2 = GetiTblId(FP,1464,S2) --PerDMG
 Str1, Str1a, Str1s = SaveiStrArr(FP,t01)
 Str2, Str2a, Str2s = SaveiStrArr(FP,t02)
+
+BT = {
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x10£Ä\x04£é£ö£é£ä£å \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x15£Ô\x04£å£î£å£â£ò£é£ó \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x18£Ä\x04£å£í£é£ó£å \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1B£Á\x04£î£ï£í£á£ì£ù \x11¡·\x08¡¤\x11¡¤\x07¡¤"
+}
+BT2 = {
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1F£É\x04nfinite \x10£Ä\x04ivide, \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x10£Ð\x04entiment in \x15£Ô\x04enebris \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x19£×\x04orld \x18£Ä\x04emication \x11¡·\x08¡¤\x11¡¤\x07¡¤",
+	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1C£Á\x04rcana \x1B£Á\x04nomaly \x11¡·\x08¡¤\x11¡¤\x07¡¤"
+}
+BStr= {}
+BStra= {}
+BStrs= {}
+BStr2= {}
+BStr2a= {}
+BStr2s= {}
+
+BName, BNamea, BNames = SaveiStrArr(FP,MakeiStrLetter("\x0D", GetiStrSize(0,BT2[2])+5))
+
+BNArr={}
+
+
+BTblArr = {}
+for j,k in pairs({87,74,5,2}) do
+	table.insert(BNArr,MakeiTblString(k+1,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,BT2[j])+5),"Base",1))
+	table.insert(BTblArr,GetiTblId(FP,k+1,BNArr[j]))
+	BStr[j],BStra[j],BStrs[j] = SaveiStrArr(FP,BT[j])
+	BStr2[j],BStr2a[j],BStr2s[j] = SaveiStrArr(FP,BT2[j])
+end
+
 CJumpEnd(FP, iStrinit)
+
+CIfOnce(FP)
+for i= 1, 4 do
+	CS__InputVA(FP,BTblArr[i],0,BStr[i],BStrs[i],nil,0,BStrs[i])
+end
+CIfEnd()
+
+for i= 1, 4 do
+	CIfOnce(FP,{CD(AxiomCcode[i],1)})
+	CS__InputVA(FP,BTblArr[i],0,BStr2[i],BStr2s[i],nil,0,BStr2s[i])
+	CIfEnd()
+end
+
 local CurEPD = CreateVar(FP)
 local SelWepID = CreateVar(FP)
 local AFlag = CreateCcode()

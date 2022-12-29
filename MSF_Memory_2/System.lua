@@ -36,9 +36,16 @@ function System()
 		"\x0D\x0D!H\x13"..AxStrArr[3],
 		"\x0D\x0D!H\x13"..AxStrArr[4],
 	}
+	local NotFoundArr2 = {
+		"\x0D\x0D!H\x13\x087IS46rOE64qUIOybgOyngeydtOq4sCDsi5zsnpHtlojri6Qu",
+		"\x0D\x0D!H\x13\x086rO166qF7J2EIOuniOyjvO2VmOuLpC4=",
+		"\x0D\x0D!H\x13\x087KCB64yA6rCQ7J2YIOqzte2PrA==",
+		"\x0D\x0D!H\x13\x086riw7Ja17IaN7J2YIOqzoO2GtQ=="
+	}
 	for i = 0,3 do
 		CTrigger(FP, {CD(AxiomCcode[i+1],1)},{DisplayText(FoundArr[i+1],4)},1)
-		CTrigger(FP, {CD(AxiomCcode[i+1],0)},{DisplayText(NotFoundArr[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],0)},{DisplayText(NotFoundArr[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],1)},{DisplayText(NotFoundArr2[i+1],4)},1)
 	end
 
 	DoActionsX(FP, {SetCp(FP),SetCD(ToggleCcode,1),})
@@ -46,6 +53,26 @@ function System()
 	CElseX(SetCD(ToggleCcode,0))
 	CIfXEnd()
 	CIfEnd()
+	if Limit == 1 then
+		TriggerX(FP,{CD(TestMode,1)},{
+			SetCD(AxiomCcode[1],1),
+			SetCD(AxiomCcode[2],1),
+			SetCD(AxiomCcode[3],1),
+			SetCD(AxiomCcode[4],1),
+			SetCD(AxiomEnable,1),
+		})
+	end
+	for i = 1, 4 do
+		Trigger2X(FP, {CD(AxiomCcode[i],1)}, {RotatePlayer({
+			PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+			PlayWAVX("staredit\\wav\\FindAxiom.wav"),
+			DisplayTextX(string.rep("\n", 20),4),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+			DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[i].."\n\n\n",0),
+			DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+		})
+	end
+	
 	
 	DoActions(FP,{
 		RemoveUnit(7,P12),
@@ -73,6 +100,10 @@ function System()
 	AddBGM(10,"staredit\\wav\\BadEnd.ogg",36*1000)--엔딩3
 	AddBGM(11,"staredit\\wav\\Axiom.ogg",118*1000)--스토리
 	AddBGM(12,"staredit\\wav\\WorldEnder1.ogg",36*1000)--스토리2
+	AddBGM(13,"staredit\\wav\\BO1.ogg",36*1000)--
+	AddBGM(14,"staredit\\wav\\BO2.ogg",36*1000)--
+	AddBGM(15,"staredit\\wav\\BO3.ogg",36*1000)--
+	AddBGM(16,"staredit\\wav\\BO4.ogg",36*1000)--
 	Install_BGMSystem(FP,3,BGMType,12,1,1,ObPlayers)
 
 	BGMArr = {}
@@ -659,12 +690,12 @@ HPRegenTable = {64}
 		CMov(FP,CPlayer,_Read(_Sub(BackupCp,6)),nil,0xFF)
 		for i = 4, 7 do
 			TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCCode[i-3],1)},{preserved})
-			if i ==4 then
-				TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCcodeAxiom,1)},{preserved})
-			end
-			
 		end
-		
+		TriggerX(FP,{CV(CPlayer,4),CD(Theorist,1,AtLeast),Command(P5, AtLeast, 1, 189),CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost)},{AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[1],1),})
+
+
+
+
 		f_LoadCp()
 	CIfEnd()
 	CIf(FP,{CD(NCBullet,1),DeathsX(CurrentPlayer,Exactly,14,0,0xFF)}) -- 핵미사일
@@ -681,7 +712,8 @@ HPRegenTable = {64}
 
 
 	CallTriggerX(FP,MakeEisEgg,{Command(FP,AtLeast,1,190),Cond_EXCC(13,Exactly,1,1)})
-	TriggerX(FP,{Cond_EXCC(13,Exactly,2,2)},{SetCD(AxiomCcode[4],1)})
+
+	TriggerX(FP,{Cond_EXCC(13,Exactly,2,2),Command(P8, AtLeast, 1, 189),CD(Theorist,1,AtLeast)},{AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[4],1)})
 	CIf(FP,{Cond_EXCC(1,Exactly,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
 	f_SaveCp()
 	InstallHeroPoint()
@@ -876,16 +908,7 @@ HPRegenTable = {64}
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[3],1)},{SetCD(ResNum,1)})
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
 
-	Trigger2X(FP, {CD(ResNum,1,AtLeast)}, {AddCD(SpecialEEggCcode,1),
-	SetCD(AxiomCcode[2],1),
-	RotatePlayer({
-		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-		PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-		DisplayTextX(string.rep("\n", 20),4),
-		DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-		DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\n\n",0),
-		DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
-	})
+	Trigger2X(FP, {CD(ResNum,1,AtLeast),Command(P6, AtLeast, 1, 189)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[2],1),})
 	DoActionsX(FP,{
 		SetCD(ResNum,0),
 		SetCD(ResNumT[1],0),
@@ -1029,6 +1052,12 @@ CellPStr = {
 "\x0F중앙 우측 ",
 "\x10중앙 상단 ",
 }
+
+		
+TriggerX(FP,{CD(AxiomCcode[1],0),CD(PyCCode[1],3,AtLeast)},{SetCD(AxiomFailCcode[1],1)})--파일런 3개 다 까는동안 미션실패시 실패코드 1 입력
+for i = 1, 4 do
+	TriggerX(FP,{Command(3+i,AtMost,0,189),CD(AxiomCcode[i],0)},{SetCD(AxiomFailCcode[i],1)})--워프게이트 깠는데 미션실패시 실패코드 1 입력
+end
 
 
 for i = 4, 7 do

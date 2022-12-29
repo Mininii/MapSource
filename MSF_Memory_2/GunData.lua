@@ -71,7 +71,7 @@ function Include_GunData(Size,LineNum)
 		GunBGM(130,5,"\x19기억의 \x1D봄 \x10《 "..Conv_HStr2("<19>A<1D>uxesia").." \x10》")
 		GunBGM(168,nil,"\x19기억의 \x1D공명 \x10《 "..Conv_HStr2("<19>R<1D>esonance").." \x10》")
 		GunBGM(175,5,"\x19기억의 \x1D내곽 \x10《 "..Conv_HStr2("<19>D<1D>efined <19>I<1D>nside").." \x10》")
-		GunBGM(189,6,"\x19기억의 \x1D통로 \x10《 "..Conv_HStr2("<19>W<1D>arp <19>T<1D>unnel").." \x10》")
+		GunBGM(189,nil,"\x19기억의 \x1D통로 \x10《 "..Conv_HStr2("<19>W<1D>arp <19>T<1D>unnel").." \x10》")
 		GunBGM(190,nil,"\x19기억의 \x08중\x1D심부 \x10《 "..Conv_HStr2("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x10》")
 		Convert_CPosXY()
 		CMov(FP,G_A,0)
@@ -991,6 +991,7 @@ end
 	CAdd(FP,N_R,8)
 	CIfEnd()
 	CDoActions(FP,{TGun_SetLine(9,SetTo,N_R)})
+	CTrigger(FP,{CD(N_Check,0),GCP(6),CD(AxiomCcode[2],0)},{SetCD(AxiomFailCcode[2],1)})
 	CTrigger(FP,{CD(N_Check,0)},{Gun_DoSuspend(),AddCD(CellCcode,1)},1)
 	CIfEnd()
 
@@ -1039,6 +1040,68 @@ end
 
 	CIf_GCase(189)
 	DoActionsX(FP,{SetCD(WarpCheck,1),SetInvincibility(Enable,189,Force2,64)})
+
+	for i = 4, 7 do
+		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
+		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom 달성시 특수패턴
+	end
+	CIfX(FP,{Gun_Line(30,Exactly,1)})
+
+	if Limit == 1 then
+		TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom 달성시 특수패턴
+	end
+	
+	CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+	CIf(FP,CD(Theorist,1,AtLeast))
+	for i = 0,3 do
+		local Opr = 0
+		if i%2 == 1 then
+			Opr = 2048
+		end
+		RandR = f_CRandNum(2048, Opr,GCP(i+4))
+	end
+	CMov(FP,G_CA_CenterX,RandR)
+	for i = 0,3 do
+		local Opr = 0
+		if i >= 2 then
+			Opr = 2048
+		end
+		RandR = f_CRandNum(2048, Opr,GCP(i+4))
+	end
+	CMov(FP,G_CA_CenterY,RandR)
+	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
+
+	
+	
+	CIfEnd()
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	--중간보스 소환 
+--Infinite Divide,(11보스 Divide)
+--Pentiment in Tenebris(1시보스 Tenebris)
+--World Demication(7시보스 Demise)
+--Arcana Anomaly(5시보스 Anomaly)
+BossUID = {87,74,5,2}
+	HName = {
+		"\x1FＩ\x04ｎｆｉｎｉｔｅ \x10Ｄ\x04ｉｖｉｄｅ,",
+		"\x10Ｐ\x04ｅｎｔｉｍｅｎｔ　ｉｎ　\x15Ｔ\x04ｅｎｅｂｒｉｓ",
+		"\x19Ｗ\x04ｏｒｌｄ \x18Ｄ\x04ｅｍｉｃａｔｉｏｎ",
+		"\x1CＡ\x04ｒｃａｎａ \x1BＡ\x04ｎｏｍａｌｙ"
+	}
+    WarpXY = {
+		{1632,1824},
+		{-1632+4096,1824},
+		{1632,-1824+4096},
+		{-1632+4096,-1824+4096}}
+	for j = 4, 7 do
+		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
+	end
+	
+	CIfXEnd()
+
+
+
+	CElseX()
 	CIfX(FP,{TTOR({Gun_Line(8,AtMost,1224),TTAND({Gun_Line(13,AtLeast,1),Gun_Line(8,AtLeast,15410),Gun_Line(8,AtMost,16350)})})})
 		CIfX(FP,{Gun_Line(8,AtMost,1224)})
 		CSub(FP,N_R,_Mov(1224),Var_TempTable[9])
@@ -1123,6 +1186,7 @@ BossUID = {87,74,5,2}
 		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
+	CIfXEnd()
 	CIfXEnd()
 --
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})

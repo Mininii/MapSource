@@ -3,7 +3,7 @@ function InputStory()
     local StartStoryTelling2 = CreateCcode()
     local StoryT = CreateCcode()
     local StoryT2 = CreateCcode()
-    TriggerX(FP,{CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
+    TriggerX(FP,{CD(TestMode,0),CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
     CIf(FP,{CD(StartStoryTelling,1)})
     CAdd(FP,_Ccode(FP,StoryT),Dt)
     DoActionsX(FP,SetV(BGMType,11),1)
@@ -42,10 +42,8 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
 
 CIfEnd()
 
-TriggerX(FP,{Command(FP, AtLeast, 1, 190),CD(SpecialEEggCcode,4,AtLeast),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling2,1),SetCD(AxiomEnable,1)})
-CIf(FP,{CD(StartStoryTelling2,1)})
-CAdd(FP,_Ccode(FP,StoryT2),Dt)
-DoActionsX(FP,SetV(BGMType,12),1)
+TriggerX(FP,{Command(FP, AtLeast, 1, 190),CD(SpecialEEggCcode,4,AtLeast),CD(Theorist,1,AtLeast)},{SetCD(StartStoryTelling2,1),SetCD(AxiomEnable,1)})
+CIfOnce(FP,{CD(StartStoryTelling2,1)})
 function AxiomStory(T,Text,AddTrig)
 Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT2)}, {
     RotatePlayer({
@@ -59,21 +57,21 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT2)}, {
 })
 end
 
-AxiomStory(5000*1,"\x04이것으로, \x07모든 조건\x04을 만족하였다.")
-AxiomStory(5000*2,"\x04당신은 이 이야기의 \x1C종지부\x04를 찍을 권리가 주어졌다.")
-AxiomStory(5000*3,"\x04잊지 않았는가..? 그래. \x07분명히 당신은 망각의 길을 걷고 있었다.")
-AxiomStory(5000*4,"\x04더이상의 \x08비극\x04을 멈추기 위해 움직여야 할 것이다.")
-AxiomStory(5000*5,"\x04이제 그 끝은, 분명히 바로 앞에 존재한다.")
-AxiomStory(5000*6,"\x04자, 나아가라. 그리고 \x06운\x11명\x04을 바꾸어라! \x07이야기의 끝을 맞이하라!")
+--AxiomStory(5000*1,"\x04이것으로, \x07모든 조건\x04을 만족하였다.")
+--AxiomStory(5000*2,"\x04당신은 이 이야기의 \x1C종지부\x04를 찍을 권리가 주어졌다.")
+--AxiomStory(5000*3,"\x04잊지 않았는가..? 그래. \x07분명히 당신은 망각의 길을 걷고 있었다.")
+--AxiomStory(5000*4,"\x04더이상의 \x08비극\x04을 멈추기 위해 움직여야 할 것이다.")
+--AxiomStory(5000*5,"\x04이제 그 끝은, 분명히 바로 앞에 존재한다.")
+--AxiomStory(5000*6,"\x04자, 나아가라. 그리고 \x06운\x11명\x04을 바꾸어라! \x07이야기의 끝을 맞이하라!")--
 
-Trigger2X(FP, {CDeaths(FP,AtLeast,5000*7,StoryT2)}, {
+Trigger2X(FP, {CDeaths(FP,AtLeast,5000*0,StoryT2)}, {
     SetCD(StartStoryTelling2,0),
 RotatePlayer({
-    PlayWAVX("staredit\\wav\\AxiomComp.wav"),
-    PlayWAVX("staredit\\wav\\AxiomComp.wav"),
+    PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
+    PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
     DisplayTextX(string.rep("\n", 20),4),
     DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-    DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\n\x0D\x0D!H\x13\x07～Ｃｏｍｍｉｎｇ　Ｓｏｏｎ～\n\x0D\x0D!H\x13\x04to Ver. 1.0\n\n\n",0),
+    DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\n\x0D\x0D!H\x13\x07～Ｈａｓ　Ｂｅｅｎ　Ａｃｔｉｖａｔｅｄ～\n\x0D\x0D!H\x13\x04A \x17truth \x0Fhowls \x04from the \x10A\x04xiom \x08o\x04f \x11t\x04he \x1FEnd\n\n\n",0),
     DisplayTextX("\x13\x04"..string.rep("―", 56),4),
 },HumanPlayers,FP);
 })

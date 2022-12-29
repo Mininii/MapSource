@@ -130,6 +130,9 @@ function Var_init()
 	BGMType = CreateVar(FP)
 	Time1 = CreateVar(FP)
 	Time2 = CreateVar(FP)
+	TimeTmp = CreateCcode()
+	TimeV = CreateVar(FP)
+	TimeV2 = CreateVar(FP)
 	CurEXP = CreateVar(FP)
 	MaxEXP = CreateVar2(FP,nil,nil,80)
 	Level = CreateVar2(FP,nil,nil,1)
@@ -240,9 +243,9 @@ function Var_init()
 	MarDup2 = CreateCcode()
 	CheatMode = CreateCcode()
 	SpecialEEggCcode = CreateCcode()
-	PyCcodeAxiom = CreateCcode()
 	LocalPlayerV=CreateVar(FP)
 	AxiomCcode = CreateCcodeArr(4)
+	AxiomFailCcode = CreateCcodeArr(4)
 	AxiomEnable = CreateCcode()
 	ResNum = CreateCcode()
 	ResNumT = CreateCcodeArr(4)
@@ -263,7 +266,7 @@ function Var_init()
 		"\x041. \x07세계의 시작\x04에서 \x07꿈\x04의 \x17조각\x04을 \x1F되찾아라.",
 		"\x042. \x18공명\x04과 \x10공명\x04을 \x1F공명\x04하라.",
 		"\x043. \x08적대\x04의 \x10위협\x04을 \x07극복하라.",
-		"\x044. \x10고통\x04의 \x07기억\x04에서 \x1F해방하라."
+		"\x044. \x10고통\x04의 \x07기억\x04을 \x1F해방시켜라."
 	}
 
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
