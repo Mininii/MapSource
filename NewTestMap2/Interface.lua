@@ -586,37 +586,40 @@ end
 	CIfEnd()
 end
 SpeedV = CreateVar(FP)
-CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
-	for i= 0, 6 do
-		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
-			CIfX(FP,{CV(SpeedV,0),TTNWar(Credit[i+1], AtLeast, "500")},{SetMemory(0x5124F0,SetTo,13),KillUnit(166, FP),SetV(SpeedV,1),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x084배속 \x04아이템을 구입하였습니다. 이제부터 \x084배속\x04이 적용됩니다."),4)}, Force1, FP)})
-				f_LSub(FP, Credit[i+1], Credit[i+1], "500")
-				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
-			CElseIfX({CV(SpeedV,1)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 구입되었습니다."), 4),SetCp(FP)})
-			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
-			CIfXEnd()
-		CIfEnd()
+--CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
+--	for i= 0, 6 do
+--		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
+--			CIfX(FP,{CV(SpeedV,0),TTNWar(Credit[i+1], AtLeast, "500")},{SetMemory(0x5124F0,SetTo,13),KillUnit(166, FP),SetV(SpeedV,1),RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x084배속 \x04아이템을 구입하였습니다. 이제부터 \x084배속\x04이 적용됩니다."),4)}, Force1, FP)})
+--				f_LSub(FP, Credit[i+1], Credit[i+1], "500")
+--				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+--			CElseIfX({CV(SpeedV,1)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 구입되었습니다."), 4),SetCp(FP)})
+--			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+--			CIfXEnd()
+--		CIfEnd()--
 
-		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,114)},{MoveUnit(1, 15, i, 114, 116)})
-		local NeedSp = def_sIndex()
-			NJump(FP, NeedSp, {CV(SpeedV,0)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x085배속 \x04아이템을 먼저 구입해주세요."), 4),SetCp(FP)})
-			CIfX(FP,{CountdownTimer(AtMost, 60*60*48),CV(SpeedV,1),TTNWar(Credit[i+1], AtLeast, "10000")},{SetCountdownTimer(Add, 60*60*12),KillUnit(169, FP)})
-			TriggerX(FP,{CountdownTimer(AtMost, 0)},{RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F최대배속 \x04아이템을 구입하였습니다. 이제부터 \x1F카운트다운 타이머 12시간\x04동안 \x1F최대배속\x04이 적용됩니다."),4)}, Force1, FP)},{preserved})
-			TriggerX(FP,{CountdownTimer(AtLeast, 1)},{RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F최대배속 \x04아이템을 구입하였습니다. \x1F카운트다운 타이머\x04가 \x1F12시간\x04 추가되었습니다."),4)}, Force1, FP)},{preserved})
-				f_LSub(FP, Credit[i+1], Credit[i+1], "10000")
-				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
-				CElseIfX({CountdownTimer(AtLeast, (60*60*48)+1)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 카운트다운 타이머가 너무 많습니다. 지속시간을 소모하고 다시 시도해주세요."), 4),SetCp(FP)})
-				CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
-			CIfXEnd()
-			NJumpEnd(FP, NeedSp)
-		CIfEnd()
+--		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,114)},{MoveUnit(1, 15, i, 114, 116)})
+--		local NeedSp = def_sIndex()
+--			NJump(FP, NeedSp, {CV(SpeedV,0)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x085배속 \x04아이템을 먼저 구입해주세요."), 4),SetCp(FP)})
+--			CIfX(FP,{CountdownTimer(AtMost, 60*60*48),CV(SpeedV,1),TTNWar(Credit[i+1], AtLeast, "10000")},{SetCountdownTimer(Add, 60*60*12),KillUnit(169, FP)})
+--			TriggerX(FP,{CountdownTimer(AtMost, 0)},{RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F5배속 \x04아이템을 구입하였습니다. 이제부터 \x1F카운트다운 타이머 12시간\x04동안 \x1F5배속\x04이 적용됩니다."),4)}, Force1, FP)},{preserved})
+--			TriggerX(FP,{CountdownTimer(AtLeast, 1)},{RotatePlayer({DisplayTextX(StrDesignX(ColorT[i+1].."P"..(i+1).." \x04이(가) \x1F5배속 \x04아이템을 구입하였습니다. \x1F카운트다운 타이머\x04가 \x1F12시간\x04 추가되었습니다."),4)}, Force1, FP)},{preserved})
+--				f_LSub(FP, Credit[i+1], Credit[i+1], "10000")
+--				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+--				CElseIfX({CountdownTimer(AtLeast, (60*60*48)+1)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 카운트다운 타이머가 너무 많습니다. 지속시간을 소모하고 다시 시도해주세요."), 4),SetCp(FP)})
+--				CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+--			CIfXEnd()
+--			NJumpEnd(FP, NeedSp)
+--		CIfEnd()--
 
-	end
-CIfEnd()
-Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayTextX(StrDesignX("\x1F보스 LV.5\x04를 클리어하였습니다. 이제부터 \x1F카운트다운 타이머 24시간\x04동안 \x1F최대배속\x04이 적용됩니다."),4)}, Force1, FP)})
-TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,1)},{preserved})--카운트다운 타이머 존재시
-TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--5배속템 안삿을경우
-TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--5배속템 삿을경우
+--	end
+--CIfEnd()
+
+Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayTextX(StrDesignX("\x1F보스 LV.5\x04를 클리어하였습니다. 이제부터 \x1F카운트다운 타이머 24시간\x04동안 \x1F5배속\x04이 적용됩니다."),4)}, Force1, FP)})
+if TestStart == 0 then
+	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,0x4)},{preserved})--카운트다운 타이머 존재시
+	TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--4배속템 안삿을경우
+	TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--4배속템 삿을경우
+end
 
 CMov(FP,B_Credit,0)
 
@@ -884,12 +887,47 @@ local PageNumLoc = CreateVar(FP)
 local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")})--누를 경우 설명서 출력
 local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")})--누를 경우 설명서 출력
 local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")})--누를 경우 설명서 출력
-local PageT = {"\x13\x04DPS 강화하기 게임에 오신것을 환영합니다.\n\x13\x04이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.\n\x13\x04맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.\n\x13\x04해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.\n\x13\x04벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)\n\x13\x04마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.\n\x13\x04만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.",
-"\x13\x04LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며\n\x13\x04각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.\n\x13\x04각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며\n\x13\x04다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다.",
-"\x13\x04각 강화 유닛은 기준확률이 부여되어 있습니다.\n\x13\x04기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며\n\x13\x04기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.\n\x13\x04예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%\n\x13\x0437~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.",
-"\x13\x04특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.\n\x13\x04획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 \n\x13\x04스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.\n\x13\x04이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.\n\x13\x04현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 \n\x13\x04그 외의 항목은 저장할 수 없습니다.\n\x13\x04현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.",
-"\x13\x04보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.\n\x13\x04각 보스 처치시 얻는 보상은 다음과 같습니다.\n\x13\x041단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12\n\x13\x042단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200\n\x13\x043단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500\n\x13\x044단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000\n\x13\x045단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000"
-
+local PageT = {
+	{--1페이지
+		"DPS 강화하기 게임에 오신것을 환영합니다.",
+		"이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.",
+		"맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.",
+		"해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.",
+		"벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)",
+		"마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.",
+		"만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.",
+	},
+	{--2페이지
+		"LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며",
+		"각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.",
+		"각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며",
+		"다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다."
+	},
+	{
+		"각 강화 유닛은 기준확률이 부여되어 있습니다.",
+		"기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며",
+		"기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.",
+		"예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%",
+		"37~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.",
+	},
+	{
+		"레벨 시스템, SCA 관련 설명",
+		"이 게임에는 레벨 시스템이 존재합니다.",
+		"특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.",
+		"획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.",
+		"이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.",
+		"현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 그 외의 항목은 저장할 수 없습니다.",
+		"현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.",
+	},
+	{
+		"보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.",
+		"각 보스 처치시 얻는 보상은 다음과 같습니다.",
+		"1단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12",
+		"2단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200",
+		"3단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500",
+		"4단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000",
+		"5단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000, 24시간동안 5배속 적용",
+	},
 }
 CIf(FP,TTOR({CD(BKey,1),CD(MKey,1)}))
 
@@ -901,7 +939,15 @@ TriggerX(FP,{CV(PageNumLoc,#PageT+1,AtLeast)},{SetV(PageNumLoc,#PageT)},{preserv
 DisplayPrint(LCP, {"\x13\x04[\x0FPrev \x04: \x17B\x04] [\x07Page \x04: \x10",PageNumLoc," \x08닫기\x04 : \x17N\x04] [\x11Next \x04: \x17M\x04]"})
 CTrigger(FP,{CD(NKey,1)},{TSetMemory(0x6509B0,SetTo,LCP)},1)
 for j,k in pairs(PageT) do
-TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText(k, 4)}, {preserved})
+	for i = 1, 7 do
+		local t
+		if k[i]~= nil then
+			t = k[i]
+		else
+			t = " "
+		end
+		TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText("\x13\x04"..t, 4)}, {preserved})
+	end
 end
 
 
