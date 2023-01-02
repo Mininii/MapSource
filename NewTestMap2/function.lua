@@ -604,6 +604,8 @@ function DisplayPrint(TargetPlayers,arg)
 		if type(k) == "string" then
 			local CT = GetStrSize(0,k)
 			BSize=BSize+CT
+		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+			BSize = BSize+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
 			BSize=BSize+(4*4)
 		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
@@ -615,20 +617,27 @@ function DisplayPrint(TargetPlayers,arg)
 		end
 	end
 	
-	local StrT = "\x0D\x0D\x0DSI"..StrXIndex..string.rep("\x0D", BSize+3)
+	local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
 	local RetV = CreateVar(FP)
 	local Dev = 0
-	table.insert(StrXKeyArr,{RetV,StrT})
-	StrXIndex=StrXIndex+1
+	table.insert(dp.StrXKeyArr,{RetV,StrT})
+	dp.StrXIndex=dp.StrXIndex+1
 	for j,k in pairs(arg) do
 		if type(k) == "string" then
 			local CT = CreateCText(FP,k)
-			table.insert(StrXPatchArr,{RetV,Dev,CT})
+			table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
 			Dev=Dev+CT[2]
+		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+			if k[2] == "LocalPlayerID" then
+				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
+			else
+				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]]})
+			end
+			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
-			CMov(FP,publicItoDecV,k)
-			CallTrigger(FP,Call_IToDec)
-			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
+			CMov(FP,dp.publicItoDecV,k)
+			CallTrigger(FP,dp.Call_IToDec)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
 		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 			for o,p in pairs(k) do
@@ -681,6 +690,7 @@ function DisplayPrintEr(TargetPlayer,arg)
 	local Dev = 0
 	local RetAct = {}
 	local ItoDecKey = {}
+	local ItoNameKey = {}
 	local VCharKey = {}
 	
 
@@ -692,6 +702,9 @@ function DisplayPrintEr(TargetPlayer,arg)
 			table.insert(RetAct,print_utf8_2(12, Dev, k))
 			
 			Dev=Dev+Strl
+		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+			table.insert(ItoNameKey,{k[2],Dev})
+			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
 			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 16)))
 			--V,Dev
@@ -715,9 +728,17 @@ function DisplayPrintEr(TargetPlayer,arg)
 	DoActions2(FP, RetAct)
 	for j,p in pairs(ItoDecKey) do
 		local k = p[1]
-		CMov(FP,publicItoDecV,k)
-		CallTrigger(FP,Call_IToDec)
-		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(publicItoDecVArr,0),4*4)
+		CMov(FP,dp.publicItoDecV,k)
+		CallTrigger(FP,dp.Call_IToDec)
+		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArr,0),4*4)
+	end
+	for j,p in pairs(ItoNameKey) do
+		local k = p[1]
+		if k == "LocalPlayerID" then
+			f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.LPNameVArr,0),4*5)
+		else
+			f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.PNameVArrArr[k],0),4*5)
+		end
 	end
 	for j,p in pairs(VCharKey) do
 		CDoActions(FP,{TBwrite(0x640B60+p[2],SetTo,V(p[1]))})
@@ -727,47 +748,82 @@ function DisplayPrintEr(TargetPlayer,arg)
 
 end
 function init_StrX()
-	for k, v in pairs(StrXKeyArr) do
+	for k, v in pairs(dp.StrXKeyArr) do
 		f_GetStrXptr(FP,v[1],v[2])
 	end
-	for k, v in pairs(StrXPatchArr) do -- STRXPtr,Deviation,CTextData
+	for k, v in pairs(dp.StrXPatchArr) do -- STRXPtr,Deviation,CTextData
 		if v[2]==0 then
 			f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
 		else
 			f_Memcpy(FP,_Add(v[1],v[2]),_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
 		end
 	end
+
+	for k, v in pairs(dp.StrXPNameArr) do -- STRXPtr,Deviation,PNameVArr
+		f_Movcpy(FP,_Add(v[1],v[2]),VArr(v[3],0),4*5)
+	end
+
 end
 function init_Setting()
-	CJump(FP, CustominitJump)
+	CJump(FP, dp.CustominitJump)
+	for i = 0, 6 do
+		ItoName(FP,i,VArr(dp.PNameVArrArr[i+1],0),ColorCode[i+1])
+		_0DPatchforVArr(FP,dp.PNameVArrArr[i+1],4)
+
+		if dp.LocOption ~=nil then
+			CIf(FP,{LocalPlayerID(i)})--로컬
+			ItoName(FP,i,VArr(dp.LPNameVArr,0),ColorCode[i+1])
+			_0DPatchforVArr(FP,dp.LPNameVArr,4)
+			CIfEnd()
+		end
+	end
+
 	init_StrX()
-	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
+	
+	DoActionsX(FP,{SetNext(dp.initTrigIndex, dp.initTrigIndex,1),SetNext("X", dp.initTrigIndex,1)},1,dp.lastTrigIndex)--RecoverNext
 
 	local SCJump = def_sIndex()
 	CJump(FP,SCJump)
-	SetCall2(FP, Call_IToDec)
-	ItoDec(FP,publicItoDecV,VArr(publicItoDecVArr,0),2,nil,0)
+	SetCall2(FP, dp.Call_IToDec)
+	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,0)
 	SetCallEnd2()
 	CJumpEnd(FP,SCJump)
-	
-
-
-	CJumpEnd(FP, CustominitJump)
+	CJumpEnd(FP, dp.CustominitJump)
 end
-function Start_init()
-	CustominitJump = def_sIndex()
-	initTrigIndex = FuncAlloc
+
+function Start_init(LocOption)
+	dp={}
+	dp.LocOption = LocOption
+	if dp.LocOption ~=nil then
+		dp.LPNameVArr = CreateVArr(5,FP)
+	end
+	dp.ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
+	dp.PNameVArrArr = CreateVArrArr(7, 5, FP)
+	dp.CustominitJump = def_sIndex()
+	dp.initTrigIndex = FuncAlloc
 	FuncAlloc=FuncAlloc+1
-	lastTrigIndex = FuncAlloc
+	dp.lastTrigIndex = FuncAlloc
 	FuncAlloc=FuncAlloc+1
-	StrXKeyArr = {}
-	StrXPatchArr = {}
-	StrXIndex = 0
-	publicItoDecVArr =CreateVArr(4,FP)
-	publicItoDecV = CreateVar(FP)
-	Call_IToDec = CreateCallIndex()
+	dp.StrXKeyArr = {}
+	dp.StrXPatchArr = {}
+	dp.StrXPNameArr = {}
+	dp.StrXIndex = 0
+	dp.publicItoDecVArr =CreateVArr(4,FP)
+	dp.publicItoDecV = CreateVar(FP)
+	dp.Call_IToDec = CreateCallIndex()
 	
-	DoActionsX(FP, {SetNext("X", CustominitJump+JumpStartAlloc,1),SetNext(lastTrigIndex, "X",1)}, 1,initTrigIndex)
+function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
+	for j=0, VArrLength do
+		for k=0, 3 do
+		TriggerX(Player,{VArrayX(VArr(VArrName,j),"Value",Exactly,0,255*(256^k))},{
+		SetVArrayX(VArr(VArrName,j),"Value",SetTo,(256^k)*0x0D,255*(256^k))})
+		end
+	end
+end
+function PName(Player) -- "LocalPlayerID" = LocalPName
+	return {"PVA",Player}
+end
+	DoActionsX(FP, {SetNext("X", dp.CustominitJump+JumpStartAlloc,1),SetNext(dp.lastTrigIndex, "X",1)}, 1,dp.initTrigIndex)
 end
 function dwread_epd(Ptr,EPDFlag) -- v=EPD
 	local RetV= CreateVar(FP)

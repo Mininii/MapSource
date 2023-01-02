@@ -51,7 +51,7 @@ Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 
-Start_init()
+Start_init(1)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100")

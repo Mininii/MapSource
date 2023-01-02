@@ -824,11 +824,11 @@ E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
 E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
 E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
 E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
-DisplayPrint(LCP, {"\x04당신의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E1VarArr2,".",E1VarArr3,"%p"})
-DisplayPrint(LCP, {"\x04당신의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
-DisplayPrint(LCP, {"\x04당신의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E1VarArr2,".",E1VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
 f_Mul(FP,EXPIncomeLoc2,10)
-DisplayPrint(LCP, {"\x04당신의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
+DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
 CIfEnd()
 
 local PageNumLoc = CreateVar(FP)
