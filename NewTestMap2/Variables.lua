@@ -15,6 +15,7 @@ function Include_Vars()
 	--MSQC_KeySet("P",502)
 	MSQC_KeySet("F9",13)
 	MSQC_KeySet("F12",503)--테스트용
+	--504 사용중
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
 	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -86,7 +87,8 @@ function Include_Vars()
 	iv.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
 	iv.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
 	iv.ScTimer = CreateCcodeArr(7)
-
+	iv.PTimeV = CreateVarArr(7,FP)
+	iv.ResetStat = CreateCcodeArr(7)
 	--General
 	iv.BossLV = CreateVar(FP)
 	
@@ -113,6 +115,9 @@ function Include_Vars()
 	iv.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
 	iv.TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
 	iv.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	iv.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
+	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(데스값)
+
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
 	iv.IncomeLoc = CreateVar(FP)
@@ -124,6 +129,7 @@ function Include_Vars()
 	iv.S_TotalEPerLoc = CreateVar(FP)
 	iv.S_TotalEPer2Loc = CreateVar(FP)
 	iv.S_TotalEPer3Loc = CreateVar(FP)
+	iv.PlayTimeLoc = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
 	iv.MoneyLoc = CreateWar(FP)
 	iv.CredLoc = CreateWar(FP)
@@ -139,6 +145,8 @@ function Include_Vars()
 	iv.MulOpLoc = CreateVar(FP)
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
+	iv.ResetStatLoc = CreateCcode()
+	
 
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
@@ -174,8 +182,8 @@ function Include_Vars()
 	AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
 	AutoSellArr = {} -- 자동강화 설정용 데스값 태아불
 	AutoBuyArr = { -- 자동구입 가격 설정용 테이블
-		{1,"3000"},
-		{7,"70000"},
+		{1,"1500"},
+		{7,"60000"},
 		{11,"900000"},
 		{15,"6000000"},
 		{18,"100000000"},
@@ -261,7 +269,7 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,5,100,1000,58,1,nil,60) -- 기본유닛
+	SetUnitAbility(88,114,5,20,1000,58,1,nil,60) -- 기본유닛
 	BossArr = {
 		{87,"10000"},
 		{25,"150000"},
@@ -271,6 +279,16 @@ function Include_Vars()
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
-
-
+	Cost_Stat_ScDmg = 80
+	Cost_Stat_AddSc = 800
+	Cost_Stat_Upgrade = 20
+	Cost_Stat_TotalEPer = 10
+	Cost_Stat_TotalEPer2 = 200
+	Cost_Stat_TotalEPer3 = 1000
+	
+	
+	
+	
+	
+	
 end

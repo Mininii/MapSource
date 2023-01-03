@@ -840,10 +840,11 @@ function VRange(Var,Left,Right)
 	
 end
 
-function Byte_NumSet(Var,DestVar,DivNum,Mask,DestInitVar)
+function Byte_NumSet(Var,DestVar,DivNum,Mask,DestInitVar,NBit)
 	if DestInitVar==nil then DestInitVar=0 end
 	CMov(FP,DestVar,DestInitVar)
-	for i = 3, 0, -1 do
+	if NBit==nil then NBit=3 end
+	for i = NBit, 0, -1 do
 		TriggerX(FP,{NVar(Var,AtLeast,(2^i)*DivNum)},{SetNVar(Var,Subtract,(2^i)*DivNum),SetNVar(DestVar, Add, (2^i)*Mask)},{preserved})
 	end
 end

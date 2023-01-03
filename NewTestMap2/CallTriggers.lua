@@ -93,7 +93,7 @@ function Install_CallTriggers()
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 37강부터 +2 +3 적용안됨
+		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 35강부터 +2 적용안됨, 36강부터 +2 적용안됨
 		CAdd(FP,ELevel,3)
 		CElseIfX({CV(ELevel,35,AtLeast),CV(ELevel,36,AtMost)})
 		CMov(FP,ELevel,37)
@@ -106,7 +106,7 @@ function Install_CallTriggers()
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,35,AtMost)}) -- 37강부터 +2 +3 적용안됨
+		CIfX(FP, {CV(ELevel,35,AtMost)}) -- 36강부터 +2 +3 적용안됨
 		CAdd(FP,ELevel,2)
 		CElseIfX({CV(ELevel,36)})
 		CMov(FP,ELevel,37)
@@ -270,20 +270,20 @@ function Install_CallTriggers()
 
 	CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
 	CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(G_BtnCP, {PName("LocalPlayerID")," : \x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
 	CElseX()
-	DisplayPrintEr(G_BtnCP, {PName("LocalPlayerID")," : \x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 	CIfXEnd()
 	CIfEnd()
 	CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
 	CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(G_BtnCP, {PName("LocalPlayerID")," : \x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
 
 	CElseX()
-	DisplayPrintEr(G_BtnCP, {PName("LocalPlayerID")," : \x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
 	CIfXEnd()
 	CIfEnd()

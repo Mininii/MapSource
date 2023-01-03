@@ -53,10 +53,32 @@ function onInit_EUD()
 	if TestStart == 1 then
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,1)}) -- 테스트모드 최대배속
 	else
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x15)}) -- 기본 3배속
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 4배속
 	end
 
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit설정
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit설정
+
+	T_YY = 2023
+	T_MM = 01
+	T_DD = 07
+	T_HH = 00
+
+	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
+	--PushErrorMsg(GlobalTime)
+	if Limit == 1 then
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Memory(0x6D0F38,AtMost,GlobalTime);
+
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	end
 
 	function InputTesterID(Player,ID)
 		Trigger {
@@ -178,7 +200,13 @@ function onInit_EUD()
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
+	if Limit == 1 then
+		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
+	
+	end
 
+	Trigger2(FP,{},{RotatePlayer({DisplayTextX(StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ"),4),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
+	
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	f_GetTblptr(FP, Etbl, 1438)
 	for i = 0, 6 do

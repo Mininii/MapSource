@@ -11,6 +11,8 @@ function Interface()
 	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--총 강화확률(+3강)
 	local ScoutDmg = iv.ScoutDmg-- CreateVarArr(7,FP) -- 기본유닛 데미지
 	local ScTimer = iv.ScTimer-- CreateCcodeArr(7)
+	local PTimeV = iv.PTimeV
+	local ResetStat = iv.ResetStat
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -38,6 +40,8 @@ function Interface()
 	local PEXP = iv.PEXP--CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
 	local TotalExp = iv.TotalExp--CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
 	local CurEXP = iv.CurEXP--CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	local PStatVer = iv.PStatVer--CreateVarArr(7,FP) -- 현재 저장된 스탯버전
+	local PlayTime = iv.PlayTime
 	--Local Data Variable
 	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
 	local IncomeLoc = iv.IncomeLoc--CreateVar(FP)
@@ -49,6 +53,7 @@ function Interface()
 	local S_TotalEPerLoc = iv.S_TotalEPerLoc--CreateVar(FP)
 	local S_TotalEPer2Loc = iv.S_TotalEPer2Loc--CreateVar(FP)
 	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
+	local PlayTimeLoc = iv.PlayTimeLoc--CreateVar(FP)
 	local StatPLoc = iv.StatPLoc--CreateVar(FP)
 	local MoneyLoc = iv.MoneyLoc--CreateWar(FP)
 	local CredLoc = iv.CredLoc--CreateWar(FP)
@@ -64,10 +69,10 @@ function Interface()
 	local MulOpLoc = iv.MulOpLoc--CreateVar(FP)
 	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
 	local LCP = iv.LCP--CreateVar(FP)
+	local ResetStatLoc = iv.ResetStatLoc
 
 	--Temp
 	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
-
 	local TempReadV = iv.TempReadV--CreateVar(FP)
 	local TempEXPV = iv.TempEXPV--CreateVar(FP)
 
@@ -116,6 +121,7 @@ function Interface()
 
 	
 	local Dx,Dy,Dv,Du,DtP,Time2,Time = CreateVariables(7,FP)
+	local SaveRemind = CreateCcode()
 	f_Read(FP,0x51CE8C,Dx)
 	CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(FP,DtP,Dy,Du)
@@ -139,19 +145,18 @@ function Interface()
 
 
 for i = 0, 6 do -- 각플레이어 
-	CIf(FP,{HumanCheck(i,1)},{SetCp(i),AddCD(ScTimer[i+1],1)})
+	CIf(FP,{HumanCheck(i,1)},{SetCp(i),AddCD(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
+	TriggerX(FP, CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1)},{preserved})
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,0,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(LoadCheck[i+1],1)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
 	CIf(FP,{CV(Time,60000,AtLeast)},{SubV(Time,60000)})
-	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1)},{SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
-if Limit == 1 then 
-	TriggerX(FP,{LocalPlayerID(i)},{DisplayText(StrDesignX("\x04현재 \x1F6~7인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 400%\x04, \x07+1강 \x17강화확률 + \x0F2.0%p"),4)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
+	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),NVar(PCheckV,AtLeast,2),NVar(PCheckV,AtMost,3)},{DisplayText(StrDesignX("\x04현재 \x1F2~3인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 100%\x04, \x07+1강 \x17강화확률 + \x0F0.5%p"),4)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),NVar(PCheckV,AtLeast,4),NVar(PCheckV,AtMost,5)},{DisplayText(StrDesignX("\x04현재 \x1F4~5인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 200%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p"),4)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),NVar(PCheckV,AtLeast,6)},{DisplayText(StrDesignX("\x04현재 \x1F6~7인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 400%\x04, \x07+1강 \x17강화확률 + \x0F2.0%p"),4)},{preserved})-- 인원수 버프 보너스
+	
+	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1)},{SetCD(SaveRemind,0),SetMemory(0x58F500, SetTo, 1),},{preserved})
+	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
 
-else
-	TriggerX(FP,{LocalPlayerID(i),NVar(PCheckV,AtLeast,2),NVar(PCheckV,AtMost,3)},{DisplayText(StrDesignX("\x04현재 \x1F2~3인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 100%\x04, \x07+1강 \x17강화확률 + \x0F0.5%p"),4)},{preserved})-- 인원수 버프 보너스
-	TriggerX(FP,{LocalPlayerID(i),NVar(PCheckV,AtLeast,4),NVar(PCheckV,AtMost,5)},{DisplayText(StrDesignX("\x04현재 \x1F4~5인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 200%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p"),4)},{preserved})-- 인원수 버프 보너스
-	TriggerX(FP,{LocalPlayerID(i),NVar(PCheckV,AtLeast,6)},{DisplayText(StrDesignX("\x04현재 \x1F6~7인 보너스 버프 \x1C적용중입니다. - \x08공격력 + 400%\x04, \x07+1강 \x17강화확률 + \x0F2.0%p"),4)},{preserved})-- 인원수 버프 보너스
-
-end
 	CIfEnd()--
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIf(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
@@ -173,22 +178,25 @@ end
 		SCA_DataLoad(i,TotalExp[i+1],112)
 		SCA_DataLoad(i,CurEXP[i+1],114)
 		SCA_DataLoad(i,Stat_AddSc[i+1],116)
+		SCA_DataLoad(i,PStatVer[i+1],117)
+		SCA_DataLoad(i,PlayTime[i+1],118)
+		
+		
 		--치팅 테스트 변수 초기화
+		CIfX(FP,CV(PStatVer[i+1],StatVer))--스탯버전이 저장된 값과 같을경우 치팅 감지 작동
 		f_LMov(FP, CTPEXP, PEXP[i+1])
 		CMov(FP, CTPLevel, 1)
 		CMov(FP,CTStatP,0)
 		CMov(FP,CTStatP2,StatP[i+1])
 		f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 		f_LMov(FP, CTTotalExp, "10",nil,nil,1)
-
 		CallTrigger(FP,Call_CT)
-
-		CAdd(FP,CTStatP2,Stat_ScDmg[i+1])
-		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(5)))
-		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(200)))
-		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(1000)))
-		CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(5)))
-		CAdd(FP,CTStatP2,_Mul(Stat_AddSc[i+1],_Mov(10)))
+		CAdd(FP,CTStatP2,_Mul(Stat_ScDmg[i+1],_Mov(Cost_Stat_ScDmg)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
+		CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(Cost_Stat_Upgrade)))
+		CAdd(FP,CTStatP2,_Mul(Stat_AddSc[i+1],_Mov(Cost_Stat_AddSc)))
 		CMov(FP,0x57f0f0+(i*4),CTStatP)--치팅감지시 스탯정보 표기용 미네랄
 		CMov(FP,0x57f120+(i*4),CTStatP2)--치팅감지시 스탯정보 표기용 가스
 		CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(CheatDetect,1)})
@@ -204,14 +212,28 @@ end
 		
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
+		CElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
+		DoActionsX(FP, {
+			SetV(PStatVer[i+1],StatVer),
+			SetV(PLevel[i+1],1),
+			SetV(StatP[i+1],0),
+			SetCWar(FP, CurEXP[i+1][2], SetTo, "0"),
+			SetCWar(FP, TotalExp[i+1][2], SetTo, "10"),
+			SetV(Stat_ScDmg[i+1],0),
+			SetV(Stat_TotalEPer[i+1],0),
+			SetV(Stat_TotalEPer2[i+1],0),
+			SetV(Stat_TotalEPer3[i+1],0),
+			SetV(Stat_Upgrade[i+1],0),
+			SetV(Stat_AddSc[i+1],0)})
+		CIfXEnd()
 		CIf(FP,CV(Stat_ScDmg[i+1],1,AtLeast))--스카 공격력 증가량 데이터 존재여부
 		DoActionsX(FP, {SetCD(ScTimer[i+1],0),RemoveUnit(88, i)})--로드성공시 스카타이머 초기화
 		for k = 0, 5 do
 			CreateUnitStacked({CV(Stat_AddSc[i+1],k)},k+1, 88, 36+i,15+i, i, nil, 1)--스카 터졌을경우 다시 지급
 		end
+		CIfEnd()
 		CreateUnitStacked({Deaths(i, AtLeast, 1, 99)},6, 88, 36+i,15+i, i, nil, 1)--테스터유저 감사 칭호 보유자 스카 6개 추가지급
 		CreateUnitStacked({Deaths(i, AtLeast, 1, 100)},6, 88, 36+i,15+i, i, nil, 1)--제작자 칭호 보유자 스카 6개 추가지급
-		CIfEnd()
 		
 		CIfEnd()
 	CIfEnd()
@@ -250,6 +272,8 @@ end
 		SCA_DataSave(i,TotalExp[i+1],112)
 		SCA_DataSave(i,CurEXP[i+1],114)
 		SCA_DataSave(i,Stat_AddSc[i+1],116)
+		SCA_DataSave(i,PStatVer[i+1],117)
+		SCA_DataSave(i,PlayTime[i+1],118)
 	NIfEnd()
 
 	CIf(FP,{Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
@@ -264,12 +288,12 @@ end
 	f_LMov(FP, CTTotalExp, "10",nil,nil,1)
 	CallTrigger(FP,Call_CT)
 
-	CAdd(FP,CTStatP2,Stat_ScDmg[i+1])
-	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(5)))
-	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(200)))
-	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(1000)))
-	CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(5)))
-	CAdd(FP,CTStatP2,_Mul(Stat_AddSc[i+1],_Mov(10)))
+	CAdd(FP,CTStatP2,_Mul(Stat_ScDmg[i+1],_Mov(Cost_Stat_ScDmg)))
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
+	CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
+	CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(Cost_Stat_Upgrade)))
+	CAdd(FP,CTStatP2,_Mul(Stat_AddSc[i+1],_Mov(Cost_Stat_AddSc)))
 	CMov(FP,0x57f0f0+(i*4),CTStatP)--치팅감지시 스탯정보 표기용 미네랄
 	CMov(FP,0x57f120+(i*4),CTStatP2)--치팅감지시 스탯정보 표기용 가스
 	CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(CheatDetect,1)})
@@ -300,7 +324,7 @@ end
 
 
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
-	if Limit == 1 then 
+	if Limit == -1 then 
 		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
 		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
@@ -308,6 +332,9 @@ end
 	end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
+	TriggerX(FP, {CD(ScTimer[i+1],86400)}, {SetCD(ResetStat[i+1],1)},{preserved}) -- 1시간뒤 스탯초기화 사용불가
+
+	
 
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
@@ -408,9 +435,9 @@ end
 		TriggerX(FP, {Deaths(i,Exactly,0x10000+j,20)}, {SetDeaths(i,SetTo,1,495+j)}, {preserved})
 	end
 	KeyFunc(i,"1",{
-		{{CV(StatP[i+1],1,AtLeast),CV(Stat_ScDmg[i+1],49,AtMost)},{SubV(StatP[i+1],1),AddV(Stat_ScDmg[i+1],1)},StrDesign("\x07기본유닛\x1B의 데미지가 증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_ScDmg,AtLeast),CV(Stat_ScDmg[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_ScDmg),AddV(Stat_ScDmg[i+1],1)},StrDesign("\x07기본유닛\x1B의 데미지가 증가하였습니다.")},
 		{{CV(Stat_ScDmg[i+1],50,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 \x08데미지\x04를 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_ScDmg-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 --	if TestStart == 1 then
 --		KeyFunc(i,"2",{
@@ -420,31 +447,69 @@ end
 --		})
 --	else
 	KeyFunc(i,"2",{
-		{{CV(StatP[i+1],10,AtLeast),CV(Stat_AddSc[i+1],4,AtMost)},{SubV(StatP[i+1],10),AddV(Stat_AddSc[i+1],1)},StrDesign("\x07기본유닛 갯수\x04가 \x0F1기 \x04증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_AddSc,AtLeast),CV(Stat_AddSc[i+1],4,AtMost)},{SubV(StatP[i+1],Cost_Stat_AddSc),AddV(Stat_AddSc[i+1],1)},StrDesign("\x07기본유닛 갯수\x04가 \x0F1기 \x04증가하였습니다.")},
 		{{CV(Stat_AddSc[i+1],5,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 갯수\x04를 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],9,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_AddSc-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 --	end
 	KeyFunc(i,"3",{
-		{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],49,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_Upgrade,AtLeast),CV(Stat_Upgrade[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_Upgrade),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},
 		{{CV(Stat_Upgrade[i+1],50,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x08데미지\x04를 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_Upgrade-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 	KeyFunc(i,"4",{
-		{{CV(StatP[i+1],5,AtLeast),CV(Stat_TotalEPer[i+1],9999,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_TotalEPer[i+1],100)},StrDesign("\x07총 \x08강화 확률\x04이 증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer,AtLeast),CV(Stat_TotalEPer[i+1],9999,AtMost)},{SubV(StatP[i+1],Cost_Stat_TotalEPer),AddV(Stat_TotalEPer[i+1],100)},StrDesign("\x07총 \x08강화 확률\x04이 증가하였습니다.")},
 		{{CV(Stat_TotalEPer[i+1],10000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07총 \x08강화 확률\x04을 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],4,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 	KeyFunc(i,"5",{
-		{{CV(StatP[i+1],200,AtLeast),CV(Stat_TotalEPer2[i+1],4999,AtMost)},{SubV(StatP[i+1],200),AddV(Stat_TotalEPer2[i+1],100)},StrDesign("\x07+2강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer2,AtLeast),CV(Stat_TotalEPer2[i+1],4999,AtMost)},{SubV(StatP[i+1],Cost_Stat_TotalEPer2),AddV(Stat_TotalEPer2[i+1],100)},StrDesign("\x07+2강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
 		{{CV(Stat_TotalEPer2[i+1],5000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],199,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer2-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 	})
 	KeyFunc(i,"6",{
-		{{CV(StatP[i+1],1000,AtLeast),CV(Stat_TotalEPer3[i+1],2999,AtMost)},{SubV(StatP[i+1],1000),AddV(Stat_TotalEPer3[i+1],100)},StrDesign("\x07+3강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer3,AtLeast),CV(Stat_TotalEPer3[i+1],2999,AtMost)},{SubV(StatP[i+1],Cost_Stat_TotalEPer3),AddV(Stat_TotalEPer3[i+1],100)},StrDesign("\x07+3강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
 		{{CV(Stat_TotalEPer3[i+1],3000,AtLeast)},{},StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다.")},
-		{{CV(StatP[i+1],999,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		{{CV(StatP[i+1],Cost_Stat_TotalEPer3-1,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")}, 
 	})
+
+	CIf(FP,{Deaths(i, Exactly, 1, 504)})
+	CIfX(FP,{CD(ResetStat[i+1],1)})
+	CallTrigger(FP,Call_Print13[i+1])
+	TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1F스탯 초기화\x04를 사용할 수 없습니다.")) ,{preserved})
+
+	CElseIfX({TNWar(Credit[i+1], AtLeast, "5000")})
+	f_LSub(FP, Credit[i+1], Credit[i+1], "5000")
+	DoActionsX(FP, {
+		
+		SetCD(ResetStat[i+1],1),
+		SetV(StatP[i+1],0),
+		SetV(Stat_ScDmg[i+1],0),
+		SetV(Stat_TotalEPer[i+1],0),
+		SetV(Stat_TotalEPer2[i+1],0),
+		SetV(Stat_TotalEPer3[i+1],0),
+		SetV(Stat_Upgrade[i+1],0),
+		SetV(Stat_AddSc[i+1],0)
+	})
+	TriggerX(FP, {LocalPlayerID(i)}, {SetV(Time,55000),SetCD(SaveRemind,1)}, {preserved})
+	CMov(FP, StatP[i+1], _Mul(_Sub(PLevel[i+1],1), 5))
+	
+	CallTrigger(FP,Call_Print13[i+1])
+	TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x1F스탯 초기화\x04 완료. \x07잠시 후 자동저장됩니다. \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요.")) ,{preserved})
+
+	CElseX()
+	CallTrigger(FP,Call_Print13[i+1])
+	TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다.")) ,{preserved})
+	CIfXEnd()
+	CIfEnd()
+
+	-- 1, 4000
+	-- 2, 4000
+	-- 3, 1000
+	-- 4, 1000
+	-- 5, 10000
+	-- 6, 30000
+
 	--KeyFunc(i,"6",{
 	--	{{CV(StatP[i+1],5,AtLeast)},{SubV(StatP[i+1],5),AddV(Stat_EXPIncome[i+1],1)},StrDesign("\x07경험치 획등량\x04이 \x0810% \x04증가하였습니다.")},
 	--	{{CV(StatP[i+1],0,AtMost)},{},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
@@ -501,8 +566,8 @@ end
 	--	CIfEnd()
 	--end
 
-	if Limit == 1 then
-		TriggerX(FP,{},{SetMemoryB(0x58F32C+(i*15)+13, Add, 40),AddV(TotalEPer[i+1],2000)},{preserved})-- 인원수 버프 보너스
+	if Limit == -1 then
+		TriggerX(FP,{},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})-- 인원수 버프 보너스
 	else
 		
 		TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 10),AddV(TotalEPer[i+1],500)},{preserved})-- 인원수 버프 보너스
@@ -556,7 +621,7 @@ end
 	
 	
 	
-	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0)}) -- CAPrint에 전송할 값들
+	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0),SetCD(ResetStatLoc,0)}) -- CAPrint에 전송할 값들
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
 	CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
@@ -578,6 +643,11 @@ end
 	CMov(FP,LCP,i)
 	CMov(FP,ScoutDmgLoc,ScoutDmg[i+1])
 	CMov(FP,EXPIncomeLoc2,Stat_EXPIncome[i+1])
+	
+	CMov(FP,PlayTimeLoc,PlayTime[i+1])
+	TriggerX(FP,{CD(ResetStat[i+1],1)},{SetCD(ResetStatLoc,1)},{preserved})
+
+	
 	CIfEnd()
 	
 
@@ -614,32 +684,32 @@ SpeedV = CreateVar(FP)
 --	end
 --CIfEnd()
 
-Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayTextX(StrDesignX("\x1F보스 LV.5\x04를 클리어하였습니다. 이제부터 \x1F카운트다운 타이머 24시간\x04동안 \x1F5배속\x04이 적용됩니다."),4)}, Force1, FP)})
-if TestStart == 0 then
-	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,0x4)},{preserved})--카운트다운 타이머 존재시
-	TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--4배속템 안삿을경우
-	TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--4배속템 삿을경우
-end
+--Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayTextX(StrDesignX("\x1F보스 LV.5\x04를 클리어하였습니다. 이제부터 \x1F카운트다운 타이머 24시간\x04동안 \x1F5배속\x04이 적용됩니다."),4)}, Force1, FP)})
+--if TestStart == 0 then
+--	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,0x4)},{preserved})--카운트다운 타이머 존재시
+--	TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--4배속템 안삿을경우
+--	TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--4배속템 삿을경우
+--end
 
 CMov(FP,B_Credit,0)
 
 Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
 	AddV(B_IncomeMax,12),--사냥터 유닛수 12 증가
 	AddV(B_TotalEPer,1500),--강화확률 +1.5%p
-	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
 	AddV(B_IncomeMax,9),--사냥터 유닛수 9 증가
 	AddV(B_TotalEPer,2500),--강화확률 +2.5%p
 	AddV(B_Credit,200),--크레딧 200
-	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
 	AddV(B_IncomeMax,6), -- 사냥터 유닛수 +6 증가
 	AddV(B_TotalEPer,3500), -- 강화확률 +3.5%p
 	AddV(B_Credit,500),--크레딧 500
 	--AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
-	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_IncomeMax,9),-- 사냥터 유닛수 +9 증가
@@ -647,13 +717,13 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_TotalEPer2,500), -- +2 강화확률 +0.5%p
 	AddV(B_Credit,2000),--크레딧 2000
 	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
-	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
 	AddV(B_TotalEPer,3000),
 	AddV(B_Credit,10000),
 	AddV(B_Stat_EXPIncome,4), -- 판매시 경험치 40% 증가
-	SetV(Time,55000),RotatePlayer({DisplayTextX(StrDesignX("보스를 클리어하였습니다. 잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 
 
@@ -771,8 +841,8 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(MStat,1)},{SetV(ESCB,0x1B)},{
 TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000)},{preserved})
 
 	for i = 0, 5 do
-		TriggerX(FP,{MLine(mmY,5+i)},{SetV(BColor[i+1],0x07),SetV(BColor3[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})
-		TriggerX(FP,{MLine(mmY,5+i),VRange(mmX3, 296, 310)},{SetV(BColor2[i+1],0x07),SetCD(MToggle2[i+1],1)},{preserved})
+		TriggerX(FP,{MLine(mmY,6+i)},{SetV(BColor[i+1],0x07),SetV(BColor3[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})
+		TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 296, 310)},{SetV(BColor2[i+1],0x07),SetCD(MToggle2[i+1],1)},{preserved})
 
 		local temp,CDFnc = ToggleFunc({CD(MToggle[i+1],0),CD(MToggle[i+1],1)})--
 		TriggerX(FP,{CD(MToggle2[i+1],1),CD(MStat,1)},{SetV(BColor2[i+1],0x08)},{preserved})
@@ -781,22 +851,25 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 		TriggerX(FP,{CD(MToggle2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000+i+1)},{preserved})
 	end
 	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
-	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - ",BColor3[1][2],"1 Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k ",BColor2[1][2],"[+]"})
-	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],"10 Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
-	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],"5 Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
-	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],"5 Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
-	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],"200 Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
-	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],"1000 Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
-	
+	TriggerX(FP, CD(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
+	TriggerX(FP, CD(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
+	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k ",BColor2[1][2],"[+]"})
+	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
+	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
+	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
+	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
+	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
+
+
 	CIfXEnd()
 	DoActions(FP,{SetCp(FP)})
 	local StatPrintEr = {
 		StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 		StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 		StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
-		StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다."),
-		StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F37강 \x04유닛 이상부터 +1만 적용됩니다."),
-		StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F37강 \x04유닛 이상부터 +1만 적용됩니다."),
+		StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
+		StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F35강 \x04유닛 이상부터 +1만 적용됩니다."),
+		StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1만 적용됩니다."),
 }
 
 	for i = 0,6 do
@@ -827,106 +900,90 @@ E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
 E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
 E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
 E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
-DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E1VarArr2,".",E1VarArr3,"%p"})
-DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
-DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07+1 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E1VarArr2,".",E1VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
 f_Mul(FP,EXPIncomeLoc2,10)
-DisplayPrint(LCP, {PName("LocalPlayerID"),"\x04의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
+
+TimeV = CreateVar(FP)
+TimeSS = CreateVar(FP)
+TimeMM = CreateVar(FP)
+TimeHH = CreateVar(FP)
+TimeDD = CreateVar(FP)
+CMov(FP,TimeV,PlayTimeLoc)
+Byte_NumSet(TimeV,TimeDD,86400,1,nil,6)
+Byte_NumSet(TimeV,TimeHH,3600,1,nil,6)
+Byte_NumSet(TimeV,TimeMM,60,1,nil,6)
+Byte_NumSet(TimeV,TimeSS,1,1,nil,6)
+
+
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",TimeDD,"일 ",TimeHH,"시간 ",TimeMM,"분 ",TimeSS,"초"})
+
+
+
+
+
 CIfEnd()
 
 local PageNumLoc = CreateVar(FP)
---[[
-
-게임 설명서
-1페이지
-
-<13><04>DPS 강화하기 게임에 오신것을 환영합니다.
-<13><04>이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.
-<13><04>맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.
-<13><04>해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.
-<13><04>벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)
-<13><04>마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.
-<13><04>만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.
-
-2페이지
-
-<13><04>LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며
-<13><04>각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.
-<13><04>각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며
-<13><04>다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다.
-
-
-3페이지
-
-<13><04>각 강화 유닛은 기준확률이 부여되어 있습니다.
-<13><04>기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며
-<13><04>기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.
-<13><04>예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%
-<13><04>37~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.
-
-4페이지
-
-<13><04>레벨 시스템, SCA 관련 설명
-<13><04>이 게임에는 레벨 시스템이 존재합니다.
-<13><04>특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.
-<13><04>획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.
-<13><04>이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.
-<13><04>현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 그 외의 항목은 저장할 수 없습니다.
-<13><04>현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.
-
-5페이지
-
-<13><04>보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.
-<13><04>각 보스 처치시 얻는 보상은 다음과 같습니다.
-<13><04>1단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12
-<13><04>2단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200
-<13><04>3단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500
-<13><04>4단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000
-<13><04>5단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000
-]]
 local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")})--누를 경우 설명서 출력
 local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")})--누를 경우 설명서 출력
 local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")})--누를 경우 설명서 출력
 local PageT = {
 	{--1페이지
-		"DPS 강화하기 게임에 오신것을 환영합니다.",
-		"이 게임은 사냥터의 건물을 공격하여 돈을 번 후 자신의 유닛을 강화하며 총 DPS를 강화하는 게임입니다.",
+		"\x1FDPS 강화하기 게임에 오신것을 환영합니다.",
+		"이 게임은 \x08사냥터의 건물을 공격\x04하여 돈을 번 후 \x0F자신의 유닛을 강화\x04하며 총 DPS를 강화하는 게임입니다.",
 		"맨 처음 게임을 시작하시면 기본유닛이 사냥터 건물을 공격할 것입니다.",
-		"해당유닛이 공격한 데미지량에 따라 돈을 벌 수 있습니다.",
-		"벌은 돈을 통해, 자기 자신 영역에 위치한 크리스탈에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)",
+		"\x08해당유닛이 공격한 데미지량\x04에 따라 \x1F돈을 벌 수 있습니다.",
+		"벌은 돈을 통해, \x17자기 자신 영역에 위치한 \x10우라즈 크리스탈\x04에서 유닛을 구입할 수 있습니다.(유닛 이름 확인)",
 		"마찬가지로 구입한 유닛을 사냥터에 보내 돈을 벌거나, 상단에 위치한 곳으로 이동시켜 강화할 수 있습니다.",
-		"만약 모든 유닛과 전재산을 잃을 경우 게임 진행이 불가능할 수 있으니 유의하시기 바랍니다.",
+		"만약 모든 유닛과 전재산을 잃을 경우 \x08게임 진행이 불가능\x04할 수 있으니 유의하시기 바랍니다.",
 	},
 	{--2페이지
+		"\x1B- \x03사냥터 \x1B-",
+		"\x03사냥터\x04에서 \x08건물을 공격\x04할 경우 \x1F돈이 지급될 것입니다.",
 		"LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며",
-		"각각의 건물에 대한 DPS는 미네랄, 가스로 확인합니다.",
-		"각 유닛에 대한 강화확률은 유닛 공격무기의 좌측 아이콘에서 확인할 수 있으며",
-		"다른 플레이어의 유닛 강화 확률도 동일하게 확인 가능합니다."
+		"각각의 건물에 대한 DPS는 \x1F미네랄\x04, \x07가스\x04로 확인합니다.",
+		"각 레벨의 건물은 일정 DPS를 달성할 경우 돈 지급량이 증가합니다.",
 	},
 	{
-		"각 강화 유닛은 기준확률이 부여되어 있습니다.",
-		"기준확률이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며",
-		"기본적으로 +2강 증가 확률 기준확률의 1/10, +3강 증가 확률 1/100 가 부여됩니다.",
-		"예 : 기준확률이 50.0%일 경우 +2강 확률은 5.0% +3강 확률은 0.5%",
-		"37~40강 유닛의 경우 위의 +2, +3강 확률이 적용되지 않습니다.",
+		"\x1B- \x08기준 확률\x1B -",
+		"\x08기준확률\x04이란 강화성공시 +1 단계 증가 확률이 기준점이라는 뜻이며",
+		"기본적으로 \x0F+2강 증가 확률은 \x08기준확률\x04의 1/10, \x1F+3강 증가 확률 1/100 \x04가 부여됩니다.",
+		"예 : \x08기준확률\x04이 50.0%일 경우 \x0F+2강 확률은 5.0% \x1F+3강 확률은 0.5% \x05실패확률은 44.5%",
+		"\x1937~40강 유닛\x04의 경우 위의 +2, +3강 확률이 \x08적용되지 않고 \x04+1강 확률로 적용됩니다.",
+		"각 유닛에 대한 강화확률은 \x1C유닛 공격무기의 좌측 아이콘\x04에서 확인할 수 있으며",
+		"다른 플레이어의 유닛 강화 확률도 같은 방법으로 확인 가능합니다."
 	},
 	{
-		"레벨 시스템, SCA 관련 설명",
-		"이 게임에는 레벨 시스템이 존재합니다.",
-		"특정 강화단계 이상 유닛은 판매를 통해 경헙치를 획득할 수 있습니다.",
-		"획득한 경험치를 통해 레벨업을 할 경우 O 키를 입력하여 스탯포인트를 분배하면 각종 이로운 효과를 얻을 수 있습니다.",
-		"이 항목은 SCA런쳐를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.",
-		"현재 SCA로 저장 가능한 항목은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 그 외의 항목은 저장할 수 없습니다.",
-		"현실시간 1분 경과시마다 자동 저장되며, 수동 저장을 원하실 경우 F9 버튼을 누르면 수동저장됩니다.",
+		"\x1B- 레벨 시스템, \x19SCA 런쳐 \x1B-",
+		"이 게임에는 \x1B레벨 시스템\x04이 존재합니다.",
+		"특정 강화단계 이상 유닛은 \x1E판매를 통해 경헙치\x04를 획득할 수 있습니다.",
+		"획득한 경험치를 통해 레벨업을 할 경우 \x1FO 키를 입력\x04하여 스탯포인트를 분배하면 \x11각종 이로운 효과\x04를 얻을 수 있습니다.",
+		"이 항목은 \x19SCA런쳐\x04를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.",
+		"현재 적용중인 버프 목록은 \x1FP 키\x04를 통해 확인 가능합니다.",
+		"현재 \x07SCA로 저장 가능한 항목\x04은 레벨, 분배한 스탯, 경험치, 크레딧 보유량 등이며 \x08그 외의 항목은 저장할 수 없습니다.",
+		"\x07현실시간 1분 경과시마다 자동 저장\x04되며, 수동 저장을 원하실 경우 \x17F9 버튼\x04을 누르면 수동저장됩니다.",
 	},
+
 	{
-		"보스 몬스터 지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.",
-		"각 보스 처치시 얻는 보상은 다음과 같습니다.",
-		"1단계 : +1강 확률 +1.5%p, 사냥터 유닛수 +12",
-		"2단계 : +1강 확률 +2.5%p, 사냥터 유닛수 +9 크레딧 +200",
-		"3단계 : +1강 확률 +3.5%p, 사냥터 유닛수 +6, 크레딧 +500",
-		"4단계 : +1강 확률 +3.0%p, 사냥터 유닛수 +9, +2 강화성공 확률 +0.5%p, 유닛 판매시 경험치 +30% 크레딧 +2,000",
-		"5단계 : +1강 확률 +3.0%p, 유닛 판매시 경험치 +40% 크레딧 +10,000, 24시간동안 5배속 적용",
+		"\x1B- 부록. \x0E다인 플레이 보너스 \x1B-",
+		"이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
+		"\x1F2~3인 보너스 버프 \x1C- \x08공격력 + 100%\x04, \x07+1강 \x17강화확률 + \x0F0.5%p",
+		"\x1F4~5인 보너스 버프 \x1C- \x08공격력 + 200%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
+		"\x1F6~7인 보너스 버프 \x1C- \x08공격력 + 400%\x04, \x07+1강 \x17강화확률 + \x0F2.0%p"
+	},
+
+
+	{
+		"\x1B- 부록. \x08보스 몬스터 \x1B-",
+		"\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.",
+		"1단계 \x07클리어시 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 유닛수 \x07+12",
+		"2단계 \x07클리어시 \x04: \x0F+1강 확률 \x07+2.5%p, \x1B사냥터 유닛수 \x07+9, \x17크레딧 +200",
+		"3단계 \x07클리어시 \x04: \x0F+1강 확률 \x07+3.5%p, \x1B사냥터 유닛수 \x07+6, \x17크레딧 +500",
+		"4단계 \x07클리어시 \x04: \x0F+1강 확률 \x07+2.0%p, \x1B사냥터 유닛수 \x07+9, \x17크레딧 +2,000, \x07+2 강화성공 확률 +0.5%p, \x1C유닛 판매시 경험치 +30%",
+		"5단계 \x07클리어시 \x04: \x0F+1강 확률 \x07+3.0%p, \x1C유닛 판매시 경험치 +40%, \x17크레딧 +10,000",
 	},
 }
 CIf(FP,TTOR({CD(BKey,1),CD(MKey,1)}))
@@ -953,7 +1010,7 @@ end
 
 CIfEnd()
 
-CTrigger(FP,{CD(NKey,1)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n",4)},1)
+CTrigger(FP,{CD(NKey,1)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n\n",4)},1)
 
 
 CIfEnd()
