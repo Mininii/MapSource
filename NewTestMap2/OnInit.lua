@@ -65,7 +65,7 @@ function onInit_EUD()
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
 	--PushErrorMsg(GlobalTime)
-	if Limit == 1 then
+	if TestStart == 0 and Limit == 1 then
 	Trigger {
 		players = {FP},
 		conditions = {
@@ -114,8 +114,6 @@ function onInit_EUD()
 		InputTesterID(i,"_Mininii")
 		InputTesterID(i,"RonaRonaChan")
 		InputTesterID(i,"Azusawa_Kohane")
-		InputTesterID2(i,"rhegb")
-		InputTesterID2(i,"Hybrid)_GOD60")
 	end
 	
 

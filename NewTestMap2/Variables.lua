@@ -88,6 +88,7 @@ function Include_Vars()
 	iv.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
 	iv.ScTimer = CreateCcodeArr(7)
 	iv.PTimeV = CreateVarArr(7,FP)
+	iv.General_Upgrade = CreateVarArr(7,FP)
 	iv.ResetStat = CreateCcodeArr(7)
 	--General
 	iv.BossLV = CreateVar(FP)
@@ -97,6 +98,7 @@ function Include_Vars()
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
 	iv.Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	iv.Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	iv.AutoBuyCode = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
 	iv.PCheckV = CreateVar(FP)--플레이어 수 체크
 	iv.MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
@@ -117,7 +119,8 @@ function Include_Vars()
 	iv.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
 	iv.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
 	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(데스값)
-
+	iv.NextOre = CreateVarArr2(7,100,FP) -- 다음 미네랄
+	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
 	iv.IncomeLoc = CreateVar(FP)
@@ -146,7 +149,10 @@ function Include_Vars()
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
 	iv.ResetStatLoc = CreateCcode()
+	iv.UpgradeUILoc = CreateVar(FP)
 	
+	iv.NextOreLoc = CreateVar(FP)
+	iv.NextGasLoc = CreateVar(FP)
 
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
@@ -166,6 +172,7 @@ function Include_Vars()
 	iv.B_TotalEPer2 = CreateVar(FP)
 	iv.B_TotalEPer3 = CreateVar(FP)
 	iv.B_Stat_EXPIncome = CreateVar(FP)
+	iv.B_Stat_Upgrade = CreateVar(FP)
 	iv.B_Credit = CreateVar(FP)
 
 	--Balance

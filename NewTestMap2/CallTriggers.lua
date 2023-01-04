@@ -46,7 +46,17 @@ function Install_CallTriggers()
 	Call_Enchant = SetCallForward()
 	--100000 = 100%
 	SetCall(FP)
-	GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	if TestStart == 1 then
+		GetEPer = CreateVar(FP)
+		CIfX(FP,{KeyPress("F12", "Down")})
+		CMov(FP,GetEPer,1)
+		CElseX()
+		GetEPer2 = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		CMov(FP,GetEPer,GetEPer2)
+		CIfXEnd()
+	else
+		GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	end
 	
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper2 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
@@ -93,10 +103,10 @@ function Install_CallTriggers()
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 35강부터 +2 적용안됨, 36강부터 +2 적용안됨
+		CIfX(FP, {CV(ELevel,33,AtMost)}) -- 35강부터 +2 적용안됨, 36강부터 +2 적용안됨
 		CAdd(FP,ELevel,3)
-		CElseIfX({CV(ELevel,35,AtLeast),CV(ELevel,36,AtMost)})
-		CMov(FP,ELevel,37)
+		CElseIfX({CV(ELevel,34,AtLeast),CV(ELevel,35,AtMost)})
+		CMov(FP,ELevel,36)
 		CElseX()
 		CAdd(FP,ELevel,1)
 		CIfXEnd()
@@ -106,10 +116,10 @@ function Install_CallTriggers()
 				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,35,AtMost)}) -- 36강부터 +2 +3 적용안됨
+		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 36강부터 +2 +3 적용안됨
 		CAdd(FP,ELevel,2)
-		CElseIfX({CV(ELevel,36)})
-		CMov(FP,ELevel,37)
+		CElseIfX({CV(ELevel,35)})
+		CMov(FP,ELevel,36)
 		CElseX()
 		CAdd(FP,ELevel,1)
 		CIfXEnd()
