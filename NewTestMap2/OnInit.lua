@@ -60,7 +60,7 @@ function onInit_EUD()
 
 	T_YY = 2023
 	T_MM = 01
-	T_DD = 07
+	T_DD = 08
 	T_HH = 00
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
@@ -80,6 +80,7 @@ function onInit_EUD()
 	}
 	end
 
+	
 	function InputTesterID(Player,ID)
 		Trigger {
 			players = {FP},

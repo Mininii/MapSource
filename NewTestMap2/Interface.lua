@@ -129,6 +129,10 @@ function Interface()
 	local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
 
 	
+	local OreDPS = {100,1000,10000,100000,500000,1000000,0}
+	local OreDPSM = {2,4,8,16,32,64}
+	local GasDPS = {100,1000,10000,100000,1000000,5000000,0}
+	local GasDPSM = {2,4,8,16,32,64}
 	local Dx,Dy,Dv,Du,DtP,Time2,Time = CreateVariables(7,FP)
 	local SaveRemind = CreateCcode()
 	f_Read(FP,0x51CE8C,Dx)
@@ -220,7 +224,6 @@ for i = 0, 6 do -- 각플레이어
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
 		CElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
 		DoActionsX(FP, {
-			SetV(PStatVer[i+1],StatVer),
 			SetV(PLevel[i+1],1),
 			SetV(StatP[i+1],0),
 			SetCWar(FP, CurEXP[i+1][2], SetTo, "0"),
@@ -243,6 +246,8 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 		
 		CIfEnd()
+		
+		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 	CIfEnd()
 	
 
@@ -341,30 +346,19 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 	TriggerX(FP, {CD(ScTimer[i+1],86400)}, {SetCD(ResetStat[i+1],1)},{preserved}) -- 1시간뒤 스탯초기화 사용불가
 
-	
-
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
 	end
-	for NBit = 2,7 do
-		local NB = 10^NBit
-		local NB2 = 10^(NBit+1)
-		if NBit == 7 then NB = (10^NBit)/2 end
-		if NBit <= 5 then NB2 = (10^(NBit+1)) elseif NBit == 6 then NB2 = (10^(NBit+1))/2 else NB2 = 0 end
-		
-			local NextT = ""
-			if NBit ~= 7 then
-				NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..NB2.." \x04입니다.")
-			end
-		TriggerX(FP,{Accumulate(i, AtLeast, NB, Ore)},{SetV(BuildMul1[i+1],2^(NBit-1)),SetV(NextOre[i+1],NB2),SetCp(i),
-			DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..NB.." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..(2^(NBit-1)).."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
-			local NextT = ""
-			if NBit ~= 7 then
-				NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..NB2.." \x04입니다.")
-			end
-		TriggerX(FP,{Accumulate(i, AtLeast, NB, Gas)},{SetV(BuildMul2[i+1],2^(NBit-1)),SetV(NextGas[i+1],NB2),SetCp(i),
-			DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..NB.." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..(2^(NBit-1)).."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--2번건물
-
+	for p = 1,6 do
+		local NextT = ""
+		if p ~= 6 then
+			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
+			NextT2 = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..GasDPS[p+1].." \x04입니다.")
+		end
+	TriggerX(FP,{Accumulate(i, AtLeast, OreDPS[p], Ore)},{SetV(BuildMul1[i+1],OreDPSM[p]),SetV(NextOre[i+1],OreDPS[p+1]),SetCp(i),
+		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
+	TriggerX(FP,{Accumulate(i, AtLeast, GasDPS[p], Gas)},{SetV(BuildMul2[i+1],GasDPSM[p]),SetV(NextGas[i+1],GasDPS[p+1]),SetCp(i),
+		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--2번건물
 	end
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F15강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),SetCp(FP)})
@@ -575,7 +569,7 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{},{SetMemoryB(0x58F32C+(i*15)+13, Add, 15),AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
 	else
 		
-		TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 15),AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
+		TriggerX(FP,{NVar(PCheckV,AtLeast,2)},{AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
 	end
 	CIf(FP,{CV(B_Credit,1,AtLeast)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_Credit,0}) -- 크레딧 지급
@@ -1004,7 +998,7 @@ local PageT = {
 	{
 		"\x13\x04\x1B- 레벨 시스템, \x19SCA 런쳐 \x1B-",
 		"\x13\x04이 게임에는 \x1B레벨 시스템\x04이 존재합니다.",
-		"\x13\x04특정 강화단계 이상 유닛은 \x1E판매를 통해 경헙치\x04를 획득할 수 있습니다.",
+		"\x13\x04특정 강화단계 이상 유닛은 \x1E판매를 통해 경험치\x04를 획득할 수 있습니다.",
 		"\x13\x04획득한 경험치를 통해 레벨업을 할 경우 \x1FO 키를 입력\x04하여 스탯포인트를 분배하면 \x11각종 이로운 효과\x04를 얻을 수 있습니다.",
 		"\x13\x04이 항목은 \x19SCA런쳐\x04를 통해 저장 가능하며 다음 게임에서 적용 가능합니다.",
 		"\x13\x04현재 적용중인 버프 목록은 \x1FP 키\x04를 통해 확인 가능합니다.",
@@ -1015,7 +1009,7 @@ local PageT = {
 	{
 		"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스 \x1B-",
 		"\x13\x04이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
-		"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.5%p",
+		"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
 	},
 
 
@@ -1437,4 +1431,15 @@ CIfEnd()
 
 --	end
 	
+if TestStart == 0 and Limit == 1 then
+	Trigger2X(FP, {Memory(0x6D0F38,AtLeast,GlobalTime);},  {
+		RotatePlayer({
+			DisplayTextX(StrDesignX("\x1B테스트 기간이 종료되었습니다. 이용해주셔서 대단히 감사합니다.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1B추후 정식버전 업데이트에서 뵙겠습니다."),4);
+		Defeat();
+		},Force1,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1)
+		
+	})
+end
 end

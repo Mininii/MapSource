@@ -119,7 +119,7 @@ function Include_Vars()
 	iv.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
 	iv.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
 	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(데스값)
-	iv.NextOre = CreateVarArr2(7,100,FP) -- 다음 미네랄
+	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
 	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
