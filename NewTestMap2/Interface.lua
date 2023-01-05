@@ -14,6 +14,7 @@ function Interface()
 	local PTimeV = iv.PTimeV
 	local ResetStat = iv.ResetStat
 	local General_Upgrade = iv.General_Upgrade--CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
+	local PBossLV = iv.PBossLV -- 개인보스레벨
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -546,6 +547,9 @@ for i = 0, 6 do -- 각플레이어
 
 
 
+
+
+
 	--총 버프 값 합산
 	CMov(FP,Stat_EXPIncome[i+1],0,nil,nil,1)
 	CMov(FP,IncomeMax[i+1],12,nil,nil,1)
@@ -564,7 +568,48 @@ for i = 0, 6 do -- 각플레이어
 	CAdd(FP,TotalEPer3[i+1],B_TotalEPer3)
 	CAdd(FP,Stat_EXPIncome[i+1],B_Stat_EXPIncome)
 	CAdd(FP,General_Upgrade[i+1],Stat_Upgrade[i+1])
-	CAdd(FP,General_Upgrade[i+1],B_Stat_Upgrade)
+	CAdd(FP,General_Upgrade[i+1],B_Stat_Upgrade)--
+
+--	"\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3",
+--	"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3",
+--	"\x043단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3, 공격력 + 50%",
+--	"\x044단계 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 \x07+6, 공격력 + 50%,\x1C추가EXP +10%",
+--	"\x045단계 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 \x07+9, 공격력 + 100%,\x1C추가EXP +10%",
+
+
+	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{AddV(Stat_EXPIncome[i+1],20)},{preserved})--카운트다운 타이머 존재시
+Trigger2X(FP,{CV(PBossLV[i+1],1,AtLeast)},{
+	AddV(IncomeMax[i+1],3),--사냥터 유닛수 3 증가
+	AddV(TotalEPer[i+1],1000),--강화확률 +1.0%p
+	
+},{preserved})
+Trigger2X(FP,{CV(PBossLV[i+1],2,AtLeast)},{
+	AddV(IncomeMax[i+1],3),--사냥터 유닛수 3 증가
+	AddV(TotalEPer[i+1],1000),--강화확률 +1.0%p
+},{preserved})
+Trigger2X(FP,{CV(PBossLV[i+1],3,AtLeast)},{
+	AddV(IncomeMax[i+1],3),--사냥터 유닛수 3 증가
+	AddV(TotalEPer[i+1],1000),--강화확률 +1.0%p
+	AddV(General_Upgrade[i+1],5),--공격력 50%
+},{preserved})
+Trigger2X(FP,{CV(PBossLV[i+1],4,AtLeast)},{
+	AddV(IncomeMax[i+1],6),--사냥터 유닛수 6 증가
+	AddV(TotalEPer[i+1],1500),--강화확률 +1.5%p
+	AddV(General_Upgrade[i+1],5),--공격력 50%
+	AddV(Stat_EXPIncome[i+1],1), --추가EXP +10%
+},{preserved})
+Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
+	AddV(IncomeMax[i+1],9),--사냥터 유닛수 9 증가
+	AddV(TotalEPer[i+1],1500),--강화확률 +1.5%p
+	AddV(General_Upgrade[i+1],10),--공격력 100%
+	AddV(Stat_EXPIncome[i+1],1), --추가EXP +10%
+},{preserved})
+for pb= 1, 5 do
+	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,55000),SetCD(SaveRemind,1),SetCp(i),DisplayText(StrDesignX("\x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
+end
+
+
+
 	if TestStart == 1 then
 		TriggerX(FP,{},{SetMemoryB(0x58F32C+(i*15)+13, Add, 15),AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
 	else
@@ -713,39 +758,32 @@ SpeedV = CreateVar(FP)
 
 CMov(FP,B_Credit,0)
 
+
 Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
-	AddV(B_IncomeMax,12),--사냥터 유닛수 12 증가
-	AddV(B_TotalEPer,1500),--강화확률 +1.5%p
+	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
+	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
 	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
-	AddV(B_IncomeMax,9),--사냥터 유닛수 9 증가
-	AddV(B_TotalEPer,2500),--강화확률 +2.5%p
+	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
+	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
 	AddV(B_Credit,200),--크레딧 200
 	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
-	AddV(B_IncomeMax,6), -- 사냥터 유닛수 +6 증가
-	AddV(B_TotalEPer,3500), -- 강화확률 +3.5%p
-	AddV(B_Credit,500),--크레딧 500
-	--AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
+	AddV(B_Credit,1200),--크레딧 1200
+	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
 	AddV(B_Stat_Upgrade,5),
 	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
-	AddV(B_IncomeMax,9),-- 사냥터 유닛수 +9 증가
-	AddV(B_TotalEPer,3000),-- 강화확률 +3.0%p
-	AddV(B_TotalEPer2,500), -- +2 강화확률 +0.5%p
-	AddV(B_Credit,2000),--크레딧 2000
-	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
-	AddV(B_Stat_Upgrade,10),
+	AddV(B_Credit,5000),--크레딧 5000
+	AddV(B_Stat_Upgrade,5),
 	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
-	AddV(B_TotalEPer,3000),
-	AddV(B_Credit,10000),
-	AddV(B_Stat_EXPIncome,4), -- 판매시 경험치 40% 증가
-	AddV(B_Stat_Upgrade,10),
+	--AddV(B_Credit,30000),
+	SetCountdownTimer(SetTo, 60*60*3);
 	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x08보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 
@@ -1009,18 +1047,28 @@ local PageT = {
 	{
 		"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스 \x1B-",
 		"\x13\x04이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
-		"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
+		"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 100%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
 	},
 
+--남는거 공 250% 강확은 논외
+	{
+		"\x13\x04\x1B- 부록. \x08개인 미니보스 몬스터 보상 목록 \x1B-",
+		"\x13\x04\x08개인 미니보스 몬스터 \x04지역은 25강 이하 유닛만 개인별로 공략 가능하며 \x0F1초간의 데미지(DPS)\x04으로 클리어 여부를 결정합니다.",
+		"\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3",
+		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3",
+		"\x043단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+3, 공격력 + 50%",
+		"\x044단계 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 \x07+6, 공격력 + 50%,\x1C추가EXP +10%",
+		"\x045단계 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 \x07+9, 공격력 + 100%,\x1C추가EXP +10%",
+	},
 
 	{
-		"\x13\x04\x1B- 부록. \x08보스 몬스터 보상 목록 \x1B-",
-		"\x13\x04\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 1분간의 데미지(DPM)으로 클리어 여부를 결정합니다.",
-		"\x041단계 \x04: \x0F+1강 확률 \x07+1.5%p, \x1B사냥터 \x07+12",
-		"\x042단계 \x04: \x0F+1강 확률 \x07+2.5%p, \x1B사냥터 \x07+9, \x17크레딧 +200",
-		"\x043단계 \x04: \x0F+1강 확률 \x07+3.5%p, \x1B사냥터 \x07+6, \x17크레딧 +500, 공격력 + 50%",
-		"\x044단계 \x04: \x0F+1강 확률 \x07+3.0%p, \x1B사냥터 \x07+9, \x17크레딧 +2,000, 공격력 + 100%, \x07+2강 확률 +0.5%p, \x1C추가EXP +30%",
-		"\x045단계 \x04: \x0F+1강 확률 \x07+3.0%p, 공격력 + 100%, \x1C추가EXP +40%, \x17크레딧 +10,000",
+		"\x13\x04\x1B- 부록. \x08단체보스 몬스터 보상 목록 \x1B-",
+		"\x13\x04\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
+		"\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
+		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6, \x17크레딧 +200",
+		"\x043단계 \x04: \x17크레딧 +1,200, 공격력 + 50%, \x1C추가EXP +30%",
+		"\x044단계 \x04: \x17크레딧 +5,000, 공격력 + 50%, ",
+		"\x045단계 \x04: \x17카운트다운 타이머 3시간 증가. 유지시간동안 \x1C추가EXP +200%",--40강유닛 뽑은후 2인이상 공략 필수
 	},
 }
 CIf(FP,TTOR({CD(BKey,1),CD(MKey,1)}))

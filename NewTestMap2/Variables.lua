@@ -92,6 +92,7 @@ function Include_Vars()
 	iv.ResetStat = CreateCcodeArr(7)
 	--General
 	iv.BossLV = CreateVar(FP)
+	iv.PBossLV = CreateVarArr(7,FP)
 	
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
@@ -180,7 +181,7 @@ function Include_Vars()
 
 	EXPArr = {}
 	for i = 1, 10000 do
-		EXPArr[i] = 10+(10*(i-1)*(i*0.1))
+		EXPArr[i] = 10+(10*(i-1)*(i*0.5))
 	end
 	EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
