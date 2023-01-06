@@ -50,7 +50,7 @@ function Include_Vars()
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
-	
+	PBossPtr = CreateVarArr(7, FP) -- 개인보스 DPS유닛 ptr
 	Names = CreateVArrArr(7, 7, FP) -- 각 플레이어 이름 저장용
 
 	ELevel = CreateVar(FP)--현재 강화중인 레벨
@@ -90,10 +90,15 @@ function Include_Vars()
 	iv.PTimeV = CreateVarArr(7,FP)
 	iv.General_Upgrade = CreateVarArr(7,FP)
 	iv.ResetStat = CreateCcodeArr(7)
+	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
+	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
+	iv.SellTicket = CreateVarArr(7,FP)
+	
 	--General
 	iv.BossLV = CreateVar(FP)
 	iv.PBossLV = CreateVarArr(7,FP)
-	
+	iv.PBossDPS = CreateWarArr(7,FP)
+	iv.TotalPBossDPS = CreateWarArr(7,FP)
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
@@ -119,9 +124,11 @@ function Include_Vars()
 	iv.TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
 	iv.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
 	iv.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
-	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(데스값)
-	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
-	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
+	iv.PlayTime2 = CreateVarArr(7,FP) -- 총 플레이타임(신 값)
+	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
+	iv.CreditAddSC = CreateVarArr(7,FP) 
+
+	
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
 	iv.IncomeLoc = CreateVar(FP)
@@ -134,6 +141,7 @@ function Include_Vars()
 	iv.S_TotalEPer2Loc = CreateVar(FP)
 	iv.S_TotalEPer3Loc = CreateVar(FP)
 	iv.PlayTimeLoc = CreateVar(FP)
+	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
 	iv.MoneyLoc = CreateWar(FP)
 	iv.CredLoc = CreateWar(FP)
@@ -154,7 +162,8 @@ function Include_Vars()
 	
 	iv.NextOreLoc = CreateVar(FP)
 	iv.NextGasLoc = CreateVar(FP)
-
+	iv.SellTicketLoc = CreateVar(FP)
+	
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
 
@@ -175,13 +184,17 @@ function Include_Vars()
 	iv.B_Stat_EXPIncome = CreateVar(FP)
 	iv.B_Stat_Upgrade = CreateVar(FP)
 	iv.B_Credit = CreateVar(FP)
+	iv.B_PCredit = CreateVarArr(7,FP)
+
+	iv.B_Ticket = CreateVar(FP)
+	iv.B_PTicket = CreateVarArr(7,FP)
 
 	--Balance
 
 
 	EXPArr = {}
 	for i = 1, 10000 do
-		EXPArr[i] = 10+(10*(i-1)*(i*0.5))
+		EXPArr[i] = 10+(10*(i-1)*(i*0.3))
 	end
 	EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
@@ -237,28 +250,28 @@ function Include_Vars()
 	PushLevelUnit(22,35000,80,44,46,24,3500,59)--가디언
 	PushLevelUnit(23,30000,160,62,104,24,5000,59)--디바우러
 	PushLevelUnit(24,30000,335,39,40,24,6500,59)--울트라
-	PushLevelUnit(25,20000,750,46,50,12,5000,59)--디파
+	PushLevelUnit(25,15000,750,46,50,12,5000,59)--디파
 
 
 
-	PushLevelUnit(25+1,25000,1500,20,1,24,10,59)--짐레
-	PushLevelUnit(25+2,25000,2100,16,3,48,30,59)--사라
-	PushLevelUnit(25+3,25000,3750,19,5,24,20,59)--짐레벌쳐
-	PushLevelUnit(25+4,25000,6000,17,10,24,30,59,1,1)--알랜
-	PushLevelUnit(25+5,25000,10200,23,12,48,100,59,1)--듀크
-	PushLevelUnit(25+6,25000,18800,53,39,24,80,59)--헌터
-	PushLevelUnit(25+7,20000,30000,52,51,24,150,59)--언클린
-	PushLevelUnit(25+8,20000,50000,69,53,72,700,59)--셔틀
-	PushLevelUnit(25+9,20000,100000,41,43,24,350,59)--드론
-	PushLevelUnit(25+10,20000,160000,40,42,48,800,59)--곰
+	PushLevelUnit(25+1,25000,15000,20,1,24,10,59)--짐레
+	PushLevelUnit(25+2,25000,21000,16,3,48,30,59)--사라
+	PushLevelUnit(25+3,25000,37500,19,5,24,20,59)--짐레벌쳐
+	PushLevelUnit(25+4,25000,60000,17,10,24,30,59,1,1)--알랜
+	PushLevelUnit(25+5,25000,102000,23,12,48,100,59,1)--듀크
+	PushLevelUnit(25+6,25000,188000,53,39,24,80,59)--헌터
+	PushLevelUnit(25+7,20000,300000,52,51,24,150,59)--언클린
+	PushLevelUnit(25+8,20000,500000,69,53,72,700,59)--셔틀
+	PushLevelUnit(25+9,20000,1000000,41,43,24,350,59)--드론
+	PushLevelUnit(25+10,20000,1600000,40,42,48,800,59)--곰
 
 
 
-	PushLevelUnit(25+11,16000,300000,10,26,72,600,59)--파벳영웅 3타
-	PushLevelUnit(25+12,12000,800000,75,85,24,1200,59)--제라툴
-	PushLevelUnit(25+13,10000,1200000,29,21,24,4000,59)--노라드
-	PushLevelUnit(25+14,5000,2000000,86,78,12,3500,59)--다니모스
-	PushLevelUnit(25+15,1000,5000000,54,36,1,4200,59,nil,1)--디버링원 공속최대
+	PushLevelUnit(25+11,16000,3000000,10,26,72,600,59)--파벳영웅 3타
+	PushLevelUnit(25+12,12000,8000000,75,85,24,1200,59)--제라툴
+	PushLevelUnit(25+13,10000,12000000,29,21,24,4000,59)--노라드
+	PushLevelUnit(25+14,5000,20000000,86,78,12,3500,59)--다니모스
+	PushLevelUnit(25+15,1000,50000000,54,36,1,4200,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
@@ -278,6 +291,13 @@ function Include_Vars()
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
 	SetUnitAbility(88,114,5,20,1000,58,1,nil,60) -- 기본유닛
+	PBossArr = {
+		{84,"1300"},
+		{36,"4800"},
+		{59,"12000"},
+		{45,"40000"},
+		{49,"130000"},
+	}--{,""},--보스 건물 아이디, DPS 요구수치
 	BossArr = {
 		{87,"10000"},
 		{25,"150000"},

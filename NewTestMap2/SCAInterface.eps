@@ -242,13 +242,19 @@ function afterTriggerExec(){
 							SetDeaths(CurrentPlayer, SetTo, 0, 14);
 							T2[cp] = 0;
 							var CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
-							if(CurVer < sca.GlobalData[16]){
+							if(CurVer < sca.GlobalData[18]){//강제집행 코드
 							LoadCheck[cp] = 0;
 							VerChange[cp] = 1;
 							PlayWAV("sound\\Bullet\\tscFir00.wav");
 							PlayWAV("sound\\Bullet\\tscFir00.wav");
 							f_eprintln("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 							}
+							if(CurVer < sca.GlobalData[16]){//최신버전 알리미 코드
+							PlayWAV("sound\\Bullet\\tscFir00.wav");
+							PlayWAV("sound\\Bullet\\tscFir00.wav");
+							f_eprintln("\x07최신버전이 감지되었습니다.  해당 맵은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
+							}
+							
 						}
 						break;
 					break;
@@ -368,14 +374,14 @@ function afterTriggerExec(){
 
 		if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1 && sca.GetLastMessage() == 4){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
 		var CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
-			if(sca.GlobalData[17] != CurVer && LoadCheck[cp] == 0 && CurVer >= sca.GlobalData[18]){ // 구버전, 허나 지원됨
+			if(sca.GlobalData[16] != CurVer && LoadCheck[cp] == 0 && CurVer >= sca.GlobalData[17]){ // 구버전, 허나 지원됨
 				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
 				SetDeathsX(cp,SetTo,1,23,0xFF);
 				LoadCheck[cp] = 1;
 				T1[cp]= 0;
 			}
-			else if(sca.GlobalData[17] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[18]){ // 구버전, 지원종료
+			else if(sca.GlobalData[16] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[17]){ // 구버전, 지원종료
 				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
 				SCA_GLoaded[cp] = 0;

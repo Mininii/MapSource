@@ -330,7 +330,6 @@ function Install_CallTriggers()
 		SettingUnit2[1], -- 26~39유닛 자동강화 설정
 		SettingUnit3[1], -- 15~25강유닛 자동판매 설정
 		SettingUnit4[1], -- 26~39유닛 자동판매 설정
-		ShopUnit[1], -- 배율설정
 	}
 	SetCall(FP)
 	ConvertVArr(FP,VArrI,VArrI4,G_BtnCP,7)
@@ -347,5 +346,17 @@ function Install_CallTriggers()
 	SetCallEnd()
 
 
+	Call_ConvertTime = SetCallForward()
+	SetCall(FP)
+	CTimeV = CreateVar(FP)
+	CTimeSS = CreateVar(FP)
+	CTimeMM = CreateVar(FP)
+	CTimeHH = CreateVar(FP)
+	CTimeDD = CreateVar(FP)
+	Byte_NumSet(CTimeV,CTimeDD,86400,1,nil,6)
+	Byte_NumSet(CTimeV,CTimeHH,3600,1,nil,6)
+	Byte_NumSet(CTimeV,CTimeMM,60,1,nil,6)
+	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
 
+	SetCallEnd()
 end

@@ -438,7 +438,8 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	local GetMoney = CreateWar(FP)
 	local DPSCheck = CreateCcode()
 	local DPSCheck2 = CreateVar(FP)
-	CIf(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1)})
+	local ResetCheck = CreateCcode()
+	CIfX(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1),SetCD(ResetCheck,0)})
 	TriggerX(FP,{CV(DPSCheck2,96,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
 	CIfX(FP,{TMemory(UnitPtr,AtMost,8319999*256)})
@@ -473,6 +474,8 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 		for j,k in pairs(TotalDPSDest) do
 			if type(k) == "number" then
 				CDoActions(FP,{TSetMemory(k, SetTo, TotalDPS2)})
+			elseif k[4] == "W" then
+				f_LMov(FP,k,{TotalDPS2,0})
 			elseif k[4] == "V" then
 				CMov(FP,k,TotalDPS2)
 			elseif k == Ore or k == Gas then
@@ -484,6 +487,9 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 		end
 	elseif type(TotalDPSDest) == "number" then
 		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, TotalDPS2)})
+	elseif TotalDPSDest[4] == "W" then
+		CMov(FP,TotalDPSDest,TotalDPS2)
+		f_LMov(FP,TotalDPSDest,{TotalDPS2,0})
 	elseif TotalDPSDest[4] == "V" then
 		CMov(FP,TotalDPSDest,TotalDPS2)
 	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
@@ -498,19 +504,67 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	DoActionsX(FP,{AddV(DPSCheck2,1)})
 	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
-		if Multiplier ~=  nil then
-			
-			f_LMov(FP, GetMoney, _LMul({DpsDest,0}, Multiplier), nil, nil, 1)
-		else
-			f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
+		if MoneyV ~= nil then
+			if Multiplier ~=  nil then
+				
+				f_LMov(FP, GetMoney, _LMul({DpsDest,0}, Multiplier), nil, nil, 1)
+			else
+				f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
+			end
+			if MultiplierV ~= nil then
+				f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
+			end
+			f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 		end
-		if MultiplierV ~= nil then
-			f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
-		end
-		f_LAdd(FP,MoneyV,MoneyV,GetMoney)
+
 		CIfEnd()
-	CTrigger(FP, {TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)}, {SetV(UnitPtr,0)},1)
+	CIf(FP,{TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)},{SetV(UnitPtr,0)})
+	local ResetArr = {}
+	for nn = 0, #DPSArr-1 do
+	table.insert(ResetArr,SetCVAar(VArr(DPSArr,nn), SetTo, 0))
+	end
+	table.insert(ResetArr,SetV(VArrI,0))
+	table.insert(ResetArr,SetV(VArrI4,0))
+	table.insert(ResetArr,SetV(TotalDPS,0))
+	table.insert(ResetArr,SetV(TotalDPS2,0))
+	table.insert(ResetArr,SetV(DPSCheckV,0))
+	table.insert(ResetArr,SetV(DpsDest,0))
+	table.insert(ResetArr,SetV(DPSCheck2,0))
+	table.insert(ResetArr,SetCD(DPSCheck,0))
+	table.insert(ResetArr,SetNWar(GetMoney, SetTo,"0"))
+
+	if type(TotalDPSDest) == "table" then
+		for j,k in pairs(TotalDPSDest) do
+			if type(k) == "number" then
+				table.insert(ResetArr,SetMemory(k, SetTo, 0))
+			elseif k[4] == "W" then
+				table.insert(ResetArr,SetNWar(k,SetTo,"0"))
+			elseif k[4] == "V" then
+				table.insert(ResetArr,SetV(k, 0))
+			elseif k == Ore or k == Gas then
+				table.insert(ResetArr,SetResources(CP, SetTo, 0, k))
+			elseif k == nil then return nil
+			else
+				PushErrorMsg("TotalDPSDest InputError")
+			end 
+		end
+	elseif type(TotalDPSDest) == "number" then
+		table.insert(ResetArr,SetMemory(TotalDPSDest, SetTo, 0))
+	elseif TotalDPSDest[4] == "V" then
+		table.insert(ResetArr,SetV(TotalDPSDest,0))
+	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
+		table.insert(ResetArr,SetResources(CP, SetTo, 0, TotalDPSDest))
+	elseif TotalDPSDest == nil then return nil
+	else
+		PushErrorMsg("TotalDPSDest InputError")
+	end 
+	DoActions2X(FP, ResetArr)
+
 	CIfEnd()
+	CElseIfX({CD(ResetCheck,0)}, {SetCD(ResetCheck,1)})
+	DoActions2X(FP, ResetArr)
+
+	CIfXEnd()
 end
 
 function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
@@ -873,3 +927,7 @@ function AutoBuy(CP,LvUniit,Cost)--Cost==String
 		CIfEnd()
 	CIfEnd()
 end
+--
+--function HumanCheck(Player,Status)
+--	if Status == 1 then return nil else return Never() end
+--end

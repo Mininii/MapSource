@@ -24,6 +24,17 @@ function onInit_EUD()
 		RClickAct = 0
 	})--보스건물 세팅
 	end
+	for j,k in pairs(PBossArr) do
+		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,
+		HP=8320000,Armor = 0,StarEditFlag=0x1C7,AdvFlag={0,0x38008005},GroundWeapon=117,AirWeapon=130,Class=193,GroupFlag=0xA,DefUpType=60,Shield=false,Height=4,
+		HumanInitAct = 23,
+		ComputerInitAct = 23,
+		AttackOrder = 23,
+		AttackMoveOrder = 23,
+		IdleOrder = 23,
+		RClickAct = 0
+	})--보스건물 세팅
+	end
 	for j,k in pairs({128,91,92,129,219}) do
 		SetUnitsDatX(k, {GroupFlag=0x0})
 	end
@@ -60,7 +71,7 @@ function onInit_EUD()
 
 	T_YY = 2023
 	T_MM = 01
-	T_DD = 08
+	T_DD = 07
 	T_HH = 00
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
@@ -200,7 +211,8 @@ function onInit_EUD()
 		}
 	}
 	if Limit == 1 then
-		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
+		Trigger2(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
+		Trigger2(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 종료되었으나 제작자가 게임에 참여중이므로 맵 실행 가능합니다..")},HumanPlayers,FP)})
 	
 	end
 

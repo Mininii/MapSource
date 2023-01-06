@@ -37,14 +37,14 @@ end
 
 VerText = "\x04Test. 0.04"
 
-TestSet(1)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
 end
 FP = P8
-LimitVer = 4
-StatVer = 3
+LimitVer = 0
+StatVer = 0
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
