@@ -303,9 +303,9 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2})
 end
 end
 function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
@@ -319,9 +319,9 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 })
 
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=4*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2})
 end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
@@ -428,9 +428,7 @@ end
 
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
-	local DPSArr = CreateVArr(96, FP)
-	local VArrI = CreateVar(FP)
-	local VArrI4 = CreateVar(FP)
+	local DPSArrX = CreateArr(96*4, FP)
 	local TotalDPS = CreateVar(FP)
 	local TotalDPS2 = CreateVar(FP)
 	local DPSCheckV = CreateVar(FP)
@@ -440,7 +438,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 	local DPSCheck2 = CreateVar(FP)
 	local ResetCheck = CreateCcode()
 	CIfX(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1),SetCD(ResetCheck,0)})
-	TriggerX(FP,{CV(DPSCheck2,96,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
+	TriggerX(FP,{CV(DPSCheck2,96*4,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
 	CIfX(FP,{TMemory(UnitPtr,AtMost,8319999*256)})
 	f_Read(FP, UnitPtr, DPSCheckV)
@@ -453,12 +451,11 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 
 
 	
-	ConvertVArr(FP,VArrI,VArrI4,DPSCheck2,96)
 	CAdd(FP,TotalDPS,DpsDest)
-	CSub(FP,TotalDPS,VArrX(DPSArr, VArrI, VArrI4))
-	CMovX(FP,VArrX(DPSArr, VArrI, VArrI4),DpsDest,SetTo,nil,nil,1)
-	CIfX(FP,{CV(TotalDPS,4,AtLeast)})
-	f_Div(FP, TotalDPS2,TotalDPS,4)
+	CSub(FP,TotalDPS,_Read(ArrX(DPSArrX,DPSCheck2)))
+	CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
+	CIfX(FP,{CV(TotalDPS,4*4,AtLeast)})
+	f_Div(FP, TotalDPS2,TotalDPS,4*4)
 	CElseX()
 	CMov(FP,TotalDPS2,0)
 	CIfXEnd()
@@ -520,11 +517,10 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 		CIfEnd()
 	CIf(FP,{TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)},{SetV(UnitPtr,0)})
 	local ResetArr = {}
-	for nn = 0, #DPSArr-1 do
-	table.insert(ResetArr,SetCVAar(VArr(DPSArr,nn), SetTo, 0))
+	for nn = 0, (96*4)-1 do
+		table.insert(ResetArr,SetMemX(Arr(DPSArrX,nn), SetTo, 0))
+		
 	end
-	table.insert(ResetArr,SetV(VArrI,0))
-	table.insert(ResetArr,SetV(VArrI4,0))
 	table.insert(ResetArr,SetV(TotalDPS,0))
 	table.insert(ResetArr,SetV(TotalDPS2,0))
 	table.insert(ResetArr,SetV(DPSCheckV,0))
@@ -608,29 +604,42 @@ end
 
 function CIf_KeyFunc(KeyName)
 	local KeyToggle = CreateCcode()
-	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
-	CIf(FP,{KeyPress(KeyName, "Down"),CD(KeyToggle,0)},{SetCD(KeyToggle,1)})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	CIf(FP,{Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Down"),CD(KeyToggle,0)},{SetCD(KeyToggle,1)})
 end
 function KeyToggleFunc(KeyName)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
-	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
-	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
-	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	return KeyToggle2,KeyToggle
+end
+function KeyToggleFunc2(KeyName,KeyName2)
+	local KeyToggle = CreateCcode()
+	local KeyToggle2 = CreateCcode()
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName2, "Down"),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName2, "Down"),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
 	return KeyToggle2,KeyToggle
 end
 
-function ToggleFunc(CondArr,Mode)
+function ToggleFunc(CondArr,Mode,EnterFlag)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
+	local NotTypingCond = nil
+	if EnterFlag ~= nil then
+		NotTypingCond = Memory(0x68C144,Exactly,0)
+	end
+	
 	if Mode ~= nil then
 		DoActionsX(FP,{SetCD(KeyToggle,0)})
-		TriggerX(FP, {CondArr[1],CD(KeyToggle2,1)}, {SetCD(KeyToggle2,0),SetCD(KeyToggle,1)}, {preserved})
-		TriggerX(FP, {CondArr[2]}, {SetCD(KeyToggle2,1)}, {preserved})
+		TriggerX(FP, {NotTypingCond,CondArr[1],CD(KeyToggle2,1)}, {SetCD(KeyToggle2,0),SetCD(KeyToggle,1)}, {preserved})
+		TriggerX(FP, {NotTypingCond,CondArr[2]}, {SetCD(KeyToggle2,1)}, {preserved})
 	else
 		DoActionsX(FP,{SetCD(KeyToggle,0)})
-		TriggerX(FP, {CondArr[2],CD(KeyToggle2,0)}, {SetCD(KeyToggle2,1),SetCD(KeyToggle,1)}, {preserved})
-		TriggerX(FP, {CondArr[1]}, {SetCD(KeyToggle2,0)}, {preserved})
+		TriggerX(FP, {NotTypingCond,CondArr[2],CD(KeyToggle2,0)}, {SetCD(KeyToggle2,1),SetCD(KeyToggle,1)}, {preserved})
+		TriggerX(FP, {NotTypingCond,CondArr[1]}, {SetCD(KeyToggle2,0)}, {preserved})
 	end
 
 	return KeyToggle2,KeyToggle
@@ -639,8 +648,8 @@ function KeyToggleOnce(KeyName)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
 	DoActionsX(FP, {SetCD(KeyToggle2,0)})
-	TriggerX(FP, {KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
-	TriggerX(FP, {KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
 	return KeyToggle
 end
 

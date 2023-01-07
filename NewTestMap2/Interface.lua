@@ -105,7 +105,9 @@ function Interface()
 	local B_PTicket = iv.B_PTicket--CreateVar(FP)
 
 
-
+	local BossRewardEnable= CreateCcode()
+	local GeneralPlayTime= CreateVar(FP)
+	local GeneralPlayTime2= CreateVar(FP)
 
 	function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
 		if Dest[4]=="V" then
@@ -152,6 +154,7 @@ function Interface()
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP)},1)--맨처음 시간값 튐 방지
 	CMov(FP,PCheckV,0)
+	CAdd(FP,GeneralPlayTime,1)
 	ULimitArr = {500,350,300,250,200,180,150}
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
@@ -164,7 +167,9 @@ function Interface()
 	end
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
 	local LoadCheck = CreateCcodeArr(7)
-	
+	Trigger2X(FP, {CV(GeneralPlayTime,(24*60*60)-1,AtMost)}, {SetCD(BossRewardEnable,0)},{preserved})
+	Trigger2X(FP, {CV(GeneralPlayTime,24*60*60,AtLeast),CV(PCheckV,2,AtLeast)}, {SetCD(BossRewardEnable,1),RotatePlayer({DisplayTextX(StrDesignX("\x04멀티플레이 시작 후 1시간이 지났습니다. \x07이제부터 1인 진행으로 개인보스 LV.5의 보상 획득 가능합니다. "))}, Force1, FP)})
+	Trigger2X(FP, {CV(PCheckV,2,AtLeast)}, {SetCD(BossRewardEnable,1)},{preserved})
 
 
 for i = 0, 6 do -- 각플레이어 
@@ -183,8 +188,8 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP, {Deaths(i,AtLeast,1,98),LocalPlayerID(i)}, { -- 밴당한 유저일 경우
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 제작자가 직접 강퇴한 유저입니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("\x13\x07『 \x04제작자에게 직접 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 		SCA_DataLoad(i,PLevel[i+1],101)
 		SCA_DataLoad(i,StatP[i+1],102)
@@ -387,7 +392,7 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{Accumulate(i, AtLeast, OreDPS[p], Ore)},{SetV(BuildMul1[i+1],OreDPSM[p]),SetV(NextOre[i+1],OreDPS[p+1]),SetCp(i),
 		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
 	TriggerX(FP,{Accumulate(i, AtLeast, GasDPS[p], Gas)},{SetV(BuildMul2[i+1],GasDPSM[p]),SetV(NextGas[i+1],GasDPS[p+1]),SetCp(i),
-		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--2번건물
+		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT2),SetCp(FP)})--2번건물
 	end
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
@@ -643,18 +648,16 @@ Trigger2X(FP,{CV(PBossLV[i+1],3,AtLeast)},{
 },{preserved})
 Trigger2X(FP,{CV(PBossLV[i+1],4,AtLeast)},{
 	AddV(IncomeMax[i+1],6),--사냥터 유닛수 6 증가
-	AddV(TotalEPer[i+1],1500),--강화확률 +1.5%p
 	AddV(General_Upgrade[i+1],5),--공격력 50%
 	AddV(Stat_EXPIncome[i+1],1), --추가EXP +10%
 },{preserved})
 Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
 	AddV(IncomeMax[i+1],9),--사냥터 유닛수 9 증가
-	AddV(TotalEPer[i+1],1500),--강화확률 +1.5%p
-	AddV(General_Upgrade[i+1],10),--공격력 100%
+	AddV(General_Upgrade[i+1],5),--공격력 50%
 	AddV(Stat_EXPIncome[i+1],1), --추가EXP +10%
 	
 },{preserved})
-Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast),NVar(PCheckV,AtLeast,2)},{
+Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast),CD(BossRewardEnable,1)},{
 	AddV(B_PTicket[i+1],5), --유닛 판매권 5개
 	
 })
@@ -862,33 +865,37 @@ CMov(FP,B_Ticket,0)
 Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
 	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
 	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
-	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x081단계 단체보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x081단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
 	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
 	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
 	AddV(B_Credit,200),--크레딧 200
-	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x082단계 단체보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	AddV(B_Stat_Upgrade,5),
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x082단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
 	AddV(B_Credit,800),--크레딧 1200
 	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
-	AddV(B_Stat_Upgrade,5),
-	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x083단계 단체보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x083단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_Credit,2000),--크레딧 2000
 	AddV(B_Stat_Upgrade,5),
-	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 단체보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
-	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 단체보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,55000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
-
-CIfOnce(FP,{CV(BossLV,5,AtLeast),NVar(PCheckV,AtLeast,2)})
+if TestStart == 1 then
+	CIfOnce(FP,{CV(BossLV,5,AtLeast)})
+else
+	CIfOnce(FP,{CV(BossLV,5,AtLeast),NVar(PCheckV,AtLeast,2)})
+end
 	for i = 0, 6 do
 		CIf(FP,{HumanCheck(i, 1)})
 		CMov(FP,B_PCredit[i+1],_Mul(PLevel[i+1],_Mov(100)))
+		TriggerX(FP,{CV(B_PCredit[i+1],50000,AtLeast)},{SetV(B_PCredit[i+1],50000)},{preserved})
 		CIfEnd()
 	end
 CIfEnd()
@@ -916,7 +923,7 @@ function TEST()
 	CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
 	
 	CS__ItoCustom(FP,SVA1(Str1,4),LevelLoc,nil,nil,{10,5},1,nil,"\x1B0",0x1B,nil, LVData)
-	local Tabkey = KeyToggleFunc("TAB")
+	local Tabkey = KeyToggleFunc2("TAB","LCTRL")
 	CIfX(FP,{CD(Tabkey,1)})--수치표기
 	CIfX(FP,{CV(LevelLoc,9999,AtMost)})
 	CElseX({SetV(ExpLoc,0)})
@@ -931,7 +938,7 @@ function TEST()
 	f_Div(FP,CurExpTmp,TotalExpLoc)
 	CElseX({SetV(CurExpTmp,20)})
 	CIfXEnd()
-	CA__SetValue(Str1,"\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x17 (TAB - 세부값)",nil,16)
+	CA__SetValue(Str1,"\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x17(Ctrl+TAB:세부값)",nil,16)
 	for i = 0, 19 do
 		CS__InputTA(FP,{CV(CurExpTmp,i+1,AtLeast)},SVA1(Str1,16+i),0x07,0xFF)
 	end
@@ -1049,7 +1056,7 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	
 	
 CIf(FP,{CV(InterfaceNumLoc,0)})--아무 설정창도 켜져있지 않을 경우 작동함
-local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")})--누를 경우 현재 적용중인 버프 상세 표기
+local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--누를 경우 현재 적용중인 버프 상세 표기
 CIf(FP,{CD(PKey,1)})
 
 for i = 1, 6 do
@@ -1093,11 +1100,11 @@ DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 :
 
 
 CIfEnd()
-local temp,LKey = ToggleFunc({KeyPress("L","Up"),KeyPress("L","Down")})--누를 경우 현재 보유 재화 표시
+local temp,LKey = ToggleFunc({KeyPress("L","Up"),KeyPress("L","Down")},nil,1)--누를 경우 현재 보유 재화 표시
 CIf(FP,{CD(LKey,1)})
 DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장안됨) \x04: \x07",SellTicketLoc,"\n\n\n\n\n\n\n"})
 CIfEnd()
-local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")})--누를 경우 현재 보유 재화 표시
+local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
 CIf(FP,{CD(KKey,1)})
 CIf(FP,CV(NextOreLoc,1,AtLeast))
 DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
@@ -1109,12 +1116,12 @@ CIfEnd()
 CIfEnd()
 
 local PageNumLoc = CreateVar(FP)
-local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")})--누를 경우 설명서 출력
+local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")},nil,1)--누를 경우 설명서 출력
 --local NKey = KeyToggleFunc("N")
 local TG = CreateCcode()
 local TG2 = CreateCcode()
-local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")})--누를 경우 설명서 출력
-local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")})--누를 경우 설명서 출력
+local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")},nil,1)--누를 경우 설명서 출력
+local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")},nil,1)--누를 경우 설명서 출력
 local PageT = {
 	{--1페이지
 		"\x13\x04\x1FDPS 강화하기 게임에 오신것을 환영합니다.",
@@ -1160,30 +1167,32 @@ local PageT = {
 	},
 
 	{
-		"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스 \x1B-",
+		"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스, 보스 시스템 \x1B-",
 		"\x13\x04이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
 		"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 100%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
+		"\x13\x04\x08개인 보스 몬스터 \x04지역은 25강 이하 유닛만 개인별로 공략 가능하며 \x0F1초간의 데미지(DPS)\x04으로 클리어 여부를 결정합니다.",
+		"\x13\x04\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
 	},
 
 --남는거 공 250% 강확은 논외
 	{
-		"\x13\x04\x1B- 부록. \x08개인 미니보스 몬스터 보상 목록 \x1B-",
-		"\x13\x04\x08개인 미니보스 몬스터 \x04지역은 25강 이하 유닛만 개인별로 공략 가능하며 \x0F1초간의 데미지(DPS)\x04으로 클리어 여부를 결정합니다.",
+		"\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
 		"\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3",
 		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3",
 		"\x043단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3, \x08공격력 + 50%",
-		"\x044단계 \x04: \x0F+1강 확률 \x07+1.5%p \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
-		"\x045단계 \x04: \x0F+1강 확률 \x07+1.5%p \x1B사냥터 \x07+9, \x08공격력 + 100%, \x1C추가EXP +10%, \x17유닛 판매권 5개\x08(멀티 플레이 시에만 지급)",
+		"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
+		"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공격력 + 50%, \x1C추가EXP +10%, \x17유닛 판매권 5개",
+		"\x045단계 보스 보상인 \x17유닛 판매권\x04은\x07 2인 이상 플레이 \x04혹은 \x082인이상 플레이를 1시간 유지한 후 솔로 플레이 \x04시 획득 가능합니다."
 	},
 
 	{
-		"\x13\x04\x1B- 부록. \x08단체보스 몬스터 보상 목록 \x1B-",
-		"\x13\x04\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
+		"\x13\x04\x1B- 부록. \x08파티 보스 몬스터 보상 목록 \x1B-",
 		"\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
-		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6, \x17크레딧 +200",
-		"\x043단계 \x04: \x17크레딧 +800, \x08공격력 + 50%, \x1C추가EXP +30%",
+		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +200",
+		"\x043단계 \x04: \x17크레딧 +800, \x1C추가EXP +30%",
 		"\x044단계 \x04: \x17크레딧 +2,000, \x08공격력 + 50%, ",
-		"\x045단계 \x04: \x17크레딧 + \x07자신의 레벨 \x1F*\x17 100\x08(멀티 플레이 시에만 지급)",
+		"\x045단계 \x04: \x17크레딧 + \x07자신의 레벨 \x1F*\x17 100\x08(\x17최대 5만 크레딧\x08, 멀티 플레이 시에만 지급)",
+		"\x045단계 보스는 \x072인 이상 플레이\x04가 아니면 \x08공략 불가능합니다."
 	},
 }
 CIf(FP,TTOR({CD(BKey,1),CD(NKey,1),CD(MKey,1)}))

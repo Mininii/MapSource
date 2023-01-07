@@ -255,7 +255,7 @@ function onInit_EUD()
 
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	
-	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i)})
+	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i),TSetMemoryX(_Add(Nextptrs,55), SetTo, 0xA00000,0xA00000)})
 
 
 	CIfEnd()

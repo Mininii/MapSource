@@ -35,15 +35,15 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x04Test. 0.04"
+VerText = "\x04v. 1.00"
 
-TestSet(2)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
 end
 FP = P8
-LimitVer = 0
+LimitVer = 1
 StatVer = 0
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
