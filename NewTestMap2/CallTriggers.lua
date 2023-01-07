@@ -24,6 +24,7 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
+	CallTrigger(FP, Call_CTInputUID)
 	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
 	CWhileEnd()
 
@@ -359,4 +360,11 @@ function Install_CallTriggers()
 	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
 
 	SetCallEnd()
+	Call_CTInputUID = SetCallForward()
+	SetCall(FP)
+	CMov(FP, ArrX(CT_CUnit,_Sub(Nextptrs,19025-25)), _Read(_Add(Nextptrs, 25)), nil, 0xFF, 1)
+
+	SetCallEnd()
+
+
 end

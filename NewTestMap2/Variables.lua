@@ -325,7 +325,7 @@ end
 	Cost_Stat_TotalEPer3 = 1000
 	
 	
-	
+	CT_CUnit = CreateArr(84*1699, FP)
 	
 	
 	

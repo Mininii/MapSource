@@ -394,6 +394,22 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{Accumulate(i, AtLeast, GasDPS[p], Gas)},{SetV(BuildMul2[i+1],GasDPSM[p]),SetV(NextGas[i+1],GasDPS[p+1]),SetCp(i),
 		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT2),SetCp(FP)})--2번건물
 	end
+	
+	TriggerX(FP, {Accumulate(i, AtLeast, 5000000, Ore),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+	TriggerX(FP, {Accumulate(i, AtLeast, 10000000, Gas),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
 
@@ -405,8 +421,9 @@ for i = 0, 6 do -- 각플레이어
 
 	for j,k in pairs(PBossArr) do
 		NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(PBossPtr[i+1],0),CV(PBossLV[i+1],j-1)})--보스방 건물 세팅
-		f_Read(FP, 0x628438, nil, PBossPtr[i+1])
-		DoActionsX(FP, {CreateUnit(1,k[1],129+i,FP),AddV(PBossPtr[i+1],2)})
+		f_Read(FP, 0x628438, nil, Nextptrs)
+		CDoActions(FP, {CreateUnit(1,k[1],129+i,FP),SetV(PBossPtr[i+1],_Add(Nextptrs,2))})
+		CallTrigger(FP, Call_CTInputUID)
 		f_LMov(FP,TotalPBossDPS[i+1],k[2])
 		--CallTrigger(FP, ResetBDPMArr)
 		NIfEnd()
@@ -1023,10 +1040,11 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 		TriggerX(FP,{CD(MToggle2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000+i+1)},{preserved})
 	end
 	CMul(FP,UpgradeLoc,10)
+	CMul(FP,ScoutDmgLoc,100)
 	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
 	TriggerX(FP, CD(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
 	TriggerX(FP, CD(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
-	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+1000 \x08(최대 5만) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," k ",BColor2[1][2],"[+]"})
+	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5만) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
 	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
 	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
 	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
@@ -1291,8 +1309,9 @@ SetCallEnd()
 CJumpEnd(FP, BossFuncJump)
 for j,k in pairs(BossArr) do
 	NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)})--보스방 건물 세팅
-	f_Read(FP, 0x628438, nil, BossEPD)
-	DoActionsX(FP, {CreateUnit(1,k[1],110,FP),AddV(BossEPD,2)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {CreateUnit(1,k[1],110,FP),SetV(BossEPD,_Add(Nextptrs,2))})
+	CallTrigger(FP, Call_CTInputUID)
 	f_LMov(FP,BossDPM,k[2])
 	CallTrigger(FP, ResetBDPMArr)
 	NIfEnd()
@@ -1609,9 +1628,12 @@ CIfEnd()
 --CA__ItoCustom(SVA1(Str1,0),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1E,0x1E,0x1E,0x1E,0x04,0x04,0x04,0x04},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0})
 
 
-
-	TriggerX(FP, {CD(TBLFlag,0)}, {CreateUnit(1,94,64,FP),RemoveUnit(94,FP)}, {preserved})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
-	DoActionsX(FP, {SetCD(TBLFlag,0)})
+	CIf(FP,{CD(TBLFlag,0)},{SetCD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
+		f_Read(FP, 0x628438, nil, Nextptrs)
+		DoActions(FP, CreateUnit(1,94,64,FP))
+		CallTrigger(FP, Call_CTInputUID)
+		DoActions(FP, RemoveUnit(94,FP))
+	CIfEnd()
 
 --	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
 --		L = CreateVar()

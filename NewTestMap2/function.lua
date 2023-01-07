@@ -567,7 +567,7 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIf(FP,{CV(UnitPtrDest,0),Memory(0x628438, AtLeast, 1)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
-
+	CallTrigger(FP, Call_CTInputUID)
 	CIfEnd()
 
 end
