@@ -2,6 +2,8 @@ function Interface()
 
 	--PlayData(NonSCA)
 	local Money = iv.Money-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+
+
 	local IncomeMax = iv.IncomeMax-- CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
 	local Income = iv.Income-- CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
 	local BuildMul1 = iv.BuildMul1-- CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
@@ -19,6 +21,13 @@ function Interface()
 	local TotalPBossDPS = iv.TotalPBossDPS --개인보스DPS 목표치
 	local SellTicket = iv.SellTicket
 
+	local CT_SellTicket = iv.CT_SellTicket
+	local CT_IncomeMax = iv.CT_IncomeMax
+	local CT_Money = iv.CT_Money
+	local CT_Credit = iv.CT_Credit
+
+
+	local CT_PLevel = iv.CT_PLevel--CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
 	
@@ -29,6 +38,7 @@ function Interface()
 	local Stat_Upgrade_UI = iv.Stat_Upgrade_UI--CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	local AutoBuyCode = iv.AutoBuyCode--CreateCcodeArr(7)-- 자동 구입 제어 데스값
 	local PCheckV = iv.PCheckV--CreateVar(FP)--플레이어 수 체크
+
 	local MulOp = iv.MulOp--CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	local Upgrade_UI = iv.Upgrade_UI--CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
@@ -50,6 +60,8 @@ function Interface()
 	local PlayTime2 = iv.PlayTime2
 	local NextOre = iv.NextOre
 	local NextGas = iv.NextGas
+	local NextOreMul = iv.NextOreMul
+	local NextGasMul = iv.NextGasMul
 	local PlayTime = iv.PlayTime
 	local CreditAddSC = iv.CreditAddSC
 	--Local Data Variable
@@ -84,6 +96,8 @@ function Interface()
 	local UpgradeUILoc = iv.UpgradeUILoc--CreateVar(FP)
 	local NextOreLoc = iv.NextOreLoc
 	local NextGasLoc = iv.NextGasLoc
+	local NextOreMulLoc = iv.NextOreMulLoc
+	local NextGasMulLoc = iv.NextGasMulLoc
 	local SellTicketLoc = iv.SellTicketLoc
 
 	--Temp
@@ -106,9 +120,10 @@ function Interface()
 
 
 	local BossRewardEnable= CreateCcode()
+	local SCheck = CreateCcode()
 	local GeneralPlayTime= CreateVar(FP)
 	local GeneralPlayTime2= CreateVar(FP)
-
+	
 	function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
 		if Dest[4]=="V" then
 			f_Read(FP,0x58A364+(48*SourceUnit)+(4*Player),Dest)
@@ -128,6 +143,9 @@ function Interface()
 		end
 		
 	end
+	DoActions(FP, {
+		LeaderBoardScore(Custom, StrDesign("\17Level"));
+		LeaderBoardComputerPlayers(Disable);}, 1)
 	
 	--PlayData(NotSureSCA)
 	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
@@ -147,12 +165,22 @@ function Interface()
 	local GasDPSM = {2,4,8,16,32,64}
 	local Dx,Dy,Dv,Du,DtP,Time2,Time = CreateVariables(7,FP)
 	local SaveRemind = CreateCcode()
+	local CTTimer = CreateCcode()
 	f_Read(FP,0x51CE8C,Dx)
 	CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(FP,DtP,Dy,Du)
 	CMov(FP,Dv,DtP) 
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP)},1)--맨처음 시간값 튐 방지
+	DoActionsX(FP, {AddCD(CTTimer,1)})
+	--CallTriggerX(FP,Call_CheckCT,{CD(CTTimer,24,AtLeast)},{SetCD(CTTimer,0)})--유닛 변조 감지
+	CT_NextRandV = CreateVar(FP)
+	CT_PrevRandV = CreateVar(FP)
+	CT_NextRandW = CreateWar(FP)
+	CT_PrevRandW = CreateWar(FP)
+	CMov(FP,CT_PrevRandV,_Mod(_Rand(),12858519))
+	f_LMov(FP,CT_PrevRandW,_LMod(_LRand(), "12532858"))
+
 	CMov(FP,PCheckV,0)
 	CAdd(FP,GeneralPlayTime,1)
 	ULimitArr = {500,350,300,250,200,180,150}
@@ -174,10 +202,11 @@ function Interface()
 
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),AddCD(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
+	DoActions(FP,{SetScore(i,SetTo,1,Custom)},1)
 	TriggerX(FP, CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1)},{preserved})
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,0,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(LoadCheck[i+1],1)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
-	CIf(FP,{LocalPlayerID(i),CV(Time,60000,AtLeast)},{SubV(Time,60000)})
-	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
+	CIf(FP,{LocalPlayerID(i),CV(Time,60000*5,AtLeast)},{SubV(Time,60000*5)})
+	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x035분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
 	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),NVar(PCheckV,AtLeast,2)},{DisplayText(StrDesignX("\x04현재 \x1F멀티 플레이 보너스 버프 \x1C적용중입니다. - \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p"),4)},{preserved})-- 인원수 버프 보너스
 	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1)},{SetMemory(0x58F500, SetTo, 1),},{preserved})
 	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
@@ -188,9 +217,10 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP, {Deaths(i,AtLeast,1,98),LocalPlayerID(i)}, { -- 밴당한 유저일 경우
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 제작자가 직접 강퇴한 유저입니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayText("\x13\x07『 \x04제작자에게 직접 문의해주시기 바랍니다.\x07 』",4);
+			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
+			
 		SCA_DataLoad(i,PLevel[i+1],101)
 		SCA_DataLoad(i,StatP[i+1],102)
 		SCA_DataLoad(i,Stat_ScDmg[i+1],103)
@@ -207,6 +237,8 @@ for i = 0, 6 do -- 각플레이어
 		SCA_DataLoad(i,PlayTime[i+1],118)
 		SCA_DataLoad(i,PlayTime2[i+1],119)
 		SCA_DataLoad(i,CreditAddSC[i+1],120)
+		f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
+		CAdd(FP,CT_PLevel[i+1],PLevel[i+1],CT_PrevRandV)
 		
 		
 		--치팅 테스트 변수 초기화
@@ -251,6 +283,7 @@ for i = 0, 6 do -- 각플레이어
 			SetV(Stat_TotalEPer3[i+1],0),
 			SetV(Stat_Upgrade[i+1],0),
 			SetV(Stat_AddSc[i+1],0)})
+			CAdd(FP,CT_PLevel[i+1],PLevel[i+1],CT_PrevRandV)
 		CIfXEnd()
 		
 		CIf(FP,{TTOR({CV(Stat_ScDmg[i+1],1,AtLeast),CV(Stat_AddSc[i+1],1,AtLeast),Deaths(i, AtLeast, 1, 100),CV(CreditAddSC[i+1],1,AtLeast)})})--스카 공격력 증가량 데이터 존재여부
@@ -280,13 +313,14 @@ for i = 0, 6 do -- 각플레이어
 		CIfXEnd()
 		
 		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
+		CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
 	CIfEnd()
 	
 
 	
 	local LevelUpJump = def_sIndex()
 	CJumpEnd(FP, LevelUpJump)
-	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],9999,AtMost)},{AddV(PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
+	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],9999,AtMost)},{AddV(PLevel[i+1],1),AddV(CT_PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
 
 	f_Read(FP,FArr(EXPArr,_Sub(PLevel[i+1],1)),TempReadV,nil,nil,1)
 	f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], {TempReadV,0})
@@ -296,6 +330,7 @@ for i = 0, 6 do -- 각플레이어
 	CallTriggerX(FP,Call_Print13[i+1],{CV(PLevel[i+1],9,AtMost)})
 	TriggerX(FP, {CV(PLevel[i+1],9,AtMost),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x1F레벨이 올랐습니다! \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요."))}, {preserved})
 	CJump(FP, LevelUpJump)
+	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
 	NIfEnd()
 	DoActionsX(FP, {AddCD(StatEffT2[i+1],1)})
 	TriggerX(FP,{CD(StatEffT2[i+1],500,AtLeast)},{SetCD(StatEff[i+1],0)},{preserved})
@@ -352,6 +387,12 @@ for i = 0, 6 do -- 각플레이어
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);})
+	TriggerX(FP, {Deaths(i,AtLeast,1,98),LocalPlayerID(i)}, { -- 밴당한 유저일 경우
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
 	
 	CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 	CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
@@ -379,6 +420,9 @@ for i = 0, 6 do -- 각플레이어
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CD(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 	TriggerX(FP, {CD(ScTimer[i+1],86400)}, {SetCD(ResetStat[i+1],1)},{preserved}) -- 1시간뒤 스탯초기화 사용불가
+	TriggerX(FP, {CD(ScTimer[i+1],4320,AtLeast),CD(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetCp(i),DisplayText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
+	CreateUnitStacked({CD(ScTimer[i+1],4320,AtLeast),CD(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men")}, 1, LevelUnitArr[2][2], 50+i,36+i, i, nil,1)
+
 
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
@@ -389,41 +433,55 @@ for i = 0, 6 do -- 각플레이어
 			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
 			NextT2 = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..GasDPS[p+1].." \x04입니다.")
 		end
-	TriggerX(FP,{Accumulate(i, AtLeast, OreDPS[p], Ore)},{SetV(BuildMul1[i+1],OreDPSM[p]),SetV(NextOre[i+1],OreDPS[p+1]),SetCp(i),
+	TriggerX(FP,{Accumulate(i, AtLeast, OreDPS[p], Ore)},{SetV(BuildMul1[i+1],OreDPSM[p]),SetV(NextOre[i+1],OreDPS[p+1]),SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
 		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
-	TriggerX(FP,{Accumulate(i, AtLeast, GasDPS[p], Gas)},{SetV(BuildMul2[i+1],GasDPSM[p]),SetV(NextGas[i+1],GasDPS[p+1]),SetCp(i),
+	TriggerX(FP,{Accumulate(i, AtLeast, GasDPS[p], Gas)},{SetV(BuildMul2[i+1],GasDPSM[p]),SetV(NextGas[i+1],GasDPS[p+1]),SetV(NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
 		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT2),SetCp(FP)})--2번건물
 	end
 	
-	TriggerX(FP, {Accumulate(i, AtLeast, 5000000, Ore),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
-
-	TriggerX(FP, {Accumulate(i, AtLeast, 10000000, Gas),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
-
-
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
 
-	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore},Money[i+1])
-	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas},Money[i+1])
+	local TempO,TempG = CreateVars(2,FP)
+	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore,TempO},Money[i+1],CT_Money[i+1])
+	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG},Money[i+1],CT_Money[i+1])
 	Debug_DPSBuilding(DpsLV1[i+1],127,95+i)
 	Debug_DPSBuilding(DpsLV2[i+1],190,88+i)
 	DPSBuilding(i,PBossPtr[i+1],"X",nil,{PBossDPS[i+1]},nil)--
+	TriggerX(FP, {Accumulate(i, AtLeast, 50000000, Ore),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+	TriggerX(FP, {Accumulate(i, AtLeast, 100000000, Gas),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+	TriggerX(FP, {CV(TempO,50000000,AtLeast),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+	TriggerX(FP, {CV(TempG,100000000,AtLeast),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+
 
 	for j,k in pairs(PBossArr) do
 		NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(PBossPtr[i+1],0),CV(PBossLV[i+1],j-1)})--보스방 건물 세팅
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		CDoActions(FP, {CreateUnit(1,k[1],129+i,FP),SetV(PBossPtr[i+1],_Add(Nextptrs,2))})
-		CallTrigger(FP, Call_CTInputUID)
+		--CallTrigger(FP, Call_CTInputUID)
 		f_LMov(FP,TotalPBossDPS[i+1],k[2])
 		--CallTrigger(FP, ResetBDPMArr)
 		NIfEnd()
@@ -481,7 +539,20 @@ for i = 0, 6 do -- 각플레이어
 	CTrigger(FP,{LocalPlayerID(i)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
 	CIfXEnd()
 	CIfEnd()--
-
+	CIf(FP,{TMemory(_Add(MenuPtrData[i+1],0x98/4),Exactly,0 + 2*65536)}) -- 싱글플레이 버튼
+	CIfX(FP,{Bring(i, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
+	CIf(FP,{LocalPlayerID(i),CV(PCheckV,2,AtLeast),CD(SCheck,1)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	TriggerX(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),SetCp(i),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+	--CallTrigger(FP, Call_CTInputUID)
+	CIfEnd()
+	TriggerX(FP,{LocalPlayerID(i),CV(PCheckV,2,AtLeast),CD(SCheck,0)},{SetCD(SCheck,1),SetCp(i),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CallTrigger(FP,Call_Print13[i+1])
+	CTrigger(FP,{LocalPlayerID(i)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()--
+	DoActionsX(FP, {SetCD(SCheck,0)})
 
 	BtnSetEnd()
 
@@ -678,6 +749,7 @@ Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast),CD(BossRewardEnable,1)},{
 	AddV(B_PTicket[i+1],5), --유닛 판매권 5개
 	
 })
+
 for pb= 1, 5 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,55000),SetCD(SaveRemind,1),SetCp(i),DisplayText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 end
@@ -697,6 +769,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	CIfEnd({})
 	CIf(FP,{CV(B_Ticket,1,AtLeast)})
 	CAdd(FP,SellTicket[i+1],B_Ticket) --
+	CAdd(FP,CT_SellTicket[i+1],B_Ticket) --
 	CIfEnd({})
 	CIf(FP,{CV(B_PCredit[i+1],1,AtLeast)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_PCredit[i+1],0}) --
@@ -704,6 +777,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	CIfEnd({})
 	CIf(FP,{CV(B_PTicket[i+1],1,AtLeast)})
 	CAdd(FP,SellTicket[i+1],B_PTicket[i+1]) --
+	CAdd(FP,CT_SellTicket[i+1],B_PTicket[i+1]) --
 	CMov(FP, B_PTicket[i+1], 0)
 	CIfEnd({})
 	
@@ -744,8 +818,8 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 			local EXP = LevelUnitArr[j][4]
 			if EXP>=1 then
 				if j>=26 then
-					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],0,AtMost)},{MoveUnit(All,UID,i,73,43+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],1,AtLeast)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP),SubV(SellTicket[i+1],1)},{preserved})
+					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],0,AtMost)},{MoveUnit(All,UID,i,73+i,43+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
+					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],1,AtLeast)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP),SubV(SellTicket[i+1],1),SubV(CT_SellTicket[i+1],1)},{preserved})
 					
 				else
 					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i),AddV(TempEXPV,EXP)},{preserved})
@@ -769,10 +843,6 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
         CIfEnd()
 		CIfXEnd()
 	CIfEnd()
-
-	
-	
-	
 	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0),SetCD(ResetStatLoc,0)}) -- CAPrint에 전송할 값들
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
@@ -803,13 +873,30 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	CMov(FP, UpgradeUILoc, General_Upgrade[i+1])
 	CMov(FP,NextOreLoc,NextOre[i+1])
 	CMov(FP,NextGasLoc,NextGas[i+1])
+	CMov(FP,NextOreMulLoc,NextOreMul[i+1])
+	CMov(FP,NextGasMulLoc,NextGasMul[i+1])
+	
+
+	CAdd(FP,CT_IncomeMax[i+1],IncomeMax[i+1],CT_PrevRandV)
 	CMov(FP,SellTicketLoc,SellTicket[i+1])
+
+
+if Limit == 0 then
+	CTrigger(FP,{TTMemory(0x5124F0, NotSame, 13)},{{
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	
-
-
-
-	
+end
 	CIfEnd()
+	VarCheatTest(i,SellTicket[i+1],CT_SellTicket[i+1],1)--변조체크
+	
+	VarCheatTest(i,IncomeMax[i+1],CT_IncomeMax[i+1],2)--변조체크
+	VarCheatTest(i,PLevel[i+1],CT_PLevel[i+1])--변조체크
+	--WarCheatTest(i,Money[i+1],CT_Money[i+1])
+	WarCheatTest(i,Credit[i+1],CT_Credit[i+1],4)
 	
 
 
@@ -855,6 +942,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CIfX(FP,{TTNWar(Credit[i+1], AtLeast,_LMul({MulOp[i+1],0}, "100"))},{})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				CAdd(FP,SellTicket[i+1],MulOp[i+1])
+				CAdd(FP,CT_SellTicket[i+1],MulOp[i+1])
 				f_LSub(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "100"))
 				CIf(FP,{LocalPlayerID(i)})
 				local TempV = CreateVar(FP)
@@ -1046,7 +1134,7 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	TriggerX(FP, CD(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
 	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5만) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
 	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
-	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 데미지 \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
+	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
 	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
 	DisplayPrint(LCP, {"\x075. \x07+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
 	DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
@@ -1125,10 +1213,10 @@ CIfEnd()
 local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
 CIf(FP,{CD(KKey,1)})
 CIf(FP,CV(NextOreLoc,1,AtLeast))
-DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
 CIfEnd()
 CIf(FP,CV(NextGasLoc,1,AtLeast))
-DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n"})
+DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n"})
 CIfEnd()
 
 CIfEnd()
@@ -1227,15 +1315,15 @@ TriggerX(FP,{CV(PageNumLoc,#PageT+1,AtLeast)},{SetV(PageNumLoc,#PageT)},{preserv
 CIf(FP,CD(TG,1))
 DisplayPrint(LCP, {"\x13\x04[\x0FPrev \x04: \x17B\x04] [\x07Page \x04: \x10",PageNumLoc," \x08열기/닫기\x04 : \x17N\x04] [\x11Next \x04: \x17M\x04]"})
 for j,k in pairs(PageT) do
+	local t = {}
 	for i = 1, 7 do
-		local t
 		if k[i]~= nil then
-			t = k[i]
+			t[i] = k[i].."\n"
 		else
-			t = " "
+			t[i] = "\n"
 		end
-		TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText(""..t, 4)}, {preserved})
 	end
+	TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText(table.concat(t), 4)}, {preserved})
 end
 CIfEnd()
 CTrigger(FP,{CD(TG,0)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n\n",4)},1)
@@ -1311,7 +1399,7 @@ for j,k in pairs(BossArr) do
 	NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)})--보스방 건물 세팅
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {CreateUnit(1,k[1],110,FP),SetV(BossEPD,_Add(Nextptrs,2))})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	f_LMov(FP,BossDPM,k[2])
 	CallTrigger(FP, ResetBDPMArr)
 	NIfEnd()
@@ -1631,11 +1719,13 @@ CIfEnd()
 	CIf(FP,{CD(TBLFlag,0)},{SetCD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		DoActions(FP, CreateUnit(1,94,64,FP))
-		CallTrigger(FP, Call_CTInputUID)
+		--CallTrigger(FP, Call_CTInputUID)
 		DoActions(FP, RemoveUnit(94,FP))
 	CIfEnd()
-
---	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
+	TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
+	TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
+	TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
+	--	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
 --		L = CreateVar()
 --		CIfOnce(FP)
 --		GetPlayerLength(FP,P1,L)
@@ -1669,4 +1759,6 @@ CIfEnd()
 --		
 --	})
 --end
+	CMov(FP,CT_PrevRandV,CT_NextRandV)
+	f_LMov(FP,CT_PrevRandW,	CT_NextRandW)
 end

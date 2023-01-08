@@ -67,6 +67,15 @@ function onInit_EUD()
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 4배속
 	end
 
+	CFor(FP,19025,19025+(84*1699),84) --치트 검사 배열에 모든 유닛 첫 등록
+	CI = CForVariable()
+	CMov(FP,Nextptrs,CI)
+	--CallTrigger(FP, Call_CTInputUID)
+	CForEnd()
+	DoActions2(FP, {
+		RotatePlayer({SetMissionObjectivesX("\x13\x04건물을 \x08공격\x04하며 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다! \n\x13\x04설명서는 B,N,M키로 확인 가능합니다.\n\n\x13\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.\n\n\x13\x04Creator - GALAXY_BURST")},Force1,FP)
+	})
+
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit설정
 
 	T_YY = 2023
@@ -216,7 +225,9 @@ function onInit_EUD()
 	
 	end
 
-	Trigger2(FP,{},{RotatePlayer({DisplayTextX(StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ"),4),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
+	Trigger2(FP,{},{RotatePlayer({
+		DisplayTextX(StrDesignX("\x04건물을 \x08공격\x04하여 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다!").."\n"..StrDesignX("\x04설명서는 B,N,M키로 확인 가능합니다.").."\n\n"..StrDesignX("\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.").."\n\n"..StrDesignX("\x04Creator - GALAXY_BURST").."\n"..StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ"),4),
+		PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
 	
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	f_GetTblptr(FP, Etbl, 1438)
@@ -230,14 +241,14 @@ function onInit_EUD()
 		
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(TestShop[i+1], SetTo, Nextptrs),CreateUnit(1,128,1+i,i)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,57+i,FP)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	DoActions(FP, {SetLoc("Location "..(57+i),"U",Add,13*32),SetLoc("Location "..(57+i),"D",Add,13*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(DpsLV2[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,190,57+i,FP)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	DoActions(FP, {SetLoc("Location "..(57+i),"L",Add,6*32),SetLoc("Location "..(57+i),"R",Add,6*32)})
 
 
@@ -245,25 +256,25 @@ function onInit_EUD()
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Subtract,10*32),SetLoc("Location "..(1+i),"R",Subtract,11*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit1[i+1], SetTo, Nextptrs),CreateUnit(1,91,1+i,i)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit2[i+1], SetTo, Nextptrs),CreateUnit(1,92,1+i,i)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit3[i+1], SetTo, Nextptrs),CreateUnit(1,129,1+i,i)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit4[i+1], SetTo, Nextptrs),CreateUnit(1,219,1+i,i)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	
 	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i),TSetMemoryX(_Add(Nextptrs,55), SetTo, 0xA00000,0xA00000)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 
 
 	CIfEnd()

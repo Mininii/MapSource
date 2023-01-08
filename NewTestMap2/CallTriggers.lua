@@ -7,6 +7,72 @@ function Install_CallTriggers()
 		Print_13_2(FP,{i},nil)
 	SetCallEnd()
 	end
+	
+--	Call_CTInputUID = SetCallForward()
+--	local CTUID = CreateVar(FP)
+--	local CTSUPtr = CreateVar(FP)
+--	local CTSUID = CreateVar(FP)
+--	SetCall(FP)
+--	f_Read(FP, _Add(Nextptrs, 25), CTUID, nil, 0xFF, 1)
+--	CMov(FP, ArrX(CT_CUnit,_Sub(Nextptrs,19025-25)),CTUID, nil, 0xFF, 1)
+--	CIf(FP,{TTOR({
+--		CV(CTUID,5),
+--		CV(CTUID,23),
+--		CV(CTUID,30),
+--		CV(CTUID,3),
+--		CV(CTUID,17),
+--	})})
+--	f_Read(FP, _Add(Nextptrs, 28), nil, CTSUPtr)
+--	CIf(FP,{CV(CTSUPtr,19025,AtLeast),CV(CTSUPtr,19025+(84*1699),AtMost)})
+--	f_Read(FP, _Add(CTSUPtr, 25), CTSUID, nil, 0xFF, 1)
+--	CMov(FP, ArrX(CT_CUnit,_Sub(CTSUPtr,19025-25)),CTSUID, nil, 0xFF, 1)
+--	CIfEnd()
+
+
+
+--	CIfEnd()--
+
+--	SetCallEnd()
+--	CTEPD = CreateVar(FP)
+--	CTUID = CreateVar(FP)
+--	Call_CheckCT = SetCallForward()
+--	SetCall(FP)--
+
+--	CunitCtrig_Part1(FP)
+--	MoveCp("X",25*4)
+--	f_SaveCp()
+--	f_Read(FP, BackupCp, CTUID, nil, 0xFF, 1)
+--	CIf(FP,{TTMemory(_TMem(ArrX(CT_CUnit,CTEPD)),NotSame,CTUID)})
+--	if TestStart == 1 then
+--		local TempV = CreateVar(FP)
+--		f_Read(FP, ArrX(CT_CUnit,CTEPD), TempV)
+--		CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+--		Convert_CPosXY()
+--		DisplayPrint(Force1, {"\x13\x04CurUID : ",CTUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})
+--	end--
+
+--	CIfEnd()
+--	f_LoadCp()
+--	ClearCalc()
+--	
+--	CunitCtrig_Part2()
+--	CunitCtrig_Part3X()
+--	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+--	CunitCtrig_Part4X(i,{
+--		DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+--		DeathsX(19025+(84*i)+19,AtMost,6,0,0xFF),
+--		
+--	},
+--	{
+--		SetV(CTEPD,(84*i)+25);MoveCp(Add,25*4)})
+--	end
+--	CunitCtrig_End()--
+
+--	
+--	SetCallEnd()
+
+
+
 	CreateStackedUnit = SetCallForward()
 	SUnitID = CreateVar(FP)
 	SLocation = CreateVar(FP)
@@ -24,7 +90,7 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
 	CWhileEnd()
 
@@ -360,11 +426,5 @@ function Install_CallTriggers()
 	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
 
 	SetCallEnd()
-	Call_CTInputUID = SetCallForward()
-	SetCall(FP)
-	CMov(FP, ArrX(CT_CUnit,_Sub(Nextptrs,19025-25)), _Read(_Add(Nextptrs, 25)), nil, 0xFF, 1)
-
-	SetCallEnd()
-
 
 end

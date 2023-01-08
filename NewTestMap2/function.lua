@@ -427,7 +427,7 @@ function BtnSetEnd()
 end
 
 
-function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
+function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_MoneyV)
 	local DPSArrX = CreateArr(96*4, FP)
 	local TotalDPS = CreateVar(FP)
 	local TotalDPS2 = CreateVar(FP)
@@ -512,6 +512,9 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV)
 				f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
 			end
 			f_LAdd(FP,MoneyV,MoneyV,GetMoney)
+			if CT_MoneyV ~= nil then
+				f_LAdd(FP,CT_MoneyV,CT_MoneyV,GetMoney)
+			end
 		end
 
 		CIfEnd()
@@ -567,7 +570,7 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIf(FP,{CV(UnitPtrDest,0),Memory(0x628438, AtLeast, 1)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
-	CallTrigger(FP, Call_CTInputUID)
+	--CallTrigger(FP, Call_CTInputUID)
 	CIfEnd()
 
 end
@@ -722,7 +725,7 @@ function DisplayPrint(TargetPlayers,arg)
 		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)})
 
 	else
-		DoActions2(FP,{RotatePlayer({DisplayText(StrT,4)},TargetPlayers,FP)})
+		DoActions2(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)})
 	end
 end
 
@@ -932,6 +935,7 @@ function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
 		CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
 			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+			f_LSub(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], Cost)
 			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 		CIfEnd()
 	CIfEnd()
@@ -940,3 +944,38 @@ end
 --function HumanCheck(Player,Status)
 --	if Status == 1 then return nil else return Never() end
 --end
+
+function VarCheatTest(Player,Var,TrapVar,Flag)
+	CIfX(FP,{CV(Var,_Sub(TrapVar,CT_PrevRandV))})
+		CAdd(FP,TrapVar,Var,CT_NextRandV)
+	CElseX()
+	if Flag ~= nil then
+	DoActions(FP,SetDeathsX(Player,SetTo,Flag,0,Flag))
+	else
+	TriggerX(FP,{LocalPlayerID(Player)},{{
+		SetCp(Player),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);}})
+	end
+	CIfXEnd()
+end
+
+function WarCheatTest(Player,War,TrapWar,Flag)
+	
+	CIfX(FP,{TTNWar(War, Exactly, _LSub(TrapWar,CT_PrevRandW))})
+		f_LAdd(FP,TrapWar,War,CT_NextRandW)
+	CElseX()
+	if Flag ~= nil then
+	DoActions(FP,SetDeathsX(Player,SetTo,Flag,0,Flag))
+	else
+	TriggerX(FP,{LocalPlayerID(Player)},{{
+		SetCp(Player),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);}})
+	end
+	CIfXEnd()
+end	

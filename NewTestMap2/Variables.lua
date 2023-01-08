@@ -92,7 +92,14 @@ function Include_Vars()
 	iv.ResetStat = CreateCcodeArr(7)
 	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
 	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
+	iv.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
+	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
 	iv.SellTicket = CreateVarArr(7,FP)
+	iv.CT_SellTicket = CreateVarArr(7,FP)
+	iv.CT_IncomeMax = CreateVarArr(7,FP)
+	iv.CT_Money = CreateWarArr(7,FP)
+	iv.CT_Credit = CreateWarArr(7,FP)
+	iv.CT_PLevel = CreateVarArr(7,FP)
 	
 	--General
 	iv.BossLV = CreateVar(FP)
@@ -162,7 +169,10 @@ function Include_Vars()
 	
 	iv.NextOreLoc = CreateVar(FP)
 	iv.NextGasLoc = CreateVar(FP)
+	iv.NextOreMulLoc = CreateVar(FP)
+	iv.NextGasMulLoc = CreateVar(FP)
 	iv.SellTicketLoc = CreateVar(FP)
+	
 	
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)

@@ -37,7 +37,7 @@ end
 
 VerText = "\x04v. 1.00"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
@@ -59,6 +59,9 @@ CJump(AllPlayers,init_func)
 	Include_64BitLibrary("Switch 100")
 	Install_BackupCP(FP)
 	Include_Vars()
+	if TestStart == 1 then
+		Include_Conv_CPosXY(FP,{4096*2,4096*2})
+	end
 
 	Include_CRandNum(FP)
 	Install_CallTriggers()
