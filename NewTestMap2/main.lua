@@ -44,7 +44,7 @@ if Limit == 1 then
 end
 FP = P8
 LimitVer = 2
-StatVer = 0
+StatVer = 2
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)

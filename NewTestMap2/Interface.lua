@@ -143,9 +143,37 @@ function Interface()
 		end
 		
 	end
-	DoActions(FP, {
+	
+	local LeaderBoardT = CreateCcode()
+Trigger { -- DPS 리더보드
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,0,LeaderBoardT);
+	},
+	actions = {
+		
+		LeaderBoardGreed(10000000);
+		LeaderBoardComputerPlayers(Disable);
+		SetCDeaths(FP,SetTo,1000,LeaderBoardT);
+		PreserveTrigger();
+},
+}
+Trigger { -- 레벨
+	players = {FP},
+	conditions = {
+		Label(0);
+		CDeaths(FP,Exactly,500,LeaderBoardT);
+	},
+	actions = {
 		LeaderBoardScore(Custom, StrDesign("\17Level"));
-		LeaderBoardComputerPlayers(Disable);}, 1)
+		LeaderBoardComputerPlayers(Disable);
+		PreserveTrigger();
+},
+}
+DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
+
+
 	
 	--PlayData(NotSureSCA)
 	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
@@ -178,8 +206,8 @@ function Interface()
 	CT_PrevRandV = CreateVar(FP)
 	CT_NextRandW = CreateWar(FP)
 	CT_PrevRandW = CreateWar(FP)
-	CMov(FP,CT_PrevRandV,_Mod(_Rand(),12858519))
-	f_LMov(FP,CT_PrevRandW,_LMod(_LRand(), "12532858"))
+	CMov(FP,CT_NextRandV,_Mod(_Rand(),12858519))
+	f_LMov(FP,CT_NextRandW,_LMod(_LRand(), "12532858"))
 
 	CMov(FP,PCheckV,0)
 	CAdd(FP,GeneralPlayTime,1)
@@ -214,13 +242,6 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()--
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
-		TriggerX(FP, {Deaths(i,AtLeast,1,98),LocalPlayerID(i)}, { -- 밴당한 유저일 경우
-			SetCp(i),
-			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-			SetMemory(0xCDDDCDDC,SetTo,1);})
-			
 		SCA_DataLoad(i,PLevel[i+1],101)
 		SCA_DataLoad(i,StatP[i+1],102)
 		SCA_DataLoad(i,Stat_ScDmg[i+1],103)
@@ -245,7 +266,7 @@ for i = 0, 6 do -- 각플레이어
 		CIfX(FP,CV(PStatVer[i+1],StatVer))--스탯버전이 저장된 값과 같을경우 치팅 감지 작동
 		f_LMov(FP, CTPEXP, PEXP[i+1])
 		CMov(FP, CTPLevel, 1)
-		CMov(FP,CTStatP,0)
+		CMov(FP,CTStatP,5)
 		CMov(FP,CTStatP2,StatP[i+1])
 		f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 		f_LMov(FP, CTTotalExp, "10",nil,nil,1)
@@ -262,6 +283,7 @@ for i = 0, 6 do -- 각플레이어
 		CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+		CTrigger(FP, {Deaths(i,AtLeast,1,98)}, {SetCD(CheatDetect,1)})
 		TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -274,7 +296,7 @@ for i = 0, 6 do -- 각플레이어
 		CElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
 		DoActionsX(FP, {
 			SetV(PLevel[i+1],1),
-			SetV(StatP[i+1],0),
+			SetV(StatP[i+1],5),
 			SetCWar(FP, CurEXP[i+1][2], SetTo, "0"),
 			SetCWar(FP, TotalExp[i+1][2], SetTo, "10"),
 			SetV(Stat_ScDmg[i+1],0),
@@ -307,6 +329,7 @@ for i = 0, 6 do -- 각플레이어
 			DisplayPrint("CP", {"\x13\x0D\x0D\x0D",PName("LocalPlayerID")," \x04님의 \x10테스트맵 \x04인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 			DisplayPrint("CP", {"\x13\x04총 ",PlayTime2[i+1]," 초 이용으로 \x17",PlayTime2[i+1]," 크레딧\x04 지급됨"})
 			f_LAdd(FP,Credit[i+1],Credit[i+1],{PlayTime2[i+1],0}) -- 
+			f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 			
 		CIfEnd()
 			
@@ -363,7 +386,7 @@ for i = 0, 6 do -- 각플레이어
 	--end
 	f_LMov(FP, CTPEXP, PEXP[i+1])
 	CMov(FP, CTPLevel, 1)
-	CMov(FP,CTStatP,0)
+	CMov(FP,CTStatP,5)
 	CMov(FP,CTStatP2,StatP[i+1])
 	f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 	f_LMov(FP, CTTotalExp, "10",nil,nil,1)
@@ -381,19 +404,13 @@ for i = 0, 6 do -- 각플레이어
 	CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {Deaths(i,AtLeast,1,98)}, {SetCD(CheatDetect,1)})
 	TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);})
-	TriggerX(FP, {Deaths(i,AtLeast,1,98),LocalPlayerID(i)}, { -- 밴당한 유저일 경우
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
-	
 	CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 	CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
 
@@ -445,6 +462,7 @@ for i = 0, 6 do -- 각플레이어
 	local TempO,TempG = CreateVars(2,FP)
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{Ore,TempO},Money[i+1],CT_Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG},Money[i+1],CT_Money[i+1])
+	
 	Debug_DPSBuilding(DpsLV1[i+1],127,95+i)
 	Debug_DPSBuilding(DpsLV2[i+1],190,88+i)
 	DPSBuilding(i,PBossPtr[i+1],"X",nil,{PBossDPS[i+1]},nil)--
@@ -548,11 +566,11 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 	TriggerX(FP,{LocalPlayerID(i),CV(PCheckV,2,AtLeast),CD(SCheck,0)},{SetCD(SCheck,1),SetCp(i),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
 	CElseX()--조건이 만족하지 않을 경우
+	DoActionsX(FP, {SetCD(SCheck,0)})
 	CallTrigger(FP,Call_Print13[i+1])
 	CTrigger(FP,{LocalPlayerID(i)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 	CIfXEnd()
 	CIfEnd()--
-	DoActionsX(FP, {SetCD(SCheck,0)})
 
 	BtnSetEnd()
 
@@ -638,6 +656,7 @@ for i = 0, 6 do -- 각플레이어
 
 	CElseIfX({TNWar(Credit[i+1], AtLeast, "5000")})
 	f_LSub(FP, Credit[i+1], Credit[i+1], "5000")
+	f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 	DoActionsX(FP, {
 		
 		SetCD(ResetStat[i+1],1),
@@ -650,7 +669,7 @@ for i = 0, 6 do -- 각플레이어
 		SetV(Stat_AddSc[i+1],0)
 	})
 	TriggerX(FP, {LocalPlayerID(i)}, {SetV(Time,55000),SetCD(SaveRemind,1)}, {preserved})
-	CMov(FP, StatP[i+1], _Mul(_Sub(PLevel[i+1],1), 5))
+	CMov(FP, StatP[i+1], _Mul(PLevel[i+1], 5))
 	
 	CallTrigger(FP,Call_Print13[i+1])
 	TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x1F스탯 초기화\x04 완료. \x07잠시 후 자동저장됩니다. \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요.")) ,{preserved})
@@ -766,18 +785,20 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 
 	CIf(FP,{CV(B_Credit,1,AtLeast)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_Credit,0}) -- 
+	f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 	CIfEnd({})
 	CIf(FP,{CV(B_Ticket,1,AtLeast)})
 	CAdd(FP,SellTicket[i+1],B_Ticket) --
-	CAdd(FP,CT_SellTicket[i+1],B_Ticket) --
+	CAdd(FP,CT_SellTicket[i+1],SellTicket[i+1],B_Ticket) --
 	CIfEnd({})
 	CIf(FP,{CV(B_PCredit[i+1],1,AtLeast)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_PCredit[i+1],0}) --
+	f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 	CMov(FP, B_PCredit[i+1], 0)
 	CIfEnd({})
 	CIf(FP,{CV(B_PTicket[i+1],1,AtLeast)})
 	CAdd(FP,SellTicket[i+1],B_PTicket[i+1]) --
-	CAdd(FP,CT_SellTicket[i+1],B_PTicket[i+1]) --
+	CAdd(FP,CT_SellTicket[i+1],SellTicket[i+1],B_PTicket[i+1]) --
 	CMov(FP, B_PTicket[i+1], 0)
 	CIfEnd({})
 	
@@ -891,12 +912,6 @@ if Limit == 0 then
 	
 end
 	CIfEnd()
-	VarCheatTest(i,SellTicket[i+1],CT_SellTicket[i+1],1)--변조체크
-	
-	VarCheatTest(i,IncomeMax[i+1],CT_IncomeMax[i+1],2)--변조체크
-	VarCheatTest(i,PLevel[i+1],CT_PLevel[i+1])--변조체크
-	--WarCheatTest(i,Money[i+1],CT_Money[i+1])
-	WarCheatTest(i,Credit[i+1],CT_Credit[i+1],4)
 	
 
 
@@ -932,6 +947,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CIfX(FP,{CV(CreditAddSC[i+1],0),TTNWar(Credit[i+1], AtLeast, "10000")},{SetV(CreditAddSC[i+1],1),SetCp(i),DisplayText(StrDesignX("\x07기본유닛 6기\x04를 구입하셨습니다. \x08주의 \x04: \x07기본유닛\x04은 게임 실행 1회에만 등장하며 3분 뒤 사라집니다."), 4)})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				f_LSub(FP, Credit[i+1], Credit[i+1], "10000")
+				f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 			CElseIfX({CV(CreditAddSC[i+1],1,AtLeast),Deaths(i,AtMost,0,99)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 구입되었습니다."), 4),SetCp(FP)})
 			CElseIfX({CV(CreditAddSC[i+1],1,AtLeast),Deaths(i,AtLeast,1,99)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 테스트 플레이 특전으로 지급받았습니다."), 4),SetCp(FP)})
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
@@ -944,14 +960,37 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 				CAdd(FP,SellTicket[i+1],MulOp[i+1])
 				CAdd(FP,CT_SellTicket[i+1],MulOp[i+1])
 				f_LSub(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "100"))
+				f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
 				CIf(FP,{LocalPlayerID(i)})
 				local TempV = CreateVar(FP)
 				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "100"),nil,nil,1)
-				DisplayPrint(LCP, {"\x13\x07『 \x17유닛 판매권\x04을 ",MulOp[i+1],"개 구입하였습니다. ",TempV," \x17크레딧 사용 \x07』"})
-				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",SellTicket[i+1]," 개의 \x17유닛 판매권 보유중. \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x17유닛 판매권\x04을 ",MulOp[i+1],"개 구입하였습니다. ",TempV," \x17크레딧 \x08사용 \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",SellTicket[i+1]," 개의 \x17유닛 판매권 보유중 \x07』"})
 				DoActions(FP, {SetCp(i),DisplayText(StrDesignX("\x08주의 \x04: \x17유닛 판매권\x04은 SCA로 저장할 수 없는 항목입니다."))})
 				CIfEnd()
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
+		
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,126)},{MoveUnit(1, 15, i, 126, 116)})
+		
+			CIfX(FP,{CV(SellTicket[i+1],MulOp[i+1],AtLeast)},{})
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+
+
+				CSub(FP,SellTicket[i+1],MulOp[i+1])
+				CSub(FP,CT_SellTicket[i+1],MulOp[i+1])
+				
+				f_LAdd(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "75"))
+				f_LAdd(FP,CT_Credit[i+1],Credit[i+1],CT_PrevRandW)
+
+				CIf(FP,{LocalPlayerID(i)})
+				local TempV = CreateVar(FP)
+				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "75"),nil,nil,1)
+				DisplayPrint(LCP, {"\x13\x07『 \x17유닛 판매권\x04을 ",MulOp[i+1],"개 판매하였습니다. ",TempV," \x17크레딧 \x07반환 \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",SellTicket[i+1]," 개의 \x17유닛 판매권 보유중 \x07』"})
+				CIfEnd()
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17유닛 판매권\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 		CIfEnd()
 	end
@@ -1055,6 +1094,11 @@ function TEST()
 	CA__lItoCustom(SVA1(Str1,8),CredLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
 	,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-2)
+	CIfX(FP,{CD(Tabkey,1)})--수치표기
+	CA__SetColor((56*2)+1, 0x17)
+	CElseX()--퍼센트표기
+	CA__SetColor((56*2)+1, 0x10)
+	CIfXEnd()
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	
 
@@ -1163,7 +1207,15 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	
 CIf(FP,{CV(InterfaceNumLoc,0)})--아무 설정창도 켜져있지 않을 경우 작동함
 local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--누를 경우 현재 적용중인 버프 상세 표기
-CIf(FP,{CD(PKey,1)})
+local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
+local LKey = KeyToggleFunc("L") --지속적으로 표기함
+local LToggle = CreateCcode()
+CTrigger(FP,{CD(PKey,1)},{SetCD(LKey,0)},1)
+CTrigger(FP,{CD(KKey,1)},{SetCD(LKey,0)},1)
+CTrigger(FP,{CD(PKey,0),CD(KKey,0),CD(LToggle,0),CD(LKey,0)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n",4)},1)
+CTrigger(FP,{CD(LToggle,0),CD(LKey,0)},{SetCD(LToggle,1)},1)
+--CTrigger(FP,{CD(LToggle,0),CD(LKey,1)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n\n",4)},1)
+CIf(FP,{CD(PKey,1)},{SetCD(LKey,0)})
 
 for i = 1, 6 do
 	Byte_NumSet(TotalEPerLoc,E1VarArr1[i],10^(6-i),1,0x30)
@@ -1206,20 +1258,23 @@ DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 :
 
 
 CIfEnd()
-local temp,LKey = ToggleFunc({KeyPress("L","Up"),KeyPress("L","Down")},nil,1)--누를 경우 현재 보유 재화 표시
-CIf(FP,{CD(LKey,1)})
-DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장안됨) \x04: \x07",SellTicketLoc,"\n\n\n\n\n\n\n"})
-CIfEnd()
-local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
-CIf(FP,{CD(KKey,1)})
-CIf(FP,CV(NextOreLoc,1,AtLeast))
-DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
-CIfEnd()
-CIf(FP,CV(NextGasLoc,1,AtLeast))
-DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n"})
-CIfEnd()
+CIf(FP,{CD(KKey,1)},{SetCD(LKey,0)})
+
+	CIf(FP,CV(NextOreLoc,1,AtLeast))
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
+	CIfEnd()
+
+	CIf(FP,CV(NextGasLoc,1,AtLeast))
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n"})
+	CIfEnd()
 
 CIfEnd()
+
+CIf(FP,{CD(LKey,1)})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장안됨) \x04: \x07",SellTicketLoc," \x17닫기 \x04: \x10L"})
+	CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n",4)},1)
+CIfEnd()
+
 
 local PageNumLoc = CreateVar(FP)
 local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")},nil,1)--누를 경우 설명서 출력
@@ -1716,12 +1771,13 @@ CIfEnd()
 --CA__ItoCustom(SVA1(Str1,0),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1E,0x1E,0x1E,0x1E,0x04,0x04,0x04,0x04},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0})
 
 
-	CIf(FP,{CD(TBLFlag,0)},{SetCD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
+	CIf(FP,{CD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		DoActions(FP, CreateUnit(1,94,64,FP))
 		--CallTrigger(FP, Call_CTInputUID)
 		DoActions(FP, RemoveUnit(94,FP))
 	CIfEnd()
+	DoActionsX(FP,{SetCD(TBLFlag,0)})
 	TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
 	TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
 	TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
@@ -1759,6 +1815,17 @@ CIfEnd()
 --		
 --	})
 --end
+
+for i = 0, 6 do -- CT단락
+	CIf(FP,{HumanCheck(i, 1)})
+	VarCheatTest(i,PLevel[i+1],CT_PLevel[i+1])--변조체크
+	VarCheatTest(i,SellTicket[i+1],CT_SellTicket[i+1],1)--변조체크
+	VarCheatTest(i,IncomeMax[i+1],CT_IncomeMax[i+1],2)--변조체크
+	WarCheatTest(i,Credit[i+1],CT_Credit[i+1],4)
+	--WarCheatTest(i,Money[i+1],CT_Money[i+1])
+	CIfEnd()
+end
+
 	CMov(FP,CT_PrevRandV,CT_NextRandV)
 	f_LMov(FP,CT_PrevRandW,	CT_NextRandW)
 end

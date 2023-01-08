@@ -67,11 +67,11 @@ function onInit_EUD()
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 4배속
 	end
 
-	CFor(FP,19025,19025+(84*1699),84) --치트 검사 배열에 모든 유닛 첫 등록
-	CI = CForVariable()
-	CMov(FP,Nextptrs,CI)
-	--CallTrigger(FP, Call_CTInputUID)
-	CForEnd()
+	--CFor(FP,19025,19025+(84*1699),84) --치트 검사 배열에 모든 유닛 첫 등록
+	--CI = CForVariable()
+	--CMov(FP,Nextptrs,CI)
+	----CallTrigger(FP, Call_CTInputUID)
+	--CForEnd()
 	DoActions2(FP, {
 		RotatePlayer({SetMissionObjectivesX("\x13\x04건물을 \x08공격\x04하며 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다! \n\x13\x04설명서는 B,N,M키로 확인 가능합니다.\n\n\x13\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.\n\n\x13\x04Creator - GALAXY_BURST")},Force1,FP)
 	})

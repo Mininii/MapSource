@@ -99,7 +99,7 @@ function Include_Vars()
 	iv.CT_IncomeMax = CreateVarArr(7,FP)
 	iv.CT_Money = CreateWarArr(7,FP)
 	iv.CT_Credit = CreateWarArr(7,FP)
-	iv.CT_PLevel = CreateVarArr(7,FP)
+	iv.CT_PLevel = CreateVarArr2(7,1,FP)
 	
 	--General
 	iv.BossLV = CreateVar(FP)
@@ -118,7 +118,7 @@ function Include_Vars()
 	
 	--PlayData(SCA)
 	iv.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
-	iv.StatP = CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
+	iv.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
 	iv.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	
@@ -314,7 +314,7 @@ if TestStart == 1 then
 		{25,"150000"},
 		{80,"1100000"},
 		{57,"9300000"},
-		{72,"80000000"},
+		{72,"20000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -335,7 +335,7 @@ end
 	Cost_Stat_TotalEPer3 = 1000
 	
 	
-	CT_CUnit = CreateArr(84*1699, FP)
+	--CT_CUnit = CreateArr(84*1699, FP)
 	
 	
 	

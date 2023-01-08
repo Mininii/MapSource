@@ -949,15 +949,18 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 	CIfX(FP,{CV(Var,_Sub(TrapVar,CT_PrevRandV))})
 		CAdd(FP,TrapVar,Var,CT_NextRandV)
 	CElseX()
-	if Flag ~= nil then
-	DoActions(FP,SetDeathsX(Player,SetTo,Flag,0,Flag))
-	else
+	if type(Flag) == "number" then
+	DoActions(FP,{SetDeathsX(Player,SetTo,Flag,98,Flag)})
+	elseif TestStart ~= 1 then
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
+	else
+	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	DisplayPrintEr(Player,{ "Var : ",Var,"  CT : ",TrapVar,"   Flag : ",Flag})
 	end
 	CIfXEnd()
 end
@@ -967,15 +970,55 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 	CIfX(FP,{TTNWar(War, Exactly, _LSub(TrapWar,CT_PrevRandW))})
 		f_LAdd(FP,TrapWar,War,CT_NextRandW)
 	CElseX()
-	if Flag ~= nil then
-	DoActions(FP,SetDeathsX(Player,SetTo,Flag,0,Flag))
-	else
+	if type(Flag) == "number" then
+	DoActions(FP,{SetDeathsX(Player,SetTo,Flag,98,Flag)})
+	elseif TestStart ~= 1 then
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
+	else
+		
+	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	local CastVar = CreateVarArr(2, FP)
+	local CastVar2 = CreateVarArr(2, FP)
+	f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
+	f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
+	f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
+	f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+	DisplayPrintEr(Player,{ "Var : { ",CastVar[1]," , ",CastVar[2]," }  CT : { ",CastVar2[1]," , ",CastVar2[2]," }   Flag : ",Flag})
 	end
+	
+	CIfXEnd()
+end	
+
+function WarCheatTestX(Player,War,TrapWar,Flag)
+	
+	CIfX(FP,{TTNWar(War, Exactly, _LAnd(TrapWar,CT_PrevRandW))})
+		f_LAdd(FP,TrapWar,War,CT_NextRandW)
+	CElseX()
+	if type(Flag) == "number" then
+	DoActions(FP,{SetDeathsX(Player,SetTo,Flag,98,Flag)})
+	elseif TestStart ~= 1 then
+	TriggerX(FP,{LocalPlayerID(Player)},{{
+		SetCp(Player),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);}})
+	else
+		
+	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	local CastVar = CreateVarArr(2, FP)
+	local CastVar2 = CreateVarArr(2, FP)
+	f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
+	f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
+	f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
+	f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+	DisplayPrintEr(Player,{ "Var : { ",CastVar[1]," , ",CastVar[2]," }  CT : { ",CastVar2[1]," , ",CastVar2[2]," }   Flag : ",Flag})
+	end
+	
 	CIfXEnd()
 end	
