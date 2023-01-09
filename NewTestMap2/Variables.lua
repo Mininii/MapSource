@@ -96,10 +96,17 @@ function Include_Vars()
 	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
 	iv.SellTicket = CreateVarArr(7,FP)
 	iv.CT_SellTicket = CreateVarArr(7,FP)
-	iv.CT_IncomeMax = CreateVarArr(7,FP)
+	iv.CT_IncomeMax = CreateVarArr2(7,12,FP)
 	iv.CT_Money = CreateWarArr(7,FP)
+	iv.CT_PEXP = CreateWarArr(7,FP)
 	iv.CT_Credit = CreateWarArr(7,FP)
 	iv.CT_PLevel = CreateVarArr2(7,1,FP)
+	iv.CT_TotalEPer = CreateVarArr(7,FP)
+	iv.CT_TotalEPer2 = CreateVarArr(7,FP)
+	iv.CT_TotalEPer3 = CreateVarArr(7,FP)
+	iv.CT_General_Upgrade = CreateVarArr(7,FP)
+	iv.CT_Stat_EXPIncome = CreateVarArr(7,FP)
+	iv.CT_LV5Cool = CreateVarArr(7,FP)
 	
 	--General
 	iv.BossLV = CreateVar(FP)
@@ -134,8 +141,9 @@ function Include_Vars()
 	iv.PlayTime2 = CreateVarArr(7,FP) -- 총 플레이타임(신 값)
 	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
 	iv.CreditAddSC = CreateVarArr(7,FP) 
+	iv.LV5Cool = CreateVarArr(7,FP)
 
-	
+
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
 	iv.IncomeLoc = CreateVar(FP)
@@ -322,7 +330,7 @@ else
 		{25,"150000"},
 		{80,"1100000"},
 		{57,"9300000"},
-		{72,"80000000"},
+		{72,"34000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 

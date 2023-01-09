@@ -513,7 +513,9 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 			end
 			f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 			if CT_MoneyV ~= nil then
+				f_LXor(FP,CT_MoneyV,CT_MoneyV,CT_NextRandW)
 				f_LAdd(FP,CT_MoneyV,CT_MoneyV,GetMoney)
+				f_LXor(FP,CT_MoneyV,CT_MoneyV,CT_NextRandW)
 			end
 		end
 
@@ -697,7 +699,7 @@ function DisplayPrint(TargetPlayers,arg)
 			if k[2] == "LocalPlayerID" then
 				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
 			else
-				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]]})
+				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
 			end
 			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
@@ -934,8 +936,10 @@ end
 function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
 		CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
+			f_LXor(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], CT_NextRandW)
 			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
 			f_LSub(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], Cost)
+			f_LXor(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], CT_NextRandW)
 			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 		CIfEnd()
 	CIfEnd()
@@ -958,8 +962,10 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
-	else
+	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	if TestStart == 1 then
+		
 	DisplayPrintEr(Player,{ "Var : ",Var,"  CT : ",TrapVar,"   Flag : ",Flag})
 	end
 	CIfXEnd()
@@ -979,15 +985,16 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
-	else
-		
+	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
-	local CastVar = CreateVarArr(2, FP)
-	local CastVar2 = CreateVarArr(2, FP)
-	f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
-	f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
-	f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
-	f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+	if TestStart == 1 then
+		local CastVar = CreateVarArr(2, FP)
+		local CastVar2 = CreateVarArr(2, FP)
+		f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
+		f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
+		f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
+		f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+		
 	DisplayPrintEr(Player,{ "Var : { ",CastVar[1]," , ",CastVar[2]," }  CT : { ",CastVar2[1]," , ",CastVar2[2]," }   Flag : ",Flag})
 	end
 	
@@ -996,8 +1003,8 @@ end
 
 function WarCheatTestX(Player,War,TrapWar,Flag)
 	
-	CIfX(FP,{TTNWar(War, Exactly, _LAnd(TrapWar,CT_PrevRandW))})
-		f_LAdd(FP,TrapWar,War,CT_NextRandW)
+	CIfX(FP,{TTNWar(War, Exactly, _LXor(TrapWar,CT_PrevRandW))})
+		f_LXor(FP,TrapWar,War,CT_NextRandW)
 	CElseX()
 	if type(Flag) == "number" then
 	DoActions(FP,{SetDeathsX(Player,SetTo,Flag,98,Flag)})
@@ -1008,17 +1015,31 @@ function WarCheatTestX(Player,War,TrapWar,Flag)
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
-	else
-		
+	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
-	local CastVar = CreateVarArr(2, FP)
-	local CastVar2 = CreateVarArr(2, FP)
-	f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
-	f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
-	f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
-	f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+	if TestStart == 1 then
+		local CastVar = CreateVarArr(2, FP)
+		local CastVar2 = CreateVarArr(2, FP)
+		f_Cast(FP, {CastVar[1],0}, War, nil, nil, 1)
+		f_Cast(FP, {CastVar[2],1}, War, nil, nil, 1)
+		f_Cast(FP, {CastVar2[1],0}, TrapWar, nil, nil, 1)
+		f_Cast(FP, {CastVar2[2],1}, TrapWar, nil, nil, 1)
+		
 	DisplayPrintEr(Player,{ "Var : { ",CastVar[1]," , ",CastVar[2]," }  CT : { ",CastVar2[1]," , ",CastVar2[2]," }   Flag : ",Flag})
 	end
 	
 	CIfXEnd()
 end	
+
+
+function Convert_Number(Num)
+	local WStr = tostring(Num)
+	if #WStr>3 and 6>=#WStr then
+		WStr = string.sub(WStr,1,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
+	elseif  #WStr>6 and 9>=#WStr then
+		WStr = string.sub(WStr,1,#WStr-6)..","..string.sub(WStr,#WStr-5,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
+	elseif  #WStr>9 and 12>=#WStr then
+		WStr = string.sub(WStr,1,#WStr-9)..","..string.sub(WStr,#WStr-8,#WStr-6)..","..string.sub(WStr,#WStr-5,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
+	end
+	return WStr
+end

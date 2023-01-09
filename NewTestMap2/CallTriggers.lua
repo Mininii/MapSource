@@ -116,7 +116,7 @@ function Install_CallTriggers()
 	if TestStart == 1 then
 		GetEPer = CreateVar(FP)
 		CIfX(FP,{KeyPress("F12", "Down")})
-		CMov(FP,GetEPer,1)
+		CMov(FP,GetEPer,E2Range[1])
 		CElseX()
 		GetEPer2 = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 		CMov(FP,GetEPer,GetEPer2)
@@ -128,6 +128,9 @@ function Install_CallTriggers()
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper2 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper3 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
+	CT_GTotalEper = CreateVar(FP)
+	CT_GTotalEper2 = CreateVar(FP)
+	CT_GTotalEper3 = CreateVar(FP)
 	--ELevel = 현재 강화중인 레벨
 	CAdd(FP,TotalEper,UEper,GEper) -- +1강 확률
 	CAdd(FP,TotalEper2,_Div(UEper,10),GEper2)
