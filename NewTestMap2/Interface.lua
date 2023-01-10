@@ -174,7 +174,7 @@ Trigger { -- 레벨
 		CDeaths(FP,Exactly,500,LeaderBoardT);
 	},
 	actions = {
-		LeaderBoardScore(Custom, StrDesign("\17Level"));
+		LeaderBoardScore(Custom, StrDesign("\17Level")" "..VerText);
 		LeaderBoardComputerPlayers(Disable);
 		PreserveTrigger();
 },
@@ -199,7 +199,6 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		{24,20000},
 		{26,80000},
 	}
-	
 	local OreDPS = {100,1000,10000,100000,500000,1000000,0}
 	local OreDPSM = {2,4,8,16,32,64}
 	local GasDPS = {100,1000,10000,100000,1000000,5000000,0}
@@ -272,7 +271,11 @@ end
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),AddCD(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
-	TriggerX(FP, CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(LV5Cool[i+1],1),SubV(CT_LV5Cool[i+1],1)},{preserved})
+	CIf(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1)})
+	TriggerX(FP, {CV(LV5Cool[i+1],1,AtLeast),}, {SubV(LV5Cool[i+1],1),SubV(CT_LV5Cool[i+1],1)},{preserved})
+	CIfEnd()
+
+
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,0,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(LoadCheck[i+1],1)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
 	CIf(FP,{LocalPlayerID(i),CV(Time,30000*5,AtLeast)},{SubV(Time,30000*5)})
 	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x035분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
@@ -1249,7 +1252,7 @@ TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F50
 	DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]\x12\x1C보유 포인트 :\x07 ",StatPLoc})
 	TriggerX(FP, CD(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
 	TriggerX(FP, CD(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
-	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5만) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
+	DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
 	DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
 	DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
 	DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
@@ -1440,7 +1443,7 @@ local PageT = {
 		"\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
 		"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
 		"\x044단계 \x04: \x17유닛 판매권 + 50, \x08공격력 + 50%, ",
-		"\x045단계 \x04: \x17크레딧 + \x07자신의 레벨 \x1F*\x17 100\x08(\x17최대 5만 크레딧\x08, 멀티 플레이 시에만 지급)",
+		"\x045단계 \x04: \x17크레딧 + \x07자신의 레벨 \x1F*\x17 100\x08(\x17최대 5만 크레딧)",
 		"\x045단계 보스는 공략후 \x088시간의 인게임 쿨타임\x04이 존재합니다."
 	},
 }

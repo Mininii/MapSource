@@ -116,7 +116,7 @@ function Install_CallTriggers()
 	if TestStart == 1 then
 		GetEPer = CreateVar(FP)
 		CIfX(FP,{KeyPress("F12", "Down")})
-		CMov(FP,GetEPer,E2Range[1])
+		CMov(FP,GetEPer,1)
 		CElseX()
 		GetEPer2 = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 		CMov(FP,GetEPer,GetEPer2)
