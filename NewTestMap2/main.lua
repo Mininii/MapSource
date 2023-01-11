@@ -37,7 +37,7 @@ end
 
 VerText = "\x11v\x04. 1.04"
 
-TestSet(2)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	

@@ -15,7 +15,15 @@ function afterTriggerExec(){
 	const SCA_GLoadSw = PVariable();
 	const SCA_GLoaded = PVariable();
 	const SCA_LLoadCheck = PVariable();
+	var UsingSCA;
 	const T2 = PVariable(); // 타임아웃타이머
+	once () {
+		UsingSCA = 0x32223223;
+	}
+	
+
+
+
 //	SetMemory(0x58f610,SetTo,0);
 //		if(Memory(0x58D900,Exactly,1)){
 //			const dst, radix=parse(dwread_epd(EPD(0x58D904)), radix=10);
@@ -90,6 +98,7 @@ function afterTriggerExec(){
 //				SetDeaths(CurrentPlayer,SetTo,150,15);
 //		}
 //		}
+//UsingSCA == 0x32223223  == SCA미사용중
 
 	foreach(cp : EUDLoopPlayer("Human")){
 	setcurpl(cp);
@@ -101,7 +110,12 @@ function afterTriggerExec(){
 		SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser\x07] {:c}{:n}",cp,cp);
 		}
 
+
 		T1[cp] ++;
+		if (sca.GlobalData[19]==0){
+
+		}
+
 		
 		if (SCA_Stat1[cp] == 1){
 			switch(sca.GetLastMessage()){
@@ -117,8 +131,9 @@ function afterTriggerExec(){
 		}
 		if(SCA_GLoadSw[cp] == 1){ // Data Load
 			sca.LoadGlobalData();
-			SCA_GLoadSw[cp] = 0;
-			SCA_GLoaded[cp] = 1;
+		}
+		if ((sca.GetLastMessage()==2 or sca.GetLastMessage()==9)&&SCA_GLoaded[cp]==1){
+			SetDeaths(CurrentPlayer, SetTo, 0, 23);
 		}
 
 /*
@@ -394,12 +409,27 @@ function afterTriggerExec(){
 				SetMemory(0x58f60C,SetTo,sca.GlobalData[2]);//이벤트는 최신버전에서만
 			}
 		}
-
 		if (SCA_GLoaded[cp] == 1 && LoadCheck[cp] == 1 && T1[cp] >= 150){
 				sca.LoadData(0);
 				SCA_GLoaded[cp] = 0;
 				SCA_LLoadCheck[cp] = 1;
 		}
 		
+		if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1 && sca.GetLastMessage() == 4){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
+		
+		
+		
+		}
+
+
+		
 	}
+	
+if (GetLastMessage() == 3 or GetLastMessage() == 5){
+	UsingSCA = cp;
+	else {
+	UsingSCA = 0x32223223;
+	}
+}
+
 }
