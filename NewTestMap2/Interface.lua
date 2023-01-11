@@ -1346,12 +1346,12 @@ CIf(FP,{CD(KKey,1)},{SetCD(LKey,0)})
 	CIfEnd()
 
 	CIf(FP,CV(NextGasLoc,1,AtLeast))
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n\n\n"})
 	CIfEnd()
 
 CIfEnd()
 
-CIf(FP,{CD(LKey,1)})
+CIfX(FP,{CD(LKey,1)})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장안됨) \x04: \x07",SellTicketLoc," \x17닫기 \x04: \x10L"})
 	for i = 0, 6 do
 		CIf(FP,HumanCheck(i, 1))
@@ -1366,7 +1366,8 @@ CIf(FP,{CD(LKey,1)})
 
 		CIfEnd()
 	end
-	CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n",4)},1)
+CElseX()
+	CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n",4)},1)
 CIfEnd()
 
 

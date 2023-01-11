@@ -809,7 +809,7 @@ function DisplayPrintEr(TargetPlayer,arg)
 		end
 	end
 	for j,p in pairs(VCharKey) do
-		CDoActions(FP,{TBwrite(0x640B60+p[2],SetTo,V(p[1]))})
+		CDoActions(FP,{TBwrite(0x640B60 + (12 * 218)+p[2],SetTo,V(p[1]))})
 	end
 	
 	CIfEnd()
