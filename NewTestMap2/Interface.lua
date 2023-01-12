@@ -599,6 +599,34 @@ for i = 0, 6 do -- 각플레이어
 --		CTrigger(FP,{CD(PKey,1)},{SetV(MaxG,0)},1)
 --	end
 	
+	TriggerX(FP, {Accumulate(i, AtLeast, 10000000, Ore),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+	TriggerX(FP, {Accumulate(i, AtLeast, 50000000, Gas),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+	TriggerX(FP, {CV(TempO[i+1],10000000,AtLeast),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+	TriggerX(FP, {CV(TempG[i+1],50000000,AtLeast),LocalPlayerID(i)}, {
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);})
+
+
 	Debug_DPSBuilding(DpsLV1[i+1],127,95+i)
 	Debug_DPSBuilding(DpsLV2[i+1],190,88+i)
 	DPSBuilding(i,PBossPtr[i+1],"X",nil,{PBossDPS[i+1]},nil)--
