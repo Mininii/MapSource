@@ -20,7 +20,7 @@ function afterTriggerExec(){
 	once () {
 		UsingSCA = 0x32223223;
 	}
-	
+
 
 
 
@@ -113,7 +113,12 @@ function afterTriggerExec(){
 
 		T1[cp] ++;
 		if (sca.GlobalData[19]==0){
-
+			switch(sca.GetLastMessage()){
+				case 1:
+					sca.LoadGlobalData();
+					UsingSCA = 1;
+				break;
+			}
 		}
 
 		
@@ -378,7 +383,6 @@ function afterTriggerExec(){
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
 				SetDeaths(CurrentPlayer, SetTo, 0, 14);
 				SetDeaths(CurrentPlayer, SetTo, 0, 16);
-				sca.ResetLastMessage();
 				T2[cp] = 0;
 		}
 		if(VerChange[cp]==1){
@@ -423,13 +427,11 @@ function afterTriggerExec(){
 
 
 		
+		if (sca.GetLastMessage() == 3 or sca.GetLastMessage() == 5){
+			UsingSCA = cp;
+		}
 	}
+
 	
-if (GetLastMessage() == 3 or GetLastMessage() == 5){
-	UsingSCA = cp;
-	else {
-	UsingSCA = 0x32223223;
-	}
-}
 
 }

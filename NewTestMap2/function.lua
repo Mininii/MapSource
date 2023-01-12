@@ -53,6 +53,10 @@ function PatchInsertPrsv(Act)
 	table.insert(PatchArrPrsv,Act)
 end
 
+function PatchInsertC(Cond)
+	table.insert(MCTCondArr,Cond)
+end
+
 function SetUnitsDatX(UnitID,Property)
 	if type(UnitID) == "string" then
 		UnitID = ParseUnit(UnitID) -- 스트링으로 유닛이름 입력가능
@@ -91,6 +95,7 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- 서플
 			elseif j=="HP"  then
 				PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,k*256))
+				PatchInsertC(Memory(0x662350 + (UnitID*4),Exactly,k*256)) 
 			elseif j=="Shield"  then
 				if type(k)=="boolean" then
 					if k == true then
@@ -107,8 +112,10 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x65FEC8 + (UnitID),SetTo,k)) -- 방어력
 			elseif j=="GroupFlag" then
 				PatchInsert(SetMemoryB(0x6637A0 + (UnitID),SetTo,k)) -- 그룹
+				PatchInsertC(MemoryB(0x6637A0 + (UnitID),Exactly,k)) 
 			elseif j=="Height" then
 				PatchInsert(SetMemoryB(0x663150 + (UnitID),SetTo,k)) -- 건설크기
+				PatchInsertC(MemoryB(0x663150 + (UnitID),Exactly,k)) 
 			elseif j=="BdDimX" then
 				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- 건설크기
 			elseif j=="BdDimY" then
@@ -128,6 +135,7 @@ function SetUnitsDatX(UnitID,Property)
 					PushErrorMsg("AdvFlag Inputdata Error")
 				end
 				PatchInsert(SetMemoryX(0x664080 + (UnitID*4),SetTo,k[1],k[2]))
+				PatchInsertC(MemoryX(0x664080 + (UnitID*4),Exactly,k[1],k[2])) 
 			elseif j=="DefType" then
 				PatchInsert(SetMemoryB(0x662180 + UnitID,SetTo,k))
 			elseif j=="DefUpType" then
@@ -139,8 +147,10 @@ function SetUnitsDatX(UnitID,Property)
 
 			elseif j=="AirWeapon"  then
 				PatchInsert(SetMemoryB(0x6616E0+UnitID,SetTo,k))
+				PatchInsertC(MemoryB(0x6616E0+UnitID,Exactly,k)) 
 			elseif j=="GroundWeapon"  then
 				PatchInsert(SetMemoryB(0x6636B8+UnitID,SetTo,k))
+				PatchInsertC(MemoryB(0x6636B8+UnitID,Exactly,k)) 
 				
 			elseif j=="SpaceProv"  then
 				PatchInsert(SetMemoryB(0x660988+(UnitID*1),SetTo,k))
@@ -201,16 +211,21 @@ function SetWeaponsDatX(WepID,Property)
 		for j,k in pairs(Property) do
 			if j=="DmgBase" then
 				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- 공격력
+				PatchInsertC(MemoryW(0x656EB0+(WepID *2),Exactly,k)) 
 			elseif j=="DmgFactor" then
 				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- 추가공격력
+				PatchInsertC(MemoryW(0x657678+(WepID *2),Exactly,k)) 
 			elseif j=="Cooldown" then
 				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- 공속
+				PatchInsertC(MemoryB(0x656FB8+(WepID *1),Exactly,k)) 
 			elseif j=="Splash" then
 				if type(k)=="boolean" then
 					if k == true then
 						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- 스플타입(일방형)
+						PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,3)) 
 					else
 						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- 스플타입(스플없음)
+						PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,1)) 
 					end
 				elseif type(k)~="table" or #k~=3 then
 					PushErrorMsg("Splash Inputdata Error")
@@ -219,21 +234,31 @@ function SetWeaponsDatX(WepID,Property)
 					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --스플 안
 					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --스플 중
 					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --스플 밖
+					PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,3)) 
+					PatchInsertC(MemoryW(0x656888+(WepID*2),Exactly,k[1])) 
+					PatchInsertC(MemoryW(0x6570C8+(WepID*2),Exactly,k[2])) 
+					PatchInsertC(MemoryW(0x657780+(WepID*2),Exactly,k[3])) 
 				end
 			elseif j=="RangeMin" then
 				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- 사거리 최소
+				PatchInsertC(Memory(0x656A18+(WepID *4),Exactly,k)) 
 			elseif j=="RangeMax" then
 				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- 사거리 최대
+				PatchInsertC(Memory(0x657470+(WepID *4),Exactly,k)) 
 			elseif j=="TargetFlag" then
 				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
+				PatchInsertC(MemoryW(0x657998 + (WepID*2), Exactly, k)) 
 			elseif j=="UpgradeType" then
 				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
+				PatchInsertC(MemoryB(0x6571D0 + WepID, Exactly, k)) 
 			elseif j=="ObjectNum" then
 				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- 투사체수
+				PatchInsertC(MemoryB(0x6564E0+WepID,Exactly,k)) 
 			elseif j=="IconType" then
 				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- 아이콘
 			elseif j== "Behavior" then
 				PatchInsert(SetMemoryB(0x656670+WepID,SetTo,k))
+				PatchInsertC(MemoryB(0x656670+WepID,Exactly,k)) 
 			elseif j== "LaunchX" then
 				PatchInsert(SetMemoryB(0x657910+WepID,SetTo,k))
 			elseif j== "LaunchY" then
@@ -250,6 +275,7 @@ function SetWeaponsDatX(WepID,Property)
 				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- 이름
 			elseif j== "DmgType" then
 				PatchInsert(SetMemoryB(0x657258+(WepID),SetTo,k)) -- 
+				PatchInsertC(MemoryB(0x657258+(WepID),Exactly,k)) 
 				
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
@@ -303,10 +329,12 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,Splash=false})
 end
+
+
 end
 function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
 	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=0,SeekRange=7,GroupFlag=0xA,
@@ -316,12 +344,13 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 	AttackMoveOrder = 2,
 	IdleOrder = 2,
 	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
+
 })
 
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,Splash=false})
 end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
@@ -512,11 +541,6 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 				f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
 			end
 			f_LAdd(FP,MoneyV,MoneyV,GetMoney)
-			if CT_MoneyV ~= nil then
-				f_LXor(FP,CT_MoneyV,CT_MoneyV,CT_NextRandW)
-				f_LAdd(FP,CT_MoneyV,CT_MoneyV,GetMoney)
-				f_LXor(FP,CT_MoneyV,CT_MoneyV,CT_NextRandW)
-			end
 		end
 
 		CIfEnd()
@@ -572,7 +596,10 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIf(FP,{CV(UnitPtrDest,0),Memory(0x628438, AtLeast, 1)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
-	--CallTrigger(FP, Call_CTInputUID)
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,BuildingID))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
 	CIfEnd()
 
 end
@@ -936,10 +963,7 @@ end
 function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
 		CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
-			f_LXor(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], CT_NextRandW)
 			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
-			f_LSub(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], Cost)
-			f_LXor(FP, iv.CT_Money[CP+1], iv.CT_Money[CP+1], CT_NextRandW)
 			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 		CIfEnd()
 	CIfEnd()
@@ -1043,3 +1067,294 @@ function Convert_Number(Num)
 	end
 	return WStr
 end
+
+function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
+	local TrapKey
+	local CT_PrevRand
+	local CT_NextRand
+	local PCT_PrevRandV
+	local PCT_NextRandV
+	local PCT_PrevRandW
+	local PCT_NextRandW
+	if PRandFlag == nil then
+	PCT_PrevRandV = CT_GPrevRandV
+	PCT_NextRandV = CT_GNextRandV
+	PCT_PrevRandW = CT_GPrevRandW
+	PCT_NextRandW = CT_GNextRandW
+	else
+	PCT_PrevRandV = CT_PrevRandV[Player+1]
+	PCT_NextRandV = CT_NextRandV[Player+1]
+	PCT_PrevRandW = CT_PrevRandW[Player+1]
+	PCT_NextRandW = CT_NextRandW[Player+1]
+	end
+	if VW[4] == "V" then
+		CIfX(FP,{CV(VW, _Xor(TrapVW,PCT_PrevRandV))})
+			CXor(FP,TrapVW,VW,PCT_NextRandV)
+	else
+		CIfX(FP,{TTNWar(VW, Exactly, _LXor(TrapVW,PCT_PrevRandW))})
+			f_LXor(FP,TrapVW,VW,PCT_NextRandW)
+	end
+	CElseX()
+	local DeathUnit = 98
+
+	if type(Flag) == "number" then
+		
+		if Flag>=32 then
+			DeathUnit = DeathUnit-(Flag/32)
+			Flag = Flag%32
+		end
+	DoActions(FP,{SetDeathsX(Player,SetTo,2^Flag,DeathUnit,2^Flag)})
+	elseif TestStart ~= 1 then
+		if Player == AllPlayers then
+			for p = 0, 6 do
+				TriggerX(FP,{LocalPlayerID(p)},{{
+					SetCp(p),
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+					DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					SetMemory(0xCDDDCDDC,SetTo,1);}})
+			end
+		else
+			TriggerX(FP,{LocalPlayerID(Player)},{{
+				SetCp(Player),
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+				SetMemory(0xCDDDCDDC,SetTo,1);}})
+				
+		end
+
+	end
+	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	if TestStart == 1 then
+		if Player == AllPlayers then Player = iv.LCP end
+		if VW[4] =="W" then
+			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayText(Text,4)})
+		else
+			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayText(Text,4)})
+		end
+		
+	end
+	
+	CIfXEnd()
+	return TrapKey
+end	
+
+
+function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배열 구성하기
+	local HeaderV = CreateVar(Player) -- 헤더가 저장된 V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- 구조오프셋 확장 변수 TempV
+	local Index = FuncAlloc -- FuncAlloc에서 라벨 받아옴
+	FuncAlloc = FuncAlloc + 3
+	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
+	local EXCUnitArr = {}
+	for k, v in pairs(EXCunitTemp) do
+		table.insert(EXCUnitArr,SetCVar("X",v[2],SetTo,0))
+	end
+
+	if ResetFlag ~= nil then
+		if type(ResetFlag) == "number" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블
+			for i = 1, #EXCunitTemp do
+				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		elseif type(ResetFlag) == "table" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블(타이머or값초기화 등)
+			for i = 1, #EXCunitTemp do
+				if ResetFlag[i]~= nil then
+					if type(ResetFlag[i]) == "table" then
+						local X = ResetFlag[i]
+						local RFValue = X[1]
+						local RFType
+						local RFMask
+						if X[2] == nil then
+							RFType = SetTo
+						else
+							RFType = X[2]
+						end
+						if X[3] == nil then
+							RFMask = 0xFFFFFFFF
+						else
+							RFMask = X[3]
+						end
+
+						table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,RFType,RFValue,RFMask))
+					else
+						PushErrorMsg("ResetFlag_Inputdata_Error")
+					end
+				end
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		end
+	else
+		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
+	end
+end
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
+end
+
+function Set_EXCC(Line,Type,Value) -- EXCC단락 내부에서 값을 쓰고싶을때. 실제값 X
+	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
+end
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 쓰고싶을때. 실제값
+	if Mask == nil then Mask = 0xFFFFFFFF end
+	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
+end
+
+
+function TCond_EXCC(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 검사하고 싶을때.
+	return TCVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
+end
+function Cond_EXCC(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 검사하고 싶을때.
+	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
+end
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때.
+	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC단락 외부에서 값을 검사하고 싶을때.
+	return TMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
+end
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때. TTOR전용
+	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+EXCC_initArr = {}
+function EXCC_Part1(EXCC_init,Actions)
+	if #EXCC_initArr ~= 0 then
+		PushErrorMsg("EXCCinitArr_Already_Loading")
+	end
+	EXCC_initArr = EXCC_init
+	EXCC_Player = EXCC_initArr[1]
+	EXCC_Index = EXCC_initArr[2]
+	EXCC_TempVarArr = EXCC_initArr[4]
+	PlayerID = EXCC_Player
+	EXCC_TempHeader = CreateVar(EXCC_Player)
+	PlayerID = PlayerConvert(PlayerID)
+	Trigger { -- Cunit Ctrig Start
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+2,0,0,1); 
+		},
+		flag = {preserved}
+	}	
+	Trigger { -- Cunit Calc Selector
+		players = {PlayerID},
+		conditions = { 
+			Label(EXCC_Index);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+			Actions,
+		},
+		flag = {preserved}
+	}	
+	
+end
+-- NJump Trig 삽입 부분 (조건만족시 Jump)
+function EXCC_Part2()
+	PlayerID = EXCC_Player
+	PlayerID = PlayerConvert(PlayerID)
+	for k, P in pairs(PlayerID) do
+		Trigger { -- Cunit Calc Last
+			players = {P},
+			conditions = { 
+				Label(EXCC_Index+1);
+			},
+		   	actions = {
+				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+				SetMemory(0x6509B0,SetTo,P);
+			},
+			flag = {preserved}
+		}	
+	end
+end
+function EXCC_Part3X()
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Start
+		players = {PlayerID},
+		conditions = { 
+			Label(EXCC_Index+2);
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_Part4X(LoopIndex,Conditions,Actions)
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Main
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+			Conditions,
+		},
+		actions = { 
+		EXCC_initArr[5],
+		SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index,0,0,0);
+		SetCtrigX("X",EXCC_Index+1,0x4,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_Index,0x158,0,SetTo,"X","X",0x4,1,0);
+		SetCtrigX("X",EXCC_Index,0x15C,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_TempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+		SetMemory(0x6509B0,SetTo,19025 + (84 * LoopIndex));
+		Actions,
+		EXCC_initArr[6]
+			},
+		flag = {preserved}
+	}		
+end
+
+	
+function EXCC_ClearCalc(Actions)
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc End
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			Actions
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_BreakCalc(Conditions,Actions)	
+	PlayerID = EXCC_Player
+	STPopTrigArr(PlayerID)
+	TTPopTrigArr(PlayerID)
+	Conditions = PopCondArr(Conditions)
+	Actions = PopActArr(Actions)
+	PopTrigArr(PlayerID,3)
+
+	Trigger { -- Cunit Calc Break
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+			Conditions,
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			SetCtrigX("X",EXCC_Index+1,0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",EXCC_Index+1,0x15C,0,SetTo,"X","X",0,0,1);
+			Actions,
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_End()
+	EXCC_Index = nil
+	EXCC_Player = nil
+	EXCC_initArr = {}
+	EXCC_TempHeader = nil
+end
+	

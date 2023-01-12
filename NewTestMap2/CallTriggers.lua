@@ -90,6 +90,41 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	local TempV = CreateVar(FP)
+	CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
+	CDoActions(FP, {
+		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,SUnitID)),
+		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+	})
+	CTSUPtr = CreateVar(FP)
+	CTSUID = CreateVar(FP)
+		--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",SUnitID})--
+	CIf(FP,{TTOR({
+		CV(SUnitID,5),
+		CV(SUnitID,23),
+		CV(SUnitID,30),
+		CV(SUnitID,3),
+		CV(SUnitID,17),
+	})})
+	f_Read(FP, _Add(Nextptrs, 28), nil, CTSUPtr)
+			--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",CTSUPtr})--
+	CIf(FP,{CV(CTSUPtr,19025,AtLeast),CV(CTSUPtr,19025+(84*1699),AtMost)})
+	f_Read(FP, _Add(CTSUPtr, 25), CTSUID, nil, 0xFF, 1)
+		--DisplayPrint(Force1, {"\x13\x04CTSUID : ",CTSUID})--
+	CSub(FP,CurCunitI,CTSUPtr,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
+	CDoActions(FP, {
+		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,CTSUID)),
+		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+	})
+	CIfEnd()
+
+	CIfEnd()
+
+
 	--CallTrigger(FP, Call_CTInputUID)
 	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
 	CWhileEnd()
@@ -128,9 +163,6 @@ function Install_CallTriggers()
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper2 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	TotalEper3 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
-	CT_GTotalEper = CreateVar(FP)
-	CT_GTotalEper2 = CreateVar(FP)
-	CT_GTotalEper3 = CreateVar(FP)
 	--ELevel = 현재 강화중인 레벨
 	CAdd(FP,TotalEper,UEper,GEper) -- +1강 확률
 	CAdd(FP,TotalEper2,_Div(UEper,10),GEper2)
@@ -429,5 +461,7 @@ function Install_CallTriggers()
 	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
 
 	SetCallEnd()
-
+if TestStart == 1 then
+	
+end
 end

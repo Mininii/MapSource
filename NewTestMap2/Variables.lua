@@ -74,7 +74,12 @@ function Include_Vars()
 
 	-- Interface Variable
 
+	MCTCondArr = {
+		Memory(0x5124F0, Exactly, 17)
+	}
 	iv={} -- 전역 변수 테이블
+	ct={} -- 전역 변수 테이블 치팅감지
+	ctg={} -- 전역 변수 테이블 치팅감지
 
 	--PlayData(NonSCA)
 	iv.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
@@ -86,41 +91,29 @@ function Include_Vars()
 	iv.TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	iv.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
 	iv.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
-	iv.ScTimer = CreateCcodeArr(7)
+	iv.ScTimer = CreateVarArr(7,FP)
 	iv.PTimeV = CreateVarArr(7,FP)
 	iv.General_Upgrade = CreateVarArr(7,FP)
-	iv.ResetStat = CreateCcodeArr(7)
+	iv.ResetStat = CreateVarArr(7,FP)
 	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
 	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	iv.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
 	iv.SellTicket = CreateVarArr(7,FP)
-	iv.CT_SellTicket = CreateVarArr(7,FP)
-	iv.CT_IncomeMax = CreateVarArr2(7,12,FP)
-	iv.CT_Money = CreateWarArr(7,FP)
-	iv.CT_PEXP = CreateWarArr(7,FP)
-	iv.CT_Credit = CreateWarArr(7,FP)
-	iv.CT_PLevel = CreateVarArr2(7,1,FP)
-	iv.CT_TotalEPer = CreateVarArr(7,FP)
-	iv.CT_TotalEPer2 = CreateVarArr(7,FP)
-	iv.CT_TotalEPer3 = CreateVarArr(7,FP)
-	iv.CT_General_Upgrade = CreateVarArr(7,FP)
-	iv.CT_Stat_EXPIncome = CreateVarArr(7,FP)
-	iv.CT_LV5Cool = CreateVarArr(7,FP)
-	
-	--General
-	iv.BossLV = CreateVar(FP)
+	iv.SCUnits = CreateVarArr(7,FP)
 	iv.PBossLV = CreateVarArr(7,FP)
 	iv.PBossDPS = CreateWarArr(7,FP)
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
+	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	
+	
+	
+	--General
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
-	iv.Stat_Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
-	iv.Upgrade_UI = CreateVarArr(7,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	iv.AutoBuyCode = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
-	iv.PCheckV = CreateVar(FP)--플레이어 수 체크
 	iv.MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
 	--PlayData(SCA)
@@ -128,7 +121,6 @@ function Include_Vars()
 	iv.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
 	iv.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	
 	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
 	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
@@ -142,6 +134,9 @@ function Include_Vars()
 	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
 	iv.CreditAddSC = CreateVarArr(7,FP) 
 	iv.LV5Cool = CreateVarArr(7,FP)
+	iv.B_PCredit = CreateVarArr(7,FP)
+	iv.B_PTicket = CreateVarArr(7,FP)
+
 
 
 	--Local Data Variable
@@ -190,11 +185,15 @@ function Include_Vars()
 
 	iv.CheatDetect = CreateCcode()
 
-	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
 
+
+
+
+
+	iv.PCheckV = CreateVar(FP)--플레이어 수 체크
 	iv.B_IncomeMax = CreateVar(FP)
 	iv.B_TotalEPer = CreateVar(FP)
 	iv.B_TotalEPer2 = CreateVar(FP)
@@ -202,13 +201,74 @@ function Include_Vars()
 	iv.B_Stat_EXPIncome = CreateVar(FP)
 	iv.B_Stat_Upgrade = CreateVar(FP)
 	iv.B_Credit = CreateVar(FP)
-	iv.B_PCredit = CreateVarArr(7,FP)
-
 	iv.B_Ticket = CreateVar(FP)
-	iv.B_PTicket = CreateVarArr(7,FP)
+	iv.BossLV = CreateVar(FP)
 
+	
+	ct.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	ct.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
+	ct.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
+	ct.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	ct.BuildMul2 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
+	ct.TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
+	ct.TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
+	ct.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	ct.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
+	ct.ScTimer = CreateVarArr(7,FP)
+	ct.PTimeV = CreateVarArr(7,FP)
+	ct.General_Upgrade = CreateVarArr(7,FP)
+	ct.ResetStat = CreateVarArr(7,FP)
+	ct.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
+	ct.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
+	ct.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
+	ct.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
+	ct.SellTicket = CreateVarArr(7,FP)
+	ct.SCUnits = CreateVarArr(7,FP)
+	ct.PBossLV = CreateVarArr(7,FP)
+	ct.PBossDPS = CreateWarArr(7,FP)
+	ct.TotalPBossDPS = CreateWarArr(7,FP)
+	ct.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	ct.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
+	ct.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
+	ct.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	ct.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
+	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
+	ct.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
+	ct.Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
+	ct.Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
+	ct.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
+	ct.TotalExp = CreateWarArr2(7,"10",FP) -- 지금까지 레벨업에 사용한 경험치 + 현재 레벨업에 필요한 경험치
+	ct.CurEXP = CreateWarArr(7,FP) -- 지금까지 레벨업에 사용한 경험치
+	ct.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
+	ct.PlayTime2 = CreateVarArr(7,FP) -- 총 플레이타임(신 값)
+	ct.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
+	ct.CreditAddSC = CreateVarArr(7,FP) 
+	ct.LV5Cool = CreateVarArr(7,FP)
+	ct.B_PCredit = CreateVarArr(7,FP)
+	ct.B_PTicket = CreateVarArr(7,FP)
+
+	
+
+	ctg.PCheckV = CreateVar(FP)--플레이어 수 체크
+	ctg.B_IncomeMax = CreateVar(FP)
+	ctg.B_TotalEPer = CreateVar(FP)
+	ctg.B_TotalEPer2 = CreateVar(FP)
+	ctg.B_TotalEPer3 = CreateVar(FP)
+	ctg.B_Stat_EXPIncome = CreateVar(FP)
+	ctg.B_Stat_Upgrade = CreateVar(FP)
+	ctg.B_Credit = CreateVar(FP)
+	ctg.B_Ticket = CreateVar(FP)
+	ctg.BossLV = CreateVar(FP)
+
+
+	iv.CT_PLevel = CreateVarArr2(7,1,FP)
 	--Balance
 
+	--PUpgrade = CreateVarArr(7,FP)
+	UnitWep = CreateVarArr(7,FP)
+	DmgFactor = CreateVarArr(7,FP)
+	Dmg = CreateVarArr(7,FP)
 
 	EXPArr = {}
 	for i = 1, 10000 do
@@ -268,7 +328,7 @@ function Include_Vars()
 	PushLevelUnit(22,36000,80,44,46,24,3500,59)--가디언
 	PushLevelUnit(23,36000,160,62,104,24,5000,59)--디바우러
 	PushLevelUnit(24,35000,335,39,40,24,6500,59)--울트라
-	PushLevelUnit(25,10000,750,46,50,12,5000,59)--디파
+	PushLevelUnit(25,30000,750,46,50,12,5000,59)--디파
 
 
 
@@ -285,11 +345,11 @@ function Include_Vars()
 
 
 
-	PushLevelUnit(25+11,16000,3000000/2,10,26,72,1000,59)--파벳영웅 3타
+	PushLevelUnit(25+11,16000,4000000/2,10,26,72,1000,59)--파벳영웅 3타
 	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--제라툴
 	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--노라드
 	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--다니모스
-	PushLevelUnit(25+15,1000,50000000/2,54,36,1,4000,59,nil,1)--디버링원 공속최대
+	PushLevelUnit(25+15,1000,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
@@ -341,10 +401,16 @@ end
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
+	CurCunitI = CreateVar(FP)
+	CT_GNextRandV = CreateVar(FP)
+	CT_GPrevRandV = CreateVar(FP)
+	CT_GNextRandW = CreateWar(FP)
+	CT_GPrevRandW = CreateWar(FP)
+	CT_NextRandV = CreateVarArr(7,FP)
+	CT_PrevRandV = CreateVarArr(7,FP)
+	CT_NextRandW = CreateWarArr(7,FP)
+	CT_PrevRandW = CreateWarArr(7,FP)
 	
-	
-	--CT_CUnit = CreateArr(84*1699, FP)
-	
-	
+
 	
 end
