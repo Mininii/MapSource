@@ -90,14 +90,14 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
-	CSub(FP,CurCunitI,Nextptrs,19025)
-	f_Div(FP,CurCunitI,_Mov(84))
-	local TempV = CreateVar(FP)
-	CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
-	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,SUnitID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
-	})
+	--CSub(FP,CurCunitI,Nextptrs,19025)
+	--f_Div(FP,CurCunitI,_Mov(84))
+	--local TempV = CreateVar(FP)
+	--CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
+	--CDoActions(FP, {
+	--	TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,SUnitID)),
+	--	TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+	--})
 	CTSUPtr = CreateVar(FP)
 	CTSUID = CreateVar(FP)
 		--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",SUnitID})--
@@ -113,13 +113,13 @@ function Install_CallTriggers()
 	CIf(FP,{CV(CTSUPtr,19025,AtLeast),CV(CTSUPtr,19025+(84*1699),AtMost)})
 	f_Read(FP, _Add(CTSUPtr, 25), CTSUID, nil, 0xFF, 1)
 		--DisplayPrint(Force1, {"\x13\x04CTSUID : ",CTSUID})--
-	CSub(FP,CurCunitI,CTSUPtr,19025)
-	f_Div(FP,CurCunitI,_Mov(84))
-	CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
-	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,CTSUID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
-	})
+	--CSub(FP,CurCunitI,CTSUPtr,19025)
+	--f_Div(FP,CurCunitI,_Mov(84))
+	--CMov(FP,TempV,_Add(_Mul(CurCunitI,_Mov(0x970/4)),_Add(CT_Cunit[3],((0x20*0)/4))))
+	--CDoActions(FP, {
+	--	TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,CTSUID)),
+	--	TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+	--})
 	CIfEnd()
 
 	CIfEnd()

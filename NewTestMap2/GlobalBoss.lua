@@ -64,12 +64,17 @@ Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
 CIfOnce(FP,{CV(BossLV,5,AtLeast)})
 
 	for i = 0, 6 do
-		CIf(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*6)})
+		CIf(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*8)})
 		CMov(FP,B_PCredit[i+1],_Mul(PLevel[i+1],_Mov(100)))
 		TriggerX(FP,{CV(B_PCredit[i+1],50000,AtLeast)},{SetV(B_PCredit[i+1],50000)},{preserved})
 		CIfEnd()
 	end
 CIfEnd()
+--for i = 0, 6 do
+--CIf(FP,{HumanCheck(i, 1),CV(LV5Cool[i+1],(60*60*5)+1,AtLeast)})
+--f_Mod(FP,LV5Cool[i+1],60*60*5)
+--CIfEnd()
+--end
 
 
 BossEPD = CreateVar(FP)
@@ -128,10 +133,10 @@ for j,k in pairs(BossArr) do
 	NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)})--보스방 건물 세팅
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {CreateUnit(1,k[1],110,FP),SetV(BossEPD,_Add(Nextptrs,2))})
-	CSub(FP,CurCunitI,Nextptrs,19025)
-	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,k[1]))})
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+	--CSub(FP,CurCunitI,Nextptrs,19025)
+	--f_Div(FP,CurCunitI,_Mov(84))
+	--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,k[1]))})
+	--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
 	f_LMov(FP,BossDPM,k[2])
 	CallTrigger(FP, ResetBDPMArr)
 	NIfEnd()

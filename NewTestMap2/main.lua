@@ -35,15 +35,15 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x11ver. \x041.04"
+VerText = "\x19ver\x07. \x041\x07.\x0404"
 
-TestSet(2)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
 end
 FP = P8
-LimitVer = 5
+LimitVer = 6
 StatVer = 4
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
@@ -62,7 +62,7 @@ CJump(AllPlayers,init_func)
 	if TestStart == 1 then
 		Include_Conv_CPosXY(FP,{4096*2,4096*2})
 	end
-	CT_Cunit = Install_EXCC(FP,3,nil)
+	--CT_Cunit = Install_EXCC(FP,3,nil)
 	Include_CRandNum(FP)
 	Install_CallTriggers()
 	

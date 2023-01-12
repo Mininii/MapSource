@@ -85,18 +85,20 @@ function GameDisplay()
         TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
         CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
         CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
-        CA__SetValue(Str1,"\x12포인트 :  000,000 | 크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
+        CA__SetValue(Str1,"\x12포인트 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
         CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
-        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1B0",0x1B,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
     
         
     
         CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-2)
         CIfX(FP,{CD(Tabkey,1)})--수치표기
         CA__SetColor((56*2)+1, 0x17)
+        CA__SetColor((56*2)+19, 0x10)
         CElseX()--퍼센트표기
         CA__SetColor((56*2)+1, 0x10)
+        CA__SetColor((56*2)+19, 0x17)
         CIfXEnd()
         CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
         
@@ -172,7 +174,7 @@ function GameDisplay()
         end
         CMul(FP,UpgradeLoc,10)
         CMul(FP,ScoutDmgLoc,100)
-        DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]\x12\x14미구현>>[이전 페이지] 1 Page [다음 페이지]"})
+        DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]"})--\x12\x14미구현>>[이전 페이지] 1 Page [다음 페이지]
         TriggerX(FP, CD(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
         TriggerX(FP, CD(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
         DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
@@ -278,10 +280,6 @@ function GameDisplay()
         DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장안됨) \x04: \x07",SellTicketLoc," \x17닫기 \x04: \x10L"})
         for i = 0, 6 do
             CIf(FP,HumanCheck(i, 1))
-            CIf(FP,{CV(LV5Cool[i+1],(60*60*6)+1,AtLeast)})
-            f_Mod(FP,LV5Cool[i+1],60*60*6)
-            CIfEnd()
-    
             CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
             CMov(FP,CTimeV,LV5Cool[i+1])
             CallTrigger(FP,Call_ConvertTime)
