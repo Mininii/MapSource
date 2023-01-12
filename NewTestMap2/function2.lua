@@ -50,7 +50,7 @@ function CreateWarArr2(Number,Value,PlayerID)
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
 		if CreateVarXAlloc > CreateMaxVAlloc then
-			CreateVariable_IndexAllocation_Overflow()
+			PushErrorMsg("CreateVariable_IndexAllocation_Overflow")
 		end
 		if PlayerID == nil then
 			PlayerID = AllPlayers

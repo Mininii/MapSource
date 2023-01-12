@@ -52,10 +52,14 @@ function onInit_EUD()
 	RunAIScript(P7VON),
 	RunAIScript(P8VON),
 })	
-	for i = 0, 24 do
-		SetUnitsDatX(i, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0})
-	end
-	
+for i = 0, 24 do
+	SetUnitsDatX(i, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0})
+end
+
+for i = 0, 227 do
+	SetUnitsDatX(i, {AdvFlag={0,0x4},Height=4})
+end
+
 	
 	
 	
@@ -239,8 +243,9 @@ function onInit_EUD()
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 	
 		
-	f_Read(FP, 0x628438, nil, Nextptrs)
+	f_Read(FP, 0x628438, ShopPtr[i+1], Nextptrs)
 	CDoActions(FP, {TSetNVar(TestShop[i+1], SetTo, Nextptrs),CreateUnit(1,128,1+i,i)})
+	
 	--CallTrigger(FP, Call_CTInputUID)
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,57+i,FP)})

@@ -40,6 +40,8 @@ function Include_Vars()
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	--Interface
 	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
+	ShopPtr = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
+	
 	TBLFlag = CreateCcode() -- TBL 갱신 여부 판별용 데스값. 유닛 생성이 감지되면 동작안함
 	SettingUnit1 = CreateVarArr(7, FP)-- 1~25강 유닛 자동강화 설정기
 	SettingUnit2 = CreateVarArr(7, FP)-- 26~39강 유닛 자동강화 설정기
@@ -184,6 +186,7 @@ function Include_Vars()
 	iv.TempEXPV = CreateVar(FP)
 
 	iv.CheatDetect = CreateCcode()
+	iv.SaveRemind = CreateCcode()
 
 	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
@@ -260,6 +263,7 @@ function Include_Vars()
 	ctg.B_Credit = CreateVar(FP)
 	ctg.B_Ticket = CreateVar(FP)
 	ctg.BossLV = CreateVar(FP)
+	iv.GeneralPlayTime = CreateVar(FP)
 
 
 	iv.CT_PLevel = CreateVarArr2(7,1,FP)
@@ -368,7 +372,7 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,5,20,100,58,1,nil,60) -- 기본유닛
+	SetUnitAbility(88,114,5,35,100,58,1,nil,60,0) -- 기본유닛
 	PBossArr = {
 		{84,"1300"},
 		{36,"4800"},
@@ -395,8 +399,8 @@ else
 end
 
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
-	Cost_Stat_ScDmg = 80
-	Cost_Stat_AddSc = 800
+	Cost_Stat_ScDmg = 15
+	Cost_Stat_AddSc = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPer2 = 200

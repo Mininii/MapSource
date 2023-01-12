@@ -54,7 +54,7 @@ function PatchInsertPrsv(Act)
 end
 
 function PatchInsertC(Cond)
-	table.insert(MCTCondArr,Cond)
+	--table.insert(MCTCondArr,Cond)
 end
 
 function SetUnitsDatX(UnitID,Property)
@@ -318,9 +318,10 @@ function Print_13X(PlayerID,TargetPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 
-function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType)
+function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType,GroupFlag)
+	if GroupFlag == nil then GroupFlag= 0xA end
 	if DefType == nil then DefType = 0 end
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=DefType,SeekRange=7,GroupFlag=0xA,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
@@ -331,7 +332,7 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 if ObjNum~=nil then
 	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,Splash=false})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
 end
 
 
@@ -350,7 +351,7 @@ function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Obj
 if ObjNum~=nil then
 	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,Splash=false})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
 end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
@@ -363,11 +364,21 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 
 	if ifTType ~= nil then
 		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
+		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID+1,Exactly,WepID))
+		if UnitID==62 then
+			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,104))
+		else
+			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID+1,Exactly,130))
+		end
 	else
 		SetUnitAbility(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
+		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
 	end
 	if Level>=26 and Level<=40 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
+		table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,0xA+0x20)) 
+	else
+		table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,0xA)) 
 	end
 	SetUnitsDatX(UnitID, {Class=193})
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
@@ -375,6 +386,17 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	--AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	table.insert(AutoEnchArr2,CreateCcodeArr(7))
 	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
+	table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
+	table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
+	table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
+	table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
+
+	table.insert(MCTCondArr,MemoryB(0x663150 + (UnitID),Exactly,4)) 
+	table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,0+0x20000000,4+8+0x20000000)) 
+	table.insert(MCTCondArr,Memory(0x657470+(WepID *4),Exactly,6*32)) 
+	table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
+	if ObjNum == nil then ObjNum =1 end
+	table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,ObjNum)) 
 	
 	
 end
