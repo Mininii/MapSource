@@ -267,6 +267,7 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		{iv.B_Credit,ctg.B_Credit,"B_Credit"},
 		{iv.B_Ticket,ctg.B_Ticket,"B_Ticket"},
 		{iv.BossLV,ctg.BossLV,"BossLV"},
+		{iv.CUnitT,ctg.CUnitT,"CUnitT"}
 
 
 	}
@@ -635,10 +636,10 @@ for i = 0, 6 do -- 각플레이어
 		NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(PBossPtr[i+1],0),CV(PBossLV[i+1],j-1)})--보스방 건물 세팅
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		CDoActions(FP, {CreateUnit(1,k[1],129+i,FP),SetV(PBossPtr[i+1],_Add(Nextptrs,2))})
-		--CSub(FP,CurCunitI,Nextptrs,19025)
-		--f_Div(FP,CurCunitI,_Mov(84))
-		--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,k[1]))})
-		--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+		CSub(FP,CurCunitI,Nextptrs,19025)
+		f_Div(FP,CurCunitI,_Mov(84))
+		CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,k[1]))})
+		CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
 		--CallTrigger(FP, Call_CTInputUID)
 		f_LMov(FP,TotalPBossDPS[i+1],k[2])
 		--CallTrigger(FP, ResetBDPMArr)
@@ -703,10 +704,10 @@ for i = 0, 6 do -- 각플레이어
 	CIf(FP,{LocalPlayerID(i),CV(PCheckV,2,AtLeast),CD(SCheck,1)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	TriggerX(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),SetCp(i),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
-	--CSub(FP,CurCunitI,Nextptrs,19025)
-	--f_Div(FP,CurCunitI,_Mov(84))
-	--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
-	--CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
 	--CallTrigger(FP, Call_CTInputUID)
 	CIfEnd()
 	TriggerX(FP,{LocalPlayerID(i),CV(PCheckV,2,AtLeast),CD(SCheck,0)},{SetCD(SCheck,1),SetCp(i),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
@@ -1047,6 +1048,9 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
 		CMov(FP,0x6509B0,Cunit2,25)
 				CTrigger(FP,{DeathsX(CurrentPlayer,Exactly,ParseUnit("Zerg Scourge"),0,0xFF)},{TSetMemory(0x6284E8+(0x30*i),SetTo,ShopPtr[i+1])},1)
+				if TestStart == 1 then
+					CTrigger(FP,{KeyPress("Y", "Down")},{TSetDeathsX(CurrentPlayer,SetTo,54,0,0xFF)},1)
+				end
 		CIfEnd()
 		CMov(FP,0x6509B0,FP)
 	CIfEnd()
@@ -1056,8 +1060,7 @@ Shop()
 GameDisplay()
 GlobalBoss()
 TBL()
---CUnit()
-	
+CUnit()	
 
 	
 MemoryCT = CreateCcode()

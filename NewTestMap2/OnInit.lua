@@ -68,7 +68,7 @@ end
 	if TestStart==1 then
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,1)}) -- 테스트모드 최대배속
 	else
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,17)}) -- 기본 3배속
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 3배속
 	end
 
 	--CFor(FP,19025,19025+(84*1699),84) --치트 검사 배열에 모든 유닛 첫 등록
@@ -293,12 +293,12 @@ end
 		if LocSet == 10 then LocSet=0 DoActions(FP, {SetLoc("Location 87","U",Add,64),SetLoc("Location 87","D",Add,64),SetLoc("Location 87", "L", Subtract, 64*10),SetLoc("Location 87", "R", Subtract, 64*10)}) end
 	end
 	
-	--CFor(FP, 0, 1700, 1)
-	--CT_UID = CreateVar(FP)
-	--CI = CForVariable()
-	--f_Read(FP, _Add(_Mul(CI,84),19025+25), CT_UID, nil, 0xFF,1)
-	--CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
-	--CForEnd()
+	CFor(FP, 0, 1700, 1)
+	CT_UID = CreateVar(FP)
+	CI = CForVariable()
+	f_Read(FP, _Add(_Mul(CI,84),19025+25), CT_UID, nil, 0xFF,1)
+	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
+	CForEnd()
 
 	CIfEnd()
 

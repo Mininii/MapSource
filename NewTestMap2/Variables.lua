@@ -77,7 +77,7 @@ function Include_Vars()
 	-- Interface Variable
 
 	MCTCondArr = {
-		Memory(0x5124F0, Exactly, 17)
+		Memory(0x5124F0, Exactly, 13)
 	}
 	iv={} -- 전역 변수 테이블
 	ct={} -- 전역 변수 테이블 치팅감지
@@ -264,6 +264,8 @@ function Include_Vars()
 	ctg.B_Ticket = CreateVar(FP)
 	ctg.BossLV = CreateVar(FP)
 	iv.GeneralPlayTime = CreateVar(FP)
+	iv.CUnitT = CreateVar(FP)
+	ctg.CUnitT = CreateVar(FP)
 
 
 	iv.CT_PLevel = CreateVarArr2(7,1,FP)

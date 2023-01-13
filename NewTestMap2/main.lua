@@ -35,9 +35,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x19ver\x07. \x041\x07.\x0404"
+VerText = "\x19ver\x07. \x041\x07.\x0405"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
@@ -62,7 +62,7 @@ CJump(AllPlayers,init_func)
 	if TestStart == 1 then
 		Include_Conv_CPosXY(FP,{4096*2,4096*2})
 	end
-	--CT_Cunit = Install_EXCC(FP,3,nil)
+	CT_Cunit = Install_EXCC(FP,3,nil)
 	Include_CRandNum(FP)
 	Install_CallTriggers()
 	
