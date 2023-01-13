@@ -18,10 +18,10 @@ function Interface()
 	local PBossDPS = iv.PBossDPS-- 개인보스DPS
 	local TotalPBossDPS = iv.TotalPBossDPS --개인보스DPS 목표치
 	local SellTicket = iv.SellTicket
-	local SCUnits = iv.SCUnits
 
-
-
+	local BanFlag = iv.BanFlag
+	local BanFlag2 = iv.BanFlag2
+	BPArr = {BanFlag,BanFlag2}
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -229,7 +229,6 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		{iv.NextOreMul,ct.NextOreMul,"NextOreMul"},
 		{iv.NextGasMul,ct.NextGasMul,"NextGasMul"},
 		{iv.SellTicket,ct.SellTicket,"SellTicket"},
-		{iv.SCUnits,ct.SCUnits,"SCUnits"},
 		{iv.PBossLV,ct.PBossLV,"PBossLV"},
 		{iv.PBossDPS,ct.PBossDPS,"PBossDPS"},
 		{iv.TotalPBossDPS,ct.TotalPBossDPS,"TotalPBossDPS"},
@@ -253,6 +252,8 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		{iv.LV5Cool,ct.LV5Cool,"LV5Cool"},
 		{iv.B_PCredit,ct.B_PCredit,"B_PCredit"},
 		{iv.B_PTicket,ct.B_PTicket,"B_PTicket"},
+		{iv.BanFlag,ct.BanFlag,"BanFlag"},
+		{iv.BanFlag2,ct.BanFlag2,"BanFlag2"},
 		{TempO,CT_TempO,"TempO"},
 		{TempG,CT_TempG,"TempG"},
 	}
@@ -350,8 +351,13 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
 
 	CIfEnd()--
+	for j,k in pairs(BPArr) do
+		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)},{preserved})
+	end
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
+		SCA_DataLoad(i,BanFlag2[i+1],97)
+		SCA_DataLoad(i,BanFlag[i+1],98)
 		SCA_DataLoad(i,PLevel[i+1],101)
 		SCA_DataLoad(i,StatP[i+1],102)
 		SCA_DataLoad(i,Stat_ScDmg[i+1],103)
@@ -392,9 +398,8 @@ for i = 0, 6 do -- 각플레이어
 		CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
-		CTrigger(FP, {Deaths(i,AtLeast,1,98)}, {SetCD(CheatDetect,1)})
-		CTrigger(FP, {Deaths(i,AtLeast,1,97)}, {SetCD(CheatDetect,1)})
-
+		CTrigger(FP, {CV(BanFlag2[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
+		CTrigger(FP, {CV(BanFlag[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -469,6 +474,8 @@ for i = 0, 6 do -- 각플레이어
 	local CTSwitch = CreateCcode()
 	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
+		SCA_DataSave(i,BanFlag2[i+1],97)
+		SCA_DataSave(i,BanFlag[i+1],98)
 		SCA_DataSave(i,PLevel[i+1],101)
 		SCA_DataSave(i,StatP[i+1],102)
 		SCA_DataSave(i,Stat_ScDmg[i+1],103)
@@ -512,8 +519,8 @@ for i = 0, 6 do -- 각플레이어
 	CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
-	CTrigger(FP, {Deaths(i,AtLeast,1,98)}, {SetCD(CheatDetect,1)})
-	CTrigger(FP, {Deaths(i,AtLeast,1,97)}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {CV(BanFlag2[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {CV(BanFlag[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 	TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -856,7 +863,6 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 
 	CAdd(FP,IncomeMax[i+1],B_IncomeMax)
-	CAdd(FP,IncomeMax[i+1],SCUnits[i+1])
 	CAdd(FP,TotalEPer[i+1],B_TotalEPer)
 	CAdd(FP,TotalEPer2[i+1],B_TotalEPer2)
 	CAdd(FP,TotalEPer3[i+1],B_TotalEPer3)
@@ -1002,7 +1008,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	f_LMov(FP,MoneyLoc,Money[i+1])
 	f_LMov(FP,CredLoc,Credit[i+1])
 	CMov(FP,IncomeLoc,Income[i+1])
-	CSub(FP,IncomeMaxLoc,IncomeMax[i+1],SCUnits[i+1])
+	CMov(FP,IncomeMaxLoc,IncomeMax[i+1])
 	f_Cast(FP,{ExpLoc,0},_LSub(PEXP[i+1], CurEXP[i+1]))
 	f_Cast(FP,{TotalExpLoc,0},_LSub(TotalExp[i+1], CurEXP[i+1]))
 	CMov(FP,LevelLoc,PLevel[i+1])

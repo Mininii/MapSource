@@ -356,7 +356,7 @@ end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
 	local WepName = {}
-	WepName[1] = 1446
+	WepName[5] = 1446
 	WepName[12] = 1445
 	WepName[24] = 1444
 	WepName[48] = 1443
@@ -480,7 +480,7 @@ end
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_MoneyV)
 	local DPSArrX = CreateArr(96*4, FP)
-	local TotalDPS = CreateVar(FP)
+	local TotalDPS = CreateWar(FP)
 	local TotalDPS2 = CreateVar(FP)
 	local DPSCheckV = CreateVar(FP)
 	local DpsDest = CreateVar(FP)
@@ -500,10 +500,8 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	CMov(FP,DpsDest,0)
 	CIfXEnd()
 
-
-	
-	CAdd(FP,TotalDPS,DpsDest)
-	CSub(FP,TotalDPS,_Read(ArrX(DPSArrX,DPSCheck2)))
+	f_LAdd(FP, TotalDPS, TotalDPS, {DpsDest,0})
+	f_LSub(FP, TotalDPS, TotalDPS, {_Read(ArrX(DPSArrX,DPSCheck2)),0})
 	CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
 	CIfX(FP,{CV(TotalDPS,4*4,AtLeast)})
 	f_Div(FP, TotalDPS2,TotalDPS,4*4)
@@ -1125,7 +1123,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 			DeathUnit = DeathUnit-(Flag/32)
 			Flag = Flag%32
 		end
-	DoActions(FP,{SetDeathsX(Player,SetTo,2^Flag,DeathUnit,2^Flag)})
+	DoActionsX(FP,{SetCVar(FP, BPArr[99-DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
 	elseif TestStart ~= 1 then
 		if Player == AllPlayers then
 			for p = 0, 6 do

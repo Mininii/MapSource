@@ -102,7 +102,6 @@ function Include_Vars()
 	iv.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
 	iv.SellTicket = CreateVarArr(7,FP)
-	iv.SCUnits = CreateVarArr(7,FP)
 	iv.PBossLV = CreateVarArr(7,FP)
 	iv.PBossDPS = CreateWarArr(7,FP)
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
@@ -139,6 +138,8 @@ function Include_Vars()
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
 
+	iv.BanFlag = CreateVarArr(7,FP)
+	iv.BanFlag2 = CreateVarArr(7,FP)
 
 
 	--Local Data Variable
@@ -226,7 +227,6 @@ function Include_Vars()
 	ct.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	ct.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
 	ct.SellTicket = CreateVarArr(7,FP)
-	ct.SCUnits = CreateVarArr(7,FP)
 	ct.PBossLV = CreateVarArr(7,FP)
 	ct.PBossDPS = CreateWarArr(7,FP)
 	ct.TotalPBossDPS = CreateWarArr(7,FP)
@@ -250,6 +250,9 @@ function Include_Vars()
 	ct.LV5Cool = CreateVarArr(7,FP)
 	ct.B_PCredit = CreateVarArr(7,FP)
 	ct.B_PTicket = CreateVarArr(7,FP)
+
+	ct.BanFlag = CreateVarArr(7,FP)
+	ct.BanFlag2 = CreateVarArr(7,FP)
 
 	
 
