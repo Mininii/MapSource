@@ -11,7 +11,9 @@ if TestStart == 1 then
 		SetMemory(0x6509B0, Subtract, 2)
 	}, {preserved})
 	CForEnd()
-	DoActionsX(FP, {AddV(iv.CUnitT,1)})
+end
+
+DoActionsX(FP, {AddV(iv.CUnitT,1)})
 CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
@@ -46,69 +48,83 @@ CIf(FP,CV(iv.CUnitT,24,AtLeast),SetV(iv.CUnitT,0))
 	CSub(FP,0x6509B0,6)
 	CIfEnd()
 
-	--0x4D 가 107 Or 10일떄 0x5C인식
-	CIfX(FP, {TTOR({DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00)})},{})--홀드or공격중일때.. 23으로 감
-	DoActions(FP, SetMemory(0x6509B0, Add, 4))
-	CIf(FP,{Deaths(CurrentPlayer, AtLeast, 1, 0)},{})-- 대상이있을경우 일단 8로 가서 이동플래그 확인
-	DoActions(FP,{SetMemory(0x6509B0, Subtract, 15)})
-	-- 이동플래그가 0 또는 8일경우에만 작동
-	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,0,0,0xFF),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})})
+--	--0x4D 가 107 Or 10일떄 0x5C인식
+--	CIfX(FP, {TTOR({DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00)})},{})--홀드or공격중일때.. 23으로 감
+--	DoActions(FP, SetMemory(0x6509B0, Add, 4))
+--	CIf(FP,{Deaths(CurrentPlayer, AtLeast, 1, 0)},{})-- 대상이있을경우 일단 8로 가서 이동플래그 확인
+--	DoActions(FP,{SetMemory(0x6509B0, Subtract, 15)})
+--	-- 이동플래그가 0 또는 8일경우에만 작동
+--	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,0,0,0xFF),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})})--
 
-		--디펜시브 값이 1이상이고 디펜타이머가 0이면 변조. 단, 이동플래그 1일경우 작동금지
-		DoActions(FP, SetMemory(0x6509B0, Add, 60))--68로이동
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Add, 1)})----
-		if TestStart ==1 then
-			CIf(FP,{DeathsX(CurrentPlayer,AtMost,2,0,0xFF)})
-				
-				f_SaveCp()
-				local TempUID = CreateVar(FP)
-				CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
-				CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
-				Convert_CPosXY()
-				DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
-				f_LoadCp()
-			CIfEnd()
-		else
-			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
-				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
-			})
-		end
-		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
-		CIfEnd()----
-		--디펜싀브값이 0일때 디펜시브 타이머와 함께 디펜시브 방어력양을 준다.
-		
-		TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFFFF0000)},{SetDeathsX(CurrentPlayer, SetTo, 65536*256, 0, 0xFFFF0000),
-		SetMemory(0x6509B0, Add, 1);
-		SetDeathsX(CurrentPlayer, SetTo, 6, 0, 0xFF),
-		SetMemory(0x6509B0, Subtract, 1);},{preserved})
-		--디펜시브 값이 1 이상이고 공속 인식되면 디펜시브 타이머는 상시로 초기화한다.
-		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Subtract, 48)})
-			--21로이동
-			TriggerX(FP, {DeathsX(CurrentPlayer,AtLeast,3*256,0,0xFF00)},{--공속이 있다없다?
-				--다시 디펜시브타이머인 69로 이동
-				SetMemory(0x6509B0, Add, 48);
-				SetDeathsX(CurrentPlayer, SetTo, 6, 0, 0xFF),--디펜타이머 초기화
-				SetMemory(0x6509B0, Subtract, 48);
-			},{preserved})--
-			DoActions(FP, {SetMemory(0x6509B0, Add, 48)})
-		CIfEnd()
-		DoActions(FP, {SetMemory(0x6509B0, Subtract, 60)})
-		--다시 23으로 이동----
-		CIfEnd()
-		DoActions(FP,{SetMemory(0x6509B0, Add, 15)})
-	CIfEnd()
-	DoActions(FP, {SetMemory(0x6509B0, Subtract, 4)})
-	
-	CElseX({})
-		DoActions(FP, {SetMemory(0x6509B0, Add, 49),
-		SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFFFF0000),
-		SetMemory(0x6509B0, Add, 1);
-		SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),
-		SetMemory(0x6509B0, Subtract, 1);
-		SetMemory(0x6509B0, Subtract, 49)})--홀드or공격 명령이 없으면 디펜을 0으로 돌린다
-		
-	CIfXEnd()--
+--		--디펜시브 값이 1이상이고 디펜타이머가 0이면 변조. 단, 이동플래그 1일경우 작동금지
+--		DoActions(FP, SetMemory(0x6509B0, Add, 60))--68로이동
+--		--디펜시브 값이 0이고 
+--		CIf(FP,{DeathsX(CurrentPlayer,AtMost,0,0,0xFFFF0000)},{SetMemory(0x6509B0, Subtract, 47)})
+--			--21로이동
+--			TriggerX(FP, {DeathsX(CurrentPlayer,AtLeast,2*256,0,0xFF00)},{--공속이 2이상이면?--
+
+--				SetMemory(0x6509B0, Add, 46);
+--				SetDeathsX(CurrentPlayer, SetTo, 65536*256, 0, 0xFFFF0000),--디펜 방어력 초기화
+--				SetMemory(0x6509B0, Add, 1);
+--				SetDeathsX(CurrentPlayer, SetTo, 25, 0, 0xFF),--디펜타이머 초기화
+--				SetMemory(0x6509B0, Subtract, 47);
+--			},{preserved})--
+--			DoActions(FP, {SetMemory(0x6509B0, Add, 47)})
+--		CIfEnd()
+--		if TestStart ==1 then
+--            f_SaveCp()
+--            local TempUID = CreateVar(FP)
+--            local TempV1 = CreateVar(FP)
+--            local TempV2 = CreateVar(FP)
+--            local TempV3 = CreateVar(FP)
+--            local TempV4 = CreateVar(FP)
+--            CMov(FP,TempV2,_Read(BackupCp),nil,0xFFFF0000,1)
+--            CMov(FP,TempV3,_Read(_Add(BackupCp,1)),nil,0xFF,1)
+--            CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
+--            CMov(FP,TempV1,_Read(_Sub(UIDPtr,6)),nil,0xFF00,1)
+--            CMov(FP,TempV4,_Read(_Sub(UIDPtr,17)),nil,0xFF,1)
+--            f_Div(FP,TempV1,256)
+--            DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  OrderID : ",TempV1,"  ","DefValue : ",TempV2,"   DefTimer : ",TempV3, "   MoveMentFlag : ",TempV4})--
+--            f_LoadCp()
+--		else
+--		end
+--		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Add, 1)})----디펜방어력 존재하는데 디펜타이머가 기준치 미달일경우
+--		if TestStart ==1 then
+--			CIf(FP,{DeathsX(CurrentPlayer,AtMost,3,0,0xFF)})
+--				
+--				f_SaveCp()
+--				local TempUID = CreateVar(FP)
+--				CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
+--				CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+--				Convert_CPosXY()
+--				DisplayPrint(Force1, {"\x13\x04핵감지! CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
+--				f_LoadCp()
+--			CIfEnd()
+--		else
+--			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
+--				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+--				DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+--			})
+--		end
+--		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
+--		CIfEnd()------
+
+--		DoActions(FP, {SetMemory(0x6509B0, Subtract, 60)})
+--		--다시 23으로 이동----
+--		CIfEnd()
+--		DoActions(FP,{SetMemory(0x6509B0, Add, 15)})
+--	CIfEnd()
+--	DoActions(FP, {SetMemory(0x6509B0, Subtract, 4)})
+--	
+--	CElseX({})
+--		DoActions(FP, {SetMemory(0x6509B0, Add, 49),
+--		SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFFFF0000),
+--		SetMemory(0x6509B0, Add, 1);
+--		SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),
+--		SetMemory(0x6509B0, Subtract, 1);
+--		SetMemory(0x6509B0, Subtract, 49)})--홀드or공격 명령이 없으면 디펜을 0으로 돌린다
+--		
+--	CIfXEnd()--
 
 
 
@@ -158,5 +174,4 @@ CIf(FP,CV(iv.CUnitT,24,AtLeast),SetV(iv.CUnitT,0))
 CIfEnd()
 
 
-end
 end

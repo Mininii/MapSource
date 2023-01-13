@@ -600,32 +600,20 @@ for i = 0, 6 do -- 각플레이어
 --		CTrigger(FP,{CD(PKey,1)},{SetV(MaxG,0)},1)
 --	end
 	
-	TriggerX(FP, {Accumulate(i, AtLeast, 10000000, Ore),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
 
-	TriggerX(FP, {Accumulate(i, AtLeast, 50000000, Gas),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
-	TriggerX(FP, {CV(TempO[i+1],10000000,AtLeast),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
+TriggerX(FP, {CV(TempO[i+1],10000000,AtLeast),LocalPlayerID(i)}, {
+	SetCp(i),
+	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+	SetMemory(0xCDDDCDDC,SetTo,1);})
 
-	TriggerX(FP, {CV(TempG[i+1],50000000,AtLeast),LocalPlayerID(i)}, {
-		SetCp(i),
-		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-		SetMemory(0xCDDDCDDC,SetTo,1);})
+TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
+	SetCp(i),
+	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+	SetMemory(0xCDDDCDDC,SetTo,1);})
 
 
 	Debug_DPSBuilding(DpsLV1[i+1],127,95+i)
@@ -1048,7 +1036,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
 		CMov(FP,0x6509B0,Cunit2,25)
 				CTrigger(FP,{DeathsX(CurrentPlayer,Exactly,ParseUnit("Zerg Scourge"),0,0xFF)},{TSetMemory(0x6284E8+(0x30*i),SetTo,ShopPtr[i+1])},1)
-				if TestStart == 1 then
+				if Limit == 1 then
 					CTrigger(FP,{KeyPress("Y", "Down")},{TSetDeathsX(CurrentPlayer,SetTo,54,0,0xFF)},1)
 				end
 		CIfEnd()
