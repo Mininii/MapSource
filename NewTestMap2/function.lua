@@ -1109,22 +1109,33 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	end
 	if VW[4] == "V" then
 		CIfX(FP,{CV(VW, _Xor(TrapVW,PCT_PrevRandV))})
-			CXor(FP,TrapVW,VW,PCT_NextRandV)
 	else
 		CIfX(FP,{TTNWar(VW, Exactly, _LXor(TrapVW,PCT_PrevRandW))})
-			f_LXor(FP,TrapVW,VW,PCT_NextRandW)
 	end
 	CElseX()
-	local DeathUnit = 98
+	local DeathUnit = 1
 
 	if type(Flag) == "number" then
 		
 		if Flag>=32 then
-			DeathUnit = DeathUnit-(Flag/32)
+			DeathUnit = math.floor(DeathUnit+(Flag/32))
 			Flag = Flag%32
 		end
-	DoActionsX(FP,{SetCVar(FP, BPArr[99-DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
-	elseif TestStart ~= 1 then
+		--if DeathUnit == 3 then Pushdsadas() end
+	if Player == AllPlayers then
+		local ttable = {}
+		for i = 0, 6 do
+			table.insert(ttable,SetCVar(FP, BPArr[DeathUnit][i+1][2], SetTo, 2^Flag, 2^Flag))
+			DoActionsX(FP,ttable)
+		end
+	else
+		DoActionsX(FP,{SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
+	end
+
+	else
+		
+
+	if TestStart ~= 1 then
 		if Player == AllPlayers then
 			for p = 0, 6 do
 				TriggerX(FP,{LocalPlayerID(p)},{{
@@ -1145,7 +1156,9 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		end
 
 	end
-	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
+	end
+	
+
 	if TestStart == 1 then
 		if Player == AllPlayers then Player = iv.LCP end
 		if VW[4] =="W" then
@@ -1155,7 +1168,6 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		end
 		
 	end
-	
 	CIfXEnd()
 	return TrapKey
 end	

@@ -57,24 +57,27 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_Ticket,50);
 	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
-Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
-	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
-})
+AddLV5Cool=CreateCcode()
+for i = 0, 4 do
+	Trigger2X(FP,{CV(BossLV,5+i,AtLeast)},{
+		SetV(B_Credit,50000-(i*10000));
+		AddCD(AddLV5Cool,1),
+		SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	})
+end
 
-CIfOnce(FP,{CV(BossLV,5,AtLeast)})
 
+CIf(FP,{CD(AddLV5Cool,1,AtLeast)},SubCD(AddLV5Cool, 1))
+if TestStart == 1 then
 	for i = 0, 6 do
-		CIf(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*8)})
-		CMov(FP,B_PCredit[i+1],_Mul(PLevel[i+1],_Mov(100)))
-		TriggerX(FP,{CV(B_PCredit[i+1],50000,AtLeast)},{SetV(B_PCredit[i+1],50000)},{preserved})
-		CIfEnd()
+		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60)},{preserved})
 	end
+else
+	for i = 0, 6 do
+		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*8)},{preserved})
+	end
+end
 CIfEnd()
---for i = 0, 6 do
---CIf(FP,{HumanCheck(i, 1),CV(LV5Cool[i+1],(60*60*5)+1,AtLeast)})
---f_Mod(FP,LV5Cool[i+1],60*60*5)
---CIfEnd()
---end
 
 
 BossEPD = CreateVar(FP)

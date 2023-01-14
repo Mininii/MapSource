@@ -1,4 +1,9 @@
 function Include_Vars()
+	if SpeedTestMode == 1 then
+		function HumanCheck(Player,Status)
+			if Status == 0 then return Never() else return Always() end
+		end
+	end
 	--System
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
@@ -140,6 +145,8 @@ function Include_Vars()
 
 	iv.BanFlag = CreateVarArr(7,FP)
 	iv.BanFlag2 = CreateVarArr(7,FP)
+	iv.BanFlag3 = CreateVarArr(7,FP)
+	iv.BanFlag4 = CreateVarArr(7,FP)
 
 
 	--Local Data Variable
@@ -253,6 +260,8 @@ function Include_Vars()
 
 	ct.BanFlag = CreateVarArr(7,FP)
 	ct.BanFlag2 = CreateVarArr(7,FP)
+	ct.BanFlag3 = CreateVarArr(7,FP)
+	ct.BanFlag4 = CreateVarArr(7,FP)
 
 	
 
@@ -392,6 +401,10 @@ if TestStart == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"20000000"},
+		{72,"20000000"},
+		{72,"20000000"},
+		{72,"20000000"},
+		{72,"20000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -399,6 +412,10 @@ else
 		{25,"150000"},
 		{80,"1100000"},
 		{57,"9300000"},
+		{72,"34000000"},
+		{72,"34000000"},
+		{72,"34000000"},
+		{72,"34000000"},
 		{72,"34000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end

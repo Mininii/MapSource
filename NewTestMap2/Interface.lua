@@ -21,7 +21,9 @@ function Interface()
 
 	local BanFlag = iv.BanFlag
 	local BanFlag2 = iv.BanFlag2
-	BPArr = {BanFlag,BanFlag2}
+	local BanFlag3 = iv.BanFlag3
+	local BanFlag4 = iv.BanFlag4
+	BPArr = {BanFlag,BanFlag2,BanFlag3,BanFlag4}
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -203,6 +205,7 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 	CMov(FP,Dv,DtP) 
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP)},1)--맨처음 시간값 튐 방지
+	TriggerX(FP,{},{AddV(Time,240000),})
 	--CallTriggerX(FP,Call_CheckCT,{CD(CTTimer,24,AtLeast)},{SetCD(CTTimer,0)})--유닛 변조 감지
 
 	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
@@ -254,6 +257,8 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		{iv.B_PTicket,ct.B_PTicket,"B_PTicket"},
 		{iv.BanFlag,ct.BanFlag,"BanFlag"},
 		{iv.BanFlag2,ct.BanFlag2,"BanFlag2"},
+		{iv.BanFlag3,ct.BanFlag3,"BanFlag3"},
+		{iv.BanFlag4,ct.BanFlag4,"BanFlag4"},
 		{TempO,CT_TempO,"TempO"},
 		{TempG,CT_TempG,"TempG"},
 	}
@@ -276,11 +281,6 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 		local VW = k[1]
 		local TrapVW = k[2]
 		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, j-1,nil,k[3])
-		if TrapVW[4] == "V" then
-			CXor(FP, TrapVW, CT_GNextRandV)
-		else
-			f_LXor(FP, TrapVW,TrapVW, CT_GNextRandW)
-		end
 
 	end
 	CMov(FP,PCheckV,0)
@@ -328,11 +328,6 @@ for i = 0, 6 do -- 각플레이어
 		local VW = k[1][i+1]
 		local TrapVW = k[2][i+1]
 		TrapKey = CheatTestX(i, VW,TrapVW, j+(#VWArr)-1,1,k[3])
-		if TrapVW[4] == "V" then
-			CXor(FP, TrapVW, CT_NextRandV[i+1])
-		else
-			f_LXor(FP, TrapVW,TrapVW, CT_NextRandW[i+1])
-		end
 
 	end
 	DoActionsX(FP, {AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
@@ -344,18 +339,21 @@ for i = 0, 6 do -- 각플레이어
 
 
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,0,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(LoadCheck[i+1],1)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
-	CIf(FP,{LocalPlayerID(i),CV(Time,30000*5,AtLeast)},{SubV(Time,30000*5)})
+	CIf(FP,{LocalPlayerID(i),CV(Time,300000,AtLeast)},{SubV(Time,300000)})
 	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x035분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4)},{preserved})
 	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),CD(PartyBonus,1)},{DisplayText(StrDesignX("\x04현재 \x1F멀티 플레이 보너스 버프 \x1C적용중입니다. - \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p"),4)},{preserved})-- 인원수 버프 보너스
+	TriggerX(FP,{LocalPlayerID(i),CV(PLevel[i+1],999,AtMost)},{DisplayText(StrDesignX("\x04현재 \x1F초보자 보너스 버프 \x1C적용중입니다. \x041000레벨 달성 전까지 \x07+1강 \x17강화확률 + \x0F5.0%p"),4)},{preserved})-- 1000레벨 미만 5퍼센트 강확보너스
 	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1)},{SetMemory(0x58F500, SetTo, 1),},{preserved})
 	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
 
 	CIfEnd()--
 	for j,k in pairs(BPArr) do
-		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)},{preserved})
+		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
 	end
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
+		SCA_DataLoad(i,BanFlag2[i+1],95)
+		SCA_DataLoad(i,BanFlag2[i+1],96)
 		SCA_DataLoad(i,BanFlag2[i+1],97)
 		SCA_DataLoad(i,BanFlag[i+1],98)
 		SCA_DataLoad(i,PLevel[i+1],101)
@@ -398,6 +396,8 @@ for i = 0, 6 do -- 각플레이어
 		CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+		CTrigger(FP, {CV(BanFlag4[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
+		CTrigger(FP, {CV(BanFlag3[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {CV(BanFlag2[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {CV(BanFlag[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
@@ -429,7 +429,7 @@ for i = 0, 6 do -- 각플레이어
 				CreateUnitStacked({CV(Stat_AddSc[i+1],k)},k+1, 88, 36+i,15+i, i, nil, 1)--스카 터졌을경우 다시 지급
 			end
 			CreateUnitStacked({CV(CreditAddSC[i+1],1,AtLeast)},6, 88, 36+i,15+i, i, nil, 1)--크레딧 스카웃 구입항목 보유자 스카지급
-			CreateUnitStacked({Deaths(i, AtLeast, 1, 100)},6, 88, 36+i,15+i, i, nil, 1)--제작자 칭호 보유자 스카 6개 추가지급
+			--CreateUnitStacked({Deaths(i, AtLeast, 1, 100)},6, 88, 36+i,15+i, i, nil, 1)--제작자 칭호 보유자 스카 6개 추가지급
 			
 		CIfEnd()
 		
@@ -448,7 +448,7 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 			
 		CIfXEnd()
-		
+		TriggerX(FP,{CV(PLevel[i+1],999,AtMost)},{SetCp(i),DisplayText(StrDesignX("\x04현재 \x1F초보자 보너스 버프 \x1C적용중입니다. \x041000레벨 달성 전까지 \x07+1강 \x17강화확률 + \x0F5.0%p"),4)},{preserved})-- 1000레벨 미만 5퍼센트 강확보너스
 		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 	CIfEnd()
 	
@@ -474,6 +474,8 @@ for i = 0, 6 do -- 각플레이어
 	local CTSwitch = CreateCcode()
 	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
+		SCA_DataSave(i,BanFlag2[i+1],95)
+		SCA_DataSave(i,BanFlag2[i+1],96)
 		SCA_DataSave(i,BanFlag2[i+1],97)
 		SCA_DataSave(i,BanFlag[i+1],98)
 		SCA_DataSave(i,PLevel[i+1],101)
@@ -519,6 +521,8 @@ for i = 0, 6 do -- 각플레이어
 	CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {CV(BanFlag4[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
+	CTrigger(FP, {CV(BanFlag3[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {CV(BanFlag2[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 	CTrigger(FP, {CV(BanFlag[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 	TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
@@ -546,7 +550,7 @@ for i = 0, 6 do -- 각플레이어
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	if Limit == 1 then 
 		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,503)})
-		--CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -719,8 +723,10 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 			
 		CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
 		CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
-		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0)}, {preserved}) 
+		if SpeedTestMode == 0 then
+			TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+			TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0)}, {preserved}) 
+		end
 		TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
 		CIfEnd()
 
@@ -731,6 +737,18 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		CIfEnd()
 	end
+	local spt ={}
+	for j = 1, 39 do
+		table.insert(spt,SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 1))
+	end
+	if SpeedTestMode == 1 then
+		f_LAdd(FP, Money[i+1], Money[i+1], "1500")
+		DoActions2X(FP, {
+			SetV(AutoBuyCode[i+1],1),spt
+		})
+	end
+
+
 	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),CV(AutoBuyCode[i+1],1,AtLeast)}) -- 자동구매 관리
 	for j, k in pairs(AutoBuyArr) do
 		AutoBuy(i,k[1],k[2])
@@ -743,6 +761,7 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 	
 	CIfXEnd()
+
 	
 	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1])})--키인식부 시작
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O")}, {SetV(InterfaceNum[i+1],1)},{preserved})
@@ -809,7 +828,6 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	})
 	TriggerX(FP, {LocalPlayerID(i)}, {SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1)}, {preserved})
 	CMov(FP, StatP[i+1], _Mul(PLevel[i+1], 5))
-	
 	CallTrigger(FP,Call_Print13[i+1])
 	TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x1F스탯 초기화\x04 완료. \x07잠시 후 자동저장됩니다. \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요.")) ,{preserved})
 
@@ -921,6 +939,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 		
 		TriggerX(FP,{CD(PartyBonus,1)},{AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
 	end
+	TriggerX(FP,{CV(PLevel[i+1],999,AtMost)},{AddV(TotalEPer[i+1],5000)},{preserved})-- 1000레벨 미만 5퍼센트 강확보너스
 
 	CIf(FP,{CV(B_Credit,1,AtLeast)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_Credit,0}) -- 
@@ -1061,7 +1080,7 @@ MemoryCT = CreateCcode()
 --error(#MCTCondArr)
 DoActionsX(FP,{SetCD(MemoryCT,0),})
 if TestStart==1 then
-	MCTCondArr[1] = Memory(0x5124F0, Exactly, 1)
+	MCTCondArr[1] = Memory(0x5124F0, Exactly, TestSpeedNum)
 end--
 condnum = 0
 condptr = 0
@@ -1095,14 +1114,9 @@ for j,k in pairs(VWArr) do
 	local VW = k[1]
 	local TrapVW = k[2]
 	if TrapVW[4] == "V" then
-		CMov(FP, TrapVW, VW)
+		CXor(FP, TrapVW,VW, CT_GNextRandV)
 	else
-		f_LMov(FP, TrapVW,VW)
-	end
-	if TrapVW[4] == "V" then
-		CXor(FP, TrapVW, CT_GNextRandV)
-	else
-		f_LXor(FP, TrapVW,TrapVW, CT_GNextRandW)
+		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
 	end
 
 end
@@ -1114,14 +1128,9 @@ end
 			local VW = k[1][i+1]
 			local TrapVW = k[2][i+1]
 			if TrapVW[4] == "V" then
-				CMov(FP, TrapVW, VW)
+				CXor(FP, TrapVW,VW, CT_NextRandV[i+1])
 			else
-				f_LMov(FP, TrapVW,VW)
-			end
-			if TrapVW[4] == "V" then
-				CXor(FP, TrapVW, CT_NextRandV[i+1])
-			else
-				f_LXor(FP, TrapVW,TrapVW, CT_NextRandW[i+1])
+				f_LXor(FP, TrapVW,VW, CT_NextRandW[i+1])
 			end
 	
 		end

@@ -1,23 +1,23 @@
 function CUnit()
     
 if TestStart == 1 then
-	CFor(FP, 19025+19, 19025+19+(84*1699), 84)
-	local CI = CForVariable()
-	CMov(FP,0x6509B0,CI)
-	TriggerX(FP, {DeathsX(FP,Exactly,0,0,0xFF)}, {
-		SetMemory(0x6509B0, Add, 2),
-		SetDeaths(CurrentPlayer,SetTo,0,0),
-		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
-		SetMemory(0x6509B0, Subtract, 2)
-	}, {preserved})
-	CForEnd()
+--	CFor(FP, 19025+19, 19025+19+(84*1699), 84)
+--	local CI = CForVariable()
+--	CMov(FP,0x6509B0,CI)
+--	TriggerX(FP, {DeathsX(FP,Exactly,0,0,0xFF)}, {
+--		SetMemory(0x6509B0, Add, 2),
+--		SetDeaths(CurrentPlayer,SetTo,0,0),
+--		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+--		SetMemory(0x6509B0, Subtract, 2)
+--	}, {preserved})
+--	CForEnd()
 end
 
 DoActionsX(FP, {AddV(iv.CUnitT,1)})
 CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
-CIf(FP,CV(iv.CUnitT,24,AtLeast),SetV(iv.CUnitT,0))
+CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
 	EXCC_Part1(CT_Cunit)
 	CIf(FP,{DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
 	CAdd(FP,0x6509B0,6)
