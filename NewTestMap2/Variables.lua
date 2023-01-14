@@ -7,6 +7,9 @@ function Include_Vars()
 	--System
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
+	ULimitArr = {500,350,300,250,200,180,150}
+	ULimitV = CreateVar(FP)
+	ULimitV2 = CreateVar(FP)
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
 	MSQC_KeySet("O",494) -- MSQC eds텍스트 입력
@@ -199,6 +202,10 @@ function Include_Vars()
 	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
+	iv.TempO = CreateVarArr(7,FP)
+	iv.TempG = CreateVarArr(7,FP)
+	ct.TempO = CreateVarArr(7,FP)
+	ct.TempG = CreateVarArr(7,FP)
 
 
 

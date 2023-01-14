@@ -60,7 +60,10 @@ for i = 0, 227 do
 	SetUnitsDatX(i, {AdvFlag={0,0x4},Height=4})
 end
 
-	
+flingyarr = {4,8,9,14,15,46,45,47,49,73,74,75,77,78,82,84,200}
+for j,k in pairs(flingyarr) do
+table.insert(PatchArr, SetMemoryB(0x6C9858 + k,SetTo,1))
+end
 	
 	
 	PatchInput()

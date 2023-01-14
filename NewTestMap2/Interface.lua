@@ -18,7 +18,6 @@ function Interface()
 	local PBossDPS = iv.PBossDPS-- 개인보스DPS
 	local TotalPBossDPS = iv.TotalPBossDPS --개인보스DPS 목표치
 	local SellTicket = iv.SellTicket
-
 	local BanFlag = iv.BanFlag
 	local BanFlag2 = iv.BanFlag2
 	local BanFlag3 = iv.BanFlag3
@@ -94,16 +93,14 @@ function Interface()
 	local NextOreMulLoc = iv.NextOreMulLoc
 	local NextGasMulLoc = iv.NextGasMulLoc
 	local SellTicketLoc = iv.SellTicketLoc
-	local TempO = CreateVarArr(7,FP)
-	local CT_TempO = CreateVarArr(7,FP)
-	local TempG = CreateVarArr(7,FP)
-	local CT_TempG = CreateVarArr(7,FP)
 	--Temp
 	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
 	local TempReadV = iv.TempReadV--CreateVar(FP)
 	local TempEXPV = iv.TempEXPV--CreateVar(FP)
 
 	local CheatDetect = iv.CheatDetect--CreateCcode()
+	local TempO = iv.TempO
+	local TempG = iv.TempG
 
 
 
@@ -124,68 +121,20 @@ function Interface()
 	local SCheck = CreateCcode()
 	local GeneralPlayTime= iv.GeneralPlayTime
 	local GeneralPlayTime2= CreateVar(FP)
-	
-	function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
-		if Dest[4]=="V" then
-			f_Read(FP,0x58A364+(48*SourceUnit)+(4*Player),Dest)
-		elseif Dest[4]=="W" then
-			f_LRead(FP, {0x58A364+(48*SourceUnit)+(4*Player),0x58A364+(48*(SourceUnit+1))+(4*Player)}, Dest, nil, 1)
-		else
-			PushErrorMsg("SCA_Dest_Inputdata_Error")
-		end
-	end
-	function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, DestUnit+1
-		if Source[4]=="V" then
-			CMov(FP,0x58A364+(48*DestUnit)+(4*Player),Source,nil,nil,1)
-		elseif Source[4]=="W" then
-			f_LMov(FP, {0x58A364+(48*DestUnit)+(4*Player),0x58A364+(48*(DestUnit+1))+(4*Player)}, Source, nil, nil, 1)
-		else
-			PushErrorMsg("SCA_Source_Inputdata_Error")
-		end
-		
-	end
-	
-	local LeaderBoardT = CreateCcode()
-Trigger { -- DPS 리더보드
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,0,LeaderBoardT);
-	},
-	actions = {
-		
-		LeaderBoardGreed(10000000);
-		LeaderBoardComputerPlayers(Disable);
-		SetCDeaths(FP,SetTo,1000,LeaderBoardT);
-		PreserveTrigger();
-},
-}
-Trigger { -- 레벨
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,500,LeaderBoardT);
-	},
-	actions = {
-		LeaderBoardScore(Custom, StrDesign("\17Level").." "..VerText);
-		LeaderBoardComputerPlayers(Disable);
-		PreserveTrigger();
-},
-}
-DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
-
-
-	
 	--PlayData(NotSureSCA)
 	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
+	
+	LeaderBoard()
+
+	
 
 
 
 
 
 	--local GEXP = CreateVar(FP)
-	local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
+	--local STable = {"1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096", "8192", "16384", "32768", "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304", "8388608", "16777216", "33554432", "67108864", "134217728", "268435456", "536870912", "1073741824", "2147483648", "4294967296", "8589934592", "17179869184", "34359738368", "68719476736", "137438953472", "274877906944", "549755813888", "1099511627776", "2199023255552", "4398046511104", "8796093022208", "17592186044416", "35184372088832", "70368744177664", "140737488355328", "281474976710656", "562949953421312", "1125899906842624", "2251799813685248", "4503599627370496", "9007199254740992", "18014398509481984", "36028797018963968", "72057594037927936", "144115188075855872", "288230376151711744", "576460752303423488", "1152921504606846976", "2305843009213693952", "4611686018427387904", "9223372036854775807"}
 	local FirstReward = {
 		{20,500},
 		{22,7000},
@@ -212,82 +161,10 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
 
 
-
-	PVWArr = {
-		{iv.Money,ct.Money,"Money"},
-		{iv.IncomeMax,ct.IncomeMax,"IncomeMax"},
-		{iv.Income,ct.Income,"Income"},
-		{iv.BuildMul1,ct.BuildMul1,"BuildMul1"},
-		{iv.BuildMul2,ct.BuildMul2,"BuildMul2"},
-		{iv.TotalEPer,ct.TotalEPer,"TotalEPer"},
-		{iv.TotalEPer2,ct.TotalEPer2,"TotalEPer2"},
-		{iv.TotalEPer3,ct.TotalEPer3,"TotalEPer3"},
-		{iv.ScoutDmg,ct.ScoutDmg,"ScoutDmg"},
-		{iv.ScTimer,ct.ScTimer,"ScTimer"},
-		{iv.PTimeV,ct.PTimeV,"PTimeV"},
-		{iv.General_Upgrade,ct.General_Upgrade,"General_Upgrade"},
-		{iv.ResetStat,ct.ResetStat,"ResetStat"},
-		{iv.NextOre,ct.NextOre,"NextOre"},
-		{iv.NextGas,ct.NextGas,"NextGas"},
-		{iv.NextOreMul,ct.NextOreMul,"NextOreMul"},
-		{iv.NextGasMul,ct.NextGasMul,"NextGasMul"},
-		{iv.SellTicket,ct.SellTicket,"SellTicket"},
-		{iv.PBossLV,ct.PBossLV,"PBossLV"},
-		{iv.PBossDPS,ct.PBossDPS,"PBossDPS"},
-		{iv.TotalPBossDPS,ct.TotalPBossDPS,"TotalPBossDPS"},
-		{iv.Stat_EXPIncome,ct.Stat_EXPIncome,"Stat_EXPIncome"},
-		{iv.PLevel,ct.PLevel,"PLevel"},
-		{iv.StatP,ct.StatP,"StatP"},
-		{iv.Stat_ScDmg,ct.Stat_ScDmg,"Stat_ScDmg"},
-		{iv.Stat_AddSc,ct.Stat_AddSc,"Stat_AddSc"},
-		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
-		{iv.Stat_TotalEPer2,ct.Stat_TotalEPer2,"Stat_TotalEPer2"},
-		{iv.Stat_TotalEPer3,ct.Stat_TotalEPer3,"Stat_TotalEPer3"},
-		{iv.Stat_Upgrade,ct.Stat_Upgrade,"Stat_Upgrade"},
-		{iv.Credit,ct.Credit,"Credit"},
-		{iv.PEXP,ct.PEXP,"PEXP"},
-		{iv.TotalExp,ct.TotalExp,"TotalExp"},
-		{iv.CurEXP,ct.CurEXP,"CurEXP"},
-		{iv.PStatVer,ct.PStatVer,"PStatVer"},
-		{iv.PlayTime2,ct.PlayTime2,"PlayTime2"},
-		{iv.PlayTime,ct.PlayTime,"PlayTime"},
-		{iv.CreditAddSC,ct.CreditAddSC,"CreditAddSC"},
-		{iv.LV5Cool,ct.LV5Cool,"LV5Cool"},
-		{iv.B_PCredit,ct.B_PCredit,"B_PCredit"},
-		{iv.B_PTicket,ct.B_PTicket,"B_PTicket"},
-		{iv.BanFlag,ct.BanFlag,"BanFlag"},
-		{iv.BanFlag2,ct.BanFlag2,"BanFlag2"},
-		{iv.BanFlag3,ct.BanFlag3,"BanFlag3"},
-		{iv.BanFlag4,ct.BanFlag4,"BanFlag4"},
-		{TempO,CT_TempO,"TempO"},
-		{TempG,CT_TempG,"TempG"},
-	}
-	VWArr = {
-		{iv.PCheckV,ctg.PCheckV,"PCheckV"},
-		{iv.B_IncomeMax,ctg.B_IncomeMax,"B_IncomeMax"},
-		{iv.B_TotalEPer,ctg.B_TotalEPer,"B_TotalEPer"},
-		{iv.B_TotalEPer2,ctg.B_TotalEPer2,"B_TotalEPer2"},
-		{iv.B_TotalEPer3,ctg.B_TotalEPer3,"B_TotalEPer3"},
-		{iv.B_Stat_EXPIncome,ctg.B_Stat_EXPIncome,"B_Stat_EXPIncome"},
-		{iv.B_Stat_Upgrade,ctg.B_Stat_Upgrade,"B_Stat_Upgrade"},
-		{iv.B_Credit,ctg.B_Credit,"B_Credit"},
-		{iv.B_Ticket,ctg.B_Ticket,"B_Ticket"},
-		{iv.BossLV,ctg.BossLV,"BossLV"},
-		{iv.CUnitT,ctg.CUnitT,"CUnitT"}
-
-
-	}
-	for j,k in pairs(VWArr) do
-		local VW = k[1]
-		local TrapVW = k[2]
-		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, j-1,nil,k[3])
-
-	end
+DataArr()
+	CT_Prev()
 	CMov(FP,PCheckV,0)
 	CAdd(FP,GeneralPlayTime,1)
-	ULimitArr = {500,350,300,250,200,180,150}
-	ULimitV = CreateVar(FP)
-	ULimitV2 = CreateVar(FP)
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 		TriggerX(FP,{HumanCheck(i,0)},{RemoveUnit("Men", P12),RemoveUnit("Factories", P12)})
@@ -309,6 +186,12 @@ DoActionsX(FP,{SetCDeaths(FP,Subtract,1,LeaderBoardT)})
 
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i)})
+
+	
+	CT_PrevCP(i)
+
+
+
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+12, AtLeast, 100),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -321,15 +204,6 @@ for i = 0, 6 do -- 각플레이어
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 
 	
-	CMov(FP,CT_NextRandV[i+1],_Mod(_Rand(),12858519))
-	f_LMov(FP,CT_NextRandW[i+1],_LMod(_LRand(), {12532858,12532858}))
-	
-	for j,k in pairs(PVWArr) do
-		local VW = k[1][i+1]
-		local TrapVW = k[2][i+1]
-		TrapKey = CheatTestX(i, VW,TrapVW, j+(#VWArr)-1,1,k[3])
-
-	end
 	DoActionsX(FP, {AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
 
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
@@ -352,28 +226,9 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
-		SCA_DataLoad(i,BanFlag2[i+1],95)
-		SCA_DataLoad(i,BanFlag2[i+1],96)
-		SCA_DataLoad(i,BanFlag2[i+1],97)
-		SCA_DataLoad(i,BanFlag[i+1],98)
-		SCA_DataLoad(i,PLevel[i+1],101)
-		SCA_DataLoad(i,StatP[i+1],102)
-		SCA_DataLoad(i,Stat_ScDmg[i+1],103)
-		SCA_DataLoad(i,Stat_TotalEPer[i+1],104)
-		SCA_DataLoad(i,Stat_TotalEPer2[i+1],105)
-		SCA_DataLoad(i,Stat_TotalEPer3[i+1],106)
-		SCA_DataLoad(i,Stat_Upgrade[i+1],107)
-		SCA_DataLoad(i,Credit[i+1],108)
-		SCA_DataLoad(i,PEXP[i+1],110)
-		SCA_DataLoad(i,TotalExp[i+1],112)
-		SCA_DataLoad(i,CurEXP[i+1],114)
-		SCA_DataLoad(i,Stat_AddSc[i+1],116)
-		SCA_DataLoad(i,PStatVer[i+1],117)
-		SCA_DataLoad(i,PlayTime[i+1],118)
-		SCA_DataLoad(i,PlayTime2[i+1],119)
-		SCA_DataLoad(i,CreditAddSC[i+1],120)
-		SCA_DataLoad(i,LV5Cool[i+1],121)
-		
+		for j,k in pairs(SCA_DataArr) do
+			SCA_DataLoad(i,k[1][i+1],k[2])
+		end
 		
 		--치팅 테스트 변수 초기화
 		CIfX(FP,CV(PStatVer[i+1],StatVer))--스탯버전이 저장된 값과 같을경우 치팅 감지 작동
@@ -474,27 +329,9 @@ for i = 0, 6 do -- 각플레이어
 	local CTSwitch = CreateCcode()
 	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
-		SCA_DataSave(i,BanFlag2[i+1],95)
-		SCA_DataSave(i,BanFlag2[i+1],96)
-		SCA_DataSave(i,BanFlag2[i+1],97)
-		SCA_DataSave(i,BanFlag[i+1],98)
-		SCA_DataSave(i,PLevel[i+1],101)
-		SCA_DataSave(i,StatP[i+1],102)
-		SCA_DataSave(i,Stat_ScDmg[i+1],103)
-		SCA_DataSave(i,Stat_TotalEPer[i+1],104)
-		SCA_DataSave(i,Stat_TotalEPer2[i+1],105)
-		SCA_DataSave(i,Stat_TotalEPer3[i+1],106)
-		SCA_DataSave(i,Stat_Upgrade[i+1],107)
-		SCA_DataSave(i,Credit[i+1],108)
-		SCA_DataSave(i,PEXP[i+1],110)
-		SCA_DataSave(i,TotalExp[i+1],112)
-		SCA_DataSave(i,CurEXP[i+1],114)
-		SCA_DataSave(i,Stat_AddSc[i+1],116)
-		SCA_DataSave(i,PStatVer[i+1],117)
-		SCA_DataSave(i,PlayTime[i+1],118)
-		SCA_DataSave(i,PlayTime2[i+1],119)
-		SCA_DataSave(i,CreditAddSC[i+1],120)
-		SCA_DataSave(i,LV5Cool[i+1],121)
+		for j,k in pairs(SCA_DataArr) do
+			SCA_DataSave(i,k[1][i+1],k[2])
+		end
 	NIfEnd()
 
 	CIf(FP,{Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
@@ -975,7 +812,7 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	CMov(FP,GEper,TotalEPer[i+1])
 	CMov(FP,GEper2,TotalEPer2[i+1])
 	CMov(FP,GEper3,TotalEPer3[i+1])
-	for j = #LevelUnitArr-1, 1, -1 do
+	for j = 39, 1, -1 do
 		local LV = LevelUnitArr[j][1]
 		local UID = LevelUnitArr[j][2]
 		local Per = LevelUnitArr[j][3]
@@ -1017,6 +854,8 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
         CIfEnd()
 		CIfXEnd()
 	CIfEnd()
+
+
 	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0),SetCD(ResetStatLoc,0)}) -- CAPrint에 전송할 값들
 	CMov(FP,TotalEPerLoc,TotalEPer[i+1])
 	CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
@@ -1061,8 +900,21 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,19025),CVar(FP,Cunit2[2],AtMost,19025+(1700*84))})
 		CMov(FP,0x6509B0,Cunit2,25)
 				CTrigger(FP,{DeathsX(CurrentPlayer,Exactly,ParseUnit("Zerg Scourge"),0,0xFF)},{TSetMemory(0x6284E8+(0x30*i),SetTo,ShopPtr[i+1])},1)
-				if Limit == 1 then
-					CTrigger(FP,{KeyPress("Y", "Down")},{TSetDeathsX(CurrentPlayer,SetTo,54,0,0xFF)},1)
+				if TestStart == 1 then
+					--CTrigger(FP,{KeyPress("Y", "Down")},{TSetDeathsX(CurrentPlayer,SetTo,54,0,0xFF)},1)
+					f_SaveCp()
+					local temp,TKey = ToggleFunc({KeyPress("T","Up"),KeyPress("T","Down")},nil,1)--
+					local temp,YKey = ToggleFunc({KeyPress("Y","Up"),KeyPress("Y","Down")},nil,1)--
+					local FID = CreateVar(FP)
+					CMov(FP,FID,_Read(_Sub(BackupCp, 16)),nil,0xFF,1)
+					CTrigger(FP,{CD(TKey,1)},{TSetMemory(_Add(FID,EPD(0x6C9930)),Add,1)},1)
+					CTrigger(FP,{CD(YKey,1)},{TSetMemory(_Add(FID,EPD(0x6C9930)),Subtract,1)},1)
+					CIf(FP,{TTOR({CD(TKey,1),CD(YKey,1)})})
+					local HD = CreateVar(FP)
+					CMov(FP,HD,_Read(_Add(FID,EPD(0x6C9930))))
+					DisplayPrint(i, {"HaltDis : ",HD})
+					CIfEnd()
+					f_LoadCp()
 				end
 		CIfEnd()
 		CMov(FP,0x6509B0,FP)
@@ -1075,111 +927,8 @@ GlobalBoss()
 TBL()
 CUnit()	
 
-	
-MemoryCT = CreateCcode()
---error(#MCTCondArr)
-DoActionsX(FP,{SetCD(MemoryCT,0),})
-if TestStart==1 then
-	MCTCondArr[1] = Memory(0x5124F0, Exactly, TestSpeedNum)
-end--
-condnum = 0
-condptr = 0
-condarr = {}
-for j,k in pairs(MCTCondArr) do
-	if condnum == 0 then table.insert(condarr,{}) condptr = condptr + 1 end
-	table.insert(condarr[condptr],k)
-	condnum = condnum + 1
-	if condnum == 15 then condnum = 0 end
-end--
-for j,k in pairs(condarr) do
-	TriggerX(FP, k, {AddCD(MemoryCT,1),SetCp(0)}, {preserved})
-end
---error(#condarr)--
-if TestStart == 1 then
-	CTrigger(FP,{
-		CD(MemoryCT,#condarr-1,AtMost)
-	},{RotatePlayer({
-		DisplayTextX("MemoryCT", 4);},Force1,FP)},{preserved})
-	else----
-		TriggerX(FP,{CD(MemoryCT,#condarr-1,AtMost)},{RotatePlayer({
-			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
-	end
-	--
-
-
-
-
-for j,k in pairs(VWArr) do
-	local VW = k[1]
-	local TrapVW = k[2]
-	if TrapVW[4] == "V" then
-		CXor(FP, TrapVW,VW, CT_GNextRandV)
-	else
-		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
-	end
-
-end
-	CMov(FP,CT_GPrevRandV,CT_GNextRandV)
-	f_LMov(FP,CT_GPrevRandW,CT_GNextRandW)
-	for i = 0, 6 do
-		CIf(FP, HumanCheck(i,1))
-		for j,k in pairs(PVWArr) do
-			local VW = k[1][i+1]
-			local TrapVW = k[2][i+1]
-			if TrapVW[4] == "V" then
-				CXor(FP, TrapVW,VW, CT_NextRandV[i+1])
-			else
-				f_LXor(FP, TrapVW,VW, CT_NextRandW[i+1])
-			end
-	
-		end
-		CMov(FP,CT_PrevRandV[i+1],CT_NextRandV[i+1])
-		f_LMov(FP,CT_PrevRandW[i+1],CT_NextRandW[i+1])
-		CIfEnd()
-	end
-	
-if TestStart == 1 then
-for i = 0, 0 do
-	CIf(FP, HumanCheck(i,1))
-	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
-
-		L = CreateVar()
-		CIfOnce(FP)
-		GetPlayerLength(FP,P1,L)
-		CIfEnd()
-		N = CreateVar()
-		local CU = CreateCcodeArr(40)
-		local CUCool = CreateCcodeArr(40)
-		SLoopN(FP,11,Always(),{SetNVar(N,Add,218)},{SetNVar(N,SetTo,0x640B63-218),TSetNVar(N,Add,L)})
-
-		for j,k in pairs({PLevel[i+1],SellTicket[i+1],IncomeMax[i+1],TotalEPer[i+1],TotalEPer2[i+1],TotalEPer3[i+1],General_Upgrade[i+1],Stat_EXPIncome[i+1]}) do
-			f_bytecmp(FP,{CU[j]},N,_byteConvert(GetStrArr(0,"@"..j.."번")),GetStrSize(0,"@"..j.."번"))
-		
-		end
-		for j,k in pairs({Credit[i+1],Money[i+1]}) do
-			f_bytecmp(FP,{CU[j+8]},N,_byteConvert(GetStrArr(0,"@"..(j+8).."번")),GetStrSize(0,"@"..(j+8).."번"))
-			
-		end
-		SLoopNEnd()
-		CUCoolT = {}
-		for j,k in pairs({PLevel[i+1],SellTicket[i+1],IncomeMax[i+1],TotalEPer[i+1],TotalEPer2[i+1],TotalEPer3[i+1],General_Upgrade[i+1],Stat_EXPIncome[i+1]}) do
-			CIf(FP, {CD(CUCool[j],0),CD(CU[j],1,AtLeast)},{SetCDeaths(FP,SetTo,0,CU[j]),SetCDeaths(FP,SetTo,24*30,CUCool[j])})
-			CAdd(FP,k,1)
-			CIfEnd()
-			table.insert(CUCoolT, SubCD(CU[j],1))
-		end
-		for j,k in pairs({Credit[i+1],Money[i+1]}) do
-			CIf(FP, {CD(CUCool[j+8],0),CD(CU[j+8],1,AtLeast)},{SetCDeaths(FP,SetTo,0,CU[j+8]),SetCDeaths(FP,SetTo,24*30,CUCool[j+8])})
-			f_LAdd(FP,k,k,"1")
-			CIfEnd()
-			table.insert(CUCoolT, SubCD(CU[j+8],1))
-		end
-		DoActions2X(FP,CUCoolT)--
-	end
-	CIfEnd()
-end
-end
+CT_Next()
+TestTrig()
 
 
 

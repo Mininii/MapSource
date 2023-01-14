@@ -24,9 +24,10 @@ function Install_CallTriggers()
 		TSetDeaths(_Add(Nextptrs,13),SetTo,2000,0),
 		TSetDeathsX(_Add(Nextptrs,18),SetTo,2000,0,0xFFFF),
 		TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),
+		
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
+	--CTrigger(FP,{},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),},1)
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	CDiv(FP,CurCunitI,84)
 	local TempV = CreateVar(FP)

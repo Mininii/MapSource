@@ -1390,3 +1390,23 @@ function EXCC_End()
 	EXCC_TempHeader = nil
 end
 	
+
+function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
+	if Dest[4]=="V" then
+		f_Read(FP,0x58A364+(48*SourceUnit)+(4*Player),Dest)
+	elseif Dest[4]=="W" then
+		f_LRead(FP, {0x58A364+(48*SourceUnit)+(4*Player),0x58A364+(48*(SourceUnit+1))+(4*Player)}, Dest, nil, 1)
+	else
+		PushErrorMsg("SCA_Dest_Inputdata_Error")
+	end
+end
+function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, DestUnit+1
+	if Source[4]=="V" then
+		CMov(FP,0x58A364+(48*DestUnit)+(4*Player),Source,nil,nil,1)
+	elseif Source[4]=="W" then
+		f_LMov(FP, {0x58A364+(48*DestUnit)+(4*Player),0x58A364+(48*(DestUnit+1))+(4*Player)}, Source, nil, nil, 1)
+	else
+		PushErrorMsg("SCA_Source_Inputdata_Error")
+	end
+	
+end
