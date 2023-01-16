@@ -267,14 +267,14 @@ function Install_CallTriggers()
 	G_Btnptr = CreateVar(FP)
 	G_BtnFnm = CreateVar(FP)
 	G_PushBtnm = CreateVar(FP)
-	G_BtnCP = CreateVar(FP)
-	local VArrI,VArrI4 = CreateVars(2,FP)
+	GCP = CreateVar(FP)
+	VArrI,VArrI4 = CreateVars(2,FP)
 
 	Call_BtnFnc = SetCallForward()
 	SetCall(FP)
 	CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
 	CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
-	--Print_13X(FP,G_BtnCP)
+	--Print_13X(FP,GCP)
 
 	f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
 	CrShift(FP,G_PushBtnm,16)
@@ -290,15 +290,15 @@ function Install_CallTriggers()
 	CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
 	CMovX(FP,GetABData,VArrX(AutoBuyVArr,VArrI,VArrI4))
 	CIfX(FP,{TNVar(GetNum, Exactly, GetABData)})
-	DisplayPrintEr(G_BtnCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+	DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
 	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
 	CElseX()
-	DisplayPrintEr(G_BtnCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
+	DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
 	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
 	CIfXEnd()
 	CJump(FP, PBJump2)
 	NJumpEnd(FP, PBJump)
-	DisplayPrintEr(G_BtnCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+	DisplayPrintEr(GCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
 	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
 	CJumpEnd(FP,PBJump2)
 
@@ -312,7 +312,7 @@ function Install_CallTriggers()
 	local GetArrNum2 = CreateVar(FP)
 	local TxtColor = CreateVar(FP)
 	f_Mul(FP, GetArrNum2, G_PushBtnm, 7)
-	CAdd(FP,GetArrNum2,G_BtnCP)
+	CAdd(FP,GetArrNum2,GCP)
 	ConvertArr(FP,GetArrNum,GetArrNum2)
 
 	DoActionsX(FP,{SetV(TxtColor,0x06),AddV(G_PushBtnm,1)})
@@ -320,21 +320,73 @@ function Install_CallTriggers()
 
 	CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
 	CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
 	CElseX()
-	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 	CIfXEnd()
 	CIfEnd()
 	CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
 	CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
 
 	CElseX()
-	DisplayPrintEr(G_BtnCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
+	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
 	CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
+
+
+
+	CElseIfX(CV(G_BtnFnm,6))
+
+	local MulOpVArr = GetVArray(iv.MulOp[1], 7)
+	local GetMulData = CreateVar(FP)
+	local SCheck = CreateCcode()
+
+
+	CIf(FP,{CV(G_PushBtnm,0)}) -- 배율 올림
+	CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+	Print_13X(FP, GCP)
+	CIfX(FP,{CV(GetMulData,10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+	f_Mul(FP,GetMulData,10)
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()
+	
+	CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
+	CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+	Print_13X(FP, GCP)
+	CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+	f_Div(FP,GetMulData,10)
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()--
+	CIf(FP,{CV(G_PushBtnm,2)}) -- 싱글플레이 버튼
+	Print_13X(FP, GCP)
+	CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
+	CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+	CSub(FP,CurCunitI,Nextptrs,19025)
+	f_Div(FP,CurCunitI,_Mov(84))
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+	--CallTrigger(FP, Call_CTInputUID)
+	CIfEnd()
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
+	CElseX()--조건이 만족하지 않을 경우
+	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
+	CIfXEnd()
+	CIfEnd()--
+
+
+
+
 	CIfXEnd()
 	CIfEnd()
 	
@@ -370,9 +422,9 @@ function Install_CallTriggers()
 		SettingUnit2[1], -- 26~39유닛 자동강화 설정
 		SettingUnit3[1], -- 15~25강유닛 자동판매 설정
 		SettingUnit4[1], -- 26~39유닛 자동판매 설정
+		ShopUnit[1] -- 시민
 	}
 	SetCall(FP)
-	ConvertVArr(FP,VArrI,VArrI4,G_BtnCP,7)
 	for j,k in pairs(BtnFncArr) do
 		local BtnVA = GetVArray(k, 7)
 		CMovX(FP,G_Btnptr,VArrX(BtnVA,VArrI,VArrI4),nil,nil,nil,1)
@@ -397,6 +449,49 @@ function Install_CallTriggers()
 	Byte_NumSet(CTimeV,CTimeHH,3600,1,nil,6)
 	Byte_NumSet(CTimeV,CTimeMM,60,1,nil,6)
 	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
+
+	SetCallEnd()
+
+
+	Call_GetLocalData = SetCallForward()
+	SetCall(FP)
+	
+	local LocalDataArr = {
+		{iv.TotalEPer[1],iv.TotalEPerLoc},
+		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
+		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
+		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
+		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
+		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
+		{iv.Income[1],iv.IncomeLoc},
+		{iv.IncomeMax[1],iv.IncomeMaxLoc},
+		{iv.PLevel[1],iv.LevelLoc},
+		{iv.StatP[1],iv.StatPLoc},
+		{iv.InterfaceNum[1],iv.InterfaceNumLoc},
+		{iv.Stat_Upgrade[1],iv.UpgradeLoc},
+		{iv.Stat_AddSc[1],iv.AddScLoc},
+		{iv.ScoutDmg[1],iv.ScoutDmgLoc},
+		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc},
+		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc2},
+		{iv.PlayTime[1],iv.PlayTimeLoc},
+		{iv.PlayTime2[1],iv.PlayTimeLoc2},
+		{iv.General_Upgrade[1],iv.UpgradeUILoc},
+		{iv.NextOre[1],iv.NextOreLoc},
+		{iv.NextGas[1],iv.NextGasLoc},
+		{iv.NextOreMul[1],iv.NextOreMulLoc},
+		{iv.NextGasMul[1],iv.NextGasMulLoc},
+		{iv.SellTicket[1],iv.SellTicketLoc},
+	}
+	for j,k in pairs(LocalDataArr) do
+		local LocPVA = GetVArray(k[1], 7)
+		CMovX(FP,k[2],VArrX(LocPVA,VArrI,VArrI4),nil,nil,nil,1)
+	end
+	
+
+	CMov(FP,iv.LCP,GCP)
+
+
+
 
 	SetCallEnd()
 if TestStart == 1 then

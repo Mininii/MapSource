@@ -75,6 +75,17 @@ function Include_Vars()
 	ShopKey = CreateCcodeArr(7) -- 
 
 	Etbl = CreateVar(FP) -- 방어력측 tblPtr저장용 변수. 세부 강화확률 표기용
+	--CheatTest
+	
+	CurCunitI = CreateVar(FP)
+	CT_GNextRandV = CreateVar(FP)
+	CT_GPrevRandV = CreateVar(FP)
+	CT_GNextRandW = CreateWar(FP)
+	CT_GPrevRandW = CreateWar(FP)
+	CT_NextRandV = CreateVarArr(7,FP)
+	CT_PrevRandV = CreateVarArr(7,FP)
+	CT_NextRandW = CreateWarArr(7,FP)
+	CT_PrevRandW = CreateWarArr(7,FP)
 
 	--String
 	
@@ -118,6 +129,8 @@ function Include_Vars()
 	
 	
 	--General
+	iv.Time = CreateVar(FP)
+	iv.Time2 = CreateVar(FP)
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
@@ -428,7 +441,16 @@ else
 		{72,"34000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
-
+	FirstReward = {
+		{20,500},
+		{22,7000},
+		{24,20000},
+		{26,80000},
+	}
+	OreDPS = {100,1000,10000,100000,500000,1000000,0}
+	OreDPSM = {2,4,8,16,32,64}
+	GasDPS = {100,1000,10000,100000,1000000,5000000,0}
+	GasDPSM = {2,4,8,16,32,64}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 	Cost_Stat_ScDmg = 15
 	Cost_Stat_AddSc = 50
@@ -436,15 +458,6 @@ end
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
-	CurCunitI = CreateVar(FP)
-	CT_GNextRandV = CreateVar(FP)
-	CT_GPrevRandV = CreateVar(FP)
-	CT_GNextRandW = CreateWar(FP)
-	CT_GPrevRandW = CreateWar(FP)
-	CT_NextRandV = CreateVarArr(7,FP)
-	CT_PrevRandV = CreateVarArr(7,FP)
-	CT_NextRandW = CreateWarArr(7,FP)
-	CT_PrevRandW = CreateWarArr(7,FP)
 	
 
 	

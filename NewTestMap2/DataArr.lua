@@ -89,4 +89,6 @@ function DataArr()
 		{iv.CreditAddSC,120},
 		{iv.LV5Cool,121},
 	}
+	
+	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}
 end

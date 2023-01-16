@@ -66,18 +66,24 @@ CJump(AllPlayers,init_func)
 	if TestStart == 1 then
 		Include_Conv_CPosXY(FP,{4096*2,4096*2})
 	end
-	CT_Cunit = Install_EXCC(FP,3,nil)
+	CT_Cunit = Install_EXCC(FP,4,nil)
 	Include_CRandNum(FP)
 	Install_CallTriggers()
 	
 CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
-
-
+DataArr()
+CT_Prev()
+LeaderBoard()
+System()
 Interface()
-
-
-
+Shop()
+GameDisplay()
+GlobalBoss()
+TBL()
+CUnit()	
+CT_Next()
+TestTrig()
 init_Setting()
 EndCtrig()
 ErrorCheck()

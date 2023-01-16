@@ -1,4 +1,6 @@
 function CT_Prev()
+	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
+	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
 	for j,k in pairs(VWArr) do
 		local VW = k[1]
 		local TrapVW = k[2]
