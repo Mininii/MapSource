@@ -116,7 +116,7 @@ function Interface()
 	local CT_PLevel = iv.CT_PLevel
 
 	local BossRewardEnable= CreateCcode()
-	local PartyBonus= CreateCcode()
+	local PartyBonus= iv.PartyBonus
 	local GeneralPlayTime= iv.GeneralPlayTime
 	local GeneralPlayTime2= CreateVar(FP)
 	local SaveRemind = iv.SaveRemind

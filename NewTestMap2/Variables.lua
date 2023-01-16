@@ -211,6 +211,7 @@ function Include_Vars()
 
 	iv.CheatDetect = CreateCcode()
 	iv.SaveRemind = CreateCcode()
+	iv.PartyBonus = CreateCcode()
 
 	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
