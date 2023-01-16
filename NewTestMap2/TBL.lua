@@ -122,7 +122,7 @@ function TBL()
     })
     NIfXEnd()
     
-    CIf(FP,{CD(BossFlag,0)})
+    CIfX(FP,{CD(BossFlag,0)})
     CIfX(FP,{Never()})
     for i = 0, 6 do
         CElseIfX({CV(SelPl,i)},{})
@@ -139,7 +139,14 @@ function TBL()
     },{TSetMemory(0x6509B0, SetTo, LCP),DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
      CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})
     CIfXEnd()
-    CIfEnd()
+    CElseX()
+	local BossLV = iv.BossLV-- CreateVar(FP)
+    CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP)})
+    for i = 0, 4 do
+        TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,5+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 보스를 "..(i+1).."회째 처치중이며 \x04보상은 \x17"..((5-i)*10000).." 크레딧 \x04입니다."), 4)},{preserved})
+    end
+    DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
+    CIfXEnd()
     
     
     
