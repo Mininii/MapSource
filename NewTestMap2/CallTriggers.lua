@@ -399,7 +399,7 @@ function Install_CallTriggers()
 		CElseX()--조건이 만족하지 않을 경우
 			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 		CIfXEnd()
-		CIfX(FP,{CD(iv.PartyBonus,0)})
+		CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CD(iv.PartyBonus,0)})
 			CSub(FP,CTimeV,_Div(_Sub(3*24*60*60,iv.GeneralPlayTime), 24))
 			CallTrigger(FP, Call_ConvertTime)
 			DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
