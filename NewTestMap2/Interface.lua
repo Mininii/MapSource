@@ -746,16 +746,34 @@ TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 	CMov(FP,GEper,TotalEPer[i+1])
 	CMov(FP,GEper2,TotalEPer2[i+1])
 	CMov(FP,GEper3,TotalEPer3[i+1])
+	CAdd(FP,XEper,_Add(GEper,GEper2),GEper3)
 	for j = 39, 1, -1 do
 		local LV = LevelUnitArr[j][1]
 		local UID = LevelUnitArr[j][2]
 		local Per = LevelUnitArr[j][3]
 		CallTriggerX(FP, Call_Enchant, {Bring(i,AtLeast,1,UID,8+i)}, {KillUnitAt(1, UID, 8+i, i),SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i)})
 	end
+	for j = 43, 40, -1 do
+		local LV = LevelUnitArr[j][1]
+		local UID = LevelUnitArr[j][2]
+		local Per = LevelUnitArr[j][3]
+		CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
+		CSub(FP,XEper,UEper)
+		CallTriggerX(FP, Call_Enchant, {CV(XEper,1,AtLeast)}, {KillUnitAt(1, UID, 8+i, i),SetV(ELevel,LV-1),SetV(ECP,i)})
+		TriggerX(FP,{CV(XEper,0)},{MoveUnit(All,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0),DisplayText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)},{preserved})
+		CIfEnd()
+	end
+
 	CIfEnd()
 
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 		CIfX(FP,{CV(PLevel[i+1],10000,AtLeast)},{MoveUnit(All,88,i,73+i,80+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
+		local ASArr = {}
+		for j = #LevelUnitArr, 1, -1 do
+			table.insert(ASArr,SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0))
+		end
+		DoActions2X(FP,ASArr)
+
 		CElseX()
 		CMov(FP,TempEXPV,0)
 		for j = #LevelUnitArr, 1, -1 do
