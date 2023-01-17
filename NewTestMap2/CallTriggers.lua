@@ -9,6 +9,20 @@ function Install_CallTriggers()
 	end
 	
 
+	Call_ConvertTime = SetCallForward()
+	SetCall(FP)
+	CTimeV = CreateVar(FP)
+	CTimeSS = CreateVar(FP)
+	CTimeMM = CreateVar(FP)
+	CTimeHH = CreateVar(FP)
+	CTimeDD = CreateVar(FP)
+	Byte_NumSet(CTimeV,CTimeDD,86400,1,nil,15)
+	Byte_NumSet(CTimeV,CTimeHH,3600,1,nil,6)
+	Byte_NumSet(CTimeV,CTimeMM,60,1,nil,6)
+	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
+
+	SetCallEnd()
+
 
 	CreateStackedUnit = SetCallForward()
 	SUnitID = CreateVar(FP)
@@ -372,42 +386,52 @@ function Install_CallTriggers()
 
 
 	CIf(FP,{CV(G_PushBtnm,0)}) -- 배율 올림
-	CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
-	Print_13X(FP, GCP)
-	CIfX(FP,{CV(GetMulData,10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
-	f_Mul(FP,GetMulData,10)
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
-	CElseX()--조건이 만족하지 않을 경우
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
-	CIfXEnd()
+		CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+		Print_13X(FP, GCP)
+		CIfX(FP,{CV(GetMulData,10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+			f_Mul(FP,GetMulData,10)
+			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+		CElseX()--조건이 만족하지 않을 경우
+			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+		CIfXEnd()
 	CIfEnd()
 	
 	CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
-	CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
-	Print_13X(FP, GCP)
-	CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
-	f_Div(FP,GetMulData,10)
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
-	CElseX()--조건이 만족하지 않을 경우
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
-	CIfXEnd()
+		CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+		Print_13X(FP, GCP)
+		CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+			f_Div(FP,GetMulData,10)
+			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+		CElseX()--조건이 만족하지 않을 경우
+			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+		CIfXEnd()
 	CIfEnd()--
 	CIf(FP,{CV(G_PushBtnm,2)}) -- 싱글플레이 버튼
-	Print_13X(FP, GCP)
-	CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
-	CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
-	f_Read(FP, 0x628438, nil, Nextptrs)
-	CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
-	CSub(FP,CurCunitI,Nextptrs,19025)
-	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
-	--CallTrigger(FP, Call_CTInputUID)
-	CIfEnd()
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
-	CElseX()--조건이 만족하지 않을 경우
-	CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
-	CIfXEnd()
+		Print_13X(FP, GCP)
+		CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
+			CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
+				f_Read(FP, 0x628438, nil, Nextptrs)
+				CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+				CSub(FP,CurCunitI,Nextptrs,19025)
+				f_Div(FP,CurCunitI,_Mov(84))
+				CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+				CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+				--CallTrigger(FP, Call_CTInputUID)
+			CIfEnd()
+			CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
+				CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
+
+			CIfEnd()
+		CElseX()--조건이 만족하지 않을 경우
+			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
+		CIfXEnd()
+		CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CD(iv.PartyBonus,0)})
+			CSub(FP,CTimeV,_Div(_Sub(3*24*60*60,iv.GeneralPlayTime), 24))
+			CallTrigger(FP, Call_ConvertTime)
+			DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+		CElseX()
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
+		CIfEnd()
 	CIfEnd()--
 
 
@@ -463,20 +487,6 @@ function Install_CallTriggers()
 		
 	SetCallEnd()
 
-
-	Call_ConvertTime = SetCallForward()
-	SetCall(FP)
-	CTimeV = CreateVar(FP)
-	CTimeSS = CreateVar(FP)
-	CTimeMM = CreateVar(FP)
-	CTimeHH = CreateVar(FP)
-	CTimeDD = CreateVar(FP)
-	Byte_NumSet(CTimeV,CTimeDD,86400,1,nil,6)
-	Byte_NumSet(CTimeV,CTimeHH,3600,1,nil,6)
-	Byte_NumSet(CTimeV,CTimeMM,60,1,nil,6)
-	Byte_NumSet(CTimeV,CTimeSS,1,1,nil,6)
-
-	SetCallEnd()
 
 
 	Call_GetLocalData = SetCallForward()
