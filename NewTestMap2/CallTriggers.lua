@@ -223,8 +223,34 @@ function Install_CallTriggers()
 			CIfEnd()
 		end
 	CIfEnd()
+
+	Call_Enchant2 = SetCallForward()
+	SetCall(FP)
+	GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	XEper = CreateVar(FP)
+	--ELevel = 현재 강화중인 레벨
+
+	if Limit == 1 then -- 테스트용 결과 출력
+		CIf(FP,{KeyPress("F12", "Down")})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
+			for i = 1, 39 do
+				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+			end
+			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
+			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
+			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
+			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
+
+			DisplayPrint(ECP,{"\x04출력된 난수 : ",ColorCodeV[2],GetEPer})
+			
+		CIfEnd()
+	end
+
 	
 	SetCallEnd()
+	
+	SetCallEnd()
+
 	Call_CT = SetCallForward()
 	SetCall(FP)
 	
