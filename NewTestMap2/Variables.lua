@@ -20,9 +20,11 @@ function Include_Vars()
 	MSQC_KeySet("4",499)
 	MSQC_KeySet("5",500)
 	MSQC_KeySet("6",501)
-	--MSQC_KeySet("P",502)
+	MSQC_KeySet("P",502)
+	MSQC_KeySet("I",503)
 	MSQC_KeySet("F9",13)
-	MSQC_KeySet("F12",503)--테스트용
+	MSQC_KeySet("F12",553)--테스트용
+	MSQC_KeySet("Z",505)
 	--504 사용중
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
 	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
@@ -60,6 +62,7 @@ function Include_Vars()
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
+	DpsLV3 = CreateVarArr(7, FP) -- 세번째 DPS건물
 	PBossPtr = CreateVarArr(7, FP) -- 개인보스 DPS유닛 ptr
 	Names = CreateVArrArr(7, 7, FP) -- 각 플레이어 이름 저장용
 
@@ -104,6 +107,7 @@ function Include_Vars()
 
 	--PlayData(NonSCA)
 	iv.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	iv.Money2 = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
 	iv.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
 	iv.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
 	iv.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
@@ -111,6 +115,7 @@ function Include_Vars()
 	iv.TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
 	iv.TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	iv.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	iv.TotalEPer4 = CreateVarArr(7,FP)--총 강화확률(특수)
 	iv.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
 	iv.ScTimer = CreateVarArr(7,FP)
 	iv.PTimeV = CreateVarArr(7,FP)
@@ -146,6 +151,8 @@ function Include_Vars()
 	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
 	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
+	iv.Stat_TotalEPer4 = CreateVarArr(7,FP)-- 특수 확업 수치
+	iv.Stat_BreakShield = CreateVarArr(7,FP)-- 파괴 방지 수치
 	iv.Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
 	iv.Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
 	iv.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
@@ -173,16 +180,20 @@ function Include_Vars()
 	iv.TotalEPerLoc = CreateVar(FP)
 	iv.TotalEPer2Loc = CreateVar(FP)
 	iv.TotalEPer3Loc = CreateVar(FP)
+	iv.TotalEPer4Loc = CreateVar(FP)
 	iv.S_TotalEPerLoc = CreateVar(FP)
 	iv.S_TotalEPer2Loc = CreateVar(FP)
 	iv.S_TotalEPer3Loc = CreateVar(FP)
+	iv.S_TotalEPer4Loc = CreateVar(FP)
+	iv.S_BreakShieldLoc = CreateVar(FP)
 	iv.PlayTimeLoc = CreateVar(FP)
 	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
 	iv.MoneyLoc = CreateWar(FP)
+	iv.MoneyLoc2 = CreateWar(FP)
 	iv.CredLoc = CreateWar(FP)
-	iv.ExpLoc = CreateVar(FP)
-	iv.TotalExpLoc = CreateVar(FP)
+	iv.ExpLoc = CreateWar(FP)
+	iv.TotalExpLoc = CreateWar(FP)
 	iv.InterfaceNumLoc = CreateVar(FP)
 	iv.UpgradeLoc = CreateVar(FP)
 	iv.EXPIncomeLoc = CreateVar(FP)
@@ -207,19 +218,22 @@ function Include_Vars()
 	iv.CTStatP2 = CreateVar(FP)
 
 	iv.TempReadV = CreateVar(FP)
-	iv.TempEXPV = CreateVar(FP)
+	iv.TempReadW = CreateWar(FP)
+	iv.TempEXPW = CreateWar(FP)
 
 	iv.CheatDetect = CreateCcode()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
 
-	iv.PEXP2 = CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
+	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
 
 	iv.TempO = CreateVarArr(7,FP)
 	iv.TempG = CreateVarArr(7,FP)
+	iv.TempX = CreateVarArr(7,FP)
 	ct.TempO = CreateVarArr(7,FP)
 	ct.TempG = CreateVarArr(7,FP)
+	ct.TempX = CreateVarArr(7,FP)
 
 
 
@@ -238,6 +252,7 @@ function Include_Vars()
 
 	
 	ct.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	ct.Money2 = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
 	ct.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
 	ct.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
 	ct.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
@@ -245,6 +260,7 @@ function Include_Vars()
 	ct.TotalEPer = CreateVarArr(7,FP)--총 강화확률(기본 1강)
 	ct.TotalEPer2 = CreateVarArr(7,FP)--총 강화확률(+2강)
 	ct.TotalEPer3 = CreateVarArr(7,FP)--총 강화확률(+3강)
+	ct.TotalEPer4 = CreateVarArr(7,FP)--총 강화확률(특수)
 	ct.ScoutDmg = CreateVarArr(7,FP) -- 기본유닛 데미지
 	ct.ScTimer = CreateVarArr(7,FP)
 	ct.PTimeV = CreateVarArr(7,FP)
@@ -266,6 +282,8 @@ function Include_Vars()
 	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
 	ct.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
+	ct.Stat_TotalEPer4 = CreateVarArr(7,FP)-- 특수 확업 수치
+	ct.Stat_BreakShield = CreateVarArr(7,FP)-- 파괴 방지 수치
 	ct.Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
 	ct.Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
 	ct.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
@@ -309,11 +327,13 @@ function Include_Vars()
 	DmgFactor = CreateVarArr(7,FP)
 	Dmg = CreateVarArr(7,FP)
 
-	EXPArr = {}
-	for i = 1, 10000 do
-		EXPArr[i] = 10+(10*(i-1)*(i*0.3))
-	end
-	EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
+	--EXPArr = {}
+	--for i = 1, 10000 do
+	--	EXPArr[i] = 10+((i-1)*(i*3))
+	--end
+
+	EXPArr = CreateLArr(50000, FP)
+	--EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
 	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
@@ -333,7 +353,7 @@ function Include_Vars()
 		{30,"3500000000000"},
 		{32,"20000000000000"},
 		{34,"120000000000000"},
-		{36,"8000000000000000"},
+		{36,"800000000000000"},
 	}
 	PatchInit() -- 유닛 패치 테이블 초기화
 
@@ -390,18 +410,21 @@ function Include_Vars()
 	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--제라툴
 	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--노라드
 	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--다니모스
-	PushLevelUnit(25+15,1000,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대
+	PushLevelUnit(25+15,0,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
 	SetWeaponsDatX(26,{WepName=1441})--파벳3연타 예외처리
-
+	PushLevelUnit(25+16,4000,60000000,11,15,72,20,59)--드랍쉽
+	PushLevelUnit(25+17,15000,120000000,9,22,48,40,59)--베슬
+	PushLevelUnit(25+18,30000,280000000,76,71,24,100,59)--아칸
+	PushLevelUnit(25+19,30000,1000000000,63,70,12,300,59)--다크아칸
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
 	--PushLevelUnit(25+17,4000,60,100,48,1300,130,59)--커세어
 	--PushLevelUnit(25+18,3000,71,77,48,1800,180,59)--아비터
-	--PushLevelUnit(25+19,3000,37,35,12,600,60,59)--저글링
+	--PushLevelUnit(25+19,3000,37,35,12,600,60,59)--저글링 
 	--PushLevelUnit(25+20,2000,38,38,24,2000,200,59)--히드라
 	--PushLevelUnit(25+21,2000,43,48,24,2700,270,59)--뮤탈
 	--PushLevelUnit(25+22,1000,44,46,48,7000,700,59)--가디언
@@ -459,7 +482,8 @@ end
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
-	
+	Cost_Stat_TotalEPer4 = 500
+	Cost_Stat_BreakShield = 1000
 
 	
 end

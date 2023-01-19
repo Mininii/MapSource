@@ -2,6 +2,7 @@ function DataArr()
 	
 	PVWArr = {
 		{iv.Money,ct.Money,"Money"},
+		{iv.Money2,ct.Money2,"Money2"},
 		{iv.IncomeMax,ct.IncomeMax,"IncomeMax"},
 		{iv.Income,ct.Income,"Income"},
 		{iv.BuildMul1,ct.BuildMul1,"BuildMul1"},
@@ -9,6 +10,7 @@ function DataArr()
 		{iv.TotalEPer,ct.TotalEPer,"TotalEPer"},
 		{iv.TotalEPer2,ct.TotalEPer2,"TotalEPer2"},
 		{iv.TotalEPer3,ct.TotalEPer3,"TotalEPer3"},
+		{iv.TotalEPer4,ct.TotalEPer4,"TotalEPer4"},
 		{iv.ScoutDmg,ct.ScoutDmg,"ScoutDmg"},
 		{iv.ScTimer,ct.ScTimer,"ScTimer"},
 		{iv.PTimeV,ct.PTimeV,"PTimeV"},
@@ -30,6 +32,8 @@ function DataArr()
 		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
 		{iv.Stat_TotalEPer2,ct.Stat_TotalEPer2,"Stat_TotalEPer2"},
 		{iv.Stat_TotalEPer3,ct.Stat_TotalEPer3,"Stat_TotalEPer3"},
+		{iv.Stat_TotalEPer4,ct.Stat_TotalEPer4,"Stat_TotalEPer4"},
+		{iv.Stat_BreakShield,ct.Stat_BreakShield,"Stat_BreakShield"},
 		{iv.Stat_Upgrade,ct.Stat_Upgrade,"Stat_Upgrade"},
 		{iv.Credit,ct.Credit,"Credit"},
 		{iv.PEXP,ct.PEXP,"PEXP"},
@@ -48,6 +52,7 @@ function DataArr()
 		{iv.BanFlag4,ct.BanFlag4,"BanFlag4"},
 		{iv.TempO,ct.TempO,"TempO"},
 		{iv.TempG,ct.TempG,"TempG"},
+		{iv.TempX,ct.TempX,"TempX"}
 	}
 	
 
@@ -88,6 +93,8 @@ function DataArr()
 		{iv.PlayTime2,119},
 		{iv.CreditAddSC,120},
 		{iv.LV5Cool,121},
+		{iv.Stat_TotalEPer4,122},
+		{iv.Stat_BreakShield,123},
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}

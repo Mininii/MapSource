@@ -105,11 +105,11 @@ function Install_CallTriggers()
 		CIfX(FP,{KeyPress("F12", "Down")})
 		CMov(FP,GetEPer,1)
 		CElseX()
-		GetEPer2 = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		GetEPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 		CMov(FP,GetEPer,GetEPer2)
 		CIfXEnd()
 	else
-		GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	end
 	
 	TotalEper = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
@@ -224,16 +224,34 @@ function Install_CallTriggers()
 		end
 	CIfEnd()
 
+	SetCallEnd()
+
 	Call_Enchant2 = SetCallForward()
 	SetCall(FP)
-	GetEPer = f_CRandNum(100001,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	if TestStart == 1 then
+		--GetEPer = CreateVar(FP)
+		--CIfX(FP,{KeyPress("F12", "Down")})
+		--CMov(FP,GetEPer,1)
+		--CElseX()
+		--GetEPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		--CMov(FP,GetEPer,GetEPer2)
+		--CIfXEnd()
+		
+		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	else
+		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	end
+	
 	XEper = CreateVar(FP)
+	BreakShield = CreateVar(FP)
 	--ELevel = 현재 강화중인 레벨
+	CMov(FP,E1Range[1],1)
+	CMov(FP,E1Range[2],XEper)
 
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
-			for i = 1, 39 do
+			for i = 40, 44 do
 				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
@@ -242,15 +260,54 @@ function Install_CallTriggers()
 			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
 
 			DisplayPrint(ECP,{"\x04출력된 난수 : ",ColorCodeV[2],GetEPer})
+			DisplayPrint(ECP,{"\x1F계산된 +1 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end
+	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--성공시
+		CAdd(FP,ELevel,1)
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
+			CIfEnd()
+		end
+	CElseX()
+		CIf(FP,CV(BreakShield,1,AtLeast))
+		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		CMov(FP,E1Range[1],1)
+		CMov(FP,E1Range[2],BreakShield)
+		DisplayPrint(ECP,{"\x04출력된 파괴방지 난수 : ",ColorCodeV[2],GetEPer})
+		DisplayPrint(ECP,{"\x1F계산된 파괴방지 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+		
+		CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, BreakShield)})--성공시
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 파괴방지 성공", 4)})
+			CIfEnd()
+		end
+		CElseX()
+		CMov(FP,ELevel,0)
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
+			CIfEnd()
+		end
+		CIfXEnd()
+		CIfEnd()
+	CIfXEnd()
+	CIf(FP,{CV(ELevel,1,AtLeast)})
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--오버플로우 방지
+		for i = 0, 6 do
+			CIf(FP,{CV(ECP,i)})
+				CMovX(FP,VArr(GetUnitVArr[i+1], ELevel),1,Add)
+			CIfEnd()
+		end
+	CIfEnd()
+
 
 	
 	SetCallEnd()
 	
-	SetCallEnd()
-
 	Call_CT = SetCallForward()
 	SetCall(FP)
 	
@@ -259,16 +316,26 @@ function Install_CallTriggers()
 	CTStatP = CreateVar(FP)
 	CTCurEXP = CreateWar(FP)
 	CTTotalExp = CreateWar(FP)
+	CTLIndex = CreateVar(FP)
 	local TempReadV = CreateVar(FP)
+	local TempReadW = CreateWar(FP)
 
 	local CheatTestJump = def_sIndex()
 	CJumpEnd(FP, CheatTestJump)
-	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,9999,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
+	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,49999,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
+	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
+	f_LRead(FP, LArrX({EXPArr},CTLIndex), TempReadW, nil, 1)
+	f_LAdd(FP, CTTotalExp, CTTotalExp, TempReadW)
+	
+	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 2), 8)
+	f_LRead(FP, LArrX({EXPArr},CTLIndex), TempReadW, nil, 1)
+	f_LAdd(FP, CTCurEXP, CTCurEXP, TempReadW)
 
-	f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,1)),TempReadV,nil,nil,1)
-	f_LAdd(FP, CTTotalExp, CTTotalExp, {TempReadV,0})
-	f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,2)),TempReadV,nil,nil,1)
-	f_LAdd(FP, CTCurEXP, CTCurEXP, {TempReadV,0})
+
+	--f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,1)),TempReadV,nil,nil,1)
+	--f_LAdd(FP, CTTotalExp, CTTotalExp, {TempReadV,0})
+	--f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,2)),TempReadV,nil,nil,1)
+	--f_LAdd(FP, CTCurEXP, CTCurEXP, {TempReadV,0})
 	CAdd(FP,CTStatP,5)
 	CJump(FP, CheatTestJump)
 	NIfEnd()
@@ -313,149 +380,159 @@ function Install_CallTriggers()
 	Call_BtnFnc = SetCallForward()
 	SetCall(FP)
 	CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
-	CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
-	--Print_13X(FP,GCP)
+		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
+			--Print_13X(FP,GCP)
 
-	f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
-	CrShift(FP,G_PushBtnm,16)
+			f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
+			CrShift(FP,G_PushBtnm,16)
 
-	CIfX(FP,{Never()})
-	CElseIfX(CV(G_BtnFnm,1))--자동구매
-	local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 7)
-	local GetNum = CreateVar(FP)
-	local GetABData = CreateVar(FP)
-	local PBJump = def_sIndex()
-	local PBJump2 = def_sIndex()
-	NJump(FP, PBJump, CV(G_PushBtnm,24))
-	CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
-	CMovX(FP,GetABData,VArrX(AutoBuyVArr,VArrI,VArrI4))
-	CIfX(FP,{TNVar(GetNum, Exactly, GetABData)})
-	DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
-	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
-	CElseX()
-	DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
-	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
-	CIfXEnd()
-	CJump(FP, PBJump2)
-	NJumpEnd(FP, PBJump)
-	DisplayPrintEr(GCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
-	CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
-	CJumpEnd(FP,PBJump2)
+			CIfX(FP,{Never()})
+			CElseIfX(CV(G_BtnFnm,1))--자동구매
+				local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 7)
+				local GetNum = CreateVar(FP)
+				local GetABData = CreateVar(FP)
+				local PBJump = def_sIndex()
+				local PBJump2 = def_sIndex()
+				NJump(FP, PBJump, CV(G_PushBtnm,24))
+				CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
+				CMovX(FP,GetABData,VArrX(AutoBuyVArr,VArrI,VArrI4))
 
+				CIfX(FP,{TNVar(GetNum, Exactly, GetABData)})
+					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+				CElseX()
+					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
+					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
+				CIfXEnd()
 
-
-
-	CElseIfX({CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,5,AtMost)})--자동강화 1~25
-	TriggerX(FP, {CV(G_BtnFnm,3)}, AddV(G_PushBtnm,25), {preserved})
-	TriggerX(FP, {CV(G_BtnFnm,5)}, AddV(G_PushBtnm,25), {preserved})
-	local GetArrNum = CreateVar(FP)
-	local GetArrNum2 = CreateVar(FP)
-	local TxtColor = CreateVar(FP)
-	f_Mul(FP, GetArrNum2, G_PushBtnm, 7)
-	CAdd(FP,GetArrNum2,GCP)
-	ConvertArr(FP,GetArrNum,GetArrNum2)
-
-	DoActionsX(FP,{SetV(TxtColor,0x06),AddV(G_PushBtnm,1)})
-	TriggerX(FP, {CV(G_PushBtnm,26,AtLeast)}, SetV(TxtColor,0x0F), {preserved})
-
-	CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
-	CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
-	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
-	CElseX()
-	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
-	CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
-	CIfXEnd()
-	CIfEnd()
-	CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
-	CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
-	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
-	CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
-
-	CElseX()
-	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
-	CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
-
-
-
-	CElseIfX(CV(G_BtnFnm,6))
-
-	local MulOpVArr = GetVArray(iv.MulOp[1], 7)
-	local GetMulData = CreateVar(FP)
-	local SCheck = CreateCcode()
-
-
-	CIf(FP,{CV(G_PushBtnm,0)}) -- 배율 올림
-		CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
-		Print_13X(FP, GCP)
-		CIfX(FP,{CV(GetMulData,10000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
-			f_Mul(FP,GetMulData,10)
-			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
-		CElseX()--조건이 만족하지 않을 경우
-			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
-		CIfXEnd()
-	CIfEnd()
-	
-	CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
-		CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
-		Print_13X(FP, GCP)
-		CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
-			f_Div(FP,GetMulData,10)
-			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
-		CElseX()--조건이 만족하지 않을 경우
-			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
-		CIfXEnd()
-	CIfEnd()--
-	CIf(FP,{CV(G_PushBtnm,2)}) -- 싱글플레이 버튼
-		Print_13X(FP, GCP)
-		CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
-			CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
-				f_Read(FP, 0x628438, nil, Nextptrs)
-				CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
-				CSub(FP,CurCunitI,Nextptrs,19025)
-				f_Div(FP,CurCunitI,_Mov(84))
-				CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
-				CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
-				--CallTrigger(FP, Call_CTInputUID)
-			CIfEnd()
-			CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
-				CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
-
-			CIfEnd()
-		CElseX()--조건이 만족하지 않을 경우
-			CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
-		CIfXEnd()
-		CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CD(iv.PartyBonus,0)})
-			CMov(FP,CTimeV,_Div(_Sub(_Mov(3*24*60*60),iv.GeneralPlayTime), 24))
-			CallTrigger(FP, Call_ConvertTime)
-			DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-		CElseX()
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
-		CIfXEnd()
-	CIfEnd()--
+				CJump(FP, PBJump2)
+				NJumpEnd(FP, PBJump)
+				DisplayPrintEr(GCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
+				CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+				CJumpEnd(FP,PBJump2)
 
 
 
 
-	CIfXEnd()
-	CIfEnd()
-	
+			CElseIfX({CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,5,AtMost)})--자동강화 1~25
+				TriggerX(FP, {CV(G_BtnFnm,3)}, AddV(G_PushBtnm,25), {preserved})
+				TriggerX(FP, {CV(G_BtnFnm,5)}, AddV(G_PushBtnm,25), {preserved})
+				local GetArrNum = CreateVar(FP)
+				local GetArrNum2 = CreateVar(FP)
+				local TxtColor = CreateVar(FP)
+				f_Mul(FP, GetArrNum2, G_PushBtnm, 7)
+				CAdd(FP,GetArrNum2,GCP)
+				ConvertArr(FP,GetArrNum,GetArrNum2)
 
-	
+				DoActionsX(FP,{SetV(TxtColor,0x06),AddV(G_PushBtnm,1)})
+				TriggerX(FP, {CV(G_PushBtnm,26,AtLeast)}, SetV(TxtColor,0x0F), {preserved})
+
+				CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
+					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
+						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
+					CElseX()
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
+						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
+					CIfXEnd()
+				CIfEnd()
+				CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
+					CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
+						CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
+
+					CElseX()
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
+						CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
+					CIfXEnd()
+
+				CIfEnd()
+				
+
+			local MulOpVArr = GetVArray(iv.MulOp[1], 7)
+			local MulOpVArr2 = CreateVArr(7, FP)
+			local GetMulData = CreateVar(FP)
+			local GetMulData2 = CreateVar(FP)
+			local SCheck = CreateCcode()
+
+			CElseIfX(CV(G_BtnFnm,6))
+				CIf(FP,{CV(G_PushBtnm,0)}) -- 배율 올림
+					CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
+					Print_13X(FP, GCP)
+					CIfX(FP,{CV(GetMulData,50000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+						CIfX(FP,{CV(GetMulData2,0)})
+						f_Mul(FP,GetMulData,5)
+						CMov(FP,GetMulData2,1)
+						CElseX()
+						f_Mul(FP,GetMulData,2)
+						CMov(FP,GetMulData2,0)
+						CIfXEnd()
+						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
+						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
+					CElseX()--조건이 만족하지 않을 경우
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
+					CIfXEnd()
+				CIfEnd()
+				
+				CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
+					CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+					Print_13X(FP, GCP)
+					CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+						CIfX(FP,{CV(GetMulData2,1)})
+						f_Div(FP,GetMulData,5)
+						CMov(FP,GetMulData2,0)
+						CElseX()
+						f_Div(FP,GetMulData,2)
+						CMov(FP,GetMulData2,1)
+						CIfXEnd()
+						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
+						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
+					CElseX()--조건이 만족하지 않을 경우
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
+					CIfXEnd()
+				CIfEnd()--
+				CIf(FP,{CV(G_PushBtnm,2)}) -- 싱글플레이 버튼
+					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
+						CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
+							f_Read(FP, 0x628438, nil, Nextptrs)
+							CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+							CSub(FP,CurCunitI,Nextptrs,19025)
+							f_Div(FP,CurCunitI,_Mov(84))
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+							--CallTrigger(FP, Call_CTInputUID)
+						CIfEnd()
+						CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
+							CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
+
+						CIfEnd()
+					CElseX()--조건이 만족하지 않을 경우
+						Print_13X(FP, GCP)
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
+					CIfXEnd()
+					CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CD(iv.PartyBonus,0)})
+						CMov(FP,CTimeV,_Div(_Sub(_Mov(3*24*60*60),iv.GeneralPlayTime), 24))
+						CallTrigger(FP, Call_ConvertTime)
+						DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+					CElseIfX({CD(iv.PartyBonus,1)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
+					CElseX()
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x08활성화 불가능.",4)})
+					CIfXEnd()
+				CIfEnd()--
+			
+			CIfXEnd()
 
 
 
-
-
-	CIfXEnd()
-
-
-
-	CIfEnd()--ShopEnd
-	CDoActions(FP,{
-		TSetMemory(_Add(G_Btnptr,0x98/4),SetTo,0 + 228*65536);
-		TSetMemory(_Add(G_Btnptr,0x9C/4),SetTo,228 + 228*65536);
-		TSetMemoryX(_Add(G_Btnptr,0xA0/4),SetTo,228,0xFFFF)})
+		CIfEnd()--ShopEnd
+		CDoActions(FP,{
+			TSetMemory(_Add(G_Btnptr,0x98/4),SetTo,0 + 228*65536);
+			TSetMemory(_Add(G_Btnptr,0x9C/4),SetTo,228 + 228*65536);
+			TSetMemoryX(_Add(G_Btnptr,0xA0/4),SetTo,228,0xFFFF)})
 	CIfEnd()
 
 
@@ -496,9 +573,12 @@ function Install_CallTriggers()
 		{iv.TotalEPer[1],iv.TotalEPerLoc},
 		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
 		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
+		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
 		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
 		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
+		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
+		{iv.Stat_BreakShield[1],iv.S_BreakShieldLoc},
 		{iv.Income[1],iv.IncomeLoc},
 		{iv.IncomeMax[1],iv.IncomeMaxLoc},
 		{iv.PLevel[1],iv.LevelLoc},

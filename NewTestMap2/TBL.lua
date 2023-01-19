@@ -12,6 +12,7 @@ function TBL()
 	local TotalEPerLoc = iv.TotalEPerLoc--CreateVar(FP)
 	local TotalEPer2Loc = iv.TotalEPer2Loc--CreateVar(FP)
 	local TotalEPer3Loc = iv.TotalEPer3Loc--CreateVar(FP)
+	local TotalEPer4Loc = iv.TotalEPer4Loc--CreateVar(FP)
 	local S_TotalEPerLoc = iv.S_TotalEPerLoc--CreateVar(FP)
 	local S_TotalEPer2Loc = iv.S_TotalEPer2Loc--CreateVar(FP)
 	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
@@ -19,6 +20,7 @@ function TBL()
 	local PlayTimeLoc2 = iv.PlayTimeLoc2--CreateVar(FP)
 	local StatPLoc = iv.StatPLoc--CreateVar(FP)
 	local MoneyLoc = iv.MoneyLoc--CreateWar(FP)
+	local MoneyLoc2 = iv.MoneyLoc2--CreateWar(FP)
 	local CredLoc = iv.CredLoc--CreateWar(FP)
 	local ExpLoc = iv.ExpLoc--CreateVar(FP)
 	local TotalExpLoc = iv.TotalExpLoc--CreateVar(FP)
@@ -46,7 +48,8 @@ function TBL()
     local iStrinit = def_sIndex()
     CJump(FP, iStrinit)
     t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
-    t01 = "\x07기준확률 \x04: \x0D000.000\x08%\x0D\x0D"
+    t01 = "\x07기준확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+    t01_1 = "\x08특수확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
     t02 = "\x08!!! \x1F최 강 유 닛 \x08!!!"
     t03 = "\x04강화 불가 유닛"
     t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
@@ -75,10 +78,12 @@ function TBL()
     EStr1, EStr1a, EStr1s = SaveiStrArr(FP,t05)
     EStr2, EStr2a, EStr2s = SaveiStrArr(FP,t07)
     EStr3, EStr3a, EStr3s = SaveiStrArr(FP,t11)
-    SelEPD,SelPer,SelUID,SelMaxHP,SelPl,SelI,CurEPD,SelEXP = CreateVars(8,FP)
+    SelEPD,SelPer,SelUID,SelMaxHP,SelPl,SelI,CurEPD = CreateVars(7,FP)
+    SelEXP = CreateWar(FP)
     BossFlag = CreateCcode()
     BossFlag2 = CreateCcode()
     SellTicketFlag = CreateCcode()
+    XEperFlag = CreateCcode()
     local TotalBossDPMLoc = CreateWar(FP)
     CJumpEnd(FP, iStrinit)
     
@@ -91,7 +96,7 @@ function TBL()
     f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
     CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
     
-    CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
+    CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
     
     CMov(FP,CurEPD,SelEPD)
     
@@ -99,27 +104,34 @@ function TBL()
     NIfX(FP,{Never()})
     for j, k in pairs(LevelUnitArr) do
         NElseIfX({CV(SelUID,k[2])},{
-            SetV(SelPer,k[3]);
-            SetV(SelEXP,k[4]);SetCD(SellTicketFlag,0)
+            SetV(SelPer,k[3]);SetCD(SellTicketFlag,0)
         })
+        f_LMov(FP, SelEXP, tostring(k[4])  ,nil,nil, 1)
         if j>=26 then
             TriggerX(FP,{CV(SelUID,k[2])},{SetCD(SellTicketFlag,1)},{preserved})
         end
+        if j>=40 then
+            TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,1)},{preserved})
+        end
+        
     end
     for j, k in pairs(BossArr) do
         NElseIfX({CV(SelUID,k[1])},{SetCD(BossFlag,1);SetCD(BossFlag2,0);
-        SetV(SelPer,0);
-        SetV(SelEXP,0);})
+        SetV(SelPer,0);})
+        
+        f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
     end
     for j, k in pairs(PBossArr) do
         NElseIfX({CV(SelUID,k[1])},{SetCD(BossFlag,1);SetCD(BossFlag2,1);
-        SetV(SelPer,0);
-        SetV(SelEXP,0);})
+        SetV(SelPer,0);})
+        
+        f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
     end
     NElseX({
         SetV(SelPer,0);
-        SetV(SelEXP,0);
     })
+    
+        f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
     NIfXEnd()
     
     CIfX(FP,{CD(BossFlag,0)})
@@ -150,7 +162,7 @@ function TBL()
     
     
     
-    CIfX(FP,{CV(SelEXP,0,AtMost)})--경험치가 없을경우 혹은 판매 불가 상태일 경우
+    CIfX(FP,{TTNWar(SelEXP,AtMost,"0")})--경험치가 없을경우 혹은 판매 불가 상태일 경우
         CIfX(FP,{CV(SelUID,88)}) -- 스카웃
         CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl2,0,EStr3,EStr3s,nil,0,EStr3s)
@@ -166,10 +178,8 @@ function TBL()
         CElseX()
         CS__SetValue(FP,EStr0,t10,nil,0)
         CIfXEnd()
-    local SelEXPL = CreateWar(FP)
-        f_Mul(FP,SelEXP,_Add(EXPIncomeLoc,10))
-        f_LMov(FP, SelEXPL, {SelEXP,0}, nil,nil,1)
-        CS__lItoCustom(FP,SVA1(EStr0,14),SelEXPL,nil,nil,{10,20},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10,11,12,14,15,16,18,19,20,22,23,24,26},nil,{{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0})
+        f_LMul(FP, SelEXP, SelEXP, {_Add(EXPIncomeLoc,10),0})
+        CS__lItoCustom(FP,SVA1(EStr0,14),SelEXP,nil,nil,{10,20},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10,11,12,14,15,16,18,19,20,22,23,24,26},nil,{{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0})
     
         TriggerX(FP, {
             CSVA1(SVA1(EStr0,15+24), Exactly, 0x0D*0x1000000, 0xFF000000)
@@ -190,51 +200,65 @@ function TBL()
     CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
-    CElseIfX({CV(SelPer,0)})--강화유닛이 아닐 경우
+    CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--강화유닛이 아닐 경우
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
         CElseIfX({CD(BossFlag,1)})--보스건물일경우
         --현재 DPS 요구치 표기는 별도
     CElseX()--그외
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+        CIfX(FP, {CD(XEperFlag,1)}) -- 특수확률일 경우
+        CS__SetValue(FP,TStr1,t01_1,nil,0)
+        CS__SetValue(FP,TStr1,"-",nil,7)
+        CElseX()
         CS__SetValue(FP,TStr1,t01,nil,0)
-        CS__ItoCustom(FP,SVA1(TStr1,7),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+        CIfXEnd()
+
+        CS__ItoCustom(FP,SVA1(TStr1,7+1),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
     --8 9 10
     --12 13 14
-    CS__InputTA(FP,{CSVA1(SVA1(TStr1,10), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
+    CS__InputTA(FP,{CSVA1(SVA1(TStr1,10+1), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
     
     TriggerX(FP, {
-        CSVA1(SVA1(TStr1,12), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-        CSVA1(SVA1(TStr1,13), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-        CSVA1(SVA1(TStr1,14), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+        CSVA1(SVA1(TStr1,12+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+        CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+        CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
     }, {
-        SetCSVA1(SVA1(TStr1,11), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-        SetCSVA1(SVA1(TStr1,12), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-        SetCSVA1(SVA1(TStr1,13), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-        SetCSVA1(SVA1(TStr1,14), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,11+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,12+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
     }, {preserved})
     TriggerX(FP, {
-        CSVA1(SVA1(TStr1,13), Exactly, string.byte("0")*0x1000000, 0xFF000000),
-        CSVA1(SVA1(TStr1,14), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+        CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+        CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
     }, {
-        SetCSVA1(SVA1(TStr1,13), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
-        SetCSVA1(SVA1(TStr1,14), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
     }, {preserved})
     TriggerX(FP, {
-        CSVA1(SVA1(TStr1,14), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+        CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
     }, {
-        SetCSVA1(SVA1(TStr1,14), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+        SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
     }, {preserved})
     
     
         CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
     CIfXEnd()
     CIf(FP,{CD(BossFlag,0)})
-    local TotalEPer4Loc = CreateVar(FP)
+    local TotalEPer5Loc = CreateVar(FP)
+    CIfX(FP, CD(XEperFlag,0))
     CAdd(FP,TotalEPer3Loc,_Div(SelPer,_Mov(100)))
     CAdd(FP,TotalEPer2Loc,_Div(SelPer,_Mov(10)))
     CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
-    
+    CElseX()
+    CAdd(FP,TotalEPer2Loc,TotalEPer3Loc)
+    CAdd(FP,TotalEPerLoc,TotalEPer2Loc)
+    CAdd(FP,TotalEPerLoc,TotalEPer4Loc)--특수확률 합산
+    CSub(FP,TotalEPerLoc,SelPer)
+    CMov(FP,TotalEPer3Loc,0)
+    CMov(FP,TotalEPer2Loc,0)
+    CIfXEnd()
     
     --35~39 +3 수치가 +2로
     
@@ -255,8 +279,8 @@ function TBL()
         CIfEnd()
     end
     
-    CSub(FP,TotalEPer4Loc,_Mov(100000),_Add(_Add(TotalEPerLoc,TotalEPer3Loc),TotalEPer2Loc))
-    CIf(FP,{CV(TotalEPer4Loc,0)})
+    CSub(FP,TotalEPer5Loc,_Mov(100000),_Add(_Add(TotalEPerLoc,TotalEPer3Loc),TotalEPer2Loc))
+    CIf(FP,{CV(TotalEPer5Loc,0)})
     CSub(FP,TotalEPerLoc,_Mov(100000),_Add(TotalEPer2Loc,TotalEPer3Loc))
     
     CIfEnd()
@@ -270,7 +294,7 @@ function TBL()
         Byte_NumSet(TotalEPerLoc,E3VarArr[i],10^(6-i),1,0x30)
         Byte_NumSet(TotalEPer2Loc,E2VarArr[i],10^(6-i),1,0x30)
         Byte_NumSet(TotalEPer3Loc,E1VarArr[i],10^(6-i),1,0x30)
-        Byte_NumSet(TotalEPer4Loc,E4VarArr[i],10^(6-i),1,0x30)
+        Byte_NumSet(TotalEPer5Loc,E4VarArr[i],10^(6-i),1,0x30)
     end
     SetEPerStr(E1VarArr)
     SetEPerStr(E2VarArr)
@@ -288,6 +312,7 @@ function TBL()
         CDoActions(FP,{TBwrite(_Add(Etbl,72+5+i),SetTo,E4VarArr[i+1])})
         CDoActions(FP,{TBwrite(_Add(Etbl,72+5+4+i),SetTo,E4VarArr[i+4])})
     end
+
     
     CIfEnd()
     CIfEnd()

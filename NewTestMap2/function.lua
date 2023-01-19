@@ -638,7 +638,7 @@ function MSQC_ExportEdsTxt()
 	io.output(CSfile)
 	io.write("[MSQC]\n")
 	for j,k in pairs(MSQC_KeyArr) do
-		io.write(j.." = "..k[1]..","..k[2].."\n")
+		io.write("Memory(0x68C144,Exactly,0);"..j.." = "..k[1]..","..k[2].."\n")
 	end
 	io.close(CSfile)
 	

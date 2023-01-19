@@ -13,6 +13,7 @@ function onInit_EUD()
 
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
+	SetUnitsDatX(173, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	for j,k in pairs(BossArr) do
 		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,
 		HP=8320000,Armor = 0,StarEditFlag=0x1C7,AdvFlag={0,0x38008004},GroundWeapon=117,AirWeapon=130,Class=193,GroupFlag=0xA,DefUpType=60,Shield=false,Height=4,
@@ -258,6 +259,9 @@ end
 	CDoActions(FP, {TSetNVar(DpsLV2[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,190,57+i,FP)})
 	--CallTrigger(FP, Call_CTInputUID)
 	DoActions(FP, {SetLoc("Location "..(57+i),"L",Add,6*32),SetLoc("Location "..(57+i),"R",Add,6*32)})
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {TSetNVar(DpsLV3[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,173,137+i,FP)})
+	--CallTrigger(FP, Call_CTInputUID)
 
 
 
@@ -303,6 +307,19 @@ end
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
 	CForEnd()
 
+	CFor(FP, 0, 50000, 1)
+	CI = CForVariable()
+	LIndex = CreateVar(FP)
+	LMulW = CreateWar2(FP,nil,nil,"3")
+	CTrigger(FP, CV(CI,10000,AtLeast), {TSetNWar(LMulW,SetTo,"10")})
+	CTrigger(FP, CV(CI,20000,AtLeast), {TSetNWar(LMulW,SetTo,"100")})
+	CTrigger(FP, CV(CI,30000,AtLeast), {TSetNWar(LMulW,SetTo,"1000")})
+	CTrigger(FP, CV(CI,40000,AtLeast), {TSetNWar(LMulW,SetTo,"10000")})
+	--10+((i-1)*(i*3))
+	ConvertLArr(FP, LIndex, CI, 8)
+	f_LMov(FP,LArrX({EXPArr}, LIndex),_LMul({CI,0}, _LMul({_Add(CI, 1),0}, LMulW)),"10",nil,1)
+	CForEnd()
+--
 	CIfEnd()
 
 	

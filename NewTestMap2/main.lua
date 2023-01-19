@@ -63,9 +63,7 @@ CJump(AllPlayers,init_func)
 	Include_64BitLibrary("Switch 100")
 	Install_BackupCP(FP)
 	Include_Vars()
-	if TestStart == 1 then
-		Include_Conv_CPosXY(FP,{4096*2,4096*2})
-	end
+	Include_Conv_CPosXY(FP,{4096*2,4096*2})
 	CT_Cunit = Install_EXCC(FP,4,nil)
 	Include_CRandNum(FP)
 	Install_CallTriggers()

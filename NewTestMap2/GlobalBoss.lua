@@ -38,24 +38,24 @@ CMov(FP,B_Ticket,0)
 Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
 	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
 	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
-	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x081단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x081단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
 	AddV(B_IncomeMax,6),--사냥터 유닛수 6 증가
 	AddV(B_TotalEPer,1000),--강화확률 +1.0%p
 	AddV(B_Credit,500),--크레딧 200
 	AddV(B_Stat_Upgrade,5),
-	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x082단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x082단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
 	AddV(B_Credit,1000),--크레딧 1000
 	AddV(B_Stat_EXPIncome,3), -- 판매시 경험치 30% 증가
-	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x083단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x083단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_Stat_Upgrade,5),
 	AddV(B_Ticket,50);
-	SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 AddLV5Cool=CreateCcode()
 for i = 0, 4 do
