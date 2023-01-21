@@ -248,7 +248,7 @@ function GameDisplay()
             end
             DisplayPrint(LCP, {"\x071. \x08특수 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],E4VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E4VarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
             DisplayPrint(LCP, {"\x072. \x08특수 \x1F파괴 방지\x08확률 \x0F0.1%p \x08MAX 500 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],E5VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E5VarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
-            DisplayPrint(LCP, {"\x073. \x10추가 \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],E6VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E6VarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+            DisplayPrint(LCP, {"\x073. \x10추가 \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],E6VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E6VarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
             CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n",4)})
 
 
@@ -263,7 +263,7 @@ function GameDisplay()
             StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F35강\x04:\x08+2, \x0F36강\x04:\x08+1 \x04만 적용됩니다."),
             StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0841강 이후 유닛\x04만 적용됩니다."),
             StrDesign("\x08특수\x1F 파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0841강 이후 유닛\x04만 적용됩니다."),
-            StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 +1 기존 강화확률 스탯을 \x07마스터 \x04하셔야 합니다."),
+            StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 기존 +1 강화확률 스탯을 \x07마스터 \x04하셔야 합니다."),
     }
     
         
@@ -437,7 +437,7 @@ function GameDisplay()
             "\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
             "\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
             "\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
-            "\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1720만 크레딧, \x10타이머\x04 6시간동안\x1CEXP+10%\x08(1회한정)",
+            "\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1720만 크레딧",
             "\x045단계 보스 보상인 \x17유닛 판매권\x04은\x07 \x082인이상 플레이 \x04or \x07멀티 1시간 유지\x04한 후 \x08솔로 플레이 \x04시 획득 가능합니다.",
             "\x046단계 개인보스는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
         },
@@ -449,7 +449,7 @@ function GameDisplay()
             "\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
             "\x044단계 \x04: \x17유닛 판매권 + 50, \x08공격력 + 50%, ",
             "\x045단계 \x04: \x04총 5회 처치 가능. 각 \x175만, 4만, 3만, 2만, 1만 크레딧",
-            "\x045단계 보스는 처치후 \x088시간의 인게임 쿨타임\x04이 존재합니다."
+            "\x045단계 보스는 처치후 \x082시간의 인게임 쿨타임\x04이 존재합니다."
         },
     }
     CIf(FP,TTOR({CD(BKey,1),CD(NKey,1),CD(MKey,1)}))

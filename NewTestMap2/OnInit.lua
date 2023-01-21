@@ -136,15 +136,15 @@ end
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
+				SetCDeaths(FP,SetTo,1,LimitM[Player+1]);
 				
 			}
 		}
 	end
 	for i = 0, 6 do -- 내부 관리자 판별 트리거
-		InputTesterID(i,"GALAXY_BURST")
-		InputTesterID(i,"_Mininii")
-		InputTesterID(i,"RonaRonaChan")
-		InputTesterID(i,"Azusawa_Kohane")
+		--InputTesterID(i,"GALAXY_BURST")
+		--InputTesterID(i,"_Mininii")
+		--InputTesterID(i,"RonaRonaChan")
 	end
 	
 

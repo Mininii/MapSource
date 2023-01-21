@@ -41,7 +41,7 @@ TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
-	SpeedTestMode = 1
+	SpeedTestMode = 0
 else
 	
 SpeedTestMode = 0

@@ -49,6 +49,7 @@ function Include_Vars()
 	ColorT = {"\x08","\x0E","\x0F","\x10","\x11","\x15","\x16"}
 	_0D = string.rep("\x0D",200) 
 	LimitX, LimitC,TestMode = CreateCcodes(3)
+	LimitM = CreateCcodeArr(7)
 	--Interface
 	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
 	ShopPtr = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
@@ -518,7 +519,7 @@ FirstReward = {
 	Cost_Stat_AddSc = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
-	Cost_Stat_TotalEPerEx = 1000
+	Cost_Stat_TotalEPerEx = 500
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
