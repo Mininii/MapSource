@@ -56,10 +56,27 @@ function DataArr()
 		{iv.TempX,ct.TempX,"TempX"},
 		{iv.TimeAttackScore,ct.TimeAttackScore,"TimeAttackScore"},
 		{iv.TimeAttackScore2,ct.TimeAttackScore2,"TimeAttackScore2"},
+		{iv.PUnitLevel,ct.PUnitLevel,"PUnitLevel"},
+		{iv.PUnitClass,ct.PUnitClass,"PUnitClass"},
+		{iv.CurPUnitCool,ct.CurPUnitCool,"CurPUnitCool"},
+		{iv.VaccItem,ct.VaccItem,"VaccItem"},
+		{iv.CS_Cooldown,ct.CS_Cooldown,"CS_Cooldown"},
+		{iv.CS_Atk,ct.CS_Atk,"CS_Atk"},
+		{iv.CS_EXP,ct.CS_EXP,"CS_EXP"},
+		{iv.CS_TotalEPer,ct.CS_TotalEPer,"CS_TotalEPer"},
+		{iv.CS_TotalEper4,ct.CS_TotalEper4,"CS_TotalEper4"},
+		{iv.CS_DPSLV,ct.CS_DPSLV,"CS_DPSLV"},
+		{iv.CS_EXPData,ct.CS_EXPData,"CS_EXPData"},
+		{iv.CS_TEPerData,ct.CS_TEPerData,"CS_TEPerData"},
+		{iv.CS_TEPer4Data,ct.CS_TEPer4Data,"CS_TEPer4Data"},
+		
+		
+		
+		
 	}
 	
 
-
+	
 
 	VWArr = {
 		{iv.PCheckV,ctg.PCheckV,"PCheckV"},
@@ -100,7 +117,15 @@ function DataArr()
 		{iv.Stat_BreakShield,123},
 		{iv.Stat_TotalEPerEx,124},
 		{iv.TimeAttackScore,125},
-		
+		{iv.PUnitLevel,126},
+		{iv.PUnitClass,127},
+		{iv.VaccItem,128},
+		{iv.CS_Cooldown,129},
+		{iv.CS_Atk,130},
+		{iv.CS_EXP,131},
+		{iv.CS_TotalEPer,132},
+		{iv.CS_TotalEper4,133},
+		{iv.CS_DPSLV,134},
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}

@@ -24,6 +24,11 @@ function Interface()
 	local BanFlag2 = iv.BanFlag2
 	local BanFlag3 = iv.BanFlag3
 	local BanFlag4 = iv.BanFlag4
+	local CS_EXPData = iv.CS_EXPData
+	local CS_TEPerData = iv.CS_TEPerData
+	local CS_TEPer4Data = iv.CS_TEPer4Data
+	
+	local CurPUnitCool = iv.CurPUnitCool
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -63,6 +68,14 @@ function Interface()
 	local LV5Cool = iv.LV5Cool
 	local TimeAttackScore = iv.TimeAttackScore
 	local TimeAttackScore2 = iv.TimeAttackScore2
+	local PUnitLevel = iv.PUnitLevel
+	local PUnitClass = iv.PUnitClass
+	local CS_Cooldown = iv.CS_Cooldown
+	local CS_Atk = iv.CS_Atk
+	local CS_EXP = iv.CS_EXP
+	local CS_TotalEPer = iv.CS_TotalEPer
+	local CS_TotalEper4 = iv.CS_TotalEper4
+	local CS_DPSLV = iv.CS_DPSLV
 
 	--Local Data Variable
 	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
@@ -178,13 +191,20 @@ TipArr = {
 	StrDesignX("\x04TIP : \x17O키\x04를 누르면 레벨 업을 통해 얻은 스탯을 분배할 수 있습니다."),
 	StrDesignX("\x04TIP : \x04강화 성공시 단계가 \x08+1 \x04뿐만 아니라 낮은 확률로 \x1C+2\x04, \x1F+3\x04 도 올라갈 수 있습니다."),}
 for i = 0, 6 do -- 각플레이어 
-	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i)})
+	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i))})
 	CT_PrevCP(i)
 
 	
 	ConvertVArr(FP,VArrI,VArrI4,GCP,7)
 
+	ConvertVArr(FP, WArrI,WArrI4, GCPW, 7)
 
+
+	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+11, AtLeast, 6),LocalPlayerID(i)},{
+		SetCp(i),
+		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
+		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+12, AtLeast, 100),LocalPlayerID(i)},{
 		SetCp(i),
@@ -316,8 +336,8 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 
-		--CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,15+i, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
-		--CMov(FP,PUnitPtr[i+1],Nextptrs)
+		CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,nil, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
+		CMov(FP,PUnitPtr[i+1],Nextptrs)
 	CIfEnd()
 	
 
@@ -545,13 +565,17 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
 	TriggerX(FP,{CV(ScTimer[i+1],4320,AtMost)},{MoveUnit(1, 88, i, 15+i, 22+i)},{preserved})
 
-
-	CTrigger(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)},{MoveUnit(1, "Men", i, 15+i, 22+i),MoveUnit(1, "Factories", i, 22+i, 57+i),
+	CIf(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)})
+	CTrigger(FP,{},{MoveUnit(1, "Men", i, 15+i, 22+i),MoveUnit(1, "Factories", i, 22+i, 57+i),
 	MoveUnit(1, LevelUnitArr[41][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[42][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[43][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[44][2], i, 22+i, 144+i),
 },1)--사냥터 입장
+	TriggerX(FP,{CV(CS_DPSLV[i+1],1,AtLeast)},{MoveUnit(1,PersonalUIDArr[i+1],i,22+i,57+i)},{preserved})
+	CIfEnd()
+
+
 
 	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 36+i)}, {preserved})--사냥터 퇴장
 
@@ -566,8 +590,27 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	for j, k in pairs(LevelUnitArr) do
 		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 	end
-
+	CIf(FP,{TTNVar(PUnitCurLevel[i+1],NotSame,PUnitClass[i+1])})
+	CMov(FP,PUnitCurLevel[i+1],PUnitClass[i+1])
+	local TempV = CreateVar(FP)
+	CMov(FP,TempV,CS_Atk[i+1])
+	TriggerX(FP,{CV(TempV,5,AtLeast)},{SetV(TempV,5)},{preserved})
+	CDoActions(FP,{TSetMemoryW(0x656EB0, PersonalWIDArr[i+1], SetTo, _Mul(TempV,3250))})
+	CIf(FP,CV(CS_Atk[i+1],6,AtLeast))
+	CDoActions(FP,{TSetMemoryB(0x58F32C, (i*15)+11, SetTo, _Sub(CS_Atk[i+1],5))})
+	CIfEnd()
+	CMov(FP,CurPUnitCool[i+1],_SHRead(ArrX(PUnitCoolArr,CS_Cooldown[i+1])))
+	
+	f_Mul(FP,CS_EXPData[i+1],CS_EXP[i+1],2)
+	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],1000)
+	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
+	
+	--
+	--CTrigger(FP,{CV(PUnitCurLevel[i+1],100)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,2)},1)
+	--CTrigger(FP,{CV(PUnitCurLevel[i+1],99,AtMost)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,1)},1)
+	CIfEnd()
 	CallTrigger(FP,Call_BtnInit,{})
+	
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})
 			
@@ -765,6 +808,16 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,Stat_EXPIncome[i+1],B_Stat_EXPIncome)
 	CAdd(FP,General_Upgrade[i+1],Stat_Upgrade[i+1])
 	CAdd(FP,General_Upgrade[i+1],B_Stat_Upgrade)--
+
+
+	CAdd(FP,Stat_EXPIncome[i+1],CS_EXPData[i+1])
+	CAdd(FP,TotalEPer[i+1],CS_TEPerData[i+1])
+	CAdd(FP,TotalEPer4[i+1],CS_TEPer4Data[i+1])
+	
+
+
+
+
 	--CTrigger(FP, {CV(Income[i+1],_Add(IncomeMax[i+1], 1),AtLeast),LocalPlayerID(i)}, {
 	--	SetCp(i),
 	--	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -972,7 +1025,7 @@ TriggerX(FP,{CV(PBossLV[i+1],6,AtLeast)},{SetCD(BossLV6Flag, 1)})
 				
 				CMov(FP, KSelUID, _SHRead(BackupCp), nil, 0xFF, 1)
 				CMov(FP, KSelPID, _SHRead(_Sub(BackupCp,6)), nil, 0xFF, 1)
-				CIf(FP,{CV(KSelPID,i),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,128),TTNVar(KSelUID,NotSame,129),TTNVar(KSelUID,NotSame,219),TTNVar(KSelUID,NotSame,91),TTNVar(KSelUID,NotSame,92)})
+				CIf(FP,{CV(KSelPID,i),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,128),TTNVar(KSelUID,NotSame,129),TTNVar(KSelUID,NotSame,219),TTNVar(KSelUID,NotSame,91),TTNVar(KSelUID,NotSame,92),TTNVar(KSelUID,NotSame,PersonalUIDArr[i+1])})
 				f_Read(FP, _Sub(BackupCp,15), CPos, nil,nil,1)
 				Convert_CPosXY()
 				Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,Simple_CalcLoc(86, -256, -256, 256, 256))

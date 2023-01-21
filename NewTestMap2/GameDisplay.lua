@@ -41,6 +41,13 @@ function GameDisplay()
 	local SellTicketLoc = iv.SellTicketLoc
     local TimeAttackScoreLoc = iv.TimeAttackScoreLoc
 
+    local CS_CooldownLoc = iv.CS_CooldownLoc
+    local CS_AtkLoc = iv.CS_AtkLoc
+    local CS_EXPLoc = iv.CS_EXPLoc
+    local CS_TotalEPerLoc = iv.CS_TotalEPerLoc
+    local CS_TotalEper4Loc = iv.CS_TotalEper4Loc
+    local CS_DPSLVLoc = iv.CS_DPSLVLoc
+    local VaccItemLoc = iv.VaccItemLoc
 
     
 	local LV5Cool = iv.LV5Cool
@@ -358,7 +365,10 @@ function GameDisplay()
     CIfEnd()
     
     CIfX(FP,{CD(LKey,1)})
-        DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x17À¯´Ö ÆÇ¸Å±Ç \x04º¸À¯ °¹¼ö \x08(ÀúÀå¾ÈµÊ) \x04: \x07",SellTicketLoc," \x17´Ý±â \x04: \x10L"})
+    
+    
+    DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x17À¯´Ö ÆÇ¸Å±Ç \x04º¸À¯ °¹¼ö \x08(ÀúÀåºÒ°¡) \x04: \x07",SellTicketLoc," \x17´Ý±â \x04: \x10L"})
+    DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x10°­È­±â ¹é½Å \x04º¸À¯ °¹¼ö \x07(ÀúÀå°¡´É) \x04: \x07",VaccItemLoc," \x17´Ý±â \x04: \x10L"})
         for i = 0, 6 do
             CIf(FP,HumanCheck(i, 1))
             CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})

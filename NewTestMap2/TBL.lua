@@ -45,6 +45,9 @@ function TBL()
 	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--총 강화확률(+2강)
 	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--총 강화확률(+3강)
 
+    local PUnitLevelLoc = iv.PUnitLevelLoc
+    local PUnitClassLoc = iv.PUnitClassLoc
+
     local iStrinit = def_sIndex()
     CJump(FP, iStrinit)
     t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
@@ -60,6 +63,8 @@ function TBL()
     t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
     t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
     t11 = "\x04(SCA 로드후 3분뒤 사라짐)"
+    t13 = "\x0F강화확률 : \x0D\x0D000 %"
+    t14 = "\x08강화비용 \x04: 000,000,000 \x17크레딧"
     iStrSize1 = GetiStrSize(0,t01)
     S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
     iTbl1 = GetiTblId(FP,1495,S0)
@@ -69,6 +74,8 @@ function TBL()
     TStr3, TStr3a, TStr3s = SaveiStrArr(FP,t03)
     TStr4, TStr4a, TStr4s = SaveiStrArr(FP,t06)
     TStr5, TStr5a, TStr5s = SaveiStrArr(FP,t08)
+    TStr6, TStr6a, TStr6s = SaveiStrArr(FP,t13)
+    TStr7, TStr7a, TStr7s = SaveiStrArr(FP,t14)
     
     S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
     iTbl2 = GetiTblId(FP,764,S1)
@@ -84,6 +91,8 @@ function TBL()
     BossFlag2 = CreateCcode()
     SellTicketFlag = CreateCcode()
     XEperFlag = CreateCcode()
+    PUnitFlag = CreateCcode()
+    
     local TotalBossDPMLoc = CreateWar(FP)
     CJumpEnd(FP, iStrinit)
     
@@ -96,7 +105,7 @@ function TBL()
     f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
     CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
     
-    CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
+    CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
     
     CMov(FP,CurEPD,SelEPD)
     
@@ -127,6 +136,12 @@ function TBL()
         
         f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
     end
+    
+    for j, k in pairs(PersonalUIDArr) do
+        NElseIfX({CV(SelUID,k)},{SetCD(PUnitFlag,1);SetV(SelPer,0);})
+        
+        f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
+    end
     NElseX({
         SetV(SelPer,0);
     })
@@ -142,8 +157,10 @@ function TBL()
         CMov(FP,TotalEPer2Loc,TotalEPer2[i+1])
         CMov(FP,TotalEPer3Loc,TotalEPer3[i+1])
         CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
-    
-        
+        CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
+        CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
+        CS__lItoCustom(FP,SVA1(MarStr[i+1],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x040",0x07)
+        CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1])
     end
     CElseX()
     CTrigger(FP,{
@@ -163,10 +180,24 @@ function TBL()
     
     
     CIfX(FP,{TTNWar(SelEXP,AtMost,"0")})--경험치가 없을경우 혹은 판매 불가 상태일 경우
+
+
         CIfX(FP,{CV(SelUID,88)}) -- 스카웃
         CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl2,0,EStr3,EStr3s,nil,0,EStr3s)
+
+        
+        CElseIfX({CD(PUnitFlag,1)})--고유유닛일경우
+        
+    CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
+    local TempPer = CreateVar(FP)
+    CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
+-- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+    CS__ItoCustom(FP,SVA1(TStr6,7),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)
+    CS__InputVA(FP,iTbl2,0,TStr6,TStr6s,nil,0,TStr6s)
+
         CElseX()
+        
         
         CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl2,0,EStr1,EStr1s,nil,0,EStr1s)
@@ -200,10 +231,20 @@ function TBL()
     CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
+
+    
+    CElseIfX({CD(PUnitFlag,1)})--고유유닛일 경우
+    CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+    local TempPer = CreateVar(FP)
+    --CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
+-- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+    CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)
+
+
     CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--강화유닛이 아닐 경우
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
         CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
-        CElseIfX({CD(BossFlag,1)})--보스건물일경우
+    CElseIfX({CD(BossFlag,1)})--보스건물일경우
         --현재 DPS 요구치 표기는 별도
     CElseX()--그외
         CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)

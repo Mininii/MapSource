@@ -135,6 +135,7 @@ function Include_Vars()
 	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	iv.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
 	
+	iv.CurPUnitCool = CreateVarArr(7,FP)
 	
 	
 	--General
@@ -176,7 +177,6 @@ function Include_Vars()
 	iv.BanFlag3 = CreateVarArr(7,FP)
 	iv.BanFlag4 = CreateVarArr(7,FP)
 	iv.TimeAttackScore = CreateVarArr(7,FP)
-
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
 	iv.IncomeLoc = CreateVar(FP)
@@ -219,6 +219,16 @@ function Include_Vars()
 	iv.NextGasMulLoc = CreateVar(FP)
 	iv.SellTicketLoc = CreateVar(FP)
 	iv.TimeAttackScoreLoc = CreateVar(FP)
+
+	iv.CS_CooldownLoc = CreateVar(FP)
+	iv.CS_AtkLoc = CreateVar(FP)
+	iv.CS_EXPLoc = CreateVar(FP)
+	iv.CS_TotalEPerLoc = CreateVar(FP)
+	iv.CS_TotalEper4Loc = CreateVar(FP)
+	iv.CS_DPSLVLoc = CreateVar(FP)
+	iv.PUnitLevelLoc = CreateVar(FP)
+	iv.PUnitClassLoc = CreateVar(FP)
+	iv.VaccItemLoc = CreateVar(FP)
 	
 	
 	--Temp
@@ -313,6 +323,12 @@ function Include_Vars()
 	ct.BanFlag3 = CreateVarArr(7,FP)
 	ct.BanFlag4 = CreateVarArr(7,FP)
 
+	ct.VaccItem = CreateVarArr(7, FP)
+	
+	ct.PUnitLevel = CreateVarArr(7,FP)
+	ct.PUnitClass = CreateVarArr(7,FP)
+
+	ct.CurPUnitCool = CreateVarArr(7,FP)
 	
 
 	ctg.PCheckV = CreateVar(FP)--플레이어 수 체크
@@ -535,4 +551,49 @@ FirstReward = {
 		{512+5344,256},
 		{512+6272,256},
 	}
+	
+	--100+(n*100)
+	--강백 균일가 10000 C
+	--for n = 0, 100 do
+	--	PUnitAtkArr[n+1] = 10+(n*n*6.5524)
+	--	PUnitCoolArr[n+1] = (100-n)*256
+	--end
+	--PUnitAtkArr = f_GetFileArrptr(FP,PUnitAtkArr,4,1)
+	--승급비용 100만C
+	--승급시 강화단계 초기화하고 아래 항목중 택1하여 각종 이로운 효과를 받음.
+
+	--1항목 공격속도 기본 72 48 24 12 6 3 1 총 6단계 강화
+	--2항목 공격력 총 10단계 강화. 13000씩 증가(6500), 처음엔 데미지 0
+	--3항목 경험치 획득량 20%씩 총 5회
+	--4항목 +1 강화확률 1.0%p씩 총 5회
+	--5항목 특강확률 0.5%p씩 총 10회 
+	--6항목 사냥터 변경 1회만. LV.MAX사냥터는 너무사기임
+	iv.CS_Cooldown = CreateVarArr(7,FP)
+	iv.CS_Atk = CreateVarArr(7,FP)
+	iv.CS_EXP = CreateVarArr(7,FP)
+	iv.CS_TotalEPer = CreateVarArr(7,FP)
+	iv.CS_TotalEper4 = CreateVarArr(7,FP)
+	iv.CS_DPSLV = CreateVarArr(7,FP)
+	iv.PUnitLevel = CreateVarArr(7,FP)
+	iv.PUnitClass = CreateVarArr(7,FP)
+	iv.VaccItem = CreateVarArr(7, FP)
+
+	ct.CS_Cooldown = CreateVarArr(7,FP)
+	ct.CS_Atk = CreateVarArr(7,FP)
+	ct.CS_EXP = CreateVarArr(7,FP)
+	ct.CS_TotalEPer = CreateVarArr(7,FP)
+	ct.CS_TotalEper4 = CreateVarArr(7,FP)
+	ct.CS_DPSLV = CreateVarArr(7,FP)
+
+	iv.CS_EXPData = CreateVarArr(7,FP)
+	iv.CS_TEPerData = CreateVarArr(7,FP)
+	iv.CS_TEPer4Data = CreateVarArr(7,FP)
+	ct.CS_EXPData = CreateVarArr(7,FP)
+	ct.CS_TEPerData = CreateVarArr(7,FP)
+	ct.CS_TEPer4Data = CreateVarArr(7,FP)
+
+	--PUnitAtkArr = {}
+	PUnitCoolArr = {72,48,24,12,6,3,1}
+	PUnitCoolArr = f_GetFileArrptr(FP,PUnitCoolArr,4,1)
+
 end

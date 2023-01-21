@@ -66,11 +66,11 @@ CJump(AllPlayers,init_func)
 	Include_Conv_CPosXY(FP,{4096*2,4096*2})
 	CT_Cunit = Install_EXCC(FP,4,nil)
 	Include_CRandNum(FP)
+	DataArr()
 	Install_CallTriggers()
 	
 CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
-DataArr()
 CT_Prev()
 LeaderBoard()
 System()

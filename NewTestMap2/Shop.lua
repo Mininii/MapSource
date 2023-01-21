@@ -5,7 +5,7 @@ function Shop()
 	local CreditAddSC = iv.CreditAddSC
 	local LCP = iv.LCP--CreateVar(FP)
 	local GeneralPlayTime= iv.GeneralPlayTime
-
+	local VaccItem = iv.VaccItem
     
 SpeedV = CreateVar(FP)
 CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
@@ -80,6 +80,41 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CIfXEnd()
 		CIfEnd()
 		
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,114)},{MoveUnit(1, 15, i, 114, 116)})
+		
+			CIfX(FP,{TTNWar(Credit[i+1], AtLeast,_LMul({MulOp[i+1],0}, "10000"))},{})
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CAdd(FP,VaccItem[i+1],MulOp[i+1])
+				f_LSub(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "10000"))
+				CIf(FP,{LocalPlayerID(i)})
+				local TempV = CreateVar(FP)
+				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "10000"),nil,nil,1)
+				DisplayPrint(LCP, {"\x13\x07『 \x10강화기 백신\x04을 ",MulOp[i+1],"개 구입하였습니다. ",TempV," \x17크레딧 \x08사용 \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",VaccItem[i+1]," 개의 \x10강화기 백신 보유중 \x07』"})
+				DoActions(FP, {SetCp(i),DisplayText(StrDesignX("\x03참고 \x04: \x10강화기 백신\x04은 SCA로 저장할 수 있습니다!"))})
+				CIfEnd()
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
+
+		
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,113)},{MoveUnit(1, 15, i, 113, 116)})
+		
+			CIfX(FP,{CV(VaccItem[i+1],MulOp[i+1],AtLeast)},{})
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CSub(FP,VaccItem[i+1],MulOp[i+1])
+				f_LAdd(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "10000"))
+				CIf(FP,{LocalPlayerID(i)})
+				local TempV = CreateVar(FP)
+				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "10000"),nil,nil,1)
+				DisplayPrint(LCP, {"\x13\x07『 \x10강화기 백신\x04을 ",MulOp[i+1],"개 판매하였습니다. ",TempV," \x17크레딧 \x07반환 \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",VaccItem[i+1]," 개의 \x10강화기 백신 보유중 \x07』"})
+				CIfEnd()
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
+
+
 	end
 CIfEnd()
 end

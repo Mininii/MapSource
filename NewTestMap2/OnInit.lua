@@ -66,7 +66,7 @@ for j,k in pairs(flingyarr) do
 table.insert(PatchArr, SetMemoryB(0x6C9858 + k,SetTo,1))
 end
 	for i = 0, 6 do
-		SetPersonalUnit(PersonalUIDArr[i+1],PersonalWIDArr[i+1],255,10,1,59,1489,0xA)
+		SetPersonalUnit(PersonalUIDArr[i+1],PersonalWIDArr[i+1],255,0,3250,57,1489,0xA)
 	end
 	
 	PatchInput()
@@ -76,6 +76,34 @@ end
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 3배속
 	end
+iTblJump = def_sIndex()
+	CJump(FP,iTblJump)
+	iStrSize6 = GetiStrSize(0,"\x07『 \x0D\x0D\x0D\x0D단. "..MakeiStrVoid(20).." \x07』\x0D\x0D\x0D\x0D\x0D")
+
+	S5 = MakeiTblString(PersonalUIDArr[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- 단축키없음
+	PMariTbl = {}
+	for i = 0, 6 do
+		PMariTbl[i+1] = GetiTblId(FP,PersonalUIDArr[i+1]+1,S5) 
+	end
+	MarStr = {}
+	MarStra = {}
+	MarStrs = {}
+	for i = 0, 6 do
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07『 \x0D\x0D\x0D\x0D단. "..MakeiStrVoid(20).." \x07』\x0D\x0D\x0D\x0D\x0D")
+	end
+	CJumpEnd(FP,iTblJump)
+
+	
+	for i = 0, 6 do
+		CS__ItoName(FP, SVA1(MarStr[i+1],3), i, nil, "\x0D", ColorCode[i+1])
+	
+		CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1]-3)
+	
+	
+	end
+	
+
+
 
 	--CFor(FP,19025,19025+(84*1699),84) --치트 검사 배열에 모든 유닛 첫 등록
 	--CI = CForVariable()
@@ -142,7 +170,7 @@ end
 		}
 	end
 	for i = 0, 6 do -- 내부 관리자 판별 트리거
-		--InputTesterID(i,"GALAXY_BURST")
+		InputTesterID(i,"GALAXY_BURST")
 		--InputTesterID(i,"_Mininii")
 		--InputTesterID(i,"RonaRonaChan")
 	end

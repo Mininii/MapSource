@@ -408,15 +408,15 @@ end
 
 function SetPersonalUnit(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,WeaponName,GroupFlag)
 	if GroupFlag == nil then GroupFlag= 0xA end
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={469762048,0xFFFFFFFF},GroundWeapon=WepID,AirWeapon=130,DefUpType=0,SeekRange=7,GroupFlag=GroupFlag,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={973078528,0xFFFFFFFF},GroundWeapon=WepID,AirWeapon=130,DefUpType=0,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
 	AttackMoveOrder = 2,
 	IdleOrder = 2,
-	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
+	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,Class=193
 })
-SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
+SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=2,Splash=false})
 
 table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
 table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,GroupFlag)) 
@@ -426,11 +426,11 @@ table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,130))
 table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
 table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
 table.insert(MCTCondArr,MemoryB(0x663150 + (UnitID),Exactly,4)) 
-table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,469762048,0xFFFFFFFF)) 
+table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,973078528,0xFFFFFFFF)) 
 table.insert(MCTCondArr,Memory(0x657470+(WepID *4),Exactly,6*32)) 
 table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
 
---table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,1)) 
+table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,2)) 
 
 end
 function PopLevelUnit()
@@ -1159,8 +1159,8 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		local ttable = {}
 		for i = 0, 6 do
 			table.insert(ttable,SetCVar(FP, BPArr[DeathUnit][i+1][2], SetTo, 2^Flag, 2^Flag))
-			DoActionsX(FP,ttable)
 		end
+		DoActionsX(FP,ttable)
 	else
 		DoActionsX(FP,{SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
 	end
@@ -1442,4 +1442,15 @@ function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, D
 		PushErrorMsg("SCA_Source_Inputdata_Error")
 	end
 	
+end
+function CreateDataPV(DataName,SCADeathData)
+	local Ret = CreateVarArr(7,FP)
+	local Ret2 = CreateVarArr(7,FP)
+	table.insert(PVWArr,{Ret,Ret2,DataName})
+	if SCADeathData ~= nil then
+		table.insert(SCA_DataArr,{Ret,SCADeathData})
+	end
+	iv.DataName = Ret
+	ct.DataName = Ret2
+	return Ret
 end
