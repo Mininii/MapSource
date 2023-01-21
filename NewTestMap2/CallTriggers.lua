@@ -48,7 +48,8 @@ function Install_CallTriggers()
 	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
 	CDoActions(FP, {
 		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,SUnitID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
+		TSetMemory(_Add(TempV,0x40/4),SetTo,_Add(CT_GNextRandV,SPlayer)),
 	})
 	CTSUPtr = CreateVar(FP)
 	CTSUID = CreateVar(FP)
@@ -70,7 +71,8 @@ function Install_CallTriggers()
 	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
 	CDoActions(FP, {
 		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,CTSUID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV)
+		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
+		TSetMemory(_Add(TempV,0x40/4),SetTo,_Add(CT_GNextRandV,SPlayer)),
 	})
 	CIfEnd()
 
@@ -229,19 +231,19 @@ function Install_CallTriggers()
 	Call_Enchant2 = SetCallForward()
 	SetCall(FP)
 	if TestStart == 1 then
-		--GetEPer = CreateVar(FP)
-		--CIfX(FP,{KeyPress("F12", "Down")})
-		--CMov(FP,GetEPer,1)
-		--CElseX()
-		--GetEPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
-		--CMov(FP,GetEPer,GetEPer2)
-		--CIfXEnd()
+		GetEPer = CreateVar(FP)
+		CIfX(FP,{KeyPress("F12", "Down")})
+		CMov(FP,GetEPer,1)
+		CElseX()
+		GetEPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		CMov(FP,GetEPer,GetEPer2)
+		CIfXEnd()
 		
-		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		--GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	else
 		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	end
-	
+	GEper4 = CreateVar(FP)
 	XEper = CreateVar(FP)
 	BreakShield = CreateVar(FP)
 	--ELevel = 현재 강화중인 레벨
@@ -272,7 +274,7 @@ function Install_CallTriggers()
 			CIfEnd()
 		end
 	CElseX()
-		CIf(FP,CV(BreakShield,1,AtLeast))
+		CIfX(FP,CV(BreakShield,1,AtLeast))
 		GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 		CMov(FP,E1Range[1],1)
 		CMov(FP,E1Range[2],BreakShield)
@@ -293,7 +295,9 @@ function Install_CallTriggers()
 			CIfEnd()
 		end
 		CIfXEnd()
-		CIfEnd()
+		CElseX()
+		CMov(FP,ELevel,0)
+		CIfXEnd()
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
 	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--오버플로우 방지
@@ -380,6 +384,9 @@ function Install_CallTriggers()
 	Call_BtnFnc = SetCallForward()
 	SetCall(FP)
 	CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
+		CIf(FP,CV(G_BtnFnm,7)) -- 고유유닛 CUnit 제어부
+
+		CIfEnd()
 		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
 			--Print_13X(FP,GCP)
 
@@ -502,7 +509,9 @@ function Install_CallTriggers()
 							CSub(FP,CurCunitI,Nextptrs,19025)
 							f_Div(FP,CurCunitI,_Mov(84))
 							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
-							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV),})
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP)),})
+							
 							--CallTrigger(FP, Call_CTInputUID)
 						CIfEnd()
 						CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
@@ -513,17 +522,19 @@ function Install_CallTriggers()
 						Print_13X(FP, GCP)
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 					CIfXEnd()
-					CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CD(iv.PartyBonus,0)})
+					CIfX(FP,{CV(iv.PCheckV,2,AtLeast),CV(iv.GeneralPlayTime,3*24*60*60,AtMost)})
 						CMov(FP,CTimeV,_Div(_Sub(_Mov(3*24*60*60),iv.GeneralPlayTime), 24))
 						CallTrigger(FP, Call_ConvertTime)
 						DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 					CElseIfX({CD(iv.PartyBonus,1)})
 						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
 					CElseX()
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x08활성화 불가능.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x08활성화 불가능.",4)})
 					CIfXEnd()
 				CIfEnd()--
 			
+			CElseIfX(CV(G_BtnFnm,7)) -- 고유유닛 버튼셋 제어부
+
 			CIfXEnd()
 
 
@@ -549,7 +560,8 @@ function Install_CallTriggers()
 		SettingUnit2[1], -- 26~39유닛 자동강화 설정
 		SettingUnit3[1], -- 15~25강유닛 자동판매 설정
 		SettingUnit4[1], -- 26~39유닛 자동판매 설정
-		ShopUnit[1] -- 시민
+		ShopUnit[1], -- 시민
+		--PUnitPtr[1] -- 고유유닛
 	}
 	SetCall(FP)
 	for j,k in pairs(BtnFncArr) do
@@ -575,6 +587,7 @@ function Install_CallTriggers()
 		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
 		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
+		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
 		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
 		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
 		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
@@ -597,6 +610,7 @@ function Install_CallTriggers()
 		{iv.NextOreMul[1],iv.NextOreMulLoc},
 		{iv.NextGasMul[1],iv.NextGasMulLoc},
 		{iv.SellTicket[1],iv.SellTicketLoc},
+		{iv.TimeAttackScore[1],iv.TimeAttackScoreLoc},
 	}
 	for j,k in pairs(LocalDataArr) do
 		local LocPVA = GetVArray(k[1], 7)

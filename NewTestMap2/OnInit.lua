@@ -65,7 +65,9 @@ flingyarr = {4,8,9,14,15,46,45,47,49,73,74,75,77,78,82,84,200}
 for j,k in pairs(flingyarr) do
 table.insert(PatchArr, SetMemoryB(0x6C9858 + k,SetTo,1))
 end
-	
+	for i = 0, 6 do
+		SetPersonalUnit(PersonalUIDArr[i+1],PersonalWIDArr[i+1],255,10,1,59,1489,0xA)
+	end
 	
 	PatchInput()
 
@@ -274,7 +276,7 @@ end
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit2[i+1], SetTo, Nextptrs),CreateUnit(1,92,1+i,i)})
 	--CallTrigger(FP, Call_CTInputUID)
-	DoActions(FP, {SetLoc("Location "..(1+i),"L",Add,2*32),SetLoc("Location "..(1+i),"R",Add,2*32)})
+	DoActions(FP, {Simple_SetLoc("Location "..(1+i), PlayerPosArr[i+1][1], PlayerPosArr[i+1][2], PlayerPosArr[i+1][1], PlayerPosArr[i+1][2])})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit3[i+1], SetTo, Nextptrs),CreateUnit(1,129,1+i,i)})
 	--CallTrigger(FP, Call_CTInputUID)
@@ -282,7 +284,7 @@ end
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TSetNVar(SettingUnit4[i+1], SetTo, Nextptrs),CreateUnit(1,219,1+i,i)})
 	--CallTrigger(FP, Call_CTInputUID)
-
+	DoActions(FP, {Simple_SetLoc("Location "..(1+i), PlayerPosArr[i+1][1]-(8*32)+16, PlayerPosArr[i+1][2]+(1680), PlayerPosArr[i+1][1]-(8*32)+16, PlayerPosArr[i+1][2]+(1680))})
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	
 	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i),TSetMemoryX(_Add(Nextptrs,55), SetTo, 0xA00000,0xA00000)})
@@ -302,9 +304,12 @@ end
 	
 	CFor(FP, 0, 1700, 1)
 	CT_UID = CreateVar(FP)
+	CT_PID = CreateVar(FP)
 	CI = CForVariable()
 	f_Read(FP, _Add(_Mul(CI,84),19025+25), CT_UID, nil, 0xFF,1)
+	f_Read(FP, _Add(_Mul(CI,84),19025+19), CT_PID, nil, 0xFF,1)
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
+	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
 	CForEnd()
 
 	CFor(FP, 0, 50000, 1)

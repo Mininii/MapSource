@@ -10,6 +10,7 @@ function GameDisplay()
 	local TotalEPer4Loc = iv.TotalEPer4Loc--CreateVar(FP)
 	local TotalEPer3Loc = iv.TotalEPer3Loc--CreateVar(FP)
 	local S_TotalEPerLoc = iv.S_TotalEPerLoc--CreateVar(FP)
+	local S_TotalEPerExLoc = iv.S_TotalEPerExLoc--CreateVar(FP)
 	local S_TotalEPer2Loc = iv.S_TotalEPer2Loc--CreateVar(FP)
 	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
 	local S_TotalEPer4Loc = iv.S_TotalEPer4Loc--CreateVar(FP)
@@ -38,6 +39,7 @@ function GameDisplay()
 	local NextOreMulLoc = iv.NextOreMulLoc
 	local NextGasMulLoc = iv.NextGasMulLoc
 	local SellTicketLoc = iv.SellTicketLoc
+    local TimeAttackScoreLoc = iv.TimeAttackScoreLoc
 
 
     
@@ -90,7 +92,7 @@ function GameDisplay()
         CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
         CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
         CA__SetValue(Str1,"\x12포인트 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
-        CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+        CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,"\x040",{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
     
@@ -130,33 +132,40 @@ function GameDisplay()
         local E3VarArr1 = CreateVarArr(6, FP)
         local E4VarArr1 = CreateVarArr(6, FP)
         local E5VarArr1 = CreateVarArr(6, FP)
+        local E6VarArr1 = CreateVarArr(6, FP)
         for i = 1, 6 do
             Byte_NumSet(S_TotalEPerLoc,E1VarArr1[i],10^(6-i),1,0x30)
             Byte_NumSet(S_TotalEPer2Loc,E2VarArr1[i],10^(6-i),1,0x30)
             Byte_NumSet(S_TotalEPer3Loc,E3VarArr1[i],10^(6-i),1,0x30)
             Byte_NumSet(S_TotalEPer4Loc,E4VarArr1[i],10^(6-i),1,0x30)
             Byte_NumSet(S_BreakShieldLoc,E5VarArr1[i],10^(6-i),1,0x30)
+            Byte_NumSet(S_TotalEPerExLoc,E6VarArr1[i],10^(6-i),1,0x30)
         end
         SetEPerStr(E1VarArr1)
         SetEPerStr(E2VarArr1)
         SetEPerStr(E3VarArr1)
         SetEPerStr(E4VarArr1)
         SetEPerStr(E5VarArr1)
+        SetEPerStr(E6VarArr1)
         E1VarArr2 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
         E2VarArr2 = {E2VarArr1[1],E2VarArr1[2],E2VarArr1[3]}
         E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
         E4VarArr2 = {E4VarArr1[1],E4VarArr1[2],E4VarArr1[3]}
         E5VarArr2 = {E5VarArr1[1],E5VarArr1[2],E5VarArr1[3]}
+        E6VarArr2 = {E6VarArr1[1],E6VarArr1[2],E6VarArr1[3]}
         E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
         E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
         E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
         E4VarArr3 = {E4VarArr1[4],E4VarArr1[5],E4VarArr1[6]}
         E5VarArr3 = {E5VarArr1[4],E5VarArr1[5],E5VarArr1[6]}
+        E6VarArr3 = {E6VarArr1[4],E6VarArr1[5],E6VarArr1[6]}
         BColor = CreateVarArr(6,FP)
         BColor2 = CreateVarArr(6,FP)
         BColor3 = CreateVarArr(6,FP)
+        BColor4 = CreateVarArr(6,FP)
         MToggle = CreateCcodeArr(6)
         MToggle2 = CreateCcodeArr(6)
+        MToggle3 = CreateCcodeArr(6)
         local ESCB = CreateVar(FP)
         local NEXB = CreateVar(FP)
         local PRVB = CreateVar(FP)
@@ -165,8 +174,10 @@ function GameDisplay()
             table.insert(BAct,SetV(BColor[j],p))
             table.insert(BAct,SetV(BColor2[j],0x04))
             table.insert(BAct,SetV(BColor3[j],0x1F))
+            table.insert(BAct,SetV(BColor4[j],0x04))
             table.insert(BAct,SetCD(MToggle[j],0))
             table.insert(BAct,SetCD(MToggle2[j],0))
+            table.insert(BAct,SetCD(MToggle3[j],0))
         end
         table.insert(BAct,SetV(ESCB,0x08))
         table.insert(BAct,SetV(NEXB,0x08))
@@ -197,13 +208,16 @@ function GameDisplay()
         for i = 0, 5 do
             TriggerX(FP,{MLine(mmY,6+i)},{SetV(BColor[i+1],0x07),SetV(BColor3[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})
             TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 296, 310)},{SetV(BColor2[i+1],0x07),SetCD(MToggle2[i+1],1)},{preserved})
+            TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 275, 293)},{SetV(BColor4[i+1],0x07),SetCD(MToggle3[i+1],1)},{preserved})
 
             local temp,CDFnc = ToggleFunc({CD(MToggle[i+1],0),CD(MToggle[i+1],1)})--
             TriggerX(FP,{CD(MToggle2[i+1],1),CD(MStat,1)},{SetV(BColor2[i+1],0x08)},{preserved})
+            TriggerX(FP,{CD(MToggle3[i+1],1),CD(MStat,1)},{SetV(BColor4[i+1],0x08)},{preserved})
             TriggerX(FP,{KeyPress(tostring(i+1), "Down")},{SetV(BColor2[i+1],0x08)},{preserved})
 
             TriggerX(FP,{CV(InterfaceNumLoc,1),CD(CDFnc,1)},{SetMemory(0x58F504,SetTo,i+1)},{preserved})
             TriggerX(FP,{CD(MToggle2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000+i+1)},{preserved})
+            TriggerX(FP,{CD(MToggle3[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10100+i+1)},{preserved})
 
             TriggerX(FP,{CV(InterfaceNumLoc,2),CD(CDFnc,1)},{SetMemory(0x58F504,SetTo,i+7)},{preserved})
             --TriggerX(FP,{CV(InterfaceNumLoc,2),CD(MToggle2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000+i+7)},{preserved})
@@ -218,12 +232,12 @@ function GameDisplay()
 
 
         CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- 상점 페이지 제어
-            DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," \x0D\x0D\x0D",BColor2[1][2],"[+]"})
-            DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor2[2][2],"[+]"})
-            DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor2[3][2],"[+]"})
-            DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor2[4][2],"[+]"})
-            DisplayPrint(LCP, {"\x075. \x0F+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor2[5][2],"[+]"})
-            DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor2[6][2],"[+]"})
+            DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+            DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+            DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+            DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],E1VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E1VarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+            DisplayPrint(LCP, {"\x075. \x0F+2 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],E2VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E2VarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+            DisplayPrint(LCP, {"\x076. \x10+3 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],E3VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E3VarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
         
         CElseIfX({CV(InterfaceNumLoc,2)})
             CMov(FP,MCP,LCP)
@@ -232,9 +246,10 @@ function GameDisplay()
             if TestStart == 1 then
                 --DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
             end
-            DisplayPrint(LCP, {"\x071. \x08특수 \x08강화확률 \x0F0.1%p \x08MAX 50 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],E4VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E4VarArr3," %p ",BColor2[1][2],"[+]"})
-            DisplayPrint(LCP, {"\x072. \x1F파괴 방지\x08확률 \x0F1.0%p \x08MAX 50 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],E5VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E5VarArr3," %p ",BColor2[2][2],"[+]"})
-            CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n",4)})
+            DisplayPrint(LCP, {"\x071. \x08특수 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],E4VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E4VarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+            DisplayPrint(LCP, {"\x072. \x08특수 \x1F파괴 방지\x08확률 \x0F0.1%p \x08MAX 500 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],E5VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E5VarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+            DisplayPrint(LCP, {"\x073. \x10추가 \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 30 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],E6VarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",E6VarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+            CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n",4)})
 
 
         CIfXEnd()
@@ -247,19 +262,20 @@ function GameDisplay()
             StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1만 적용됩니다."),
             StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F35강\x04:\x08+2, \x0F36강\x04:\x08+1 \x04만 적용됩니다."),
             StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0841강 이후 유닛\x04만 적용됩니다."),
-            StrDesign("\x1F파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0841강 이후 유닛\x04만 적용됩니다."),
+            StrDesign("\x08특수\x1F 파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0841강 이후 유닛\x04만 적용됩니다."),
+            StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 +1 기존 강화확률 스탯을 \x07마스터 \x04하셔야 합니다."),
     }
     
-        for i = 0,6 do
-            CIf(FP,{HumanCheck(i, 1)})
-                CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr+1,20)})
-                for j = 1, 8 do
-                    TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
-                end
-            CIfEnd()
-        end
         
     CIfEnd()
+    for i = 0,6 do
+        CIf(FP,{HumanCheck(i, 1)})
+            CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)})
+            for j = 1, #StatPrintEr do
+                TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
+            end
+        CIfEnd()
+    end
     CIf(FP,{CV(InterfaceNumLoc,0)})--아무 설정창도 켜져있지 않을 경우 작동함
     local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--누를 경우 현재 적용중인 버프 상세 표기
     local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
@@ -285,6 +301,16 @@ function GameDisplay()
         Byte_NumSet(TotalEPer4Loc,E4VarArr1[i],10^(6-i),1,0x30)
         Byte_NumSet(S_BreakShieldLoc,E5VarArr1[i],10^(6-i),1,0x30)
     end
+    E1VarArr2 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
+    E2VarArr2 = {E2VarArr1[1],E2VarArr1[2],E2VarArr1[3]}
+    E3VarArr2 = {E3VarArr1[1],E3VarArr1[2],E3VarArr1[3]}
+    E4VarArr2 = {E4VarArr1[1],E4VarArr1[2],E4VarArr1[3]}
+    E5VarArr2 = {E5VarArr1[1],E5VarArr1[2],E5VarArr1[3]}
+    E1VarArr3 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
+    E2VarArr3 = {E2VarArr1[4],E2VarArr1[5],E2VarArr1[6]}
+    E3VarArr3 = {E3VarArr1[4],E3VarArr1[5],E3VarArr1[6]}
+    E4VarArr3 = {E4VarArr1[4],E4VarArr1[5],E4VarArr1[6]}
+    E5VarArr3 = {E5VarArr1[4],E5VarArr1[5],E5VarArr1[6]}
     SetEPerStr(E1VarArr1)
     SetEPerStr(E2VarArr1)
     SetEPerStr(E3VarArr1)
@@ -294,7 +320,7 @@ function GameDisplay()
     DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07+2 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E2VarArr2,".",E2VarArr3,"%p"})
     DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10+3 \x08강화확률 \x04총 증가량 : \x07+ \x0F",E3VarArr2,".",E3VarArr3,"%p"})
     DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x08강화확률 \x04총 증가량 : \x07+ \x08",E4VarArr2,".",E4VarArr3,"%p"})
-    DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",E5VarArr2,".",E5VarArr3,"%p"})
+    DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",E5VarArr2,".",E5VarArr3,"%p"})
     f_Mul(FP,EXPIncomeLoc2,10)
     DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
     f_Mul(FP,UpgradeUILoc,10)
@@ -318,14 +344,15 @@ function GameDisplay()
         
         CMov(FP,CTimeV,PlayTimeLoc)
         CallTrigger(FP,Call_ConvertTime)
-        DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\n"})
+        DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+        DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07타임어택 점수 : \x04",TimeAttackScoreLoc})
         
         CIf(FP,CV(NextOreLoc,1,AtLeast))
             DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
         CIfEnd()
     
         CIf(FP,CV(NextGasLoc,1,AtLeast))
-            DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n\n\n\n\n"})
+            DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n"})
         CIfEnd()
     
     CIfEnd()
@@ -365,9 +392,10 @@ function GameDisplay()
         {--2페이지
             "\x13\x04\x1B- \x03사냥터 \x1B-",
             "\x13\x04\x03사냥터\x04에서 \x08건물을 공격\x04할 경우 \x1F돈이 지급될 것입니다.",
-            "\x13\x04LV.1 건물은 1~25강 유닛, LV.2 건물은 26~40강 유닛으로 입장 가능하며",
+            "\x13\x08LV.1 \x04건물은 1~25강 유닛, \x0FLV.2 \x04건물은 26~40강 유닛, \x11LV.MAX \x04건물은 41~44강 유닛으로 입장 가능하며",
             "\x13\x04각각의 건물에 대한 DPS는 \x1F미네랄\x04, \x07가스\x04로 확인합니다.",
-            "\x13\x04각 레벨의 건물은 일정 DPS를 달성할 경우 돈 지급량이 증가합니다.",
+            "\x13\x04(단, 미네랄의 경우 \x11LV.MAX\x04의 건물을 공격하는 순간 \x1F미네랄 \x04표기가 \x11LV.MAX \x04건물로 변경됨)",
+            "\x13\x11LV.MAX \x04건물을 제외한 각 레벨의 건물은 일정 DPS를 달성할 경우 돈 지급량이 증가합니다.",
         },
         {
             "\x13\x04\x1B- \x08기준 확률\x1B -",
@@ -407,18 +435,17 @@ function GameDisplay()
     --남는거 공 250% 강확은 논외
         {
             "\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
-            "\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3",
-            "\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3",
-            "\x043단계 \x04: \x0F+1강 확률 \x07+1.0%p \x1B사냥터 \x07+3, \x08공격력 + 50%",
-            "\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
-            "\x045단계 \x04: \x1B사냥터 \x07+9, \x08공격력 + 50%, \x1C추가EXP +10%, \x17유닛 판매권 5개",
-            "\x045단계 보스 보상인 \x17유닛 판매권\x04은\x07 2인 이상 플레이 \x04혹은 \x082인이상 플레이를 1시간 유지한 후 솔로 플레이 \x04시 획득 가능합니다."
+            "\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
+            "\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
+            "\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1720만 크레딧, \x10타이머\x04 6시간동안\x1CEXP+10%\x08(1회한정)",
+            "\x045단계 보스 보상인 \x17유닛 판매권\x04은\x07 \x082인이상 플레이 \x04or \x07멀티 1시간 유지\x04한 후 \x08솔로 플레이 \x04시 획득 가능합니다.",
+            "\x046단계 개인보스는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
         },
     
         {
             "\x13\x04\x1B- 부록. \x08파티 보스 몬스터 보상 목록 \x1B-",
-            "\x041단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
-            "\x042단계 \x04: \x0F+1강 확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
+            "\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
+            "\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
             "\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
             "\x044단계 \x04: \x17유닛 판매권 + 50, \x08공격력 + 50%, ",
             "\x045단계 \x04: \x04총 5회 처치 가능. 각 \x175만, 4만, 3만, 2만, 1만 크레딧",

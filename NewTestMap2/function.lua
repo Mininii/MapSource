@@ -318,9 +318,10 @@ function Print_13X(PlayerID,TargetPlayer,String)
 	FuncAlloc = FuncAlloc + 1
 end
 
-function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType,GroupFlag)
+function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType,GroupFlag,RangeMax)
 	if GroupFlag == nil then GroupFlag= 0xA end
 	if DefType == nil then DefType = 0 end
+	if RangeMax == nil then RangeMax = 6*32 end
 	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
@@ -330,13 +331,17 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
 if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=RangeMax,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
+	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=RangeMax,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
 end
 
 
 end
+
+
+
+
 function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
 	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=0,SeekRange=7,GroupFlag=0xA,
 	HumanInitAct = 2,
@@ -399,6 +404,34 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,ObjNum)) 
 	
 	
+end
+
+function SetPersonalUnit(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,WeaponName,GroupFlag)
+	if GroupFlag == nil then GroupFlag= 0xA end
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={469762048,0xFFFFFFFF},GroundWeapon=WepID,AirWeapon=130,DefUpType=0,SeekRange=7,GroupFlag=GroupFlag,
+	HumanInitAct = 2,
+	ComputerInitAct = 2,
+	AttackOrder = 10,
+	AttackMoveOrder = 2,
+	IdleOrder = 2,
+	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
+})
+SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
+
+table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
+table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,GroupFlag)) 
+table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,130))
+--table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
+--table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
+table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
+table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
+table.insert(MCTCondArr,MemoryB(0x663150 + (UnitID),Exactly,4)) 
+table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,469762048,0xFFFFFFFF)) 
+table.insert(MCTCondArr,Memory(0x657470+(WepID *4),Exactly,6*32)) 
+table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
+
+--table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,1)) 
+
 end
 function PopLevelUnit()
 	LevelDataArr = CreateArr(#LevelUnitArr, FP)
@@ -603,13 +636,12 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	else
 		PushErrorMsg("TotalDPSDest InputError")
 	end 
-	DoActions2X(FP, ResetArr)
+	--DoActions2X(FP, ResetArr)
 
 	CIfEnd()
-	CElseIfX({CD(ResetCheck,0)}, {SetCD(ResetCheck,1)})
-	DoActions2X(FP, ResetArr)
 
 	CIfXEnd()
+	return ResetArr
 end
 
 function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
@@ -620,6 +652,7 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	f_Div(FP,CurCunitI,_Mov(84))
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,BuildingID))})
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
 	CIfEnd()
 
 end

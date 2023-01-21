@@ -90,7 +90,7 @@ function TBL()
     
     
     
-    CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)}) -- 클릭유닛인식(로컬)
+    CIf(FP,{Memory(0x6284B8 ,AtLeast,1)}) -- 클릭유닛인식(로컬)
     CMov(FP,SelPl,0)
     f_Read(FP,0x6284B8,nil,SelEPD)
     f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
@@ -155,7 +155,7 @@ function TBL()
 	local BossLV = iv.BossLV-- CreateVar(FP)
     CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP)})
     for i = 0, 4 do
-        TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,5+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 보스를 "..(i+1).."회째 처치중이며 \x04보상은 \x17"..((5-i)*10000).." 크레딧 \x04입니다."), 4)},{preserved})
+        TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*10000).." 크레딧 \x04입니다."), 4)},{preserved})
     end
     DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
     CIfXEnd()
@@ -395,6 +395,7 @@ function TBL()
             f_Div(FP,CurCunitI,_Mov(84))
             CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
             CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+            CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
             --CallTrigger(FP, Call_CTInputUID)
             DoActions(FP, RemoveUnit(94,FP))
         CIfEnd()

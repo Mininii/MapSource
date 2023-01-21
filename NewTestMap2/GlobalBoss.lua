@@ -16,6 +16,7 @@ function GlobalBoss()
 	local BossLV = iv.BossLV-- CreateVar(FP)
 	local LV5Cool = iv.LV5Cool
 	local Time = iv.Time
+	local BossLV6Flag = iv.BossLV6Flag
 
 --Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayTextX(StrDesignX("\x1F보스 LV.5\x04를 클리어하였습니다. 이제부터 \x1F카운트다운 타이머 24시간\x04동안 \x1F5배속\x04이 적용됩니다."),4)}, Force1, FP)})
 --if TestStart == 0 then
@@ -74,10 +75,12 @@ if TestStart == 1 then
 	end
 else
 	for i = 0, 6 do
-		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*8)},{preserved})
+		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*2)},{preserved})
 	end
 end
 CIfEnd()
+--Trigger2X(FP, {CD(BossLV6Flag,1)}, {SetCountdownTimer(SetTo, 60*60*6),RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. \x10카운트 다운 타이머\x04가 \x076시간 \x04주어집니다."),4),
+--	DisplayTextX(StrDesignX("\x10카운트 다운 타이머\x04 지속 시간동안 \x1C경험치 배율\x04이 \x1C100% \x04증가합니다."),4)}, Force1,FP)})
 
 
 BossEPD = CreateVar(FP)
@@ -140,6 +143,7 @@ for j,k in pairs(BossArr) do
 	f_Div(FP,CurCunitI,_Mov(84))
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,k[1]))})
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
 	f_LMov(FP,BossDPM,k[2])
 	CallTrigger(FP, ResetBDPMArr)
 	NIfEnd()

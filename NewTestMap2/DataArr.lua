@@ -30,6 +30,7 @@ function DataArr()
 		{iv.Stat_ScDmg,ct.Stat_ScDmg,"Stat_ScDmg"},
 		{iv.Stat_AddSc,ct.Stat_AddSc,"Stat_AddSc"},
 		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
+		{iv.Stat_TotalEPerEx,ct.Stat_TotalEPerEx,"Stat_TotalEPerEx"},
 		{iv.Stat_TotalEPer2,ct.Stat_TotalEPer2,"Stat_TotalEPer2"},
 		{iv.Stat_TotalEPer3,ct.Stat_TotalEPer3,"Stat_TotalEPer3"},
 		{iv.Stat_TotalEPer4,ct.Stat_TotalEPer4,"Stat_TotalEPer4"},
@@ -52,7 +53,9 @@ function DataArr()
 		{iv.BanFlag4,ct.BanFlag4,"BanFlag4"},
 		{iv.TempO,ct.TempO,"TempO"},
 		{iv.TempG,ct.TempG,"TempG"},
-		{iv.TempX,ct.TempX,"TempX"}
+		{iv.TempX,ct.TempX,"TempX"},
+		{iv.TimeAttackScore,ct.TimeAttackScore,"TimeAttackScore"},
+		{iv.TimeAttackScore2,ct.TimeAttackScore2,"TimeAttackScore2"},
 	}
 	
 
@@ -95,6 +98,9 @@ function DataArr()
 		{iv.LV5Cool,121},
 		{iv.Stat_TotalEPer4,122},
 		{iv.Stat_BreakShield,123},
+		{iv.Stat_TotalEPerEx,124},
+		{iv.TimeAttackScore,125},
+		
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}

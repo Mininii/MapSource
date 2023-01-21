@@ -5,6 +5,7 @@ function Include_Vars()
 		end
 	end
 	--System
+	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
 	ULimitArr = {500,350,300,250,200,180,150}
@@ -59,6 +60,7 @@ function Include_Vars()
 	SettingUnit3 = CreateVarArr(7, FP)-- 15~25강 유닛 자동판매 설정기
 	SettingUnit4 = CreateVarArr(7, FP)-- 26~39강 유닛 자동판매 설정기
 	ShopUnit = CreateVarArr(7, FP) -- 시민설정기
+	PUnitPtr = CreateVarArr(7, FP) -- 고유유닛
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
@@ -130,6 +132,7 @@ function Include_Vars()
 	iv.PBossDPS = CreateWarArr(7,FP)
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
 	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
+	iv.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
 	
 	
 	
@@ -149,6 +152,7 @@ function Include_Vars()
 	iv.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
+	iv.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
 	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
 	iv.Stat_TotalEPer4 = CreateVarArr(7,FP)-- 특수 확업 수치
@@ -170,7 +174,7 @@ function Include_Vars()
 	iv.BanFlag2 = CreateVarArr(7,FP)
 	iv.BanFlag3 = CreateVarArr(7,FP)
 	iv.BanFlag4 = CreateVarArr(7,FP)
-
+	iv.TimeAttackScore = CreateVarArr(7,FP)
 
 	--Local Data Variable
 	iv.IncomeMaxLoc = CreateVar(FP)
@@ -182,6 +186,7 @@ function Include_Vars()
 	iv.TotalEPer3Loc = CreateVar(FP)
 	iv.TotalEPer4Loc = CreateVar(FP)
 	iv.S_TotalEPerLoc = CreateVar(FP)
+	iv.S_TotalEPerExLoc = CreateVar(FP)
 	iv.S_TotalEPer2Loc = CreateVar(FP)
 	iv.S_TotalEPer3Loc = CreateVar(FP)
 	iv.S_TotalEPer4Loc = CreateVar(FP)
@@ -212,6 +217,7 @@ function Include_Vars()
 	iv.NextOreMulLoc = CreateVar(FP)
 	iv.NextGasMulLoc = CreateVar(FP)
 	iv.SellTicketLoc = CreateVar(FP)
+	iv.TimeAttackScoreLoc = CreateVar(FP)
 	
 	
 	--Temp
@@ -224,6 +230,7 @@ function Include_Vars()
 	iv.CheatDetect = CreateCcode()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
+	iv.BossLV6Flag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
@@ -280,6 +287,7 @@ function Include_Vars()
 	ct.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	ct.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
+	ct.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
 	ct.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
 	ct.Stat_TotalEPer4 = CreateVarArr(7,FP)-- 특수 확업 수치
@@ -296,6 +304,8 @@ function Include_Vars()
 	ct.LV5Cool = CreateVarArr(7,FP)
 	ct.B_PCredit = CreateVarArr(7,FP)
 	ct.B_PTicket = CreateVarArr(7,FP)
+	ct.TimeAttackScore = CreateVarArr(7,FP)
+	ct.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
 
 	ct.BanFlag = CreateVarArr(7,FP)
 	ct.BanFlag2 = CreateVarArr(7,FP)
@@ -410,15 +420,15 @@ function Include_Vars()
 	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--제라툴
 	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--노라드
 	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--다니모스
-	PushLevelUnit(25+15,0,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대
 	SetWeaponsDatX(25,{WepName=1441})--파벳3연타 예외처리
 	SetWeaponsDatX(103,{WepName=1439})--발키리2연타 예외처리
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
 	SetWeaponsDatX(26,{WepName=1441})--파벳3연타 예외처리
-	PushLevelUnit(25+16,4000,60000000,11,15,72,20,59)--드랍쉽
-	PushLevelUnit(25+17,15000,120000000,9,22,48,40,59)--베슬
-	PushLevelUnit(25+18,30000,280000000,76,71,24,100,59)--아칸
-	PushLevelUnit(25+19,30000,1000000000,63,70,12,300,59)--다크아칸
+	PushLevelUnit(25+15,9000,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대 -- 만렙기준 16.4
+	PushLevelUnit(25+16,12000,60000000,11,15,72,10,59)--드랍쉽 -- 만렙기준 13.4
+	PushLevelUnit(25+17,20000,150000000,9,22,48,50,59)--베슬 -- 만렙기준 5.4
+	PushLevelUnit(25+18,25000,800000000,76,71,24,100,59)--아칸 -- 만렙기준 0.4
+	PushLevelUnit(25+19,25000,4000000000,63,70,12,500,59)--다크아칸
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
@@ -432,13 +442,31 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,5,35,100,58,1,nil,60,0) -- 기본유닛
+	SetUnitAbility(88,114,5,35,100,58,1,nil,60,0,3*32) -- 기본유닛
+	
+	table.insert(MCTCondArr,MemoryB(0x6616E0+88,Exactly,130))
+	table.insert(MCTCondArr,MemoryB(0x6636B8+88,Exactly,114))
+	table.insert(MCTCondArr,MemoryB(0x6637A0 + (88),Exactly,0)) 
+	table.insert(MCTCondArr,MemoryW(0x656EB0+(114 *2),Exactly,35)) 
+	table.insert(MCTCondArr,MemoryW(0x657678+(114 *2),Exactly,100)) 
+	table.insert(MCTCondArr,MemoryB(0x656FB8+114,Exactly,5)) 
+	table.insert(MCTCondArr,MemoryB(0x6571D0+114,Exactly, 58)) 
+	table.insert(MCTCondArr,MemoryB(0x663150 + (88),Exactly,4)) 
+	table.insert(MCTCondArr,MemoryX(0x664080 + (88*4),Exactly,0+0x20000000,4+8+0x20000000)) 
+	table.insert(MCTCondArr,Memory(0x657470+(114 *4),Exactly,3*32)) 
+	table.insert(MCTCondArr,MemoryB(0x6566F8+114,Exactly,1)) 
+	table.insert(MCTCondArr,MemoryB(0x6564E0+114,Exactly,1)) 
+
+
+
+
 	PBossArr = {
 		{84,"1300"},
 		{36,"4800"},
 		{59,"12000"},
 		{45,"40000"},
 		{49,"130000"},
+		{68,"3222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -465,12 +493,22 @@ else
 		{72,"34000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
-	FirstReward = {
-		{20,500},
-		{22,7000},
-		{24,20000},
-		{26,80000},
-	}
+FirstReward = {
+	{20,500},
+	{22,7000},
+	{24,20000},
+	{26,80000},
+}
+--FirstReward2 = {
+--	{37,500},
+--	{38,2000},
+--	{39,8000},
+--	{40,20000},
+--	{41,50000},
+--	{42,100000},
+--	{43,300000},
+--	{44,700000},
+--}
 	OreDPS = {100,1000,10000,100000,500000,1000000,0}
 	OreDPSM = {2,4,8,16,32,64}
 	GasDPS = {100,1000,10000,100000,1000000,5000000,0}
@@ -480,10 +518,20 @@ end
 	Cost_Stat_AddSc = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
+	Cost_Stat_TotalEPerEx = 1000
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
-	Cost_Stat_BreakShield = 1000
-
-	
+	Cost_Stat_BreakShield = 50
+	PersonalUIDArr = {21,27,28,48,55,56,64}
+	PersonalWIDArr = {118,119,120,121,122,123,124}
+	PlayerPosArr = {
+		{512+640,256},
+		{512+1568,256},
+		{512+2528,256},
+		{512+3488,256},
+		{512+4416,256},
+		{512+5344,256},
+		{512+6272,256},
+	}
 end

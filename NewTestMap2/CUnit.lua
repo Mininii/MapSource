@@ -16,8 +16,14 @@ end
 DoActionsX(FP, {AddV(iv.CUnitT,1)})
 CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
+PIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
-CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
+CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
+CTKillT = {}
+for i = 1, 40 do
+table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 152, Force1))
+end
+DoActions(FP, CTKillT)
 	EXCC_Part1(CT_Cunit)
 	CIf(FP,{DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
 	CAdd(FP,0x6509B0,6)
@@ -25,6 +31,7 @@ CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
 	CAdd(FP,0x6509B0,30)
 
 	local TempV = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
 	if TestStart ==1 then
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x00000004,0 ,0x00000004 )})
 
@@ -136,8 +143,9 @@ CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
 
 
 	CSub(FP,TempV,EXCC_TempVarArr[1],EXCC_TempVarArr[2]) -- Line0 = 저장된난수 + 유닛ID Line1 = 저장된 난수
+	CSub(FP,TempV2,EXCC_TempVarArr[3],EXCC_TempVarArr[2]) -- Line2 = 저장된난수 + PlayerID Line1 = 저장된 난수
 	--TempV=계산된 유닛ID
-	CIfX(FP,{TMemory(UIDPtr, Exactly, TempV)})--UIDPtr == 실제 유닛ID저장된 포인터
+	CIfX(FP,{TMemoryX(UIDPtr, Exactly, TempV,0xFF)})--UIDPtr == 실제 유닛ID저장된 포인터
 	CDoActions(FP, {Set_EXCCX(0,SetTo,_Add(TempV,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
 	CElseX()
 	if TestStart == 1 then
@@ -155,6 +163,25 @@ CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
 	end--
 
 	CIfXEnd()--
+		--TempV=계산된 유닛ID
+	CIfX(FP,{TMemoryX(PIDPtr, Exactly, TempV2,0xFF)})--UIDPtr == 실제 유닛ID저장된 포인터
+	CDoActions(FP, {Set_EXCCX(2,SetTo,_Add(TempV2,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
+	CElseX()
+	if TestStart == 1 then
+		f_SaveCp()
+		local TempPID = CreateVar(FP)
+		CMov(FP,TempPID,_Read(PIDPtr,0xFF),nil,0xFF,1)
+		CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+		Convert_CPosXY()
+		DisplayPrint(Force1, {"\x13\x04CurPID : ",TempPID,"  CT_CUnit : ",TempV2,"  ","X : ",CPosX,"   Y : ",CPosY})--
+		f_LoadCp()
+	else
+	TriggerX(FP,{},{RotatePlayer({
+		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+		DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+	end--
+
+	CIfXEnd()--
 
 
 
@@ -164,10 +191,12 @@ CIf(FP,CV(iv.CUnitT,36,AtLeast),SetV(iv.CUnitT,0))
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 		EXCC_Part4X(i,{
 			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+			DeathsX(19025+(84*i)+19,AtMost,7,0,0xFF),
 		},
 		{MoveCp(Add,19*4),
 		SetCVar(FP,CurCunitI2[2],SetTo,i),--SetResources(P1,Add,1,Gas)
 		SetCVar(FP,UIDPtr[2],SetTo,19025+(84*i)+25),--SetResources(P1,Add,1,Gas)--
+		SetCVar(FP,PIDPtr[2],SetTo,19025+(84*i)+19),--SetResources(P1,Add,1,Gas)--
 		})
 	end
 	EXCC_End()
