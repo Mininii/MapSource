@@ -279,8 +279,10 @@ function Install_CallTriggers()
 		CMov(FP,E1Range[1],1)
 		CMov(FP,E1Range[2],BreakShield)
 		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
 			DisplayPrint(ECP,{"\x04출력된 파괴방지 난수 : ",ColorCodeV[2],GetEPer})
 			DisplayPrint(ECP,{"\x1F계산된 파괴방지 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			CIfEnd()
 		end
 		
 		CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, BreakShield)})--성공시
@@ -524,7 +526,7 @@ function Install_CallTriggers()
 					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)},{},{preserved})	-- 조건이 만족할 경우 싱글전환
 						CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
 							f_Read(FP, 0x628438, nil, Nextptrs)
-							CTrigger(FP,{},{CreateUnit(1,94,64,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
 							CSub(FP,CurCunitI,Nextptrs,19025)
 							f_Div(FP,CurCunitI,_Mov(84))
 							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
@@ -588,8 +590,31 @@ function Install_CallTriggers()
 								PUnitEPer = CreateVar(FP)
 								CMov(FP,PUnitEPer,_Sub(_Mov(100001),_Mul(GetPUnitLevel,10000)))
 
+								if Limit == 1 then -- 테스트용 결과 출력
+									ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
+									ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
+									ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
+									ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
+									CMov(FP,E1Range[1],1)
+									CMov(FP,E1Range[2],PUnitEPer)
+						
+									DisplayPrint(GCP,{"\x04출력된 난수 : ",ColorCodeV[2],GPEper})
+									DisplayPrint(GCP,{"\x1F계산된 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+									
+								end
 								CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})--성공시
 									--"\x13\x07『 "..Str.." \x07』"
+									CIf(FP,Memory(0x628438,AtLeast,1))
+									f_Read(FP,_Add(G_Btnptr,10),CPos)
+									Convert_CPosXY()
+									f_Read(FP, 0x628438, nil, Nextptrs)
+									CSub(FP,CurCunitI,Nextptrs,19025)
+									f_Div(FP,CurCunitI,_Mov(84))
+									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV),})
+									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP)),})
+									Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,94,87,FP,{hallucinated = true}),KillUnit(94, FP)})
+									CIfEnd()
 									CMov(FP,PrevPUnitLevel,GetPUnitLevel)
 									CAdd(FP,GetPUnitLevel,1)
 									DisplayPrint(GCP, {"\x13\x07『 \x04강화에 \x07성공하셨습니다!\x07",PrevPUnitLevel,"강 → ",GetPUnitLevel,"강 \x07』"})
@@ -597,14 +622,35 @@ function Install_CallTriggers()
 
 								--TriggerX(FP,{CV(G_PushBtnm,1,AtLeast)},{},{preserved})--백신 사용
 									GPEper = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+									if Limit == 1 then -- 테스트용 결과 출력
+										ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
+										ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
+										ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
+										ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
+										CMov(FP,E1Range[1],1)
+										CMov(FP,E1Range[2],PUnitEPer)
+							
+										DisplayPrint(GCP,{"\x04출력된 난수 : ",ColorCodeV[2],GPEper})
+										DisplayPrint(GCP,{"\x1F계산된 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+										
+									end
 									CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다."), 4),SetCp(FP)})
 										DisplayPrint(GCP, {"\x13\x07『 \x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다! ",GetPUnitLevel,"강 유지 \x07』"})
+										f_Read(FP,_Add(G_Btnptr,10),CPos)
+										Convert_CPosXY()
+										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,22,87,FP,{hallucinated = false}),GiveUnits(All, 22, FP, 64, P9),KillUnit(22, P9)})
 									CElseX()
 									
 										CIfX(FP,{CV(G_PushBtnm,1,AtLeast)},{SubV(GetVAccData,1)})
+										f_Read(FP,_Add(G_Btnptr,10),CPos)
+										Convert_CPosXY()
+										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,94,87,FP,{hallucinated = false}),GiveUnits(All, 94, FP, 64, P9),KillUnit(94, P9)})
 											DisplayPrint(GCP, {"\x13\x07『 \x07강화\x04에 \x08실패\x04했지만 \x10강화기 백신\x04을 사용하여 단계를 유지했습니다! ",GetPUnitLevel,"강 유지 \x07』"})
 											DisplayPrint(GCP, {"\x13\x07『 \x04남은 \x10강화기 백신\x04 갯수 : ",GetVAccData," 개 \x07』"})
 										CElseX()
+										f_Read(FP,_Add(G_Btnptr,10),CPos)
+										Convert_CPosXY()
+										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,50,87,FP,{hallucinated = false}),GiveUnits(All, 50, FP, 64, P9),KillUnit(50, P9)})
 											CMov(FP,PrevPUnitLevel,GetPUnitLevel)
 											CSub(FP,GetPUnitLevel,1)
 											DisplayPrint(GCP, {"\x13\x07『 \x04강화에 \x08실패\x04하여 단계가 하락하였습니다... \x08",PrevPUnitLevel,"강 → ",GetPUnitLevel,"강 \x07』"})
@@ -648,14 +694,17 @@ function Install_CallTriggers()
 								CMovX(FP,GetDPSLVData,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4))
 								ClassUpErrJump = def_sIndex()
 								CMov(FP,0x6509B0,GCP)
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,6,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격속도를 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,10,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격력을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,5,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 경험치 획득량을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,5,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 +1 강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,10,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x08특수 \x04강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,1,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,CS_CooldownLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격속도를 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,CS_AtkLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격력을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,CS_EXPLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 경험치 획득량을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,CS_TotalEPerLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 +1 강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,CS_TotalEper4Limit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x08특수 \x04강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
 								CIfX(FP,{TTNWar(GetCreditData,AtLeast,"1000000")})
 									CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+									f_Read(FP,_Add(G_Btnptr,10),CPos)
+									Convert_CPosXY()
+									Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(10,82,87,FP,{hallucinated = false}),GiveUnits(All, 82, FP, 64, P9),KillUnit(82, P9)})
 									f_LSub(FP, GetCreditData, GetCreditData, "1000000")
 									PrevClassLevel = CreateVar(FP)
 									local TempV = CreateVar(FP)
@@ -664,31 +713,35 @@ function Install_CallTriggers()
 									CAdd(FP,GetClassData,1)
 									DisplayPrint(GCP, {"\x13\x07『 \x07축하합니다! \x04승급에 성공하셨습니다! \x07",PrevClassLevel,"단 → ",GetClassData,"단 \x07』"})
 									CIf(FP,{CV(G_PushBtnm,3)},{AddV(GetCooldownData,1)})
-									CMov(FP,TempV,_SHRead(ArrX(PUnitCoolArr,GetCooldownData)))
-									DisplayPrint(GCP, {"\x13\x07『 \x07고유 유닛\x04의 공격속도가 증가하였습니다. \x04증가 후 Cooldown : \x07",TempV," \x07』"})
+										CMov(FP,TempV,_rShift(_SHRead(ArrX(PUnitCoolArr,GetCooldownData)), 8))
+										DisplayPrint(GCP, {"\x13\x07『 \x07고유 유닛\x04의 공격속도가 증가하였습니다. \x04증가 후 Cooldown : \x07",TempV," \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,4)},{AddV(GetAtkData,1)})
-									CMov(FP,TempV,_Mul(GetAtkData,6500))
-									DisplayPrint(GCP, {"\x13\x07『 \x07고유 유닛\x04의 공격력이 증가하였습니다. \x04증가 후 \x08Damage \x04: \x07",TempV," \x07』"})
+										CMov(FP,TempV,_Mul(GetAtkData,6500))
+										DisplayPrint(GCP, {"\x13\x07『 \x07고유 유닛\x04의 공격력이 증가하였습니다. \x04증가 후 \x08Damage \x04: \x07",TempV," \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,5)},{AddV(GetEXPData,1)})
-									CMov(FP,TempV,_Mul(GetEXPData,20))
-									DisplayPrint(GCP, {"\x13\x07『 \x1C경험치 증가량\x04이 상승하였습니다. \x04증가 후 \x04: \x1C+ ",TempV,"% \x07』"})
+										CMov(FP,TempV,_Mul(GetEXPData,20))
+										DisplayPrint(GCP, {"\x13\x07『 \x1C경험치 증가량\x04이 상승하였습니다. \x04증가 후 \x04: \x1C+ ",TempV,"% \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,6)},{AddV(GetTotalEPerData,1)})
-									CMov(FP,TempV,GetTotalEPerData)
-									DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",TempV,".0%p \x07』"})
+										local E1VarArr1 = CreateVarArr(6,FP)
+										E5VarArr1 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
+										E5VarArr2 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
+										CMov(FP,TempV,_Mul(GetTotalEPerData,500))
+										for i = 1, 6 do
+										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
+										end
+										SetEPerStr(E1VarArr1)
+										DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
-									CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
-									local E1VarArr1 = CreateVarArr(6,FP)
-									for i = 1, 6 do
-									Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-									end
-									E5VarArr1 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
-									E5VarArr2 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
-									SetEPerStr(E1VarArr1)
-									DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+										CMov(FP,TempV,_Mul(GetTotalEper4Data,1000))
+										for i = 1, 6 do
+										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
+										end
+										SetEPerStr(E1VarArr1)
+										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이제부터 \x07고유 유닛\x04으로 \x0FLV.2 \x04사냥터에 입장할 수 있습니다."))})
 									CIfEnd()
@@ -709,46 +762,54 @@ function Install_CallTriggers()
 						CIfXEnd()
 
 					CIfEnd()
-					CIf(FP,{CV(G_PushBtnm,9)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x04현재 고유유닛 승급 효과는 다음과 같습니다."), 4)})
-					CMovX(FP,GetCooldownData,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4))
-					CMovX(FP,GetAtkData,VArrX(GetVArray(iv.CS_Atk[1], 7),VArrI,VArrI4))
-					CMovX(FP,GetEXPData,VArrX(GetVArray(iv.CS_EXP[1], 7),VArrI,VArrI4))
-					CMovX(FP,GetTotalEPerData,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4))
-					CMovX(FP,GetTotalEper4Data,VArrX(GetVArray(iv.CS_TotalEper4[1], 7),VArrI,VArrI4))
-					CMovX(FP,GetDPSLVData,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4))
-					
-					CMov(FP,TempV,_SHRead(ArrX(PUnitCoolArr,GetCooldownData)))
-					DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격속도 - Cooldown : \x07",TempV," \x07』"})
-
-					CMov(FP,TempV,_Mul(GetAtkData,6500))
-					DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격력 - \x08Damage \x04: \x07",TempV," \x07』"})
-
-					CMov(FP,TempV,_Mul(GetEXPData,20))
-					DisplayPrint(GCP, {"\x07『 \x1C경험치 증가량\x04 : \x1C+ ",TempV,"% \x07』"})
-
-					CMov(FP,TempV,GetTotalEPerData)
-					DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화확률\x04증가량 \x04: \x0F+ ",TempV,".0%p \x07』"})
-
-
-					CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
-					for i = 1, 6 do
-					Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-					end
-					SetEPerStr(E1VarArr1)
-					DisplayPrint(GCP, {"\x07『 \x08특수 \x07강화확률\x04 증가량 : \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
-					CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0FLV.2 사냥터 입장 효과 적용중"), 4)},1)
-					
-					CIfEnd()
 
 				CMovX(FP,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4),GetPUnitLevel)
 				f_LMovX(FP, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4), GetCreditData)
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
 				
-			CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 30분이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 30분이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
 			CIfXEnd()
-			CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
 			CIfXEnd()
+			
+			CIf(FP,{CV(G_PushBtnm,9)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x04현재 고유유닛 승급 효과는 다음과 같습니다."), 4)})
+				CMovX(FP,GetCooldownData,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetAtkData,VArrX(GetVArray(iv.CS_Atk[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetEXPData,VArrX(GetVArray(iv.CS_EXP[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetTotalEPerData,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetTotalEper4Data,VArrX(GetVArray(iv.CS_TotalEper4[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetDPSLVData,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4))
+				
+				CMov(FP,TempV,_rShift(_SHRead(ArrX(PUnitCoolArr,GetCooldownData)), 8))
+				DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격속도 - Cooldown : \x07",TempV," \x07』"})
+
+				CMov(FP,TempV,_Mul(GetAtkData,6500))
+				DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격력 - \x08Damage \x04: \x07",TempV," \x07』"})
+
+				CMov(FP,TempV,_Mul(GetEXPData,20))
+				DisplayPrint(GCP, {"\x07『 \x1C경험치 증가량\x04 : \x1C+ ",TempV,"% \x07』"})
+
+				CMov(FP,TempV,_Mul(GetTotalEPerData,500))
+				for i = 1, 6 do
+				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
+				end
+				SetEPerStr(E1VarArr1)
+
+				DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화 확률 \x04증가량 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+
+				CMov(FP,TempV,_Mul(GetTotalEper4Data,1000))
+				for i = 1, 6 do
+				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
+				end
+				SetEPerStr(E1VarArr1)
+				DisplayPrint(GCP, {"\x07『 \x08특수 \x07강화 확률\x04 증가량 : \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
+				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
+				
+			CIfEnd()
+
+
 			CIfXEnd()
 
 

@@ -44,6 +44,7 @@ function TBL()
 	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(±âº» 1°­)
 	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+2°­)
 	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+3°­)
+	local TotalEPer4 = iv.TotalEPer4-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(Æ¯°­)
 
     local PUnitLevelLoc = iv.PUnitLevelLoc
     local PUnitClassLoc = iv.PUnitClassLoc
@@ -139,7 +140,6 @@ function TBL()
     
     for j, k in pairs(PersonalUIDArr) do
         NElseIfX({CV(SelUID,k)},{SetCD(PUnitFlag,1);SetV(SelPer,0);})
-        
         f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
     end
     NElseX({
@@ -159,6 +159,7 @@ function TBL()
         CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
         CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
         CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
+        CMov(FP,TotalEPer4Loc,TotalEPer4[i+1])--Æ¯¼öÈ®·ü ÇÕ»ê
         CS__lItoCustom(FP,SVA1(MarStr[i+1],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x03ÃÊ",0x07)
         CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1])
     end
@@ -384,7 +385,12 @@ function TBL()
     end
     CS__InputVA(FP,iTbl2,0,EStr2,EStr2s,nil,0,EStr2s)
     CElseIfX({CD(PUnitFlag,1)})-- °íÀ¯À¯´Ö Á¤º¸ »ó½Ã°»½Å
-    
+
+    for j, k in pairs(PersonalUIDArr) do
+        CIf(FP,{CV(SelUID,k)})
+        CMov(FP,PUnitLevelLoc,iv.PUnitLevel[j])
+        CIfEnd()
+    end
     CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
     local TempPer = CreateVar(FP)
     CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
@@ -398,6 +404,7 @@ function TBL()
     CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
     local TempCred = CreateVar(FP)
     CMov(FP,TempCred,_Add(_Mul(PUnitLevelLoc,1000),1000))
+    TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempCred,0)},{preserved})
     CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08)--°­È­´Ü°è
     CS__ItoCustom(FP,SVA1(TStr7,14),TempCred,nil,nil,{10,9},1,nil,"\x170",0x17,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
     CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)--°¡°Ý

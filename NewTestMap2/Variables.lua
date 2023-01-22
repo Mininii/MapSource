@@ -442,10 +442,10 @@ function Include_Vars()
 	SetWeaponsDatX(64,{WepName=1440})--질럿2연타 예외처리
 	SetWeaponsDatX(26,{WepName=1441})--파벳3연타 예외처리
 	PushLevelUnit(25+15,9000,50000000/2,54,36,5,4000,59,nil,1)--디버링원 공속최대 -- 만렙기준 16.4
-	PushLevelUnit(25+16,12000,60000000,11,15,72,10,59)--드랍쉽 -- 만렙기준 13.4
-	PushLevelUnit(25+17,20000,150000000,9,22,48,50,59)--베슬 -- 만렙기준 5.4
-	PushLevelUnit(25+18,25000,800000000,76,71,24,100,59)--아칸 -- 만렙기준 0.4
-	PushLevelUnit(25+19,25000,4000000000,63,70,12,500,59)--다크아칸
+	PushLevelUnit(25+16,12000,60000000,11,15,72,40,59)--드랍쉽 -- 만렙기준 13.4
+	PushLevelUnit(25+17,20000,150000000,9,22,48,70,59)--베슬 -- 만렙기준 5.4
+	PushLevelUnit(25+18,25000,800000000,76,71,24,120,59)--아칸 -- 만렙기준 0.4
+	PushLevelUnit(25+19,25000,4000000000,63,70,12,400,59)--다크아칸
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
@@ -525,18 +525,18 @@ FirstReward2 = {
 }
 	OreDPS = {100,1000,10000,100000,500000,1000000,0}
 	OreDPSM = {2,4,8,16,32,64}
-	GasDPS = {100,1000,10000,100000,1000000,5000000,0}
-	GasDPSM = {2,4,8,16,32,64}
+	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
+	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 	Cost_Stat_ScDmg = 15
 	Cost_Stat_AddSc = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
-	Cost_Stat_TotalEPerEx = 500
+	Cost_Stat_TotalEPerEx = 1000
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
-	Cost_Stat_BreakShield = 50
+	Cost_Stat_BreakShield = 150
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {
@@ -590,7 +590,16 @@ FirstReward2 = {
 	ct.CS_TEPer4Data = CreateVarArr(7,FP)
 
 	--PUnitAtkArr = {}
-	PUnitCoolArr = {72,48,24,12,6,3,1}
+	PUnitCoolArr = {72*256,48*256,24*256,12*256,6*256,3*256,1*256}
 	PUnitCoolArr = f_GetFileArrptr(FP,PUnitCoolArr,4,1)
+
+	CS_CooldownLimit = 6
+	CS_AtkLimit = 20
+	CS_EXPLimit = 5
+	CS_TotalEPerLimit = 10
+	CS_TotalEper4Limit = 5
+	CS_DPSLVLimit = 1
+
+
 
 end

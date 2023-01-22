@@ -408,13 +408,20 @@ end
 
 function SetPersonalUnit(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,WeaponName,GroupFlag)
 	if GroupFlag == nil then GroupFlag= 0xA end
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={973078528,0xFFFFFFFF},GroundWeapon=WepID,AirWeapon=130,DefUpType=0,SeekRange=7,GroupFlag=GroupFlag,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={973078528,0xFFFFFFFF},GroundWeapon=WepID,AirWeapon=130,DefUpType=60,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
 	AttackMoveOrder = 2,
 	IdleOrder = 2,
-	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,Class=193
+	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,Class=193,
+	RdySnd = 256,
+	WhatSndInit = 265,
+	WhatSndEnd = 268,
+	YesInit = 269,
+	YesEnd = 272,
+	PissedInit = 258,
+	PissedEnd = 264
 })
 SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=2,Splash=false})
 

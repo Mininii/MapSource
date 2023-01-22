@@ -79,9 +79,7 @@ else
 	end
 end
 CIfEnd()
---Trigger2X(FP, {CD(BossLV6Flag,1)}, {SetCountdownTimer(SetTo, 60*60*6),RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. \x10카운트 다운 타이머\x04가 \x076시간 \x04주어집니다."),4),
---	DisplayTextX(StrDesignX("\x10카운트 다운 타이머\x04 지속 시간동안 \x1C경험치 배율\x04이 \x1C100% \x04증가합니다."),4)}, Force1,FP)})
-
+Trigger2X(FP, {CD(BossLV6Flag,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)

@@ -205,7 +205,7 @@ for i = 0, 6 do -- 각플레이어
 	ConvertVArr(FP, WArrI,WArrI4, GCPW, 7)
 
 
-	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+11, AtLeast, 6),LocalPlayerID(i)},{
+	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+11, AtLeast, 11),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
@@ -226,10 +226,7 @@ for i = 0, 6 do -- 각플레이어
 	DoActionsX(FP, {AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1)})
 
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
-	CIf(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1)})
-	Trigger2X(FP,{CV(PBossLV[i+1],5,AtMost)},{
-		SubV(TimeAttackScore2[i+1],1), 
-	},{preserved})
+	CIf(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),})
 	TriggerX(FP, {CV(LV5Cool[i+1],1,AtLeast),}, {SubV(LV5Cool[i+1],1)},{preserved})
 	CIfEnd()
 
@@ -446,7 +443,7 @@ for i = 0, 6 do -- 각플레이어
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	if Limit == 1 then 
 		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,553)})
-		CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+		--CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -460,17 +457,22 @@ for i = 0, 6 do -- 각플레이어
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
 	end
-	for p = 1,6 do
+	for p = 1,7 do
 		local NextT = ""
-		if p ~= 6 then
+		local NextT2 = ""
+		if p<=6 then
 			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
+		end
+		if p ~= 7 then
 			NextT2 = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..GasDPS[p+1].." \x04입니다.")
 		end
-	TriggerX(FP,{CV(TempO[i+1], OreDPS[p],AtLeast)},{
-		SetV(BuildMul1[i+1],OreDPSM[p]),
-		SetV(NextOre[i+1],OreDPS[p+1]),
-		SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
+	if p<=6 then
+		TriggerX(FP,{CV(TempO[i+1], OreDPS[p],AtLeast)},{
+			SetV(BuildMul1[i+1],OreDPSM[p]),
+			SetV(NextOre[i+1],OreDPS[p+1]),
+			SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
+			DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
+	end
 	TriggerX(FP,{CV(TempG[i+1], GasDPS[p],AtLeast)},{
 		SetV(BuildMul2[i+1],GasDPSM[p]),
 		SetV(NextGas[i+1],GasDPS[p+1]),
@@ -479,7 +481,7 @@ for i = 0, 6 do -- 각플레이어
 	end
 	
 	for j,k in pairs(FirstReward) do
-		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText("\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！\n\n\n"..StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ").."\n\n\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！", 4),SetCp(FP)})
+		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ"), 4),SetCp(FP)})
 		
 		f_LAdd(FP, PEXP[i+1], PEXP[i+1], tostring(k[2]))
 
@@ -487,7 +489,7 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 	end
 	for j,k in pairs(FirstReward2) do
-		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText("\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！\n\n\n"..StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ").."\n\n\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！", 4),SetCp(FP)})
+		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText(StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),SetCp(FP)})
 		
 		f_LAdd(FP, Credit[i+1], Credit[i+1], tostring(k[2]))
 
@@ -535,7 +537,7 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 	SetMemory(0xCDDDCDDC,SetTo,1);})
 
-TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
+TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	SetCp(i),
 	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
@@ -604,19 +606,28 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,36+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 	end
 	CIf(FP,{TTNVar(PUnitCurLevel[i+1],NotSame,PUnitClass[i+1])})
+	TriggerX(FP,{CV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit,AtLeast)},{SetV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit)},{preserved})
 	CMov(FP,PUnitCurLevel[i+1],PUnitClass[i+1])
+
+	TriggerX(FP,{CV(CS_Cooldown[i+1],CS_CooldownLimit,AtLeast)},{SetV(CS_Cooldown[i+1],CS_CooldownLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_Atk[i+1],CS_AtkLimit,AtLeast)},{SetV(CS_Atk[i+1],CS_AtkLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_EXP[i+1],CS_EXPLimit,AtLeast)},{SetV(CS_EXP[i+1],CS_EXPLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_TotalEPer[i+1],CS_TotalEPerLimit,AtLeast)},{SetV(CS_TotalEPer[i+1],CS_TotalEPerLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_TotalEper4[i+1],CS_TotalEper4Limit,AtLeast)},{SetV(CS_TotalEper4[i+1],CS_TotalEper4Limit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_DPSLV[i+1],CS_DPSLVLimit,AtLeast)},{SetV(CS_DPSLV[i+1],CS_DPSLVLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,CS_Atk[i+1])
-	TriggerX(FP,{CV(TempV,5,AtLeast)},{SetV(TempV,5)},{preserved})
+	TriggerX(FP,{CV(TempV,10,AtLeast)},{SetV(TempV,10)},{preserved})
 	CDoActions(FP,{TSetMemoryW(0x656EB0, PersonalWIDArr[i+1], SetTo, _Mul(TempV,3250))})
-	CIf(FP,CV(CS_Atk[i+1],6,AtLeast))
-	CDoActions(FP,{TSetMemoryB(0x58F32C, (i*15)+11, SetTo, _Sub(CS_Atk[i+1],5))})
+	CIf(FP,CV(CS_Atk[i+1],11,AtLeast))
+	CDoActions(FP,{TSetMemoryB(0x58F32C, (i*15)+11, SetTo, _Sub(CS_Atk[i+1],10))})
 	CIfEnd()
-	CMov(FP,CurPUnitCool[i+1],_SHRead(ArrX(PUnitCoolArr,CS_Cooldown[i+1])))
 	
+	CMov(FP,CurPUnitCool[i+1],_SHRead(ArrX(PUnitCoolArr,CS_Cooldown[i+1])))
 	f_Mul(FP,CS_EXPData[i+1],CS_EXP[i+1],2)
-	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],1000)
-	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
+	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],500)
+	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],1000)
 	
 	--
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],100)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,2)},1)
@@ -882,7 +893,7 @@ for pb= 1, 6 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,(300000)-5000),SetCD(SaveRemind,1),SetCp(i),DisplayText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 end
 
-CIfOnce(FP, {CV(PBossLV[i+1],6,AtLeast)},{SetCp(i)})
+CIfOnce(FP, {Command(i, AtLeast, 1, LevelUnitArr[44][2])},{SetCp(i)})
 
 DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x07타임어택 \x10점수\x04는 \x07",TimeAttackScore2[i+1]," \x04점 입니다. \x07』"})
 CIfX(FP,{CV(TimeAttackScore[i+1],TimeAttackScore2[i+1],AtMost)},{})

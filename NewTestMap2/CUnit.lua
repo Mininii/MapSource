@@ -23,6 +23,9 @@ CTKillT = {}
 for i = 1, 40 do
 table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 152, Force1))
 end
+for i = 0, 6  do
+	table.insert(CTKillT,KillUnitAt(All, PersonalUIDArr[i+1], 152, Force1))
+end
 DoActions(FP, CTKillT)
 	EXCC_Part1(CT_Cunit)
 	CIf(FP,{DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
