@@ -61,7 +61,7 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 AddLV5Cool=CreateCcode()
 for i = 0, 4 do
 	Trigger2X(FP,{CV(BossLV,5+i,AtLeast)},{
-		SetV(B_Credit,50000-(i*10000));
+		SetV(B_Credit,25000-(i*5000));
 		AddCD(AddLV5Cool,1),
 		SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 	})
@@ -75,7 +75,7 @@ if TestStart == 1 then
 	end
 else
 	for i = 0, 6 do
-		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*2)},{preserved})
+		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
 	end
 end
 CIfEnd()

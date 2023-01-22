@@ -655,6 +655,7 @@ function Install_CallTriggers()
 								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,10,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x08특수 \x04강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
 								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,1,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
 								CIfX(FP,{TTNWar(GetCreditData,AtLeast,"1000000")})
+									CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 									f_LSub(FP, GetCreditData, GetCreditData, "1000000")
 									PrevClassLevel = CreateVar(FP)
 									local TempV = CreateVar(FP)
@@ -679,7 +680,7 @@ function Install_CallTriggers()
 									DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",TempV,".0%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
-									CMov(FP,TempV,GetTotalEPerData)
+									CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 									local E1VarArr1 = CreateVarArr(6,FP)
 									for i = 1, 6 do
 									Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
@@ -729,7 +730,7 @@ function Install_CallTriggers()
 					DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화확률\x04증가량 \x04: \x0F+ ",TempV,".0%p \x07』"})
 
 
-					CMov(FP,TempV,GetTotalEPerData)
+					CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 					for i = 1, 6 do
 					Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
 					end

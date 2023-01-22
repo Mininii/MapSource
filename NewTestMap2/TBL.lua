@@ -63,8 +63,8 @@ function TBL()
     t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
     t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
     t11 = "\x04(SCA 로드후 3분뒤 사라짐)"
-    t13 = "\x0F강화확률 : \x0D\x0D000 %"
-    t14 = "\x08강화비용 \x04: 000,000,000 \x17크레딧"
+    t13 = "\x0F강화확률, \x08실패\x04시 \x07유지\x0F확률 \x04: \x1C\x0D\x0D000 %"
+    t14 = "\x08\x0D\x0D\x0D\x0D강. 강화비용 \x04: \x0D000,000,000 \x17크레딧"
     iStrSize1 = GetiStrSize(0,t01)
     S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
     iTbl1 = GetiTblId(FP,1495,S0)
@@ -159,7 +159,7 @@ function TBL()
         CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
         CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
         CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
-        CS__lItoCustom(FP,SVA1(MarStr[i+1],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x040",0x07)
+        CS__lItoCustom(FP,SVA1(MarStr[i+1],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x03초",0x07)
         CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1])
     end
     CElseX()
@@ -172,7 +172,7 @@ function TBL()
 	local BossLV = iv.BossLV-- CreateVar(FP)
     CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP)})
     for i = 0, 4 do
-        TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*10000).." 크레딧 \x04입니다."), 4)},{preserved})
+        TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*5000).." 크레딧 \x04입니다."), 4)},{preserved})
     end
     DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
     CIfXEnd()
@@ -189,12 +189,6 @@ function TBL()
         
         CElseIfX({CD(PUnitFlag,1)})--고유유닛일경우
         
-    CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
-    local TempPer = CreateVar(FP)
-    CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
--- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-    CS__ItoCustom(FP,SVA1(TStr6,7),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)
-    CS__InputVA(FP,iTbl2,0,TStr6,TStr6s,nil,0,TStr6s)
 
         CElseX()
         
@@ -234,11 +228,6 @@ function TBL()
 
     
     CElseIfX({CD(PUnitFlag,1)})--고유유닛일 경우
-    CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
-    local TempPer = CreateVar(FP)
-    --CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
--- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-    CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)
 
 
     CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--강화유닛이 아닐 경우
@@ -358,7 +347,7 @@ function TBL()
     CIfEnd()
     CIfEnd()
     
-    CIf(FP, {CD(BossFlag,1)}) -- 보스건물 정보 상시갱신
+    CIfX(FP, {CD(BossFlag,1)}) -- 보스건물 정보 상시갱신
     TotalDPMLoc = CreateWar(FP)
     CIfX(FP,{CD(BossFlag2,1)})
     SelEPD2= CreateVar(FP)
@@ -394,7 +383,26 @@ function TBL()
         CS__InputTA(FP,{CV(TempGauge,i+1,AtLeast)},SVA1(EStr2,0+i),0x07,0xFF)
     end
     CS__InputVA(FP,iTbl2,0,EStr2,EStr2s,nil,0,EStr2s)
-    CIfEnd()
+    CElseIfX({CD(PUnitFlag,1)})-- 고유유닛 정보 상시갱신
+    
+    CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
+    local TempPer = CreateVar(FP)
+    CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
+    TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempPer,0)},{preserved})
+-- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+    CS__ItoCustom(FP,SVA1(TStr6,17),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)--강화확률
+    CS__InputVA(FP,iTbl2,0,TStr6,TStr6s,nil,0,TStr6s)
+
+
+
+    CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+    local TempCred = CreateVar(FP)
+    CMov(FP,TempCred,_Add(_Mul(PUnitLevelLoc,1000),1000))
+    CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08)--강화단계
+    CS__ItoCustom(FP,SVA1(TStr7,14),TempCred,nil,nil,{10,9},1,nil,"\x170",0x17,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+    CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)--가격
+
+    CIfXEnd()
     
     CIf(FP,{CV(SelUID,15)}) -- 시민 정보 상시갱신
     CIfX(FP,{Never()})

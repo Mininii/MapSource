@@ -95,7 +95,7 @@ iTblJump = def_sIndex()
 
 	
 	for i = 0, 6 do
-		CS__ItoName(FP, SVA1(MarStr[i+1],3), i, nil, "\x0D", ColorCode[i+1])
+		CS__ItoName(FP, SVA1(MarStr[i+1],10), i, nil, "\x0D", ColorCode[i+1])
 	
 		CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1]-3)
 	

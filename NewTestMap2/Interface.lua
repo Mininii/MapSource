@@ -168,7 +168,12 @@ function Interface()
 
 
 	CMov(FP,PCheckV,0)
-	CAdd(FP,GeneralPlayTime,1)
+	if TestStart == 1 then
+		CAdd(FP,GeneralPlayTime,10000)
+	else
+		CAdd(FP,GeneralPlayTime,1)
+	end
+
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 		TriggerX(FP,{HumanCheck(i,0)},{RemoveUnit("Men", P12),RemoveUnit("Factories", P12)})
@@ -332,7 +337,7 @@ for i = 0, 6 do -- 각플레이어
 		CIfXEnd()
 		TriggerX(FP,{CV(PLevel[i+1],999,AtMost)},{SetCp(i),DisplayText(StrDesignX("\x04현재 \x1F초보자 보너스 버프 \x1C적용중입니다. \x041000레벨 달성 전까지 \x1C경험치 획득량 2배"),4)},{preserved})-- 1000레벨 미만 5퍼센트 강확보너스
 		CIfOnce(FP, {CV(PStatVer[i+1],4,AtMost)}) --기존 8시간 적용된 쿨 비례해서 낮춰줌
-		CDiv(FP, LV5Cool[i+1], 4)
+		CDiv(FP, LV5Cool[i+1], 8)
 		CIfEnd()
 		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 
@@ -473,17 +478,25 @@ for i = 0, 6 do -- 각플레이어
 		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT2),SetCp(FP)})--2번건물
 	end
 	
-	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
-	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
 	for j,k in pairs(FirstReward) do
-		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText("\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！\n\n\n"..StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ").."\n\n\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！", 4),SetCp(FP)})
+		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText("\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！\n\n\n"..StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ").."\n\n\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！", 4),SetCp(FP)})
 		
 		f_LAdd(FP, PEXP[i+1], PEXP[i+1], tostring(k[2]))
 
 		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
 		CIfEnd()
 	end
+	for j,k in pairs(FirstReward2) do
+		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText("\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！\n\n\n"..StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ").."\n\n\n\x13\x04！！！　\x07ＲＥＷＡＲＤ\x04　！！！", 4),SetCp(FP)})
+		
+		f_LAdd(FP, Credit[i+1], Credit[i+1], tostring(k[2]))
 
+		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
+		CIfEnd()
+	end
+
+	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
+	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
 	
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{TempO[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG[i+1]},Money[i+1])
@@ -863,7 +876,7 @@ Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast),CD(BossRewardEnable,1)},{
 	
 })
 Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
-	AddV(B_PCredit[i+1], 200000)
+	AddV(B_PCredit[i+1], 150000)
 })
 for pb= 1, 6 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,(300000)-5000),SetCD(SaveRemind,1),SetCp(i),DisplayText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
