@@ -739,7 +739,7 @@ function Install_CallTriggers()
 										local E1VarArr1 = CreateVarArr(6,FP)
 										E5VarArr1 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
 										E5VarArr2 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
-										CMov(FP,TempV,_Mul(GetTotalEPerData,500))
+										CMov(FP,TempV,_Mul(GetTotalEPerData,250))
 										for i = 1, 6 do
 										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
 										end
@@ -747,7 +747,7 @@ function Install_CallTriggers()
 										DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
-										CMov(FP,TempV,_Mul(GetTotalEper4Data,1000))
+										CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 										for i = 1, 6 do
 										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
 										end
@@ -800,7 +800,7 @@ function Install_CallTriggers()
 				CMov(FP,TempV,_Mul(GetEXPData,20))
 				DisplayPrint(GCP, {"\x07『 \x1C경험치 증가량\x04 : \x1C+ ",TempV,"% \x07』"})
 
-				CMov(FP,TempV,_Mul(GetTotalEPerData,500))
+				CMov(FP,TempV,_Mul(GetTotalEPerData,250))
 				for i = 1, 6 do
 				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
 				end
@@ -808,7 +808,7 @@ function Install_CallTriggers()
 
 				DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화 확률 \x04증가량 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
 
-				CMov(FP,TempV,_Mul(GetTotalEper4Data,1000))
+				CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 				for i = 1, 6 do
 				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
 				end

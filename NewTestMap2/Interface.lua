@@ -654,8 +654,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	
 	CMov(FP,CurPUnitCool[i+1],_SHRead(ArrX(PUnitCoolArr,CS_Cooldown[i+1])))
 	f_Mul(FP,CS_EXPData[i+1],CS_EXP[i+1],2)
-	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],500)
-	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],1000)
+	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],250)
+	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
 	
 	--
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],100)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,2)},1)

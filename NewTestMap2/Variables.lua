@@ -616,8 +616,8 @@ FirstReward2 = {
 	CS_CooldownLimit = 6
 	CS_AtkLimit = 20
 	CS_EXPLimit = 5
-	CS_TotalEPerLimit = 10
-	CS_TotalEper4Limit = 5
+	CS_TotalEPerLimit = 20
+	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
 
 
