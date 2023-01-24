@@ -30,6 +30,29 @@ function Interface()
 	
 	local CurPUnitCool = iv.CurPUnitCool
 
+	local RandomSeed1 = iv.RandomSeed1
+	local RandomSeed2 = iv.RandomSeed2
+	local RandomSeed3 = iv.RandomSeed3
+	local RandomSeed4 = iv.RandomSeed4
+	local RandomSeed5 = iv.RandomSeed5
+	local RandomSeed6 = iv.RandomSeed6
+	local RandomSeed7 = iv.RandomSeed7
+	local RandomSeed8 = iv.RandomSeed8
+	local RandomSeed9 = iv.RandomSeed9
+	local RandomSeed10 = iv.RandomSeed10
+	local RSArr = {
+		RandomSeed1,
+		RandomSeed2,
+		RandomSeed3,
+		RandomSeed4,
+		RandomSeed5,
+		RandomSeed6,
+		RandomSeed7,
+		RandomSeed8,
+		RandomSeed9,
+		RandomSeed10,
+	}
+
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
 	
@@ -182,7 +205,7 @@ function Interface()
 		TriggerX(FP,{CV(PCheckV,i)},{SetV(ULimitV,ULimitArr[i]),SetV(ULimitV2,ULimitArr[i]-1)},{preserved})
 	end
 	if Limit == 1 then
-		DoActionsX(FP,{SetV(PCheckV,7)})
+		--DoActionsX(FP,{SetV(PCheckV,7)})
 	end
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
 	Trigger2X(FP, {CV(GeneralPlayTime,(24*60*60)-1,AtMost)}, {SetCD(BossRewardEnable,0)},{preserved})
@@ -251,6 +274,11 @@ for i = 0, 6 do -- 각플레이어
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
 		for j,k in pairs(SCA_DataArr) do
 			SCA_DataLoad(i,k[1][i+1],k[2])
+		end
+		for j,k in pairs(RSArr) do
+			CIf(FP,{CV(k[i+1],0)})
+				f_Rand(FP,k[i+1])
+			CIfEnd()
 		end
 		TriggerX(FP,CD(LimitM[i+1],1),{SetDeaths(i, SetTo, 1, 100)})
 		--치팅 테스트 변수 초기화
@@ -443,7 +471,7 @@ for i = 0, 6 do -- 각플레이어
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	if Limit == 1 then 
 		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,553)})
-		--CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, 15+i, i)
+		CreateUnitStacked({}, 12, LevelUnitArr[25][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -634,6 +662,22 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],99,AtMost)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,1)},1)
 	CIfEnd()
 	CallTrigger(FP,Call_BtnInit,{})
+
+	CIf(FP,{CD(LoadCheck[i+1],1),CV(RSArr[1][i+1],0)})
+		for j = 1,9 do--랜덤값 정렬
+			CMov(FP,RSArr[j][i+1],RSArr[j+1][i+1])
+		end
+		f_Rand(FP,RSArr[10][i+1])--랜덤값 재생성
+		
+		for j,k in pairs(RSArr) do -- 랜덤 0인거 검사
+			CIf(FP,{CV(k[i+1],0)})
+				f_Rand(FP,k[i+1])
+			CIfEnd()
+		end
+
+		
+	CIfEnd()
+
 	
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})

@@ -69,7 +69,16 @@ function DataArr()
 		{iv.CS_EXPData,ct.CS_EXPData,"CS_EXPData"},
 		{iv.CS_TEPerData,ct.CS_TEPerData,"CS_TEPerData"},
 		{iv.CS_TEPer4Data,ct.CS_TEPer4Data,"CS_TEPer4Data"},
-		
+		{iv.RandomSeed1,ct.RandomSeed1,"RandomSeed1"},
+		{iv.RandomSeed2,ct.RandomSeed2,"RandomSeed2"},
+		{iv.RandomSeed3,ct.RandomSeed3,"RandomSeed3"},
+		{iv.RandomSeed4,ct.RandomSeed4,"RandomSeed4"},
+		{iv.RandomSeed5,ct.RandomSeed5,"RandomSeed5"},
+		{iv.RandomSeed6,ct.RandomSeed6,"RandomSeed6"},
+		{iv.RandomSeed7,ct.RandomSeed7,"RandomSeed7"},
+		{iv.RandomSeed8,ct.RandomSeed8,"RandomSeed8"},
+		{iv.RandomSeed9,ct.RandomSeed9,"RandomSeed9"},
+		{iv.RandomSeed10,ct.RandomSeed10,"RandomSeed10"},
 		
 		
 		
@@ -126,6 +135,16 @@ function DataArr()
 		{iv.CS_TotalEPer,132},
 		{iv.CS_TotalEper4,133},
 		{iv.CS_DPSLV,134},
+		{iv.RandomSeed1,135},
+		{iv.RandomSeed2,136},
+		{iv.RandomSeed3,137},
+		{iv.RandomSeed4,138},
+		{iv.RandomSeed5,139},
+		{iv.RandomSeed6,140},
+		{iv.RandomSeed7,141},
+		{iv.RandomSeed8,142},
+		{iv.RandomSeed9,143},
+		{iv.RandomSeed10,144},
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}

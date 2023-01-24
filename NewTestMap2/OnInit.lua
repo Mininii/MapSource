@@ -111,7 +111,7 @@ iTblJump = def_sIndex()
 	----CallTrigger(FP, Call_CTInputUID)
 	--CForEnd()
 	DoActions2(FP, {
-		RotatePlayer({SetMissionObjectivesX("\x13\x04건물을 \x08공격\x04하며 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다! \n\x13\x04설명서는 B,N,M키, 각종 정보는 L,K,P 키로 확인 가능합니다.\n\n\x13\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.\n\n\x13\x04Creator - GALAXY_BURST\n\x13\x08혼자하기 힘들다면? \x07디스코드로 오세요!\n\x13\x04https://discord.com/invite/jqU9vG9j")},Force1,FP)
+		RotatePlayer({SetMissionObjectivesX("\x13\x04건물을 \x08공격\x04하며 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다! \n\x13\x04설명서는 B,N,M키, 각종 정보는 L,K,P 키로 확인 가능합니다.\n\n\x13\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.\n\n\x13\x04Creator - GALAXY_BURST\n\x13\x08혼자하기 힘들다면? \x07디스코드로 오세요!\n\x13\x04https://discord.gg/Tgsb6BbRgN")},Force1,FP)
 	})
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit설정
