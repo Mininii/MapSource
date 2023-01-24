@@ -269,6 +269,14 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()--
 	for j,k in pairs(BPArr) do
 		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
+		TriggerX(FP, {CD(LoadCheck[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
+			SetCp(i),
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		})
+		
 	end
 	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
@@ -403,7 +411,7 @@ for i = 0, 6 do -- 각플레이어
 
 	
 	local CTSwitch = CreateCcode()
-	NIf(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	NIf(FP,{CD(LoadCheck[i+1],1),Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
 		CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
 		CMov(FP,PLevelBak,PLevel[i+1])
@@ -417,7 +425,7 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 	NIfEnd()
 
-	CIf(FP,{Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
+	CIf(FP,{CD(LoadCheck[i+1],1),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
 	--if TestStart == 1 then
 	--	f_LAdd(FP,Credit[i+1],Credit[i+1],"1") -- 진입했냐?
 	--end
