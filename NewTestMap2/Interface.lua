@@ -196,10 +196,10 @@ TipArr = {
 	StrDesignX("\x04TIP : \x17O키\x04를 누르면 레벨 업을 통해 얻은 스탯을 분배할 수 있습니다."),
 	StrDesignX("\x04TIP : \x04강화 성공시 단계가 \x08+1 \x04뿐만 아니라 낮은 확률로 \x1C+2\x04, \x1F+3\x04 도 올라갈 수 있습니다."),}
 for i = 0, 6 do -- 각플레이어 
-	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i))})
+	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i)})
 	CT_PrevCP(i)
 
-	
+	f_LMov(FP, GCPW, tostring(i))
 	ConvertVArr(FP,VArrI,VArrI4,GCP,7)
 
 	ConvertVArr(FP, WArrI,WArrI4, GCPW, 7)
