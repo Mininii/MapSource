@@ -498,8 +498,10 @@ function Install_CallTriggers()
 						CIfXEnd()
 						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
+						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),CV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
 					CElseX()--조건이 만족하지 않을 경우
+						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),CV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
 					CIfXEnd()
 				CIfEnd()
@@ -517,8 +519,10 @@ function Install_CallTriggers()
 						CIfXEnd()
 						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
+						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),CV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
 					CElseX()--조건이 만족하지 않을 경우
+						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),CV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
 					CIfXEnd()
 				CIfEnd()--
@@ -568,7 +572,7 @@ function Install_CallTriggers()
 			GetVAccData = CreateVar(FP)
 			GetClassData = CreateVar(FP)
 			CIfX(FP, {TTOR({_TDeaths(GCP, Exactly, 1, 1),_TDeaths(GCP, Exactly, 3, 1),_TDeaths(GCP, Exactly, 4, 1),_TDeaths(GCP, Exactly, 5, 1),_TDeaths(GCP, Exactly, 6, 1)})},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
-				CIfX(FP,{CV(iv.GeneralPlayTime,12*60*60,AtLeast)})
+				CIfX(FP,{CV(iv.GeneralPlayTime,48*60*60,AtLeast)})
 				GetCreditData = CreateWar(FP)
 				CMovX(FP,GetClassData,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetPUnitLevel,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4))
@@ -634,7 +638,7 @@ function Install_CallTriggers()
 										DisplayPrint(GCP,{"\x1F계산된 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 										
 									end
-									CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다."), 4),SetCp(FP)})
+									CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})
 										DisplayPrint(GCP, {"\x13\x07『 \x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다! ",GetPUnitLevel,"강 유지 \x07』"})
 										f_Read(FP,_Add(G_Btnptr,10),CPos)
 										Convert_CPosXY()
@@ -768,7 +772,10 @@ function Install_CallTriggers()
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
 				
-			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 30분이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 2시간이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
+			CMov(FP,CTimeV,_Div(_Sub(_Mov(2*24*60*60),iv.GeneralPlayTime), 24))
+			CallTrigger(FP, Call_ConvertTime)
+			DisplayPrint(GCP, {"\x13\x07『 고유유닛 기능 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x07』"})
 			CIfXEnd()
 			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
 			CIfXEnd()
