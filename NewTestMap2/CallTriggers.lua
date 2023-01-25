@@ -569,17 +569,26 @@ function Install_CallTriggers()
 			GetVAccData = CreateVar(FP)
 			GetClassData = CreateVar(FP)
 			CIfX(FP, {TTOR({_TDeaths(GCP, Exactly, 1, 1),_TDeaths(GCP, Exactly, 3, 1),_TDeaths(GCP, Exactly, 4, 1),_TDeaths(GCP, Exactly, 5, 1),_TDeaths(GCP, Exactly, 6, 1)})},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
+			CIfX(FP,{CV(iv.GeneralPlayTime,24*5*60,AtLeast)})
 				GetCreditData = CreateWar(FP)
 				GerRandData = CreateVar(FP)
-				CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
+				GetEnchCool = CreateVar(FP)
 				CMovX(FP,GetClassData,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetPUnitLevel,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4))
 				f_LMovX(FP, GetCreditData, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4))
+				CMovX(FP, GetEnchCool, VArrX(GetVArray(iv.PUnitEnchCool[1], 7), VArrI, VArrI4))
+				
 				CIf(FP,{CV(G_PushBtnm,0,AtLeast),CV(G_PushBtnm,1,AtMost)}) -- 
-					CIfX(FP,{CV(GetPUnitLevel,10,AtLeast)})
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
-					CElseX()
+					CIfX(FP,{TTOR({CV(GetPUnitLevel,10,AtLeast),CV(GetEnchCool,1,AtLeast)})})
+						CTrigger(FP,{CV(GetPUnitLevel,10,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
+						CTrigger(FP,{CV(GetEnchCool,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 강화를 진행하기 위한 쿨타임이 필요합니다."), 4),SetCp(FP)},{preserved})
+						CIf(FP,CV(GetEnchCool,1,AtLeast))
+						CMov(FP,CTimeV,_Div(_Sub(_Mov(30*24),GetEnchCool), 24))
+						CallTrigger(FP, Call_ConvertTime)
+						DisplayPrint(GCP, {"\x13\x07『 \x08강화\x04쿨타임 남은 시간 : \x07",CTimeSS,"초 \x07』"})
+						CIfEnd()
+						CElseX()
 						PrevPUnitLevel = CreateVar(FP)
 						CIfX(FP,{TTNWar(GetCreditData, AtLeast, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))})
 							VaccJump = def_sIndex()
@@ -587,6 +596,12 @@ function Install_CallTriggers()
 							CElseX()
 								
 								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+								TriggerX(FP,{CV(GetPUnitLevel,8,AtLeast)},{SetV(GetEnchCool,24*30)},{preserved})
+								CIfX(FP,{CV(G_PushBtnm,1)})--백신 사용시 6번째 랜덤값 불러옴
+								CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed6[1], 7),VArrI,VArrI4))
+								CElseX()--안쓰면 1번째 랜덤값 불러옴
+								CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
+								CIfXEnd()
 								f_LSub(FP, GetCreditData, GetCreditData, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))
 								CTrigger(FP,{CV(GerRandData,0)},{TSetNVar(GerRandData, SetTo, _Rand())},1)
 								GPEper = CreateVar(FP)
@@ -665,6 +680,12 @@ function Install_CallTriggers()
 										CIfXEnd()
 									CIfXEnd()
 
+								CIfXEnd()
+								
+								CIfX(FP,{CV(G_PushBtnm,1)})--백신 사용시 6번째 랜덤값 저장
+								CMovX(FP,VArrX(GetVArray(iv.RandomSeed6[1], 7),VArrI,VArrI4),0,SetTo,nil,nil,1)
+								CElseX()--안쓰면 1번째 랜덤값 저장
+								CMovX(FP,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4),0,SetTo,nil,nil,1)
 								CIfXEnd()
 							CIfXEnd()
 						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})--크레딧이 부족합
@@ -771,12 +792,16 @@ function Install_CallTriggers()
 
 					CIfEnd()
 
-				CMovX(FP,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4),GerRandData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4),GetPUnitLevel)
 				f_LMovX(FP, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4), GetCreditData)
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
-				
+				CMovX(FP, VArrX(GetVArray(iv.PUnitEnchCool[1], 7), VArrI, VArrI4),GetEnchCool)
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 5분이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
+				CMov(FP,CTimeV,_Div(_Sub(_Mov(24*5*60),iv.GeneralPlayTime), 24))
+				CallTrigger(FP, Call_ConvertTime)
+				DisplayPrint(GCP, {"\x13\x07『 고유유닛 기능 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x07』"})
+			CIfXEnd()
 			CElseIfX({TTNVar(G_PushBtnm,NotSame,9)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
 			CIfXEnd()
 			

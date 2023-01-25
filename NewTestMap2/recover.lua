@@ -29,3 +29,22 @@
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
     --복구가 완료되었습니다. 하지만 현재 게임중일 경우 저장데이터가 덮어써지므로 복구가 되지 않습니다. 확인부탁드립니다.
+
+    function RandTest()
+    RandTable = {
+        2349907629,
+2039485187,
+591859665,
+3789345345,
+4037257525,
+690715754,
+1905323560,
+499873098,
+2817004433,
+2108592098
+    }
+    for j,k in pairs(RandTable) do
+        print(k%10000)
+    end
+    end
+    RandTest()

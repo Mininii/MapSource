@@ -171,6 +171,7 @@ function Include_Vars()
 	iv.LV5Cool = CreateVarArr(7,FP)
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
+	iv.PUnitEnchCool = CreateVarArr(7,FP)
 
 	iv.BanFlag = CreateVarArr(7,FP)
 	iv.BanFlag2 = CreateVarArr(7,FP)
@@ -608,7 +609,8 @@ FirstReward2 = {
 	ct.CS_EXPData = CreateVarArr(7,FP)
 	ct.CS_TEPerData = CreateVarArr(7,FP)
 	ct.CS_TEPer4Data = CreateVarArr(7,FP)
-
+	ct.PUnitEnchCool = CreateVarArr(7,FP)
+	
 	--PUnitAtkArr = {}
 	PUnitCoolArr = {72*256,48*256,24*256,12*256,6*256,3*256,1*256}
 	PUnitCoolArr = f_GetFileArrptr(FP,PUnitCoolArr,4,1)

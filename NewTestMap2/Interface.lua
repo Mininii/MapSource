@@ -27,6 +27,7 @@ function Interface()
 	local CS_EXPData = iv.CS_EXPData
 	local CS_TEPerData = iv.CS_TEPerData
 	local CS_TEPer4Data = iv.CS_TEPer4Data
+	local PUnitEnchCool = iv.PUnitEnchCool
 	
 	local CurPUnitCool = iv.CurPUnitCool
 
@@ -221,7 +222,7 @@ TipArr = {
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i)})
 	CT_PrevCP(i)
-
+	CSub(FP,PUnitEnchCool[i+1],1)
 	f_LMov(FP, GCPW, tostring(i))
 	ConvertVArr(FP,VArrI,VArrI4,GCP,7)
 
@@ -671,8 +672,22 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CIfEnd()
 	CallTrigger(FP,Call_BtnInit,{})
 
+
 	CIf(FP,{CD(LoadCheck[i+1],1),CV(RSArr[1][i+1],0)})
-		for j = 1,9 do--랜덤값 정렬
+		for j = 1,4 do--랜덤값 정렬
+			CMov(FP,RSArr[j][i+1],RSArr[j+1][i+1])
+		end
+		f_Rand(FP,RSArr[5][i+1])--랜덤값 재생성
+		
+		for j,k in pairs(RSArr) do -- 랜덤 0인거 검사
+			CIf(FP,{CV(k[i+1],0)})
+				f_Rand(FP,k[i+1])
+			CIfEnd()
+		end
+	CIfEnd()
+
+	CIf(FP,{CD(LoadCheck[i+1],1),CV(RSArr[6][i+1],0)})
+		for j = 6,9 do--랜덤값 정렬
 			CMov(FP,RSArr[j][i+1],RSArr[j+1][i+1])
 		end
 		f_Rand(FP,RSArr[10][i+1])--랜덤값 재생성
@@ -682,10 +697,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 				f_Rand(FP,k[i+1])
 			CIfEnd()
 		end
-
-		
 	CIfEnd()
-
 	
 	for j, k in pairs(LevelUnitArr) do
 		TriggerX(FP, {Command(i,AtLeast,1,k[2])}, {SetCD(AutoEnchArr2[j][i+1],1)})

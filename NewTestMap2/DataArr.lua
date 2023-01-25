@@ -79,6 +79,7 @@ function DataArr()
 		{iv.RandomSeed8,ct.RandomSeed8,"RandomSeed8"},
 		{iv.RandomSeed9,ct.RandomSeed9,"RandomSeed9"},
 		{iv.RandomSeed10,ct.RandomSeed10,"RandomSeed10"},
+		{iv.PUnitEnchCool,ct.PUnitEnchCool,"PUnitEnchCool"},
 		
 		
 		
