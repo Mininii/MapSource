@@ -160,8 +160,6 @@ function TBL()
         CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
         CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
         CMov(FP,TotalEPer4Loc,TotalEPer4[i+1])--특수확률 합산
-        CS__lItoCustom(FP,SVA1(MarStr[i+1],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x03초",0x07)
-        CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1])
     end
     CElseX()
     CTrigger(FP,{
@@ -389,6 +387,8 @@ function TBL()
     for j, k in pairs(PersonalUIDArr) do
         CIf(FP,{CV(SelUID,k)})
         CMov(FP,PUnitLevelLoc,iv.PUnitLevel[j])
+        CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x03초",0x07)
+        CS__InputVA(FP,PMariTbl[j],0,MarStr[j],MarStrs[j],nil,0,MarStrs[j])
         CIfEnd()
     end
     CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)

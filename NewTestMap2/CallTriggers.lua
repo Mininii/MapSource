@@ -498,16 +498,15 @@ function Install_CallTriggers()
 						CIfXEnd()
 						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
-						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),SetV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 올렸습니다."))},{preserved})
 					CElseX()--조건이 만족하지 않을 경우
-						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),SetV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 올릴 수 없습니다."))},{preserved})
 					CIfXEnd()
 				CIfEnd()
 				
 				CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
 					CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
+					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
 					Print_13X(FP, GCP)
 					CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
 						CIfX(FP,{CV(GetMulData2,1)})
@@ -519,10 +518,8 @@ function Install_CallTriggers()
 						CIfXEnd()
 						CMovX(FP,VArrX(MulOpVArr,VArrI,VArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
-						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),SetV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: 배율을 내렸습니다."))},{preserved})
 					CElseX()--조건이 만족하지 않을 경우
-						TriggerX(FP, {CV(GetMulData,0)}, {SetV(GetMulData,1),SetV(GetMulData2,0)}, {preserved})--예외처리 초기화
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
 					CIfXEnd()
 				CIfEnd()--
