@@ -4,7 +4,7 @@ function onPluginStart(){
 sca.Init();
 }
 
-function afterTriggerExec(){
+function beforeTriggerExec(){
 	sca.Exec();
 	const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 	const s=StringBuffer();
@@ -16,84 +16,98 @@ function afterTriggerExec(){
 	const SCA_GLoaded = PVariable();
 	const SCA_LLoadCheck = PVariable();
 	const T2 = PVariable(); // 타임아웃타이머
-//	SetMemory(0x58f610,SetTo,0);
-//		if(Memory(0x58D900,Exactly,1)){
-//			const dst, radix=parse(dwread_epd(EPD(0x58D904)), radix=10);
-//			if(list(radix!=0&&dst<=8300000)){
-//			SetMemory(0x58f610,SetTo,dst);
-//			}
-//		}
-//		
-//	if(Deaths(CurrentPlayer,AtLeast,1,150)&&Deaths(CurrentPlayer,AtMost,220000,150)&&Deaths(CurrentPlayer,AtLeast,1,151)){
-//		SetDeaths(CurrentPlayer,SetTo,150,15);
-//		var GiveRate = dwread_epd((12*150)+(cp))*10000;
-//		var GiveP = dwread_epd((12*151)+(cp))-1;
-//		if(Accumulate(CurrentPlayer,AtLeast,GiveRate,Ore)){
-//		SetResources(GiveP,Add,GiveRate,Ore);
-//		SetResources(CurrentPlayer,Subtract,GiveRate,Ore);
-//		f_eprintln("\x07『 ",PColor(GiveP), PName(GiveP),"\x04에게 \x1F",GiveRate," Ore\x04를 기부하였습니다. \x07』");
-//		setcurpl(GiveP);
-//		f_eprintln("\x07『 ",PColor(cp), PName(cp),"\x04에게 \x1F",GiveRate," Ore\x04를 기부받았습니다. \x07』");
-//		SetDeaths(CurrentPlayer,SetTo,150,15);
-//		setcurpl(cp);
-//		SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		else{
-//		f_eprintln("\x07『 \x04잔액이 부족합니다. \x07』");
-//		SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//	}
-//	else if(Deaths(CurrentPlayer,AtLeast,1,150)&&Deaths(CurrentPlayer,AtMost,220000,150)&&Deaths(CurrentPlayer,AtMost,0,151)){
-//	f_eprintln("\x07『 \x1F기부 플레이어\x04가 설정되지 않았습니다. \x07』");
-//	SetDeaths(CurrentPlayer,SetTo,150,15);
-//	}
 	
-			
-		
-//		var OldPLV = dwread_epd(72+cp);
-//		var NewPLV = dwread_epd(216+cp);
-//		if(<?ChatEvent("cp","@칭호 1")?>){
-//				Nick1[cp] = 1;
-//				f_eprintln("\x03칭호\x04가 \x07",1," \x04번으로 변경되었습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		if(<?ChatEvent("cp","@칭호 2")?>){
-//		if (OldPLV>=2) {
-//				Nick1[cp] = 2;
-//				f_eprintln("\x03칭호\x04가 \x07",2," \x04번으로 변경되었습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		else {
-//				f_eprintln("\x03구 레벨데이터\x04가 존재하지 않습니다.");
-//		}
-//		}
-//		if(<?ChatEvent("cp","@칭호 3")?>){
-//		if(Deaths(CurrentPlayer,AtLeast,1,11)){
-//				Nick1[cp] = 3;
-//				f_eprintln("\x03칭호\x04가 \x07",3," \x04번으로 변경되었습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		else{
-//				f_eprintln("\x03칭호\x07 사용 권한\x04이 없습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		}
-//		
-//		if(<?ChatEvent("cp","@칭호 4")?>){
-//		if(Deaths(CurrentPlayer,AtLeast,1,38)){
-//				Nick1[cp] = 4;
-//				f_eprintln("\x03칭호\x04가 \x07",4," \x04번으로 변경되었습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		else{
-//				f_eprintln("\x03칭호\x07 사용 권한\x04이 없습니다.");
-//				SetDeaths(CurrentPlayer,SetTo,150,15);
-//		}
-//		}
+	var GLoadCheck;
+	var CurVer;
+
 
 	foreach(cp : EUDLoopPlayer("Human")){
-	setcurpl(cp);
-	SetDeaths(CurrentPlayer,SetTo,sca.GetLastMessage(),1);
+		setcurpl(cp);
+		if(Deaths(CurrentPlayer,Exactly,2,2)){
+			sca.GlobalData[0]=0;
+		}
+		
+		if(sca.GlobalData[0]==1){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴 
+			if(LoadCheck[cp] == 0){
+			CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
+			if(sca.GlobalData[1] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[1]){ // 구버전, 지원종료
+				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
+				PlayWAV("sound\\Bullet\\tscFir00.wav");
+				LoadCheck[cp] = 1;
+				GLoadCheck = 0;
+			}
+			else{ // 최신버전이다
+				LoadCheck[cp] = 1;
+				GLoadCheck = 1;
+			}
+			} 
+			
+				for (var i = 0; i < 20; i++) {
+					SetDeaths(EPD(0x58f60C)+i,SetTo,sca.GlobalData[i],0);
+				}
+					SetDeaths(EPD(0x58f60C)+20,SetTo,sca.Year,0);
+					SetDeaths(EPD(0x58f60C)+21,SetTo,sca.Month,0);
+					SetDeaths(EPD(0x58f60C)+22,SetTo,sca.Hour,0);
+					SetDeaths(EPD(0x58f60C)+23,SetTo,sca.Month,0);
+					SetDeaths(EPD(0x58f60C)+24,SetTo,sca.Week,0);
+		}
+
+
+
+		if(CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= 10000){
+		GLoadCheck = 0;
+		VerChange[cp] = 1;
+		f_eprintln("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
+		}
+		//if(CurVer < sca.GlobalData[2]){
+		//DisplayText("\x08신버전 감지! \x04해당 버전은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
+		//}
+
+		if(VerChange[cp]==1){
+			DisplayText("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
+		}
+
+
+	
+		if(Deaths(CurrentPlayer,Exactly,1,2)){//2번데스값에서 1번 신호가 온 경우
+			sca.LoadGlobalData(); //
+		}
+
+		if(Deaths(CurrentPlayer,Exactly,2,2)){//2번데스값에서 2번 신호가 온 경우
+			sca.LoadTime();
+		}
+
+		if(GLoadCheck==1){
+			
+			if(Deaths(CurrentPlayer,Exactly,3,2)){//2번데스값에서 3번 신호가 온 경우
+				sca.LoadData(0);
+			}
+			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
+				sca.SaveData(0);
+			    f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+			}
+			
+		}
+		if (LoadCheck[cp]==1 && GLoadCheck == 0){
+			SetDeaths(CurrentPlayer,SetTo,0,1);
+		}
+		else{
+		if (sca.ConnectStatus() == 1){//SCA가용상태 인식
+			SetDeathsX(CurrentPlayer,SetTo,1,1,1);
+		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,1);
+		}
+		if (sca.CommandStatus() == 0){
+			SetDeathsX(CurrentPlayer,SetTo,2,1,2);
+		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,2);
+		}
+		}
+
+		SetDeaths(CurrentPlayer,SetTo,0,2);//신호 초기화
+		
 		if(Deaths(CurrentPlayer, AtLeast, 1,100)){
 		
 		SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
@@ -101,306 +115,5 @@ function afterTriggerExec(){
 		else if (Deaths(CurrentPlayer, AtLeast, 1,99)) {
 		SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser\x07] {:c}{:n}",cp,cp);
 		}
-
-		T1[cp] ++;
-		
-		if (SCA_Stat1[cp] == 1){
-			switch(sca.GetLastMessage()){
-				case 1:
-					SCA_GLoadSw[cp] = 1;
-					SCA_Stat1[cp] = 0;
-					SetDeaths(CurrentPlayer, SetTo, 3, 23);
-				break;
-			}
-		}
-		if (LoadCheck[cp] == 1 && sca.GetLastMessage() == 4 &&SCA_LLoadCheck[cp]==1) {
-			SetDeaths(CurrentPlayer, SetTo, 2, 23);
-		}
-		if(SCA_GLoadSw[cp] == 1){ // Data Load
-			sca.LoadGlobalData();
-			SCA_GLoadSw[cp] = 0;
-			SCA_GLoaded[cp] = 1;
-		}
-
-/*
-1 = 연결됨
-2 = 연결 끊킴
-3 = 로드중
-4 = 로드 완료
-5 = 세이브중
-6 = 세이브 완료
-7 = 런처와 먼저 연결하세요
-8 = 다른 작업 중입니다.
-9 = 작업 실패
-10 = 명령 실행
-*/
-
-		if(Deaths(CurrentPlayer, AtLeast, 1,14)){ // Data Save
-
-			T2[cp] ++;
-			if(SCA_Stat1[cp] == 1||LoadCheck[cp]==0 || Deaths(CurrentPlayer, AtMost, 1, 23) || Deaths(CurrentPlayer, AtLeast, 3, 23)) {
-				f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-				PlayWAV("sound\\Bullet\\tscFir00.wav");
-				SetDeaths(CurrentPlayer, SetTo, 0, 14);
-				T2[cp] = 0;
-			}
-
-			else if(Deaths(CurrentPlayer, AtLeast, 1,14) && Deaths(CurrentPlayer, AtMost, 2,14)){
-				switch(sca.GetLastMessage()){
-					case 1:
-						f_eprintln("\x03SCArchive\x04에서 \x07글로벌 데이터\x04를 불러오고 있습니다...");
-							SetDeaths(CurrentPlayer, SetTo, 2, 14);
-						sca.LoadGlobalData();
-						T2[cp] = 0;
-						break;
-					case 2:
-						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-						break;
-					case 4:
-						if(Deaths(CurrentPlayer, Exactly, 1,14)) {
-							SetDeaths(CurrentPlayer, SetTo, 2, 14);
-							f_eprintln("\x03SCArchive\x04에서 \x07글로벌 데이터\x04를 불러오고 있습니다...");
-							sca.LoadGlobalData();
-							T2[cp] = 0;
-						}
-						else {
-							SetDeaths(CurrentPlayer, SetTo, 3, 14);
-							T2[cp] = 0;
-						}
-						break;
-					break;
-					case 5:
-						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-						break;
-					case 6:
-						f_eprintln("\x03SCArchive\x04에서 \x07글로벌 데이터\x04를 불러오고 있습니다...");
-						SetDeaths(CurrentPlayer, SetTo, 2, 14);
-						sca.LoadGlobalData();
-						T2[cp] = 0;
-						break;
-					case 7:
-						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					case 8:
-						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					case 9:
-					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
-					PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					default:
-				}
-	
-		}
-			else if(Deaths(CurrentPlayer, AtLeast, 3,14)){
-				switch(sca.GetLastMessage()){
-					case 1:
-						f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
-							SetDeaths(CurrentPlayer, SetTo, 4, 14);
-						sca.SaveData(0);
-						T2[cp] = 0;
-						break;
-					case 2:
-						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-						break;
-					case 3:
-						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-						break;
-					case 4:
-						f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
-							SetDeaths(CurrentPlayer, SetTo, 4, 14);
-						sca.SaveData(0);
-						T2[cp] = 0;
-						break;
-					case 6:
-						if(Deaths(CurrentPlayer, Exactly, 3,14)) {
-							SetDeaths(CurrentPlayer, SetTo, 4, 14);
-							f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
-							sca.SaveData(0);
-							T2[cp] = 0;
-						}
-						else {
-							SetDeaths(CurrentPlayer, SetTo, 0, 14);
-							T2[cp] = 0;
-							var CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
-							if(CurVer < sca.GlobalData[16] && sca.GlobalData[16] <= 10000){
-							LoadCheck[cp] = 0;
-							VerChange[cp] = 1;
-							PlayWAV("sound\\Bullet\\tscFir00.wav");
-							PlayWAV("sound\\Bullet\\tscFir00.wav");
-							f_eprintln("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
-							}
-							if(CurVer < sca.GlobalData[17]){
-							PlayWAV("sound\\Bullet\\tscFir00.wav");
-							PlayWAV("sound\\Bullet\\tscFir00.wav");
-							DisplayText("\x08신버전 감지! \x04해당 버전은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
-							}
-							
-						}
-						break;
-					break;
-					case 7:
-						f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					case 8:
-						f_eprintln("\x03SCArchive\x04에서 \x08다른 작업 중입니다.");
-						PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					case 9:
-					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
-					PlayWAV("sound\\Bullet\\tscFir00.wav");
-						SetDeaths(CurrentPlayer, SetTo, 0, 14);
-						T2[cp] = 0;
-					break;
-					default:
-				}
-				
-			}
-			//else if(Deaths(CurrentPlayer, Exactly, 2,16)){
-			//	SetDeaths(CurrentPlayer,SetTo,(sca.Year*10000)+(sca.Month*100)+sca.Day,148);
-			//	SetDeaths(CurrentPlayer,SetTo,(sca.Hour*100)+sca.Min,147);
-			//	f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
-			//	
-			//	
-			//	SetDeaths(CurrentPlayer, SetTo, 0, 14);
-			//	SetDeaths(CurrentPlayer, SetTo, 3, 16);
-			//	T2[cp] = 0;
-			//}
-			//else if(Deaths(CurrentPlayer, Exactly, 0,16)){
-			//	sca.LoadTime();
-			//	SetDeaths(CurrentPlayer, SetTo, 1, 16);
-			//	T2[cp] = 0;
-			//}
-			
-		}
-		
-//		if(Deaths(CurrentPlayer, Exactly, 1,16)){
-//			T2[cp] ++;
-//			switch(sca.GetLastMessage()){
-//				case 2:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//				case 4:
-//					SetDeaths(CurrentPlayer, SetTo, 2, 16);
-//					break;
-//				case 6:
-//					SetDeaths(CurrentPlayer, SetTo, 2, 16);
-//					break;
-//				case 7:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//					break;
-//				case 9:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//					break;
-//				default:
-//			}
-//		}
-//		
-//		if(Deaths(CurrentPlayer, Exactly, 3,16)){
-//			T2[cp] ++;
-//			switch(sca.GetLastMessage()){
-//				case 1:
-//					sca.SaveData(0);
-//				case 2:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//					break;
-//				case 6:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					break;
-//				case 7:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x03SCArchive\x04와 \x07연결\x04되지 않아 \x08저장\x04할 수 없습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//					break;
-//				case 9:
-//					SetDeaths(CurrentPlayer, SetTo, 0, 16);
-//					SetDeaths(CurrentPlayer, SetTo, 0, 14);
-//					f_eprintln("\x08알 수 없는 오류로 저장에 실패했습니다.");
-//					PlayWAV("sound\\Bullet\\tscFir00.wav");
-//					break;
-//				default:
-//			}
-//		}
-		if (T2[cp]>= 2500) {
-				f_eprintln("\x08타임아웃\x04입니다. \x07다시 저장 \x04해주시기 바랍니다.");
-				PlayWAV("sound\\Bullet\\tscFir00.wav");
-				SetDeaths(CurrentPlayer, SetTo, 0, 14);
-				SetDeaths(CurrentPlayer, SetTo, 0, 16);
-				sca.ResetLastMessage();
-				T2[cp] = 0;
-		}
-		if(VerChange[cp]==1){
-			DisplayText("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
-		}
-		
-		
-
-		if(sca.GlobalData[19]==1&&SCA_GLoaded[cp] == 1 && sca.GetLastMessage() == 4){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴  
-		var CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
-			if(sca.GlobalData[17] != CurVer && LoadCheck[cp] == 0 && CurVer >= sca.GlobalData[18]){ // 구버전, 허나 지원됨
-				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
-				PlayWAV("sound\\Bullet\\tscFir00.wav");
-				SetDeathsX(cp,SetTo,1,23,0xFF);
-				LoadCheck[cp] = 1;
-				T1[cp]= 0;
-			}
-			else if(sca.GlobalData[17] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[18]){ // 구버전, 지원종료
-				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
-				PlayWAV("sound\\Bullet\\tscFir00.wav");
-				SCA_GLoaded[cp] = 0;
-				SCA_Stat1[cp] = 1;
-				T1[cp] = 0;
-			}
-			else{ // 최신버전이다
-				LoadCheck[cp] = 1;
-				SetDeathsX(cp,SetTo,1,23,0xFF);
-				SetMemory(0x58f60C,SetTo,sca.GlobalData[2]);//이벤트는 최신버전에서만
-			}
-		}
-
-		if (SCA_GLoaded[cp] == 1 && LoadCheck[cp] == 1 && T1[cp] >= 150){
-				sca.LoadData(0);
-				SCA_GLoaded[cp] = 0;
-				SCA_LLoadCheck[cp] = 1;
-		}
-		
 	}
 }

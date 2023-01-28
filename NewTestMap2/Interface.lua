@@ -1,5 +1,4 @@
 function Interface()
-
 	--PlayData(NonSCA)
 	local Money = iv.Money-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
 	local Money2 = iv.Money2-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
@@ -173,7 +172,6 @@ function Interface()
 	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 	
-	local LoadCheck = CreateCcodeArr(7)
 	local OreMode = CreateCcodeArr(7)
 	local ZKeyCool = CreateCcodeArr(7)
 
@@ -208,17 +206,20 @@ function Interface()
 	if Limit == 1 then
 		--DoActionsX(FP,{SetV(PCheckV,7)})
 	end
+	local PartyBonus2 = iv.PartyBonus2
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
-	Trigger2X(FP, {CV(GeneralPlayTime,(24*60*60)-1,AtMost)}, {SetCD(BossRewardEnable,0)},{preserved})
+	
 	Trigger2X(FP, {CV(GeneralPlayTime,(3*24*60*60)-1,AtMost)}, {SetCD(PartyBonus,0)},{preserved})
-	Trigger2X(FP, {CV(GeneralPlayTime,24*60*60,AtLeast),CV(PCheckV,2,AtLeast)}, {SetCD(BossRewardEnable,1),RotatePlayer({DisplayTextX(StrDesignX("\x04멀티플레이 시작 후 1시간이 지났습니다. \x07이제부터 1인 진행으로 개인보스 LV.5의 보상 획득 가능합니다."))}, Force1, FP)})
+	Trigger2X(FP, {CV(GeneralPlayTime,(3*24*60*60)-1,AtMost),CD(BossLV6Flag,1),CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus2,1)},{preserved})
 	Trigger2X(FP, {CV(GeneralPlayTime,3*24*60*60,AtLeast),CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus,1),RotatePlayer({DisplayTextX(StrDesignX("\x04멀티플레이 시작 후 3시간이 지났습니다. \x07이제부터 1인 진행으로 파티 버프가 활성화됩니다."))}, Force1, FP)})
-	Trigger2X(FP, {CV(PCheckV,2,AtLeast)}, {SetCD(BossRewardEnable,1),SetCD(PartyBonus,1)},{preserved})
+	Trigger2X(FP, {CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus,1)},{preserved})
+	Trigger2X(FP, {CD(PartyBonus,1)}, {SetCD(PartyBonus,1)},{preserved})
+	
 TipArr = {
-	StrDesignX("\x04TIP : \x04유닛 선택 후 Z키를 누르면 한곳에 뭉칩니다."),
-	StrDesignX("\x04TIP : \x1F미네랄\x04, \x07가스\x04는 현재 자신의 건물을 공격중인 모든 유닛 DPS를 나타냅니다."),
+	StrDesignX("\x04TIP : \x04유닛 선택 후 Z키를 누르면 한곳에 뭉칩니다."),	StrDesignX("\x04TIP : \x1F미네랄\x04, \x07가스\x04는 현재 자신의 건물을 공격중인 모든 유닛 DPS를 나타냅니다."),
 	StrDesignX("\x04TIP : \x17O키\x04를 누르면 레벨 업을 통해 얻은 스탯을 분배할 수 있습니다."),
 	StrDesignX("\x04TIP : \x04강화 성공시 단계가 \x08+1 \x04뿐만 아니라 낮은 확률로 \x1C+2\x04, \x1F+3\x04 도 올라갈 수 있습니다."),}
+
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i)})
 	CT_PrevCP(i)
@@ -232,18 +233,18 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+11, AtLeast, 11),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
+		DisplayText("g\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+12, AtLeast, 100),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
+		DisplayText("s\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 100),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
+		DisplayText("u\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 
 	
@@ -255,31 +256,31 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 
 	DoActions(FP, {SetSwitch("Switch 100",Random),SetSwitch("Switch 101",Random)})
-	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,0,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(LoadCheck[i+1],1)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
+	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,1,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
 	CIf(FP,{LocalPlayerID(i),CV(Time,300000,AtLeast)},{SubV(Time,300000)})
-	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x035분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
+	TriggerX(FP,{LocalPlayerID(i),CD(SCA.LoadCheckArr[i+1],2),CD(SaveRemind,0)},{DisplayText(StrDesignX("\x03SYSTEM \x04: \x07실제시간 \x035분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
 	TriggerX(FP,{LocalPlayerID(i),CD(SaveRemind,0),CD(PartyBonus,1)},{DisplayText(StrDesignX("\x04현재 \x1F멀티 플레이 보너스 버프 \x1C적용중입니다. - \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p"),4)},{preserved})-- 인원수 버프 보너스
 	TriggerX(FP,{LocalPlayerID(i),CV(PLevel[i+1],999,AtMost)},{DisplayText(StrDesignX("\x04현재 \x1F초보자 보너스 버프 \x1C적용중입니다. \x041000레벨 달성 전까지 \x1C경험치 획득량 2배"),4)},{preserved})-- 1000레벨 미만 5퍼센트 강확보너스
 	TriggerX(FP,{Switch("Switch 100", Cleared),Switch("Switch 101", Cleared)}, {DisplayText(StrDesignX("\x04TIP : \x04유닛 선택 후 Z키를 누르면 한곳에 뭉칩니다."),4)}, {preserved})
 	TriggerX(FP,{Switch("Switch 100", Set),Switch("Switch 101", Cleared)}, {DisplayText(StrDesignX("\x04TIP : \x1F미네랄\x04, \x07가스\x04는 현재 자신의 건물을 공격중인 모든 유닛 DPS를 나타냅니다."),4)}, {preserved})
 	TriggerX(FP,{Switch("Switch 100", Cleared),Switch("Switch 101", Set)}, {DisplayText(StrDesignX("\x04TIP : \x17O키\x04를 누르면 레벨 업을 통해 얻은 스탯을 분배할 수 있습니다."),4)}, {preserved})
 	TriggerX(FP,{Switch("Switch 100", Set),Switch("Switch 101", Set)}, {DisplayText(StrDesignX("\x04TIP : \x04강화 성공시 단계가 \x08+1 \x04뿐만 아니라 낮은 확률로 \x1C+2\x04, \x1F+3\x04 도 올라갈 수 있습니다."),4)}, {preserved})
-	TriggerX(FP,{LocalPlayerID(i),CD(LoadCheck[i+1],1)},{SetMemory(0x58F500, SetTo, 1),},{preserved})
+	TriggerX(FP,{LocalPlayerID(i),CD(SCA.LoadCheckArr[i+1],2)},{SetMemory(0x58F500, SetTo, 1),},{preserved})
 	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
 
 	CIfEnd()--
 	for j,k in pairs(BPArr) do
 		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
-		TriggerX(FP, {CD(LoadCheck[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
+		TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("B\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 		
 	end
-	CIfOnce(FP,{Deaths(i, Exactly, 2, 23)},{SetCD(LoadCheck[i+1],1),SetCD(CheatDetect,0)})--로드 완료시 첫 실행 트리거
+	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
 		for j,k in pairs(SCA_DataArr) do
 			SCA_DataLoad(i,k[1][i+1],k[2])
@@ -321,7 +322,7 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("L\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 		
@@ -375,24 +376,35 @@ for i = 0, 6 do -- 각플레이어
 		CIfEnd()
 		CMov(FP,PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 
-		CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,nil, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
+		CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,80+i, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
 		CMov(FP,PUnitPtr[i+1],Nextptrs)
 	CIfEnd()
 	
 
+	if TestStart == 1 then
+		local EXPAcc = CreateWar(FP)
+		f_LAdd(FP, EXPAcc, EXPAcc, "10000000000")
+		f_LAdd(FP, PEXP[i+1], PEXP[i+1], EXPAcc)
+	end
 	
 	local LevelUpJump = def_sIndex()
 	local LIndex = CreateVar(FP) 
+	local PrevLMulW = CreateWar2(FP,nil,nil,"10")
+	local NextLMulW = CreateWar(FP)
 	CJumpEnd(FP, LevelUpJump)
-	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],49999,AtMost)},{AddV(PLevel[i+1],1),AddV(CT_PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
+	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],99999,AtMost)},{AddV(PLevel[i+1],1),AddV(CT_PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
 
 	ConvertLArr(FP, LIndex, _Sub(PLevel[i+1], 1), 8)
-	f_LRead(FP, LArrX({EXPArr},LIndex), TempReadW, nil, 1)
-	f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], TempReadW)
+	f_LRead(FP, LArrX({EXPArr},LIndex), NextLMulW, nil, 1)
+	f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], NextLMulW)
 	
-	ConvertLArr(FP, LIndex, _Sub(PLevel[i+1], 2), 8)
-	f_LRead(FP, LArrX({EXPArr},LIndex), TempReadW, nil, 1)
-	f_LAdd(FP, CurEXP[i+1], CurEXP[i+1], TempReadW)
+	--ConvertLArr(FP, LIndex, _Sub(PLevel[i+1], 2), 8)
+	--f_LRead(FP, LArrX({EXPArr},LIndex), TempReadW, nil, 1)
+	f_LAdd(FP, CurEXP[i+1], CurEXP[i+1], PrevLMulW)
+	f_LMov(FP, PrevLMulW, NextLMulW)
+
+	
+	
 	
 
 
@@ -412,21 +424,25 @@ for i = 0, 6 do -- 각플레이어
 
 	
 	local CTSwitch = CreateCcode()
-	NIf(FP,{CD(LoadCheck[i+1],1),Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetCD(CTSwitch,1)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-		DoActions(FP,SetDeaths(i, SetTo, 1, 14))--저장
-		CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
-		CMov(FP,PLevelBak,PLevel[i+1])
-		CMov(FP,PLevel[i+1],1)
-		CIfEnd()
-		for j,k in pairs(SCA_DataArr) do
-			SCA_DataSave(i,k[1][i+1],k[2])
-		end
-		CIf(FP,Deaths(i,AtLeast,1,100))
-		CMov(FP,PLevel[i+1],PLevelBak)
-		CIfEnd()
+	TriggerX(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetDeaths(i, SetTo, 1,14)},{preserved})
+	
+	NIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),},{}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
+	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
+	CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
+	CMov(FP,PLevelBak,PLevel[i+1])
+	CMov(FP,PLevel[i+1],1)
+	CIfEnd()
+	for j,k in pairs(SCA_DataArr) do
+		SCA_DataSave(i,k[1][i+1],k[2])
+	end
+	CIf(FP,Deaths(i,AtLeast,1,100))
+	CMov(FP,PLevel[i+1],PLevelBak)
+	CIfEnd()
 	NIfEnd()
 
-	CIf(FP,{CD(LoadCheck[i+1],1),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
+
+	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
 	--if TestStart == 1 then
 	--	f_LAdd(FP,Credit[i+1],Credit[i+1],"1") -- 진입했냐?
 	--end
@@ -459,7 +475,7 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
+		DisplayText("S\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);})
 	CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
@@ -469,11 +485,6 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 
 	
-	if TestStart == 1 then
-		--EXPAcc = CreateWar(FP)
-		--f_LAdd(FP, EXPAcc, EXPAcc, "10000000000")
-		--f_LAdd(FP, PEXP[i+1], PEXP[i+1], EXPAcc)
-	end
 
 
 
@@ -520,7 +531,7 @@ for i = 0, 6 do -- 각플레이어
 	for j,k in pairs(FirstReward) do
 		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetCp(i),DisplayText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ"), 4),SetCp(FP)})
 		
-		f_LAdd(FP, PEXP[i+1], PEXP[i+1], tostring(k[2]))
+		f_LAdd(FP, PEXP[i+1], PEXP[i+1], tostring(k[2]*100))
 
 		TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)}) -- 자동저장
 		CIfEnd()
@@ -563,21 +574,21 @@ for i = 0, 6 do -- 각플레이어
 TriggerX(FP, {CV(TempO[i+1],10000000,AtLeast),LocalPlayerID(i)}, {
 	SetCp(i),
 	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+	DisplayText("O\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 	SetMemory(0xCDDDCDDC,SetTo,1);})
 
 TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	SetCp(i),
 	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+	DisplayText("G\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 	SetMemory(0xCDDDCDDC,SetTo,1);})
 
 TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	SetCp(i),
 	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-	DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+	DisplayText("X\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 	SetMemory(0xCDDDCDDC,SetTo,1);})
 
@@ -673,21 +684,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CallTrigger(FP,Call_BtnInit,{})
 
 
-	CIf(FP,{CD(LoadCheck[i+1],1),CV(RSArr[1][i+1],0)})
-		for j = 1,4 do--랜덤값 정렬
-			CMov(FP,RSArr[j][i+1],RSArr[j+1][i+1])
-		end
-		f_Rand(FP,RSArr[5][i+1])--랜덤값 재생성
-		
-		for j,k in pairs(RSArr) do -- 랜덤 0인거 검사
-			CIf(FP,{CV(k[i+1],0)})
-				f_Rand(FP,k[i+1])
-			CIfEnd()
-		end
-	CIfEnd()
-
-	CIf(FP,{CD(LoadCheck[i+1],1),CV(RSArr[6][i+1],0)})
-		for j = 6,9 do--랜덤값 정렬
+	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(RSArr[1][i+1],0)})
+		for j = 1,9 do--랜덤값 정렬
 			CMov(FP,RSArr[j][i+1],RSArr[j+1][i+1])
 		end
 		f_Rand(FP,RSArr[10][i+1])--랜덤값 재생성
@@ -944,12 +942,9 @@ Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
 	AddV(IncomeMax[i+1],9),--사냥터 유닛수 9 증가
 	AddV(General_Upgrade[i+1],5),--공격력 50%
 	AddV(Stat_EXPIncome[i+1],1), --추가EXP +10%
-	
-},{preserved})
-Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast),CD(BossRewardEnable,1)},{
 	AddV(B_PTicket[i+1],5), --유닛 판매권 5개
 	
-})
+},{preserved})
 Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
 	AddV(B_PCredit[i+1], 150000)
 })

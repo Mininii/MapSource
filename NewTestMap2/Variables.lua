@@ -11,6 +11,26 @@ function Include_Vars()
 	ULimitArr = {500,350,300,250,200,180,150}
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
+	SCA = {}
+	SCA.GlobalCheck = CreateCcode()
+	SCA.LoadCheckArr = CreateCcodeArr(7)
+	VoidAreaOffset = 0x58f610
+	VoidAreaAlloc = 0x58f60C
+	VoidAreaLimit = 0x5967F0
+	SCA.GlobalVarArr = CreateVarArr(19, FP)
+	SCA.GlobalData = CreateVoidArr(19)
+	SCA.Year = CreateVoid()
+	SCA.Month = CreateVoid()
+	SCA.Hour = CreateVoid()
+	SCA.Day = CreateVoid()
+	SCA.Week = CreateVoid()
+	SCA.CheckTime = CreateCcode()
+	SCA.GLoadCmp = CreateCcode()
+	SCA.YearV = CreateVar(FP)
+	SCA.MonthV = CreateVar(FP)
+	SCA.HourV = CreateVar(FP)
+	SCA.DayV = CreateVar(FP)
+	SCA.WeekV = CreateVar(FP)
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
 	MSQC_KeySet("O",494) -- MSQC eds텍스트 입력
@@ -141,6 +161,7 @@ function Include_Vars()
 	--General
 	iv.Time = CreateVar(FP)
 	iv.Time2 = CreateVar(FP)
+	iv.Time3 = CreateVar(FP)
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
@@ -252,6 +273,7 @@ function Include_Vars()
 	iv.CheatDetect = CreateCcode()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
+	iv.PartyBonus2 = CreateCcode()
 	iv.BossLV6Flag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
@@ -380,7 +402,7 @@ function Include_Vars()
 	--	EXPArr[i] = 10+((i-1)*(i*3))
 	--end
 
-	EXPArr = CreateLArr(50000, FP)
+	EXPArr = CreateLArr(1000000, FP)
 	--EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
@@ -532,11 +554,14 @@ else
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 FirstReward = {
-	{20,500},
-	{22,7000},
-	{24,20000},
-	{26,80000},
+	{20,5},
+	{22,70},
+	{24,200},
+	{26,800},
 }
+for i = 34,40 do
+	table.insert(FirstReward, {LevelUnitArr[i][1],LevelUnitArr[i][4]})
+end
 FirstReward2 = {
 	{40,10000},
 	{41,30000},

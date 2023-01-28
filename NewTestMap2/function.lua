@@ -1043,7 +1043,7 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
@@ -1066,7 +1066,7 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
@@ -1096,7 +1096,7 @@ function WarCheatTestX(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
@@ -1184,7 +1184,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 				TriggerX(FP,{LocalPlayerID(p)},{{
 					SetCp(p),
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+					DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 					DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);}})
 			end
@@ -1192,7 +1192,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 			TriggerX(FP,{LocalPlayerID(Player)},{{
 				SetCp(Player),
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 				DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 				SetMemory(0xCDDDCDDC,SetTo,1);}})
 				

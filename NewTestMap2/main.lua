@@ -35,9 +35,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x19ver\x07. \x042\x07.\x0406"
+VerText = "\x19ver\x07. \x042\x07.\x0407"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
@@ -73,6 +73,7 @@ CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
 CT_Prev()
 LeaderBoard()
+Operator()
 System()
 Interface()
 Shop()

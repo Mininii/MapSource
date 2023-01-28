@@ -73,10 +73,10 @@ function GameDisplay()
         CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
         CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
         
-        CS__ItoCustom(FP,SVA1(Str1,4),LevelLoc,nil,nil,{10,5},1,nil,"\x1B0",0x1B,nil, LVData)
+        CS__ItoCustom(FP,SVA1(Str1,4),LevelLoc,nil,nil,{10,6},1,nil,"\x1B０",0x1B,nil, LVData)
         local Tabkey = KeyToggleFunc2("TAB","LCTRL")
         CIfX(FP,{CD(Tabkey,1)})--수치표기
-        CIfX(FP,{CV(LevelLoc,49999,AtMost)})
+        CIfX(FP,{CV(LevelLoc,99999,AtMost)})
         CElseX({TSetNWar(ExpLoc, SetTo, "0"),TSetNWar(TotalExpLoc, SetTo, "0")})
         CIfXEnd()
         CA__lItoCustom(SVA1(Str1,16),ExpLoc,nil,nil,{10,14},nil,nil,"\x040",{0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
@@ -85,7 +85,7 @@ function GameDisplay()
         CElseX()--퍼센트표기
         local CurExpTmp = CreateVar(FP)
         local CurExpTmp2 = CreateWar(FP)
-        CIfX(FP,{CV(LevelLoc,49999,AtMost)})
+        CIfX(FP,{CV(LevelLoc,99999,AtMost)})
         f_LMul(FP, CurExpTmp2,ExpLoc, "20")
         f_Cast(FP, {CurExpTmp,0}, _LDiv(CurExpTmp2,TotalExpLoc), nil, nil, 1)
         CElseX({SetV(CurExpTmp,20)})
@@ -448,7 +448,6 @@ function GameDisplay()
             "\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
             "\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
             "\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1715만 크레딧",
-            "\x045단계 보스 보상인 \x17유닛 판매권\x04은\x07 \x082인이상 플레이 \x04or \x07멀티 1시간 유지\x04한 후 \x08솔로 플레이 \x04시 획득 가능합니다.",
             "\x046단계 개인보스는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
         },
     
@@ -496,5 +495,17 @@ function GameDisplay()
     CIfEnd()
     
     CMov(FP,0x6509B0,FP)
+    
+	if TestStart == 1 then
+		local TempV = CreateVar(FP)
+		for i = 0, 6 do
+			f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
+			DisplayPrint(i, {"SCA_LastMessage = ",TempV,"   Month : ",SCA.MonthV,"   Year : ",SCA.YearV})
+			DisplayPrint(i, {"Hour = ",SCA.HourV,"   Day : ",SCA.DayV,"   Week : ",SCA.WeekV})
+
+		end
+	end
+
+
     FixText(FP, 2)    
 end
