@@ -1,11 +1,6 @@
     EXPArr = {}
-	for i = 1, 50000 do
+	for i = 1, 1000000 do
         local XI = 3
-        if i >=40000 then XI = 10000
-        elseif i >=30000 then XI = 1000
-        elseif i >=20000 then XI = 100
-        elseif i >=10000 then XI = 10
-        end
 		EXPArr[i] = 10+((i-1)*(i*XI))
 	end
 
@@ -19,32 +14,35 @@
 
     end
 
-    
+    exp(999999)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     end
-    tt = exp(1389)
+    tt = exp(1730)
 --    
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
-    --º¹±¸°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù. ÇÏÁö¸¸ ÇöÀç °ÔÀÓÁßÀÏ °æ¿ì ÀúÀåµ¥ÀÌÅÍ°¡ µ¤¾î½áÁö¹Ç·Î º¹±¸°¡ µÇÁö ¾Ê½À´Ï´Ù. È®ÀÎºÎÅ¹µå¸³´Ï´Ù.
-
-    function RandTest()
-    RandTable = {
-        2349907629,
-2039485187,
-591859665,
-3789345345,
-4037257525,
-690715754,
-1905323560,
-499873098,
-2817004433,
-2108592098
-    }
-    for j,k in pairs(RandTable) do
-        print(k%10000)
+    --ë³µêµ¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. í•˜ì§€ë§Œ í˜„ì¬ ê²Œì„ì¤‘ì¼ ê²½ìš° ì €ì¥ë°ì´í„°ê°€ ë®ì–´ì¨ì§€ë¯€ë¡œ ë³µêµ¬ê°€ ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤. í™•ì¸ë¶€íƒë“œë¦½ë‹ˆë‹¤.
+    math.randomseed( os.time() )
+    function RandTest(n)
+        local t = {0,0,0,0,0,0,0,0,0,0}
+        local t2={0,0,0,0,0,0,0,0,0,0}
+        for i = 1, n do
+            local k = bit32.band(math.random(0xFFFFFFFF),0xFFFFFFFF)
+            local ptr = (((k)%10000)//1000)+1 -- ê°•í™”ì„±ê³µì—¬ë¶€
+            local ptr2 = (((bit32.rshift(k,16))%10000)//1000)+1 -- ìœ ì§€ ì„±ê³µ ì‹¤íŒ¨ì—¬ë¶€
+            --print(k,ptr,ptr2)
+            t[ptr] = t[ptr]+1
+            t2[ptr2] = t2[ptr2]+1
+        end        
+        print("ê°•í™” ì‹¤íŒ¨, ì„±ê³µê°’")
+        for j,k in pairs(t) do
+            print(((j-1)*1000).."~"..tostring(j*1000).." : "..k)
+        end
+        print("ìœ ì§€ ì„±ê³µ, ì‹¤íŒ¨ê°’")
+        for j,k in pairs(t2) do
+            print(((j-1)*1000).."~"..tostring(j*1000).." : "..k)
+        end
     end
-    end
-    RandTest()
+    --RandTest(500000)
