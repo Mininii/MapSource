@@ -10,6 +10,12 @@ function System()
 	CMov(FP,Du,Dy)
 	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP),AddV(Time3,DtP)},1)--맨처음 시간값 튐 방지
 	TriggerX(FP,{},{AddV(Time,240000),})
-	Trigger2X(FP, {CV(Time3,60000*5)}, {RotatePlayer({DisplayTextX(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),SetV(Time3, 0),SetCD(SCA.GlobalCheck,0),SetV(SCA.GlobalData[1],0),SetCD(SCA.GLoadCmp,0)}, {preserved})
+	Trigger2X(FP, {CV(Time3,60000*5)}, {RotatePlayer({DisplayTextX(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),SetV(Time3, 0),
+	SetCD(SCA.GlobalCheck,0),
+	SetCD(SCA.GlobalLoadFlag,0),
+	SetV(SCA.GlobalVarArr[1],0),
+	SetV(SCA.MonthV,0),
+	SetMemory(SCA.Month, SetTo,0),
+	SetMemory(SCA.GlobalData[1],SetTo,0)}, {preserved})
 	--CallTriggerX(FP,Call_CheckCT,{CD(CTTimer,24,AtLeast)},{SetCD(CTTimer,0)})--유닛 변조 감지
 end

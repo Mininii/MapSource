@@ -13,6 +13,7 @@ function Include_Vars()
 	ULimitV2 = CreateVar(FP)
 	SCA = {}
 	SCA.GlobalCheck = CreateCcode()
+	SCA.GlobalLoadFlag = CreateCcode()
 	SCA.LoadCheckArr = CreateCcodeArr(7)
 	VoidAreaOffset = 0x58f610
 	VoidAreaAlloc = 0x58f60C

@@ -104,7 +104,16 @@ function beforeTriggerExec(){
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,2);
 		}
+		
+		if (sca.GetLastMessage() == 4){
+			SetDeathsX(CurrentPlayer,SetTo,4,1,4);
 		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,4);
+		}
+		
+		}
+		
 
 		SetDeaths(CurrentPlayer,SetTo,0,2);//신호 초기화
 		
