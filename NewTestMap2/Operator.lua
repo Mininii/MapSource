@@ -6,7 +6,7 @@ function Operator()
 		return SetDeathsX(CP, SetTo, 0, 1,3)
 	end
 	function SCA.LoadCmp(CP)
-		return DeathsX(CP, Exactly, 3, 1,7)
+		return DeathsX(CP, Exactly, 4, 1,4)
 	end
 	--3 사용가능
 	--그외 사용불가
@@ -51,10 +51,8 @@ function Operator()
 	CIfEnd()
 	
 	TriggerX(FP,{CDX(SCA.GlobalLoadFlag,3,3),CD(SCA.GlobalCheck,2)},{SetCD(SCA.GlobalCheck,3)},{preserved})
-	CIf(FP, {TTOR({Memory(SCA.Month, AtMost, 0),Memory(SCA.GlobalData[1],AtMost,0)}),CD(SCA.Timer,24*30,AtLeast)}, {
-		
-	})
-	DoActionsX(FP, {
+	CIf(FP, {TTOR({Memory(SCA.Month, AtMost, 0),Memory(SCA.GlobalData[1],AtMost,0)}),CD(SCA.Timer,24*30,AtLeast)})
+	DoActions2X(FP, {
 		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06Global Data Load Faliure. Try Again..."), 4)}, Force1, FP),SetV(iv.Time3, 0),
 		SetCD(SCA.GlobalCheck,0),
 		SetCD(SCA.GlobalLoadFlag,0),
