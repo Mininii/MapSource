@@ -492,6 +492,15 @@ function SetCD(Code,Value)
 		return TSetCDeaths(FP,SetTo,Value,Code)
 	end
 end
+function SetCDX(Code,Value,Mask)
+	if Value == nil then Value = 1 end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCDeathsX(FP,SetTo,Value,Code,Mask)
+	else
+		return TSetCDeathsX(FP,SetTo,Value,Code,Mask)
+	end
+end
 function AddV(V,Value)
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -530,7 +539,17 @@ function CD(Code,Value,Type)
 		return TCDeaths(FP,Type,Value,Code)
 	end
 end
-function CV(V,Value,Type)
+function CDX(Code,Value,Mask,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CDeathsX(FP,Type,Value,Code,Mask)
+	else
+		return TCDeathsX(FP,Type,Value,Code,Mask)
+	end
+end
+function CV(V,Value,Mask,Type)
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
