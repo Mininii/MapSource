@@ -37,7 +37,7 @@ end
 
 VerText = "\x19ver\x07. \x042\x07.\x0407"
 
-TestSet(2)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
@@ -48,7 +48,7 @@ SpeedTestMode = 0
 end
 FP = P8
 LimitVer = 16
-StatVer = 6
+StatVer = 7
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)

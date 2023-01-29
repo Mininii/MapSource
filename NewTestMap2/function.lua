@@ -1460,7 +1460,5 @@ function CreateDataPV(DataName,SCADeathData)
 	if SCADeathData ~= nil then
 		table.insert(SCA_DataArr,{Ret,SCADeathData})
 	end
-	iv.DataName = Ret
-	ct.DataName = Ret2
-	return Ret
+	return Ret,Ret2
 end

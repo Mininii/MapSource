@@ -79,7 +79,7 @@ else
 	end
 end
 CIfEnd()
-Trigger2X(FP, {CD(BossLV6Flag,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000.").."\n"..StrDesignX("\x07이제부터 1인 진행으로 파티 버프가 활성화됩니다."), 4)}, Force1,FP)})
+Trigger2X(FP, {CD(BossLV6Flag,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)

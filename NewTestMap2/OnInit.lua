@@ -340,7 +340,7 @@ iTblJump = def_sIndex()
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
 	CForEnd()
 
-	CFor(FP, 0, 100000, 1)
+	CFor(FP, 0, LevelLimit, 1)
 	CI = CForVariable()
 	LIndex = CreateVar(FP)
 	LMulW = CreateWar2(FP,nil,nil,"3")

@@ -315,6 +315,22 @@ function Install_CallTriggers()
 
 	
 	SetCallEnd()
+
+	
+	Call_SetEPerStr = SetCallForward()
+	SetCall(FP)
+	EVarArr1 = CreateVarArr(6, FP)
+	GEVar = CreateVar(FP)
+	EVarArr2 = {EVarArr1[1],EVarArr1[2],EVarArr1[3]}
+	EVarArr3 = {EVarArr1[4],EVarArr1[5],EVarArr1[6]}
+	for i = 1, 6 do
+		Byte_NumSet(GEVar,EVarArr1[i],10^(6-i),1,0x30)
+	end
+	SetEPerStr(EVarArr1)
+
+	SetCallEnd()
+
+	
 	
 	Call_CT = SetCallForward()
 	SetCall(FP)
@@ -330,7 +346,7 @@ function Install_CallTriggers()
 
 	local CheatTestJump = def_sIndex()
 	CJumpEnd(FP, CheatTestJump)
-	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,99999,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
+	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,LevelLimit-1,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
 	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
 	f_LRead(FP, LArrX({EXPArr},CTLIndex), CT_NextLMulW, nil, 1)
 	f_LAdd(FP, CTTotalExp, CTTotalExp, CT_NextLMulW)
@@ -545,11 +561,7 @@ function Install_CallTriggers()
 						Print_13X(FP, GCP)
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 					CIfXEnd()
-					CIfX(FP,{CD(iv.PartyBonus2,0),CV(iv.PCheckV,2,AtLeast),CV(iv.GeneralPlayTime,3*24*60*60,AtMost)})
-						CMov(FP,CTimeV,_Div(_Sub(_Mov(3*24*60*60),iv.GeneralPlayTime), 24))
-						CallTrigger(FP, Call_ConvertTime)
-						DisplayPrint(GCP, {"\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-					CElseIfX({CD(iv.PartyBonus,1)})
+					CIfX(FP,{CD(iv.PartyBonus,2,AtLeast)})
 						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
 					CElseX()
 						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x08활성화 불가능.",4)})
@@ -747,23 +759,14 @@ function Install_CallTriggers()
 										DisplayPrint(GCP, {"\x13\x07『 \x1C경험치 증가량\x04이 상승하였습니다. \x04증가 후 \x04: \x1C+ ",TempV,"% \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,6)},{AddV(GetTotalEPerData,1)})
-										local E1VarArr1 = CreateVarArr(6,FP)
-										E5VarArr1 = {E1VarArr1[1],E1VarArr1[2],E1VarArr1[3]}
-										E5VarArr2 = {E1VarArr1[4],E1VarArr1[5],E1VarArr1[6]}
-										CMov(FP,TempV,_Mul(GetTotalEPerData,250))
-										for i = 1, 6 do
-										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-										end
-										SetEPerStr(E1VarArr1)
-										DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+										CMov(FP,GEVar,TempV)
+										CallTrigger(FP, Call_SetEPerStr)
+										DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
-										CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
-										for i = 1, 6 do
-										Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-										end
-										SetEPerStr(E1VarArr1)
-										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+										CMov(FP,GEVar,TempV)
+										CallTrigger(FP, Call_SetEPerStr)
+										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이제부터 \x07고유 유닛\x04으로 \x0FLV.2 \x04사냥터에 입장할 수 있습니다."))})
 									CIfEnd()
@@ -805,30 +808,20 @@ function Install_CallTriggers()
 				CMovX(FP,GetTotalEPerData,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetTotalEper4Data,VArrX(GetVArray(iv.CS_TotalEper4[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetDPSLVData,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4))
-				
 				CMov(FP,TempV,_rShift(_SHRead(ArrX(PUnitCoolArr,GetCooldownData)), 8))
 				DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격속도 - Cooldown : \x07",TempV," \x07』"})
-
 				CMov(FP,TempV,_Mul(GetAtkData,6500))
 				DisplayPrint(GCP, {"\x07『 \x07고유 유닛\x04의 공격력 - \x08Damage \x04: \x07",TempV," \x07』"})
-
 				CMov(FP,TempV,_Mul(GetEXPData,20))
 				DisplayPrint(GCP, {"\x07『 \x1C경험치 증가량\x04 : \x1C+ ",TempV,"% \x07』"})
-
 				CMov(FP,TempV,_Mul(GetTotalEPerData,250))
-				for i = 1, 6 do
-				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-				end
-				SetEPerStr(E1VarArr1)
-
-				DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화 확률 \x04증가량 \x04: \x0F+ ",E5VarArr1,".",E5VarArr2,"%p \x07』"})
-
+				CMov(FP,GEVar,TempV)
+				CallTrigger(FP, Call_SetEPerStr)
+				DisplayPrint(GCP, {"\x07『 \x0F+1 \x07강화 확률 \x04증가량 \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x07』"})
 				CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
-				for i = 1, 6 do
-				Byte_NumSet(TempV,E1VarArr1[i],10^(6-i),1,0x30)
-				end
-				SetEPerStr(E1VarArr1)
-				DisplayPrint(GCP, {"\x07『 \x08특수 \x07강화 확률\x04 증가량 : \x07+ \x08",E5VarArr1,".",E5VarArr2,"%p \x07』"})
+				CMov(FP,GEVar,TempV)
+				CallTrigger(FP, Call_SetEPerStr)
+				DisplayPrint(GCP, {"\x07『 \x08특수 \x07강화 확률\x04 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
 				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
 				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
 				
@@ -888,6 +881,8 @@ function Install_CallTriggers()
 		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
 		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
+		{iv.Stat_TotalEPerEx2[1],iv.S_TotalEPerEx2Loc},
+		{iv.Stat_TotalEPerEx3[1],iv.S_TotalEPerEx3Loc},
 		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
 		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
 		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
@@ -933,6 +928,7 @@ function Install_CallTriggers()
 
 
 	SetCallEnd()
+
 if TestStart == 1 then
 	
 end

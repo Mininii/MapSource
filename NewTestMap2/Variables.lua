@@ -5,6 +5,7 @@ function Include_Vars()
 		end
 	end
 	--System
+	LevelLimit = 100000
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
@@ -15,11 +16,11 @@ function Include_Vars()
 	SCA.GlobalCheck = CreateCcode()
 	SCA.GlobalLoadFlag = CreateCcode()
 	SCA.LoadCheckArr = CreateCcodeArr(7)
-	VoidAreaOffset = 0x58f610
-	VoidAreaAlloc = 0x58f60C
+	VoidAreaOffset = 0x58f60C
+	VoidAreaAlloc = 0x58f60C-4
 	VoidAreaLimit = 0x5967F0
-	SCA.GlobalVarArr = CreateVarArr(19, FP)
-	SCA.GlobalData = CreateVoidArr(19)
+	SCA.GlobalVarArr = CreateVarArr(20, FP)
+	SCA.GlobalData = CreateVoidArr(20)
 	SCA.Year = CreateVoid()
 	SCA.Month = CreateVoid()
 	SCA.Hour = CreateVoid()
@@ -211,6 +212,8 @@ function Include_Vars()
 	iv.TotalEPer4Loc = CreateVar(FP)
 	iv.S_TotalEPerLoc = CreateVar(FP)
 	iv.S_TotalEPerExLoc = CreateVar(FP)
+	iv.S_TotalEPerEx2Loc = CreateVar(FP)
+	iv.S_TotalEPerEx3Loc = CreateVar(FP)
 	iv.S_TotalEPer2Loc = CreateVar(FP)
 	iv.S_TotalEPer3Loc = CreateVar(FP)
 	iv.S_TotalEPer4Loc = CreateVar(FP)
@@ -403,7 +406,7 @@ function Include_Vars()
 	--	EXPArr[i] = 10+((i-1)*(i*3))
 	--end
 
-	EXPArr = CreateLArr(1000000, FP)
+	EXPArr = CreateLArr(LevelLimit+1, FP)
 	--EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
@@ -470,14 +473,14 @@ function Include_Vars()
 	PushLevelUnit(25+4,25000,60000/2,17,10,24,30,59,1,1)--알랜
 	PushLevelUnit(25+5,25000,102000/2,23,12,48,100,59,1)--듀크
 	PushLevelUnit(25+6,25000,188000/2,53,39,24,80,59)--헌터
-	PushLevelUnit(25+7,20000,300000/2,52,51,24,150,59)--언클린
-	PushLevelUnit(25+8,20000,500000/2,69,53,72,700,59)--셔틀
-	PushLevelUnit(25+9,20000,1000000/2,41,43,24,350,59)--드론
-	PushLevelUnit(25+10,20000,1600000/2,40,42,48,1200,59)--곰
+	PushLevelUnit(25+7,20000,350000/2,52,51,24,150,59)--언클린
+	PushLevelUnit(25+8,20000,750000/2,69,53,72,700,59)--셔틀
+	PushLevelUnit(25+9,20000,1500000/2,41,43,24,350,59)--드론
+	PushLevelUnit(25+10,20000,3000000/2,40,42,48,1200,59)--곰
 
 
 
-	PushLevelUnit(25+11,16000,4000000/2,10,26,72,1000,59)--파벳영웅 3타
+	PushLevelUnit(25+11,16000,5000000/2,10,26,72,1000,59)--파벳영웅 3타
 	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--제라툴
 	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--노라드
 	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--다니모스
@@ -528,6 +531,7 @@ function Include_Vars()
 		{45,"40000"},
 		{49,"130000"},
 		{68,"3222"},
+		--{68,"32222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -555,13 +559,13 @@ else
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 FirstReward = {
-	{20,5},
-	{22,70},
-	{24,200},
-	{26,800},
+	{20,500},
+	{22,7000},
+	{24,20000},
+	{26,80000},
 }
 for i = 34,40 do
-	table.insert(FirstReward, {LevelUnitArr[i][1],LevelUnitArr[i][4]})
+	table.insert(FirstReward, {LevelUnitArr[i][1],LevelUnitArr[i][4]*10})
 end
 FirstReward2 = {
 	{40,10000},
@@ -580,10 +584,12 @@ FirstReward2 = {
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000
+	Cost_Stat_TotalEPerEx2 = 2500
+	Cost_Stat_TotalEPerEx3 = 5000
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
-	Cost_Stat_BreakShield = 150
+	Cost_Stat_BreakShield = 250
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {

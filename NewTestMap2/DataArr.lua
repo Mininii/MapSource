@@ -149,4 +149,7 @@ function DataArr()
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}
+
+	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",145)
+	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
 end

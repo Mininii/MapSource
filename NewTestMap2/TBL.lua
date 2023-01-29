@@ -313,33 +313,33 @@ function TBL()
     CSub(FP,TotalEPerLoc,_Mov(100000),_Add(TotalEPer2Loc,TotalEPer3Loc))
     
     CIfEnd()
-    
-    
-    local E1VarArr = CreateVarArr(6, FP)
-    local E2VarArr = CreateVarArr(6, FP)
-    local E3VarArr = CreateVarArr(6, FP)
-    local E4VarArr = CreateVarArr(6, FP)
-    for i = 1, 6 do
-        Byte_NumSet(TotalEPerLoc,E3VarArr[i],10^(6-i),1,0x30)
-        Byte_NumSet(TotalEPer2Loc,E2VarArr[i],10^(6-i),1,0x30)
-        Byte_NumSet(TotalEPer3Loc,E1VarArr[i],10^(6-i),1,0x30)
-        Byte_NumSet(TotalEPer5Loc,E4VarArr[i],10^(6-i),1,0x30)
-    end
-    SetEPerStr(E1VarArr)
-    SetEPerStr(E2VarArr)
-    SetEPerStr(E3VarArr)
-    SetEPerStr(E4VarArr)
-    
-    
+
+
+
+
+    CMov(FP,GEVar,TotalEPer3Loc)
+    CallTrigger(FP, Call_SetEPerStr)
     for i = 0, 2 do
-        CDoActions(FP,{TBwrite(_Add(Etbl,18+5+i),SetTo,E1VarArr[i+1])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,18+5+4+i),SetTo,E1VarArr[i+4])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,35+5+i),SetTo,E2VarArr[i+1])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,35+5+4+i),SetTo,E2VarArr[i+4])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,52+5+i),SetTo,E3VarArr[i+1])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,52+5+4+i),SetTo,E3VarArr[i+4])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,72+5+i),SetTo,E4VarArr[i+1])})
-        CDoActions(FP,{TBwrite(_Add(Etbl,72+5+4+i),SetTo,E4VarArr[i+4])})
+        CDoActions(FP,{TBwrite(_Add(Etbl,18+5+i),SetTo,EVarArr1[i+1])})
+        CDoActions(FP,{TBwrite(_Add(Etbl,18+5+4+i),SetTo,EVarArr1[i+4])})
+    end
+    CMov(FP,GEVar,TotalEPer2Loc)
+    CallTrigger(FP, Call_SetEPerStr)
+    for i = 0, 2 do
+        CDoActions(FP,{TBwrite(_Add(Etbl,35+5+i),SetTo,EVarArr1[i+1])})
+        CDoActions(FP,{TBwrite(_Add(Etbl,35+5+4+i),SetTo,EVarArr1[i+4])})
+    end
+    CMov(FP,GEVar,TotalEPerLoc)
+    CallTrigger(FP, Call_SetEPerStr)
+    for i = 0, 2 do
+        CDoActions(FP,{TBwrite(_Add(Etbl,52+5+i),SetTo,EVarArr1[i+1])})
+        CDoActions(FP,{TBwrite(_Add(Etbl,52+5+4+i),SetTo,EVarArr1[i+4])})
+    end
+    CMov(FP,GEVar,TotalEPer5Loc)
+    CallTrigger(FP, Call_SetEPerStr)
+    for i = 0, 2 do
+        CDoActions(FP,{TBwrite(_Add(Etbl,72+5+i),SetTo,EVarArr1[i+1])})
+        CDoActions(FP,{TBwrite(_Add(Etbl,72+5+4+i),SetTo,EVarArr1[i+4])})
     end
 
     

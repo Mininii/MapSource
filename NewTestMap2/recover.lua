@@ -19,7 +19,7 @@
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     end
-    tt = exp(5967)
+    tt = exp(80000)
 --    
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
