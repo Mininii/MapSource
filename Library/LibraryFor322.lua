@@ -549,7 +549,7 @@ function CDX(Code,Value,Mask,Type)
 		return TCDeathsX(FP,Type,Value,Code,Mask)
 	end
 end
-function CV(V,Value,Mask,Type)
+function CV(V,Value,Type)
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
