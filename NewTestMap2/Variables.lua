@@ -146,7 +146,7 @@ function Include_Vars()
 	iv.PTimeV = CreateVarArr(7,FP)
 	iv.General_Upgrade = CreateVarArr(7,FP)
 	iv.ResetStat = CreateVarArr(7,FP)
-	iv.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
+	iv.NextOre = CreateVarArr2(7,100,FP) -- 다음 미네랄
 	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	iv.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
@@ -255,6 +255,8 @@ function Include_Vars()
 	iv.PUnitLevelLoc = CreateVar(FP)
 	iv.PUnitClassLoc = CreateVar(FP)
 	iv.VaccItemLoc = CreateVar(FP)
+	iv.SCCoolLoc = CreateVar(FP)
+	iv.PETicketLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -278,7 +280,7 @@ function Include_Vars()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
 	iv.PartyBonus2 = CreateCcode()
-	iv.BossLV6Flag = CreateCcode()
+	iv.PBossClearFlag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 
@@ -321,7 +323,7 @@ function Include_Vars()
 	ct.PTimeV = CreateVarArr(7,FP)
 	ct.General_Upgrade = CreateVarArr(7,FP)
 	ct.ResetStat = CreateVarArr(7,FP)
-	ct.NextOre = CreateVarArr2(7,50,FP) -- 다음 미네랄
+	ct.NextOre = CreateVarArr2(7,100,FP) -- 다음 미네랄
 	ct.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	ct.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	ct.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
@@ -506,14 +508,14 @@ function Include_Vars()
 	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--울트라
 	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--디파
 
-	SetUnitAbility(88,114,5,35,100,58,1,nil,60,0,3*32) -- 기본유닛
+	SetUnitAbility(88,114,255,37,100,58,1,nil,60,0,3*32) -- 기본유닛
 	
 	table.insert(MCTCondArr,MemoryB(0x6616E0+88,Exactly,130))
 	table.insert(MCTCondArr,MemoryB(0x6636B8+88,Exactly,114))
 	table.insert(MCTCondArr,MemoryB(0x6637A0 + (88),Exactly,0)) 
-	table.insert(MCTCondArr,MemoryW(0x656EB0+(114 *2),Exactly,35)) 
+	table.insert(MCTCondArr,MemoryW(0x656EB0+(114 *2),Exactly,37)) 
 	table.insert(MCTCondArr,MemoryW(0x657678+(114 *2),Exactly,100)) 
-	table.insert(MCTCondArr,MemoryB(0x656FB8+114,Exactly,5)) 
+	table.insert(MCTCondArr,MemoryB(0x656FB8+114,Exactly,255)) 
 	table.insert(MCTCondArr,MemoryB(0x6571D0+114,Exactly, 58)) 
 	table.insert(MCTCondArr,MemoryB(0x663150 + (88),Exactly,4)) 
 	table.insert(MCTCondArr,MemoryX(0x664080 + (88*4),Exactly,0+0x20000000,4+8+0x20000000)) 
@@ -531,7 +533,7 @@ function Include_Vars()
 		{45,"40000"},
 		{49,"130000"},
 		{68,"3222"},
-		--{68,"32222"},
+		{34,"32222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -574,8 +576,14 @@ FirstReward2 = {
 	{43,150000},
 	{44,1000000},
 }
-	OreDPS = {100,1000,10000,100000,500000,1000000,0}
-	OreDPSM = {2,4,8,16,32,64}
+
+	NBagArr = {}
+	for i = 0,6 do
+		table.insert(NBagArr,NBag(FP, 1, 21))
+	end
+
+	OreDPS = {100,1000,10000,100000,500000,1000000,5000000}
+	OreDPSM = {2,4,8,16,32,64,128}
 	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
@@ -590,6 +598,7 @@ FirstReward2 = {
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
 	Cost_Stat_BreakShield = 250
+	Cost_Stat_SCCool = 50
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {

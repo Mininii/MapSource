@@ -152,4 +152,7 @@ function DataArr()
 
 	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",145)
 	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
+	iv.Stat_SCCool,ct.Stat_SCCool = CreateDataPV("Stat_SCCool",147)
+	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",148)
+	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("PETicket",149)
 end

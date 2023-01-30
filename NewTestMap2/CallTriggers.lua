@@ -41,6 +41,13 @@ function Install_CallTriggers()
 		
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
+	CIf(FP,{CV(SUnitID,88)})
+	for i = 0, 6 do
+		CIf(FP,{CV(SPlayer,i)})
+		NAppend(FP, NBagArr[i+1], Nextptrs)
+		CIfEnd()
+	end
+	CIfEnd()
 	--CTrigger(FP,{},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),},1)
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	CDiv(FP,CurCunitI,84)
@@ -699,17 +706,27 @@ function Install_CallTriggers()
 			--		DisplayPrint(GCP, {"일반강화"})
 				CIfEnd()
 
-				if TestStart == 0 then
-					CIf(FP,{CV(G_PushBtnm,2)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 죄송합니다. 아직 구현되지 않은 시스템입니다."), 4),SetCp(FP)}) -- 확정강화
-						--CAdd(FP,GetPUnitLevel,1)
-						--DisplayPrint(GCP, {"확정강화테스트. : " ,GetPUnitLevel})
+					GetPETicket = CreateVar(FP)
+					CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4))
+					CIf(FP,{CV(G_PushBtnm,2)}) -- 확정강화
+					CIfX(FP,{CV(GetPETicket,1,AtLeast)})
+					CIfX(FP,{CV(GetPUnitLevel,9)})
+					CSub(FP, GetPETicket, 1)
+					CMov(FP,PrevPUnitLevel,GetPUnitLevel)
+					CAdd(FP,GetPUnitLevel,1)
+					DisplayPrint(GCP, {"\x13\x07『 \x1F확정 강화권\x04을 사용하여 강화하셨습니다. \x07",PrevPUnitLevel,"강 → ",GetPUnitLevel,"강 \x07』"})
+					CElseIfX({CV(GetPUnitLevel,8,AtMost)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 아이템은 \x089강 \x04에서만 사용가능합니다. \x07강화\x04를 더 진행해주세요."), 4),SetCp(FP)})
+					CElseX()
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)})
+					CIfXEnd()
+					CElseX()
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 확정 강화권이 부족합니다."), 4),SetCp(FP)})
+					CIfXEnd()
+
+
 					CIfEnd()
-				else
-					CIf(FP,{CV(G_PushBtnm,2)},{}) -- 확정강화
-						CAdd(FP,GetPUnitLevel,1)
-						DisplayPrint(GCP, {"확정강화테스트. : " ,GetPUnitLevel})
-					CIfEnd()
-				end
+					CMovX(FP,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),GetPETicket)
 
 
 					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,8,AtMost)},{}) -- 승급
@@ -719,8 +736,9 @@ function Install_CallTriggers()
 							CMov(FP,GetUID,_SHRead(_Add(G_Btnptr,25)),nil,0xFF,1)
 
 							CIfX(FP,{TBring(GCP, AtLeast, 1, GetUID, _Add(GCP,160))})--승급하기
-								GetCooldownData,GetAtkData,GetEXPData,GetTotalEPerData,GetTotalEper4Data,GetDPSLVData = CreateVars(6,FP)
+								GetCooldownData,GetAtkData,GetEXPData,GetTotalEPerData,GetTotalEper4Data,GetDPSLVData,GetBrShData = CreateVars(7,FP)
 								CMovX(FP,GetCooldownData,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4))
+								CMovX(FP,GetBrShData,VArrX(GetVArray(iv.CS_BreakShield[1], 7),VArrI,VArrI4))
 								CMovX(FP,GetAtkData,VArrX(GetVArray(iv.CS_Atk[1], 7),VArrI,VArrI4))
 								CMovX(FP,GetEXPData,VArrX(GetVArray(iv.CS_EXP[1], 7),VArrI,VArrI4))
 								CMovX(FP,GetTotalEPerData,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4))
@@ -759,19 +777,28 @@ function Install_CallTriggers()
 										DisplayPrint(GCP, {"\x13\x07『 \x1C경험치 증가량\x04이 상승하였습니다. \x04증가 후 \x04: \x1C+ ",TempV,"% \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,6)},{AddV(GetTotalEPerData,1)})
+										CMov(FP,TempV,_Mul(GetTotalEPerData,250))
 										CMov(FP,GEVar,TempV)
 										CallTrigger(FP, Call_SetEPerStr)
 										DisplayPrint(GCP, {"\x13\x07『 \x0F+1 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
+										CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 										CMov(FP,GEVar,TempV)
 										CallTrigger(FP, Call_SetEPerStr)
 										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이제부터 \x07고유 유닛\x04으로 \x0FLV.2 \x04사냥터에 입장할 수 있습니다."))})
 									CIfEnd()
+									CIf(FP,{CV(G_PushBtnm,9)},{AddV(GetBrShData,1)})
+										CMov(FP,TempV,_Mul(GetBrShData,100))
+										CMov(FP,GEVar,TempV)
+										CallTrigger(FP, Call_SetEPerStr)
+										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x1F파괴방지 \x04확률이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
+									CIfEnd()
 
 									CMovX(FP,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4),GetCooldownData)
+									CMovX(FP,VArrX(GetVArray(iv.CS_BreakShield[1], 7),VArrI,VArrI4),GetBrShData)
 									CMovX(FP,VArrX(GetVArray(iv.CS_Atk[1], 7),VArrI,VArrI4),GetAtkData)
 									CMovX(FP,VArrX(GetVArray(iv.CS_EXP[1], 7),VArrI,VArrI4),GetEXPData)
 									CMovX(FP,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4),GetTotalEPerData)
@@ -804,6 +831,7 @@ function Install_CallTriggers()
 			CIf(FP,{CV(G_PushBtnm,9)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x04현재 고유유닛 승급 효과는 다음과 같습니다."), 4)})
 				CMovX(FP,GetCooldownData,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetAtkData,VArrX(GetVArray(iv.CS_Atk[1], 7),VArrI,VArrI4))
+				CMovX(FP,GetBrShData,VArrX(GetVArray(iv.CS_BreakShield[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetEXPData,VArrX(GetVArray(iv.CS_EXP[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetTotalEPerData,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetTotalEper4Data,VArrX(GetVArray(iv.CS_TotalEper4[1], 7),VArrI,VArrI4))
@@ -822,6 +850,10 @@ function Install_CallTriggers()
 				CMov(FP,GEVar,TempV)
 				CallTrigger(FP, Call_SetEPerStr)
 				DisplayPrint(GCP, {"\x07『 \x08특수 \x07강화 확률\x04 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
+				CMov(FP,TempV,_Mul(GetBrShData,100))
+				CMov(FP,GEVar,TempV)
+				CallTrigger(FP, Call_SetEPerStr)
+				DisplayPrint(GCP, {"\x07『 \x08특수 \x1F파괴방지 \x04확률 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
 				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
 				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
 				
@@ -915,7 +947,11 @@ function Install_CallTriggers()
 		{iv.PUnitLevel[1],iv.PUnitLevelLoc},
 		{iv.PUnitClass[1],iv.PUnitClassLoc},
 		{iv.VaccItem[1],iv.VaccItemLoc},
+		{iv.Stat_SCCool[1],iv.SCCoolLoc},
+		{iv.PETicket[1],iv.PETicketLoc},
+		
 	}
+	
 	for j,k in pairs(LocalDataArr) do
 		local LocPVA = GetVArray(k[1], 7)
 		CMovX(FP,k[2],VArrX(LocPVA,VArrI,VArrI4),nil,nil,nil,1)

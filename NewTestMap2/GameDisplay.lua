@@ -50,8 +50,9 @@ function GameDisplay()
 	local CS_TotalEper4Loc = iv.CS_TotalEper4Loc
 	local CS_DPSLVLoc = iv.CS_DPSLVLoc
 	local VaccItemLoc = iv.VaccItemLoc
+	local SCCoolLoc = iv.SCCoolLoc
 
-	
+	local PETicketLoc = iv.PETicketLoc
 	local LV5Cool = iv.LV5Cool
 
 	
@@ -209,7 +210,7 @@ function GameDisplay()
 
 
 		CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- 상점 페이지 제어
-			DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 5000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 25000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -245,6 +246,7 @@ function GameDisplay()
 			CMov(FP,GEVar,S_TotalEPerEx3Loc)
 			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x075. \x10추가 \x0F+3 \x08강화확률 \x0F0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_SCCool.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 
 		CIfXEnd()
@@ -261,6 +263,7 @@ function GameDisplay()
 			StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x10추가 \x0F+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x10추가 \x0F+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
+			StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x07공격속도\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 	}
 	
 		
@@ -345,16 +348,16 @@ function GameDisplay()
 	CIfX(FP,{CD(LKey,1)})
 	
 	
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x04보유 갯수 \x08(저장불가) \x04: \x07",SellTicketLoc," \x17닫기 \x04: \x10L"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x04보유 갯수 \x07(저장가능) \x04: \x07",VaccItemLoc," \x17닫기 \x04: \x10L"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x08(저장X) \x04: \x07",SellTicketLoc," \x12[\x17닫기 \x04: \x10L]"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
 		for i = 0, 6 do
 			CIf(FP,HumanCheck(i, 1))
 			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
 			CMov(FP,CTimeV,LV5Cool[i+1])
 			CallTrigger(FP,Call_ConvertTime)
-			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초  \x17닫기 \x04: \x10L"})
+			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 			CElseX()
-			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07처치 가능!  \x17닫기 \x04: \x10L"})
+			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07처치 가능! "})
 			CIfXEnd()
 	
 			CIfEnd()
@@ -426,7 +429,8 @@ function GameDisplay()
 			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
 			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1715만 크레딧",
-			"\x046단계 개인보스는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
+			"\x047단계 \x04: \x1F확정 강화권\x04 1개",
+			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
 	
 		{
