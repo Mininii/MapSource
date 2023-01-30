@@ -10,16 +10,16 @@ function beforeTriggerExec(){
 	const s=StringBuffer();
 	const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
 	const LoadCheck = PVariable();
-	const VerChange = PVariable();
-	const SCA_Stat1 = PVariable(list(1,1,1,1,1,1,1,1));
-	const SCA_GLoadSw = PVariable();
+	const KillCode = PVariable();
 	const SCA_GLoaded = PVariable();
-	const SCA_LLoadCheck = PVariable();
+	const NBAlarm = PVariable();
 	const T2 = PVariable(); // 타임아웃타이머
 	
 	var GLoadCheck;
 	var CurVer;
-
+	once {
+		CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
+	}
 
 	foreach(cp : EUDLoopPlayer("Human")){
 		setcurpl(cp);
@@ -31,10 +31,12 @@ function beforeTriggerExec(){
 			SCA_GLoaded[4] = 0;
 			SCA_GLoaded[5] = 0;
 			SCA_GLoaded[6] = 0;
+			sca.GlobalData[0] = 0;
+			
 		}
-		if(sca.GlobalData[0]==1&&SCA_GLoaded[cp]==0){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴 
+		if(sca.GlobalData[0]==1&&1<=sca.Month&&SCA_GLoaded[cp]==0){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴 
 			if(LoadCheck[cp] == 0){
-			CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
+			
 			if(sca.GlobalData[1] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[1]){ // 구버전, 지원종료
 				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
@@ -46,7 +48,7 @@ function beforeTriggerExec(){
 				GLoadCheck = 1;
 			}
 			} 
-			DisplayText("\x13\x04GlobalData Loaded");
+			DisplayText("\x13\x07『 \x03SYSTEM \x04: GlobalData Loaded \x07』");
 			SCA_GLoaded[cp] = 1;
 				for (var i = 0; i < 20; i++) {
 					SetDeaths(EPD(0x58f60C)+i,SetTo,sca.GlobalData[i],0);
@@ -60,18 +62,25 @@ function beforeTriggerExec(){
 
 
 
-		if(CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= 10000){
+		if(GLoadCheck==1&&CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= 10000){
 		GLoadCheck = 0;
-		VerChange[cp] = 1;
+		KillCode[0] = 1;
+		KillCode[1] = 1;
+		KillCode[2] = 1;
+		KillCode[3] = 1;
+		KillCode[4] = 1;
+		KillCode[5] = 1;
+		KillCode[6] = 1;
 		f_eprintln("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 		}
 		//if(CurVer < sca.GlobalData[2]){
 		//DisplayText("\x08신버전 감지! \x04해당 버전은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다.");
 		//}
 
-		if(VerChange[cp]==1){
+		if(KillCode[cp]==1){
 			DisplayText("\x04해당 맵은 현시간 부로 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 		}
+
 
 
 	
@@ -89,6 +98,7 @@ function beforeTriggerExec(){
 				sca.LoadData(0);
 			}
 			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
+				NBAlarm[cp] = 0;
 				sca.SaveData(0);
 			    f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
 			}
@@ -104,6 +114,17 @@ function beforeTriggerExec(){
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,1);
 		}
+		
+/***
+ * @Summary.ko-KR
+ * 0 = 대기
+ * 1 = 불러오는 중
+ * 2 = 시간 불러오는 중
+ * 3 = 맵 변수 불러오는 중
+ * 4 = 저장중
+***/
+
+
 		if (sca.CommandStatus() == 0){
 			SetDeathsX(CurrentPlayer,SetTo,2,1,2);
 		}
@@ -111,11 +132,37 @@ function beforeTriggerExec(){
 			SetDeathsX(CurrentPlayer,SetTo,0,1,2);
 		}
 		
+/***
+ * @Summary.ko-KR
+ * 1 = 연결됨
+ * 2 = 연결 끊킴
+ * 3 = 로드중
+ * 4 = 로드 완료
+ * 5 = 세이브중
+ * 6 = 세이브 완료
+ * 7 = 런처와 먼저 연결하세요
+ * 8 = 다른 작업 중입니다.
+ * 9 = 작업 실패
+***/
 		if (sca.GetLastMessage() == 4){
 			SetDeathsX(CurrentPlayer,SetTo,4,1,4);
 		}
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,4);
+		}
+		if (sca.GetLastMessage() == 6){
+			SetDeathsX(CurrentPlayer,SetTo,8,1,8);
+
+		if(NBAlarm[cp]==0&&CurVer < sca.GlobalData[1]){
+			NBAlarm[cp] = 1;
+			PlayWAV("sound\\Bullet\\tscFir00.wav");
+			PlayWAV("sound\\Bullet\\tscFir00.wav");
+			DisplayText("\x08신버전 감지! \x04해당 버전은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다. 현재 저장은 정상적으로 됩니다.");
+		}
+
+		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,8);
 		}
 		
 		}

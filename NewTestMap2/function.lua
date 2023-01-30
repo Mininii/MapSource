@@ -1161,7 +1161,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 			DeathUnit = math.floor(DeathUnit+(Flag/32))
 			Flag = Flag%32
 		end
-		if DeathUnit == 1 and Flag == 20 then
+		if DeathUnit == 2 and Flag == 5 then
 			--error(Text)
 		end
 		--if DeathUnit == 3 then Pushdsadas() end

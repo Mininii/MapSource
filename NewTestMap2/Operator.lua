@@ -3,21 +3,44 @@ function Operator()
 		return DeathsX(CP, Exactly, 3, 1,3)
 	end
 	function SCA.Reset(CP)
-		return SetDeathsX(CP, SetTo, 0, 1,3)
+		return SetDeaths(CP, SetTo, 0, 1)
 	end
-	function SCA.LoadCmp(CP)
-		return DeathsX(CP, Exactly, 4, 1,4)
+	function SCA.LoadCmp(CP)--사용가능 + 로드완료
+		return DeathsX(CP, Exactly, 7, 1,7)
+	end
+	function SCA.SaveCmp(CP)--사용가능 + 저장완료
+		return DeathsX(CP, Exactly, 11, 1,11)
 	end
 	--3 사용가능
+	--4 로드완료
+	--8 저장완료
 	--그외 사용불가
-	if TestStart == 1 then
-		TriggerX(FP, {KeyPress("I","Down")}, {SetCD(SCA.GlobalCheck,0)}, {preserved})
-	end
+	DoActions(FP,{SetMemory(0x58F504, SetTo, 0)})
 	CurrentOP = CreateVar(FP)
+	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
+
+	if Limit == 1 then
+		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
+	end
+
+	Trigger2X(FP, {CD(SCA.GReload,1)}, {SetCD(SCA.GReload,0),
+	RotatePlayer({DisplayTextX(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
+	SetCD(SCA.GlobalCheck,0),
+	SetCD(SCA.GlobalLoadFlag,0),
+	SetV(SCA.GlobalVarArr[1],0),
+	SetV(SCA.MonthV,0),
+	SetMemory(SCA.Month, SetTo,0),
+	SetMemory(SCA.GlobalData[1],SetTo,0)}, {preserved})
+
+
+
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX({HumanCheck(i,1),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i)})--상위플레이어가 런쳐 연결된경우
 		CIfX(FP,{SCA.Available(i)},{})
+		if Limit == 1 then
+			--TriggerX(FP, {MSQC_KeyInput(i, "F9")}, {SetCD(SCA.GReload,1)}, {preserved})
+		end
 		CTrigger(FP, {CD(SCA.GlobalCheck,0),SCA.Available(i)}, {SetDeaths(i, SetTo, 2, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,1)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i)}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
@@ -72,7 +95,8 @@ function Operator()
 	for i = 0,6 do
 		TriggerX(FP, {HumanCheck(i,0)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1)},{preserved})
-		--CTrigger(FP, {HumanCheck(i,1),SCA.Available(i)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
+		CTrigger(FP, {HumanCheck(i,1),SCA.Available(i)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
+		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
 	end--
 
 	NIf(FP, {TTOR({

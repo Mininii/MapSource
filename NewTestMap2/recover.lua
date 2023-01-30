@@ -1,6 +1,9 @@
     EXPArr = {}
 	for i = 1, 1000000 do
         local XI = 3
+        if i>=10000 then
+            XI = 10
+        end
 		EXPArr[i] = 10+((i-1)*(i*XI))
 	end
 
@@ -19,7 +22,7 @@
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     end
-    tt = exp(80000)
+    tt = exp(10866)
 --    
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])

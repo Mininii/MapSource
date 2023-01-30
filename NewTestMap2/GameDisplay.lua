@@ -17,6 +17,8 @@ function GameDisplay()
 	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
 	local S_TotalEPer4Loc = iv.S_TotalEPer4Loc--CreateVar(FP)
 	local S_BreakShieldLoc = iv.S_BreakShieldLoc--CreateVar(FP)
+	local BreakShieldLoc = iv.BreakShieldLoc--CreateVar(FP)
+	
 	local PlayTimeLoc = iv.PlayTimeLoc--CreateVar(FP)
 	local PlayTimeLoc2 = iv.PlayTimeLoc2--CreateVar(FP)
 	local StatPLoc = iv.StatPLoc--CreateVar(FP)
@@ -124,7 +126,6 @@ function GameDisplay()
 		end 
 		CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"TEST",FP,{}) 
 	
-		DoActions(FP,{SetMemory(0x58F504, SetTo, 0)})
 	CIf(FP, CV(InterfaceNumLoc,1,AtLeast))
 		
 		CMov(FP,MCP,LCP)
@@ -306,7 +307,7 @@ function GameDisplay()
 	CMov(FP,GEVar,TotalEPer4Loc)
 	CallTrigger(FP, Call_SetEPerStr)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x08강화확률 \x04총 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p"})
-	CMov(FP,GEVar,S_BreakShieldLoc)
+	CMov(FP,GEVar,BreakShieldLoc)
 	CallTrigger(FP, Call_SetEPerStr)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p"})
 	f_Mul(FP,EXPIncomeLoc2,10)
@@ -414,6 +415,13 @@ function GameDisplay()
 			"\x13\x04\x17유닛 판매권\x04이 없으면 \x08유닛을 판매할 수 없습니다.",
 			"\x13\x04또한 \x17유닛 판매권\x08은 SCA 저장 불가능 아이템\x04입니다. 종료 전 모두 소모하는것을 권장드립니다.",
 		},
+		{
+			"\x13\x04\x1B- 고유 유닛 시스템\x08(약 8000레벨 이상 컨텐츠 이용 권장)\x1B -",
+			"\x13\x04SCA 로드가 성공되면 자신만의 \x07고유 유닛\x04이 생성됩니다.",
+			"\x13\x04이 고유유닛은 \x08최대 10강\x04까지 할 수 있지만 강화를 한다고 어떤 효과가 바로 주어지는건 아닙니다.",
+			"\x13\x0410강을 달성하고 \x17100만 크레딧\x04을 사용하여 원하는 옵션 획득과 함께 \x1F승급\x04할 수 있습니다.",
+			"\x13\x04승급 옵션 선택 이후로는 \x08되돌리기가 불가능\x04합니다. 원하는 옵션을 신중하게 선택해주세요.",
+		},
 	
 		{
 			"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스, 보스 시스템 \x1B-",
@@ -480,14 +488,18 @@ function GameDisplay()
 	
 	if TestStart == 1 then
 		local TempV = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
+		CMov(FP,TempV2,CurrentOP,1)
 		for i = 0, 6 do
 			f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
-			DisplayPrint(i, {"SCA_LastMessage = ",TempV,"   Month : ",SCA.MonthV,"   Year : ",SCA.YearV})
+			
+			DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   Month : ",SCA.MonthV,"   Year : ",SCA.YearV})
 			DisplayPrint(i, {"Hour = ",SCA.HourV,"   Day : ",SCA.DayV,"   Week : ",SCA.WeekV})
 
 		end
 	end
 
 
+	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
 	FixText(FP, 2)    
 end

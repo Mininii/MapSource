@@ -79,7 +79,6 @@ function DataArr()
 		{iv.RandomSeed8,ct.RandomSeed8,"RandomSeed8"},
 		{iv.RandomSeed9,ct.RandomSeed9,"RandomSeed9"},
 		{iv.RandomSeed10,ct.RandomSeed10,"RandomSeed10"},
-		{iv.PUnitEnchCool,ct.PUnitEnchCool,"PUnitEnchCool"},
 		
 		
 		
@@ -154,5 +153,10 @@ function DataArr()
 	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
 	iv.Stat_SCCool,ct.Stat_SCCool = CreateDataPV("Stat_SCCool",147)
 	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",148)
-	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("PETicket",149)
+	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",149) 
+
+	
+	iv.CS_BreakShieldData,ct.CS_BreakShieldData=CreateDataPV("CS_BreakShieldData")
+	iv.TotalBreakShield,ct.TotalBreakShield = CreateDataPV("TotalBreakShield")
+	iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
 end

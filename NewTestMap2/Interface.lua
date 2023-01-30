@@ -26,8 +26,8 @@ function Interface()
 	local CS_EXPData = iv.CS_EXPData
 	local CS_TEPerData = iv.CS_TEPerData
 	local CS_TEPer4Data = iv.CS_TEPer4Data
-	local PUnitEnchCool = iv.PUnitEnchCool
-	
+	local CS_BreakShieldData = iv.CS_BreakShieldData
+	local TotalBreakShield = iv.TotalBreakShield
 	local CurPUnitCool = iv.CurPUnitCool
 
 	local RandomSeed1 = iv.RandomSeed1
@@ -101,9 +101,9 @@ function Interface()
 	local CS_TotalEPer = iv.CS_TotalEPer
 	local CS_TotalEper4 = iv.CS_TotalEper4
 	local CS_DPSLV = iv.CS_DPSLV
+	local CS_BreakShield = iv.CS_BreakShield
 	local Stat_SCCool = iv.Stat_SCCool
 	local PETicket = iv.PETicket
-
 	--Local Data Variable
 	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
 	local IncomeLoc = iv.IncomeLoc--CreateVar(FP)
@@ -194,8 +194,8 @@ function Interface()
 
 
 	CMov(FP,PCheckV,0)
-	if TestStart == 1 then
-		CAdd(FP,GeneralPlayTime,10000)
+	if Limit == 1 then
+		CAdd(FP,GeneralPlayTime,100)
 	else
 		CAdd(FP,GeneralPlayTime,1)
 	end
@@ -224,7 +224,6 @@ TipArr = {
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i)})
 	CT_PrevCP(i)
-	CSub(FP,PUnitEnchCool[i+1],1)
 	f_LMov(FP, GCPW, tostring(i))
 	ConvertVArr(FP,VArrI,VArrI4,GCP,7)
 
@@ -691,6 +690,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP,{CV(CS_TotalEPer[i+1],CS_TotalEPerLimit,AtLeast)},{SetV(CS_TotalEPer[i+1],CS_TotalEPerLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 	TriggerX(FP,{CV(CS_TotalEper4[i+1],CS_TotalEper4Limit,AtLeast)},{SetV(CS_TotalEper4[i+1],CS_TotalEper4Limit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 	TriggerX(FP,{CV(CS_DPSLV[i+1],CS_DPSLVLimit,AtLeast)},{SetV(CS_DPSLV[i+1],CS_DPSLVLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(CS_BreakShield[i+1],CS_BreakShieldLimit,AtLeast)},{SetV(CS_BreakShield[i+1],CS_BreakShieldLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,CS_Atk[i+1])
@@ -704,11 +704,16 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	f_Mul(FP,CS_EXPData[i+1],CS_EXP[i+1],2)
 	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],250)
 	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
+
+	f_Mul(FP,CS_BreakShieldData[i+1],CS_BreakShield[i+1],100)
+	
 	
 	--
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],100)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,2)},1)
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],99,AtMost)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,1)},1)
 	CIfEnd()
+
+	TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(EnchCool[i+1],0)},{SetV(iv.PSaveChk[i+1],0),SetCp(i),DisplayText(StrDesignX("\x03SYSTEM \x04: 이제 다시 강화를 진행할 수 있습니다."), 4)},{preserved})
 	CallTrigger(FP,Call_BtnInit,{})
 
 
@@ -897,8 +902,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 			{{CV(StatP[i+1],Cost_Stat_TotalEPerEx3-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 		KeyFunc(i,"6",{
-			{{CV(StatP[i+1],Cost_Stat_SCCool,AtLeast),CV(Stat_SCCool[i+1],8,AtMost)},{SubV(StatP[i+1],Cost_Stat_SCCool),AddV(Stat_SCCool[i+1],1)},StrDesign("\x07기본유닛 \x1B공격속도\x04가 \x04증가하였습니다.")},
-			{{CV(Stat_SCCool[i+1],9,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 \x1B공격속도\x04를 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_SCCool,AtLeast),CV(Stat_SCCool[i+1],7,AtMost)},{SubV(StatP[i+1],Cost_Stat_SCCool),AddV(Stat_SCCool[i+1],1)},StrDesign("\x07기본유닛 \x1B공격속도\x04가 \x04증가하였습니다.")},
+			{{CV(Stat_SCCool[i+1],8,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 \x1B공격속도\x04를 올릴 수 없습니다.")},
 			{{CV(StatP[i+1],Cost_Stat_SCCool-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 
@@ -934,6 +939,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
 	CMov(FP,TotalEPer4[i+1],Stat_TotalEPer4[i+1],nil,nil,1)
+	CMov(FP,TotalBreakShield[i+1],Stat_BreakShield[i+1],nil,nil,1)
 	CAdd(FP,IncomeMax[i+1],B_IncomeMax)
 	CAdd(FP,TotalEPer[i+1],Stat_TotalEPerEx[i+1])
 	CAdd(FP,TotalEPer2[i+1],Stat_TotalEPerEx2[i+1])
@@ -949,6 +955,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,Stat_EXPIncome[i+1],CS_EXPData[i+1])
 	CAdd(FP,TotalEPer[i+1],CS_TEPerData[i+1])
 	CAdd(FP,TotalEPer4[i+1],CS_TEPer4Data[i+1])
+	CAdd(FP,TotalBreakShield[i+1],CS_BreakShieldData[i+1])
 	
 
 
@@ -1064,6 +1071,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
 	CIf(FP,{Bring(i,AtLeast,1,"Men",8+i)},{}) --  유닛 강화시도하기. 39강 이하유닛
+	CMov(FP,BreakShield,TotalBreakShield[i+1])
 	CMov(FP,GEper,TotalEPer[i+1])
 	CMov(FP,GEper2,TotalEPer2[i+1])
 	CMov(FP,GEper3,TotalEPer3[i+1])
@@ -1072,7 +1080,6 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 	CAdd(FP,GEper4,TotalEPer3[i+1])
 	CAdd(FP,GEper4,TotalEPer4[i+1])
 
-	CMov(FP,BreakShield,Stat_BreakShield[i+1])
 
 	for j = 39, 1, -1 do
 		local LV = LevelUnitArr[j][1]
@@ -1150,7 +1157,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
 	TriggerX(FP,{CV(ResetStat[i+1],1)},{SetCD(ResetStatLoc,1)},{preserved})
 	CIfEnd()
-	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1)})
+	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1),SubV(EnchCool[i+1], 1)})
 		--핫키 QCUnit 등록방지
 		local Cunit2 = CreateVar(FP)
 		local KSelUID = CreateVar(FP)

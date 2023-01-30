@@ -9,7 +9,7 @@ function Include_Vars()
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
-	ULimitArr = {500,350,300,250,200,180,150}
+	ULimitArr = {500,300,230,180,140,120,100}
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
 	SCA = {}
@@ -33,6 +33,7 @@ function Include_Vars()
 	SCA.HourV = CreateVar(FP)
 	SCA.DayV = CreateVar(FP)
 	SCA.WeekV = CreateVar(FP)
+	SCA.GReload = CreateCcode()
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
 	MSQC_KeySet("O",494) -- MSQC eds텍스트 입력
@@ -97,6 +98,9 @@ function Include_Vars()
 	GEper = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +1강 확률을 저장함
 	GEper2 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +2강 확률을 저장함
 	GEper3 = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +3강 확률을 저장함
+	GEper4 = CreateVar(FP)
+	XEper = CreateVar(FP)
+	BreakShield = CreateVar(FP)
 	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
 
 	ShopSw = CreateCcodeArr(7) -- 
@@ -115,6 +119,7 @@ function Include_Vars()
 	CT_NextRandW = CreateWarArr(7,FP)
 	CT_PrevRandW = CreateWarArr(7,FP)
 
+	EnchCool = CreateVarArr(7, FP)
 	--String
 	
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
@@ -194,7 +199,6 @@ function Include_Vars()
 	iv.LV5Cool = CreateVarArr(7,FP)
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
-	iv.PUnitEnchCool = CreateVarArr(7,FP)
 
 	iv.BanFlag = CreateVarArr(7,FP)
 	iv.BanFlag2 = CreateVarArr(7,FP)
@@ -218,6 +222,8 @@ function Include_Vars()
 	iv.S_TotalEPer3Loc = CreateVar(FP)
 	iv.S_TotalEPer4Loc = CreateVar(FP)
 	iv.S_BreakShieldLoc = CreateVar(FP)
+	iv.BreakShieldLoc = CreateVar(FP)
+	
 	iv.PlayTimeLoc = CreateVar(FP)
 	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
@@ -475,11 +481,14 @@ function Include_Vars()
 	PushLevelUnit(25+4,25000,60000/2,17,10,24,30,59,1,1)--알랜
 	PushLevelUnit(25+5,25000,102000/2,23,12,48,100,59,1)--듀크
 	PushLevelUnit(25+6,25000,188000/2,53,39,24,80,59)--헌터
-	PushLevelUnit(25+7,20000,350000/2,52,51,24,150,59)--언클린
-	PushLevelUnit(25+8,20000,750000/2,69,53,72,700,59)--셔틀
-	PushLevelUnit(25+9,20000,1500000/2,41,43,24,350,59)--드론
-	PushLevelUnit(25+10,20000,3000000/2,40,42,48,1200,59)--곰
-
+--	PushLevelUnit(25+7,20000,350000/2,52,51,24,150,59)--언클린
+--	PushLevelUnit(25+8,20000,750000/2,69,53,72,700,59)--셔틀
+--	PushLevelUnit(25+9,20000,1500000/2,41,43,24,350,59)--드론
+--	PushLevelUnit(25+10,20000,3000000/2,40,42,48,1200,59)--곰
+	PushLevelUnit(25+7,20000,300000/2,52,51,24,150,59)--언클린
+	PushLevelUnit(25+8,20000,500000/2,69,53,72,700,59)--셔틀
+	PushLevelUnit(25+9,20000,1000000/2,41,43,24,350,59)--드론
+	PushLevelUnit(25+10,20000,1600000/2,40,42,48,1200,59)--곰
 
 
 	PushLevelUnit(25+11,16000,5000000/2,10,26,72,1000,59)--파벳영웅 3타
@@ -650,7 +659,6 @@ FirstReward2 = {
 	ct.CS_EXPData = CreateVarArr(7,FP)
 	ct.CS_TEPerData = CreateVarArr(7,FP)
 	ct.CS_TEPer4Data = CreateVarArr(7,FP)
-	ct.PUnitEnchCool = CreateVarArr(7,FP)
 	
 	--PUnitAtkArr = {}
 	PUnitCoolArr = {72*256,48*256,24*256,12*256,6*256,3*256,1*256}
@@ -662,7 +670,7 @@ FirstReward2 = {
 	CS_TotalEPerLimit = 20
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
-
+	CS_BreakShieldLimit = 200
 
 
 end
