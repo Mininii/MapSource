@@ -91,7 +91,7 @@ function Operator()
 
 	SCA.Loading = CreateCcodeArr(7)
 	SCA.LoadJump = def_sIndex()
-	CIf(FP,{CD(SCA.GlobalCheck,3)})
+	CIf(FP,{CD(SCA.GlobalCheck,3)},{SetCD(SCA.Timer,0)})
 	for i = 0,6 do
 		TriggerX(FP, {HumanCheck(i,0)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1)},{preserved})

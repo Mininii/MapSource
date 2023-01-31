@@ -345,10 +345,13 @@ function Install_CallTriggers()
 	CTCurEXP = CreateWar(FP)
 	CTTotalExp = CreateWar(FP)
 	CTLIndex = CreateVar(FP)
-	CT_PrevLMulW = CreateWar2(FP,nil,nil,"10")
+	CT_PrevLMulW = CreateWar(FP)
 	CT_NextLMulW = CreateWar(FP)
 
 	local CheatTestJump = def_sIndex()
+	CIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,LevelLimit-1,AtMost)},{}) -- 경험치 치팅 검사
+	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
+	f_LRead(FP, LArrX({EXPArr},CTLIndex), CT_PrevLMulW, nil, 1)
 	CJumpEnd(FP, CheatTestJump)
 	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,LevelLimit-1,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
 	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
@@ -368,6 +371,7 @@ function Install_CallTriggers()
 	CAdd(FP,CTStatP,5)
 	CJump(FP, CheatTestJump)
 	NIfEnd()
+	CIfEnd()
 
 
 	SetCallEnd()

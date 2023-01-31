@@ -332,6 +332,17 @@ for i = 0, 6 do -- 각플레이어
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
 		CElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
+		DoActions(FP, {
+			SetCp(i),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
+			SetCp(FP)
+		})
 		DoActionsX(FP, {
 			SetV(PLevel[i+1],1),
 			SetV(StatP[i+1],5),
@@ -396,8 +407,11 @@ for i = 0, 6 do -- 각플레이어
 	
 	local LevelUpJump = def_sIndex()
 	local LIndex = CreateVar(FP) 
-	local PrevLMulW = CreateWar2(FP,nil,nil,"10")
+	local PrevLMulW = CreateWar(FP)
 	local NextLMulW = CreateWar(FP)
+	CIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],LevelLimit-1,AtMost)},{})
+	ConvertLArr(FP, LIndex, _Sub(PLevel[i+1], 1), 8)
+	f_LRead(FP, LArrX({EXPArr},LIndex), PrevLMulW, nil, 1)
 	CJumpEnd(FP, LevelUpJump)
 	NIf(FP,{TTNWar(PEXP[i+1],AtLeast,TotalExp[i+1]),CV(PLevel[i+1],LevelLimit-1,AtMost)},{AddV(PLevel[i+1],1),AddV(CT_PLevel[i+1],1),SetCD(StatEffT2[i+1],0),SetCD(StatEff[i+1],1)})
 
@@ -405,8 +419,6 @@ for i = 0, 6 do -- 각플레이어
 	f_LRead(FP, LArrX({EXPArr},LIndex), NextLMulW, nil, 1)
 	f_LAdd(FP, TotalExp[i+1], TotalExp[i+1], NextLMulW)
 	
-	--ConvertLArr(FP, LIndex, _Sub(PLevel[i+1], 2), 8)
-	--f_LRead(FP, LArrX({EXPArr},LIndex), TempReadW, nil, 1)
 	f_LAdd(FP, CurEXP[i+1], CurEXP[i+1], PrevLMulW)
 	f_LMov(FP, PrevLMulW, NextLMulW)
 
@@ -426,6 +438,7 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP, {CV(PLevel[i+1],9,AtMost),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x1F레벨이 올랐습니다! \x17O 키\x04를 눌러 \x07능력치\x04를 설정해주세요."))}, {preserved})
 	CJump(FP, LevelUpJump)
 	NIfEnd()
+	CIfEnd()
 	DoActionsX(FP, {AddCD(StatEffT2[i+1],1)})
 	TriggerX(FP,{CD(StatEffT2[i+1],500,AtLeast)},{SetCD(StatEff[i+1],0)},{preserved})
 
