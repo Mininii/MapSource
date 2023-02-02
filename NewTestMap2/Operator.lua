@@ -99,14 +99,14 @@ function Operator()
 		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
 	end--
 
-	NIf(FP, {TTOR({
+	NIf(FP, {
 		CD(SCA.Loading[1],0),
 		CD(SCA.Loading[2],0),
 		CD(SCA.Loading[3],0),
 		CD(SCA.Loading[4],0),
 		CD(SCA.Loading[5],0),
 		CD(SCA.Loading[6],0),
-		CD(SCA.Loading[7],0)})})
+		CD(SCA.Loading[7],0)})
 		for i = 0,6 do
 			NJumpX(FP, SCA.LoadJump, {HumanCheck(i,1),SCA.Available(i),CD(SCA.LoadCheckArr[i+1],0)}, {SetDeaths(i, SetTo, 3, 2),SetCD(SCA.Loading[i+1],1),SCA.Reset(i)})
 		end

@@ -237,7 +237,7 @@ function GameDisplay()
 			DisplayPrint(LCP, {"\x071. \x08Æ¯¼ö \x08°­È­È®·ü \x0F0.1%p \x08MAX 100 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			CMov(FP,GEVar,S_BreakShieldLoc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x072. \x08Æ¯¼ö \x1FÆÄ±« ¹æÁö\x08È®·ü \x0F0.1%p \x08MAX 500 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08Æ¯¼ö \x1FÆÄ±« ¹æÁö\x08È®·ü \x0F0.1%p \x08MAX 300 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerExLoc)
 			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x073. \x10Ãß°¡ \x07+1 \x08°­È­È®·ü \x0F0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
@@ -486,7 +486,7 @@ function GameDisplay()
 	
 	CMov(FP,0x6509B0,FP)
 	
-	if TestStart == 1 then
+	if Limit == 1 then
 		local TempV = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
 		CMov(FP,TempV2,CurrentOP,1)

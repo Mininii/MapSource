@@ -1,11 +1,18 @@
     EXPArr = {}
-	for i = 1, 1000000 do
+	for i = 1, 100000 do
         local XI = 3
         if i>=10000 then
             XI = 10
         end
 		EXPArr[i] = 10+((i-1)*(i*XI))
 	end
+--    mw2 = 10
+--    mw = 6
+--for i = 1, 100000 do
+--	EXPArr[i] = mw2
+--    mw2 = mw2+mw
+--    mw=mw+6
+--end
 
     function exp(lv)
         total = 0
@@ -16,13 +23,12 @@
         return total
 
     end
-
     exp(100000)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     end
-    tt = exp(7342)
+    tt = exp(5050)
 --    
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])

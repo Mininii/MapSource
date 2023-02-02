@@ -549,19 +549,15 @@ for i = 0, 6 do -- 각플레이어
 	for p = 1,7 do
 		local NextT = ""
 		local NextT2 = ""
-		if p<=6 then
-			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
-		end
 		if p ~= 7 then
+			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
 			NextT2 = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..GasDPS[p+1].." \x04입니다.")
 		end
-	if p<=6 then
-		TriggerX(FP,{CV(TempO[i+1], OreDPS[p],AtLeast)},{
-			SetV(BuildMul1[i+1],OreDPSM[p]),
-			SetV(NextOre[i+1],OreDPS[p+1]),
-			SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-			DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
-	end
+	TriggerX(FP,{CV(TempO[i+1], OreDPS[p],AtLeast)},{
+		SetV(BuildMul1[i+1],OreDPSM[p]),
+		SetV(NextOre[i+1],OreDPS[p+1]),
+		SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
+		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
 	TriggerX(FP,{CV(TempG[i+1], GasDPS[p],AtLeast)},{
 		SetV(BuildMul2[i+1],GasDPSM[p]),
 		SetV(NextGas[i+1],GasDPS[p+1]),
