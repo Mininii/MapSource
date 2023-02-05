@@ -2,6 +2,9 @@ function Operator()
 	function SCA.Available(CP)
 		return DeathsX(CP, Exactly, 3, 1,3)
 	end
+	function SCA.NotAvailable(CP)
+		return DeathsX(CP, Exactly, 0, 1,2)
+	end
 	function SCA.Reset(CP)
 		return SetDeaths(CP, SetTo, 0, 1)
 	end
@@ -32,11 +35,16 @@ function Operator()
 	SetMemory(SCA.Month, SetTo,0),
 	SetMemory(SCA.GlobalData[1],SetTo,0)}, {preserved})
 
-
+	OPBanActArr={}
+	OPBan=CreateCcodeArr(7)
+	OPBanT=CreateCcodeArr(7)
 
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
-        CElseIfX({HumanCheck(i,1),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i)})--상위플레이어가 런쳐 연결된경우
+        CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i)})--상위플레이어가 런쳐 연결된경우
+		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i)}, {AddCD(OPBanT[i+1],1)}, {preserved})
+		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i),CD(OPBanT,60*24,AtLeast)}, {AddCD(OPBan[i+1],1),SetCD(OPBanT[i+1],0)}, {preserved})
+		CTrigger(FP, {CD(SCA.GlobalCheck,3),SCA.Available(i)}, {SetCD(OPBanT[i+1],0)}, {preserved})
 		CIfX(FP,{SCA.Available(i)},{})
 		if Limit == 1 then
 			--TriggerX(FP, {MSQC_KeyInput(i, "F9")}, {SetCD(SCA.GReload,1)}, {preserved})
@@ -45,9 +53,12 @@ function Operator()
 		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i)}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
 		CIfXEnd()
-		
+		table.insert(OPBanActArr, SetCD(OPBan[i+1],0))
+		table.insert(OPBanActArr, SetCD(OPBanT[i+1],0))
 	end
 	SCA.Timer = CreateCcode()
+	CElseX()--OP가 없음. OP밴을 모두 푼다.
+	DoActions2X(FP, OPBanActArr)
     CIfXEnd()--
 	CIf(FP,{CD(SCA.GlobalCheck,2)},{AddCD(SCA.Timer,1)})
 	--error(SCA.Year)
@@ -99,7 +110,7 @@ function Operator()
 		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
 	end--
 
-	NIf(FP, {
+	NIfX(FP, {
 		CD(SCA.Loading[1],0),
 		CD(SCA.Loading[2],0),
 		CD(SCA.Loading[3],0),
@@ -110,7 +121,19 @@ function Operator()
 		for i = 0,6 do
 			NJumpX(FP, SCA.LoadJump, {HumanCheck(i,1),SCA.Available(i),CD(SCA.LoadCheckArr[i+1],0)}, {SetDeaths(i, SetTo, 3, 2),SetCD(SCA.Loading[i+1],1),SCA.Reset(i)})
 		end
-	NIfEnd()
+	NElseX()
+		local LoadTimer = CreateCcode() 
+		local Ttable= {}
+		for i = 0, 6 do
+			table.insert(Ttable, SubCD(LoadTimer[i+1],1))
+			CIf(FP, {HumanCheck(i,1),CD(LoadTimer[i+1],0),SCA.Available(i),CD(SCA.LoadCheckArr[i+1],0)},{SetCD(LoadTimer[i+1], 24*3)})
+				CallTrigger(FP,Call_Print13[i+1])
+				DoActions(FP, {print_utf8(12,0,StrDesign("\x04다른 플레이어가 \x03SCArchive \x04에서 \x07게임 데이터\x04를 불러오고 있습니다. 잠시만 기다려주세요."))})
+			CIfEnd()
+			
+		end
+		DoActions2X(FP, Ttable)
+	NIfXEnd()
 	NJumpXEnd(FP,SCA.LoadJump)
 	CIfEnd()
 	

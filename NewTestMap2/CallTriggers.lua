@@ -570,9 +570,11 @@ function Install_CallTriggers()
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 					CIfXEnd()
 					CIfX(FP,{CD(iv.PartyBonus,2,AtLeast)})
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x07활성화 되었습니다.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07런쳐 로드 인원이 2명이상 인식되어 영구 활성화 되었습니다.",4)})
+					CElseIfX({CV(iv.PCheckV,2,AtLeast)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07활성화 되었지만 런쳐 로드 인원이 1명 이하입니다. 솔로 플레이로 전환할 경우 버프가 \x08비활성화됩니다.",4)})
 					CElseX()
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x08싱글 플레이\x04시 \x07멀티 보너스 버프 \x04활성화까지 남은 시간 : \x08활성화 불가능.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x08활성화 불가능.",4)})
 					CIfXEnd()
 				CIfEnd()--
 			
