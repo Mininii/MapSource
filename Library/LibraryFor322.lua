@@ -529,6 +529,41 @@ function SetV(V,Value,Type)
 		return TSetCVar(FP,V[2],Type,Value)
 	end
 end
+
+function CV(V,Value,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CVar(FP,V[2],Type,Value)
+	else
+		return TCVar(FP,V[2],Type,Value)
+	end
+	
+end
+
+function SetVX(V,Value,Mask,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = SetTo end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Type,Value,Mask)
+	else
+		return TSetCVar(FP,V[2],Type,Value,Mask)
+	end
+end
+
+function CVX(V,Value,Mask,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CVar(FP,V[2],Type,Value,Mask)
+	else
+		return TCVar(FP,V[2],Type,Value,Mask)
+	end
+	
+end
 function CD(Code,Value,Type)
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
@@ -548,17 +583,6 @@ function CDX(Code,Value,Mask,Type)
 	else
 		return TCDeathsX(FP,Type,Value,Code,Mask)
 	end
-end
-function CV(V,Value,Type)
-	if Value == nil then Value = 1 end
-	if Type == nil then Type = Exactly end
-	if FP == nil then PushErrorMsg("FP Player not defined") end
-	if type(Value) == "number" then
-		return CVar(FP,V[2],Type,Value)
-	else
-		return TCVar(FP,V[2],Type,Value)
-	end
-	
 end
 
 function PlotSizeCalc(Points,SizeofPolygon)
