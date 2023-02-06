@@ -201,6 +201,18 @@ function Interface()
 	local MissionPDataArr = {}
 	local MissionDataTextArr = {}
 
+	-- 15강 판매 ok
+	-- 인게임 3시간 달성 ok
+	-- 강화확률 +1 마스터
+	-- 판매권 판매하기
+	-- 5보스 5회 격파(한번에)
+	-- 40강 48마리 생성
+	-- 백신 구매하기
+	-- 백신을 사용하여 10강 달성
+	
+	-- 확정권을 사용하여 10강 달성
+
+
 	for i = 0, 6 do
 		local MissionDataArr = { -- {Cond,RewardArr,Text}  RewardArr = {Credit,SellTicket,VaccItem,EXP}
 		{{CVX(MissionV[i+1],1,1)},{1000,0,0,1000},"B,N,M키를 눌러 설명서 읽기"},
@@ -209,9 +221,11 @@ function Interface()
 		{{NWar(Money[i+1], AtLeast, "5000000")},{1000},"500만원 모으기"},
 		{{Command(i, AtLeast, 1, LevelUnitArr[15][2])},{1500},"15강 유닛 만들기"},
 		{{CV(PBossLV[i+1],1,AtLeast)},{1500},"개인보스 LV.1 처치하기"},
+		{{CVX(MissionV[i+1],32,32)},{1000,10,0,500},"15강 유닛 판매하기"},
 		{{CV(PLevel[i+1],50,AtLeast)},{1000},"LV. 50 달성"},
 		{{Command(i, AtLeast, 1, LevelUnitArr[26][2])},{5000,50},"26강 유닛 만들기"},
 		{{CV(PLevel[i+1],100,AtLeast)},{1000},"LV. 100 달성"},
+		{{CV(PlayTime[i+1],3600*3,AtLeast)},{5000,100},"인게임 플레이 시간 3시간 달성하기"},
 		{{Command(i, AtLeast, 1, LevelUnitArr[36][2])},{10000,100},"36강 유닛 만들기"},
 		{{CVX(MissionV[i+1],8,8)},{1000,5},"상점에서 구입 배율 조정하기"},
 		{{CVX(MissionV[i+1],4,4)},{1000,10},"상점에서 유닛 판매권 1개 이상 구입하기"},
@@ -233,7 +247,7 @@ function Interface()
 					MText = MText.."\x17"..m.." Credit "
 				end
 				if l == 2 then
-					MText = MText.."\x17"..m.." 유닛 판매권 "
+					MText = MText.."\x19"..m.." 유닛 판매권 "
 				end
 				if l == 3 then
 					MText = MText.."\x10"..m.." 강화기 백신 "
@@ -332,16 +346,18 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{LocalPlayerID(i)},{SetCD(SaveRemind,0)},{preserved})
 
 	CIfEnd()--
-	for j,k in pairs(BPArr) do
-		TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
-		TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
-			SetCp(i),
-			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("B\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
-			SetMemory(0xCDDDCDDC,SetTo,1);
-		})
-		
+	if TestStart == 0 then
+		for j,k in pairs(BPArr) do
+			TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
+	
+			TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
+				SetCp(i),
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("B\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+				SetMemory(0xCDDDCDDC,SetTo,1);
+			})
+		end
 	end
 	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
@@ -515,11 +531,43 @@ for i = 0, 6 do -- 각플레이어
 	
 	CIfEnd()
 
+	for j,k in pairs(FirstReward) do
+		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PEXP[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ"), 4),SetCp(FP)})
+	end
+	for j,k in pairs(FirstReward2) do
+		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PEXP[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),SetCp(FP)})
+	end
+
 	
+	
+	CIf(FP,{CV(SCA.GlobalVarArr[4],1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
+		CIf(FP,{TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
+			CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
+			CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
+			DoActionsX(FP,{
+				AddV(DayCheck2[i+1],1),
+				AddV(B_PCredit[i+1],100000),
+				AddV(B_PTicket[i+1],100),SetCp(i),DisplayText(StrDesignX("일일 출석 보상으로 \x04\x17유닛 판매권 500개, 크레딧 5만\x04을 얻었습니다."), 4)})
+				local TempV = CreateVar(FP)
+				local TempV2 = CreateVar(FP)
+				CMov(FP,TempV,_Mod(DayCheck2[i+1],7))
+				CMov(FP,TempV2,_Div(DayCheck2[i+1],7))
+			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
+			DoActionsX(FP, {
+				AddV(B_PCredit[i+1],1000000),
+				AddV(iv.VaccItem[i+1],10),
+				SetCp(i),DisplayText(StrDesignX("누적 출석 보상으로 \x04\x17크레딧 100만, \x10강화기 백신 10개\x04를 얻었습니다."), 4)})
+			CIfEnd()
+			DisplayPrint(i, {"\x13\x07『 \x04현재까지 총 출석일수 : ",DayCheck2[i+1],"일 \x07』"})
+		CIfEnd()
+	CIfEnd()
+
+
 	local CTSwitch = CreateCcode()
 	TriggerX(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetDeaths(i, SetTo, 1,14)},{preserved})
 	
-	NIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),},{SetV(DPErT[i+1],24*5)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	NIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 	CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
@@ -592,7 +640,7 @@ for i = 0, 6 do -- 각플레이어
 							table.insert(RewardAct,AddV(B_PCredit[i+1],m))
 						end
 						if l == 2 then
-							MText = MText.."\x17"..m.." 유닛 판매권 "
+							MText = MText.."\x19"..m.." 유닛 판매권 "
 							table.insert(RewardAct,AddV(SellTicket[i+1],m))
 						end
 						if l == 3 then
@@ -609,15 +657,9 @@ for i = 0, 6 do -- 각플레이어
 		end
 	CIfEnd()
 
-	
-	CIf(FP,{CD(SCA.GlobalCheck2,1),CV(SCA.LoadCheckArr[i+1],2)})
-		CIf(FP,{TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})})
-			CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
-			CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
-			CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
-			CAdd(FP,DayCheck2[i+1],1)--날짜 바뀔때마다 올라감
-			DisplayPrint(i, {"\x13\x04날짜가 바뀌었습니다. 테스트용. 현재 몇분? : ",SCA.MinV})
-		CIfEnd()
+	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr,AtLeast),})
+	CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
+	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0)},  {print_utf8(12,0,"\x07M\x04ission \x1FALL \x07CLEAR"),SetV(DPErT[i+1],15)}, {preserved})
 	CIfEnd()
 	
 
@@ -663,45 +705,19 @@ for i = 0, 6 do -- 각플레이어
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
 	end
-	for p = 1,7 do
-		local NextT = ""
-		local NextT2 = ""
-		if p ~= 7 then
-			NextT = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04는 \x08"..OreDPS[p+1].." \x04입니다.")
-			NextT2 = "\n"..StrDesignX("다음 \x07돈 증가량 \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04는 \x08"..GasDPS[p+1].." \x04입니다.")
-		end
-	TriggerX(FP,{CV(TempO[i+1], OreDPS[p],AtLeast)},{
-		SetV(BuildMul1[i+1],OreDPSM[p]),
-		SetV(NextOre[i+1],OreDPS[p+1]),
-		SetV(NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-		DisplayText(StrDesignX("건물의 \x1BDPS\x1F(미네랄)\x04가 \x08"..OreDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..OreDPSM[p].."배\x04로 증가하였습니다.")..NextT),SetCp(FP)})--1번건물
-	TriggerX(FP,{CV(TempG[i+1], GasDPS[p],AtLeast)},{
-		SetV(BuildMul2[i+1],GasDPSM[p]),
-		SetV(NextGas[i+1],GasDPS[p+1]),
-		SetV(NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
-		DisplayText(StrDesignX("건물의 \x1BDPS\x07(가스)\x04가 \x08"..GasDPS[p].." \x04를 돌파하였습니다. \x07돈 증가량\x04이 \x08"..GasDPSM[p].."배\x04로 증가하였습니다.")..NextT2),SetCp(FP)})--2번건물
-	end
-	
-	for j,k in pairs(FirstReward) do
-		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PEXP[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x0FＥＸＰ"), 4),SetCp(FP)})
-	end
-	for j,k in pairs(FirstReward2) do
-		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PEXP[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),SetCp(FP)})
-	end
-
 	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[15][2])},{SetCp(i),DisplayText(StrDesignX("\x0815강 \x04유닛을 획득하였습니다. \x0815강 \x04유닛부터는 \x17판매\x04를 통해 \x1B경험치\x04를 획득할 수 있습니다.")),SetCp(FP)})
-	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x17유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
+	TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[26][2])},{SetCp(i),DisplayText(StrDesignX("\x0F26강 \x04유닛을 획득하였습니다. \x0F26강 \x04유닛부터는 \x08보스\x04에 도전할 수 있습니다.")),DisplayText(StrDesignX("\x08보스 \x1C도전 \x07제한시간\x04은 없으며, \x08최대 4기 \x04입장 가능합니다.")),DisplayText(StrDesignX("\x0F26강 \x04유닛부터는 \x19유닛 판매권\x04이 있어야 판매가 가능합니다.")),SetCp(FP)})
 	
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{TempO[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV3[i+1],"10000000000",nil,{TempX[i+1]},Money[i+1])
-	CIf(FP,{TTNWar(Money[i+1], AtLeast, "15000000000000000000")})--1500경이상일경우
-	f_LSub(FP, Money[i+1], Money[i+1], "10000000000000000000")
-	CAdd(FP,Money2[i+1],1)
-	CIfEnd()
+--	CIf(FP,{TTNWar(Money[i+1], AtLeast, "15000000000000000000")})--1500경이상일경우
+--	f_LSub(FP, Money[i+1], Money[i+1], "10000000000000000000")
+--	CAdd(FP,Money2[i+1],1)
+--	CIfEnd()
 	
-	CIf(FP,{CV(Money2[i+1],1,AtLeast)})--400경이하일때 2번째변수가 1이상일경우
-	CIf(FP,{TTNWar(Money[i+1], AtMost, "4000000000000000000")})
+	CIf(FP,{CV(Money2[i+1],1,AtLeast)})--800경이하일때 2번째변수가 1이상일경우
+	CIf(FP,{TTNWar(Money[i+1], AtMost, "8000000000000000000")})
 	f_LAdd(FP, Money[i+1], Money[i+1], "10000000000000000000")
 	CSub(FP,Money2[i+1],1)
 	CIfEnd()
@@ -1259,7 +1275,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 			local EXP = LevelUnitArr[j][4]
 			if EXP>=1 then
 				if j>=26 then
-					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],0,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
+					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],0,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
 					CIf(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],1,AtLeast)},{KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],1)})
 					f_LAdd(FP, TempEXPW,TempEXPW, tostring(EXP))
 					CIfEnd()
@@ -1267,6 +1283,9 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 				else
 					CIf(FP,{Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i)})
 					f_LAdd(FP, TempEXPW,TempEXPW, tostring(EXP))
+					if j==15 then
+						DoActionsX(FP, {SetVX(MissionV[i+1],32,32)})
+					end
 					CIfEnd()
 				end
 			else
@@ -1319,7 +1338,8 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 				f_Read(FP, _Sub(BackupCp,15), CPos, nil,nil,1)
 				Convert_CPosXY()
 				Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,Simple_CalcLoc(86, -512, -512, 512, 512))
-				CDoActions(FP, {AddCD(ZKeyCool[i+1], 24*3),TMoveUnit(All, KSelUID, i, 87, 87);SetCp(i),DisplayText(StrDesignX("\x03SYSTEM \x04: 현재 선택중인 같은 종류의 유닛을 뭉쳤습니다. 쿨타임 : 3초"),4)})
+				CDoActions(FP, {AddCD(ZKeyCool[i+1], 24*3),TMoveUnit(All, KSelUID, i, 87, 87)})
+				DoActions(FP, {SetCp(i),DisplayText(StrDesignX("\x03SYSTEM \x04: 현재 선택중인 같은 종류의 유닛을 뭉쳤습니다. 쿨타임 : 3초.").."\n"..StrDesignX("\x04이 메세지는 1회만 표기됩니다."),4)}, 1)
 				CIfEnd()
 				f_LoadCp()
 				CElseIfX({MSQC_KeyInput(i,"Z"),CD(ZKeyCool[i+1],1,AtLeast)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 현재 유닛 뭉치기 기능이 쿨타임중입니다."),4)})

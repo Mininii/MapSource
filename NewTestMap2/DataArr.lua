@@ -159,7 +159,6 @@ function DataArr()
 		{iv.SellTicket,150}
 	}
 	
-	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}
 
 	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",145)
 	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
@@ -171,6 +170,11 @@ function DataArr()
 	iv.DayCheck2,ct.DayCheck2 = CreateDataPV("DayCheck2",153) 
 	iv.YearCheck,ct.YearCheck = CreateDataPV("YearCheck",154) 
 	iv.MonthCheck,ct.MonthCheck = CreateDataPV("MonthCheck",155) 
+	iv.BanFlag5,ct.BanFlag5 = CreateDataPV("BanFlag5",94) 
+	iv.BanFlag6,ct.BanFlag6 = CreateDataPV("BanFlag6",93) 
+	iv.BanFlag7,ct.BanFlag7 = CreateDataPV("BanFlag7",92) 
+	iv.BanFlag8,ct.BanFlag8 = CreateDataPV("BanFlag8",91) 
+	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4,iv.BanFlag5,iv.BanFlag6,iv.BanFlag7,iv.BanFlag8}
 
 	
 	iv.CS_BreakShieldData,ct.CS_BreakShieldData=CreateDataPV("CS_BreakShieldData")

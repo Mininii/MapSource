@@ -1,5 +1,5 @@
 function CT_Prev()
-	error(#VWArr+#PVWArr+#VWArr2)
+	--error(#VWArr+#PVWArr+#VWArr2)
 	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
 	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
 	for j,k in pairs(VWArr) do
@@ -75,10 +75,21 @@ for j,k in pairs(VWArr) do
 	end
 
 end
+
+for j,k in pairs(VWArr2) do
+	local VW = k[1]
+	local TrapVW = k[2]
+	if TrapVW[4] == "V" then
+		CXor(FP, TrapVW,VW, CT_GNextRandV)
+	else
+		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
+	end
+
+end
 	CMov(FP,CT_GPrevRandV,CT_GNextRandV)
 	f_LMov(FP,CT_GPrevRandW,CT_GNextRandW)
 	for i = 0, 6 do
-		CIf(FP, HumanCheck(i,1))
+		CIf(FP, {HumanCheck(i,1),LocalPlayerID(i)})
 		for j,k in pairs(PVWArr) do
 			local VW = k[1][i+1]
 			local TrapVW = k[2][i+1]

@@ -53,7 +53,7 @@ function Operator()
 		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i)}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
 		CIfXEnd()
-		TriggerX(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),}, {SetV(DPErT[i+1],24*5)}, {preserved})
+		TriggerX(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),}, {SetV(DPErT[i+1],24*10)}, {preserved})
 		
 		table.insert(OPBanActArr, SetCD(OPBan[i+1],0))
 		table.insert(OPBanActArr, SetCD(OPBanT[i+1],0))
@@ -86,6 +86,8 @@ function Operator()
 		SubV(SCA.WeekV,0x32232232),
 		SubV(SCA.MinV,0x32232232),
 	})
+
+
 	CIfEnd()
 	CIf(FP, {Memory(SCA.GlobalData[1],AtLeast,1),CDX(SCA.GlobalLoadFlag,0,2)},{SetCDX(SCA.GlobalLoadFlag,2,2)})
 	SCA.GVAReset = {}
@@ -96,6 +98,7 @@ function Operator()
 	for i = 1,20 do
 		f_Read(FP, SCA.GlobalData[i], SCA.GlobalVarArr[i])
 	end
+	Trigger2X(FP, {CV(SCA.GlobalVarArr[4],1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상 \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
 	CIfEnd()
 	
 	TriggerX(FP,{CDX(SCA.GlobalLoadFlag,3,3),CD(SCA.GlobalCheck,2)},{SetCD(SCA.GlobalCheck,3)},{preserved})
@@ -118,7 +121,7 @@ function Operator()
 	CIf(FP,{CD(SCA.GlobalCheck,3)},{SetCD(SCA.Timer,0)})
 	for i = 0,6 do
 		TriggerX(FP, {HumanCheck(i,0)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
-		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1)},{preserved})
+		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1),SetCD(SCA.GlobalCheck2,1)},{preserved})
 		CTrigger(FP, {HumanCheck(i,1),SCA.Available(i)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
 	end--

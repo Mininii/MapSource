@@ -388,7 +388,7 @@ function TBL()
         CIf(FP,{CV(SelUID,k)})
         CMov(FP,PUnitLevelLoc,iv.PUnitLevel[j])
         CMov(FP,PUnitClassLoc,iv.PUnitClass[j])
-        CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,2},1,nil,"\x03√ ",0x07)
+        CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,3},1,nil,"\x03√ ",0x07)
         CS__InputVA(FP,PMariTbl[j],0,MarStr[j],MarStrs[j],nil,0,MarStrs[j])
         CIfEnd()
     end

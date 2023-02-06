@@ -279,7 +279,30 @@ function GameDisplay()
 	CIfEnd()
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)})
+		
+		for p = 1,7 do
+			local NextT = ""
+			local NextT2 = ""
+			if p ~= 7 then
+				NextT = "다음 \x08배수\x04 증가 \x1BDPS\x1F(미네랄) : \x08"..OreDPS[p+1]
+				NextT2 = "다음 \x08배수\x04 증가 \x1BDPS\x07(가스) : \x08"..GasDPS[p+1]
+			end
+		TriggerX(FP,{CV(iv.TempO[i+1], OreDPS[p],AtLeast)},{
+			SetV(iv.BuildMul1[i+1],OreDPSM[p]),
+			SetV(iv.NextOre[i+1],OreDPS[p+1]),
+			SetV(iv.NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
+			DisplayText(StrDesignX("\x1BDPS\x1F(미네랄) \x08"..OreDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..OreDPSM[p].."배. "..NextT)),SetCp(FP)})--1번건물
+		TriggerX(FP,{CV(iv.TempG[i+1], GasDPS[p],AtLeast)},{
+			SetV(iv.BuildMul2[i+1],GasDPSM[p]),
+			SetV(iv.NextGas[i+1],GasDPS[p+1]),
+			SetV(iv.NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
+			DisplayText(StrDesignX("\x1BDPS\x07(가스) \x08"..GasDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..GasDPSM[p].."배. "..NextT2)),SetCp(FP)})--2번건물
+		end
+	
+
+
+
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)},{SetV(DPErT[i+1],24*10)})
 			for j = 1, #StatPrintEr do
 				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
 			end
@@ -332,7 +355,7 @@ function GameDisplay()
 	
 	CIfEnd()
 	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0)})
-		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,5)})
+		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,5)},{preserved})
 		CMul(FP,ScoutDmgLoc,100)
 		CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
 		CMov(FP,CTimeV,PlayTimeLoc2)
@@ -361,7 +384,7 @@ function GameDisplay()
 	
 	CIfX(FP,{CD(LKey,1)})
 	
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x17유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
 		for i = 0, 6 do
 			CIf(FP,HumanCheck(i, 1))
@@ -422,10 +445,10 @@ function GameDisplay()
 		},
 		{
 			"\x13\x04\x1B- 레벨 시스템 2 -",
-			"\x13\x0426강 이후 유닛부터는 판매시 경험치가 대폭 증가하지만 \x17유닛 판매권\x04이 필요합니다.",
-			"\x13\x04유닛 판매권은 100크레딧 당 1개로 구입하거나 보스 공략으로 얻을 수 있습니다.",
-			"\x13\x04\x17유닛 판매권\x04이 없으면 \x08유닛을 판매할 수 없습니다.",
-			"\x13\x04또한 \x17유닛 판매권\x08은 SCA 저장 불가능 아이템\x04입니다. 종료 전 모두 소모하는것을 권장드립니다.",
+			"\x13\x0426강 이후 유닛부터는 판매시 경험치가 대폭 증가하지만 \x19유닛 판매권\x04이 필요합니다.",
+			"\x13\x19유닛 판매권\x04은 100크레딧 당 1개로 구입하거나 보스 공략으로 얻을 수 있습니다.",
+			"\x13\x04\x19유닛 판매권\x04이 없으면 \x08유닛을 판매할 수 없습니다.",
+			"\x13\x04또한 \x19유닛 판매권\x08은 SCA 저장 불가능 아이템\x04입니다. 종료 전 모두 소모하는것을 권장드립니다.",
 		},
 		{
 			"\x13\x04\x1B- 고유 유닛 시스템\x08(약 8000레벨 이상 컨텐츠 이용 권장)\x1B -",
@@ -450,7 +473,7 @@ function GameDisplay()
 			"\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
 			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
-			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x17유닛 판매권 5개\x12\x046단계 : \x1715만 크레딧",
+			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개\x12\x046단계 : \x1715만 크레딧",
 			"\x047단계 \x04: \x1F확정 강화권\x04 1개",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
@@ -460,7 +483,7 @@ function GameDisplay()
 			"\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
 			"\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
-			"\x044단계 \x04: \x17유닛 판매권 + 50, \x08공격력 + 50%, ",
+			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
 			"\x045단계 \x04: \x04총 5회 처치 가능. 각 \x172.5만, 2만, 1.5만, 1만, 5천 크레딧",
 			"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
@@ -500,18 +523,18 @@ function GameDisplay()
 	
 	CMov(FP,0x6509B0,FP)
 	
-	if Limit == 1 then
-		local TempV = CreateVar(FP)
-		local TempV2 = CreateVar(FP)
-		CMov(FP,TempV2,CurrentOP,1)
-		for i = 0, 6 do
-			f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
-			
-			DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   ",})
-			DisplayPrint(i, {SCA.YearV,".",SCA.MonthV,".",SCA.DayV,". ",SCA.HourV," : ",SCA.MinV,"   Week : ",SCA.WeekV})
-
-		end
-	end
+	--if Limit == 1 then
+	--	local TempV = CreateVar(FP)
+	--	local TempV2 = CreateVar(FP)
+	--	CMov(FP,TempV2,CurrentOP,1)
+	--	for i = 0, 6 do
+	--		f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
+	--		
+	--		DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   ",})
+	--		DisplayPrint(i, {SCA.YearV,".",SCA.MonthV,".",SCA.DayV,". ",SCA.HourV," : ",SCA.MinV,"   Week : ",SCA.WeekV})
+--
+	--	end
+	--end
 
 
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})

@@ -89,13 +89,13 @@ iTblJump = def_sIndex()
 	MarStra = {}
 	MarStrs = {}
 	for i = 0, 6 do
-		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07¡º \x0D\x0D\x0D\x0D´Ü. "..MakeiStrVoid(20).." \x07¡»\x0D\x0D\x0D\x0D\x0D")
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07¡º \x0D\x0D\x0D\x0D\x0D´Ü. "..MakeiStrVoid(20).." \x07¡»\x0D\x0D\x0D\x0D\x0D")
 	end
 	CJumpEnd(FP,iTblJump)
 
 	
 	for i = 0, 6 do
-		CS__ItoName(FP, SVA1(MarStr[i+1],10), i, nil, "\x0D", ColorCode[i+1])
+		CS__ItoName(FP, SVA1(MarStr[i+1],11), i, nil, "\x0D", ColorCode[i+1])
 	
 		CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1]-3)
 	

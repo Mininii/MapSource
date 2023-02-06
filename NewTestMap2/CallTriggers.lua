@@ -435,7 +435,7 @@ function Install_CallTriggers()
 		CIfEnd()
 		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
 		
-			CMovX(FP,VArrX(GetVArray(DPErT[1], 7),VArrI,VArrI4),24*5)
+			CMovX(FP,VArrX(GetVArray(DPErT[1], 7),VArrI,VArrI4),24*10)
 			--Print_13X(FP,GCP)
 
 			f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)

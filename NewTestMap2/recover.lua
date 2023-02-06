@@ -24,7 +24,7 @@ end
         return total
 
     end
-    exp(90000)
+    exp(100000)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))

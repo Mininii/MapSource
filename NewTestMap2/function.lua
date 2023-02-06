@@ -606,7 +606,14 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 			if MultiplierV ~= nil then
 				f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
 			end
-			f_LAdd(FP,MoneyV,MoneyV,GetMoney)
+			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--오버플로우일경우 더하지말고 GetMoney를 1000경원짜리에 맞춘다.
+				local TempW = CreateWar(FP)
+				f_LSub(FP, TempW, "10000000000000000000", GetMoney)--1000경-벌은돈=빼야할남은돈
+				f_LSub(FP, MoneyV, MoneyV, TempW)--현재돈 << 현재돈 - 빼야할남은돈
+				CAdd(FP,iv.Money2[CP+1],1)--1000경원수표추가
+			CElseX()--아닐경우 정상적으로 더함
+				f_LAdd(FP,MoneyV,MoneyV,GetMoney)
+			CIfXEnd()
 		end
 
 		CIfEnd()
