@@ -434,6 +434,8 @@ function Install_CallTriggers()
 
 		CIfEnd()
 		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
+		
+			CMovX(FP,VArrX(GetVArray(DPErT[1], 7),VArrI,VArrI4),24*5)
 			--Print_13X(FP,GCP)
 
 			f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
@@ -507,13 +509,19 @@ function Install_CallTriggers()
 			local GetMulData = CreateVar(FP)
 			local GetMulData2 = CreateVar(FP)
 			local SCheck = CreateCcode()
+			local GetVAccData = CreateVar(FP)
+			local GetClassData = CreateVar(FP)
+			local GetMissionData = CreateVar(FP)
 
 			CElseIfX(CV(G_BtnFnm,6))
+			CMovX(FP,GetMissionData,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4))
 				CIf(FP,{CV(G_PushBtnm,0)}) -- 배율 올림
 					CMovX(FP,GetMulData,VArrX(MulOpVArr,VArrI,VArrI4))
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
+
 					Print_13X(FP, GCP)
 					CIfX(FP,{CV(GetMulData,50000000-1,AtMost)},{},{preserved})	-- 조건이 만족할 경우
+						CMov(FP,GetMissionData,8,nil,8)
 						CIfX(FP,{CV(GetMulData2,0)})
 						f_Mul(FP,GetMulData,5)
 						CMov(FP,GetMulData2,1)
@@ -534,6 +542,7 @@ function Install_CallTriggers()
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
 					Print_13X(FP, GCP)
 					CIfX(FP,{CV(GetMulData,2,AtLeast)},{},{preserved})	-- 조건이 만족할 경우
+						CMov(FP,GetMissionData,8,nil,8)
 						CIfX(FP,{CV(GetMulData2,1)})
 						f_Div(FP,GetMulData,5)
 						CMov(FP,GetMulData2,0)
@@ -577,6 +586,7 @@ function Install_CallTriggers()
 						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x08활성화 불가능.",4)})
 					CIfXEnd()
 				CIfEnd()--
+			CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),GetMissionData)
 			
 			CElseIfX(CV(G_BtnFnm,7)) -- 고유유닛 버튼셋 제어부
 			--1 = 연결됨
@@ -589,12 +599,11 @@ function Install_CallTriggers()
 			--8 = 다른 작업 중입니다.
 			--9 = 작업 실패
 			--10 = 명령 실행
-			GetVAccData = CreateVar(FP)
-			GetClassData = CreateVar(FP)
 			CIfX(FP, {TDeathsX(GCP, Exactly, 1, 1,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
 			CIfX(FP,{CV(iv.GeneralPlayTime,24*60*60,AtLeast)})
 				GetCreditData = CreateWar(FP)
 				GerRandData = CreateVar(FP)
+				CMovX(FP,GetMissionData,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetClassData,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetPUnitLevel,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4))
@@ -614,7 +623,7 @@ function Install_CallTriggers()
 							VaccJump = def_sIndex()
 							CIfX(FP, {CV(G_PushBtnm,1),CV(GetVAccData,0)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
 							CElseX()
-								
+								CMov(FP, GetMissionData, 2, nil, 2)
 								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{SetV(GetEnchCoolData,50),SetV(SaveChkData,1),TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--저장필요
 								CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
@@ -759,6 +768,7 @@ function Install_CallTriggers()
 								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
 								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,9),CV(GetBrShData,CS_BreakShieldLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x1F파괴 방지 \x04확률을 올릴 수 없습니다."), 4),SetCp(FP)})
 								CIfX(FP,{TTNWar(GetCreditData,AtLeast,"1000000")})
+									CMov(FP, GetMissionData, 16, nil, 16)
 									CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 									f_Read(FP,_Add(G_Btnptr,10),CPos)
 									Convert_CPosXY()
@@ -821,6 +831,7 @@ function Install_CallTriggers()
 
 					CIfEnd()
 
+				CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),GetMissionData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4),GetPUnitLevel)
 				f_LMovX(FP, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4), GetCreditData)
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
@@ -913,52 +924,6 @@ function Install_CallTriggers()
 	Call_GetLocalData = SetCallForward()
 	SetCall(FP)
 	
-	local LocalDataArr = {
-		{iv.TotalEPer[1],iv.TotalEPerLoc},
-		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
-		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
-		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
-		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
-		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
-		{iv.Stat_TotalEPerEx2[1],iv.S_TotalEPerEx2Loc},
-		{iv.Stat_TotalEPerEx3[1],iv.S_TotalEPerEx3Loc},
-		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
-		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
-		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
-		{iv.TotalBreakShield[1],iv.BreakShieldLoc},
-		{iv.Stat_BreakShield[1],iv.S_BreakShieldLoc},
-		{iv.Income[1],iv.IncomeLoc},
-		{iv.IncomeMax[1],iv.IncomeMaxLoc},
-		{iv.PLevel[1],iv.LevelLoc},
-		{iv.StatP[1],iv.StatPLoc},
-		{iv.InterfaceNum[1],iv.InterfaceNumLoc},
-		{iv.Stat_Upgrade[1],iv.UpgradeLoc},
-		{iv.Stat_AddSc[1],iv.AddScLoc},
-		{iv.ScoutDmg[1],iv.ScoutDmgLoc},
-		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc},
-		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc2},
-		{iv.PlayTime[1],iv.PlayTimeLoc},
-		{iv.PlayTime2[1],iv.PlayTimeLoc2},
-		{iv.General_Upgrade[1],iv.UpgradeUILoc},
-		{iv.NextOre[1],iv.NextOreLoc},
-		{iv.NextGas[1],iv.NextGasLoc},
-		{iv.NextOreMul[1],iv.NextOreMulLoc},
-		{iv.NextGasMul[1],iv.NextGasMulLoc},
-		{iv.SellTicket[1],iv.SellTicketLoc},
-		{iv.TimeAttackScore[1],iv.TimeAttackScoreLoc},
-		{iv.CS_Cooldown[1],iv.CS_CooldownLoc},
-		{iv.CS_Atk[1],iv.CS_AtkLoc},
-		{iv.CS_EXP[1],iv.CS_EXPLoc},
-		{iv.CS_TotalEPer[1],iv.CS_TotalEPerLoc},
-		{iv.CS_TotalEper4[1],iv.CS_TotalEper4Loc},
-		{iv.CS_DPSLV[1],iv.CS_DPSLVLoc},
-		{iv.PUnitLevel[1],iv.PUnitLevelLoc},
-		{iv.PUnitClass[1],iv.PUnitClassLoc},
-		{iv.VaccItem[1],iv.VaccItemLoc},
-		{iv.Stat_SCCool[1],iv.SCCoolLoc},
-		{iv.PETicket[1],iv.PETicketLoc},
-		
-	}
 	
 	for j,k in pairs(LocalDataArr) do
 		local LocPVA = GetVArray(k[1], 7)

@@ -317,6 +317,7 @@ iTblJump = def_sIndex()
 	
 	CDoActions(FP, {TSetNVar(ShopUnit[i+1], SetTo, Nextptrs),CreateUnit(1, 15, 116, i),TSetMemoryX(_Add(Nextptrs,55), SetTo, 0xA00000,0xA00000)})
 	--CallTrigger(FP, Call_CTInputUID)
+	DoActions(FP, {SetLoc("Location "..(80+i),"U",Subtract,64),SetLoc("Location "..(80+i),"D",Subtract,64)})
 	
 
 	CIfEnd()
@@ -329,6 +330,7 @@ iTblJump = def_sIndex()
 		LocSet = LocSet+1
 		if LocSet == 10 then LocSet=0 DoActions(FP, {SetLoc("Location 87","U",Add,64),SetLoc("Location 87","D",Add,64),SetLoc("Location 87", "L", Subtract, 64*10),SetLoc("Location 87", "R", Subtract, 64*10)}) end
 	end
+
 	
 	CFor(FP, 0, 1700, 1)
 	CT_UID = CreateVar(FP)
@@ -343,19 +345,30 @@ iTblJump = def_sIndex()
 	CFor(FP, 0, LevelLimit, 1)
 	CI = CForVariable()
 	LIndex = CreateVar(FP)
+	CICh = CreateVar(FP)
 	LMulW = CreateWar2(FP,nil,nil,"3")
 	LMulW2 = CreateWar2(FP,nil,nil,"10")
 	LMulW3 = CreateWar(FP)
+	LMulW4 = CreateWar2(FP,nil,nil,"6")
 	--CTrigger(FP, CV(CI,10000,AtLeast), {TSetNWar(LMulW,SetTo,"10")})
 	--CTrigger(FP, CV(CI,20000,AtLeast), {TSetNWar(LMulW,SetTo,"100")})
 	--CTrigger(FP, CV(CI,30000,AtLeast), {TSetNWar(LMulW,SetTo,"1000")})
 	--CTrigger(FP, CV(CI,40000,AtLeast), {TSetNWar(LMulW,SetTo,"10000")})
 	--10+((i-1)*(i*3))
+	
+    --if i >50000 and i%10==0 then
+    --    mw3 = mw3+1
+    --end
 
 	ConvertLArr(FP, LIndex, CI, 8)
 	f_LMov(FP,LArrX({EXPArr}, LIndex),LMulW2,nil,nil,1)
-	f_LAdd(FP, LMulW, LMulW, "6")
+	f_LAdd(FP, LMulW, LMulW, LMulW4)
 	f_LAdd(FP, LMulW2, LMulW2, LMulW)
+	CAdd(FP,CICh,1)
+	CIf(FP, {CV(CI,50000,AtLeast),CV(CICh,10,AtLeast)},{SetV(CICh,0)})
+	f_LAdd(FP, LMulW4, LMulW4, "1")
+	CIfEnd()
+	
 
 	CForEnd()
 --

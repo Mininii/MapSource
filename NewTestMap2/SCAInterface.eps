@@ -17,9 +17,6 @@ function beforeTriggerExec(){
 	
 	var GLoadCheck;
 	var CurVer;
-	once {
-		CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
-	}
 
 	foreach(cp : EUDLoopPlayer("Human")){
 		setcurpl(cp);
@@ -36,7 +33,7 @@ function beforeTriggerExec(){
 		}
 		if(sca.GlobalData[0]==1&&1<=sca.Month&&SCA_GLoaded[cp]==0){ // 글로벌데이터 불러오기 성공시 이벤트여부, 현재버전등등 알려줌 + 개인데이터 불러옴 
 			if(LoadCheck[cp] == 0){
-			
+			CurVer = dwread_epd(EPD(0x58f608));//TEP에서 입력한 버전정보 불러옴
 			if(sca.GlobalData[1] != CurVer && LoadCheck[cp] == 0 && CurVer < sca.GlobalData[1]){ // 구버전, 지원종료
 				f_eprintln("\x04현재 최신버전이 아닙니다! 해당 맵은 \x03SCArchive \x07지원이 \x08종료\x04되었습니다. 최신버전을 이용해주세요.");
 				PlayWAV("sound\\Bullet\\tscFir00.wav");
@@ -53,11 +50,14 @@ function beforeTriggerExec(){
 				for (var i = 0; i < 20; i++) {
 					SetDeaths(EPD(0x58f60C)+i,SetTo,sca.GlobalData[i],0);
 				}
-					SetDeaths(EPD(0x58f60C)+20,SetTo,sca.Year,0);
-					SetDeaths(EPD(0x58f60C)+21,SetTo,sca.Month,0);
-					SetDeaths(EPD(0x58f60C)+22,SetTo,sca.Hour,0);
-					SetDeaths(EPD(0x58f60C)+23,SetTo,sca.Day,0);
-					SetDeaths(EPD(0x58f60C)+24,SetTo,sca.Week,0);
+					SetDeaths(EPD(0x58f60C)+20,SetTo,sca.Year+0x32232232,0);
+					SetDeaths(EPD(0x58f60C)+21,SetTo,sca.Month+0x32232232,0);
+					SetDeaths(EPD(0x58f60C)+22,SetTo,sca.Hour+0x32232232,0);
+					SetDeaths(EPD(0x58f60C)+23,SetTo,sca.Day+0x32232232,0);
+					SetDeaths(EPD(0x58f60C)+24,SetTo,sca.Week+0x32232232,0);
+					SetDeaths(EPD(0x58f60C)+24,SetTo,sca.Min+0x32232232,0);
+					
+					
 		}
 
 

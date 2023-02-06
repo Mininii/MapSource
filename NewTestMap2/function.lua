@@ -387,10 +387,9 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	end
 	SetUnitsDatX(UnitID, {Class=193})
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
-	AutoEnchArr = CreateArr(7*#LevelUnitArr, FP)
+
 	--AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	table.insert(AutoEnchArr2,CreateCcodeArr(7))
-	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
 	table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
 	table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
 	table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
@@ -441,8 +440,15 @@ table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,2))
 
 end
 function PopLevelUnit()
+	AutoEnchArr = CreateArr(7*#LevelUnitArr, FP)
+	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
 	LevelDataArr = CreateArr(#LevelUnitArr, FP)
 	BuyDataArr = CreateArr(#AutoBuyArr,FP)
+	for j = 0, 9 do
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr,j),SetTo,0))
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoSellArr,j),SetTo,0))
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j),SetTo,0))
+	end
 	BuyDataWArr = CreateWArr(#AutoBuyArr,FP)
 	for j,k in pairs(LevelUnitArr) do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
@@ -1453,12 +1459,18 @@ function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, D
 	end
 	
 end
-function CreateDataPV(DataName,SCADeathData)
+function CreateDataPV(DataName,SCADeathData,LocOp)
 	local Ret = CreateVarArr(7,FP)
 	local Ret2 = CreateVarArr(7,FP)
 	table.insert(PVWArr,{Ret,Ret2,DataName})
 	if SCADeathData ~= nil then
 		table.insert(SCA_DataArr,{Ret,SCADeathData})
 	end
-	return Ret,Ret2
+	if LocOp == 1 then 
+		local Ret3 = CreateVar(FP)
+		table.insert(LocalDataArr,{Ret[1],Ret3})
+		return Ret,Ret2,Ret3
+	else return Ret,Ret2
+	end
+	
 end

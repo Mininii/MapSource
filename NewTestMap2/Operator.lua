@@ -18,7 +18,7 @@ function Operator()
 	--4 로드완료
 	--8 저장완료
 	--그외 사용불가
-	DoActions(FP,{SetMemory(0x58F504, SetTo, 0)})
+	DoActionsX(FP,{SetMemory(0x58F504, SetTo, 0),SetCD(SCA.GlobalCheck2,0)})
 	CurrentOP = CreateVar(FP)
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
 
@@ -43,7 +43,7 @@ function Operator()
 	for i = 0, 6 do
         CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i)})--상위플레이어가 런쳐 연결된경우
 		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i)}, {AddCD(OPBanT[i+1],1)}, {preserved})
-		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i),CD(OPBanT,60*24,AtLeast)}, {AddCD(OPBan[i+1],1),SetCD(OPBanT[i+1],0)}, {preserved})
+		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i),CD(OPBanT[i+1],60*24,AtLeast)}, {AddCD(OPBan[i+1],1),SetCD(OPBanT[i+1],0)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,3),SCA.Available(i)}, {SetCD(OPBanT[i+1],0)}, {preserved})
 		CIfX(FP,{SCA.Available(i)},{})
 		if Limit == 1 then
@@ -53,6 +53,8 @@ function Operator()
 		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i)}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
 		CIfXEnd()
+		TriggerX(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),}, {SetV(DPErT[i+1],24*5)}, {preserved})
+		
 		table.insert(OPBanActArr, SetCD(OPBan[i+1],0))
 		table.insert(OPBanActArr, SetCD(OPBanT[i+1],0))
 	end
@@ -67,12 +69,23 @@ function Operator()
 	SetV(SCA.YearV,0),
 	SetV(SCA.HourV,0),
 	SetV(SCA.DayV,0),
-	SetV(SCA.WeekV,0)})
+	SetV(SCA.WeekV,0),
+	SetV(SCA.MinV,0),SetCD(SCA.GlobalCheck2,1)
+})
 	f_Read(FP, SCA.Month, SCA.MonthV)
 	f_Read(FP, SCA.Year, SCA.YearV)
 	f_Read(FP, SCA.Hour, SCA.HourV)
 	f_Read(FP, SCA.Day, SCA.DayV)
 	f_Read(FP, SCA.Week, SCA.WeekV)
+	f_Read(FP, SCA.Min, SCA.MinV)
+	DoActionsX(FP, {
+		SubV(SCA.MonthV,0x32232232),
+		SubV(SCA.YearV,0x32232232),
+		SubV(SCA.HourV,0x32232232),
+		SubV(SCA.DayV,0x32232232),
+		SubV(SCA.WeekV,0x32232232),
+		SubV(SCA.MinV,0x32232232),
+	})
 	CIfEnd()
 	CIf(FP, {Memory(SCA.GlobalData[1],AtLeast,1),CDX(SCA.GlobalLoadFlag,0,2)},{SetCDX(SCA.GlobalLoadFlag,2,2)})
 	SCA.GVAReset = {}
@@ -122,7 +135,7 @@ function Operator()
 			NJumpX(FP, SCA.LoadJump, {HumanCheck(i,1),SCA.Available(i),CD(SCA.LoadCheckArr[i+1],0)}, {SetDeaths(i, SetTo, 3, 2),SetCD(SCA.Loading[i+1],1),SCA.Reset(i)})
 		end
 	NElseX()
-		local LoadTimer = CreateCcode() 
+		local LoadTimer = CreateCcodeArr(7) 
 		local Ttable= {}
 		for i = 0, 6 do
 			table.insert(Ttable, SubCD(LoadTimer[i+1],1))

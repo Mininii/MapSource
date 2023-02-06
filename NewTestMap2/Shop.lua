@@ -47,6 +47,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				CAdd(FP,SellTicket[i+1],MulOp[i+1])
 				f_LSub(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "100"))
+				CMov(FP,iv.MissionV[i+1],4,nil,4)
 				CIf(FP,{LocalPlayerID(i)})
 				local TempV = CreateVar(FP)
 				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "100"),nil,nil,1)

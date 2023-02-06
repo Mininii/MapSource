@@ -35,9 +35,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x19ver\x07. \x042\x07.\x0410"
+VerText = "\x19ver\x07. \x042\x07.\x0411"
 
-TestSet(0)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
@@ -48,7 +48,7 @@ SpeedTestMode = 0
 end
 FP = P8
 LimitVer = 19
-StatVer = 8
+StatVer = 9
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
@@ -57,6 +57,7 @@ Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),Hum
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 
 Start_init(1)
+__SetIndexAlloc(0x6000, 0xA000)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Include_CtrigPlib(360,"Switch 100")

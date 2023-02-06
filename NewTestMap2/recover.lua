@@ -5,10 +5,14 @@
 --	end
     mw2 = 10
     mw = 6
-for i = 1, 100000 do
+    mw3 = 6
+for i = 1, 200000 do
 	EXPArr[i] = mw2
     mw2 = mw2+mw
-    mw=mw+6
+    if i >50000 and i%10==0 then
+        mw3 = mw3+1
+    end
+    mw=mw+mw3
 end
 
     function exp(lv)
@@ -20,7 +24,7 @@ end
         return total
 
     end
-    exp(4394)
+    exp(90000)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))

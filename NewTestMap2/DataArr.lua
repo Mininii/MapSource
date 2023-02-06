@@ -79,7 +79,7 @@ function DataArr()
 		{iv.RandomSeed8,ct.RandomSeed8,"RandomSeed8"},
 		{iv.RandomSeed9,ct.RandomSeed9,"RandomSeed9"},
 		{iv.RandomSeed10,ct.RandomSeed10,"RandomSeed10"},
-		
+		{iv.B_PEXP,ct.B_PEXP,"B_PEXP"},
 		
 		
 	}
@@ -100,6 +100,17 @@ function DataArr()
 		{iv.BossLV,ctg.BossLV,"BossLV"},
 		{iv.CUnitT,ctg.CUnitT,"CUnitT"}
 	}
+	VWArr2 = {
+		{SCA.YearV,ct.YearV,"YearV"},
+		{SCA.MonthV,ct.MonthV,"MonthV"},
+		{SCA.HourV,ct.HourV,"HourV"},
+		{SCA.DayV,ct.DayV,"DayV"},
+		{SCA.WeekV,ct.WeekV,"WeekV"},
+		{SCA.MinV,ct.MinV,"MinV"},
+	}
+	for j,k in pairs(SCA.GlobalVarArr) do
+		table.insert(VWArr2,{k,ct.GlobalVarArr[j],"GlobalVarArr"..(j-1)})
+	end
 	SCA_DataArr = {
 		{iv.BanFlag4,95},
 		{iv.BanFlag3,96},
@@ -145,6 +156,7 @@ function DataArr()
 		{iv.RandomSeed8,142},
 		{iv.RandomSeed9,143},
 		{iv.RandomSeed10,144},
+		{iv.SellTicket,150}
 	}
 	
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4}
@@ -154,9 +166,65 @@ function DataArr()
 	iv.Stat_SCCool,ct.Stat_SCCool = CreateDataPV("Stat_SCCool",147)
 	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",148)
 	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",149) 
+	iv.CurMission,ct.CurMission = CreateDataPV("CurMission",151) 
+	iv.DayCheck,ct.DayCheck = CreateDataPV("DayCheck",152) 
+	iv.DayCheck2,ct.DayCheck2 = CreateDataPV("DayCheck2",153) 
+	iv.YearCheck,ct.YearCheck = CreateDataPV("YearCheck",154) 
+	iv.MonthCheck,ct.MonthCheck = CreateDataPV("MonthCheck",155) 
 
 	
 	iv.CS_BreakShieldData,ct.CS_BreakShieldData=CreateDataPV("CS_BreakShieldData")
 	iv.TotalBreakShield,ct.TotalBreakShield = CreateDataPV("TotalBreakShield")
 	iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
+	iv.SCCool,ct.SCCool = CreateDataPV("SCCool")
+	iv.AddSC,ct.AddSC = CreateDataPV("AddSC")
+	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")
+
+	LocalDataArr = {
+		{iv.TotalEPer[1],iv.TotalEPerLoc},
+		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
+		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
+		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
+		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
+		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
+		{iv.Stat_TotalEPerEx2[1],iv.S_TotalEPerEx2Loc},
+		{iv.Stat_TotalEPerEx3[1],iv.S_TotalEPerEx3Loc},
+		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
+		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
+		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
+		{iv.TotalBreakShield[1],iv.BreakShieldLoc},
+		{iv.Stat_BreakShield[1],iv.S_BreakShieldLoc},
+		{iv.Income[1],iv.IncomeLoc},
+		{iv.IncomeMax[1],iv.IncomeMaxLoc},
+		{iv.PLevel[1],iv.LevelLoc},
+		{iv.StatP[1],iv.StatPLoc},
+		{iv.InterfaceNum[1],iv.InterfaceNumLoc},
+		{iv.Stat_Upgrade[1],iv.UpgradeLoc},
+		{iv.AddSC[1],iv.AddScLoc},
+		{iv.ScoutDmg[1],iv.ScoutDmgLoc},
+		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc},
+		{iv.Stat_EXPIncome[1],iv.EXPIncomeLoc2},
+		{iv.PlayTime[1],iv.PlayTimeLoc},
+		{iv.PlayTime2[1],iv.PlayTimeLoc2},
+		{iv.General_Upgrade[1],iv.UpgradeUILoc},
+		{iv.NextOre[1],iv.NextOreLoc},
+		{iv.NextGas[1],iv.NextGasLoc},
+		{iv.NextOreMul[1],iv.NextOreMulLoc},
+		{iv.NextGasMul[1],iv.NextGasMulLoc},
+		{iv.SellTicket[1],iv.SellTicketLoc},
+		{iv.TimeAttackScore[1],iv.TimeAttackScoreLoc},
+		{iv.CS_Cooldown[1],iv.CS_CooldownLoc},
+		{iv.CS_Atk[1],iv.CS_AtkLoc},
+		{iv.CS_EXP[1],iv.CS_EXPLoc},
+		{iv.CS_TotalEPer[1],iv.CS_TotalEPerLoc},
+		{iv.CS_TotalEper4[1],iv.CS_TotalEper4Loc},
+		{iv.CS_DPSLV[1],iv.CS_DPSLVLoc},
+		{iv.PUnitLevel[1],iv.PUnitLevelLoc},
+		{iv.PUnitClass[1],iv.PUnitClassLoc},
+		{iv.VaccItem[1],iv.VaccItemLoc},
+		{iv.SCCool[1],iv.SCCoolLoc},
+		{iv.PETicket[1],iv.PETicketLoc},
+		{iv.CreditAddSC[1],iv.CreditAddSCLoc},
+		{iv.Money2[1],iv.MoneyLoc2},
+	}
 end

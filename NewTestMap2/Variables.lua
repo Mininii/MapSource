@@ -5,6 +5,9 @@ function Include_Vars()
 		end
 	end
 	--System
+	iv={} -- 전역 변수 테이블
+	ct={} -- 전역 변수 테이블 치팅감지
+	ctg={} -- 전역 변수 테이블 치팅감지
 	LevelLimit = 100000
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
@@ -13,6 +16,7 @@ function Include_Vars()
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
 	SCA = {}
+	SCA.GlobalCheck2 = CreateCcode()
 	SCA.GlobalCheck = CreateCcode()
 	SCA.GlobalLoadFlag = CreateCcode()
 	SCA.LoadCheckArr = CreateCcodeArr(7)
@@ -20,12 +24,14 @@ function Include_Vars()
 	VoidAreaAlloc = 0x58f60C-4
 	VoidAreaLimit = 0x5967F0
 	SCA.GlobalVarArr = CreateVarArr(20, FP)
+	ct.GlobalVarArr = CreateVarArr(20, FP)
 	SCA.GlobalData = CreateVoidArr(20)
 	SCA.Year = CreateVoid()
 	SCA.Month = CreateVoid()
 	SCA.Hour = CreateVoid()
 	SCA.Day = CreateVoid()
 	SCA.Week = CreateVoid()
+	SCA.Min = CreateVoid()
 	SCA.CheckTime = CreateCcode()
 	SCA.GLoadCmp = CreateCcode()
 	SCA.YearV = CreateVar(FP)
@@ -33,6 +39,15 @@ function Include_Vars()
 	SCA.HourV = CreateVar(FP)
 	SCA.DayV = CreateVar(FP)
 	SCA.WeekV = CreateVar(FP)
+	SCA.MinV = CreateVar(FP)
+	
+	ct.YearV = CreateVar(FP)
+	ct.MonthV = CreateVar(FP)
+	ct.HourV = CreateVar(FP)
+	ct.DayV = CreateVar(FP)
+	ct.WeekV = CreateVar(FP)
+	ct.MinV = CreateVar(FP)
+
 	SCA.GReload = CreateCcode()
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
@@ -48,6 +63,9 @@ function Include_Vars()
 	MSQC_KeySet("I",503)
 	MSQC_KeySet("F9",13)
 	MSQC_KeySet("F12",553)--테스트용
+	MSQC_KeySet("B",554)
+	MSQC_KeySet("N",555)
+	MSQC_KeySet("M",556)
 	MSQC_KeySet("Z",505)
 	--504 사용중
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
@@ -74,6 +92,7 @@ function Include_Vars()
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	LimitM = CreateCcodeArr(7)
 	--Interface
+	DPErT = CreateVarArr(7,FP)
 	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
 	ShopPtr = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
 	
@@ -131,13 +150,10 @@ function Include_Vars()
 	MCTCondArr = {
 		Memory(0x5124F0, Exactly, 13)
 	}
-	iv={} -- 전역 변수 테이블
-	ct={} -- 전역 변수 테이블 치팅감지
-	ctg={} -- 전역 변수 테이블 치팅감지
 
 	--PlayData(NonSCA)
 	iv.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
-	iv.Money2 = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	iv.Money2 = CreateVarArr(7,FP) -- 자신의 현재 돈 보유량
 	iv.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
 	iv.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
 	iv.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
@@ -199,6 +215,7 @@ function Include_Vars()
 	iv.LV5Cool = CreateVarArr(7,FP)
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
+	iv.B_PEXP = CreateVarArr(7,FP)
 
 	iv.BanFlag = CreateVarArr(7,FP)
 	iv.BanFlag2 = CreateVarArr(7,FP)
@@ -228,7 +245,7 @@ function Include_Vars()
 	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
 	iv.MoneyLoc = CreateWar(FP)
-	iv.MoneyLoc2 = CreateWar(FP)
+	iv.MoneyLoc2 = CreateVar(FP)
 	iv.CredLoc = CreateWar(FP)
 	iv.ExpLoc = CreateWar(FP)
 	iv.TotalExpLoc = CreateWar(FP)
@@ -263,6 +280,7 @@ function Include_Vars()
 	iv.VaccItemLoc = CreateVar(FP)
 	iv.SCCoolLoc = CreateVar(FP)
 	iv.PETicketLoc = CreateVar(FP)
+	iv.CreditAddSCLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -315,7 +333,7 @@ function Include_Vars()
 
 	
 	ct.Money = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
-	ct.Money2 = CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
+	ct.Money2 = CreateVarArr(7,FP) -- 자신의 현재 돈 보유량
 	ct.IncomeMax = CreateVarArr2(7,12,FP) -- 자신의 사냥터 최대 유닛수
 	ct.Income = CreateVarArr(7,FP) -- 자신의 현재 사냥터에 보유중인 유닛수
 	ct.BuildMul1 = CreateVarArr2(7,1,FP)-- 건물 돈 획득략 배수
@@ -360,6 +378,7 @@ function Include_Vars()
 	ct.LV5Cool = CreateVarArr(7,FP)
 	ct.B_PCredit = CreateVarArr(7,FP)
 	ct.B_PTicket = CreateVarArr(7,FP)
+	ct.B_PEXP = CreateVarArr(7,FP)
 	ct.TimeAttackScore = CreateVarArr(7,FP)
 	ct.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
 
@@ -596,8 +615,8 @@ FirstReward2 = {
 	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
-	Cost_Stat_ScDmg = 15
-	Cost_Stat_AddSc = 50
+	--Cost_Stat_ScDmg = 15
+	--Cost_Stat_AddSc = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000
@@ -607,7 +626,7 @@ FirstReward2 = {
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
 	Cost_Stat_BreakShield = 250
-	Cost_Stat_SCCool = 50
+	--Cost_Stat_SCCool = 50
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {

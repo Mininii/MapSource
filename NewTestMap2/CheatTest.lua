@@ -1,4 +1,5 @@
 function CT_Prev()
+	error(#VWArr+#PVWArr+#VWArr2)
 	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
 	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
 	for j,k in pairs(VWArr) do
@@ -7,6 +8,13 @@ function CT_Prev()
 		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, j-1,nil,k[3])
 
 	end
+	for j,k in pairs(VWArr2) do
+		local VW = k[1]
+		local TrapVW = k[2]
+		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, (j+#VWArr+#PVWArr)-1,nil,k[3])
+
+	end
+	
 
 
 end
