@@ -22,12 +22,14 @@ function CT_PrevCP(i)
 	CMov(FP,CT_NextRandV[i+1],_Mod(_Rand(),12858519))
 	f_LMov(FP,CT_NextRandW[i+1],_LMod(_LRand(), {12532858,12532858}))
 	
+	CIf(FP, LocalPlayerID(i))
 	for j,k in pairs(PVWArr) do
 		local VW = k[1][i+1]
 		local TrapVW = k[2][i+1]
 		TrapKey = CheatTestX(i, VW,TrapVW, j+(#VWArr)-1,1,k[3])
 
 	end
+	CIfEnd()
 end
 function CT_Next()
 	

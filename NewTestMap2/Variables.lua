@@ -140,7 +140,7 @@ function Include_Vars()
 
 	EnchCool = CreateVarArr(7, FP)
 	--String
-	
+	VaccSCount = CreateCcodeArr(7)
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 

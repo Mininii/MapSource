@@ -264,8 +264,8 @@ function GameDisplay()
 			StrDesign("\x04빈 항목입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
-			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1만 적용됩니다."),
-			StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F35강\x04:\x08+2, \x0F36강\x04:\x08+1 \x04만 적용됩니다."),
+			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1로 합산, 적용됩니다.."),
+			StrDesign("\x10+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F35강\x04:\x08+2로, \x0F36강\x04:\x08+1로\x04 합산 적용됩니다."),
 			StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0840강 이후 유닛\x04만 적용됩니다."),
 			StrDesign("\x08특수\x1F 파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0840강 이후 유닛\x04만 적용됩니다."),
 			StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
@@ -280,25 +280,6 @@ function GameDisplay()
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
 		
-		for p = 1,7 do
-			local NextT = ""
-			local NextT2 = ""
-			if p ~= 7 then
-				NextT = "다음 \x08배수\x04 증가 \x1BDPS\x1F(미네랄) : \x08"..OreDPS[p+1]
-				NextT2 = "다음 \x08배수\x04 증가 \x1BDPS\x07(가스) : \x08"..GasDPS[p+1]
-			end
-		TriggerX(FP,{CV(iv.TempO[i+1], OreDPS[p],AtLeast)},{
-			SetV(iv.BuildMul1[i+1],OreDPSM[p]),
-			SetV(iv.NextOre[i+1],OreDPS[p+1]),
-			SetV(iv.NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-			DisplayText(StrDesignX("\x1BDPS\x1F(미네랄) \x08"..OreDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..OreDPSM[p].."배. "..NextT)),SetCp(FP)})--1번건물
-		TriggerX(FP,{CV(iv.TempG[i+1], GasDPS[p],AtLeast)},{
-			SetV(iv.BuildMul2[i+1],GasDPSM[p]),
-			SetV(iv.NextGas[i+1],GasDPS[p+1]),
-			SetV(iv.NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
-			DisplayText(StrDesignX("\x1BDPS\x07(가스) \x08"..GasDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..GasDPSM[p].."배. "..NextT2)),SetCp(FP)})--2번건물
-		end
-	
 
 
 
@@ -462,10 +443,10 @@ function GameDisplay()
 			"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스, 보스 시스템 \x1B-",
 			"\x13\x04이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
 			"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
-			"\x13\x08단, SCA 로드가 \x072명 이상 \x08완료되어야 영구 유지 됩니다.",
+			"\x13\x08단, SCA 로드가 \x072명 이상 \x08완료되어야 영구 유지 됩니다. (런쳐 로드 \x071인이하 \x04멀티플레이일 경우 \x08영구 유지 불가\x04)",
 			"\x13\x04\x08개인 보스 몬스터 \x04지역은 25강 이하 유닛만 개인별로 공략 가능하며 \x0F1초간의 데미지(DPS)\x04으로 클리어 여부를 결정합니다.",
 			"\x13\x04개인보스 \x07LV.6 \x04이상부터는 \x1041강 이상 유닛부터 공략 가능합니다.",
-			"\x13\x04\x08보스 몬스터 \x04지역은 26강 유닛부터 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
+			"\x13\x04\x08파티 보스 몬스터 \x04지역은 26강~41강 유닛으로 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
 		},
 	
 	--남는거 공 250% 강확은 논외
@@ -523,6 +504,29 @@ function GameDisplay()
 	
 	CMov(FP,0x6509B0,FP)
 	
+	for i = 0,6 do
+		CIf(FP,{HumanCheck(i, 1)})
+		for p = 1,7 do
+			local NextT = ""
+			local NextT2 = ""
+			if p ~= 7 then
+				NextT = "다음 \x08배수\x04 증가 \x1BDPS\x1F(미네랄) : \x08"..OreDPS[p+1]
+				NextT2 = "다음 \x08배수\x04 증가 \x1BDPS\x07(가스) : \x08"..GasDPS[p+1]
+			end
+		TriggerX(FP,{CV(iv.TempO[i+1], OreDPS[p],AtLeast)},{
+			SetV(iv.BuildMul1[i+1],OreDPSM[p]),
+			SetV(iv.NextOre[i+1],OreDPS[p+1]),
+			SetV(iv.NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
+			DisplayText(StrDesignX("\x1BDPS\x1F(미네랄) \x08"..OreDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..OreDPSM[p].."배. "..NextT)),SetCp(FP)})--1번건물
+		TriggerX(FP,{CV(iv.TempG[i+1], GasDPS[p],AtLeast)},{
+			SetV(iv.BuildMul2[i+1],GasDPSM[p]),
+			SetV(iv.NextGas[i+1],GasDPS[p+1]),
+			SetV(iv.NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
+			DisplayText(StrDesignX("\x1BDPS\x07(가스) \x08"..GasDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..GasDPSM[p].."배. "..NextT2)),SetCp(FP)})--2번건물
+		end
+		CIfEnd()
+
+	end
 	--if Limit == 1 then
 	--	local TempV = CreateVar(FP)
 	--	local TempV2 = CreateVar(FP)

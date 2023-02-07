@@ -203,62 +203,97 @@ function Interface()
 
 	-- 15강 판매 ok
 	-- 인게임 3시간 달성 ok
-	-- 강화확률 +1 마스터
-	-- 판매권 판매하기
-	-- 5보스 5회 격파(한번에)
-	-- 40강 48마리 생성
-	-- 백신 구매하기
-	-- 백신을 사용하여 10강 달성
+	-- 강화확률 +1 마스터 ok
+	-- 판매권 판매하기 ok
+	-- 5보스 5회 격파(한번에) ok
+	-- 40강 48마리 생성 ok
+	-- 백신 구매하기 ok
+	-- 백신을 사용하여 10강 달성 ok
 	
-	-- 확정권을 사용하여 10강 달성
+	-- 확정권을 사용하여 10강 달성 ok
 
 
 	for i = 0, 6 do
-		local MissionDataArr = { -- {Cond,RewardArr,Text}  RewardArr = {Credit,SellTicket,VaccItem,EXP}
+		local MissionDataArr = { -- {Cond,RewardArr,Text}  RewardArr = {Credit,SellTicket,VaccItem,EXP,PETicket}
 		{{CVX(MissionV[i+1],1,1)},{1000,0,0,1000},"B,N,M키를 눌러 설명서 읽기"},
 		{{Command(i, AtLeast, 1, LevelUnitArr[2][2])},{1000},"2강 유닛 만들기"},
-		{{CV(Income[i+1],12,AtLeast)},{1000},"사냥터에 유닛 12기 채우기"},
+		{{CV(Income[i+1],12,AtLeast)},{2000},"사냥터에 유닛 12기 채우기"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[11][2])},{1500},"11강 유닛 만들기"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[15][2])},{2500},"15강 유닛 만들기"},
 		{{NWar(Money[i+1], AtLeast, "5000000")},{1000},"500만원 모으기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[15][2])},{1500},"15강 유닛 만들기"},
 		{{CV(PBossLV[i+1],1,AtLeast)},{1500},"개인보스 LV.1 처치하기"},
 		{{CVX(MissionV[i+1],32,32)},{1000,10,0,500},"15강 유닛 판매하기"},
-		{{CV(PLevel[i+1],50,AtLeast)},{1000},"LV. 50 달성"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[26][2])},{5000,50},"26강 유닛 만들기"},
-		{{CV(PLevel[i+1],100,AtLeast)},{1000},"LV. 100 달성"},
-		{{CV(PlayTime[i+1],3600*3,AtLeast)},{5000,100},"인게임 플레이 시간 3시간 달성하기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[36][2])},{10000,100},"36강 유닛 만들기"},
-		{{CVX(MissionV[i+1],8,8)},{1000,5},"상점에서 구입 배율 조정하기"},
-		{{CVX(MissionV[i+1],4,4)},{1000,10},"상점에서 유닛 판매권 1개 이상 구입하기"},
-		{{CV(PLevel[i+1],500,AtLeast)},{5000},"LV. 500 달성"},
-		{{CVX(MissionV[i+1],2,2)},{10000,100},"고유유닛 강화 시도하기"},
-		{{CV(PLevel[i+1],1000,AtLeast)},{10000},"LV. 1000 달성"},
-		{{CV(PUnitLevel[i+1],10,AtLeast)},{500000,0,5},"고유유닛 10강 달성하기"},
-		{{CVX(MissionV[i+1],16,16)},{100000},"고유유닛 승급하기"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[20][2])},{5000,0,0,8000},"20강 유닛 만들기"},
+		{{CV(PLevel[i+1],50,AtLeast)},{10000},"LV. 50 달성"},
+		{{CV(PBossLV[i+1],5,AtLeast)},{15000},"개인보스 LV.5 처치하기"},
+		{{CVX(MissionV[i+1],8,8)},{1000},"상점 시민 버튼에서 구입 배율 조정하기"},
+		{{CVX(MissionV[i+1],4,4)},{5000,10},"상점에서 유닛 판매권 1개 이상 구입하기"},
+		{{CVX(MissionV[i+1],64,64)},{5000,10},"상점에서 유닛 판매권 1개 이상 되팔기"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[26][2])},{10000,50},"26강 유닛 만들기"},
+		{{CV(PlayTime[i+1],3600*3,AtLeast)},{10000,100},"총 플레이 시간 3시간 달성하기"},
+		{{CV(PLevel[i+1],100,AtLeast)},{50000},"LV. 100 달성"},
+		{{CV(Stat_TotalEPer[i+1],10000,AtLeast)},{10000,100},"강화확률 +1 증가 스탯 마스터"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[36][2])},{50000,100},"36강 유닛 만들기"},
+		{{CV(PLevel[i+1],500,AtLeast)},{100000},"LV. 500 달성"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[40][2])},{100000,500},"40강 유닛 만들기"},
+		{{CV(PLevel[i+1],1000,AtLeast)},{100000},"LV. 1000 달성"},
+		{{Command(i, AtLeast, 48, LevelUnitArr[40][2])},{300000,2000},"40강 유닛 48기 보유"},
+		{{CVX(MissionV[i+1],256,256)},{50000,500,1},"상점에서 강화기 백신 1개 이상 구입하기"},
+		{{CVX(MissionV[i+1],2,2)},{30000,100,3},"고유유닛 강화 시도하기"},
+		{{CVX(MissionV[i+1],1024,1024)},{100000,500,1},"상점에서 강화기 백신 1개 이상 되팔기"},
+		{{CV(BossLV,9,AtLeast)},{300000},"파티보스 LV.5 한번에 5회 처치하기"},
+		{{CV(PUnitLevel[i+1],10,AtLeast)},{250000,0,5,0,1},"고유유닛 10강 달성하기"},
+		{{CD(VaccSCount[i+1],6,AtLeast)},{100000,500},"상점에서 강화기 백신 5개 이상 되팔기"},
+		{{CVX(MissionV[i+1],16,16)},{250000,2000},"고유유닛 승급하기"},
+		{{CVX(MissionV[i+1],512,512)},{250000,0,3},"확정 강화권 사용으로 고유유닛 10강 달성하기"},
+		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 사용으로 고유유닛 10강 달성하기"},
+
 		}
 		table.insert(MissionPDataArr,MissionDataArr)
 		
 	end
+	local rewardarr = {0,0,0,0,0}
+	os.execute("mkdir " .. "MSQC")
+	local CSfile = io.open(FileDirectory .. "sul" .. ".txt", "w")
+	io.output(CSfile)
 	for j,k in pairs(MissionPDataArr[1]) do
 		local MText = "\x07M\x04ission \x08No. \x10"..j.." \x04: "..k[3].." \x04|| \x07보상 \x04: "
+		local MText3 = "Mission No. "..j.." : "..k[3].." || 보상 : "
 		local MText2 = "\x07M\x04ission \x08No. \x10"..j.." \x04: "..k[3].." \x07CLEAR"
 		for l,m in pairs(k[2]) do
 			if m>= 1 then
 				if l == 1 then
-					MText = MText.."\x17"..m.." Credit "
+					MText = MText.."\x17("..m.." Credit) "
+					MText3 = MText3.."("..m.." Credit) "
+					rewardarr[l] = rewardarr[l]+m
 				end
 				if l == 2 then
-					MText = MText.."\x19"..m.." 유닛 판매권 "
+					MText = MText.."\x19("..m.." 유닛 판매권) "
+					MText3 = MText3.."("..m.." 유닛 판매권) "
+					rewardarr[l] = rewardarr[l]+m
 				end
 				if l == 3 then
-					MText = MText.."\x10"..m.." 강화기 백신 "
+					MText = MText.."\x10("..m.." 강화기 백신) "
+					MText3 = MText3.."("..m.." 강화기 백신) "
+					rewardarr[l] = rewardarr[l]+m
 				end
 				if l == 4 then
-					MText = MText.."\x1F"..m.." EXP "
+					MText = MText.."\x1F("..m.." EXP) "
+					MText3 = MText3.."("..m.." EXP) "
+					rewardarr[l] = rewardarr[l]+m
+				end
+				if l == 5 then
+					MText = MText.."\x1F("..m.." 확정 강화권) "
+					MText3 = MText3.."("..m.." 확정 강화권) "
+					rewardarr[l] = rewardarr[l]+m
 				end
 			end
 		end
+		io.write(MText3.."\n")
 		table.insert(MissionDataTextArr,{StrDesign(MText),StrDesignX(MText2)})
 	end
+	io.write(rewardarr[1].." 크레딧    "..rewardarr[2].." 유닛 판매권    "..rewardarr[3].." 강화기 백신    "..rewardarr[4].." EXP    "..rewardarr[5].." 확정 강화권")
+	io.close(CSfile)
 	
 
 	CMov(FP,PCheckV,0)
@@ -295,9 +330,7 @@ TipArr = {
 
 for i = 0, 6 do -- 각플레이어 
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i))})
-	CIf(FP, LocalPlayerID(i))
 	CT_PrevCP(i)
-	CIfEnd()
 
 	ConvertVArr(FP,VArrI,VArrI4,GCP,7)
 	ConvertVArr(FP, WArrI,WArrI4, GCPW, 7)
@@ -540,7 +573,7 @@ for i = 0, 6 do -- 각플레이어
 
 	
 	
-	CIf(FP,{CV(SCA.GlobalVarArr[4],1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
+	CIf(FP,{CV(DayCheck2[i+1],23,AtMost),CV(SCA.GlobalVarArr[4],1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
 		CIf(FP,{TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
 			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
 			CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
@@ -562,6 +595,51 @@ for i = 0, 6 do -- 각플레이어
 			DisplayPrint(i, {"\x13\x07『 \x04현재까지 총 출석일수 : ",DayCheck2[i+1],"일 \x07』"})
 		CIfEnd()
 	CIfEnd()
+
+
+	
+	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr-1,AtMost),})
+			CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
+		for j,k in pairs(MissionPDataArr[i+1]) do
+			Trigger2X(FP, {CV(CurMission[i+1],j-1),CV(DPErT[i+1],0),LocalPlayerID(i)},  {print_utf8(12,0,MissionDataTextArr[j][1])}, {preserved})
+			Trigger2X(FP, {CV(CurMission[i+1],j-1),CV(DPErT[i+1],0)},  {SetV(DPErT[i+1],15)}, {preserved})
+				local RewardAct = {}
+				local MText = "보상 : "
+				for l,m in pairs(k[2]) do
+					if m>= 1 then
+						if l == 1 then
+							MText = MText.."\x17"..m.." Credit "
+							table.insert(RewardAct,AddV(B_PCredit[i+1],m))
+						end
+						if l == 2 then
+							MText = MText.."\x19"..m.." 유닛 판매권 "
+							table.insert(RewardAct,AddV(SellTicket[i+1],m))
+						end
+						if l == 3 then
+							MText = MText.."\x10"..m.." 강화기 백신 "
+							table.insert(RewardAct,AddV(iv.VaccItem[i+1],m))
+						end
+						if l == 4 then
+							MText = MText.."\x1F"..m.." EXP "
+							table.insert(RewardAct,AddV(B_PEXP[i+1],m))
+						end
+						if l == 5 then
+							MText = MText.."\x1F"..m.." 확정 강화권 "
+							table.insert(RewardAct,AddV(PETicket[i+1],m))
+						end
+					end
+				end
+			Trigger2X(FP,{CV(CurMission[i+1],j-1),k[1]},{RewardAct,AddV(CurMission[i+1],1),SetCp(i),DisplayText(MissionDataTextArr[j][2], 4),DisplayText(StrDesignX(MText), 4),SetDeaths(i,SetTo,1,13)})
+		end
+	CIfEnd()
+
+	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr,AtLeast),})
+	CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
+	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0),LocalPlayerID(i)},  {print_utf8(12,0,"\x07M\x04ission \x1FALL \x07CLEAR")}, {preserved})
+	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0)},  {SetV(DPErT[i+1],15)}, {preserved})
+	CIfEnd()
+	CMov(FP,MissionV[i+1],0)
+
 
 
 	local CTSwitch = CreateCcode()
@@ -627,50 +705,17 @@ for i = 0, 6 do -- 각플레이어
 
 
 	
-	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr-1,AtMost),})
-			CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
-		for j,k in pairs(MissionPDataArr[i+1]) do
-			Trigger2X(FP, {CV(CurMission[i+1],j-1),CV(DPErT[i+1],0)},  {print_utf8(12,0,MissionDataTextArr[j][1]),SetV(DPErT[i+1],15)}, {preserved})
-				local RewardAct = {}
-				local MText = "보상 : "
-				for l,m in pairs(k[2]) do
-					if m>= 1 then
-						if l == 1 then
-							MText = MText.."\x17"..m.." Credit "
-							table.insert(RewardAct,AddV(B_PCredit[i+1],m))
-						end
-						if l == 2 then
-							MText = MText.."\x19"..m.." 유닛 판매권 "
-							table.insert(RewardAct,AddV(SellTicket[i+1],m))
-						end
-						if l == 3 then
-							MText = MText.."\x10"..m.." 강화기 백신 "
-							table.insert(RewardAct,AddV(iv.VaccItem[i+1],m))
-						end
-						if l == 4 then
-							MText = MText.."\x1F"..m.." EXP "
-							table.insert(RewardAct,AddV(B_PEXP[i+1],m))
-						end
-					end
-				end
-			Trigger2X(FP,{CV(CurMission[i+1],j-1),k[1]},{{RewardAct,AddV(CurMission[i+1],1),SetCp(i),DisplayText(MissionDataTextArr[j][2], 4),DisplayText(StrDesignX(MText), 4)}})
-		end
-	CIfEnd()
-
-	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr,AtLeast),})
-	CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
-	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0)},  {print_utf8(12,0,"\x07M\x04ission \x1FALL \x07CLEAR"),SetV(DPErT[i+1],15)}, {preserved})
-	CIfEnd()
-	
 
 	
 
 
-
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayText(StrDesign("\x04SCA 시스템 사운드를 \x071번\x04으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayText(StrDesign("\x04SCA 시스템 사운드를 \x07기본\x04으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
+	
 	if Limit == 1 then 
 		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,553)})
-		CreateUnitStacked({}, 12, LevelUnitArr[25][2], 36+i, nil, i)
+		--CreateUnitStacked({}, 12, LevelUnitArr[25][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -1337,7 +1382,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 				CIf(FP,{CV(KSelPID,i),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,128),TTNVar(KSelUID,NotSame,129),TTNVar(KSelUID,NotSame,219),TTNVar(KSelUID,NotSame,91),TTNVar(KSelUID,NotSame,92),TTNVar(KSelUID,NotSame,PersonalUIDArr[i+1])})
 				f_Read(FP, _Sub(BackupCp,15), CPos, nil,nil,1)
 				Convert_CPosXY()
-				Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,Simple_CalcLoc(86, -512, -512, 512, 512))
+				Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,Simple_CalcLoc(86, -320, -320, 320, 320))
 				CDoActions(FP, {AddCD(ZKeyCool[i+1], 24*3),TMoveUnit(All, KSelUID, i, 87, 87)})
 				DoActions(FP, {SetCp(i),DisplayText(StrDesignX("\x03SYSTEM \x04: 현재 선택중인 같은 종류의 유닛을 뭉쳤습니다. 쿨타임 : 3초.").."\n"..StrDesignX("\x04이 메세지는 1회만 표기됩니다."),4)}, 1)
 				CIfEnd()

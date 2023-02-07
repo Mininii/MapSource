@@ -63,6 +63,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 		
 			CIfX(FP,{CV(GeneralPlayTime,4*24*60*60,AtLeast),CV(SellTicket[i+1],MulOp[i+1],AtLeast)},{})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CMov(FP,iv.MissionV[i+1],64,nil,64)
 
 
 				CSub(FP,SellTicket[i+1],MulOp[i+1])
@@ -85,6 +86,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 		
 			CIfX(FP,{TTNWar(Credit[i+1], AtLeast,_LMul({MulOp[i+1],0}, "100000"))},{})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CMov(FP,iv.MissionV[i+1],256,nil,256)
 				CAdd(FP,VaccItem[i+1],MulOp[i+1])
 				f_LSub(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "100000"))
 				CIf(FP,{LocalPlayerID(i)})
@@ -105,8 +107,10 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				CSub(FP,VaccItem[i+1],MulOp[i+1])
 				f_LAdd(FP, Credit[i+1], Credit[i+1], _LMul({MulOp[i+1],0}, "100000"))
+				CMov(FP,iv.MissionV[i+1],1024,nil,1024)
 				CIf(FP,{LocalPlayerID(i)})
 				local TempV = CreateVar(FP)
+				CAdd(FP,_Ccode(FP, VaccSCount[i+1]),MulOp[i+1])
 				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "100000"),nil,nil,1)
 				DisplayPrint(LCP, {"\x13\x07『 \x10강화기 백신\x04을 ",MulOp[i+1],"개 판매하였습니다. ",TempV," \x17크레딧 \x07반환 \x07』"})
 				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",VaccItem[i+1]," 개의 \x10강화기 백신 보유중 \x07』"})
