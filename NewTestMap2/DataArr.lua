@@ -27,8 +27,8 @@ function DataArr()
 		{iv.Stat_EXPIncome,ct.Stat_EXPIncome,"Stat_EXPIncome"},
 		{iv.PLevel,ct.PLevel,"PLevel"},
 		{iv.StatP,ct.StatP,"StatP"},
-		{iv.Stat_ScDmg,ct.Stat_ScDmg,"Stat_ScDmg"},
-		{iv.Stat_AddSc,ct.Stat_AddSc,"Stat_AddSc"},
+		{iv.Stat_FailEXP,ct.Stat_FailEXP,"Stat_FailEXP"},
+		{iv.Stat_LV2EXP,ct.Stat_LV2EXP,"Stat_LV2EXP"},
 		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
 		{iv.Stat_TotalEPerEx,ct.Stat_TotalEPerEx,"Stat_TotalEPerEx"},
 		{iv.Stat_TotalEPer2,ct.Stat_TotalEPer2,"Stat_TotalEPer2"},
@@ -118,7 +118,7 @@ function DataArr()
 		{iv.BanFlag,98},
 		{iv.PLevel,101},
 		{iv.StatP,102},
-		{iv.Stat_ScDmg,103},
+		{iv.Stat_FailEXP,103},
 		{iv.Stat_TotalEPer,104},
 		{iv.Stat_TotalEPer2,105},
 		{iv.Stat_TotalEPer3,106},
@@ -127,7 +127,7 @@ function DataArr()
 		{iv.PEXP,110},
 		{iv.TotalExp,112},
 		{iv.CurEXP,114},
-		{iv.Stat_AddSc,116},
+		{iv.Stat_LV2EXP,116},
 		{iv.PStatVer,117},
 		{iv.PlayTime,118},
 		{iv.PlayTime2,119},
@@ -162,7 +162,7 @@ function DataArr()
 
 	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",145)
 	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
-	iv.Stat_SCCool,ct.Stat_SCCool = CreateDataPV("Stat_SCCool",147)
+	iv.Stat_LV3Incm,ct.Stat_LV3Incm = CreateDataPV("Stat_LV3Incm",147)
 	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",148)
 	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",149) 
 	iv.CurMission,ct.CurMission = CreateDataPV("CurMission",151) 
@@ -183,12 +183,16 @@ function DataArr()
 	iv.SCCool,ct.SCCool = CreateDataPV("SCCool")
 	iv.AddSC,ct.AddSC = CreateDataPV("AddSC")
 	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")
+	iv.TempIncm,ct.TempIncm = CreateDataPV("TempIncm")
+
 
 	LocalDataArr = {
 		{iv.TotalEPer[1],iv.TotalEPerLoc},
 		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
 		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
 		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
+		{iv.Stat_FailEXP[1],iv.S_FailEXPLoc},
+		{iv.Stat_LV2EXP[1],iv.S_LV2EXPLoc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
 		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
 		{iv.Stat_TotalEPerEx2[1],iv.S_TotalEPerEx2Loc},
@@ -230,5 +234,7 @@ function DataArr()
 		{iv.PETicket[1],iv.PETicketLoc},
 		{iv.CreditAddSC[1],iv.CreditAddSCLoc},
 		{iv.Money2[1],iv.MoneyLoc2},
+		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
+		
 	}
 end

@@ -18,7 +18,9 @@ function GameDisplay()
 	local S_TotalEPer4Loc = iv.S_TotalEPer4Loc--CreateVar(FP)
 	local S_BreakShieldLoc = iv.S_BreakShieldLoc--CreateVar(FP)
 	local BreakShieldLoc = iv.BreakShieldLoc--CreateVar(FP)
-	
+	local S_LV3IncmLoc = iv.S_LV3IncmLoc
+	local S_FailEXPLoc = iv.S_FailEXPLoc
+	local S_LV2EXPLoc = iv.S_LV2EXPLoc
 	local PlayTimeLoc = iv.PlayTimeLoc--CreateVar(FP)
 	local PlayTimeLoc2 = iv.PlayTimeLoc2--CreateVar(FP)
 	local StatPLoc = iv.StatPLoc--CreateVar(FP)
@@ -211,13 +213,17 @@ function GameDisplay()
 
 
 		CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- 상점 페이지 제어
-			--DisplayPrint(LCP, {"\x071. \x07기본유닛 \x08데미지 \x04+100 \x08(최대 25000) - ",BColor3[1][2],Cost_Stat_ScDmg.." Pts\x12\x07 + ",BColor[1][2],ScoutDmgLoc," ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			--DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_AddSc.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			CMov(FP,GEVar,S_FailEXPLoc)
+			CallTrigger(FP, Call_SetEPerStr)
+			DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 50 - ",BColor3[1][2],Cost_Stat_FailEXP.." Pts\x12\x07 + ",BColor[1][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," % ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			--DisplayPrint(LCP, {"\x072. \x07추가 기본유닛 \x041기 증가 \x04최대 5기 - ",BColor3[2][2],Cost_Stat_LV2EXP.." Pts\x12\x07+ ",BColor[2][2],AddScLoc," 기 ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			
-			DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			CMov(FP,GEVar,S_LV2EXPLoc)
+			CallTrigger(FP, Call_SetEPerStr)
+			--DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 100 ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			
-			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08(최대 +500%) - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x04증가 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
 			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x074. \x07+1 \x08강화확률 \x0F0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
@@ -251,16 +257,17 @@ function GameDisplay()
 			CMov(FP,GEVar,S_TotalEPerEx3Loc)
 			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x075. \x10추가 \x0F+3 \x08강화확률 \x0F0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
-			--DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_SCCool.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
-
-			DisplayPrint(LCP, {"\x076. ",BColor3[6][2],"빈 항목입니다.\x12\x07 ",BColor[6][2]," - ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			--DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			CMov(FP,GEVar,S_LV3IncmLoc)
+			CallTrigger(FP, Call_SetEPerStr)
+			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 100 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,"\x0D.\x0D\x0D\x0D\x0D\x0D",EVarArr3," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 		CIfXEnd()
 		DoActions(FP,{SetCp(FP)})
 		local StatPrintEr = {
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
-			StrDesign("\x04빈 항목입니다."),
+			StrDesign("\x0F26강~39강 \x04유닛 \x08강화 실패\x04시 일정량의 경험치를 얻을 수 있습니다. \x08주의 \x04: \x0815강 \x04이하, \x1140강\x04 이상에는 적용되지 않습니다."),
 			StrDesign("\x04빈 항목입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
@@ -271,8 +278,7 @@ function GameDisplay()
 			StrDesign("\x10추가 \x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x10추가 \x0F+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x10추가 \x0F+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
-			StrDesign("\x04빈 항목입니다."),
-			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x07공격속도\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
+			StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량을 1% 증가시킵니다. \x07기본값 : 100%. \x08주의 \x04: 이 항목은 \x1041강 \x07이상 \x04유닛에게 유효합니다."),
 	}
 	
 		
@@ -323,9 +329,12 @@ function GameDisplay()
 	CallTrigger(FP, Call_SetEPerStr)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p"})
 	f_Mul(FP,EXPIncomeLoc2,10)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1C경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1C판매시 경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
 	f_Mul(FP,UpgradeUILoc,10)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 \x08공격력 \x04증가량 : \x07+ \x08",UpgradeUILoc,"%"})
+	CMov(FP,GEVar,S_LV3IncmLoc)
+	CallTrigger(FP, Call_SetEPerStr)
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x11LV.MAX \x1B허수아비\x04 추가 돈 수급량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%"})
 	
 	
 	

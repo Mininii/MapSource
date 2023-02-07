@@ -195,8 +195,8 @@ function Include_Vars()
 	--PlayData(SCA)
 	iv.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	iv.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
-	iv.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	iv.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	iv.Stat_FailEXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	iv.Stat_LV2EXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
@@ -240,7 +240,8 @@ function Include_Vars()
 	iv.S_TotalEPer4Loc = CreateVar(FP)
 	iv.S_BreakShieldLoc = CreateVar(FP)
 	iv.BreakShieldLoc = CreateVar(FP)
-	
+	iv.S_FailEXPLoc = CreateVar(FP)
+	iv.S_LV2EXPLoc = CreateVar(FP)
 	iv.PlayTimeLoc = CreateVar(FP)
 	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
@@ -281,6 +282,7 @@ function Include_Vars()
 	iv.SCCoolLoc = CreateVar(FP)
 	iv.PETicketLoc = CreateVar(FP)
 	iv.CreditAddSCLoc = CreateVar(FP)
+	iv.S_LV3IncmLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -299,6 +301,7 @@ function Include_Vars()
 	iv.TempReadV = CreateVar(FP)
 	iv.TempReadW = CreateWar(FP)
 	iv.TempEXPW = CreateWar(FP)
+	iv.TempEXPW2 = CreateWar(FP)
 
 	iv.CheatDetect = CreateCcode()
 	iv.SaveRemind = CreateCcode()
@@ -358,8 +361,8 @@ function Include_Vars()
 	ct.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	ct.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	ct.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
-	ct.Stat_ScDmg = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	ct.Stat_AddSc = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	ct.Stat_FailEXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	ct.Stat_LV2EXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
@@ -615,8 +618,8 @@ FirstReward2 = {
 	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
-	--Cost_Stat_ScDmg = 15
-	--Cost_Stat_AddSc = 50
+	Cost_Stat_FailEXP = 100
+	Cost_Stat_LV2EXP = 100
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000
@@ -626,7 +629,7 @@ FirstReward2 = {
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
 	Cost_Stat_BreakShield = 250
-	--Cost_Stat_SCCool = 50
+	Cost_Stat_LV3Incm = 500
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {
