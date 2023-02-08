@@ -20,7 +20,7 @@ function TestTrig()
 	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	local StatP = iv.StatP--CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
 	local Stat_FailEXP = iv.Stat_FailEXP--CreateVarArr(7,FP)-- 사냥터 업글 수치
-	local Stat_LV2EXP = iv.Stat_LV2EXP--CreateVarArr(7,FP)-- 사냥터 업글 수치
+	local Stat_BossLVUP = iv.Stat_BossLVUP--CreateVarArr(7,FP)-- 사냥터 업글 수치
 	local Stat_TotalEPer = iv.Stat_TotalEPer--CreateVarArr(7,FP)-- +1강 확업 수치
 	local Stat_TotalEPer2 = iv.Stat_TotalEPer2--CreateVarArr(7,FP)-- +2강 확업 수치
 	local Stat_TotalEPer3 = iv.Stat_TotalEPer3--CreateVarArr(7,FP)-- +3강 확업 수치

@@ -67,16 +67,30 @@ for i = 0, 4 do
 	})
 end
 
-
+local TempEXPV = CreateVar(FP)
 CIf(FP,{CD(AddLV5Cool,1,AtLeast)},SubCD(AddLV5Cool, 1))
+for i = 0, 6 do
+CIf(FP, {HumanCheck(i, 1)})
+CIf(FP,{CV(iv.Stat_BossLVUP[i+1],1,AtLeast)})
+f_LMov(FP, TempWX, "0", nil, nil, 1)
+CMov(FP,StartLV,PLevel[i+1])
+CAdd(FP,EndLV,PLevel[i+1],_Sub(iv.Stat_BossLVUP[i+1],1))
+CallTrigger(FP, Call_GetLevelEXP)
+CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({iv.Stat_BossLVUP[i+1],0}, "100000000"))})
+f_LMov(FP, TempWX, _LMul({iv.Stat_BossLVUP[i+1],0}, "100000000"))
+CIfEnd()
+f_LAdd(FP, iv.PEXP[i+1], iv.PEXP[i+1], TempWX)
+f_Cast(FP, {TempEXPV,0}, TempWX, nil, nil, 1)
+DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 ",iv.Stat_BossLVUP[i+1],"업\x04 스탯으로 얻은 경험치 : \x1C",TempEXPV," \x07』"})
+CIfEnd()
+
 if TestStart == 1 then
-	for i = 0, 6 do
-		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60)},{preserved})
-	end
+		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
 else
-	for i = 0, 6 do
-		TriggerX(FP,{HumanCheck(i, 1)},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
-	end
+		TriggerX(FP,{},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
+end
+
+CIfEnd()
 end
 CIfEnd()
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})

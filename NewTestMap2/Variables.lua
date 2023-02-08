@@ -196,7 +196,7 @@ function Include_Vars()
 	iv.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	iv.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
 	iv.Stat_FailEXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	iv.Stat_LV2EXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	iv.Stat_BossLVUP = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
@@ -241,7 +241,7 @@ function Include_Vars()
 	iv.S_BreakShieldLoc = CreateVar(FP)
 	iv.BreakShieldLoc = CreateVar(FP)
 	iv.S_FailEXPLoc = CreateVar(FP)
-	iv.S_LV2EXPLoc = CreateVar(FP)
+	iv.S_BossLVUPLoc = CreateVar(FP)
 	iv.PlayTimeLoc = CreateVar(FP)
 	iv.PlayTimeLoc2 = CreateVar(FP)
 	iv.StatPLoc = CreateVar(FP)
@@ -260,7 +260,7 @@ function Include_Vars()
 	iv.MulOpLoc = CreateVar(FP)
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
-	iv.ResetStatLoc = CreateCcode()
+	iv.ResetStatLoc = CreateVar(FP)
 	iv.UpgradeUILoc = CreateVar(FP)
 	
 	iv.NextOreLoc = CreateVar(FP)
@@ -362,7 +362,7 @@ function Include_Vars()
 	ct.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	ct.StatP = CreateVarArr2(7,5,FP)-- 현재 보유중인 스탯포인트
 	ct.Stat_FailEXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
-	ct.Stat_LV2EXP = CreateVarArr(7,FP)-- 사냥터 업글 수치
+	ct.Stat_BossLVUP = CreateVarArr(7,FP)-- 사냥터 업글 수치
 	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1강 확업 수치
 	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2강 확업 수치
@@ -435,9 +435,11 @@ function Include_Vars()
 	--for i = 1, 10000 do
 	--	EXPArr[i] = 10+((i-1)*(i*3))
 	--end
-
+	--SRTable = {5000,50000,100000,200000,500000}
 	EXPArr = CreateLArr(LevelLimit+1, FP)
 	--EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
+	
+	--SRTable = f_GetFileArrptr(FP,SRTable,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
 	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
@@ -619,7 +621,7 @@ FirstReward2 = {
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 	Cost_Stat_FailEXP = 100
-	Cost_Stat_LV2EXP = 100
+	Cost_Stat_BossLVUP = 50
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000
@@ -629,7 +631,7 @@ FirstReward2 = {
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
 	Cost_Stat_BreakShield = 250
-	Cost_Stat_LV3Incm = 500
+	Cost_Stat_LV3Incm = 100
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {

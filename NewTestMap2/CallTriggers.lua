@@ -936,6 +936,28 @@ function Install_CallTriggers()
 
 	SetCallEnd()
 
+	TempWX = CreateWar(FP)
+	local LIndex = CreateVar(FP)
+	StartLV = CreateVar(FP)
+	EndLV = CreateVar(FP)
+	local TempW = CreateWar(FP)
+	Call_GetLevelEXP = SetCallForward()
+	SetCall(FP)
+	local GEXPJump = def_sIndex()
+	NJumpEnd(FP, GEXPJump)
+	
+	ConvertLArr(FP, LIndex, _Sub(StartLV, 1), 8)
+	f_LRead(FP, LArrX({EXPArr},LIndex), TempW, nil, 1)
+	f_LAdd(FP, TempWX, TempWX, TempW)
+
+	CAdd(FP,StartLV,1)
+
+	NJump(FP, GEXPJump, {CV(StartLV,EndLV,AtMost)})
+
+
+	SetCallEnd()
+
+
 if TestStart == 1 then
 	
 end

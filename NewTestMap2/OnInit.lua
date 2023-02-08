@@ -344,7 +344,7 @@ iTblJump = def_sIndex()
 
 	CFor(FP, 0, LevelLimit, 1)
 	CI = CForVariable()
-	LIndex = CreateVar(FP)
+	local LIndex = CreateVar(FP)
 	CICh = CreateVar(FP)
 	LMulW = CreateWar2(FP,nil,nil,"3")
 	LMulW2 = CreateWar2(FP,nil,nil,"10")

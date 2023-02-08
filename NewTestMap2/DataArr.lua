@@ -28,7 +28,7 @@ function DataArr()
 		{iv.PLevel,ct.PLevel,"PLevel"},
 		{iv.StatP,ct.StatP,"StatP"},
 		{iv.Stat_FailEXP,ct.Stat_FailEXP,"Stat_FailEXP"},
-		{iv.Stat_LV2EXP,ct.Stat_LV2EXP,"Stat_LV2EXP"},
+		{iv.Stat_BossLVUP,ct.Stat_BossLVUP,"Stat_BossLVUP"},
 		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
 		{iv.Stat_TotalEPerEx,ct.Stat_TotalEPerEx,"Stat_TotalEPerEx"},
 		{iv.Stat_TotalEPer2,ct.Stat_TotalEPer2,"Stat_TotalEPer2"},
@@ -127,7 +127,7 @@ function DataArr()
 		{iv.PEXP,110},
 		{iv.TotalExp,112},
 		{iv.CurEXP,114},
-		{iv.Stat_LV2EXP,116},
+		{iv.Stat_BossLVUP,116},
 		{iv.PStatVer,117},
 		{iv.PlayTime,118},
 		{iv.PlayTime2,119},
@@ -184,6 +184,7 @@ function DataArr()
 	iv.AddSC,ct.AddSC = CreateDataPV("AddSC")
 	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")
 	iv.TempIncm,ct.TempIncm = CreateDataPV("TempIncm")
+	iv.B_PEXP2,ct.B_PEXP2 = CreateDataPV("B_PEXP2")
 
 
 	LocalDataArr = {
@@ -192,7 +193,7 @@ function DataArr()
 		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
 		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
 		{iv.Stat_FailEXP[1],iv.S_FailEXPLoc},
-		{iv.Stat_LV2EXP[1],iv.S_LV2EXPLoc},
+		{iv.Stat_BossLVUP[1],iv.S_BossLVUPLoc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
 		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
 		{iv.Stat_TotalEPerEx2[1],iv.S_TotalEPerEx2Loc},
