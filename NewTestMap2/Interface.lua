@@ -244,7 +244,7 @@ function Interface()
 		{{CVX(MissionV[i+1],1024,1024)},{100000,500,1},"상점에서 강화기 백신 1개 이상 되팔기"},
 		{{CV(BossLV,9,AtLeast)},{300000},"파티보스 LV.5 한번에 5회 처치하기"},
 		{{CV(PUnitLevel[i+1],10,AtLeast)},{250000,0,5,0,1},"고유유닛 10강 달성하기"},
-		{{CD(VaccSCount[i+1],6,AtLeast)},{100000,500},"상점에서 강화기 백신 5개 이상 되팔기"},
+		{{CD(VaccSCount[i+1],5,AtLeast)},{100000,500},"상점에서 강화기 백신 5개 이상 되팔기"},
 		{{CVX(MissionV[i+1],16,16)},{250000,2000},"고유유닛 승급하기"},
 		{{CVX(MissionV[i+1],512,512)},{250000,0,3},"확정 강화권 사용으로 고유유닛 10강 달성하기"},
 		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 사용으로 고유유닛 10강 달성하기"},
@@ -880,10 +880,10 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 
 
 
-	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 36+i)}, {preserved})--사냥터 퇴장
+	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 80+i)}, {preserved})--사냥터 퇴장
 
 	TriggerX(FP, {Bring(i, AtMost, 3, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
-	TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 36+i)}, {preserved})--보스방 퇴장
+	TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 80+i)}, {preserved})--보스방 퇴장
 
 	
 	TriggerX(FP, {CV(PBossLV[i+1],4,AtMost),Bring(i, AtLeast, 5, "Men", 119+i)}, {MoveUnit(1, "Men", i, 119+i, 22+i)}, {preserved})--개인보스방 입장제한
