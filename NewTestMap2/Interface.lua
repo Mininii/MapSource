@@ -66,7 +66,7 @@ function Interface()
 	--PlayData(SCA)
 	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
 	local StatP = iv.StatP--CreateVarArr(7,FP)-- 현재 보유중인 스탯포인트
-	local Stat_FailEXP = iv.Stat_FailEXP--CreateVarArr(7,FP)-- 사냥터 업글 수치
+	local Stat_BossSTic = iv.Stat_BossSTic--CreateVarArr(7,FP)-- 사냥터 업글 수치
 	local Stat_BossLVUP = iv.Stat_BossLVUP--CreateVarArr(7,FP)-- 사냥터 업글 수치
 	local Stat_TotalEPer = iv.Stat_TotalEPer--CreateVarArr(7,FP)-- +1강 확업 수치
 	local Stat_TotalEPerEx = iv.Stat_TotalEPerEx--CreateVarArr(7,FP)-- +1강 확업 수치
@@ -246,8 +246,8 @@ function Interface()
 		{{CV(PUnitLevel[i+1],10,AtLeast)},{250000,0,5,0,1},"고유유닛 10강 달성하기"},
 		{{CD(VaccSCount[i+1],5,AtLeast)},{100000,500},"상점에서 강화기 백신 5개 이상 되팔기"},
 		{{CVX(MissionV[i+1],16,16)},{250000,2000},"고유유닛 승급하기"},
-		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 사용으로 고유유닛 10강 달성하기"},
-		{{CVX(MissionV[i+1],512,512)},{250000,0,3},"확정 강화권 사용으로 고유유닛 10강 달성하기"},
+		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 또는 확정 강화권 사용으로 고유유닛 10강 달성하기"},
+		{{CV(iv.PMission[i+1],3,AtLeast)},{250000,0,3},"고유유닛 강화 3연속 성공하기"},
 
 		}
 		table.insert(MissionPDataArr,MissionDataArr)
@@ -411,7 +411,7 @@ for i = 0, 6 do -- 각플레이어
 		f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 		f_LMov(FP, CTTotalExp, "10",nil,nil,1)
 		CallTrigger(FP,Call_CT)
-		--CAdd(FP,CTStatP2,_Mul(_Div(Stat_FailEXP[i+1],_Mov(100)),_Mov(Cost_Stat_FailEXP)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BossSTic[i+1],_Mov(100)),_Mov(Cost_Stat_BossSTic)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPerEx[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPerEx)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPerEx2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPerEx2)))
@@ -454,7 +454,7 @@ for i = 0, 6 do -- 각플레이어
 			SetV(StatP[i+1],5),
 			SetCWar(FP, CurEXP[i+1][2], SetTo, "0"),
 			SetCWar(FP, TotalExp[i+1][2], SetTo, "10"),
-			SetV(Stat_FailEXP[i+1],0),
+			SetV(Stat_BossSTic[i+1],0),
 			SetV(Stat_TotalEPer[i+1],0),
 			SetV(Stat_TotalEPer2[i+1],0),
 			SetV(Stat_TotalEPer3[i+1],0),
@@ -588,10 +588,10 @@ for i = 0, 6 do -- 각플레이어
 	
 	CIfX(FP,{CV(DayCheck2[i+1],27,AtMost),CV(SCA.GlobalVarArr[4],1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
 if TestStart == 1 then
-	CIf(FP,{TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+	CIf(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
 		CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
 else
-	CIf(FP,{TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+	CIf(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
 		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
 end
 
@@ -654,11 +654,6 @@ end
 		end
 	CIfEnd()
 
-	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr,AtLeast),})
-	CallTriggerX(FP, Call_Print13[i+1],{CV(DPErT[i+1],0)})
-	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0),LocalPlayerID(i)},  {print_utf8(12,0,StrDesign("\x07M\x04ission \x1FALL \x07CLEAR"))}, {preserved})
-	Trigger2X(FP, {CV(CurMission[i+1],#MissionDataTextArr),CV(DPErT[i+1],0)},  {SetV(DPErT[i+1],15)}, {preserved})
-	CIfEnd()
 	CMov(FP,MissionV[i+1],0)
 
 
@@ -694,7 +689,7 @@ end
 	--f_LMov(FP, CTTotalExp, "10",nil,nil,1)
 	--CallTrigger(FP,Call_CT)
 
-	--CAdd(FP,CTStatP2,_Mul(Stat_FailEXP[i+1],_Mov(Cost_Stat_FailEXP)))
+	--CAdd(FP,CTStatP2,_Mul(Stat_BossSTic[i+1],_Mov(Cost_Stat_BossSTic)))
 	--CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
 	--CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
 	--CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
@@ -866,9 +861,11 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 
 	
 	UnitReadX(FP, i, "Men", 65+i, Income[i+1])
-	TriggerX(FP,{CV(ScTimer[i+1],4320,AtMost)},{MoveUnit(1, 88, i, 15+i, 22+i)},{preserved})
-
-	CIf(FP,{TBring(i, AtMost, _Sub(IncomeMax[i+1],1), "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)})
+	local TempICM = CreateVar(FP)
+	CSub(FP,TempICM,IncomeMax[i+1],1)
+	TriggerX(FP, {Bring(i, Exactly, 1, PersonalUIDArr[i+1], 65+i)}, {SubV(Income[i+1], 1),AddV(TempICM,1)}, {preserved})
+	
+	CIfX(FP,{TBring(i, AtMost, TempICM, "Men", 65+i),Bring(i,AtLeast,1,"Men",15+i)})
 	CTrigger(FP,{},{MoveUnit(1, "Men", i, 15+i, 22+i),MoveUnit(1, "Factories", i, 22+i, 57+i),
 	MoveUnit(1, LevelUnitArr[41][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[42][2], i, 22+i, 144+i),
@@ -876,7 +873,12 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	MoveUnit(1, LevelUnitArr[44][2], i, 22+i, 144+i),
 },1)--사냥터 입장
 	TriggerX(FP,{CV(CS_DPSLV[i+1],1,AtLeast)},{MoveUnit(1,PersonalUIDArr[i+1],i,22+i,57+i)},{preserved})
-	CIfEnd()
+	CElseX({MoveUnit(1,PersonalUIDArr[i+1],i,15+i,22+i)})
+	TriggerX(FP,{CV(CS_DPSLV[i+1],1,AtLeast)},{MoveUnit(1,PersonalUIDArr[i+1],i,22+i,57+i)},{preserved})
+	CIfXEnd()
+
+
+	TriggerX(FP,{CV(ScTimer[i+1],4320,AtMost)},{MoveUnit(1, 88, i, 15+i, 22+i)},{preserved})
 
 
 
@@ -940,6 +942,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 
 	TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(EnchCool[i+1],0)},{SetV(iv.PSaveChk[i+1],0),SetCp(i),DisplayText(StrDesignX("\x03SYSTEM \x04: 이제 다시 강화를 진행할 수 있습니다."), 4)},{preserved})
 	CallTrigger(FP,Call_BtnInit,{})
+
+	
 
 
 	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(RSArr[1][i+1],0)})
@@ -1026,7 +1030,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 					
 					SetV(ResetStat[i+1],1),
 					SetV(StatP[i+1],0),
-					SetV(Stat_FailEXP[i+1],0),
+					SetV(Stat_BossSTic[i+1],0),
 					SetV(Stat_TotalEPer[i+1],0),
 					SetV(Stat_TotalEPer2[i+1],0),
 					SetV(Stat_TotalEPer3[i+1],0),
@@ -1051,11 +1055,11 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 		CIfEnd()
 		CIfX(FP,{CV(InterfaceNum[i+1],1)},{SetV(DPErT[i+1],24)})
 
-		--	KeyFunc(i,"1",{
-		--		{{CV(StatP[i+1],Cost_Stat_FailEXP,AtLeast),CV(Stat_FailEXP[i+1],249,AtMost)},{SubV(StatP[i+1],Cost_Stat_FailEXP),AddV(Stat_FailEXP[i+1],1)},StrDesign("\x07기본유닛\x1B의 데미지가 증가하였습니다.")},
-		--		{{CV(Stat_FailEXP[i+1],250,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x07기본유닛 \x08데미지\x04를 올릴 수 없습니다.")},
-		--		{{CV(StatP[i+1],Cost_Stat_FailEXP-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
-		--	})
+			KeyFunc(i,"1",{
+				{{CV(StatP[i+1],Cost_Stat_BossSTic,AtLeast),CV(Stat_BossSTic[i+1],19,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSTic),AddV(Stat_BossSTic[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x19판매권\x04이 증가하였습니다.")},
+				{{CV(Stat_BossSTic[i+1],20,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x19판매권\x04을 올릴 수 없습니다.")},
+				{{CV(StatP[i+1],Cost_Stat_BossSTic-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+			})
 		--	if TestStart == 1 then
 		--		KeyFunc(i,"2",{
 		--			{{CV(StatP[i+1],5,AtLeast),CV(Stat_Upgrade[i+1],89,AtMost)},{SubV(StatP[i+1],5),AddV(Stat_Upgrade[i+1],1)},StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다.")},

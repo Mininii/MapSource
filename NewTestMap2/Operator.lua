@@ -121,6 +121,25 @@ function Operator()
 	SCA.Loading = CreateCcodeArr(7)
 	SCA.LoadJump = def_sIndex()
 	CIf(FP,{CD(SCA.GlobalCheck,3)},{SetCD(SCA.Timer,0)})
+	if TestStart == 1 then
+		CIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535)})
+	else
+		CIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535)})
+	end
+	CElseX()
+	DoActions2X(FP, {
+		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06날짜 데이터가 잘못되었습니다. 다시 불러옵니다."), 4)}, Force1, FP),SetV(iv.Time3, 0),
+		SetCD(SCA.GlobalCheck,0),
+		SetCD(SCA.GlobalLoadFlag,0),
+		SetV(SCA.GlobalVarArr[1],0),
+		SetV(SCA.MonthV,0),
+		SetMemory(SCA.Month, SetTo,0),
+		SetMemory(SCA.GlobalData[1],SetTo,0),
+		SetCD(SCA.GlobalCheck2,0)
+	})
+	CIfXEnd()
+
+
 	for i = 0,6 do
 		TriggerX(FP, {HumanCheck(i,0)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1),SetCD(SCA.GlobalCheck2,1)},{preserved})

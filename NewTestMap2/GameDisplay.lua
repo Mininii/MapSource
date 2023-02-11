@@ -19,7 +19,7 @@ function GameDisplay()
 	local S_BreakShieldLoc = iv.S_BreakShieldLoc--CreateVar(FP)
 	local BreakShieldLoc = iv.BreakShieldLoc--CreateVar(FP)
 	local S_LV3IncmLoc = iv.S_LV3IncmLoc
-	local S_FailEXPLoc = iv.S_FailEXPLoc
+	local S_BossSTicLoc = iv.S_BossSTicLoc
 	local S_BossLVUPLoc = iv.S_BossLVUPLoc
 	local PlayTimeLoc = iv.PlayTimeLoc--CreateVar(FP)
 	local PlayTimeLoc2 = iv.PlayTimeLoc2--CreateVar(FP)
@@ -220,14 +220,15 @@ function GameDisplay()
 
 
 		CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- 상점 페이지 제어
-			CMov(FP,GEVar,S_FailEXPLoc)
-			CallTrigger(FP, Call_SetEPerStr)
-			--DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 50 - ",BColor3[1][2],Cost_Stat_FailEXP.." Pts\x12\x07 + ",BColor[1][2],EVarArr2,".",EVarArr3," % ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			--DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07 + ",BColor[1][2],EVarArr2,".",EVarArr3," % ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			
+			--5보스 처치시 판매권 +10개 증가 최대 20회 1스탯당 50포인트
 			--DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 100 ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
-			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +1업 \x08MAX 20 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			CMul(FP,S_BossSTicLoc,10)
+			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 10개 \x08MAX 20 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +2업 \x08MAX 25 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -272,7 +273,7 @@ function GameDisplay()
 		local StatPrintEr = {
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
-			StrDesign("\x04빈 항목입니다."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 \x19유닛 판매권\x04을 얻습니다."),
 			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x08스탯당 1억 \x04입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
@@ -347,8 +348,8 @@ function GameDisplay()
 	
 	
 	CIfEnd()
-	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0)})
-		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,5)},{preserved})
+	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0),AddV(AddScLoc,1)})
+		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,6)},{preserved})
 		CMul(FP,ScoutDmgLoc,100)
 		CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
 		CMov(FP,CTimeV,PlayTimeLoc2)
@@ -359,9 +360,9 @@ function GameDisplay()
 		CMov(FP,CTimeV,PlayTimeLoc)
 		CallTrigger(FP,Call_ConvertTime)
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07타임어택 점수 : \x04",TimeAttackScoreLoc})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x07출석 이벤트 출석일수 \x04: ",iv.DayCheck2Loc,"일"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
 		
 
@@ -370,7 +371,7 @@ function GameDisplay()
 		CIfEnd()
 	
 		CIf(FP,CV(NextGasLoc,1,AtLeast))
-			DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc,"\n\n\n"})
+			DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc})
 		CIfEnd()
 	
 	CIfEnd()

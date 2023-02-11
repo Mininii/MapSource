@@ -35,9 +35,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x19ver\x07. \x042\x07.\x0411"
+VerText = "\x19ver\x07. \x042\x07.\x0412"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
@@ -47,7 +47,7 @@ else
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 20
+LimitVer = 21
 StatVer = 10
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

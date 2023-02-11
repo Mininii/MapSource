@@ -53,6 +53,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 				f_Cast(FP,{TempV,0},_LMul({MulOp[i+1],0}, "100"),nil,nil,1)
 				DisplayPrint(LCP, {"\x13\x07『 \x19유닛 판매권\x04을 ",MulOp[i+1],"개 구입하였습니다. ",TempV," \x17크레딧 \x08사용 \x07』"})
 				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",SellTicket[i+1]," 개의 \x19유닛 판매권 보유중 \x07』"})
+				DoActions(FP, {SetCp(i),DisplayText(StrDesignX("\x03참고 \x04: \x19유닛 판매권\x04은 SCA로 저장할 수 있습니다!"))})
 				CIfEnd()
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
@@ -60,7 +61,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 		
 		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,126)},{MoveUnit(1, 15, i, 126, 116)})
 		
-			CIfX(FP,{CV(GeneralPlayTime,4*24*60*60,AtLeast),CV(SellTicket[i+1],MulOp[i+1],AtLeast)},{})
+			CIfX(FP,{CV(SellTicket[i+1],MulOp[i+1],AtLeast)},{})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				CMov(FP,iv.MissionV[i+1],64,nil,64)
 
@@ -76,7 +77,6 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",SellTicket[i+1]," 개의 \x19유닛 판매권 보유중 \x07』"})
 				CIfEnd()
 				
-			CElseIfX({CV(GeneralPlayTime,4*24*60*60,AtMost)},{SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 해당 항목은 \x1F인게임 \x0F4시간 이상 \x04플레이 후 사용가능합니다.."), 4),SetCp(FP)})
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 		CIfEnd()

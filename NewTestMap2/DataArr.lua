@@ -27,7 +27,7 @@ function DataArr()
 		{iv.Stat_EXPIncome,ct.Stat_EXPIncome,"Stat_EXPIncome"},
 		{iv.PLevel,ct.PLevel,"PLevel"},
 		{iv.StatP,ct.StatP,"StatP"},
-		{iv.Stat_FailEXP,ct.Stat_FailEXP,"Stat_FailEXP"},
+		{iv.Stat_BossSTic,ct.Stat_BossSTic,"Stat_BossSTic"},
 		{iv.Stat_BossLVUP,ct.Stat_BossLVUP,"Stat_BossLVUP"},
 		{iv.Stat_TotalEPer,ct.Stat_TotalEPer,"Stat_TotalEPer"},
 		{iv.Stat_TotalEPerEx,ct.Stat_TotalEPerEx,"Stat_TotalEPerEx"},
@@ -118,7 +118,7 @@ function DataArr()
 		{iv.BanFlag,98},
 		{iv.PLevel,101},
 		{iv.StatP,102},
-		{iv.Stat_FailEXP,103},
+		{iv.Stat_BossSTic,103},
 		{iv.Stat_TotalEPer,104},
 		{iv.Stat_TotalEPer2,105},
 		{iv.Stat_TotalEPer3,106},
@@ -192,7 +192,7 @@ function DataArr()
 		{iv.TotalEPer2[1],iv.TotalEPer2Loc},
 		{iv.TotalEPer3[1],iv.TotalEPer3Loc},
 		{iv.TotalEPer4[1],iv.TotalEPer4Loc},
-		{iv.Stat_FailEXP[1],iv.S_FailEXPLoc},
+		{iv.Stat_BossSTic[1],iv.S_BossSTicLoc},
 		{iv.Stat_BossLVUP[1],iv.S_BossLVUPLoc},
 		{iv.Stat_TotalEPer[1],iv.S_TotalEPerLoc},
 		{iv.Stat_TotalEPerEx[1],iv.S_TotalEPerExLoc},
@@ -236,6 +236,7 @@ function DataArr()
 		{iv.CreditAddSC[1],iv.CreditAddSCLoc},
 		{iv.Money2[1],iv.MoneyLoc2},
 		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
+		{iv.DayCheck2[1],iv.DayCheck2Loc},
 		
 	}
 end
