@@ -411,7 +411,6 @@ for i = 0, 6 do -- 각플레이어
 		f_LMov(FP, CTCurEXP, 0,nil,nil,1)
 		f_LMov(FP, CTTotalExp, "10",nil,nil,1)
 		CallTrigger(FP,Call_CT)
-		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BossSTic[i+1],_Mov(100)),_Mov(Cost_Stat_BossSTic)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPerEx[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPerEx)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPerEx2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPerEx2)))
@@ -420,6 +419,7 @@ for i = 0, 6 do -- 각플레이어
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer4[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer4)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BreakShield[i+1],_Mov(100)),_Mov(Cost_Stat_BreakShield)))
+		CAdd(FP,CTStatP2,_Mul(Stat_BossSTic[i+1],_Mov(Cost_Stat_BossSTic)))
 		CAdd(FP,CTStatP2,_Mul(Stat_LV3Incm[i+1],_Mov(Cost_Stat_LV3Incm)))
 		CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(Cost_Stat_Upgrade)))
 		CAdd(FP,CTStatP2,_Mul(Stat_BossLVUP[i+1],_Mov(Cost_Stat_BossLVUP)))
@@ -1056,8 +1056,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 		CIfX(FP,{CV(InterfaceNum[i+1],1)},{SetV(DPErT[i+1],24)})
 
 			KeyFunc(i,"1",{
-				{{CV(StatP[i+1],Cost_Stat_BossSTic,AtLeast),CV(Stat_BossSTic[i+1],19,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSTic),AddV(Stat_BossSTic[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x19판매권\x04이 증가하였습니다.")},
-				{{CV(Stat_BossSTic[i+1],20,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x19판매권\x04을 올릴 수 없습니다.")},
+				{{CV(StatP[i+1],Cost_Stat_BossSTic,AtLeast),CV(Stat_BossSTic[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSTic),AddV(Stat_BossSTic[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x19판매권\x04이 증가하였습니다.")},
+				{{CV(Stat_BossSTic[i+1],50,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x19판매권\x04을 올릴 수 없습니다.")},
 				{{CV(StatP[i+1],Cost_Stat_BossSTic-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 			})
 		--	if TestStart == 1 then
@@ -1068,8 +1068,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 		--		})
 		--	else
 			KeyFunc(i,"2",{
-				{{CV(StatP[i+1],Cost_Stat_BossLVUP,AtLeast),CV(Stat_BossLVUP[i+1],19,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossLVUP),AddV(Stat_BossLVUP[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x1F레벨\x04이 증가하였습니다.")},
-				{{CV(Stat_BossLVUP[i+1],20,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1F레벨\x04을 올릴 수 없습니다.")},
+				{{CV(StatP[i+1],Cost_Stat_BossLVUP,AtLeast),CV(Stat_BossLVUP[i+1],24,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossLVUP),AddV(Stat_BossLVUP[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x1F레벨\x04이 증가하였습니다.")},
+				{{CV(Stat_BossLVUP[i+1],25,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1F레벨\x04을 올릴 수 없습니다.")},
 				{{CV(StatP[i+1],Cost_Stat_BossLVUP-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 			})
 		--	end
