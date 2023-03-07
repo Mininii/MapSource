@@ -47,8 +47,8 @@ else
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 21
-StatVer = 10
+LimitVer = 22
+StatVer = 12
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)

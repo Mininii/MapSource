@@ -91,6 +91,7 @@ function Include_Vars()
 	_0D = string.rep("\x0D",200) 
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	LimitM = CreateCcodeArr(7)
+	LimitSaveEnable = CreateCcode()
 	--Interface
 	DPErT = CreateVarArr(7,FP)
 	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
@@ -305,6 +306,7 @@ function Include_Vars()
 	iv.TempEXPW2 = CreateWar(FP)
 
 	iv.CheatDetect = CreateCcode()
+	iv.StatTest = CreateCcode()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
 	iv.PartyBonus2 = CreateCcode()
@@ -622,7 +624,7 @@ FirstReward2 = {
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
 	Cost_Stat_BossSTic = 100
-	Cost_Stat_BossLVUP = 50
+	Cost_Stat_BossLVUP = 25
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000

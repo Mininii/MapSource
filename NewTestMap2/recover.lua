@@ -4,18 +4,18 @@
 --		EXPArr[i] = 10+((i-1)*(i*XI))
 --	end
     mw2 = 10
-    mw = 6
+    mw = 0
     mw3 = 6
     cci=0
 for i = 1, 100000 do
 	EXPArr[i] = mw2
-    mw2 = mw2+mw
+    mw=mw+mw3
+    mw2=mw2+mw
     cci = cci + 1
     if i >50000 and cci>=10 then
         mw3 = mw3+1
         cci = 0
     end
-    mw=mw+mw3
 end
 
     function exp(lv)
@@ -27,15 +27,27 @@ end
         return total
 
     end
-    exp(100000)
+    exp(15959)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     end
-    print(EXPArr[6001])
+    EXPArr2 = {}
+    for i = 1, 100000 do
+        EXPArr2[i] = 10+(10*(i-1)*(i*0.3))
+    end
 --    
+    function exp2(lv)
+        total = 0
+        for i = 1, lv do
+            total = total + EXPArr2[i]
+        end
+        print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
+        return total
 
+    end
 
+    exp2(15959)
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
     --복구가 완료되었습니다. 하지만 현재 게임중일 경우 저장데이터가 덮어써지므로 복구가 되지 않습니다. 확인부탁드립니다.

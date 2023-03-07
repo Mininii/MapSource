@@ -12,7 +12,6 @@ function CT_Prev()
 		local VW = k[1]
 		local TrapVW = k[2]
 		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, (j+#VWArr+#PVWArr)-1,nil,k[3])
-
 	end
 	
 
@@ -27,6 +26,7 @@ function CT_PrevCP(i)
 		local VW = k[1][i+1]
 		local TrapVW = k[2][i+1]
 		TrapKey = CheatTestX(i, VW,TrapVW, j+(#VWArr)-1,1,k[3])
+		if 2^(j+(#VWArr)-1)==2048.0 then error(k[3]) end
 
 	end
 	CIfEnd()

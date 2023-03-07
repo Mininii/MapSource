@@ -227,9 +227,8 @@ function GameDisplay()
 			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,S_BossSTicLoc,10)
-			CMul(FP,S_BossLVUPLoc,2)
 			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 10개 \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +2업 \x08MAX 25 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +1업 \x08MAX 50 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -466,13 +465,13 @@ function GameDisplay()
 	--남는거 공 250% 강확은 논외
 		{
 			"\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
-			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3",
-			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
-			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개\x12\x046단계 : \x1715만 크레딧",
-			"\x047단계 \x04: \x1F확정 강화권\x04 1개",
+			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개",
+			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3\x12\x046단계 : \x1715만 크레딧",
+			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
+			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
-	
+		
 		{
 			"\x13\x04\x1B- 부록. \x08파티 보스 몬스터 보상 목록 \x1B-",
 			"\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,",

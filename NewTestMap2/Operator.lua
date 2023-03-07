@@ -165,7 +165,7 @@ function Operator()
 			table.insert(Ttable, SubCD(LoadTimer[i+1],1))
 			CIf(FP, {HumanCheck(i,1),CD(LoadTimer[i+1],0),SCA.Available(i),CD(SCA.LoadCheckArr[i+1],0)},{SetCD(LoadTimer[i+1], 24*3)})
 				CallTrigger(FP,Call_Print13[i+1])
-				DoActions(FP, {print_utf8(12,0,StrDesign("\x04다른 플레이어가 \x03SCArchive \x04에서 \x07게임 데이터\x04를 불러오고 있습니다. 잠시만 기다려주세요."))})
+				Trigger2X(FP, {LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x04다른 플레이어가 \x03SCArchive \x04에서 \x07게임 데이터\x04를 불러오고 있습니다. 잠시만 기다려주세요."))}, {preserved})
 			CIfEnd()
 			
 		end

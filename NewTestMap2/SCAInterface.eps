@@ -17,7 +17,6 @@ function beforeTriggerExec(){
 	
 	var GLoadCheck;
 	var CurVer;
-
 	foreach(cp : EUDLoopPlayer("Human")){
 		setcurpl(cp);
 		if(Deaths(CurrentPlayer,Exactly,1,2)){
@@ -58,11 +57,12 @@ function beforeTriggerExec(){
 					SetDeaths(EPD(0x58f60C)+25,SetTo,sca.Min+0x32232232,0);
 					
 					
+					
 		}
 
 
 
-		if(GLoadCheck==1&&CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= 10000){
+		if(GLoadCheck==1&&CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= CurVer+1){
 		GLoadCheck = 0;
 		KillCode[0] = 1;
 		KillCode[1] = 1;

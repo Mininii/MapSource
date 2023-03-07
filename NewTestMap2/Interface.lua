@@ -154,6 +154,7 @@ function Interface()
 	local TempEXPW2 = iv.TempEXPW2--CreateVar(FP)
 
 	local CheatDetect = iv.CheatDetect--CreateCcode()
+	local StatTest = iv.StatTest--CreateCcode()
 	local TempO = iv.TempO
 	local TempG = iv.TempG
 	local TempX = iv.TempX
@@ -244,8 +245,8 @@ function Interface()
 		{{CVX(MissionV[i+1],1024,1024)},{100000,500,1},"상점에서 강화기 백신 1개 이상 되팔기"},
 		{{CV(BossLV,9,AtLeast)},{300000},"파티보스 LV.5 한번에 5회 처치하기"},
 		{{CV(PUnitLevel[i+1],10,AtLeast)},{250000,0,5,0,1},"고유유닛 10강 달성하기"},
-		{{CD(VaccSCount[i+1],5,AtLeast)},{100000,500},"상점에서 강화기 백신 5개 이상 되팔기"},
-		{{CVX(MissionV[i+1],16,16)},{250000,2000},"고유유닛 승급하기"},
+		{{CVX(MissionV[i+1],16,16)},{100000,500},"고유유닛 승급하기"},
+		{{CD(VaccSCount[i+1],5,AtLeast)},{250000,2000},"상점에서 강화기 백신 5개 이상 되팔기"},
 		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 또는 확정 강화권 사용으로 고유유닛 10강 달성하기"},
 		{{CV(iv.PMission[i+1],3,AtLeast)},{250000,0,3},"고유유닛 강화 3연속 성공하기"},
 
@@ -393,7 +394,7 @@ for i = 0, 6 do -- 각플레이어
 			})
 		end
 	end
-	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
+	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(StatTest, 0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
 		for j,k in pairs(SCA_DataArr) do
 			SCA_DataLoad(i,k[1][i+1],k[2])
@@ -401,9 +402,9 @@ for i = 0, 6 do -- 각플레이어
 		for j,k in pairs(RSArr) do
 			CTrigger(FP, {CV(k[i+1],0)}, {SetV(k[i+1],_Rand())}, 1)
 		end
-		TriggerX(FP,CD(LimitM[i+1],1),{SetDeaths(i, SetTo, 1, 100)})
+		TriggerX(FP, {Deaths(i, Exactly, 1, 100)}, {SetCD(LimitSaveEnable,1)})
 		--치팅 테스트 변수 초기화
-		CIfX(FP,{CV(PStatVer[i+1],StatVer),Deaths(i,AtMost,0,100)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
+		NIfX(FP,{CV(PStatVer[i+1],StatVer)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
 		f_LMov(FP, CTPEXP, PEXP[i+1])
 		CMov(FP, CTPLevel, 1)
 		CMov(FP,CTStatP,5)
@@ -425,10 +426,10 @@ for i = 0, 6 do -- 각플레이어
 		CAdd(FP,CTStatP2,_Mul(Stat_BossLVUP[i+1],_Mov(Cost_Stat_BossLVUP)))
 		CMov(FP,0x57f0f0+(i*4),CTStatP)--치팅감지시 스탯정보 표기용 미네랄
 		CMov(FP,0x57f120+(i*4),CTStatP2)--치팅감지시 스탯정보 표기용 가스
-		CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(CheatDetect,1)})
-		CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(CheatDetect,1)})
-		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(CheatDetect,1)})
-		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(CheatDetect,1)})
+		CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(StatTest,1)})
+		CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(StatTest,1)})
+		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(StatTest,1)})
+		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(StatTest,1)})
 		CTrigger(FP, {CV(BanFlag4[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {CV(BanFlag3[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
 		CTrigger(FP, {CV(BanFlag2[i+1],1,AtLeast)}, {SetCD(CheatDetect,1)})
@@ -436,18 +437,30 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP, {CD(CheatDetect,1),LocalPlayerID(i)}, {
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayText("L\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("LB\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
 			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
-		CElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
+		local StatTestJump = def_sIndex()
+		NJump(FP, StatTestJump, CD(StatTest,1))
+		NElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
+		NJumpEnd(FP, StatTestJump)--스탯 무결성 검사 실패시 자동으로 초기화
 
 		CIf(FP, {CV(PStatVer[i+1],8,AtMost),TTNWar(PEXP[i+1], AtLeast, "125000000450000")}) --5만레벨이상유저 경험치 재설정
 		f_LMov(FP, PEXP[i+1], "125000000450000", nil, nil, 1)
 		CIfEnd()
-
+		CTrigger(FP, {CV(PStatVer[i+1],StatVer)}, {SetCp(i),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),}, 1)
+		CTrigger(FP, {CD(StatTest,1)}, {SetCp(i),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패"), 4),
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패"), 4),}, 1)
 
 		DoActionsX(FP, {
 			SetV(PLevel[i+1],1),
@@ -467,15 +480,8 @@ for i = 0, 6 do -- 각플레이어
 			SetV(Stat_Upgrade[i+1],0),
 			SetV(Stat_BossLVUP[i+1],0),
 			SetCp(i),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. 스탯을 \x1F재 분배 \x04해주세요"), 4),
 			SetCp(FP)})
-		CIfXEnd()
+		NIfXEnd()
 
 		
 		--CreateUnitStacked({Deaths(i, AtLeast, 1, 100)},6, 88, 36+i,15+i, i, nil, 1)--제작자 칭호 보유자 스카 6개 추가지급
@@ -506,6 +512,10 @@ for i = 0, 6 do -- 각플레이어
 		CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,80+i, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
 		DoActions(FP, {SetLoc("Location "..(80+i),"U",Subtract,64),SetLoc("Location "..(80+i),"D",Subtract,64)})
 		CMov(FP,PUnitPtr[i+1],Nextptrs)
+		if Limit == 1 then --테스트 참가 유저 테스터유저 칭호 지급
+			TriggerX(FP, {}, {SetCp(i),StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다.")}, {preserved})
+			TriggerX(FP, {Deaths(i, AtMost, 0, 99)}, {SetDeaths(i, SetTo, 1, 99),SetCp(i),StrDesignX("\x07테스터 유저 칭호\x04가 지급되었습니다!!! 이 칭호는 영구 지급됩니다.")}, {preserved})
+		end
 	CIfEnd()
 	
 
@@ -661,7 +671,12 @@ end
 	local CTSwitch = CreateCcode()
 	TriggerX(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetDeaths(i, SetTo, 1,14)},{preserved})
 	
-	NIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+if Limit == 0 then
+	NIfX(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+else
+	NIfX(FP,{CD(LimitSaveEnable,1),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+end
+
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 	CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
@@ -674,7 +689,15 @@ end
 	CIf(FP,Deaths(i,AtLeast,1,100))
 	CMov(FP,PLevel[i+1],PLevelBak)
 	CIfEnd()
-	NIfEnd()
+	NElseIfX({Deaths(i, AtLeast, 1,14),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],2,AtMost)},{SetV(DPErT[i+1],24*10),SetDeaths(i, SetTo, 0,14)}) -- 조건불만족 - 미션3번클리어못함
+	CallTriggerX(FP,Call_Print13[i+1],{})
+	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 저장을 하기 위해서는 먼저 \x07M\x04ission \x08No. \x103\x04 까지 클리어 하셔야 합니다."))}, {preserved})
+	if Limit == 1 then
+	NElseIfX({Deaths(i, AtLeast, 1,14),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),CD(LimitSaveEnable,0)},{SetV(DPErT[i+1],24*10),SetDeaths(i, SetTo, 0,14)}) -- 조건불만족 - 테스트맵
+	CallTriggerX(FP,Call_Print13[i+1],{})
+	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서 저장하려면 제작자와 함께 해야 합니다."))}, {preserved})
+	end
+	NIfXEnd()
 
 
 	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
@@ -738,7 +761,7 @@ end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CV(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
-	TriggerX(FP, {CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetCp(i),DisplayText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
+	TriggerX(FP, {CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetMemX(Arr(AutoEnchArr,((2-1)*7)+i), SetTo, 0),SetCp(i),DisplayText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
 	CreateUnitStacked({CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men")}, 1, LevelUnitArr[2][2], 50+i,36+i, i, nil,1)
 	CIf(FP, {CV(ScTimer[i+1],4320,AtMost)})
 	local NBTemp = CreateVar(FP)
@@ -1068,8 +1091,8 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 		--		})
 		--	else
 			KeyFunc(i,"2",{
-				{{CV(StatP[i+1],Cost_Stat_BossLVUP,AtLeast),CV(Stat_BossLVUP[i+1],24,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossLVUP),AddV(Stat_BossLVUP[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x1F레벨\x04이 증가하였습니다.")},
-				{{CV(Stat_BossLVUP[i+1],25,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1F레벨\x04을 올릴 수 없습니다.")},
+				{{CV(StatP[i+1],Cost_Stat_BossLVUP,AtLeast),CV(Stat_BossLVUP[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossLVUP),AddV(Stat_BossLVUP[i+1],1)},StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x1F레벨\x04이 증가하였습니다.")},
+				{{CV(Stat_BossLVUP[i+1],50,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1F레벨\x04을 올릴 수 없습니다.")},
 				{{CV(StatP[i+1],Cost_Stat_BossLVUP-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 			})
 		--	end
