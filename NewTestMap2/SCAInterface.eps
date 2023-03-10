@@ -1,7 +1,216 @@
 import TriggerEditor.SCArchive as sca;
 
+const MapMakerFlag = PVariable();
+const PLevel = PVariable();
+const StatP = PVariable();
+const StatIncome = PVariable();
+const StatTotalEPer = PVariable();
+const StatTotalEPer2 = PVariable();
+const StatTotalEPer3 = PVariable();
+const StatUpgrade = PVariable();
+const Credit32 = PVariable();
+const Credit64 = PVariable();
+const PEXP32 = PVariable();
+const PEXP64 = PVariable();
+const TotalExp32 = PVariable();
+const TotalExp64 = PVariable();
+const CurEXP32 = PVariable();
+const CurEXP64 = PVariable();
+const TesterFlag = PVariable();
+const BanFlag = PVariable();
+const AddSc = PVariable();
+const PStatVer = PVariable();
+const PlayTime = PVariable();
+const PlayTime2 = PVariable();
+const CreditAddSC = PVariable();
+const LV5Cool = PVariable();
+const BanFlag2 = PVariable();
+const BanFlag3 = PVariable();
+const BanFlag4 = PVariable();
+const StatTotalEPer4 = PVariable();
+const StatBreakShield = PVariable();
+const StatTotalEPerEx = PVariable();
+const TimeAttackScore = PVariable();
+const PUnitLevel = PVariable();
+const PUnitClass = PVariable();
+const VaccItem = PVariable();
+const CSCooldown = PVariable();
+const CSAtk = PVariable();
+const CSEXP = PVariable();
+const CSTotalEPer = PVariable();
+const CSTotalEper4 = PVariable();
+const CSDPSLV = PVariable();
+const RandomSeed1 = PVariable();
+const RandomSeed2 = PVariable();
+const RandomSeed3 = PVariable();
+const RandomSeed4 = PVariable();
+const RandomSeed5 = PVariable();
+const RandomSeed6 = PVariable();
+const RandomSeed7 = PVariable();
+const RandomSeed8 = PVariable();
+const RandomSeed9 = PVariable();
+const RandomSeed10 = PVariable();
+const StatTotalEPerEx2 = PVariable();
+const StatTotalEPerEx3 = PVariable();
+const StatSCCool = PVariable();
+const PETicket = PVariable();
+const CSBreakShield = PVariable();
+const SellTicket = PVariable();
+const CurMission = PVariable();
+const DayCheck = PVariable();
+const DayCheck2 = PVariable();
+const YearCheck = PVariable();
+const MonthCheck = PVariable();
+const BanFlag5 = PVariable();
+const BanFlag6 = PVariable();
+const BanFlag7 = PVariable();
+const BanFlag8 = PVariable();
+const RankTitle = PVariable();
+var Asm_Arrptr;
 function onPluginStart(){
 sca.Init();
+}
+function afterTriggerExec(){
+if(Memory(5830260,AtLeast,1)){
+
+once{
+	Asm_Arrptr = dwread_epd(EPD(5830260));
+var focus = 87;
+SetDeaths(Asm_Arrptr,SetTo,EPD(MapMakerFlag)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PLevel)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatP)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatIncome)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPer)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPer2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPer3)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatUpgrade)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(Credit32)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(Credit64)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PEXP32)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PEXP64)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(TotalExp32)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(TotalExp64)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CurEXP32)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CurEXP64)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(TesterFlag)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(AddSc)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PStatVer)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PlayTime)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PlayTime2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CreditAddSC)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(LV5Cool)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag3)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag4)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPer4)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatBreakShield)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPerEx)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(TimeAttackScore)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PUnitLevel)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PUnitClass)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(VaccItem)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSCooldown)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSAtk)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSEXP)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSTotalEPer)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSTotalEper4)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSDPSLV)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed1)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed3)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed4)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed5)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed6)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed7)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed8)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed9)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed10)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPerEx2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPerEx3)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatSCCool)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PETicket)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSBreakShield)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(SellTicket)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CurMission)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(DayCheck)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(DayCheck2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(YearCheck)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(MonthCheck)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag5)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag6)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag7)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag8)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(RankTitle)+focus,0);
+Asm_Arrptr+=1;
+SetMemory(5830260,SetTo,0);	
+}
+}
 }
 
 function beforeTriggerExec(){
@@ -59,8 +268,14 @@ function beforeTriggerExec(){
 					
 					
 		}
-
-
+	//var css;
+	//if(Deaths(cp,AtLeast,1,494)){
+	//css-=1;
+	//}
+	//if(Deaths(cp,AtLeast,1,502)){
+	//css+=1;
+	//}
+	//f_eprintln(css," MapMakerFlag : ",dwread_epd(EPD(MapMakerFlag)+css));
 
 		if(GLoadCheck==1&&CurVer < sca.GlobalData[2] && sca.GlobalData[2] <= CurVer+1){
 		GLoadCheck = 0;
@@ -114,7 +329,6 @@ function beforeTriggerExec(){
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,1);
 		}
-		
 /***
  * @Summary.ko-KR
  * 0 = ´ë±â

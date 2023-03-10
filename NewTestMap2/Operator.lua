@@ -98,9 +98,9 @@ function Operator()
 	for i = 1,20 do
 		f_Read(FP, SCA.GlobalData[i], SCA.GlobalVarArr[i])
 	end
-	Trigger2X(FP, {CV(SCA.GlobalVarArr[4],1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CVX(SCA.GlobalVarArr[4],1,1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
 	
-	Trigger2X(FP, {CV(SCA.GlobalVarArr[4],0)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CVX(SCA.GlobalVarArr[4],0,1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
 	CIfEnd()
 	
 	TriggerX(FP,{CDX(SCA.GlobalLoadFlag,3,3),CD(SCA.GlobalCheck,2)},{SetCD(SCA.GlobalCheck,3)},{preserved})

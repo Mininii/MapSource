@@ -8,6 +8,7 @@
     mw3 = 6
     cci=0
 for i = 1, 100000 do
+   -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
     mw=mw+mw3
     mw2=mw2+mw

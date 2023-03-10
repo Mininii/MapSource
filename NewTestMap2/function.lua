@@ -1447,20 +1447,25 @@ function EXCC_End()
 end
 	
 
-function SCA_DataLoad(Player,Dest,SourceUnit) --Dest == W then Use SourceUnit, SourceUnit+1
+function SCA_DataLoad(Player,Dest,Sourceptr) --Dest == W then Use SourceUnit, SourceUnit+1
 	if Dest[4]=="V" then
-		f_Read(FP,0x58A364+(48*SourceUnit)+(4*Player),Dest)
+		f_Read(FP,_Add(Sourceptr,18*Player),Dest)
 	elseif Dest[4]=="W" then
-		f_LRead(FP, {0x58A364+(48*SourceUnit)+(4*Player),0x58A364+(48*(SourceUnit+1))+(4*Player)}, Dest, nil, 1)
+		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
+		f_LRead(FP, {_Add(Sourceptr[1],18*Player),_Add(Sourceptr[2],18*Player)}, Dest, nil, 1)
 	else
 		PushErrorMsg("SCA_Dest_Inputdata_Error")
 	end
 end
-function SCA_DataSave(Player,Source,DestUnit) --Source == W then Use DestUnit, DestUnit+1
+function SCA_DataSave(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
 	if Source[4]=="V" then
-		CMov(FP,0x58A364+(48*DestUnit)+(4*Player),Source,nil,nil,1)
+		CDoActions(FP, {TSetMemory(_Add(Destptr,18*Player), SetTo, Source)})
 	elseif Source[4]=="W" then
-		f_LMov(FP, {0x58A364+(48*DestUnit)+(4*Player),0x58A364+(48*(DestUnit+1))+(4*Player)}, Source, nil, nil, 1)
+		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
+		CDoActions(FP, {
+			TSetMemory(_Add(Destptr[1],18*Player), SetTo, _Cast(0,Source)),
+			TSetMemory(_Add(Destptr[2],18*Player), SetTo, _Cast(1,Source))
+		})
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
 	end

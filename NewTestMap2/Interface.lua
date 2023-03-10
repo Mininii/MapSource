@@ -395,14 +395,14 @@ for i = 0, 6 do -- 각플레이어
 		end
 	end
 	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(StatTest, 0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
-		CIfX(FP, {Deaths(i,AtLeast,1,101)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
+		CIfX(FP, {TDeaths(_Add(SCA.PLevel,18*i),AtLeast,1,0)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
 		for j,k in pairs(SCA_DataArr) do
 			SCA_DataLoad(i,k[1][i+1],k[2])
 		end
 		for j,k in pairs(RSArr) do
 			CTrigger(FP, {CV(k[i+1],0)}, {SetV(k[i+1],_Rand())}, 1)
 		end
-		TriggerX(FP, {Deaths(i, Exactly, 1, 100)}, {SetCD(LimitSaveEnable,1)})
+		TriggerX(FP, {CV(iv.MapMakerFlag[i+1],1)}, {SetCD(LimitSaveEnable,1)})
 		--치팅 테스트 변수 초기화
 		NIfX(FP,{CV(PStatVer[i+1],StatVer)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
 		f_LMov(FP, CTPEXP, PEXP[i+1])
@@ -443,6 +443,7 @@ for i = 0, 6 do -- 각플레이어
 		
 		CMov(FP,0x57f0f0+(i*4),0)--치팅감지시 스탯정보 표기용 미네랄 초기화
 		CMov(FP,0x57f120+(i*4),0)--치팅감지시 스탯정보 표기용 가스 초기화
+		TriggerX(FP, {CV(BossLV,5,AtLeast)}, {SetV(LV5Cool[i+1],60*60)},{preserved})--불러왓는데 보스잡혀잇으면 쿨 1시간 설정
 		local StatTestJump = def_sIndex()
 		NJump(FP, StatTestJump, CD(StatTest,1))
 		NElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
@@ -487,7 +488,7 @@ for i = 0, 6 do -- 각플레이어
 		--CreateUnitStacked({Deaths(i, AtLeast, 1, 100)},6, 88, 36+i,15+i, i, nil, 1)--제작자 칭호 보유자 스카 6개 추가지급
 		
 		CElseX()--레벨이 0일 경우 이쪽으로
-		SCA_DataLoad(i,PlayTime2[i+1],119)--구 이용시간 불러옴
+		SCA_DataLoad(i,PlayTime2[i+1],SCA.PlayTime2)--구 이용시간 불러옴
 		CIf(FP,CV(PlayTime2[i+1],1,AtLeast),{SetV(ScTimer[i+1],0),RemoveUnit(88, i),SetCp(i),DisplayText(StrDesignX("\x04테스트 유저 특전으로 다음 보상을 드립니다. \x07다시한번 플레이해주셔서 감사합니다.").."\n"..StrDesignX("\x07기본유닛 6기\x04 지급. \x08주의 \x04: \x07기본유닛\x04은 게임 실행 1회에만 등장하며 3분 뒤 사라집니다."), 4),SetCp(FP)})
 			TriggerX(FP,{CV(PlayTime2[i+1],1,AtLeast)},{SetV(CreditAddSC[i+1],1),SetDeaths(i, SetTo, 1, 99)},{preserved})
 			CMov(FP,CTimeV,PlayTime2[i+1])
@@ -513,8 +514,8 @@ for i = 0, 6 do -- 각플레이어
 		DoActions(FP, {SetLoc("Location "..(80+i),"U",Subtract,64),SetLoc("Location "..(80+i),"D",Subtract,64)})
 		CMov(FP,PUnitPtr[i+1],Nextptrs)
 		if Limit == 1 then --테스트 참가 유저 테스터유저 칭호 지급
-			TriggerX(FP, {}, {SetCp(i),StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다.")}, {preserved})
-			TriggerX(FP, {Deaths(i, AtMost, 0, 99)}, {SetDeaths(i, SetTo, 1, 99),SetCp(i),StrDesignX("\x07테스터 유저 칭호\x04가 지급되었습니다!!! 이 칭호는 영구 지급됩니다.")}, {preserved})
+			TriggerX(FP, {}, {SetCp(i),DisplayText(StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다."), 4)}, {preserved})
+			TriggerX(FP, {CV(iv.TesterFlag[i+1],0)}, {SetV(iv.TesterFlag[i+1],1),SetCp(i),DisplayText(StrDesignX("\x07테스터 유저 칭호\x04가 지급되었습니다!!! 이 칭호는 영구 지급됩니다."), 4)}, {preserved})
 		end
 	CIfEnd()
 	
@@ -594,38 +595,59 @@ for i = 0, 6 do -- 각플레이어
 		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PCredit[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),SetCp(FP)})
 	end
 
+	if TestStart == 1 then
+		CIf(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+			CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
+	else
+		CIf(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
+	end
+	CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
+	CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
 	
-	
-	CIfX(FP,{CV(DayCheck2[i+1],27,AtMost),CV(SCA.GlobalVarArr[4],1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
-if TestStart == 1 then
-	CIf(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-		CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
-else
-	CIf(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
-end
-
-			CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
-			CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
+	CIfX(FP,{CVX(DayCheck2[i+1],27,0xFF,AtMost),CVX(SCA.GlobalVarArr[4],1,1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
 			DoActionsX(FP,{
-				AddV(DayCheck2[i+1],1),
+				AddVX(DayCheck2[i+1],1,0xFF),
 				AddV(B_PCredit[i+1],100000),
 				AddV(B_PTicket[i+1],100),SetCp(i),DisplayText(StrDesignX("일일 출석 보상으로 \x04\x17유닛 판매권 100개, 크레딧 10만\x04을 얻었습니다."), 4)})
 				local TempV = CreateVar(FP)
 				local TempV2 = CreateVar(FP)
-				CMov(FP,TempV,_Mod(DayCheck2[i+1],7))
-				CMov(FP,TempV2,_Div(DayCheck2[i+1],7))
+				local TempV3 = CreateVar(FP)
+				CMov(FP,TempV3,_Mod(DayCheck2[i+1],_Mov(0x100)),nil,nil,1)
+				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
+				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
 			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
 			DoActionsX(FP, {
 				AddV(B_PCredit[i+1],1000000),
 				AddV(iv.VaccItem[i+1],5),
 				SetCp(i),DisplayText(StrDesignX("누적 출석 보상으로 \x04\x17크레딧 100만, \x10강화기 백신 5개\x04를 얻었습니다."), 4)})
 			CIfEnd()
-			DisplayPrint(i, {"\x13\x07『 \x04현재까지 총 출석일수 : \x07",DayCheck2[i+1],"일 \x07』"})
-			TriggerX(FP, {CV(DayCheck2[i+1],28,AtLeast)}, {SetCp(i),DisplayText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
-		CIfEnd()
-	CElseIfX({CD(SCA.GlobalCheck2,1),CV(DayCheck2[i+1],28,AtLeast)},{SetCp(i),DisplayText(StrDesignX("이미 모든 출석 이벤트를 완료 하셨습니다."), 4)})
+			DisplayPrint(i, {"\x13\x07『 \x04현재까지 시즌 1 출석 이벤트 출석일수 : \x07",TempV3,"일 \x07』"})
+			TriggerX(FP, {CVX(DayCheck2[i+1],28,0xFF,AtLeast)}, {SetCp(i),DisplayText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
+	CElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28,0xFF,AtLeast)},{SetCp(i),DisplayText(StrDesignX("이미 모든 출석 이벤트를 완료 하셨습니다."), 4)})
 	CIfXEnd()
+
+	CIfX(FP,{CVX(DayCheck2[i+1],27*0x100,0xFF00,AtMost),CVX(SCA.GlobalVarArr[4],2,2),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 2호 출석이벤트
+			DoActionsX(FP,{
+				AddVX(DayCheck2[i+1],1*0x100,0xFF00),
+				AddV(B_PCredit[i+1],500000),
+				SetCp(i),DisplayText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만\x04을 얻었습니다."), 4)})
+				local TempV = CreateVar(FP)
+				local TempV2 = CreateVar(FP)
+				local TempV3 = CreateVar(FP)
+				CMov(FP,TempV3,_Mod(_rShift(DayCheck2[i+1], 8),_Mov(0x100)),nil,nil,1)
+				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
+				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
+			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
+			DoActionsX(FP, {
+				SetCp(i),DisplayText(StrDesignX("누적 출석 보상으로 ???\x04를 5개 얻었습니다."), 4)})
+			CIfEnd()
+			DisplayPrint(i, {"\x13\x07『 \x04현재까지 시즌 2 출석 이벤트 출석일수 : \x07",TempV3,"일 \x07』"})
+			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
+	CElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayText(StrDesignX("이미 모든 출석 이벤트를 완료 하셨습니다."), 4)})
+	CIfXEnd()
+
+	CIfEnd()
 
 
 	
@@ -660,8 +682,12 @@ end
 						end
 					end
 				end
-			Trigger2X(FP,{CV(CurMission[i+1],j-1),k[1]},{RewardAct,AddV(CurMission[i+1],1),SetCp(i),DisplayText(MissionDataTextArr[j][2], 4),DisplayText(StrDesignX(MText), 4),SetDeaths(i,SetTo,1,13)})
-		end
+				if j>=3 then
+					Trigger2X(FP,{CV(CurMission[i+1],j-1),k[1]},{RewardAct,AddV(CurMission[i+1],1),SetCp(i),DisplayText(MissionDataTextArr[j][2], 4),DisplayText(StrDesignX(MText), 4),SetDeaths(i,SetTo,1,13)})
+				else
+					Trigger2X(FP,{CV(CurMission[i+1],j-1),k[1]},{RewardAct,AddV(CurMission[i+1],1),SetCp(i),DisplayText(MissionDataTextArr[j][2], 4),DisplayText(StrDesignX(MText), 4)})
+				end
+					end
 	CIfEnd()
 
 	CMov(FP,MissionV[i+1],0)
@@ -679,14 +705,14 @@ end
 
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
-	CIf(FP,Deaths(i,AtLeast,1,100))--제작자일경우 레벨 1으로 저장후 세팅.
+	CIf(FP,CV(iv.MapMakerFlag[i+1],1))--제작자일경우 레벨 1으로 저장후 세팅.
 	CMov(FP,PLevelBak,PLevel[i+1])
 	CMov(FP,PLevel[i+1],1)
 	CIfEnd()
 	for j,k in pairs(SCA_DataArr) do
 		SCA_DataSave(i,k[1][i+1],k[2])
 	end
-	CIf(FP,Deaths(i,AtLeast,1,100))
+	CIf(FP,CV(iv.MapMakerFlag[i+1],1))
 	CMov(FP,PLevel[i+1],PLevelBak)
 	CIfEnd()
 	NElseIfX({Deaths(i, AtLeast, 1,14),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],2,AtMost)},{SetV(DPErT[i+1],24*10),SetDeaths(i, SetTo, 0,14)}) -- 조건불만족 - 미션3번클리어못함
@@ -753,7 +779,7 @@ end
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	
 	if Limit == 1 then 
-		CIf(FP,{Deaths(i,AtLeast,1,100),Deaths(i,AtLeast,1,553)})
+		CIf(FP,{CV(iv.MapMakerFlag[i+1]),Deaths(i,AtLeast,1,553)})
 		--CreateUnitStacked({}, 12, LevelUnitArr[40][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
@@ -1322,7 +1348,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		TriggerX(FP,{NVar(General_Upgrade[i+1],Exactly,2^CBit,2^CBit)},{SetMemoryB(0x58F32C+(i*15)+13, Add, 2^CBit)},{preserved})
 	end
 	--if Limit == 1 then--맵제작자용 치트
-	--	CIf(FP,{Deaths(i,AtLeast,1,100)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)})
+	--	CIf(FP,{CV(iv.MapMakerFlag[i+1],1)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)})
 	--	CMov(FP,IncomeMax[i+1],48,nil,nil,1)
 	--	CIfEnd()
 	--end

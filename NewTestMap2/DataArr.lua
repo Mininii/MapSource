@@ -111,69 +111,77 @@ function DataArr()
 	for j,k in pairs(SCA.GlobalVarArr) do
 		table.insert(VWArr2,{k,ct.GlobalVarArr[j],"GlobalVarArr"..(j-1)})
 	end
+
+
+
 	SCA_DataArr = {
-		{iv.BanFlag4,95},
-		{iv.BanFlag3,96},
-		{iv.BanFlag2,97},
-		{iv.BanFlag,98},
-		{iv.PLevel,101},
-		{iv.StatP,102},
-		{iv.Stat_BossSTic,103},
-		{iv.Stat_TotalEPer,104},
-		{iv.Stat_TotalEPer2,105},
-		{iv.Stat_TotalEPer3,106},
-		{iv.Stat_Upgrade,107},
-		{iv.Credit,108},
-		{iv.PEXP,110},
-		{iv.TotalExp,112},
-		{iv.CurEXP,114},
-		{iv.Stat_BossLVUP,116},
-		{iv.PStatVer,117},
-		{iv.PlayTime,118},
-		{iv.PlayTime2,119},
-		{iv.CreditAddSC,120},
-		{iv.LV5Cool,121},
-		{iv.Stat_TotalEPer4,122},
-		{iv.Stat_BreakShield,123},
-		{iv.Stat_TotalEPerEx,124},
-		{iv.TimeAttackScore,125},
-		{iv.PUnitLevel,126},
-		{iv.PUnitClass,127},
-		{iv.VaccItem,128},
-		{iv.CS_Cooldown,129},
-		{iv.CS_Atk,130},
-		{iv.CS_EXP,131},
-		{iv.CS_TotalEPer,132},
-		{iv.CS_TotalEper4,133},
-		{iv.CS_DPSLV,134},
-		{iv.RandomSeed1,135},
-		{iv.RandomSeed2,136},
-		{iv.RandomSeed3,137},
-		{iv.RandomSeed4,138},
-		{iv.RandomSeed5,139},
-		{iv.RandomSeed6,140},
-		{iv.RandomSeed7,141},
-		{iv.RandomSeed8,142},
-		{iv.RandomSeed9,143},
-		{iv.RandomSeed10,144},
-		{iv.SellTicket,150}
+		{iv.BanFlag4,SCA.BanFlag4},
+		{iv.BanFlag3,SCA.BanFlag3},
+		{iv.BanFlag2,SCA.BanFlag2},
+		{iv.BanFlag,SCA.BanFlag},
+		{iv.PLevel,SCA.PLevel},
+		{iv.StatP,SCA.StatP},
+		{iv.Stat_BossSTic,SCA.StatIncome},
+		{iv.Stat_TotalEPer,SCA.StatTotalEPer},
+		{iv.Stat_TotalEPer2,SCA.StatTotalEPer2},
+		{iv.Stat_TotalEPer3,SCA.StatTotalEPer3},
+		{iv.Stat_Upgrade,SCA.StatUpgrade},
+		{iv.Credit,{SCA.Credit32,SCA.Credit64}},
+		{iv.PEXP,{SCA.PEXP32,SCA.PEXP64}},
+		{iv.TotalExp,{SCA.TotalExp32,SCA.TotalExp64}},
+		{iv.CurEXP,{SCA.CurEXP32,SCA.CurEXP64}},
+		{iv.Stat_BossLVUP,SCA.AddSc},
+		{iv.PStatVer,SCA.PStatVer},
+		{iv.PlayTime,SCA.PlayTime},
+		{iv.PlayTime2,SCA.PlayTime2},
+		{iv.CreditAddSC,SCA.CreditAddSC},
+		{iv.LV5Cool,SCA.LV5Cool},
+		{iv.Stat_TotalEPer4,SCA.StatTotalEPer4},
+		{iv.Stat_BreakShield,SCA.StatBreakShield},
+		{iv.Stat_TotalEPerEx,SCA.StatTotalEPerEx},
+		{iv.TimeAttackScore,SCA.TimeAttackScore},
+		{iv.PUnitLevel,SCA.PUnitLevel},
+		{iv.PUnitClass,SCA.PUnitClass},
+		{iv.VaccItem,SCA.VaccItem},
+		{iv.CS_Cooldown,SCA.CSCooldown},
+		{iv.CS_Atk,SCA.CSAtk},
+		{iv.CS_EXP,SCA.CSEXP},
+		{iv.CS_TotalEPer,SCA.CSTotalEPer},
+		{iv.CS_TotalEper4,SCA.CSTotalEper4},
+		{iv.CS_DPSLV,SCA.CSDPSLV},
+		{iv.RandomSeed1,SCA.RandomSeed1},
+		{iv.RandomSeed2,SCA.RandomSeed2},
+		{iv.RandomSeed3,SCA.RandomSeed3},
+		{iv.RandomSeed4,SCA.RandomSeed4},
+		{iv.RandomSeed5,SCA.RandomSeed5},
+		{iv.RandomSeed6,SCA.RandomSeed6},
+		{iv.RandomSeed7,SCA.RandomSeed7},
+		{iv.RandomSeed8,SCA.RandomSeed8},
+		{iv.RandomSeed9,SCA.RandomSeed9},
+		{iv.RandomSeed10,SCA.RandomSeed10},
+		{iv.SellTicket,SCA.SellTicket}
 	}
 	
 
-	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",145)
-	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",146)
-	iv.Stat_LV3Incm,ct.Stat_LV3Incm = CreateDataPV("Stat_LV3Incm",147)
-	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",148)
-	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",149) 
-	iv.CurMission,ct.CurMission = CreateDataPV("CurMission",151) 
-	iv.DayCheck,ct.DayCheck = CreateDataPV("DayCheck",152) 
-	iv.DayCheck2,ct.DayCheck2 = CreateDataPV("DayCheck2",153) 
-	iv.YearCheck,ct.YearCheck = CreateDataPV("YearCheck",154) 
-	iv.MonthCheck,ct.MonthCheck = CreateDataPV("MonthCheck",155) 
-	iv.BanFlag5,ct.BanFlag5 = CreateDataPV("BanFlag5",94) 
-	iv.BanFlag6,ct.BanFlag6 = CreateDataPV("BanFlag6",93) 
-	iv.BanFlag7,ct.BanFlag7 = CreateDataPV("BanFlag7",92) 
-	iv.BanFlag8,ct.BanFlag8 = CreateDataPV("BanFlag8",91) 
+	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",SCA.StatTotalEPerEx2)
+	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",SCA.StatTotalEPerEx3)
+	iv.Stat_LV3Incm,ct.Stat_LV3Incm = CreateDataPV("Stat_LV3Incm",SCA.StatLV3Incm)
+	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",SCA.PETicket)
+	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",SCA.CSBreakShield) 
+	iv.CurMission,ct.CurMission = CreateDataPV("CurMission",SCA.CurMission) 
+	iv.DayCheck,ct.DayCheck = CreateDataPV("DayCheck",SCA.DayCheck) 
+	iv.DayCheck2,ct.DayCheck2 = CreateDataPV("DayCheck2",SCA.DayCheck2) 
+	iv.YearCheck,ct.YearCheck = CreateDataPV("YearCheck",SCA.YearCheck) 
+	iv.MonthCheck,ct.MonthCheck = CreateDataPV("MonthCheck",SCA.MonthCheck) 
+	iv.RankTitle,ct.RankTitle = CreateDataPV("RankTitle",SCA.RankTitle)
+
+
+
+
+	iv.BanFlag5,ct.BanFlag5 = CreateDataPV("BanFlag5",SCA.BanFlag5) 
+	iv.BanFlag6,ct.BanFlag6 = CreateDataPV("BanFlag6",SCA.BanFlag6) 
+	iv.BanFlag7,ct.BanFlag7 = CreateDataPV("BanFlag7",SCA.BanFlag7) 
+	iv.BanFlag8,ct.BanFlag8 = CreateDataPV("BanFlag8",SCA.BanFlag8) 
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4,iv.BanFlag5,iv.BanFlag6,iv.BanFlag7,iv.BanFlag8}
 
 	
@@ -185,6 +193,9 @@ function DataArr()
 	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")
 	iv.TempIncm,ct.TempIncm = CreateDataPV("TempIncm")
 	iv.B_PEXP2,ct.B_PEXP2 = CreateDataPV("B_PEXP2")
+	iv.MapMakerFlag,ct.MapMakerFlag = CreateDataPV("MapMakerFlag",SCA.MapMakerFlag)
+	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
+
 
 
 	LocalDataArr = {
