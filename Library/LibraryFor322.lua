@@ -530,6 +530,35 @@ function SetV(V,Value,Type)
 	end
 end
 
+function AddVX(V,Value,Mask)
+	if Value == nil then Value = 1 end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Add,Value,Mask)
+	else
+		return TSetCVar(FP,V[2],Add,Value,Mask)
+	end
+end
+function SubVX(V,Value,Mask)
+	if Value == nil then Value = 1 end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Subtract,Value,Mask)
+	else
+		return TSetCVar(FP,V[2],Subtract,Value,Mask)
+	end
+end
+function SetVX(V,Value,Mask,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = SetTo end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return SetCVar(FP,V[2],Type,Value,Mask)
+	else
+		return TSetCVar(FP,V[2],Type,Value,Mask)
+	end
+end
+
 function CV(V,Value,Type)
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
