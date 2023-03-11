@@ -16,6 +16,39 @@ function Include_Vars()
 	ULimitV = CreateVar(FP)
 	ULimitV2 = CreateVar(FP)
 	SCA = {}
+	
+function SCA.CreateVar(PlayerID)
+	CreateVarXAlloc = CreateVarXAlloc + 1
+	if CreateVarXAlloc > CreateMaxVAlloc then
+		CreateVariable_IndexAllocation_Overflow()
+	end
+	if PlayerID == nil then
+		PlayerID = AllPlayers
+	end
+	table.insert(CreateVarPArr,{"V",PlayerID})
+	local Ret = V(CreateVarXAlloc)
+	if type(PlayerID) == "number" then
+		Ret[1] = PlayerID
+	end
+	table.insert(SCA.DataPtrArr, Ret)
+	return Ret
+end
+
+function SCA.Available(CP)
+	return DeathsX(CP, Exactly, 3, 1,3)
+end
+function SCA.NotAvailable(CP)
+	return DeathsX(CP, Exactly, 0, 1,2)
+end
+function SCA.Reset(CP)
+	return SetDeaths(CP, SetTo, 0, 1)
+end
+function SCA.LoadCmp(CP)--사용가능 + 로드완료
+	return DeathsX(CP, Exactly, 7, 1,7)
+end
+function SCA.SaveCmp(CP)--사용가능 + 저장완료
+	return DeathsX(CP, Exactly, 11, 1,11)
+end
 	SCA.GlobalCheck2 = CreateCcode()
 	SCA.GlobalCheck = CreateCcode()
 	SCA.GlobalLoadFlag = CreateCcode()
@@ -39,8 +72,7 @@ function Include_Vars()
 	io.output(CSfile)
 	io.write("ArrPtr MemOffset : "..SCA.ArrPtr)
 	io.close(CSfile)
-
-
+	SCA.DataPtrArr = {}
 
 	SCA.DataOffsetArr = CreateArr(500*4, FP)
 	SCA.CheckTime = CreateCcode()
@@ -59,74 +91,75 @@ function Include_Vars()
 	ct.WeekV = CreateVar(FP)
 	ct.MinV = CreateVar(FP)
 
-	SCA.MapMakerFlag = CreateVar(FP)
-	SCA.PLevel = CreateVar(FP)
-	SCA.StatP = CreateVar(FP)
-	SCA.StatIncome = CreateVar(FP)
-	SCA.StatTotalEPer = CreateVar(FP)
-	SCA.StatTotalEPer2 = CreateVar(FP)
-	SCA.StatTotalEPer3 = CreateVar(FP)
-	SCA.StatUpgrade = CreateVar(FP)
-	SCA.Credit32 = CreateVar(FP)
-	SCA.Credit64 = CreateVar(FP)
-	SCA.PEXP32 = CreateVar(FP)
-	SCA.PEXP64 = CreateVar(FP)
-	SCA.TotalExp32 = CreateVar(FP)
-	SCA.TotalExp64 = CreateVar(FP)
-	SCA.CurEXP32 = CreateVar(FP)
-	SCA.CurEXP64 = CreateVar(FP)
-	SCA.TesterFlag = CreateVar(FP)
-	SCA.BanFlag = CreateVar(FP)
-	SCA.AddSc = CreateVar(FP)
-	SCA.PStatVer = CreateVar(FP)
-	SCA.PlayTime = CreateVar(FP)
-	SCA.PlayTime2 = CreateVar(FP)
-	SCA.CreditAddSC = CreateVar(FP)
-	SCA.LV5Cool = CreateVar(FP)
-	SCA.BanFlag2 = CreateVar(FP)
-	SCA.BanFlag3 = CreateVar(FP)
-	SCA.BanFlag4 = CreateVar(FP)
-	SCA.StatTotalEPer4 = CreateVar(FP)
-	SCA.StatBreakShield = CreateVar(FP)
-	SCA.StatTotalEPerEx = CreateVar(FP)
-	SCA.TimeAttackScore = CreateVar(FP)
-	SCA.PUnitLevel = CreateVar(FP)
-	SCA.PUnitClass = CreateVar(FP)
-	SCA.VaccItem = CreateVar(FP)
-	SCA.CSCooldown = CreateVar(FP)
-	SCA.CSAtk = CreateVar(FP)
-	SCA.CSEXP = CreateVar(FP)
-	SCA.CSTotalEPer = CreateVar(FP)
-	SCA.CSTotalEper4 = CreateVar(FP)
-	SCA.CSDPSLV = CreateVar(FP)
-	SCA.RandomSeed1 = CreateVar(FP)
-	SCA.RandomSeed2 = CreateVar(FP)
-	SCA.RandomSeed3 = CreateVar(FP)
-	SCA.RandomSeed4 = CreateVar(FP)
-	SCA.RandomSeed5 = CreateVar(FP)
-	SCA.RandomSeed6 = CreateVar(FP)
-	SCA.RandomSeed7 = CreateVar(FP)
-	SCA.RandomSeed8 = CreateVar(FP)
-	SCA.RandomSeed9 = CreateVar(FP)
-	SCA.RandomSeed10 = CreateVar(FP)
-	SCA.StatTotalEPerEx2 = CreateVar(FP)
-	SCA.StatTotalEPerEx3 = CreateVar(FP)
-	SCA.StatSCCool = CreateVar(FP)
-	SCA.PETicket = CreateVar(FP)
-	SCA.CSBreakShield = CreateVar(FP)
-	SCA.SellTicket = CreateVar(FP)
-	SCA.CurMission = CreateVar(FP)
-	SCA.DayCheck = CreateVar(FP)
-	SCA.DayCheck2 = CreateVar(FP)
-	SCA.YearCheck = CreateVar(FP)
-	SCA.MonthCheck = CreateVar(FP)
-	SCA.BanFlag5 = CreateVar(FP)
-	SCA.BanFlag6 = CreateVar(FP)
-	SCA.BanFlag7 = CreateVar(FP)
-	SCA.BanFlag8 = CreateVar(FP)
-	SCA.RankTitle = CreateVar(FP)
-
-
+	SCA.MapMakerFlag = SCA.CreateVar(FP)
+	SCA.PLevel = SCA.CreateVar(FP)
+	SCA.StatP = SCA.CreateVar(FP)
+	SCA.StatIncome = SCA.CreateVar(FP)
+	SCA.StatTotalEPer = SCA.CreateVar(FP)
+	SCA.StatTotalEPer2 = SCA.CreateVar(FP)
+	SCA.StatTotalEPer3 = SCA.CreateVar(FP)
+	SCA.StatUpgrade = SCA.CreateVar(FP)
+	SCA.Credit32 = SCA.CreateVar(FP)
+	SCA.Credit64 = SCA.CreateVar(FP)
+	SCA.PEXP32 = SCA.CreateVar(FP)
+	SCA.PEXP64 = SCA.CreateVar(FP)
+	SCA.TotalExp32 = SCA.CreateVar(FP)
+	SCA.TotalExp64 = SCA.CreateVar(FP)
+	SCA.CurEXP32 = SCA.CreateVar(FP)
+	SCA.CurEXP64 = SCA.CreateVar(FP)
+	SCA.TesterFlag = SCA.CreateVar(FP)
+	SCA.BanFlag = SCA.CreateVar(FP)
+	SCA.AddSc = SCA.CreateVar(FP)
+	SCA.PStatVer = SCA.CreateVar(FP)
+	SCA.PlayTime = SCA.CreateVar(FP)
+	SCA.PlayTime2 = SCA.CreateVar(FP)
+	SCA.CreditAddSC = SCA.CreateVar(FP)
+	SCA.LV5Cool = SCA.CreateVar(FP)
+	SCA.BanFlag2 = SCA.CreateVar(FP)
+	SCA.BanFlag3 = SCA.CreateVar(FP)
+	SCA.BanFlag4 = SCA.CreateVar(FP)
+	SCA.StatTotalEPer4 = SCA.CreateVar(FP)
+	SCA.StatBreakShield = SCA.CreateVar(FP)
+	SCA.StatTotalEPerEx = SCA.CreateVar(FP)
+	SCA.TimeAttackScore = SCA.CreateVar(FP)
+	SCA.PUnitLevel = SCA.CreateVar(FP)
+	SCA.PUnitClass = SCA.CreateVar(FP)
+	SCA.VaccItem = SCA.CreateVar(FP)
+	SCA.CSCooldown = SCA.CreateVar(FP)
+	SCA.CSAtk = SCA.CreateVar(FP)
+	SCA.CSEXP = SCA.CreateVar(FP)
+	SCA.CSTotalEPer = SCA.CreateVar(FP)
+	SCA.CSTotalEper4 = SCA.CreateVar(FP)
+	SCA.CSDPSLV = SCA.CreateVar(FP)
+	SCA.RandomSeed1 = SCA.CreateVar(FP)
+	SCA.RandomSeed2 = SCA.CreateVar(FP)
+	SCA.RandomSeed3 = SCA.CreateVar(FP)
+	SCA.RandomSeed4 = SCA.CreateVar(FP)
+	SCA.RandomSeed5 = SCA.CreateVar(FP)
+	SCA.RandomSeed6 = SCA.CreateVar(FP)
+	SCA.RandomSeed7 = SCA.CreateVar(FP)
+	SCA.RandomSeed8 = SCA.CreateVar(FP)
+	SCA.RandomSeed9 = SCA.CreateVar(FP)
+	SCA.RandomSeed10 = SCA.CreateVar(FP)
+	SCA.StatTotalEPerEx2 = SCA.CreateVar(FP)
+	SCA.StatTotalEPerEx3 = SCA.CreateVar(FP)
+	SCA.StatSCCool = SCA.CreateVar(FP)
+	SCA.PETicket = SCA.CreateVar(FP)
+	SCA.CSBreakShield = SCA.CreateVar(FP)
+	SCA.SellTicket = SCA.CreateVar(FP)
+	SCA.CurMission = SCA.CreateVar(FP)
+	SCA.DayCheck = SCA.CreateVar(FP)
+	SCA.DayCheck2 = SCA.CreateVar(FP)
+	SCA.YearCheck = SCA.CreateVar(FP)
+	SCA.MonthCheck = SCA.CreateVar(FP)
+	SCA.BanFlag5 = SCA.CreateVar(FP)
+	SCA.BanFlag6 = SCA.CreateVar(FP)
+	SCA.BanFlag7 = SCA.CreateVar(FP)
+	SCA.BanFlag8 = SCA.CreateVar(FP)
+	SCA.RankTitle = SCA.CreateVar(FP)
+	SCA.StatTotalEPer4X = SCA.CreateVar(FP)
+	SCA.StatBreakShield2 = SCA.CreateVar(FP)
+	
 
 	SCA.GReload = CreateCcode()
 	--MSQC_init(0x590004)
@@ -713,7 +746,9 @@ FirstReward2 = {
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
+	Cost_Stat_TotalEPer4X = 3000
 	Cost_Stat_BreakShield = 250
+	Cost_Stat_BreakShield2 = 1000
 	Cost_Stat_LV3Incm = 100
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}

@@ -75,7 +75,9 @@ function Interface()
 	local Stat_TotalEPer2 = iv.Stat_TotalEPer2--CreateVarArr(7,FP)-- +2강 확업 수치
 	local Stat_TotalEPer3 = iv.Stat_TotalEPer3--CreateVarArr(7,FP)-- +3강 확업 수치
 	local Stat_TotalEPer4 = iv.Stat_TotalEPer4--CreateVarArr(7,FP)-- +3강 확업 수치
+	local Stat_TotalEPer4X = iv.Stat_TotalEPer4X--CreateVarArr(7,FP)-- +3강 확업 수치
 	local Stat_BreakShield = iv.Stat_BreakShield--CreateVarArr(7,FP)-- +3강 확업 수치
+	local Stat_BreakShield2 = iv.Stat_BreakShield2--CreateVarArr(7,FP)-- +3강 확업 수치
 	local Stat_Upgrade = iv.Stat_Upgrade--CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
 	local Credit = iv.Credit--CreateWarArr(7,FP) -- 보유중인 크레딧
 	local PEXP = iv.PEXP--CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
@@ -110,46 +112,15 @@ function Interface()
 	local MonthCheck = iv.MonthCheck
 	local YearCheck = iv.YearCheck
 	--Local Data Variable
-	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
-	local IncomeLoc = iv.IncomeLoc--CreateVar(FP)
-	local LevelLoc = iv.LevelLoc--CreateVar(FP)
-	local LevelLoc2 = iv.LevelLoc2--CreateVar(FP)
-	local TotalEPerLoc = iv.TotalEPerLoc--CreateVar(FP)
-	local TotalEPer2Loc = iv.TotalEPer2Loc--CreateVar(FP)
-	local TotalEPer3Loc = iv.TotalEPer3Loc--CreateVar(FP)
-	local TotalEPer4Loc = iv.TotalEPer4Loc--CreateVar(FP)
-	local S_TotalEPerLoc = iv.S_TotalEPerLoc--CreateVar(FP)
-	local S_TotalEPer2Loc = iv.S_TotalEPer2Loc--CreateVar(FP)
-	local S_TotalEPer3Loc = iv.S_TotalEPer3Loc--CreateVar(FP)
-	local S_TotalEPer4Loc = iv.S_TotalEPer4Loc--CreateVar(FP)
-	local PlayTimeLoc = iv.PlayTimeLoc--CreateVar(FP)
-	local PlayTimeLoc2 = iv.PlayTimeLoc2--CreateVar(FP)
-	local StatPLoc = iv.StatPLoc--CreateVar(FP)
 	local MoneyLoc = iv.MoneyLoc--CreateWar(FP)
-	local MoneyLoc2 = iv.MoneyLoc2--CreateWar(FP)
 	local CredLoc = iv.CredLoc--CreateWar(FP)
 	local ExpLoc = iv.ExpLoc--CreateVar(FP)
 	local TotalExpLoc = iv.TotalExpLoc--CreateVar(FP)
-	local InterfaceNumLoc = iv.InterfaceNumLoc--CreateVar(FP)
-	local UpgradeLoc = iv.UpgradeLoc--CreateVar(FP)
-	local EXPIncomeLoc = iv.EXPIncomeLoc--CreateVar(FP)
-	local EXPIncomeLoc2 = iv.EXPIncomeLoc2--CreateVar(FP)
 	local StatEffLoc = iv.StatEffLoc--CreateCcode()
-	local ScoutDmgLoc = iv.ScoutDmgLoc--CreateVar(FP)
-	local MulOpLoc = iv.MulOpLoc--CreateVar(FP)
 	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
-	local LCP = iv.LCP--CreateVar(FP)
 	local ResetStatLoc = iv.ResetStatLoc
-	local UpgradeUILoc = iv.UpgradeUILoc--CreateVar(FP)
-	local NextOreLoc = iv.NextOreLoc
-	local NextGasLoc = iv.NextGasLoc
-	local NextOreMulLoc = iv.NextOreMulLoc
-	local NextGasMulLoc = iv.NextGasMulLoc
-	local SellTicketLoc = iv.SellTicketLoc
 	--Temp
 	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
-	local TempReadV = iv.TempReadV--CreateVar(FP)
-	local TempReadW = iv.TempReadW--CreateVar(FP)
 	local TempEXPW = iv.TempEXPW--CreateVar(FP)
 	local TempEXPW2 = iv.TempEXPW2--CreateVar(FP)
 
@@ -419,7 +390,9 @@ for i = 0, 6 do -- 각플레이어
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer2[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer3[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer4[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer4)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer4X[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer4X)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BreakShield[i+1],_Mov(100)),_Mov(Cost_Stat_BreakShield)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BreakShield2[i+1],_Mov(100)),_Mov(Cost_Stat_BreakShield2)))
 		CAdd(FP,CTStatP2,_Mul(Stat_BossSTic[i+1],_Mov(Cost_Stat_BossSTic)))
 		CAdd(FP,CTStatP2,_Mul(Stat_LV3Incm[i+1],_Mov(Cost_Stat_LV3Incm)))
 		CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(Cost_Stat_Upgrade)))
@@ -473,7 +446,9 @@ for i = 0, 6 do -- 각플레이어
 			SetV(Stat_TotalEPer2[i+1],0),
 			SetV(Stat_TotalEPer3[i+1],0),
 			SetV(Stat_TotalEPer4[i+1],0),
+			SetV(Stat_TotalEPer4X[i+1],0),
 			SetV(Stat_BreakShield[i+1],0),
+			SetV(Stat_BreakShield2[i+1],0),
 			SetV(Stat_TotalEPerEx[i+1],0),
 			SetV(Stat_TotalEPerEx2[i+1],0),
 			SetV(Stat_TotalEPerEx3[i+1],0),
@@ -702,7 +677,8 @@ if Limit == 0 then
 else
 	NIfX(FP,{CD(LimitSaveEnable,1),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 end
-
+	CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
+	TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 	CIf(FP,CV(iv.MapMakerFlag[i+1],1))--제작자일경우 레벨 1으로 저장후 세팅.
@@ -719,9 +695,13 @@ end
 	CallTriggerX(FP,Call_Print13[i+1],{})
 	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 저장을 하기 위해서는 먼저 \x07M\x04ission \x08No. \x103\x04 까지 클리어 하셔야 합니다."))}, {preserved})
 	if Limit == 1 then
-	NElseIfX({Deaths(i, AtLeast, 1,14),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),CD(LimitSaveEnable,0)},{SetV(DPErT[i+1],24*10),SetDeaths(i, SetTo, 0,14)}) -- 조건불만족 - 테스트맵
-	CallTriggerX(FP,Call_Print13[i+1],{})
-	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서 저장하려면 제작자와 함께 해야 합니다."))}, {preserved})
+	NElseIfX({Deaths(i, AtLeast, 1,14),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),CD(LimitSaveEnable,0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
+	CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
+	SCA_DataSave(i,iv.TesterFlag[i+1],SCA.TesterFlag)
+	TriggerX(FP, {Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서는 테스트 기록 정보만 저장됩니다..."))}, {preserved})
+	
+	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
+	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 	end
 	NIfXEnd()
 
@@ -1086,7 +1066,9 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 					SetV(Stat_Upgrade[i+1],0),
 					SetV(Stat_BossLVUP[i+1],0),
 					SetV(Stat_TotalEPer4[i+1],0),
+					SetV(Stat_TotalEPer4X[i+1],0),
 					SetV(Stat_BreakShield[i+1],0),
+					SetV(Stat_BreakShield2[i+1],0),
 					SetV(Stat_TotalEPerEx[i+1],0),
 					SetV(Stat_TotalEPerEx2[i+1],0),
 					SetV(Stat_TotalEPerEx3[i+1],0),
@@ -1186,11 +1168,22 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 			{{CV(StatP[i+1],Cost_Stat_LV3Incm-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 
+		CElseIfX({CV(InterfaceNum[i+1],3)},{SetV(DPErT[i+1],24)}) -- 3번 스탯페이지
+		KeyFunc(i,"1",{
+			{{CV(StatP[i+1],Cost_Stat_TotalEPer4X,AtLeast),CV(Stat_TotalEPer4X[i+1],4999,AtMost)},{SubV(StatP[i+1],Cost_Stat_TotalEPer4X),AddV(Stat_TotalEPer4X[i+1],100)},StrDesign("\x08특수 강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+			{{CV(Stat_TotalEPer4X[i+1],5000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x08특수 \x08강화확률\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_TotalEPer4X-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+		KeyFunc(i,"2",{
+			{{CV(StatP[i+1],Cost_Stat_BreakShield2,AtLeast),CV(Stat_BreakShield2[i+1],9999,AtMost)},{SubV(StatP[i+1],Cost_Stat_BreakShield),AddV(Stat_BreakShield2[i+1],100)},StrDesign("\x08특수 \x1F파괴 방지확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+			{{CV(Stat_BreakShield2[i+1],10000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x1F피괴 \x08방지확률\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_BreakShield2-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
 		
 		CIfXEnd()
 	TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2,AtLeast),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtMost),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],2,AtMost),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	CIfEnd()
 	DoActions(FP, SetCp(FP))--키인식부 종료
 
@@ -1217,6 +1210,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
 	CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
 	CMov(FP,TotalEPer4[i+1],Stat_TotalEPer4[i+1],nil,nil,1)
+	CAdd(FP,TotalEPer4[i+1],Stat_TotalEPer4X[i+1])
 	CMov(FP,TotalBreakShield[i+1],Stat_BreakShield[i+1],nil,nil,1)
 	CAdd(FP,IncomeMax[i+1],B_IncomeMax)
 	CAdd(FP,TotalEPer[i+1],Stat_TotalEPerEx[i+1])
@@ -1234,6 +1228,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,TotalEPer[i+1],CS_TEPerData[i+1])
 	CAdd(FP,TotalEPer4[i+1],CS_TEPer4Data[i+1])
 	CAdd(FP,TotalBreakShield[i+1],CS_BreakShieldData[i+1])
+	CAdd(FP,TotalBreakShield[i+1],Stat_BreakShield2[i+1])
 	
 
 

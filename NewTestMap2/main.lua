@@ -37,7 +37,7 @@ end
 
 VerText = "\x19ver\x07. \x042\x07.\x0412"
 
-TestSet(2)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13

@@ -1,19 +1,4 @@
 function Operator()
-	function SCA.Available(CP)
-		return DeathsX(CP, Exactly, 3, 1,3)
-	end
-	function SCA.NotAvailable(CP)
-		return DeathsX(CP, Exactly, 0, 1,2)
-	end
-	function SCA.Reset(CP)
-		return SetDeaths(CP, SetTo, 0, 1)
-	end
-	function SCA.LoadCmp(CP)--사용가능 + 로드완료
-		return DeathsX(CP, Exactly, 7, 1,7)
-	end
-	function SCA.SaveCmp(CP)--사용가능 + 저장완료
-		return DeathsX(CP, Exactly, 11, 1,11)
-	end
 	--3 사용가능
 	--4 로드완료
 	--8 저장완료

@@ -377,7 +377,7 @@ iTblJump = def_sIndex()
 --
 	CIfEnd()
 	CIfOnce(FP, {Memory(SCA.ArrPtr,Exactly,0)})
-	for j,k in pairs({SCA.MapMakerFlag,SCA.PLevel,SCA.StatP,SCA.StatIncome,SCA.StatTotalEPer,SCA.StatTotalEPer2,SCA.StatTotalEPer3,SCA.StatUpgrade,SCA.Credit32,SCA.Credit64,SCA.PEXP32,SCA.PEXP64,SCA.TotalExp32,SCA.TotalExp64,SCA.CurEXP32,SCA.CurEXP64,SCA.TesterFlag,SCA.BanFlag,SCA.AddSc,SCA.PStatVer,SCA.PlayTime,SCA.PlayTime2,SCA.CreditAddSC,SCA.LV5Cool,SCA.BanFlag2,SCA.BanFlag3,SCA.BanFlag4,SCA.StatTotalEPer4,SCA.StatBreakShield,SCA.StatTotalEPerEx,SCA.TimeAttackScore,SCA.PUnitLevel,SCA.PUnitClass,SCA.VaccItem,SCA.CSCooldown,SCA.CSAtk,SCA.CSEXP,SCA.CSTotalEPer,SCA.CSTotalEper4,SCA.CSDPSLV,SCA.RandomSeed1,SCA.RandomSeed2,SCA.RandomSeed3,SCA.RandomSeed4,SCA.RandomSeed5,SCA.RandomSeed6,SCA.RandomSeed7,SCA.RandomSeed8,SCA.RandomSeed9,SCA.RandomSeed10,SCA.StatTotalEPerEx2,SCA.StatTotalEPerEx3,SCA.StatSCCool,SCA.PETicket,SCA.CSBreakShield,SCA.SellTicket,SCA.CurMission,SCA.DayCheck,SCA.DayCheck2,SCA.YearCheck,SCA.MonthCheck,SCA.BanFlag5,SCA.BanFlag6,SCA.BanFlag7,SCA.BanFlag8,SCA.RankTitle}) do
+	for j,k in pairs(SCA.DataPtrArr) do
 		CMov(FP,k,_Read(ArrX(SCA.DataOffsetArr, j-1)),nil,nil,1)
 	end
 

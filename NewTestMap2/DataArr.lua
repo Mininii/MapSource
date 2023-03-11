@@ -195,6 +195,8 @@ function DataArr()
 	iv.B_PEXP2,ct.B_PEXP2 = CreateDataPV("B_PEXP2")
 	iv.MapMakerFlag,ct.MapMakerFlag = CreateDataPV("MapMakerFlag",SCA.MapMakerFlag)
 	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
+	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
+	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
 
 
 

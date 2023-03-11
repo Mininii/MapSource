@@ -66,6 +66,9 @@ const BanFlag6 = PVariable();
 const BanFlag7 = PVariable();
 const BanFlag8 = PVariable();
 const RankTitle = PVariable();
+
+const StatTotalEPer4X = PVariable();
+const StatBreakShield2 = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
 sca.Init();
@@ -315,7 +318,7 @@ function beforeTriggerExec(){
 			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
 				NBAlarm[cp] = 0;
 				sca.SaveData(0);
-			    f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
 			}
 			
 		}
@@ -384,11 +387,11 @@ function beforeTriggerExec(){
 
 		SetDeaths(CurrentPlayer,SetTo,0,2);//신호 초기화
 		
-		if(Deaths(CurrentPlayer, AtLeast, 1,100)){
+		if(MapMakerFlag[cp]==1){
 		
 		SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
 		}
-		else if (Deaths(CurrentPlayer, AtLeast, 1,99)) {
+		else if (TesterFlag[cp]==1) {
 		SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser\x07] {:c}{:n}",cp,cp);
 		}
 	}
