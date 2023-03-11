@@ -159,6 +159,7 @@ end
 	SCA.RankTitle = SCA.CreateVar(FP)
 	SCA.StatTotalEPer4X = SCA.CreateVar(FP)
 	SCA.StatBreakShield2 = SCA.CreateVar(FP)
+	SCA.FfragItem = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -317,6 +318,8 @@ end
 	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3강 확업 수치
 	iv.Stat_TotalEPer4 = CreateVarArr(7,FP)-- 특수 확업 수치
 	iv.Stat_BreakShield = CreateVarArr(7,FP)-- 파괴 방지 수치
+
+
 	iv.Stat_Upgrade = CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
 	iv.Credit = CreateWarArr(7,FP) -- 보유중인 크레딧
 	iv.PEXP = CreateWarArr(7, FP) -- 자신이 지금까지 얻은 총 경험치
@@ -354,6 +357,8 @@ end
 	iv.S_TotalEPer4Loc = CreateVar(FP)
 	iv.S_BreakShieldLoc = CreateVar(FP)
 	iv.BreakShieldLoc = CreateVar(FP)
+	iv.S_TotalEPer4XLoc = CreateVar(FP)
+	iv.S_BreakShield2Loc = CreateVar(FP)
 	iv.S_BossSTicLoc = CreateVar(FP)
 	iv.S_BossLVUPLoc = CreateVar(FP)
 	iv.PlayTimeLoc = CreateVar(FP)

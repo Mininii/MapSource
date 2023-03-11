@@ -35,9 +35,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x19ver\x07. \x042\x07.\x0412"
+VerText = "\x19ver\x07. \x042\x07.\x0413"
 
-TestSet(1)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13

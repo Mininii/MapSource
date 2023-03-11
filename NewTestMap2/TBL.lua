@@ -163,6 +163,15 @@ function TBL()
     end
     CElseX()
     CTrigger(FP,{
+        CV(SelUID,215),
+    },{TSetMemory(0x6509B0, SetTo, LCP),DisplayText("\n\n\n\n\n\n\n"..
+    StrDesignX("\x17독도").."\n"..
+    StrDesignX("\x04독도는 동해의 남서부, 울릉도와 오키 제도 사이에 위치한 동도와 서도를 포함해").."\n"..
+    StrDesignX("\x04총 91개의 크고 작은 섬들로 이루어져 있는 대한민국의 섬이다. ").."\n"..
+    StrDesignX("\x04울릉도에서 뱃길로 200리 정도 떨어져 있다.").."\n"..
+    StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
+     CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})
+    CTrigger(FP,{
         CV(SelPer,1,AtLeast),
     },{TSetMemory(0x6509B0, SetTo, LCP),DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
      CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})

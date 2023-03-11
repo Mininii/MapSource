@@ -7,11 +7,15 @@
     mw = 0
     mw3 = 6
     cci=0
-for i = 1, 100000 do
+for i = 1, 500000 do
    -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
     mw=mw+mw3
-    mw2=mw2+mw
+    if mw>0xFFFFFFFFFFFFFFFF-mw2 then
+        error("overflow. i = "..i)
+    else
+        mw2=mw2+mw
+    end
     cci = cci + 1
     if i >50000 and cci>=10 then
         mw3 = mw3+1
@@ -28,7 +32,7 @@ end
         return total
 
     end
-    exp(15959)
+    exp(200000)
     function zergling(total,zerglings)
         total = total+(zerglings*37500000)
         print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
@@ -48,7 +52,7 @@ end
 
     end
 
-    exp2(15959)
+    exp2(100000)
 --    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
     --복구가 완료되었습니다. 하지만 현재 게임중일 경우 저장데이터가 덮어써지므로 복구가 되지 않습니다. 확인부탁드립니다.

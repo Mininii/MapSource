@@ -58,20 +58,31 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_Ticket,50);
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
-AddLV5Cool=CreateCcode()
+AddLV5Cool2=CreateCcodeArr(7)
 for i = 0, 4 do
 	Trigger2X(FP,{CV(BossLV,5+i,AtLeast)},{
-		SetV(B_Credit,25000-(i*5000));
-		AddCD(AddLV5Cool,1),
+		SetV(B_PCredit[1],25000-(i*5000));
+		SetV(B_PCredit[2],25000-(i*5000));
+		SetV(B_PCredit[3],25000-(i*5000));
+		SetV(B_PCredit[4],25000-(i*5000));
+		SetV(B_PCredit[5],25000-(i*5000));
+		SetV(B_PCredit[6],25000-(i*5000));
+		SetV(B_PCredit[7],25000-(i*5000));
+		AddCD(AddLV5Cool2[1],1),
+		AddCD(AddLV5Cool2[2],1),
+		AddCD(AddLV5Cool2[3],1),
+		AddCD(AddLV5Cool2[4],1),
+		AddCD(AddLV5Cool2[5],1),
+		AddCD(AddLV5Cool2[6],1),
+		AddCD(AddLV5Cool2[7],1),
 		SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayTextX(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 	})
 end
 
 local TempEXPV = CreateVar(FP)
 local TempSTicV = CreateVar(FP)
-CIf(FP,{CD(AddLV5Cool,1,AtLeast)},SubCD(AddLV5Cool, 1))
 for i = 0, 6 do
-CIf(FP, {HumanCheck(i, 1)})
+CIf(FP,{HumanCheck(i, 1),CD(SCA.LoadCheckArr[i+1],2),CD(AddLV5Cool2[i+1],1,AtLeast)},SubCD(AddLV5Cool2[i+1], 1))
 CIf(FP,{CV(iv.Stat_BossLVUP[i+1],1,AtLeast)})
 f_LMov(FP, TempWX, "0", nil, nil, 1)
 CMov(FP,StartLV,PLevel[i+1])
@@ -82,7 +93,7 @@ f_LMov(FP, TempWX, _LMul({iv.Stat_BossLVUP[i+1],0}, "50000000"))
 CIfEnd()
 f_LAdd(FP, iv.PEXP[i+1], iv.PEXP[i+1], TempWX)
 f_Cast(FP, {TempEXPV,0}, TempWX, nil, nil, 1)
-DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"\x04 으로 얻은 경험치 : \x1C",TempEXPV," \x07』"})
+DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"업\x04 으로 얻은 경험치 : \x1C",TempEXPV," \x07』"})
 CIfEnd()
 
 
@@ -100,7 +111,6 @@ end
 
 CIfEnd()
 end
-CIfEnd()
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x077단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 

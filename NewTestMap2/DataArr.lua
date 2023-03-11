@@ -165,7 +165,7 @@ function DataArr()
 
 	iv.Stat_TotalEPerEx2,ct.Stat_TotalEPerEx2 = CreateDataPV("Stat_TotalEPerEx2",SCA.StatTotalEPerEx2)
 	iv.Stat_TotalEPerEx3,ct.Stat_TotalEPerEx3 = CreateDataPV("Stat_TotalEPerEx3",SCA.StatTotalEPerEx3)
-	iv.Stat_LV3Incm,ct.Stat_LV3Incm = CreateDataPV("Stat_LV3Incm",SCA.StatLV3Incm)
+	iv.Stat_LV3Incm,ct.Stat_LV3Incm = CreateDataPV("Stat_LV3Incm",SCA.StatSCCool)
 	iv.PETicket,ct.PETicket = CreateDataPV("PETicket",SCA.PETicket)
 	iv.CS_BreakShield,ct.CS_BreakShield = CreateDataPV("CS_BreakShield",SCA.CSBreakShield) 
 	iv.CurMission,ct.CurMission = CreateDataPV("CurMission",SCA.CurMission) 
@@ -197,6 +197,7 @@ function DataArr()
 	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
 	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
 	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
+	iv.FfragItem,ct.FfragItem = CreateDataPV("Stat_BreakShield2",SCA.FfragItem)
 
 
 
@@ -214,8 +215,10 @@ function DataArr()
 		{iv.Stat_TotalEPer2[1],iv.S_TotalEPer2Loc},
 		{iv.Stat_TotalEPer3[1],iv.S_TotalEPer3Loc},
 		{iv.Stat_TotalEPer4[1],iv.S_TotalEPer4Loc},
+		{iv.Stat_TotalEPer4X[1],iv.S_TotalEPer4XLoc},
 		{iv.TotalBreakShield[1],iv.BreakShieldLoc},
 		{iv.Stat_BreakShield[1],iv.S_BreakShieldLoc},
+		{iv.Stat_BreakShield2[1],iv.S_BreakShield2Loc},
 		{iv.Income[1],iv.IncomeLoc},
 		{iv.IncomeMax[1],iv.IncomeMaxLoc},
 		{iv.PLevel[1],iv.LevelLoc},

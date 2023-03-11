@@ -38,6 +38,8 @@ function GameDisplay()
 	local MulOpLoc = iv.MulOpLoc--CreateVar(FP)
 	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
 	local LCP = iv.LCP--CreateVar(FP)
+	local S_TotalEPer4XLoc = iv.S_TotalEPer4XLoc
+	local S_BreakShield2Loc = iv.S_BreakShield2Loc
 	local ResetStatLoc = iv.ResetStatLoc
 	local UpgradeUILoc = iv.UpgradeUILoc--CreateVar(FP)
 	local NextOreLoc = iv.NextOreLoc
@@ -270,20 +272,18 @@ function GameDisplay()
 			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 100 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,3)})
-			
+			CMov(FP,GEVar,S_TotalEPer4XLoc)
+			CallTrigger(FP, Call_SetEPerStr)
 				--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 			DisplayPrint(LCP, {"\x071. \x08특수 \x08강화확률 \x1F2\x04 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4X.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,".",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-
+			CMov(FP,GEVar,S_BreakShield2Loc)
+			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x072. \x08특수 \x1F파괴 방지\x08확률 \x1F2\x04 \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[2][2],Cost_Stat_BreakShield2.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 
-			DisplayPrint(LCP, {"\x073. 빈 항목입니다. ",BColor3[3][2],"---\x12\x07 ",BColor[3][2]," ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
-
-			DisplayPrint(LCP, {"\x074. 빈 항목입니다. ",BColor3[4][2],"---\x12\x07 ",BColor[4][2]," ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
-
-			DisplayPrint(LCP, {"\x075. 빈 항목입니다. ",BColor3[5][2],"---\x12\x07 ",BColor[5][2]," ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
-			--DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
-
-			DisplayPrint(LCP, {"\x076. 빈 항목입니다. ",BColor3[6][2],"---\x12\x07 ",BColor[6][2]," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. 빈 항목입니다. ",BColor3[3][2],"---\x12\x07 ",BColor[3][2],"--- ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x074. 빈 항목입니다. ",BColor3[4][2],"---\x12\x07 ",BColor[4][2],"--- ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+			DisplayPrint(LCP, {"\x075. 빈 항목입니다. ",BColor3[5][2],"---\x12\x07 ",BColor[5][2],"--- ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. 빈 항목입니다. ",BColor3[6][2],"---\x12\x07 ",BColor[6][2],"--- ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 		CIfXEnd()
 		DoActions(FP,{SetCp(FP)})
 		local StatPrintEr = {
@@ -301,7 +301,7 @@ function GameDisplay()
 			StrDesign("\x10추가 \x0F+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x10추가 \x0F+3\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 1페이지 강화확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량을 1% 증가시킵니다. \x07기본값 : 100%. \x08주의 \x04: 이 항목은 \x1041강 \x07이상 \x04유닛에게 유효합니다."),
-			StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 2페이지 확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
+			StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 2페이지 특수확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x08특수\x1F 파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 2페이지 파괴방지 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x04빈 항목입니다."),
 			StrDesign("\x04빈 항목입니다."),
