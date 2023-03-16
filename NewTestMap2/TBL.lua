@@ -54,6 +54,8 @@ function TBL()
     t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
     t01 = "\x07기준확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
     t01_1 = "\x08특수확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+    t01_2 = "\x03개별확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+    t01_3 = "\x05고정확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
     t02 = "\x08!!! \x1F최 강 유 닛 \x08!!!"
     t03 = "\x04강화 불가 유닛"
     t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
@@ -109,19 +111,28 @@ function TBL()
     CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
     
     CMov(FP,CurEPD,SelEPD)
+    CMov(FP,0x6509B0,LCP)
+    CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})
     
     
     NIfX(FP,{Never()})
     for j, k in pairs(LevelUnitArr) do
         NElseIfX({CV(SelUID,k[2])},{
-            SetV(SelPer,k[3]);SetCD(SellTicketFlag,0)
+            SetV(SelPer,k[3]);SetCD(SellTicketFlag,0),
         })
+        TriggerX(FP, {CV(SelPl,7)}, {DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4)})
         f_LMov(FP, SelEXP, tostring(k[4])  ,nil,nil, 1)
         if j>=26 then
             TriggerX(FP,{CV(SelUID,k[2])},{SetCD(SellTicketFlag,1)},{preserved})
         end
-        if j>=40 then
+        if j>=40 and j<=43 then
             TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,1)},{preserved})
+        end
+        if j>=44 and j<=46 then
+            TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,2+(j-44))},{preserved})
+        end
+        if j==47 then
+            TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,5)},{preserved})
         end
         
     end
@@ -170,11 +181,6 @@ function TBL()
     StrDesignX("\x04총 91개의 크고 작은 섬들로 이루어져 있는 대한민국의 섬이다. ").."\n"..
     StrDesignX("\x04울릉도에서 뱃길로 200리 정도 떨어져 있다.").."\n"..
     StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
-     CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})
-    CTrigger(FP,{
-        CV(SelPer,1,AtLeast),
-    },{TSetMemory(0x6509B0, SetTo, LCP),DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
-     CDoActions(FP,{TSetMemoryB(0x58F32C, (7*15)+13, SetTo, UpgradeUILoc)})
     CIfXEnd()
     CElseX()
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -248,6 +254,10 @@ function TBL()
         CIfX(FP, {CD(XEperFlag,1)}) -- 특수확률일 경우
         CS__SetValue(FP,TStr1,t01_1,nil,0)
         CS__SetValue(FP,TStr1,"-",nil,7)
+        CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,4,AtMost)})--개별확률
+        CS__SetValue(FP,TStr1,t01_2,nil,0)
+        CElseIfX({CD(XEperFlag,5)})--고정확률
+        CS__SetValue(FP,TStr1,t01_3,nil,0)
         CElseX()
         CS__SetValue(FP,TStr1,t01,nil,0)
         CIfXEnd()
@@ -256,7 +266,10 @@ function TBL()
     --8 9 10
     --12 13 14
     CS__InputTA(FP,{CSVA1(SVA1(TStr1,10+1), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
-    
+    local TempV =CreateVar(FP)
+    local TempV2 =CreateVar(FP)
+    CMod(FP,TempV,SelPer,1000)
+    CDiv(FP,TempV2,SelPer,1000)
     TriggerX(FP, {
         CSVA1(SVA1(TStr1,12+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
         CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
@@ -280,6 +293,14 @@ function TBL()
         SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
     }, {preserved})
     
+    CIf(FP,{CV(TempV2,0)})
+    CS__SetValue(FP,TStr1,"\x0D",nil,9)
+    CS__SetValue(FP,TStr1,"\x0D",nil,10)
+    CS__SetValue(FP,TStr1,"0",nil,11)
+    CIfEnd()
+    CIf(FP,{CV(TempV,0)})
+    CS__SetValue(FP,TStr1,"\x0D",nil,12)
+    CIfEnd()
     
         CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
     CIfXEnd()
@@ -289,13 +310,26 @@ function TBL()
     CAdd(FP,TotalEPer3Loc,_Div(SelPer,_Mov(100)))
     CAdd(FP,TotalEPer2Loc,_Div(SelPer,_Mov(10)))
     CAdd(FP,TotalEPerLoc,SelPer) -- +1강 확률
-    CElseX()
+    CElseIfX({CD(XEperFlag,1)})
     CAdd(FP,TotalEPer2Loc,TotalEPer3Loc)
     CAdd(FP,TotalEPerLoc,TotalEPer2Loc)
     CAdd(FP,TotalEPerLoc,TotalEPer4Loc)--특수확률 합산
     CSub(FP,TotalEPerLoc,SelPer)
     CMov(FP,TotalEPer3Loc,0)
     CMov(FP,TotalEPer2Loc,0)
+    CElseIfX({CD(XEperFlag,2)})
+    CMov(FP,TotalEPer2Loc,0)
+    CMov(FP,TotalEPer3Loc,0)
+    CElseIfX({CD(XEperFlag,3)})
+    CMov(FP,TotalEPerLoc,0)
+    CMov(FP,TotalEPer3Loc,0)
+    CElseIfX({CD(XEperFlag,4)})
+    CMov(FP,TotalEPerLoc,0)
+    CMov(FP,TotalEPer2Loc,0)
+    CElseIfX({CD(XEperFlag,5)})
+    CMov(FP,TotalEPerLoc,SelPer)
+    CMov(FP,TotalEPer2Loc,0)
+    CMov(FP,TotalEPer3Loc,0)
     CIfXEnd()
     
     --35~39 +3 수치가 +2로

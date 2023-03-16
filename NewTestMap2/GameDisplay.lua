@@ -290,7 +290,7 @@ function GameDisplay()
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 \x19유닛 판매권\x04을 얻습니다."),
-			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x08스탯당 1억 \x04입니다."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x081레벨당 5천만 \x04입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
 			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1로 합산, 적용됩니다."),
@@ -382,9 +382,12 @@ function GameDisplay()
 		CMov(FP,CTimeV,PlayTimeLoc)
 		CallTrigger(FP,Call_ConvertTime)
 		local TempV = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
 		CMov(FP,TempV,iv.DayCheck2Loc,nil,0xFF,1)
+		CMov(FP,TempV2,iv.DayCheck2Loc,nil,0xFF00,1)
+		CrShift(FP, TempV2, 8)
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x07시즌 1호 출석 이벤트 출석일수 \x04: ",TempV,"일"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
@@ -403,7 +406,7 @@ function GameDisplay()
 	CIfX(FP,{CD(LKey,1)})
 	
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc, " \x04|| \x03??? \x07(저장O): ",iv.FfragItemLoc})
 		for i = 0, 6 do
 			CIf(FP,HumanCheck(i, 1))
 			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})

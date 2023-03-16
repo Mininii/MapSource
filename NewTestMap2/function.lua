@@ -401,6 +401,10 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
 	if ObjNum == nil then ObjNum =1 end
 	table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,ObjNum)) 
+	if Limit == 1 then
+		if PUT[UnitID] == nil then PUT[UnitID]=true else error("PUT_Duplicated : "..UnitID) end
+		if PWT[WepID] == nil then PWT[WepID]=true else error("PWT_Duplicated : "..WepID) end
+	end
 	
 	
 end

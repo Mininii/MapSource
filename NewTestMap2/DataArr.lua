@@ -253,6 +253,7 @@ function DataArr()
 		{iv.Money2[1],iv.MoneyLoc2},
 		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
 		{iv.DayCheck2[1],iv.DayCheck2Loc},
+		{iv.FfragItem[1],iv.FfragItemLoc},
 		
 	}
 end
