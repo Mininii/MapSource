@@ -1146,6 +1146,8 @@ function Convert_Number(Num)
 end
 
 function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
+	
+	--if 2^(Flag-96)==4.0 then error(Text) end
 	local TrapKey
 	local CT_PrevRand
 	local CT_NextRand

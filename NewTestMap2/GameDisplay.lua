@@ -130,9 +130,9 @@ function GameDisplay()
 	CA__SetMemoryX((56*3)-1,0x0D0D0D0D,0xFFFFFFFF,1)
 		end 
 		CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"TEST",FP,{}) 
-	
-	CIf(FP, CV(InterfaceNumLoc,1,AtLeast))
+
 		
+	CIf(FP, CV(InterfaceNumLoc,1,AtLeast))
 		CMov(FP,MCP,LCP)
 		CallTriggerX(FP,Call_SetScrMouse,{},{})
 		mmX = mouseX -- 상대좌표 좌측정렬
@@ -140,8 +140,12 @@ function GameDisplay()
 		mmX2 = screenX -- 중앙정렬
 		mmX3 = screenX2 -- 중앙정렬
 		if TestStart == 1 then
-		   --DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+		--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 		end
+	CIfEnd()
+	
+	CIf(FP, {CV(InterfaceNumLoc,1,AtLeast),CV(InterfaceNumLoc,0xFF,AtMost)})
+		
 		
 		BColor = CreateVarArr(6,FP)
 		BColor2 = CreateVarArr(6,FP)

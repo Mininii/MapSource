@@ -8,7 +8,7 @@ function Include_Vars()
 	iv={} -- 전역 변수 테이블
 	ct={} -- 전역 변수 테이블 치팅감지
 	ctg={} -- 전역 변수 테이블 치팅감지
-	LevelLimit = 100000
+	LevelLimit = 200000
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
@@ -160,6 +160,14 @@ end
 	SCA.StatTotalEPer4X = SCA.CreateVar(FP)
 	SCA.StatBreakShield2 = SCA.CreateVar(FP)
 	SCA.FfragItem = SCA.CreateVar(FP)
+
+
+	SCA.FirstRewardLim = SCA.CreateVar(FP)
+	SCA.FRCount45 = SCA.CreateVar(FP)
+	SCA.FRCount46 = SCA.CreateVar(FP)
+	SCA.FRCount47 = SCA.CreateVar(FP)
+	SCA.FRCount48 = SCA.CreateVar(FP)
+	
 	
 
 	SCA.GReload = CreateCcode()
@@ -543,6 +551,8 @@ end
 	iv.GeneralPlayTime = CreateVar(FP)
 	iv.CUnitT = CreateVar(FP)
 	ctg.CUnitT = CreateVar(FP)
+	iv.XEPerT,ct.XEPerT = CreateVars(2,FP)
+	iv.XEPerM,ct.XEPerM = CreateVars(2,FP)
 
 
 	iv.CT_PLevel = CreateVarArr2(7,1,FP)
@@ -656,7 +666,7 @@ end
 	PushLevelUnit(25+16,12000,60000000,11,15,72,40,59)--드랍쉽 -- 만렙기준 13.4
 	PushLevelUnit(25+17,20000,150000000,9,22,48,70,59)--베슬 -- 만렙기준 5.4
 	PushLevelUnit(25+18,25000,800000000,76,71,24,120,59)--아칸 -- 만렙기준 0.4
-	PushLevelUnit(25+19,0,4000000000,63,70,12,400,59)--개별확률 +1 강확따라감 -- 다크아칸
+	PushLevelUnit(25+19,15000,4000000000,63,70,12,400,59)--개별확률 +1 강확따라감 -- 다크아칸
 	PushLevelUnit(25+20,0,0,74,62,48,2500,59)--개별확률 +2 강확따라감 -- 프로브
 	PushLevelUnit(25+21,0,0,81,76,24,2800,59)--개별확률 +3 강확따라감 -- 
 	PushLevelUnit(25+22,500,0,78,67,12,3600,59)--고정확률 0.5%
@@ -700,6 +710,7 @@ end
 		{49,"130000"},
 		{68,"3222"},
 		{34,"32222"},
+		{51,"322222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {

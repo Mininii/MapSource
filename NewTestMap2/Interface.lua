@@ -177,6 +177,8 @@ function Interface()
 
 	local MissionPDataArr = {}
 	local MissionDataTextArr = {}
+	local XEPerT = iv.XEPerT
+	local XEPerM = iv.XEPerM
 
 	-- 15강 판매 ok
 	-- 인게임 3시간 달성 ok
@@ -300,6 +302,14 @@ function Interface()
 	
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus2,1)},{preserved})--런쳐 불러온사람 1명이하인데 멀티일경우 보너스 활성화
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,1,AtMost)}, {SetCD(PartyBonus2,0)},{preserved})-- 런쳐 불러온사람 1명이하인데 솔로일경우 보너스 비활성화
+	if Limit == 1 then
+		DoActionsX(FP, {AddV(XEPerT,100)})
+		
+	end
+	DoActionsX(FP, {AddV(XEPerT,1)})
+	Trigger2X(FP,{CV(XEPerT,24*60*60,AtLeast)},{SubV(XEPerT,24*60*60),AddV(XEPerM,100),
+	RotatePlayer({DisplayTextX(StrDesignX("\x1C44강\x04~\x1E46강 \x04유닛의 \x08강화확률이 \x0F0.1%p \x08하락\x04하였습니다.\x07"), 4),DisplayTextX(StrDesignX("\x1C44강\x04~\x1E46강 \x04유닛의 강화확률은 1시간마다 0.1%p씩 하락합니다.\x07"), 4)}, Force1, FP),
+},{preserved})
 
 	
 TipArr = {
@@ -606,6 +616,7 @@ for i = 0, 6 do -- 각플레이어
 	end
 	CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
 	CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
+
 	
 	CIfX(FP,{CVX(DayCheck2[i+1],27,0xFF,AtMost),CVX(SCA.GlobalVarArr[5],1,1),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)})--시즌 1호 출석이벤트
 			DoActionsX(FP,{
@@ -651,6 +662,10 @@ for i = 0, 6 do -- 각플레이어
 			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
 	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayText(StrDesignX("이미 모든 시즌 2호 출석 이벤트를 완료 하셨습니다."), 4)})
 	NIfXEnd()
+	
+	DoActionsX(FP,{
+		SetCp(i),DisplayText(StrDesignX("\x1C45강\x04~\x1E48강 \x07첫달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4)})
+
 	NElseIfX({VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),})
 		NJump(FP, DailyJump, {CVX(DayCheck2[i+1],0*0x100,0xFF00),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1),CD(SCA.LoadCheckArr[i+1],2)}) -- 시즌2 출석 0일일 경우 강제로 출석체크시킴
 	
@@ -1072,7 +1087,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O")}, {SetV(InterfaceNum[i+1],1)},{preserved})
 	local ClickCD = CreateCcode()
 	local ClickCD2 = CreateCcode()
-	CIf(FP,{CV(InterfaceNum[i+1],1,AtLeast)},{})
+	CIf(FP,{CV(InterfaceNum[i+1],1,AtLeast),CV(InterfaceNum[i+1],0xFF,AtMost)},{})
 		for j = 0, 5 do
 			TriggerX(FP, {Deaths(i,Exactly,0x10100+j+1,20)}, {SetCD(ClickCD, j+1),SetCD(ClickCD2, 301)}, {preserved})
 			TriggerX(FP, {CD(ClickCD, j+1)}, {SetDeaths(i,SetTo,1,496+j)}, {preserved})
@@ -1221,13 +1236,14 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 		})
 		
 	CIfXEnd()
+
 	NJump(FP, ClickCDWhile, {CD(ClickCD,1,AtLeast),CD(ClickCD2,1,AtLeast)},{SubCD(ClickCD2, 1)})
 
 	TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],3),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	CIfEnd()
 	DoActions(FP, SetCp(FP))--키인식부 종료
 
@@ -1438,12 +1454,16 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
 		if j == 44 then
 			CMov(FP,XEper,TotalEPer[i+1])
+			CSub(FP,XEper,Per)
+			CSub(FP,XEper,XEPerM)
 		end
 		if j == 45 then
 			CMov(FP,XEper,TotalEPer2[i+1])
+			CSub(FP,XEper,XEPerM)
 		end
 		if j == 46 then
 			CMov(FP,XEper,TotalEPer3[i+1])
+			CSub(FP,XEper,XEPerM)
 		end
 		if j == 47 then
 			CMov(FP,XEper,Per)

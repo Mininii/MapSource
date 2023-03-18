@@ -107,6 +107,8 @@ function DataArr()
 		{SCA.DayV,ct.DayV,"DayV"},
 		{SCA.WeekV,ct.WeekV,"WeekV"},
 		{SCA.MinV,ct.MinV,"MinV"},
+		{iv.XEPerT,ct.XEPerT,"XEPerT"},
+		{iv.XEPerM,ct.XEPerM,"XEPerM"},
 	}
 	for j,k in pairs(SCA.GlobalVarArr) do
 		table.insert(VWArr2,{k,ct.GlobalVarArr[j],"GlobalVarArr"..(j-1)})
@@ -197,8 +199,9 @@ function DataArr()
 	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
 	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
 	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
-	iv.FfragItem,ct.FfragItem = CreateDataPV("Stat_BreakShield2",SCA.FfragItem)
-
+	iv.FfragItem,ct.FfragItem = CreateDataPV("FfragItem",SCA.FfragItem)
+	iv.FirstRewardLim,ct.FirstRewardLim = CreateDataPV("FirstRewardLim",SCA.FirstRewardLim)
+	
 
 
 	LocalDataArr = {
