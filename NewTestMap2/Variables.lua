@@ -161,12 +161,22 @@ end
 	SCA.StatBreakShield2 = SCA.CreateVar(FP)
 	SCA.FfragItem = SCA.CreateVar(FP)
 
-
+	--3.00 추가 데이터
+	SCA.FfragItemUsed = SCA.CreateVar(FP)
+	SCA.TimeAttackScore48 = SCA.CreateVar(FP)
 	SCA.FirstRewardLim = SCA.CreateVar(FP)
-	SCA.FRCount45 = SCA.CreateVar(FP)
-	SCA.FRCount46 = SCA.CreateVar(FP)
-	SCA.FRCount47 = SCA.CreateVar(FP)
-	SCA.FRCount48 = SCA.CreateVar(FP)
+	SCA.FXPer44 = SCA.CreateVar(FP)
+	SCA.FXPer45 = SCA.CreateVar(FP)
+	SCA.FXPer46 = SCA.CreateVar(FP)
+	SCA.FIncm = SCA.CreateVar(FP)
+	SCA.FSEXP = SCA.CreateVar(FP)
+	SCA.FXEPer = SCA.CreateVar(FP)
+	SCA.FMEPer = SCA.CreateVar(FP)
+	SCA.FBrSh = SCA.CreateVar(FP)
+	SCA.StatBossSFrg = SCA.CreateVar(FP)
+	SCA.StatXEPer44 = SCA.CreateVar(FP)
+	SCA.StatXEPer45 = SCA.CreateVar(FP)
+	SCA.StatXEPer46 = SCA.CreateVar(FP)
 	
 	
 
@@ -189,6 +199,7 @@ end
 	MSQC_KeySet("N",555)
 	MSQC_KeySet("M",556)
 	MSQC_KeySet("Z",505)
+	MSQC_KeySet("U",506)
 	--504 사용중
 	MSQC_ExportEdsTxt() -- MSQC eds텍스트 출력
 	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
@@ -266,6 +277,9 @@ end
 	VaccSCount = CreateCcodeArr(7)
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
+	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"??? \x04:")
+	--PtsS,PtsSa,PtsSs = DwSaveiStrptrX(FP,"\x04| 포인트 \x04:")
+	--CredS,CredSa,CredSs = DwSaveiStrptrX(FP,"\x04| \x17크레딧 \x04:")
 
 
 	-- Interface Variable
@@ -388,6 +402,7 @@ end
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
 	iv.ResetStatLoc = CreateVar(FP)
+	iv.ResetStat2Loc = CreateVar(FP)
 	iv.UpgradeUILoc = CreateVar(FP)
 	iv.PMission = CreateVarArr(7, FP)
 	iv.NextOreLoc = CreateVar(FP)
@@ -396,6 +411,11 @@ end
 	iv.NextGasMulLoc = CreateVar(FP)
 	iv.SellTicketLoc = CreateVar(FP)
 	iv.TimeAttackScoreLoc = CreateVar(FP)
+	iv.TimeAttackScore48Loc = CreateVar(FP)
+	iv.Stat_BossSFrgLoc = CreateVar(FP)
+	iv.Stat_XEPer44Loc = CreateVar(FP)
+	iv.Stat_XEPer45Loc = CreateVar(FP)
+	iv.Stat_XEPer46Loc = CreateVar(FP)
 
 	iv.CS_CooldownLoc = CreateVar(FP)
 	iv.CS_AtkLoc = CreateVar(FP)
@@ -412,6 +432,22 @@ end
 	iv.S_LV3IncmLoc = CreateVar(FP)
 	iv.DayCheck2Loc = CreateVar(FP)
 	iv.FfragItemLoc = CreateVar(FP)
+	iv.FfragItemUsedLoc = CreateVar(FP)
+	
+	iv.FXPer44Loc = CreateVar(FP)
+	iv.FXPer45Loc = CreateVar(FP)
+	iv.FXPer46Loc = CreateVar(FP)
+	iv.FIncmLoc = CreateVar(FP)
+	iv.FSEXPLoc = CreateVar(FP)
+	iv.FXEPerLoc = CreateVar(FP)
+	iv.FMEPerLoc = CreateVar(FP)
+	iv.FBrShLoc = CreateVar(FP)
+	iv.XEPer44Loc = CreateVar(FP)
+	iv.XEPer45Loc = CreateVar(FP)
+	iv.XEPer46Loc = CreateVar(FP)
+	iv.CXEPerLoc = CreateVar(FP)
+	iv.CMEPerLoc = CreateVar(FP)
+	iv.CBrShLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -841,6 +877,20 @@ FirstReward2 = {
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
 	CS_BreakShieldLimit = 200
+	Cost_Stat_BossSFrg = 1000
+	Cost_Stat_XEPer44 = 100
+	Cost_Stat_XEPer45 = 300
+	Cost_Stat_XEPer46 = 600
 
+
+
+	Cost_FXPer44 = 10
+	Cost_FXPer45 = 40
+	Cost_FXPer46 = 70
+	Cost_FIncm = 100
+	Cost_FSEXP = 150
+	Cost_FXEPer = 200
+	Cost_FMEPer = 500
+	Cost_FBrSh = 1000
 
 end

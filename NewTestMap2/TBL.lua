@@ -328,16 +328,19 @@ function TBL()
 	CMov(FP,TotalEPer3Loc,0)
 	CMov(FP,TotalEPer2Loc,0)
 	CElseIfX({CD(XEperFlag,2)})
+	CAdd(FP,TotalEPerLoc,iv.XEPer44Loc)
 	CSub(FP,TotalEPerLoc,SelPer)
 	CMov(FP,TotalEPer2Loc,0)
 	CMov(FP,TotalEPer3Loc,0)
 	CElseIfX({CD(XEperFlag,3)})
 	CMov(FP,TotalEPerLoc,0)
+	CAdd(FP,TotalEPer2Loc,iv.XEPer45Loc)
 	CSub(FP,TotalEPer2Loc,SelPer)
 	CMov(FP,TotalEPer3Loc,0)
 	CElseIfX({CD(XEperFlag,4)})
 	CMov(FP,TotalEPerLoc,0)
 	CMov(FP,TotalEPer2Loc,0)
+	CAdd(FP,TotalEPer3Loc,iv.XEPer46Loc)
 	CSub(FP,TotalEPer3Loc,SelPer)
 	CElseIfX({CD(XEperFlag,5)})
 	CMov(FP,TotalEPerLoc,SelPer)
@@ -498,11 +501,23 @@ function TBL()
 	local temp,YKey = ToggleFunc({KeyPress("Y","Up"),KeyPress("Y","Down")},nil,1)--´©¸¦ °æ¿ì ÇöÀç Àû¿ëÁßÀÎ ¹öÇÁ »ó¼¼ Ç¥±â
 
 	CIf(FP,{CD(YKey,1)})
+	CMov(FP,0x6509B0,LCP)
+
+	CIf(FP,{CD(XEperFlag,3)},{DisplayText(StrDesignX("45°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIfEnd()
+	CIf(FP,{CD(XEperFlag,4)},{DisplayText(StrDesignX("46°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIfEnd()
+	CIf(FP,{CD(XEperFlag,5)},{DisplayText(StrDesignX("47°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIfEnd()
+	CIf(FP,{CD(XEperFlag,6)},{DisplayText(StrDesignX("48°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIfEnd()
 
 	--[[
 		
 	]]
 
+	
+	CMov(FP,0x6509B0,FP)
 	CIfEnd()
 	--CA__Input(MakeiStrData("\x04°æ",1),SVA1(Str1,3+2))
 	--CA__Input(MakeiStrData("\x04Á¶",1),SVA1(Str1,3+2))

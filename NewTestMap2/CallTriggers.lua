@@ -323,12 +323,30 @@ function Install_CallTriggers()
 	GEVar = CreateVar(FP)
 	EVarArr2 = {EVarArr1[1],EVarArr1[2],EVarArr1[3]}
 	EVarArr3 = {EVarArr1[4],EVarArr1[5],EVarArr1[6]}
+
 	for i = 1, 6 do
 		Byte_NumSet(GEVar,EVarArr1[i],10^(6-i),1,0x30)
 	end
 	SetEPerStr(EVarArr1)
 
 	SetCallEnd()
+	
+	Call_SetEPerStr2 = SetCallForward()
+	SetCall(FP)
+	EVarArr1_2 = CreateVarArr(6, FP)
+	GEVar_2 = CreateVar(FP)
+	EVarArr2_2 = {EVarArr1_2[1],EVarArr1_2[2],EVarArr1_2[3]}
+	EVarArr3_2 = {EVarArr1_2[4],EVarArr1_2[5],EVarArr1_2[6]}
+
+	for i = 1, 6 do
+		Byte_NumSet(GEVar_2,EVarArr1_2[i],10^(6-i),1,0x30)
+	end
+	SetEPerStr(EVarArr1_2)
+
+	SetCallEnd()
+
+	
+	EVarArr1_2 = CreateVarArr(6, FP)
 
 	
 	

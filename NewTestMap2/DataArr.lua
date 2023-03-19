@@ -200,7 +200,50 @@ function DataArr()
 	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
 	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
 	iv.FfragItem,ct.FfragItem = CreateDataPV("FfragItem",SCA.FfragItem)
+
+
+
+
+	--3.00
+	iv.FfragItemUsed,ct.FfragItemUsed = CreateDataPV("FfragItemUsed",SCA.FfragItemUsed)
+	iv.TimeAttackScore48,ct.TimeAttackScore48 = CreateDataPV("TimeAttackScore48",SCA.TimeAttackScore48)
 	iv.FirstRewardLim,ct.FirstRewardLim = CreateDataPV("FirstRewardLim",SCA.FirstRewardLim)
+
+	--[[
+		하급 확률의 조각 (45강확증가) 
+		중급 확률의 조각 (46강확)
+		상급 확률의 조각 (47강확)
+		재물의 조각 (LV.3 돈증가량 곱연산)
+		경험의 조각 (경험치)
+		특수 확률의 조각 (특확)
+		궁극 확률의 조각(+1이랑 효과 같음. 모든유닛 다적용)
+		보호의 조각 (파방)
+	]]
+	iv.FXPer44,ct.FXPer44 = CreateDataPV("FXPer44",SCA.FXPer44)
+	iv.FXPer45,ct.FXPer45 = CreateDataPV("FXPer45",SCA.FXPer45)
+	iv.FXPer46,ct.FXPer46 = CreateDataPV("FXPer46",SCA.FXPer46)
+	iv.FIncm,ct.FIncm = CreateDataPV("FIncm",SCA.FIncm)
+	iv.FSEXP,ct.FSEXP = CreateDataPV("FSEXP",SCA.FSEXP)
+	iv.FXEPer,ct.FXEPer = CreateDataPV("FXEPer",SCA.FXEPer)
+	iv.FMEPer,ct.FMEPer = CreateDataPV("FMEPer",SCA.FMEPer)
+	iv.FBrSh,ct.FBrSh = CreateDataPV("FBrSh",SCA.FBrSh)
+
+	iv.Stat_BossSFrg,ct.Stat_BossSFrg = CreateDataPV("Stat_BossSFrg",SCA.StatBossSFrg)
+	iv.Stat_XEPer44,ct.Stat_XEPer44 = CreateDataPV("Stat_XEPer44",SCA.StatXEPer44)
+	iv.Stat_XEPer45,ct.Stat_XEPer45 = CreateDataPV("Stat_XEPer45",SCA.StatXEPer45)
+	iv.Stat_XEPer46,ct.Stat_XEPer46 = CreateDataPV("Stat_XEPer46",SCA.StatXEPer46)
+	
+	iv.CXPer44,ct.CXPer44 = CreateDataPV("CXPer44")
+	iv.CXPer45,ct.CXPer45 = CreateDataPV("CXPer45")
+	iv.CXPer46,ct.CXPer46 = CreateDataPV("CXPer46")
+	iv.CXEPer,ct.CXEPer = CreateDataPV("CXEPer")
+	iv.CMEPer,ct.CMEPer = CreateDataPV("CMEPer")
+	iv.CBrSh,ct.CBrSh = CreateDataPV("CBrSh")
+	iv.ResetStat2,ct.ResetStat2 = CreateDataPV("ResetStat2")
+	iv.XEPer44,ct.XEPer44 = CreateDataPV("XEPer44")
+	iv.XEPer45,ct.XEPer45 = CreateDataPV("XEPer45")
+	iv.XEPer46,ct.XEPer46 = CreateDataPV("XEPer46")
+
 	
 
 
@@ -257,6 +300,26 @@ function DataArr()
 		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
 		{iv.DayCheck2[1],iv.DayCheck2Loc},
 		{iv.FfragItem[1],iv.FfragItemLoc},
-		
+		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},
+		{iv.FXPer44[1],iv.FXPer44Loc},
+		{iv.FXPer45[1],iv.FXPer45Loc},
+		{iv.FXPer46[1],iv.FXPer46Loc},
+		{iv.FIncm[1],iv.FIncmLoc},
+		{iv.FSEXP[1],iv.FSEXPLoc},
+		{iv.FXEPer[1],iv.FXEPerLoc},
+		{iv.FMEPer[1],iv.FMEPerLoc},
+		{iv.FBrSh[1],iv.FBrShLoc},
+		{iv.XEPer44[1],iv.XEPer44Loc},
+		{iv.XEPer45[1],iv.XEPer45Loc},
+		{iv.XEPer46[1],iv.XEPer46Loc},
+		{iv.CXEPer[1],iv.CXEPerLoc},
+		{iv.CMEPer[1],iv.CMEPerLoc},
+		{iv.CBrSh[1],iv.CBrShLoc},
+		{iv.TimeAttackScore48[1],iv.TimeAttackScore48Loc},
+		{iv.Stat_BossSFrg[1],iv.Stat_BossSFrgLoc},
+		{iv.Stat_XEPer44[1],iv.Stat_XEPer44Loc},
+		{iv.Stat_XEPer45[1],iv.Stat_XEPer45Loc},
+		{iv.Stat_XEPer46[1],iv.Stat_XEPer46Loc},
+				
 	}
 end

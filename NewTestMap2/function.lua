@@ -1492,3 +1492,9 @@ function CreateDataPV(DataName,SCADeathData,LocOp)
 	end
 	
 end
+function CIfChkVar(Var)--Var에 변화가 있을때마다 1회만 작동시키는 코드. CIfEnd 필요
+	local CurVar = CreateVar(FP)
+	CIf(FP,{TTNVar(Var,NotSame,CurVar)})
+	CMov(FP,CurVar,Var)
+	
+end

@@ -14,6 +14,7 @@ function Interface()
 	local ScTimer = iv.ScTimer-- CreateCcodeArr(7)
 	local PTimeV = iv.PTimeV
 	local ResetStat = iv.ResetStat
+	local ResetStat2 = iv.ResetStat2
 	local General_Upgrade = iv.General_Upgrade--CreateVarArr(7,FP)-- 유닛 공격력 증가량 수치
 	local PBossLV = iv.PBossLV -- 개인보스레벨
 	local PBossDPS = iv.PBossDPS-- 개인보스DPS
@@ -97,6 +98,7 @@ function Interface()
 	local CreditAddSC = iv.CreditAddSC
 	local LV5Cool = iv.LV5Cool
 	local TimeAttackScore = iv.TimeAttackScore
+	local TimeAttackScore48 = iv.TimeAttackScore48
 	local TimeAttackScore2 = iv.TimeAttackScore2
 	local PUnitLevel = iv.PUnitLevel
 	local PUnitClass = iv.PUnitClass
@@ -115,6 +117,10 @@ function Interface()
 	local DayCheck2 = iv.DayCheck2
 	local MonthCheck = iv.MonthCheck
 	local YearCheck = iv.YearCheck
+	local Stat_BossSFrg = iv.Stat_BossSFrg
+	local Stat_XEPer44 = iv.Stat_XEPer44
+	local Stat_XEPer45 = iv.Stat_XEPer45
+	local Stat_XEPer46 = iv.Stat_XEPer46
 	--Local Data Variable
 	local MoneyLoc = iv.MoneyLoc--CreateWar(FP)
 	local CredLoc = iv.CredLoc--CreateWar(FP)
@@ -123,6 +129,7 @@ function Interface()
 	local StatEffLoc = iv.StatEffLoc--CreateCcode()
 	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
 	local ResetStatLoc = iv.ResetStatLoc
+	local ResetStat2Loc = iv.ResetStat2Loc
 	--Temp
 	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
 	local TempEXPW = iv.TempEXPW--CreateVar(FP)
@@ -381,7 +388,7 @@ for i = 0, 6 do -- 각플레이어
 			})
 		end
 	end
-	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(StatTest, 0),SetCD(SCA.LoadCheckArr[i+1],2)})--로드 완료시 첫 실행 트리거
+	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],1)},{SetCD(CheatDetect,0),SetCD(StatTest, 0),SetCD(SCA.LoadCheckArr[i+1],2),SetV(TimeAttackScore2[i+1],TimeScoreInit)})--로드 완료시 첫 실행 트리거
 		CIfX(FP, {TDeaths(_Add(SCA.PLevel,18*i),AtLeast,1,0)})--레벨데이터가 있을경우 로드후 모두 덮어씌움, 없으면 뉴비로 간주하고 로드안함
 		for j,k in pairs(SCA_DataArr) do
 			SCA_DataLoad(i,k[1][i+1],k[2])
@@ -409,6 +416,10 @@ for i = 0, 6 do -- 각플레이어
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_TotalEPer4X[i+1],_Mov(100)),_Mov(Cost_Stat_TotalEPer4X)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BreakShield[i+1],_Mov(100)),_Mov(Cost_Stat_BreakShield)))
 		CAdd(FP,CTStatP2,_Mul(_Div(Stat_BreakShield2[i+1],_Mov(100)),_Mov(Cost_Stat_BreakShield2)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_XEPer44[i+1],_Mov(10)),_Mov(Cost_Stat_XEPer44)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_XEPer45[i+1],_Mov(10)),_Mov(Cost_Stat_XEPer45)))
+		CAdd(FP,CTStatP2,_Mul(_Div(Stat_XEPer46[i+1],_Mov(10)),_Mov(Cost_Stat_XEPer46)))
+		CAdd(FP,CTStatP2,_Mul(Stat_BossSFrg[i+1],_Mov(Cost_Stat_BossSFrg)))
 		CAdd(FP,CTStatP2,_Mul(Stat_BossSTic[i+1],_Mov(Cost_Stat_BossSTic)))
 		CAdd(FP,CTStatP2,_Mul(Stat_LV3Incm[i+1],_Mov(Cost_Stat_LV3Incm)))
 		CAdd(FP,CTStatP2,_Mul(Stat_Upgrade[i+1],_Mov(Cost_Stat_Upgrade)))
@@ -449,20 +460,17 @@ for i = 0, 6 do -- 각플레이어
 		CTrigger(FP, {TTNVar(PStatVer[i+1], NotSame, StatVer)}, {SetCp(i),
 		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
 		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
-		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
 		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),}, 1)
 		for h = 1, 4 do
 			CTrigger(FP, {CD(StatTest,h)}, {SetCp(i),
 			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),
 			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),
-			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),
 			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),}, 1)
 		end
-		if Limit == 1 then
-			DisplayPrint(i, {"\x13\x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]})
-			DisplayPrint(i, {"\x13\x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2})
-		end
-
+		CIf(FP,CD(StatTest,1,AtLeast))
+		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]," \x07』"})
+		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
+		CIfEnd()
 
 		DoActionsX(FP, {
 			SetV(PLevel[i+1],1),
@@ -483,6 +491,10 @@ for i = 0, 6 do -- 각플레이어
 			SetV(Stat_LV3Incm[i+1],0),
 			SetV(Stat_Upgrade[i+1],0),
 			SetV(Stat_BossLVUP[i+1],0),
+			SetV(Stat_BossSFrg[i+1],0),
+			SetV(Stat_XEPer44[i+1],0),
+			SetV(Stat_XEPer45[i+1],0),
+			SetV(Stat_XEPer46[i+1],0),
 			SetCp(i),
 			SetCp(FP)})
 		NIfXEnd()
@@ -538,7 +550,7 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd({})
 	if TestStart == 1 then
 		local EXPAcc = CreateWar(FP)
-		--f_LAdd(FP, EXPAcc, EXPAcc, "10000000000")
+		--f_LAdd(FP, EXPAcc, EXPAcc, "100000000000")
 		--f_LAdd(FP, PEXP[i+1], PEXP[i+1], EXPAcc)
 	end
 	
@@ -744,6 +756,7 @@ end
 	CallTriggerX(FP,Call_Print13[i+1],{})
 	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 저장을 하기 위해서는 먼저 \x07M\x04ission \x08No. \x103\x04 까지 클리어 하셔야 합니다."))}, {preserved})
 	if Limit == 1 then
+	
 	NElseIfX({CD(LimitSaveEnable,0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
 	CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
 	SCA_DataSave(i,iv.TesterFlag[i+1],SCA.TesterFlag)
@@ -819,6 +832,7 @@ end
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CV(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
+	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat2[i+1],0)}, {AddV(ResetStat2[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
 	TriggerX(FP, {CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetMemX(Arr(AutoEnchArr,((2-1)*7)+i), SetTo, 0),SetCp(i),DisplayText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
 	CreateUnitStacked({CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men")}, 1, LevelUnitArr[2][2], 50+i,36+i, i, nil,1)
 	CIf(FP, {CV(ScTimer[i+1],4320,AtMost)})
@@ -901,7 +915,7 @@ TriggerX(FP, {CV(TempG[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 	SetMemory(0xCDDDCDDC,SetTo,1);})
 
-TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
+TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	SetCp(i),
 	PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 	DisplayText("X\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
@@ -917,7 +931,7 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	for j,k in pairs(PBossArr) do
 		local LocID = 129+i
 		local AddCond = nil
-		if j >=6 then LocID = 153+i AddCond = CV(BossLV,5,AtLeast) end
+		if j >=6 then LocID = 153+i AddCond = {CV(BossLV,5,AtLeast),CV(LV5Cool[i+1],60*60,AtMost)} end
 		NIfOnce(FP,{Memory(0x628438,AtLeast,1),CV(PBossPtr[i+1],0),CV(PBossLV[i+1],j-1),AddCond})--보스방 건물 세팅
 		DoActions2X(FP, PBossResetArr)
 		f_Read(FP, 0x628438, nil, Nextptrs)
@@ -1082,17 +1096,55 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	
 	CIfXEnd()
 
-	
-	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1])})--키인식부 시작
-	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O")}, {SetV(InterfaceNum[i+1],1)},{preserved})
+	local KeyTog = CreateCcode()
+	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1]),SetCD(KeyTog,0)})--키인식부 시작
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x10000,20)}, {SetDeaths(i,SetTo,1,495)}, {preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x30000,20)}, {SetDeaths(i,SetTo,1,506)}, {preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],256)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0)},{preserved})
 	local ClickCD = CreateCcode()
 	local ClickCD2 = CreateCcode()
+	CIf(FP,{CV(InterfaceNum[i+1],256,AtLeast),CV(InterfaceNum[i+1],512,AtMost)},{})
+	CIf(FP, Deaths(i, Exactly, 1, 507),{SetV(DPErT[i+1],24*10)})
+	
+		CIfX(FP,{CV(ResetStat2[i+1],1,AtLeast)})
+		CallTrigger(FP,Call_Print13[i+1])
+		TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x19보석 초기화\x04를 사용할 수 없습니다.")) ,{preserved})
+		CElseIfX({CV(iv.FfragItem[i+1],100,AtLeast)})
+			DoActionsX(FP, {
+				SubV(iv.FfragItem[i+1],100),
+				SetV(iv.FXPer44[i+1],0),
+				SetV(iv.FXPer45[i+1],0),
+				SetV(iv.FXPer46[i+1],0),
+				SetV(iv.FIncm[i+1],0),
+				SetV(iv.FSEXP[i+1],0),
+				SetV(iv.FXEPer[i+1],0),
+				SetV(iv.FMEPer[i+1],0),
+				SetV(iv.FBrSh[i+1],0),
+				SetV(iv.FfragItemUsed[i+1],0),
+				SetV(ResetStat2[i+1],1),
+			})
+			TriggerX(FP, {LocalPlayerID(i)}, {SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1)}, {preserved})
+			CallTrigger(FP,Call_Print13[i+1])
+			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x19보석 초기화\x04 완료. \x07잠시 후 자동저장됩니다. \x17U 키\x04를 눌러 \x19보석\x04을 재설정해주세요.")) ,{preserved})
+
+		CElseX()
+			CallTrigger(FP,Call_Print13[i+1])
+			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E???\x04이 부족합니다.")) ,{preserved})
+		CIfXEnd()
+	CIfEnd()
+
+
+		TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
+	CIfEnd()
 	CIf(FP,{CV(InterfaceNum[i+1],1,AtLeast),CV(InterfaceNum[i+1],0xFF,AtMost)},{})
 		for j = 0, 5 do
-			TriggerX(FP, {Deaths(i,Exactly,0x10100+j+1,20)}, {SetCD(ClickCD, j+1),SetCD(ClickCD2, 301)}, {preserved})
+			TriggerX(FP, {Deaths(i,Exactly,0x10100+j+1,20)}, {SetCD(ClickCD, j+1),SetCD(ClickCD2, 501)}, {preserved})
 			TriggerX(FP, {CD(ClickCD, j+1)}, {SetDeaths(i,SetTo,1,496+j)}, {preserved})
 		end
-		for j = 0, 8 do
+		for j = 1, 8 do
 			TriggerX(FP, {Deaths(i,Exactly,0x10000+j,20)}, {SetCD(ClickCD, 0),SetDeaths(i,SetTo,1,495+j)}, {preserved})
 		end
 		TriggerX(FP, {Deaths(i,AtLeast,1,502)}, {SetCD(ClickCD, 0)}, {preserved})
@@ -1126,6 +1178,10 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 					SetV(Stat_TotalEPerEx2[i+1],0),
 					SetV(Stat_TotalEPerEx3[i+1],0),
 					SetV(Stat_LV3Incm[i+1],0),
+					SetV(Stat_BossSFrg[i+1],0),
+					SetV(Stat_XEPer44[i+1],0),
+					SetV(Stat_XEPer45[i+1],0),
+					SetV(Stat_XEPer46[i+1],0),
 				})
 				TriggerX(FP, {LocalPlayerID(i)}, {SetV(Time,(30000*5)-5000),SetCD(SaveRemind,1)}, {preserved})
 				CMov(FP, StatP[i+1], _Mul(PLevel[i+1], 5))
@@ -1235,6 +1291,29 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 			{{CV(StatP[i+1],Cost_Stat_BreakShield2-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 		
+		KeyFunc(i,"3",{
+			{{CV(StatP[i+1],Cost_Stat_BossSFrg,AtLeast),CV(Stat_BossSFrg[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSFrg),AddV(Stat_BossSFrg[i+1],1)},StrDesign("\x08개인 보스 \x07LV.7 \x04처치 보상 \x1E???\x04이 \x04증가하였습니다.")},
+			{{CV(Stat_BossSFrg[i+1],50,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1E???\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_BossSFrg-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+		KeyFunc(i,"4",{
+			{{CV(StatP[i+1],Cost_Stat_XEPer44,AtLeast),CV(Stat_XEPer44[i+1],4999,AtMost)},{SubV(StatP[i+1],Cost_Stat_XEPer44),AddV(Stat_XEPer44[i+1],10)},StrDesign("\x1F44강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+			{{CV(Stat_XEPer44[i+1],5000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x1F44강 \x08강화확률\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_XEPer44-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+		
+		KeyFunc(i,"5",{
+			{{CV(StatP[i+1],Cost_Stat_XEPer45,AtLeast),CV(Stat_XEPer45[i+1],4999,AtMost)},{SubV(StatP[i+1],Cost_Stat_XEPer45),AddV(Stat_XEPer45[i+1],10)},StrDesign("\x1C45강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+			{{CV(Stat_XEPer45[i+1],5000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x1C45강 \x08강화확률\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_XEPer45-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+		
+		KeyFunc(i,"6",{
+			{{CV(StatP[i+1],Cost_Stat_XEPer46,AtLeast),CV(Stat_XEPer46[i+1],4999,AtMost)},{SubV(StatP[i+1],Cost_Stat_XEPer46),AddV(Stat_XEPer46[i+1],10)},StrDesign("\x1E46강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다.")},
+			{{CV(Stat_XEPer46[i+1],5000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x1E46강 \x08강화확률\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_XEPer46-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
+		})
+		
 	CIfXEnd()
 
 	NJump(FP, ClickCDWhile, {CD(ClickCD,1,AtLeast),CD(ClickCD2,1,AtLeast)},{SubCD(ClickCD2, 1)})
@@ -1289,9 +1368,49 @@ TriggerX(FP, {CV(TempX[i+1],5000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,TotalEPer4[i+1],CS_TEPer4Data[i+1])
 	CAdd(FP,TotalBreakShield[i+1],CS_BreakShieldData[i+1])
 	CAdd(FP,TotalBreakShield[i+1],Stat_BreakShield2[i+1])
+	CIfChkVar(iv.FXPer44[i+1])
+	f_Mul(FP,iv.CXPer44[i+1],iv.FXPer44[i+1],10)
+	CIfEnd()
+	CIfChkVar(iv.FXPer45[i+1])
+	f_Mul(FP,iv.CXPer45[i+1],iv.FXPer45[i+1],10)
+	CIfEnd()
+	CIfChkVar(iv.FXPer46[i+1])
+	f_Mul(FP,iv.CXPer46[i+1],iv.FXPer46[i+1],10)
+	CIfEnd()
+	CIfChkVar(iv.FXEPer[i+1])
+	f_Mul(FP,iv.CXEPer[i+1],iv.FXEPer[i+1],10)
+	CIfEnd()
+	CIfChkVar(iv.FMEPer[i+1])
+	f_Mul(FP,iv.CMEPer[i+1],iv.FMEPer[i+1],10)
+	CIfEnd()
+	CIfChkVar(iv.FBrSh[i+1])
+	CMov(FP,iv.CBrSh[i+1],iv.FBrSh[i+1])
+	CIfEnd()
+	
+	CMov(FP,iv.XEPer44[i+1],iv.CXPer44[i+1])
+	CMov(FP,iv.XEPer45[i+1],iv.CXPer45[i+1])
+	CMov(FP,iv.XEPer46[i+1],iv.CXPer46[i+1])
+	CAdd(FP,iv.XEPer44[i+1],iv.Stat_XEPer44[i+1])
+	CAdd(FP,iv.XEPer45[i+1],iv.Stat_XEPer45[i+1])
+	CAdd(FP,iv.XEPer46[i+1],iv.Stat_XEPer46[i+1])
+	
+	CAdd(FP,TotalEPer[i+1],iv.CMEPer[i+1])
+	CAdd(FP,iv.XEPer45[i+1],iv.CMEPer[i+1])
+	CAdd(FP,iv.XEPer46[i+1],iv.CMEPer[i+1])
+	CAdd(FP,TotalEPer4[i+1],iv.CMEPer[i+1])
+
+	CAdd(FP,TotalEPer4[i+1],iv.CXEPer[i+1])
+
+	CAdd(FP,TotalBreakShield[i+1],iv.CBrSh[i+1])
+	
+	
+	
+	
 	
 
 
+	--CIfChkVar(iv.FIncm[i+1])
+	--CIfChkVar(iv.FSEXP[i+1])
 
 
 	--CTrigger(FP, {CV(Income[i+1],_Add(IncomeMax[i+1], 1),AtLeast),LocalPlayerID(i)}, {
@@ -1351,14 +1470,26 @@ end
 
 CIfOnce(FP, {Command(i, AtLeast, 1, LevelUnitArr[44][2])},{SetCp(i)})
 
-DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x07타임어택 \x10점수\x04는 \x07",TimeAttackScore2[i+1]," \x04점 입니다. \x07』"})
+DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x1F44강 \x07타임어택 \x10점수\x04는 \x07",TimeAttackScore2[i+1]," \x04점 입니다. \x07』"})
 CIfX(FP,{CV(TimeAttackScore[i+1],TimeAttackScore2[i+1],AtMost)},{})
-DisplayPrint("CP", {"\x13\x07『 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",TimeAttackScore[i+1]," \x04점을 뛰어넘으셨네요! 축하드립니다! \x07』"})
+DisplayPrint("CP", {"\x13\x07『 \x1F44강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",TimeAttackScore[i+1]," \x04점을 뛰어넘으셨네요! 축하드립니다! \x07』"})
 CDoActions(FP, {SetV(TimeAttackScore[i+1],TimeAttackScore2[i+1])})
 CElseX()
 DisplayPrint("CP", {"\x13\x07『 기존 \x07",TimeAttackScore[i+1]," \x04점을 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
 CIfXEnd()
 CIfEnd()
+
+CIfOnce(FP, {Command(i, AtLeast, 1, LevelUnitArr[48][2])},{SetCp(i)})
+
+DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x1B48강 \x07타임어택 \x10점수\x04는 \x07",TimeAttackScore2[i+1]," \x04점 입니다. \x07』"})
+CIfX(FP,{CV(TimeAttackScore48[i+1],TimeAttackScore2[i+1],AtMost)},{})
+DisplayPrint("CP", {"\x13\x07『 \x1B48강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",TimeAttackScore48[i+1]," \x04점을 뛰어넘으셨네요! 축하드립니다! \x07』"})
+CDoActions(FP, {SetV(TimeAttackScore48[i+1],TimeAttackScore2[i+1])})
+CElseX()
+DisplayPrint("CP", {"\x13\x07『 기존 \x07",TimeAttackScore48[i+1]," \x04점을 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
+CIfXEnd()
+CIfEnd()
+
 TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 TriggerX(FP,{CV(PBossLV[i+1],6,AtLeast)},{SetCDX(PBossClearFlag, 1,1)})
 TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
@@ -1454,15 +1585,18 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
 		if j == 44 then
 			CMov(FP,XEper,TotalEPer[i+1])
+			CAdd(FP,XEper,iv.XEPer44[i+1])
 			CSub(FP,XEper,Per)
 			CSub(FP,XEper,XEPerM)
 		end
 		if j == 45 then
 			CMov(FP,XEper,TotalEPer2[i+1])
+			CAdd(FP,XEper,iv.XEPer45[i+1])
 			CSub(FP,XEper,XEPerM)
 		end
 		if j == 46 then
 			CMov(FP,XEper,TotalEPer3[i+1])
+			CAdd(FP,XEper,iv.XEPer46[i+1])
 			CSub(FP,XEper,XEPerM)
 		end
 		if j == 47 then
@@ -1532,6 +1666,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 	f_LMov(FP,TotalExpLoc,_LSub(TotalExp[i+1], CurEXP[i+1]),nil,nil,1)
 	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
 	CMov(FP,ResetStatLoc,ResetStat[i+1])
+	CMov(FP,ResetStat2Loc,ResetStat2[i+1])
 	CIfEnd()
 	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1),SubV(EnchCool[i+1], 1)})
 		--핫키 QCUnit 등록방지
