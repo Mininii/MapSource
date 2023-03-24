@@ -1,4 +1,5 @@
 import TriggerEditor.SCArchive as sca;
+import TriggerEditor.SCAFastLoader as scfl;
 const str1 = StringBuffer(1024);
 const MapMakerFlag = PVariable();
 const PLevel = PVariable();
@@ -270,6 +271,7 @@ SetMemory(5830260,SetTo,0);
 
 function beforeTriggerExec(){
 	sca.Exec();
+	scfl.Exec();
 	const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 	const s=StringBuffer();
 	const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
@@ -368,8 +370,14 @@ function beforeTriggerExec(){
 
 		if(GLoadCheck==1){
 			
+
 			if(Deaths(CurrentPlayer,Exactly,3,2)){//2번데스값에서 3번 신호가 온 경우
+			if(scfl.usercount == scfl.scausercount){
+				scfl.DataFastLoad(cp,0);
+			}
+			else{
 				sca.LoadData(0);
+			}
 			}
 			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
 				NBAlarm[cp] = 0;
@@ -416,13 +424,39 @@ function beforeTriggerExec(){
  * 7 = 런처와 먼저 연결하세요
  * 8 = 다른 작업 중입니다.
  * 9 = 작업 실패
+ * 10 = 명령 실행
+ * 11 = 시간 로드
+ * 12 = 글로벌데이터 로드
 ***/
-		if (sca.GetLastMessage() == 4){
+
+		if (sca.GetLastMessage() == 4){ // 로드완료일경우 
 			SetDeathsX(CurrentPlayer,SetTo,4,1,4);
 		}
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,4);
 		}
+
+
+		if (sca.GetLastMessage() == 11) {// 시간 로드완료일경우
+			SetDeathsX(CurrentPlayer,SetTo,16,1,16);
+		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,16);
+		}
+
+
+		if (sca.GetLastMessage() == 12) {// 글로벌데이터 로드완료일경우
+			SetDeathsX(CurrentPlayer,SetTo,32,1,32);
+		}
+		else{
+			SetDeathsX(CurrentPlayer,SetTo,0,1,32);
+		}
+
+
+		
+
+
+
 		if (sca.GetLastMessage() == 6){
 			SetDeathsX(CurrentPlayer,SetTo,8,1,8);
 
