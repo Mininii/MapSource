@@ -297,7 +297,7 @@ function DataArr()
 		{iv.PETicket[1],iv.PETicketLoc},
 		{iv.CreditAddSC[1],iv.CreditAddSCLoc},
 		{iv.Money2[1],iv.MoneyLoc2},
-		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
+		{iv.TempIncm[1],iv.S_LV3IncmLoc},
 		{iv.DayCheck2[1],iv.DayCheck2Loc},
 		{iv.FfragItem[1],iv.FfragItemLoc},
 		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},

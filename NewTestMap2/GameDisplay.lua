@@ -451,18 +451,11 @@ function GameDisplay()
 			DisplayPrint(LCP, {"\x076. \x1E46강 \x08강화확률 \x0F+0.01%p \x08MAX 500 \x04- ",BColor3[4][2],Cost_Stat_XEPer46.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,256)})
-
-			    
 			
-			
-			
-			
-			    
-			    
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],FXPer44Loc,"개 하급 확률의 보석 ",CColor3_1[1][2],Cost_FXPer44.." 무색조각 필요\x12",CColor3_2[1][2],Cost_FIncm.." 무색조각 필요 ",CColor1_2[1][2],"재물의 보석 ",FIncmLoc,"개 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],FXPer45Loc,"개 중급 확률의 보석 ",CColor3_1[2][2],Cost_FXPer45.." 무색조각 필요\x12",CColor3_2[2][2],Cost_FSEXP.." 무색조각 필요 ",CColor1_2[2][2],"경험의 보석 ",FSEXPLoc,"개 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],FXPer46Loc,"개 상급 확률의 보석 ",CColor3_1[3][2],Cost_FXPer46.." 무색조각 필요\x12",CColor3_2[3][2],Cost_FBrSh.." 무색조각 필요 ",CColor1_2[3][2],"보호의 보석 ",FBrShLoc,"개 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],FXEPerLoc,"개 특수 확률의 보석 ",CColor3_1[4][2],Cost_FXEPer.." 무색조각 필요\x12",CColor3_2[4][2],Cost_FMEPer.." 무색조각 필요 ",CColor1_2[4][2],"궁극 확률의 보석 ",FMEPerLoc,"개 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],FXPer44Loc,"개 하급 보석 ",CColor3_1[1][2],"개당 "..Cost_FXPer44.." 조각\x12",CColor3_2[1][2],"개당 "..Cost_FIncm.." 조각 ",CColor1_2[1][2],"재물의 보석 ",FIncmLoc,"개 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],FXPer45Loc,"개 중급 보석 ",CColor3_1[2][2],"개당 "..Cost_FXPer45.." 조각\x12",CColor3_2[2][2],"개당 "..Cost_FSEXP.." 조각 ",CColor1_2[2][2],"경험의 보석 ",FSEXPLoc,"개 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],FXPer46Loc,"개 상급 보석 ",CColor3_1[3][2],"개당 "..Cost_FXPer46.." 조각\x12",CColor3_2[3][2],"개당 "..Cost_FBrSh.." 조각 ",CColor1_2[3][2],"보호의 보석 ",FBrShLoc,"개 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],FXEPerLoc,"개 특급 보석 ",CColor3_1[4][2],"개당 "..Cost_FXEPer.." 조각\x12",CColor3_2[4][2],"개당 "..Cost_FMEPer.." 조각 ",CColor1_2[4][2],"궁극의 보석 ",FMEPerLoc,"개 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
 			local TempFf = CreateVar(FP)
 			CSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
 			DisplayPrint(LCP, {"\n\x13무색조각 \x04누적 획득량 : ",iv.FfragItemLoc," \x07|| \x02무색 조각 \x08사용중 \x04갯수 : ",iv.FfragItemUsedLoc," \x07|| \x1C사용가능 \x02무색 조각 \x04갯수 : ",TempFf})

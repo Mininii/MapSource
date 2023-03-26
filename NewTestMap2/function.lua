@@ -1501,3 +1501,14 @@ function CIfChkVar(Var)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd Ç
 	CMov(FP,CurVar,Var)
 	
 end
+function FragBuyFnc(FFrag,FfragU,FItem,Cost,cntC,failC)
+	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
+		local TempV = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
+		CSub(FP,TempV,FFrag,FfragU)
+		CSub(FP,TempV2,TempV,1)
+		TriggerX(FP, {CV(TempV,Cost,AtLeast)}, {AddV(FfragU,Cost),AddV(FItem,1)},{preserved})
+		TriggerX(FP, {CV(TempV2,Cost,AtMost)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
+	CWhileEnd()
+	
+end

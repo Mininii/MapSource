@@ -1,5 +1,6 @@
 import TriggerEditor.SCArchive as sca;
-import TriggerEditor.SCAFastLoader as scfl;
+import TriggerEditor.SCAWrapper as scw;
+import effsnd as efs;
 const str1 = StringBuffer(1024);
 const MapMakerFlag = PVariable();
 const PLevel = PVariable();
@@ -268,10 +269,8 @@ SetMemory(5830260,SetTo,0);
 }
 }
 }
-
 function beforeTriggerExec(){
-	sca.Exec();
-	scfl.Exec();
+	scw.Exec();
 	const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 	const s=StringBuffer();
 	const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
@@ -287,6 +286,7 @@ function beforeTriggerExec(){
 	
 	var GLoadCheck;
 	var CurVer;
+	if(ElapsedTime(AtLeast,90)){
 	foreach(cp : EUDLoopPlayer("Human")){
 		setcurpl(cp);
 		if(Deaths(CurrentPlayer,Exactly,1,2)){
@@ -361,27 +361,22 @@ function beforeTriggerExec(){
 
 	
 		if(Deaths(CurrentPlayer,Exactly,1,2)){//2번데스값에서 1번 신호가 온 경우
-			sca.LoadGlobalData(); //
+			scw.scaLoadGlobal(efs.SCmp);
 		}
 
 		if(Deaths(CurrentPlayer,Exactly,2,2)){//2번데스값에서 2번 신호가 온 경우
-			sca.LoadTime();
+			scw.scaLoadTime(efs.SCmp);
 		}
 
 		if(GLoadCheck==1){
 			
 
 			if(Deaths(CurrentPlayer,Exactly,3,2)){//2번데스값에서 3번 신호가 온 경우
-			if(scfl.usercount == scfl.scausercount){
-				scfl.DataFastLoad(cp,0);
-			}
-			else{
-				sca.LoadData(0);
-			}
+				scw.scaLoad(0,efs.SCmp);
 			}
 			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
 				NBAlarm[cp] = 0;
-				sca.SaveData(0);
+				scw.scaSave(0,efs.SCmp);
 			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
 			}
 			
@@ -403,6 +398,7 @@ function beforeTriggerExec(){
  * 2 = 시간 불러오는 중
  * 3 = 맵 변수 불러오는 중
  * 4 = 저장중
+ * 6 = 패스트로드 : 한명 로드시 전부 6됨
 ***/
 
 
@@ -643,5 +639,7 @@ function beforeTriggerExec(){
 		
 		}
 		
+	}
+	
 	}
 }
