@@ -396,7 +396,6 @@ for i = 0, 6 do -- 각플레이어
 		for j,k in pairs(RSArr) do
 			CTrigger(FP, {CV(k[i+1],0)}, {SetV(k[i+1],_Rand())}, 1)
 		end
-		TriggerX(FP, {CV(iv.MapMakerFlag[i+1],1)}, {SetCD(LimitSaveEnable,1)})
 		--치팅 테스트 변수 초기화
 		NIfX(FP,{CV(PStatVer[i+1],StatVer)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
 		f_LMov(FP, CTPEXP, PEXP[i+1])
@@ -736,7 +735,7 @@ for i = 0, 6 do -- 각플레이어
 if Limit == 0 then
 	NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 else
-	NIfX(FP,{CD(LimitSaveEnable,1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 end
 	CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
 	TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
@@ -757,7 +756,7 @@ end
 	TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 저장을 하기 위해서는 먼저 \x07M\x04ission \x08No. \x103\x04 까지 클리어 하셔야 합니다."))}, {preserved})
 	if Limit == 1 then
 	
-	NElseIfX({CD(LimitSaveEnable,0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
+	NElseIfX({CV(iv.MapMakerFlag[i+1],0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
 	CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
 	SCA_DataSave(i,iv.TesterFlag[i+1],SCA.TesterFlag)
 	TriggerX(FP, {Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서는 테스트 기록 정보만 저장됩니다..."))}, {preserved})
