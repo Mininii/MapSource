@@ -139,7 +139,7 @@ function GameDisplay()
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
 
 		CElseX()
-		CA__SetValue(Str1,"\x12\x02??? \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		CA__SetValue(Str1,"\x12\x02무색 조각 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(iv.FfragItemLoc,999999,AtLeast),{SetV(iv.FfragItemLoc,999999)},{preserved})
         CS__ItoCustom(FP,SVA1(Str1,8),iv.FfragItemLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
 		CIfXEnd()
@@ -174,7 +174,7 @@ function GameDisplay()
 		mmX2 = screenX -- 중앙정렬
 		mmX3 = screenX2 -- 중앙정렬
 		if TestStart == 1 then
-		DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+		--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 		end
 		BColor = CreateVarArr(6,FP)
 		BColor2 = CreateVarArr(6,FP)
@@ -187,11 +187,13 @@ function GameDisplay()
 		CColor3_1 = CreateVarArr(4,FP)
 		CColor4_1 = CreateVarArr(4,FP)
 		CColor5_1 = CreateVarArr(4,FP)
+		CColor6_1 = CreateVarArr(4,FP)
 		CColor1_2 = CreateVarArr(4,FP)
 		CColor2_2 = CreateVarArr(4,FP)
 		CColor3_2 = CreateVarArr(4,FP)
 		CColor4_2 = CreateVarArr(4,FP)
 		CColor5_2 = CreateVarArr(4,FP)
+		CColor6_2 = CreateVarArr(4,FP)
 
 		MToggle = CreateCcodeArr(6)
 		MToggle2 = CreateCcodeArr(6)
@@ -224,6 +226,7 @@ function GameDisplay()
 			table.insert(BAct,SetV(CColor3_1[j],0x1F))
 			table.insert(BAct,SetV(CColor4_1[j],0x04))
 			table.insert(BAct,SetV(CColor5_1[j],0x04))
+			table.insert(BAct,SetV(CColor6_1[j],0x04))
 			table.insert(BAct,SetCD(MToggle1_1[j],0))
 			table.insert(BAct,SetCD(MToggle2_1[j],0))
 			table.insert(BAct,SetCD(MToggle3_1[j],0))
@@ -236,6 +239,7 @@ function GameDisplay()
 			table.insert(BAct,SetV(CColor3_2[j],0x1F))
 			table.insert(BAct,SetV(CColor4_2[j],0x04))
 			table.insert(BAct,SetV(CColor5_2[j],0x04))
+			table.insert(BAct,SetV(CColor6_2[j],0x04))
 			table.insert(BAct,SetCD(MToggle1_2[j],0))
 			table.insert(BAct,SetCD(MToggle2_2[j],0))
 			table.insert(BAct,SetCD(MToggle3_2[j],0))
@@ -251,11 +255,30 @@ function GameDisplay()
 		--274~388 상대좌표 나가기버튼
 		
 		local MStat,CDFnc2 = ToggleFunc({Memory(0x6CDDC0,Exactly,0),Memory(0x6CDDC0,Exactly,2)},1)--
-		TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388)},{SetV(ESCB,0x07)},{preserved})
-		TriggerX(FP,{MLine(mmY,4),VRange(mmX, 274, 388),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388)},{SetV(ESCB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
+		
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378)},{SetV(ESCB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
 
-		TriggerX(FP,{CV(InterfaceNumLoc,1,AtLeast),CV(InterfaceNumLoc,255,AtMost),MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000)},{preserved})
-		TriggerX(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost),MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
+		
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508)},{SetV(SWAPB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
+		
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10)},{SetV(SWAPB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
+
+		
+		
+
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
+
+		
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
+
+
 		CIf(FP,{CV(InterfaceNumLoc,1,AtLeast),CV(InterfaceNumLoc,255,AtMost)})
 		
 		TriggerX(FP,{MLine(mmY,4),VRange(mmX3, 113, 187)},{SetV(PRVB,0x07)},{preserved})
@@ -296,11 +319,53 @@ function GameDisplay()
 		TriggerX(FP, CV(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 		CIf(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
+		
+		for i = 0, 3 do
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 0, 320)},{SetV(CColor1_1[i+1],0x07),SetV(CColor3_1[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--좌측
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 0, 320)},{SetV(CColor1_2[i+1],0x07),SetV(CColor3_2[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--우측
+
+			
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 10, 32)},{SetV(CColor4_1[i+1],0x07),SetCD(MToggle1_1[i+1],1)},{preserved})
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 36, 66)},{SetV(CColor5_1[i+1],0x07),SetCD(MToggle2_1[i+1],1)},{preserved})
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 70, 107)},{SetV(CColor6_1[i+1],0x07),SetCD(MToggle3_1[i+1],1)},{preserved})
+			TriggerX(FP,{CD(MToggle1_1[i+1],1),CD(MStat,1)},{SetV(CColor4_1[i+1],0x08)},{preserved})
+			TriggerX(FP,{CD(MToggle2_1[i+1],1),CD(MStat,1)},{SetV(CColor5_1[i+1],0x08)},{preserved})
+			TriggerX(FP,{CD(MToggle3_1[i+1],1),CD(MStat,1)},{SetV(CColor6_1[i+1],0x08)},{preserved})
+
+			
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 289, 311)},{SetV(CColor4_2[i+1],0x07),SetCD(MToggle1_2[i+1],1)},{preserved})
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 255, 285)},{SetV(CColor5_2[i+1],0x07),SetCD(MToggle2_2[i+1],1)},{preserved})
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 214, 251)},{SetV(CColor6_2[i+1],0x07),SetCD(MToggle3_2[i+1],1)},{preserved})
+			TriggerX(FP,{CD(MToggle1_2[i+1],1),CD(MStat,1)},{SetV(CColor4_2[i+1],0x08)},{preserved})
+			TriggerX(FP,{CD(MToggle2_2[i+1],1),CD(MStat,1)},{SetV(CColor5_2[i+1],0x08)},{preserved})
+			TriggerX(FP,{CD(MToggle3_2[i+1],1),CD(MStat,1)},{SetV(CColor6_2[i+1],0x08)},{preserved})
+
+			
+			TriggerX(FP,{CD(MToggle1_1[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000+i+1)},{preserved})--1
+			TriggerX(FP,{CD(MToggle2_1[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30010+i+1)},{preserved})--10
+			TriggerX(FP,{CD(MToggle3_1[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30020+i+1)},{preserved})--100
+			TriggerX(FP,{CD(MToggle1_2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30100+i+1)},{preserved})--1
+			TriggerX(FP,{CD(MToggle2_2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30110+i+1)},{preserved})--10
+			TriggerX(FP,{CD(MToggle3_2[i+1],1),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30120+i+1)},{preserved})--100
+
+
+
+			local temp,CDFnc = ToggleFunc({CD(MToggle[i+1],0),CD(MToggle[i+1],1)})--
+			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX, 0, 320)},{SetMemory(0x58F504,SetTo,0x100+i+1)},{preserved})--좌측
+			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX3, 0, 320)},{SetMemory(0x58F504,SetTo,0x180+i+1)},{preserved})--우측
+
+			
+			TriggerX(FP,{CD(MToggle2[i+1],1),CD(MStat,1)},{SetV(BColor2[i+1],0x08)},{preserved})
+
+
+
+
+		end
 
 
 		DisplayPrint(LCP, {"\x1C보석 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [스탯 설정 창으로 이동]\x12"})--
-		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1E100 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1E100 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 --		local TempLoc = CreateVar(FP)
 --		CIfX(FP, {CV(ResetStatLoc,4,AtMost)})
@@ -372,7 +437,7 @@ function GameDisplay()
 			CallTrigger(FP, Call_SetEPerStr)
 			DisplayPrint(LCP, {"\x072. \x08특수 \x1F파괴 방지\x08확률 \x1F2\x04 \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[2][2],Cost_Stat_BreakShield2.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 
-			DisplayPrint(LCP, {"\x073. \x08개인 보스 \x1FLV.7 \x04처치시 \x02??? + 10개 \x08MAX 50. ",BColor3[1][2],Cost_Stat_BossSFrg.." Pts\x12\x07+ ",BColor[3][2],Stat_BossSFrgLoc," 개 ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x08개인 보스 \x1FLV.7 \x04처치시 \x02무색 조각 + 10개 \x08MAX 50. ",BColor3[1][2],Cost_Stat_BossSFrg.." Pts\x12\x07+ ",BColor[3][2],Stat_BossSFrgLoc," 개 ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			
 			
 			CMov(FP,GEVar,Stat_XEPer44Loc)
@@ -387,12 +452,20 @@ function GameDisplay()
 
 			CElseIfX({CV(InterfaceNumLoc,256)})
 
-
-			DisplayPrint(LCP, {"[+1] [+10] [+100]",FXPer44Loc,"개 하급 확률의 보석 "..Cost_FXPer44.." 무색조각 필요 \x12재물의 보석 "..Cost_FIncm.." 무색조각 필요 ",FIncmLoc,"개 [+1] [+10] [+100]"})
-			DisplayPrint(LCP, {"[+1] [+10] [+100]",FXPer45Loc,"개 중급 확률의 보석 "..Cost_FXPer45.." 무색조각 필요 \x12경험의 보석 "..Cost_FSEXP.." 무색조각 필요 ",FSEXPLoc,"개 [+1] [+10] [+100]"})
-			DisplayPrint(LCP, {"[+1] [+10] [+100]",FXPer46Loc,"개 상급 확률의 보석 "..Cost_FXPer46.." 무색조각 필요 \x12보호의 보석 "..Cost_FBrSh.." 무색조각 필요 ",FBrShLoc,"개 [+1] [+10] [+100]"})
-			DisplayPrint(LCP, {"[+1] [+10] [+100]",FXEPerLoc,"개 특수 확률의 보석 "..Cost_FXEPer.." 무색조각 필요 \x12궁극 확률의 보석 "..Cost_FMEPer.." 무색조각 필요 ",FMEPerLoc,"개 [+1] [+10] [+100]"})
-			DisplayPrint(LCP, {"\x13무색조각 누적 획득량 : ",iv.FfragItemLoc," || 무색 조각 사용중 갯수 : ",iv.FfragItemUsedLoc})
+			    
+			
+			
+			
+			
+			    
+			    
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],FXPer44Loc,"개 하급 확률의 보석 ",CColor3_1[1][2],Cost_FXPer44.." 무색조각 필요\x12",CColor3_2[1][2],Cost_FIncm.." 무색조각 필요 ",CColor1_2[1][2],"재물의 보석 ",FIncmLoc,"개 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],FXPer45Loc,"개 중급 확률의 보석 ",CColor3_1[2][2],Cost_FXPer45.." 무색조각 필요\x12",CColor3_2[2][2],Cost_FSEXP.." 무색조각 필요 ",CColor1_2[2][2],"경험의 보석 ",FSEXPLoc,"개 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],FXPer46Loc,"개 상급 확률의 보석 ",CColor3_1[3][2],Cost_FXPer46.." 무색조각 필요\x12",CColor3_2[3][2],Cost_FBrSh.." 무색조각 필요 ",CColor1_2[3][2],"보호의 보석 ",FBrShLoc,"개 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],FXEPerLoc,"개 특수 확률의 보석 ",CColor3_1[4][2],Cost_FXEPer.." 무색조각 필요\x12",CColor3_2[4][2],Cost_FMEPer.." 무색조각 필요 ",CColor1_2[4][2],"궁극 확률의 보석 ",FMEPerLoc,"개 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			local TempFf = CreateVar(FP)
+			CSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
+			DisplayPrint(LCP, {"\n\x13무색조각 \x04누적 획득량 : ",iv.FfragItemLoc," \x07|| \x02무색 조각 \x08사용중 \x04갯수 : ",iv.FfragItemUsedLoc," \x07|| \x1C사용가능 \x02무색 조각 \x04갯수 : ",TempFf})
 		CIfXEnd()
 		DoActions(FP,{SetCp(FP)})
 		local StatPrintEr = {
@@ -412,7 +485,7 @@ function GameDisplay()
 			StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량을 1% 증가시킵니다. \x07기본값 : 100%. \x08주의 \x04: 이 항목은 \x1041강 \x07이상 \x04유닛에게 유효합니다."),
 			StrDesign("\x08특수\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 2페이지 특수확률 스탯을 \x07마스터 \x04하시길 권장합니다."),
 			StrDesign("\x08특수\x1F 파괴 방지\x08확률\x04을 증가시킵니다. \x08주의 \x04: 먼저 2페이지 파괴방지 스탯을 \x07마스터 \x04하시길 권장합니다."),
-			StrDesign("\x08개인 보스 \x1FLV.7 \x04처치시마다 일정량의 \x02???\x04을 얻습니다."),
+			StrDesign("\x08개인 보스 \x1FLV.7 \x04처치시마다 일정량의 \x02무색 조각\x04을 얻습니다."),
 			StrDesign("\x1F44강 \x08강화 \x04시도시 \x08강화확률\x04을 증가시킵니다."),
 			StrDesign("\x1C45강 \x08강화 \x04시도시 \x08강화확률\x04을 증가시킵니다."),
 			StrDesign("\x1E46강 \x08강화 \x04시도시 \x08강화확률\x04을 증가시킵니다."),
@@ -420,16 +493,16 @@ function GameDisplay()
 	
 	
 	local StatPrintEr2 = {
-		StrDesign("\x08테스트1-1"),
-		StrDesign("\x08테스트1-2"),
-		StrDesign("\x08테스트1-3"),
-		StrDesign("\x08테스트1-4"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F44강 \x08강화확률 \x04증가"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1C45강 \x08강화확률 \x04증가"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1E46강 \x08강화확률 \x04증가"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x08특수 \x08강화확률 \x04증가"),
 }
 	local StatPrintEr3 = {
-		StrDesign("\x08테스트2-1"),
-		StrDesign("\x08테스트2-2"),
-		StrDesign("\x08테스트2-3"),
-		StrDesign("\x08테스트2-4"),
+		StrDesign("\x04개당 \x110.01배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가"),
+		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가"),
+		StrDesign("\x04개당 \x0F0.001%p\x04의 \x1F파괴 방지 확률 \x04증가"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가"),
 	}
 
 		
@@ -437,14 +510,16 @@ function GameDisplay()
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
 			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x100,20),Deaths(i,AtMost,0x100+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x180,20),Deaths(i,AtMost,0x180+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
 			for j = 1, #StatPrintEr do
 				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
 			end
 			for j = 1, #StatPrintEr2 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x100,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
+				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x100,20)}, {print_utf8(12,0,StatPrintEr2[j])}, {preserved})
 			end
 			for j = 1, #StatPrintEr3 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x180,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
+				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x180,20)}, {print_utf8(12,0,StatPrintEr3[j])}, {preserved})
 			end
 		CIfEnd()
 	end
@@ -539,7 +614,7 @@ function GameDisplay()
 	CIfX(FP,{CD(LKey,1)})
 	
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc, " \x04|| \x03??? \x07(저장O): ",iv.FfragItemLoc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc, " \x04|| \x03무색 조각 \x07(저장O): ",iv.FfragItemLoc})
 		for i = 0, 6 do
 			CIf(FP,HumanCheck(i, 1))
 			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})

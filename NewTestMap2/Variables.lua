@@ -277,7 +277,7 @@ end
 	VaccSCount = CreateCcodeArr(7)
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
-	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"??? \x04:")
+	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"무색 조각 \x04:")
 	--PtsS,PtsSa,PtsSs = DwSaveiStrptrX(FP,"\x04| 포인트 \x04:")
 	--CredS,CredSa,CredSs = DwSaveiStrptrX(FP,"\x04| \x17크레딧 \x04:")
 

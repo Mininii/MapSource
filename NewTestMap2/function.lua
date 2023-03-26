@@ -688,6 +688,9 @@ end
 function MSQC_KeyInput(Player,KeyName) -- 키인식용 조건
 	return Deaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
+function MSQC_SetKeyInput(Player,KeyName) -- 키인식용 조건
+	return SetDeaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
+end
 function MSQC_ExportEdsTxt()
 	
 	os.execute("mkdir " .. "MSQC")

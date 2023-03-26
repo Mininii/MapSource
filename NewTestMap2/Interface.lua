@@ -309,13 +309,13 @@ function Interface()
 	
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus2,1)},{preserved})--런쳐 불러온사람 1명이하인데 멀티일경우 보너스 활성화
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,1,AtMost)}, {SetCD(PartyBonus2,0)},{preserved})-- 런쳐 불러온사람 1명이하인데 솔로일경우 보너스 비활성화
-	if Limit == 1 then
-		DoActionsX(FP, {AddV(XEPerT,100)})
-		
-	end
+	--if Limit == 1 then
+	--	DoActionsX(FP, {AddV(XEPerT,1)})
+	--	
+	--end
 	DoActionsX(FP, {AddV(XEPerT,1)})
 	Trigger2X(FP,{CV(XEPerT,24*60*60,AtLeast)},{SubV(XEPerT,24*60*60),AddV(XEPerM,100),
-	RotatePlayer({DisplayTextX(StrDesignX("\x1C44강\x04~\x1E46강 \x04유닛의 \x08강화확률이 \x0F0.1%p \x08하락\x04하였습니다.\x07"), 4),DisplayTextX(StrDesignX("\x1C44강\x04~\x1E46강 \x04유닛의 강화확률은 1시간마다 0.1%p씩 하락합니다.\x07"), 4)}, Force1, FP),
+	RotatePlayer({DisplayTextX(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 \x08강화확률이 \x0F0.1%p \x08하락\x04하였습니다.\x07"), 4),DisplayTextX(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 강화확률은 1시간마다 0.1%p씩 하락합니다.\x07"), 4)}, Force1, FP),
 },{preserved})
 
 	
@@ -658,7 +658,7 @@ for i = 0, 6 do -- 각플레이어
 				AddVX(DayCheck2[i+1],1*0x100,0xFF00),
 				AddV(B_PCredit[i+1],500000),
 				AddV(iv.FfragItem[i+1],5),
-				SetCp(i),DisplayText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02???\x04를 5개 얻었습니다."), 4)})
+				SetCp(i),DisplayText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02무색 조각\x04를 5개 얻었습니다."), 4)})
 				local TempV = CreateVar(FP)
 				local TempV2 = CreateVar(FP)
 				local TempV3 = CreateVar(FP)
@@ -668,7 +668,7 @@ for i = 0, 6 do -- 각플레이어
 			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
 			DoActionsX(FP, {
 				AddV(iv.FfragItem[i+1],50),
-				SetCp(i),DisplayText(StrDesignX("누적 출석 보상으로 \x02???\x04를 50개 얻었습니다."), 4)})
+				SetCp(i),DisplayText(StrDesignX("누적 출석 보상으로 \x02무색 조각\x04를 50개 얻었습니다."), 4)})
 			CIfEnd()
 			DisplayPrint(i, {"\x13\x07『 \x04현재까지 시즌 2 출석 이벤트 출석일수 : \x07",TempV3,"일 \x07』"})
 			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
@@ -966,6 +966,10 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	MoveUnit(1, LevelUnitArr[42][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[43][2], i, 22+i, 144+i),
 	MoveUnit(1, LevelUnitArr[44][2], i, 22+i, 144+i),
+	MoveUnit(1, LevelUnitArr[45][2], i, 22+i, 144+i),
+	MoveUnit(1, LevelUnitArr[46][2], i, 22+i, 144+i),
+	MoveUnit(1, LevelUnitArr[47][2], i, 22+i, 144+i),
+	MoveUnit(1, LevelUnitArr[48][2], i, 22+i, 144+i),
 },1)--사냥터 입장
 	TriggerX(FP,{CV(CS_DPSLV[i+1],1,AtLeast)},{MoveUnit(1,PersonalUIDArr[i+1],i,22+i,57+i)},{preserved})
 	CElseX({MoveUnit(1,PersonalUIDArr[i+1],i,15+i,22+i)})
@@ -1098,12 +1102,8 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 	local KeyTog = CreateCcode()
 	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1]),SetCD(KeyTog,0)})--키인식부 시작
-	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x10000,20)}, {SetDeaths(i,SetTo,1,495)}, {preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x30000,20)}, {SetDeaths(i,SetTo,1,506)}, {preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],256)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0)},{preserved})
 	local ClickCD = CreateCcode()
 	local ClickCD2 = CreateCcode()
 	CIf(FP,{CV(InterfaceNum[i+1],256,AtLeast),CV(InterfaceNum[i+1],512,AtMost)},{})
@@ -1112,9 +1112,9 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		CIfX(FP,{CV(ResetStat2[i+1],1,AtLeast)})
 		CallTrigger(FP,Call_Print13[i+1])
 		TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x19보석 초기화\x04를 사용할 수 없습니다.")) ,{preserved})
-		CElseIfX({CV(iv.FfragItem[i+1],100,AtLeast)})
+		CElseIfX({CV(iv.FfragItem[i+1],1000,AtLeast)})
 			DoActionsX(FP, {
-				SubV(iv.FfragItem[i+1],100),
+				SubV(iv.FfragItem[i+1],1000),
 				SetV(iv.FXPer44[i+1],0),
 				SetV(iv.FXPer45[i+1],0),
 				SetV(iv.FXPer46[i+1],0),
@@ -1132,12 +1132,11 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 		CElseX()
 			CallTrigger(FP,Call_Print13[i+1])
-			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E???\x04이 부족합니다.")) ,{preserved})
+			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E무색 조각\x04이 부족합니다.")) ,{preserved})
 		CIfXEnd()
 	CIfEnd()
 
 
-		TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 	CIfEnd()
 	CIf(FP,{CV(InterfaceNum[i+1],1,AtLeast),CV(InterfaceNum[i+1],0xFF,AtMost)},{})
 		for j = 0, 5 do
@@ -1292,8 +1291,8 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		})
 		
 		KeyFunc(i,"3",{
-			{{CV(StatP[i+1],Cost_Stat_BossSFrg,AtLeast),CV(Stat_BossSFrg[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSFrg),AddV(Stat_BossSFrg[i+1],1)},StrDesign("\x08개인 보스 \x07LV.7 \x04처치 보상 \x1E???\x04이 \x04증가하였습니다.")},
-			{{CV(Stat_BossSFrg[i+1],50,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1E???\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_BossSFrg,AtLeast),CV(Stat_BossSFrg[i+1],49,AtMost)},{SubV(StatP[i+1],Cost_Stat_BossSFrg),AddV(Stat_BossSFrg[i+1],1)},StrDesign("\x08개인 보스 \x07LV.7 \x04처치 보상 \x1E무색 조각\x04이 \x04증가하였습니다.")},
+			{{CV(Stat_BossSFrg[i+1],50,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1E무색 조각\x04을 올릴 수 없습니다.")},
 			{{CV(StatP[i+1],Cost_Stat_BossSFrg-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 		KeyFunc(i,"4",{
@@ -1318,14 +1317,21 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 	NJump(FP, ClickCDWhile, {CD(ClickCD,1,AtLeast),CD(ClickCD2,1,AtLeast)},{SubCD(ClickCD2, 1)})
 
-	TriggerX(FP, {MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],3),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	CIfEnd()
-	DoActions(FP, SetCp(FP))--키인식부 종료
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x10000,20)}, {SetDeaths(i,SetTo,1,495),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)}, {preserved})--ESC
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x40000,20)}, {SetDeaths(i,SetTo,1,494)}, {preserved})--O
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x30000,20)}, {SetDeaths(i,SetTo,1,506)}, {preserved})--U
+	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],256)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 
+	DoActions(FP, SetCp(FP))--키인식부 종료
 	TriggerX(FP,{CV(InterfaceNum[i+1],0),CV(BrightLoc,30,AtMost),LocalPlayerID(i)},{AddV(BrightLoc,1)},{preserved})
 	TriggerX(FP,{CV(InterfaceNum[i+1],1,AtLeast),CV(BrightLoc,14,AtLeast),LocalPlayerID(i)},{SubV(BrightLoc,1)},{preserved})
 	CDoActions(FP,{TSetMemory(0x657A9C,SetTo,BrightLoc)})
