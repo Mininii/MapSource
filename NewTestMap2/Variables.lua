@@ -181,6 +181,7 @@ end
 	
 
 	SCA.GReload = CreateCcode()
+	SCA.LoadSlot1 = CreateCcodeArr(7)
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
 	MSQC_KeySet("O",494) -- MSQC eds텍스트 입력
@@ -238,6 +239,7 @@ end
 	SettingUnit4 = CreateVarArr(7, FP)-- 26~39강 유닛 자동판매 설정기
 	ShopUnit = CreateVarArr(7, FP) -- 시민설정기
 	PUnitPtr = CreateVarArr(7, FP) -- 고유유닛
+	SlotPtr = CreateVarArr(7, FP) -- 슬롯포인터
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물
@@ -322,6 +324,7 @@ end
 	iv.Time = CreateVar(FP)
 	iv.Time2 = CreateVar(FP)
 	iv.Time3 = CreateVar(FP)
+	iv.Time4 = CreateVar(FP)
 	--Setting, Effect
 	iv.StatEff = CreateCcodeArr(7) -- 레벨업 이펙트
 	iv.StatEffT2 = CreateCcodeArr(7) -- 레벨업 이펙트
@@ -705,7 +708,7 @@ end
 	PushLevelUnit(25+19,15000,4000000000,63,70,12,400,59)--개별확률 +1 강확따라감 -- 다크아칸
 	PushLevelUnit(25+20,0,0,74,62,48,2500,59)--개별확률 +2 강확따라감 -- 프로브
 	PushLevelUnit(25+21,0,0,81,76,24,2800,59)--개별확률 +3 강확따라감 -- 
-	PushLevelUnit(25+22,500,0,78,67,12,3600,59)--고정확률 0.5%
+	PushLevelUnit(25+22,10000,0,78,67,12,3600,59)--고정확률 0.5%
 	PushLevelUnit(25+23,0,0,79,69,5,6550,59)-- 최강유닛
 
 	--이하 밸런스 미정

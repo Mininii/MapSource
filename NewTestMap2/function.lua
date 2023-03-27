@@ -1042,8 +1042,12 @@ end
 
 function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
-		CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
+		if LvUniit==40 then
+			CIf(FP,{CV(iv.Money2[1],1,AtLeast)},{SubV(iv.Money2[1],1)})
+		else
+			CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
 			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+		end
 			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 		CIfEnd()
 	CIfEnd()
@@ -1150,7 +1154,6 @@ end
 
 function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	
-	--if 2^(Flag-96)==4.0 then error(Text) end
 	local TrapKey
 	local CT_PrevRand
 	local CT_NextRand
@@ -1187,6 +1190,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 			--error(Text)
 		end
 		--if DeathUnit == 3 then Pushdsadas() end
+		
 	if Player == AllPlayers then
 		local ttable = {}
 		for i = 0, 6 do
@@ -1195,6 +1199,10 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		DoActionsX(FP,ttable)
 	else
 		DoActionsX(FP,{SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
+	end
+	
+	if DeathUnit== 	2 then 
+		--if 2^Flag == 1048576 then error(Text) end
 	end
 
 	else

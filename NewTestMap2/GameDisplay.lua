@@ -174,7 +174,7 @@ function GameDisplay()
 		mmX2 = screenX -- 중앙정렬
 		mmX3 = screenX2 -- 중앙정렬
 		if TestStart == 1 then
-		--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+		DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 		end
 		BColor = CreateVarArr(6,FP)
 		BColor2 = CreateVarArr(6,FP)
@@ -255,28 +255,28 @@ function GameDisplay()
 		--274~388 상대좌표 나가기버튼
 		
 		local MStat,CDFnc2 = ToggleFunc({Memory(0x6CDDC0,Exactly,0),Memory(0x6CDDC0,Exactly,2)},1)--
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388)},{SetV(ESCB,0x07)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188)},{SetV(ESCB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
 		
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378)},{SetV(ESCB,0x07)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 64, 178)},{SetV(ESCB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 64, 178),CD(MStat,1)},{SetV(ESCB,0x1B)},{preserved})
 
 		
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508)},{SetV(SWAPB,0x07)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 193,308)},{SetV(SWAPB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 193,308),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
 		
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10)},{SetV(SWAPB,0x07)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 193+10,308+10)},{SetV(SWAPB,0x07)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 193+10,308+10),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
 
 		
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 64, 178),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
 		
 
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 274, 388),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 264, 378),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
 
 		
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 393,508),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 393+10,508+10),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 193,308),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 193+10,308+10),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
 
 
 		CIf(FP,{CV(InterfaceNumLoc,1,AtLeast),CV(InterfaceNumLoc,255,AtMost)})
@@ -314,7 +314,7 @@ function GameDisplay()
 
 		end
 
-		DisplayPrint(LCP, {"\x07능력치 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [보석 설정 창으로 이동]\x12",PRVB[2],"[이전 페이지(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[다음 페이지(P)]"})--
+		DisplayPrint(LCP, {"\x07능력치 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [보석 설정 창으로 이동]\x12",PRVB[2],"[이전 페이지(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[다음 페이지(P)]"})--
 		TriggerX(FP, CV(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
 		TriggerX(FP, CV(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
@@ -363,7 +363,7 @@ function GameDisplay()
 		end
 
 
-		DisplayPrint(LCP, {"\x1C보석 \x04설정. \x10숫자키 또는 마우스클릭\x04으로 \x07업그레이드. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [스탯 설정 창으로 이동]\x12"})--
+		DisplayPrint(LCP, {"\x1C보석 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [스탯 설정 창으로 이동]\x12"})--
 		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
 		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()

@@ -745,6 +745,7 @@ end
 	CMov(FP,PLevelBak,PLevel[i+1])
 	CMov(FP,PLevel[i+1],1)
 	CIfEnd()
+	SCA_DataReset(i)
 	for j,k in pairs(SCA_DataArr) do
 		SCA_DataSave(i,k[1][i+1],k[2])
 	end
@@ -765,6 +766,18 @@ end
 	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 	end
 	NIfXEnd()
+	CIfEnd()
+
+	
+	CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast)})
+	CIf(FP, {CD(SCA.LoadSlot1[i+1],1),SCA.Available(i)}, {SCA.Reset(i),SetCD(SCA.LoadSlot1[i+1],2),SetDeaths(i,SetTo,11,2)})
+	SCA_DataReset(i)
+	CIfEnd()
+	CIf(FP,{SCA.LoadCmp(i),CD(SCA.LoadSlot1[i+1],2)})
+		SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
+
+	CIfEnd()
+
 	CIfEnd()
 
 
@@ -1081,11 +1094,11 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		CIfEnd()
 	end
-	local spt ={}
-	for j = 1, 39 do
-		table.insert(spt,SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 1))
-	end
 	if SpeedTestMode == 1 then
+		local spt ={}
+		for j = 1, 39 do
+			table.insert(spt,SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 1))
+		end
 		f_LAdd(FP, Money[i+1], Money[i+1], "1500")
 		DoActions2X(FP, {
 			SetV(AutoBuyCode[i+1],1),spt

@@ -981,6 +981,33 @@ function Install_CallTriggers()
 
 	SetCallEnd()
 
+	SCA_cp = CreateVar(FP)
+	function SCA_DataReset(cp,cond) -- 슬롯 불러오기 or 저장전 데이터 초기화를 위한 함수
+		CallTriggerX(FP, Call_DataReset, cond, {SetV(SCA_cp,cp)})
+		
+	end
+	Call_DataReset = SetCallForward()
+	SetCall(FP)
+	local Pl = CreateVar(FP)
+	CMul(FP,Pl,SCA_cp,18)
+	for j,k in pairs(SCA_DataArr) do
+		local Destptr = k[2]
+		local Player = SCA_cp
+		local Source = k[1][1]--1P기준
+	if Source[4]=="V" then
+		CDoActions(FP, {TSetMemory(_Add(Destptr,Pl), SetTo, 0)})
+	elseif Source[4]=="W" then
+		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
+		CDoActions(FP, {
+			TSetMemory(_Add(Destptr[1],Pl), SetTo, 0),
+			TSetMemory(_Add(Destptr[2],Pl), SetTo, 0)
+		})
+	else
+		PushErrorMsg("SCA_Source_Inputdata_Error")
+	end
+	
+	end
+	SetCallEnd()
 
 if TestStart == 1 then
 	
