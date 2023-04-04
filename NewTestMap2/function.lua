@@ -1520,3 +1520,15 @@ function FragBuyFnc(FFrag,FfragU,FItem,Cost,cntC,failC)
 	CWhileEnd()
 	
 end
+
+function SigmaT(max,Func)
+	local t={}
+	for i = 1, max do
+		t[i] = Func(i)
+	end
+	return t
+end
+function CreateCostData(Max,SFunc)
+	return {Max,f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1)}
+
+end
