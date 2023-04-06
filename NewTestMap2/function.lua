@@ -1510,14 +1510,34 @@ function CIfChkVar(Var)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd Ç
 	CMov(FP,CurVar,Var)
 	
 end
-function FragBuyFnc(FFrag,FfragU,FItem,Cost,cntC,failC)
+function FragBuyFnc(CP,FFrag,FfragU,FItem,Cost,CostLoc,cntC,failC)
+	local CostArr = Cost[1]
+	local UpMax = Cost[2]
 	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
 		local TempV = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
+		local TempCostV = CreateVar(FP)
+		f_Read(FP,FArr(CostArr,FItem),TempCostV,nil,nil,1)
 		CSub(FP,TempV,FFrag,FfragU)
 		CSub(FP,TempV2,TempV,1)
-		TriggerX(FP, {CV(TempV,Cost,AtLeast)}, {AddV(FfragU,Cost),AddV(FItem,1)},{preserved})
-		TriggerX(FP, {CV(TempV2,Cost,AtMost)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
+		CTrigger(FP, {CV(TempV2,TempCostV,AtMost)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
+		CTrigger(FP, {CV(FItem,UpMax,AtLeast)}, {SetCD(cntC,0),SetCD(failC,2)},{preserved})
+		CTrigger(FP, {CV(TempV,TempCostV,AtLeast),CD(failC,0)}, {AddV(FfragU,TempCostV),AddV(FItem,1)},{preserved})
 	CWhileEnd()
+	CIf(FP,{LocalPlayerID(CP)})
+	f_Read(FP,FArr(CostArr,FItem),CostLoc,nil,nil,1)
+	CIfEnd()
 	
+end
+
+function SigmaT(max,Func)
+	local t={}
+	for i = 1, max do
+		t[i] = Func(i)
+	end
+	return t
+end
+function CreateCostData(Max,SFunc)
+	return {f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1),Max}
+
 end

@@ -191,7 +191,7 @@ function TBL()
 	end
 	DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
 	CIfXEnd()
-	TriggerX(FP, {CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x1E46강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
+	TriggerX(FP, {CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
 	
 	
 	
@@ -254,16 +254,18 @@ function TBL()
 	CElseIfX({CD(BossFlag,1)})--보스건물일경우
 		--현재 DPS 요구치 표기는 별도
 	CElseX()--그외
+	MFlag = CreateCcode()
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 		CIfX(FP, {CD(XEperFlag,1)}) -- 특수확률일 경우
 		CS__SetValue(FP,TStr1,t01_1,nil,0)
 		CS__SetValue(FP,TStr1,"-",nil,7)
-		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,4,AtMost)})--개별확률
+		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)},{SetCD(MFlag,0)})--개별확률
+		CiSub(FP,SelPer,iv.XEPerM)
 		CS__SetValue(FP,TStr1,t01_2,nil,0)
-		CS__SetValue(FP,TStr1,"-",nil,7)
-		CAdd(FP,SelPer,iv.XEPerM)
-		CElseIfX({CD(XEperFlag,5)})--고정확률
-		CS__SetValue(FP,TStr1,t01_3,nil,0)
+		CIf(FP,CV(SelPer,0x80000000,AtLeast),{SetCD(MFlag,1)})
+		CNeg(FP, SelPer)--마이너스 수치 반전
+		CS__SetValue(FP,TStr1,"-",nil,7)--마이너스 표기 추가
+		CIfEnd()
 		CElseX()
 		CS__SetValue(FP,TStr1,t01,nil,0)
 		CIfXEnd()
@@ -327,25 +329,16 @@ function TBL()
 	CSub(FP,TotalEPerLoc,SelPer)
 	CMov(FP,TotalEPer3Loc,0)
 	CMov(FP,TotalEPer2Loc,0)
-	CElseIfX({CD(XEperFlag,2)})
-	CAdd(FP,TotalEPerLoc,iv.XEPer44Loc)
+	CElseIfX({CD(XEperFlag,2,AtLeast)})
+	CTrigger(FP, {CD(XEperFlag,2)},{SetV(TotalEPerLoc,iv.XEPer44Loc)},{preserved})
+	CTrigger(FP, {CD(XEperFlag,3)},{SetV(TotalEPerLoc,iv.XEPer45Loc)},{preserved})
+	CTrigger(FP, {CD(XEperFlag,4)},{SetV(TotalEPerLoc,iv.XEPer46Loc)},{preserved})
+	CTrigger(FP, {CD(XEperFlag,5)},{SetV(TotalEPerLoc,iv.XEPer47Loc)},{preserved})
+	CIfX(FP,CD(MFlag,0))
+	CAdd(FP,TotalEPerLoc,SelPer)
+	CElseX()
 	CSub(FP,TotalEPerLoc,SelPer)
-	CMov(FP,TotalEPer2Loc,0)
-	CMov(FP,TotalEPer3Loc,0)
-	CElseIfX({CD(XEperFlag,3)})
-	CMov(FP,TotalEPerLoc,0)
-	CAdd(FP,TotalEPer2Loc,iv.XEPer45Loc)
-	CSub(FP,TotalEPer2Loc,SelPer)
-	CMod(FP,TotalEPer2Loc,100001)
-	CMov(FP,TotalEPer3Loc,0)
-	CElseIfX({CD(XEperFlag,4)})
-	CMov(FP,TotalEPerLoc,0)
-	CMov(FP,TotalEPer2Loc,0)
-	CAdd(FP,TotalEPer3Loc,iv.XEPer46Loc)
-	CSub(FP,TotalEPer3Loc,SelPer)
-	CMod(FP,TotalEPer3Loc,100001)
-	CElseIfX({CD(XEperFlag,5)})
-	CMov(FP,TotalEPerLoc,SelPer)
+	CIfXEnd()
 	CMov(FP,TotalEPer2Loc,0)
 	CMov(FP,TotalEPer3Loc,0)
 	CIfXEnd()

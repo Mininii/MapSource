@@ -111,8 +111,10 @@ end
 
 CIfEnd()
 end
-Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x076단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
-Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x077단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x1C6단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x1F7단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x1E8단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 100,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,8,8)}, {SetV(B_Credit,200000);RotatePlayer({DisplayTextX(StrDesignX("\x08누군가가 \x1D9단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 200,000."), 4)}, Force1,FP)})
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)

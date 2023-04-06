@@ -177,6 +177,7 @@ end
 	SCA.StatXEPer44 = SCA.CreateVar(FP)
 	SCA.StatXEPer45 = SCA.CreateVar(FP)
 	SCA.StatXEPer46 = SCA.CreateVar(FP)
+	SCA.StatXEPer47 = SCA.CreateVar(FP)
 	
 	
 
@@ -419,6 +420,7 @@ end
 	iv.Stat_XEPer44Loc = CreateVar(FP)
 	iv.Stat_XEPer45Loc = CreateVar(FP)
 	iv.Stat_XEPer46Loc = CreateVar(FP)
+	iv.Stat_XEPer47Loc = CreateVar(FP)
 
 	iv.CS_CooldownLoc = CreateVar(FP)
 	iv.CS_AtkLoc = CreateVar(FP)
@@ -436,21 +438,31 @@ end
 	iv.DayCheck2Loc = CreateVar(FP)
 	iv.FfragItemLoc = CreateVar(FP)
 	iv.FfragItemUsedLoc = CreateVar(FP)
+	iv.TempIncmLoc = CreateVar(FP)
 	
 	iv.FXPer44Loc = CreateVar(FP)
 	iv.FXPer45Loc = CreateVar(FP)
 	iv.FXPer46Loc = CreateVar(FP)
+	iv.FXPer47Loc = CreateVar(FP)
 	iv.FIncmLoc = CreateVar(FP)
 	iv.FSEXPLoc = CreateVar(FP)
-	iv.FXEPerLoc = CreateVar(FP)
 	iv.FMEPerLoc = CreateVar(FP)
 	iv.FBrShLoc = CreateVar(FP)
 	iv.XEPer44Loc = CreateVar(FP)
 	iv.XEPer45Loc = CreateVar(FP)
 	iv.XEPer46Loc = CreateVar(FP)
+	iv.XEPer47Loc = CreateVar(FP)
 	iv.CXEPerLoc = CreateVar(FP)
 	iv.CMEPerLoc = CreateVar(FP)
 	iv.CBrShLoc = CreateVar(FP)
+	iv.Cost_FXPer44Loc = CreateVar(FP)
+	iv.Cost_FIncmLoc = CreateVar(FP)
+	iv.Cost_FXPer45Loc = CreateVar(FP)
+	iv.Cost_FSEXPLoc = CreateVar(FP)
+	iv.Cost_FXPer46Loc = CreateVar(FP)
+	iv.Cost_FBrShLoc = CreateVar(FP)
+	iv.Cost_FXPer47Loc = CreateVar(FP)
+	iv.Cost_FMEPerLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -705,10 +717,10 @@ end
 	PushLevelUnit(25+16,12000,60000000,11,15,72,40,59)--드랍쉽 -- 만렙기준 13.4
 	PushLevelUnit(25+17,20000,150000000,9,22,48,70,59)--베슬 -- 만렙기준 5.4
 	PushLevelUnit(25+18,25000,800000000,76,71,24,120,59)--아칸 -- 만렙기준 0.4
-	PushLevelUnit(25+19,15000,4000000000,63,70,12,400,59)--개별확률 +1 강확따라감 -- 다크아칸
-	PushLevelUnit(25+20,0,0,74,62,48,2500,59)--개별확률 +2 강확따라감 -- 프로브
-	PushLevelUnit(25+21,0,0,81,76,24,2800,59)--개별확률 +3 강확따라감 -- 
-	PushLevelUnit(25+22,10000,0,78,67,12,3600,59)--고정확률 0.5%
+	PushLevelUnit(25+19,10000,4000000000,63,70,12,400,59)--개별확률 -- 다크아칸
+	PushLevelUnit(25+20,7000,0,74,62,48,2500,59)--개별확률 -- 프로브
+	PushLevelUnit(25+21,4000,0,81,76,24,2800,59)--개별확률 -- 
+	PushLevelUnit(25+22,1000,0,78,67,12,3600,59)--개별확률
 	PushLevelUnit(25+23,0,0,79,69,5,6550,59)-- 최강유닛
 
 	--이하 밸런스 미정
@@ -750,6 +762,7 @@ end
 		{68,"3222"},
 		{34,"32222"},
 		{51,"322222"},
+		{42,"3222222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -793,6 +806,12 @@ FirstReward2 = {
 	{44,1000000},
 }
 
+FirstReward3 = {
+	{45,5000000,10,"\x1C"},
+	{46,5000000,40,"\x1E"},
+	{47,5000000,70,"\x02"},
+	{48,5000000,100,"\x1B"},
+}
 	NBagArr = {}
 	for i = 0,6 do
 		table.insert(NBagArr,NBag(FP, 1, 21))
@@ -882,18 +901,45 @@ FirstReward2 = {
 	CS_BreakShieldLimit = 200
 	Cost_Stat_BossSFrg = 1000
 	Cost_Stat_XEPer44 = 100
-	Cost_Stat_XEPer45 = 300
-	Cost_Stat_XEPer46 = 600
+	Cost_Stat_XEPer45 = 400
+	Cost_Stat_XEPer46 = 700
+	Cost_Stat_XEPer47 = 1000
+
+
+--	--{Max,FileArr}
+	Cost_FXPer44 = CreateCostData(500,function(n) return 1*n end)
+	Cost_FXPer45 = CreateCostData(500,function(n) return 7*n end)
+	Cost_FXPer46 = CreateCostData(500,function(n) return 16*n end)
+	Cost_FXPer47 = CreateCostData(500,function(n) return 80*n end)
+	Cost_FMEPer = CreateCostData(200,function(n) return 500+((n-1)*(n*38)) end)
+	Cost_FIncm = CreateCostData(10000,function(n) return n*1 end)
+	Cost_FSEXP = CreateCostData(10000,function(n) return 100+(1*n) end)
+	Cost_FBrSh = CreateCostData(150,function(n) return 100+((n-1)*(n*45)) end)
+
+--	Cost_FXPer44 = 10
+--	Cost_FXPer45 = 40
+--	Cost_FXPer46 = 70
+--	Cost_FXPer47 = 100
+--	Cost_FIncm = 100
+--	Cost_FSEXP = 150
+--	Cost_FMEPer = 500
+--	Cost_FBrSh = 1000
+
+--	CreateCostData(Max,SFunc)
 
 
 
-	Cost_FXPer44 = 10
-	Cost_FXPer45 = 40
-	Cost_FXPer46 = 70
-	Cost_FIncm = 100
-	Cost_FSEXP = 150
-	Cost_FXEPer = 200
-	Cost_FMEPer = 500
-	Cost_FBrSh = 1000
+
+
+
+
+
+
+
+
+
+
+
+
 
 end
