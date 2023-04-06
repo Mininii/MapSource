@@ -319,7 +319,7 @@ end
 	
 	iv.CurPUnitCool = CreateVarArr(7,FP)
 	
-	
+	ctarr = {{},{},{},{},{},{},{},{}}
 	--General
 	iv.Time = CreateVar(FP)
 	iv.Time2 = CreateVar(FP)

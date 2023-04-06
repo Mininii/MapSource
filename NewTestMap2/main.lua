@@ -89,6 +89,19 @@ EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
 
+os.execute("mkdir " .. "banflag")
+local CSfile = io.open(FileDirectory .. "banflag" .. ".txt", "w")
+io.output(CSfile)
+for j,k in pairs(ctarr) do
+	io.write("BanFlag"..j.." : ")
+	
+	for l,m in pairs(k) do
+		io.write("\""..l.." : "..m.."\", ")
+	end
+	
+	io.write("\n")
+end
+io.close(CSfile)
 
 if LD2XOption == 1 then
 __PopStringArray()
