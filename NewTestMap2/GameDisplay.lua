@@ -85,6 +85,14 @@ function GameDisplay()
 	local Stat_XEPer46Loc = iv.Stat_XEPer46Loc
 	local Stat_XEPer47Loc = iv.Stat_XEPer47Loc
 	local TempIncmLoc = iv.TempIncmLoc
+	local Cost_FXPer44Loc = iv.Cost_FXPer44Loc
+	local Cost_FIncmLoc = iv.Cost_FIncmLoc
+	local Cost_FXPer45Loc = iv.Cost_FXPer45Loc
+	local Cost_FSEXPLoc = iv.Cost_FSEXPLoc
+	local Cost_FXPer46Loc = iv.Cost_FXPer46Loc
+	local Cost_FBrShLoc = iv.Cost_FBrShLoc
+	local Cost_FXPer47Loc = iv.Cost_FXPer47Loc
+	local Cost_FMEPerLoc = iv.Cost_FMEPerLoc
 	
 
 	function TEST() 
@@ -135,16 +143,16 @@ function GameDisplay()
 		TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 		CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0)
+		CIfX(FP,CD(Tabkey,0))
 		CA__SetValue(Str1,"\x12포인트 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999,AtLeast),{SetV(StatPLoc,999999)},{preserved})
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-		--CIfX(FP,CD(Tabkey,0))
 
-		--CElseX()
-		--CA__SetValue(Str1,"\x12\x02무색 조각 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
-		--TriggerX(FP,CV(iv.FfragItemLoc,999999,AtLeast),{SetV(iv.FfragItemLoc,999999)},{preserved})
-        --CS__ItoCustom(FP,SVA1(Str1,8),iv.FfragItemLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-		--CIfXEnd()
+		CElseX()
+		CA__SetValue(Str1,"\x12\x02무색 조각 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		TriggerX(FP,CV(iv.FfragItemLoc,999999,AtLeast),{SetV(iv.FfragItemLoc,999999)},{preserved})
+        CS__ItoCustom(FP,SVA1(Str1,8),iv.FfragItemLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+		CIfXEnd()
 
         CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,"\x040",{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
@@ -176,7 +184,7 @@ function GameDisplay()
 		mmX2 = screenX -- 중앙정렬
 		mmX3 = screenX2 -- 중앙정렬
 		if TestStart == 1 then
-		DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+		--DisplayPrintEr(0, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
 		end
 		BColor = CreateVarArr(6,FP)
 		BColor2 = CreateVarArr(6,FP)
@@ -317,8 +325,8 @@ function GameDisplay()
 		end
 
 		DisplayPrint(LCP, {"\x07능력치 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [보석 설정 창으로 이동]\x12",PRVB[2],"[이전 페이지(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[다음 페이지(P)]"})--
-		TriggerX(FP, CV(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 		CIf(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
 		
@@ -366,8 +374,8 @@ function GameDisplay()
 
 
 		DisplayPrint(LCP, {"\x1C보석 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [스탯 설정 창으로 이동]\x12"})--
-		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1E1000 무색조각 \x04사용 \x081시간이내 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 --		local TempLoc = CreateVar(FP)
 --		CIfX(FP, {CV(ResetStatLoc,4,AtMost)})
@@ -456,10 +464,10 @@ function GameDisplay()
 
 			CElseIfX({CV(InterfaceNumLoc,256)})
 			
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],FXPer44Loc,"개 하급 보석 ",CColor3_1[1][2],"개당 "..Cost_FXPer44.." 조각\x12",CColor3_2[1][2],"개당 "..Cost_FIncm.." 조각 ",CColor1_2[1][2],"재물의 보석 ",FIncmLoc,"개 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],FXPer45Loc,"개 중급 보석 ",CColor3_1[2][2],"개당 "..Cost_FXPer45.." 조각\x12",CColor3_2[2][2],"개당 "..Cost_FSEXP.." 조각 ",CColor1_2[2][2],"경험의 보석 ",FSEXPLoc,"개 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],FXPer46Loc,"개 상급 보석 ",CColor3_1[3][2],"개당 "..Cost_FXPer46.." 조각\x12",CColor3_2[3][2],"개당 "..Cost_FBrSh.." 조각 ",CColor1_2[3][2],"보호의 보석 ",FBrShLoc,"개 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],FXPer47Loc,"개 특급 보석 ",CColor3_1[4][2],"개당 "..Cost_FXPer47.." 조각\x12",CColor3_2[4][2],"개당 "..Cost_FMEPer.." 조각 ",CColor1_2[4][2],"궁극의 보석 ",FMEPerLoc,"개 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"하급 보석 ",FXPer44Loc,"개 ",CColor3_1[1][2],"|| Cost : ",Cost_FXPer44Loc,"\x12",CColor3_2[1][2]," Cost : ",Cost_FIncmLoc," || ",CColor1_2[1][2],FIncmLoc," 개 재물의 보석 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"중급 보석 ",FXPer45Loc,"개 ",CColor3_1[2][2],"|| Cost : ",Cost_FXPer45Loc,"\x12",CColor3_2[2][2]," Cost : ",Cost_FSEXPLoc," || ",CColor1_2[2][2],FSEXPLoc," 개 경험의 보석 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"상급 보석 ",FXPer46Loc,"개 ",CColor3_1[3][2],"|| Cost : ",Cost_FXPer46Loc,"\x12",CColor3_2[3][2]," Cost : ",Cost_FBrShLoc," || ",CColor1_2[3][2],FBrShLoc," 개 보호의 보석 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"특급 보석 ",FXPer47Loc,"개 ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," 개 궁극의 보석 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
 			local TempFf = CreateVar(FP)
 			CSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
 			DisplayPrint(LCP, {"\n\x13무색조각 \x04누적 획득량 : ",iv.FfragItemLoc," \x07|| \x02무색 조각 \x08사용중 \x04갯수 : ",iv.FfragItemUsedLoc," \x07|| \x1C사용가능 \x02무색 조각 \x04갯수 : ",TempFf})
@@ -488,18 +496,17 @@ function GameDisplay()
 			StrDesign("\x0247강 \x08강화 \x04시도시 \x08강화확률\x04을 증가시킵니다."),
 	}
 	
-	
 	local StatPrintEr2 = {
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F44강 \x08강화확률 \x04증가"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1C45강 \x08강화확률 \x04증가"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1E46강 \x08강화확률 \x04증가"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x0247강 \x08강화확률 \x04증가"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F44강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer44[2].." 개"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1C45강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer45[2].." 개"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1E46강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer47[2].." 개"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
 }
 	local StatPrintEr3 = {
-		StrDesign("\x04개당 \x110.01배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가"),
-		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가"),
-		StrDesign("\x04개당 \x0F0.001%p\x04의 \x1F파괴 방지 확률 \x04증가"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가"),
+		StrDesign("\x04개당 \x110.01배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가. \x08MAX "..Cost_FIncm[2].." 개"),
+		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가. \x08MAX "..Cost_FSEXP[2].." 개"),
+		StrDesign("\x04개당 \x0F0.001%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh[2].." 개"),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer[2].." 개"),
 	}
 
 		

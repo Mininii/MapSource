@@ -455,6 +455,14 @@ end
 	iv.CXEPerLoc = CreateVar(FP)
 	iv.CMEPerLoc = CreateVar(FP)
 	iv.CBrShLoc = CreateVar(FP)
+	iv.Cost_FXPer44Loc = CreateVar(FP)
+	iv.Cost_FIncmLoc = CreateVar(FP)
+	iv.Cost_FXPer45Loc = CreateVar(FP)
+	iv.Cost_FSEXPLoc = CreateVar(FP)
+	iv.Cost_FXPer46Loc = CreateVar(FP)
+	iv.Cost_FBrShLoc = CreateVar(FP)
+	iv.Cost_FXPer47Loc = CreateVar(FP)
+	iv.Cost_FMEPerLoc = CreateVar(FP)
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -899,14 +907,14 @@ FirstReward3 = {
 
 
 --	--{Max,FileArr}
-	Cost_FXPer44 = {f_GetFileArrptr(FP,SigmaT(500,function(n) return 1*n end),4,1),500}--마스터 10만
-	Cost_FXPer45 = {f_GetFileArrptr(FP,SigmaT(500,function(n) return 7*n end),4,1),500}--마스터 80만
-	Cost_FXPer46 = {f_GetFileArrptr(FP,SigmaT(500,function(n) return 16*n end),4,1),500}--마스터 200만
-	Cost_FXPer47 = {f_GetFileArrptr(FP,SigmaT(500,function(n) return 80*n end),4,1),500}--마스터 1000만
-	Cost_FMEPer = {f_GetFileArrptr(FP,SigmaT(200,function(n) return 500+((n-1)*(n*38)) end),4,1),200}--마스터 대략 1억
-	Cost_FIncm = {f_GetFileArrptr(FP,SigmaT(10000,function(n) return n*1 end),4,1),10000} -- 마스터 대략 5000만
-	Cost_FSEXP = {f_GetFileArrptr(FP,SigmaT(10000,function(n) return 100+(1*n) end),4,1),10000} --마스터 대략 5000만 
-	Cost_FBrSh = {f_GetFileArrptr(FP,SigmaT(200,function(n) return 100+((n-1)*(n*19)) end),4,1),200} --마스터 대략 2천만
+	Cost_FXPer44 = CreateCostData(500,function(n) return 1*n end)
+	Cost_FXPer45 = CreateCostData(500,function(n) return 7*n end)
+	Cost_FXPer46 = CreateCostData(500,function(n) return 16*n end)
+	Cost_FXPer47 = CreateCostData(500,function(n) return 80*n end)
+	Cost_FMEPer = CreateCostData(200,function(n) return 500+((n-1)*(n*38)) end)
+	Cost_FIncm = CreateCostData(10000,function(n) return n*1 end)
+	Cost_FSEXP = CreateCostData(10000,function(n) return 100+(1*n) end)
+	Cost_FBrSh = CreateCostData(150,function(n) return 100+((n-1)*(n*45)) end)
 
 --	Cost_FXPer44 = 10
 --	Cost_FXPer45 = 40
@@ -918,5 +926,20 @@ FirstReward3 = {
 --	Cost_FBrSh = 1000
 
 --	CreateCostData(Max,SFunc)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 end

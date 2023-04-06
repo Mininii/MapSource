@@ -621,7 +621,7 @@ for i = 0, 6 do -- 각플레이어
 	for j,k in pairs(FirstReward2) do
 		TriggerX(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])},{SetDeaths(i,SetTo,1,13),AddV(B_PCredit[i+1],k[2]),SetCp(i),DisplayText(StrDesignX("\x11"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),SetCp(FP)})
 	end
-	for j,k in pairs(FirstReward2) do -- j == 1~4
+	for j,k in pairs(FirstReward3) do -- j == 1~4
 		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])})
 			CIf(FP,CVX(iv.FirstRewardLim[i+1],9,2^((j-1)*8),AtMost),{AddVX(iv.FirstRewardLim[i+1],1,2^((j-1)*8)),SetDeaths(i,SetTo,1,13),AddV(B_PCredit[i+1],k[2]),AddV(iv.FfragItem[i+1],k[3]),SetCp(i),DisplayText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),DisplayText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
 			local TempV = CreateVar(FP)
@@ -867,6 +867,8 @@ end
 	TriggerX(FP, {Command(i,AtLeast,1,88),CV(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat2[i+1],0)}, {AddV(ResetStat2[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
+	TriggerX(FP, {Command(i,AtLeast,1,LevelUnitArr[41][2]),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 41강보유시 스탯초기화 비활성화
+	TriggerX(FP, {Command(i,AtLeast,1,LevelUnitArr[41][2]),CV(ResetStat2[i+1],0)}, {AddV(ResetStat2[i+1],1)}) -- 41강보유시 스탯초기화 비활성화
 	TriggerX(FP, {CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetMemX(Arr(AutoEnchArr,((2-1)*7)+i), SetTo, 0),SetCp(i),DisplayText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
 	CreateUnitStacked({CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men")}, 1, LevelUnitArr[2][2], 50+i,36+i, i, nil,1)
 	CIf(FP, {CV(ScTimer[i+1],4320,AtMost)})
@@ -1160,18 +1162,22 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	end
 
 
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer44[i+1],Cost_FXPer44,CntCArr[1],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer45[i+1],Cost_FXPer45,CntCArr[2],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer46[i+1],Cost_FXPer46,CntCArr[3],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer47[i+1],Cost_FXPer47,CntCArr[4],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FIncm[i+1],Cost_FIncm,CntCArr[5],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FSEXP[i+1],Cost_FSEXP,CntCArr[6],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FBrSh[i+1],Cost_FBrSh,CntCArr[7],failCcode)
-	FragBuyFnc(iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FMEPer[i+1],Cost_FMEPer,CntCArr[8],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer44[i+1],Cost_FXPer44,iv.Cost_FXPer44Loc,CntCArr[1],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer45[i+1],Cost_FXPer45,iv.Cost_FXPer45Loc,CntCArr[2],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer46[i+1],Cost_FXPer46,iv.Cost_FXPer46Loc,CntCArr[3],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FXPer47[i+1],Cost_FXPer47,iv.Cost_FXPer47Loc,CntCArr[4],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FIncm[i+1],Cost_FIncm,iv.Cost_FIncmLoc,CntCArr[5],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FSEXP[i+1],Cost_FSEXP,iv.Cost_FSEXPLoc,CntCArr[6],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FBrSh[i+1],Cost_FBrSh,iv.Cost_FBrShLoc,CntCArr[7],failCcode)
+	FragBuyFnc(i,iv.FfragItem[i+1],iv.FfragItemUsed[i+1],iv.FMEPer[i+1],Cost_FMEPer,iv.Cost_FMEPerLoc,CntCArr[8],failCcode)
 
-	CIf(FP,CD(failCcode,1),{SetCD(failCcode,0),SetV(DPErT[i+1],24*10)})
+
+
+
+	CIf(FP,CD(failCcode,1,AtLeast),{SetV(DPErT[i+1],24*10)})
 		CallTrigger(FP,Call_Print13[i+1])
-		TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E무색 조각\x04이 부족합니다.")) ,{preserved})
+		TriggerX(FP, {LocalPlayerID(i),CD(failCcode,1)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E무색 조각\x04이 부족합니다.")),SetCD(failCcode,0)} ,{preserved})
+		TriggerX(FP, {LocalPlayerID(i),CD(failCcode,2)},{print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E무색 조각\x04이 부족합니다.")),SetCD(failCcode,0)} ,{preserved})
 	CIfEnd()
 
 
@@ -1179,9 +1185,9 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		CIfX(FP,{CV(ResetStat2[i+1],1,AtLeast)})
 		CallTrigger(FP,Call_Print13[i+1])
 		TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x19보석 초기화\x04를 사용할 수 없습니다.")) ,{preserved})
-		CElseIfX({CV(iv.FfragItem[i+1],1000,AtLeast)})
+		CElseIfX({TTNWar(Credit[i+1], AtLeast, "100000")})
+			f_LSub(FP, Credit[i+1], Credit[i+1], "100000")
 			DoActionsX(FP, {
-				SubV(iv.FfragItem[i+1],1000),
 				SetV(iv.FXPer44[i+1],0),
 				SetV(iv.FXPer45[i+1],0),
 				SetV(iv.FXPer46[i+1],0),
@@ -1199,7 +1205,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 
 		CElseX()
 			CallTrigger(FP,Call_Print13[i+1])
-			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1E무색 조각\x04이 부족합니다.")) ,{preserved})
+			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다.")) ,{preserved})
 		CIfXEnd()
 	CIfEnd()
 
@@ -1524,7 +1530,7 @@ Trigger2X(FP,{CV(PBossLV[i+1],7,AtLeast)},{
 })
 Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
 	AddV(iv.FfragItem[i+1], 25),
-	AddV(SellTicket,100000)
+	AddV(SellTicket[i+1],100000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
 	AddV(iv.FfragItem[i+1], 1000),
