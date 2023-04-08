@@ -86,6 +86,9 @@ const StatBossSFrg = PVariable();
 const StatXEPer44 = PVariable();
 const StatXEPer45 = PVariable();
 const StatXEPer46 = PVariable();
+const StatXEPer47 = PVariable();
+const FfragItem64 = PVariable();
+const FfragItemUsed64 = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
 sca.Init();
@@ -264,6 +267,12 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(StatXEPer45)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(StatXEPer46)+focus,0);
 Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(StatXEPer47)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItem64)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItemUsed64)+focus,0);
+Asm_Arrptr+=1;
 
 SetMemory(5830260,SetTo,0);	
 }
@@ -378,6 +387,10 @@ function beforeTriggerExec(){
 				NBAlarm[cp] = 0;
 				scw.scaSave(0,efs.SCmp);
 			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+			}
+			
+			if(Deaths(CurrentPlayer,Exactly,11,2)){//2번데스값에서 10번 신호가 온 경우
+				scw.scaLoad(1,efs.SCmp);
 			}
 			
 		}

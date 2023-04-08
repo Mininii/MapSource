@@ -178,7 +178,9 @@ end
 	SCA.StatXEPer45 = SCA.CreateVar(FP)
 	SCA.StatXEPer46 = SCA.CreateVar(FP)
 	SCA.StatXEPer47 = SCA.CreateVar(FP)
-	
+	SCA.FfragItem64 = SCA.CreateVar(FP)
+	SCA.FfragItemUsed64 = SCA.CreateVar(FP)
+	SCA.FStatVer = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -436,9 +438,9 @@ end
 	iv.CreditAddSCLoc = CreateVar(FP)
 	iv.S_LV3IncmLoc = CreateVar(FP)
 	iv.DayCheck2Loc = CreateVar(FP)
-	iv.FfragItemLoc = CreateVar(FP)
-	iv.FfragItemUsedLoc = CreateVar(FP)
-	iv.TempIncmLoc = CreateVar(FP)
+	iv.FfragItemLoc = CreateWar(FP)
+	iv.FfragItemUsedLoc = CreateWar(FP)
+	iv.TempIncmLoc = CreateWar(FP)
 	
 	iv.FXPer44Loc = CreateVar(FP)
 	iv.FXPer45Loc = CreateVar(FP)
@@ -485,6 +487,7 @@ end
 
 	iv.CheatDetect = CreateCcode()
 	iv.StatTest = CreateCcode()
+	iv.FStatTest = CreateCcode()
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
 	iv.PartyBonus2 = CreateCcode()

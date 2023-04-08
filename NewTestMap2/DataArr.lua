@@ -193,19 +193,20 @@ function DataArr()
 	iv.SCCool,ct.SCCool = CreateDataPV("SCCool")
 	iv.AddSC,ct.AddSC = CreateDataPV("AddSC")
 	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")
-	iv.TempIncm,ct.TempIncm = CreateDataPV("TempIncm")
+	iv.TempIncm,ct.TempIncm = CreateDataPW("TempIncm")
 	iv.B_PEXP2,ct.B_PEXP2 = CreateDataPV("B_PEXP2")
 	iv.MapMakerFlag,ct.MapMakerFlag = CreateDataPV("MapMakerFlag",SCA.MapMakerFlag)
 	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
 	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
 	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
-	iv.FfragItem,ct.FfragItem = CreateDataPV("FfragItem",SCA.FfragItem)
-
+	iv.FfragItem,ct.FfragItem = CreateDataPW("FfragItem",{SCA.FfragItem,SCA.FfragItem64})
+	iv.B_PFfragItem,ct.B_PFfragItem = CreateDataPV("B_PEXP2")
+	
 
 
 
 	--3.00
-	iv.FfragItemUsed,ct.FfragItemUsed = CreateDataPV("FfragItemUsed",SCA.FfragItemUsed)
+	iv.FfragItemUsed,ct.FfragItemUsed = CreateDataPW("FfragItemUsed",{SCA.FfragItemUsed,SCA.FfragItemUsed64})
 	iv.TimeAttackScore48,ct.TimeAttackScore48 = CreateDataPV("TimeAttackScore48",SCA.TimeAttackScore48)
 	iv.FirstRewardLim,ct.FirstRewardLim = CreateDataPV("FirstRewardLim",SCA.FirstRewardLim)
 
@@ -248,6 +249,7 @@ function DataArr()
 	iv.XEPer47,ct.XEPer47 = CreateDataPV("XEPer47")
 
 	
+	iv.FStatVer,ct.FStatVer = CreateDataPV("FStatVer",SCA.FStatVer)
 
 
 	LocalDataArr = {
@@ -302,8 +304,6 @@ function DataArr()
 		{iv.Money2[1],iv.MoneyLoc2},
 		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
 		{iv.DayCheck2[1],iv.DayCheck2Loc},
-		{iv.FfragItem[1],iv.FfragItemLoc},
-		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},
 		{iv.FXPer44[1],iv.FXPer44Loc},
 		{iv.FXPer45[1],iv.FXPer45Loc},
 		{iv.FXPer46[1],iv.FXPer46Loc},
@@ -326,6 +326,8 @@ function DataArr()
 		{iv.Stat_XEPer46[1],iv.Stat_XEPer46Loc},
 		{iv.Stat_XEPer47[1],iv.Stat_XEPer47Loc},
 		{iv.TempIncm[1],iv.TempIncmLoc},
+		{iv.FfragItem[1],iv.FfragItemLoc},
+		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc}
 				
 	}
 end

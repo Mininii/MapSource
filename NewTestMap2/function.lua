@@ -608,7 +608,11 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 				f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
 			end
 			if MultiplierV ~= nil then
-				f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
+				if MultiplierV[4]=="V" then
+					f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
+				elseif MultiplierV[4]=="W" then
+					f_LMul(FP, GetMoney,GetMoney, MultiplierV)
+				end
 			end
 			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--오버플로우일경우 더하지말고 GetMoney를 1000경원짜리에 맞춘다.
 				local TempW = CreateWar(FP)
@@ -783,6 +787,8 @@ function DisplayPrint(TargetPlayers,arg)
 			BSize = BSize+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
 			BSize=BSize+(4*4)
+		elseif type(k)=="table" and k[4]=="W" then
+			BSize=BSize+(4*5)
 		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 			BSize = BSize+#k
 		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
@@ -814,6 +820,11 @@ function DisplayPrint(TargetPlayers,arg)
 			CallTrigger(FP,dp.Call_IToDec)
 			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
 			Dev=Dev+(4*4)
+		elseif type(k)=="table" and k[4]=="W" then
+			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+			CallTrigger(FP,dp.Call_lIToDec)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
+			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 			for o,p in pairs(k) do
 				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
@@ -962,6 +973,51 @@ function init_Setting()
 	SetCall2(FP, dp.Call_IToDec)
 	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,0)
 	SetCallEnd2()
+	
+	SetCall2(FP, dp.Call_lIToDec)
+	DoActionsX(FP, {
+		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--init << 0
+	local li = def_sIndex()
+	NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"1"..string.rep("0",19))},{
+		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303031),
+		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--<<Zeromode = 0x0D
+		for i = 19, 1, -1 do
+			local wt = string.rep("9",i)
+			local mb = 3-i%4
+			local MaskBit = 256^mb
+			local idx = 4-math.floor(i/4)
+			CTrigger(FP,{TTNWar(dp.publiclItoDecW,AtMost,wt)},{SetCVAar(VArr(dp.publiclItoDecVArr,idx),SetTo,MaskBit*0x0D,MaskBit*0xFF)},1)--<<Zeromode = 0x0D
+		end
+
+		NJumpEnd(FP,li)
+		function dp.War_NumSet(DestVAI,DivNum,MaskBit)
+			local MaskBit = 256^MaskBit
+			for i = 3, 0, -1 do
+				local CBit = 2^i
+				local nt = tostring(CBit)..string.rep("0",DivNum)
+				CIf(FP,{TTNWar(dp.publiclItoDecW, AtLeast, nt)},{SetCVAar(VArr(dp.publiclItoDecVArr,DestVAI), Add, CBit*MaskBit,MaskBit*0xFF)})
+				f_LSub(FP, dp.publiclItoDecW, dp.publiclItoDecW, nt)
+				CIfEnd()
+			end
+		end
+		for i = 18, 0, -1 do
+			local mb=3-(i%4)
+			local mi=4-math.floor(i/4)
+			dp.War_NumSet(mi,i,mb)
+		end
+		
+
+
+
+	SetCallEnd2()
+
 	CJumpEnd(FP,SCJump)
 	CJumpEnd(FP, dp.CustominitJump)
 end
@@ -986,6 +1042,10 @@ function Start_init(LocOption)
 	dp.publicItoDecVArr =CreateVArr(4,FP)
 	dp.publicItoDecV = CreateVar(FP)
 	dp.Call_IToDec = CreateCallIndex()
+	
+	dp.publiclItoDecVArr =CreateVArr(5,FP)
+	dp.publiclItoDecW = CreateWar(FP)
+	dp.Call_lIToDec = CreateCallIndex()
 	
 function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 	for j=0, VArrLength do
@@ -1504,6 +1564,22 @@ function CreateDataPV(DataName,SCADeathData,LocOp)
 	end
 	
 end
+function CreateDataPW(DataName,SCADeathData,LocOp)
+	local Ret = CreateWarArr(7,FP)
+	local Ret2 = CreateWarArr(7,FP)
+	table.insert(PVWArr,{Ret,Ret2,DataName})
+	if SCADeathData ~= nil then
+		if #SCADeathData~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
+		table.insert(SCA_DataArr,{Ret,SCADeathData})
+	end
+	if LocOp == 1 then 
+		local Ret3 = CreateWar(FP)
+		table.insert(LocalDataArr,{Ret[1],Ret3})
+		return Ret,Ret2,Ret3
+	else return Ret,Ret2
+	end
+	
+end
 function CIfChkVar(Var)--Var에 변화가 있을때마다 1회만 작동시키는 코드. CIfEnd 필요
 	local CurVar = CreateVar(FP)
 	CIf(FP,{TTNVar(Var,NotSame,CurVar)})
@@ -1514,15 +1590,23 @@ function FragBuyFnc(CP,FFrag,FfragU,FItem,Cost,CostLoc,cntC,failC)
 	local CostArr = Cost[1]
 	local UpMax = Cost[2]
 	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
-		local TempV = CreateVar(FP)
-		local TempV2 = CreateVar(FP)
+		local BCan = def_sIndex()
+		NJump(FP,BCan,{CV(FItem,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
+		local TempW = CreateWar(FP)
+		local TempW2 = CreateWar(FP)
 		local TempCostV = CreateVar(FP)
+		local TempCostW = CreateWar(FP)
 		f_Read(FP,FArr(CostArr,FItem),TempCostV,nil,nil,1)
-		CSub(FP,TempV,FFrag,FfragU)
-		CSub(FP,TempV2,TempV,1)
-		CTrigger(FP, {CV(TempV2,TempCostV,AtMost)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
+		f_LMov(FP,TempCostW,{TempCostV,0},nil,nil,1)
+		f_LSub(FP,TempW,FFrag,FfragU)
+		f_LSub(FP,TempW2,TempW,"1")
+		CIfX(FP,{TTNWar(TempW,AtLeast,TempCostW)},{AddV(FItem,1)})
+		f_LAdd(FP,FfragU,FfragU,{TempCostV,0})
+		CElseX()
+		CTrigger(FP, {TTNWar(TempW2,AtMost,TempCostW)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
 		CTrigger(FP, {CV(FItem,UpMax,AtLeast)}, {SetCD(cntC,0),SetCD(failC,2)},{preserved})
-		CTrigger(FP, {CV(TempV,TempCostV,AtLeast),CD(failC,0)}, {AddV(FfragU,TempCostV),AddV(FItem,1)},{preserved})
+		CIfXEnd()
+		NJumpEnd(FP,BCan)
 	CWhileEnd()
 	CIf(FP,{LocalPlayerID(CP)})
 	f_Read(FP,FArr(CostArr,FItem),CostLoc,nil,nil,1)
@@ -1537,7 +1621,15 @@ function SigmaT(max,Func)
 	end
 	return t
 end
+
+function SigmaDPT(max,Func)
+	local t={0}
+	for i = 1, max do
+		t[i+1] = t[i]+Func(i)
+	end
+	return t
+end
 function CreateCostData(Max,SFunc)
-	return {f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1),Max}
+	return {f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1),Max,f_GetFileArrptr(FP,SigmaDPT(Max,SFunc),4,1)}
 
 end

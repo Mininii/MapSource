@@ -948,8 +948,15 @@ function Install_CallTriggers()
 	
 	
 	for j,k in pairs(LocalDataArr) do
-		local LocPVA = GetVArray(k[1], 7)
-		CMovX(FP,k[2],VArrX(LocPVA,VArrI,VArrI4),nil,nil,nil,1)
+		if k[1][4]=="V" then
+			local LocPVA = GetVArray(k[1], 7)
+			CMovX(FP,k[2],VArrX(LocPVA,VArrI,VArrI4),nil,nil,nil,1)
+		elseif k[1][4]=="W" then
+			local LocPWA = GetWArray(k[1], 7)
+			f_LMovX(FP, k[2], WArrX(LocPWA, WArrI,WArrI4), SetTo, nil,nil, 1)
+		else
+			PushErrorMsg("LocalDataArr_InputError")
+		end
 	end
 	
 
