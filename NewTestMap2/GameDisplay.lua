@@ -279,8 +279,8 @@ function GameDisplay()
 		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 193+10,308+10),CD(MStat,1)},{SetV(SWAPB,0x1B)},{preserved})
 
 		
-		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x40000)},{preserved})
-		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 64, 178),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x30000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000)},{preserved})
+		TriggerX(FP,{VRange(InterfaceNumLoc, 256, 512),MLine(mmY,4),VRange(mmX, 64, 178),CD(CDFnc2,1)},{SetMemory(0x58F504,SetTo,0x10000)},{preserved})
 		
 
 
@@ -396,7 +396,7 @@ function GameDisplay()
 			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,S_BossSTicLoc,10)
 			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 10개 \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +1업 \x08MAX 50 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +2업 \x08MAX 50 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,UpgradeLoc,10)
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -436,7 +436,7 @@ function GameDisplay()
 			DisplayPrint(LCP, {"\x075. \x0F+3 \x08강화확률 2 \x0F+0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
 			--DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
-			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 100 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 1000 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,3)})
 			CMov(FP,GEVar,S_TotalEPer4XLoc)
@@ -478,7 +478,7 @@ function GameDisplay()
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 \x19유닛 판매권\x04을 얻습니다."),
-			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x081레벨당 5천만 \x04입니다."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x082레벨당 5천만 \x04입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
 			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1로 합산, 적용됩니다."),

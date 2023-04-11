@@ -86,14 +86,13 @@ CIf(FP,{HumanCheck(i, 1),CD(SCA.LoadCheckArr[i+1],2),CD(AddLV5Cool2[i+1],1,AtLea
 CIf(FP,{CV(iv.Stat_BossLVUP[i+1],1,AtLeast)})
 f_LMov(FP, TempWX, "0", nil, nil, 1)
 CMov(FP,StartLV,PLevel[i+1])
-CAdd(FP,EndLV,PLevel[i+1],_Sub(_Add(iv.Stat_BossLVUP[i+1],iv.Stat_BossLVUP[i+1]),1))
+CAdd(FP,EndLV,PLevel[i+1],_Add(iv.Stat_BossLVUP[i+1],iv.Stat_BossLVUP[i+1]))
 CallTrigger(FP, Call_GetLevelEXP)
 CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({iv.Stat_BossLVUP[i+1],0}, "50000000"))})
 f_LMov(FP, TempWX, _LMul({iv.Stat_BossLVUP[i+1],0}, "50000000"))
 CIfEnd()
 f_LAdd(FP, iv.PEXP[i+1], iv.PEXP[i+1], TempWX)
-f_Cast(FP, {TempEXPV,0}, TempWX, nil, nil, 1)
-DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"업\x04 으로 얻은 경험치 : \x1C",TempEXPV," \x07』"})
+DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
 CIfEnd()
 
 

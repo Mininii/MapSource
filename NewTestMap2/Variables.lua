@@ -181,6 +181,7 @@ end
 	SCA.FfragItem64 = SCA.CreateVar(FP)
 	SCA.FfragItemUsed64 = SCA.CreateVar(FP)
 	SCA.FStatVer = SCA.CreateVar(FP)
+	SCA.PLevel2 = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -230,6 +231,9 @@ end
 	LimitM = CreateCcodeArr(7)
 	LimitSaveEnable = CreateCcode()
 	--Interface
+	
+	VArrI,VArrI4 = CreateVars(2,FP)
+	WArrI,WArrI4,GCPW = CreateWars(3,FP)
 	DPErT = CreateVarArr(7,FP)
 	TestShop = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
 	ShopPtr = CreateVarArr(7, FP) -- 테스트용이었는데 잘작동해서 유닛 자판기에 사용중
@@ -251,6 +255,13 @@ end
 	Names = CreateVArrArr(7, 7, FP) -- 각 플레이어 이름 저장용
 
 	ELevel = CreateVar(FP)--현재 강화중인 레벨
+
+	
+	CntCArr = CreateCcodeArr(8)
+	failCcode = CreateCcode()
+
+	TempFfragTotal = CreateWar(FP)
+
 	--EExp = CreateVar(FP)
 	ECP = CreateVar(FP) -- 강화 제어용 변수. 현재 강화중인 플레이어를 저장함
 	GEper = CreateVar(FP) -- 강화 제어용 변수. 해당플레이어의 +1강 확률을 저장함
@@ -622,9 +633,11 @@ end
 	--	EXPArr[i] = 10+((i-1)*(i*3))
 	--end
 	--SRTable = {5000,50000,100000,200000,500000}
-	EXPArr = CreateLArr(LevelLimit+1, FP)
+	--EXPArr = CreateLArr(LevelLimit+1, FP)
 	--EXPArr = f_GetFileArrptr(FP,EXPArr,4,1)
 	
+	EXPArr = f_GetFileptr(FP, "expdata", 1)
+	EXPArr_dp = f_GetFileptr(FP, "expdata_dp", 1)
 	--SRTable = f_GetFileArrptr(FP,SRTable,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
@@ -910,22 +923,22 @@ FirstReward3 = {
 
 
 --	--{Max,FileArr}
-	Cost_FXPer44 = CreateCostData(500,function(n) return 1+((n-1)*(n*1)) end)
-	--마스터 10.0% = 30만, 컴플리트 50.0% 4000만
-	Cost_FXPer45 = CreateCostData(500,function(n) return 1+((n-1)*(n*4)) end)
-	--마스터 10.0% = 130만, 컴플리트 50.0% 1.6억
-	Cost_FXPer46 = CreateCostData(500,function(n) return 1+((n-1)*(n*7)) end)
-	--마스터 10.0% = 230만, 컴플리트 50.0% 3억
-	Cost_FXPer47 = CreateCostData(500,function(n) return 1+((n-1)*(n*10)) end)
-	--마스터 10.0% = 330만, 컴플리트 50.0% 4.4억
-	Cost_FMEPer = CreateCostData(200,function(n) return 500+((n-1)*(n*900)) end)
-	--마스터 5.0% = 3750만, 컴플리트 20.0% 10억
-	Cost_FIncm = CreateCostData(1000,function(n) return n*10 end)
+	Cost_FXPer44 = CreateCostData(100,function(n) return 1+((n-1)*(n*1)) end)
+	--마스터 10.0% = 30만, 
+	Cost_FXPer45 = CreateCostData(100,function(n) return 1+((n-1)*(n*4)) end)
+	--마스터 10.0% = 130만,
+	Cost_FXPer46 = CreateCostData(100,function(n) return 1+((n-1)*(n*7)) end)
+	--마스터 10.0% = 230만, 
+	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
+	--마스터 10.0% = 330만, 
+	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*1)*n) end)
+	--마스터 1.0% = 2500만, 컴플리트 3.0% 20억
+	Cost_FIncm = CreateCostData(999,function(n) return n*10 end)
 	--컴플리트 10000% = 5000만
 	Cost_FSEXP = CreateCostData(1000,function(n) return 100+(2*n) end)
 	--컴플리트 10000% = 110만
-	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*8)*n) end)
-	--컴플리트 15.0% = 10억
+	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*20)*n) end)
+	--컴플리트 15.0% = 25억
 
 --	Cost_FXPer44 = 10
 --	Cost_FXPer45 = 40

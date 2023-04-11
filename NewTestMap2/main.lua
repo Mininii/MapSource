@@ -21,16 +21,20 @@ end
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
-		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
-		InitEXTLua()
+		if dir ~= "recover.lua" then
+			InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
+			InitEXTLua()
+		end
      end
 end
 
 EXTLUA = "dir \""..Curdir.."\\MapSource\\NewTestMap2\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "main.lua" then
-		InitEXTLua = assert(loadfile(Curdir.."MapSource\\NewTestMap2\\"..dir))
-		InitEXTLua()
+		if dir ~= "recover.lua" then
+			InitEXTLua = assert(loadfile(Curdir.."MapSource\\NewTestMap2\\"..dir))
+			InitEXTLua()
+		end
      end
 end
 ------------------------------------------------------------------------------------------------------------------------------
@@ -48,7 +52,7 @@ SpeedTestMode = 0
 end
 FP = P8
 LimitVer = 22
-StatVer = 12
+StatVer = 14
 StatVer2 = 1
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})

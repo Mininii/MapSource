@@ -250,6 +250,7 @@ function DataArr()
 
 	
 	iv.FStatVer,ct.FStatVer = CreateDataPV("FStatVer",SCA.FStatVer)
+	iv.PLevel2,ct.PLevel2 = CreateDataPV("PLevel2",SCA.PLevel2)
 
 
 	LocalDataArr = {

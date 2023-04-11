@@ -191,7 +191,7 @@ function TBL()
 	end
 	DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
 	CIfXEnd()
-	TriggerX(FP, {CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
+	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
 	
 	
 	

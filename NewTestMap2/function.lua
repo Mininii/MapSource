@@ -1547,8 +1547,34 @@ function SCA_DataSave(Player,Source,Destptr) --Source == W then Use DestUnit, De
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
 	end
-	
 end
+
+
+function SCA_DataLoadG(Player,Dest,Sourceptr) --Dest == W then Use SourceUnit, SourceUnit+1
+	if Dest[1][4]=="V" then
+		f_Read(FP,_Add(Sourceptr,_Mul(Player,_Mov(18))),VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4))
+	elseif Dest[1][4]=="W" then
+		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
+		f_LRead(FP, {_Add(Sourceptr[1],_Mul(Player,_Mov(18))),_Add(Sourceptr[2],_Mul(Player,_Mov(18)))}, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), nil, 1)
+	else
+		PushErrorMsg("SCA_Dest_Inputdata_Error")
+	end
+end
+function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
+	if Source[1][4]=="V" then
+		CDoActions(FP, {TSetMemory(_Add(Destptr,_Mul(Player,_Mov(18))), SetTo, VArrX(GetVArray(Source[1], 7),VArrI,VArrI4))})
+	elseif Source[1][4]=="W" then
+		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
+		CDoActions(FP, {
+			TSetMemory(_Add(Destptr[1],_Mul(Player,_Mov(18))), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
+			TSetMemory(_Add(Destptr[2],_Mul(Player,_Mov(18))), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
+		})
+	else
+		PushErrorMsg("SCA_Source_Inputdata_Error")
+	end
+end
+
+
 function CreateDataPV(DataName,SCADeathData,LocOp)
 	local Ret = CreateVarArr(7,FP)
 	local Ret2 = CreateVarArr(7,FP)
@@ -1586,30 +1612,33 @@ function CIfChkVar(Var)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd Ç
 	CMov(FP,CurVar,Var)
 	
 end
-function FragBuyFnc(CP,FFrag,FfragU,FItem,Cost,CostLoc,cntC,failC)
+function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 	local CostArr = Cost[1]
 	local UpMax = Cost[2]
+	local GetItemData = CreateVar(FP)
+	CMovX(FP, GetItemData, VArrX(GetVArray(FItem[1],7), VArrI, VArrI4), SetTo, nil, nil, 1)
 	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
 		local BCan = def_sIndex()
-		NJump(FP,BCan,{CV(FItem,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
+		NJump(FP,BCan,{CV(GetItemData,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
 		local TempW = CreateWar(FP)
 		local TempW2 = CreateWar(FP)
 		local TempCostV = CreateVar(FP)
 		local TempCostW = CreateWar(FP)
-		f_Read(FP,FArr(CostArr,FItem),TempCostV,nil,nil,1)
+		f_Read(FP,FArr(CostArr,GetItemData),TempCostV,nil,nil,1)
 		f_LMov(FP,TempCostW,{TempCostV,0},nil,nil,1)
-		f_LSub(FP,TempW,FFrag,FfragU)
+		f_LSub(FP,TempW,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4))
 		f_LSub(FP,TempW2,TempW,"1")
-		CIfX(FP,{TTNWar(TempW,AtLeast,TempCostW)},{AddV(FItem,1)})
-		f_LAdd(FP,FfragU,FfragU,{TempCostV,0})
+		CIfX(FP,{TTNWar(TempW,AtLeast,TempCostW)},{AddV(GetItemData,1)})
+		f_LAdd(FP,WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),{TempCostV,0})
 		CElseX()
 		CTrigger(FP, {TTNWar(TempW2,AtMost,TempCostW)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
-		CTrigger(FP, {CV(FItem,UpMax,AtLeast)}, {SetCD(cntC,0),SetCD(failC,2)},{preserved})
+		CTrigger(FP, {CV(GetItemData,UpMax,AtLeast)}, {SetCD(cntC,0),SetCD(failC,2)},{preserved})
 		CIfXEnd()
 		NJumpEnd(FP,BCan)
+		CMovX(FP, VArrX(GetVArray(FItem[1],7),VArrI, VArrI4), GetItemData, SetTo, nil, nil, 1)
 	CWhileEnd()
-	CIf(FP,{LocalPlayerID(CP)})
-	f_Read(FP,FArr(CostArr,FItem),CostLoc,nil,nil,1)
+	CIf(FP,{TMemory(0x512684, Exactly, iv.LCP)})
+	f_Read(FP,FArr(CostArr,GetItemData),CostLoc,nil,nil,1)
 	CIfEnd()
 	
 end

@@ -1,4 +1,50 @@
-    EXPArr = {}
+
+local Strchar = string.char
+local b32band = bit32.band
+local b32rshift = bit32.rshift
+local tconcat = table.concat
+function dwwrite(dword)
+	return Strchar(b32band(dword,0xFF),b32rshift(b32band(dword,0xFF00),8),b32rshift(b32band(dword,0xFF0000),16),b32rshift(b32band(dword,0xFF000000),24))
+end
+
+function SaveFileArr(FileArray,ElementSize,FileName)
+	local FilePath = "expdata\\"..FileName
+	local Fileptr = io.open(FilePath, "wb")
+    assert(Fileptr~=nil, FilePath.." Can't be Open!")
+
+	local FileSTR = ""
+	local STRLength = 0
+    for i = 1, #FileArray do
+    	if ElementSize == 1 then
+	    	FileSTR = FileSTR .. string.char(FileArray[i])
+	    	STRLength = STRLength + 1
+	    elseif ElementSize == 2 then
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8))
+	    	STRLength = STRLength + 2
+	    elseif ElementSize == 3 then
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16))
+	    	STRLength = STRLength + 3
+	    elseif ElementSize == 4 then
+	    	FileSTR = FileSTR .. string.char(bit32.band(FileArray[i], 0xFF),bit32.rshift(bit32.band(FileArray[i], 0xFF00),8),bit32.rshift(bit32.band(FileArray[i], 0xFF0000),16),bit32.rshift(bit32.band(FileArray[i], 0xFF000000),24))
+	    	STRLength = STRLength + 4
+	    else
+	    	SaveFileArr_InputData_Error()
+		end
+		if STRLength >= 4096 then
+    		Fileptr:write(FileSTR)
+    		STRLength = 0
+    		FileSTR = ""
+    	end
+    end
+    if STRLength >= 1 then
+    	Fileptr:write(FileSTR)
+    end
+    local size = Fileptr:seek("end")
+	io.close(Fileptr)
+	return size
+end
+
+EXPArr = {}
 --	for i = 1, 100000 do
 --        local XI = 3
 --		EXPArr[i] = 10+((i-1)*(i*XI))
@@ -8,17 +54,41 @@
     mw3 = 6
     cci=0
     
-for i = 1, 200000 do
+for i = 1, 200001 do
    -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
-    mw2=mw2+mw
     mw=mw+mw3
+    mw2=mw2+mw
     cci = cci + 1
     if i >50000 and cci>=10 then
         mw3 = mw3+1
         cci = 0
     end
 end
+EXPArr4 = {}--¿œπ›
+EXPArr4_2 = {0,0,0,0}--dp
+to = 0
+for i = 1, 200001 do
+    local ex = EXPArr[i]
+    to = to + ex
+    local idx = (i-1)*4
+    local idx2 = (i)*4
+    EXPArr4[idx+1] = (math.floor(ex%4294967296))
+    EXPArr4[idx+2] = math.floor(ex/4294967296)
+    EXPArr4[idx+3] = 0
+    EXPArr4[idx+4] = 0
+    EXPArr4_2[idx2+1] = (math.floor(to%4294967296))
+    EXPArr4_2[idx2+2] = math.floor(to/4294967296)
+    EXPArr4_2[idx2+3] = 0
+    EXPArr4_2[idx2+4] = 0
+end
+
+
+
+
+
+SaveFileArr(EXPArr4,4,"expdata")
+SaveFileArr(EXPArr4_2,4,"expdata_dp")
 
     function exp(lv)
         total = 0

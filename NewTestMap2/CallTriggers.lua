@@ -235,7 +235,7 @@ function Install_CallTriggers()
 	SetCall(FP)
 	if TestStart == 1 then
 		GetEPer = CreateVar(FP)
-		CIfX(FP,{KeyPress("F12", "Down")})
+		CIfX(FP,{KeyPress("F11", "Down")})
 		CMov(FP,GetEPer,1)
 		CElseX()
 		GetEPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
@@ -362,30 +362,30 @@ function Install_CallTriggers()
 	CT_PrevLMulW = CreateWar(FP)
 	CT_NextLMulW = CreateWar(FP)
 
-	local CheatTestJump = def_sIndex()
-	CIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,LevelLimit-1,AtMost)},{}) -- 경험치 치팅 검사
-	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
-	f_LRead(FP, LArrX({EXPArr},CTLIndex), CT_PrevLMulW, nil, 1)
-	CJumpEnd(FP, CheatTestJump)
-	NIf(FP,{TTNWar(CTPEXP,AtLeast,CTTotalExp),CV(CTPLevel,LevelLimit-1,AtMost)},{AddV(CTPLevel,1)}) -- 경험치 치팅 검사
-	ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 1), 8)
-	f_LRead(FP, LArrX({EXPArr},CTLIndex), CT_NextLMulW, nil, 1)
-	f_LAdd(FP, CTTotalExp, CTTotalExp, CT_NextLMulW)
+	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 150), 8)--151 포커스
+	f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTCurEXP, nil, 1)
+	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 151), 8)--151 포커스
+	f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTTotalExp, nil, 1)
+
 	
-	--ConvertLArr(FP, CTLIndex, _Sub(CTPLevel, 2), 8)
-	--f_LRead(FP, LArrX({EXPArr},CTLIndex), TempReadW, nil, 1)
-	f_LAdd(FP, CTCurEXP, CTCurEXP, CT_PrevLMulW)
-	f_LMov(FP, CT_PrevLMulW, CT_NextLMulW)
-
-
-	--f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,1)),TempReadV,nil,nil,1)
-	--f_LAdd(FP, CTTotalExp, CTTotalExp, {TempReadV,0})
-	--f_Read(FP,FArr(EXPArr,_Sub(CTPLevel,2)),TempReadV,nil,nil,1)
-	--f_LAdd(FP, CTCurEXP, CTCurEXP, {TempReadV,0})
-	CAdd(FP,CTStatP,5)
-	CJump(FP, CheatTestJump)
-	NIfEnd()
-	CIfEnd()
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx2)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx3[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx3)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer3[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer4[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer4)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer4X[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer4X)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_BreakShield[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_BreakShield)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_BreakShield2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_BreakShield2)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer44[1], 7), VArrI, VArrI4),_Mov(10)),_Mov(Cost_Stat_XEPer44)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer45[1], 7), VArrI, VArrI4),_Mov(10)),_Mov(Cost_Stat_XEPer45)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer46[1], 7), VArrI, VArrI4),_Mov(10)),_Mov(Cost_Stat_XEPer46)))
+	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer47[1], 7), VArrI, VArrI4),_Mov(10)),_Mov(Cost_Stat_XEPer47)))
+	CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_BossSTic[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_BossSTic)))
+	CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_LV3Incm[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_LV3Incm)))
+	CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_Upgrade[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_Upgrade)))
+	CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_BossLVUP[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_BossLVUP)))
 
 
 	SetCallEnd()
@@ -422,8 +422,6 @@ function Install_CallTriggers()
 	G_BtnFnm = CreateVar(FP)
 	G_PushBtnm = CreateVar(FP)
 	GCP = CreateVar(FP)
-	VArrI,VArrI4 = CreateVars(2,FP)
-	WArrI,WArrI4,GCPW = CreateWars(3,FP)
 	Call_BtnFnc = SetCallForward()
 	local GetPUnitLevel = CreateVar(FP)
 	local GetPUnitCool = CreateVar(FP)
@@ -972,18 +970,20 @@ function Install_CallTriggers()
 	StartLV = CreateVar(FP)
 	EndLV = CreateVar(FP)
 	local TempW = CreateWar(FP)
+	local TempW2 = CreateWar(FP)
 	Call_GetLevelEXP = SetCallForward()
 	SetCall(FP)
-	local GEXPJump = def_sIndex()
-	NJumpEnd(FP, GEXPJump)
 	
-	ConvertLArr(FP, LIndex, _Sub(StartLV, 1), 8)
-	f_LRead(FP, LArrX({EXPArr},LIndex), TempW, nil, 1)
-	f_LAdd(FP, TempWX, TempWX, TempW)
+	ConvertLArr(FP, LIndex, _Add(StartLV, 150), 8)--151 포커스
+	f_LRead(FP, LArrX({EXPArr_dp},LIndex), TempW, nil, 1) -- start
+
+	ConvertLArr(FP, LIndex, _Add(EndLV, 150), 8)--151 포커스
+	f_LRead(FP, LArrX({EXPArr_dp},LIndex), TempW2, nil, 1) -- start
+
+
+	f_LSub(FP, TempWX, TempW2, TempW)
 
 	CAdd(FP,StartLV,1)
-
-	NJump(FP, GEXPJump, {CV(StartLV,EndLV,AtMost)})
 
 
 	SetCallEnd()
@@ -1016,7 +1016,95 @@ function Install_CallTriggers()
 	end
 	SetCallEnd()
 
-if TestStart == 1 then
+	Call_SCA_DataSaveAll = SetCallForward()
+	SetCall(FP)
+	for j,k in pairs(SCA_DataArr) do
+		SCA_DataSaveG(GCP,k[1],k[2])
+	end
+	SetCallEnd()
+	Call_SCA_DataLoadAll = SetCallForward()
+	SetCall(FP)
+	for j,k in pairs(SCA_DataArr) do
+		SCA_DataLoadG(GCP,k[1],k[2])
+	end
+	SetCallEnd()
+
+	Call_FfragShop = SetCallForward()
+	SetCall(FP)
 	
-end
+	FragBuyFnc(iv.FXPer44,Cost_FXPer44,iv.Cost_FXPer44Loc,CntCArr[1],failCcode)
+	FragBuyFnc(iv.FXPer45,Cost_FXPer45,iv.Cost_FXPer45Loc,CntCArr[2],failCcode)
+	FragBuyFnc(iv.FXPer46,Cost_FXPer46,iv.Cost_FXPer46Loc,CntCArr[3],failCcode)
+	FragBuyFnc(iv.FXPer47,Cost_FXPer47,iv.Cost_FXPer47Loc,CntCArr[4],failCcode)
+	FragBuyFnc(iv.FIncm,Cost_FIncm,iv.Cost_FIncmLoc,CntCArr[5],failCcode)
+	FragBuyFnc(iv.FSEXP,Cost_FSEXP,iv.Cost_FSEXPLoc,CntCArr[6],failCcode)
+	FragBuyFnc(iv.FBrSh,Cost_FBrSh,iv.Cost_FBrShLoc,CntCArr[7],failCcode)
+	FragBuyFnc(iv.FMEPer,Cost_FMEPer,iv.Cost_FMEPerLoc,CntCArr[8],failCcode)
+	SetCallEnd()
+
+
+	Call_FCT = SetCallForward()
+	SetCall(FP)
+	GetData_FXPer44 = CreateVar(FP)
+	GetData_FXPer45 = CreateVar(FP)
+	GetData_FXPer46 = CreateVar(FP)
+	GetData_FXPer47 = CreateVar(FP)
+	GetData_FMEPer = CreateVar(FP)
+	GetData_FIncm = CreateVar(FP)
+	GetData_FSEXP = CreateVar(FP)
+	GetData_FBrSh = CreateVar(FP)
+	DoActionsX(FP, {
+		SetV(GetData_FXPer44,0),
+		SetV(GetData_FXPer45,0),
+		SetV(GetData_FXPer46,0),
+		SetV(GetData_FXPer47,0),
+		SetV(GetData_FMEPer,0),
+		SetV(GetData_FIncm,0),
+		SetV(GetData_FSEXP,0),
+		SetV(GetData_FBrSh,0),
+	})
+	CMovX(FP,GetData_FXPer44,VArrX(GetVArray(iv.FXPer44[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FXPer45,VArrX(GetVArray(iv.FXPer45[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FXPer46,VArrX(GetVArray(iv.FXPer46[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FXPer47,VArrX(GetVArray(iv.FXPer47[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FMEPer,VArrX(GetVArray(iv.FMEPer[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FIncm,VArrX(GetVArray(iv.FIncm[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FSEXP,VArrX(GetVArray(iv.FSEXP[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FBrSh,VArrX(GetVArray(iv.FBrSh[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FXPer44[3],GetData_FXPer44)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FXPer45[3],GetData_FXPer45)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FXPer46[3],GetData_FXPer46)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FXPer47[3],GetData_FXPer47)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FMEPer[3],GetData_FMEPer)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FIncm[3],GetData_FIncm)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FSEXP[3],GetData_FSEXP)),0})
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_Read(FArr(Cost_FBrSh[3],GetData_FBrSh)),0})
+	CTrigger(FP, {TTNWar(TempFfragTotal,NotSame,WArrX(GetWArray(iv.FfragItemUsed[1],7), WArrI, WArrI4))}, {SetCDX(iv.FStatTest,1,1)},1)
+	CTrigger(FP, {TTNWar(TempFfragTotal,">",WArrX(GetWArray(iv.FfragItem[1],7), WArrI, WArrI4))}, {SetCDX(iv.FStatTest,2,2)},1)
+	CTrigger(FP, {TTNWar(WArrX(GetWArray(iv.FfragItemUsed[1],7), WArrI, WArrI4),">",WArrX(GetWArray(iv.FfragItem[1],7), WArrI, WArrI4))}, {SetCDX(iv.FStatTest,4,4)},1)
+
+	if Limit == 1 then
+		local TempW = CreateWar(FP)
+		local TempW2 = CreateWar(FP)
+		f_LMovX(FP, TempW, WArrX(GetWArray(iv.FfragItemUsed[1],7), WArrI, WArrI4), SetTo, nil, nil, 1)
+		f_LMovX(FP, TempW2, WArrX(GetWArray(iv.FfragItem[1],7), WArrI, WArrI4), SetTo, nil, nil, 1)
+		CIf(FP,{CDX(iv.FStatTest,1,1)})
+			DisplayPrint(GCP, {"\x12\x04TempFfragTotal : ",TempFfragTotal,"  FfragItemUsed : ",TempW})
+		CIfEnd()
+		CIf(FP,{CDX(iv.FStatTest,2,2)})
+		DisplayPrint(GCP, {"\x12\x04TempFfragTotal : ",TempFfragTotal,"  FfragItem : ",TempW2})
+		CIfEnd()
+		CIf(FP,{CDX(iv.FStatTest,4,4)})
+		DisplayPrint(GCP, {"\x12\x04FfragItemUsed : ",TempW,"  FfragItem : ",TempW2})
+		CIfEnd()
+	end
+	TriggerX(FP,{CV(GetData_FXPer44,Cost_FXPer44[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FXPer45,Cost_FXPer45[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FXPer46,Cost_FXPer46[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FXPer47,Cost_FXPer47[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FMEPer,Cost_FMEPer[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FIncm,Cost_FIncm[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FSEXP,Cost_FSEXP[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FBrSh,Cost_FBrSh[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	SetCallEnd()
 end
