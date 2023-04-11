@@ -8,8 +8,8 @@ function dwwrite(dword)
 end
 
 function SaveFileArr(FileArray,ElementSize,FileName)
-	local FilePath = "expdata\\"..FileName
-	local Fileptr = io.open(FilePath, "wb")
+	local FilePath = FileName
+	local Fileptr = io.open("C:\\Temp\\"..FilePath, "wb")
     assert(Fileptr~=nil, FilePath.." Can't be Open!")
 
 	local FileSTR = ""

@@ -431,14 +431,15 @@ for i = 0, 6 do -- 각플레이어
 		CMov(FP,CTStatP,_Mul(iv.PLevel2[i+1],_Mov(5)))
 		CMov(FP,CTPLevel,iv.PLevel2[i+1])
 		CallTrigger(FP,Call_CT)
-		CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCD(StatTest,1)})
+		CTrigger(FP, {TTNVar(CTStatP,NotSame,CTStatP2)}, {SetCDX(StatTest,1,1)})
 		CIfX(FP,{CV(iv.MapMakerFlag[i+1],0)})
-			CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCD(StatTest,2)})
+			CTrigger(FP, {TTNVar(CTPLevel,NotSame,PLevel[i+1])}, {SetCDX(StatTest,2,2)})
 		CElseX()
 			CTrigger(FP, {}, {SetV(PLevel[i+1],CTPLevel)})
 		CIfXEnd()
-		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCD(StatTest,3)})
-		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCD(StatTest,4)})
+		CTrigger(FP, {TTNWar(CTCurEXP,NotSame,CurEXP[i+1])}, {SetCDX(StatTest,4,4)})
+		CTrigger(FP, {TTNWar(CTTotalExp,NotSame,TotalExp[i+1])}, {SetCDX(StatTest,8,8)})
+		
 		local StatTestJump = def_sIndex()
 		NJump(FP, StatTestJump, CD(StatTest,1,AtLeast))
 		NElseX()--새 스탯 버전이 감지될 경우 치팅감지 작동X, 스탯을 초기화함
@@ -446,8 +447,9 @@ for i = 0, 6 do -- 각플레이어
 
 		CTrigger(FP, {TTNVar(PStatVer[i+1], NotSame, StatVer)}, {SetCp(i),
 		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),}, 1)
-		for h = 1, 4 do
-			CTrigger(FP, {CD(StatTest,h)}, {SetCp(i),
+		for h = 1, 5 do
+			local NBit = 2^(h-1)
+			CTrigger(FP, {CDX(StatTest,NBit,NBit)}, {SetCp(i),
 			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),}, 1)
 		end
 		CIf(FP,CD(StatTest,1,AtLeast))
