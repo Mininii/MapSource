@@ -42368,7 +42368,7 @@ function TSetKills(Player, Modifier, Number, Unit)
 		end
 	else
 		if type(Player) == "number" then
-			return TSetDeaths(0x5878A4+Player*4,Modifier,Number,Unit)
+			return TSetDeaths(EPD(0x5878A4)+Player,Modifier,Number,Unit)
 		else
 			return TSetDeaths(Vi(Player[2],EPD(0x5878A4),Player[1],Player[3]),Modifier,Number,Unit)
 		end
@@ -55472,6 +55472,7 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 				flag = {Preserved}
 			}
 		else
+			local RecoverNextArr = {}
 			for i = 1, #iStrid do
 				Trigger {
 					players = {PlayerID},
@@ -55486,11 +55487,13 @@ function CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction
 						SetCtrigX(iStrid[i][1][1],iStrid[i][1][2],0x158,iStrid[i][1][3],SetTo,CB[1][1],CB[1][2],0x15C,1,CB[1][3]);
 						SetCtrig1X(iStrid[i][1][1],iStrid[i][1][2],0x148,iStrid[i][1][3],SetTo,0xFFFFFFFF);
 						SetCtrig1X(iStrid[i][1][1],iStrid[i][1][2],0x160,iStrid[i][1][3],SetTo,SetTo*16777216,0xFF000000);
-						CallLabelAlways(iStrid[i][1][1],iStrid[i][1][2],iStrid[i][1][3]);
+						CallLabel1(iStrid[i][1][1],iStrid[i][1][2],iStrid[i][1][3]);
 					},
 					flag = {Preserved}
 				}
+				table.insert(RecoverNextArr,CallLabel2(iStrid[i][1][1],iStrid[i][1][2],iStrid[i][1][3]))
 			end
+			DoActionsX(PlayerID,RecoverNextArr)
 		end
 	CIfEnd()
 
@@ -55635,6 +55638,7 @@ function CBPrint(iTblid,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
 				flag = {Preserved}
 			}
 		else
+			local RecoverNextArr = {}
 			for i = 1, #iTblid do
 				Trigger {
 					players = {PlayerID},
@@ -55649,11 +55653,13 @@ function CBPrint(iTblid,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
 						SetCtrigX(iTblid[i][1][1],iTblid[i][1][2],0x158,iTblid[i][1][3],SetTo,CB[1][1],CB[1][2],0x15C,1,CB[1][3]);
 						SetCtrig1X(iTblid[i][1][1],iTblid[i][1][2],0x148,iTblid[i][1][3],SetTo,0xFFFFFFFF);
 						SetCtrig1X(iTblid[i][1][1],iTblid[i][1][2],0x160,iTblid[i][1][3],SetTo,SetTo*16777216,0xFF000000);
-						CallLabelAlways(iTblid[i][1][1],iTblid[i][1][2],iTblid[i][1][3]);
+						CallLabel1(iTblid[i][1][1],iTblid[i][1][2],iTblid[i][1][3]);
 					},
 					flag = {Preserved}
 				}
+				table.insert(RecoverNextArr,CallLabel2(iTblid[i][1][1],iTblid[i][1][2],iTblid[i][1][3]))
 			end
+			DoActionsX(PlayerID,RecoverNextArr)
 		end
 	CIfEnd()
 
@@ -97828,7 +97834,7 @@ function f_PatchSTRxArr(PlayerID)
 	end
 
 	Trigger {
-		players = {CurrentPlayer,PlayerID},
+		players = {13,PlayerID},
 		conditions = {
 			Label(FuncAlloc);
 			Never();

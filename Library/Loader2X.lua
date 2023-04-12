@@ -52,7 +52,6 @@ function Trigger(args)
 	if args.conditions then
 		args.conditions = FlattenList(args.conditions)
 		CCount = 16-#args.conditions
-		assert(#args.conditions<=16, "TRIG Conditions Was Too Many. Current Conditions : "..#args.conditions)
 		for k, v in pairs(args.conditions) do
 			dwwrite(v[1])
 			dwwrite(v[2])
@@ -81,7 +80,6 @@ function Trigger(args)
 	local ACount = 64
 	if args.actions then
 		args.actions = FlattenList(args.actions)
-		assert(#args.actions<=64, "TRIG Actions Was Too Many. Current Actions : "..#args.actions)
 		ACount = 64-#args.actions
 		for k, v in pairs(args.actions) do
 			dwwrite(v[1])
@@ -140,23 +138,24 @@ function Trigger(args)
 
 	if args.players then
 		args.players = FlattenList(args.players)
-		local VP = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} -- P1~P12 All F1~F4
+		local VP = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} -- P1~P12 "13~17" All F1~F4 
 		for k, v in pairs(args.players) do
 			if type(v) == "number" then
 				VP[v+1] = 1
 			elseif v == AllPlayers then
-				VP[13] = 1
+				VP[18] = 1
 			elseif v == Force1 then
-				VP[14] = 1
+				VP[19] = 1
 			elseif v == Force2 then
-				VP[15] = 1
+				VP[20] = 1
 			elseif v == Force3 then
-				VP[16] = 1
+				VP[21] = 1
 			elseif v == Force4 then
-				VP[17] = 1
+				VP[22] = 1
 			end
 		end
-		for i = 1, 12 do
+
+		for i = 1, 17 do
 			if VP[i] == 1 then
 				TRIGStr[TI] = "\x01"
 				TI=TI+1
@@ -165,9 +164,9 @@ function Trigger(args)
 				TI=TI+1
 			end
 		end
-		TRIGStr[TI] = "\0\0\0\0\0"
-		TI=TI+1
-		for i = 13, 17 do
+		--TRIGStr[TI] = "\0\0\0\0\0"
+		--TI=TI+1
+		for i = 18, 22 do
 			if VP[i] == 1 then
 				TRIGStr[TI] = "\x01"
 				TI=TI+1
@@ -447,4 +446,62 @@ function __PopStringArray()
 	__DoActions2(12,ActArr)
 end
 
+function StartSTRCtrig()
+    if BatMode ~= 0 then
+        local Batptr = io.open(Mapdir..".bat", "w")
+        if BatMode == 1 then
+	        Batptr:write("STRCtrigAssembler.exe \""..Mapdir..".scx\"")
+	    else 
+	    	Batptr:write("STRCtrigAssembler_nopause.exe \""..Mapdir..".scx\"")
+	    end
+        io.close(Batptr)
+
+        __Trigger {
+            players = {AllPlayers},
+            conditions = {
+                Disabled(Condition(0, 0, 0, 0, 10, 253, 0, 2));
+            },
+            flag = {preserved},
+        }
+    end
+end
+
+function EndSTRCtrig()
+    if BatMode ~= 0 then
+        __Trigger { 
+            players = {AllPlayers},
+            conditions = {
+                Disabled(Condition(0, 0, 0, 0, 10, 252, 0, 2));
+            },
+            flag = {preserved},
+        }
+    end
+end
+
 __InitTrigger()
+
+function __LoadLuaFiles(Path)
+    for dir in io.popen("dir \""..Path.."\" /b"):lines() do
+        if dir:match "%.[Ll][Uu][Aa]$" and (dir ~= "Loader2X.lua" and dir ~= "LoaderX.lua" and dir ~= "Loader2.lua" and dir ~= "Loader.lua") then
+            InitEXTLua = assert(loadfile(Path..dir))
+            InitEXTLua()
+        elseif (dir ~= "Loader2X.lua" and dir ~= "LoaderX.lua" and dir ~= "Loader2.lua" and dir ~= "Loader.lua") then
+            __LoadLuaFiles(Path..dir.."\\")
+        end
+    end
+end
+
+
+function __LoadLuaFilesX(Path)
+    for dir in io.popen("dir \""..Path.."\" /b"):lines() do
+        if dir:match "%.[Ll][Uu][Aa]$" and not(dir:match "[Mm][Aa][Ii][Nn].[Ll][Uu][Aa]") then
+            InitSUBLua = assert(loadfile(Path..dir))
+            InitSUBLua()
+        elseif not(dir:match "[Mm][Aa][Ii][Nn].[Ll][Uu][Aa]") then
+            __LoadLuaFilesX(Path..dir.."\\")
+        end
+    end
+end
+
+
+--↑ 외부루아 불러오기----------------------------------------------------------------------------------------------------------------------
