@@ -1110,4 +1110,115 @@ function Install_CallTriggers()
 	TriggerX(FP,{CV(GetData_FSEXP,Cost_FSEXP[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	TriggerX(FP,{CV(GetData_FBrSh,Cost_FBrSh[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	SetCallEnd()
+
+	
+	Ga_45 = {
+		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",1,500,iv.Money2},
+		{"\x1F확정 강화권",5,1000,iv.PETicket},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+		{"\x1041강 유닛",5,20000,iv.E41},
+		{"\x1140강 유닛",5,30000,iv.E40},
+	}
+
+	Ga_46 = {
+		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",1,500,iv.Money2},
+		{"\x1F확정 강화권",5,1000,iv.PETicket},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+		{"\x1041강 유닛",5,20000,iv.E41},
+		{"\x1140강 유닛",5,30000,iv.E40},
+	}
+
+	Ga_47 = {
+		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",1,500,iv.Money2},
+		{"\x1F확정 강화권",5,1000,iv.PETicket},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+		{"\x1041강 유닛",5,20000,iv.E41},
+		{"\x1140강 유닛",5,30000,iv.E40},
+	}
+
+	Ga_48 = {
+		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",1,500,iv.Money2},
+		{"\x1F확정 강화권",5,1000,iv.PETicket},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+		{"\x1041강 유닛",5,20000,iv.E41},
+		{"\x1140강 유닛",5,30000,iv.E40},
+	}
+
+	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48}
+
+
+	Call_Gacha = SetCallForward()
+	GaLv = CreateVar(FP)
+	SetCall(FP)
+	if TestStart == 1 then
+		GetGPer = CreateVar(FP)
+		CIfX(FP,{KeyPress("F11", "Down")})
+		CMov(FP,GetGPer,1)
+		CElseX()
+		GetGPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+		CMov(FP,GetGPer,GetGPer2)
+		CIfXEnd()
+		
+		--GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	else
+		GetGPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
+	end
+
+	if Limit == 1 then -- 테스트용 결과 출력
+		CIf(FP,{KeyPress("F12", "Down")})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
+			for i = 45, 48 do
+				TriggerX(FP, CV(GaLv,i), {DisplayText("\x08"..i.."강 유닛 뽑기 시도", 4)},{preserved})
+			end
+			DisplayPrint(ECP,{"\x04출력된 난수 : ",GetGPer})
+		CIfEnd()
+	end
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
+pifrag = {1,4,7,10}
+pifrag2 = {
+	"\x1C45강",
+	"\x1E46강",
+	"\x0247강",
+	"\x1B48강"}
+for i = 45, 48 do
+	local TotalGPer = 1	
+	local errt = "\n"
+	CIf(FP,{CV(GaLv,i)})
+	for j,k in pairs(GaArr[i-44]) do
+		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
+		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
+		CTrigger(FP, {}, {DisplayText(StrDesignX((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."),4)}, 1)
+		if j == 1 then
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+
+		end
+		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+		CIfEnd()
+		TotalGPer = TotalGPer+k[3]
+	end
+	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
+	CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
+	errt = errt..(TotalGPer).."  100000\n" -- 꽝일경우
+	--error(errt)
+	DoActions(FP,{DisplayText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
+
+	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+	CIfEnd()
+
+end
+
+
+
+	SetCallEnd()
+	Call_DailyPrint = SetCallForward()
+	SetCall(FP)
+	DV = CreateVar(FP)
+	DisplayPrint(GCP, {"\x13\x07『 \x04현재까지 시즌 2 출석 이벤트 출석일수 : \x07",DV,"일 \x07』"})
+	SetCallEnd()
+
+
 end

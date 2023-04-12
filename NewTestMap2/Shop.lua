@@ -117,6 +117,23 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 		CIfEnd()
+		
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,167)},{MoveUnit(1, 15, i, 167, 168)})
+		
+			CIfX(FP,{CV(iv.PETicket[i+1],MulOp[i+1],AtLeast)},{})
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CSub(FP,iv.PETicket[i+1],MulOp[i+1])
+				CAdd(FP,iv.B_PFfragItem[i+1],_Mul(MulOp[i+1],_Mov(10)))
+				CMov(FP,iv.MissionV[i+1],2048,nil,2048)
+				CIf(FP,{LocalPlayerID(i)})
+				local TempV = CreateVar(FP)
+				CMov(FP,TempV,_Mul(MulOp[i+1],_Mov(10)))
+				DisplayPrint(LCP, {"\x13\x07『 \x1F확정 강화권\x04을 ",MulOp[i+1],"개 사용하여 ",TempV," \x02무색 조각\x04으로 \x07변환 \x04하였습니다. \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",iv.PETicket[i+1]," 개의 \x1F확정 강화권 보유중 \x07』"})
+				CIfEnd()
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x1F확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
 
 
 	end

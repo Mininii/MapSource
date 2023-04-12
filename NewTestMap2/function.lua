@@ -811,8 +811,12 @@ function DisplayPrint(TargetPlayers,arg)
 		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 			if k[2] == "LocalPlayerID" then
 				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
-			else
+			elseif type(k[2])=="number" then
 				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
+			elseif k[2][4] == "V" then
+				CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+				CMov(FP,dp.VtoNameV,k[2])
+				CallTrigger(FP, dp.Call_VtoName)
 			end
 			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
@@ -848,6 +852,96 @@ function DisplayPrint(TargetPlayers,arg)
 		DoActions2(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)})
 	end
 end
+
+
+--function DisplayPrint(TargetPlayers,arg) -- ext text ver
+--	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
+--		f_SaveCp()
+--	end--
+
+--	local BSize = 0
+--	for j,k in pairs(arg) do -- StrSizeCalc
+--		if type(k) == "string" then
+--			local CT = GetStrSize(0,k)
+--			BSize=BSize+CT
+--		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+--			BSize = BSize+(4*5)
+--		elseif type(k)=="table" and k[4]=="V" then
+--			BSize=BSize+(4*4)
+--		elseif type(k)=="table" and k[4]=="W" then
+--			BSize=BSize+(4*5)
+--		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+--			BSize = BSize+#k
+--		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+--			BSize=BSize+1
+--		else
+--			PushErrorMsg("Print_Inputdata_Error")
+--		end
+--	end
+--	local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
+--	
+--	if ExtTextArr[StrT] == nil then
+--		ExtTextArr[StrT] = ExtTextIndex
+--		ExtTextFile[ExtTextIndex] = StrT
+--		ExtTextIndex = ExtTextIndex + 1
+--	end--
+
+--	local StrKey = ExtTextArr[StrT]
+--	local RetV = CreateVar(FP)
+--	local Dev = 0
+--	table.insert(dp.StrXKeyArr,{RetV,StrKey})
+--	dp.StrXIndex=dp.StrXIndex+1
+--	for j,k in pairs(arg) do
+--		if type(k) == "string" then
+--			local CT = CreateCText(FP,k)
+--			table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
+--			Dev=Dev+CT[2]
+--		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+--			if k[2] == "LocalPlayerID" then
+--				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
+--			elseif type(k[2])=="number" then
+--				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
+--			elseif k[2][4] == "V" then
+--				CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+--				CMov(FP,dp.VtoNameV,k[2])
+--				CallTrigger(FP, dp.Call_VtoName)
+--			end
+--			Dev=Dev+(4*5)
+--		elseif type(k)=="table" and k[4]=="V" then
+--			CMov(FP,dp.publicItoDecV,k)
+--			CallTrigger(FP,dp.Call_IToDec)
+--			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
+--			Dev=Dev+(4*4)
+--		elseif type(k)=="table" and k[4]=="W" then
+--			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+--			CallTrigger(FP,dp.Call_lIToDec)
+--			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
+--			Dev=Dev+(4*5)
+--		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+--			for o,p in pairs(k) do
+--				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
+--				Dev=Dev+(1)
+--			end--
+
+--		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+--			CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
+--			Dev=Dev+(1)--
+
+--		else
+--			PushErrorMsg("Print_Inputdata_Error")
+--		end
+--	end
+--	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
+--		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)})
+--	elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
+--		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)})--
+
+--	else
+--		DoActions2X(FP,{RotatePlayer({Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},TargetPlayers,FP)})
+--	end
+--end
+
+
 
 function print_utf8_2(line, offset, string)
     local ret = {}
@@ -973,6 +1067,16 @@ function init_Setting()
 	SetCall2(FP, dp.Call_IToDec)
 	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,0)
 	SetCallEnd2()
+
+	SetCall2(FP, dp.Call_VtoName)
+	for i = 0,6 do
+	CIf(FP,{CV(dp.VtoNameV,i)})
+	f_Movcpy(FP, dp.VtoNamePtr, dp.PNameVArrArr[i+1], 4*5)
+	CIfEnd()
+	end
+
+	SetCallEnd2()
+	
 	
 	SetCall2(FP, dp.Call_lIToDec)
 	DoActionsX(FP, {
@@ -1023,11 +1127,15 @@ function init_Setting()
 end
 
 function Start_init(LocOption)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
 	dp={}
 	dp.LocOption = LocOption
 	if dp.LocOption ~=nil then
 		dp.LPNameVArr = CreateVArr(5,FP)
 	end
+	dp.VPNameVArr = CreateVArr(5,FP)
 	dp.ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
 	dp.PNameVArrArr = CreateVArrArr(7, 5, FP)
 	dp.CustominitJump = def_sIndex()
@@ -1042,9 +1150,12 @@ function Start_init(LocOption)
 	dp.publicItoDecVArr =CreateVArr(4,FP)
 	dp.publicItoDecV = CreateVar(FP)
 	dp.Call_IToDec = CreateCallIndex()
+	dp.Call_VtoName = CreateCallIndex()
 	
 	dp.publiclItoDecVArr =CreateVArr(5,FP)
 	dp.publiclItoDecW = CreateWar(FP)
+	dp.VtoNamePtr = CreateVar(FP)
+	dp.VtoNameV = CreateVar(FP)
 	dp.Call_lIToDec = CreateCallIndex()
 	
 function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1

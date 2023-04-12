@@ -497,14 +497,21 @@ function TBL()
 
 	CIf(FP,{CD(YKey,1)})
 	CMov(FP,0x6509B0,LCP)
-
-	CIf(FP,{CD(XEperFlag,3)},{DisplayText(StrDesignX("45°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	function GaTxt(Ga_Arr)
+		local Txt = ""
+		for j,k in pairs(Ga_Arr) do
+			Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04°³ - \x07"..(k[3]/1000).." %").."\n"
+		end
+		return Txt
+	end
+	
+	CIf(FP,{CD(XEperFlag,3)},{DisplayText(StrDesignX("\x1C45°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x041°³ ±âº»Áö±Þ)").."\n"..GaTxt(Ga_45), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,4)},{DisplayText(StrDesignX("46°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIf(FP,{CD(XEperFlag,4)},{DisplayText(StrDesignX("\x1E46°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x044°³ ±âº»Áö±Þ)").."\n"..GaTxt(Ga_46), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,5)},{DisplayText(StrDesignX("47°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIf(FP,{CD(XEperFlag,5)},{DisplayText(StrDesignX("\x0247°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x047°³ ±âº»Áö±Þ)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,6)},{DisplayText(StrDesignX("48°­ À¯´Ö »Ì±â È®·üÇ¥").."\n", 4)})
+	CIf(FP,{CD(XEperFlag,6)},{DisplayText(StrDesignX("\x1B48°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x0410°³ ±âº»Áö±Þ)").."\n"..GaTxt(Ga_48), 4)})
 	CIfEnd()
 
 	--[[
