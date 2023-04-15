@@ -61,13 +61,13 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 AddLV5Cool2=CreateCcodeArr(7)
 for i = 0, 4 do
 	Trigger2X(FP,{CV(BossLV,5+i,AtLeast)},{
-		SetV(B_PCredit[1],25000-(i*5000));
-		SetV(B_PCredit[2],25000-(i*5000));
-		SetV(B_PCredit[3],25000-(i*5000));
-		SetV(B_PCredit[4],25000-(i*5000));
-		SetV(B_PCredit[5],25000-(i*5000));
-		SetV(B_PCredit[6],25000-(i*5000));
-		SetV(B_PCredit[7],25000-(i*5000));
+		AddV(B_PCredit[1],25000-(i*5000));
+		AddV(B_PCredit[2],25000-(i*5000));
+		AddV(B_PCredit[3],25000-(i*5000));
+		AddV(B_PCredit[4],25000-(i*5000));
+		AddV(B_PCredit[5],25000-(i*5000));
+		AddV(B_PCredit[6],25000-(i*5000));
+		AddV(B_PCredit[7],25000-(i*5000));
 		AddCD(AddLV5Cool2[1],1),
 		AddCD(AddLV5Cool2[2],1),
 		AddCD(AddLV5Cool2[3],1),
