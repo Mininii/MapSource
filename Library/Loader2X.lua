@@ -9,7 +9,8 @@ local Strchar = string.char
 local b32band = bit32.band
 local b32rshift = bit32.rshift
 local tconcat = table.concat
-
+CurTrigCnt = 0
+CurTrigTotal = 0
 function __InitTrigger()
 	__TRIGChkptr:write("TRIG\0\0\0\0") -- Header
 
@@ -183,6 +184,8 @@ function Trigger(args)
 	end
 	
 	args.callerLine = debug.getinfo(2).currentline
+	CurTrigCnt = CurTrigCnt + 1
+	CurTrigTotal = CurTrigTotal + 1 
 end
 
 function __Trigger(args)
