@@ -107,7 +107,7 @@ function TBL()
 	CMov(FP,SelPl,0)
 	f_Read(FP,0x6284B8,nil,SelEPD)
 	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
-	CMov(FP,SelUID,_Read(_Add(SelEPD,25)),nil,0xFF,1)
+	CMov(FP,SelUID,_ReadF(_Add(SelEPD,25)),nil,0xFF,1)
 	
 	CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
 	
@@ -121,7 +121,7 @@ function TBL()
 		NElseIfX({CV(SelUID,k[2])},{
 			SetV(SelPer,k[3]);SetCD(SellTicketFlag,0),
 		})
-		TriggerX(FP, {CV(SelPl,7)}, {DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4)},{preserved})
+		TriggerX(FP, {CV(SelPl,7)}, {DisplayExtText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4)},{preserved})
 		f_LMov(FP, SelEXP, tostring(k[4])  ,nil,nil, 1)
 		if j>=26 then
 			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(SellTicketFlag,1)},{preserved})
@@ -176,7 +176,7 @@ function TBL()
 	CElseX()
 	CTrigger(FP,{
 		CV(SelUID,215),
-	},{TSetMemory(0x6509B0, SetTo, LCP),DisplayText("\n\n\n\n\n\n\n"..
+	},{TSetMemory(0x6509B0, SetTo, LCP),DisplayExtText("\n\n\n\n\n\n\n"..
 	StrDesignX("\x17독도").."\n"..
 	StrDesignX("\x04독도는 동해의 남서부, 울릉도와 오키 제도 사이에 위치한 동도와 서도를 포함해").."\n"..
 	StrDesignX("\x04총 91개의 크고 작은 섬들로 이루어져 있는 대한민국의 섬이다. ").."\n"..
@@ -187,11 +187,11 @@ function TBL()
 	local BossLV = iv.BossLV-- CreateVar(FP)
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP)})
 	for i = 0, 4 do
-		TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*5000).." 크레딧 \x04입니다."), 4)},{preserved})
+		TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayExtText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*5000).." 크레딧 \x04입니다."), 4)},{preserved})
 	end
 	DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
 	CIfXEnd()
-	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
+	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 감소합니다."), 4)},{preserved})
 	
 	
 	
@@ -505,13 +505,13 @@ function TBL()
 		return Txt
 	end
 	
-	CIf(FP,{CD(XEperFlag,3)},{DisplayText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x041개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
+	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x041개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,4)},{DisplayText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x044개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
+	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x044개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,5)},{DisplayText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x047개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
+	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x047개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,6)},{DisplayText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x0410개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
+	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x0410개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
 	CIfEnd()
 
 	--[[
@@ -540,9 +540,9 @@ function TBL()
 			DoActions(FP, RemoveUnit(94,FP))
 		CIfEnd()
 		DoActionsX(FP,{SetCD(TBLFlag,0)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
 		--	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
 	--		L = CreateVar()
 	--		CIfOnce(FP)
@@ -569,7 +569,7 @@ function TBL()
 	--if TestStart == 0 and Limit == 1 then
 	--	Trigger2X(FP, {Memory(0x6D0F38,AtLeast,GlobalTime);},  {
 	--		RotatePlayer({
-	--			DisplayTextX(StrDesignX("\x1B테스트 기간이 종료되었습니다. 이용해주셔서 대단히 감사합니다.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1B추후 정식버전 업데이트에서 뵙겠습니다."),4);
+	--			DisplayExtText(StrDesignX("\x1B테스트 기간이 종료되었습니다. 이용해주셔서 대단히 감사합니다.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1B추후 정식버전 업데이트에서 뵙겠습니다."),4);
 	--		Defeat();
 	--		},Force1,FP);
 	--		Defeat();

@@ -551,7 +551,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	CIfXEnd()
 
 	f_LAdd(FP, TotalDPS, TotalDPS, {DpsDest,0})
-	f_LSub(FP, TotalDPS, TotalDPS, {_Read(ArrX(DPSArrX,DPSCheck2)),0})
+	f_LSub(FP, TotalDPS, TotalDPS, {_ReadF(ArrX(DPSArrX,DPSCheck2)),0})
 	CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
 	CIfX(FP,{CV(TotalDPS,4*4,AtLeast)})
 	f_Div(FP, TotalDPS2,TotalDPS,4*4)
@@ -773,6 +773,7 @@ function CS__InputTA(Player,Condition,SVA1,Value,Mask,Flag)
 	if Flag == nil then Flag = {preserved} elseif Flag == 1 then Flag = {} end
 	TriggerX(Player,Condition,{SetCSVA1(SVA1,SetTo,Value,Mask)},Flag)
 end
+--[[
 function DisplayPrint(TargetPlayers,arg)
 	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
 		f_SaveCp()
@@ -852,94 +853,92 @@ function DisplayPrint(TargetPlayers,arg)
 		DoActions2(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)})
 	end
 end
+]]
 
+function DisplayPrint(TargetPlayers,arg) -- ext text ver
+	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
+		f_SaveCp()
+	end--
+	local BSize = 0
+	for j,k in pairs(arg) do -- StrSizeCalc
+		if type(k) == "string" then
+			local CT = GetStrSize(0,k)
+			BSize=BSize+CT
+		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+			BSize = BSize+(4*5)
+		elseif type(k)=="table" and k[4]=="V" then
+			BSize=BSize+(4*4)
+		elseif type(k)=="table" and k[4]=="W" then
+			BSize=BSize+(4*5)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			BSize = BSize+#k
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			BSize=BSize+1
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
+	
+	if ExtTextArr[StrT] == nil then
+		ExtTextArr[StrT] = ExtTextIndex
+		ExtTextFile[ExtTextIndex] = StrT
+		ExtTextIndex = ExtTextIndex + 1
+	end--
 
---function DisplayPrint(TargetPlayers,arg) -- ext text ver
---	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
---		f_SaveCp()
---	end--
-
---	local BSize = 0
---	for j,k in pairs(arg) do -- StrSizeCalc
---		if type(k) == "string" then
---			local CT = GetStrSize(0,k)
---			BSize=BSize+CT
---		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
---			BSize = BSize+(4*5)
---		elseif type(k)=="table" and k[4]=="V" then
---			BSize=BSize+(4*4)
---		elseif type(k)=="table" and k[4]=="W" then
---			BSize=BSize+(4*5)
---		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
---			BSize = BSize+#k
---		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
---			BSize=BSize+1
---		else
---			PushErrorMsg("Print_Inputdata_Error")
---		end
---	end
---	local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
---	
---	if ExtTextArr[StrT] == nil then
---		ExtTextArr[StrT] = ExtTextIndex
---		ExtTextFile[ExtTextIndex] = StrT
---		ExtTextIndex = ExtTextIndex + 1
---	end--
-
---	local StrKey = ExtTextArr[StrT]
---	local RetV = CreateVar(FP)
---	local Dev = 0
---	table.insert(dp.StrXKeyArr,{RetV,StrKey})
---	dp.StrXIndex=dp.StrXIndex+1
---	for j,k in pairs(arg) do
---		if type(k) == "string" then
---			local CT = CreateCText(FP,k)
---			table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
---			Dev=Dev+CT[2]
---		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
---			if k[2] == "LocalPlayerID" then
---				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
---			elseif type(k[2])=="number" then
---				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
---			elseif k[2][4] == "V" then
---				CAdd(FP,dp.VtoNamePtr,RetV,Dev)
---				CMov(FP,dp.VtoNameV,k[2])
---				CallTrigger(FP, dp.Call_VtoName)
---			end
---			Dev=Dev+(4*5)
---		elseif type(k)=="table" and k[4]=="V" then
---			CMov(FP,dp.publicItoDecV,k)
---			CallTrigger(FP,dp.Call_IToDec)
---			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
---			Dev=Dev+(4*4)
---		elseif type(k)=="table" and k[4]=="W" then
---			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
---			CallTrigger(FP,dp.Call_lIToDec)
---			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
---			Dev=Dev+(4*5)
---		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
---			for o,p in pairs(k) do
---				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
---				Dev=Dev+(1)
---			end--
-
---		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
---			CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
---			Dev=Dev+(1)--
-
---		else
---			PushErrorMsg("Print_Inputdata_Error")
---		end
---	end
---	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
---		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)})
---	elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
---		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)})--
-
---	else
---		DoActions2X(FP,{RotatePlayer({Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},TargetPlayers,FP)})
---	end
---end
+	local StrKey = ExtTextArr[StrT]
+	local ExtTextTrigIdx = dp.Alloc
+	dp.Alloc = dp.Alloc+1
+	local RetV = CreateVar(FP)
+	local Dev = 0
+	table.insert(dp.ExtTextDataArr,{RetV,ExtTextTrigIdx})
+	dp.StrXIndex=dp.StrXIndex+1
+	for j,k in pairs(arg) do
+		if type(k) == "string" then
+			local CT = CreateCText(FP,k)
+			table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
+			Dev=Dev+CT[2]
+		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+			if k[2] == "LocalPlayerID" then
+				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
+			elseif type(k[2])=="number" then
+				table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
+			elseif k[2][4] == "V" then
+				CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+				CMov(FP,dp.VtoNameV,k[2])
+				CallTrigger(FP, dp.Call_VtoName)
+			end
+			Dev=Dev+(4*5)
+		elseif type(k)=="table" and k[4]=="V" then
+			CMov(FP,dp.publicItoDecV,k)
+			CallTrigger(FP,dp.Call_IToDec)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
+			Dev=Dev+(4*4)
+		elseif type(k)=="table" and k[4]=="W" then
+			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+			CallTrigger(FP,dp.Call_lIToDec)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
+			Dev=Dev+(4*5)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			for o,p in pairs(k) do
+				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
+				Dev=Dev+(1)
+			end
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
+			Dev=Dev+(1)
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},nil,ExtTextTrigIdx)
+	elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},nil,ExtTextTrigIdx)
+	else
+		DoActionsX(FP,{RotatePlayer({Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},TargetPlayers,FP)},nil,ExtTextTrigIdx)
+	end
+end
 
 
 
@@ -1031,6 +1030,13 @@ function init_StrX()
 	for k, v in pairs(dp.StrXKeyArr) do
 		f_GetStrXptr(FP,v[1],v[2])
 	end
+	CheckTrig("init_StrX_1")
+	for k, v in pairs(dp.ExtTextDataArr) do
+		f_GetStrXptr(FP,v[1],_ReadF({FP,v[2],CAddr("Str",2),0}))
+	end
+	CheckTrig("init_StrX_2")
+	
+	
 	for k, v in pairs(dp.StrXPatchArr) do -- STRXPtr,Deviation,CTextData
 		if v[2]==0 then
 			f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
@@ -1131,6 +1137,14 @@ function Start_init(LocOption)
 		Need_STRCTRIGASM()
 	end
 	dp={}
+	dp.Alloc = 0xC000
+	dp.AllocLimit = 0xF000
+	
+	function dp.SetAlloc(Start,End)
+		dp.Alloc = Start
+		dp.AllocLimit = End
+	end
+
 	dp.LocOption = LocOption
 	if dp.LocOption ~=nil then
 		dp.LPNameVArr = CreateVArr(5,FP)
@@ -1157,6 +1171,7 @@ function Start_init(LocOption)
 	dp.VtoNamePtr = CreateVar(FP)
 	dp.VtoNameV = CreateVar(FP)
 	dp.Call_lIToDec = CreateCallIndex()
+	dp.ExtTextDataArr = {}
 	
 function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 	for j=0, VArrLength do
@@ -1238,8 +1253,8 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1261,8 +1276,8 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1291,8 +1306,8 @@ function WarCheatTestX(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1386,16 +1401,16 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 				TriggerX(FP,{LocalPlayerID(p)},{{
 					SetCp(p),
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-					DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+					DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);}})
 			end
 		else
 			TriggerX(FP,{LocalPlayerID(Player)},{{
 				SetCp(Player),
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-				DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+				DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 				SetMemory(0xCDDDCDDC,SetTo,1);}})
 				
 		end
@@ -1407,9 +1422,9 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	if TestStart == 1 then
 		if Player == AllPlayers then Player = iv.LCP end
 		if VW[4] =="W" then
-			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayText(Text,4)})
+			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
 		else
-			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayText(Text,4)})
+			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
 		end
 		
 	end
@@ -1772,4 +1787,8 @@ end
 function CreateCostData(Max,SFunc)
 	return {f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1),Max,f_GetFileArrptr(FP,SigmaDPT(Max,SFunc),4,1)}
 
+end
+function CheckTrig(Name)
+TrigBench:write(Name.." : "..CurTrigCnt.."\n")
+CurTrigCnt = 0
 end

@@ -325,8 +325,8 @@ function GameDisplay()
 		end
 
 		DisplayPrint(LCP, {"\x07능력치 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [보석 설정 창으로 이동]\x12",PRVB[2],"[이전 페이지(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[다음 페이지(P)]"})--
-		TriggerX(FP, CV(ResetStatLoc,0), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStatLoc,1), {DisplayText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStatLoc,0), {DisplayExtText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x1F사용가능", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStatLoc,1), {DisplayExtText("\x1F[스탯초기화 \x175000 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+O\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 		CIf(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
 		
@@ -374,16 +374,16 @@ function GameDisplay()
 
 
 		DisplayPrint(LCP, {"\x1C보석 \x04설정. ",ESCB[2],"[나가기 클릭 또는 ESC]",SWAPB[2]," [스탯 설정 창으로 이동]\x12"})--
-		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayExtText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x1F사용가능", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayExtText("\x1C[보석초기화 \x1710만 크레딧 \x081시간이내 \x1141강미보유 1회만 \x04Ctrl+U\x1F] \x08사용불가", 4)}, {preserved})
 		CIfEnd()
 --		local TempLoc = CreateVar(FP)
 --		CIfX(FP, {CV(ResetStatLoc,4,AtMost)})
---		CMov(FP,TempLoc,_Read(ArrX(SRTable, ResetStatLoc)))
+--		CMov(FP,TempLoc,_ReadF(ArrX(SRTable, ResetStatLoc)))
 --		DisplayPrint(LCP, {"\x1F[스탯초기화 \x17",TempLoc,"크레딧 \x04사용 안했을 경우 \x081시간후 가격 상승 \x04Ctrl+O\x1F]"})
 --		
 --		CElseX()
---		DoActions(FP, {DisplayText("\x1F[스탯초기화 \x08사용불가\x1F] ", 4)})
+--		DoActions(FP, {DisplayExtText("\x1F[스탯초기화 \x08사용불가\x1F] ", 4)})
 --		CIfXEnd()
 
 
@@ -470,7 +470,11 @@ function GameDisplay()
 			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"특급 보석 ",FXPer47Loc,"개 ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," 개 궁극의 보석 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
 			local TempFf = CreateWar(FP)
 			f_LSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
-			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
+			if Limit == 0 then
+				CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
+			else
+				CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수 - \x03TESTMODE 조각 지급받기 \x04F12버튼\x08(1회만)", 4)})
+			end
 			DisplayPrint(LCP, {"\x13\x08",iv.FfragItemUsedLoc," \x04/ ",iv.FfragItemLoc," (\x07",TempFf,"\x04)"})
 		CIfXEnd()
 		DoActions(FP,{SetCp(FP)})
@@ -536,14 +540,15 @@ function GameDisplay()
 	local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")},nil,1)--누를 경우 설명서 출력
 	local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")},nil,1)--누를 경우 설명서 출력
 	local LToggle = CreateCcode()
+	DoActionsX(FP, {SetCD(LToggle,1)}, 1)
 	CTrigger(FP,{CD(PKey,1)},{SetCD(LKey,0)},1)
 	CTrigger(FP,{CD(KKey,1)},{SetCD(LKey,0)},1)
 	TriggerX(FP,{CD(BKey,1)},{SetCD(LKey,0)},{preserved})
 	TriggerX(FP,{CD(NKey,1)},{SetCD(LKey,0)},{preserved})
 	TriggerX(FP,{CD(MKey,1)},{SetCD(LKey,0)},{preserved})
-	CTrigger(FP,{CD(PKey,0),CD(KKey,0),CD(LToggle,0),CD(LKey,0)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n",4)},1)
+	CTrigger(FP,{CD(PKey,0),CD(KKey,0),CD(LToggle,0),CD(LKey,0)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\n\n\n\n\n\n\n",4)},1)
 	CTrigger(FP,{CD(LToggle,0),CD(LKey,0)},{SetCD(LToggle,1)},1)
-	--CTrigger(FP,{CD(LToggle,0),CD(LKey,1)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n\n",4)},1)
+	--CTrigger(FP,{CD(LToggle,0),CD(LKey,1)},{SetCD(LToggle,1),TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\n\n\n\n\n\n\n\n",4)},1)
 	CIf(FP,{CD(PKey,1)},{SetCD(LKey,0)})
 	
 
@@ -591,7 +596,7 @@ function GameDisplay()
 		CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
 		CMov(FP,CTimeV,PlayTimeLoc2)
 		CallTrigger(FP,Call_ConvertTime)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07테스트 버전 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07베타 테스트 버전 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 		CIfEnd()
 		
 		CMov(FP,CTimeV,PlayTimeLoc)
@@ -634,7 +639,7 @@ function GameDisplay()
 	
 			CIfEnd()
 		end
-		CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n",4)},1)
+		CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\n\n\n\n\n\n\n",4)},1)
 	CIfXEnd()
 	
 	
@@ -747,10 +752,10 @@ function GameDisplay()
 				t[i] = "\n"
 			end
 		end
-		TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayText(table.concat(t), 4)}, {preserved})
+		TriggerX(FP, {CV(PageNumLoc,j)}, {DisplayExtText(table.concat(t), 4)}, {preserved})
 	end
 	CIfEnd()
-	CTrigger(FP,{CD(TG,0)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayText("\n\n\n\n\n\n\n\n",4)},1)
+	CTrigger(FP,{CD(TG,0)},{TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\n\n\n\n\n\n\n\n",4)},1)
 	
 	
 	CIfEnd()
@@ -773,12 +778,12 @@ function GameDisplay()
 			SetV(iv.BuildMul1[i+1],OreDPSM[p]),
 			SetV(iv.NextOre[i+1],OreDPS[p+1]),
 			SetV(iv.NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-			DisplayText(StrDesignX("\x1BDPS\x1F(미네랄) \x08"..OreDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..OreDPSM[p].."배. "..NextT)),SetCp(FP)})--1번건물
+			DisplayExtText(StrDesignX("\x1BDPS\x1F(미네랄) \x08"..OreDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..OreDPSM[p].."배. "..NextT)),SetCp(FP)})--1번건물
 		TriggerX(FP,{CV(iv.TempG[i+1], GasDPS[p],AtLeast)},{
 			SetV(iv.BuildMul2[i+1],GasDPSM[p]),
 			SetV(iv.NextGas[i+1],GasDPS[p+1]),
 			SetV(iv.NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
-			DisplayText(StrDesignX("\x1BDPS\x07(가스) \x08"..GasDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..GasDPSM[p].."배. "..NextT2)),SetCp(FP)})--2번건물
+			DisplayExtText(StrDesignX("\x1BDPS\x07(가스) \x08"..GasDPS[p].." \x04돌파. 현재 돈 배수 : \x08"..GasDPSM[p].."배. "..NextT2)),SetCp(FP)})--2번건물
 		end
 		CIfEnd()
 

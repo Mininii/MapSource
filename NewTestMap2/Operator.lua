@@ -16,7 +16,7 @@ function Operator()
 	end
 
 	Trigger2X(FP, {CD(SCA.GReload,1)}, {SetCD(SCA.GReload,0),
-	RotatePlayer({DisplayTextX(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
+	RotatePlayer({DisplayExtText(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
 	SetCD(SCA.GlobalCheck,0),
 	SetCD(SCA.GlobalLoadFlag,0),
 	SetV(SCA.GlobalVarArr[1],0),
@@ -87,17 +87,17 @@ function Operator()
 	for i = 1,20 do
 		f_Read(FP, SCA.GlobalData[i], SCA.GlobalVarArr[i])
 	end
-	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],1,1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
-	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],2,2)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 2호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x17크레딧 50만, \x02무색 조각 5개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x02무색 조각 50개"),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],1,1)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],2,2)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 2호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x17크레딧 50만, \x02무색 조각 5개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x02무색 조각 50개"),4)}, Force1, FP)}, {preserved})
 	
-	Trigger2X(FP, {CV(SCA.GlobalVarArr[5],0)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CV(SCA.GlobalVarArr[5],0)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
 	
 	CIfEnd()
 	
 	TriggerX(FP,{CDX(SCA.GlobalLoadFlag,3,3),CD(SCA.GlobalCheck,2)},{SetCD(SCA.GlobalCheck,3)},{preserved})
 	CIf(FP, {TTOR({Memory(SCA.Month, AtMost, 0),Memory(SCA.GlobalData[1],AtMost,0)}),CD(SCA.Timer,24*60,AtLeast)},{SetCD(SCA.Timer,0)})
 	DoActions2X(FP, {
-		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06Global Data Load Faliure. Try Again..."), 4)}, Force1, FP),SetV(iv.Time3, 0),
+		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06Global Data Load Faliure. Try Again..."), 4)}, Force1, FP),SetV(iv.Time3, 0),
 		SetCD(SCA.GlobalCheck,0),
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),
@@ -119,7 +119,7 @@ function Operator()
 	end
 	CElseX()
 	DoActions2X(FP, {
-		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06날짜 데이터가 잘못되었습니다. 다시 불러옵니다."), 4)}, Force1, FP),SetV(iv.Time3, 0),
+		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06날짜 데이터가 잘못되었습니다. 다시 불러옵니다."), 4)}, Force1, FP),SetV(iv.Time3, 0),
 		SetCD(SCA.GlobalCheck,0),
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),

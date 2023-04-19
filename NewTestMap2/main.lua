@@ -39,9 +39,10 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
+
 VerText = "\x19ver\x07. \x042\x07.\x0414"
 
-TestSet(2)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 13
@@ -60,6 +61,7 @@ SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
+TrigBench = io.open(FileDirectory .. "TrigBenchmark" .. ".txt", "wb")
 
 Start_init(1)
 __SetIndexAlloc(0x4000, 0xA000)
@@ -93,7 +95,6 @@ init_Setting()
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
-
 os.execute("mkdir " .. "banflag")
 local CSfile = io.open(FileDirectory .. "banflag" .. ".txt", "w")
 io.output(CSfile)
@@ -106,7 +107,11 @@ for j,k in pairs(ctarr) do
 	
 	io.write("\n")
 end
+CheckTrig("EndTrig")
+
+TrigBench:write("Total Trig Count : "..CurTrigTotal.."\n")
 io.close(CSfile)
+io.close(TrigBench)
 
 if LD2XOption == 1 then
 __PopStringArray()

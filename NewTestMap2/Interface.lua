@@ -1,4 +1,5 @@
 function Interface()
+	CheckTrig("Interface_Forward")
 	--PlayData(NonSCA)
 	local Money = iv.Money-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
 	local Money2 = iv.Money2-- CreateWarArr(7,FP) -- 자신의 현재 돈 보유량
@@ -505,15 +506,16 @@ for i = 0, 6 do -- 각플레이어
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 		CElseX()--레벨이 0일 경우 이쪽으로
 		SCA_DataLoad(i,PlayTime2[i+1],SCA.PlayTime2)--구 이용시간 불러옴
-		CIf(FP,CV(PlayTime2[i+1],1,AtLeast),{SetV(ScTimer[i+1],0),RemoveUnit(88, i),SetCp(i),DisplayExtText(StrDesignX("\x04테스트 유저 특전으로 다음 보상을 드립니다. \x07다시한번 플레이해주셔서 감사합니다.").."\n"..StrDesignX("\x07기본유닛 6기\x04 지급. \x08주의 \x04: \x07기본유닛\x04은 게임 실행 1회에만 등장하며 3분 뒤 사라집니다."), 4),SetCp(FP)})
-			TriggerX(FP,{CV(PlayTime2[i+1],1,AtLeast)},{SetV(CreditAddSC[i+1],1),SetDeaths(i, SetTo, 1, 99)},{preserved})
+		SCA_DataLoad(i,iv.TesterFlag[i+1],SCA.TesterFlag)--테스터플래그 불러옴
+		TriggerX(FP,{CV(iv.TesterFlag[i+1],1,AtLeast)},{SetV(ScTimer[i+1],0),SetV(CreditAddSC[i+1],1),RemoveUnit(88, i),SetCp(i),DisplayExtText(StrDesignX("\x04테스트 유저 특전으로 다음 보상을 드립니다. \x07다시한번 플레이해주셔서 감사합니다.").."\n"..StrDesignX("\x07기본유닛 6기\x04 지급. \x08주의 \x04: \x07기본유닛\x04은 게임 실행 1회에만 등장하며 3분 뒤 사라집니다."), 4),SetCp(FP)})
+		CIf(FP,{CV(PlayTime2[i+1],1,AtLeast)},{SetV(ScTimer[i+1],0),RemoveUnit(88, i),SetCp(i),DisplayExtText(StrDesignX("\x04테스트 유저 특전으로 다음 보상을 드립니다. \x07다시한번 플레이해주셔서 감사합니다.").."\n"..StrDesignX("\x07기본유닛 6기\x04 지급. \x08주의 \x04: \x07기본유닛\x04은 게임 실행 1회에만 등장하며 3분 뒤 사라집니다."), 4),SetCp(FP)})
+			TriggerX(FP,{CV(PlayTime2[i+1],1,AtLeast)},{SetV(CreditAddSC[i+1],1),SetVX(iv.TesterFlag[i+1],1,1)},{preserved})
 			CMov(FP,CTimeV,PlayTime2[i+1])
 			CallTrigger(FP,Call_ConvertTime)
 			DoActions(FP,{SetCp(i)})
-			DisplayPrint("CP", {"\x13\x0D\x0D\x0D",PName("LocalPlayerID")," \x04님의 \x10테스트맵 \x04인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+			DisplayPrint("CP", {"\x13\x0D\x0D\x0D",PName("LocalPlayerID")," \x04님의 \x10베타 테스트맵 \x04인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 			DisplayPrint("CP", {"\x13\x04총 ",PlayTime2[i+1]," 초 이용으로 \x17",PlayTime2[i+1]," 크레딧\x04 지급됨"})
 			f_LAdd(FP,Credit[i+1],Credit[i+1],{PlayTime2[i+1],0}) -- 
-			
 		CIfEnd()
 			
 		CIfXEnd()
@@ -541,7 +543,7 @@ for i = 0, 6 do -- 각플레이어
 		CMov(FP,PUnitPtr[i+1],Nextptrs)
 		if Limit == 1 then --테스트 참가 유저 테스터유저 칭호 지급
 			TriggerX(FP, {}, {SetCp(i),DisplayExtText(StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다."), 4)}, {preserved})
-			TriggerX(FP, {CV(iv.TesterFlag[i+1],0)}, {SetV(iv.TesterFlag[i+1],1),SetCp(i),DisplayExtText(StrDesignX("\x07테스터 유저 칭호\x04가 지급되었습니다!!! 이 칭호는 영구 지급됩니다."), 4)}, {preserved})
+			TriggerX(FP, {CVX(iv.TesterFlag[i+1],0,2)}, {SetVX(iv.TesterFlag[i+1],2,2),SetV(iv.CreditAddSC[i+1],1),SetCp(i),DisplayExtText(StrDesignX("\x07테스터 보상\x04이 지급되었습니다!!!").."\n"..StrDesignX("보상내용 : \x04시즌2 \x1F테스터 \x04칭호(영구지급), \x17DPC(디스코드 코인)"), 4)}, {preserved})
 		end
 	CIfEnd()
 	
@@ -826,8 +828,8 @@ for i = 0, 6 do -- 각플레이어
 	
 
 
-	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x071번\x04으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
-	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x07기본\x04으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
+	--TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x071번\x04으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
+	--TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x07기본\x04으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	
 	
@@ -1060,7 +1062,6 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	f_Mul(FP,CS_EXPData[i+1],CS_EXP[i+1],2)
 	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],250)
 	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
-
 	f_Mul(FP,CS_BreakShieldData[i+1],CS_BreakShield[i+1],100)
 	
 	
@@ -1154,7 +1155,10 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 		TriggerX(FP, {Deaths(i,Exactly,0x30120+j,20)}, {SetCD(CntCArr[j+4],100)}, {preserved})
 	end
 	CallTrigger(FP, Call_FfragShop)
-
+	if Limit == 1 then
+		CallTriggerX(FP,Call_Print13[i+1],{MSQC_KeyInput(i, "F12")},nil,1)
+		TriggerX(FP,{CD(SCA.LoadCheckArr[i+1],2),MSQC_KeyInput(i, "F12")},{SetV(DPErT[i+1],24*10),AddV(iv.B_PFfragItem[i+1],10000),print_utf8(12,0,StrDesign("\x03TESTMODE OP \x04: \x02무색 조각 \x041만개 지급 완료.\x08(저장X)"))})
+	end
 
 
 
@@ -1211,8 +1215,8 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 				CallTrigger(FP,Call_Print13[i+1])
 				TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x1F스탯 초기화\x04를 사용할 수 없습니다.")) ,{preserved})
 
-			--CElseIfX({TTNWar(Credit[i+1], AtLeast, _LMov({_Read(ArrX(SRTable, ResetStat[i+1])),0}))})
-				--f_LSub(FP, Credit[i+1], Credit[i+1], _LMov({_Read(ArrX(SRTable, ResetStat[i+1])),0}))
+			--CElseIfX({TTNWar(Credit[i+1], AtLeast, _LMov({_ReadF(ArrX(SRTable, ResetStat[i+1])),0}))})
+				--f_LSub(FP, Credit[i+1], Credit[i+1], _LMov({_ReadF(ArrX(SRTable, ResetStat[i+1])),0}))
 			CElseIfX({TTNWar(Credit[i+1], AtLeast, "5000")})
 				f_LSub(FP, Credit[i+1], Credit[i+1], "5000")
 				DoActionsX(FP, {
@@ -1699,17 +1703,11 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
             CIfEnd()
         CIfEnd()
 	CIfEnd()
-
+	
 
 	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0),SetV(ResetStatLoc,0)}) -- CAPrint에 전송할 값들
 	CallTrigger(FP, Call_GetLocalData)
-	f_LMov(FP,MoneyLoc,Money[i+1])
-	f_LMov(FP,CredLoc,Credit[i+1])
-	f_LMov(FP,ExpLoc,_LSub(PEXP[i+1], CurEXP[i+1]),nil,nil,1)
-	f_LMov(FP,TotalExpLoc,_LSub(TotalExp[i+1], CurEXP[i+1]),nil,nil,1)
-	TriggerX(FP,{CD(StatEff[i+1],1)},{SetCD(StatEffLoc,1)},{preserved})
-	CMov(FP,ResetStatLoc,ResetStat[i+1])
-	CMov(FP,ResetStat2Loc,ResetStat2[i+1])
+	TriggerX(FP,{CD(iv.StatEff[i+1],1)},{SetCD(iv.StatEffLoc,1)},{preserved})
 	CIfEnd()
 	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1),SubV(EnchCool[i+1], 1)})
 		--핫키 QCUnit 등록방지
@@ -1743,12 +1741,12 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 					--local temp,TKey = ToggleFunc({KeyPress("T","Up"),KeyPress("T","Down")},nil,1)--
 					--local temp,YKey = ToggleFunc({KeyPress("Y","Up"),KeyPress("Y","Down")},nil,1)--
 					--local FID = CreateVar(FP)
-					--CMov(FP,FID,_Read(_Sub(BackupCp, 16)),nil,0xFF,1)
+					--CMov(FP,FID,_ReadF(_Sub(BackupCp, 16)),nil,0xFF,1)
 					--CTrigger(FP,{CD(TKey,1)},{TSetMemory(_Add(FID,EPD(0x6C9930)),Add,1)},1)
 					--CTrigger(FP,{CD(YKey,1)},{TSetMemory(_Add(FID,EPD(0x6C9930)),Subtract,1)},1)
 					--CIf(FP,{TTOR({CD(TKey,1),CD(YKey,1)})})
 					--local HD = CreateVar(FP)
-					--CMov(FP,HD,_Read(_Add(FID,EPD(0x6C9930))))
+					--CMov(FP,HD,_ReadF(_Add(FID,EPD(0x6C9930))))
 					--DisplayPrint(i, {"HaltDis : ",HD})
 					--CIfEnd()
 					--f_LoadCp()
@@ -1786,6 +1784,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		NElseIfX({CV(iv.MapMakerFlag[i+1],0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
 		CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
 		SCA_DataSave(i,iv.TesterFlag[i+1],SCA.TesterFlag)
+		SCA_DataSave(i,iv.CreditAddSC[i+1],SCA.CreditAddSC)
 		TriggerX(FP, {Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서는 테스트 기록 정보만 저장됩니다..."))}, {preserved})
 		
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
@@ -1794,9 +1793,11 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		NIfXEnd()
 		CIfEnd()
 	CIfEnd()
+	
+	CheckTrig("Interface_P"..(i+1))
 end
 
 
 
-
+CheckTrig("Interface_End")
 end

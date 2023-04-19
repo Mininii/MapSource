@@ -40,8 +40,8 @@ DoActions(FP, CTKillT)
 
 		f_SaveCp()
 		local TempUID = CreateVar(FP)
-		CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
-		CMov(FP,CPos,_Read(_Sub(BackupCp,45)))
+		CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
+		CMov(FP,CPos,_ReadF(_Sub(BackupCp,45)))
 		Convert_CPosXY()
 		DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
 		f_LoadCp()
@@ -49,7 +49,7 @@ DoActions(FP, CTKillT)
 	else
 		TriggerX(FP, {DeathsX(CurrentPlayer,Exactly,0x00000004,0 ,0x00000004 )}, {RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayTextX("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+			DisplayExtText("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 	end
 
@@ -88,11 +88,11 @@ DoActions(FP, CTKillT)
 --            local TempV2 = CreateVar(FP)
 --            local TempV3 = CreateVar(FP)
 --            local TempV4 = CreateVar(FP)
---            CMov(FP,TempV2,_Read(BackupCp),nil,0xFFFF0000,1)
---            CMov(FP,TempV3,_Read(_Add(BackupCp,1)),nil,0xFF,1)
---            CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
---            CMov(FP,TempV1,_Read(_Sub(UIDPtr,6)),nil,0xFF00,1)
---            CMov(FP,TempV4,_Read(_Sub(UIDPtr,17)),nil,0xFF,1)
+--            CMov(FP,TempV2,_ReadF(BackupCp),nil,0xFFFF0000,1)
+--            CMov(FP,TempV3,_ReadF(_Add(BackupCp,1)),nil,0xFF,1)
+--            CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
+--            CMov(FP,TempV1,_ReadF(_Sub(UIDPtr,6)),nil,0xFF00,1)
+--            CMov(FP,TempV4,_ReadF(_Sub(UIDPtr,17)),nil,0xFF,1)
 --            f_Div(FP,TempV1,256)
 --            DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  OrderID : ",TempV1,"  ","DefValue : ",TempV2,"   DefTimer : ",TempV3, "   MoveMentFlag : ",TempV4})--
 --            f_LoadCp()
@@ -104,8 +104,8 @@ DoActions(FP, CTKillT)
 --				
 --				f_SaveCp()
 --				local TempUID = CreateVar(FP)
---				CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
---				CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+--				CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
+--				CMov(FP,CPos,_ReadF(_Sub(BackupCp,15)))
 --				Convert_CPosXY()
 --				DisplayPrint(Force1, {"\x13\x04핵감지! CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
 --				f_LoadCp()
@@ -113,7 +113,7 @@ DoActions(FP, CTKillT)
 --		else
 --			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
 --				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
---				DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+--				DisplayExtText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 --			})
 --		end
 --		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
@@ -154,15 +154,15 @@ DoActions(FP, CTKillT)
 	if TestStart == 1 then
 		f_SaveCp()
 		local TempUID = CreateVar(FP)
-		CMov(FP,TempUID,_Read(UIDPtr,0xFF),nil,0xFF,1)
-		CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+		CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
+		CMov(FP,CPos,_ReadF(_Sub(BackupCp,15)))
 		Convert_CPosXY()
 		DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
 		f_LoadCp()
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayTextX("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayExtText("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
@@ -173,15 +173,15 @@ DoActions(FP, CTKillT)
 	if TestStart == 1 then
 		f_SaveCp()
 		local TempPID = CreateVar(FP)
-		CMov(FP,TempPID,_Read(PIDPtr,0xFF),nil,0xFF,1)
-		CMov(FP,CPos,_Read(_Sub(BackupCp,15)))
+		CMov(FP,TempPID,_ReadF(PIDPtr,0xFF),nil,0xFF,1)
+		CMov(FP,CPos,_ReadF(_Sub(BackupCp,15)))
 		Convert_CPosXY()
 		DisplayPrint(Force1, {"\x13\x04CurPID : ",TempPID,"  CT_CUnit : ",TempV2,"  ","X : ",CPosX,"   Y : ",CPosY})--
 		f_LoadCp()
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayTextX("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayExtText("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--

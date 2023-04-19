@@ -117,8 +117,8 @@ iTblJump = def_sIndex()
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit설정
 
 	T_YY = 2023
-	T_MM = 01
-	T_DD = 07
+	T_MM = 05
+	T_DD = 01
 	T_HH = 00
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
@@ -181,7 +181,7 @@ iTblJump = def_sIndex()
 		CDeaths(FP,Exactly,1,LimitX);
 		CDeaths(FP,Exactly,0,LimitC);}, {
 			RotatePlayer({
-				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				DisplayExtText(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 			Defeat();
 			},Force1,FP);
 			Defeat();
@@ -189,7 +189,7 @@ iTblJump = def_sIndex()
 	if TestStart == 0 then
 	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
 		RotatePlayer({
-			DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 		Defeat();
 		},Force1,FP);
 		Defeat();
@@ -200,11 +200,12 @@ iTblJump = def_sIndex()
 			Trigger { -- 게임오버
 				players = {FP},
 				conditions = {
+					Label(0);
 					MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
 				},
 				actions = {
 					RotatePlayer({
-					DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+					DisplayExtText("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 					Defeat();
 					},HumanPlayers,FP);
 					Defeat();
@@ -218,11 +219,12 @@ iTblJump = def_sIndex()
 		Trigger { -- 게임오버
 		players = {FP},
 		conditions = {
+			Label(0);
 			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			DisplayExtText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -232,11 +234,12 @@ iTblJump = def_sIndex()
 	Trigger { -- 게임오버
 		players = {FP},
 		conditions = {
+			Label(0);
 			MemoryX(0x57EEE8 + 36*7,Exactly,2,0xFF);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			DisplayExtText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -246,27 +249,33 @@ iTblJump = def_sIndex()
 	Trigger { -- 게임오버
 		players = {FP},
 		conditions = {
+			Label(0);
 			MemoryX(0x57EEE0 + (36*7)+8,AtLeast,1*256,0xFF00);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			DisplayExtText("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	if Limit == 1 then
-		Trigger2(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
-		Trigger2(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 종료되었으나 제작자가 게임에 참여중이므로 맵 실행 가능합니다..")},HumanPlayers,FP)})
-	
-	end
 
-	Trigger2(FP,{},{RotatePlayer({
-		DisplayTextX(StrDesignX("\x04건물을 \x08공격\x04하여 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다!").."\n"..StrDesignX("\x04설명서는 B,N,M키로 확인 가능합니다.").."\n\n"..StrDesignX("\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.").."\n\n"..StrDesignX("\x04Creator - GALAXY_BURST").."\n"..StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ"),4),
+	Trigger2X(FP,{},{RotatePlayer({
+		DisplayTextX(
+			StrDesignX("\x04건물을 \x08공격\x04하여 \x03많은 돈\x04을 벌고 유닛을 강화하여 \x07DPS\x04를 강화합시다!")..
+			"\n"..StrDesignX("\x04설명서는 B,N,M키로 확인 가능합니다.")..
+			"\n"..StrDesignX("\x17[SCA]\x04수동 저장은 \x08F9 키 \x04입니다.")..
+			"\n"..StrDesignX("\x04Creator - GALAXY_BURST")..
+			"\n"..StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(つ>ㅅ<)つ"),4),
 		PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
 	
+		if Limit == 1 then
+			Trigger2X(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
+			Trigger2X(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 종료되었으나 제작자가 게임에 참여중이므로 맵 실행 가능합니다..")},HumanPlayers,FP)})
+		
+		end
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	f_GetTblptr(FP, Etbl, 1438)
 	for i = 0, 6 do
@@ -349,7 +358,7 @@ iTblJump = def_sIndex()
 	CIfEnd()
 	CIfOnce(FP, {Memory(SCA.ArrPtr,Exactly,0)})
 	for j,k in pairs(SCA.DataPtrArr) do
-		CMov(FP,k,_Read(ArrX(SCA.DataOffsetArr, j-1)),nil,nil,1)
+		CMov(FP,k,_ReadF(ArrX(SCA.DataOffsetArr, j-1)),nil,nil,1)
 	end
 
 	CIfEnd()
