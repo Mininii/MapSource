@@ -1198,6 +1198,10 @@ for i = 45, 48 do
 	local TotalGPer = 1	
 	local errt = "\n"
 	CIf(FP,{CV(GaLv,i)})
+	if i == 45 then
+		
+		CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4096,nil,4096)
+	end
 	for j,k in pairs(GaArr[i-44]) do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})

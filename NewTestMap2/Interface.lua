@@ -236,9 +236,10 @@ function Interface()
 		{{CD(VaccSCount[i+1],5,AtLeast)},{250000,2000},"상점에서 강화기 백신 5개 이상 되팔기"},
 		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 또는 확정 강화권 사용으로 고유유닛 10강 달성하기"},
 		{{CV(iv.PMission[i+1],3,AtLeast)},{250000,0,3},"고유유닛 강화 3연속 성공하기"},
-		--{{Command(i, AtLeast, 1, LevelUnitArr[44][2])},{2000000,0,0,0,2},"44강 유닛 만들기"},
-		--{{CV(PUnitClass[i+1],62,AtLeast)},{5000000,0,0,0,5},"고유유닛 62단 만들기"},
+		{{Command(i, AtLeast, 1, LevelUnitArr[44][2])},{1000000,0,0,0,1},"44강 유닛 만들기"},
+		{{CV(PUnitClass[i+1],62,AtLeast)},{3000000,0,0,0,2},"고유유닛 62단 만들기"},
 		{{CVX(MissionV[i+1],2048,2048)},{0,10000,0,0,1},"확정 강화권을 무색 조각으로 바꾸기"},
+		{{CVX(MissionV[i+1],4096,4096)},{0,50000},"45강 유닛 판매하기"},
 
 		}
 		table.insert(MissionPDataArr,MissionDataArr)
