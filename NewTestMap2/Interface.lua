@@ -889,11 +889,13 @@ for i = 0, 6 do -- 각플레이어
 	CIfChkVar(iv.FBrSh[i+1])
 	CMov(FP,iv.CBrSh[i+1],_Mul(iv.FBrSh[i+1],_Mov(100)))
 	CIfEnd()
-	CIfChkVar(iv.FIncm[i+1])
-		f_LMov(FP,iv.TempIncm[i+1],_LDiv(_LMul({Stat_LV3Incm[i+1],0},{_Add(iv.FIncm[i+1],1),0}),"100"),"100")
-	CIfEnd()
-	CIfChkVar(Stat_LV3Incm[i+1])
-		f_LMov(FP,iv.TempIncm[i+1],_LDiv(_LMul({Stat_LV3Incm[i+1],0},{_Add(iv.FIncm[i+1],1),0}),"100"),"100")
+	
+	local CCVar = CreateVar2(FP,nil,nil,0xFFFFFFFF)
+	local CCVar2 = CreateVar2(FP,nil,nil,0xFFFFFFFF)
+	CIf(FP,{TTOR({TTNVar(iv.FIncm[i+1],NotSame,CCVar),TTNVar(Stat_LV3Incm[i+1],NotSame,CCVar2)})})
+	CMov(FP,CCVar,iv.FIncm[i+1])
+	CMov(FP,CCVar2,Stat_LV3Incm[i+1])
+	f_LMov(FP,iv.TempIncm[i+1],_LDiv({_Mul(_Add(Stat_LV3Incm[i+1],100),_Add(iv.FIncm[i+1],100)),0},"100"))
 	CIfEnd()
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{TempO[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG[i+1]},Money[i+1])
@@ -1338,8 +1340,8 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 			{{CV(StatP[i+1],Cost_Stat_TotalEPerEx3-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 		KeyFunc(i,"6",{
-			{{CV(StatP[i+1],Cost_Stat_LV3Incm,AtLeast),CV(Stat_LV3Incm[i+1],999,AtMost)},{SubV(StatP[i+1],Cost_Stat_LV3Incm),AddV(Stat_LV3Incm[i+1],1)},StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량이 \x071%\x04 증가하였습니다.")},
-			{{CV(Stat_LV3Incm[i+1],1000,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x11LV.MAX \x1B허수아비\x04 돈 수급량\x04을 올릴 수 없습니다.")},
+			{{CV(StatP[i+1],Cost_Stat_LV3Incm,AtLeast),CV(Stat_LV3Incm[i+1],899,AtMost)},{SubV(StatP[i+1],Cost_Stat_LV3Incm),AddV(Stat_LV3Incm[i+1],1)},StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량이 \x071%\x04 증가하였습니다.")},
+			{{CV(Stat_LV3Incm[i+1],900,AtLeast)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 더 이상 \x11LV.MAX \x1B허수아비\x04 돈 수급량\x04을 올릴 수 없습니다.")},
 			{{CV(StatP[i+1],Cost_Stat_LV3Incm-1,AtMost)},{SetCD(ClickCD, 0)},StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")},
 		})
 

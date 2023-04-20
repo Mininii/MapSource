@@ -436,7 +436,7 @@ function GameDisplay()
 			DisplayPrint(LCP, {"\x075. \x0F+3 \x08강화확률 2 \x0F+0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
 			--DisplayPrint(LCP, {"\x076. \x07기본유닛 \x1B공격 쿨타임 \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
-			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 1000 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x111.0% \x08MAX 900 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,3)})
 			CMov(FP,GEVar,S_TotalEPer4XLoc)
