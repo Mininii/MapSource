@@ -32,6 +32,8 @@ function Install_CallTriggers()
 	SAmount = CreateVar(FP)
 	SetCall(FP)
 	CWhile(FP,{CV(SAmount,1,AtLeast)},{SubV(SAmount,1)})
+	TriggerX(FP, {CV(SUnitID,16)}, {SetMemoryB(0x669E28+237, SetTo, 0)}, {preserved})
+	TriggerX(FP, {CV(SUnitID,78)}, {SetMemoryB(0x669E28+237, SetTo, 16)}, {preserved})
 	CIf(FP,{Memory(0x628438, AtLeast, 1)},{SetCD(TBLFlag,1)})
 		f_Read(FP, 0x628438, nil, Nextptrs)
 		CDoActions(FP, {TCreateUnit(1,SUnitID,SLocation,SPlayer),
@@ -369,7 +371,7 @@ function Install_CallTriggers()
 	DoActionsX(FP,{SetCDX(iv.StatTest,16,16)})
 	CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTCurEXP),TTNWar(CTPEXP, AtMost, CTTotalExp)},{SetCDX(iv.StatTest,0,16)},1)
 	if Limit == 1 then
-		DisplayPrint(iv.LCP, {"CTPEXP : ",CTPEXP,"   CTCurEXP : ",CTCurEXP,"   CTTotalExp : ",CTTotalExp})
+		DisplayPrint(iv.LCP, {"\x13\x04CTPEXP : ",CTPEXP,"   CTCurEXP : ",CTCurEXP,"   CTTotalExp : ",CTTotalExp})
 	end
 	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
 	CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx)))
@@ -1102,13 +1104,13 @@ function Install_CallTriggers()
 		f_LMovX(FP, TempW, WArrX(GetWArray(iv.FfragItemUsed[1],7), WArrI, WArrI4), SetTo, nil, nil, 1)
 		f_LMovX(FP, TempW2, WArrX(GetWArray(iv.FfragItem[1],7), WArrI, WArrI4), SetTo, nil, nil, 1)
 		CIf(FP,{CDX(iv.FStatTest,1,1)})
-			DisplayPrint(GCP, {"\x12\x04TempFfragTotal : ",TempFfragTotal,"  FfragItemUsed : ",TempW})
+			DisplayPrint(GCP, {"\x13\x04TempFfragTotal : ",TempFfragTotal,"  FfragItemUsed : ",TempW})
 		CIfEnd()
 		CIf(FP,{CDX(iv.FStatTest,2,2)})
-		DisplayPrint(GCP, {"\x12\x04TempFfragTotal : ",TempFfragTotal,"  FfragItem : ",TempW2})
+		DisplayPrint(GCP, {"\x13\x04TempFfragTotal : ",TempFfragTotal,"  FfragItem : ",TempW2})
 		CIfEnd()
 		CIf(FP,{CDX(iv.FStatTest,4,4)})
-		DisplayPrint(GCP, {"\x12\x04FfragItemUsed : ",TempW,"  FfragItem : ",TempW2})
+		DisplayPrint(GCP, {"\x13\x04FfragItemUsed : ",TempW,"  FfragItem : ",TempW2})
 		CIfEnd()
 	end
 	TriggerX(FP,{CV(GetData_FXPer44,Cost_FXPer44[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
@@ -1124,38 +1126,36 @@ function Install_CallTriggers()
 	
 	Ga_45 = {
 		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
-		{"\x171000경원 수표",1,500,iv.Money2},
-		{"\x1F확정 강화권",5,1000,iv.PETicket},
+		{"\x1F확정 강화권",5,500,iv.PETicket},
+		{"\x171000경원 수표",1,1000,iv.Money2},
 		{"\x17크레딧",2000000,5000,iv.B_PCredit},
-		{"\x1041강 유닛",5,20000,iv.E41},
-		{"\x1140강 유닛",5,30000,iv.E40},
+		{"\x1041강 유닛",10,20000,iv.E41},
+		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
 	Ga_46 = {
-		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
-		{"\x171000경원 수표",1,500,iv.Money2},
-		{"\x1F확정 강화권",5,1000,iv.PETicket},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit},
-		{"\x1041강 유닛",5,20000,iv.E41},
-		{"\x1140강 유닛",5,30000,iv.E40},
+		{"\x02무색 조각",4000,50,iv.B_PFfragItem},
+		{"\x1F확정 강화권",10,500,iv.PETicket},
+		{"\x171000경원 수표",4,1000,iv.Money2},
+		{"\x17크레딧",3000000,5000,iv.B_PCredit},
+		{"\x1D42강 유닛",10,20000,iv.E42},
+		{"\x1041강 유닛",10,30000,iv.E41},
 	}
 
 	Ga_47 = {
-		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
-		{"\x171000경원 수표",1,500,iv.Money2},
-		{"\x1F확정 강화권",5,1000,iv.PETicket},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit},
-		{"\x1041강 유닛",5,20000,iv.E41},
-		{"\x1140강 유닛",5,30000,iv.E40},
+		{"\x02무색 조각",7000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",7,1000,iv.Money2},
+		{"\x17크레딧",4000000,5000,iv.B_PCredit},
+		{"\x0643강 유닛",10,20000,iv.E43},
+		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
 	Ga_48 = {
-		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
-		{"\x171000경원 수표",1,500,iv.Money2},
-		{"\x1F확정 강화권",5,1000,iv.PETicket},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit},
-		{"\x1041강 유닛",5,20000,iv.E41},
-		{"\x1140강 유닛",5,30000,iv.E40},
+		{"\x02무색 조각",10000,50,iv.B_PFfragItem},
+		{"\x171000경원 수표",10,500,iv.Money2},
+		{"\x17크레딧",5000000,5000,iv.B_PCredit},
+		{"\x1F44강 유닛",10,20000,iv.E44},
+		{"\x0643강 유닛",10,30000,iv.E43},
 	}
 
 	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48}
@@ -1202,6 +1202,11 @@ for i = 45, 48 do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
 		CTrigger(FP, {}, {DisplayExtText(StrDesignX((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."),4)}, 1)
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
+			CIfEnd()
+		end
 		if j == 1 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 
@@ -1209,9 +1214,15 @@ for i = 45, 48 do
 		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		CIfEnd()
 		TotalGPer = TotalGPer+k[3]
+		
 	end
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
 	CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
+	if Limit == 1 then
+		CIf(FP,{VRange(GetGPer,TotalGPer,100000),KeyPress("F12", "Down")})
+			CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ 100000"), 4)})
+		CIfEnd()
+	end
 	errt = errt..(TotalGPer).."  100000\n" -- 꽝일경우
 	--error(errt)
 	DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
@@ -1221,6 +1232,7 @@ for i = 45, 48 do
 
 end
 
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 
 	SetCallEnd()

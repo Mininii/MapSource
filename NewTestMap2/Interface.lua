@@ -313,7 +313,7 @@ function Interface()
 	
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,2,AtLeast)}, {SetCD(PartyBonus2,1)},{preserved})--런쳐 불러온사람 1명이하인데 멀티일경우 보너스 활성화
 	Trigger2X(FP, {CD(PartyBonus,1,AtMost),CV(PCheckV,1,AtMost)}, {SetCD(PartyBonus2,0)},{preserved})-- 런쳐 불러온사람 1명이하인데 솔로일경우 보너스 비활성화
-	if Limit == 1 then
+	if TestStart == 1 then
 		DoActionsX(FP, {AddV(XEPerT,100)})
 		
 	end
@@ -703,7 +703,7 @@ for i = 0, 6 do -- 각플레이어
 	NIfXEnd()
 	
 	DoActionsX(FP,{
-		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1E48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
+		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
 
 	NElseIfX({VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),})
 		NJump(FP, DailyJump, {CVX(DayCheck2[i+1],0*0x100,0xFF00),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌2 출석 0일일 경우 강제로 출석체크시킴
@@ -818,7 +818,7 @@ for i = 0, 6 do -- 각플레이어
 
 
 	
-	if Limit == 1 then 
+	if TestStart == 1 then 
 		CIf(FP,{CV(iv.MapMakerFlag[i+1]),Deaths(i,AtLeast,1,553)})
 		CreateUnitStacked({}, 12, LevelUnitArr[44][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
@@ -1025,6 +1025,9 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	end
 	CreateUnitStacked({Memory(0x628438,AtLeast,1),CV(iv.E40[i+1],1,AtLeast)}, 1, LevelUnitArr[40][2], 80+i,nil, i, {SubV(iv.E40[i+1], 1)})
 	CreateUnitStacked({Memory(0x628438,AtLeast,1),CV(iv.E41[i+1],1,AtLeast)}, 1, LevelUnitArr[41][2], 80+i,nil, i, {SubV(iv.E41[i+1], 1)})
+	CreateUnitStacked({Memory(0x628438,AtLeast,1),CV(iv.E42[i+1],1,AtLeast)}, 1, LevelUnitArr[42][2], 80+i,nil, i, {SubV(iv.E42[i+1], 1)})
+	CreateUnitStacked({Memory(0x628438,AtLeast,1),CV(iv.E43[i+1],1,AtLeast)}, 1, LevelUnitArr[43][2], 80+i,nil, i, {SubV(iv.E43[i+1], 1)})
+	CreateUnitStacked({Memory(0x628438,AtLeast,1),CV(iv.E44[i+1],1,AtLeast)}, 1, LevelUnitArr[44][2], 80+i,nil, i, {SubV(iv.E44[i+1], 1)})
 
 	CIf(FP,{TTNVar(PUnitCurLevel[i+1],NotSame,PUnitClass[i+1])})
 	CMov(FP,PUnitClass[i+1],0)
@@ -1157,7 +1160,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	CallTrigger(FP, Call_FfragShop)
 	if Limit == 1 then
 		CallTriggerX(FP,Call_Print13[i+1],{MSQC_KeyInput(i, "F12")},nil,1)
-		TriggerX(FP,{CD(SCA.LoadCheckArr[i+1],2),MSQC_KeyInput(i, "F12")},{SetV(DPErT[i+1],24*10),AddV(iv.B_PFfragItem[i+1],10000),print_utf8(12,0,StrDesign("\x03TESTMODE OP \x04: \x02무색 조각 \x041만개 지급 완료.\x08(저장X)"))})
+		TriggerX(FP,{CD(SCA.LoadCheckArr[i+1],2),MSQC_KeyInput(i, "F12")},{SetV(DPErT[i+1],24*10),AddV(iv.B_PFfragItem[i+1],100000),print_utf8(12,0,StrDesign("\x03TESTMODE OP \x04: \x02무색 조각 \x0410만개 지급 완료.\x08(저장X)"))})
 	end
 
 
@@ -1517,14 +1520,14 @@ Trigger2X(FP,{CV(PBossLV[i+1],7,AtLeast)},{
 })
 Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
 	AddV(iv.B_PFfragItem[i+1], 25),
-	AddV(SellTicket[i+1],100000)
+	AddV(B_PTicket[i+1],100000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
 	AddV(iv.B_PFfragItem[i+1], 1000),
 	
 })
 
-for pb= 1, 7 do
+for pb= 1, 9 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,(300000)-5000),SetCD(SaveRemind,1),SetCp(i),DisplayExtText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 end
 
@@ -1578,6 +1581,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 	CIfEnd({})
 	CIf(FP,{CV(iv.B_PFfragItem[i+1],1,AtLeast)})
 	f_LAdd(FP,iv.FfragItem[i+1],iv.FfragItem[i+1],{iv.B_PFfragItem[i+1],0}) --
+	DisplayPrint(i,{"\x13\x07『 \x02무색 조각\x04을 \x07",iv.B_PFfragItem[i+1]," 개 \x04 획득하였습니다. 현재 총 획득량 : \x07",iv.FfragItem[i+1]," 개 \x07』"})
 	CMov(FP, iv.B_PFfragItem[i+1], 0)
 	CIfEnd({})
 	CIf(FP,{CV(B_PEXP[i+1],1,AtLeast)})
@@ -1762,7 +1766,7 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 	else
 		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	end
-		CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
+		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
 		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
@@ -1782,13 +1786,13 @@ TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
 		if Limit == 1 then
 		
 		NElseIfX({CV(iv.MapMakerFlag[i+1],0)},{SetV(DPErT[i+1],24*10)}) -- 조건불만족 - 테스트맵
-		CallTriggerX(FP,Call_Print13[i+1],{Deaths(i, Exactly, 1, 14)})
 		SCA_DataSave(i,iv.TesterFlag[i+1],SCA.TesterFlag)
 		SCA_DataSave(i,iv.CreditAddSC[i+1],SCA.CreditAddSC)
-		TriggerX(FP, {Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서는 테스트 기록 정보만 저장됩니다..."))}, {preserved})
+		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
+		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
+		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 테스트맵에서는 테스트 기록 정보만 저장됩니다..."))}, {preserved})
 		
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
-		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 		end
 		NIfXEnd()
 		CIfEnd()

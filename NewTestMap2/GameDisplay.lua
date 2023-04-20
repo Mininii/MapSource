@@ -502,15 +502,15 @@ function GameDisplay()
 	}
 	
 	local StatPrintEr2 = {
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F44강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer44[2].." 개"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1C45강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer45[2].." 개"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1E46강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer47[2].." 개"),
-		StrDesign("\x04개당 \x0F0.01%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1F44강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer44[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1C45강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer45[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1E46강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer47[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
 }
 	local StatPrintEr3 = {
 		StrDesign("\x04개당 \x110.01배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가. \x08MAX "..Cost_FIncm[2].." 개"),
 		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가. \x08MAX "..Cost_FSEXP[2].." 개"),
-		StrDesign("\x04개당 \x0F0.001%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh[2].." 개"),
 		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer[2].." 개"),
 	}
 
@@ -715,7 +715,7 @@ function GameDisplay()
 			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개",
 			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3\x12\x046단계 : \x1715만 크레딧",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
-			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%\x12\x048단계 \x04: \x02무색 조각\x04 25개, \x19유닛 판매권 5만개",
+			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%\x12\x048단계 \x04: \x02무색 조각\x04 25개, \x19유닛 판매권 10만개",
 			"\x12\x049단계 \x04: \x02무색 조각\x04 1000개",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
