@@ -1229,7 +1229,7 @@ end
 function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
 		if LvUniit==40 then
-			CIf(FP,{CV(iv.Money2[1],1,AtLeast)},{SubV(iv.Money2[1],1)})
+			CIf(FP,{CV(iv.Money2[CP+1],1,AtLeast)},{SubV(iv.Money2[CP+1],1)})
 		else
 			CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
 			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
@@ -1676,24 +1676,35 @@ function SCA_DataSave(Player,Source,Destptr) --Source == W then Use DestUnit, De
 end
 
 
-function SCA_DataLoadG(Player,Dest,Sourceptr) --Dest == W then Use SourceUnit, SourceUnit+1
+function SCA_DataLoadG(Player,Dest,Sourceptr,DataName) --Dest == W then Use SourceUnit, SourceUnit+1
 	if Dest[1][4]=="V" then
-		f_Read(FP,_Add(Sourceptr,_Mul(Player,_Mov(18))),VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4))
+		f_Read(FP,_Add(Sourceptr,Player),VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4))
 	elseif Dest[1][4]=="W" then
 		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
-		f_LRead(FP, {_Add(Sourceptr[1],_Mul(Player,_Mov(18))),_Add(Sourceptr[2],_Mul(Player,_Mov(18)))}, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), nil, 1)
+		local Temp32 = CreateVar(FP)
+		local Temp64 = CreateVar(FP)
+		local TempRead = CreateWar(FP)
+		f_LRead(FP, {_Add(Sourceptr[1],Player),_Add(Sourceptr[2],Player)}, TempRead)
+		f_Cast(FP, {Temp32,0},TempRead)
+		f_Cast(FP, {Temp64,1},TempRead)
+		if Limit == 1 then
+			DisplayPrint(GCP, {"Player : ",GCP," || DataName : "..DataName.." || TempRead : ",TempRead," || 32bit : ",Temp32," || 64bit : ",Temp64})
+			
+		end
+		f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, SetTo, nil, nil,1)
+
 	else
 		PushErrorMsg("SCA_Dest_Inputdata_Error")
 	end
 end
 function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
 	if Source[1][4]=="V" then
-		CDoActions(FP, {TSetMemory(_Add(Destptr,_Mul(Player,_Mov(18))), SetTo, VArrX(GetVArray(Source[1], 7),VArrI,VArrI4))})
+		CDoActions(FP, {TSetMemory(_Add(Destptr,Player), SetTo, VArrX(GetVArray(Source[1], 7),VArrI,VArrI4))})
 	elseif Source[1][4]=="W" then
 		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
 		CDoActions(FP, {
-			TSetMemory(_Add(Destptr[1],_Mul(Player,_Mov(18))), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
-			TSetMemory(_Add(Destptr[2],_Mul(Player,_Mov(18))), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
+			TSetMemory(_Add(Destptr[1],Player), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
+			TSetMemory(_Add(Destptr[2],Player), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
 		})
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
@@ -1706,7 +1717,7 @@ function CreateDataPV(DataName,SCADeathData,LocOp)
 	local Ret2 = CreateVarArr(7,FP)
 	table.insert(PVWArr,{Ret,Ret2,DataName})
 	if SCADeathData ~= nil then
-		table.insert(SCA_DataArr,{Ret,SCADeathData})
+		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
 	end
 	if LocOp == 1 then 
 		local Ret3 = CreateVar(FP)
@@ -1719,10 +1730,10 @@ end
 function CreateDataPW(DataName,SCADeathData,LocOp)
 	local Ret = CreateWarArr(7,FP)
 	local Ret2 = CreateWarArr(7,FP)
-	table.insert(PVWArr,{Ret,Ret2,DataName})
+	table.insert(PVWArr,{Ret,Ret2})
 	if SCADeathData ~= nil then
 		if #SCADeathData~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
-		table.insert(SCA_DataArr,{Ret,SCADeathData})
+		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
 	end
 	if LocOp == 1 then 
 		local Ret3 = CreateWar(FP)

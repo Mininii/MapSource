@@ -787,10 +787,6 @@ if TestStart == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"20000000"},
-		{72,"20000000"},
-		{72,"20000000"},
-		{72,"20000000"},
-		{72,"20000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -798,10 +794,6 @@ else
 		{25,"150000"},
 		{80,"1100000"},
 		{57,"9300000"},
-		{72,"34000000"},
-		{72,"34000000"},
-		{72,"34000000"},
-		{72,"34000000"},
 		{72,"34000000"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
@@ -838,8 +830,8 @@ FirstReward3 = {
 	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
 	GasDPSM = {2,4,8,16,32,64,128}
 	PopLevelUnit() -- 밸런스가 모두 설정된 강화유닛 데이터 처리용 함수
-	Cost_Stat_BossSTic = 100
-	Cost_Stat_BossLVUP = 25
+	Cost_Stat_BossSTic = 250
+	Cost_Stat_BossLVUP = 250
 	Cost_Stat_Upgrade = 20
 	Cost_Stat_TotalEPer = 10
 	Cost_Stat_TotalEPerEx = 1000
@@ -852,6 +844,11 @@ FirstReward3 = {
 	Cost_Stat_BreakShield = 250
 	Cost_Stat_BreakShield2 = 1000
 	Cost_Stat_LV3Incm = 100
+	Cost_Stat_BossSFrg = 1000
+	Cost_Stat_XEPer44 = 1000
+	Cost_Stat_XEPer45 = 4000
+	Cost_Stat_XEPer46 = 7000
+	Cost_Stat_XEPer47 = 10000
 	PersonalUIDArr = {21,27,28,48,55,56,64}
 	PersonalWIDArr = {118,119,120,121,122,123,124}
 	PlayerPosArr = {
@@ -915,11 +912,6 @@ FirstReward3 = {
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
 	CS_BreakShieldLimit = 200
-	Cost_Stat_BossSFrg = 1000
-	Cost_Stat_XEPer44 = 100
-	Cost_Stat_XEPer45 = 400
-	Cost_Stat_XEPer46 = 700
-	Cost_Stat_XEPer47 = 1000
 
 
 --	--{Max,FileArr}

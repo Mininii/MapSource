@@ -59,57 +59,43 @@ Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x084단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 AddLV5Cool2=CreateCcodeArr(7)
-for i = 0, 4 do
-	Trigger2X(FP,{CV(BossLV,5+i,AtLeast)},{
-		AddV(B_PCredit[1],25000-(i*5000));
-		AddV(B_PCredit[2],25000-(i*5000));
-		AddV(B_PCredit[3],25000-(i*5000));
-		AddV(B_PCredit[4],25000-(i*5000));
-		AddV(B_PCredit[5],25000-(i*5000));
-		AddV(B_PCredit[6],25000-(i*5000));
-		AddV(B_PCredit[7],25000-(i*5000));
-		AddCD(AddLV5Cool2[1],1),
-		AddCD(AddLV5Cool2[2],1),
-		AddCD(AddLV5Cool2[3],1),
-		AddCD(AddLV5Cool2[4],1),
-		AddCD(AddLV5Cool2[5],1),
-		AddCD(AddLV5Cool2[6],1),
-		AddCD(AddLV5Cool2[7],1),
+	Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
+		AddV(B_Credit,50000);
 		SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 	})
-end
-
 local TempEXPV = CreateVar(FP)
 local TempSTicV = CreateVar(FP)
+CIf(FP,{CV(BossLV,5,AtLeast)})
 for i = 0, 6 do
-CIf(FP,{HumanCheck(i, 1),CD(SCA.LoadCheckArr[i+1],2),CD(AddLV5Cool2[i+1],1,AtLeast)},SubCD(AddLV5Cool2[i+1], 1))
-CIf(FP,{CV(iv.Stat_BossLVUP[i+1],1,AtLeast)})
-f_LMov(FP, TempWX, "0", nil, nil, 1)
-CMov(FP,StartLV,PLevel[i+1])
-CAdd(FP,EndLV,PLevel[i+1],_Add(iv.Stat_BossLVUP[i+1],iv.Stat_BossLVUP[i+1]))
-CallTrigger(FP, Call_GetLevelEXP)
-CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({iv.Stat_BossLVUP[i+1],0}, "50000000"))})
-f_LMov(FP, TempWX, _LMul({iv.Stat_BossLVUP[i+1],0}, "50000000"))
-CIfEnd()
-f_LAdd(FP, iv.PEXP[i+1], iv.PEXP[i+1], TempWX)
-DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
-CIfEnd()
+	CIfOnce(FP,{HumanCheck(i, 1),CD(SCA.LoadCheckArr[i+1],2)})
+		CIf(FP,{CV(iv.Stat_BossLVUP[i+1],1,AtLeast)})
+		f_LMov(FP, TempWX, "0", nil, nil, 1)
+		CMov(FP,StartLV,PLevel[i+1])
+		CAdd(FP,EndLV,PLevel[i+1],_Mul(iv.Stat_BossLVUP[i+1],_Mov(50)))
+		CallTrigger(FP, Call_GetLevelEXP)
+		CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({iv.Stat_BossLVUP[i+1],0}, "1000000000"))})
+		f_LMov(FP, TempWX, _LMul({iv.Stat_BossLVUP[i+1],0}, "1000000000"))
+		CIfEnd()
+		f_LAdd(FP, iv.PEXP[i+1], iv.PEXP[i+1], TempWX)
+		DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨업 능력치 ",iv.Stat_BossLVUP[i+1],"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
+		CIfEnd()
 
 
-CIf(FP,{CV(iv.Stat_BossSTic[i+1],1,AtLeast)})
-CAdd(FP,iv.SellTicket[i+1],_Mul(iv.Stat_BossSTic[i+1],_Mov(10)))
-f_Mul(FP,TempSTicV,iv.Stat_BossSTic[i+1],10)
-DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 ",iv.Stat_BossSTic[i+1],"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
-CIfEnd()
+		CIf(FP,{CV(iv.Stat_BossSTic[i+1],1,AtLeast)})
+		CAdd(FP,iv.SellTicket[i+1],_Mul(iv.Stat_BossSTic[i+1],_Mov(100)))
+		f_Mul(FP,TempSTicV,iv.Stat_BossSTic[i+1],100)
+		DisplayPrint(i, {"\x13\x07『 \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 ",iv.Stat_BossSTic[i+1],"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
+		CIfEnd()
 
-if TestStart == 1 then
-		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
-else
-		TriggerX(FP,{},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
+		--if TestStart == 1 then
+		--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
+		--else
+		--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
+		--end
+
+	CIfEnd()
 end
-
 CIfEnd()
-end
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1C6단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1F7단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1E8단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 100,000."), 4)}, Force1,FP)})
@@ -190,5 +176,9 @@ DoActions(FP, SetInvincibility(Disable, BossArr[5][1], FP, 64))
 for i = 0,6 do
 	
 	TriggerX(FP, {HumanCheck(i,1),CV(LV5Cool[i+1],1,AtLeast);}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
+--	TriggerX(FP, {HumanCheck(i,1),CD(SCA.LoadCheckArr[i+1],1,AtMost)}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
+
+
+	
 end
 end

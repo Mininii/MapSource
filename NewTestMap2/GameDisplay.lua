@@ -394,9 +394,10 @@ function GameDisplay()
 			--DisplayPrint(LCP, {"\x071. \x08강화 실패\x04시 경험치 획득량 증가 \x07+0.1% \x08MAX 100 ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
-			CMul(FP,S_BossSTicLoc,10)
-			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 10개 \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +2업 \x08MAX 50 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			CMul(FP,S_BossSTicLoc,100)
+			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 100개 \x08MAX 10 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			CMul(FP,S_BossLVUPLoc,50)
+			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +50업 \x08MAX 5 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,UpgradeLoc,10)
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -451,16 +452,16 @@ function GameDisplay()
 			
 			CMov(FP,GEVar,Stat_XEPer44Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x073. \x1F44강 \x08강화확률 \x0F+0.01%p \x08MAX 200 \x04- ",BColor3[3][2],Cost_Stat_XEPer44.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x1F44강 \x08강화확률 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_XEPer44.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer45Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x074. \x1C45강 \x08강화확률 \x0F+0.01%p \x08MAX 200 \x04- ",BColor3[4][2],Cost_Stat_XEPer45.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+			DisplayPrint(LCP, {"\x074. \x1C45강 \x08강화확률 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[4][2],Cost_Stat_XEPer45.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer46Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x075. \x1E46강 \x08강화확률 \x0F+0.01%p \x08MAX 200 \x04- ",BColor3[5][2],Cost_Stat_XEPer46.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			DisplayPrint(LCP, {"\x075. \x1E46강 \x08강화확률 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_XEPer46.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer47Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x076. \x0247강 \x08강화확률 \x0F+0.01%p \x08MAX 200 \x04- ",BColor3[6][2],Cost_Stat_XEPer47.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x0247강 \x08강화확률 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[6][2],Cost_Stat_XEPer47.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,256)})
 			
@@ -482,7 +483,7 @@ function GameDisplay()
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 \x19유닛 판매권\x04을 얻습니다."),
-			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x082레벨당 5천만 \x04입니다."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x08최대 50억 \x04입니다."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
 			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1로 합산, 적용됩니다."),
@@ -606,7 +607,7 @@ function GameDisplay()
 		CMov(FP,TempV,iv.DayCheck2Loc,nil,0xFF,1)
 		CMov(FP,TempV2,iv.DayCheck2Loc,nil,0xFF00,1)
 		CrShift(FP, TempV2, 8)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 || \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 || \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일. "})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x1B48강 \x07타임어택 점수 : \x04",TimeAttackScore48Loc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
@@ -627,18 +628,18 @@ function GameDisplay()
 	
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
-		for i = 0, 6 do
-			CIf(FP,HumanCheck(i, 1))
-			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
-			CMov(FP,CTimeV,LV5Cool[i+1])
-			CallTrigger(FP,Call_ConvertTime)
-			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-			CElseX()
-			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07처치 가능! "})
-			CIfXEnd()
-	
-			CIfEnd()
-		end
+--		for i = 0, 6 do
+--			CIf(FP,HumanCheck(i, 1))
+--			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
+--			CMov(FP,CTimeV,LV5Cool[i+1])
+--			CallTrigger(FP,Call_ConvertTime)
+--			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+--			CElseX()
+--			DisplayPrint(LCP, {PName(i)," \x04님의 \x1F보스 LV.5 \x04처치 가능까지 남은 시간 \x04: \x07처치 가능! "})
+--			CIfXEnd()
+--	
+--			CIfEnd()
+--		end
 		CTrigger(FP,{CD(LToggle,1)},{SetCD(LToggle,0),TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\n\n\n\n\n\n\n",4)},1)
 	CIfXEnd()
 	
@@ -712,11 +713,11 @@ function GameDisplay()
 	--남는거 공 250% 강확은 논외
 		{
 			"\x13\x04\x1B- 부록. \x08개인 보스 몬스터 보상 목록 \x1B-",
-			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개",
-			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3\x12\x046단계 : \x1715만 크레딧",
-			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
-			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10%\x12\x048단계 \x04: \x02무색 조각\x04 25개, \x19유닛 판매권 10만개",
-			"\x12\x049단계 \x04: \x02무색 조각\x04 1000개",
+			"\x041단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x046단계 : \x1715만 크레딧, \x02무색 조각\x04 3개",
+			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
+			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x048단계 \x04: \x02무색 조각\x04 25개, \x19유닛 판매권 10만개",
+			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10% \x12\x049단계 \x04: \x02무색 조각\x04 1000개",
+			"\x12\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
 		
@@ -726,8 +727,9 @@ function GameDisplay()
 			"\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
 			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
-			"\x045단계 \x04: \x04총 5회 처치 가능. 각 \x172.5만, 2만, 1.5만, 1만, 5천 크레딧",
-			"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
+			"\x045단계 \x04: \x175만 크레딧 \x04+ \x07자신의 투자 스탯에 따라 보상이 상이합니다.",
+			--"\x04X단계 \x04: ",
+			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
 	}
 	CIf(FP,TTOR({CD(BKey,1),CD(NKey,1),CD(MKey,1)}))

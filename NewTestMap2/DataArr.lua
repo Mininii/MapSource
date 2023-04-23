@@ -117,51 +117,51 @@ function DataArr()
 
 
 	SCA_DataArr = {
-		{iv.BanFlag4,SCA.BanFlag4},
-		{iv.BanFlag3,SCA.BanFlag3},
-		{iv.BanFlag2,SCA.BanFlag2},
-		{iv.BanFlag,SCA.BanFlag},
-		{iv.PLevel,SCA.PLevel},
-		{iv.StatP,SCA.StatP},
-		{iv.Stat_BossSTic,SCA.StatIncome},
-		{iv.Stat_TotalEPer,SCA.StatTotalEPer},
-		{iv.Stat_TotalEPer2,SCA.StatTotalEPer2},
-		{iv.Stat_TotalEPer3,SCA.StatTotalEPer3},
-		{iv.Stat_Upgrade,SCA.StatUpgrade},
-		{iv.Credit,{SCA.Credit32,SCA.Credit64}},
-		{iv.PEXP,{SCA.PEXP32,SCA.PEXP64}},
-		{iv.TotalExp,{SCA.TotalExp32,SCA.TotalExp64}},
-		{iv.CurEXP,{SCA.CurEXP32,SCA.CurEXP64}},
-		{iv.Stat_BossLVUP,SCA.AddSc},
-		{iv.PStatVer,SCA.PStatVer},
-		{iv.PlayTime,SCA.PlayTime},
-		{iv.PlayTime2,SCA.PlayTime2},
-		{iv.CreditAddSC,SCA.CreditAddSC},
-		{iv.LV5Cool,SCA.LV5Cool},
-		{iv.Stat_TotalEPer4,SCA.StatTotalEPer4},
-		{iv.Stat_BreakShield,SCA.StatBreakShield},
-		{iv.Stat_TotalEPerEx,SCA.StatTotalEPerEx},
-		{iv.TimeAttackScore,SCA.TimeAttackScore},
-		{iv.PUnitLevel,SCA.PUnitLevel},
-		{iv.PUnitClass,SCA.PUnitClass},
-		{iv.VaccItem,SCA.VaccItem},
-		{iv.CS_Cooldown,SCA.CSCooldown},
-		{iv.CS_Atk,SCA.CSAtk},
-		{iv.CS_EXP,SCA.CSEXP},
-		{iv.CS_TotalEPer,SCA.CSTotalEPer},
-		{iv.CS_TotalEper4,SCA.CSTotalEper4},
-		{iv.CS_DPSLV,SCA.CSDPSLV},
-		{iv.RandomSeed1,SCA.RandomSeed1},
-		{iv.RandomSeed2,SCA.RandomSeed2},
-		{iv.RandomSeed3,SCA.RandomSeed3},
-		{iv.RandomSeed4,SCA.RandomSeed4},
-		{iv.RandomSeed5,SCA.RandomSeed5},
-		{iv.RandomSeed6,SCA.RandomSeed6},
-		{iv.RandomSeed7,SCA.RandomSeed7},
-		{iv.RandomSeed8,SCA.RandomSeed8},
-		{iv.RandomSeed9,SCA.RandomSeed9},
-		{iv.RandomSeed10,SCA.RandomSeed10},
-		{iv.SellTicket,SCA.SellTicket}
+		{iv.BanFlag4,SCA.BanFlag4,"BanFlag4"},
+		{iv.BanFlag3,SCA.BanFlag3,"BanFlag3"},
+		{iv.BanFlag2,SCA.BanFlag2,"BanFlag2"},
+		{iv.BanFlag,SCA.BanFlag,"BanFlag"},
+		{iv.PLevel,SCA.PLevel,"PLevel"},
+		{iv.StatP,SCA.StatP,"StatP"},
+		{iv.Stat_BossSTic,SCA.StatIncome,"Stat_BossSTic"},
+		{iv.Stat_TotalEPer,SCA.StatTotalEPer,"Stat_TotalEPer"},
+		{iv.Stat_TotalEPer2,SCA.StatTotalEPer2,"Stat_TotalEPer2"},
+		{iv.Stat_TotalEPer3,SCA.StatTotalEPer3,"Stat_TotalEPer3"},
+		{iv.Stat_Upgrade,SCA.StatUpgrade,"Stat_Upgrade"},
+		{iv.Credit,{SCA.Credit32,SCA.Credit64},"Credit"},
+		{iv.PEXP,{SCA.PEXP32,SCA.PEXP64},"PEXP"},
+		{iv.TotalExp,{SCA.TotalExp32,SCA.TotalExp64},"TotalExp"},
+		{iv.CurEXP,{SCA.CurEXP32,SCA.CurEXP64},"CurEXP"},
+		{iv.Stat_BossLVUP,SCA.AddSc,"Stat_BossLVUP"},
+		{iv.PStatVer,SCA.PStatVer,"PStatVer"},
+		{iv.PlayTime,SCA.PlayTime,"PlayTime"},
+		{iv.PlayTime2,SCA.PlayTime2,"PlayTime2"},
+		{iv.CreditAddSC,SCA.CreditAddSC,"CreditAddSC"},
+		{iv.LV5Cool,SCA.LV5Cool,"LV5Cool"},
+		{iv.Stat_TotalEPer4,SCA.StatTotalEPer4,"Stat_TotalEPer4"},
+		{iv.Stat_BreakShield,SCA.StatBreakShield,"Stat_BreakShield"},
+		{iv.Stat_TotalEPerEx,SCA.StatTotalEPerEx,"Stat_TotalEPerEx"},
+		{iv.TimeAttackScore,SCA.TimeAttackScore,"TimeAttackScore"},
+		{iv.PUnitLevel,SCA.PUnitLevel,"PUnitLevel"},
+		{iv.PUnitClass,SCA.PUnitClass,"PUnitClass"},
+		{iv.VaccItem,SCA.VaccItem,"VaccItem"},
+		{iv.CS_Cooldown,SCA.CSCooldown,"CS_Cooldown"},
+		{iv.CS_Atk,SCA.CSAtk,"CS_Atk"},
+		{iv.CS_EXP,SCA.CSEXP,"CS_EXP"},
+		{iv.CS_TotalEPer,SCA.CSTotalEPer,"CS_TotalEPer"},
+		{iv.CS_TotalEper4,SCA.CSTotalEper4,"CS_TotalEper4"},
+		{iv.CS_DPSLV,SCA.CSDPSLV,"CS_DPSLV"},
+		{iv.RandomSeed1,SCA.RandomSeed1,"RandomSeed1"},
+		{iv.RandomSeed2,SCA.RandomSeed2,"RandomSeed2"},
+		{iv.RandomSeed3,SCA.RandomSeed3,"RandomSeed3"},
+		{iv.RandomSeed4,SCA.RandomSeed4,"RandomSeed4"},
+		{iv.RandomSeed5,SCA.RandomSeed5,"RandomSeed5"},
+		{iv.RandomSeed6,SCA.RandomSeed6,"RandomSeed6"},
+		{iv.RandomSeed7,SCA.RandomSeed7,"RandomSeed7"},
+		{iv.RandomSeed8,SCA.RandomSeed8,"RandomSeed8"},
+		{iv.RandomSeed9,SCA.RandomSeed9,"RandomSeed9"},
+		{iv.RandomSeed10,SCA.RandomSeed10,"RandomSeed10"},
+		{iv.SellTicket,SCA.SellTicket,"SellTicket"}
 	}
 	
 
@@ -337,4 +337,18 @@ function DataArr()
 		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc}
 				
 	}
+
+
+	for j,k in pairs(SCA_DataArr) do
+		if k[1][4]=="V" then
+			if k[2][4] ~= "V" then
+			PushErrorMsg("DataType Mismatch : "..j.." - "..k[3])
+			end
+		end
+		if k[1][4]=="W" then
+			if #k[2]~=2  then
+			PushErrorMsg("DataType Mismatch : "..j.." - "..k[3])
+			end
+		end
+	end
 end
