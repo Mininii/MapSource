@@ -849,8 +849,6 @@ for i = 0, 6 do -- 각플레이어
 	local NBTemp = CreateVar(FP)
 	local TempSCCool = CreateVar(FP)
 	NBagLoop(FP,NBagArr[i+1],{NBTemp})
-
-	
 	CMov(FP,0x6509B0,NBTemp,25)
 
 	CIfX(FP,{DeathsX(CurrentPlayer, Exactly, 88, 0, 0xFF)})
@@ -869,25 +867,25 @@ for i = 0, 6 do -- 각플레이어
 		CMov(FP,0x6509B0,FP)
 
 
-	CElseX()
-
+	CElseIfX({DeathsX(CurrentPlayer, Exactly, 79, 0, 0xFF)})
+	
 	CMov(FP,0x6509B0,NBTemp,21)
 		DoActions(FP,{
 			SetDeathsX(CurrentPlayer,SetTo,0,0,0xFFFF),
-			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00)})
+			SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})--SetCp(i),DisplayText("인식댐", 4)
+			
 
 	CIfXEnd()
 
 	
 	CMov(FP,0x6509B0,NBTemp,19)
-	CIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
+	NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
 	NRemove(FP,NBagArr[i+1])
-	CIfEnd()
+	NIfEnd()
 
 	NBagLoopEnd()
 	--iv.PUnitLevel
 
-	
 
 	if TestStart == 1 then 
 		--CMov(FP,StatP[i+1],500)
@@ -1613,6 +1611,16 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	DisplayPrint(i,{"\x13\x07『 \x02무색 조각\x04을 \x07",iv.B_PFfragItem[i+1]," 개 \x04 획득하였습니다. 현재 총 획득량 : \x07",iv.FfragItem[i+1]," 개 \x07』"})
 	CMov(FP, iv.B_PFfragItem[i+1], 0)
 	CIfEnd({})
+	
+	CIf(FP,{CV(iv.OldFfrag[i+1],1,AtLeast)})
+	local TempVX = CreateVar(FP)
+	f_Mul(FP, TempVX, iv.OldFfrag[i+1], 5)
+	f_LAdd(FP,iv.FfragItem[i+1],iv.FfragItem[i+1],{TempVX,0}) --
+	DisplayPrint(i,{"\x13\x07『 \x02???\x04을 \x07",iv.OldFfrag[i+1]," 개 \x07변환하여\x04 \x02무색 조각\x04을 ",TempVX," 개 획득하였습니다. 현재 총 획득량 : \x07",iv.FfragItem[i+1]," 개 \x07』"})
+	CMov(FP, iv.OldFfrag[i+1], 0)
+	CIfEnd({})
+
+
 	CIf(FP,{CV(B_PEXP[i+1],1,AtLeast)})
 	f_LAdd(FP,PEXP[i+1],PEXP[i+1],{B_PEXP[i+1],0}) --
 	CMov(FP, B_PEXP[i+1], 0)
@@ -1825,7 +1833,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		end
 		NIfXEnd()
 		CIfEnd()
-		TriggerX(FP, {CD(LV5Cool[i+1],0,AtMost);}, {SetCD(BossLV6Private[i+1],0)},{preserved})
+		--TriggerX(FP, {CV(LV5Cool[i+1],0,AtMost);}, {SetCD(BossLV6Private[i+1],0)},{preserved})
 	CIfEnd()
 	
 	CheckTrig("Interface_P"..(i+1))

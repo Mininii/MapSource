@@ -160,6 +160,7 @@ end
 	SCA.StatTotalEPer4X = SCA.CreateVar(FP)
 	SCA.StatBreakShield2 = SCA.CreateVar(FP)
 	SCA.FfragItem = SCA.CreateVar(FP)
+	SCA.FfragItem32 = SCA.CreateVar(FP)
 
 	--3.00 추가 데이터
 	SCA.FfragItemUsed = SCA.CreateVar(FP)
@@ -822,7 +823,7 @@ FirstReward3 = {
 }
 	NBagArr = {}
 	for i = 0,6 do
-		table.insert(NBagArr,NBag(FP, 1, 21))
+		table.insert(NBagArr,NBag(FP, 1, 521))
 	end
 
 	OreDPS = {100,1000,10000,100000,500000,1000000,5000000,0}
@@ -914,7 +915,28 @@ FirstReward3 = {
 	CS_BreakShieldLimit = 200
 
 
---	--{Max,FileArr}
+
+----	--{Max,FileArr}
+--	Cost_FXPer44 = CreateCostData(100,function(n) return 1+((n-1)*(n*1)) end)
+--	--마스터 10.0% = 30만, 
+--	Cost_FXPer45 = CreateCostData(100,function(n) return 1+((n-1)*(n*4)) end)
+--	--마스터 10.0% = 130만,
+--	Cost_FXPer46 = CreateCostData(100,function(n) return 1+((n-1)*(n*7)) end)
+--	--마스터 10.0% = 230만, 
+--	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
+--	--마스터 10.0% = 330만, 
+--	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*1)*n) end)
+--	--마스터 1.0% = 2500만, 컴플리트 3.0% 20억
+--	Cost_FIncm = CreateCostData(900,function(n) return n*50 end)
+--	--컴플리트 10000% = 2000만
+--	Cost_FSEXP = CreateCostData(1000,function(n) return 100+(2*n) end)
+--	--컴플리트 10000% = 110만
+--	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*20)*n) end)
+--	--컴플리트 15.0% = 25억
+
+
+	
+	--	--{Max,FileArr}
 	Cost_FXPer44 = CreateCostData(100,function(n) return 1+((n-1)*(n*1)) end)
 	--마스터 10.0% = 30만, 
 	Cost_FXPer45 = CreateCostData(100,function(n) return 1+((n-1)*(n*4)) end)
@@ -923,14 +945,14 @@ FirstReward3 = {
 	--마스터 10.0% = 230만, 
 	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
 	--마스터 10.0% = 330만, 
-	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*1)*n) end)
-	--마스터 1.0% = 2500만, 컴플리트 3.0% 20억
-	Cost_FIncm = CreateCostData(900,function(n) return n*50 end)
-	--컴플리트 10000% = 2000만
+	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*11)) end)
+	--마스터 1.0% = 376만, 컴플리트 3.0% 1억
+	Cost_FIncm = CreateCostData(900,function(n) return n*10 end)
+	--컴플리트 10000% = 200만
 	Cost_FSEXP = CreateCostData(1000,function(n) return 100+(2*n) end)
 	--컴플리트 10000% = 110만
-	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*20)*n) end)
-	--컴플리트 15.0% = 25억
+	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*1)*n) end)
+	--컴플리트 15.0% = 1.2억
 
 --	Cost_FXPer44 = 10
 --	Cost_FXPer45 = 40

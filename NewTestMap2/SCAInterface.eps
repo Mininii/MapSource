@@ -74,6 +74,7 @@ const RankTitle = PVariable();
 const StatTotalEPer4X = PVariable();
 const StatBreakShield2 = PVariable();
 const FfragItem = PVariable();
+const FfragItem32 = PVariable();
 const FfragItemUsed = PVariable();
 const TimeAttackScore48 = PVariable();
 const FirstRewardLim = PVariable();
@@ -241,6 +242,8 @@ Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(StatBreakShield2)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItem)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItem32)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItemUsed)+focus,0);
 Asm_Arrptr+=1;
@@ -508,7 +511,7 @@ function beforeTriggerExec(){
 			if(MapMakerFlag[cp]==1){
 			DisplayText("\x07『 \x03@칭호 1 \x04: \x07[\x03M\x04ap\x10 M\x04aker\x07] \x07』");
 			}
-			else if(TesterFlag[cp]>=1){
+			else if(TesterFlag[cp]&1){
 			DisplayText("\x07『 \x03@칭호 1 \x04: \x07[\x11T\x04ester \x1FU\x04ser\x07] \x07』");
 			}
 			else{
@@ -556,8 +559,8 @@ function beforeTriggerExec(){
 			DisplayText("\x07『 \x03@칭호 4 \x04: \x08없음 \x07』");
 			}
 			
-			 if(TesterFlag[cp]>=2){
-			DisplayText("\x07『 \x03@칭호 5 \x04: \x07[\x11S\x04eason \x022 \x1FT\x04ester] \x07』");
+			 if(TesterFlag[cp]&2){
+			DisplayText("\x07『 \x03@칭호 5 \x04: \x07[\x11S\x04eason \x022 \x1FT\x04ester\x07] \x07』");
 			}
 			else{
 			DisplayText("\x07『 \x03@칭호 5 \x04: \x08없음 \x07』");
@@ -573,7 +576,7 @@ function beforeTriggerExec(){
 		}
 		
 		if(<?ChatEvent("cp","@칭호 1")?>){
-			if(MapMakerFlag[cp]==1||TesterFlag[cp]>=1){//맵메이커 or 테스터
+			if(MapMakerFlag[cp]==1||TesterFlag[cp]&1){//맵메이커 or 테스터
 				f_eprintln("\x03칭호\x04가 \x071 \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,1,49);
 					SetDeaths(CurrentPlayer,SetTo,1,50);
@@ -624,7 +627,7 @@ function beforeTriggerExec(){
 		
 		
 		if(<?ChatEvent("cp","@칭호 5")?>){
-			if(TesterFlag[cp]>=2){// 테스터2
+			if(TesterFlag[cp]&2){// 테스터2
 				f_eprintln("\x03칭호\x04가 \x071 \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,1,49);
 					SetDeaths(CurrentPlayer,SetTo,5,50);
@@ -641,7 +644,7 @@ function beforeTriggerExec(){
 				if(MapMakerFlag[cp]==1){
 					SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
 				}
-				else if (TesterFlag[cp]>=1) {
+				else if (TesterFlag[cp]&1) {
 					SetPNamef(cp,"\x07[\x11T\x04ester \x1FU\x04ser\x07] {:c}{:n}",cp,cp);
 				}
 			}
@@ -684,8 +687,8 @@ function beforeTriggerExec(){
 					}
 			}
 			else if(Deaths(cp,Exactly,5,50)){
-				if( TesterFlag[cp]>=2){
-				SetPNamef(cp,"\x07[\x11S\x04eason \x022 \x1FT\x04ester] {:c}{:n}",cp,cp);
+				if( TesterFlag[cp]&2){
+				SetPNamef(cp,"\x07[\x11S\x04eason \x022 \x1FT\x04ester\x07] {:c}{:n}",cp,cp);
 					}
 			}
 		

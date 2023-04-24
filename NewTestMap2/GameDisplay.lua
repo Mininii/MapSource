@@ -607,20 +607,14 @@ function GameDisplay()
 		CMov(FP,TempV,iv.DayCheck2Loc,nil,0xFF,1)
 		CMov(FP,TempV2,iv.DayCheck2Loc,nil,0xFF00,1)
 		CrShift(FP, TempV2, 8)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 || \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일. "})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x1B48강 \x07타임어택 점수 : \x04",TimeAttackScore48Loc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일. "})
 		
 
-		CIf(FP,CV(NextOreLoc,1,AtLeast))
-			DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
-		CIfEnd()
-	
-		CIf(FP,CV(NextGasLoc,1,AtLeast))
-			DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc})
-		CIfEnd()
 	
 	CIfEnd()
 	
@@ -628,6 +622,13 @@ function GameDisplay()
 	
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
+	CIf(FP,CV(NextOreLoc,1,AtLeast))
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
+	CIfEnd()
+
+	CIf(FP,CV(NextGasLoc,1,AtLeast))
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0FLV.2 \x07돈 증가량 ",NextGasMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x07(가스)\x04 : \x07",NextGasLoc})
+	CIfEnd()
 --		for i = 0, 6 do
 --			CIf(FP,HumanCheck(i, 1))
 --			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
@@ -717,7 +718,7 @@ function GameDisplay()
 			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x048단계 \x04: \x02무색 조각\x04 25개, \x19유닛 판매권 10만개",
 			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10% \x12\x049단계 \x04: \x02무색 조각\x04 1000개",
-			"\x12\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
+			"\x13\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
 		

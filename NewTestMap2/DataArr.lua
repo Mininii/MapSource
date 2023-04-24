@@ -199,7 +199,7 @@ function DataArr()
 	iv.TesterFlag,ct.TesterFlag = CreateDataPV("TesterFlag",SCA.TesterFlag)
 	iv.Stat_TotalEPer4X,ct.Stat_TotalEPer4X = CreateDataPV("Stat_TotalEPer4X",SCA.StatTotalEPer4X)
 	iv.Stat_BreakShield2,ct.Stat_BreakShield2 = CreateDataPV("Stat_BreakShield2",SCA.StatBreakShield2)
-	iv.FfragItem,ct.FfragItem = CreateDataPW("FfragItem",{SCA.FfragItem,SCA.FfragItem64})
+	iv.FfragItem,ct.FfragItem = CreateDataPW("FfragItem",{SCA.FfragItem32,SCA.FfragItem64})
 	iv.B_PFfragItem,ct.B_PFfragItem = CreateDataPV("B_PFfragItem")
 	
 
@@ -258,6 +258,7 @@ function DataArr()
 	iv.E43,ct.E43 = CreateDataPV("E43") -- 43강유닛 생성용
 	iv.E44,ct.E44 = CreateDataPV("E44") -- 44강유닛 생성용
 
+	iv.OldFfrag,ct.OldFfrag = CreateDataPV("OldFfrag",SCA.FfragItem)
 
 	LocalDataArr = {
 		{iv.TotalEPer[1],iv.TotalEPerLoc},

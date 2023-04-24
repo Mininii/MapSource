@@ -48,10 +48,11 @@ function Install_CallTriggers()
 		CIf(FP,{CV(SPlayer,i)})
 		local NBTemp = CreateVar(FP)
 		NBagLoop(FP,NBagArr[i+1],{NBTemp})
+
 		CMov(FP,0x6509B0,NBTemp,19)
-		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
+		NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
 		NRemove(FP,NBagArr[i+1])
-		CIfEnd()
+		NIfEnd()
 	
 		NBagLoopEnd()
 		CMov(FP,0x6509B0,FP)

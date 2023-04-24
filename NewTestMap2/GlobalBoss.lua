@@ -172,13 +172,13 @@ for j,k in pairs(BossArr) do
 	CIfEnd()
 	NJumpEnd(FP,ClearJump)
 end
-DoActions(FP, SetInvincibility(Disable, BossArr[5][1], FP, 64))
-for i = 0,6 do
-	
-	TriggerX(FP, {HumanCheck(i,1),CV(LV5Cool[i+1],1,AtLeast);}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
---	TriggerX(FP, {HumanCheck(i,1),CD(SCA.LoadCheckArr[i+1],1,AtMost)}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
+--DoActions(FP, SetInvincibility(Disable, BossArr[5][1], FP, 64))
+--for i = 0,6 do
+--	
+--	TriggerX(FP, {HumanCheck(i,1),CV(LV5Cool[i+1],1,AtLeast);}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
+----	TriggerX(FP, {HumanCheck(i,1),CD(SCA.LoadCheckArr[i+1],1,AtMost)}, {SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})--
+--
 
-
-	
-end
+--	
+--end
 end
