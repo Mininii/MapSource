@@ -15,6 +15,7 @@ function onInit_EUD()
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(173, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	for j,k in pairs(BossArr) do
+		local addprop = {}
 		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,
 		HP=8320000,Armor = 0,StarEditFlag=0x1C7,AdvFlag={0,0x38008004},GroundWeapon=117,AirWeapon=130,Class=193,GroupFlag=0xA,DefUpType=60,Shield=false,Height=4,
 		HumanInitAct = 23,
@@ -22,7 +23,8 @@ function onInit_EUD()
 		AttackOrder = 23,
 		AttackMoveOrder = 23,
 		IdleOrder = 23,
-		RClickAct = 0
+		RClickAct = 0,
+		
 	})--보스건물 세팅
 	end
 	for j,k in pairs(PBossArr) do
@@ -61,6 +63,7 @@ for i = 0, 227 do
 	SetUnitsDatX(i, {AdvFlag={0,0x4},Height=4})
 end
 
+SetUnitsDatX(77, {DefType= 0})
 flingyarr = {4,8,9,14,15,46,45,47,49,73,74,75,77,78,82,84,200}
 for j,k in pairs(flingyarr) do
 table.insert(PatchArr, SetMemoryB(0x6C9858 + k,SetTo,1))

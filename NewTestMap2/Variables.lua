@@ -788,6 +788,7 @@ if TestStart == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"20000000"},
+		{77,"13222"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -796,6 +797,7 @@ else
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"34000000"},
+		{77,"13222"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 FirstReward = {
@@ -912,7 +914,11 @@ FirstReward3 = {
 	CS_TotalEPerLimit = 20
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
-	CS_BreakShieldLimit = 200
+	if Limit == 1 then
+		CS_BreakShieldLimit = 260
+	else
+		CS_BreakShieldLimit = 200
+	end
 
 
 

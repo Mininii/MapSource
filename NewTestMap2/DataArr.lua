@@ -189,7 +189,7 @@ function DataArr()
 	
 	iv.CS_BreakShieldData,ct.CS_BreakShieldData=CreateDataPV("CS_BreakShieldData")
 	iv.TotalBreakShield,ct.TotalBreakShield = CreateDataPV("TotalBreakShield")
-	iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
+	--iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
 	iv.SCCool,ct.SCCool = CreateDataPV("SCCool")
 	iv.AddSC,ct.AddSC = CreateDataPV("AddSC")
 	iv.MissionV,ct.MissionV = CreateDataPV("MissionV")

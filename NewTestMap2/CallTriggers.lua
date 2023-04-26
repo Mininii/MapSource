@@ -628,7 +628,6 @@ function Install_CallTriggers()
 			--9 = 작업 실패
 			--10 = 명령 실행
 			CIfX(FP, {TDeathsX(GCP, Exactly, 1, 1,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
-			CIfX(FP,{CV(iv.GeneralPlayTime,24*60*5,AtLeast)})
 				GetCreditData = CreateWar(FP)
 				GerRandData = CreateVar(FP)
 				GetPMissionData = CreateVar(FP)
@@ -639,15 +638,15 @@ function Install_CallTriggers()
 				CMovX(FP,GetPUnitLevel,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4))
 				f_LMovX(FP, GetCreditData, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4))
-				SaveChkData = CreateVar(FP)
+				--SaveChkData = CreateVar(FP)
 				GetEnchCoolData = CreateVar(FP)
 				CMovX(FP,GetEnchCoolData,VArrX(GetVArray(EnchCool[1], 7),VArrI,VArrI4))
-				CMovX(FP,SaveChkData,VArrX(GetVArray(iv.PSaveChk[1], 7),VArrI,VArrI4))
+				--CMovX(FP,SaveChkData,VArrX(GetVArray(iv.PSaveChk[1], 7),VArrI,VArrI4))
 				
 				CIf(FP,{CV(G_PushBtnm,0,AtLeast),CV(G_PushBtnm,1,AtMost)}) -- 
-					CIfX(FP,{TTOR({CV(GetPUnitLevel,10,AtLeast),CV(SaveChkData,1,AtLeast)})})
-						CTrigger(FP,{CV(GetPUnitLevel,10,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
-						CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 강화를 진행하기 위해선 먼저 저장해야 합니다. F9를 눌러주세요."), 4),SetCp(FP)},{preserved})
+					CIfX(FP,{CV(GetPUnitLevel,10,AtLeast)})--CV(SaveChkData,1,AtLeast)
+						CTrigger(FP,{},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
+						--CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 강화를 진행하기 위해선 먼저 저장해야 합니다. F9를 눌러주세요."), 4),SetCp(FP)},{preserved})
 						CElseX()
 						PrevPUnitLevel = CreateVar(FP)
 						CIfX(FP,{TTNWar(GetCreditData, AtLeast, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))})
@@ -656,7 +655,7 @@ function Install_CallTriggers()
 							CElseX()
 								CMov(FP, GetMissionData, 2, nil, 2)
 								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
-								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{SetV(GetEnchCoolData,50),SetV(SaveChkData,1),TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--저장필요
+								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{SetV(GetEnchCoolData,50),TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--저장필요 SetV(SaveChkData,1),
 								CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
 								f_LSub(FP, GetCreditData, GetCreditData, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))
 								CTrigger(FP,{CV(GerRandData,0)},{TSetNVar(GerRandData, SetTo, _Rand())},1)
@@ -701,6 +700,7 @@ function Install_CallTriggers()
 									TriggerX(FP,{CV(G_PushBtnm,1),CV(GetPUnitLevel,10)},{SetVX(GetMissionData,128,128)},{preserved})--
 								CElseX()--실패시
 								CMov(FP,GetPMissionData,1)
+								CMov(FP,GetMissionData,8192,nil,8192)
 
 								--TriggerX(FP,{CV(G_PushBtnm,1,AtLeast)},{},{preserved})--백신 사용
 									CMov(FP,GPEper,_Mod(GerRandData2,10000),1)
@@ -872,13 +872,8 @@ function Install_CallTriggers()
 				f_LMovX(FP, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4), GetCreditData)
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
-				CMovX(FP, VArrX(GetVArray(iv.PSaveChk[1], 7), VArrI, VArrI4),SaveChkData)
+				--CMovX(FP, VArrX(GetVArray(iv.PSaveChk[1], 7), VArrI, VArrI4),SaveChkData)
 				CMovX(FP,VArrX(GetVArray(EnchCool[1], 7),VArrI,VArrI4),GetEnchCoolData)
-			CElseIfX({TTNVar(G_PushBtnm,NotSame,10)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이 기능은 인게임 1시간이 지난 후 사용할 수 있습니다."), 4),SetCp(FP)})
-				CMov(FP,CTimeV,_Div(_Sub(_Mov(24*60*5),iv.GeneralPlayTime), 24))
-				CallTrigger(FP, Call_ConvertTime)
-				DisplayPrint(GCP, {"\x13\x07『 고유유닛 기능 \x04활성화까지 남은 시간 : \x07",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x07』"})
-			CIfXEnd()
 			CElseIfX({TTNVar(G_PushBtnm,NotSame,10)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
 			CIfXEnd()
 			
@@ -991,7 +986,7 @@ function Install_CallTriggers()
 
 	SetCallEnd()
 
-	TempWX = CreateWar(FP)
+	local TempWX = CreateWar(FP)
 	local LIndex = CreateVar(FP)
 	StartLV = CreateVar(FP)
 	EndLV = CreateVar(FP)
@@ -1258,6 +1253,62 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	SetCall(FP)
 	DV = CreateVar(FP)
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재까지 시즌 2 출석 이벤트 출석일수 : \x07",DV,"일 \x07』"})
+	SetCallEnd()
+
+	CurBossReward = CreateVar(FP)
+	Call_BossReward = SetCallForward()
+	SetCall(FP)
+	local VATmp_Stat_BossLVUP = CreateVar(FP)
+	local VATmp_PLevel = CreateVar(FP)
+	local VATmp_Stat_BossSTic = CreateVar(FP)
+	local TempSTicV = CreateVar(FP)
+	local TempWX = CreateWar(FP)
+	CMovX(FP,VATmp_Stat_BossLVUP,VArrX(GetVArray(iv.Stat_BossLVUP[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,VATmp_PLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,VATmp_Stat_BossSTic,VArrX(GetVArray(iv.Stat_BossSTic[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+
+
+	CIf(FP,{CV(VATmp_Stat_BossLVUP,1,AtLeast)})
+	f_LMov(FP, TempWX, "0", nil, nil, 1)
+	CMov(FP,StartLV,VATmp_PLevel)
+	CIfX(FP,{CV(CurBossReward,1)})
+	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mov(150)))
+	CElseX()
+	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mov(50)))
+	CIfXEnd()
+	
+
+	CallTrigger(FP, Call_GetLevelEXP)
+
+	CIfX(FP,{CV(CurBossReward,1)})
+		CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({VATmp_Stat_BossLVUP,0}, "3000000000"))})
+		f_LMov(FP, TempWX, _LMul({VATmp_Stat_BossLVUP,0}, "3000000000"))
+		CIfEnd()
+	CElseX()
+		CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({VATmp_Stat_BossLVUP,0}, "1000000000"))})
+		f_LMov(FP, TempWX, _LMul({VATmp_Stat_BossLVUP,0}, "1000000000"))
+		CIfEnd()
+	CIfXEnd()
+
+	f_LMovX(FP, WArrX(GetWArray(iv.PEXP[1], 7), WArrI, WArrI4), TempWX, Add)
+	DisplayPrint(GCP, {"\x13\x07『 \x08파티 보스 \x1FLV.5, \x1DExtra \x04처치시 \x1F레벨업 능력치 ",VATmp_Stat_BossLVUP,"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
+	CIfEnd()
+	CIf(FP,{CV(VATmp_Stat_BossSTic,1,AtLeast)})
+	CIfX(FP,{CV(CurBossReward,1)})
+	CMovX(FP, VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mov(300)), Add)
+	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,300)
+	CElseX()
+	CMovX(FP, VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mov(100)), Add)
+	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,100)
+	CIfXEnd()
+	DisplayPrint(GCP, {"\x13\x07『 \x08파티 보스 \x1FLV.5, \x1DExtra \x04처치시 \x19유닛 판매권 ",VATmp_Stat_BossSTic,"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
+	CIfEnd()
+	--if TestStart == 1 then
+	--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
+	--else
+	--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60*60*1)},{preserved})
+	--end
+
 	SetCallEnd()
 
 

@@ -395,9 +395,9 @@ function GameDisplay()
 			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"빈 항목입니다.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"빈 항목입니다.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,S_BossSTicLoc,100)
-			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권 + 100개 \x08MAX 10 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			DisplayPrint(LCP, {"\x071. \x08파티 보스 \x1FLV.5, \x1DExtra\x04(x3) \x04처치시 \x19유닛 판매권 + 100개 \x08MAX 10 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," 개 ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			CMul(FP,S_BossLVUPLoc,50)
-			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5 \x04처치시 \x1F레벨 +50업 \x08MAX 5 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08파티 보스 \x1FLV.5, \x1DExtra\x04(x3) \x04처치시 \x1F레벨 +50업 \x08MAX 5 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,UpgradeLoc,10)
 			DisplayPrint(LCP, {"\x073. \x1B보유 유닛 \x08데미지 \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
@@ -482,8 +482,8 @@ function GameDisplay()
 		local StatPrintEr = {
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x08데미지\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
 			--StrDesign("\x04게임 시작시 처음 지급하는 \x07기본유닛(스카웃) \x0F갯수\x04를 증가시킵니다. \x08주의 \x04: \x07기본유닛\x04은 3분 뒤 사라집니다."),
-			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 \x19유닛 판매권\x04을 얻습니다."),
-			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시마다 일정량의 레벨이 증가합니다. \x08주의 \x04: 얻을 수 있는 \x1C최대 경험치\x04는 \x08최대 50억 \x04입니다."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시 \x19유닛 판매권\x04을 얻습니다. \x1DExtra\x04는 3배 획득."),
+			StrDesign("\x08파티 보스 \x1FLV.5 \x04처치시 \x1C레벨\x04이 증가합니다. \x08주의 \x04: \x1C최대 경험치\x04는 \x08최대 50억, \x1DExtra\x04는 3배 획득."),
 			StrDesign("\x04자신의 \x07강화 \x04유닛 \x08데미지\x04를 증가시킵니다."),
 			StrDesign("\x07+1\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: \x07+2, \x10+3 \x04강화확률에 대한 영향은 \x08없습니다."),
 			StrDesign("\x07+2\x08 강화확률\x04을 증가시킵니다. \x08주의 \x04: 이 항목은 \x0F36강 \x04유닛 이상부터 +1로 합산, 적용됩니다."),
@@ -707,7 +707,7 @@ function GameDisplay()
 			"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
 			"\x13\x08단, SCA 로드가 \x072명 이상 \x08완료되어야 영구 유지 됩니다. (런쳐 로드 \x071인이하 \x04멀티플레이일 경우 \x08영구 유지 불가\x04)",
 			"\x13\x04\x08개인 보스 몬스터 \x04지역은 25강 이하 유닛만 개인별로 공략 가능하며 \x0F1초간의 데미지(DPS)\x04으로 클리어 여부를 결정합니다.",
-			"\x13\x04개인보스 \x07LV.6 \x04이상부터는 \x1041강 이상 유닛부터 공략 가능합니다.",
+			"\x13\x04개인보스 \x07LV.6 \x04이상부터는 \x1041강 이상 유닛부터 공략 가능\x04하며 \x071회 한정 전체 보상이 있습니다.",
 			"\x13\x04\x08파티 보스 몬스터 \x04지역은 26강~40강 유닛으로 입장 가능하며 \x081분간의 데미지(DPM)\x04으로 클리어 여부를 결정합니다.",
 		},
 	
@@ -729,6 +729,7 @@ function GameDisplay()
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
 			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
 			"\x045단계 \x04: \x175만 크레딧 \x04+ \x07자신의 투자 스탯에 따라 보상이 상이합니다.",
+			"\x1BExtra \x04: \x1F확정 강화권\x04 1개 + \x07자신의 투자 스탯에 따라 보상이 상이합니다.",
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},

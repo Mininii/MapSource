@@ -231,7 +231,7 @@ function Interface()
 		{{CVX(MissionV[i+1],256,256)},{50000,500,1},"상점에서 강화기 백신 1개 이상 구입하기"},
 		{{CVX(MissionV[i+1],2,2)},{30000,100,3},"고유유닛 강화 시도하기"},
 		{{CVX(MissionV[i+1],1024,1024)},{100000,500,1},"상점에서 강화기 백신 1개 이상 되팔기"},
-		{{CV(BossLV,9,AtLeast)},{300000},"파티보스 LV.5 한번에 5회 처치하기"},
+		{{CVX(MissionV[i+1],8192,8192)},{300000},"고유유닛 강화 실패 또는 유지하기"},
 		{{CV(PUnitLevel[i+1],10,AtLeast)},{250000,0,5,0,1},"고유유닛 10강 달성하기"},
 		{{CVX(MissionV[i+1],16,16)},{100000,500},"고유유닛 승급하기"},
 		{{CD(VaccSCount[i+1],5,AtLeast)},{250000,2000},"상점에서 강화기 백신 5개 이상 되팔기"},
@@ -689,7 +689,7 @@ for i = 0, 6 do -- 각플레이어
 				AddVX(DayCheck2[i+1],1*0x100,0xFF00),
 				AddV(B_PCredit[i+1],500000),
 				AddV(iv.B_PFfragItem[i+1],5),
-				SetCp(i),DisplayExtText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02무색 조각\x04를 5개 얻었습니다."), 4)})
+				SetCp(i),DisplayExtText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02??? \x04를 5개 얻었습니다."), 4)})
 				local TempV = CreateVar(FP)
 				local TempV2 = CreateVar(FP)
 				local TempV3 = CreateVar(FP)
@@ -699,7 +699,7 @@ for i = 0, 6 do -- 각플레이어
 			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
 			DoActionsX(FP, {
 				AddV(iv.B_PFfragItem[i+1],50),
-				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x02무색 조각\x04를 50개 얻었습니다."), 4)})
+				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x02??? \x04를 50개 얻었습니다."), 4)})
 			CIfEnd()
 			CallTrigger(FP,Call_DailyPrint)
 			CMov(FP,DV,TempV3)
@@ -1099,7 +1099,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	--CTrigger(FP,{CV(PUnitCurLevel[i+1],99,AtMost)},{SetMemoryB(0x6564E0+PersonalWIDArr[i+1],SetTo,1)},1)
 	CIfEnd()
 
-	TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(EnchCool[i+1],0)},{SetV(iv.PSaveChk[i+1],0),SetCp(i),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 이제 다시 강화를 진행할 수 있습니다."), 4)},{preserved})
+	--TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(EnchCool[i+1],0)},{SetV(iv.PSaveChk[i+1],0),SetCp(i),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 이제 다시 강화를 진행할 수 있습니다."), 4)},{preserved})
 	CallTrigger(FP,Call_BtnInit,{})
 
 	
@@ -1834,8 +1834,11 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		NIfXEnd()
 		CIfEnd()
 		--TriggerX(FP, {CV(LV5Cool[i+1],0,AtMost);}, {SetCD(BossLV6Private[i+1],0)},{preserved})
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,0)})
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)})
 	CIfEnd()
 	
+
 	CheckTrig("Interface_P"..(i+1))
 end
 

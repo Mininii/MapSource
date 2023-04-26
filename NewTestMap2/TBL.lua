@@ -64,6 +64,7 @@ function TBL()
 	t05 = "\x08판매 불가 유닛"
 	t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t09 = "\x08현재 DPS : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
+	t09_1 = "\x1D현재 타격수 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
 	t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
 	t11 = "\x04(SCA 로드후 3분뒤 사라짐)"
@@ -161,7 +162,6 @@ function TBL()
 		f_LMov(FP, SelEXP, "0"  ,nil,nil, 1)
 	NIfXEnd()
 	
-	CIfX(FP,{CD(BossFlag,0)})
 	CIfX(FP,{Never()})
 	for i = 0, 6 do
 		CElseIfX({CV(SelPl,i)},{})
@@ -182,14 +182,6 @@ function TBL()
 	StrDesignX("\x04총 91개의 크고 작은 섬들로 이루어져 있는 대한민국의 섬이다. ").."\n"..
 	StrDesignX("\x04울릉도에서 뱃길로 200리 정도 떨어져 있다.").."\n"..
 	StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
-	CIfXEnd()
-	CElseX()
-	local BossLV = iv.BossLV-- CreateVar(FP)
-	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP)})
-	for i = 0, 4 do
-		TriggerX(FP,{CD(BossFlag2,0),CV(BossLV,4+i,Exactly)},{DisplayExtText(StrDesignX("\x04현재 \x08LV.5 \x04보스를 \x1C"..(i).."회\x04째 처치중이며 \x04보상은 \x17"..((5-i)*5000).." 크레딧 \x04입니다."), 4)},{preserved})
-	end
-	DoActions(FP,{SetMemory(0x6509B0, SetTo, FP)})
 	CIfXEnd()
 	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 서서히 감소합니다."), 4)},{preserved})
 	
@@ -412,7 +404,11 @@ function TBL()
 		f_LMov(FP,TotalBossDPMLoc,TotalPBossDPS[i+1])
 		CIfEnd()
 	end
+	CIfX(FP,{CV(SelUID,77)})
+	CS__SetValue(FP,TStr4,t09_1,nil,0)
+	CElseX()
 	CS__SetValue(FP,TStr4,t09,nil,0)
+	CIfXEnd()
 	CElseX()
 	f_LMov(FP,TotalDPMLoc,TotalDPM)
 	f_LMov(FP,TotalBossDPMLoc,BossDPM)
