@@ -622,6 +622,7 @@ function GameDisplay()
 	
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O) \x04: ",PETicketLoc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1E각성의 보석 \x07(저장O) \x04: \x07",iv.AwakItemLoc})
 	CIf(FP,CV(NextOreLoc,1,AtLeast))
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
 	CIfEnd()
@@ -729,7 +730,7 @@ function GameDisplay()
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
 			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
 			"\x045단계 \x04: \x175만 크레딧 \x04+ \x07자신의 투자 스탯에 따라 보상이 상이합니다.",
-			"\x1BExtra \x04: \x1F확정 강화권\x04 1개 + \x07자신의 투자 스탯에 따라 보상이 상이합니다.",
+			"\x1BExtra \x04: \x1F확정 강화권\x04 1개 + \x07자신의 투자 스탯에 따라 보상이 상이합니다. \x08(SCA런쳐 2인이상 로드시 출현함)",
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},

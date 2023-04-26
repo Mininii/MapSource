@@ -259,6 +259,12 @@ function DataArr()
 	iv.E44,ct.E44 = CreateDataPV("E44") -- 44강유닛 생성용
 
 	iv.OldFfrag,ct.OldFfrag = CreateDataPV("OldFfrag",SCA.FfragItem)
+	iv.AwakItem,ct.AwakItem = CreateDataPV("AwakItem",SCA.AwakItem)
+	iv.CSX_LV3Incm,ct.CSX_LV3Incm = CreateDataPV("CSX_LV3Incm",SCA.CSX_LV3Incm)
+	iv.CSX_LV3IncmData,ct.CSX_LV3IncmData = CreateDataPV("CSX_LV3IncmData")
+
+	
+	
 
 	LocalDataArr = {
 		{iv.TotalEPer[1],iv.TotalEPerLoc},
@@ -335,7 +341,8 @@ function DataArr()
 		{iv.Stat_XEPer47[1],iv.Stat_XEPer47Loc},
 		{iv.TempIncm[1],iv.TempIncmLoc},
 		{iv.FfragItem[1],iv.FfragItemLoc},
-		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc}
+		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},
+		{iv.AwakItem[1],iv.AwakItemLoc}
 				
 	}
 

@@ -915,10 +915,14 @@ for i = 0, 6 do -- 각플레이어
 	
 	local CCVar = CreateVar2(FP,nil,nil,0xFFFFFFFF)
 	local CCVar2 = CreateVar2(FP,nil,nil,0xFFFFFFFF)
-	CIf(FP,{TTOR({TTNVar(iv.FIncm[i+1],NotSame,CCVar),TTNVar(Stat_LV3Incm[i+1],NotSame,CCVar2)})})
+	local CCVar3 = CreateVar2(FP,nil,nil,0xFFFFFFFF)
+
+	
+	CIf(FP,{TTOR({TTNVar(iv.FIncm[i+1],NotSame,CCVar),TTNVar(Stat_LV3Incm[i+1],NotSame,CCVar2),TTNVar(iv.CSX_LV3IncmData[i+1],NotSame,CCVar3)})})
 	CMov(FP,CCVar,iv.FIncm[i+1])
 	CMov(FP,CCVar2,Stat_LV3Incm[i+1])
-	f_LMov(FP,iv.TempIncm[i+1],_LDiv({_Mul(_Add(Stat_LV3Incm[i+1],100),_Add(iv.FIncm[i+1],100)),0},"100"))
+	CMov(FP,CCVar3,iv.CSX_LV3IncmData[i+1])
+	f_LMov(FP,iv.TempIncm[i+1],_LDiv(_LMul({_Mul(_Add(Stat_LV3Incm[i+1],100),_Add(iv.FIncm[i+1],100)),0}, {iv.CSX_LV3IncmData[i+1],0}),"10000"))
 	CIfEnd()
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{TempO[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG[i+1]},Money[i+1])
@@ -1066,10 +1070,12 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP,{CV(CS_TotalEper4[i+1],CS_TotalEper4Limit,AtLeast)},{SetV(CS_TotalEper4[i+1],CS_TotalEper4Limit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 	TriggerX(FP,{CV(CS_DPSLV[i+1],CS_DPSLVLimit,AtLeast)},{SetV(CS_DPSLV[i+1],CS_DPSLVLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 	TriggerX(FP,{CV(CS_BreakShield[i+1],CS_BreakShieldLimit,AtLeast)},{SetV(CS_BreakShield[i+1],CS_BreakShieldLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
+	TriggerX(FP,{CV(iv.CSX_LV3Incm[i+1],CSX_LV3IncmLimit,AtLeast)},{SetV(iv.CSX_LV3Incm[i+1],CSX_LV3IncmLimit)},{preserved})--모든 데이터를 리미트수치만큼으로 고정
 
 	CMov(FP,PUnitCurLevel[i+1],PUnitClass[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_Cooldown[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_Atk[i+1])
+	CAdd(FP,PUnitClass[i+1],iv.CSX_LV3Incm[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_EXP[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_TotalEPer[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_TotalEper4[i+1])
@@ -1092,6 +1098,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],250)
 	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
 	f_Mul(FP,CS_BreakShieldData[i+1],CS_BreakShield[i+1],100)
+	f_Mul(FP,iv.CSX_LV3IncmData[i+1],_Add(iv.CSX_LV3Incm[i+1],1),100)
 	
 	
 	--
@@ -1548,7 +1555,7 @@ Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
 	AddV(B_PTicket[i+1],100000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
-	AddV(iv.B_PFfragItem[i+1], 1000),
+	AddV(iv.B_PFfragItem[i+1], 10000),
 	
 })
 
@@ -1750,7 +1757,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	CallTrigger(FP, Call_GetLocalData)
 	TriggerX(FP,{CD(iv.StatEff[i+1],1)},{SetCD(iv.StatEffLoc,1)},{preserved})
 	CIfEnd()
-	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1),SubV(EnchCool[i+1], 1)})
+	DoActionsX(FP,{SubCD(ZKeyCool[i+1], 1)})
 		--핫키 QCUnit 등록방지
 		local Cunit2 = CreateVar(FP)
 		local KSelUID = CreateVar(FP)
@@ -1834,8 +1841,8 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		NIfXEnd()
 		CIfEnd()
 		--TriggerX(FP, {CV(LV5Cool[i+1],0,AtMost);}, {SetCD(BossLV6Private[i+1],0)},{preserved})
-	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,0)})
-	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)})
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,0)},1)
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)},1)
 	CIfEnd()
 	
 

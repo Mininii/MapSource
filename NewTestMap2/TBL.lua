@@ -63,8 +63,8 @@ function TBL()
 	t10_1 = "\x07뽑기 \x17(판매권 1만개 필요)\x04 확률표 : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 	t05 = "\x08판매 불가 유닛"
 	t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
+	t06_1 = "\x1D현재 타격수 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t09 = "\x08현재 DPS : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
-	t09_1 = "\x1D현재 타격수 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
 	t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
 	t11 = "\x04(SCA 로드후 3분뒤 사라짐)"
@@ -172,6 +172,12 @@ function TBL()
 		CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
 		CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
 		CMov(FP,TotalEPer4Loc,TotalEPer4[i+1])--특수확률 합산
+		CMov(FP,iv.XEPer44Loc,iv.XEPer44[i+1])
+		CMov(FP,iv.XEPer45Loc,iv.XEPer45[i+1])
+		CMov(FP,iv.XEPer46Loc,iv.XEPer46[i+1])
+		CMov(FP,iv.XEPer47Loc,iv.XEPer47[i+1])
+
+
 	end
 	CElseX()
 	CTrigger(FP,{
@@ -404,15 +410,15 @@ function TBL()
 		f_LMov(FP,TotalBossDPMLoc,TotalPBossDPS[i+1])
 		CIfEnd()
 	end
-	CIfX(FP,{CV(SelUID,77)})
-	CS__SetValue(FP,TStr4,t09_1,nil,0)
-	CElseX()
 	CS__SetValue(FP,TStr4,t09,nil,0)
-	CIfXEnd()
 	CElseX()
 	f_LMov(FP,TotalDPMLoc,TotalDPM)
 	f_LMov(FP,TotalBossDPMLoc,BossDPM)
+	CIfX(FP,{CV(SelUID,77)})
+	CS__SetValue(FP,TStr4,t06_1,nil,0)
+	CElseX()
 	CS__SetValue(FP,TStr4,t06,nil,0)
+	CIfXEnd()
 	CIfXEnd()
 	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)--DPS 수치
 	

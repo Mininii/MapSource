@@ -361,6 +361,7 @@ end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
 	local WepName = {}
+	WepName[4] = 1447
 	WepName[5] = 1446
 	WepName[12] = 1445
 	WepName[24] = 1444
@@ -1084,49 +1085,47 @@ function init_Setting()
 	SetCallEnd2()
 	
 	
---	SetCall2(FP, dp.Call_lIToDec)
---	DoActionsX(FP, {
---		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--init << 0
---	local li = def_sIndex()
---	NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"1"..string.rep("0",19))},{
---		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303031),
---		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
---		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--<<Zeromode = 0x0D
---		for i = 19, 1, -1 do
---			local wt = string.rep("9",i)
---			local mb = 3-i%4
---			local MaskBit = 256^mb
---			local idx = 4-math.floor(i/4)
---			CTrigger(FP,{TTNWar(dp.publiclItoDecW,AtMost,wt)},{SetCVAar(VArr(dp.publiclItoDecVArr,idx),SetTo,MaskBit*0x0D,MaskBit*0xFF)},1)--<<Zeromode = 0x0D
---		end--
+	SetCall2(FP, dp.Call_lIToDec)
+	DoActionsX(FP, {
+		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--init << 0
+	local li = def_sIndex()
+	NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"1"..string.rep("0",19))},{
+		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303031),
+		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
+		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--<<Zeromode = 0x0D
+		for i = 19, 1, -1 do
+			local wt = string.rep("9",i)
+			local mb = 3-i%4
+			local MaskBit = 256^mb
+			local idx = 4-math.floor(i/4)
+			CTrigger(FP,{TTNWar(dp.publiclItoDecW,AtMost,wt)},{SetCVAar(VArr(dp.publiclItoDecVArr,idx),SetTo,MaskBit*0x0D,MaskBit*0xFF)},1)--<<Zeromode = 0x0D
+		end--
+		NJumpEnd(FP,li)
+		function dp.War_NumSet(DestVAI,DivNum,MaskBit)
+			local MaskBit = 256^MaskBit
+			for i = 3, 0, -1 do
+				local CBit = 2^i
+				local nt = tostring(CBit)..string.rep("0",DivNum)
+				CIf(FP,{TTNWar(dp.publiclItoDecW, AtLeast, nt)},{SetCVAar(VArr(dp.publiclItoDecVArr,DestVAI), Add, CBit*MaskBit,MaskBit*0xFF)})
+				f_LSub(FP, dp.publiclItoDecW, dp.publiclItoDecW, nt)
+				CIfEnd()
+			end
+		end
+		for i = 18, 0, -1 do
+			local mb=3-(i%4)
+			local mi=4-math.floor(i/4)
+			dp.War_NumSet(mi,i,mb)
+		end
+		--
 
---		NJumpEnd(FP,li)
---		function dp.War_NumSet(DestVAI,DivNum,MaskBit)
---			local MaskBit = 256^MaskBit
---			for i = 3, 0, -1 do
---				local CBit = 2^i
---				local nt = tostring(CBit)..string.rep("0",DivNum)
---				CIf(FP,{TTNWar(dp.publiclItoDecW, AtLeast, nt)},{SetCVAar(VArr(dp.publiclItoDecVArr,DestVAI), Add, CBit*MaskBit,MaskBit*0xFF)})
---				f_LSub(FP, dp.publiclItoDecW, dp.publiclItoDecW, nt)
---				CIfEnd()
---			end
---		end
---		for i = 18, 0, -1 do
---			local mb=3-(i%4)
---			local mi=4-math.floor(i/4)
---			dp.War_NumSet(mi,i,mb)
---		end
---		--
---
---
 
---	SetCallEnd2()--
+	SetCallEnd2()--
 
 --	SetCall2(FP, dp.Call_lIToDec)
 --	DoActionsX(FP, {

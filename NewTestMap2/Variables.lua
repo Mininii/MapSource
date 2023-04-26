@@ -183,6 +183,7 @@ end
 	SCA.FfragItemUsed64 = SCA.CreateVar(FP)
 	SCA.FStatVer = SCA.CreateVar(FP)
 	SCA.PLevel2 = SCA.CreateVar(FP)
+	SCA.AwakItem = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -289,7 +290,6 @@ end
 	CT_NextRandW = CreateWarArr(7,FP)
 	CT_PrevRandW = CreateWarArr(7,FP)
 
-	EnchCool = CreateVarArr(7, FP)
 	--String
 	VaccSCount = CreateCcodeArr(7)
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
@@ -477,6 +477,8 @@ end
 	iv.Cost_FBrShLoc = CreateVar(FP)
 	iv.Cost_FXPer47Loc = CreateVar(FP)
 	iv.Cost_FMEPerLoc = CreateVar(FP)
+	iv.AwakItemLoc = CreateVar(FP)
+
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -602,7 +604,6 @@ end
 	ct.PUnitClass = CreateVarArr(7,FP)
 
 	ct.CurPUnitCool = CreateVarArr(7,FP)
-	
 
 	ctg.PCheckV = CreateVar(FP)--플레이어 수 체크
 	ctg.B_IncomeMax = CreateVar(FP)
@@ -737,8 +738,8 @@ end
 	PushLevelUnit(25+19,10000,4000000000,63,70,12,400,59)--개별확률 -- 다크아칸
 	PushLevelUnit(25+20,7000,0,74,62,48,2500,59)--개별확률 -- 프로브
 	PushLevelUnit(25+21,4000,0,81,76,24,2800,59)--개별확률 -- 
-	PushLevelUnit(25+22,1000,0,78,67,12,3600,59)--개별확률
-	PushLevelUnit(25+23,0,0,79,69,5,6550,59)-- 최강유닛
+	PushLevelUnit(25+22,1000,0,78,67,12,3400,59)--개별확률
+	PushLevelUnit(25+23,0,0,79,69,4,6550,59)-- 최강유닛
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
@@ -788,7 +789,7 @@ if TestStart == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"20000000"},
-		{77,"13222"},
+		{77,"63222"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -797,7 +798,7 @@ else
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"34000000"},
-		{77,"13222"},
+		{77,"63222"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 FirstReward = {
@@ -818,10 +819,10 @@ FirstReward2 = {
 }
 
 FirstReward3 = {
-	{45,5000000,10,"\x1C",10},
-	{46,10000000,40,"\x1E",7},
-	{47,20000000,70,"\x02",4},
-	{48,50000000,100,"\x1B",1},
+	{45,10000000,100,"\x1C",10},
+	{46,40000000,400,"\x1E",7},
+	{47,70000000,700,"\x02",4},
+	{48,100000000,1000,"\x1B",1},
 }
 	NBagArr = {}
 	for i = 0,6 do
@@ -843,7 +844,7 @@ FirstReward3 = {
 	Cost_Stat_TotalEPer2 = 200
 	Cost_Stat_TotalEPer3 = 1000
 	Cost_Stat_TotalEPer4 = 500
-	Cost_Stat_TotalEPer4X = 3000
+	Cost_Stat_TotalEPer4X = 1000
 	Cost_Stat_BreakShield = 250
 	Cost_Stat_BreakShield2 = 1000
 	Cost_Stat_LV3Incm = 100
@@ -914,6 +915,7 @@ FirstReward3 = {
 	CS_TotalEPerLimit = 20
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
+	CSX_LV3IncmLimit = 60
 	if Limit == 1 then
 		CS_BreakShieldLimit = 260
 	else

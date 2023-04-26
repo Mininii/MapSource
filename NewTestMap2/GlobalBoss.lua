@@ -71,14 +71,12 @@ Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
 	AddV(iv.PETicket[5], 1),
 	AddV(iv.PETicket[6], 1),
 	AddV(iv.PETicket[7], 1),
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1D6단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1DExtra Boss\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
-local TempEXPV = CreateVar(FP)
-local TempSTicV = CreateVar(FP)
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1C6단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1F7단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
-Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1E8단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 100,000."), 4)}, Force1,FP)})
-Trigger2X(FP, {CDX(PBossClearFlag,8,8)}, {SetV(B_Credit,200000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1D9단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 200,000."), 4)}, Force1,FP)})
+--Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1E8단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 100,000."), 4)}, Force1,FP)})
+--Trigger2X(FP, {CDX(PBossClearFlag,8,8)}, {SetV(B_Credit,200000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1D9단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 200,000."), 4)}, Force1,FP)})
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)
@@ -96,11 +94,17 @@ TriggerX(FP,{CV(DPSCheck2,1440,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
 CIfX(FP, {CV(BossLV,5)})
 
-CIfX(FP,{TMemory(BossEPD,AtMost,8319999*256)})
+CIfX(FP,{TMemory(BossEPD,AtMost,(8319999*256)+128)})
 	f_Read(FP, BossEPD, DPSCheckV)
 	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
 	CTrigger(FP,{},{TSetMemory(BossEPD,SetTo,8320000*256)},1)
+	--if Limit == 1 then
+	--	DisplayPrint(AllPlayers,{"Dmg256 : ",DpsDest})
+	--end
 	CrShift(FP, DpsDest, 7)
+	--if Limit == 1 then
+	--	DisplayPrint(AllPlayers,{"Dmg1 : ",DpsDest})
+	--end
 	CElseX()
 	CMov(FP,DpsDest,0)
 	CIfXEnd()

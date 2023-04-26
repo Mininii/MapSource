@@ -95,6 +95,8 @@ const FfragItem64 = PVariable();
 const FfragItemUsed64 = PVariable();
 const FStatVer = PVariable();
 const PLevel2 = PVariable();
+const AwakItem = PVariable();
+const CSX_LV3Incm = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
 sca.Init();
@@ -284,6 +286,10 @@ Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(FStatVer)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(PLevel2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(AwakItem)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CSX_LV3Incm)+focus,0);
 Asm_Arrptr+=1;
 
 
