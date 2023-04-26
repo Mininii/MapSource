@@ -305,7 +305,7 @@ function Interface()
 		TriggerX(FP,{CV(PCheckV,i)},{SetV(ULimitV,ULimitArr[i]),SetV(ULimitV2,ULimitArr[i]-1)},{preserved})
 	end
 	if Limit == 1 then
-		--DoActionsX(FP,{SetV(PCheckV,7)})
+		DoActionsX(FP,{SetV(PCheckV,7),SetCD(PartyBonus,2)})
 	end
 	local PartyBonus2 = iv.PartyBonus2
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
@@ -1081,7 +1081,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,PUnitClass[i+1],CS_TotalEper4[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_DPSLV[i+1])
 	CAdd(FP,PUnitClass[i+1],CS_BreakShield[i+1])
-	TriggerX(FP,{CV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit+CS_BreakShieldLimit,AtLeast)},{SetV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit+CS_BreakShieldLimit)},{preserved})
+	TriggerX(FP,{CV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit+CS_BreakShieldLimit+CSX_LV3IncmLimit,AtLeast)},{SetV(PUnitClass[i+1],CS_CooldownLimit+CS_AtkLimit+CS_EXPLimit+CS_TotalEPerLimit+CS_TotalEper4Limit+CS_DPSLVLimit+CS_BreakShieldLimit+CSX_LV3IncmLimit)},{preserved})
 
 
 
@@ -1098,7 +1098,7 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	f_Mul(FP,CS_TEPerData[i+1],CS_TotalEPer[i+1],250)
 	f_Mul(FP,CS_TEPer4Data[i+1],CS_TotalEper4[i+1],500)
 	f_Mul(FP,CS_BreakShieldData[i+1],CS_BreakShield[i+1],100)
-	f_Mul(FP,iv.CSX_LV3IncmData[i+1],_Add(iv.CSX_LV3Incm[i+1],1),100)
+	CMov(FP, iv.CSX_LV3IncmData[i+1], iv.CSX_LV3Incm[i+1], 100)
 	
 	
 	--

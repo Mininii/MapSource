@@ -1735,7 +1735,7 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName) --Dest == W then Use Sour
 		f_Cast(FP, {Temp32,0},TempRead)
 		f_Cast(FP, {Temp64,1},TempRead)
 		if Limit == 1 then
-			DisplayPrint(GCP, {"Player : ",GCP," || DataName : "..DataName.." || TempRead : ",TempRead," || 32bit : ",Temp32," || 64bit : ",Temp64})
+			--DisplayPrint(GCP, {"Player : ",GCP," || DataName : "..DataName.." || TempRead : ",TempRead," || 32bit : ",Temp32," || 64bit : ",Temp64})
 			
 		end
 		f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, SetTo, nil, nil,1)

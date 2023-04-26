@@ -777,7 +777,7 @@ function Install_CallTriggers()
 					CMovX(FP,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),GetPETicket)
 
 
-					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,9,AtMost)},{}) -- 승급
+					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,10,AtMost)},{}) -- 승급
 						CIfX(FP,{CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 승급에 필요한 강화 단계가 부족합니다. 필요 단계 : 10강"), 4),SetCp(FP)})
 						CElseX()
 							GetUID = CreateVar(FP)
@@ -867,6 +867,7 @@ function Install_CallTriggers()
 									CMovX(FP,VArrX(GetVArray(iv.CS_TotalEPer[1], 7),VArrI,VArrI4),GetTotalEPerData)
 									CMovX(FP,VArrX(GetVArray(iv.CS_TotalEper4[1], 7),VArrI,VArrI4),GetTotalEper4Data)
 									CMovX(FP,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4),GetDPSLVData)
+									CMovX(FP,VArrX(GetVArray(iv.CSX_LV3Incm[1], 7),VArrI,VArrI4),GetLV3IncmData)
 
 
 								CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
@@ -885,7 +886,6 @@ function Install_CallTriggers()
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
 				--CMovX(FP, VArrX(GetVArray(iv.PSaveChk[1], 7), VArrI, VArrI4),SaveChkData)
-				CMovX(FP,VArrX(GetVArray(iv.CSX_LV3Incm[1], 7),VArrI,VArrI4),GetLV3IncmData)
 				CMovX(FP,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),GetAwakItemData)
 
 
@@ -1156,6 +1156,7 @@ function Install_CallTriggers()
 
 	
 	Ga_45 = {
+		{"\x1E각성의 보석",1,1,iv.AwakItem},
 		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
 		{"\x1F확정 강화권",5,500,iv.PETicket},
 		{"\x171000경원 수표",1,1000,iv.Money2},
@@ -1165,6 +1166,7 @@ function Install_CallTriggers()
 	}
 
 	Ga_46 = {
+		{"\x1E각성의 보석",1,3,iv.AwakItem},
 		{"\x02무색 조각",4000,50,iv.B_PFfragItem},
 		{"\x1F확정 강화권",10,500,iv.PETicket},
 		{"\x171000경원 수표",4,1000,iv.Money2},
@@ -1174,6 +1176,7 @@ function Install_CallTriggers()
 	}
 
 	Ga_47 = {
+		{"\x1E각성의 보석",1,10,iv.AwakItem},
 		{"\x02무색 조각",7000,350,iv.B_PFfragItem},
 		{"\x171000경원 수표",7,1000,iv.Money2},
 		{"\x17크레딧",4000000,5000,iv.B_PCredit},
@@ -1243,17 +1246,12 @@ for i = 45, 48 do
 				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
 			CIfEnd()
 		end
-		if i == 48 then
-			if j == 1 then
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-			end
-			if j == 2 then
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-			end
-		else
+		
 		if j == 1 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 		end
+		if j == 2 then
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 		end
 		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		CIfEnd()
