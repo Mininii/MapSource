@@ -1841,8 +1841,9 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		NIfXEnd()
 		CIfEnd()
 		--TriggerX(FP, {CV(LV5Cool[i+1],0,AtMost);}, {SetCD(BossLV6Private[i+1],0)},{preserved})
-	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,0)},1)
-	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)},1)
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)},1)
+	CallTriggerX(FP, Call_BossReward,{CV(PBossLV[i+1],6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,2)},1)
+	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,3)},1)
 	CIfEnd()
 	
 

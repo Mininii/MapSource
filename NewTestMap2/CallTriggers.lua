@@ -1248,10 +1248,10 @@ for i = 45, 48 do
 		end
 		
 		if j == 1 then
-			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 		end
 		if j == 2 then
-			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서"..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 		end
 		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		CIfEnd()
@@ -1299,37 +1299,23 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIf(FP,{CV(VATmp_Stat_BossLVUP,1,AtLeast)})
 	f_LMov(FP, TempWX, "0", nil, nil, 1)
 	CMov(FP,StartLV,VATmp_PLevel)
-	CIfX(FP,{CV(CurBossReward,1)})
-	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mov(150)))
-	CElseX()
-	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mov(50)))
-	CIfXEnd()
+	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mul(CurBossReward,_Mov(50))))
 	
 
 	CallTrigger(FP, Call_GetLevelEXP)
 
-	CIfX(FP,{CV(CurBossReward,1)})
-		CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({VATmp_Stat_BossLVUP,0}, "3000000000"))})
-		f_LMov(FP, TempWX, _LMul({VATmp_Stat_BossLVUP,0}, "3000000000"))
-		CIfEnd()
-	CElseX()
-		CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({VATmp_Stat_BossLVUP,0}, "1000000000"))})
-		f_LMov(FP, TempWX, _LMul({VATmp_Stat_BossLVUP,0}, "1000000000"))
-		CIfEnd()
-	CIfXEnd()
+	CIf(FP, {TTNWar(TempWX, AtLeast, _LMul({VATmp_Stat_BossLVUP,0}, _LMul("1000000000",{CurBossReward,0})))})
+	f_LMov(FP, TempWX, _LMul({VATmp_Stat_BossLVUP,0}, _LMul("1000000000",{CurBossReward,0})))
+	CIfEnd()
 
 	f_LMovX(FP, WArrX(GetWArray(iv.PEXP[1], 7), WArrI, WArrI4), TempWX, Add)
-	DisplayPrint(GCP, {"\x13\x07『 \x08파티 보스 \x1FLV.5, \x1DExtra \x04처치시 \x1F레벨업 능력치 ",VATmp_Stat_BossLVUP,"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x08보스 \x04처치시 \x1F레벨업 능력치 ",VATmp_Stat_BossLVUP,"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
 	CIfEnd()
+
 	CIf(FP,{CV(VATmp_Stat_BossSTic,1,AtLeast)})
-	CIfX(FP,{CV(CurBossReward,1)})
-	CMovX(FP, VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mov(300)), Add)
-	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,300)
-	CElseX()
-	CMovX(FP, VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mov(100)), Add)
-	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,100)
-	CIfXEnd()
-	DisplayPrint(GCP, {"\x13\x07『 \x08파티 보스 \x1FLV.5, \x1DExtra \x04처치시 \x19유닛 판매권 ",VATmp_Stat_BossSTic,"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
+	CMovX(FP, VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mul(CurBossReward,_Mov(100))), Add)
+	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,_Mul(CurBossReward,_Mov(100)))
+	DisplayPrint(GCP, {"\x13\x07『 \x08보스 \x04처치시 \x19유닛 판매권 ",VATmp_Stat_BossSTic,"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
 	CIfEnd()
 	--if TestStart == 1 then
 	--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
