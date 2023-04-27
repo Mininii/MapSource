@@ -922,7 +922,7 @@ for i = 0, 6 do -- 각플레이어
 	CMov(FP,CCVar,iv.FIncm[i+1])
 	CMov(FP,CCVar2,Stat_LV3Incm[i+1])
 	CMov(FP,CCVar3,iv.CSX_LV3IncmData[i+1])
-	f_LMov(FP,iv.TempIncm[i+1],_LDiv(_LMul({_Mul(_Add(Stat_LV3Incm[i+1],100),_Add(iv.FIncm[i+1],100)),0}, {iv.CSX_LV3IncmData[i+1],0}),"10000"))
+	f_LMov(FP,iv.TempIncm[i+1],_LDiv(_LMul({_Mul(_Add(Stat_LV3Incm[i+1],100),_Add(_Mul(iv.FIncm[i+1],_Mov(10)),100)),0}, {iv.CSX_LV3IncmData[i+1],0}),"10000"))
 	CIfEnd()
 	DPSBuilding(i,DpsLV1[i+1],nil,BuildMul1[i+1],{TempO[i+1]},Money[i+1])
 	DPSBuilding(i,DpsLV2[i+1],"100000",BuildMul2[i+1],{Gas,TempG[i+1]},Money[i+1])

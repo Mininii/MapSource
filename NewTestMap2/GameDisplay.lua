@@ -509,7 +509,7 @@ function GameDisplay()
 		StrDesign("\x04개당 \x0F0.1%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
 }
 	local StatPrintEr3 = {
-		StrDesign("\x04개당 \x110.01배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가. \x08MAX "..Cost_FIncm[2].." 개"),
+		StrDesign("\x04개당 \x110.1배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가. \x08MAX "..Cost_FIncm[2].." 개"),
 		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가. \x08MAX "..Cost_FSEXP[2].." 개"),
 		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh[2].." 개"),
 		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer[2].." 개"),
