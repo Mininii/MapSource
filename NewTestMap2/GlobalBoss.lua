@@ -64,13 +64,13 @@ Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x085단계 파티보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
-	AddV(iv.PETicket[1], 1),
-	AddV(iv.PETicket[2], 1),
-	AddV(iv.PETicket[3], 1),
-	AddV(iv.PETicket[4], 1),
-	AddV(iv.PETicket[5], 1),
-	AddV(iv.PETicket[6], 1),
-	AddV(iv.PETicket[7], 1),
+	AddV(iv.PETicket2[1], 1),
+	AddV(iv.PETicket2[2], 1),
+	AddV(iv.PETicket2[3], 1),
+	AddV(iv.PETicket2[4], 1),
+	AddV(iv.PETicket2[5], 1),
+	AddV(iv.PETicket2[6], 1),
+	AddV(iv.PETicket2[7], 1),
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1DExtra Boss\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1C6단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})

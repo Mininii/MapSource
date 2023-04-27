@@ -239,8 +239,8 @@ function Interface()
 		{{CV(iv.PMission[i+1],3,AtLeast)},{250000,0,3},"고유유닛 강화 3연속 성공하기"},
 		{{Command(i, AtLeast, 1, LevelUnitArr[44][2])},{1000000,0,0,0,1},"44강 유닛 만들기"},
 		{{CV(PUnitClass[i+1],62,AtLeast)},{3000000,0,0,0,2},"고유유닛 62단 만들기"},
-		{{CVX(MissionV[i+1],2048,2048)},{0,10000,0,0,1},"확정 강화권을 무색 조각으로 바꾸기"},
-		{{CVX(MissionV[i+1],4096,4096)},{0,50000},"45강 유닛 판매하기"},
+		--{{CVX(MissionV[i+1],2048,2048)},{0,10000,0,0,1},"확정 강화권을 무색 조각으로 바꾸기"},
+		{{CVX(MissionV[i+1],4096,4096)},{0,60000},"45강 유닛 판매하기"},
 
 		}
 		table.insert(MissionPDataArr,MissionDataArr)
@@ -744,7 +744,7 @@ for i = 0, 6 do -- 각플레이어
 						end
 						if l == 5 then
 							MText = MText.."\x1F"..m.." 확정 강화권 "
-							table.insert(RewardAct,AddV(PETicket[i+1],m))
+							table.insert(RewardAct,AddV(iv.PETicket2[i+1],m))
 						end
 					end
 				end
@@ -1548,10 +1548,10 @@ Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
 	AddV(B_PCredit[i+1], 150000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],7,AtLeast)},{
-	AddV(PETicket[i+1], 1)
+	AddV(iv.PETicket2[i+1], 1)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
-	AddV(iv.B_PFfragItem[i+1], 25),
+	AddV(iv.B_PFfragItem[i+1], 250),
 	AddV(B_PTicket[i+1],100000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{

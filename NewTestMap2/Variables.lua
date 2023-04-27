@@ -185,6 +185,7 @@ end
 	SCA.PLevel2 = SCA.CreateVar(FP)
 	SCA.AwakItem = SCA.CreateVar(FP)
 	SCA.CSX_LV3Incm = SCA.CreateVar(FP)
+	SCA.PETicket2 = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -479,7 +480,6 @@ end
 	iv.Cost_FXPer47Loc = CreateVar(FP)
 	iv.Cost_FMEPerLoc = CreateVar(FP)
 	iv.AwakItemLoc = CreateVar(FP)
-
 	
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
@@ -780,7 +780,7 @@ end
 		{49,"130000"},
 		{68,"3222"},
 		{34,"32222"},
-		{51,"322222"},
+		{51,"1322222"},
 		{42,"3222222"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
@@ -820,10 +820,10 @@ FirstReward2 = {
 }
 
 FirstReward3 = {
-	{45,10000000,32,"\x1C",10},
-	{46,32222222,322,"\x1E",7},
-	{47,80000000,3222,"\x02",4},
-	{48,322222222,32222,"\x1B",1},
+	{45,20000000,32,"\x1C",10},
+	{46,40000000,322,"\x1E",7},
+	{47,70000000,3222,"\x02",4},
+	{48,1000000000,32222,"\x1B",1},
 }
 	NBagArr = {}
 	for i = 0,6 do
@@ -953,7 +953,7 @@ FirstReward3 = {
 	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*11)) end)
 	--마스터 1.0% = 376만, 컴플리트 3.0% 1억
 	Cost_FIncm = CreateCostData(500,function(n) return 1+((n-1)*(n*0.5)) end)
-	--컴플리트 10000% = 200만
+	--컴플리트 10000% = 2000만
 	Cost_FSEXP = CreateCostData(1000,function(n) return 100+(2*n) end)
 	--컴플리트 10000% = 110만
 	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*1)*n) end)

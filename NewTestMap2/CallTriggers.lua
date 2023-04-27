@@ -751,7 +751,7 @@ function Install_CallTriggers()
 				CIfEnd()
 
 					GetPETicket = CreateVar(FP)
-					CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4))
+					CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4))
 					CIf(FP,{CV(G_PushBtnm,2)}) -- 확정강화
 					CIfX(FP,{CV(GetPETicket,1,AtLeast)})
 					CIfX(FP,{CV(GetPUnitLevel,9)})
@@ -774,7 +774,7 @@ function Install_CallTriggers()
 
 
 					CIfEnd()
-					CMovX(FP,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),GetPETicket)
+					CMovX(FP,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4),GetPETicket)
 
 
 					local failflag = CreateCcode()
@@ -1159,41 +1159,52 @@ function Install_CallTriggers()
 	TriggerX(FP,{CV(GetData_FBrSh,Cost_FBrSh[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	SetCallEnd()
 
-	
-	Ga_45 = {
-		{"\x1E각성의 보석",1,1,iv.AwakItem},
-		{"\x02무색 조각",1000,50,iv.B_PFfragItem},
-		{"\x1F확정 강화권",5,500,iv.PETicket},
-		{"\x171000경원 수표",1,1000,iv.Money2},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+	--[[
+		32개 10회 320 / 10 = 32 >> 250 으로 변경
+		322개 7회 2254 / 10 = 225 >> 550 으로 변경
+		3222개 4회 12888 / 10 = 1288
+		32222개 1회 32222 / 10 = 3222
+		250
+		550
+		1288
+		3222
+		
+		
+		
+
+	]]
+	Ga_45 = {--기대치 2개
+		{"\x1E각성의 보석",1,10,iv.AwakItem},
+		{"\x02무색 조각",1000,100,iv.B_PFfragItem},
+		{"\x171000경원 수표",10,1000,iv.Money2},
+		{"\x17크레딧",200000,5000,iv.B_PCredit},
 		{"\x1041강 유닛",10,20000,iv.E41},
 		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
-	Ga_46 = {
-		{"\x1E각성의 보석",1,3,iv.AwakItem},
-		{"\x02무색 조각",4000,50,iv.B_PFfragItem},
-		{"\x1F확정 강화권",10,500,iv.PETicket},
-		{"\x171000경원 수표",4,1000,iv.Money2},
-		{"\x17크레딧",3000000,5000,iv.B_PCredit},
+	Ga_46 = {--기대치 7개
+		{"\x1E각성의 보석",1,40,iv.AwakItem},
+		{"\x02무색 조각",4000,100,iv.B_PFfragItem},
+		{"\x171000경원 수표",40,1000,iv.Money2},
+		{"\x17크레딧",300000,5000,iv.B_PCredit},
 		{"\x1D42강 유닛",10,20000,iv.E42},
 		{"\x1041강 유닛",10,30000,iv.E41},
 	}
 
-	Ga_47 = {
-		{"\x1E각성의 보석",1,10,iv.AwakItem},
-		{"\x02무색 조각",7000,350,iv.B_PFfragItem},
-		{"\x171000경원 수표",7,1000,iv.Money2},
-		{"\x17크레딧",4000000,5000,iv.B_PCredit},
+	Ga_47 = {--기대치 20개
+		{"\x1E각성의 보석",1,150,iv.AwakItem},
+		{"\x02무색 조각",7000,150,iv.B_PFfragItem},
+		{"\x171000경원 수표",70,2000,iv.Money2},
+		{"\x17크레딧",400000,5000,iv.B_PCredit},
 		{"\x0643강 유닛",10,20000,iv.E43},
 		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
-	Ga_48 = {
-		{"\x1E각성의 보석",1,50,iv.AwakItem},
-		{"\x02무색 조각",10000,1000,iv.B_PFfragItem},
-		{"\x171000경원 수표",10,1500,iv.Money2},
-		{"\x17크레딧",5000000,5000,iv.B_PCredit},
+	Ga_48 = {--기대치 50개
+		{"\x1E각성의 보석",1,400,iv.AwakItem},
+		{"\x02무색 조각",10000,400,iv.B_PFfragItem},
+		{"\x171000경원 수표",100,3000,iv.Money2},
+		{"\x17크레딧",500000,5000,iv.B_PCredit},
 		{"\x1F44강 유닛",10,20000,iv.E44},
 		{"\x0643강 유닛",10,30000,iv.E43},
 	}

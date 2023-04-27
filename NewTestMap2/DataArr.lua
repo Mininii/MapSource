@@ -345,6 +345,7 @@ function DataArr()
 		{iv.AwakItem[1],iv.AwakItemLoc}
 				
 	}
+	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)
 
 
 	for j,k in pairs(SCA_DataArr) do
