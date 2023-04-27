@@ -158,7 +158,7 @@ CJumpEnd(FP, BossFuncJump)
 for j,k in pairs(BossArr) do
 	local cond
 	if j==6 then
-		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)}--CD(iv.PartyBonus,2,AtLeast)
+		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1),CD(iv.PartyBonus,2,AtLeast)}--
 	else
 		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)}
 	end

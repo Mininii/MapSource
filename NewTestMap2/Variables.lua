@@ -184,6 +184,7 @@ end
 	SCA.FStatVer = SCA.CreateVar(FP)
 	SCA.PLevel2 = SCA.CreateVar(FP)
 	SCA.AwakItem = SCA.CreateVar(FP)
+	SCA.CSX_LV3Incm = SCA.CreateVar(FP)
 	
 
 	SCA.GReload = CreateCcode()
@@ -819,10 +820,10 @@ FirstReward2 = {
 }
 
 FirstReward3 = {
-	{45,10000000,100,"\x1C",10},
-	{46,40000000,400,"\x1E",7},
-	{47,70000000,700,"\x02",4},
-	{48,100000000,1000,"\x1B",1},
+	{45,10000000,32,"\x1C",10},
+	{46,32222222,322,"\x1E",7},
+	{47,80000000,3222,"\x02",4},
+	{48,322222222,32222,"\x1B",1},
 }
 	NBagArr = {}
 	for i = 0,6 do
@@ -916,11 +917,7 @@ FirstReward3 = {
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
 	CSX_LV3IncmLimit = 60
-	if Limit == 1 then
-		CS_BreakShieldLimit = 260
-	else
-		CS_BreakShieldLimit = 200
-	end
+	CS_BreakShieldLimit = 200
 
 
 
