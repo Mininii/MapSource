@@ -1169,48 +1169,65 @@ function Install_CallTriggers()
 		1288
 		3222
 		
+
+		
+
+
+
+		1+4
+		4+10
+		7+80
+		10+990
+		
+		
 		
 		
 
 	]]
 	Ga_45 = {--기대치 2개
 		{"\x1E각성의 보석",1,10,iv.AwakItem},
-		{"\x02무색 조각",1000,100,iv.B_PFfragItem},
+		{"\x02무색 조각",10000,40,iv.B_PFfragItem},
 		{"\x171000경원 수표",10,1000,iv.Money2},
-		{"\x17크레딧",200000,5000,iv.B_PCredit},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit},
 		{"\x1041강 유닛",10,20000,iv.E41},
 		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
 	Ga_46 = {--기대치 7개
 		{"\x1E각성의 보석",1,40,iv.AwakItem},
-		{"\x02무색 조각",4000,100,iv.B_PFfragItem},
+		{"\x02무색 조각",40000,25,iv.B_PFfragItem},
 		{"\x171000경원 수표",40,1000,iv.Money2},
-		{"\x17크레딧",300000,5000,iv.B_PCredit},
+		{"\x17크레딧",3000000,5000,iv.B_PCredit},
 		{"\x1D42강 유닛",10,20000,iv.E42},
 		{"\x1041강 유닛",10,30000,iv.E41},
 	}
 
 	Ga_47 = {--기대치 20개
-		{"\x1E각성의 보석",1,150,iv.AwakItem},
-		{"\x02무색 조각",7000,150,iv.B_PFfragItem},
+		{"\x1E각성의 보석",1,160,iv.AwakItem},
+		{"\x02무색 조각",70000,110,iv.B_PFfragItem},
 		{"\x171000경원 수표",70,2000,iv.Money2},
-		{"\x17크레딧",400000,5000,iv.B_PCredit},
+		{"\x17크레딧",4000000,5000,iv.B_PCredit},
 		{"\x0643강 유닛",10,20000,iv.E43},
 		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
 	Ga_48 = {--기대치 50개
-		{"\x1E각성의 보석",1,400,iv.AwakItem},
-		{"\x02무색 조각",10000,400,iv.B_PFfragItem},
+		{"\x1E각성의 보석",1,500,iv.AwakItem},
+		{"\x02무색 조각",100000,990,iv.B_PFfragItem},
 		{"\x171000경원 수표",100,3000,iv.Money2},
-		{"\x17크레딧",500000,5000,iv.B_PCredit},
+		{"\x17크레딧",5000000,5000,iv.B_PCredit},
 		{"\x1F44강 유닛",10,20000,iv.E44},
 		{"\x0643강 유닛",10,30000,iv.E43},
 	}
 
 	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48}
 
+	pifrag = {1,4,7,10}
+	pifrag2 = {
+		"\x1C45강",
+		"\x1E46강",
+		"\x0247강",
+		"\x1B48강"}
 
 	Call_Gacha = SetCallForward()
 	GaLv = CreateVar(FP)
@@ -1239,12 +1256,6 @@ function Install_CallTriggers()
 		CIfEnd()
 	end
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
-pifrag = {1,4,7,10}
-pifrag2 = {
-	"\x1C45강",
-	"\x1E46강",
-	"\x0247강",
-	"\x1B48강"}
 for i = 45, 48 do
 	local TotalGPer = 1	
 	local errt = "\n"

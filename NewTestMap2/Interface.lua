@@ -305,7 +305,7 @@ function Interface()
 		TriggerX(FP,{CV(PCheckV,i)},{SetV(ULimitV,ULimitArr[i]),SetV(ULimitV2,ULimitArr[i]-1)},{preserved})
 	end
 	if Limit == 1 then
-		DoActionsX(FP,{SetV(PCheckV,7),SetCD(PartyBonus,2)})
+		--DoActionsX(FP,{SetV(PCheckV,7),SetCD(PartyBonus,2)})
 	end
 	local PartyBonus2 = iv.PartyBonus2
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))

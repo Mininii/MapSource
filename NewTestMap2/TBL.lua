@@ -507,13 +507,13 @@ function TBL()
 		return Txt
 	end
 	
-	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x041개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
+	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[1].."개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x044개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
+	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[2].."개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x047개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
+	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[3].."개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x0410개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
+	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[4].."개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
 	CIfEnd()
 
 	--[[
