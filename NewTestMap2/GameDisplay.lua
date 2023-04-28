@@ -594,11 +594,11 @@ function GameDisplay()
 	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0),AddV(AddScLoc,1)})
 		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,6)},{preserved})
 		CMul(FP,ScoutDmgLoc,100)
-		CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
-		CMov(FP,CTimeV,PlayTimeLoc2)
-		CallTrigger(FP,Call_ConvertTime)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07베타 테스트 버전 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-		CIfEnd()
+		--CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
+		--CMov(FP,CTimeV,PlayTimeLoc2)
+		--CallTrigger(FP,Call_ConvertTime)
+		--DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07베타 테스트 버전 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+		--CIfEnd()
 		
 		CMov(FP,CTimeV,PlayTimeLoc)
 		CallTrigger(FP,Call_ConvertTime)
@@ -614,6 +614,19 @@ function GameDisplay()
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일. "})
 		
+		local TempV = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
+		local TempV3 = CreateVar(FP)
+		local TempV4 = CreateVar(FP)
+		CMov(FP,TempV,_Sub(_Mov(FirstReward3[1][5]*1),_Mov(iv.FirstRewardLimLoc,1*255)),nil,1*255)
+		CMov(FP,TempV2,_Sub(_Mov(FirstReward3[2][5]*256),_Mov(iv.FirstRewardLimLoc,256*255)),nil,256*255)
+		CMov(FP,TempV3,_Sub(_Mov(FirstReward3[3][5]*65536),_Mov(iv.FirstRewardLimLoc,65536*255)),nil,65536*255)
+		CMov(FP,TempV4,_Sub(_Mov(FirstReward3[4][5]*16777216),_Mov(iv.FirstRewardLimLoc,16777216*255)),nil,16777216*255)
+		CrShift(FP,TempV2,(2-1)*8)
+		CrShift(FP,TempV3,(3-1)*8)
+		CrShift(FP,TempV4,(4-1)*8)
+
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07남은 일일 첫 달성 보상 \x04횟수 - "..FirstReward3[1][4].."45강 : \x04",TempV,"회, "..FirstReward3[2][4].."46강 : \x04",TempV2,"회, "..FirstReward3[3][4].."47강 : \x04",TempV3,"회, "..FirstReward3[4][4].."48강 : \x04",TempV4,"회"})
 
 	
 	CIfEnd()
@@ -719,7 +732,7 @@ function GameDisplay()
 			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x047단계 \x04: \x1F확정 강화권\x04 1개",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x048단계 \x04: \x02무색 조각\x04 250개, \x19유닛 판매권 10만개",
 			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10% \x12\x049단계 \x04: \x02무색 조각\x04 1만개",
-			"\x13\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
+			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
 		

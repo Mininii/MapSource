@@ -158,7 +158,7 @@ CJumpEnd(FP, BossFuncJump)
 for j,k in pairs(BossArr) do
 	local cond
 	if j==6 then
-		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1),CD(iv.PartyBonus,2,AtLeast)}--
+		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1),CD(iv.PartyBonus,2,AtLeast),}--
 	else
 		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)}
 	end
@@ -177,6 +177,7 @@ for j,k in pairs(BossArr) do
 	NJump(FP,ClearJump,{CV(BossLV,j,AtLeast)})
 	CIf(FP,{TTNWar(TotalDPM, AtLeast, BossDPM)})
 	DoActionsX(FP,{KillUnit(k[1],FP),AddV(BossLV,1),SetV(BossEPD,0)})
+	f_LMov(FP,TotalDPM,"0",nil,nil,1)
 	CIfEnd()
 	NJumpEnd(FP,ClearJump)
 end

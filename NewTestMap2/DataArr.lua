@@ -342,7 +342,8 @@ function DataArr()
 		{iv.TempIncm[1],iv.TempIncmLoc},
 		{iv.FfragItem[1],iv.FfragItemLoc},
 		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},
-		{iv.AwakItem[1],iv.AwakItemLoc}
+		{iv.AwakItem[1],iv.AwakItemLoc},
+		{iv.FirstRewardLim[1],iv.FirstRewardLimLoc}
 				
 	}
 	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)

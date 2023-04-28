@@ -1821,7 +1821,7 @@ function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 		NJumpEnd(FP,BCan)
 		CMovX(FP, VArrX(GetVArray(FItem[1],7),VArrI, VArrI4), GetItemData, SetTo, nil, nil, 1)
 	CWhileEnd()
-	CIf(FP,{TMemory(0x512684, Exactly, iv.LCP)})
+	CIf(FP,{TMemory(0x512684, Exactly, GCP)})
 	f_Read(FP,FArr(CostArr,GetItemData),CostLoc,nil,nil,1)
 	CIfEnd()
 	

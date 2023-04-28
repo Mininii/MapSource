@@ -480,7 +480,7 @@ end
 	iv.Cost_FXPer47Loc = CreateVar(FP)
 	iv.Cost_FMEPerLoc = CreateVar(FP)
 	iv.AwakItemLoc = CreateVar(FP)
-	
+	iv.FirstRewardLimLoc = CreateVar(FP)
 	iv.RandomSeed1 = CreateVarArr(7,FP)
 	iv.RandomSeed2 = CreateVarArr(7,FP)
 	iv.RandomSeed3 = CreateVarArr(7,FP)
