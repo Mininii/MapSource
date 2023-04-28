@@ -1725,7 +1725,7 @@ end
 
 function SCA_DataLoadG(Player,Dest,Sourceptr,DataName) --Dest == W then Use SourceUnit, SourceUnit+1
 	if Dest[1][4]=="V" then
-		f_Read(FP,_Add(Sourceptr,Player),VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4))
+		CMovX(FP, VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4), _ReadF(_Add(Sourceptr,Player)), SetTo, nil, nil, 1)
 	elseif Dest[1][4]=="W" then
 		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
 		local Temp32 = CreateVar(FP)

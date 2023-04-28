@@ -97,6 +97,7 @@ const FStatVer = PVariable();
 const PLevel2 = PVariable();
 const AwakItem = PVariable();
 const CSX_LV3Incm = PVariable();
+const PETicket2 = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
 sca.Init();
@@ -291,6 +292,8 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(AwakItem)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(CSX_LV3Incm)+focus,0);
 Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(PETicket2)+focus,0);
+Asm_Arrptr+=1;
 
 
 SetMemory(5830260,SetTo,0);	
@@ -298,7 +301,8 @@ SetMemory(5830260,SetTo,0);
 }
 }
 function beforeTriggerExec(){
-	scw.Exec();
+	//scw.Exec();
+	sca.Exec();
 	const T1 = PVariable(); // 저장,불러오기 버튼 작동 지연 타이머
 	const s=StringBuffer();
 	const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
@@ -389,27 +393,34 @@ function beforeTriggerExec(){
 
 	
 		if(Deaths(CurrentPlayer,Exactly,1,2)){//2번데스값에서 1번 신호가 온 경우
-			scw.scaLoadGlobal(SCmp);
+			//scw.scaLoadGlobal(SCmp);
+			sca.LoadGlobalData();
+
 		}
 
 		if(Deaths(CurrentPlayer,Exactly,2,2)){//2번데스값에서 2번 신호가 온 경우
-			scw.scaLoadTime(SCmp);
+			//scw.scaLoadTime(SCmp);
+			sca.LoadTime();
 		}
 
 		if(GLoadCheck==1){
 			
 
 			if(Deaths(CurrentPlayer,Exactly,3,2)){//2번데스값에서 3번 신호가 온 경우
-				scw.scaLoad(0,SCmp);
+				//scw.scaLoad(0,SCmp);
+				sca.LoadData(0);
 			}
 			if(Deaths(CurrentPlayer,Exactly,4,2)){//2번데스값에서 4번 신호가 온 경우
 				NBAlarm[cp] = 0;
-				scw.scaSave(0,SCmp);
+				//scw.scaSave(0,SCmp);
+				
+				sca.SaveData(0);
 			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
 			}
 			
 			if(Deaths(CurrentPlayer,Exactly,11,2)){//2번데스값에서 10번 신호가 온 경우
-				scw.scaLoad(1,SCmp);
+				//scw.scaLoad(1,SCmp);
+				sca.LoadData(1);
 			}
 			
 		}

@@ -404,6 +404,7 @@ for i = 0, 6 do -- 각플레이어
 		for j,k in pairs(RSArr) do
 			CTrigger(FP, {CV(k[i+1],0)}, {SetV(k[i+1],_Rand())}, 1)
 		end
+
 		--TriggerX(FP,{CV(LV5Cool[i+1],1,AtLeast)},SetCD(BossLV6Private[i+1],0x32223222))
 		--치팅 테스트 변수 초기화]
 		NIfX(FP,{CV(iv.FStatVer[i+1],StatVer2)},{SetNWar(TempFfragTotal,SetTo,0)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
@@ -547,6 +548,7 @@ for i = 0, 6 do -- 각플레이어
 		CreateUnitStacked({},1,PersonalUIDArr[i+1],36+i,80+i, i,nil, 1) --런쳐 불러오기 성공시 고유유닛 가져오기
 		DoActions(FP, {SetLoc("Location "..(80+i),"U",Subtract,64),SetLoc("Location "..(80+i),"D",Subtract,64)})
 		CMov(FP,PUnitPtr[i+1],Nextptrs)
+		CMov(FP,LV5Cool[i+1],0)
 		if Limit == 1 then --테스트 참가 유저 테스터유저 칭호 지급
 			TriggerX(FP, {}, {SetCp(i),DisplayExtText(StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다."), 4)}, {preserved})
 			TriggerX(FP, {CVX(iv.TesterFlag[i+1],0,2)}, {SetVX(iv.TesterFlag[i+1],2,2),SetV(iv.CreditAddSC[i+1],1),SetCp(i),DisplayExtText(StrDesignX("\x07테스터 보상\x04이 지급되었습니다!!!").."\n"..StrDesignX("보상내용 : \x04시즌2 \x1F테스터 \x04칭호(영구지급), \x17DPC(디스코드 코인)"), 4)}, {preserved})
@@ -1811,7 +1813,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	end
 		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
-		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
+		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 		CMov(FP,iv.PLevel2[i+1],PLevel[i+1])
