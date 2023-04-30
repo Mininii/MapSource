@@ -74,7 +74,7 @@ end
 	
 	PatchInput()
 
-	if TestStart==1 then
+	if Limit==1 then
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,TestSpeedNum)}) -- 테스트모드 최대배속
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- 기본 3배속
@@ -174,6 +174,7 @@ iTblJump = def_sIndex()
 	end
 	for i = 0, 6 do -- 내부 관리자 판별 트리거
 		InputTesterID(i,"GALAXY_BURST")
+		InputTesterID(i,"Azusawa_Kohane")
 		--InputTesterID(i,"_Mininii")
 		--InputTesterID(i,"RonaRonaChan")
 	end

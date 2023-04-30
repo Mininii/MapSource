@@ -35,7 +35,7 @@ function CT_Next()
 MemoryCT = CreateCcode()
 --error(#MCTCondArr)
 DoActionsX(FP,{SetCD(MemoryCT,0),})
-if TestStart==1 then
+if Limit==1 then
 	MCTCondArr[1] = Memory(0x5124F0, Exactly, TestSpeedNum)
 end--
 condnum = 0

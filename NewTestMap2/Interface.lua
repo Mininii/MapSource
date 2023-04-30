@@ -305,7 +305,7 @@ function Interface()
 		TriggerX(FP,{CV(PCheckV,i)},{SetV(ULimitV,ULimitArr[i]),SetV(ULimitV2,ULimitArr[i]-1)},{preserved})
 	end
 	if Limit == 1 then
-		--DoActionsX(FP,{SetV(PCheckV,7),SetCD(PartyBonus,2)})
+		DoActionsX(FP,{SetV(PCheckV,7),SetCD(PartyBonus,2)})
 	end
 	local PartyBonus2 = iv.PartyBonus2
 	DoActions(FP, SetMemory(0x58F500, SetTo, 0))
@@ -827,7 +827,7 @@ for i = 0, 6 do -- 각플레이어
 	
 	if Limit == 1 then 
 		CIf(FP,{CV(iv.MapMakerFlag[i+1]),Deaths(i,AtLeast,1,553)})
-		CreateUnitStacked({}, 12, LevelUnitArr[44][2], 36+i, nil, i)
+		--CreateUnitStacked({}, 12, LevelUnitArr[44][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -1550,7 +1550,9 @@ Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
 	AddV(B_PCredit[i+1], 150000)
 })
 Trigger2X(FP,{CV(PBossLV[i+1],7,AtLeast)},{
-	AddV(iv.PETicket2[i+1], 1)
+	AddV(B_PCredit[i+1], 1000000),
+	AddV(iv.B_PFfragItem[i+1], 5),
+
 })
 Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
 	AddV(iv.B_PFfragItem[i+1], 250),
@@ -1807,11 +1809,13 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 		
 		CIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})
-	if Limit == 0 then
-		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-	else
-		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-	end
+--	if Limit == 0 then
+--		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+--	else
+--		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+--	end
+	
+	NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
 		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기

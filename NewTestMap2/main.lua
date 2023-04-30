@@ -40,19 +40,19 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0401"
+VerText = "\x19ver\x07. \x043\x07.\x0402"
 
-TestSet(0)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 13
+	TestSpeedNum = 1
 	SpeedTestMode = 0
 else
 	
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 24
+LimitVer = 25
 StatVer = 14
 StatVer2 = 1
 EUDTurbo(FP)
@@ -99,13 +99,13 @@ os.execute("mkdir " .. "banflag")
 local CSfile = io.open(FileDirectory .. "banflag" .. ".txt", "w")
 io.output(CSfile)
 for j,k in pairs(ctarr) do
-	io.write("BanFlag"..j.." : ")
+	io.write("BanFlag"..j.." = [")
 	
 	for l,m in pairs(k) do
-		io.write("\""..l.." : "..m.."\", ")
+		io.write("\""..m.."\", ")
 	end
 	
-	io.write("\n")
+	io.write("]\n")
 end
 CheckTrig("EndTrig")
 

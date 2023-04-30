@@ -1433,7 +1433,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	else
 		DoActionsX(FP,{SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
 	end
-	ctarr[DeathUnit][Flag] = Text
+	ctarr[DeathUnit][Flag+1] = Text
 	
 	if DeathUnit== 	1 then 
 		--if 2^Flag == 2048 then error(Text) end

@@ -276,6 +276,7 @@ function TBL()
 	local TempV2 =CreateVar(FP)
 	CMod(FP,TempV,SelPer,1000)
 	CDiv(FP,TempV2,SelPer,1000)
+
 	TriggerX(FP, {
 		CSVA1(SVA1(TStr1,12+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
 		CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
@@ -304,6 +305,7 @@ function TBL()
 	CS__SetValue(FP,TStr1,"\x08\x0D",nil,9)
 	CS__SetValue(FP,TStr1,"\x08\x0D",nil,10)
 	CS__SetValue(FP,TStr1,"\x080",nil,11)
+	
 	CIfEnd()
 	CIf(FP,{CV(TempV,0)})
 	CS__SetValue(FP,TStr1,"\x08\x0D",nil,12)
