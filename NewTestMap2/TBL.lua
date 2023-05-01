@@ -313,6 +313,27 @@ function TBL()
 	CS__SetValue(FP,TStr1,"\x08\x0D",nil,14)
 	CS__SetValue(FP,TStr1,"\x08\x0D",nil,15)
 	CIfEnd()
+
+	CIf(FP,{CV(TempV2,0),CV(TempV,1,AtLeast)})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,13), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,13), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,14), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,14), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,15), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,15), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+	CIfEnd()
+	
+
+
 	
 		CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
 	CIfXEnd()

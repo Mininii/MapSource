@@ -1466,15 +1466,15 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	end
 	
 
-	if TestStart == 1 then
-		if Player == AllPlayers then Player = iv.LCP end
-		if VW[4] =="W" then
-			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
-		else
-			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
-		end
-		
-	end
+--	if TestStart == 1 then
+--		if Player == AllPlayers then Player = iv.LCP end
+--		if VW[4] =="W" then
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		else
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		end
+--		
+--	end
 	CIfXEnd()
 	return TrapKey
 end	

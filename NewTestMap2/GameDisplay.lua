@@ -94,6 +94,8 @@ function GameDisplay()
 	local Cost_FXPer47Loc = iv.Cost_FXPer47Loc
 	local Cost_FMEPerLoc = iv.Cost_FMEPerLoc
 	
+	local TempFf = CreateWar(FP)
+	local TempFf2 = CreateVar(FP)
 
 	function TEST() 
 		local PlayerID = CAPrintPlayerID 
@@ -102,15 +104,34 @@ function GameDisplay()
 		local InterfaceNumLoc2 = CreateCcode()
 		DoActionsX(FP,AddCD(StatEffT,1))
 		
-		CA__SetValue(Str1,"\x07보유금액 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000 \x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+		CA__SetValue(Str1,"\x07보유금액 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000\x0D\x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+
+		CA__SetValue(Str2,"\x07보유금액 \x04: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D \x04원　\x17천경： 00000000 \x04개\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 		--43
 		--49
-		CS__ItoCustom(FP,SVA1(Str1,40),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
-		CS__ItoCustom(FP,SVA1(Str1,46),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x190",0x19,{0,1})
+		CS__ItoCustom(FP,SVA1(Str2,40),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
+		CS__ItoCustom(FP,SVA1(Str2,46),IncomeMaxLoc,nil,nil,{10,2},1,nil,"\x190",0x19,{0,1})
+		CS__ItoCustom(FP,SVA1(Str2,23),MoneyLoc2,nil,nil,{10,8},1,nil,"\x170",0x17)
 		CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+		
+		CIfX(FP, {TTNWar(MoneyLoc, AtLeast, "10000000000000000")})
+			CA__InputSVA1(SVA1(Str2,8),SVA1(Str1,9),10,0xFFFFFFFF,1,Str1s)
+		CElseIfX({TTNWar(MoneyLoc, AtLeast, "1000000000000")})
+			CA__InputSVA1(SVA1(Str2,8),SVA1(Str1,14),10,0xFFFFFFFF,1,Str1s)
+		CElseIfX({TTNWar(MoneyLoc, AtLeast, "100000000")})
+			CA__InputSVA1(SVA1(Str2,8),SVA1(Str1,19),10,0xFFFFFFFF,1,Str1s)
+		CElseIfX({TTNWar(MoneyLoc, AtLeast, "10000")})
+			CA__InputSVA1(SVA1(Str2,8),SVA1(Str1,24),10,0xFFFFFFFF,1,Str1s)
+		CElseX()
+			CA__InputSVA1(SVA1(Str2,8),SVA1(Str1,29),5,0xFFFFFFFF,1,Str1s)
+		CIfXEnd()
+		
+		CIf(FP,{CV(MoneyLoc2,0)})
+			CA__SetValue(Str2, "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", nil, 20)
+		CIfEnd()
 	
 		--CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x04,0x04,0x04},{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
-		CA__InputVA(56*0,Str1,Str1s,nil,56*0,56*1-2)
+		CA__InputVA(56*0,Str2,Str2s,nil,56*0,56*1-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 		CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
 		
@@ -143,16 +164,21 @@ function GameDisplay()
 		TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 		CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0)
+
+
+		f_LSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
+		f_Cast(FP, {TempFf2,0}, TempFf,nil,nil,1)
+
+
+		CIfX(FP,CD(Tabkey,0))
 		CA__SetValue(Str1,"\x12포인트 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999,AtLeast),{SetV(StatPLoc,999999)},{preserved})
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-	--	CIfX(FP,CD(Tabkey,0))
-
-	--	CElseX()
-	--	CA__SetValue(Str1,"\x12\x02무색 조각 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
-	--	TriggerX(FP,CV(iv.FfragItemLoc,999999,AtLeast),{SetV(iv.FfragItemLoc,999999)},{preserved})
-    --    CS__ItoCustom(FP,SVA1(Str1,8),iv.FfragItemLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-	--	CIfXEnd()
+		CElseX()
+		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		TriggerX(FP,CV(TempFf2,999999,AtLeast),{SetV(TempFf2,999999)},{preserved})
+        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+		CIfXEnd()
 
         CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,"\x040",{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
@@ -469,8 +495,7 @@ function GameDisplay()
 			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"중급 보석 ",FXPer45Loc,"개 ",CColor3_1[2][2],"|| Cost : ",Cost_FXPer45Loc,"\x12",CColor3_2[2][2]," Cost : ",Cost_FSEXPLoc," || ",CColor1_2[2][2],FSEXPLoc," 개 경험의 보석 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"상급 보석 ",FXPer46Loc,"개 ",CColor3_1[3][2],"|| Cost : ",Cost_FXPer46Loc,"\x12",CColor3_2[3][2]," Cost : ",Cost_FBrShLoc," || ",CColor1_2[3][2],FBrShLoc," 개 보호의 보석 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"특급 보석 ",FXPer47Loc,"개 ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," 개 궁극의 보석 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
-			local TempFf = CreateWar(FP)
-			f_LSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
+
 			if Limit == 0 then
 				CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
 			else
@@ -604,15 +629,18 @@ function GameDisplay()
 		CallTrigger(FP,Call_ConvertTime)
 		local TempV = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
+		local TempV3 = CreateVar(FP)
 		CMov(FP,TempV,iv.DayCheck2Loc,nil,0xFF,1)
 		CMov(FP,TempV2,iv.DayCheck2Loc,nil,0xFF00,1)
+		CMov(FP,TempV3,iv.DayCheck2Loc,nil,0xFF0000,1)
 		CrShift(FP, TempV2, 8)
+		CrShift(FP, TempV3, 16)
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x1B48강 \x07타임어택 점수 : \x04",TimeAttackScore48Loc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일. "})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2,3시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일, ",TempV3,"일."})
 		
 		local TempV = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
@@ -633,9 +661,9 @@ function GameDisplay()
 	
 	CIfX(FP,{CD(LKey,1)})
 	
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x07(저장O) \x04: \x07",SellTicketLoc," \x04|| \x171000경원 수표\x08(저장X) \x04 : ",MoneyLoc2," \x12[\x17닫기 \x04: \x10L]"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x07(저장O) \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x07(저장O)\x1F(\x02구\x04,\x1F신버전) \x04: ",PETicketLoc,", ",iv.PETicket2Loc})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1E각성의 보석 \x07(저장O) \x04: \x07",iv.AwakItemLoc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x04: \x07",SellTicketLoc," \x04\x12[\x17닫기 \x04: \x10L]"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: ",PETicketLoc,", ",iv.PETicket2Loc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1E각성의 보석 \x04: \x07",iv.AwakItemLoc})
 	CIf(FP,CV(NextOreLoc,1,AtLeast))
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
 	CIfEnd()

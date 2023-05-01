@@ -650,15 +650,15 @@ for i = 0, 6 do -- 각플레이어
 --\x0247강
 --\x1B48강
 	CIf(FP,CD(SCA.LoadCheckArr[i+1],2))--출석트리거는 로드해야 작동됨
-	--if TestStart == 1 then
-	--	NIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-	--		CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
-	--else
-	--	NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-	--		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
-	--end
+	if TestStart == 1 then
+		NIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+			CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
+	else
 		NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
 			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
+	end
+	--	NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+	--		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
 	CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
 	CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
 
@@ -684,7 +684,10 @@ for i = 0, 6 do -- 각플레이어
 	--		TriggerX(FP, {CVX(DayCheck2[i+1],28,0xFF,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
 	--CElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28,0xFF,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 1호 출석 이벤트를 완료 하셨습니다."), 4)})
 	--CIfXEnd()
+	DoActionsX(FP,{
+		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
 	local DailyJump = def_sIndex()
+	local DailyJump2 = def_sIndex()
 	NIfX(FP,{CVX(DayCheck2[i+1],27*0x100,0xFF00,AtMost),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)})--시즌 2호 출석이벤트
 			NJumpEnd(FP, DailyJump)
 			DoActionsX(FP,{
@@ -703,17 +706,39 @@ for i = 0, 6 do -- 각플레이어
 				AddV(iv.B_PFfragItem[i+1],50),
 				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x02??? \x04를 50개 얻었습니다."), 4)})
 			CIfEnd()
-			CallTrigger(FP,Call_DailyPrint)
 			CMov(FP,DV,TempV3)
+			CallTrigger(FP,Call_DailyPrint)
 			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
 	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 2호 출석 이벤트를 완료 하셨습니다."), 4)})
 	NIfXEnd()
 	
-	DoActionsX(FP,{
-		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
+	NIfX(FP,{CVX(DayCheck2[i+1],27*0x10000,0xFF0000,AtMost),CVX(SCA.GlobalVarArr[5],4,4),CD(SCA.GlobalCheck2,1)})--시즌 3호 출석이벤트
+			NJumpEnd(FP, DailyJump2)
+			DoActionsX(FP,{
+				AddV(iv.B_PFfragItem[i+1],100),
+				AddVX(DayCheck2[i+1],1*0x10000,0xFF0000),
+				SetCp(i),DisplayExtText(StrDesignX("일일 출석 보상으로 \x02무색 조각 \x04을 100개 얻었습니다."), 4)})
+				local TempV = CreateVar(FP)
+				local TempV2 = CreateVar(FP)
+				local TempV3 = CreateVar(FP)
+				CMov(FP,TempV3,_Mod(_rShift(DayCheck2[i+1], 16),_Mov(0x100)),nil,nil,1)
+				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
+				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
+			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
+			DoActionsX(FP, {
+				AddV(iv.AwakItem[i+1],1),
+				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x1E각성의 보석\x04을 1개 얻었습니다."), 4)})
+			CIfEnd()
+			CMov(FP,DV2,TempV3)
+			CallTrigger(FP,Call_DailyPrint2)
+			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
+	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 3호 출석 이벤트를 완료 하셨습니다."), 4)})
+	NIfXEnd()
+	
 
 	NElseIfX({VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),})
 		NJump(FP, DailyJump, {CVX(DayCheck2[i+1],0*0x100,0xFF00),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌2 출석 0일일 경우 강제로 출석체크시킴
+		NJump(FP, DailyJump2, {CVX(DayCheck2[i+1],0*0x10000,0xFF0000),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌3 출석 0일일 경우 강제로 출석체크시킴
 	
 	NIfXEnd()
 	CIfEnd()
