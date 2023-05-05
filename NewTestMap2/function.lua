@@ -693,6 +693,9 @@ end
 function MSQC_KeyInput(Player,KeyName) -- 키인식용 조건
 	return Deaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
+function MSQC_TKeyInput(Player,KeyName) -- 키인식용 조건 Player에 V 사용가능
+	return TDeaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
+end
 function MSQC_SetKeyInput(Player,KeyName) -- 키인식용 조건
 	return SetDeaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
@@ -1275,14 +1278,70 @@ end
 
 function AutoBuy(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(iv.AutoBuyCode[CP+1],LvUniit)})
-		if LvUniit==40 then
-			CIf(FP,{CV(iv.Money2[CP+1],1,AtLeast)},{SubV(iv.Money2[CP+1],1)})
+		if Limit == 1 then
+			if LvUniit==40 then
+				CIf(FP,{CV(iv.Money2[CP+1],3,AtLeast)},{SubV(iv.Money2[CP+1],1)})
+			else
+				CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
+				f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+			end
+				CreateUnitStacked({}, 3, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+			CIfEnd()
 		else
-			CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
-			f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+			if LvUniit==40 then
+				CIf(FP,{CV(iv.Money2[CP+1],1,AtLeast)},{SubV(iv.Money2[CP+1],1)})
+			else
+				CIf(FP, {TTNWar(iv.Money[CP+1],AtLeast,Cost)})
+				f_LSub(FP, iv.Money[CP+1], iv.Money[CP+1], Cost)
+			end
+				CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+			CIfEnd()
 		end
-			CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-		CIfEnd()
+
+
+	CIfEnd()
+end
+
+function AutoBuyG(CP,LvUniit,Cost)--Cost==String
+	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode,LvUniit)})
+		--if Limit == 1 then
+		--	if LvUniit==40 then
+		--		CIf(FP,{CV(GetMoney2,3,AtLeast)},{SubV(GetMoney2,3)})
+		--	else
+		--		CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
+		--		f_LSub(FP, GetMoney, GetMoney, Cost)
+		--	end
+
+--		--		CDoActions(FP, {
+		--			SetNVar(SAmount,SetTo,3),
+		--			SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),
+		--			SetNVar(DLocation,SetTo,0),
+		--			TSetNVar(SPlayer,SetTo,CP)})
+		--			CTrigger(FP, {CD(AutoBuyOp,0)}, {TSetNVar(SLocation,SetTo,_Add(CP,43))}, 1)
+		--			CTrigger(FP, {CD(AutoBuyOp,1)}, {TSetNVar(SLocation,SetTo,_Add(CP,170))}, 1)
+		--		CallTrigger(FP, CreateStackedUnit)
+		--		--CreateUnitStacked({}, 3, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+		--	CIfEnd()
+		--else
+			if LvUniit==40 then
+				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+			else
+				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
+				f_LSub(FP, GetMoney, GetMoney, Cost)
+			end
+				CDoActions(FP, {
+					SetNVar(SAmount,SetTo,1),
+					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),
+					SetNVar(DLocation,SetTo,0),
+					TSetNVar(SPlayer,SetTo,CP)})
+					CTrigger(FP, {CD(AutoBuyOp,0)}, {TSetNVar(SLocation,SetTo,_Add(CP,43))}, 1)
+					CTrigger(FP, {CD(AutoBuyOp,1)}, {TSetNVar(SLocation,SetTo,_Add(CP,170))}, 1)
+				CallTrigger(FP, CreateStackedUnit)
+				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+			CIfEnd()
+		--end
+
+
 	CIfEnd()
 end
 --
@@ -1777,7 +1836,7 @@ end
 function CreateDataPW(DataName,SCADeathData,LocOp)
 	local Ret = CreateWarArr(7,FP)
 	local Ret2 = CreateWarArr(7,FP)
-	table.insert(PVWArr,{Ret,Ret2})
+	table.insert(PVWArr,{Ret,Ret2,DataName})
 	if SCADeathData ~= nil then
 		if #SCADeathData~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
 		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})

@@ -7,7 +7,6 @@ function Install_CallTriggers()
 		Print_13_2(FP,{i},nil)
 	SetCallEnd()
 	end
-	
 
 	Call_ConvertTime = SetCallForward()
 	SetCall(FP)
@@ -44,22 +43,18 @@ function Install_CallTriggers()
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 	})
 	CIf(FP,{TTOR({CV(SUnitID,88),CV(SUnitID,79)})})
-	for i = 0, 6 do
-		CIf(FP,{CV(SPlayer,i)})
-		local NBTemp = CreateVar(FP)
-		NBagLoop(FP,NBagArr[i+1],{NBTemp})
+	local NBTemp = CreateVar(FP)
+	NBagLoop(FP,NBagArr,{NBTemp})
 
-		CMov(FP,0x6509B0,NBTemp,19)
-		NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
-		NRemove(FP,NBagArr[i+1])
-		NIfEnd()
+	CMov(FP,0x6509B0,NBTemp,19)
+	NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
+	NRemove(FP,NBagArr)
+	NIfEnd()
+
+	NBagLoopEnd()
+	CMov(FP,0x6509B0,FP)
 	
-		NBagLoopEnd()
-		CMov(FP,0x6509B0,FP)
-		
-		NAppend(FP, NBagArr[i+1], Nextptrs)
-		CIfEnd()
-	end
+	NAppend(FP, NBagArr, Nextptrs)
 	CIfEnd()
 	--CTrigger(FP,{},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),},1)
 	CSub(FP,CurCunitI,Nextptrs,19025)
@@ -854,7 +849,7 @@ function Install_CallTriggers()
 									CIfEnd()
 									
 									CIf(FP,{CV(G_PushBtnm,10)},{AddV(GetLV3IncmData,1),SubV(GetAwakItemData, _Sub(GetClassData,262))})
-										CMov(FP,TempV,_Mul(GetLV3IncmData,10))
+										CMov(FP,TempV,_Mul(GetLV3IncmData,30))
 										CMov(FP,GEVar,TempV,1000)
 										CallTrigger(FP, Call_SetEPerStr)
 										DisplayPrint(GCP, {"\x13\x07『 \x11LV.MAX \x1B허수아비\x04 돈 수급량이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3," 배 \x07』"})
@@ -928,7 +923,7 @@ function Install_CallTriggers()
 				
 				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
 				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
-				CMov(FP,TempV,_Mul(GetLV3IncmData,10))
+				CMov(FP,TempV,_Mul(GetLV3IncmData,30))
 				CMov(FP,GEVar,TempV,1000)
 				CallTrigger(FP, Call_SetEPerStr)
 				DisplayPrint(GCP, {"\x07『 \x11LV.MAX \x1B허수아비\x04 돈 수급 추가 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3," 배 \x04(\x1E각성 Level \x04: \x1F",GetLV3IncmData,"\x04) \x07』"})
@@ -1080,6 +1075,17 @@ function Install_CallTriggers()
 	end
 	SetCallEnd()
 
+	Call_Print13CP = SetCallForward()
+	SetCall(FP)
+	
+	for i = 0, 6 do
+		CIf(FP,{CV(GCP,i)})
+		Print_13_2(FP,{i},nil)
+		CIfEnd()
+	end
+	SetCallEnd()
+	
+
 	Call_FfragShop = SetCallForward()
 	SetCall(FP)
 	
@@ -1091,6 +1097,65 @@ function Install_CallTriggers()
 	FragBuyFnc(iv.FSEXP,Cost_FSEXP,iv.Cost_FSEXPLoc,CntCArr[6],failCcode)
 	FragBuyFnc(iv.FBrSh,Cost_FBrSh,iv.Cost_FBrShLoc,CntCArr[7],failCcode)
 	FragBuyFnc(iv.FMEPer,Cost_FMEPer,iv.Cost_FMEPerLoc,CntCArr[8],failCcode)
+	SetCallEnd()
+	Call_StatShop = SetCallForward()
+	SetCall(FP)
+	
+	ClickCD = CreateCcode()
+	ClickCD2 = CreateCcode()
+	GetINumData = CreateVar(FP)
+	GetPStatData = CreateVar(FP)
+	CMovX(FP,GetINumData,VArrX(GetVArray(iv.InterfaceNum[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetPStatData,VArrX(GetVArray(iv.StatP[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+
+	function StatBuyFunc(KeyID,StatID,Cost,Multiplier,Max,SendTxt,ErrTxt)
+		local TempSID = CreateVar(FP)
+		CIf(FP,{MSQC_TKeyInput(GCP, KeyID)})
+			CallTrigger(FP, Call_Print13CP)
+			CMovX(FP,TempSID,VArrX(GetVArray(StatID[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+			CIfX(FP, {CV(GetPStatData,Cost,AtLeast),CV(TempSID,Max-1,AtMost)},{SubV(GetPStatData,Cost),AddV(TempSID,Multiplier)})
+			CMovX(FP,VArrX(GetVArray(StatID[1], 7), VArrI, VArrI4),TempSID,nil,nil,nil,1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,SendTxt) ,{preserved})
+			CElseIfX({CV(TempSID,Max,AtLeast)},{SetCD(ClickCD, 0)})
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,ErrTxt) ,{preserved})
+			CElseIfX({CV(GetPStatData,Cost-1,AtMost)},{SetCD(ClickCD, 0)})
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: 포인트가 부족합니다.")) ,{preserved})
+			CIfXEnd()
+		CIfEnd()
+	end
+	CIfX(FP,{CV(GetINumData,1)},{})
+	
+	
+	StatBuyFunc("1",iv.Stat_BossSTic,Cost_Stat_BossSTic,1,10,StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x19판매권\x04이 증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x19판매권\x04을 올릴 수 없습니다."))
+	StatBuyFunc("2",iv.Stat_BossLVUP,Cost_Stat_BossLVUP,1,5,StrDesign("\x08파티 보스 \x1FLV.5 \x04처치 보상 \x1F레벨\x04이 증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x04처치 보상 \x1F레벨\x04을 올릴 수 없습니다."))
+	StatBuyFunc("3",iv.Stat_Upgrade,Cost_Stat_Upgrade,1,50,StrDesign("\x07유닛 데미지\x04가 \x0810% \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상  \x07유닛 \x08데미지\x04를 올릴 수 없습니다."))
+	StatBuyFunc("4",iv.Stat_TotalEPer,Cost_Stat_TotalEPer,100,10000,StrDesign("\x07+1강 \x08강화 확률\x04이 증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x07+1강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("5",iv.Stat_TotalEPer2,Cost_Stat_TotalEPer2,100,5000,StrDesign("\x07+2강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("6",iv.Stat_TotalEPer3,Cost_Stat_TotalEPer3,100,3000,StrDesign("\x07+3강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다."))
+
+
+	CElseIfX({CV(GetINumData,2)},{}) -- 2번 스탯페이지
+
+	StatBuyFunc("1",iv.Stat_TotalEPer4,Cost_Stat_TotalEPer4,100,10000,StrDesign("\x08특수 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x08특수 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("2",iv.Stat_BreakShield,Cost_Stat_BreakShield,100,30000,StrDesign("\x08특수 \x1F파괴 방지확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x1F피괴 \x08방지확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("3",iv.Stat_TotalEPerEx,Cost_Stat_TotalEPerEx,100,5000,StrDesign("\x07+1강 \x08강화 확률\x04이 \x0F0.1%p 증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x07+1강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("4",iv.Stat_TotalEPerEx2,Cost_Stat_TotalEPerEx2,100,2000,StrDesign("\x07+2강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x07+2강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("5",iv.Stat_TotalEPerEx3,Cost_Stat_TotalEPerEx3,100,1000,StrDesign("\x07+3강 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x10+3강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("6",iv.Stat_LV3Incm,Cost_Stat_LV3Incm,1,100,StrDesign("\x11LV.MAX \x1B허수아비\x04 돈 수급량이 \x071%\x04 증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x11LV.MAX \x1B허수아비\x04 돈 수급량\x04을 올릴 수 없습니다."))
+
+	CElseIfX({CV(GetINumData,3)},{}) -- 3번 스탯페이지
+
+	StatBuyFunc("1",iv.Stat_TotalEPer4X,Cost_Stat_TotalEPer4X,100,5000,StrDesign("\x08특수 강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x08특수 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("2",iv.Stat_BreakShield2,Cost_Stat_BreakShield2,100,10000,StrDesign("\x08특수 \x1F파괴 방지확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x1F피괴 \x08방지확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("3",iv.Stat_XEPer44,Cost_Stat_XEPer44,100,5000,StrDesign("\x1F44강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x1F44강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("4",iv.Stat_XEPer45,Cost_Stat_XEPer45,100,5000,StrDesign("\x1C45강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x1C45강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("5",iv.Stat_XEPer46,Cost_Stat_XEPer46,100,5000,StrDesign("\x1E46강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x1E46강 \x08강화확률\x04을 올릴 수 없습니다."))
+	StatBuyFunc("6",iv.Stat_XEPer47,Cost_Stat_XEPer47,100,5000,StrDesign("\x0247강 \x08강화확률\x04이 \x0F0.1%p \x04증가하였습니다."),StrDesign("\x08ERROR \x04: 더 이상 \x0247강 \x08강화확률\x04을 올릴 수 없습니다."))
+	CIfXEnd()
+
+	CMovX(FP,VArrX(GetVArray(iv.StatP[1], 7), VArrI, VArrI4),GetPStatData,nil,nil,nil,1)
+
+
 	SetCallEnd()
 
 
@@ -1301,6 +1366,7 @@ for i = 45, 48 do
 
 end
 
+CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 
@@ -1349,6 +1415,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,_Mul(CurBossReward,_Mov(100)))
 	DisplayPrint(GCP, {"\x13\x07『 \x08보스 \x04처치시 \x19유닛 판매권 ",VATmp_Stat_BossSTic,"업\x04 스탯으로 얻은 유닛 판매권 : \x19",TempSTicV," 개 \x07』"})
 	CIfEnd()
+	
 	--if TestStart == 1 then
 	--		TriggerX(FP,{},{AddV(LV5Cool[i+1],60)},{preserved})
 	--else
@@ -1356,6 +1423,24 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	--end
 
 	SetCallEnd()
+	Call_AutoBuy = SetCallForward()
+	SetCall(FP)
+	GetAutoBuyCode = CreateVar(FP)
+	GetMoney2 = CreateVar(FP)
+	GetMoney = CreateWar(FP)
 
+	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	f_LMovX(FP, GetMoney, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),nil,nil,nil,1)
+	AutoBuyOp = CreateCcode()
+	for j, k in pairs(AutoBuyArr) do
+		AutoBuyG(GCP,k[1],k[2])
+	end
 
+	
+	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),GetAutoBuyCode,nil,nil,nil,1)
+	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)
+	f_LMovX(FP, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),GetMoney,nil,nil,nil,1)
+
+	SetCallEnd()
 end

@@ -823,6 +823,17 @@ function GameDisplay()
 	
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
+			local TempFV = CreateVar(FP)
+			local FVT = CreateCcode()
+			CIf(FP,{CV(iv.B_PFfragItem[i+1],1,AtLeast)},SetCD(FVT,480))
+			f_LAdd(FP,iv.FfragItem[i+1],iv.FfragItem[i+1],{iv.B_PFfragItem[i+1],0}) --
+			CAdd(FP,TempFV,iv.B_PFfragItem[i+1])
+			CMov(FP, iv.B_PFfragItem[i+1], 0)
+			CIfEnd({})
+			CIf(FP,{CD(FVT,1,AtLeast)},{SubCD(FVT,1)})
+				DisplayPrint(i,{"\x13\x07¡º \x02¹«»ö Á¶°¢\x04À» \x07",TempFV," °³ \x04 È¹µæÇÏ¿´½À´Ï´Ù. ÇöÀç ÃÑ È¹µæ·® : \x07",iv.FfragItem[i+1]," °³ \x07¡»"})
+			CIfEnd()
+			TriggerX(FP, {CD(FVT,0)}, {SetV(TempFV,0)},{preserved})
 		for p = 1,7 do
 			local NextT = ""
 			local NextT2 = ""

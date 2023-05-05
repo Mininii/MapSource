@@ -107,6 +107,16 @@ for j,k in pairs(ctarr) do
 	
 	io.write("]\n")
 end
+
+for j,k in pairs(ctarr) do
+    io.write("BanFlag"..j.." : ")
+    
+    for l,m in pairs(k) do
+        io.write("\""..l.." : "..m.."\", ")
+    end
+    
+    io.write("\n")
+end
 CheckTrig("EndTrig")
 
 TrigBench:write("Total Trig Count : "..CurTrigTotal.."\n")

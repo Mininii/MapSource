@@ -13,6 +13,55 @@ if TestStart == 1 then
 --	CForEnd()
 end
 
+
+local NBTemp = CreateVar(FP)
+local TempSCCool = CreateVar(FP)
+NBagLoop(FP,NBagArr,{NBTemp})
+CMov(FP,0x6509B0,NBTemp,25)
+
+CIfX(FP,{DeathsX(CurrentPlayer, Exactly, 88, 0, 0xFF)})
+
+	CIfX(FP, {Never()})
+	for i = 0, 6 do
+		CElseIfX({TDeathsX(_Add(NBTemp,19), Exactly, i, 0, 0xFF)})
+		ClShift(FP, TempSCCool, _Sub(_Mov(9),iv.SCCool[i+1]), 8)
+	end
+	CIfXEnd()
+
+	CMov(FP,0x6509B0,NBTemp,21)
+	DoActions(FP,{
+		SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF),
+		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00)})
+
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,103*256,0,0xFF00)})
+	CDoActions(FP, {
+		TSetDeathsX(CurrentPlayer,SetTo,TempSCCool,0,0xFF00),
+	})
+	CIfEnd()
+	CMov(FP,0x6509B0,FP)
+
+
+CElseIfX({DeathsX(CurrentPlayer, Exactly, 79, 0, 0xFF)})
+
+CMov(FP,0x6509B0,NBTemp,21)
+	DoActions(FP,{
+		SetDeathsX(CurrentPlayer,SetTo,0,0,0xFFFF),
+		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})--SetCp(i),DisplayText("ÀÎ½Ä´ï", 4)
+		
+
+CIfXEnd()
+
+
+CMov(FP,0x6509B0,NBTemp,19)
+NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
+NRemove(FP,NBagArr)
+NIfEnd()
+
+NBagLoopEnd()
+
+
+
+
 DoActionsX(FP, {AddV(iv.CUnitT,1)})
 CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
