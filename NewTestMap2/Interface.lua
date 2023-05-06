@@ -1150,9 +1150,8 @@ TriggerX(FP, {CV(TempX[i+1],20000000,AtLeast),LocalPlayerID(i)}, {
 	end
 
 
-	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),CV(AutoBuyCode[i+1],1,AtLeast)}) -- 자동구매 관리
-	CallTrigger(FP, Call_AutoBuy,{SetCD(AutoBuyOp,0)})
-	--CallTrigger(FP, Call_AutoBuy,{SetCD(AutoBuyOp,1)})
+	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})}) -- 자동구매 관리
+	CallTrigger(FP, Call_AutoBuy,{})
 	CElseIfX({TCommand(i,AtLeast,ULimitV2,"Men")})
 	CallTrigger(FP,Call_Print13[i+1])
 	for j = 1, 7 do
@@ -1668,6 +1667,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	end
 
 	CIfEnd()
+	TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(iv.EnchCool[i+1],1,AtLeast)},{SetV(iv.PSaveChk[i+1],0),SetV(iv.EnchCool[i+1],0)},{preserved})
 
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 
@@ -1694,7 +1694,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 				end
 			elseif j>=45 then
 				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],9999,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
+				CallTriggerX(FP, Call_Gacha, {CV(iv.EnchCool[i+1],9,AtMost),Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {SetV(iv.PSaveChk[i+1],1),AddV(iv.EnchCool[i+1],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
 			else
 				
 				--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
@@ -1735,7 +1735,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 				
 				CMov(FP, KSelUID, _SHRead(BackupCp), nil, 0xFF, 1)
 				CMov(FP, KSelPID, _SHRead(_Sub(BackupCp,6)), nil, 0xFF, 1)
-				CIf(FP,{CV(KSelPID,i),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,128),TTNVar(KSelUID,NotSame,129),TTNVar(KSelUID,NotSame,219),TTNVar(KSelUID,NotSame,91),TTNVar(KSelUID,NotSame,92),TTNVar(KSelUID,NotSame,PersonalUIDArr[i+1])})
+				CIf(FP,{CV(KSelPID,i),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,217),TTNVar(KSelUID,NotSame,15),TTNVar(KSelUID,NotSame,128),TTNVar(KSelUID,NotSame,129),TTNVar(KSelUID,NotSame,219),TTNVar(KSelUID,NotSame,91),TTNVar(KSelUID,NotSame,92),TTNVar(KSelUID,NotSame,PersonalUIDArr[i+1])})
 				f_Read(FP, _Sub(BackupCp,15), CPos, nil,nil,1)
 				Convert_CPosXY()
 				Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,Simple_CalcLoc(86, -320, -320, 320, 320))

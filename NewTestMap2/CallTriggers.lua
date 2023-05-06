@@ -465,28 +465,54 @@ function Install_CallTriggers()
 			CrShift(FP,G_PushBtnm,16)
 
 			CIfX(FP,{Never()})
-			CElseIfX(CV(G_BtnFnm,1))--자동구매
+			CElseIfX({TTOR({CV(G_BtnFnm,1),CV(G_BtnFnm,8)})})--자동구매
 				local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 7)
+				local AutoBuyVArr2 = GetVArray(iv.AutoBuyCode2[1], 7)
 				local GetNum = CreateVar(FP)
 				local GetABData = CreateVar(FP)
 				local PBJump = def_sIndex()
 				local PBJump2 = def_sIndex()
 				NJump(FP, PBJump, CV(G_PushBtnm,24))
 				CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
+				CIfX(FP,{CV(G_BtnFnm,8)})
+				CMovX(FP,GetABData,VArrX(AutoBuyVArr2,VArrI,VArrI4))
+				CElseX()
 				CMovX(FP,GetABData,VArrX(AutoBuyVArr,VArrI,VArrI4))
+				CIfXEnd()
+
+
 
 				CIfX(FP,{TNVar(GetNum, Exactly, GetABData)})
+
+					CIfX(FP,{CV(G_BtnFnm,8)})
+					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x19추가 \x1B자동구입 \x08OFF \x07』"})
+					CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),0)
+					CElseX()
 					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
 					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+					CIfXEnd()
+
 				CElseX()
+
+					CIfX(FP,{CV(G_BtnFnm,8)})
+					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x19추가 \x1B자동구입 \x07ON \x07』"})
+					CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),GetNum)
+					CElseX()
 					DisplayPrintEr(GCP, {"\x07『 \x06",GetNum,"강 \x04유닛 \x1B자동구입 \x07ON \x07』"})
 					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
+					CIfXEnd()
+
 				CIfXEnd()
 
 				CJump(FP, PBJump2)
 				NJumpEnd(FP, PBJump)
+				DisplayPrintEr(GCP, {"\x07『 \x04유닛 \x19추가 \x1B자동구입 \x08OFF \x07』"})
+				CIfX(FP,{CV(G_BtnFnm,8)})
+				CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),0)
+				CElseX()
 				DisplayPrintEr(GCP, {"\x07『 \x04유닛 \x1B자동구입 \x08OFF \x07』"})
 				CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
+				CIfXEnd()
 				CJumpEnd(FP,PBJump2)
 
 
@@ -637,7 +663,6 @@ function Install_CallTriggers()
 				f_LMovX(FP, GetCreditData, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4))
 				--SaveChkData = CreateVar(FP)
 				GetEnchCoolData = CreateVar(FP)
-				--CMovX(FP,SaveChkData,VArrX(GetVArray(iv.PSaveChk[1], 7),VArrI,VArrI4))
 				
 				CIf(FP,{CV(G_PushBtnm,0,AtLeast),CV(G_PushBtnm,1,AtMost)}) -- 
 					CIfX(FP,{CV(GetPUnitLevel,10,AtLeast)})--CV(SaveChkData,1,AtLeast)
@@ -651,10 +676,9 @@ function Install_CallTriggers()
 							CElseX()
 								CMov(FP, GetMissionData, 2, nil, 2)
 								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
-								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{SetV(GetEnchCoolData,50),TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--저장필요 SetV(SaveChkData,1),
-								CMovX(FP,GerRandData,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
+								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--저장필요 SetV(SaveChkData,1),
 								f_LSub(FP, GetCreditData, GetCreditData, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))
-								CTrigger(FP,{CV(GerRandData,0)},{TSetNVar(GerRandData, SetTo, _Rand())},1)
+								CTrigger(FP,{},{TSetNVar(GerRandData, SetTo, _Rand())},1)
 								GPEper = CreateVar(FP)
 								GerRandData2 = CreateVar(FP)
 								CMov(FP,GerRandData2,GerRandData)
@@ -737,7 +761,6 @@ function Install_CallTriggers()
 
 								CIfXEnd()
 								
-								CMovX(FP,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4),0,SetTo,nil,nil,1)
 							CIfXEnd()
 						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})--크레딧이 부족합
 						CIfXEnd()
@@ -885,7 +908,6 @@ function Install_CallTriggers()
 				f_LMovX(FP, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4), GetCreditData)
 				CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData)
 				CMovX(FP,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4),GetClassData)
-				--CMovX(FP, VArrX(GetVArray(iv.PSaveChk[1], 7), VArrI, VArrI4),SaveChkData)
 				CMovX(FP,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),GetAwakItemData)
 
 
@@ -957,7 +979,8 @@ function Install_CallTriggers()
 		SettingUnit3[1], -- 15~25강유닛 자동판매 설정
 		SettingUnit4[1], -- 26~39유닛 자동판매 설정
 		ShopUnit[1], -- 시민
-		PUnitPtr[1] -- 고유유닛
+		PUnitPtr[1], -- 고유유닛
+		TestShop2[1], -- 유닛 자동구매기
 	}
 	SetCall(FP)
 	for j,k in pairs(BtnFncArr) do
@@ -1250,6 +1273,7 @@ function Install_CallTriggers()
 
 	]]
 	Ga_45 = {--기대치 2개
+		{"\x17크레딧",3222222222,2,iv.B_PCredit},
 		{"\x1E각성의 보석",1,10,iv.AwakItem},
 		{"\x02무색 조각",10000,40,iv.B_PFfragItem},
 		{"\x171000경원 수표",10,1000,iv.Money2},
@@ -1259,6 +1283,7 @@ function Install_CallTriggers()
 	}
 
 	Ga_46 = {--기대치 7개
+		{"\x17크레딧",3222222222,2,iv.B_PCredit},
 		{"\x1E각성의 보석",1,40,iv.AwakItem},
 		{"\x02무색 조각",40000,25,iv.B_PFfragItem},
 		{"\x171000경원 수표",40,1000,iv.Money2},
@@ -1268,6 +1293,7 @@ function Install_CallTriggers()
 	}
 
 	Ga_47 = {--기대치 20개
+		{"\x17크레딧",3222222222,2,iv.B_PCredit},
 		{"\x1E각성의 보석",1,160,iv.AwakItem},
 		{"\x02무색 조각",70000,110,iv.B_PFfragItem},
 		{"\x171000경원 수표",70,2000,iv.Money2},
@@ -1277,6 +1303,7 @@ function Install_CallTriggers()
 	}
 
 	Ga_48 = {--기대치 50개
+		{"\x17크레딧",3222222222,2,iv.B_PCredit},
 		{"\x1E각성의 보석",1,500,iv.AwakItem},
 		{"\x02무색 조각",100000,990,iv.B_PFfragItem},
 		{"\x171000경원 수표",100,3000,iv.Money2},
@@ -1294,23 +1321,43 @@ function Install_CallTriggers()
 		"\x0247강",
 		"\x1B48강"}
 
+
+	Call_RSSort = SetCallForward()
+	SetCall(FP)
+	local RSArr = {
+		iv.RandomSeed1,
+		iv.RandomSeed2,
+		iv.RandomSeed3,
+		iv.RandomSeed4,
+		iv.RandomSeed5,
+		iv.RandomSeed6,
+		iv.RandomSeed7,
+		iv.RandomSeed8,
+		iv.RandomSeed9,
+		iv.RandomSeed10,
+	}
+
+	CMovX(FP,VArrX(GetVArray(RSArr[1][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[2][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[2][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[3][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[3][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[4][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[4][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[5][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[5][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[6][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[6][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[7][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[7][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[8][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[8][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[9][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[9][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[10][1], 7),VArrI,VArrI4))
+	CMovX(FP,VArrX(GetVArray(RSArr[10][1], 7),VArrI,VArrI4),_Rand())
+		
+	SetCallEnd()
+
+
 	Call_Gacha = SetCallForward()
 	GaLv = CreateVar(FP)
 	SetCall(FP)
-	if TestStart == 1 then
-		GetGPer = CreateVar(FP)
-		CIfX(FP,{KeyPress("F11", "Down")})
-		CMov(FP,GetGPer,1)
-		CElseX()
-		GetGPer2 = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
-		CMov(FP,GetGPer,GetGPer2)
-		CIfXEnd()
-		
-		--GetEPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
-	else
-		GetGPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
-	end
-
+	local GetGPer = CreateVar(FP)
+	CMovX(FP,GetGPer,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
+	f_Mod(FP,GetGPer,100000)
+	CAdd(FP,GetGPer,1)
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
@@ -1345,6 +1392,9 @@ for i = 45, 48 do
 		if j == 2 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
 		end
+		if j == 3 then
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+		end
 		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		CIfEnd()
 		TotalGPer = TotalGPer+k[3]
@@ -1367,6 +1417,7 @@ for i = 45, 48 do
 end
 
 CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+CallTrigger(FP, Call_RSSort)
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 
@@ -1425,22 +1476,28 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	SetCallEnd()
 	Call_AutoBuy = SetCallForward()
 	SetCall(FP)
+	BuyError = CreateCcode()
 	GetAutoBuyCode = CreateVar(FP)
+	GetAutoBuyCode2 = CreateVar(FP)
 	GetMoney2 = CreateVar(FP)
 	GetMoney = CreateWar(FP)
-
+	GetSellTicket = CreateVar(FP)
+	CMovX(FP,GetSellTicket,VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetAutoBuyCode2,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	f_LMovX(FP, GetMoney, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),nil,nil,nil,1)
-	AutoBuyOp = CreateCcode()
 	for j, k in pairs(AutoBuyArr) do
 		AutoBuyG(GCP,k[1],k[2])
+		AutoBuyG2(GCP,k[1],k[2])
 	end
 
+	CTrigger(FP,{CD(BuyError,1)},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17유닛 판매권\x04이 부족하여 유료 자판기의 작동이 중지되었습니다."), 4)},{preserved})
 	
+	CMovX(FP,VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4),GetSellTicket,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),GetAutoBuyCode,nil,nil,nil,1)
+	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),GetAutoBuyCode2,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)
 	f_LMovX(FP, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),GetMoney,nil,nil,nil,1)
-
 	SetCallEnd()
 end

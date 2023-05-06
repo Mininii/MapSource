@@ -262,7 +262,8 @@ function DataArr()
 	iv.AwakItem,ct.AwakItem = CreateDataPV("AwakItem",SCA.AwakItem)
 	iv.CSX_LV3Incm,ct.CSX_LV3Incm = CreateDataPV("CSX_LV3Incm",SCA.CSX_LV3Incm)
 	iv.CSX_LV3IncmData,ct.CSX_LV3IncmData = CreateDataPV("CSX_LV3IncmData")
-
+    iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
+    iv.EnchCool,ct.EnchCool = CreateDataPV("EnchCool")
 	
 	
 

@@ -1304,25 +1304,6 @@ end
 
 function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode,LvUniit)})
-		--if Limit == 1 then
-		--	if LvUniit==40 then
-		--		CIf(FP,{CV(GetMoney2,3,AtLeast)},{SubV(GetMoney2,3)})
-		--	else
-		--		CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-		--		f_LSub(FP, GetMoney, GetMoney, Cost)
-		--	end
-
---		--		CDoActions(FP, {
-		--			SetNVar(SAmount,SetTo,3),
-		--			SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),
-		--			SetNVar(DLocation,SetTo,0),
-		--			TSetNVar(SPlayer,SetTo,CP)})
-		--			CTrigger(FP, {CD(AutoBuyOp,0)}, {TSetNVar(SLocation,SetTo,_Add(CP,43))}, 1)
-		--			CTrigger(FP, {CD(AutoBuyOp,1)}, {TSetNVar(SLocation,SetTo,_Add(CP,170))}, 1)
-		--		CallTrigger(FP, CreateStackedUnit)
-		--		--CreateUnitStacked({}, 3, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-		--	CIfEnd()
-		--else
 			if LvUniit==40 then
 				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
 			else
@@ -1331,17 +1312,38 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 			end
 				CDoActions(FP, {
 					SetNVar(SAmount,SetTo,1),
-					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),
+					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,43)),
 					SetNVar(DLocation,SetTo,0),
 					TSetNVar(SPlayer,SetTo,CP)})
-					CTrigger(FP, {CD(AutoBuyOp,0)}, {TSetNVar(SLocation,SetTo,_Add(CP,43))}, 1)
-					CTrigger(FP, {CD(AutoBuyOp,1)}, {TSetNVar(SLocation,SetTo,_Add(CP,170))}, 1)
 				CallTrigger(FP, CreateStackedUnit)
 				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 			CIfEnd()
 		--end
 
 
+	CIfEnd()
+end
+function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
+	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode2,LvUniit)})
+		CIfX(FP,{CV(GetSellTicket,100,AtLeast)})
+			if LvUniit==40 then
+				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+			else
+				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
+				f_LSub(FP, GetMoney, GetMoney, Cost)
+			end
+				CSub(FP,GetSellTicket,100)
+				CDoActions(FP, {
+					SetNVar(SAmount,SetTo,1),
+					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
+					SetNVar(DLocation,SetTo,0),
+					TSetNVar(SPlayer,SetTo,CP)})
+				CallTrigger(FP, CreateStackedUnit)
+				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+			CIfEnd()
+		--end
+		CElseX({SetV(GetAutoBuyCode2,0),SetCD(BuyError,1)})
+		CIfXEnd()
 	CIfEnd()
 end
 --
