@@ -1436,10 +1436,13 @@ Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
 })
 Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
 	AddV(iv.B_PFfragItem[i+1], 10000),
-	
+})
+Trigger2X(FP,{CV(PBossLV[i+1],10,AtLeast)},{
+	AddV(B_PCredit[i+1], 100000000),
+	AddV(B_PTicket[i+1],480000)
 })
 
-for pb= 1, 9 do
+for pb= 1, 10 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,(300000)-5000),SetCD(SaveRemind,1),SetCp(i),DisplayExtText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
 end
 
@@ -1668,6 +1671,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	CIfEnd()
 	TriggerX(FP,{CV(iv.PSaveChk[i+1],1),SCA.SaveCmp(i),CV(iv.EnchCool[i+1],1,AtLeast)},{SetV(iv.PSaveChk[i+1],0),SetV(iv.EnchCool[i+1],0)},{preserved})
+	TriggerX(FP,{SCA.Available(i),CV(iv.EnchCool[i+1],10,AtLeast),LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 

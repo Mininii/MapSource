@@ -348,6 +348,7 @@ function DataArr()
 				
 	}
 	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)
+    iv.BuyTicket,ct.BuyTicket,iv.BuyTicketLoc = CreateDataPV("BuyTicket",nil,1)
 
 
 	for j,k in pairs(SCA_DataArr) do

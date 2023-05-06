@@ -149,6 +149,22 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02구 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 			CIfXEnd()
 		CIfEnd()
+		CIf(FP,{HumanCheck(i, 1),Bring(i,AtLeast,1,15,177)},{MoveUnit(1, 15, i, 177, 168)})
+		
+			CIfX(FP,{CV(iv.PETicket2[i+1],MulOp[i+1],AtLeast)},{})
+				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+				CSub(FP,iv.PETicket2[i+1],MulOp[i+1])
+				CAdd(FP,iv.BuyTicket[i+1],_Mul(MulOp[i+1],10000))
+				CIf(FP,{LocalPlayerID(i)})
+				local TempV = CreateVar(FP)
+				CMov(FP,TempV,MulOp[i+1])
+				DisplayPrint(LCP, {"\x13\x07『 \x1F신 확정 강화권\x04을 ",MulOp[i+1],"개 사용하여 ",TempV," \x08구입 티켓\x04으로 \x07변환 \x04하였습니다. \x07』"})
+				DisplayPrint(LCP, {"\x13\x07『 \x04현재 ",iv.BuyTicket[i+1]," 개의 \x08구입 티켓 \x04보유중 \x07』"})
+				DoActionsX(FP, {SetCp(i),DisplayExtText(StrDesignX("\x08주의 \x04: \x08구입 티켓\x04은 SCA로 저장할 수 없습니다!"))})
+				CIfEnd()
+			CElseX({SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+			CIfXEnd()
+		CIfEnd()
 
 
 	end

@@ -1325,14 +1325,14 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 end
 function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode2,LvUniit)})
-		CIfX(FP,{CV(GetSellTicket,100,AtLeast)})
+		CIfX(FP,{CV(GetBuyTicket,1,AtLeast)})
 			if LvUniit==40 then
 				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
 			else
 				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 				f_LSub(FP, GetMoney, GetMoney, Cost)
 			end
-				CSub(FP,GetSellTicket,100)
+				CSub(FP,GetBuyTicket,1)
 				CDoActions(FP, {
 					SetNVar(SAmount,SetTo,1),
 					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),

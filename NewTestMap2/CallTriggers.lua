@@ -1416,7 +1416,6 @@ for i = 45, 48 do
 
 end
 
-CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 CallTrigger(FP, Call_RSSort)
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
@@ -1481,8 +1480,8 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	GetAutoBuyCode2 = CreateVar(FP)
 	GetMoney2 = CreateVar(FP)
 	GetMoney = CreateWar(FP)
-	GetSellTicket = CreateVar(FP)
-	CMovX(FP,GetSellTicket,VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	GetBuyTicket = CreateVar(FP)
+	CMovX(FP,GetBuyTicket,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode2,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
@@ -1492,9 +1491,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 		AutoBuyG2(GCP,k[1],k[2])
 	end
 
-	CTrigger(FP,{CD(BuyError,1)},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17유닛 판매권\x04이 부족하여 유료 자판기의 작동이 중지되었습니다."), 4)},{preserved})
+	CTrigger(FP,{CD(BuyError,1)},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x08구입 티켓\x04이 부족하여 유료 자판기의 작동이 중지되었습니다."), 4)},{preserved})
 	
-	CMovX(FP,VArrX(GetVArray(iv.SellTicket[1], 7), VArrI, VArrI4),GetSellTicket,nil,nil,nil,1)
+	CMovX(FP,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),GetBuyTicket,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),GetAutoBuyCode,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),GetAutoBuyCode2,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)

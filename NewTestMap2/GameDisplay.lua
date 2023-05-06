@@ -661,8 +661,8 @@ function GameDisplay()
 	
 	CIfX(FP,{CD(LKey,1)})
 	
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x04: \x07",SellTicketLoc," \x04\x12[\x17닫기 \x04: \x10L]"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: ",PETicketLoc,", ",iv.PETicket2Loc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x04: \x07",SellTicketLoc," \x04|| \x08구입 티켓\x04(\x08저장X\x04) : \x08",iv.BuyTicketLoc," \x04\x12[\x17닫기 \x04: \x10L]"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: \x02",PETicketLoc,", \x1F",iv.PETicket2Loc})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1E각성의 보석 \x04: \x07",iv.AwakItemLoc})
 	CIf(FP,CV(NextOreLoc,1,AtLeast))
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
@@ -760,18 +760,18 @@ function GameDisplay()
 			"\x042단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3 \x12\x047단계 \x04: \x17100만 크레딧, \x02무색 조각\x04 5개",
 			"\x043단계 \x04: \x0F+1확률\x07+1.0%p \x1B사냥터 \x07+3, \x08공+50% \x12\x048단계 \x04: \x02무색 조각\x04 250개, \x19유닛 판매권 10만개",
 			"\x044단계 \x04: \x1B사냥터 \x07+6, \x08공격력 + 50%, \x1C추가EXP +10% \x12\x049단계 \x04: \x02무색 조각\x04 1만개",
-			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 ",
+			"\x045단계 \x04: \x1B사냥터 \x07+9, \x08공+50%, \x1CEXP+10%, \x19유닛 판매권 5개 \x12\x0410단계 \x04: \x171억 크레딧, \x19유닛 판매권 48만개 ",
 			"\x046단계 개인보스 이후부터는 \x08파티 보스 5단계\x04를 \x071회 이상 처치\x04해야 출현합니다."
 		},
 		
 		{
 			"\x13\x04\x1B- 부록. \x08파티 보스 몬스터 보상 목록 \x1B-",
 			"\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
-			"\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,\x08공격력 + 50%, \x17크레딧 +500",
+			"\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6, \x08공격력 + 50%, \x17크레딧 +500",
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
 			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
 			"\x045단계 \x04: \x175만 크레딧, \x07스탯 효과",
-			"\x1BExtra \x04: \x1F확정 강화권\x04 1개, \x07스탯 효과 \x08(SCA런쳐 2인이상 로드시 출현함)",
+			"\x1BExtra \x04: \x1F확정 강화권\x04 1개, \x08구입 티켓 5만개, \x07스탯 효과 \x08(SCA런쳐 2인이상 로드시 출현함)",
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
