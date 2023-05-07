@@ -71,11 +71,15 @@ CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
 CTKillT = {}
 for i = 1, 40 do
 table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 152, Force1))
+table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 178, Force1))
 end
 for i = 0, 6  do
 	table.insert(CTKillT,KillUnitAt(All, PersonalUIDArr[i+1], 152, Force1))
+	table.insert(CTKillT,KillUnitAt(All, PersonalUIDArr[i+1], 178, Force1))
 end
-DoActions(FP, CTKillT)
+
+
+DoActions2(FP, CTKillT)
 	EXCC_Part1(CT_Cunit)
 	CIf(FP,{DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
 	CAdd(FP,0x6509B0,6)

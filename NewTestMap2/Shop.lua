@@ -154,7 +154,7 @@ CIf(FP,{Bring(AllPlayers, AtLeast, 1, 15, 112)})
 			CIfX(FP,{CV(iv.PETicket2[i+1],MulOp[i+1],AtLeast)},{})
 				TriggerX(FP,{LocalPlayerID(i)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
 				CSub(FP,iv.PETicket2[i+1],MulOp[i+1])
-				CAdd(FP,iv.BuyTicket[i+1],_Mul(MulOp[i+1],10000))
+				CAdd(FP,iv.BuyTicket[i+1],_Mul(MulOp[i+1],50000))
 				CIf(FP,{LocalPlayerID(i)})
 				local TempV = CreateVar(FP)
 				CMov(FP,TempV,MulOp[i+1])

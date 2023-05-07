@@ -872,7 +872,7 @@ function Install_CallTriggers()
 									CIfEnd()
 									
 									CIf(FP,{CV(G_PushBtnm,10)},{AddV(GetLV3IncmData,1),SubV(GetAwakItemData, _Sub(GetClassData,262))})
-										CMov(FP,TempV,_Mul(GetLV3IncmData,30))
+										CMov(FP,TempV,_Mul(GetLV3IncmData,100))
 										CMov(FP,GEVar,TempV,1000)
 										CallTrigger(FP, Call_SetEPerStr)
 										DisplayPrint(GCP, {"\x13\x07『 \x11LV.MAX \x1B허수아비\x04 돈 수급량이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3," 배 \x07』"})
@@ -945,7 +945,7 @@ function Install_CallTriggers()
 				
 				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
 				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
-				CMov(FP,TempV,_Mul(GetLV3IncmData,30))
+				CMov(FP,TempV,_Mul(GetLV3IncmData,100))
 				CMov(FP,GEVar,TempV,1000)
 				CallTrigger(FP, Call_SetEPerStr)
 				DisplayPrint(GCP, {"\x07『 \x11LV.MAX \x1B허수아비\x04 돈 수급 추가 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3," 배 \x04(\x1E각성 Level \x04: \x1F",GetLV3IncmData,"\x04) \x07』"})
@@ -1218,6 +1218,8 @@ function Install_CallTriggers()
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FIncm[3],GetData_FIncm)),0})
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FSEXP[3],GetData_FSEXP)),0})
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FBrSh[3],GetData_FBrSh)),0})
+	
+	
 	local TempW = CreateWar(FP)
 	local TempW2 = CreateWar(FP)
 	f_LMovX(FP, TempW, WArrX(GetWArray(iv.FfragItemUsed[1],7), WArrI, WArrI4), SetTo, nil, nil, 1)
@@ -1322,42 +1324,15 @@ function Install_CallTriggers()
 		"\x1B48강"}
 
 
-	Call_RSSort = SetCallForward()
-	SetCall(FP)
-	local RSArr = {
-		iv.RandomSeed1,
-		iv.RandomSeed2,
-		iv.RandomSeed3,
-		iv.RandomSeed4,
-		iv.RandomSeed5,
-		iv.RandomSeed6,
-		iv.RandomSeed7,
-		iv.RandomSeed8,
-		iv.RandomSeed9,
-		iv.RandomSeed10,
-	}
-
-	CMovX(FP,VArrX(GetVArray(RSArr[1][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[2][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[2][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[3][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[3][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[4][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[4][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[5][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[5][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[6][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[6][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[7][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[7][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[8][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[8][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[9][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[9][1], 7),VArrI,VArrI4),VArrX(GetVArray(RSArr[10][1], 7),VArrI,VArrI4))
-	CMovX(FP,VArrX(GetVArray(RSArr[10][1], 7),VArrI,VArrI4),_Rand())
-		
-	SetCallEnd()
-
 
 	Call_Gacha = SetCallForward()
 	GaLv = CreateVar(FP)
 	SetCall(FP)
-	local GetGPer = CreateVar(FP)
-	CMovX(FP,GetGPer,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
-	f_Mod(FP,GetGPer,100000)
-	CAdd(FP,GetGPer,1)
+	--local GetGPer = CreateVar(FP)
+	--CMovX(FP,GetGPer,VArrX(GetVArray(iv.RandomSeed1[1], 7),VArrI,VArrI4))
+	--f_Mod(FP,GetGPer,100000)
+	--CAdd(FP,GetGPer,1)
+	GetGPer = f_CRandNum(100000,1) -- 랜덤 난수 생성. GetEPer 사용 종료까지 재생성 금지
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
@@ -1416,7 +1391,7 @@ for i = 45, 48 do
 
 end
 
-CallTrigger(FP, Call_RSSort)
+--CallTrigger(FP, Call_RSSort)
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 

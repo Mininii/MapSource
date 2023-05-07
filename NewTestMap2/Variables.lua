@@ -964,15 +964,19 @@ FirstReward3 = {
 	--마스터 10.0% = 230만, 
 	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
 	--마스터 10.0% = 330만, 
-	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*11)) end)
+	Cost_FMEPer = CreateCostData(350,function(n) return 100+((n-1)*(n*1)*n) end)
 	--마스터 1.0% = 376만, 컴플리트 3.0% 1억
-	Cost_FIncm = CreateCostData(500,function(n) return 1+((n-1)*(n*0.5)) end)
+	Cost_FIncm = CreateCostData(200,function(n) return 1+((n-1)*(n*3)) end)
 	--컴플리트 10000% = 2000만
 	Cost_FSEXP = CreateCostData(1000,function(n) return (2*n) end)
 	--컴플리트 10000% = 110만
-	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*1)*n) end)
+	Cost_FBrSh = CreateCostData(200,function(n) return 100+((n-1)*(n*3)*n) end)
 	--컴플리트 15.0% = 1.2억
-
+	CSXAwakItemArr = {0}
+	for i = 1, 60 do
+		table.insert(CSXAwakItemArr, i+CSXAwakItemArr[i])
+	end
+	CSXAwakItemArr = f_GetFileArrptr(FP,CSXAwakItemArr,4,1)
 --	Cost_FXPer44 = 10
 --	Cost_FXPer45 = 40
 --	Cost_FXPer46 = 70
