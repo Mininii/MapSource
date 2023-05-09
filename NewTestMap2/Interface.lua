@@ -1565,29 +1565,39 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		if j <= 25 then
 			EXP = 0
 		end
-		--if Limit == 1 then
-		--	
-		--CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
-		--CIfX(FP, {Bring(i,AtLeast,4,UID,8+i)},{KillUnitAt(4, UID, 8+i, i)})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CElseIfX({Bring(i,AtLeast,3,UID,8+i)},{KillUnitAt(3, UID, 8+i, i),})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CElseIfX({Bring(i,AtLeast,2,UID,8+i)},{KillUnitAt(2, UID, 8+i, i),})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CElseX({KillUnitAt(1, UID, 8+i, i),})
-		--CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--CIfXEnd()
-		--CIfEnd()
-		--else
-		--CallTriggerX(FP, Call_Enchant, {Bring(i,AtLeast,1,UID,8+i)}, {KillUnitAt(1, UID, 8+i, i),SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
-		--end
-
+		if Limit == 1 then
+			
+		CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
+		CIfX(FP, {Bring(i,AtLeast,6,UID,8+i)},{KillUnitAt(6, UID, 8+i, i)})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CElseIfX({Bring(i,AtLeast,5,UID,8+i)},{KillUnitAt(5, UID, 8+i, i),})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CElseIfX({Bring(i,AtLeast,4,UID,8+i)},{KillUnitAt(4, UID, 8+i, i),})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CElseIfX({Bring(i,AtLeast,3,UID,8+i)},{KillUnitAt(3, UID, 8+i, i),})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CElseIfX({Bring(i,AtLeast,2,UID,8+i)},{KillUnitAt(2, UID, 8+i, i),})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CElseX({KillUnitAt(1, UID, 8+i, i),})
+		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
+		CIfXEnd()
+		CIfEnd()
+		else
 		CIf(FP,{Bring(i,AtLeast,1,UID,8+i)})
 		CIfX(FP, {Bring(i,AtLeast,2,UID,8+i)},{KillUnitAt(2, UID, 8+i, i)})
 		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
@@ -1596,6 +1606,8 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		CallTriggerX(FP, Call_Enchant, {}, {SetV(ELevel,LV-1),SetV(UEper,Per),SetV(ECP,i),SetNWar(TempEXPW2,SetTo,tostring(EXP))})
 		CIfXEnd()
 		CIfEnd()
+		end
+
 	end
 	for j = 43, 40, -1 do
 		local LV = LevelUnitArr[j][1]
@@ -1782,13 +1794,13 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 		
 		CIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})
-	if Limit == 0 then
-		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-	else
-		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-	end
+--	if Limit == 0 then
+--		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+--	else
+--		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+--	end
 	
---	NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
 		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
