@@ -113,7 +113,6 @@ end
 	SCA.PStatVer = SCA.CreateVar(FP)
 	SCA.PlayTime = SCA.CreateVar(FP)
 	SCA.PlayTime2 = SCA.CreateVar(FP)
-	SCA.CreditAddSC = SCA.CreateVar(FP)
 	SCA.LV5Cool = SCA.CreateVar(FP)
 	SCA.BanFlag2 = SCA.CreateVar(FP)
 	SCA.BanFlag3 = SCA.CreateVar(FP)
@@ -131,16 +130,6 @@ end
 	SCA.CSTotalEPer = SCA.CreateVar(FP)
 	SCA.CSTotalEper4 = SCA.CreateVar(FP)
 	SCA.CSDPSLV = SCA.CreateVar(FP)
-	SCA.RandomSeed1 = SCA.CreateVar(FP)
-	SCA.RandomSeed2 = SCA.CreateVar(FP)
-	SCA.RandomSeed3 = SCA.CreateVar(FP)
-	SCA.RandomSeed4 = SCA.CreateVar(FP)
-	SCA.RandomSeed5 = SCA.CreateVar(FP)
-	SCA.RandomSeed6 = SCA.CreateVar(FP)
-	SCA.RandomSeed7 = SCA.CreateVar(FP)
-	SCA.RandomSeed8 = SCA.CreateVar(FP)
-	SCA.RandomSeed9 = SCA.CreateVar(FP)
-	SCA.RandomSeed10 = SCA.CreateVar(FP)
 	SCA.StatTotalEPerEx2 = SCA.CreateVar(FP)
 	SCA.StatTotalEPerEx3 = SCA.CreateVar(FP)
 	SCA.StatSCCool = SCA.CreateVar(FP)
@@ -186,8 +175,11 @@ end
 	SCA.AwakItem = SCA.CreateVar(FP)
 	SCA.CSX_LV3Incm = SCA.CreateVar(FP)
 	SCA.PETicket2 = SCA.CreateVar(FP)
-	
+	SCA.FXPer48 = SCA.CreateVar(FP)
+	SCA.FMin = SCA.CreateVar(FP)
 
+
+	
 	SCA.GReload = CreateCcode()
 	SCA.LoadSlot1 = CreateCcodeArr(7)
 	--MSQC_init(0x590004)
@@ -264,7 +256,7 @@ end
 	ELevel = CreateVar(FP)--현재 강화중인 레벨
 
 	
-	CntCArr = CreateCcodeArr(8)
+	CntCArr = CreateCcodeArr(10)
 	failCcode = CreateCcode()
 	failCcode2 = CreateCcode()
 
@@ -376,7 +368,6 @@ end
 	iv.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
 	iv.PlayTime2 = CreateVarArr(7,FP) -- 총 플레이타임(신 값)
 	iv.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
-	iv.CreditAddSC = CreateVarArr(7,FP) 
 	iv.LV5Cool = CreateVarArr(7,FP)
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
@@ -455,7 +446,6 @@ end
 	iv.VaccItemLoc = CreateVar(FP)
 	iv.SCCoolLoc = CreateVar(FP)
 	iv.PETicketLoc = CreateVar(FP)
-	iv.CreditAddSCLoc = CreateVar(FP)
 	iv.S_LV3IncmLoc = CreateVar(FP)
 	iv.DayCheck2Loc = CreateVar(FP)
 	iv.FfragItemLoc = CreateWar(FP)
@@ -485,19 +475,10 @@ end
 	iv.Cost_FBrShLoc = CreateVar(FP)
 	iv.Cost_FXPer47Loc = CreateVar(FP)
 	iv.Cost_FMEPerLoc = CreateVar(FP)
+	iv.Cost_FXPer48Loc = CreateVar(FP)
+	iv.Cost_FMinLoc = CreateVar(FP)
 	iv.AwakItemLoc = CreateVar(FP)
 	iv.FirstRewardLimLoc = CreateVar(FP)
-	iv.RandomSeed1 = CreateVarArr(7,FP)
-	iv.RandomSeed2 = CreateVarArr(7,FP)
-	iv.RandomSeed3 = CreateVarArr(7,FP)
-	iv.RandomSeed4 = CreateVarArr(7,FP)
-	iv.RandomSeed5 = CreateVarArr(7,FP)
-	iv.RandomSeed6 = CreateVarArr(7,FP)
-	iv.RandomSeed7 = CreateVarArr(7,FP)
-	iv.RandomSeed8 = CreateVarArr(7,FP)
-	iv.RandomSeed9 = CreateVarArr(7,FP)
-	iv.RandomSeed10 = CreateVarArr(7,FP)
-	
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
 
@@ -582,7 +563,6 @@ end
 	ct.PStatVer = CreateVarArr(7,FP) -- 현재 저장된 스탯버전
 	ct.PlayTime2 = CreateVarArr(7,FP) -- 총 플레이타임(신 값)
 	ct.PlayTime = CreateVarArr(7,FP) -- 총 플레이타임(구 값)
-	ct.CreditAddSC = CreateVarArr(7,FP) 
 	ct.LV5Cool = CreateVarArr(7,FP)
 	ct.B_PCredit = CreateVarArr(7,FP)
 	ct.B_PTicket = CreateVarArr(7,FP)
@@ -590,16 +570,6 @@ end
 	ct.TimeAttackScore = CreateVarArr(7,FP)
 	ct.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
 
-	ct.RandomSeed1 = CreateVarArr(7,FP)
-	ct.RandomSeed2 = CreateVarArr(7,FP)
-	ct.RandomSeed3 = CreateVarArr(7,FP)
-	ct.RandomSeed4 = CreateVarArr(7,FP)
-	ct.RandomSeed5 = CreateVarArr(7,FP)
-	ct.RandomSeed6 = CreateVarArr(7,FP)
-	ct.RandomSeed7 = CreateVarArr(7,FP)
-	ct.RandomSeed8 = CreateVarArr(7,FP)
-	ct.RandomSeed9 = CreateVarArr(7,FP)
-	ct.RandomSeed10 = CreateVarArr(7,FP)
 	ct.BanFlag = CreateVarArr(7,FP)
 	ct.BanFlag2 = CreateVarArr(7,FP)
 	ct.BanFlag3 = CreateVarArr(7,FP)
@@ -651,31 +621,51 @@ end
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
 	AutoEnchArr = {} -- 자동강화 설정용 데스값 태아불
-	AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
+	--AutoEnchArr2 = {} -- 자동강화 설정 가능 여부 판별용 데스값 태아불
 	AutoSellArr = {} -- 자동강화 설정용 데스값 태아불
 	if Limit == 1 then
         
-		AutoBuyArr = { -- 자동구입 가격 설정용 테이블
-		{1,"4500"},
-		{7,"120000"},
-		{11,"2100000"},
-		{15,"24000000"},
-		{18,"300000000"},
-		{20,"1800000000"},
-		{22,"10500000000"},
-		{24,"60000000000"},
-		{26,"300000000000"},
-		{28,"1800000000000"},
-		{30,"10500000000000"},
-		{32,"60000000000000"},
-		{34,"360000000000000"},
-		{36,"2400000000000000"},
-		{37,"18000000000000000"},
-		{38,"150000000000000000"},
-		{39,"2400000000000000000"},
-		{40,"10000000000000000000"},
-	}
+--		AutoBuyArr = { -- 자동구입 가격 설정용 테이블
+--		{1,"4500"},
+--		{7,"120000"},
+--		{11,"2100000"},
+--		{15,"24000000"},
+--		{18,"300000000"},
+--		{20,"1800000000"},
+--		{22,"10500000000"},
+--		{24,"60000000000"},
+--		{26,"300000000000"},
+--		{28,"1800000000000"},
+--		{30,"10500000000000"},
+--		{32,"60000000000000"},
+--		{34,"360000000000000"},
+--		{36,"2400000000000000"},
+--		{37,"18000000000000000"},
+--		{38,"150000000000000000"},
+--		{39,"2400000000000000000"},
+--		{40,"10000000000000000000"},
+--	}
 	
+AutoBuyArr = { -- 자동구입 가격 설정용 테이블
+{1,"1500"},
+{7,"40000"}, 
+{11,"700000"},
+{15,"8000000"},
+{18,"100000000"},
+{20,"600000000"},
+{22,"3500000000"},
+{24,"20000000000"},
+{26,"100000000000"},
+{28,"600000000000"},
+{30,"3500000000000"},
+{32,"20000000000000"},
+{34,"120000000000000"},
+{36,"800000000000000"},
+{37,"6000000000000000"},
+{38,"50000000000000000"},
+{39,"800000000000000000"},
+{40,"10000000000000000000"},
+}
 		else
 	AutoBuyArr = { -- 자동구입 가격 설정용 테이블
 	{1,"1500"},
@@ -771,7 +761,9 @@ end
 	PushLevelUnit(25+20,7000,0,74,62,48,2500,59)--개별확률 -- 프로브
 	PushLevelUnit(25+21,4000,0,81,76,24,2800,59)--개별확률 -- 
 	PushLevelUnit(25+22,1000,0,78,67,12,3400,59)--개별확률
-	PushLevelUnit(25+23,0,0,79,69,4,6550,59)-- 최강유닛
+	PushLevelUnit(25+23,0,0,79,69,4,6550,59)-- 
+	PushLevelUnit(25+24,500,0,99,112,3,6550,59)-- 
+	PushLevelUnit(25+25,100,0,100,116,1,0,59,nil,2)-- 최강유닛
 
 	--이하 밸런스 미정
 	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--스카웃
@@ -814,6 +806,7 @@ end
 		{51,"1322222"},
 		{42,"3222222"},
 		{98,"15000000"},
+		{102,"300000000"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -822,7 +815,18 @@ if TestStart == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"20000000"},
-		{77,"63222"},
+		{77,"3222"},
+		{104,"2322"},
+	}--{,""},--보스 건물 아이디, DPM 요구수치
+elseif Limit == 1 then
+	BossArr = {
+		{87,"10000"},
+		{25,"150000"},
+		{80,"1100000"},
+		{57,"9300000"},
+		{72,"34000000"},
+		{77,"3222"},
+		{104,"3222"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -832,6 +836,7 @@ else
 		{57,"9300000"},
 		{72,"34000000"},
 		{77,"63222"},
+		{104,"322322"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 end
 FirstReward = {
@@ -988,6 +993,8 @@ FirstReward3 = {
 	--마스터 10.0% = 230만, 
 	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
 	--마스터 10.0% = 330만, 
+	Cost_FXPer48 = CreateCostData(1000,function(n) return 1+((n-1)*(n*12)) end)
+	--마스터 10.0% = 330만, 
 	Cost_FMEPer = CreateCostData(350,function(n) return 100+((n-1)*(n*1)*n) end)
 	--마스터 1.0% = 376만, 컴플리트 3.0% 1억
 	Cost_FIncm = CreateCostData(200,function(n) return 1+((n-1)*(n*3)) end)
@@ -996,6 +1003,11 @@ FirstReward3 = {
 	--컴플리트 10000% = 110만
 	Cost_FBrSh = CreateCostData(200,function(n) return 100+((n-1)*(n*3)*n) end)
 	--컴플리트 15.0% = 1.2억
+	
+	
+	Cost_FMin = CreateCostData(200,function(n) return 1+((n-1)*(n*2)*(5*n)) end)
+
+	
 	CSXAwakItemArr = {0}
 	for i = 1, 60 do
 		table.insert(CSXAwakItemArr, i+CSXAwakItemArr[i])

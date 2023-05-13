@@ -99,21 +99,21 @@ NJump(FP, BossClearCheck, {TMemoryX(_Add(BossEPD,17), Exactly, 0, 0xFF00)}, {Set
 
 TriggerX(FP,{CV(DPSCheck2,1440,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
-CIfX(FP, {CV(BossLV,5)})
+CIfX(FP, {TTOR({CV(BossLV,5),CV(BossLV,6)})})
 
-CIfX(FP,{TMemory(BossEPD,AtMost,(8319999*256)+128)})
-	f_Read(FP, BossEPD, DPSCheckV)
-	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
-	CTrigger(FP,{},{TSetMemory(BossEPD,SetTo,8320000*256)},1)
-	--if Limit == 1 then
-	--	DisplayPrint(AllPlayers,{"Dmg256 : ",DpsDest})
-	--end
-	CrShift(FP, DpsDest, 7)
-	--if Limit == 1 then
-	--	DisplayPrint(AllPlayers,{"Dmg1 : ",DpsDest})
-	--end
+	CIfX(FP,{TMemory(BossEPD,AtMost,(8319999*256)+128)})
+		f_Read(FP, BossEPD, DPSCheckV)
+		CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
+		CTrigger(FP,{},{TSetMemory(BossEPD,SetTo,8320000*256)},1)
+		--if Limit == 1 then
+		--	DisplayPrint(AllPlayers,{"Dmg256 : ",DpsDest})
+		--end
+		CrShift(FP, DpsDest, 7)
+		--if Limit == 1 then
+		--	DisplayPrint(AllPlayers,{"Dmg1 : ",DpsDest})
+		--end
 	CElseX()
-	CMov(FP,DpsDest,0)
+		CMov(FP,DpsDest,0)
 	CIfXEnd()
 
 CElseX()
@@ -136,7 +136,7 @@ if TestStart == 1 then
 end
 
 f_LMov(FP,TotalDPM,_LAdd(TotalDPM,{DpsDest,0}))
-CIfX(FP, {CV(BossLV,5)})
+CIfX(FP, {TTOR({CV(BossLV,5),CV(BossLV,6)})})
 CElseX()
 f_LMov(FP,TotalDPM,_LSub(TotalDPM,{_ReadF(ArrX(DPSArr2,DPSCheck2)),0}))
 CMovX(FP,ArrX(DPSArr2,DPSCheck2),DpsDest,nil,nil,nil,1)
@@ -164,7 +164,7 @@ SetCallEnd()
 CJumpEnd(FP, BossFuncJump)
 for j,k in pairs(BossArr) do
 	local cond
-	if j==6 then
+	if j>=6 then
 		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1),CD(iv.PartyBonus,2,AtLeast),}--
 	else
 		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)}

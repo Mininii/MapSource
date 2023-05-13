@@ -45,8 +45,9 @@ VerText = "\x19ver\x07. \x043\x07.\x0411"
 TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 1
+	TestSpeedNum = 13
 	SpeedTestMode = 0
+	X3Mode = 0
 else
 	
 SpeedTestMode = 0

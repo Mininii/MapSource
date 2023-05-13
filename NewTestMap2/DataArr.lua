@@ -43,7 +43,6 @@ function DataArr()
 		{iv.PStatVer,ct.PStatVer,"PStatVer"},
 		{iv.PlayTime2,ct.PlayTime2,"PlayTime2"},
 		{iv.PlayTime,ct.PlayTime,"PlayTime"},
-		{iv.CreditAddSC,ct.CreditAddSC,"CreditAddSC"},
 		{iv.LV5Cool,ct.LV5Cool,"LV5Cool"},
 		{iv.B_PCredit,ct.B_PCredit,"B_PCredit"},
 		{iv.B_PTicket,ct.B_PTicket,"B_PTicket"},
@@ -69,16 +68,6 @@ function DataArr()
 		{iv.CS_EXPData,ct.CS_EXPData,"CS_EXPData"},
 		{iv.CS_TEPerData,ct.CS_TEPerData,"CS_TEPerData"},
 		{iv.CS_TEPer4Data,ct.CS_TEPer4Data,"CS_TEPer4Data"},
-		{iv.RandomSeed1,ct.RandomSeed1,"RandomSeed1"},
-		{iv.RandomSeed2,ct.RandomSeed2,"RandomSeed2"},
-		{iv.RandomSeed3,ct.RandomSeed3,"RandomSeed3"},
-		{iv.RandomSeed4,ct.RandomSeed4,"RandomSeed4"},
-		{iv.RandomSeed5,ct.RandomSeed5,"RandomSeed5"},
-		{iv.RandomSeed6,ct.RandomSeed6,"RandomSeed6"},
-		{iv.RandomSeed7,ct.RandomSeed7,"RandomSeed7"},
-		{iv.RandomSeed8,ct.RandomSeed8,"RandomSeed8"},
-		{iv.RandomSeed9,ct.RandomSeed9,"RandomSeed9"},
-		{iv.RandomSeed10,ct.RandomSeed10,"RandomSeed10"},
 		{iv.B_PEXP,ct.B_PEXP,"B_PEXP"},
 		
 		
@@ -136,7 +125,6 @@ function DataArr()
 		{iv.PStatVer,SCA.PStatVer,"PStatVer"},
 		{iv.PlayTime,SCA.PlayTime,"PlayTime"},
 		{iv.PlayTime2,SCA.PlayTime2,"PlayTime2"},
-		{iv.CreditAddSC,SCA.CreditAddSC,"CreditAddSC"},
 		{iv.LV5Cool,SCA.LV5Cool,"LV5Cool"},
 		{iv.Stat_TotalEPer4,SCA.StatTotalEPer4,"Stat_TotalEPer4"},
 		{iv.Stat_BreakShield,SCA.StatBreakShield,"Stat_BreakShield"},
@@ -151,16 +139,6 @@ function DataArr()
 		{iv.CS_TotalEPer,SCA.CSTotalEPer,"CS_TotalEPer"},
 		{iv.CS_TotalEper4,SCA.CSTotalEper4,"CS_TotalEper4"},
 		{iv.CS_DPSLV,SCA.CSDPSLV,"CS_DPSLV"},
-		{iv.RandomSeed1,SCA.RandomSeed1,"RandomSeed1"},
-		{iv.RandomSeed2,SCA.RandomSeed2,"RandomSeed2"},
-		{iv.RandomSeed3,SCA.RandomSeed3,"RandomSeed3"},
-		{iv.RandomSeed4,SCA.RandomSeed4,"RandomSeed4"},
-		{iv.RandomSeed5,SCA.RandomSeed5,"RandomSeed5"},
-		{iv.RandomSeed6,SCA.RandomSeed6,"RandomSeed6"},
-		{iv.RandomSeed7,SCA.RandomSeed7,"RandomSeed7"},
-		{iv.RandomSeed8,SCA.RandomSeed8,"RandomSeed8"},
-		{iv.RandomSeed9,SCA.RandomSeed9,"RandomSeed9"},
-		{iv.RandomSeed10,SCA.RandomSeed10,"RandomSeed10"},
 		{iv.SellTicket,SCA.SellTicket,"SellTicket"}
 	}
 	
@@ -311,7 +289,6 @@ function DataArr()
 		{iv.VaccItem[1],iv.VaccItemLoc},
 		{iv.SCCool[1],iv.SCCoolLoc},
 		{iv.PETicket[1],iv.PETicketLoc},
-		{iv.CreditAddSC[1],iv.CreditAddSCLoc},
 		{iv.Money2[1],iv.MoneyLoc2},
 		{iv.Stat_LV3Incm[1],iv.S_LV3IncmLoc},
 		{iv.DayCheck2[1],iv.DayCheck2Loc},
@@ -345,6 +322,10 @@ function DataArr()
 	}
 	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)
     iv.BuyTicket,ct.BuyTicket,iv.BuyTicketLoc = CreateDataPV("BuyTicket",nil,1)
+	iv.XEPer48,ct.XEPer48,iv.XEPer48Loc = CreateDataPV("XEPer48",nil,1)
+	iv.CXPer48,ct.CXPer48 = CreateDataPV("CXPer48")
+	iv.FXPer48,ct.FXPer48,iv.FXPer48Loc = CreateDataPV("FXPer46",SCA.FXPer48,1)
+	iv.FMin,ct.FMin,iv.FMinLoc = CreateDataPV("FMin",SCA.FMin,1)
 
 
 	for j,k in pairs(SCA_DataArr) do

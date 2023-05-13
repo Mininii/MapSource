@@ -41,7 +41,7 @@ CIfX(FP,{DeathsX(CurrentPlayer, Exactly, 88, 0, 0xFF)})
 	CMov(FP,0x6509B0,FP)
 
 
-CElseIfX({DeathsX(CurrentPlayer, Exactly, 79, 0, 0xFF)})
+CElseIfX({TTOR({DeathsX(CurrentPlayer, Exactly, 79, 0, 0xFF),DeathsX(CurrentPlayer, Exactly, 99, 0, 0xFF),DeathsX(CurrentPlayer, Exactly, 100, 0, 0xFF)})})
 
 CMov(FP,0x6509B0,NBTemp,21)
 	DoActions(FP,{

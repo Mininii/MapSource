@@ -64,6 +64,8 @@ for i = 0, 227 do
 end
 
 SetUnitsDatX(77, {DefType= 0})
+SetUnitsDatX(104, {DefType= 0})
+SetUnitsDatX(102, {DefType= 0})
 flingyarr = {4,8,9,14,15,46,45,47,49,73,74,75,77,78,82,84,200}
 for j,k in pairs(flingyarr) do
 table.insert(PatchArr, SetMemoryB(0x6C9858 + k,SetTo,1))

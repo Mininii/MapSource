@@ -64,6 +64,7 @@ function TBL()
 	t05 = "\x08판매 불가 유닛"
 	t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t06_1 = "\x1D현재 타격수 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
+	t06_2 = "\x17남은 크레딧 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t09 = "\x08현재 DPS : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
 	t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04만0000배"
@@ -136,6 +137,9 @@ function TBL()
 		if j==48 then
 			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,6)},{preserved})
 		end
+		if j==49 then
+			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,7)},{preserved})
+		end
 		
 	end
 	for j, k in pairs(BossArr) do
@@ -190,7 +194,7 @@ function TBL()
 	StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
 	CIfXEnd()
 	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 서서히 감소합니다."), 4)},{preserved})
-	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08주의 \x04: 유료 자판기는 유닛 1기 소환시마다 \x08구입 티켓 1개\x04가 \x08소모\x04됩니다."), 4)},{preserved})
+	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08주의 \x04: 유료 자판기는 유닛 1기 소환시마다 \x08구입 티켓 1개\x04가 \x08소모\x04됩니다."), 4)})
 	
 	
 	
@@ -256,17 +260,20 @@ function TBL()
 	MFlag = CreateCcode()
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 		CIfX(FP, {CD(XEperFlag,1)}) -- 특수확률일 경우
-		CS__SetValue(FP,TStr1,t01_1,nil,0)
-		CS__SetValue(FP,TStr1,"-",nil,7)
-		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)},{SetCD(MFlag,0)})--개별확률
-		CiSub(FP,SelPer,iv.XEPerM)
-		CS__SetValue(FP,TStr1,t01_2,nil,0)
-		CIf(FP,CV(SelPer,0x80000000,AtLeast),{SetCD(MFlag,1)})
-		CNeg(FP, SelPer)--마이너스 수치 반전
-		CS__SetValue(FP,TStr1,"-",nil,7)--마이너스 표기 추가
-		CIfEnd()
+			CS__SetValue(FP,TStr1,t01_1,nil,0)
+			CS__SetValue(FP,TStr1,"-",nil,7)
+		CElseIfX({CD(XEperFlag,7)},{SetCD(MFlag,0)})--고정확률
+			CS__SetValue(FP,TStr1,t01_3,nil,0)
+
+		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)},{SetCD(MFlag,0)})--개별확률
+			CiSub(FP,SelPer,iv.XEPerM)
+			CS__SetValue(FP,TStr1,t01_2,nil,0)
+			CIf(FP,CV(SelPer,0x80000000,AtLeast),{SetCD(MFlag,1)})
+				CNeg(FP, SelPer)--마이너스 수치 반전
+				CS__SetValue(FP,TStr1,"-",nil,7)--마이너스 표기 추가
+			CIfEnd()
 		CElseX()
-		CS__SetValue(FP,TStr1,t01,nil,0)
+			CS__SetValue(FP,TStr1,t01,nil,0)
 		CIfXEnd()
 
 		CS__ItoCustom(FP,SVA1(TStr1,7+1),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
@@ -331,6 +338,20 @@ function TBL()
 	}, {
 		SetCSVA1(SVA1(TStr1,15), SetTo, string.byte("0")*0x1000000,0xFF000000),
 	}, {preserved})
+
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	
 	CIfEnd()
 	
 
@@ -356,6 +377,8 @@ function TBL()
 	CTrigger(FP, {CD(XEperFlag,3)},{SetV(TotalEPerLoc,iv.XEPer45Loc)},{preserved})
 	CTrigger(FP, {CD(XEperFlag,4)},{SetV(TotalEPerLoc,iv.XEPer46Loc)},{preserved})
 	CTrigger(FP, {CD(XEperFlag,5)},{SetV(TotalEPerLoc,iv.XEPer47Loc)},{preserved})
+	CTrigger(FP, {CD(XEperFlag,6)},{SetV(TotalEPerLoc,iv.XEPer48Loc)},{preserved})
+	CTrigger(FP, {CD(XEperFlag,7)},{SetV(TotalEPerLoc,0)},{preserved})
 	CIfX(FP,CD(MFlag,0))
 	CAdd(FP,TotalEPerLoc,SelPer)
 	CElseX()
@@ -434,12 +457,23 @@ function TBL()
 		f_LMov(FP,TotalBossDPMLoc,TotalPBossDPS[i+1])
 		CIfEnd()
 	end
+	CIfX(FP,{CV(SelUID,102)})
+	CS__SetValue(FP,TStr4,t06_2,nil,0)
+	local TempW = CreateWar(FP)
+	f_LMov(FP,TempW,_LSub(TotalBossDPMLoc,TotalDPMLoc))
+	f_LMov(FP,TotalDPMLoc,TempW)
+	CElseX()
 	CS__SetValue(FP,TStr4,t09,nil,0)
+	CIfXEnd()
+
+
 	CElseX()
 	f_LMov(FP,TotalDPMLoc,TotalDPM)
 	f_LMov(FP,TotalBossDPMLoc,BossDPM)
-	CIfX(FP,{CV(SelUID,77)})
+	CIfX(FP,{TTOR({CV(SelUID,77),CV(SelUID,104)})})
 	CS__SetValue(FP,TStr4,t06_1,nil,0)
+
+
 	CElseX()
 	CS__SetValue(FP,TStr4,t06,nil,0)
 	CIfXEnd()

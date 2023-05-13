@@ -361,6 +361,13 @@ end
 end
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
 	local WepName = {}
+	local DamageFactor = Damage/10
+	if Damage == 0 then
+		Damage = 65500/2
+		DamageFactor = 728/2
+	end
+	WepName[1] = 1469
+	WepName[3] = 1468
 	WepName[4] = 1447
 	WepName[5] = 1446
 	WepName[12] = 1445
@@ -369,7 +376,7 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	WepName[72] = 1442
 
 	if ifTType ~= nil then
-		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
+		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WepName[Cooldown])
 		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID+1,Exactly,WepID))
 		if UnitID==62 then
 			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,104))
@@ -377,10 +384,10 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID+1,Exactly,130))
 		end
 	else
-		SetUnitAbility(UnitID,WepID,Cooldown,Damage,Damage/10,UpgradeID,ObjNum,WepName[Cooldown])
+		SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WepName[Cooldown])
 		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
 	end
-	if Level>=26 and Level<=40 then
+	if Level>=26 and Level<=50 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
 		table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,0xA+0x20)) 
 	else
@@ -390,9 +397,9 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTT
 	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
 
 	--AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
-	table.insert(AutoEnchArr2,CreateCcodeArr(7))
+	--table.insert(AutoEnchArr2,CreateCcodeArr(7))
 	table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
-	table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
+	table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,DamageFactor)) 
 	table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
 	table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
 
@@ -446,8 +453,10 @@ table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,2))
 end
 function PopLevelUnit()
 	AutoEnchArr = CreateArr(7*#LevelUnitArr, FP)
+	AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
-	LevelDataArr = CreateArr(#LevelUnitArr, FP)
+	LevelDataArr = CreateVArr(#LevelUnitArr, FP)
+	PerDataArr = CreateArr(#LevelUnitArr, FP)
 	BuyDataArr = CreateArr(#AutoBuyArr,FP)
 	for j = 0, 9 do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr,j),SetTo,0))
@@ -456,7 +465,9 @@ function PopLevelUnit()
 	end
 	BuyDataWArr = CreateWArr(#AutoBuyArr,FP)
 	for j,k in pairs(LevelUnitArr) do
-		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(LevelDataArr,j-1),SetTo,k[2]))
+		
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(LevelDataArr,j-1),SetTo,k[2]))
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(PerDataArr,j-1),SetTo,k[3]))
 	end
 	
 	for j,k in pairs(AutoBuyArr) do
@@ -529,10 +540,10 @@ function BtnSetEnd()
 end
 
 
-function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_MoneyV)
+function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossFlag)
 	local DPSArrX = CreateArr(96*4, FP)
 	local TotalDPS = CreateWar(FP)
-	local TotalDPS2 = CreateVar(FP)
+	local TotalDPS2 = CreateWar(FP)
 	local DPSCheckV = CreateVar(FP)
 	local DpsDest = CreateVar(FP)
 	local GetMoney = CreateWar(FP)
@@ -542,6 +553,51 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	CIfX(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1),SetCD(ResetCheck,0)})
 	TriggerX(FP,{CV(DPSCheck2,96*4,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
+	if BossFlag == 1 then
+	CIfX(FP,{TMemoryX(_Add(UnitPtr,23), Exactly, 102,0xFF)})
+
+
+
+		CIfX(FP,{TMemory(UnitPtr,AtMost,(8319999*256)+128)})
+		f_Read(FP, UnitPtr, DPSCheckV)
+		CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
+		CTrigger(FP,{},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
+		CrShift(FP, DpsDest, 7)
+		CElseX()
+		CMov(FP,DpsDest,0)
+		CIfXEnd()
+		local TempV = CreateVar(FP)
+		CMov(FP,TempV,_Mul(DpsDest,_Add(iv.FMin[CP+1],10)))
+		f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
+		f_LAdd(FP, TotalDPS, TotalDPS, {TempV,0})
+		f_LMov(FP,TotalDPS2,TotalDPS)
+
+		
+
+
+	CElseX()
+		CIfX(FP,{TMemory(UnitPtr,AtMost,8319999*256)})
+		f_Read(FP, UnitPtr, DPSCheckV)
+		CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
+		CTrigger(FP,{},{TSetMemory(UnitPtr,SetTo,8320000*256)},1)
+		CrShift(FP, DpsDest, 8)
+		CElseX()
+		CMov(FP,DpsDest,0)
+		CIfXEnd()
+		f_LAdd(FP, TotalDPS, TotalDPS, {DpsDest,0})
+		f_LSub(FP, TotalDPS, TotalDPS, {_ReadF(ArrX(DPSArrX,DPSCheck2)),0})
+		CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
+		CIfX(FP,{TTNWar(TotalDPS,AtLeast,"16")})
+		f_LDiv(FP, TotalDPS2,TotalDPS,"16")
+		CElseX()
+		f_LMov(FP,TotalDPS2,"0")
+		CIfXEnd()
+	CIfXEnd()
+
+
+
+	else
+		
 	CIfX(FP,{TMemory(UnitPtr,AtMost,8319999*256)})
 	f_Read(FP, UnitPtr, DPSCheckV)
 	CMov(FP,DpsDest,_Sub(_Mov(8320000*256),DPSCheckV))
@@ -550,15 +606,19 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	CElseX()
 	CMov(FP,DpsDest,0)
 	CIfXEnd()
-
 	f_LAdd(FP, TotalDPS, TotalDPS, {DpsDest,0})
 	f_LSub(FP, TotalDPS, TotalDPS, {_ReadF(ArrX(DPSArrX,DPSCheck2)),0})
 	CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
-	CIfX(FP,{CV(TotalDPS,4*4,AtLeast)})
-	f_Div(FP, TotalDPS2,TotalDPS,4*4)
+	CIfX(FP,{TTNWar(TotalDPS,AtLeast,"16")})
+	f_LDiv(FP, TotalDPS2,TotalDPS,"16")
 	CElseX()
-	CMov(FP,TotalDPS2,0)
+	f_LMov(FP,TotalDPS2,"0")
 	CIfXEnd()
+
+	end
+
+
+
 	--CMov(FP,TotalDPS,0)
 	--for j = 1, 24 do
 	--	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
@@ -570,27 +630,27 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	if type(TotalDPSDest) == "table" then
 		for j,k in pairs(TotalDPSDest) do
 			if type(k) == "number" then
-				CDoActions(FP,{TSetMemory(k, SetTo, TotalDPS2)})
+				CDoActions(FP,{TSetMemory(k, SetTo, _Cast(0,TotalDPS2))})
 			elseif k[4] == "W" then
-				f_LMov(FP,k,{TotalDPS2,0})
+				f_LMov(FP,k,TotalDPS2)
 			elseif k[4] == "V" then
-				CMov(FP,k,TotalDPS2)
+				f_Cast(FP, {k,0}, TotalDPS2)
 			elseif k == Ore or k == Gas then
-				CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS2, k)})
+				CDoActions(FP,{TSetResources(CP, SetTo, _Cast(0,TotalDPS2), k)})
 			elseif k == nil then return nil
 			else
 				PushErrorMsg("TotalDPSDest InputError")
 			end 
 		end
 	elseif type(TotalDPSDest) == "number" then
-		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, TotalDPS2)})
+		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, _Cast(0,TotalDPS2))})
 	elseif TotalDPSDest[4] == "W" then
-		CMov(FP,TotalDPSDest,TotalDPS2)
-		f_LMov(FP,TotalDPSDest,{TotalDPS2,0})
+		--CMov(FP,TotalDPSDest,TotalDPS2)
+		f_LMov(FP,TotalDPSDest,TotalDPS2)
 	elseif TotalDPSDest[4] == "V" then
-		CMov(FP,TotalDPSDest,TotalDPS2)
+		CMov(FP,TotalDPSDest,_Cast(0,TotalDPS2))
 	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
-		CDoActions(FP,{TSetResources(CP, SetTo, TotalDPS2, TotalDPSDest)})
+		CDoActions(FP,{TSetResources(CP, SetTo, _Cast(0,TotalDPS2), TotalDPSDest)})
 	elseif TotalDPSDest == nil then return nil
 	else
 		PushErrorMsg("TotalDPSDest InputError")
@@ -600,8 +660,8 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 	
 	DoActionsX(FP,{AddV(DPSCheck2,1)})
 	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
+	if MoneyV ~= nil then
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
-		if MoneyV ~= nil then
 			if Multiplier ~=  nil then
 				
 				f_LMov(FP, GetMoney, _LMul({DpsDest,0}, Multiplier), nil, nil, 1)
@@ -615,17 +675,28 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,CT_Mo
 					f_LMul(FP, GetMoney,GetMoney, MultiplierV)
 				end
 			end
+			
+			CIf(FP,{TTNWar(GetMoney,AtLeast,"10000000000000000000")}) -- 순간적으로 번돈이 천경을 넘을경우
+			f_LSub(FP, GetMoney,GetMoney, "10000000000000000000")--
+			CAdd(FP,iv.Money2[CP+1],1)--1000경원수표추가
+			CIfEnd()
+
 			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--오버플로우일경우 더하지말고 GetMoney를 1000경원짜리에 맞춘다.
 				local TempW = CreateWar(FP)
 				f_LSub(FP, TempW, "10000000000000000000", GetMoney)--1000경-벌은돈=빼야할남은돈
-				f_LSub(FP, MoneyV, MoneyV, TempW)--현재돈 << 현재돈 - 빼야할남은돈
 				CAdd(FP,iv.Money2[CP+1],1)--1000경원수표추가
+				f_LSub(FP, MoneyV, MoneyV, TempW)--현재돈 << 현재돈 - 빼야할남은돈
+
+				
+
+
+
 			CElseX()--아닐경우 정상적으로 더함
 				f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 			CIfXEnd()
-		end
 
 		CIfEnd()
+	end
 	CIf(FP,{TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)},{SetV(UnitPtr,0)})
 	local ResetArr = {}
 	for nn = 0, (96*4)-1 do
@@ -1307,7 +1378,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 	
 	if Limit == 1 then
 		if LvUniit==40 then
-			CIf(FP,{CV(GetMoney2,3,AtLeast)},{SubV(GetMoney2,3)})
+			CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
 		else
 			CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 			f_LSub(FP, GetMoney, GetMoney, Cost)
@@ -1347,7 +1418,7 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 		CIfX(FP,{CV(GetBuyTicket,1,AtLeast)})
 		if Limit == 1 then
 			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,3,AtLeast)},{SubV(GetMoney2,3)})
+				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
 			else
 				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 				f_LSub(FP, GetMoney, GetMoney, Cost)

@@ -36,12 +36,12 @@ function TestTrig()
 	local NextOreMul = iv.NextOreMul
 	local NextGasMul = iv.NextGasMul
 	local PlayTime = iv.PlayTime
-	local CreditAddSC = iv.CreditAddSC
 	local LV5Cool = iv.LV5Cool
 	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
 if TestStart == 1 then
 	for i = 0, 0 do
+		--[[
 		CIf(FP, HumanCheck(i,1))
 		if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
 	
@@ -78,7 +78,7 @@ if TestStart == 1 then
 			end
 			DoActions2X(FP,CUCoolT)--
 		end
-		CIfEnd()
+		CIfEnd()]]
 	end
 	end
 

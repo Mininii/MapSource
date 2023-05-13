@@ -50,7 +50,6 @@ function GameDisplay()
 	local SellTicketLoc = iv.SellTicketLoc
 	local TimeAttackScoreLoc = iv.TimeAttackScoreLoc
 	local TimeAttackScore48Loc = iv.TimeAttackScore48Loc
-	local CreditAddSCLoc = iv.CreditAddSCLoc
 	local CS_CooldownLoc = iv.CS_CooldownLoc
 	local CS_AtkLoc = iv.CS_AtkLoc
 	local CS_EXPLoc = iv.CS_EXPLoc
@@ -68,10 +67,12 @@ function GameDisplay()
 	local FXPer45Loc = iv.FXPer45Loc
 	local FXPer46Loc = iv.FXPer46Loc
 	local FXPer47Loc = iv.FXPer47Loc
+	local FXPer48Loc = iv.FXPer48Loc
 	local FIncmLoc = iv.FIncmLoc
 	local FSEXPLoc = iv.FSEXPLoc
 	local FMEPerLoc = iv.FMEPerLoc
 	local FBrShLoc = iv.FBrShLoc
+	local FMinLoc = iv.FMinLoc
 	local XEPer44Loc = iv.XEPer44Loc
 	local XEPer45Loc = iv.XEPer45Loc
 	local XEPer46Loc = iv.XEPer46Loc
@@ -93,6 +94,8 @@ function GameDisplay()
 	local Cost_FBrShLoc = iv.Cost_FBrShLoc
 	local Cost_FXPer47Loc = iv.Cost_FXPer47Loc
 	local Cost_FMEPerLoc = iv.Cost_FMEPerLoc
+	local Cost_FXPer48Loc = iv.Cost_FXPer48Loc
+	local Cost_FMinLoc = iv.Cost_FMinLoc
 	
 	local TempFf = CreateWar(FP)
 	local TempFf2 = CreateVar(FP)
@@ -106,7 +109,7 @@ function GameDisplay()
 		
 		CA__SetValue(Str1,"\x07보유금액 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000\x0D\x04원\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 
-		CA__SetValue(Str2,"\x07보유금액 \x04: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D \x04원　\x17천경： 00000000 \x04개\x12\x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+		CA__SetValue(Str2,"\x07보유금액 \x04: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D \x04원\x12\x17천경： 00000000 \x04개 \x07사냥터\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 		--43
 		--49
 		CS__ItoCustom(FP,SVA1(Str2,40),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
@@ -127,7 +130,7 @@ function GameDisplay()
 		CIfXEnd()
 		
 		CIf(FP,{CV(MoneyLoc2,0)})
-			CA__SetValue(Str2, "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", nil, 20)
+			CA__SetValue(Str2, "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x12", nil, 20)
 		CIfEnd()
 	
 		--CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x04,0x04,0x04},{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
@@ -218,29 +221,29 @@ function GameDisplay()
 		BColor4 = CreateVarArr(6,FP)
 
 		
-		CColor1_1 = CreateVarArr(4,FP)
-		CColor2_1 = CreateVarArr(4,FP)
-		CColor3_1 = CreateVarArr(4,FP)
-		CColor4_1 = CreateVarArr(4,FP)
-		CColor5_1 = CreateVarArr(4,FP)
-		CColor6_1 = CreateVarArr(4,FP)
-		CColor1_2 = CreateVarArr(4,FP)
-		CColor2_2 = CreateVarArr(4,FP)
-		CColor3_2 = CreateVarArr(4,FP)
-		CColor4_2 = CreateVarArr(4,FP)
-		CColor5_2 = CreateVarArr(4,FP)
-		CColor6_2 = CreateVarArr(4,FP)
+		CColor1_1 = CreateVarArr(5,FP)
+		CColor2_1 = CreateVarArr(5,FP)
+		CColor3_1 = CreateVarArr(5,FP)
+		CColor4_1 = CreateVarArr(5,FP)
+		CColor5_1 = CreateVarArr(5,FP)
+		CColor6_1 = CreateVarArr(5,FP)
+		CColor1_2 = CreateVarArr(5,FP)
+		CColor2_2 = CreateVarArr(5,FP)
+		CColor3_2 = CreateVarArr(5,FP)
+		CColor4_2 = CreateVarArr(5,FP)
+		CColor5_2 = CreateVarArr(5,FP)
+		CColor6_2 = CreateVarArr(5,FP)
 
 		MToggle = CreateCcodeArr(6)
 		MToggle2 = CreateCcodeArr(6)
 		MToggle3 = CreateCcodeArr(6)
 		
-		MToggle1_1 = CreateCcodeArr(4)
-		MToggle2_1 = CreateCcodeArr(4)
-		MToggle3_1 = CreateCcodeArr(4)
-		MToggle1_2 = CreateCcodeArr(4)
-		MToggle2_2 = CreateCcodeArr(4)
-		MToggle3_2 = CreateCcodeArr(4)
+		MToggle1_1 = CreateCcodeArr(5)
+		MToggle2_1 = CreateCcodeArr(5)
+		MToggle3_1 = CreateCcodeArr(5)
+		MToggle1_2 = CreateCcodeArr(5)
+		MToggle2_2 = CreateCcodeArr(5)
+		MToggle3_2 = CreateCcodeArr(5)
 
 		local SWAPB = CreateVar(FP)
 		local ESCB = CreateVar(FP)
@@ -256,7 +259,7 @@ function GameDisplay()
 			table.insert(BAct,SetCD(MToggle2[j],0))
 			table.insert(BAct,SetCD(MToggle3[j],0))
 		end
-		for j,p in pairs({0x1F,0x1C,0x1E,0x1D}) do
+		for j,p in pairs({0x1F,0x1C,0x1E,0x1D,0x1B}) do
 			table.insert(BAct,SetV(CColor1_1[j],p))
 			table.insert(BAct,SetV(CColor2_1[j],0x04))
 			table.insert(BAct,SetV(CColor3_1[j],0x1F))
@@ -269,7 +272,7 @@ function GameDisplay()
 
 		end
 		
-		for j,p in pairs({0x11,0x1C,0x1F,0x02}) do
+		for j,p in pairs({0x11,0x1C,0x1F,0x02,0x17}) do
 			table.insert(BAct,SetV(CColor1_2[j],p))
 			table.insert(BAct,SetV(CColor2_2[j],0x04))
 			table.insert(BAct,SetV(CColor3_2[j],0x1F))
@@ -356,7 +359,7 @@ function GameDisplay()
 		CIfEnd()
 		CIf(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
 		
-		for i = 0, 3 do
+		for i = 0, 4 do
 			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 0, 320)},{SetV(CColor1_1[i+1],0x07),SetV(CColor3_1[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--좌측
 			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 0, 320)},{SetV(CColor1_2[i+1],0x07),SetV(CColor3_2[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--우측
 
@@ -495,13 +498,14 @@ function GameDisplay()
 			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"중급 보석 ",FXPer45Loc,"개 ",CColor3_1[2][2],"|| Cost : ",Cost_FXPer45Loc,"\x12",CColor3_2[2][2]," Cost : ",Cost_FSEXPLoc," || ",CColor1_2[2][2],FSEXPLoc," 개 경험의 보석 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"상급 보석 ",FXPer46Loc,"개 ",CColor3_1[3][2],"|| Cost : ",Cost_FXPer46Loc,"\x12",CColor3_2[3][2]," Cost : ",Cost_FBrShLoc," || ",CColor1_2[3][2],FBrShLoc," 개 보호의 보석 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"특급 보석 ",FXPer47Loc,"개 ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," 개 궁극의 보석 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"고급 보석 ",FXPer48Loc,"개 ",CColor3_1[5][2],"|| Cost : ",Cost_FXPer48Loc,"\x12",CColor3_2[5][2]," Cost : ",Cost_FMinLoc," || ",CColor1_2[5][2],FMinLoc," 개 채광의 보석 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			if Limit == 0 then
-				CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
+				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
 			else
-				CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수 - \x03TESTMODE 조각 지급받기 \x04F12버튼\x08(1회만)", 4)})
+				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수 - \x03TESTMODE 조각 지급받기 \x04F12버튼\x08(1회만)", 4)})
 			end
-			DisplayPrint(LCP, {"\x13\x08",iv.FfragItemUsedLoc," \x04/ ",iv.FfragItemLoc," (\x07",TempFf,"\x04)"})
+			DisplayPrint(LCP, {"무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수\x12\x08",iv.FfragItemUsedLoc," \x04/ ",iv.FfragItemLoc," (\x07",TempFf,"\x04)"})
 		CIfXEnd()
 		DoActions(FP,{SetCp(FP)})
 		local StatPrintEr = {
@@ -530,14 +534,16 @@ function GameDisplay()
 	local StatPrintEr2 = {
 		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1F44강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer44[2].." 개"),
 		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1C45강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer45[2].." 개"),
-		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1E46강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer47[2].." 개"),
-		StrDesign("\x04개당 \x0F0.1%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1E46강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer46[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1%p\x04의 \x0247강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer47[2].." 개"),
+		StrDesign("\x04개당 \x0F0.005%p\x04의 \x1B48강 \x08강화확률 \x04증가. \x08MAX "..Cost_FXPer48[2].." 개"),
 }
 	local StatPrintEr3 = {
 		StrDesign("\x04개당 \x110.1배\x04의 \x11LV.MAX \x1B허수아비\x04 돈 수급량 증가. \x08MAX "..Cost_FIncm[2].." 개"),
 		StrDesign("\x04개당 \x1C10%\x04의 \x1C판매시 경험치량 \x04증가. \x08MAX "..Cost_FSEXP[2].." 개"),
 		StrDesign("\x04개당 \x0F0.1%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh[2].." 개"),
 		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer[2].." 개"),
+		StrDesign("\x04개당 \x0F0.1배\x04의 \x17크레딧 채광속도 \x04증가. \x08MAX "..Cost_FMin[2].." 개"),
 	}
 
 		
@@ -616,8 +622,7 @@ function GameDisplay()
 	
 	
 	CIfEnd()
-	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0),AddV(AddScLoc,1)})
-		TriggerX(FP, {CV(CreditAddSCLoc,1,AtLeast)}, {AddV(AddScLoc,6)},{preserved})
+	CIf(FP,{CD(KKey,1)},{SetCD(LKey,0),AddV(AddScLoc,7)})
 		CMul(FP,ScoutDmgLoc,100)
 		--CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
 		--CMov(FP,CTimeV,PlayTimeLoc2)
