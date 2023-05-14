@@ -238,10 +238,6 @@ function DataArr()
 
 	iv.OldFfrag,ct.OldFfrag = CreateDataPV("OldFfrag",SCA.FfragItem)
 	iv.AwakItem,ct.AwakItem = CreateDataPV("AwakItem",SCA.AwakItem)
-	iv.CSX_LV3Incm,ct.CSX_LV3Incm = CreateDataPV("CSX_LV3Incm",SCA.CSX_LV3Incm)
-	iv.CSX_LV3IncmData,ct.CSX_LV3IncmData = CreateDataPV("CSX_LV3IncmData")
-    iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
-    iv.EnchCool,ct.EnchCool = CreateDataPV("EnchCool")
 	
 	
 
@@ -320,6 +316,10 @@ function DataArr()
 		{iv.FirstRewardLim[1],iv.FirstRewardLimLoc}
 				
 	}
+	iv.CSX_LV3Incm,ct.CSX_LV3Incm,iv.CSX_LV3IncmLoc = CreateDataPV("CSX_LV3Incm",SCA.CSX_LV3Incm,1)
+	iv.CSX_LV3IncmData,ct.CSX_LV3IncmData = CreateDataPV("CSX_LV3IncmData")
+    iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
+    iv.EnchCool,ct.EnchCool = CreateDataPV("EnchCool")
 	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)
     iv.BuyTicket,ct.BuyTicket,iv.BuyTicketLoc = CreateDataPV("BuyTicket",nil,1)
 	iv.XEPer48,ct.XEPer48,iv.XEPer48Loc = CreateDataPV("XEPer48",nil,1)

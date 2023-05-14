@@ -77,6 +77,7 @@ function GameDisplay()
 	local XEPer45Loc = iv.XEPer45Loc
 	local XEPer46Loc = iv.XEPer46Loc
 	local XEPer47Loc = iv.XEPer47Loc
+	local XEPer48Loc = iv.XEPer48Loc
 	local CXEPerLoc = iv.CXEPerLoc
 	local CMEPerLoc = iv.CMEPerLoc
 	local CBrShLoc = iv.CBrShLoc
@@ -604,15 +605,19 @@ function GameDisplay()
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer47Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x08강화확률 \x04총 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p\x04|| \x0247강 \x08강화확률 : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x08강화확률 \x04총 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04|| \x0247강 \x08강화확률 : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
 	CMov(FP,GEVar,BreakShieldLoc)
 	CallTrigger(FP, Call_SetEPerStr)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p"})
+	CMov(FP,GEVar_2,XEPer48Loc)
+	CallTrigger(FP, Call_SetEPerStr2)
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x08특수 \x1F파괴 방지\x08확률 \x04총 증가량 : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p \x04|| \x1B48강 \x08강화확률 : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
 	f_Mul(FP,EXPIncomeLoc2,10)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1C판매시 경험치 \x07추가 \x04획득량 : \x07+ \x1C",EXPIncomeLoc2,"%"})
 	f_Mul(FP,UpgradeUILoc,10)
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 \x08공격력 \x04증가량 : \x07+ \x08",UpgradeUILoc,"%"})
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x11LV.MAX \x1B허수아비\x04 돈 수급 총 증가량 : \x07+ \x0F",TempIncmLoc,"%"})
+	local TempV = CreateVar(FP)
+	CMov(FP,TempV,_Div(_Mul(_Add(iv.CSX_LV3IncmLoc,10),_Add(iv.FMinLoc,10)),_Mov(10)))
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x11LV.MAX \x1B허수아비\x04 돈 수급 총 증가량 : \x07+ \x0F",TempIncmLoc,"% \x04|| \x17채광력 : ",TempV})
 	
 	
 	
@@ -800,6 +805,13 @@ function GameDisplay()
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
+		{
+			"\x13\x04\x1B- 부록. \x17크레딧 \x1F광산 \x1B-",
+			"\x13\x04",
+			--"\x04X단계 \x04: ",
+			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
+		},
+		
 	}
 	CIf(FP,TTOR({CD(BKey,1),CD(NKey,1),CD(MKey,1)}))
 	TriggerX(FP,{CD(NKey,1)},{SetCD(TG2,1)},{preserved})

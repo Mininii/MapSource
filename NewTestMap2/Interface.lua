@@ -398,6 +398,8 @@ for i = 0, 6 do -- 각플레이어
 			SetV(iv.FSEXP[i+1],0),
 			SetV(iv.FMEPer[i+1],0),
 			SetV(iv.FBrSh[i+1],0),
+			SetV(iv.FXPer48[i+1],0),
+			SetV(iv.FMin[i+1],0),
 			SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 		})
 		CTrigger(FP, {TTNVar(iv.FStatVer[i+1], NotSame, StatVer2)}, {SetCp(i),
@@ -846,16 +848,22 @@ for i = 0, 6 do -- 각플레이어
 	
 
 
-	--TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x071번\x04으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
-	--TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayExtText(StrDesign("\x04SCA 시스템 사운드를 \x07기본\x04으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x07ON\x04 으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x08OFF\x04 으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	
 	
 	TriggerX(FP, {Command(i,AtLeast,1,88),CV(ScTimer[i+1],4320)}, {RemoveUnit(88,i)},{preserved}) -- 3분뒤 사라지는 기본유닛
+	--if Limit == 1 then
+	--	TriggerX(FP, {}, {SetV(ResetStat[i+1],0)},{preserved}) -- 테스트모드 스탯초기화 무한
+	--	TriggerX(FP, {}, {SetV(ResetStat2[i+1],0)},{preserved}) -- 테스트모드 스탯초기화 무한
+	--else
+	--end
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
 	TriggerX(FP, {CV(ScTimer[i+1],86400),CV(ResetStat2[i+1],0)}, {AddV(ResetStat2[i+1],1)}) -- 1시간뒤 스탯초기화 비활성화
 	TriggerX(FP, {Command(i,AtLeast,1,LevelUnitArr[41][2]),CV(ResetStat[i+1],0)}, {AddV(ResetStat[i+1],1)}) -- 41강보유시 스탯초기화 비활성화
 	TriggerX(FP, {Command(i,AtLeast,1,LevelUnitArr[41][2]),CV(ResetStat2[i+1],0)}, {AddV(ResetStat2[i+1],1)}) -- 41강보유시 스탯초기화 비활성화
+
 	TriggerX(FP, {CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men"),}, {SetMemX(Arr(AutoEnchArr,((2-1)*7)+i), SetTo, 0),SetCp(i),DisplayExtText(StrDesignX("\x04모두 \x08강화에 실패\x04하신 모양이네요... \x0F2강 유닛 1기\x04를 위로 보상으로 지급합니다."), 4),SetCp(FP)}) -- 기본유닛 사라지고 전멸할경우 기회줌
 	CreateUnitStacked({CV(ScTimer[i+1],4320,AtLeast),CV(ScTimer[i+1],4320*2,AtMost),NWar(Money[i+1], AtMost, "1499"),Command(i,AtMost,0,"Men")}, 1, LevelUnitArr[2][2], 50+i,36+i, i, nil,1)
 
@@ -1046,12 +1054,10 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	for j, k in pairs(LevelUnitArr) do
 		if Limit == 1 then
 			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 10)}, 10, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 10)})
 		else
 			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 10)}, 10, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 10)})
 		end
 	end
 
@@ -1204,6 +1210,8 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 				SetV(iv.FBrSh[i+1],0),
 				SetV(iv.FIncm[i+1],0),
 				SetV(iv.FSEXP[i+1],0),
+				SetV(iv.FXPer48[i+1],0),
+				SetV(iv.FMin[i+1],0),
 				SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 				SetV(ResetStat2[i+1],1),
 			})
@@ -1565,9 +1573,9 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 					end
 					CIfEnd()
 				end
-			elseif j>=45 then
+			elseif j>=45 and 48>=j then
 				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],9999,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {SetDeaths(i,SetTo,1,13),SetV(iv.PSaveChk[i+1],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
+				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {SetV(iv.PSaveChk[i+1],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
 			else
 				
 				--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
@@ -1640,13 +1648,13 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 		
 		CIf(FP,{CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})
---	if Limit == 0 then
---		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
---	else
---		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
---	end
+	if Limit == 0 then
+		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	else
+		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	end
 	
-	NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+	--NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 		CallTriggerX(FP,Call_Print13[i+1],{SCA.Available(i),Deaths(i, Exactly, 1, 14)})
 		TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14),LocalPlayerID(i)}, {print_utf8(12,0,StrDesign("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."))}, {preserved})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기

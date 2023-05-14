@@ -806,7 +806,7 @@ end
 		{51,"1322222"},
 		{42,"3222222"},
 		{98,"15000000"},
-		{102,"300000000"},
+		{102,"1000000000"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -1005,7 +1005,7 @@ FirstReward3 = {
 	--컴플리트 15.0% = 1.2억
 	
 	
-	Cost_FMin = CreateCostData(200,function(n) return 1+((n-1)*(n*2)*(5*n)) end)
+	Cost_FMin = CreateCostData(200,function(n) return 10000+((n-1)*(162*n)) end)
 
 	
 	CSXAwakItemArr = {0}
