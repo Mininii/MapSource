@@ -177,7 +177,10 @@ end
 	SCA.PETicket2 = SCA.CreateVar(FP)
 	SCA.FXPer48 = SCA.CreateVar(FP)
 	SCA.FMin = SCA.CreateVar(FP)
-
+	SCA.WeekCheck = SCA.CreateVar(FP)
+	SCA.FirstRewardLim2 = SCA.CreateVar(FP)
+	SCA.TimeAttackScore50 = SCA.CreateVar(FP)
+	SCA.FfragItemRank = SCA.CreateVar(FP)
 
 	
 	SCA.GReload = CreateCcode()
@@ -479,6 +482,16 @@ end
 	iv.Cost_FMinLoc = CreateVar(FP)
 	iv.AwakItemLoc = CreateVar(FP)
 	iv.FirstRewardLimLoc = CreateVar(FP)
+	
+	iv.S45 = CreateVarArr(7,FP)
+	iv.S46 = CreateVarArr(7,FP)
+	iv.S47 = CreateVarArr(7,FP)
+	iv.S48 = CreateVarArr(7,FP)
+	iv.S45Loc = CreateVar(FP)
+	iv.S46Loc = CreateVar(FP)
+	iv.S47Loc = CreateVar(FP)
+	iv.S48Loc = CreateVar(FP)
+
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
 
@@ -806,7 +819,7 @@ end
 		{51,"1322222"},
 		{42,"3222222"},
 		{98,"15000000"},
-		{102,"1000000000"},
+		{102,"100000000"},
 	}--{,""},--보스 건물 아이디, DPS 요구수치
 if TestStart == 1 then
 	BossArr = {
@@ -825,8 +838,8 @@ elseif Limit == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"34000000"},
-		{77,"3222"},
-		{104,"3222"},
+		{77,"63222"},
+		{104,"322322"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -861,6 +874,10 @@ FirstReward3 = {
 	{46,20000000,322,"\x1E",7},
 	{47,50000000,3222,"\x02",4},
 	{48,322222222,32222,"\x1B",1},
+}
+FirstReward4 = {
+	{49,"15",322222,"\x06",4}, -- 스트링 : 억단위
+	{50,"100",3222222,"\x07",1}, -- 스트링 : 억단위
 }
 	NBagArr = NBag(FP, 1, 1700)
 

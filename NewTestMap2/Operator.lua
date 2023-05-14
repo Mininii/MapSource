@@ -8,7 +8,7 @@ function Operator()
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
 	Trigger2X(FP, {CV(iv.Time4,60000,AtLeast)}, {SetV(iv.Time4, 0),SetMemory(0x58F504, SetTo, 0x50000),}, {preserved})
 
-	if Limit == 1 then
+	if TestStart == 1 then
 		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
 	end
 	for i = 0,6 do

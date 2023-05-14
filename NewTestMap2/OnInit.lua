@@ -193,13 +193,18 @@ iTblJump = def_sIndex()
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 	if TestStart == 0 then
-	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
-		RotatePlayer({
-			DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
-		Defeat();
-		},Force1,FP);
-		Defeat();
-		SetMemory(0xCDDDCDDC,SetTo,1);})
+		
+--		if Limit == 1 then
+--			local TempVV = CreateVar(FP)
+--			f_Read(FP,0x51CE84,TempVV)
+--			DisplayPrint(AllPlayers, {"\x13\x040x51CE84 : ",TempVV})
+--		end
+--		CTrigger(FP,{TTMemory(0x51CE84,NotSame,1000)},{
+--			RotatePlayer({
+--				DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거하거나 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x1B또한 이 맵은 배틀넷에서만 플레이 가능합니다. 배틀넷에서 진행해 주십시오."),4);
+--			},Force1,FP);
+--			SetMemory(0xCDDDCDDC,SetTo,1);},1)
+			
 	end
 	if TestStart == 0 then
 		for i = 0, 6 do

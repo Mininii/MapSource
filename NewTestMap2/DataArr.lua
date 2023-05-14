@@ -313,7 +313,15 @@ function DataArr()
 		{iv.FfragItem[1],iv.FfragItemLoc},
 		{iv.FfragItemUsed[1],iv.FfragItemUsedLoc},
 		{iv.AwakItem[1],iv.AwakItemLoc},
-		{iv.FirstRewardLim[1],iv.FirstRewardLimLoc}
+		{iv.FirstRewardLim[1],iv.FirstRewardLimLoc},
+		{iv.S45[1],iv.S45Loc},
+		{iv.S46[1],iv.S46Loc},
+		{iv.S47[1],iv.S47Loc},
+		{iv.S48[1],iv.S48Loc},
+
+
+
+
 				
 	}
 	iv.CSX_LV3Incm,ct.CSX_LV3Incm,iv.CSX_LV3IncmLoc = CreateDataPV("CSX_LV3Incm",SCA.CSX_LV3Incm,1)
@@ -327,6 +335,10 @@ function DataArr()
 	iv.FXPer48,ct.FXPer48,iv.FXPer48Loc = CreateDataPV("FXPer46",SCA.FXPer48,1)
 	iv.FMin,ct.FMin,iv.FMinLoc = CreateDataPV("FMin",SCA.FMin,1)
 
+	iv.WeekCheck,ct.WeekCheck = CreateDataPV("WeekCheck",SCA.WeekCheck) 
+	iv.FirstRewardLim2,ct.FirstRewardLim2,iv.FirstRewardLim2Loc = CreateDataPV("FirstRewardLim2",SCA.FirstRewardLim2,1)
+	iv.TimeAttackScore50,ct.TimeAttackScore50,iv.TimeAttackScore50Loc = CreateDataPV("TimeAttackScore50",SCA.TimeAttackScore50,1)
+	iv.FfragItemRank,ct.FfragItemRank = CreateDataPV("FfragItemRank",SCA.FfragItemRank)
 
 	for j,k in pairs(SCA_DataArr) do
 		if k[1][4]=="V" then

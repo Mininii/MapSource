@@ -180,6 +180,7 @@ function TBL()
 		CMov(FP,iv.XEPer45Loc,iv.XEPer45[i+1])
 		CMov(FP,iv.XEPer46Loc,iv.XEPer46[i+1])
 		CMov(FP,iv.XEPer47Loc,iv.XEPer47[i+1])
+		CMov(FP,iv.XEPer48Loc,iv.XEPer48[i+1])
 
 
 	end

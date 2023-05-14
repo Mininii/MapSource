@@ -175,26 +175,29 @@ function GameDisplay()
 
 
 		CIfX(FP,CD(Tabkey,0))
-		CA__SetValue(Str1,"\x12포인트 \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
-		TriggerX(FP,CV(StatPLoc,999999,AtLeast),{SetV(StatPLoc,999999)},{preserved})
-        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+		CA__SetValue(Str1,"\x12포인트 \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		TriggerX(FP,CV(StatPLoc,999999999,AtLeast),{SetV(StatPLoc,999999999)},{preserved})
+        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CElseX()
-		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000 \x04| \x17크레딧 \x04:  12\x04,123\x04,123\x04,123\x04,123\x04,123\x04,123",nil,1)
-		TriggerX(FP,CV(TempFf2,999999,AtLeast),{SetV(TempFf2,999999)},{preserved})
-        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
+		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		TriggerX(FP,CV(TempFf2,999999999,AtLeast),{SetV(TempFf2,999999999)},{preserved})
+        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CIfXEnd()
+		CIf(FP,{TTNWar(CredLoc, AtLeast, "999999999999999")})
+		f_LMov(FP,CredLoc,"999999999999999")
+		CIfEnd()
 
-        CA__lItoCustom(SVA1(Str1,25),CredLoc,nil,nil,10,1,nil,"\x040",{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
-        ,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
+        CA__lItoCustom(SVA1(Str1,29),CredLoc,nil,nil,{10,15},1,nil,"\x040",{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+        ,{0,1,2,4,5,6,8,9,10,12,13,14,16,17,18},nil,{0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 
 	
 		CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-2)
 		CIfX(FP,{CD(Tabkey,1)})--수치표기
 		CA__SetColor((56*2)+1, 0x02)
-		CA__SetColor((56*2)+19, 0x10)
+		CA__SetColor((56*2)+23, 0x10)
 		CElseX()--퍼센트표기
 		CA__SetColor((56*2)+1, 0x10)
-		CA__SetColor((56*2)+19, 0x17)
+		CA__SetColor((56*2)+23, 0x17)
 		CIfXEnd()
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 		
@@ -647,9 +650,7 @@ function GameDisplay()
 		CrShift(FP, TempV3, 16)
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x1B48강 \x07타임어택 점수 : \x04",TimeAttackScore48Loc})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x08데미지 (10레벨당 100증가, 최대 250회) : \x04",ScoutDmgLoc})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x10갯수 (기본 1개, 1000레벨당 1기 추가, 최대 5회) : \x07",AddScLoc," 기"})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x04기본유닛 \x07공격속도 (1000레벨당 1 감소, 최대 8회) : \x0F9 - ",SCCoolLoc})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x0750강 \x07타임어택 점수 : \x04",iv.TimeAttackScore50Loc})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2,3시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일, ",TempV3,"일."})
 		
 		local TempV = CreateVar(FP)
@@ -665,6 +666,13 @@ function GameDisplay()
 		CrShift(FP,TempV4,(4-1)*8)
 
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07남은 일일 첫 달성 보상 \x04횟수 - "..FirstReward3[1][4].."45강 : \x04",TempV,"회, "..FirstReward3[2][4].."46강 : \x04",TempV2,"회, "..FirstReward3[3][4].."47강 : \x04",TempV3,"회, "..FirstReward3[4][4].."48강 : \x04",TempV4,"회"})
+		
+		CMov(FP,TempV,_Sub(_Mov(FirstReward4[1][5]*1),_Mov(iv.FirstRewardLim2Loc,1*255)),nil,1*255)
+		CMov(FP,TempV2,_Sub(_Mov(FirstReward4[2][5]*256),_Mov(iv.FirstRewardLim2Loc,256*255)),nil,256*255)
+		CrShift(FP,TempV2,(2-1)*8)
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07남은 주간 첫 달성 보상 \x04횟수 - "..FirstReward4[1][4].."49강 : \x04",TempV,"회, "..FirstReward4[2][4].."50강 : \x04",TempV2,"회 (매주 목요일마다 초기화)"})
+		
+		
 
 	
 	CIfEnd()
@@ -674,6 +682,7 @@ function GameDisplay()
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x19유닛 판매권 \x04: \x07",SellTicketLoc," \x04|| \x08구입 티켓\x04(\x08저장X\x04) : \x08",iv.BuyTicketLoc," \x04\x12[\x17닫기 \x04: \x10L]"})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x10강화기 백신 \x04: \x07",VaccItemLoc," \x04|| \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: \x02",PETicketLoc,", \x1F",iv.PETicket2Loc})
 	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1E각성의 보석 \x04: \x07",iv.AwakItemLoc})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 "..FirstReward3[1][4].."45강 \x04~ "..FirstReward3[4][4].."48강 \x07판매 \x04횟수 - "..FirstReward3[1][4].."45강 : \x04",iv.S45Loc,"회, "..FirstReward3[2][4].."46강 : \x04",iv.S46Loc,"회, "..FirstReward3[3][4].."47강 : \x04",iv.S47Loc,"회, "..FirstReward3[4][4].."48강 : \x04",iv.S48Loc,"회"})
 	--CIf(FP,CV(NextOreLoc,1,AtLeast))
 	--	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 사냥터 \x0ELV.1 \x07돈 증가량 ",NextOreMulLoc," \x08업그레이드\x04에 필요한 \x1BDPS\x1F(미네랄)\x04 : \x1F",NextOreLoc})
 	--CIfEnd()
@@ -702,14 +711,6 @@ function GameDisplay()
 	local TG = CreateCcode()
 	local TG2 = CreateCcode()
 	local PageT = {
-
-		{--1페이지
-		"\x13\x042023. 05. 07. 긴급 점검 공지사항",
-		"\x13\x043.10 버전에서 일부 플레이어의 뽑기 난수값이 고정되어 한 결과만 나오는 심각한 버그가 있었습니다. ",
-		"\x13\x04이에따라 모든 플레이어 정보를 3.11 업데이트 이전으로 롤백, 복구하는 점검이 있었습니다.",
-		"\x13\x04이에 따른 점검 보상으로 \x02무색 조각 10만개\x04와 \x171000만 크레딧\x04이 지급되었습니다. ",
-		"\x13\x04이용에 불편을 드려 죄송합니다.",
-	},
 
 
 		{--1페이지
@@ -764,6 +765,14 @@ function GameDisplay()
 		},
 	
 		{
+			"\x13\x04\x1B- 부록. 레벨별 기본유닛 스펙업 \x1B-",
+			"\x13\x04런쳐 로드가 완료되면 인게임 3분간 사용가능한 기본유닛이 지급됩니다.",
+			"\x13\x04기본유닛은 자신의 레벨에 따라 스펙이 달라집니다.",
+			"\x13\x04\x08데미지 \x04: 10레벨당 100증가, 최대 25000 ",
+			"\x13\x04\x04기본유닛 \x10갯수 \x04: 기본 7개, 1000레벨당 1기 추가, 최대 12개",
+			"\x13\x04\x07공격속도 \x04: 기본 쿨타임 9, 1000레벨당 1 감소, 최소 쿨타임 1",
+		},
+		{
 			"\x13\x04\x1B- 부록. \x0E다인 플레이 보너스, 보스 시스템 \x1B-",
 			"\x13\x04이 게임에는 \x0E다인 플레이 보너스 버프\x04가 존재합니다. 처음 하시는 분들은 2인 이상 플레이를 \x08매우 권장합니다.",
 			"\x13\x04\x1F2~7인 보너스 버프 \x1C- \x08공격력 + 150%\x04, \x07+1강 \x17강화확률 + \x0F1.0%p",
@@ -786,12 +795,12 @@ function GameDisplay()
 		
 		{
 			"\x13\x04\x1B- 부록. \x08파티 보스 몬스터 보상 목록 \x1B-",
-			"\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6,",
+			"\x041단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6",
 			"\x042단계 \x04: \x0F+1확률 \x07+1.0%p, \x1B사냥터 \x07+6, \x08공격력 + 50%, \x17크레딧 +500",
 			"\x043단계 \x04: \x17크레딧 +1,000, \x1C추가EXP +30%",
-			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%, ",
-			"\x045단계 \x04: \x175만 크레딧, \x07스탯 효과",
-			"\x1BExtra \x04: \x1F확정 강화권\x04 1개, \x08구입 티켓 10만개, \x07스탯 효과 \x08(SCA런쳐 2인이상 로드시 출현함)",
+			"\x044단계 \x04: \x19유닛 판매권 + 50, \x08공격력 + 50%\x12\x1BExtra \x04LV. \x1DVI \x04: \x1F확정 강화권\x04 1개, \x08구입 티켓 10만개, \x07스탯 효과",
+			"\x045단계 \x04: \x175만 크레딧, \x07스탯 효과\x12\x1CExtra \x04LV. \x1FXI \x04: \x1F확정 강화권\x04 3개, \x17크레딧 +200만",
+			"\x12\x08Extra Boss는 SCA런쳐 2인이상 로드시에만 출현함",
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
@@ -802,14 +811,17 @@ function GameDisplay()
 			FirstReward3[2][4].."46강 \x04: \x17크레딧 "..Convert_Number(FirstReward3[2][2])..", \x02무색 조각 "..Convert_Number(FirstReward3[2][3]).."개. \x04일일 제한"..FirstReward3[2][5].."회",
 			FirstReward3[3][4].."47강 \x04: \x17크레딧 "..Convert_Number(FirstReward3[3][2])..", \x02무색 조각 "..Convert_Number(FirstReward3[3][3]).."개. \x04일일 제한"..FirstReward3[3][5].."회",
 			FirstReward3[4][4].."48강 \x04: \x17크레딧 "..Convert_Number(FirstReward3[4][2])..", \x02무색 조각 "..Convert_Number(FirstReward3[4][3]).."개. \x04일일 제한"..FirstReward3[4][5].."회",
+			FirstReward4[1][4].."49강 \x04: \x17크레딧 "..Convert_Number(FirstReward4[1][2]).."억, \x02무색 조각 "..Convert_Number(FirstReward4[1][3]).."개. \x04주간 제한"..FirstReward4[1][5].."회\x07 (매주 목요일 초기화)",
+			FirstReward4[2][4].."50강 \x04: \x17크레딧 "..Convert_Number(FirstReward4[2][2]).."억, \x02무색 조각 "..Convert_Number(FirstReward4[2][3]).."개. \x04주간 제한"..FirstReward4[2][5].."회\x07 (매주 목요일 초기화)",
 			--"\x04X단계 \x04: ",
 			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
 		},
 		{
 			"\x13\x04\x1B- 부록. \x17크레딧 \x1F광산 \x1B-",
-			"\x13\x04",
-			--"\x04X단계 \x04: ",
-			--"\x045단계 보스는 처치후 \x081시간의 인게임 쿨타임\x04이 존재합니다."
+			"\x13\x04맵상의 모든 보스 몬스터의 공략이 완료된 이후 \x17크레딧 \x1F광산\x04이 개인 보스존에 생성됩니다",
+			"\x13\x04이 광산에 1회 공격을 할 때마다 \x17채광력 \x04만큼의 크레딧이 주어집니다. (\x17채광력\x04은 P키로 확인 가능)",
+			"\x13\x04채광력 : 채광의 보석, 각성 횟수에 따라 1.1배씩 곱연산으로 증가",
+			"\x13\x041회 최대 채광 가능 크레딧 : 기본 1억 + 15만레벨 이후 1레벨당 20만씩 증가",
 		},
 		
 	}

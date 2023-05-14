@@ -40,7 +40,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0411"
+VerText = "\x19ver\x07. \x043\x07.\x0420"
 
 TestSet(1)
 if Limit == 1 then
@@ -53,7 +53,7 @@ else
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 30
+LimitVer = 31
 StatVer = 14
 StatVer2 = 4
 EUDTurbo(FP)

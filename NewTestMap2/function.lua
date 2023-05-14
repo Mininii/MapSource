@@ -666,11 +666,13 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
 	if MoneyV ~= nil then
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
+			local TempV = CreateVar(FP)
+			CMov(FP,TempV,DpsDest)
+			TriggerX(FP,CV(TempV,6274402,AtLeast),{SetV(TempV,6274402)},{preserved})
 			if Multiplier ~=  nil then
-				
-				f_LMov(FP, GetMoney, _LMul({DpsDest,0}, Multiplier), nil, nil, 1)
+				f_LMov(FP, GetMoney, _LMul({TempV,0}, Multiplier), nil, nil, 1)
 			else
-				f_LMov(FP, GetMoney,{DpsDest,0},nil,nil,1)
+				f_LMov(FP, GetMoney,{TempV,0},nil,nil,1)
 			end
 			if MultiplierV ~= nil then
 				if MultiplierV[4]=="V" then

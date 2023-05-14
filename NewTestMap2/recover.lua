@@ -68,6 +68,9 @@ end
 EXPArr4 = {}--¿œπ›
 EXPArr4_2 = {0,0,0,0}--dp
 to = 0
+
+local Fileptr = io.open("C:\\Temp\\expdata1.txt", "wb")
+local Fileptr2 = io.open("C:\\Temp\\expdata_dp1.txt", "wb")
 for i = 1, 200001 do
     local ex = EXPArr[i]
     to = to + ex
@@ -81,6 +84,9 @@ for i = 1, 200001 do
     EXPArr4_2[idx2+2] = math.floor(to/4294967296)
     EXPArr4_2[idx2+3] = 0
     EXPArr4_2[idx2+4] = 0
+    Fileptr:write(i.."        32 : "..(math.floor(ex%4294967296)).."     64 : "..math.floor(ex/4294967296).."\n")
+    Fileptr2:write(i.."        32 : "..(math.floor(to%4294967296)).."     64 : "..math.floor(to/4294967296).."\n")
+
 end
 
 

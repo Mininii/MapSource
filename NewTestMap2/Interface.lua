@@ -77,6 +77,7 @@ function Interface()
 	local LV5Cool = iv.LV5Cool
 	local TimeAttackScore = iv.TimeAttackScore
 	local TimeAttackScore48 = iv.TimeAttackScore48
+	local TimeAttackScore50 = iv.TimeAttackScore50
 	local TimeAttackScore2 = iv.TimeAttackScore2
 	local PUnitLevel = iv.PUnitLevel
 	local PUnitClass = iv.PUnitClass
@@ -362,6 +363,7 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()--
 	if TestStart == 0 then
 		for j,k in pairs(BPArr) do
+			
 			TriggerX(FP, {Deaths(i, Exactly, 0,14),CV(k[i+1],1,AtLeast)},{SetDeaths(i,SetTo,1,14)})
 	
 			TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],0),CV(k[i+1],1,AtLeast),LocalPlayerID(i)},{
@@ -444,6 +446,16 @@ for i = 0, 6 do -- 각플레이어
 		CIf(FP,CD(StatTest,1,AtLeast))
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]," \x07』"})
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
+
+		TriggerX(FP,{CV(iv.PLevel2[i+1],200000),CDX(StatTest,2^(5-1),2^(5-1)),LocalPlayerID(i)},{
+			SetCp(i),
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			DisplayExtText("LV\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			SetMemory(0xCDDDCDDC,SetTo,1);
+
+		})
+
 		CIfEnd()
 
 		DoActionsX(FP, {
@@ -632,6 +644,23 @@ for i = 0, 6 do -- 각플레이어
 			DisplayPrint(i, {"\x13\x07『 \x04오늘의 "..k[4]..k[1].."강 \x07최초 달성 보상 \x04수령 횟수 : \x07",TempV," / \x0F"..k[5].." 회 \x07』"})
 		CIfEnd()
 	end
+	for j,k in pairs(FirstReward4) do -- j == 1~4
+		local NMask = 256^(j-1)
+		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])})
+			CIfX(FP,{CVX(iv.FirstRewardLim2[i+1],NMask*(k[5]-1),NMask*255,AtMost)},{AddVX(iv.FirstRewardLim2[i+1],NMask*1,NMask*255),SetDeaths(i,SetTo,1,13),AddV(iv.B_PFfragItem[i+1],k[3]),SetCp(i),DisplayExtText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).."억 \x17Ｃｒｅｄｉｔ"), 4),DisplayExtText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
+			f_LAdd(FP, Credit[i+1], Credit[i+1], k[2].."00000000")
+			CElseX()
+				TriggerX(FP,{},{SetCp(i),DisplayExtText(StrDesignX("\x04이번 주는 더이상 "..k[4]..k[1].."강 \x07최초 달성 보상\x04을 얻을 수 없어요. \x07매주 목요일\x04에 다시 도전해주세요!"), 4),SetCp(FP)},{preserved})
+			CIfXEnd()
+			local TempV = CreateVar(FP)
+			CMov(FP,TempV,iv.FirstRewardLim2[i+1],nil,NMask*255)
+			if j>=2 then
+				CrShift(FP,TempV,(j-1)*8)
+			end
+			DisplayPrint(i, {"\x13\x07『 \x04오늘의 "..k[4]..k[1].."강 \x07최초 달성 보상 \x04수령 횟수 : \x07",TempV," / \x0F"..k[5].." 회 \x07』"})
+		CIfEnd()
+	end
+
 
 --\x1C45강
 --\x1E46강
@@ -649,6 +678,7 @@ for i = 0, 6 do -- 각플레이어
 	--		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
 	CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
 	CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
+	CMov(FP,iv.WeekCheck[i+1],SCA.WeekV)--날짜에 맞춰짐
 
 	
 	--CIfX(FP,{CVX(DayCheck2[i+1],27,0xFF,AtMost),CVX(SCA.GlobalVarArr[5],1,1),CD(SCA.GlobalCheck2,1)})--시즌 1호 출석이벤트
@@ -672,6 +702,17 @@ for i = 0, 6 do -- 각플레이어
 	--		TriggerX(FP, {CVX(DayCheck2[i+1],28,0xFF,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
 	--CElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28,0xFF,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 1호 출석 이벤트를 완료 하셨습니다."), 4)})
 	--CIfXEnd()
+
+	
+	--1 = 월요일
+	--2 = 화요일
+	--3 = 수요일
+	--4 = 목요일
+	--5 = 금요일
+	--6 = 토요일
+	--7 = 일요일
+	TriggerX(FP,{CV(iv.WeekCheck[i+1],4)},{SetCp(i),DisplayExtText(StrDesignX("\x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다. (매주 목요일마다 초기화됨)"), 4),SetV(iv.FirstRewardLim2[i+1],0)},{preserved})
+
 	DoActionsX(FP,{
 		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
 	local DailyJump = def_sIndex()
@@ -840,7 +881,7 @@ for i = 0, 6 do -- 각플레이어
 	
 	if Limit == 1 then 
 		CIf(FP,{CV(iv.MapMakerFlag[i+1]),Deaths(i,AtLeast,1,553)})
-		--CreateUnitStacked({}, 12, LevelUnitArr[44][2], 36+i, nil, i)
+		--CreateUnitStacked({}, 12, LevelUnitArr[50][2], 36+i, nil, i)
 		--f_LAdd(FP,PEXP[i+1],PEXP[i+1],"500000000")
 		CIfEnd()
 	end
@@ -1054,10 +1095,16 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	for j, k in pairs(LevelUnitArr) do
 		if Limit == 1 then
 			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 10)}, 10, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 10)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 		else
 			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 10)}, 10, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 10)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
+			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
 		end
 	end
 
@@ -1469,6 +1516,20 @@ DisplayPrint("CP", {"\x13\x07『 기존 \x07",TimeAttackScore48[i+1]," \x04점을 뛰�
 CIfXEnd()
 CIfEnd()
 
+
+CIfOnce(FP, {Command(i, AtLeast, 1, LevelUnitArr[50][2])},{SetCp(i)})
+
+DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x0750강 \x07타임어택 \x10점수\x04는 \x07",TimeAttackScore2[i+1]," \x04점 입니다. \x07』"})
+CIfX(FP,{CV(TimeAttackScore50[i+1],TimeAttackScore2[i+1],AtMost)},{})
+DisplayPrint("CP", {"\x13\x07『 \x0750강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",TimeAttackScore50[i+1]," \x04점을 뛰어넘으셨네요! 축하드립니다! \x07』"})
+CDoActions(FP, {SetV(TimeAttackScore50[i+1],TimeAttackScore2[i+1])})
+CElseX()
+DisplayPrint("CP", {"\x13\x07『 기존 \x07",TimeAttackScore50[i+1]," \x04점을 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
+CIfXEnd()
+CIfEnd()
+
+
+
 TriggerX(FP,{CV(PBossLV[i+1],5,AtLeast)},{KillUnitAt(1,13,119+i,FP)})
 TriggerX(FP,{CV(PBossLV[i+1],6,AtLeast)},{SetCDX(PBossClearFlag, 1,1)})
 TriggerX(FP,{CV(PBossLV[i+1],7,AtLeast)},{SetCDX(PBossClearFlag, 2,2)})
@@ -1548,8 +1609,12 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	f_LMov(FP,TempEXPW2,"0",nil,nil,1)
 	CallTriggerX(FP, Call_EnchUnit,{})
 	CIfEnd()
-
-	
+	local SUT = {
+		iv.S45[i+1],
+		iv.S46[i+1],
+		iv.S47[i+1],
+		iv.S48[i+1]
+	}
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 
 		f_LMov(FP,TempEXPW,"0",nil,nil,1)
@@ -1573,9 +1638,10 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 					end
 					CIfEnd()
 				end
+				
 			elseif j>=45 and 48>=j then
 				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],9999,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {SetV(iv.PSaveChk[i+1],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
+				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {AddV(SUT[j-44],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
 			else
 				
 				--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
@@ -1660,9 +1726,11 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 		CMov(FP,iv.PLevel2[i+1],PLevel[i+1])
+		f_Cast(FP, {iv.FfragItemRank[i+1],0}, _LDiv(iv.FfragItem[i+1], "10000"), nil, nil, 1)
 		CIf(FP,CV(iv.MapMakerFlag[i+1],1))--제작자일경우 레벨 1으로 저장후 세팅.
 		CMov(FP,PLevelBak,PLevel[i+1])
 		CMov(FP,PLevel[i+1],1)
+		CMov(FP,iv.FfragItemRank[i+1],0)
 		CIfEnd()
 		SCA_DataReset(i)
 		CallTrigger(FP,Call_SCA_DataSaveAll)

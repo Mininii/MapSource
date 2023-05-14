@@ -96,9 +96,9 @@ function Install_CallTriggers()
 
 	--CallTrigger(FP, Call_CTInputUID)
 	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
+	CIfEnd()
 	CWhileEnd()
 
-	CIfEnd()
 	SetCallEnd()
 	function CreateUnitStacked(Condition,Amount,UnitID,Location,DestLocation,Player,AddTrig,Preserved)
 		if DestLocation == nil then DestLocation = 0 end
@@ -1284,6 +1284,30 @@ function Install_CallTriggers()
 	TriggerX(FP,{CV(GetData_FMin,Cost_FMin[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	SetCallEnd()
 
+	
+
+
+
+	Call_CPSound = SetCallForward()
+	SoundOp = CreateVar(FP)
+	SetCall(FP)
+	local SW = CreateVar(FP)
+	CMov(FP,SW,0)
+	CWhile(FP, {CV(SW,6,AtMost)}, {})
+	CIf(FP,{TDeaths(SW,Exactly,1,3)})
+		CMov(FP,0x6509B0,SW)
+		TriggerX(FP, {CV(SoundOp,1)}, {PlayWAV("staredit\\wav\\Clear1.ogg")},{preserved})
+		TriggerX(FP, {CV(SoundOp,2)}, {PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg")},{preserved})
+		TriggerX(FP, {CV(SoundOp,3)}, {PlayWAV("staredit\\wav\\Clear3.ogg")},{preserved})
+	CIfEnd()
+	CAdd(FP,SW,1)
+	CWhileEnd()
+
+	SetCallEnd()
+
+
+
+
 	--[[
 		32개 10회 320 / 10 = 32 >> 250 으로 변경
 		322개 7회 2254 / 10 = 225 >> 550 으로 변경
@@ -1398,12 +1422,15 @@ for i = 45, 48 do
 		
 		if j == 1 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			CallTrigger(FP, Call_CPSound, SetV(SoundOp,2))
 		end
 		if j == 2 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			CallTrigger(FP, Call_CPSound, SetV(SoundOp,3))
 		end
 		if j == 3 then
 			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			CallTrigger(FP, Call_CPSound, SetV(SoundOp,1))
 		end
 		CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		CIfEnd()
@@ -1511,9 +1538,6 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	SetCallEnd()
 	Call_EnchUnit = SetCallForward()
 	SetCall(FP)
-	local CI = CFor(FP,0,#LevelUnitArr-1,1)
-	local UID = CreateVar(FP)
-	local Per = CreateVar(FP)
 	local GetXEper44 = CreateVar(FP)
 	local GetXEper45 = CreateVar(FP)
 	local GetXEper46 = CreateVar(FP)
@@ -1525,31 +1549,42 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMovX(FP,GetXEper46,VArrX(GetVArray(iv.XEPer46[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetXEper47,VArrX(GetVArray(iv.XEPer47[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetXEper48,VArrX(GetVArray(iv.XEPer48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	local CI = CFor(FP,0,#LevelUnitArr-1,1)
+	local UID = CreateVar(FP)
+	local Per = CreateVar(FP)
 	CMovX(FP,UID,VArr(LevelDataArr,CI),nil,nil,nil,1)
 	CMov(FP,Per,_SHRead(ArrX(PerDataArr,CI)),nil,nil,1)
-	CMov(FP,GCP,ECP,nil,nil,1)
+	CMov(FP,ECP,GCP,nil,nil,1)
 	CMov(FP,UEper,Per)
 	CMov(FP,ELevelB,CI)
 	
 	CIf(FP,VRange(CI, 0, 38))
-	if Limit == 1 then
-			
-		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-		CIfX(FP, {TBring(GCP,AtLeast,6,UID,_Add(GCP,8))},{TKillUnitAt(6, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,6)})
-		CElseIfX({TBring(GCP,AtLeast,5,UID,_Add(GCP,8))},{TKillUnitAt(5, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,5)})
-		CElseIfX({TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,4)})
-		CElseIfX({TBring(GCP,AtLeast,3,UID,_Add(GCP,8))},{TKillUnitAt(3, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,3)})
-		CElseIfX({TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
-		CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
-		CIfXEnd()
-		CIfEnd()
-		else
+--	if Limit == 1 then
+--			
+--		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
+--		CIfX(FP, {TBring(GCP,AtLeast,6,UID,_Add(GCP,8))},{TKillUnitAt(6, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,6)})
+--		CElseIfX({TBring(GCP,AtLeast,5,UID,_Add(GCP,8))},{TKillUnitAt(5, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,5)})
+--		CElseIfX({TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,4)})
+--		CElseIfX({TBring(GCP,AtLeast,3,UID,_Add(GCP,8))},{TKillUnitAt(3, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,3)})
+--		CElseIfX({TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
+--		CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
+--		CIfXEnd()
+--		CIfEnd()
+--		else
+--		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
+--		CIfX(FP, {TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
+--		CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
+--		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
+--		CIfXEnd()
+--		CIfEnd()
+--	end
 		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
 		CIfX(FP, {TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
 		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
@@ -1557,7 +1592,6 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
 		CIfXEnd()
 		CIfEnd()
-	end
 	CIfEnd()
 	CIf(FP,VRange(CI, 39, 42))
 		CSub(FP,XEper,GEper4,Per)
@@ -1607,7 +1641,15 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIfEnd()
 
 	CIfX(FP,{CV(XEper,1,AtLeast)})
-		CIfX(FP, {TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
+		CIfX(FP, {TBring(GCP,AtLeast,8,UID,_Add(GCP,8))},{TKillUnitAt(8, UID, _Add(GCP,8), GCP)})
+		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,8)})
+		CElseIfX({TBring(GCP,AtLeast,7,UID,_Add(GCP,8))},{TKillUnitAt(7, UID, _Add(GCP,8), GCP)})
+		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,7)})
+		CElseIfX({TBring(GCP,AtLeast,6,UID,_Add(GCP,8))},{TKillUnitAt(6, UID, _Add(GCP,8), GCP)})
+		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,6)})
+		CElseIfX({TBring(GCP,AtLeast,5,UID,_Add(GCP,8))},{TKillUnitAt(5, UID, _Add(GCP,8), GCP)})
+		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,5)})
+		CElseIfX({TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
 		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,4)})
 		CElseIfX({TBring(GCP,AtLeast,3,UID,_Add(GCP,8))},{TKillUnitAt(3, UID, _Add(GCP,8), GCP)})
 		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,3)})
