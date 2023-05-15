@@ -137,18 +137,20 @@ function GameDisplay()
 		--CA__lItoCustom(SVA1(Str1,8),MoneyLoc,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x04,0x04,0x04},{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 		CA__InputVA(56*0,Str2,Str2s,nil,56*0,56*1-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
-		CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
+
+
 		
-		CS__ItoCustom(FP,SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1B０",0x1B,nil, LVData)
 		local Tabkey = KeyToggleFunc2("TAB","LCTRL")
 		CIfX(FP,{CD(Tabkey,1)})--수치표기
 		CIfX(FP,{CV(LevelLoc,LevelLimit-1,AtMost)})
 		CElseX({TSetNWar(ExpLoc, SetTo, "0"),TSetNWar(TotalExpLoc, SetTo, "0")})
 		CIfXEnd()
-		CA__lItoCustom(SVA1(Str1,16),ExpLoc,nil,nil,{10,14},nil,nil,"\x040",{0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
-		CA__Input(MakeiStrData("\x08／",1),SVA1(Str1,32))
-		CA__lItoCustom(SVA1(Str1,34),TotalExpLoc,nil,nil,{10,14},nil,nil,"\x040",{0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
+		CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－",nil,1)
+		CA__lItoCustom(SVA1(Str1,12),ExpLoc,nil,nil,{10,15},nil,nil,"\x040",{0x1C,0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
+		CA__Input(MakeiStrData("\x08／",1),SVA1(Str1,30))
+		CA__lItoCustom(SVA1(Str1,31),TotalExpLoc,nil,nil,{10,15},nil,nil,"\x040",{0x1C,0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
 		CElseX()--퍼센트표기
+		CA__SetValue(Str1,"\x07ＬＶ．\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04－\x0FＥＸＰ\x04：",nil,1)
 		local CurExpTmp = CreateVar(FP)
 		local CurExpTmp2 = CreateWar(FP)
 		CIfX(FP,{CV(LevelLoc,LevelLimit-1,AtMost)})
@@ -165,6 +167,8 @@ function GameDisplay()
 		
 		
 		CIfXEnd()
+		
+		CS__ItoCustom(FP,SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1B０",0x1B,nil, LVData)
 		TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 		CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0)
@@ -180,7 +184,8 @@ function GameDisplay()
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CElseX()
 		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
-		TriggerX(FP,CV(TempFf2,999999999,AtLeast),{SetV(TempFf2,999999999)},{preserved})
+		CTrigger(FP,{TTNWar(TempFf, AtLeast, "999999999")},{SetV(TempFf2,999999999)},{preserved})
+
         CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CIfXEnd()
 		CIf(FP,{TTNWar(CredLoc, AtLeast, "999999999999999")})

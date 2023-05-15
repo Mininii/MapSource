@@ -456,7 +456,8 @@ function PopLevelUnit()
 	AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
 	LevelDataArr = CreateVArr(#LevelUnitArr, FP)
-	PerDataArr = CreateArr(#LevelUnitArr, FP)
+	ExpDataArr = CreateVArr(#LevelUnitArr, FP)
+	PerDataArr = CreateVArr(#LevelUnitArr, FP)
 	BuyDataArr = CreateArr(#AutoBuyArr,FP)
 	for j = 0, 9 do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr,j),SetTo,0))
@@ -467,7 +468,8 @@ function PopLevelUnit()
 	for j,k in pairs(LevelUnitArr) do
 		
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(LevelDataArr,j-1),SetTo,k[2]))
-		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(PerDataArr,j-1),SetTo,k[3]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ExpDataArr,j-1),SetTo,k[4]))
 	end
 	
 	for j,k in pairs(AutoBuyArr) do

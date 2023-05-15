@@ -8,7 +8,7 @@ function Include_Vars()
 	iv={} -- 전역 변수 테이블
 	ct={} -- 전역 변수 테이블 치팅감지
 	ctg={} -- 전역 변수 테이블 치팅감지
-	LevelLimit = 200000
+	LevelLimit = 300000
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
 	LimitVerPtr = 0x58f608
@@ -181,6 +181,7 @@ end
 	SCA.FirstRewardLim2 = SCA.CreateVar(FP)
 	SCA.TimeAttackScore50 = SCA.CreateVar(FP)
 	SCA.FfragItemRank = SCA.CreateVar(FP)
+	SCA.SellTicket64 = SCA.CreateVar(FP)
 
 	
 	SCA.GReload = CreateCcode()
@@ -327,7 +328,7 @@ end
 	iv.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	iv.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	iv.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
-	iv.SellTicket = CreateVarArr(7,FP)
+	iv.SellTicket = CreateWarArr(7,FP)
 	iv.PBossLV = CreateVarArr(7,FP)
 	iv.PBossDPS = CreateWarArr(7,FP)
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
@@ -429,7 +430,7 @@ end
 	iv.NextGasLoc = CreateVar(FP)
 	iv.NextOreMulLoc = CreateVar(FP)
 	iv.NextGasMulLoc = CreateVar(FP)
-	iv.SellTicketLoc = CreateVar(FP)
+	iv.SellTicketLoc = CreateWar(FP)
 	iv.TimeAttackScoreLoc = CreateVar(FP)
 	iv.TimeAttackScore48Loc = CreateVar(FP)
 	iv.Stat_BossSFrgLoc = CreateVar(FP)
@@ -553,7 +554,7 @@ end
 	ct.NextGas = CreateVarArr2(7,100,FP) -- 다음 가스
 	ct.NextOreMul = CreateVarArr2(7,2,FP) -- 다음 미네랄배수
 	ct.NextGasMul = CreateVarArr2(7,2,FP) -- 다음 가스배수
-	ct.SellTicket = CreateVarArr(7,FP)
+	ct.SellTicket = CreateWarArr(7,FP)
 	ct.PBossLV = CreateVarArr(7,FP)
 	ct.PBossDPS = CreateWarArr(7,FP)
 	ct.TotalPBossDPS = CreateWarArr(7,FP)

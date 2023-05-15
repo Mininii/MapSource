@@ -35,6 +35,8 @@ function Interface()
 	local CS_BreakShieldData = iv.CS_BreakShieldData
 	local TotalBreakShield = iv.TotalBreakShield
 	local CurPUnitCool = iv.CurPUnitCool
+	local TempEXPW = iv.TempEXPW--CreateVar(FP)
+	
 
 	--General
 	local BossLV = iv.BossLV-- CreateVar(FP)
@@ -112,7 +114,6 @@ function Interface()
 	local ResetStat2Loc = iv.ResetStat2Loc
 	--Temp
 	local CTStatP2 = iv.CTStatP2--CreateVar(FP)
-	local TempEXPW = iv.TempEXPW--CreateVar(FP)
 	local TempEXPW2 = iv.TempEXPW2--CreateVar(FP)
 
 	local CheatDetect = iv.CheatDetect--CreateCcode()
@@ -447,7 +448,7 @@ for i = 0, 6 do -- 각플레이어
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]," \x07』"})
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
 
-		TriggerX(FP,{CV(iv.PLevel2[i+1],200000),CDX(StatTest,2^(5-1),2^(5-1)),LocalPlayerID(i)},{
+		TriggerX(FP,{CV(iv.PLevel2[i+1],LevelLimit),CDX(StatTest,2^(6-1),2^(6-1)),LocalPlayerID(i)},{
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 			DisplayExtText("LV\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
@@ -657,7 +658,7 @@ for i = 0, 6 do -- 각플레이어
 			if j>=2 then
 				CrShift(FP,TempV,(j-1)*8)
 			end
-			DisplayPrint(i, {"\x13\x07『 \x04오늘의 "..k[4]..k[1].."강 \x07최초 달성 보상 \x04수령 횟수 : \x07",TempV," / \x0F"..k[5].." 회 \x07』"})
+			DisplayPrint(i, {"\x13\x07『 \x04이번주 "..k[4]..k[1].."강 \x07최초 달성 보상 \x04수령 횟수 : \x07",TempV," / \x0F"..k[5].." 회 \x07』"})
 		CIfEnd()
 	end
 
@@ -712,34 +713,33 @@ for i = 0, 6 do -- 각플레이어
 	--6 = 토요일
 	--7 = 일요일
 	TriggerX(FP,{CV(iv.WeekCheck[i+1],4)},{SetCp(i),DisplayExtText(StrDesignX("\x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다. (매주 목요일마다 초기화됨)"), 4),SetV(iv.FirstRewardLim2[i+1],0)},{preserved})
-
 	DoActionsX(FP,{
 		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
-	local DailyJump = def_sIndex()
+--	local DailyJump = def_sIndex()
 	local DailyJump2 = def_sIndex()
-	NIfX(FP,{CVX(DayCheck2[i+1],27*0x100,0xFF00,AtMost),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)})--시즌 2호 출석이벤트
-			NJumpEnd(FP, DailyJump)
-			DoActionsX(FP,{
-				AddVX(DayCheck2[i+1],1*0x100,0xFF00),
-				AddV(B_PCredit[i+1],500000),
-				AddV(iv.B_PFfragItem[i+1],5),
-				SetCp(i),DisplayExtText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02??? \x04를 5개 얻었습니다."), 4)})
-				local TempV = CreateVar(FP)
-				local TempV2 = CreateVar(FP)
-				local TempV3 = CreateVar(FP)
-				CMov(FP,TempV3,_Mod(_rShift(DayCheck2[i+1], 8),_Mov(0x100)),nil,nil,1)
-				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
-				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
-			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
-			DoActionsX(FP, {
-				AddV(iv.B_PFfragItem[i+1],50),
-				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x02??? \x04를 50개 얻었습니다."), 4)})
-			CIfEnd()
-			CMov(FP,DV,TempV3)
-			CallTrigger(FP,Call_DailyPrint)
-			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
-	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 2호 출석 이벤트를 완료 하셨습니다."), 4)})
-	NIfXEnd()
+--	NIfX(FP,{CVX(DayCheck2[i+1],27*0x100,0xFF00,AtMost),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)})--시즌 2호 출석이벤트
+--			NJumpEnd(FP, DailyJump)
+--			DoActionsX(FP,{
+--				AddVX(DayCheck2[i+1],1*0x100,0xFF00),
+--				AddV(B_PCredit[i+1],500000),
+--				AddV(iv.B_PFfragItem[i+1],5),
+--				SetCp(i),DisplayExtText(StrDesignX("일일 출석 보상으로 \x04\x17크레딧 50만, \x02??? \x04를 5개 얻었습니다."), 4)})
+--				local TempV = CreateVar(FP)
+--				local TempV2 = CreateVar(FP)
+--				local TempV3 = CreateVar(FP)
+--				CMov(FP,TempV3,_Mod(_rShift(DayCheck2[i+1], 8),_Mov(0x100)),nil,nil,1)
+--				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
+--				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
+--			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
+--			DoActionsX(FP, {
+--				AddV(iv.B_PFfragItem[i+1],50),
+--				SetCp(i),DisplayExtText(StrDesignX("누적 출석 보상으로 \x02??? \x04를 50개 얻었습니다."), 4)})
+--			CIfEnd()
+--			CMov(FP,DV,TempV3)
+--			CallTrigger(FP,Call_DailyPrint)
+--			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
+--	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 2호 출석 이벤트를 완료 하셨습니다."), 4)})
+--	NIfXEnd()
 	
 	NIfX(FP,{CVX(DayCheck2[i+1],27*0x10000,0xFF0000,AtMost),CVX(SCA.GlobalVarArr[5],4,4),CD(SCA.GlobalCheck2,1)})--시즌 3호 출석이벤트
 			NJumpEnd(FP, DailyJump2)
@@ -766,7 +766,7 @@ for i = 0, 6 do -- 각플레이어
 	
 
 	NElseIfX({VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),})
-		NJump(FP, DailyJump, {CVX(DayCheck2[i+1],0*0x100,0xFF00),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌2 출석 0일일 경우 강제로 출석체크시킴
+		--NJump(FP, DailyJump, {CVX(DayCheck2[i+1],0*0x100,0xFF00),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌2 출석 0일일 경우 강제로 출석체크시킴
 		NJump(FP, DailyJump2, {CVX(DayCheck2[i+1],0*0x10000,0xFF0000),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)}) -- 시즌3 출석 0일일 경우 강제로 출석체크시킴
 	
 	NIfXEnd()
@@ -788,7 +788,7 @@ for i = 0, 6 do -- 각플레이어
 						end
 						if l == 2 then
 							MText = MText.."\x19"..m.." 유닛 판매권 "
-							table.insert(RewardAct,AddV(SellTicket[i+1],m))
+							table.insert(RewardAct,AddV(B_PTicket[i+1],m))
 						end
 						if l == 3 then
 							MText = MText.."\x10"..m.." 강화기 백신 "
@@ -1085,6 +1085,7 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	
 	TriggerX(FP, {CV(PBossLV[i+1],4,AtMost),Bring(i, AtLeast, 5, "Men", 119+i)}, {MoveUnit(1, "Men", i, 119+i, 22+i)}, {preserved})--개인보스방 입장제한
 	TriggerX(FP, {CV(PBossLV[i+1],4,AtMost),Bring(i, AtLeast, 1, 88, 119+i)}, {MoveUnit(1, 88, i, 119+i, 22+i)}, {preserved})--개인보스방 입장제한
+	TriggerX(FP, {CV(PBossLV[i+1],5,AtLeast),CV(CS_DPSLV[i+1],1,AtLeast)}, {MoveUnit(1,PersonalUIDArr[i+1],i,119+i,57+i)}, {preserved})--고유유닛 개인보스에서 사냥터로 이동
 
 	TriggerX(FP,{CV(iv.E40[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 40-1), Add, 10),SubV(iv.E40[i+1], 10)},{preserved})
 	TriggerX(FP,{CV(iv.E41[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 41-1), Add, 10),SubV(iv.E41[i+1], 10)},{preserved})
@@ -1550,7 +1551,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	f_LAdd(FP,Credit[i+1],Credit[i+1],{B_Credit,0}) -- 
 	CIfEnd({})
 	CIf(FP,{CV(B_Ticket,1,AtLeast)})
-	CAdd(FP,SellTicket[i+1],B_Ticket) --
+	f_LAdd(FP, SellTicket[i+1], SellTicket[i+1], {B_Ticket,0})
 	CIfEnd({})
 	
 	CIf(FP,CD(SCA.LoadCheckArr[i+1],2))--불러올경우 보상 대입 작동
@@ -1573,7 +1574,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	CMov(FP, B_PEXP[i+1], 0)
 	CIfEnd({})
 	CIf(FP,{CV(B_PTicket[i+1],1,AtLeast)})
-	CAdd(FP,SellTicket[i+1],B_PTicket[i+1]) --
+	f_LAdd(FP, SellTicket[i+1], SellTicket[i+1], {B_PTicket[i+1],0})
 	CMov(FP, B_PTicket[i+1], 0)
 	CIfEnd({})
 	CIfEnd()
@@ -1609,56 +1610,19 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	f_LMov(FP,TempEXPW2,"0",nil,nil,1)
 	CallTriggerX(FP, Call_EnchUnit,{})
 	CIfEnd()
-	local SUT = {
-		iv.S45[i+1],
-		iv.S46[i+1],
-		iv.S47[i+1],
-		iv.S48[i+1]
-	}
 	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 
-		f_LMov(FP,TempEXPW,"0",nil,nil,1)
-		for j = #LevelUnitArr, 1, -1 do
-			local UID = LevelUnitArr[j][2]
-			local EXP = LevelUnitArr[j][4]
-			if EXP>=1 then
-				if j>=26 then
-					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(PLevel[i+1],LevelLimit,AtLeast)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-					TriggerX(FP,{CV(PLevel[i+1],LevelLimit-1,AtMost),Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],0,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-					CIf(FP,{CV(PLevel[i+1],LevelLimit-1,AtMost),Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],1,AtLeast)},{KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],1)})
-					f_LAdd(FP, TempEXPW,TempEXPW, tostring(EXP))
-					CIfEnd()
-					
-				else
-					TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(PLevel[i+1],LevelLimit,AtLeast)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-					CIf(FP,{CV(PLevel[i+1],LevelLimit-1,AtMost),Bring(i,AtLeast,1,UID,73+i)},{KillUnitAt(1, UID, 73+i, i)})
-					f_LAdd(FP, TempEXPW,TempEXPW, tostring(EXP))
-					if j==15 then
-						DoActionsX(FP, {SetVX(MissionV[i+1],32,32)})
-					end
-					CIfEnd()
-				end
-				
-			elseif j>=45 and 48>=j then
-				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],9999,AtMost)},{MoveUnit(All,UID,i,73+i,36+i),SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)},{preserved})
-				CallTriggerX(FP, Call_Gacha, {Bring(i,AtLeast,1,UID,73+i),CV(SellTicket[i+1],10000,AtLeast)}, {AddV(SUT[j-44],1),KillUnitAt(1, UID, 73+i, i),SubV(SellTicket[i+1],10000),SetV(GaLv,j),SetV(ECP,i)})
-			else
-				
-				--CallTriggerX(FP,Call_Print13[i+1],{Bring(i,AtLeast,1,UID,73+i)})
-				TriggerX(FP,{Bring(i,AtLeast,1,UID,73+i)},{MoveUnit(1,UID,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-			end
-
-			
-		end
-		TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
-        CIf(FP,{TTNWar(TempEXPW,AtLeast,"1")})
-            f_LAdd(FP, PEXP[i+1], PEXP[i+1],TempEXPW)
-            CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
-                f_LAdd(FP,PEXP2[i+1],PEXP2[i+1],_LMul(TempEXPW,{Stat_EXPIncome[i+1],0}))
-                f_LAdd(FP, PEXP[i+1], PEXP[i+1], _LDiv(PEXP2[i+1],"10"))
-                f_LMod(FP, PEXP2[i+1],PEXP2[i+1], "10")
-            CIfEnd()
-        CIfEnd()
+		CallTriggerX(FP, Call_SellUnit,{})
+		
+	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
+	CIf(FP,{TTNWar(TempEXPW,AtLeast,"1")})
+		f_LAdd(FP, PEXP[i+1], PEXP[i+1],TempEXPW)
+		CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
+			f_LAdd(FP,PEXP2[i+1],PEXP2[i+1],_LMul(TempEXPW,{Stat_EXPIncome[i+1],0}))
+			f_LAdd(FP, PEXP[i+1], PEXP[i+1], _LDiv(PEXP2[i+1],"10"))
+			f_LMod(FP, PEXP2[i+1],PEXP2[i+1], "10")
+		CIfEnd()
+	CIfEnd()
 	CIfEnd()
 	CallTriggerX(FP, Call_Shop,{Bring(i, AtLeast, 1, 15, 112)})
 

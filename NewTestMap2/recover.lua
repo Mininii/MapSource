@@ -54,7 +54,7 @@ EXPArr = {}
     mw3 = 6
     cci=0
     
-for i = 1, 200001 do
+for i = 1, 300001 do
    -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
     mw=mw+mw3
@@ -71,7 +71,7 @@ to = 0
 
 local Fileptr = io.open("C:\\Temp\\expdata1.txt", "wb")
 local Fileptr2 = io.open("C:\\Temp\\expdata_dp1.txt", "wb")
-for i = 1, 200001 do
+for i = 1, 300001 do
     local ex = EXPArr[i]
     to = to + ex
     local idx = (i-1)*4
@@ -84,10 +84,19 @@ for i = 1, 200001 do
     EXPArr4_2[idx2+2] = math.floor(to/4294967296)
     EXPArr4_2[idx2+3] = 0
     EXPArr4_2[idx2+4] = 0
-    Fileptr:write(i.."        32 : "..(math.floor(ex%4294967296)).."     64 : "..math.floor(ex/4294967296).."\n")
-    Fileptr2:write(i.."        32 : "..(math.floor(to%4294967296)).."     64 : "..math.floor(to/4294967296).."\n")
+    Fileptr:write(i.."  "..ex.."      32 : "..bit32.band((math.floor(ex%4294967296)), 0xFFFFFFFF).."     64 : "..bit32.band(math.floor(ex/4294967296), 0xFFFFFFFF).."\n")
+    Fileptr2:write(i.."  "..to.."      32 : "..bit32.band((math.floor(to%4294967296)), 0xFFFFFFFF).."     64 : "..bit32.band(math.floor(to/4294967296), 0xFFFFFFFF).."\n")
 
 end
+
+
+
+
+
+
+
+
+
 
 
 

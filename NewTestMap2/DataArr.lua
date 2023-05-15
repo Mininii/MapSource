@@ -139,7 +139,7 @@ function DataArr()
 		{iv.CS_TotalEPer,SCA.CSTotalEPer,"CS_TotalEPer"},
 		{iv.CS_TotalEper4,SCA.CSTotalEper4,"CS_TotalEper4"},
 		{iv.CS_DPSLV,SCA.CSDPSLV,"CS_DPSLV"},
-		{iv.SellTicket,SCA.SellTicket,"SellTicket"}
+		{iv.SellTicket,{SCA.SellTicket,SCA.SellTicket64},"SellTicket"}
 	}
 	
 

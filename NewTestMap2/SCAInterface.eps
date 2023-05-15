@@ -27,7 +27,6 @@ const AddSc = PVariable();
 const PStatVer = PVariable();
 const PlayTime = PVariable();
 const PlayTime2 = PVariable();
-const CreditAddSC = PVariable();
 const LV5Cool = PVariable();
 const BanFlag2 = PVariable();
 const BanFlag3 = PVariable();
@@ -45,16 +44,6 @@ const CSEXP = PVariable();
 const CSTotalEPer = PVariable();
 const CSTotalEper4 = PVariable();
 const CSDPSLV = PVariable();
-const RandomSeed1 = PVariable();
-const RandomSeed2 = PVariable();
-const RandomSeed3 = PVariable();
-const RandomSeed4 = PVariable();
-const RandomSeed5 = PVariable();
-const RandomSeed6 = PVariable();
-const RandomSeed7 = PVariable();
-const RandomSeed8 = PVariable();
-const RandomSeed9 = PVariable();
-const RandomSeed10 = PVariable();
 const StatTotalEPerEx2 = PVariable();
 const StatTotalEPerEx3 = PVariable();
 const StatSCCool = PVariable();
@@ -98,8 +87,23 @@ const PLevel2 = PVariable();
 const AwakItem = PVariable();
 const CSX_LV3Incm = PVariable();
 const PETicket2 = PVariable();
+const FXPer48 = PVariable();
+const FMin = PVariable();
+const WeekCheck = PVariable();
+const FirstRewardLim2 = PVariable();
+const TimeAttackScore50 = PVariable();
+const FfragItemRank = PVariable();
+const SellTicket64 = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
+
+	const a = 0x6D0F48; //방이름
+	const b = 0x6D0F78; //방장닉
+	const c = Db("");
+	//if(strcmp(a, b) == 0){foreach(cp : EUDLoopPlayer('Human', None, None)){setcurpl(cp); DisplayText("\x13\x1BUDP 플레이는 금지하고 있습니다.\n\x13\x1B만약 오랜기간 UDP로 플레이하신 경우 디스코드를 방문하여 제작자에게 문의해주시기 바랍니다."); SetMemory(0xCDDDCDDC,SetTo,1);}}
+	if(strcmp(b, c) == 0){foreach(cp : EUDLoopPlayer('Human', None, None)){setcurpl(cp); DisplayText("\x13\x1B싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."); SetMemory(0xCDDDCDDC,SetTo,1);}}
+	else if(Memory(0x51CE84,AtLeast,1001)){foreach(cp : EUDLoopPlayer('Human', None, None)){setcurpl(cp); DisplayText("\x13\x1B방 제목에서 배속 옵션을 제거해 주십시오.\n\x13\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오."); SetMemory(0xCDDDCDDC,SetTo,1);}}
+	
 sca.Init();
 }
 function afterTriggerExec(){
@@ -152,8 +156,6 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(PlayTime)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(PlayTime2)+focus,0);
 Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(CreditAddSC)+focus,0);
-Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(LV5Cool)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(BanFlag2)+focus,0);
@@ -187,26 +189,6 @@ Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(CSTotalEper4)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(CSDPSLV)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed1)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed2)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed3)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed4)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed5)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed6)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed7)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed8)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed9)+focus,0);
-Asm_Arrptr+=1;
-SetDeaths(Asm_Arrptr,SetTo,EPD(RandomSeed10)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(StatTotalEPerEx2)+focus,0);
 Asm_Arrptr+=1;
@@ -294,6 +276,22 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(CSX_LV3Incm)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(PETicket2)+focus,0);
 Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FXPer48)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FMin)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(WeekCheck)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FirstRewardLim2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(TimeAttackScore50)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItemRank)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(SellTicket64)+focus,0);
+Asm_Arrptr+=1;
+
+
 
 
 SetMemory(5830260,SetTo,0);	
@@ -318,7 +316,7 @@ function beforeTriggerExec(){
 	
 	var GLoadCheck;
 	var CurVer;
-	if(ElapsedTime(AtLeast,90)){
+	//if(ElapsedTime(AtLeast,90)){
 	foreach(cp : EUDLoopPlayer("Human")){
 		setcurpl(cp);
 		if(Deaths(CurrentPlayer,Exactly,1,2)){
@@ -505,7 +503,6 @@ function beforeTriggerExec(){
 			PlayWAV("sound\\Bullet\\tscFir00.wav");
 			DisplayText("\x08신버전 감지! \x04해당 버전은 \x03SCArchive \x07지원이 \x04추후 \x08종료\x04됩니다. 현재 저장은 정상적으로 됩니다.");
 		}
-
 		}
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,8);
@@ -525,7 +522,7 @@ function beforeTriggerExec(){
 		}
 		//48번유닛은 칭호사용가능 여부 전달인자
 		if(<?ChatEvent("cp","@보유칭호")?>){
-			if(MapMakerFlag[cp]==1){
+			if(MapMakerFlag[cp]>=1){
 			DisplayText("\x07『 \x03@칭호 1 \x04: \x07[\x03M\x04ap\x10 M\x04aker\x07] \x07』");
 			}
 			else if(TesterFlag[cp]&1){
@@ -583,6 +580,12 @@ function beforeTriggerExec(){
 			DisplayText("\x07『 \x03@칭호 5 \x04: \x08없음 \x07』");
 			}
 			
+			if(DeathsX(cp,Exactly,28*65536,48,0xFF0000)){//28일 출석완료시 칭호사용가능
+			DisplayText("\x07『 \x03@칭호 6 \x04: \x07[\x11S\x04eason \x0F3 \x07P\x04layer\x07]\x08 \x07』");
+			}
+			else{
+			DisplayText("\x07『 \x03@칭호 6 \x04: \x08없음 \x07』");
+			}
 		}
 		
 		
@@ -593,7 +596,7 @@ function beforeTriggerExec(){
 		}
 		
 		if(<?ChatEvent("cp","@칭호 1")?>){
-			if(MapMakerFlag[cp]==1||TesterFlag[cp]&1){//맵메이커 or 테스터
+			if(MapMakerFlag[cp]>=1||TesterFlag[cp]&1){//맵메이커 or 테스터
 				f_eprintln("\x03칭호\x04가 \x071 \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,1,49);
 					SetDeaths(CurrentPlayer,SetTo,1,50);
@@ -656,9 +659,22 @@ function beforeTriggerExec(){
 		}
 			
 			
+		if(<?ChatEvent("cp","@칭호 6")?>){
+			if(DeathsX(cp,Exactly,28*65536,48,0xFF0000)){//출석칭호
+				f_eprintln("\x03칭호\x04가 \x076 \x04번으로 변경되었습니다.");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+					SetDeaths(CurrentPlayer,SetTo,6,50);
+					Rankst[cp] = RankTitle[cp] % 10;
+			}
+			else{
+				f_eprintln("\x03칭호\x04사용 권한이 없습니다..");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+			}
+		}
+		
 		if(Deaths(cp,AtLeast,1,50)){
 			if(Deaths(cp,Exactly,1,50)){
-				if(MapMakerFlag[cp]==1){
+				if(MapMakerFlag[cp]>=1){
 					SetPNamef(cp,"\x07[\x03M\x04ap\x10 M\x04aker\x07] {:c}{:n}",cp,cp);
 				}
 				else if (TesterFlag[cp]&1) {
@@ -708,10 +724,15 @@ function beforeTriggerExec(){
 				SetPNamef(cp,"\x07[\x11S\x04eason \x022 \x1FT\x04ester\x07] {:c}{:n}",cp,cp);
 					}
 			}
+			else if(Deaths(cp,Exactly,6,50)){
+				if( DeathsX(cp,Exactly,28*65536,48,0xFF0000)){
+				SetPNamef(cp,"\x07[\x11S\x04eason \x0F3 \x07P\x04layer\x07] {:c}{:n}",cp,cp);
+					}
+			}
 		
 		}
 		
 	}
 	
-	}
+	//}
 }
