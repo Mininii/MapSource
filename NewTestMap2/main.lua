@@ -40,20 +40,22 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0420"
+VerText = "\x19ver\x07. \x043\x07.\x0422"
 
-TestSet(0)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 13
+	TestSpeedNum = 1
 	SpeedTestMode = 0
 	X3Mode = 0
+	CreatorCheatMode = 1
 else
 	
+CreatorCheatMode = 0
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 31
+LimitVer = 33
 StatVer = 14
 StatVer2 = 4
 EUDTurbo(FP)

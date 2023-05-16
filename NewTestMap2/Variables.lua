@@ -839,8 +839,8 @@ elseif Limit == 1 then
 		{80,"1100000"},
 		{57,"9300000"},
 		{72,"34000000"},
-		{77,"63222"},
-		{104,"322322"},
+		{77,"6322"},
+		{104,"32232"},
 	}--{,""},--보스 건물 아이디, DPM 요구수치
 else
 	BossArr = {
@@ -1041,6 +1041,16 @@ FirstReward4 = {
 --	Cost_FBrSh = 1000
 
 --	CreateCostData(Max,SFunc)
+
+
+	PLocPos = {672,
+	1600,
+	2560,
+	3520,
+	4448,
+	5376,
+	6304}
+	PLocPos = f_GetFileArrptr(FP,PLocPos,4,1)
 
 
 

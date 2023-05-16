@@ -194,7 +194,7 @@ function TBL()
 	StrDesignX("\x04울릉도에서 뱃길로 200리 정도 떨어져 있다.").."\n"..
 	StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
 	CIfXEnd()
-	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,5,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간마다 0.1%씩 서서히 감소합니다."), 4)},{preserved})
+	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x1C44강\x04~\x0247강 \x04유닛의 강화 확률은 인게임 1시간 : 0.1% 비율로 서서히 감소합니다."), 4)},{preserved})
 	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08주의 \x04: 유료 자판기는 유닛 1기 소환시마다 \x08구입 티켓 1개\x04가 \x08소모\x04됩니다."), 4)})
 	
 	

@@ -54,7 +54,7 @@ EXPArr = {}
     mw3 = 6
     cci=0
     
-for i = 1, 300001 do
+for i = 1, 322323 do
    -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
     mw=mw+mw3
@@ -71,7 +71,7 @@ to = 0
 
 local Fileptr = io.open("C:\\Temp\\expdata1.txt", "wb")
 local Fileptr2 = io.open("C:\\Temp\\expdata_dp1.txt", "wb")
-for i = 1, 300001 do
+for i = 1, 322323 do
     local ex = EXPArr[i]
     to = to + ex
     local idx = (i-1)*4

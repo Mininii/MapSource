@@ -123,7 +123,7 @@ iTblJump = def_sIndex()
 
 	T_YY = 2023
 	T_MM = 05
-	T_DD = 16
+	T_DD = 18
 	T_HH = 00
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }

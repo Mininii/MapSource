@@ -1093,21 +1093,7 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP,{CV(iv.E43[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 43-1), Add, 10),SubV(iv.E43[i+1], 10)},{preserved})
 	TriggerX(FP,{CV(iv.E44[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 44-1), Add, 10),SubV(iv.E44[i+1], 10)},{preserved})
 	--강화성공한 유닛 생성하기(캔낫씹힘방지)
-	for j, k in pairs(LevelUnitArr) do
-		if Limit == 1 then
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-		else
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-			CreateUnitStacked({Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], k[1]-1), AtLeast, 1)}, 1, k[2], 50+i,80+i, i, {SetCVAar(VArr(GetUnitVArr[i+1], k[1]-1), Subtract, 1)})
-		end
-	end
+	
 
 
 	CIf(FP,{TTNVar(PUnitCurLevel[i+1],NotSame,PUnitClass[i+1])})
@@ -1161,38 +1147,6 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	CallTrigger(FP,Call_BtnInit,{})
 
 	
-
-	local AutoEnable = {}
-	for j, k in pairs(LevelUnitArr) do
-		table.insert(AutoEnable, SetMemX(Arr(AutoEnchArr2,((j-1)*7)+i), SetTo, 1))
-		Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
-		--CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
-		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
-		--if SpeedTestMode == 0 then
-		--	TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		--	TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0)}, {preserved}) 
-		--end
-		--TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
-		--CIfEnd()
-
---		--CIf(FP,MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1))
-		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
-		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0)}, {preserved})
-		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
-		--CIfEnd()
-	end
-	CallTrigger(FP, Call_AutoEnch)
-	if SpeedTestMode == 1 then
-		local spt ={}
-		for j = 1, 39 do
-			table.insert(spt,SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 1))
-		end
-		f_LAdd(FP, Money[i+1], Money[i+1], "1500")
-		DoActions2X(FP, {
-			SetV(AutoBuyCode[i+1],1),spt
-		})
-	end
 
 
 	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})}) -- 자동구매 관리
@@ -1598,7 +1552,6 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+13, AtLeast, 91)},{SetMemoryB(0x58F32C+(i*15)+13, SetTo, 90)},{preserved})--뎀지 오버플로우 방지
 
-	CIf(FP,{Bring(i,AtLeast,1,"Men",8+i)},{}) --  유닛 강화시도하기. 39강 이하유닛
 	CMov(FP,BreakShield,TotalBreakShield[i+1])
 	CMov(FP,GEper,TotalEPer[i+1])
 	CMov(FP,GEper2,TotalEPer2[i+1])
@@ -1607,14 +1560,34 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	CAdd(FP,GEper4,TotalEPer2[i+1])
 	CAdd(FP,GEper4,TotalEPer3[i+1])
 	CAdd(FP,GEper4,TotalEPer4[i+1])
-	f_LMov(FP,TempEXPW2,"0",nil,nil,1)
-	CallTriggerX(FP, Call_EnchUnit,{})
-	CIfEnd()
-	CIf(FP,{Bring(i,AtLeast,1,"Men",73+i)},{}) --  유닛 판매시도하기
 
-		CallTriggerX(FP, Call_SellUnit,{})
-		
+	
+
+	
+	local AutoEnable = {}
+	for j, k in pairs(LevelUnitArr) do
+		table.insert(AutoEnable, SetMemX(Arr(AutoEnchArr2,((j-1)*7)+i), SetTo, 1))
+		Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
+		--CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
+		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
+		--if SpeedTestMode == 0 then
+		--	TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		--	TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 0)}, {preserved}) 
+		--end
+		--TriggerX(FP, {MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 8+i)}, {preserved})
+		--CIfEnd()
+
+--		--CIf(FP,MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1))
+		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
+		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0),LocalPlayerID(i)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0)}, {preserved})
+		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
+		--CIfEnd()
+	end
+	CallTrigger(FP, Call_LevelUnitFunc)
 	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
+	
+
 	CIf(FP,{TTNWar(TempEXPW,AtLeast,"1")})
 		f_LAdd(FP, PEXP[i+1], PEXP[i+1],TempEXPW)
 		CIf(FP,{CV(Stat_EXPIncome[i+1],1,AtLeast)})
@@ -1623,7 +1596,8 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 			f_LMod(FP, PEXP2[i+1],PEXP2[i+1], "10")
 		CIfEnd()
 	CIfEnd()
-	CIfEnd()
+
+
 	CallTriggerX(FP, Call_Shop,{Bring(i, AtLeast, 1, 15, 112)})
 
 	CIf(FP,LocalPlayerID(i),{SetCD(StatEffLoc,0),SetV(ResetStatLoc,0)}) -- CAPrint에 전송할 값들
@@ -1681,7 +1655,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	if Limit == 0 then
 		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	else
-		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
+		NIfX(FP,{CV(iv.MapMakerFlag[i+1],1,AtLeast),CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	end
 	
 	--NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
