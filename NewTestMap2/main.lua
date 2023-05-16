@@ -49,6 +49,7 @@ if Limit == 1 then
 	SpeedTestMode = 0
 	X3Mode = 0
 	CreatorCheatMode = 1
+	CreatorCheatModeMul = 10
 else
 	
 CreatorCheatMode = 0
