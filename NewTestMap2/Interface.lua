@@ -1560,7 +1560,11 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	CAdd(FP,GEper4,TotalEPer2[i+1])
 	CAdd(FP,GEper4,TotalEPer3[i+1])
 	CAdd(FP,GEper4,TotalEPer4[i+1])
-
+	CMov(FP,GetXEper44,iv.XEPer44[i+1])
+	CMov(FP,GetXEper45,iv.XEPer45[i+1])
+	CMov(FP,GetXEper46,iv.XEPer46[i+1])
+	CMov(FP,GetXEper47,iv.XEPer47[i+1])
+	CMov(FP,GetXEper48,iv.XEPer48[i+1])
 	
 
 	
@@ -1583,6 +1587,24 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0)}, {preserved})
 		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		--CIfEnd()
+	end
+	--table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
+	for j,k in pairs(LevelUnitArr) do
+		local UID = k[2]
+		local Per = k[3]
+		local Exp = k[4]
+		CallTriggerX(FP, Call_AutoEnch,{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
+		CallTriggerX(FP, Call_AutoSell,{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
+		
+		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], 42-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CI,j-1),SetV(PerV,Per)})
+		CMovX(FP,GetCreateUnit,VArrX(GetUnitVArr[i+1], VI, VI4),nil,nil,nil,1)
+
+
+		CallTrigger(FP, Call_GetUnit)
+		
+		CMovX(FP,VArrX(GetUnitVArr[i+1], VI, VI4),GetCreateUnit,Subtract,nil,nil,1)
+
+		CIfEnd()
 	end
 	CallTrigger(FP, Call_LevelUnitFunc)
 	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})

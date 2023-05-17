@@ -1873,90 +1873,6 @@ CIfEnd()
 
 NJumpEnd(FP, SellJump)
 
-
-
-	
-		
-	CIf(FP,{TMemory(_TMem(ArrX(AutoEnchArr,CJ)),Exactly,1)})
-		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoEnchArr,CJ)), SetTo, 0)}) -- 자동강화 조건 충족안됨
-			CallTriggerX(FP,Call_Print13CP,{})
-			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		CElseX({TOrder(UID, GCP, _Add(GCP,36), Move, _Add(GCP,8))})--충족됨
-		CIfXEnd()
-	CIfEnd()
-
-	CIf(FP,{TMemory(_TMem(ArrX(AutoSellArr,CJ)),Exactly,1)})
-		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0)}) -- 자동판매 조건 충족안됨
-			CallTriggerX(FP,Call_Print13CP,{})
-			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		CElseX({TOrder(UID, GCP, _Add(GCP,36), Move, _Add(GCP,73))})--충족됨
-		CIfXEnd()
-	CIfEnd()
-
-
-	for i = 0, 6 do
-		CIf(FP,{CV(GCP,i)})
-		CMovX(FP,GetCreateUnit,VArrX(GetUnitVArr[i+1], VI, VI4),nil,nil,nil,1)
-		CIfEnd()
-	end
-	CIf(FP,{CV(GetCreateUnit,1,AtLeast)})
-
-		NIfX(FP,{TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})
-			CMov(FP,ECW,GetCreateUnit)
-			NIfX(FP,{CV(CI,38,AtMost)})
-
-				CallTrigger(FP, Call_Enchant)
-				
-
-
-
-				
-			NElseX()
-			AutoEnchJump = def_sIndex()
-
-				CIfX(FP,{VRange(CI, 39, 42)})
-				CSub(FP,XEper,GEper4,Per)
-				CElseX()
-				CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,Per))},1)
-				CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,Per))},1)
-				CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,Per))},1)
-				CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,Per))},1)
-				CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,Per))},1)
-				CTrigger(FP, CV(CI,48), {SetV(XEper,Per)},1)
-				CIfXEnd()
-				CIf(FP,{VRange(CI, 43, 47)})
-				CiSub(FP,XEper,iv.XEPerM)
-				TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
-				CIfEnd()
-				NJump(FP, AutoEnchJump, CV(XEper,0))
-				CallTrigger(FP, Call_Enchant2)
-			NIfXEnd()
-		NElseX()
-			NJumpEnd(FP, AutoEnchJump)
-			CDoActions(FP, {
-				TSetNVar(SAmount,SetTo,GetCreateUnit),
-				TSetNVar(SUnitID,SetTo,UID),
-				TSetNVar(SLocation,SetTo,GCP+50),
-				TSetNVar(DLocation,SetTo,GCP+80),
-				TSetNVar(SPlayer,SetTo,GCP),
-			})
-			CallTrigger(FP, CreateStackedUnit)
-		NIfXEnd()
-
-		for i = 0, 6 do
-			CIf(FP,{CV(GCP,i)})
-			CMovX(FP,VArrX(GetUnitVArr[i+1], VI, VI4),GetCreateUnit,Subtract,nil,nil,1)
-			CIfEnd()
-		end
-	CIfEnd()
-
-
-
-
-
-
-
-
 	CAdd(FP,CJ,7)
 	CForEnd()
 
@@ -2104,5 +2020,74 @@ f_LMovX(FP,WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4),GetCreditData,SetTo,
 
 
 CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
+	SetCallEnd()
+
+	Call_AutoEnch = SetCallForward()
+	UIDV = CreateVar(FP)
+	SetCall(FP)
+	if SpeedTestMode == 0 then
+		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoEnchArr,CJ)), SetTo, 0)}) -- 자동강화 조건 충족안됨
+			CallTriggerX(FP,Call_Print13CP,{})
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		CElseX({TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,8))})--충족됨
+		CIfXEnd()
+	else
+		CDoActions(FP,{TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,8))})
+	end
+
+	SetCallEnd()
+	Call_AutoSell = SetCallForward()
+	SetCall(FP)
+
+	if SpeedTestMode == 0 then
+		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0)}) -- 자동판매 조건 충족안됨
+			CallTriggerX(FP,Call_Print13CP,{})
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
+		CElseX({TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,73))})--충족됨
+		CIfXEnd()
+	else
+		CDoActions(FP,{TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,73))})
+	end
+	SetCallEnd()
+
+	Call_GetUnit = SetCallForward()
+	SetCall(FP)
+	PerV = CreateVar(FP)
+		NIfX(FP,{TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})
+		CMov(FP,ECW,GetCreateUnit)
+		NIfX(FP,{CV(CI,38,AtMost)})
+			CallTrigger(FP, Call_Enchant)
+		NElseX()
+		AutoEnchJump = def_sIndex()
+
+			CIfX(FP,{VRange(CI, 39, 42)})
+			CSub(FP,XEper,GEper4,PerV)
+			CElseX()
+			CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,PerV))},1)
+			CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,PerV))},1)
+			CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,PerV))},1)
+			CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,PerV))},1)
+			CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,PerV))},1)
+			CTrigger(FP, CV(CI,48), {SetV(XEper,PerV)},1)
+			CIfXEnd()
+			CIf(FP,{VRange(CI, 43, 47)})
+			CiSub(FP,XEper,iv.XEPerM)
+			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
+			CIfEnd()
+			NJump(FP, AutoEnchJump, CV(XEper,0))
+			CallTrigger(FP, Call_Enchant2)
+		NIfXEnd()
+	NElseX()
+		NJumpEnd(FP, AutoEnchJump)
+		CDoActions(FP, {
+			TSetNVar(SAmount,SetTo,GetCreateUnit),
+			TSetNVar(SUnitID,SetTo,UIDV),
+			TSetNVar(SLocation,SetTo,GCP+50),
+			TSetNVar(DLocation,SetTo,GCP+80),
+			TSetNVar(SPlayer,SetTo,GCP),
+		})
+		CallTrigger(FP, CreateStackedUnit)
+	NIfXEnd()
+
 	SetCallEnd()
 end
