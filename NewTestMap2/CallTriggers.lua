@@ -1612,11 +1612,14 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)
 	f_LMovX(FP, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),GetMoney,nil,nil,nil,1)
 	SetCallEnd()
-	local GetXEper44 = CreateVar(FP)
-	local GetXEper45 = CreateVar(FP)
-	local GetXEper46 = CreateVar(FP)
-	local GetXEper47 = CreateVar(FP)
-	local GetXEper48 = CreateVar(FP)
+
+	
+
+	GetXEper44 = CreateVar(FP)
+	GetXEper45 = CreateVar(FP)
+	GetXEper46 = CreateVar(FP)
+	GetXEper47 = CreateVar(FP)
+	GetXEper48 = CreateVar(FP)
 	local UID = CreateVar(FP)
 	local Per = CreateVar(FP)
 	local VI = CreateVar(FP)
@@ -1627,45 +1630,16 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	local EXP = CreateVar(FP)
 
 
-	
 
-	Call_LevelUnitFunc = SetCallForward()
+	Call_EnchFunc = SetCallForward()
 	SetCall(FP)
-	local CJ = CreateVar(FP)
-	CMov(FP,CJ,GCP)
-	CMovX(FP,GetXEper44,VArrX(GetVArray(iv.XEPer44[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	CMovX(FP,GetXEper45,VArrX(GetVArray(iv.XEPer45[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	CMovX(FP,GetXEper46,VArrX(GetVArray(iv.XEPer46[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	CMovX(FP,GetXEper47,VArrX(GetVArray(iv.XEPer47[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	CMovX(FP,GetXEper48,VArrX(GetVArray(iv.XEPer48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
-	CMovX(FP,GetLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	CMovX(FP,GetMissionData,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),nil,nil,nil,1)
-	f_LMov(FP,TempEXPW,"0",nil,nil,1)
-	CMov(FP,ECP,GCP,nil,nil,1)
-	local EnchJump = def_sIndex()
-	local SellJump = def_sIndex()
-	local EnchLock = CreateVar(FP)
-	local SellLock = CreateVar(FP)
-	CMov(FP,EnchLock,0)
-	CMov(FP,SellLock,0)
-	CTrigger(FP, {TBring(GCP, Exactly, 0, "Men", GCP+8)}, {SetV(EnchLock,1)},1)
-	CTrigger(FP, {TBring(GCP, Exactly, 0, "Men", GCP+73)}, {SetV(SellLock,1)},1)
-
 	local CI = CFor(FP,0,#LevelUnitArr,1)
-	
 	ConvertVArr(FP, VI, VI4, CI, #LevelUnitArr)
-	local GetCreateUnit = CreateVar(FP)
 	CMovX(FP,UID,VArrX(LevelDataArr,VI,VI4),nil,nil,nil,1)
 	CMovX(FP,Per,VArrX(PerDataArr,VI,VI4),nil,nil,nil,1)
 	CMov(FP,UEper,Per)
 	CMov(FP,ELevelB,CI)
-	CMovX(FP,EXP,VArrX(ExpDataArr,VI,VI4),nil,nil,nil,1)
 	
-	
-	NJump(FP, EnchJump, {CV(EnchLock,1)})
-
-
 	CIf(FP,VRange(CI, 0, 38))
 	if Limit == 1 then
 		if CreatorCheatMode == 1 then
@@ -1814,72 +1788,75 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIfXEnd()
 	CIfEnd()
 	CIfEnd()
+	CForEnd()
 
-	
+	SetCallEnd()
+	Call_SellFunc = SetCallForward()
+	SetCall(FP)
+	CJ = CreateVar(FP)
+	CMov(FP,CJ,GCP)
+	f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
+	CMovX(FP,GetLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	f_LMov(FP,TempEXPW,"0",nil,nil,1)
+	local CI = CFor(FP,0,#LevelUnitArr,1)
+	ConvertVArr(FP, VI, VI4, CI, #LevelUnitArr)
+	CMovX(FP,UID,VArrX(LevelDataArr,VI,VI4),nil,nil,nil,1)
+	CMov(FP,ELevelB,CI)
+	CMovX(FP,EXP,VArrX(ExpDataArr,VI,VI4),nil,nil,nil,1)
 
-	NJumpEnd(FP, EnchJump)
-	NJump(FP, SellJump, {CV(SellLock,1)})
-
-CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,73))})
-	CIfX(FP,{CV(EXP,1,AtLeast)})
-		CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
-		CElseX()
-			CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(1, UID, GCP+73, GCP)})--판매권이필요없어요
-				f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
-				CTrigger(FP, {CV(CI,14)}, {SetVX(GetMissionData,32,32)},1)
-			CElseX()--판매권이필요행
-				CIfX(FP, {TTNWar(GetSellTicket,AtMost,"0")}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
-				CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
-				f_LSub(FP, GetSellTicket, GetSellTicket, "1")
-				f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
+	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,73))})
+		CIfX(FP,{CV(EXP,1,AtLeast)})
+			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
+			CElseX()
+				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(1, UID, GCP+73, GCP)})--판매권이필요없어요
+					f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
+					CTrigger(FP, {CV(CI,14)}, {SetVX(GetMissionData,32,32)},1)
+				CElseX()--판매권이필요행
+					CIfX(FP, {TTNWar(GetSellTicket,AtMost,"0")}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
+					CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
+					f_LSub(FP, GetSellTicket, GetSellTicket, "1")
+					f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
+					CIfXEnd()
 				CIfXEnd()
 			CIfXEnd()
+		CElseIfX(VRange(CI,44, 47))
+			CIfX(FP, {TTNWar(GetSellTicket,AtMost,"9999")},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
+			CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
+			f_LSub(FP, GetSellTicket, GetSellTicket, "10000")
+			CIf(FP, {CV(CI,44)},{})
+			CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4096,SetTo,nil,4096,1)
+			CMovX(FP,VArrX(GetVArray(iv.S45[1], 7),VArrI,VArrI4),1,Add)
+			CIfEnd()
+			CIf(FP, {CV(CI,45)})
+			CMovX(FP,VArrX(GetVArray(iv.S46[1], 7),VArrI,VArrI4),1,Add)
+			CIfEnd()
+			CIf(FP, {CV(CI,46)})
+			CMovX(FP,VArrX(GetVArray(iv.S47[1], 7),VArrI,VArrI4),1,Add)
+			CIfEnd()
+			CIf(FP, {CV(CI,47)})
+			CMovX(FP,VArrX(GetVArray(iv.S48[1], 7),VArrI,VArrI4),1,Add)
+			CIfEnd()
+			CMov(FP,ECP,GCP)
+			CMov(FP,GaLv,CI,1)
+			CallTrigger(FP, Call_Gacha)
+			CIfXEnd()
+		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)})
 		CIfXEnd()
-	CElseIfX(VRange(CI,44, 47))
-		CIfX(FP, {TTNWar(GetSellTicket,AtMost,"9999")},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
-		CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
-		f_LSub(FP, GetSellTicket, GetSellTicket, "10000")
-		CIf(FP, {CV(CI,44)},{SetVX(GetMissionData, 4096, 4096)})
-		CMovX(FP,VArrX(GetVArray(iv.S45[1], 7),VArrI,VArrI4),1,Add)
-		CIfEnd()
-		CIf(FP, {CV(CI,45)})
-		CMovX(FP,VArrX(GetVArray(iv.S46[1], 7),VArrI,VArrI4),1,Add)
-		CIfEnd()
-		CIf(FP, {CV(CI,46)})
-		CMovX(FP,VArrX(GetVArray(iv.S47[1], 7),VArrI,VArrI4),1,Add)
-		CIfEnd()
-		CIf(FP, {CV(CI,47)})
-		CMovX(FP,VArrX(GetVArray(iv.S48[1], 7),VArrI,VArrI4),1,Add)
-		CIfEnd()
-		CMov(FP,ECP,GCP)
-		CMov(FP,GaLv,CI,1)
-		CallTrigger(FP, Call_Gacha)
-		CIfXEnd()
-	CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)})
-	CIfXEnd()
-CIfEnd()
-
-
-
-
-
-
-
-
-
-
-
-
-
-NJumpEnd(FP, SellJump)
-
+	CIfEnd()
 	CAdd(FP,CJ,7)
 	CForEnd()
 
+	
+
 	f_LMovX(FP,WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),GetSellTicket,SetTo,nil,nil,1)
-	CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),GetMissionData,SetTo,nil,nil,1)
 
 	SetCallEnd()
+
+
+
+
+	
+
 	Call_Shop = SetCallForward()
 	local GetMulOp = CreateVar(FP)
 	local GetOldTicket = CreateVar(FP)
@@ -2050,6 +2027,7 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	end
 	SetCallEnd()
 
+	GetCreateUnit = CreateVar(FP)
 	Call_GetUnit = SetCallForward()
 	SetCall(FP)
 	PerV = CreateVar(FP)

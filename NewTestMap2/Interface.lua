@@ -1596,17 +1596,18 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		CallTriggerX(FP, Call_AutoEnch,{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
 		CallTriggerX(FP, Call_AutoSell,{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
 		
-		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], 42-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CI,j-1),SetV(PerV,Per)})
-		CMovX(FP,GetCreateUnit,VArrX(GetUnitVArr[i+1], VI, VI4),nil,nil,nil,1)
+		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CI,j-1),SetV(PerV,Per)})
+		CMovX(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,nil,1)
 
 
 		CallTrigger(FP, Call_GetUnit)
 		
-		CMovX(FP,VArrX(GetUnitVArr[i+1], VI, VI4),GetCreateUnit,Subtract,nil,nil,1)
+		CMovX(FP,VArr(GetUnitVArr[i+1], j-1),GetCreateUnit,Subtract,nil,nil,1)
 
 		CIfEnd()
 	end
-	CallTrigger(FP, Call_LevelUnitFunc)
+	CallTriggerX(FP, Call_EnchFunc,{Bring(i,AtLeast,1,"Men",8+i)},{SetV(ECP,i)})
+	CallTriggerX(FP, Call_SellFunc,{Bring(i,AtLeast,1,"Men",73+i)},{SetV(ECP,i)})
 	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})
 	
 
