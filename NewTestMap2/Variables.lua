@@ -633,6 +633,9 @@ end
 	
 	EXPArr = f_GetFileptr(FP, "expdata", 1)
 	EXPArr_dp = f_GetFileptr(FP, "expdata_dp", 1)
+	YearData = f_GetFileptr(FP, "YearData", 1)
+
+	
 	--SRTable = f_GetFileArrptr(FP,SRTable,4,1)
 
 	LevelUnitArr = {} -- 모든 강화 유닛 저장 테이블. 각 1~4 인덱스는 Level,UnitID,Percent,Exp
@@ -1055,6 +1058,20 @@ FirstReward4 = {
 	PLocPos = f_GetFileArrptr(FP,PLocPos,4,1)
 
 
+	MonthData = {
+		0,
+		31,
+		31+28,
+		31+28+31,
+		31+28+31+30,
+		31+28+31+30+31,
+		31+28+31+30+31+30,
+		31+28+31+30+31+30+31,
+		31+28+31+30+31+30+31+31,
+		31+28+31+30+31+30+31+31+30,
+		31+28+31+30+31+30+31+31+30+31,
+		31+28+31+30+31+30+31+31+30+31+30}
+	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
 
 	--그외 남는 확률값은 꽝 - 기본 조각 지급(각 1,2,5,10개)
 end

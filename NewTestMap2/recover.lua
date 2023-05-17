@@ -43,7 +43,7 @@ function SaveFileArr(FileArray,ElementSize,FileName)
 	io.close(Fileptr)
 	return size
 end
-
+--[[
 EXPArr = {}
 --	for i = 1, 100000 do
 --        local XI = 3
@@ -139,7 +139,40 @@ SaveFileArr(EXPArr4_2,4,"expdata_dp")
     end
 
     exp2(100000)
---    print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
+
+]]
+function leafyear(i)
+    if i % 4 == 0 then    --           # 4로 나누어 떨어지는지 확인
+        if i % 100 == 0 then   --      # 100으로 나누어 떨어지는지 확인
+            if i % 400 == 0 then    -- # 400으로 나누어 떨어지는지 확인
+                return true
+            end    --# 4, 100, 400으로 나누어 떨어지면 윤년
+        else
+            return true -- # 4로 나누어 떨어지고, 100으로 나누어 떨어지지 않으면 윤년
+        end
+    end
+    return false
+end
+local Fileptr = io.open("C:\\Temp\\yeararr.txt", "wb")
+    YearArr = {0}
+    tot = 0
+    for i = 1, 99999 do
+        if leafyear(i) == true then
+            tot = tot+ 366
+            YearArr[i+1] = tot
+        else
+            tot = tot+ 365
+            YearArr[i+1] = tot
+        end
+        Fileptr:write(i.."  "..tot.."\n")
+    end
+
+    SaveFileArr(YearArr,4,"YearData")
+    
+
+
+
+    --print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
     --복구가 완료되었습니다. 하지만 현재 게임중일 경우 저장데이터가 덮어써지므로 복구가 되지 않습니다. 확인부탁드립니다.
 --    math.randomseed( os.time() )

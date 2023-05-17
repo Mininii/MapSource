@@ -8,8 +8,11 @@ function Operator()
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
 	Trigger2X(FP, {CV(iv.Time4,60000,AtLeast)}, {SetV(iv.Time4, 0),SetMemory(0x58F504, SetTo, 0x50000),}, {preserved})
 
-	if TestStart == 1 then
+	if Limit == 1 then
 		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
+	end
+	if Limit == 1 then
+		TriggerX(FP, {KeyPress("Y","Down")}, {SetV(SCA.WeekV,0)}, {preserved})
 	end
 	for i = 0,6 do
 		TriggerX(FP, {Deaths(i, AtLeast, 1, 49)}, {SetDeaths(i,SetTo,0,49),SetV(DPErT[i+1],24*10)},{preserved})
@@ -21,6 +24,11 @@ function Operator()
 	SetCD(SCA.GlobalLoadFlag,0),
 	SetV(SCA.GlobalVarArr[1],0),
 	SetV(SCA.MonthV,0),
+	SetV(SCA.YearV,0),
+	SetV(SCA.HourV,0),
+	SetV(SCA.DayV,0),
+	SetV(SCA.WeekV,0),
+	SetV(SCA.MinV,0),
 	SetMemory(SCA.Month, SetTo,0),
 	SetMemory(SCA.GlobalData[1],SetTo,0)}, {preserved})
 
@@ -74,13 +82,19 @@ function Operator()
 	SetV(SCA.HourV,0),
 	SetV(SCA.DayV,0),
 	SetV(SCA.WeekV,0),
-	SetV(SCA.MinV,0),SetCD(SCA.GlobalCheck2,1)
+	SetV(SCA.MinV,0),
+	SetCD(SCA.GlobalCheck2,1)
 })
 	f_Read(FP, SCA.Month, SCA.MonthV)
 	f_Read(FP, SCA.Year, SCA.YearV)
 	f_Read(FP, SCA.Hour, SCA.HourV)
-	f_Read(FP, SCA.Day, SCA.DayV)
-	f_Read(FP, SCA.Week, SCA.WeekV)
+	if Limit == 1 then
+		CMov(FP,SCA.WeekV,5+0x32232232)
+		CMov(FP,SCA.DayV,19+0x32232232)
+	else
+		f_Read(FP, SCA.Day, SCA.DayV)
+		f_Read(FP, SCA.Week, SCA.WeekV)
+	end
 	f_Read(FP, SCA.Min, SCA.MinV)
 	DoActionsX(FP, {
 		SubV(SCA.MonthV,0x32232232),
@@ -118,6 +132,11 @@ function Operator()
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),
 		SetV(SCA.MonthV,0),
+		SetV(SCA.YearV,0),
+		SetV(SCA.HourV,0),
+		SetV(SCA.DayV,0),
+		SetV(SCA.WeekV,0),
+		SetV(SCA.MinV,0),
 		SetMemory(SCA.Month, SetTo,0),
 		SetMemory(SCA.GlobalData[1],SetTo,0)
 	})
@@ -129,9 +148,9 @@ function Operator()
 	SCA.LoadJump = def_sIndex()
 	CIf(FP,{CD(SCA.GlobalCheck,3)},{SetCD(SCA.Timer,0)})
 	if TestStart == 1 then
-		CIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535)})
+		CIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),VRange(SCA.WeekV, 1, 7)})
 	else
-		CIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535)})
+		CIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),VRange(SCA.WeekV, 1, 7)})
 	end
 	CElseX()
 	DoActions2X(FP, {
@@ -140,6 +159,11 @@ function Operator()
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),
 		SetV(SCA.MonthV,0),
+		SetV(SCA.YearV,0),
+		SetV(SCA.HourV,0),
+		SetV(SCA.DayV,0),
+		SetV(SCA.WeekV,0),
+		SetV(SCA.MinV,0),
 		SetMemory(SCA.Month, SetTo,0),
 		SetMemory(SCA.GlobalData[1],SetTo,0),
 		SetCD(SCA.GlobalCheck2,0)

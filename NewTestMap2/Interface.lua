@@ -447,6 +447,11 @@ for i = 0, 6 do -- 각플레이어
 			CTrigger(FP, {CDX(StatTest,NBit,NBit)}, {SetCp(i),
 			DisplayExtText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),}, 1)
 		end
+		--CIf(FP,{CV(PStatVer[i+1], 14,AtMost)})
+		--	CTrigger(FP, {CV(SCA.WeekV,4),CV(iv.WeekCheck[i+1],3)}, {SetV(iv.FirstRewardLim2[i+1],0),SetV(iv.WeekCheck[i+1],SCA.WeekV),SetCp(i),
+		--	DisplayExtText(StrDesignX("\x04주간 첫 달성 보상 남은횟수가 \x07초기화\x04되었습니다. \x08사유 \x04: 주간 글로벌 데이터 버그로 인한 조치"), 4)})
+
+		--CIfEnd()
 		CIf(FP,CD(StatTest,1,AtLeast))
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]," \x07』"})
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
@@ -684,18 +689,89 @@ for i = 0, 6 do -- 각플레이어
 --\x0247강
 --\x1B48강
 	CIf(FP,CD(SCA.LoadCheckArr[i+1],2))--출석트리거는 로드해야 작동됨
-	if TestStart == 1 then
-		NIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-			CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
-	else
+--	if TestStart == 1 then
+--		NIfX(FP,{VRange(SCA.MinV,0,59),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.MinV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+--			CMov(FP,DayCheck[i+1],SCA.MinV)--날짜에 맞춰짐
+--	else
+--		NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
+--			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
+--	end
 		NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-			CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
-	end
-	--	NIfX(FP,{VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),TTOR({_TTNVar(DayCheck[i+1],NotSame,SCA.DayV),_TTNVar(MonthCheck[i+1],NotSame,SCA.MonthV),_TTNVar(YearCheck[i+1],NotSame,SCA.YearV)})},{SetDeaths(i,SetTo,1,13)})
-	--		CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
+			
+
+	local PrevDate = CreateVar(FP)
+	f_Read(FP, FArr(YearData, _Sub(YearCheck[i+1],1)), PrevDate)
+	LeafyearFlag = CreateCcode()
+	DoActionsX(FP, {SetCD(LeafyearFlag, 0)})
+	local TmpV1 =CreateVar(FP)
+	local TmpV2 =CreateVar(FP)
+	local TmpV3 =CreateVar(FP)
+	f_Mod(FP,TmpV1,YearCheck[i+1],4)
+	f_Mod(FP,TmpV2,YearCheck[i+1],100)
+	f_Mod(FP,TmpV3,YearCheck[i+1],400)
+	CIf(FP, {CV(TmpV1,0)})
+		CIfX(FP,{CV(TmpV2,0)})
+			TriggerX(FP,{CV(TmpV3,0)},{SetCD(LeafyearFlag, 1)},{preserved})
+		CElseX({SetCD(LeafyearFlag, 1)})
+		CIfXEnd()
+	CIfEnd()
+
+	CAdd(FP,PrevDate,_ReadF(FArr(MonthData, _Sub(MonthCheck[i+1],1))))
+	TriggerX(FP,{CV(MonthCheck[i+1],3,AtLeast),CD(LeafyearFlag,1)},{AddV(PrevDate,1)},{preserved})
+	CAdd(FP,PrevDate,DayCheck[i+1])
+
+
+	local NextDate = CreateVar(FP)
+	f_Read(FP, FArr(YearData, _Sub(SCA.YearV,1)), NextDate)
+	
+	f_Mod(FP,TmpV1,SCA.YearV,4)
+	f_Mod(FP,TmpV2,SCA.YearV,100)
+	f_Mod(FP,TmpV3,SCA.YearV,400)
+	CIf(FP, {CV(TmpV1,0)})
+		CIfX(FP,{CV(TmpV2,0)})
+			TriggerX(FP,{CV(TmpV3,0)},{SetCD(LeafyearFlag, 1)},{preserved})
+		CElseX({SetCD(LeafyearFlag, 1)})
+		CIfXEnd()
+	CIfEnd()
+	CAdd(FP,NextDate,_ReadF(FArr(MonthData, _Sub(SCA.MonthV,1))))
+	TriggerX(FP,{CV(SCA.MonthV,3,AtLeast),CD(LeafyearFlag,1)},{AddV(NextDate,1)},{preserved})
+	CAdd(FP,NextDate,SCA.DayV)
+
+	local TotalDate =CreateVar(FP)
+	CSub(FP,TotalDate,NextDate,PrevDate)
+
+
+	local CheckWeek = CreateVar(FP)
+	CMov(FP,CheckWeek,iv.WeekCheck[i+1])
+
+
+CMov(FP,DayCheck[i+1],SCA.DayV)--날짜에 맞춰짐
 	CMov(FP,MonthCheck[i+1],SCA.MonthV)--날짜에 맞춰짐
 	CMov(FP,YearCheck[i+1],SCA.YearV)--날짜에 맞춰짐
 	CMov(FP,iv.WeekCheck[i+1],SCA.WeekV)--날짜에 맞춰짐
+
+	if Limit == 1 then
+		DisplayPrint(i, {"\x13\x04TotalDate : ",TotalDate," PrevDate : ",PrevDate,"   NextDate : ",NextDate})
+	end
+	CIfX(FP,{CV(SCA.WeekV,4)})
+	TriggerX(FP,{},{SetCp(i),DisplayExtText(StrDesignX("\x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다. (오늘은 목요일입니다.)"), 4),SetV(iv.FirstRewardLim2[i+1],0)},{preserved})
+	CElseIfX({CV(TotalDate,1,AtLeast)})
+	
+	local ThursdayJump = def_sIndex()
+	NWhile(FP,{CV(TotalDate,1,AtLeast)})
+
+	CAdd(FP,CheckWeek,1)
+	CSub(FP,TotalDate,1)
+	NJump(FP, ThursdayJump, {CV(CheckWeek,4)},{SetCp(i),DisplayExtText(StrDesignX("\x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다.").."\n"..StrDesignX(" 오늘이 목요일은 아니지만 매주 목요일을 지날때 초기화됩니다."), 4),SetV(iv.FirstRewardLim2[i+1],0)})
+
+	TriggerX(FP, {CV(CheckWeek,8,AtLeast)}, {SetV(CheckWeek,1)}, {preserved})
+
+
+	NWhileEnd()
+	NJumpEnd(FP, ThursdayJump)
+	
+	CIfXEnd()
+
 
 	
 	--CIfX(FP,{CVX(DayCheck2[i+1],27,0xFF,AtMost),CVX(SCA.GlobalVarArr[5],1,1),CD(SCA.GlobalCheck2,1)})--시즌 1호 출석이벤트
@@ -728,9 +804,13 @@ for i = 0, 6 do -- 각플레이어
 	--5 = 금요일
 	--6 = 토요일
 	--7 = 일요일
-	TriggerX(FP,{CV(iv.WeekCheck[i+1],4)},{SetCp(i),DisplayExtText(StrDesignX("\x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다. (매주 목요일마다 초기화됨)"), 4),SetV(iv.FirstRewardLim2[i+1],0)},{preserved})
-	DoActionsX(FP,{
-		SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
+	if Limit == 0 then
+		DoActionsX(FP,{
+			SetCp(i),DisplayExtText(StrDesignX("\x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다."), 4),SetV(iv.FirstRewardLim[i+1],0)})
+	else
+		DoActionsX(FP,{
+			SetCp(i),SetV(iv.FirstRewardLim[i+1],0)})
+	end
 --	local DailyJump = def_sIndex()
 	local DailyJump2 = def_sIndex()
 --	NIfX(FP,{CVX(DayCheck2[i+1],27*0x100,0xFF00,AtMost),CVX(SCA.GlobalVarArr[5],2,2),CD(SCA.GlobalCheck2,1)})--시즌 2호 출석이벤트
@@ -757,6 +837,7 @@ for i = 0, 6 do -- 각플레이어
 --	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x100,0xFF00,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 2호 출석 이벤트를 완료 하셨습니다."), 4)})
 --	NIfXEnd()
 	
+if Limit == 0 then
 	NIfX(FP,{CVX(DayCheck2[i+1],27*0x10000,0xFF0000,AtMost),CVX(SCA.GlobalVarArr[5],4,4),CD(SCA.GlobalCheck2,1)})--시즌 3호 출석이벤트
 			NJumpEnd(FP, DailyJump2)
 			DoActionsX(FP,{
@@ -779,6 +860,30 @@ for i = 0, 6 do -- 각플레이어
 			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)}, {SetCp(i),DisplayExtText(StrDesignX("모든 출석 이벤트를 완료 하셨습니다. \x1F고생하셨습니다!"), 4)})
 	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)},{SetCp(i),DisplayExtText(StrDesignX("이미 모든 시즌 3호 출석 이벤트를 완료 하셨습니다."), 4)})
 	NIfXEnd()
+else
+	NIfX(FP,{CVX(DayCheck2[i+1],27*0x10000,0xFF0000,AtMost),CVX(SCA.GlobalVarArr[5],4,4),CD(SCA.GlobalCheck2,1)})--시즌 3호 출석이벤트
+			NJumpEnd(FP, DailyJump2)
+			DoActionsX(FP,{
+				AddV(iv.B_PFfragItem[i+1],100),
+				AddVX(DayCheck2[i+1],1*0x10000,0xFF0000),
+				SetCp(i)})
+				local TempV = CreateVar(FP)
+				local TempV2 = CreateVar(FP)
+				local TempV3 = CreateVar(FP)
+				CMov(FP,TempV3,_Mod(_rShift(DayCheck2[i+1], 16),_Mov(0x100)),nil,nil,1)
+				CMov(FP,TempV,_Mod(TempV3,7),nil,nil,1)
+				CMov(FP,TempV2,_Div(TempV3,7),nil,nil,1)
+			CIf(FP,{CV(TempV2,1,AtLeast),CV(TempV2,4,AtMost),CV(TempV,0)})
+			DoActionsX(FP, {
+				AddV(iv.AwakItem[i+1],1),
+				SetCp(i)})
+			CIfEnd()
+			CMov(FP,DV2,TempV3)
+			CallTrigger(FP,Call_DailyPrint2)
+			TriggerX(FP, {CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)}, {SetCp(i),})
+	NElseIfX({CD(SCA.GlobalCheck2,1),CVX(DayCheck2[i+1],28*0x10000,0xFF0000,AtLeast)},{SetCp(i),})
+	NIfXEnd()
+end
 	
 
 	NElseIfX({VRange(SCA.DayV,1,31),VRange(SCA.MonthV,1,12),VRange(SCA.YearV,2023,65535),})
