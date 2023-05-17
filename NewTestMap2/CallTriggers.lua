@@ -1850,7 +1850,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CElseX()
 				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(1, UID, GCP+73, GCP)})--판매권이필요없어요
 					f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
-					CTrigger(FP, {CV(CI,14)}, {SetVX(GetMissionData,32,32)},1)
+					CIf(FP, {CV(CI,14)})
+					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
+					CIfEnd()
 				CElseX()--판매권이필요행
 					CIfX(FP, {TTNWar(GetSellTicket,AtMost,"0")}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 					CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})

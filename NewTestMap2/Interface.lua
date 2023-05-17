@@ -192,7 +192,7 @@ function Interface()
 		{{MemX(Arr(AutoEnchArr2,((2-1)*7)+i), AtLeast, 1)},{1000},"2강 유닛 만들기"},
 		{{CV(Income[i+1],12,AtLeast)},{2000},"사냥터에 유닛 12기 채우기"},
 		{{MemX(Arr(AutoEnchArr2,((11-1)*7)+i), AtLeast, 1)},{1500},"11강 유닛 만들기"},
-		{{MemX(Arr(AutoEnchArr2,((2-1)*7)+i), AtLeast, 1)},{2500},"15강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((15-1)*7)+i), AtLeast, 1)},{2500},"15강 유닛 만들기"},
 		{{NWar(Money[i+1], AtLeast, "5000000")},{1000},"500만원 모으기"},
 		{{CV(PBossLV[i+1],1,AtLeast)},{1500},"개인보스 LV.1 처치하기"},
 		{{CVX(MissionV[i+1],32,32)},{1000,10,0,500},"15강 유닛 판매하기"},
