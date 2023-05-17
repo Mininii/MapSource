@@ -1587,14 +1587,14 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)}, {SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0)}, {preserved})
 		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		--CIfEnd()
-	end
 	--table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
-	for j,k in pairs(LevelUnitArr) do
 		local UID = k[2]
 		local Per = k[3]
 		local Exp = k[4]
-		CallTriggerX(FP, Call_AutoEnch,{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
-		CallTriggerX(FP, Call_AutoSell,{MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID)})
+		
+		
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 		
 		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CI,j-1),SetV(PerV,Per)})
 		CMovX(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,nil,1)

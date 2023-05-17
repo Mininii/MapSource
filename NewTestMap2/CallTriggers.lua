@@ -608,6 +608,10 @@ function Install_CallTriggers()
 				TriggerX(FP, {CV(G_PushBtnm,26,AtLeast)}, SetV(TxtColor,0x0F), {preserved})
 
 				CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
+					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
+					CallTriggerX(FP,Call_Print13CP,{})
+					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})		
+					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
@@ -615,8 +619,14 @@ function Install_CallTriggers()
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 					CIfXEnd()
+					CIfXEnd()
+
 				CIfEnd()
 				CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
+					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
+					CallTriggerX(FP,Call_Print13CP,{})
+					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})		
+					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
@@ -625,6 +635,7 @@ function Install_CallTriggers()
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
 					CIfXEnd()
+				CIfXEnd()
 
 				CIfEnd()
 				
@@ -1997,34 +2008,6 @@ f_LMovX(FP,WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4),GetCreditData,SetTo,
 
 
 CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
-	SetCallEnd()
-
-	Call_AutoEnch = SetCallForward()
-	UIDV = CreateVar(FP)
-	SetCall(FP)
-	if SpeedTestMode == 0 then
-		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoEnchArr,CJ)), SetTo, 0)}) -- 자동강화 조건 충족안됨
-			CallTriggerX(FP,Call_Print13CP,{})
-			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		CElseX({TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,8))})--충족됨
-		CIfXEnd()
-	else
-		CDoActions(FP,{TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,8))})
-	end
-
-	SetCallEnd()
-	Call_AutoSell = SetCallForward()
-	SetCall(FP)
-
-	if SpeedTestMode == 0 then
-		CIfX(FP,{TMemory(_TMem(Arr(AutoEnchArr2,CJ)), Exactly, 0)},{TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0)}) -- 자동판매 조건 충족안됨
-			CallTriggerX(FP,Call_Print13CP,{})
-			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})
-		CElseX({TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,73))})--충족됨
-		CIfXEnd()
-	else
-		CDoActions(FP,{TOrder(UIDV, GCP, _Add(GCP,36), Move, _Add(GCP,73))})
-	end
 	SetCallEnd()
 
 	GetCreateUnit = CreateVar(FP)
