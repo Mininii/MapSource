@@ -55,7 +55,7 @@ function onInit_EUD()
 	RunAIScript(P7VON),
 	RunAIScript(P8VON),
 })	
-for i = 0, 24 do
+for i = 0, 25 do
 	SetUnitsDatX(i, {Reqptr=5,MinCost=0,GasCost=0,SuppCost=0})
 end
 

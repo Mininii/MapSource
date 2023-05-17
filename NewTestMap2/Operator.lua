@@ -30,7 +30,11 @@ function Operator()
 
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
-        CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i)})--상위플레이어가 런쳐 연결된경우
+		local TimeT = CreateCcode()
+		local TimeC = CreateCcode()
+		local TimeC2 = CreateCcode()
+		local Time = CreateVar(FP)
+        CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i),AddCD(TimeT,1)})--상위플레이어가 런쳐 연결된경우
 		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i)}, {AddCD(OPBanT[i+1],1)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i),CD(OPBanT[i+1],60*24,AtLeast)}, {AddCD(OPBan[i+1],1),SetCD(OPBanT[i+1],0)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,3),SCA.Available(i)}, {SetCD(OPBanT[i+1],0)}, {preserved})
@@ -43,6 +47,17 @@ function Operator()
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
 		CIfXEnd()
 		TriggerX(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),}, {SetV(DPErT[i+1],24*10)}, {preserved})
+		CIf(FP,{LocalPlayerID(i),CV(iv.PCheckV,2,AtLeast)})
+		CAdd(FP,Time,GDt)
+			CIf(FP,{CD(TimeT,10*24,AtLeast)},{SetCD(TimeT,0),AddCD(TimeC, 1)})
+				TriggerX(FP, {CV(Time,3500,AtLeast)}, {AddCD(TimeC2,1)},{preserved})
+				--DisplayPrint(AllPlayers,{ "\x13\x0413 : ",Time})
+				CMov(FP,Time,0)
+			CIfEnd()
+			TriggerX(FP, {CD(TimeC2,5,AtLeast),Memory(0x58F504,Exactly,0)}, {SetMemory(0x58F504, SetTo, 0x100000),SetCD(TimeC, 0),SetCD(TimeC2,0)},{preserved})
+			TriggerX(FP, {CD(TimeC,7,AtLeast)}, {SetCD(TimeC, 0),SetCD(TimeC2,0)},{preserved})
+		CIfEnd()
+		TriggerX(FP, {Deaths(i, Exactly, 0x100000, 20)}, {SetCD(InternalFlag,1)},{preserved})
 		
 		table.insert(OPBanActArr, SetCD(OPBan[i+1],0))
 		table.insert(OPBanActArr, SetCD(OPBanT[i+1],0))
@@ -165,6 +180,14 @@ function Operator()
 		DoActions2X(FP, Ttable)
 	NIfXEnd()
 	NJumpXEnd(FP,SCA.LoadJump)
+	CIfEnd()
+
+
+	CIf(FP,{CD(InternalFlag,1)},{SetCD(InternalFlag, 0)})
+	for i = 0, 6 do
+		TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: 게임 속도 저하가 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)})
+	end
+	
 	CIfEnd()
 	
 end

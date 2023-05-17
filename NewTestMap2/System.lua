@@ -4,6 +4,7 @@ function System()
 	local Time3 = iv.Time3
 	local Time4 = iv.Time4
 	local Dx,Dy,Dv,Du,DtP = CreateVariables(5,FP)
+	GDt = DtP
 	f_Read(FP,0x51CE8C,Dx)
 	CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 	CiSub(FP,DtP,Dy,Du)

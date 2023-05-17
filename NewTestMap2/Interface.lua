@@ -180,31 +180,35 @@ function Interface()
 	-- 백신을 사용하여 10강 달성 ok
 	
 	-- 확정권을 사용하여 10강 달성 ok
-
+	
+	
+	
+	
+	
 
 	for i = 0, 6 do
 		local MissionDataArr = { -- {Cond,RewardArr,Text}  RewardArr = {Credit,SellTicket,VaccItem,EXP,PETicket}
 		{{CVX(MissionV[i+1],1,1)},{1000,0,0,1000},"B,N,M키를 눌러 설명서 읽기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[2][2])},{1000},"2강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((2-1)*7)+i), AtLeast, 1)},{1000},"2강 유닛 만들기"},
 		{{CV(Income[i+1],12,AtLeast)},{2000},"사냥터에 유닛 12기 채우기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[11][2])},{1500},"11강 유닛 만들기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[15][2])},{2500},"15강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((11-1)*7)+i), AtLeast, 1)},{1500},"11강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((2-1)*7)+i), AtLeast, 1)},{2500},"15강 유닛 만들기"},
 		{{NWar(Money[i+1], AtLeast, "5000000")},{1000},"500만원 모으기"},
 		{{CV(PBossLV[i+1],1,AtLeast)},{1500},"개인보스 LV.1 처치하기"},
 		{{CVX(MissionV[i+1],32,32)},{1000,10,0,500},"15강 유닛 판매하기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[20][2])},{5000,0,0,8000},"20강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((20-1)*7)+i), AtLeast, 1)},{5000,0,0,8000},"20강 유닛 만들기"},
 		{{CV(PLevel[i+1],50,AtLeast)},{10000},"LV. 50 달성"},
 		{{CV(PBossLV[i+1],5,AtLeast)},{15000},"개인보스 LV.5 처치하기"},
 		{{CVX(MissionV[i+1],8,8)},{1000},"상점 시민 버튼에서 구입 배율 조정하기"},
 		{{CVX(MissionV[i+1],4,4)},{5000,10},"상점에서 유닛 판매권 1개 이상 구입하기"},
 		{{CVX(MissionV[i+1],64,64)},{5000,10},"상점에서 유닛 판매권 1개 이상 되팔기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[26][2])},{10000,50},"26강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((26-1)*7)+i), AtLeast, 1)},{10000,50},"26강 유닛 만들기"},
 		{{CV(PlayTime[i+1],3600*3,AtLeast)},{10000,100},"총 플레이 시간 3시간 달성하기"},
 		{{CV(PLevel[i+1],100,AtLeast)},{50000},"LV. 100 달성"},
 		{{CV(Stat_TotalEPer[i+1],10000,AtLeast)},{10000,100},"강화확률 +1 증가 스탯 마스터"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[36][2])},{50000,100},"36강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((36-1)*7)+i), AtLeast, 1)},{50000,100},"36강 유닛 만들기"},
 		{{CV(PLevel[i+1],500,AtLeast)},{100000},"LV. 500 달성"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[40][2])},{100000,500},"40강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((40-1)*7)+i), AtLeast, 1)},{100000,500},"40강 유닛 만들기"},
 		{{CV(PLevel[i+1],1000,AtLeast)},{100000},"LV. 1000 달성"},
 		{{Command(i, AtLeast, 48, LevelUnitArr[40][2])},{300000,2000},"40강 유닛 48기 보유"},
 		{{CVX(MissionV[i+1],256,256)},{50000,500,1},"상점에서 강화기 백신 1개 이상 구입하기"},
@@ -216,7 +220,7 @@ function Interface()
 		{{CD(VaccSCount[i+1],5,AtLeast)},{250000,2000},"상점에서 강화기 백신 5개 이상 되팔기"},
 		{{CVX(MissionV[i+1],128,128)},{250000,0,3},"강화기 백신 또는 확정 강화권 사용으로 고유유닛 10강 달성하기"},
 		{{CV(iv.PMission[i+1],3,AtLeast)},{250000,0,3},"고유유닛 강화 3연속 성공하기"},
-		{{Command(i, AtLeast, 1, LevelUnitArr[44][2])},{1000000,0,0,0,1},"44강 유닛 만들기"},
+		{{MemX(Arr(AutoEnchArr2,((44-1)*7)+i), AtLeast, 1)},{1000000,0,0,0,1},"44강 유닛 만들기"},
 		{{CV(PUnitClass[i+1],62,AtLeast)},{3000000,0,0,0,2},"고유유닛 62단 만들기"},
 		--{{CVX(MissionV[i+1],2048,2048)},{0,10000,0,0,1},"확정 강화권을 무색 조각으로 바꾸기"},
 		{{CVX(MissionV[i+1],4096,4096)},{0,60000},"45강 유닛 판매하기"},
@@ -310,7 +314,6 @@ TipArr = {
 	StrDesignX("\x04TIP : \x04강화 성공시 단계가 \x08+1 \x04뿐만 아니라 낮은 확률로 \x1C+2\x04, \x1F+3\x04 도 올라갈 수 있습니다."),}
 
 for i = 0, 6 do -- 각플레이어 
-	local XEperArr={iv.XEPer44[i+1],iv.XEPer45[i+1],iv.XEPer46[i+1],iv.XEPer47[i+1]}
 	CIf(FP,{HumanCheck(i,1)},{SetCp(i),SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i))})
 	CT_PrevCP(i)
 	CheckTrig("Interface_Start_P"..(i+1))
@@ -561,10 +564,23 @@ for i = 0, 6 do -- 각플레이어
 	f_LAdd(FP,PEXP[i+1],PEXP[i+1],{B_PEXP2[i+1],0}) --
 	CMov(FP, B_PEXP2[i+1], 0)
 	CIfEnd({})
-	if TestStart == 1 then
+	if Limit == 1 then
 		local EXPAcc = CreateWar(FP)
 		--f_LAdd(FP, EXPAcc, EXPAcc, "100000000000")
 		--f_LAdd(FP, PEXP[i+1], PEXP[i+1], EXPAcc)
+		if SpeedTestMode == 1 then
+			if SpeedTestOp == 1 then
+				f_LAdd(FP, Money[i+1], Money[i+1], "15000000")
+				DoActionsX(FP,{
+					SetV(AutoBuyCode[i+1],1)},1)
+			elseif SpeedTestOp == 2 then
+				f_LAdd(FP, Money[i+1], Money[i+1], "15000000")
+				DoActionsX(FP,{
+					SetV(iv.BuyTicket[i+1],845648648),
+					SetV(AutoBuyCode[i+1],1),
+					SetV(iv.AutoBuyCode2[i+1],1)},1)
+			end
+		end
 	end
 	
 	local LevelUpJump = def_sIndex()
@@ -889,8 +905,8 @@ for i = 0, 6 do -- 각플레이어
 	
 
 
-	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,0,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,1,3),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x07ON\x04 으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
-	TriggerX(FP, {MSQC_KeyInput(i, "F12"),Deaths(i,Exactly,1,3)}, {SetDeaths(i,SetTo,0,553),SetDeaths(i,SetTo,0,3),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x08OFF\x04 으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),DeathsX(i,Exactly,0,3,1)}, {SetDeaths(i,SetTo,0,553),SetDeathsX(i,SetTo,1,3,1),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x07ON\x04 으로 변경하였습니다."),4),PlayWAV("staredit\\wav\\conn.ogg"),PlayWAV("staredit\\wav\\conn.ogg")},{preserved})
+	TriggerX(FP, {MSQC_KeyInput(i, "F12"),DeathsX(i,Exactly,1,3,1)}, {SetDeaths(i,SetTo,0,553),SetDeathsX(i,SetTo,0,3,1),SetCp(i),DisplayExtText(StrDesign("\x04뽑기 알림 사운드를 \x08OFF\x04 으로 변경하였습니다."),4),PlayWAV("sound\\Misc\\TRescue.wav"),PlayWAV("sound\\Misc\\TRescue.wav")},{preserved})
 	CreateUnitStacked(nil,1, 88, 36+i,15+i, i, nil, 1)--기본유닛지급
 	
 	
@@ -1569,9 +1585,22 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	
 	local AutoEnable = {}
+	local AutoEnable2 = {}
+	local AutoEnable3 = {}
 	for j, k in pairs(LevelUnitArr) do
 		table.insert(AutoEnable, SetMemX(Arr(AutoEnchArr2,((j-1)*7)+i), SetTo, 1))
-		Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
+		if j~= 15 then
+			table.insert(AutoEnable2, SetMemX(Arr(AutoEnchArr,((j-1)*7)+i), SetTo, 1))
+		end
+
+		table.insert(AutoEnable3, SetMemX(Arr(AutoSellArr,((j-1)*7)+i), SetTo, 0))
+		if SpeedTestMode == 1 then
+			Trigger2X(FP, {}, AutoEnable)
+			Trigger2X(FP, {}, AutoEnable2)
+			Trigger2X(FP, {}, AutoEnable3)
+		else
+			Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
+		end
 		--CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
 		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
 		--if SpeedTestMode == 0 then
@@ -1593,18 +1622,20 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		local Exp = k[4]
 		
 		
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 		
-		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CI,j-1),SetV(PerV,Per)})
-		CMovX(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,nil,1)
+		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CIV,j-1),SetV(UEper,Per),SetV(UEper2,math.floor(Per/10)),SetV(UEper3,math.floor(Per/100))})
+		CMov(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,1)
+		
+		
 
 
 		CallTrigger(FP, Call_GetUnit)
 		
-		CMovX(FP,VArr(GetUnitVArr[i+1], j-1),GetCreateUnit,Subtract,nil,nil,1)
+		CSub(FP,VArr(GetUnitVArr[i+1], j-1),GetCreateUnit)
 
 		CIfEnd()
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 	end
 	CallTriggerX(FP, Call_EnchFunc,{Bring(i,AtLeast,1,"Men",8+i)},{SetV(ECP,i)})
 	CallTriggerX(FP, Call_SellFunc,{Bring(i,AtLeast,1,"Men",73+i)},{SetV(ECP,i)})
@@ -1618,7 +1649,9 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 			f_LAdd(FP, PEXP[i+1], PEXP[i+1], _LDiv(PEXP2[i+1],"10"))
 			f_LMod(FP, PEXP2[i+1],PEXP2[i+1], "10")
 		CIfEnd()
+		f_LMov(FP, TempEXPW, "0")
 	CIfEnd()
+	
 
 
 	CallTriggerX(FP, Call_Shop,{Bring(i, AtLeast, 1, 15, 112)})

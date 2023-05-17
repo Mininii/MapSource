@@ -126,10 +126,12 @@ function Install_CallTriggers()
 	local TotalEper3 = CreateVar(FP) -- 새로운 변수 사용으로 중복적용 방지
 	ECW = CreateVar(FP)
 	ELevelB = CreateVar(FP)
+	UEper2 = CreateVar(FP)
+	UEper3 = CreateVar(FP)
 	--ELevel = 현재 강화중인 레벨
 	CAdd(FP,TotalEper,UEper,GEper) -- +1강 확률
-	CAdd(FP,TotalEper2,_Div(UEper,_Mov(10)),GEper2)
-	CAdd(FP,TotalEper3,_Div(UEper,_Mov(100)),GEper3)
+	CAdd(FP,TotalEper2,UEper2,GEper2)
+	CAdd(FP,TotalEper3,UEper3,GEper3)
 
 	E3Range = CreateVarArr(2, FP)
 	E2Range = CreateVarArr(2, FP)
@@ -377,6 +379,17 @@ function Install_CallTriggers()
 	EVarArr1_2 = CreateVarArr(6, FP)
 
 	
+
+	GCP = CreateVar(FP)
+	Call_Print13CP = SetCallForward()
+	SetCall(FP)
+	
+	for i = 0, 6 do
+		CIf(FP,{CV(GCP,i)})
+		Print_13_2(FP,{i},nil)
+		CIfEnd()
+	end
+	SetCallEnd()
 	
 	Call_CT = SetCallForward()
 	SetCall(FP)
@@ -456,7 +469,6 @@ function Install_CallTriggers()
 	G_Btnptr = CreateVar(FP)
 	G_BtnFnm = CreateVar(FP)
 	G_PushBtnm = CreateVar(FP)
-	GCP = CreateVar(FP)
 	Call_BtnFnc = SetCallForward()
 	local GetPUnitLevel = CreateVar(FP)
 	local GetPUnitCool = CreateVar(FP)
@@ -496,7 +508,12 @@ function Install_CallTriggers()
 				local GetABData = CreateVar(FP)
 				local PBJump = def_sIndex()
 				local PBJump2 = def_sIndex()
+				local PBJump3 = def_sIndex()
+				local PBJump4 = def_sIndex()
+
+
 				NJump(FP, PBJump, CV(G_PushBtnm,24))
+				NJump(FP, PBJump4, CV(G_PushBtnm,25))
 				CMov(FP, GetNum,_SHRead(Arr(BuyDataArr,G_PushBtnm)))
 				CIfX(FP,{CV(G_BtnFnm,8)})
 				CMovX(FP,GetABData,VArrX(AutoBuyVArr2,VArrI,VArrI4))
@@ -593,6 +610,17 @@ function Install_CallTriggers()
 				CIfXEnd()
 				CJumpEnd(FP,PBJump2)
 
+				CJump(FP, PBJump3)
+				NJumpEnd(FP, PBJump4)
+				
+				CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)},{TSetDeathsX(GCP,SetTo,2,3,2)})
+				DisplayPrintEr(GCP, {"\x07『 \x04강화 \x1C내부계산 \x04모드 \x07ON \x07』"})
+				CElseX({TSetDeathsX(GCP,SetTo,0,3,2)})
+				DisplayPrintEr(GCP, {"\x07『 \x04강화 \x1C내부계산 \x04모드 \x08OFF \x07』"})
+				CIfXEnd()
+
+				CJumpEnd(FP,PBJump3)
+
 
 
 
@@ -613,10 +641,18 @@ function Install_CallTriggers()
 					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})		
 					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
+						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(판매 우선 적용됨) \x07』",})
+						CElseX()
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
+						CIfXEnd()
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
 					CElseX()
+						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(판매 우선 적용됨) \x07』",})
+						CElseX()
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
+						CIfXEnd()
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 					CIfXEnd()
 					CIfXEnd()
@@ -1195,16 +1231,6 @@ function Install_CallTriggers()
 		SCA_DataLoadG(PlayerV,k[1],k[2],k[3])
 	end
 	SetCallEnd()
-
-	Call_Print13CP = SetCallForward()
-	SetCall(FP)
-	
-	for i = 0, 6 do
-		CIf(FP,{CV(GCP,i)})
-		Print_13_2(FP,{i},nil)
-		CIfEnd()
-	end
-	SetCallEnd()
 	
 
 	Call_FfragShop = SetCallForward()
@@ -1371,7 +1397,7 @@ function Install_CallTriggers()
 	local SW = CreateVar(FP)
 	CMov(FP,SW,0)
 	CWhile(FP, {CV(SW,6,AtMost)}, {})
-	CIf(FP,{TDeaths(SW,Exactly,1,3)})
+	CIf(FP,{TDeathsX(SW,Exactly,1,3,1)})
 		CMov(FP,0x6509B0,SW)
 		TriggerX(FP, {CV(SoundOp,1)}, {PlayWAV("staredit\\wav\\Clear1.ogg")},{preserved})
 		TriggerX(FP, {CV(SoundOp,2)}, {PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg")},{preserved})
@@ -1647,8 +1673,11 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	local CI = CFor(FP,0,#LevelUnitArr,1)
 	ConvertVArr(FP, VI, VI4, CI, #LevelUnitArr)
 	CMovX(FP,UID,VArrX(LevelDataArr,VI,VI4),nil,nil,nil,1)
-	CMovX(FP,Per,VArrX(PerDataArr,VI,VI4),nil,nil,nil,1)
-	CMov(FP,UEper,Per)
+	CMovX(FP,UEper,VArrX(PerDataArr,VI,VI4),nil,nil,nil,1)
+	CMovX(FP,UEper2,VArrX(PerDataArr2,VI,VI4),nil,nil,nil,1)
+	CMovX(FP,UEper3,VArrX(PerDataArr3,VI,VI4),nil,nil,nil,1)
+
+
 	CMov(FP,ELevelB,CI)
 	
 	CIf(FP,VRange(CI, 0, 38))
@@ -1697,7 +1726,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	end
 	CIfEnd()
 	CIf(FP,VRange(CI, 39, 42))
-		CSub(FP,XEper,GEper4,Per)
+		CSub(FP,XEper,GEper4,UEper)
 		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
 		if Limit== 1 then
 			if CreatorCheatMode == 1 then
@@ -1777,12 +1806,12 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIf(FP,VRange(CI, 43, 48))
 
 	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-	CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,Per))},1)
-	CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,Per))},1)
-	CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,Per))},1)
-	CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,Per))},1)
-	CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,Per))},1)
-	CTrigger(FP, CV(CI,48), {SetV(XEper,Per)},1)
+	CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,UEper))},1)
+	CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,UEper))},1)
+	CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,UEper))},1)
+	CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,UEper))},1)
+	CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,UEper))},1)
+	CTrigger(FP, CV(CI,48), {SetV(XEper,UEper)},1)
 	CIf(FP,{VRange(CI, 43, 47)})
 	CiSub(FP,XEper,iv.XEPerM)
 	TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
@@ -2011,27 +2040,32 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	SetCallEnd()
 
 	GetCreateUnit = CreateVar(FP)
+	UIDV = CreateVar(FP)
+	CIV = CreateVar(FP)
 	Call_GetUnit = SetCallForward()
 	SetCall(FP)
-	PerV = CreateVar(FP)
-		NIfX(FP,{TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})
+	
+	NIfX(FP,{TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})
+		CMov(FP,ECP,GCP)
+		CMov(FP,ELevelB,CIV)
 		CMov(FP,ECW,GetCreateUnit)
-		NIfX(FP,{CV(CI,38,AtMost)})
+		NIfX(FP,{CV(CIV,38,AtMost)})
+
 			CallTrigger(FP, Call_Enchant)
 		NElseX()
 		AutoEnchJump = def_sIndex()
 
-			CIfX(FP,{VRange(CI, 39, 42)})
-			CSub(FP,XEper,GEper4,PerV)
+			CIfX(FP,{VRange(CIV, 39, 42)})
+			CSub(FP,XEper,GEper4,UEper)
 			CElseX()
-			CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,PerV))},1)
-			CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,PerV))},1)
-			CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,PerV))},1)
-			CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,PerV))},1)
-			CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,PerV))},1)
-			CTrigger(FP, CV(CI,48), {SetV(XEper,PerV)},1)
+			CTrigger(FP, CV(CIV,43), {SetV(XEper,_Add(GetXEper44,UEper))},1)
+			CTrigger(FP, CV(CIV,44), {SetV(XEper,_Add(GetXEper45,UEper))},1)
+			CTrigger(FP, CV(CIV,45), {SetV(XEper,_Add(GetXEper46,UEper))},1)
+			CTrigger(FP, CV(CIV,46), {SetV(XEper,_Add(GetXEper47,UEper))},1)
+			CTrigger(FP, CV(CIV,47), {SetV(XEper,_Add(GetXEper48,UEper))},1)
+			CTrigger(FP, CV(CIV,48), {SetV(XEper,UEper)},1)
 			CIfXEnd()
-			CIf(FP,{VRange(CI, 43, 47)})
+			CIf(FP,{VRange(CIV, 43, 47)})
 			CiSub(FP,XEper,iv.XEPerM)
 			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
 			CIfEnd()

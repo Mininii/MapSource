@@ -49,6 +49,7 @@ end
 function SCA.SaveCmp(CP)--사용가능 + 저장완료
 	return DeathsX(CP, Exactly, 11, 1,11)
 end
+	InternalFlag = CreateCcode()
 	SCA.GlobalCheck2 = CreateCcode()
 	SCA.GlobalCheck = CreateCcode()
 	SCA.GlobalLoadFlag = CreateCcode()
@@ -349,6 +350,7 @@ end
 	iv.InterfaceNum = CreateVarArr(7,FP) -- 상점이나 스탯 찍는 창 제어부
 	iv.AutoBuyCode = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
 	iv.AutoBuyCode2 = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
+	iv.InternalCalcModeArr = CreateArr(7,FP)-- 자동 구입 제어 데스값
 	iv.MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
 	--PlayData(SCA)

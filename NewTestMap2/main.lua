@@ -40,15 +40,16 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0422"
+VerText = "\x19ver\x07. \x043\x07.\x0424"
 
-TestSet(1)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 1
 	SpeedTestMode = 0
+	SpeedTestOp = 0
 	X3Mode = 0
-	CreatorCheatMode = 1
+	CreatorCheatMode = 0
 	CreatorCheatModeMul = 10
 else
 	
@@ -56,7 +57,7 @@ CreatorCheatMode = 0
 SpeedTestMode = 0
 end
 FP = P8
-LimitVer = 33
+LimitVer = 35
 StatVer = 14
 StatVer2 = 4
 EUDTurbo(FP)
@@ -85,8 +86,8 @@ CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
 CT_Prev()
 LeaderBoard()
-Operator()
 System()
+Operator()
 Interface()
 Shop()
 GameDisplay()
