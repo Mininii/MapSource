@@ -71,15 +71,17 @@ Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
 	AddV(iv.PETicket2[5], 1),
 	AddV(iv.PETicket2[6], 1),
 	AddV(iv.PETicket2[7], 1),
-	AddV(iv.BuyTicket[1], 100000),
-	AddV(iv.BuyTicket[2], 100000),
-	AddV(iv.BuyTicket[3], 100000),
-	AddV(iv.BuyTicket[4], 100000),
-	AddV(iv.BuyTicket[5], 100000),
-	AddV(iv.BuyTicket[6], 100000),
-	AddV(iv.BuyTicket[7], 100000),
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1DExtra Boss\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
+CIfOnce(FP, {CV(BossLV,6,AtLeast)})
+f_LAdd(FP,iv.BuyTicket[1],iv.BuyTicket[1], "100000")
+f_LAdd(FP,iv.BuyTicket[2],iv.BuyTicket[2], "100000")
+f_LAdd(FP,iv.BuyTicket[3],iv.BuyTicket[3], "100000")
+f_LAdd(FP,iv.BuyTicket[4],iv.BuyTicket[4], "100000")
+f_LAdd(FP,iv.BuyTicket[5],iv.BuyTicket[5], "100000")
+f_LAdd(FP,iv.BuyTicket[6],iv.BuyTicket[6], "100000")
+f_LAdd(FP,iv.BuyTicket[7],iv.BuyTicket[7], "100000")
+CIfEnd()
 Trigger2X(FP,{CV(BossLV,7,AtLeast)},{
 	AddV(iv.PETicket2[1], 3),
 	AddV(iv.PETicket2[2], 3),

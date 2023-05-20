@@ -329,7 +329,7 @@ function DataArr()
     iv.PSaveChk,ct.PSaveChk = CreateDataPV("PSaveChk")
     iv.EnchCool,ct.EnchCool = CreateDataPV("EnchCool")
 	iv.PETicket2,ct.PETicket2,iv.PETicket2Loc = CreateDataPV("PETicket2",SCA.PETicket2,1)
-    iv.BuyTicket,ct.BuyTicket,iv.BuyTicketLoc = CreateDataPV("BuyTicket",nil,1)
+    iv.BuyTicket,ct.BuyTicket,iv.BuyTicketLoc = CreateDataPW("BuyTicket",nil,1)
 	iv.XEPer48,ct.XEPer48,iv.XEPer48Loc = CreateDataPV("XEPer48",nil,1)
 	iv.CXPer48,ct.CXPer48 = CreateDataPV("CXPer48")
 	iv.FXPer48,ct.FXPer48,iv.FXPer48Loc = CreateDataPV("FXPer46",SCA.FXPer48,1)
@@ -339,6 +339,11 @@ function DataArr()
 	iv.FirstRewardLim2,ct.FirstRewardLim2,iv.FirstRewardLim2Loc = CreateDataPV("FirstRewardLim2",SCA.FirstRewardLim2,1)
 	iv.TimeAttackScore50,ct.TimeAttackScore50,iv.TimeAttackScore50Loc = CreateDataPV("TimeAttackScore50",SCA.TimeAttackScore50,1)
 	iv.FfragItemRank,ct.FfragItemRank = CreateDataPV("FfragItemRank",SCA.FfragItemRank)
+	iv.GFfragLoc = CreateVar(FP)
+	iv.GCreditLoc = CreateWar(FP)
+	iv.GAwakItemLoc = CreateVar(FP)
+
+
 
 	for j,k in pairs(SCA_DataArr) do
 		if k[1][4]=="V" then

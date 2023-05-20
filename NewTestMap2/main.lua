@@ -42,7 +42,7 @@ end
 
 VerText = "\x19ver\x07. \x043\x07.\x0426"
 
-TestSet(0)
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 1
@@ -50,7 +50,7 @@ if Limit == 1 then
 	SpeedTestOp = 0
 	X3Mode = 0
 	CreatorCheatMode = 0
-	CreatorCheatModeMul = 10
+	CreatorCheatModeMul = 5
 else
 	
 CreatorCheatMode = 0
@@ -67,7 +67,6 @@ Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 TrigBench = io.open(FileDirectory .. "TrigBenchmark" .. ".txt", "wb")
-
 Start_init(1)
 __SetIndexAlloc(0x4000, 0xA000)
 init_func = def_sIndex()

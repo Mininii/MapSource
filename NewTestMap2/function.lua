@@ -674,24 +674,33 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 			local TempV = CreateVar(FP)
 			CMov(FP,TempV,DpsDest)
-			TriggerX(FP,CV(TempV,6274402,AtLeast),{SetV(TempV,6274402)},{preserved})
-			if Multiplier ~=  nil then
-				f_LMov(FP, GetMoney, _LMul({TempV,0}, Multiplier), nil, nil, 1)
-			else
-				f_LMov(FP, GetMoney,{TempV,0},nil,nil,1)
-			end
+			
 			if MultiplierV ~= nil then
 				if MultiplierV[4]=="V" then
-					f_LMul(FP, GetMoney,GetMoney, {MultiplierV,0})
+					f_LMov(FP,GetMoney,_LMul({MultiplierV,0},{TempV,0}))
 				elseif MultiplierV[4]=="W" then
-					f_LMul(FP, GetMoney,GetMoney, MultiplierV)
+					f_LMov(FP,GetMoney,_LMul(MultiplierV,{TempV,0}))
 				end
+			else
+				f_Cast(FP, GetMoney,{TempV,0},nil, nil, 1)
+			end
+
+
+			if Multiplier == "100000000" then -- 3렙허수일경우
+				CIf(FP,{TTNWar(GetMoney,AtLeast,"100000000000")}) -- 순간적으로 번돈 베이스값이 천억넘을경우(밑에서 1억 더 곱해서 돈으로 바꿀거임 즉 1000억 = 1000경)
+				local TempDiv = CreateWar(FP)
+				f_LDiv(FP, TempDiv,GetMoney, "100000000000")--곱하여 TempDiv변수에 넣는다
+				f_LMod(FP, GetMoney, GetMoney, "100000000000")--1000억이 넘는 값은 지운다
+				local TempCast = CreateVar(FP)
+				f_Cast(FP, {TempCast,0}, TempDiv, nil, nil, 1)
+				CAdd(FP,iv.Money2[CP+1],TempCast)--1000경원수표추가
+				CIfEnd()
+				f_LMul(FP, GetMoney, GetMoney,Multiplier)
+			elseif Multiplier ~= nil then
+				f_LMul(FP, GetMoney, GetMoney,Multiplier)
 			end
 			
-			CIf(FP,{TTNWar(GetMoney,AtLeast,"10000000000000000000")}) -- 순간적으로 번돈이 천경을 넘을경우
-			f_LSub(FP, GetMoney,GetMoney, "10000000000000000000")--
-			CAdd(FP,iv.Money2[CP+1],1)--1000경원수표추가
-			CIfEnd()
+			
 
 			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--오버플로우일경우 더하지말고 GetMoney를 1000경원짜리에 맞춘다.
 				local TempW = CreateWar(FP)
@@ -1390,8 +1399,14 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 	
 	if Limit == 1 then
 		if CreatorCheatMode == 1 then
+			local CostX = "0"
+			for i = 1, CreatorCheatModeMul do
+				CostX = strsum(CostX,Cost)
+			end
+			Cost = CostX
+
 			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+				CIf(FP,{CV(GetMoney2,CreatorCheatModeMul,AtLeast)},{SubV(GetMoney2,CreatorCheatModeMul)})
 			else
 				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 				f_LSub(FP, GetMoney, GetMoney, Cost)
@@ -1463,16 +1478,22 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 end
 function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode2,LvUniit)})
-		CIfX(FP,{CV(GetBuyTicket,1,AtLeast)})
-		if CreatorCheatMode==1 then
-			if Limit == 1 then
+		CIfX(FP,{TTNWar(GetBuyTicket,AtLeast,"1")})
+		if Limit == 1 then
+			if CreatorCheatMode==1 then
+				local CostX = "0"
+				for i = 1, CreatorCheatModeMul do
+					CostX = strsum(CostX,Cost)
+				end
+				Cost = CostX
+		
 				if LvUniit==40 then
-					CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+					CIf(FP,{CV(GetMoney2,CreatorCheatModeMul,AtLeast)},{SubV(GetMoney2,CreatorCheatModeMul)})
 				else
 					CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 					f_LSub(FP, GetMoney, GetMoney, Cost)
 				end
-				CSub(FP,GetBuyTicket,1)
+				f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
 				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 				for i = 0, 6 do
 					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, CreatorCheatModeMul)},{preserved})
@@ -1487,6 +1508,30 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 				CIfXEnd()
 					--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 				CIfEnd()
+			else
+				if LvUniit==40 then
+					CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+				else
+					CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
+					f_LSub(FP, GetMoney, GetMoney, Cost)
+				end
+				f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
+				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
+				for i = 0, 6 do
+					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
+				end
+				CElseX()
+				CDoActions(FP, {
+					SetNVar(SAmount,SetTo,1),
+					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
+					SetNVar(DLocation,SetTo,0),
+					TSetNVar(SPlayer,SetTo,CP)})
+				CallTrigger(FP, CreateStackedUnit)
+				CIfXEnd()
+					--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
+				CIfEnd()
+			end
+
 		else
 			if LvUniit==40 then
 				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
@@ -1494,7 +1539,7 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
 				f_LSub(FP, GetMoney, GetMoney, Cost)
 			end
-			CSub(FP,GetBuyTicket,1)
+			f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 			for i = 0, 6 do
 				TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
@@ -1510,30 +1555,7 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 			CIfEnd()
 		end
-		else
-			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
-			else
-				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-				f_LSub(FP, GetMoney, GetMoney, Cost)
-			end
-			CSub(FP,GetBuyTicket,1)
-			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-			for i = 0, 6 do
-				TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
-			end
-			CElseX()
-			CDoActions(FP, {
-				SetNVar(SAmount,SetTo,1),
-				SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
-				SetNVar(DLocation,SetTo,0),
-				TSetNVar(SPlayer,SetTo,CP)})
-			CallTrigger(FP, CreateStackedUnit)
-			CIfXEnd()
-				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-			CIfEnd()
-		end
-		--end
+
 		CElseX({SetV(GetAutoBuyCode2,0),SetCD(BuyError,1)})
 		CIfXEnd()
 	CIfEnd()
@@ -2054,19 +2076,20 @@ function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 	local UpMax = Cost[2]
 	local GetItemData = CreateVar(FP)
 	CMovX(FP, GetItemData, VArrX(GetVArray(FItem[1],7), VArrI, VArrI4), SetTo, nil, nil, 1)
+	local TempCostW = CreateWar(FP)
+	local LIndex = CreateVar(FP)
+	ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 포커스
 	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
 		local BCan = def_sIndex()
 		NJump(FP,BCan,{CV(GetItemData,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
 		local TempW = CreateWar(FP)
 		local TempW2 = CreateWar(FP)
-		local TempCostV = CreateVar(FP)
-		local TempCostW = CreateWar(FP)
-		f_Read(FP,FArr(CostArr,GetItemData),TempCostV,nil,nil,1)
-		f_LMov(FP,TempCostW,{TempCostV,0},nil,nil,1)
+		ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 포커스
+		f_LRead(FP, LArrX({CostArr},LIndex), TempCostW, nil, 1)
 		f_LSub(FP,TempW,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4))
 		f_LSub(FP,TempW2,TempW,"1")
 		CIfX(FP,{TTNWar(TempW,AtLeast,TempCostW)},{AddV(GetItemData,1)})
-		f_LAdd(FP,WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),{TempCostV,0})
+		f_LAdd(FP,WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),TempCostW)
 		CElseX()
 		CTrigger(FP, {TTNWar(TempW2,AtMost,TempCostW)}, {SetCD(cntC,0),SetCD(failC,1)},{preserved})
 		CTrigger(FP, {CV(GetItemData,UpMax,AtLeast)}, {SetCD(cntC,0),SetCD(failC,2)},{preserved})
@@ -2075,7 +2098,8 @@ function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 		CMovX(FP, VArrX(GetVArray(FItem[1],7),VArrI, VArrI4), GetItemData, SetTo, nil, nil, 1)
 	CWhileEnd()
 	CIf(FP,{TMemory(0x512684, Exactly, GCP)})
-	f_Read(FP,FArr(CostArr,GetItemData),CostLoc,nil,nil,1)
+	f_LRead(FP, LArrX({CostArr},LIndex), CostLoc, nil, 1)
+	TriggerX(FP, {CV(GetItemData,UpMax,AtLeast)}, {SetNWar(CostLoc, SetTo, "0")}, {preserved})
 	CIfEnd()
 	
 end
@@ -2097,9 +2121,78 @@ function SigmaDPT(max,Func)
 end
 function CreateCostData(Max,SFunc)
 	return {f_GetFileArrptr(FP,SigmaT(Max,SFunc),4,1),Max,f_GetFileArrptr(FP,SigmaDPT(Max,SFunc),4,1)}
-
+end
+function ReciveCostDataFile(Max,CostFile)
+	return {f_GetFileptr(FP, CostFile, 1),Max,f_GetFileptr(FP, CostFile.."_dp", 1)}
 end
 function CheckTrig(Name)
 TrigBench:write(Name.." : "..CurTrigCnt.."\n")
 CurTrigCnt = 0
+end
+
+function strsum(a,b)
+    retsum={}
+    e=math.max(#a,#b)
+    m=0
+    for i = 1, e do
+        s1=#a-i+1
+        s2=#b-i+1
+        if s1>=1 then
+            r1=tonumber(string.sub(a,s1,s1))
+        else
+            r1=0
+        end
+        if s2>=1 then
+            r2=tonumber(string.sub(b,s2,s2))
+        else
+            r2=0
+        end
+
+        if r1 == nil then r1=0 end
+        if r2 == nil then r2=0 end
+        r4=r1+r2+m
+        m=0
+        retsum[e-i+1]=r4%10
+        --print(e,i,#a-i+1,#b-i+1,r1,r2,m,r4)
+        if r4>= 10 then
+            m=1
+            if e==i then
+                table.insert(retsum,1,"1")
+            end
+        end
+    end
+    return table.concat(retsum)
+end
+
+SubtitleArr = {}
+function Create_utf8_Subtitle(string,SCAID,SCID)
+    local ret = {}
+    if type(string) == "string" then
+        local str = string
+        local n = 1
+        local t = cp949_to_utf8(str)
+        while n <= #t do
+            ret[#ret+1] = _dw(t, n)
+            n = n + 4
+        end
+    elseif type(string) == "number" then
+		PushErrorMsg("Subtitle_String_InputError")
+    end
+
+	for j,k in pairs(ret) do
+		if k~=0 then
+			table.insert(SubtitleArr,SCAID.."	"..SCID.."	SCAStr	"..k.."	"..j.."	0")
+		end
+	end
+	
+end
+function PopSubtitleData()
+	Subtitle = io.open(FileDirectory .. "Subtitle" .. ".txt", "wb")
+
+	for j,k in pairs(SubtitleArr) do
+		Subtitle:write(k.."\n")
+	end
+
+	io.close(Subtitle)
+	
 end

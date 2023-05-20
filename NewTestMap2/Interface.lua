@@ -389,7 +389,7 @@ for i = 0, 6 do -- 각플레이어
 
 		--TriggerX(FP,{CV(LV5Cool[i+1],1,AtLeast)},SetCD(BossLV6Private[i+1],0x32223222))
 		--치팅 테스트 변수 초기화]
-		NIfX(FP,{CV(iv.FStatVer[i+1],StatVer2)},{SetNWar(TempFfragTotal,SetTo,0)})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
+		NIfX(FP,{CV(iv.FStatVer[i+1],StatVer2)},{SetNWar(TempFfragTotal,SetTo,"0")})--스탯버전이 저장된 값과 같거나 제작자가 아닐경우 경우 치팅 감지 작동
 		local FStatTestJump = def_sIndex()
 		CallTrigger(FP,Call_FCT)
 		NJump(FP, FStatTestJump, CD(FStatTest,1,AtLeast))
@@ -456,7 +456,7 @@ for i = 0, 6 do -- 각플레이어
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    PLevel : ",PLevel[i+1]," \x07』"})
 		DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
 
-		TriggerX(FP,{CV(iv.PLevel2[i+1],LevelLimit),CDX(StatTest,2^(6-1),2^(6-1)),LocalPlayerID(i)},{
+		TriggerX(FP,{CDX(StatTest,2^(6-1),2^(6-1)),LocalPlayerID(i)},{
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 			DisplayExtText("LV\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
@@ -556,11 +556,9 @@ for i = 0, 6 do -- 각플레이어
 		end
 		CIf(FP,{CV(iv.CSX_LV3Incm[i+1],1,AtLeast)})
 		local TempAwak = CreateVar(FP)
-		local TempAwak2 = CreateVar(FP)
 		f_Read(FP,FArr(CSXAwakItemArr,iv.CSX_LV3Incm[i+1]),TempAwak,nil,nil,1)
-		CAdd(FP,TempAwak2,_Mul(TempAwak,10000))
-		CAdd(FP,iv.BuyTicket[i+1],TempAwak2)
-		DisplayPrint(i, {"\x13\x07『 \x1E각성 ",iv.CSX_LV3Incm[i+1]," \x04회에 따라 \x08구입 티켓\x04이 지급됩니다. 지급 갯수 : \x07",TempAwak2," 개 \x07』"})
+		f_LAdd(FP, iv.BuyTicket[i+1],iv.BuyTicket[i+1],_LMul({TempAwak,0}, "10000"))
+		DisplayPrint(i, {"\x13\x07『 \x1E각성 ",iv.CSX_LV3Incm[i+1]," \x04회에 따라 \x08구입 티켓\x04이 지급됩니다. 지급 갯수 : \x07",iv.BuyTicket[i+1]," 개 \x07』"})
 		CIfEnd()
 	CIfEnd()
 	
@@ -581,7 +579,7 @@ for i = 0, 6 do -- 각플레이어
 			elseif SpeedTestOp == 2 then
 				f_LAdd(FP, Money[i+1], Money[i+1], "15000000")
 				DoActionsX(FP,{
-					SetV(iv.BuyTicket[i+1],845648648),
+					SetNWar(iv.BuyTicket[i+1],SetTo,"845648648"),
 					SetV(AutoBuyCode[i+1],1),
 					SetV(iv.AutoBuyCode2[i+1],1)},1)
 			end
@@ -1270,17 +1268,6 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	
 
 
-	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})}) -- 자동구매 관리
-	CallTrigger(FP, Call_AutoBuy,{})
-	CElseIfX({TCommand(i,AtLeast,ULimitV2,"Men")})
-	CallTrigger(FP,Call_Print13[i+1])
-	for j = 1, 7 do
-		TriggerX(FP, {LocalPlayerID(i),CV(PCheckV,j)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 "..ULimitArr[j].."기)"))},{preserved})
-	end
-
-	
-	CIfXEnd()
-
 	local KeyTog = CreateCcode()
 	DoActionsX(FP, {SetCp(i),SetCDeaths(FP,SetTo,0,ShopKey[i+1]),SetCD(KeyTog,0)})--키인식부 시작
 	TriggerX(FP, {CV(InterfaceNum[i+1],0),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
@@ -1296,6 +1283,9 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	SetCD(CntCArr[8],0),
 	SetCD(CntCArr[9],0),
 	SetCD(CntCArr[10],0),})
+	for j = 7, 8 do
+		TriggerX(FP, {Deaths(i,Exactly,0x10000+j,20)}, {SetCD(ClickCD, 0),SetDeaths(i,SetTo,1,495+j)}, {preserved})
+	end
 	for j = 1, 5 do
 		TriggerX(FP, {Deaths(i,Exactly,0x30000+j,20)}, {SetCD(CntCArr[j],1)}, {preserved})
 		TriggerX(FP, {Deaths(i,Exactly,0x30010+j,20)}, {SetCD(CntCArr[j],10)}, {preserved})
@@ -1347,6 +1337,8 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 			TriggerX(FP, {LocalPlayerID(i)},print_utf8(12,0,StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다.")) ,{preserved})
 		CIfXEnd()
 	CIfEnd()
+	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {CV(InterfaceNum[i+1],257),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 
 
 	CIfEnd()
@@ -1415,11 +1407,11 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	NJump(FP, ClickCDWhile, {CD(ClickCD,1,AtLeast),CD(ClickCD2,1,AtLeast)},{SubCD(ClickCD2, 1)})
 	
 
-
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],3),MSQC_KeyInput(i, "I")},{SubV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],2),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],1),MSQC_KeyInput(i, "P")},{AddV(InterfaceNum[i+1],1)},{preserved})
+
 	CIfEnd()
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x10000,20)}, {SetDeaths(i,SetTo,1,495),SetCp(i),DisplayExtText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)}, {preserved})--ESC
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x40000,20)}, {SetDeaths(i,SetTo,1,494)}, {preserved})--O
@@ -1728,20 +1720,42 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		
 		
 		
+
+
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
+	end
+	
+	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})}) -- 자동구매 관리
+
+
+	CallTrigger(FP, Call_AutoBuy,{})
+	
+	for j, k in pairs(LevelUnitArr) do
+		local UID = k[2]
+		local Per = k[3]
+		local Exp = k[4]
 		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CIV,j-1),SetV(UEper,Per),SetV(UEper2,math.floor(Per/10)),SetV(UEper3,math.floor(Per/100))})
 		CMov(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,1)
-		
-		
-
-
+	
+	
 		CallTrigger(FP, Call_GetUnit)
 		
 		CSub(FP,VArr(GetUnitVArr[i+1], j-1),GetCreateUnit)
 
 		CIfEnd()
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 	end
+
+
+	CElseIfX({TCommand(i,AtLeast,ULimitV2,"Men")})
+	CallTrigger(FP,Call_Print13[i+1])
+	for j = 1, 7 do
+		TriggerX(FP, {LocalPlayerID(i),CV(PCheckV,j)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 "..ULimitArr[j].."기)"))},{preserved})
+	end
+	CIfXEnd()
+
+
+	
 	CallTriggerX(FP, Call_EnchFunc,{Bring(i,AtLeast,1,"Men",8+i)},{SetV(ECP,i)})
 	CallTriggerX(FP, Call_SellFunc,{Bring(i,AtLeast,1,"Men",73+i)},{SetV(ECP,i)})
 	TriggerX(FP,{Bring(i,AtLeast,1,88,73+i)},{MoveUnit(1,88,i,73+i,36+i),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)},{preserved})

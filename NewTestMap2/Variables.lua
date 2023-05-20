@@ -301,6 +301,8 @@ end
 	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"무색 조각 \x04:")
 	--PtsS,PtsSa,PtsSs = DwSaveiStrptrX(FP,"\x04| 포인트 \x04:")
 	--CredS,CredSa,CredSs = DwSaveiStrptrX(FP,"\x04| \x17크레딧 \x04:")
+	iStrL = GetiStrId(FP,MakeiStrVoid(54)) 
+	StrL, StrLa, StrLs = SaveiStrArr(FP,MakeiStrVoid(54))
 
 
 	-- Interface Variable
@@ -473,16 +475,16 @@ end
 	iv.CXEPerLoc = CreateVar(FP)
 	iv.CMEPerLoc = CreateVar(FP)
 	iv.CBrShLoc = CreateVar(FP)
-	iv.Cost_FXPer44Loc = CreateVar(FP)
-	iv.Cost_FIncmLoc = CreateVar(FP)
-	iv.Cost_FXPer45Loc = CreateVar(FP)
-	iv.Cost_FSEXPLoc = CreateVar(FP)
-	iv.Cost_FXPer46Loc = CreateVar(FP)
-	iv.Cost_FBrShLoc = CreateVar(FP)
-	iv.Cost_FXPer47Loc = CreateVar(FP)
-	iv.Cost_FMEPerLoc = CreateVar(FP)
-	iv.Cost_FXPer48Loc = CreateVar(FP)
-	iv.Cost_FMinLoc = CreateVar(FP)
+	iv.Cost_FXPer44Loc = CreateWar(FP)
+	iv.Cost_FIncmLoc = CreateWar(FP)
+	iv.Cost_FXPer45Loc = CreateWar(FP)
+	iv.Cost_FSEXPLoc = CreateWar(FP)
+	iv.Cost_FXPer46Loc = CreateWar(FP)
+	iv.Cost_FBrShLoc = CreateWar(FP)
+	iv.Cost_FXPer47Loc = CreateWar(FP)
+	iv.Cost_FMEPerLoc = CreateWar(FP)
+	iv.Cost_FXPer48Loc = CreateWar(FP)
+	iv.Cost_FMinLoc = CreateWar(FP)
 	iv.AwakItemLoc = CreateVar(FP)
 	iv.FirstRewardLimLoc = CreateVar(FP)
 	
@@ -982,7 +984,7 @@ FirstReward4 = {
 	CS_TotalEPerLimit = 20
 	CS_TotalEper4Limit = 10
 	CS_DPSLVLimit = 1
-	CSX_LV3IncmLimit = 60
+	CSX_LV3IncmLimit = 2960
 	CS_BreakShieldLimit = 200
 
 
@@ -1008,31 +1010,29 @@ FirstReward4 = {
 
 	
 	--	--{Max,FileArr}
-	Cost_FXPer44 = CreateCostData(100,function(n) return 1+((n-1)*(n*1)) end)
+	Cost_FXPer44 = ReciveCostDataFile(100,"FXPer44")
 	--마스터 10.0% = 30만, 
-	Cost_FXPer45 = CreateCostData(100,function(n) return 1+((n-1)*(n*4)) end)
+	Cost_FXPer45 = ReciveCostDataFile(100,"FXPer45")
 	--마스터 10.0% = 130만,
-	Cost_FXPer46 = CreateCostData(100,function(n) return 1+((n-1)*(n*7)) end)
+	Cost_FXPer46 = ReciveCostDataFile(100,"FXPer46")
 	--마스터 10.0% = 230만, 
-	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
+	Cost_FXPer47 = ReciveCostDataFile(100,"FXPer47")
 	--마스터 10.0% = 330만, 
-	Cost_FXPer48 = CreateCostData(1000,function(n) return 1+((n-1)*(n*12)) end)
+	Cost_FXPer48 = ReciveCostDataFile(1000,"FXPer48")
 	--마스터 10.0% = 330만, 
-	Cost_FMEPer = CreateCostData(350,function(n) return 100+((n-1)*(n*1)*n) end)
+	Cost_FMEPer = ReciveCostDataFile(350,"FMEPer")
 	--마스터 1.0% = 376만, 컴플리트 3.0% 1억
-	Cost_FIncm = CreateCostData(200,function(n) return 1+((n-1)*(n*3)) end)
+	Cost_FIncm = ReciveCostDataFile(200,"FIncm")
 	--컴플리트 10000% = 2000만
-	Cost_FSEXP = CreateCostData(1000,function(n) return (2*n) end)
+	Cost_FSEXP = ReciveCostDataFile(1000,"FSEXP")
 	--컴플리트 10000% = 110만
-	Cost_FBrSh = CreateCostData(200,function(n) return 100+((n-1)*(n*3)*n) end)
+	Cost_FBrSh = ReciveCostDataFile(200,"FBrSh")
 	--컴플리트 15.0% = 1.2억
-	
-	
-	Cost_FMin = CreateCostData(200,function(n) return 10000+((n-1)*(162*n)) end)
+	Cost_FMin = ReciveCostDataFile(200,"FMin")
 
 	
 	CSXAwakItemArr = {0}
-	for i = 1, 60 do
+	for i = 1, 2960 do
 		table.insert(CSXAwakItemArr, i+CSXAwakItemArr[i])
 	end
 	CSXAwakItemArr = f_GetFileArrptr(FP,CSXAwakItemArr,4,1)
@@ -1072,6 +1072,7 @@ FirstReward4 = {
 		31+28+31+30+31+30+31+31+30+31,
 		31+28+31+30+31+30+31+31+30+31+30}
 	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
-
+	Create_utf8_Subtitle("\x08아\x0E스\x1F나\x10바\x17보\x1E멍\x1D츙\x15이","whatdonald1@naver.com","GALAXY_BURST")
+	PopSubtitleData()
 	--그외 남는 확률값은 꽝 - 기본 조각 지급(각 1,2,5,10개)
 end

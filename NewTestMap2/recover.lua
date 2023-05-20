@@ -43,7 +43,6 @@ function SaveFileArr(FileArray,ElementSize,FileName)
 	io.close(Fileptr)
 	return size
 end
---[[
 EXPArr = {}
 --	for i = 1, 100000 do
 --        local XI = 3
@@ -54,7 +53,7 @@ EXPArr = {}
     mw3 = 6
     cci=0
     
-for i = 1, 322323 do
+for i = 1, 300001 do
    -- if 0xFFFFFFFFFFFFFFFF
 	EXPArr[i] = mw2
     mw=mw+mw3
@@ -71,7 +70,7 @@ to = 0
 
 local Fileptr = io.open("C:\\Temp\\expdata1.txt", "wb")
 local Fileptr2 = io.open("C:\\Temp\\expdata_dp1.txt", "wb")
-for i = 1, 322323 do
+for i = 1, 300001 do
     local ex = EXPArr[i]
     to = to + ex
     local idx = (i-1)*4
@@ -88,22 +87,69 @@ for i = 1, 322323 do
     Fileptr2:write(i.."  "..to.."      32 : "..bit32.band((math.floor(to%4294967296)), 0xFFFFFFFF).."     64 : "..bit32.band(math.floor(to/4294967296), 0xFFFFFFFF).."\n")
 
 end
+io.close(Fileptr)
+io.close(Fileptr2)
 
+function SigmaT(max,Func)
+	local t={}
+	for i = 1, max do
+		t[i] = Func(i)
+	end
+	return t
+end
 
-
-
-
-
-
-
-
-
-
-
-
+function SigmaDPT(max,Func)
+	local t={0}
+	for i = 1, max do
+		t[i+1] = t[i]+Func(i)
+	end
+	return t
+end
 
 SaveFileArr(EXPArr4,4,"expdata")
 SaveFileArr(EXPArr4_2,4,"expdata_dp")
+function CreateCostDataFile(Max,SFunc,FileName)
+    Max= Max+1
+    local t = SigmaT(Max,SFunc)
+    local dpt = SigmaDPT(Max,SFunc)
+    local CostArr4 = {}
+    local CostArr4_2 = {}
+
+    local Fileptr = io.open("C:\\Temp\\"..FileName..".txt", "wb")
+    local Fileptr2 = io.open("C:\\Temp\\"..FileName.."_dp.txt", "wb")
+    for i = 1, Max do
+        local idx = (i-1)*4
+        CostArr4[idx+1] = (math.floor(t[i]%4294967296))
+        CostArr4[idx+2] = math.floor(t[i]/4294967296)
+        CostArr4[idx+3] = 0
+        CostArr4[idx+4] = 0
+        CostArr4_2[idx+1] = (math.floor(dpt[i]%4294967296))
+        CostArr4_2[idx+2] = math.floor(dpt[i]/4294967296)
+        CostArr4_2[idx+3] = 0
+        CostArr4_2[idx+4] = 0
+        Fileptr:write(i.." - 32 : "..math.floor(t[i]%4294967296).."    64 : "..math.floor(t[i]/4294967296).. "\n")
+        Fileptr2:write(i.." - 32 : "..math.floor(dpt[i]%4294967296).."    64 : "..math.floor(dpt[i]/4294967296).. "\n")
+    end
+    SaveFileArr(CostArr4,4,FileName.."")
+    SaveFileArr(CostArr4_2,4,FileName.."_dp")
+    io.close(Fileptr)
+    io.close(Fileptr2)
+
+
+end
+
+
+
+Cost_FXPer44 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*1)) end,"FXPer44")
+Cost_FXPer45 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*4)) end,"FXPer45")
+Cost_FXPer46 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*7)) end,"FXPer46")
+Cost_FXPer47 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*10)) end,"FXPer47")
+Cost_FXPer48 = CreateCostDataFile(1000,function(n) return 1+((n-1)*(n*12)) end,"FXPer48")
+Cost_FMEPer = CreateCostDataFile(350,function(n) return 100+((n-1)*(n*1)*n) end,"FMEPer")
+Cost_FIncm = CreateCostDataFile(200,function(n) return 1+((n-1)*(n*3)) end,"FIncm")
+Cost_FSEXP = CreateCostDataFile(1000,function(n) return (2*n) end,"FSEXP")
+Cost_FBrSh = CreateCostDataFile(200,function(n) return 100+((n-1)*(n*3)*n) end,"FBrSh")
+Cost_FMin = CreateCostDataFile(200,function(n) return 10000+((n-1)*(162*n)) end,"FMin")
 
     function exp(lv)
         total = 0
@@ -140,7 +186,6 @@ SaveFileArr(EXPArr4_2,4,"expdata_dp")
 
     exp2(100000)
 
-]]
 function leafyear(i)
     if i % 4 == 0 then    --           # 4로 나누어 떨어지는지 확인
         if i % 100 == 0 then   --      # 100으로 나누어 떨어지는지 확인
@@ -168,8 +213,8 @@ local Fileptr = io.open("C:\\Temp\\yeararr.txt", "wb")
     end
 
     SaveFileArr(YearArr,4,"YearData")
+    io.close(Fileptr)
     
-
 
 
     --print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))

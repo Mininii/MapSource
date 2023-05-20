@@ -4,7 +4,9 @@ import TriggerEditor.SCAWrapper as scw;
 function SCmp(cp){
 	var value = cp;
 }
+const SCAStr = EUDArray(60*8);
 const str1 = StringBuffer(1024);
+const SubtitleData = [Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4)];
 const MapMakerFlag = PVariable();
 const PLevel = PVariable();
 const StatP = PVariable();
@@ -312,6 +314,7 @@ function beforeTriggerExec(){
 	const Rankst = PVariable();
 	const Rankst2 = PVariable();
 	const RankNum = PVariable();
+	const CustomSubTitleEnabled = PVariable();
 	const RankName = [Db("st"),Db("nd"),Db("rd"),Db("th")];
 	
 	var GLoadCheck;
@@ -465,9 +468,14 @@ function beforeTriggerExec(){
  * 11 = 시간 로드
  * 12 = 글로벌데이터 로드
 ***/
-
 		if (sca.GetLastMessage() == 4){ // 로드완료일경우 
 			SetDeathsX(CurrentPlayer,SetTo,4,1,4);
+			if (SCAStr[60*cp]>=1 && CustomSubTitleEnabled[cp]==0) { // 칭호 데이터가 감지될 경우
+				for (var i = 0; i < 60; i++){
+					SetDeaths(EPD(SubtitleData[cp])+i,SetTo,SCAStr[(60*cp)+i],0);
+				}
+				CustomSubTitleEnabled[cp]=1;
+			}
 		}
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,4);
@@ -520,6 +528,7 @@ function beforeTriggerExec(){
 		if(<?ChatEvent("cp","@칭호")?>){
 			DisplayText("\x13\x11칭호 \x04도움말\n\x13@보유칭호 \x04: 자신이 보유한 칭호를 볼 수 있습니다.\n\x13@칭호 0 \x04: 칭호를 사용안함 상태로 변경합니다.\n\x13@칭호 1 \x04: 1번 칭호를 착용합니다.\n\x13@칭호 2 \x04: 2번 칭호를 착용합니다.\n\x13그외 @칭호 3, @칭호 4 등등이 있습니다,");
 		}
+		
 		//48번유닛은 칭호사용가능 여부 전달인자
 		if(<?ChatEvent("cp","@보유칭호")?>){
 			if(MapMakerFlag[cp]>=1){
@@ -585,6 +594,12 @@ function beforeTriggerExec(){
 			}
 			else{
 			DisplayText("\x07『 \x03@칭호 6 \x04: \x08없음 \x07』");
+			}
+			if(CustomSubTitleEnabled[cp]>=1){
+			str1.print("\x07『 \x03@칭호 커스텀 \x04: \x07[",ptr2s(SubtitleData[cp]),"\x07] \x07』");
+			}
+			else{
+			DisplayText("\x07『 \x03@칭호 커스텀 \x04: \x08없음 \x07』");
 			}
 		}
 		
@@ -671,6 +686,18 @@ function beforeTriggerExec(){
 					SetDeaths(CurrentPlayer,SetTo,1,49);
 			}
 		}
+		if(<?ChatEvent("cp","@칭호 커스텀")?>){
+			if(CustomSubTitleEnabled[cp]>=1){//커스텀칭호
+				f_eprintln("\x03칭호\x04가 \x07커스텀 \x04으로 변경되었습니다.");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+					SetDeaths(CurrentPlayer,SetTo,256,50);
+			}
+			else{
+				f_eprintln("\x03칭호\x04사용 권한이 없습니다..");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+			}
+		}
+
 		
 		if(Deaths(cp,AtLeast,1,50)){
 			if(Deaths(cp,Exactly,1,50)){
@@ -729,6 +756,12 @@ function beforeTriggerExec(){
 				SetPNamef(cp,"\x07[\x11S\x04eason \x0F3 \x07P\x04layer\x07] {:c}{:n}",cp,cp);
 					}
 			}
+			else if(Deaths(cp,Exactly,256,50)){
+				if(CustomSubTitleEnabled[cp]>=1){//커스텀칭호
+				SetPNamef(cp,"\x07[{:s}\x07] {:c}{:n}",SubtitleData[cp],cp,cp);
+					}
+			}
+
 		
 		}
 		

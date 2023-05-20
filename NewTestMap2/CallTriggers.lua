@@ -1235,7 +1235,11 @@ function Install_CallTriggers()
 
 	Call_FfragShop = SetCallForward()
 	SetCall(FP)
+	GetINumData = CreateVar(FP)
+	GetPStatData = CreateVar(FP)
+	CMovX(FP,GetINumData,VArrX(GetVArray(iv.InterfaceNum[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	
+	CIfX(FP,{CV(GetINumData,256)})
 	FragBuyFnc(iv.FXPer44,Cost_FXPer44,iv.Cost_FXPer44Loc,CntCArr[1],failCcode)
 	FragBuyFnc(iv.FXPer45,Cost_FXPer45,iv.Cost_FXPer45Loc,CntCArr[2],failCcode)
 	FragBuyFnc(iv.FXPer46,Cost_FXPer46,iv.Cost_FXPer46Loc,CntCArr[3],failCcode)
@@ -1246,14 +1250,15 @@ function Install_CallTriggers()
 	FragBuyFnc(iv.FBrSh,Cost_FBrSh,iv.Cost_FBrShLoc,CntCArr[8],failCcode)
 	FragBuyFnc(iv.FMEPer,Cost_FMEPer,iv.Cost_FMEPerLoc,CntCArr[9],failCcode)
 	FragBuyFnc(iv.FMin,Cost_FMin,iv.Cost_FMinLoc,CntCArr[10],failCcode)
+	CElseIfX({CV(GetINumData,257)})
+	
+	CIfXEnd()
 	SetCallEnd()
 	Call_StatShop = SetCallForward()
 	SetCall(FP)
 	
 	ClickCD = CreateCcode()
 	ClickCD2 = CreateCcode()
-	GetINumData = CreateVar(FP)
-	GetPStatData = CreateVar(FP)
 	CMovX(FP,GetINumData,VArrX(GetVArray(iv.InterfaceNum[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetPStatData,VArrX(GetVArray(iv.StatP[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 
@@ -1344,16 +1349,45 @@ function Install_CallTriggers()
 	CMovX(FP,GetData_FBrSh,VArrX(GetVArray(iv.FBrSh[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FXPer48,VArrX(GetVArray(iv.FXPer48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FMin,VArrX(GetVArray(iv.FMin[1], 7), VArrI, VArrI4),nil,nil,nil,1)
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FXPer44[3],GetData_FXPer44)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FXPer45[3],GetData_FXPer45)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FXPer46[3],GetData_FXPer46)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FXPer47[3],GetData_FXPer47)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FMEPer[3],GetData_FMEPer)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FIncm[3],GetData_FIncm)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FSEXP[3],GetData_FSEXP)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FBrSh[3],GetData_FBrSh)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FXPer48[3],GetData_FXPer48)),0})
-	f_LAdd(FP,TempFfragTotal,TempFfragTotal,{_ReadF(FArr(Cost_FMin[3],GetData_FMin)),0})
+
+	
+	
+
+
+	local LIndex = CreateVar(FP)
+	local TempCostW = CreateWar(FP)
+	f_LMov(FP,TempFfragTotal,"0")
+	ConvertLArr(FP, LIndex, _Add(GetData_FXPer44, 151), 8)
+	f_LRead(FP, LArrX({Cost_FXPer44[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FXPer45, 151), 8)
+	f_LRead(FP, LArrX({Cost_FXPer45[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FXPer46, 151), 8)
+	f_LRead(FP, LArrX({Cost_FXPer46[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FXPer47, 151), 8)
+	f_LRead(FP, LArrX({Cost_FXPer47[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FMEPer, 151), 8)
+	f_LRead(FP, LArrX({Cost_FMEPer[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FIncm, 151), 8)
+	f_LRead(FP, LArrX({Cost_FIncm[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FSEXP, 151), 8)
+	f_LRead(FP, LArrX({Cost_FSEXP[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FBrSh, 151), 8)
+	f_LRead(FP, LArrX({Cost_FBrSh[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FXPer48, 151), 8)
+	f_LRead(FP, LArrX({Cost_FXPer48[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FMin, 151), 8)
+	f_LRead(FP, LArrX({Cost_FMin[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+
 	
 	
 	local TempW = CreateWar(FP)
@@ -1434,22 +1468,24 @@ function Install_CallTriggers()
 		
 		
 		
+		
+		
 
 	]]
 	Ga_45 = {--기대치 2개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit},
-		{"\x1E각성의 보석",1,10,iv.AwakItem},
-		{"\x02무색 조각",10000,40,iv.B_PFfragItem},
+		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x1E각성의 보석",1,10,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",10000,40,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",10,1000,iv.Money2},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit},
+		{"\x17크레딧",2000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1041강 유닛",10,20000,iv.E41},
 		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
 	Ga_46 = {--기대치 7개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit},
-		{"\x1E각성의 보석",1,40,iv.AwakItem},
-		{"\x02무색 조각",40000,25,iv.B_PFfragItem},
+		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x1E각성의 보석",1,40,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",40000,25,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",40,1000,iv.Money2},
 		{"\x17크레딧",3000000,5000,iv.B_PCredit},
 		{"\x1D42강 유닛",10,20000,iv.E42},
@@ -1457,21 +1493,21 @@ function Install_CallTriggers()
 	}
 
 	Ga_47 = {--기대치 20개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit},
-		{"\x1E각성의 보석",1,160,iv.AwakItem},
-		{"\x02무색 조각",70000,110,iv.B_PFfragItem},
+		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x1E각성의 보석",1,160,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",70000,110,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",70,2000,iv.Money2},
-		{"\x17크레딧",4000000,5000,iv.B_PCredit},
+		{"\x17크레딧",4000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x0643강 유닛",10,20000,iv.E43},
 		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
 	Ga_48 = {--기대치 50개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit},
-		{"\x1E각성의 보석",1,500,iv.AwakItem},
-		{"\x02무색 조각",100000,990,iv.B_PFfragItem},
+		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x1E각성의 보석",1,500,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",100000,990,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",100,3000,iv.Money2},
-		{"\x17크레딧",5000000,5000,iv.B_PCredit},
+		{"\x17크레딧",5000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1F44강 유닛",10,20000,iv.E44},
 		{"\x0643강 유닛",10,30000,iv.E43},
 	}
@@ -1513,6 +1549,16 @@ for i = 45, 48 do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
 		CTrigger(FP, {}, {DisplayExtText(StrDesignX((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."),4)}, 1)
+		if k[5]~=nil then
+			CIf(FP,{TMemory(0x512684,Exactly,GCP)})
+			if k[5][4]=="V" then
+				CAdd(FP,k[5],k[2])
+			elseif k[5][4]=="W" then
+				f_LAdd(FP,k[5],k[5],tostring(k[2]))
+			end
+			CIfEnd()
+
+		end
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
@@ -1546,6 +1592,9 @@ for i = 45, 48 do
 	errt = errt..(TotalGPer).."  100000\n" -- 꽝일경우
 	--error(errt)
 	DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
+	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
+		CAdd(FP,iv.GFfragLoc,pifrag[i-44])
+	CIfEnd()
 
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
@@ -1620,8 +1669,8 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	GetAutoBuyCode2 = CreateVar(FP)
 	GetMoney2 = CreateVar(FP)
 	GetMoney = CreateWar(FP)
-	GetBuyTicket = CreateVar(FP)
-	CMovX(FP,GetBuyTicket,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	GetBuyTicket = CreateWar(FP)
+	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode2,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
@@ -1643,7 +1692,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 
 	
-	CMovX(FP,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),GetBuyTicket,nil,nil,nil,1)
+	f_LMovX(FP, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),GetBuyTicket,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),GetAutoBuyCode,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),GetAutoBuyCode2,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)
@@ -1667,7 +1716,6 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	local EXP = CreateVar(FP)
 
 
-
 	Call_EnchFunc = SetCallForward()
 	SetCall(FP)
 	local CI = CFor(FP,0,#LevelUnitArr,1)
@@ -1680,153 +1728,50 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 	CMov(FP,ELevelB,CI)
 	
-	CIf(FP,VRange(CI, 0, 38))
-	if Limit == 1 then
-		if CreatorCheatMode == 1 then
-			CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-			CIfX(FP, {TBring(GCP,AtLeast,10,UID,_Add(GCP,8))},{TKillUnitAt(10, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,10)})
-			CElseIfX({TBring(GCP,AtLeast,9,UID,_Add(GCP,8))},{TKillUnitAt(9, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,9)})
-			CElseIfX({TBring(GCP,AtLeast,8,UID,_Add(GCP,8))},{TKillUnitAt(8, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,8)})
-			CElseIfX({TBring(GCP,AtLeast,7,UID,_Add(GCP,8))},{TKillUnitAt(7, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,7)})
-			CElseIfX({TBring(GCP,AtLeast,6,UID,_Add(GCP,8))},{TKillUnitAt(6, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,6)})
-			CElseIfX({TBring(GCP,AtLeast,5,UID,_Add(GCP,8))},{TKillUnitAt(5, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,5)})
-			CElseIfX({TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,4)})
-			CElseIfX({TBring(GCP,AtLeast,3,UID,_Add(GCP,8))},{TKillUnitAt(3, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,3)})
-			CElseIfX({TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
-			CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
-			CIfXEnd()
-			CIfEnd()
-		else
-			CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-			CIfX(FP,{TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
-			CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
-			CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
-			CIfXEnd()
-			CIfEnd()
-		end
-		else
-		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-		CIfX(FP,{TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,2)})
-		CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP),})
-		CallTriggerX(FP, Call_Enchant, {}, {SetV(ECW,1)})
-		CIfXEnd()
+	
+	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))},{SetV(ECW,0)})
+		UnitReadX(FP,GCP,UID,_Add(GCP,8),ECW)
+		TriggerX(FP, CV(ECW,50,AtLeast), {SetV(ECW,50)},{preserved})
+		--DisplayPrintEr(GCP, {"ECW : ",ECW,"   UID : ",UID})
+
+		CIf(FP,VRange(CI, 0, 38))
+			CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
+			CallTrigger(FP, Call_Enchant)
 		CIfEnd()
-	end
-	CIfEnd()
-	CIf(FP,VRange(CI, 39, 42))
-		CSub(FP,XEper,GEper4,UEper)
-		CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-		if Limit== 1 then
-			if CreatorCheatMode == 1 then
-				CIfX(FP,{CV(XEper,1,AtLeast)})
-				CIfX(FP, {TBring(GCP,AtLeast,20,UID,_Add(GCP,8))},{TKillUnitAt(20, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,20)})
-				CElseIfX({TBring(GCP,AtLeast,19,UID,_Add(GCP,8))},{TKillUnitAt(19, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,19)})
-				CElseIfX({TBring(GCP,AtLeast,18,UID,_Add(GCP,8))},{TKillUnitAt(18, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,18)})
-				CElseIfX({TBring(GCP,AtLeast,17,UID,_Add(GCP,8))},{TKillUnitAt(17, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,17)})
-				CElseIfX({TBring(GCP,AtLeast,16,UID,_Add(GCP,8))},{TKillUnitAt(16, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,16)})
-				CElseIfX({TBring(GCP,AtLeast,15,UID,_Add(GCP,8))},{TKillUnitAt(15, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,15)})
-				CElseIfX({TBring(GCP,AtLeast,14,UID,_Add(GCP,8))},{TKillUnitAt(14, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,14)})
-				CElseIfX({TBring(GCP,AtLeast,13,UID,_Add(GCP,8))},{TKillUnitAt(13, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,13)})
-				CElseIfX({TBring(GCP,AtLeast,12,UID,_Add(GCP,8))},{TKillUnitAt(12, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,12)})
-				CElseIfX({TBring(GCP,AtLeast,11,UID,_Add(GCP,8))},{TKillUnitAt(11, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,11)})
-				CElseIfX({TBring(GCP,AtLeast,10,UID,_Add(GCP,8))},{TKillUnitAt(10, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,10)})
-				CElseIfX({TBring(GCP,AtLeast,9,UID,_Add(GCP,8))},{TKillUnitAt(9, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,9)})
-				CElseIfX({TBring(GCP,AtLeast,8,UID,_Add(GCP,8))},{TKillUnitAt(8, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,8)})
-				CElseIfX({TBring(GCP,AtLeast,7,UID,_Add(GCP,8))},{TKillUnitAt(7, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,7)})
-				CElseIfX({TBring(GCP,AtLeast,6,UID,_Add(GCP,8))},{TKillUnitAt(6, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,6)})
-				CElseIfX({TBring(GCP,AtLeast,5,UID,_Add(GCP,8))},{TKillUnitAt(5, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,5)})
-				CElseIfX({TBring(GCP,AtLeast,4,UID,_Add(GCP,8))},{TKillUnitAt(4, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,4)})
-				CElseIfX({TBring(GCP,AtLeast,3,UID,_Add(GCP,8))},{TKillUnitAt(3, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,3)})
-				CElseIfX({TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,2)})
-				CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,1)})
-				CIfXEnd()
-				CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
-				CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
-				CIfXEnd()
-			else
-				CIfX(FP,{CV(XEper,1,AtLeast)})
-				CIfX(FP, {TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,2)})
-				CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP)})
-				CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,1)})
-				CIfXEnd()
-				CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
-				CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
-				CIfXEnd()
-			end
-			
-		else
+		CIf(FP,VRange(CI, 39, 42))
+			CSub(FP,XEper,GEper4,UEper)
 			CIfX(FP,{CV(XEper,1,AtLeast)})
-			CIfX(FP, {TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,2)})
-			CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP)})
-			CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,1)})
-			CIfXEnd()
+			CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
+			CallTrigger(FP, Call_Enchant2)
+
+			CElseX()
 			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
 			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
 			CIfXEnd()
-		end
+
 		CIfEnd()
 
-	CIfEnd()
+		CIf(FP,VRange(CI, 43, 48))
+			CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,UEper))},1)
+			CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,UEper))},1)
+			CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,UEper))},1)
+			CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,UEper))},1)
+			CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,UEper))},1)
+			CTrigger(FP, CV(CI,48), {SetV(XEper,UEper)},1)
 
+			CIf(FP,{VRange(CI, 43, 47)})
+			CiSub(FP,XEper,iv.XEPerM)
+			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
+			CIfEnd()
+			
+			CIfX(FP,{CV(XEper,1,AtLeast)})
+				CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
+				CallTrigger(FP, Call_Enchant2)
+			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
+			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
+			CIfXEnd()
 
-	CIf(FP,VRange(CI, 43, 48))
-
-	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,8))})
-	CTrigger(FP, CV(CI,43), {SetV(XEper,_Add(GetXEper44,UEper))},1)
-	CTrigger(FP, CV(CI,44), {SetV(XEper,_Add(GetXEper45,UEper))},1)
-	CTrigger(FP, CV(CI,45), {SetV(XEper,_Add(GetXEper46,UEper))},1)
-	CTrigger(FP, CV(CI,46), {SetV(XEper,_Add(GetXEper47,UEper))},1)
-	CTrigger(FP, CV(CI,47), {SetV(XEper,_Add(GetXEper48,UEper))},1)
-	CTrigger(FP, CV(CI,48), {SetV(XEper,UEper)},1)
-	CIf(FP,{VRange(CI, 43, 47)})
-	CiSub(FP,XEper,iv.XEPerM)
-	TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
-	CIfEnd()
-
-	CIfX(FP,{CV(XEper,1,AtLeast)})
-		CIfX(FP,{TBring(GCP,AtLeast,2,UID,_Add(GCP,8))},{TKillUnitAt(2, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,2)})
-		CElseX({TKillUnitAt(1, UID, _Add(GCP,8), GCP)})
-		CallTriggerX(FP, Call_Enchant2, {}, {SetV(ECW,1)})
-		CIfXEnd()
-	CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
-	CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
-	CIfXEnd()
-	CIfEnd()
+		CIfEnd()
 	CIfEnd()
 	CForEnd()
 
@@ -1844,43 +1789,59 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMov(FP,ELevelB,CI)
 	CMovX(FP,EXP,VArrX(ExpDataArr,VI,VI4),nil,nil,nil,1)
 
-	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,73))})
+	CIf(FP,{TBring(GCP,AtLeast,1,UID,_Add(GCP,73))},{SetV(ECW,0)})
+		UnitReadX(FP,GCP,UID,_Add(GCP,73),ECW)
+		TriggerX(FP, CV(ECW,255,AtLeast), SetV(ECW,255), {preserved})
 		CIfX(FP,{CV(EXP,1,AtLeast)})
 			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
 			CElseX()
-				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(1, UID, GCP+73, GCP)})--판매권이필요없어요
-					f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
+				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--판매권이필요없어요
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIf(FP, {CV(CI,14)})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
 					CIfEnd()
 				CElseX()--판매권이필요행
 					CIfX(FP, {TTNWar(GetSellTicket,AtMost,"0")}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
-					CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
-					f_LSub(FP, GetSellTicket, GetSellTicket, "1")
-					f_LAdd(FP, TempEXPW,TempEXPW, {EXP,0})
+					CElseX({TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
+					f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIfXEnd()
 				CIfXEnd()
 			CIfXEnd()
 		CElseIfX(VRange(CI,44, 47))
 			CIfX(FP, {TTNWar(GetSellTicket,AtMost,"9999")},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
-			CElseX({TKillUnitAt(1, UID, GCP+73, GCP)})
-			f_LSub(FP, GetSellTicket, GetSellTicket, "10000")
-			CIf(FP, {CV(CI,44)},{})
-			CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4096,SetTo,nil,4096,1)
-			CMovX(FP,VArrX(GetVArray(iv.S45[1], 7),VArrI,VArrI4),1,Add)
-			CIfEnd()
-			CIf(FP, {CV(CI,45)})
-			CMovX(FP,VArrX(GetVArray(iv.S46[1], 7),VArrI,VArrI4),1,Add)
-			CIfEnd()
-			CIf(FP, {CV(CI,46)})
-			CMovX(FP,VArrX(GetVArray(iv.S47[1], 7),VArrI,VArrI4),1,Add)
-			CIfEnd()
-			CIf(FP, {CV(CI,47)})
-			CMovX(FP,VArrX(GetVArray(iv.S48[1], 7),VArrI,VArrI4),1,Add)
-			CIfEnd()
-			CMov(FP,ECP,GCP)
-			CMov(FP,GaLv,CI,1)
-			CallTrigger(FP, Call_Gacha)
+			CElseX({})
+			local TempWC = CreateWar()
+				f_LDiv(FP, TempWC, GetSellTicket, "10000")
+				CIfX(FP,{CV(ECW,_Cast(0,TempWC),AtMost)})
+				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul({ECW,0},"10000"))
+				CDoActions(FP, {TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
+				CElseX()
+				f_Cast(FP, {ECW,0}, TempWC, nil, nil, 1)
+				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul({ECW,0},"10000"))
+				CDoActions(FP, {TKillUnitAt(_lShift(_Cast(0,TempWC), 24), UID, GCP+73, GCP),TMoveUnit(All,UID,GCP,GCP+73,GCP+36)})
+				CIfXEnd()
+
+
+				CIf(FP, {CV(CI,44)},{})
+					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4096,SetTo,nil,4096,1)
+					CMovX(FP,VArrX(GetVArray(iv.S45[1], 7),VArrI,VArrI4),ECW,Add)
+				CIfEnd()
+				CIf(FP, {CV(CI,45)})
+					CMovX(FP,VArrX(GetVArray(iv.S46[1], 7),VArrI,VArrI4),ECW,Add)
+				CIfEnd()
+				CIf(FP, {CV(CI,46)})
+					CMovX(FP,VArrX(GetVArray(iv.S47[1], 7),VArrI,VArrI4),ECW,Add)
+				CIfEnd()
+				CIf(FP, {CV(CI,47)})
+					CMovX(FP,VArrX(GetVArray(iv.S48[1], 7),VArrI,VArrI4),ECW,Add)
+				CIfEnd()
+				CMov(FP,ECP,GCP)
+				CMov(FP,GaLv,CI,1)
+				
+				CWhile(FP, {CV(ECW,1,AtLeast)},{SubV(ECW,1)})
+				CallTrigger(FP, Call_Gacha)
+				CWhileEnd()
 			CIfXEnd()
 		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)})
 		CIfXEnd()
@@ -1912,7 +1873,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	f_LMov(FP,LMulOP,{GetMulOp,0})
 	f_LMovX(FP, GetCreditData, WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
-	CMovX(FP,GetBuyTicket,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetOldTicket,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 
@@ -2017,7 +1978,7 @@ CIf(FP,{TBring(GCP,AtLeast,1,15,177)},{TMoveUnit(1, 15, GCP, 177, 168)})
 CIfX(FP,{CV(GetPETicket,GetMulOp,AtLeast)},{})
 	
 	CSub(FP,GetPETicket,GetMulOp)
-	CAdd(FP,GetBuyTicket,_Mul(GetMulOp,50000))
+	f_LAdd(FP, GetBuyTicket,GetBuyTicket, _LMul({GetMulOp,0}, "50000"))
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,GetMulOp)
 	DisplayPrint(GCP, {"\x13\x07『 \x1F신 확정 강화권\x04을 ",GetMulOp,"개 사용하여 ",TempV," \x08구입 티켓\x04으로 \x07변환 \x04하였습니다. \x07』"})
@@ -2026,7 +1987,7 @@ CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),Disp
 CIfXEnd()
 CIfEnd()
 
-CMovX(FP,VArrX(GetVArray(iv.BuyTicket[1], 7), VArrI, VArrI4),GetBuyTicket,SetTo,nil,nil,1)
+f_LMovX(FP,WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),GetBuyTicket,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),GetMissionData,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),GetAwakItemData,SetTo,nil,nil,1)
@@ -2076,6 +2037,7 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 		NIfXEnd()
 	NElseX()
 		NJumpEnd(FP, AutoEnchJump)
+		TriggerX(FP,{CV(GetCreateUnit,30,AtLeast)},{SetV(GetCreateUnit,30)},{preserved})
 		CDoActions(FP, {
 			TSetNVar(SAmount,SetTo,GetCreateUnit),
 			TSetNVar(SUnitID,SetTo,UIDV),
