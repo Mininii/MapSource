@@ -220,6 +220,8 @@ function DataArr()
 	iv.CXEPer,ct.CXEPer = CreateDataPV("CXEPer")
 	iv.CMEPer,ct.CMEPer = CreateDataPV("CMEPer")
 	iv.CBrSh,ct.CBrSh = CreateDataPV("CBrSh")
+
+
 	iv.ResetStat2,ct.ResetStat2 = CreateDataPV("ResetStat2")
 	iv.XEPer44,ct.XEPer44 = CreateDataPV("XEPer44")
 	iv.XEPer45,ct.XEPer45 = CreateDataPV("XEPer45")
@@ -342,7 +344,12 @@ function DataArr()
 	iv.GFfragLoc = CreateVar(FP)
 	iv.GCreditLoc = CreateWar(FP)
 	iv.GAwakItemLoc = CreateVar(FP)
-
+	iv.FAcc,ct.FAcc,iv.FAccLoc = CreateDataPV("FAcc",SCA.FAcc,1)
+	iv.FAcc2,ct.FAcc2,iv.FAcc2Loc = CreateDataPV("FAcc2",SCA.FAcc2,1)
+	iv.FBrSh2,ct.FBrSh2,iv.FBrSh2Loc = CreateDataPV("FBrSh2",SCA.FBrSh2,1)
+	iv.FMEPer2,ct.FMEPer2,iv.FMEPer2Loc = CreateDataPV("FMEPer2",SCA.FMEPer2,1)
+	iv.CMEPer2,ct.CMEPer2 = CreateDataPV("CMEPer2")
+	iv.CBrSh2,ct.CBrSh2 = CreateDataPV("CBrSh2")
 
 
 	for j,k in pairs(SCA_DataArr) do

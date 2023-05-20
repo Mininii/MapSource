@@ -406,6 +406,10 @@ for i = 0, 6 do -- 각플레이어
 			SetV(iv.FBrSh[i+1],0),
 			SetV(iv.FXPer48[i+1],0),
 			SetV(iv.FMin[i+1],0),
+			SetV(iv.FAcc[i+1],0),
+			SetV(iv.FAcc2[i+1],0),
+			SetV(iv.FBrSh2[i+1],0),
+			SetV(iv.FMEPer2[i+1],0),
 			SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 		})
 		CTrigger(FP, {TTNVar(iv.FStatVer[i+1], NotSame, StatVer2)}, {SetCp(i),
@@ -1058,6 +1062,12 @@ end
 	CIfChkVar(iv.FBrSh[i+1])
 	CMov(FP,iv.CBrSh[i+1],_Mul(iv.FBrSh[i+1],_Mov(100)))
 	CIfEnd()
+	CIfChkVar(iv.FMEPer2[i+1])
+	CMov(FP,iv.CMEPer2[i+1],_Mul(iv.FMEPer2[i+1],_Mov(10)))
+	CIfEnd()
+	CIfChkVar(iv.FBrSh2[i+1])
+	CMov(FP,iv.CBrSh2[i+1],_Mul(iv.FBrSh2[i+1],_Mov(10)))
+	CIfEnd()
 	
 	local CCVar = CreateVar2(FP,nil,nil,0xFFFFFFFF)
 	local CCVar2 = CreateVar2(FP,nil,nil,0xFFFFFFFF)
@@ -1325,6 +1335,10 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 				SetV(iv.FSEXP[i+1],0),
 				SetV(iv.FXPer48[i+1],0),
 				SetV(iv.FMin[i+1],0),
+				SetV(iv.FAcc[i+1],0),
+				SetV(iv.FAcc2[i+1],0),
+				SetV(iv.FBrSh2[i+1],0),
+				SetV(iv.FMEPer2[i+1],0),
 				SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 				SetV(ResetStat2[i+1],1),
 			})
@@ -1482,6 +1496,16 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	CAdd(FP,iv.XEPer45[i+1],iv.CMEPer[i+1])
 	CAdd(FP,iv.XEPer46[i+1],iv.CMEPer[i+1])
 	CAdd(FP,iv.XEPer47[i+1],iv.CMEPer[i+1])
+	CAdd(FP,TotalEPer[i+1],iv.CMEPer2[i+1])
+	CAdd(FP,iv.XEPer44[i+1],iv.CMEPer2[i+1])
+	CAdd(FP,iv.XEPer45[i+1],iv.CMEPer2[i+1])
+	CAdd(FP,iv.XEPer46[i+1],iv.CMEPer2[i+1])
+	CAdd(FP,iv.XEPer47[i+1],iv.CMEPer2[i+1])
+	CAdd(FP,iv.XEPer48[i+1],iv.CMEPer2[i+1])
+
+	
+
+
 	CAdd(FP,TotalBreakShield[i+1],iv.CBrSh[i+1])
 	
 	

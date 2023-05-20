@@ -96,6 +96,11 @@ const FirstRewardLim2 = PVariable();
 const TimeAttackScore50 = PVariable();
 const FfragItemRank = PVariable();
 const SellTicket64 = PVariable();
+const FAcc = PVariable();
+const FAcc2 = PVariable();
+const FBrSh2 = PVariable();
+const FMEPer2 = PVariable();
+
 var Asm_Arrptr;
 function onPluginStart(){
 
@@ -292,6 +297,17 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(FfragItemRank)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(SellTicket64)+focus,0);
 Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FAcc)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FAcc2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FBrSh2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FMEPer2)+focus,0);
+Asm_Arrptr+=1;
+
+
+
 
 
 

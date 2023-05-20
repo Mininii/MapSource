@@ -183,7 +183,10 @@ end
 	SCA.TimeAttackScore50 = SCA.CreateVar(FP)
 	SCA.FfragItemRank = SCA.CreateVar(FP)
 	SCA.SellTicket64 = SCA.CreateVar(FP)
-
+	SCA.FAcc = SCA.CreateVar(FP)
+	SCA.FAcc2 = SCA.CreateVar(FP)
+	SCA.FBrSh2 = SCA.CreateVar(FP)
+	SCA.FMEPer2 = SCA.CreateVar(FP)
 	
 	SCA.GReload = CreateCcode()
 	SCA.LoadSlot1 = CreateCcodeArr(7)
@@ -485,6 +488,12 @@ end
 	iv.Cost_FMEPerLoc = CreateWar(FP)
 	iv.Cost_FXPer48Loc = CreateWar(FP)
 	iv.Cost_FMinLoc = CreateWar(FP)
+	iv.Cost_FAccLoc = CreateWar(FP)
+	iv.Cost_FAcc2Loc = CreateWar(FP)
+	iv.Cost_FBrSh2Loc = CreateWar(FP)
+	iv.Cost_FMEPer2Loc = CreateWar(FP)
+
+
 	iv.AwakItemLoc = CreateVar(FP)
 	iv.FirstRewardLimLoc = CreateVar(FP)
 	
@@ -1029,6 +1038,12 @@ FirstReward4 = {
 	Cost_FBrSh = ReciveCostDataFile(200,"FBrSh")
 	--컴플리트 15.0% = 1.2억
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
+	
+	Cost_FAcc = ReciveCostDataFile(10, "FAcc")
+	Cost_FAcc2 = ReciveCostDataFile(10,"FAcc2")
+	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
+	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
+
 
 	
 	CSXAwakItemArr = {0}

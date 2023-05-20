@@ -313,7 +313,7 @@ function GameDisplay()
 			table.insert(BAct1,SetCD(MToggle3_2[j],0))
 		end
 		
-	for j,p in pairs({0x04,0x04,0x04,0x04,0x04}) do
+	for j,p in pairs({0x04,0x08,0x04,0x04,0x04}) do
 			table.insert(BAct2,SetV(CColor1_1[j],p))
 			table.insert(BAct2,SetV(CColor2_1[j],0x04))
 			table.insert(BAct2,SetV(CColor3_1[j],0x1F))
@@ -324,7 +324,7 @@ function GameDisplay()
 			table.insert(BAct2,SetCD(MToggle2_1[j],0))
 			table.insert(BAct2,SetCD(MToggle3_1[j],0))
 	end
-	for j,p in pairs({0x04,0x04,0x04,0x04,0x04}) do
+	for j,p in pairs({0x1C,0x1E,0x04,0x04,0x04}) do
 			table.insert(BAct2,SetV(CColor1_2[j],p))
 			table.insert(BAct2,SetV(CColor2_2[j],0x04))
 			table.insert(BAct2,SetV(CColor3_2[j],0x1F))
@@ -553,13 +553,16 @@ function GameDisplay()
 			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"고급 보석 ",FXPer48Loc,"개 ",CColor3_1[5][2],"|| Cost : ",Cost_FXPer48Loc,"\x12",CColor3_2[5][2]," Cost : ",Cost_FMinLoc," || ",CColor1_2[5][2],FMinLoc," 개 채광의 보석 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			CElseIfX({CV(InterfaceNumLoc,257)})
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"비어있음 --개 ",CColor3_1[1][2],"|| Cost : --\x12",CColor3_2[1][2]," Cost : -- || ",CColor1_2[1][2],"-- 개 비어있음 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"비어있음 --개 ",CColor3_1[2][2],"|| Cost : --\x12",CColor3_2[2][2]," Cost : -- || ",CColor1_2[2][2],"-- 개 비어있음 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"촉진의 보석1 ",iv.FAcc2Loc,"개 ",CColor3_1[1][2],"|| Cost : ",iv.Cost_FAcc2Loc,"\x12",CColor3_2[1][2]," Cost : ",iv.Cost_FBrSh2Loc," || ",CColor1_2[1][2],iv.FBrSh2Loc," 개 수호의 보석 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"촉진의 보석2 ",iv.FAccLoc,"개 ",CColor3_1[2][2],"|| Cost : ",iv.Cost_FAccLoc,"\x12",CColor3_2[2][2]," Cost : ",iv.Cost_FMEPer2Loc," || ",CColor1_2[2][2],iv.FMEPer2Loc," 개 진 궁극의 보석 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"비어있음 --개 ",CColor3_1[3][2],"|| Cost : --\x12",CColor3_2[3][2]," Cost : -- || ",CColor1_2[3][2],"-- 개 비어있음 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"비어있음 --개 ",CColor3_1[4][2],"|| Cost : --\x12",CColor3_2[4][2]," Cost : -- || ",CColor1_2[4][2],"-- 개 비어있음 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"비어있음 --개 ",CColor3_1[5][2],"|| Cost : --\x12",CColor3_2[5][2]," Cost : -- || ",CColor1_2[5][2],"-- 개 비어있음 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
-
+			
+			
+			
+			
 
 			if Limit == 0 then
 				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13무색조각 \x08사용중 \x04/ \x04누적 획득량 (\x07사용가능\x04) 갯수", 4)})
@@ -610,15 +613,15 @@ function GameDisplay()
 		StrDesign("\x04개당 \x0F0.1배\x04의 \x17크레딧 채광속도 \x04증가. \x08MAX "..Cost_FMin[2].." 개"),
 	}
 	local StatPrintEr4 = {
-		StrDesign("\x04빈 항목입니다."),
-		StrDesign("\x04빈 항목입니다."),
+		StrDesign("\x04개당 \x04일반 자판기\x04의 \x07유닛 구입 속도 \x081배 \x04증가. \x08MAX "..Cost_FAcc2[2].." 개"),
+		StrDesign("\x04개당 \x08유료 자판기\x04의 \x07유닛 구입 속도 \x081배 \x04증가. \x08MAX "..Cost_FAcc[2].." 개"),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
 }
 	local StatPrintEr5 = {
-		StrDesign("\x04빈 항목입니다."),
-		StrDesign("\x04빈 항목입니다."),
+		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh2[2].." 개"),
+		StrDesign("\x0750강 \x11제외\x04. \x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer2[2].." 개"),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),

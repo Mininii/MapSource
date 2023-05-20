@@ -1394,67 +1394,17 @@ end
 --	CIfEnd()
 --end
 
+
+
 function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode,LvUniit)})
-	
-	if Limit == 1 then
-		if CreatorCheatMode == 1 then
-			local CostX = "0"
-			for i = 1, CreatorCheatModeMul do
-				CostX = strsum(CostX,Cost)
-			end
-			Cost = CostX
-
-			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,CreatorCheatModeMul,AtLeast)},{SubV(GetMoney2,CreatorCheatModeMul)})
-			else
-				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-				f_LSub(FP, GetMoney, GetMoney, Cost)
-			end
-				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-				for i = 0, 6 do
-					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, CreatorCheatModeMul)},{preserved})
-				end
-				CElseX()
-				CDoActions(FP, {
-					SetNVar(SAmount,SetTo,CreatorCheatModeMul),
-					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,43)),
-					SetNVar(DLocation,SetTo,0),
-					TSetNVar(SPlayer,SetTo,CP)})
-				CallTrigger(FP, CreateStackedUnit)
-				CIfXEnd()
-
-				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-			CIfEnd()
-		else
-			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
-			else
-				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-				f_LSub(FP, GetMoney, GetMoney, Cost)
-			end
-				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-				for i = 0, 6 do
-					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
-				end
-				CElseX()
-				CDoActions(FP, {
-					SetNVar(SAmount,SetTo,1),
-					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,43)),
-					SetNVar(DLocation,SetTo,0),
-					TSetNVar(SPlayer,SetTo,CP)})
-				CallTrigger(FP, CreateStackedUnit)
-				CIfXEnd()
-				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-			CIfEnd()
-		end
-	--end
-	else
 		if LvUniit==40 then
-			CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+			CIf(FP,{CV(GetMoney2,GetFAcc2,AtLeast)},{SubV(GetMoney2,GetFAcc2)})
 		else
-			CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-			f_LSub(FP, GetMoney, GetMoney, Cost)
+			local TempCost = CreateWar(FP)
+			f_LMul(FP, TempCost, Cost, {GetFAcc2,0})
+			CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
+			f_LSub(FP, GetMoney, GetMoney, TempCost)
 		end
 		CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 		for i = 0, 6 do
@@ -1462,7 +1412,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 		end
 		CElseX()
 		CDoActions(FP, {
-			SetNVar(SAmount,SetTo,1),
+			TSetNVar(SAmount,SetTo,GetFAcc2),
 			SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,43)),
 			SetNVar(DLocation,SetTo,0),
 			TSetNVar(SPlayer,SetTo,CP)})
@@ -1471,82 +1421,31 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 			--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 		CIfEnd()
 	--end
-	end
 
 
 	CIfEnd()
 end
 function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode2,LvUniit)})
-		CIfX(FP,{TTNWar(GetBuyTicket,AtLeast,"1")})
-		if Limit == 1 then
-			if CreatorCheatMode==1 then
-				local CostX = "0"
-				for i = 1, CreatorCheatModeMul do
-					CostX = strsum(CostX,Cost)
-				end
-				Cost = CostX
 		
-				if LvUniit==40 then
-					CIf(FP,{CV(GetMoney2,CreatorCheatModeMul,AtLeast)},{SubV(GetMoney2,CreatorCheatModeMul)})
-				else
-					CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-					f_LSub(FP, GetMoney, GetMoney, Cost)
-				end
-				f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
-				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-				for i = 0, 6 do
-					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, CreatorCheatModeMul)},{preserved})
-				end
-				CElseX()
-				CDoActions(FP, {
-					SetNVar(SAmount,SetTo,CreatorCheatModeMul),
-					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
-					SetNVar(DLocation,SetTo,0),
-					TSetNVar(SPlayer,SetTo,CP)})
-				CallTrigger(FP, CreateStackedUnit)
-				CIfXEnd()
-					--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-				CIfEnd()
-			else
-				if LvUniit==40 then
-					CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
-				else
-					CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-					f_LSub(FP, GetMoney, GetMoney, Cost)
-				end
-				f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
-				CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-				for i = 0, 6 do
-					TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
-				end
-				CElseX()
-				CDoActions(FP, {
-					SetNVar(SAmount,SetTo,1),
-					SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
-					SetNVar(DLocation,SetTo,0),
-					TSetNVar(SPlayer,SetTo,CP)})
-				CallTrigger(FP, CreateStackedUnit)
-				CIfXEnd()
-					--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
-				CIfEnd()
-			end
 
-		else
+		CIfX(FP,{TTNWar(GetBuyTicket,AtLeast,_CastW(GetFAcc))})
 			if LvUniit==40 then
-				CIf(FP,{CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+				CIf(FP,{CV(GetMoney2,GetFAcc,AtLeast)},{SubV(GetMoney2,GetFAcc)})
 			else
-				CIf(FP, {TTNWar(GetMoney,AtLeast,Cost)})
-				f_LSub(FP, GetMoney, GetMoney, Cost)
+				local TempCost = CreateWar(FP)
+				f_LMul(FP, TempCost, Cost, {GetFAcc,0})
+				CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
+				f_LSub(FP, GetMoney, GetMoney, TempCost)
 			end
-			f_LSub(FP, GetBuyTicket, GetBuyTicket, "1")
+			f_LSub(FP, GetBuyTicket, GetBuyTicket, {GetFAcc,0})
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 			for i = 0, 6 do
 				TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
 			end
 			CElseX()
 			CDoActions(FP, {
-				SetNVar(SAmount,SetTo,1),
+				TSetNVar(SAmount,SetTo,GetFAcc),
 				SetNVar(SUnitID,SetTo,LevelUnitArr[LvUniit][2]),TSetNVar(SLocation,SetTo,_Add(CP,170)),
 				SetNVar(DLocation,SetTo,0),
 				TSetNVar(SPlayer,SetTo,CP)})
@@ -1554,8 +1453,6 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 			CIfXEnd()
 				--CreateUnitStacked({}, 1, LevelUnitArr[LvUniit][2], 43+CP,nil, CP)
 			CIfEnd()
-		end
-
 		CElseX({SetV(GetAutoBuyCode2,0),SetCD(BuyError,1)})
 		CIfXEnd()
 	CIfEnd()

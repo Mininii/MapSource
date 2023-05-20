@@ -1251,6 +1251,18 @@ function Install_CallTriggers()
 	FragBuyFnc(iv.FMEPer,Cost_FMEPer,iv.Cost_FMEPerLoc,CntCArr[9],failCcode)
 	FragBuyFnc(iv.FMin,Cost_FMin,iv.Cost_FMinLoc,CntCArr[10],failCcode)
 	CElseIfX({CV(GetINumData,257)})
+	FragBuyFnc(iv.FAcc,Cost_FAcc,iv.Cost_FAccLoc,CntCArr[1],failCcode)
+	FragBuyFnc(iv.FAcc2,Cost_FAcc2,iv.Cost_FAcc2Loc,CntCArr[2],failCcode)
+	FragBuyFnc(iv.FBrSh2,Cost_FBrSh2,iv.Cost_FBrSh2Loc,CntCArr[6],failCcode)
+	FragBuyFnc(iv.FMEPer2,Cost_FMEPer2,iv.Cost_FMEPer2Loc,CntCArr[7],failCcode)
+	
+	
+	
+	
+
+
+
+
 	
 	CIfXEnd()
 	SetCallEnd()
@@ -1327,6 +1339,10 @@ function Install_CallTriggers()
 	GetData_FBrSh = CreateVar(FP)
 	GetData_FXPer48 = CreateVar(FP)
 	GetData_FMin = CreateVar(FP)
+	GetData_FAcc = CreateVar(FP)
+	GetData_FAcc2 = CreateVar(FP)
+	GetData_FBrSh2 = CreateVar(FP)
+	GetData_FMEPer2 = CreateVar(FP)
 	DoActionsX(FP, {
 		SetV(GetData_FXPer44,0),
 		SetV(GetData_FXPer45,0),
@@ -1349,8 +1365,11 @@ function Install_CallTriggers()
 	CMovX(FP,GetData_FBrSh,VArrX(GetVArray(iv.FBrSh[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FXPer48,VArrX(GetVArray(iv.FXPer48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FMin,VArrX(GetVArray(iv.FMin[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FAcc,VArrX(GetVArray(iv.FAcc[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FAcc2,VArrX(GetVArray(iv.FAcc2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FBrSh2,VArrX(GetVArray(iv.FBrSh2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FMEPer2,VArrX(GetVArray(iv.FMEPer2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 
-	
 	
 
 
@@ -1386,6 +1405,18 @@ function Install_CallTriggers()
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
 	ConvertLArr(FP, LIndex, _Add(GetData_FMin, 151), 8)
 	f_LRead(FP, LArrX({Cost_FMin[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FAcc, 151), 8)
+	f_LRead(FP, LArrX({Cost_FAcc[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FAcc2, 151), 8)
+	f_LRead(FP, LArrX({Cost_FAcc2[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FBrSh2, 151), 8)
+	f_LRead(FP, LArrX({Cost_FBrSh2[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FMEPer2, 151), 8)
+	f_LRead(FP, LArrX({Cost_FMEPer2[3]},LIndex), TempCostW, nil, 1)
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
 
 	
@@ -1669,12 +1700,19 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	GetAutoBuyCode2 = CreateVar(FP)
 	GetMoney2 = CreateVar(FP)
 	GetMoney = CreateWar(FP)
+	GetFAcc = CreateVar(FP)
+	GetFAcc2 = CreateVar(FP)
 	GetBuyTicket = CreateWar(FP)
 	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode2,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	f_LMovX(FP, GetMoney, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),nil,nil,nil,1)
+	CMovX(FP,GetFAcc,VArrX(GetVArray(iv.FAcc[1], 7), VArrI, VArrI4),nil,nil,1,1)
+	CMovX(FP,GetFAcc2,VArrX(GetVArray(iv.FAcc2[1], 7), VArrI, VArrI4),nil,nil,1,1)
+	
+	
+
 	for j, k in pairs(AutoBuyArr) do
 		AutoBuyG(GCP,k[1],k[2])
 		AutoBuyG2(GCP,k[1],k[2])
