@@ -571,6 +571,18 @@ function CV(V,Value,Type)
 	
 end
 
+function _CV(V,Value,Type)
+	if Value == nil then Value = 1 end
+	if Type == nil then Type = Exactly end
+	if FP == nil then PushErrorMsg("FP Player not defined") end
+	if type(Value) == "number" then
+		return CVar(FP,V[2],Type,Value)
+	else
+		return _TCVar(FP,V[2],Type,Value)
+	end
+	
+end
+
 function SetVX(V,Value,Mask,Type)
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = SetTo end
