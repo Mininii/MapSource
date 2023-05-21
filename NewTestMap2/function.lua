@@ -1147,6 +1147,345 @@ function init_StrX()
 
 end
 function init_Setting()
+	
+function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = 상수 / Int -> Dec VA[0~3]
+	STPopTrigArr(PlayerID)
+-- B = 0x20, C = ColorCod, S = Sign, 0~9 = Number, X = 0x0D
+-- ZeroMode : 0 표시 방법 선택 / 0 (0) / Space (1) / 0x0D (2)
+-- Color : 컬러코드 추가 / 0x01 ~ 0x1F (기본 0x0D)
+-- Sign : 부호 추가 / 부호없음 (0) / 부호추가(1) / 부호추가 +Space (2)
+-- DigitMax : 시작 자리수 (기본 10) / DigitMin : 끝 자리수 (기본1)
+ 	if Sign == nil or Sign == "X" then
+ 		Sign = 0
+ 	end
+ 	if Color == nil or Color == "X" or Color == 0 then
+ 		Color = 0x0D
+ 	end
+ 	if ZeroMode == nil or ZeroMode == "X" then
+ 		ZeroMode = 0
+ 	end
+ 	if ZeroMode == 0 then
+ 		ZeroMode = 0x30
+ 	elseif ZeroMode == 1 then
+ 		ZeroMode = 0x20
+ 	elseif ZeroMode == 2 then
+ 		ZeroMode = 0x0D
+ 	end
+ 	if DigitMax == nil or DigitMax == "X" then
+ 		DigitMax = 10
+ 	end
+ 	if DigitMin == nil or DigitMin == "X" then
+ 		DigitMin = 1
+ 	end
+
+ 	local X = {}
+ 	if Sign == 0 then
+	 	Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+			},
+			actions = {
+				SetCtrig1X(Input[1],Input[2],0x148,Input[3],SetTo,0xFFFFFFFF);
+				SetCtrig1X(Input[1],Input[2],0x160,Input[3],SetTo,SetTo*16777216,0xFF000000);
+				SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
+				CallLabelAlways(Input[1],Input[2],Input[3]);
+			},
+			flag = {Preserved}
+		}
+	else
+		CIfX(PlayerID, CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF))
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					SetCtrig1X(Input[1],Input[2],0x148,Input[3],SetTo,0xFFFFFFFF);
+					SetCtrig1X(Input[1],Input[2],0x160,Input[3],SetTo,SetTo*16777216,0xFF000000);
+					SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
+					CallLabelAlways(Input[1],Input[2],Input[3]);
+				},
+				flag = {Preserved}
+			}
+		CElseX()
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,SetTo,0xFFFFFFFF);
+					SetCtrig1X(Input[1],Input[2],0x148,Input[3],SetTo,0xFFFFFFFF);
+					SetCtrig1X(Input[1],Input[2],0x160,Input[3],SetTo,Subtract*16777216,0xFF000000);
+					SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
+					CallLabelAlways(Input[1],Input[2],Input[3]);
+				},
+				flag = {Preserved}
+			}
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Add,1);
+				},
+				flag = {Preserved}
+			}
+		CIfXEnd()
+	end
+ 	-- XXXX[0] 90SC[1] 5678[2] 1234[3] / CXXX[0] 90BS[1] 5678[2] 1234[3]
+ 	if Sign == 0 then
+	 	DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x0D0D0D0D),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x00000D00 + Color*0x00000001),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
+	 elseif Sign == 1 then
+	 	DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x0D0D0D0D),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x00000D00 + Color*0x00000001),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000D00,0x0000FF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002D00,0x0000FF00)},flag = {Preserved}}
+	 elseif Sign == 2 then
+	 	DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x000D0D0D + Color * 0x01000000),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x0000200D),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
+				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000000D,0x000000FF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002D,0x000000FF)},flag = {Preserved}}
+	 end
+
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 	
+ 	for i = 2, 0, -1 do
+ 			CBit = 2^i * 1000000000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,2^i*0x010000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 100000000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,2^i*0x01000000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 10000000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x00000001);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 1000000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x0100);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 100000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x010000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 10000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x01000000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 1000
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x01);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 100
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x0100);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 10
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x010000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	for i = 3, 0, -1 do
+ 			CBit = 2^i * 1
+			Trigger {
+				players = {PlayerID},
+				conditions = {
+					Label(0);
+					CtrigX("X",CRet[1],0x15C,0,AtLeast,CBit);
+				},
+				actions = {
+					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
+					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x01000000);
+				},
+				flag = {Preserved}
+			}
+	end
+
+	if DigitMax == 9 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0x00FF0000))
+	 elseif DigitMax == 8 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 elseif DigitMax == 7 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0x000000FF))
+	 elseif DigitMax == 6 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0x0000FFFF))
+	 elseif DigitMax == 5 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0x00FFFFFF))
+	 elseif DigitMax == 4 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 elseif DigitMax == 3 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0x000000FF))
+	 elseif DigitMax == 2 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0x0000FFFF))
+	 elseif DigitMax == 1 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0x00FFFFFF))
+	 end
+
+	 if DigitMin == 2 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFF000000))
+	 elseif DigitMin == 3 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 elseif DigitMin == 4 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFF00))
+	 elseif DigitMin == 5 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 elseif DigitMin == 6 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFF000000))
+	 elseif DigitMin == 7 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFF0000))
+	 elseif DigitMin == 8 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFF00))
+	 elseif DigitMin == 9 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 elseif DigitMin == 10 then
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x0D0D0D0D,0xFFFFFFFF))
+	 	table.insert(X,SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0D0D0D0D,0xFF000000))
+	 end
+	 DoActionsX(PlayerID,X)
+end
+
+
 	CJump(FP, dp.CustominitJump)
 	for i = 0, 6 do
 		ItoName(FP,i,VArr(dp.PNameVArrArr[i+1],0),ColorCode[i+1])
@@ -1167,7 +1506,7 @@ function init_Setting()
 	local SCJump = def_sIndex()
 	CJump(FP,SCJump)
 	SetCall2(FP, dp.Call_IToDec)
-	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,0)
+	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
 	SetCallEnd2()
 
 	SetCall2(FP, dp.Call_VtoName)
@@ -1188,12 +1527,13 @@ function init_Setting()
 		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--init << 0
 	local li = def_sIndex()
-	NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"1"..string.rep("0",19))},{
-		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303031),
+	NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"0x8000000000000000")},{
+		SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303000+string.byte("-")),--음수이다
 		SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--<<Zeromode = 0x0D
+		f_LNeg(FP, dp.publiclItoDecW, dp.publiclItoDecW)--음수표현을 위해 반전
 		for i = 19, 1, -1 do
 			local wt = string.rep("9",i)
 			local mb = 3-i%4
@@ -1578,12 +1918,13 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	PCT_NextRandW = CT_NextRandW[Player+1]
 	end
 	if VW[4] == "V" then
-		CIfX(FP,{CV(VW, _Xor(TrapVW,PCT_PrevRandV))})
+		CIfX(FP,{CV(VW, TrapVW)}) -- 치트 난수 테스트(참이어야 정상)
+		
 	else
-		CIfX(FP,{TTNWar(VW, Exactly, _LXor(TrapVW,PCT_PrevRandW))})
+		CIfX(FP,{TTNWar(VW, Exactly, TrapVW)}) -- 치트 난수 테스트(참이어야 정상)
 	end
-	CElseX()
 	local DeathUnit = 1
+	local ttable = {}
 
 	if type(Flag) == "number" then
 		
@@ -1597,21 +1938,21 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		--if DeathUnit == 3 then Pushdsadas() end
 		
 	if Player == AllPlayers then
-		local ttable = {}
 		for i = 0, 6 do
 			table.insert(ttable,SetCVar(FP, BPArr[DeathUnit][i+1][2], SetTo, 2^Flag, 2^Flag))
 		end
-		DoActionsX(FP,ttable)
 	else
-		DoActionsX(FP,{SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)})
+		ttable = {SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)}
 	end
 	ctarr[DeathUnit][Flag+1] = Text
 	
 	if DeathUnit== 	1 then 
 		--if 2^Flag == 2048 then error(Text) end
 	end
+	CElseX({ttable})
 
 	else
+	CElseX()
 		
 
 	if TestStart ~= 1 then
@@ -1635,6 +1976,8 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		end
 
 	end
+
+
 	end
 	
 
@@ -1648,6 +1991,12 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --		
 --	end
 	CIfXEnd()
+	if VW[4] == "V" then
+		CXor(FP, VW, PCT_PrevRandV)--감지 여부 상관없이 진짜값으로 복구
+		
+	else
+		f_LXor(FP, VW, VW, PCT_PrevRandW)--감지 여부 상관없이 진짜값으로 복구
+	end
 	return TrapKey
 end	
 
@@ -1981,9 +2330,15 @@ function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 		NJump(FP,BCan,{CV(GetItemData,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
 		local TempW = CreateWar(FP)
 		local TempW2 = CreateWar(FP)
+		local TempW3 = CreateWar(FP)
 		ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 포커스
 		f_LRead(FP, LArrX({CostArr},LIndex), TempCostW, nil, 1)
+		f_LMovX(FP,TempW3,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4))
+		CIfX(FP,{TTNWar(TempW3,iAtLeast,"1")})--마이너스가아니면
 		f_LSub(FP,TempW,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4))
+		CElseX()--마이너스면
+		f_LMov(FP,TempW,"0")
+		CIfXEnd()
 		f_LSub(FP,TempW2,TempW,"1")
 		CIfX(FP,{TTNWar(TempW,AtLeast,TempCostW)},{AddV(GetItemData,1)})
 		f_LAdd(FP,WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4),TempCostW)

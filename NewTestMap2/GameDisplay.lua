@@ -631,28 +631,32 @@ function GameDisplay()
 	CIfEnd()
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)},{SetV(DPErT[i+1],24*10)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x100,20),Deaths(i,AtMost,0x100+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x180,20),Deaths(i,AtMost,0x180+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x200,20),Deaths(i,AtMost,0x200+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x280,20),Deaths(i,AtMost,0x280+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
-			for j = 1, #StatPrintEr do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
-			end
-			for j = 1, #StatPrintEr2 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x100,20)}, {print_utf8(12,0,StatPrintEr2[j])}, {preserved})
-			end
-			for j = 1, #StatPrintEr3 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x180,20)}, {print_utf8(12,0,StatPrintEr3[j])}, {preserved})
-			end
-			for j = 1, #StatPrintEr4 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x200,20)}, {print_utf8(12,0,StatPrintEr4[j])}, {preserved})
-			end
-			for j = 1, #StatPrintEr5 do
-				TriggerX(FP, {LocalPlayerID(i),Deaths(i,Exactly,j+0x280,20)}, {print_utf8(12,0,StatPrintEr5[j])}, {preserved})
-			end
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x100,20),Deaths(i,AtMost,0x100+#StatPrintEr2,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x180,20),Deaths(i,AtMost,0x180+#StatPrintEr2,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x200,20),Deaths(i,AtMost,0x200+#StatPrintEr2,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x280,20),Deaths(i,AtMost,0x280+#StatPrintEr2,20)})
 		CIfEnd()
 	end
+	CIf(FP,{TMemory(0x512684,Exactly,LCP)})
+	CMov(FP,0x6509B0,LCP)
+	for j = 1, #StatPrintEr do
+		TriggerX(FP, {Deaths(CurrentPlayer,Exactly,j,20)}, {print_utf8(12,0,StatPrintEr[j])}, {preserved})
+	end
+	for j = 1, #StatPrintEr2 do
+		TriggerX(FP, {Deaths(CurrentPlayer,Exactly,j+0x100,20)}, {print_utf8(12,0,StatPrintEr2[j])}, {preserved})
+	end
+	for j = 1, #StatPrintEr3 do
+		TriggerX(FP, {Deaths(CurrentPlayer,Exactly,j+0x180,20)}, {print_utf8(12,0,StatPrintEr3[j])}, {preserved})
+	end
+	for j = 1, #StatPrintEr4 do
+		TriggerX(FP, {Deaths(CurrentPlayer,Exactly,j+0x200,20)}, {print_utf8(12,0,StatPrintEr4[j])}, {preserved})
+	end
+	for j = 1, #StatPrintEr5 do
+		TriggerX(FP, {Deaths(CurrentPlayer,Exactly,j+0x280,20)}, {print_utf8(12,0,StatPrintEr5[j])}, {preserved})
+	end
+	CIfEnd()
+	CMov(FP,0x6509B0,FP)
 	CIf(FP,{CV(InterfaceNumLoc,0)})--아무 설정창도 켜져있지 않을 경우 작동함
 	local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--누를 경우 현재 적용중인 버프 상세 표기
 	local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--누를 경우 현재 보유 재화 표시
@@ -734,8 +738,15 @@ function GameDisplay()
 		CrShift(FP, TempV2, 8)
 		CrShift(FP, TempV3, 16)
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07총 인게임 플레이 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 점수 : \x04",TimeAttackScoreLoc," || \x1B48강 \x07타임어택 점수 : \x04",TimeAttackScore48Loc})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x0750강 \x07타임어택 점수 : \x04",iv.TimeAttackScore50Loc})
+		CMov(FP,CTimeV,_Sub(_Mov(1000000),TimeAttackScoreLoc))
+		CallTrigger(FP,Call_ConvertTime)
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1F44강 \x07타임어택 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+		CMov(FP,CTimeV,_Sub(_Mov(1000000),TimeAttackScore48Loc))
+		CallTrigger(FP,Call_ConvertTime)
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x1B48강 \x07타임어택 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
+		CMov(FP,CTimeV,_Sub(_Mov(1000000),iv.TimeAttackScore50Loc))
+		CallTrigger(FP,Call_ConvertTime)
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x0750강 \x07타임어택 시간 : \x04",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초"})
 		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04님의 \x07각 시즌별(1,2,3시즌) 출석일수 \x04: ",TempV,"일, ",TempV2,"일, ",TempV3,"일."})
 		
 		local TempV = CreateVar(FP)
@@ -770,7 +781,7 @@ function GameDisplay()
 
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
 	CS__SetValue(FP,StrL,"\x19유닛 판매권 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000\x04 \x04개",nil,0)
-	CS__lItoCustom(FP,SVA1(StrL,9),SellTicketLoc,nil,nil,10,nil,nil,"\x1B0",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+	CS__lItoCustom(FP,SVA1(StrL,9),SellTicketLoc,nil,nil,10,nil,nil, {"\x07+","\x08-", "\x1B0"},{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	CS__InputVA(FP, iStrL, 54*0,StrL,StrLs,nil,54*0,54*1)
 	CDoActions(FP, {TSetMemory(0x6509B0, SetTo, LCP),DisplayText(iStrL[4], 4)})
 

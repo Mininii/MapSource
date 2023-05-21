@@ -1,4 +1,5 @@
 function CT_Prev()
+	--PushErrorMsg(#VWArr.." "..#VWArr2.." "..#PVWArr)
 	--error(#VWArr+#PVWArr+#VWArr2)
 	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
 	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
@@ -71,8 +72,10 @@ for j,k in pairs(VWArr) do
 	local TrapVW = k[2]
 	if TrapVW[4] == "V" then
 		CXor(FP, TrapVW,VW, CT_GNextRandV)
+		CXor(FP, VW, CT_GNextRandV)
 	else
 		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
+		f_LXor(FP, VW,VW, CT_GNextRandW)
 	end
 
 end
@@ -82,8 +85,10 @@ for j,k in pairs(VWArr2) do
 	local TrapVW = k[2]
 	if TrapVW[4] == "V" then
 		CXor(FP, TrapVW,VW, CT_GNextRandV)
+		CXor(FP, VW, CT_GNextRandV)
 	else
 		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
+		f_LXor(FP, VW,VW, CT_GNextRandW)
 	end
 
 end
@@ -96,8 +101,10 @@ end
 			local TrapVW = k[2][i+1]
 			if TrapVW[4] == "V" then
 				CXor(FP, TrapVW,VW, CT_NextRandV[i+1])
+				CXor(FP, VW, CT_NextRandV[i+1])
 			else
 				f_LXor(FP, TrapVW,VW, CT_NextRandW[i+1])
+				f_LXor(FP, VW,VW, CT_NextRandW[i+1])
 			end
 	
 		end

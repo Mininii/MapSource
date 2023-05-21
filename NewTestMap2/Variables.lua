@@ -37,6 +37,9 @@ end
 function SCA.Available(CP)
 	return DeathsX(CP, Exactly, 3, 1,3)
 end
+function SCA.NoLoadAvailable(CP)
+	return DeathsX(CP, Exactly, 3, 1,7)
+end
 function SCA.NotAvailable(CP)
 	return DeathsX(CP, Exactly, 0, 1,2)
 end
@@ -187,6 +190,8 @@ end
 	SCA.FAcc2 = SCA.CreateVar(FP)
 	SCA.FBrSh2 = SCA.CreateVar(FP)
 	SCA.FMEPer2 = SCA.CreateVar(FP)
+	SCA.SettingSubtitle = SCA.CreateVar(FP)
+	SCA.SettingEffSound = SCA.CreateVar(FP)
 	
 	SCA.GReload = CreateCcode()
 	SCA.LoadSlot1 = CreateCcodeArr(7)

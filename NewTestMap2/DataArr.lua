@@ -104,6 +104,8 @@ function DataArr()
 	end
 
 
+	iv.SettingSubtitle = CreateVarArr(7,FP)
+	iv.SettingEffSound = CreateVarArr(7,FP)
 
 	SCA_DataArr = {
 		{iv.BanFlag4,SCA.BanFlag4,"BanFlag4"},
@@ -139,7 +141,9 @@ function DataArr()
 		{iv.CS_TotalEPer,SCA.CSTotalEPer,"CS_TotalEPer"},
 		{iv.CS_TotalEper4,SCA.CSTotalEper4,"CS_TotalEper4"},
 		{iv.CS_DPSLV,SCA.CSDPSLV,"CS_DPSLV"},
-		{iv.SellTicket,{SCA.SellTicket,SCA.SellTicket64},"SellTicket"}
+		{iv.SellTicket,{SCA.SellTicket,SCA.SellTicket64},"SellTicket"},
+		{iv.SettingSubtitle,SCA.SettingSubtitle,"SettingSubtitle"},
+		{iv.SettingEffSound,SCA.SettingEffSound,"SettingEffSound"},
 	}
 	
 
@@ -350,6 +354,8 @@ function DataArr()
 	iv.FMEPer2,ct.FMEPer2,iv.FMEPer2Loc = CreateDataPV("FMEPer2",SCA.FMEPer2,1)
 	iv.CMEPer2,ct.CMEPer2 = CreateDataPV("CMEPer2")
 	iv.CBrSh2,ct.CBrSh2 = CreateDataPV("CBrSh2")
+	iv.RankTitle2,ct.RankTitle2 = CreateDataPV("RankTitle2",SCA.RankTitle2)
+	iv.RankTitle3,ct.RankTitle3 = CreateDataPV("RankTitle3",SCA.RankTitle3)
 
 
 	for j,k in pairs(SCA_DataArr) do
