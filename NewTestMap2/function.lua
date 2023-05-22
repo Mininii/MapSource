@@ -2272,14 +2272,24 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Des
 		local Temp64 = CreateVar(FP)
 		TempRead = CreateWar(FP)
 		f_LRead(FP, {_Add(Sourceptr[1],Player),_Add(Sourceptr[2],Player)}, TempRead)
-		f_Cast(FP, {Temp32,0},TempRead)
-		f_Cast(FP, {Temp64,1},TempRead)
 		if DestType == Add then
+			CIfX(FP,{TTNWar(TempRead,AtLeast,"0x8000000000000000")})
+			f_LNeg(FP, TempRead, TempRead)
+			if Dest == iv.PEXP then--경험치 예외처리 Unsigned Subtract
+				f_LSub(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4),WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead)
+			else--그외 Signed Subtract
+				f_LiSub(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4),WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead)
+			end
+			CElseX()
 			f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, Add)
+			CIfXEnd()
+			
 		else
 			f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, SetTo, nil, nil,1)
 		end
 		if Limit == 1 then
+			f_Cast(FP, {Temp32,0},TempRead)
+			f_Cast(FP, {Temp64,1},TempRead)
 			--DisplayPrint(GCP, {"Player : ",GCP," || DataName : "..DataName.." || TempRead : ",TempRead," || 32bit : ",Temp32," || 64bit : ",Temp64})
 			
 		end

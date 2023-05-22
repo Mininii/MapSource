@@ -1241,6 +1241,7 @@ function Install_CallTriggers()
 	Call_SCA_DataLoadAdd = SetCallForward()
 	SetCall(FP)
 	CMov(FP,PlayerV,_Mul(GCP,_Mov(18)))
+
 	for j,k in pairs(SCA_DataArr) do
 		SCA_DataLoadG(PlayerV,k[1],k[2],k[3],AtLeast,1,Add)
 	end

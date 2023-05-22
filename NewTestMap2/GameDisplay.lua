@@ -184,15 +184,23 @@ function GameDisplay()
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CElseX()
 		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
-		CTrigger(FP,{TTNWar(TempFf, AtLeast, "999999999")},{SetV(TempFf2,999999999)},{preserved})
+		CTrigger(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")},{SetV(TempFf2,999999999)},{preserved})
 
-        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+		CIfX(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")})
+		CMov(FP,TempFf2,999999999)
+		CElseIfX({TTNWar(TempFf, AtMost, "0xFFFFFFFFC46535FF")})
+		CMov(FP,TempFf2,-999999999)
 		CIfXEnd()
-		CIf(FP,{TTNWar(CredLoc, AtLeast, "999999999999999")})
-		f_LMov(FP,CredLoc,"999999999999999")
-		CIfEnd()
 
-        CA__lItoCustom(SVA1(Str1,29),CredLoc,nil,nil,{10,15},1,nil,"\x040",{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+		CIfXEnd()
+		CIfX(FP,{TTNWar(CredLoc, AtLeast, "999999999999999"),TTNWar(CredLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
+		f_LMov(FP,CredLoc,"999999999999999")
+		CElseIfX({TTNWar(CredLoc, AtMost, "0xFFFC72815B397FFF")})
+		f_LMov(FP,CredLoc,"0xFFFC72815B398000")
+		CIfXEnd()
+
+        CA__lItoCustom(SVA1(Str1,29),CredLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,2,4,5,6,8,9,10,12,13,14,16,17,18},nil,{0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 
 	
@@ -781,7 +789,7 @@ function GameDisplay()
 
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
 	CS__SetValue(FP,StrL,"\x19유닛 판매권 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000\x04 \x04개",nil,0)
-	CS__lItoCustom(FP,SVA1(StrL,9),SellTicketLoc,nil,nil,10,nil,nil, {"\x07+","\x08-", "\x1B0"},{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+	CS__lItoCustom(FP,SVA1(StrL,9),SellTicketLoc,nil,nil,10,nil,nil, {"\x07\x0D","\x08-", "\x1B0"},{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	CS__InputVA(FP, iStrL, 54*0,StrL,StrLs,nil,54*0,54*1)
 	CDoActions(FP, {TSetMemory(0x6509B0, SetTo, LCP),DisplayText(iStrL[4], 4)})
 
