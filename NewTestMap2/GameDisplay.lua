@@ -188,7 +188,7 @@ function GameDisplay()
 
 		CIfX(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")})
 		CMov(FP,TempFf2,999999999)
-		CElseIfX({TTNWar(TempFf, AtMost, "0xFFFFFFFFC46535FF")})
+		CElseIfX({TTNWar(TempFf, AtLeast, "0x8000000000000000"),TTNWar(TempFf, AtMost, "0xFFFFFFFFC46535FF")})
 		CMov(FP,TempFf2,-999999999)
 		CIfXEnd()
 
@@ -196,8 +196,8 @@ function GameDisplay()
 		CIfXEnd()
 		CIfX(FP,{TTNWar(CredLoc, AtLeast, "999999999999999"),TTNWar(CredLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
 		f_LMov(FP,CredLoc,"999999999999999")
-		CElseIfX({TTNWar(CredLoc, AtMost, "0xFFFC72815B397FFF")})
-		f_LMov(FP,CredLoc,"0xFFFC72815B398000")
+		CElseIfX({TTNWar(CredLoc, AtLeast, "0x8000000000000000"),TTNWar(CredLoc, AtMost, "0xFFFC72815B398000")})
+		f_LMov(FP,CredLoc,"0xFFFC72815B398001")
 		CIfXEnd()
 
         CA__lItoCustom(SVA1(Str1,29),CredLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
