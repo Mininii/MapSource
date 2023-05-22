@@ -7,6 +7,13 @@ function SCmp(cp){
 const SCAStr = EUDArray(60*8);
 const str1 = StringBuffer(1024);
 const SubtitleData = [Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4)];
+const AnnounceData = [Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4)];
+const WhisperData = [Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4)];
+const LSpeakerData = [Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4),Db(60*4)];
+
+
+
+
 const MapMakerFlag = PVariable();
 const PLevel = PVariable();
 const StatP = PVariable();
@@ -109,7 +116,8 @@ const TRankTitle2 = PVariable();
 const TRankTitle3 = PVariable();
 
 const SettingSubtitle = PVariable();
-
+const Money2 = PVariable();
+const CurPlayTime = PVariable();
 var Asm_Arrptr;
 function onPluginStart(){
 
@@ -320,6 +328,11 @@ SetDeaths(Asm_Arrptr,SetTo,EPD(RankTitle2)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(RankTitle3)+focus,0);
 Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(Money2)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(CurPlayTime)+focus,0);
+Asm_Arrptr+=1;
+
 
 
 
@@ -353,6 +366,9 @@ function beforeTriggerExec(){
 	const CustomSubTitleEnabled = PVariable();
 	const RankName = [Db("st"),Db("nd"),Db("rd"),Db("th")];
 	const LoadSlot = PVariable();
+	const AnnounceFlag = PVariable();
+	const WhisperFlag = PVariable();
+	const LSpeakerFlag = PVariable();
 	var GLoadCheck;
 	var CurVer;
 	//if(ElapsedTime(AtLeast,90)){
@@ -471,6 +487,26 @@ function beforeTriggerExec(){
 				sca.SaveData(0);
 			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
 			}
+			if(Deaths(CurrentPlayer,Exactly,9,2)){//2번데스값에서 10번 신호=1번슬롯에 저장하라 신호가 온 경우
+				NBAlarm[cp] = 0;
+				RankTitle[cp] = 0;
+				RankTitle2[cp] = 0;
+				RankTitle3[cp] = 0;
+				MapMakerFlag[cp] = 0;
+				DayCheck2[cp] = 0;
+				SettingSubtitle[cp] = 0;
+				TesterFlag[cp] = 0;
+				
+				for (var i = 0; i < 60; i++){
+					SCAStr[(60*cp)+i] = 0;
+				} 
+				str1.print("\x13\x07『 \x03Slot : \x0410 \x07Saving...\x07 』");
+				//scw.scaSave(1,SCmp);
+				sca.SaveData(10);
+				LoadSlot[cp]=0;
+			    //f_eprintln("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다...");
+
+			}
 			
 			if(Deaths(CurrentPlayer,Exactly,10,2)){//2번데스값에서 10번 신호=1번슬롯에 저장하라 신호가 온 경우
 				NBAlarm[cp] = 0;
@@ -553,10 +589,19 @@ function beforeTriggerExec(){
 
 
 			if (LoadSlot[cp]==4){
-				CustomSubTitleEnabled[cp]=1;// 칭호 데이터가 감지될 경우
+				if (SCAStr[(60*cp)+0]>=1){
+				CustomSubTitleEnabled[cp]=1;// 칭호 데이터 감지여부
 				for (var i = 0; i < 60; i++){
 					SetDeaths(EPD(SubtitleData[cp])+i,SetTo,SCAStr[(60*cp)+i],0);
 				} 
+				}
+				else {
+				CustomSubTitleEnabled[cp]=0;// 칭호 데이터 감지여부
+				for (var i = 0; i < 60; i++){
+					SetDeaths(EPD(SubtitleData[cp])+i,SetTo,0,0);
+					
+				} 
+				}
 				LoadSlot[cp]=1;
 			}
 			
@@ -569,6 +614,29 @@ function beforeTriggerExec(){
 			if (LoadSlot[cp]>=1){
 				SetDeathsX(CurrentPlayer,SetTo,64,1,64);//슬롯로드완료일경우
 			}
+			if (LoadSlot[cp]==6){ // 공지
+				for (var i = 0; i < 60; i++){
+					SetDeaths(EPD(AnnounceData[cp])+i,SetTo,SCAStr[(60*cp)+i],0);
+				} 
+				LoadSlot[cp]=1;
+				AnnounceFlag[cp] = 2000;
+			}
+			if (LoadSlot[cp]==7){ // 귓말
+				for (var i = 0; i < 60; i++){
+					SetDeaths(EPD(WhisperData[cp])+i,SetTo,SCAStr[(60*cp)+i],0);
+				} 
+				LoadSlot[cp]=1;
+				WhisperFlag[cp] = 2000;
+			}
+			if (LoadSlot[cp]==8){ // 확성기
+				for (var i = 0; i < 60; i++){
+					SetDeaths(EPD(LSpeakerData[cp])+i,SetTo,SCAStr[(60*cp)+i],0);
+				} 
+				LoadSlot[cp]=1;
+				LSpeakerFlag[cp] = 2000;
+			}
+
+
 
 
 		}
@@ -591,6 +659,22 @@ function beforeTriggerExec(){
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,32);
 		}
+
+
+		if (WhisperFlag[cp]>=1) {//귓
+			WhisperFlag[cp]-=1;
+			//sprintf(4,"\x13\x03제작자로부터의 귓속말 : \" {:s} \"",WhisperData[cp]);
+			str1.printAt(6,"\x13\x03제작자로부터의 귓속말 : ",ptr2s(WhisperData[cp]));
+		}
+		if (AnnounceFlag[cp]>=1) {//공지
+			AnnounceFlag[cp]-=1;
+			printAllAt(7,"\x13\x03전체 공지사항 \x04: \" {:s} \"",AnnounceData[cp]);
+		}
+		if (LSpeakerFlag[cp]>=1) {//확성기
+			LSpeakerFlag[cp]-=1;
+			printAllAt(8,"\x13\x03{:s}",LSpeakerData[cp]);
+		}
+
 
 
 		

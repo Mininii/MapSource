@@ -1744,7 +1744,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 			CIf(FP,{CV(GetMoney2,GetFAcc2,AtLeast)},{SubV(GetMoney2,GetFAcc2)})
 		else
 			local TempCost = CreateWar(FP)
-			f_LMul(FP, TempCost, Cost, {GetFAcc2,0})
+			f_LMul(FP, TempCost, Cost, GetFAcc2W)
 			CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
 			f_LSub(FP, GetMoney, GetMoney, TempCost)
 		end
@@ -1771,16 +1771,16 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 	CIf(FP,{Memory(0x628438,AtLeast,1),CV(GetAutoBuyCode2,LvUniit)})
 		
 
-		CIfX(FP,{TTNWar(GetBuyTicket,AtLeast,_CastW(GetFAcc))})
+		CIfX(FP,{TTNWar(GetBuyTicket,AtLeast,GetFAccW)})
 			if LvUniit==40 then
 				CIf(FP,{CV(GetMoney2,GetFAcc,AtLeast)},{SubV(GetMoney2,GetFAcc)})
 			else
 				local TempCost = CreateWar(FP)
-				f_LMul(FP, TempCost, Cost, {GetFAcc,0})
+				f_LMul(FP, TempCost, Cost, GetFAccW)
 				CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
 				f_LSub(FP, GetMoney, GetMoney, TempCost)
 			end
-			f_LSub(FP, GetBuyTicket, GetBuyTicket, {GetFAcc,0})
+			f_LSub(FP, GetBuyTicket, GetBuyTicket, GetFAccW)
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 			for i = 0, 6 do
 				TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
@@ -2246,25 +2246,59 @@ function SCA_DataSave(Player,Source,Destptr) --Source == W then Use DestUnit, De
 end
 
 
-function SCA_DataLoadG(Player,Dest,Sourceptr,DataName) --Dest == W then Use SourceUnit, SourceUnit+1
+function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Dest == W then Use SourceUnit, SourceUnit+1
+	if Type~= nil then
+		if Dest[1][4]=="V" then
+			CIf(FP,{TMemory(_Add(Sourceptr,Player), Type,Value)})
+		elseif Dest[1][4]=="W" then
+			CIf(FP,{TTOR({
+				_TMemory(_Add(Sourceptr[1],Player), Type,Value),
+				_TMemory(_Add(Sourceptr[2],Player), Type,Value)
+			})})
+		end
+	end
+	local TempRead
 	if Dest[1][4]=="V" then
-		CMovX(FP, VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4), _ReadF(_Add(Sourceptr,Player)), SetTo, nil, nil, 1)
+		TempRead = CreateVar(FP)
+		f_Read(FP,_Add(Sourceptr,Player),TempRead,nil,nil,1)
+		if DestType == Add then
+			CMovX(FP, VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4), TempRead, Add)
+		else
+			CMovX(FP, VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4), TempRead, SetTo, nil, nil, 1)
+		end
 	elseif Dest[1][4]=="W" then
 		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
 		local Temp32 = CreateVar(FP)
 		local Temp64 = CreateVar(FP)
-		local TempRead = CreateWar(FP)
+		TempRead = CreateWar(FP)
 		f_LRead(FP, {_Add(Sourceptr[1],Player),_Add(Sourceptr[2],Player)}, TempRead)
 		f_Cast(FP, {Temp32,0},TempRead)
 		f_Cast(FP, {Temp64,1},TempRead)
+		if DestType == Add then
+			f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, Add)
+		else
+			f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, SetTo, nil, nil,1)
+		end
 		if Limit == 1 then
 			--DisplayPrint(GCP, {"Player : ",GCP," || DataName : "..DataName.." || TempRead : ",TempRead," || 32bit : ",Temp32," || 64bit : ",Temp64})
 			
 		end
-		f_LMovX(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead, SetTo, nil, nil,1)
 
 	else
 		PushErrorMsg("SCA_Dest_Inputdata_Error")
+	end
+
+	if DestType~= nil then
+		local TypeT = ""
+		if DestType == SetTo then TypeT = "로 대입"
+		elseif DestType == Add then TypeT = "더하거나 빼기"
+		end
+		--DisplayPrint(GCP, {"\x13\x07『 \x03SYSTEM Message \x04: 당신의 \x07"..DataName.."\x04 데이터가 \x03",TempRead,"\x08 "..TypeT.." \x04되었습니다. \x07』"})
+	
+	end
+
+	if Type~= nil then
+		CIfEnd()
 	end
 end
 function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1

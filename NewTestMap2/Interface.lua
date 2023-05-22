@@ -347,7 +347,7 @@ for i = 0, 6 do -- 각플레이어
 	DoActionsX(FP, {AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1),SubV(DPErT[i+1],1)})
 
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom)})
-	CIf(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),})
+	CIf(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),AddV(iv.CurPlayTime[i+1],1)})
 	--TriggerX(FP, {CV(LV5Cool[i+1],1,AtLeast),}, {SubV(LV5Cool[i+1],1)},{preserved})
 	CIfEnd()
 
@@ -955,35 +955,121 @@ end
 
 
 	local CTSwitch = CreateCcode()
+	local CTSwitch2 = CreateCcode()
 	
 
+	if Limit == 1 then 
+		CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast),CD(SCA.LoadCheckArr[i+1],2)})--슬롯로드해야됨 감지. 단, 게임로드해야 쓸수있다
+		
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],1),SCA.Available(i)},{SetCD(SCA.LoadSlot1[i+1],2),SetDeaths(i,SetTo,9,2),SCA.Reset(i),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Step 1"),4)})--슬롯10번 저장신호
+				SCA_DataReset(i,{},{})--SCA 데이터 리셋
+				CIf(FP,{LocalPlayerID(i)})
 	
-	CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast),CD(SCA.LoadCheckArr[i+1],2)})--슬롯로드해야됨 감지. 단, 게임로드해야 쓸수있다
-		SCA_DataReset(i,{CD(SCA.LoadSlot1[i+1],1),SCA.NoSlotLoadAvailable(i)},{SCA.Reset(i),SetDeaths(i,SetTo,11,2),SetCp(i),DisplayExtText(StrDesignX("1"),4)})--SCA 슬롯로드 후 데이터 리셋
-		CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],1)},{SetCD(SCA.LoadSlot1[i+1],2),SetCp(i),DisplayExtText(StrDesignX("2"),4)})
-			SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
-			SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
-			DisplayPrint(i, {"\x13\x04SlotPtr : ",SlotPtr[i+1],"   SubtitleFlag : ",SubtitleFlag[i+1]})
+				SCA_DataSave(i, iv.S45Loc, SCA.FXPer44)--45판매횟수
+				SCA_DataSave(i, iv.S46Loc, SCA.FXPer45)--46판매횟수
+				SCA_DataSave(i, iv.S47Loc, SCA.FXPer46)--47판매횟수
+				SCA_DataSave(i, iv.S48Loc, SCA.FXPer48)--48판매횟수
+				SCA_DataSave(i, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
+				SCA_DataSave(i, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
+				SCA_DataSave(i, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
+				
+				CIfEnd()
+			CIfEnd()
+			SCA_DataReset(i,{CD(SCA.LoadSlot1[i+1],2),SCA.NoSlotLoadAvailable(i)},{SCA.Reset(i),SetDeaths(i,SetTo,11,2),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Step 2"),4)})--SCA 슬롯로드 후 데이터 리셋
+			CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],3),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Step 3"),4)})
+				SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
+				SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
+					DisplayPrint(i, {"\x13\x04SlotPtr : ",SlotPtr[i+1],"   SubtitleFlag : ",SubtitleFlag[i+1]})
+			CIfEnd()
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],3)})
+				CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
+				for j = 2, 9 do 
+					local cond = CVX(SlotPtr[i+1],2^j,2^j)
+					local act
+					if j == 4 then cond =CD(SubtitleLoad[i+1],1) end -- 4번 조건은 예외
+					if j == 4 then act = SetCD(SubtitleLoad[i+1],0) end
+					TriggerX(FP, {CD(CurLoadSlot[i+1],j),SCA.SlotLoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),act,SetCD(CurLoadCmpSlot[i+1],j),SetCD(CurLoadSlot[i+1],0),}, {preserved})
+					TriggerX(FP, {cond,SCA.Available(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SetCD(CurLoadSlot[i+1],j),SCA.Reset(i)}, {preserved})
+				end
+				CallTriggerX(FP,Call_SCA_DataLoadSetTo,{CD(CurLoadCmpSlot[i+1],2)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 SetTo 실행되었습니다."),4)})
+				CallTriggerX(FP,Call_SCA_DataLoadAdd,{CD(CurLoadCmpSlot[i+1],3)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 Add/Sub 실행되었습니다."),4)})
+				CIf(FP,{CD(CurLoadCmpSlot[i+1],5)},{SetCD(CurLoadCmpSlot[i+1],0),SetCD(CTSwitch2,0)})
+				SCA_DataLoad(i, BPTest[1], SCA.BanFlag)
+				TriggerX(FP, {CV(BPTest[1],1,AtLeast)},{SetCD(CTSwitch2,1)})
+				TriggerX(FP, {CD(CTSwitch2,1),LocalPlayerID(i)},{
+					SetCp(i),
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayExtText("S\x13\x07『 \x04당신은 SCA 시스템에서 이미 닉네임을 변경한 유저로 감지되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
+					DisplayExtText("\x13\x07『 \x04만약 닉네임을 변경하지 않은유저일 경우 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					SetMemory(0xCDDDCDDC,SetTo,1);})
+				CIfEnd()
+				--Call_SCA_DataLoadSetTo
+				--Call_SCA_DataLoadAdd
+			CIfEnd()
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],3),CV(SlotPtr[i+1],0),CD(SubtitleLoad[i+1],0),SCA.Available(i)},{SetCD(SCA.LoadSlot1[i+1],4),SetDeaths(i,SetTo,10,2),SCA.Reset(i),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Step 4"),4)})--슬롯1번 저장신호
+				SCA_DataReset(i,{},{})--SCA 데이터 리셋
+				SCA_DataSave(i, SlotPtr[i+1], SCA.PLevel)
+				SCA_DataSave(i, SubtitleFlag[i+1], SCA.PLevel2)
+			CIfEnd()
+			TriggerX(FP, {CD(SCA.LoadSlot1[i+1],4),SCA.SaveCmp(i)},{SetCD(SCA.LoadSlot1[i+1],0),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Completed"),4),SetCD(CurLoadSlot[i+1],0),SetCD(CurLoadCmpSlot[i+1],0)},{preserved})
+				
 		CIfEnd()
-		CIf(FP,{CD(SCA.LoadSlot1[i+1],2)})
-			CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
-			for j = 2, 9 do 
-				local cond = CVX(SlotPtr[i+1],2^j,2^j)
-				local act
-				if j == 4 then cond =CD(SubtitleLoad[i+1],1) end -- 4번 조건은 예외
-				if j == 4 then act = SetCD(SubtitleLoad[i+1],0) end
-				TriggerX(FP, {CD(CurLoadSlot[i+1],j),SCA.SlotLoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),act,SetCD(CurLoadCmpSlot[i+1],j)}, {preserved})
-				TriggerX(FP, {cond,SCA.Available(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SetCD(CurLoadSlot[i+1],j),SCA.Reset(i)}, {preserved})
-			end
+	else
+		CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast),CD(SCA.LoadCheckArr[i+1],2)})--슬롯로드해야됨 감지. 단, 게임로드해야 쓸수있다
+		
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],1),SCA.Available(i)},{SetCD(SCA.LoadSlot1[i+1],2),SetDeaths(i,SetTo,9,2),SCA.Reset(i)})--슬롯10번 저장신호
+				SCA_DataReset(i,{},{})--SCA 데이터 리셋
+				CIf(FP,{LocalPlayerID(i)})
+	
+				SCA_DataSave(i, iv.S45Loc, SCA.FXPer44)--45판매횟수
+				SCA_DataSave(i, iv.S46Loc, SCA.FXPer45)--46판매횟수
+				SCA_DataSave(i, iv.S47Loc, SCA.FXPer46)--47판매횟수
+				SCA_DataSave(i, iv.S48Loc, SCA.FXPer48)--48판매횟수
+				SCA_DataSave(i, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
+				SCA_DataSave(i, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
+				SCA_DataSave(i, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
+				
+				CIfEnd()
+			CIfEnd()
+			SCA_DataReset(i,{CD(SCA.LoadSlot1[i+1],2),SCA.NoSlotLoadAvailable(i)},{SCA.Reset(i),SetDeaths(i,SetTo,11,2)})--SCA 슬롯로드 후 데이터 리셋
+			CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],3)})
+				SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
+				SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
+			CIfEnd()
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],3)})
+				CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
+				for j = 2, 9 do 
+					local cond = CVX(SlotPtr[i+1],2^j,2^j)
+					local act
+					if j == 4 then cond =CD(SubtitleLoad[i+1],1) end -- 4번 조건은 예외
+					if j == 4 then act = SetCD(SubtitleLoad[i+1],0) end
+					TriggerX(FP, {CD(CurLoadSlot[i+1],j),SCA.SlotLoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),act,SetCD(CurLoadCmpSlot[i+1],j),SetCD(CurLoadSlot[i+1],0),}, {preserved})
+					TriggerX(FP, {cond,SCA.Available(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SetCD(CurLoadSlot[i+1],j),SCA.Reset(i)}, {preserved})
+				end
+				CallTriggerX(FP,Call_SCA_DataLoadSetTo,{CD(CurLoadCmpSlot[i+1],2)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 SetTo 실행되었습니다."),4)})
+				CallTriggerX(FP,Call_SCA_DataLoadAdd,{CD(CurLoadCmpSlot[i+1],3)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 Add/Sub 실행되었습니다."),4)})
+				CIf(FP,{CD(CurLoadCmpSlot[i+1],5)},{SetCD(CurLoadCmpSlot[i+1],0),SetCD(CTSwitch2,0)})
+				SCA_DataLoad(i, BPTest[1], SCA.BanFlag)
+				TriggerX(FP, {CV(BPTest[1],1,AtLeast)},{SetCD(CTSwitch2,1)})
+				TriggerX(FP, {CD(CTSwitch2,1),LocalPlayerID(i)},{
+					SetCp(i),
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayExtText("S\x13\x07『 \x04당신은 SCA 시스템에서 이미 닉네임을 변경한 유저로 감지되어 강퇴당했습니다. (데이터는 정상저장 후 보존되어 있음.)\x07 』",4);
+					DisplayExtText("\x13\x07『 \x04만약 닉네임을 변경하지 않은유저일 경우 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					SetMemory(0xCDDDCDDC,SetTo,1);})
+				CIfEnd()
+				--Call_SCA_DataLoadSetTo
+				--Call_SCA_DataLoadAdd
+			CIfEnd()
+			CIf(FP,{CD(SCA.LoadSlot1[i+1],3),CV(SlotPtr[i+1],0),CD(SubtitleLoad[i+1],0),SCA.Available(i)},{SetCD(SCA.LoadSlot1[i+1],4),SetDeaths(i,SetTo,10,2),SCA.Reset(i)})--슬롯1번 저장신호
+				SCA_DataReset(i,{},{})--SCA 데이터 리셋
+				SCA_DataSave(i, SlotPtr[i+1], SCA.PLevel)
+				SCA_DataSave(i, SubtitleFlag[i+1], SCA.PLevel2)
+			CIfEnd()
+			TriggerX(FP, {CD(SCA.LoadSlot1[i+1],4),SCA.SaveCmp(i)},{SetCD(SCA.LoadSlot1[i+1],0),SetCD(CurLoadSlot[i+1],0),SetCD(CurLoadCmpSlot[i+1],0)},{preserved})
+				
 		CIfEnd()
-		CIf(FP,{CD(SCA.LoadSlot1[i+1],2),CV(SlotPtr[i+1],0),CD(SubtitleLoad[i+1],0),SCA.SlotLoadCmp(i)},{SetCD(SCA.LoadSlot1[i+1],3),SetDeaths(i,SetTo,10,2),SCA.Reset(i),SetCp(i),DisplayExtText(StrDesignX("3"),4)})--슬롯1번 저장신호
-			SCA_DataReset(i,{},{})--SCA 데이터 리셋
-			SCA_DataSave(i, SlotPtr[i+1], SCA.PLevel)
-			SCA_DataSave(i, SubtitleFlag[i+1], SCA.PLevel2)
-		CIfEnd()
-		TriggerX(FP, {CD(SCA.LoadSlot1[i+1],3),SCA.SaveCmp(i)},{SetCD(SCA.LoadSlot1[i+1],0),SetCp(i),DisplayExtText(StrDesignX("fin"),4)},{preserved})
-			
-	CIfEnd()
+	end
 
 	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
 	--if TestStart == 1 then
@@ -1485,10 +1571,61 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 
 
 	--총 버프 값 합산
-	CallTrigger(FP,Call_SetValue)
+	--CallTrigger(FP,Call_SetValue)
 	
-	
-	
+	CMov(FP,Stat_EXPIncome[i+1],0,nil,nil,1)
+    CMov(FP,IncomeMax[i+1],12,nil,nil,1)
+    CMov(FP,General_Upgrade[i+1],0,nil,nil,1)
+    CMov(FP,TotalEPer[i+1],Stat_TotalEPer[i+1],nil,nil,1)
+    CMov(FP,TotalEPer2[i+1],Stat_TotalEPer2[i+1],nil,nil,1)
+    CMov(FP,TotalEPer3[i+1],Stat_TotalEPer3[i+1],nil,nil,1)
+    CMov(FP,TotalEPer4[i+1],Stat_TotalEPer4[i+1],nil,nil,1)
+    CAdd(FP,TotalEPer4[i+1],Stat_TotalEPer4X[i+1])
+    CMov(FP,TotalBreakShield[i+1],Stat_BreakShield[i+1],nil,nil,1)
+    CAdd(FP,IncomeMax[i+1],B_IncomeMax)
+    CAdd(FP,TotalEPer[i+1],Stat_TotalEPerEx[i+1])
+    CAdd(FP,TotalEPer2[i+1],Stat_TotalEPerEx2[i+1])
+    CAdd(FP,TotalEPer3[i+1],Stat_TotalEPerEx3[i+1])
+    CAdd(FP,TotalEPer[i+1],B_TotalEPer)
+    CAdd(FP,TotalEPer2[i+1],B_TotalEPer2)
+    CAdd(FP,TotalEPer3[i+1],B_TotalEPer3)
+    CAdd(FP,Stat_EXPIncome[i+1],B_Stat_EXPIncome)
+    CAdd(FP,General_Upgrade[i+1],Stat_Upgrade[i+1])
+    CAdd(FP,General_Upgrade[i+1],B_Stat_Upgrade)--
+
+
+    CAdd(FP,Stat_EXPIncome[i+1],CS_EXPData[i+1])
+    CAdd(FP,Stat_EXPIncome[i+1],iv.FSEXP[i+1])
+    CAdd(FP,TotalEPer[i+1],CS_TEPerData[i+1])
+    CAdd(FP,TotalEPer4[i+1],CS_TEPer4Data[i+1])
+    CAdd(FP,TotalBreakShield[i+1],CS_BreakShieldData[i+1])
+    CAdd(FP,TotalBreakShield[i+1],Stat_BreakShield2[i+1])
+    
+    CMov(FP,iv.XEPer44[i+1],iv.CXPer44[i+1])
+    CMov(FP,iv.XEPer45[i+1],iv.CXPer45[i+1])
+    CMov(FP,iv.XEPer46[i+1],iv.CXPer46[i+1])
+    CMov(FP,iv.XEPer47[i+1],iv.CXPer47[i+1])
+    CMov(FP,iv.XEPer48[i+1],iv.CXPer48[i+1])
+    CAdd(FP,iv.XEPer44[i+1],iv.Stat_XEPer44[i+1])
+    CAdd(FP,iv.XEPer45[i+1],iv.Stat_XEPer45[i+1])
+    CAdd(FP,iv.XEPer46[i+1],iv.Stat_XEPer46[i+1])
+    CAdd(FP,iv.XEPer47[i+1],iv.Stat_XEPer47[i+1])
+    
+    CAdd(FP,TotalEPer[i+1],iv.CMEPer[i+1])
+    CAdd(FP,iv.XEPer44[i+1],iv.CMEPer[i+1])
+    CAdd(FP,iv.XEPer45[i+1],iv.CMEPer[i+1])
+    CAdd(FP,iv.XEPer46[i+1],iv.CMEPer[i+1])
+    CAdd(FP,iv.XEPer47[i+1],iv.CMEPer[i+1])
+    CAdd(FP,TotalEPer[i+1],iv.CMEPer2[i+1])
+    CAdd(FP,iv.XEPer44[i+1],iv.CMEPer2[i+1])
+    CAdd(FP,iv.XEPer45[i+1],iv.CMEPer2[i+1])
+    CAdd(FP,iv.XEPer46[i+1],iv.CMEPer2[i+1])
+    CAdd(FP,iv.XEPer47[i+1],iv.CMEPer2[i+1])
+    CAdd(FP,iv.XEPer48[i+1],iv.CMEPer2[i+1])
+
+    
+
+
 	
 
 
@@ -1584,6 +1721,25 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		
 		TriggerX(FP,{CD(PartyBonus2,1,AtLeast)},{AddV(TotalEPer[i+1],1000),AddV(General_Upgrade[i+1],15)},{preserved})-- 인원수 버프 보너스
 	--end
+	
+    CAdd(FP,TotalBreakShield[i+1],iv.CBrSh[i+1])
+    CAdd(FP,TotalBreakShield[i+1],iv.CBrSh2[i+1])
+	CMov(FP,BreakShield,TotalBreakShield[i+1])
+    CMov(FP,GEper,TotalEPer[i+1])
+    CMov(FP,GEper2,TotalEPer2[i+1])
+    CMov(FP,GEper3,TotalEPer3[i+1])
+    CMov(FP,GEper4,TotalEPer[i+1])
+    CAdd(FP,GEper4,TotalEPer2[i+1])
+    CAdd(FP,GEper4,TotalEPer3[i+1])
+    CAdd(FP,GEper4,TotalEPer4[i+1])
+    CMov(FP,GetXEper44,iv.XEPer44[i+1])
+    CMov(FP,GetXEper45,iv.XEPer45[i+1])
+    CMov(FP,GetXEper46,iv.XEPer46[i+1])
+    CMov(FP,GetXEper47,iv.XEPer47[i+1])
+    CMov(FP,GetXEper48,iv.XEPer48[i+1])
+	
+
+
 	TriggerX(FP,{CV(PLevel[i+1],999,AtMost)},{AddV(Stat_EXPIncome[i+1],10)},{preserved})-- 1000레벨 미만 경치2배
 
 	CIf(FP,{CV(B_Credit,1,AtLeast)})
@@ -1685,10 +1841,11 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 	end
 	
-	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men"),TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})}) -- 자동구매 관리
+	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men")}) -- 자동구매 관리
 
-
+	CIf(FP,{TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})})
 	CallTrigger(FP, Call_AutoBuy,{})
+	CIfEnd()
 	
 	CheckTrig("Interface_Point_4_P"..(i+1))
 	for j, k in pairs(LevelUnitArr) do

@@ -167,6 +167,7 @@ function DataArr()
 	iv.BanFlag7,ct.BanFlag7 = CreateDataPV("BanFlag7",SCA.BanFlag7) 
 	iv.BanFlag8,ct.BanFlag8 = CreateDataPV("BanFlag8",SCA.BanFlag8) 
 	BPArr = {iv.BanFlag,iv.BanFlag2,iv.BanFlag3,iv.BanFlag4,iv.BanFlag5,iv.BanFlag6,iv.BanFlag7,iv.BanFlag8}
+	BPTest = CreateVarArr(7,FP)
 
 	
 	iv.CS_BreakShieldData,ct.CS_BreakShieldData=CreateDataPV("CS_BreakShieldData")
@@ -345,7 +346,7 @@ function DataArr()
 	iv.FirstRewardLim2,ct.FirstRewardLim2,iv.FirstRewardLim2Loc = CreateDataPV("FirstRewardLim2",SCA.FirstRewardLim2,1)
 	iv.TimeAttackScore50,ct.TimeAttackScore50,iv.TimeAttackScore50Loc = CreateDataPV("TimeAttackScore50",SCA.TimeAttackScore50,1)
 	iv.FfragItemRank,ct.FfragItemRank = CreateDataPV("FfragItemRank",SCA.FfragItemRank)
-	iv.GFfragLoc = CreateVar(FP)
+	iv.GFfragLoc = CreateWar(FP)
 	iv.GCreditLoc = CreateWar(FP)
 	iv.GAwakItemLoc = CreateVar(FP)
 	iv.FAcc,ct.FAcc,iv.FAccLoc = CreateDataPV("FAcc",SCA.FAcc,1)

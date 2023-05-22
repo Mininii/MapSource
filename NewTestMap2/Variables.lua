@@ -195,6 +195,10 @@ end
 	SCA.FMEPer2 = SCA.CreateVar(FP)
 	--SCA.SettingSubtitle = SCA.CreateVar(FP)
 	SCA.SettingEffSound = SCA.CreateVar(FP)
+
+	SCA.Money2 = SCA.CreateVar(FP)
+	SCA.CurPlayTime = SCA.CreateVar(FP)
+	
 	NSCA = {}
 	NSCA.TMapMakerFlag = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
 	NSCA.TDayCheck2 = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
@@ -357,6 +361,7 @@ end
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
 	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- 경험치 획득량 수치. 사용 미정
 	iv.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
+	iv.CurPlayTime = CreateVarArr(7,FP) -- 자신의 현재 돈 보유량
 	
 	iv.CurPUnitCool = CreateVarArr(7,FP)
 	
@@ -1056,8 +1061,8 @@ FirstReward4 = {
 	--컴플리트 15.0% = 1.2억
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
-	Cost_FAcc = ReciveCostDataFile(10, "FAcc")
-	Cost_FAcc2 = ReciveCostDataFile(10,"FAcc2")
+	Cost_FAcc = ReciveCostDataFile(30, "FAcc")
+	Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
 	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
 
@@ -1104,7 +1109,9 @@ FirstReward4 = {
 		31+28+31+30+31+30+31+31+30+31,
 		31+28+31+30+31+30+31+31+30+31+30}
 	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
-	Create_utf8_Subtitle("\x08아\x0E스\x1F나\x10바\x17보\x1E멍\x1D츙\x15이","whatdonald1@naver.com","GALAXY_BURST")
+	Create_utf8_Subtitle("공지테스트","whatdonald1@naver.com","GALAXY_BURST1")
+	Create_utf8_Subtitle("귓테스트","whatdonald1@naver.com","GALAXY_BURST2")
+	Create_utf8_Subtitle("확성기테스트","whatdonald1@naver.com","GALAXY_BURST3")
 	PopSubtitleData()
 	--그외 남는 확률값은 꽝 - 기본 조각 지급(각 1,2,5,10개)
 end
