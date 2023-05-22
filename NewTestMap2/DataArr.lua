@@ -104,7 +104,7 @@ function DataArr()
 	end
 
 
-	iv.SettingSubtitle = CreateVarArr(7,FP)
+	--iv.SettingSubtitle = CreateVarArr(7,FP)
 	iv.SettingEffSound = CreateVarArr(7,FP)
 
 	SCA_DataArr = {
@@ -142,7 +142,7 @@ function DataArr()
 		{iv.CS_TotalEper4,SCA.CSTotalEper4,"CS_TotalEper4"},
 		{iv.CS_DPSLV,SCA.CSDPSLV,"CS_DPSLV"},
 		{iv.SellTicket,{SCA.SellTicket,SCA.SellTicket64},"SellTicket"},
-		{iv.SettingSubtitle,SCA.SettingSubtitle,"SettingSubtitle"},
+		--{iv.SettingSubtitle,SCA.SettingSubtitle,"SettingSubtitle"},
 		{iv.SettingEffSound,SCA.SettingEffSound,"SettingEffSound"},
 	}
 	

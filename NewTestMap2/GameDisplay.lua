@@ -1015,18 +1015,17 @@ function GameDisplay()
 		CIfEnd()
 
 	end
---if Limit == 1 then
---	local TempV = CreateVar(FP)
---	local TempV2 = CreateVar(FP)
---	CMov(FP,TempV2,CurrentOP,1)
---	for i = 0, 6 do
---		f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
---		
---		DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   ",})
---		DisplayPrint(i, {SCA.YearV,".",SCA.MonthV,".",SCA.DayV,". ",SCA.HourV," : ",SCA.MinV,"   Week : ",SCA.WeekV})--
-
---	end
---end
+if Limit == 1 then
+	local TempV = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	CMov(FP,TempV2,CurrentOP,1)
+	for i = 0, 6 do
+		f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
+		
+		DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   ",})
+		DisplayPrint(i, {SCA.YearV,".",SCA.MonthV,".",SCA.DayV,". ",SCA.HourV," : ",SCA.MinV,"   Week : ",SCA.WeekV})--
+	end
+end
 
 
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})

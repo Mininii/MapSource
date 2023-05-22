@@ -37,8 +37,11 @@ end
 function SCA.Available(CP)
 	return DeathsX(CP, Exactly, 3, 1,3)
 end
-function SCA.NoLoadAvailable(CP)
-	return DeathsX(CP, Exactly, 3, 1,7)
+function SCA.NoSlotLoadAvailable(CP)--슬롯 로드완료 상태가 아닐때만
+	return DeathsX(CP, Exactly, 3, 1,3+64)
+end
+function SCA.SlotLoadCmp(CP)--사용가능 + 슬롯로드완료
+	return DeathsX(CP, Exactly, 3+64, 1,3+64)
 end
 function SCA.NotAvailable(CP)
 	return DeathsX(CP, Exactly, 0, 1,2)
@@ -190,8 +193,12 @@ end
 	SCA.FAcc2 = SCA.CreateVar(FP)
 	SCA.FBrSh2 = SCA.CreateVar(FP)
 	SCA.FMEPer2 = SCA.CreateVar(FP)
-	SCA.SettingSubtitle = SCA.CreateVar(FP)
+	--SCA.SettingSubtitle = SCA.CreateVar(FP)
 	SCA.SettingEffSound = SCA.CreateVar(FP)
+	NSCA = {}
+	NSCA.TMapMakerFlag = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
+	NSCA.TDayCheck2 = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
+
 	
 	SCA.GReload = CreateCcode()
 	SCA.LoadSlot1 = CreateCcodeArr(7)
@@ -259,6 +266,11 @@ end
 	ShopUnit = CreateVarArr(7, FP) -- 시민설정기
 	PUnitPtr = CreateVarArr(7, FP) -- 고유유닛
 	SlotPtr = CreateVarArr(7, FP) -- 슬롯포인터
+	CurLoadSlot = CreateCcodeArr(7) -- 슬롯포인터
+	CurLoadCmpSlot = CreateCcodeArr(7) 
+	SubtitleFlag = CreateVarArr(7, FP)--서브타이틀 플래그
+	SubtitleFlag2 = CreateVarArr(7, FP)--서브타이틀 플래그
+	SubtitleLoad = CreateCcodeArr(7)--서브타이틀 플래그
 
 	DpsLV1 = CreateVarArr(7, FP) -- 첫번째 DPS건물
 	DpsLV2 = CreateVarArr(7, FP) -- 두번째 DPS건물

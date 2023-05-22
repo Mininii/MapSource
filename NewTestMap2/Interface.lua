@@ -902,6 +902,13 @@ end
 	
 	NIfXEnd()
 	CIfEnd()
+	
+	CDoActions(FP,{
+		TSetDeaths(i,SetTo,DayCheck2[i+1],48);
+		TSetDeaths(i,SetTo,iv.MapMakerFlag[i+1],100);
+		TSetDeaths(i,SetTo,iv.TesterFlag[i+1],101);
+		--TSetDeaths(i,SetTo,iv.SettingSubtitle[i+1],102);
+	})
 
 	
 	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),CV(CurMission[i+1],#MissionDataTextArr-1,AtMost),})
@@ -951,21 +958,31 @@ end
 	
 
 	
---	CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast)})--슬롯로드해야됨 감지
---	SCA_DataReset(i,{CD(SCA.LoadSlot1[i+1],1),SCA.NoLoadAvailable(i)},{SCA.Reset(i),SetDeaths(i,SetTo,11,2)})--SCA 슬롯로드 후 데이터 리셋
---	CIf(FP,{SCA.LoadCmp(i),CD(SCA.LoadSlot1[i+1],1)},{SetCD(SCA.LoadSlot1[i+1],2)})
---		SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
---		for j = 2, 9 do 
---			--TriggerX(FP, {CVX(SlotPtr[i+1],2^j,2^j),SCA.LoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SCA.Reset(i)}, {preserved})
---		end
---		
---		TriggerX(FP, {CVX(SlotPtr[i+1],0),SCA.LoadCmp(i)}, {SetCD(SCA.LoadSlot1[i+1],0)}, {preserved})--
-
---	CIfEnd()
-
-
-
-
+	CIf(FP, {CD(SCA.LoadSlot1[i+1],1,AtLeast),CD(SCA.LoadCheckArr[i+1],2)})--슬롯로드해야됨 감지. 단, 게임로드해야 쓸수있다
+		SCA_DataReset(i,{CD(SCA.LoadSlot1[i+1],1),SCA.NoSlotLoadAvailable(i)},{SCA.Reset(i),SetDeaths(i,SetTo,11,2),SetCp(i),DisplayExtText(StrDesignX("1"),4)})--SCA 슬롯로드 후 데이터 리셋
+		CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],1)},{SetCD(SCA.LoadSlot1[i+1],2),SetCp(i),DisplayExtText(StrDesignX("2"),4)})
+			SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
+			SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
+			DisplayPrint(i, {"\x13\x04SlotPtr : ",SlotPtr[i+1],"   SubtitleFlag : ",SubtitleFlag[i+1]})
+		CIfEnd()
+		CIf(FP,{CD(SCA.LoadSlot1[i+1],2)})
+			CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
+			for j = 2, 9 do 
+				local cond = CVX(SlotPtr[i+1],2^j,2^j)
+				local act
+				if j == 4 then cond =CD(SubtitleLoad[i+1],1) end -- 4번 조건은 예외
+				if j == 4 then act = SetCD(SubtitleLoad[i+1],0) end
+				TriggerX(FP, {CD(CurLoadSlot[i+1],j),SCA.SlotLoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),act,SetCD(CurLoadCmpSlot[i+1],j)}, {preserved})
+				TriggerX(FP, {cond,SCA.Available(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SetCD(CurLoadSlot[i+1],j),SCA.Reset(i)}, {preserved})
+			end
+		CIfEnd()
+		CIf(FP,{CD(SCA.LoadSlot1[i+1],2),CV(SlotPtr[i+1],0),CD(SubtitleLoad[i+1],0),SCA.SlotLoadCmp(i)},{SetCD(SCA.LoadSlot1[i+1],3),SetDeaths(i,SetTo,10,2),SCA.Reset(i),SetCp(i),DisplayExtText(StrDesignX("3"),4)})--슬롯1번 저장신호
+			SCA_DataReset(i,{},{})--SCA 데이터 리셋
+			SCA_DataSave(i, SlotPtr[i+1], SCA.PLevel)
+			SCA_DataSave(i, SubtitleFlag[i+1], SCA.PLevel2)
+		CIfEnd()
+		TriggerX(FP, {CD(SCA.LoadSlot1[i+1],3),SCA.SaveCmp(i)},{SetCD(SCA.LoadSlot1[i+1],0),SetCp(i),DisplayExtText(StrDesignX("fin"),4)},{preserved})
+			
 	CIfEnd()
 
 	CIf(FP,{CD(SCA.LoadCheckArr[i+1],2),Deaths(i, Exactly, 0,14),CD(CTSwitch,1)},{SetCD(CTSwitch,0),SetCD(CheatDetect,0)})--세이브 완료후 치팅 검사
@@ -1768,7 +1785,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetDeaths(i, SetTo, 1,14)},{preserved})
 
 		
-		CIf(FP,{CD(SCA.LoadSlot1[i+1],0),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})
+		CIf(FP,{CD(SCA.LoadSlot1[i+1],0),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})--로드슬롯 프로토콜이 완료되어야됨
 	if Limit == 0 then
 		NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
 	else

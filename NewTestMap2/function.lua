@@ -1506,7 +1506,7 @@ end
 	local SCJump = def_sIndex()
 	CJump(FP,SCJump)
 	SetCall2(FP, dp.Call_IToDec)
-	ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
+	dp.ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
 	SetCallEnd2()
 
 	SetCall2(FP, dp.Call_VtoName)
@@ -1533,7 +1533,6 @@ end
 		SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
 		SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--<<Zeromode = 0x0D
-		f_LNeg(FP, dp.publiclItoDecW, dp.publiclItoDecW)--음수표현을 위해 반전
 		for i = 19, 1, -1 do
 			local wt = string.rep("9",i)
 			local mb = 3-i%4
@@ -1542,6 +1541,9 @@ end
 			CTrigger(FP,{TTNWar(dp.publiclItoDecW,AtMost,wt)},{SetCVAar(VArr(dp.publiclItoDecVArr,idx),SetTo,MaskBit*0x0D,MaskBit*0xFF)},1)--<<Zeromode = 0x0D
 		end--
 		NJumpEnd(FP,li)
+		CIf(FP,{TTNWar(dp.publiclItoDecW,AtLeast,"0x8000000000000000")})
+		f_LNeg(FP, dp.publiclItoDecW, dp.publiclItoDecW)--음수표현을 위해 반전
+		CIfEnd()
 		function dp.War_NumSet(DestVAI,DivNum,MaskBit)
 			local MaskBit = 256^MaskBit
 			for i = 3, 0, -1 do
