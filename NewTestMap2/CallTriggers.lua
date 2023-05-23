@@ -1268,6 +1268,7 @@ function Install_CallTriggers()
 	CElseIfX({CV(GetINumData,257)})
 	FragBuyFnc(iv.FAcc2,Cost_FAcc2,iv.Cost_FAcc2Loc,CntCArr[1],failCcode)
 	FragBuyFnc(iv.FAcc,Cost_FAcc,iv.Cost_FAccLoc,CntCArr[2],failCcode)
+	FragBuyFnc(iv.FMinMax,Cost_FMinMax,iv.Cost_FMinMaxLoc,CntCArr[3],failCcode)
 	FragBuyFnc(iv.FBrSh2,Cost_FBrSh2,iv.Cost_FBrSh2Loc,CntCArr[6],failCcode)
 	FragBuyFnc(iv.FMEPer2,Cost_FMEPer2,iv.Cost_FMEPer2Loc,CntCArr[7],failCcode)
 	
@@ -1358,6 +1359,7 @@ function Install_CallTriggers()
 	GetData_FAcc2 = CreateVar(FP)
 	GetData_FBrSh2 = CreateVar(FP)
 	GetData_FMEPer2 = CreateVar(FP)
+	GetData_FMinMax = CreateVar(FP)
 	DoActionsX(FP, {
 		SetV(GetData_FXPer44,0),
 		SetV(GetData_FXPer45,0),
@@ -1384,6 +1386,7 @@ function Install_CallTriggers()
 	CMovX(FP,GetData_FAcc2,VArrX(GetVArray(iv.FAcc2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FBrSh2,VArrX(GetVArray(iv.FBrSh2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetData_FMEPer2,VArrX(GetVArray(iv.FMEPer2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,GetData_FMinMax,VArrX(GetVArray(iv.FMinMax[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 
 	
 
@@ -1433,6 +1436,9 @@ function Install_CallTriggers()
 	ConvertLArr(FP, LIndex, _Add(GetData_FMEPer2, 151), 8)
 	f_LRead(FP, LArrX({Cost_FMEPer2[3]},LIndex), TempCostW, nil, 1)
 	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
+	ConvertLArr(FP, LIndex, _Add(GetData_FMinMax, 151), 8)
+	f_LRead(FP, LArrX({Cost_FMinMax[3]},LIndex), TempCostW, nil, 1)
+	f_LAdd(FP,TempFfragTotal,TempFfragTotal,TempCostW)
 
 	
 	
@@ -1465,6 +1471,11 @@ function Install_CallTriggers()
 	TriggerX(FP,{CV(GetData_FBrSh,Cost_FBrSh[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	TriggerX(FP,{CV(GetData_FXPer48,Cost_FXPer48[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	TriggerX(FP,{CV(GetData_FMin,Cost_FMin[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FAcc,Cost_FAcc[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FAcc2,Cost_FAcc2[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FBrSh2,Cost_FBrSh2[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FMEPer2,Cost_FMEPer2[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
+	TriggerX(FP,{CV(GetData_FMinMax,Cost_FMinMax[2]+1,AtLeast)},{SetCDX(iv.FStatTest,8,8)},{preserved})
 	SetCallEnd()
 
 	
@@ -1870,13 +1881,16 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"9999"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 			CElseX({})
 			local TempWC = CreateWar()
+			local TempWC2 = CreateWar()
 				f_LDiv(FP, TempWC, GetSellTicket, "10000")
-				CIfX(FP,{CV(ECW,_Cast(0,TempWC),AtMost)})
-				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul({ECW,0},"10000"))
+				
+				f_LMov(FP,TempWC2,{ECW,0})
+
+				CIfX(FP,{TTNWar(TempWC2,AtMost,TempWC)})
+				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul(TempWC2,"10000"))
 				CDoActions(FP, {TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
 				CElseX()
-				f_Cast(FP, {ECW,0}, TempWC, nil, nil, 1)
-				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul({ECW,0},"10000"))
+				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul(TempWC,"10000"))
 				CDoActions(FP, {TKillUnitAt(_lShift(_Cast(0,TempWC), 24), UID, GCP+73, GCP),TMoveUnit(All,UID,GCP,GCP+73,GCP+36)})
 				CIfXEnd()
 
@@ -1922,6 +1936,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	local GetMulOp = CreateVar(FP)
 	local GetOldTicket = CreateVar(FP)
 	local LMulOP = CreateWar(FP)
+	FirstRewardLimData = CreateVar(FP)
 	SetCall(FP)
 	f_LMov(FP,GetCreditData,"0",nil,nil,1)--크레딧 복사버그 방지용 초기화...?
 	CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),nil,nil,nil,1)
@@ -1933,6 +1948,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetOldTicket,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),nil,nil,nil,1)
+	CMovX(FP,FirstRewardLimData,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 
 
 	
@@ -2044,6 +2060,17 @@ CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),Disp
 CIfXEnd()
 CIfEnd()
 
+
+
+CIf(FP,{TBring(GCP,AtLeast,1,15,128)},{TMoveUnit(1, 15, GCP, 128, 168)})
+
+CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 25개 사용하여 \x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
+CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+CIfXEnd()
+CIfEnd()
+
+CMovX(FP,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI4),FirstRewardLimData,SetTo,nil,nil,1)
 f_LMovX(FP,WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),GetBuyTicket,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),GetAwakItemData,SetTo,nil,nil,1)
@@ -2171,6 +2198,7 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	LocIDB = CreateVar(FP)
 	PBossIDB = CreateVar(FP)
 	PBossSetDPSB = CreateWar(FP)
+	TempTotalDPS = CreateWar(FP)
 
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {TCreateUnit(1,PBossIDB,LocIDB,FP)})
@@ -2182,7 +2210,10 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
 	--CallTrigger(FP, Call_CTInputUID)
 	CIfX(FP,{CV(PBossIDB,102)})
-	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),_LAdd(_LMul({_Sub(VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),_Mov(150000)),0},"200000"), PBossSetDPSB),SetTo,nil,nil,1)--TotalPBossDPS = 캘수있는 크레딧 총량
+	CMovX(FP,GetData_FMinMax,VArrX(GetVArray(iv.FMinMax[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CAdd(FP,GetData_FMinMax,10)
+	f_LMov(FP,TempTotalDPS,_LDiv(_LAdd(_LMul({_Sub(VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),_Mov(150000)),0},"200000"), PBossSetDPSB), "10"))
+	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),_LMul(TempTotalDPS, {GetData_FMinMax,0}),SetTo,nil,nil,1)--TotalPBossDPS = 캘수있는 크레딧 총량
 	CElseX()
 	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),PBossSetDPSB,SetTo,nil,nil,1)
 	CIfXEnd()
@@ -2197,14 +2228,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x1F44강 \x07타임어택 \x10시간\x04은 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x04당신의 \x1F44강 \x07타임어택 \x10시간\x04은 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint("CP", {"\x13\x07『 \x1F44강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x1F44강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint("CP", {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
 	CIfXEnd()
 
 	SetCallEnd()
@@ -2215,14 +2246,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x1B48강 \x07타임어택 \x10점수\x04는 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x04당신의 \x1B48강 \x07타임어택 \x10점수\x04는 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint("CP", {"\x13\x07『 \x1B48강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x1B48강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore48[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint("CP", {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
 	CIfXEnd()
 	SetCallEnd()
 
@@ -2232,14 +2263,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore50[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint("CP", {"\x13\x07『 \x04당신의 \x0750강 \x07타임어택 \x10점수\x04는 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x04당신의 \x0750강 \x07타임어택 \x10점수\x04는 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초 \x04입니다. \x07』"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint("CP", {"\x13\x07『 \x0750강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 \x0750강 \x07타임어택 \x10점수\x04가 갱신되었습니다! 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어넘으셨네요! 축하드립니다! \x07』"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore50[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint("CP", {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
+	DisplayPrint(GCP, {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
 	CIfXEnd()
 	SetCallEnd()
 

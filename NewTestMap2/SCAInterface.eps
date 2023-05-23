@@ -110,16 +110,18 @@ const FMEPer2 = PVariable();
 const SettingEffSound = PVariable();
 const RankTitle2 = PVariable();
 const RankTitle3 = PVariable();
+const Money2 = PVariable();
+const CurPlayTime = PVariable();
+const FMinMax = PVariable();
 
+
+const SettingSubtitle = PVariable();
+var Asm_Arrptr;
 const TRankTitle = PVariable();
 const TRankTitle2 = PVariable();
 const TRankTitle3 = PVariable();
-
-const SettingSubtitle = PVariable();
-const Money2 = PVariable();
-const CurPlayTime = PVariable();
-var Asm_Arrptr;
 function onPluginStart(){
+
 
 	const a = 0x6D0F48; //방이름
 	const b = 0x6D0F78; //방장닉
@@ -331,6 +333,8 @@ Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(Money2)+focus,0);
 Asm_Arrptr+=1;
 SetDeaths(Asm_Arrptr,SetTo,EPD(CurPlayTime)+focus,0);
+Asm_Arrptr+=1;
+SetDeaths(Asm_Arrptr,SetTo,EPD(FMinMax)+focus,0);
 Asm_Arrptr+=1;
 
 

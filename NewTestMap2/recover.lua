@@ -145,17 +145,17 @@ Cost_FXPer45 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*4)) end,"FX
 Cost_FXPer46 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*7)) end,"FXPer46")
 Cost_FXPer47 = CreateCostDataFile(100,function(n) return 1+((n-1)*(n*10)) end,"FXPer47")
 Cost_FXPer48 = CreateCostDataFile(1000,function(n) return 1+((n-1)*(n*12)) end,"FXPer48")
-Cost_FMEPer = CreateCostDataFile(350,function(n) return 100+((n-1)*(n*1)*n) end,"FMEPer")
+Cost_FMEPer = CreateCostDataFile(350,function(n) return 100+((n-1)*(n*33)) end,"FMEPer")
 Cost_FIncm = CreateCostDataFile(200,function(n) return 1+((n-1)*(n*3)) end,"FIncm")
 Cost_FSEXP = CreateCostDataFile(1000,function(n) return (2*n) end,"FSEXP")
 Cost_FBrSh = CreateCostDataFile(200,function(n) return 100+((n-1)*(n*3)*n) end,"FBrSh")
 Cost_FMin = CreateCostDataFile(200,function(n) return 10000+((n-1)*(162*n)) end,"FMin")
 
-Cost_FAcc = CreateCostDataFile(30, function(n) return 25000000+((n-1)*25000000) end, "FAcc")--유료전용 촉진
-Cost_FAcc2 = CreateCostDataFile(30, function(n) return 50000000+((n-1)*50000000) end, "FAcc2")--무료전용 촉진
+Cost_FAcc = CreateCostDataFile(30, function(n) return 150000000+((n-1)*50000000) end, "FAcc")--유료전용 촉진
+Cost_FAcc2 = CreateCostDataFile(30, function(n) return 300000000+((n-1)*100000000) end, "FAcc2")--무료전용 촉진
 Cost_FBrSh2 = CreateCostDataFile(1000,function(n) return 8000000+((n-1)*(n)*n) end,"FBrSh2")--수호의 보석
 Cost_FMEPer = CreateCostDataFile(150,function(n) return 40000000+((n-1)*(n*250)*n) end,"FMEPer2")--진 궁극
-Cost_FMinMax = CreateCostDataFile(1000,function(n) return ((n-1)*(n*3)) end,"FMinMax")--채굴(광산최대치 퍼센트증가)
+Cost_FMinMax = CreateCostDataFile(1000,function(n) return 100000+((n*5000)) end,"FMinMax")--채굴(광산최대치 퍼센트증가)
 
 
     function exp(lv)

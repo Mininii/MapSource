@@ -83,13 +83,13 @@ f_LAdd(FP,iv.BuyTicket[6],iv.BuyTicket[6], "100000")
 f_LAdd(FP,iv.BuyTicket[7],iv.BuyTicket[7], "100000")
 CIfEnd()
 Trigger2X(FP,{CV(BossLV,7,AtLeast)},{
-	AddV(iv.PETicket2[1], 3),
-	AddV(iv.PETicket2[2], 3),
-	AddV(iv.PETicket2[3], 3),
-	AddV(iv.PETicket2[4], 3),
-	AddV(iv.PETicket2[5], 3),
-	AddV(iv.PETicket2[6], 3),
-	AddV(iv.PETicket2[7], 3),
+	AddV(iv.PETicket2[1], 6),
+	AddV(iv.PETicket2[2], 6),
+	AddV(iv.PETicket2[3], 6),
+	AddV(iv.PETicket2[4], 6),
+	AddV(iv.PETicket2[5], 6),
+	AddV(iv.PETicket2[6], 6),
+	AddV(iv.PETicket2[7], 6),
 	AddV(iv.B_Credit, 2000000),
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1CExtra Boss\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })

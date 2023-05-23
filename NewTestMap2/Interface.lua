@@ -410,6 +410,7 @@ for i = 0, 6 do -- 각플레이어
 			SetV(iv.FAcc2[i+1],0),
 			SetV(iv.FBrSh2[i+1],0),
 			SetV(iv.FMEPer2[i+1],0),
+			SetV(iv.FMinMax[i+1],0),
 			SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 		})
 		CTrigger(FP, {TTNVar(iv.FStatVer[i+1], NotSame, StatVer2)}, {SetCp(i),
@@ -632,7 +633,7 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{CD(StatEffT2[i+1],500,AtLeast)},{SetCD(StatEff[i+1],0)},{preserved})
 
 	
-	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],2)},{})--로드 완료시 첫 실행 트리거
+	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],1)})--로드 완료시 첫 실행 트리거
 	
 	CMov(FP,AddSC[i+1],_Div(PLevel[i+1],_Mov(1000)))
 	CMov(FP,ScoutDmg[i+1],_Div(PLevel[i+1],_Mov(10)))
@@ -676,8 +677,9 @@ for i = 0, 6 do -- 각플레이어
 	for j,k in pairs(FirstReward4) do -- j == 1~4
 		local NMask = 256^(j-1)
 		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])})
-			CIfX(FP,{CVX(iv.FirstRewardLim2[i+1],NMask*(k[5]-1),NMask*255,AtMost)},{AddVX(iv.FirstRewardLim2[i+1],NMask*1,NMask*255),SetDeaths(i,SetTo,1,13),AddV(iv.B_PFfragItem[i+1],k[3]),SetCp(i),DisplayExtText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).."억 \x17Ｃｒｅｄｉｔ"), 4),DisplayExtText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
+			CIfX(FP,{CVX(iv.FirstRewardLim2[i+1],NMask*(k[5]-1),NMask*255,AtMost)},{AddVX(iv.FirstRewardLim2[i+1],NMask*1,NMask*255),SetDeaths(i,SetTo,1,13),SetCp(i),DisplayExtText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).."억 \x17Ｃｒｅｄｉｔ"), 4),DisplayExtText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
 			f_LAdd(FP, Credit[i+1], Credit[i+1], k[2].."00000000")
+			f_LAdd(FP, iv.FfragItem[i+1], iv.FfragItem[i+1], tostring(k[3]))
 			CElseX()
 				TriggerX(FP,{},{SetCp(i),DisplayExtText(StrDesignX("\x04이번 주는 더이상 "..k[4]..k[1].."강 \x07최초 달성 보상\x04을 얻을 수 없어요. \x07매주 목요일\x04에 다시 도전해주세요!"), 4),SetCp(FP)},{preserved})
 			CIfXEnd()
@@ -1457,6 +1459,7 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 				SetV(iv.FAcc2[i+1],0),
 				SetV(iv.FBrSh2[i+1],0),
 				SetV(iv.FMEPer2[i+1],0),
+				SetV(iv.FMinMax[i+1],0),
 				SetNWar(iv.FfragItemUsed[i+1],SetTo,"0"),
 				SetV(ResetStat2[i+1],1),
 			})
@@ -1549,9 +1552,9 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x40000,20)}, {SetDeaths(i,SetTo,1,494)}, {preserved})--O
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),Deaths(i,Exactly,0x30000,20)}, {SetDeaths(i,SetTo,1,506)}, {preserved})--U
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),CV(InterfaceNum[i+1],255,AtMost),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0),SetCp(i),DisplayExtText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0),SetCp(i),DisplayExtText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
+	TriggerX(FP, {VRange(InterfaceNum[i+1],256,511),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],0),SetCp(i),DisplayExtText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),CV(InterfaceNum[i+1],255,AtMost),MSQC_KeyInput(i,"U"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],256)},{preserved})
-	TriggerX(FP, {CV(InterfaceNum[i+1],256),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
+	TriggerX(FP, {VRange(InterfaceNum[i+1],256,511),MSQC_KeyInput(i,"O"),CD(KeyTog,0)}, {SetCD(KeyTog,1),SetV(InterfaceNum[i+1],1)},{preserved})
 	TriggerX(FP, {CV(InterfaceNum[i+1],1,AtLeast),MSQC_KeyInput(i,"ESC")}, {SetV(InterfaceNum[i+1],0),SetCp(i),DisplayExtText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 4)},{preserved})
 
 	DoActions(FP, SetCp(FP))--키인식부 종료
@@ -1829,16 +1832,8 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		--TriggerX(FP, {MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)}, {Order(k[2], i, 36+i, Move, 73+i)}, {preserved})
 		--CIfEnd()
 	--table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
-		local UID = k[2]
-		local Per = k[3]
-		local Exp = k[4]
-		
-		
-		
 
 
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
-		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
 	end
 	
 	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men")}) -- 자동구매 관리
@@ -1869,6 +1864,18 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP, {LocalPlayerID(i),CV(PCheckV,j)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 "..ULimitArr[j].."기)"))},{preserved})
 	end
 	CIfXEnd()
+
+	
+	
+	for j, k in pairs(LevelUnitArr) do
+	
+		local UID = k[2]
+		local Per = k[3]
+		local Exp = k[4]
+	TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+8)},{preserved})
+	TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
+	end
+	
 
 
 	

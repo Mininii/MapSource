@@ -1750,7 +1750,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 		end
 		CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 		for i = 0, 6 do
-			TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
+			CTrigger(FP,{CV(CP,i)},{TSetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, GetFAcc2)},{preserved})
 		end
 		CElseX()
 		CDoActions(FP, {
@@ -1783,7 +1783,7 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 			f_LSub(FP, GetBuyTicket, GetBuyTicket, GetFAccW)
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 			for i = 0, 6 do
-				TriggerX(FP,{CV(CP,i)},{SetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, 1)},{preserved})
+				CTrigger(FP,{CV(CP,i)},{TSetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, GetFAcc)},{preserved})
 			end
 			CElseX()
 			CDoActions(FP, {
@@ -2463,7 +2463,7 @@ function strsum(a,b)
 end
 
 SubtitleArr = {}
-function Create_utf8_Subtitle(string,SCAID,SCID)
+function Create_utf8_Subtitle(string,SCAID,SCID,Slot)
     local ret = {}
     if type(string) == "string" then
         local str = string
@@ -2479,7 +2479,7 @@ function Create_utf8_Subtitle(string,SCAID,SCID)
 
 	for j,k in pairs(ret) do
 		if k~=0 then
-			table.insert(SubtitleArr,SCAID.."	"..SCID.."	SCAStr	"..k.."	"..j.."	0")
+			table.insert(SubtitleArr,SCAID.."	"..SCID.."	SCAStr	"..k.."	"..j.."	"..Slot)
 		end
 	end
 	

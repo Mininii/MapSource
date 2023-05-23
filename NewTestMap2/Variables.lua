@@ -195,10 +195,11 @@ end
 	SCA.FMEPer2 = SCA.CreateVar(FP)
 	--SCA.SettingSubtitle = SCA.CreateVar(FP)
 	SCA.SettingEffSound = SCA.CreateVar(FP)
-
+	SCA.RankTitle2 = SCA.CreateVar(FP)
+	SCA.RankTitle3 = SCA.CreateVar(FP)
 	SCA.Money2 = SCA.CreateVar(FP)
 	SCA.CurPlayTime = SCA.CreateVar(FP)
-	
+	SCA.FMinMax = SCA.CreateVar(FP)
 	NSCA = {}
 	NSCA.TMapMakerFlag = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
 	NSCA.TDayCheck2 = SCA.CreateVar(FP) -- SCA사용안함. EPS에 전송할 목적
@@ -514,6 +515,7 @@ end
 	iv.Cost_FAcc2Loc = CreateWar(FP)
 	iv.Cost_FBrSh2Loc = CreateWar(FP)
 	iv.Cost_FMEPer2Loc = CreateWar(FP)
+	iv.Cost_FMinMaxLoc = CreateWar(FP)
 
 
 	iv.AwakItemLoc = CreateVar(FP)
@@ -1109,9 +1111,10 @@ FirstReward4 = {
 		31+28+31+30+31+30+31+31+30+31,
 		31+28+31+30+31+30+31+31+30+31+30}
 	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
-	Create_utf8_Subtitle("공지테스트","whatdonald1@naver.com","GALAXY_BURST1")
-	Create_utf8_Subtitle("귓테스트","whatdonald1@naver.com","GALAXY_BURST2")
-	Create_utf8_Subtitle("확성기테스트","whatdonald1@naver.com","GALAXY_BURST3")
+	--Create_utf8_Subtitle("\x17플라스틱\x10러브","didtmdwo1297@naver.com","Plastic__Test",4)
+	Create_utf8_Subtitle("\x08아\x0E스\x1F나\x10바\x17보\x1E멍\x1D츙\x15이","didtmdwo1297@naver.com","Plastic__Test",4)
+	Create_utf8_Subtitle("아스나님열일해라ㅅㄱ","didtmdwo1297@naver.com","Plastic__Test",6)
 	PopSubtitleData()
+
 	--그외 남는 확률값은 꽝 - 기본 조각 지급(각 1,2,5,10개)
 end
