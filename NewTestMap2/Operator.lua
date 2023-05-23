@@ -12,10 +12,10 @@ function Operator()
 		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
 	end
 	if Limit == 1 then
-		TriggerX(FP, {KeyPress("T","Down")}, {SetMemory(0x58F504, SetTo, 0x50000)}, {preserved})
+		--TriggerX(FP, {KeyPress("T","Down")}, {SetMemory(0x58F504, SetTo, 0x50000)}, {preserved})
 	end
 	if Limit == 1 then
-		TriggerX(FP, {KeyPress("Y","Down")}, {SetV(SCA.WeekV,0)}, {preserved})
+		--TriggerX(FP, {KeyPress("Y","Down")}, {SetV(SCA.WeekV,0)}, {preserved})
 	end
 	for i = 0,6 do
 		TriggerX(FP, {Deaths(i, AtLeast, 1, 49)}, {SetDeaths(i,SetTo,0,49),SetV(DPErT[i+1],24*10)},{preserved})
@@ -187,7 +187,10 @@ function Operator()
 		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1),SetCD(SCA.GlobalCheck2,1)},{preserved})
 		CTrigger(FP, {HumanCheck(i,1),SCA.Available(i)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
+		if Limit == 0 then
+			
 		Trigger2X(FP, {Deaths(i, Exactly, 0x50000, 20)}, {SetCD(SCA.LoadSlot1[i+1],1)}, {preserved}) -- 슬롯 프로토콜 초기화
+		end
 	end--
 
 	NIfX(FP, {

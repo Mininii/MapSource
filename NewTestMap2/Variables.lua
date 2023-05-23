@@ -1065,7 +1065,7 @@ FirstReward4 = {
 	Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
 	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
-
+	Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 
 	
 	CSXAwakItemArr = {0}
