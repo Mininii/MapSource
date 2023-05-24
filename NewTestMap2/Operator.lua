@@ -22,13 +22,6 @@ function Operator()
 	end
 
 	Trigger2X(FP, {CD(SCA.GReload,1),
-	CD(SCA.LoadSlot1[1],0),
-	CD(SCA.LoadSlot1[2],0),
-	CD(SCA.LoadSlot1[3],0),
-	CD(SCA.LoadSlot1[4],0),
-	CD(SCA.LoadSlot1[5],0),
-	CD(SCA.LoadSlot1[6],0),
-	CD(SCA.LoadSlot1[7],0),
 }, {SetCD(SCA.GReload,0),
 	RotatePlayer({DisplayExtText(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
 	SetCD(SCA.GlobalCheck,0),
@@ -61,8 +54,9 @@ function Operator()
 		if Limit == 1 then
 			--TriggerX(FP, {MSQC_KeyInput(i, "F9")}, {SetCD(SCA.GReload,1)}, {preserved})
 		end
-		CTrigger(FP, {CD(SCA.GlobalCheck,0),SCA.Available(i)}, {SetDeaths(i, SetTo, 2, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,1)}, {preserved})
-		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i)}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
+		
+		CTrigger(FP, {CD(SCA.GlobalCheck,0),SCA.Available(i),}, {SetDeaths(i, SetTo, 2, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,1)}, {preserved})
+		CTrigger(FP, {CD(SCA.GlobalCheck,1),SCA.Available(i),}, {SetDeaths(i, SetTo, 1, 2),SCA.Reset(i),SetCD(SCA.GlobalCheck,2)}, {preserved})
 		--TriggerX(FP, {CD(SCA.GlobalCheck,2),SCA.Available(i)}, {SetCD(SCA.CheckTime,1),SetCD(SCA.GlobalCheck,3)}, {preserved})--라스트메세지 초기화 신호
 		CIfXEnd()
 		TriggerX(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),}, {SetV(DPErT[i+1],24*10)}, {preserved})
@@ -187,7 +181,9 @@ function Operator()
 		TriggerX(FP, {HumanCheck(i,1),SCA.LoadCmp(i),CD(SCA.Loading[i+1],1)}, {SetCD(SCA.LoadCheckArr[i+1],1),SetCD(SCA.Loading[i+1],0),AddCD(iv.PartyBonus,1),SetCD(SCA.GlobalCheck2,1)},{preserved})
 		CTrigger(FP, {HumanCheck(i,1),SCA.Available(i)}, {SetCD(SCA.Loading[i+1],0)},{preserved})
 		Trigger2X(FP, {Deaths(i, Exactly, 0x20000, 20)}, {SetCD(SCA.GReload,1)}, {preserved})
-		Trigger2X(FP, {Deaths(i, Exactly, 0x50000, 20)}, {SetCD(SCA.LoadSlot1[i+1],1)}, {preserved}) -- 슬롯 프로토콜 초기화
+		if SlotEnable == 1 then
+			Trigger2X(FP, {Deaths(i, Exactly, 0x50000, 20)}, {SetCD(SCA.LoadSlot1[i+1],1)}, {preserved}) -- 슬롯 프로토콜 초기화
+		end
 		if Limit == 0 then
 			
 		end

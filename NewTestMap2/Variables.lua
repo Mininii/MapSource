@@ -525,10 +525,14 @@ end
 	iv.S46 = CreateVarArr(7,FP)
 	iv.S47 = CreateVarArr(7,FP)
 	iv.S48 = CreateVarArr(7,FP)
+	iv.S49 = CreateVarArr(7,FP)
+	iv.S50 = CreateVarArr(7,FP)
 	iv.S45Loc = CreateVar(FP)
 	iv.S46Loc = CreateVar(FP)
 	iv.S47Loc = CreateVar(FP)
 	iv.S48Loc = CreateVar(FP)
+	iv.S49Loc = CreateVar(FP)
+	iv.S50Loc = CreateVar(FP)
 
 	--Temp
 	iv.CTStatP2 = CreateVar(FP)
@@ -1063,11 +1067,11 @@ FirstReward4 = {
 	--컴플리트 15.0% = 1.2억
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
-	Cost_FAcc = ReciveCostDataFile(30, "FAcc")
-	Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
-	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
+	Cost_FAcc = ReciveCostDataFile(9, "FAcc")
+	Cost_FAcc2 = ReciveCostDataFile(9,"FAcc2")
+	Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
-	Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
+	Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
 
 	
 	CSXAwakItemArr = {0}

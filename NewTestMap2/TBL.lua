@@ -61,6 +61,8 @@ function TBL()
 	t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 	t10 = "\x19EXP\x17(판매권 필요)\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 	t10_1 = "\x07뽑기 \x17(판매권 1만개 필요)\x04 확률표 : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t10_2 = "\x07뽑기 \x17(판매권 10만개 필요)\x04 확률표 : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t10_3 = "\x07뽑기 \x17(판매권 100만개 필요)\x04 확률표 : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 	t05 = "\x08판매 불가 유닛"
 	t06 = "\x11현재 DPM : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t06_1 = "\x1D현재 타격수 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
@@ -140,6 +142,9 @@ function TBL()
 		if j==49 then
 			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,7)},{preserved})
 		end
+		if j==50 then
+			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(XEperFlag,8)},{preserved})
+		end
 		
 	end
 	for j, k in pairs(BossArr) do
@@ -212,6 +217,12 @@ function TBL()
 		CS__SetValue(FP,EStr0,t10_1,nil,0)
 		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
 
+		CElseIfX({CD(XEperFlag,7)})--경험치가 아닌 다른걸 줄경우
+		CS__SetValue(FP,EStr0,t10_2,nil,0)
+		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
+		CElseIfX({CD(XEperFlag,8)})--경험치가 아닌 다른걸 줄경우
+		CS__SetValue(FP,EStr0,t10_3,nil,0)
+		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
 		CElseX()
 		
 		
@@ -561,7 +572,11 @@ function TBL()
 	function GaTxt(Ga_Arr)
 		local Txt = ""
 		for j,k in pairs(Ga_Arr) do
-			Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04개 - \x07"..(k[3]/1000).." %").."\n"
+			if type(k[2]) == "string" then 
+				Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).."\x07억 \x04개 - \x07"..(k[3]/1000).." %").."\n"
+			else
+				Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04개 - \x07"..(k[3]/1000).." %").."\n"
+			end
 		end
 		return Txt
 	end
@@ -573,6 +588,10 @@ function TBL()
 	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[3].."개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
 	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[4].."개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
+	CIfEnd()
+	CIf(FP,{CD(XEperFlag,7)},{DisplayExtText(StrDesignX("\x0649강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[5].."개 기본지급)").."\n"..GaTxt(Ga_49), 4)})
+	CIfEnd()
+	CIf(FP,{CD(XEperFlag,8)},{DisplayExtText(StrDesignX("\x0750강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[6].."개 기본지급)").."\n"..GaTxt(Ga_50), 4)})
 	CIfEnd()
 
 	--[[

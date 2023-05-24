@@ -325,6 +325,8 @@ function DataArr()
 		{iv.S46[1],iv.S46Loc},
 		{iv.S47[1],iv.S47Loc},
 		{iv.S48[1],iv.S48Loc},
+		{iv.S49[1],iv.S49Loc},
+		{iv.S50[1],iv.S50Loc},
 
 
 

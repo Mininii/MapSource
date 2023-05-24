@@ -639,11 +639,11 @@ function GameDisplay()
 	CIfEnd()
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x100,20),Deaths(i,AtMost,0x100+#StatPrintEr2,20)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x180,20),Deaths(i,AtMost,0x180+#StatPrintEr2,20)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x200,20),Deaths(i,AtMost,0x200+#StatPrintEr2,20)})
-			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x280,20),Deaths(i,AtMost,0x280+#StatPrintEr2,20)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtMost,#StatPrintEr,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x100,20),Deaths(i,AtMost,0x100+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x180,20),Deaths(i,AtMost,0x180+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x200,20),Deaths(i,AtMost,0x200+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
+			CallTriggerX(FP,Call_Print13[i+1],{Deaths(i,AtLeast,1,20),Deaths(i,AtLeast,0x280,20),Deaths(i,AtMost,0x280+#StatPrintEr2,20)},{SetV(DPErT[i+1],24*10)})
 		CIfEnd()
 	end
 	CIf(FP,{TMemory(0x512684,Exactly,LCP)})
@@ -803,8 +803,8 @@ function GameDisplay()
 
 
 	DisplayPrint(LCP, {"\x10강화기 백신 : ",VaccItemLoc," \x04개, \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: \x02",PETicketLoc," \x04개, \x1F",iv.PETicket2Loc," \x04개, \x1E각성의 보석 \x04: \x07",iv.AwakItemLoc," \x04개"})
-	DisplayPrint(LCP, {""..FirstReward3[1][4].."45강 \x04~ "..FirstReward3[4][4].."48강 \x07판매 \x04횟수 - "..FirstReward3[1][4].."45강 : \x04",iv.S45Loc,"회, "..FirstReward3[2][4].."46강 : \x04",iv.S46Loc,"회, "..FirstReward3[3][4].."47강 : \x04",iv.S47Loc,"회, "..FirstReward3[4][4].."48강 : \x04",iv.S48Loc,"회"})
-	DisplayPrint(LCP, {""..FirstReward3[1][4].."45강 \x04~ "..FirstReward3[4][4].."48강 \x07판매\x04로 얻은 재화 - \x02무색 조각 \x04: \x07",iv.GFfragLoc," \x04개, \x1E각성의 보석 \x04: \x07",iv.GAwakItemLoc," \x04개."})
+	DisplayPrint(LCP, {""..FirstReward3[1][4].."45강 \x04~ "..FirstReward4[2][4].."50강 \x07판매 \x04횟수 및 얻은 재화 \x12 "..FirstReward3[1][4].."45강 : \x04",iv.S45Loc,"회, "..FirstReward3[2][4].."46강 : \x04",iv.S46Loc,"회, "..FirstReward3[3][4].."47강 : \x04",iv.S47Loc,"회, "..FirstReward3[4][4].."48강 : \x04",iv.S48Loc,"회"})
+	DisplayPrint(LCP, {"\x02무색 조각 \x04: \x07",iv.GFfragLoc," \x04개, \x1E각성의 보석 \x04: \x07",iv.GAwakItemLoc," \x04개.\x12"..FirstReward4[1][4].."49강 \x04: ",iv.S49Loc,"회, "..FirstReward4[2][4].."50강 \x04: ",iv.S50Loc,"회"})
 	
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
 	CS__SetValue(FP, StrL, "\x17크레딧 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000",nil,0)

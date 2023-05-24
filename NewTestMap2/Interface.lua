@@ -563,13 +563,13 @@ for i = 0, 6 do -- 각플레이어
 	CIfEnd()
 	
 	TriggerX(FP, {CV(iv.RankTitle[i+1],1,AtLeast)}, {SetCp(i),
-	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
+	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3-1 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
 	})--순위권 알림
 	TriggerX(FP, {CV(iv.RankTitle2[i+1],1,AtLeast)}, {SetCp(i),
-	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
+	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3-2 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
 	})--순위권 알림
 	TriggerX(FP, {CV(iv.RankTitle3[i+1],1,AtLeast)}, {SetCp(i),
-	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
+	DisplayExtText(StrDesignX("\x1F와우! \x04순위권 유저시군요! \x03@칭호 3-3 \x04명령어로 랭커 전용 칭호를 사용할 수 있습니다."),4),
 	})--순위권 알림
 
 
@@ -632,8 +632,11 @@ for i = 0, 6 do -- 각플레이어
 	DoActionsX(FP, {AddCD(StatEffT2[i+1],1)})
 	TriggerX(FP,{CD(StatEffT2[i+1],500,AtLeast)},{SetCD(StatEff[i+1],0)},{preserved})
 
-	
-	CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],1)})--로드 완료시 첫 실행 트리거
+	if SlotEnable== 0 then
+		CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],2)},{})--로드 완료시 첫 실행 트리거--SetCD(SCA.LoadSlot1[i+1],1)
+	else
+		CIfOnce(FP,{CD(SCA.LoadCheckArr[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],1)})--로드 완료시 첫 실행 트리거--
+	end
 	
 	CMov(FP,AddSC[i+1],_Div(PLevel[i+1],_Mov(1000)))
 	CMov(FP,ScoutDmg[i+1],_Div(PLevel[i+1],_Mov(10)))
@@ -971,6 +974,8 @@ end
 				SCA_DataSave(i, iv.S46Loc, SCA.FXPer45)--46판매횟수
 				SCA_DataSave(i, iv.S47Loc, SCA.FXPer46)--47판매횟수
 				SCA_DataSave(i, iv.S48Loc, SCA.FXPer48)--48판매횟수
+				SCA_DataSave(i, iv.S49Loc, SCA.FXEPer)--49판매횟수
+				SCA_DataSave(i, iv.S50Loc, SCA.FMEPer)--50판매횟수
 				SCA_DataSave(i, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
 				SCA_DataSave(i, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
 				SCA_DataSave(i, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
@@ -1027,6 +1032,8 @@ end
 				SCA_DataSave(i, iv.S46Loc, SCA.FXPer45)--46판매횟수
 				SCA_DataSave(i, iv.S47Loc, SCA.FXPer46)--47판매횟수
 				SCA_DataSave(i, iv.S48Loc, SCA.FXPer48)--48판매횟수
+				SCA_DataSave(i, iv.S49Loc, SCA.FXEPer)--49판매횟수
+				SCA_DataSave(i, iv.S50Loc, SCA.FMEPer)--50판매횟수
 				SCA_DataSave(i, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
 				SCA_DataSave(i, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
 				SCA_DataSave(i, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트

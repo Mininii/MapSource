@@ -403,7 +403,7 @@ function beforeTriggerExec(){
 				GLoadCheck = 1;
 			}
 			} 
-			DisplayText("\x13\x07¡º \x03SYSTEM \x04: GlobalData Loaded \x07¡»");
+			//DisplayText("\x13\x07¡º \x03SYSTEM \x04: GlobalData Loaded \x07¡»");
 			SCA_GLoaded[cp] = 1;
 				for (var i = 0; i < 20; i++) {
 					SetDeaths(EPD(0x58f60C)+i,SetTo,sca.GlobalData[i],0);
@@ -504,7 +504,7 @@ function beforeTriggerExec(){
 				for (var i = 0; i < 60; i++){
 					SCAStr[(60*cp)+i] = 0;
 				} 
-				str1.print("\x13\x07¡º \x03Slot : \x0410 \x07Saving...\x07 ¡»");
+				//str1.print("\x13\x07¡º \x03Slot : \x0410 \x07Saving...\x07 ¡»");
 				//scw.scaSave(1,SCmp);
 				sca.SaveData(10);
 				LoadSlot[cp]=0;
@@ -525,7 +525,7 @@ function beforeTriggerExec(){
 				for (var i = 0; i < 60; i++){
 					SCAStr[(60*cp)+i] = 0;
 				} 
-				str1.print("\x13\x07¡º \x03Slot : \x041 \x07Saving...\x07 ¡»");
+				//str1.print("\x13\x07¡º \x03Slot : \x041 \x07Saving...\x07 ¡»");
 				//scw.scaSave(1,SCmp);
 				sca.SaveData(1);
 				LoadSlot[cp]=0;
@@ -537,7 +537,7 @@ function beforeTriggerExec(){
 				LoadSlot[cp] = dwread_epd(EPD(0x58A364 + 48 * 2 + 4 * cp))-10;
 				//scw.scaLoad(LoadSlot[cp],SCmp);
 				sca.LoadData(LoadSlot[cp]);
-				str1.print("\x13\x07¡º \x03Slot : \x04",LoadSlot[cp]," \x0FLoading... \x07¡»");
+				//str1.print("\x13\x07¡º \x03Slot : \x04",LoadSlot[cp]," \x0FLoading... \x07¡»");
 			}
 			
 		}
