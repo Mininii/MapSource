@@ -157,6 +157,11 @@ Cost_FMEPer = CreateCostDataFile(150,function(n) return 40000000+((n-1)*(n*250)*
 Cost_FMinMax = CreateCostDataFile(50,function(n) return 10000000+(n*5000000) end,"FMinMax")--채굴(광산최대치 퍼센트증가)
 
 
+Cost_FAcc = CreateCostDataFile(30, function(n) return 5000000+((n-1)*1500000) end, "FAcc_Test")--유료전용 촉진
+Cost_FAcc2 = CreateCostDataFile(30, function(n) return 10000000+((n-1)*3000000) end, "FAcc2_Test")--무료전용 촉진
+Cost_FMinMax = CreateCostDataFile(1000,function(n) return 1000000+(n*500000) end,"FMinMax_Test")--채굴(광산최대치 퍼센트증가)
+
+
     function exp(lv)
         total = 0
         for i = 1, lv do

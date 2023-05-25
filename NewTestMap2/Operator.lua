@@ -93,13 +93,13 @@ function Operator()
 	f_Read(FP, SCA.Month, SCA.MonthV)
 	f_Read(FP, SCA.Year, SCA.YearV)
 	f_Read(FP, SCA.Hour, SCA.HourV)
-	if Limit == 1 then
-		CMov(FP,SCA.WeekV,5+0x32232232)
-		CMov(FP,SCA.DayV,19+0x32232232)
-	else
-		f_Read(FP, SCA.Day, SCA.DayV)
-		f_Read(FP, SCA.Week, SCA.WeekV)
-	end
+	--if Limit == 1 then
+	--	CMov(FP,SCA.WeekV,5+0x32232232)
+	--	CMov(FP,SCA.DayV,19+0x32232232)
+	--else
+	--end
+	f_Read(FP, SCA.Day, SCA.DayV)
+	f_Read(FP, SCA.Week, SCA.WeekV)
 	f_Read(FP, SCA.Min, SCA.MinV)
 	DoActionsX(FP, {
 		SubV(SCA.MonthV,0x32232232),

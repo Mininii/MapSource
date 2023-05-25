@@ -379,7 +379,7 @@ end
 	iv.AutoBuyCode = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
 	iv.AutoBuyCode2 = CreateVarArr(7,FP)-- 자동 구입 제어 데스값
 	iv.InternalCalcModeArr = CreateArr(7,FP)-- 자동 구입 제어 데스값
-	iv.MulOp = CreateVarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
+	iv.MulOp = CreateWarArr2(7,1,FP) -- 유닛 공격력에 따른 수치 표기용 변수
 	
 	--PlayData(SCA)
 	iv.PLevel = CreateVarArr2(7,1,FP)-- 자신의 현재 레벨
@@ -449,7 +449,7 @@ end
 	iv.StatEffLoc = CreateCcode()
 	iv.ScoutDmgLoc = CreateVar(FP)
 	iv.AddScLoc = CreateVar(FP)
-	iv.MulOpLoc = CreateVar(FP)
+	iv.MulOpLoc = CreateWar(FP)
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
 	iv.ResetStatLoc = CreateVar(FP)
@@ -1067,11 +1067,24 @@ FirstReward4 = {
 	--컴플리트 15.0% = 1.2억
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
-	Cost_FAcc = ReciveCostDataFile(9, "FAcc")
-	Cost_FAcc2 = ReciveCostDataFile(9,"FAcc2")
 	Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
-	Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
+	if Limit == 1 then
+		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
+		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
+	
+		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
+	else
+		Cost_FAcc = ReciveCostDataFile(9, "FAcc")
+		Cost_FAcc2 = ReciveCostDataFile(9,"FAcc2")
+	
+		Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
+	end
+	
+	
+	
+
+
 
 	
 	CSXAwakItemArr = {0}
@@ -1116,7 +1129,12 @@ FirstReward4 = {
 		31+28+31+30+31+30+31+31+30+31+30}
 	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
 	--Create_utf8_Subtitle("\x17플라스틱\x10러브","didtmdwo1297@naver.com","Plastic__Test",4)
+
+
 	Create_utf8_Subtitle("\x08아\x0E스\x1F나\x10바\x17보\x1E멍\x1D츙\x15이","didtmdwo1297@naver.com","Plastic__Test",4)
+
+
+	
 	Create_utf8_Subtitle("아스나님열일해라ㅅㄱ","didtmdwo1297@naver.com","Plastic__Test",6)
 	PopSubtitleData()
 

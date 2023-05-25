@@ -120,6 +120,14 @@ var Asm_Arrptr;
 const TRankTitle = PVariable();
 const TRankTitle2 = PVariable();
 const TRankTitle3 = PVariable();
+
+
+
+const AnnounceFlag = PVariable();
+const WhisperFlag = PVariable();
+const LSpeakerFlag = PVariable();
+
+
 function onPluginStart(){
 
 
@@ -349,6 +357,25 @@ Asm_Arrptr+=1;
 SetMemory(5830260,SetTo,0);	
 }
 }
+
+	foreach(cp : EUDLoopPlayer("Human")){
+		if (WhisperFlag[cp]>=1) {//±Ó
+			WhisperFlag[cp]-=1;
+			//sprintf(4,"\x13\x03Á¦ÀÛÀÚ·ÎºÎÅÍÀÇ ±Ó¼Ó¸» : \" {:s} \"",WhisperData[cp]);
+			str1.printAt(6,"\x13\x03Á¦ÀÛÀÚ·ÎºÎÅÍÀÇ ±Ó¼Ó¸» : ",ptr2s(WhisperData[cp]));
+		}
+		if (AnnounceFlag[cp]>=1) {//°øÁö
+			AnnounceFlag[cp]-=1;
+			printAllAt(7,"\x13\x03ÀüÃ¼ °øÁö»çÇ× \x04: \" {:s} \"",AnnounceData[cp]);
+		}
+		if (LSpeakerFlag[cp]>=1) {//È®¼º±â
+			LSpeakerFlag[cp]-=1;
+			printAllAt(8,"\x13\x03{:s}",LSpeakerData[cp]);
+		}
+	}
+
+
+
 }
 function beforeTriggerExec(){
 	//scw.Exec();
@@ -370,9 +397,6 @@ function beforeTriggerExec(){
 	const CustomSubTitleEnabled = PVariable();
 	const RankName = [Db("st"),Db("nd"),Db("rd"),Db("th")];
 	const LoadSlot = PVariable();
-	const AnnounceFlag = PVariable();
-	const WhisperFlag = PVariable();
-	const LSpeakerFlag = PVariable();
 	var GLoadCheck;
 	var CurVer;
 	//if(ElapsedTime(AtLeast,90)){
@@ -590,7 +614,11 @@ function beforeTriggerExec(){
 			
 			//if (LoadSlot[cp]==0){//¸ÞÀÎ ½½·Ô ·Îµå¿Ï·á½Ã ¸ÇÃ³À½ 1È¸¸¸ ¿Å±è??
 			//}
+			
 
+			if (LoadSlot[cp]==0){
+				TSettingSubtitle[cp] = SettingSubtitle[cp];
+			}
 
 			if (LoadSlot[cp]==4){
 				if (SCAStr[(60*cp)+0]>=1){
@@ -662,21 +690,6 @@ function beforeTriggerExec(){
 		}
 		else{
 			SetDeathsX(CurrentPlayer,SetTo,0,1,32);
-		}
-
-
-		if (WhisperFlag[cp]>=1) {//±Ó
-			WhisperFlag[cp]-=1;
-			//sprintf(4,"\x13\x03Á¦ÀÛÀÚ·ÎºÎÅÍÀÇ ±Ó¼Ó¸» : \" {:s} \"",WhisperData[cp]);
-			str1.printAt(6,"\x13\x03Á¦ÀÛÀÚ·ÎºÎÅÍÀÇ ±Ó¼Ó¸» : ",ptr2s(WhisperData[cp]));
-		}
-		if (AnnounceFlag[cp]>=1) {//°øÁö
-			AnnounceFlag[cp]-=1;
-			printAllAt(7,"\x13\x03ÀüÃ¼ °øÁö»çÇ× \x04: \" {:s} \"",AnnounceData[cp]);
-		}
-		if (LSpeakerFlag[cp]>=1) {//È®¼º±â
-			LSpeakerFlag[cp]-=1;
-			printAllAt(8,"\x13\x03{:s}",LSpeakerData[cp]);
 		}
 
 
@@ -795,14 +808,14 @@ function beforeTriggerExec(){
 				}
 
 			if(TRankTitle[cp]>=1 && TRankTitle2[cp]==0 && TRankTitle3[cp]==0){
-					str1.print("\x07¡º \x03@ÄªÈ£ 3-1 \x04: \x07[\x07LV \x08R\x1Fank. \x04",TRankTitle[cp],ptr2s(RankName[RankNum[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-2 \x04: \x07[\x03Class \x08R\x1Fank. \x04",TRankTitle2[cp],ptr2s(RankName[RankNum2[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-3 \x04: \x08¾øÀ½ \x07¡»");
+					str1.print("\x07¡º \x03@ÄªÈ£ 3-1 \x04: \x07[\x07LV \x08R\x1Fank. \x04",TRankTitle[cp],ptr2s(RankName[RankNum[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-2 \x04: \x08¾øÀ½ \x04|| \x03ÄªÈ£ 3-3 \x04: \x08¾øÀ½ \x07¡»");
 			}
 			else if(TRankTitle[cp]>=1 && TRankTitle2[cp]>=1 && TRankTitle3[cp]==0){
 					str1.print("\x07¡º \x03@ÄªÈ£ 3-1 \x04: \x07[\x07LV \x08R\x1Fank. \x04",TRankTitle[cp],ptr2s(RankName[RankNum[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-2 \x04: \x07[\x03Class \x08R\x1Fank. \x04",TRankTitle2[cp],ptr2s(RankName[RankNum2[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-3 \x04: \x08¾øÀ½ \x07¡»");
 				
 			}
 			else if(TRankTitle[cp]>=1 && TRankTitle2[cp]==0 && TRankTitle3[cp]>=1){
-					str1.print("\x07¡º \x03@ÄªÈ£ 3-1 \x04: \x07[\x07LV \x08R\x1Fank. \x04",TRankTitle[cp],ptr2s(RankName[RankNum[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-2 \x04: \¤¼09¾øÀ½ \x04|| \x03ÄªÈ£ 3-3 \x04: \x07[\x02Fragment \x08R\x1Fank. \x04",TRankTitle3[cp],ptr2s(RankName[RankNum3[cp]]),"\x07] \x07¡»");
+					str1.print("\x07¡º \x03@ÄªÈ£ 3-1 \x04: \x07[\x07LV \x08R\x1Fank. \x04",TRankTitle[cp],ptr2s(RankName[RankNum[cp]]),"\x07] \x04|| \x03ÄªÈ£ 3-2 \x04: \x08¾øÀ½ \x04|| \x03ÄªÈ£ 3-3 \x04: \x07[\x02Fragment \x08R\x1Fank. \x04",TRankTitle3[cp],ptr2s(RankName[RankNum3[cp]]),"\x07] \x07¡»");
 				
 			}
 			else if(TRankTitle[cp]>=1 && TRankTitle2[cp]>=1 && TRankTitle3[cp]>=1){
@@ -1092,3 +1105,4 @@ function beforeTriggerExec(){
 	
 	//}
 }
+

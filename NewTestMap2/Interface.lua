@@ -557,7 +557,11 @@ for i = 0, 6 do -- 각플레이어
 		CIf(FP,{CV(iv.CSX_LV3Incm[i+1],1,AtLeast)})
 		local TempAwak = CreateVar(FP)
 		f_Read(FP,FArr(CSXAwakItemArr,iv.CSX_LV3Incm[i+1]),TempAwak,nil,nil,1)
-		f_LAdd(FP, iv.BuyTicket[i+1],iv.BuyTicket[i+1],_LMul({TempAwak,0}, "10000"))
+		if Limit == 1 then 
+			f_LAdd(FP, iv.BuyTicket[i+1],iv.BuyTicket[i+1],_LMul({TempAwak,0}, "1000000"))
+		else 
+			f_LAdd(FP, iv.BuyTicket[i+1],iv.BuyTicket[i+1],_LMul({TempAwak,0}, "10000"))
+		end
 		DisplayPrint(i, {"\x13\x07『 \x1E각성 ",iv.CSX_LV3Incm[i+1]," \x04회에 따라 \x08구입 티켓\x04이 지급됩니다. 지급 갯수 : \x07",iv.BuyTicket[i+1]," 개 \x07』"})
 		CIfEnd()
 	CIfEnd()
@@ -1002,6 +1006,9 @@ end
 				CallTriggerX(FP,Call_SCA_DataLoadAdd,{CD(CurLoadCmpSlot[i+1],3)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 Add/Sub 실행되었습니다."),4)})
 				CIf(FP,{CD(CurLoadCmpSlot[i+1],5)},{SetCD(CurLoadCmpSlot[i+1],0),SetCD(CTSwitch2,0)})
 				SCA_DataLoad(i, BPTest[1], SCA.BanFlag)
+				SCA_DataLoad(i, iv.RankTitle[i+1], SCA.RankTitle)
+				SCA_DataLoad(i, iv.RankTitle2[i+1], SCA.RankTitle2)
+				SCA_DataLoad(i, iv.RankTitle3[i+1], SCA.RankTitle3)
 				TriggerX(FP, {CV(BPTest[1],1,AtLeast)},{SetCD(CTSwitch2,1)})
 				TriggerX(FP, {CD(CTSwitch2,1),LocalPlayerID(i)},{
 					SetCp(i),
@@ -1057,9 +1064,16 @@ end
 				end
 				CallTriggerX(FP,Call_SCA_DataLoadSetTo,{CD(CurLoadCmpSlot[i+1],2)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 SetTo 실행되었습니다."),4)})
 				CallTriggerX(FP,Call_SCA_DataLoadAdd,{CD(CurLoadCmpSlot[i+1],3)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 Add/Sub 실행되었습니다."),4)})
+
 				CIf(FP,{CD(CurLoadCmpSlot[i+1],5)},{SetCD(CurLoadCmpSlot[i+1],0),SetCD(CTSwitch2,0)})
-				SCA_DataLoad(i, BPTest[1], SCA.BanFlag)
-				TriggerX(FP, {CV(BPTest[1],1,AtLeast)},{SetCD(CTSwitch2,1)})
+				SCA_DataLoad(i, BPTest[i+1], SCA.BanFlag)
+				SCA_DataLoad(i, iv.RankTitle[i+1], SCA.RankTitle)
+				SCA_DataLoad(i, iv.RankTitle2[i+1], SCA.RankTitle2)
+				SCA_DataLoad(i, iv.RankTitle3[i+1], SCA.RankTitle3)
+				
+				
+				
+				TriggerX(FP, {CV(BPTest[i+1],1,AtLeast)},{SetCD(CTSwitch2,1)})
 				TriggerX(FP, {CD(CTSwitch2,1),LocalPlayerID(i)},{
 					SetCp(i),
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
