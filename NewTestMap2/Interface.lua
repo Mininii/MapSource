@@ -990,7 +990,8 @@ end
 			CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],3),SetCp(i),DisplayExtText(StrDesignX("Slot Protocol Step 3"),4)})
 				SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
 				SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
-					DisplayPrint(i, {"\x13\x04SlotPtr : ",SlotPtr[i+1],"   SubtitleFlag : ",SubtitleFlag[i+1]})
+				DoActionsX(FP,{SetVX(SlotPtr[i+1],32,32)},1) -- 칭호와 밴플래그 데이터는 무조건 1회 불러옴
+				DisplayPrint(i, {"\x13\x04SlotPtr : ",SlotPtr[i+1],"   SubtitleFlag : ",SubtitleFlag[i+1]})
 			CIfEnd()
 			CIf(FP,{CD(SCA.LoadSlot1[i+1],3)})
 				CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
@@ -1051,6 +1052,7 @@ end
 			CIf(FP,{SCA.SlotLoadCmp(i),CD(SCA.LoadSlot1[i+1],2)},{SetCD(SCA.LoadSlot1[i+1],3)})
 				SCA_DataLoad(i, SlotPtr[i+1], SCA.PLevel)
 				SCA_DataLoad(i, SubtitleFlag[i+1], SCA.PLevel2)
+				DoActionsX(FP,{SetVX(SlotPtr[i+1],32,32)},1) -- 칭호와 밴플래그 데이터는 무조건 1회 불러옴
 			CIfEnd()
 			CIf(FP,{CD(SCA.LoadSlot1[i+1],3)})
 				CTrigger(FP, {TTNVar(SubtitleFlag[i+1],NotSame,SubtitleFlag2[i+1])}, {SetV(SubtitleFlag2[i+1],SubtitleFlag[i+1]),SetCD(SubtitleLoad[i+1],1)},{preserved}) -- 서브타이틀 플래그 상태여부
