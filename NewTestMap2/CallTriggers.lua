@@ -1154,7 +1154,6 @@ function Install_CallTriggers()
 
 	
 	
-	CMov(FP,iv.LCP,GCP)
 
 
 
@@ -1544,8 +1543,8 @@ function Install_CallTriggers()
 	]]
 	Ga_45 = {--기대치 2개
 		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
-		{"\x1E각성의 보석",1,10,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02무색 조각",10000,40,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x1E각성의 보석",1,50,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",10000,1500,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",10,1000,iv.Money2},
 		{"\x17크레딧",2000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1041강 유닛",10,20000,iv.E41},
@@ -1554,8 +1553,8 @@ function Install_CallTriggers()
 
 	Ga_46 = {--기대치 7개
 		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
-		{"\x1E각성의 보석",1,40,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02무색 조각",40000,25,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x1E각성의 보석",1,75,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",40,1000,iv.Money2},
 		{"\x17크레딧",3000000,5000,iv.B_PCredit},
 		{"\x1D42강 유닛",10,20000,iv.E42},
@@ -1565,7 +1564,7 @@ function Install_CallTriggers()
 	Ga_47 = {--기대치 20개
 		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1E각성의 보석",1,160,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02무색 조각",70000,110,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x02무색 조각",70000,470,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",70,2000,iv.Money2},
 		{"\x17크레딧",4000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x0643강 유닛",10,20000,iv.E43},
@@ -1586,14 +1585,15 @@ function Install_CallTriggers()
 		{"\x17크레딧",3222222222,22,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1E각성의 보석",7,1000,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",1000000,1500,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17크레딧",10000000,10000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x02무색 조각",100000,15000,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x17크레딧",10000000,30000,iv.B_PCredit,iv.GCreditLoc},
 	}
 	
 	Ga_50 = {--판매권 백만개 필요 = 1억크레딧 
 		{"\x17크레딧","322",50,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",15,5000,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",2000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17크레딧",65000000,20000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",100000000,35000,iv.B_PCredit,iv.GCreditLoc},
 	}
 
 	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48,Ga_49,Ga_50}
@@ -1649,7 +1649,7 @@ for i = 45, 50 do
 				CAdd(FP,k[5],k[2])
 			elseif k[5][4]=="W" then
 				if type(k[2]) == "string" then
-					f_LAdd(FP,k[5],k[5],k[2].."00000000")
+					f_LAdd(FP,k[5],k[5],k[2].."22222222")
 				else
 					f_LAdd(FP,k[5],k[5],tostring(k[2]))
 				end
@@ -1685,7 +1685,7 @@ for i = 45, 50 do
 		end
 		
 		if type(k[2]) == "string" then
-			f_LMovX(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),k[2].."00000000", Add)
+			f_LMovX(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),k[2].."22222222", Add)
 		else
 			CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		end
@@ -1961,6 +1961,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 				CElseX()
 				f_LSub(FP, GetSellTicket, GetSellTicket, _LMul(TempWC,GaCostW))
 				CDoActions(FP, {TKillUnitAt(_lShift(_Cast(0,TempWC), 24), UID, GCP+73, GCP),TMoveUnit(All,UID,GCP,GCP+73,GCP+36)})
+				CMov(FP,ECW,_Cast(0,TempWC))
 				CIfXEnd()
 
 

@@ -452,6 +452,7 @@ end
 	iv.MulOpLoc = CreateWar(FP)
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
+	iv.LCPW = CreateWar(FP)
 	iv.ResetStatLoc = CreateVar(FP)
 	iv.ResetStat2Loc = CreateVar(FP)
 	iv.UpgradeUILoc = CreateVar(FP)

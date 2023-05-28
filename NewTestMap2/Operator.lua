@@ -6,7 +6,7 @@ function Operator()
 	DoActionsX(FP,{SetMemory(0x58F504, SetTo, 0),SetCD(SCA.GlobalCheck2,0)})
 	CurrentOP = CreateVar(FP)
 	Trigger2X(FP, {CV(iv.Time3,60000*5,AtLeast)}, {SetV(iv.Time3, 0),SetMemory(0x58F504, SetTo, 0x20000),}, {preserved})
-	Trigger2X(FP, {CV(iv.Time4,60000,AtLeast)}, {SetV(iv.Time4, 0),SetMemory(0x58F504, SetTo, 0x50000),}, {preserved})
+	Trigger2X(FP, {CV(iv.Time4,45000,AtLeast)}, {SetV(iv.Time4, 0),SetMemory(0x58F504, SetTo, 0x50000),}, {preserved})
 
 	if Limit == 1 then
 		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
@@ -126,6 +126,7 @@ function Operator()
 	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],4,4)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 3호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x02무색 조각 100개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x1E각성의 보석 1개"),4)}, Force1, FP)}, {preserved})
 	
 	Trigger2X(FP, {CV(SCA.GlobalVarArr[5],0)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CV(SCA.GlobalVarArr[6],1)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04글로벌 데이터를 통해 \x07솔로 플레이 버프\x04가 \x07영구 활성화되었습니다."),4)}, Force1, FP),SetCD(iv.PartyBonus,2)}, {preserved})
 	
 	CIfEnd()
 	

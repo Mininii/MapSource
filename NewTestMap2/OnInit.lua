@@ -292,6 +292,10 @@ iTblJump = def_sIndex()
 	for i = 0, 6 do
 		
 	CIf(FP,{HumanCheck(i,1)},{})
+	CIf(FP,{LocalPlayerID(i)})
+	CMov(FP,iv.LCP,i)
+	f_LMov(FP,iv.LCPW,tostring(i))
+	CIfEnd()
 
 
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])

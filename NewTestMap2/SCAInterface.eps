@@ -120,7 +120,7 @@ var Asm_Arrptr;
 const TRankTitle = PVariable();
 const TRankTitle2 = PVariable();
 const TRankTitle3 = PVariable();
-
+const LinSubtitle = PVariable();
 
 
 const AnnounceFlag = PVariable();
@@ -641,6 +641,7 @@ function beforeTriggerExec(){
 				TRankTitle[cp] = RankTitle[cp];
 				TRankTitle2[cp] = RankTitle2[cp];
 				TRankTitle3[cp] = RankTitle3[cp];
+				LinSubtitle[cp] = VaccItem[cp];
 				LoadSlot[cp]=1;
 			}
 			if (LoadSlot[cp]>=1){
@@ -727,6 +728,7 @@ function beforeTriggerExec(){
 		//TRankTitle2[cp] = 2;
 		//TRankTitle3[cp] = 3;
 		//48번유닛은 칭호사용가능 여부 전달인자
+		//LinSubtitle
 		if(<?ChatEvent("cp","@보유칭호")?>){
 			if(Deaths(cp,AtLeast,1,100)){
 			DisplayText("\x07『 \x03@칭호 1 \x04: \x07[\x03M\x04ap\x10 M\x04aker\x07] \x07』");
@@ -856,6 +858,12 @@ function beforeTriggerExec(){
 			else{
 			DisplayText("\x07『 \x03@칭호 6 \x04: \x08없음 \x07』");
 			}
+			if(LinSubtitle[cp]>=1){//린강유저칭호
+			DisplayText("\x07『 \x03@칭호 7 \x04: \x07[\x11F\x17rom \x1DL\x1Eineage\x07]\x08 \x07』");
+			}
+			else{
+			DisplayText("\x07『 \x03@칭호 7 \x04: \x08없음 \x07』");
+			}
 			if(CustomSubTitleEnabled[cp]>=1){
 			str1.print("\x07『 \x03@칭호 커스텀 \x04: \x07[",ptr2s(SubtitleData[cp]),"\x07] \x07』");
 			}
@@ -944,6 +952,19 @@ function beforeTriggerExec(){
 					SetDeaths(CurrentPlayer,SetTo,1,49);
 			}
 		}
+			
+		if(<?ChatEvent("cp","@칭호 7")?>){
+			if(LinSubtitle[cp]>=1){//출석칭호
+				f_eprintln("\x03칭호\x04가 \x077 \x04번으로 변경되었습니다.");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+					TSettingSubtitle[cp] = 9;
+			}
+			else{
+				f_eprintln("\x03칭호\x04사용 권한이 없습니다..");
+					SetDeaths(CurrentPlayer,SetTo,1,49);
+			}
+		}
+
 		if(<?ChatEvent("cp","@칭호 3-2")?>){
 			if(TRankTitle2[cp]>=1){//랭크타이틀
 				f_eprintln("\x03칭호\x04가 \x073-2 \x04번으로 변경되었습니다.");
@@ -1092,6 +1113,14 @@ function beforeTriggerExec(){
 					
 				}
 			}
+			else if(TSettingSubtitle[cp] == 9){
+				if(LinSubtitle[cp]>=1){
+				SetPNamef(cp,"\x07[\x11F\x17rom \x1DL\x1Eineage\x07] {:c}{:n}",cp,cp);
+					}
+			}
+			
+
+
 			else if(TSettingSubtitle[cp] == 256){
 				if(CustomSubTitleEnabled[cp]>=1){//커스텀칭호
 				SetPNamef(cp,"\x07[{:s}\x07] {:c}{:n}",SubtitleData[cp],cp,cp);

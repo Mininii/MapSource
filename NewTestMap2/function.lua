@@ -2003,6 +2003,81 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 end	
 
 
+
+function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
+	local TrapKey
+	local CT_PrevRand
+	local CT_NextRand
+	local PCT_PrevRandV
+	local PCT_NextRandV
+	local PCT_PrevRandW
+	local PCT_NextRandW
+	if VW[1][4] == "V" then
+		
+		
+		
+		
+
+
+		
+		CIfX(FP,{TMemory(_TMem(VArrX(GetVArray(VW[1], 7), VArrL, VArrL4)), Exactly, _MovX(VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),SetTo))}) -- 치트 난수 테스트(참이어야 정상)
+		
+	else
+		CIfX(FP,{TTLMemoryX(_TLMem(WArrX(GetWArray(VW[1], 7), WArrL, WArrL4)), Exactly, _LMovX(WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),SetTo))}) -- 치트 난수 테스트(참이어야 정상)
+	end
+	local DeathUnit = 1
+	--local ttable = {}
+
+	if type(Flag) == "number" then
+		
+		if Flag>=32 then
+			DeathUnit = math.floor(DeathUnit+(Flag/32))
+			Flag = Flag%32
+		end
+		if DeathUnit == 2 and Flag == 5 then
+			--error(Text)
+		end
+		--if DeathUnit == 3 then Pushdsadas() end
+		
+	--ttable = {SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)}
+	ctarr[DeathUnit][Flag+1] = Text
+	if DeathUnit== 	1 then 
+		--if 2^Flag == 2048 then error(Text) end
+	end
+	CElseX()
+	CMovX(FP, VArrX(GetVArray(BPArr[DeathUnit][1], 7), VArrL, VArrL4), 2^Flag,SetTo,2^Flag)
+
+	else
+
+	end
+	
+
+--	if TestStart == 1 then
+--		if Player == AllPlayers then Player = iv.LCP end
+--		if VW[4] =="W" then
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		else
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		end
+--		
+--	end
+	CIfXEnd()
+	if VW[1][4] == "V" then
+		CXor(FP, VArrX(GetVArray(VW[1], 7), VArrL, VArrL4), VArrX(GetVArray(CT_PrevRandV[1], 7), VArrL, VArrL4))--감지 여부 상관없이 진짜값으로 복구
+		
+	else
+		f_LMovX(FP, WArrX(GetWArray(VW[1], 7), WArrL, WArrL4), _LXor(WArrX(GetWArray(VW[1], 7), WArrL, WArrL4), WArrX(GetWArray(CT_PrevRandW[1], 7), WArrL, WArrL4)))--감지 여부 상관없이 진짜값으로 복구
+	end
+
+	
+
+
+	
+	return TrapKey
+end	
+
+
+
 function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배열 구성하기
 	local HeaderV = CreateVar(Player) -- 헤더가 저장된 V
 	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- 구조오프셋 확장 변수 TempV
