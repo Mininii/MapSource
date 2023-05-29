@@ -255,10 +255,72 @@ function Install_CallTriggers()
 	CWhileEnd()
 	SetCallEnd()
 
+
+	CJ = CreateVar(FP)
+
 	Call_Enchant2 = SetCallForward()
 	SetCall(FP)
 	--ELevel = 현재 강화중인 레벨
+
+	CIfX(FP,{TDeathsX(ECP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)}) -- 내부계산을 켜고 자강모드일경우
 	
+	CWhile(FP, {CV(ECW,1,AtLeast)},{SubV(ECW,1)})
+	CMov(FP,ELevel,ELevelB)
+	CMov(FP,E1Range[1],1)
+	CMov(FP,E1Range[2],XEper)
+
+	GetEPer = CreateVar(FP)
+	BrShW = CreateWar(FP)
+	BrShV = CreateVar(FP)
+	CMov(FP,BrShV,_Sub(_Mov(100000),_Div(_Mul(BreakShield2,_Sub(_Mov(100000),XEper)), 1000)))
+	f_Rand(FP,GetEPer)
+	f_Mod(FP,GetEPer,BrShV)
+	CAdd(FP,GetEPer,1)
+
+	if Limit == 1 then -- 테스트용 결과 출력
+		CIf(FP,{KeyPress("F12", "Down")})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
+			for i = 40, 49 do
+				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+			end
+			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
+			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
+			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
+			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
+
+			DisplayPrint(ECP,{"\x04출력된 난수 : ",ColorCodeV[2],GetEPer, " \x04내 파방 : \x1F",BreakShield," \x04파방에 의해 출력된 확률 최대값 : ",ColorCodeV[2],BrShV})
+			DisplayPrint(ECP,{"\x1F계산된 +1 확률 : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			
+		CIfEnd()
+	end
+	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--성공시
+		CAdd(FP,ELevel,1)
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F결과 : +1 성공", 4)})
+			CIfEnd()
+		end
+	CElseX()
+	CMov(FP,ELevel,0)
+		if Limit == 1 then
+			CIf(FP,{KeyPress("F12", "Down")})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08결과 : 실패", 4)})
+			CIfEnd()
+		end
+	CIfXEnd()
+	CIf(FP,{CV(ELevel,1,AtLeast)})
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--오버플로우 방지
+		for i = 0, 6 do
+			CIf(FP,{CV(ECP,i)})
+				CMovX(FP,VArr(GetUnitVArr[i+1], ELevel),1,Add)
+			CIfEnd()
+		end
+	CIfEnd()
+
+	CWhileEnd()
+
+
+	CElseX()
 	CWhile(FP, {CV(ECW,1,AtLeast)},{SubV(ECW,1)})
 	CMov(FP,ELevel,ELevelB)
 	CMov(FP,E1Range[1],1)
@@ -343,6 +405,7 @@ function Install_CallTriggers()
 
 	CWhileEnd()
 
+	CIfXEnd()
 	
 	SetCallEnd()
 
@@ -1268,8 +1331,8 @@ function Install_CallTriggers()
 	FragBuyFnc(iv.FAcc2,Cost_FAcc2,iv.Cost_FAcc2Loc,CntCArr[1],failCcode)
 	FragBuyFnc(iv.FAcc,Cost_FAcc,iv.Cost_FAccLoc,CntCArr[2],failCcode)
 	FragBuyFnc(iv.FMinMax,Cost_FMinMax,iv.Cost_FMinMaxLoc,CntCArr[3],failCcode)
-	FragBuyFnc(iv.FBrSh2,Cost_FBrSh2,iv.Cost_FBrSh2Loc,CntCArr[6],failCcode)
-	FragBuyFnc(iv.FMEPer2,Cost_FMEPer2,iv.Cost_FMEPer2Loc,CntCArr[7],failCcode)
+	FragBuyFnc(iv.FBrSh2,Cost_FBrSh2,iv.Cost_FBrSh2Loc,CntCArr[4],failCcode)
+	FragBuyFnc(iv.FMEPer2,Cost_FMEPer2,iv.Cost_FMEPer2Loc,CntCArr[5],failCcode)
 	
 	
 	
@@ -1479,28 +1542,25 @@ function Install_CallTriggers()
 
 	
 
-
-
-	Call_CPSound = SetCallForward()
-	SoundOp = CreateVar(FP)
-	SetCall(FP)
+	CPMode = CreateVar(FP)
 	local SW = CreateVar(FP)
-	CMov(FP,SW,0)
-	CWhile(FP, {CV(SW,6,AtMost)}, {})
-	CIf(FP,{TDeathsX(SW,Exactly,1,3,1)})
-		CMov(FP,0x6509B0,SW)
-		TriggerX(FP, {CV(SoundOp,1)}, {PlayWAV("staredit\\wav\\Clear1.ogg")},{preserved})
-		TriggerX(FP, {CV(SoundOp,2)}, {PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg")},{preserved})
-		TriggerX(FP, {CV(SoundOp,3)}, {PlayWAV("staredit\\wav\\Clear3.ogg")},{preserved})
-	CIfEnd()
-	CAdd(FP,SW,1)
-	CWhileEnd()
-
-	SetCallEnd()
 	Call_CPSound2 = SetCallForward()
 	SoundOp = CreateVar(FP)
 	SetCall(FP)
-	local SW = CreateVar(FP)
+	CIfX(FP,{CV(CPMode,0)})
+	CMov(FP,SW,0)
+    CWhile(FP, {CV(SW,6,AtMost)}, {})
+    CIf(FP,{TDeathsX(SW,Exactly,1,3,1)})
+        CMov(FP,0x6509B0,SW)
+        TriggerX(FP, {CV(SoundOp,1)}, {PlayWAV("staredit\\wav\\Clear1.ogg")},{preserved})
+        TriggerX(FP, {CV(SoundOp,2)}, {PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg")},{preserved})
+        TriggerX(FP, {CV(SoundOp,3)}, {PlayWAV("staredit\\wav\\Clear3.ogg")},{preserved})
+    CIfEnd()
+    CAdd(FP,SW,1)
+    CWhileEnd()
+
+
+	CElseX()
 	CMov(FP,SW,GCP)
 	CMov(FP,0x6509B0,SW)
 	CIf(FP,{TDeathsX(SW,Exactly,1,3,1)})
@@ -1508,6 +1568,7 @@ function Install_CallTriggers()
 	TriggerX(FP, {CV(SoundOp,2)}, {PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg"),PlayWAV("staredit\\wav\\Clear2.ogg")},{preserved})
 	TriggerX(FP, {CV(SoundOp,3)}, {PlayWAV("staredit\\wav\\Clear3.ogg")},{preserved})
 	CIfEnd()
+	CIfXEnd()
 
 	SetCallEnd()
 
@@ -1663,24 +1724,28 @@ for i = 45, 50 do
 			CIfEnd()
 		end
 		if j == 1 then--32억, 322억 무조건 표출
-			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-			CallTrigger(FP, Call_CPSound, SetV(SoundOp,2))
+			if type(k[2]) == "string" then
+				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).."억 \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			else
+				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			end
+				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,2),SetV(CPMode,0)})
 		end
 		if i == 49 or i == 50 then--49강 50강에서만 텍스트알람 소리알람 전체 활성화. 그외 개인 소리 알람으로만 설정
 			if j == 2 then
 				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-				CallTrigger(FP, Call_CPSound, SetV(SoundOp,3))
+				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,3),SetV(CPMode,0)})
 			end
 			if j == 3 then
 				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-				CallTrigger(FP, Call_CPSound, SetV(SoundOp,1))
+				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,0)})
 			end
 		else
 			if j == 2 then
-				CallTrigger(FP, Call_CPSound2, SetV(SoundOp,3))
+				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,3),SetV(CPMode,1)})
 			end
 			if j == 3 then
-				CallTrigger(FP, Call_CPSound2, SetV(SoundOp,1))
+				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,1)})
 			end
 		end
 		
@@ -1695,7 +1760,7 @@ for i = 45, 50 do
 		
 	end
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
-	CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
+	--CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
 	if Limit == 1 then
 		CIf(FP,{VRange(GetGPer,TotalGPer,100000),KeyPress("F12", "Down")})
 			CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ 100000"), 4)})
@@ -1705,7 +1770,7 @@ for i = 45, 50 do
 	if i==50 then
 		--error(errt)
 	end
-	DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
+	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
 		f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
@@ -1846,6 +1911,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 	Call_EnchFunc = SetCallForward()
 	SetCall(FP)
+	CMov(FP,CJ,GCP)
 	local CI = CFor(FP,0,#LevelUnitArr,1)
 	ConvertVArr(FP, VI, VI4, CI, #LevelUnitArr)
 	CMovX(FP,UID,VArrX(LevelDataArr,VI,VI4),nil,nil,nil,1)
@@ -1899,12 +1965,12 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 		CIfEnd()
 	CIfEnd()
+	CAdd(FP,CJ,7)
 	CForEnd()
 
 	SetCallEnd()
 	Call_SellFunc = SetCallForward()
 	SetCall(FP)
-	CJ = CreateVar(FP)
 	CMov(FP,CJ,GCP)
 	f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
@@ -2352,6 +2418,22 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CElseX()
 	DisplayPrint(GCP, {"\x13\x07『 기존 \x07",CTimeDD,"일 ",CTimeHH,"시간 ",CTimeMM,"분 ",CTimeSS,"초\x04를 뛰어 넘지는 못했네요... 다음판엔 더 힘내봅시다. \x07』"})
 	CIfXEnd()
+	SetCallEnd()
+
+	Call_SaveSlot10 = SetCallForward()
+	SetCall(FP)
+	CMov(FP,PlayerV,_Mul(GCP,_Mov(18)))
+	
+	SCA_DataSaveG2(PlayerV, iv.S45Loc, SCA.FXPer44)--45판매횟수
+	SCA_DataSaveG2(PlayerV, iv.S46Loc, SCA.FXPer45)--46판매횟수
+	SCA_DataSaveG2(PlayerV, iv.S47Loc, SCA.FXPer46)--47판매횟수
+	SCA_DataSaveG2(PlayerV, iv.S48Loc, SCA.FXPer48)--48판매횟수
+	SCA_DataSaveG2(PlayerV, iv.S49Loc, SCA.FXEPer)--49판매횟수
+	SCA_DataSaveG2(PlayerV, iv.S50Loc, SCA.FMEPer)--50판매횟수
+	SCA_DataSaveG2(PlayerV, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
+	SCA_DataSaveG2(PlayerV, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
+	SCA_DataSaveG2(PlayerV, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
+
 	SetCallEnd()
 
 end

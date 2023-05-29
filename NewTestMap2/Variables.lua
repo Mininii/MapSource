@@ -300,6 +300,7 @@ end
 	GEper4 = CreateVar(FP)
 	XEper = CreateVar(FP)
 	BreakShield = CreateVar(FP)
+	BreakShield2 = CreateVar(FP)
 	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
 
 	ShopSw = CreateCcodeArr(7) -- 

@@ -1,8 +1,8 @@
 function CT_Prev()
 	--PushErrorMsg(#VWArr.." "..#VWArr2.." "..#PVWArr)
 	--error(#VWArr+#PVWArr+#VWArr2)
-	CMov(FP,CT_GNextRandV,_Mod(_Rand(),12858519))
-	f_LMov(FP,CT_GNextRandW,_LMod(_LRand(), {12532858,12532858}))
+	CMov(FP,CT_GNextRandV,_Rand())
+	f_LMov(FP,CT_GNextRandW,_LRand())
 	for j,k in pairs(VWArr) do
 		local VW = k[1]
 		local TrapVW = k[2]
@@ -18,18 +18,23 @@ function CT_Prev()
 
 
 end
-function CT_PrevCP(i)
-	CMov(FP,CT_NextRandV[i+1],_Mod(_Rand(),12858519))
-	f_LMov(FP,CT_NextRandW[i+1],_LMod(_LRand(), {12532858,12532858}))
+function CT_PrevCP()
+	VArrL,VArrL4 = CreateVars(2, FP)
+	WArrL,WArrL4 = CreateWars(2, FP)
+	GV,TrapGV = CreateVars(2, FP)
+	GW,TrapGW = CreateWars(2, FP)
+	for i = 0,6 do --ConvertVArr
+		TriggerX(FP, {LocalPlayerID(i)}, {SetV(VArrL,604*i),SetV(VArrL4,2416*i),SetNWar(WArrL, SetTo, {604*i,604*i}),SetNWar(WArrL4, SetTo, {2416*i,2416*i}),},{preserved})
+	end
+
 	
-	CIf(FP, LocalPlayerID(i))
+	
 	for j,k in pairs(PVWArr) do
-		local VW = k[1][i+1]
-		local TrapVW = k[2][i+1]
-		TrapKey = CheatTestX(i, VW,TrapVW, j+(#VWArr)-1,1,k[3])
+		local VW = k[1]
+		local TrapVW = k[2]
+		TrapKey = CheatTest2X(GCP, VW,TrapVW, j+(#VWArr)-1,1,k[3])
 
 	end
-	CIfEnd()
 end
 function CT_Next()
 	
@@ -72,10 +77,10 @@ for j,k in pairs(VWArr) do
 	local TrapVW = k[2]
 	if TrapVW[4] == "V" then
 		CXor(FP, TrapVW,VW, CT_GNextRandV)
-		CXor(FP, VW, CT_GNextRandV)
+		CMov(FP, VW, TrapVW)
 	else
 		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
-		f_LXor(FP, VW,VW, CT_GNextRandW)
+		f_LMov(FP, VW, TrapVW)
 	end
 
 end
@@ -85,31 +90,34 @@ for j,k in pairs(VWArr2) do
 	local TrapVW = k[2]
 	if TrapVW[4] == "V" then
 		CXor(FP, TrapVW,VW, CT_GNextRandV)
-		CXor(FP, VW, CT_GNextRandV)
+		CMov(FP, VW, TrapVW)
 	else
 		f_LXor(FP, TrapVW,VW, CT_GNextRandW)
-		f_LXor(FP, VW,VW, CT_GNextRandW)
+		f_LMov(FP, VW, TrapVW)
 	end
 
 end
+
+
+	for j,k in pairs(PVWArr) do
+		local VW = k[1]
+		local TrapVW = k[2]
+		if TrapVW[1][4] == "V" then
+			CMovX(FP,GV,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
+			CXor(FP,GV, CT_GNextRandV)
+			CMovX(FP,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),GV,nil,nil,nil,1)
+			CMovX(FP,VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),GV,nil,nil,nil,1)
+
+		else
+			f_LMovX(FP,GW,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
+			f_LXor(FP, GW,GW, CT_GNextRandW)
+			f_LMovX(FP,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),GW,nil,nil,nil,1)
+			f_LMovX(FP,WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),GW,nil,nil,nil,1)
+		end
+
+	end
+
+
 	CMov(FP,CT_GPrevRandV,CT_GNextRandV)
 	f_LMov(FP,CT_GPrevRandW,CT_GNextRandW)
-	for i = 0, 6 do
-		CIf(FP, {HumanCheck(i,1),LocalPlayerID(i)})
-		for j,k in pairs(PVWArr) do
-			local VW = k[1][i+1]
-			local TrapVW = k[2][i+1]
-			if TrapVW[4] == "V" then
-				CXor(FP, TrapVW,VW, CT_NextRandV[i+1])
-				CXor(FP, VW, CT_NextRandV[i+1])
-			else
-				f_LXor(FP, TrapVW,VW, CT_NextRandW[i+1])
-				f_LXor(FP, VW,VW, CT_NextRandW[i+1])
-			end
-	
-		end
-		CMov(FP,CT_PrevRandV[i+1],CT_NextRandV[i+1])
-		f_LMov(FP,CT_PrevRandW[i+1],CT_NextRandW[i+1])
-		CIfEnd()
-	end
 end

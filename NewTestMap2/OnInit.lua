@@ -295,6 +295,7 @@ iTblJump = def_sIndex()
 	CIf(FP,{LocalPlayerID(i)})
 	CMov(FP,iv.LCP,i)
 	f_LMov(FP,iv.LCPW,tostring(i))
+	
 	CIfEnd()
 
 

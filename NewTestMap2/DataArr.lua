@@ -360,6 +360,7 @@ function DataArr()
 	iv.RankTitle2,ct.RankTitle2 = CreateDataPV("RankTitle2",SCA.RankTitle2)
 	iv.RankTitle3,ct.RankTitle3 = CreateDataPV("RankTitle3",SCA.RankTitle3)
 	iv.FMinMax,ct.FMinMax,iv.FMinMaxLoc = CreateDataPV("FMinMax",SCA.FMinMax,1)
+	iv.TotalBreakShield2,ct.TotalBreakShield2 = CreateDataPV("TotalBreakShield2")
 
 
 	for j,k in pairs(SCA_DataArr) do

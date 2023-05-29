@@ -176,14 +176,16 @@ function GameDisplay()
 
 		f_LSub(FP,TempFf,iv.FfragItemLoc,iv.FfragItemUsedLoc)
 		f_Cast(FP, {TempFf2,0}, TempFf,nil,nil,1)
-
+		TempCrStLoc = CreateWar(FP)
 
 		CIfX(FP,CD(Tabkey,0))
 		CA__SetValue(Str1,"\x12포인트 \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999999,AtLeast),{SetV(StatPLoc,999999999)},{preserved})
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+		f_LMov(FP, TempCrStLoc, CredLoc)
 		CElseX()
-		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x19판매권 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		f_LMov(FP, TempCrStLoc, SellTicketLoc)
 		CTrigger(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")},{SetV(TempFf2,999999999)},{preserved})
 
 		CIfX(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")})
@@ -194,13 +196,13 @@ function GameDisplay()
 
         CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CIfXEnd()
-		CIfX(FP,{TTNWar(CredLoc, AtLeast, "999999999999999"),TTNWar(CredLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
-		f_LMov(FP,CredLoc,"999999999999999")
-		CElseIfX({TTNWar(CredLoc, AtLeast, "0x8000000000000000"),TTNWar(CredLoc, AtMost, "0xFFFC72815B398000")})
-		f_LMov(FP,CredLoc,"0xFFFC72815B398001")
+		CIfX(FP,{TTNWar(TempCrStLoc, AtLeast, "999999999999999"),TTNWar(TempCrStLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
+		f_LMov(FP,TempCrStLoc,"999999999999999")
+		CElseIfX({TTNWar(TempCrStLoc, AtLeast, "0x8000000000000000"),TTNWar(TempCrStLoc, AtMost, "0xFFFC72815B398000")})
+		f_LMov(FP,TempCrStLoc,"0xFFFC72815B398001")
 		CIfXEnd()
 
-        CA__lItoCustom(SVA1(Str1,29),CredLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+        CA__lItoCustom(SVA1(Str1,29),TempCrStLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
         ,{0,1,2,4,5,6,8,9,10,12,13,14,16,17,18},nil,{0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 
 	
@@ -321,7 +323,7 @@ function GameDisplay()
 			table.insert(BAct1,SetCD(MToggle3_2[j],0))
 		end
 		
-	for j,p in pairs({0x04,0x08,0x19,0x04,0x04}) do
+	for j,p in pairs({0x04,0x08,0x19,0x1C,0x1E}) do
 			table.insert(BAct2,SetV(CColor1_1[j],p))
 			table.insert(BAct2,SetV(CColor2_1[j],0x04))
 			table.insert(BAct2,SetV(CColor3_1[j],0x1F))
@@ -332,7 +334,7 @@ function GameDisplay()
 			table.insert(BAct2,SetCD(MToggle2_1[j],0))
 			table.insert(BAct2,SetCD(MToggle3_1[j],0))
 	end
-	for j,p in pairs({0x1C,0x1E,0x04,0x04,0x04}) do
+	for j,p in pairs({0x04,0x04,0x04,0x04,0x04}) do
 			table.insert(BAct2,SetV(CColor1_2[j],p))
 			table.insert(BAct2,SetV(CColor2_2[j],0x04))
 			table.insert(BAct2,SetV(CColor3_2[j],0x1F))
@@ -561,11 +563,11 @@ function GameDisplay()
 			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"고급 보석 ",FXPer48Loc,"개 ",CColor3_1[5][2],"|| Cost : ",Cost_FXPer48Loc,"\x12",CColor3_2[5][2]," Cost : ",Cost_FMinLoc," || ",CColor1_2[5][2],FMinLoc," 개 채광의 보석 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			CElseIfX({CV(InterfaceNumLoc,257)})
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"촉진의 보석1 ",iv.FAcc2Loc,"개 ",CColor3_1[1][2],"|| Cost : ",iv.Cost_FAcc2Loc,"\x12",CColor3_2[1][2]," Cost : ",iv.Cost_FBrSh2Loc," || ",CColor1_2[1][2],iv.FBrSh2Loc," 개 수호의 보석 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"촉진의 보석2 ",iv.FAccLoc,"개 ",CColor3_1[2][2],"|| Cost : ",iv.Cost_FAccLoc,"\x12",CColor3_2[2][2]," Cost : ",iv.Cost_FMEPer2Loc," || ",CColor1_2[2][2],iv.FMEPer2Loc," 개 초월의 보석 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"촉진의 보석1 ",iv.FAcc2Loc,"개 ",CColor3_1[1][2],"|| Cost : ",iv.Cost_FAcc2Loc,"\x12",CColor3_2[1][2]," Cost : -- || ",CColor1_2[1][2],"-- 개 비어있음 ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"촉진의 보석2 ",iv.FAccLoc,"개 ",CColor3_1[2][2],"|| Cost : ",iv.Cost_FAccLoc,"\x12",CColor3_2[2][2]," Cost : -- || ",CColor1_2[2][2],"-- 개 비어있음 ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
 			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"채굴의 보석 ",iv.FMinMaxLoc,"개 ",CColor3_1[3][2],"|| Cost : ",iv.Cost_FMinMaxLoc,"\x12",CColor3_2[3][2]," Cost : -- || ",CColor1_2[3][2],"-- 개 비어있음 ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"비어있음 --개 ",CColor3_1[4][2],"|| Cost : --\x12",CColor3_2[4][2]," Cost : -- || ",CColor1_2[4][2],"-- 개 비어있음 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"비어있음 --개 ",CColor3_1[5][2],"|| Cost : --\x12",CColor3_2[5][2]," Cost : -- || ",CColor1_2[5][2],"-- 개 비어있음 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"수호의 보석 ",iv.FBrSh2Loc,"개 ",CColor3_1[4][2],"|| Cost : ",iv.Cost_FBrSh2Loc,"\x12",CColor3_2[4][2]," Cost : -- || ",CColor1_2[4][2],"-- 개 비어있음 ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"초월의 보석 ",iv.FMEPer2Loc,"개 ",CColor3_1[5][2],"|| Cost : ",iv.Cost_FMEPer2Loc,"\x12",CColor3_2[5][2]," Cost : -- || ",CColor1_2[5][2],"-- 개 비어있음 ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			
 			
@@ -624,12 +626,12 @@ function GameDisplay()
 		StrDesign("\x04개당 \x04일반 자판기\x04의 \x07유닛 구입 속도 \x081배 \x04증가. \x08MAX "..Cost_FAcc2[2].." 개"),
 		StrDesign("\x04개당 \x08유료 자판기\x04의 \x07유닛 구입 속도 \x081배 \x04증가. \x08MAX "..Cost_FAcc[2].." 개"),
 		StrDesign("\x04개당 \x17크레딧 광산\x04의 \x07최대 채광량 \x080.1배 \x04증가. \x08MAX "..Cost_FMinMax[2].." 개"),
-		StrDesign("\x04빈 항목입니다."),
-		StrDesign("\x04빈 항목입니다."),
-}
-	local StatPrintEr5 = {
 		StrDesign("\x04개당 \x0F0.01%p\x04의 \x1F파괴 방지 확률 \x04증가. \x08MAX "..Cost_FBrSh2[2].." 개"),
 		StrDesign("\x0750강 \x11제외\x04. \x04개당 \x0F0.01%p\x04의 \x1F모\x1C든\x1E유\x07닛 \x08강화확률 \x04증가. \x08MAX "..Cost_FMEPer2[2].." 개"),
+}
+	local StatPrintEr5 = {
+		StrDesign("\x04빈 항목입니다."),
+		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
 		StrDesign("\x04빈 항목입니다."),
@@ -780,6 +782,7 @@ function GameDisplay()
 
 	
 	CIfEnd()
+
 	
 	CIfX(FP,{CD(LKey,1)})
 	
@@ -803,9 +806,10 @@ function GameDisplay()
 
 
 	DisplayPrint(LCP, {"\x10강화기 백신 : ",VaccItemLoc," \x04개, \x1F확정 강화권 \x1F(\x02구\x04,\x1F신버전) \x04: \x02",PETicketLoc," \x04개, \x1F",iv.PETicket2Loc," \x04개, \x1E각성의 보석 \x04: \x07",iv.AwakItemLoc," \x04개"})
-	DisplayPrint(LCP, {""..FirstReward3[1][4].."45강 \x04~ "..FirstReward4[2][4].."50강 \x07판매 \x04횟수 및 얻은 재화 \x12 "..FirstReward3[1][4].."45강 : \x04",iv.S45Loc,"회, "..FirstReward3[2][4].."46강 : \x04",iv.S46Loc,"회, "..FirstReward3[3][4].."47강 : \x04",iv.S47Loc,"회, "..FirstReward3[4][4].."48강 : \x04",iv.S48Loc,"회"})
-	DisplayPrint(LCP, {"\x02무색 조각 \x04: \x07",iv.GFfragLoc," \x04개, \x1E각성의 보석 \x04: \x07",iv.GAwakItemLoc," \x04개.\x12"..FirstReward4[1][4].."49강 \x04: ",iv.S49Loc,"회, "..FirstReward4[2][4].."50강 \x04: ",iv.S50Loc,"회"})
 	
+	
+	DisplayPrint(LCP, {""..FirstReward3[1][4].."45강 \x04~ "..FirstReward4[2][4].."50강 \x07판매 \x04횟수 및 얻은 재화\x08(아래는 현재 보유중인 재화가 아닙니다) \x12 "..FirstReward3[1][4].."45강 : \x04",iv.S45Loc,"회, "..FirstReward3[2][4].."46강 : \x04",iv.S46Loc,"회, "..FirstReward3[3][4].."47강 : \x04",iv.S47Loc,"회"})
+	DisplayPrint(LCP, {"\x02무색 조각 \x04: \x07",iv.GFfragLoc," \x04개, \x1E각성의 보석 \x04: \x07",iv.GAwakItemLoc," \x04개.\x12"..FirstReward3[4][4].."48강 : \x04",iv.S48Loc,"회, "..FirstReward4[1][4].."49강 \x04: ",iv.S49Loc,"회, "..FirstReward4[2][4].."50강 \x04: ",iv.S50Loc,"회"})
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
 	CS__SetValue(FP, StrL, "\x17크레딧 \x04:  0000\x04경0000\x04조0000\x04억0000\x04만0000",nil,0)
 	CS__lItoCustom(FP,SVA1(StrL,6),iv.GCreditLoc,nil,nil,10,nil,nil,"\x1B0",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})

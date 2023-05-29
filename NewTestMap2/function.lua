@@ -1908,17 +1908,12 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	local PCT_NextRandV
 	local PCT_PrevRandW
 	local PCT_NextRandW
-	if PRandFlag == nil then
+	
 	PCT_PrevRandV = CT_GPrevRandV
 	PCT_NextRandV = CT_GNextRandV
 	PCT_PrevRandW = CT_GPrevRandW
 	PCT_NextRandW = CT_GNextRandW
-	else
-	PCT_PrevRandV = CT_PrevRandV[Player+1]
-	PCT_NextRandV = CT_NextRandV[Player+1]
-	PCT_PrevRandW = CT_PrevRandW[Player+1]
-	PCT_NextRandW = CT_NextRandW[Player+1]
-	end
+	
 	if VW[4] == "V" then
 		CIfX(FP,{CV(VW, TrapVW)}) -- 치트 난수 테스트(참이어야 정상)
 		
@@ -2004,26 +1999,18 @@ end
 
 
 
+
+
 function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	local TrapKey
-	local CT_PrevRand
-	local CT_NextRand
-	local PCT_PrevRandV
-	local PCT_NextRandV
-	local PCT_PrevRandW
-	local PCT_NextRandW
 	if VW[1][4] == "V" then
-		
-		
-		
-		
-
-
-		
-		CIfX(FP,{TMemory(_TMem(VArrX(GetVArray(VW[1], 7), VArrL, VArrL4)), Exactly, _MovX(VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),SetTo))}) -- 치트 난수 테스트(참이어야 정상)
-		
+		CMovX(FP,GV,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
+		CMovX(FP,TrapGV,VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
+		CIfX(FP,{CV(GV, TrapGV)}) -- 치트 난수 테스트(참이어야 정상)
 	else
-		CIfX(FP,{TTLMemoryX(_TLMem(WArrX(GetWArray(VW[1], 7), WArrL, WArrL4)), Exactly, _LMovX(WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),SetTo))}) -- 치트 난수 테스트(참이어야 정상)
+		f_LMovX(FP,GW,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
+		f_LMovX(FP,TrapGW,WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
+		CIfX(FP,{TTNWar(GW, Exactly, TrapGW)}) -- 치트 난수 테스트(참이어야 정상)
 	end
 	local DeathUnit = 1
 	--local ttable = {}
@@ -2045,8 +2032,10 @@ function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		--if 2^Flag == 2048 then error(Text) end
 	end
 	CElseX()
-	CMovX(FP, VArrX(GetVArray(BPArr[DeathUnit][1], 7), VArrL, VArrL4), 2^Flag,SetTo,2^Flag)
-
+	if TestStart == 0 then
+		CMovX(FP, VArrX(GetVArray(BPArr[DeathUnit][1], 7), VArrL, VArrL4), 2^Flag,SetTo,2^Flag)
+	end
+ 
 	else
 
 	end
@@ -2063,15 +2052,13 @@ function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --	end
 	CIfXEnd()
 	if VW[1][4] == "V" then
-		CXor(FP, VArrX(GetVArray(VW[1], 7), VArrL, VArrL4), VArrX(GetVArray(CT_PrevRandV[1], 7), VArrL, VArrL4))--감지 여부 상관없이 진짜값으로 복구
+		CXor(FP, GV, CT_GPrevRandV)--감지 여부 상관없이 진짜값으로 복구
+		CMovX(FP,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),GV,nil,nil,nil,1)
 		
 	else
-		f_LMovX(FP, WArrX(GetWArray(VW[1], 7), WArrL, WArrL4), _LXor(WArrX(GetWArray(VW[1], 7), WArrL, WArrL4), WArrX(GetWArray(CT_PrevRandW[1], 7), WArrL, WArrL4)))--감지 여부 상관없이 진짜값으로 복구
+		f_LXor(FP, GW, GW, CT_GPrevRandW)--감지 여부 상관없이 진짜값으로 복구
+		f_LMovX(FP,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),GW,nil,nil,nil,1)
 	end
-
-	
-
-
 	
 	return TrapKey
 end	
@@ -2394,6 +2381,19 @@ function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, D
 		CDoActions(FP, {
 			TSetMemory(_Add(Destptr[1],Player), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
 			TSetMemory(_Add(Destptr[2],Player), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
+		})
+	else
+		PushErrorMsg("SCA_Source_Inputdata_Error")
+	end
+end
+function SCA_DataSaveG2(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
+	if Source[4]=="V" then
+		CDoActions(FP, {TSetMemory(_Add(Destptr,Player), SetTo, Source)})
+	elseif Source[4]=="W" then
+		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
+		CDoActions(FP, {
+			TSetMemory(_Add(Destptr[1],Player), SetTo, _Cast(0,Source)),
+			TSetMemory(_Add(Destptr[2],Player), SetTo, _Cast(1,Source))
 		})
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
