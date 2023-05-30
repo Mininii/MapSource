@@ -1743,10 +1743,23 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 		if LvUniit==40 then
 			CIf(FP,{CV(GetMoney2,GetFAcc2,AtLeast)},{SubV(GetMoney2,GetFAcc2)})
 		else
-			local TempCost = CreateWar(FP)
-			f_LMul(FP, TempCost, Cost, GetFAcc2W)
-			CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
-			f_LSub(FP, GetMoney, GetMoney, TempCost)
+			if LvUniit == 39 then -- 80경짜리 예외처리
+				CIf(FP,{CV(GetArbMoney,_Sub(GetFAcc2,1),AtMost)})
+				CAdd(FP,GetArbMoney,_Cast(0,_LDiv(GetMoney,"800000000000000000")))
+				f_LMod(FP, GetMoney, GetMoney, "800000000000000000")
+				TriggerX(FP,{CV(GetMoney2,2,AtLeast)},{SubV(GetMoney2, 2),AddV(GetArbMoney,25)},{preserved})
+				CTrigger(FP,{CV(GetMoney2,2,AtLeast),CV(GetArbMoney,_Sub(GetFAcc2,1),AtMost)},{SubV(GetMoney2, 2),AddV(GetArbMoney,25)},{preserved})
+
+				CIfEnd()
+				
+				CIf(FP,{CV(GetArbMoney,GetFAcc2,AtLeast)},{SubV(GetArbMoney,GetFAcc2)})
+
+			else
+				local TempCost = CreateWar(FP)
+				f_LMul(FP, TempCost, Cost, GetFAcc2W)
+				CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
+				f_LSub(FP, GetMoney, GetMoney, TempCost)
+			end
 		end
 		CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
 		for i = 0, 6 do
@@ -1775,10 +1788,21 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 			if LvUniit==40 then
 				CIf(FP,{CV(GetMoney2,GetFAcc,AtLeast)},{SubV(GetMoney2,GetFAcc)})
 			else
-				local TempCost = CreateWar(FP)
-				f_LMul(FP, TempCost, Cost, GetFAccW)
-				CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
-				f_LSub(FP, GetMoney, GetMoney, TempCost)
+				if LvUniit == 39 then
+					CIf(FP,{CV(GetArbMoney,_Sub(GetFAcc,1),AtMost)})
+					CAdd(FP,GetArbMoney,_Cast(0,_LDiv(GetMoney,"800000000000000000")))
+					f_LMod(FP, GetMoney, GetMoney, "800000000000000000")
+					TriggerX(FP,{CV(GetMoney2,2,AtLeast)},{SubV(GetMoney2, 2),AddV(GetArbMoney,25)},{preserved})
+					CTrigger(FP,{CV(GetMoney2,2,AtLeast),CV(GetArbMoney,_Sub(GetFAcc,1),AtMost)},{SubV(GetMoney2, 2),AddV(GetArbMoney,25)},{preserved})
+					CIfEnd()
+					
+					CIf(FP,{CV(GetArbMoney,GetFAcc,AtLeast)},{SubV(GetArbMoney,GetFAcc)})
+				else
+					local TempCost = CreateWar(FP)
+					f_LMul(FP, TempCost, Cost, GetFAccW)
+					CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
+					f_LSub(FP, GetMoney, GetMoney, TempCost)
+				end
 			end
 			f_LSub(FP, GetBuyTicket, GetBuyTicket, GetFAccW)
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})

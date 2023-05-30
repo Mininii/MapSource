@@ -373,6 +373,7 @@ function DataArr()
 	iv.BrSh47,ct.BrSh47 = CreateDataPV("BrSh47")
 	iv.BrSh48,ct.BrSh48 = CreateDataPV("BrSh48")
 	iv.BrSh49,ct.BrSh49 = CreateDataPV("BrSh49")
+	iv.Money3,ct.Money3 = CreateDataPV("Money3")
 	for j,k in pairs(SCA_DataArr) do
 		if k[1][4]=="V" then
 			if k[2][4] ~= "V" then

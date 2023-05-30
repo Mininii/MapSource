@@ -1219,13 +1219,7 @@ end
 --	f_LSub(FP, Money[i+1], Money[i+1], "10000000000000000000")
 --	CAdd(FP,Money2[i+1],1)
 --	CIfEnd()
-	
-	CIf(FP,{CV(Money2[i+1],1,AtLeast)})--800경이하일때 2번째변수가 1이상일경우
-	CIf(FP,{TTNWar(Money[i+1], AtMost, "8000000000000000000")})
-	f_LAdd(FP, Money[i+1], Money[i+1], "10000000000000000000")
-	CSub(FP,Money2[i+1],1)
-	CIfEnd()
-	CIfEnd()
+
 
 
 	TriggerX(FP, {CV(TempX[i+1],1,AtLeast)},{SetCD(OreMode[i+1], 1)})
@@ -1897,6 +1891,25 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP, {LocalPlayerID(i),CV(PCheckV,j)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 "..ULimitArr[j].."기)"))},{preserved})
 	end
 	CIfXEnd()
+
+	
+	CIf(FP,{CV(iv.Money3[i+1],1,AtLeast)})--800경이하일때 3번째변수가 1이상일경우
+	CIf(FP,{TTNWar(Money[i+1], AtMost, "8000000000000000000")})
+	local TempV = CreateVar(FP)
+	CMov(FP,TempV,iv.Money3[i+1])
+	TriggerX(FP, {CV(TempV,10,AtLeast)},{SetV(TempV,10)},{preserved})
+	f_LAdd(FP, Money[i+1], Money[i+1], _LMul({TempV,0}, "800000000000000000"))
+	CSub(FP,iv.Money3[i+1],TempV)
+	CIfEnd()
+	CIfEnd()
+	
+	CIf(FP,{CV(Money2[i+1],1,AtLeast)})--800경이하일때 2번째변수가 1이상일경우
+	CIf(FP,{TTNWar(Money[i+1], AtMost, "8000000000000000000")})
+	f_LAdd(FP, Money[i+1], Money[i+1], "10000000000000000000")
+	CSub(FP,Money2[i+1],1)
+	CIfEnd()
+	CIfEnd()
+	
 
 	
 	

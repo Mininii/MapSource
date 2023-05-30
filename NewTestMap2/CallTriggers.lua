@@ -1095,7 +1095,7 @@ function Install_CallTriggers()
 								CIf(FP,{CD(failflag)})
 									local Tempea = CreateVar(FP)
 									CMov(FP,Tempea,_Sub(GetClassData,_Mov(261)))
-									DisplayPrint(GCP, {"\x13\x07『 \x08ERROR \x04: \x1E각성의 보석\x04이 부족합니다. \x1E필요 각성의 보석 : ",Tempea," 개 \x07』"})
+									DisplayPrint(GCP, {"\x13\x07『 \x08ERROR \x04: \x1E각성의 보석\x04이 부족합니다. \x1E필요 각성의 보석 : ",Tempea," \x04개, \x1E보유 각성의 보석 : ",GetAwakItemData," \x04개 \x07』"})
 								CIfEnd()
 							CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 기능은 승급장에서 사용가능합니다."), 4),SetCp(FP)})
 							CIfXEnd()
@@ -1634,7 +1634,7 @@ function Install_CallTriggers()
 		{"\x1E각성의 보석",1,75,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",40,1000,iv.Money2},
-		{"\x17크레딧",3000000,5000,iv.B_PCredit},
+		{"\x17크레딧",3000000,5000,iv.B_PCredit,iv.GCreditLoc},
 		{"\x1D42강 유닛",10,20000,iv.E42},
 		{"\x1041강 유닛",10,30000,iv.E41},
 	}
@@ -1868,7 +1868,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	GetFAcc = CreateVar(FP)
 	GetFAcc2 = CreateVar(FP)
 	GetBuyTicket = CreateWar(FP)
+	GetArbMoney = CreateVar(FP)
 	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
+	CMovX(FP,GetArbMoney,VArrX(GetVArray(iv.Money3[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode,VArrX(GetVArray(iv.AutoBuyCode[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAutoBuyCode2,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetMoney2,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
@@ -1907,6 +1909,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMovX(FP,VArrX(GetVArray(iv.AutoBuyCode2[1], 7), VArrI, VArrI4),GetAutoBuyCode2,nil,nil,nil,1)
 	CMovX(FP,VArrX(GetVArray(iv.Money2[1], 7), VArrI, VArrI4),GetMoney2,nil,nil,nil,1)
 	f_LMovX(FP, WArrX(GetWArray(iv.Money[1], 7), WArrI, WArrI4),GetMoney,nil,nil,nil,1)
+	CMovX(FP,VArrX(GetVArray(iv.Money3[1], 7), VArrI, VArrI4),GetArbMoney,nil,nil,nil,1)
 	SetCallEnd()
 
 	
@@ -2171,9 +2174,9 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetVAccData,MulOP,AtLeast),CV(G
 	for i = 0, 6 do
 		CTrigger(FP, {CV(GCP,i)}, {AddCD(VaccSCount[i+1],MulOP)},1)
 	end
-	local TempV = CreateVar(FP)
-	f_Cast(FP,{TempV,0},_LMul(LMulOP, "100000"),nil,nil,1)
-	DisplayPrint(GCP, {"\x13\x07『 \x10강화기 백신\x04을 ",LMulOP,"개 판매하였습니다. ",TempV," \x17크레딧 \x07반환 \x07』"})
+	local TempW = CreateWar(FP)
+	f_LMul(FP, TempW, LMulOP, "100000")
+	DisplayPrint(GCP, {"\x13\x07『 \x10강화기 백신\x04을 ",LMulOP,"개 판매하였습니다. ",TempW," \x17크레딧 \x07반환 \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetVAccData," 개의 \x10강화기 백신 보유중 \x07』"})
 CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
 CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
