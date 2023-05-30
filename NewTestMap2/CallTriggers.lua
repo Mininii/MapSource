@@ -272,7 +272,24 @@ function Install_CallTriggers()
 	GetEPer = CreateVar(FP)
 	BrShW = CreateWar(FP)
 	BrShV = CreateVar(FP)
-	CMov(FP,BrShV,_Sub(_Mov(100000),_Div(_Mul(BreakShield2,_Sub(_Mov(100000),XEper)), 1000)))
+	BrShArr = {
+		iv.BrSh40,
+		iv.BrSh41,
+		iv.BrSh42,
+		iv.BrSh43,
+		iv.BrSh44,
+		iv.BrSh45,
+		iv.BrSh46,
+		iv.BrSh47,
+		iv.BrSh48,
+		iv.BrSh49,
+	}
+	for j,k in pairs(BrShArr) do
+		CIf(FP,{CV(ELevel,j+38)})
+		CMovX(FP,BrShV,VArrX(GetVArray(k[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+		CIfEnd()
+	end
+	
 	f_Rand(FP,GetEPer)
 	f_Mod(FP,GetEPer,BrShV)
 	CAdd(FP,GetEPer,1)
@@ -2435,5 +2452,66 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	SCA_DataSaveG2(PlayerV, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
 
 	SetCallEnd()
+	Call_CalcBrSh = SetCallForward()
+	BrShRet = CreateVar(FP)
+	InputEper = CreateVar(FP)
+	InputBrSh = CreateVar(FP)
+	SetCall(FP)
+	CMov(FP,BrShRet,_Sub(_Mov(100000),_Div(_Mul(InputBrSh,_Sub(_Mov(100000),InputEper)), _Mov(10000))))
+	SetCallEnd()
+	Call_SetBrSh = SetCallForward()
+	SetCall(FP)
+	CMovX(FP,InputBrSh,VArrX(GetVArray(iv.TotalBreakShield2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 
+	CSub(FP,InputEper,GEper4,LevelUnitArr[40][3])
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh40[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	CSub(FP,InputEper,GEper4,LevelUnitArr[41][3])
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh41[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	CSub(FP,InputEper,GEper4,LevelUnitArr[42][3])
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh42[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	CSub(FP,InputEper,GEper4,LevelUnitArr[43][3])
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh43[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	CMov(FP,InputEper,LevelUnitArr[49][3])
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh49[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	SetCallEnd()
+	Call_SetBrSh2 = SetCallForward()
+	SetCall(FP)
+	CMovX(FP,InputBrSh,VArrX(GetVArray(iv.TotalBreakShield2[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+
+	
+	CAdd(FP,InputEper,GetXEper44,LevelUnitArr[44][3])
+	CiSub(FP,InputEper,iv.XEPerM)
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--마이너스일경우 0
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh44[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	
+	CAdd(FP,InputEper,GetXEper45,LevelUnitArr[45][3])
+	CiSub(FP,InputEper,iv.XEPerM)
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--마이너스일경우 0
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh45[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	
+	CAdd(FP,InputEper,GetXEper46,LevelUnitArr[46][3])
+	CiSub(FP,InputEper,iv.XEPerM)
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--마이너스일경우 0
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh46[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	
+	CAdd(FP,InputEper,GetXEper47,LevelUnitArr[47][3])
+	CiSub(FP,InputEper,iv.XEPerM)
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--마이너스일경우 0
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh47[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	
+	CAdd(FP,InputEper,GetXEper48,LevelUnitArr[48][3])
+	CiSub(FP,InputEper,iv.XEPerM)
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--마이너스일경우 0
+	CallTrigger(FP, Call_CalcBrSh)
+	CMovX(FP,VArrX(GetVArray(iv.BrSh48[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
+	SetCallEnd()
 end

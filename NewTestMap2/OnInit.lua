@@ -122,8 +122,8 @@ iTblJump = def_sIndex()
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit¼³Á¤
 
 	T_YY = 2023
-	T_MM = 05
-	T_DD = 26
+	T_MM = 06
+	T_DD = 01
 	T_HH = 00
 
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }

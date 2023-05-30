@@ -300,7 +300,6 @@ end
 	GEper4 = CreateVar(FP)
 	XEper = CreateVar(FP)
 	BreakShield = CreateVar(FP)
-	BreakShield2 = CreateVar(FP)
 	UEper = CreateVar(FP) -- 강화 제어용 변수. 강화할 유닛의 확률을 저장함
 
 	ShopSw = CreateCcodeArr(7) -- 
@@ -1071,18 +1070,18 @@ FirstReward4 = {
 	
 	Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
-	if Limit == 1 then
-		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
-		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
+	--if Limit == 1 then
+	--	Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
+	--	Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
+	--
+	--	Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
+	--else
+	--end
 	
-		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
-	else
-		Cost_FAcc = ReciveCostDataFile(9, "FAcc")
-		Cost_FAcc2 = ReciveCostDataFile(9,"FAcc2")
-	
-		Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
-	end
-	
+	Cost_FAcc = ReciveCostDataFile(9, "FAcc")
+	Cost_FAcc2 = ReciveCostDataFile(9,"FAcc2")
+
+	Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
 	
 	
 

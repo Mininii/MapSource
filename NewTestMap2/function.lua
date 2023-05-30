@@ -2438,6 +2438,19 @@ function CIfChkVar(Var)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd Ç
 	CMov(FP,CurVar,Var)
 	
 end
+function CIfChkVars(Vars)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd ÇÊ¿ä
+	if #Vars <=1 then PushErrorMsg("Vars_InputError") end
+ 	local CurVars = CreateVarArr(#Vars,FP)
+	local TTORCondArr = {}
+	for j,k in pairs(Vars) do
+		table.insert(TTORCondArr, _TTNVar(k, NotSame, CurVars[j]))
+	end
+	CIf(FP,{TTOR(TTORCondArr)})
+	for j,k in pairs(Vars) do
+		CMov(FP,CurVars[j],k)
+	end
+	
+end
 function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 	local CostArr = Cost[1]
 	local UpMax = Cost[2]

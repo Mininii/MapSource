@@ -40,12 +40,12 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0437"
+VerText = "\x19ver\x07. \x043\x07.\x0438"
 
 TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 13
+	TestSpeedNum = 1
 	SpeedTestMode = 0
 	SpeedTestOp = 2
 	X3Mode = 0

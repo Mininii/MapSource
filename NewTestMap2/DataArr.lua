@@ -363,6 +363,16 @@ function DataArr()
 	iv.TotalBreakShield2,ct.TotalBreakShield2 = CreateDataPV("TotalBreakShield2")
 
 
+	iv.BrSh40,ct.BrSh40 = CreateDataPV("BrSh40")
+	iv.BrSh41,ct.BrSh41 = CreateDataPV("BrSh41")
+	iv.BrSh42,ct.BrSh42 = CreateDataPV("BrSh42")
+	iv.BrSh43,ct.BrSh43 = CreateDataPV("BrSh43")
+	iv.BrSh44,ct.BrSh44 = CreateDataPV("BrSh44")
+	iv.BrSh45,ct.BrSh45 = CreateDataPV("BrSh45")
+	iv.BrSh46,ct.BrSh46 = CreateDataPV("BrSh46")
+	iv.BrSh47,ct.BrSh47 = CreateDataPV("BrSh47")
+	iv.BrSh48,ct.BrSh48 = CreateDataPV("BrSh48")
+	iv.BrSh49,ct.BrSh49 = CreateDataPV("BrSh49")
 	for j,k in pairs(SCA_DataArr) do
 		if k[1][4]=="V" then
 			if k[2][4] ~= "V" then

@@ -1748,10 +1748,6 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	CMov(FP,BreakShield,TotalBreakShield[i+1])
 	
-	CIfChkVar(iv.TotalBreakShield[i+1])
-	CMov(FP,iv.TotalBreakShield2[i+1],_Div(iv.TotalBreakShield[i+1],_Mov(100)))
-	CIfEnd()
-	CMov(FP,BreakShield2,iv.TotalBreakShield2[i+1])
 
     CMov(FP,GEper,TotalEPer[i+1])
     CMov(FP,GEper2,TotalEPer2[i+1])
@@ -1765,7 +1761,19 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
     CMov(FP,GetXEper46,iv.XEPer46[i+1])
     CMov(FP,GetXEper47,iv.XEPer47[i+1])
     CMov(FP,GetXEper48,iv.XEPer48[i+1])
+
+
+	CIfChkVars({iv.TotalBreakShield[i+1],GEper4})--총 특확, 파방 비교
+	CMov(FP,iv.TotalBreakShield2[i+1],_Div(iv.TotalBreakShield[i+1],_Mov(10)))
+	CallTrigger(FP,Call_SetBrSh)
+
+	CIfEnd()
+
+	CIfChkVar(XEPerM)
 	
+	CallTrigger(FP,Call_SetBrSh2)
+
+	CIfEnd()
 
 
 	TriggerX(FP,{CV(PLevel[i+1],999,AtMost)},{AddV(Stat_EXPIncome[i+1],10)},{preserved})-- 1000레벨 미만 경치2배
