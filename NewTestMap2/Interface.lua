@@ -1769,7 +1769,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	CIfEnd()
 
-	CIfChkVar(XEPerM)
+	CIfChkVars({iv.TotalBreakShield[i+1],XEPerM})--개별확률 마이너스값, 파방 비교
 	
 	CallTrigger(FP,Call_SetBrSh2)
 

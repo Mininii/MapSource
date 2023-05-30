@@ -51,12 +51,13 @@ if Limit == 1 then
 	X3Mode = 0
 	CreatorCheatMode = 0
 	CreatorCheatModeMul = 5
+	SlotEnable =0
 else
 	
 CreatorCheatMode = 0
 SpeedTestMode = 0
-end
 SlotEnable =1
+end
 FP = P8
 LimitVer = 46
 StatVer = 14
