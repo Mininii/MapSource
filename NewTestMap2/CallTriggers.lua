@@ -1669,8 +1669,8 @@ function Install_CallTriggers()
 	
 	Ga_50 = {--판매권 백만개 필요 = 1억크레딧 
 		{"\x17크레딧","322",50,iv.Credit,iv.GCreditLoc},
-		{"\x1E각성의 보석",15,5000,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02무색 조각",2000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x1E각성의 보석",75,5000,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02무색 조각",4000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x17크레딧",100000000,35000,iv.B_PCredit,iv.GCreditLoc},
 	}
 
@@ -2030,8 +2030,8 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			f_LMov(FP,GaCostW,"100000")
 			f_LMov(FP,GaCostW2,"99999")
 		CElseIfX({CV(CI,49)}) -- 50강 판매권 100만개
-			f_LMov(FP,GaCostW,"100000")
-			f_LMov(FP,GaCostW2,"99999")
+			f_LMov(FP,GaCostW,"1000000")
+			f_LMov(FP,GaCostW2,"999999")
 		CIfXEnd()
 			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 			CElseX({})

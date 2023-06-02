@@ -178,7 +178,7 @@ iTblJump = def_sIndex()
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"Azusawa_Kohane")
 		--InputTesterID(i,"_Mininii")
-		--InputTesterID(i,"RonaRonaChan")
+		InputTesterID(i,"RonaRonaChan")
 	end
 	
 

@@ -662,7 +662,9 @@ for i = 0, 6 do -- 각플레이어
 	for j,k in pairs(FirstReward3) do -- j == 1~4
 		local NMask = 256^(j-1)
 		CIfOnce(FP,{Command(i,AtLeast,1,LevelUnitArr[k[1]][2])})
-			CIfX(FP,{CVX(iv.FirstRewardLim[i+1],NMask*(k[5]-1),NMask*255,AtMost)},{AddVX(iv.FirstRewardLim[i+1],NMask*1,NMask*255),SetDeaths(i,SetTo,1,13),AddV(B_PCredit[i+1],k[2]),AddV(iv.B_PFfragItem[i+1],k[3]),SetCp(i),DisplayExtText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),DisplayExtText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
+			CIfX(FP,{CVX(iv.FirstRewardLim[i+1],NMask*(k[5]-1),NMask*255,AtMost)},{AddVX(iv.FirstRewardLim[i+1],NMask*1,NMask*255),SetDeaths(i,SetTo,1,13),AddV(B_PCredit[i+1],k[2]),SetCp(i),DisplayExtText(StrDesignX(k[4]..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[2]).." \x17Ｃｒｅｄｉｔ"), 4),DisplayExtText(StrDesignX("\x08"..k[1].."강 \x04유닛 \x07최초 \x11달성 \x04보상! : \x1F"..Convert_Number(k[3]).." \x02 무색 조각"), 4),SetCp(FP)})
+			
+			f_LAdd(FP, iv.FfragItem[i+1], iv.FfragItem[i+1], tostring(k[3]))
 			CElseX()
 				TriggerX(FP,{},{SetCp(i),DisplayExtText(StrDesignX("\x04오늘은 더이상 "..k[4]..k[1].."강 \x07최초 달성 보상\x04을 얻을 수 없어요. 내일 다시 도전해주세요!"), 4),SetCp(FP)},{preserved})
 			CIfXEnd()

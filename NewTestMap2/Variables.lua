@@ -1068,18 +1068,23 @@ FirstReward4 = {
 	--컴플리트 15.0% = 1.2억
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
-	Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
 	if Limit == 1 then
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
+		Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2_Test")
+		Cost_FIncm = ReciveCostDataFile(500,"FIncm_Test")
+		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2_Test")
 	
 		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
 	else
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
+		Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
+		Cost_FIncm = ReciveCostDataFile(200,"FIncm")
+		Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
 	
-		Cost_FMinMax = ReciveCostDataFile(50,"FMinMax")
+		Cost_FMinMax = ReciveCostDataFile(100,"FMinMax")
 	end
 	
 	
