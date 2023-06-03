@@ -3,19 +3,21 @@ function CT_Prev()
 	--error(#VWArr+#PVWArr+#VWArr2)
 	CMov(FP,CT_GNextRandV,_Rand())
 	f_LMov(FP,CT_GNextRandW,_LRand())
-	for j,k in pairs(VWArr) do
-		local VW = k[1]
-		local TrapVW = k[2]
-		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, j-1,nil,k[3])
-
-	end
-	for j,k in pairs(VWArr2) do
-		local VW = k[1]
-		local TrapVW = k[2]
-		TrapKey = CheatTestX(AllPlayers, VW,TrapVW, (j+#VWArr+#PVWArr)-1,nil,k[3])
-	end
+	if Limit == 0 then
+		for j,k in pairs(VWArr) do
+			local VW = k[1]
+			local TrapVW = k[2]
+			TrapKey = CheatTestX(AllPlayers, VW,TrapVW, j-1,nil,k[3])
 	
-
+		end
+		for j,k in pairs(VWArr2) do
+			local VW = k[1]
+			local TrapVW = k[2]
+			TrapKey = CheatTestX(AllPlayers, VW,TrapVW, (j+#VWArr+#PVWArr)-1,nil,k[3])
+		end
+		
+	
+	end
 
 end
 function CT_PrevCP()
@@ -28,16 +30,19 @@ function CT_PrevCP()
 	end
 
 	
+	if Limit == 0 then
+		for j,k in pairs(PVWArr) do
+			local VW = k[1]
+			local TrapVW = k[2]
+			TrapKey = CheatTest2X(GCP, VW,TrapVW, j+(#VWArr)-1,1,k[3])
 	
-	for j,k in pairs(PVWArr) do
-		local VW = k[1]
-		local TrapVW = k[2]
-		TrapKey = CheatTest2X(GCP, VW,TrapVW, j+(#VWArr)-1,1,k[3])
-
+		end
 	end
 end
 function CT_Next()
 	
+if Limit == 0 then
+
 MemoryCT = CreateCcode()
 --error(#MCTCondArr)
 DoActionsX(FP,{SetCD(MemoryCT,0),})
@@ -68,8 +73,6 @@ if TestStart == 1 then
 			DisplayExtText("m\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end
 	--
-
-
 
 
 for j,k in pairs(VWArr) do
@@ -117,7 +120,7 @@ end
 
 	end
 
-
+end
 	CMov(FP,CT_GPrevRandV,CT_GNextRandV)
 	f_LMov(FP,CT_GPrevRandW,CT_GNextRandW)
 end

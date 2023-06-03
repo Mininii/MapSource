@@ -771,9 +771,9 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,BuildingID))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,BuildingID))})
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,FP))})
 	CIfEnd()
 
 end

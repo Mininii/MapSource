@@ -67,7 +67,11 @@ CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
 PIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
-CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
+if Limit == 0 then
+	CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
+else
+	CIf(FP,{Never(),CV(iv.CUnitT,36,AtLeast)},{SetV(iv.CUnitT,0)})
+end
 CTKillT = {}
 for i = 1, 40 do
 table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 152, Force1))
@@ -198,11 +202,11 @@ DoActions2(FP, CTKillT)
 
 
 
-	CSub(FP,TempV,EXCC_TempVarArr[1],EXCC_TempVarArr[2]) -- Line0 = 저장된난수 + 유닛ID Line1 = 저장된 난수
-	CSub(FP,TempV2,EXCC_TempVarArr[3],EXCC_TempVarArr[2]) -- Line2 = 저장된난수 + PlayerID Line1 = 저장된 난수
+	CXor(FP,TempV,EXCC_TempVarArr[1],EXCC_TempVarArr[2]) -- Line0 = 저장된난수 + 유닛ID Line1 = 저장된 난수
+	CXor(FP,TempV2,EXCC_TempVarArr[3],EXCC_TempVarArr[2]) -- Line2 = 저장된난수 + PlayerID Line1 = 저장된 난수
 	--TempV=계산된 유닛ID
 	CIfX(FP,{TMemoryX(UIDPtr, Exactly, TempV,0xFF)})--UIDPtr == 실제 유닛ID저장된 포인터
-	CDoActions(FP, {Set_EXCCX(0,SetTo,_Add(TempV,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
+	CDoActions(FP, {Set_EXCCX(0,SetTo,_Xor(TempV,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
 	CElseX()
 	if TestStart == 1 then
 		f_SaveCp()
@@ -221,7 +225,7 @@ DoActions2(FP, CTKillT)
 	CIfXEnd()--
 		--TempV=계산된 유닛ID
 	CIfX(FP,{TMemoryX(PIDPtr, Exactly, TempV2,0xFF)})--UIDPtr == 실제 유닛ID저장된 포인터
-	CDoActions(FP, {Set_EXCCX(2,SetTo,_Add(TempV2,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
+	CDoActions(FP, {Set_EXCCX(2,SetTo,_Xor(TempV2,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
 	CElseX()
 	if TestStart == 1 then
 		f_SaveCp()

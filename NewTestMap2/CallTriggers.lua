@@ -62,9 +62,9 @@ function Install_CallTriggers()
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
 	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,SUnitID)),
+		TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,SUnitID)),
 		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
-		TSetMemory(_Add(TempV,0x40/4),SetTo,_Add(CT_GNextRandV,SPlayer)),
+		TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),
 	})
 	CTSUPtr = CreateVar(FP)
 	CTSUID = CreateVar(FP)
@@ -85,9 +85,9 @@ function Install_CallTriggers()
 	CDiv(FP,CurCunitI,84)
 	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
 	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Add(CT_GNextRandV,CTSUID)),
+		TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,CTSUID)),
 		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
-		TSetMemory(_Add(TempV,0x40/4),SetTo,_Add(CT_GNextRandV,SPlayer)),
+		TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),
 	})
 	CIfEnd()
 
@@ -830,9 +830,9 @@ function Install_CallTriggers()
 							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
 							CSub(FP,CurCunitI,Nextptrs,19025)
 							f_Div(FP,CurCunitI,_Mov(84))
-							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,94))})
 							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV),})
-							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP)),})
+							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,FP)),})
 							
 							--CallTrigger(FP, Call_CTInputUID)
 						CIfEnd()
@@ -921,9 +921,9 @@ function Install_CallTriggers()
 									f_Read(FP, 0x628438, nil, Nextptrs)
 									CSub(FP,CurCunitI,Nextptrs,19025)
 									f_Div(FP,CurCunitI,_Mov(84))
-									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,94))})
+									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,94))})
 									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV),})
-									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP)),})
+									CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,FP)),})
 									Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,94,87,FP,{hallucinated = true}),KillUnit(94, FP)})
 									CIfEnd()
 									CMov(FP,PrevPUnitLevel,GetPUnitLevel)
@@ -2398,9 +2398,9 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,VArrX(GetVArray(PBossPtr[1], 7), VArrI, VArrI4),Nextptrs,SetTo,nil,2,1)
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	f_Div(FP,CurCunitI,_Mov(84))
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Add(CT_GNextRandV,PBossIDB))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,PBossIDB))})
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Add(CT_GNextRandV,FP))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,FP))})
 	--CallTrigger(FP, Call_CTInputUID)
 	CIfX(FP,{CV(PBossIDB,102)})
 	CMovX(FP,GetData_FMinMax,VArrX(GetVArray(iv.FMinMax[1], 7), VArrI, VArrI4),nil,nil,nil,1)
