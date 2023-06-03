@@ -32,6 +32,7 @@ function TBL()
 	local ScoutDmgLoc = iv.ScoutDmgLoc--CreateVar(FP)
 	local AddScLoc = iv.AddScLoc--CreateVar(FP)
 	local MulOpLoc = iv.MulOpLoc--CreateVar(FP)
+
 	local BrightLoc = iv.BrightLoc--CreateVar2(FP,nil,nil,31)
 	local LCP = iv.LCP--CreateVar(FP)
 	local ResetStatLoc = iv.ResetStatLoc
@@ -69,7 +70,8 @@ function TBL()
 	t06_2 = "\x17남은 크레딧 : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t09 = "\x08현재 DPS : \x0D0000\x04경0000\x04조0000\x04억0000\x04만0000"
 	t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
-	t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04억0000\x04만0000배"
+	t08 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04억0000\x04만0000배 \x04|| \x1F일간"
+	t08_1 = "\x04구입하기 \x07현재배율 \x04: \x0D0000\x04억0000\x04만0000배 \x04|| \x1F주간"
 	t11 = "\x04(SCA 로드후 3분뒤 사라짐)"
 	t13 = "\x0F강화확률, \x08실패\x04시 \x07유지\x0F확률 \x04: \x1C\x0D\x0D000 %"
 	t14 = "\x08\x0D\x0D\x0D\x0D강. 강화비용 \x04: \x0D000,000,000 \x17크레딧"
@@ -543,11 +545,17 @@ function TBL()
 	for i = 0, 6 do
 		CElseIfX({CV(SelPl,i)},{})
 		f_LMov(FP,MulOpLoc,MulOp[i+1])
+		CMov(FP,iv.FROpLoc,VArr(FirstRewardOpVArr, i))
 	end
 	CElseX()
 	f_LMov(FP,MulOpLoc,0)
 	CIfXEnd()
+	CIfX(FP,{CV(iv.FROpLoc,0)})
 	CS__SetValue(FP,TStr5,t08,nil,0)
+	CElseX()
+	CS__SetValue(FP,TStr5,t08_1,nil,0)
+	CIfXEnd()
+
 	
 	CS__lItoCustom(FP,SVA1(TStr5,12),MulOpLoc,nil,nil,{10,12},nil,nil,"\x040",nil,{0,1,2,3,5,6,7,8,10,11,12,13},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	CTrigger(FP, {TTNWar(MulOpLoc,AtLeast,"10000")

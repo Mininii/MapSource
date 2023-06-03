@@ -450,6 +450,7 @@ end
 	iv.ScoutDmgLoc = CreateVar(FP)
 	iv.AddScLoc = CreateVar(FP)
 	iv.MulOpLoc = CreateWar(FP)
+	iv.FROpLoc = CreateVar(FP)
 	iv.BrightLoc = CreateVar2(FP,nil,nil,31)
 	iv.LCP = CreateVar(FP)
 	iv.LCPW = CreateWar(FP)

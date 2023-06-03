@@ -761,8 +761,10 @@ function Install_CallTriggers()
 
 			local MulOpWArr = GetWArray(iv.MulOp[1], 7)
 			local MulOpVArr2 = CreateVArr(7, FP)
+			FirstRewardOpVArr = CreateVArr(7, FP)
 			local GetMulData = CreateWar(FP)
 			local GetMulData2 = CreateVar(FP)
+			local GetFirstRewardOp = CreateVar(FP)
 			local SCheck = CreateCcode()
 			local GetVAccData = CreateVar(FP)
 			local GetClassData = CreateVar(FP)
@@ -771,7 +773,7 @@ function Install_CallTriggers()
 					f_LMovX(FP, GetMulData, WArrX(MulOpWArr,WArrI,WArrI4))
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
 
-					Print_13X(FP, GCP)
+					CallTrigger(FP, Call_Print13CP)
 					CIfX(FP,{TTNWar(GetMulData,AtMost,"499999999999")})	-- 조건이 만족할 경우
 						CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),8,SetTo,8)
 						CIfX(FP,{CV(GetMulData2,0)})
@@ -792,7 +794,7 @@ function Install_CallTriggers()
 				CIf(FP,{CV(G_PushBtnm,1)}) -- 배율 내림
 					f_LMovX(FP, GetMulData, WArrX(MulOpWArr,WArrI,WArrI4))
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
-					Print_13X(FP, GCP)
+					CallTrigger(FP, Call_Print13CP)
 					CIfX(FP,{TTNWar(GetMulData,AtLeast,"2")})	-- 조건이 만족할 경우
 						CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),8,SetTo,8)
 						CIfX(FP,{CV(GetMulData2,1)})
@@ -808,6 +810,18 @@ function Install_CallTriggers()
 					CElseX()--조건이 만족하지 않을 경우
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 더 이상 배율을 내릴 수 없습니다."))},{preserved})
 					CIfXEnd()
+				CIfEnd()--
+				CIf(FP,{CV(G_PushBtnm,3)}) -- 일간, 주간 구입 모드
+				CMovX(FP,GetFirstRewardOp,VArrX(FirstRewardOpVArr,VArrI,VArrI4),nil,nil,nil,1)
+				CallTrigger(FP, Call_Print13CP)
+				CIfX(FP,{CV(GetFirstRewardOp,0)},{SetV(GetFirstRewardOp,1),})	-- 조건이 만족할 경우
+				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17첫 달성 \x07보상 \x08제한 \x1F리셋\x04 구입 설정을 \x07주간\x04으로 설정합니다. "))},{preserved})
+				CElseX({SetV(GetFirstRewardOp,0)})
+				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17첫 달성 \x07보상 \x08제한 \x1F리셋\x04 구입 설정을 \x07일간\x04으로 설정합니다. "))},{preserved})
+				CIfXEnd()
+
+
+				CMovX(FP,VArrX(FirstRewardOpVArr,VArrI,VArrI4),GetFirstRewardOp,nil,nil,nil,1)
 				CIfEnd()--
 				CIf(FP,{CV(G_PushBtnm,2)}) -- 싱글플레이 버튼
 					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)})	-- 조건이 만족할 경우 싱글전환
@@ -827,7 +841,7 @@ function Install_CallTriggers()
 
 						CIfEnd()
 					CElseX()--조건이 만족하지 않을 경우
-						Print_13X(FP, GCP)
+						CallTrigger(FP, Call_Print13CP)
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 					CIfXEnd()
 					CIfX(FP,{CD(iv.PartyBonus,2,AtLeast)})
@@ -938,10 +952,10 @@ function Install_CallTriggers()
 										
 									end
 									CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})
-										DisplayPrint(GCP, {"\x13\x07『 \x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다! ",GetPUnitLevel,"강 유지 \x07』"})
 										f_Read(FP,_Add(G_Btnptr,10),CPos)
 										Convert_CPosXY()
 										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,22,87,FP,{hallucinated = false}),GiveUnits(All, 22, FP, 64, P9),KillUnit(22, P9)})
+										DisplayPrint(GCP, {"\x13\x07『 \x07강화\x04에 \x08실패\x04했지만 단계가 하락하지 않았습니다! ",GetPUnitLevel,"강 유지 \x07』"})
 									CElseX()
 									
 										CIfX(FP,{CV(G_PushBtnm,1,AtLeast)},{SubV(GetVAccData,1)})
@@ -967,6 +981,7 @@ function Install_CallTriggers()
 						CIfXEnd()
 					CIfXEnd()
 			--		DisplayPrint(GCP, {"일반강화"})
+					TriggerX(FP, {CV(GetClassData,262,AtLeast)}, {DisplayExtText(StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4)}, {preserved})
 				CIfEnd()
 
 					GetPETicket = CreateVar(FP)
@@ -998,7 +1013,7 @@ function Install_CallTriggers()
 
 					local failflag = CreateCcode()
 					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,10,AtMost)},{SetCD(failflag,0)}) -- 승급
-						CIfX(FP,{CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 승급에 필요한 강화 단계가 부족합니다. 필요 단계 : 10강"), 4),SetCp(FP)})
+						CIfX(FP,{CV(GetClassData,261,AtMost),CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 승급에 필요한 강화 단계가 부족합니다. 필요 단계 : 10강").."\n"..StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4),SetCp(FP)})
 						CElseX()
 							GetUID = CreateVar(FP)
 							CMov(FP,GetUID,_SHRead(_Add(G_Btnptr,25)),nil,0xFF,1)
@@ -2099,6 +2114,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	local LMulOP = CreateWar(FP)
 	local MulOP = CreateVar(FP)
 	FirstRewardLimData = CreateVar(FP)
+	FirstRewardLimData2 = CreateVar(FP)
 	SetCall(FP)
 	f_LMov(FP,GetCreditData,"0",nil,nil,1)--크레딧 복사버그 방지용 초기화...?
 	CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),nil,nil,nil,1)
@@ -2109,7 +2125,6 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	f_LMovX(FP, GetBuyTicket, WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 	CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetOldTicket,VArrX(GetVArray(iv.PETicket[1], 7),VArrI,VArrI4),nil,nil,nil,1)
-	CMovX(FP,FirstRewardLimData,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	f_Cast(FP, {MulOP,0}, LMulOP, nil,nil,1)
 
 	
@@ -2229,14 +2244,26 @@ CIfEnd()
 
 
 CIf(FP,{TBring(GCP,AtLeast,1,15,128)},{TMoveUnit(1, 15, GCP, 128, 168)})
+CMovX(FP,GetFirstRewardOp,VArrX(FirstRewardOpVArr,VArrI,VArrI4),nil,nil,nil,1)
+CMovX(FP,FirstRewardLimData,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI4),nil,nil,nil,1)
+CMovX(FP,FirstRewardLimData2,VArrX(GetVArray(iv.FirstRewardLim2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 
-CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 25개 사용하여 \x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
-CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+CIfX(FP,{CV(GetFirstRewardOp,0)})
+	CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 25개 사용하여 \x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
+	CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CIfXEnd()
+CElseX()
+	CIfX(FP,{CV(FirstRewardLimData2,1,AtLeast),CV(GetPETicket,500,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData2,0),SubV(GetPETicket, 500),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 500개 사용하여 \x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
+	CElseIfX({CV(FirstRewardLimData2,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CIfXEnd()
 CIfXEnd()
-CIfEnd()
 
 CMovX(FP,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI4),FirstRewardLimData,SetTo,nil,nil,1)
+CMovX(FP,VArrX(GetVArray(iv.FirstRewardLim2[1], 7),VArrI,VArrI4),FirstRewardLimData2,SetTo,nil,nil,1)
+CIfEnd()
+
 f_LMovX(FP,WArrX(GetWArray(iv.BuyTicket[1], 7), WArrI, WArrI4),GetBuyTicket,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),GetVAccData,SetTo,nil,nil,1)
 CMovX(FP,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),GetAwakItemData,SetTo,nil,nil,1)
