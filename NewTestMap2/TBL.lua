@@ -624,7 +624,7 @@ function TBL()
 	--CA__ItoCustom(SVA1(Str1,0),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1E,0x1E,0x1E,0x1E,0x04,0x04,0x04,0x04},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0})
 	
 	
-		CIf(FP,{CD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
+		CIf(FP,{Memory(0x628438, AtLeast, 1),CD(TBLFlag,0)})--tbl상시갱신용. CreateUnitStacked 사용시 발동안함
 			f_Read(FP, 0x628438, nil, Nextptrs)
 			DoActions(FP, CreateUnit(1,94,136,FP))
 			CSub(FP,CurCunitI,Nextptrs,19025)

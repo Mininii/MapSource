@@ -30,74 +30,70 @@ function Install_CallTriggers()
 	SPlayer = CreateVar(FP)
 	SAmount = CreateVar(FP)
 	SetCall(FP)
-	CWhile(FP,{CV(SAmount,1,AtLeast)},{SubV(SAmount,1)})
-	TriggerX(FP, {CV(SUnitID,16)}, {SetMemoryB(0x669E28+237, SetTo, 0)}, {preserved})
-	TriggerX(FP, {CV(SUnitID,78)}, {SetMemoryB(0x669E28+237, SetTo, 16)}, {preserved})
-	CIf(FP,{Memory(0x628438, AtLeast, 1)},{SetCD(TBLFlag,1)})
-		f_Read(FP, 0x628438, nil, Nextptrs)
-		CDoActions(FP, {TCreateUnit(1,SUnitID,SLocation,SPlayer),
-		TSetDeaths(_Add(Nextptrs,13),SetTo,2000,0),
-		TSetDeathsX(_Add(Nextptrs,18),SetTo,2000,0,0xFFFF),
-		TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-		
-		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
-	})
-	CIf(FP,{TTOR({CV(SUnitID,88),CV(SUnitID,79),CV(SUnitID,99),CV(SUnitID,100)})})
-	local NBTemp = CreateVar(FP)
-	NBagLoop(FP,NBagArr,{NBTemp})
 
-	CMov(FP,0x6509B0,NBTemp,19)
-	NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
-	NRemove(FP,NBagArr)
-	NIfEnd()
+		CWhile(FP,{CV(SAmount,1,AtLeast)},{SubV(SAmount,1)})
+		TriggerX(FP, {CV(SUnitID,16)}, {SetMemoryB(0x669E28+237, SetTo, 0)}, {preserved})
+		TriggerX(FP, {CV(SUnitID,78)}, {SetMemoryB(0x669E28+237, SetTo, 16)}, {preserved})
+		CIf(FP,{Memory(0x628438, AtLeast, 1)},{SetCD(TBLFlag,1)})
+			f_Read(FP, 0x628438, nil, Nextptrs)
+			CDoActions(FP, {TCreateUnit(1,SUnitID,SLocation,SPlayer),
+				TSetDeaths(_Add(Nextptrs,13),SetTo,2000,0),
+				TSetDeathsX(_Add(Nextptrs,18),SetTo,2000,0,0xFFFF),
+				TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
+				TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),})
+			CIf(FP,{TTOR({CV(SUnitID,88),CV(SUnitID,79),CV(SUnitID,99),CV(SUnitID,100)})})
+				local NBTemp = CreateVar(FP)
+				NBagLoop(FP,NBagArr,{NBTemp})
 
-	NBagLoopEnd()
-	CMov(FP,0x6509B0,FP)
-	
-	NAppend(FP, NBagArr, Nextptrs)
-	CIfEnd()
-	--CTrigger(FP,{},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),},1)
-	CSub(FP,CurCunitI,Nextptrs,19025)
-	CDiv(FP,CurCunitI,84)
-	local TempV = CreateVar(FP)
-	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
-	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,SUnitID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
-		TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),
-	})
-	CTSUPtr = CreateVar(FP)
-	CTSUID = CreateVar(FP)
-		--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",SUnitID})--
-	CIf(FP,{TTOR({
-		CV(SUnitID,5),
-		CV(SUnitID,23),
-		CV(SUnitID,30),
-		CV(SUnitID,3),
-		CV(SUnitID,17),
-	})})
-	f_Read(FP, _Add(Nextptrs, 28), nil, CTSUPtr)
-			--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",CTSUPtr})--
-	CIf(FP,{CV(CTSUPtr,19025,AtLeast),CV(CTSUPtr,19025+(84*1699),AtMost)})
-	f_Read(FP, _Add(CTSUPtr, 25), CTSUID, nil, 0xFF, 1)
-		--DisplayPrint(Force1, {"\x13\x04CTSUID : ",CTSUID})--
-	CSub(FP,CurCunitI,CTSUPtr,19025)
-	CDiv(FP,CurCunitI,84)
-	CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
-	CDoActions(FP, {
-		TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,CTSUID)),
-		TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
-		TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),
-	})
-	CIfEnd()
+				CMov(FP,0x6509B0,NBTemp,19)
+				NIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF00)})
+					NRemove(FP,NBagArr)
+				NIfEnd()
 
-	CIfEnd()
+				NBagLoopEnd()
+				CMov(FP,0x6509B0,FP)
+				
+				NAppend(FP, NBagArr, Nextptrs)
+			CIfEnd()
+			--CTrigger(FP,{},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF000000),},1)
+			CSub(FP,CurCunitI,Nextptrs,19025)
+			CDiv(FP,CurCunitI,84)
+			local TempV = CreateVar(FP)
+			CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
+			CDoActions(FP, {
+				TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,SUnitID)),
+				TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
+				TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),})
+			CTSUPtr = CreateVar(FP)
+			CTSUID = CreateVar(FP)
+				--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",SUnitID})--
+			CIf(FP,{TTOR({
+				CV(SUnitID,5),
+				CV(SUnitID,23),
+				CV(SUnitID,30),
+				CV(SUnitID,3),
+				CV(SUnitID,17),
+			})})
+				f_Read(FP, _Add(Nextptrs, 28), nil, CTSUPtr)
+						--DisplayPrint(Force1, {"\x13\x04CTSUPtr : ",CTSUPtr})--
+				CIf(FP,{CV(CTSUPtr,19025,AtLeast),CV(CTSUPtr,19025+(84*1699),AtMost)})
+					f_Read(FP, _Add(CTSUPtr, 25), CTSUID, nil, 0xFF, 1)
+						--DisplayPrint(Force1, {"\x13\x04CTSUID : ",CTSUID})--
+					CSub(FP,CurCunitI,CTSUPtr,19025)
+					CDiv(FP,CurCunitI,84)
+					CMov(FP,TempV,_Add(_Mul(CurCunitI,0x970/4),_Add(CT_Cunit[3],((0x20*0)/4))))
+					CDoActions(FP, {
+						TSetMemory(TempV,SetTo,_Xor(CT_GNextRandV,CTSUID)),
+						TSetMemory(_Add(TempV,0x20/4),SetTo,CT_GNextRandV),
+						TSetMemory(_Add(TempV,0x40/4),SetTo,_Xor(CT_GNextRandV,SPlayer)),
+					})
+				CIfEnd()
 
-
-	--CallTrigger(FP, Call_CTInputUID)
-	CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
-	CIfEnd()
-	CWhileEnd()
+			CIfEnd()
+			--CallTrigger(FP, Call_CTInputUID)
+		CIfEnd()
+		CWhileEnd()
+		CTrigger(FP, {CV(DLocation,1,AtLeast)}, {TOrder(SUnitID, SPlayer, SLocation, Move, DLocation)},1)
 
 	SetCallEnd()
 	function CreateUnitStacked(Condition,Amount,UnitID,Location,DestLocation,Player,AddTrig,Preserved)
@@ -1635,58 +1631,58 @@ function Install_CallTriggers()
 
 	]]
 	Ga_45 = {--기대치 2개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3222222222,2,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",1,50,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",10000,1500,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",10,1000,iv.Money2},
-		{"\x17크레딧",2000000,5000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",2000000,5000,iv.Credit,iv.GCreditLoc},
 		{"\x1041강 유닛",10,20000,iv.E41},
 		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
 	Ga_46 = {--기대치 7개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3222222222,2,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",1,75,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",40,1000,iv.Money2},
-		{"\x17크레딧",3000000,5000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3000000,5000,iv.Credit,iv.GCreditLoc},
 		{"\x1D42강 유닛",10,20000,iv.E42},
 		{"\x1041강 유닛",10,30000,iv.E41},
 	}
 
 	Ga_47 = {--기대치 20개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3222222222,2,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",1,160,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",70000,470,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",70,2000,iv.Money2},
-		{"\x17크레딧",4000000,5000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",4000000,5000,iv.Credit,iv.GCreditLoc},
 		{"\x0643강 유닛",10,20000,iv.E43},
 		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
 	Ga_48 = {--기대치 50개
-		{"\x17크레딧",3222222222,2,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3222222222,2,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",1,500,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",100000,990,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",100,3000,iv.Money2},
-		{"\x17크레딧",5000000,5000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",5000000,5000,iv.Credit,iv.GCreditLoc},
 		{"\x1F44강 유닛",10,20000,iv.E44},
 		{"\x0643강 유닛",10,30000,iv.E43},
 	}
 	
 	Ga_49 = {-- 판매권 10만개 필요 = 천만크레딧49
-		{"\x17크레딧",3222222222,22,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",3222222222,22,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",7,1000,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",1000000,1500,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x02무색 조각",100000,15000,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17크레딧",10000000,30000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",10000000,30000,iv.Credit,iv.GCreditLoc},
 	}
 	
 	Ga_50 = {--판매권 백만개 필요 = 1억크레딧 
-		{"\x17크레딧","322",50,iv.Credit,iv.GCreditLoc},
+		{"\x17크레딧","32222222222",50,iv.Credit,iv.GCreditLoc},
 		{"\x1E각성의 보석",75,5000,iv.AwakItem,iv.GAwakItemLoc},
 		{"\x02무색 조각",4000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17크레딧",100000000,35000,iv.B_PCredit,iv.GCreditLoc},
+		{"\x17크레딧",100000000,35000,iv.Credit,iv.GCreditLoc},
 	}
 
 	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48,Ga_49,Ga_50}
@@ -1736,20 +1732,7 @@ for i = 45, 50 do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
 		CTrigger(FP, {}, {DisplayExtText(StrDesignX((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."),4)}, 1)
-		if k[5]~=nil then
-			CIf(FP,{TMemory(0x512684,Exactly,GCP)})
-			if k[5][4]=="V" then
-				CAdd(FP,k[5],k[2])
-			elseif k[5][4]=="W" then
-				if type(k[2]) == "string" then
-					f_LAdd(FP,k[5],k[5],k[2].."22222222")
-				else
-					f_LAdd(FP,k[5],k[5],tostring(k[2]))
-				end
-			end
-			CIfEnd()
 
-		end
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
@@ -1780,13 +1763,27 @@ for i = 45, 50 do
 				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,1)})
 			end
 		end
-		
-		if type(k[2]) == "string" then
-			f_LMovX(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),k[2].."22222222", Add)
+
+
+		if k[5]~=nil then
+			CIf(FP,{TMemory(0x512684,Exactly,GCP)})
+			if k[5][4]=="W" then
+				local src
+				if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
+				f_LAdd(FP,k[5],k[5],src)
+			else
+				CAdd(FP,k[5],k[2])
+			end
+			CIfEnd()
+
+		end
+		if k[4][1][4]=="W" then
+			local src
+			if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
+			f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 		else
 			CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		end
-		
 		CIfEnd()
 		TotalGPer = TotalGPer+k[3]
 		
@@ -2404,8 +2401,19 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	--CallTrigger(FP, Call_CTInputUID)
 	CIfX(FP,{CV(PBossIDB,102)})
 	CMovX(FP,GetData_FMinMax,VArrX(GetVArray(iv.FMinMax[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+	CMovX(FP,VATmp_PLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CAdd(FP,GetData_FMinMax,10)
-	f_LMov(FP,TempTotalDPS,_LDiv(_LAdd(_LMul({_Sub(VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),_Mov(150000)),0},"200000"), PBossSetDPSB), "10"))
+	local TotalVar = CreateVar(FP)
+	CMov(FP,TotalVar,0)
+	for i = 0, 14 do
+		CAdd(FP,TotalVar,_Sub(VATmp_PLevel,150000+(i*10000))) --VATmp_PLevel = 레벨
+		--TotalVar 수치 1당 20만
+	end
+
+
+
+
+	f_LMov(FP,TempTotalDPS,_LDiv(_LAdd(_LMul({TotalVar,0},"200000"), PBossSetDPSB), "10"))
 	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),_LMul(TempTotalDPS, {GetData_FMinMax,0}),SetTo,nil,nil,1)--TotalPBossDPS = 캘수있는 크레딧 총량
 	CElseX()
 	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),PBossSetDPSB,SetTo,nil,nil,1)

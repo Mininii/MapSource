@@ -224,5 +224,9 @@ function Operator()
 	end
 	
 	CIfEnd()
+
+	for i = 0, 6 do
+	TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),Memory(0x628438, AtMost, 0),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x08캔낫\x04이 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)},{preserved})
+	end
 	
 end

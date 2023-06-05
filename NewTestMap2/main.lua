@@ -40,7 +40,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0439"
+VerText = "\x19ver\x07. \x043\x07.\x0440"
 
 TestSet(1)
 if Limit == 1 then
@@ -52,8 +52,9 @@ if Limit == 1 then
 	CreatorCheatMode = 0
 	CreatorCheatModeMul = 5
 	SlotEnable =0
+	FragMode = 0
 else
-	
+FragMode = 0
 CreatorCheatMode = 0
 SpeedTestMode = 0
 SlotEnable =1

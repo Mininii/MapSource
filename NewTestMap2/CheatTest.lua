@@ -3,7 +3,7 @@ function CT_Prev()
 	--error(#VWArr+#PVWArr+#VWArr2)
 	CMov(FP,CT_GNextRandV,_Rand())
 	f_LMov(FP,CT_GNextRandW,_LRand())
-	if Limit == 0 then
+--	if Limit == 0 then
 		for j,k in pairs(VWArr) do
 			local VW = k[1]
 			local TrapVW = k[2]
@@ -17,7 +17,7 @@ function CT_Prev()
 		end
 		
 	
-	end
+	--end
 
 end
 function CT_PrevCP()
@@ -30,18 +30,18 @@ function CT_PrevCP()
 	end
 
 	
-	if Limit == 0 then
+	--if Limit == 0 then
 		for j,k in pairs(PVWArr) do
 			local VW = k[1]
 			local TrapVW = k[2]
 			TrapKey = CheatTest2X(GCP, VW,TrapVW, j+(#VWArr)-1,1,k[3])
 	
 		end
-	end
+	--end
 end
 function CT_Next()
 	
-if Limit == 0 then
+--if Limit == 0 then
 
 MemoryCT = CreateCcode()
 --error(#MCTCondArr)
@@ -120,7 +120,7 @@ end
 
 	end
 
-end
+--end
 	CMov(FP,CT_GPrevRandV,CT_GNextRandV)
 	f_LMov(FP,CT_GPrevRandW,CT_GNextRandW)
 end

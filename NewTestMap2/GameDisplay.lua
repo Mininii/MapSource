@@ -954,7 +954,7 @@ function GameDisplay()
 			"\x13\x04맵상의 모든 보스 몬스터의 공략이 완료된 이후 \x17크레딧 \x1F광산\x04이 개인 보스존에 생성됩니다",
 			"\x13\x04이 광산에 1회 공격을 할 때마다 \x17채광력 \x04만큼의 크레딧이 주어집니다. (\x17채광력\x04은 P키로 확인 가능)",
 			"\x13\x04채광력 : 채광의 보석, 각성 횟수에 따라 1.1배씩 곱연산으로 증가",
-			"\x13\x041회 최대 채광 가능 크레딧 : 기본 1억 + 15만레벨 이후 1레벨당 20만씩 증가",
+			"\x13\x041회 최대 채광 가능 크레딧 : 기본 1억 + 15만레벨 이후 1만 레벨 단위로 증가량 20만씩 증가",
 		},
 		
 	}
@@ -995,17 +995,17 @@ function GameDisplay()
 	
 	for i = 0,6 do
 		CIf(FP,{HumanCheck(i, 1)})
-			local TempFV = CreateVar(FP)
+			local TempFW = CreateWar(FP)
 			local FVT = CreateCcode()
 			CIf(FP,{CV(iv.B_PFfragItem[i+1],1,AtLeast)},SetCD(FVT,480))
 			f_LAdd(FP,iv.FfragItem[i+1],iv.FfragItem[i+1],{iv.B_PFfragItem[i+1],0}) --
-			CAdd(FP,TempFV,iv.B_PFfragItem[i+1])
+			f_LAdd(FP,TempFW,TempFW,{iv.B_PFfragItem[i+1],0})
 			CMov(FP, iv.B_PFfragItem[i+1], 0)
 			CIfEnd({})
 			CIf(FP,{CD(FVT,1,AtLeast)},{SubCD(FVT,1)})
-				DisplayPrint(i,{"\x13\x07『 \x02무색 조각\x04을 \x07",TempFV," 개 \x04 획득하였습니다. 현재 총 획득량 : \x07",iv.FfragItem[i+1]," 개 \x07』"})
+				DisplayPrint(i,{"\x13\x07『 \x02무색 조각\x04을 \x07",TempFW," 개 \x04 획득하였습니다. 현재 총 획득량 : \x07",iv.FfragItem[i+1]," 개 \x07』"})
 			CIfEnd()
-			TriggerX(FP, {CD(FVT,0)}, {SetV(TempFV,0)},{preserved})
+			TriggerX(FP, {CD(FVT,0)}, {SetNWar(TempFW,SetTo,"0")},{preserved})
 		for p = 1,7 do
 			local NextT = ""
 			local NextT2 = ""

@@ -67,11 +67,11 @@ CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
 PIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
-if Limit == 0 then
-	CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
-else
-	CIf(FP,{Never(),CV(iv.CUnitT,36,AtLeast)},{SetV(iv.CUnitT,0)})
-end
+CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
+--if Limit == 0 then
+--else
+--	CIf(FP,{Never(),CV(iv.CUnitT,36,AtLeast)},{SetV(iv.CUnitT,0)})
+--end
 CTKillT = {}
 for i = 1, 40 do
 table.insert(CTKillT,KillUnitAt(All, LevelUnitArr[i][2], 152, Force1))

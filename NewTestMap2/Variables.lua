@@ -1070,7 +1070,7 @@ FirstReward4 = {
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
-	if Limit == 1 then
+	if Limit == 1 and FragMode == 1 then
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
 		Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2_Test")
@@ -1081,9 +1081,9 @@ FirstReward4 = {
 	else
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
-		Cost_FBrSh2= ReciveCostDataFile(250,"FBrSh2")
+		Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
 		Cost_FIncm = ReciveCostDataFile(200,"FIncm")
-		Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
+		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
 	
 		Cost_FMinMax = ReciveCostDataFile(100,"FMinMax")
 	end
