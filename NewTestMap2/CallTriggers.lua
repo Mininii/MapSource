@@ -489,7 +489,7 @@ function Install_CallTriggers()
 	f_LRead(FP, LArrX({EXPArr_dp},151+LevelLimit), CTMaxExp, nil, 1)
 	DoActionsX(FP,{SetCDX(iv.StatTest,16,16)})
 	CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTCurEXP),TTNWar(CTPEXP, AtMost, CTTotalExp)},{SetCDX(iv.StatTest,0,16)},1)
-	CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTMaxExp)},{SetCDX(iv.StatTest,32,32)},1)
+	--CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTMaxExp)},{SetCDX(iv.StatTest,32,32)},1)
 	if Limit == 1 then
 	--	DisplayPrint(iv.LCP, {"\x13\x04CTPEXP : ",CTPEXP,"   CTCurEXP : ",CTCurEXP,"   CTTotalExp : ",CTTotalExp})
 	end
@@ -743,11 +743,23 @@ function Install_CallTriggers()
 					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."))}, {preserved})		
 					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
+					
+						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(판매 우선 적용됨) \x07』",})
+						CElseX()
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
+						CIfXEnd()
+						
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
 
 					CElseX()
+					
+						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
 						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(판매 우선 적용됨) \x07』",})
+						CElseX()
+						DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(내부 계산으로 작동. 판매 우선 적용됨) \x07』",})
+						CIfXEnd()
+
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
 					CIfXEnd()
 				CIfXEnd()
@@ -1309,8 +1321,6 @@ function Install_CallTriggers()
 	for j,k in pairs(SCA_DataArr) do
 		SCA_DataSaveG(PlayerV,k[1],k[2])
 	end
-	SCA_DataSaveG(PlayerV,iv.Money2,SCA.Money2) -- 수표
-	SCA_DataSaveG(PlayerV,iv.CurPlayTime,SCA.CurPlayTime) -- 수표
 	
 	SetCallEnd()
 	Call_SCA_DataLoadAll = SetCallForward()
@@ -1636,8 +1646,6 @@ function Install_CallTriggers()
 		{"\x02무색 조각",10000,1500,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",10,1000,iv.Money2},
 		{"\x17크레딧",2000000,5000,iv.Credit,iv.GCreditLoc},
-		{"\x1041강 유닛",10,20000,iv.E41},
-		{"\x1140강 유닛",10,30000,iv.E40},
 	}
 
 	Ga_46 = {--기대치 7개
@@ -1646,8 +1654,6 @@ function Install_CallTriggers()
 		{"\x02무색 조각",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",40,1000,iv.Money2},
 		{"\x17크레딧",3000000,5000,iv.Credit,iv.GCreditLoc},
-		{"\x1D42강 유닛",10,20000,iv.E42},
-		{"\x1041강 유닛",10,30000,iv.E41},
 	}
 
 	Ga_47 = {--기대치 20개
@@ -1656,8 +1662,6 @@ function Install_CallTriggers()
 		{"\x02무색 조각",70000,470,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",70,2000,iv.Money2},
 		{"\x17크레딧",4000000,5000,iv.Credit,iv.GCreditLoc},
-		{"\x0643강 유닛",10,20000,iv.E43},
-		{"\x1D42강 유닛",10,30000,iv.E42},
 	}
 
 	Ga_48 = {--기대치 50개
@@ -1666,8 +1670,6 @@ function Install_CallTriggers()
 		{"\x02무색 조각",100000,990,iv.B_PFfragItem,iv.GFfragLoc},
 		{"\x171000경원 수표",100,3000,iv.Money2},
 		{"\x17크레딧",5000000,5000,iv.Credit,iv.GCreditLoc},
-		{"\x1F44강 유닛",10,20000,iv.E44},
-		{"\x0643강 유닛",10,30000,iv.E43},
 	}
 	
 	Ga_49 = {-- 판매권 10만개 필요 = 천만크레딧49
@@ -1739,29 +1741,14 @@ for i = 45, 50 do
 			CIfEnd()
 		end
 		if j == 1 then--32억, 322억 무조건 표출
-			if type(k[2]) == "string" then
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).."억 \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-			else
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-			end
-				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,2),SetV(CPMode,0)})
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
+			CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,2),SetV(CPMode,0)})
 		end
-		if i == 49 or i == 50 then--49강 50강에서만 텍스트알람 소리알람 전체 활성화. 그외 개인 소리 알람으로만 설정
-			if j == 2 then
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,3),SetV(CPMode,0)})
-			end
-			if j == 3 then
-				DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07『 ",PName(ECP)," \x04님께서 "..pifrag2[i-44].." \x04유닛 \x17판매 뽑기\x04에서 \x07"..(k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다! 축하드립니다! \x07』\n\n\x13\x04"..string.rep("=",50)})
-				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,0)})
-			end
-		else
-			if j == 2 then
-				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,3),SetV(CPMode,1)})
-			end
-			if j == 3 then
-				CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,1)})
-			end
+		if j == 2 then
+			CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,3),SetV(CPMode,1)})
+		end
+		if j == 3 then
+			CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,1),SetV(CPMode,1)})
 		end
 
 
@@ -1838,6 +1825,12 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 
 	CIf(FP,{CV(VATmp_Stat_BossLVUP,1,AtLeast)})
+
+
+	CIfX(FP,{CV(VATmp_PLevel,LevelLimit,AtLeast)})--만렙일경우 지급X
+	DisplayPrint(GCP, {"\x13\x07『 \x08보스 \x04처치시 \x1F레벨업 능력치 ",VATmp_Stat_BossLVUP,"업\x04 으로 얻은 경험치 : \x1C0 \x07』"})
+	CElseX()
+
 	f_LMov(FP, TempWX, "0", nil, nil, 1)
 	CMov(FP,StartLV,VATmp_PLevel)
 	CAdd(FP,EndLV,VATmp_PLevel,_Mul(VATmp_Stat_BossLVUP,_Mul(CurBossReward,_Mov(50))))
@@ -1851,6 +1844,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 	f_LMovX(FP, WArrX(GetWArray(iv.PEXP[1], 7), WArrI, WArrI4), TempWX, Add)
 	DisplayPrint(GCP, {"\x13\x07『 \x08보스 \x04처치시 \x1F레벨업 능력치 ",VATmp_Stat_BossLVUP,"업\x04 으로 얻은 경험치 : \x1C",TempWX," \x07』"})
+	CIfXEnd()
+
+
 	CIfEnd()
 
 	CIf(FP,{CV(VATmp_Stat_BossSTic,1,AtLeast)})
@@ -2277,15 +2273,22 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 
 	GetCreateUnit = CreateVar(FP)
 	UIDV = CreateVar(FP)
+	EXPV = CreateVar(FP)
 	CIV = CreateVar(FP)
 	Call_GetUnit = SetCallForward()
 	UVA1,UVA4 = CreateVars(2,FP)
 	SetCall(FP)
-	
-	NIfX(FP,{TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})
-		CMov(FP,ECP,GCP)
-		CMov(FP,ELevelB,CIV)
-		CMov(FP,ECW,GetCreateUnit)
+
+	--CIf(FP,{CV(GetCreateUnit,1000,AtLeast)},{SetV(GetCreateUnit,1000)})
+	--CallTrigger(FP, Call_Print13CP)
+	--CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: 내부 계산 동시 시행수가 너무 많아 \x061000회로 제한\x04합니다.")) ,{preserved})
+	--CIfEnd()
+
+
+	CMov(FP,ECP,GCP)
+	CMov(FP,ELevelB,CIV)
+	CMov(FP,ECW,GetCreateUnit)
+	NIfX(FP,{TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})--내부계산 ON, 자동판매 OFF, 자동강화 ON
 		NIfX(FP,{CV(CIV,38,AtMost)})
 
 			CallTrigger(FP, Call_Enchant)
@@ -2306,11 +2309,96 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 			CiSub(FP,XEper,iv.XEPerM)
 			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--마이너스일경우 0
 			CIfEnd()
-			NJump(FP, AutoEnchJump, CV(XEper,0))
+			NJumpX(FP, AutoEnchJump, CV(XEper,0))
 			CallTrigger(FP, Call_Enchant2)
+
 		NIfXEnd()
+	NElseIfX({TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 1)})--내부계산 ON, 자동판매 ON
+		CMovX(FP,GetLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
+		f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
+
+		NJumpX(FP, AutoEnchJump, {CV(EXPV,1,AtLeast),CV(GetLevel,LevelLimit,AtLeast)}) -- 경치있는몹인데 만렙일경우
+
+		
+		NIfX(FP,{CV(EXPV,1,AtLeast)})
+			NIfX(FP, {VRange(CIV,14,24)},{})--판매권이필요없어요
+				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+				CIf(FP, {CV(CIV,14)})
+				CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
+				CIfEnd()
+			NElseX()--판매권이필요행
+
+			NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --판매권오링
+			
+				f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
+				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+			NIfXEnd()
+		NElseIfX(VRange(CIV,44, 49))
+		GaCostW = CreateWar(FP)
+		GaCostW2 = CreateWar(FP)
+		CIfX(FP,{VRange(CIV,44, 47)}) -- 45~48강 판매권 만개설정
+			f_LMov(FP,GaCostW,"10000")
+			f_LMov(FP,GaCostW2,"9999")
+		CElseIfX({CV(CIV,48)}) -- 49강 판매권 10만개
+			f_LMov(FP,GaCostW,"100000")
+			f_LMov(FP,GaCostW2,"99999")
+		CElseIfX({CV(CIV,49)}) -- 50강 판매권 100만개
+			f_LMov(FP,GaCostW,"1000000")
+			f_LMov(FP,GaCostW2,"999999")
+		CIfXEnd()
+		NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --판매권오링
+
+			local TempWC = CreateWar()
+			local TempWC2 = CreateWar()
+			f_LDiv(FP, TempWC, GetSellTicket, GaCostW)
+			
+			f_LMov(FP,TempWC2,{ECW,0})
+
+			CIfX(FP,{TTNWar(TempWC2,AtMost,TempWC)})
+			f_LSub(FP, GetSellTicket, GetSellTicket, _LMul(TempWC2,GaCostW))
+			CMov(FP,GetCreateUnit,ECW)
+			CDoActions(FP, {})
+			CElseX()
+			f_LSub(FP, GetSellTicket, GetSellTicket, _LMul(TempWC,GaCostW))
+			CMov(FP,GetCreateUnit,_Cast(0,TempWC))
+			CDoActions(FP, {})
+			CMov(FP,ECW,_Cast(0,TempWC))
+			CIfXEnd()
+
+
+			CIf(FP, {CV(CIV,44)},{})
+				CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4096,SetTo,nil,4096,1)
+				CMovX(FP,VArrX(GetVArray(iv.S45[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CIf(FP, {CV(CIV,45)})
+				CMovX(FP,VArrX(GetVArray(iv.S46[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CIf(FP, {CV(CIV,46)})
+				CMovX(FP,VArrX(GetVArray(iv.S47[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CIf(FP, {CV(CIV,47)})
+				CMovX(FP,VArrX(GetVArray(iv.S48[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CIf(FP, {CV(CIV,48)})
+				CMovX(FP,VArrX(GetVArray(iv.S49[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CIf(FP, {CV(CIV,49)})
+				CMovX(FP,VArrX(GetVArray(iv.S50[1], 7),VArrI,VArrI4),ECW,Add)
+			CIfEnd()
+			CMov(FP,ECP,GCP)
+			CMov(FP,GaLv,CIV,1)
+			
+			CWhile(FP, {CV(ECW,1,AtLeast)},{SubV(ECW,1)})
+			CallTrigger(FP, Call_Gacha)
+			CWhileEnd()
+		NIfXEnd()
+		f_LMovX(FP,WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),GetSellTicket,SetTo,nil,nil,1)
+
+
+
+
 	NElseX()
-		NJumpEnd(FP, AutoEnchJump)
+		NJumpXEnd(FP, AutoEnchJump)
 		TriggerX(FP,{CV(GetCreateUnit,30,AtLeast)},{SetV(GetCreateUnit,30)},{preserved})
 		CDoActions(FP, {
 			TSetNVar(SAmount,SetTo,GetCreateUnit),
@@ -2479,6 +2567,8 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	SetCall(FP)
 	CMov(FP,PlayerV,_Mul(GCP,_Mov(18)))
 	
+	SCA_DataSaveG(PlayerV, iv.Money2,SCA.Money2) -- 수표
+	SCA_DataSaveG(PlayerV, iv.CurPlayTime,SCA.CurPlayTime) -- 현재겜시간
 	SCA_DataSaveG2(PlayerV, iv.S45Loc, SCA.FXPer44)--45판매횟수
 	SCA_DataSaveG2(PlayerV, iv.S46Loc, SCA.FXPer45)--46판매횟수
 	SCA_DataSaveG2(PlayerV, iv.S47Loc, SCA.FXPer46)--47판매횟수

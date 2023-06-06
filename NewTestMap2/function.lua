@@ -1912,7 +1912,8 @@ end
 
 
 function Convert_Number(Num)
-	local WStr = tostring(Num)
+	local WStr
+	if type(Num) == "number" then WStr = tostring(Num) else WStr = Num end
 	if #WStr>3 and 6>=#WStr then
 		WStr = string.sub(WStr,1,#WStr-3)..","..string.sub(WStr,#WStr-2,#WStr)
 	elseif  #WStr>6 and 9>=#WStr then

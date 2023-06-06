@@ -588,11 +588,7 @@ function TBL()
 	function GaTxt(Ga_Arr)
 		local Txt = ""
 		for j,k in pairs(Ga_Arr) do
-			if type(k[2]) == "string" then 
-				Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).."\x07억 \x04개 - \x07"..(k[3]/1000).." %").."\n"
-			else
-				Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04개 - \x07"..(k[3]/1000).." %").."\n"
-			end
+			Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).."\x07억 \x04개 - \x07"..(k[3]/1000).." %").."\n"
 		end
 		return Txt
 	end

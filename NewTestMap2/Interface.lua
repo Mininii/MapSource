@@ -571,8 +571,12 @@ for i = 0, 6 do -- 각플레이어
 
 
 	CIf(FP,{CV(B_PEXP2[i+1],1,AtLeast)})
+	CIf(FP,{CV(PLevel[i+1],LevelLimit-1,AtMost)})
 	f_LAdd(FP,PEXP[i+1],PEXP[i+1],{B_PEXP2[i+1],0}) --
+	CIfEnd()
+
 	CMov(FP, B_PEXP2[i+1], 0)
+
 	CIfEnd({})
 	if Limit == 1 then
 		local EXPAcc = CreateWar(FP)
@@ -1345,12 +1349,9 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 	TriggerX(FP, {CV(PBossLV[i+1],4,AtMost),Bring(i, AtLeast, 1, 88, 119+i)}, {MoveUnit(1, 88, i, 119+i, 22+i)}, {preserved})--개인보스방 입장제한
 	TriggerX(FP, {CV(PBossLV[i+1],5,AtLeast),CV(CS_DPSLV[i+1],1,AtLeast)}, {MoveUnit(1,PersonalUIDArr[i+1],i,119+i,57+i)}, {preserved})--고유유닛 개인보스에서 사냥터로 이동
 
-	TriggerX(FP,{CV(iv.E40[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 40-1), Add, 10),SubV(iv.E40[i+1], 10)},{preserved})
-	TriggerX(FP,{CV(iv.E41[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 41-1), Add, 10),SubV(iv.E41[i+1], 10)},{preserved})
-	TriggerX(FP,{CV(iv.E42[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 42-1), Add, 10),SubV(iv.E42[i+1], 10)},{preserved})
-	TriggerX(FP,{CV(iv.E43[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 43-1), Add, 10),SubV(iv.E43[i+1], 10)},{preserved})
-	TriggerX(FP,{CV(iv.E44[i+1],10,AtLeast)},  {SetCVAar(VArr(GetUnitVArr[i+1], 44-1), Add, 10),SubV(iv.E44[i+1], 10)},{preserved})
-	--강화성공한 유닛 생성하기(캔낫씹힘방지)
+
+
+
 	
 
 	if Limit == 1 then
@@ -1797,7 +1798,10 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 
 	CIf(FP,{CV(B_PEXP[i+1],1,AtLeast)})
+	
+	CIf(FP,{CV(PLevel[i+1],LevelLimit-1,AtMost)})
 	f_LAdd(FP,PEXP[i+1],PEXP[i+1],{B_PEXP[i+1],0}) --
+	CIfEnd()
 	CMov(FP, B_PEXP[i+1], 0)
 	CIfEnd({})
 	CIf(FP,{CV(B_PTicket[i+1],1,AtLeast)})
@@ -1865,7 +1869,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	end
 	
-	CIfX(FP, {TCommand(i,AtMost,ULimitV2,"Men")}) -- 자동구매 관리
+	CIfX(FP, {Memory(0x628438,AtLeast,1),TCommand(i,AtMost,ULimitV2,"Men")}) -- 자동구매 관리
 
 	CIf(FP,{TTOR({CV(AutoBuyCode[i+1],1,AtLeast),CV(iv.AutoBuyCode2[i+1],1,AtLeast)})})
 	CallTrigger(FP, Call_AutoBuy,{})
@@ -1877,7 +1881,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		local Per = k[3]
 		local Exp = k[4]
 		
-		CIf(FP,{CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UVA1,604*(j-1)),SetV(UVA4,2416*(j-1)),SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CIV,j-1),SetV(UEper,Per),SetV(UEper2,math.floor(Per/10)),SetV(UEper3,math.floor(Per/100))})
+		CIf(FP,{Memory(0x628438,AtLeast,1),CVAar(VArr(GetUnitVArr[i+1], j-1), AtLeast, 1)},{SetV(UVA1,604*(j-1)),SetV(UVA4,2416*(j-1)),SetV(EXPV,Exp),SetV(UIDV,UID),SetV(CJ,((j-1)*7)+i),SetV(UIDV,UID),SetV(CIV,j-1),SetV(UEper,Per),SetV(UEper2,math.floor(Per/10)),SetV(UEper3,math.floor(Per/100))})
 		CMov(FP,GetCreateUnit,VArr(GetUnitVArr[i+1], j-1),nil,nil,1)
 		CallTrigger(FP, Call_GetUnit)
 
@@ -1887,7 +1891,7 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	end
 
 
-	CElseIfX({TCommand(i,AtLeast,ULimitV2,"Men")})
+	CElseIfX({TTOR({Memory(0x628438,AtMost,0),_TCommand(i,AtLeast,ULimitV2,"Men")})})
 	CallTrigger(FP,Call_Print13[i+1])
 	for j = 1, 7 do
 		TriggerX(FP, {LocalPlayerID(i),CV(PCheckV,j)}, {print_utf8(12,0,StrDesign("\x08ERROR \x04: 보유 유닛수가 너무 많아 유닛 구입할 수 없습니다.\x08 (최대 "..ULimitArr[j].."기)"))},{preserved})

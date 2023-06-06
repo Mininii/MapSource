@@ -237,11 +237,6 @@ function DataArr()
 	iv.FStatVer,ct.FStatVer = CreateDataPV("FStatVer",SCA.FStatVer)
 	iv.PLevel2,ct.PLevel2 = CreateDataPV("PLevel2",SCA.PLevel2)
 
-	iv.E40,ct.E40 = CreateDataPV("E40") -- 40강유닛 생성용
-	iv.E41,ct.E41 = CreateDataPV("E41") -- 41강유닛 생성용
-	iv.E42,ct.E42 = CreateDataPV("E42") -- 42강유닛 생성용
-	iv.E43,ct.E43 = CreateDataPV("E43") -- 43강유닛 생성용
-	iv.E44,ct.E44 = CreateDataPV("E44") -- 44강유닛 생성용
 
 	iv.OldFfrag,ct.OldFfrag = CreateDataPV("OldFfrag",SCA.FfragItem)
 	iv.AwakItem,ct.AwakItem = CreateDataPV("AwakItem",SCA.AwakItem)
