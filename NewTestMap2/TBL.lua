@@ -588,7 +588,7 @@ function TBL()
 	function GaTxt(Ga_Arr)
 		local Txt = ""
 		for j,k in pairs(Ga_Arr) do
-			Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04°³ - \x07"..(k[3]/1000).." %").."\n"
+			Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).."\x07¾ï \x04°³ - \x07"..(k[3]/1000).." %").."\n"
 		end
 		return Txt
 	end
