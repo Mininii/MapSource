@@ -133,6 +133,7 @@ function LeaderBoardF()
 			
 				f_Read(FP,_Sub(BackupCp,15),CurXY)
 				
+				NJumpX(FP, L_Gun_Jump, {CV(TargetUID,128)})--보석 예외처리
 				for i = 0, 3 do
 					NJumpX(FP, L_Gun_Jump, {HumanCheck(i, 1),
 					CVar(FP,CurXY[2],AtLeast,TargetArr2[i+1][1],0xFFFF),

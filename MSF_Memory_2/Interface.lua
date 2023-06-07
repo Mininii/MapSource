@@ -114,7 +114,7 @@ function Interface()
 			ModifyUnitEnergy(All,70,i,64,0);
 			GiveUnits(All,70,i,"Anywhere",11);
 			RemoveUnitAt(All,70,"Anywhere",11);
-			DisplayText("\x0D\x0D"..GiveRateT[k+1],4);
+			DisplayExtText("\x0D\x0D"..GiveRateT[k+1],4);
 			SetCDeaths(FP,Add,1,GiveRate[i+1]);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
 			PreserveTrigger();
@@ -123,7 +123,7 @@ function Interface()
 	end
 	for k = 0, 2 do
 	UnitButton(i, 54, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
-		DisplayText("\x0D\x0D"..P6[k+1],4);
+		DisplayExtText("\x0D\x0D"..P6[k+1],4);
 		SetCDeaths(FP,Add,1,PCMode[i+1]);})
 	if k == 2 then
 	UnitButton(i, 50, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
@@ -168,7 +168,7 @@ actions = {
 	RemoveUnitAt(1,"Terran Wraith","Anywhere",i);
 	SetDeaths(i,Add,1,"Terran Wraith");
 	--CreateUnitWithProperties(1,32,2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x04Ｍａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
+	DisplayExtText(StrDesign("\x04Ｍａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	--SetCDeaths(FP,Add,1,MarCreate);
 	PreserveTrigger();
@@ -189,7 +189,7 @@ actions = {
 	RemoveUnitAt(1,32,26+i,i);
 	SetResources(i,Subtract,HMCost,Ore);
 	CreateUnitWithProperties(1,20,2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x04Ｍａｒｉｎｅ을 \x1BＨ \x04Ｍａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..HMCost.." O r e"),4);
+	DisplayExtText(StrDesign("\x1F광물\x04을 소모하여 \x04Ｍａｒｉｎｅ을 \x1BＨ \x04Ｍａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..HMCost.." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
@@ -210,7 +210,7 @@ Trigger { -- 조합 루미아마린
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
 		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost.." O r e"),4);
+		DisplayExtText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
 		AddCD(CreateMarine1[i+1],1);
@@ -234,7 +234,7 @@ Trigger { -- 조합 루미아마린
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
 		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-		DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost2.." O r e"),4);
+		DisplayExtText(StrDesign("\x1F광물\x04을 소모하여 \x1BＨ \x04Ｍａｒｉｎｅ을 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ으로 \x19변환\x04하였습니다. - \x1F"..LMCost2.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		AddCD(CreateMarine1[i+1],1);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
@@ -256,7 +256,7 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	SetResources(i,Add,NMCost+HMCost+LMCost,Ore);
-	DisplayText(StrDesign(Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ12기 조합) \x1F자원 \x04반환 + \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
+	DisplayExtText(StrDesign(Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ12기 조합) \x1F자원 \x04반환 + \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
@@ -275,7 +275,7 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	SetResources(i,Add,NMCost+HMCost+LMCost2,Ore);
-	DisplayText(StrDesign(Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ12기 조합) \x1F자원 \x04반환 + \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
+	DisplayExtText(StrDesign(Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ12기 조합) \x1F자원 \x04반환 + \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
@@ -294,7 +294,7 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
+	DisplayExtText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
@@ -314,7 +314,7 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
+	DisplayExtText(StrDesign("\x1F광물\x04을 소모하여 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ을 \x19소환\x04하였습니다. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
@@ -340,13 +340,14 @@ actions = {
 	Trigger { -- 자동환전
 		players = {i},
 		conditions = {
+			Label();
 			Command(i,AtLeast,1,"Terran Vulture");
 		},
 		actions = {
 			ModifyUnitEnergy(1,"Terran Vulture",i,64,0);
 			RemoveUnitAt(1,"Terran Vulture","Anywhere",i);
 			SetDeaths(i,SetTo,1,"Terran Barracks");
-			DisplayText(StrDesign("\x07자동환전\x04을 사용하셨습니다."),4);
+			DisplayExtText(StrDesign("\x07자동환전\x04을 사용하셨습니다."),4);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
 			PreserveTrigger();
 		},
@@ -398,7 +399,7 @@ actions = {
 		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayText(StrDesign("\x04이미 \x1C빛의 보호막\x04을 사용중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
+		DisplayExtText(StrDesign("\x04이미 \x1C빛의 보호막\x04을 사용중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -418,7 +419,7 @@ actions = {
 		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayText(StrDesign("\x1C빛의 보호막\x04이 현재 \x0E쿨타임 \x04중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
+		DisplayExtText(StrDesign("\x1C빛의 보호막\x04이 현재 \x0E쿨타임 \x04중입니다. 자원 반환 + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -459,7 +460,7 @@ Trigger { -- 보호막 가동
 		Memory(0x582294+(4*i),AtMost,1199);
 	},
 	actions = {
-		DisplayText(StrDesign("\x1C빛의 보호막\x04 사용이 종료되었습니다."),4);
+		DisplayExtText(StrDesign("\x1C빛의 보호막\x04 사용이 종료되었습니다."),4);
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		SetCDeaths(i,SetTo,0,ShUsed);
@@ -475,7 +476,7 @@ Trigger { -- 보호막 가동
 		Memory(0x582294+(4*i),AtMost,0);
 	},
 	actions = {
-		DisplayText(StrDesign("\x1C빛의 보호막\x04 쿨타임이 종료되었습니다."),4);
+		DisplayExtText(StrDesign("\x1C빛의 보호막\x04 쿨타임이 종료되었습니다."),4);
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		SetCDeaths(i,SetTo,0,ShCool);
@@ -484,10 +485,10 @@ Trigger { -- 보호막 가동
 }
 
 
-Trigger2(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{preserved})
-Trigger2(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
-Trigger2(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
-Trigger2(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(50000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 직접 파괴 \x07보너스 \x1F＋"..N_to_EmN(30000).." \x1FＰｔｓ"),4)},{preserved})
 
 TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
 TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[i+1])},{preserved})
@@ -506,7 +507,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 			actions = {
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayText(StrDesign("\x04잔액이 부족합니다."),4);
+				DisplayExtText(StrDesign("\x04잔액이 부족합니다."),4);
 				SetCDeaths(FP,Add,1,CUnitRefrash);
 				PreserveTrigger();
 			},
@@ -526,9 +527,9 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 				SetResources(j,Add,GiveRate2[l+1],Ore);
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayText(StrDesign(PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부하였습니다."),4);
+				DisplayExtText(StrDesign(PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부하였습니다."),4);
 				SetMemory(0x6509B0,SetTo,j);
-				DisplayText(StrDesign(PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부받았습니다."),4);
+				DisplayExtText(StrDesign(PlayerString[i+1].."\x04에게 \x1F"..GiveRate2[l+1].." Ore\x04를 기부받았습니다."),4);
 				SetMemory(0x6509B0,SetTo,i);
 				SetCDeaths(FP,Add,1,CUnitRefrash);
 				PreserveTrigger();
@@ -538,12 +539,13 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		Trigger { -- 돈 기부 시스템
 			players = {i},
 			conditions = {
+				Label();
 				--MemoryB(0x58D2B0+(46*i)+GiveUnitID[j+1],AtLeast,1);
 				Command(i,AtLeast,1,GiveUnitID[j+1]);
 				HumanCheck(j,0);
 			},
 			actions = {
-				DisplayText(StrDesign(PlayerString[j+1].."\x04이(가) 존재하지 않습니다."),4);
+				DisplayExtText(StrDesign(PlayerString[j+1].."\x04이(가) 존재하지 않습니다."),4);
 				--SetMemoryB(0x58D2B0+(46*i)+GiveUnitID[j+1],SetTo,0);
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
@@ -564,7 +566,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 	for j = 0, 3 do
 	TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
 	TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
-		DisplayText(DelayMedicT[j+1],4),
+		DisplayExtText(DelayMedicT[j+1],4),
 		SetCDeaths(FP,Add,1,DelayMedic[i+1]),
 		GiveUnits(All,72,i,"Anywhere",P12),
 		ModifyUnitEnergy(1,72,P12,64,0);
@@ -615,20 +617,20 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 				})
 		NIfEnd()
 
-	Trigger2(i,{DeathsX(i,Exactly,0,12,0xFF000000);Command(i,AtLeast,1,22);},{
+	Trigger2X(i,{DeathsX(i,Exactly,0,12,0xFF000000);Command(i,AtLeast,1,22);},{
 		GiveUnits(All,22,i,"Anywhere",P12);
 		ModifyUnitEnergy(All,22,P12,64,0);
 		RemoveUnitAt(All,22,"Anywhere",P12);
-		DisplayText(StrDesign("\x1CBGM\x04을 듣지 않습니다."),4);
+		DisplayExtText(StrDesign("\x1CBGM\x04을 듣지 않습니다."),4);
 		SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 	},{preserved})
 
-	Trigger2(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,22);},{
+	Trigger2X(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,22);},{
 		GiveUnits(All,22,i,"Anywhere",P12);
 		ModifyUnitEnergy(All,22,P12,64,0);
 		RemoveUnitAt(All,22,"Anywhere",P12);
-		DisplayText(StrDesign("\x1CBGM\x04을 듣습니다."),4);
+		DisplayExtText(StrDesign("\x1CBGM\x04을 듣습니다."),4);
 		SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 	},{preserved})
@@ -648,7 +650,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,71);
 		ModifyUnitEnergy(1,71,i,64,0);
 		RemoveUnitAt(1,71,"Anywhere",i);
-		DisplayText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다."),4);
+		DisplayExtText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},
@@ -664,7 +666,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,74);
 		ModifyUnitEnergy(1,74,i,64,0);
 		RemoveUnitAt(1,74,"Anywhere",i);
-		DisplayText(StrDesign("\x04멀티 \x07스탑\x04기능을 사용합니다."),4);
+		DisplayExtText(StrDesign("\x04멀티 \x07스탑\x04기능을 사용합니다."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},
@@ -680,7 +682,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,75);
 		ModifyUnitEnergy(1,75,i,64,0);
 		RemoveUnitAt(1,75,"Anywhere",i);
-		DisplayText(StrDesign("\x04멀티 \x11홀드\x04기능을 사용합니다."),4);
+		DisplayExtText(StrDesign("\x04멀티 \x11홀드\x04기능을 사용합니다."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},

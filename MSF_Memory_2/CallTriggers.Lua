@@ -77,7 +77,7 @@ function Install_CallTriggers()
 		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CunitIndex,13,SetTo,0x1,0x1),AddV(EEggV,1)},1) -- 할루시플래그 1일경우 DUnitCalc[14]=1(BitMask)
 		f_LoadCp()
 		CElseX()
-		DoActions2(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayExtText(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 	SetCallEnd()
 
@@ -203,10 +203,6 @@ function Install_CallTriggers()
 	if Limit == 1 then
 	CurCP = CreateVar(FP)
 	ReadCP = CreateVar(FP)
-	CurCPVA = CreateVArr(4,FP)
-	ReadCPVA = CreateVArr(4,FP)
-	CurCPStrPtr = CreateVar(FP)
-	ReadCPStrPtr = CreateVar(FP)
 
 	CallCheckCP = SetCallForward()
 	SetCall(FP)
@@ -215,12 +211,8 @@ function Install_CallTriggers()
 	f_Read(FP,BackupCp,ReadCP)
 	CMov(FP,CurCP,BackupCp,-19025)
 	f_Mod(FP,CurCP,84)
-	ItoDec(FP,CurCP,VArr(CurCPVA,0),2,nil,0)
-	ItoDec(FP,ReadCP,VArr(ReadCPVA,0),2,nil,0)
-	f_Movcpy(FP,_Add(CurCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dCurCPStrPtr : ")),VArr(CurCPVA,0),4*4)
-	f_Movcpy(FP,_Add(ReadCPStrPtr,GetStrSize(0,"\x0d\x0d\x0dReadCPStrPtr : ")),VArr(ReadCPVA,0),4*4)
-	Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dCurCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
-	Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x0d\x0d\x0dReadCPStrPtr : ".._0D,4)},HumanPlayers,FP);},{preserved})
+	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07·\x11·\x08·\x07【 \x03SYSTEM \x04: CurCP = \x07",CurCP," \x07】\x08·\x11·\x07·"})
+	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07·\x11·\x08·\x07【 \x03SYSTEM \x04: ReadCP = \x07",ReadCP," \x07】\x08·\x11·\x07·"})
 	f_LoadCp()
 	SetCallEnd()
 	end
@@ -657,7 +649,7 @@ local CGJump = def_sIndex()
 --CJumpEnd(FP,CGJump)
 --CRead(FP,CGTemp[1],_Add(CGiveH[1],CGivePtr))
 --CRead(FP,CGTemp[2],_Add(CGiveH[2],CGivePtr))
-----DoActions2(FP, RotatePlayer({DisplayTextX("TGCheckAc",4)}, HumanPlayers, FP))
+----DoActions2(FP, RotatePlayer({DisplayExtText("TGCheckAc",4)}, HumanPlayers, FP))
 --NIf(FP,CV(CGTemp[1],1,AtLeast))
 --CMov(FP,CGTemp2[1],CGTemp[2],nil,0xFF,1)--
 
@@ -669,7 +661,7 @@ local CGJump = def_sIndex()
 
 ----f_Read(FP,_Add(CGTemp[1],10),CPos) -- 생성유닛 위치 불러오기
 ----Convert_CPosXY()
-----Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayTextX("TGCheck",4)}, HumanPlayers, FP)})
+----Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayExtText("TGCheck",4)}, HumanPlayers, FP)})
 ----CDoActions(FP, {TGiveUnits(1,CGTemp[3],P9,1,CGTemp2[3])})
 --f_CGive(FP, CGTemp[1], nil, CGTemp2[3], CGTemp2[2])
 --CIfEnd()--
@@ -697,7 +689,7 @@ CForEnd()
 SetCallEnd()
 
 function NUGive(Var,UnitID)
-	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayTextX("TGCheckPr",4)}, HumanPlayers, FP)
+	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayExtText("TGCheckPr",4)}, HumanPlayers, FP)
 	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{Order(UnitID,Force2,64,Attack,64),SetInvincibility(Disable,UnitID,Force2,64)})
 end
 	

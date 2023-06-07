@@ -338,14 +338,13 @@ end
 
 	f_GetTblptr(FP,AtkCondTblPtr,1413)
 	f_GetTblptr(FP,HPCondTblPtr,1414)
-	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
 	f_Memcpy(FP,AtkCondTblPtr,_TMem(Arr(AtkCondT[3],0),"X","X",1),AtkCondT[2])
 	f_Memcpy(FP,HPCondTblPtr,_TMem(Arr(HPCondT[3],0),"X","X",1),HPCondT[2])
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)
 	f_Movcpy(FP,_Add(AtkCondTblPtr,AtkCondT[2]),VArr(LVVA,0),4*4)
 	f_Movcpy(FP,_Add(HPCondTblPtr,HPCondT[2]),VArr(LVVA,0),4*4)
 	G_init()
-	G_CA_init()
+	--G_CA_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	T_YY = 2022
@@ -353,12 +352,10 @@ end
 	T_DD = 11
 	T_HH = 12
 	if Limit == 1 then
-		f_GetStrXptr(FP,CurCPStrPtr,"\x0d\x0d\x0dCurCPStrPtr : ".._0D)
-		f_GetStrXptr(FP,ReadCPStrPtr,"\x0d\x0d\x0dReadCPStrPtr : ".._0D)
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
 		DoActions(FP,{RotatePlayer({SetAllianceStatus(Force2,Ally)}, {P5,P6,P7,P8}, FP)})
-		DoActions2(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
-		Trigger2(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayExtText(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
+		Trigger2X(FP,{},{RotatePlayer({DisplayExtText("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
         
 	end
 --	PushErrorMsg("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다.")
@@ -407,14 +404,14 @@ end
 		CDeaths(FP,Exactly,1,LimitX);
 		CDeaths(FP,Exactly,0,LimitC);}, {
 			RotatePlayer({
-				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				DisplayExtText(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 	Trigger2X(FP, {Memory(0x51CE84,AtLeast,1001);}, {
 		RotatePlayer({
-			DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+			DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거해 주십시오.").."\n"..StrDesignX("\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 		Defeat();
 		},HumanPlayers,FP);
 		Defeat();
@@ -487,11 +484,12 @@ end
 		Trigger { -- 게임오버
 			players = {FP},
 			conditions = {
+				Label(0);
 				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
 			},
 			actions = {
 				RotatePlayer({
-				DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				DisplayExtText(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 				Defeat();
 				},HumanPlayers,FP);
 				Defeat();
@@ -501,11 +499,12 @@ end
 		Trigger { -- 게임오버
 			players = {FP},
 			conditions = {
+				Label(0);
 				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
 			},
 			actions = {
 				RotatePlayer({
-					DisplayTextX(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+					DisplayExtText(StrDesignX("\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 				Defeat();
 				},HumanPlayers,FP);
 				Defeat();
@@ -515,11 +514,12 @@ end
 		Trigger { -- 게임오버
 			players = {FP},
 			conditions = {
+				Label(0);
 				MemoryX(0x57EEE0 + (36*i)+8,AtLeast,1*256,0xFF00);
 			},
 			actions = {
 				RotatePlayer({
-					DisplayTextX("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+					DisplayExtText("\x13"..StrDesign("\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
 				Defeat();
 				},HumanPlayers,FP);
 				Defeat();
@@ -529,7 +529,7 @@ end
 	end
 Trigger2X(FP,{Memory(0x57F0B4, Exactly, 0);},{
 	RotatePlayer({
-	DisplayTextX(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
+	DisplayExtText(StrDesign("\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동."),4);
 	Defeat();
 	},HumanPlayers,FP);
 	Defeat();
@@ -754,7 +754,6 @@ CWhileEnd()
 CDoActions(FP,{KillUnit(35,P5)})
 TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 f_Read(FP, 0x512684, LocalPlayerV)
-f_GetStrXptr(FP,UnivStrPtr,UnivToString)
 CIfEnd() -- OnPluginStart End
 DoActionsX(FP, SetMemory(0x6509B0,SetTo,FP))
 	--for j,k in pairs(RCV) do

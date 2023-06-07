@@ -10,10 +10,10 @@ function InputStory()
 function AxiomStory(T,Text,AddTrig)
     Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT)}, {
         RotatePlayer({
-            DisplayTextX(string.rep("\n", 20),4),
-            DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-            DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
-            DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+            DisplayExtText(string.rep("\n", 20),4),
+            DisplayExtText("\x13\x04"..string.rep("―", 56),4),
+            DisplayExtText("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
+            DisplayExtText("\x13\x04"..string.rep("―", 56),4),
         },HumanPlayers,FP);
         SetCDeaths(FP,Add,1,ButtonSound);
         AddTrig
@@ -33,10 +33,10 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
     RotatePlayer({
         PlayWAVX("staredit\\wav\\AxiomPreview.wav"),
         PlayWAVX("staredit\\wav\\AxiomPreview.wav"),
-        DisplayTextX(string.rep("\n", 20),4),
-        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-        DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\x0D\x0D!H\x13\x04Insert키를 눌러 진행상황을 확인할 수 있습니다.",0),
-        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+        DisplayExtText(string.rep("\n", 20),4),
+        DisplayExtText("\x13\x04"..string.rep("―", 56),4),
+        DisplayExtText("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\x0D\x0D!H\x13\x04Insert키를 눌러 진행상황을 확인할 수 있습니다.",0),
+        DisplayExtText("\x13\x04"..string.rep("―", 56),4),
     },HumanPlayers,FP);
 })
 
@@ -47,10 +47,10 @@ CIfOnce(FP,{CD(StartStoryTelling2,1)})
 function AxiomStory(T,Text,AddTrig)
 Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT2)}, {
     RotatePlayer({
-        DisplayTextX(string.rep("\n", 20),4),
-        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-        DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
-        DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+        DisplayExtText(string.rep("\n", 20),4),
+        DisplayExtText("\x13\x04"..string.rep("―", 56),4),
+        DisplayExtText("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
+        DisplayExtText("\x13\x04"..string.rep("―", 56),4),
     },HumanPlayers,FP);
     SetCDeaths(FP,Add,1,ButtonSound);
     AddTrig
@@ -69,10 +69,10 @@ Trigger2X(FP, {CDeaths(FP,AtLeast,5000*0,StoryT2)}, {
 RotatePlayer({
     PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
     PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
-    DisplayTextX(string.rep("\n", 20),4),
-    DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-    DisplayTextX("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\n\x0D\x0D!H\x13\x07～Ｈａｓ　Ｂｅｅｎ　Ａｃｔｉｖａｔｅｄ～\n\x0D\x0D!H\x13\x04A \x17truth \x0Fhowls \x04from the \x10A\x04xiom \x08o\x04f \x11t\x04he \x1FEnd\n\n\n",0),
-    DisplayTextX("\x13\x04"..string.rep("―", 56),4),
+    DisplayExtText(string.rep("\n", 20),4),
+    DisplayExtText("\x13\x04"..string.rep("―", 56),4),
+    DisplayExtText("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ\n\n\x0D\x0D!H\x13\x07～Ｈａｓ　Ｂｅｅｎ　Ａｃｔｉｖａｔｅｄ～\n\x0D\x0D!H\x13\x04A \x17truth \x0Fhowls \x04from the \x10A\x04xiom \x08o\x04f \x11t\x04he \x1FEnd\n\n\n",0),
+    DisplayExtText("\x13\x04"..string.rep("―", 56),4),
 },HumanPlayers,FP);
 })
 

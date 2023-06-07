@@ -21,7 +21,7 @@ function System()
 	CIfX(FP,{Memory(0x596A44, Exactly, 0x00000100),CD(ToggleCcode,0)})
 	CTrigger(FP,{},{
 	TSetMemory(0x6509B0,SetTo,LocalPlayerV),
-	DisplayText("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ",4),
+	DisplayExtText("\x0D\x0D!H\x13\x10Ａ\x04ｘｉｏｍ　\x08ｏ\x04ｆ　\x11ｔ\x04ｈｅ　\x1FＥｎｄ",4),
 	PlayWAV("staredit\\wav\\AxiomPreview2.wav"),
 	PlayWAV("staredit\\wav\\AxiomPreview2.wav"),},1)
 	local FoundArr = {
@@ -43,10 +43,14 @@ function System()
 		"\x0D\x0D!H\x13\x086riw7Ja17IaN7J2YIOqzoO2GtQ=="
 	}
 	for i = 0,3 do
-		CTrigger(FP, {CD(AxiomCcode[i+1],1)},{DisplayText(FoundArr[i+1],4)},1)
-		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],0)},{DisplayText(NotFoundArr[i+1],4)},1)
-		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],1)},{DisplayText(NotFoundArr2[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],1)},{DisplayExtText(FoundArr[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],0)},{DisplayExtText(NotFoundArr[i+1],4)},1)
+		CTrigger(FP, {CD(AxiomCcode[i+1],0),CD(AxiomFailCcode[i+1],1)},{DisplayExtText(NotFoundArr2[i+1],4)},1)
 	end
+	
+--	CTrigger(FP, {CD(AxiomCcode[4],1)},{--보석 스크립트 핵으로 변경
+--	SetMemory(0x66EC48+(958*4),SetTo,165)
+--	})
 
 	DoActionsX(FP, {SetCp(FP),SetCD(ToggleCcode,1),})
 	CElseIfX({Memory(0x596A44, Exactly, 0x00000100)},SetCD(ToggleCcode,1))
@@ -66,10 +70,10 @@ function System()
 		Trigger2X(FP, {CD(AxiomCcode[i],1)}, {RotatePlayer({
 			PlayWAVX("staredit\\wav\\FindAxiom.wav"),
 			PlayWAVX("staredit\\wav\\FindAxiom.wav"),
-			DisplayTextX(string.rep("\n", 20),4),
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4),
-			DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[i].."\n\n\n",0),
-			DisplayTextX("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
+			DisplayExtText(string.rep("\n", 20),4),
+			DisplayExtText("\x13\x04"..string.rep("―", 56),4),
+			DisplayExtText("\x12\n\n\x0D\x0D!H\x13"..AxStrArr[i].."\n\n\n",0),
+			DisplayExtText("\x13\x04"..string.rep("―", 56),4),}, HumanPlayers, FP)
 		})
 	end
 	
@@ -88,7 +92,7 @@ function System()
 		RemoveUnit(205,AllPlayers),})
 
 	Cast_UnitCount()
-	AddBGM(1,"staredit\\wav\\BYD_OP.ogg",152*1000)--오프닝
+	AddBGM(1,"staredit\\wav\\finale_start_op.ogg",152*1000)--오프닝
 	AddBGM(2,"staredit\\wav\\GBGM1.ogg",33*1000)--햇
 	AddBGM(3,"staredit\\wav\\GBGM2.ogg",34*1000)--레어
 	AddBGM(4,"staredit\\wav\\GBGM3.ogg",55*1000)--하이브
@@ -100,10 +104,10 @@ function System()
 	AddBGM(10,"staredit\\wav\\BadEnd.ogg",36*1000)--엔딩3
 	AddBGM(11,"staredit\\wav\\Axiom.ogg",118*1000)--스토리
 	AddBGM(12,"staredit\\wav\\WorldEnder1.ogg",36*1000)--스토리2
-	AddBGM(13,"staredit\\wav\\BO1.ogg",36*1000)--
-	AddBGM(14,"staredit\\wav\\BO2.ogg",36*1000)--
-	AddBGM(15,"staredit\\wav\\BO3.ogg",36*1000)--
-	AddBGM(16,"staredit\\wav\\BO4.ogg",36*1000)--
+	AddBGM(13,"staredit\\wav\\BO1.ogg",170*1000)--
+	AddBGM(14,"staredit\\wav\\BO2.ogg",162*1000)--
+	AddBGM(15,"staredit\\wav\\BO3.ogg",189*1000)--
+	AddBGM(16,"staredit\\wav\\BO4.ogg",179*1000)--
 	Install_BGMSystem(FP,3,BGMType,12,1,1,ObPlayers)
 
 	BGMArr = {}
@@ -270,6 +274,7 @@ HPRegenTable = {64}
 	NJumpXEnd(FP,Crystal)
 
 	DoActions(FP,{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+	TriggerX(FP, {CD(AxiomCcode[4],1),Deaths(CurrentPlayer,Exactly,100*256,0)}, {SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,187*256,0,0xFF00),SetMemory(0x6509B0,Subtract,17)}, {preserved})
 	CIf(FP,{Deaths(CurrentPlayer,Exactly,0,0)},{SetMemory(0x6509B0,Add,17),SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00)})
 	CSub(FP,0x6509B0,9)
 	f_SaveCp()
@@ -561,7 +566,7 @@ HPRegenTable = {64}
 		NJump(FP,CCMU_Check,{Memory(0x628438,AtMost,0)},{TSetMemory(0x6509B0,SetTo,CPlayer),
 			--PlayWAV("staredit\\wav\\revive.ogg"),
 			TSetDeaths(CPlayer, SetTo, 1, 110);
-			DisplayText(StrDesign("\x08ERROR : \x04변수(Nextptrs)를 찾을 수 없습니다. \x07소생 \x04위치를 본진으로 설정합니다."),4),
+			DisplayExtText(StrDesign("\x08ERROR : \x04변수(Nextptrs)를 찾을 수 없습니다. \x07소생 \x04위치를 본진으로 설정합니다."),4),
 			SetMemory(0x6509B0,SetTo,FP),
 			TSetDeaths(CPlayer,Add,1,178)
 		})
@@ -594,7 +599,7 @@ HPRegenTable = {64}
 				SetMemory(0x6509B0,SetTo,i),
 				--PlayWAV("staredit\\wav\\revive.ogg"),
 				SetDeaths(i, SetTo, 1, 110);
-				DisplayText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
+				DisplayExtText(StrDesign("\x16빛\x04을 잃은 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04의 \x03축복\x04을 받아 \x07소생하였습니다. \x1B(재사용 대기시간 : 10분)"),4),
 				SetMemory(0x6509B0,SetTo,FP),
 				--RunAIScriptAt("Recall Here",24)
 			},{preserved})
@@ -1099,7 +1104,7 @@ Trigger2X(FP, {
 	CDeaths(FP,Exactly,0,CanWT);
 	CVar(FP,count[2],AtLeast,1500);}, {
 	RotatePlayer({
-		DisplayTextX(CanText,4),
+		DisplayExtText(CanText,4),
 		PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
 		PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV")
 	},HumanPlayers,FP);
@@ -1155,16 +1160,16 @@ DoActions2X(FP,{SubCD(CanWT,1),SubCD(CanCT,1)})
 end
 CIf(FP,CD(DefeatCC,1,AtLeast))
 DoActionsX(FP,{AddCD(DefeatCC,1)})
-DoActions2(FP,{RotatePlayer({
-	DisplayTextX(string.rep("\n", 20),4);
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
-	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
-	DisplayTextX("\n",4);
-	DisplayTextX("\x13\x15모든 플레이어가 빛을 잃었습니다.\n",4);
-	DisplayTextX("\x13\x05게임에서 패배하였습니다.",4);
-	DisplayTextX("\n",4);
-	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
-	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+DoActions2X(FP,{RotatePlayer({
+	DisplayExtText(string.rep("\n", 20),4);
+	DisplayExtText("\x13\x04"..string.rep("―", 56),4);
+	DisplayExtText("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayExtText("\n",4);
+	DisplayExtText("\x13\x15모든 플레이어가 빛을 잃었습니다.\n",4);
+	DisplayExtText("\x13\x05게임에서 패배하였습니다.",4);
+	DisplayExtText("\n",4);
+	DisplayExtText("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayExtText("\x13\x04"..string.rep("―", 56),4);
 	PlayWAVX("staredit\\wav\\Game_Over.ogg");
 	PlayWAVX("staredit\\wav\\Game_Over.ogg");
 	PlayWAVX("staredit\\wav\\Game_Over.ogg");},HumanPlayers,FP)},1)
@@ -1233,7 +1238,8 @@ end
 CIfEnd()
 
 for j = 4, 7 do
-Trigger2X(FP,{Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+	Trigger2X(FP,{CD(AxiomCcode[j-3],0),Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayExtText("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+	Trigger2X(FP,{CD(AxiomCcode[j-3],1),Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,1000000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayExtText("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].."\x10 】 \x04를 \x1F해방\x04하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F１，０００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
 end
 TargetRotation = CreateVar(FP)
 WBreak=CreateCcode()
@@ -1299,7 +1305,7 @@ SetMemoryX(0x662DC4, SetTo, 256*6,0xFF00);--마인SeekRange
 
 })
 TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x08HARD \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x10필요 경험치량\x04이 1.5배 \x08상승\x04하고 \x07적 웨이브, \x0F건작, \x11유닛 속성 \x04등의 \x08난이도\x04가 상승합니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
-DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+DoActions2X(FP,{RotatePlayer({DisplayExtText(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
 
 
@@ -1327,7 +1333,7 @@ SetV(Level,50),
 SetMemoryW(0x663888 + (28 *2),SetTo,NMCost+HMCost+LMCost2);--루미마린 가격 재설정
 })
 TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 3배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
-DoActions2(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg")},HumanPlayers,FP)})
+DoActions2X(FP,{RotatePlayer({DisplayExtText(TheoristTxt,4),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg")},HumanPlayers,FP)})
 
 for k = 1, 4 do
 	Trigger2X(FP,{CVar(FP,SetPlayers[2],Exactly,k);},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x07Ｍｅｍｏｒｙ ２\n\x13"..Players[k].." \x17환전률 : \x1B"..ExRate[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH \x04Marine\n\x13\x1BH \x04Marine + \x1F"..LMCost2.." Ore \x04= \x08Ｌ\x11ｕ\x03ｍ\x18ｉ\x08Ａ \x08Ｍ\x04ａｒｉｎｅ\n\x13\x04――――――――――――――――――――――――――――――\n\x13\x04Thanks to : +=.=+, A..K, psc.Archive, CheezeNacho, LucasSpia, \n\x13\x04njjds148, lptime106, -Men-, Ninfia, NyanCats\n\x13\x04Spetial Thanks : Balexs")},HumanPlayers,FP);
@@ -1341,19 +1347,17 @@ if CheatEnableFlag== 1 then
 	CIf(FP,{CD(CheatMode,1)})
 		CIfOnce(FP)
 		CheatTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07CHEAT \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07모든 영작유닛\x04이 끌당되며, \x08자동환전\x04이 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
-		DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+		DoActions2(FP,{RotatePlayer({DisplayExtText(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 		CIfEnd()
 		for j, k in pairs(EraUngmeojulT) do
 			CIfOnce(FP,ElapsedTime(AtLeast, (10*j)+300))
-			local CT = CreateCText(FP, "\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다."))
-			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(CT[3],0),"X","X",1),CT[2])
+			local CT = "\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다.")
 			Trigger2X(FP,{},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
 			RotatePlayer({
-				DisplayTextX(UnivToString,4),
-				DisplayTextX(UnivToString,4),
-				DisplayTextX(UnivToString,4),
+				DisplayExtText(CT,4),
+				DisplayExtText(CT,4),
+				DisplayExtText(CT,4),
 				PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
-			f_Memcpy(FP,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
 			CIfEnd()
 		end
 	CIfEnd()

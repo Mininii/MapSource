@@ -12,7 +12,6 @@ function Include_GunData(Size,LineNum)
 	G_A = CreateVar(FP)
 	FuncAlloc = FuncAlloc + 1
 	G_InputH = CreateVar(FP)
-	f_GunStrPtr = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
 	G_TempH = CreateVar(FP)
@@ -23,21 +22,10 @@ function Include_GunData(Size,LineNum)
 	Var_InputCVar = {}
 	Var_Lines = LineNum
 	Var_TempTable = CreateVarArr(Var_Lines,FP)
-	f_GunSendStrPtr = CreateVar(FP)
-	f_GunSendStrPtr2 = CreateVar(FP)
 	
 	G_Send = SetCallForward()
 	function G_init()
 		table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_InputH[2],0x15C,0,SetTo,FP,CIndex,0x15C,1,0))--{"X",0x500,0x15C,1,0}--G_InputH
-		f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
-		f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
-		f_GetStrXptr(FP,f_GunSendStrPtr2,"\x0D\x0D\x0Df_GunSend2".._0D)
-		f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
-		f_Memcpy(FP,f_GunSendStrPtr2,_TMem(Arr(f_GunSendT2[3],0),"X","X",1),f_GunSendT2[2])
-		f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
-		f_Memcpy(FP,_Add(f_GunStrPtr,f_GunT[2]+16),_TMem(Arr(f_GunT2[3],0),"X","X",1),f_GunT2[2])
-		f_Memcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]+16),_TMem(Arr(f_GunT2[3],0),"X","X",1),f_GunT2[2])
-		f_Memcpy(FP,_Add(f_GunSendStrPtr2,f_GunSendT2[2]+16),_TMem(Arr(f_GunT2[3],0),"X","X",1),f_GunT2[2])
 	end
 	SetCall(FP)
 		f_SaveCp()
@@ -47,9 +35,9 @@ function Include_GunData(Size,LineNum)
 		function GunBGM(ID,Type,Text)
 			local GText = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07·\x11·\x08·\x07† "..Text.." \x04을(를) 파괴하였습니다. \x07†\x08·\x11·\x07·\n\x0D\x0D\n\x0D\x0D"
 			if Type == nil then
-				Trigger2X(FP,{CV(GunID,ID)},{RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CV(GunID,ID)},{RotatePlayer({DisplayExtText(GText,4)},HumanPlayers,FP)},{preserved})
 			else
-				Trigger2X(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg");DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg");DisplayExtText(GText,4)},HumanPlayers,FP)},{preserved})
 			end
 		end
 		--\x1B기억의 기둥 \x1D【 Conv_HStr2("") \x1D】
@@ -93,16 +81,12 @@ function Include_GunData(Size,LineNum)
 		
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			ItoDec(FP,G_A,VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),4*4)
-			DoActions2(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
-			ItoDec(FP,DUnitCalc[4][1],VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr2,f_GunSendT2[2]),VArr(f_GunNumT,0),4*4)
-			DoActions2(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend2".._0D,4)},HumanPlayers,FP)})
+			DisplayPrint(HumanPlayers,{"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ",G_A," \x07】\x08·\x11·\x07·"})
+			DisplayPrint(HumanPlayers,{"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ",DUnitCalc[4][1]," \x07】\x08·\x11·\x07·"})
 			CIfEnd()
 		end
 		CElseX()
-		DoActions2(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayExtText(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 		f_LoadCp()
 	SetCallEnd()
@@ -131,16 +115,12 @@ function Include_GunData(Size,LineNum)
 		
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			ItoDec(FP,G_A,VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),4*4)
-			DoActions2(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
-			ItoDec(FP,DUnitCalc[4][1],VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunSendStrPtr2,f_GunSendT2[2]),VArr(f_GunNumT,0),4*4)
-			DoActions2(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend2".._0D,4)},HumanPlayers,FP)})
+			DisplayPrint(HumanPlayers,{"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ",G_A," \x07】\x08·\x11·\x07·"})
+			DisplayPrint(HumanPlayers,{"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ",DUnitCalc[4][1]," \x07】\x08·\x11·\x07·"})
 			CIfEnd()
 		end
 		CElseX()
-		DoActions2(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayExtText(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 		f_LoadCp()
 	SetCallEnd()
@@ -1050,7 +1030,9 @@ end
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom 달성시 특수패턴
 	end
-	
+
+--	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+--	31이 1일경우 보스 소환 작동
 	CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
 	CIf(FP,CD(Theorist,1,AtLeast))
 	for i = 0,3 do
@@ -1081,7 +1063,7 @@ end
 --World Demication(7시보스 Demise)
 --Arcana Anomaly(5시보스 Anomaly)
 BossUID = {87,74,5,2}
-	HName = {
+	HName2 = {
 		"\x1FＩ\x04ｎｆｉｎｉｔｅ \x10Ｄ\x04ｉｖｉｄｅ,",
 		"\x10Ｐ\x04ｅｎｔｉｍｅｎｔ　ｉｎ　\x15Ｔ\x04ｅｎｅｂｒｉｓ",
 		"\x19Ｗ\x04ｏｒｌｄ \x18Ｄ\x04ｅｍｉｃａｔｉｏｎ",
@@ -1093,7 +1075,7 @@ BossUID = {87,74,5,2}
 		{1632,-1824+4096},
 		{-1632+4096,-1824+4096}}
 	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
@@ -1182,7 +1164,7 @@ BossUID = {87,74,5,2}
 		{1632,-1824+4096},
 		{-1632+4096,-1824+4096}}
 	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 	end
 	
@@ -1333,7 +1315,7 @@ BossUID = {87,74,5,2}
 		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*2700)},{RotatePlayer({PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i])},HumanPlayers,FP)})
     end
 	for j, k in pairs(Lyrics) do
-		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
+		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayExtText(k[1], 4)},HumanPlayers,FP)})
 	end
 	SetBright(0,0)
 
@@ -2576,7 +2558,7 @@ end
 	CIf(FP,{CD(ED2Clear,1)},{SetCD(Fin,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 Trigger2X(FP,{},{RotatePlayer({
-	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x11Ｐ\x04ａｓｔ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
@@ -3083,7 +3065,7 @@ Trigger2X(FP,{},{RotatePlayer({
 	CIf(FP,{CV(B3DeathCheck,1)},{SetCD(Fin,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 	Trigger2X(FP,{},{RotatePlayer({
-	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x06Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x08Ｆ\x04ａｔｅ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x06Ｆｉｎａｌ　Ｂｏｓｓ \x04－\x10【 \x08Ｆ\x04ａｔｅ \x10】 \x04를 처치하셨습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x10ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
@@ -3117,7 +3099,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		table.insert(GunPushTrig,TSetMemory(_Add(G_TempH,(i*0x20)/4),SetTo,Var_TempTable[i+1]))
 	end
 	CDoActions(FP,GunPushTrig)
-	Trigger2X(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayTextX(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+	Trigger2X(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayExtText(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 	CIf(FP,{Gun_Line(54,AtLeast,1),}) -- SuspendCode
 		CMov(FP,G_TempW,0)
 		CWhile(FP,CVar(FP,G_TempW[2],AtMost,(Var_Lines-1)*(0x20/4)))
@@ -3126,9 +3108,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		CWhileEnd()
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
-			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),4*4)
-			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_Gun".._0D,4)},HumanPlayers,FP)})
+			DisplayPrint(HumanPlayers, {"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : \x1F",f_GunNum," \x07】\x08·\x11·\x07·"})
 			CIfEnd()
 		end
 	CIfEnd()

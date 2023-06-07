@@ -153,7 +153,6 @@ function Var_init()
 	SetPlayers = CreateVar(FP)
 	ExRateV = CreateVar(FP)
 	Dt = CreateVar(FP)
-	HTextStrPtr = CreateVar(FP)
 	CA_Create = CreateVar(FP)
 	CA_Color = CreateVar(FP)
 	EEggCode = CreateCcode()
@@ -259,8 +258,6 @@ function Var_init()
 	EEggV = CreateVar(FP)
 	UnivStrPtr = CreateVar(FP)
 	_0D_1000B = string.rep("\x0D",1000)
-	UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
-	StrReset = CreateCText(FP,UnivToString)
 
 	AxStrArr = {
 		"\x041. \x07세계의 시작\x04에서 \x07꿈\x04의 \x17조각\x04을 \x1F되찾아라.",
@@ -332,14 +329,14 @@ function Var_init()
 	Str12 = CreateCText(FP,"\x0D\x0D!H\x07·\x11·\x08·\x07【 ")
 	Str03 = {}
 	Str02 = {}
-	NMT = CreateCText(FP,"\x04의 Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·")
-	HMT = CreateCText(FP,"\x04의 \x1BＨ \x04Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·")
+
 	for i = 0, 3 do
-		table.insert(Str03,CreateCText(FP,"\x04의 "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."Ｍ\x04ａｒｉｎｅ이 \x16빛\x04을 \x04잃었습니다. \x07】\x08·\x11·\x07·"))
 		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."Ｌ\x11ｕ\x03ｍ\x18ｉ"..Color[i+1].."Ａ "..Color[i+1].."\x07】\x08·\x11·\x07·"))
 	end
 	Str13 = CreateCText(FP,"\x04이(가) \x1C빛의 보호막\x04을 사용했습니다. \x07】\x08·\x11·\x07·")
 	EEggStr = CreateCText(FP,"\x04이(가) \x07빛\x04의 기억\x04을 발견했습니다. \x07】\x08·\x11·\x07·")
+
+	
 
 	AtkCondT = CreateCText(FP,"공격력 업그레이드 조건 불만족\n	Next Level - ")
 	HPCondT = CreateCText(FP,"체력 업그레이드 조건 불만족\n	Next Level - ")

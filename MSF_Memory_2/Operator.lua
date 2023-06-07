@@ -308,13 +308,13 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 	f_Read(FP,ArrX(EXPArr2,ArrI),MaxEXP,nil,nil,1)
 	CIfXEnd()
 	CAdd(FP,Level,1)
-	Trigger2X(FP,{CV(Level,10,AtLeast)},{RotatePlayer({DisplayTextX(StimUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
+	Trigger2X(FP,{CV(Level,10,AtLeast)},{RotatePlayer({DisplayExtText(StimUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
 
 	SetMemoryB(0x57F27C + (0 * 228) + 71,SetTo,1),
 	SetMemoryB(0x57F27C + (1 * 228) + 71,SetTo,1),
 	SetMemoryB(0x57F27C + (2 * 228) + 71,SetTo,1),
 	SetMemoryB(0x57F27C + (3 * 228) + 71,SetTo,1)})
-	Trigger2X(FP,{CV(Level,20,AtLeast)},{RotatePlayer({DisplayTextX(ExchangeUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
+	Trigger2X(FP,{CV(Level,20,AtLeast)},{RotatePlayer({DisplayExtText(ExchangeUnlock,4),PlayWAVX("staredit\\wav\\start.ogg"),PlayWAVX("staredit\\wav\\start.ogg")},HumanPlayers,FP),
 
 	SetMemoryB(0x57F27C + (0 * 228) + 2,SetTo,1),
 	SetMemoryB(0x57F27C + (1 * 228) + 2,SetTo,1),
@@ -330,8 +330,8 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 	local ShieldUnlockT = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07LV.30\x04 돌파, \x1C빛의 보호막\x04이 \x03활성화\x04되었습니다.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＵＮＬＯＣＫ\x04　！！！\x0D\x0D\n\x0D\x0D\x13\x04"
 
 
-	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayTextX(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
-	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
+	Trigger2X(FP,{CV(Level,40,AtLeast)},{RotatePlayer({DisplayExtText(SkillUnlock,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
+	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayExtText(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
 	
 	f_Mul(FP,MarHPRegen,Level,256)
 	CMov(FP,AtkCondTmp,Level,49)
@@ -348,7 +348,7 @@ Trigger2X(FP,{
 	CV(ShieldEnV,0);
 },{
 	
-	RotatePlayer({DisplayTextX(ShieldUnlockT,4);},HumanPlayers,FP);
+	RotatePlayer({DisplayExtText(ShieldUnlockT,4);},HumanPlayers,FP);
 	SetMemory(0x5822C4+(0*4),SetTo,1200);
 	SetMemory(0x582264+(0*4),SetTo,1200);
 	SetMemoryB(0x57F27C+(228*0)+19,SetTo,1);
@@ -422,7 +422,7 @@ for i = 1, 11 do
 		CVar(FP,SpeedVar[2],Exactly,i);
 	},{
 		RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-		DisplayTextX("\x0D\x0D!H"..StrDesignX2("\x0F게임 \x10속도\x04를 \x10- "..XSpeed[i].."\x04로 \x0F변경\x04하였습니다."), 0)},HumanPlayers,FP);
+		DisplayExtText("\x0D\x0D!H"..StrDesignX2("\x0F게임 \x10속도\x04를 \x10- "..XSpeed[i].."\x04로 \x0F변경\x04하였습니다."), 0)},HumanPlayers,FP);
 		SetMemory(0x5124F0,SetTo,SpeedV[i]);},{preserved})
 end
 CIfEnd()
@@ -638,9 +638,9 @@ TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
 
 CIfX(FP,{CDeaths(FP,AtMost,1,Theorist)})
 
- CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：０００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,0) 
+ CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：\x0D００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,0) 
  CA__ItoCustom(SVA1(Str1,0),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data) 
- CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,4},1,"\x04０",nil,{0x04,0x04,0x04,0x04},{20,21,22,24},Data) 
+ CA__ItoCustom(SVA1(Str1,0),CurExpTmp,nil,nil,{10,3},1,"\x04０",nil,{0x04,0x04,0x04},{21,22,24},Data) 
 
  TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
  function LevelIStrColor(Color,ValueArr)
@@ -708,14 +708,14 @@ CAPrint(iStr1,{Force1,Force2,Force5},{1,0,0,0,1,3,0,0},"TEST",FP,{CD(OPJump,1,At
 		TriggerX(FP,{Command(Force1,AtLeast,1,BanToken[i]);},{ModifyUnitEnergy(1,BanToken[i],Force1,64,0);
 		SetCDeaths(FP,Add,1,CUnitRefrash);RemoveUnitAt(1,BanToken[i],"Anywhere",Force1);SetCDeaths(FP,Add,1,BanCode[i]);},{preserved})
 		for j = 1, 4 do
-			Trigger2X(i,{CDeaths(FP,Exactly,j,BanCode[i])},{RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i)})
+			Trigger2X(i,{CDeaths(FP,Exactly,j,BanCode[i])},{RotatePlayer({DisplayExtText(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i)})
 		end
-		Trigger2X(i,{CDeaths(FP,AtLeast,5,BanCode[i]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+		Trigger2X(i,{CDeaths(FP,AtLeast,5,BanCode[i]);},{RotatePlayer({DisplayExtText(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 	})
 		local WAVT = {}
 		for k = 0, 9 do
 			table.insert(WAVT,PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV"))
-			table.insert(WAVT,DisplayTextX(StrDesign("\x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동."),4))
+			table.insert(WAVT,DisplayExtText(StrDesign("\x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동."),4))
 		end
 		Trigger2X(i,{CDeaths(FP,AtLeast,5,BanCode[i]);Memory(0x57F1B0, Exactly, i)},{RotatePlayer(WAVT,i,i),SetMemory(0xCDDDCDDC,SetTo,1);})
 		end

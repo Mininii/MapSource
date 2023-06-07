@@ -202,6 +202,19 @@ function BossTrig()
 	end
 	for i = 4, 7 do
 	InvDisable2(189,i,{
+		CD(AxiomCcode[i-3],0),
+		CV(BPtrArr[1],0,AtMost),
+		CV(BPtrArr[2],0,AtMost),
+		CV(BPtrArr[3],0,AtMost),
+		CV(BPtrArr[4],0,AtMost),
+		CD(WarpCheck,0),
+		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
+	InvDisable2(189,i,{ -- axiom 활성화시에는 브금꺼져야 부술수있음
+		CD(AxiomCcode[i-3],1),
+		Deaths(0,Exactly,0,12),
+		Deaths(1,Exactly,0,12),
+		Deaths(2,Exactly,0,12),
+		Deaths(3,Exactly,0,12),
 		CV(BPtrArr[1],0,AtMost),
 		CV(BPtrArr[2],0,AtMost),
 		CV(BPtrArr[3],0,AtMost),
@@ -210,4 +223,5 @@ function BossTrig()
 		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
 	end
 	DoActionsX(FP,{SetCD(WarpCheck,0)})
+	--
 end
