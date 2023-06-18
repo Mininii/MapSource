@@ -1085,7 +1085,7 @@ FirstReward4 = {
 		Cost_FIncm = ReciveCostDataFile(200,"FIncm")
 		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
 	
-		Cost_FMinMax = ReciveCostDataFile(100,"FMinMax")
+		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 	end
 	
 	
