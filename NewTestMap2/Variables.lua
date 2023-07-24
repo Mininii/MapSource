@@ -550,6 +550,8 @@ end
 	iv.SaveRemind = CreateCcode()
 	iv.PartyBonus = CreateCcode()
 	iv.PartyBonus2 = CreateCcode()
+	iv.HotTimeBonus = CreateCcode()
+	iv.HotTimeBonus2 = CreateCcode()
 	iv.PBossClearFlag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
@@ -650,6 +652,7 @@ end
 	ctg.B_Ticket = CreateVar(FP)
 	ctg.BossLV = CreateVar(FP)
 	iv.GeneralPlayTime = CreateVar(FP)
+	iv.BossInv = CreateCcode()
 	iv.CUnitT = CreateVar(FP)
 	ctg.CUnitT = CreateVar(FP)
 	iv.XEPerT,ct.XEPerT = CreateVars(2,FP)

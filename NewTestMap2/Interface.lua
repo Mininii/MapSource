@@ -281,11 +281,11 @@ function Interface()
 
 	CMov(FP,PCheckV,0)
 	if Limit == 1 then
-		CAdd(FP,GeneralPlayTime,1)
+		CAdd(FP,GeneralPlayTime,100)
 	else
 		CAdd(FP,GeneralPlayTime,1)
 	end
-
+	TriggerX(FP,{CD(iv.HotTimeBonus,1),CV(GeneralPlayTime,24*60*60*12)},{SetCD(iv.HotTimeBonus,0),RotatePlayer({DisplayExtText(StrDesignX("\x07핫 타임 보너스\x04가 \x06종료되었습니다.\x04(보스 처치 보상은 유지됨)"),4)}, Force1, FP)})
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 		TriggerX(FP,{HumanCheck(i,0)},{RemoveUnit("Men", P12),RemoveUnit("Factories", P12)})
@@ -308,7 +308,7 @@ function Interface()
 		DoActionsX(FP, {AddV(XEPerT,100)})
 		
 	end
-	DoActionsX(FP, {AddV(XEPerT,1)})
+	DoActionsX(FP, {AddV(XEPerT,1),SetCD(iv.BossInv,0)})
 	Trigger2X(FP,{CV(XEPerT,864,AtLeast)},{SubV(XEPerT,864),AddV(XEPerM,1),
 	--RotatePlayer({DisplayExtText(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 \x08강화확률이 \x0F0.1%p \x08하락\x04하였습니다.\x07"), 4),DisplayExtText(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 강화확률은 1시간마다 0.1%p씩 하락합니다.\x07"), 4)}, Force1, FP),
 },{preserved})
@@ -325,6 +325,7 @@ for i = 0, 6 do -- 각플레이어
 	TriggerX(FP,{MSQC_KeyInput(i, "B")},{SetVX(MissionV[i+1],1,1)},{preserved})
 	TriggerX(FP,{MSQC_KeyInput(i, "N")},{SetVX(MissionV[i+1],1,1)},{preserved})
 	TriggerX(FP,{MSQC_KeyInput(i, "M")},{SetVX(MissionV[i+1],1,1)},{preserved})
+	TriggerX(FP,{CD(SCA.LoadCheckArr[i+1],1,AtMost)},{AddCD(iv.BossInv,1)},{preserved})
 	TriggerX(FP,{MemoryB(0x58F32C+(i*15)+11, AtLeast, 11),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -342,7 +343,7 @@ for i = 0, 6 do -- 각플레이어
 		DisplayExtText("u\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom),AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1),SubV(DPErT[i+1],1),SetSwitch("Switch 100",Random),SetSwitch("Switch 101",Random)})
-	TriggerX(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),AddV(iv.CurPlayTime[i+1],1)},{preserved})
+	TriggerX(FP,CV(PTimeV[i+1],24,AtLeast), {Order("Factories", i, 109, Attack, 110),SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),AddV(iv.CurPlayTime[i+1],1)},{preserved})
 
 
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,1,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
@@ -1059,6 +1060,9 @@ end
 					TriggerX(FP, {CD(CurLoadSlot[i+1],j),SCA.SlotLoadCmp(i)}, {SetVX(SlotPtr[i+1],0,2^j),act,SetCD(CurLoadCmpSlot[i+1],j),SetCD(CurLoadSlot[i+1],0),}, {preserved})
 					TriggerX(FP, {cond,SCA.Available(i)}, {SetVX(SlotPtr[i+1],0,2^j),SetDeaths(i,SetTo,10+j,2),SetCD(CurLoadSlot[i+1],j),SCA.Reset(i)}, {preserved})
 				end
+				--for j = 6, 9 do
+				--	TriggerX(FP,{},{SetVX(SlotPtr[i+1],0,2^j)},{preserved})
+				--end
 				CallTriggerX(FP,Call_SCA_DataLoadSetTo,{CD(CurLoadCmpSlot[i+1],2)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 SetTo 실행되었습니다."),4)})
 				CallTriggerX(FP,Call_SCA_DataLoadAdd,{CD(CurLoadCmpSlot[i+1],3)},{SetCD(CurLoadCmpSlot[i+1],0),SetCp(i),DisplayExtText(StrDesignX("일부 데이터가 실시간 Add/Sub 실행되었습니다."),4)})
 
@@ -1339,10 +1343,10 @@ TriggerX(FP, {CV(TempX[i+1],200000000,AtLeast),LocalPlayerID(i)}, {
 
 	TriggerX(FP, {Bring(i,AtLeast,1,"Men",29+i)}, {MoveUnit(1, "Men", i, 29+i, 80+i)}, {preserved})--사냥터 퇴장
 
-	TriggerX(FP, {Bring(i, AtMost, 3, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
+	--TriggerX(FP, {Bring(i, AtMost, 3, "Factories", 109)}, {MoveUnit(1, "Factories", i, 102+i, 109)}, {preserved})--보스방 입장
 
 
-	TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 80+i)}, {preserved})--보스방 퇴장
+	--TriggerX(FP, {}, {MoveUnit(1, "Factories", i, 111, 80+i)}, {preserved})--보스방 퇴장
 
 	
 	TriggerX(FP, {CV(PBossLV[i+1],4,AtMost),Bring(i, AtLeast, 5, "Men", 119+i)}, {MoveUnit(1, "Men", i, 119+i, 22+i)}, {preserved})--개인보스방 입장제한
@@ -1693,7 +1697,6 @@ Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
 },{preserved})
 Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
 	AddV(B_PTicket[i+1],5), --유닛 판매권 5개
-	
 })
 Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
 	AddV(iv.B_PFfragItem[i+1], 3),
@@ -1714,6 +1717,31 @@ Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
 Trigger2X(FP,{CV(PBossLV[i+1],10,AtLeast)},{
 	AddV(B_PTicket[i+1],1000000)
 })
+CIf(FP,{CD(iv.HotTimeBonus2,1)})
+
+Trigger2X(FP,{CV(PBossLV[i+1],5,AtLeast)},{
+	AddV(B_PTicket[i+1],5), --유닛 판매권 5개
+})
+Trigger2X(FP,{CV(PBossLV[i+1],6,AtLeast)},{
+	AddV(iv.B_PFfragItem[i+1], 3),
+	AddV(B_PCredit[i+1], 150000)
+})
+Trigger2X(FP,{CV(PBossLV[i+1],7,AtLeast)},{
+	AddV(B_PCredit[i+1], 1000000),
+	AddV(iv.B_PFfragItem[i+1], 5),
+
+})
+Trigger2X(FP,{CV(PBossLV[i+1],8,AtLeast)},{
+	AddV(iv.B_PFfragItem[i+1], 250),
+	AddV(B_PTicket[i+1],100000)
+})
+Trigger2X(FP,{CV(PBossLV[i+1],9,AtLeast)},{
+	AddV(iv.B_PFfragItem[i+1], 10000),
+})
+Trigger2X(FP,{CV(PBossLV[i+1],10,AtLeast)},{
+	AddV(B_PTicket[i+1],1000000)
+})
+CIfEnd()
 
 for pb= 1, 10 do
 	TriggerX(FP,{LocalPlayerID(i),CV(PBossLV[i+1],pb,AtLeast)},{SetV(Time,(300000)-5000),SetCD(SaveRemind,1),SetCp(i),DisplayExtText(StrDesignX("\x08"..pb.."단계 \x07개인보스\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4),SetCp(FP)})
@@ -1848,6 +1876,14 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 			Trigger2X(FP, {}, AutoEnable3)
 		else
 			Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
+			if j >= 26 and j<= 40 then
+				Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, {RemoveUnitAt(All, "Factories", 109, i)})
+				CreateUnitStacked({CV(BossLV,6,AtMost),Command(i,AtLeast,1,k[2])}, 4, k[2], 109,nil, i, nil,1)
+			end
+			if j >= 48 and j<= 50 then
+				Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, {RemoveUnitAt(All, "Factories", 109, i)})
+				CreateUnitStacked({CV(BossLV,6,AtMost),Command(i,AtLeast,1,k[2])}, 4, k[2], 109,nil, i, nil,1)
+			end
 		end
 		--CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
 		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
@@ -2014,7 +2050,10 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
 		TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
 		CMov(FP,iv.PLevel2[i+1],PLevel[i+1])
+		CIfX(FP,{TTNWar(iv.FfragItem[i+1],AtLeast,"42949672950000")},{SetV(iv.FfragItemRank[i+1],-1)})
+		CElseX()
 		f_Cast(FP, {iv.FfragItemRank[i+1],0}, _LDiv(iv.FfragItem[i+1], "10000"), nil, nil, 1)
+		CIfXEnd()
 		CIf(FP,CV(iv.MapMakerFlag[i+1],1))--제작자일경우 레벨 1으로 저장후 세팅.
 		CMov(FP,PLevelBak,PLevel[i+1])
 		CMov(FP,PLevel[i+1],1)
@@ -2043,6 +2082,9 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 	CallTriggerX(FP, Call_BossReward,{CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)},1)
 	CallTriggerX(FP, Call_BossReward,{CV(PBossLV[i+1],6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,2)},1)
 	CallTriggerX(FP, Call_BossReward,{CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,3)},1)
+	CallTriggerX(FP, Call_BossReward,{CD(iv.HotTimeBonus2,1),CV(BossLV,5,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,1)},1)
+	CallTriggerX(FP, Call_BossReward,{CD(iv.HotTimeBonus2,1),CV(PBossLV[i+1],6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,2)},1)
+	CallTriggerX(FP, Call_BossReward,{CD(iv.HotTimeBonus2,1),CV(BossLV,6,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(CurBossReward,3)},1)
 	CIfEnd()
 	
 

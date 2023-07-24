@@ -1733,8 +1733,11 @@ for i = 45, 50 do
 	for j,k in pairs(GaArr[i-44]) do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
-		CTrigger(FP, {}, {DisplayExtText(StrDesignX((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."),4)}, 1)
-
+		CallTrigger(FP, Call_Print13CP)
+		CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."))}, 1)
+		CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다.\x07(핫타임 2배)"))}, 1)
+		
+		
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
 				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
@@ -1757,8 +1760,14 @@ for i = 45, 50 do
 			if k[5][4]=="W" then
 				local src
 				if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
+				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				f_LAdd(FP,k[5],k[5],src)
+				CIfEnd()
 				f_LAdd(FP,k[5],k[5],src)
 			else
+				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				CAdd(FP,k[5],k[2])
+				CIfEnd()
 				CAdd(FP,k[5],k[2])
 			end
 			CIfEnd()
@@ -1767,9 +1776,17 @@ for i = 45, 50 do
 		if k[4][1][4]=="W" then
 			local src
 			if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
-			f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+			
+				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+				CIfEnd()
+				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 		else
-			CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+			
+				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+				CIfEnd()
+				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		end
 		CIfEnd()
 		TotalGPer = TotalGPer+k[3]
@@ -1788,9 +1805,15 @@ for i = 45, 50 do
 	end
 	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
+	CIf(FP,{CD(iv.HotTimeBonus,1)})
 		f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
+	f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
+	CIfEnd()
 
+	CIf(FP,{CD(iv.HotTimeBonus,1)})
+	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+	CIfEnd()
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
 
@@ -2016,6 +2039,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
 			CElseX()
 				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--판매권이필요없어요
+					CIf(FP,{CD(iv.HotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIf(FP, {CV(CI,14)})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
@@ -2024,6 +2050,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 					CElseX({TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
 					f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
+					CIf(FP,{CD(iv.HotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIfXEnd()
 				CIfXEnd()
@@ -2322,6 +2351,9 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 		
 		NIfX(FP,{CV(EXPV,1,AtLeast)})
 			NIfX(FP, {VRange(CIV,14,24)},{})--판매권이필요없어요
+			CIf(FP,{CD(iv.HotTimeBonus,1)})
+			f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+			CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 				CIf(FP, {CV(CIV,14)})
 				CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
@@ -2331,6 +2363,9 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 			NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --판매권오링
 			
 				f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
+				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+				CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 			NIfXEnd()
 		NElseIfX(VRange(CIV,44, 49))
@@ -2578,6 +2613,8 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	SCA_DataSaveG2(PlayerV, iv.GAwakItemLoc, SCA.AwakItem)--누적각보판매획득량
 	SCA_DataSaveG2(PlayerV, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--누적조각판매획득량
 	SCA_DataSaveG2(PlayerV, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--누적크레딧판매획득량 64비트
+	SCA_DataSaveG2(PlayerV, iv.EX_XI_ClearT, SCA.TimeAttackScore)--엑XI 클탐
+
 
 	SetCallEnd()
 	Call_CalcBrSh = SetCallForward()

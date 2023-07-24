@@ -93,6 +93,60 @@ Trigger2X(FP,{CV(BossLV,7,AtLeast)},{
 	AddV(iv.B_Credit, 2000000),
 	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1CExtra Boss\x04를 클리어하였습니다. \x07잠시 후 자동저장됩니다..."),4)}, Force1, FP)
 })
+
+CIf(FP,{CD(iv.HotTimeBonus2,1)})
+
+
+	Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
+		AddV(B_Credit,500),--크레딧 200
+	})
+	Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
+		AddV(B_Credit,1000),--크레딧 1000
+	})
+	Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
+		AddV(B_Ticket,50);
+	})
+	AddLV5Cool2=CreateCcodeArr(7)
+	Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
+		AddV(B_Credit,50000);
+	})
+	Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
+		AddV(iv.PETicket2[1], 1),
+		AddV(iv.PETicket2[2], 1),
+		AddV(iv.PETicket2[3], 1),
+		AddV(iv.PETicket2[4], 1),
+		AddV(iv.PETicket2[5], 1),
+		AddV(iv.PETicket2[6], 1),
+		AddV(iv.PETicket2[7], 1),
+	})
+	CIfOnce(FP, {CV(BossLV,6,AtLeast)})
+	f_LAdd(FP,iv.BuyTicket[1],iv.BuyTicket[1], "100000")
+	f_LAdd(FP,iv.BuyTicket[2],iv.BuyTicket[2], "100000")
+	f_LAdd(FP,iv.BuyTicket[3],iv.BuyTicket[3], "100000")
+	f_LAdd(FP,iv.BuyTicket[4],iv.BuyTicket[4], "100000")
+	f_LAdd(FP,iv.BuyTicket[5],iv.BuyTicket[5], "100000")
+	f_LAdd(FP,iv.BuyTicket[6],iv.BuyTicket[6], "100000")
+	f_LAdd(FP,iv.BuyTicket[7],iv.BuyTicket[7], "100000")
+	CIfEnd()
+	Trigger2X(FP,{CV(BossLV,7,AtLeast)},{
+		AddV(iv.PETicket2[1], 6),
+		AddV(iv.PETicket2[2], 6),
+		AddV(iv.PETicket2[3], 6),
+		AddV(iv.PETicket2[4], 6),
+		AddV(iv.PETicket2[5], 6),
+		AddV(iv.PETicket2[6], 6),
+		AddV(iv.PETicket2[7], 6),
+		AddV(iv.B_Credit, 2000000),
+	})
+
+
+CIfEnd()
+
+CIfOnce(FP, {CV(BossLV,7,AtLeast)},{RemoveUnitAt(All, "Factories", 109, Force1)})
+	CMov(FP,iv.Time4,200000-10000)
+	CMov(FP,iv.EX_XI_ClearT,_Div(iv.GeneralPlayTime,24))
+CIfEnd()
+
 Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1C6단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1F7단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 50,000."), 4)}, Force1,FP)})
 --Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08누군가가 \x1E8단계 개인보스\x04를 처치하였습니다. 단체 보상 - \x17크레딧 + 100,000."), 4)}, Force1,FP)})
@@ -201,6 +255,9 @@ for j,k in pairs(BossArr) do
 	CIfEnd()
 	NJumpEnd(FP,ClearJump)
 end
+TriggerX(FP,{CV(iv.GeneralPlayTime,5*24*60,AtMost),CD(iv.BossInv,1,AtLeast)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
+TriggerX(FP,{CD(iv.BossInv,0)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
+TriggerX(FP,{CV(iv.GeneralPlayTime,5*24*60,AtLeast)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
 --DoActions(FP, SetInvincibility(Disable, BossArr[5][1], FP, 64))
 --for i = 0,6 do
 --	
