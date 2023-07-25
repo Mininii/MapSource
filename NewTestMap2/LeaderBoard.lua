@@ -53,7 +53,7 @@ Trigger { -- ·¹º§
 		CDeaths(FP,Exactly,500,LeaderBoardT);
 	},
 	actions = {
-		LeaderBoardScore(Custom, StrDesign("\17Level").." "..VerText);
+		LeaderBoardScore(Custom, StrDesign("\17Level").." "..VerText.." \x0E!\x1C!\x1F!\x08Hot\x07Time\x1F!\x1C!\x0E!");
 		LeaderBoardComputerPlayers(Disable);
 		PreserveTrigger();
 },

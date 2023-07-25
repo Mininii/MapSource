@@ -255,7 +255,7 @@ for j,k in pairs(BossArr) do
 	CIfEnd()
 	NJumpEnd(FP,ClearJump)
 end
-TriggerX(FP,{CV(iv.GeneralPlayTime,5*24*60,AtMost),CD(iv.BossInv,1,AtLeast)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
+TriggerX(FP,{CV(iv.GeneralPlayTime,5*24*60,AtMost),CD(iv.BossInv,1,AtLeast)},{SetInvincibility(Enable, BossArr[5][1], FP, 64)},{preserved})
 TriggerX(FP,{CD(iv.BossInv,0)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
 TriggerX(FP,{CV(iv.GeneralPlayTime,5*24*60,AtLeast)},{SetInvincibility(Disable, BossArr[5][1], FP, 64)},{preserved})
 --DoActions(FP, SetInvincibility(Disable, BossArr[5][1], FP, 64))

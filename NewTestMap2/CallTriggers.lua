@@ -1734,8 +1734,13 @@ for i = 45, 50 do
 		errt = errt..TotalGPer.."  "..k[3]-1+TotalGPer.."\n"
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
 		CallTrigger(FP, Call_Print13CP)
-		CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
-		CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
+		if i <= 48 then
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
+		else
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
+			
+		end
 		
 		
 		if Limit == 1 then
@@ -1760,14 +1765,19 @@ for i = 45, 50 do
 			if k[5][4]=="W" then
 				local src
 				if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
+				
+				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
 				f_LAdd(FP,k[5],k[5],src)
 				CIfEnd()
+				end
 				f_LAdd(FP,k[5],k[5],src)
 			else
+				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
 				CAdd(FP,k[5],k[2])
 				CIfEnd()
+				end
 				CAdd(FP,k[5],k[2])
 			end
 			CIfEnd()
@@ -1777,15 +1787,19 @@ for i = 45, 50 do
 			local src
 			if type(k[2])=="number" then src = tostring(k[2]) else src = k[2] end
 			
+				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
 				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 				CIfEnd()
+				end
 				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 		else
 			
+				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
 				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 				CIfEnd()
+				end
 				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
 		end
 		CIfEnd()
@@ -1805,15 +1819,19 @@ for i = 45, 50 do
 	end
 	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04À¯´Ö ÆÇ¸Å º¸»ó : \x02¹«»ö Á¶°¢ \x07"..pifrag[i-44].." °³"), 4)})
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
+	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
 		f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
+	end
 	f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
 
+	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
+	end
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
 

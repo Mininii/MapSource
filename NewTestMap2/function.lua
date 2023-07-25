@@ -463,6 +463,7 @@ function PopLevelUnit()
 	BuyDataArr = CreateArr(#AutoBuyArr,FP)
 	for j = 0, 9 do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr,j),SetTo,0))
+		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr2,j),SetTo,0))
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoSellArr,j),SetTo,0))
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j),SetTo,0))
 	end
@@ -576,7 +577,11 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 		local TempV = CreateVar(FP)
 		
 		f_Mul(FP,TempV,DpsDest,_Div(_Mul(_Add(iv.CSX_LV3Incm[CP+1],10),_Add(iv.FMin[CP+1],10)),_Mov(10)))
+		CIf(FP,{CD(iv.HotTimeBonus2,1)})
 		f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
+		CIfEnd()
+		f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
+
 		f_LAdd(FP, TotalDPS, TotalDPS, {TempV,0})
 		CIfEnd()
 

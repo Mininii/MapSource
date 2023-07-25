@@ -1876,14 +1876,6 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 			Trigger2X(FP, {}, AutoEnable3)
 		else
 			Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
-			if j >= 26 and j<= 40 then
-				Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, {RemoveUnitAt(All, "Factories", 109, i)})
-				CreateUnitStacked({CV(BossLV,6,AtMost),Command(i,AtLeast,1,k[2])}, 4, k[2], 109,nil, i, nil,1)
-			end
-			if j >= 48 and j<= 50 then
-				Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, {RemoveUnitAt(All, "Factories", 109, i)})
-				CreateUnitStacked({CV(BossLV,6,AtMost),Command(i,AtLeast,1,k[2])}, 4, k[2], 109,nil, i, nil,1)
-			end
 		end
 		--CIf(FP,MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1))
 		--CallTriggerX(FP,Call_Print13[i+1],{MemX(Arr(AutoEnchArr,((j-1)*7)+i), Exactly, 1),CD(AutoEnchArr2[j][i+1],0)})
@@ -1904,6 +1896,24 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 
 	end
+
+	CIf(FP,{VRange(BossLV,0,4)})
+	for j = 26, 40 do
+		Trigger2X(FP, {MemX(Arr(AutoEnchArr2,((j-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((j+1-1)*7)+i), Exactly, 0)}, {RemoveUnitAt(All, "Factories", 109, i)})
+		CreateUnitStacked({Bring(i,AtMost,3,LevelUnitArr[j][2],109),MemX(Arr(AutoEnchArr2,((j-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((j+1-1)*7)+i), Exactly, 0)}, 1, LevelUnitArr[j][2], 109,nil, i, nil)
+	end
+	for j = 48, 50 do
+		Trigger2X(FP, {MemX(Arr(AutoEnchArr2,((j-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((j+1-1)*7)+i), Exactly, 0)}, {RemoveUnitAt(All, "Factories", 109, i)})
+		CreateUnitStacked({Bring(i,AtMost,3,LevelUnitArr[j][2],109),MemX(Arr(AutoEnchArr2,((j-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((j+1-1)*7)+i), Exactly, 0)}, 1, LevelUnitArr[j][2], 109,nil, i, nil)
+	end
+
+	CIfEnd()
+	CIf(FP,{VRange(BossLV,5,6)})
+	for x,y in pairs({26,36,40,48,49,50}) do
+		Trigger2X(FP, {MemX(Arr(AutoEnchArr2,((y-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((y+1-1)*7)+i), Exactly, 0)}, {RemoveUnitAt(All, "Factories", 109, i)})
+		CreateUnitStacked({Bring(i,AtMost,3,LevelUnitArr[y][2],109),MemX(Arr(AutoEnchArr2,((y-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((y+1-1)*7)+i), Exactly, 0)}, 1, LevelUnitArr[y][2], 109,nil, i, nil)
+	end
+	CIfEnd()
 	
 	CIfX(FP, {Memory(0x628438,AtLeast,1),TCommand(i,AtMost,ULimitV2,"Men")}) -- 자동구매 관리
 
