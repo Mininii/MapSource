@@ -343,7 +343,7 @@ for i = 0, 6 do -- 각플레이어
 		DisplayExtText("u\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);},{preserved})--공업수치 변조인식, 강퇴
 	CDoActions(FP,{TSetScore(i,SetTo,PLevel[i+1],Custom),AddV(ScTimer[i+1],1),AddV(PTimeV[i+1],1),SubV(DPErT[i+1],1),SetSwitch("Switch 100",Random),SetSwitch("Switch 101",Random)})
-	TriggerX(FP,CV(PTimeV[i+1],24,AtLeast), {Order("Factories", i, 109, Attack, 110),SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),AddV(iv.CurPlayTime[i+1],1)},{preserved})
+	TriggerX(FP,CV(PTimeV[i+1],24,AtLeast), {SubV(PTimeV[i+1],24),AddV(PlayTime[i+1],1),SubV(TimeAttackScore2[i+1],1),AddV(iv.CurPlayTime[i+1],1)},{preserved})
 
 
 	TriggerX(FP,{LocalPlayerID(i),Command(i,AtMost,1,"Men"),Command(i,AtMost,0,"Factories"),CV(Time2,60000,AtLeast),CD(SCA.LoadCheckArr[i+1],2)},{SetV(Time2,0),SetMemory(0x58F500, SetTo, 1),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 보유 유닛이 없을 경우 \x07실제시간 \x031분\x04마다 \x1C자동저장 \x04됩니다. \x07저장중..."), 4),DisplayExtText(StrDesignX("\x03SYSTEM \x04: 수동저장은 F9를 눌러주세요."),4)},{preserved})
@@ -1909,6 +1909,10 @@ TriggerX(FP,{CV(PBossLV[i+1],9,AtLeast)},{SetCDX(PBossClearFlag, 8,8)})
 
 	CIfEnd()
 	CIf(FP,{VRange(BossLV,5,6)})
+	function BossRange(left,right)
+		Trigger2X(FP, {MemX(Arr(AutoEnchArr2,((left-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((right+1-1)*7)+i), Exactly, 0)}, {RemoveUnitAt(All, "Factories", 109, i)})
+		CreateUnitStacked({Bring(i,AtMost,3,LevelUnitArr[left][2],109),MemX(Arr(AutoEnchArr2,((left-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((right+1-1)*7)+i), Exactly, 0)}, 1, LevelUnitArr[left][2], 109,nil, i, nil)
+	end
 	for x,y in pairs({26,36,40,48,49,50}) do
 		Trigger2X(FP, {MemX(Arr(AutoEnchArr2,((y-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((y+1-1)*7)+i), Exactly, 0)}, {RemoveUnitAt(All, "Factories", 109, i)})
 		CreateUnitStacked({Bring(i,AtMost,3,LevelUnitArr[y][2],109),MemX(Arr(AutoEnchArr2,((y-1)*7)+i), Exactly, 1),MemX(Arr(AutoEnchArr2,((y+1-1)*7)+i), Exactly, 0)}, 1, LevelUnitArr[y][2], 109,nil, i, nil)
