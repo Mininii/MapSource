@@ -40,7 +40,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0452"
+VerText = "\x19ver\x07. \x043\x07.\x0453"
 
 TestSet(0)
 if Limit == 1 then
@@ -52,17 +52,19 @@ if Limit == 1 then
 	CreatorCheatMode = 0
 	CreatorCheatModeMul = 5
 	SlotEnable =0
-	FragMode = 0
+	FragMode = 1
 	HotTimeTest = 1
+	HotTimeMul = 4
 else
 	HotTimeTest = 0
+	HotTimeMul = 1
 FragMode = 0
 CreatorCheatMode = 0
 SpeedTestMode = 0
 SlotEnable =1
 end
 FP = P8
-LimitVer = 58
+LimitVer = 59
 StatVer = 14
 StatVer2 = 5
 EUDTurbo(FP)

@@ -1738,7 +1738,8 @@ for i = 45, 50 do
 			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."))}, 1)
 			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다.\x07(핫타임 2배)"))}, 1)
 		else
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04확률에 당첨되어 "..k[1].." "..Convert_Number(k[2]).." \x04개를 획득하였습니다.\x07(핫타임 2배)"))}, 1)
 			
 		end
 		
@@ -1768,15 +1769,40 @@ for i = 45, 50 do
 				
 				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				f_LAdd(FP,k[5],k[5],src)
+				if HotTimeTest == 1 then
+					f_LAdd(FP,k[5],k[5],_LMul(src, tostring(HotTimeMul)))
+				else
+					f_LAdd(FP,k[5],k[5],src)
+				end
 				CIfEnd()
+				else
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					if HotTimeTest == 1 then
+						f_LAdd(FP,k[5],k[5],_LMul(src, tostring(HotTimeMul)))
+					else
+						f_LAdd(FP,k[5],k[5],src)
+					end
+					CIfEnd()
+
 				end
 				f_LAdd(FP,k[5],k[5],src)
 			else
 				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				CAdd(FP,k[5],k[2])
+				if HotTimeTest == 1 then
+					CAdd(FP,k[5],k[2]*HotTimeMul)
+				else
+					CAdd(FP,k[5],k[2])
+				end
 				CIfEnd()
+				else
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					if HotTimeTest == 1 then
+						CAdd(FP,k[5],k[2]*HotTimeMul)
+					else
+						CAdd(FP,k[5],k[2])
+					end
+					CIfEnd()
 				end
 				CAdd(FP,k[5],k[2])
 			end
@@ -1789,7 +1815,19 @@ for i = 45, 50 do
 			
 				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+				if HotTimeTest == 1 then
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), _LMul(src, tostring(HotTimeMul)))
+				else
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+				end
+				CIfEnd()
+				else
+				CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+				if HotTimeTest == 1 then
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), _LMul(src, tostring(HotTimeMul)))
+				else
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+				end
 				CIfEnd()
 				end
 				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
@@ -1797,7 +1835,20 @@ for i = 45, 50 do
 			
 				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+				if HotTimeTest == 1 then
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2]*HotTimeMul,Add)
+				else
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+				end
+				CIfEnd()
+				else
+					
+				CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+				if HotTimeTest == 1 then
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2]*HotTimeMul,Add)
+				else
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+				end
 				CIfEnd()
 				end
 				CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
@@ -1821,16 +1872,44 @@ for i = 45, 50 do
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
 	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
-		f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
+	
+				if HotTimeTest == 1 then
+					f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44]*HotTimeMul,0})
+				else
+					f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
+				end
 	CIfEnd()
+	else
+		CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+		
+					if HotTimeTest == 1 then
+						f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44]*HotTimeMul,0})
+					else
+						f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
+					end
+		CIfEnd()
 	end
 	f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
 
 	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
-	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+	
+				if HotTimeTest == 1 then
+					CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44]*HotTimeMul,Add)
+				else
+					CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+				end
 	CIfEnd()
+	else
+		CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+		
+					if HotTimeTest == 1 then
+						CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44]*HotTimeMul,Add)
+					else
+						CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+					end
+		CIfEnd()
 	end
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
@@ -2058,8 +2137,16 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CElseX()
 				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--판매권이필요없어요
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
-					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
-					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+					if HotTimeTest == 1 then
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {_Mul(ECW, HotTimeMul),0}))
+					else
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIfEnd()
+					end
 					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIf(FP, {CV(CI,14)})
@@ -2070,8 +2157,16 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					CElseX({TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
 					f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
-					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
-					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+					if HotTimeTest == 1 then
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {_Mul(ECW, HotTimeMul),0}))
+					else
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIfEnd()
+					end
 					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 					CIfXEnd()
@@ -2372,8 +2467,16 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 		NIfX(FP,{CV(EXPV,1,AtLeast)})
 			NIfX(FP, {VRange(CIV,14,24)},{})--판매권이필요없어요
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
-				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+				if HotTimeTest == 1 then
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {_Mul(ECW, HotTimeMul),0}))
+				else
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIfEnd()
+				end
 				CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 				CIf(FP, {CV(CIV,14)})
@@ -2385,8 +2488,16 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 			
 				f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
-				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
-				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+				if HotTimeTest == 1 then
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {_Mul(ECW, HotTimeMul),0}))
+				else
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIfEnd()
+				end
 				CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 			NIfXEnd()

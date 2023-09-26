@@ -552,6 +552,8 @@ end
 	iv.PartyBonus2 = CreateCcode()
 	iv.HotTimeBonus = CreateCcode()
 	iv.HotTimeBonus2 = CreateCcode()
+	iv.SpHotTimeBonus = CreateCcode()
+	
 	iv.PBossClearFlag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정
@@ -1076,20 +1078,20 @@ FirstReward4 = {
 	if Limit == 1 and FragMode == 1 then
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
-		Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2_Test")
-		Cost_FIncm = ReciveCostDataFile(500,"FIncm_Test")
-		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2_Test")
-	
-		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
+		--Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2_Test")
+		--Cost_FIncm = ReciveCostDataFile(500,"FIncm_Test")
+		--Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2_Test")
+	--
+		--Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
 	else
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
-		Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
-		Cost_FIncm = ReciveCostDataFile(200,"FIncm")
-		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
-	
-		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 	end
+	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
+	Cost_FIncm = ReciveCostDataFile(200,"FIncm")
+	Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
+
+	Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 	
 	
 	

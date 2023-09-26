@@ -281,11 +281,13 @@ function Interface()
 
 	CMov(FP,PCheckV,0)
 	if Limit == 1 then
-		CAdd(FP,GeneralPlayTime,100)
+		CAdd(FP,GeneralPlayTime,1)
 	else
 		CAdd(FP,GeneralPlayTime,1)
 	end
-	TriggerX(FP,{CD(iv.HotTimeBonus,1),CV(GeneralPlayTime,24*60*60*12)},{SetCD(iv.HotTimeBonus,0),RotatePlayer({DisplayExtText(StrDesignX("\x07핫 타임 보너스\x04가 \x06종료되었습니다.\x04(보스 처치 보상은 유지됨)"),4)}, Force1, FP)})
+	if Limit == 0 then
+		TriggerX(FP,{CD(iv.HotTimeBonus,1),CV(GeneralPlayTime,24*60*60*12)},{SetCD(iv.HotTimeBonus,0),SetCD(iv.SpHotTimeBonus,0),RotatePlayer({DisplayExtText(StrDesignX("\x07핫 타임 보너스\x04가 \x06종료되었습니다.\x04(보스 처치 보상은 유지됨)"),4)}, Force1, FP)})
+	end
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 		TriggerX(FP,{HumanCheck(i,0)},{RemoveUnit("Men", P12),RemoveUnit("Factories", P12)})
