@@ -3,9 +3,11 @@ function Include_GunData(Size,LineNum)
 	local GunPlayer = CreateVar(FP)
 	local CIndex = FuncAlloc
 	local RMBak = RedNumber
-	local RedNumber = RMBak
+	local RedNumberL = RMBak
 	if RedMode == 1 then
-		RedNumber=1
+		RedNumberL=1
+	else
+		RedNumberL = RMBak
 	end
 	f_GunSendT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
 	f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
@@ -372,7 +374,7 @@ end
 			TriggerX(FP,{GCP(4+i),Gun_Line(0,Exactly,133),Gun_Line(6,AtLeast,1)},{SubCD(HiveCcode[i+1],1)},{preserved})
 		end
 		CTrigger(FP,{Gun_Line(6,AtLeast,1)},{Gun_DoSuspend()},1)
-		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,SetTo,1)},1)
+		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumberL)},{Gun_SetLine(6,SetTo,1)},1)
 	CIfEnd()
 
 	
@@ -381,7 +383,7 @@ end
 	NexEffArr = {429,424,427,337,951,549}
 	NexUIDArr2 = {17,77,78,10,3,100}
 	NexEffArr2 = {332,213,214,493,442,231}
-		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},1)
+		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumberL)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)},1)
 		CTrigger(FP,{Gun_Line(6,AtLeast,5)},{Gun_DoSuspend(),AddCD(NexCcode,1)},1)
 		for i = 5, 8 do
 			TriggerX(FP,{Gun_Line(4,Exactly,i-1),Gun_Line(6,Exactly,5)},{Simple_CalcLoc(0,-128,-128,128,128),SetCp(i-1),RunAIScriptAt(JYD,1)})
@@ -414,7 +416,7 @@ end
 
 	WV = CreateVar(FP)
 	CIf_GCase(148)
-		CTrigger(FP,{CD(Theorist,1,AtLeast)},{TGun_SetLine(7, Add, _Div(_Sub(_Mov(400),RedNumber),12))},1)
+		CTrigger(FP,{CD(Theorist,1,AtLeast)},{TGun_SetLine(7, Add, _Div(_Sub(_Mov(400),RedNumberL),12))},1)
 		CTrigger(FP,{Gun_Line(10,AtMost,0)},{Gun_SetLine(7,SetTo,50),Gun_SetLine(10,SetTo,1)},1)
 		CMov(FP,TRepeatX,G_CA_CenterX)
 		CMov(FP,TRepeatY,G_CA_CenterY)
@@ -556,7 +558,7 @@ end
 	CIf_GCase(151)
 		DoActions2(FP,{Simple_CalcLoc(0,-256,-256,256,256)})
 		CDoActions(FP,{Gun_SetLine(8,SetTo,1),TCreateUnit(1,84,1,G_CA_Player)})
-		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
+		CTrigger(FP,{TGun_Line(7,AtLeast,RedNumberL)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
 		CereT = {80,8}
 		for j = 1, 2 do
 		for i = 0, 7 do
@@ -604,7 +606,7 @@ end
 	CIfEnd()
 
 	CIf_GCase(127)
-	CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
+	CTrigger(FP,{TGun_Line(7,AtLeast,RedNumberL)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
 	Ion_CUTable1={{23,69,11},{81,30},{67,102},{60,68}}
 	Ion_CUTable2={{21,17},{28,19},{22,10},{8,3}}
 	Ion_CUTable3={{55,53,54,48},{104,56,53,47},{56,53,54,48},{104,62,51,15}}
@@ -633,7 +635,7 @@ end
 	CTrigger(FP,{Gun_Line(6,AtLeast,3)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	CIf_GCase(126)
-	CTrigger(FP,{TGun_Line(7,AtLeast,RedNumber)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
+	CTrigger(FP,{TGun_Line(7,AtLeast,RedNumberL)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),Gun_SetLine(9,Add,1)},1)
 	--	Tier1 = {17,19,77,78,76,63,21,88,28,86,75,25}
 	--	Tier2 = {79,80,52,10,22,65,70}
 	--	Tier3 = {27,66,29,98,57,3,8,11,69,100}
@@ -977,7 +979,7 @@ end
 
 	CIf_GCase(175)
 	CTrigger(FP,{Gun_Line(7,Exactly,1)},{TCreateUnitWithProperties(5,13,1,G_CA_Player,{energy=100})},1)
-	CIf(FP,{TGun_Line(7,AtLeast,RedNumber)})
+	CIf(FP,{TGun_Line(7,AtLeast,RedNumberL)})
 	DoActions2X(FP,{Gun_DoSuspend(),AddCD(XelCcode,1),RotatePlayer({PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")},HumanPlayers,FP)})
 		for i = 4, 7 do
 			TriggerX(FP,{CD(Theorist,0),GCP(i)},{Order("Men",i,64,Attack,2+i-4)},{preserved})
