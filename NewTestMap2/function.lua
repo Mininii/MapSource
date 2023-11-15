@@ -578,7 +578,11 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 		
 		f_Mul(FP,TempV,DpsDest,_Div(_Mul(_Add(iv.CSX_LV3Incm[CP+1],10),_Add(iv.FMin[CP+1],10)),_Mov(10)))
 		CIf(FP,{CD(iv.HotTimeBonus2,1)})
-		f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
+		if Limit == 1 and HotTimeTest == 1 then
+			f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {_Mul(TempV,_Mov(HotTimeMul)),0})
+		else
+			f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
+		end
 		CIfEnd()
 		f_LAdd(FP, iv.Credit[CP+1], iv.Credit[CP+1], {TempV,0})
 

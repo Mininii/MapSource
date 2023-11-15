@@ -1076,20 +1076,20 @@ FirstReward4 = {
 	if Limit == 1 and FragMode == 1 then
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc_Test")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2_Test")
-		Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2_Test")
-		Cost_FIncm = ReciveCostDataFile(500,"FIncm_Test")
-		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2_Test")
-	
-		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
+		--Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2_Test")
+		--Cost_FIncm = ReciveCostDataFile(500,"FIncm_Test")
+		--Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2_Test")
+	--
+		--Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax_Test")
 	else
 		Cost_FAcc = ReciveCostDataFile(30, "FAcc")
 		Cost_FAcc2 = ReciveCostDataFile(30,"FAcc2")
-		Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
-		Cost_FIncm = ReciveCostDataFile(200,"FIncm")
-		Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
-	
-		Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 	end
+	Cost_FBrSh2= ReciveCostDataFile(1000,"FBrSh2")
+	Cost_FIncm = ReciveCostDataFile(200,"FIncm")
+	Cost_FMEPer2 = ReciveCostDataFile(350,"FMEPer2")
+
+	Cost_FMinMax = ReciveCostDataFile(1000,"FMinMax")
 	
 	
 	
