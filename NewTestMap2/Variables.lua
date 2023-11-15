@@ -552,6 +552,8 @@ end
 	iv.PartyBonus2 = CreateCcode()
 	iv.HotTimeBonus = CreateCcode()
 	iv.HotTimeBonus2 = CreateCcode()
+	iv.SpHotTimeBonus = CreateCcode()
+	
 	iv.PBossClearFlag = CreateCcode()
 
 	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10로 나눠 경험치에 더할 값 저장용. 사용 미정

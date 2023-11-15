@@ -1738,7 +1738,8 @@ for i = 45, 50 do
 			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
 			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
 		else
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
 			
 		end
 		
@@ -1774,6 +1775,15 @@ for i = 45, 50 do
 					f_LAdd(FP,k[5],k[5],src)
 				end
 				CIfEnd()
+				else
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					if HotTimeTest == 1 then
+						f_LAdd(FP,k[5],k[5],_LMul(src, tostring(HotTimeMul)))
+					else
+						f_LAdd(FP,k[5],k[5],src)
+					end
+					CIfEnd()
+
 				end
 				f_LAdd(FP,k[5],k[5],src)
 			else
@@ -1785,6 +1795,14 @@ for i = 45, 50 do
 					CAdd(FP,k[5],k[2])
 				end
 				CIfEnd()
+				else
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					if HotTimeTest == 1 then
+						CAdd(FP,k[5],k[2]*HotTimeMul)
+					else
+						CAdd(FP,k[5],k[2])
+					end
+					CIfEnd()
 				end
 				CAdd(FP,k[5],k[2])
 			end
@@ -1803,12 +1821,29 @@ for i = 45, 50 do
 					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 				end
 				CIfEnd()
+				else
+				CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+				if HotTimeTest == 1 then
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), _LMul(src, tostring(HotTimeMul)))
+				else
+					f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
+				end
+				CIfEnd()
 				end
 				f_LAdd(FP, WArrX(GetWArray(k[4][1],7), WArrI, WArrI4),WArrX(GetWArray(k[4][1],7), WArrI, WArrI4), src)
 		else
 			
 				if i <= 48 then
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
+				if HotTimeTest == 1 then
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2]*HotTimeMul,Add)
+				else
+					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2],Add)
+				end
+				CIfEnd()
+				else
+					
+				CIf(FP,{CD(iv.SpHotTimeBonus,1)})
 				if HotTimeTest == 1 then
 					CMovX(FP,VArrX(GetVArray(k[4][1], 7), VArrI, VArrI4),k[2]*HotTimeMul,Add)
 				else
@@ -1844,6 +1879,15 @@ for i = 45, 50 do
 					f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 				end
 	CIfEnd()
+	else
+		CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+		
+					if HotTimeTest == 1 then
+						f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44]*HotTimeMul,0})
+					else
+						f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
+					end
+		CIfEnd()
 	end
 	f_LAdd(FP,iv.GFfragLoc,iv.GFfragLoc,{pifrag[i-44],0})
 	CIfEnd()
@@ -1857,6 +1901,15 @@ for i = 45, 50 do
 					CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 				end
 	CIfEnd()
+	else
+		CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+		
+					if HotTimeTest == 1 then
+						CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44]*HotTimeMul,Add)
+					else
+						CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
+					end
+		CIfEnd()
 	end
 	CMovX(FP,VArrX(GetVArray(iv.B_PFfragItem[1], 7), VArrI, VArrI4),pifrag[i-44],Add)
 	CIfEnd()
@@ -2089,6 +2142,10 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					else
 						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIfEnd()
 					end
 					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
@@ -2105,6 +2162,10 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					else
 						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
 						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
+						CIfEnd()
 					end
 					CIfEnd()
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {ECW,0}))
@@ -2411,6 +2472,10 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 				else
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIfEnd()
 				end
 				CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
@@ -2428,6 +2493,10 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 				else
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIf(FP,{CD(iv.SpHotTimeBonus,1)})
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
+					CIfEnd()
 				end
 				CIfEnd()
 				f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {ECW,0}))
