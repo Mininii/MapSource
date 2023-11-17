@@ -303,11 +303,11 @@ function init()
 			
 			if Limit == 1 then
 				for j,k in pairs(ZergGndUArr) do
-					SetUnitsDat2X(PatchArr,k,{Height=12})
+					SetUnitsDat2X(PatchArr,k,{Height=12,AdvFlag={4,4}})
 				end
 				
 			end
-			SetUnitsDat2X(PatchArr,13,{AdvFlag={4,4}})
+			--SetUnitsDat2X(PatchArr,13,{AdvFlag={4,4}}) 
 
 			--SetUnitsDat2X(PatchArr,25,{AdvFlag={4,4}})
 			--SetUnitsDat2X(PatchArr,30,{AdvFlag={4,4}})

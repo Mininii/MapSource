@@ -6,8 +6,28 @@ function Gun_System()
 
 	CIf(FP,{CV(HondonMode,1,AtLeast)})
 	TurboSeekT = CreateCcode()
-	DoActionsX(FP,{AddCD(TurboSeekT,1)})
+	UnitTurnRadT = CreateCcode()
+	DoActionsX(FP,{AddCD(TurboSeekT,1),AddCD(UnitTurnRadT,1)})
 	TriggerX(FP,{CD(TurboSeekT,2,AtLeast)},{SetDeaths(-111923, SetTo, 1, 0),SubCD(TurboSeekT,2)},{preserved})
+
+	CIf(FP,{CD(UnitTurnRadT,12,AtLeast)},{SetCD(UnitTurnRadT,0)})
+	
+	PtrV = CreateVar(FP)
+
+	CMov(FP,PtrV,19025)
+	CWhile(FP,CV(PtrV,19025 + (84*1699),AtMost))
+	CIf(FP,{TMemoryX(_Add(PtrV,19),AtMost,6,0xFF),TTOR({_TMemoryX(_Add(PtrV,25),Exactly,12,0xFF),_TMemoryX(_Add(PtrV,25),Exactly,60,0xFF)})})
+	CDoActions(FP, {
+		TSetMemoryX(_Add(PtrV,8),SetTo,127*65536,0xFF0000),
+		TSetMemoryX(_Add(PtrV,9),SetTo,0*16777216,0xFF000000),
+		})
+	CIfEnd()
+	CAdd(FP,PtrV,84)
+	CWhileEnd()
+
+
+	CIfEnd()
+	
 	CIfEnd()
 
 	CanWarn = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n\x13\x04캔낫을 의도적으로 걸 경우 게임에서 \x08패배\x04합니다.\n\x13\x04\x07유닛 생성 큐\x04에 유닛이 \x08５０，０００\x04이상 \x10증가\x04하지 않도록 \x08주의\x04해 주시기 바랍니다.\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
@@ -30,12 +50,12 @@ function Gun_System()
 		table.insert(InvEnvTable,SetInvincibility(Enable, k, FP, 64))
 	end
 
-	Trigger2X(FP,{--유닛생성 큐 데이터 5000이상 건작무적
-	CV(CreateUnitQueueNum,5000,AtLeast);
-},InvEnvTable,{preserved})
-Trigger2X(FP,{--유닛생성 큐 데이터 4999이하 건작무적해제
-CV(CreateUnitQueueNum,4999,AtMost);
-},InvDisTable,{preserved})
+--	Trigger2X(FP,{--유닛생성 큐 데이터 5000이상 건작무적
+--	CV(CreateUnitQueueNum,5000,AtLeast);
+--},InvEnvTable,{preserved})
+--Trigger2X(FP,{--유닛생성 큐 데이터 4999이하 건작무적해제
+--CV(CreateUnitQueueNum,4999,AtMost);
+--},InvDisTable,{preserved})
 
 
 	Trigger2X(FP,{--유닛생성 큐 데이터 5만개이상 패배

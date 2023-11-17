@@ -44,10 +44,10 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(1)
-VNum = "3.4"
+TestSet(0)
+VNum = "3.5"
 
-AutoSettingMode = true
+AutoSettingMode = false
 
 Test=""
 if Limit == 1 then Test="T" end
