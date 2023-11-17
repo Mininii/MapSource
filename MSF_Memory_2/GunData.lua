@@ -1029,75 +1029,37 @@ end
 	end
 	CIfX(FP,{Gun_Line(30,Exactly,1)})
 
-	if Limit == 1 then
-		TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom 달성시 특수패턴
-	end
-
---	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
---	31이 1일경우 보스 소환 작동
-	CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
-	CIf(FP,CD(Theorist,1,AtLeast))
-	for i = 0,3 do
-		local Opr = 0
-		if i%2 == 1 then
-			Opr = 2048
-		end
-		RandR = f_CRandNum(2048, Opr,GCP(i+4))
-	end
-	CMov(FP,G_CA_CenterX,RandR)
-	for i = 0,3 do
-		local Opr = 0
-		if i >= 2 then
-			Opr = 2048
-		end
-		RandR = f_CRandNum(2048, Opr,GCP(i+4))
-	end
-	CMov(FP,G_CA_CenterY,RandR)
-	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
-
+	CIf(FP,{GCP(4)})
+		
+	CrSwitch = CreateCcode()
 	
-	
-	CIfEnd()
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	--중간보스 소환 
---Infinite Divide,(11보스 Divide)
---Pentiment in Tenebris(1시보스 Tenebris)
---World Demication(7시보스 Demise)
---Arcana Anomaly(5시보스 Anomaly)
-BossUID = {87,74,5,2}
-	HName2 = {
-		"\x1FＩ\x04ｎｆｉｎｉｔｅ \x10Ｄ\x04ｉｖｉｄｅ,",
-		"\x10Ｐ\x04ｅｎｔｉｍｅｎｔ　ｉｎ　\x15Ｔ\x04ｅｎｅｂｒｉｓ",
-		"\x19Ｗ\x04ｏｒｌｄ \x18Ｄ\x04ｅｍｉｃａｔｉｏｎ",
-		"\x1CＡ\x04ｒｃａｎａ \x1BＡ\x04ｎｏｍａｌｙ"
-	}
-    WarpXY = {
-		{1632,1824},
-		{-1632+4096,1824},
-		{1632,-1824+4096},
-		{-1632+4096,-1824+4096}}
-	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
-		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
+	local Ibit = 606.0606*2
+	local InterCrTable = {}
+	local InterDestTable = {}
+	for i = 0, 15 do
+		table.insert(InterCrTable,850+((Ibit/2)*i))
+		table.insert(InterCrTable,850+((Ibit/2)*16)+((Ibit/4)*i))
+		table.insert(InterCrTable,850+((Ibit/2)*16)+((Ibit/4)*16)+((Ibit/8)*i))
+		table.insert(InterCrTable,850+((Ibit/2)*16)+((Ibit/4)*16)+((Ibit/8)*16)+((Ibit/16)*i))
 	end
+	for j,k in pairs(InterCrTable) do
+		TriggerX(FP, {Gun_Line(8,AtLeast,k)}, {AddCD(CrSwitch,1)})
+	end
+		TriggerX(FP, {Gun_Line(8,AtLeast,850+((Ibit/2)*16)+((Ibit/4)*16)+((Ibit/8)*16)+((Ibit/16)*16))}, {AddCD(CrSwitch,1)},{preserved})
 	
-	CIfXEnd()
 
 
-
-	CElseX()
-	CIfX(FP,{TTOR({Gun_Line(8,AtMost,1224),TTAND({Gun_Line(13,AtLeast,1),Gun_Line(8,AtLeast,15410),Gun_Line(8,AtMost,16350)})})})
-		CIfX(FP,{Gun_Line(8,AtMost,1224)})
-		CSub(FP,N_R,_Mov(1224),Var_TempTable[9])
+		CIfX(FP,{Gun_Line(8,AtMost,850)})
+		CSub(FP,N_R,_Mov(850),Var_TempTable[9])
 		f_Div(FP,N_R,4)
 		CElseX()
-		CSub(FP,N_R,_Mov(16350),Var_TempTable[9])
-		f_Div(FP,N_R,3)
+		G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP",nil,nil,1)
+		CSub(FP,N_R,Var_TempTable[9],850)
+		f_Div(FP,N_R,55)
 		CIfXEnd()
 
 		CMov(FP,N_A,0)
 		TempRand = f_CRandNum(360)
-		DoActionsX(FP,{SetCD(N_Check,0)})
 		CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
 		f_Lengthdir(FP,N_R,_Add(N_A,TempRand),N_X,N_Y)
 		
@@ -1105,70 +1067,173 @@ BossUID = {87,74,5,2}
 		CAdd(FP,N_Y,G_CA_CenterY)
 
 		Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(4)},20,548,0)
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(5)},20,548,13)
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(6)},20,548,17)
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(7)},20,548,10)
 
+		CWhile(FP,{CD(CrSwitch,1,AtLeast)},{SubCD(CrSwitch,1)})
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+
+		DoActions(FP,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),CreateUnit(1,84,1,FP),KillUnit(84,FP),SetMemoryB(0x6636B8+94,SetTo,130)})
+		CDoActions(FP,{
+			TSetDeaths(_Add(Nextptrs,13),SetTo,100,0),
+			TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000),
+			TSetDeathsX(_Add(Nextptrs,18),SetTo,100,0,0xFFFF)})
+		CWhileEnd()
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,10)
 		
-		TriggerX(FP,{CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},{SetCD(N_Check,1)},{preserved})
-		CAdd(FP,N_A,12)
+
+
+		CAdd(FP,N_A,8)
 		CWhileEnd()
 
-	CElseIfX({Gun_Line(10,AtMost,0)},{Gun_SetLine(10,SetTo,1)})
-		G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
 		
-	--Ion_CUTable3={{55,53,54,48,17},{104,56,53,47,19},{56,53,54,48,10},{104,62,51,15,3}}
-	G_CA_SetSpawn({},{56,53,54,48},"ACAS",{"Warp2","Warp3","Warp3","Warp3"},"MAX",1,nil,"CP")
-	G_CA_SetSpawn({},{104,51,15},"ACAS",{"Warp3","Warp4","Warp4"},"MAX",1,nil,"CP")
-	CElseIfX({Gun_Line(8,AtLeast,8790),Gun_Line(11,AtMost,0)},{Gun_SetLine(11,SetTo,1)})
-	G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
-	G_CA_SetSpawn({},{56,53,54,48},"ACAS",{"Warp2","Warp3","Warp3","Warp3"},"MAX",1,nil,"CP")
-	G_CA_SetSpawn({},{104,51,15},"ACAS",{"Warp3","Warp4","Warp4"},"MAX",1,nil,"CP")
-	CElseIfX({Gun_Line(8,AtLeast,15410),Gun_Line(13,AtMost,0)},{Gun_SetLine(13,SetTo,1)})
-	CDoActions(FP,{TKillUnit("Factories",G_CA_Player)})
-	G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
-	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
-	CIf(FP,CD(Theorist,1,AtLeast))
-	for i = 0,3 do
-		local Opr = 0
-		if i%2 == 1 then
-			Opr = 2048
-		end
-		RandR = f_CRandNum(2048, Opr,GCP(i+4))
-	end
-	CMov(FP,G_CA_CenterX,RandR)
-	for i = 0,3 do
-		local Opr = 0
-		if i >= 2 then
-			Opr = 2048
-		end
-		RandR = f_CRandNum(2048, Opr,GCP(i+4))
-	end
-	CMov(FP,G_CA_CenterY,RandR)
-	G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
 
-	
-	
+		Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{})
+		DoActions(FP,{Order(94,P5,64,Move,1)})
+		TriggerX(FP, {Gun_Line(8,AtLeast,20240)}, {Gun_SetLine(31,SetTo,1),SetCp(4),RunAIScriptAt(JYD, 64),SetCp(FP)},{preserved})--Axiom 달성시 특수패턴
+		G_CA_SetSpawn({Gun_Line(8,AtLeast,20240)},{84},"ACAS","Warp1",nil,5,nil,"CP",nil,nil,1)
+
+
 	CIfEnd()
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	--중간보스 소환 
-BossUID = {87,74,5,2}
-	HName = {
-		"\x10Ｄ\x04ｉｖｉｄｅ",
-		"\x15Ｔ\x04ｅｎｅｂｒｉｓ",
-		"\x18Ｄ\x04ｅｍｉｓｅ",
-		"\x1BＡ\x04ｎｏｍａｌｙ"
-	}
-    WarpXY = {
-		{1632,1824},
-		{-1632+4096,1824},
-		{1632,-1824+4096},
-		{-1632+4096,-1824+4096}}
-	for j = 4, 7 do
-		Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
-		CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
-	end
+
+
+
+
+		if Limit == 1 then
+			--TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom 달성시 특수패턴
+		end
+
+	--	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+	--	31이 1일경우 보스 소환 작동
+		CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+			CIf(FP,CD(Theorist,1,AtLeast))
+				for i = 0,3 do
+					local Opr = 0
+					if i%2 == 1 then
+						Opr = 2048
+					end
+					RandR = f_CRandNum(2048, Opr,GCP(i+4))
+				end
+				CMov(FP,G_CA_CenterX,RandR)
+				for i = 0,3 do
+					local Opr = 0
+					if i >= 2 then
+						Opr = 2048
+					end
+					RandR = f_CRandNum(2048, Opr,GCP(i+4))
+				end
+				CMov(FP,G_CA_CenterY,RandR)
+				G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
+
+				
+			
+			CIfEnd()
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			--중간보스 소환 
+		--Infinite Divide,(11보스 Divide)
+		--Pentiment in Tenebris(1시보스 Tenebris)
+		--World Demication(7시보스 Demise)
+		--Arcana Anomaly(5시보스 Anomaly)
+		BossUID = {87,74,5,2}
+			HName2 = {
+				"\x1FＩ\x04ｎｆｉｎｉｔｅ \x10Ｄ\x04ｉｖｉｄｅ,",
+				"\x10Ｐ\x04ｅｎｔｉｍｅｎｔ　ｉｎ　\x15Ｔ\x04ｅｎｅｂｒｉｓ",
+				"\x19Ｗ\x04ｏｒｌｄ \x18Ｄ\x04ｅｍｉｃａｔｉｏｎ",
+				"\x1CＡ\x04ｒｃａｎａ \x1BＡ\x04ｎｏｍａｌｙ"
+			}
+			WarpXY = {
+				{1632,1824},
+				{-1632+4096,1824},
+				{1632,-1824+4096},
+				{-1632+4096,-1824+4096}}
+			for j = 4, 7 do
+				Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+				CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
+			end
+			
+		CIfXEnd()
+
+
+
+	CElseX()
+		CIfX(FP,{TTOR({Gun_Line(8,AtMost,1224),TTAND({Gun_Line(13,AtLeast,1),Gun_Line(8,AtLeast,15410),Gun_Line(8,AtMost,16350)})})})
+			CIfX(FP,{Gun_Line(8,AtMost,1224)})
+			CSub(FP,N_R,_Mov(1224),Var_TempTable[9])
+			f_Div(FP,N_R,4)
+			CElseX()
+			CSub(FP,N_R,_Mov(16350),Var_TempTable[9])
+			f_Div(FP,N_R,3)
+			CIfXEnd()
+
+			CMov(FP,N_A,0)
+			TempRand = f_CRandNum(360)
+			CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
+			f_Lengthdir(FP,N_R,_Add(N_A,TempRand),N_X,N_Y)
+			
+			CAdd(FP,N_X,G_CA_CenterX)
+			CAdd(FP,N_Y,G_CA_CenterY)
+
+			Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(4)},20,548,0)
+			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(5)},20,548,13)
+			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(6)},20,548,17)
+			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost),GCP(7)},20,548,10)
+			
+			CAdd(FP,N_A,12)
+			CWhileEnd()
+
+		CElseIfX({Gun_Line(10,AtMost,0)},{Gun_SetLine(10,SetTo,1)})
+			G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
+			
+		--Ion_CUTable3={{55,53,54,48,17},{104,56,53,47,19},{56,53,54,48,10},{104,62,51,15,3}}
+		G_CA_SetSpawn({},{56,53,54,48},"ACAS",{"Warp2","Warp3","Warp3","Warp3"},"MAX",1,nil,"CP")
+		G_CA_SetSpawn({},{104,51,15},"ACAS",{"Warp3","Warp4","Warp4"},"MAX",1,nil,"CP")
+		CElseIfX({Gun_Line(8,AtLeast,8790),Gun_Line(11,AtMost,0)},{Gun_SetLine(11,SetTo,1)})
+		G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
+		G_CA_SetSpawn({},{56,53,54,48},"ACAS",{"Warp2","Warp3","Warp3","Warp3"},"MAX",1,nil,"CP")
+		G_CA_SetSpawn({},{104,51,15},"ACAS",{"Warp3","Warp4","Warp4"},"MAX",1,nil,"CP")
+		CElseIfX({Gun_Line(8,AtLeast,15410),Gun_Line(13,AtMost,0)},{Gun_SetLine(13,SetTo,1)})
+		CDoActions(FP,{TKillUnit("Factories",G_CA_Player)})
+		G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
+		CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
+		CIf(FP,CD(Theorist,1,AtLeast))
+		for i = 0,3 do
+			local Opr = 0
+			if i%2 == 1 then
+				Opr = 2048
+			end
+			RandR = f_CRandNum(2048, Opr,GCP(i+4))
+		end
+		CMov(FP,G_CA_CenterX,RandR)
+		for i = 0,3 do
+			local Opr = 0
+			if i >= 2 then
+				Opr = 2048
+			end
+			RandR = f_CRandNum(2048, Opr,GCP(i+4))
+		end
+		CMov(FP,G_CA_CenterY,RandR)
+		G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
+
+		
+		
+		CIfEnd()
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		--중간보스 소환 
+	BossUID = {87,74,5,2}
+		HName = {
+			"\x10Ｄ\x04ｉｖｉｄｅ",
+			"\x15Ｔ\x04ｅｎｅｂｒｉｓ",
+			"\x18Ｄ\x04ｅｍｉｓｅ",
+			"\x1BＡ\x04ｎｏｍａｌｙ"
+		}
+		WarpXY = {
+			{1632,1824},
+			{-1632+4096,1824},
+			{1632,-1824+4096},
+			{-1632+4096,-1824+4096}}
+		for j = 4, 7 do
+			Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07기억\x04의 수호자 \x10【 "..HName[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+			CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
+		end
 	
 	CIfXEnd()
 	CIfXEnd()
