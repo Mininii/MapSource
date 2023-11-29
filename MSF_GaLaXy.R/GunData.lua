@@ -517,7 +517,7 @@ function Include_GunData(Size,LineNum)
 	IonCUTable = {1,6,25}
 	IonCUTable2 = {28,27,27}
 	IonCUTable3 = {75,19,61}
-	
+	 
 
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
 		if X2_Mode == 1 then
@@ -555,7 +555,7 @@ function Include_GunData(Size,LineNum)
 	for l = 1, 3 do
 		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},28,FaciCUTable[l],187,nil,"CG")
 		f_TempRepeat({Gun_Line(9,Exactly,1),CD(GMode,l)},21,FaciCUTable2[l],187,nil,"CG")
-		f_TempRepeat({CD(GMode,l)},25,FaciCUTable3[l],nil,nil,FactTankXY)
+        f_TempRepeat({CD(GMode,l)},25,FaciCUTable3[l],nil,nil,FactTankXY)
 	end
 	Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,{CreateUnit(5,84,1,FP),KillUnit(84,FP)})
 	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})

@@ -456,7 +456,7 @@ for i = 1, 5 do
 			SetMemoryW(0x657678+(117*2),Add,6*i);
 			SetMemoryW(0x656EB0+(118*2),Add,300*i);
 			SetMemoryW(0x657678+(118*2),Add,10*i);
-			SetMemoryW(0x656EB0+(119*2),Add,1000*i);
+			SetMemoryW(0x656EB0+(119*2),Add,600*i);
 			SetMemoryW(0x657678+(119*2),Add,40*i);
 			SetMemoryW(0x656EB0+(120*2),Add,150*i);
 			SetMemoryW(0x657678+(120*2),Add,41*i);

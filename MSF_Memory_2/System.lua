@@ -663,11 +663,13 @@ HPRegenTable = {64}
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,204,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,33,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,84,0,0xFF))
-	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,94,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,42,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,191,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,128,0,0xFF))
 	EXCC_BreakCalc(DeathsX(CurrentPlayer,Exactly,205,0,0xFF))
+
+	
+	EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,94,0,0xFF)})
 	
 
 	CIf(FP,{CD(tesStart,1),CD(tesFlag,1),DeathsX(CurrentPlayer,Exactly,60,0,0xFF)},{SetMemory(0x662350+(64*4), SetTo, 3854862*256)}) -- testify probe pattern

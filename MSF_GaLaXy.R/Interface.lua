@@ -22,11 +22,17 @@ function Interface()
 			PreserveTrigger();
 			},
 		}
-	Trigger { -- 동맹상태 고정
+		Trigger { -- 동맹상태 고정
+		players = {Force1},
+		actions = {
+			SetAllianceStatus(Force1,Ally);
+			SetAllianceStatus(P12,Enemy);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 비전 preserved 제거
 	players = {Force1},
 	actions = {
-		SetAllianceStatus(Force1,Ally);
-		SetAllianceStatus(P12,Enemy);
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");
 		RunAIScript("Turn ON Shared Vision for Player 3");
@@ -34,7 +40,6 @@ function Interface()
 		RunAIScript("Turn ON Shared Vision for Player 5");
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		RunAIScript("Turn ON Shared Vision for Player 7");
-		PreserveTrigger();
 	},
 }
 	for i = 1, 6 do -- 강퇴기능
