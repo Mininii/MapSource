@@ -40,7 +40,7 @@ NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
-TestSet(0)
+TestSet(1)
 TestPMul=2
 VerText = "\x04Ver. Beta. 0.8"
 if Limit == 1 then
@@ -86,8 +86,13 @@ end
 			BlasterBullet = TStruct_init(FP,32,20,HumanPlayers)
 			BoneBullet = TStruct_init(FP,200,20,HumanPlayers)
 			Include_G_CB_Library(0x600,256,55,{Var_TempTable[2],Var_TempTable[3]},{TRepeatX,TRepeatY},G_CB_ShapeT,G_CB_LoopMaxT)
+			DataInput()
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
+		Start_init()
+		
+		--CT_Prev()
+		
 		DoHumanCheck()
 		BGMManager()
 		onInit_EUD() -- onPluginStart
@@ -115,6 +120,8 @@ end
 		CIfEnd()
 		NoAirCollisionX(FP)
 	CIfEnd()
+	--CT_Next()
+	init_Setting()
 	Enable_HideErrorMessage(FP)
 EndCtrig()
 ErrorCheck()

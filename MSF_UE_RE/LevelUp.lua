@@ -21,6 +21,7 @@ function LevelUp()
 		CommandLeastAt(148,64),
 		CommandLeastAt(130,64),
 		CommandLeastAt(201,64),
+		CV(CreateUnitQueueNum,0),
 		Bring(FP,AtLeast,1,147,64),
 	},{SetCVar(FP,ReserveBGM[2],SetTo,0)})
 	
@@ -47,7 +48,7 @@ function LevelUp()
 			-- 보스소환 테스트
 			if Limit == 1 then
 			--	
-		        CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
+		        --CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
 
 				
 			--	SBossPtr
@@ -329,6 +330,9 @@ function LevelUp()
 		end
 		TriggerX(FP,{},{print_utf8(12,0,"\x07『 \x04추가 \x08뉴클리어\x04가 지급되었습니다. \x07』")},{preserved})
 	CIfEnd()
+	if Limit == 1 then
+		TriggerX(FP, {CD(TestMode,1)}, {SetDeaths(Force1,SetTo,1,70);},{preserved})
+	end
 
 	DoActions2X(FP,{SetDeaths(FP,Subtract,1,147),
 	SetCDeaths(FP,SetTo,0,ReplaceDelayT),

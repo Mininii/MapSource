@@ -686,7 +686,6 @@ local TempAngle = CreateVar(FP)
 
 
 
-local isScore = CreateCcode()
 
 local Call_Repeat = SetCallForward()
 SetCall(FP)
@@ -695,121 +694,49 @@ SetCall(FP)
 --local RetRand = f_CRandNum(#ZergGndUArr,0)
 --CMovX(FP,Repeat_UnitIDV,VArr(ZergGndVArr,RetRand),nil,0xFF)
 --CIfXEnd()
-CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
+
+
+
+
+
+
+
+
+local QueueX = CreateVar(FP)
+local QueueY = CreateVar(FP)
+
+local LocV = CreateVarArr(4, FP)
+
+
 	CIfX(FP,{CV(RepeatType,100)})--탄막유닛 전용 RepeatType
 	CreateBullet(Repeat_UnitIDV, 20, TempAngle, Repeat_X, Repeat_Y, FP)
 	CElseX()
-	CIf(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,0),CVar(FP,RepeatType[2],Exactly,4)})})
-		local Gun_Order = def_sIndex()
-		CJumpXEnd(FP,Gun_Order)
-		f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
-		for i = 0, 6 do
-			NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
-				CJumpX(FP,Gun_Order)
-			NIfEnd()
-		end
-		CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
-		for i = 0, 6 do
-			CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)})
-				CMov(FP,TempBarPos,BarPos[i+1])
-			CIfEnd()
-		end
-		CIfEnd()
-	CIfEnd()
-	-- MoveUnitLoc = 1
-	-- DefAttackLoc = 89
-	-- DefCreateLoc = 90
-	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+		local RepeatProperties = CreateVar(FP)
+		
+		f_Read(FP,0x58DC60,LocV[1],"X",0xFFFFFFFF,1)
+		f_Read(FP,0x58DC68,LocV[2],"X",0xFFFFFFFF,1)
+		f_Read(FP,0x58DC64,LocV[3],"X",0xFFFFFFFF,1)
+		f_Read(FP,0x58DC6C,LocV[4],"X",0xFFFFFFFF,1)
 
-	f_Lengthdir(FP,_Mod(_Rand(),24*32),_Mod(_Rand(),360),CPosX,CPosY)
-	CDiv(FP,CPosY,2)
-	Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,1536,4480,1536,4480)})
+		CMov(FP,QueueX,_iDiv(_Add(LocV[1],LocV[2]),2))
+		CMov(FP,QueueY,_iDiv(_Add(LocV[3],LocV[4]),2))
+
+
+
+	TriggerX(FP,{CD(CB_Repeat_Check,0)},{SetVX(RepeatProperties, 0, 1)},{preserved})
+	TriggerX(FP,{CD(CB_Repeat_Check,1)},{SetVX(RepeatProperties, 1, 1)},{preserved})
 	CDoActions(FP,{
-		TCreateUnitWithProperties(1,Repeat_UnitIDV,90,P8,{energy = 100}),
---		TModifyUnitEnergy(All,Repeat_UnitIDV,P8,1,100);
+		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr),SetTo,QueueX),
+		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr),SetTo,QueueY),
+		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr),SetTo,_Mov(Repeat_UnitIDV,0xFF)),
+		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr),SetTo,CreatePlayer),
+		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr),SetTo,RepeatType),
+		TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr),SetTo,RepeatProperties),
 	})
-	
+	DoActionsX(FP,{AddV(CreateUnitQueueNum,1),AddV(CreateUnitQueuePtr,1)})
+	TriggerX(FP, {CV(CreateUnitQueuePtr,100000,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
 
-	CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-	
-		
-		CTrigger(FP, {TMemoryX(_Add(Repeat_UnitIDV,EPDF(0x664080)), Exactly, 4,4),CD(CB_Repeat_Check,1)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- 공중유닛+CBRepeat 소환 = 겹치기 ON
-		local TempW = CreateWar(FP)
-		f_LMovX(FP, TempW, WArr(MaxHPWArr,Repeat_UnitIDV), SetTo, nil, nil, 1)
-		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
-		local TempV1 = CreateVar(FP)
-		local TempV2 = CreateVar(FP)
-		f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
-			CDoActions(FP, {
-				Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
-				Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
-				Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
-		})
-		CIfEnd()
-
-
-		f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
-		Convert_CPosXY()
-		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
-		CDoActions(FP,{TMoveUnit(1,Repeat_UnitIDV,FP,90,1)})
-		f_Read(FP,_Add(Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
-		Convert_CPosXY()
-		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
-
-		CIfX(FP,CVar(FP,RepeatType[2],Exactly,0),SetCDeaths(FP,SetTo,1,isScore))
-		
-			CMov(FP,CPos,TempBarPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
-			CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89)})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,4),SetCDeaths(FP,SetTo,1,isScore)) -- 겹효과 부여+어택
-
-			CMov(FP,CPos,TempBarPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
-			CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
-
-
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,187),SetCDeaths(FP,SetTo,1,isScore))
-			CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,187*256,0,0xFF00),})
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,1),SetCDeaths(FP,SetTo,1,isScore))
-			f_Read(FP,_Add(Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,59,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(59,-32,-32,32,32)})
-			CDoActions(FP,{
-				TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000),TSetDeathsX(_Add(Nextptrs,72),SetTo,0xFF*256,0,0xFF00),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000),CreateUnit(1,ObEff,60,FP),KillUnit(ObEff, FP)
-			})
-			f_CGive(FP, Nextptrs,nil, P9, FP)
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 공중 충돌판정 삭제 루카스보스 전용 RepeatType
-		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
-		GetLocCenter("Boss",CPosX,CPosY)
-		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
-		CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89),TSetDeathsX(_Add(Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
-		CTrigger(FP,{CVar(FP,Repeat_UnitIDV[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
-
-		CElseIfX(CVar(FP,RepeatType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 RepeatType
-		TriggerX(FP,CVar(FP,Repeat_UnitIDV[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
-		GetLocCenter("Boss",CPosX,CPosY)
-		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
-		CDoActions(FP,{TOrder(Repeat_UnitIDV,FP,90,Attack,89)})
-		CTrigger(FP,{CVar(FP,Repeat_UnitIDV[2],Exactly,27)},{TSetDeathsX(_Add(Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
-		CElseX(SetCDeaths(FP,SetTo,0,isScore))
-			DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
-		CIfXEnd()
-		CIf(FP,CDeaths(FP,AtLeast,1,isScore))
-			f_Mod(FP,BiteCalc,Repeat_UnitIDV,_Mov(2),0xFF)
-			f_Read(FP,_Add(_Div(Repeat_UnitIDV,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
-			NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
-			CDiv(FP,UnitPoint,65536)
-			NElseX()
-			CMod(FP,UnitPoint,65536)
-			NIfXEnd()
-			CAdd(FP,InputPoint,UnitPoint)
-		CIfEnd()
-		
-	CIfEnd()
 	CIfXEnd()
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
@@ -1515,7 +1442,7 @@ function Create_G_CB_Arr()
 	if G_CB_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CB_Arr_Created") end
 	CMov(FP,Actived_G_CB,0)
 	for i = 0, G_CB_ArrSize-1 do
-		CTrigger(FP, {CVar("X","X",AtLeast,1),Memory(0x628438,AtLeast,1)}, {
+		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
 			G_CB_InputCVar,
 			SetCtrigX("X",G_CB_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
 			SetCVar(FP,G_CB_Num[2],SetTo,i+1),
@@ -2103,4 +2030,412 @@ function SetWeaponsDat(Condition,WepID,Property,Flag)
 		end
 	end
 	Trigger2(FP,Condition,Action,Flag)
+end
+
+function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
+	
+	local TrapKey
+	local CT_PrevRand
+	local CT_NextRand
+	local PCT_PrevRandV
+	local PCT_NextRandV
+	local PCT_PrevRandW
+	local PCT_NextRandW
+	
+	PCT_PrevRandV = CT_GPrevRandV
+	PCT_NextRandV = CT_GNextRandV
+	PCT_PrevRandW = CT_GPrevRandW
+	PCT_NextRandW = CT_GNextRandW
+	
+	if VW[4] == "V" then
+		CIfX(FP,{CV(VW, TrapVW)}) -- 치트 난수 테스트(참이어야 정상)
+		
+	else
+		CIfX(FP,{TTNWar(VW, Exactly, TrapVW)}) -- 치트 난수 테스트(참이어야 정상)
+	end
+	local DeathUnit = 1
+	local ttable = {}
+
+	if type(Flag) == "number" then
+		
+		if Flag>=32 then
+			DeathUnit = math.floor(DeathUnit+(Flag/32))
+			Flag = Flag%32
+		end
+		if DeathUnit == 2 and Flag == 5 then
+			--error(Text)
+		end
+		--if DeathUnit == 3 then Pushdsadas() end
+		
+	if Player == AllPlayers then
+		for i = 0, 6 do
+			table.insert(ttable,SetCVar(FP, BPArr[DeathUnit][i+1][2], SetTo, 2^Flag, 2^Flag))
+		end
+	else
+		ttable = {SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)}
+	end
+	ctarr[DeathUnit][Flag+1] = Text
+	
+	if DeathUnit== 	1 then 
+		--if 2^Flag == 2048 then error(Text) end
+	end
+	CElseX({ttable})
+
+	else
+	CElseX()
+		
+
+	if TestStart ~= 1 then
+		if Player == AllPlayers then
+			for p = 0, 6 do
+				TriggerX(FP,{LocalPlayerID(p)},{{
+					SetCp(p),
+					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+					DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+					DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					SetMemory(0xCDDDCDDC,SetTo,1);}})
+			end
+		else
+			TriggerX(FP,{LocalPlayerID(Player)},{{
+				SetCp(Player),
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+				SetMemory(0xCDDDCDDC,SetTo,1);}})
+				
+		end
+
+	end
+
+
+	end
+	
+
+--	if TestStart == 1 then
+--		if Player == AllPlayers then Player = iv.LCP end
+--		if VW[4] =="W" then
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		else
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		end
+--		
+--	end
+	CIfXEnd()
+	if VW[4] == "V" then
+		CXor(FP, VW, PCT_PrevRandV)--감지 여부 상관없이 진짜값으로 복구
+		
+	else
+		f_LXor(FP, VW, VW, PCT_PrevRandW)--감지 여부 상관없이 진짜값으로 복구
+	end
+	return TrapKey
+end	
+
+
+
+function CreateDataPV(DataName,SCADeathData,LocOp)
+	local Ret = CreateVarArr(7,FP)
+	local Ret2 = CreateVarArr(7,FP)
+	table.insert(PVWArr,{Ret,Ret2,DataName})
+	if SCADeathData ~= nil then
+		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
+	end
+	if LocOp == 1 then 
+		local Ret3 = CreateVar(FP)
+		table.insert(LocalDataArr,{Ret[1],Ret3})
+		return Ret,Ret2,Ret3
+	else return Ret,Ret2
+	end
+	
+end
+function CreateDataPW(DataName,SCADeathData,LocOp)
+	local Ret = CreateWarArr(7,FP)
+	local Ret2 = CreateWarArr(7,FP)
+	table.insert(PVWArr,{Ret,Ret2,DataName})
+	if SCADeathData ~= nil then
+		if #SCADeathData~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
+		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
+	end
+	if LocOp == 1 then 
+		local Ret3 = CreateWar(FP)
+		table.insert(LocalDataArr,{Ret[1],Ret3})
+		return Ret,Ret2,Ret3
+	else return Ret,Ret2
+	end
+	
+end
+
+
+
+function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
+	local TrapKey
+	if VW[1][4] == "V" then
+		CMovX(FP,GV,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
+		CMovX(FP,TrapGV,VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
+		CIfX(FP,{CV(GV, TrapGV)}) -- 치트 난수 테스트(참이어야 정상)
+	else
+		f_LMovX(FP,GW,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
+		f_LMovX(FP,TrapGW,WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
+		CIfX(FP,{TTNWar(GW, Exactly, TrapGW)}) -- 치트 난수 테스트(참이어야 정상)
+	end
+	local DeathUnit = 1
+	--local ttable = {}
+
+	if type(Flag) == "number" then
+		
+		if Flag>=32 then
+			DeathUnit = math.floor(DeathUnit+(Flag/32))
+			Flag = Flag%32
+		end
+		if DeathUnit == 2 and Flag == 5 then
+			--error(Text)
+		end
+		--if DeathUnit == 3 then Pushdsadas() end
+		
+	--ttable = {SetCVar(FP, BPArr[DeathUnit][Player+1][2], SetTo, 2^Flag, 2^Flag)}
+	ctarr[DeathUnit][Flag+1] = Text
+	if DeathUnit== 	1 then 
+		--if 2^Flag == 2048 then error(Text) end
+	end
+	CElseX()
+	if TestStart == 0 then
+		CMovX(FP, VArrX(GetVArray(BPArr[DeathUnit][1], 7), VArrL, VArrL4), 2^Flag,SetTo,2^Flag)
+	end
+ 
+	else
+
+	end
+	
+
+--	if TestStart == 1 then
+--		if Player == AllPlayers then Player = iv.LCP end
+--		if VW[4] =="W" then
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		else
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--		end
+--		
+--	end
+	CIfXEnd()
+	if VW[1][4] == "V" then
+		CXor(FP, GV, CT_GPrevRandV)--감지 여부 상관없이 진짜값으로 복구
+		CMovX(FP,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),GV,nil,nil,nil,1)
+		
+	else
+		f_LXor(FP, GW, GW, CT_GPrevRandW)--감지 여부 상관없이 진짜값으로 복구
+		f_LMovX(FP,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),GW,nil,nil,nil,1)
+	end
+	
+	return TrapKey
+end	
+
+function DisplayPrint(TargetPlayers,arg)
+	if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
+		f_SaveCp()
+	end
+
+	local BSize = 0
+	for j,k in pairs(arg) do -- StrSizeCalc
+		if type(k) == "string" then
+			local CT = GetStrSize(0,k)
+			BSize=BSize+CT
+		elseif type(k)=="table" and k[4]=="V" then
+			BSize=BSize+(4*4)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			BSize = BSize+#k
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			BSize=BSize+1
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	
+	local StrT = "\x0D\x0D\x0DSI"..StrXIndex..string.rep("\x0D", BSize+3)
+	local RetV = CreateVar(FP)
+	local Dev = 0
+	table.insert(StrXKeyArr,{RetV,StrT})
+	StrXIndex=StrXIndex+1
+	for j,k in pairs(arg) do
+		if type(k) == "string" then
+			local CT = CreateCText(FP,k)
+			table.insert(StrXPatchArr,{RetV,Dev,CT})
+			Dev=Dev+CT[2]
+		elseif type(k)=="table" and k[4]=="V" then
+			CMov(FP,publicItoDecV,k)
+			CallTrigger(FP,Call_IToDec)
+			f_Movcpy(FP,_Add(RetV,Dev),VArr(publicItoDecVArr,0),4*4)
+			Dev=Dev+(4*4)
+		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+			for o,p in pairs(k) do
+				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
+				Dev=Dev+(1)
+			end
+
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
+			Dev=Dev+(1)
+
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)})
+	elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
+		CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)})
+
+	else
+		DoActions2(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)})
+	end
+end
+
+function print_utf8_2(line, offset, string)
+    local ret = {}
+    local dst = 0x640B60 + line * 218 + offset
+	
+    if type(string) == "string" then
+        local str = string
+        local n = 1
+        if dst % 4 >= 1 then
+            for i = 1, dst % 4 do str = '\x0d'..str end
+        end
+        local t = cp949_to_utf8(str)
+        while n <= #t do
+			
+            ret[#ret+1] = SetMemory(dst - dst % 4 +n-1, SetTo, _dw(t, n))
+            n = n + 4
+        end
+    elseif type(string) == "number" then
+        PushErrorMsg("print_utf8_InputError")
+    end
+    return ret
+end
+
+function DisplayPrintEr(TargetPlayer,arg)
+	local Dev = 0
+	local RetAct = {}
+	local ItoDecKey = {}
+	local VCharKey = {}
+	
+
+
+	for j,k in pairs(arg) do
+		if type(k) == "string" then
+			local Strl = GetStrSize(0,k)
+			if Strl%4~=0 then k=string.rep("\x0D", (4-Strl%4))..k Strl=Strl+(4-Strl%4) end
+			table.insert(RetAct,print_utf8_2(12, Dev, k))
+			
+			Dev=Dev+Strl
+		elseif type(k)=="table" and k[4]=="V" then
+			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 16)))
+			--V,Dev
+			table.insert(ItoDecKey,{k,Dev})
+			Dev=Dev+(4*4)
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
+			table.insert(VCharKey,{k,Dev})
+			Dev=Dev+(1)
+
+		else
+			PushErrorMsg("Print_Inputdata_Error")
+		end
+	end
+	if type(TargetPlayer) == "table" and TargetPlayer[4] == "V" then
+		Print_13X(FP, TargetPlayer)
+	else
+		CallTrigger(FP, Call_Print13[TargetPlayer+1])
+	end
+	CIf(FP, {TMemory(0x512684,Exactly,TargetPlayer)})
+	DoActions2(FP, RetAct)
+	for j,p in pairs(ItoDecKey) do
+		local k = p[1]
+		CMov(FP,publicItoDecV,k)
+		CallTrigger(FP,Call_IToDec)
+		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(publicItoDecVArr,0),4*4)
+	end
+	for j,p in pairs(VCharKey) do
+		CDoActions(FP,{TBwrite(0x640B60+p[2],SetTo,V(p[1]))})
+	end
+	
+	CIfEnd()
+
+end
+
+function Print_13X(PlayerID,TargetPlayer,String)
+	local Y = {}
+	if String ~= nil then
+		table.insert(Y,print_utf8(12, 0, String))
+	end
+	CIf(PlayerID,Memory(0x628438,AtLeast,1))
+		f_ReadX(PlayerID,0x628438,V(FuncAlloc),1,0xFFFFFF)
+		CDoActions(PlayerID,{SetMemory(0x628438,SetTo,0),TCreateUnit(1,0,"Anywhere",TargetPlayer),Y})
+		CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
+	CIfEnd()
+	FuncAlloc = FuncAlloc + 1
+end
+
+function init_StrX()
+	for k, v in pairs(StrXKeyArr) do
+		f_GetStrXptr(FP,v[1],v[2])
+	end
+	for k, v in pairs(StrXPatchArr) do -- STRXPtr,Deviation,CTextData
+		if v[2]==0 then
+			f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
+		else
+			f_Memcpy(FP,_Add(v[1],v[2]),_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
+		end
+	end
+end
+function init_Setting()
+	CJump(FP, CustominitJump)
+	init_StrX()
+	DoActionsX(FP,{SetNext(initTrigIndex, initTrigIndex,1),SetNext("X", initTrigIndex,1)},1,lastTrigIndex)--RecoverNext
+
+	local SCJump = def_sIndex()
+	CJump(FP,SCJump)
+	SetCall2(FP, Call_IToDec)
+	ItoDec(FP,publicItoDecV,VArr(publicItoDecVArr,0),2,nil,0)
+	SetCallEnd2()
+	CJumpEnd(FP,SCJump)
+	
+
+
+	CJumpEnd(FP, CustominitJump)
+end
+function Start_init()
+	CustominitJump = def_sIndex()
+	initTrigIndex = FuncAlloc
+	FuncAlloc=FuncAlloc+1
+	lastTrigIndex = FuncAlloc
+	FuncAlloc=FuncAlloc+1
+	StrXKeyArr = {}
+	StrXPatchArr = {}
+	StrXIndex = 0
+	publicItoDecVArr =CreateVArr(4,FP)
+	publicItoDecV = CreateVar(FP)
+	Call_IToDec = CreateCallIndex()
+	
+	DoActionsX(FP, {SetNext("X", CustominitJump+JumpStartAlloc,1),SetNext(lastTrigIndex, "X",1)}, 1,initTrigIndex)
+end
+
+
+function Print_13_2(PlayerID,DisplayPlayer,String)
+	local X = {}
+	local Y = {}
+	PlayerID = PlayerConvert(PlayerID)
+	if type(DisplayPlayer) == "number" then
+		temp = {DisplayPlayer}
+		DisplayPlayer = temp
+	end
+	for k, P in pairs(DisplayPlayer) do
+		table.insert(X,CreateUnit(1,0,"Anywhere",P))
+	end
+	if String ~= nil then
+		table.insert(Y,print_utf8(12, 0, String))
+	end
+	CIf(PlayerID,Memory(0x628438,AtLeast,1))
+		f_ReadX(PlayerID,0x628438,V(FuncAlloc),1,0xFFFFFF)
+		DoActionsX(PlayerID,{SetMemory(0x628438,SetTo,0),X,Y})
+		CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
+	CIfEnd()
+	FuncAlloc = FuncAlloc + 1
 end

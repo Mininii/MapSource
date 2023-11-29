@@ -130,6 +130,23 @@ function OPTrig()
 
 	local iStrInit = def_sIndex()
 	CJump(FP, iStrInit)
+
+	
+			--[[
+			1 = 연결됨
+			2 = 연결 끊킴
+			3 = 로드중
+			4 = 로드 완료
+			5 = 세이브중
+			6 = 세이브 완료
+			7 = 런처와 먼저 연결하세요
+			8 = 다른 작업 중입니다.
+			9 = 작업 실패
+			10 = 명령 실행
+			11 = 시간 로드
+			12 = 글로벌데이터 로드
+			]]
+			
 	local initStr = "\x07LV.0000" 
 	local initStr2 = MakeiStrVoid(20).." \x04: " 
 	local SCAStat1 = "\x07연결 되었습니다!" 
@@ -283,6 +300,12 @@ function OPTrig()
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
 	CIfOnce(FP, CD(StartT,100,AtLeast))
+	for i = 0, 6 do -- 불러온 데이터 설정
+		TriggerX(FP,{Deaths(i, AtMost, 31, 43)},{SetDeaths(i, Add, 32, 43)})
+		TriggerX(FP,{Deaths(i, AtMost, 31, 44)},{SetDeaths(i, Add, 32, 44)})
+		Act_TSetMemoryW(0x660E00+(MarID[i+1]*2), Add, _Mul(ShUp[i+1], _Mov(1000)))
+		CSub(FP, MCoolDown[i+1], _Mul(MCoolDownP[i+1], _Mov(256+65536)))
+	end
 	if Limit == 1 then
 	Trigger {
 		players = {FP},

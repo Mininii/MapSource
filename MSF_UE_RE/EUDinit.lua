@@ -379,7 +379,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(67,1200)
 	UnitEnableX(70)
 	UnitEnableX(68)
-	for i = 37, 49 do
+	for i = 37, 50 do
 		UnitEnableX(i)
 		
 	end
@@ -494,6 +494,31 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			
 		}
 	}
+	
+	function InputTesterID(Player,ID)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+	end
+		for i = 0, 6 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
+			InputTesterID(i,"GALAXY_BURST")
+			InputTesterID(i,"_Mininii")
+			InputTesterID(i,"RonaRonaChan")
+			InputTesterID(i,"Azusawa_Kohane")
+			
+			
+		end
+
+
 	end
 	
 	Trigger { -- 배속방지

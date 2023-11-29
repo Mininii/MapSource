@@ -11,9 +11,8 @@ function PlayerInterface()
 	local MarMaxHP = Create_VTable(7,10000*256,FP)
 	local MultiHold = Create_VTable(7,nil,FP)
 	local MultiStop = Create_VTable(7,nil,FP)
-	local AtkExceed = Create_VTable(7,32,FP)
-	local HPExceed = Create_VTable(7,32,FP)	
-	local ShUp = Create_VTable(7,nil,FP)	
+	local AtkExceed = Create_VTable(7,nil,FP)
+	local HPExceed = Create_VTable(7,nil,FP)	
 	local ShPoint = Create_VTable(7,nil,FP)	
 	local AtkUpgradeMaskRetArr,AtkUpgradePtrArr,NormalUpgradeMaskRetArr,
 	NormalUpgradePtrArr,DefUpgradeMaskRetArr,DefUpgradePtrArr,AtkFactorMaskRetArr,
@@ -39,7 +38,6 @@ function PlayerInterface()
 	local GiveVA = CreateVArray(FP,7)
 	local ArmorT3 = CreateCcodeArr(7)
 	local ShopSw = CreateCcodeArr(7)
-	local MCoolDownP = CreateVarArr(7,FP)
 	local AtkUpCount = CreateVarArr(7, FP)
 	local HPUpCount = CreateVarArr(7, FP)
 	local MCoolDownCost = Create_VTable(7,P_MCooldown,FP)
@@ -160,8 +158,11 @@ function PlayerInterface()
 	
 	
 	end 
-	CAPrint(iStr1,{Force1},{1,0,0,0,1,3,0,0},"StatusInterface",FP,{CD(DeleteToggle,0)}) --
-
+	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"StatusInterface",FP,{CD(DeleteToggle,0)}) --
+	CIf(FP,{CD(DeleteToggle,0)})
+	DisplayPrint(HumanPlayers,{"\x10【 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08100000 \x10】"})
+	CIfEnd()
+	FixText(FP, 2)
 
 
 	CIfXEnd()
@@ -264,8 +265,6 @@ function PlayerInterface()
 			}
 		end
 		KeyCP = i
-
-		
 		Trigger { -- 스팀팩
 			players = {i},
 			conditions = {
@@ -472,6 +471,24 @@ function PlayerInterface()
 				SetCDeaths(FP,SetTo,0,HeroPointNotice[i+1]);
 			},{preserved})
 			if Limit == 1 then
+
+				
+			Trigger { -- 버튼 기능
+				players = {i},
+				conditions = {
+					Label(0);
+					Bring(i,AtLeast,1,66,64);
+				},
+				actions = {
+					RemoveUnitAt(1,66,"Anywhere",i);
+					SetCDeaths(FP,Add,1,CUnitFlag);
+					Order("Men",i,64,Attack,74+i);
+					DisplayText("\x07『 \x03TESTMODE OP \x04: \x1C모든 유닛\x04에 \x1D마우스 위치로 공격 명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
+					PreserveTrigger();
+				},
+			}
+
+
 			TriggerX(i,{Command(i,AtLeast,1,70);},{
 				GiveUnits(All,70,i,"Anywhere",P12);
 				RemoveUnitAt(All,70,"Anywhere",P12);
@@ -499,14 +516,14 @@ function PlayerInterface()
 		CElseIfX(TTDeaths(i,"<",OldStat[i+1],4))
 			CDoActions(FP,{TSetDeaths(i,SetTo,OldStat[i+1],4)})
 		CIfXEnd()
-		CIfX(FP,{TTDeaths(i,">",NewStat[i+1],35)})
-			f_Read(FP,0x58A364+(48*35)+(4*i),TempStat)
-			CSub(FP,TempStat2,TempStat,NewStat[i+1])
-			CMov(FP,NewStat[i+1],TempStat)
-			CAdd(FP,NewAvStat[i+1],TempStat2)
-		CElseIfX(TTDeaths(i,"<",NewStat[i+1],35))
-			CDoActions(FP,{TSetDeaths(i,SetTo,NewStat[i+1],35)})
-		CIfXEnd()
+--		CIfX(FP,{TTDeaths(i,">",NewStat[i+1],35)})
+--			f_Read(FP,0x58A364+(48*35)+(4*i),TempStat)
+--			CSub(FP,TempStat2,TempStat,NewStat[i+1])
+--			CMov(FP,NewStat[i+1],TempStat)
+--			CAdd(FP,NewAvStat[i+1],TempStat2)
+--		CElseIfX(TTDeaths(i,"<",NewStat[i+1],35))
+--			CDoActions(FP,{TSetDeaths(i,SetTo,NewStat[i+1],35)})
+--		CIfXEnd()
 		
 		function SCA_DeathToV(Dest,SourceUnit,TargetPlayer)
 			CIfX(FP,{TTDeaths(TargetPlayer,">",Dest,SourceUnit)})
@@ -516,11 +533,27 @@ function PlayerInterface()
 				CDoActions(FP,{TSetDeaths(TargetPlayer,SetTo,Dest,SourceUnit)})
 			CIfXEnd()
 		end
+		--NewAvStat = 따로계산
+		SCA_DeathToV(NewStat[i+1],35,i)
+		SCA_DeathToV(NewUsedStat[i+1],39,i)
+		CMov(FP, NewAvStat[i+1], _Sub(NewStat[i+1],NewUsedStat[i+1]))
+		
+		
 		SCA_DeathToV(OldMaxLevel[i+1],6,i)
 		SCA_DeathToV(NewMaxLevel[i+1],18,i)
 		SCA_DeathToV(OldMaxScore[i+1],24,i)
 		SCA_DeathToV(NewMaxScore[i+1],36,i)
 		SCA_DeathToV(UsedOldP[i+1],37,i)
+
+		SCA_DeathToV(MultiStimPack[i+1],40,i)
+		SCA_DeathToV(MultiHold[i+1],41,i)
+		SCA_DeathToV(MultiStop[i+1],42,i)
+		SCA_DeathToV(AtkExceed[i+1],43,i)
+		SCA_DeathToV(HPExceed[i+1],44,i)
+		SCA_DeathToV(ShUp[i+1],45,i)
+		SCA_DeathToV(MCoolDownP[i+1],46,i)
+
+
 		
 		CIf(FP,{Bring(i,AtLeast,1,28,64)},{
 			RemoveUnitAt(1,28,"Anywhere",i),
@@ -611,7 +644,9 @@ function PlayerInterface()
 			NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Bring(i,AtLeast,1,MedicTrig[j],64)})
 		end
 
-			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0)})
+			NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,5,AtLeast)},{SetCD(TestT,0),
+			SetDeaths(i,Add,1,71);
+			SetCDeaths(FP,Add,1,CUnitFlag);})
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
 					DoActionsX(FP,{
@@ -820,7 +855,7 @@ function CIfShop(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
 	if type(Cost)=="number" then
 		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
 		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
@@ -838,7 +873,7 @@ function CIfShop2(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
 	if type(Cost)=="number" then
 		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
 		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
@@ -871,6 +906,32 @@ end
 		CIfEnd()
 		CIfShop(i,48,P_ShUpgrade,"\x07[ \x07구입 성공, \x1C쉴드 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
 		CIfEnd()
+		CIfShop(i,50,0,"\x07[ \x07스탯\x04이 \x1F초기화\x04되었습니다. \x07]","\x07[ \x08사용 불가 \x07]",{},{
+			SetV(NewUsedStat[i+1],0),
+			SetV(AtkExceed[i+1],32),
+			SetV(HPExceed[i+1],32),
+			SetV(MultiStimPack[i+1],0),
+			SetV(MultiHold[i+1],0),
+			SetV(MultiStop[i+1],0),
+			SetV(MCoolDown[i+1],(17*256)+(17*65536)),
+			SetV(MCoolDownP[i+1],0),
+			SetV(ShUp[i+1],0),
+			SetV(MCoolDownCost[i+1],P_MCooldown),
+			
+			SetDeaths(i, SetTo, 0, 39),
+			SetDeaths(i, SetTo, 0, 40),
+			SetDeaths(i, SetTo, 0, 41),
+			SetDeaths(i, SetTo, 0, 42),
+			SetDeaths(i, SetTo, 32, 43),
+			SetDeaths(i, SetTo, 32, 44),
+			SetDeaths(i, SetTo, 0, 45),
+			SetDeaths(i, SetTo, 0, 46),
+			SetMemoryW(0x660E00+(MarID[i+1]*2),SetTo,10000)})
+		CIfEnd()
+
+		
+
+
 		CIf(FP,{TMemory(_Add(MenuPtr[i+1],0x98/4),Exactly,0 + 45*65536)})
 		CIf(FP,{CDeaths(FP,AtMost,0,ShopSw[i+1]),})
 		CallTrigger(FP,Call_Print13[i+1])
@@ -905,7 +966,10 @@ end
 		CIfEnd()
 		TriggerX(FP,CV(AtkExceed[i+1],255+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,0)},{preserved})
 		TriggerX(FP,CV(HPExceed[i+1],831+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,0)},{preserved})
+		TriggerX(FP,CV(AtkExceed[i+1],255,AtMost),{SetMemoryB(0x57F27C+(228*i)+46,SetTo,1)},{preserved})
+		TriggerX(FP,CV(HPExceed[i+1],831,AtMost),{SetMemoryB(0x57F27C+(228*i)+47,SetTo,1)},{preserved})
 		TriggerX(FP,CV(ShUp[i+1],54+1,AtLeast),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)},{preserved})
+		TriggerX(FP,CV(ShUp[i+1],54,AtMost),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,1)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1,1},
 			{MultiStimPack[i+1],{42},1,1},
@@ -932,6 +996,18 @@ end
 			TriggerX(FP,{CVar(FP,k[1][2],AtLeast,k[3])},X,{preserved})
 			TriggerX(FP,{CVar(FP,k[1][2],AtMost,0)},Y,{preserved})
 		end
+		TriggerX(FP,{},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,1)})
+		TriggerX(FP,{CVar(FP,AtkUpCompCount[2],AtLeast,33)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
+		TriggerX(FP,{CVar(FP,DefUpCompCount[2],AtLeast,33)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
+		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,2)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
+		if Limit == 1 then
+			
+		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+42,SetTo,0)},{preserved})
+		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,1)},{preserved})
+		end
+		
+
+		
 
 		TriggerX(FP,{CVar(FP,NukesUsage[i+1][2],AtMost,0)},{SetMemoryB(0x57F27C+(228*i)+41,SetTo,0)},{preserved})
 		 -- 업글시 돈 증가량 변수와 동기화. TT조건을 이용해 값이 변화할때만 연산함
@@ -954,6 +1030,7 @@ end
 		
 		if Limit == 1 then 
 			CIfX(FP, CD(TestMode,1))
+			CMov(FP,0x57f120+(4*i),ExScore[i+1])
 			CElseX()
 			CMov(FP,0x57f120+(4*i),ExScore[i+1])
 			CIfXEnd()
@@ -1016,10 +1093,12 @@ end
 	local TempPos = CreateVar(FP)
 
 	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- 원격스팀 외 기능들
-		--for i = 0, 6 do
-		--	GetLocCenter(73+i,CPosX,CPosY)
-		--	CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
-		--end
+		if Limit == 1 then
+			for i = 0, 6 do
+				GetLocCenter(73+i,CPosX,CPosY)
+				CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
+			end
+		end
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
@@ -1232,6 +1311,8 @@ for i=0, 6 do
 	TempAtkUpCompCountChk = CreateVar2(FP,nil,nil,1)
 		for i = 0, 6 do
 			CIf(FP,{LocalPlayerID(i),CV(SelPl,i)})
+			CMov(FP,AtkExceedTemp,AtkExceed[i+1])
+			CMov(FP,HPExceedTemp,HPExceed[i+1])
 			CMov(FP,TempHPUpCount,HPUpCount[i+1])
 			CMov(FP,TempAtkUpCount,AtkUpCount[i+1])
 			CMov(FP,TempAtkFactor,AtkFactorV[i+1])
@@ -1264,11 +1345,18 @@ for i=0, 6 do
 		RetSigma = f_Sigma(TempAtkUpCount,254,TempAtkFactor)
 		RetSVA(iStr9,22)
 		CS__ItoCustom(FP,SVA1(iStr9,22),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__ItoCustom(FP,SVA1(iStr9,22+23),TempAtkUpCompCount,nil,nil,{10,3},1,nil,"\x1F0",0x1D)
+		CS__ItoCustom(FP,SVA1(iStr9,22+23+6),AtkExceedTemp,nil,nil,{10,3},1,nil,"\x1F0",0x1C)
 		RetSigma = f_Sigma(TempAtkUpCount,TempCalcV,TempAtkFactor)
 		RetSVA(iStr10,21)
 		CS__ItoCustom(FP,SVA1(iStr10,21),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__ItoCustom(FP,SVA1(iStr10,21+23),TempAtkUpCompCount,nil,nil,{10,3},1,nil,"\x1F0",0x1D)
+		CS__ItoCustom(FP,SVA1(iStr10,21+23+6),AtkExceedTemp,nil,nil,{10,3},1,nil,"\x1F0",0x1C)
 		CS__InputVA(FP,iTbl8,0,iStr9,iStr9s,nil,0,iStr9s)
 		CS__InputVA(FP,iTbl9,0,iStr10,iStr10s,nil,0,iStr10s)
+		--+23
+		
+
 		NIfEnd()
 
 		HPButtonsIndex = def_sIndex()
@@ -1285,9 +1373,13 @@ for i=0, 6 do
 		RetSigma = f_Sigma(TempHPUpCount,254,TempHPFactor)
 		RetSVA(iStr11,21)
 		CS__ItoCustom(FP,SVA1(iStr11,21),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__ItoCustom(FP,SVA1(iStr11,21+23),TempDefUpCompCount,nil,nil,{10,3},1,nil,"\x1F0",0x1D)
+		CS__ItoCustom(FP,SVA1(iStr11,21+23+6),HPExceedTemp,nil,nil,{10,3},1,nil,"\x1F0",0x1C)
 		RetSigma = f_Sigma(TempHPUpCount,TempCalcV,TempHPFactor)
 		RetSVA(iStr12,20)
 		CS__ItoCustom(FP,SVA1(iStr12,20),RetSigma,nil,nil,10,1,nil,"\x1F0",0x1F,{0,2,3,4,6,7,8,10,11,12})
+		CS__ItoCustom(FP,SVA1(iStr12,20+23),TempDefUpCompCount,nil,nil,{10,3},1,nil,"\x1F0",0x1D)
+		CS__ItoCustom(FP,SVA1(iStr12,20+23+6),HPExceedTemp,nil,nil,{10,3},1,nil,"\x1F0",0x1C)
 		CS__InputVA(FP,iTbl10,0,iStr11,iStr11s,nil,0,iStr11s)
 		CS__InputVA(FP,iTbl11,0,iStr12,iStr12s,nil,0,iStr12s)
 		NIfEnd()

@@ -44,12 +44,12 @@ function Install_Roka7Boss()
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
 	TriggerX(FP,{Memory(0x58F524,AtLeast,1)},{SetInvincibility(Disable, 87, FP, 64)})--첫 퍼지기패턴시 무적해제
 	CIf(FP,{CV(B_5_C,1,AtLeast)})
-	if Limit == 1 then
-		CIf(FP,{CD(TestMode,1)})
-		CMov(FP,0x57f120,_Read(0x58F524))
-		CMov(FP,0x57f0f0,_Read(VO(1547)))
-		CIfEnd()
-	end
+--	if Limit == 1 then
+--		CIf(FP,{CD(TestMode,1)})
+--		CMov(FP,0x57f120,_Read(0x58F524))
+--		CMov(FP,0x57f0f0,_Read(VO(1547)))
+--		CIfEnd()
+--	end
 		
 	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 3333*256, 0),CV(F2BHP,0),CV(F2BSH,0)},{SetV(F2BSH,1),SetMemory(0x58F518,SetTo,1)},1)
 	CTrigger(FP,{TDeaths(B_5_C+2, AtMost, 2000*256, 0),CV(F2BHP,0),CV(F2BSH,1)},{SetV(F2BSH,2),SetMemory(0x58F518,SetTo,2)},1)

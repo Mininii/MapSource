@@ -190,34 +190,204 @@ CunitCtrig_End()
         SetCDeaths(FP,SetTo,0,SoundLimit[7]),
         SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
     TriggerX(FP, {CD(GCT,1,AtLeast),CV(LevelT,10)}, {Order("Any unit",FP,64,Move,64)}, {preserved})
-    CIfX(FP,{Memory(0x628438,AtLeast,1),CVar(FP,count[2],AtMost,GunLimit),Bring(FP,AtLeast,1,147,64)}) -- 건작함수 제어
-        DoActions(FP,{
-            SetInvincibility(Disable,"Buildings",FP,64);
-        })
-        CMov(FP,Actived_Gun,0)
-		CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,1,GCT)},1)
-        for i = 0, 127 do
-            CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
-                Var_InputCVar,
-                SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
-                SetCVar(FP,f_GunNum[2],SetTo,i),
-                SetCVar(FP,Actived_Gun[2],Add,1),
-                SetNext("X",f_Gun,0),SetNext(f_Gun+1,"X",1), -- Call f_Gun
-                SetCtrigX("X",f_Gun+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
-                SetCtrigX("X",f_Gun+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
-                SetCtrig1X("X",f_Gun+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
-            }, 1, 0x500+i)
+
+    
+    DoActions(FP,{
+        SetInvincibility(Disable,"Buildings",FP,64);
+    })
+    CMov(FP,Actived_Gun,0)
+    CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,1,GCT)},1)
+    for i = 0, 127 do
+        CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
+            Var_InputCVar,
+            SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+            SetCVar(FP,f_GunNum[2],SetTo,i),
+            SetCVar(FP,Actived_Gun[2],Add,1),
+            SetNext("X",f_Gun,0),SetNext(f_Gun+1,"X",1), -- Call f_Gun
+            SetCtrigX("X",f_Gun+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+            SetCtrigX("X",f_Gun+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+            SetCtrig1X("X",f_Gun+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+        }, 1, 0x500+i)
+    end
+    CMov(FP,0x6509B0,FP)
+    Create_G_CB_Arr()
+
+    
+
+
+	local G_CA_Nextptrs = CreateVar(FP)
+	local TempUID = CreateVar(FP)
+	local TempPID = CreateVar(FP)
+	local TempType = CreateVar(FP)
+	local TempProperties = CreateVar(FP)
+    local f_TempTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	if Limit == 1 then
+--		CIf(FP,{CD(TestMode,1)})
+--		--DisplayPrintEr(0,{"\x07『 \x03TESTMODE OP \x04: CreateUnitQueuePtr : ",CreateUnitQueuePtr," || CreateUnitQueuePtr2 : ",CreateUnitQueuePtr2," \x07』"})
+--		local TestV = CreateVar()
+--		CMov(FP,TestV,0)
+--		CFor(FP, 19025+19, 19025+19 + (84*1700), 84)
+--			local CI = CForVariable()
+--			CTrigger(FP, {TMemoryX(CI,AtLeast,1*256,0xFF00)}, {AddV(TestV,1)},1)
+--		CForEnd()
+		--DisplayPrintEr(0,{"\x07『 \x03TESTMODE OP \x04: CUnit Count : ",TestV," \x07』"})--
+
+--		CIfEnd()
+	end
+	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
+
+    
+
+
+    QPosX = CreateVar(FP)
+    QPosY = CreateVar(FP)
+	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+	f_SHRead(FP, _Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), QPosX)
+	f_SHRead(FP, _Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), QPosY)
+	f_SHRead(FP, _Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), TempUID)
+	f_SHRead(FP, _Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), TempPID)
+	f_SHRead(FP, _Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), TempType)
+	f_SHRead(FP, _Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr2), TempProperties)
+	CDoActions(FP, {
+		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr2), SetTo, 0)
+	})
+	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
+	TriggerX(FP, {CV(CreateUnitQueuePtr2,100000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
+
+    local isScore = CreateCcode()
+
+	CIf(FP,{TTOR({CVar(FP,TempType[2],Exactly,0),CVar(FP,TempType[2],Exactly,4)})})
+        local Gun_Order = def_sIndex()
+        CJumpXEnd(FP,Gun_Order)
+        f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
+        for i = 0, 6 do
+            NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
+                CJumpX(FP,Gun_Order)
+            NIfEnd()
         end
-        CMov(FP,0x6509B0,FP)
-        Create_G_CB_Arr()
-        CElseX()
-        DoActions(FP,{
-            SetInvincibility(Enable,"Buildings",FP,64);
-        })
-    CIfXEnd()
+        CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
+        for i = 0, 6 do
+            CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)})
+                CMov(FP,TempBarPos,BarPos[i+1])
+            CIfEnd()
+        end
+        CIfEnd()
+    CIfEnd()
 
 
 
+	NIf(FP,{CV(TempUID,1,AtLeast),CV(TempUID,226,AtMost)})
+	local CRLID = CreateVar(FP)
+
+
+
+	Simple_SetLocX(FP,0,QPosX,QPosY,QPosX,QPosY)
+	-- MoveUnitLoc = 1
+	-- DefAttackLoc = 89
+	-- DefCreateLoc = 90
+	CMov(FP,CunitIndex,_Div(_Sub(G_CA_Nextptrs,19025),_Mov(84)))
+
+	f_Lengthdir(FP,_Mod(_Rand(),24*32),_Mod(_Rand(),360),CPosX,CPosY)
+	CDiv(FP,CPosY,2)
+	Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,1536,4480,1536,4480)})
+	CDoActions(FP,{
+		TCreateUnitWithProperties(1,TempUID,90,P8,{energy = 100}),
+--		TModifyUnitEnergy(All,TempUID,P8,1,100);
+	})
+	
+
+	CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	
+		
+		CTrigger(FP, {TMemoryX(_Add(TempUID,EPDF(0x664080)), Exactly, 4,4),CVX(TempProperties,1,1)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- 공중유닛+CBRepeat 소환 = 겹치기 ON
+		local TempW = CreateWar(FP)
+		f_LMovX(FP, TempW, WArr(MaxHPWArr,TempUID), SetTo, nil, nil, 1)
+		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+		local TempV1 = CreateVar(FP)
+		local TempV2 = CreateVar(FP)
+		f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
+			CDoActions(FP, {
+				Set_EXCC2(LHPCunit, CunitIndex, 0, SetTo,1),
+				Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
+				Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
+		})
+		CIfEnd()
+
+
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+		Convert_CPosXY()
+		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
+		CDoActions(FP,{TMoveUnit(1,TempUID,FP,90,1)})
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
+		Convert_CPosXY()
+		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
+
+		CIfX(FP,CVar(FP,TempType[2],Exactly,0),SetCDeaths(FP,SetTo,1,isScore))
+		
+			CMov(FP,CPos,TempBarPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+			CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89)})
+		CElseIfX(CVar(FP,TempType[2],Exactly,4),SetCDeaths(FP,SetTo,1,isScore)) -- 겹효과 부여+어택
+
+			CMov(FP,CPos,TempBarPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+			CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89),TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
+
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,187),SetCDeaths(FP,SetTo,1,isScore))
+			CDoActions(FP,{TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),})
+		CElseIfX(CVar(FP,TempType[2],Exactly,1),SetCDeaths(FP,SetTo,1,isScore))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,59,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(59,-32,-32,32,32)})
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000),CreateUnit(1,ObEff,60,FP),KillUnit(ObEff, FP)
+			})
+			f_CGive(FP, G_CA_Nextptrs,nil, P9, FP)
+		CElseIfX(CVar(FP,TempType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
+		CElseIfX(CVar(FP,TempType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 공중 충돌판정 삭제 루카스보스 전용 TempType
+		TriggerX(FP,CVar(FP,TempUID[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
+		GetLocCenter("Boss",CPosX,CPosY)
+		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+		CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89),TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
+		CTrigger(FP,{CVar(FP,TempUID[2],Exactly,27)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
+
+		CElseIfX(CVar(FP,TempType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- 루카스보스로 어택명령, 루카스보스 전용 TempType
+		TriggerX(FP,CVar(FP,TempUID[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
+		GetLocCenter("Boss",CPosX,CPosY)
+		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
+		CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89)})
+		CTrigger(FP,{CVar(FP,TempUID[2],Exactly,27)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
+		CElseX(SetCDeaths(FP,SetTo,0,isScore))
+			DoActions(FP,RotatePlayer({DisplayTextX(f_TempTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+		CIfXEnd()
+		CIf(FP,CDeaths(FP,AtLeast,1,isScore))
+			f_Mod(FP,BiteCalc,TempUID,_Mov(2),0xFF)
+			f_Read(FP,_Add(_Div(TempUID,_Mov(2)),_Mov(EPD(0x663EB8))),UnitPoint)
+			NIfX(FP,{CVar(FP,BiteCalc[2],AtLeast,1)})
+			CDiv(FP,UnitPoint,65536)
+			NElseX()
+			CMod(FP,UnitPoint,65536)
+			NIfXEnd()
+			CAdd(FP,InputPoint,UnitPoint)
+		CIfEnd()
+		
+	CIfEnd()
+
+	
+
+
+	NIfEnd()
+
+	NWhileEnd()
+	
     if Limit == 1 then
         TriggerX(FP,{CD(TestMode,1)}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
     end

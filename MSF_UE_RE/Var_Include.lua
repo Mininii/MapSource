@@ -2,7 +2,7 @@
 function Objects()
 
 
-	LvLimit = 90
+	LvLimit = 190
 	-- Balance
 	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
@@ -373,6 +373,7 @@ function Var_init()
 	HPLV = Create_VTable(7,nil,FP)
 	NewStat = Create_VTable(7,nil,FP)
 	NewAvStat = Create_VTable(7,nil,FP)
+	NewUsedStat = Create_VTable(7,nil,FP)
     MapMaxLevel = CreateVar(FP)
     CurLevel = CreateVar2(FP,nil,nil,1)
 	initStart = CreateCcode()
@@ -382,6 +383,8 @@ function Var_init()
 	LevelFactor = CreateVar(FP)
 	NCCalc = CreateVar(FP)
 	SoloNoPointC = CreateCcode()
+	ShUp = Create_VTable(7,nil,FP)	
+	MCoolDownP = CreateVarArr(7,FP)
 
 	MCoolDown = Create_VTable(7, (17*256)+(17*65536), FP)
 	
@@ -399,6 +402,33 @@ function Var_init()
 	TalkTimer = CreateVar2(FP,nil,nil,3)
 
 
+	CT_GNextRandV = CreateVar(FP)
+	CT_GPrevRandV = CreateVar(FP)
+	CT_GNextRandW = CreateWar(FP)
+	CT_GPrevRandW = CreateWar(FP)
+	CT_NextRandV = CreateVarArr(7,FP)
+	CT_PrevRandV = CreateVarArr(7,FP)
+	CT_NextRandW = CreateWarArr(7,FP)
+	CT_PrevRandW = CreateWarArr(7,FP)
+	
+	--queue
+	
+	function Create_VoidEPDHeaderV(Player,Size)
+		local Void = f_GetVoidptr(Player,Size)
+		local Header =  CreateVar(Player)
+		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
+		return Header
+	end
+	CreateUnitQueueUIDArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueuePIDArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueueXPosArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueueYPosArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueueTypeArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueuePropertiesArr = Create_VoidEPDHeaderV(FP,4*100005)
+	CreateUnitQueuePtr = CreateVar(FP)
+	CreateUnitQueueNum = CreateVar(FP)
+	CreateUnitQueuePtr2 = CreateVar(FP)
+	
 	end
 
 function HPoints()

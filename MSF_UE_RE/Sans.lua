@@ -483,7 +483,7 @@ function Install_SansBoss()
         --TS_SendX(Deaths(Force1,AtLeast,1,41), BlasterBullet, {96*16,192*16,CPosX,CPosY,1,AngleRand})
 		--Trigger2X(FP,{Deaths(Force1,AtLeast,1,41)},{RotatePlayer({DisplayTextX("\x0D\x0D!H대사 출력 테스트,        나는 샌즈",4)},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
 		--TS_SendX(Deaths(Force1,AtLeast,1,41), BoneBullet, {CPosX,CPosY})
-		DoActions(FP, SetDeaths(Force1,SetTo,0,41))
+		--DoActions(FP, SetDeaths(Force1,SetTo,0,41))
 		
 		CIfEnd()
 	end
