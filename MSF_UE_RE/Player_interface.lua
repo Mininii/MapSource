@@ -41,6 +41,7 @@ function PlayerInterface()
 	local AtkUpCount = CreateVarArr(7, FP)
 	local HPUpCount = CreateVarArr(7, FP)
 	local MCoolDownCost = Create_VTable(7,P_MCooldown,FP)
+	local MSkillCost = Create_VTable(7,P_MSkill,FP)
 	
 	local NsW = CreateCcode()
 	
@@ -175,7 +176,7 @@ function PlayerInterface()
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
 		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 게임 시작시 레벨0일경우 1로 변경
-		Trigger2(i, {Deaths(i,AtLeast,100000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
+		Trigger2(i, {Deaths(i,AtLeast,1000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,10000,6)}, {SetDeaths(i, SetTo, 1, 149)}) -- 구레벨 1만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,LvLimit+10,18)}, {SetDeaths(i, SetTo, 1, 149)}) -- 맵 맥스레벨+10 = 비정상 데이터
 		
@@ -483,7 +484,7 @@ function PlayerInterface()
 					RemoveUnitAt(1,66,"Anywhere",i);
 					SetCDeaths(FP,Add,1,CUnitFlag);
 					Order("Men",i,64,Attack,74+i);
-					DisplayText("\x07『 \x03TESTMODE OP \x04: \x1C모든 유닛\x04에 \x1D마우스 위치로 공격 명령 \x04을 내립니다. (\x0FJunk Yard Dog\x04) \x07』",4);
+					DisplayText("\x07『 \x03TESTMODE OP \x04: \x1C모든 유닛\x04에 \x1D마우스 위치로 공격 명령 \x04을 내립니다. (\x0FAttack\x04) \x07』",4);
 					PreserveTrigger();
 				},
 			}
@@ -552,7 +553,8 @@ function PlayerInterface()
 		SCA_DeathToV(HPExceed[i+1],44,i)
 		SCA_DeathToV(ShUp[i+1],45,i)
 		SCA_DeathToV(MCoolDownP[i+1],46,i)
-
+		SCA_DeathToV(MSkillP[i+1],47,i)
+		
 
 		
 		CIf(FP,{Bring(i,AtLeast,1,28,64)},{
@@ -818,7 +820,7 @@ function PlayerInterface()
 			SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0),
 			SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0),
 			SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x07[ \x04밸런스 문제로 인해 더이상 체업 못해요 죄송합니다............................. \x07]",4),
+			DisplayText("\x07[ \x08체력\x04이 시스템상 한계라서 더이상 체업 못해요 죄송합니다............................. \x07]",4),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			PlayWAV("staredit\\wav\\TT.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)
@@ -850,19 +852,21 @@ function PlayerInterface()
 	
 function CIfShop(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 	CIf(FP,{TMemory(_Add(MenuPtr[CP+1],0x98/4),Exactly,0 + ID*65536)})
+	local ShopActCcode = CreateCcode()
 	CurShopCost = Cost
 	CurShopCP = CP
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),Actions},{preserved})	-- 포인트가 충분할 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtLeast,Cost),CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),SetCD(ShopActCcode,1),Actions},{preserved})	-- 포인트가 충분할 경우
 	if type(Cost)=="number" then
 		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
+		CTrigger(FP,{CVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
 	else
 	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,_Sub(Cost,1)),CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,_Sub(Cost,1)),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,_Sub(Cost,1)),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
 	end
+	return ShopActCcode
 end
 
 	
@@ -894,17 +898,17 @@ end
 		--
 		--CIfEnd()
 		end
-		CIfShop(i,42,P_StimCost,"\x07[ \x07구입 성공, \x1B원격 스팀팩 \x04기능을 사용할 수 있습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStimPack[i+1][2],AtMost,0)},{SetCVar(FP,MultiStimPack[i+1][2],SetTo,1)})
+		CIfShop(i,42,P_StimCost,"\x07[ \x1B원격 스팀팩 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStimPack[i+1][2],AtMost,0)},{SetCVar(FP,MultiStimPack[i+1][2],SetTo,1)})
 		CIfEnd()
-		CIfShop(i,43,P_MultiStopCost,"\x07[ \x07구입 성공, \x07멀티 스탑 \x04기능을 사용할 수 있습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiHold[i+1][2],AtMost,0)},{SetCVar(FP,MultiHold[i+1][2],SetTo,1)})
+		CIfShop(i,43,P_MultiStopCost,"\x07[ \x07멀티 스탑 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiHold[i+1][2],AtMost,0)},{SetCVar(FP,MultiHold[i+1][2],SetTo,1)})
 		CIfEnd()
-		CIfShop(i,44,P_MultiHoldCost,"\x07[ \x07구입 성공, \x07멀티 홀드 \x04기능을 사용할 수 있습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStop[i+1][2],AtMost,0)},{SetCVar(FP,MultiStop[i+1][2],SetTo,1)})
+		CIfShop(i,44,P_MultiHoldCost,"\x07[ \x07멀티 홀드 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStop[i+1][2],AtMost,0)},{SetCVar(FP,MultiStop[i+1][2],SetTo,1)})
 		CIfEnd()
-		CIfShop(i,46,P_AtkExceed,"\x07[ \x07구입 성공, \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
+		CIfShop(i,46,P_AtkExceed,"\x07[ \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
 		CIfEnd()
-		CIfShop(i,47,P_HPExceed,"\x07[ \x07구입 성공, \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],255,AtMost)},AddV(HPExceed[i+1],1))
+		CIfShop(i,47,P_HPExceed,"\x07[ \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],255,AtMost)},AddV(HPExceed[i+1],1))
 		CIfEnd()
-		CIfShop(i,48,P_ShUpgrade,"\x07[ \x07구입 성공, \x1C쉴드 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
+		CIfShop(i,48,P_ShUpgrade,"\x07[ \x1C쉴드 \x04업그레이드를 구입하였습니다.  \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
 		CIfEnd()
 		CIfShop(i,50,0,"\x07[ \x07스탯\x04이 \x1F초기화\x04되었습니다. \x07]","\x07[ \x08사용 불가 \x07]",{},{
 			SetV(NewUsedStat[i+1],0),
@@ -917,6 +921,9 @@ end
 			SetV(MCoolDownP[i+1],0),
 			SetV(ShUp[i+1],0),
 			SetV(MCoolDownCost[i+1],P_MCooldown),
+			SetV(MSkillP[i+1],0),
+			SetV(MSkillCool[i+1],200),
+			SetV(MSkillCost[i+1],P_MSkill),
 			
 			SetDeaths(i, SetTo, 0, 39),
 			SetDeaths(i, SetTo, 0, 40),
@@ -926,35 +933,32 @@ end
 			SetDeaths(i, SetTo, 32, 44),
 			SetDeaths(i, SetTo, 0, 45),
 			SetDeaths(i, SetTo, 0, 46),
+			SetDeaths(i, SetTo, 0, 47),
 			SetMemoryW(0x660E00+(MarID[i+1]*2),SetTo,10000)})
 		CIfEnd()
 
 		
 
 
-		CIf(FP,{TMemory(_Add(MenuPtr[i+1],0x98/4),Exactly,0 + 45*65536)})
-		CIf(FP,{CDeaths(FP,AtMost,0,ShopSw[i+1]),})
-		CallTrigger(FP,Call_Print13[i+1])
-		local ShopTempV = CreateVar(FP)
-		CMov(FP,ShopTempV,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],P_ExcOldP)),nil,nil,1)
-			CIfX(FP, {CV(ShopTempV, P_ExcOldP, AtLeast)})
-				local TempPV = CreateVarArr(3, FP)
-				CDiv(FP,TempPV[1],ShopTempV,P_ExcOldP)
-				CDoActions(FP,{
-					TSetDeaths(i, Add, TempPV[1], 35),AddV(UsedOldP[i+1],TempPV[1]),TSetDeaths(i,Add,TempPV[1],37),SetDeaths(i,SetTo,150,15),
-					SetCp(i),PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP),SetCDeaths(FP,SetTo,1,ShopSw[i+1]),
-				})
-				CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x07구입 성공, \x1B구버전 포인트\x04가 전환되었습니다. \x07]")},{preserved})
-			CElseX()
-				CDoActions(FP, {
-					SetDeaths(i,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[i+1]),SetCp(i),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCp(FP)
-				})
-				CTrigger(FP,{LocalPlayerID(i)},{print_utf8(12,0,"\x07[ \x08포인트가 부족합니다 \x07]")},{preserved})
-			CIfXEnd()
+		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x08공격\x1F속도 \x04업그레이드를 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],P_MCooldown),SubV(MCoolDown[i+1],256+65536)})
+		CIfEnd()
+		MarSkillBuyCcode = CIfShop(i,51,MSkillCost[i+1],"    ","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MSkillP[i+1],9,AtMost)},{AddV(MSkillP[i+1],1),AddV(MSkillCost[i+1],P_MSkill)})
+		CIf(FP,{CD(MarSkillBuyCcode,1)})
+		TriggerX(FP,{CV(MSkillP[i+1],2)},SetV(MSkillCool[i+1],200),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],3)},SetV(MSkillCool[i+1],150),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],4)},SetV(MSkillCool[i+1],100),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],5)},SetV(MSkillCool[i+1],72),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],6)},SetV(MSkillCool[i+1],45),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],7)},SetV(MSkillCool[i+1],30),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],8)},SetV(MSkillCool[i+1],23),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],9)},SetV(MSkillCool[i+1],15),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],10)},SetV(MSkillCool[i+1],9),{preserved})
+		DisplayPrintEr(i, {"\x07[ \x07강력한 광범위 공격스킬 \x04업그레이드를 구입하였습니다. \x08(주의 : 보스전 사용불가) \x07현재 \x1D공격스킬 \x07쿨다운 \x04: \x1D",MSkillCool[i+1]," \x04틱 \x07]"})
 		CIfEnd()
 		CIfEnd()
-		CIfShop(i,49,MCoolDownCost[i+1],"\x07[ \x07구입 성공, \x08공격\x1F속도 \x04업그레이드가 완료되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MCoolDownP[i+1],9,AtMost)},{AddV(MCoolDownP[i+1],1),AddV(MCoolDownCost[i+1],P_MCooldown),SubV(MCoolDown[i+1],256+65536)})
-		CIfEnd()
+
+
+
 		CIfEnd()--ShopEnd
 
 		
@@ -979,6 +983,7 @@ end
 			{MultiHold[i+1],{65},1},
 			{MultiStop[i+1],{67},1},
 			{MCoolDownP[i+1],{49},10,1},
+			{MSkillP[i+1],{51},10,1},
 			
 		}
 		for j, k in pairs(ItemT) do
@@ -1004,10 +1009,28 @@ end
 			
 		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+42,SetTo,0)},{preserved})
 		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,1)},{preserved})
+		TriggerX(FP,{CD(TestMode,0)},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,0)},{preserved})
+		else
+			TriggerX(FP,{},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,0)},{preserved})
 		end
 		
 
 		
+		CIfOnce(FP,{Switch("Switch 242", Set)})
+		local ShopTempV = CreateVar(FP)
+		CMov(FP,ShopTempV,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],P_ExcOldP)),nil,nil,1)
+			CIfX(FP, {CV(ShopTempV, P_ExcOldP, AtLeast)})
+				CallTrigger(FP,Call_Print13[i+1])
+				local TempPV = CreateVarArr(3, FP)
+				CDiv(FP,TempPV[1],ShopTempV,P_ExcOldP)
+				CDoActions(FP,{
+					TSetDeaths(i, Add, TempPV[1], 35),AddV(UsedOldP[i+1],TempPV[1]),TSetDeaths(i,Add,TempPV[1],37),SetDeaths(i,SetTo,150,15),
+					SetCp(i),PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP)
+				})
+				
+				DisplayPrintEr(i, {"\x07[ \x07자동으로 \x1B구버전 포인트\x04가 전환되었습니다. 획득한 포인트 : \x07",TempPV[1]," \x07]"})
+			CIfXEnd()
+		CIfEnd()
 
 		TriggerX(FP,{CVar(FP,NukesUsage[i+1][2],AtMost,0)},{SetMemoryB(0x57F27C+(228*i)+41,SetTo,0)},{preserved})
 		 -- 업글시 돈 증가량 변수와 동기화. TT조건을 이용해 값이 변화할때만 연산함
@@ -1261,6 +1284,8 @@ for i=0, 6 do
 	HPExceedTemp = CreateVar(FP)
 	MCoolDownTemp = CreateVar(FP)
 	MCoolDownCostTemp = CreateVar(FP)
+	MSkillTemp = CreateVar(FP)
+	MSkillCostTemp = CreateVar(FP)
 		for i = 0, 6 do
 			CIf(FP,{CV(SelPl,i)})
 			CTrigger(FP, {}, {TSetCVar(FP,PointTamp[2],SetTo,_Sub(OldAvStat[i+1],_Mul(UsedOldP[i+1],_Mov(P_ExcOldP))))}, 1)
@@ -1268,6 +1293,8 @@ for i=0, 6 do
 			CMov(FP,HPExceedTemp,HPExceed[i+1])
 			CMov(FP,MCoolDownTemp,MCoolDownP[i+1])
 			CMov(FP,MCoolDownCostTemp,MCoolDownCost[i+1])
+			CMov(FP,MSkillTemp,MSkillP[i+1])
+			CMov(FP,MSkillCostTemp,MSkillCost[i+1])
 
 			CIfEnd()
 		end
@@ -1276,12 +1303,15 @@ for i=0, 6 do
 		CS__ItoCustom(FP,SVA1(Str7,15),HPExceedTemp,nil,nil,{10,3},1,nil,"\x070",0x1D)
 		CS__ItoCustom(FP,SVA1(Str8,14),MCoolDownTemp,nil,nil,{10,2},1,nil,"\x070",0x1D)
 		CS__ItoCustom(FP,SVA1(Str8,29),MCoolDownCostTemp,nil,nil,{10,3},1,nil,"\x1F0",0x1F)
+		CS__ItoCustom(FP,SVA1(Str9,14),MSkillTemp,nil,nil,{10,2},1,nil,"\x070",0x1D)
+		CS__ItoCustom(FP,SVA1(Str9,29),MSkillCostTemp,nil,nil,{10,4},1,nil,"\x1F0",0x1F)
 		
 	CS__InputVA(FP,iTbl4,0,Str5,Str5s,nil,0,Str5s)
 	CS__InputVA(FP,iTbl5,0,Str6,Str6s,nil,0,Str6s)
 	CS__InputVA(FP,iTbl6,0,Str7,Str7s,nil,0,Str7s)
 
 	CS__InputVA(FP,iTbl7,0,Str8,Str8s,nil,0,Str8s)
+	CS__InputVA(FP,iTbl12,0,Str9,Str9s,nil,0,Str9s)
 
 
 	CIfEnd()

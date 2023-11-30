@@ -1,170 +1,275 @@
 function Gun_System()
 
 
-    --[[
-    EXCunit 적용
-    1번줄 : 건작의 레벨
-    9번줄 : 영작유닛 표식
-    10번줄 : 마린 데스값 중복적용 방지용
-    ]]
-    EXCC_Part1(DUnitCalc)
-    --CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
-    DoActions(FP,MoveCp(Subtract,6*4))
-    Check_P8 = def_sIndex()
-    NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
-    DoActions(FP,MoveCp(Add,6*4))
-    Install_DeathNotice()
-    EXCC_ClearCalc()
-    --ClearCalc()
+	--[[
+	EXCunit 적용
+	1번줄 : 건작의 레벨
+	9번줄 : 영작유닛 표식
+	10번줄 : 마린 데스값 중복적용 방지용
+	]]
+	EXCC_Part1(DUnitCalc)
+	--CunitCtrig_Part1(FP) -- 죽은유닛 인식 단락 시작
+	DoActions(FP,MoveCp(Subtract,6*4))
+	Check_P8 = def_sIndex()
+	NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
+	DoActions(FP,MoveCp(Add,6*4))
+	Install_DeathNotice()
+	EXCC_ClearCalc()
+	--ClearCalc()
 
-    NJumpEnd(FP,Check_P8)
-    DoActions(FP,MoveCp(Add,6*4))
-    CIf(FP,Cond_EXCC(8,AtLeast,1)) -- 영작유닛인식
-    f_SaveCp()
-    InstallHeroPoint()
-    CIfEnd()
-    CMov(FP,Gun_Type,0)
-    CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
-    for j, k in pairs({142,135,140,141,138,139,137}) do -- 잡건작 목록
-        f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = 잡건작 플래그
-    end
-    CIfEnd()
+	NJumpEnd(FP,Check_P8)
+	DoActions(FP,MoveCp(Add,6*4))
+	CIf(FP,Cond_EXCC(8,AtLeast,1)) -- 영작유닛인식
+	f_SaveCp()
+	InstallHeroPoint()
+	CIfEnd()
+	CMov(FP,Gun_Type,0)
+	CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
+	for j, k in pairs({142,135,140,141,138,139,137}) do -- 잡건작 목록
+		f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = 잡건작 플래그
+	end
+	CIfEnd()
 
-    f_GSend(131)
-    f_GSend(132)
-    f_GSend(133)
-    f_GSend(130)
-    f_GSend(151)
-    f_GSend(201)
-    f_GSend(148)
-    f_GSend(173)
-    f_GSend(152)
-    CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- 다크아칸 폭발이펙트
-        f_SaveCp()
-        f_Read(FP,_Sub(BackupCp,15),CPos)
-        Convert_CPosXY()
-        CreateBullet(205,20,0,CPosX,CPosY)
-        CreateBullet(206,20,0,CPosX,CPosY)
-        CSPlot(CSMakePolygon(8,64,0,PlotSizeCalc(2,6),1),FP,63,0,nil,1,32,FP,nil,nil,1)
-        DoActions(FP,{KillUnit(63,FP)})
-        f_LoadCp()
-    CIfEnd()
+	f_GSend(131)
+	f_GSend(132)
+	f_GSend(133)
+	f_GSend(130)
+	f_GSend(151)
+	f_GSend(201)
+	f_GSend(148)
+	f_GSend(173)
+	f_GSend(152)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- 다크아칸 폭발이펙트
+		f_SaveCp()
+		f_Read(FP,_Sub(BackupCp,15),CPos)
+		Convert_CPosXY()
+		CreateBullet(205,20,0,CPosX,CPosY)
+		CreateBullet(206,20,0,CPosX,CPosY)
+		CSPlot(CSMakePolygon(8,64,0,PlotSizeCalc(2,6),1),FP,63,0,nil,1,32,FP,nil,nil,1)
+		DoActions(FP,{KillUnit(63,FP)})
+		f_LoadCp()
+	CIfEnd()
 
-    if TestStart == 1 then
-        --f_GSend(146)
-        --f_GSend(136)
-    end
-
-
-
-    EXCC_ClearCalc()
-    EXCC_Part2()
-    --CunitCtrig_Part2()
-    --DoActionsXI(FP,EXCC_Forward)
-    EXCC_Part3X()
-    --CunitCtrig_Part3X()
-    for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
-    EXCC_Part4X(i,{
-    DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
-    DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
-    },
-    {SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
-    SetCVar(FP,CurCunitI[2],SetTo,i),
-    MoveCp(Add,25*4),
-    })--
-    end
-    EXCC_End()
+	if TestStart == 1 then
+		--f_GSend(146)
+		--f_GSend(136)
+	end
 
 
 
-
-    
-    
-    EXCC_Part1(LHPCunit)
-    f_SaveCp()
-    local ReadHP = CreateVar(FP)
-    local TempV1 = CreateVar(FP)
-    local TempV2 = CreateVar(FP)
-    local TempW = CreateWar(FP)
-    local TempW2 = CreateWar(FP)
-    local TempW3 = CreateWar(FP)
-    local TempW4 = CreateWar(FP)
-    local TempW5 = CreateWar(FP)
-    local VoidV = CreateVar(FP)
-
-    
-    f_Read(FP, BackupCp, ReadHP)
-
-    f_LMov(FP, TempW, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]}, nil, nil, 1)
-    f_LMov(FP, TempW2, {ReadHP,VoidV}, nil, nil, 1)
+	EXCC_ClearCalc()
+	EXCC_Part2()
+	--CunitCtrig_Part2()
+	--DoActionsXI(FP,EXCC_Forward)
+	EXCC_Part3X()
+	--CunitCtrig_Part3X()
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+	EXCC_Part4X(i,{
+	DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
+	DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
+	},
+	{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
+	SetCVar(FP,CurCunitI[2],SetTo,i),
+	MoveCp(Add,25*4),
+	})--
+	end
+	EXCC_End()
 
 
-    f_LAdd(FP, TempW3, TempW, TempW2)
-    
-    CIfX(FP, {TTCWar(FP, TempW3[2], AtLeast, tostring(8320000*256))})
-    
-        f_LSub(FP, TempW4, _LMov(tostring(8320000*256)), TempW2)
-        f_LSub(FP, TempW5, TempW, TempW4)
 
 
-        f_LMov(FP, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]},TempW5, nil, nil, 1)
-    CDoActions(FP, {
-        TSetMemory(BackupCp, SetTo, 8320000*256),
-        Set_EXCCX(0, SetTo, 1),
-        Set_EXCCX(1, SetTo, EXCC_TempVarArr[2]),
-        Set_EXCCX(2, SetTo, EXCC_TempVarArr[3]),
-    })
-    CElseX()
-        f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
-        CDoActions(FP, {
-            TSetMemory(BackupCp, Add, TempV1),
-            Set_EXCCX(0, SetTo, 0),
-            Set_EXCCX(1, SetTo, 0),
-            Set_EXCCX(2, SetTo, 0),
-        })
-    CIfXEnd()
-    
+	
+	
+	EXCC_Part1(LHPCunit)
+	f_SaveCp()
+	local ReadHP = CreateVar(FP)
+	local TempV1 = CreateVar(FP)
+	local TempV2 = CreateVar(FP)
+	local TempW = CreateWar(FP)
+	local TempW2 = CreateWar(FP)
+	local TempW3 = CreateWar(FP)
+	local TempW4 = CreateWar(FP)
+	local TempW5 = CreateWar(FP)
+	local VoidV = CreateVar(FP)
 
-    f_LoadCp()
-    EXCC_ClearCalc()
-    EXCC_Part2()
-    EXCC_Part3X()
-    
-    for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
-    EXCC_Part4X(i,{
-        
-        CVar("X", "X", AtLeast, 1);
-        Deaths(19025+(84*i)+2,AtMost,(8320000*256)-256,0),
-        DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
-        DeathsX(19025+(84*i)+19,AtLeast,7,0,0xFF00),
-    },
-    {
-        SetCVar(FP,CurCunitI[2],SetTo,i),
-        SetCVar(FP, BackupCp[2], SetTo, 19025+(84*i)+2);
-        MoveCp(Add,2*4),
-    })--
-    end
-    EXCC_End()
+	
+	f_Read(FP, BackupCp, ReadHP)
+
+	f_LMov(FP, TempW, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]}, nil, nil, 1)
+	f_LMov(FP, TempW2, {ReadHP,VoidV}, nil, nil, 1)
+
+
+	f_LAdd(FP, TempW3, TempW, TempW2)
+	
+	CIfX(FP, {TTCWar(FP, TempW3[2], AtLeast, tostring(8320000*256))})
+	
+		f_LSub(FP, TempW4, _LMov(tostring(8320000*256)), TempW2)
+		f_LSub(FP, TempW5, TempW, TempW4)
+
+
+		f_LMov(FP, {EXCC_TempVarArr[2],EXCC_TempVarArr[3]},TempW5, nil, nil, 1)
+	CDoActions(FP, {
+		TSetMemory(BackupCp, SetTo, 8320000*256),
+		Set_EXCCX(0, SetTo, 1),
+		Set_EXCCX(1, SetTo, EXCC_TempVarArr[2]),
+		Set_EXCCX(2, SetTo, EXCC_TempVarArr[3]),
+	})
+	CElseX()
+		f_LMov(FP, {TempV1,TempV2}, TempW, nil, nil, 1)
+		CDoActions(FP, {
+			TSetMemory(BackupCp, Add, TempV1),
+			Set_EXCCX(0, SetTo, 0),
+			Set_EXCCX(1, SetTo, 0),
+			Set_EXCCX(2, SetTo, 0),
+		})
+	CIfXEnd()
+	
+
+	f_LoadCp()
+	EXCC_ClearCalc()
+	EXCC_Part2()
+	EXCC_Part3X()
+	
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+	EXCC_Part4X(i,{
+		
+		CVar("X", "X", AtLeast, 1);
+		Deaths(19025+(84*i)+2,AtMost,(8320000*256)-256,0),
+		DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+		DeathsX(19025+(84*i)+19,AtLeast,7,0,0xFF00),
+	},
+	{
+		SetCVar(FP,CurCunitI[2],SetTo,i),
+		SetCVar(FP, BackupCp[2], SetTo, 19025+(84*i)+2);
+		MoveCp(Add,2*4),
+	})--
+	end
+	EXCC_End()
 
 CunitCtrig_Part1(FP)
 
 
 MJ = def_sIndexArr(7)
+SkillUnit = def_sIndex()
+NJumpX(FP,SkillUnit,{DeathsX(CurrentPlayer,Exactly,179,0,0xFF)},{})
 
 for i = 1, 7 do
-    NJump(FP, MJ[i], DeathsX(CurrentPlayer,Exactly,MarID[i],0,0xFF),{SetMemory(0x6509B0, Subtract, 4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF),
-    SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})
+	NJump(FP, MJ[i], DeathsX(CurrentPlayer,Exactly,MarID[i],0,0xFF),{SetMemory(0x6509B0, Subtract, 4),SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF),
+	SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})
 end
 ClearCalc()
 for i = 1, 7 do
-    NJumpEnd(FP, MJ[i])
-    BreakCalc({DeathsX(CurrentPlayer,AtMost,18*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,18*65536,0,0xFF0000)})
-    CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
-    TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00)},{preserved})
-    ClearCalc()
+	NJumpEnd(FP, MJ[i])
+
+
+
+--21에서 33으로 이동하여 쿨탐 1틱 차감후 복귀
+	--DoActions(FP, {SetMemory(0x6509B0, Add, 12),SetDeathsX(CurrentPlayer, Subtract, 1, 0, 0xFFFF),SetMemory(0x6509B0, Subtract, 12)})
+	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),Subtract,1)})
+	BreakCalc({DeathsX(CurrentPlayer,AtMost,18*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,18*65536,0,0xFF0000)})
+	
+	CIf(FP,{CV(MSkillP[i],1,AtLeast)},{SetMemory(0x6509B0, Subtract, 2)})
+	MarSkill = def_sIndex()
+	CJump(FP,MarSkill)
+	CallMarSkill = SetCallForward()
+	SetCall(FP)
+	f_SaveCp()
+	
+	--19
+	--CDoActions(FP,{TSetMemoryX(_Add(BackupCp,14),SetTo,MSkillCool[i],0xFFFF)})
+	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),SetTo,MSkillCool[i])})
+	f_Read(FP,_Sub(BackupCp,9),CPos)
+	Convert_CPosXY()
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+	function MarListSkillUnitFunc()
+		CIf(FP,Memory(0x628438,AtLeast,1))
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		CDoActions(FP,{
+			CreateUnit(1,179,1,i-1),
+			TSetDeathsX(_Add(Nextptrs,8),SetTo,127*65536,0,0xFF0000),
+			TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
+			TSetDeaths(_Add(Nextptrs,22),SetTo,1536+(3072*65536),0),
+			TSetDeathsX(_Add(Nextptrs,21),SetTo,0,0,0xFF),
+			TSetDeathsX(_Add(Nextptrs,21),SetTo,0,1,0xFF00),
+		})
+		CIfEnd()
+	end
+	MarListSkillUnitFunc()
+
+	f_LoadCp()
+	SetCallEnd()
+	CJumpEnd(FP,MarSkill)
+
+	--19에서 33으로 이동하여 쿨타임이 존재하는가를 찾아라. 
+	CAdd(FP,0x6509B0,14)
+	
+	--CIf(FP,{Memory(0x628438,AtLeast,1),DeathsX(CurrentPlayer,AtMost,0,0,0xFFFF)}) -- 공메모리 영역 쿨타임 체크
+	CIf(FP,{Memory(0x628438,AtLeast,1),TMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),AtMost,0),Bring(FP, AtLeast, 1, 147, 64)}) -- 공메모리 영역 쿨타임 체크
+	
+		CSub(FP,0x6509B0,14)
+		CIf(FP,DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00))
+			CAdd(FP,0x6509B0,4)
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
+				CSub(FP,0x6509B0,4)
+				CallTrigger(FP,CallMarSkill)
+				CAdd(FP,0x6509B0,4)
+			CIfEnd()
+			CSub(FP,0x6509B0,4)
+		CIfEnd()
+		CIf(FP,DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00))
+			CAdd(FP,0x6509B0,4)
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
+				CSub(FP,0x6509B0,4)
+				CallTrigger(FP,CallMarSkill)
+				CAdd(FP,0x6509B0,4)
+			CIfEnd()
+			CSub(FP,0x6509B0,4)
+		CIfEnd()
+		CIf(FP,DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00))
+			CAdd(FP,0x6509B0,4)
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
+				CSub(FP,0x6509B0,4)
+				CallTrigger(FP,CallMarSkill)
+				CAdd(FP,0x6509B0,4)
+			CIfEnd()
+			CSub(FP,0x6509B0,4)
+		CIfEnd()
+		CAdd(FP,0x6509B0,14)
+	CIfEnd()
+	CSub(FP,0x6509B0,14)
+
+
+	CAdd(FP,0x6509B0,2)
+	
+CIfEnd()
+
+
+
+	CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
+	TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00)},{preserved})
+	
+	
+	ClearCalc()
 end
 
+NJumpXEnd(FP,SkillUnit)
 
+
+DoActions(FP,{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
+TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,10*256,0)},{SetDeaths(CurrentPlayer,SetTo,9*256,0)},{preserved})
+CIf(FP,Deaths(CurrentPlayer,Exactly,0,0))
+CAdd(FP,0x6509B0,23)
+DoActions(FP,{SetDeathsX(CurrentPlayer,SetTo,84,0,0xFF),
+RemoveUnit(84,Force1);
+SetMemory(0x6509B0,Subtract,16),
+SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000),
+SetMemory(0x6509B0,Add,16),})
+CSub(FP,0x6509B0,23)
+CIfEnd()
+
+
+
+ClearCalc()
 
 CunitCtrig_Part2()
 CunitCtrig_Part3X()
@@ -173,46 +278,46 @@ CunitCtrig_Part4X(i,{
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
 },
-{MoveCp(Add,25*4)})
+{MoveCp(Add,25*4),SetV(MarSkillTimerPtr,i)})
 end
 CunitCtrig_End()
 
 
-    
-    DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
-    TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{
-        SetCDeaths(FP,SetTo,0,SoundLimit[1]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[2]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[3]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[4]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[5]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[6]),
-        SetCDeaths(FP,SetTo,0,SoundLimit[7]),
-        SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
-    TriggerX(FP, {CD(GCT,1,AtLeast),CV(LevelT,10)}, {Order("Any unit",FP,64,Move,64)}, {preserved})
+	
+	DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
+	TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{
+		SetCDeaths(FP,SetTo,0,SoundLimit[1]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[2]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[3]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[4]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[5]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[6]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[7]),
+		SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
+	TriggerX(FP, {CD(GCT,1,AtLeast),CV(LevelT,10)}, {Order("Any unit",FP,64,Move,64)}, {preserved})
 
-    
-    DoActions(FP,{
-        SetInvincibility(Disable,"Buildings",FP,64);
-    })
-    CMov(FP,Actived_Gun,0)
-    CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,1,GCT)},1)
-    for i = 0, 127 do
-        CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
-            Var_InputCVar,
-            SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
-            SetCVar(FP,f_GunNum[2],SetTo,i),
-            SetCVar(FP,Actived_Gun[2],Add,1),
-            SetNext("X",f_Gun,0),SetNext(f_Gun+1,"X",1), -- Call f_Gun
-            SetCtrigX("X",f_Gun+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
-            SetCtrigX("X",f_Gun+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
-            SetCtrig1X("X",f_Gun+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
-        }, 1, 0x500+i)
-    end
-    CMov(FP,0x6509B0,FP)
-    Create_G_CB_Arr()
+	
+	DoActions(FP,{
+		SetInvincibility(Disable,"Buildings",FP,64);
+	})
+	CMov(FP,Actived_Gun,0)
+	CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Subtract,1,GCT)},1)
+	for i = 0, 127 do
+		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
+			Var_InputCVar,
+			SetCtrigX("X",G_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+			SetCVar(FP,f_GunNum[2],SetTo,i),
+			SetCVar(FP,Actived_Gun[2],Add,1),
+			SetNext("X",f_Gun,0),SetNext(f_Gun+1,"X",1), -- Call f_Gun
+			SetCtrigX("X",f_Gun+1,0x158,0,SetTo,"X","X",0x4,1,0), -- RecoverNext
+			SetCtrigX("X",f_Gun+1,0x15C,0,SetTo,"X","X",0,0,1), -- RecoverNext
+			SetCtrig1X("X",f_Gun+1,0x164,0,SetTo,0x0,0x2) -- RecoverNext
+		}, 1, 0x500+i)
+	end
+	CMov(FP,0x6509B0,FP)
+	Create_G_CB_Arr()
 
-    
+	
 
 
 	local G_CA_Nextptrs = CreateVar(FP)
@@ -220,7 +325,7 @@ CunitCtrig_End()
 	local TempPID = CreateVar(FP)
 	local TempType = CreateVar(FP)
 	local TempProperties = CreateVar(FP)
-    local f_TempTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+	local f_TempTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	if Limit == 1 then
 --		CIf(FP,{CD(TestMode,1)})
 --		--DisplayPrintEr(0,{"\x07『 \x03TESTMODE OP \x04: CreateUnitQueuePtr : ",CreateUnitQueuePtr," || CreateUnitQueuePtr2 : ",CreateUnitQueuePtr2," \x07』"})
@@ -236,11 +341,11 @@ CunitCtrig_End()
 	end
 	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
 
-    
+	
 
 
-    QPosX = CreateVar(FP)
-    QPosY = CreateVar(FP)
+	QPosX = CreateVar(FP)
+	QPosY = CreateVar(FP)
 	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 	f_SHRead(FP, _Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), QPosX)
 	f_SHRead(FP, _Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), QPosY)
@@ -259,25 +364,25 @@ CunitCtrig_End()
 	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
 	TriggerX(FP, {CV(CreateUnitQueuePtr2,100000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
 
-    local isScore = CreateCcode()
+	local isScore = CreateCcode()
 
 	CIf(FP,{TTOR({CVar(FP,TempType[2],Exactly,0),CVar(FP,TempType[2],Exactly,4)})})
-        local Gun_Order = def_sIndex()
-        CJumpXEnd(FP,Gun_Order)
-        f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
-        for i = 0, 6 do
-            NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
-                CJumpX(FP,Gun_Order)
-            NIfEnd()
-        end
-        CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
-        for i = 0, 6 do
-            CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)})
-                CMov(FP,TempBarPos,BarPos[i+1])
-            CIfEnd()
-        end
-        CIfEnd()
-    CIfEnd()
+		local Gun_Order = def_sIndex()
+		CJumpXEnd(FP,Gun_Order)
+		f_Mod(FP,Gun_TempRand,_Rand(),_Mov(7))
+		for i = 0, 6 do
+			NIf(FP,{CVar(FP,Gun_TempRand[2],Exactly,i),HumanCheck(i,0)})
+				CJumpX(FP,Gun_Order)
+			NIfEnd()
+		end
+		CIf(FP,CDeaths(FP,AtLeast,1,PCheck))
+		for i = 0, 6 do
+			CIf(FP,{CVar(FP,BarrackPtr[i+1][2],AtLeast,1),CVar(FP,Gun_TempRand[2],Exactly,i)})
+				CMov(FP,TempBarPos,BarPos[i+1])
+			CIfEnd()
+		end
+		CIfEnd()
+	CIfEnd()
 
 
 
@@ -388,7 +493,8 @@ CunitCtrig_End()
 
 	NWhileEnd()
 	
-    if Limit == 1 then
-        TriggerX(FP,{CD(TestMode,1)}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
-    end
+	DoActions(FP,{RemoveUnit(179,P12),RemoveUnit(84,P12),RemoveUnit(84,Force1)})
+	if Limit == 1 then
+		TriggerX(FP,{CD(TestMode,1)}, RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),{preserved})
+	end
 end

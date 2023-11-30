@@ -22,6 +22,7 @@ function Objects()
 	P_HPExceed = 25
 	P_ShUpgrade = 15
 	P_MCooldown = 20
+	P_MSkill = 1000
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 
@@ -385,8 +386,9 @@ function Var_init()
 	SoloNoPointC = CreateCcode()
 	ShUp = Create_VTable(7,nil,FP)	
 	MCoolDownP = CreateVarArr(7,FP)
-
+	MSkillP = CreateVarArr(7,FP)
 	MCoolDown = Create_VTable(7, (17*256)+(17*65536), FP)
+	MSkillCool = Create_VTable(7, 200, FP)
 	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
@@ -428,6 +430,8 @@ function Var_init()
 	CreateUnitQueuePtr = CreateVar(FP)
 	CreateUnitQueueNum = CreateVar(FP)
 	CreateUnitQueuePtr2 = CreateVar(FP)
+	MarSkillTimerArr = Create_VoidEPDHeaderV(FP,4*1700)
+	MarSkillTimerPtr = CreateVar(FP)
 	
 	end
 

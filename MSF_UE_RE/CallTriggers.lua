@@ -634,6 +634,7 @@ SetCallEnd()
 	t03 = "\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07』"
 	t04 = "\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C832\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07』"
 	t05 = "\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D) \x03(Q) \x07』"
+	t06 = "\x07『 \x08공격\x1F스킬 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D\x0D\x0D) \x03(A) \x07』"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
 
@@ -645,6 +646,7 @@ SetCallEnd()
 	iStrSize7 = GetiStrSize(0,"\x07『 \x18ATK \x1F한계돌파 \x04업그레이드 (000\x04/\x1C256\x04) \x1F(Cost:10) \x03(A) \x07』")
 	iStrSize8 = GetiStrSize(0,"\x07『 \x08HP \x1F한계돌파 \x04업그레이드 (000\x04/\x1C832\x04) \x1F(Cost:35) \x03(D) \x07』")
 	iStrSize9 = GetiStrSize(0,"\x07『 \x08공격\x0F속도 \x04업그레이드 (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07』")
+	iStrSize10 = GetiStrSize(0,t06)
 	
 
 	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- 단축키없음
@@ -660,6 +662,10 @@ SetCallEnd()
 	S10 = MakeiTblString(1368,"일반명령",'Q',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk2)+5),"Base",1)
 	S11 = MakeiTblString(1372,"일반명령",'D',MakeiStrLetter("\x0D",GetiStrSize(0,OHP1)+5),"Base",1)
 	S12 = MakeiTblString(1371,"일반명령",'E',MakeiStrLetter("\x0D",GetiStrSize(0,OHP2)+5),"Base",1)
+
+	S13 = MakeiTblString(1474,"일반명령",'A',MakeiStrLetter("\x0D",iStrSize10+5),"Base",1)
+
+	
 	iTbl1 = GetiTblId(FP,1501,S1) 
 	iTbl2 = GetiTblId(FP,831,S2) 
 	iTbl3 = GetiTblId(FP,816,S3) 
@@ -673,6 +679,7 @@ SetCallEnd()
 	iTbl9 = GetiTblId(FP,1368,S10)
 	iTbl10 = GetiTblId(FP,1372,S11)
 	iTbl11 = GetiTblId(FP,1371,S12)
+	iTbl12 = GetiTblId(FP,1474,S13)
 
 	PMariTbl = {}
 	for i = 0, 6 do
@@ -695,6 +702,7 @@ SetCallEnd()
 	Str6, Str6a, Str6s = SaveiStrArr(FP,t03)
 	Str7, Str7a, Str7s = SaveiStrArr(FP,t04)
 	Str8, Str8a, Str8s = SaveiStrArr(FP,t05)
+	Str9, Str9a, Str9s = SaveiStrArr(FP,t06)
 	
 	iStr9, iStr9a, iStr9s = SaveiStrArr(FP,OAtk1)
 	iStr10, iStr10a, iStr10s = SaveiStrArr(FP,OAtk2)

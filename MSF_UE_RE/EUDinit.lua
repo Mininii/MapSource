@@ -379,7 +379,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(67,1200)
 	UnitEnableX(70)
 	UnitEnableX(68)
-	for i = 37, 50 do
+	for i = 37, 51 do
 		UnitEnableX(i)
 		
 	end
@@ -719,6 +719,13 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CMovX(FP,VArr(AtkFactorBackUp,CI),Act_WRead(_Add(CI2,0x657678)),nil,nil,nil,1)--factor
 	CMovX(FP,VArr(AtkBackUp,CI),Act_WRead(_Add(CI2,0x656EB0)),nil,nil,nil,1)--amount
 	CForEnd()
+
+	CFor(FP, 0, 1700, 1) -- 
+	CI = CForVariable()
+	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,CI),SetTo,0)})
+	CForEnd()
+
+	
 
 
 
