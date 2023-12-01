@@ -40,8 +40,6 @@ function PlayerInterface()
 	local ShopSw = CreateCcodeArr(7)
 	local AtkUpCount = CreateVarArr(7, FP)
 	local HPUpCount = CreateVarArr(7, FP)
-	local MCoolDownCost = Create_VTable(7,P_MCooldown,FP)
-	local MSkillCost = Create_VTable(7,P_MSkill,FP)
 	
 	local NsW = CreateCcode()
 	
@@ -554,6 +552,7 @@ function PlayerInterface()
 		SCA_DeathToV(ShUp[i+1],45,i)
 		SCA_DeathToV(MCoolDownP[i+1],46,i)
 		SCA_DeathToV(MSkillP[i+1],47,i)
+		SCA_DeathToV(PStatVer[i+1],48,i)
 		
 
 		
@@ -906,7 +905,7 @@ end
 		CIfEnd()
 		CIfShop(i,46,P_AtkExceed,"\x07[ \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
 		CIfEnd()
-		CIfShop(i,47,P_HPExceed,"\x07[ \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],255,AtMost)},AddV(HPExceed[i+1],1))
+		CIfShop(i,47,P_HPExceed,"\x07[ \x08HP \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(HPExceed[i+1],831,AtMost)},AddV(HPExceed[i+1],1))
 		CIfEnd()
 		CIfShop(i,48,P_ShUpgrade,"\x07[ \x1C쉴드 \x04업그레이드를 구입하였습니다.  \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
 		CIfEnd()
@@ -944,13 +943,14 @@ end
 		CIfEnd()
 		MarSkillBuyCcode = CIfShop(i,51,MSkillCost[i+1],"    ","\x07[ \x08포인트가 부족합니다 \x07]",{CV(MSkillP[i+1],9,AtMost)},{AddV(MSkillP[i+1],1),AddV(MSkillCost[i+1],P_MSkill)})
 		CIf(FP,{CD(MarSkillBuyCcode,1)})
-		TriggerX(FP,{CV(MSkillP[i+1],2)},SetV(MSkillCool[i+1],200),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],3)},SetV(MSkillCool[i+1],150),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],4)},SetV(MSkillCool[i+1],100),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],5)},SetV(MSkillCool[i+1],72),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],6)},SetV(MSkillCool[i+1],45),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],7)},SetV(MSkillCool[i+1],30),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],8)},SetV(MSkillCool[i+1],23),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],1)},SetV(MSkillCool[i+1],200),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],2)},SetV(MSkillCool[i+1],150),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],3)},SetV(MSkillCool[i+1],100),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],4)},SetV(MSkillCool[i+1],78),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],5)},SetV(MSkillCool[i+1],56),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],6)},SetV(MSkillCool[i+1],44),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],7)},SetV(MSkillCool[i+1],31),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],8)},SetV(MSkillCool[i+1],22),{preserved})
 		TriggerX(FP,{CV(MSkillP[i+1],9)},SetV(MSkillCool[i+1],15),{preserved})
 		TriggerX(FP,{CV(MSkillP[i+1],10)},SetV(MSkillCool[i+1],9),{preserved})
 		DisplayPrintEr(i, {"\x07[ \x07강력한 광범위 공격스킬 \x04업그레이드를 구입하였습니다. \x08(주의 : 보스전 사용불가) \x07현재 \x1D공격스킬 \x07쿨다운 \x04: \x1D",MSkillCool[i+1]," \x04틱 \x07]"})
@@ -1030,6 +1030,49 @@ end
 				
 				DisplayPrintEr(i, {"\x07[ \x07자동으로 \x1B구버전 포인트\x04가 전환되었습니다. 획득한 포인트 : \x07",TempPV[1]," \x07]"})
 			CIfXEnd()
+
+			CIf(FP,{TTNVar(PStatVer[i+1], NotSame, StatVer)})
+			CMov(FP,PStatVer[i+1],StatVer)
+			CTrigger(FP, {}, {SetCp(i),PlayWAV("staredit\\wav\\BuySE.ogg");
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+			DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),
+		}, 1)
+			DoActionsX(FP, {
+				SetV(NewUsedStat[i+1],0),
+				SetV(AtkExceed[i+1],32),
+				SetV(HPExceed[i+1],32),
+				SetV(MultiStimPack[i+1],0),
+				SetV(MultiHold[i+1],0),
+				SetV(MultiStop[i+1],0),
+				SetV(MCoolDown[i+1],(17*256)+(17*65536)),
+				SetV(MCoolDownP[i+1],0),
+				SetV(ShUp[i+1],0),
+				SetV(MCoolDownCost[i+1],P_MCooldown),
+				SetV(MSkillP[i+1],0),
+				SetV(MSkillCool[i+1],200),
+				SetV(MSkillCost[i+1],P_MSkill),
+				
+				SetDeaths(i, SetTo, 0, 39),
+				SetDeaths(i, SetTo, 0, 40),
+				SetDeaths(i, SetTo, 0, 41),
+				SetDeaths(i, SetTo, 0, 42),
+				SetDeaths(i, SetTo, 32, 43),
+				SetDeaths(i, SetTo, 32, 44),
+				SetDeaths(i, SetTo, 0, 45),
+				SetDeaths(i, SetTo, 0, 46),
+				SetDeaths(i, SetTo, 0, 47),
+				SetMemoryW(0x660E00+(MarID[i+1]*2),SetTo,10000)})
+			
+			
+			CIfEnd()
+
+
 		CIfEnd()
 
 		TriggerX(FP,{CVar(FP,NukesUsage[i+1][2],AtMost,0)},{SetMemoryB(0x57F27C+(228*i)+41,SetTo,0)},{preserved})

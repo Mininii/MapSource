@@ -305,15 +305,22 @@ function OPTrig()
 		TriggerX(FP,{Deaths(i, AtMost, 31, 44)},{SetDeaths(i, Add, 32, 44)})
 		Act_TSetMemoryW(0x660E00+(MarID[i+1]*2), Add, _Mul(ShUp[i+1], _Mov(1000)))
 		CSub(FP, MCoolDown[i+1], _Mul(MCoolDownP[i+1], _Mov(256+65536)))
-		TriggerX(FP,{CV(MSkillP[i+1],2)},SetV(MSkillCool[i+1],200),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],3)},SetV(MSkillCool[i+1],150),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],4)},SetV(MSkillCool[i+1],100),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],5)},SetV(MSkillCool[i+1],72),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],6)},SetV(MSkillCool[i+1],45),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],7)},SetV(MSkillCool[i+1],30),{preserved})
-		TriggerX(FP,{CV(MSkillP[i+1],8)},SetV(MSkillCool[i+1],23),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],1)},SetV(MSkillCool[i+1],200),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],2)},SetV(MSkillCool[i+1],150),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],3)},SetV(MSkillCool[i+1],100),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],4)},SetV(MSkillCool[i+1],78),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],5)},SetV(MSkillCool[i+1],56),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],6)},SetV(MSkillCool[i+1],44),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],7)},SetV(MSkillCool[i+1],31),{preserved})
+		TriggerX(FP,{CV(MSkillP[i+1],8)},SetV(MSkillCool[i+1],22),{preserved})
 		TriggerX(FP,{CV(MSkillP[i+1],9)},SetV(MSkillCool[i+1],15),{preserved})
 		TriggerX(FP,{CV(MSkillP[i+1],10)},SetV(MSkillCool[i+1],9),{preserved})
+		f_Mul(FP, MSkillCost[i+1], _Add(MSkillP[i+1],1), P_MSkill)
+		f_Mul(FP, MCoolDownCost[i+1], _Add(MCoolDownP[i+1],1), P_MCooldown)
+		
+
+
+
 	end
 	if Limit == 1 then
 	Trigger {

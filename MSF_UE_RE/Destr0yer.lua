@@ -523,8 +523,10 @@ Trigger {
 	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		f_Div(FP,DTotalDmg,_Mov(256))
 		f_Mul(FP,DTotalDmg,_Mov(10))
-		
-		f_Div(FP,DTotalDmg,SetPlayers)
+		if Limit == 1 then
+		else
+			f_Div(FP,DTotalDmg,SetPlayers)
+		end
 		
 		ItoDecX(FP,DTotalDmg,VArr(TotalDmgVA,0),2,0x7,2)
 		_0DPatchX(FP,TotalDmgVA,12)

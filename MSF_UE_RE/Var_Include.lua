@@ -387,8 +387,12 @@ function Var_init()
 	ShUp = Create_VTable(7,nil,FP)	
 	MCoolDownP = CreateVarArr(7,FP)
 	MSkillP = CreateVarArr(7,FP)
+	
+	MCoolDownCost = Create_VTable(7,P_MCooldown,FP)
+	MSkillCost = Create_VTable(7,P_MSkill,FP)
 	MCoolDown = Create_VTable(7, (17*256)+(17*65536), FP)
 	MSkillCool = Create_VTable(7, 200, FP)
+	PStatVer = Create_VTable(7,nil,FP)	
 	
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
 	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
