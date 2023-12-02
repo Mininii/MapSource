@@ -283,7 +283,6 @@ CIfEnd()
 
 SetCallEnd()
 
-
 f_Replace = SetCallForward()
 SetCall(FP)
 	CIfX(FP,Memory(0x628438,AtLeast,1))
@@ -294,6 +293,9 @@ SetCall(FP)
 	f_Read(FP,_Add(BackupCp,1),Gun_LV,"X",0xFF000000)
 	f_Read(FP,_Add(BackupCp,1),CunitP,"X",0xFF00)
 	f_Read(FP,_Add(BackupCp,1),RepHeroIndex,"X",0xFF)
+	
+
+
 	f_Div(FP,CunitP,_Mov(0x100)) -- 0
 	f_Div(FP,Gun_LV,_Mov(0x1000000)) -- 1
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
@@ -311,6 +313,7 @@ SetCall(FP)
 			
 	})
 	CIfEnd()
+	CTrigger(FP, {CV(RepHeroIndex,125)}, {TSetMemory(_Add(ChkBunkerArr,CunitIndex),SetTo,1)},{preserved})
 
 	CDoActions(FP,{
 	TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
@@ -578,10 +581,18 @@ SetCallEnd()
 
 	--TriggerX(FP,{CVar(FP,Diff[2],AtLeast,1)},{SetMemory(0x515BD0,SetTo,256*16*10),SetMemory(0x662350+(4*125),SetTo,16000*256*10),SetMemory(0x662350+(4*124),SetTo,16000*256*10)},{preserved})
 	
-	for i = 2, 10 do
-		TriggerX(FP,{CVar(FP,Level[2],Exactly,i)},{SetMemory(0x515BD0,SetTo,256*16*i),SetMemory(0x662350+(4*125),SetTo,16000*256*i),SetMemory(0x662350+(4*124),SetTo,16000*256*i)},{preserved})
-	end
 
+	CIfX(FP, CV(Level,831,AtMost))
+	CMov(FP,0x662350+(4*125),_Mul(Level, 10000*256))
+	CMov(FP,0x662350+(4*124),_Mul(Level, 10000*256))
+	CMov(FP,BunkerHP,_Mul(Level, 10000*256),-128)
+	CElseX()
+	CMov(FP,BunkerHP,832*10000*256,-128)
+	CMov(FP,0x662350+(4*125),832*10000*256)
+	CMov(FP,0x662350+(4*124),832*10000*256)
+	CIfXEnd()
+	
+	
 	
 	for i = 37, 57 do
 		SetLevelUpHP(i)

@@ -2439,3 +2439,12 @@ function Print_13_2(PlayerID,DisplayPlayer,String)
 	CIfEnd()
 	FuncAlloc = FuncAlloc + 1
 end
+
+function KeyToggleFunc2(KeyName,KeyName2)
+	local KeyToggle = CreateCcode()
+	local KeyToggle2 = CreateCcode()
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName, "Up")}, {SetCD(KeyToggle,0)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName2, "Down"),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,0)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,1)}, {preserved})
+	TriggerX(FP, {Memory(0x68C144,Exactly,0),KeyPress(KeyName2, "Down"),KeyPress(KeyName, "Down"),CD(KeyToggle,0),CD(KeyToggle2,1)},{SetCD(KeyToggle,1),SetCD(KeyToggle2,0)}, {preserved})
+	return KeyToggle2,KeyToggle
+end

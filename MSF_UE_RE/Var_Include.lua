@@ -23,6 +23,7 @@ function Objects()
 	P_ShUpgrade = 15
 	P_MCooldown = 20
 	P_MSkill = 1000
+	P_MinUpgrade = 10000
 	--System
 	MarID = {0,1,16,20,32,99,100}  
 	MarWep = {117,118,119,120,121,122,123} 
@@ -385,6 +386,7 @@ function Var_init()
 	NCCalc = CreateVar(FP)
 	SoloNoPointC = CreateCcode()
 	ShUp = Create_VTable(7,nil,FP)	
+	MinUp = Create_VTable(7,nil,FP)	
 	MCoolDownP = CreateVarArr(7,FP)
 	MSkillP = CreateVarArr(7,FP)
 	
@@ -406,6 +408,7 @@ function Var_init()
 	MarDup = CreateCcode()
 	MarDup2 = CreateCcode()
 	TalkTimer = CreateVar2(FP,nil,nil,3)
+	BunkerHP = CreateVar(FP)
 
 
 	CT_GNextRandV = CreateVar(FP)
@@ -436,6 +439,8 @@ function Var_init()
 	CreateUnitQueuePtr2 = CreateVar(FP)
 	MarSkillTimerArr = Create_VoidEPDHeaderV(FP,4*1700)
 	MarSkillTimerPtr = CreateVar(FP)
+	ChkBunkerArr = Create_VoidEPDHeaderV(FP,4*1700)
+	ChkBunkerPtr = CreateVar(FP)
 	
 	end
 

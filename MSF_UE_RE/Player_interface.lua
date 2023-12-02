@@ -93,16 +93,17 @@ function PlayerInterface()
 	Trigger2X(FP,{Memory(0x596A44, Exactly, 65536)},{SetCDeaths(FP,SetTo,0,DeleteToggle),DisplayText(string.rep("\n", 20),4)},{preserved})
 	CIfX(FP,{Switch("Switch 242", Set)})
 
-	 
 	
-	
+	TempExRate = CreateVar(FP)
 		TempVT = CreateVarArr(7,FP)
+		CMov(FP,TempExRate,ExchangeRate)
 		for i = 0, 6 do
 		CIf(FP,{LocalPlayerID(i)},{SetMemory(0x6509B0,SetTo,FP)}) -- 스테이터스 전송
 		CMov(FP,TempVT[1],NewAvStat[i+1])
 		CMov(FP,TempVT[2],NewStat[i+1])
 		CMov(FP,TempVT[3],NewMaxLevel[i+1])
 		CMov(FP,TempVT[4],NewMaxScore[i+1])
+		CMov(FP,TempVT[5],MinUp[i+1])
 		CIfEnd({SetMemory(0x6509B0,SetTo,FP)})
 		end
 		local iStrInit = def_sIndex()
@@ -129,7 +130,22 @@ function PlayerInterface()
 		TriggerX(FP,{CD(ET,6,AtLeast)},{SetNVar(EC,Add,604),SetCD(ET,0)},{preserved})
 		TriggerX(FP,NVar(EC,AtLeast,8*604),SetNVar(EC,SetTo,0),{preserved}) 
 	function StatusInterface() --
-	local PlayerID = CAPrintPlayerID 
+	local PlayerID = CAPrintPlayerID
+	
+	DoActionsX(FP,{SetV(TempVT[6],0x32223222)},1)
+	CIf(FP,{TTCVar(FP, TempVT[6][2], NotSame, TempVT[5])})
+	CMov(FP, TempVT[6], TempVT[5])
+
+	CIfX(FP,CV(TempVT[5],1,AtLeast))
+	
+	CAdd(FP,TempVT[7],_Div(_Mul(TempExRate,TempVT[5]),_Mov(10)),TempExRate)
+
+	CElseX()
+	CMov(FP,TempVT[7],TempExRate)
+	CIfXEnd()
+
+	CIfEnd()
+
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,StatusT1,nil,0) 
 	CA__ItoCustom(SVA1(Str1,13),TempVT[3],nil,nil,{10,3},1,"\x0D",nil,0x1F)--"\x1F0"
@@ -145,23 +161,37 @@ function PlayerInterface()
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,StatusT3E,nil,0) 
 	CA__InputSVA1(SVA1(Str1,24),SVA1(EffStr1,EC),22,0xFF,0,54)
-	CA__ItoCustom(SVA1(Str1,17),ExchangeRate,nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
+	CA__ItoCustom(SVA1(Str1,17),TempVT[7],nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
 	CA__ItoCustom(SVA1(Str1,42),MulPoint,nil,nil,{10,2},1,"\x0D",nil,0x07)--"\x1F0"
 	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-3)
 	CElseX()
 	CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0) 
 	CA__SetValue(Str1,StatusT3,nil,0) 
-	CA__ItoCustom(SVA1(Str1,17),ExchangeRate,nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
+	CA__ItoCustom(SVA1(Str1,17),TempVT[7],nil,nil,{10,4},1,"\x0D",nil,0x1F)--"\x1F0"
 	CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-3)
 	CIfXEnd()
 	
 	
 	end 
-	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"StatusInterface",FP,{CD(DeleteToggle,0)}) --
+	
+	local Tabkey,TabKey2 = KeyToggleFunc2("TAB","LCTRL")
+
+	CIfX(FP,{CD(Tabkey,1)})--수치표기
+	
+
 	CIf(FP,{CD(DeleteToggle,0)})
+	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"StatusInterface",FP,{CD(DeleteToggle,0)}) --
 	DisplayPrint(HumanPlayers,{"\x10【 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08100000 \x10】"})
-	CIfEnd()
 	FixText(FP, 2)
+	CIfEnd()
+	CElseX()
+	CIf(FP,{CD(DeleteToggle,0)})
+	FixText(FP, 1)
+	DisplayPrint(HumanPlayers,{"\x10【 \x07세부 창 열기 \x04: \x1CLCTRL \x04+ \x1FTAB \x10】"})
+	TriggerX(FP,{CD(TabKey2,1)},{RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", 4)}, HumanPlayers, FP)},{preserved})
+	FixText(FP, 2)
+	CIfEnd()
+	CIfXEnd()
 
 
 	CIfXEnd()
@@ -553,6 +583,9 @@ function PlayerInterface()
 		SCA_DeathToV(MCoolDownP[i+1],46,i)
 		SCA_DeathToV(MSkillP[i+1],47,i)
 		SCA_DeathToV(PStatVer[i+1],48,i)
+		SCA_DeathToV(MinUp[i+1],49,i)
+
+		
 		
 
 		
@@ -658,7 +691,8 @@ function PlayerInterface()
 						ModifyUnitHitPoints(All,7,i,"Anywhere",100),
 						ModifyUnitHitPoints(All,10,i,"Anywhere",100),
 						SetInvincibility(Enable, MarID[i+1], i, 64),
-						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+						SetInvincibility(Enable, 124, i, 64),
+						SetInvincibility(Enable, 125, i, 64),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
 						ModifyUnitShields(All,"Buildings",i,"Anywhere",100),
 						SetDeaths(i, SetTo, 1, 34);
@@ -909,6 +943,8 @@ end
 		CIfEnd()
 		CIfShop(i,48,P_ShUpgrade,"\x07[ \x1C쉴드 \x04업그레이드를 구입하였습니다.  \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(ShUp[i+1],54,AtMost)},{AddV(ShUp[i+1],1),SetMemoryW(0x660E00+(MarID[i+1]*2),Add,1000)})
 		CIfEnd()
+		CIfShop(i,52,P_MinUpgrade,"\x07[ \x1F미네랄 \x08최종 \x1e획득량 \x04업그레이드를 구입하였습니다.  \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{},{AddV(MinUp[i+1],1)})
+		CIfEnd()
 		CIfShop(i,50,0,"\x07[ \x07스탯\x04이 \x1F초기화\x04되었습니다. \x07]","\x07[ \x08사용 불가 \x07]",{},{
 			SetV(NewUsedStat[i+1],0),
 			SetV(AtkExceed[i+1],32),
@@ -922,6 +958,7 @@ end
 			SetV(MCoolDownCost[i+1],P_MCooldown),
 			SetV(MSkillP[i+1],0),
 			SetV(MSkillCool[i+1],200),
+			SetV(MinUp[i+1],0),
 			SetV(MSkillCost[i+1],P_MSkill),
 			
 			SetDeaths(i, SetTo, 0, 39),
@@ -933,6 +970,7 @@ end
 			SetDeaths(i, SetTo, 0, 45),
 			SetDeaths(i, SetTo, 0, 46),
 			SetDeaths(i, SetTo, 0, 47),
+			SetDeaths(i, SetTo, 0, 49),
 			SetMemoryW(0x660E00+(MarID[i+1]*2),SetTo,10000)})
 		CIfEnd()
 
@@ -1056,6 +1094,8 @@ end
 				SetV(MCoolDownCost[i+1],P_MCooldown),
 				SetV(MSkillP[i+1],0),
 				SetV(MSkillCool[i+1],200),
+				SetV(MinUp[i+1],0),
+				
 				SetV(MSkillCost[i+1],P_MSkill),
 				
 				SetDeaths(i, SetTo, 0, 39),
@@ -1067,6 +1107,7 @@ end
 				SetDeaths(i, SetTo, 0, 45),
 				SetDeaths(i, SetTo, 0, 46),
 				SetDeaths(i, SetTo, 0, 47),
+				SetDeaths(i, SetTo, 0, 49),
 				SetMemoryW(0x660E00+(MarID[i+1]*2),SetTo,10000)})
 			
 			
@@ -1088,6 +1129,9 @@ end
 			CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 			CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
+			CIf(FP,CV(MinUp[i+1],1,AtLeast))
+			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,MinUp[i+1]),{FP,ExchangeRate[2],nil,"V"}))
+			CIfEnd()
 			CMov(FP,ExchangeP,0)
 		CIfEnd()
 
@@ -1141,6 +1185,8 @@ end
 			table.insert(HealZActT,ModifyUnitHitPoints(All,MarID[j+1],Force1,i+2,100))
 			table.insert(HealZActT,SetInvincibility(Enable, MarID[j+1], Force1, i+2))
 			table.insert(HealZActT,SetInvincibility(Enable, MarID[j+1], Force1, i+2))
+			table.insert(HealZActT,SetInvincibility(Enable, 124, Force1, i+2))
+			table.insert(HealZActT,SetInvincibility(Enable, 125, Force1, i+2))
 		end
 		Trigger2X(FP,{HumanCheck(i,1)},{
 			HealZActT,
@@ -1148,7 +1194,6 @@ end
 			ModifyUnitShields(All,10,Force1,i+2,100),
 			ModifyUnitHitPoints(All,7,Force1,i+2,100),
 			ModifyUnitShields(All,7,Force1,i+2,100),
-			ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
 			ModifyUnitShields(All,"Buildings",Force1,i+2,100),
 			SetDeaths(Force1, SetTo, 1, 34);
 			SetCD(CUnitFlag,1)
@@ -1165,6 +1210,7 @@ end
 				CMov(FP,MulCon[i+1],_Add(CPosX,_Mul(CPosY,_Mov(0x10000))))
 			end
 		end
+		CMov(FP, ChkBunkerPtr, 0)
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,6,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
@@ -1197,7 +1243,12 @@ end
 			CIfEnd()
 			CIf(FP,{Deaths(i,AtLeast,1,34)}) -- Heal
 			CTrigger(FP, {TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000),TMemory(_Add(BackupCp,6),Exactly,MarID[i+1])}, {TSetMemory(_Sub(BackupCp,17), SetTo, MarHP[i+1]),TSetMemoryX(_Add(BackupCp,36),SetTo,0,0x04000000)}, 1)
+			CTrigger(FP, {TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000),TMemory(_Add(BackupCp,6),Exactly,124)}, {TSetMemory(_Sub(BackupCp,17), SetTo, BunkerHP),TSetMemoryX(_Add(BackupCp,36),SetTo,0,0x04000000)}, 1)
+			CTrigger(FP, {TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000),TMemory(_Add(BackupCp,6),Exactly,125)}, {TSetMemory(_Sub(BackupCp,17), SetTo, BunkerHP),TSetMemoryX(_Add(BackupCp,36),SetTo,0,0x04000000)}, 1)
+			CTrigger(FP, {TMemory(_Add(ChkBunkerArr,ChkBunkerPtr),Exactly,1),TMemoryX(_Add(BackupCp,36),Exactly,0,0x04000000),TMemory(_Add(BackupCp,6),Exactly,125)}, {TSetMemoryX(_Add(BackupCp,36),SetTo,0x04000000,0x04000000)}, 1)
+
 			CIfEnd()
+			
 			CIf(FP,{Deaths(i,AtLeast,1,70)}) -- JYD
 				f_Read(FP,_Sub(BackupCp,9),TempPos)
 				CDoActions(FP,{TSetDeaths(_Add(BackupCp,4),SetTo,0,0),TSetDeathsX(BackupCp,SetTo,187*256,0,0xFF00),TSetDeaths(_Sub(BackupCp,13),SetTo,TempPos,0),TSetDeaths(_Add(BackupCp,3),SetTo,TempPos,0),TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
@@ -1227,6 +1278,7 @@ end
 
 			end
 			CIfEnd()
+			CAdd(FP, ChkBunkerPtr, 1)
 			CAdd(FP,0x6509B0,84)
 		CWhileEnd()
 		CMov(FP,0x6509B0,FP)

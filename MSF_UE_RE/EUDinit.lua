@@ -379,7 +379,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(67,1200)
 	UnitEnableX(70)
 	UnitEnableX(68)
-	for i = 37, 51 do
+	for i = 37, 52 do
 		UnitEnableX(i)
 		
 	end
@@ -738,7 +738,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			-- 0xYYYYXXXX 0xLLIIPPUU
 			-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 			CunitHP = CreateVar(FP)
-			CIf(FP,{TTMemory(_Add(BackupCp,6),NotSame,58)}) -- 발키리 저리가
+			CIf(FP,{TTMemoryX(_Add(BackupCp,6),NotSame,58,0xFF)}) -- 발키리 저리가
 				f_Read(FP,_Sub(BackupCp,9),CPos)
 				f_Read(FP,_Sub(BackupCp,17),CunitHP)
 				f_Div(FP,CunitHP,_Mov(256))

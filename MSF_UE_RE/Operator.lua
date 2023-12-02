@@ -300,6 +300,18 @@ function OPTrig()
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
 	CIfOnce(FP, CD(StartT,100,AtLeast))
+	
+	CIfX(FP, CV(Level,831,AtMost))
+	CMov(FP,0x662350+(4*125),_Mul(Level, 10000*256))
+	CMov(FP,0x662350+(4*124),_Mul(Level, 10000*256))
+	CMov(FP,BunkerHP,_Mul(Level, 10000*256),-128)
+	CElseX()
+	CMov(FP,BunkerHP,832*10000*256,-128)
+	CMov(FP,0x662350+(4*125),832*10000*256)
+	CMov(FP,0x662350+(4*124),832*10000*256)
+	CIfXEnd()
+	
+
 	for i = 0, 6 do -- 불러온 데이터 설정
 		TriggerX(FP,{Deaths(i, AtMost, 31, 43)},{SetDeaths(i, Add, 32, 43)})
 		TriggerX(FP,{Deaths(i, AtMost, 31, 44)},{SetDeaths(i, Add, 32, 44)})
