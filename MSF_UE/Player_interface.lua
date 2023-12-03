@@ -1431,7 +1431,23 @@ end
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoHeal[i+1]),CDeaths(FP,AtLeast,1,TelCool2[i+1])},{TelCooltime2},{preserved})
 		TriggerX(FP,{CDeaths(FP,AtLeast,1,AutoHeal[i+1]),CDeaths(FP,Exactly,0,TelCool2[i+1])},{TelCooltimeRecover2},{preserved})
 		Trigger2(FP,{Deaths(i,AtLeast,1,197),Deaths(i,AtMost,0,14),Deaths(i,AtMost,0,16)},{SetDeaths(i,SetTo,1,14)},{preserved})
+		CIf(FP,{CD(MultiCommand[i+1],1),CD(LVResetStartFlag,1)})
 		TriggerX(FP, {CD(MultiCommand[i+1],1),CD(LVResetStartFlag,1)}, {SetDeaths(i,SetTo,1,70),SetCDeaths(FP,Add,1,CUnitFlag)}, {preserved})
+		local WhileC = CreateCcode()
+		local WhileJ = def_sIndex()
+		
+
+		CJumpEnd(FP,WhileJ)
+		NWhile(FP,{Memory(0x628438, AtLeast, 1),TMemory(0x5821D4 + (4*i),AtLeast,_ReadF(0x582204 + (4*i))),Accumulate(i, AtLeast, 30000, Ore),CD(WhileC,1000,AtMost)},{AddCD(WhileC,1)})
+		f_Rand(FP,RandV)
+		CAdd(FP,TempX,_Mod(RandV,2272-800),800)
+		CAdd(FP,TempY,_Mod(RandV,6080-5440),5440)
+		Simple_SetLocX(FP,0,TempX,TempY,TempX,TempY,{CreateUnit(1, MarID[i+1], 1, i),SetResources(i, Subtract, 30000, Ore)})
+		CJump(FP, WhileJ)
+		NWhileEnd()
+
+		DoActionsX(FP,{SetCD(WhileC,0)})
+		CIfEnd()
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,12)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
 			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동

@@ -443,6 +443,18 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			}
 	}
 	end
+	if Limit == 1 then
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				},
+			actions = {
+				SetCVar(FP,SetPlayers[2],SetTo,7);
+				}
+		}
+		
+	end
 
 	for k = 1, 7 do
 		Trigger { -- 미션 오브젝트, 환전률 셋팅
@@ -470,6 +482,18 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 		conditions = {
 			Label(0);
 			isname(i,"GALAXY_BURST");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+	}
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"Azusawa_Kohane");
 			CDeaths(FP,AtLeast,1,LimitX);
 		},
 		actions = {

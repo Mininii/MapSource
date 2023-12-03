@@ -426,8 +426,11 @@ local CB_P = CreateVar(FP)
 			for i = 0, 6 do
 				CIf(FP,{HumanCheck(i,1)})
 					CIfX(FP,{CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)})
-					
-					CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+					if Limit == 1 then
+						CIfX(FP,{Never()})
+					else
+						CIfX(FP,{CVar(FP,SetPlayers[2],Exactly,1)})
+					end
 					CMov(FP,ReadScore,0)
 					CElseX()
 					f_Div(FP,ReadScore,ExScore[i+1],1000)
@@ -451,7 +454,11 @@ local CB_P = CreateVar(FP)
 					GetPVA = CreateVArray(FP,13)
 					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
 					_0DPatchX(FP,GetPVA,12)
-					CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+					if Limit == 1 then
+						CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,1))
+					else
+						CIfX(FP,CVar(FP,SetPlayers[2],AtLeast,2))
+					end
 					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
 					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 					CElseX()

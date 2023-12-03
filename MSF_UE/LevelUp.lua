@@ -271,6 +271,7 @@ function LevelUp()
 	CIfEnd()
 	
 	local ContinueT = CreateCcode()
+	local ContinueC = CreateCcode()
 
 	CIfX(FP,{Never()})
 
@@ -291,11 +292,13 @@ function LevelUp()
 		SetCDeaths(FP,SetTo,0,ConCP[5]);
 		SetCDeaths(FP,SetTo,0,ConCP[6]);
 		SetCDeaths(FP,SetTo,0,ConCP[7]);
+		AddCD(ContinueC, 1);
 		
 	})
 	CIfXEnd()
 	NoB = 220
 	YesB = 221
+	TriggerX(FP, {CD(ContinueC,3,AtLeast)}, {SetDeaths(CurrentPlayer, SetTo, 1, YesB),SetCD(ContinueC,0)}, {preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,2),CVar(FP,LevelT[2],AtMost,10),CDeaths(FP,Exactly,0,Continue)},{SetCDeaths(FP,SetTo,1,Continue);},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CVar(FP,LevelT[2],AtLeast,10),CDeaths(FP,AtLeast,7,ContinueT)},{SetCDeaths(FP,SetTo,1,Continue);},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,5001,ReplaceDelayT),CDeaths(FP,Exactly,0,Continue),Deaths(CurrentPlayer,AtLeast,1,NoB)},{RotatePlayer({DisplayTextX(NoText,4),PlayWAVX("staredit\\wav\\button3.wav");PlayWAVX("staredit\\wav\\button3.wav");},HumanPlayers,FP),SetCDeaths(FP,Add,1,NoCcode)},{preserved})
@@ -386,6 +389,7 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,0,ConCP[5]);
 	SetCDeaths(FP,SetTo,0,ConCP[6]);
 	SetCDeaths(FP,SetTo,0,ConCP[7]);
+	SetCDeaths(FP,SetTo,0,ContinueC);
 	
 
 	})
