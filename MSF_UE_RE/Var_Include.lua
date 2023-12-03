@@ -2,7 +2,7 @@
 function Objects()
 
 
-	LvLimit = 190
+	LvLimit = 400
 	-- Balance
 	MarDamageFactor = 1 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
 	MarDamageAmount = 30 -- 투사체수 2로 지정해서 절반의 값으로 써야됨
@@ -296,6 +296,9 @@ function Var_init()
 	CPConsoleToggle = CreateCcode()
 	ConCP = CreateCcodeArr(7)
 	GivePChange = CreateCcodeArr(7)
+	GiveP = CreateVarArr(7, FP)
+	TempGiveP = CreateVarArr(7, FP)
+	GivePChk = CreateArr(7, FP)
 
 	Var_TempTable = {}
 	Var_InputCVar = {}

@@ -251,10 +251,21 @@ f_SetLvHP = SetCallForward()
 SetCall(FP)
 		CMovX(FP, TempBakHP, VArr(MaxHPBackUp,UnitIDV), SetTo, nil, nil, 1)
 		f_Div(FP,TempBakHP2,TempBakHP,4)
+		--HP/4 = TempBakHP2
+		--(Level/10) * TempBakHP2 = TempLvHP_L
+		--TempLvHP_L / 4 = TempLvHP_L6
+		--TempLvHP_L6 * (LevelT-1) = TempLvHP_L5
+		-- TempLvHP_L + TempLvHP_L5 = TempLvHP_L4
+
 		f_LAdd(FP, TempLvHP_L, _LMul({TempBakHP2,0}, {_Div(Level,_Mov(10)),0}), {TempBakHP,0})
 		f_LDiv(FP, TempLvHP_L6, TempLvHP_L,"4")
 		f_LMul(FP, TempLvHP_L5, TempLvHP_L6, _LMov({LevelT-1,0}))
 		f_LAdd(FP,TempLvHP_L4,TempLvHP_L,TempLvHP_L5)
+		CIf(FP,{CV(Level,101,AtLeast)})
+
+		f_LAdd(FP,TempLvHP_L4,TempLvHP_L4,_LMul(TempLvHP_L4, {_Div(Level,_Mov(100)),0}))
+
+		CIfEnd()
 		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L4,SetTo,nil,nil,1)
 		CTrigger(FP,{TTCWar(FP,TempLvHP_L4[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L4[2],SetTo,"2129920000")},{preserved})
 		CTrigger(FP,{TTCWar(FP,TempLvHP_L4[2],AtMost,"255")},{SetCWar(FP,TempLvHP_L4[2],SetTo,"256")},{preserved})
@@ -510,6 +521,16 @@ SetCallEnd()
 		Print_13_2(FP,{i},nil)
 	SetCallEnd()
 	end
+
+	Call_Print13X = SetCallForward()
+	Print13V = CreateVar(FP)
+	SetCall(FP)
+	for i = 0, 6 do
+		CIf(FP,{CV(Print13V,i)})
+		CallTrigger(FP,Call_Print13[i+1])
+		CIfEnd()
+	end
+	SetCallEnd()
 
 	ComputerReplace = SetCallForward()
 	SetCall(FP)
