@@ -296,6 +296,9 @@ function Var_init()
 	CPConsoleToggle = CreateCcode()
 	ConCP = CreateCcodeArr(7)
 	GivePChange = CreateCcodeArr(7)
+	GiveP = CreateVarArr(7, FP)
+	TempGiveP = CreateVarArr(7, FP)
+	GivePChk = CreateArr(7, FP)
 
 	Var_TempTable = {}
 	Var_InputCVar = {}

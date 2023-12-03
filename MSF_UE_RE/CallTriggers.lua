@@ -511,6 +511,16 @@ SetCallEnd()
 	SetCallEnd()
 	end
 
+	Call_Print13X = SetCallForward()
+	Print13V = CreateVar(FP)
+	SetCall(FP)
+	for i = 0, 6 do
+		CIf(FP,{CV(Print13V,i)})
+		CallTrigger(FP,Call_Print13[i+1])
+		CIfEnd()
+	end
+	SetCallEnd()
+
 	ComputerReplace = SetCallForward()
 	SetCall(FP)
 	CMov(FP,0x6509B0,UnitDataPtr)
