@@ -302,7 +302,18 @@ CWhileEnd()
 	CIfEnd()
 	DoActions(FP, {KillUnit(188,P12)})
 	
-	
+	if Limit == 1 then
+		
+	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)'
+		Trigger2(FP, {
+			DeathsX(19025+(84*i)+19,AtMost,6,0,0xFF),
+			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),},{
+			SetDeaths(19025+(84*i)+21,SetTo,0,0),
+			SetDeathsX(19025+(84*i)+21,SetTo,0,1,0xFF00),
+			},{preserved})
+	end
+
+	end
 
 	TriggerX(FP,{CD(SoundLimit,5,AtMost),CD(DSound,1,AtLeast)},{SetCD(DSound,0),AddCD(SoundLimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP)},{preserved})
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))

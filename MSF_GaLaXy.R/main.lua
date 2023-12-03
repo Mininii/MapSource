@@ -44,13 +44,17 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(0)
+TestSet(1)
 VNum = "3.5"
 
 AutoSettingMode = false
 
 Test=""
 if Limit == 1 then Test="T" end
+RMode = 1
+if Limit == 1 then
+	RMode = 1
+end
 if X2_Mode == 1 then
 	VName = VNum.."_2X"..Test
 	MapSize = {256*32,256*32}
@@ -113,6 +117,9 @@ Trigger2X(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),Hu
 --		Trigger2X(FP,{LocalPlayerID(i),KeyPress("ESC", "Down"),KeyPress("ENTER", "Down")},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0),Defeat(),RotatePlayer({Victory()},MapPlayers,FP)})
 --	end
 --end
+if RMode == 1 then
+	NoAirCollisionX(FP)
+end
 
 EndCtrig()
 ErrorCheck()

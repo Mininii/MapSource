@@ -301,9 +301,15 @@ function init()
 				table.insert(CtrigInitArr[FP+1],SetVArrayX(VArr(ZergGndVArr,i-1),"Value",SetTo,ZergGndUArr[i]))
 			end
 			
+			if RMode == 1 then
+				for j,k in pairs(ZergGndUArr) do
+				SetUnitsDat2X(PatchArr,k,{SizeL=4,SizeU=4,SizeR=4,SizeD=4})
+				end
+			end
 			if Limit == 1 then
 				for j,k in pairs(ZergGndUArr) do
-					SetUnitsDat2X(PatchArr,k,{Height=12,AdvFlag={4,4}})
+					--SetUnitsDat2X(PatchArr,k,{Height=12,AdvFlag={4,4}})
+
 				end
 				
 			end
