@@ -42,7 +42,7 @@ function Install_Roka7Boss()
 
 
 	CIfX(FP,{Bring(FP,AtLeast,1, "。˙+˚roka7。+.˚。˙+˚roka7。+.˚     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--다크아칸 에너지 스크립트 뉴클리어로 변경
-	TriggerX(FP,{Memory(0x58F524,AtLeast,1)},{SetInvincibility(Disable, 87, FP, 64)})--첫 퍼지기패턴시 무적해제
+	TriggerX(FP,{Memory(0x58F524,AtLeast,1)},{SetInvincibility(Disable, 87, FP, 64)},{preserved})--첫 퍼지기패턴시 무적해제
 	CIf(FP,{CV(B_5_C,1,AtLeast)})
 --	if Limit == 1 then
 --		CIf(FP,{CD(TestMode,1)})
@@ -69,7 +69,9 @@ function Install_Roka7Boss()
 	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,3)},{SetV(F2XT2,18*3),SetV(F2XT3,36*45)},1)
 	CTrigger(FP,{TMemory(0x594000+4*41,Exactly,4)},{SetV(F2XT2,18*4),SetV(F2XT3,36*37)},1)
 	CTrigger(FP,{TDeathsX(B_5_C+19, AtMost, 0*256, 0,0xFF00)},{SetV(B_5_C,0)})
+	CTrigger(FP,{},{SetCD(roka7Chk,0)},1)
 
+	CTrigger(FP,{CV(V(XColor),5)},{SetCD(roka7Chk,1)},1)
 	
 	CIf(FP,CV(F2BRS,0),SetV(F2BSD,72))--Random
 	CRandNum(FP,10,F2BSD)
@@ -81,19 +83,23 @@ function Install_Roka7Boss()
 	f_Read(FP,_Add(B_5_C,2),F2BDX)
 	CSub(FP,F2BDT,F2BDY,F2BDX)
 	CIf(FP,{TTOR({_TNVar(F2BRT, AtMost, F2BRU),_TNVar(F2XT1, AtMost, F2XT2)})})
-		CIf(FP,{CV(F2BDT,1*256,AtLeast),CV(F2BDT,0x7FFFFFFF,AtMost)},{
-			SetMemory(0x58DC60,SetTo,0),
-			SetMemory(0x58DC64,SetTo,0),
-			SetMemory(0x58DC68,SetTo,640),
-			SetMemory(0x58DC6C,SetTo,640),
-			MoveLocation(1, 87,P8,"Anywhere")})
-			TriggerX(FP,{CV(F2BDT,640*256,AtLeast)},{SubV(F2BDT,640*256),KillUnitAt(64,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,320*256,AtLeast)},{SubV(F2BDT,320*256),KillUnitAt(32,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,160*256,AtLeast)},{SubV(F2BDT,160*256),KillUnitAt(16,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,80*256,AtLeast)},{SubV(F2BDT,80*256),KillUnitAt(8,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,40*256,AtLeast)},{SubV(F2BDT,40*256),KillUnitAt(4,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,20*256,AtLeast)},{SubV(F2BDT,20*256),KillUnitAt(2,"Men",1,Force1)},{preserved})
-			TriggerX(FP,{CV(F2BDT,10*256,AtLeast)},{SubV(F2BDT,10*256),KillUnitAt(1,"Men",1,Force1)},{preserved})
+		CIf(FP,{CV(F2BDT,1*256,AtLeast),CV(F2BDT,0x7FFFFFFF,AtMost)},{})
+			 -- 기존 공반패턴 주석화
+
+		--	SetMemory(0x58DC60,SetTo,0),
+		--	SetMemory(0x58DC64,SetTo,0),
+		--	SetMemory(0x58DC68,SetTo,640),
+		--	SetMemory(0x58DC6C,SetTo,640),
+		--	MoveLocation(1, 87,P8,"Anywhere")
+		--	TriggerX(FP,{CV(F2BDT,640*256,AtLeast)},{SubV(F2BDT,640*256),KillUnitAt(64,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,320*256,AtLeast)},{SubV(F2BDT,320*256),KillUnitAt(32,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,160*256,AtLeast)},{SubV(F2BDT,160*256),KillUnitAt(16,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,80*256,AtLeast)},{SubV(F2BDT,80*256),KillUnitAt(8,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,40*256,AtLeast)},{SubV(F2BDT,40*256),KillUnitAt(4,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,20*256,AtLeast)},{SubV(F2BDT,20*256),KillUnitAt(2,"Men",1,Force1)},{preserved})
+		--	TriggerX(FP,{CV(F2BDT,10*256,AtLeast)},{SubV(F2BDT,10*256),KillUnitAt(1,"Men",1,Force1)},{preserved})
+
+		
 			CDoActions(FP,{TSetDeaths(B_5_C+2,SetTo,F2BDY,0)})
 		CIfEnd()
 	CIfEnd()
@@ -3247,7 +3253,8 @@ end
 	table.insert(roka7ResetTable,SetV(F2XT2,0))
 	table.insert(roka7ResetTable,SetV(F2XT3,0))
 	table.insert(roka7ResetTable,SetV(B_5_C,0))
-
+	table.insert(roka7ResetTable,SetCD(roka7Chk,0))
+	
 	DoActions2X(FP,roka7ResetTable)
 	DoActions(FP,{
 		SetMemory(0x58F524,SetTo,0);
@@ -3256,6 +3263,7 @@ end
 		SetMemory(0x58F51C,SetTo,0);
 	})
 	CallTrigger(FP,Call_VoidReset)
+	CElseX({SetCD(roka7Chk,0)})
 	CIfXEnd()
 	
 	

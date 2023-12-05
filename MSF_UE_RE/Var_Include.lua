@@ -299,7 +299,8 @@ function Var_init()
 	GiveP = CreateVarArr(7, FP)
 	TempGiveP = CreateVarArr(7, FP)
 	GivePChk = CreateArr(7, FP)
-
+	roka7Chk=CreateCcode()
+	AtkMirrorV = Create_VTable(7,MarDamageAmount*2*256,FP)
 	Var_TempTable = {}
 	Var_InputCVar = {}
 	Var_Lines = 55

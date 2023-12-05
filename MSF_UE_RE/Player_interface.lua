@@ -799,6 +799,7 @@ function PlayerInterface()
 			SetMemory(0x6509B0,SetTo,FP),
 			SetMemoryW(0x656EB0 + (MarWep[i+1]*2),Add,MarDamageFactor*255),
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
+			SetCVar(FP,AtkMirrorV[i+1][2],Add,((MarDamageFactor*2)*255)*256),
 		})
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
 		TriggerX(FP,{},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)

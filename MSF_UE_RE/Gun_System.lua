@@ -146,6 +146,39 @@ function Gun_System()
 	end
 	EXCC_End()
 
+	
+	MarSkill = def_sIndex()
+	MarSkillP = CreateVar(FP)
+	CJump(FP,MarSkill)
+    CallMarSkill = SetCallForward()
+    SetCall(FP)
+    f_SaveCp()
+    
+    --19
+	for i = 1,7 do
+		CTrigger(FP,{CV(MarSkillP,i-1)},{TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),SetTo,MSkillCool[i])},1)
+	
+	end
+    f_Read(FP,_Sub(BackupCp,9),CPos)
+    Convert_CPosXY()
+    Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+        CIf(FP,Memory(0x628438,AtLeast,1))
+        f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+        CDoActions(FP,{
+            TCreateUnit(1,179,1,MarSkillP),
+            TSetDeathsX(_Add(Nextptrs,8),SetTo,127*65536,0,0xFF0000),
+            TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
+            TSetDeaths(_Add(Nextptrs,22),SetTo,1536+(3072*65536),0),
+            TSetDeathsX(_Add(Nextptrs,21),SetTo,0,0,0xFF),
+            TSetDeathsX(_Add(Nextptrs,21),SetTo,0,1,0xFF00),
+        })
+        CIfEnd()
+
+    f_LoadCp()
+    SetCallEnd()
+    CJumpEnd(FP,MarSkill)
+	
+
 CunitCtrig_Part1(FP)
 
 
@@ -168,81 +201,44 @@ for i = 1, 7 do
 	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),Subtract,1)})
 	BreakCalc({DeathsX(CurrentPlayer,AtMost,18*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,18*65536,0,0xFF0000)})
 	
-	CIf(FP,{CV(MSkillP[i],1,AtLeast)},{SetMemory(0x6509B0, Subtract, 2)})
-	MarSkill = def_sIndex()
-	CJump(FP,MarSkill)
-	CallMarSkill = SetCallForward()
-	SetCall(FP)
-	f_SaveCp()
-	
-	--19
-	--CDoActions(FP,{TSetMemoryX(_Add(BackupCp,14),SetTo,MSkillCool[i],0xFFFF)})
-	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),SetTo,MSkillCool[i])})
-	f_Read(FP,_Sub(BackupCp,9),CPos)
-	Convert_CPosXY()
-	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-	function MarListSkillUnitFunc()
-		CIf(FP,Memory(0x628438,AtLeast,1))
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		CDoActions(FP,{
-			CreateUnit(1,179,1,i-1),
-			TSetDeathsX(_Add(Nextptrs,8),SetTo,127*65536,0,0xFF0000),
-			TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
-			TSetDeaths(_Add(Nextptrs,22),SetTo,1536+(3072*65536),0),
-			TSetDeathsX(_Add(Nextptrs,21),SetTo,0,0,0xFF),
-			TSetDeathsX(_Add(Nextptrs,21),SetTo,0,1,0xFF00),
-		})
-		CIfEnd()
-	end
-	MarListSkillUnitFunc()
+	CSub(FP,0x6509B0,2)
+	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00)})})--공격, 홀드, 인벙커 체크
+		CAdd(FP,0x6509B0,4)
+		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})--대상 존재 체크
 
-	f_LoadCp()
-	SetCallEnd()
-	CJumpEnd(FP,MarSkill)
+			CIf(FP,{CV(MSkillP[i],1,AtLeast),Memory(0x628438,AtLeast,1),TMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),AtMost,0),Bring(FP, AtLeast, 1, 147, 64)},{SetV(MarSkillP,i-1)})--쿨타임,캔낫 체크
+			CSub(FP,0x6509B0,4)
+			CallTrigger(FP,CallMarSkill)
+			CAdd(FP,0x6509B0,4)
+			CIfEnd()
 
-	--19에서 33으로 이동하여 쿨타임이 존재하는가를 찾아라. 
-	CAdd(FP,0x6509B0,14)
-	
-	--CIf(FP,{Memory(0x628438,AtLeast,1),DeathsX(CurrentPlayer,AtMost,0,0,0xFFFF)}) -- 공메모리 영역 쿨타임 체크
-	CIf(FP,{Memory(0x628438,AtLeast,1),TMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),AtMost,0),Bring(FP, AtLeast, 1, 147, 64)}) -- 공메모리 영역 쿨타임 체크
-	
-		CSub(FP,0x6509B0,14)
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00))
-			CAdd(FP,0x6509B0,4)
-			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
-				CSub(FP,0x6509B0,4)
-				CallTrigger(FP,CallMarSkill)
-				CAdd(FP,0x6509B0,4)
+			CIf(FP,{CD(roka7Chk,1)})--roka7보스 공반 기믹 발동시
+			local TargetPtr = CreateVar(FP)
+				f_SaveCp()
+				f_Read(FP,BackupCp,nil,TargetPtr)
+				CTrigger(FP,{
+					TMemoryX(_Add(TargetPtr,25),Exactly,ParseUnit("。˙+˚roka7。+.˚。˙+˚roka7。+.˚     "),0xFF)},{
+						TSetMemory(_Sub(BackupCp,21),Subtract,AtkMirrorV[i])},1) -- 공격하는 대상이 로카일 경우 마린의 공격 데미지만큼 마린이 피해를 입음
+						if Limit == 1 then -- 수치 모니터링용 테스트 코드
+							CIf(FP,{CD(TestMode,1)})
+							local TempV = CreateVar(FP)
+							f_Div(FP,TempV,AtkMirrorV[i],256)
+							DisplayPrint(i-1,{"AtkMirrorV : ", AtkMirrorV[i],"   /256 : ",TempV})
+							CIfEnd()
+						end
+				CTrigger(FP,{
+					TMemory(_Sub(BackupCp,21),Exactly,0)},{
+						TSetMemoryX(_Sub(BackupCp,4),SetTo,0,0xFF00)},1) -- 마린의 피가 0일 경우 마린 죽임(이 트리거가 없을 경우 마린이 자동으로 죽지 않고 좀비 상태가 됨)
+				f_LoadCp()
+				
 			CIfEnd()
-			CSub(FP,0x6509B0,4)
+
+			
 		CIfEnd()
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00))
-			CAdd(FP,0x6509B0,4)
-			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
-				CSub(FP,0x6509B0,4)
-				CallTrigger(FP,CallMarSkill)
-				CAdd(FP,0x6509B0,4)
-			CIfEnd()
-			CSub(FP,0x6509B0,4)
-		CIfEnd()
-		CIf(FP,DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00))
-			CAdd(FP,0x6509B0,4)
-			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})
-				CSub(FP,0x6509B0,4)
-				CallTrigger(FP,CallMarSkill)
-				CAdd(FP,0x6509B0,4)
-			CIfEnd()
-			CSub(FP,0x6509B0,4)
-		CIfEnd()
-		CAdd(FP,0x6509B0,14)
+		CSub(FP,0x6509B0,4)
 	CIfEnd()
-	CSub(FP,0x6509B0,14)
-
-
 	CAdd(FP,0x6509B0,2)
 	
-CIfEnd()
-
 
 
 	CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
