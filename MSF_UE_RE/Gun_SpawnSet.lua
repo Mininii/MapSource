@@ -721,11 +721,7 @@ function InstallGunData()
 					end
 					
 					local BYDTechGunCAPlot = CAPlotForward()
-					if Limit == 1 then
-						CMov(FP,V(BYDTechGunCAPlot[5]),_Add(_Mul(LevelT,2),_Div(Level,10)))
-					else
-						CMov(FP,V(BYDTechGunCAPlot[5]),_Mul(LevelT,2))
-					end
+					CMov(FP,V(BYDTechGunCAPlot[5]),_Mul(LevelT,2))
 					TriggerX(FP,{CV(V(BYDTechGunCAPlot[5]),PlotSizeCalc(6,8),AtLeast)},{SetV(V(BYDTechGunCAPlot[5]),PlotSizeCalc(6,8))},{preserved})
 					CAPlot(CSMakePolygon(6,96,0,PlotSizeCalc(6,8),1),P8,nilunit,0,{Var_TempTable[2],Var_TempTable[3]},1,32,{1,0,0,0,9999,0},"BYDTechGunFunc",FP,nil,nil,1)
 					
