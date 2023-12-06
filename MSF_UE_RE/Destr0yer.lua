@@ -520,22 +520,34 @@ Trigger {
 
 	local TotalDmgVA = CreateVArray(FP,13)
 	local Pat1 = Create_PatternCcode(PatternCcode)
+	local DPointW = CreateWar(FP)
 	CIf(FP,{DeathsX(FP,Exactly,(66*4)+1,BGMLength,0xFFFFFF),CDeaths(FP,AtMost,0,Pat1)},{SetCDeaths(FP,SetTo,1,Pat1)})
 		f_Div(FP,DTotalDmg,_Mov(256))
 		f_Mul(FP,DTotalDmg,_Mov(10))
+		local DMaxPoint = CreateVar(FP)
+		CMov(FP,DMaxPoint,3500000)
+		CTrigger(FP, {CV(OutputPoint,3500000,AtLeast)}, {SetV(DMaxPoint,OutputPoint)}, {preserved})
+		
+		TriggerX(FP,{CV(DTotalDmg,3500000,AtLeast)},{SetV(DTotalDmg,3500000)},{preserved})
+
+		
+		
+		--(DMaxPoint/100)*((DTotalDmg*100)/3500000)
+		f_LDiv(FP, DPointW, _LMul({DMaxPoint,0},{DTotalDmg,0}),"3500000")
+		--OutputPoint
+
+		f_Cast(FP,{DTotalDmg,0},DPointW,nil,nil,1) 
+
 		f_Div(FP,DTotalDmg,SetPlayers)
 		
-		ItoDecX(FP,DTotalDmg,VArr(TotalDmgVA,0),2,0x7,2)
-		_0DPatchX(FP,TotalDmgVA,12)
-		f_Memcpy(FP,DBoss_PrintScore2,_TMem(Arr(DBossTotalDMGT[3],0),"X","X",1),DBossTotalDMGT[2])
-		f_Movcpy(FP,_Add(DBoss_PrintScore2,DBossTotalDMGT[2]),VArr(TotalDmgVA,0),12*4)
 		for i = 1, 7 do
 			CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 				CAdd(FP,ExScore[i],DTotalDmg)
 			CIfEnd()
 		end
+		DTotalDmg["fwc"] = true
+		DisplayPrint(HumanPlayers, {"\x13\x1FＢ\x04ｏｓｓ \x08Ｂ\x04ａｔｔｌｅ \x07Ｂ\x04ｏｎｕｓ : \x07",DTotalDmg})
 		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
-		DoActions(FP,RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossDMG".._0D,4)},HumanPlayers,FP))
 		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),KillUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
 	CIfEnd()
 
@@ -630,7 +642,7 @@ Trigger {
 			CallTrigger(FP,Call_ScorePrint,{SetCDeaths(FP,SetTo,1,isDBossClear)})
 		CIfEnd()
 		CIf(FP,CDeaths(FP,AtLeast,3000+6000,ClearTimer))
-		CIfX(FP,{TCVar(FP,TotalScore[2],AtLeast,OutputPoint),CVar(FP,TotalScore[2],AtMost,0x7FFFFFFF)}) --  점수만족시
+		CIfX(FP,{TTNVar(TotalScore, iAtLeast, OutputPoint)}) --  점수만족시
 
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,1,Destr0yerClear2)})
 

@@ -24,11 +24,11 @@ function Gun_System()
 	InstallHeroPoint()
 	CIfEnd()
 	CMov(FP,Gun_Type,0)
-	CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
-	for j, k in pairs({142,135,140,141,138,139,137}) do -- 잡건작 목록
+	--CIf(FP,{CVar(FP,LevelT[2],AtMost,3)})
+	for j, k in pairs({142,135,140,141,138,139,137,146,144,143}) do -- 잡건작 목록
 		f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = 잡건작 플래그
 	end
-	CIfEnd()
+	--CIfEnd()
 
 	f_GSend(131)
 	f_GSend(132)
@@ -214,18 +214,46 @@ for i = 1, 7 do
 
 			CIf(FP,{CD(roka7Chk,1)})--roka7보스 공반 기믹 발동시
 			local TargetPtr = CreateVar(FP)
+			local TempSh = CreateVar(FP)
 				f_SaveCp()
 				f_Read(FP,BackupCp,nil,TargetPtr)
+				 -- 공격하는 대상이 로카일 경우 마린의 공격 데미지만큼 마린이 피해를 입음
+				CIf(FP,{TMemoryX(_Add(TargetPtr,25),Exactly,ParseUnit("。˙+˚roka7。+.˚。˙+˚roka7。+.˚     "),0xFF)})
+					CIfX(FP,{TMemoryX(_Add(BackupCp,1), AtLeast, 1*256,0xFFFFFF)})
+
+					CIfX(FP, {TMemoryX(_Add(BackupCp,1), AtLeast, 1000*256,0xFFFFFF)})
+					f_Read(FP, _Add(BackupCp,1) ,TempSh)
+					f_Div(FP, TempSh, 256*1000)
+					f_Mul(FP, TempSh,AtkMirrorV2[i])
+					CElseX({SetV(TempSh, 0)})
+					CIfXEnd()
+
+					CDoActions(FP, {TSetMemoryX(_Add(BackupCp,1), SetTo, 0, 0xFFFFFF),TSetMemory(_Sub(BackupCp,21),Subtract,_Sub(AtkMirrorV[i],TempSh))})
+					if Limit == 1 then -- 수치 모니터링용 테스트 코드
+						CIf(FP,{CD(TestMode,1)})
+						local TempV = CreateVar(FP)
+						local TempV2 = CreateVar(FP)
+						CMov(FP,TempV2,_Sub(AtkMirrorV[i],TempSh))
+						f_Div(FP,TempV,TempV2,256)
+						DisplayPrint(i-1,{"SHD!!! AtkMirrorV : ", AtkMirrorV[i],"   /256 : ",TempV,"   TempSh : ",TempSh})
+						CIfEnd()
+					end
+
+					CElseX({TSetMemory(_Sub(BackupCp,21),Subtract,AtkMirrorV[i])})
+					if Limit == 1 then -- 수치 모니터링용 테스트 코드
+						CIf(FP,{CD(TestMode,1)})
+						local TempV = CreateVar(FP)
+						f_Div(FP,TempV,AtkMirrorV[i],256)
+						DisplayPrint(i-1,{"AtkMirrorV : ", AtkMirrorV[i],"   /256 : ",TempV})
+						CIfEnd()
+					end
+					CIfXEnd()
+
+				CIfEnd()
 				CTrigger(FP,{
-					TMemoryX(_Add(TargetPtr,25),Exactly,ParseUnit("。˙+˚roka7。+.˚。˙+˚roka7。+.˚     "),0xFF)},{
-						TSetMemory(_Sub(BackupCp,21),Subtract,AtkMirrorV[i])},1) -- 공격하는 대상이 로카일 경우 마린의 공격 데미지만큼 마린이 피해를 입음
-						if Limit == 1 then -- 수치 모니터링용 테스트 코드
-							CIf(FP,{CD(TestMode,1)})
-							local TempV = CreateVar(FP)
-							f_Div(FP,TempV,AtkMirrorV[i],256)
-							DisplayPrint(i-1,{"AtkMirrorV : ", AtkMirrorV[i],"   /256 : ",TempV})
-							CIfEnd()
-						end
+					},{
+						},1)
+						
 				CTrigger(FP,{
 					TMemory(_Sub(BackupCp,21),Exactly,0)},{
 						TSetMemoryX(_Sub(BackupCp,4),SetTo,0,0xFF00)},1) -- 마린의 피가 0일 경우 마린 죽임(이 트리거가 없을 경우 마린이 자동으로 죽지 않고 좀비 상태가 됨)
@@ -289,6 +317,7 @@ CunitCtrig_End()
 		SetCDeaths(FP,SetTo,0,SoundLimit[5]),
 		SetCDeaths(FP,SetTo,0,SoundLimit[6]),
 		SetCDeaths(FP,SetTo,0,SoundLimit[7]),
+		SetCDeaths(FP,SetTo,0,SoundLimit[8]),
 		SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 	TriggerX(FP, {CD(GCT,1,AtLeast),CV(LevelT,10)}, {Order("Any unit",FP,64,Move,64)}, {preserved})
 
@@ -321,6 +350,7 @@ CunitCtrig_End()
 	local TempPID = CreateVar(FP)
 	local TempType = CreateVar(FP)
 	local TempProperties = CreateVar(FP)
+	local TempAngle = CreateVar(FP)
 	local f_TempTypeErr = "\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	if Limit == 1 then
 --		CIf(FP,{CD(TestMode,1)})
@@ -349,18 +379,27 @@ CunitCtrig_End()
 	f_SHRead(FP, _Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), TempPID)
 	f_SHRead(FP, _Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), TempType)
 	f_SHRead(FP, _Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr2), TempProperties)
+	f_SHRead(FP, _Add(CreateUnitQueueAngleArr,CreateUnitQueuePtr2), TempAngle)
 	CDoActions(FP, {
 		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), SetTo, 0),
 		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), SetTo, 0),
 		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), SetTo, 0),
 		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr2), SetTo, 0),
 		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr2), SetTo, 0),
-		TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr2), SetTo, 0)
+		TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr2), SetTo, 0),
+		TSetMemory(_Add(CreateUnitQueueAngleArr,CreateUnitQueuePtr2), SetTo, 0)
 	})
 	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
 	TriggerX(FP, {CV(CreateUnitQueuePtr2,100000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
 
 	local isScore = CreateCcode()
+
+	
+CIfX(FP,{CV(TempType,100)})--탄막유닛 전용 RepeatType
+CreateBullet(TempUID, 20, TempAngle, QPosX, QPosY, TempPID)
+CElseX()
+
+
 
 	CIf(FP,{TTOR({CVar(FP,TempType[2],Exactly,0),CVar(FP,TempType[2],Exactly,4)})})
 		local Gun_Order = def_sIndex()
@@ -379,7 +418,6 @@ CunitCtrig_End()
 		end
 		CIfEnd()
 	CIfEnd()
-
 
 
 	NIf(FP,{CV(TempUID,1,AtLeast),CV(TempUID,226,AtMost)})
@@ -407,8 +445,12 @@ CunitCtrig_End()
 		
 		CTrigger(FP, {TMemoryX(_Add(TempUID,EPDF(0x664080)), Exactly, 4,4),CVX(TempProperties,1,1)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- 공중유닛+CBRepeat 소환 = 겹치기 ON
 		local TempW = CreateWar(FP)
+		local TempHP = CreateVar(FP)
 		f_LMovX(FP, TempW, WArr(MaxHPWArr,TempUID), SetTo, nil, nil, 1)
-		CIf(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
+		CIf(FP,{CVX(TempProperties,2,2)})
+		f_LDiv(FP, TempW, TempW, "10")
+		CIfEnd()
+		CIfX(FP,{TTCWar(FP, TempW[2], AtLeast, tostring(8320000*256))})
 		local TempV1 = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
 		f_LMov(FP, {TempV1,TempV2}, _LSub(TempW,tostring(8320000*256)), nil, nil, 1)
@@ -417,7 +459,11 @@ CunitCtrig_End()
 				Set_EXCC2(LHPCunit, CunitIndex, 1, SetTo,TempV1),
 				Set_EXCC2(LHPCunit, CunitIndex, 2, SetTo,TempV2),
 		})
-		CIfEnd()
+		CElseX()
+		f_Cast(FP,{TempHP,0},TempW,nil,nil,1) 
+		CDoActions(FP, {TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,TempHP)})
+
+		CIfXEnd()
 
 
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- 생성유닛 위치 불러오기
@@ -481,6 +527,7 @@ CunitCtrig_End()
 		CIfEnd()
 		
 	CIfEnd()
+CIfXEnd()
 
 	
 

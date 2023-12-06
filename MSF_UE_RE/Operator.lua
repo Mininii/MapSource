@@ -5,12 +5,13 @@ function OPTrig()
 		CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
 		f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07기부모드\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
+		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07기부모드\x04 : F9, \x1F수동저장 \x04: HOME키, \x1C배속조정 \x04: F12\x07 ]")},1)
 	end
 	CIfXEnd()
 	for i = 0, 6 do
 		CIf(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,i)})
 --        Print13_NumSet(LevelPtr,0x64159C,1000,0x10000)
+		Print13_NumSet(LevelPtr,0x64159C,1000,0x10000)
 		Print13_NumSet(LevelPtr,0x64159C,100,0x1000000)
 		Print13_NumSet(LevelPtr,0x6415A0,10,0x1)
 		Print13_NumSet(LevelPtr,0x6415A0,1,0x100)
@@ -152,7 +153,7 @@ function OPTrig()
 	local SCAStat1 = "\x07연결 되었습니다!" 
 	local SCAStat2 = "\x07데이터를 불러오는 중..." 
 	local NonSCAStr = "\x10SCA 런쳐\x04와 \x07연결\x04해주세요." 
-	local SCAInitStr = "\x1F플\x04레이어 : \x07\x0D\x04명. 선택 가능 \x1F최대 \x07Level \x04- 000  / \x1F선택 \x07Level - 000 "
+	local SCAInitStr = "\x1F플\x04레이어 : \x07\x0D\x04명. 선택가능 \x1F최대 \x07Level \x04- 0000  / \x1F선택 \x07Level - 0000 "
 	
 	local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))
 	
@@ -212,8 +213,8 @@ function OPTrig()
 		
 		CS__InputTA(FP,{CD(EffC,0)},SVA1(OPStr,7),0x07,0xFF)
 		CA__InputSVA1(SVA1(OPStr,11),SVA1(EffStr1,EC),48,0xFF,0,54)
-		CA__ItoCustom(SVA1(OPStr,17+11),MapMaxLevel,nil,nil,{10,3},1,nil,"\x040",0x07,{0,1,2})
-		CA__ItoCustom(SVA1(OPStr,35+11),CurLevel,nil,nil,{10,3},1,nil,"\x040",0x04,{0,1,2})
+		CA__ItoCustom(SVA1(OPStr,17+10),MapMaxLevel,nil,nil,{10,4},1,nil,"\x040",0x07,{0,1,2})
+		CA__ItoCustom(SVA1(OPStr,35+11),CurLevel,nil,nil,{10,4},1,nil,"\x040",0x04,{0,1,2})
 		CA__InputVA(0,OPStr,OPStrs,nil,0,56*1-3)
 		for i = 0, 6 do
 		CA__SetValue(OPStr,MakeiStrVoid(54),0xFFFFFFFF,0) 
@@ -289,8 +290,6 @@ function OPTrig()
 	}, 1)
 		CallTriggerX(FP, LevelReset,nil,nil,1)
 		
-	f_Memcpy(FP,PointStrPtr,_TMem(Arr(StPT[3],0),"X","X",1),StPT[2])
-	f_Memcpy(FP,KillScStrPtr,_TMem(Arr(KillPT[3],0),"X","X",1),KillPT[2])
 		CIfEnd()
 		NJumpEnd(FP,StartJumpV)
 
@@ -300,6 +299,7 @@ function OPTrig()
 	CIfEnd()
 	TriggerX(FP, CD(StartC,1,AtLeast), AddCD(StartT,1), {preserved})
 	CIfOnce(FP, CD(StartT,100,AtLeast))
+	CMov(FP,LVPaneltyScore,_Mul(Level, _Mov(50)))
 	
 	CIfX(FP, CV(Level,831,AtMost))
 	CMov(FP,0x662350+(4*125),_Mul(Level, 10000*256))

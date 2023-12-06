@@ -74,7 +74,7 @@ function Install_Roka7Boss()
 	CTrigger(FP,{CV(V(XColor),5)},{SetCD(roka7Chk,1)},1)
 	
 	CIf(FP,CV(F2BRS,0),SetV(F2BSD,72))--Random
-	CRandNum(FP,10,F2BSD)
+	CRandNum(FP,10,F2BSD,1)
 	DoActionsX(FP,{SetV(F2BRS,1)})
 	CMov(FP,F2BRT,F2BSD)
 	CIfEnd()

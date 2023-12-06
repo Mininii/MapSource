@@ -179,19 +179,26 @@ function PlayerInterface()
 	end 
 	
 	local Tabkey,TabKey2 = KeyToggleFunc2("TAB","LCTRL")
+	CMov(FP,TotalScore,0)
+	for i = 0, 6 do
+		CAdd(FP,TotalScore,ExScore[i+1])
+	end
+	CIfX(FP, {TTNVar(TotalScore, iAtLeast, OutputPoint)},{SetV(ClearLamp,0x07)})--클리어조건 만족시 초록색으로
+	CElseX({SetV(ClearLamp,0x08)})--불만족일 경우 빨간색
+	CIfXEnd()
 
 	CIfX(FP,{CD(Tabkey,1)})--수치표기
 	
 
 	CIf(FP,{CD(DeleteToggle,0)})
 	CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"StatusInterface",FP,{CD(DeleteToggle,0)}) --
-	DisplayPrint(HumanPlayers,{"\x10【 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08100000 \x10】"})
+	DisplayPrint(HumanPlayers,{"\x10【 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," || \x07클리어 \x08필요 \x04포인트 : ",ClearLamp[2],TotalScore," \x04/ \x1D",OutputPoint," \x10】"})
 	FixText(FP, 2)
 	CIfEnd()
 	CElseX()
 	CIf(FP,{CD(DeleteToggle,0)})
 	FixText(FP, 1)
-	DisplayPrint(HumanPlayers,{"\x10【 \x07세부 창 열기 \x04: \x1CLCTRL \x04+ \x1FTAB \x10】"})
+	DisplayPrint(HumanPlayers,{"\x10【 \x07세부 창 열기 \x04: \x1CLCTRL \x04+ \x1FTAB || \x07클리어 \x08필요 \x04포인트 : ",ClearLamp[2],TotalScore," \x04/ \x1D",OutputPoint," \x10】"})
 	TriggerX(FP,{CD(TabKey2,1)},{RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", 4)}, HumanPlayers, FP)},{preserved})
 	FixText(FP, 2)
 	CIfEnd()
@@ -208,7 +215,7 @@ function PlayerInterface()
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
 		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 게임 시작시 레벨0일경우 1로 변경
-		Trigger2(i, {Deaths(i,AtLeast,1000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
+		Trigger2(i, {Deaths(i,AtLeast,10000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,10000,6)}, {SetDeaths(i, SetTo, 1, 149)}) -- 구레벨 1만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,LvLimit+10,18)}, {SetDeaths(i, SetTo, 1, 149)}) -- 맵 맥스레벨+10 = 비정상 데이터
 		
@@ -266,17 +273,6 @@ function PlayerInterface()
 					},
 				}
 		end
-		
-		Trigger { -- 미네랄 마이너스 방지
-			players = {i},
-			conditions = {
-				Memory(0x57f0f0+(i*4),AtLeast,0x80000000);
-			},
-			actions = {
-				SetResources(i,SetTo,0x7FFFFFFF,Ore);
-				PreserveTrigger();
-			},
-		}
 		MC = {65,67}
 		for j, k in pairs(MC) do
 			local X = {}
@@ -331,21 +327,6 @@ function PlayerInterface()
 			},
 		}
 		
-		Trigger { -- 보호막 가동
-			players = {i},
-			conditions = {
-				Label(0);
-				Memory(0x582294+(4*i),AtMost,249);
-				Bring(i,AtLeast,1,19,64);
-			},
-			actions = {
-				SetMemory(0x582294+(4*i),SetTo,1000);
-				RemoveUnitAt(1,19,"Anywhere",i);
-				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D,4),PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,i);
-				SetCDeaths(FP,SetTo,1,ShUsed[i+1]);
-				PreserveTrigger();
-			},
-		}
 		CIfEnd()
 		Trigger { -- 보호막 가동
 			players = {i},
@@ -462,7 +443,7 @@ function PlayerInterface()
 
 				CIfX(FP,{CV(TempGiveVX,1,AtLeast),TAccumulate(i,AtLeast,TempGiveVX,Ore)},{TSetResources(TempGivePV2,Add,TempGiveVX,Ore),TSetResources(i,Subtract,TempGiveVX,Ore)})
 					DisplayPrintEr(i, {"\x07『 ",PName(TempGivePV2),"\x04에게 \x1F",TempGiveVX," Ore\x04를 기부하였습니다. \x07』"})
-					DisplayPrint(TempGivePV2,{"\x07『 ",PName(i),"\x04에게 \x1F",TempGiveVX," Ore\x04를 기부받았습니다. \x07』"})
+					DisplayPrint(TempGivePV2,{"\x12\x07『 ",PName(i),"\x04에게 \x1F",TempGiveVX," Ore\x04를 기부받았습니다. \x07』"})
 				CElseIfX({CV(TempGiveVX,0),TAccumulate(TempGivePV2,AtLeast,0x7FFFFFFF,Ore)})
 				DisplayPrintEr(i,{"\x07『 ",PName(TempGivePV2),"\x04의 미네랄이 최대치이기에 기부할 수 없습니다. \x07』"})
 				CElseX({SetMemory(0x6509B0,SetTo,i)})
@@ -563,7 +544,14 @@ function PlayerInterface()
 
 
 		CIfX(FP,HumanCheck(i,1)) -- FP가 관리하는 시스템 부분 트리거. 각플레이어가 있을경우 실행된다.
-
+		CIf(FP,{--보호막 가동
+			Memory(0x582294+(4*i),AtMost,249);
+			Bring(i,AtLeast,1,19,64);},{SetMemory(0x582294+(4*i),SetTo,1000);
+			RemoveUnitAt(1,19,"Anywhere",i);
+			SetCDeaths(FP,SetTo,1,ShUsed[i+1]);})
+		DisplayPrint(HumanPlayers, {"\x12\x07『 ",PName(i),"\x04님이 \x1C수정 보호막\x04을 사용했습니다. \x07』"})
+		DoActions(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\shield_use.ogg")},HumanPlayers,FP);})
+		CIfEnd()
 
 		--SCA 데이터 변동시 갱신
 		CIfX(FP,{TTDeaths(i,">",OldStat[i+1],4)})
@@ -670,7 +658,8 @@ function PlayerInterface()
 				CreateBullet(205,20,0,CPosX,CPosY,i)
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 				TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit[i+1])},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsHit00.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit[i+1])},{preserved})
-				DoActions2(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i+1].."Nuke".._0D,4),MinimapPing(1)},HumanPlayers,FP)})
+				DisplayPrint(HumanPlayers, {"\x12\x07『 ",PName(i),"\x04님이 \x08뉴클리어\x04를 \x1F사용\x04하였습니다. \x07』"})
+				DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP)})
 			CIfEnd()
 		CIfEnd()
 		CWhile(FP,{CDeaths(FP,AtLeast,1,MarCreate[i+1]),Memory(0x628438,AtLeast,1)},{SetCDeaths(FP,Subtract,1,MarCreate[i+1]),SetCD(CUnitFlag,1)})
@@ -801,6 +790,9 @@ function PlayerInterface()
 			SetCVar(FP,AtkUpCompCount[i+1][2],Add,1),
 			SetCVar(FP,AtkMirrorV[i+1][2],Add,((MarDamageFactor*2)*255)*256),
 		})
+		f_Div(FP,AtkMirrorV2[i+1],AtkMirrorV[i+1],100)
+
+
 		TriggerX(FP,{CDeaths(FP,AtMost,0,UpSELemit[i+1])},{SetMemory(0x6509B0,SetTo,i),PlayWAV("staredit\\wav\\LimitBreak.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,100,UpSELemit[i+1])},{preserved})
 		TriggerX(FP,{},{SetCVar(FP,AtkFactorV[i+1][2],Add,1)},{preserved})--CVar(FP,AtkUpCompCount[i+1][2],AtLeast,151)
 		for j = 1, 25 do
@@ -1162,15 +1154,39 @@ end
 		CIfEnd()
 		
 		CIf(FP,Score(i,Kills,AtLeast,1000))
-			CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-			CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-			CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),{FP,ExchangeRate[2],nil,"V"}))
-			CIf(FP,CV(MinUp[i+1],1,AtLeast))
-			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,MinUp[i+1]),{FP,ExchangeRate[2],nil,"V"}))
+			local AddScoreV = CreateVar(FP)
+			local AddScoreD4 = CreateVar(FP)
+			local AddScoreP4 = CreateVar(FP)
+			local ReadKillScore = CreateVar(FP)
+			local ReadKillScoreD4 = CreateVar(FP)
+			local ReadKillScoreP4 = CreateVar(FP)
+			f_Read(FP,0x581F04+(i*4),ReadKillScore)
+			f_Div(FP,ReadKillScoreD4,ReadKillScore,1000)
+			f_Mod(FP,ReadKillScoreP4,ReadKillScore,1000)
+			CAdd(FP,AddScoreV,_Mul(Level,ReadKillScoreD4))
+			CMov(FP,ExchangeP,ReadKillScoreD4)
+			CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},ReadKillScoreD4)
+			CIf(FP,{CV(AddScoreV,10,AtLeast)})
+				f_Div(FP,AddScoreD4,AddScoreV,10)
+				f_Mod(FP,AddScoreV,10)
+				CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},AddScoreD4)
 			CIfEnd()
+			CMov(FP,0x581F04+(i*4),ReadKillScoreP4)
+			CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Add(MinUp[i+1],10)),{FP,ExchangeRate[2],nil,"V"}))
 			CMov(FP,ExchangeP,0)
 		CIfEnd()
+		
+		
+		Trigger { -- 미네랄 마이너스 방지
+			players = {FP},
+			conditions = {
+				Memory(0x57f0f0+(i*4),AtLeast,0x80000000);
+			},
+			actions = {
+				SetResources(i,SetTo,0x7FFFFFFF,Ore);
+				PreserveTrigger();
+			},
+		}
 
 		CMov(FP,0x582174+(4*i),count)
 		CAdd(FP,0x582174+(4*i),count)
@@ -1365,11 +1381,19 @@ for i=0, 6 do
 	end
 	CIfEnd()
 
-
+	local OutputPoint2 = CreateVar(FP)
+	local OutputPointD = CreateVar(FP)
 --	Trigger2(FP,{Bring(FP,AtMost,0,147,64)},{ModifyUnitShields(All,"Men",Force1,64,0)},{preserved})
 	CIf(FP,{CDeaths(FP,Exactly,0,isSingle),CVar(FP,InputPoint[2],AtLeast,1000)})
-	CAdd(FP,OutputPoint,_Div(InputPoint,_Mov(1000)))
+	f_Div(FP, OutputPointD,InputPoint,_Mov(1000))
+	CAdd(FP,OutputPoint,OutputPointD)
+	CAdd(FP,OutputPoint2,OutputPointD)
+	CIf(FP,{CV(OutputPoint2,10,AtLeast)})
+	CAdd(FP,OutputPoint,_Mul(_Div(OutputPoint2,_Mov(10)),Level))
+	f_Mod(FP,OutputPoint2,_Mov(10))
+	CIfEnd()
 	f_Mod(FP,InputPoint,_Mov(1000))
+
 	CIfEnd()
     CallTriggerX(FP,Call_ScorePrint,{CDeaths(FP,AtLeast,1,ScorePrint)},{SetCDeaths(FP,SetTo,0,ScorePrint),SetCDeaths(FP,SetTo,0,isDBossClear)})
 	

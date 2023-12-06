@@ -191,42 +191,21 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포인트 정보 
 end
 
 function Install_DeathNotice()
-	CIf(FP,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
-		DoActions(FP,MoveCp(Subtract,6*4))
-		for j = 1, 7 do
-			CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
-				f_SaveCp()
-				Install_CText1(HTextStrPtr,Str12,Str01,Names[j])
-				DoActionsX(FP,{
-					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,50,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-50);
-				})
-				for k = 0, 6 do
-					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
-				end
-				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
-				f_LoadCp()
-			CIfEnd()
-		end
-		DoActions(FP,MoveCp(Add,6*4))
-	CIfEnd()
-
 	for j = 1, 7 do
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,MarID[j],0,0xFF))
 		DoActions(FP,MoveCp(Subtract,6*4))
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,j-1,0,0xFF))
 				f_SaveCp()
-				Install_CText1(HTextStrPtr,Str12,Str02,Names[j])
-				DoActionsX(FP,{
-					RotatePlayer({DisplayTextX(HTextStr,4)},HumanPlayers,FP);
-					SetScore(j-1,Add,500,Custom);
-					SetCVar(FP,ExScore[j][2],Add,-500);
+				
+				CDoActions(FP,{
+					TSetScore(j-1,Add,LVPaneltyScore,Custom);
+					TSetCVar(FP,ExScore[j][2],Add,_Neg(LVPaneltyScore));
 				})
+				DisplayPrint(HumanPlayers, {"\x12\x07『 ",PName(j-1),"님의 \x1FExceeD \x1BM\x04arine\x04이 \x1F한계\x04를 극복하지 못하고 \x08사망\x04했습니다. \x06(\x07Score \x08-",LVPaneltyScore,"\x06) \x07』"})
 				for k = 0, 6 do
 					TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[k+1])},{SetMemory(0x6509B0,SetTo,k),PlayWAV("staredit\\wav\\die_se.ogg"),SetMemory(0x6509B0,SetTo,FP),SetCDeaths(FP,Add,1,SoundLimit[k+1])},{preserved})
 				end
-				f_Memcpy(FP,HTextStrPtr,_TMem(Arr(HTextStrReset[3],0),"X","X",1),HTextStrReset[2])
+				TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit[8])},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")}, ObPlayers, FP),SetCDeaths(FP,Add,1,SoundLimit[8])},{preserved})
 				f_LoadCp()
 			CIfEnd()
 		DoActions(FP,MoveCp(Add,6*4))
@@ -695,7 +674,7 @@ local G_CB_LineTemp = CreateVar(FP)
 local CB_Repeat_Check = CreateCcode()
 local Repeat_X = CreateVar(FP)
 local Repeat_Y = CreateVar(FP)
-local G_CB_WSTestStrPtr = CreateVar(FP)
+--local G_CB_WSTestStrPtr = CreateVar(FP)
 local G_CB_WSTestVA = CreateVArr(5,FP)
 local TempAngle = CreateVar(FP)
 
@@ -724,35 +703,36 @@ local QueueY = CreateVar(FP)
 local LocV = CreateVarArr(4, FP)
 
 
-	CIfX(FP,{CV(RepeatType,100)})--탄막유닛 전용 RepeatType
-	CreateBullet(Repeat_UnitIDV, 20, TempAngle, Repeat_X, Repeat_Y, FP)
-	CElseX()
-		local RepeatProperties = CreateVar(FP)
+local RepeatProperties = CreateVar(FP)
 		
-		f_Read(FP,0x58DC60,LocV[1],"X",0xFFFFFFFF,1)
-		f_Read(FP,0x58DC68,LocV[2],"X",0xFFFFFFFF,1)
-		f_Read(FP,0x58DC64,LocV[3],"X",0xFFFFFFFF,1)
-		f_Read(FP,0x58DC6C,LocV[4],"X",0xFFFFFFFF,1)
+f_Read(FP,0x58DC60,LocV[1],"X",0xFFFFFFFF,1)
+f_Read(FP,0x58DC68,LocV[2],"X",0xFFFFFFFF,1)
+f_Read(FP,0x58DC64,LocV[3],"X",0xFFFFFFFF,1)
+f_Read(FP,0x58DC6C,LocV[4],"X",0xFFFFFFFF,1)
 
-		CMov(FP,QueueX,_iDiv(_Add(LocV[1],LocV[2]),2))
-		CMov(FP,QueueY,_iDiv(_Add(LocV[3],LocV[4]),2))
+CMov(FP,QueueX,_iDiv(_Add(LocV[1],LocV[2]),2))
+CMov(FP,QueueY,_iDiv(_Add(LocV[3],LocV[4]),2))
 
 
 
-	TriggerX(FP,{CD(CB_Repeat_Check,0)},{SetVX(RepeatProperties, 0, 1)},{preserved})
-	TriggerX(FP,{CD(CB_Repeat_Check,1)},{SetVX(RepeatProperties, 1, 1)},{preserved})
-	CDoActions(FP,{
-		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr),SetTo,QueueX),
-		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr),SetTo,QueueY),
-		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr),SetTo,_Mov(Repeat_UnitIDV,0xFF)),
-		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr),SetTo,CreatePlayer),
-		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr),SetTo,RepeatType),
-		TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr),SetTo,RepeatProperties),
-	})
-	DoActionsX(FP,{AddV(CreateUnitQueueNum,1),AddV(CreateUnitQueuePtr,1)})
-	TriggerX(FP, {CV(CreateUnitQueuePtr,100000,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
+TriggerX(FP,{CD(CB_Repeat_Check,0)},{SetVX(RepeatProperties, 0, 1)},{preserved})
+TriggerX(FP,{CD(CB_Repeat_Check,1)},{SetVX(RepeatProperties, 1, 1)},{preserved})
+CDoActions(FP,{
+TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr),SetTo,QueueX),
+TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr),SetTo,QueueY),
+TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr),SetTo,_Mov(Repeat_UnitIDV,0xFF)),
+TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr),SetTo,CreatePlayer),
+TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr),SetTo,RepeatType),
+TSetMemory(_Add(CreateUnitQueuePropertiesArr,CreateUnitQueuePtr),SetTo,RepeatProperties),
+TSetMemory(_Add(CreateUnitQueueAngleArr,CreateUnitQueuePtr),SetTo,TempAngle),
 
-	CIfXEnd()
+})
+DoActionsX(FP,{AddV(CreateUnitQueueNum,1),AddV(CreateUnitQueuePtr,1),SetV(RepeatProperties,0)})
+TriggerX(FP, {CV(CreateUnitQueuePtr,100000,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
+
+
+
+
 	CSub(FP,Spawn_TempW,1)
 CWhileEnd()
 CMov(FP,RepeatType,0)
@@ -786,11 +766,16 @@ function f_TempRepeat(UnitID,Number,Condition,Type,Owner,CenterXY)
 	})
 end
 
-function f_TempRepeatX(UnitID,Number,Condition,Type,Owner,CenterXY)
+function f_TempRepeatX(UnitID,Number,Condition,Type,Owner,CenterXY,RProperites)
 	if Owner == nil then Owner = 0xFFFFFFFF end
 	if Type == nil then Type = 0 end
 	local SetX = 0 
 	local SetY = 0
+	if RProperites == nil then 
+		RProperites = {}
+		RProperites[1] = 0
+		RProperites[2] = 0
+	end
 	if CenterXY == nil then 
 		SetX = 0xFFFFFFFF
 		SetY = 0xFFFFFFFF
@@ -807,7 +792,9 @@ function f_TempRepeatX(UnitID,Number,Condition,Type,Owner,CenterXY)
 		TSetCVar(FP,TRepeatY[2],SetTo,SetY),
 		SetCVar(FP,RepeatType[2],SetTo,Type),
 		SetCDeaths(FP,SetTo,0,CB_Repeat_Check),
-		SetCVar(FP,CreatePlayer[2],SetTo,Owner)})
+		SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+		SetVX(RepeatProperties, RProperites[1], RProperites[2])
+	})
 	CallTriggerX(FP,Call_Repeat,Condition)
 end
 
@@ -1417,6 +1404,7 @@ end
 			CElseX()
 			if Limit == 1 then
 				TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+				
 			end
 			
 			local G_CB_InputCAct = {}
@@ -1474,7 +1462,7 @@ end
 
 	function G_CB_init()
 
-		f_GetStrXptr(FP,G_CB_WSTestStrPtr,"\x0D\x0D\x0DG_CB_WS".._0D)
+		--f_GetStrXptr(FP,G_CB_WSTestStrPtr,"\x0D\x0D\x0DG_CB_WS".._0D)
 
 	end
 
@@ -2255,7 +2243,11 @@ function DisplayPrint(TargetPlayers,arg) -- ext text ver
 		elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 			BSize = BSize+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
-			BSize=BSize+(4*4)
+			if k["fwc"] == true then
+				BSize=BSize+(4*12)
+			else
+				BSize=BSize+(4*4)
+			end
 		elseif type(k)=="table" and k[4]=="W" then
 			BSize=BSize+(4*5)
 		elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
@@ -2298,10 +2290,17 @@ function DisplayPrint(TargetPlayers,arg) -- ext text ver
 			end
 			Dev=Dev+(4*5)
 		elseif type(k)=="table" and k[4]=="V" then
-			CMov(FP,dp.publicItoDecV,k)
-			CallTrigger(FP,dp.Call_IToDec)
-			f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
-			Dev=Dev+(4*4)
+			if k["fwc"] == true then
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_IToDecX)
+				f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
+				Dev=Dev+(4*12)
+			else
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_IToDec)
+				f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
+				Dev=Dev+(4*4)
+			end
 		elseif type(k)=="table" and k[4]=="W" then
 			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
 			CallTrigger(FP,dp.Call_lIToDec)
@@ -2379,8 +2378,13 @@ function DisplayPrintEr(TargetPlayer,arg)
 		elseif type(k)=="table" and k[4]=="V" then
 			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 16)))
 			--V,Dev
-			table.insert(ItoDecKey,{k,Dev})
-			Dev=Dev+(4*4)
+			if k["fwc"] == true then
+				table.insert(ItoDecKey,{k,Dev,true})
+				Dev=Dev+(4*12)
+			else
+				table.insert(ItoDecKey,{k,Dev,false})
+				Dev=Dev+(4*4)
+			end
 		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 			table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
 			table.insert(VCharKey,{k,Dev})
@@ -2390,22 +2394,36 @@ function DisplayPrintEr(TargetPlayer,arg)
 			PushErrorMsg("Print_Inputdata_Error")
 		end
 	end
-	if type(TargetPlayer) == "table" and TargetPlayer[4] == "V" then
-		CMov(FP,Print13V,TargetPlayer)
-		CallTrigger(FP, Call_Print13X)
-		CDoActions(FP, {TSetDeaths(TargetPlayer,SetTo,150,15)})
-	else
-		CallTrigger(FP, Call_Print13[TargetPlayer+1])
-		
-		DoActions(FP, {SetDeaths(TargetPlayer,SetTo,150,15)})
+	if TargetPlayer == AllPlayers then
+		CMov(FP,Print13V,7)
+		DoActions(FP, {SetDeaths(Force1,SetTo,150,15)})
+		else
+		if type(TargetPlayer) == "table" and TargetPlayer[4] == "V" then
+			CMov(FP,Print13V,TargetPlayer)
+			CallTrigger(FP, Call_Print13X)
+			CDoActions(FP, {TSetDeaths(TargetPlayer,SetTo,150,15)})
+		else
+			CallTrigger(FP, Call_Print13[TargetPlayer+1])
+			
+			DoActions(FP, {SetDeaths(TargetPlayer,SetTo,150,15)})
+		end
 	end
-	CIf(FP, {TMemory(0x512684,Exactly,TargetPlayer)})
+	if TargetPlayer == AllPlayers then
+	else
+		CIf(FP, {TMemory(0x512684,Exactly,TargetPlayer)})
+	end
 	DoActions2(FP, RetAct)
 	for j,p in pairs(ItoDecKey) do
 		local k = p[1]
+		local bool = p[3]
 		CMov(FP,dp.publicItoDecV,k)
-		CallTrigger(FP,dp.Call_IToDec)
-		f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArr,0),4*4)
+		if bool == true then
+			CallTrigger(FP,dp.Call_IToDecX)
+			f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArrX,0),4*12)
+		else
+			CallTrigger(FP,dp.Call_IToDec)
+			f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArr,0),4*4)
+		end
 	end
 	for j,p in pairs(ItoNameKey) do
 		local k = p[1]
@@ -2424,7 +2442,10 @@ function DisplayPrintEr(TargetPlayer,arg)
 	for j,p in pairs(VCharKey) do
 		CDoActions(FP,{TBwrite(0x640B60 + (12 * 218)+p[2],SetTo,V(p[1]))})
 	end
-	CIfEnd()
+	if TargetPlayer == AllPlayers then
+	else
+		CIfEnd()
+	end
 
 end
 
@@ -2509,7 +2530,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 				SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
 				CallLabelAlways(Input[1],Input[2],Input[3]);
 			},
-			flag = {Preserved}
+			flag = {preserved}
 		}
 	else
 		CIfX(PlayerID, CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF))
@@ -2524,7 +2545,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
 					CallLabelAlways(Input[1],Input[2],Input[3]);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 		CElseX()
 			Trigger {
@@ -2539,7 +2560,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrigX(Input[1],Input[2],0x158,Input[3],SetTo,"X",CRet[1],0x15C,1,0);
 					CallLabelAlways(Input[1],Input[2],Input[3]);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 			Trigger {
 				players = {PlayerID},
@@ -2549,7 +2570,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 				actions = {
 					SetCtrig1X("X",CRet[1],0x15C,0,Add,1);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 		CIfXEnd()
 	end
@@ -2564,26 +2585,26 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x00000D00 + Color*0x00000001),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
-	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000D00,0x0000FF00)},flag = {Preserved}}
-	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002D00,0x0000FF00)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00000D00,0x0000FF00)},flag = {preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00002D00,0x0000FF00)},flag = {preserved}}
 	 elseif Sign == 2 then
 	 	DoActionsX(PlayerID,{SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3],SetTo,0x000D0D0D + Color * 0x01000000),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x30*0x01010000 + 0x0000200D),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x30*0x01010101),
 				SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x30*0x01010101)})
-	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000000D,0x000000FF)},flag = {Preserved}}
-	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002D,0x000000FF)},flag = {Preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtMost,0x7FFFFFFF);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000000D,0x000000FF)},flag = {preserved}}
+	 	Trigger {players = {PlayerID},conditions = {Label(0);CtrigX(Input[1],Input[2],0x15C,Input[3],AtLeast,0x80000000);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x0000002D,0x000000FF)},flag = {preserved}}
 	 end
 
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {Preserved}}
-	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {Preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,SetTo,0x01000000*ZeroMode,0xFF000000)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,999);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000001*ZeroMode,0x000000FF)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,99);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00000100*ZeroMode,0x0000FF00)},flag = {preserved}}
+	 Trigger {players = {PlayerID},conditions = {Label(0);CtrigX("X",CRet[1],0x15C,0,AtMost,9);},actions = {SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,SetTo,0x00010000*ZeroMode,0x00FF0000)},flag = {preserved}}
 	 	
  	for i = 2, 0, -1 do
  			CBit = 2^i * 1000000000
@@ -2597,7 +2618,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,2^i*0x010000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2613,7 +2634,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+1,Add,2^i*0x01000000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2629,7 +2650,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x00000001);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2645,7 +2666,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x0100);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2661,7 +2682,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x010000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2677,7 +2698,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+2,Add,2^i*0x01000000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2693,7 +2714,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x01);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2709,7 +2730,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x0100);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2725,7 +2746,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x010000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2741,7 +2762,7 @@ function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin
 					SetCtrig1X("X",CRet[1],0x15C,0,Subtract,CBit);
 					SetCtrig1X(OutputVA[1],OutputVA[2],0x15C,OutputVA[3]+3,Add,2^i*0x01000000);
 				},
-				flag = {Preserved}
+				flag = {preserved}
 			}
 	end
 
@@ -2825,6 +2846,10 @@ end
 	CJump(FP,SCJump)
 	SetCall2(FP, dp.Call_IToDec)
 	dp.ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
+	SetCallEnd2()
+	
+	SetCall2(FP, dp.Call_IToDecX)
+	ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,1)
 	SetCallEnd2()
 
 	SetCall2(FP, dp.Call_VtoName)
@@ -2936,7 +2961,7 @@ end
 
 function Start_init(LocOption)
 	if STRCTRIGASM == 0 then
-		Need_STRCTRIGASM()
+		PushErrorMsg("Need_STRCTRIGASM")
 	end
 	dp={}
 	dp.Alloc = 0xC000
@@ -2964,8 +2989,10 @@ function Start_init(LocOption)
 	dp.StrXPNameArr = {}
 	dp.StrXIndex = 0
 	dp.publicItoDecVArr =CreateVArr(4,FP)
+	dp.publicItoDecVArrX =CreateVArr(12,FP)
 	dp.publicItoDecV = CreateVar(FP)
 	dp.Call_IToDec = CreateCallIndex()
+	dp.Call_IToDecX = CreateCallIndex()
 	dp.Call_VtoName = CreateCallIndex()
 	
 	dp.publiclItoDecVArr =CreateVArr(5,FP)

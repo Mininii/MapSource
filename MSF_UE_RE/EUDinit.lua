@@ -107,7 +107,7 @@ function SetUnitClassType(UnitID,Type)
 end
 
 function onInit_EUD()
-	local ShTStrPtr = Create_VTable(7)
+	--local ShTStrPtr = Create_VTable(7)
 	local VoidResetPtr = CreateVar2(FP, nil, nil, EPD(0x58F44A))
 	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SetMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
 	CWhile(FP,CV(VoidResetPtr,EPD(0x5967E8),AtMost))
@@ -216,7 +216,7 @@ DTypeArr = {
 	
 
 	
-
+	
 --roka7
 function EffUnitPatch(UnitID)
 	table.insert(PatchArr,SetMemoryB(0x6616E0 + UnitID,SetTo,130))
@@ -505,6 +505,8 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
+				--SetDeaths(Player,SetTo,1,11),--이거넣은채로 테스터 모집하지마셈 작살남
+				--SetDeaths(Player,SetTo,1000000,35)--이거넣은채로 테스터 모집하지마셈 작살남
 				
 			}
 		}
@@ -647,8 +649,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	
 	for i = 0, 6 do
 
-	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
-	_0DPatchX(FP,Names[i+1],7)
 	CS__ItoName(FP, SVA1(MarStr[i+1],3), i, nil, "\x0D", ColorCode[i+1])
 
 	CS__InputVA(FP,PMariTbl[i+1],0,MarStr[i+1],MarStrs[i+1],nil,0,MarStrs[i+1]-3)
@@ -657,60 +657,6 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	end
 
 	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
-	f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
-	f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
-	f_GetStrXptr(FP,G_CA_StrPtr,"\x0D\x0D\x0DG_CA_Err".._0D)
-	f_GetStrXptr(FP,G_CA_StrPtr2,"\x0D\x0D\x0DG_CA_Func".._0D)
-	f_GetStrXptr(FP,G_CA_StrPtr3,"\x0D\x0D\x0DG_CA_SendError".._0D)
-
-
-	
-	f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
-	f_GetStrXptr(FP,HTextStrPtr,HTextStr)
-	for i = 0, 6 do
-	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."shd".._0D)
-	f_GetStrXptr(FP,PScoreSTrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Score".._0D)
-	f_GetStrXptr(FP,NukeUseStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Nuke".._0D)
-	f_GetStrXptr(FP,AMUseStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."AMatter".._0D)
-	end
-	f_GetStrXptr(FP,DBoss_PrintScore,"\x0D\x0D\x0DDBossSC".._0D)
-	f_GetStrXptr(FP,DBoss_PrintScore2,"\x0D\x0D\x0DDBossDMG".._0D)
-	f_GetStrXptr(FP,PointStrPtr,"\x0D\x0D\x0DGetP".._0D)
-	f_GetStrXptr(FP,KillScStrPtr,"\x0D\x0D\x0DKillP".._0D)
-	f_GetStrXptr(FP,GiveStrPtr,"\x0D\x0D\x0DGive".._0D)
-	
-	
-	
-
-	f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12[3],0),"X","X",1),Str12[2])
-	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3),_TMem(Arr(UpCompTxt,0),"X","X",1),4*4)
-	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20),_TMem(Arr(Str22[3],0),"X","X",1),Str22[2])
-	--f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]-3+20+Str22[2]-3),_TMem(Arr(UpCompRet,0),"X","X",1),4*4)
-	f_Memcpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3+20),_TMem(Arr(Str23[3],0),"X","X",1),Str23[2])
-
-	f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
-	f_Memcpy(FP,G_CA_StrPtr,_TMem(Arr(f_GunErrT[3],0),"X","X",1),f_GunErrT[2])
-	f_Memcpy(FP,G_CA_StrPtr2,_TMem(Arr(f_GunFuncT[3],0),"X","X",1),f_GunFuncT[2])
-	f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
-	f_Memcpy(FP,G_CA_StrPtr3,_TMem(Arr(f_GunSendErrT[3],0),"X","X",1),f_GunSendErrT[2])
-
-	
-
-
-
-
-	
-	
-	
-
-	f_Memcpy(FP,_Add(f_GunStrPtr,f_GunT[2]+20),_TMem(Arr(Str24[3],0),"X","X",1),Str24[2])
-
-	for i = 1, 7 do
-	Install_CText1(PScoreSTrPtr[i],Str10,Str18,Names[i])
-	Install_CText1(ShTStrPtr[i],Str12,Str13,Names[i])
-	Install_CText1(NukeUseStrPtr[i],Str12,NukeUseT,Names[i])
-	end
-
 	
 	CFor(FP, 0, 130, 1) -- 공격력 정보 백업
 	CI = CForVariable()

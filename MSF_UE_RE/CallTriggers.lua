@@ -52,17 +52,7 @@ SetCall(FP)
 		DisplayText("\x12\x07『 \x04잔액이 부족합니다. \x07』",4),
 		SetMemory(0x6509B0,SetTo,FP)
 	})
-	ItoDec(FP,UpCost,VArr(UpCompTxt,0),2,0x1F,0)
-	ItoDec(FP,UpCompleted,VArr(UpCompRet,0),2,0x19,0)
-	_0DPatchforVArr(FP,UpCompRet,4)
-	_0DPatchforVArr(FP,UpCompTxt,4)
-	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]),VArr(UpCompTxt,0),5*4)
-	f_Movcpy(FP,_Add(UPCompStrPtr,Str12[2]+20+Str22[2]-3),VArr(UpCompRet,0),5*4)
-	CDoActions(FP,{
-		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x0D\x0D\x0DUPC".._0D,4),
-		SetMemory(0x6509B0,SetTo,FP)
-	})
+	DisplayPrint(UpgradeCP, {"\x12\x07『 \x1F",UpCost," \x04미네랄을 소비하여 총 \x19",UpCompleted," \x04회 업그레이드를 완료하였습니다. \x07』"})
 	NJumpEnd(FP,OCU_Check)
 	DoActionsX(FP,{
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,0),
@@ -189,10 +179,7 @@ SetCall(FP)
 		CWhileEnd()
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
-			_0DPatchX(FP,f_GunNumT,5)
-			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),5*4)
-			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_Gun".._0D,4)},HumanPlayers,FP)})
+			DisplayPrint(HumanPlayers, {"『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ",f_GunNum," \x07』"})
 			CIfEnd()
 		end
 	CIfEnd()
@@ -225,10 +212,7 @@ SetCall(FP)
 	
 	if Limit == 1 then
 	CIf(FP,CD(TestMode,1))
-	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
-	_0DPatchX(FP,f_GunNumT,5)
-	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
-	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+	DisplayPrint(HumanPlayers, {"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ",G_CA," \x07』"})
 	CIfEnd()
 	end
 	CElseX()
@@ -262,9 +246,7 @@ SetCall(FP)
 		f_LMul(FP, TempLvHP_L5, TempLvHP_L6, _LMov({LevelT-1,0}))
 		f_LAdd(FP,TempLvHP_L4,TempLvHP_L,TempLvHP_L5)
 		CIf(FP,{CV(Level,101,AtLeast)})
-
-		f_LAdd(FP,TempLvHP_L4,TempLvHP_L4,_LMul(TempLvHP_L4, {_Div(Level,_Mov(100)),0}))
-
+		f_LAdd(FP,TempLvHP_L4,TempLvHP_L4,_LMul(_LDiv(TempLvHP_L4,"2"), {_Div(Level,_Mov(100)),0}))
 		CIfEnd()
 		f_LMovX(FP, WArr(MaxHPWArr,UnitIDV), TempLvHP_L4,SetTo,nil,nil,1)
 		CTrigger(FP,{TTCWar(FP,TempLvHP_L4[2],AtLeast,"2129920000")},{SetCWar(FP,TempLvHP_L4[2],SetTo,"2129920000")},{preserved})
@@ -397,25 +379,6 @@ SetCallEnd()
 	Call_ScorePrint = SetCallForward()
 	SetCall(FP)
 	
-		local ExScoreVA = Create_VArrTable(7,13)
-		local ExScoreP = Create_VTable(7)
-		local TotalScoreVA = CreateVArray(FP,7)
-		local DBossScoreVA = CreateVArray(FP,7)
-		TxtSkip = Str10[2] + GetStrSize(0,"\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d") + (4*6)
-		for i = 1, 7 do
-			if Limit == 1 then
-				TriggerX(FP,{CD(TestMode,1),CVar(FP,ExScore[i],AtLeast,0x80000000)},{SetCVar(FP,ExScore[i],SetTo,0)},{preserved})
-			end
-		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
-		CMov(FP,ExScoreP[i],ExScore[i])
-		ItoDecX(FP,ExScoreP[i],VArr(ExScoreVA[i],0),2,nil,2)
-		_0DPatchX(FP,ExScoreVA[i],6)
-		f_Movcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip),VArr(ExScoreVA[i],0),12*4)
-		f_Memcpy(FP,_Add(PScoreSTrPtr[i],TxtSkip+(12*4)),_TMem(Arr(Str19[3],0),"X","X",1),Str19[2])
-		CIfEnd()
-
-		
-		end
 		Trigger {
 			players = {FP},
 			conditions = {
@@ -430,16 +393,8 @@ SetCallEnd()
 		for i = 1, 7 do
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 		CAdd(FP,TotalScore,ExScore[i])
-		Trigger {
-			players = {FP},
-			conditions = {
-				},
-			
-			actions = {
-				RotatePlayer({DisplayTextX("\x0D\x0D\x0D"..PlayerString[i].."Score".._0D,4)},HumanPlayers,FP);
-				PreserveTrigger();
-			},
-		}
+		ExScore[i]["fwc"]=true
+		DisplayPrint(HumanPlayers, {"\x13\x03† ",PName(i-1)," \x04: \x1F",ExScore[i]," \x03†"})
 		CIfEnd()
 		end
 		CIf(FP,CDeaths(FP,AtLeast,1,Win))
@@ -467,16 +422,8 @@ SetCallEnd()
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					SetMemory(0x6509B0,SetTo,FP)},1)
-					GetPVA = CreateVArray(FP,13)
-					ItoDecX(FP,ReadScore,VArr(GetPVA,0),2,0x7,2)
-					_0DPatchX(FP,GetPVA,12)
-					f_Movcpy(FP,_Add(KillScStrPtr,KillPT[2]),VArr(GetPVA,0),12*4)
-					f_Memcpy(FP,_Add(KillScStrPtr,KillPT[2]+(12*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
-					DoActions(FP,{
-						SetMemory(0x6509B0,SetTo,i),
-						DisplayText("\x0D\x0D\x0DKillP".._0D,4),
-						SetMemory(0x6509B0,SetTo,FP)
-					})
+					ReadScore["fwc"]=true 
+					DisplayPrint(i, {"\x13\x10【 \x07킬 스코어가 \x19구버전 스탯 포인트\x04로 전환되었습니다. 구 버전에서 이용가능합니다. \x04: ",ReadScore," \x10】"})
 				CIfEnd()
 			end
 
@@ -486,30 +433,8 @@ SetCallEnd()
 --else
 	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
 --end
-		ItoDec(FP,TotalScore,VArr(TotalScoreVA,0),2,nil,2)
-		ItoDec(FP,OutputPoint,VArr(DBossScoreVA,0),2,nil,2)
-		_0DPatchX(FP,TotalScoreVA,6)
-		_0DPatchX(FP,DBossScoreVA,6)
-
-		f_Memcpy(FP,DBoss_PrintScore,_TMem(Arr(DBossT1[3],0),"X","X",1),DBossT1[2])
-		f_Movcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]),VArr(TotalScoreVA,0),5*4)
-		f_Memcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)),_TMem(Arr(DBossT2[3],0),"X","X",1),DBossT2[2])
-		f_Movcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)+DBossT2[2]),VArr(DBossScoreVA,0),5*4)
-		f_Memcpy(FP,_Add(DBoss_PrintScore,DBossT1[2]+(5*4)+DBossT2[2]+(5*4)),_TMem(Arr(DBossT3[3],0),"X","X",1),DBossT3[2])
 		
-
---		"\x13\x10【 \x07P\x04layer \x06T\x04otal \x1FS\x04core : "TotalScore" / "DBossScore" \x10】"
-
-		Trigger {
-			players = {FP},
-			conditions = {
-				},
-			
-			actions = {
-				RotatePlayer({DisplayTextX("\x0D\x0D\x0DDBossSC".._0D,4)},HumanPlayers,FP);
-				PreserveTrigger();
-			},
-		}
+		DisplayPrint(HumanPlayers, {"\x13\x10【 \x07P\x04layer \x06T\x04otal \x1FS\x04core : ",ClearLamp[2],TotalScore," \x04/ \x1D",OutputPoint,"  \x10】"})
 	CIfEnd()
 	
 
@@ -530,6 +455,12 @@ SetCallEnd()
 		CallTrigger(FP,Call_Print13[i+1])
 		CIfEnd()
 	end
+	CIf(FP,{CV(Print13V,7)})--AllP
+	for i = 0, 6 do
+		CallTrigger(FP,Call_Print13[i+1])
+	end
+	CIfEnd()
+	
 	SetCallEnd()
 
 	ComputerReplace = SetCallForward()

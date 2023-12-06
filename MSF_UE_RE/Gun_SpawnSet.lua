@@ -11,8 +11,8 @@ function InstallGunData()
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,480))
 
-				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtMost,48*32)},{40,43},"CC_L",nil,nil,nil,nil,{48*32,96*32},nil,1)
-				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtLeast,48*32)},{40,43},"CC_R",nil,nil,nil,nil,{48*32,96*32},nil,1)
+				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtMost,48*32)},{38,43},"CC_L",nil,nil,nil,nil,{48*32,96*32},nil,1)
+				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,0),Gun_Line(1,AtLeast,48*32)},{38,43},"CC_R",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,1),Gun_Line(1,AtMost,48*32)},{39,44},"CC_L",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1),Gun_Line(5,Exactly,1),Gun_Line(1,AtLeast,48*32)},{39,44},"CC_R",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				
@@ -37,8 +37,8 @@ function InstallGunData()
 				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,5),Gun_Line(5,Exactly,1),Gun_Line(1,AtLeast,48*32)},{86,79},"CC_R",nil,nil,nil,nil,{48*32,96*32},nil,1)
 
 				
-				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,0),Gun_Line(1,AtMost,48*32)},{40,43},"CC_LF",nil,nil,nil,nil,{48*32,96*32},nil,1)
-				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,0),Gun_Line(1,AtLeast,48*32)},{40,43},"CC_RF",nil,nil,nil,nil,{48*32,96*32},nil,1)
+				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,0),Gun_Line(1,AtMost,48*32)},{38,43},"CC_LF",nil,nil,nil,nil,{48*32,96*32},nil,1)
+				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,0),Gun_Line(1,AtLeast,48*32)},{38,43},"CC_RF",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,1),Gun_Line(1,AtMost,48*32)},{39,44},"CC_LF",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,6),Gun_Line(5,Exactly,1),Gun_Line(1,AtLeast,48*32)},{39,44},"CC_RF",nil,nil,nil,nil,{48*32,96*32},nil,1)
 				
@@ -650,10 +650,10 @@ function InstallGunData()
 	end
 
 	function Case_Formation()
-		CIf(FP,Gun_Line(0,Exactly,173))
+		CIf(FP,Gun_Line(0,Exactly,173),{SetMemoryB(0x665C48+341,SetTo,0)})--가우스라이플 공격이펙트 안보이게하기
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("\x07Ｆｏｒｍａｔｉｏｎ",300000,1)
+			GunBreak("\x07Ｆｏｒｍａｔｉｏｎ",3000000,1)
 			G_CB_SetSpawn(CVar(FP,LevelT[2],AtMost,9),{13},"Form","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1)},{25},"FormF1","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,2)},{25},"FormF2","MAX",3,nil,nil,{0,0})
@@ -667,6 +667,7 @@ function InstallGunData()
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{30},"Form2","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{69},"FormF2","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,10)},{121},"FormF1","MAX",3,nil,nil,{0,0})
+			
 			DoActions2(FP,RotatePlayer({PlayWAVX("staredit\\wav\\Glass.wav"),PlayWAVX("staredit\\wav\\Glass.wav"),PlayWAVX("staredit\\wav\\Glass.wav"),PlayWAVX("staredit\\wav\\Glass.wav"),PlayWAVX("staredit\\wav\\Glass.wav")},HumanPlayers,FP))
 		CIfEnd()
 		CTrigger(FP,{Gun_Line(4,AtLeast,480),G_CB_CondStack},{Gun_DoSuspend()},1)
@@ -690,6 +691,13 @@ function InstallGunData()
 				f_TempRepeat(104,7,{Gun_Line(0,Exactly,138)})
 				f_TempRepeat(56,4,{Gun_Line(0,Exactly,138)})
 				f_TempRepeat(45,2,{Gun_Line(0,Exactly,138)})
+				f_TempRepeat(37,10,{Gun_Line(0,Exactly,146)})
+				f_TempRepeat(38,10,{Gun_Line(0,Exactly,144)})
+				f_TempRepeat(37,5,{Gun_Line(0,Exactly,143)})
+				f_TempRepeat(38,5,{Gun_Line(0,Exactly,143)})
+
+
+
 				CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
 				CDoActions(FP,{Gun_SetLine(5,Add,1)})
 				CIf(FP,CVar(FP,Level[2],AtLeast,11))
@@ -708,13 +716,18 @@ function InstallGunData()
 					CMov(FP,TempRandV,_Mod(_Rand(),_Mov(#HeroArr)))
 					CMovX(FP,TempRandV2,VArr(HeroVArr,TempRandV),nil,nil,1)
 					NJumpX(FP, RandCheck, {CV(TempRandV2,121)})--핵배틀 잡건작 스폰 방지
-					f_TempRepeatX(TempRandV2,1)
+					f_TempRepeatX(TempRandV2,1,nil,nil,nil,nil,{2,2})
 					
 					end
 					
 					local BYDTechGunCAPlot = CAPlotForward()
-					CMov(FP,V(BYDTechGunCAPlot[5]),_Mul(LevelT,2))
-					CAPlot(CSMakePolygon(6,96,0,PlotSizeCalc(6,1),1),P8,nilunit,0,{Var_TempTable[2],Var_TempTable[3]},1,32,{1,0,0,0,9999,0},"BYDTechGunFunc",FP,nil,nil,1)
+					if Limit == 1 then
+						CMov(FP,V(BYDTechGunCAPlot[5]),_Add(_Mul(LevelT,2),_Div(Level,10)))
+					else
+						CMov(FP,V(BYDTechGunCAPlot[5]),_Mul(LevelT,2))
+					end
+					TriggerX(FP,{CV(V(BYDTechGunCAPlot[5]),PlotSizeCalc(6,8),AtLeast)},{SetV(V(BYDTechGunCAPlot[5]),PlotSizeCalc(6,8))},{preserved})
+					CAPlot(CSMakePolygon(6,96,0,PlotSizeCalc(6,8),1),P8,nilunit,0,{Var_TempTable[2],Var_TempTable[3]},1,32,{1,0,0,0,9999,0},"BYDTechGunFunc",FP,nil,nil,1)
 					
 					CMov(FP,V(BYDTechGunCAPlot[6]),1)
 					
