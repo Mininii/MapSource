@@ -9,17 +9,17 @@ function Include_GunData(Size,LineNum)
 	else
 		RedNumberL = RMBak
 	end
-	f_GunSendT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
-	f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
+	--f_GunSendT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
+	--f_GunSendT2 = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_A = CreateVar(FP)
 	FuncAlloc = FuncAlloc + 1
 	G_InputH = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
 	G_TempH = CreateVar(FP)
-	f_GunT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
+	--f_GunT = CreateCText(FP,"\x07·\x11·\x08·\x07【 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
 	G_SendErrT = StrDesign("\x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07")
-	f_GunT2 = CreateCText(FP," \x07】\x08·\x11·\x07·")
+	--f_GunT2 = CreateCText(FP," \x07】\x08·\x11·\x07·")
 	local f_GunNumT = CreateVArray(FP,5)
 	Var_InputCVar = {}
 	Var_Lines = LineNum

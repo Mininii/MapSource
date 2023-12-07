@@ -70,10 +70,8 @@ Trigger2(FP,{HumanCheck(i,0)},{RemoveUnit(125,i),RemoveUnit(107,i),RemoveUnit(11
 end
 	CIf(AllPlayers,ElapsedTime(AtLeast,3))
 		init_func = def_sIndex()
-		Start_init()
-		dp.SetAlloc(0x4000, 0x6000)
 		CJump(AllPlayers,init_func)
-
+			DP_Start_init(FP,{15,5000},0x4000, 0x6000)
 			Include_CtrigPlib(360,"Switch 100")
 			Include_64BitLibrary("Switch 100")
 			Include_CBPaint()

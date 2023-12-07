@@ -318,11 +318,11 @@ function Var_init()
 	JYD = "Set Unit Order To: Junk Yard Dog"
 
 	
-	ClassInfo2 = CreateCText(FP,"\x04 (")
-	ClassInfo3 = CreateCText(FP,"\x04) - ")
-	ClassInfo4 = CreateCText(FP," £Ä£í£ç")
-	ClassInfo6 = CreateCText(FP,"\x1F.")
-	ClassInfo5 = CreateCText(FP," £¥")
+	--ClassInfo2 = CreateCText(FP,"\x04 (")
+	--ClassInfo3 = CreateCText(FP,"\x04) - ")
+	--ClassInfo4 = CreateCText(FP," £Ä£í£ç")
+	--ClassInfo6 = CreateCText(FP,"\x1F.")
+	--ClassInfo5 = CreateCText(FP," £¥")
 	
 	HTextStrReset = CreateCText(FP,HTextStr)
 	Str122 = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
