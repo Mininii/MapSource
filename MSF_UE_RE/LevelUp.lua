@@ -265,13 +265,7 @@ function LevelUp()
 
 	
 	TriggerX(FP,{CDeaths(FP,Exactly,0,Destr0yerClear2),CDeaths(FP,AtLeast,5000,ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[6])},{
-		SetDeaths(0,SetTo,1,14),
-		SetDeaths(1,SetTo,1,14),
-		SetDeaths(2,SetTo,1,14),
-		SetDeaths(3,SetTo,1,14),
-		SetDeaths(4,SetTo,1,14),
-		SetDeaths(5,SetTo,1,14),
-		SetDeaths(6,SetTo,1,14),
+		SetDeaths(Force1,SetTo,1,14),SetDeaths(Force1,SetTo,5000,15),
 	SetCDeaths(FP,SetTo,1,TextSwitch[6])},{preserved})
 	
 	for i = 0, 4 do

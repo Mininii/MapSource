@@ -364,12 +364,12 @@ function OPTrig()
 	KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
 		PlayWAV("sound\\Misc\\Buzz.wav"),
 		PlayWAV("sound\\Misc\\Buzz.wav"),
-		SetDeaths(CurrentPlayer,SetTo,150,15);},1)
+		SetDeaths(CurrentPlayer,SetTo,5000,15);},1)
 	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F9),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole),},{print_utf8(12,0,"\x07『 \x1C배속조정 \x04상태에서는 사용할 수 없는 기능입니다. \x03ESC\x04를 눌러 기능을 OFF해주세요. \x07』")},1)
 	KeyInput(F9,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{
 		PlayWAV("sound\\Misc\\Buzz.wav"),
 		PlayWAV("sound\\Misc\\Buzz.wav"),
-		SetDeaths(CurrentPlayer,SetTo,150,15);},1)
+		SetDeaths(CurrentPlayer,SetTo,5000,15);},1)
 	KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,0,OPConsole)},SetDeaths(CurrentPlayer,SetTo,1,OPConsole),1)
 	KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(FP,SetTo,0,BanConsole)},1)
 

@@ -366,7 +366,7 @@ function PlayerInterface()
 		TriggerX(i,{Deaths(i,Exactly,0,OPConsole),Deaths(i,AtLeast,1,F9),Deaths(i,Exactly,0,B),Deaths(i,Exactly,1,CPConsole)},{SetDeaths(i,SetTo,0,CPConsole),SetDeaths(i,SetTo,0,F9),SetCDeaths(FP,SetTo,0,FuncT[i+1])},{preserved})
 		CIf(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,CPConsole)},{TSetCDeaths(FP,Add,Dt,FuncT[i+1])}) -- 스탯창 인터페이스 Deaths 100~149
 			KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1]),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x04숫자키를 눌러 \x1F기부 플레이어\x04를 선택해주세요. \x07』")},1,1)
-			KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15)},1)
+			KeyInput(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15)},1)
 			
 --[[
 
@@ -375,7 +375,7 @@ function PlayerInterface()
 			
 			CIf(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,CPConsole)},{TSetCDeaths(FP,Add,Dt,FuncT[i+1])}) -- 스탯창 인터페이스 Deaths 100~149
 			
-				CIfKey(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15)},nil,1)
+				CIfKey(219,{CDeaths(FP,AtMost,0,GivePChange[i+1])},{SetCDeaths(FP,SetTo,1,GivePChange[i+1]),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15)},nil,1)
 				DisplayPrintEr(i,{"\x07『 \x04숫자키를 눌러 \x1F기부 플레이어\x04를 선택해주세요. \x07』"})
 				CIfEnd()
 				for j = 0, 6 do
@@ -392,15 +392,15 @@ function PlayerInterface()
 			for j = 0, 6 do
 				if i==j then 
 					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 "..PlayerString[j+1].."\x04은(는) 자기 자신입니다. 자기 자신에게는 기부할 수 없습니다. \x07』")},1,1)
-					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15),},1)
+					KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15),},1)
 
 				else 
 				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 \x1F기부 플레이어\x04가"..PlayerString[j+1].."\x04으로 설정되었습니다. 금액을 입력해주세요. (금액 제한 없음)\x07』")},1,1)
-				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(i,SetTo,j+1,151),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15)},1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,1)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetDeaths(i,SetTo,j+1,151),SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15)},1)
 				end
 
 				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,0),LocalPlayerID(i)},{print_utf8(12,0,"\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』")},1,1)
-				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,0)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15)},1)
+				KeyInput(j+212,{CDeaths(FP,AtLeast,1,GivePChange[i+1]),HumanCheck(j,0)},{SetCDeaths(FP,SetTo,0,GivePChange[i+1]);SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15)},1)
 				TriggerX(FP,{Deaths(i,Exactly,j+1,151),HumanCheck(j,0)},{SetDeaths(i,SetTo,0,151)},{preserved})
 			end
 			--[[
@@ -417,7 +417,7 @@ function PlayerInterface()
 				CIfEnd()
 			end]]
 
-			CIfX(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,151),TTOR({Deaths(i,AtLeast,1,150),Deaths(i,AtLeast,1,152)})},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,150,15);})
+			CIfX(FP,{HumanCheck(i,1),Deaths(i,AtLeast,1,151),TTOR({Deaths(i,AtLeast,1,150),Deaths(i,AtLeast,1,152)})},{SetCDeaths(FP,SetTo,0,FuncT[i+1]),SetDeaths(i,SetTo,5000,15);})
 
 			--[[
 			TriggerX(FP,{LocalPlayerID(i)},{
@@ -450,7 +450,7 @@ function PlayerInterface()
 				DisplayPrintEr(i, {"\x07『 \x04잔액이 부족합니다. \x07』"})
 				CIfXEnd()
 			DoActions(FP,SetMemory(0x6509B0,SetTo,i))
-			CElseIfX({Deaths(i,AtMost,0,151),TTOR({Deaths(i,AtLeast,1,150),Deaths(i,AtLeast,1,152)})},{SetDeaths(i,SetTo,150,15)})
+			CElseIfX({Deaths(i,AtMost,0,151),TTOR({Deaths(i,AtLeast,1,150),Deaths(i,AtLeast,1,152)})},{SetDeaths(i,SetTo,5000,15)})
 			DisplayPrintEr(i, {"\x07『 \x1F기부 플레이어\x04가 설정되지 않았습니다. \x07』"})
 			CIfXEnd()
 			DoActions(FP,SetMemory(0x6509B0,SetTo,i))
@@ -917,11 +917,11 @@ function CIfShop(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 		if type(ContentStr) == "string" then ContentStr = {ContentStr} end
 		DisplayPrintEr(CP, ContentStr)
 	end
-	CTrigger(FP,{},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),SetCD(ShopActCcode,1),Actions},{preserved})	-- 포인트가 충분할 경우
+	CTrigger(FP,{},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,5000,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),SetCD(ShopActCcode,1),Actions},{preserved})	-- 포인트가 충분할 경우
 	CElseIfX({TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])})
 	if type(DisContentStr) == "string" then DisContentStr = {DisContentStr} end
 	DisplayPrintEr(CP, DisContentStr)
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,5000,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
 	CElseX()
 	CIfXEnd()
 	return ShopActCcode
@@ -940,12 +940,12 @@ function CIfShop2(CP,ID,Cost,ContentStr,DisContentStr,Conditions,Actions)
 		if type(ContentStr) == "string" then ContentStr = {ContentStr} end
 		DisplayPrintEr(CP, ContentStr)
 	end
-	CTrigger(FP,{},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),SetCD(ShopActCcode,1),Actions},{preserved})	-- 포인트가 충분할 경우
+	CTrigger(FP,{},{TSetCVar(FP,NewAvStat[CP+1][2],Subtract,Cost),AddV(NewUsedStat[i+1],Cost),SetDeaths(CP,SetTo,5000,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\BuySE.ogg");SetCp(FP),SetCD(ShopActCcode,1),Actions},{preserved})	-- 포인트가 충분할 경우
 	CElseIfX({TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])})
 
 	if type(DisContentStr) == "string" then DisContentStr = {DisContentStr} end
 	DisplayPrintEr(CP, DisContentStr)
-	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,150,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
+	CTrigger(FP,{TCVar(FP,NewAvStat[CP+1][2],AtMost,Cost-1),CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetDeaths(CP,SetTo,5000,15),SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),SetCp(CP),PlayWAV("staredit\\wav\\FailSE.ogg"),SetCD(ShopActCcode,0),SetCp(FP)},{preserved})	-- 포인트가 충분하지 않을 경우
 	CElseX()
 	CIfXEnd()
 end
@@ -1091,7 +1091,7 @@ end
 				local TempPV = CreateVarArr(3, FP)
 				CDiv(FP,TempPV[1],ShopTempV,P_ExcOldP)
 				CDoActions(FP,{
-					TSetDeaths(i, Add, TempPV[1], 35),AddV(UsedOldP[i+1],TempPV[1]),TSetDeaths(i,Add,TempPV[1],37),SetDeaths(i,SetTo,150,15),
+					TSetDeaths(i, Add, TempPV[1], 35),AddV(UsedOldP[i+1],TempPV[1]),TSetDeaths(i,Add,TempPV[1],37),SetDeaths(i,SetTo,5000,15),
 					SetCp(i),PlayWAV("staredit\\wav\\BuySE.ogg"),SetCp(FP)
 				})
 				
@@ -1220,7 +1220,7 @@ end
 			--DoActions(FP,{SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,1000)})
 			TriggerX(FP,{CDeaths(FP,AtMost,0,isSingle)},{SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000);},{preserved})
 		CIfXEnd()
-		DoActionsX(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,NukeCool[i+1]),SetDeaths(i,Subtract,1,15),SetCDeaths(FP,Subtract,1,ArmorT3[i+1])})
+		CDoActions(FP,{SetCDeaths(FP,Subtract,1,UpSELemit[i+1]),SetCDeaths(FP,Subtract,1,NukeCool[i+1]),TSetDeaths(i,Subtract,Dt,15),SetCDeaths(FP,Subtract,1,ArmorT3[i+1])})
 		CElseX()
 			DoActions(FP,{SetDeaths(i,SetTo,0,12)}) -- 각플레이어가 존재하지 않을 경우 각플레이어의 브금타이머 0으로 고정 
 			TriggerX(FP,{Deaths(i,AtLeast,1,227)},{SetDeaths(i,SetTo,0,227),SetCDeaths(FP,Add,100,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동

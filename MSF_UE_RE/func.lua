@@ -2396,16 +2396,16 @@ function DisplayPrintEr(TargetPlayer,arg)
 	end
 	if TargetPlayer == AllPlayers then
 		CMov(FP,Print13V,7)
-		DoActions(FP, {SetDeaths(Force1,SetTo,150,15)})
+		DoActions(FP, {SetDeaths(Force1,SetTo,5000,15)})
 		else
 		if type(TargetPlayer) == "table" and TargetPlayer[4] == "V" then
 			CMov(FP,Print13V,TargetPlayer)
 			CallTrigger(FP, Call_Print13X)
-			CDoActions(FP, {TSetDeaths(TargetPlayer,SetTo,150,15)})
+			CDoActions(FP, {TSetDeaths(TargetPlayer,SetTo,5000,15)})
 		else
 			CallTrigger(FP, Call_Print13[TargetPlayer+1])
 			
-			DoActions(FP, {SetDeaths(TargetPlayer,SetTo,150,15)})
+			DoActions(FP, {SetDeaths(TargetPlayer,SetTo,5000,15)})
 		end
 	end
 	if TargetPlayer == AllPlayers then
