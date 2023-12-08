@@ -1349,8 +1349,7 @@ end
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 
-	CTrigger(FP,{CV(Dt,39,AtMost)},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
-	CTrigger(FP,{CV(Dt,40,AtLeast)},{TGun_SetLine(10,Add,40),TGun_SetLine(8,Add,40)},1)--CV(Dt,0x2A,AtMost)
+	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D)},1)--CV(Dt,0x2A,AtMost)
 	DoActionsX(FP,{SubV(ExRateV,13),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
 	function CA_3DAcc(Time,XY,YZ,ZX)
@@ -1392,8 +1391,8 @@ end
 	SetBright(2700,15)
 	SetBright(8090,31)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{29},"ACAS","tes_SF","MAX",198,nil,nil,nil,nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	CIf(FP,Gun_Line(8,AtMost,8090))
 	CA_3DAcc(0,1,1,0)
 	CA_3DAcc2(0,-1,0,-1)
@@ -1445,7 +1444,7 @@ end
 	for i = 5, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
-	end
+	end 
 	NUGive(12130,29)
 	TriggerX(FP,{Gun_Line(8,AtLeast,12130-670)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,12130),SetV(TesCircleR,12130)})
 	for j,k in pairs({12130,12800,13480,14150,14830,15500,16180,16850}) do
@@ -1507,8 +1506,8 @@ end
 		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,22920+(337*i))},{SetV(CA_Create,2000+cuid),nsw},1)
 	end
 	--34040
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,34040)},{77,88},"ACAS","tesSh01",8,0,nil,nil,nil,nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,44150)},{17,28},"ACAS","tesSh02",8,0,nil,nil,nil,nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,34040)},{3,29},"ACAS","tesSh01",8,0,nil,nil,nil,nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,44150)},{65,80},"ACAS","tesSh02",8,0,nil,nil,nil,nil,1)
 	local tesP1 = {55280,55440,55950,56120,56620,56790,57130,57300,57640,57970,58140,58650,58820,59320,59490,59830,60000,60250,60500,55280+5390,55440+5390,55950+5390,56120+5390,56620+5390,56790+5390,57130+5390,57300+5390,57640+5390,57970+5390,58140+5390,58650+5390,58820+5390,59320+5390,59490+5390,59830+5390,60000+5390,60250+5390,60500+5390}
 	local tesP2 = {}
 	for i = 1, 9 do
@@ -1547,7 +1546,7 @@ end
 	for j,k in pairs(tesP1) do
 		if j%2 == 1 then RetT2 = CA_Eff_DRat2 else RetT2 = CA_Eff_DRat3 end
 
-		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,50000),SetV(CA_Create,2000+tesP2[j]),SetV(CA_EffSWArr2[e],24)},1)
+		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{AddV(RetT2,50000),SetV(CA_Create,2000+tesP2[j]),SetV(CA_EffSWArr2[e],12)},1)
 		e=e+1
 		if e >= 9 then e=e-8 end
 	end
@@ -1601,12 +1600,12 @@ end
 	end
 	local EFSW = {}
 	for i = 1, 8 do
-		EFSW[i] = SetV(CA_EffSWArr2[i],8)
+		EFSW[i] = SetV(CA_EffSWArr2[i],4)
 	end
 	DoActionsX(FP,RT)
 	
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,66060)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 
 
 	for i = 0, 14 do--
@@ -1778,12 +1777,12 @@ end
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 4 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],8))
 		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],0))
 	end
 	for i = 5, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],0))
-		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr2,SetV(CA_EffSWArr2[i],8))
 	end
 	
 	for j,k in pairs(tesLineArr) do
@@ -1844,7 +1843,7 @@ end
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
 	for i = 1, 8 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],3))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],2))
 	end
 	for j,k in pairs(TesTArr) do
 		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,2000+80),SWEffArr1},1)
@@ -1855,8 +1854,8 @@ end
 	--CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,2000+60),SWEffArr1},1)
 	TriggerX(FP,{Gun_LineRange(8,135500,135500+5000),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
 	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1),SetMemory(0x662350+(116*4),SetTo,9999*256),})
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	TriggerX(FP,{Gun_Line(8,AtLeast,120000+36400)},{AddV(CA_Eff_RatF2,60000),SetV(CA_Eff_RatFDT,5000)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,158090)},{KillUnit(116,Force2)})
 	--TriggerX(FP,{Gun_Line(8,AtLeast,(60000*2)+20220)},{AddV(CA_ACCR,0),SetV(CA_Eff_RatFMDT,15000),SetV(CA_Eff_RatFM2,1300000)})
@@ -1868,11 +1867,21 @@ end
 
 
 	TriggerX(FP,{Gun_Line(8,AtLeast,163140)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,0),SetV(TesCircleL,163820),SetV(TesCircleR,164490)})
+	
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,163140)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,163820)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,164490)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,165160)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	TriggerX(FP,{Gun_Line(8,AtLeast,164490)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,165160),SetV(TesCircleR,165840)})
 
 	for i = 0, 31 do
 		G_CA_Bullet({Gun_Line(8,AtLeast,120000+(i*(bit*2)))},220,"ACAS","tes_Eff",20,1,{2048,2048},nil,0,nil,nil,1)
 	end
+	
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,173930)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,174430)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,175280)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,175780)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	
 	TriggerX(FP,{Gun_Line(8,AtLeast,173930)},{SetV(TesCircleDiv,1),SetCD(TesCircleC,8),SetCD(TesEffFlag,0),SetV(TesCircleL,174430),SetV(TesCircleR,174940)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,175280)},{SetV(TesCircleDiv,1),SetCD(TesCircleC,8),SetCD(TesEffFlag,1),SetV(TesCircleL,175780),SetV(TesCircleR,176290)})
@@ -1930,7 +1939,7 @@ end
 	
 	local SWEffArr1 = {}
 	for i = 1, 8 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],12))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],9))
 	end
 	
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+10110)},{SetV(CA_Create,2000+11),AddV(CA_Eff_RatF,30000),SWEffArr1},1)
@@ -1941,7 +1950,7 @@ end
 	
 	local SWEffArr1 = {}
 	for i = 1, 8 do
-		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],9))
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],6))
 	end
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+15500)},{SetV(CA_Create,2000+69),AddV(CA_Eff_RatF,30000),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+15560)},{SetV(CA_Create,2000+69),AddV(CA_Eff_RatF,30000),SWEffArr1},1)
@@ -1964,9 +1973,15 @@ end
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+21570)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22240)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22920)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+102),SWEffArr1},1)
+	
+	local SWEffArr1 = {}
+	for i = 1, 8 do
+		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],3))
+	end
+
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+23590)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15),AddV(CA_Eff_DRat2,50000),AddV(CA_Eff_DRat3,50000),SetV(CA_Create,2000+60),SetMemoryW(0x656EB0+(121 *2),SetTo,3000),SetCD(tesFlag,0),SWEffArr1},1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
-	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
+	G_CA_SetSpawn({Gun_Line(8,AtLeast,(60000*3)+23590)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
 	local SWEffArr1 = {}
 	for i = 1, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],8))
@@ -2031,7 +2046,7 @@ end
 	CSub(FP,CA_Eff_Rat2,CA_EffFin)
 	CSub(FP,CA_Eff_Rat3,CA_EffFin)
 	CIf(FP,{CV(CA_Eff_Rat2,0),CV(CA_Eff_Rat3,0),Gun_Line(8,AtLeast,(60000*3)+30000)},{SetV(CA_ACCR,0),SetMemoryB(0x669E28+210, SetTo, 17),SetMemoryB(0x657040+129,SetTo,42)})
-		CAdd(FP,tesEndt,Dt)
+		CAdd(FP,tesEndt,0x1D)
 		--42
 		DoActions2(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\tesEnd.ogg"),PlayWAVX("staredit\\wav\\tesEnd.ogg"),PlayWAVX("staredit\\wav\\tesEnd.ogg")},HumanPlayers,FP)},1)
 		TriggerX(FP,{CV(tesEndt,830,AtLeast)},{AddV(CA_Eff_Rat2,50000),AddV(CA_Eff_Rat3,50000)},{preserved})
@@ -2081,7 +2096,7 @@ end
 
 	CIf(FP,Gun_Line(7,AtLeast,400))
 
-	CTrigger(FP,{},{TGun_SetLine(10,Add,Dt),TGun_SetLine(8,Add,Dt)},1)--CV(Dt,0x2A,AtMost)
+	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D)},1)--CV(Dt,0x2A,AtMost)
 --	CTrigger(FP,{CV(Dt,0x2A+1,AtLeast)},{TGun_SetLine(10,Add,0x2A),TGun_SetLine(8,Add,0x2A)},1)
 
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)

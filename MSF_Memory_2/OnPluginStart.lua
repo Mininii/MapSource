@@ -325,9 +325,9 @@ end
 --	GetPlayerName(FP, i, VArr(Names2[i+1],0))
 	GetPlayerLength(FP,i,PLength[i+1]) 
 	ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
-	f_GetTblptr(FP,MarTblPtr[i+1],MarID[i+1]+1)
+	--f_GetTblptr(FP,MarTblPtr[i+1],MarID[i+1]+1)
 	_0DPatchforVArr(FP,Names[i+1],4)
-	Install_CText1(MarTblPtr[i+1],Str122,Str02[i+1],Names[i+1])
+	--Install_CText1(MarTblPtr[i+1],Str122,Str02[i+1],Names[i+1])
 	f_GetStrXptr(FP,ShTStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."Shield".._0D)
 	f_GetStrXptr(FP,EEggStrPtr[i+1],"\x0D\x0D\x0D"..PlayerString[i+1].."EEgg".._0D)
 	

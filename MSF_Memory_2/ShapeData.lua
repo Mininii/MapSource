@@ -287,6 +287,11 @@ for i=0, 15 do
    table.insert(Warp1,CSMakeCircle(6+(6*i),32+(32*i),0,7+(6*i),1))
 end
 Warp1 = CS_CropXY(CS_OverlapX(table.unpack(Warp1)),{-2048,2048},{-2048,2048})
+WarpZ = {}
+for i=0, 7 do
+   table.insert(WarpZ,CSMakeCircle(6+(6*i),64+(64*i),0,7+(6*i),1))
+end
+WarpZ = CS_CropXY(CS_OverlapX(table.unpack(WarpZ)),{-2048,2048},{-2048,2048})
 
 
 function CSMakeFillPathXY(Range,Radius)
@@ -438,7 +443,8 @@ tes_EllipseN = CS_Rotate(CS_MoveXY(EllipseB,1600,0), -90)
 		"tes_SF",
 		"tes_Eff",
 		"tes_EllipseN",
-		"tes_Eff2"
+		"tes_Eff2",
+		"WarpZ"
 	}
 	)
 	tesSh = {}

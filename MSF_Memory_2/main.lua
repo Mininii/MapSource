@@ -37,7 +37,7 @@ TestSet(1)
 if Limit == 1 then
 	EVFFlag = 0
 	AtkSpeedMode = 1
-	CheatEnableFlag = 1
+	CheatEnableFlag = 0
 	TheoristTestMode = 0
 	GBossTestMode = 2
 	EEggTestNum = 20
