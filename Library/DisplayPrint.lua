@@ -746,7 +746,9 @@
 		CJumpEnd(FP, dp.CustominitJump)
 	end
 
-	function DP_Start_init(FixedPlayer,DP_OP_Hold,AllocStart,AllocEnd,Disable_64BitLib)
+	function DP_Start_init(FixedPlayer,DP_OP_Hold,AllocStart,AllocEnd,SettingOp)
+		
+	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16,0x17}
 		if FixedPlayer == nil and FP == nil then
 			PushErrorMsg("Need FixedPlayer")
 		end
@@ -815,5 +817,9 @@
 	function PName(Player) -- "LocalPlayerID" = LocalPName
 		return {"PVA",Player}
 	end
+	if SettingOp == nil then
 		DoActionsX(FP, {SetNext("X", dp.CustominitJump+JumpStartAlloc,1),SetNext(dp.lastTrigIndex, "X",1)}, 1,dp.initTrigIndex)
+	else
+		return {"DoActionsX",FP,{SetNext("X", dp.CustominitJump+JumpStartAlloc,1),SetNext(dp.lastTrigIndex, "X",1)},1,dp.initTrigIndex}
+	end
 	end

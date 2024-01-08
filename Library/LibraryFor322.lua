@@ -1802,3 +1802,256 @@ function TS_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- 변수 V 를 
 	CIfEnd()
 
 end
+
+function TestSet(val)
+	Limit = 0
+	TestStart = 0
+	if val == 1 then 
+		Limit = 1
+		TestStart = 0
+	elseif val == 2 then
+		Limit = 1
+		TestStart = 1
+	else
+		Limit = 0
+		TestStart = 0
+	end
+end
+
+function Install_EXCC(Player,ArrSize,ResetFlag) -- 확장 구조오프셋 단락 전용 배열 구성하기
+	local HeaderV = CreateVar(Player) -- 헤더가 저장된 V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- 구조오프셋 확장 변수 TempV
+	local Index = FuncAlloc -- FuncAlloc에서 라벨 받아옴
+	FuncAlloc = FuncAlloc + 3
+	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
+	local EXCUnitArr = {}
+	for k, v in pairs(EXCunitTemp) do
+		table.insert(EXCUnitArr,SetCVar("X",v[2],SetTo,0))
+	end
+
+	if ResetFlag ~= nil then
+		if type(ResetFlag) == "number" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블
+			for i = 1, #EXCunitTemp do
+				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		elseif type(ResetFlag) == "table" then
+			local EXCunit_Reset = {} -- 필요시 리셋 또는 값 조정 테이블(타이머or값초기화 등)
+			for i = 1, #EXCunitTemp do
+				if ResetFlag[i]~= nil then
+					if type(ResetFlag[i]) == "table" then
+						local X = ResetFlag[i]
+						local RFValue = X[1]
+						local RFType
+						local RFMask
+						if X[2] == nil then
+							RFType = SetTo
+						else
+							RFType = X[2]
+						end
+						if X[3] == nil then
+							RFMask = 0xFFFFFFFF
+						else
+							RFMask = X[3]
+						end
+
+						table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,RFType,RFValue,RFMask))
+					else
+						PushErrorMsg("ResetFlag_Inputdata_Error")
+					end
+				end
+			end
+			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
+		end
+	else
+		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
+	end
+end
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC단락 외부에서 값을 쓰고싶을때. 무조건 T액션, 너무많이 쓸 경우 성능 하락 우려 있음
+	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
+end
+
+function Set_EXCC(Line,Type,Value) -- EXCC단락 내부에서 값을 쓰고싶을때. 실제값 X
+	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
+end
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 쓰고싶을때. 실제값
+	if Mask == nil then Mask = 0xFFFFFFFF end
+	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
+end
+
+
+function TCond_EXCC(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 검사하고 싶을때.
+	return TCVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
+end
+function Cond_EXCC(Line,Type,Value,Mask) -- EXCC단락 내부에서 값을 검사하고 싶을때.
+	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
+end
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때.
+	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC단락 외부에서 값을 검사하고 싶을때.
+	return TMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
+end
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC단락 외부에서 값을 검사하고 싶을때. TTOR전용
+	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
+end
+EXCC_initArr = {}
+function EXCC_Part1(EXCC_init,Actions)
+	if #EXCC_initArr ~= 0 then
+		PushErrorMsg("EXCCinitArr_Already_Loading")
+	end
+	EXCC_initArr = EXCC_init
+	EXCC_Player = EXCC_initArr[1]
+	EXCC_Index = EXCC_initArr[2]
+	EXCC_TempVarArr = EXCC_initArr[4]
+	PlayerID = EXCC_Player
+	EXCC_TempHeader = CreateVar(EXCC_Player)
+	PlayerID = PlayerConvert(PlayerID)
+	Trigger { -- Cunit Ctrig Start
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+		},
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+2,0,0,1); 
+		},
+		flag = {preserved}
+	}	
+	Trigger { -- Cunit Calc Selector
+		players = {PlayerID},
+		conditions = { 
+			Label(EXCC_Index);
+		},
+		actions = {
+			SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+			Actions,
+		},
+		flag = {preserved}
+	}	
+	
+end
+-- NJump Trig 삽입 부분 (조건만족시 Jump)
+function EXCC_Part2()
+	PlayerID = EXCC_Player
+	PlayerID = PlayerConvert(PlayerID)
+	for k, P in pairs(PlayerID) do
+		Trigger { -- Cunit Calc Last
+			players = {P},
+			conditions = { 
+				Label(EXCC_Index+1);
+			},
+		   	actions = {
+				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
+				SetMemory(0x6509B0,SetTo,P);
+			},
+			flag = {preserved}
+		}	
+	end
+end
+function EXCC_Part3X()
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Start
+		players = {PlayerID},
+		conditions = { 
+			Label(EXCC_Index+2);
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_Part4X(LoopIndex,Conditions,Actions)
+	MoveCpValue = 0
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc Main
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+			Conditions,
+		},
+		actions = { 
+		EXCC_initArr[5],
+		SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index,0,0,0);
+		SetCtrigX("X",EXCC_Index+1,0x4,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_Index,0x158,0,SetTo,"X","X",0x4,1,0);
+		SetCtrigX("X",EXCC_Index,0x15C,0,SetTo,"X","X",0,0,1);
+		SetCtrigX("X",EXCC_TempHeader[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
+		SetMemory(0x6509B0,SetTo,19025 + (84 * LoopIndex));
+		Actions,
+		EXCC_initArr[6]
+			},
+		flag = {preserved}
+	}		
+end
+
+	
+function EXCC_ClearCalc(Actions)
+	PlayerID = EXCC_Player
+	Trigger { -- Cunit Calc End
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			Actions
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_BreakCalc(Conditions,Actions)	
+	PlayerID = EXCC_Player
+	STPopTrigArr(PlayerID)
+	TTPopTrigArr(PlayerID)
+	Conditions = PopCondArr(Conditions)
+	Actions = PopActArr(Actions)
+	PopTrigArr(PlayerID,3)
+
+	Trigger { -- Cunit Calc Break
+		players = {PlayerID},
+		conditions = { 
+			Label(0);
+			Conditions,
+		}, 
+		actions = {
+			SetCtrigX("X","X",0x4,0,SetTo,"X",EXCC_Index+1,0,0,0);
+			SetCtrigX("X",EXCC_Index+1,0x158,0,SetTo,"X","X",0x4,1,0);
+			SetCtrigX("X",EXCC_Index+1,0x15C,0,SetTo,"X","X",0,0,1);
+			Actions,
+		},
+		flag = {preserved}
+	}	
+end
+
+function EXCC_End()
+	EXCC_Index = nil
+	EXCC_Player = nil
+	EXCC_initArr = {}
+	EXCC_TempHeader = nil
+end
+	
+function Install_BackupCP(Player)
+	BackupCp = CreateVar(Player)
+	SaveCp_CallIndex = SetCallForward()
+	SetCall(Player)
+		SaveCp(Player,BackupCp)
+	SetCallEnd()
+
+	LoadCp_CallIndex = SetCallForward()
+	SetCall(Player)
+		LoadCp(Player,BackupCp)
+		SetRecoverCp()
+	SetCallEnd()
+
+	function f_SaveCp()
+		CallTrigger(Player,SaveCp_CallIndex,nil)
+	end
+	function f_LoadCp()
+		CallTrigger(Player,LoadCp_CallIndex,nil)
+	end
+end
