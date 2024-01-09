@@ -1,4 +1,4 @@
-function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Θ-A))
+function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(��-A))
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
 		CS_InputError()
@@ -74,7 +74,7 @@ function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) 
 	return Shape	
 end
 
-function CSMakeSpiralX(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Θ-A))
+function CSMakeSpiralX(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(��-A))
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
 		CS_InputError()

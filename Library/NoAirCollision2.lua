@@ -1,4 +1,4 @@
--- Artanis´ÔÀÇ noAirCollision.lua¿¡ PlayerId ³ÖÀº ¹öÁ¯
+-- Artanisë‹˜ì˜ noAirCollision.luaì— PlayerId ë„£ì€ ë²„ì ¼
 
 function NoAirCollision(PlayerID)
 Trigger {

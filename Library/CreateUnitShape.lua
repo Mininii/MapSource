@@ -2,7 +2,7 @@
 
 
 
--- ¡é Prev functions (v1.0) ---------------------------------------------------------------------------------------------------------------------
+-- â†“ Prev functions (v1.0) ---------------------------------------------------------------------------------------------------------------------
 
 function CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve)
     local LocId,PLocId = ConvertLocation(LocId)

@@ -44,12 +44,12 @@ end
 ---@param Str? string
 ---@return string
 function StrDesign(Str)
-	return "\x07¡º "..Str.." \x07¡»"
+	return "\x07ã€ "..Str.." \x07ã€"
 end
 ---@param Str? string
 ---@return string
 function StrDesignX(Str)
-	return "\x13\x07¡º "..Str.." \x07¡»"
+	return "\x13\x07ã€ "..Str.." \x07ã€"
 end
 function RotatePlayer(Print,Players,RecoverCP)
 	return CopyCpAction(Print,Players,RecoverCP)
@@ -666,8 +666,8 @@ function Install_BGMSystem(Player,MaxPlayers,BGMTypeV,DeathUnit,ObConFlag,BGMSki
 for i = 128, 131 do
 	CIf(InitBGMP,{LocalPlayerID(i)})
 	CIfX(InitBGMP,{Memory(0x596A44, Exactly, 65536),CD(ObCcode1,0)})
-	TriggerX(InitBGMP,{CD(ObCcode2,0),CD(ObCcode1,0)},{SetCD(ObCcode2,1),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04°üÀüÀÚ ºê±İÀ» OffÇß½À´Ï´Ù."),4),SetCp(InitBGMP)},{preserved})
-	TriggerX(InitBGMP,{CD(ObCcode2,1),CD(ObCcode1,0)},{SetCD(ObCcode2,0),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04°üÀüÀÚ ºê±İÀ» OnÇß½À´Ï´Ù."),4),SetCp(InitBGMP)},{preserved})
+	TriggerX(InitBGMP,{CD(ObCcode2,0),CD(ObCcode1,0)},{SetCD(ObCcode2,1),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04ê´€ì „ì ë¸Œê¸ˆì„ Offí–ˆìŠµë‹ˆë‹¤."),4),SetCp(InitBGMP)},{preserved})
+	TriggerX(InitBGMP,{CD(ObCcode2,1),CD(ObCcode1,0)},{SetCD(ObCcode2,0),SetCD(ObCcode1,1),SetCp(i),PlayWAV("staredit\\wav\\button3.wav"),DisplayText(StrDesign("\x04ê´€ì „ì ë¸Œê¸ˆì„ Oní–ˆìŠµë‹ˆë‹¤."),4),SetCp(InitBGMP)},{preserved})
 	CElseIfX({Memory(0x596A44, Exactly, 65536)},SetCD(ObCcode1,1))
 	CElseX(SetCD(ObCcode1,0))
 	CIfXEnd()
@@ -688,7 +688,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
 			table.insert(X,CVar(InitBGMP,LevelT[2],AtLeast,BGMArr[i][4][1]))
 			table.insert(X,CVar(InitBGMP,LevelT[2],AtMost,BGMArr[i][4][2]))
 		end
-		Trigger { -- ºê±İ?????? j??
+		Trigger { -- ë¸Œê¸ˆ?????? j??
 			players = {InitBGMP},
 			conditions = {
 				Label(0);
@@ -705,7 +705,7 @@ CIfX(InitBGMP,Deaths(CurrentPlayer,AtMost,0,DeathUnit))
 	end
 CElseX()
 if BGMSkipSEFlag == nil then
-Trigger { -- ºê±İ????????? ??????
+Trigger { -- ë¸Œê¸ˆ????????? ??????
 	players = {InitBGMP},
 		actions = {
 		PlayWAV("staredit\\wav\\BGM_Skip.ogg");
@@ -728,7 +728,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 		end
 
 		if ObConFlag~=nil then
-			Trigger { -- ºê±İ?????? j??
+			Trigger { -- ë¸Œê¸ˆ?????? j??
 				players = {InitBGMP},
 				conditions = {
 					Label(0);
@@ -745,7 +745,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 				},
 			}
 			if BGMSkipSEFlag == nil then
-			Trigger { -- ºê±İ?????? j??
+			Trigger { -- ë¸Œê¸ˆ?????? j??
 				players = {InitBGMP},
 				conditions = {
 					Label(0);
@@ -759,7 +759,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 				},
 			}
 			end
-			Trigger { -- ºê±İ?????? j??
+			Trigger { -- ë¸Œê¸ˆ?????? j??
 				players = {InitBGMP},
 				conditions = {
 					Label(0);
@@ -773,7 +773,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 			}
 
 		else
-			Trigger { -- ºê±İ?????? j??
+			Trigger { -- ë¸Œê¸ˆ?????? j??
 				players = {InitBGMP},
 				conditions = {
 					Label(0);
@@ -795,7 +795,7 @@ CIfX(InitBGMP,Deaths(InitBGMP,AtMost,0,DeathUnit))
 	end
 CElseX()
 if BGMSkipSEFlag == nil then
-Trigger { -- ºê±İ????????? ?????? ????????
+Trigger { -- ë¸Œê¸ˆ????????? ?????? ????????
 	players = {InitBGMP},
 	conditions = {
 	},
@@ -848,12 +848,12 @@ function IBGM_EPD(Player,MaxPlayer,Option_NT,BGMDeathsT)
 
 	for j, k in pairs(BGMDeathsT) do
 		for i = 0, MaxPlayer do
-			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,DtP,k,0xFFFFFF)},1) -- ºê±İÅ¸ÀÌ¸Ó
-			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- ºê±İÅ¸ÀÌ¸Ó
+			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,DtP,k,0xFFFFFF)},1) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
+			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
 		end
 		CDoActions(Player,{TSetDeathsX(Player,Subtract,DtP,k,0xFFFFFF),
 		SetDeathsX(Player,SetTo,0,k,0xFF000000),
-		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- ºê±İÅ¸ÀÌ¸Ó
+		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
 	end
 end
 
@@ -949,7 +949,7 @@ function _0DPatchX(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 	NWhileEnd()
 end
 
-function ConvertLocation(Location) -- ·ÎÄÉÀÌ¼Ç ÀÎµ¦½º º¯È¯ÇÔ¼ö. TempLocID´Â 0ºÎÅÍ ½ÃÀÛ, LocationÀº 1ºÎÅÍ ½ÃÀÛÇÏ´Â ÀÎµ¦½º¸¦ ¹İÈ¯ÇÔ. ¹®ÀÚ¿­ ÀÔ·Â °¡´É
+function ConvertLocation(Location) -- ë¡œì¼€ì´ì…˜ ì¸ë±ìŠ¤ ë³€í™˜í•¨ìˆ˜. TempLocIDëŠ” 0ë¶€í„° ì‹œì‘, Locationì€ 1ë¶€í„° ì‹œì‘í•˜ëŠ” ì¸ë±ìŠ¤ë¥¼ ë°˜í™˜í•¨. ë¬¸ìì—´ ì…ë ¥ ê°€ëŠ¥
 	local TempLocID = Location
 	if type(Location) == "string" then
 		TempLocID = ParseLocation(Location)-1
@@ -1080,7 +1080,7 @@ function Install_TMemoryBW(PlayerID)
 	
 end
 
-function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ¾È¾²°Å³ª ÀÚÁÖ ¹Ù²î´Â ·ÎÄÉÀÌ¼Ç, TempUnit = ¾È¾²´Â À¯´Ö. Unused °¡´É ¾Æ¸¶?
+function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ì•ˆì“°ê±°ë‚˜ ìì£¼ ë°”ë€ŒëŠ” ë¡œì¼€ì´ì…˜, TempUnit = ì•ˆì“°ëŠ” ìœ ë‹›. Unused ê°€ëŠ¥ ì•„ë§ˆ?
 	GLocC = 1
 	local TempLocID, TempLoc = ConvertLocation(TempLoc)
 	local PlayerID = TriggerPlayer
@@ -1108,7 +1108,7 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = ¾È¾²°Å³ª À
 
 		Simple_SetLocX(PlayerID,DestLocId,RetX,RetY,RetX,RetY)
 	end
-	function SetLocCenter2(Location) -- TempLoc¸¦ LocationÀ¸·Î ÀÌµ¿½ÃÅ°±â¸¸ ÇÔ. CallÀÌ ÇÊ¿ä¾øÀ½. TempLoc¸¸ »ç¿ëÇØµµ µÉ °æ¿ì ÀÌ°É ½áµµ µÊ
+	function SetLocCenter2(Location) -- TempLocë¥¼ Locationìœ¼ë¡œ ì´ë™ì‹œí‚¤ê¸°ë§Œ í•¨. Callì´ í•„ìš”ì—†ìŒ. TempLocë§Œ ì‚¬ìš©í•´ë„ ë  ê²½ìš° ì´ê±¸ ì¨ë„ ë¨
 	
 		local Location2, Location = ConvertLocation(Location)
 		DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
@@ -1403,14 +1403,14 @@ function Include_Conv_CPosXY(Player,MapSize)
 end
 
 
----@param UnitPtr? table -- º¸½º À¯´ÖÀÇ EPD°¡ ´ã±ä ÁÖ¼Ò
----@param UnitHPRetV? table -- º¸½º À¯´ÖÀÇ È®Àå HP¸¦ ¸®ÅÏ¹Ş´Â V/VA
----@param Preset? table -- 6°³ÀÇ ÇÁ¸®¼Â ÀÔ·Â°ø°£. {} ÇüÅÂ·Î ÀÔ·Â
----@param CAfunc? string -- º¸½º ÆĞÅÏ µîÀÇ CAFunc ÀÔ·Â°ø°£. CB[3]ÀÌ 1ÀÌ»óÀÏ °æ¿ì ÇØ´ç ÇÔ¼ö°¡ ÀÛµ¿µÇÁö ¾ÊÀ½
----@param PlayerID? number -- Æ®¸®°Å ÇÃ·¹ÀÌ¾î
----@param Condition? table -- CABoss ¹ßµ¿ Á¶°Ç
----@param Action? table -- Á¶°ÇÀÌ ¸¸Á·µÉ¶§ ½ÇÇàÇÒ ¾×¼Ç
----@return table,table -- ÇØ´çÇÔ¼öÀÇ ¸®ÅÏ°ª = CA,CB
+---@param UnitPtr? table -- ë³´ìŠ¤ ìœ ë‹›ì˜ EPDê°€ ë‹´ê¸´ ì£¼ì†Œ
+---@param UnitHPRetV? table -- ë³´ìŠ¤ ìœ ë‹›ì˜ í™•ì¥ HPë¥¼ ë¦¬í„´ë°›ëŠ” V/VA
+---@param Preset? table -- 6ê°œì˜ í”„ë¦¬ì…‹ ì…ë ¥ê³µê°„. {} í˜•íƒœë¡œ ì…ë ¥
+---@param CAfunc? string -- ë³´ìŠ¤ íŒ¨í„´ ë“±ì˜ CAFunc ì…ë ¥ê³µê°„. CB[3]ì´ 1ì´ìƒì¼ ê²½ìš° í•´ë‹¹ í•¨ìˆ˜ê°€ ì‘ë™ë˜ì§€ ì•ŠìŒ
+---@param PlayerID? number -- íŠ¸ë¦¬ê±° í”Œë ˆì´ì–´
+---@param Condition? table -- CABoss ë°œë™ ì¡°ê±´
+---@param Action? table -- ì¡°ê±´ì´ ë§Œì¡±ë ë•Œ ì‹¤í–‰í•  ì•¡ì…˜
+---@return table,table -- í•´ë‹¹í•¨ìˆ˜ì˜ ë¦¬í„´ê°’ = CA,CB
 function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_LHPData)
 	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
 	local FP = PlayerID
@@ -1446,23 +1446,23 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 	end
 	CB = CreateVarArr(9,PlayerID)
 
-	--ÀÌÇÏ ÇÁ¸®¼Â
-	--Preset[1] = PattNum -- ½ÃÀÛ ÆĞÅÏ ³Ñ¹ö °áÁ¤. 0¿¡¼­ ½ÃÀÛ½Ã nilÀÔ·ÂÇØµµµÊ
-	--Preset[2] = initPattT -- º¸½º ¼ÒÈ¯ ÈÄ ÀÛµ¿ ´ë±â½Ã°£. 1ÇÁ·¹ÀÓ ´ÜÀ§
-	--Preset[3] = Lock type -- º¸½º¸¦ °íÁ¤½ÃÅ³Áö °áÁ¤ÇÔ. 1 ÀÔ·Â½Ã ºÎºĞ°íÁ¤µÊ(¹Ì¼¼ÇÏ°Ô ÀÌµ¿ÇÔ). ¸¶¸°, °í½ºÆ®·ù ¸ğµÎ »ç¿ë°¡´É. ´Ü, 2 ÀÌ»ó ÀÔ·Â½Ã ¿ÏÀü°íÁ¤µÇ´Âµ¥ ÃÖ°í¼Óµµ, °¡¼Óµµ Á¶ÀÛ½Ã Æ¨±è
-	--Preset[4] = initHP -- ÃÊ±â HP ÀÔ·Â(½ÇÁ¦°ªÀº MaxHP + InitHP)
-	--Preset[5] = MaxHP -- ¹«Àû»óÅÂ·Î ¸¸µé¶§ ÃÖ´ëÃ¼·Â°ª. ¸¶¸° °ø°İ·ÂÀÌ ³Ê¹« ³ôÀ» °æ¿ì 800¸¸ÂëÀ¸·Î Àâ¾ÆÁà¾ßµÊ
-	--Preset[6] = ExtendHPFlag -- È®Àå Ã¼·Â ±â´É »ç¿ë ¿©ºÎ. 1ÀÏ °æ¿ì »ç¿ë¾ÈÇÔ
-	-- ÀÌÇÏ ³»ºÎº¯¼ö
-	--CB[1] = Unused -- »ç¿ë¾ÈµÊ. »ç¿ëÀÚ°¡ ÀÚÀ¯·Ó°Ô »ç¿ë °¡´É
-	--CB[2] = ExHP -- ÇöÀç È®ÀåµÈ HP°ªÀÌ ÀúÀåµÈ º¯¼ö. ÀÌ °ªÀ» º¯°æÇÏ¸é Ã¼·ÂÀ» ÀÚÀ¯·Ó°Ô ´Ã·È´Ù ÁÙ¿´´Ù ÇÒ ¼ö ÀÖÀ½. EXCC_LHP µ¥ÀÌÅÍ ÀÔ·Â½Ã ÃÖ´ë 42¾ï±îÁö Ãâ·ÂµÊ(ÀĞ±âÀü¿ë)
-	--CB[3] = PattT -- º¸½º ÀÛµ¿ ´ë±â½Ã°£. ÀÌ °ªÀÌ 1 ÀÌ»óÀÏ °æ¿ì ¹«Àû. 1ÇÁ·¹ÀÓ ´ÜÀ§·Î 1¾¿ °¨¼ÒµÊ
-	--CB[4] = Unused -- EXCC LHP¿ë À¯´Ö ÀÎµ¦½º. EXCC_LHP µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¾ÊÀ» °æ¿ì »ç¿ë¾ÈµÊ
-	--CB[5] = DeathFlag -- Á×¾ùÀ» °æ¿ì ÀÌ °ªÀÌ 1ÀÌ µÊ.
-	--CB[6] = Enable BossKill -- ÀÌ °ªÀÌ 0ÀÏ °æ¿ì º¸½º¸¦ Á×ÀÏ¼ö ÀÖ´Â »óÅÂ°¡ µÊ. ¾ÆÁ÷ Á×ÀÌ±â ½ÈÀ»¶§ ÀÌ °ªÀ» 1·Î ¹Ù²Ù¸é µÊ
-	--CB[7] = Temp -- ³»ºÎ »ç¿ë º¯¼ö. »ç¿ëÀÚ°¡ °ª º¯°æ ±İÁö
-	--CB[8] = Temp -- ³»ºÎ »ç¿ë º¯¼ö. »ç¿ëÀÚ°¡ °ª º¯°æ ±İÁö
-	--CB[9] = Unused -- EXCC LHP¿ë °è»êTempV. EXCC_LHP µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¾ÊÀ» °æ¿ì »ç¿ë¾ÈµÊ
+	--ì´í•˜ í”„ë¦¬ì…‹
+	--Preset[1] = PattNum -- ì‹œì‘ íŒ¨í„´ ë„˜ë²„ ê²°ì •. 0ì—ì„œ ì‹œì‘ì‹œ nilì…ë ¥í•´ë„ë¨
+	--Preset[2] = initPattT -- ë³´ìŠ¤ ì†Œí™˜ í›„ ì‘ë™ ëŒ€ê¸°ì‹œê°„. 1í”„ë ˆì„ ë‹¨ìœ„
+	--Preset[3] = Lock type -- ë³´ìŠ¤ë¥¼ ê³ ì •ì‹œí‚¬ì§€ ê²°ì •í•¨. 1 ì…ë ¥ì‹œ ë¶€ë¶„ê³ ì •ë¨(ë¯¸ì„¸í•˜ê²Œ ì´ë™í•¨). ë§ˆë¦°, ê³ ìŠ¤íŠ¸ë¥˜ ëª¨ë‘ ì‚¬ìš©ê°€ëŠ¥. ë‹¨, 2 ì´ìƒ ì…ë ¥ì‹œ ì™„ì „ê³ ì •ë˜ëŠ”ë° ìµœê³ ì†ë„, ê°€ì†ë„ ì¡°ì‘ì‹œ íŠ•ê¹€
+	--Preset[4] = initHP -- ì´ˆê¸° HP ì…ë ¥(ì‹¤ì œê°’ì€ MaxHP + InitHP)
+	--Preset[5] = MaxHP -- ë¬´ì ìƒíƒœë¡œ ë§Œë“¤ë•Œ ìµœëŒ€ì²´ë ¥ê°’. ë§ˆë¦° ê³µê²©ë ¥ì´ ë„ˆë¬´ ë†’ì„ ê²½ìš° 800ë§Œì¯¤ìœ¼ë¡œ ì¡ì•„ì¤˜ì•¼ë¨
+	--Preset[6] = ExtendHPFlag -- í™•ì¥ ì²´ë ¥ ê¸°ëŠ¥ ì‚¬ìš© ì—¬ë¶€. 1ì¼ ê²½ìš° ì‚¬ìš©ì•ˆí•¨
+	-- ì´í•˜ ë‚´ë¶€ë³€ìˆ˜
+	--CB[1] = Unused -- ì‚¬ìš©ì•ˆë¨. ì‚¬ìš©ìê°€ ììœ ë¡­ê²Œ ì‚¬ìš© ê°€ëŠ¥
+	--CB[2] = ExHP -- í˜„ì¬ í™•ì¥ëœ HPê°’ì´ ì €ì¥ëœ ë³€ìˆ˜. ì´ ê°’ì„ ë³€ê²½í•˜ë©´ ì²´ë ¥ì„ ììœ ë¡­ê²Œ ëŠ˜ë ¸ë‹¤ ì¤„ì˜€ë‹¤ í•  ìˆ˜ ìˆìŒ. EXCC_LHP ë°ì´í„° ì…ë ¥ì‹œ ìµœëŒ€ 42ì–µê¹Œì§€ ì¶œë ¥ë¨(ì½ê¸°ì „ìš©)
+	--CB[3] = PattT -- ë³´ìŠ¤ ì‘ë™ ëŒ€ê¸°ì‹œê°„. ì´ ê°’ì´ 1 ì´ìƒì¼ ê²½ìš° ë¬´ì . 1í”„ë ˆì„ ë‹¨ìœ„ë¡œ 1ì”© ê°ì†Œë¨
+	--CB[4] = Unused -- EXCC LHPìš© ìœ ë‹› ì¸ë±ìŠ¤. EXCC_LHP ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ì•Šì„ ê²½ìš° ì‚¬ìš©ì•ˆë¨
+	--CB[5] = DeathFlag -- ì£½ì—‡ì„ ê²½ìš° ì´ ê°’ì´ 1ì´ ë¨.
+	--CB[6] = Enable BossKill -- ì´ ê°’ì´ 0ì¼ ê²½ìš° ë³´ìŠ¤ë¥¼ ì£½ì¼ìˆ˜ ìˆëŠ” ìƒíƒœê°€ ë¨. ì•„ì§ ì£½ì´ê¸° ì‹«ì„ë•Œ ì´ ê°’ì„ 1ë¡œ ë°”ê¾¸ë©´ ë¨
+	--CB[7] = Temp -- ë‚´ë¶€ ì‚¬ìš© ë³€ìˆ˜. ì‚¬ìš©ìê°€ ê°’ ë³€ê²½ ê¸ˆì§€
+	--CB[8] = Temp -- ë‚´ë¶€ ì‚¬ìš© ë³€ìˆ˜. ì‚¬ìš©ìê°€ ê°’ ë³€ê²½ ê¸ˆì§€
+	--CB[9] = Unused -- EXCC LHPìš© ê³„ì‚°TempV. EXCC_LHP ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ì•Šì„ ê²½ìš° ì‚¬ìš©ì•ˆë¨
 	local TempV1 = CreateVar(FP)
 	local TempV2 = CreateVar(FP)
 	local TempW2 = CreateWar(FP)
@@ -1523,7 +1523,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 	end
 
 
-		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--»ì¾ÆÀÖ´Â°æ¿ì
+		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--ì‚´ì•„ìˆëŠ”ê²½ìš°
 		
 			if EXCC_LHPData~=nil then
 				CTrigger(PlayerID,{CV(CB[6],1,AtLeast),CV(CB[2],Preset[5],AtMost)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
@@ -1597,14 +1597,14 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action,EXCC_
 					CABossTempV2 = TempV2
 					CABossLHPData=EXCC_LHPData
 				end
-				if CAfunc ~= nil then -- ÆĞÅÏÀÛ¼º´Ü¶ô
+				if CAfunc ~= nil then -- íŒ¨í„´ì‘ì„±ë‹¨ë½
 					_G[CAfunc]()
 				end
-			CElseX({SubV(CB[3],1)})--ÆĞÅÏÅ¸ÀÌ¸Ó 1ÀÌ»óÀÏ °æ¿ì ¹«Àû, ÆĞÅÏÀÛµ¿Á¤Áö
+			CElseX({SubV(CB[3],1)})--íŒ¨í„´íƒ€ì´ë¨¸ 1ì´ìƒì¼ ê²½ìš° ë¬´ì , íŒ¨í„´ì‘ë™ì •ì§€
 			CIfXEnd()
 	-------------------------------------------------------------------------
 
-		CElseX() -- Á×Àº°æ¿ì
+		CElseX() -- ì£½ì€ê²½ìš°
 			CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
 		CIfXEnd()
 	CIfEnd()
@@ -1632,8 +1632,8 @@ end
 
 function TStruct_init(PlayerID,Number,Line,HumanPlayersArr)
 	if Line>= 56 then PushErrorMsg("TStruct Line Overflow") end
-	local TStr_SendErrT = "\x07¡º \x08ERROR \x04: Trigger Struct ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	local StartIndex = FuncAlloc -- FuncAlloc¿¡¼­ ¶óº§ ¹Ş¾Æ¿È
+	local TStr_SendErrT = "\x07ã€ \x08ERROR \x04: Trigger Struct ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	local StartIndex = FuncAlloc -- FuncAllocì—ì„œ ë¼ë²¨ ë°›ì•„ì˜´
 	FuncAlloc = FuncAlloc + 1
 	local VarArr = CreateVarArr(Line,PlayerID)
 	local InputH = CreateVar(PlayerID)
@@ -1761,7 +1761,7 @@ function TSetTSLine(Line,Type,Value,Mask)
 	return TSetCVar(TS_Player, TS_VarArr[Line][2], Type, Value, Mask)
 end
 
-function TS_Send(Condition,TStructData,SendProperty,PreserveFlag)--»ó¼ö¸¸ ÀÔ·ÂÇÏ°í ½ÍÀ»¶§
+function TS_Send(Condition,TStructData,SendProperty,PreserveFlag)--ìƒìˆ˜ë§Œ ì…ë ¥í•˜ê³  ì‹¶ì„ë•Œ
 	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
 	local TStr_PlayerID = TStructData[1]
 	local TStr_SendVarArr = TStructData[8]
@@ -1778,7 +1778,7 @@ function TS_Send(Condition,TStructData,SendProperty,PreserveFlag)--»ó¼ö¸¸ ÀÔ·ÂÇÏ
 	CallTriggerX(TStr_PlayerID,TStr_SendCallIndex,Condition,TStr_SendArr,PreserveFlag)
 
 end
-function TS_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- º¯¼ö V ¸¦ ÀÔ·ÂÇÏ°í ½ÍÀ»¶§(Áß°£¿¬»êÀÚ, ´Ù¸¥ µ¥ÀÌÅÍÇü µî ÀÔ·Â½Ã ¹ö±×³²)
+function TS_SendX(Condition,TStructData,SendProperty,PreserveFlag) -- ë³€ìˆ˜ V ë¥¼ ì…ë ¥í•˜ê³  ì‹¶ì„ë•Œ(ì¤‘ê°„ì—°ì‚°ì, ë‹¤ë¥¸ ë°ì´í„°í˜• ë“± ì…ë ¥ì‹œ ë²„ê·¸ë‚¨)
 	if type(SendProperty) ~= "table" then PushErrorMsg("SendProperty InputData Error") end
 	local TStr_PlayerID = TStructData[1]
 	local TStr_SendVarArr = TStructData[8]
@@ -1818,10 +1818,10 @@ function TestSet(val)
 	end
 end
 
-function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿­ ±¸¼ºÇÏ±â
-	local HeaderV = CreateVar(Player) -- Çì´õ°¡ ÀúÀåµÈ V
-	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- ±¸Á¶¿ÀÇÁ¼Â È®Àå º¯¼ö TempV
-	local Index = FuncAlloc -- FuncAlloc¿¡¼­ ¶óº§ ¹Ş¾Æ¿È
+function Install_EXCC(Player,ArrSize,ResetFlag) -- í™•ì¥ êµ¬ì¡°ì˜¤í”„ì…‹ ë‹¨ë½ ì „ìš© ë°°ì—´ êµ¬ì„±í•˜ê¸°
+	local HeaderV = CreateVar(Player) -- í—¤ë”ê°€ ì €ì¥ëœ V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- êµ¬ì¡°ì˜¤í”„ì…‹ í™•ì¥ ë³€ìˆ˜ TempV
+	local Index = FuncAlloc -- FuncAllocì—ì„œ ë¼ë²¨ ë°›ì•„ì˜´
 	FuncAlloc = FuncAlloc + 3
 	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 	local EXCUnitArr = {}
@@ -1831,13 +1831,13 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 
 	if ResetFlag ~= nil then
 		if type(ResetFlag) == "number" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”
 			for i = 1, #EXCunitTemp do
 				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
 			end
 			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		elseif type(ResetFlag) == "table" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí(Å¸ÀÌ¸Óor°ªÃÊ±âÈ­ µî)
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”(íƒ€ì´ë¨¸orê°’ì´ˆê¸°í™” ë“±)
 			for i = 1, #EXCunitTemp do
 				if ResetFlag[i]~= nil then
 					if type(ResetFlag[i]) == "table" then
@@ -1868,35 +1868,35 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
 	end
 end
-function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
 
-function Set_EXCC(Line,Type,Value) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª X
+function Set_EXCC(Line,Type,Value) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’ X
 	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
 end
-function Set_EXCCX(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’
 	if Mask == nil then Mask = 0xFFFFFFFF end
 	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
 end
 
 
-function TCond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function TCond_EXCC(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TCVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
 end
-function Cond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
 end
-function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
-function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§. TTORÀü¿ë
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ. TTORì „ìš©
 	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
 EXCC_initArr = {}
@@ -1934,7 +1934,7 @@ function EXCC_Part1(EXCC_init,Actions)
 	}	
 	
 end
--- NJump Trig »ğÀÔ ºÎºĞ (Á¶°Ç¸¸Á·½Ã Jump)
+-- NJump Trig ì‚½ì… ë¶€ë¶„ (ì¡°ê±´ë§Œì¡±ì‹œ Jump)
 function EXCC_Part2()
 	PlayerID = EXCC_Player
 	PlayerID = PlayerConvert(PlayerID)

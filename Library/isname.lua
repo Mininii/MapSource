@@ -121,7 +121,7 @@ RegisterSetDeathsHook(function(Player, Modifier, Number, Unit)
             local b1 = math.floor((Number % 65536) / 256)
             local b2 = math.floor((Number % 16777216) / 65536)
             local b3 = math.floor(Number / 16777216)
-            return "setname(".. p .. ", Å¸ÀÔ=" .. DecodeType(b0) .. ", Á¾Á·=" .. DecodeRace(b1) .. ", Æ÷½º=" .. b2 .. ', Ã¹±ÛÀÚ="' .. string.char(b3) .. '"); '
+            return "setname(".. p .. ", íƒ€ì…=" .. DecodeType(b0) .. ", ì¢…ì¡±=" .. DecodeRace(b1) .. ", í¬ìŠ¤=" .. b2 .. ', ì²«ê¸€ì="' .. string.char(b3) .. '"); '
         else
             local letter = structure - 10
             local b = {}
@@ -193,7 +193,7 @@ RegisterDeathsHook(function(Player, Modifier, Number, Unit)
             local b1 = math.floor((Number % 65536) / 256)
             local b2 = math.floor((Number % 16777216) / 65536)
             local b3 = math.floor(Number / 16777216)
-            return "isname(".. p .. ", Å¸ÀÔ=" .. DecodeType(b0) .. ", Á¾Á·=" .. DecodeRace(b1) .. ", Æ÷½º=" .. b2 .. ', Ã¹±ÛÀÚ="' .. string.char(b3) .. '"); '
+            return "isname(".. p .. ", íƒ€ì…=" .. DecodeType(b0) .. ", ì¢…ì¡±=" .. DecodeRace(b1) .. ", í¬ìŠ¤=" .. b2 .. ', ì²«ê¸€ì="' .. string.char(b3) .. '"); '
         else
             local letter = structure - 10
             local b = {}

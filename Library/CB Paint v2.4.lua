@@ -4,15 +4,15 @@
 -- CSMake : Polygon(X) / Star(X) / Line(X) / Circle(X) / Path(X) / GraphX,Y,R,A,T /
 -- CS_ : MirrorX,Y,R,A / Kaleidoscope(X) / Rotate(3D) / Overlap / Merge / Intersect / Subtract / CropXY,RA,Path / InvertXY,RA / RemoveStack / MoveXY,RA / RatioXY,RA / Reverse, Shuffle, Convert(Order), Add / CheckXY,RA,Path,Stack,Collide / FillXY,RA,HX,RD,PathXY,PathRA,PathHX,PathRD / Vector2D
 -- CSPlot : Plot / PlotOrder / Plotwithproperties / PlotOrderwithproperties / PlotAct / PlotActwithproperties
--- CSSave : Save / SaveWithName / SaveInit(√ ±‚»≠) / Load
+-- CSSave : Save / SaveWithName / SaveInit(Ï¥àÍ∏∞Ìôî) / Load
 -- Shape Packet : < Total Number, <X1,Y1> , <X2,Y2> , ... > 
 -- 0 degree = 12'o Clock Direction -> Clockwise (+) 
 
 -- CSMake Functions : Input -> Shape ---------------------------------------------------------------
--- Path : ¡° ¡˝«’ (Path)
--- Polygon : ¡§¥Ÿ∞¢«¸ / Circle : ø¯«¸
--- Star : ¡§¥Ÿ∞¢∫∞ (SA) / Line : ¥ŸπÊ«‚ ¡˜º±
--- GrpahX,Y,R,A,T : y=f(x), x=f(y), a=f(r), r=f(a), (x(t),y(t)) µÓ∞£∞› ±◊∑°«¡ (Path) 
+-- Path : Ï†ê ÏßëÌï© (Path)
+-- Polygon : Ï†ïÎã§Í∞ÅÌòï / Circle : ÏõêÌòï
+-- Star : Ï†ïÎã§Í∞ÅÎ≥Ñ (SA) / Line : Îã§Î∞©Ìñ• ÏßÅÏÑ†
+-- GrpahX,Y,R,A,T : y=f(x), x=f(y), a=f(r), r=f(a), (x(t),y(t)) Îì±Í∞ÑÍ≤© Í∑∏ÎûòÌîÑ (Path) 
 
 function CSMakePath(PathData,...)
 	if type(PathData[2]) == "number" then
@@ -723,7 +723,7 @@ function CSMakeGraphX(Ratio,funcY,Start,Direction,StepSize,StepRange,Number)
 		CS_InputError()
 	end
 	StepSize = StepSize^2
-	local ER = StepSize*0.05 -- ø¿¬˜ «—∞Ë < 5%
+	local ER = StepSize*0.05 -- Ïò§Ï∞® ÌïúÍ≥Ñ < 5%
 	NX = Start
 	NY = _G[funcY](NX)
 	table.insert(Shape,{NX*XRatio,NY*YRatio})
@@ -789,7 +789,7 @@ function CSMakeGraphY(Ratio,funcX,Start,Direction,StepSize,StepRange,Number)
 		CS_InputError()
 	end
 	StepSize = StepSize^2
-	local ER = StepSize*0.05 -- ø¿¬˜ «—∞Ë < 5%
+	local ER = StepSize*0.05 -- Ïò§Ï∞® ÌïúÍ≥Ñ < 5%
 	NY = Start
 	NX = _G[funcX](NY)
 	table.insert(Shape,{NX*XRatio,NY*YRatio})
@@ -855,7 +855,7 @@ function CSMakeGraphA(Ratio,funcR,Start,Direction,StepSize,StepRange,Number)
 		CS_InputError()
 	end
 	StepSize = StepSize^2
-	local ER = StepSize*0.05 -- ø¿¬˜ «—∞Ë < 5%
+	local ER = StepSize*0.05 -- Ïò§Ï∞® ÌïúÍ≥Ñ < 5%
 	NA = Start
 	NR = _G[funcR](NA)
 	NX = NR*math.cos(NA)
@@ -925,7 +925,7 @@ function CSMakeGraphR(Ratio,funcA,Start,Direction,StepSize,StepRange,Number)
 		CS_InputError()
 	end
 	StepSize = StepSize^2
-	local ER = StepSize*0.05 -- ø¿¬˜ «—∞Ë < 5%
+	local ER = StepSize*0.05 -- Ïò§Ï∞® ÌïúÍ≥Ñ < 5%
 	NR = Start
 	NA = _G[funcA](NR)
 	NX = NR*math.cos(NA)
@@ -995,7 +995,7 @@ function CSMakeGraphT(Ratio,Parafunc,Start,Direction,StepSize,StepRange,Number)
 		CS_InputError()
 	end
 	StepSize = StepSize^2
-	local ER = StepSize*0.05 -- ø¿¬˜ «—∞Ë < 5%
+	local ER = StepSize*0.05 -- Ïò§Ï∞® ÌïúÍ≥Ñ < 5%
 	NT = Start
 	local Ret = _G[Parafunc](NT)
 	NX = Ret[1]
@@ -1036,10 +1036,10 @@ function CSMakeGraphT(Ratio,Parafunc,Start,Direction,StepSize,StepRange,Number)
 	return Shape
 end
 
--- CS_ Function : Shape -> Shape (Invert¥¬ Subtract∑Œ ªÁøÎ) -------------------------------------------------------------------------------------------------------------------------------------------------------
--- MoveXY,RA : ¡˜±≥¡¬«•,±ÿ¡¬«• ∆Ú«‡¿Ãµø / Rotate(3D) : »∏¿¸(ªÔ¬˜ø¯) / InvertXY, InvertRA : ¡˜±≥¡¬«•,±ÿ¡¬«• π›¿¸ / Shuffle : º¯º≠ º≈«√(OrderShape¿¸øÎ) / CheckXY,RA,Path,Stack,Collide : ¡˜±≥¡¬«•,±ÿ¡¬«•,¿”¿«∞Ê∑Œ,∞„ƒ£∫Œ∫–,≈∏ µµ«¸∞˙¿« √Êµπ√º≈© / Reverse : ø™º¯¿∏∑Œ ¿ÁπËø≠
--- RatioXY, RatioRA : ¡˜±≥¡¬«•, ±ÿ¡¬«• ≈©±‚¡∂¡§ / CropXY, CropRA, CropPath : ¡˜±≥¡¬«•, ±ÿ¡¬«•, ¿”¿«µµ«¸ ø‹∫Œ¿⁄∏£±‚ / FillXY,RA,HX,RD,PathXY,RA,HX,RD : ¡˜±≥¡¬«•, ±ÿ¡¬«•, ¿”¿«µµ«¸ ≥ª∫Œ √§øÏ±‚ / Convert : Number∞° ¥Ÿ∏• Shape∏¶ ºˆø° ∏¬∞‘ ∑£¥˝¿∏∑Œ ∫Ø»Ø / Add : µµ«¸ø° ¡° µ•¿Ã≈Õ √ﬂ∞°
--- RemoveStack : ∞„ƒ£ øµø™ ¡ˆøÏ±‚ / Merge : «’ƒ°±‚ A°˙B / Overlap : ∞„ƒ°±‚ A+B / Intersect : ∞¯≈Îøµø™ A°˚B / Subtract : ª©±‚ A-B / Xor : A•ƒB / MirrorX,Y,R,A : ¡¬øÏ,ªÛ«œ,ø¯,∞¢µµ ¥Îƒ™ / Kaleidoscope(X) : ∏∏»≠∞Ê ¥Îƒ™ (¡¬øÏ(∫Ò)¥Îƒ™) / Vector2D(Polar) : 2D∫§≈Õ(±ÿ¡¬«•)«‘ºˆ ¿ÃπÃ¡ˆ ∫Ø»Ø
+-- CS_ Function : Shape -> Shape (InvertÎäî SubtractÎ°ú ÏÇ¨Ïö©) -------------------------------------------------------------------------------------------------------------------------------------------------------
+-- MoveXY,RA : ÏßÅÍµêÏ¢åÌëú,Í∑πÏ¢åÌëú ÌèâÌñâÏù¥Îèô / Rotate(3D) : ÌöåÏ†Ñ(ÏÇºÏ∞®Ïõê) / InvertXY, InvertRA : ÏßÅÍµêÏ¢åÌëú,Í∑πÏ¢åÌëú Î∞òÏ†Ñ / Shuffle : ÏàúÏÑú ÏÖîÌîå(OrderShapeÏ†ÑÏö©) / CheckXY,RA,Path,Stack,Collide : ÏßÅÍµêÏ¢åÌëú,Í∑πÏ¢åÌëú,ÏûÑÏùòÍ≤ΩÎ°ú,Í≤πÏπúÎ∂ÄÎ∂Ñ,ÌÉÄ ÎèÑÌòïÍ≥ºÏùò Ï∂©ÎèåÏ≤¥ÌÅ¨ / Reverse : Ïó≠ÏàúÏúºÎ°ú Ïû¨Î∞∞Ïó¥
+-- RatioXY, RatioRA : ÏßÅÍµêÏ¢åÌëú, Í∑πÏ¢åÌëú ÌÅ¨Í∏∞Ï°∞Ï†ï / CropXY, CropRA, CropPath : ÏßÅÍµêÏ¢åÌëú, Í∑πÏ¢åÌëú, ÏûÑÏùòÎèÑÌòï Ïô∏Î∂ÄÏûêÎ•¥Í∏∞ / FillXY,RA,HX,RD,PathXY,RA,HX,RD : ÏßÅÍµêÏ¢åÌëú, Í∑πÏ¢åÌëú, ÏûÑÏùòÎèÑÌòï ÎÇ¥Î∂Ä Ï±ÑÏö∞Í∏∞ / Convert : NumberÍ∞Ä Îã§Î•∏ ShapeÎ•º ÏàòÏóê ÎßûÍ≤å ÎûúÎç§ÏúºÎ°ú Î≥ÄÌôò / Add : ÎèÑÌòïÏóê Ï†ê Îç∞Ïù¥ÌÑ∞ Ï∂îÍ∞Ä
+-- RemoveStack : Í≤πÏπú ÏòÅÏó≠ ÏßÄÏö∞Í∏∞ / Merge : Ìï©ÏπòÍ∏∞ A‚à™B / Overlap : Í≤πÏπòÍ∏∞ A+B / Intersect : Í≥µÌÜµÏòÅÏó≠ A‚à©B / Subtract : ÎπºÍ∏∞ A-B / Xor : AŒîB / MirrorX,Y,R,A : Ï¢åÏö∞,ÏÉÅÌïò,Ïõê,Í∞ÅÎèÑ ÎåÄÏπ≠ / Kaleidoscope(X) : ÎßåÌôîÍ≤Ω ÎåÄÏπ≠ (Ï¢åÏö∞(ÎπÑ)ÎåÄÏπ≠) / Vector2D(Polar) : 2DÎ≤°ÌÑ∞(Í∑πÏ¢åÌëú)Ìï®Ïàò Ïù¥ÎØ∏ÏßÄ Î≥ÄÌôò
 
 function CS_MoveXY(Shape,X,Y)
 	if Shape == nil then
@@ -3968,11 +3968,11 @@ function CS_CheckPath(Shape,Path,Outside)
 				l = NY-k*NX 
 			end
 			if GA[j] == k then
-				if GB[j] == l then -- ¿œƒ°
+				if GB[j] == l then -- ÏùºÏπò
 					Check = 1
 					goto CS_CheckPathReset1
 				end
-			else -- ±≥¡° 1∞≥
+			else -- ÍµêÏ†ê 1Í∞ú
 				if GA[j] == "X" then
 					local RY = k*GB[j]+l
 					if GB[j] >= NX and RY >= Domain[j][3] and RY <= Domain[j][4] then
@@ -4100,11 +4100,11 @@ function CS_CropPath(Shape,Path,Outside)
 				l = NY-k*NX 
 			end
 			if GA[j] == k then
-				if GB[j] == l then -- ¿œƒ°
+				if GB[j] == l then -- ÏùºÏπò
 					Check = 1
 					goto CS_CheckPathReset1
 				end
-			else -- ±≥¡° 1∞≥
+			else -- ÍµêÏ†ê 1Í∞ú
 				if GA[j] == "X" then
 					local RY = k*GB[j]+l
 					if GB[j] >= NX and RY >= Domain[j][3] and RY <= Domain[j][4] then
@@ -4689,7 +4689,7 @@ function CS_CropGraphXY(Shape,Ratio,funcXY,Sign,Edge)
 		CS_InputError()
 	end
 	if Edge == nil then
-		Edge = 0 -- = ∆˜«‘
+		Edge = 0 -- = Ìè¨Ìï®
 	end
 	if Sign == nil then
 		Sign = 0 -- 0 : > / 1: <
@@ -4748,7 +4748,7 @@ function CS_CropGraphRA(Shape,Ratio,funcRA,Sign,Edge)
 		CS_InputError()
 	end
 	if Edge == nil then
-		Edge = 0 -- = ∆˜«‘
+		Edge = 0 -- = Ìè¨Ìï®
 	end
 	if Sign == nil then
 		Sign = 0 -- 0 : > / 1: <
@@ -5314,9 +5314,9 @@ function CS_DistortionX(Shape,mulLU,mulLD,mulRU,mulRD,CenterXY,Ufunc,Dfunc,Rfunc
 end
 
 -- CSPlot Function : Shape -> TRIG ---------------------------------------------------------------------------------------------------
--- Plot : ¥‹º¯ Plot / Plotwithproperties : Plotø° Properties √ﬂ∞°
--- PlotAct : PerAction √ﬂ∞° / PlotActwithproperties : PlotActø° Properties √ﬂ∞°
--- PlotOrder : OrderShape √ﬂ∞°, DestLocation ¡ˆ¡§ ∂«¥¬ DestXY ¿‘∑¬ / PlotOrderwithproperties : PlotOrderø° Properties √ﬂ∞°
+-- Plot : Îã®Ïàú Plot / Plotwithproperties : PlotÏóê Properties Ï∂îÍ∞Ä
+-- PlotAct : PerAction Ï∂îÍ∞Ä / PlotActwithproperties : PlotActÏóê Properties Ï∂îÍ∞Ä
+-- PlotOrder : OrderShape Ï∂îÍ∞Ä, DestLocation ÏßÄÏ†ï ÎòêÎäî DestXY ÏûÖÎ†• / PlotOrderwithproperties : PlotOrderÏóê Properties Ï∂îÍ∞Ä
 
 function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,Condition,Action,Preserve)
 	if Shape == nil then
@@ -6392,7 +6392,7 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 	end
 end
 -- CSSave Functions : Shape -> .txt File ---------------------------------------------------------------
--- Save : µµ«¸ µ•¿Ã≈Õ∏¶ FileName.txt∑Œ ¿˙¿Â«‘ / SavewithName : ¿Ã∏ß∞˙ ∞∞¿Ã ¿˙¿Â
+-- Save : ÎèÑÌòï Îç∞Ïù¥ÌÑ∞Î•º FileName.txtÎ°ú Ï†ÄÏû•Ìï® / SavewithName : Ïù¥Î¶ÑÍ≥º Í∞ôÏù¥ Ï†ÄÏû•
 CSSaveInitCheck = 0
 function CSSaveInit()
 	if CSSaveInitCheck == 0 then
@@ -7180,7 +7180,7 @@ function CS_DoubleSortRA(Shape,Thickness,RDirection,ADirection)
 	local SR 
 	local I1, I2, Index
 
-	if RDirection == 0 and ADirection == 0 then -- R¢÷, A¢÷
+	if RDirection == 0 and ADirection == 0 then -- R‚Üó, A‚Üó
 		SR = CS_GetRmin(Shape)
 		RetShape = CS_SortR(Shape,0)
 		local Amin, Temp
@@ -7703,7 +7703,7 @@ function CS_DoubleSortGraph(Shape,funcA,funcB,Thickness,PartShuffle,ADirection,B
 	local SR 
 	local I1, I2
 	local Part = {}
-	if ADirection == 0 and BDirection == 0 then -- R¢÷, A¢÷
+	if ADirection == 0 and BDirection == 0 then -- R‚Üó, A‚Üó
 		SR = RetCalcA[2]
 		local Amin, Temp
 		I1 = 2
@@ -8146,7 +8146,7 @@ function CA_Rotate(Angle)
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
 	STPopTrigArr(PlayerID)
-	if type(Angle) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+	if type(Angle) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 		f_Lengthdir(PlayerID,V(CA[8]),_Mov(Angle),V(CB[5]),V(CB[6])) -- XCos XSin 
 		f_Lengthdir(PlayerID,V(CA[9]),_Mov(Angle),V(CB[7]),V(CB[8])) -- YCos YSin
 	else
@@ -8177,7 +8177,7 @@ function CA_Rotate3D(XYAngle,YZAngle,ZXAngle)
 
 	CMov(PlayerID,V(CB[9]),0) -- Z
 	if XYAngle ~= nil then 
-		if type(XYAngle) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(XYAngle) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[8]),_Mov(XYAngle),V(CA[11]),V(CA[12])) -- XCos XSin 
 			f_Lengthdir(PlayerID,V(CA[9]),_Mov(XYAngle),V(CA[13]),V(CA[14])) -- YCos YSin
 		else
@@ -8189,7 +8189,7 @@ function CA_Rotate3D(XYAngle,YZAngle,ZXAngle)
 	end
 
 	if YZAngle ~= nil then 
-		if type(YZAngle) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(YZAngle) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[9]),_Mov(YZAngle),V(CA[13]),V(CA[14])) -- YCos YSin
 		else
 			f_Lengthdir(PlayerID,V(CA[9]),V(CB[7]),V(CA[13]),V(CA[14])) -- YCos YSin
@@ -8199,7 +8199,7 @@ function CA_Rotate3D(XYAngle,YZAngle,ZXAngle)
 	end
 
 	if ZXAngle ~= nil then 
-		if type(ZXAngle) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(ZXAngle) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[8]),_Mov(ZXAngle),V(CA[11]),V(CA[12])) -- XCos XSin 
 			f_Lengthdir(PlayerID,V(CB[9]),_Mov(ZXAngle),V(CA[13]),V(CA[14])) -- ZCos ZSin
 		else
@@ -8446,23 +8446,23 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -8647,23 +8647,23 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -8891,23 +8891,23 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 			table.insert(OrderAct,SetCVar("X",CC[1],SetTo,0))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -8931,11 +8931,11 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 		CVariable(PlayerID,CAPlotVarAlloc+8)
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+12) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+13)
 		CVariable(PlayerID,CAPlotVarAlloc+14)
@@ -9205,23 +9205,23 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 			table.insert(OrderAct,SetCVar("X",CC[1],SetTo,0))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -9245,11 +9245,11 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		CVariable(PlayerID,CAPlotVarAlloc+8)
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+12) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+13)
 		CVariable(PlayerID,CAPlotVarAlloc+14)
@@ -9477,23 +9477,23 @@ function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CA
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -9696,23 +9696,23 @@ function CAPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -9958,23 +9958,23 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 			table.insert(OrderAct,SetCVar("X",CC[1],SetTo,0))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -9998,11 +9998,11 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 		CVariable(PlayerID,CAPlotVarAlloc+8)
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+12) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+13)
 		CVariable(PlayerID,CAPlotVarAlloc+14)
@@ -10290,23 +10290,23 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 			table.insert(OrderAct,SetCVar("X",CC[1],SetTo,0))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -10330,11 +10330,11 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 		CVariable(PlayerID,CAPlotVarAlloc+8)
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+10,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+10) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+12) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+13)
 		CVariable(PlayerID,CAPlotVarAlloc+14)
@@ -10520,7 +10520,7 @@ DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 	return Ret
 end
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- CXPlot ∑˘ «‘ºˆ
+-- CXPlot Î•ò Ìï®Ïàò
 
 function CXMakeShape(Ratio,PathData,...)
 	local XRatio
@@ -10716,8 +10716,8 @@ function CXMakePolyhedron(Face,Size,Number)
 		Polyhedron = {0}
 		for i = 1, #Cut do
 			local ptr1, ptr2
-			pt1 = Cut[i][1]+1 -- ≤¿¡˛¡°
-			pt2 = Cut[i][2]+1 -- πÿ∏È
+			pt1 = Cut[i][1]+1 -- Íº≠ÏßìÏ†ê
+			pt2 = Cut[i][2]+1 -- Î∞ëÎ©¥
 			local NX, NY, NZ
 			NX = (2*Icosahedron[pt1][1]+Icosahedron[pt2][1])/3
 			NY = (2*Icosahedron[pt1][2]+Icosahedron[pt2][2])/3
@@ -11567,7 +11567,7 @@ function CX_Rotate(RotateX,RotateY,RotateZ)
 		CMov(PlayerID,V(CB[8]),RotateZ)
 	end
 	if RotateX ~= nil then 
-		if type(RotateX) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(RotateX) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[9]),_Mov(RotateX),V(CB[9]),V(CA[12])) -- YCos YSin
 			f_Lengthdir(PlayerID,V(CA[11]),_Mov(RotateX),V(CA[13]),V(CA[14])) -- ZCos ZSin
 		else
@@ -11579,7 +11579,7 @@ function CX_Rotate(RotateX,RotateY,RotateZ)
 	end
 
 	if RotateY ~= nil then 
-		if type(RotateY) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(RotateY) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[8]),_Mov(RotateY),V(CB[9]),V(CA[12])) -- XCos XSin 
 			f_Lengthdir(PlayerID,V(CA[11]),_Mov(RotateY),V(CA[13]),V(CA[14])) -- ZCos ZSin
 		else
@@ -11591,7 +11591,7 @@ function CX_Rotate(RotateX,RotateY,RotateZ)
 	end
 
 	if RotateZ ~= nil then 
-		if type(RotateZ) == "number" then -- Temp Var∞° Angle∑Œ ¿‘∑¬Ω√ _Mov(Angle) ¿‘∑¬«“ ∞ÊøÏ Temp Var∞° √ ±‚»≠µ«æÓ πˆ±◊ πﬂª˝
+		if type(RotateZ) == "number" then -- Temp VarÍ∞Ä AngleÎ°ú ÏûÖÎ†•Ïãú _Mov(Angle) ÏûÖÎ†•Ìï† Í≤ΩÏö∞ Temp VarÍ∞Ä Ï¥àÍ∏∞ÌôîÎêòÏñ¥ Î≤ÑÍ∑∏ Î∞úÏÉù
 			f_Lengthdir(PlayerID,V(CA[8]),_Mov(RotateZ),V(CB[9]),V(CA[12])) -- XCos XSin 
 			f_Lengthdir(PlayerID,V(CA[9]),_Mov(RotateZ),V(CA[13]),V(CA[14])) -- YCos YSin
 		else
@@ -11888,23 +11888,23 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -11982,7 +11982,7 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 			CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 			CAPlotVarAlloc = CAPlotVarAlloc + 7
 			if CXfunc ~= nil then
-				_G[CXfunc]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+				_G[CXfunc]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 			end
 			NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 	-------------------------------------------------------------------------
@@ -12093,23 +12093,23 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -12187,7 +12187,7 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 			CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 			CAPlotVarAlloc = CAPlotVarAlloc + 7
 			if CXfunc ~= nil then
-				_G[CXfunc]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+				_G[CXfunc]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 			end
 			NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 	-------------------------------------------------------------------------
@@ -12300,23 +12300,23 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -12394,7 +12394,7 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 			CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 			CAPlotVarAlloc = CAPlotVarAlloc + 7
 			if CXfunc ~= nil then
-				_G[CXfunc]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+				_G[CXfunc]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 			end
 			NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 	-------------------------------------------------------------------------
@@ -12523,23 +12523,23 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -12617,7 +12617,7 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 			CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 			CAPlotVarAlloc = CAPlotVarAlloc + 7
 			if CXfunc ~= nil then
-				_G[CXfunc]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+				_G[CXfunc]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 			end
 			NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 	-------------------------------------------------------------------------
@@ -12685,7 +12685,7 @@ DoActionsX(PlayerID,SetCVar("X",CA[2],Subtract,1))
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------
--- √ﬂ∞° ∞Ì±ﬁ «‘ºˆ
+-- Ï∂îÍ∞Ä Í≥†Í∏â Ìï®Ïàò
 function CS_Level(Type,Point,Number)
 	if Type == "Polygon" then
 		return Point*(Number*(Number-1))/2 + 1
@@ -13422,24 +13422,24 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 		CBPlotFArrY = PlotArrY
 
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,Preset[5])
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 				CBPlotLoopMaxptr = ptr
 			else
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			end
 		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
 			if type(Preset[5][1]) == "number" then 
@@ -13448,9 +13448,9 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 			end
 			if type(Preset[5][2]) == "number" then 
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
 			CBPlotLoopMaxptr = ptr
 		else
@@ -13458,9 +13458,9 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 				CBPlotLoopMaxptr = ptr
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -13500,7 +13500,7 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 	CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 	CAPlotVarAlloc = CAPlotVarAlloc + 8
 
-	if Prefunc ~= nil then -- CB_Func ªÁøÎ
+	if Prefunc ~= nil then -- CB_Func ÏÇ¨Ïö©
 		_G[Prefunc]()
 	end
 
@@ -13775,24 +13775,24 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 		CBPlotFArrY = PlotArrY
 
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,Preset[5])
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 				CBPlotLoopMaxptr = ptr
 			else
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			end
 		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
 			if type(Preset[5][1]) == "number" then 
@@ -13801,9 +13801,9 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 			end
 			if type(Preset[5][2]) == "number" then 
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
 			CBPlotLoopMaxptr = ptr
 		else
@@ -13811,9 +13811,9 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 				CBPlotLoopMaxptr = ptr
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -13853,7 +13853,7 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 	CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 	CAPlotVarAlloc = CAPlotVarAlloc + 8
 
-	if Prefunc ~= nil then -- CB_Func ªÁøÎ
+	if Prefunc ~= nil then -- CB_Func ÏÇ¨Ïö©
 		_G[Prefunc]()
 	end
 
@@ -14133,24 +14133,24 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		CBPlotFArrY = PlotArrY
 
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,Preset[5])
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 				CBPlotLoopMaxptr = ptr
 			else
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			end
 		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
 			if type(Preset[5][1]) == "number" then 
@@ -14159,9 +14159,9 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 			end
 			if type(Preset[5][2]) == "number" then 
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
 			CBPlotLoopMaxptr = ptr
 		else
@@ -14169,9 +14169,9 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 				CBPlotLoopMaxptr = ptr
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -14202,11 +14202,11 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		CVariable(PlayerID,CAPlotVarAlloc+10)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+11) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+11) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+12,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+12,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+13) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+14)
 		CVariable(PlayerID,CAPlotVarAlloc+15)
@@ -14230,7 +14230,7 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 	CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 	CAPlotVarAlloc = CAPlotVarAlloc + 21
 
-	if Prefunc ~= nil then -- CB_Func ªÁøÎ
+	if Prefunc ~= nil then -- CB_Func ÏÇ¨Ïö©
 		_G[Prefunc]()
 	end
 
@@ -14589,24 +14589,24 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		CBPlotFArrY = PlotArrY
 
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
 			if LoopMax ~= nil then
 				ptr = CreateVar2(PlayerID,nil,nil,Preset[5])
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 				CBPlotLoopMaxptr = ptr
 			else
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			end
 		elseif LoopMax ~= nil and type(Preset[5]) == "table" and #Preset[5] == 2 then
 			if type(Preset[5][1]) == "number" then 
@@ -14615,9 +14615,9 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 			end
 			if type(Preset[5][2]) == "number" then 
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5][2]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
 			CBPlotLoopMaxptr = ptr
 		else
@@ -14625,9 +14625,9 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 				ptr = CreateVar2(PlayerID,nil,nil,1)
 				CBPlotLoopMaxptr = ptr
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,0) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -14658,11 +14658,11 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		CVariable(PlayerID,CAPlotVarAlloc+9)
 		CVariable(PlayerID,CAPlotVarAlloc+10)
 		if type(OrderPreset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+11,"X",SetTo,OrderPreset[1]) -- Selected Order Shape (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+11) -- Selected Order Shape (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+11) -- Selected Order Shape (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+12,"X",SetTo,1) -- Order Cur Index (∞°∫Ø)
+		CVariable2(PlayerID,CAPlotVarAlloc+12,"X",SetTo,1) -- Order Cur Index (Í∞ÄÎ≥Ä)
 		CVariable(PlayerID,CAPlotVarAlloc+13) -- Temp Order Index
 		CVariable(PlayerID,CAPlotVarAlloc+14)
 		CVariable(PlayerID,CAPlotVarAlloc+15)
@@ -14686,7 +14686,7 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 	CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 	CAPlotVarAlloc = CAPlotVarAlloc + 21
 
-	if Prefunc ~= nil then -- CB_Func ªÁøÎ
+	if Prefunc ~= nil then -- CB_Func ÏÇ¨Ïö©
 		_G[Prefunc]()
 	end
 
@@ -15758,7 +15758,7 @@ if FCBDTRNCheck == 1 then
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	Trigger { 
 		players = {IncludePlayer},
@@ -15916,7 +15916,7 @@ if FCBDTRN2Check == 1 then
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	Trigger { 
 		players = {IncludePlayer},
@@ -16040,7 +16040,7 @@ if FCBWARPCheck == 1 then
 	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[19] : CntrX / CV[20] : CntrY
 	-- CV[11] : UFunc Init / CV[12] : UFunc End / CV[13] : DFunc Init / CV[14] : DFunc End / CV[15] : LFunc Init / CV[16] : LFunc End / CV[17] : RFunc Init / CV[18] : RFunc End
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
-	-- CV[29] : XCntr / CV[30] : YCntr / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[29] : XCntr / CV[30] : YCntr / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	Trigger { 
 		players = {IncludePlayer},
 			conditions = {
@@ -17904,7 +17904,7 @@ if FCBSPLTCheck == 1 then
 	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y
 	-- CV[11] : Overwrite / CV[12] : Looper / CV[13] : N / CV[14~15] : Func / CV[16] : CVoid / CV[17] : temp 
 	-- CV[18] : k / CV[19] : Loop+1 / CV[20] : Shape[1]+1 / CV[21] : RetShape[1]
-	Trigger { -- {N,f(i)} : 1~N -> f(i)∏¶ √ﬂ∞°«‘
+	Trigger { -- {N,f(i)} : 1~N -> f(i)Î•º Ï∂îÍ∞ÄÌï®
 		players = {IncludePlayer},
 			conditions = {
 				Label(FCBSPLTAlloc);
@@ -18018,8 +18018,8 @@ function Include_CBPaint()
 	local IncludePlayer = IncludePlayerID
 	FCBPAINTCheck = 1
 
-	local CVoid = f_GetVoidptr(IncludePlayer,0x25C00) -- 64 * 0x970 ∞¯øÎ ∏ﬁ∏∏Æ
-	local CV = CreateVarArr(64,IncludePlayer) -- ∞¯øÎ∫Øºˆ
+	local CVoid = f_GetVoidptr(IncludePlayer,0x25C00) -- 64 * 0x970 Í≥µÏö© Î©îÎ™®Î¶¨
+	local CV = CreateVarArr(64,IncludePlayer) -- Í≥µÏö©Î≥ÄÏàò
 	FCBPAINTCVoid = CVoid
 	FCBPAINTCVArr = CV
 	CBPlotTempArr = CV
@@ -18147,7 +18147,7 @@ function Include_CBPaint()
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	FCBDTRNAlloc = FuncAlloc
 	FCBDTRNCall1 = FuncAlloc
@@ -18160,7 +18160,7 @@ function Include_CBPaint()
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	FCBDTRN2Alloc = FuncAlloc
 	FCBDTRN2Call1 = FuncAlloc
@@ -18171,7 +18171,7 @@ function Include_CBPaint()
 	-- CV[5] : FArrX / CV[6] : FArrY / CV[7] : RFArrX / CV[8] : RFArrY / CV[9] : X / CV[10] : Y / CV[19] : CntrX / CV[20] : CntrY
 	-- CV[11] : UFunc Init / CV[12] : UFunc End / CV[13] : DFunc Init / CV[14] : DFunc End / CV[15] : LFunc Init / CV[16] : LFunc End / CV[17] : RFunc Init / CV[18] : RFunc End
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
-	-- CV[29] : XCntr / CV[30] : YCntr / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin / CV[45] : •ƒX*XCntr / CV[46] : •ƒY*YCntr 
+	-- CV[29] : XCntr / CV[30] : YCntr / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin / CV[45] : ŒîX*XCntr / CV[46] : ŒîY*YCntr 
 	FCBWARPAlloc = FuncAlloc
 	FCBWARPCall1 = FuncAlloc
 	FuncAlloc = FuncAlloc + 5
@@ -20156,7 +20156,7 @@ function CB_Distortion(mulLU,mulLD,mulRU,mulRD,CenterXY,Shape,RetShape)
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒX*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîX*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
@@ -20347,7 +20347,7 @@ function CB_Distortion2(dLU,dLD,dRU,dRD,CenterXY,Shape,RetShape)
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒX*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîX*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
@@ -20538,7 +20538,7 @@ function CB_Warping(Ufunc,Dfunc,Lfunc,Rfunc,CenterXY,Shape,RetShape)
 	-- CV[21] : R1Y / CV[22] : R2Y / CV[23] : R3X / CV[24] : R4X / CV[25] : Xmax / CV[26] : Xmin  / CV[27] : Ymax / CV[28] : Ymin
 	-- CV[29] : XCntr / CV[30] : YCntr / CV[31] : R1Y1 / CV[32] : R1Y2 / CV[33] : R2Y1 / CV[34] : R2Y2 
 	-- CV[35] : R3X1 / CV[36] : R3X2 / CV[37] : R4X1 / CV[38] : R4X2 / CV[39] : Xmax-Xmin / CV[40] : Ymax-Ymin
-	-- CV[41] : R1•ƒY / CV[42] : R2•ƒY / CV[43] : R3•ƒX / CV[44] : R4•ƒX / CV[45] : •ƒX*XCntr / CV[46] : •ƒX*YCntr 
+	-- CV[41] : R1ŒîY / CV[42] : R2ŒîY / CV[43] : R3ŒîX / CV[44] : R4ŒîX / CV[45] : ŒîX*XCntr / CV[46] : ŒîX*YCntr 
 	-- CV[47] : R1k / CV[48] : R2k / CV[49] : R3k / CV[50] : R4k
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
@@ -25130,7 +25130,7 @@ function CB_Split(Preset,Looper,Overwrite,Shape,RetShape)
 	end
 end
 
-function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(•»-A))
+function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Œò-A))
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
 		CS_InputError()
@@ -25206,7 +25206,7 @@ function CSMakeSpiral(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) 
 	return Shape	
 end
 
-function CSMakeSpiralX(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(•»-A))
+function CSMakeSpiralX(Point,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Œò-A))
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
 		CS_InputError()
@@ -25480,7 +25480,7 @@ function CSMakeGraphX2(funcY,Start,Direction,StepLength,Partition,MaxError,Numbe
 			Count = Count + 1
 		end
 
-		-- 2nd Point (°Ó((CX-NX)^2+(CY-NY)^2) °÷ Length)
+		-- 2nd Point (‚àö((CX-NX)^2+(CY-NY)^2) ‚âí Length)
 		if Direction == 0 then -- forward
 			dx = CX-NX
 			sx = CX-NX
@@ -25522,7 +25522,7 @@ function CSMakeGraphX2(funcY,Start,Direction,StepLength,Partition,MaxError,Numbe
 			Count = Count + 1
 		end
 
-		-- 3rd Point ¢≤Part °÷ Length
+		-- 3rd Point ‚àëPart ‚âí Length
 		TY = _G[funcY](TX)
 		NX = TX
 		NY = TY
@@ -25593,7 +25593,7 @@ function CSMakeGraphY2(funcX,Start,Direction,StepLength,Partition,MaxError,Numbe
 			Count = Count + 1
 		end
 
-		-- 2nd Point (°Ó((CY-NY)^2+(CX-NX)^2) °÷ Length)
+		-- 2nd Point (‚àö((CY-NY)^2+(CX-NX)^2) ‚âí Length)
 		if Direction == 0 then -- forward
 			dy = CY-NY
 			sy = CY-NY
@@ -25635,7 +25635,7 @@ function CSMakeGraphY2(funcX,Start,Direction,StepLength,Partition,MaxError,Numbe
 			Count = Count + 1
 		end
 
-		-- 3rd Point ¢≤Part °÷ Length
+		-- 3rd Point ‚àëPart ‚âí Length
 		TX = _G[funcX](TY)
 		NY = TY
 		NX = TX
@@ -25746,7 +25746,7 @@ function CSMakeGraphR2(funcA,Start,Direction,StepLength,StepNumber,Partition,Max
 		end
 		if Alert1 == 1 and CT == nil then Loop1_LimitExceeded() end
 
-		-- 2nd Point ¢≤Part °÷ Length
+		-- 2nd Point ‚àëPart ‚âí Length
 		if Loop2 ~= nil then
 			if Direction == 0 then -- forward
 				dt = (CT-NT2)*2
@@ -25912,7 +25912,7 @@ function CSMakeGraphA2(funcR,Start,Direction,StepLength,StepNumber,Partition,Max
 		end
 		if Alert1 == 1 and CT == nil then Loop1_LimitExceeded() end
 
-		-- 2nd Point ¢≤Part °÷ Length
+		-- 2nd Point ‚àëPart ‚âí Length
 		if Loop2 ~= nil then
 			if Direction == 0 then -- forward
 				dt = (CT-NT2)*2
@@ -26068,7 +26068,7 @@ function CSMakeGraphT2(Parafunc,Start,Direction,StepLength,StepNumber,Partition,
 		end
 		if Alert1 == 1 and CT == nil then Loop1_LimitExceeded() end
 
-		-- 2nd Point ¢≤Part °÷ Length
+		-- 2nd Point ‚àëPart ‚âí Length
 		if Loop2 ~= nil then
 			if Direction == 0 then -- forward
 				dt = (CT-NT2)*2
@@ -26635,7 +26635,7 @@ function CSMakeGraphRA(funcRA,areaR,areaA,StepR,StepA,MaxError,LoopR,LoopA)
 	return Shape
 end
 
-function __Sort(Level,Start,End) -- SortøÎ ≥ª∫Œ «‘ºˆ
+function __Sort(Level,Start,End) -- SortÏö© ÎÇ¥Î∂Ä Ìï®Ïàò
 	local Kmin, Temp
 	for i = Start, End do
 		Kmin = i
@@ -27107,7 +27107,7 @@ function CS_NSortI(Shape,Func,Step,funcI,FStep,Direction)
 	return RetShape, LoopArr
 end
 
-function __TSort(Level,Start,End) -- TSortøÎ ≥ª∫Œ «‘ºˆ
+function __TSort(Level,Start,End) -- TSortÏö© ÎÇ¥Î∂Ä Ìï®Ïàò
 	local Kmin, Temp
 	for i = Start, End do
 		Kmin = i
@@ -27523,7 +27523,7 @@ function CS_TSortI(Shape,Func,Step,Void,funcI,FStep,Direction)
 	return RetShape, LoopArr
 end
 
-function CS_Mix(Shape,Preset,Looper,Overwrite) -- {Shape,f(n)} : 1~n -> f(n)ø° ∫πªÁ
+function CS_Mix(Shape,Preset,Looper,Overwrite) -- {Shape,f(n)} : 1~n -> f(n)Ïóê Î≥µÏÇ¨
 	local RetShape = {0}
 	local LoopArr = {0}
 
@@ -27659,7 +27659,7 @@ function CS_Mix(Shape,Preset,Looper,Overwrite) -- {Shape,f(n)} : 1~n -> f(n)ø° ∫
 	end
 end
 
-function CS_Split(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)∏¶ √ﬂ∞°«‘
+function CS_Split(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)Î•º Ï∂îÍ∞ÄÌï®
 	local Over = 0
 	if Overwrite == nil or Overwrite == 0 then
 		Over = 0
@@ -27751,7 +27751,7 @@ function CS_Split(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)∏¶ √ﬂ∞
 	return RetShape
 end
 
-function CS_Arrange(Shape,Preset,Looper,Overwrite) -- {N,f(i),f(j)} : 1~N -> f(i)∞˙ f(j)∏¶ ±≥√º
+function CS_Arrange(Shape,Preset,Looper,Overwrite) -- {N,f(i),f(j)} : 1~N -> f(i)Í≥º f(j)Î•º ÍµêÏ≤¥
 	local Over = {0,0}
 	if Overwrite == nil or Overwrite == 0 then
 		Over = {0,0}
@@ -28086,7 +28086,7 @@ function CS_SortTM(Shape,funcT,FStep,Direction)
 	return RetShape, LoopArr
 end
 
-function __SortT(Level,Start,End) -- SortTøÎ ≥ª∫Œ «‘ºˆ
+function __SortT(Level,Start,End) -- SortTÏö© ÎÇ¥Î∂Ä Ìï®Ïàò
 	local Kmin, Temp
 	for i = Start, End do
 		Kmin = i
@@ -28154,7 +28154,7 @@ function __SortT(Level,Start,End) -- SortTøÎ ≥ª∫Œ «‘ºˆ
 	end
 end
 
-function CS_TMix(Shape,Looper,Overwrite) -- {Shape,TSort,f(n)} : 1~n -> f(n)ø° ∫πªÁ
+function CS_TMix(Shape,Looper,Overwrite) -- {Shape,TSort,f(n)} : 1~n -> f(n)Ïóê Î≥µÏÇ¨
 	local CmpShape = {}
 	for k, v in pairs(Shape) do
 		local index = 1
@@ -28284,7 +28284,7 @@ function CS_TMix(Shape,Looper,Overwrite) -- {Shape,TSort,f(n)} : 1~n -> f(n)ø° ∫
 	return RetShape, NLoopArr
 end
 
-function CS_TSplit(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)∏¶ √ﬂ∞°«‘
+function CS_TSplit(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)Î•º Ï∂îÍ∞ÄÌï®
 	local CmpShape = {Shape[1][1]}
 	local index = 1
 	for i = 1, Shape[2][1] do
@@ -28405,7 +28405,7 @@ function CS_TSplit(Shape,Preset,Looper,Overwrite) -- {N,f(i)} : 1~N -> f(i)∏¶ √ﬂ
 	return NShape, RetLoopArr
 end
 
-function CS_TArrange(Shape,Preset,Looper,Overwrite) -- {N,f(i),f(j)} : 1~N -> f(i)∞˙ f(j)∏¶ ±≥√º
+function CS_TArrange(Shape,Preset,Looper,Overwrite) -- {N,f(i),f(j)} : 1~N -> f(i)Í≥º f(j)Î•º ÍµêÏ≤¥
 	local CmpShape = {Shape[1][1]}
 	local index = 1
 	for i = 1, Shape[2][1] do
@@ -29298,10 +29298,10 @@ function CS_GetCircleX(Point1,Point2,Radius,Direction)
 	if pa < 0 then pa = pa + math.pi*2 end
 
 	if math.abs(da1 - pa) < math.pi/4 then -- da1 == dir : 0
-		if Direction == 0 then -- Ω√∞ËπÊ«‚
+		if Direction == 0 then -- ÏãúÍ≥ÑÎ∞©Ìñ•
 			cx = cx1
 			cy = cy1
-		else -- π›Ω√∞ËπÊ«‚
+		else -- Î∞òÏãúÍ≥ÑÎ∞©Ìñ•
 			cx = cx2
 			cy = cy2
 		end
@@ -29324,10 +29324,10 @@ function CS_GetIntersection(CircleData,MaxError)
 	else
 		MaxError = math.abs(MaxError)
 	end
-	-- {"A",1,2} : Angle (∞¢µµ¡¶«—/πÃ¡ˆø¯)
-	-- {"R",1} : π›¡ˆ∏ß
-	-- {"C",{1,2}} : ¡ﬂΩ…¡¬«•
-	-- {"P",{1,2}} : ø¯ ¿ß¿« ¡°
+	-- {"A",1,2} : Angle (Í∞ÅÎèÑÏ†úÌïú/ÎØ∏ÏßÄÏõê)
+	-- {"R",1} : Î∞òÏßÄÎ¶Ñ
+	-- {"C",{1,2}} : Ï§ëÏã¨Ï¢åÌëú
+	-- {"P",{1,2}} : Ïõê ÏúÑÏùò Ï†ê
 
 	local CircleArr = {}
 	for k, v in pairs (CircleData) do
@@ -30045,7 +30045,7 @@ function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisCo
 		AxisColor[1][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
 	end
 
-	if areaY[1] <= 0 then -- X√‡
+	if areaY[1] <= 0 then -- XÏ∂ï
 		for i = 0, XNum do
 			GRPFile:seek("set",math.floor(54+3*i+((YNum)+areaY[1])*XFill))
 			GRPFile:write(string.char(AxisColor[1][1]))
@@ -30054,7 +30054,7 @@ function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisCo
 		end
 	end
 
-	if areaX[1] <= 0 then -- Y√‡
+	if areaX[1] <= 0 then -- YÏ∂ï
 		for i = 0, YNum do
 			GRPFile:seek("set",math.floor(54-3*areaX[1]+((YNum)-i)*XFill))
 			GRPFile:write(string.char(AxisColor[1][1]))
@@ -30387,8 +30387,8 @@ function CSMakeTileX(Point,Radius,Angle,Level,Number) -- P3 Octagon
 	local Size = 1
 	local k = math.sqrt(2) 
 	local TileArr = {{"D",{1+1/k,1/k},{1,0},{0,0},{1/k,1/k}},{"K",{1,0},{1+1/k,1/k},{1+k,0}},{"K",{1,0},{1+1/k,-1/k},{1+k,0}}}
-	local b = k-1 -- °Ó2-1
-	local a = 2-k -- 2-°Ó2
+	local b = k-1 -- ‚àö2-1
+	local a = 2-k -- 2-‚àö2
  
 	for i = 1, Level do
 		Size = Size*b
@@ -30548,7 +30548,7 @@ function CSMakeTileX(Point,Radius,Angle,Level,Number) -- P3 Octagon
 	return Shape
 end
 
-function CS_FillPattern(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- ¡˜∞¢
+function CS_FillPattern(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- ÏßÅÍ∞Å
 	if VectorX[1] == 0 and VectorX[2] == 0 then
 		CS_InputError()
 	end
@@ -30617,8 +30617,8 @@ function CS_FillPattern(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angl
 	local LX, LY = {}, {}
 	for i = 1, 2 do
 		for j = 1, 2 do
-			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k º¯
-			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k º¯
+			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k Ïàú
+			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k Ïàú
 		end
 	end
 
@@ -30762,7 +30762,7 @@ function CS_FillPattern(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angl
 	return NShape
 end
 
-function CS_FillPatternX(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- ªÔ∞¢
+function CS_FillPatternX(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Angle) -- ÏÇºÍ∞Å
 	if VectorX[1] == 0 and VectorX[2] == 0 then
 		CS_InputError()
 	end
@@ -30828,8 +30828,8 @@ function CS_FillPatternX(Pattern,areaX,areaY,VectorX,VectorY,offsetX,offsetY,Ang
 	local LX, LY = {}, {}
 	for i = 1, 2 do
 		for j = 1, 2 do
-			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k º¯
-			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k º¯
+			table.insert(LX,{-axisX[2],axisX[1],axisX[2]*areaX[i]-axisX[1]*areaY[j]}) -- X / Y / k Ïàú
+			table.insert(LY,{-axisY[2],axisY[1],axisY[2]*areaX[i]-axisY[1]*areaY[j]}) -- X / Y / k Ïàú
 		end
 	end
 
@@ -30994,14 +30994,14 @@ function CS_FillPatternPathX(Path,Outside,Pattern,VectorX,VectorY,offsetX,offset
 	return CS_CropPath(CS_FillPatternX(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),Path,Outside)
 end
 
---[[ πÃ±∏«ˆ «‘ºˆµÈ (Update øπ¡§)
+--[[ ÎØ∏Íµ¨ÌòÑ Ìï®ÏàòÎì§ (Update ÏòàÏ†ï)
  Include_CVPaint
  CVPlot
  CV_
  LiAtLeast LiAtMost LiAbove LiBelow
  CD__ScanW
  CX_ConvertRTP <-> CX_ConvertXYZ
- CX_RotateRTP (±∏∏È¡¬«•∞Ë)
+ CX_RotateRTP (Íµ¨Î©¥Ï¢åÌëúÍ≥Ñ)
  CB_Arrange
  CB_Mix
 ]]--
@@ -31059,23 +31059,23 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		CVPlotFArr = PlotArr
 
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -31114,7 +31114,7 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 	CAPlotPlayerID = PlayerID
 	CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6,CAPlotVarAlloc+7,CAPlotVarAlloc+8,CAPlotVarAlloc+9,CAPlotVarAlloc+10,CAPlotVarAlloc+11,CAPlotVarAlloc+12}
 	CAPlotVarAlloc = CAPlotVarAlloc + 13
-	if Prefunc ~= nil then -- CB_Func ªÁøÎ
+	if Prefunc ~= nil then -- CB_Func ÏÇ¨Ïö©
 		_G[Prefunc]()
 	end
 

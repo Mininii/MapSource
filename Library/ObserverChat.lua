@@ -1,6 +1,6 @@
 -- ObserverChat.lua v1.0 Made by Ninfia
--- °üÀüÀÚ ¡ê ÇÃ·¹ÀÌ¾î°£ Ã¤ÆÃÀ» Áö¿øÇÏ´Â ÇÃ·¯±×ÀÎ
--- 2.0ºÎÅÍ´Â CtrigAsm v5.4.lua¿¡ ÀÚµ¿À¸·Î Æ÷ÇÔµË´Ï´Ù.
+-- ê´€ì „ì â†” í”Œë ˆì´ì–´ê°„ ì±„íŒ…ì„ ì§€ì›í•˜ëŠ” í”ŒëŸ¬ê·¸ì¸
+-- 2.0ë¶€í„°ëŠ” CtrigAsm v5.4.luaì— ìë™ìœ¼ë¡œ í¬í•¨ë©ë‹ˆë‹¤.
 
 function TogglePlayerModerate(PlayerID,State,Timer,TargetPlayer,Condition,Action)
 	if State == "Off" then
@@ -60,7 +60,7 @@ function TogglePlayerModerate(PlayerID,State,Timer,TargetPlayer,Condition,Action
 	end
 end
 
-function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,ActionOn,ActionOff) -- Player¡æOb
+function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,ActionOn,ActionOff) -- Playerâ†’Ob
 	function LocalPlayerID(Player,Type)
 		if Type == nil then
 			Type = Exactly
@@ -285,7 +285,7 @@ function ObserverDrop(PlayerID,Timer,TargetPlayer,Delay,Condition,Action) -- "Ob
 			MemoryX(Timer,AtMost,0xFFE0,0xFFF0);
 		},
 		actions = {
-			SetMemory(0x657A9C,SetTo,0); -- È­¸é ¾ÏÀü
+			SetMemory(0x657A9C,SetTo,0); -- í™”ë©´ ì•”ì „
 			SetMemoryX(Timer,Add,1*16,0xFFF0);
 			PreserveTrigger();
 		},

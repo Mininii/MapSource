@@ -9,7 +9,7 @@
 			if type(k) == "string" then
 				local CT = GetStrSize(0,k)
 				BSize=BSize+CT
-			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ¿ìÈ¸Àü¿ë
+			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ìš°íšŒì „ìš©
 				BSize = BSize+(4*5)
 			elseif type(k)=="table" and k[4]=="V" then
 				if k["fwc"] == true then
@@ -19,9 +19,9 @@
 				end
 			elseif type(k)=="table" and k[4]=="W" then
 				BSize=BSize+(4*5)
-			elseif type(k)=="table" and k[1][4]=="V" then -- VarArrÀÏ °æ¿ì
+			elseif type(k)=="table" and k[1][4]=="V" then -- VarArrì¼ ê²½ìš°
 				BSize = BSize+#k
-			elseif type(k)=="number" then -- »ó¼öindex V ÀÔ·Â, string.char ±¸Çö¿ë. ¸Ç¾Õ 0xFF¿µ¿ª¸¸ »ç¿ë
+			elseif type(k)=="number" then -- ìƒìˆ˜index V ì…ë ¥, string.char êµ¬í˜„ìš©. ë§¨ì• 0xFFì˜ì—­ë§Œ ì‚¬ìš©
 				BSize=BSize+1
 			else
 				PushErrorMsg("Print_Inputdata_Error")
@@ -47,7 +47,7 @@
 				local CT = CreateCText(FP,k)
 				table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
 				Dev=Dev+CT[2]
-			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ¿ìÈ¸Àü¿ë
+			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ìš°íšŒì „ìš©
 				if k[2] == "LocalPlayerID" then
 					table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
 				elseif type(k[2])=="number" then
@@ -75,12 +75,12 @@
 				CallTrigger(FP,dp.Call_lIToDec)
 				f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
 				Dev=Dev+(4*5)
-			elseif type(k)=="table" and k[1][4]=="V" then -- VarArrÀÏ °æ¿ì
+			elseif type(k)=="table" and k[1][4]=="V" then -- VarArrì¼ ê²½ìš°
 				for o,p in pairs(k) do
 					CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
 					Dev=Dev+(1)
 				end
-			elseif type(k)=="number" then -- »ó¼öindex V ÀÔ·Â, string.char ±¸Çö¿ë. ¸Ç¾Õ 0xFF¿µ¿ª¸¸ »ç¿ë
+			elseif type(k)=="number" then -- ìƒìˆ˜index V ì…ë ¥, string.char êµ¬í˜„ìš©. ë§¨ì• 0xFFì˜ì—­ë§Œ ì‚¬ìš©
 				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
 				Dev=Dev+(1)
 			else
@@ -141,7 +141,7 @@
 				table.insert(RetAct,print_utf8_2(12, Dev, k))
 				
 				Dev=Dev+Strl
-			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ¿ìÈ¸Àü¿ë
+			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr ìš°íšŒì „ìš©
 				table.insert(ItoNameKey,{k[2],Dev})
 				Dev=Dev+(4*5)
 			elseif type(k)=="table" and k[4]=="V" then
@@ -154,7 +154,7 @@
 					table.insert(ItoDecKey,{k,Dev,false})
 					Dev=Dev+(4*4)
 				end
-			elseif type(k)=="number" then -- »ó¼öindex V ÀÔ·Â, string.char ±¸Çö¿ë. ¸Ç¾Õ 0xFF¿µ¿ª¸¸ »ç¿ë
+			elseif type(k)=="number" then -- ìƒìˆ˜index V ì…ë ¥, string.char êµ¬í˜„ìš©. ë§¨ì• 0xFFì˜ì—­ë§Œ ì‚¬ìš©
 				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
 				table.insert(VCharKey,{k,Dev})
 				Dev=Dev+(1)
@@ -270,13 +270,13 @@
 	end
 	function init_Setting()
 		
-	function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = »ó¼ö / Int -> Dec VA[0~3]
+	function dp.ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) -- VA index = ìƒìˆ˜ / Int -> Dec VA[0~3]
 		STPopTrigArr(PlayerID)
 	-- B = 0x20, C = ColorCod, S = Sign, 0~9 = Number, X = 0x0D
-	-- ZeroMode : 0 Ç¥½Ã ¹æ¹ı ¼±ÅÃ / 0 (0) / Space (1) / 0x0D (2)
-	-- Color : ÄÃ·¯ÄÚµå Ãß°¡ / 0x01 ~ 0x1F (±âº» 0x0D)
-	-- Sign : ºÎÈ£ Ãß°¡ / ºÎÈ£¾øÀ½ (0) / ºÎÈ£Ãß°¡(1) / ºÎÈ£Ãß°¡ +Space (2)
-	-- DigitMax : ½ÃÀÛ ÀÚ¸®¼ö (±âº» 10) / DigitMin : ³¡ ÀÚ¸®¼ö (±âº»1)
+	-- ZeroMode : 0 í‘œì‹œ ë°©ë²• ì„ íƒ / 0 (0) / Space (1) / 0x0D (2)
+	-- Color : ì»¬ëŸ¬ì½”ë“œ ì¶”ê°€ / 0x01 ~ 0x1F (ê¸°ë³¸ 0x0D)
+	-- Sign : ë¶€í˜¸ ì¶”ê°€ / ë¶€í˜¸ì—†ìŒ (0) / ë¶€í˜¸ì¶”ê°€(1) / ë¶€í˜¸ì¶”ê°€ +Space (2)
+	-- DigitMax : ì‹œì‘ ìë¦¬ìˆ˜ (ê¸°ë³¸ 10) / DigitMin : ë ìë¦¬ìˆ˜ (ê¸°ë³¸1)
 		if Sign == nil or Sign == "X" then
 			Sign = 0
 		end
@@ -613,7 +613,7 @@
 			ItoName(FP,i,VArr(dp.PNameVArrArr[i+1],0),ColorCode[i+1])
 			_0DPatchforVArr(FP,dp.PNameVArrArr[i+1],4)
 
-			CIf(FP,{LocalPlayerID(i)})--·ÎÄÃ
+			CIf(FP,{LocalPlayerID(i)})--ë¡œì»¬
 			ItoName(FP,i,VArr(dp.LPNameVArr,0),ColorCode[i+1])
 			_0DPatchforVArr(FP,dp.LPNameVArr,4)
 			CIfEnd()
@@ -653,7 +653,7 @@
 			SetCVAar(VArr(dp.publiclItoDecVArr,4), SetTo, 0x30303030)})--init << 0
 		local li = def_sIndex()
 		NJump(FP,li,{TTNWar(dp.publiclItoDecW,AtLeast,"0x8000000000000000")},{
-			SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303000+string.byte("-")),--À½¼öÀÌ´Ù
+			SetCVAar(VArr(dp.publiclItoDecVArr,0), SetTo, 0x30303000+string.byte("-")),--ìŒìˆ˜ì´ë‹¤
 			SetCVAar(VArr(dp.publiclItoDecVArr,1), SetTo, 0x30303030),
 			SetCVAar(VArr(dp.publiclItoDecVArr,2), SetTo, 0x30303030),
 			SetCVAar(VArr(dp.publiclItoDecVArr,3), SetTo, 0x30303030),
@@ -667,12 +667,12 @@
 			end--
 			NJumpEnd(FP,li)
 			CIf(FP,{TTNWar(dp.publiclItoDecW,AtLeast,"0x8000000000000000")})
-			f_LNeg(FP, dp.publiclItoDecW, dp.publiclItoDecW)--À½¼öÇ¥ÇöÀ» À§ÇØ ¹İÀü
+			f_LNeg(FP, dp.publiclItoDecW, dp.publiclItoDecW)--ìŒìˆ˜í‘œí˜„ì„ ìœ„í•´ ë°˜ì „
 			CIfEnd()
 			function dp.War_NumSet(DestVAI,DivNum,MaskBit)
 				local MaskBit = 256^MaskBit
 				for i = 3, 0, -1 do
-					local CBit = 2^i
+					local CBit = math.floor(2^i)
 					local nt = tostring(CBit)..string.rep("0",DivNum)
 					CIf(FP,{TTNWar(dp.publiclItoDecW, AtLeast, nt)},{SetCVAar(VArr(dp.publiclItoDecVArr,DestVAI), Add, CBit*MaskBit,MaskBit*0xFF)})
 					f_LSub(FP, dp.publiclItoDecW, dp.publiclItoDecW, nt)
