@@ -2,7 +2,7 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\NewTestMap2\\main.lua")
 
---¼ÓµµÃøÁ¤¿ë
+--ì†ë„ì¸¡ì •ìš©
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1

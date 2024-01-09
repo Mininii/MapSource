@@ -5,9 +5,9 @@ function Include_Vars()
 		end
 	end
 	--System
-	iv={} -- Àü¿ª º¯¼ö Å×ÀÌºí
-	ct={} -- Àü¿ª º¯¼ö Å×ÀÌºí Ä¡ÆÃ°¨Áö
-	ctg={} -- Àü¿ª º¯¼ö Å×ÀÌºí Ä¡ÆÃ°¨Áö
+	iv={} -- ì „ì—­ ë³€ìˆ˜ í…Œì´ë¸”
+	ct={} -- ì „ì—­ ë³€ìˆ˜ í…Œì´ë¸” ì¹˜íŒ…ê°ì§€
+	ctg={} -- ì „ì—­ ë³€ìˆ˜ í…Œì´ë¸” ì¹˜íŒ…ê°ì§€
 	LevelLimit = 300000
 	TimeScoreInit = 1000000
 	HumanPlayers={P1,P2,P3,P4,P5,P6,P7,P9,P10,P11,P12}
@@ -37,10 +37,10 @@ end
 function SCA.Available(CP)
 	return DeathsX(CP, Exactly, 3, 1,3)
 end
-function SCA.NoSlotLoadAvailable(CP)--½½·Ô ·Îµå¿Ï·á »óÅÂ°¡ ¾Æ´Ò¶§¸¸
+function SCA.NoSlotLoadAvailable(CP)--ìŠ¬ë¡¯ ë¡œë“œì™„ë£Œ ìƒíƒœê°€ ì•„ë‹ë•Œë§Œ
 	return DeathsX(CP, Exactly, 3, 1,3+64)
 end
-function SCA.SlotLoadCmp(CP)--»ç¿ë°¡´É + ½½·Ô·Îµå¿Ï·á
+function SCA.SlotLoadCmp(CP)--ì‚¬ìš©ê°€ëŠ¥ + ìŠ¬ë¡¯ë¡œë“œì™„ë£Œ
 	return DeathsX(CP, Exactly, 3+64, 1,3+64)
 end
 function SCA.NotAvailable(CP)
@@ -49,10 +49,10 @@ end
 function SCA.Reset(CP)
 	return SetDeaths(CP, SetTo, 0, 1)
 end
-function SCA.LoadCmp(CP)--»ç¿ë°¡´É + ·Îµå¿Ï·á
+function SCA.LoadCmp(CP)--ì‚¬ìš©ê°€ëŠ¥ + ë¡œë“œì™„ë£Œ
 	return DeathsX(CP, Exactly, 7, 1,7)
 end
-function SCA.SaveCmp(CP)--»ç¿ë°¡´É + ÀúÀå¿Ï·á
+function SCA.SaveCmp(CP)--ì‚¬ìš©ê°€ëŠ¥ + ì €ì¥ì™„ë£Œ
 	return DeathsX(CP, Exactly, 11, 1,11)
 end
 	InternalFlag = CreateCcode()
@@ -158,7 +158,7 @@ end
 	SCA.FfragItem = SCA.CreateVar(FP)
 	SCA.FfragItem32 = SCA.CreateVar(FP)
 
-	--3.00 Ãß°¡ µ¥ÀÌÅÍ
+	--3.00 ì¶”ê°€ ë°ì´í„°
 	SCA.FfragItemUsed = SCA.CreateVar(FP)
 	SCA.TimeAttackScore48 = SCA.CreateVar(FP)
 	SCA.FirstRewardLim = SCA.CreateVar(FP)
@@ -201,15 +201,15 @@ end
 	SCA.CurPlayTime = SCA.CreateVar(FP)
 	SCA.FMinMax = SCA.CreateVar(FP)
 	NSCA = {}
-	NSCA.TMapMakerFlag = SCA.CreateVar(FP) -- SCA»ç¿ë¾ÈÇÔ. EPS¿¡ Àü¼ÛÇÒ ¸ñÀû
-	NSCA.TDayCheck2 = SCA.CreateVar(FP) -- SCA»ç¿ë¾ÈÇÔ. EPS¿¡ Àü¼ÛÇÒ ¸ñÀû
+	NSCA.TMapMakerFlag = SCA.CreateVar(FP) -- SCAì‚¬ìš©ì•ˆí•¨. EPSì— ì „ì†¡í•  ëª©ì 
+	NSCA.TDayCheck2 = SCA.CreateVar(FP) -- SCAì‚¬ìš©ì•ˆí•¨. EPSì— ì „ì†¡í•  ëª©ì 
 
 	
 	SCA.GReload = CreateCcode()
 	SCA.LoadSlot1 = CreateCcodeArr(7)
 	--MSQC_init(0x590004)
 	MSQC_KeyArr = {} 
-	MSQC_KeySet("O",494) -- MSQC edsÅØ½ºÆ® ÀÔ·Â
+	MSQC_KeySet("O",494) -- MSQC edsí…ìŠ¤íŠ¸ ì…ë ¥
 	MSQC_KeySet("ESC",495)
 	MSQC_KeySet("1",496)
 	MSQC_KeySet("2",497)
@@ -220,15 +220,15 @@ end
 	MSQC_KeySet("P",502)
 	MSQC_KeySet("I",503)
 	MSQC_KeySet("F9",13)
-	MSQC_KeySet("F12",553)--Å×½ºÆ®¿ë
+	MSQC_KeySet("F12",553)--í…ŒìŠ¤íŠ¸ìš©
 	MSQC_KeySet("B",554)
 	MSQC_KeySet("N",555)
 	MSQC_KeySet("M",556)
 	MSQC_KeySet("Z",505)
 	MSQC_KeySet("U",506)
-	--504 »ç¿ëÁß
-	MSQC_ExportEdsTxt() -- MSQC edsÅØ½ºÆ® Ãâ·Â
-	Nextptrs = CreateVar(FP) -- À¯´Ö EPD ·Îµå¿ë
+	--504 ì‚¬ìš©ì¤‘
+	MSQC_ExportEdsTxt() -- MSQC edsí…ìŠ¤íŠ¸ ì¶œë ¥
+	Nextptrs = CreateVar(FP) -- ìœ ë‹› EPD ë¡œë“œìš©
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
 	P1VON = "Turn ON Shared Vision for Player 1"
 	P2VOFF = "Turn OFF Shared Vision for Player 2"
@@ -256,34 +256,34 @@ end
 	VArrI,VArrI4 = CreateVars(2,FP)
 	WArrI,WArrI4,GCPW = CreateWars(3,FP)
 	DPErT = CreateVarArr(7,FP)
-	TestShop = CreateVarArr(7, FP) -- Å×½ºÆ®¿ëÀÌ¾ú´Âµ¥ ÀßÀÛµ¿ÇØ¼­ À¯´Ö ÀÚÆÇ±â¿¡ »ç¿ëÁß
-	TestShop2 = CreateVarArr(7, FP) -- Å×½ºÆ®¿ëÀÌ¾ú´Âµ¥ ÀßÀÛµ¿ÇØ¼­ À¯´Ö ÀÚÆÇ±â¿¡ »ç¿ëÁß
+	TestShop = CreateVarArr(7, FP) -- í…ŒìŠ¤íŠ¸ìš©ì´ì—ˆëŠ”ë° ì˜ì‘ë™í•´ì„œ ìœ ë‹› ìíŒê¸°ì— ì‚¬ìš©ì¤‘
+	TestShop2 = CreateVarArr(7, FP) -- í…ŒìŠ¤íŠ¸ìš©ì´ì—ˆëŠ”ë° ì˜ì‘ë™í•´ì„œ ìœ ë‹› ìíŒê¸°ì— ì‚¬ìš©ì¤‘
 
 	
-	ShopPtr = CreateVarArr(7, FP) -- Å×½ºÆ®¿ëÀÌ¾ú´Âµ¥ ÀßÀÛµ¿ÇØ¼­ À¯´Ö ÀÚÆÇ±â¿¡ »ç¿ëÁß
+	ShopPtr = CreateVarArr(7, FP) -- í…ŒìŠ¤íŠ¸ìš©ì´ì—ˆëŠ”ë° ì˜ì‘ë™í•´ì„œ ìœ ë‹› ìíŒê¸°ì— ì‚¬ìš©ì¤‘
 	
-	TBLFlag = CreateCcode() -- TBL °»½Å ¿©ºÎ ÆÇº°¿ë µ¥½º°ª. À¯´Ö »ı¼ºÀÌ °¨ÁöµÇ¸é µ¿ÀÛ¾ÈÇÔ
-	SettingUnit1 = CreateVarArr(7, FP)-- 1~25°­ À¯´Ö ÀÚµ¿°­È­ ¼³Á¤±â
-	SettingUnit2 = CreateVarArr(7, FP)-- 26~39°­ À¯´Ö ÀÚµ¿°­È­ ¼³Á¤±â
+	TBLFlag = CreateCcode() -- TBL ê°±ì‹  ì—¬ë¶€ íŒë³„ìš© ë°ìŠ¤ê°’. ìœ ë‹› ìƒì„±ì´ ê°ì§€ë˜ë©´ ë™ì‘ì•ˆí•¨
+	SettingUnit1 = CreateVarArr(7, FP)-- 1~25ê°• ìœ ë‹› ìë™ê°•í™” ì„¤ì •ê¸°
+	SettingUnit2 = CreateVarArr(7, FP)-- 26~39ê°• ìœ ë‹› ìë™ê°•í™” ì„¤ì •ê¸°
 
-	SettingUnit3 = CreateVarArr(7, FP)-- 15~25°­ À¯´Ö ÀÚµ¿ÆÇ¸Å ¼³Á¤±â
-	SettingUnit4 = CreateVarArr(7, FP)-- 26~39°­ À¯´Ö ÀÚµ¿ÆÇ¸Å ¼³Á¤±â
-	ShopUnit = CreateVarArr(7, FP) -- ½Ã¹Î¼³Á¤±â
-	PUnitPtr = CreateVarArr(7, FP) -- °íÀ¯À¯´Ö
-	SlotPtr = CreateVarArr(7, FP) -- ½½·ÔÆ÷ÀÎÅÍ
-	CurLoadSlot = CreateCcodeArr(7) -- ½½·ÔÆ÷ÀÎÅÍ
+	SettingUnit3 = CreateVarArr(7, FP)-- 15~25ê°• ìœ ë‹› ìë™íŒë§¤ ì„¤ì •ê¸°
+	SettingUnit4 = CreateVarArr(7, FP)-- 26~39ê°• ìœ ë‹› ìë™íŒë§¤ ì„¤ì •ê¸°
+	ShopUnit = CreateVarArr(7, FP) -- ì‹œë¯¼ì„¤ì •ê¸°
+	PUnitPtr = CreateVarArr(7, FP) -- ê³ ìœ ìœ ë‹›
+	SlotPtr = CreateVarArr(7, FP) -- ìŠ¬ë¡¯í¬ì¸í„°
+	CurLoadSlot = CreateCcodeArr(7) -- ìŠ¬ë¡¯í¬ì¸í„°
 	CurLoadCmpSlot = CreateCcodeArr(7) 
-	SubtitleFlag = CreateVarArr(7, FP)--¼­ºêÅ¸ÀÌÆ² ÇÃ·¡±×
-	SubtitleFlag2 = CreateVarArr(7, FP)--¼­ºêÅ¸ÀÌÆ² ÇÃ·¡±×
-	SubtitleLoad = CreateCcodeArr(7)--¼­ºêÅ¸ÀÌÆ² ÇÃ·¡±×
+	SubtitleFlag = CreateVarArr(7, FP)--ì„œë¸Œíƒ€ì´í‹€ í”Œë˜ê·¸
+	SubtitleFlag2 = CreateVarArr(7, FP)--ì„œë¸Œíƒ€ì´í‹€ í”Œë˜ê·¸
+	SubtitleLoad = CreateCcodeArr(7)--ì„œë¸Œíƒ€ì´í‹€ í”Œë˜ê·¸
 
-	DpsLV1 = CreateVarArr(7, FP) -- Ã¹¹øÂ° DPS°Ç¹°
-	DpsLV2 = CreateVarArr(7, FP) -- µÎ¹øÂ° DPS°Ç¹°
-	DpsLV3 = CreateVarArr(7, FP) -- ¼¼¹øÂ° DPS°Ç¹°
-	PBossPtr = CreateVarArr(7, FP) -- °³ÀÎº¸½º DPSÀ¯´Ö ptr
-	Names = CreateVArrArr(7, 7, FP) -- °¢ ÇÃ·¹ÀÌ¾î ÀÌ¸§ ÀúÀå¿ë
+	DpsLV1 = CreateVarArr(7, FP) -- ì²«ë²ˆì§¸ DPSê±´ë¬¼
+	DpsLV2 = CreateVarArr(7, FP) -- ë‘ë²ˆì§¸ DPSê±´ë¬¼
+	DpsLV3 = CreateVarArr(7, FP) -- ì„¸ë²ˆì§¸ DPSê±´ë¬¼
+	PBossPtr = CreateVarArr(7, FP) -- ê°œì¸ë³´ìŠ¤ DPSìœ ë‹› ptr
+	Names = CreateVArrArr(7, 7, FP) -- ê° í”Œë ˆì´ì–´ ì´ë¦„ ì €ì¥ìš©
 
-	ELevel = CreateVar(FP)--ÇöÀç °­È­ÁßÀÎ ·¹º§
+	ELevel = CreateVar(FP)--í˜„ì¬ ê°•í™”ì¤‘ì¸ ë ˆë²¨
 
 	
 	CntCArr = CreateCcodeArr(10)
@@ -293,19 +293,19 @@ end
 	TempFfragTotal = CreateWar(FP)
 
 	--EExp = CreateVar(FP)
-	ECP = CreateVar(FP) -- °­È­ Á¦¾î¿ë º¯¼ö. ÇöÀç °­È­ÁßÀÎ ÇÃ·¹ÀÌ¾î¸¦ ÀúÀåÇÔ
-	GEper = CreateVar(FP) -- °­È­ Á¦¾î¿ë º¯¼ö. ÇØ´çÇÃ·¹ÀÌ¾îÀÇ +1°­ È®·üÀ» ÀúÀåÇÔ
-	GEper2 = CreateVar(FP) -- °­È­ Á¦¾î¿ë º¯¼ö. ÇØ´çÇÃ·¹ÀÌ¾îÀÇ +2°­ È®·üÀ» ÀúÀåÇÔ
-	GEper3 = CreateVar(FP) -- °­È­ Á¦¾î¿ë º¯¼ö. ÇØ´çÇÃ·¹ÀÌ¾îÀÇ +3°­ È®·üÀ» ÀúÀåÇÔ
+	ECP = CreateVar(FP) -- ê°•í™” ì œì–´ìš© ë³€ìˆ˜. í˜„ì¬ ê°•í™”ì¤‘ì¸ í”Œë ˆì´ì–´ë¥¼ ì €ì¥í•¨
+	GEper = CreateVar(FP) -- ê°•í™” ì œì–´ìš© ë³€ìˆ˜. í•´ë‹¹í”Œë ˆì´ì–´ì˜ +1ê°• í™•ë¥ ì„ ì €ì¥í•¨
+	GEper2 = CreateVar(FP) -- ê°•í™” ì œì–´ìš© ë³€ìˆ˜. í•´ë‹¹í”Œë ˆì´ì–´ì˜ +2ê°• í™•ë¥ ì„ ì €ì¥í•¨
+	GEper3 = CreateVar(FP) -- ê°•í™” ì œì–´ìš© ë³€ìˆ˜. í•´ë‹¹í”Œë ˆì´ì–´ì˜ +3ê°• í™•ë¥ ì„ ì €ì¥í•¨
 	GEper4 = CreateVar(FP)
 	XEper = CreateVar(FP)
 	BreakShield = CreateVar(FP)
-	UEper = CreateVar(FP) -- °­È­ Á¦¾î¿ë º¯¼ö. °­È­ÇÒ À¯´ÖÀÇ È®·üÀ» ÀúÀåÇÔ
+	UEper = CreateVar(FP) -- ê°•í™” ì œì–´ìš© ë³€ìˆ˜. ê°•í™”í•  ìœ ë‹›ì˜ í™•ë¥ ì„ ì €ì¥í•¨
 
 	ShopSw = CreateCcodeArr(7) -- 
 	ShopKey = CreateCcodeArr(7) -- 
 
-	Etbl = CreateVar(FP) -- ¹æ¾î·ÂÃø tblPtrÀúÀå¿ë º¯¼ö. ¼¼ºÎ °­È­È®·ü Ç¥±â¿ë
+	Etbl = CreateVar(FP) -- ë°©ì–´ë ¥ì¸¡ tblPtrì €ì¥ìš© ë³€ìˆ˜. ì„¸ë¶€ ê°•í™”í™•ë¥  í‘œê¸°ìš©
 	--CheatTest
 	
 	CurCunitI = CreateVar(FP)
@@ -323,9 +323,9 @@ end
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(54))
 	Str2, Str2a, Str2s = SaveiStrArr(FP,MakeiStrVoid(54))
-	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"¹«»ö Á¶°¢ \x04:")
-	--PtsS,PtsSa,PtsSs = DwSaveiStrptrX(FP,"\x04| Æ÷ÀÎÆ® \x04:")
-	--CredS,CredSa,CredSs = DwSaveiStrptrX(FP,"\x04| \x17Å©·¹µ÷ \x04:")
+	--FfragS,FfragSa,FfragSs = DwSaveiStrptrX(FP,"ë¬´ìƒ‰ ì¡°ê° \x04:")
+	--PtsS,PtsSa,PtsSs = DwSaveiStrptrX(FP,"\x04| í¬ì¸íŠ¸ \x04:")
+	--CredS,CredSa,CredSs = DwSaveiStrptrX(FP,"\x04| \x17í¬ë ˆë”§ \x04:")
 	iStrL = GetiStrId(FP,MakeiStrVoid(54)) 
 	StrL, StrLa, StrLs = SaveiStrArr(FP,MakeiStrVoid(54))
 
@@ -337,32 +337,32 @@ end
 	}
 
 	--PlayData(NonSCA)
-	iv.Money = CreateWarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
-	iv.Money2 = CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
-	iv.IncomeMax = CreateVarArr2(7,12,FP) -- ÀÚ½ÅÀÇ »ç³ÉÅÍ ÃÖ´ë À¯´Ö¼ö
-	iv.Income = CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç »ç³ÉÅÍ¿¡ º¸À¯ÁßÀÎ À¯´Ö¼ö
-	iv.BuildMul1 = CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	iv.BuildMul2 = CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	iv.TotalEPer = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(±âº» 1°­)
-	iv.TotalEPer2 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+2°­)
-	iv.TotalEPer3 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+3°­)
-	iv.TotalEPer4 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(Æ¯¼ö)
-	iv.ScoutDmg = CreateVarArr(7,FP) -- ±âº»À¯´Ö µ¥¹ÌÁö
+	iv.Money = CreateWarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
+	iv.Money2 = CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
+	iv.IncomeMax = CreateVarArr2(7,12,FP) -- ìì‹ ì˜ ì‚¬ëƒ¥í„° ìµœëŒ€ ìœ ë‹›ìˆ˜
+	iv.Income = CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ì‚¬ëƒ¥í„°ì— ë³´ìœ ì¤‘ì¸ ìœ ë‹›ìˆ˜
+	iv.BuildMul1 = CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	iv.BuildMul2 = CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	iv.TotalEPer = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (ê¸°ë³¸ 1ê°•)
+	iv.TotalEPer2 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+2ê°•)
+	iv.TotalEPer3 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+3ê°•)
+	iv.TotalEPer4 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (íŠ¹ìˆ˜)
+	iv.ScoutDmg = CreateVarArr(7,FP) -- ê¸°ë³¸ìœ ë‹› ë°ë¯¸ì§€
 	iv.ScTimer = CreateVarArr(7,FP)
 	iv.PTimeV = CreateVarArr(7,FP)
 	iv.General_Upgrade = CreateVarArr(7,FP)
 	iv.ResetStat = CreateVarArr(7,FP)
-	iv.NextOre = CreateVarArr2(7,100,FP) -- ´ÙÀ½ ¹Ì³×¶ö
-	iv.NextGas = CreateVarArr2(7,100,FP) -- ´ÙÀ½ °¡½º
-	iv.NextOreMul = CreateVarArr2(7,2,FP) -- ´ÙÀ½ ¹Ì³×¶ö¹è¼ö
-	iv.NextGasMul = CreateVarArr2(7,2,FP) -- ´ÙÀ½ °¡½º¹è¼ö
+	iv.NextOre = CreateVarArr2(7,100,FP) -- ë‹¤ìŒ ë¯¸ë„¤ë„
+	iv.NextGas = CreateVarArr2(7,100,FP) -- ë‹¤ìŒ ê°€ìŠ¤
+	iv.NextOreMul = CreateVarArr2(7,2,FP) -- ë‹¤ìŒ ë¯¸ë„¤ë„ë°°ìˆ˜
+	iv.NextGasMul = CreateVarArr2(7,2,FP) -- ë‹¤ìŒ ê°€ìŠ¤ë°°ìˆ˜
 	iv.SellTicket = CreateWarArr(7,FP)
 	iv.PBossLV = CreateVarArr(7,FP)
 	iv.PBossDPS = CreateWarArr(7,FP)
 	iv.TotalPBossDPS = CreateWarArr(7,FP)
-	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- °æÇèÄ¡ È¹µæ·® ¼öÄ¡. »ç¿ë ¹ÌÁ¤
+	iv.Stat_EXPIncome = CreateVarArr(7,FP)-- ê²½í—˜ì¹˜ íšë“ëŸ‰ ìˆ˜ì¹˜. ì‚¬ìš© ë¯¸ì •
 	iv.TimeAttackScore2 = CreateVarArr2(7,TimeScoreInit,FP)
-	iv.CurPlayTime = CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
+	iv.CurPlayTime = CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
 	
 	iv.CurPUnitCool = CreateVarArr(7,FP)
 	
@@ -373,35 +373,35 @@ end
 	iv.Time3 = CreateVar(FP)
 	iv.Time4 = CreateVar(FP)
 	--Setting, Effect
-	iv.StatEff = CreateCcodeArr(7) -- ·¹º§¾÷ ÀÌÆåÆ®
-	iv.StatEffT2 = CreateCcodeArr(7) -- ·¹º§¾÷ ÀÌÆåÆ®
-	iv.InterfaceNum = CreateVarArr(7,FP) -- »óÁ¡ÀÌ³ª ½ºÅÈ Âï´Â Ã¢ Á¦¾îºÎ
-	iv.AutoBuyCode = CreateVarArr(7,FP)-- ÀÚµ¿ ±¸ÀÔ Á¦¾î µ¥½º°ª
-	iv.AutoBuyCode2 = CreateVarArr(7,FP)-- ÀÚµ¿ ±¸ÀÔ Á¦¾î µ¥½º°ª
-	iv.InternalCalcModeArr = CreateArr(7,FP)-- ÀÚµ¿ ±¸ÀÔ Á¦¾î µ¥½º°ª
-	iv.MulOp = CreateWarArr2(7,1,FP) -- À¯´Ö °ø°İ·Â¿¡ µû¸¥ ¼öÄ¡ Ç¥±â¿ë º¯¼ö
+	iv.StatEff = CreateCcodeArr(7) -- ë ˆë²¨ì—… ì´í™íŠ¸
+	iv.StatEffT2 = CreateCcodeArr(7) -- ë ˆë²¨ì—… ì´í™íŠ¸
+	iv.InterfaceNum = CreateVarArr(7,FP) -- ìƒì ì´ë‚˜ ìŠ¤íƒ¯ ì°ëŠ” ì°½ ì œì–´ë¶€
+	iv.AutoBuyCode = CreateVarArr(7,FP)-- ìë™ êµ¬ì… ì œì–´ ë°ìŠ¤ê°’
+	iv.AutoBuyCode2 = CreateVarArr(7,FP)-- ìë™ êµ¬ì… ì œì–´ ë°ìŠ¤ê°’
+	iv.InternalCalcModeArr = CreateArr(7,FP)-- ìë™ êµ¬ì… ì œì–´ ë°ìŠ¤ê°’
+	iv.MulOp = CreateWarArr2(7,1,FP) -- ìœ ë‹› ê³µê²©ë ¥ì— ë”°ë¥¸ ìˆ˜ì¹˜ í‘œê¸°ìš© ë³€ìˆ˜
 	
 	--PlayData(SCA)
-	iv.PLevel = CreateVarArr2(7,1,FP)-- ÀÚ½ÅÀÇ ÇöÀç ·¹º§
-	iv.StatP = CreateVarArr2(7,5,FP)-- ÇöÀç º¸À¯ÁßÀÎ ½ºÅÈÆ÷ÀÎÆ®
-	iv.Stat_BossSTic = CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	iv.Stat_BossLVUP = CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1°­ È®¾÷ ¼öÄ¡
-	iv.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1°­ È®¾÷ ¼öÄ¡
-	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2°­ È®¾÷ ¼öÄ¡
-	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3°­ È®¾÷ ¼öÄ¡
-	iv.Stat_TotalEPer4 = CreateVarArr(7,FP)-- Æ¯¼ö È®¾÷ ¼öÄ¡
-	iv.Stat_BreakShield = CreateVarArr(7,FP)-- ÆÄ±« ¹æÁö ¼öÄ¡
+	iv.PLevel = CreateVarArr2(7,1,FP)-- ìì‹ ì˜ í˜„ì¬ ë ˆë²¨
+	iv.StatP = CreateVarArr2(7,5,FP)-- í˜„ì¬ ë³´ìœ ì¤‘ì¸ ìŠ¤íƒ¯í¬ì¸íŠ¸
+	iv.Stat_BossSTic = CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	iv.Stat_BossLVUP = CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	iv.Stat_TotalEPer = CreateVarArr(7,FP)-- +1ê°• í™•ì—… ìˆ˜ì¹˜
+	iv.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1ê°• í™•ì—… ìˆ˜ì¹˜
+	iv.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2ê°• í™•ì—… ìˆ˜ì¹˜
+	iv.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3ê°• í™•ì—… ìˆ˜ì¹˜
+	iv.Stat_TotalEPer4 = CreateVarArr(7,FP)-- íŠ¹ìˆ˜ í™•ì—… ìˆ˜ì¹˜
+	iv.Stat_BreakShield = CreateVarArr(7,FP)-- íŒŒê´´ ë°©ì§€ ìˆ˜ì¹˜
 
 
-	iv.Stat_Upgrade = CreateVarArr(7,FP)-- À¯´Ö °ø°İ·Â Áõ°¡·® ¼öÄ¡
-	iv.Credit = CreateWarArr(7,FP) -- º¸À¯ÁßÀÎ Å©·¹µ÷
-	iv.PEXP = CreateWarArr(7, FP) -- ÀÚ½ÅÀÌ Áö±İ±îÁö ¾òÀº ÃÑ °æÇèÄ¡
-	iv.TotalExp = CreateWarArr2(7,"10",FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡ + ÇöÀç ·¹º§¾÷¿¡ ÇÊ¿äÇÑ °æÇèÄ¡
-	iv.CurEXP = CreateWarArr(7,FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡
-	iv.PStatVer = CreateVarArr(7,FP) -- ÇöÀç ÀúÀåµÈ ½ºÅÈ¹öÀü
-	iv.PlayTime2 = CreateVarArr(7,FP) -- ÃÑ ÇÃ·¹ÀÌÅ¸ÀÓ(½Å °ª)
-	iv.PlayTime = CreateVarArr(7,FP) -- ÃÑ ÇÃ·¹ÀÌÅ¸ÀÓ(±¸ °ª)
+	iv.Stat_Upgrade = CreateVarArr(7,FP)-- ìœ ë‹› ê³µê²©ë ¥ ì¦ê°€ëŸ‰ ìˆ˜ì¹˜
+	iv.Credit = CreateWarArr(7,FP) -- ë³´ìœ ì¤‘ì¸ í¬ë ˆë”§
+	iv.PEXP = CreateWarArr(7, FP) -- ìì‹ ì´ ì§€ê¸ˆê¹Œì§€ ì–»ì€ ì´ ê²½í—˜ì¹˜
+	iv.TotalExp = CreateWarArr2(7,"10",FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜ + í˜„ì¬ ë ˆë²¨ì—…ì— í•„ìš”í•œ ê²½í—˜ì¹˜
+	iv.CurEXP = CreateWarArr(7,FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜
+	iv.PStatVer = CreateVarArr(7,FP) -- í˜„ì¬ ì €ì¥ëœ ìŠ¤íƒ¯ë²„ì „
+	iv.PlayTime2 = CreateVarArr(7,FP) -- ì´ í”Œë ˆì´íƒ€ì„(ì‹  ê°’)
+	iv.PlayTime = CreateVarArr(7,FP) -- ì´ í”Œë ˆì´íƒ€ì„(êµ¬ ê°’)
 	iv.LV5Cool = CreateVarArr(7,FP)
 	iv.B_PCredit = CreateVarArr(7,FP)
 	iv.B_PTicket = CreateVarArr(7,FP)
@@ -556,7 +556,7 @@ end
 	
 	iv.PBossClearFlag = CreateCcode()
 
-	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10·Î ³ª´² °æÇèÄ¡¿¡ ´õÇÒ °ª ÀúÀå¿ë. »ç¿ë ¹ÌÁ¤
+	iv.PEXP2 = CreateWarArr(7, FP) -- 1/10ë¡œ ë‚˜ëˆ  ê²½í—˜ì¹˜ì— ë”í•  ê°’ ì €ì¥ìš©. ì‚¬ìš© ë¯¸ì •
 
 
 	iv.TempO = CreateVarArr(7,FP)
@@ -570,7 +570,7 @@ end
 
 
 
-	iv.PCheckV = CreateVar(FP)--ÇÃ·¹ÀÌ¾î ¼ö Ã¼Å©
+	iv.PCheckV = CreateVar(FP)--í”Œë ˆì´ì–´ ìˆ˜ ì²´í¬
 	iv.B_IncomeMax = CreateVar(FP)
 	iv.B_TotalEPer = CreateVar(FP)
 	iv.B_TotalEPer2 = CreateVar(FP)
@@ -582,48 +582,48 @@ end
 	iv.BossLV = CreateVar(FP)
 
 	
-	ct.Money = CreateWarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
-	ct.Money2 = CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
-	ct.IncomeMax = CreateVarArr2(7,12,FP) -- ÀÚ½ÅÀÇ »ç³ÉÅÍ ÃÖ´ë À¯´Ö¼ö
-	ct.Income = CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç »ç³ÉÅÍ¿¡ º¸À¯ÁßÀÎ À¯´Ö¼ö
-	ct.BuildMul1 = CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	ct.BuildMul2 = CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	ct.TotalEPer = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(±âº» 1°­)
-	ct.TotalEPer2 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+2°­)
-	ct.TotalEPer3 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+3°­)
-	ct.TotalEPer4 = CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(Æ¯¼ö)
-	ct.ScoutDmg = CreateVarArr(7,FP) -- ±âº»À¯´Ö µ¥¹ÌÁö
+	ct.Money = CreateWarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
+	ct.Money2 = CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
+	ct.IncomeMax = CreateVarArr2(7,12,FP) -- ìì‹ ì˜ ì‚¬ëƒ¥í„° ìµœëŒ€ ìœ ë‹›ìˆ˜
+	ct.Income = CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ì‚¬ëƒ¥í„°ì— ë³´ìœ ì¤‘ì¸ ìœ ë‹›ìˆ˜
+	ct.BuildMul1 = CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	ct.BuildMul2 = CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	ct.TotalEPer = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (ê¸°ë³¸ 1ê°•)
+	ct.TotalEPer2 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+2ê°•)
+	ct.TotalEPer3 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+3ê°•)
+	ct.TotalEPer4 = CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (íŠ¹ìˆ˜)
+	ct.ScoutDmg = CreateVarArr(7,FP) -- ê¸°ë³¸ìœ ë‹› ë°ë¯¸ì§€
 	ct.ScTimer = CreateVarArr(7,FP)
 	ct.PTimeV = CreateVarArr(7,FP)
 	ct.General_Upgrade = CreateVarArr(7,FP)
 	ct.ResetStat = CreateVarArr(7,FP)
-	ct.NextOre = CreateVarArr2(7,100,FP) -- ´ÙÀ½ ¹Ì³×¶ö
-	ct.NextGas = CreateVarArr2(7,100,FP) -- ´ÙÀ½ °¡½º
-	ct.NextOreMul = CreateVarArr2(7,2,FP) -- ´ÙÀ½ ¹Ì³×¶ö¹è¼ö
-	ct.NextGasMul = CreateVarArr2(7,2,FP) -- ´ÙÀ½ °¡½º¹è¼ö
+	ct.NextOre = CreateVarArr2(7,100,FP) -- ë‹¤ìŒ ë¯¸ë„¤ë„
+	ct.NextGas = CreateVarArr2(7,100,FP) -- ë‹¤ìŒ ê°€ìŠ¤
+	ct.NextOreMul = CreateVarArr2(7,2,FP) -- ë‹¤ìŒ ë¯¸ë„¤ë„ë°°ìˆ˜
+	ct.NextGasMul = CreateVarArr2(7,2,FP) -- ë‹¤ìŒ ê°€ìŠ¤ë°°ìˆ˜
 	ct.SellTicket = CreateWarArr(7,FP)
 	ct.PBossLV = CreateVarArr(7,FP)
 	ct.PBossDPS = CreateWarArr(7,FP)
 	ct.TotalPBossDPS = CreateWarArr(7,FP)
-	ct.Stat_EXPIncome = CreateVarArr(7,FP)-- °æÇèÄ¡ È¹µæ·® ¼öÄ¡. »ç¿ë ¹ÌÁ¤
-	ct.PLevel = CreateVarArr2(7,1,FP)-- ÀÚ½ÅÀÇ ÇöÀç ·¹º§
-	ct.StatP = CreateVarArr2(7,5,FP)-- ÇöÀç º¸À¯ÁßÀÎ ½ºÅÈÆ÷ÀÎÆ®
-	ct.Stat_BossSTic = CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	ct.Stat_BossLVUP = CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1°­ È®¾÷ ¼öÄ¡
-	ct.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1°­ È®¾÷ ¼öÄ¡
-	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2°­ È®¾÷ ¼öÄ¡
-	ct.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3°­ È®¾÷ ¼öÄ¡
-	ct.Stat_TotalEPer4 = CreateVarArr(7,FP)-- Æ¯¼ö È®¾÷ ¼öÄ¡
-	ct.Stat_BreakShield = CreateVarArr(7,FP)-- ÆÄ±« ¹æÁö ¼öÄ¡
-	ct.Stat_Upgrade = CreateVarArr(7,FP)-- À¯´Ö °ø°İ·Â Áõ°¡·® ¼öÄ¡
-	ct.Credit = CreateWarArr(7,FP) -- º¸À¯ÁßÀÎ Å©·¹µ÷
-	ct.PEXP = CreateWarArr(7, FP) -- ÀÚ½ÅÀÌ Áö±İ±îÁö ¾òÀº ÃÑ °æÇèÄ¡
-	ct.TotalExp = CreateWarArr2(7,"10",FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡ + ÇöÀç ·¹º§¾÷¿¡ ÇÊ¿äÇÑ °æÇèÄ¡
-	ct.CurEXP = CreateWarArr(7,FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡
-	ct.PStatVer = CreateVarArr(7,FP) -- ÇöÀç ÀúÀåµÈ ½ºÅÈ¹öÀü
-	ct.PlayTime2 = CreateVarArr(7,FP) -- ÃÑ ÇÃ·¹ÀÌÅ¸ÀÓ(½Å °ª)
-	ct.PlayTime = CreateVarArr(7,FP) -- ÃÑ ÇÃ·¹ÀÌÅ¸ÀÓ(±¸ °ª)
+	ct.Stat_EXPIncome = CreateVarArr(7,FP)-- ê²½í—˜ì¹˜ íšë“ëŸ‰ ìˆ˜ì¹˜. ì‚¬ìš© ë¯¸ì •
+	ct.PLevel = CreateVarArr2(7,1,FP)-- ìì‹ ì˜ í˜„ì¬ ë ˆë²¨
+	ct.StatP = CreateVarArr2(7,5,FP)-- í˜„ì¬ ë³´ìœ ì¤‘ì¸ ìŠ¤íƒ¯í¬ì¸íŠ¸
+	ct.Stat_BossSTic = CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	ct.Stat_BossLVUP = CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	ct.Stat_TotalEPer = CreateVarArr(7,FP)-- +1ê°• í™•ì—… ìˆ˜ì¹˜
+	ct.Stat_TotalEPerEx = CreateVarArr(7,FP)-- +1ê°• í™•ì—… ìˆ˜ì¹˜
+	ct.Stat_TotalEPer2 = CreateVarArr(7,FP)-- +2ê°• í™•ì—… ìˆ˜ì¹˜
+	ct.Stat_TotalEPer3 = CreateVarArr(7,FP)-- +3ê°• í™•ì—… ìˆ˜ì¹˜
+	ct.Stat_TotalEPer4 = CreateVarArr(7,FP)-- íŠ¹ìˆ˜ í™•ì—… ìˆ˜ì¹˜
+	ct.Stat_BreakShield = CreateVarArr(7,FP)-- íŒŒê´´ ë°©ì§€ ìˆ˜ì¹˜
+	ct.Stat_Upgrade = CreateVarArr(7,FP)-- ìœ ë‹› ê³µê²©ë ¥ ì¦ê°€ëŸ‰ ìˆ˜ì¹˜
+	ct.Credit = CreateWarArr(7,FP) -- ë³´ìœ ì¤‘ì¸ í¬ë ˆë”§
+	ct.PEXP = CreateWarArr(7, FP) -- ìì‹ ì´ ì§€ê¸ˆê¹Œì§€ ì–»ì€ ì´ ê²½í—˜ì¹˜
+	ct.TotalExp = CreateWarArr2(7,"10",FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜ + í˜„ì¬ ë ˆë²¨ì—…ì— í•„ìš”í•œ ê²½í—˜ì¹˜
+	ct.CurEXP = CreateWarArr(7,FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜
+	ct.PStatVer = CreateVarArr(7,FP) -- í˜„ì¬ ì €ì¥ëœ ìŠ¤íƒ¯ë²„ì „
+	ct.PlayTime2 = CreateVarArr(7,FP) -- ì´ í”Œë ˆì´íƒ€ì„(ì‹  ê°’)
+	ct.PlayTime = CreateVarArr(7,FP) -- ì´ í”Œë ˆì´íƒ€ì„(êµ¬ ê°’)
 	ct.LV5Cool = CreateVarArr(7,FP)
 	ct.B_PCredit = CreateVarArr(7,FP)
 	ct.B_PTicket = CreateVarArr(7,FP)
@@ -643,7 +643,7 @@ end
 
 	ct.CurPUnitCool = CreateVarArr(7,FP)
 
-	ctg.PCheckV = CreateVar(FP)--ÇÃ·¹ÀÌ¾î ¼ö Ã¼Å©
+	ctg.PCheckV = CreateVar(FP)--í”Œë ˆì´ì–´ ìˆ˜ ì²´í¬
 	ctg.B_IncomeMax = CreateVar(FP)
 	ctg.B_TotalEPer = CreateVar(FP)
 	ctg.B_TotalEPer2 = CreateVar(FP)
@@ -684,13 +684,13 @@ end
 	
 	--SRTable = f_GetFileArrptr(FP,SRTable,4,1)
 
-	LevelUnitArr = {} -- ¸ğµç °­È­ À¯´Ö ÀúÀå Å×ÀÌºí. °¢ 1~4 ÀÎµ¦½º´Â Level,UnitID,Percent,Exp
-	AutoEnchArr = {} -- ÀÚµ¿°­È­ ¼³Á¤¿ë µ¥½º°ª ÅÂ¾ÆºÒ
-	--AutoEnchArr2 = {} -- ÀÚµ¿°­È­ ¼³Á¤ °¡´É ¿©ºÎ ÆÇº°¿ë µ¥½º°ª ÅÂ¾ÆºÒ
-	AutoSellArr = {} -- ÀÚµ¿°­È­ ¼³Á¤¿ë µ¥½º°ª ÅÂ¾ÆºÒ
+	LevelUnitArr = {} -- ëª¨ë“  ê°•í™” ìœ ë‹› ì €ì¥ í…Œì´ë¸”. ê° 1~4 ì¸ë±ìŠ¤ëŠ” Level,UnitID,Percent,Exp
+	AutoEnchArr = {} -- ìë™ê°•í™” ì„¤ì •ìš© ë°ìŠ¤ê°’ íƒœì•„ë¶ˆ
+	--AutoEnchArr2 = {} -- ìë™ê°•í™” ì„¤ì • ê°€ëŠ¥ ì—¬ë¶€ íŒë³„ìš© ë°ìŠ¤ê°’ íƒœì•„ë¶ˆ
+	AutoSellArr = {} -- ìë™ê°•í™” ì„¤ì •ìš© ë°ìŠ¤ê°’ íƒœì•„ë¶ˆ
 	if Limit == 1 then
         
---		AutoBuyArr = { -- ÀÚµ¿±¸ÀÔ °¡°İ ¼³Á¤¿ë Å×ÀÌºí
+--		AutoBuyArr = { -- ìë™êµ¬ì… ê°€ê²© ì„¤ì •ìš© í…Œì´ë¸”
 --		{1,"4500"},
 --		{7,"120000"},
 --		{11,"2100000"},
@@ -711,7 +711,7 @@ end
 --		{40,"10000000000000000000"},
 --	}
 	
-AutoBuyArr = { -- ÀÚµ¿±¸ÀÔ °¡°İ ¼³Á¤¿ë Å×ÀÌºí
+AutoBuyArr = { -- ìë™êµ¬ì… ê°€ê²© ì„¤ì •ìš© í…Œì´ë¸”
 {1,"1500"},
 {7,"40000"}, 
 {11,"700000"},
@@ -732,7 +732,7 @@ AutoBuyArr = { -- ÀÚµ¿±¸ÀÔ °¡°İ ¼³Á¤¿ë Å×ÀÌºí
 {40,"10000000000000000000"},
 }
 		else
-	AutoBuyArr = { -- ÀÚµ¿±¸ÀÔ °¡°İ ¼³Á¤¿ë Å×ÀÌºí
+	AutoBuyArr = { -- ìë™êµ¬ì… ê°€ê²© ì„¤ì •ìš© í…Œì´ë¸”
 	{1,"1500"},
 	{7,"40000"}, 
 	{11,"700000"},
@@ -753,96 +753,96 @@ AutoBuyArr = { -- ÀÚµ¿±¸ÀÔ °¡°İ ¼³Á¤¿ë Å×ÀÌºí
 	{40,"10000000000000000000"},
 }
 end
-	PatchInit() -- À¯´Ö ÆĞÄ¡ Å×ÀÌºí ÃÊ±âÈ­
+	PatchInit() -- ìœ ë‹› íŒ¨ì¹˜ í…Œì´ë¸” ì´ˆê¸°í™”
 	if Limit == 1 then
 		PUT={}
 		PWT={}
 	end
-	--PushLevelUnit(·¹º§, °­È­È®·ü, ÆÇ¸Å½Ã_°æÇèÄ¡·®, À¯´ÖID, ¹«±âID, °ø°İ¼Óµµ, µ¥¹ÌÁö, °ø°İ·ÂÁõ°¡ »ç¿ë¿©ºÎ, µ¥°¡¸®_ÀÖ´ÂÀ¯´Öor¾ø´ÂÀ¯´Ö, ¹«±âÅõ»çÃ¼¼ö)
-	--°ø°İ¼Óµµ : 1,12,24,48,72 (¸Å¿ìºü¸§ ,ºü¸§, º¸Åë, ´À¸², ¸Å¿ì´À¸²)
-	PushLevelUnit(1,60000,0,0,0,24,1,60)--¸¶¸° 10¿ø
-	PushLevelUnit(2,60000,0,1,2,72,10,59)--°í½ºÆ®
-	PushLevelUnit(3,57500,0,2,4,72,20,59)--¹úÃÄ 300¿ø
-	PushLevelUnit(4,54300,0,7,13,48,20,59)--¿¡¾¾ºñ 
-	PushLevelUnit(5,50000,0,8,16,48,30,59)--·¹ÀÌ½º 4000¿ø
-	PushLevelUnit(6,50000,0,5,11,48,50,59,1)--ÅÊÅ©
-	PushLevelUnit(7,50000,0,3,7,48,80,59,1)--°ñ·­ 
-	PushLevelUnit(8,50000,0,32,25,72,60,59)--ÆÄºª 3Å¸ 2¸¸¿ø
-	PushLevelUnit(9,47000,0,58,103,48,80,59)--¹ßÅ°¸® 2Å¸
-	PushLevelUnit(10,46500,0,12,19,48,250,59)--¹èÆ²
+	--PushLevelUnit(ë ˆë²¨, ê°•í™”í™•ë¥ , íŒë§¤ì‹œ_ê²½í—˜ì¹˜ëŸ‰, ìœ ë‹›ID, ë¬´ê¸°ID, ê³µê²©ì†ë„, ë°ë¯¸ì§€, ê³µê²©ë ¥ì¦ê°€ ì‚¬ìš©ì—¬ë¶€, ë°ê°€ë¦¬_ìˆëŠ”ìœ ë‹›orì—†ëŠ”ìœ ë‹›, ë¬´ê¸°íˆ¬ì‚¬ì²´ìˆ˜)
+	--ê³µê²©ì†ë„ : 1,12,24,48,72 (ë§¤ìš°ë¹ ë¦„ ,ë¹ ë¦„, ë³´í†µ, ëŠë¦¼, ë§¤ìš°ëŠë¦¼)
+	PushLevelUnit(1,60000,0,0,0,24,1,60)--ë§ˆë¦° 10ì›
+	PushLevelUnit(2,60000,0,1,2,72,10,59)--ê³ ìŠ¤íŠ¸
+	PushLevelUnit(3,57500,0,2,4,72,20,59)--ë²Œì³ 300ì›
+	PushLevelUnit(4,54300,0,7,13,48,20,59)--ì—ì”¨ë¹„ 
+	PushLevelUnit(5,50000,0,8,16,48,30,59)--ë ˆì´ìŠ¤ 4000ì›
+	PushLevelUnit(6,50000,0,5,11,48,50,59,1)--íƒ±í¬
+	PushLevelUnit(7,50000,0,3,7,48,80,59,1)--ê³¨ëŸ‡ 
+	PushLevelUnit(8,50000,0,32,25,72,60,59)--íŒŒë²³ 3íƒ€ 2ë§Œì›
+	PushLevelUnit(9,47000,0,58,103,48,80,59)--ë°œí‚¤ë¦¬ 2íƒ€
+	PushLevelUnit(10,46500,0,12,19,48,250,59)--ë°°í‹€
 
 
 
-	PushLevelUnit(11,46300,0,65,64,72,250,59)--Áú·µ 2Å¸ 6¸¸¿ø
-	PushLevelUnit(12,45200,0,66,66,48,400,59)--µå¶ó±º
-	PushLevelUnit(13,45000,0,67,68,48,550,59)--ÇÏÅÛ
-	PushLevelUnit(14,45000,0,61,111,72,1000,59)--´ÚÅÛ
-	PushLevelUnit(15,44000,1,83,115,72,1300,59,nil,1)--¸®¹ö
-	PushLevelUnit(16,44000,2,70,73,48,1000,59)--½ºÄ«¿ô
-	PushLevelUnit(17,44000,5,60,100,48,1300,59)--Ä¿¼¼¾î
-	PushLevelUnit(18,43000,10,71,77,48,1800,59)--¾ÆºñÅÍ
+	PushLevelUnit(11,46300,0,65,64,72,250,59)--ì§ˆëŸ¿ 2íƒ€ 6ë§Œì›
+	PushLevelUnit(12,45200,0,66,66,48,400,59)--ë“œë¼êµ°
+	PushLevelUnit(13,45000,0,67,68,48,550,59)--í•˜í…œ
+	PushLevelUnit(14,45000,0,61,111,72,1000,59)--ë‹¥í…œ
+	PushLevelUnit(15,44000,1,83,115,72,1300,59,nil,1)--ë¦¬ë²„
+	PushLevelUnit(16,44000,2,70,73,48,1000,59)--ìŠ¤ì¹´ì›ƒ
+	PushLevelUnit(17,44000,5,60,100,48,1300,59)--ì»¤ì„¸ì–´
+	PushLevelUnit(18,43000,10,71,77,48,1800,59)--ì•„ë¹„í„°
 
 
 	
-	PushLevelUnit(19,42000,15,37,35,12,600,59)--Àú±Û¸µ
-	PushLevelUnit(20,38000,27,38,38,24,2000,59)--È÷µå¶ó
-	PushLevelUnit(21,38000,45,43,48,24,2700,59)--¹ÂÅ»
-	PushLevelUnit(22,36000,80,44,46,24,3500,59)--°¡µğ¾ğ
-	PushLevelUnit(23,36000,160,62,104,24,5000,59)--µğ¹Ù¿ì·¯
-	PushLevelUnit(24,35000,335,39,40,24,6500,59)--¿ïÆ®¶ó
-	PushLevelUnit(25,30000,750,46,50,12,5000,59)--µğÆÄ
+	PushLevelUnit(19,42000,15,37,35,12,600,59)--ì €ê¸€ë§
+	PushLevelUnit(20,38000,27,38,38,24,2000,59)--íˆë“œë¼
+	PushLevelUnit(21,38000,45,43,48,24,2700,59)--ë®¤íƒˆ
+	PushLevelUnit(22,36000,80,44,46,24,3500,59)--ê°€ë””ì–¸
+	PushLevelUnit(23,36000,160,62,104,24,5000,59)--ë””ë°”ìš°ëŸ¬
+	PushLevelUnit(24,35000,335,39,40,24,6500,59)--ìš¸íŠ¸ë¼
+	PushLevelUnit(25,30000,750,46,50,12,5000,59)--ë””íŒŒ
 
 
 
-	PushLevelUnit(25+1,25000,15000/2,20,1,24,10,59)--Áü·¹
-	PushLevelUnit(25+2,25000,21000/2,16,3,48,30,59)--»ç¶ó
-	PushLevelUnit(25+3,25000,37500/2,19,5,24,20,59)--Áü·¹¹úÃÄ
-	PushLevelUnit(25+4,25000,60000/2,17,10,24,30,59,1,1)--¾Ë·£
-	PushLevelUnit(25+5,25000,102000/2,23,12,48,100,59,1)--µàÅ©
-	PushLevelUnit(25+6,25000,188000/2,53,39,24,80,59)--ÇåÅÍ
---	PushLevelUnit(25+7,20000,350000/2,52,51,24,150,59)--¾ğÅ¬¸°
---	PushLevelUnit(25+8,20000,750000/2,69,53,72,700,59)--¼ÅÆ²
---	PushLevelUnit(25+9,20000,1500000/2,41,43,24,350,59)--µå·Ğ
---	PushLevelUnit(25+10,20000,3000000/2,40,42,48,1200,59)--°õ
-	PushLevelUnit(25+7,20000,300000/2,52,51,24,150,59)--¾ğÅ¬¸°
-	PushLevelUnit(25+8,20000,500000/2,69,53,72,700,59)--¼ÅÆ²
-	PushLevelUnit(25+9,20000,1000000/2,41,43,24,350,59)--µå·Ğ
-	PushLevelUnit(25+10,20000,1600000/2,40,42,48,1200,59)--°õ
+	PushLevelUnit(25+1,25000,15000/2,20,1,24,10,59)--ì§ë ˆ
+	PushLevelUnit(25+2,25000,21000/2,16,3,48,30,59)--ì‚¬ë¼
+	PushLevelUnit(25+3,25000,37500/2,19,5,24,20,59)--ì§ë ˆë²Œì³
+	PushLevelUnit(25+4,25000,60000/2,17,10,24,30,59,1,1)--ì•Œëœ
+	PushLevelUnit(25+5,25000,102000/2,23,12,48,100,59,1)--ë“€í¬
+	PushLevelUnit(25+6,25000,188000/2,53,39,24,80,59)--í—Œí„°
+--	PushLevelUnit(25+7,20000,350000/2,52,51,24,150,59)--ì–¸í´ë¦°
+--	PushLevelUnit(25+8,20000,750000/2,69,53,72,700,59)--ì…”í‹€
+--	PushLevelUnit(25+9,20000,1500000/2,41,43,24,350,59)--ë“œë¡ 
+--	PushLevelUnit(25+10,20000,3000000/2,40,42,48,1200,59)--ê³°
+	PushLevelUnit(25+7,20000,300000/2,52,51,24,150,59)--ì–¸í´ë¦°
+	PushLevelUnit(25+8,20000,500000/2,69,53,72,700,59)--ì…”í‹€
+	PushLevelUnit(25+9,20000,1000000/2,41,43,24,350,59)--ë“œë¡ 
+	PushLevelUnit(25+10,20000,1600000/2,40,42,48,1200,59)--ê³°
 
 
-	PushLevelUnit(25+11,16000,5000000/2,10,26,48,750,59)--ÆÄºª¿µ¿õ 3Å¸
-	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--Á¦¶óÅø
-	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--³ë¶óµå
-	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--´Ù´Ï¸ğ½º
-	SetWeaponsDatX(25,{WepName=1441})--ÆÄºª3¿¬Å¸ ¿¹¿ÜÃ³¸®
-	SetWeaponsDatX(103,{WepName=1439})--¹ßÅ°¸®2¿¬Å¸ ¿¹¿ÜÃ³¸®
-	SetWeaponsDatX(64,{WepName=1440})--Áú·µ2¿¬Å¸ ¿¹¿ÜÃ³¸®
-	SetWeaponsDatX(26,{WepName=1448})--ÆÄºª3¿¬Å¸ ¿¹¿ÜÃ³¸®
-	PushLevelUnit(25+15,9000,50000000/2,54,36,5,4000,59,nil,1)--µğ¹ö¸µ¿ø °ø¼ÓÃÖ´ë -- ¸¸·¾±âÁØ 16.4
-	PushLevelUnit(25+16,12000,60000000,11,15,72,40,59)--µå¶ø½± -- ¸¸·¾±âÁØ 13.4
-	PushLevelUnit(25+17,20000,150000000,9,22,48,70,59)--º£½½ -- ¸¸·¾±âÁØ 5.4
-	PushLevelUnit(25+18,25000,800000000,76,71,24,120,59)--¾ÆÄ­ -- ¸¸·¾±âÁØ 0.4
-	PushLevelUnit(25+19,10000,4000000000,63,70,12,400,59)--°³º°È®·ü -- ´ÙÅ©¾ÆÄ­
-	PushLevelUnit(25+20,7000,0,74,62,48,2500,59)--°³º°È®·ü -- ÇÁ·Îºê
-	PushLevelUnit(25+21,4000,0,81,76,24,2800,59)--°³º°È®·ü -- 
-	PushLevelUnit(25+22,1000,0,78,67,12,3400,59)--°³º°È®·ü
+	PushLevelUnit(25+11,16000,5000000/2,10,26,48,750,59)--íŒŒë²³ì˜ì›… 3íƒ€
+	PushLevelUnit(25+12,12000,8000000/2,75,85,24,2000,59)--ì œë¼íˆ´
+	PushLevelUnit(25+13,10000,12000000/2,29,21,24,4000,59)--ë…¸ë¼ë“œ
+	PushLevelUnit(25+14,5000,20000000/2,86,78,12,3500,59)--ë‹¤ë‹ˆëª¨ìŠ¤
+	SetWeaponsDatX(25,{WepName=1441})--íŒŒë²³3ì—°íƒ€ ì˜ˆì™¸ì²˜ë¦¬
+	SetWeaponsDatX(103,{WepName=1439})--ë°œí‚¤ë¦¬2ì—°íƒ€ ì˜ˆì™¸ì²˜ë¦¬
+	SetWeaponsDatX(64,{WepName=1440})--ì§ˆëŸ¿2ì—°íƒ€ ì˜ˆì™¸ì²˜ë¦¬
+	SetWeaponsDatX(26,{WepName=1448})--íŒŒë²³3ì—°íƒ€ ì˜ˆì™¸ì²˜ë¦¬
+	PushLevelUnit(25+15,9000,50000000/2,54,36,5,4000,59,nil,1)--ë””ë²„ë§ì› ê³µì†ìµœëŒ€ -- ë§Œë ™ê¸°ì¤€ 16.4
+	PushLevelUnit(25+16,12000,60000000,11,15,72,40,59)--ë“œëì‰½ -- ë§Œë ™ê¸°ì¤€ 13.4
+	PushLevelUnit(25+17,20000,150000000,9,22,48,70,59)--ë² ìŠ¬ -- ë§Œë ™ê¸°ì¤€ 5.4
+	PushLevelUnit(25+18,25000,800000000,76,71,24,120,59)--ì•„ì¹¸ -- ë§Œë ™ê¸°ì¤€ 0.4
+	PushLevelUnit(25+19,10000,4000000000,63,70,12,400,59)--ê°œë³„í™•ë¥  -- ë‹¤í¬ì•„ì¹¸
+	PushLevelUnit(25+20,7000,0,74,62,48,2500,59)--ê°œë³„í™•ë¥  -- í”„ë¡œë¸Œ
+	PushLevelUnit(25+21,4000,0,81,76,24,2800,59)--ê°œë³„í™•ë¥  -- 
+	PushLevelUnit(25+22,1000,0,78,67,12,3400,59)--ê°œë³„í™•ë¥ 
 	PushLevelUnit(25+23,0,0,79,69,4,6550,59)-- 
 	PushLevelUnit(25+24,500,0,99,112,3,6550,59)-- 
-	PushLevelUnit(25+25,100,0,100,116,1,0,59,nil,2)-- ÃÖ°­À¯´Ö
+	PushLevelUnit(25+25,100,0,100,116,1,0,59,nil,2)-- ìµœê°•ìœ ë‹›
 
-	--ÀÌÇÏ ¹ë·±½º ¹ÌÁ¤
-	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--½ºÄ«¿ô
-	--PushLevelUnit(25+17,4000,60,100,48,1300,130,59)--Ä¿¼¼¾î
-	--PushLevelUnit(25+18,3000,71,77,48,1800,180,59)--¾ÆºñÅÍ
-	--PushLevelUnit(25+19,3000,37,35,12,600,60,59)--Àú±Û¸µ 
-	--PushLevelUnit(25+20,2000,38,38,24,2000,200,59)--È÷µå¶ó
-	--PushLevelUnit(25+21,2000,43,48,24,2700,270,59)--¹ÂÅ»
-	--PushLevelUnit(25+22,1000,44,46,48,7000,700,59)--°¡µğ¾ğ
-	--PushLevelUnit(25+23,1000,62,104,24*4,20000,2000,59)--µğ¹Ù¿ì·¯
-	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--¿ïÆ®¶ó
-	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--µğÆÄ
+	--ì´í•˜ ë°¸ëŸ°ìŠ¤ ë¯¸ì •
+	--PushLevelUnit(25+16,4000,70,73,48,1000,100,59)--ìŠ¤ì¹´ì›ƒ
+	--PushLevelUnit(25+17,4000,60,100,48,1300,130,59)--ì»¤ì„¸ì–´
+	--PushLevelUnit(25+18,3000,71,77,48,1800,180,59)--ì•„ë¹„í„°
+	--PushLevelUnit(25+19,3000,37,35,12,600,60,59)--ì €ê¸€ë§ 
+	--PushLevelUnit(25+20,2000,38,38,24,2000,200,59)--íˆë“œë¼
+	--PushLevelUnit(25+21,2000,43,48,24,2700,270,59)--ë®¤íƒˆ
+	--PushLevelUnit(25+22,1000,44,46,48,7000,700,59)--ê°€ë””ì–¸
+	--PushLevelUnit(25+23,1000,62,104,24*4,20000,2000,59)--ë””ë°”ìš°ëŸ¬
+	--PushLevelUnit(25+24,500,39,40,48,13000,1300,59)--ìš¸íŠ¸ë¼
+	--PushLevelUnit(25+25,500,46,50,48,18000,1800,59)--ë””íŒŒ
 
-	SetUnitAbility(88,114,255,37,100,58,1,nil,60,0,3*32) -- ±âº»À¯´Ö
+	SetUnitAbility(88,114,255,37,100,58,1,nil,60,0,3*32) -- ê¸°ë³¸ìœ ë‹›
 	
 	table.insert(MCTCondArr,MemoryB(0x6616E0+88,Exactly,130))
 	table.insert(MCTCondArr,MemoryB(0x6636B8+88,Exactly,114))
@@ -872,7 +872,7 @@ end
 		{42,"3222222"},
 		{98,"15000000"},
 		{102,"100000000"},
-	}--{,""},--º¸½º °Ç¹° ¾ÆÀÌµğ, DPS ¿ä±¸¼öÄ¡
+	}--{,""},--ë³´ìŠ¤ ê±´ë¬¼ ì•„ì´ë””, DPS ìš”êµ¬ìˆ˜ì¹˜
 if TestStart == 1 then
 	BossArr = {
 		{87,"10000"},
@@ -882,7 +882,7 @@ if TestStart == 1 then
 		{72,"20000000"},
 		{77,"3222"},
 		{104,"2322"},
-	}--{,""},--º¸½º °Ç¹° ¾ÆÀÌµğ, DPM ¿ä±¸¼öÄ¡
+	}--{,""},--ë³´ìŠ¤ ê±´ë¬¼ ì•„ì´ë””, DPM ìš”êµ¬ìˆ˜ì¹˜
 elseif Limit == 1 then
 	BossArr = {
 		{87,"10000"},
@@ -892,7 +892,7 @@ elseif Limit == 1 then
 		{72,"34000000"},
 		{77,"6322"},
 		{104,"32232"},
-	}--{,""},--º¸½º °Ç¹° ¾ÆÀÌµğ, DPM ¿ä±¸¼öÄ¡
+	}--{,""},--ë³´ìŠ¤ ê±´ë¬¼ ì•„ì´ë””, DPM ìš”êµ¬ìˆ˜ì¹˜
 else
 	BossArr = {
 		{87,"10000"},
@@ -902,7 +902,7 @@ else
 		{72,"34000000"},
 		{77,"63222"},
 		{104,"322322"},
-	}--{,""},--º¸½º °Ç¹° ¾ÆÀÌµğ, DPM ¿ä±¸¼öÄ¡
+	}--{,""},--ë³´ìŠ¤ ê±´ë¬¼ ì•„ì´ë””, DPM ìš”êµ¬ìˆ˜ì¹˜
 end
 FirstReward = {
 	{20,500},
@@ -928,8 +928,8 @@ FirstReward3 = {
 	{48,322222222,32222,"\x1B",1},
 }
 FirstReward4 = {
-	{49,"15",322222,"\x06",4}, -- ½ºÆ®¸µ : ¾ï´ÜÀ§
-	{50,"100",3222222,"\x07",1}, -- ½ºÆ®¸µ : ¾ï´ÜÀ§
+	{49,"15",322222,"\x06",4}, -- ìŠ¤íŠ¸ë§ : ì–µë‹¨ìœ„
+	{50,"100",3222222,"\x07",1}, -- ìŠ¤íŠ¸ë§ : ì–µë‹¨ìœ„
 }
 	NBagArr = NBag(FP, 1, 1700)
 
@@ -937,7 +937,7 @@ FirstReward4 = {
 	OreDPSM = {2,4,8,16,32,64,128}
 	GasDPS = {100,1000,10000,100000,1000000,5000000,10000000,0}
 	GasDPSM = {2,4,8,16,32,64,128}
-	PopLevelUnit() -- ¹ë·±½º°¡ ¸ğµÎ ¼³Á¤µÈ °­È­À¯´Ö µ¥ÀÌÅÍ Ã³¸®¿ë ÇÔ¼ö
+	PopLevelUnit() -- ë°¸ëŸ°ìŠ¤ê°€ ëª¨ë‘ ì„¤ì •ëœ ê°•í™”ìœ ë‹› ë°ì´í„° ì²˜ë¦¬ìš© í•¨ìˆ˜
 	Cost_Stat_BossSTic = 250
 	Cost_Stat_BossLVUP = 250
 	Cost_Stat_Upgrade = 20
@@ -979,21 +979,21 @@ FirstReward4 = {
 	}
 	
 	--100+(n*100)
-	--°­¹é ±ÕÀÏ°¡ 10000 C
+	--ê°•ë°± ê· ì¼ê°€ 10000 C
 	--for n = 0, 100 do
 	--	PUnitAtkArr[n+1] = 10+(n*n*6.5524)
 	--	PUnitCoolArr[n+1] = (100-n)*256
 	--end
 	--PUnitAtkArr = f_GetFileArrptr(FP,PUnitAtkArr,4,1)
-	--½Â±Şºñ¿ë 100¸¸C
-	--½Â±Ş½Ã °­È­´Ü°è ÃÊ±âÈ­ÇÏ°í ¾Æ·¡ Ç×¸ñÁß ÅÃ1ÇÏ¿© °¢Á¾ ÀÌ·Î¿î È¿°ú¸¦ ¹ŞÀ½.
+	--ìŠ¹ê¸‰ë¹„ìš© 100ë§ŒC
+	--ìŠ¹ê¸‰ì‹œ ê°•í™”ë‹¨ê³„ ì´ˆê¸°í™”í•˜ê³  ì•„ë˜ í•­ëª©ì¤‘ íƒ1í•˜ì—¬ ê°ì¢… ì´ë¡œìš´ íš¨ê³¼ë¥¼ ë°›ìŒ.
 
-	--1Ç×¸ñ °ø°İ¼Óµµ ±âº» 72 48 24 12 6 3 1 ÃÑ 6´Ü°è °­È­
-	--2Ç×¸ñ °ø°İ·Â ÃÑ 10´Ü°è °­È­. 13000¾¿ Áõ°¡(6500), Ã³À½¿£ µ¥¹ÌÁö 0
-	--3Ç×¸ñ °æÇèÄ¡ È¹µæ·® 20%¾¿ ÃÑ 5È¸
-	--4Ç×¸ñ +1 °­È­È®·ü 1.0%p¾¿ ÃÑ 5È¸
-	--5Ç×¸ñ Æ¯°­È®·ü 0.5%p¾¿ ÃÑ 10È¸ 
-	--6Ç×¸ñ »ç³ÉÅÍ º¯°æ 1È¸¸¸. LV.MAX»ç³ÉÅÍ´Â ³Ê¹«»ç±âÀÓ
+	--1í•­ëª© ê³µê²©ì†ë„ ê¸°ë³¸ 72 48 24 12 6 3 1 ì´ 6ë‹¨ê³„ ê°•í™”
+	--2í•­ëª© ê³µê²©ë ¥ ì´ 10ë‹¨ê³„ ê°•í™”. 13000ì”© ì¦ê°€(6500), ì²˜ìŒì—” ë°ë¯¸ì§€ 0
+	--3í•­ëª© ê²½í—˜ì¹˜ íšë“ëŸ‰ 20%ì”© ì´ 5íšŒ
+	--4í•­ëª© +1 ê°•í™”í™•ë¥  1.0%pì”© ì´ 5íšŒ
+	--5í•­ëª© íŠ¹ê°•í™•ë¥  0.5%pì”© ì´ 10íšŒ 
+	--6í•­ëª© ì‚¬ëƒ¥í„° ë³€ê²½ 1íšŒë§Œ. LV.MAXì‚¬ëƒ¥í„°ëŠ” ë„ˆë¬´ì‚¬ê¸°ì„
 	iv.CS_Cooldown = CreateVarArr(7,FP)
 	iv.CS_Atk = CreateVarArr(7,FP)
 	iv.CS_EXP = CreateVarArr(7,FP)
@@ -1035,43 +1035,43 @@ FirstReward4 = {
 
 ----	--{Max,FileArr}
 --	Cost_FXPer44 = CreateCostData(100,function(n) return 1+((n-1)*(n*1)) end)
---	--¸¶½ºÅÍ 10.0% = 30¸¸, 
+--	--ë§ˆìŠ¤í„° 10.0% = 30ë§Œ, 
 --	Cost_FXPer45 = CreateCostData(100,function(n) return 1+((n-1)*(n*4)) end)
---	--¸¶½ºÅÍ 10.0% = 130¸¸,
+--	--ë§ˆìŠ¤í„° 10.0% = 130ë§Œ,
 --	Cost_FXPer46 = CreateCostData(100,function(n) return 1+((n-1)*(n*7)) end)
---	--¸¶½ºÅÍ 10.0% = 230¸¸, 
+--	--ë§ˆìŠ¤í„° 10.0% = 230ë§Œ, 
 --	Cost_FXPer47 = CreateCostData(100,function(n) return 1+((n-1)*(n*10)) end)
---	--¸¶½ºÅÍ 10.0% = 330¸¸, 
+--	--ë§ˆìŠ¤í„° 10.0% = 330ë§Œ, 
 --	Cost_FMEPer = CreateCostData(300,function(n) return 1000+((n-1)*(n*1)*n) end)
---	--¸¶½ºÅÍ 1.0% = 2500¸¸, ÄÄÇÃ¸®Æ® 3.0% 20¾ï
+--	--ë§ˆìŠ¤í„° 1.0% = 2500ë§Œ, ì»´í”Œë¦¬íŠ¸ 3.0% 20ì–µ
 --	Cost_FIncm = CreateCostData(900,function(n) return n*50 end)
---	--ÄÄÇÃ¸®Æ® 10000% = 2000¸¸
+--	--ì»´í”Œë¦¬íŠ¸ 10000% = 2000ë§Œ
 --	Cost_FSEXP = CreateCostData(1000,function(n) return 100+(2*n) end)
---	--ÄÄÇÃ¸®Æ® 10000% = 110¸¸
+--	--ì»´í”Œë¦¬íŠ¸ 10000% = 110ë§Œ
 --	Cost_FBrSh = CreateCostData(150,function(n) return 1000+((n-1)*(n*20)*n) end)
---	--ÄÄÇÃ¸®Æ® 15.0% = 25¾ï
+--	--ì»´í”Œë¦¬íŠ¸ 15.0% = 25ì–µ
 
 
 	
 	--	--{Max,FileArr}
 	Cost_FXPer44 = ReciveCostDataFile(100,"FXPer44")
-	--¸¶½ºÅÍ 10.0% = 30¸¸, 
+	--ë§ˆìŠ¤í„° 10.0% = 30ë§Œ, 
 	Cost_FXPer45 = ReciveCostDataFile(100,"FXPer45")
-	--¸¶½ºÅÍ 10.0% = 130¸¸,
+	--ë§ˆìŠ¤í„° 10.0% = 130ë§Œ,
 	Cost_FXPer46 = ReciveCostDataFile(100,"FXPer46")
-	--¸¶½ºÅÍ 10.0% = 230¸¸, 
+	--ë§ˆìŠ¤í„° 10.0% = 230ë§Œ, 
 	Cost_FXPer47 = ReciveCostDataFile(100,"FXPer47")
-	--¸¶½ºÅÍ 10.0% = 330¸¸, 
+	--ë§ˆìŠ¤í„° 10.0% = 330ë§Œ, 
 	Cost_FXPer48 = ReciveCostDataFile(1000,"FXPer48")
-	--¸¶½ºÅÍ 10.0% = 330¸¸, 
+	--ë§ˆìŠ¤í„° 10.0% = 330ë§Œ, 
 	Cost_FMEPer = ReciveCostDataFile(350,"FMEPer")
-	--¸¶½ºÅÍ 1.0% = 376¸¸, ÄÄÇÃ¸®Æ® 3.0% 1¾ï
+	--ë§ˆìŠ¤í„° 1.0% = 376ë§Œ, ì»´í”Œë¦¬íŠ¸ 3.0% 1ì–µ
 	Cost_FIncm = ReciveCostDataFile(200,"FIncm")
-	--ÄÄÇÃ¸®Æ® 10000% = 2000¸¸
+	--ì»´í”Œë¦¬íŠ¸ 10000% = 2000ë§Œ
 	Cost_FSEXP = ReciveCostDataFile(1000,"FSEXP")
-	--ÄÄÇÃ¸®Æ® 10000% = 110¸¸
+	--ì»´í”Œë¦¬íŠ¸ 10000% = 110ë§Œ
 	Cost_FBrSh = ReciveCostDataFile(200,"FBrSh")
-	--ÄÄÇÃ¸®Æ® 15.0% = 1.2¾ï
+	--ì»´í”Œë¦¬íŠ¸ 15.0% = 1.2ì–µ
 	Cost_FMin = ReciveCostDataFile(200,"FMin")
 	
 	Cost_FMEPer2 = ReciveCostDataFile(150,"FMEPer2")
@@ -1140,15 +1140,15 @@ FirstReward4 = {
 		31+28+31+30+31+30+31+31+30+31,
 		31+28+31+30+31+30+31+31+30+31+30}
 	MonthData = f_GetFileArrptr(FP,MonthData,4,1)
-	--Create_utf8_Subtitle("\x17ÇÃ¶ó½ºÆ½\x10·¯ºê","didtmdwo1297@naver.com","Plastic__Test",4)
+	--Create_utf8_Subtitle("\x17í”Œë¼ìŠ¤í‹±\x10ëŸ¬ë¸Œ","didtmdwo1297@naver.com","Plastic__Test",4)
 
 
-	Create_utf8_Subtitle("\x08¾Æ\x0E½º\x1F³ª\x10¹Ù\x17º¸\x1E¸Û\x1DÃö\x15ÀÌ","didtmdwo1297@naver.com","Plastic__Test",4)
+	Create_utf8_Subtitle("\x08ì•„\x0EìŠ¤\x1Fë‚˜\x10ë°”\x17ë³´\x1Eë©\x1Dì¸™\x15ì´","didtmdwo1297@naver.com","Plastic__Test",4)
 
 
 	
-	Create_utf8_Subtitle("¾Æ½º³ª´Ô¿­ÀÏÇØ¶ó¤µ¤¡","didtmdwo1297@naver.com","Plastic__Test",6)
+	Create_utf8_Subtitle("ì•„ìŠ¤ë‚˜ë‹˜ì—´ì¼í•´ë¼ã……ã„±","didtmdwo1297@naver.com","Plastic__Test",6)
 	PopSubtitleData()
 
-	--±×¿Ü ³²´Â È®·ü°ªÀº ²Î - ±âº» Á¶°¢ Áö±Ş(°¢ 1,2,5,10°³)
+	--ê·¸ì™¸ ë‚¨ëŠ” í™•ë¥ ê°’ì€ ê½ - ê¸°ë³¸ ì¡°ê° ì§€ê¸‰(ê° 1,2,5,10ê°œ)
 end

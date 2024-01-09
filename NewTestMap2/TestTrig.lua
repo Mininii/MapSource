@@ -1,35 +1,35 @@
 function TestTrig()
 	
-	local Money = iv.Money-- CreateWarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç µ· º¸À¯·®
-	local IncomeMax = iv.IncomeMax-- CreateVarArr2(7,12,FP) -- ÀÚ½ÅÀÇ »ç³ÉÅÍ ÃÖ´ë À¯´Ö¼ö
-	local Income = iv.Income-- CreateVarArr(7,FP) -- ÀÚ½ÅÀÇ ÇöÀç »ç³ÉÅÍ¿¡ º¸À¯ÁßÀÎ À¯´Ö¼ö
-	local BuildMul1 = iv.BuildMul1-- CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	local BuildMul2 = iv.BuildMul2-- CreateVarArr2(7,1,FP)-- °Ç¹° µ· È¹µæ·« ¹è¼ö
-	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(±âº» 1°­)
-	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+2°­)
-	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+3°­)
-	local ScoutDmg = iv.ScoutDmg-- CreateVarArr(7,FP) -- ±âº»À¯´Ö µ¥¹ÌÁö
+	local Money = iv.Money-- CreateWarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ëˆ ë³´ìœ ëŸ‰
+	local IncomeMax = iv.IncomeMax-- CreateVarArr2(7,12,FP) -- ìì‹ ì˜ ì‚¬ëƒ¥í„° ìµœëŒ€ ìœ ë‹›ìˆ˜
+	local Income = iv.Income-- CreateVarArr(7,FP) -- ìì‹ ì˜ í˜„ì¬ ì‚¬ëƒ¥í„°ì— ë³´ìœ ì¤‘ì¸ ìœ ë‹›ìˆ˜
+	local BuildMul1 = iv.BuildMul1-- CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	local BuildMul2 = iv.BuildMul2-- CreateVarArr2(7,1,FP)-- ê±´ë¬¼ ëˆ íšë“ëµ ë°°ìˆ˜
+	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (ê¸°ë³¸ 1ê°•)
+	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+2ê°•)
+	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+3ê°•)
+	local ScoutDmg = iv.ScoutDmg-- CreateVarArr(7,FP) -- ê¸°ë³¸ìœ ë‹› ë°ë¯¸ì§€
 	local ScTimer = iv.ScTimer-- CreateCcodeArr(7)
 	local PTimeV = iv.PTimeV
 	local ResetStat = iv.ResetStat
-	local General_Upgrade = iv.General_Upgrade--CreateVarArr(7,FP)-- À¯´Ö °ø°İ·Â Áõ°¡·® ¼öÄ¡
-	local PBossLV = iv.PBossLV -- °³ÀÎº¸½º·¹º§
-	local PBossDPS = iv.PBossDPS-- °³ÀÎº¸½ºDPS
-	local TotalPBossDPS = iv.TotalPBossDPS --°³ÀÎº¸½ºDPS ¸ñÇ¥Ä¡
+	local General_Upgrade = iv.General_Upgrade--CreateVarArr(7,FP)-- ìœ ë‹› ê³µê²©ë ¥ ì¦ê°€ëŸ‰ ìˆ˜ì¹˜
+	local PBossLV = iv.PBossLV -- ê°œì¸ë³´ìŠ¤ë ˆë²¨
+	local PBossDPS = iv.PBossDPS-- ê°œì¸ë³´ìŠ¤DPS
+	local TotalPBossDPS = iv.TotalPBossDPS --ê°œì¸ë³´ìŠ¤DPS ëª©í‘œì¹˜
 	local SellTicket = iv.SellTicket
-	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- ÀÚ½ÅÀÇ ÇöÀç ·¹º§
-	local StatP = iv.StatP--CreateVarArr(7,FP)-- ÇöÀç º¸À¯ÁßÀÎ ½ºÅÈÆ÷ÀÎÆ®
-	local Stat_BossSTic = iv.Stat_BossSTic--CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	local Stat_BossLVUP = iv.Stat_BossLVUP--CreateVarArr(7,FP)-- »ç³ÉÅÍ ¾÷±Û ¼öÄ¡
-	local Stat_TotalEPer = iv.Stat_TotalEPer--CreateVarArr(7,FP)-- +1°­ È®¾÷ ¼öÄ¡
-	local Stat_TotalEPer2 = iv.Stat_TotalEPer2--CreateVarArr(7,FP)-- +2°­ È®¾÷ ¼öÄ¡
-	local Stat_TotalEPer3 = iv.Stat_TotalEPer3--CreateVarArr(7,FP)-- +3°­ È®¾÷ ¼öÄ¡
-	local Stat_Upgrade = iv.Stat_Upgrade--CreateVarArr(7,FP)-- À¯´Ö °ø°İ·Â Áõ°¡·® ¼öÄ¡
-	local Credit = iv.Credit--CreateWarArr(7,FP) -- º¸À¯ÁßÀÎ Å©·¹µ÷
-	local PEXP = iv.PEXP--CreateWarArr(7, FP) -- ÀÚ½ÅÀÌ Áö±İ±îÁö ¾òÀº ÃÑ °æÇèÄ¡
-	local TotalExp = iv.TotalExp--CreateWarArr2(7,"10",FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡ + ÇöÀç ·¹º§¾÷¿¡ ÇÊ¿äÇÑ °æÇèÄ¡
-	local CurEXP = iv.CurEXP--CreateWarArr(7,FP) -- Áö±İ±îÁö ·¹º§¾÷¿¡ »ç¿ëÇÑ °æÇèÄ¡
-	local PStatVer = iv.PStatVer--CreateVarArr(7,FP) -- ÇöÀç ÀúÀåµÈ ½ºÅÈ¹öÀü
+	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- ìì‹ ì˜ í˜„ì¬ ë ˆë²¨
+	local StatP = iv.StatP--CreateVarArr(7,FP)-- í˜„ì¬ ë³´ìœ ì¤‘ì¸ ìŠ¤íƒ¯í¬ì¸íŠ¸
+	local Stat_BossSTic = iv.Stat_BossSTic--CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	local Stat_BossLVUP = iv.Stat_BossLVUP--CreateVarArr(7,FP)-- ì‚¬ëƒ¥í„° ì—…ê¸€ ìˆ˜ì¹˜
+	local Stat_TotalEPer = iv.Stat_TotalEPer--CreateVarArr(7,FP)-- +1ê°• í™•ì—… ìˆ˜ì¹˜
+	local Stat_TotalEPer2 = iv.Stat_TotalEPer2--CreateVarArr(7,FP)-- +2ê°• í™•ì—… ìˆ˜ì¹˜
+	local Stat_TotalEPer3 = iv.Stat_TotalEPer3--CreateVarArr(7,FP)-- +3ê°• í™•ì—… ìˆ˜ì¹˜
+	local Stat_Upgrade = iv.Stat_Upgrade--CreateVarArr(7,FP)-- ìœ ë‹› ê³µê²©ë ¥ ì¦ê°€ëŸ‰ ìˆ˜ì¹˜
+	local Credit = iv.Credit--CreateWarArr(7,FP) -- ë³´ìœ ì¤‘ì¸ í¬ë ˆë”§
+	local PEXP = iv.PEXP--CreateWarArr(7, FP) -- ìì‹ ì´ ì§€ê¸ˆê¹Œì§€ ì–»ì€ ì´ ê²½í—˜ì¹˜
+	local TotalExp = iv.TotalExp--CreateWarArr2(7,"10",FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜ + í˜„ì¬ ë ˆë²¨ì—…ì— í•„ìš”í•œ ê²½í—˜ì¹˜
+	local CurEXP = iv.CurEXP--CreateWarArr(7,FP) -- ì§€ê¸ˆê¹Œì§€ ë ˆë²¨ì—…ì— ì‚¬ìš©í•œ ê²½í—˜ì¹˜
+	local PStatVer = iv.PStatVer--CreateVarArr(7,FP) -- í˜„ì¬ ì €ì¥ëœ ìŠ¤íƒ¯ë²„ì „
 	local PlayTime2 = iv.PlayTime2
 	local NextOre = iv.NextOre
 	local NextGas = iv.NextGas
@@ -37,13 +37,13 @@ function TestTrig()
 	local NextGasMul = iv.NextGasMul
 	local PlayTime = iv.PlayTime
 	local LV5Cool = iv.LV5Cool
-	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- °æÇèÄ¡ È¹µæ·® ¼öÄ¡. »ç¿ë ¹ÌÁ¤
-	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10·Î ³ª´² °æÇèÄ¡¿¡ ´õÇÒ °ª ÀúÀå¿ë. »ç¿ë ¹ÌÁ¤
+	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- ê²½í—˜ì¹˜ íšë“ëŸ‰ ìˆ˜ì¹˜. ì‚¬ìš© ë¯¸ì •
+	local PEXP2 = iv.PEXP2--CreateVarArr(7, FP) -- 1/10ë¡œ ë‚˜ëˆ  ê²½í—˜ì¹˜ì— ë”í•  ê°’ ì €ì¥ìš©. ì‚¬ìš© ë¯¸ì •
 if TestStart == 1 then
 	for i = 0, 0 do
 		--[[
 		CIf(FP, HumanCheck(i,1))
-		if TestStart == 1 then -- °ü¸®ÀÚ ÄÜ¼Ö ÀÏ´Üºñ°øÀ¯µ¥ÀÌÅÍ(¹æ°¥µÊ)
+		if TestStart == 1 then -- ê´€ë¦¬ì ì½˜ì†” ì¼ë‹¨ë¹„ê³µìœ ë°ì´í„°(ë°©ê°ˆë¨)
 	
 			L = CreateVar()
 			CIfOnce(FP)
@@ -55,11 +55,11 @@ if TestStart == 1 then
 			SLoopN(FP,11,Always(),{SetNVar(N,Add,218)},{SetNVar(N,SetTo,0x640B63-218),TSetNVar(N,Add,L)})
 	
 			for j,k in pairs({PLevel[i+1],SellTicket[i+1],IncomeMax[i+1],TotalEPer[i+1],TotalEPer2[i+1],TotalEPer3[i+1],General_Upgrade[i+1],Stat_EXPIncome[i+1]}) do
-				f_bytecmp(FP,{CU[j]},N,_byteConvert(GetStrArr(0,"@"..j.."¹ø")),GetStrSize(0,"@"..j.."¹ø"))
+				f_bytecmp(FP,{CU[j]},N,_byteConvert(GetStrArr(0,"@"..j.."ë²ˆ")),GetStrSize(0,"@"..j.."ë²ˆ"))
 			
 			end
 			for j,k in pairs({Credit[i+1],Money[i+1]}) do
-				f_bytecmp(FP,{CU[j+8]},N,_byteConvert(GetStrArr(0,"@"..(j+8).."¹ø")),GetStrSize(0,"@"..(j+8).."¹ø"))
+				f_bytecmp(FP,{CU[j+8]},N,_byteConvert(GetStrArr(0,"@"..(j+8).."ë²ˆ")),GetStrSize(0,"@"..(j+8).."ë²ˆ"))
 				
 			end
 			SLoopNEnd()

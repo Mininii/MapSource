@@ -1,7 +1,7 @@
 function LeaderBoard()
 	
 local LeaderBoardT = CreateCcode()
-Trigger { -- DPS ∏Æ¥ı∫∏µÂ
+Trigger { -- DPS Î¶¨ÎçîÎ≥¥Îìú
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -16,7 +16,7 @@ Trigger { -- DPS ∏Æ¥ı∫∏µÂ
 		PreserveTrigger();
 },
 }
-Trigger { -- ∑π∫ß
+Trigger { -- Î†àÎ≤®
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -30,7 +30,7 @@ Trigger { -- ∑π∫ß
 },
 }
 
-Trigger { -- DPS ∏Æ¥ı∫∏µÂ
+Trigger { -- DPS Î¶¨ÎçîÎ≥¥Îìú
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -45,7 +45,7 @@ Trigger { -- DPS ∏Æ¥ı∫∏µÂ
 		PreserveTrigger();
 },
 }
-Trigger { -- ∑π∫ß
+Trigger { -- Î†àÎ≤®
 	players = {FP},
 	conditions = {
 		Label(0);

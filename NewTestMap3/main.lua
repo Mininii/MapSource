@@ -1,26 +1,17 @@
+
+
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\NewTestMap3\\main.lua")
-
---¼ÓµµÃøÁ¤¿ë
+--__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- ë§µíŒŒì¼ ê²½ë¡œ(\ë¥¼ \\ë¡œ ë°”ê¿”ì•¼í•¨)
+--__SubDirSetting(__encode_cp949(Curdir.."MapSource\\NewTestMap3")) -- Main.lua í´ë”ê²½ë¡œ (\ë¥¼ \\ë¡œ ë°”ê¿”ì•¼í•¨, ì—†ìœ¼ë©´ ë¹„ìš°ê¸°)
+--ì†ë„ì¸¡ì •ìš©
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-LD2XOption = 1
-if LD2XOption == 1 then
-	Mapdir="C:\\euddraft0.9.2.0\\exmap2"
-	__StringArray = {}
-	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
-	__TRIGChkptrT = {}
-	__TTI = 1
-	Loader2XFName = "Loader.lua"
-else
-	Loader2XFName = "Loader2X.lua"
-end
 
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
+     if dir:match "%.[Ll][Uu][Aa]$" then
 		if dir ~= "recover.lua" then
 			InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 			InitEXTLua()
@@ -53,12 +44,12 @@ end
 LimitVer = 1
 StatVer = 1
 StatVer2 = 1
-EUDTurbo(AllPlayers) -- 8ÀÎ¿ë¸Ê
+EUDTurbo(AllPlayers) -- 8ì¸ìš©ë§µ
 SetForces({P1,P2,P3,P4,P5,P6,P7,P8},{},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 
 FP = P1
-SetFixedPlayer(FP) -- ¸ŞÀÎ Æ®·¯±â ÇÃ·¹ÀÌ¾î. 
-Enable_HumanCheck() -- ÄÄÇ»ÅÍ Ã¼Å© ÇÊ¿ä½Ã PlayerCheck(Player,Status) »ç¿ë
+SetFixedPlayer(FP) -- ë©”ì¸ íŠ¸ëŸ¬ê¸° í”Œë ˆì´ì–´. 
+Enable_HumanCheck() -- ì»´í“¨í„° ì²´í¬ í•„ìš”ì‹œ PlayerCheck(Player,Status) ì‚¬ìš©
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 
 init_func = def_sIndex()
@@ -100,18 +91,18 @@ TriggerX({P2,P3,P4,P5,P6,P7,P8}, {Switch("Switch 1",Cleared)}, {
 for i = 1, 7 do
 	TriggerX(i, {Switch("Switch 187",Set)}, {
 		SetDeaths(0,SetTo,0,0);
-		SetSwitch("Switch 187",Clear);-- RotatePlayer({DisplayTextX((i+1).."P°¡ ½ÇÇàÁß", 1)}, AllPlayers, i);
+		SetSwitch("Switch 187",Clear); --RotatePlayer({DisplayTextX((i+1).."Pê°€ ì‹¤í–‰ì¤‘", 1)}, AllPlayers, i);
 		SetMemory(0x6509B0,SetTo,i)}, {preserved})
 end
 TriggerX(P1, {Switch("Switch 187",Set)}, {
 	SetDeaths(0,SetTo,0,0);}, {preserved},0x5000)
 CIf(FP,Switch("Switch 1",Cleared),SetSwitch("Switch 1",Set))
---FP Æ®¸®°Å ½ÃÀÛºÎ
---¿©±â¿¡ ¸ğµç FP Æ®¸®°Å ÀÔ·Â (Àı´ë FP ÀÌ¿ÜÀÇ Æ®¸®°Å ÀÔ·Â ±İÁö)
+--FP íŠ¸ë¦¬ê±° ì‹œì‘ë¶€
+--ì—¬ê¸°ì— ëª¨ë“  FP íŠ¸ë¦¬ê±° ì…ë ¥ (ì ˆëŒ€ FP ì´ì™¸ì˜ íŠ¸ë¦¬ê±° ì…ë ¥ ê¸ˆì§€)
 
---TriggerX(FP, {}, {RotatePlayer({DisplayTextX("1¹øÆ®¸®°Å", 1)}, AllPlayers, FP)}, {preserved})
---TriggerX(FP, {}, {RotatePlayer({DisplayTextX("2¹øÆ®¸®°Å", 1)}, AllPlayers, FP)}, {preserved})
---TriggerX(FP, {}, {RotatePlayer({DisplayTextX("3¹øÆ®¸®°Å", 1)}, AllPlayers, FP)}, {preserved})
+--TriggerX(FP, {}, {RotatePlayer({DisplayTextX("1ë²ˆíŠ¸ë¦¬ê±°", 1)}, AllPlayers, FP)}, {preserved})
+--TriggerX(FP, {}, {RotatePlayer({DisplayTextX("2ë²ˆíŠ¸ë¦¬ê±°", 1)}, AllPlayers, FP)}, {preserved})
+--TriggerX(FP, {}, {RotatePlayer({DisplayTextX("3ë²ˆíŠ¸ë¦¬ê±°", 1)}, AllPlayers, FP)}, {preserved})
 _G[DPInitActArr[1]](DPInitActArr[2],DPInitActArr[3],DPInitActArr[4],DPInitActArr[5])
 
 --onInit_EUD() -- onPluginStart
@@ -119,7 +110,7 @@ _G[DPInitActArr[1]](DPInitActArr[2],DPInitActArr[3],DPInitActArr[4],DPInitActArr
 
 
 
---FP Æ®¸®°Å Á¾·áºÎ
+--FP íŠ¸ë¦¬ê±° ì¢…ë£Œë¶€
 CIfEnd()
 DoActionsX(P1, {}, nil,0x5001)
 init_Setting()
@@ -153,9 +144,3 @@ SetCallErrorCheck()
 --TrigBench:write("Total Trig Count : "..CurTrigTotal.."\n")
 --io.close(CSfile)
 --io.close(TrigBench)
-
-if LD2XOption == 1 then
-__PopStringArray()
-io.close(__TRIGchkptr)
-end
-

@@ -103,14 +103,14 @@ function GameDisplay()
 
 	function TEST() 
 		local PlayerID = CAPrintPlayerID 
-		local LVData = {{{0,9},{"£°",{0x1000000}}}} 
+		local LVData = {{{0,9},{"ï¼",{0x1000000}}}} 
 		local StatEffT = CreateCcode()
 		local InterfaceNumLoc2 = CreateCcode()
 		DoActionsX(FP,AddCD(StatEffT,1))
 		
-		CA__SetValue(Str1,"\x07º¸À¯±İ¾× \x04:  0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000\x0D\x04¿ø\x12\x07»ç³ÉÅÍ\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+		CA__SetValue(Str1,"\x07ë³´ìœ ê¸ˆì•¡ \x04:  0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000\x0D\x04ì›\x12\x07ì‚¬ëƒ¥í„°\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 
-		CA__SetValue(Str2,"\x07º¸À¯±İ¾× \x04: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D \x04¿ø\x12\x17Ãµ°æ£º 00000000 \x04°³ \x07»ç³ÉÅÍ\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
+		CA__SetValue(Str2,"\x07ë³´ìœ ê¸ˆì•¡ \x04: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D \x04ì›\x12\x17ì²œê²½ï¼š 00000000 \x04ê°œ \x07ì‚¬ëƒ¥í„°\x04 \x0D\x0D\x0D / \x0D\x0D\x0D\x0D\x0D",nil,1)
 		--43
 		--49
 		CS__ItoCustom(FP,SVA1(Str2,40),IncomeLoc,nil,nil,{10,2},1,nil,"\x1B0",0x1B,{0,1})
@@ -141,16 +141,16 @@ function GameDisplay()
 
 		
 		local Tabkey = KeyToggleFunc2("TAB","LCTRL")
-		CIfX(FP,{CD(Tabkey,1)})--¼öÄ¡Ç¥±â
+		CIfX(FP,{CD(Tabkey,1)})--ìˆ˜ì¹˜í‘œê¸°
 		CIfX(FP,{CV(LevelLoc,LevelLimit-1,AtMost)})
 		CElseX({TSetNWar(ExpLoc, SetTo, "0"),TSetNWar(TotalExpLoc, SetTo, "0")})
 		CIfXEnd()
-		CA__SetValue(Str1,"\x07£Ì£Ö£®\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04£­",nil,1)
+		CA__SetValue(Str1,"\x07ï¼¬ï¼¶ï¼\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04ï¼",nil,1)
 		CA__lItoCustom(SVA1(Str1,12),ExpLoc,nil,nil,{10,15},nil,nil,"\x040",{0x1C,0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
-		CA__Input(MakeiStrData("\x08£¯",1),SVA1(Str1,30))
+		CA__Input(MakeiStrData("\x08ï¼",1),SVA1(Str1,30))
 		CA__lItoCustom(SVA1(Str1,31),TotalExpLoc,nil,nil,{10,15},nil,nil,"\x040",{0x1C,0x1C,0x1C,0x1F,0x1F,0x1F,0x1E,0x1E,0x1E,0x07,0x07,0x07,0x10,0x10,0x10})
-		CElseX()--ÆÛ¼¾Æ®Ç¥±â
-		CA__SetValue(Str1,"\x07£Ì£Ö£®\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04£­\x0F£Å£Ø£Ğ\x04£º",nil,1)
+		CElseX()--í¼ì„¼íŠ¸í‘œê¸°
+		CA__SetValue(Str1,"\x07ï¼¬ï¼¶ï¼\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04ï¼\x0Fï¼¥ï¼¸ï¼°\x04ï¼š",nil,1)
 		local CurExpTmp = CreateVar(FP)
 		local CurExpTmp2 = CreateWar(FP)
 		CIfX(FP,{CV(LevelLoc,LevelLimit-1,AtMost)})
@@ -158,7 +158,7 @@ function GameDisplay()
 		f_Cast(FP, {CurExpTmp,0}, _LDiv(CurExpTmp2,TotalExpLoc), nil, nil, 1)
 		CElseX({SetV(CurExpTmp,20)})
 		CIfXEnd()
-		CA__SetValue(Str1,"\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x17(Ctrl+TAB:¼¼ºÎ°ª)",nil,16)
+		CA__SetValue(Str1,"\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x04l\x17(Ctrl+TAB:ì„¸ë¶€ê°’)",nil,16)
 		for i = 0, 19 do
 			CS__InputTA(FP,{CV(CurExpTmp,i+1,AtLeast)},SVA1(Str1,16+i),0x07,0xFF)
 		end
@@ -168,7 +168,7 @@ function GameDisplay()
 		
 		CIfXEnd()
 		
-		CS__ItoCustom(FP,SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1B£°",0x1B,nil, LVData)
+		CS__ItoCustom(FP,SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1Bï¼",0x1B,nil, LVData)
 		TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 		CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0)
@@ -179,12 +179,12 @@ function GameDisplay()
 		TempCrStLoc = CreateWar(FP)
 
 		CIfX(FP,CD(Tabkey,0))
-		CA__SetValue(Str1,"\x12Æ÷ÀÎÆ® \x04:  000,000,000 \x04| \x17Å©·¹µ÷ \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		CA__SetValue(Str1,"\x12í¬ì¸íŠ¸ \x04:  000,000,000 \x04| \x17í¬ë ˆë”§ \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999999,AtLeast),{SetV(StatPLoc,999999999)},{preserved})
         CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		f_LMov(FP, TempCrStLoc, CredLoc)
 		CElseX()
-		CA__SetValue(Str1,"\x12\x02Á¶°¢\x0D \x04:  000,000,000 \x04| \x19ÆÇ¸Å±Ç \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
+		CA__SetValue(Str1,"\x12\x02ì¡°ê°\x0D \x04:  000,000,000 \x04| \x19íŒë§¤ê¶Œ \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		f_LMov(FP, TempCrStLoc, SellTicketLoc)
 		CTrigger(FP,{TTNWar(TempFf, AtLeast, "999999999"),TTNWar(TempFf, AtMost, "0x7FFFFFFFFFFFFFFF")},{SetV(TempFf2,999999999)},{preserved})
 
@@ -207,10 +207,10 @@ function GameDisplay()
 
 	
 		CA__InputVA(56*2,Str1,Str1s,nil,56*2,56*3-2)
-		CIfX(FP,{CD(Tabkey,1)})--¼öÄ¡Ç¥±â
+		CIfX(FP,{CD(Tabkey,1)})--ìˆ˜ì¹˜í‘œê¸°
 		CA__SetColor((56*2)+1, 0x02)
 		CA__SetColor((56*2)+23, 0x10)
-		CElseX()--ÆÛ¼¾Æ®Ç¥±â
+		CElseX()--í¼ì„¼íŠ¸í‘œê¸°
 		CA__SetColor((56*2)+1, 0x10)
 		CA__SetColor((56*2)+23, 0x17)
 		CIfXEnd()
@@ -227,12 +227,12 @@ function GameDisplay()
 		
 		CMov(FP,MCP,LCP)
 		CallTriggerX(FP,Call_SetScrMouse,{},{})
-		mmX = mouseX -- »ó´ëÁÂÇ¥ ÁÂÃøÁ¤·Ä
+		mmX = mouseX -- ìƒëŒ€ì¢Œí‘œ ì¢Œì¸¡ì •ë ¬
 		mmY = mouseY
-		mmX2 = screenX -- Áß¾ÓÁ¤·Ä
-		mmX3 = screenX2 -- Áß¾ÓÁ¤·Ä
+		mmX2 = screenX -- ì¤‘ì•™ì •ë ¬
+		mmX3 = screenX2 -- ì¤‘ì•™ì •ë ¬
 		if TestStart == 1 then
-		--DisplayPrintEr(0, {"»ó´ëÁÂÇ¥ X : ", mmX, "  Y : ", mmY, " || Áß¾ÓÁ¤·Ä X : ", mmX2, "  Y : ", mmY," || ¿ìÃøÁ¤·Ä X : ",mmX3,"  Y : ",mmY});
+		--DisplayPrintEr(0, {"ìƒëŒ€ì¢Œí‘œ X : ", mmX, "  Y : ", mmY, " || ì¤‘ì•™ì •ë ¬ X : ", mmX2, "  Y : ", mmY," || ìš°ì¸¡ì •ë ¬ X : ",mmX3,"  Y : ",mmY});
 		end
 		BColor = CreateVarArr(6,FP)
 		BColor2 = CreateVarArr(6,FP)
@@ -355,8 +355,8 @@ function GameDisplay()
 		Trigger2X(FP, {CV(InterfaceNumLoc,256)}, BAct1,{preserved})
 		Trigger2X(FP, {CV(InterfaceNumLoc,257)}, BAct2,{preserved})
 		local CDFncArr={}
-		--296~310 °¢ ½ºÅÈÂï±â ¹öÆ°
-		--274~388 »ó´ëÁÂÇ¥ ³ª°¡±â¹öÆ°
+		--296~310 ê° ìŠ¤íƒ¯ì°ê¸° ë²„íŠ¼
+		--274~388 ìƒëŒ€ì¢Œí‘œ ë‚˜ê°€ê¸°ë²„íŠ¼
 		
 		local MStat,CDFnc2 = ToggleFunc({Memory(0x6CDDC0,Exactly,0),Memory(0x6CDDC0,Exactly,2)},1)--
 		TriggerX(FP,{VRange(InterfaceNumLoc, 1, 255),MLine(mmY,4),VRange(mmX, 74, 188)},{SetV(ESCB,0x07)},{preserved})
@@ -418,15 +418,15 @@ function GameDisplay()
 
 		end
 
-		DisplayPrint(LCP, {"\x07´É·ÂÄ¡ \x04¼³Á¤. ",ESCB[2],"[³ª°¡±â Å¬¸¯ ¶Ç´Â ESC]",SWAPB[2]," [º¸¼® ¼³Á¤ Ã¢À¸·Î ÀÌµ¿]\x12",PRVB[2],"[ÀÌÀü ÆäÀÌÁö(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[´ÙÀ½ ÆäÀÌÁö(P)]"})--
-		TriggerX(FP, CV(ResetStatLoc,0), {DisplayExtText("\x1F[½ºÅÈÃÊ±âÈ­ \x175000 Å©·¹µ÷ \x081½Ã°£ÀÌ³» \x1141°­¹Ìº¸À¯ 1È¸¸¸ \x04Ctrl+O\x1F] \x1F»ç¿ë°¡´É", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStatLoc,1), {DisplayExtText("\x1F[½ºÅÈÃÊ±âÈ­ \x175000 Å©·¹µ÷ \x081½Ã°£ÀÌ³» \x1141°­¹Ìº¸À¯ 1È¸¸¸ \x04Ctrl+O\x1F] \x08»ç¿ëºÒ°¡", 4)}, {preserved})
+		DisplayPrint(LCP, {"\x07ëŠ¥ë ¥ì¹˜ \x04ì„¤ì •. ",ESCB[2],"[ë‚˜ê°€ê¸° í´ë¦­ ë˜ëŠ” ESC]",SWAPB[2]," [ë³´ì„ ì„¤ì • ì°½ìœ¼ë¡œ ì´ë™]\x12",PRVB[2],"[ì´ì „ í˜ì´ì§€(I)] \x07",InterfaceNumLoc," Page ",NEXB[2],"[ë‹¤ìŒ í˜ì´ì§€(P)]"})--
+		TriggerX(FP, CV(ResetStatLoc,0), {DisplayExtText("\x1F[ìŠ¤íƒ¯ì´ˆê¸°í™” \x175000 í¬ë ˆë”§ \x081ì‹œê°„ì´ë‚´ \x1141ê°•ë¯¸ë³´ìœ  1íšŒë§Œ \x04Ctrl+O\x1F] \x1Fì‚¬ìš©ê°€ëŠ¥", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStatLoc,1), {DisplayExtText("\x1F[ìŠ¤íƒ¯ì´ˆê¸°í™” \x175000 í¬ë ˆë”§ \x081ì‹œê°„ì´ë‚´ \x1141ê°•ë¯¸ë³´ìœ  1íšŒë§Œ \x04Ctrl+O\x1F] \x08ì‚¬ìš©ë¶ˆê°€", 4)}, {preserved})
 		CIfEnd()
 		CIf(FP,{CV(InterfaceNumLoc,256,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
 		
 		for i = 0, 4 do
-			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 0, 320)},{SetV(CColor1_1[i+1],0x07),SetV(CColor3_1[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--ÁÂÃø
-			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 0, 320)},{SetV(CColor1_2[i+1],0x07),SetV(CColor3_2[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--¿ìÃø
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 0, 320)},{SetV(CColor1_1[i+1],0x07),SetV(CColor3_1[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--ì¢Œì¸¡
+			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX3, 0, 320)},{SetV(CColor1_2[i+1],0x07),SetV(CColor3_2[i+1],0x0E),SetCD(MToggle[i+1],1)},{preserved})--ìš°ì¸¡
 			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 10, 32)},{SetV(CColor4_1[i+1],0x07),SetCD(MToggle1_1[i+1],1)},{preserved})
 			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 36, 66)},{SetV(CColor5_1[i+1],0x07),SetCD(MToggle2_1[i+1],1)},{preserved})
 			TriggerX(FP,{MLine(mmY,6+i),VRange(mmX, 70, 107)},{SetV(CColor6_1[i+1],0x07),SetCD(MToggle3_1[i+1],1)},{preserved})
@@ -449,10 +449,10 @@ function GameDisplay()
 
 
 			local temp,CDFnc = ToggleFunc({CD(MToggle[i+1],0),CD(MToggle[i+1],1)})--
-			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX, 0, 300)},{SetMemory(0x58F504,SetTo,0x100+i+1)},{preserved})--ÁÂÃø
-			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX3, 0, 300)},{SetMemory(0x58F504,SetTo,0x180+i+1)},{preserved})--¿ìÃø
-			TriggerX(FP,{CV(InterfaceNumLoc,257),CD(CDFnc,1),VRange(mmX, 0, 300)},{SetMemory(0x58F504,SetTo,0x200+i+1)},{preserved})--ÁÂÃø
-			TriggerX(FP,{CV(InterfaceNumLoc,257),CD(CDFnc,1),VRange(mmX3, 0, 300)},{SetMemory(0x58F504,SetTo,0x280+i+1)},{preserved})--¿ìÃø
+			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX, 0, 300)},{SetMemory(0x58F504,SetTo,0x100+i+1)},{preserved})--ì¢Œì¸¡
+			TriggerX(FP,{CV(InterfaceNumLoc,256),CD(CDFnc,1),VRange(mmX3, 0, 300)},{SetMemory(0x58F504,SetTo,0x180+i+1)},{preserved})--ìš°ì¸¡
+			TriggerX(FP,{CV(InterfaceNumLoc,257),CD(CDFnc,1),VRange(mmX, 0, 300)},{SetMemory(0x58F504,SetTo,0x200+i+1)},{preserved})--ì¢Œì¸¡
+			TriggerX(FP,{CV(InterfaceNumLoc,257),CD(CDFnc,1),VRange(mmX3, 0, 300)},{SetMemory(0x58F504,SetTo,0x280+i+1)},{preserved})--ìš°ì¸¡
 
 			
 			TriggerX(FP,{CD(MToggle2[i+1],1),CD(MStat,1)},{SetV(BColor2[i+1],0x08)},{preserved})
@@ -464,42 +464,42 @@ function GameDisplay()
 		local InterfaceNumLoc2 = CreateVar(FP)
 		TriggerX(FP,{CV(InterfaceNumLoc,256)},{SetV(InterfaceNumLoc2,1)},{preserved})
 		TriggerX(FP,{CV(InterfaceNumLoc,257)},{SetV(InterfaceNumLoc2,2)},{preserved})
-		DisplayPrint(LCP, {"\x1Cº¸¼® \x04¼³Á¤. ",ESCB[2],"[³ª°¡±â Å¬¸¯ ¶Ç´Â ESC]",SWAPB[2]," [½ºÅÈ ¼³Á¤ Ã¢À¸·Î ÀÌµ¿]\x12",PRVB[2],"[ÀÌÀü ÆäÀÌÁö(I)] \x07",InterfaceNumLoc2," Page ",NEXB[2],"[´ÙÀ½ ÆäÀÌÁö(P)]"})--
-		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayExtText("\x1C[º¸¼®ÃÊ±âÈ­ \x1710¸¸ Å©·¹µ÷ \x081½Ã°£ÀÌ³» \x1141°­¹Ìº¸À¯ 1È¸¸¸ \x04Ctrl+U\x1F] \x1F»ç¿ë°¡´É", 4)}, {preserved})
-		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayExtText("\x1C[º¸¼®ÃÊ±âÈ­ \x1710¸¸ Å©·¹µ÷ \x081½Ã°£ÀÌ³» \x1141°­¹Ìº¸À¯ 1È¸¸¸ \x04Ctrl+U\x1F] \x08»ç¿ëºÒ°¡", 4)}, {preserved})
+		DisplayPrint(LCP, {"\x1Cë³´ì„ \x04ì„¤ì •. ",ESCB[2],"[ë‚˜ê°€ê¸° í´ë¦­ ë˜ëŠ” ESC]",SWAPB[2]," [ìŠ¤íƒ¯ ì„¤ì • ì°½ìœ¼ë¡œ ì´ë™]\x12",PRVB[2],"[ì´ì „ í˜ì´ì§€(I)] \x07",InterfaceNumLoc2," Page ",NEXB[2],"[ë‹¤ìŒ í˜ì´ì§€(P)]"})--
+		TriggerX(FP, CV(ResetStat2Loc,0), {DisplayExtText("\x1C[ë³´ì„ì´ˆê¸°í™” \x1710ë§Œ í¬ë ˆë”§ \x081ì‹œê°„ì´ë‚´ \x1141ê°•ë¯¸ë³´ìœ  1íšŒë§Œ \x04Ctrl+U\x1F] \x1Fì‚¬ìš©ê°€ëŠ¥", 4)}, {preserved})
+		TriggerX(FP, CV(ResetStat2Loc,1), {DisplayExtText("\x1C[ë³´ì„ì´ˆê¸°í™” \x1710ë§Œ í¬ë ˆë”§ \x081ì‹œê°„ì´ë‚´ \x1141ê°•ë¯¸ë³´ìœ  1íšŒë§Œ \x04Ctrl+U\x1F] \x08ì‚¬ìš©ë¶ˆê°€", 4)}, {preserved})
 		CIfEnd()
 --		local TempLoc = CreateVar(FP)
 --		CIfX(FP, {CV(ResetStatLoc,4,AtMost)})
 --		CMov(FP,TempLoc,_ReadF(ArrX(SRTable, ResetStatLoc)))
---		DisplayPrint(LCP, {"\x1F[½ºÅÈÃÊ±âÈ­ \x17",TempLoc,"Å©·¹µ÷ \x04»ç¿ë ¾ÈÇßÀ» °æ¿ì \x081½Ã°£ÈÄ °¡°İ »ó½Â \x04Ctrl+O\x1F]"})
+--		DisplayPrint(LCP, {"\x1F[ìŠ¤íƒ¯ì´ˆê¸°í™” \x17",TempLoc,"í¬ë ˆë”§ \x04ì‚¬ìš© ì•ˆí–ˆì„ ê²½ìš° \x081ì‹œê°„í›„ ê°€ê²© ìƒìŠ¹ \x04Ctrl+O\x1F]"})
 --		
 --		CElseX()
---		DoActions(FP, {DisplayExtText("\x1F[½ºÅÈÃÊ±âÈ­ \x08»ç¿ëºÒ°¡\x1F] ", 4)})
+--		DoActions(FP, {DisplayExtText("\x1F[ìŠ¤íƒ¯ì´ˆê¸°í™” \x08ì‚¬ìš©ë¶ˆê°€\x1F] ", 4)})
 --		CIfXEnd()
 
 
-		CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- »óÁ¡ ÆäÀÌÁö Á¦¾î
-			--DisplayPrint(LCP, {"\x071. \x08°­È­ ½ÇÆĞ\x04½Ã °æÇèÄ¡ È¹µæ·® Áõ°¡ \x07+0.1% \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07 + ",BColor[1][2],EVarArr2,".",EVarArr3," % ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+		CIfX(FP,{CV(InterfaceNumLoc,1)},{}) -- ìƒì  í˜ì´ì§€ ì œì–´
+			--DisplayPrint(LCP, {"\x071. \x08ê°•í™” ì‹¤íŒ¨\x04ì‹œ ê²½í—˜ì¹˜ íšë“ëŸ‰ ì¦ê°€ \x07+0.1% \x08MAX 50 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07 + ",BColor[1][2],EVarArr2,".",EVarArr3," % ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			
-			--5º¸½º Ã³Ä¡½Ã ÆÇ¸Å±Ç +10°³ Áõ°¡ ÃÖ´ë 20È¸ 1½ºÅÈ´ç 50Æ÷ÀÎÆ®
-			--DisplayPrint(LCP, {"\x071. \x08°­È­ ½ÇÆĞ\x04½Ã °æÇèÄ¡ È¹µæ·® Áõ°¡ \x07+0.1% \x08MAX 100 ",BColor3[1][2],"ºó Ç×¸ñÀÔ´Ï´Ù.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"ºó Ç×¸ñÀÔ´Ï´Ù.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
-			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"ºó Ç×¸ñÀÔ´Ï´Ù.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			--5ë³´ìŠ¤ ì²˜ì¹˜ì‹œ íŒë§¤ê¶Œ +10ê°œ ì¦ê°€ ìµœëŒ€ 20íšŒ 1ìŠ¤íƒ¯ë‹¹ 50í¬ì¸íŠ¸
+			--DisplayPrint(LCP, {"\x071. \x08ê°•í™” ì‹¤íŒ¨\x04ì‹œ ê²½í—˜ì¹˜ íšë“ëŸ‰ ì¦ê°€ \x07+0.1% \x08MAX 100 ",BColor3[1][2],"ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			--DisplayPrint(LCP, {"\x071. ",BColor3[1][2],"ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤.\x12\x07 ",BColor[1][2]," - ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			--DisplayPrint(LCP, {"\x072. ",BColor3[2][2],"ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤.\x12\x07 ",BColor[2][2]," - ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,S_BossSTicLoc,100)
-			DisplayPrint(LCP, {"\x071. \x08ÆÄÆ¼ º¸½º \x1FLV.5, \x1F°³ÀÎ \x1CLV.6\x04(x2) \x1DExtra\x04(x3) \x04Ã³Ä¡½Ã \x19À¯´Ö ÆÇ¸Å±Ç + 100°³ \x08MAX 10 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," °³ ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			DisplayPrint(LCP, {"\x071. \x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5, \x1Fê°œì¸ \x1CLV.6\x04(x2) \x1DExtra\x04(x3) \x04ì²˜ì¹˜ì‹œ \x19ìœ ë‹› íŒë§¤ê¶Œ + 100ê°œ \x08MAX 10 - ",BColor3[1][2],Cost_Stat_BossSTic.." Pts\x12\x07+ ",BColor[1][2],S_BossSTicLoc," ê°œ ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			CMul(FP,S_BossLVUPLoc,50)
-			DisplayPrint(LCP, {"\x072. \x08ÆÄÆ¼ º¸½º \x1FLV.5, \x1F°³ÀÎ \x1CLV.6\x04(x2) \x1DExtra\x04(x3) \x04Ã³Ä¡½Ã \x1F·¹º§ +50¾÷ \x08MAX 5 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5, \x1Fê°œì¸ \x1CLV.6\x04(x2) \x1DExtra\x04(x3) \x04ì²˜ì¹˜ì‹œ \x1Fë ˆë²¨ +50ì—… \x08MAX 5 - ",BColor3[2][2],Cost_Stat_BossLVUP.." Pts\x12\x07+ ",BColor[2][2],S_BossLVUPLoc," LV ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMul(FP,UpgradeLoc,10)
-			DisplayPrint(LCP, {"\x073. \x1Bº¸À¯ À¯´Ö \x08µ¥¹ÌÁö \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x1Bë³´ìœ  ìœ ë‹› \x08ë°ë¯¸ì§€ \x07+10% \x08MAX 50 - ",BColor3[3][2],Cost_Stat_Upgrade.." Pts\x12\x07+ ",BColor[3][2],UpgradeLoc," % ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerLoc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x074. \x07+1 \x08°­È­È®·ü \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+			DisplayPrint(LCP, {"\x074. \x07+1 \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[4][2],Cost_Stat_TotalEPer.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPer2Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x075. \x0F+2 \x08°­È­È®·ü \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			DisplayPrint(LCP, {"\x075. \x0F+2 \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_TotalEPer2.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPer3Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x076. \x10+3 \x08°­È­È®·ü \x0F+0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x10+3 \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 30 \x04- ",BColor3[6][2],Cost_Stat_TotalEPer3.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 			
 		
 		CElseIfX({CV(InterfaceNumLoc,2)})
@@ -507,67 +507,67 @@ function GameDisplay()
 			CallTriggerX(FP,Call_SetScrMouse,{},{})
 			
 			if TestStart == 1 then
-				--DisplayPrintEr(0, {"»ó´ëÁÂÇ¥ X : ", mmX, "  Y : ", mmY, " || Áß¾ÓÁ¤·Ä X : ", mmX2, "  Y : ", mmY," || ¿ìÃøÁ¤·Ä X : ",mmX3,"  Y : ",mmY});
+				--DisplayPrintEr(0, {"ìƒëŒ€ì¢Œí‘œ X : ", mmX, "  Y : ", mmY, " || ì¤‘ì•™ì •ë ¬ X : ", mmX2, "  Y : ", mmY," || ìš°ì¸¡ì •ë ¬ X : ",mmX3,"  Y : ",mmY});
 			end
 			
 			
 			CMov(FP,GEVar,S_TotalEPer4Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x071. \x08Æ¯¼ö \x08°­È­È®·ü \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,".",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+			DisplayPrint(LCP, {"\x071. \x08íŠ¹ìˆ˜ \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,".",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			CMov(FP,GEVar,S_BreakShieldLoc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x072. \x08Æ¯¼ö \x1FÆÄ±« ¹æÁö\x08È®·ü \x0F+0.1%p \x08MAX 300 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08íŠ¹ìˆ˜ \x1FíŒŒê´´ ë°©ì§€\x08í™•ë¥  \x0F+0.1%p \x08MAX 300 \x04- ",BColor3[2][2],Cost_Stat_BreakShield.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerExLoc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x073. \x07+1 \x08°­È­È®·ü 2 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x07+1 \x08ê°•í™”í™•ë¥  2 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_TotalEPerEx.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerEx2Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x074. \x0F+2 \x08°­È­È®·ü 2 \x0F+0.1%p \x08MAX 20 \x04- ",BColor3[4][2],Cost_Stat_TotalEPerEx2.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+			DisplayPrint(LCP, {"\x074. \x0F+2 \x08ê°•í™”í™•ë¥  2 \x0F+0.1%p \x08MAX 20 \x04- ",BColor3[4][2],Cost_Stat_TotalEPerEx2.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
 			CMov(FP,GEVar,S_TotalEPerEx3Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x075. \x0F+3 \x08°­È­È®·ü 2 \x0F+0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
-			--DisplayPrint(LCP, {"\x076. \x07±âº»À¯´Ö \x1B°ø°İ ÄğÅ¸ÀÓ \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x075. \x0F+3 \x08ê°•í™”í™•ë¥  2 \x0F+0.1%p \x08MAX 10 \x04- ",BColor3[5][2],Cost_Stat_TotalEPerEx3.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			--DisplayPrint(LCP, {"\x076. \x07ê¸°ë³¸ìœ ë‹› \x1Bê³µê²© ì¿¨íƒ€ì„ \x04-1 \x08MAX 8 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07",BColor[6][2],"9 - ",SCCoolLoc," ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
-			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·® \x111.0% \x08MAX 100 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ \x111.0% \x08MAX 100 \x04- ",BColor3[6][2],Cost_Stat_LV3Incm.." Pts\x12\x07+ ",BColor[6][2],S_LV3IncmLoc," % ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,3)})
 			CMov(FP,GEVar,S_TotalEPer4XLoc)
 			CallTrigger(FP, Call_SetEPerStr)
-				--DisplayPrintEr(0, {"»ó´ëÁÂÇ¥ X : ", mmX, "  Y : ", mmY, " || Áß¾ÓÁ¤·Ä X : ", mmX2, "  Y : ", mmY," || ¿ìÃøÁ¤·Ä X : ",mmX3,"  Y : ",mmY});
-			DisplayPrint(LCP, {"\x071. \x08Æ¯¼ö \x08°­È­È®·ü \x1F2\x04 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4X.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,".",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
+				--DisplayPrintEr(0, {"ìƒëŒ€ì¢Œí‘œ X : ", mmX, "  Y : ", mmY, " || ì¤‘ì•™ì •ë ¬ X : ", mmX2, "  Y : ", mmY," || ìš°ì¸¡ì •ë ¬ X : ",mmX3,"  Y : ",mmY});
+			DisplayPrint(LCP, {"\x071. \x08íŠ¹ìˆ˜ \x08ê°•í™”í™•ë¥  \x1F2\x04 \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[1][2],Cost_Stat_TotalEPer4X.." Pts\x12\x07+ ",BColor[1][2],EVarArr2,".",EVarArr3," %p ",BColor4[1][2],"[M] ",BColor2[1][2],"[+]"})
 			CMov(FP,GEVar,S_BreakShield2Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x072. \x08Æ¯¼ö \x1FÆÄ±« ¹æÁö\x08È®·ü \x1F2\x04 \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[2][2],Cost_Stat_BreakShield2.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
+			DisplayPrint(LCP, {"\x072. \x08íŠ¹ìˆ˜ \x1FíŒŒê´´ ë°©ì§€\x08í™•ë¥  \x1F2\x04 \x0F+0.1%p \x08MAX 100 \x04- ",BColor3[2][2],Cost_Stat_BreakShield2.." Pts\x12\x07+ ",BColor[2][2],EVarArr2,".",EVarArr3," %p ",BColor4[2][2],"[M] ",BColor2[2][2],"[+]"})
 
 
 			
 			CMov(FP,GEVar,Stat_XEPer44Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x073. \x1F44°­ \x08°­È­È®·ü \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_XEPer44.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
+			DisplayPrint(LCP, {"\x073. \x1F44ê°• \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[3][2],Cost_Stat_XEPer44.." Pts\x12\x07+ ",BColor[3][2],EVarArr2,".",EVarArr3," %p ",BColor4[3][2],"[M] ",BColor2[3][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer45Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x074. \x1C45°­ \x08°­È­È®·ü \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[4][2],Cost_Stat_XEPer45.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
+			DisplayPrint(LCP, {"\x074. \x1C45ê°• \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[4][2],Cost_Stat_XEPer45.." Pts\x12\x07+ ",BColor[4][2],EVarArr2,".",EVarArr3," %p ",BColor4[4][2],"[M] ",BColor2[4][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer46Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x075. \x1E46°­ \x08°­È­È®·ü \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_XEPer46.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
+			DisplayPrint(LCP, {"\x075. \x1E46ê°• \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[5][2],Cost_Stat_XEPer46.." Pts\x12\x07+ ",BColor[5][2],EVarArr2,".",EVarArr3," %p ",BColor4[5][2],"[M] ",BColor2[5][2],"[+]"})
 			CMov(FP,GEVar,Stat_XEPer47Loc)
 			CallTrigger(FP, Call_SetEPerStr)
-			DisplayPrint(LCP, {"\x076. \x0247°­ \x08°­È­È®·ü \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[6][2],Cost_Stat_XEPer47.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
+			DisplayPrint(LCP, {"\x076. \x0247ê°• \x08ê°•í™”í™•ë¥  \x0F+0.1%p \x08MAX 50 \x04- ",BColor3[6][2],Cost_Stat_XEPer47.." Pts\x12\x07+ ",BColor[6][2],EVarArr2,".",EVarArr3," %p ",BColor4[6][2],"[M] ",BColor2[6][2],"[+]"})
 
 			CElseIfX({CV(InterfaceNumLoc,256)})
 			
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"ÇÏ±Ş º¸¼® ",FXPer44Loc,"°³ ",CColor3_1[1][2],"|| Cost : ",Cost_FXPer44Loc,"\x12",CColor3_2[1][2]," Cost : ",Cost_FIncmLoc," || ",CColor1_2[1][2],FIncmLoc," °³ Àç¹°ÀÇ º¸¼® ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"Áß±Ş º¸¼® ",FXPer45Loc,"°³ ",CColor3_1[2][2],"|| Cost : ",Cost_FXPer45Loc,"\x12",CColor3_2[2][2]," Cost : ",Cost_FSEXPLoc," || ",CColor1_2[2][2],FSEXPLoc," °³ °æÇèÀÇ º¸¼® ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"»ó±Ş º¸¼® ",FXPer46Loc,"°³ ",CColor3_1[3][2],"|| Cost : ",Cost_FXPer46Loc,"\x12",CColor3_2[3][2]," Cost : ",Cost_FBrShLoc," || ",CColor1_2[3][2],FBrShLoc," °³ º¸È£ÀÇ º¸¼® ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"Æ¯±Ş º¸¼® ",FXPer47Loc,"°³ ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," °³ ±Ã±ØÀÇ º¸¼® ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"°í±Ş º¸¼® ",FXPer48Loc,"°³ ",CColor3_1[5][2],"|| Cost : ",Cost_FXPer48Loc,"\x12",CColor3_2[5][2]," Cost : ",Cost_FMinLoc," || ",CColor1_2[5][2],FMinLoc," °³ Ã¤±¤ÀÇ º¸¼® ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"í•˜ê¸‰ ë³´ì„ ",FXPer44Loc,"ê°œ ",CColor3_1[1][2],"|| Cost : ",Cost_FXPer44Loc,"\x12",CColor3_2[1][2]," Cost : ",Cost_FIncmLoc," || ",CColor1_2[1][2],FIncmLoc," ê°œ ì¬ë¬¼ì˜ ë³´ì„ ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"ì¤‘ê¸‰ ë³´ì„ ",FXPer45Loc,"ê°œ ",CColor3_1[2][2],"|| Cost : ",Cost_FXPer45Loc,"\x12",CColor3_2[2][2]," Cost : ",Cost_FSEXPLoc," || ",CColor1_2[2][2],FSEXPLoc," ê°œ ê²½í—˜ì˜ ë³´ì„ ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"ìƒê¸‰ ë³´ì„ ",FXPer46Loc,"ê°œ ",CColor3_1[3][2],"|| Cost : ",Cost_FXPer46Loc,"\x12",CColor3_2[3][2]," Cost : ",Cost_FBrShLoc," || ",CColor1_2[3][2],FBrShLoc," ê°œ ë³´í˜¸ì˜ ë³´ì„ ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"íŠ¹ê¸‰ ë³´ì„ ",FXPer47Loc,"ê°œ ",CColor3_1[4][2],"|| Cost : ",Cost_FXPer47Loc,"\x12",CColor3_2[4][2]," Cost : ",Cost_FMEPerLoc," || ",CColor1_2[4][2],FMEPerLoc," ê°œ ê¶ê·¹ì˜ ë³´ì„ ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"ê³ ê¸‰ ë³´ì„ ",FXPer48Loc,"ê°œ ",CColor3_1[5][2],"|| Cost : ",Cost_FXPer48Loc,"\x12",CColor3_2[5][2]," Cost : ",Cost_FMinLoc," || ",CColor1_2[5][2],FMinLoc," ê°œ ì±„ê´‘ì˜ ë³´ì„ ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			CElseIfX({CV(InterfaceNumLoc,257)})
-			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"ÃËÁøÀÇ º¸¼®1 ",iv.FAcc2Loc,"°³ ",CColor3_1[1][2],"|| Cost : ",iv.Cost_FAcc2Loc,"\x12",CColor3_2[1][2]," Cost : -- || ",CColor1_2[1][2],"-- °³ ºñ¾îÀÖÀ½ ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"ÃËÁøÀÇ º¸¼®2 ",iv.FAccLoc,"°³ ",CColor3_1[2][2],"|| Cost : ",iv.Cost_FAccLoc,"\x12",CColor3_2[2][2]," Cost : -- || ",CColor1_2[2][2],"-- °³ ºñ¾îÀÖÀ½ ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"Ã¤±¼ÀÇ º¸¼® ",iv.FMinMaxLoc,"°³ ",CColor3_1[3][2],"|| Cost : ",iv.Cost_FMinMaxLoc,"\x12",CColor3_2[3][2]," Cost : -- || ",CColor1_2[3][2],"-- °³ ºñ¾îÀÖÀ½ ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"¼öÈ£ÀÇ º¸¼® ",iv.FBrSh2Loc,"°³ ",CColor3_1[4][2],"|| Cost : ",iv.Cost_FBrSh2Loc,"\x12",CColor3_2[4][2]," Cost : -- || ",CColor1_2[4][2],"-- °³ ºñ¾îÀÖÀ½ ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
-			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"ÃÊ¿ùÀÇ º¸¼® ",iv.FMEPer2Loc,"°³ ",CColor3_1[5][2],"|| Cost : ",iv.Cost_FMEPer2Loc,"\x12",CColor3_2[5][2]," Cost : -- || ",CColor1_2[5][2],"-- °³ ºñ¾îÀÖÀ½ ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[1][2],"[+1] ",CColor5_1[1][2],"[+10] ",CColor6_1[1][2],"[+100] ",CColor1_1[1][2],"ì´‰ì§„ì˜ ë³´ì„1 ",iv.FAcc2Loc,"ê°œ ",CColor3_1[1][2],"|| Cost : ",iv.Cost_FAcc2Loc,"\x12",CColor3_2[1][2]," Cost : -- || ",CColor1_2[1][2],"-- ê°œ ë¹„ì–´ìˆìŒ ",CColor6_2[1][2],"[+100] ",CColor5_2[1][2],"[+10] ",CColor4_2[1][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[2][2],"[+1] ",CColor5_1[2][2],"[+10] ",CColor6_1[2][2],"[+100] ",CColor1_1[2][2],"ì´‰ì§„ì˜ ë³´ì„2 ",iv.FAccLoc,"ê°œ ",CColor3_1[2][2],"|| Cost : ",iv.Cost_FAccLoc,"\x12",CColor3_2[2][2]," Cost : -- || ",CColor1_2[2][2],"-- ê°œ ë¹„ì–´ìˆìŒ ",CColor6_2[2][2],"[+100] ",CColor5_2[2][2],"[+10] ",CColor4_2[2][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[3][2],"[+1] ",CColor5_1[3][2],"[+10] ",CColor6_1[3][2],"[+100] ",CColor1_1[3][2],"ì±„êµ´ì˜ ë³´ì„ ",iv.FMinMaxLoc,"ê°œ ",CColor3_1[3][2],"|| Cost : ",iv.Cost_FMinMaxLoc,"\x12",CColor3_2[3][2]," Cost : -- || ",CColor1_2[3][2],"-- ê°œ ë¹„ì–´ìˆìŒ ",CColor6_2[3][2],"[+100] ",CColor5_2[3][2],"[+10] ",CColor4_2[3][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[4][2],"[+1] ",CColor5_1[4][2],"[+10] ",CColor6_1[4][2],"[+100] ",CColor1_1[4][2],"ìˆ˜í˜¸ì˜ ë³´ì„ ",iv.FBrSh2Loc,"ê°œ ",CColor3_1[4][2],"|| Cost : ",iv.Cost_FBrSh2Loc,"\x12",CColor3_2[4][2]," Cost : -- || ",CColor1_2[4][2],"-- ê°œ ë¹„ì–´ìˆìŒ ",CColor6_2[4][2],"[+100] ",CColor5_2[4][2],"[+10] ",CColor4_2[4][2],"[+1]"})
+			DisplayPrint(LCP, {CColor4_1[5][2],"[+1] ",CColor5_1[5][2],"[+10] ",CColor6_1[5][2],"[+100] ",CColor1_1[5][2],"ì´ˆì›”ì˜ ë³´ì„ ",iv.FMEPer2Loc,"ê°œ ",CColor3_1[5][2],"|| Cost : ",iv.Cost_FMEPer2Loc,"\x12",CColor3_2[5][2]," Cost : -- || ",CColor1_2[5][2],"-- ê°œ ë¹„ì–´ìˆìŒ ",CColor6_2[5][2],"[+100] ",CColor5_2[5][2],"[+10] ",CColor4_2[5][2],"[+1]"})
 
 			
 			
@@ -575,66 +575,66 @@ function GameDisplay()
 			
 
 			if Limit == 0 then
-				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13¹«»öÁ¶°¢ \x08»ç¿ëÁß \x04/ \x04´©Àû È¹µæ·® (\x07»ç¿ë°¡´É\x04) °¹¼ö", 4)})
+				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13ë¬´ìƒ‰ì¡°ê° \x08ì‚¬ìš©ì¤‘ \x04/ \x04ëˆ„ì  íšë“ëŸ‰ (\x07ì‚¬ìš©ê°€ëŠ¥\x04) ê°¯ìˆ˜", 4)})
 			else
-				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13¹«»öÁ¶°¢ \x08»ç¿ëÁß \x04/ \x04´©Àû È¹µæ·® (\x07»ç¿ë°¡´É\x04) °¹¼ö - \x03TESTMODE Á¶°¢ Áö±Ş¹Ş±â \x04F12¹öÆ°\x08(1È¸¸¸)", 4)})
+				--CDoActions(FP, {TSetMemory(0x6509B0,SetTo,LCP),DisplayExtText("\x13ë¬´ìƒ‰ì¡°ê° \x08ì‚¬ìš©ì¤‘ \x04/ \x04ëˆ„ì  íšë“ëŸ‰ (\x07ì‚¬ìš©ê°€ëŠ¥\x04) ê°¯ìˆ˜ - \x03TESTMODE ì¡°ê° ì§€ê¸‰ë°›ê¸° \x04F12ë²„íŠ¼\x08(1íšŒë§Œ)", 4)})
 			end
 		CIfXEnd()
 		CIf(FP,{VRange(InterfaceNumLoc, 256,511)})
 		
-		DisplayPrint(LCP, {"¹«»öÁ¶°¢ \x08»ç¿ëÁß \x04/ \x04´©Àû È¹µæ·® (\x07»ç¿ë°¡´É\x04) °¹¼ö\x12\x08",iv.FfragItemUsedLoc," \x04/ ",iv.FfragItemLoc," (\x07",TempFf,"\x04)"})
+		DisplayPrint(LCP, {"ë¬´ìƒ‰ì¡°ê° \x08ì‚¬ìš©ì¤‘ \x04/ \x04ëˆ„ì  íšë“ëŸ‰ (\x07ì‚¬ìš©ê°€ëŠ¥\x04) ê°¯ìˆ˜\x12\x08",iv.FfragItemUsedLoc," \x04/ ",iv.FfragItemLoc," (\x07",TempFf,"\x04)"})
 		CIfEnd()
 		DoActions(FP,{SetCp(FP)})
 		local StatPrintEr = {
-			--StrDesign("\x04°ÔÀÓ ½ÃÀÛ½Ã Ã³À½ Áö±ŞÇÏ´Â \x07±âº»À¯´Ö(½ºÄ«¿ô) \x08µ¥¹ÌÁö\x04¸¦ Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: \x07±âº»À¯´Ö\x04Àº 3ºĞ µÚ »ç¶óÁı´Ï´Ù."),
-			--StrDesign("\x04°ÔÀÓ ½ÃÀÛ½Ã Ã³À½ Áö±ŞÇÏ´Â \x07±âº»À¯´Ö(½ºÄ«¿ô) \x0F°¹¼ö\x04¸¦ Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: \x07±âº»À¯´Ö\x04Àº 3ºĞ µÚ »ç¶óÁı´Ï´Ù."),
-			StrDesign("\x08ÆÄÆ¼ º¸½º \x1FLV.5 \x04Ã³Ä¡½Ã \x19À¯´Ö ÆÇ¸Å±Ç\x04À» ¾ò½À´Ï´Ù. \x1F°³ÀÎ \x1CLV.6\x04(x2) \x1DExtra\x04(x3)."),
-			StrDesign("\x08ÆÄÆ¼ º¸½º \x1FLV.5 \x04Ã³Ä¡½Ã \x1C·¹º§\x04ÀÌ Áõ°¡ÇÕ´Ï´Ù. \x08ÁÖÀÇ \x04: \x1CÃÖ´ë °æÇèÄ¡\x04´Â \x08ÃÖ´ë 50¾ï, \x1F°³ÀÎ \x1CLV.6\x04(x2) \x1DExtra\x04(x3)"),
-			StrDesign("\x04ÀÚ½ÅÀÇ \x07°­È­ \x04À¯´Ö \x08µ¥¹ÌÁö\x04¸¦ Áõ°¡½ÃÅµ´Ï´Ù."),
-			StrDesign("\x07+1\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: \x07+2, \x10+3 \x04°­È­È®·ü¿¡ ´ëÇÑ ¿µÇâÀº \x08¾ø½À´Ï´Ù."),
-			StrDesign("\x07+2\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ÀÌ Ç×¸ñÀº \x0F36°­ \x04À¯´Ö ÀÌ»óºÎÅÍ +1·Î ÇÕ»ê, Àû¿ëµË´Ï´Ù."),
-			StrDesign("\x10+3\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ÀÌ Ç×¸ñÀº \x0F35°­\x04:\x08+2·Î, \x0F36°­\x04:\x08+1·Î\x04 ÇÕ»ê Àû¿ëµË´Ï´Ù."),
-			StrDesign("\x08Æ¯¼ö\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ÀÌ Ç×¸ñÀº \x0840°­ ÀÌÈÄ À¯´Ö\x04¸¸ Àû¿ëµË´Ï´Ù."),
-			StrDesign("\x08Æ¯¼ö\x1F ÆÄ±« ¹æÁö\x08È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ÀÌ Ç×¸ñÀº \x0840°­ ÀÌÈÄ À¯´Ö\x04¸¸ Àû¿ëµË´Ï´Ù."),
-			StrDesign("\x10Ãß°¡ \x07+1\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ¸ÕÀú 1ÆäÀÌÁö °­È­È®·ü ½ºÅÈÀ» \x07¸¶½ºÅÍ \x04ÇÏ½Ã±æ ±ÇÀåÇÕ´Ï´Ù."),
-			StrDesign("\x10Ãß°¡ \x0F+2\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ¸ÕÀú 1ÆäÀÌÁö °­È­È®·ü ½ºÅÈÀ» \x07¸¶½ºÅÍ \x04ÇÏ½Ã±æ ±ÇÀåÇÕ´Ï´Ù."),
-			StrDesign("\x10Ãß°¡ \x0F+3\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ¸ÕÀú 1ÆäÀÌÁö °­È­È®·ü ½ºÅÈÀ» \x07¸¶½ºÅÍ \x04ÇÏ½Ã±æ ±ÇÀåÇÕ´Ï´Ù."),
-			StrDesign("\x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·®À» 1% Áõ°¡½ÃÅµ´Ï´Ù. \x07±âº»°ª : 100%. \x08ÁÖÀÇ \x04: ÀÌ Ç×¸ñÀº \x1041°­ \x07ÀÌ»ó \x04À¯´Ö¿¡°Ô À¯È¿ÇÕ´Ï´Ù."),
-			StrDesign("\x08Æ¯¼ö\x08 °­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ¸ÕÀú 2ÆäÀÌÁö Æ¯¼öÈ®·ü ½ºÅÈÀ» \x07¸¶½ºÅÍ \x04ÇÏ½Ã±æ ±ÇÀåÇÕ´Ï´Ù."),
-			StrDesign("\x08Æ¯¼ö\x1F ÆÄ±« ¹æÁö\x08È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù. \x08ÁÖÀÇ \x04: ¸ÕÀú 2ÆäÀÌÁö ÆÄ±«¹æÁö ½ºÅÈÀ» \x07¸¶½ºÅÍ \x04ÇÏ½Ã±æ ±ÇÀåÇÕ´Ï´Ù."),
-			StrDesign("\x1F44°­ \x08°­È­ \x04½Ãµµ½Ã \x08°­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù."),
-			StrDesign("\x1C45°­ \x08°­È­ \x04½Ãµµ½Ã \x08°­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù."),
-			StrDesign("\x1E46°­ \x08°­È­ \x04½Ãµµ½Ã \x08°­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù."),
-			StrDesign("\x0247°­ \x08°­È­ \x04½Ãµµ½Ã \x08°­È­È®·ü\x04À» Áõ°¡½ÃÅµ´Ï´Ù."),
+			--StrDesign("\x04ê²Œì„ ì‹œì‘ì‹œ ì²˜ìŒ ì§€ê¸‰í•˜ëŠ” \x07ê¸°ë³¸ìœ ë‹›(ìŠ¤ì¹´ì›ƒ) \x08ë°ë¯¸ì§€\x04ë¥¼ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: \x07ê¸°ë³¸ìœ ë‹›\x04ì€ 3ë¶„ ë’¤ ì‚¬ë¼ì§‘ë‹ˆë‹¤."),
+			--StrDesign("\x04ê²Œì„ ì‹œì‘ì‹œ ì²˜ìŒ ì§€ê¸‰í•˜ëŠ” \x07ê¸°ë³¸ìœ ë‹›(ìŠ¤ì¹´ì›ƒ) \x0Fê°¯ìˆ˜\x04ë¥¼ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: \x07ê¸°ë³¸ìœ ë‹›\x04ì€ 3ë¶„ ë’¤ ì‚¬ë¼ì§‘ë‹ˆë‹¤."),
+			StrDesign("\x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5 \x04ì²˜ì¹˜ì‹œ \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì„ ì–»ìŠµë‹ˆë‹¤. \x1Fê°œì¸ \x1CLV.6\x04(x2) \x1DExtra\x04(x3)."),
+			StrDesign("\x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5 \x04ì²˜ì¹˜ì‹œ \x1Cë ˆë²¨\x04ì´ ì¦ê°€í•©ë‹ˆë‹¤. \x08ì£¼ì˜ \x04: \x1CìµœëŒ€ ê²½í—˜ì¹˜\x04ëŠ” \x08ìµœëŒ€ 50ì–µ, \x1Fê°œì¸ \x1CLV.6\x04(x2) \x1DExtra\x04(x3)"),
+			StrDesign("\x04ìì‹ ì˜ \x07ê°•í™” \x04ìœ ë‹› \x08ë°ë¯¸ì§€\x04ë¥¼ ì¦ê°€ì‹œí‚µë‹ˆë‹¤."),
+			StrDesign("\x07+1\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: \x07+2, \x10+3 \x04ê°•í™”í™•ë¥ ì— ëŒ€í•œ ì˜í–¥ì€ \x08ì—†ìŠµë‹ˆë‹¤."),
+			StrDesign("\x07+2\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ì´ í•­ëª©ì€ \x0F36ê°• \x04ìœ ë‹› ì´ìƒë¶€í„° +1ë¡œ í•©ì‚°, ì ìš©ë©ë‹ˆë‹¤."),
+			StrDesign("\x10+3\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ì´ í•­ëª©ì€ \x0F35ê°•\x04:\x08+2ë¡œ, \x0F36ê°•\x04:\x08+1ë¡œ\x04 í•©ì‚° ì ìš©ë©ë‹ˆë‹¤."),
+			StrDesign("\x08íŠ¹ìˆ˜\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ì´ í•­ëª©ì€ \x0840ê°• ì´í›„ ìœ ë‹›\x04ë§Œ ì ìš©ë©ë‹ˆë‹¤."),
+			StrDesign("\x08íŠ¹ìˆ˜\x1F íŒŒê´´ ë°©ì§€\x08í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ì´ í•­ëª©ì€ \x0840ê°• ì´í›„ ìœ ë‹›\x04ë§Œ ì ìš©ë©ë‹ˆë‹¤."),
+			StrDesign("\x10ì¶”ê°€ \x07+1\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ë¨¼ì € 1í˜ì´ì§€ ê°•í™”í™•ë¥  ìŠ¤íƒ¯ì„ \x07ë§ˆìŠ¤í„° \x04í•˜ì‹œê¸¸ ê¶Œì¥í•©ë‹ˆë‹¤."),
+			StrDesign("\x10ì¶”ê°€ \x0F+2\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ë¨¼ì € 1í˜ì´ì§€ ê°•í™”í™•ë¥  ìŠ¤íƒ¯ì„ \x07ë§ˆìŠ¤í„° \x04í•˜ì‹œê¸¸ ê¶Œì¥í•©ë‹ˆë‹¤."),
+			StrDesign("\x10ì¶”ê°€ \x0F+3\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ë¨¼ì € 1í˜ì´ì§€ ê°•í™”í™•ë¥  ìŠ¤íƒ¯ì„ \x07ë§ˆìŠ¤í„° \x04í•˜ì‹œê¸¸ ê¶Œì¥í•©ë‹ˆë‹¤."),
+			StrDesign("\x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ì„ 1% ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x07ê¸°ë³¸ê°’ : 100%. \x08ì£¼ì˜ \x04: ì´ í•­ëª©ì€ \x1041ê°• \x07ì´ìƒ \x04ìœ ë‹›ì—ê²Œ ìœ íš¨í•©ë‹ˆë‹¤."),
+			StrDesign("\x08íŠ¹ìˆ˜\x08 ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ë¨¼ì € 2í˜ì´ì§€ íŠ¹ìˆ˜í™•ë¥  ìŠ¤íƒ¯ì„ \x07ë§ˆìŠ¤í„° \x04í•˜ì‹œê¸¸ ê¶Œì¥í•©ë‹ˆë‹¤."),
+			StrDesign("\x08íŠ¹ìˆ˜\x1F íŒŒê´´ ë°©ì§€\x08í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤. \x08ì£¼ì˜ \x04: ë¨¼ì € 2í˜ì´ì§€ íŒŒê´´ë°©ì§€ ìŠ¤íƒ¯ì„ \x07ë§ˆìŠ¤í„° \x04í•˜ì‹œê¸¸ ê¶Œì¥í•©ë‹ˆë‹¤."),
+			StrDesign("\x1F44ê°• \x08ê°•í™” \x04ì‹œë„ì‹œ \x08ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤."),
+			StrDesign("\x1C45ê°• \x08ê°•í™” \x04ì‹œë„ì‹œ \x08ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤."),
+			StrDesign("\x1E46ê°• \x08ê°•í™” \x04ì‹œë„ì‹œ \x08ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤."),
+			StrDesign("\x0247ê°• \x08ê°•í™” \x04ì‹œë„ì‹œ \x08ê°•í™”í™•ë¥ \x04ì„ ì¦ê°€ì‹œí‚µë‹ˆë‹¤."),
 	}
 	
 	local StatPrintEr2 = {
-		StrDesign("\x04°³´ç \x0F0.1%p\x04ÀÇ \x1F44°­ \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FXPer44[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.1%p\x04ÀÇ \x1C45°­ \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FXPer45[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.1%p\x04ÀÇ \x1E46°­ \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FXPer46[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.1%p\x04ÀÇ \x0247°­ \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FXPer47[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.005%p\x04ÀÇ \x1B48°­ \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FXPer48[2].." °³"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1%p\x04ì˜ \x1F44ê°• \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FXPer44[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1%p\x04ì˜ \x1C45ê°• \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FXPer45[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1%p\x04ì˜ \x1E46ê°• \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FXPer46[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1%p\x04ì˜ \x0247ê°• \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FXPer47[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.005%p\x04ì˜ \x1B48ê°• \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FXPer48[2].." ê°œ"),
 }
 	local StatPrintEr3 = {
-		StrDesign("\x04°³´ç \x110.1¹è\x04ÀÇ \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·® Áõ°¡. \x08MAX "..Cost_FIncm[2].." °³"),
-		StrDesign("\x04°³´ç \x1C10%\x04ÀÇ \x1CÆÇ¸Å½Ã °æÇèÄ¡·® \x04Áõ°¡. \x08MAX "..Cost_FSEXP[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.1%p\x04ÀÇ \x1FÆÄ±« ¹æÁö È®·ü \x04Áõ°¡. \x08MAX "..Cost_FBrSh[2].." °³"),
-		StrDesign("\x0649°­\x04,\x0750°­ \x11Á¦¿Ü\x04. \x04°³´ç \x0F0.01%p\x04ÀÇ \x1F¸ğ\x1Cµç\x1EÀ¯\x07´Ö \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FMEPer[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.1¹è\x04ÀÇ \x17Å©·¹µ÷ Ã¤±¤¼Óµµ \x04Áõ°¡. \x08MAX "..Cost_FMin[2].." °³"),
+		StrDesign("\x04ê°œë‹¹ \x110.1ë°°\x04ì˜ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ ì¦ê°€. \x08MAX "..Cost_FIncm[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x1C10%\x04ì˜ \x1CíŒë§¤ì‹œ ê²½í—˜ì¹˜ëŸ‰ \x04ì¦ê°€. \x08MAX "..Cost_FSEXP[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1%p\x04ì˜ \x1FíŒŒê´´ ë°©ì§€ í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FBrSh[2].." ê°œ"),
+		StrDesign("\x0649ê°•\x04,\x0750ê°• \x11ì œì™¸\x04. \x04ê°œë‹¹ \x0F0.01%p\x04ì˜ \x1Fëª¨\x1Cë“ \x1Eìœ \x07ë‹› \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FMEPer[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.1ë°°\x04ì˜ \x17í¬ë ˆë”§ ì±„ê´‘ì†ë„ \x04ì¦ê°€. \x08MAX "..Cost_FMin[2].." ê°œ"),
 	}
 	local StatPrintEr4 = {
-		StrDesign("\x04°³´ç \x04ÀÏ¹İ ÀÚÆÇ±â\x04ÀÇ \x07À¯´Ö ±¸ÀÔ ¼Óµµ \x081¹è \x04Áõ°¡. \x08MAX "..Cost_FAcc2[2].." °³"),
-		StrDesign("\x04°³´ç \x08À¯·á ÀÚÆÇ±â\x04ÀÇ \x07À¯´Ö ±¸ÀÔ ¼Óµµ \x081¹è \x04Áõ°¡. \x08MAX "..Cost_FAcc[2].." °³"),
-		StrDesign("\x04°³´ç \x17Å©·¹µ÷ ±¤»ê\x04ÀÇ \x07ÃÖ´ë Ã¤±¤·® \x080.1¹è \x04Áõ°¡. \x08MAX "..Cost_FMinMax[2].." °³"),
-		StrDesign("\x04°³´ç \x0F0.01%p\x04ÀÇ \x1FÆÄ±« ¹æÁö È®·ü \x04Áõ°¡. \x08MAX "..Cost_FBrSh2[2].." °³"),
-		StrDesign("\x0750°­ \x11Á¦¿Ü\x04. \x04°³´ç \x0F0.01%p\x04ÀÇ \x1F¸ğ\x1Cµç\x1EÀ¯\x07´Ö \x08°­È­È®·ü \x04Áõ°¡. \x08MAX "..Cost_FMEPer2[2].." °³"),
+		StrDesign("\x04ê°œë‹¹ \x04ì¼ë°˜ ìíŒê¸°\x04ì˜ \x07ìœ ë‹› êµ¬ì… ì†ë„ \x081ë°° \x04ì¦ê°€. \x08MAX "..Cost_FAcc2[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x08ìœ ë£Œ ìíŒê¸°\x04ì˜ \x07ìœ ë‹› êµ¬ì… ì†ë„ \x081ë°° \x04ì¦ê°€. \x08MAX "..Cost_FAcc[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x17í¬ë ˆë”§ ê´‘ì‚°\x04ì˜ \x07ìµœëŒ€ ì±„ê´‘ëŸ‰ \x080.1ë°° \x04ì¦ê°€. \x08MAX "..Cost_FMinMax[2].." ê°œ"),
+		StrDesign("\x04ê°œë‹¹ \x0F0.01%p\x04ì˜ \x1FíŒŒê´´ ë°©ì§€ í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FBrSh2[2].." ê°œ"),
+		StrDesign("\x0750ê°• \x11ì œì™¸\x04. \x04ê°œë‹¹ \x0F0.01%p\x04ì˜ \x1Fëª¨\x1Cë“ \x1Eìœ \x07ë‹› \x08ê°•í™”í™•ë¥  \x04ì¦ê°€. \x08MAX "..Cost_FMEPer2[2].." ê°œ"),
 }
 	local StatPrintEr5 = {
-		StrDesign("\x04ºó Ç×¸ñÀÔ´Ï´Ù."),
-		StrDesign("\x04ºó Ç×¸ñÀÔ´Ï´Ù."),
-		StrDesign("\x04ºó Ç×¸ñÀÔ´Ï´Ù."),
-		StrDesign("\x04ºó Ç×¸ñÀÔ´Ï´Ù."),
-		StrDesign("\x04ºó Ç×¸ñÀÔ´Ï´Ù."),
+		StrDesign("\x04ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤."),
+		StrDesign("\x04ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤."),
+		StrDesign("\x04ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤."),
+		StrDesign("\x04ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤."),
+		StrDesign("\x04ë¹ˆ í•­ëª©ì…ë‹ˆë‹¤."),
 	}
 
 		
@@ -667,13 +667,13 @@ function GameDisplay()
 	end
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
-	CIf(FP,{CV(InterfaceNumLoc,0)})--¾Æ¹« ¼³Á¤Ã¢µµ ÄÑÁ®ÀÖÁö ¾ÊÀ» °æ¿ì ÀÛµ¿ÇÔ
-	local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--´©¸¦ °æ¿ì ÇöÀç Àû¿ëÁßÀÎ ¹öÇÁ »ó¼¼ Ç¥±â
-	local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--´©¸¦ °æ¿ì ÇöÀç º¸À¯ ÀçÈ­ Ç¥½Ã
-	local LKey = KeyToggleFunc("L") --Áö¼ÓÀûÀ¸·Î Ç¥±âÇÔ
-	local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")},nil,1)--´©¸¦ °æ¿ì ¼³¸í¼­ Ãâ·Â
-	local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")},nil,1)--´©¸¦ °æ¿ì ¼³¸í¼­ Ãâ·Â
-	local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")},nil,1)--´©¸¦ °æ¿ì ¼³¸í¼­ Ãâ·Â
+	CIf(FP,{CV(InterfaceNumLoc,0)})--ì•„ë¬´ ì„¤ì •ì°½ë„ ì¼œì ¸ìˆì§€ ì•Šì„ ê²½ìš° ì‘ë™í•¨
+	local temp,PKey = ToggleFunc({KeyPress("P","Up"),KeyPress("P","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° í˜„ì¬ ì ìš©ì¤‘ì¸ ë²„í”„ ìƒì„¸ í‘œê¸°
+	local temp,KKey = ToggleFunc({KeyPress("K","Up"),KeyPress("K","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° í˜„ì¬ ë³´ìœ  ì¬í™” í‘œì‹œ
+	local LKey = KeyToggleFunc("L") --ì§€ì†ì ìœ¼ë¡œ í‘œê¸°í•¨
+	local temp,BKey = ToggleFunc({KeyPress("B","Up"),KeyPress("B","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° ì„¤ëª…ì„œ ì¶œë ¥
+	local temp,NKey = ToggleFunc({KeyPress("N","Up"),KeyPress("N","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° ì„¤ëª…ì„œ ì¶œë ¥
+	local temp,MKey = ToggleFunc({KeyPress("M","Up"),KeyPress("M","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° ì„¤ëª…ì„œ ì¶œë ¥
 	local LToggle = CreateCcode()
 	DoActionsX(FP, {SetCD(LToggle,1)}, 1)
 	CTrigger(FP,{CD(PKey,1)},{SetCD(LKey,0)},1)
@@ -692,34 +692,34 @@ function GameDisplay()
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer44Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07+1 \x08°­È­È®·ü : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1F44°­ \x08°­È­È®·ü : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07+1 \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1F44ê°• \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
 	CMov(FP,GEVar,TotalEPer2Loc)
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer45Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07+2 \x08°­È­È®·ü : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1C45°­ \x08°­È­È®·ü : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07+2 \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1C45ê°• \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
 	CMov(FP,GEVar,TotalEPer3Loc)
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer46Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x10+3 \x08°­È­È®·ü : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1E46°­ \x08°­È­È®·ü : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x10+3 \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2,".",EVarArr3,"%p \x04|| \x1E46ê°• \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p",})
 	CMov(FP,GEVar,TotalEPer4Loc)
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer47Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x08Æ¯¼ö \x08°­È­È®·ü \x04ÃÑ Áõ°¡·® : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04|| \x0247°­ \x08°­È­È®·ü : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x08íŠ¹ìˆ˜ \x08ê°•í™”í™•ë¥  \x04ì´ ì¦ê°€ëŸ‰ : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04|| \x0247ê°• \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
 	CMov(FP,GEVar,BreakShieldLoc)
 	CallTrigger(FP, Call_SetEPerStr)
 	CMov(FP,GEVar_2,XEPer48Loc)
 	CallTrigger(FP, Call_SetEPerStr2)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x08Æ¯¼ö \x1FÆÄ±« ¹æÁö\x08È®·ü \x04ÃÑ Áõ°¡·® : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p \x04|| \x1B48°­ \x08°­È­È®·ü : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x08íŠ¹ìˆ˜ \x1FíŒŒê´´ ë°©ì§€\x08í™•ë¥  \x04ì´ ì¦ê°€ëŸ‰ : \x07+ \x1F",EVarArr2,".",EVarArr3,"%p \x04|| \x1B48ê°• \x08ê°•í™”í™•ë¥  : \x07+ \x0F",EVarArr2_2,".",EVarArr3_2,"%p"})
 	f_Mul(FP,EXPIncomeLoc2,10)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x1CÆÇ¸Å½Ã °æÇèÄ¡ \x07Ãß°¡ \x04È¹µæ·® : \x07+ \x1C",EXPIncomeLoc2,"%"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x1CíŒë§¤ì‹œ ê²½í—˜ì¹˜ \x07ì¶”ê°€ \x04íšë“ëŸ‰ : \x07+ \x1C",EXPIncomeLoc2,"%"})
 	f_Mul(FP,UpgradeUILoc,10)
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07ÃÑ \x08°ø°İ·Â \x04Áõ°¡·® : \x07+ \x08",UpgradeUILoc,"%"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ì´ \x08ê³µê²©ë ¥ \x04ì¦ê°€ëŸ‰ : \x07+ \x08",UpgradeUILoc,"%"})
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,_Div(_Mul(_Add(iv.CSX_LV3IncmLoc,10),_Add(iv.FMinLoc,10)),_Mov(10)))
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş ÃÑ Áõ°¡·® : \x07+ \x0F",TempIncmLoc,"% \x04|| \x17Ã¤±¤·Â : ",TempV})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ ì´ ì¦ê°€ëŸ‰ : \x07+ \x0F",TempIncmLoc,"% \x04|| \x17ì±„ê´‘ë ¥ : ",TempV})
 	
 	
 	
@@ -734,7 +734,7 @@ function GameDisplay()
 		--CIf(FP,{CV(PlayTimeLoc2,1,AtLeast)})
 		--CMov(FP,CTimeV,PlayTimeLoc2)
 		--CallTrigger(FP,Call_ConvertTime)
-		--DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07º£Å¸ Å×½ºÆ® ¹öÀü ÇÃ·¹ÀÌ ½Ã°£ : \x04",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
+		--DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ë² íƒ€ í…ŒìŠ¤íŠ¸ ë²„ì „ í”Œë ˆì´ ì‹œê°„ : \x04",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
 		--CIfEnd()
 		
 		CMov(FP,CTimeV,PlayTimeLoc)
@@ -747,17 +747,17 @@ function GameDisplay()
 		CMov(FP,TempV3,iv.DayCheck2Loc,nil,0xFF0000,1)
 		CrShift(FP, TempV2, 8)
 		CrShift(FP, TempV3, 16)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07ÃÑ ÀÎ°ÔÀÓ ÇÃ·¹ÀÌ ½Ã°£ : \x04",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ì´ ì¸ê²Œì„ í”Œë ˆì´ ì‹œê°„ : \x04",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
 		CMov(FP,CTimeV,_Sub(_Mov(1000000),TimeAttackScoreLoc))
 		CallTrigger(FP,Call_ConvertTime)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x1F44°­ \x07Å¸ÀÓ¾îÅÃ ½Ã°£ : \x04",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x1F44ê°• \x07íƒ€ì„ì–´íƒ ì‹œê°„ : \x04",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
 		CMov(FP,CTimeV,_Sub(_Mov(1000000),TimeAttackScore48Loc))
 		CallTrigger(FP,Call_ConvertTime)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x1B48°­ \x07Å¸ÀÓ¾îÅÃ ½Ã°£ : \x04",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x1B48ê°• \x07íƒ€ì„ì–´íƒ ì‹œê°„ : \x04",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
 		CMov(FP,CTimeV,_Sub(_Mov(1000000),iv.TimeAttackScore50Loc))
 		CallTrigger(FP,Call_ConvertTime)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x0750°­ \x07Å¸ÀÓ¾îÅÃ ½Ã°£ : \x04",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07°¢ ½ÃÁğº°(1,2,3½ÃÁğ) Ãâ¼®ÀÏ¼ö \x04: ",TempV,"ÀÏ, ",TempV2,"ÀÏ, ",TempV3,"ÀÏ."})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x0750ê°• \x07íƒ€ì„ì–´íƒ ì‹œê°„ : \x04",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ê° ì‹œì¦Œë³„(1,2,3ì‹œì¦Œ) ì¶œì„ì¼ìˆ˜ \x04: ",TempV,"ì¼, ",TempV2,"ì¼, ",TempV3,"ì¼."})
 		
 		local TempV = CreateVar(FP)
 		local TempV2 = CreateVar(FP)
@@ -771,12 +771,12 @@ function GameDisplay()
 		CrShift(FP,TempV3,(3-1)*8)
 		CrShift(FP,TempV4,(4-1)*8)
 
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07³²Àº ÀÏÀÏ Ã¹ ´Ş¼º º¸»ó \x04È½¼ö - "..FirstReward3[1][4].."45°­ : \x04",TempV,"È¸, "..FirstReward3[2][4].."46°­ : \x04",TempV2,"È¸, "..FirstReward3[3][4].."47°­ : \x04",TempV3,"È¸, "..FirstReward3[4][4].."48°­ : \x04",TempV4,"È¸"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ë‚¨ì€ ì¼ì¼ ì²« ë‹¬ì„± ë³´ìƒ \x04íšŸìˆ˜ - "..FirstReward3[1][4].."45ê°• : \x04",TempV,"íšŒ, "..FirstReward3[2][4].."46ê°• : \x04",TempV2,"íšŒ, "..FirstReward3[3][4].."47ê°• : \x04",TempV3,"íšŒ, "..FirstReward3[4][4].."48ê°• : \x04",TempV4,"íšŒ"})
 		
 		CMov(FP,TempV,_Sub(_Mov(FirstReward4[1][5]*1),_Mov(iv.FirstRewardLim2Loc,1*255)),nil,1*255)
 		CMov(FP,TempV2,_Sub(_Mov(FirstReward4[2][5]*256),_Mov(iv.FirstRewardLim2Loc,256*255)),nil,256*255)
 		CrShift(FP,TempV2,(2-1)*8)
-		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07³²Àº ÁÖ°£ Ã¹ ´Ş¼º º¸»ó \x04È½¼ö - "..FirstReward4[1][4].."49°­ : \x04",TempV,"È¸, "..FirstReward4[2][4].."50°­ : \x04",TempV2,"È¸ (¸ÅÁÖ ¸ñ¿äÀÏ¸¶´Ù ÃÊ±âÈ­)"})
+		DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ë‚¨ì€ ì£¼ê°„ ì²« ë‹¬ì„± ë³´ìƒ \x04íšŸìˆ˜ - "..FirstReward4[1][4].."49ê°• : \x04",TempV,"íšŒ, "..FirstReward4[2][4].."50ê°• : \x04",TempV2,"íšŒ (ë§¤ì£¼ ëª©ìš”ì¼ë§ˆë‹¤ ì´ˆê¸°í™”)"})
 		
 		
 
@@ -786,18 +786,18 @@ function GameDisplay()
 	
 	CIfX(FP,{CD(LKey,1)})
 	
-	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ \x07ÀçÈ­ Á¤º¸ \x04\x12[\x17´İ±â \x04: \x10L]"})
+	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ \x07ì¬í™” ì •ë³´ \x04\x12[\x17ë‹«ê¸° \x04: \x10L]"})
 		
-	local LVData = {{{0,9},{"£°",{0x1000000}}}} 
+	local LVData = {{{0,9},{"ï¼",{0x1000000}}}} 
 
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
-	CS__SetValue(FP,StrL,"\x19À¯´Ö ÆÇ¸Å±Ç \x04:  0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000\x04 \x04°³",nil,0)
+	CS__SetValue(FP,StrL,"\x19ìœ ë‹› íŒë§¤ê¶Œ \x04:  0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000\x04 \x04ê°œ",nil,0)
 	CS__lItoCustom(FP,SVA1(StrL,9),SellTicketLoc,nil,nil,10,nil,nil, {"\x07\x0D","\x08-", "\x1B0"},{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	CS__InputVA(FP, iStrL, 54*0,StrL,StrLs,nil,54*0,54*1)
 	CDoActions(FP, {TSetMemory(0x6509B0, SetTo, LCP),DisplayText(iStrL[4], 4)})
 
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
-	CS__SetValue(FP,StrL,"\x08±¸ÀÔ Æ¼ÄÏ\x04(\x08ÀúÀåX\x04) :  0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000\x04 \x04°³",nil,0)
+	CS__SetValue(FP,StrL,"\x08êµ¬ì… í‹°ì¼“\x04(\x08ì €ì¥X\x04) :  0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000\x04 \x04ê°œ",nil,0)
 	CS__lItoCustom(FP,SVA1(StrL,13),iv.BuyTicketLoc,nil,nil,10,nil,nil,"\x1B0",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 
 	CS__InputVA(FP, iStrL, 54*0,StrL,StrLs,nil,54*0,54*1)	
@@ -805,32 +805,32 @@ function GameDisplay()
 	CDoActions(FP, {TSetMemory(0x6509B0, SetTo, LCP),DisplayText(iStrL[4], 4)})
 
 
-	DisplayPrint(LCP, {"\x10°­È­±â ¹é½Å : ",VaccItemLoc," \x04°³, \x1FÈ®Á¤ °­È­±Ç \x1F(\x02±¸\x04,\x1F½Å¹öÀü) \x04: \x02",PETicketLoc," \x04°³, \x1F",iv.PETicket2Loc," \x04°³, \x1E°¢¼ºÀÇ º¸¼® \x04: \x07",iv.AwakItemLoc," \x04°³"})
+	DisplayPrint(LCP, {"\x10ê°•í™”ê¸° ë°±ì‹  : ",VaccItemLoc," \x04ê°œ, \x1Fí™•ì • ê°•í™”ê¶Œ \x1F(\x02êµ¬\x04,\x1Fì‹ ë²„ì „) \x04: \x02",PETicketLoc," \x04ê°œ, \x1F",iv.PETicket2Loc," \x04ê°œ, \x1Eê°ì„±ì˜ ë³´ì„ \x04: \x07",iv.AwakItemLoc," \x04ê°œ"})
 	
 	
-	DisplayPrint(LCP, {""..FirstReward3[1][4].."45°­ \x04~ "..FirstReward4[2][4].."50°­ \x07ÆÇ¸Å \x04È½¼ö ¹× ¾òÀº ÀçÈ­\x08(¾Æ·¡´Â ÇöÀç º¸À¯ÁßÀÎ ÀçÈ­°¡ ¾Æ´Õ´Ï´Ù) \x12 "..FirstReward3[1][4].."45°­ : \x04",iv.S45Loc,"È¸, "..FirstReward3[2][4].."46°­ : \x04",iv.S46Loc,"È¸, "..FirstReward3[3][4].."47°­ : \x04",iv.S47Loc,"È¸"})
-	DisplayPrint(LCP, {"\x02¹«»ö Á¶°¢ \x04: \x07",iv.GFfragLoc," \x04°³, \x1E°¢¼ºÀÇ º¸¼® \x04: \x07",iv.GAwakItemLoc," \x04°³.\x12"..FirstReward3[4][4].."48°­ : \x04",iv.S48Loc,"È¸, "..FirstReward4[1][4].."49°­ \x04: ",iv.S49Loc,"È¸, "..FirstReward4[2][4].."50°­ \x04: ",iv.S50Loc,"È¸"})
+	DisplayPrint(LCP, {""..FirstReward3[1][4].."45ê°• \x04~ "..FirstReward4[2][4].."50ê°• \x07íŒë§¤ \x04íšŸìˆ˜ ë° ì–»ì€ ì¬í™”\x08(ì•„ë˜ëŠ” í˜„ì¬ ë³´ìœ ì¤‘ì¸ ì¬í™”ê°€ ì•„ë‹™ë‹ˆë‹¤) \x12 "..FirstReward3[1][4].."45ê°• : \x04",iv.S45Loc,"íšŒ, "..FirstReward3[2][4].."46ê°• : \x04",iv.S46Loc,"íšŒ, "..FirstReward3[3][4].."47ê°• : \x04",iv.S47Loc,"íšŒ"})
+	DisplayPrint(LCP, {"\x02ë¬´ìƒ‰ ì¡°ê° \x04: \x07",iv.GFfragLoc," \x04ê°œ, \x1Eê°ì„±ì˜ ë³´ì„ \x04: \x07",iv.GAwakItemLoc," \x04ê°œ.\x12"..FirstReward3[4][4].."48ê°• : \x04",iv.S48Loc,"íšŒ, "..FirstReward4[1][4].."49ê°• \x04: ",iv.S49Loc,"íšŒ, "..FirstReward4[2][4].."50ê°• \x04: ",iv.S50Loc,"íšŒ"})
 	CS__SetValue(FP, StrL, MakeiStrVoid(54),0xFFFFFFFF,0)
-	CS__SetValue(FP, StrL, "\x17Å©·¹µ÷ \x04:  0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000",nil,0)
+	CS__SetValue(FP, StrL, "\x17í¬ë ˆë”§ \x04:  0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000",nil,0)
 	CS__lItoCustom(FP,SVA1(StrL,6),iv.GCreditLoc,nil,nil,10,nil,nil,"\x1B0",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23}, nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	
 	CS__InputVA(FP, iStrL, 54*0,StrL,StrLs,nil,54*0,54*1)	
 	CDoActions(FP, {TSetMemory(0x6509B0, SetTo, LCP),DisplayText(iStrL[4], 4)})
 	--CIf(FP,CV(NextOreLoc,1,AtLeast))
-	--	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ »ç³ÉÅÍ \x0ELV.1 \x07µ· Áõ°¡·® ",NextOreMulLoc," \x08¾÷±×·¹ÀÌµå\x04¿¡ ÇÊ¿äÇÑ \x1BDPS\x1F(¹Ì³×¶ö)\x04 : \x1F",NextOreLoc})
+	--	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ ì‚¬ëƒ¥í„° \x0ELV.1 \x07ëˆ ì¦ê°€ëŸ‰ ",NextOreMulLoc," \x08ì—…ê·¸ë ˆì´ë“œ\x04ì— í•„ìš”í•œ \x1BDPS\x1F(ë¯¸ë„¤ë„)\x04 : \x1F",NextOreLoc})
 	--CIfEnd()
 
 --	--CIf(FP,CV(NextGasLoc,1,AtLeast))
-	--	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04´ÔÀÇ »ç³ÉÅÍ \x0FLV.2 \x07µ· Áõ°¡·® ",NextGasMulLoc," \x08¾÷±×·¹ÀÌµå\x04¿¡ ÇÊ¿äÇÑ \x1BDPS\x07(°¡½º)\x04 : \x07",NextGasLoc})
+	--	DisplayPrint(LCP, {PName("LocalPlayerID")," \x04ë‹˜ì˜ ì‚¬ëƒ¥í„° \x0FLV.2 \x07ëˆ ì¦ê°€ëŸ‰ ",NextGasMulLoc," \x08ì—…ê·¸ë ˆì´ë“œ\x04ì— í•„ìš”í•œ \x1BDPS\x07(ê°€ìŠ¤)\x04 : \x07",NextGasLoc})
 	--CIfEnd()
 --		for i = 0, 6 do
 --			CIf(FP,HumanCheck(i, 1))
 --			CIfX(FP,{CV(LV5Cool[i+1],1,AtLeast)})
 --			CMov(FP,CTimeV,LV5Cool[i+1])
 --			CallTrigger(FP,Call_ConvertTime)
---			DisplayPrint(LCP, {PName(i)," \x04´ÔÀÇ \x1Fº¸½º LV.5 \x04Ã³Ä¡ °¡´É±îÁö ³²Àº ½Ã°£ \x04: \x07",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ"})
+--			DisplayPrint(LCP, {PName(i)," \x04ë‹˜ì˜ \x1Fë³´ìŠ¤ LV.5 \x04ì²˜ì¹˜ ê°€ëŠ¥ê¹Œì§€ ë‚¨ì€ ì‹œê°„ \x04: \x07",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ"})
 --			CElseX()
---			DisplayPrint(LCP, {PName(i)," \x04´ÔÀÇ \x1Fº¸½º LV.5 \x04Ã³Ä¡ °¡´É±îÁö ³²Àº ½Ã°£ \x04: \x07Ã³Ä¡ °¡´É! "})
+--			DisplayPrint(LCP, {PName(i)," \x04ë‹˜ì˜ \x1Fë³´ìŠ¤ LV.5 \x04ì²˜ì¹˜ ê°€ëŠ¥ê¹Œì§€ ë‚¨ì€ ì‹œê°„ \x04: \x07ì²˜ì¹˜ ê°€ëŠ¥! "})
 --			CIfXEnd()
 --	
 --			CIfEnd()
@@ -846,115 +846,115 @@ function GameDisplay()
 	local PageT = {
 
 
-		{--1ÆäÀÌÁö
-			"\x13\x04\x1FDPS °­È­ÇÏ±â °ÔÀÓ¿¡ ¿À½Å°ÍÀ» È¯¿µÇÕ´Ï´Ù.",
-			"\x13\x04ÀÌ °ÔÀÓÀº \x08»ç³ÉÅÍÀÇ °Ç¹°À» °ø°İ\x04ÇÏ¿© µ·À» ¹ø ÈÄ \x0FÀÚ½ÅÀÇ À¯´ÖÀ» °­È­\x04ÇÏ¸ç ÃÑ DPS¸¦ °­È­ÇÏ´Â °ÔÀÓÀÔ´Ï´Ù.",
-			"\x13\x04¸Ç Ã³À½ °ÔÀÓÀ» ½ÃÀÛÇÏ½Ã¸é ±âº»À¯´ÖÀÌ »ç³ÉÅÍ °Ç¹°À» °ø°İÇÒ °ÍÀÔ´Ï´Ù.",
-			"\x13\x04\x08ÇØ´çÀ¯´ÖÀÌ °ø°İÇÑ µ¥¹ÌÁö·®\x04¿¡ µû¶ó \x1Fµ·À» ¹ú ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04¹úÀº µ·À» ÅëÇØ, \x17ÀÚ±â ÀÚ½Å ¿µ¿ª¿¡ À§Ä¡ÇÑ \x10¿ì¶óÁî Å©¸®½ºÅ»\x04¿¡¼­ À¯´ÖÀ» ±¸ÀÔÇÒ ¼ö ÀÖ½À´Ï´Ù.(À¯´Ö ÀÌ¸§ È®ÀÎ)",
-			"\x13\x04¸¶Âù°¡Áö·Î ±¸ÀÔÇÑ À¯´ÖÀ» »ç³ÉÅÍ¿¡ º¸³» µ·À» ¹ú°Å³ª, »ó´Ü¿¡ À§Ä¡ÇÑ °÷À¸·Î ÀÌµ¿½ÃÄÑ °­È­ÇÒ ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04¸¸¾à ¸ğµç À¯´Ö°ú ÀüÀç»êÀ» ÀÒÀ» °æ¿ì \x08°ÔÀÓ ÁøÇàÀÌ ºÒ°¡´É\x04ÇÒ ¼ö ÀÖÀ¸´Ï À¯ÀÇÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.",
+		{--1í˜ì´ì§€
+			"\x13\x04\x1FDPS ê°•í™”í•˜ê¸° ê²Œì„ì— ì˜¤ì‹ ê²ƒì„ í™˜ì˜í•©ë‹ˆë‹¤.",
+			"\x13\x04ì´ ê²Œì„ì€ \x08ì‚¬ëƒ¥í„°ì˜ ê±´ë¬¼ì„ ê³µê²©\x04í•˜ì—¬ ëˆì„ ë²ˆ í›„ \x0Fìì‹ ì˜ ìœ ë‹›ì„ ê°•í™”\x04í•˜ë©° ì´ DPSë¥¼ ê°•í™”í•˜ëŠ” ê²Œì„ì…ë‹ˆë‹¤.",
+			"\x13\x04ë§¨ ì²˜ìŒ ê²Œì„ì„ ì‹œì‘í•˜ì‹œë©´ ê¸°ë³¸ìœ ë‹›ì´ ì‚¬ëƒ¥í„° ê±´ë¬¼ì„ ê³µê²©í•  ê²ƒì…ë‹ˆë‹¤.",
+			"\x13\x04\x08í•´ë‹¹ìœ ë‹›ì´ ê³µê²©í•œ ë°ë¯¸ì§€ëŸ‰\x04ì— ë”°ë¼ \x1Fëˆì„ ë²Œ ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04ë²Œì€ ëˆì„ í†µí•´, \x17ìê¸° ìì‹  ì˜ì—­ì— ìœ„ì¹˜í•œ \x10ìš°ë¼ì¦ˆ í¬ë¦¬ìŠ¤íƒˆ\x04ì—ì„œ ìœ ë‹›ì„ êµ¬ì…í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.(ìœ ë‹› ì´ë¦„ í™•ì¸)",
+			"\x13\x04ë§ˆì°¬ê°€ì§€ë¡œ êµ¬ì…í•œ ìœ ë‹›ì„ ì‚¬ëƒ¥í„°ì— ë³´ë‚´ ëˆì„ ë²Œê±°ë‚˜, ìƒë‹¨ì— ìœ„ì¹˜í•œ ê³³ìœ¼ë¡œ ì´ë™ì‹œì¼œ ê°•í™”í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04ë§Œì•½ ëª¨ë“  ìœ ë‹›ê³¼ ì „ì¬ì‚°ì„ ìƒì„ ê²½ìš° \x08ê²Œì„ ì§„í–‰ì´ ë¶ˆê°€ëŠ¥\x04í•  ìˆ˜ ìˆìœ¼ë‹ˆ ìœ ì˜í•˜ì‹œê¸° ë°”ëë‹ˆë‹¤.",
 		},
-		{--2ÆäÀÌÁö
-			"\x13\x04\x1B- \x03»ç³ÉÅÍ \x1B-",
-			"\x13\x04\x03»ç³ÉÅÍ\x04¿¡¼­ \x08°Ç¹°À» °ø°İ\x04ÇÒ °æ¿ì \x1Fµ·ÀÌ Áö±ŞµÉ °ÍÀÔ´Ï´Ù.",
-			"\x13\x08LV.1 \x04°Ç¹°Àº 1~25°­ À¯´Ö, \x0FLV.2 \x04°Ç¹°Àº 26~40°­ À¯´Ö, \x11LV.MAX \x04°Ç¹°Àº 41°­ ÀÌÈÄ À¯´ÖÀ¸·Î ÀÔÀå °¡´ÉÇÏ¸ç",
-			"\x13\x04°¢°¢ÀÇ °Ç¹°¿¡ ´ëÇÑ DPS´Â \x1F¹Ì³×¶ö\x04, \x07°¡½º\x04·Î È®ÀÎÇÕ´Ï´Ù.",
-			"\x13\x04(´Ü, ¹Ì³×¶öÀÇ °æ¿ì \x11LV.MAX\x04ÀÇ °Ç¹°À» °ø°İÇÏ´Â ¼ø°£ \x1F¹Ì³×¶ö \x04Ç¥±â°¡ \x11LV.MAX \x04°Ç¹°·Î º¯°æµÊ)",
-			"\x13\x11LV.MAX \x04°Ç¹°À» Á¦¿ÜÇÑ °¢ ·¹º§ÀÇ °Ç¹°Àº ÀÏÁ¤ DPS¸¦ ´Ş¼ºÇÒ °æ¿ì µ· Áö±Ş·®ÀÌ Áõ°¡ÇÕ´Ï´Ù.",
-		},
-		{
-			"\x13\x04\x1B- \x08±âÁØ È®·ü\x1B -",
-			"\x13\x04\x08±âÁØÈ®·ü\x04ÀÌ¶õ °­È­¼º°ø½Ã +1 ´Ü°è Áõ°¡ È®·üÀÌ ±âÁØÁ¡ÀÌ¶ó´Â ¶æÀÌ¸ç",
-			"\x13\x04±âº»ÀûÀ¸·Î \x0F+2°­ Áõ°¡ È®·üÀº \x08±âÁØÈ®·ü\x04ÀÇ 1/10, \x1F+3°­ Áõ°¡ È®·ü 1/100 \x04°¡ ºÎ¿©µË´Ï´Ù.",
-			"\x13\x04¿¹ : \x08±âÁØÈ®·ü\x04ÀÌ 50.0%ÀÏ °æ¿ì \x0F+2°­ È®·üÀº 5.0% \x1F+3°­ È®·üÀº 0.5% \x05½ÇÆĞÈ®·üÀº 44.5%",
-			"\x13\x04\x1937~40°­ À¯´Ö\x04ÀÇ °æ¿ì À§ÀÇ +2, +3°­ È®·üÀÌ \x08Àû¿ëµÇÁö ¾Ê°í \x04+1°­ È®·ü·Î Àû¿ëµË´Ï´Ù.",
-			"\x13\x04°¢ À¯´Ö¿¡ ´ëÇÑ °­È­È®·üÀº \x1CÀ¯´Ö °ø°İ¹«±âÀÇ ÁÂÃø ¾ÆÀÌÄÜ\x04¿¡¼­ È®ÀÎÇÒ ¼ö ÀÖÀ¸¸ç",
-			"\x13\x04´Ù¸¥ ÇÃ·¹ÀÌ¾îÀÇ À¯´Ö °­È­ È®·üµµ °°Àº ¹æ¹ıÀ¸·Î È®ÀÎ °¡´ÉÇÕ´Ï´Ù."
+		{--2í˜ì´ì§€
+			"\x13\x04\x1B- \x03ì‚¬ëƒ¥í„° \x1B-",
+			"\x13\x04\x03ì‚¬ëƒ¥í„°\x04ì—ì„œ \x08ê±´ë¬¼ì„ ê³µê²©\x04í•  ê²½ìš° \x1Fëˆì´ ì§€ê¸‰ë  ê²ƒì…ë‹ˆë‹¤.",
+			"\x13\x08LV.1 \x04ê±´ë¬¼ì€ 1~25ê°• ìœ ë‹›, \x0FLV.2 \x04ê±´ë¬¼ì€ 26~40ê°• ìœ ë‹›, \x11LV.MAX \x04ê±´ë¬¼ì€ 41ê°• ì´í›„ ìœ ë‹›ìœ¼ë¡œ ì…ì¥ ê°€ëŠ¥í•˜ë©°",
+			"\x13\x04ê°ê°ì˜ ê±´ë¬¼ì— ëŒ€í•œ DPSëŠ” \x1Fë¯¸ë„¤ë„\x04, \x07ê°€ìŠ¤\x04ë¡œ í™•ì¸í•©ë‹ˆë‹¤.",
+			"\x13\x04(ë‹¨, ë¯¸ë„¤ë„ì˜ ê²½ìš° \x11LV.MAX\x04ì˜ ê±´ë¬¼ì„ ê³µê²©í•˜ëŠ” ìˆœê°„ \x1Fë¯¸ë„¤ë„ \x04í‘œê¸°ê°€ \x11LV.MAX \x04ê±´ë¬¼ë¡œ ë³€ê²½ë¨)",
+			"\x13\x11LV.MAX \x04ê±´ë¬¼ì„ ì œì™¸í•œ ê° ë ˆë²¨ì˜ ê±´ë¬¼ì€ ì¼ì • DPSë¥¼ ë‹¬ì„±í•  ê²½ìš° ëˆ ì§€ê¸‰ëŸ‰ì´ ì¦ê°€í•©ë‹ˆë‹¤.",
 		},
 		{
-			"\x13\x04\x1B- ·¹º§ ½Ã½ºÅÛ, \x19SCA ·±ÃÄ \x1B-",
-			"\x13\x04ÀÌ °ÔÀÓ¿¡´Â \x1B·¹º§ ½Ã½ºÅÛ\x04ÀÌ Á¸ÀçÇÕ´Ï´Ù.",
-			"\x13\x04Æ¯Á¤ °­È­´Ü°è ÀÌ»ó À¯´ÖÀº \x1EÆÇ¸Å¸¦ ÅëÇØ °æÇèÄ¡\x04¸¦ È¹µæÇÒ ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04È¹µæÇÑ °æÇèÄ¡¸¦ ÅëÇØ ·¹º§¾÷À» ÇÒ °æ¿ì \x1FO Å°¸¦ ÀÔ·Â\x04ÇÏ¿© ½ºÅÈÆ÷ÀÎÆ®¸¦ ºĞ¹èÇÏ¸é \x11°¢Á¾ ÀÌ·Î¿î È¿°ú\x04¸¦ ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04ÀÌ Ç×¸ñÀº \x19SCA·±ÃÄ\x04¸¦ ÅëÇØ ÀúÀå °¡´ÉÇÏ¸ç ´ÙÀ½ °ÔÀÓ¿¡¼­ Àû¿ë °¡´ÉÇÕ´Ï´Ù.",
-			"\x13\x04ÇöÀç Àû¿ëÁßÀÎ ¹öÇÁ ¸ñ·ÏÀº \x1FP Å°\x04¸¦ ÅëÇØ È®ÀÎ °¡´ÉÇÕ´Ï´Ù.",
-			"\x13\x04ÇöÀç \x07SCA·Î ÀúÀå °¡´ÉÇÑ Ç×¸ñ\x04Àº ·¹º§, ºĞ¹èÇÑ ½ºÅÈ, °æÇèÄ¡, Å©·¹µ÷ º¸À¯·® µîÀÌ¸ç \x08±× ¿ÜÀÇ Ç×¸ñÀº ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.",
-			"\x13\x04\x07Çö½Ç½Ã°£ 1ºĞ °æ°ú½Ã¸¶´Ù ÀÚµ¿ ÀúÀå\x04µÇ¸ç, ¼öµ¿ ÀúÀåÀ» ¿øÇÏ½Ç °æ¿ì \x17F9 ¹öÆ°\x04À» ´©¸£¸é ¼öµ¿ÀúÀåµË´Ï´Ù.",
+			"\x13\x04\x1B- \x08ê¸°ì¤€ í™•ë¥ \x1B -",
+			"\x13\x04\x08ê¸°ì¤€í™•ë¥ \x04ì´ë€ ê°•í™”ì„±ê³µì‹œ +1 ë‹¨ê³„ ì¦ê°€ í™•ë¥ ì´ ê¸°ì¤€ì ì´ë¼ëŠ” ëœ»ì´ë©°",
+			"\x13\x04ê¸°ë³¸ì ìœ¼ë¡œ \x0F+2ê°• ì¦ê°€ í™•ë¥ ì€ \x08ê¸°ì¤€í™•ë¥ \x04ì˜ 1/10, \x1F+3ê°• ì¦ê°€ í™•ë¥  1/100 \x04ê°€ ë¶€ì—¬ë©ë‹ˆë‹¤.",
+			"\x13\x04ì˜ˆ : \x08ê¸°ì¤€í™•ë¥ \x04ì´ 50.0%ì¼ ê²½ìš° \x0F+2ê°• í™•ë¥ ì€ 5.0% \x1F+3ê°• í™•ë¥ ì€ 0.5% \x05ì‹¤íŒ¨í™•ë¥ ì€ 44.5%",
+			"\x13\x04\x1937~40ê°• ìœ ë‹›\x04ì˜ ê²½ìš° ìœ„ì˜ +2, +3ê°• í™•ë¥ ì´ \x08ì ìš©ë˜ì§€ ì•Šê³  \x04+1ê°• í™•ë¥ ë¡œ ì ìš©ë©ë‹ˆë‹¤.",
+			"\x13\x04ê° ìœ ë‹›ì— ëŒ€í•œ ê°•í™”í™•ë¥ ì€ \x1Cìœ ë‹› ê³µê²©ë¬´ê¸°ì˜ ì¢Œì¸¡ ì•„ì´ì½˜\x04ì—ì„œ í™•ì¸í•  ìˆ˜ ìˆìœ¼ë©°",
+			"\x13\x04ë‹¤ë¥¸ í”Œë ˆì´ì–´ì˜ ìœ ë‹› ê°•í™” í™•ë¥ ë„ ê°™ì€ ë°©ë²•ìœ¼ë¡œ í™•ì¸ ê°€ëŠ¥í•©ë‹ˆë‹¤."
 		},
 		{
-			"\x13\x04\x1B- ·¹º§ ½Ã½ºÅÛ 2 -",
-			"\x13\x0426°­ ÀÌÈÄ À¯´ÖºÎÅÍ´Â ÆÇ¸Å½Ã °æÇèÄ¡°¡ ´ëÆø Áõ°¡ÇÏÁö¸¸ \x19À¯´Ö ÆÇ¸Å±Ç\x04ÀÌ ÇÊ¿äÇÕ´Ï´Ù.",
-			"\x13\x19À¯´Ö ÆÇ¸Å±Ç\x04Àº 100Å©·¹µ÷ ´ç 1°³·Î ±¸ÀÔÇÏ°Å³ª º¸½º °ø·«À¸·Î ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04\x19À¯´Ö ÆÇ¸Å±Ç\x04ÀÌ ¾øÀ¸¸é \x08À¯´ÖÀ» ÆÇ¸ÅÇÒ ¼ö ¾ø½À´Ï´Ù.",
-			"\x13\x04¶ÇÇÑ \x19À¯´Ö ÆÇ¸Å±Ç\x07Àº SCA ÀúÀå °¡´É ¾ÆÀÌÅÛ\x04ÀÔ´Ï´Ù. ´Ù¸¥ °ÔÀÓ¿¡¼­ ´Ù½Ã »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+			"\x13\x04\x1B- ë ˆë²¨ ì‹œìŠ¤í…œ, \x19SCA ëŸ°ì³ \x1B-",
+			"\x13\x04ì´ ê²Œì„ì—ëŠ” \x1Bë ˆë²¨ ì‹œìŠ¤í…œ\x04ì´ ì¡´ì¬í•©ë‹ˆë‹¤.",
+			"\x13\x04íŠ¹ì • ê°•í™”ë‹¨ê³„ ì´ìƒ ìœ ë‹›ì€ \x1EíŒë§¤ë¥¼ í†µí•´ ê²½í—˜ì¹˜\x04ë¥¼ íšë“í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04íšë“í•œ ê²½í—˜ì¹˜ë¥¼ í†µí•´ ë ˆë²¨ì—…ì„ í•  ê²½ìš° \x1FO í‚¤ë¥¼ ì…ë ¥\x04í•˜ì—¬ ìŠ¤íƒ¯í¬ì¸íŠ¸ë¥¼ ë¶„ë°°í•˜ë©´ \x11ê°ì¢… ì´ë¡œìš´ íš¨ê³¼\x04ë¥¼ ì–»ì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04ì´ í•­ëª©ì€ \x19SCAëŸ°ì³\x04ë¥¼ í†µí•´ ì €ì¥ ê°€ëŠ¥í•˜ë©° ë‹¤ìŒ ê²Œì„ì—ì„œ ì ìš© ê°€ëŠ¥í•©ë‹ˆë‹¤.",
+			"\x13\x04í˜„ì¬ ì ìš©ì¤‘ì¸ ë²„í”„ ëª©ë¡ì€ \x1FP í‚¤\x04ë¥¼ í†µí•´ í™•ì¸ ê°€ëŠ¥í•©ë‹ˆë‹¤.",
+			"\x13\x04í˜„ì¬ \x07SCAë¡œ ì €ì¥ ê°€ëŠ¥í•œ í•­ëª©\x04ì€ ë ˆë²¨, ë¶„ë°°í•œ ìŠ¤íƒ¯, ê²½í—˜ì¹˜, í¬ë ˆë”§ ë³´ìœ ëŸ‰ ë“±ì´ë©° \x08ê·¸ ì™¸ì˜ í•­ëª©ì€ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
+			"\x13\x04\x07í˜„ì‹¤ì‹œê°„ 1ë¶„ ê²½ê³¼ì‹œë§ˆë‹¤ ìë™ ì €ì¥\x04ë˜ë©°, ìˆ˜ë™ ì €ì¥ì„ ì›í•˜ì‹¤ ê²½ìš° \x17F9 ë²„íŠ¼\x04ì„ ëˆ„ë¥´ë©´ ìˆ˜ë™ì €ì¥ë©ë‹ˆë‹¤.",
 		},
 		{
-			"\x13\x04\x1B- °íÀ¯ À¯´Ö ½Ã½ºÅÛ\x08(¾à 8000·¹º§ ÀÌ»ó ÄÁÅÙÃ÷ ÀÌ¿ë ±ÇÀå)\x1B -",
-			"\x13\x04SCA ·Îµå°¡ ¼º°øµÇ¸é ÀÚ½Å¸¸ÀÇ \x07°íÀ¯ À¯´Ö\x04ÀÌ »ı¼ºµË´Ï´Ù.",
-			"\x13\x04ÀÌ °íÀ¯À¯´ÖÀº \x08ÃÖ´ë 10°­\x04±îÁö ÇÒ ¼ö ÀÖÁö¸¸ °­È­¸¦ ÇÑ´Ù°í ¾î¶² È¿°ú°¡ ¹Ù·Î ÁÖ¾îÁö´Â°Ç ¾Æ´Õ´Ï´Ù.",
-			"\x13\x0410°­À» ´Ş¼ºÇÏ°í \x17100¸¸ Å©·¹µ÷\x04À» »ç¿ëÇÏ¿© ¿øÇÏ´Â ¿É¼Ç È¹µæ°ú ÇÔ²² \x1F½Â±Ş\x04ÇÒ ¼ö ÀÖ½À´Ï´Ù.",
-			"\x13\x04½Â±Ş ¿É¼Ç ¼±ÅÃ ÀÌÈÄ·Î´Â \x08µÇµ¹¸®±â°¡ ºÒ°¡´É\x04ÇÕ´Ï´Ù. ¿øÇÏ´Â ¿É¼ÇÀ» ½ÅÁßÇÏ°Ô ¼±ÅÃÇØÁÖ¼¼¿ä.",
+			"\x13\x04\x1B- ë ˆë²¨ ì‹œìŠ¤í…œ 2 -",
+			"\x13\x0426ê°• ì´í›„ ìœ ë‹›ë¶€í„°ëŠ” íŒë§¤ì‹œ ê²½í—˜ì¹˜ê°€ ëŒ€í­ ì¦ê°€í•˜ì§€ë§Œ \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì´ í•„ìš”í•©ë‹ˆë‹¤.",
+			"\x13\x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì€ 100í¬ë ˆë”§ ë‹¹ 1ê°œë¡œ êµ¬ì…í•˜ê±°ë‚˜ ë³´ìŠ¤ ê³µëµìœ¼ë¡œ ì–»ì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04\x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì´ ì—†ìœ¼ë©´ \x08ìœ ë‹›ì„ íŒë§¤í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
+			"\x13\x04ë˜í•œ \x19ìœ ë‹› íŒë§¤ê¶Œ\x07ì€ SCA ì €ì¥ ê°€ëŠ¥ ì•„ì´í…œ\x04ì…ë‹ˆë‹¤. ë‹¤ë¥¸ ê²Œì„ì—ì„œ ë‹¤ì‹œ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+		},
+		{
+			"\x13\x04\x1B- ê³ ìœ  ìœ ë‹› ì‹œìŠ¤í…œ\x08(ì•½ 8000ë ˆë²¨ ì´ìƒ ì»¨í…ì¸  ì´ìš© ê¶Œì¥)\x1B -",
+			"\x13\x04SCA ë¡œë“œê°€ ì„±ê³µë˜ë©´ ìì‹ ë§Œì˜ \x07ê³ ìœ  ìœ ë‹›\x04ì´ ìƒì„±ë©ë‹ˆë‹¤.",
+			"\x13\x04ì´ ê³ ìœ ìœ ë‹›ì€ \x08ìµœëŒ€ 10ê°•\x04ê¹Œì§€ í•  ìˆ˜ ìˆì§€ë§Œ ê°•í™”ë¥¼ í•œë‹¤ê³  ì–´ë–¤ íš¨ê³¼ê°€ ë°”ë¡œ ì£¼ì–´ì§€ëŠ”ê±´ ì•„ë‹™ë‹ˆë‹¤.",
+			"\x13\x0410ê°•ì„ ë‹¬ì„±í•˜ê³  \x17100ë§Œ í¬ë ˆë”§\x04ì„ ì‚¬ìš©í•˜ì—¬ ì›í•˜ëŠ” ì˜µì…˜ íšë“ê³¼ í•¨ê»˜ \x1FìŠ¹ê¸‰\x04í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04ìŠ¹ê¸‰ ì˜µì…˜ ì„ íƒ ì´í›„ë¡œëŠ” \x08ë˜ëŒë¦¬ê¸°ê°€ ë¶ˆê°€ëŠ¥\x04í•©ë‹ˆë‹¤. ì›í•˜ëŠ” ì˜µì…˜ì„ ì‹ ì¤‘í•˜ê²Œ ì„ íƒí•´ì£¼ì„¸ìš”.",
 		},
 	
 		{
-			"\x13\x04\x1B- ºÎ·Ï. ·¹º§º° ±âº»À¯´Ö ½ºÆå¾÷ \x1B-",
-			"\x13\x04·±ÃÄ ·Îµå°¡ ¿Ï·áµÇ¸é ÀÎ°ÔÀÓ 3ºĞ°£ »ç¿ë°¡´ÉÇÑ ±âº»À¯´ÖÀÌ Áö±ŞµË´Ï´Ù.",
-			"\x13\x04±âº»À¯´ÖÀº ÀÚ½ÅÀÇ ·¹º§¿¡ µû¶ó ½ºÆåÀÌ ´Ş¶óÁı´Ï´Ù.",
-			"\x13\x04\x08µ¥¹ÌÁö \x04: 10·¹º§´ç 100Áõ°¡, ÃÖ´ë 25000 ",
-			"\x13\x04\x04±âº»À¯´Ö \x10°¹¼ö \x04: ±âº» 7°³, 1000·¹º§´ç 1±â Ãß°¡, ÃÖ´ë 12°³",
-			"\x13\x04\x07°ø°İ¼Óµµ \x04: ±âº» ÄğÅ¸ÀÓ 9, 1000·¹º§´ç 1 °¨¼Ò, ÃÖ¼Ò ÄğÅ¸ÀÓ 1",
+			"\x13\x04\x1B- ë¶€ë¡. ë ˆë²¨ë³„ ê¸°ë³¸ìœ ë‹› ìŠ¤í™ì—… \x1B-",
+			"\x13\x04ëŸ°ì³ ë¡œë“œê°€ ì™„ë£Œë˜ë©´ ì¸ê²Œì„ 3ë¶„ê°„ ì‚¬ìš©ê°€ëŠ¥í•œ ê¸°ë³¸ìœ ë‹›ì´ ì§€ê¸‰ë©ë‹ˆë‹¤.",
+			"\x13\x04ê¸°ë³¸ìœ ë‹›ì€ ìì‹ ì˜ ë ˆë²¨ì— ë”°ë¼ ìŠ¤í™ì´ ë‹¬ë¼ì§‘ë‹ˆë‹¤.",
+			"\x13\x04\x08ë°ë¯¸ì§€ \x04: 10ë ˆë²¨ë‹¹ 100ì¦ê°€, ìµœëŒ€ 25000 ",
+			"\x13\x04\x04ê¸°ë³¸ìœ ë‹› \x10ê°¯ìˆ˜ \x04: ê¸°ë³¸ 7ê°œ, 1000ë ˆë²¨ë‹¹ 1ê¸° ì¶”ê°€, ìµœëŒ€ 12ê°œ",
+			"\x13\x04\x07ê³µê²©ì†ë„ \x04: ê¸°ë³¸ ì¿¨íƒ€ì„ 9, 1000ë ˆë²¨ë‹¹ 1 ê°ì†Œ, ìµœì†Œ ì¿¨íƒ€ì„ 1",
 		},
 		{
-			"\x13\x04\x1B- ºÎ·Ï. \x0E´ÙÀÎ ÇÃ·¹ÀÌ º¸³Ê½º, º¸½º ½Ã½ºÅÛ \x1B-",
-			"\x13\x04ÀÌ °ÔÀÓ¿¡´Â \x0E´ÙÀÎ ÇÃ·¹ÀÌ º¸³Ê½º ¹öÇÁ\x04°¡ Á¸ÀçÇÕ´Ï´Ù. Ã³À½ ÇÏ½Ã´Â ºĞµéÀº 2ÀÎ ÀÌ»ó ÇÃ·¹ÀÌ¸¦ \x08¸Å¿ì ±ÇÀåÇÕ´Ï´Ù.",
-			"\x13\x04\x1F2~7ÀÎ º¸³Ê½º ¹öÇÁ \x1C- \x08°ø°İ·Â + 150%\x04, \x07+1°­ \x17°­È­È®·ü + \x0F1.0%p",
-			"\x13\x08´Ü, SCA ·Îµå°¡ \x072¸í ÀÌ»ó \x08¿Ï·áµÇ¾î¾ß ¿µ±¸ À¯Áö µË´Ï´Ù. (·±ÃÄ ·Îµå \x071ÀÎÀÌÇÏ \x04¸ÖÆ¼ÇÃ·¹ÀÌÀÏ °æ¿ì \x08¿µ±¸ À¯Áö ºÒ°¡\x04)",
-			"\x13\x04\x08°³ÀÎ º¸½º ¸ó½ºÅÍ \x04Áö¿ªÀº 25°­ ÀÌÇÏ À¯´Ö¸¸ °³ÀÎº°·Î °ø·« °¡´ÉÇÏ¸ç \x0F1ÃÊ°£ÀÇ µ¥¹ÌÁö(DPS)\x04À¸·Î Å¬¸®¾î ¿©ºÎ¸¦ °áÁ¤ÇÕ´Ï´Ù.",
-			"\x13\x04°³ÀÎº¸½º \x07LV.6 \x04ÀÌ»óºÎÅÍ´Â \x1041°­ ÀÌ»ó À¯´ÖºÎÅÍ °ø·« °¡´É\x04ÇÏ¸ç \x071È¸ ÇÑÁ¤ ÀüÃ¼ º¸»óÀÌ ÀÖ½À´Ï´Ù.",
-			"\x13\x04\x08ÆÄÆ¼ º¸½º ¸ó½ºÅÍ \x04Áö¿ªÀº 26°­~40°­ À¯´ÖÀ¸·Î ÀÔÀå °¡´ÉÇÏ¸ç \x081ºĞ°£ÀÇ µ¥¹ÌÁö(DPM)\x04À¸·Î Å¬¸®¾î ¿©ºÎ¸¦ °áÁ¤ÇÕ´Ï´Ù.",
+			"\x13\x04\x1B- ë¶€ë¡. \x0Eë‹¤ì¸ í”Œë ˆì´ ë³´ë„ˆìŠ¤, ë³´ìŠ¤ ì‹œìŠ¤í…œ \x1B-",
+			"\x13\x04ì´ ê²Œì„ì—ëŠ” \x0Eë‹¤ì¸ í”Œë ˆì´ ë³´ë„ˆìŠ¤ ë²„í”„\x04ê°€ ì¡´ì¬í•©ë‹ˆë‹¤. ì²˜ìŒ í•˜ì‹œëŠ” ë¶„ë“¤ì€ 2ì¸ ì´ìƒ í”Œë ˆì´ë¥¼ \x08ë§¤ìš° ê¶Œì¥í•©ë‹ˆë‹¤.",
+			"\x13\x04\x1F2~7ì¸ ë³´ë„ˆìŠ¤ ë²„í”„ \x1C- \x08ê³µê²©ë ¥ + 150%\x04, \x07+1ê°• \x17ê°•í™”í™•ë¥  + \x0F1.0%p",
+			"\x13\x08ë‹¨, SCA ë¡œë“œê°€ \x072ëª… ì´ìƒ \x08ì™„ë£Œë˜ì–´ì•¼ ì˜êµ¬ ìœ ì§€ ë©ë‹ˆë‹¤. (ëŸ°ì³ ë¡œë“œ \x071ì¸ì´í•˜ \x04ë©€í‹°í”Œë ˆì´ì¼ ê²½ìš° \x08ì˜êµ¬ ìœ ì§€ ë¶ˆê°€\x04)",
+			"\x13\x04\x08ê°œì¸ ë³´ìŠ¤ ëª¬ìŠ¤í„° \x04ì§€ì—­ì€ 25ê°• ì´í•˜ ìœ ë‹›ë§Œ ê°œì¸ë³„ë¡œ ê³µëµ ê°€ëŠ¥í•˜ë©° \x0F1ì´ˆê°„ì˜ ë°ë¯¸ì§€(DPS)\x04ìœ¼ë¡œ í´ë¦¬ì–´ ì—¬ë¶€ë¥¼ ê²°ì •í•©ë‹ˆë‹¤.",
+			"\x13\x04ê°œì¸ë³´ìŠ¤ \x07LV.6 \x04ì´ìƒë¶€í„°ëŠ” \x1041ê°• ì´ìƒ ìœ ë‹›ë¶€í„° ê³µëµ ê°€ëŠ¥\x04í•˜ë©° \x071íšŒ í•œì • ì „ì²´ ë³´ìƒì´ ìˆìŠµë‹ˆë‹¤.",
+			"\x13\x04\x08íŒŒí‹° ë³´ìŠ¤ ëª¬ìŠ¤í„° \x04ì§€ì—­ì€ 26ê°•~40ê°• ìœ ë‹›ìœ¼ë¡œ ì…ì¥ ê°€ëŠ¥í•˜ë©° \x081ë¶„ê°„ì˜ ë°ë¯¸ì§€(DPM)\x04ìœ¼ë¡œ í´ë¦¬ì–´ ì—¬ë¶€ë¥¼ ê²°ì •í•©ë‹ˆë‹¤.",
 		},
 	
-	--³²´Â°Å °ø 250% °­È®Àº ³í¿Ü
+	--ë‚¨ëŠ”ê±° ê³µ 250% ê°•í™•ì€ ë…¼ì™¸
 		{
-			"\x13\x04\x1B- ºÎ·Ï. \x08°³ÀÎ º¸½º ¸ó½ºÅÍ º¸»ó ¸ñ·Ï \x1B-",
-			"\x041´Ü°è \x04: \x0F+1È®·ü\x07+1.0%p \x1B»ç³ÉÅÍ \x07+3 \x12\x046´Ü°è : \x1715¸¸ Å©·¹µ÷, \x02¹«»ö Á¶°¢\x04 3°³, \x07½ºÅÈ È¿°ú",
-			"\x042´Ü°è \x04: \x0F+1È®·ü\x07+1.0%p \x1B»ç³ÉÅÍ \x07+3 \x12\x047´Ü°è \x04: \x17100¸¸ Å©·¹µ÷, \x02¹«»ö Á¶°¢\x04 5°³",
-			"\x043´Ü°è \x04: \x0F+1È®·ü\x07+1.0%p \x1B»ç³ÉÅÍ \x07+3, \x08°ø+50% \x12\x048´Ü°è \x04: \x02¹«»ö Á¶°¢\x04 250°³, \x19À¯´Ö ÆÇ¸Å±Ç 10¸¸°³",
-			"\x044´Ü°è \x04: \x1B»ç³ÉÅÍ \x07+6, \x08°ø°İ·Â + 50%, \x1CÃß°¡EXP +10% \x12\x049´Ü°è \x04: \x02¹«»ö Á¶°¢\x04 1¸¸°³",
-			"\x045´Ü°è \x04: \x1B»ç³ÉÅÍ \x07+9, \x08°ø+50%, \x1CEXP+10%, \x19À¯´Ö ÆÇ¸Å±Ç 5°³ \x12\x0410´Ü°è \x04: \x19À¯´Ö ÆÇ¸Å±Ç 100¸¸°³ ",
-			"\x046´Ü°è °³ÀÎº¸½º ÀÌÈÄºÎÅÍ´Â \x08ÆÄÆ¼ º¸½º 5´Ü°è\x04¸¦ \x071È¸ ÀÌ»ó Ã³Ä¡\x04ÇØ¾ß ÃâÇöÇÕ´Ï´Ù."
+			"\x13\x04\x1B- ë¶€ë¡. \x08ê°œì¸ ë³´ìŠ¤ ëª¬ìŠ¤í„° ë³´ìƒ ëª©ë¡ \x1B-",
+			"\x041ë‹¨ê³„ \x04: \x0F+1í™•ë¥ \x07+1.0%p \x1Bì‚¬ëƒ¥í„° \x07+3 \x12\x046ë‹¨ê³„ : \x1715ë§Œ í¬ë ˆë”§, \x02ë¬´ìƒ‰ ì¡°ê°\x04 3ê°œ, \x07ìŠ¤íƒ¯ íš¨ê³¼",
+			"\x042ë‹¨ê³„ \x04: \x0F+1í™•ë¥ \x07+1.0%p \x1Bì‚¬ëƒ¥í„° \x07+3 \x12\x047ë‹¨ê³„ \x04: \x17100ë§Œ í¬ë ˆë”§, \x02ë¬´ìƒ‰ ì¡°ê°\x04 5ê°œ",
+			"\x043ë‹¨ê³„ \x04: \x0F+1í™•ë¥ \x07+1.0%p \x1Bì‚¬ëƒ¥í„° \x07+3, \x08ê³µ+50% \x12\x048ë‹¨ê³„ \x04: \x02ë¬´ìƒ‰ ì¡°ê°\x04 250ê°œ, \x19ìœ ë‹› íŒë§¤ê¶Œ 10ë§Œê°œ",
+			"\x044ë‹¨ê³„ \x04: \x1Bì‚¬ëƒ¥í„° \x07+6, \x08ê³µê²©ë ¥ + 50%, \x1Cì¶”ê°€EXP +10% \x12\x049ë‹¨ê³„ \x04: \x02ë¬´ìƒ‰ ì¡°ê°\x04 1ë§Œê°œ",
+			"\x045ë‹¨ê³„ \x04: \x1Bì‚¬ëƒ¥í„° \x07+9, \x08ê³µ+50%, \x1CEXP+10%, \x19ìœ ë‹› íŒë§¤ê¶Œ 5ê°œ \x12\x0410ë‹¨ê³„ \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ 100ë§Œê°œ ",
+			"\x046ë‹¨ê³„ ê°œì¸ë³´ìŠ¤ ì´í›„ë¶€í„°ëŠ” \x08íŒŒí‹° ë³´ìŠ¤ 5ë‹¨ê³„\x04ë¥¼ \x071íšŒ ì´ìƒ ì²˜ì¹˜\x04í•´ì•¼ ì¶œí˜„í•©ë‹ˆë‹¤."
 		},
 		
 		{
-			"\x13\x04\x1B- ºÎ·Ï. \x08ÆÄÆ¼ º¸½º ¸ó½ºÅÍ º¸»ó ¸ñ·Ï \x1B-",
-			"\x041´Ü°è \x04: \x0F+1È®·ü \x07+1.0%p, \x1B»ç³ÉÅÍ \x07+6",
-			"\x042´Ü°è \x04: \x0F+1È®·ü \x07+1.0%p, \x1B»ç³ÉÅÍ \x07+6, \x08°ø°İ·Â + 50%, \x17Å©·¹µ÷ +500",
-			"\x043´Ü°è \x04: \x17Å©·¹µ÷ +1,000, \x1CÃß°¡EXP +30%",
-			"\x044´Ü°è \x04: \x19À¯´Ö ÆÇ¸Å±Ç + 50, \x08°ø°İ·Â + 50%\x12\x1BExtra \x04LV. \x1DVI \x04: \x1FÈ®Á¤ °­È­±Ç\x04 1°³, \x08±¸ÀÔ Æ¼ÄÏ 10¸¸°³, \x07½ºÅÈ È¿°ú",
-			"\x045´Ü°è \x04: \x175¸¸ Å©·¹µ÷, \x07½ºÅÈ È¿°ú\x12\x1CExtra \x04LV. \x1FXI \x04: \x1FÈ®Á¤ °­È­±Ç\x04 6°³, \x17Å©·¹µ÷ +200¸¸",
-			"\x12\x08Extra Boss´Â SCA·±ÃÄ 2ÀÎÀÌ»ó ·Îµå½Ã¿¡¸¸ ÃâÇöÇÔ",
-			--"\x04X´Ü°è \x04: ",
-			--"\x045´Ü°è º¸½º´Â Ã³Ä¡ÈÄ \x081½Ã°£ÀÇ ÀÎ°ÔÀÓ ÄğÅ¸ÀÓ\x04ÀÌ Á¸ÀçÇÕ´Ï´Ù."
+			"\x13\x04\x1B- ë¶€ë¡. \x08íŒŒí‹° ë³´ìŠ¤ ëª¬ìŠ¤í„° ë³´ìƒ ëª©ë¡ \x1B-",
+			"\x041ë‹¨ê³„ \x04: \x0F+1í™•ë¥  \x07+1.0%p, \x1Bì‚¬ëƒ¥í„° \x07+6",
+			"\x042ë‹¨ê³„ \x04: \x0F+1í™•ë¥  \x07+1.0%p, \x1Bì‚¬ëƒ¥í„° \x07+6, \x08ê³µê²©ë ¥ + 50%, \x17í¬ë ˆë”§ +500",
+			"\x043ë‹¨ê³„ \x04: \x17í¬ë ˆë”§ +1,000, \x1Cì¶”ê°€EXP +30%",
+			"\x044ë‹¨ê³„ \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ + 50, \x08ê³µê²©ë ¥ + 50%\x12\x1BExtra \x04LV. \x1DVI \x04: \x1Fí™•ì • ê°•í™”ê¶Œ\x04 1ê°œ, \x08êµ¬ì… í‹°ì¼“ 10ë§Œê°œ, \x07ìŠ¤íƒ¯ íš¨ê³¼",
+			"\x045ë‹¨ê³„ \x04: \x175ë§Œ í¬ë ˆë”§, \x07ìŠ¤íƒ¯ íš¨ê³¼\x12\x1CExtra \x04LV. \x1FXI \x04: \x1Fí™•ì • ê°•í™”ê¶Œ\x04 6ê°œ, \x17í¬ë ˆë”§ +200ë§Œ",
+			"\x12\x08Extra BossëŠ” SCAëŸ°ì³ 2ì¸ì´ìƒ ë¡œë“œì‹œì—ë§Œ ì¶œí˜„í•¨",
+			--"\x04Xë‹¨ê³„ \x04: ",
+			--"\x045ë‹¨ê³„ ë³´ìŠ¤ëŠ” ì²˜ì¹˜í›„ \x081ì‹œê°„ì˜ ì¸ê²Œì„ ì¿¨íƒ€ì„\x04ì´ ì¡´ì¬í•©ë‹ˆë‹¤."
 		},
 		
 		{
-			"\x13\x04\x1B- ºÎ·Ï. \x1C45°­ \x04ÀÌÈÄ Ã¹ ´Ş¼º º¸»ó \x1B-",
-			FirstReward3[1][4].."45°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward3[1][2])..", \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward3[1][3]).."°³. \x04ÀÏÀÏ Á¦ÇÑ"..FirstReward3[1][5].."È¸",
-			FirstReward3[2][4].."46°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward3[2][2])..", \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward3[2][3]).."°³. \x04ÀÏÀÏ Á¦ÇÑ"..FirstReward3[2][5].."È¸",
-			FirstReward3[3][4].."47°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward3[3][2])..", \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward3[3][3]).."°³. \x04ÀÏÀÏ Á¦ÇÑ"..FirstReward3[3][5].."È¸",
-			FirstReward3[4][4].."48°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward3[4][2])..", \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward3[4][3]).."°³. \x04ÀÏÀÏ Á¦ÇÑ"..FirstReward3[4][5].."È¸",
-			FirstReward4[1][4].."49°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward4[1][2]).."¾ï, \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward4[1][3]).."°³. \x04ÁÖ°£ Á¦ÇÑ"..FirstReward4[1][5].."È¸\x07 (¸ÅÁÖ ¸ñ¿äÀÏ ÃÊ±âÈ­)",
-			FirstReward4[2][4].."50°­ \x04: \x17Å©·¹µ÷ "..Convert_Number(FirstReward4[2][2]).."¾ï, \x02¹«»ö Á¶°¢ "..Convert_Number(FirstReward4[2][3]).."°³. \x04ÁÖ°£ Á¦ÇÑ"..FirstReward4[2][5].."È¸\x07 (¸ÅÁÖ ¸ñ¿äÀÏ ÃÊ±âÈ­)",
-			--"\x04X´Ü°è \x04: ",
-			--"\x045´Ü°è º¸½º´Â Ã³Ä¡ÈÄ \x081½Ã°£ÀÇ ÀÎ°ÔÀÓ ÄğÅ¸ÀÓ\x04ÀÌ Á¸ÀçÇÕ´Ï´Ù."
+			"\x13\x04\x1B- ë¶€ë¡. \x1C45ê°• \x04ì´í›„ ì²« ë‹¬ì„± ë³´ìƒ \x1B-",
+			FirstReward3[1][4].."45ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward3[1][2])..", \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward3[1][3]).."ê°œ. \x04ì¼ì¼ ì œí•œ"..FirstReward3[1][5].."íšŒ",
+			FirstReward3[2][4].."46ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward3[2][2])..", \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward3[2][3]).."ê°œ. \x04ì¼ì¼ ì œí•œ"..FirstReward3[2][5].."íšŒ",
+			FirstReward3[3][4].."47ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward3[3][2])..", \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward3[3][3]).."ê°œ. \x04ì¼ì¼ ì œí•œ"..FirstReward3[3][5].."íšŒ",
+			FirstReward3[4][4].."48ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward3[4][2])..", \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward3[4][3]).."ê°œ. \x04ì¼ì¼ ì œí•œ"..FirstReward3[4][5].."íšŒ",
+			FirstReward4[1][4].."49ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward4[1][2]).."ì–µ, \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward4[1][3]).."ê°œ. \x04ì£¼ê°„ ì œí•œ"..FirstReward4[1][5].."íšŒ\x07 (ë§¤ì£¼ ëª©ìš”ì¼ ì´ˆê¸°í™”)",
+			FirstReward4[2][4].."50ê°• \x04: \x17í¬ë ˆë”§ "..Convert_Number(FirstReward4[2][2]).."ì–µ, \x02ë¬´ìƒ‰ ì¡°ê° "..Convert_Number(FirstReward4[2][3]).."ê°œ. \x04ì£¼ê°„ ì œí•œ"..FirstReward4[2][5].."íšŒ\x07 (ë§¤ì£¼ ëª©ìš”ì¼ ì´ˆê¸°í™”)",
+			--"\x04Xë‹¨ê³„ \x04: ",
+			--"\x045ë‹¨ê³„ ë³´ìŠ¤ëŠ” ì²˜ì¹˜í›„ \x081ì‹œê°„ì˜ ì¸ê²Œì„ ì¿¨íƒ€ì„\x04ì´ ì¡´ì¬í•©ë‹ˆë‹¤."
 		},
 		{
-			"\x13\x04\x1B- ºÎ·Ï. \x17Å©·¹µ÷ \x1F±¤»ê \x1B-",
-			"\x13\x04¸Ê»óÀÇ ¸ğµç º¸½º ¸ó½ºÅÍÀÇ °ø·«ÀÌ ¿Ï·áµÈ ÀÌÈÄ \x17Å©·¹µ÷ \x1F±¤»ê\x04ÀÌ °³ÀÎ º¸½ºÁ¸¿¡ »ı¼ºµË´Ï´Ù",
-			"\x13\x04ÀÌ ±¤»ê¿¡ 1È¸ °ø°İÀ» ÇÒ ¶§¸¶´Ù \x17Ã¤±¤·Â \x04¸¸Å­ÀÇ Å©·¹µ÷ÀÌ ÁÖ¾îÁı´Ï´Ù. (\x17Ã¤±¤·Â\x04Àº PÅ°·Î È®ÀÎ °¡´É)",
-			"\x13\x04Ã¤±¤·Â : Ã¤±¤ÀÇ º¸¼®, °¢¼º È½¼ö¿¡ µû¶ó 1.1¹è¾¿ °ö¿¬»êÀ¸·Î Áõ°¡",
-			"\x13\x041È¸ ÃÖ´ë Ã¤±¤ °¡´É Å©·¹µ÷ : ±âº» 1¾ï + 15¸¸·¹º§ ÀÌÈÄ 1¸¸ ·¹º§ ´ÜÀ§·Î Áõ°¡·® 20¸¸¾¿ Áõ°¡",
+			"\x13\x04\x1B- ë¶€ë¡. \x17í¬ë ˆë”§ \x1Fê´‘ì‚° \x1B-",
+			"\x13\x04ë§µìƒì˜ ëª¨ë“  ë³´ìŠ¤ ëª¬ìŠ¤í„°ì˜ ê³µëµì´ ì™„ë£Œëœ ì´í›„ \x17í¬ë ˆë”§ \x1Fê´‘ì‚°\x04ì´ ê°œì¸ ë³´ìŠ¤ì¡´ì— ìƒì„±ë©ë‹ˆë‹¤",
+			"\x13\x04ì´ ê´‘ì‚°ì— 1íšŒ ê³µê²©ì„ í•  ë•Œë§ˆë‹¤ \x17ì±„ê´‘ë ¥ \x04ë§Œí¼ì˜ í¬ë ˆë”§ì´ ì£¼ì–´ì§‘ë‹ˆë‹¤. (\x17ì±„ê´‘ë ¥\x04ì€ Pí‚¤ë¡œ í™•ì¸ ê°€ëŠ¥)",
+			"\x13\x04ì±„ê´‘ë ¥ : ì±„ê´‘ì˜ ë³´ì„, ê°ì„± íšŸìˆ˜ì— ë”°ë¼ 1.1ë°°ì”© ê³±ì—°ì‚°ìœ¼ë¡œ ì¦ê°€",
+			"\x13\x041íšŒ ìµœëŒ€ ì±„ê´‘ ê°€ëŠ¥ í¬ë ˆë”§ : ê¸°ë³¸ 1ì–µ + 15ë§Œë ˆë²¨ ì´í›„ 1ë§Œ ë ˆë²¨ ë‹¨ìœ„ë¡œ ì¦ê°€ëŸ‰ 20ë§Œì”© ì¦ê°€",
 		},
 		
 	}
@@ -970,7 +970,7 @@ function GameDisplay()
 	TriggerX(FP,{CV(PageNumLoc,0)},{SetV(PageNumLoc,1)},{preserved})
 	TriggerX(FP,{CV(PageNumLoc,#PageT+1,AtLeast)},{SetV(PageNumLoc,#PageT)},{preserved})
 	CIf(FP,CD(TG,1))
-	DisplayPrint(LCP, {"\x13\x04[\x0FPrev \x04: \x17B\x04] [\x07Page \x04: \x10",PageNumLoc," \x08¿­±â/´İ±â\x04 : \x17N\x04] [\x11Next \x04: \x17M\x04]"})
+	DisplayPrint(LCP, {"\x13\x04[\x0FPrev \x04: \x17B\x04] [\x07Page \x04: \x10",PageNumLoc," \x08ì—´ê¸°/ë‹«ê¸°\x04 : \x17N\x04] [\x11Next \x04: \x17M\x04]"})
 	for j,k in pairs(PageT) do
 		local t = {}
 		for i = 1, 7 do
@@ -1003,26 +1003,26 @@ function GameDisplay()
 			CMov(FP, iv.B_PFfragItem[i+1], 0)
 			CIfEnd({})
 			CIf(FP,{CD(FVT,1,AtLeast)},{SubCD(FVT,1)})
-				DisplayPrint(i,{"\x13\x07¡º \x02¹«»ö Á¶°¢\x04À» \x07",TempFW," °³ \x04 È¹µæÇÏ¿´½À´Ï´Ù. ÇöÀç ÃÑ È¹µæ·® : \x07",iv.FfragItem[i+1]," °³ \x07¡»"})
+				DisplayPrint(i,{"\x13\x07ã€ \x02ë¬´ìƒ‰ ì¡°ê°\x04ì„ \x07",TempFW," ê°œ \x04 íšë“í•˜ì˜€ìŠµë‹ˆë‹¤. í˜„ì¬ ì´ íšë“ëŸ‰ : \x07",iv.FfragItem[i+1]," ê°œ \x07ã€"})
 			CIfEnd()
 			TriggerX(FP, {CD(FVT,0)}, {SetNWar(TempFW,SetTo,"0")},{preserved})
 		for p = 1,7 do
 			local NextT = ""
 			local NextT2 = ""
 			if p ~= 7 then
-				NextT = "´ÙÀ½ \x08¹è¼ö\x04 Áõ°¡ \x1BDPS\x1F(¹Ì³×¶ö) : \x08"..OreDPS[p+1]
-				NextT2 = "´ÙÀ½ \x08¹è¼ö\x04 Áõ°¡ \x1BDPS\x07(°¡½º) : \x08"..GasDPS[p+1]
+				NextT = "ë‹¤ìŒ \x08ë°°ìˆ˜\x04 ì¦ê°€ \x1BDPS\x1F(ë¯¸ë„¤ë„) : \x08"..OreDPS[p+1]
+				NextT2 = "ë‹¤ìŒ \x08ë°°ìˆ˜\x04 ì¦ê°€ \x1BDPS\x07(ê°€ìŠ¤) : \x08"..GasDPS[p+1]
 			end
 		TriggerX(FP,{CV(iv.TempO[i+1], OreDPS[p],AtLeast)},{
 			SetV(iv.BuildMul1[i+1],OreDPSM[p]),
 			SetV(iv.NextOre[i+1],OreDPS[p+1]),
 			SetV(iv.NextOreMul[i+1],OreDPSM[p+1]),SetCp(i),
-			DisplayExtText(StrDesignX("\x1BDPS\x1F(¹Ì³×¶ö) \x08"..OreDPS[p].." \x04µ¹ÆÄ. ÇöÀç µ· ¹è¼ö : \x08"..OreDPSM[p].."¹è. "..NextT)),SetCp(FP)})--1¹ø°Ç¹°
+			DisplayExtText(StrDesignX("\x1BDPS\x1F(ë¯¸ë„¤ë„) \x08"..OreDPS[p].." \x04ëŒíŒŒ. í˜„ì¬ ëˆ ë°°ìˆ˜ : \x08"..OreDPSM[p].."ë°°. "..NextT)),SetCp(FP)})--1ë²ˆê±´ë¬¼
 		TriggerX(FP,{CV(iv.TempG[i+1], GasDPS[p],AtLeast)},{
 			SetV(iv.BuildMul2[i+1],GasDPSM[p]),
 			SetV(iv.NextGas[i+1],GasDPS[p+1]),
 			SetV(iv.NextGasMul[i+1],GasDPSM[p+1]),SetCp(i),
-			DisplayExtText(StrDesignX("\x1BDPS\x07(°¡½º) \x08"..GasDPS[p].." \x04µ¹ÆÄ. ÇöÀç µ· ¹è¼ö : \x08"..GasDPSM[p].."¹è. "..NextT2)),SetCp(FP)})--2¹ø°Ç¹°
+			DisplayExtText(StrDesignX("\x1BDPS\x07(ê°€ìŠ¤) \x08"..GasDPS[p].." \x04ëŒíŒŒ. í˜„ì¬ ëˆ ë°°ìˆ˜ : \x08"..GasDPSM[p].."ë°°. "..NextT2)),SetCp(FP)})--2ë²ˆê±´ë¬¼
 		end
 		CIfEnd()
 

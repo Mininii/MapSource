@@ -1,9 +1,9 @@
 function TBL()
-	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- °æÇèÄ¡ È¹µæ·® ¼öÄ¡. »ç¿ë ¹ÌÁ¤
-	local PBossLV = iv.PBossLV -- °³ÀÎº¸½º·¹º§
-	local PBossDPS = iv.PBossDPS-- °³ÀÎº¸½ºDPS
-	local TotalPBossDPS = iv.TotalPBossDPS --°³ÀÎº¸½ºDPS ¸ñÇ¥Ä¡
-	local MulOp = iv.MulOp--CreateVarArr2(7,1,FP) -- À¯´Ö °ø°İ·Â¿¡ µû¸¥ ¼öÄ¡ Ç¥±â¿ë º¯¼ö
+	local Stat_EXPIncome = iv.Stat_EXPIncome--CreateVarArr(7,FP)-- ê²½í—˜ì¹˜ íšë“ëŸ‰ ìˆ˜ì¹˜. ì‚¬ìš© ë¯¸ì •
+	local PBossLV = iv.PBossLV -- ê°œì¸ë³´ìŠ¤ë ˆë²¨
+	local PBossDPS = iv.PBossDPS-- ê°œì¸ë³´ìŠ¤DPS
+	local TotalPBossDPS = iv.TotalPBossDPS --ê°œì¸ë³´ìŠ¤DPS ëª©í‘œì¹˜
+	local MulOp = iv.MulOp--CreateVarArr2(7,1,FP) -- ìœ ë‹› ê³µê²©ë ¥ì— ë”°ë¥¸ ìˆ˜ì¹˜ í‘œê¸°ìš© ë³€ìˆ˜
 	--Local Data Variable
 	local IncomeMaxLoc = iv.IncomeMaxLoc--CreateVar(FP)
 	local IncomeLoc = iv.IncomeLoc--CreateVar(FP)
@@ -42,10 +42,10 @@ function TBL()
 	local NextOreMulLoc = iv.NextOreMulLoc
 	local NextGasMulLoc = iv.NextGasMulLoc
 	local SellTicketLoc = iv.SellTicketLoc
-	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(±âº» 1°­)
-	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+2°­)
-	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(+3°­)
-	local TotalEPer4 = iv.TotalEPer4-- CreateVarArr(7,FP)--ÃÑ °­È­È®·ü(Æ¯°­)
+	local TotalEPer = iv.TotalEPer-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (ê¸°ë³¸ 1ê°•)
+	local TotalEPer2 = iv.TotalEPer2-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+2ê°•)
+	local TotalEPer3 = iv.TotalEPer3-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (+3ê°•)
+	local TotalEPer4 = iv.TotalEPer4-- CreateVarArr(7,FP)--ì´ ê°•í™”í™•ë¥ (íŠ¹ê°•)
 
 	local PUnitLevelLoc = iv.PUnitLevelLoc
 	local PUnitClassLoc = iv.PUnitClassLoc
@@ -53,30 +53,30 @@ function TBL()
 	local iStrinit = def_sIndex()
 	CJump(FP, iStrinit)
 	t00 = "\x07\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
-	t01 = "\x07±âÁØÈ®·ü \x04: \x0D\x0D000.000\x08%\x0D\x0D"
-	t01_1 = "\x08Æ¯¼öÈ®·ü \x04: \x08\x0D\x0D000.000\x08%\x0D\x0D"
-	t01_2 = "\x03°³º°È®·ü \x04: \x08\x0D\x0D000.000\x08%\x0D\x0D"
-	t01_3 = "\x05°íÁ¤È®·ü \x04: \x0D\x0D000.000\x08%\x0D\x0D"
-	t02 = "\x08!!! \x1FÃÖ °­ À¯ ´Ö \x08!!!"
-	t03 = "\x04°­È­ ºÒ°¡ À¯´Ö"
+	t01 = "\x07ê¸°ì¤€í™•ë¥  \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+	t01_1 = "\x08íŠ¹ìˆ˜í™•ë¥  \x04: \x08\x0D\x0D000.000\x08%\x0D\x0D"
+	t01_2 = "\x03ê°œë³„í™•ë¥  \x04: \x08\x0D\x0D000.000\x08%\x0D\x0D"
+	t01_3 = "\x05ê³ ì •í™•ë¥  \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+	t02 = "\x08!!! \x1Fìµœ ê°• ìœ  ë‹› \x08!!!"
+	t03 = "\x04ê°•í™” ë¶ˆê°€ ìœ ë‹›"
 	t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-	t10 = "\x19EXP\x17(ÆÇ¸Å±Ç ÇÊ¿ä)\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-	t10_1 = "\x07»Ì±â \x17(ÆÇ¸Å±Ç 1¸¸°³ ÇÊ¿ä)\x04 È®·üÇ¥ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-	t10_2 = "\x07»Ì±â \x17(ÆÇ¸Å±Ç 10¸¸°³ ÇÊ¿ä)\x04 È®·üÇ¥ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-	t10_3 = "\x07»Ì±â \x17(ÆÇ¸Å±Ç 100¸¸°³ ÇÊ¿ä)\x04 È®·üÇ¥ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
-	t05 = "\x08ÆÇ¸Å ºÒ°¡ À¯´Ö"
-	t06 = "\x11ÇöÀç DPM : \x0D0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000"
-	t06_1 = "\x1DÇöÀç Å¸°İ¼ö : \x0D0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000"
-	t06_2 = "\x17³²Àº Å©·¹µ÷ : \x0D0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000"
-	t09 = "\x08ÇöÀç DPS : \x0D0000\x04°æ0000\x04Á¶0000\x04¾ï0000\x04¸¸0000"
+	t10 = "\x19EXP\x17(íŒë§¤ê¶Œ í•„ìš”)\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t10_1 = "\x07ë½‘ê¸° \x17(íŒë§¤ê¶Œ 1ë§Œê°œ í•„ìš”)\x04 í™•ë¥ í‘œ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t10_2 = "\x07ë½‘ê¸° \x17(íŒë§¤ê¶Œ 10ë§Œê°œ í•„ìš”)\x04 í™•ë¥ í‘œ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t10_3 = "\x07ë½‘ê¸° \x17(íŒë§¤ê¶Œ 100ë§Œê°œ í•„ìš”)\x04 í™•ë¥ í‘œ : \x19Y\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	t05 = "\x08íŒë§¤ ë¶ˆê°€ ìœ ë‹›"
+	t06 = "\x11í˜„ì¬ DPM : \x0D0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000"
+	t06_1 = "\x1Dí˜„ì¬ íƒ€ê²©ìˆ˜ : \x0D0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000"
+	t06_2 = "\x17ë‚¨ì€ í¬ë ˆë”§ : \x0D0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000"
+	t09 = "\x08í˜„ì¬ DPS : \x0D0000\x04ê²½0000\x04ì¡°0000\x04ì–µ0000\x04ë§Œ0000"
 	t07 = "\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I\x04I"
-	t08 = "\x04±¸ÀÔÇÏ±â \x07ÇöÀç¹èÀ² \x04: \x0D0000\x04¾ï0000\x04¸¸0000¹è \x04|| \x1FÀÏ°£"
-	t08_1 = "\x04±¸ÀÔÇÏ±â \x07ÇöÀç¹èÀ² \x04: \x0D0000\x04¾ï0000\x04¸¸0000¹è \x04|| \x1FÁÖ°£"
-	t11 = "\x04(SCA ·ÎµåÈÄ 3ºĞµÚ »ç¶óÁü)"
-	t13 = "\x0F°­È­È®·ü, \x08½ÇÆĞ\x04½Ã \x07À¯Áö\x0FÈ®·ü \x04: \x1C\x0D\x0D000 %"
-	t14 = "\x08\x0D\x0D\x0D\x0D°­. °­È­ºñ¿ë \x04: \x0D000,000,000 \x17Å©·¹µ÷"
+	t08 = "\x04êµ¬ì…í•˜ê¸° \x07í˜„ì¬ë°°ìœ¨ \x04: \x0D0000\x04ì–µ0000\x04ë§Œ0000ë°° \x04|| \x1Fì¼ê°„"
+	t08_1 = "\x04êµ¬ì…í•˜ê¸° \x07í˜„ì¬ë°°ìœ¨ \x04: \x0D0000\x04ì–µ0000\x04ë§Œ0000ë°° \x04|| \x1Fì£¼ê°„"
+	t11 = "\x04(SCA ë¡œë“œí›„ 3ë¶„ë’¤ ì‚¬ë¼ì§)"
+	t13 = "\x0Fê°•í™”í™•ë¥ , \x08ì‹¤íŒ¨\x04ì‹œ \x07ìœ ì§€\x0Fí™•ë¥  \x04: \x1C\x0D\x0D000 %"
+	t14 = "\x08\x0D\x0D\x0D\x0Dê°•. ê°•í™”ë¹„ìš© \x04: \x0D000,000,000 \x17í¬ë ˆë”§"
 	iStrSize1 = GetiStrSize(0,t01)
-	S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
+	S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
 	iTbl1 = GetiTblId(FP,1495,S0)
 	TStr0, TStr0a, TStr0s = SaveiStrArr(FP,t00)
 	TStr1, TStr1a, TStr1s = SaveiStrArr(FP,t01)
@@ -87,9 +87,9 @@ function TBL()
 	TStr6, TStr6a, TStr6s = SaveiStrArr(FP,t13)
 	TStr7, TStr7a, TStr7s = SaveiStrArr(FP,t14)
 	
-	S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
+	S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
 	iTbl2 = GetiTblId(FP,764,S1)
-	S2 = MakeiTblString(16,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t08)+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
+	S2 = MakeiTblString(16,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t08)+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
 	iTbl3 = GetiTblId(FP,16,S1)
 	EStr0, EStr0a, EStr0s = SaveiStrArr(FP,t04)
 	EStr1, EStr1a, EStr1s = SaveiStrArr(FP,t05)
@@ -109,13 +109,13 @@ function TBL()
 	
 	
 	
-	CIf(FP,{Memory(0x6284B8 ,AtLeast,1)}) -- Å¬¸¯À¯´ÖÀÎ½Ä(·ÎÄÃ)
+	CIf(FP,{Memory(0x6284B8 ,AtLeast,1)}) -- í´ë¦­ìœ ë‹›ì¸ì‹(ë¡œì»¬)
 	CMov(FP,SelPl,0)
 	f_Read(FP,0x6284B8,nil,SelEPD)
 	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
 	CMov(FP,SelUID,_ReadF(_Add(SelEPD,25)),nil,0xFF,1)
 	
-	CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- À¯´Ö¼±ÅÃ½Ã 1È¸¸¸ ½ÇÇà
+	CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- ìœ ë‹›ì„ íƒì‹œ 1íšŒë§Œ ì‹¤í–‰
 	
 	CMov(FP,CurEPD,SelEPD)
 	CMov(FP,0x6509B0,LCP)
@@ -127,7 +127,7 @@ function TBL()
 		NElseIfX({CV(SelUID,k[2])},{
 			SetV(SelPer,k[3]);SetCD(SellTicketFlag,0),
 		})
-		TriggerX(FP, {CV(SelPl,7)}, {DisplayExtText(StrDesignX("\x17P8 \x08°­È­ À¯´Ö\x04ÀÇ ¼¼ºÎ Á¤º¸´Â \x0FÀÚ±âÀÚ½Å\x04ÀÇ \x07´É·ÂÄ¡\x04¿¡ µû¶ó Ç¥±âµË´Ï´Ù."), 4)},{preserved})
+		TriggerX(FP, {CV(SelPl,7)}, {DisplayExtText(StrDesignX("\x17P8 \x08ê°•í™” ìœ ë‹›\x04ì˜ ì„¸ë¶€ ì •ë³´ëŠ” \x0Fìê¸°ìì‹ \x04ì˜ \x07ëŠ¥ë ¥ì¹˜\x04ì— ë”°ë¼ í‘œê¸°ë©ë‹ˆë‹¤."), 4)},{preserved})
 		f_LMov(FP, SelEXP, tostring(k[4])  ,nil,nil, 1)
 		if j>=26 then
 			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(SellTicketFlag,1)},{preserved})
@@ -182,7 +182,7 @@ function TBL()
 		CMov(FP,EXPIncomeLoc,Stat_EXPIncome[i+1])
 		CMov(FP,PUnitLevelLoc,iv.PUnitLevel[i+1])
 		CMov(FP,PUnitClassLoc,iv.PUnitClass[i+1])
-		CMov(FP,TotalEPer4Loc,TotalEPer4[i+1])--Æ¯¼öÈ®·ü ÇÕ»ê
+		CMov(FP,TotalEPer4Loc,TotalEPer4[i+1])--íŠ¹ìˆ˜í™•ë¥  í•©ì‚°
 		CMov(FP,iv.XEPer44Loc,iv.XEPer44[i+1])
 		CMov(FP,iv.XEPer45Loc,iv.XEPer45[i+1])
 		CMov(FP,iv.XEPer46Loc,iv.XEPer46[i+1])
@@ -195,34 +195,34 @@ function TBL()
 	CTrigger(FP,{
 		CV(SelUID,215),
 	},{TSetMemory(0x6509B0, SetTo, LCP),DisplayExtText("\n\n\n\n\n\n\n"..
-	StrDesignX("\x17µ¶µµ").."\n"..
-	StrDesignX("\x04µ¶µµ´Â µ¿ÇØÀÇ ³²¼­ºÎ, ¿ï¸ªµµ¿Í ¿ÀÅ° Á¦µµ »çÀÌ¿¡ À§Ä¡ÇÑ µ¿µµ¿Í ¼­µµ¸¦ Æ÷ÇÔÇØ").."\n"..
-	StrDesignX("\x04ÃÑ 91°³ÀÇ Å©°í ÀÛÀº ¼¶µé·Î ÀÌ·ç¾îÁ® ÀÖ´Â ´ëÇÑ¹Î±¹ÀÇ ¼¶ÀÌ´Ù. ").."\n"..
-	StrDesignX("\x04¿ï¸ªµµ¿¡¼­ ¹î±æ·Î 200¸® Á¤µµ ¶³¾îÁ® ÀÖ´Ù.").."\n"..
-	StrDesignX("\x07- \x1FÃâÃ³ \x04: À§Å°¹é°ú \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
+	StrDesignX("\x17ë…ë„").."\n"..
+	StrDesignX("\x04ë…ë„ëŠ” ë™í•´ì˜ ë‚¨ì„œë¶€, ìš¸ë¦‰ë„ì™€ ì˜¤í‚¤ ì œë„ ì‚¬ì´ì— ìœ„ì¹˜í•œ ë™ë„ì™€ ì„œë„ë¥¼ í¬í•¨í•´").."\n"..
+	StrDesignX("\x04ì´ 91ê°œì˜ í¬ê³  ì‘ì€ ì„¬ë“¤ë¡œ ì´ë£¨ì–´ì ¸ ìˆëŠ” ëŒ€í•œë¯¼êµ­ì˜ ì„¬ì´ë‹¤. ").."\n"..
+	StrDesignX("\x04ìš¸ë¦‰ë„ì—ì„œ ë±ƒê¸¸ë¡œ 200ë¦¬ ì •ë„ ë–¨ì–´ì ¸ ìˆë‹¤.").."\n"..
+	StrDesignX("\x07- \x1Fì¶œì²˜ \x04: ìœ„í‚¤ë°±ê³¼ \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
 	CIfXEnd()
-	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)}, {DisplayExtText(StrDesignX("\x08ÁÖÀÇ \x04: \x03°³º°È®·ü \x04À¯´ÖÀÇ °­È­ È®·üÀº ÀÎ°ÔÀÓ 1½Ã°£ : 0.1% ºñÀ²·Î ¼­¼­È÷ °¨¼ÒÇÕ´Ï´Ù."), 4)},{preserved})
-	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08ÁÖÀÇ \x04: À¯·á ÀÚÆÇ±â´Â À¯´Ö 1±â ¼ÒÈ¯½Ã¸¶´Ù \x08±¸ÀÔ Æ¼ÄÏ 1°³\x04°¡ \x08¼Ò¸ğ\x04µË´Ï´Ù."), 4)})
+	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)}, {DisplayExtText(StrDesignX("\x08ì£¼ì˜ \x04: \x03ê°œë³„í™•ë¥  \x04ìœ ë‹›ì˜ ê°•í™” í™•ë¥ ì€ ì¸ê²Œì„ 1ì‹œê°„ : 0.1% ë¹„ìœ¨ë¡œ ì„œì„œíˆ ê°ì†Œí•©ë‹ˆë‹¤."), 4)},{preserved})
+	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08ì£¼ì˜ \x04: ìœ ë£Œ ìíŒê¸°ëŠ” ìœ ë‹› 1ê¸° ì†Œí™˜ì‹œë§ˆë‹¤ \x08êµ¬ì… í‹°ì¼“ 1ê°œ\x04ê°€ \x08ì†Œëª¨\x04ë©ë‹ˆë‹¤."), 4)})
 	
 	
 	
-	CIfX(FP,{TTNWar(SelEXP,AtMost,"0")})--°æÇèÄ¡°¡ ¾øÀ»°æ¿ì È¤Àº ÆÇ¸Å ºÒ°¡ »óÅÂÀÏ °æ¿ì
+	CIfX(FP,{TTNWar(SelEXP,AtMost,"0")})--ê²½í—˜ì¹˜ê°€ ì—†ì„ê²½ìš° í˜¹ì€ íŒë§¤ ë¶ˆê°€ ìƒíƒœì¼ ê²½ìš°
 
 
-		CIfX(FP,{CV(SelUID,88)}) -- ½ºÄ«¿ô
+		CIfX(FP,{CV(SelUID,88)}) -- ìŠ¤ì¹´ì›ƒ
 		CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
 		CS__InputVA(FP,iTbl2,0,EStr3,EStr3s,nil,0,EStr3s)
 
 		
-		CElseIfX({CD(PUnitFlag,1)})--°íÀ¯À¯´ÖÀÏ°æ¿ì
-		CElseIfX({CD(XEperFlag,3,AtLeast),CD(XEperFlag,6,AtMost)})--°æÇèÄ¡°¡ ¾Æ´Ñ ´Ù¸¥°É ÁÙ°æ¿ì
+		CElseIfX({CD(PUnitFlag,1)})--ê³ ìœ ìœ ë‹›ì¼ê²½ìš°
+		CElseIfX({CD(XEperFlag,3,AtLeast),CD(XEperFlag,6,AtMost)})--ê²½í—˜ì¹˜ê°€ ì•„ë‹Œ ë‹¤ë¥¸ê±¸ ì¤„ê²½ìš°
 		CS__SetValue(FP,EStr0,t10_1,nil,0)
 		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
 
-		CElseIfX({CD(XEperFlag,7)})--°æÇèÄ¡°¡ ¾Æ´Ñ ´Ù¸¥°É ÁÙ°æ¿ì
+		CElseIfX({CD(XEperFlag,7)})--ê²½í—˜ì¹˜ê°€ ì•„ë‹Œ ë‹¤ë¥¸ê±¸ ì¤„ê²½ìš°
 		CS__SetValue(FP,EStr0,t10_2,nil,0)
 		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
-		CElseIfX({CD(XEperFlag,8)})--°æÇèÄ¡°¡ ¾Æ´Ñ ´Ù¸¥°É ÁÙ°æ¿ì
+		CElseIfX({CD(XEperFlag,8)})--ê²½í—˜ì¹˜ê°€ ì•„ë‹Œ ë‹¤ë¥¸ê±¸ ì¤„ê²½ìš°
 		CS__SetValue(FP,EStr0,t10_3,nil,0)
 		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
 		CElseX()
@@ -231,7 +231,7 @@ function TBL()
 		CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
 		CS__InputVA(FP,iTbl2,0,EStr1,EStr1s,nil,0,EStr1s)
 		CIfXEnd()
-	CElseX()--°æÇèÄ¡°¡ ÀÖÀ»°æ¿ì
+	CElseX()--ê²½í—˜ì¹˜ê°€ ìˆì„ê²½ìš°
 		CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)
 		CIfX(FP,{CD(SellTicketFlag,0)})
 		CS__SetValue(FP,EStr0,t04,nil,0)
@@ -253,38 +253,38 @@ function TBL()
 			SetCSVA1(SVA1(EStr0,15+25), SetTo, 0x0D*0x1000000,0xFF000000),
 		}, {preserved})
 		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
-		CElseIfX({CD(BossFlag,1)})--º¸½º°Ç¹°ÀÏ°æ¿ì
-		--ÇöÀç DPS °ÔÀÌÁö Ç¥±â´Â º°µµ
+		CElseIfX({CD(BossFlag,1)})--ë³´ìŠ¤ê±´ë¬¼ì¼ê²½ìš°
+		--í˜„ì¬ DPS ê²Œì´ì§€ í‘œê¸°ëŠ” ë³„ë„
 	CIfXEnd()
 	
-	CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--ÃÖ°­À¯´ÖÀÏ°æ¿ì
+	CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--ìµœê°•ìœ ë‹›ì¼ê²½ìš°
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 		CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
 
 	
-	CElseIfX({CD(PUnitFlag,1)})--°íÀ¯À¯´ÖÀÏ °æ¿ì
+	CElseIfX({CD(PUnitFlag,1)})--ê³ ìœ ìœ ë‹›ì¼ ê²½ìš°
 
 
-	CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--°­È­À¯´ÖÀÌ ¾Æ´Ò °æ¿ì
+	CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--ê°•í™”ìœ ë‹›ì´ ì•„ë‹ ê²½ìš°
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 		CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
-	CElseIfX({CD(BossFlag,1)})--º¸½º°Ç¹°ÀÏ°æ¿ì
-		--ÇöÀç DPS ¿ä±¸Ä¡ Ç¥±â´Â º°µµ
-	CElseX()--±×¿Ü
+	CElseIfX({CD(BossFlag,1)})--ë³´ìŠ¤ê±´ë¬¼ì¼ê²½ìš°
+		--í˜„ì¬ DPS ìš”êµ¬ì¹˜ í‘œê¸°ëŠ” ë³„ë„
+	CElseX()--ê·¸ì™¸
 	MFlag = CreateCcode()
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
-		CIfX(FP, {CD(XEperFlag,1)}) -- Æ¯¼öÈ®·üÀÏ °æ¿ì
+		CIfX(FP, {CD(XEperFlag,1)}) -- íŠ¹ìˆ˜í™•ë¥ ì¼ ê²½ìš°
 			CS__SetValue(FP,TStr1,t01_1,nil,0)
 			CS__SetValue(FP,TStr1,"-",nil,7)
-		CElseIfX({CD(XEperFlag,7)},{SetCD(MFlag,0)})--°íÁ¤È®·ü
+		CElseIfX({CD(XEperFlag,7)},{SetCD(MFlag,0)})--ê³ ì •í™•ë¥ 
 			CS__SetValue(FP,TStr1,t01_3,nil,0)
 
-		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)},{SetCD(MFlag,0)})--°³º°È®·ü
+		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)},{SetCD(MFlag,0)})--ê°œë³„í™•ë¥ 
 			CiSub(FP,SelPer,iv.XEPerM)
 			CS__SetValue(FP,TStr1,t01_2,nil,0)
 			CIf(FP,CV(SelPer,0x80000000,AtLeast),{SetCD(MFlag,1)})
-				CNeg(FP, SelPer)--¸¶ÀÌ³Ê½º ¼öÄ¡ ¹İÀü
-				CS__SetValue(FP,TStr1,"-",nil,7)--¸¶ÀÌ³Ê½º Ç¥±â Ãß°¡
+				CNeg(FP, SelPer)--ë§ˆì´ë„ˆìŠ¤ ìˆ˜ì¹˜ ë°˜ì „
+				CS__SetValue(FP,TStr1,"-",nil,7)--ë§ˆì´ë„ˆìŠ¤ í‘œê¸° ì¶”ê°€
 			CIfEnd()
 		CElseX()
 			CS__SetValue(FP,TStr1,t01,nil,0)
@@ -378,11 +378,11 @@ function TBL()
 	CIfX(FP, CD(XEperFlag,0))
 	CAdd(FP,TotalEPer3Loc,_Div(SelPer,_Mov(100)))
 	CAdd(FP,TotalEPer2Loc,_Div(SelPer,_Mov(10)))
-	CAdd(FP,TotalEPerLoc,SelPer) -- +1°­ È®·ü
+	CAdd(FP,TotalEPerLoc,SelPer) -- +1ê°• í™•ë¥ 
 	CElseIfX({CD(XEperFlag,1)})
 	CAdd(FP,TotalEPer2Loc,TotalEPer3Loc)
 	CAdd(FP,TotalEPerLoc,TotalEPer2Loc)
-	CAdd(FP,TotalEPerLoc,TotalEPer4Loc)--Æ¯¼öÈ®·ü ÇÕ»ê
+	CAdd(FP,TotalEPerLoc,TotalEPer4Loc)--íŠ¹ìˆ˜í™•ë¥  í•©ì‚°
 	CSub(FP,TotalEPerLoc,SelPer)
 	CMov(FP,TotalEPer3Loc,0)
 	CMov(FP,TotalEPer2Loc,0)
@@ -402,7 +402,7 @@ function TBL()
 	CMov(FP,TotalEPer3Loc,0)
 	CIfXEnd()
 	
-	--35~39 +3 ¼öÄ¡°¡ +2·Î
+	--35~39 +3 ìˆ˜ì¹˜ê°€ +2ë¡œ
 	
 	for i = 35, 39 do
 		CIf(FP,{CV(SelUID,LevelUnitArr[i][2])})
@@ -411,7 +411,7 @@ function TBL()
 		CIfEnd()
 	end
 	
-	--36~39 +2 ¼öÄ¡°¡ +1·Î
+	--36~39 +2 ìˆ˜ì¹˜ê°€ +1ë¡œ
 	
 	
 	for i = 36, 39 do
@@ -459,7 +459,7 @@ function TBL()
 	CIfEnd()
 	CIfEnd()
 	
-	CIfX(FP, {CD(BossFlag,1)}) -- º¸½º°Ç¹° Á¤º¸ »ó½Ã°»½Å
+	CIfX(FP, {CD(BossFlag,1)}) -- ë³´ìŠ¤ê±´ë¬¼ ì •ë³´ ìƒì‹œê°±ì‹ 
 	TotalDPMLoc = CreateWar(FP)
 	CIfX(FP,{CD(BossFlag2,1)})
 	SelEPD2= CreateVar(FP)
@@ -492,12 +492,12 @@ function TBL()
 	CS__SetValue(FP,TStr4,t06,nil,0)
 	CIfXEnd()
 	CIfXEnd()
-	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)--DPS ¼öÄ¡
+	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)--DPS ìˆ˜ì¹˜
 	
 	CS__lItoCustom(FP,SVA1(TStr4,9),TotalDPMLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
 	CS__InputVA(FP,iTbl1,0,TStr4,TStr4s,nil,0,TStr4s)
 	
-	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)--DPS °ÔÀÌÁö
+	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)--DPS ê²Œì´ì§€
 	local TotalDPMTemp = CreateWar(FP)
 	local TempGauge = CreateVar(FP)
 	local TempGaugeT = CreateVar(FP)
@@ -510,13 +510,13 @@ function TBL()
 		CS__InputTA(FP,{CV(TempGauge,i+1,AtLeast)},SVA1(EStr2,0+i),0x07,0xFF)
 	end
 	CS__InputVA(FP,iTbl2,0,EStr2,EStr2s,nil,0,EStr2s)
-	CElseIfX({CD(PUnitFlag,1)})-- °íÀ¯À¯´Ö Á¤º¸ »ó½Ã°»½Å
+	CElseIfX({CD(PUnitFlag,1)})-- ê³ ìœ ìœ ë‹› ì •ë³´ ìƒì‹œê°±ì‹ 
 
 	for j, k in pairs(PersonalUIDArr) do
 		CIf(FP,{CV(SelUID,k)})
 		CMov(FP,PUnitLevelLoc,iv.PUnitLevel[j])
 		CMov(FP,PUnitClassLoc,iv.PUnitClass[j])
-		CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,4},1,nil,"\x03ÃÊ",0x07)
+		CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,4},1,nil,"\x03ì´ˆ",0x07)
 		CS__InputVA(FP,PMariTbl[j],0,MarStr[j],MarStrs[j],nil,0,MarStrs[j])
 		CIfEnd()
 	end
@@ -525,7 +525,7 @@ function TBL()
 	CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
 	TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempPer,0)},{preserved})
 -- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-	CS__ItoCustom(FP,SVA1(TStr6,17),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)--°­È­È®·ü
+	CS__ItoCustom(FP,SVA1(TStr6,17),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)--ê°•í™”í™•ë¥ 
 	CS__InputVA(FP,iTbl2,0,TStr6,TStr6s,nil,0,TStr6s)
 
 
@@ -534,13 +534,13 @@ function TBL()
 	local TempCred = CreateVar(FP)
 	CMov(FP,TempCred,_Add(_Mul(PUnitLevelLoc,1000),1000))
 	TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempCred,0)},{preserved})
-	CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08)--°­È­´Ü°è
+	CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08)--ê°•í™”ë‹¨ê³„
 	CS__ItoCustom(FP,SVA1(TStr7,14),TempCred,nil,nil,{10,9},1,nil,"\x170",0x17,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
-	CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)--°¡°İ
+	CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)--ê°€ê²©
 
 	CIfXEnd()
 	
-	CIf(FP,{CV(SelUID,15)}) -- ½Ã¹Î Á¤º¸ »ó½Ã°»½Å
+	CIf(FP,{CV(SelUID,15)}) -- ì‹œë¯¼ ì •ë³´ ìƒì‹œê°±ì‹ 
 	CIfX(FP,{Never()})
 	for i = 0, 6 do
 		CElseIfX({CV(SelPl,i)},{})
@@ -581,29 +581,29 @@ function TBL()
 	
 	CIfEnd()
 
-	local temp,YKey = ToggleFunc({KeyPress("Y","Up"),KeyPress("Y","Down")},nil,1)--´©¸¦ °æ¿ì ÇöÀç Àû¿ëÁßÀÎ ¹öÇÁ »ó¼¼ Ç¥±â
+	local temp,YKey = ToggleFunc({KeyPress("Y","Up"),KeyPress("Y","Down")},nil,1)--ëˆ„ë¥¼ ê²½ìš° í˜„ì¬ ì ìš©ì¤‘ì¸ ë²„í”„ ìƒì„¸ í‘œê¸°
 
 	CIf(FP,{CD(YKey,1)})
 	CMov(FP,0x6509B0,LCP)
 	function GaTxt(Ga_Arr)
 		local Txt = ""
 		for j,k in pairs(Ga_Arr) do
-            Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04°³ - \x07"..(k[3]/1000).." %").."\n"
+            Txt = Txt..StrDesignX(k[1].." "..Convert_Number(k[2]).." \x04ê°œ - \x07"..(k[3]/1000).." %").."\n"
 		end
 		return Txt
 	end
 	
-	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[1].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_45), 4)})
+	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[1].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_45), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[2].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_46), 4)})
+	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[2].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_46), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[3].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_47), 4)})
+	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[3].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[4].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_48), 4)})
+	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[4].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_48), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,7)},{DisplayExtText(StrDesignX("\x0649°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[5].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_49), 4)})
+	CIf(FP,{CD(XEperFlag,7)},{DisplayExtText(StrDesignX("\x0649ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[5].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_49), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,8)},{DisplayExtText(StrDesignX("\x0750°­ \x04À¯´Ö \x17»Ì±â \x07È®·üÇ¥ \x04(\x02¹«»ö Á¶°¢ \x04"..pifrag[6].."°³ ±âº»Áö±Ş)").."\n"..GaTxt(Ga_50), 4)})
+	CIf(FP,{CD(XEperFlag,8)},{DisplayExtText(StrDesignX("\x0750ê°• \x04ìœ ë‹› \x17ë½‘ê¸° \x07í™•ë¥ í‘œ \x04(\x02ë¬´ìƒ‰ ì¡°ê° \x04"..pifrag[6].."ê°œ ê¸°ë³¸ì§€ê¸‰)").."\n"..GaTxt(Ga_50), 4)})
 	CIfEnd()
 
 	--[[
@@ -613,14 +613,14 @@ function TBL()
 	
 	CMov(FP,0x6509B0,FP)
 	CIfEnd()
-	--CA__Input(MakeiStrData("\x04°æ",1),SVA1(Str1,3+2))
-	--CA__Input(MakeiStrData("\x04Á¶",1),SVA1(Str1,3+2))
-	--CA__Input(MakeiStrData("\x04¾ï",1),SVA1(Str1,3+2))
-	--CA__Input(MakeiStrData("\x04¸¸",1),SVA1(Str1,3+7))
+	--CA__Input(MakeiStrData("\x04ê²½",1),SVA1(Str1,3+2))
+	--CA__Input(MakeiStrData("\x04ì¡°",1),SVA1(Str1,3+2))
+	--CA__Input(MakeiStrData("\x04ì–µ",1),SVA1(Str1,3+2))
+	--CA__Input(MakeiStrData("\x04ë§Œ",1),SVA1(Str1,3+7))
 	--CA__ItoCustom(SVA1(Str1,0),MoneyLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1E,0x1E,0x1E,0x1E,0x04,0x04,0x04,0x04},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0})
 	
 	
-		CIf(FP,{Memory(0x628438, AtLeast, 1),CD(TBLFlag,0)})--tbl»ó½Ã°»½Å¿ë. CreateUnitStacked »ç¿ë½Ã ¹ßµ¿¾ÈÇÔ
+		CIf(FP,{Memory(0x628438, AtLeast, 1),CD(TBLFlag,0)})--tblìƒì‹œê°±ì‹ ìš©. CreateUnitStacked ì‚¬ìš©ì‹œ ë°œë™ì•ˆí•¨
 			f_Read(FP, 0x628438, nil, Nextptrs)
 			DoActions(FP, CreateUnit(1,94,136,FP))
 			CSub(FP,CurCunitI,Nextptrs,19025)
@@ -632,10 +632,10 @@ function TBL()
 			DoActions(FP, RemoveUnit(94,FP))
 		CIfEnd()
 		DoActionsX(FP,{SetCD(TBLFlag,0)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x04ÇöÀç ÀÚ½ÅÀÇ \x1F¹Ì³×¶ö\x04, \x07°¡½º\x04°¡ °Ç¹°¿¡°Ô °¡ÇÏ´Â \x08µ¥¹ÌÁö\x17(DPS) \x04ÀÔ´Ï´Ù."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x07ÀÚ½Å\x04ÀÇ \x11Áö¿ª\x04¿¡ ÀÖ´Â \x1CÅ©¸®½ºÅ»\x04¿¡¼­ \x07À¯´ÖÀ» ±¸ÀÔ\x04ÇÏ°í \x0F»ó´ÜÀÇ ¾ÆÄ«µ¥¹Ì \x04Áö¿ª¿¡ À¯´ÖÀ» ³ÖÀ¸¸é \x08°­È­\x04°¡ µË´Ï´Ù."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: °ğ ¸Ç Ã³À½ ÁÖ¾îÁø ½ºÄ«¿ôÀÌ \x08»ç¶óÁú °Í\x04ÀÔ´Ï´Ù. \x07À¯´ÖÀ» ±¸ÀÔ, \x08°­È­\x04ÇÏ¿© \x17»ç³ÉÅÍ\x04¿¡ º¸³À½Ã´Ù!"))},Force1,FP)})
-		--	if TestStart == 1 then -- °ü¸®ÀÚ ÄÜ¼Ö ÀÏ´Üºñ°øÀ¯µ¥ÀÌÅÍ(¹æ°¥µÊ)
+		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x04í˜„ì¬ ìì‹ ì˜ \x1Fë¯¸ë„¤ë„\x04, \x07ê°€ìŠ¤\x04ê°€ ê±´ë¬¼ì—ê²Œ ê°€í•˜ëŠ” \x08ë°ë¯¸ì§€\x17(DPS) \x04ì…ë‹ˆë‹¤."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x07ìì‹ \x04ì˜ \x11ì§€ì—­\x04ì— ìˆëŠ” \x1Cí¬ë¦¬ìŠ¤íƒˆ\x04ì—ì„œ \x07ìœ ë‹›ì„ êµ¬ì…\x04í•˜ê³  \x0Fìƒë‹¨ì˜ ì•„ì¹´ë°ë¯¸ \x04ì§€ì—­ì— ìœ ë‹›ì„ ë„£ìœ¼ë©´ \x08ê°•í™”\x04ê°€ ë©ë‹ˆë‹¤."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: ê³§ ë§¨ ì²˜ìŒ ì£¼ì–´ì§„ ìŠ¤ì¹´ì›ƒì´ \x08ì‚¬ë¼ì§ˆ ê²ƒ\x04ì…ë‹ˆë‹¤. \x07ìœ ë‹›ì„ êµ¬ì…, \x08ê°•í™”\x04í•˜ì—¬ \x17ì‚¬ëƒ¥í„°\x04ì— ë³´ëƒ…ì‹œë‹¤!"))},Force1,FP)})
+		--	if TestStart == 1 then -- ê´€ë¦¬ì ì½˜ì†” ì¼ë‹¨ë¹„ê³µìœ ë°ì´í„°(ë°©ê°ˆë¨)
 	--		L = CreateVar()
 	--		CIfOnce(FP)
 	--		GetPlayerLength(FP,P1,L)
@@ -645,7 +645,7 @@ function TBL()
 	--		local CUCool = CreateCcodeArr(40)
 	--		SLoopN(FP,11,Always(),{SetNVar(N,Add,218)},{SetNVar(N,SetTo,0x640B63-218),TSetNVar(N,Add,L)})
 	--		for i = 1, 40 do
-	--			f_bytecmp(FP,{CU[i]},N,_byteConvert(GetStrArr(0,"@"..i.."°­")),GetStrSize(0,"@"..i.."°­"))
+	--			f_bytecmp(FP,{CU[i]},N,_byteConvert(GetStrArr(0,"@"..i.."ê°•")),GetStrSize(0,"@"..i.."ê°•"))
 	--		end--
 	
 	--		SLoopNEnd()
@@ -661,7 +661,7 @@ function TBL()
 	--if TestStart == 0 and Limit == 1 then
 	--	Trigger2X(FP, {Memory(0x6D0F38,AtLeast,GlobalTime);},  {
 	--		RotatePlayer({
-	--			DisplayExtText(StrDesignX("\x1BÅ×½ºÆ® ±â°£ÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. ÀÌ¿ëÇØÁÖ¼Å¼­ ´ë´ÜÈ÷ °¨»çÇÕ´Ï´Ù.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1BÃßÈÄ Á¤½Ä¹öÀü ¾÷µ¥ÀÌÆ®¿¡¼­ ºË°Ú½À´Ï´Ù."),4);
+	--			DisplayExtText(StrDesignX("\x1Bí…ŒìŠ¤íŠ¸ ê¸°ê°„ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ì´ìš©í•´ì£¼ì…”ì„œ ëŒ€ë‹¨íˆ ê°ì‚¬í•©ë‹ˆë‹¤.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1Bì¶”í›„ ì •ì‹ë²„ì „ ì—…ë°ì´íŠ¸ì—ì„œ ëµ™ê² ìŠµë‹ˆë‹¤."),4);
 	--		Defeat();
 	--		},Force1,FP);
 	--		Defeat();

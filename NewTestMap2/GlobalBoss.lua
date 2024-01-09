@@ -1,6 +1,6 @@
 function GlobalBoss()
     
-	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- ÀÚ½ÅÀÇ ÇöÀç ·¹º§
+	local PLevel = iv.PLevel--CreateVarArr2(7,1,FP)-- ìì‹ ì˜ í˜„ì¬ ë ˆë²¨
 	local B_IncomeMax = iv.B_IncomeMax--CreateVar(FP)
 	local B_TotalEPer = iv.B_TotalEPer--CreateVar(FP)
 	local B_TotalEPer2 = iv.B_TotalEPer2--CreateVar(FP)
@@ -18,50 +18,50 @@ function GlobalBoss()
 	local Time = iv.Time
 	local PBossClearFlag = iv.PBossClearFlag
 
---Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayExtText(StrDesignX("\x1Fº¸½º LV.5\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. ÀÌÁ¦ºÎÅÍ \x1FÄ«¿îÆ®´Ù¿î Å¸ÀÌ¸Ó 24½Ã°£\x04µ¿¾È \x1F5¹è¼Ó\x04ÀÌ Àû¿ëµË´Ï´Ù."),4)}, Force1, FP)})
+--Trigger2X(FP,{CV(BossLV,5,AtLeast)},{SetCountdownTimer(Add, 60*60*24),RotatePlayer({DisplayExtText(StrDesignX("\x1Fë³´ìŠ¤ LV.5\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. ì´ì œë¶€í„° \x1Fì¹´ìš´íŠ¸ë‹¤ìš´ íƒ€ì´ë¨¸ 24ì‹œê°„\x04ë™ì•ˆ \x1F5ë°°ì†\x04ì´ ì ìš©ë©ë‹ˆë‹¤."),4)}, Force1, FP)})
 --if TestStart == 0 then
---	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,0x4)},{preserved})--Ä«¿îÆ®´Ù¿î Å¸ÀÌ¸Ó Á¸Àç½Ã
---	TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--4¹è¼ÓÅÛ ¾È»ñÀ»°æ¿ì
---	TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--4¹è¼ÓÅÛ »ñÀ»°æ¿ì
+--	TriggerX(FP,{CountdownTimer(AtLeast, 1)},{SetMemory(0x5124F0,SetTo,0x4)},{preserved})--ì¹´ìš´íŠ¸ë‹¤ìš´ íƒ€ì´ë¨¸ ì¡´ì¬ì‹œ
+--	TriggerX(FP,{CV(SpeedV,0),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,0x15)},{preserved})--4ë°°ì†í…œ ì•ˆì‚¿ì„ê²½ìš°
+--	TriggerX(FP,{CV(SpeedV,1),CountdownTimer(AtMost, 0)},{SetMemory(0x5124F0,SetTo,13)},{preserved})--4ë°°ì†í…œ ì‚¿ì„ê²½ìš°
 --end
 
 CMov(FP,B_Credit,0)
 CMov(FP,B_Ticket,0)
 
---"\x13\x04\x1B- ºÎ·Ï. \x08ÆÄÆ¼ º¸½º ¸ó½ºÅÍ º¸»ó ¸ñ·Ï \x1B-",
---"\x041´Ü°è \x04: \x0F+1°­ È®·ü \x07+1.0%p, \x1B»ç³ÉÅÍ \x07+6,",
---"\x042´Ü°è \x04: \x0F+1°­ È®·ü \x07+1.0%p, \x1B»ç³ÉÅÍ \x07+6,\x08°ø°İ·Â + 50%, \x17Å©·¹µ÷ +500",
---"\x043´Ü°è \x04: \x17Å©·¹µ÷ +1,000, \x1CÃß°¡EXP +30%",
---"\x044´Ü°è \x04: \x17À¯´Ö ÆÇ¸Å±Ç + 50, \x08°ø°İ·Â + 50%, ",
---"\x045´Ü°è \x04: \x17Å©·¹µ÷ + \x07ÀÚ½ÅÀÇ ·¹º§ \x1F*\x17 100\x08(\x17ÃÖ´ë 5¸¸ Å©·¹µ÷\x08, ¸ÖÆ¼ ÇÃ·¹ÀÌ ½Ã¿¡¸¸ Áö±Ş)",
---"\x045´Ü°è º¸½º´Â \x072ÀÎ ÀÌ»ó ÇÃ·¹ÀÌ\x04°¡ ¾Æ´Ï¸é \x08°ø·« ºÒ°¡´ÉÇÕ´Ï´Ù."
+--"\x13\x04\x1B- ë¶€ë¡. \x08íŒŒí‹° ë³´ìŠ¤ ëª¬ìŠ¤í„° ë³´ìƒ ëª©ë¡ \x1B-",
+--"\x041ë‹¨ê³„ \x04: \x0F+1ê°• í™•ë¥  \x07+1.0%p, \x1Bì‚¬ëƒ¥í„° \x07+6,",
+--"\x042ë‹¨ê³„ \x04: \x0F+1ê°• í™•ë¥  \x07+1.0%p, \x1Bì‚¬ëƒ¥í„° \x07+6,\x08ê³µê²©ë ¥ + 50%, \x17í¬ë ˆë”§ +500",
+--"\x043ë‹¨ê³„ \x04: \x17í¬ë ˆë”§ +1,000, \x1Cì¶”ê°€EXP +30%",
+--"\x044ë‹¨ê³„ \x04: \x17ìœ ë‹› íŒë§¤ê¶Œ + 50, \x08ê³µê²©ë ¥ + 50%, ",
+--"\x045ë‹¨ê³„ \x04: \x17í¬ë ˆë”§ + \x07ìì‹ ì˜ ë ˆë²¨ \x1F*\x17 100\x08(\x17ìµœëŒ€ 5ë§Œ í¬ë ˆë”§\x08, ë©€í‹° í”Œë ˆì´ ì‹œì—ë§Œ ì§€ê¸‰)",
+--"\x045ë‹¨ê³„ ë³´ìŠ¤ëŠ” \x072ì¸ ì´ìƒ í”Œë ˆì´\x04ê°€ ì•„ë‹ˆë©´ \x08ê³µëµ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤."
 
 Trigger2X(FP,{CV(BossLV,1,AtLeast)},{
-	AddV(B_IncomeMax,6),--»ç³ÉÅÍ À¯´Ö¼ö 6 Áõ°¡
-	AddV(B_TotalEPer,1000),--°­È­È®·ü +1.0%p
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x081´Ü°è ÆÄÆ¼º¸½º\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	AddV(B_IncomeMax,6),--ì‚¬ëƒ¥í„° ìœ ë‹›ìˆ˜ 6 ì¦ê°€
+	AddV(B_TotalEPer,1000),--ê°•í™”í™•ë¥  +1.0%p
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x081ë‹¨ê³„ íŒŒí‹°ë³´ìŠ¤\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
-	AddV(B_IncomeMax,6),--»ç³ÉÅÍ À¯´Ö¼ö 6 Áõ°¡
-	AddV(B_TotalEPer,1000),--°­È­È®·ü +1.0%p
-	AddV(B_Credit,500),--Å©·¹µ÷ 200
+	AddV(B_IncomeMax,6),--ì‚¬ëƒ¥í„° ìœ ë‹›ìˆ˜ 6 ì¦ê°€
+	AddV(B_TotalEPer,1000),--ê°•í™”í™•ë¥  +1.0%p
+	AddV(B_Credit,500),--í¬ë ˆë”§ 200
 	AddV(B_Stat_Upgrade,5),
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x082´Ü°è ÆÄÆ¼º¸½º\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x082ë‹¨ê³„ íŒŒí‹°ë³´ìŠ¤\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
-	AddV(B_Credit,1000),--Å©·¹µ÷ 1000
-	AddV(B_Stat_EXPIncome,3), -- ÆÇ¸Å½Ã °æÇèÄ¡ 30% Áõ°¡
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x083´Ü°è ÆÄÆ¼º¸½º\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	AddV(B_Credit,1000),--í¬ë ˆë”§ 1000
+	AddV(B_Stat_EXPIncome,3), -- íŒë§¤ì‹œ ê²½í—˜ì¹˜ 30% ì¦ê°€
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x083ë‹¨ê³„ íŒŒí‹°ë³´ìŠ¤\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 	AddV(B_Stat_Upgrade,5),
 	AddV(B_Ticket,50);
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x084´Ü°è ÆÄÆ¼º¸½º\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x084ë‹¨ê³„ íŒŒí‹°ë³´ìŠ¤\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 AddLV5Cool2=CreateCcodeArr(7)
 Trigger2X(FP,{CV(BossLV,5,AtLeast)},{
 	AddV(B_Credit,50000);
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x085´Ü°è ÆÄÆ¼º¸½º\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x085ë‹¨ê³„ íŒŒí‹°ë³´ìŠ¤\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
 	AddV(iv.PETicket2[1], 1),
@@ -71,7 +71,7 @@ Trigger2X(FP,{CV(BossLV,6,AtLeast)},{
 	AddV(iv.PETicket2[5], 1),
 	AddV(iv.PETicket2[6], 1),
 	AddV(iv.PETicket2[7], 1),
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1DExtra Boss\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1DExtra Boss\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 CIfOnce(FP, {CV(BossLV,6,AtLeast)})
 f_LAdd(FP,iv.BuyTicket[1],iv.BuyTicket[1], "100000")
@@ -91,17 +91,17 @@ Trigger2X(FP,{CV(BossLV,7,AtLeast)},{
 	AddV(iv.PETicket2[6], 6),
 	AddV(iv.PETicket2[7], 6),
 	AddV(iv.B_Credit, 2000000),
-	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1CExtra Boss\x04¸¦ Å¬¸®¾îÇÏ¿´½À´Ï´Ù. \x07Àá½Ã ÈÄ ÀÚµ¿ÀúÀåµË´Ï´Ù..."),4)}, Force1, FP)
+	SetV(Time,(300000)-5000),SetCD(SaveRemind,1),RotatePlayer({DisplayExtText(StrDesignX("\x1CExtra Boss\x04ë¥¼ í´ë¦¬ì–´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ì ì‹œ í›„ ìë™ì €ì¥ë©ë‹ˆë‹¤..."),4)}, Force1, FP)
 })
 
 CIf(FP,{CD(iv.HotTimeBonus2,1)})
 
 
 	Trigger2X(FP,{CV(BossLV,2,AtLeast)},{
-		AddV(B_Credit,500),--Å©·¹µ÷ 200
+		AddV(B_Credit,500),--í¬ë ˆë”§ 200
 	})
 	Trigger2X(FP,{CV(BossLV,3,AtLeast)},{
-		AddV(B_Credit,1000),--Å©·¹µ÷ 1000
+		AddV(B_Credit,1000),--í¬ë ˆë”§ 1000
 	})
 	Trigger2X(FP,{CV(BossLV,4,AtLeast)},{
 		AddV(B_Ticket,50);
@@ -147,10 +147,10 @@ CIfOnce(FP, {CV(BossLV,7,AtLeast)},{RemoveUnitAt(All, "Factories", 109, Force1)}
 	CMov(FP,iv.EX_XI_ClearT,_Div(iv.GeneralPlayTime,24))
 CIfEnd()
 
-Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08´©±º°¡°¡ \x1C6´Ü°è °³ÀÎº¸½º\x04¸¦ Ã³Ä¡ÇÏ¿´½À´Ï´Ù. ´ÜÃ¼ º¸»ó - \x17Å©·¹µ÷ + 50,000."), 4)}, Force1,FP)})
-Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08´©±º°¡°¡ \x1F7´Ü°è °³ÀÎº¸½º\x04¸¦ Ã³Ä¡ÇÏ¿´½À´Ï´Ù. ´ÜÃ¼ º¸»ó - \x17Å©·¹µ÷ + 50,000."), 4)}, Force1,FP)})
---Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08´©±º°¡°¡ \x1E8´Ü°è °³ÀÎº¸½º\x04¸¦ Ã³Ä¡ÇÏ¿´½À´Ï´Ù. ´ÜÃ¼ º¸»ó - \x17Å©·¹µ÷ + 100,000."), 4)}, Force1,FP)})
---Trigger2X(FP, {CDX(PBossClearFlag,8,8)}, {SetV(B_Credit,200000);RotatePlayer({DisplayExtText(StrDesignX("\x08´©±º°¡°¡ \x1D9´Ü°è °³ÀÎº¸½º\x04¸¦ Ã³Ä¡ÇÏ¿´½À´Ï´Ù. ´ÜÃ¼ º¸»ó - \x17Å©·¹µ÷ + 200,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,1,1)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08ëˆ„êµ°ê°€ê°€ \x1C6ë‹¨ê³„ ê°œì¸ë³´ìŠ¤\x04ë¥¼ ì²˜ì¹˜í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¨ì²´ ë³´ìƒ - \x17í¬ë ˆë”§ + 50,000."), 4)}, Force1,FP)})
+Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({DisplayExtText(StrDesignX("\x08ëˆ„êµ°ê°€ê°€ \x1F7ë‹¨ê³„ ê°œì¸ë³´ìŠ¤\x04ë¥¼ ì²˜ì¹˜í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¨ì²´ ë³´ìƒ - \x17í¬ë ˆë”§ + 50,000."), 4)}, Force1,FP)})
+--Trigger2X(FP, {CDX(PBossClearFlag,4,4)}, {SetV(B_Credit,100000);RotatePlayer({DisplayExtText(StrDesignX("\x08ëˆ„êµ°ê°€ê°€ \x1E8ë‹¨ê³„ ê°œì¸ë³´ìŠ¤\x04ë¥¼ ì²˜ì¹˜í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¨ì²´ ë³´ìƒ - \x17í¬ë ˆë”§ + 100,000."), 4)}, Force1,FP)})
+--Trigger2X(FP, {CDX(PBossClearFlag,8,8)}, {SetV(B_Credit,200000);RotatePlayer({DisplayExtText(StrDesignX("\x08ëˆ„êµ°ê°€ê°€ \x1D9ë‹¨ê³„ ê°œì¸ë³´ìŠ¤\x04ë¥¼ ì²˜ì¹˜í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¨ì²´ ë³´ìƒ - \x17í¬ë ˆë”§ + 200,000."), 4)}, Force1,FP)})
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)
@@ -236,7 +236,7 @@ for j,k in pairs(BossArr) do
 	else
 		cond = {Memory(0x628438,AtLeast,1),CV(BossEPD,0),CV(BossLV,j-1)}
 	end
-	NIfOnce(FP,cond)--º¸½º¹æ °Ç¹° ¼¼ÆÃ
+	NIfOnce(FP,cond)--ë³´ìŠ¤ë°© ê±´ë¬¼ ì„¸íŒ…
 	f_Read(FP, 0x628438, nil, Nextptrs)
 	CDoActions(FP, {CreateUnit(1,k[1],110,FP),SetV(BossEPD,_Add(Nextptrs,2))})
 	CSub(FP,CurCunitI,Nextptrs,19025)

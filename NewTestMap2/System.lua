@@ -10,7 +10,7 @@ function System()
 	CiSub(FP,DtP,Dy,Du)
 	CMov(FP,Dv,DtP) 
 	CMov(FP,Du,Dy)
-	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP),AddV(Time3,DtP),AddV(Time4,DtP)},1)--¸ÇÃ³À½ ½Ã°£°ª Æ¦ ¹æÁö
+	CTrigger(FP,{CV(DtP,2500,AtMost)},{AddV(Time,DtP),AddV(Time2,DtP),AddV(Time3,DtP),AddV(Time4,DtP)},1)--ë§¨ì²˜ìŒ ì‹œê°„ê°’ íŠ ë°©ì§€
 	TriggerX(FP,{},{AddV(Time,240000),})
-	--CallTriggerX(FP,Call_CheckCT,{CD(CTTimer,24,AtLeast)},{SetCD(CTTimer,0)})--À¯´Ö º¯Á¶ °¨Áö
+	--CallTriggerX(FP,Call_CheckCT,{CD(CTTimer,24,AtLeast)},{SetCD(CTTimer,0)})--ìœ ë‹› ë³€ì¡° ê°ì§€
 end

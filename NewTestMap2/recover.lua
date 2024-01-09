@@ -64,7 +64,7 @@ for i = 1, 300001 do
         cci = 0
     end
 end
-EXPArr4 = {}--ÀÏ¹İ
+EXPArr4 = {}--ì¼ë°˜
 EXPArr4_2 = {0,0,0,0}--dp
 to = 0
 
@@ -150,17 +150,17 @@ Cost_FIncm = CreateCostDataFile(200,function(n) return 1+((n-1)*(n*3)) end,"FInc
 Cost_FSEXP = CreateCostDataFile(1000,function(n) return (2*n) end,"FSEXP")
 Cost_FBrSh = CreateCostDataFile(200,function(n) return 100+((n-1)*(n*3)*n) end,"FBrSh")
 Cost_FMin = CreateCostDataFile(200,function(n) return 10000+((n-1)*(162*n)) end,"FMin")
-Cost_FAcc = CreateCostDataFile(30, function(n) return 150000000+((n-1)*50000000) end, "FAcc")--À¯·áÀü¿ë ÃËÁø
-Cost_FAcc2 = CreateCostDataFile(30, function(n) return 300000000+((n-1)*100000000) end, "FAcc2")--¹«·áÀü¿ë ÃËÁø
-Cost_FBrSh2 = CreateCostDataFile(1000,function(n) return 5000000+((n-1)*(n*1)*(n*12)) end,"FBrSh2")--¼öÈ£ÀÇ º¸¼®
-Cost_FMEPer = CreateCostDataFile(350,function(n) return 4000000+((n-1)*(n*50)*n) end,"FMEPer2")--Áø ±Ã±Ø
-Cost_FMinMax = CreateCostDataFile(1000,function(n) return n*5000000 end,"FMinMax")--Ã¤±¼(±¤»êÃÖ´ëÄ¡ ÆÛ¼¾Æ®Áõ°¡)
+Cost_FAcc = CreateCostDataFile(30, function(n) return 150000000+((n-1)*50000000) end, "FAcc")--ìœ ë£Œì „ìš© ì´‰ì§„
+Cost_FAcc2 = CreateCostDataFile(30, function(n) return 300000000+((n-1)*100000000) end, "FAcc2")--ë¬´ë£Œì „ìš© ì´‰ì§„
+Cost_FBrSh2 = CreateCostDataFile(1000,function(n) return 5000000+((n-1)*(n*1)*(n*12)) end,"FBrSh2")--ìˆ˜í˜¸ì˜ ë³´ì„
+Cost_FMEPer = CreateCostDataFile(350,function(n) return 4000000+((n-1)*(n*50)*n) end,"FMEPer2")--ì§„ ê¶ê·¹
+Cost_FMinMax = CreateCostDataFile(1000,function(n) return n*5000000 end,"FMinMax")--ì±„êµ´(ê´‘ì‚°ìµœëŒ€ì¹˜ í¼ì„¼íŠ¸ì¦ê°€)
 
-Cost_FAcc = CreateCostDataFile(30, function(n) return 5000000+((n-1)*1500000) end, "FAcc_Test")--À¯·áÀü¿ë ÃËÁø
-Cost_FAcc2 = CreateCostDataFile(30, function(n) return 10000000+((n-1)*3000000) end, "FAcc2_Test")--¹«·áÀü¿ë ÃËÁø
-Cost_FMinMax = CreateCostDataFile(1000,function(n) return n*5000000 end,"FMinMax_Test")--Ã¤±¼(±¤»êÃÖ´ëÄ¡ ÆÛ¼¾Æ®Áõ°¡)
-Cost_FBrSh2 = CreateCostDataFile(1000,function(n) return 100+((n-1)*(n*3)*n) end,"FBrSh2_Test")--¼öÈ£ÀÇ º¸¼®
-Cost_FMEPer = CreateCostDataFile(350,function(n) return 100+((n-1)*(n*33)) end,"FMEPer2_Test")--Áø ±Ã±Ø
+Cost_FAcc = CreateCostDataFile(30, function(n) return 5000000+((n-1)*1500000) end, "FAcc_Test")--ìœ ë£Œì „ìš© ì´‰ì§„
+Cost_FAcc2 = CreateCostDataFile(30, function(n) return 10000000+((n-1)*3000000) end, "FAcc2_Test")--ë¬´ë£Œì „ìš© ì´‰ì§„
+Cost_FMinMax = CreateCostDataFile(1000,function(n) return n*5000000 end,"FMinMax_Test")--ì±„êµ´(ê´‘ì‚°ìµœëŒ€ì¹˜ í¼ì„¼íŠ¸ì¦ê°€)
+Cost_FBrSh2 = CreateCostDataFile(1000,function(n) return 100+((n-1)*(n*3)*n) end,"FBrSh2_Test")--ìˆ˜í˜¸ì˜ ë³´ì„
+Cost_FMEPer = CreateCostDataFile(350,function(n) return 100+((n-1)*(n*33)) end,"FMEPer2_Test")--ì§„ ê¶ê·¹
 Cost_FIncm = CreateCostDataFile(500,function(n) return 1+((n-1)*(n*3)) end,"FIncm_Test")
 
 
@@ -200,13 +200,13 @@ Cost_FIncm = CreateCostDataFile(500,function(n) return 1+((n-1)*(n*3)) end,"FInc
     exp2(100000)
 
 function leafyear(i)
-    if i % 4 == 0 then    --           # 4·Î ³ª´©¾î ¶³¾îÁö´ÂÁö È®ÀÎ
-        if i % 100 == 0 then   --      # 100À¸·Î ³ª´©¾î ¶³¾îÁö´ÂÁö È®ÀÎ
-            if i % 400 == 0 then    -- # 400À¸·Î ³ª´©¾î ¶³¾îÁö´ÂÁö È®ÀÎ
+    if i % 4 == 0 then    --           # 4ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ëŠ”ì§€ í™•ì¸
+        if i % 100 == 0 then   --      # 100ìœ¼ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ëŠ”ì§€ í™•ì¸
+            if i % 400 == 0 then    -- # 400ìœ¼ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ëŠ”ì§€ í™•ì¸
                 return true
-            end    --# 4, 100, 400À¸·Î ³ª´©¾î ¶³¾îÁö¸é À±³â
+            end    --# 4, 100, 400ìœ¼ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ë©´ ìœ¤ë…„
         else
-            return true -- # 4·Î ³ª´©¾î ¶³¾îÁö°í, 100À¸·Î ³ª´©¾î ¶³¾îÁöÁö ¾ÊÀ¸¸é À±³â
+            return true -- # 4ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ê³ , 100ìœ¼ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ì§€ ì•Šìœ¼ë©´ ìœ¤ë…„
         end
     end
     return false
@@ -232,24 +232,24 @@ local Fileptr = io.open("C:\\Temp\\yeararr.txt", "wb")
 
     --print("total : "..math.floor(total).."    32 : "..(math.floor(total%4294967296)).."   64 : "..math.floor(total/4294967296))
     --print(EXPArr[20000])
-    --º¹±¸°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù. ÇÏÁö¸¸ ÇöÀç °ÔÀÓÁßÀÏ °æ¿ì ÀúÀåµ¥ÀÌÅÍ°¡ µ¤¾î½áÁö¹Ç·Î º¹±¸°¡ µÇÁö ¾Ê½À´Ï´Ù. È®ÀÎºÎÅ¹µå¸³´Ï´Ù.
+    --ë³µêµ¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. í•˜ì§€ë§Œ í˜„ì¬ ê²Œì„ì¤‘ì¼ ê²½ìš° ì €ì¥ë°ì´í„°ê°€ ë®ì–´ì¨ì§€ë¯€ë¡œ ë³µêµ¬ê°€ ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤. í™•ì¸ë¶€íƒë“œë¦½ë‹ˆë‹¤.
 --    math.randomseed( os.time() )
 --    function RandTest(n)
 --        local t = {0,0,0,0,0,0,0,0,0,0}
 --        local t2={0,0,0,0,0,0,0,0,0,0}
 --        for i = 1, n do
 --            local k = bit32.band(math.random(0xFFFFFFFF),0xFFFFFFFF)
---            local ptr = (((k)%10000)//1000)+1 -- °­È­¼º°ø¿©ºÎ
---            local ptr2 = (((bit32.rshift(k,16))%10000)//1000)+1 -- À¯Áö ¼º°ø ½ÇÆĞ¿©ºÎ
+--            local ptr = (((k)%10000)//1000)+1 -- ê°•í™”ì„±ê³µì—¬ë¶€
+--            local ptr2 = (((bit32.rshift(k,16))%10000)//1000)+1 -- ìœ ì§€ ì„±ê³µ ì‹¤íŒ¨ì—¬ë¶€
 --            --print(k,ptr,ptr2)
 --            t[ptr] = t[ptr]+1
 --            t2[ptr2] = t2[ptr2]+1
 --        end        
---        print("°­È­ ½ÇÆĞ, ¼º°ø°ª")
+--        print("ê°•í™” ì‹¤íŒ¨, ì„±ê³µê°’")
 --        for j,k in pairs(t) do
 --            print(((j-1)*1000).."~"..tostring(j*1000).." : "..k)
 --        end
---        print("À¯Áö ¼º°ø, ½ÇÆĞ°ª")
+--        print("ìœ ì§€ ì„±ê³µ, ì‹¤íŒ¨ê°’")
 --        for j,k in pairs(t2) do
 --            print(((j-1)*1000).."~"..tostring(j*1000).." : "..k)
 --        end

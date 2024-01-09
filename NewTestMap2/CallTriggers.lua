@@ -117,15 +117,15 @@ function Install_CallTriggers()
 	
 
 	
-	local TotalEper = CreateVar(FP) -- »õ·Î¿î º¯¼ö »ç¿ëÀ¸·Î Áßº¹Àû¿ë ¹æÁö
-	local TotalEper2 = CreateVar(FP) -- »õ·Î¿î º¯¼ö »ç¿ëÀ¸·Î Áßº¹Àû¿ë ¹æÁö
-	local TotalEper3 = CreateVar(FP) -- »õ·Î¿î º¯¼ö »ç¿ëÀ¸·Î Áßº¹Àû¿ë ¹æÁö
+	local TotalEper = CreateVar(FP) -- ìƒˆë¡œìš´ ë³€ìˆ˜ ì‚¬ìš©ìœ¼ë¡œ ì¤‘ë³µì ìš© ë°©ì§€
+	local TotalEper2 = CreateVar(FP) -- ìƒˆë¡œìš´ ë³€ìˆ˜ ì‚¬ìš©ìœ¼ë¡œ ì¤‘ë³µì ìš© ë°©ì§€
+	local TotalEper3 = CreateVar(FP) -- ìƒˆë¡œìš´ ë³€ìˆ˜ ì‚¬ìš©ìœ¼ë¡œ ì¤‘ë³µì ìš© ë°©ì§€
 	ECW = CreateVar(FP)
 	ELevelB = CreateVar(FP)
 	UEper2 = CreateVar(FP)
 	UEper3 = CreateVar(FP)
-	--ELevel = ÇöÀç °­È­ÁßÀÎ ·¹º§
-	CAdd(FP,TotalEper,UEper,GEper) -- +1°­ È®·ü
+	--ELevel = í˜„ì¬ ê°•í™”ì¤‘ì¸ ë ˆë²¨
+	CAdd(FP,TotalEper,UEper,GEper) -- +1ê°• í™•ë¥ 
 	CAdd(FP,TotalEper2,UEper2,GEper2)
 	CAdd(FP,TotalEper3,UEper3,GEper3)
 
@@ -149,74 +149,74 @@ function Install_CallTriggers()
 		CIfX(FP,{KeyPress("F11", "Down")})
 		CMov(FP,GetEPer,1)
 		CElseX()
-		GetEPer2 = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetEPer2 = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 		CMov(FP,GetEPer,GetEPer2)
 		CIfXEnd()
 	else
-		GetEPer = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetEPer = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 	end
 
 
-	if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+	if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
 			for i = 1, 39 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."°­ À¯´Ö °­È­ ½Ãµµ", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."ê°• ìœ ë‹› ê°•í™” ì‹œë„", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
 			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
 			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
 
-			DisplayPrint(ECP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",ColorCodeV[2],GetEPer})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ +3 È®·ü : ",ColorCodeV2[2],E3Range[1]," \x04~ ",E3Range[2]})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ +2 È®·ü : ",ColorCodeV3[2],E2Range[1]," \x04~ ",E2Range[2]})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ +1 È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			DisplayPrint(ECP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",ColorCodeV[2],GetEPer})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ +3 í™•ë¥  : ",ColorCodeV2[2],E3Range[1]," \x04~ ",E3Range[2]})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ +2 í™•ë¥  : ",ColorCodeV3[2],E2Range[1]," \x04~ ",E2Range[2]})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ +1 í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end
 
 	
 	
-	--°­È­ ¼º°ø ¶Ç´Â ½ÇÆĞ °áÁ¤. TotalEper°¡ ·£´ı³­¼öº¸´Ù ´õ Å¬°æ¿ì ¼º°ø
-	CIfX(FP,{TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])})--+3°­ ¼º°ø½Ã
+	--ê°•í™” ì„±ê³µ ë˜ëŠ” ì‹¤íŒ¨ ê²°ì •. TotalEperê°€ ëœë¤ë‚œìˆ˜ë³´ë‹¤ ë” í´ê²½ìš° ì„±ê³µ
+	CIfX(FP,{TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])})--+3ê°• ì„±ê³µì‹œ
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1F°á°ú : +3 ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1Fê²°ê³¼ : +3 ì„±ê³µ", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,33,AtMost)}) -- 35°­ºÎÅÍ +2 Àû¿ë¾ÈµÊ, 36°­ºÎÅÍ +2 Àû¿ë¾ÈµÊ
+		CIfX(FP, {CV(ELevel,33,AtMost)}) -- 35ê°•ë¶€í„° +2 ì ìš©ì•ˆë¨, 36ê°•ë¶€í„° +2 ì ìš©ì•ˆë¨
 		CAdd(FP,ELevel,3)
 		CElseIfX({CV(ELevel,34,AtLeast),CV(ELevel,35,AtMost)})
 		CMov(FP,ELevel,36)
 		CElseX()
 		CAdd(FP,ELevel,1)
 		CIfXEnd()
-	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2°­ ¼º°ø½Ã
+	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2ê°• ì„±ê³µì‹œ
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1C°á°ú : +2 ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1Cê²°ê³¼ : +2 ì„±ê³µ", 4)})
 			CIfEnd()
 		end
-		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 36°­ºÎÅÍ +2 +3 Àû¿ë¾ÈµÊ
+		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 36ê°•ë¶€í„° +2 +3 ì ìš©ì•ˆë¨
 		CAdd(FP,ELevel,2)
 		CElseIfX({CV(ELevel,35)})
 		CMov(FP,ELevel,36)
 		CElseX()
 		CAdd(FP,ELevel,1)
 		CIfXEnd()
-	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1°­ ¼º°ø½Ã
+	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1ê°• ì„±ê³µì‹œ
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F°á°ú : +1 ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0Fê²°ê³¼ : +1 ì„±ê³µ", 4)})
 			CIfEnd()
 		end
 		CAdd(FP,ELevel,1)
-	CElseX()--½ÇÆĞ½Ã Never(°æÇèÄ¡ Áö±Ş)
+	CElseX()--ì‹¤íŒ¨ì‹œ Never(ê²½í—˜ì¹˜ ì§€ê¸‰)
 		local TempEXP = CreateVar(FP)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08°á°ú : ½ÇÆĞ", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08ê²°ê³¼ : ì‹¤íŒ¨", 4)})
 			CIfEnd()
 		end
 		for i = 0, 6 do
@@ -239,7 +239,7 @@ function Install_CallTriggers()
 	CMov(FP,ELevel,0)
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
-	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--¿À¹öÇÃ·Î¿ì ¹æÁö
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--ì˜¤ë²„í”Œë¡œìš° ë°©ì§€
 
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
@@ -256,9 +256,9 @@ function Install_CallTriggers()
 
 	Call_Enchant2 = SetCallForward()
 	SetCall(FP)
-	--ELevel = ÇöÀç °­È­ÁßÀÎ ·¹º§
+	--ELevel = í˜„ì¬ ê°•í™”ì¤‘ì¸ ë ˆë²¨
 
-	CIfX(FP,{TDeathsX(ECP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)}) -- ³»ºÎ°è»êÀ» ÄÑ°í ÀÚ°­¸ğµåÀÏ°æ¿ì
+	CIfX(FP,{TDeathsX(ECP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)}) -- ë‚´ë¶€ê³„ì‚°ì„ ì¼œê³  ìê°•ëª¨ë“œì¼ê²½ìš°
 	
 	CWhile(FP, {CV(ECW,1,AtLeast)},{SubV(ECW,1)})
 	CMov(FP,ELevel,ELevelB)
@@ -290,39 +290,39 @@ function Install_CallTriggers()
 	f_Mod(FP,GetEPer,BrShV)
 	CAdd(FP,GetEPer,1)
 
-	if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+	if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
 			for i = 40, 49 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."°­ À¯´Ö °­È­ ½Ãµµ", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."ê°• ìœ ë‹› ê°•í™” ì‹œë„", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
 			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
 			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
 
-			DisplayPrint(ECP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",ColorCodeV[2],GetEPer, " \x04³» ÆÄ¹æ : \x1F",BreakShield," \x04ÆÄ¹æ¿¡ ÀÇÇØ Ãâ·ÂµÈ È®·ü ÃÖ´ë°ª : ",ColorCodeV[2],BrShV})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ +1 È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			DisplayPrint(ECP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",ColorCodeV[2],GetEPer, " \x04ë‚´ íŒŒë°© : \x1F",BreakShield," \x04íŒŒë°©ì— ì˜í•´ ì¶œë ¥ëœ í™•ë¥  ìµœëŒ€ê°’ : ",ColorCodeV[2],BrShV})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ +1 í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end
-	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--¼º°ø½Ã
+	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--ì„±ê³µì‹œ
 		CAdd(FP,ELevel,1)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F°á°ú : +1 ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0Fê²°ê³¼ : +1 ì„±ê³µ", 4)})
 			CIfEnd()
 		end
 	CElseX()
 	CMov(FP,ELevel,0)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08°á°ú : ½ÇÆĞ", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08ê²°ê³¼ : ì‹¤íŒ¨", 4)})
 			CIfEnd()
 		end
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
-	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--¿À¹öÇÃ·Î¿ì ¹æÁö
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--ì˜¤ë²„í”Œë¡œìš° ë°©ì§€
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
 				CMovX(FP,VArr(GetUnitVArr[i+1], ELevel),1,Add)
@@ -345,61 +345,61 @@ function Install_CallTriggers()
 		CIfX(FP,{KeyPress("F11", "Down")})
 		CMov(FP,GetEPer,1)
 		CElseX()
-		GetEPer2 = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetEPer2 = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 		CMov(FP,GetEPer,GetEPer2)
 		CIfXEnd()
 		
-		--GetEPer = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		--GetEPer = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 	else
-		GetEPer = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetEPer = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 	end
 
-	if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+	if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
 			for i = 40, 49 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."°­ À¯´Ö °­È­ ½Ãµµ", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."ê°• ìœ ë‹› ê°•í™” ì‹œë„", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
 			ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
 			ColorCodeV4 = CreateVar2(FP,nil,nil,0x1B)
 
-			DisplayPrint(ECP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",ColorCodeV[2],GetEPer})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ +1 È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			DisplayPrint(ECP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",ColorCodeV[2],GetEPer})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ +1 í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			
 		CIfEnd()
 	end
-	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--¼º°ø½Ã
+	CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, XEper)})--ì„±ê³µì‹œ
 		CAdd(FP,ELevel,1)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F°á°ú : +1 ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0Fê²°ê³¼ : +1 ì„±ê³µ", 4)})
 			CIfEnd()
 		end
 	CElseX()
 		CIfX(FP,CV(BreakShield,1,AtLeast))
-		GetEPer = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetEPer = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 		CMov(FP,E1Range[1],1)
 		CMov(FP,E1Range[2],BreakShield)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-			DisplayPrint(ECP,{"\x04Ãâ·ÂµÈ ÆÄ±«¹æÁö ³­¼ö : ",ColorCodeV[2],GetEPer})
-			DisplayPrint(ECP,{"\x1F°è»êµÈ ÆÄ±«¹æÁö È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+			DisplayPrint(ECP,{"\x04ì¶œë ¥ëœ íŒŒê´´ë°©ì§€ ë‚œìˆ˜ : ",ColorCodeV[2],GetEPer})
+			DisplayPrint(ECP,{"\x1Fê³„ì‚°ëœ íŒŒê´´ë°©ì§€ í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 			CIfEnd()
 		end
 		
-		CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, BreakShield)})--¼º°ø½Ã
+		CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, BreakShield)})--ì„±ê³µì‹œ
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08°á°ú : ÆÄ±«¹æÁö ¼º°ø", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08ê²°ê³¼ : íŒŒê´´ë°©ì§€ ì„±ê³µ", 4)})
 			CIfEnd()
 		end
 		CElseX()
 		CMov(FP,ELevel,0)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08°á°ú : ½ÇÆĞ", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08ê²°ê³¼ : ì‹¤íŒ¨", 4)})
 			CIfEnd()
 		end
 		CIfXEnd()
@@ -408,7 +408,7 @@ function Install_CallTriggers()
 		CIfXEnd()
 	CIfXEnd()
 	CIf(FP,{CV(ELevel,1,AtLeast)})
-	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--¿À¹öÇÃ·Î¿ì ¹æÁö
+	TriggerX(FP,{CV(ELevel,#LevelUnitArr-1,AtLeast)},{SetV(ELevel,#LevelUnitArr-1)},{preserved})--ì˜¤ë²„í”Œë¡œìš° ë°©ì§€
 		for i = 0, 6 do
 			CIf(FP,{CV(ECP,i)})
 				CMovX(FP,VArr(GetUnitVArr[i+1], ELevel),1,Add)
@@ -482,9 +482,9 @@ function Install_CallTriggers()
 	CTMaxExp = CreateWar(FP)
 	
 
-	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 150), 8)--151 Æ÷Ä¿½º
+	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 150), 8)--151 í¬ì»¤ìŠ¤
 	f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTCurEXP, nil, 1)
-	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 151), 8)--151 Æ÷Ä¿½º
+	ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 151), 8)--151 í¬ì»¤ìŠ¤
 	f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTTotalExp, nil, 1)
 	f_LRead(FP, LArrX({EXPArr_dp},151+LevelLimit), CTMaxExp, nil, 1)
 	DoActionsX(FP,{SetCDX(iv.StatTest,16,16)})
@@ -522,7 +522,7 @@ function Install_CallTriggers()
 	mouseY = dwread_epd(0x6CDDC8)
 	screenGridX = dwread_epd(0x62848C)
 	screenGridY = dwread_epd(0x6284A8)
-	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --Áß¾Ó (¸Ê»çÀÌÁî*16, ¸Ê»çÀÌÁî*16)
+	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --ì¤‘ì•™ (ë§µì‚¬ì´ì¦ˆ*16, ë§µì‚¬ì´ì¦ˆ*16)
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MCP),CenterView(118)})
 	ScreenX2 = dwread_epd(0x62848C);
 	ScreenY2 = dwread_epd(0x6284A8);
@@ -536,7 +536,7 @@ function Install_CallTriggers()
 	CAdd(FP,screenY,screenGridY,screenSizeY)
 	Simple_SetLocX(FP,117, screenX, screenY,screenX, screenY)
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, MCP),CenterView(118)})
-	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --Áß¾Ó (¸Ê»çÀÌÁî*16, ¸Ê»çÀÌÁî*16)
+	Simple_SetLocX(FP,117, 256*16, 256*16,256*16, 256*16) --ì¤‘ì•™ (ë§µì‚¬ì´ì¦ˆ*16, ë§µì‚¬ì´ì¦ˆ*16)
 	CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
 
 	screenX2 = CreateVar(FP)
@@ -552,7 +552,7 @@ function Install_CallTriggers()
 	SetCall(FP)
 	PUnitCurLevel = CreateVarArr2(7,0xFFFFFFFF,FP)
 	CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
-		CIf(FP,CV(G_BtnFnm,7)) -- °íÀ¯À¯´Ö CUnit Á¦¾îºÎ
+		CIf(FP,CV(G_BtnFnm,7)) -- ê³ ìœ ìœ ë‹› CUnit ì œì–´ë¶€
 		CMovX(FP,GetPUnitCool,VArrX(GetVArray(iv.CurPUnitCool[1], 7),VArrI,VArrI4))
 		CMov(FP,0x6509B0,G_Btnptr,21)
 		DoActions(FP,{
@@ -569,7 +569,7 @@ function Install_CallTriggers()
 		
 
 		CIfEnd()
-		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- ¹öÆ° ´­·µÀ»°æ¿ì
+		CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- ë²„íŠ¼ ëˆŒëŸ¿ì„ê²½ìš°
 		
 			CMovX(FP,VArrX(GetVArray(DPErT[1], 7),VArrI,VArrI4),24*10)
 			--Print_13X(FP,GCP)
@@ -578,7 +578,7 @@ function Install_CallTriggers()
 			CrShift(FP,G_PushBtnm,16)
 
 			CIfX(FP,{Never()})
-			CElseIfX({TTOR({CV(G_BtnFnm,1),CV(G_BtnFnm,8)})})--ÀÚµ¿±¸¸Å
+			CElseIfX({TTOR({CV(G_BtnFnm,1),CV(G_BtnFnm,8)})})--ìë™êµ¬ë§¤
 				local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 7)
 				local AutoBuyVArr2 = GetVArray(iv.AutoBuyCode2[1], 7)
 				local GetNum = CreateVar(FP)
@@ -610,7 +610,7 @@ function Install_CallTriggers()
 					CMov(FP,CLocR,CPosX,32+64+64)
 					Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 					CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-					DisplayPrintEr(GCP, {"\x07¡º \x06",GetNum,"°­ \x04À¯´Ö \x19Ãß°¡ \x1BÀÚµ¿±¸ÀÔ \x08OFF \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x06",GetNum,"ê°• \x04ìœ ë‹› \x19ì¶”ê°€ \x1Bìë™êµ¬ì… \x08OFF \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),0)
 					CElseX()
 					
@@ -619,7 +619,7 @@ function Install_CallTriggers()
 					CMov(FP,CLocR,CPosX,32+64)
 					Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 					CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-					DisplayPrintEr(GCP, {"\x07¡º \x06",GetNum,"°­ \x04À¯´Ö \x1BÀÚµ¿±¸ÀÔ \x08OFF \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x06",GetNum,"ê°• \x04ìœ ë‹› \x1Bìë™êµ¬ì… \x08OFF \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
 					CIfXEnd()
 
@@ -641,7 +641,7 @@ function Install_CallTriggers()
 						TSetNVar(SPlayer,SetTo,FP),
 					})
 					CallTrigger(FP, CreateStackedUnit)
-					DisplayPrintEr(GCP, {"\x07¡º \x06",GetNum,"°­ \x04À¯´Ö \x19Ãß°¡ \x1BÀÚµ¿±¸ÀÔ \x07ON \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x06",GetNum,"ê°• \x04ìœ ë‹› \x19ì¶”ê°€ \x1Bìë™êµ¬ì… \x07ON \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),GetNum)
 					CElseX()
 					f_Read(FP,FArr(PLocPos,GCP),CPosX,nil,nil,1)
@@ -659,7 +659,7 @@ function Install_CallTriggers()
 						TSetNVar(SPlayer,SetTo,FP),
 					})
 					CallTrigger(FP, CreateStackedUnit)
-					DisplayPrintEr(GCP, {"\x07¡º \x06",GetNum,"°­ \x04À¯´Ö \x1BÀÚµ¿±¸ÀÔ \x07ON \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x06",GetNum,"ê°• \x04ìœ ë‹› \x1Bìë™êµ¬ì… \x07ON \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),GetNum)
 					CIfXEnd()
 
@@ -674,7 +674,7 @@ function Install_CallTriggers()
 					CMov(FP,CLocR,CPosX,32+64+64)
 					Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 					CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-					DisplayPrintEr(GCP, {"\x07¡º \x04À¯´Ö \x19Ãß°¡ \x1BÀÚµ¿±¸ÀÔ \x08OFF \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x04ìœ ë‹› \x19ì¶”ê°€ \x1Bìë™êµ¬ì… \x08OFF \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr2,VArrI,VArrI4),0)
 				CElseX()
 					f_Read(FP,FArr(PLocPos,GCP),CPosX,nil,nil,1)
@@ -682,7 +682,7 @@ function Install_CallTriggers()
 					CMov(FP,CLocR,CPosX,32+64)
 					Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 					CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-					DisplayPrintEr(GCP, {"\x07¡º \x04À¯´Ö \x1BÀÚµ¿±¸ÀÔ \x08OFF \x07¡»"})
+					DisplayPrintEr(GCP, {"\x07ã€ \x04ìœ ë‹› \x1Bìë™êµ¬ì… \x08OFF \x07ã€"})
 					CMovX(FP,VArrX(AutoBuyVArr,VArrI,VArrI4),0)
 				CIfXEnd()
 				CJumpEnd(FP,PBJump2)
@@ -691,10 +691,10 @@ function Install_CallTriggers()
 				NJumpEnd(FP, PBJump4)
 				
 				CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)},{TSetDeathsX(GCP,SetTo,2,3,2)})
-				DisplayPrintEr(GCP, {"\x07¡º \x04°­È­ \x1C³»ºÎ°è»ê \x04¸ğµå \x07ON \x07¡»"})
+				DisplayPrintEr(GCP, {"\x07ã€ \x04ê°•í™” \x1Cë‚´ë¶€ê³„ì‚° \x04ëª¨ë“œ \x07ON \x07ã€"})
 				CMovX(FP,VArrX(GetVArray(iv.SettingEffSound[1], 7),VArrI,VArrI4),2,SetTo,2)
 				CElseX({TSetDeathsX(GCP,SetTo,0,3,2)})
-				DisplayPrintEr(GCP, {"\x07¡º \x04°­È­ \x1C³»ºÎ°è»ê \x04¸ğµå \x08OFF \x07¡»"})
+				DisplayPrintEr(GCP, {"\x07ã€ \x04ê°•í™” \x1Cë‚´ë¶€ê³„ì‚° \x04ëª¨ë“œ \x08OFF \x07ã€"})
 				CMovX(FP,VArrX(GetVArray(iv.SettingEffSound[1], 7),VArrI,VArrI4),0,SetTo,2)
 				CIfXEnd()
 
@@ -703,7 +703,7 @@ function Install_CallTriggers()
 
 
 
-			CElseIfX({CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,5,AtMost)})--ÀÚµ¿°­È­ 1~25
+			CElseIfX({CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,5,AtMost)})--ìë™ê°•í™” 1~25
 				TriggerX(FP, {CV(G_BtnFnm,3)}, AddV(G_PushBtnm,25), {preserved})
 				TriggerX(FP, {CV(G_BtnFnm,5)}, AddV(G_PushBtnm,25), {preserved})
 				local GetArrNum = CreateVar(FP)
@@ -717,20 +717,20 @@ function Install_CallTriggers()
 				CIf(FP,{CV(G_BtnFnm,2,AtLeast),CV(G_BtnFnm,3,AtMost)})
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
 					CallTriggerX(FP,Call_Print13CP,{})
-					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ÃÖ¼Ò 1È¸ ÀÌ»ó ÇØ´ç À¯´ÖÀÇ °­È­¸¦ ¼º°øÇØ¾ßÇÕ´Ï´Ù."))}, {preserved})		
+					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ìµœì†Œ 1íšŒ ì´ìƒ í•´ë‹¹ ìœ ë‹›ì˜ ê°•í™”ë¥¼ ì„±ê³µí•´ì•¼í•©ë‹ˆë‹¤."))}, {preserved})		
 					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
 						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x1BÀÚµ¿°­È­ \x07ON \04(ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x1Bìë™ê°•í™” \x07ON \04(íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CElseX()
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x1BÀÚµ¿°­È­ \x07ON \04(³»ºÎ °è»êÀ¸·Î ÀÛµ¿. ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x1Bìë™ê°•í™” \x07ON \04(ë‚´ë¶€ ê³„ì‚°ìœ¼ë¡œ ì‘ë™. íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CIfXEnd()
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
 					CElseX()
 						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x1BÀÚµ¿°­È­ \x08OFF \04(ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x1Bìë™ê°•í™” \x08OFF \04(íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CElseX()
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x1BÀÚµ¿°­È­ \x08OFF \04(³»ºÎ °è»êÀ¸·Î ÀÛµ¿. ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x1Bìë™ê°•í™” \x08OFF \04(ë‚´ë¶€ ê³„ì‚°ìœ¼ë¡œ ì‘ë™. íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CIfXEnd()
 						CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 					CIfXEnd()
@@ -740,14 +740,14 @@ function Install_CallTriggers()
 				CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
 					CallTriggerX(FP,Call_Print13CP,{})
-					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ÃÖ¼Ò 1È¸ ÀÌ»ó ÇØ´ç À¯´ÖÀÇ °­È­¸¦ ¼º°øÇØ¾ßÇÕ´Ï´Ù."))}, {preserved})		
+					CTrigger(FP, {TMemory(0x512684,Exactly,GCP)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ìµœì†Œ 1íšŒ ì´ìƒ í•´ë‹¹ ìœ ë‹›ì˜ ê°•í™”ë¥¼ ì„±ê³µí•´ì•¼í•©ë‹ˆë‹¤."))}, {preserved})		
 					CElseX()
 					CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
 					
 						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x07ÀÚµ¿ÆÇ¸Å \x07ON \04(ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x07ìë™íŒë§¤ \x07ON \04(íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CElseX()
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x07ÀÚµ¿ÆÇ¸Å \x07ON \04(³»ºÎ °è»êÀ¸·Î ÀÛµ¿. ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x07ìë™íŒë§¤ \x07ON \04(ë‚´ë¶€ ê³„ì‚°ìœ¼ë¡œ ì‘ë™. íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CIfXEnd()
 						
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
@@ -755,9 +755,9 @@ function Install_CallTriggers()
 					CElseX()
 					
 						CIfX(FP,{TDeathsX(GCP,Exactly,0,3,2)})
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x07ÀÚµ¿ÆÇ¸Å \x08OFF \04(ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x07ìë™íŒë§¤ \x08OFF \04(íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CElseX()
-						DisplayPrintEr(GCP, {"\x07¡º ",TxtColor[2],G_PushBtnm,"°­ \x04À¯´Ö \x07ÀÚµ¿ÆÇ¸Å \x08OFF \04(³»ºÎ °è»êÀ¸·Î ÀÛµ¿. ÆÇ¸Å ¿ì¼± Àû¿ëµÊ) \x07¡»",})
+						DisplayPrintEr(GCP, {"\x07ã€ ",TxtColor[2],G_PushBtnm,"ê°• \x04ìœ ë‹› \x07ìë™íŒë§¤ \x08OFF \04(ë‚´ë¶€ ê³„ì‚°ìœ¼ë¡œ ì‘ë™. íŒë§¤ ìš°ì„  ì ìš©ë¨) \x07ã€",})
 						CIfXEnd()
 
 						CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
@@ -777,12 +777,12 @@ function Install_CallTriggers()
 			local GetVAccData = CreateVar(FP)
 			local GetClassData = CreateVar(FP)
 			CElseIfX(CV(G_BtnFnm,6))
-				CIf(FP,{CV(G_PushBtnm,0)}) -- ¹èÀ² ¿Ã¸²
+				CIf(FP,{CV(G_PushBtnm,0)}) -- ë°°ìœ¨ ì˜¬ë¦¼
 					f_LMovX(FP, GetMulData, WArrX(MulOpWArr,WArrI,WArrI4))
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
 
 					CallTrigger(FP, Call_Print13CP)
-					CIfX(FP,{TTNWar(GetMulData,AtMost,"499999999999")})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì
+					CIfX(FP,{TTNWar(GetMulData,AtMost,"499999999999")})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš°
 						CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),8,SetTo,8)
 						CIfX(FP,{CV(GetMulData2,0)})
 						f_LMul(FP,GetMulData,GetMulData,"5")
@@ -793,17 +793,17 @@ function Install_CallTriggers()
 						CIfXEnd()
 						f_LMovX(FP, WArrX(MulOpWArr,WArrI,WArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: ¹èÀ²À» ¿Ã·È½À´Ï´Ù."))},{preserved})
-					CElseX()--Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ» °æ¿ì
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó ¹èÀ²À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))},{preserved})
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: ë°°ìœ¨ì„ ì˜¬ë ¸ìŠµë‹ˆë‹¤."))},{preserved})
+					CElseX()--ì¡°ê±´ì´ ë§Œì¡±í•˜ì§€ ì•Šì„ ê²½ìš°
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ë” ì´ìƒ ë°°ìœ¨ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))},{preserved})
 					CIfXEnd()
 				CIfEnd()
 				
-				CIf(FP,{CV(G_PushBtnm,1)}) -- ¹èÀ² ³»¸²
+				CIf(FP,{CV(G_PushBtnm,1)}) -- ë°°ìœ¨ ë‚´ë¦¼
 					f_LMovX(FP, GetMulData, WArrX(MulOpWArr,WArrI,WArrI4))
 					CMovX(FP,GetMulData2,VArrX(MulOpVArr2,VArrI,VArrI4))
 					CallTrigger(FP, Call_Print13CP)
-					CIfX(FP,{TTNWar(GetMulData,AtLeast,"2")})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì
+					CIfX(FP,{TTNWar(GetMulData,AtLeast,"2")})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš°
 						CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),8,SetTo,8)
 						CIfX(FP,{CV(GetMulData2,1)})
 						f_LDiv(FP,GetMulData,GetMulData,"5")
@@ -814,28 +814,28 @@ function Install_CallTriggers()
 						CIfXEnd()
 						f_LMovX(FP, WArrX(MulOpWArr,WArrI,WArrI4),GetMulData)
 						CMovX(FP,VArrX(MulOpVArr2,VArrI,VArrI4),GetMulData2)
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: ¹èÀ²À» ³»·È½À´Ï´Ù."))},{preserved})
-					CElseX()--Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ» °æ¿ì
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó ¹èÀ²À» ³»¸± ¼ö ¾ø½À´Ï´Ù."))},{preserved})
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: ë°°ìœ¨ì„ ë‚´ë ¸ìŠµë‹ˆë‹¤."))},{preserved})
+					CElseX()--ì¡°ê±´ì´ ë§Œì¡±í•˜ì§€ ì•Šì„ ê²½ìš°
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ë” ì´ìƒ ë°°ìœ¨ì„ ë‚´ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))},{preserved})
 					CIfXEnd()
 				CIfEnd()--
-				CIf(FP,{CV(G_PushBtnm,3)}) -- ÀÏ°£, ÁÖ°£ ±¸ÀÔ ¸ğµå
+				CIf(FP,{CV(G_PushBtnm,3)}) -- ì¼ê°„, ì£¼ê°„ êµ¬ì… ëª¨ë“œ
 				CMovX(FP,GetFirstRewardOp,VArrX(FirstRewardOpVArr,VArrI,VArrI4),nil,nil,nil,1)
 				CallTrigger(FP, Call_Print13CP)
-				CIfX(FP,{CV(GetFirstRewardOp,0)},{SetV(GetFirstRewardOp,1),})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì
-				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17Ã¹ ´Ş¼º \x07º¸»ó \x08Á¦ÇÑ \x1F¸®¼Â\x04 ±¸ÀÔ ¼³Á¤À» \x07ÁÖ°£\x04À¸·Î ¼³Á¤ÇÕ´Ï´Ù. "))},{preserved})
+				CIfX(FP,{CV(GetFirstRewardOp,0)},{SetV(GetFirstRewardOp,1),})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš°
+				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17ì²« ë‹¬ì„± \x07ë³´ìƒ \x08ì œí•œ \x1Fë¦¬ì…‹\x04 êµ¬ì… ì„¤ì •ì„ \x07ì£¼ê°„\x04ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤. "))},{preserved})
 				CElseX({SetV(GetFirstRewardOp,0)})
-				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17Ã¹ ´Ş¼º \x07º¸»ó \x08Á¦ÇÑ \x1F¸®¼Â\x04 ±¸ÀÔ ¼³Á¤À» \x07ÀÏ°£\x04À¸·Î ¼³Á¤ÇÕ´Ï´Ù. "))},{preserved})
+				CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{print_utf8(12,0,StrDesign("\x03System \x04: \x17ì²« ë‹¬ì„± \x07ë³´ìƒ \x08ì œí•œ \x1Fë¦¬ì…‹\x04 êµ¬ì… ì„¤ì •ì„ \x07ì¼ê°„\x04ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤. "))},{preserved})
 				CIfXEnd()
 
 
 				CMovX(FP,VArrX(FirstRewardOpVArr,VArrI,VArrI4),GetFirstRewardOp,nil,nil,nil,1)
 				CIfEnd()--
-				CIf(FP,{CV(G_PushBtnm,2)}) -- ½Ì±ÛÇÃ·¹ÀÌ ¹öÆ°
-					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì ½Ì±ÛÀüÈ¯
+				CIf(FP,{CV(G_PushBtnm,2)}) -- ì‹±ê¸€í”Œë ˆì´ ë²„íŠ¼
+					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš° ì‹±ê¸€ì „í™˜
 						CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
 							f_Read(FP, 0x628438, nil, Nextptrs)
-							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x08½Ì±Û ÇÃ·¹ÀÌ·Î ÀüÈ¯ÇÕ´Ï´Ù. ÀÌ ¼³Á¤Àº µÇµ¹¸± ¼ö ¾ø½À´Ï´Ù."),4),SetCp(FP),},{preserved})
+							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x08ì‹±ê¸€ í”Œë ˆì´ë¡œ ì „í™˜í•©ë‹ˆë‹¤. ì´ ì„¤ì •ì€ ë˜ëŒë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."),4),SetCp(FP),},{preserved})
 							CSub(FP,CurCunitI,Nextptrs,19025)
 							f_Div(FP,CurCunitI,_Mov(84))
 							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,94))})
@@ -845,38 +845,38 @@ function Install_CallTriggers()
 							--CallTrigger(FP, Call_CTInputUID)
 						CIfEnd()
 						CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
-							CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04Á¤¸»·Î \x08½Ì±ÛÇÃ·¹ÀÌ\x04·Î \x07ÀüÈ¯\x04ÇÏ½Ã°Ú½À´Ï±î? \x08¿øÇÏ½Ã¸é ÇÑ¹ø ´õ ´­·¯ÁÖ¼¼¿ä."),4),SetCp(FP),},{preserved})
+							CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04ì •ë§ë¡œ \x08ì‹±ê¸€í”Œë ˆì´\x04ë¡œ \x07ì „í™˜\x04í•˜ì‹œê² ìŠµë‹ˆê¹Œ? \x08ì›í•˜ì‹œë©´ í•œë²ˆ ë” ëˆŒëŸ¬ì£¼ì„¸ìš”."),4),SetCp(FP),},{preserved})
 
 						CIfEnd()
-					CElseX()--Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ» °æ¿ì
+					CElseX()--ì¡°ê±´ì´ ë§Œì¡±í•˜ì§€ ì•Šì„ ê²½ìš°
 						CallTrigger(FP, Call_Print13CP)
-						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ½Ã¹ÎÀ» ½Ì±Û ÇÃ·¹ÀÌ ¼³Á¤ À§Ä¡·Î ÀÌµ¿ÇÑ ÈÄ »ç¿ë°¡´ÉÇÕ´Ï´Ù."))},{preserved})
+						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: ì‹œë¯¼ì„ ì‹±ê¸€ í”Œë ˆì´ ì„¤ì • ìœ„ì¹˜ë¡œ ì´ë™í•œ í›„ ì‚¬ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤."))},{preserved})
 					CIfXEnd()
 					CIfX(FP,{CD(iv.PartyBonus,2,AtLeast)})
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07¸ÖÆ¼ º¸³Ê½º ¹öÇÁ \x04È°¼ºÈ­ »óÅÂ : \x07·±ÃÄ ·Îµå ÀÎ¿øÀÌ 2¸íÀÌ»ó ÀÎ½ÄµÇ¾î ¿µ±¸ È°¼ºÈ­ µÇ¾ú½À´Ï´Ù.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07ë©€í‹° ë³´ë„ˆìŠ¤ ë²„í”„ \x04í™œì„±í™” ìƒíƒœ : \x07ëŸ°ì³ ë¡œë“œ ì¸ì›ì´ 2ëª…ì´ìƒ ì¸ì‹ë˜ì–´ ì˜êµ¬ í™œì„±í™” ë˜ì—ˆìŠµë‹ˆë‹¤.",4)})
 					CElseIfX({CV(iv.PCheckV,2,AtLeast)})
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07¸ÖÆ¼ º¸³Ê½º ¹öÇÁ \x04È°¼ºÈ­ »óÅÂ : \x07È°¼ºÈ­ µÇ¾úÁö¸¸ ·±ÃÄ ·Îµå ÀÎ¿øÀÌ 1¸í ÀÌÇÏÀÔ´Ï´Ù. ¼Ö·Î ÇÃ·¹ÀÌ·Î ÀüÈ¯ÇÒ °æ¿ì ¹öÇÁ°¡ \x08ºñÈ°¼ºÈ­µË´Ï´Ù.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07ë©€í‹° ë³´ë„ˆìŠ¤ ë²„í”„ \x04í™œì„±í™” ìƒíƒœ : \x07í™œì„±í™” ë˜ì—ˆì§€ë§Œ ëŸ°ì³ ë¡œë“œ ì¸ì›ì´ 1ëª… ì´í•˜ì…ë‹ˆë‹¤. ì†”ë¡œ í”Œë ˆì´ë¡œ ì „í™˜í•  ê²½ìš° ë²„í”„ê°€ \x08ë¹„í™œì„±í™”ë©ë‹ˆë‹¤.",4)})
 					CElseX()
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07¸ÖÆ¼ º¸³Ê½º ¹öÇÁ \x04È°¼ºÈ­ »óÅÂ : \x08È°¼ºÈ­ ºÒ°¡´É.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07ë©€í‹° ë³´ë„ˆìŠ¤ ë²„í”„ \x04í™œì„±í™” ìƒíƒœ : \x08í™œì„±í™” ë¶ˆê°€ëŠ¥.",4)})
 					CIfXEnd()
 				CIfEnd()--
 			
-			CElseIfX(CV(G_BtnFnm,7)) -- °íÀ¯À¯´Ö ¹öÆ°¼Â Á¦¾îºÎ
-			--1 = ¿¬°áµÊ
-			--2 = ¿¬°á ²÷Å´
-			--3 = ·ÎµåÁß
-			--4 = ·Îµå ¿Ï·á
-			--5 = ¼¼ÀÌºêÁß
-			--6 = ¼¼ÀÌºê ¿Ï·á
-			--7 = ·±Ã³¿Í ¸ÕÀú ¿¬°áÇÏ¼¼¿ä
-			--8 = ´Ù¸¥ ÀÛ¾÷ ÁßÀÔ´Ï´Ù.
-			--9 = ÀÛ¾÷ ½ÇÆĞ
-			--10 = ¸í·É ½ÇÇà
+			CElseIfX(CV(G_BtnFnm,7)) -- ê³ ìœ ìœ ë‹› ë²„íŠ¼ì…‹ ì œì–´ë¶€
+			--1 = ì—°ê²°ë¨
+			--2 = ì—°ê²° ëŠí‚´
+			--3 = ë¡œë“œì¤‘
+			--4 = ë¡œë“œ ì™„ë£Œ
+			--5 = ì„¸ì´ë¸Œì¤‘
+			--6 = ì„¸ì´ë¸Œ ì™„ë£Œ
+			--7 = ëŸ°ì²˜ì™€ ë¨¼ì € ì—°ê²°í•˜ì„¸ìš”
+			--8 = ë‹¤ë¥¸ ì‘ì—… ì¤‘ì…ë‹ˆë‹¤.
+			--9 = ì‘ì—… ì‹¤íŒ¨
+			--10 = ëª…ë ¹ ì‹¤í–‰
 			CIfX(FP, {TDeathsX(GCP, Exactly, 1, 1,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
 				GetCreditData = CreateWar(FP)
 				GerRandData = CreateVar(FP)
 				GetAwakItemData = CreateVar(FP)
-				f_LMov(FP,GetCreditData,"0",nil,nil,1)--Å©·¹µ÷ º¹»ç¹ö±× ¹æÁö¿ë ÃÊ±âÈ­...?
+				f_LMov(FP,GetCreditData,"0",nil,nil,1)--í¬ë ˆë”§ ë³µì‚¬ë²„ê·¸ ë°©ì§€ìš© ì´ˆê¸°í™”...?
 				CMovX(FP,GetClassData,VArrX(GetVArray(iv.PUnitClass[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetPUnitLevel,VArrX(GetVArray(iv.PUnitLevel[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4))
@@ -887,17 +887,17 @@ function Install_CallTriggers()
 				
 				CIf(FP,{CV(G_PushBtnm,0,AtLeast),CV(G_PushBtnm,1,AtMost)}) -- 
 					CIfX(FP,{CV(GetPUnitLevel,10,AtLeast)})--CV(SaveChkData,1,AtLeast)
-						CTrigger(FP,{},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÀÌ¹Ì ÃÖ°í´Ü°è±îÁö °­È­µÇ¾ú½À´Ï´Ù. \x07½Â±Ş\x04À» ÁøÇàÇØÁÖ¼¼¿ä."), 4),SetCp(FP)},{preserved})
-						--CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: °­È­¸¦ ÁøÇàÇÏ±â À§ÇØ¼± ¸ÕÀú ÀúÀåÇØ¾ß ÇÕ´Ï´Ù. F9¸¦ ´­·¯ÁÖ¼¼¿ä."), 4),SetCp(FP)},{preserved})
+						CTrigger(FP,{},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ì´ë¯¸ ìµœê³ ë‹¨ê³„ê¹Œì§€ ê°•í™”ë˜ì—ˆìŠµë‹ˆë‹¤. \x07ìŠ¹ê¸‰\x04ì„ ì§„í–‰í•´ì£¼ì„¸ìš”."), 4),SetCp(FP)},{preserved})
+						--CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ê°•í™”ë¥¼ ì§„í–‰í•˜ê¸° ìœ„í•´ì„  ë¨¼ì € ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤. F9ë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”."), 4),SetCp(FP)},{preserved})
 						CElseX()
 						PrevPUnitLevel = CreateVar(FP)
 						CIfX(FP,{TTNWar(GetCreditData, AtLeast, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000")),TTNWar(GetCreditData, AtMost, "0x7FFFFFFFFFFFFFFF")})
 							VaccJump = def_sIndex()
-							CIfX(FP, {CV(G_PushBtnm,1),TTOR({CV(GetVAccData,0),CV(GetVAccData,0x80000000,AtLeast)})},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x10°­È­±â ¹é½Å\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+							CIfX(FP, {CV(G_PushBtnm,1),TTOR({CV(GetVAccData,0),CV(GetVAccData,0x80000000,AtLeast)})},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x10ê°•í™”ê¸° ë°±ì‹ \x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 							CElseX()
 								CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),2,SetTo,2)
-								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ÀÚµ¿ÀúÀå
-								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--ÀúÀåÇÊ¿ä SetV(SaveChkData,1),
+								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ìë™ì €ì¥
+								CTrigger(FP,{CV(GetPUnitLevel,8,AtLeast)},{TSetDeaths(GCP, SetTo, 0, 1)},{preserved})--ì €ì¥í•„ìš” SetV(SaveChkData,1),
 								f_LSub(FP, GetCreditData, GetCreditData, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000"))
 								CTrigger(FP,{},{TSetNVar(GerRandData, SetTo, _Rand())},1)
 								GPEper = CreateVar(FP)
@@ -909,7 +909,7 @@ function Install_CallTriggers()
 								PUnitEPer = CreateVar(FP)
 								CMov(FP,PUnitEPer,_Sub(_Mov(10001),_Mul(GetPUnitLevel,1000)))
 
-								if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+								if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 									ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 									ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
 									ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
@@ -917,12 +917,12 @@ function Install_CallTriggers()
 									CMov(FP,E1Range[1],1)
 									CMov(FP,E1Range[2],PUnitEPer)
 						
-									DisplayPrint(GCP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",ColorCodeV[2],GPEper})
-									DisplayPrint(GCP,{"\x1F°è»êµÈ È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+									DisplayPrint(GCP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",ColorCodeV[2],GPEper})
+									DisplayPrint(GCP,{"\x1Fê³„ì‚°ëœ í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 									
 								end
-								CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})--¼º°ø½Ã
-									--"\x13\x07¡º "..Str.." \x07¡»"
+								CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})--ì„±ê³µì‹œ
+									--"\x13\x07ã€ "..Str.." \x07ã€"
 									CIf(FP,Memory(0x628438,AtLeast,1))
 									f_Read(FP,_Add(G_Btnptr,10),CPos)
 									Convert_CPosXY()
@@ -937,17 +937,17 @@ function Install_CallTriggers()
 									CMov(FP,PrevPUnitLevel,GetPUnitLevel)
 									CAdd(FP,GetPUnitLevel,1)
 									CMovX(FP,VArrX(GetVArray(iv.PMission[1], 7),VArrI,VArrI4),1,Add)
-									DisplayPrint(GCP, {"\x13\x07¡º \x04°­È­¿¡ \x07¼º°øÇÏ¼Ì½À´Ï´Ù! \x07",PrevPUnitLevel,"°­ ¡æ ",GetPUnitLevel,"°­ \x07¡»"})
+									DisplayPrint(GCP, {"\x13\x07ã€ \x04ê°•í™”ì— \x07ì„±ê³µí•˜ì…¨ìŠµë‹ˆë‹¤! \x07",PrevPUnitLevel,"ê°• â†’ ",GetPUnitLevel,"ê°• \x07ã€"})
 									CIf(FP,{CV(G_PushBtnm,1),CV(GetPUnitLevel,10)})--
 									CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),128,SetTo,128)
 									CIfEnd()
-								CElseX()--½ÇÆĞ½Ã
+								CElseX()--ì‹¤íŒ¨ì‹œ
 								CMovX(FP,VArrX(GetVArray(iv.PMission[1], 7),VArrI,VArrI4),1,SetTo)
 								CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),8192,SetTo,8192)
 
-								--TriggerX(FP,{CV(G_PushBtnm,1,AtLeast)},{},{preserved})--¹é½Å »ç¿ë
+								--TriggerX(FP,{CV(G_PushBtnm,1,AtLeast)},{},{preserved})--ë°±ì‹  ì‚¬ìš©
 									CMov(FP,GPEper,_Mod(GerRandData2,_Mov(10000)),1)
-									if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+									if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 										ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 										ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
 										ColorCodeV3 = CreateVar2(FP,nil,nil,0x10)
@@ -955,46 +955,46 @@ function Install_CallTriggers()
 										CMov(FP,E1Range[1],1)
 										CMov(FP,E1Range[2],PUnitEPer)
 							
-										DisplayPrint(GCP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",ColorCodeV[2],GPEper})
-										DisplayPrint(GCP,{"\x1F°è»êµÈ È®·ü : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
+										DisplayPrint(GCP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",ColorCodeV[2],GPEper})
+										DisplayPrint(GCP,{"\x1Fê³„ì‚°ëœ í™•ë¥  : ",ColorCodeV4[2],E1Range[1]," \x04~ ",E1Range[2]})
 										
 									end
 									CIfX(FP,{CV(GPEper,1,AtLeast),CV(GPEper,PUnitEPer,AtMost)})
 										f_Read(FP,_Add(G_Btnptr,10),CPos)
 										Convert_CPosXY()
 										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,22,87,FP,{hallucinated = false}),GiveUnits(All, 22, FP, 64, P9),KillUnit(22, P9)})
-										DisplayPrint(GCP, {"\x13\x07¡º \x07°­È­\x04¿¡ \x08½ÇÆĞ\x04ÇßÁö¸¸ ´Ü°è°¡ ÇÏ¶ôÇÏÁö ¾Ê¾Ò½À´Ï´Ù! ",GetPUnitLevel,"°­ À¯Áö \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x07ê°•í™”\x04ì— \x08ì‹¤íŒ¨\x04í–ˆì§€ë§Œ ë‹¨ê³„ê°€ í•˜ë½í•˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤! ",GetPUnitLevel,"ê°• ìœ ì§€ \x07ã€"})
 									CElseX()
 									
 										CIfX(FP,{CV(G_PushBtnm,1,AtLeast)},{SubV(GetVAccData,1)})
 										f_Read(FP,_Add(G_Btnptr,10),CPos)
 										Convert_CPosXY()
 										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,94,87,FP,{hallucinated = false}),GiveUnits(All, 94, FP, 64, P9),KillUnit(94, P9)})
-											DisplayPrint(GCP, {"\x13\x07¡º \x07°­È­\x04¿¡ \x08½ÇÆĞ\x04ÇßÁö¸¸ \x10°­È­±â ¹é½Å\x04À» »ç¿ëÇÏ¿© ´Ü°è¸¦ À¯ÁöÇß½À´Ï´Ù! ",GetPUnitLevel,"°­ À¯Áö \x07¡»"})
-											DisplayPrint(GCP, {"\x13\x07¡º \x04³²Àº \x10°­È­±â ¹é½Å\x04 °¹¼ö : ",GetVAccData," °³ \x07¡»"})
+											DisplayPrint(GCP, {"\x13\x07ã€ \x07ê°•í™”\x04ì— \x08ì‹¤íŒ¨\x04í–ˆì§€ë§Œ \x10ê°•í™”ê¸° ë°±ì‹ \x04ì„ ì‚¬ìš©í•˜ì—¬ ë‹¨ê³„ë¥¼ ìœ ì§€í–ˆìŠµë‹ˆë‹¤! ",GetPUnitLevel,"ê°• ìœ ì§€ \x07ã€"})
+											DisplayPrint(GCP, {"\x13\x07ã€ \x04ë‚¨ì€ \x10ê°•í™”ê¸° ë°±ì‹ \x04 ê°¯ìˆ˜ : ",GetVAccData," ê°œ \x07ã€"})
 										CElseX()
 										f_Read(FP,_Add(G_Btnptr,10),CPos)
 										Convert_CPosXY()
 										Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(1,50,87,FP,{hallucinated = false}),GiveUnits(All, 50, FP, 64, P9),KillUnit(50, P9)})
 											CMov(FP,PrevPUnitLevel,GetPUnitLevel)
 											CSub(FP,GetPUnitLevel,1)
-											DisplayPrint(GCP, {"\x13\x07¡º \x04°­È­¿¡ \x08½ÇÆĞ\x04ÇÏ¿© ´Ü°è°¡ ÇÏ¶ôÇÏ¿´½À´Ï´Ù... \x08",PrevPUnitLevel,"°­ ¡æ ",GetPUnitLevel,"°­ \x07¡»"})
+											DisplayPrint(GCP, {"\x13\x07ã€ \x04ê°•í™”ì— \x08ì‹¤íŒ¨\x04í•˜ì—¬ ë‹¨ê³„ê°€ í•˜ë½í•˜ì˜€ìŠµë‹ˆë‹¤... \x08",PrevPUnitLevel,"ê°• â†’ ",GetPUnitLevel,"ê°• \x07ã€"})
 										CIfXEnd()
 									CIfXEnd()
 
 								CIfXEnd()
 								
 							CIfXEnd()
-						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17Å©·¹µ÷\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})--Å©·¹µ÷ÀÌ ºÎÁ·ÇÕ
+						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17í¬ë ˆë”§\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})--í¬ë ˆë”§ì´ ë¶€ì¡±í•©
 						CIfXEnd()
 					CIfXEnd()
-			--		DisplayPrint(GCP, {"ÀÏ¹İ°­È­"})
-					TriggerX(FP, {CV(GetClassData,262,AtLeast)}, {DisplayExtText(StrDesignX("\x03Âü°í \x04: \x07262´Ü\x04 ÀÌÈÄ \x1E°¢¼º\x04ÇÒ °æ¿ì¿¡´Â °­È­ÇÏÁö ¾Ê¾Æµµ \x07½Â±Ş °¡´É\x04ÇÕ´Ï´Ù!"), 4)}, {preserved})
+			--		DisplayPrint(GCP, {"ì¼ë°˜ê°•í™”"})
+					TriggerX(FP, {CV(GetClassData,262,AtLeast)}, {DisplayExtText(StrDesignX("\x03ì°¸ê³  \x04: \x07262ë‹¨\x04 ì´í›„ \x1Eê°ì„±\x04í•  ê²½ìš°ì—ëŠ” ê°•í™”í•˜ì§€ ì•Šì•„ë„ \x07ìŠ¹ê¸‰ ê°€ëŠ¥\x04í•©ë‹ˆë‹¤!"), 4)}, {preserved})
 				CIfEnd()
 
 					GetPETicket = CreateVar(FP)
 					CMovX(FP,GetPETicket,VArrX(GetVArray(iv.PETicket2[1], 7),VArrI,VArrI4))
-					CIf(FP,{CV(G_PushBtnm,2)}) -- È®Á¤°­È­
+					CIf(FP,{CV(G_PushBtnm,2)}) -- í™•ì •ê°•í™”
 					CIfX(FP,{CV(GetPETicket,1,AtLeast)})
 					CIfX(FP,{VRange(GetPUnitLevel, 7, 9)})
 					CSub(FP, GetPETicket, 1)
@@ -1003,15 +1003,15 @@ function Install_CallTriggers()
 					f_Read(FP,_Add(G_Btnptr,10),CPos)
 					Convert_CPosXY()
 					Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(9,82,136,FP,{hallucinated = false}),MoveUnit(All, 82, FP, 136, 87),GiveUnits(All, 82, FP, 64, P9),KillUnit(82, P9)})
-					DisplayPrint(GCP, {"\x13\x07¡º \x1FÈ®Á¤ °­È­±Ç\x04À» »ç¿ëÇÏ¿© °­È­ÇÏ¼Ì½À´Ï´Ù. \x07",PrevPUnitLevel,"°­ ¡æ ",GetPUnitLevel,"°­ \x07¡»"})
+					DisplayPrint(GCP, {"\x13\x07ã€ \x1Fí™•ì • ê°•í™”ê¶Œ\x04ì„ ì‚¬ìš©í•˜ì—¬ ê°•í™”í•˜ì…¨ìŠµë‹ˆë‹¤. \x07",PrevPUnitLevel,"ê°• â†’ ",GetPUnitLevel,"ê°• \x07ã€"})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),128,SetTo,128)
 					CElseIfX({CV(GetPUnitLevel,6,AtMost)})
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÀÌ ¾ÆÀÌÅÛÀº \x087°­ \x04ÀÌ»ó ¿¡¼­¸¸ »ç¿ë°¡´ÉÇÕ´Ï´Ù. \x07°­È­\x04¸¦ ´õ ÁøÇàÇØÁÖ¼¼¿ä."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ì´ ì•„ì´í…œì€ \x087ê°• \x04ì´ìƒ ì—ì„œë§Œ ì‚¬ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤. \x07ê°•í™”\x04ë¥¼ ë” ì§„í–‰í•´ì£¼ì„¸ìš”."), 4),SetCp(FP)})
 					CElseX()
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÀÌ¹Ì ÃÖ°í´Ü°è±îÁö °­È­µÇ¾ú½À´Ï´Ù. \x07½Â±Ş\x04À» ÁøÇàÇØÁÖ¼¼¿ä."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ì´ë¯¸ ìµœê³ ë‹¨ê³„ê¹Œì§€ ê°•í™”ë˜ì—ˆìŠµë‹ˆë‹¤. \x07ìŠ¹ê¸‰\x04ì„ ì§„í–‰í•´ì£¼ì„¸ìš”."), 4),SetCp(FP)})
 					CIfXEnd()
 					CElseX()
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: È®Á¤ °­È­±ÇÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í™•ì • ê°•í™”ê¶Œì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 					CIfXEnd()
 
 
@@ -1020,12 +1020,12 @@ function Install_CallTriggers()
 
 
 					local failflag = CreateCcode()
-					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,10,AtMost)},{SetCD(failflag,0)}) -- ½Â±Ş
-						CIfX(FP,{CV(GetClassData,261,AtMost),CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ½Â±Ş¿¡ ÇÊ¿äÇÑ °­È­ ´Ü°è°¡ ºÎÁ·ÇÕ´Ï´Ù. ÇÊ¿ä ´Ü°è : 10°­").."\n"..StrDesignX("\x03Âü°í \x04: \x07262´Ü\x04 ÀÌÈÄ \x1E°¢¼º\x04ÇÒ °æ¿ì¿¡´Â °­È­ÇÏÁö ¾Ê¾Æµµ \x07½Â±Ş °¡´É\x04ÇÕ´Ï´Ù!"), 4),SetCp(FP)})
+					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,10,AtMost)},{SetCD(failflag,0)}) -- ìŠ¹ê¸‰
+						CIfX(FP,{CV(GetClassData,261,AtMost),CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ìŠ¹ê¸‰ì— í•„ìš”í•œ ê°•í™” ë‹¨ê³„ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤. í•„ìš” ë‹¨ê³„ : 10ê°•").."\n"..StrDesignX("\x03ì°¸ê³  \x04: \x07262ë‹¨\x04 ì´í›„ \x1Eê°ì„±\x04í•  ê²½ìš°ì—ëŠ” ê°•í™”í•˜ì§€ ì•Šì•„ë„ \x07ìŠ¹ê¸‰ ê°€ëŠ¥\x04í•©ë‹ˆë‹¤!"), 4),SetCp(FP)})
 						CElseX()
 							GetUID = CreateVar(FP)
 							CMov(FP,GetUID,_SHRead(_Add(G_Btnptr,25)),nil,0xFF,1)
-							CIfX(FP,{TBring(GCP, AtLeast, 1, GetUID, _Add(GCP,160))})--½Â±ŞÇÏ±â
+							CIfX(FP,{TBring(GCP, AtLeast, 1, GetUID, _Add(GCP,160))})--ìŠ¹ê¸‰í•˜ê¸°
 								GetCooldownData,GetAtkData,GetEXPData,GetTotalEPerData,GetTotalEper4Data,GetDPSLVData,GetBrShData,GetLV3IncmData = CreateVars(8,FP)
 								CMovX(FP,GetCooldownData,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4))
 								CMovX(FP,GetBrShData,VArrX(GetVArray(iv.CS_BreakShield[1], 7),VArrI,VArrI4))
@@ -1039,19 +1039,19 @@ function Install_CallTriggers()
 
 								ClassUpErrJump = def_sIndex()
 								CMov(FP,0x6509B0,GCP)
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,CS_CooldownLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó °ø°İ¼Óµµ¸¦ ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,CS_AtkLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó °ø°İ·ÂÀ» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,CS_EXPLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó ÆÇ¸Å½Ã °æÇèÄ¡ È¹µæ·®À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,CS_TotalEPerLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó +1 °­È­È®·üÀ» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,CS_TotalEper4Limit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó \x08Æ¯¼ö \x04°­È­È®·üÀ» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÇØ´ç ¿É¼ÇÀº 1È¸¸¸ »ç¿ë °¡´ÉÇÕ´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,9),CV(GetBrShData,CS_BreakShieldLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó \x1FÆÄ±« ¹æÁö \x04È®·üÀ» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetLV3IncmData,CSX_LV3IncmLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ´õ ÀÌ»ó \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·® \x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetClassData,261,AtMost)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x07262´Ü ÀÌ»ó\x04¿¡¼­¸¸ »ç¿ë °¡´ÉÇÑ ¿É¼ÇÀÔ´Ï´Ù."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,CS_CooldownLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ ê³µê²©ì†ë„ë¥¼ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,CS_AtkLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ ê³µê²©ë ¥ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,CS_EXPLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ íŒë§¤ì‹œ ê²½í—˜ì¹˜ íšë“ëŸ‰ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,CS_TotalEPerLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ +1 ê°•í™”í™•ë¥ ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,CS_TotalEper4Limit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ \x08íŠ¹ìˆ˜ \x04ê°•í™”í™•ë¥ ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í•´ë‹¹ ì˜µì…˜ì€ 1íšŒë§Œ ì‚¬ìš© ê°€ëŠ¥í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,9),CV(GetBrShData,CS_BreakShieldLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ \x1FíŒŒê´´ ë°©ì§€ \x04í™•ë¥ ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetLV3IncmData,CSX_LV3IncmLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ë” ì´ìƒ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetClassData,261,AtMost)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x07262ë‹¨ ì´ìƒ\x04ì—ì„œë§Œ ì‚¬ìš© ê°€ëŠ¥í•œ ì˜µì…˜ì…ë‹ˆë‹¤."), 4),SetCp(FP)})
 								NJumpX(FP,ClassUpErrJump,{TTOR({_CV(GetAwakItemData,_Sub(GetClassData,_Mov(262)),AtMost),CV(GetAwakItemData,0x80000000,AtLeast)}),CV(G_PushBtnm,10)},{SetCD(failflag,1),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP)})
 								CIfX(FP,{TTNWar(GetCreditData,AtLeast,"1000000"),TTNWar(GetCreditData, AtMost, "0x7FFFFFFFFFFFFFFF")})
 									CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),16,SetTo,16)
-									CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ÀÚµ¿ÀúÀå
+									CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ìë™ì €ì¥
 									f_Read(FP,_Add(G_Btnptr,10),CPos)
 									Convert_CPosXY()
 									Simple_SetLocX(FP, 86, CPosX, CPosY, CPosX, CPosY,{CreateUnitWithProperties(9,82,136,FP,{hallucinated = false}),MoveUnit(All, 82, FP, 136, 87),GiveUnits(All, 82, FP, 64, P9),KillUnit(82, P9)})
@@ -1061,45 +1061,45 @@ function Install_CallTriggers()
 									CMov(FP,GetPUnitLevel,0)
 									CMov(FP,PrevClassLevel,GetClassData)
 									CAdd(FP,GetClassData,1)
-									DisplayPrint(GCP, {"\x13\x07¡º \x07ÃàÇÏÇÕ´Ï´Ù! \x04½Â±Ş¿¡ ¼º°øÇÏ¼Ì½À´Ï´Ù! \x07",PrevClassLevel,"´Ü ¡æ ",GetClassData,"´Ü \x07¡»"})
+									DisplayPrint(GCP, {"\x13\x07ã€ \x07ì¶•í•˜í•©ë‹ˆë‹¤! \x04ìŠ¹ê¸‰ì— ì„±ê³µí•˜ì…¨ìŠµë‹ˆë‹¤! \x07",PrevClassLevel,"ë‹¨ â†’ ",GetClassData,"ë‹¨ \x07ã€"})
 									CIf(FP,{CV(G_PushBtnm,3)},{AddV(GetCooldownData,1)})
 										CMov(FP,TempV,_rShift(_SHRead(ArrX(PUnitCoolArr,GetCooldownData)), 8))
-										DisplayPrint(GCP, {"\x13\x07¡º \x07°íÀ¯ À¯´Ö\x04ÀÇ °ø°İ¼Óµµ°¡ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ Cooldown : \x07",TempV," \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x07ê³ ìœ  ìœ ë‹›\x04ì˜ ê³µê²©ì†ë„ê°€ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ Cooldown : \x07",TempV," \x07ã€"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,4)},{AddV(GetAtkData,1)})
 										CMov(FP,TempV,_Mul(GetAtkData,6500),200)
-										DisplayPrint(GCP, {"\x13\x07¡º \x07°íÀ¯ À¯´Ö\x04ÀÇ °ø°İ·ÂÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x08Damage \x04: \x07",TempV," \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x07ê³ ìœ  ìœ ë‹›\x04ì˜ ê³µê²©ë ¥ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x08Damage \x04: \x07",TempV," \x07ã€"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,5)},{AddV(GetEXPData,1)})
 										CMov(FP,TempV,_Mul(GetEXPData,20))
-										DisplayPrint(GCP, {"\x13\x07¡º \x1CÆÇ¸Å½Ã °æÇèÄ¡ Áõ°¡·®\x04ÀÌ »ó½ÂÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x04: \x1C+ ",TempV,"% \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x1CíŒë§¤ì‹œ ê²½í—˜ì¹˜ ì¦ê°€ëŸ‰\x04ì´ ìƒìŠ¹í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x04: \x1C+ ",TempV,"% \x07ã€"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,6)},{AddV(GetTotalEPerData,1)})
 										CMov(FP,TempV,_Mul(GetTotalEPerData,250))
 										CMov(FP,GEVar,TempV)
 										CallTrigger(FP, Call_SetEPerStr)
-										DisplayPrint(GCP, {"\x13\x07¡º \x0F+1 \x07°­È­È®·ü\x04ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x0F+1 \x07ê°•í™”í™•ë¥ \x04ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x07ã€"})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,7)},{AddV(GetTotalEper4Data,1)})
 										CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 										CMov(FP,GEVar,TempV)
 										CallTrigger(FP, Call_SetEPerStr)
-										DisplayPrint(GCP, {"\x13\x07¡º \x08Æ¯¼ö \x07°­È­È®·ü\x04ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x08íŠ¹ìˆ˜ \x07ê°•í™”í™•ë¥ \x04ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07ã€"})
 									CIfEnd()
-									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ \x07°íÀ¯ À¯´Ö\x04À¸·Î \x0FLV.2 \x04»ç³ÉÅÍ¿¡ ÀÔÀåÇÒ ¼ö ÀÖ½À´Ï´Ù."))})
+									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04ì´ì œë¶€í„° \x07ê³ ìœ  ìœ ë‹›\x04ìœ¼ë¡œ \x0FLV.2 \x04ì‚¬ëƒ¥í„°ì— ì…ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤."))})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,9)},{AddV(GetBrShData,1)})
 										CMov(FP,TempV,_Mul(GetBrShData,100))
 										CMov(FP,GEVar,TempV)
 										CallTrigger(FP, Call_SetEPerStr)
-										DisplayPrint(GCP, {"\x13\x07¡º \x08Æ¯¼ö \x1FÆÄ±«¹æÁö \x04È®·üÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x08íŠ¹ìˆ˜ \x1FíŒŒê´´ë°©ì§€ \x04í™•ë¥ ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07ã€"})
 									CIfEnd()
 									
 									CIf(FP,{CV(G_PushBtnm,10)},{AddV(GetLV3IncmData,1),SubV(GetAwakItemData, _Sub(GetClassData,262))})
 										CMov(FP,TempV,_Mul(GetLV3IncmData,100))
 										CMov(FP,GEVar,TempV,1000)
 										CallTrigger(FP, Call_SetEPerStr)
-										DisplayPrint(GCP, {"\x13\x07¡º \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·®ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù. \x04Áõ°¡ ÈÄ \x04: \x07+ \x08",EVarArr2,".",EVarArr3," ¹è \x07¡»"})
+										DisplayPrint(GCP, {"\x13\x07ã€ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤. \x04ì¦ê°€ í›„ \x04: \x07+ \x08",EVarArr2,".",EVarArr3," ë°° \x07ã€"})
 									CIfEnd()
 
 									CMovX(FP,VArrX(GetVArray(iv.CS_Cooldown[1], 7),VArrI,VArrI4),GetCooldownData)
@@ -1112,15 +1112,15 @@ function Install_CallTriggers()
 									CMovX(FP,VArrX(GetVArray(iv.CSX_LV3Incm[1], 7),VArrI,VArrI4),GetLV3IncmData)
 
 
-								CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17Å©·¹µ÷\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+								CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17í¬ë ˆë”§\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 								CIfXEnd()
 								NJumpXEnd(FP,ClassUpErrJump)
 								CIf(FP,{CD(failflag)})
 									local Tempea = CreateVar(FP)
 									CMov(FP,Tempea,_Sub(GetClassData,_Mov(261)))
-									DisplayPrint(GCP, {"\x13\x07¡º \x08ERROR \x04: \x1E°¢¼ºÀÇ º¸¼®\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù. \x1EÇÊ¿ä °¢¼ºÀÇ º¸¼® : ",Tempea," \x04°³, \x1Eº¸À¯ °¢¼ºÀÇ º¸¼® : ",GetAwakItemData," \x04°³ \x07¡»"})
+									DisplayPrint(GCP, {"\x13\x07ã€ \x08ERROR \x04: \x1Eê°ì„±ì˜ ë³´ì„\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. \x1Eí•„ìš” ê°ì„±ì˜ ë³´ì„ : ",Tempea," \x04ê°œ, \x1Eë³´ìœ  ê°ì„±ì˜ ë³´ì„ : ",GetAwakItemData," \x04ê°œ \x07ã€"})
 								CIfEnd()
-							CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÇØ´ç ±â´ÉÀº ½Â±ŞÀå¿¡¼­ »ç¿ë°¡´ÉÇÕ´Ï´Ù."), 4),SetCp(FP)})
+							CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í•´ë‹¹ ê¸°ëŠ¥ì€ ìŠ¹ê¸‰ì¥ì—ì„œ ì‚¬ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 							CIfXEnd()
 						CIfXEnd()
 
@@ -1134,7 +1134,7 @@ function Install_CallTriggers()
 
 
 				
-			CElseIfX({TTNVar(G_PushBtnm,NotSame,11)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ·±ÃÄ¿¡ ¿¬°áµÇ¾îÀÖÁö ¾Ê¾Æ ±â´ÉÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù."), 4),SetCp(FP)})
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,11)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ëŸ°ì³ì— ì—°ê²°ë˜ì–´ìˆì§€ ì•Šì•„ ê¸°ëŠ¥ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
 			CIfXEnd()
 			
 			CIf(FP,{CV(G_PushBtnm,11)},{TSetMemory(0x6509B0, SetTo, GCP)})
@@ -1147,30 +1147,30 @@ function Install_CallTriggers()
 				CMovX(FP,GetDPSLVData,VArrX(GetVArray(iv.CS_DPSLV[1], 7),VArrI,VArrI4))
 				CMovX(FP,GetLV3IncmData,VArrX(GetVArray(iv.CSX_LV3Incm[1], 7),VArrI,VArrI4))
 				CMov(FP,TempV,_rShift(_SHRead(ArrX(PUnitCoolArr,GetCooldownData)), 8))
-				DisplayPrint(GCP, {"\x07¡º \x07°íÀ¯ À¯´Ö\x04ÀÇ °ø°İ¼Óµµ - Cooldown : \x07",TempV," \x04(Level : \x07",GetCooldownData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x07ê³ ìœ  ìœ ë‹›\x04ì˜ ê³µê²©ì†ë„ - Cooldown : \x07",TempV," \x04(Level : \x07",GetCooldownData,"\x04) \x07ã€"})
 				CMov(FP,TempV,_Mul(GetAtkData,6500),200)
-				DisplayPrint(GCP, {"\x07¡º \x07°íÀ¯ À¯´Ö\x04ÀÇ °ø°İ·Â - \x08Damage \x04: \x07",TempV," \x04(Level : \x07",GetAtkData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x07ê³ ìœ  ìœ ë‹›\x04ì˜ ê³µê²©ë ¥ - \x08Damage \x04: \x07",TempV," \x04(Level : \x07",GetAtkData,"\x04) \x07ã€"})
 				CMov(FP,TempV,_Mul(GetEXPData,20))
-				DisplayPrint(GCP, {"\x07¡º \x1CÆÇ¸Å½Ã °æÇèÄ¡ Áõ°¡·®\x04 : \x1C+ ",TempV,"% \x04(Level : \x07",GetEXPData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x1CíŒë§¤ì‹œ ê²½í—˜ì¹˜ ì¦ê°€ëŸ‰\x04 : \x1C+ ",TempV,"% \x04(Level : \x07",GetEXPData,"\x04) \x07ã€"})
 				CMov(FP,TempV,_Mul(GetTotalEPerData,250))
 				CMov(FP,GEVar,TempV)
 				CallTrigger(FP, Call_SetEPerStr)
-				DisplayPrint(GCP, {"\x07¡º \x0F+1 \x07°­È­ È®·ü \x04Áõ°¡·® \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetTotalEPerData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x0F+1 \x07ê°•í™” í™•ë¥  \x04ì¦ê°€ëŸ‰ \x04: \x0F+ ",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetTotalEPerData,"\x04) \x07ã€"})
 				CMov(FP,TempV,_Mul(GetTotalEper4Data,500))
 				CMov(FP,GEVar,TempV)
 				CallTrigger(FP, Call_SetEPerStr)
-				DisplayPrint(GCP, {"\x07¡º \x08Æ¯¼ö \x07°­È­ È®·ü\x04 Áõ°¡·® : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetTotalEper4Data,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x08íŠ¹ìˆ˜ \x07ê°•í™” í™•ë¥ \x04 ì¦ê°€ëŸ‰ : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetTotalEper4Data,"\x04) \x07ã€"})
 				CMov(FP,TempV,_Mul(GetBrShData,100))
 				CMov(FP,GEVar,TempV)
 				CallTrigger(FP, Call_SetEPerStr)
-				DisplayPrint(GCP, {"\x07¡º \x08Æ¯¼ö \x1FÆÄ±«¹æÁö \x04È®·ü Áõ°¡·® : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetBrShData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x08íŠ¹ìˆ˜ \x1FíŒŒê´´ë°©ì§€ \x04í™•ë¥  ì¦ê°€ëŸ‰ : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetBrShData,"\x04) \x07ã€"})
 				
-				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0ELV.1 »ç³ÉÅÍ \x04ÀÔÀå È¿°ú Àû¿ëÁß"), 4)},1)
-				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0FLV.2 »ç³ÉÅÍ \x04ÀÔÀå È¿°ú Àû¿ëÁß"), 4)},1)
+				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0ELV.1 ì‚¬ëƒ¥í„° \x04ì…ì¥ íš¨ê³¼ ì ìš©ì¤‘"), 4)},1)
+				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0FLV.2 ì‚¬ëƒ¥í„° \x04ì…ì¥ íš¨ê³¼ ì ìš©ì¤‘"), 4)},1)
 				CMov(FP,TempV,_Mul(GetLV3IncmData,100))
 				CMov(FP,GEVar,TempV,1000)
 				CallTrigger(FP, Call_SetEPerStr)
-				DisplayPrint(GCP, {"\x07¡º \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş Ãß°¡ Áõ°¡·® : \x07+ \x08",EVarArr2,".",EVarArr3," ¹è \x04(\x1E°¢¼º Level \x04: \x1F",GetLV3IncmData,"\x04) \x07¡»"})
+				DisplayPrint(GCP, {"\x07ã€ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ ì¶”ê°€ ì¦ê°€ëŸ‰ : \x07+ \x08",EVarArr2,".",EVarArr3," ë°° \x04(\x1Eê°ì„± Level \x04: \x1F",GetLV3IncmData,"\x04) \x07ã€"})
 				
 			CIfEnd()
 			
@@ -1179,8 +1179,8 @@ function Install_CallTriggers()
 				CMovX(FP,GetPBossLV,VArrX(GetVArray(iv.PBossLV[1], 7),VArrI,VArrI4))
 				local PUID = CreateVar(FP)
 				CMov(FP,PUID,_ReadF(_Add(G_Btnptr,25)),nil,0xFF,1)
-				CIfX(FP,{CV(GetPBossLV,4,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),TMoveUnit(1, PUID, GCP, 64, GCP+119),DisplayExtText(StrDesignX("\x04°íÀ¯ À¯´ÖÀ» \x0ELV.1 \x07º¸½º Á¸\x04À¸·Î ÀÌµ¿ÇÕ´Ï´Ù."), 4),SetCp(FP)})
-				CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÀÌ¹Ì \x07º¸½º\x04¸¦ ¸ğµÎ ¼ÒÅÁÇÏ¿´½À´Ï´Ù."), 4),SetCp(FP)})
+				CIfX(FP,{CV(GetPBossLV,4,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),TMoveUnit(1, PUID, GCP, 64, GCP+119),DisplayExtText(StrDesignX("\x04ê³ ìœ  ìœ ë‹›ì„ \x0ELV.1 \x07ë³´ìŠ¤ ì¡´\x04ìœ¼ë¡œ ì´ë™í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
+				CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ì´ë¯¸ \x07ë³´ìŠ¤\x04ë¥¼ ëª¨ë‘ ì†Œíƒ•í•˜ì˜€ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
 				CIfXEnd()
 
 			CIfEnd()
@@ -1206,14 +1206,14 @@ function Install_CallTriggers()
 	Call_BtnInit = SetCallForward()
 
 	local BtnFncArr = {
-		TestShop[1], -- À¯´Ö ÀÚµ¿±¸¸Å±â
-		SettingUnit1[1], -- 1~25°­À¯´Ö ÀÚµ¿°­È­ ¼³Á¤
-		SettingUnit2[1], -- 26~39À¯´Ö ÀÚµ¿°­È­ ¼³Á¤
-		SettingUnit3[1], -- 15~25°­À¯´Ö ÀÚµ¿ÆÇ¸Å ¼³Á¤
-		SettingUnit4[1], -- 26~39À¯´Ö ÀÚµ¿ÆÇ¸Å ¼³Á¤
-		ShopUnit[1], -- ½Ã¹Î
-		PUnitPtr[1], -- °íÀ¯À¯´Ö
-		TestShop2[1], -- À¯´Ö ÀÚµ¿±¸¸Å±â
+		TestShop[1], -- ìœ ë‹› ìë™êµ¬ë§¤ê¸°
+		SettingUnit1[1], -- 1~25ê°•ìœ ë‹› ìë™ê°•í™” ì„¤ì •
+		SettingUnit2[1], -- 26~39ìœ ë‹› ìë™ê°•í™” ì„¤ì •
+		SettingUnit3[1], -- 15~25ê°•ìœ ë‹› ìë™íŒë§¤ ì„¤ì •
+		SettingUnit4[1], -- 26~39ìœ ë‹› ìë™íŒë§¤ ì„¤ì •
+		ShopUnit[1], -- ì‹œë¯¼
+		PUnitPtr[1], -- ê³ ìœ ìœ ë‹›
+		TestShop2[1], -- ìœ ë‹› ìë™êµ¬ë§¤ê¸°
 	}
 	SetCall(FP)
 	for j,k in pairs(BtnFncArr) do
@@ -1272,10 +1272,10 @@ function Install_CallTriggers()
 	Call_GetLevelEXP = SetCallForward()
 	SetCall(FP)
 	
-	ConvertLArr(FP, LIndex, _Add(StartLV, 150), 8)--151 Æ÷Ä¿½º
+	ConvertLArr(FP, LIndex, _Add(StartLV, 150), 8)--151 í¬ì»¤ìŠ¤
 	f_LRead(FP, LArrX({EXPArr_dp},LIndex), TempW, nil, 1) -- start
 
-	ConvertLArr(FP, LIndex, _Add(EndLV, 150), 8)--151 Æ÷Ä¿½º
+	ConvertLArr(FP, LIndex, _Add(EndLV, 150), 8)--151 í¬ì»¤ìŠ¤
 	f_LRead(FP, LArrX({EXPArr_dp},LIndex), TempW2, nil, 1) -- start
 
 
@@ -1287,7 +1287,7 @@ function Install_CallTriggers()
 	SetCallEnd()
 
 	SCA_cp = CreateVar(FP)
-	function SCA_DataReset(cp,cond,Act) -- ½½·Ô ºÒ·¯¿À±â or ÀúÀåÀü µ¥ÀÌÅÍ ÃÊ±âÈ­¸¦ À§ÇÑ ÇÔ¼ö
+	function SCA_DataReset(cp,cond,Act) -- ìŠ¬ë¡¯ ë¶ˆëŸ¬ì˜¤ê¸° or ì €ì¥ì „ ë°ì´í„° ì´ˆê¸°í™”ë¥¼ ìœ„í•œ í•¨ìˆ˜
 		CallTriggerX(FP, Call_DataReset, cond, {SetV(SCA_cp,cp),Act})
 		
 	end
@@ -1298,7 +1298,7 @@ function Install_CallTriggers()
 	for j,k in pairs(SCA_DataArr) do
 		local Destptr = k[2]
 		local Player = SCA_cp
-		local Source = k[1][1]--1P±âÁØ
+		local Source = k[1][1]--1Pê¸°ì¤€
 	if Source[4]=="V" then
 		CDoActions(FP, {TSetMemory(_Add(Destptr,Pl), SetTo, 0)})
 	elseif Source[4]=="W" then
@@ -1401,38 +1401,38 @@ function Install_CallTriggers()
 			CElseIfX({CV(TempSID,Max,AtLeast)},{SetCD(ClickCD, 0)})
 			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,ErrTxt) ,{preserved})
 			CElseIfX({TTOR({CV(GetPStatData,Cost-1,AtMost),CV(GetPStatData,0x80000000,AtLeast)})},{SetCD(ClickCD, 0)})
-			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: Æ÷ÀÎÆ®°¡ ºÎÁ·ÇÕ´Ï´Ù.")) ,{preserved})
+			CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: í¬ì¸íŠ¸ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.")) ,{preserved})
 			CIfXEnd()
 		CIfEnd()
 	end
 	CIfX(FP,{CV(GetINumData,1)},{})
 	
 	
-	StatBuyFunc("1",iv.Stat_BossSTic,Cost_Stat_BossSTic,1,10,StrDesign("\x08ÆÄÆ¼ º¸½º \x1FLV.5 \x04Ã³Ä¡ º¸»ó \x19ÆÇ¸Å±Ç\x04ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x04Ã³Ä¡ º¸»ó \x19ÆÇ¸Å±Ç\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("2",iv.Stat_BossLVUP,Cost_Stat_BossLVUP,1,5,StrDesign("\x08ÆÄÆ¼ º¸½º \x1FLV.5 \x04Ã³Ä¡ º¸»ó \x1F·¹º§\x04ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x04Ã³Ä¡ º¸»ó \x1F·¹º§\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("3",iv.Stat_Upgrade,Cost_Stat_Upgrade,1,50,StrDesign("\x07À¯´Ö µ¥¹ÌÁö\x04°¡ \x0810% \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó  \x07À¯´Ö \x08µ¥¹ÌÁö\x04¸¦ ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("4",iv.Stat_TotalEPer,Cost_Stat_TotalEPer,100,10000,StrDesign("\x07+1°­ \x08°­È­ È®·ü\x04ÀÌ Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x07+1°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("5",iv.Stat_TotalEPer2,Cost_Stat_TotalEPer2,100,5000,StrDesign("\x07+2°­ °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x07+2°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("6",iv.Stat_TotalEPer3,Cost_Stat_TotalEPer3,100,3000,StrDesign("\x07+3°­ °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x10+3°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
+	StatBuyFunc("1",iv.Stat_BossSTic,Cost_Stat_BossSTic,1,10,StrDesign("\x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5 \x04ì²˜ì¹˜ ë³´ìƒ \x19íŒë§¤ê¶Œ\x04ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x04ì²˜ì¹˜ ë³´ìƒ \x19íŒë§¤ê¶Œ\x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("2",iv.Stat_BossLVUP,Cost_Stat_BossLVUP,1,5,StrDesign("\x08íŒŒí‹° ë³´ìŠ¤ \x1FLV.5 \x04ì²˜ì¹˜ ë³´ìƒ \x1Fë ˆë²¨\x04ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x04ì²˜ì¹˜ ë³´ìƒ \x1Fë ˆë²¨\x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("3",iv.Stat_Upgrade,Cost_Stat_Upgrade,1,50,StrDesign("\x07ìœ ë‹› ë°ë¯¸ì§€\x04ê°€ \x0810% \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ  \x07ìœ ë‹› \x08ë°ë¯¸ì§€\x04ë¥¼ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("4",iv.Stat_TotalEPer,Cost_Stat_TotalEPer,100,10000,StrDesign("\x07+1ê°• \x08ê°•í™” í™•ë¥ \x04ì´ ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x07+1ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("5",iv.Stat_TotalEPer2,Cost_Stat_TotalEPer2,100,5000,StrDesign("\x07+2ê°• ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x07+2ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("6",iv.Stat_TotalEPer3,Cost_Stat_TotalEPer3,100,3000,StrDesign("\x07+3ê°• ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x10+3ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
 
 
-	CElseIfX({CV(GetINumData,2)},{}) -- 2¹ø ½ºÅÈÆäÀÌÁö
+	CElseIfX({CV(GetINumData,2)},{}) -- 2ë²ˆ ìŠ¤íƒ¯í˜ì´ì§€
 
-	StatBuyFunc("1",iv.Stat_TotalEPer4,Cost_Stat_TotalEPer4,100,10000,StrDesign("\x08Æ¯¼ö °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x08Æ¯¼ö \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("2",iv.Stat_BreakShield,Cost_Stat_BreakShield,100,30000,StrDesign("\x08Æ¯¼ö \x1FÆÄ±« ¹æÁöÈ®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x1FÇÇ±« \x08¹æÁöÈ®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("3",iv.Stat_TotalEPerEx,Cost_Stat_TotalEPerEx,100,5000,StrDesign("\x07+1°­ \x08°­È­ È®·ü\x04ÀÌ \x0F0.1%p Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x07+1°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("4",iv.Stat_TotalEPerEx2,Cost_Stat_TotalEPerEx2,100,2000,StrDesign("\x07+2°­ °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x07+2°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("5",iv.Stat_TotalEPerEx3,Cost_Stat_TotalEPerEx3,100,1000,StrDesign("\x07+3°­ °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x10+3°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("6",iv.Stat_LV3Incm,Cost_Stat_LV3Incm,1,100,StrDesign("\x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·®ÀÌ \x071%\x04 Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x11LV.MAX \x1BÇã¼ö¾Æºñ\x04 µ· ¼ö±Ş·®\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
+	StatBuyFunc("1",iv.Stat_TotalEPer4,Cost_Stat_TotalEPer4,100,10000,StrDesign("\x08íŠ¹ìˆ˜ ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x08íŠ¹ìˆ˜ \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("2",iv.Stat_BreakShield,Cost_Stat_BreakShield,100,30000,StrDesign("\x08íŠ¹ìˆ˜ \x1FíŒŒê´´ ë°©ì§€í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x1Fí”¼ê´´ \x08ë°©ì§€í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("3",iv.Stat_TotalEPerEx,Cost_Stat_TotalEPerEx,100,5000,StrDesign("\x07+1ê°• \x08ê°•í™” í™•ë¥ \x04ì´ \x0F0.1%p ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x07+1ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("4",iv.Stat_TotalEPerEx2,Cost_Stat_TotalEPerEx2,100,2000,StrDesign("\x07+2ê°• ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x07+2ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("5",iv.Stat_TotalEPerEx3,Cost_Stat_TotalEPerEx3,100,1000,StrDesign("\x07+3ê°• ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x10+3ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("6",iv.Stat_LV3Incm,Cost_Stat_LV3Incm,1,100,StrDesign("\x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰ì´ \x071%\x04 ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x11LV.MAX \x1Bí—ˆìˆ˜ì•„ë¹„\x04 ëˆ ìˆ˜ê¸‰ëŸ‰\x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
 
-	CElseIfX({CV(GetINumData,3)},{}) -- 3¹ø ½ºÅÈÆäÀÌÁö
+	CElseIfX({CV(GetINumData,3)},{}) -- 3ë²ˆ ìŠ¤íƒ¯í˜ì´ì§€
 
-	StatBuyFunc("1",iv.Stat_TotalEPer4X,Cost_Stat_TotalEPer4X,100,5000,StrDesign("\x08Æ¯¼ö °­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x08Æ¯¼ö \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("2",iv.Stat_BreakShield2,Cost_Stat_BreakShield2,100,10000,StrDesign("\x08Æ¯¼ö \x1FÆÄ±« ¹æÁöÈ®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x1FÇÇ±« \x08¹æÁöÈ®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("3",iv.Stat_XEPer44,Cost_Stat_XEPer44,100,5000,StrDesign("\x1F44°­ \x08°­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x1F44°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("4",iv.Stat_XEPer45,Cost_Stat_XEPer45,100,5000,StrDesign("\x1C45°­ \x08°­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x1C45°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("5",iv.Stat_XEPer46,Cost_Stat_XEPer46,100,5000,StrDesign("\x1E46°­ \x08°­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x1E46°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
-	StatBuyFunc("6",iv.Stat_XEPer47,Cost_Stat_XEPer47,100,5000,StrDesign("\x0247°­ \x08°­È­È®·ü\x04ÀÌ \x0F0.1%p \x04Áõ°¡ÇÏ¿´½À´Ï´Ù."),StrDesign("\x08ERROR \x04: ´õ ÀÌ»ó \x0247°­ \x08°­È­È®·ü\x04À» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù."))
+	StatBuyFunc("1",iv.Stat_TotalEPer4X,Cost_Stat_TotalEPer4X,100,5000,StrDesign("\x08íŠ¹ìˆ˜ ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x08íŠ¹ìˆ˜ \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("2",iv.Stat_BreakShield2,Cost_Stat_BreakShield2,100,10000,StrDesign("\x08íŠ¹ìˆ˜ \x1FíŒŒê´´ ë°©ì§€í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x1Fí”¼ê´´ \x08ë°©ì§€í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("3",iv.Stat_XEPer44,Cost_Stat_XEPer44,100,5000,StrDesign("\x1F44ê°• \x08ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x1F44ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("4",iv.Stat_XEPer45,Cost_Stat_XEPer45,100,5000,StrDesign("\x1C45ê°• \x08ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x1C45ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("5",iv.Stat_XEPer46,Cost_Stat_XEPer46,100,5000,StrDesign("\x1E46ê°• \x08ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x1E46ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
+	StatBuyFunc("6",iv.Stat_XEPer47,Cost_Stat_XEPer47,100,5000,StrDesign("\x0247ê°• \x08ê°•í™”í™•ë¥ \x04ì´ \x0F0.1%p \x04ì¦ê°€í•˜ì˜€ìŠµë‹ˆë‹¤."),StrDesign("\x08ERROR \x04: ë” ì´ìƒ \x0247ê°• \x08ê°•í™”í™•ë¥ \x04ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."))
 	CIfXEnd()
 
 	CMovX(FP,VArrX(GetVArray(iv.StatP[1], 7), VArrI, VArrI4),GetPStatData,nil,nil,nil,1)
@@ -1614,10 +1614,10 @@ function Install_CallTriggers()
 
 
 	--[[
-		32°³ 10È¸ 320 / 10 = 32 >> 250 À¸·Î º¯°æ
-		322°³ 7È¸ 2254 / 10 = 225 >> 550 À¸·Î º¯°æ
-		3222°³ 4È¸ 12888 / 10 = 1288
-		32222°³ 1È¸ 32222 / 10 = 3222
+		32ê°œ 10íšŒ 320 / 10 = 32 >> 250 ìœ¼ë¡œ ë³€ê²½
+		322ê°œ 7íšŒ 2254 / 10 = 225 >> 550 ìœ¼ë¡œ ë³€ê²½
+		3222ê°œ 4íšŒ 12888 / 10 = 1288
+		32222ê°œ 1íšŒ 32222 / 10 = 3222
 		250
 		550
 		1288
@@ -1640,63 +1640,63 @@ function Install_CallTriggers()
 		
 
 	]]
-	Ga_45 = {--±â´ëÄ¡ 2°³
-		{"\x17Å©·¹µ÷",3222222222,2,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",1,50,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",10000,1500,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x171000°æ¿ø ¼öÇ¥",10,1000,iv.Money2},
-		{"\x17Å©·¹µ÷",2000000,5000,iv.Credit,iv.GCreditLoc},
+	Ga_45 = {--ê¸°ëŒ€ì¹˜ 2ê°œ
+		{"\x17í¬ë ˆë”§",3222222222,2,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",1,50,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",10000,1500,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x171000ê²½ì› ìˆ˜í‘œ",10,1000,iv.Money2},
+		{"\x17í¬ë ˆë”§",2000000,5000,iv.Credit,iv.GCreditLoc},
 	}
 
-	Ga_46 = {--±â´ëÄ¡ 7°³
-		{"\x17Å©·¹µ÷",3222222222,2,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",1,75,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x171000°æ¿ø ¼öÇ¥",40,1000,iv.Money2},
-		{"\x17Å©·¹µ÷",3000000,5000,iv.Credit,iv.GCreditLoc},
+	Ga_46 = {--ê¸°ëŒ€ì¹˜ 7ê°œ
+		{"\x17í¬ë ˆë”§",3222222222,2,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",1,75,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",40000,550,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x171000ê²½ì› ìˆ˜í‘œ",40,1000,iv.Money2},
+		{"\x17í¬ë ˆë”§",3000000,5000,iv.Credit,iv.GCreditLoc},
 	}
 
-	Ga_47 = {--±â´ëÄ¡ 20°³
-		{"\x17Å©·¹µ÷",3222222222,2,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",1,160,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",70000,470,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x171000°æ¿ø ¼öÇ¥",70,2000,iv.Money2},
-		{"\x17Å©·¹µ÷",4000000,5000,iv.Credit,iv.GCreditLoc},
+	Ga_47 = {--ê¸°ëŒ€ì¹˜ 20ê°œ
+		{"\x17í¬ë ˆë”§",3222222222,2,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",1,160,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",70000,470,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x171000ê²½ì› ìˆ˜í‘œ",70,2000,iv.Money2},
+		{"\x17í¬ë ˆë”§",4000000,5000,iv.Credit,iv.GCreditLoc},
 	}
 
-	Ga_48 = {--±â´ëÄ¡ 50°³
-		{"\x17Å©·¹µ÷",3222222222,2,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",1,500,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",100000,990,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x171000°æ¿ø ¼öÇ¥",100,3000,iv.Money2},
-		{"\x17Å©·¹µ÷",5000000,5000,iv.Credit,iv.GCreditLoc},
+	Ga_48 = {--ê¸°ëŒ€ì¹˜ 50ê°œ
+		{"\x17í¬ë ˆë”§",3222222222,2,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",1,500,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",100000,990,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x171000ê²½ì› ìˆ˜í‘œ",100,3000,iv.Money2},
+		{"\x17í¬ë ˆë”§",5000000,5000,iv.Credit,iv.GCreditLoc},
 	}
 	
-	Ga_49 = {-- ÆÇ¸Å±Ç 10¸¸°³ ÇÊ¿ä = Ãµ¸¸Å©·¹µ÷49
-		{"\x17Å©·¹µ÷",3222222222,22,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",7,1000,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",1000000,1500,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x02¹«»ö Á¶°¢",100000,15000,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17Å©·¹µ÷",10000000,30000,iv.Credit,iv.GCreditLoc},
+	Ga_49 = {-- íŒë§¤ê¶Œ 10ë§Œê°œ í•„ìš” = ì²œë§Œí¬ë ˆë”§49
+		{"\x17í¬ë ˆë”§",3222222222,22,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",7,1000,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",1000000,1500,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",100000,15000,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x17í¬ë ˆë”§",10000000,30000,iv.Credit,iv.GCreditLoc},
 	}
 	
-	Ga_50 = {--ÆÇ¸Å±Ç ¹é¸¸°³ ÇÊ¿ä = 1¾ïÅ©·¹µ÷ 
-		{"\x17Å©·¹µ÷","32222222222",50,iv.Credit,iv.GCreditLoc},
-		{"\x1E°¢¼ºÀÇ º¸¼®",75,5000,iv.AwakItem,iv.GAwakItemLoc},
-		{"\x02¹«»ö Á¶°¢",4000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
-		{"\x17Å©·¹µ÷",100000000,35000,iv.Credit,iv.GCreditLoc},
+	Ga_50 = {--íŒë§¤ê¶Œ ë°±ë§Œê°œ í•„ìš” = 1ì–µí¬ë ˆë”§ 
+		{"\x17í¬ë ˆë”§","32222222222",50,iv.Credit,iv.GCreditLoc},
+		{"\x1Eê°ì„±ì˜ ë³´ì„",75,5000,iv.AwakItem,iv.GAwakItemLoc},
+		{"\x02ë¬´ìƒ‰ ì¡°ê°",4000000,15000,iv.B_PFfragItem,iv.GFfragLoc},
+		{"\x17í¬ë ˆë”§",100000000,35000,iv.Credit,iv.GCreditLoc},
 	}
 
 	GaArr = {Ga_45,Ga_46,Ga_47,Ga_48,Ga_49,Ga_50}
 
 	pifrag = {1,4,7,10,322,3222}
 	pifrag2 = {
-		"\x1C45°­",
-		"\x1E46°­",
-		"\x0247°­",
-		"\x1B48°­",
-		"\x0649°­",
-		"\x0750°­",
+		"\x1C45ê°•",
+		"\x1E46ê°•",
+		"\x0247ê°•",
+		"\x1B48ê°•",
+		"\x0649ê°•",
+		"\x0750ê°•",
 	
 	}
 
@@ -1714,15 +1714,15 @@ function Install_CallTriggers()
 		GetGPer = CreateVar(FP)
 		CMov(FP,GetGPer,GachaTest)
 	else
-		GetGPer = f_CRandNum(100000,1) -- ·£´ı ³­¼ö »ı¼º. GetEPer »ç¿ë Á¾·á±îÁö Àç»ı¼º ±İÁö
+		GetGPer = f_CRandNum(100000,1) -- ëœë¤ ë‚œìˆ˜ ìƒì„±. GetEPer ì‚¬ìš© ì¢…ë£Œê¹Œì§€ ì¬ìƒì„± ê¸ˆì§€
 	end
-	if Limit == 1 then -- Å×½ºÆ®¿ë °á°ú Ãâ·Â
+	if Limit == 1 then -- í…ŒìŠ¤íŠ¸ìš© ê²°ê³¼ ì¶œë ¥
 		CIf(FP,{KeyPress("F12", "Down")})
 			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
 			for i = 45, 48 do
-				TriggerX(FP, CV(GaLv,i), {DisplayExtText("\x08"..i.."°­ À¯´Ö »Ì±â ½Ãµµ", 4)},{preserved})
+				TriggerX(FP, CV(GaLv,i), {DisplayExtText("\x08"..i.."ê°• ìœ ë‹› ë½‘ê¸° ì‹œë„", 4)},{preserved})
 			end
-			DisplayPrint(ECP,{"\x04Ãâ·ÂµÈ ³­¼ö : ",GetGPer})
+			DisplayPrint(ECP,{"\x04ì¶œë ¥ëœ ë‚œìˆ˜ : ",GetGPer})
 		CIfEnd()
 	end
 CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
@@ -1735,22 +1735,22 @@ for i = 45, 50 do
 		CIf(FP,{VRange(GetGPer,TotalGPer,k[3]-1+TotalGPer)})
 		CallTrigger(FP, Call_Print13CP)
 		if i <= 48 then
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04í™•ë¥ ì— ë‹¹ì²¨ë˜ì–´ "..k[1].." "..Convert_Number(k[2]).." \x04ê°œë¥¼ íšë“í•˜ì˜€ìŠµë‹ˆë‹¤."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.HotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04í™•ë¥ ì— ë‹¹ì²¨ë˜ì–´ "..k[1].." "..Convert_Number(k[2]).." \x04ê°œë¥¼ íšë“í•˜ì˜€ìŠµë‹ˆë‹¤.\x07(í•«íƒ€ì„ 2ë°°)"))}, 1)
 		else
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù."))}, 1)
-			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù.\x07(ÇÖÅ¸ÀÓ 2¹è)"))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,0)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04í™•ë¥ ì— ë‹¹ì²¨ë˜ì–´ "..k[1].." "..Convert_Number(k[2]).." \x04ê°œë¥¼ íšë“í•˜ì˜€ìŠµë‹ˆë‹¤."))}, 1)
+			CTrigger(FP, {TMemory(0x512684,Exactly,ECP),CD(iv.SpHotTimeBonus,1)}, {print_utf8(12,0,StrDesign((k[3]/1000).." % \x04í™•ë¥ ì— ë‹¹ì²¨ë˜ì–´ "..k[1].." "..Convert_Number(k[2]).." \x04ê°œë¥¼ íšë“í•˜ì˜€ìŠµë‹ˆë‹¤.\x07(í•«íƒ€ì„ 2ë°°)"))}, 1)
 			
 		end
 		
 		
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04´çÃ· ³­¼ö Á¶°Ç ¹üÀ§ : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
+				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04ë‹¹ì²¨ ë‚œìˆ˜ ì¡°ê±´ ë²”ìœ„ : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
 			CIfEnd()
 		end
-		if j == 1 then--32¾ï, 322¾ï ¹«Á¶°Ç Ç¥Ãâ
-			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07¡º ",PName(ECP)," \x04´Ô²²¼­ "..pifrag2[i-44].." \x04À¯´Ö \x17ÆÇ¸Å »Ì±â\x04¿¡¼­ \x07"..(k[3]/1000).." % \x04È®·ü¿¡ ´çÃ·µÇ¾î "..k[1].." "..Convert_Number(k[2]).." \x04°³¸¦ È¹µæÇÏ¿´½À´Ï´Ù! ÃàÇÏµå¸³´Ï´Ù! \x07¡»\n\n\x13\x04"..string.rep("=",50)})
+		if j == 1 then--32ì–µ, 322ì–µ ë¬´ì¡°ê±´ í‘œì¶œ
+			DisplayPrint(AllPlayers, {"\x13\x04"..string.rep("=",50).."\n\n\x13\x07ã€ ",PName(ECP)," \x04ë‹˜ê»˜ì„œ "..pifrag2[i-44].." \x04ìœ ë‹› \x17íŒë§¤ ë½‘ê¸°\x04ì—ì„œ \x07"..(k[3]/1000).." % \x04í™•ë¥ ì— ë‹¹ì²¨ë˜ì–´ "..k[1].." "..Convert_Number(k[2]).." \x04ê°œë¥¼ íšë“í•˜ì˜€ìŠµë‹ˆë‹¤! ì¶•í•˜ë“œë¦½ë‹ˆë‹¤! \x07ã€\n\n\x13\x04"..string.rep("=",50)})
 			CallTrigger(FP, Call_CPSound2, {SetV(SoundOp,2),SetV(CPMode,0)})
 		end
 		if j == 2 then
@@ -1858,17 +1858,17 @@ for i = 45, 50 do
 		
 	end
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
-	--CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04È®·ü·Î \x08²Î\x04¿¡ °É¸®¼Ì½À´Ï´Ù...."),4)}, 1)
+	--CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04í™•ë¥ ë¡œ \x08ê½\x04ì— ê±¸ë¦¬ì…¨ìŠµë‹ˆë‹¤...."),4)}, 1)
 	if Limit == 1 then
 		CIf(FP,{VRange(GetGPer,TotalGPer,100000),KeyPress("F12", "Down")})
-			CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04´çÃ· ³­¼ö Á¶°Ç ¹üÀ§ : "..TotalGPer.." ~ 100000"), 4)})
+			CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04ë‹¹ì²¨ ë‚œìˆ˜ ì¡°ê±´ ë²”ìœ„ : "..TotalGPer.." ~ 100000"), 4)})
 		CIfEnd()
 	end
-	errt = errt..(TotalGPer).."  100000\n" -- ²ÎÀÏ°æ¿ì
+	errt = errt..(TotalGPer).."  100000\n" -- ê½ì¼ê²½ìš°
 	if i==50 then
 		--error(errt)
 	end
-	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04À¯´Ö ÆÇ¸Å º¸»ó : \x02¹«»ö Á¶°¢ \x07"..pifrag[i-44].." °³"), 4)})
+	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04ìœ ë‹› íŒë§¤ ë³´ìƒ : \x02ë¬´ìƒ‰ ì¡°ê° \x07"..pifrag[i-44].." ê°œ"), 4)})
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
 	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -1924,12 +1924,12 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	Call_DailyPrint = SetCallForward()
 	SetCall(FP)
 	DV = CreateVar(FP)
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç±îÁö ½ÃÁğ 2 Ãâ¼® ÀÌº¥Æ® Ãâ¼®ÀÏ¼ö : \x07",DV,"ÀÏ \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ê¹Œì§€ ì‹œì¦Œ 2 ì¶œì„ ì´ë²¤íŠ¸ ì¶œì„ì¼ìˆ˜ : \x07",DV,"ì¼ \x07ã€"})
 	SetCallEnd()
 	Call_DailyPrint2 = SetCallForward()
 	SetCall(FP)
 	DV2 = CreateVar(FP)
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç±îÁö ½ÃÁğ 3 Ãâ¼® ÀÌº¥Æ® Ãâ¼®ÀÏ¼ö : \x07",DV2,"ÀÏ \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ê¹Œì§€ ì‹œì¦Œ 3 ì¶œì„ ì´ë²¤íŠ¸ ì¶œì„ì¼ìˆ˜ : \x07",DV2,"ì¼ \x07ã€"})
 	SetCallEnd()
 
 	CurBossReward = CreateVar(FP)
@@ -1947,8 +1947,8 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIf(FP,{CV(VATmp_Stat_BossLVUP,1,AtLeast)})
 
 
-	CIfX(FP,{CV(VATmp_PLevel,LevelLimit,AtLeast)})--¸¸·¾ÀÏ°æ¿ì Áö±ŞX
-	DisplayPrint(GCP, {"\x13\x07¡º \x08º¸½º \x04Ã³Ä¡½Ã \x1F·¹º§¾÷ ´É·ÂÄ¡ ",VATmp_Stat_BossLVUP,"¾÷\x04 À¸·Î ¾òÀº °æÇèÄ¡ : \x1C0 \x07¡»"})
+	CIfX(FP,{CV(VATmp_PLevel,LevelLimit,AtLeast)})--ë§Œë ™ì¼ê²½ìš° ì§€ê¸‰X
+	DisplayPrint(GCP, {"\x13\x07ã€ \x08ë³´ìŠ¤ \x04ì²˜ì¹˜ì‹œ \x1Fë ˆë²¨ì—… ëŠ¥ë ¥ì¹˜ ",VATmp_Stat_BossLVUP,"ì—…\x04 ìœ¼ë¡œ ì–»ì€ ê²½í—˜ì¹˜ : \x1C0 \x07ã€"})
 	CElseX()
 
 	f_LMov(FP, TempWX, "0", nil, nil, 1)
@@ -1963,7 +1963,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CIfEnd()
 
 	f_LMovX(FP, WArrX(GetWArray(iv.PEXP[1], 7), WArrI, WArrI4), TempWX, Add)
-	DisplayPrint(GCP, {"\x13\x07¡º \x08º¸½º \x04Ã³Ä¡½Ã \x1F·¹º§¾÷ ´É·ÂÄ¡ ",VATmp_Stat_BossLVUP,"¾÷\x04 À¸·Î ¾òÀº °æÇèÄ¡ : \x1C",TempWX," \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x08ë³´ìŠ¤ \x04ì²˜ì¹˜ì‹œ \x1Fë ˆë²¨ì—… ëŠ¥ë ¥ì¹˜ ",VATmp_Stat_BossLVUP,"ì—…\x04 ìœ¼ë¡œ ì–»ì€ ê²½í—˜ì¹˜ : \x1C",TempWX," \x07ã€"})
 	CIfXEnd()
 
 
@@ -1976,7 +1976,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMovX(FP, VArrX(GetVArray(iv.B_PTicket[1], 7), VArrI, VArrI4), _Mul(VATmp_Stat_BossSTic,_Mul(CurBossReward,_Mov(100))), Add)
 
 	f_Mul(FP,TempSTicV,VATmp_Stat_BossSTic,_Mul(CurBossReward,_Mov(100)))
-	DisplayPrint(GCP, {"\x13\x07¡º \x08º¸½º \x04Ã³Ä¡½Ã \x19À¯´Ö ÆÇ¸Å±Ç ",VATmp_Stat_BossSTic,"¾÷\x04 ½ºÅÈÀ¸·Î ¾òÀº À¯´Ö ÆÇ¸Å±Ç : \x19",TempSTicV," °³ \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x08ë³´ìŠ¤ \x04ì²˜ì¹˜ì‹œ \x19ìœ ë‹› íŒë§¤ê¶Œ ",VATmp_Stat_BossSTic,"ì—…\x04 ìŠ¤íƒ¯ìœ¼ë¡œ ì–»ì€ ìœ ë‹› íŒë§¤ê¶Œ : \x19",TempSTicV," ê°œ \x07ã€"})
 	CIfEnd()
 	
 	--if TestStart == 1 then
@@ -2023,7 +2023,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMov(FP,CLocR,CPosX,32+64+64)
 	Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 	CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-	CTrigger(FP,{},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x08±¸ÀÔ Æ¼ÄÏ\x04ÀÌ ºÎÁ·ÇÏ¿© À¯·á ÀÚÆÇ±âÀÇ ÀÛµ¿ÀÌ ÁßÁöµÇ¾ú½À´Ï´Ù."), 4)},{preserved})
+	CTrigger(FP,{},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x08êµ¬ì… í‹°ì¼“\x04ì´ ë¶€ì¡±í•˜ì—¬ ìœ ë£Œ ìíŒê¸°ì˜ ì‘ë™ì´ ì¤‘ì§€ë˜ì—ˆìŠµë‹ˆë‹¤."), 4)},{preserved})
 	if Limit == 1 then
 		
 		DisplayPrint(GCP, {"\x13\x04GetFAcc : ",GetFAcc,"   GetFAcc2 : ",GetFAcc2})
@@ -2085,7 +2085,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CIfX(FP,{CV(XEper,1,AtLeast)})
 			CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
 			CallTrigger(FP, Call_Enchant2)
-			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: È®·üÀÌ ºÎÁ·ÇÏ¿© °­È­ÇÒ ¼ö ¾ø½À´Ï´Ù..."), 4),SetCp(FP)})
+			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í™•ë¥ ì´ ë¶€ì¡±í•˜ì—¬ ê°•í™”í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤..."), 4),SetCp(FP)})
 			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
 			CIfXEnd()
 
@@ -2101,13 +2101,13 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 
 			CIf(FP,{VRange(CI, 43, 47)})
 			CiSub(FP,XEper,iv.XEPerM)
-			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 			CIfEnd()
 			
 			CIfX(FP,{CV(XEper,1,AtLeast)})
 				CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
 				CallTrigger(FP, Call_Enchant2)
-			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: È®·üÀÌ ºÎÁ·ÇÏ¿© °­È­ÇÒ ¼ö ¾ø½À´Ï´Ù..."), 4),SetCp(FP)})
+			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í™•ë¥ ì´ ë¶€ì¡±í•˜ì—¬ ê°•í™”í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤..."), 4),SetCp(FP)})
 			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
 			CIfXEnd()
 
@@ -2133,9 +2133,9 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 		UnitReadX(FP,GCP,UID,_Add(GCP,73),ECW)
 		TriggerX(FP, CV(ECW,255,AtLeast), SetV(ECW,255), {preserved})
 		CIfX(FP,{CV(EXP,1,AtLeast)})
-			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÀÌ¹Ì ¸¸·¾À» ´Ş¼ºÇÏ¿© ÆÇ¸ÅÇÒ ¼ö ¾ø½À´Ï´Ù..."), 4),SetCp(FP)})
+			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ì´ë¯¸ ë§Œë ™ì„ ë‹¬ì„±í•˜ì—¬ íŒë§¤í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤..."), 4),SetCp(FP)})
 			CElseX()
-				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--ÆÇ¸Å±ÇÀÌÇÊ¿ä¾ø¾î¿ä
+				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--íŒë§¤ê¶Œì´í•„ìš”ì—†ì–´ìš”
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
 					if HotTimeTest == 1 then
 						f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXP,0}, {_Mul(ECW, HotTimeMul),0}))
@@ -2152,8 +2152,8 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					CIf(FP, {CV(CI,14)})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
 					CIfEnd()
-				CElseX()--ÆÇ¸Å±ÇÀÌÇÊ¿äÇà
-					CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19À¯´Ö ÆÇ¸Å±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù... \x07L Å°\x04·Î º¸À¯°¹¼ö¸¦ È®ÀÎÇØÁÖ¼¼¿ä."), 4),SetCp(FP)})
+				CElseX()--íŒë§¤ê¶Œì´í•„ìš”í–‰
+					CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤... \x07L í‚¤\x04ë¡œ ë³´ìœ ê°¯ìˆ˜ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”."), 4),SetCp(FP)})
 					CElseX({TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
 					f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -2175,17 +2175,17 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 		CElseIfX(VRange(CI,44, 49))
 		GaCostW = CreateWar(FP)
 		GaCostW2 = CreateWar(FP)
-		CIfX(FP,{VRange(CI,44, 47)}) -- 45~48°­ ÆÇ¸Å±Ç ¸¸°³¼³Á¤
+		CIfX(FP,{VRange(CI,44, 47)}) -- 45~48ê°• íŒë§¤ê¶Œ ë§Œê°œì„¤ì •
 			f_LMov(FP,GaCostW,"10000")
 			f_LMov(FP,GaCostW2,"9999")
-		CElseIfX({CV(CI,48)}) -- 49°­ ÆÇ¸Å±Ç 10¸¸°³
+		CElseIfX({CV(CI,48)}) -- 49ê°• íŒë§¤ê¶Œ 10ë§Œê°œ
 			f_LMov(FP,GaCostW,"100000")
 			f_LMov(FP,GaCostW2,"99999")
-		CElseIfX({CV(CI,49)}) -- 50°­ ÆÇ¸Å±Ç 100¸¸°³
+		CElseIfX({CV(CI,49)}) -- 50ê°• íŒë§¤ê¶Œ 100ë§Œê°œ
 			f_LMov(FP,GaCostW,"1000000")
 			f_LMov(FP,GaCostW2,"999999")
 		CIfXEnd()
-			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19À¯´Ö ÆÇ¸Å±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù... \x07L Å°\x04·Î º¸À¯°¹¼ö¸¦ È®ÀÎÇØÁÖ¼¼¿ä."), 4),SetCp(FP)})
+			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤... \x07L í‚¤\x04ë¡œ ë³´ìœ ê°¯ìˆ˜ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”."), 4),SetCp(FP)})
 			CElseX({})
 			local TempWC = CreateWar()
 			local TempWC2 = CreateWar()
@@ -2229,7 +2229,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 				CallTrigger(FP, Call_Gacha)
 				CWhileEnd()
 			CIfXEnd()
-		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: ÇØ´ç À¯´ÖÀº ÆÇ¸ÅÇÒ ¼ö ¾ø½À´Ï´Ù..."), 4),SetCp(FP)})
+		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: í•´ë‹¹ ìœ ë‹›ì€ íŒë§¤í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤..."), 4),SetCp(FP)})
 		CIfXEnd()
 	CIfEnd()
 	CAdd(FP,CJ,7)
@@ -2253,7 +2253,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	FirstRewardLimData = CreateVar(FP)
 	FirstRewardLimData2 = CreateVar(FP)
 	SetCall(FP)
-	f_LMov(FP,GetCreditData,"0",nil,nil,1)--Å©·¹µ÷ º¹»ç¹ö±× ¹æÁö¿ë ÃÊ±âÈ­...?
+	f_LMov(FP,GetCreditData,"0",nil,nil,1)--í¬ë ˆë”§ ë³µì‚¬ë²„ê·¸ ë°©ì§€ìš© ì´ˆê¸°í™”...?
 	CMovX(FP,GetVAccData,VArrX(GetVArray(iv.VaccItem[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	CMovX(FP,GetAwakItemData,VArrX(GetVArray(iv.AwakItem[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 	f_LMovX(FP, LMulOP, WArrX(GetWArray(iv.MulOp[1], 7), WArrI, WArrI4),nil,nil,nil,1)
@@ -2273,9 +2273,9 @@ CIfX(FP,{TTNWar(GetCreditData, AtLeast,_LMul(LMulOP, "100")),TTNWar(GetCreditDat
 	CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),4,SetTo,4)
 	local TempW = CreateWar(FP)
 	f_LMul(FP,TempW,LMulOP, "100")
-	DisplayPrint(GCP, {"\x13\x07¡º \x19À¯´Ö ÆÇ¸Å±Ç\x04À» ",LMulOP,"°³ ±¸ÀÔÇÏ¿´½À´Ï´Ù. ",TempW," \x17Å©·¹µ÷ \x08»ç¿ë \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetSellTicket," °³ÀÇ \x19À¯´Ö ÆÇ¸Å±Ç º¸À¯Áß \x07¡»\n"..StrDesignX("\x03Âü°í \x04: \x19À¯´Ö ÆÇ¸Å±Ç\x04Àº SCA·Î ÀúÀåÇÒ ¼ö ÀÖ½À´Ï´Ù!")})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17Å©·¹µ÷\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì„ ",LMulOP,"ê°œ êµ¬ì…í•˜ì˜€ìŠµë‹ˆë‹¤. ",TempW," \x17í¬ë ˆë”§ \x08ì‚¬ìš© \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetSellTicket," ê°œì˜ \x19ìœ ë‹› íŒë§¤ê¶Œ ë³´ìœ ì¤‘ \x07ã€\n"..StrDesignX("\x03ì°¸ê³  \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì€ SCAë¡œ ì €ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤!")})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17í¬ë ˆë”§\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2291,10 +2291,10 @@ CIfX(FP,{TTNWar(GetSellTicket,AtLeast,LMulOP),TTNWar(GetSellTicket,AtMost,"0x7FF
 
 	local TempW = CreateWar(FP)
 	f_LMul(FP,TempW,LMulOP, "75")
-	DisplayPrint(GCP, {"\x13\x07¡º \x19À¯´Ö ÆÇ¸Å±Ç\x04À» ",LMulOP,"°³ ÆÇ¸ÅÇÏ¿´½À´Ï´Ù. ",TempW," \x17Å©·¹µ÷ \x07¹İÈ¯ \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetSellTicket," °³ÀÇ \x19À¯´Ö ÆÇ¸Å±Ç º¸À¯Áß \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì„ ",LMulOP,"ê°œ íŒë§¤í•˜ì˜€ìŠµë‹ˆë‹¤. ",TempW," \x17í¬ë ˆë”§ \x07ë°˜í™˜ \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetSellTicket," ê°œì˜ \x19ìœ ë‹› íŒë§¤ê¶Œ ë³´ìœ ì¤‘ \x07ã€"})
 	
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x19À¯´Ö ÆÇ¸Å±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x19ìœ ë‹› íŒë§¤ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2308,10 +2308,10 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),TTNWar(GetCreditData, AtLeast,_LMu
 	f_LSub(FP, GetCreditData, GetCreditData, _LMul(LMulOP, "100000"))
 	local TempW = CreateWar(FP)
 	f_LMul(FP,TempW,LMulOP, "100000")
-	DisplayPrint(GCP, {"\x13\x07¡º \x10°­È­±â ¹é½Å\x04À» ",LMulOP,"°³ ±¸ÀÔÇÏ¿´½À´Ï´Ù. ",TempW," \x17Å©·¹µ÷ \x08»ç¿ë \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetVAccData," °³ÀÇ \x10°­È­±â ¹é½Å º¸À¯Áß \x07¡»\n"..StrDesignX("\x03Âü°í \x04: \x10°­È­±â ¹é½Å\x04Àº SCA·Î ÀúÀåÇÒ ¼ö ÀÖ½À´Ï´Ù!")})
-CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850¾ï\x04 ´ÜÀ§ ÀÌ»óÀ» »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17Å©·¹µ÷\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x10ê°•í™”ê¸° ë°±ì‹ \x04ì„ ",LMulOP,"ê°œ êµ¬ì…í•˜ì˜€ìŠµë‹ˆë‹¤. ",TempW," \x17í¬ë ˆë”§ \x08ì‚¬ìš© \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetVAccData," ê°œì˜ \x10ê°•í™”ê¸° ë°±ì‹  ë³´ìœ ì¤‘ \x07ã€\n"..StrDesignX("\x03ì°¸ê³  \x04: \x10ê°•í™”ê¸° ë°±ì‹ \x04ì€ SCAë¡œ ì €ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤!")})
+CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850ì–µ\x04 ë‹¨ìœ„ ì´ìƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17í¬ë ˆë”§\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2328,10 +2328,10 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetVAccData,MulOP,AtLeast),CV(G
 	end
 	local TempW = CreateWar(FP)
 	f_LMul(FP, TempW, LMulOP, "100000")
-	DisplayPrint(GCP, {"\x13\x07¡º \x10°­È­±â ¹é½Å\x04À» ",LMulOP,"°³ ÆÇ¸ÅÇÏ¿´½À´Ï´Ù. ",TempW," \x17Å©·¹µ÷ \x07¹İÈ¯ \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetVAccData," °³ÀÇ \x10°­È­±â ¹é½Å º¸À¯Áß \x07¡»"})
-CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850¾ï\x04 ´ÜÀ§ ÀÌ»óÀ» »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x10°­È­±â ¹é½Å\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x10ê°•í™”ê¸° ë°±ì‹ \x04ì„ ",LMulOP,"ê°œ íŒë§¤í•˜ì˜€ìŠµë‹ˆë‹¤. ",TempW," \x17í¬ë ˆë”§ \x07ë°˜í™˜ \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetVAccData," ê°œì˜ \x10ê°•í™”ê¸° ë°±ì‹  ë³´ìœ ì¤‘ \x07ã€"})
+CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850ì–µ\x04 ë‹¨ìœ„ ì´ìƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x10ê°•í™”ê¸° ë°±ì‹ \x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2344,10 +2344,10 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetOldTicket,MulOP,AtLeast),CV(
 	CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),2048,SetTo,2048)
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,_Mul(MulOP,_Mov(25)))
-	DisplayPrint(GCP, {"\x13\x07¡º \x02±¸ È®Á¤ °­È­±Ç\x04À» ",LMulOP,"°³ »ç¿ëÇÏ¿© ",TempV," \x02¹«»ö Á¶°¢\x04À¸·Î \x07º¯È¯ \x04ÇÏ¿´½À´Ï´Ù. \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetOldTicket," °³ÀÇ \x1FÈ®Á¤ °­È­±Ç º¸À¯Áß \x07¡»"})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850¾ï\x04 ´ÜÀ§ ÀÌ»óÀ» »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02±¸ È®Á¤ °­È­±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x02êµ¬ í™•ì • ê°•í™”ê¶Œ\x04ì„ ",LMulOP,"ê°œ ì‚¬ìš©í•˜ì—¬ ",TempV," \x02ë¬´ìƒ‰ ì¡°ê°\x04ìœ¼ë¡œ \x07ë³€í™˜ \x04í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetOldTicket," ê°œì˜ \x1Fí™•ì • ê°•í™”ê¶Œ ë³´ìœ ì¤‘ \x07ã€"})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850ì–µ\x04 ë‹¨ìœ„ ì´ìƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02êµ¬ í™•ì • ê°•í™”ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 CIf(FP,{TBring(GCP,AtLeast,1,15,169)},{TMoveUnit(1, 15, GCP, 169, 168)})
@@ -2357,10 +2357,10 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetOldTicket,MulOP,AtLeast),CV(
 	CAdd(FP,GetPETicket,MulOP)
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,MulOP)
-	DisplayPrint(GCP, {"\x13\x07¡º \x02±¸ È®Á¤ °­È­±Ç\x04À» ",LMulOP,"°³ »ç¿ëÇÏ¿© ",TempV," \x1F½Å È®Á¤ °­È­±Ç\x04À¸·Î \x07º¯È¯ \x04ÇÏ¿´½À´Ï´Ù. \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetOldTicket," °³ÀÇ \x02±¸ È®Á¤ °­È­±Ç \x04º¸À¯Áß \x07¡»"})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850¾ï\x04 ´ÜÀ§ ÀÌ»óÀ» »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02±¸ È®Á¤ °­È­±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x02êµ¬ í™•ì • ê°•í™”ê¶Œ\x04ì„ ",LMulOP,"ê°œ ì‚¬ìš©í•˜ì—¬ ",TempV," \x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ìœ¼ë¡œ \x07ë³€í™˜ \x04í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetOldTicket," ê°œì˜ \x02êµ¬ í™•ì • ê°•í™”ê¶Œ \x04ë³´ìœ ì¤‘ \x07ã€"})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850ì–µ\x04 ë‹¨ìœ„ ì´ìƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02êµ¬ í™•ì • ê°•í™”ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 CIf(FP,{TBring(GCP,AtLeast,1,15,177)},{TMoveUnit(1, 15, GCP, 177, 168)})
@@ -2371,10 +2371,10 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetPETicket,MulOP,AtLeast),CV(G
 	f_LAdd(FP, GetBuyTicket,GetBuyTicket, _LMul(LMulOP, "50000"))
 	local TempV = CreateVar(FP)
 	CMov(FP,TempV,MulOP)
-	DisplayPrint(GCP, {"\x13\x07¡º \x1F½Å È®Á¤ °­È­±Ç\x04À» ",LMulOP,"°³ »ç¿ëÇÏ¿© ",TempV," \x08±¸ÀÔ Æ¼ÄÏ\x04À¸·Î \x07º¯È¯ \x04ÇÏ¿´½À´Ï´Ù. \x07¡»"})
-	DisplayPrint(GCP, {"\x13\x07¡º \x04ÇöÀç ",GetBuyTicket," °³ÀÇ \x08±¸ÀÔ Æ¼ÄÏ \x04º¸À¯Áß \x07¡»\n"..StrDesignX("\x08ÁÖÀÇ \x04: \x08±¸ÀÔ Æ¼ÄÏ\x04Àº SCA·Î ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù!")})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850¾ï\x04 ´ÜÀ§ ÀÌ»óÀ» »ç¿ëÇÒ ¼ö ¾ø´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F½Å È®Á¤ °­È­±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì„ ",LMulOP,"ê°œ ì‚¬ìš©í•˜ì—¬ ",TempV," \x08êµ¬ì… í‹°ì¼“\x04ìœ¼ë¡œ \x07ë³€í™˜ \x04í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04í˜„ì¬ ",GetBuyTicket," ê°œì˜ \x08êµ¬ì… í‹°ì¼“ \x04ë³´ìœ ì¤‘ \x07ã€\n"..StrDesignX("\x08ì£¼ì˜ \x04: \x08êµ¬ì… í‹°ì¼“\x04ì€ SCAë¡œ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!")})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850ì–µ\x04 ë‹¨ìœ„ ì´ìƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì•„ì´í…œì…ë‹ˆë‹¤."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2386,14 +2386,14 @@ CMovX(FP,FirstRewardLimData,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI
 CMovX(FP,FirstRewardLimData2,VArrX(GetVArray(iv.FirstRewardLim2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 
 CIfX(FP,{CV(GetFirstRewardOp,0)})
-	CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F½Å È®Á¤ °­È­±Ç\x04À» 25°³ »ç¿ëÇÏ¿© \x1C45°­\x04~\x1B48°­ \x07ÃÖÃÊ ´Ş¼º º¸»ó \x08È½¼öÁ¦ÇÑ\x04ÀÌ ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù \x07¡»", 4)})
-	CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: ÀÌ¹Ì ¸ğµç ÃÖÃÊ´Ş¼º º¸»ó \x08È½¼öÁ¦ÇÑ\x04ÀÌ ²Ë Ã¡½À´Ï´Ù."), 4),SetCp(FP)})
-	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F½Å È®Á¤ °­È­±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì„ 25ê°œ ì‚¬ìš©í•˜ì—¬ \x1C45ê°•\x04~\x1B48ê°• \x07ìµœì´ˆ ë‹¬ì„± ë³´ìƒ \x08íšŸìˆ˜ì œí•œ\x04ì´ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤ \x07ã€", 4)})
+	CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: ì´ë¯¸ ëª¨ë“  ìµœì´ˆë‹¬ì„± ë³´ìƒ \x08íšŸìˆ˜ì œí•œ\x04ì´ ê½‰ ì°¼ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 	CIfXEnd()
 CElseX()
-	CIfX(FP,{CV(FirstRewardLimData2,1,AtLeast),CV(GetPETicket,500,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData2,0),SubV(GetPETicket, 500),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F½Å È®Á¤ °­È­±Ç\x04À» 500°³ »ç¿ëÇÏ¿© \x0649°­\x04~\x0750°­ \x07ÃÖÃÊ ´Ş¼º º¸»ó \x08È½¼öÁ¦ÇÑ\x04ÀÌ ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù \x07¡»", 4)})
-	CElseIfX({CV(FirstRewardLimData2,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: ÀÌ¹Ì ¸ğµç ÃÖÃÊ´Ş¼º º¸»ó \x08È½¼öÁ¦ÇÑ\x04ÀÌ ²Ë Ã¡½À´Ï´Ù."), 4),SetCp(FP)})
-	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F½Å È®Á¤ °­È­±Ç\x04ÀÌ ºÎÁ·ÇÕ´Ï´Ù."), 4),SetCp(FP)})
+	CIfX(FP,{CV(FirstRewardLimData2,1,AtLeast),CV(GetPETicket,500,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData2,0),SubV(GetPETicket, 500),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì„ 500ê°œ ì‚¬ìš©í•˜ì—¬ \x0649ê°•\x04~\x0750ê°• \x07ìµœì´ˆ ë‹¬ì„± ë³´ìƒ \x08íšŸìˆ˜ì œí•œ\x04ì´ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤ \x07ã€", 4)})
+	CElseIfX({CV(FirstRewardLimData2,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: ì´ë¯¸ ëª¨ë“  ìµœì´ˆë‹¬ì„± ë³´ìƒ \x08íšŸìˆ˜ì œí•œ\x04ì´ ê½‰ ì°¼ìŠµë‹ˆë‹¤."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1Fì‹  í™•ì • ê°•í™”ê¶Œ\x04ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."), 4),SetCp(FP)})
 	CIfXEnd()
 CIfXEnd()
 
@@ -2412,7 +2412,7 @@ f_LMovX(FP,WArrX(GetWArray(iv.Credit[1], 7), WArrI, WArrI4),GetCreditData,SetTo,
 
 
 
-CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ÀÚµ¿ÀúÀå
+CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--ìë™ì €ì¥
 	SetCallEnd()
 
 	GetCreateUnit = CreateVar(FP)
@@ -2425,14 +2425,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 
 	--CIf(FP,{CV(GetCreateUnit,1000,AtLeast)},{SetV(GetCreateUnit,1000)})
 	--CallTrigger(FP, Call_Print13CP)
-	--CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: ³»ºÎ °è»ê µ¿½Ã ½ÃÇà¼ö°¡ ³Ê¹« ¸¹¾Æ \x061000È¸·Î Á¦ÇÑ\x04ÇÕ´Ï´Ù.")) ,{preserved})
+	--CTrigger(FP, {TMemory(0x512684,Exactly,GCP)},print_utf8(12,0,StrDesign("\x08ERROR \x04: ë‚´ë¶€ ê³„ì‚° ë™ì‹œ ì‹œí–‰ìˆ˜ê°€ ë„ˆë¬´ ë§ì•„ \x061000íšŒë¡œ ì œí•œ\x04í•©ë‹ˆë‹¤.")) ,{preserved})
 	--CIfEnd()
 
 
 	CMov(FP,ECP,GCP)
 	CMov(FP,ELevelB,CIV)
 	CMov(FP,ECW,GetCreateUnit)
-	NIfX(FP,{TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})--³»ºÎ°è»ê ON, ÀÚµ¿ÆÇ¸Å OFF, ÀÚµ¿°­È­ ON
+	NIfX(FP,{TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,CJ)), Exactly, 1)})--ë‚´ë¶€ê³„ì‚° ON, ìë™íŒë§¤ OFF, ìë™ê°•í™” ON
 		NIfX(FP,{CV(CIV,38,AtMost)})
 
 			CallTrigger(FP, Call_Enchant)
@@ -2451,21 +2451,21 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 			CIfXEnd()
 			CIf(FP,{VRange(CIV, 43, 47)})
 			CiSub(FP,XEper,iv.XEPerM)
-			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+			TriggerX(FP,CV(XEper,0x80000000,AtLeast),{SetV(XEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 			CIfEnd()
 			NJumpX(FP, AutoEnchJump, CV(XEper,0))
 			CallTrigger(FP, Call_Enchant2)
 
 		NIfXEnd()
-	NElseIfX({TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 1)})--³»ºÎ°è»ê ON, ÀÚµ¿ÆÇ¸Å ON
+	NElseIfX({TDeathsX(GCP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,CJ)), Exactly, 1)})--ë‚´ë¶€ê³„ì‚° ON, ìë™íŒë§¤ ON
 		CMovX(FP,GetLevel,VArrX(GetVArray(iv.PLevel[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 		f_LMovX(FP, GetSellTicket, WArrX(GetWArray(iv.SellTicket[1], 7), WArrI, WArrI4),nil,nil,nil,1)
 
-		NJumpX(FP, AutoEnchJump, {CV(EXPV,1,AtLeast),CV(GetLevel,LevelLimit,AtLeast)}) -- °æÄ¡ÀÖ´Â¸÷ÀÎµ¥ ¸¸·¾ÀÏ°æ¿ì
+		NJumpX(FP, AutoEnchJump, {CV(EXPV,1,AtLeast),CV(GetLevel,LevelLimit,AtLeast)}) -- ê²½ì¹˜ìˆëŠ”ëª¹ì¸ë° ë§Œë ™ì¼ê²½ìš°
 
 		
 		NIfX(FP,{CV(EXPV,1,AtLeast)})
-			NIfX(FP, {VRange(CIV,14,24)},{})--ÆÇ¸Å±ÇÀÌÇÊ¿ä¾ø¾î¿ä
+			NIfX(FP, {VRange(CIV,14,24)},{})--íŒë§¤ê¶Œì´í•„ìš”ì—†ì–´ìš”
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
 				if HotTimeTest == 1 then
 					f_LAdd(FP, TempEXPW,TempEXPW, _LMul({EXPV,0}, {_Mul(ECW, HotTimeMul),0}))
@@ -2482,9 +2482,9 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 				CIf(FP, {CV(CIV,14)})
 				CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
 				CIfEnd()
-			NElseX()--ÆÇ¸Å±ÇÀÌÇÊ¿äÇà
+			NElseX()--íŒë§¤ê¶Œì´í•„ìš”í–‰
 
-			NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --ÆÇ¸Å±Ç¿À¸µ
+			NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --íŒë§¤ê¶Œì˜¤ë§
 			
 				f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
 				CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -2504,17 +2504,17 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 		NElseIfX(VRange(CIV,44, 49))
 		GaCostW = CreateWar(FP)
 		GaCostW2 = CreateWar(FP)
-		CIfX(FP,{VRange(CIV,44, 47)}) -- 45~48°­ ÆÇ¸Å±Ç ¸¸°³¼³Á¤
+		CIfX(FP,{VRange(CIV,44, 47)}) -- 45~48ê°• íŒë§¤ê¶Œ ë§Œê°œì„¤ì •
 			f_LMov(FP,GaCostW,"10000")
 			f_LMov(FP,GaCostW2,"9999")
-		CElseIfX({CV(CIV,48)}) -- 49°­ ÆÇ¸Å±Ç 10¸¸°³
+		CElseIfX({CV(CIV,48)}) -- 49ê°• íŒë§¤ê¶Œ 10ë§Œê°œ
 			f_LMov(FP,GaCostW,"100000")
 			f_LMov(FP,GaCostW2,"99999")
-		CElseIfX({CV(CIV,49)}) -- 50°­ ÆÇ¸Å±Ç 100¸¸°³
+		CElseIfX({CV(CIV,49)}) -- 50ê°• íŒë§¤ê¶Œ 100ë§Œê°œ
 			f_LMov(FP,GaCostW,"1000000")
 			f_LMov(FP,GaCostW2,"999999")
 		CIfXEnd()
-		NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --ÆÇ¸Å±Ç¿À¸µ
+		NJumpX(FP, AutoEnchJump, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}) --íŒë§¤ê¶Œì˜¤ë§
 
 			local TempWC = CreateWar()
 			local TempWC2 = CreateWar()
@@ -2662,15 +2662,15 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	local TotalVar = CreateVar(FP)
 	CMov(FP,TotalVar,0)
 	for i = 0, 14 do
-		CAdd(FP,TotalVar,_Sub(VATmp_PLevel,150000+(i*10000))) --VATmp_PLevel = ·¹º§
-		--TotalVar ¼öÄ¡ 1´ç 20¸¸
+		CAdd(FP,TotalVar,_Sub(VATmp_PLevel,150000+(i*10000))) --VATmp_PLevel = ë ˆë²¨
+		--TotalVar ìˆ˜ì¹˜ 1ë‹¹ 20ë§Œ
 	end
 
 
 
 
 	f_LMov(FP,TempTotalDPS,_LDiv(_LAdd(_LMul({TotalVar,0},"200000"), PBossSetDPSB), "10"))
-	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),_LMul(TempTotalDPS, {GetData_FMinMax,0}),SetTo,nil,nil,1)--TotalPBossDPS = Ä¶¼öÀÖ´Â Å©·¹µ÷ ÃÑ·®
+	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),_LMul(TempTotalDPS, {GetData_FMinMax,0}),SetTo,nil,nil,1)--TotalPBossDPS = ìº˜ìˆ˜ìˆëŠ” í¬ë ˆë”§ ì´ëŸ‰
 	CElseX()
 	f_LMovX(FP,WArrX(GetWArray(iv.TotalPBossDPS[1], 7), WArrI, WArrI4),PBossSetDPSB,SetTo,nil,nil,1)
 	CIfXEnd()
@@ -2685,14 +2685,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint(GCP, {"\x13\x07¡º \x04´ç½ÅÀÇ \x1F44°­ \x07Å¸ÀÓ¾îÅÃ \x10½Ã°£\x04Àº \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ \x04ÀÔ´Ï´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04ë‹¹ì‹ ì˜ \x1F44ê°• \x07íƒ€ì„ì–´íƒ \x10ì‹œê°„\x04ì€ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ \x04ì…ë‹ˆë‹¤. \x07ã€"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint(GCP, {"\x13\x07¡º \x1F44°­ \x07Å¸ÀÓ¾îÅÃ \x10Á¡¼ö\x04°¡ °»½ÅµÇ¾ú½À´Ï´Ù! ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î³ÑÀ¸¼Ì³×¿ä! ÃàÇÏµå¸³´Ï´Ù! \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x1F44ê°• \x07íƒ€ì„ì–´íƒ \x10ì ìˆ˜\x04ê°€ ê°±ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤! ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ë„˜ìœ¼ì…¨ë„¤ìš”! ì¶•í•˜ë“œë¦½ë‹ˆë‹¤! \x07ã€"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint(GCP, {"\x13\x07¡º ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î ³ÑÁö´Â ¸øÇß³×¿ä... ´ÙÀ½ÆÇ¿£ ´õ Èû³»º¾½Ã´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ ë„˜ì§€ëŠ” ëª»í–ˆë„¤ìš”... ë‹¤ìŒíŒì—” ë” í˜ë‚´ë´…ì‹œë‹¤. \x07ã€"})
 	CIfXEnd()
 
 	SetCallEnd()
@@ -2703,14 +2703,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore48[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint(GCP, {"\x13\x07¡º \x04´ç½ÅÀÇ \x1B48°­ \x07Å¸ÀÓ¾îÅÃ \x10Á¡¼ö\x04´Â \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ \x04ÀÔ´Ï´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04ë‹¹ì‹ ì˜ \x1B48ê°• \x07íƒ€ì„ì–´íƒ \x10ì ìˆ˜\x04ëŠ” \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ \x04ì…ë‹ˆë‹¤. \x07ã€"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint(GCP, {"\x13\x07¡º \x1B48°­ \x07Å¸ÀÓ¾îÅÃ \x10Á¡¼ö\x04°¡ °»½ÅµÇ¾ú½À´Ï´Ù! ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î³ÑÀ¸¼Ì³×¿ä! ÃàÇÏµå¸³´Ï´Ù! \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x1B48ê°• \x07íƒ€ì„ì–´íƒ \x10ì ìˆ˜\x04ê°€ ê°±ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤! ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ë„˜ìœ¼ì…¨ë„¤ìš”! ì¶•í•˜ë“œë¦½ë‹ˆë‹¤! \x07ã€"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore48[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint(GCP, {"\x13\x07¡º ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î ³ÑÁö´Â ¸øÇß³×¿ä... ´ÙÀ½ÆÇ¿£ ´õ Èû³»º¾½Ã´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ ë„˜ì§€ëŠ” ëª»í–ˆë„¤ìš”... ë‹¤ìŒíŒì—” ë” í˜ë‚´ë´…ì‹œë‹¤. \x07ã€"})
 	CIfXEnd()
 	SetCallEnd()
 
@@ -2720,14 +2720,14 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	CMovX(FP,PrevTimeScore,VArrX(GetVArray(iv.TimeAttackScore50[1], 7), VArrI, VArrI4),nil,nil,nil,1)
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),CurTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
-	DisplayPrint(GCP, {"\x13\x07¡º \x04´ç½ÅÀÇ \x0750°­ \x07Å¸ÀÓ¾îÅÃ \x10Á¡¼ö\x04´Â \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ \x04ÀÔ´Ï´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x04ë‹¹ì‹ ì˜ \x0750ê°• \x07íƒ€ì„ì–´íƒ \x10ì ìˆ˜\x04ëŠ” \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ \x04ì…ë‹ˆë‹¤. \x07ã€"})
 	CMov(FP,CTimeV,_Sub(_Mov(1000000),PrevTimeScore))
 	CallTrigger(FP,Call_ConvertTime)
 	CIfX(FP,{CV(PrevTimeScore,CurTimeScore,AtMost)},{})
-	DisplayPrint(GCP, {"\x13\x07¡º \x0750°­ \x07Å¸ÀÓ¾îÅÃ \x10Á¡¼ö\x04°¡ °»½ÅµÇ¾ú½À´Ï´Ù! ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î³ÑÀ¸¼Ì³×¿ä! ÃàÇÏµå¸³´Ï´Ù! \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ \x0750ê°• \x07íƒ€ì„ì–´íƒ \x10ì ìˆ˜\x04ê°€ ê°±ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤! ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ë„˜ìœ¼ì…¨ë„¤ìš”! ì¶•í•˜ë“œë¦½ë‹ˆë‹¤! \x07ã€"})
 	CMovX(FP,VArrX(GetVArray(iv.TimeAttackScore50[1], 7), VArrI, VArrI4),CurTimeScore,nil,nil,nil,1)
 	CElseX()
-	DisplayPrint(GCP, {"\x13\x07¡º ±âÁ¸ \x07",CTimeDD,"ÀÏ ",CTimeHH,"½Ã°£ ",CTimeMM,"ºĞ ",CTimeSS,"ÃÊ\x04¸¦ ¶Ù¾î ³ÑÁö´Â ¸øÇß³×¿ä... ´ÙÀ½ÆÇ¿£ ´õ Èû³»º¾½Ã´Ù. \x07¡»"})
+	DisplayPrint(GCP, {"\x13\x07ã€ ê¸°ì¡´ \x07",CTimeDD,"ì¼ ",CTimeHH,"ì‹œê°„ ",CTimeMM,"ë¶„ ",CTimeSS,"ì´ˆ\x04ë¥¼ ë›°ì–´ ë„˜ì§€ëŠ” ëª»í–ˆë„¤ìš”... ë‹¤ìŒíŒì—” ë” í˜ë‚´ë´…ì‹œë‹¤. \x07ã€"})
 	CIfXEnd()
 	SetCallEnd()
 
@@ -2735,18 +2735,18 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	SetCall(FP)
 	CMov(FP,PlayerV,_Mul(GCP,_Mov(18)))
 	
-	SCA_DataSaveG(PlayerV, iv.Money2,SCA.Money2) -- ¼öÇ¥
-	SCA_DataSaveG(PlayerV, iv.CurPlayTime,SCA.CurPlayTime) -- ÇöÀç°×½Ã°£
-	SCA_DataSaveG2(PlayerV, iv.S45Loc, SCA.FXPer44)--45ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.S46Loc, SCA.FXPer45)--46ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.S47Loc, SCA.FXPer46)--47ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.S48Loc, SCA.FXPer48)--48ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.S49Loc, SCA.FXEPer)--49ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.S50Loc, SCA.FMEPer)--50ÆÇ¸ÅÈ½¼ö
-	SCA_DataSaveG2(PlayerV, iv.GAwakItemLoc, SCA.AwakItem)--´©Àû°¢º¸ÆÇ¸ÅÈ¹µæ·®
-	SCA_DataSaveG2(PlayerV, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--´©ÀûÁ¶°¢ÆÇ¸ÅÈ¹µæ·®
-	SCA_DataSaveG2(PlayerV, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--´©ÀûÅ©·¹µ÷ÆÇ¸ÅÈ¹µæ·® 64ºñÆ®
-	SCA_DataSaveG2(PlayerV, iv.EX_XI_ClearT, SCA.TimeAttackScore)--¿¢XI Å¬Å½
+	SCA_DataSaveG(PlayerV, iv.Money2,SCA.Money2) -- ìˆ˜í‘œ
+	SCA_DataSaveG(PlayerV, iv.CurPlayTime,SCA.CurPlayTime) -- í˜„ì¬ê²œì‹œê°„
+	SCA_DataSaveG2(PlayerV, iv.S45Loc, SCA.FXPer44)--45íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.S46Loc, SCA.FXPer45)--46íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.S47Loc, SCA.FXPer46)--47íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.S48Loc, SCA.FXPer48)--48íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.S49Loc, SCA.FXEPer)--49íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.S50Loc, SCA.FMEPer)--50íŒë§¤íšŸìˆ˜
+	SCA_DataSaveG2(PlayerV, iv.GAwakItemLoc, SCA.AwakItem)--ëˆ„ì ê°ë³´íŒë§¤íšë“ëŸ‰
+	SCA_DataSaveG2(PlayerV, iv.GFfragLoc, {SCA.FfragItem32,SCA.FfragItem64})--ëˆ„ì ì¡°ê°íŒë§¤íšë“ëŸ‰
+	SCA_DataSaveG2(PlayerV, iv.GCreditLoc, {SCA.Credit32,SCA.Credit64})--ëˆ„ì í¬ë ˆë”§íŒë§¤íšë“ëŸ‰ 64ë¹„íŠ¸
+	SCA_DataSaveG2(PlayerV, iv.EX_XI_ClearT, SCA.TimeAttackScore)--ì—‘XI í´íƒ
 
 
 	SetCallEnd()
@@ -2784,31 +2784,31 @@ CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{pre
 	
 	CAdd(FP,InputEper,GetXEper44,LevelUnitArr[44][3])
 	CiSub(FP,InputEper,iv.XEPerM)
-	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 	CallTrigger(FP, Call_CalcBrSh)
 	CMovX(FP,VArrX(GetVArray(iv.BrSh44[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
 	
 	CAdd(FP,InputEper,GetXEper45,LevelUnitArr[45][3])
 	CiSub(FP,InputEper,iv.XEPerM)
-	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 	CallTrigger(FP, Call_CalcBrSh)
 	CMovX(FP,VArrX(GetVArray(iv.BrSh45[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
 	
 	CAdd(FP,InputEper,GetXEper46,LevelUnitArr[46][3])
 	CiSub(FP,InputEper,iv.XEPerM)
-	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 	CallTrigger(FP, Call_CalcBrSh)
 	CMovX(FP,VArrX(GetVArray(iv.BrSh46[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
 	
 	CAdd(FP,InputEper,GetXEper47,LevelUnitArr[47][3])
 	CiSub(FP,InputEper,iv.XEPerM)
-	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 	CallTrigger(FP, Call_CalcBrSh)
 	CMovX(FP,VArrX(GetVArray(iv.BrSh47[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
 	
 	CAdd(FP,InputEper,GetXEper48,LevelUnitArr[48][3])
 	CiSub(FP,InputEper,iv.XEPerM)
-	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--¸¶ÀÌ³Ê½ºÀÏ°æ¿ì 0
+	TriggerX(FP,CV(InputEper,0x80000000,AtLeast),{SetV(InputEper,0)},{preserved})--ë§ˆì´ë„ˆìŠ¤ì¼ê²½ìš° 0
 	CallTrigger(FP, Call_CalcBrSh)
 	CMovX(FP,VArrX(GetVArray(iv.BrSh48[1], 7), VArrI, VArrI4),BrShRet,nil,nil,nil,1)
 	SetCallEnd()

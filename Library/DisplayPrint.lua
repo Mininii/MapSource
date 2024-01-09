@@ -29,18 +29,13 @@
 		end
 		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
 		
-		if ExtTextArr[StrT] == nil then
-			ExtTextArr[StrT] = ExtTextIndex
-			ExtTextFile[ExtTextIndex] = StrT
-			ExtTextIndex = ExtTextIndex + 1
-		end--
 
-		local StrKey = ExtTextArr[StrT]
-		local ExtTextTrigIdx = dp.Alloc
 		dp.Alloc = dp.Alloc+1
 		local RetV = CreateVar(FP)
 		local Dev = 0
-		table.insert(dp.ExtTextDataArr,{RetV,ExtTextTrigIdx})
+		table.insert(dp.StrXKeyArr,{RetV,StrT})
+
+		
 		dp.StrXIndex=dp.StrXIndex+1
 		for j,k in pairs(arg) do
 			if type(k) == "string" then
@@ -88,11 +83,11 @@
 			end
 		end
 		if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
-			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},nil,ExtTextTrigIdx)
+			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)},nil,nil)
 		elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
-			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},nil,ExtTextTrigIdx)
+			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)},nil,nil)
 		else
-			DoActionsX(FP,{RotatePlayer({Action(0, StrKey, 0, 0, 0, 0, 0, 6, 0, 4)},TargetPlayers,FP)},nil,ExtTextTrigIdx)
+			DoActionsX(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)},nil,nil)
 		end
 	end
 
@@ -108,7 +103,7 @@
 			if dst % 4 >= 1 then
 				for i = 1, dst % 4 do str = '\x0d'..str end
 			end
-			local t = cp949_to_utf8(str)
+			local t = StrToMem(str)
 			while n <= #t do
 				
 				ret[#ret+1] = SetMemory(dst - dst % 4 +n-1, SetTo, _dw(t, n))
@@ -249,9 +244,6 @@
 	function init_StrX()
 		for k, v in pairs(dp.StrXKeyArr) do
 			f_GetStrXptr(FP,v[1],v[2])
-		end
-		for k, v in pairs(dp.ExtTextDataArr) do
-			f_GetStrXptr(FP,v[1],_ReadF({FP,v[2],CAddr("Str",2),0}))
 		end
 		
 		
@@ -804,7 +796,6 @@
 		end
 		dp.VtoNamePtr = CreateVar(FP)
 		dp.VtoNameV = CreateVar(FP)
-		dp.ExtTextDataArr = {}
 		
 	function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 		for j=0, VArrLength do

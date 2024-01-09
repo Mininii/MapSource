@@ -46,7 +46,7 @@ CElseX()
 CMov(FP,0x6509B0,NBTemp,21)
 	DoActions(FP,{
 		SetDeathsX(CurrentPlayer,SetTo,0,0,0xFFFF),
-		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})--SetCp(i),DisplayText("ÀÎ½Ä´ï", 4)
+		SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),})--SetCp(i),DisplayText("ì¸ì‹ëŒ", 4)
 		
 
 CIfXEnd()
@@ -106,7 +106,7 @@ DoActions2(FP, CTKillT)
 	else
 		TriggerX(FP, {DeathsX(CurrentPlayer,Exactly,0x00000004,0 ,0x00000004 )}, {RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("a\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù.\x07 ¡»",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+			DisplayExtText("a\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 	end
 
@@ -115,25 +115,25 @@ DoActions2(FP, CTKillT)
 	CSub(FP,0x6509B0,6)
 	CIfEnd()
 
---	--0x4D °¡ 107 Or 10ÀÏ‹š 0x5CÀÎ½Ä
---	CIfX(FP, {TTOR({DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00)})},{})--È¦µåor°ø°İÁßÀÏ¶§.. 23À¸·Î °¨
+--	--0x4D ê°€ 107 Or 10ì¼ë–„ 0x5Cì¸ì‹
+--	CIfX(FP, {TTOR({DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00)})},{})--í™€ë“œorê³µê²©ì¤‘ì¼ë•Œ.. 23ìœ¼ë¡œ ê°
 --	DoActions(FP, SetMemory(0x6509B0, Add, 4))
---	CIf(FP,{Deaths(CurrentPlayer, AtLeast, 1, 0)},{})-- ´ë»óÀÌÀÖÀ»°æ¿ì ÀÏ´Ü 8·Î °¡¼­ ÀÌµ¿ÇÃ·¡±× È®ÀÎ
+--	CIf(FP,{Deaths(CurrentPlayer, AtLeast, 1, 0)},{})-- ëŒ€ìƒì´ìˆì„ê²½ìš° ì¼ë‹¨ 8ë¡œ ê°€ì„œ ì´ë™í”Œë˜ê·¸ í™•ì¸
 --	DoActions(FP,{SetMemory(0x6509B0, Subtract, 15)})
---	-- ÀÌµ¿ÇÃ·¡±×°¡ 0 ¶Ç´Â 8ÀÏ°æ¿ì¿¡¸¸ ÀÛµ¿
+--	-- ì´ë™í”Œë˜ê·¸ê°€ 0 ë˜ëŠ” 8ì¼ê²½ìš°ì—ë§Œ ì‘ë™
 --	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,0,0,0xFF),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})})--
 
---		--µğÆæ½Ãºê °ªÀÌ 1ÀÌ»óÀÌ°í µğÆæÅ¸ÀÌ¸Ó°¡ 0ÀÌ¸é º¯Á¶. ´Ü, ÀÌµ¿ÇÃ·¡±× 1ÀÏ°æ¿ì ÀÛµ¿±İÁö
---		DoActions(FP, SetMemory(0x6509B0, Add, 60))--68·ÎÀÌµ¿
---		--µğÆæ½Ãºê °ªÀÌ 0ÀÌ°í 
+--		--ë””íœì‹œë¸Œ ê°’ì´ 1ì´ìƒì´ê³  ë””íœíƒ€ì´ë¨¸ê°€ 0ì´ë©´ ë³€ì¡°. ë‹¨, ì´ë™í”Œë˜ê·¸ 1ì¼ê²½ìš° ì‘ë™ê¸ˆì§€
+--		DoActions(FP, SetMemory(0x6509B0, Add, 60))--68ë¡œì´ë™
+--		--ë””íœì‹œë¸Œ ê°’ì´ 0ì´ê³  
 --		CIf(FP,{DeathsX(CurrentPlayer,AtMost,0,0,0xFFFF0000)},{SetMemory(0x6509B0, Subtract, 47)})
---			--21·ÎÀÌµ¿
---			TriggerX(FP, {DeathsX(CurrentPlayer,AtLeast,2*256,0,0xFF00)},{--°ø¼ÓÀÌ 2ÀÌ»óÀÌ¸é?--
+--			--21ë¡œì´ë™
+--			TriggerX(FP, {DeathsX(CurrentPlayer,AtLeast,2*256,0,0xFF00)},{--ê³µì†ì´ 2ì´ìƒì´ë©´?--
 
 --				SetMemory(0x6509B0, Add, 46);
---				SetDeathsX(CurrentPlayer, SetTo, 65536*256, 0, 0xFFFF0000),--µğÆæ ¹æ¾î·Â ÃÊ±âÈ­
+--				SetDeathsX(CurrentPlayer, SetTo, 65536*256, 0, 0xFFFF0000),--ë””íœ ë°©ì–´ë ¥ ì´ˆê¸°í™”
 --				SetMemory(0x6509B0, Add, 1);
---				SetDeathsX(CurrentPlayer, SetTo, 25, 0, 0xFF),--µğÆæÅ¸ÀÌ¸Ó ÃÊ±âÈ­
+--				SetDeathsX(CurrentPlayer, SetTo, 25, 0, 0xFF),--ë””íœíƒ€ì´ë¨¸ ì´ˆê¸°í™”
 --				SetMemory(0x6509B0, Subtract, 47);
 --			},{preserved})--
 --			DoActions(FP, {SetMemory(0x6509B0, Add, 47)})
@@ -155,7 +155,7 @@ DoActions2(FP, CTKillT)
 --            f_LoadCp()
 --		else
 --		end
---		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Add, 1)})----µğÆæ¹æ¾î·Â Á¸ÀçÇÏ´Âµ¥ µğÆæÅ¸ÀÌ¸Ó°¡ ±âÁØÄ¡ ¹Ì´ŞÀÏ°æ¿ì
+--		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Add, 1)})----ë””íœë°©ì–´ë ¥ ì¡´ì¬í•˜ëŠ”ë° ë””íœíƒ€ì´ë¨¸ê°€ ê¸°ì¤€ì¹˜ ë¯¸ë‹¬ì¼ê²½ìš°
 --		if TestStart ==1 then
 --			CIf(FP,{DeathsX(CurrentPlayer,AtMost,3,0,0xFF)})
 --				
@@ -164,20 +164,20 @@ DoActions2(FP, CTKillT)
 --				CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
 --				CMov(FP,CPos,_ReadF(_Sub(BackupCp,15)))
 --				Convert_CPosXY()
---				DisplayPrint(Force1, {"\x13\x04ÇÙ°¨Áö! CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
+--				DisplayPrint(Force1, {"\x13\x04í•µê°ì§€! CurUID : ",TempUID,"  CT_CUnit : ",TempV,"  ","X : ",CPosX,"   Y : ",CPosY})--
 --				f_LoadCp()
 --			CIfEnd()
 --		else
 --			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
 --				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
---				DisplayExtText("\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù.\x07 ¡»",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+--				DisplayExtText("\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 --			})
 --		end
 --		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
 --		CIfEnd()------
 
 --		DoActions(FP, {SetMemory(0x6509B0, Subtract, 60)})
---		--´Ù½Ã 23À¸·Î ÀÌµ¿----
+--		--ë‹¤ì‹œ 23ìœ¼ë¡œ ì´ë™----
 --		CIfEnd()
 --		DoActions(FP,{SetMemory(0x6509B0, Add, 15)})
 --	CIfEnd()
@@ -189,7 +189,7 @@ DoActions2(FP, CTKillT)
 --		SetMemory(0x6509B0, Add, 1);
 --		SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),
 --		SetMemory(0x6509B0, Subtract, 1);
---		SetMemory(0x6509B0, Subtract, 49)})--È¦µåor°ø°İ ¸í·ÉÀÌ ¾øÀ¸¸é µğÆæÀ» 0À¸·Î µ¹¸°´Ù
+--		SetMemory(0x6509B0, Subtract, 49)})--í™€ë“œorê³µê²© ëª…ë ¹ì´ ì—†ìœ¼ë©´ ë””íœì„ 0ìœ¼ë¡œ ëŒë¦°ë‹¤
 --		
 --	CIfXEnd()--
 
@@ -202,10 +202,10 @@ DoActions2(FP, CTKillT)
 
 
 
-	CXor(FP,TempV,EXCC_TempVarArr[1],EXCC_TempVarArr[2]) -- Line0 = ÀúÀåµÈ³­¼ö + À¯´ÖID Line1 = ÀúÀåµÈ ³­¼ö
-	CXor(FP,TempV2,EXCC_TempVarArr[3],EXCC_TempVarArr[2]) -- Line2 = ÀúÀåµÈ³­¼ö + PlayerID Line1 = ÀúÀåµÈ ³­¼ö
-	--TempV=°è»êµÈ À¯´ÖID
-	CIfX(FP,{TMemoryX(UIDPtr, Exactly, TempV,0xFF)})--UIDPtr == ½ÇÁ¦ À¯´ÖIDÀúÀåµÈ Æ÷ÀÎÅÍ
+	CXor(FP,TempV,EXCC_TempVarArr[1],EXCC_TempVarArr[2]) -- Line0 = ì €ì¥ëœë‚œìˆ˜ + ìœ ë‹›ID Line1 = ì €ì¥ëœ ë‚œìˆ˜
+	CXor(FP,TempV2,EXCC_TempVarArr[3],EXCC_TempVarArr[2]) -- Line2 = ì €ì¥ëœë‚œìˆ˜ + PlayerID Line1 = ì €ì¥ëœ ë‚œìˆ˜
+	--TempV=ê³„ì‚°ëœ ìœ ë‹›ID
+	CIfX(FP,{TMemoryX(UIDPtr, Exactly, TempV,0xFF)})--UIDPtr == ì‹¤ì œ ìœ ë‹›IDì €ì¥ëœ í¬ì¸í„°
 	CDoActions(FP, {Set_EXCCX(0,SetTo,_Xor(TempV,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
 	CElseX()
 	if TestStart == 1 then
@@ -219,12 +219,12 @@ DoActions2(FP, CTKillT)
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("i\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù.\x07 ¡»",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayExtText("i\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
-		--TempV=°è»êµÈ À¯´ÖID
-	CIfX(FP,{TMemoryX(PIDPtr, Exactly, TempV2,0xFF)})--UIDPtr == ½ÇÁ¦ À¯´ÖIDÀúÀåµÈ Æ÷ÀÎÅÍ
+		--TempV=ê³„ì‚°ëœ ìœ ë‹›ID
+	CIfX(FP,{TMemoryX(PIDPtr, Exactly, TempV2,0xFF)})--UIDPtr == ì‹¤ì œ ìœ ë‹›IDì €ì¥ëœ í¬ì¸í„°
 	CDoActions(FP, {Set_EXCCX(2,SetTo,_Xor(TempV2,CT_GNextRandV)),Set_EXCCX(1, SetTo, CT_GNextRandV)})
 	CElseX()
 	if TestStart == 1 then
@@ -238,7 +238,7 @@ DoActions2(FP, CTKillT)
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("p\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù.\x07 ¡»",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayExtText("p\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
@@ -248,7 +248,7 @@ DoActions2(FP, CTKillT)
 	EXCC_ClearCalc()
 	EXCC_Part2()
 	EXCC_Part3X()
-	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+	for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
 		EXCC_Part4X(i,{
 			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
 			DeathsX(19025+(84*i)+19,AtMost,7,0,0xFF),

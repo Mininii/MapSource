@@ -296,43 +296,55 @@ function CreateCArray(Player,Size)
 end
 
 
+
+
 function CreateCText(Player,Text) -- CtrigAsm 5.1
 	local X = {}
-	local StrSize = GetStrSize(0,Text)
+	local StrSize = #Text
 	if (StrSize)/4>601 then PushErrorMsg("StrSize_OverFlow") end
 	table.insert(X,Text)
 	table.insert(X,StrSize)
 	
 	table.insert(X,CreateArr(((StrSize)/4)+1,Player))
-	local Z = print_utf8A(X[3],0, Text)
+	local Z = printA(X[3],0, Text)
 	for j, k in pairs(Z) do
 		table.insert(CtrigInitArr[Player+1],k)
 	end
 	return X
 end
-function print_utf8A(Array,pos, string)
+function printA(Array,pos,st)
     local ret = {}
     local dst = pos*4
-    if type(string) == "string" then
-        local str = string
+    if type(st) == "string" then
+        local str = st
         local n = 1
         if dst % 4 >= 1 then
             for i = 1, dst % 4 do str = '\x0d'..str end
         end
-        local t = cp949_to_utf8(str)
+		local t = StrToMem(str)
         while n <= #t do
 			
             ret[#ret+1] = SetMemX(Arr(Array,(dst - dst % 4 +n-1)/4),SetTo,_dw(t, n))
             n = n + 4
         end
-    elseif type(string) == "number" then
+    elseif type(st) == "number" then
         PushErrorMsg("print_utf8A_InputError")
     end
     return ret
 end
 
-
-
+function StrToMem(str)
+	
+	local t={}
+	local e = 0
+	local f = 1
+	for i = 1, #str do
+		t[f] = bit32.band(string.byte(str,i), (256^e)*255)
+		e = e + 1
+		if e <= 4 then f=f+1 e=0 end
+	end
+	return t
+end
 
 
 function CreateCCodeSet(Variables)

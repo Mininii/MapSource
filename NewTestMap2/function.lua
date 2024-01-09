@@ -59,7 +59,7 @@ end
 
 function SetUnitsDatX(UnitID,Property)
 	if type(UnitID) == "string" then
-		UnitID = ParseUnit(UnitID) -- ½ºÆ®¸µÀ¸·Î À¯´ÖÀÌ¸§ ÀÔ·Â°¡´É
+		UnitID = ParseUnit(UnitID) -- ìŠ¤íŠ¸ë§ìœ¼ë¡œ ìœ ë‹›ì´ë¦„ ì…ë ¥ê°€ëŠ¥
 	end
 	if UnitID>=228 then PushErrorMsg("UnitID Index Overflow") end
 	if type(Property)~= "table" then
@@ -67,7 +67,7 @@ function SetUnitsDatX(UnitID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="MinCost" then
-				PatchInsert(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- ¹Ì³×¶ö
+				PatchInsert(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- ë¯¸ë„¤ë„
 			elseif j=="Playerable" then
 				local SType
 				if type(k)=="boolean" then
@@ -88,11 +88,11 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,SType))
 				PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,SType))
 			elseif j=="GasCost"  then
-				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- °¡½º
+				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- ê°€ìŠ¤
 			elseif j=="BuildTime"  then
-				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- »ı»ê¼Óµµ
+				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ìƒì‚°ì†ë„
 			elseif j=="SuppCost"  then
-				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ¼­ÇÃ
+				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ì„œí”Œ
 			elseif j=="HP"  then
 				PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,k*256))
 				PatchInsertC(Memory(0x662350 + (UnitID*4),Exactly,k*256)) 
@@ -109,17 +109,17 @@ function SetUnitsDatX(UnitID,Property)
 					PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, k))
 				end
 			elseif j=="Armor" then
-				PatchInsert(SetMemoryB(0x65FEC8 + (UnitID),SetTo,k)) -- ¹æ¾î·Â
+				PatchInsert(SetMemoryB(0x65FEC8 + (UnitID),SetTo,k)) -- ë°©ì–´ë ¥
 			elseif j=="GroupFlag" then
-				PatchInsert(SetMemoryB(0x6637A0 + (UnitID),SetTo,k)) -- ±×·ì
+				PatchInsert(SetMemoryB(0x6637A0 + (UnitID),SetTo,k)) -- ê·¸ë£¹
 				PatchInsertC(MemoryB(0x6637A0 + (UnitID),Exactly,k)) 
 			elseif j=="Height" then
-				PatchInsert(SetMemoryB(0x663150 + (UnitID),SetTo,k)) -- °Ç¼³Å©±â
+				PatchInsert(SetMemoryB(0x663150 + (UnitID),SetTo,k)) -- ê±´ì„¤í¬ê¸°
 				PatchInsertC(MemoryB(0x663150 + (UnitID),Exactly,k)) 
 			elseif j=="BdDimX" then
-				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- °Ç¼³Å©±â
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- ê±´ì„¤í¬ê¸°
 			elseif j=="BdDimY" then
-				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- °Ç¼³Å©±â
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- ê±´ì„¤í¬ê¸°
 			elseif j=="SizeL" then
 				PatchInsert(SetMemoryX(0x6617C8 + (UnitID*8),SetTo,(k),0xFFFF))
 			elseif j=="SizeU" then
@@ -129,7 +129,7 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="SizeD" then
 				PatchInsert(SetMemoryX(0x6617CC + (UnitID*8),SetTo,(k*65536),0xFFFF0000))
 			elseif j=="SuppProv" then
-				PatchInsert(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- ¼­ÇÃ°ø±Ş·®
+				PatchInsert(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- ì„œí”Œê³µê¸‰ëŸ‰
 			elseif j=="AdvFlag" then
 				if type(k)~= "table" or #k~=2 then
 					PushErrorMsg("AdvFlag Inputdata Error")
@@ -210,40 +210,40 @@ function SetWeaponsDatX(WepID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="DmgBase" then
-				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- °ø°İ·Â
+				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- ê³µê²©ë ¥
 				PatchInsertC(MemoryW(0x656EB0+(WepID *2),Exactly,k)) 
 			elseif j=="DmgFactor" then
-				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- Ãß°¡°ø°İ·Â
+				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- ì¶”ê°€ê³µê²©ë ¥
 				PatchInsertC(MemoryW(0x657678+(WepID *2),Exactly,k)) 
 			elseif j=="Cooldown" then
-				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- °ø¼Ó
+				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- ê³µì†
 				PatchInsertC(MemoryB(0x656FB8+(WepID *1),Exactly,k)) 
 			elseif j=="Splash" then
 				if type(k)=="boolean" then
 					if k == true then
-						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ½ºÇÃÅ¸ÀÔ(ÀÏ¹æÇü)
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ìŠ¤í”Œíƒ€ì…(ì¼ë°©í˜•)
 						PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,3)) 
 					else
-						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- ½ºÇÃÅ¸ÀÔ(½ºÇÃ¾øÀ½)
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- ìŠ¤í”Œíƒ€ì…(ìŠ¤í”Œì—†ìŒ)
 						PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,1)) 
 					end
 				elseif type(k)~="table" or #k~=3 then
 					PushErrorMsg("Splash Inputdata Error")
 				else
-					PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ½ºÇÃÅ¸ÀÔ(ÀÏ¹æÇü)
-					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --½ºÇÃ ¾È
-					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --½ºÇÃ Áß
-					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --½ºÇÃ ¹Û
+					PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ìŠ¤í”Œíƒ€ì…(ì¼ë°©í˜•)
+					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --ìŠ¤í”Œ ì•ˆ
+					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --ìŠ¤í”Œ ì¤‘
+					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --ìŠ¤í”Œ ë°–
 					PatchInsertC(MemoryB(0x6566F8+WepID,Exactly,3)) 
 					PatchInsertC(MemoryW(0x656888+(WepID*2),Exactly,k[1])) 
 					PatchInsertC(MemoryW(0x6570C8+(WepID*2),Exactly,k[2])) 
 					PatchInsertC(MemoryW(0x657780+(WepID*2),Exactly,k[3])) 
 				end
 			elseif j=="RangeMin" then
-				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- »ç°Å¸® ÃÖ¼Ò
+				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ì‚¬ê±°ë¦¬ ìµœì†Œ
 				PatchInsertC(Memory(0x656A18+(WepID *4),Exactly,k)) 
 			elseif j=="RangeMax" then
-				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- »ç°Å¸® ÃÖ´ë
+				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ì‚¬ê±°ë¦¬ ìµœëŒ€
 				PatchInsertC(Memory(0x657470+(WepID *4),Exactly,k)) 
 			elseif j=="TargetFlag" then
 				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
@@ -252,10 +252,10 @@ function SetWeaponsDatX(WepID,Property)
 				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
 				PatchInsertC(MemoryB(0x6571D0 + WepID, Exactly, k)) 
 			elseif j=="ObjectNum" then
-				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- Åõ»çÃ¼¼ö
+				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- íˆ¬ì‚¬ì²´ìˆ˜
 				PatchInsertC(MemoryB(0x6564E0+WepID,Exactly,k)) 
 			elseif j=="IconType" then
-				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- ¾ÆÀÌÄÜ
+				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- ì•„ì´ì½˜
 			elseif j== "Behavior" then
 				PatchInsert(SetMemoryB(0x656670+WepID,SetTo,k))
 				PatchInsertC(MemoryB(0x656670+WepID,Exactly,k)) 
@@ -272,7 +272,7 @@ function SetWeaponsDatX(WepID,Property)
 			elseif j== "FlingyID" then
 				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
 			elseif j== "WepName" then
-				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ÀÌ¸§
+				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ì´ë¦„
 			elseif j== "DmgType" then
 				PatchInsert(SetMemoryB(0x657258+(WepID),SetTo,k)) -- 
 				PatchInsertC(MemoryB(0x657258+(WepID),Exactly,k)) 
@@ -481,7 +481,7 @@ function PopLevelUnit()
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j-1),SetTo,k[1]))
 		--table.insert(CtrigInitArr[FP+1],SetCWAar(WArr(BuyDataWArr,j-1),SetTo,k[2]))
 	end
-	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- ÃÖ°­À¯´Ö °­È­È®·ü °¨Ãß±â
+	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- ìµœê°•ìœ ë‹› ê°•í™”í™•ë¥  ê°ì¶”ê¸°
 
 	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
 end
@@ -490,11 +490,11 @@ function CIfKeyFunc(CP,Key,ContentStr,DisContentStr,Conditions,CondActions,DisCo
 	CIf(FP,{MSQC_KeyInput(CP, Key)})
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),CondActions},{preserved})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),CondActions},{preserved})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš°
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1])},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),DisCondActions},{preserved})	-- Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ» °æ¿ì
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopKey[CP+1])},{SetCDeaths(FP,SetTo,1,ShopKey[CP+1]),DisCondActions},{preserved})	-- ì¡°ê±´ì´ ë§Œì¡±í•˜ì§€ ì•Šì„ ê²½ìš°
 end
-function KeyFunc(CP,Key,ContentArgs) --{{1Â÷Á¶°Ç¹è¿­,¾×¼Ç¹è¿­,Ãâ·ÂÇÒÅØ½ºÆ®},...}
+function KeyFunc(CP,Key,ContentArgs) --{{1ì°¨ì¡°ê±´ë°°ì—´,ì•¡ì…˜ë°°ì—´,ì¶œë ¥í• í…ìŠ¤íŠ¸},...}
 	CIf(FP,{MSQC_KeyInput(CP, Key)})
 	for o,p in pairs(ContentArgs) do
 		if o == 1 then
@@ -521,9 +521,9 @@ function CIfBtnFunc(CP,ID,ContentStr,DisContentStr,Conditions,CondActions,DisCon
 	CurShopCond = Conditions
 	CallTrigger(FP,Call_Print13[CP+1])
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP),Conditions},{print_utf8(12,0,ContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),CondActions},{preserved})	-- Á¶°ÇÀÌ ¸¸Á·ÇÒ °æ¿ì
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),Conditions},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),CondActions},{preserved})	-- ì¡°ê±´ì´ ë§Œì¡±í•  ê²½ìš°
 	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1]),LocalPlayerID(CP)},{print_utf8(12,0,DisContentStr)},{preserved})
-	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),DisCondActions},{preserved})	-- Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ» °æ¿ì
+	CTrigger(FP,{CDeaths(FP,AtMost,0,ShopSw[CP+1])},{SetCDeaths(FP,SetTo,1,ShopSw[CP+1]),DisCondActions},{preserved})	-- ì¡°ê±´ì´ ë§Œì¡±í•˜ì§€ ì•Šì„ ê²½ìš°
 end
 
 function BtnSetInit(CP,MenuPtr)
@@ -695,14 +695,14 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 			end
 
 
-			if Multiplier == "100000000" then -- 3·¾Çã¼öÀÏ°æ¿ì
-				CIf(FP,{TTNWar(GetMoney,AtLeast,"100000000000")}) -- ¼ø°£ÀûÀ¸·Î ¹øµ· º£ÀÌ½º°ªÀÌ Ãµ¾ï³ÑÀ»°æ¿ì(¹Ø¿¡¼­ 1¾ï ´õ °öÇØ¼­ µ·À¸·Î ¹Ù²Ü°ÅÀÓ Áï 1000¾ï = 1000°æ)
+			if Multiplier == "100000000" then -- 3ë ™í—ˆìˆ˜ì¼ê²½ìš°
+				CIf(FP,{TTNWar(GetMoney,AtLeast,"100000000000")}) -- ìˆœê°„ì ìœ¼ë¡œ ë²ˆëˆ ë² ì´ìŠ¤ê°’ì´ ì²œì–µë„˜ì„ê²½ìš°(ë°‘ì—ì„œ 1ì–µ ë” ê³±í•´ì„œ ëˆìœ¼ë¡œ ë°”ê¿€ê±°ì„ ì¦‰ 1000ì–µ = 1000ê²½)
 				local TempDiv = CreateWar(FP)
-				f_LDiv(FP, TempDiv,GetMoney, "100000000000")--°öÇÏ¿© TempDivº¯¼ö¿¡ ³Ö´Â´Ù
-				f_LMod(FP, GetMoney, GetMoney, "100000000000")--1000¾ïÀÌ ³Ñ´Â °ªÀº Áö¿î´Ù
+				f_LDiv(FP, TempDiv,GetMoney, "100000000000")--ê³±í•˜ì—¬ TempDivë³€ìˆ˜ì— ë„£ëŠ”ë‹¤
+				f_LMod(FP, GetMoney, GetMoney, "100000000000")--1000ì–µì´ ë„˜ëŠ” ê°’ì€ ì§€ìš´ë‹¤
 				local TempCast = CreateVar(FP)
 				f_Cast(FP, {TempCast,0}, TempDiv, nil, nil, 1)
-				CAdd(FP,iv.Money2[CP+1],TempCast)--1000°æ¿ø¼öÇ¥Ãß°¡
+				CAdd(FP,iv.Money2[CP+1],TempCast)--1000ê²½ì›ìˆ˜í‘œì¶”ê°€
 				CIfEnd()
 				f_LMul(FP, GetMoney, GetMoney,Multiplier)
 			elseif Multiplier ~= nil then
@@ -711,17 +711,17 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 			
 			
 
-			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--¿À¹öÇÃ·Î¿ìÀÏ°æ¿ì ´õÇÏÁö¸»°í GetMoney¸¦ 1000°æ¿øÂ¥¸®¿¡ ¸ÂÃá´Ù.
+			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--ì˜¤ë²„í”Œë¡œìš°ì¼ê²½ìš° ë”í•˜ì§€ë§ê³  GetMoneyë¥¼ 1000ê²½ì›ì§œë¦¬ì— ë§ì¶˜ë‹¤.
 				local TempW = CreateWar(FP)
-				f_LSub(FP, TempW, "10000000000000000000", GetMoney)--1000°æ-¹úÀºµ·=»©¾ßÇÒ³²Àºµ·
-				CAdd(FP,iv.Money2[CP+1],1)--1000°æ¿ø¼öÇ¥Ãß°¡
-				f_LSub(FP, MoneyV, MoneyV, TempW)--ÇöÀçµ· << ÇöÀçµ· - »©¾ßÇÒ³²Àºµ·
+				f_LSub(FP, TempW, "10000000000000000000", GetMoney)--1000ê²½-ë²Œì€ëˆ=ë¹¼ì•¼í• ë‚¨ì€ëˆ
+				CAdd(FP,iv.Money2[CP+1],1)--1000ê²½ì›ìˆ˜í‘œì¶”ê°€
+				f_LSub(FP, MoneyV, MoneyV, TempW)--í˜„ì¬ëˆ << í˜„ì¬ëˆ - ë¹¼ì•¼í• ë‚¨ì€ëˆ
 
 				
 
 
 
-			CElseX()--¾Æ´Ò°æ¿ì Á¤»óÀûÀ¸·Î ´õÇÔ
+			CElseX()--ì•„ë‹ê²½ìš° ì •ìƒì ìœ¼ë¡œ ë”í•¨
 				f_LAdd(FP,MoneyV,MoneyV,GetMoney)
 			CIfXEnd()
 
@@ -786,18 +786,18 @@ function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
 	CIfEnd()
 
 end
-function MSQC_KeySet(KeyName,DeathUnit,KeyNum) -- Å°ÀÎ½Ä¿ë µ¥½º°ª µî·Ï
+function MSQC_KeySet(KeyName,DeathUnit,KeyNum) -- í‚¤ì¸ì‹ìš© ë°ìŠ¤ê°’ ë“±ë¡
 	if KeyNum == nil then KeyNum = 1 end
 	MSQC_KeyArr[KeyName] = {DeathUnit,KeyNum}
 end
 
-function MSQC_KeyInput(Player,KeyName) -- Å°ÀÎ½Ä¿ë Á¶°Ç
+function MSQC_KeyInput(Player,KeyName) -- í‚¤ì¸ì‹ìš© ì¡°ê±´
 	return Deaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
-function MSQC_TKeyInput(Player,KeyName) -- Å°ÀÎ½Ä¿ë Á¶°Ç Player¿¡ V »ç¿ë°¡´É
+function MSQC_TKeyInput(Player,KeyName) -- í‚¤ì¸ì‹ìš© ì¡°ê±´ Playerì— V ì‚¬ìš©ê°€ëŠ¥
 	return TDeaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
-function MSQC_SetKeyInput(Player,KeyName) -- Å°ÀÎ½Ä¿ë Á¶°Ç
+function MSQC_SetKeyInput(Player,KeyName) -- í‚¤ì¸ì‹ìš© ì¡°ê±´
 	return SetDeaths(Player, Exactly, MSQC_KeyArr[KeyName][2], MSQC_KeyArr[KeyName][1])
 end
 function MSQC_ExportEdsTxt()
@@ -951,7 +951,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 		if LvUniit==40 then
 			CIf(FP,{CV(GetMoney2,GetFAcc2,AtLeast)},{SubV(GetMoney2,GetFAcc2)})
 		else
-			if LvUniit == 39 then -- 80°æÂ¥¸® ¿¹¿ÜÃ³¸®
+			if LvUniit == 39 then -- 80ê²½ì§œë¦¬ ì˜ˆì™¸ì²˜ë¦¬
 				CIf(FP,{CV(GetArbMoney,_Sub(GetFAcc2,1),AtMost)})
 				CAdd(FP,GetArbMoney,_Cast(0,_LDiv(GetMoney,"800000000000000000")))
 				f_LMod(FP, GetMoney, GetMoney, "800000000000000000")
@@ -1046,8 +1046,8 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù. (µ¥ÀÌÅÍ´Â º¸Á¸µÇ¾î ÀÖÀ½.)\x07 ¡»",4);
-		DisplayExtText("\x13\x07¡º \x04SCA ¾ÆÀÌµğ, ½ºÅ¸ ¾ÆÀÌµğ, ÇöÀç ¹Ì³×¶ö, °¡½º Á¤º¸¿Í ÇÔ²² Á¦ÀÛÀÚ¿¡°Ô ¹®ÀÇÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\x07 ¡»",4);
+		DisplayExtText(Flag.."\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤. (ë°ì´í„°ëŠ” ë³´ì¡´ë˜ì–´ ìˆìŒ.)\x07 ã€",4);
+		DisplayExtText("\x13\x07ã€ \x04SCA ì•„ì´ë””, ìŠ¤íƒ€ ì•„ì´ë””, í˜„ì¬ ë¯¸ë„¤ë„, ê°€ìŠ¤ ì •ë³´ì™€ í•¨ê»˜ ì œì‘ìì—ê²Œ ë¬¸ì˜í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\x07 ã€",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1069,8 +1069,8 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù. (µ¥ÀÌÅÍ´Â º¸Á¸µÇ¾î ÀÖÀ½.)\x07 ¡»",4);
-		DisplayExtText("\x13\x07¡º \x04SCA ¾ÆÀÌµğ, ½ºÅ¸ ¾ÆÀÌµğ, ÇöÀç ¹Ì³×¶ö, °¡½º Á¤º¸¿Í ÇÔ²² Á¦ÀÛÀÚ¿¡°Ô ¹®ÀÇÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\x07 ¡»",4);
+		DisplayExtText(Flag.."\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤. (ë°ì´í„°ëŠ” ë³´ì¡´ë˜ì–´ ìˆìŒ.)\x07 ã€",4);
+		DisplayExtText("\x13\x07ã€ \x04SCA ì•„ì´ë””, ìŠ¤íƒ€ ì•„ì´ë””, í˜„ì¬ ë¯¸ë„¤ë„, ê°€ìŠ¤ ì •ë³´ì™€ í•¨ê»˜ ì œì‘ìì—ê²Œ ë¬¸ì˜í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\x07 ã€",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1099,8 +1099,8 @@ function WarCheatTestX(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù. (µ¥ÀÌÅÍ´Â º¸Á¸µÇ¾î ÀÖÀ½.)\x07 ¡»",4);
-		DisplayExtText("\x13\x07¡º \x04SCA ¾ÆÀÌµğ, ½ºÅ¸ ¾ÆÀÌµğ, ÇöÀç ¹Ì³×¶ö, °¡½º Á¤º¸¿Í ÇÔ²² Á¦ÀÛÀÚ¿¡°Ô ¹®ÀÇÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\x07 ¡»",4);
+		DisplayExtText(Flag.."\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤. (ë°ì´í„°ëŠ” ë³´ì¡´ë˜ì–´ ìˆìŒ.)\x07 ã€",4);
+		DisplayExtText("\x13\x07ã€ \x04SCA ì•„ì´ë””, ìŠ¤íƒ€ ì•„ì´ë””, í˜„ì¬ ë¯¸ë„¤ë„, ê°€ìŠ¤ ì •ë³´ì™€ í•¨ê»˜ ì œì‘ìì—ê²Œ ë¬¸ì˜í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\x07 ã€",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1148,10 +1148,10 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	PCT_NextRandW = CT_GNextRandW
 	
 	if VW[4] == "V" then
-		CIfX(FP,{CV(VW, TrapVW)}) -- Ä¡Æ® ³­¼ö Å×½ºÆ®(ÂüÀÌ¾î¾ß Á¤»ó)
+		CIfX(FP,{CV(VW, TrapVW)}) -- ì¹˜íŠ¸ ë‚œìˆ˜ í…ŒìŠ¤íŠ¸(ì°¸ì´ì–´ì•¼ ì •ìƒ)
 		
 	else
-		CIfX(FP,{TTNWar(VW, Exactly, TrapVW)}) -- Ä¡Æ® ³­¼ö Å×½ºÆ®(ÂüÀÌ¾î¾ß Á¤»ó)
+		CIfX(FP,{TTNWar(VW, Exactly, TrapVW)}) -- ì¹˜íŠ¸ ë‚œìˆ˜ í…ŒìŠ¤íŠ¸(ì°¸ì´ì–´ì•¼ ì •ìƒ)
 	end
 	local DeathUnit = 1
 	local ttable = {}
@@ -1191,16 +1191,16 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 				TriggerX(FP,{LocalPlayerID(p)},{{
 					SetCp(p),
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayExtText(Flag.."\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù. (µ¥ÀÌÅÍ´Â º¸Á¸µÇ¾î ÀÖÀ½.)\x07 ¡»",4);
-					DisplayExtText("\x13\x07¡º \x04SCA ¾ÆÀÌµğ, ½ºÅ¸ ¾ÆÀÌµğ, ÇöÀç ¹Ì³×¶ö, °¡½º Á¤º¸¿Í ÇÔ²² Á¦ÀÛÀÚ¿¡°Ô ¹®ÀÇÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\x07 ¡»",4);
+					DisplayExtText(Flag.."\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤. (ë°ì´í„°ëŠ” ë³´ì¡´ë˜ì–´ ìˆìŒ.)\x07 ã€",4);
+					DisplayExtText("\x13\x07ã€ \x04SCA ì•„ì´ë””, ìŠ¤íƒ€ ì•„ì´ë””, í˜„ì¬ ë¯¸ë„¤ë„, ê°€ìŠ¤ ì •ë³´ì™€ í•¨ê»˜ ì œì‘ìì—ê²Œ ë¬¸ì˜í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\x07 ã€",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);}})
 			end
 		else
 			TriggerX(FP,{LocalPlayerID(Player)},{{
 				SetCp(Player),
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayExtText(Flag.."\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù. (µ¥ÀÌÅÍ´Â º¸Á¸µÇ¾î ÀÖÀ½.)\x07 ¡»",4);
-				DisplayExtText("\x13\x07¡º \x04SCA ¾ÆÀÌµğ, ½ºÅ¸ ¾ÆÀÌµğ, ÇöÀç ¹Ì³×¶ö, °¡½º Á¤º¸¿Í ÇÔ²² Á¦ÀÛÀÚ¿¡°Ô ¹®ÀÇÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\x07 ¡»",4);
+				DisplayExtText(Flag.."\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤. (ë°ì´í„°ëŠ” ë³´ì¡´ë˜ì–´ ìˆìŒ.)\x07 ã€",4);
+				DisplayExtText("\x13\x07ã€ \x04SCA ì•„ì´ë””, ìŠ¤íƒ€ ì•„ì´ë””, í˜„ì¬ ë¯¸ë„¤ë„, ê°€ìŠ¤ ì •ë³´ì™€ í•¨ê»˜ ì œì‘ìì—ê²Œ ë¬¸ì˜í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\x07 ã€",4);
 				SetMemory(0xCDDDCDDC,SetTo,1);}})
 				
 		end
@@ -1222,10 +1222,10 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --	end
 	CIfXEnd()
 	if VW[4] == "V" then
-		CXor(FP, VW, PCT_PrevRandV)--°¨Áö ¿©ºÎ »ó°ü¾øÀÌ ÁøÂ¥°ªÀ¸·Î º¹±¸
+		CXor(FP, VW, PCT_PrevRandV)--ê°ì§€ ì—¬ë¶€ ìƒê´€ì—†ì´ ì§„ì§œê°’ìœ¼ë¡œ ë³µêµ¬
 		
 	else
-		f_LXor(FP, VW, VW, PCT_PrevRandW)--°¨Áö ¿©ºÎ »ó°ü¾øÀÌ ÁøÂ¥°ªÀ¸·Î º¹±¸
+		f_LXor(FP, VW, VW, PCT_PrevRandW)--ê°ì§€ ì—¬ë¶€ ìƒê´€ì—†ì´ ì§„ì§œê°’ìœ¼ë¡œ ë³µêµ¬
 	end
 	return TrapKey
 end	
@@ -1239,11 +1239,11 @@ function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 	if VW[1][4] == "V" then
 		CMovX(FP,GV,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
 		CMovX(FP,TrapGV,VArrX(GetVArray(TrapVW[1], 7), VArrL, VArrL4),nil,nil,nil,1)
-		CIfX(FP,{CV(GV, TrapGV)}) -- Ä¡Æ® ³­¼ö Å×½ºÆ®(ÂüÀÌ¾î¾ß Á¤»ó)
+		CIfX(FP,{CV(GV, TrapGV)}) -- ì¹˜íŠ¸ ë‚œìˆ˜ í…ŒìŠ¤íŠ¸(ì°¸ì´ì–´ì•¼ ì •ìƒ)
 	else
 		f_LMovX(FP,GW,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
 		f_LMovX(FP,TrapGW,WArrX(GetWArray(TrapVW[1], 7), WArrL, WArrL4),nil,nil,nil,1)
-		CIfX(FP,{TTNWar(GW, Exactly, TrapGW)}) -- Ä¡Æ® ³­¼ö Å×½ºÆ®(ÂüÀÌ¾î¾ß Á¤»ó)
+		CIfX(FP,{TTNWar(GW, Exactly, TrapGW)}) -- ì¹˜íŠ¸ ë‚œìˆ˜ í…ŒìŠ¤íŠ¸(ì°¸ì´ì–´ì•¼ ì •ìƒ)
 	end
 	local DeathUnit = 1
 	--local ttable = {}
@@ -1285,11 +1285,11 @@ function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --	end
 	CIfXEnd()
 	if VW[1][4] == "V" then
-		CXor(FP, GV, CT_GPrevRandV)--°¨Áö ¿©ºÎ »ó°ü¾øÀÌ ÁøÂ¥°ªÀ¸·Î º¹±¸
+		CXor(FP, GV, CT_GPrevRandV)--ê°ì§€ ì—¬ë¶€ ìƒê´€ì—†ì´ ì§„ì§œê°’ìœ¼ë¡œ ë³µêµ¬
 		CMovX(FP,VArrX(GetVArray(VW[1], 7), VArrL, VArrL4),GV,nil,nil,nil,1)
 		
 	else
-		f_LXor(FP, GW, GW, CT_GPrevRandW)--°¨Áö ¿©ºÎ »ó°ü¾øÀÌ ÁøÂ¥°ªÀ¸·Î º¹±¸
+		f_LXor(FP, GW, GW, CT_GPrevRandW)--ê°ì§€ ì—¬ë¶€ ìƒê´€ì—†ì´ ì§„ì§œê°’ìœ¼ë¡œ ë³µêµ¬
 		f_LMovX(FP,WArrX(GetWArray(VW[1], 7), WArrL, WArrL4),GW,nil,nil,nil,1)
 	end
 	
@@ -1298,10 +1298,10 @@ end
 
 
 
-function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿­ ±¸¼ºÇÏ±â
-	local HeaderV = CreateVar(Player) -- Çì´õ°¡ ÀúÀåµÈ V
-	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- ±¸Á¶¿ÀÇÁ¼Â È®Àå º¯¼ö TempV
-	local Index = FuncAlloc -- FuncAlloc¿¡¼­ ¶óº§ ¹Ş¾Æ¿È
+function Install_EXCC(Player,ArrSize,ResetFlag) -- í™•ì¥ êµ¬ì¡°ì˜¤í”„ì…‹ ë‹¨ë½ ì „ìš© ë°°ì—´ êµ¬ì„±í•˜ê¸°
+	local HeaderV = CreateVar(Player) -- í—¤ë”ê°€ ì €ì¥ëœ V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- êµ¬ì¡°ì˜¤í”„ì…‹ í™•ì¥ ë³€ìˆ˜ TempV
+	local Index = FuncAlloc -- FuncAllocì—ì„œ ë¼ë²¨ ë°›ì•„ì˜´
 	FuncAlloc = FuncAlloc + 3
 	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 	local EXCUnitArr = {}
@@ -1311,13 +1311,13 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 
 	if ResetFlag ~= nil then
 		if type(ResetFlag) == "number" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”
 			for i = 1, #EXCunitTemp do
 				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
 			end
 			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		elseif type(ResetFlag) == "table" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí(Å¸ÀÌ¸Óor°ªÃÊ±âÈ­ µî)
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”(íƒ€ì´ë¨¸orê°’ì´ˆê¸°í™” ë“±)
 			for i = 1, #EXCunitTemp do
 				if ResetFlag[i]~= nil then
 					if type(ResetFlag[i]) == "table" then
@@ -1348,35 +1348,35 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
 	end
 end
-function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
 
-function Set_EXCC(Line,Type,Value) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª X
+function Set_EXCC(Line,Type,Value) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’ X
 	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
 end
-function Set_EXCCX(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’
 	if Mask == nil then Mask = 0xFFFFFFFF end
 	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
 end
 
 
-function TCond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function TCond_EXCC(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TCVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
 end
-function Cond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
 end
-function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
-function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§. TTORÀü¿ë
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ. TTORì „ìš©
 	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
 EXCC_initArr = {}
@@ -1414,7 +1414,7 @@ function EXCC_Part1(EXCC_init,Actions)
 	}	
 	
 end
--- NJump Trig »ğÀÔ ºÎºĞ (Á¶°Ç¸¸Á·½Ã Jump)
+-- NJump Trig ì‚½ì… ë¶€ë¶„ (ì¡°ê±´ë§Œì¡±ì‹œ Jump)
 function EXCC_Part2()
 	PlayerID = EXCC_Player
 	PlayerID = PlayerConvert(PlayerID)
@@ -1570,9 +1570,9 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Des
 		if DestType == Add then
 			CIfX(FP,{TTNWar(TempRead,AtLeast,"0x8000000000000000")})
 			f_LNeg(FP, TempRead, TempRead)
-			if Dest == iv.PEXP then--°æÇèÄ¡ ¿¹¿ÜÃ³¸® Unsigned Subtract
+			if Dest == iv.PEXP then--ê²½í—˜ì¹˜ ì˜ˆì™¸ì²˜ë¦¬ Unsigned Subtract
 				f_LSub(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4),WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead)
-			else--±×¿Ü Signed Subtract
+			else--ê·¸ì™¸ Signed Subtract
 				f_LiSub(FP, WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4),WArrX(GetWArray(Dest[1], 7),WArrI,WArrI4), TempRead)
 			end
 			CElseX()
@@ -1595,10 +1595,10 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Des
 
 	if DestType~= nil then
 		local TypeT = ""
-		if DestType == SetTo then TypeT = "·Î ´ëÀÔ"
-		elseif DestType == Add then TypeT = "´õÇÏ°Å³ª »©±â"
+		if DestType == SetTo then TypeT = "ë¡œ ëŒ€ì…"
+		elseif DestType == Add then TypeT = "ë”í•˜ê±°ë‚˜ ë¹¼ê¸°"
 		end
-		--DisplayPrint(GCP, {"\x13\x07¡º \x03SYSTEM Message \x04: ´ç½ÅÀÇ \x07"..DataName.."\x04 µ¥ÀÌÅÍ°¡ \x03",TempRead,"\x08 "..TypeT.." \x04µÇ¾ú½À´Ï´Ù. \x07¡»"})
+		--DisplayPrint(GCP, {"\x13\x07ã€ \x03SYSTEM Message \x04: ë‹¹ì‹ ì˜ \x07"..DataName.."\x04 ë°ì´í„°ê°€ \x03",TempRead,"\x08 "..TypeT.." \x04ë˜ì—ˆìŠµë‹ˆë‹¤. \x07ã€"})
 	
 	end
 
@@ -1665,13 +1665,13 @@ function CreateDataPW(DataName,SCADeathData,LocOp)
 	end
 	
 end
-function CIfChkVar(Var)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd ÇÊ¿ä
+function CIfChkVar(Var)--Varì— ë³€í™”ê°€ ìˆì„ë•Œë§ˆë‹¤ 1íšŒë§Œ ì‘ë™ì‹œí‚¤ëŠ” ì½”ë“œ. CIfEnd í•„ìš”
 	local CurVar = CreateVar(FP)
 	CIf(FP,{TTNVar(Var,NotSame,CurVar)})
 	CMov(FP,CurVar,Var)
 	
 end
-function CIfChkVars(Vars)--Var¿¡ º¯È­°¡ ÀÖÀ»¶§¸¶´Ù 1È¸¸¸ ÀÛµ¿½ÃÅ°´Â ÄÚµå. CIfEnd ÇÊ¿ä
+function CIfChkVars(Vars)--Varì— ë³€í™”ê°€ ìˆì„ë•Œë§ˆë‹¤ 1íšŒë§Œ ì‘ë™ì‹œí‚¤ëŠ” ì½”ë“œ. CIfEnd í•„ìš”
 	if #Vars <=1 then PushErrorMsg("Vars_InputError") end
  	local CurVars = CreateVarArr(#Vars,FP)
 	local TTORCondArr = {}
@@ -1691,19 +1691,19 @@ function FragBuyFnc(FItem,Cost,CostLoc,cntC,failC)
 	CMovX(FP, GetItemData, VArrX(GetVArray(FItem[1],7), VArrI, VArrI4), SetTo, nil, nil, 1)
 	local TempCostW = CreateWar(FP)
 	local LIndex = CreateVar(FP)
-	ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 Æ÷Ä¿½º
+	ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 í¬ì»¤ìŠ¤
 	CWhile(FP, {CD(cntC,1,AtLeast)},{SubCD(cntC,1)})
 		local BCan = def_sIndex()
 		NJump(FP,BCan,{CV(GetItemData,UpMax,AtLeast)},{SetCD(cntC,0),SetCD(failC,2)})
 		local TempW = CreateWar(FP)
 		local TempW2 = CreateWar(FP)
 		local TempW3 = CreateWar(FP)
-		ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 Æ÷Ä¿½º
+		ConvertLArr(FP, LIndex, _Add(GetItemData, 151), 8)--151 í¬ì»¤ìŠ¤
 		f_LRead(FP, LArrX({CostArr},LIndex), TempCostW, nil, 1)
 		f_LMovX(FP,TempW3,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4))
-		CIfX(FP,{TTNWar(TempW3,iAtLeast,"1")})--¸¶ÀÌ³Ê½º°¡¾Æ´Ï¸é
+		CIfX(FP,{TTNWar(TempW3,iAtLeast,"1")})--ë§ˆì´ë„ˆìŠ¤ê°€ì•„ë‹ˆë©´
 		f_LSub(FP,TempW,WArrX(GetWArray(iv.FfragItem[1], 7),WArrI,WArrI4),WArrX(GetWArray(iv.FfragItemUsed[1], 7),WArrI,WArrI4))
-		CElseX()--¸¶ÀÌ³Ê½º¸é
+		CElseX()--ë§ˆì´ë„ˆìŠ¤ë©´
 		f_LMov(FP,TempW,"0")
 		CIfXEnd()
 		f_LSub(FP,TempW2,TempW,"1")

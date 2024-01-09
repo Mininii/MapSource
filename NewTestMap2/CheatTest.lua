@@ -70,7 +70,7 @@ if TestStart == 1 then
 	else----
 		TriggerX(FP,{CD(MemoryCT,#condarr-1,AtMost)},{RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("m\x13\x07¡º \x04´ç½ÅÀº SCA ½Ã½ºÅÛ¿¡¼­ ÇÙÀ¯Àú·Î ÀÇ½ÉµÇ¾î °­Åğ´çÇß½À´Ï´Ù.\x07 ¡»",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+			DisplayExtText("m\x13\x07ã€ \x04ë‹¹ì‹ ì€ SCA ì‹œìŠ¤í…œì—ì„œ í•µìœ ì €ë¡œ ì˜ì‹¬ë˜ì–´ ê°•í‡´ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end
 	--
 

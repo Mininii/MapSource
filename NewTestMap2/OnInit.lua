@@ -25,7 +25,7 @@ function onInit_EUD()
 		IdleOrder = 23,
 		RClickAct = 0,
 		
-	})--º¸½º°Ç¹° ¼¼ÆÃ
+	})--ë³´ìŠ¤ê±´ë¬¼ ì„¸íŒ…
 	end
 	for j,k in pairs(PBossArr) do
 		SetUnitsDatX(k[1], {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,
@@ -36,12 +36,12 @@ function onInit_EUD()
 		AttackMoveOrder = 23,
 		IdleOrder = 23,
 		RClickAct = 0
-	})--º¸½º°Ç¹° ¼¼ÆÃ
+	})--ë³´ìŠ¤ê±´ë¬¼ ì„¸íŒ…
 	end
 	for j,k in pairs({128,91,92,129,219}) do
 		SetUnitsDatX(k, {GroupFlag=0x0})
 	end
-	for j,k in pairs({128,92,91}) do--»óÁ¡, ¼³Á¤À¯´Ö¿ë
+	for j,k in pairs({128,92,91}) do--ìƒì , ì„¤ì •ìœ ë‹›ìš©
 		SetUnitsDatX(k, {AdvFlag={0x20000000,0x20000000},HumanInitAct=23,ComputerInitAct=23,AttackOrder=23,AttackMoveOrder=23,IdleOrder=23,StarEditFlag=0x1C7,})
 		
 	end
@@ -77,15 +77,15 @@ end
 	PatchInput()
 
 	if Limit==1 then
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,TestSpeedNum)}) -- Å×½ºÆ®¸ðµå ÃÖ´ë¹è¼Ó
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,TestSpeedNum)}) -- í…ŒìŠ¤íŠ¸ëª¨ë“œ ìµœëŒ€ë°°ì†
 	else
-		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- ±âº» 3¹è¼Ó
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,13)}) -- ê¸°ë³¸ 3ë°°ì†
 	end
 iTblJump = def_sIndex()
 	CJump(FP,iTblJump)
-	iStrSize6 = GetiStrSize(0,"\x07¡º \x0D\x0D\x0D\x0D\x0D\x0D´Ü. "..MakeiStrVoid(20).." \x07¡»\x0D\x0D\x0D\x0D\x0D")
+	iStrSize6 = GetiStrSize(0,"\x07ã€Ž \x0D\x0D\x0D\x0D\x0D\x0Dë‹¨. "..MakeiStrVoid(20).." \x07ã€\x0D\x0D\x0D\x0D\x0D")
 
-	S5 = MakeiTblString(PersonalUIDArr[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
+	S5 = MakeiTblString(PersonalUIDArr[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
 	PMariTbl = {}
 	for i = 0, 6 do
 		PMariTbl[i+1] = GetiTblId(FP,PersonalUIDArr[i+1]+1,S5) 
@@ -94,7 +94,7 @@ iTblJump = def_sIndex()
 	MarStra = {}
 	MarStrs = {}
 	for i = 0, 6 do
-		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07¡º \x0D\x0D\x0D\x0D\x0D\x0D´Ü. "..MakeiStrVoid(20).." \x07¡»\x0D\x0D\x0D\x0D\x0D")
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07ã€Ž \x0D\x0D\x0D\x0D\x0D\x0Dë‹¨. "..MakeiStrVoid(20).." \x07ã€\x0D\x0D\x0D\x0D\x0D")
 	end
 	CJumpEnd(FP,iTblJump)
 
@@ -110,16 +110,16 @@ iTblJump = def_sIndex()
 
 
 
-	--CFor(FP,19025,19025+(84*1699),84) --Ä¡Æ® °Ë»ç ¹è¿­¿¡ ¸ðµç À¯´Ö Ã¹ µî·Ï
+	--CFor(FP,19025,19025+(84*1699),84) --ì¹˜íŠ¸ ê²€ì‚¬ ë°°ì—´ì— ëª¨ë“  ìœ ë‹› ì²« ë“±ë¡
 	--CI = CForVariable()
 	--CMov(FP,Nextptrs,CI)
 	----CallTrigger(FP, Call_CTInputUID)
 	--CForEnd()
 	DoActions2(FP, {
-		RotatePlayer({SetMissionObjectivesX("\x13\x04°Ç¹°À» \x08°ø°Ý\x04ÇÏ¸ç \x03¸¹Àº µ·\x04À» ¹ú°í À¯´ÖÀ» °­È­ÇÏ¿© \x07DPS\x04¸¦ °­È­ÇÕ½Ã´Ù! \n\x13\x04¼³¸í¼­´Â B,N,MÅ°, °¢Á¾ Á¤º¸´Â L,K,P Å°·Î È®ÀÎ °¡´ÉÇÕ´Ï´Ù.\n\n\x13\x17[SCA]\x04¼öµ¿ ÀúÀåÀº \x08F9 Å° \x04ÀÔ´Ï´Ù.\n\n\x13\x04Creator - GALAXY_BURST\n\x13\x08È¥ÀÚÇÏ±â Èûµé´Ù¸é? \x07µð½ºÄÚµå·Î ¿À¼¼¿ä!\n\x13\x04https://discord.gg/Tgsb6BbRgN")},Force1,FP)
+		RotatePlayer({SetMissionObjectivesX("\x13\x04ê±´ë¬¼ì„ \x08ê³µê²©\x04í•˜ë©° \x03ë§Žì€ ëˆ\x04ì„ ë²Œê³  ìœ ë‹›ì„ ê°•í™”í•˜ì—¬ \x07DPS\x04ë¥¼ ê°•í™”í•©ì‹œë‹¤! \n\x13\x04ì„¤ëª…ì„œëŠ” B,N,Mí‚¤, ê°ì¢… ì •ë³´ëŠ” L,K,P í‚¤ë¡œ í™•ì¸ ê°€ëŠ¥í•©ë‹ˆë‹¤.\n\n\x13\x17[SCA]\x04ìˆ˜ë™ ì €ìž¥ì€ \x08F9 í‚¤ \x04ìž…ë‹ˆë‹¤.\n\n\x13\x04Creator - GALAXY_BURST\n\x13\x08í˜¼ìží•˜ê¸° íž˜ë“¤ë‹¤ë©´? \x07ë””ìŠ¤ì½”ë“œë¡œ ì˜¤ì„¸ìš”!\n\x13\x04https://discord.gg/Tgsb6BbRgN")},Force1,FP)
 	})
 
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limit¼³Á¤
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),RemoveUnit(188, AllPlayers)}) -- Limitì„¤ì •
 
 	T_YY = 2023
 	T_MM = 06
@@ -154,7 +154,7 @@ iTblJump = def_sIndex()
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
-				SetDeaths(Player, SetTo, 1, 100); -- ¸ÊÁ¦ÀÛÀÚ ÇÃ·¡±×
+				SetDeaths(Player, SetTo, 1, 100); -- ë§µì œìž‘ìž í”Œëž˜ê·¸
 				
 			}
 		}
@@ -174,7 +174,7 @@ iTblJump = def_sIndex()
 			}
 		}
 	end
-	for i = 0, 6 do -- ³»ºÎ °ü¸®ÀÚ ÆÇº° Æ®¸®°Å
+	for i = 0, 6 do -- ë‚´ë¶€ ê´€ë¦¬ìž íŒë³„ íŠ¸ë¦¬ê±°
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"Azusawa_Kohane")
 		--InputTesterID(i,"_Mininii")
@@ -187,7 +187,7 @@ iTblJump = def_sIndex()
 		CDeaths(FP,Exactly,1,LimitX);
 		CDeaths(FP,Exactly,0,LimitC);}, {
 			RotatePlayer({
-				DisplayExtText(StrDesignX("\x1BÅ×½ºÆ® Àü¿ë ¸ÊÀÔ´Ï´Ù. Á¤½Ä¹öÁ¯À¸·Î ½ÃÀÛÇØÁÖ¼¼¿ä.").."\n"..StrDesignX("\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿."),4);
+				DisplayExtText(StrDesignX("\x1Bí…ŒìŠ¤íŠ¸ ì „ìš© ë§µìž…ë‹ˆë‹¤. ì •ì‹ë²„ì ¼ìœ¼ë¡œ ì‹œìž‘í•´ì£¼ì„¸ìš”.").."\n"..StrDesignX("\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ìž‘ë™."),4);
 			Defeat();
 			},Force1,FP);
 			Defeat();
@@ -201,14 +201,14 @@ iTblJump = def_sIndex()
 --		end
 --		CTrigger(FP,{TTMemory(0x51CE84,NotSame,1000)},{
 --			RotatePlayer({
---				DisplayExtText(StrDesignX("\x1B¹æ Á¦¸ñ¿¡¼­ ¹è¼Ó ¿É¼ÇÀ» Á¦°ÅÇÏ°Å³ª °ÔÀÓ ¹ÝÀÀ¼Óµµ(ÅÏ·¹ÀÌÆ®)¸¦ ÃÖ´ë·Î ¿Ã·ÁÁÖ½Ê½Ã¿À.").."\n"..StrDesignX("\x1B¶ÇÇÑ ÀÌ ¸ÊÀº ¹èÆ²³Ý¿¡¼­¸¸ ÇÃ·¹ÀÌ °¡´ÉÇÕ´Ï´Ù. ¹èÆ²³Ý¿¡¼­ ÁøÇàÇØ ÁÖ½Ê½Ã¿À."),4);
+--				DisplayExtText(StrDesignX("\x1Bë°© ì œëª©ì—ì„œ ë°°ì† ì˜µì…˜ì„ ì œê±°í•˜ê±°ë‚˜ ê²Œìž„ ë°˜ì‘ì†ë„(í„´ë ˆì´íŠ¸)ë¥¼ ìµœëŒ€ë¡œ ì˜¬ë ¤ì£¼ì‹­ì‹œì˜¤.").."\n"..StrDesignX("\x1Bë˜í•œ ì´ ë§µì€ ë°°í‹€ë„·ì—ì„œë§Œ í”Œë ˆì´ ê°€ëŠ¥í•©ë‹ˆë‹¤. ë°°í‹€ë„·ì—ì„œ ì§„í–‰í•´ ì£¼ì‹­ì‹œì˜¤."),4);
 --			},Force1,FP);
 --			SetMemory(0xCDDDCDDC,SetTo,1);},1)
 			
 	end
 	if TestStart == 0 then
 		for i = 0, 6 do
-			Trigger { -- °ÔÀÓ¿À¹ö
+			Trigger { -- ê²Œìž„ì˜¤ë²„
 				players = {FP},
 				conditions = {
 					Label(0);
@@ -216,7 +216,7 @@ iTblJump = def_sIndex()
 				},
 				actions = {
 					RotatePlayer({
-					DisplayExtText("\x13\x1B»ç¶÷ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ÄÄÇ»ÅÍ ³ÖÁö¸¶¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+					DisplayExtText("\x13\x1Bì‚¬ëžŒ ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ì»´í“¨í„° ë„£ì§€ë§ˆì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ìž‘ë™.",4);
 					Defeat();
 					},HumanPlayers,FP);
 					Defeat();
@@ -227,7 +227,7 @@ iTblJump = def_sIndex()
 		end
 	end
 
-		Trigger { -- °ÔÀÓ¿À¹ö
+		Trigger { -- ê²Œìž„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -235,14 +235,14 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1BÄÄÇ»ÅÍ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayExtText("\x13\x1Bì»´í“¨í„° ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œìž‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ìž‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	Trigger { -- °ÔÀÓ¿À¹ö
+	Trigger { -- ê²Œìž„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -250,14 +250,14 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1BÄÄÇ»ÅÍ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayExtText("\x13\x1Bì»´í“¨í„° ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œìž‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ìž‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	Trigger { -- °ÔÀÓ¿À¹ö
+	Trigger { -- ê²Œìž„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			Label(0);
@@ -265,7 +265,7 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1BÄÄÇ»ÅÍ Á¾Á· º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayExtText("\x13\x1Bì»´í“¨í„° ì¢…ì¡± ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œìž‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ìž‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -275,16 +275,16 @@ iTblJump = def_sIndex()
 
 	Trigger2X(FP,{},{RotatePlayer({
 		DisplayTextX(
-			StrDesignX("\x04°Ç¹°À» \x08°ø°Ý\x04ÇÏ¿© \x03¸¹Àº µ·\x04À» ¹ú°í À¯´ÖÀ» °­È­ÇÏ¿© \x07DPS\x04¸¦ °­È­ÇÕ½Ã´Ù!")..
-			"\n"..StrDesignX("\x04¼³¸í¼­´Â B,N,MÅ°·Î È®ÀÎ °¡´ÉÇÕ´Ï´Ù.")..
-			"\n"..StrDesignX("\x17[SCA]\x04¼öµ¿ ÀúÀåÀº \x08F9 Å° \x04ÀÔ´Ï´Ù.")..
+			StrDesignX("\x04ê±´ë¬¼ì„ \x08ê³µê²©\x04í•˜ì—¬ \x03ë§Žì€ ëˆ\x04ì„ ë²Œê³  ìœ ë‹›ì„ ê°•í™”í•˜ì—¬ \x07DPS\x04ë¥¼ ê°•í™”í•©ì‹œë‹¤!")..
+			"\n"..StrDesignX("\x04ì„¤ëª…ì„œëŠ” B,N,Mí‚¤ë¡œ í™•ì¸ ê°€ëŠ¥í•©ë‹ˆë‹¤.")..
+			"\n"..StrDesignX("\x17[SCA]\x04ìˆ˜ë™ ì €ìž¥ì€ \x08F9 í‚¤ \x04ìž…ë‹ˆë‹¤.")..
 			"\n"..StrDesignX("\x04Creator - GALAXY_BURST")..
-			"\n"..StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ"),4),
+			"\n"..StrDesignX("\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ã¤>ã……<)ã¤"),4),
 		PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
 	
 		if Limit == 1 then
-			Trigger2X(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04ÇöÀç \x07Å×½ºÆ® ¹öÀü\x04À» ÀÌ¿ëÁßÀÔ´Ï´Ù.\n\x13\x07Å×½ºÆ®¿¡ ÇùÁ¶ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù. \n\x13\x04Å×½ºÆ®¸Ê ÀÌ¿ë °¡´É ±â°£Àº "..T_YY.."³â "..T_MM.."¿ù "..T_DD.."ÀÏ "..T_HH.."½Ã ±îÁöÀÔ´Ï´Ù.")},HumanPlayers,FP)})
-			Trigger2X(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04ÇöÀç \x07Å×½ºÆ® ¹öÀü\x04À» ÀÌ¿ëÁßÀÔ´Ï´Ù.\n\x13\x07Å×½ºÆ®¿¡ ÇùÁ¶ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù. \n\x13\x04Å×½ºÆ®¸Ê ÀÌ¿ë °¡´É ±â°£Àº Á¾·áµÇ¾úÀ¸³ª Á¦ÀÛÀÚ°¡ °ÔÀÓ¿¡ Âü¿©ÁßÀÌ¹Ç·Î ¸Ê ½ÇÇà °¡´ÉÇÕ´Ï´Ù..")},HumanPlayers,FP)})
+			Trigger2X(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04í˜„ìž¬ \x07í…ŒìŠ¤íŠ¸ ë²„ì „\x04ì„ ì´ìš©ì¤‘ìž…ë‹ˆë‹¤.\n\x13\x07í…ŒìŠ¤íŠ¸ì— í˜‘ì¡°í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤. \n\x13\x04í…ŒìŠ¤íŠ¸ë§µ ì´ìš© ê°€ëŠ¥ ê¸°ê°„ì€ "..T_YY.."ë…„ "..T_MM.."ì›” "..T_DD.."ì¼ "..T_HH.."ì‹œ ê¹Œì§€ìž…ë‹ˆë‹¤.")},HumanPlayers,FP)})
+			Trigger2X(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04í˜„ìž¬ \x07í…ŒìŠ¤íŠ¸ ë²„ì „\x04ì„ ì´ìš©ì¤‘ìž…ë‹ˆë‹¤.\n\x13\x07í…ŒìŠ¤íŠ¸ì— í˜‘ì¡°í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤. \n\x13\x04í…ŒìŠ¤íŠ¸ë§µ ì´ìš© ê°€ëŠ¥ ê¸°ê°„ì€ ì¢…ë£Œë˜ì—ˆìœ¼ë‚˜ ì œìž‘ìžê°€ ê²Œìž„ì— ì°¸ì—¬ì¤‘ì´ë¯€ë¡œ ë§µ ì‹¤í–‰ ê°€ëŠ¥í•©ë‹ˆë‹¤..")},HumanPlayers,FP)})
 		
 		end
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
@@ -372,7 +372,7 @@ iTblJump = def_sIndex()
 
 
 	
-	DoActionsX(FP,SetCtrig2X(SCA.ArrPtr, SetTo, "X",SCA.DataOffsetArr[2],0,1,0, nil))--¹è¿­ ½ÃÀÛÁ¡ ÀúÀå
+	DoActionsX(FP,SetCtrig2X(SCA.ArrPtr, SetTo, "X",SCA.DataOffsetArr[2],0,1,0, nil))--ë°°ì—´ ì‹œìž‘ì  ì €ìž¥
 --
 	CIfEnd()
 	CIfOnce(FP, {Memory(SCA.ArrPtr,Exactly,0)})
