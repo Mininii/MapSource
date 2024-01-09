@@ -1,6 +1,8 @@
 function Include_Vars()
 
 	Nextptrs = CreateVar(FP) -- 유닛 EPD 로드용
+	CurCunitI = CreateVar(FP)-- 유닛 index 체크용
+	NBagArr = NBag(FP, 1, 1700) -- CUnit NBag
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
 	P1VON = "Turn ON Shared Vision for Player 1"
 	P2VOFF = "Turn OFF Shared Vision for Player 2"
@@ -35,7 +37,16 @@ function Include_Vars()
 	CT_GNextRandV = CreateVar(FP)
 	CT_GPrevRandW = CreateWar(FP)
 	CT_GNextRandW = CreateWar(FP)
+	
+	if Limit==1 then
 	MCTCondArr = {
-		Memory(0x5124F0, Exactly, 13)
+		Memory(0x5124F0, Exactly, TestSpeedNum)
 	}
+	else
+	MCTCondArr = {
+		Memory(0x5124F0, Exactly, 0x1D)
+	}
+	end
+	
+	ctarr = {{},{},{},{},{},{},{},{}}
 end

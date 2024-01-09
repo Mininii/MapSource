@@ -1,5 +1,9 @@
 function onInit_EUD()
-	CIfOnce(FP)
+	if Limit==1 then
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,TestSpeedNum)}) -- 테스트모드 최대배속
+	else
+		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x1D)}) -- 기본 2배속
+	end
 	PatchInit()
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
@@ -132,6 +136,16 @@ function onInit_EUD()
 		CIfEnd()
 	end
 
+
+	CFor(FP, 0, 1700, 1) --모든유닛 배치 완료 후 CT_CUnit에 유닛 정보 입력
+	CT_UID = CreateVar(FP)
+	CT_PID = CreateVar(FP)
+	CI = CForVariable()
+	f_Read(FP, _Add(_Mul(CI,84),19025+25), CT_UID, nil, 0xFF,1)
+	f_Read(FP, _Add(_Mul(CI,84),19025+19), CT_PID, nil, 0xFF,1)
+	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
+	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
+	CForEnd()
 
 	CIfEnd()
 end

@@ -36,7 +36,7 @@ VerText = "\x19ver\x07. \x040\x07.\x0401"
 TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 1
+	TestSpeedNum = 1--0x1D
 else
 SpeedTestMode = 0
 SlotEnable =1
