@@ -33,7 +33,7 @@ end
 
 VerText = "\x19ver\x07. \x040\x07.\x0401"
 
-TestSet(1)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 1
@@ -51,32 +51,50 @@ FP = P1
 SetFixedPlayer(FP) -- 메인 트러기 플레이어. 
 Enable_HumanCheck() -- 컴퓨터 체크 필요시 PlayerCheck(Player,Status) 사용
 StartCtrig(1,FP,nil,1,"C:\\Temp")
+Trigger {
+	players = {P2,P3,P4,P5,P6,P7,P8},
+	conditions = {
+		Label(0);
+		Switch("Switch 189",Set);
+		Switch("Switch 188",Cleared);
+	},
+	actions = {
+		SetCtrigX(P1,0xFFFF,0x4,0,SetTo,P1,0x5002,0x0,0,0);
+		SetCtrigX("X","X",0x4,0,SetTo,P1,0xFFFB,0x0,0,0);
+		SetCtrigX(P1,0x5002,0x4,0,SetTo,"X","X",0x0,0,1);
+		SetCtrigX(P1,0x5002,0x158,0,SetTo,"X","X",0x4,1,0);
+		SetCtrigX(P1,0x5002,0x15C,0,SetTo,"X","X",0x0,0,1);
+		SetSwitch("Switch 188",Set);
+		PreserveTrigger();
+	},
+}
+Trigger {
+	players = {P1},
+	conditions = {
+		Label(0x5002);
+		Switch("Switch 189",Set);
+		Switch("Switch 188",Set);
+	},
+	actions = {
+		SetDeaths(0,SetTo,0,0);
+		PreserveTrigger();
+	}
+}
+
+
+
+
 
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 Include_CtrigPlib(360,"Switch 100")
 Include_64BitLibrary("Switch 100")
 CJumpEnd(AllPlayers,init_func)
-DPInitActArr = DP_Start_init(FP,nil,nil,nil,1)
-
-
-
-init_func = def_sIndex()
-CJump(AllPlayers,init_func)
-	Install_BackupCP(FP)
-	--Include_Vars()
-	Include_Conv_CPosXY(FP,{4096*2,4096*2})
-	CT_Cunit = Install_EXCC(FP,4,nil)
-	Include_CRandNum(FP)
-	--DataArr()
-	--Install_CallTriggers()
-	
-CJumpEnd(AllPlayers,init_func)
 
 
 
 
-MainTrig = def_sIndex()
+
 
 
 
@@ -97,6 +115,27 @@ end
 TriggerX(P1, {Switch("Switch 187",Set)}, {
 	SetDeaths(0,SetTo,0,0);}, {preserved},0x5000)
 CIf(FP,Switch("Switch 1",Cleared),SetSwitch("Switch 1",Set))
+
+DPInitActArr = DP_Start_init(FP,nil,0x4000,0x6000,1)
+
+
+
+init_func = def_sIndex()
+CJump(AllPlayers,init_func)
+	Install_BackupCP(FP)
+	Include_Vars()
+	Include_Conv_CPosXY(FP,{4096*2,4096*2})
+	CT_Cunit = Install_EXCC(FP,4,nil)
+	Include_CRandNum(FP)
+	Data()
+	--Install_CallTriggers()
+	
+CJumpEnd(AllPlayers,init_func)
+
+CT_Prev()
+CT_PrevCP()
+
+
 --FP 트리거 시작부
 --여기에 모든 FP 트리거 입력 (절대 FP 이외의 트리거 입력 금지)
 
@@ -105,15 +144,28 @@ CIf(FP,Switch("Switch 1",Cleared),SetSwitch("Switch 1",Set))
 --TriggerX(FP, {}, {RotatePlayer({DisplayTextX("3번트리거", 1)}, AllPlayers, FP)}, {preserved})
 _G[DPInitActArr[1]](DPInitActArr[2],DPInitActArr[3],DPInitActArr[4],DPInitActArr[5])
 
---onInit_EUD() -- onPluginStart
+onInit_EUD() -- onPluginStart
+
+Interface()
 
 
-
-
---FP 트리거 종료부
-CIfEnd()
-DoActionsX(P1, {}, nil,0x5001)
+CT_Next()
 init_Setting()
+CIfEnd()--FP 트리거 종료부
+
+DoActions(AllPlayers, {SetAllianceStatus(Force1, Ally),
+RunAIScript(P1VON),
+RunAIScript(P2VON),
+RunAIScript(P3VON),
+RunAIScript(P4VON),
+RunAIScript(P5VON),
+RunAIScript(P6VON),
+RunAIScript(P7VON),
+RunAIScript(P8VON),
+})	
+
+
+DoActionsX(P1, {}, nil,0x5001)
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
