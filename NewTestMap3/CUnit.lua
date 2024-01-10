@@ -62,7 +62,9 @@ NBagLoopEnd()
 
 
 
+
 DoActionsX(FP, {AddV(iv.CUnitT,1)})
+
 CTEPD = CreateVar(FP)
 UIDPtr =  CreateVar(FP)
 PIDPtr =  CreateVar(FP)

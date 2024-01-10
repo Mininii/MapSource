@@ -1567,6 +1567,14 @@ function SCA_DataSaveG2(Player,Source,Destptr) --Source == W then Use DestUnit, 
 end
 
 
+function CreateDataV(DataName,Value)
+	if Value == nil then Value = 0 end
+	
+	local Ret = CreateVar2(FP,nil,nil,Value)
+	local Ret2 = CreateVar2(FP,nil,nil,Value)
+	table.insert(VWArr,{Ret,Ret2,DataName})
+return Ret,Ret2
+end
 function CreateDataPV(DataName,SCADeathData,LocOp,Value)
 	if Value == nil then Value = 0 end
 	
@@ -1582,7 +1590,6 @@ function CreateDataPV(DataName,SCADeathData,LocOp,Value)
 		return Ret,Ret2,Ret3
 	else return Ret,Ret2
 	end
-	
 end
 function CreateDataPW(DataName,SCADeathData,LocOp,Value)
 	if Value == nil then Value = 0 end
