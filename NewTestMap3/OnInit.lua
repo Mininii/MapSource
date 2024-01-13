@@ -69,7 +69,7 @@ function onInit_EUD()
 			}
 		}
 	end
-	for i = 0, 6 do -- 내부 관리자 판별 트리거
+	for i = 0, 7 do -- 내부 관리자 판별 트리거
 		InputTesterID(i,"GALAXY_BURST")
 		InputTesterID(i,"Azusawa_Kohane")
 		--InputTesterID(i,"_Mininii")
@@ -136,15 +136,18 @@ function onInit_EUD()
 		CIfEnd()
 	end
 
-
-	CFor(FP, 0, 1700, 1) --모든유닛 배치 완료 후 CT_CUnit에 유닛 정보 입력
+	CFor(FP, 0, 1700, 1)
+	CI = CForVariable()
 	CT_UID = CreateVar(FP)
 	CT_PID = CreateVar(FP)
-	CI = CForVariable()
-	f_Read(FP, _Add(_Mul(CI,84),19025+25), CT_UID, nil, 0xFF,1)
-	f_Read(FP, _Add(_Mul(CI,84),19025+19), CT_PID, nil, 0xFF,1)
+	f_Read(FP, _Add(_Mul(CI,84),19025+25),CT_UID, nil, 0xFF,1)
+	CMov(FP,0x6509B0,FP)
+	f_Read(FP, _Add(_Mul(CI,84),19025+19),CT_PID, nil, 0xFF,1)
+	CMov(FP,0x6509B0,FP)
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
+	CMov(FP,0x6509B0,FP)
+	CAdd(FP,CI,1)
 	CForEnd()
 
 	CIfEnd()

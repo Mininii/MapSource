@@ -148,7 +148,7 @@ onInit_EUD() -- onPluginStart
 
 Interface()
 
-
+CUnit()
 CT_Next()
 init_Setting()
 CIfEnd()--FP 트리거 종료부
