@@ -1,6 +1,4 @@
-function DisplayExtText(Text, AlwaysDisplay)
-	return DisplayText(Text, AlwaysDisplay)
-end
+
 function Install_BackupCP(Player)
 	BackupCp = CreateVar(Player)
 	SaveCp_CallIndex = SetCallForward()
