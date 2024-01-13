@@ -9,17 +9,17 @@ function Include_GunData(Size,LineNum)
 	else
 		RedNumberL = RMBak
 	end
-	--f_GunSendT = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	--f_GunSendT2 = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: ¼º°øÇÑ f_GunSendÀÇ EXCunit Number : ")
+	--f_GunSendT = CreateCText(FP,"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	--f_GunSendT2 = CreateCText(FP,"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: ì„±ê³µí•œ f_GunSendì˜ EXCunit Number : ")
 	G_A = CreateVar(FP)
 	FuncAlloc = FuncAlloc + 1
 	G_InputH = CreateVar(FP)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
 	G_TempH = CreateVar(FP)
-	--f_GunT = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	G_SendErrT = StrDesign("\x08ERROR : \x04f_GunÀÇ ¸ñ·ÏÀÌ °¡µæ Â÷ G_Send¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07")
-	--f_GunT2 = CreateCText(FP," \x07¡½\x08¡¤\x11¡¤\x07¡¤")
+	--f_GunT = CreateCText(FP,"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	G_SendErrT = StrDesign("\x08ERROR : \x04f_Gunì˜ ëª©ë¡ì´ ê°€ë“ ì°¨ G_Sendë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07")
+	--f_GunT2 = CreateCText(FP," \x07ã€‘\x08Â·\x11Â·\x07Â·")
 	local f_GunNumT = CreateVArray(FP,5)
 	Var_InputCVar = {}
 	Var_Lines = LineNum
@@ -35,34 +35,34 @@ function Include_GunData(Size,LineNum)
 		f_Read(FP,BackupCp,GunID,"X",0xFF,1)
 		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
 		function GunBGM(ID,Type,Text)
-			local GText = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07¡¤\x11¡¤\x08¡¤\x07¢Ó "..Text.." \x04À»(¸¦) ÆÄ±«ÇÏ¿´½À´Ï´Ù. \x07¢Ó\x08¡¤\x11¡¤\x07¡¤\n\x0D\x0D\n\x0D\x0D"
+			local GText = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x07Â·\x11Â·\x08Â·\x07â€  "..Text.." \x04ì„(ë¥¼) íŒŒê´´í•˜ì˜€ìŠµë‹ˆë‹¤. \x07â€ \x08Â·\x11Â·\x07Â·\n\x0D\x0D\n\x0D\x0D"
 			if Type == nil then
-				Trigger2X(FP,{CV(GunID,ID)},{RotatePlayer({DisplayExtText(GText,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CV(GunID,ID)},{RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
 			else
-				Trigger2X(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg");DisplayExtText(GText,4)},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CV(GunID,ID)},{SetV(BGMType,Type),RotatePlayer({PlayWAVX("staredit\\wav\\BGM_Skip.ogg");PlayWAVX("staredit\\wav\\BGM_Skip.ogg");DisplayTextX(GText,4)},HumanPlayers,FP)},{preserved})
 			end
 		end
-		--\x1B±â¾ïÀÇ ±âµÕ \x1D¡¼ Conv_HStr2("") \x1D¡½
+		--\x1Bê¸°ì–µì˜ ê¸°ë‘¥ \x1Dã€ Conv_HStr2("") \x1Dã€‘
 
 
-		GunBGM(131,2,"\x19±â¾ïÀÇ \x04±âµÕ \x10¡¶ "..Conv_HStr2("<19>H<4>atchery").." \x10¡·")
-		GunBGM(132,3,"\x19±â¾ïÀÇ \x04±âµÕ \x10¡¶ "..Conv_HStr2("<19>L<4>air").." \x10¡·")
-		GunBGM(133,4,"\x19±â¾ïÀÇ \x04±âµÕ \x10¡¶ "..Conv_HStr2("<19>H<4>ive").." \x10¡·")
-		GunBGM(154,5,"\x19±â¾ïÀÇ \x1DÁ¶°¢»ó \x10¡¶ "..Conv_HStr2("<19>F<1D>elis").." \x10¡·")
-		GunBGM(148,5,"\x19±â¾ïÀÇ \x1DÀ§±â \x10¡¶ "..Conv_HStr2("<19>C<1D>risis").." \x10¡·")
-		GunBGM(174,5,"\x19±â¾ïÀÇ \x1D¹®¸í \x10¡¶ "..Conv_HStr2("<19>L<1D>ost <19>C<1D>ivilization").." \x10¡·")
-		GunBGM(147,5,"\x19±â¾ïÀÇ \x1DÃµ±¹ \x10¡¶ "..Conv_HStr2("<1D>the <19>H<1D>eaven").." \x10¡·")
-		GunBGM(151,5,"\x19±â¾ïÀÇ \x1D½Ç¿ë¼º \x10¡¶ "..Conv_HStr2("<19>P<1D>ragmatism").." \x10¡·")
-		GunBGM(127,5,"\x19±â¾ïÀÇ \x1Dº¸°ü¼Ò \x10¡¶ "..Conv_HStr2("<19>A<1D>rchive").." \x10¡·")
-		GunBGM(126,5,"\x19±â¾ïÀÇ \x1D±ÕÇü \x10¡¶ "..Conv_HStr2("<19>E<1D>quilibrium").." \x10¡·")
-		GunBGM(200,5,"\x19±â¾ïÀÇ \x1D¾Ğµµ \x10¡¶ "..Conv_HStr2("<19>O<1D>verwhelm").." \x10¡·")
-		GunBGM(201,5,"\x19±â¾ïÀÇ \x1D¸Á°¢ \x10¡¶ "..Conv_HStr2("<19>O<1D>blivion").." \x10¡·")
-		GunBGM(152,5,"\x19±â¾ïÀÇ \x1D¾Ç¸ù \x10¡¶ "..Conv_HStr2("<19>N<1D>ightmare").." \x10¡·")
-		GunBGM(130,5,"\x19±â¾ïÀÇ \x1Dº½ \x10¡¶ "..Conv_HStr2("<19>A<1D>uxesia").." \x10¡·")
-		GunBGM(168,nil,"\x19±â¾ïÀÇ \x1D°ø¸í \x10¡¶ "..Conv_HStr2("<19>R<1D>esonance").." \x10¡·")
-		GunBGM(175,5,"\x19±â¾ïÀÇ \x1D³»°û \x10¡¶ "..Conv_HStr2("<19>D<1D>efined <19>I<1D>nside").." \x10¡·")
-		GunBGM(189,nil,"\x19±â¾ïÀÇ \x1DÅë·Î \x10¡¶ "..Conv_HStr2("<19>W<1D>arp <19>T<1D>unnel").." \x10¡·")
-		GunBGM(190,nil,"\x19±â¾ïÀÇ \x08Áß\x1D½ÉºÎ \x10¡¶ "..Conv_HStr2("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x10¡·")
+		GunBGM(131,2,"\x19ê¸°ì–µì˜ \x04ê¸°ë‘¥ \x10ã€Š "..Conv_HStr2("<19>H<4>atchery").." \x10ã€‹")
+		GunBGM(132,3,"\x19ê¸°ì–µì˜ \x04ê¸°ë‘¥ \x10ã€Š "..Conv_HStr2("<19>L<4>air").." \x10ã€‹")
+		GunBGM(133,4,"\x19ê¸°ì–µì˜ \x04ê¸°ë‘¥ \x10ã€Š "..Conv_HStr2("<19>H<4>ive").." \x10ã€‹")
+		GunBGM(154,5,"\x19ê¸°ì–µì˜ \x1Dì¡°ê°ìƒ \x10ã€Š "..Conv_HStr2("<19>F<1D>elis").." \x10ã€‹")
+		GunBGM(148,5,"\x19ê¸°ì–µì˜ \x1Dìœ„ê¸° \x10ã€Š "..Conv_HStr2("<19>C<1D>risis").." \x10ã€‹")
+		GunBGM(174,5,"\x19ê¸°ì–µì˜ \x1Dë¬¸ëª… \x10ã€Š "..Conv_HStr2("<19>L<1D>ost <19>C<1D>ivilization").." \x10ã€‹")
+		GunBGM(147,5,"\x19ê¸°ì–µì˜ \x1Dì²œêµ­ \x10ã€Š "..Conv_HStr2("<1D>the <19>H<1D>eaven").." \x10ã€‹")
+		GunBGM(151,5,"\x19ê¸°ì–µì˜ \x1Dì‹¤ìš©ì„± \x10ã€Š "..Conv_HStr2("<19>P<1D>ragmatism").." \x10ã€‹")
+		GunBGM(127,5,"\x19ê¸°ì–µì˜ \x1Dë³´ê´€ì†Œ \x10ã€Š "..Conv_HStr2("<19>A<1D>rchive").." \x10ã€‹")
+		GunBGM(126,5,"\x19ê¸°ì–µì˜ \x1Dê· í˜• \x10ã€Š "..Conv_HStr2("<19>E<1D>quilibrium").." \x10ã€‹")
+		GunBGM(200,5,"\x19ê¸°ì–µì˜ \x1Dì••ë„ \x10ã€Š "..Conv_HStr2("<19>O<1D>verwhelm").." \x10ã€‹")
+		GunBGM(201,5,"\x19ê¸°ì–µì˜ \x1Dë§ê° \x10ã€Š "..Conv_HStr2("<19>O<1D>blivion").." \x10ã€‹")
+		GunBGM(152,5,"\x19ê¸°ì–µì˜ \x1Dì•…ëª½ \x10ã€Š "..Conv_HStr2("<19>N<1D>ightmare").." \x10ã€‹")
+		GunBGM(130,5,"\x19ê¸°ì–µì˜ \x1Dë´„ \x10ã€Š "..Conv_HStr2("<19>A<1D>uxesia").." \x10ã€‹")
+		GunBGM(168,nil,"\x19ê¸°ì–µì˜ \x1Dê³µëª… \x10ã€Š "..Conv_HStr2("<19>R<1D>esonance").." \x10ã€‹")
+		GunBGM(175,5,"\x19ê¸°ì–µì˜ \x1Dë‚´ê³½ \x10ã€Š "..Conv_HStr2("<19>D<1D>efined <19>I<1D>nside").." \x10ã€‹")
+		GunBGM(189,nil,"\x19ê¸°ì–µì˜ \x1Dí†µë¡œ \x10ã€Š "..Conv_HStr2("<19>W<1D>arp <19>T<1D>unnel").." \x10ã€‹")
+		GunBGM(190,nil,"\x19ê¸°ì–µì˜ \x08ì¤‘\x1Dì‹¬ë¶€ \x10ã€Š "..Conv_HStr2("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x10ã€‹")
 		Convert_CPosXY()
 		CMov(FP,G_A,0)
 		G_SkipJump = def_sIndex()
@@ -83,12 +83,12 @@ function Include_GunData(Size,LineNum)
 		
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			DisplayPrint(HumanPlayers,{"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ",G_A," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
-			DisplayPrint(HumanPlayers,{"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: ¼º°øÇÑ f_GunSendÀÇ EXCunit Number : ",DUnitCalc[4][1]," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+			DisplayPrint(HumanPlayers,{"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ",G_A," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
+			DisplayPrint(HumanPlayers,{"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: ì„±ê³µí•œ f_GunSendì˜ EXCunit Number : ",DUnitCalc[4][1]," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 			CIfEnd()
 		end
 		CElseX()
-		DoActions2X(FP,{RotatePlayer({DisplayExtText(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 		f_LoadCp()
 	SetCallEnd()
@@ -117,12 +117,12 @@ function Include_GunData(Size,LineNum)
 		
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			DisplayPrint(HumanPlayers,{"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ",G_A," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
-			DisplayPrint(HumanPlayers,{"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: ¼º°øÇÑ f_GunSendÀÇ EXCunit Number : ",DUnitCalc[4][1]," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+			DisplayPrint(HumanPlayers,{"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ",G_A," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
+			DisplayPrint(HumanPlayers,{"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: ì„±ê³µí•œ f_GunSendì˜ EXCunit Number : ",DUnitCalc[4][1]," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 			CIfEnd()
 		end
 		CElseX()
-		DoActions2X(FP,{RotatePlayer({DisplayExtText(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 		f_LoadCp()
 	SetCallEnd()
@@ -196,7 +196,7 @@ end
 	local G_TempW = CreateVar(FP)
 	local CurLoc,CurLoc2 = CreateVars(2,FP)
 	local GunCaseCheck = CreateCcode()
-	local GunCaseErrT = StrDesign("\x08ERROR : \x04µî·ÏµÇÁö ¾ÊÀº °ÇÀÛÀÌ ÀÛµ¿ÇÏ¿© ÀÚµ¿À¸·Î SuspendÇÏ¿´½À´Ï´Ù. °ÇÀÛÀ» µî·ÏÇØÁÖ¼¼¿ä.\x07")
+	local GunCaseErrT = StrDesign("\x08ERROR : \x04ë“±ë¡ë˜ì§€ ì•Šì€ ê±´ì‘ì´ ì‘ë™í•˜ì—¬ ìë™ìœ¼ë¡œ Suspendí•˜ì˜€ìŠµë‹ˆë‹¤. ê±´ì‘ì„ ë“±ë¡í•´ì£¼ì„¸ìš”.\x07")
 	f_GunTable = {}
 	function CIf_GCase(Index)
 		CIf(FP,{Gun_Line(0,Exactly,Index),Gun_Line(54,AtMost,0)},{SetCD(GunCaseCheck,1)})
@@ -213,7 +213,7 @@ end
 	CMov(FP,G_CA_Player,Var_TempTable[5],nil,0xFF,1)
 	DoActionsX(FP,{SetSwitch(RandSwitch,Random),SetCD(GunCaseCheck,0)})
 	CDoActions(FP,{Gun_SetLine(7,Add,1)})
-	CIf(FP,CD(Theorist,1,AtLeast)) -- ÀÌ·ĞÄ¡ »ÑÆ¢¹æÁö
+	CIf(FP,CD(Theorist,1,AtLeast)) -- ì´ë¡ ì¹˜ ë¿ŒíŠ€ë°©ì§€
 	CIf(FP,{TTOR({Gun_Line(0,Exactly,126),Gun_Line(0,Exactly,127),Gun_Line(0,Exactly,132),Gun_Line(0,Exactly,133)}),Gun_Line(54,AtMost,0)},{SetCD(GunCaseCheck,1)})
 	
 	Simple_SetLocX(FP,0,_Sub(Var_TempTable[2],32*9),_Sub(Var_TempTable[3],32*9),_Add(Var_TempTable[2],32*9),_Add(Var_TempTable[3],32*9),{KillUnitAt(All,nilunit,1,FP)})
@@ -422,29 +422,29 @@ end
 		CMov(FP,TRepeatY,G_CA_CenterY)
 		CIf(FP,{Gun_Line(7,AtLeast,35)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0)})
 		DoActionsX(FP,{SetV(WV,0)})
-		CWhile(FP,{CV(WV,2,AtMost)},{AddV(WV,1)}) -- Æ¼¾î1
+		CWhile(FP,{CV(WV,2,AtMost)},{AddV(WV,1)}) -- í‹°ì–´1
 			CMov(FP,UnitIDV1,VArr(Tier1VA,f_CRandNum(#Tier1,0)))
 			f_TempRepeat2X(nil,UID1I,1,233,"CP","X",2)
 			--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",233,nil,"CP",2,nil)
 		CWhileEnd()
 		DoActionsX(FP,{SetV(WV,0)})
-		CWhile(FP,{CV(WV,1,AtMost)},{AddV(WV,1)}) -- Æ¼¾î2
+		CWhile(FP,{CV(WV,1,AtMost)},{AddV(WV,1)}) -- í‹°ì–´2
 			CMov(FP,UnitIDV1,VArr(Tier2VA,f_CRandNum(#Tier2,0)))
 			f_TempRepeat2X(nil,UID1I,1,545,"CP","X",2)
 			--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",545,nil,"CP",2,nil)
 		CWhileEnd()
-		CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- Æ¼¾î3
+		CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- í‹°ì–´3
 		f_TempRepeat2X(nil,UID1I,1,211,"CP","X",2)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",211,nil,"CP",2,nil)
 		CIfEnd()
 		CIf(FP,{Gun_Line(6,AtLeast,5)},{Gun_SetLine(8,Add,1),Gun_SetLine(6,SetTo,0)})
-		CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- Æ¼¾î4
+		CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- í‹°ì–´4
 		f_TempRepeat2X(nil,UID1I,1,548,"CP","X",2)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",548,nil,"CP",2,nil)
 
 		CIfEnd()
 		CIf(FP,{Gun_Line(8,AtLeast,2)},{Gun_SetLine(9,Add,1),Gun_SetLine(8,SetTo,0)})
-		CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- Æ¼¾î5
+		CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- í‹°ì–´5
 		f_TempRepeat2X(nil,UID1I,1,984,"CP","X",2)
 		--G_CA_SetSpawn2X({},{UID1I},"ACAS","Point","MAX",984,nil,"CP",2,nil)
 		CIfEnd()
@@ -919,15 +919,15 @@ end
 	f_TempRepeat2X(nil,UID1I,1,545,"CP","X",2)
 	CForEnd()
 	CFor(FP,0,25,1)
-	CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- Æ¼¾î3
+	CMov(FP,UnitIDV1,VArr(Tier3VA,f_CRandNum(#Tier3,0))) -- í‹°ì–´3
 	f_TempRepeat2X(nil,UID1I,1,211,"CP","X",2)
 	CForEnd()
 	CFor(FP,0,13,1)
-	CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- Æ¼¾î4
+	CMov(FP,UnitIDV1,VArr(Tier4VA,f_CRandNum(#Tier4,0))) -- í‹°ì–´4
 	f_TempRepeat2X(nil,UID1I,1,548,"CP","X",2)
 	CForEnd()
 	CFor(FP,0,6,1)
-	CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- Æ¼¾î5
+	CMov(FP,UnitIDV1,VArr(Tier5VA,f_CRandNum(#Tier5,0))) -- í‹°ì–´5
 	f_TempRepeat2X(nil,UID1I,1,984,"CP","X",2)
 	CForEnd()
 	CIfEnd()
@@ -1024,8 +1024,8 @@ end
 	DoActionsX(FP,{SetCD(WarpCheck,1),SetInvincibility(Enable,189,Force2,64)})
 
 	for i = 4, 7 do
-		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom ¹Ì´Ş¼º½Ã ±âº»ÆĞÅÏ
-		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom ´Ş¼º½Ã Æ¯¼öÆĞÅÏ
+		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom ë¯¸ë‹¬ì„±ì‹œ ê¸°ë³¸íŒ¨í„´
+		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom ë‹¬ì„±ì‹œ íŠ¹ìˆ˜íŒ¨í„´
 	end
 	CIfX(FP,{Gun_Line(30,Exactly,1)})
 
@@ -1088,7 +1088,7 @@ end
 
 		Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{})
 		DoActions(FP,{Order(94,P5,64,Move,1)})
-		TriggerX(FP, {Gun_Line(8,AtLeast,20240)}, {Gun_SetLine(31,SetTo,1),SetCp(4),RunAIScriptAt(JYD, 64),SetCp(FP)},{preserved})--Axiom ´Ş¼º½Ã Æ¯¼öÆĞÅÏ
+		TriggerX(FP, {Gun_Line(8,AtLeast,20240)}, {Gun_SetLine(31,SetTo,1),SetCp(4),RunAIScriptAt(JYD, 64),SetCp(FP)},{preserved})--Axiom ë‹¬ì„±ì‹œ íŠ¹ìˆ˜íŒ¨í„´
 		G_CA_SetSpawn({Gun_Line(8,AtLeast,20240)},{84},"ACAS","Warp1",nil,5,nil,"CP",nil,nil,1)
 
 
@@ -1098,11 +1098,11 @@ end
 
 
 		if Limit == 1 then
-			--TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom ´Ş¼º½Ã Æ¯¼öÆĞÅÏ
+			--TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom ë‹¬ì„±ì‹œ íŠ¹ìˆ˜íŒ¨í„´
 		end
 
 	--	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
-	--	31ÀÌ 1ÀÏ°æ¿ì º¸½º ¼ÒÈ¯ ÀÛµ¿
+	--	31ì´ 1ì¼ê²½ìš° ë³´ìŠ¤ ì†Œí™˜ ì‘ë™
 		CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
 			CIf(FP,CD(Theorist,1,AtLeast))
 				for i = 0,3 do
@@ -1127,17 +1127,17 @@ end
 			
 			CIfEnd()
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-			--Áß°£º¸½º ¼ÒÈ¯ 
-		--Infinite Divide,(11º¸½º Divide)
-		--Pentiment in Tenebris(1½Ãº¸½º Tenebris)
-		--World Demication(7½Ãº¸½º Demise)
-		--Arcana Anomaly(5½Ãº¸½º Anomaly)
+			--ì¤‘ê°„ë³´ìŠ¤ ì†Œí™˜ 
+		--Infinite Divide,(11ë³´ìŠ¤ Divide)
+		--Pentiment in Tenebris(1ì‹œë³´ìŠ¤ Tenebris)
+		--World Demication(7ì‹œë³´ìŠ¤ Demise)
+		--Arcana Anomaly(5ì‹œë³´ìŠ¤ Anomaly)
 		BossUID = {87,74,5,2}
 			HName2 = {
-				"\x1F£É\x04£î£æ£é£î£é£ô£å \x10£Ä\x04£é£ö£é£ä£å,",
-				"\x10£Ğ\x04£å£î£ô£é£í£å£î£ô¡¡£é£î¡¡\x15£Ô\x04£å£î£å£â£ò£é£ó",
-				"\x19£×\x04£ï£ò£ì£ä \x18£Ä\x04£å£í£é£ã£á£ô£é£ï£î",
-				"\x1C£Á\x04£ò£ã£á£î£á \x1B£Á\x04£î£ï£í£á£ì£ù"
+				"\x1Fï¼©\x04ï½ï½†ï½‰ï½ï½‰ï½”ï½… \x10ï¼¤\x04ï½‰ï½–ï½‰ï½„ï½…,",
+				"\x10ï¼°\x04ï½…ï½ï½”ï½‰ï½ï½…ï½ï½”ã€€ï½‰ï½ã€€\x15ï¼´\x04ï½…ï½ï½…ï½‚ï½’ï½‰ï½“",
+				"\x19ï¼·\x04ï½ï½’ï½Œï½„ \x18ï¼¤\x04ï½…ï½ï½‰ï½ƒï½ï½”ï½‰ï½ï½",
+				"\x1Cï¼¡\x04ï½’ï½ƒï½ï½ï½ \x1Bï¼¡\x04ï½ï½ï½ï½ï½Œï½™"
 			}
 			WarpXY = {
 				{1632,1824},
@@ -1145,7 +1145,7 @@ end
 				{1632,-1824+4096},
 				{-1632+4096,-1824+4096}}
 			for j = 4, 7 do
-				Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x08£Â£Ï£Ó£Ó¡¡£Â£Á£Ô£Ô£Ì£Å\x04¡¡£¡£¡£¡\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10Á¾¸»\x04ÀÇ \x11°ø¸® \x10¡¼ "..HName2[j-3].." \x10¡½ \x04°¡ \x08ºÀÀÎ\x04¿¡¼­ \x17ÇØ¹æ\x04µÇ¾ú½À´Ï´Ù.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x08£Â£Ï£Ó£Ó¡¡£Â£Á£Ô£Ô£Ì£Å\x04¡¡£¡£¡£¡\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+				Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x08ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼¢ï¼¡ï¼´ï¼´ï¼¬ï¼¥\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10ì¢…ë§\x04ì˜ \x11ê³µë¦¬ \x10ã€ "..HName2[j-3].." \x10ã€‘ \x04ê°€ \x08ë´‰ì¸\x04ì—ì„œ \x17í•´ë°©\x04ë˜ì—ˆìŠµë‹ˆë‹¤.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x08ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼¢ï¼¡ï¼´ï¼´ï¼¬ï¼¥\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 				CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 			end
 			
@@ -1217,13 +1217,13 @@ end
 		
 		CIfEnd()
 		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		--Áß°£º¸½º ¼ÒÈ¯ 
+		--ì¤‘ê°„ë³´ìŠ¤ ì†Œí™˜ 
 	BossUID = {87,74,5,2}
 		HName = {
-			"\x10£Ä\x04£é£ö£é£ä£å",
-			"\x15£Ô\x04£å£î£å£â£ò£é£ó",
-			"\x18£Ä\x04£å£í£é£ó£å",
-			"\x1B£Á\x04£î£ï£í£á£ì£ù"
+			"\x10ï¼¤\x04ï½‰ï½–ï½‰ï½„ï½…",
+			"\x15ï¼´\x04ï½…ï½ï½…ï½‚ï½’ï½‰ï½“",
+			"\x18ï¼¤\x04ï½…ï½ï½‰ï½“ï½…",
+			"\x1Bï¼¡\x04ï½ï½ï½ï½ï½Œï½™"
 		}
 		WarpXY = {
 			{1632,1824},
@@ -1231,7 +1231,7 @@ end
 			{1632,-1824+4096},
 			{-1632+4096,-1824+4096}}
 		for j = 4, 7 do
-			Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x08£Â£Ï£Ó£Ó¡¡£Â£Á£Ô£Ô£Ì£Å\x04¡¡£¡£¡£¡\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07±â¾ï\x04ÀÇ ¼öÈ£ÀÚ \x10¡¼ "..HName[j-3].." \x10¡½ \x04°¡ \x08ºÀÀÎ\x04¿¡¼­ \x17ÇØ¹æ\x04µÇ¾ú½À´Ï´Ù.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x08£Â£Ï£Ó£Ó¡¡£Â£Á£Ô£Ô£Ì£Å\x04¡¡£¡£¡£¡\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+			Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("staredit\\wav\\BossAwak.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x08ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼¢ï¼¡ï¼´ï¼´ï¼¬ï¼¥\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H"..StrDesignX2("\x07ê¸°ì–µ\x04ì˜ ìˆ˜í˜¸ì \x10ã€ "..HName[j-3].." \x10ã€‘ \x04ê°€ \x08ë´‰ì¸\x04ì—ì„œ \x17í•´ë°©\x04ë˜ì—ˆìŠµë‹ˆë‹¤.").."\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x08ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼¢ï¼¡ï¼´ï¼´ï¼¬ï¼¥\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 			CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 		end
 	
@@ -1246,71 +1246,71 @@ end
 
 
 	local Lyrics = {
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08Darkest night, \x07¢Ü",3370},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08ÀÌ ¾îµÎ¿î ¹ã, \x07¢Ü",3370},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08I'll confront you here.... \x07¢Ü",5390},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08¹Ù·Î ¿©±â¼­ ³»°¡ ³Ê¿Í ¸Â¼³Áö¾î´Ï... \x07¢Ü",5390},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08Darkest night, \x07â™ª",3370},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ì´ ì–´ë‘ìš´ ë°¤, \x07â™ª",3370},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08I'll confront you here.... \x07â™ª",5390},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ë°”ë¡œ ì—¬ê¸°ì„œ ë‚´ê°€ ë„ˆì™€ ë§ì„¤ì§€ì–´ë‹ˆ... \x07â™ª",5390},
 
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 Such a \x08destiny \x04was not desired. \x07¢Ü",34040},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ÀÌ·± \x08¿î¸í\x04Àº ¹Ù¶óÁö ¾Ê¾Ò¾î. \x07¢Ü",34040},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 In this place, \x07¢Ü",38420},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ÀÌ°÷¿¡¼­, \x07¢Ü",38420},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10I never wished to see that side of you. \x07¢Ü",39770},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10³ª´Â ³× ±×·± ¸éÀ» º¸°í ½ÍÁö ¾Ê¾Ò´Âµ¥. \x07¢Ü",39770},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 And raise different \x08c\x0Eo\x0Fl\x10o\x11r\x18s \x04for one another. \x07¢Ü",44150},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ¼­·ÎÀÇ \x08´Ù\x0E¸¥ \x0F»ö\x10Ã¤\x11µé\x18ÀÌ \x04ÇÇ¾î³ª°í ÀÖ±¸³ª. \x07¢Ü",44150},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08Never notice me. \x07¢Ü",49550},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08Àı´ë ³¯ ´«Ä¡Ã¤Áö ¸¶. \x07¢Ü",49550},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10Never call my name with your voice. \x07¢Ü",52240},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10Àı´ë ³× ¸ñ¼Ò¸®·Î ³» ÀÌ¸§À» ¼Ó»èÀÌÁö ¸¶. \x07¢Ü",52240},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 Such a \x08destiny \x04was not desired. \x07â™ª",34040},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ì´ëŸ° \x08ìš´ëª…\x04ì€ ë°”ë¼ì§€ ì•Šì•˜ì–´. \x07â™ª",34040},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 In this place, \x07â™ª",38420},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ì´ê³³ì—ì„œ, \x07â™ª",38420},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10I never wished to see that side of you. \x07â™ª",39770},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10ë‚˜ëŠ” ë„¤ ê·¸ëŸ° ë©´ì„ ë³´ê³  ì‹¶ì§€ ì•Šì•˜ëŠ”ë°. \x07â™ª",39770},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 And raise different \x08c\x0Eo\x0Fl\x10o\x11r\x18s \x04for one another. \x07â™ª",44150},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ì„œë¡œì˜ \x08ë‹¤\x0Eë¥¸ \x0Fìƒ‰\x10ì±„\x11ë“¤\x18ì´ \x04í”¼ì–´ë‚˜ê³  ìˆêµ¬ë‚˜. \x07â™ª",44150},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08Never notice me. \x07â™ª",49550},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ì ˆëŒ€ ë‚  ëˆˆì¹˜ì±„ì§€ ë§ˆ. \x07â™ª",49550},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10Never call my name with your voice. \x07â™ª",52240},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10ì ˆëŒ€ ë„¤ ëª©ì†Œë¦¬ë¡œ ë‚´ ì´ë¦„ì„ ì†ì‚­ì´ì§€ ë§ˆ. \x07â™ª",52240},
 
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 Let me forget \x07everything \x07¢Ü",75840},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x07¸ğµç °Í\x04À» ÀØ°Ô ÇØÁà.\x07¢Ü",75840},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 and \x08leave no \x10trace of you. \x07¢Ü",78870},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10³× ÈçÀû ÇÏ³ª \x08³²±âÁö ¸»¾ÆÁà. \x07¢Ü",78870},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08What am I carrying out \x07¢Ü",81570},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ÀÌ \x11Àı¸Á\x04ÀÇ \x0FÁöÆò¼±¿¡¼­ \x07¢Ü",81570},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08in this \x0Fhorizon \x04of \x11despair? \x07¢Ü",83930},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08³ª´Â ¹«¾ùÀ» ÇÏ°í ÀÖ´Â °ÅÁö? \x07¢Ü",83930},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 Let me forget \x07everything \x07â™ª",75840},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x07ëª¨ë“  ê²ƒ\x04ì„ ìŠê²Œ í•´ì¤˜.\x07â™ª",75840},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 and \x08leave no \x10trace of you. \x07â™ª",78870},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10ë„¤ í”ì  í•˜ë‚˜ \x08ë‚¨ê¸°ì§€ ë§ì•„ì¤˜. \x07â™ª",78870},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08What am I carrying out \x07â™ª",81570},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ì´ \x11ì ˆë§\x04ì˜ \x0Fì§€í‰ì„ ì—ì„œ \x07â™ª",81570},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08in this \x0Fhorizon \x04of \x11despair? \x07â™ª",83930},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ë‚˜ëŠ” ë¬´ì—‡ì„ í•˜ê³  ìˆëŠ” ê±°ì§€? \x07â™ª",83930},
 
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 If it's not you, I can hurt \x07¢Ü",87300},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ³Ê¸¸ ¾Æ´Ï¶ó¸é, ³­ Á¤ÀÇ¶ó´Â ÀÌ¸§ ¾Æ·¡ \x07¢Ü",87300},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08anyone in the name of justice. \x07¢Ü",89320},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08´©±¸µç »óÃ³ÀÔÈú ¼ö ÀÖ¾î. \x07¢Ü",89320},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1EYour shadow \x04gets in the way of \x07my light. \x07¢Ü",92690},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1E³× ±×¸²ÀÚ\x04°¡ \x07³» ºû\x04À» °¡·Î¸·°í ÀÖ³×. \x07¢Ü",92690},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 And \x07¡¸\x08£Ô\x11£å£ó£ô£é£æ£ù\x07¡¹\x04.... \x07¢Ü",98090},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ±×¸®°ï \x07¡¸\x08Áõ\x11¾ğ\x07¡¹ \x04ÇØ... \x07¢Ü",98090},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 If it's not you, I can hurt \x07â™ª",87300},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ë„ˆë§Œ ì•„ë‹ˆë¼ë©´, ë‚œ ì •ì˜ë¼ëŠ” ì´ë¦„ ì•„ë˜ \x07â™ª",87300},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08anyone in the name of justice. \x07â™ª",89320},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ëˆ„êµ¬ë“  ìƒì²˜ì…í ìˆ˜ ìˆì–´. \x07â™ª",89320},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1EYour shadow \x04gets in the way of \x07my light. \x07â™ª",92690},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1Eë„¤ ê·¸ë¦¼ì\x04ê°€ \x07ë‚´ ë¹›\x04ì„ ê°€ë¡œë§‰ê³  ìˆë„¤. \x07â™ª",92690},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 And \x07ã€Œ\x08ï¼´\x11ï½…ï½“ï½”ï½‰ï½†ï½™\x07ã€\x04.... \x07â™ª",98090},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ê·¸ë¦¬ê³¤ \x07ã€Œ\x08ì¦\x11ì–¸\x07ã€ \x04í•´... \x07â™ª",98090},
 
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 Let me forget \x07everything, \x07¢Ü",135000},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x07¸ğµç °Í\x04À» ÀØ°Ô ÇØÁà, \x07¢Ü",135000},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 still \x17moonlight \x07shines on us. \x07¢Ü",138200},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ¿©ÀüÈ÷ \x17´Şºû\x04Àº \x07¿ì¸®¸¦ ºñÃß³×. \x07¢Ü",138200},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08Broken heart, \x04I don't want you \x07¢Ü",140890},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08ºÎ¼­Áø ¸¶À½, \x04³­ ³×°¡ \x11Ã£Áöµµ\x04, \x07¢Ü",140890},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 to \x11find \x04and \x10take a look at. \x07¢Ü",143250},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10¹Ù¶óº¸Áöµµ \x04¾Ê¾ÒÀ¸¸é ÇØ. \x07¢Ü",143250},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 So I'll \x08sin \x04more and \x11destroy my thoughts, \x07¢Ü",146620},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ±×·¯´Ï \x11Àâ³äµéÀº ÀØÀº Ã¤·Î\x04, ³»°¡ ´õ \x08ÁË\x04¸¦ Áş°í, \x07¢Ü",146620},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08make a mess of my hand. \x07¢Ü",149660},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08³» ¼Õ¸¸À» ´õ ¾û¸ÁÀ¸·Î ¸¸µé°Ô. \x07¢Ü",149660},
-		{"\x0D\x0D!H\x13\x05¢Ü\x04 I swear on the darkest night I'll end it all. \x07¢Ü",152020},
-		{"\x0D\x0D!H\x13\x05¢Ü\x04 ÀÌ ¾îµÎ¿î ¹ã¿¡ ½º½º·Î ¸ğµç °É ³¡³»¸®¶ó ¸Í¼¼ÇÒ°Ô. \x07¢Ü",152020},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 And \x07¡¸\x08£Ô\x11£å£ó£ô£é£æ£ù\x07¡¹\x04.... \x07¢Ü",157410},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ±×¸®°ï \x07¡¸\x08Áõ\x11¾ğ\x07¡¹ \x04 ÇÏÁö... \x07¢Ü",157410},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 Let me forget \x07everything, \x07â™ª",135000},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x07ëª¨ë“  ê²ƒ\x04ì„ ìŠê²Œ í•´ì¤˜, \x07â™ª",135000},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 still \x17moonlight \x07shines on us. \x07â™ª",138200},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ì—¬ì „íˆ \x17ë‹¬ë¹›\x04ì€ \x07ìš°ë¦¬ë¥¼ ë¹„ì¶”ë„¤. \x07â™ª",138200},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08Broken heart, \x04I don't want you \x07â™ª",140890},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ë¶€ì„œì§„ ë§ˆìŒ, \x04ë‚œ ë„¤ê°€ \x11ì°¾ì§€ë„\x04, \x07â™ª",140890},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 to \x11find \x04and \x10take a look at. \x07â™ª",143250},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10ë°”ë¼ë³´ì§€ë„ \x04ì•Šì•˜ìœ¼ë©´ í•´. \x07â™ª",143250},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 So I'll \x08sin \x04more and \x11destroy my thoughts, \x07â™ª",146620},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ê·¸ëŸ¬ë‹ˆ \x11ì¡ë…ë“¤ì€ ìŠì€ ì±„ë¡œ\x04, ë‚´ê°€ ë” \x08ì£„\x04ë¥¼ ì§“ê³ , \x07â™ª",146620},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08make a mess of my hand. \x07â™ª",149660},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08ë‚´ ì†ë§Œì„ ë” ì—‰ë§ìœ¼ë¡œ ë§Œë“¤ê²Œ. \x07â™ª",149660},
+		{"\x0D\x0D!H\x13\x05â™ª\x04 I swear on the darkest night I'll end it all. \x07â™ª",152020},
+		{"\x0D\x0D!H\x13\x05â™ª\x04 ì´ ì–´ë‘ìš´ ë°¤ì— ìŠ¤ìŠ¤ë¡œ ëª¨ë“  ê±¸ ëë‚´ë¦¬ë¼ ë§¹ì„¸í• ê²Œ. \x07â™ª",152020},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 And \x07ã€Œ\x08ï¼´\x11ï½…ï½“ï½”ï½‰ï½†ï½™\x07ã€\x04.... \x07â™ª",157410},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ê·¸ë¦¬ê³¤ \x07ã€Œ\x08ì¦\x11ì–¸\x07ã€ \x04 í•˜ì§€... \x07â™ª",157410},
 
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 All that I'm left with is \x18your reminiscences. \x07¢Ü",180000},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 ³»°Ô ³²°ÜÁø °Å¶ó°ï, \x18³ÊÀÇ Ãß¾ï»Ó. \x07¢Ü",180000},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1FTake me to where you are, \x08won't you? \x07¢Ü",185050},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1F³×°¡ ÀÖ´Â °÷À¸·Î ³¯ µ¥·Á´Ù Áà, \x08±×·² °ÅÁö? \x07¢Ü",185050},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10Till then I'll keep \x1Cstruggling. \x07¢Ü",189430},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x10±×¶§±îÁö, ³»°¡ °è¼Ó \x1CºĞÅõ\x10ÇÏ°í ÀÖÀ»°Ô. \x07¢Ü",189430},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x08Curse \x04of \x11justice \x1Fyou don't know. \x07¢Ü",194830},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1F³×°¡ ¾Ë ¸® ¾ø´Â \x04ÀÌ \x11Á¤ÀÇ\x04ÀÇ \x08ÀúÁÖ \x04¼Ó¿¡¼­. \x07¢Ü",194830},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 All that I'm left with is \x18your reminiscences. \x07â™ª",180000},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 ë‚´ê²Œ ë‚¨ê²¨ì§„ ê±°ë¼ê³¤, \x18ë„ˆì˜ ì¶”ì–µë¿. \x07â™ª",180000},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1FTake me to where you are, \x08won't you? \x07â™ª",185050},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1Fë„¤ê°€ ìˆëŠ” ê³³ìœ¼ë¡œ ë‚  ë°ë ¤ë‹¤ ì¤˜, \x08ê·¸ëŸ´ ê±°ì§€? \x07â™ª",185050},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10Till then I'll keep \x1Cstruggling. \x07â™ª",189430},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x10ê·¸ë•Œê¹Œì§€, ë‚´ê°€ ê³„ì† \x1Cë¶„íˆ¬\x10í•˜ê³  ìˆì„ê²Œ. \x07â™ª",189430},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x08Curse \x04of \x11justice \x1Fyou don't know. \x07â™ª",194830},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1Fë„¤ê°€ ì•Œ ë¦¬ ì—†ëŠ” \x04ì´ \x11ì •ì˜\x04ì˜ \x08ì €ì£¼ \x04ì†ì—ì„œ. \x07â™ª",194830},
 
 	}
 	CIf_GCase(190)
-	DoActions(FP,{KillUnit(125,Force1)},1)--°ÇÀÛº¸½º ÀÛµ¿½Ã ¸ğµç º¡Ä¿ Æø¹ß
+	DoActions(FP,{KillUnit(125,Force1)},1)--ê±´ì‘ë³´ìŠ¤ ì‘ë™ì‹œ ëª¨ë“  ë²™ì»¤ í­ë°œ
 	
 	local tesTestmode = 0
 	
@@ -1323,14 +1323,14 @@ end
 		CIfX(FP,{CD(AxiomEnable,1,AtLeast)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
 	end
 	local tesPatchT = {}
-	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- ½ºÅ³À¯´Ö¹«±â Àç¼³Á¤
-	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--ÇÙ¹èÆ²µô³ÊÇÁ
-	SetWeaponsDat2X(tesPatchT,62,{DmgBase=999})--ÇÁ·Îºêµô¹öÇÁ
+	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- ìŠ¤í‚¬ìœ ë‹›ë¬´ê¸° ì¬ì„¤ì •
+	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--í•µë°°í‹€ë”œë„ˆí”„
+	SetWeaponsDat2X(tesPatchT,62,{DmgBase=999})--í”„ë¡œë¸Œë”œë²„í”„
 	
 
 	for j,k in pairs({Tier1,Tier2,Tier3,Tier4,Tier5}) do
 		for p, o in pairs(k) do
-			SetUnitsDat2X(tesPatchT,o,{AdvFlag={4,4},Height=12}) -- ¸ğµç ÀûÀ¯´ÖÀ» °øÁßÀ¸·Î
+			SetUnitsDat2X(tesPatchT,o,{AdvFlag={4,4},Height=12}) -- ëª¨ë“  ì ìœ ë‹›ì„ ê³µì¤‘ìœ¼ë¡œ
 		end
 	end
 
@@ -1381,7 +1381,7 @@ end
 		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*2700)},{RotatePlayer({PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i]),PlayWAVX(GunBGMArr2[i])},HumanPlayers,FP)})
     end
 	for j, k in pairs(Lyrics) do
-		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayExtText(k[1], 4)},HumanPlayers,FP)})
+		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
 	end
 	SetBright(0,0)
 
@@ -2067,7 +2067,7 @@ end
 
 	CIfEnd()
 	--
-	--InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08ÃÖÈÄ\x04ÀÇ \x10±â¾ï \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04ÀÇ \x02¹«Àû»óÅÂ\x04°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù.")
+	--InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08ìµœí›„\x04ì˜ \x10ê¸°ì–µ \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04ì˜ \x02ë¬´ì ìƒíƒœ\x04ê°€ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤.")
 --tesEnd.ogg
 --,
 
@@ -2499,7 +2499,7 @@ end
 	--CallTrigger(FP,EffUnitLoop)
 	TriggerX(FP,{Gun_Line(8,AtLeast,186000)},{Gun_SetLine(10,Subtract,4000)},{preserved})
 	
-	InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08ÃÖÈÄ\x04ÀÇ \x10±â¾ï \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04ÀÇ \x02¹«Àû»óÅÂ\x04°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù.")
+	InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08ìµœí›„\x04ì˜ \x10ê¸°ì–µ \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04ì˜ \x02ë¬´ì ìƒíƒœ\x04ê°€ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤.")
 	TriggerX(FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},{Gun_DoSuspend()})
 	
 	CIfEnd()
@@ -2558,10 +2558,10 @@ end
 		ReplaceV2 =CreateVar(FP)
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CurPlace)})
 		CAdd(FP,ReplaceV,ReplaceV2,UnitDataPtr)
-		CIf(FP,{TMemory(ReplaceV,AtLeast,1)},{SetMemoryX(0x664080 + (118*4),SetTo,1,1)}) -- ¹è¿­¿¡¼­ µ¥ÀÌÅÍ°¡ ¹ß°ßµÇÁö ¾ÊÀ»¶§±îÁö ¼øÈ¯ÇÑ´Ù.
+		CIf(FP,{TMemory(ReplaceV,AtLeast,1)},{SetMemoryX(0x664080 + (118*4),SetTo,1,1)}) -- ë°°ì—´ì—ì„œ ë°ì´í„°ê°€ ë°œê²¬ë˜ì§€ ì•Šì„ë•Œê¹Œì§€ ìˆœí™˜í•œë‹¤.
 			CMov(FP,0x6509B0,ReplaceV)
 			CWhile(FP,CDeaths(FP,AtMost,3,CurPlace))
-			CallTrigger(FP,f_Replace)-- µ¥ÀÌÅÍÈ­ ÇÑ À¯´Ö Àç¹èÄ¡ÇÏ´Â ÄÚµå
+			CallTrigger(FP,f_Replace)-- ë°ì´í„°í™” í•œ ìœ ë‹› ì¬ë°°ì¹˜í•˜ëŠ” ì½”ë“œ
 			DoActionsX(FP,{SetCDeaths(FP,Add,1,CurPlace),})
 			CWhileEnd()
 		CAdd(FP,ReplaceV2,2)
@@ -2569,14 +2569,14 @@ end
 		CMov(FP,0x6509B0,FP)
 		DoActionsX(FP,{SetV(BGMType,10),SetCD(Fin,1)},1)
 		DoActions(FP,{SetInvincibility(Enable, "Any unit", AllPlayers, 64),ModifyUnitEnergy(All, "Men", Force1, 64, 0),RemoveUnitAt(1, "Men", 64, Force1),ModifyUnitEnergy(All, "Men", Force2, 64, 0),GiveUnits(All,"Buildings",Force1,64,P12)})
-		StoryPrint(4000*1,"\x04¸¶Ä§³» ÀÌ È¥µ·ÀÇ ±â¾ïÀ» ¸ğµÎ Á¤È­ÇÏ¿´´Ù.")
-		StoryPrint(4000*2,"\x04ÇÏÁö¸¸, ¶Ç ´Ù½Ã \x10È¥µ·\x04ÀÌ ¸ğµç °ÍÀ» µÚµ¤°í ÀÖ¾ú°í,")
-		StoryPrint(4000*3,"\x04¾Æ¹« ÀÏ ¾ø¾ú´Ù´Â µí, ¸ğµç°ÍÀÌ ±×´ë·Î¿´´Ù.")
-		StoryPrint(4000*4,"\x04ÀÌ ¶§, ³ª ÀÚ½ÅÀº ±ú´Ş¾Ò´Ù. ÀÌ \x10È¥µ·\x04À» Á¤È­ÇÏ±â¿£ \x07ºû\x04ÀÌ ÃæºĞÇÏÁö ¾Ê¾Ò´Ù´Â °ÍÀ».")
-		StoryPrint(4000*5,"\x04...\x0F³Ê¹« ¸¹Àº \x07ºû\x04À» \x08Çãºñ\x04ÇÏ¿´´ø °É±î...?")
-		StoryPrint(4000*6,"\x04°á±¹ ±× ¾î¶² °Íµµ ÇØ°áÇÏÁö ¸øÇÑ Ã¤")
-		StoryPrint(4000*7,"\x08°íÅë\x04½º·¯¿î ±â¾ïÀ» ¶Ç ´Ù½Ã ¸ÂÀÌÇÏ¸ç")
-		StoryPrint(4000*8,"\x07´ç½Å\x04Àº \x1FÀı¸Á\x04ÀÇ \x07±â¾ï\x04¼Ó¿¡¼­ \x11³¡¾ø´Â È¥µ·\x04¿¡ ½Ã´Ş¸®°Ô µÇ¾ú´Ù.")
+		StoryPrint(4000*1,"\x04ë§ˆì¹¨ë‚´ ì´ í˜¼ëˆì˜ ê¸°ì–µì„ ëª¨ë‘ ì •í™”í•˜ì˜€ë‹¤.")
+		StoryPrint(4000*2,"\x04í•˜ì§€ë§Œ, ë˜ ë‹¤ì‹œ \x10í˜¼ëˆ\x04ì´ ëª¨ë“  ê²ƒì„ ë’¤ë®ê³  ìˆì—ˆê³ ,")
+		StoryPrint(4000*3,"\x04ì•„ë¬´ ì¼ ì—†ì—ˆë‹¤ëŠ” ë“¯, ëª¨ë“ ê²ƒì´ ê·¸ëŒ€ë¡œì˜€ë‹¤.")
+		StoryPrint(4000*4,"\x04ì´ ë•Œ, ë‚˜ ìì‹ ì€ ê¹¨ë‹¬ì•˜ë‹¤. ì´ \x10í˜¼ëˆ\x04ì„ ì •í™”í•˜ê¸°ì—” \x07ë¹›\x04ì´ ì¶©ë¶„í•˜ì§€ ì•Šì•˜ë‹¤ëŠ” ê²ƒì„.")
+		StoryPrint(4000*5,"\x04...\x0Fë„ˆë¬´ ë§ì€ \x07ë¹›\x04ì„ \x08í—ˆë¹„\x04í•˜ì˜€ë˜ ê±¸ê¹Œ...?")
+		StoryPrint(4000*6,"\x04ê²°êµ­ ê·¸ ì–´ë–¤ ê²ƒë„ í•´ê²°í•˜ì§€ ëª»í•œ ì±„")
+		StoryPrint(4000*7,"\x08ê³ í†µ\x04ìŠ¤ëŸ¬ìš´ ê¸°ì–µì„ ë˜ ë‹¤ì‹œ ë§ì´í•˜ë©°")
+		StoryPrint(4000*8,"\x07ë‹¹ì‹ \x04ì€ \x1Fì ˆë§\x04ì˜ \x07ê¸°ì–µ\x04ì†ì—ì„œ \x11ëì—†ëŠ” í˜¼ëˆ\x04ì— ì‹œë‹¬ë¦¬ê²Œ ë˜ì—ˆë‹¤.")
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{SetMemory(0x657A9C,Subtract,1)},{preserved})
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*9)},{Gun_DoSuspend(),SetCD(Win,1)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
@@ -2584,21 +2584,21 @@ end
 
 	CIf(FP,CD(EDNum,2))--
     DoActionsX(FP,{SetV(BGMType,7),SetCD(Fin,1)},1)
-	StoryPrint(4000*2,"\x04¸¶Ä§³» ÀÌ È¥µ·ÀÇ ±â¾ïÀ» ¸ğµÎ Á¤È­ÇÏ¿´´Ù.")
-	StoryPrint(4000*3,"\x04ÇÏÁö¸¸, ÀÒ¾î¹ö¸° \x07ºû\x04ÀÇ \x17±â¾ï\x04Àº Ã£À» ¼ö ¾ø¾ú°í")
-	StoryPrint(4000*4,"\x04¸ÓÁö¾Ê¾Æ ÀÌ ±â¾ïÀº ´Ù½Ã \x10È¥µ·\x04¿¡ Àá±æ °ÍÀÌ°ÚÁö..")
-	StoryPrint(4000*5,"\x04...¶ó´Â.. È¤µ¶ÇÑ \x1FÀı¸Á\x04°¨¿¡ ´Ù½ÃÇÑ¹ø »ç·ÎÀâÈ÷°Ô µÈ´Ù.")
-	StoryPrint(4000*6,"\x0FÀÒ¾î¹ö¸° \x17±â¾ï\x04ÀÇ \x0E¸ÚÁö°í \x1F¾Æ¸§´Ù¿î \x1DÃß»óÈ­\x04´Â, µµ´ëÃ¼ ¾îµğ¿¡ ÀÖ´Ü ¸»ÀÎ°¡?")
-	StoryPrint(4000*7,"\x04¾îÂ¼¸é, ±× ±â¾ïÀº \x10Çã±¸\x04ÀÇ Á¸Àç°¡ ¾Æ´Ò±î...?")
-	StoryPrint(4000*8,"\x04¼ö¸¹Àº »ı°¢ÀÌ ´ç½ÅÀÇ ¸Ó¸´¼ÓÀ» ½ºÃÄ Áö³ª°¡¸ç")
-	StoryPrint(4000*9,"\x08³Ğµğ ³ĞÀº \x07±â¾ï\x04¼Ó¿¡¼­ \x11³¡¾ø´Â ¿©Á¤\x04ÀÌ °è¼ÓµÈ´Ù.")
+	StoryPrint(4000*2,"\x04ë§ˆì¹¨ë‚´ ì´ í˜¼ëˆì˜ ê¸°ì–µì„ ëª¨ë‘ ì •í™”í•˜ì˜€ë‹¤.")
+	StoryPrint(4000*3,"\x04í•˜ì§€ë§Œ, ìƒì–´ë²„ë¦° \x07ë¹›\x04ì˜ \x17ê¸°ì–µ\x04ì€ ì°¾ì„ ìˆ˜ ì—†ì—ˆê³ ")
+	StoryPrint(4000*4,"\x04ë¨¸ì§€ì•Šì•„ ì´ ê¸°ì–µì€ ë‹¤ì‹œ \x10í˜¼ëˆ\x04ì— ì ê¸¸ ê²ƒì´ê² ì§€..")
+	StoryPrint(4000*5,"\x04...ë¼ëŠ”.. í˜¹ë…í•œ \x1Fì ˆë§\x04ê°ì— ë‹¤ì‹œí•œë²ˆ ì‚¬ë¡œì¡íˆê²Œ ëœë‹¤.")
+	StoryPrint(4000*6,"\x0Fìƒì–´ë²„ë¦° \x17ê¸°ì–µ\x04ì˜ \x0Eë©‹ì§€ê³  \x1Fì•„ë¦„ë‹¤ìš´ \x1Dì¶”ìƒí™”\x04ëŠ”, ë„ëŒ€ì²´ ì–´ë””ì— ìˆë‹¨ ë§ì¸ê°€?")
+	StoryPrint(4000*7,"\x04ì–´ì©Œë©´, ê·¸ ê¸°ì–µì€ \x10í—ˆêµ¬\x04ì˜ ì¡´ì¬ê°€ ì•„ë‹ê¹Œ...?")
+	StoryPrint(4000*8,"\x04ìˆ˜ë§ì€ ìƒê°ì´ ë‹¹ì‹ ì˜ ë¨¸ë¦¿ì†ì„ ìŠ¤ì³ ì§€ë‚˜ê°€ë©°")
+	StoryPrint(4000*9,"\x08ë„“ë”” ë„“ì€ \x07ê¸°ì–µ\x04ì†ì—ì„œ \x11ëì—†ëŠ” ì—¬ì •\x04ì´ ê³„ì†ëœë‹¤.")
 	TriggerX(FP,{Gun_Line(8,AtLeast,4000*10)},{Gun_DoSuspend(),SetCD(Win,1)})
 	CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
 	CIf(FP,{CD(EDNum,3)},{SetMemory(0x662350+(64*4),SetTo,8320000*256),
-		SetMemoryW(0x656888 + (2*62), SetTo, 32), -- ½ºÇÃ
-		SetMemoryW(0x6570C8 + (2*62), SetTo, 64), -- ½ºÇÃ
-		SetMemoryW(0x657780 + (2*62), SetTo, 128), -- ½ºÇÃ
+		SetMemoryW(0x656888 + (2*62), SetTo, 32), -- ìŠ¤í”Œ
+		SetMemoryW(0x6570C8 + (2*62), SetTo, 64), -- ìŠ¤í”Œ
+		SetMemoryW(0x657780 + (2*62), SetTo, 128), -- ìŠ¤í”Œ
 		})--CD(EEggCode,10,AtLeast),CD(EEggCode,16,AtMost)
     DoActionsX(FP,{SetV(BGMType,8),Gun_SetLine(9,SetTo,19780)},1)
 	TriggerX(FP,{Gun_Line(13,AtLeast,22580)},{SetCD(BStart,1)})
@@ -2640,20 +2640,20 @@ end
 	CIf(FP,{CD(ED2Clear,1)},{SetCD(Fin,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 Trigger2X(FP,{},{RotatePlayer({
-	DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x10£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18£Æ£é£î£á£ì¡¡£Â£ï£ó£ó \x04£­\x10¡¼ \x11£Ğ\x04£á£ó£ô \x10¡½ \x04¸¦ Ã³Ä¡ÇÏ¼Ì½À´Ï´Ù.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x10£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x10ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x18ï¼¦ï½‰ï½ï½ï½Œã€€ï¼¢ï½ï½“ï½“ \x04ï¼\x10ã€ \x11ï¼°\x04ï½ï½“ï½” \x10ã€‘ \x04ë¥¼ ì²˜ì¹˜í•˜ì…¨ìŠµë‹ˆë‹¤.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x10ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\x0D\x0D\n\x0D\x0D\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg"),
 	PlayWAVX("staredit\\wav\\Clear1.ogg")
 	},HumanPlayers,FP);})
-		StoryPrint(4000*1,"\x04¸¶Ä§³», °ú°ÅÀÇ ±â¾ïÀ» µÇÃ£¾Æ ³»¾ú´Ù.")
-		StoryPrint(4000*2,"\x04ÇÏÁö¸¸, ¾îÂ°¼­ÀÏ±î, \x10½½ÇÂ \x18°¨Á¤\x04ÀÌ \x08ÆøÇ³\x04Ã³·³ ¸ô¾ÆÄ£´Ù.")
-		StoryPrint(4000*3,"\x04¾Æ¾Æ, ÀÌ°ÍÀº ±×³à¿Í ÇÔ²²Çß´ø \x1CÃß¾ï\x04ÀÇ \x17±â¾ï\x04ÀÎ°¡..?")
-		StoryPrint(4000*4,"\x04Áö±İÀº ÀÌ ¼¼»ó¿¡ Á¸ÀçÇÏÁö ¾Ê´Â ±×³à¿ÍÀÇ \x0E¼ÒÁßÇÑ ±â¾ï\x04.")
-		StoryPrint(4000*5,"\x04Áö±İÂë, ±×³à´Â ¾îµğ¼­ ¹«¾ùÀ» ÇÏ°í ÀÖÀ»±î?")
-		StoryPrint(4000*6,"\x04ºÎµğ ÁÁÀº °÷À¸·Î Àß ¶°³µ±â¸¦ ºô¸ç...")
-		StoryPrint(4000*7,"\x04´ç½ÅÀº ¶Ç´Ù¸¥ \x07ºû\x04ÀÇ \x17±â¾ïÀ» Ã£¾Æ \x11³¡¾ø´Â ¿©Á¤\x04ÀÌ °è¼ÓµÈ´Ù.")
+		StoryPrint(4000*1,"\x04ë§ˆì¹¨ë‚´, ê³¼ê±°ì˜ ê¸°ì–µì„ ë˜ì°¾ì•„ ë‚´ì—ˆë‹¤.")
+		StoryPrint(4000*2,"\x04í•˜ì§€ë§Œ, ì–´ì§¸ì„œì¼ê¹Œ, \x10ìŠ¬í”ˆ \x18ê°ì •\x04ì´ \x08í­í’\x04ì²˜ëŸ¼ ëª°ì•„ì¹œë‹¤.")
+		StoryPrint(4000*3,"\x04ì•„ì•„, ì´ê²ƒì€ ê·¸ë…€ì™€ í•¨ê»˜í–ˆë˜ \x1Cì¶”ì–µ\x04ì˜ \x17ê¸°ì–µ\x04ì¸ê°€..?")
+		StoryPrint(4000*4,"\x04ì§€ê¸ˆì€ ì´ ì„¸ìƒì— ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê·¸ë…€ì™€ì˜ \x0Eì†Œì¤‘í•œ ê¸°ì–µ\x04.")
+		StoryPrint(4000*5,"\x04ì§€ê¸ˆì¯¤, ê·¸ë…€ëŠ” ì–´ë””ì„œ ë¬´ì—‡ì„ í•˜ê³  ìˆì„ê¹Œ?")
+		StoryPrint(4000*6,"\x04ë¶€ë”” ì¢‹ì€ ê³³ìœ¼ë¡œ ì˜ ë– ë‚¬ê¸°ë¥¼ ë¹Œë©°...")
+		StoryPrint(4000*7,"\x04ë‹¹ì‹ ì€ ë˜ë‹¤ë¥¸ \x07ë¹›\x04ì˜ \x17ê¸°ì–µì„ ì°¾ì•„ \x11ëì—†ëŠ” ì—¬ì •\x04ì´ ê³„ì†ëœë‹¤.")
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
@@ -2670,10 +2670,10 @@ Trigger2X(FP,{},{RotatePlayer({
 		DeathsX(P4,AtMost,0,12,0xFFFFFF),
 		DeathsX(FP,AtMost,0,12,0xFFFFFF),
 	},{SetV(BGMType,9)},{preserved})
-	--CallTrigger(FP, Call_CreateBullet_EPD,{})--À¯µµÅº¸· ±¸Á¶Ã¼ ºÒ·¯¿À±â
+	--CallTrigger(FP, Call_CreateBullet_EPD,{})--ìœ ë„íƒ„ë§‰ êµ¬ì¡°ì²´ ë¶ˆëŸ¬ì˜¤ê¸°
 
 	if BossPhaseTestMode == 0 then
-		G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--µµÇüÀ¸·Î ÇÙ¶³±¸±â. ¾Æ¹« UnitIDÀÔ·Â°¡´É, RepeatType 3 ÇÏ¸é ¹ß»çµÊ --CD(TestMode,0)
+		G_CA_Bullet({}, 204, "ACAS", "Hp2", 1, 3, nil, {2048,2048}, nil, nil, nil, 1)--ë„í˜•ìœ¼ë¡œ í•µë–¨êµ¬ê¸°. ì•„ë¬´ UnitIDì…ë ¥ê°€ëŠ¥, RepeatType 3 í•˜ë©´ ë°œì‚¬ë¨ --CD(TestMode,0)
 	end
 	StartV = CreateVarArr(4,FP)
 	CIf(FP,{Gun_Line(13,AtMost,16700)})
@@ -2704,9 +2704,9 @@ Trigger2X(FP,{},{RotatePlayer({
 		Order("Men",3,15,Move,5),
 		SetCD(MarDup,1),
 		SetCD(CUnitFlag,1),
-		SetMemory(0x66EC48+(318*4), SetTo, 133),--ÇÙÅÍÁö´Â¸ğ¼Ç»ì¸®±â
-		RemoveUnit(60, AllPlayers),--ÇÙ¹èÆ²»èÁ¦
-		SetMemoryB(0x665C48+511,SetTo,0)--°¡½Ã º¸ÀÌ±â »èÁ¦
+		SetMemory(0x66EC48+(318*4), SetTo, 133),--í•µí„°ì§€ëŠ”ëª¨ì…˜ì‚´ë¦¬ê¸°
+		RemoveUnit(60, AllPlayers),--í•µë°°í‹€ì‚­ì œ
+		SetMemoryB(0x665C48+511,SetTo,0)--ê°€ì‹œ ë³´ì´ê¸° ì‚­ì œ
 	},1)
 
 	if BossPhaseTestMode == 1 then
@@ -2744,7 +2744,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		CMov(FP,TempA,PattV[1])
 		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
-		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- À§Ä¡·Î ½î±â
+		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
 		--CMov(FP,TempA,PattV[1],90)
 		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
@@ -2753,7 +2753,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		CMov(FP,TempA,PattV[1],180)
 		f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
 		DoActionsX(FP,{AddV(CPosX,2048),AddV(CPosY,2048)})
-		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- À§Ä¡·Î ½î±â
+		CreateBulletXY(206,20,{CPosX,CPosY},{2048,2048},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 		--SetBullet(206,20,{CPosX,CPosY},{2048,2048})
 		--CMov(FP,TempA,PattV[1],270)
 		--f_Lengthdir(FP, 500, TempA, CPosX, CPosY)
@@ -2779,9 +2779,9 @@ Trigger2X(FP,{},{RotatePlayer({
 			WeaponTimeLeft(30,32),
 			SetMemory(0x66EC48+(533*4), SetTo, 242),
 			SetMemoryB(0x669E28+(533), SetTo, 16),
-			SetMemoryW(0x656888 + (2*30), SetTo, 12), -- ½ºÇÃ
-			SetMemoryW(0x6570C8 + (2*30), SetTo, 12), -- ½ºÇÃ
-			SetMemoryW(0x657780 + (2*30), SetTo, 12), -- ½ºÇÃ
+			SetMemoryW(0x656888 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
+			SetMemoryW(0x6570C8 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
+			SetMemoryW(0x657780 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
 		})
 		CIf(FP,CV(PattV[1],1))
 			for i = 1, 49 do 
@@ -2847,9 +2847,9 @@ Trigger2X(FP,{},{RotatePlayer({
 			WeaponTimeLeft(127,255),
 			WeaponTimeLeft(30,255),
 			SetMemoryB(0x669E28+(541), SetTo, 13),
-			SetMemoryW(0x656888 + (2*30), SetTo, 8), -- ½ºÇÃ
-			SetMemoryW(0x6570C8 + (2*30), SetTo, 8), -- ½ºÇÃ
-			SetMemoryW(0x657780 + (2*30), SetTo, 8), -- ½ºÇÃ
+			SetMemoryW(0x656888 + (2*30), SetTo, 8), -- ìŠ¤í”Œ
+			SetMemoryW(0x6570C8 + (2*30), SetTo, 8), -- ìŠ¤í”Œ
+			SetMemoryW(0x657780 + (2*30), SetTo, 8), -- ìŠ¤í”Œ
 		})
 		CIf(FP,{CV(PattV[2],100,AtLeast),{CV(PattV[1],9,AtMost)}},{SetV(PattV[2],0),AddV(PattV[1],1)})
 		f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
@@ -2868,9 +2868,9 @@ Trigger2X(FP,{},{RotatePlayer({
 			WeaponTimeLeft(127,255),
 			WeaponTimeLeft(30,255),
 			SetMemoryB(0x669E28+(541), SetTo, 10),
-			SetMemoryW(0x656888 + (2*30), SetTo, 12), -- ½ºÇÃ
-			SetMemoryW(0x6570C8 + (2*30), SetTo, 12), -- ½ºÇÃ
-			SetMemoryW(0x657780 + (2*30), SetTo, 12), -- ½ºÇÃ
+			SetMemoryW(0x656888 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
+			SetMemoryW(0x6570C8 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
+			SetMemoryW(0x657780 + (2*30), SetTo, 12), -- ìŠ¤í”Œ
 		})
 		G_CA_Bullet({CV(PattV[1],0)}, 205, "ACAS", "B1S", 1, 1,  {2048,2048})
 		G_CA_Bullet({CV(PattV[1],256)}, 205, "ACAS", "B1S", 1, 1,  {2048,2048})
@@ -2906,7 +2906,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			CreateBulletXY(206,20,{2048-128,2048},{CPosX,CPosY},FP)-- À§Ä¡·Î ½î±â
+			CreateBulletXY(206,20,{2048-128,2048},{CPosX,CPosY},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 			--SetBullet(206, 20, {2048-128,2048}, {CPosX,CPosY})
 
 
@@ -2916,7 +2916,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			CreateBulletXY(206,20,{2048+128,2048},{CPosX,CPosY},FP)-- À§Ä¡·Î ½î±â
+			CreateBulletXY(206,20,{2048+128,2048},{CPosX,CPosY},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 			--SetBullet(206, 20, {2048+128,2048}, {CPosX,CPosY})
 
 
@@ -2926,7 +2926,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			CreateBulletXY(206,20,{2048,2048+64}, {CPosX,CPosY},FP)-- À§Ä¡·Î ½î±â
+			CreateBulletXY(206,20,{2048,2048+64}, {CPosX,CPosY},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 			--SetBullet(206, 20, {2048,2048+64}, {CPosX,CPosY})
 
 
@@ -2936,7 +2936,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			DoActions(FP,MoveLocation(1, "Men", i, 10))
 			f_Read(PlayerID,0x58DC60+0x14*0,CPosX,"X",0xFFFFFFFF)
 			f_Read(PlayerID,0x58DC64+0x14*0,CPosY,"X",0xFFFFFFFF)
-			CreateBulletXY(206,20,{2048,2048-64}, {CPosX,CPosY},FP)-- À§Ä¡·Î ½î±â
+			CreateBulletXY(206,20,{2048,2048-64}, {CPosX,CPosY},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
 			--SetBullet(206, 20, {2048,2048-64}, {CPosX,CPosY})
 
 
@@ -3056,7 +3056,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			SetMemoryB(0x6636B8+207, SetTo, 127),
 			SetInvincibility(Enable, 116, Force2, 64),
 			SetMemory(0x662350+(116*4),SetTo,100*256),
-			SetMemory(0x66EC48+(318*4), SetTo, 246),--ÇÙÅÍÁö´Â¸ğ¼Ç»ì¸®±â
+			SetMemory(0x66EC48+(318*4), SetTo, 246),--í•µí„°ì§€ëŠ”ëª¨ì…˜ì‚´ë¦¬ê¸°
 			KillUnit(25, Force2),
 			KillUnit(30, Force2),
 
@@ -3147,20 +3147,20 @@ Trigger2X(FP,{},{RotatePlayer({
 	CIf(FP,{CV(B3DeathCheck,1)},{SetCD(Fin,1)})
 	G_CA_SetSpawn({},{84},"ACAS","Warp1",Warp1[1]/40,3,nil,"OP",nil,nil,1)
 	Trigger2X(FP,{},{RotatePlayer({
-	DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x10£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x06£Æ£é£î£á£ì¡¡£Â£ï£ó£ó \x04£­\x10¡¼ \x08£Æ\x04£á£ô£å \x10¡½ \x04¸¦ Ã³Ä¡ÇÏ¼Ì½À´Ï´Ù.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x10£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\x0D\x0D\n\x0D\x0D\x13\x04",4),
+	DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x10ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x06ï¼¦ï½‰ï½ï½ï½Œã€€ï¼¢ï½ï½“ï½“ \x04ï¼\x10ã€ \x08ï¼¦\x04ï½ï½”ï½… \x10ã€‘ \x04ë¥¼ ì²˜ì¹˜í•˜ì…¨ìŠµë‹ˆë‹¤.\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x10ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\x0D\x0D\n\x0D\x0D\x13\x04",4),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg"),
 	PlayWAVX("staredit\\wav\\Clear2.ogg")
 	},HumanPlayers,FP);})
-		StoryPrint(4000*1,"\x04¿î¸í\x08( \x11£Æ\x04£á£ô£å \x08)\x04")
-		StoryPrint(4000*2,"\x04¾ÆÁÖ ¸Õ °ú°Å\x10 ( \x11£Ğ\x04£á£ó£ô \x10)\x04ÀÇ ¿î¸íÀº ÂüÀ¸·Î ºñÂüÇß¾úÁö.")
-		StoryPrint(4000*3,"\x04ÇÏÁö¸¸, ÀÌ¹ø¿¡´Â °ú°Å¿Í ´Ù¸£°Ôµµ.. \x08ºñÂü\x04ÇÑ ¿î¸íÀ¸·ÎºÎÅÍ ¹ş¾î³µ¾î.")
-		StoryPrint(4000*4,"\x04±×·±µ¥.. ¹«¾ùÀÏ±î? ¹«¾ğ°¡ ÀØ¾î¹ö¸°µíÇÑ... ÇãÀüÇÑ ÀÌ ´À³¦Àº..?")
-		StoryPrint(4000*5,"\x04¿ì¸®´Â ¾îÂ¼¸é, \x07¸ÚÁö°í ¾Æ¸§´Ù¿î °Í\x04À» ÀØ¾î¹ö·ÈÀ» ÅÍÀÎµ¥...")
-		StoryPrint(4000*6,"\x04¼ö¸¹Àº ±â¾ïÀ» ÇìÂ¤À¸¸ç »ı°¢ÇØº¸¾ÒÁö¸¸ \x08Á¤´ä\x04Àº ³ª¿ÀÁö ¾Ê¾Ò°í,")
-		StoryPrint(4000*7,"\x04´ç½ÅÀº ¶Ç´Ù¸¥ \x07¸Á°¢\x04 ¼Ó¿¡¼­ \02±â¾à\04¾ø´Â ¿©Á¤ÀÌ °è¼ÓµÈ´Ù.")
+		StoryPrint(4000*1,"\x04ìš´ëª…\x08( \x11ï¼¦\x04ï½ï½”ï½… \x08)\x04")
+		StoryPrint(4000*2,"\x04ì•„ì£¼ ë¨¼ ê³¼ê±°\x10 ( \x11ï¼°\x04ï½ï½“ï½” \x10)\x04ì˜ ìš´ëª…ì€ ì°¸ìœ¼ë¡œ ë¹„ì°¸í–ˆì—ˆì§€.")
+		StoryPrint(4000*3,"\x04í•˜ì§€ë§Œ, ì´ë²ˆì—ëŠ” ê³¼ê±°ì™€ ë‹¤ë¥´ê²Œë„.. \x08ë¹„ì°¸\x04í•œ ìš´ëª…ìœ¼ë¡œë¶€í„° ë²—ì–´ë‚¬ì–´.")
+		StoryPrint(4000*4,"\x04ê·¸ëŸ°ë°.. ë¬´ì—‡ì¼ê¹Œ? ë¬´ì–¸ê°€ ìŠì–´ë²„ë¦°ë“¯í•œ... í—ˆì „í•œ ì´ ëŠë‚Œì€..?")
+		StoryPrint(4000*5,"\x04ìš°ë¦¬ëŠ” ì–´ì©Œë©´, \x07ë©‹ì§€ê³  ì•„ë¦„ë‹¤ìš´ ê²ƒ\x04ì„ ìŠì–´ë²„ë ¸ì„ í„°ì¸ë°...")
+		StoryPrint(4000*6,"\x04ìˆ˜ë§ì€ ê¸°ì–µì„ í—¤ì§šìœ¼ë©° ìƒê°í•´ë³´ì•˜ì§€ë§Œ \x08ì •ë‹µ\x04ì€ ë‚˜ì˜¤ì§€ ì•Šì•˜ê³ ,")
+		StoryPrint(4000*7,"\x04ë‹¹ì‹ ì€ ë˜ë‹¤ë¥¸ \x07ë§ê°\x04 ì†ì—ì„œ \02ê¸°ì•½\04ì—†ëŠ” ì—¬ì •ì´ ê³„ì†ëœë‹¤.")
 		TriggerX(FP,{Gun_Line(8,AtLeast,4000*8)},{Gun_DoSuspend(),SetCD(Win,1)})
 		CDoActions(FP,{TGun_SetLine(8,Add,Dt)})
 	CIfEnd()
@@ -3181,7 +3181,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		table.insert(GunPushTrig,TSetMemory(_Add(G_TempH,(i*0x20)/4),SetTo,Var_TempTable[i+1]))
 	end
 	CDoActions(FP,GunPushTrig)
-	Trigger2X(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayExtText(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+	Trigger2X(FP,{CD(GunCaseCheck,0),Gun_Line(54,AtMost,0)},{Gun_SetLine(54,SetTo,1),RotatePlayer({DisplayTextX(GunCaseErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 	CIf(FP,{Gun_Line(54,AtLeast,1),}) -- SuspendCode
 		CMov(FP,G_TempW,0)
 		CWhile(FP,CVar(FP,G_TempW[2],AtMost,(Var_Lines-1)*(0x20/4)))
@@ -3190,7 +3190,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		CWhileEnd()
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			DisplayPrint(HumanPlayers, {"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : \x1F",f_GunNum," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+			DisplayPrint(HumanPlayers, {"\x07Â·\x11Â·\x08Â·\x07ã€ \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ì : \x1F",f_GunNum," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 			CIfEnd()
 		end
 	CIfEnd()

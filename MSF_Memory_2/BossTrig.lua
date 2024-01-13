@@ -13,7 +13,7 @@ function BossTrig()
 	TV = CreateVarArr(10,FP)
 
 
-	CIf(FP,CV(BPtrArr[1],1,AtLeast),{AddCD(B1C[2],1)})--ÇÏÅÛº¸½º
+	CIf(FP,CV(BPtrArr[1],1,AtLeast),{AddCD(B1C[2],1)})--í•˜í…œë³´ìŠ¤
 		TriggerX(FP,{CD(Theorist,1,AtLeast)},{SetInvincibility(Enable, 87, P5, 64)})
 		CIf(FP,CD(B1C[1],0))
 			TriggerX(FP,{CD(B1C[2],15,AtLeast)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
@@ -31,7 +31,7 @@ function BossTrig()
 		CIf(FP,CD(B1C[1],1),AddCD(B1C[3],1))
 			CIf(FP,CD(B1C[3],1),{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64)}) --100~500
 				
-			CMov(FP,0x6509B0,19025+19) --CUnit ½ÃÀÛÁöÁ¡ +19 (0x4C)
+			CMov(FP,0x6509B0,19025+19) --CUnit ì‹œì‘ì§€ì  +19 (0x4C)
 			CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 				CIf(FP,DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00))
 					CAdd(FP,0x6509B0,6)
@@ -62,7 +62,7 @@ function BossTrig()
 	CIfEnd()
 
 
-	CIf(FP,CV(BPtrArr[2],1,AtLeast))--ˆªÅÛº¸½º
+	CIf(FP,CV(BPtrArr[2],1,AtLeast))--ë‹¼í…œë³´ìŠ¤
 		
 		
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),Simple_SetLoc(9,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),MoveLocation(10,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
@@ -86,7 +86,7 @@ function BossTrig()
 
 
 
-	CIf(FP,CV(BPtrArr[3],1,AtLeast),{SetMemoryX(0x665E44, SetTo, 0,0xFF000000);SetBulletSpeed(250),AddCD(B3C[3],1)})--ÅÊÅ©º¸½º
+	CIf(FP,CV(BPtrArr[3],1,AtLeast),{SetMemoryX(0x665E44, SetTo, 0,0xFF000000);SetBulletSpeed(250),AddCD(B3C[3],1)})--íƒ±í¬ë³´ìŠ¤
 		f_Read(FP,_Add(BPtrArr[3],10),CPos)
 		Convert_CPosXY()
 		CIf(FP,{CD(Theorist,1,AtLeast),CD(B3C[3],25,AtLeast)},{SetCD(B3C[3],0)})
@@ -158,7 +158,7 @@ function BossTrig()
 
 
 
-	CIf(FP,CV(BPtrArr[4],1,AtLeast))--¹úÃÄº¸½º
+	CIf(FP,CV(BPtrArr[4],1,AtLeast))--ë²Œì³ë³´ìŠ¤
 		f_Read(FP,_Add(BPtrArr[4],10),CPos)
 		Convert_CPosXY()
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[4],P8,64)})
@@ -186,7 +186,7 @@ function BossTrig()
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[4],19),Exactly,0,0xFF00)},{SetV(BPtrArr[4],0),KillUnit(191,P9),SetDeaths(7,SetTo,1,BossUID[4])},1)
 	CIfEnd()
 
-	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force2,64)})--ÇÁ·Îºêº¸½º
+	CIf(FP,{CV(BPtrArr[5],1,AtLeast),CD(BStart,1)},{SetMemoryB(0x6636B8+64,SetTo,62),SetInvincibility(Disable,64,Force2,64)})--í”„ë¡œë¸Œë³´ìŠ¤
 	CDoActions(FP,{
 		TSetMemory(_Add(BPtrArr[5],13),SetTo,640)
 	})
@@ -209,7 +209,7 @@ function BossTrig()
 		CV(BPtrArr[4],0,AtMost),
 		CD(WarpCheck,0),
 		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
-	InvDisable2(189,i,{ -- axiom È°¼ºÈ­½Ã¿¡´Â ºê±İ²¨Á®¾ß ºÎ¼ú¼öÀÖÀ½
+	InvDisable2(189,i,{ -- axiom í™œì„±í™”ì‹œì—ëŠ” ë¸Œê¸ˆêº¼ì ¸ì•¼ ë¶€ìˆ ìˆ˜ìˆìŒ
 		CD(AxiomCcode[i-3],1),
 		Deaths(0,Exactly,0,12),
 		Deaths(1,Exactly,0,12),

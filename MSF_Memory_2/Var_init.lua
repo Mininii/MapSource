@@ -205,6 +205,8 @@ function Var_init()
 	OvArrY = CreateVarArr(4,FP)
 	NexArrX = CreateVarArr(4,FP)
 	NexArrY = CreateVarArr(4,FP)
+	WarnC = CreateVarArr(4,FP)
+	WarnCT = CreateVarArr(4,FP)
 	
 	ThCallT = CreateCcode()
 	AFlag = CreateCcode()
@@ -235,8 +237,8 @@ function Var_init()
 	GeneCcode = CreateCcode()--2
 	WarpCheck = CreateCcode()
 	CUnitRefrash = CreateCcode()
-	Theorist = CreateCcode() -- ÀÌ·ĞÄ¡¸ğµå Ccode
-	DCV = CreateVar(FP)--µ¥Ä«ÀúÀåV
+	Theorist = CreateCcode() -- ì´ë¡ ì¹˜ëª¨ë“œ Ccode
+	DCV = CreateVar(FP)--ë°ì¹´ì €ì¥V
 	CUnitFlag = CreateCcode()
 	MarDup = CreateCcode()
 	MarDup2 = CreateCcode()
@@ -260,23 +262,23 @@ function Var_init()
 	_0D_1000B = string.rep("\x0D",1000)
 
 	AxStrArr = {
-		"\x041. \x07¼¼°èÀÇ ½ÃÀÛ\x04¿¡¼­ \x07²Ş\x04ÀÇ \x17Á¶°¢\x04À» \x1FµÇÃ£¾Æ¶ó.",
-		"\x042. \x18°ø¸í\x04°ú \x10°ø¸í\x04À» \x1F°ø¸í\x04ÇÏ¶ó.",
-		"\x043. \x08Àû´ë\x04ÀÇ \x10À§Çù\x04À» \x07±Øº¹ÇÏ¶ó.",
-		"\x044. \x10°íÅë\x04ÀÇ \x07±â¾ï\x04À» \x1FÇØ¹æ½ÃÄÑ¶ó."
+		"\x041. \x07ì„¸ê³„ì˜ ì‹œì‘\x04ì—ì„œ \x07ê¿ˆ\x04ì˜ \x17ì¡°ê°\x04ì„ \x1Fë˜ì°¾ì•„ë¼.",
+		"\x042. \x18ê³µëª…\x04ê³¼ \x10ê³µëª…\x04ì„ \x1Fê³µëª…\x04í•˜ë¼.",
+		"\x043. \x08ì ëŒ€\x04ì˜ \x10ìœ„í˜‘\x04ì„ \x07ê·¹ë³µí•˜ë¼.",
+		"\x044. \x10ê³ í†µ\x04ì˜ \x07ê¸°ì–µ\x04ì„ \x1Fí•´ë°©ì‹œì¼œë¼."
 	}
 
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(38).."\r\n",3)) 
-	Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
+	Str1, Str1a, Str1s = SaveiStrArrX(FP,MakeiStrVoid(54))
 	RepHeroIndex,Gun_LV,CunitHP,CunitP,CunitIndex = CreateVars(5,FP)
 	Replace_JumpUnitArr = {nilunit,4,6,18,24,26,31,58,35,168,201}
-	f_ReplaceErrT = StrDesign("\x08ERROR : \x04Äµ³´À¸·Î ÀÎÇØ f_Replace¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07")
+	f_ReplaceErrT = StrDesign("\x08ERROR : \x04ìº”ë‚«ìœ¼ë¡œ ì¸í•´ f_Replaceë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07")
 	CurPlace = CreateCcode()
 	HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 	MapPlayers = {P1,P2,P3,P4}
 	ObPlayers = {P5,P6,P7,P8,P9,P10,P11,P12}
-	Players = {"\x081ÀÎ","\x0E2ÀÎ","\x0F3ÀÎ","\x104ÀÎ"}
+	Players = {"\x081ì¸","\x0E2ì¸","\x0F3ì¸","\x104ì¸"}
 	MarID = {0,1,16,99}
 	MarWep = {117,118,119,120} 
 	GiveRate2 = {1000, 5000,10000,50000,100000,500000}  
@@ -291,12 +293,12 @@ function Var_init()
 	HTextStr = _0D
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x06#X_MAX"}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4"} 
-	P = {"\x081ÀÎ","\x0E2ÀÎ","\x0F3ÀÎ","\x104ÀÎ"}
+	P = {"\x081ì¸","\x0E2ì¸","\x0F3ì¸","\x104ì¸"}
 	DelayMedicT = {
-		StrDesign("\x1D¿¹¾à¸Şµñ\x04À» \x1B2Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F300 Ore\x07"),
-		StrDesign("\x1D¿¹¾à¸Şµñ\x04À» \x1B3Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F350 Ore\x07"),
-		StrDesign("\x1D¿¹¾à¸Şµñ\x04À» \x1B4Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F400 Ore\x07"),
-		StrDesign("\x1D¿¹¾à¸Şµñ\x04À» \x1BºñÈ°¼ºÈ­(1Tick)\x04ÇÏ¿´½À´Ï´Ù. - \x1F250 Ore\x07")}
+		StrDesign("\x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B2Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F300 Ore\x07"),
+		StrDesign("\x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B3Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F350 Ore\x07"),
+		StrDesign("\x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B4Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F400 Ore\x07"),
+		StrDesign("\x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1Bë¹„í™œì„±í™”(1Tick)\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F250 Ore\x07")}
 	ResetSwitch = "Switch 250"
 	WaveSwitch = "Switch 150"
 	P1VOFF = "Turn OFF Shared Vision for Player 1"
@@ -320,26 +322,26 @@ function Var_init()
 	
 	--ClassInfo2 = CreateCText(FP,"\x04 (")
 	--ClassInfo3 = CreateCText(FP,"\x04) - ")
-	--ClassInfo4 = CreateCText(FP," £Ä£í£ç")
+	--ClassInfo4 = CreateCText(FP," ï¼¤ï½ï½‡")
 	--ClassInfo6 = CreateCText(FP,"\x1F.")
-	--ClassInfo5 = CreateCText(FP," £¥")
+	--ClassInfo5 = CreateCText(FP," ï¼…")
 	
 	HTextStrReset = CreateCText(FP,HTextStr)
-	Str122 = CreateCText(FP,"\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
-	Str12 = CreateCText(FP,"\x0D\x0D!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ")
+	Str122 = CreateCText(FP,"\x07Â·\x11Â·\x08Â·\x07ã€ ")
+	Str12 = CreateCText(FP,"\x0D\x0D!H\x07Â·\x11Â·\x08Â·\x07ã€ ")
 	Str03 = {}
 	Str02 = {}
 
 	for i = 0, 3 do
-		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."\x07¡½\x08¡¤\x11¡¤\x07¡¤"))
+		table.insert(Str02,CreateCText(FP,"\x04's "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."\x07ã€‘\x08Â·\x11Â·\x07Â·"))
 	end
-	Str13 = CreateCText(FP,"\x04ÀÌ(°¡) \x1CºûÀÇ º¸È£¸·\x04À» »ç¿ëÇß½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤")
-	EEggStr = CreateCText(FP,"\x04ÀÌ(°¡) \x07ºû\x04ÀÇ ±â¾ï\x04À» ¹ß°ßÇß½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤")
+	Str13 = CreateCText(FP,"\x04ì´(ê°€) \x1Cë¹›ì˜ ë³´í˜¸ë§‰\x04ì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤. \x07ã€‘\x08Â·\x11Â·\x07Â·")
+	EEggStr = CreateCText(FP,"\x04ì´(ê°€) \x07ë¹›\x04ì˜ ê¸°ì–µ\x04ì„ ë°œê²¬í–ˆìŠµë‹ˆë‹¤. \x07ã€‘\x08Â·\x11Â·\x07Â·")
 
 	
 
-	AtkCondT = CreateCText(FP,"°ø°İ·Â ¾÷±×·¹ÀÌµå Á¶°Ç ºÒ¸¸Á·\n	Next Level - ")
-	HPCondT = CreateCText(FP,"Ã¼·Â ¾÷±×·¹ÀÌµå Á¶°Ç ºÒ¸¸Á·\n	Next Level - ")
+	AtkCondT = CreateCText(FP,"ê³µê²©ë ¥ ì—…ê·¸ë ˆì´ë“œ ì¡°ê±´ ë¶ˆë§Œì¡±\n	Next Level - ")
+	HPCondT = CreateCText(FP,"ì²´ë ¥ ì—…ê·¸ë ˆì´ë“œ ì¡°ê±´ ë¶ˆë§Œì¡±\n	Next Level - ")
 
 	--CXPlot 
 	function CreateVarA(Player)
@@ -371,9 +373,9 @@ function Var_init()
 	CXGeneFlag = CreateCcode()
 	
 
-	TTemp = CXMakePolyhedron(20,512) -- ÇÑº¯ÀÇ Å©±â°¡ 512 Á¤20¸éÃ¼ (Z>0 ÇÏ¾ç / Z=0 ÆÄ¶û / Z<0 °ËÁ¤) 
+	TTemp = CXMakePolyhedron(20,512) -- í•œë³€ì˜ í¬ê¸°ê°€ 512 ì •20ë©´ì²´ (Z>0 í•˜ì–‘ / Z=0 íŒŒë‘ / Z<0 ê²€ì •) 
 	TNumber = TTemp[1]/2 + 1
-	TShape = {1,{0,0,0}} -- ¿øÁ¡ µ¥ÀÌÅÍ »ğÀÔ
+	TShape = {1,{0,0,0}} -- ì›ì  ë°ì´í„° ì‚½ì…
 	local Sym = {{1,4},{2,3},{5,8},{6,7},{9,12},{10,11}}
 	for i = 1, TTemp[1]/2 do
 	table.insert(TShape,{TTemp[Sym[i][1]+1][1],TTemp[Sym[i][1]+1][2], TTemp[Sym[i][1]+1][3]})
@@ -390,12 +392,12 @@ function Var_init()
 	CA_Eff_RRat3 = CreateVar(FP)
 	CA_Eff_DRat2Dt = CreateVar2(FP,nil,nil,2500)
 	CA_Eff_DRat3Dt = CreateVar2(FP,nil,nil,2500)
-	CA_EffSWArr = CreateCcodeArr(8)--ÀÌÆåÆ® ÄÑ°í²ø°ÇÁö °áÁ¤ÇÏ´Â CcodeArr. 0ÀÏ°æ¿ì¿¡¸¸ ÄÑÁü
-	CA_EffSWArr2 = CreateVarArr(8,FP)--Ä¿½ºÅÒ JYD Repeat¸¦ ¾îµğ¿¡ ½òÁö °áÁ¤ÇÏ´Â Ç×¸ñ. 1 ÀÌ»óÀÏ °æ¿ì ¼ıÀÚ¸¸Å­ ÇØ´çÁöÁ¡¿¡ ½ô. ´Ù¸¥Á¡¿¡ Áßº¹¼±ÅÃ °¡´É
-	--CA_EffSWArr3 = CreateVarArr(8,FP)--Ä¿½ºÅÒ ÀÌÆåÆ® ÄÑ°í²ø²«Áö °áÁ¤ÇÏ´Â Ç×¸ñ. »óµ¿
+	CA_EffSWArr = CreateCcodeArr(8)--ì´í™íŠ¸ ì¼œê³ ëŒê±´ì§€ ê²°ì •í•˜ëŠ” CcodeArr. 0ì¼ê²½ìš°ì—ë§Œ ì¼œì§
+	CA_EffSWArr2 = CreateVarArr(8,FP)--ì»¤ìŠ¤í…€ JYD Repeatë¥¼ ì–´ë””ì— ì ì§€ ê²°ì •í•˜ëŠ” í•­ëª©. 1 ì´ìƒì¼ ê²½ìš° ìˆ«ìë§Œí¼ í•´ë‹¹ì§€ì ì— ì¨. ë‹¤ë¥¸ì ì— ì¤‘ë³µì„ íƒ ê°€ëŠ¥
+	--CA_EffSWArr3 = CreateVarArr(8,FP)--ì»¤ìŠ¤í…€ ì´í™íŠ¸ ì¼œê³ ëŒê»€ì§€ ê²°ì •í•˜ëŠ” í•­ëª©. ìƒë™
 	CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX = CreateVars(3,FP)
 	CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2 = CreateVars(3,FP)
---	CreateHeroPointArr(15,"\x1BÀÜ\x04ÇØ "..Conv_HStr("<1B>C<04>ivilian"),30000)
+--	CreateHeroPointArr(15,"\x1Bì”\x04í•´ "..Conv_HStr("<1B>C<04>ivilian"),30000)
 
 
 Tier1 = {17,77,78,76,63,21,88,28,86,75,25}
@@ -406,59 +408,59 @@ Tier5 = {60,68}
 EraUngmeojulT = {}
 EraUngmeojulC = CreateCcode()
 
-CreateHeroPointArr(17,nil,9999,0,"\x1BÀü\x04Åõº´±â "..Conv_HStr("<1B>A<04>lan <1B>S<04>chezar"),25000,nil,nil,1) --
-CreateHeroPointArr(77,nil,6000,5000,"\x1B°Ë\x04Åõº´ "..Conv_HStr("<1B>F<4>enix <1B>Z"),30000,nil,nil,1) --
-CreateHeroPointArr(78,nil,8000,6000,"\x1B¿ë\x04±âº´ "..Conv_HStr("<1B>F<4>enix <1B>D"),33000,nil,nil,1) --
-CreateHeroPointArr(76,nil,9000,6000,"\x1Bº¸\x04¿Á "..Conv_HStr("<1B>O<4>rb"),45000,nil,nil,1) --
-CreateHeroPointArr(21,nil,9999,0,"\x1B¸Á\x04·É "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000,nil,nil,1) --
-CreateHeroPointArr(88,nil,9000,3000,"\x1BÁ¤\x04Âû±â "..Conv_HStr("<1B>A<4>rtanis"),32000,nil,nil,1) --
-CreateHeroPointArr(28,nil,9999,0,"\x1BÀü\x04ÇÔ "..Conv_HStr("<1B>H<4>yperion"),35000,nil,nil,1) --
-CreateHeroPointArr(86,nil,9999,7000,"\x1B¸Á\x04Åä "..Conv_HStr("<1B>D<4>animoth"),42000,nil,nil,1) --
-CreateHeroPointArr(25,nil,9999,0,"\x1B´ë\x04Æ÷ "..Conv_HStr("<1B>M<4>ortal"),38000) --
-CreateHeroPointArr(75,nil,7000,9000,"\x1B±×\x04¸²ÀÚ "..Conv_HStr("<1B>Z<4>eratul"),40000,nil,nil,1) --
-CreateHeroPointArr(63,nil,5000,9000,"\x1Fº¸\x04ÁÖ "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),50000,nil,1,1) --
+CreateHeroPointArr(17,nil,9999,0,"\x1Bì „\x04íˆ¬ë³‘ê¸° "..Conv_HStr("<1B>A<04>lan <1B>S<04>chezar"),25000,nil,nil,1) --
+CreateHeroPointArr(77,nil,6000,5000,"\x1Bê²€\x04íˆ¬ë³‘ "..Conv_HStr("<1B>F<4>enix <1B>Z"),30000,nil,nil,1) --
+CreateHeroPointArr(78,nil,8000,6000,"\x1Bìš©\x04ê¸°ë³‘ "..Conv_HStr("<1B>F<4>enix <1B>D"),33000,nil,nil,1) --
+CreateHeroPointArr(76,nil,9000,6000,"\x1Bë³´\x04ì˜¥ "..Conv_HStr("<1B>O<4>rb"),45000,nil,nil,1) --
+CreateHeroPointArr(21,nil,9999,0,"\x1Bë§\x04ë ¹ "..Conv_HStr("<1B>T<04>om <1B>K<04>azansky"),30000,nil,nil,1) --
+CreateHeroPointArr(88,nil,9000,3000,"\x1Bì •\x04ì°°ê¸° "..Conv_HStr("<1B>A<4>rtanis"),32000,nil,nil,1) --
+CreateHeroPointArr(28,nil,9999,0,"\x1Bì „\x04í•¨ "..Conv_HStr("<1B>H<4>yperion"),35000,nil,nil,1) --
+CreateHeroPointArr(86,nil,9999,7000,"\x1Bë§\x04í†  "..Conv_HStr("<1B>D<4>animoth"),42000,nil,nil,1) --
+CreateHeroPointArr(25,nil,9999,0,"\x1BëŒ€\x04í¬ "..Conv_HStr("<1B>M<4>ortal"),38000) --
+CreateHeroPointArr(75,nil,7000,9000,"\x1Bê·¸\x04ë¦¼ì "..Conv_HStr("<1B>Z<4>eratul"),40000,nil,nil,1) --
+CreateHeroPointArr(63,nil,5000,9000,"\x1Fë³´\x04ì£¼ "..Conv_HStr("<1F>D<4>ark <1F>O<4>rb"),50000,nil,1,1) --
 
 
-CreateHeroPointArr(19,nil,22000,0,"\x1B±â\x04½ÀÀÚ "..Conv_HStr("<1B>J<04>im <1B>R<04>aynor <1B>V"),45000,nil,nil,1) --
-CreateHeroPointArr(52,nil,25000,0,"\x1BºÎ\x04ÆĞ "..Conv_HStr("<1B>O<4>rganes"),55000,nil,nil,1) --
-CreateHeroPointArr(10,nil,15000,0,"\x1FÈ­\x04¿° "..Conv_HStr("<1F>I<04>nferno"),55000,nil,1,1) --
-CreateHeroPointArr(22,nil,25000,0,"\x1FºÎ\x04Á¤ÀÚ "..Conv_HStr("<1F>A<4>dverse"),55000,nil,1,1)--
-CreateHeroPointArr(79,nil,17000,6000,"\x1BºÒ\x04»çÀÚ "..Conv_HStr("<1B>T<4>assadar"),45000,nil,nil,1)--
-CreateHeroPointArr(80,nil,20000,8900,"\x1F¹İ\x04Á¤¸³ "..Conv_HStr("<1F>A<04>ntithese"),55000,nil,1,1)
+CreateHeroPointArr(19,nil,22000,0,"\x1Bê¸°\x04ìŠµì "..Conv_HStr("<1B>J<04>im <1B>R<04>aynor <1B>V"),45000,nil,nil,1) --
+CreateHeroPointArr(52,nil,25000,0,"\x1Bë¶€\x04íŒ¨ "..Conv_HStr("<1B>O<4>rganes"),55000,nil,nil,1) --
+CreateHeroPointArr(10,nil,15000,0,"\x1Fí™”\x04ì—¼ "..Conv_HStr("<1F>I<04>nferno"),55000,nil,1,1) --
+CreateHeroPointArr(22,nil,25000,0,"\x1Fë¶€\x04ì •ì "..Conv_HStr("<1F>A<4>dverse"),55000,nil,1,1)--
+CreateHeroPointArr(79,nil,17000,6000,"\x1Bë¶ˆ\x04ì‚¬ì "..Conv_HStr("<1B>T<4>assadar"),45000,nil,nil,1)--
+CreateHeroPointArr(80,nil,20000,8900,"\x1Fë°˜\x04ì •ë¦½ "..Conv_HStr("<1F>A<04>ntithese"),55000,nil,1,1)
 
-CreateHeroPointArr(8,nil,25000,0,"\x1FÀ¯\x04·É "..Conv_HStr("<1F>P<04>hantom"),67000,nil,1,1)
-CreateHeroPointArr(3,nil,31920,0,"\x1F¹«\x04¹ıÀÚ "..Conv_HStr("<1F>B<04>rutal"),76000,nil,1,1)
-CreateHeroPointArr(57,nil,27000,0,"\x1F¸¶\x04³à "..Conv_HStr("<1F>W<4>itch"),56000,nil,1,1)
-CreateHeroPointArr(98,nil,20000,10000,"\x1FÀ§\x04¹İÀÚ "..Conv_HStr("<1F>B<4>reach"),75000,nil,1,1)
-CreateHeroPointArr(27,nil,10000,20000,"\x1F½Â\x04ÃµÀÚ "..Conv_HStr("<1F>A<4>scension"),65000,nil,1,1)
-CreateHeroPointArr(29,nil,35000,0,"\x1F±â\x04ÇÔ "..Conv_HStr("<1F>N<4>orad <1F>II"),45000,nil,1,1)
-CreateHeroPointArr(66,nil,30000,10000,"\x1F¿µ\x04»ıÀÚ "..Conv_HStr("<1F>I<4>mmortal"),75000,nil,1,1)
-CreateHeroPointArr(100,nil,35000,0,"\x1F¼Ò\x04¸êÀÚ "..Conv_HStr("<1F>E<04>clipse"),55000,nil,1,1)
-CreateHeroPointArr(70,nil,26000,12000,"\x1F³ª\x04¶ô "..Conv_HStr("<1F>F<04>allen"),75000,nil,1,1)
-CreateHeroPointArr(65,nil,25000,5000,"\x1F±¤\x04Àü»ç "..Conv_HStr("<1F>M<4>adness"),65000,nil,1,1)
+CreateHeroPointArr(8,nil,25000,0,"\x1Fìœ \x04ë ¹ "..Conv_HStr("<1F>P<04>hantom"),67000,nil,1,1)
+CreateHeroPointArr(3,nil,31920,0,"\x1Fë¬´\x04ë²•ì "..Conv_HStr("<1F>B<04>rutal"),76000,nil,1,1)
+CreateHeroPointArr(57,nil,27000,0,"\x1Fë§ˆ\x04ë…€ "..Conv_HStr("<1F>W<4>itch"),56000,nil,1,1)
+CreateHeroPointArr(98,nil,20000,10000,"\x1Fìœ„\x04ë°˜ì "..Conv_HStr("<1F>B<4>reach"),75000,nil,1,1)
+CreateHeroPointArr(27,nil,10000,20000,"\x1FìŠ¹\x04ì²œì "..Conv_HStr("<1F>A<4>scension"),65000,nil,1,1)
+CreateHeroPointArr(29,nil,35000,0,"\x1Fê¸°\x04í•¨ "..Conv_HStr("<1F>N<4>orad <1F>II"),45000,nil,1,1)
+CreateHeroPointArr(66,nil,30000,10000,"\x1Fì˜\x04ìƒì "..Conv_HStr("<1F>I<4>mmortal"),75000,nil,1,1)
+CreateHeroPointArr(100,nil,35000,0,"\x1Fì†Œ\x04ë©¸ì "..Conv_HStr("<1F>E<04>clipse"),55000,nil,1,1)
+CreateHeroPointArr(70,nil,26000,12000,"\x1Fë‚˜\x04ë½ "..Conv_HStr("<1F>F<04>allen"),75000,nil,1,1)
+CreateHeroPointArr(65,nil,25000,5000,"\x1Fê´‘\x04ì „ì‚¬ "..Conv_HStr("<1F>M<4>adness"),65000,nil,1,1)
 
-CreateHeroPointArr(102,nil,60000,0,"\x1F´ë\x04¸³ÀÚ "..Conv_HStr("<1F>C<4>onflict"),100000,nil,1,1)
-CreateHeroPointArr(61,nil,70000,10000,"\x1Fº¯\x04¸íÀÚ "..Conv_HStr("<1F>V<4>indication"),80000,nil,1,1)
-CreateHeroPointArr(67,nil,120000,10000,"\x1FÃ¢\x04¼¼ÀÚ "..Conv_HStr("<1F>G<4>enesis"),115000,nil,1,1)
-CreateHeroPointArr(23,nil,250000,0,"\x1F¿ì\x04»ó "..Conv_HStr("<1F>I<4>conoclasm"),66600,nil,1,1)
-CreateHeroPointArr(81,nil,100000,50000,"\x1F°ø\x04ÀÛ "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1,1)
-CreateHeroPointArr(30,nil,322,0,"\x1FÁ¤\x04Ã¼¼º "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)
-
-
-
-CreateHeroPointArr(60,nil,110000,60000,"\x08Àû\x04´ëÀÚ "..Conv_HStr("<08>A<4>ntagonism"),322000,nil,nil,1)
-CreateHeroPointArr(68,nil,250000,64000,"\x1FÁı\x04Çà°ü "..Conv_HStr("<1F>J<4>udgement"),110000,nil,1)
+CreateHeroPointArr(102,nil,60000,0,"\x1FëŒ€\x04ë¦½ì "..Conv_HStr("<1F>C<4>onflict"),100000,nil,1,1)
+CreateHeroPointArr(61,nil,70000,10000,"\x1Fë³€\x04ëª…ì "..Conv_HStr("<1F>V<4>indication"),80000,nil,1,1)
+CreateHeroPointArr(67,nil,120000,10000,"\x1Fì°½\x04ì„¸ì "..Conv_HStr("<1F>G<4>enesis"),115000,nil,1,1)
+CreateHeroPointArr(23,nil,250000,0,"\x1Fìš°\x04ìƒ "..Conv_HStr("<1F>I<4>conoclasm"),66600,nil,1,1)
+CreateHeroPointArr(81,nil,100000,50000,"\x1Fê³µ\x04ì‘ "..Conv_HStr("<1F>D<4>antalion"),85000,nil,1,1)
+CreateHeroPointArr(30,nil,322,0,"\x1Fì •\x04ì²´ì„± "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)
 
 
-CreateHeroPointArr(71,nil,1,60000,"\x1F°í\x04Åë "..Conv_HStr("<1F>P<4>ain"),55000,nil,1,1)
 
-CreateHeroPointArr(118,nil,20000,30000,"\x1FÁõ\x04¿ÀÀÚ "..Conv_HStr("<1F>H<4>ate"),65000,nil,1)
+CreateHeroPointArr(60,nil,110000,60000,"\x08ì \x04ëŒ€ì "..Conv_HStr("<08>A<4>ntagonism"),322000,nil,nil,1)
+CreateHeroPointArr(68,nil,250000,64000,"\x1Fì§‘\x04í–‰ê´€ "..Conv_HStr("<1F>J<4>udgement"),110000,nil,1)
 
 
-CreateHeroPointArr(150,nil,80000,0,"\x19¼±\x04¹° "..Conv_HStr("<19>B<04>onus"),55000,2,1)
-CreateHeroPointArr(176,nil,50000,0,"\x19ÀÚ\x04¿ø "..Conv_HStr("<1D>F<4>it"),15500,2,1)
-CreateHeroPointArr(177,nil,50000,0,"\x19ÀÚ\x04¿ø "..Conv_HStr("<1D>F<4>it"),15500,2,1)
-CreateHeroPointArr(178,nil,50000,0,"\x19ÀÚ\x04¿ø "..Conv_HStr("<1D>F<4>it"),15500,2,1)
+CreateHeroPointArr(71,nil,1,60000,"\x1Fê³ \x04í†µ "..Conv_HStr("<1F>P<4>ain"),55000,nil,1,1)
+
+CreateHeroPointArr(118,nil,20000,30000,"\x1Fì¦\x04ì˜¤ì "..Conv_HStr("<1F>H<4>ate"),65000,nil,1)
+
+
+CreateHeroPointArr(150,nil,80000,0,"\x19ì„ \x04ë¬¼ "..Conv_HStr("<19>B<04>onus"),55000,2,1)
+CreateHeroPointArr(176,nil,50000,0,"\x19ì\x04ì› "..Conv_HStr("<1D>F<4>it"),15500,2,1)
+CreateHeroPointArr(177,nil,50000,0,"\x19ì\x04ì› "..Conv_HStr("<1D>F<4>it"),15500,2,1)
+CreateHeroPointArr(178,nil,50000,0,"\x19ì\x04ì› "..Conv_HStr("<1D>F<4>it"),15500,2,1)
 
 
 end

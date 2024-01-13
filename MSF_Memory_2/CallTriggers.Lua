@@ -4,7 +4,7 @@ function Install_CallTriggers()
 	local InverseOptionY = CreateCcode()
 	f_Replace = SetCallForward()
 	SetCall(FP)
-		CIfX(FP,Memory(0x628438,AtLeast,1)) -- Äµ³´Ã¼Å©.
+		CIfX(FP,Memory(0x628438,AtLeast,1)) -- ìº”ë‚«ì²´í¬.
 		f_SaveCp()
 		CMov(FP,Gun_LV,0)
 		f_Read(FP,BackupCp,CPos)
@@ -73,11 +73,11 @@ function Install_CallTriggers()
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100}),
 			TSetMemoryX(_Add(Nextptrs,35),SetTo,CunitP,0xFF),
 		})
-		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ¹«ÀûÇÃ·¡±× 1ÀÏ°æ¿ì ¹«Àû»óÅÂ·Î ¹Ù²Ş
-		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CunitIndex,13,SetTo,0x1,0x1),AddV(EEggV,1)},1) -- ÇÒ·ç½ÃÇÃ·¡±× 1ÀÏ°æ¿ì DUnitCalc[14]=1(BitMask)
+		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ë¬´ì í”Œë˜ê·¸ 1ì¼ê²½ìš° ë¬´ì ìƒíƒœë¡œ ë°”ê¿ˆ
+		CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x20000,0x20000)},{Set_EXCC2X(DUnitCalc,CunitIndex,13,SetTo,0x1,0x1),AddV(EEggV,1)},1) -- í• ë£¨ì‹œí”Œë˜ê·¸ 1ì¼ê²½ìš° DUnitCalc[14]=1(BitMask)
 		f_LoadCp()
 		CElseX()
-		DoActions2X(FP,{RotatePlayer({DisplayExtText(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+		DoActions2X(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
 	SetCallEnd()
 
@@ -139,7 +139,7 @@ function Install_CallTriggers()
 			f_Div(FP,CurCunitI,_Mov(84))
 			RandColor = f_CRandNum(5)
 			for j,k in pairs({0,10,13,15,16}) do
-				TriggerX(FP, {CV(RandColor,j-1)}, {SetMemoryB(0x669E28+936, SetTo, k);}, {preserved}) -- »ö»ó
+				TriggerX(FP, {CV(RandColor,j-1)}, {SetMemoryB(0x669E28+936, SetTo, k);}, {preserved}) -- ìƒ‰ìƒ
 				
 			end
 			
@@ -182,11 +182,11 @@ function Install_CallTriggers()
 	f_Read(FP,SendEff[1],RecoverEff1)
 	f_Read(FP,SendEff2[1],RecoverEff2)
 	CDoActions(FP,{
-		TSetMemory(SendEff2[1],SetTo,131); -- ½ºÅ©¸³Æ®
-		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]); --ÄÃ·¯
+		TSetMemory(SendEff2[1],SetTo,131); -- ìŠ¤í¬ë¦½íŠ¸
+		TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]); --ì»¬ëŸ¬
 		TCreateUnit(1,204,"Location 1",CurrentOP);
-		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]); --ÄÃ·¯ º¹±¸
-		TSetMemory(SendEff2[1],SetTo,RecoverEff2); -- ½ºÅ©¸³Æ® º¹±¸
+		TSetMemoryX(SendEff[1],SetTo,RecoverEff1,SendEff[3]); --ì»¬ëŸ¬ ë³µêµ¬
+		TSetMemory(SendEff2[1],SetTo,RecoverEff2); -- ìŠ¤í¬ë¦½íŠ¸ ë³µêµ¬
 	})
 	CIfEnd()
 	SetCallEnd()
@@ -211,8 +211,8 @@ function Install_CallTriggers()
 	f_Read(FP,BackupCp,ReadCP)
 	CMov(FP,CurCP,BackupCp,-19025)
 	f_Mod(FP,CurCP,84)
-	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03SYSTEM \x04: CurCP = \x07",CurCP," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
-	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07¡¤\x11¡¤\x08¡¤\x07¡¼ \x03SYSTEM \x04: ReadCP = \x07",ReadCP," \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07Â·\x11Â·\x08Â·\x07ã€ \x03SYSTEM \x04: CurCP = \x07",CurCP," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
+	DisplayPrint(HumanPlayers, {"\x0D\x0D\x07Â·\x11Â·\x08Â·\x07ã€ \x03SYSTEM \x04: ReadCP = \x07",ReadCP," \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 	f_LoadCp()
 	SetCallEnd()
 	end
@@ -353,7 +353,7 @@ function Install_CallTriggers()
 	TriggerX(FP,{CVar("X",CA[11],AtLeast,0x80000000),CD(CXEffType,5)},{CreateOrder(3,69,7,1,Attack,64)},{preserved})
 	TriggerX(FP,{CVar("X",CA[11],AtMost,0x7FFFFFFF),CD(CXEffType,5)},{CreateOrder(3,11,7,1,Attack,64)},{preserved})
 
-	------ ¿øÁ¡ ´ëÄª -------------------------------------------------------------
+	------ ì›ì  ëŒ€ì¹­ -------------------------------------------------------------
 	CMov(FP,V(CA[8]),V(CA[12]))
 	CMov(FP,V(CA[9]),V(CA[13]))
 	CMov(FP,V(CA[11]),V(CA[14]))
@@ -438,8 +438,8 @@ function Install_CallTriggers()
 
 		function CreateEffUnitA(Condition,Height,Color)
 			TriggerX(FP,{Condition},{
-				SetMemoryB(0x66321C, SetTo, Height); -- ³ôÀÌ
-				SetMemoryB(0x669E28+936, SetTo, Color); -- »ö»ó
+				SetMemoryB(0x66321C, SetTo, Height); -- ë†’ì´
+				SetMemoryB(0x669E28+936, SetTo, Color); -- ìƒ‰ìƒ
 				CreateUnitWithProperties(1,204,1,FP,{energy = 100})},{preserved})
 		end
 		
@@ -483,7 +483,7 @@ function Install_CallTriggers()
 		CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},18,13)
 
 		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
-	--Ä¿½ºÅÒ µµÇü °ÇÀÛ À¯´Ö »ı¼º±¸°£0~227
+	--ì»¤ìŠ¤í…€ ë„í˜• ê±´ì‘ ìœ ë‹› ìƒì„±êµ¬ê°„0~227
 	CA_CP = CreateVar(FP)
 	CIf(FP,{CV(CA_Create,1,AtLeast),CV(CA_Create,227,AtMost)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)})
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CA_CP[2],SetTo,4)},{preserved})
@@ -495,7 +495,7 @@ function Install_CallTriggers()
 		f_TempRepeatX({CD(Theorist,0)}, CA_Create, 1, 193, CA_CP)
 		f_TempRepeatX({CD(Theorist,1,AtLeast)}, CA_Create, 1, 186, CA_CP)
 	CIfEnd()
-	--Ä¿½ºÅÒ µµÇü ½ºÄµÀÌÆåÆ® »ı¼º±¸°£ 1000~2000
+	--ì»¤ìŠ¤í…€ ë„í˜• ìŠ¤ìº”ì´í™íŠ¸ ìƒì„±êµ¬ê°„ 1000~2000
 	CIf(FP,{CV(CA_Create,1000,AtLeast),CV(CA_Create,2000,AtMost)})
 		CDoActions(FP,{
 			TSetMemoryX(0x666458, SetTo, _Sub(CA_Create,1000),0xFFFF),
@@ -504,7 +504,7 @@ function Install_CallTriggers()
 			SetMemoryX(0x666458, SetTo, 546,0xFFFF)
 		})
 	CIfEnd()
-	--Ä¿½ºÅÒ JYD Repeat »ı¼º±¸°£ 2000~4000 . CA_EffSWArr2¿Í ¿¬°èÇÏ¿© »ç¿ëÇØ¾ßµÊ
+	--ì»¤ìŠ¤í…€ JYD Repeat ìƒì„±êµ¬ê°„ 2000~4000 . CA_EffSWArr2ì™€ ì—°ê³„í•˜ì—¬ ì‚¬ìš©í•´ì•¼ë¨
 	local BackupX = CreateVar(FP)
 	local BackupY = CreateVar(FP)
 	CMov(FP,BackupX,V(CA[8]))
@@ -573,7 +573,7 @@ function Install_CallTriggers()
 	CIf(FP,Memory(0x628438, AtLeast, 1))
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	DoActions(FP, CreateUnitWithProperties(1, 60, 1, FP, {hallucinated=true}))
-	f_Read(FP,_Add(Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+	f_Read(FP,_Add(Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 	Convert_CPosXY()
 	CDoActions(FP,{
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
@@ -649,7 +649,7 @@ local CGJump = def_sIndex()
 --CJumpEnd(FP,CGJump)
 --CRead(FP,CGTemp[1],_Add(CGiveH[1],CGivePtr))
 --CRead(FP,CGTemp[2],_Add(CGiveH[2],CGivePtr))
-----DoActions2(FP, RotatePlayer({DisplayExtText("TGCheckAc",4)}, HumanPlayers, FP))
+----DoActions2(FP, RotatePlayer({DisplayTextX("TGCheckAc",4)}, HumanPlayers, FP))
 --NIf(FP,CV(CGTemp[1],1,AtLeast))
 --CMov(FP,CGTemp2[1],CGTemp[2],nil,0xFF,1)--
 
@@ -659,9 +659,9 @@ local CGJump = def_sIndex()
 --f_Div(FP, CGTemp2[2], 0x100)
 --f_Div(FP, CGTemp2[3], 0x1000)--
 
-----f_Read(FP,_Add(CGTemp[1],10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+----f_Read(FP,_Add(CGTemp[1],10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 ----Convert_CPosXY()
-----Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayExtText("TGCheck",4)}, HumanPlayers, FP)})
+----Simple_SetLocX(FP, 0, CPosX, CPosX, CPosY, CPosY, {Simple_CalcLoc(0,-4,-4,4,4),RotatePlayer({DisplayTextX("TGCheck",4)}, HumanPlayers, FP)})
 ----CDoActions(FP, {TGiveUnits(1,CGTemp[3],P9,1,CGTemp2[3])})
 --f_CGive(FP, CGTemp[1], nil, CGTemp2[3], CGTemp2[2])
 --CIfEnd()--
@@ -678,7 +678,7 @@ CFor(FP,19025,19025+(84*1700),84)
 	})
 	CMov(FP,CGTemp[1],_Read(_Add(CI,35)),nil,0xFF)
 	f_CGive(FP, CI, nil, CGTemp[1], P9)
-	f_Read(FP,_Add(CI,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+	f_Read(FP,_Add(CI,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 	--Convert_CPosXY()
 	--Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 	--CDoActions(FP,{TGiveUnits(1,CGTemp[3],P9,1,CGTemp[1])})
@@ -689,7 +689,7 @@ CForEnd()
 SetCallEnd()
 
 function NUGive(Var,UnitID)
-	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayExtText("TGCheckPr",4)}, HumanPlayers, FP)
+	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayTextX("TGCheckPr",4)}, HumanPlayers, FP)
 	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{Order(UnitID,Force2,64,Attack,64),SetInvincibility(Disable,UnitID,Force2,64)})
 end
 	

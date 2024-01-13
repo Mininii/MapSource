@@ -12,60 +12,60 @@ function Opening()
     end
 	for i=1, 57 do
         Trigger2X(FP,{CDeaths(FP,AtLeast,i*15,OPCCode);},{RotatePlayer(
-			{DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-			DisplayExtText("\x0D\x0D\n",4);
-			DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", i),4);
-			DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",4);
-			DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", i),4);
-			DisplayExtText("\x0D\x0D\n\x0D\x0D\n",4);
+			{DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+			DisplayTextX("\x0D\x0D\n",4);
+			DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", i),4);
+			DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",4);
+			DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", i),4);
+			DisplayTextX("\x0D\x0D\n\x0D\x0D\n",4);
         },HumanPlayers,FP)})
 end
 Trigger2X(FP,{CDeaths(FP,AtLeast,956,OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,3100,OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\x13\x05£½\x04The Wonderful Abstractions of a Lost Memory\x07£½\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\x13\x05ï¼\x04The Wonderful Abstractions of a Lost Memory\x07ï¼\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,3378,OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\x13\x07£½\x04The Wonderful Abstractions of a Lost Memory\x07£½\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\x13\x07ï¼\x04The Wonderful Abstractions of a Lost Memory\x07ï¼\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x03\x0D\x0D\n\x0D\x0D\n",4);},HumanPlayers,FP)})
 Trigger2X(FP,{CDeaths(FP,AtLeast,4200,OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\x13\x07£½\x04The Wonderful Abstractions of a Lost Memory\x07£½\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04Á¶ÇÕ ¼³¸íÀº F10 + J ¿¡ ÀÖ½À´Ï´Ù.",4);},HumanPlayers,FP)})
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\x13\x07ï¼\x04The Wonderful Abstractions of a Lost Memory\x07ï¼\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04ì¡°í•© ì„¤ëª…ì€ F10 + J ì— ìžˆìŠµë‹ˆë‹¤.",4);},HumanPlayers,FP)})
 for i = 1, 3 do
 Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(i*1000),OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\x13\x07£½\x04The Wonderful Abstractions of a Lost Memory\x07£½\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\x13\x04"..(4-i).."ÃÊ ³²¾Ò½À´Ï´Ù.\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4);
-    DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 57),4);
-    DisplayExtText("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04Á¶ÇÕ ¼³¸íÀº F10 + J ¿¡ ÀÖ½À´Ï´Ù.",4);
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\x13\x07ï¼\x04The Wonderful Abstractions of a Lost Memory\x07ï¼\x0D\x0D\n\x0D\x0D\x13\x02"..VerText.."\x0D\x0D\n\x0D\x0D\x13\x04"..(4-i).."ì´ˆ ë‚¨ì•˜ìŠµë‹ˆë‹¤.\x0D\x0D\n\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4);
+    DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 57),4);
+    DisplayTextX("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04ì¡°í•© ì„¤ëª…ì€ F10 + J ì— ìžˆìŠµë‹ˆë‹¤.",4);
     PlayWAVX("sound\\glue\\countdown.wav")
 },HumanPlayers,FP)})
 end
 Trigger2X(FP,{CDeaths(FP,AtLeast,5900+(4*1000),OPCCode);},{RotatePlayer(
-    {DisplayExtText(string.rep("\x0D\x0D\n", 10),4);
-    DisplayExtText("\x0D\x0D\n",4);
-    DisplayExtText("\x0D\x0D\x13\x04",4);
-    DisplayExtText("\x0D\x0D\x13\x06\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04£Ó¡¡£Ô¡¡£Á¡¡£Ò¡¡£Ô\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1F",4);
-    DisplayExtText("\x0D\x0D\x13\x04",4);
-    DisplayExtText("\x0D\x0D\x13\x04\x0D\x0D\n\x0D\x0D\n",4);
+    {DisplayTextX(string.rep("\x0D\x0D\n", 10),4);
+    DisplayTextX("\x0D\x0D\n",4);
+    DisplayTextX("\x0D\x0D\x13\x04",4);
+    DisplayTextX("\x0D\x0D\x13\x06\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04ï¼³ã€€ï¼´ã€€ï¼¡ã€€ï¼²ã€€ï¼´\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x1F",4);
+    DisplayTextX("\x0D\x0D\x13\x04",4);
+    DisplayTextX("\x0D\x0D\x13\x04\x0D\x0D\n\x0D\x0D\n",4);
     PlayWAVX("sound\\Bullet\\pshield.wav");
 },HumanPlayers,FP),SetCD(OPJump,1),SetMemory(0x657A9C,SetTo,31),SetSwitch("Switch 253",Clear)})
 DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
@@ -111,42 +111,42 @@ CDoActions(FP,{AddCD(Win,Dt)})
 DoActions2(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\H_Clear.ogg"),PlayWAVX("staredit\\wav\\H_Clear.ogg")},HumanPlayers,FP)},1)
 	for i=1, 57 do
 	Trigger2X(FP,{CD(Win,i*8,AtLeast)},RotatePlayer({
-        DisplayExtText(string.rep("\x0D\x0D\n", 10),4),
-        DisplayExtText("\x0D\x0D\n",4),
-        DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", i),4),
-        DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",4),
-        DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", i),4),
-        DisplayExtText("\x0D\x0D\n\x0D\x0D\n",4),
+        DisplayTextX(string.rep("\x0D\x0D\n", 10),4),
+        DisplayTextX("\x0D\x0D\n",4),
+        DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", i),4),
+        DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",4),
+        DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", i),4),
+        DisplayTextX("\x0D\x0D\n\x0D\x0D\n",4),
     },HumanPlayers,FP))
 
     
     
 	end
 EDText = {
-    "\x08£Â£á£ä¡¡\x0F£Å\x04£î£ä£é£î£ç £° £º \x1FÀý¸Á\x04°ú \x10È¥µ·\x04ÀÇ \x17±â¾ï ",
-    "\x08£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £± £º \x18ÀÒ¾î¹ö¸° \x07ºû\x04ÀÇ \x17±â¾ï",
-    "\x0E£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £² £º \x11°ú°Å\x04ÀÇ \x17±â¾ï",
-    "\x10£Î£ï£ò£í£á£ì¡¡\x0F£Å\x04£î£ä£é£î£ç £³ £º \x10¸Á°¢\x04ÀÇ \x08¿î¸í",
-    "\x1F£È£é£ä£ä£å£î¡¡\x0F£Å\x04£î£ä£é£î£ç £´ £º \x1F±â¾ï¼¼°è\x04ÀÇ \x10ºØ±«",
+    "\x08ï¼¢ï½ï½„ã€€\x0Fï¼¥\x04ï½Žï½„ï½‰ï½Žï½‡ ï¼ ï¼š \x1Fì ˆë§\x04ê³¼ \x10í˜¼ëˆ\x04ì˜ \x17ê¸°ì–µ ",
+    "\x08ï¼®ï½ï½’ï½ï½ï½Œã€€\x0Fï¼¥\x04ï½Žï½„ï½‰ï½Žï½‡ ï¼‘ ï¼š \x18ìžƒì–´ë²„ë¦° \x07ë¹›\x04ì˜ \x17ê¸°ì–µ",
+    "\x0Eï¼®ï½ï½’ï½ï½ï½Œã€€\x0Fï¼¥\x04ï½Žï½„ï½‰ï½Žï½‡ ï¼’ ï¼š \x11ê³¼ê±°\x04ì˜ \x17ê¸°ì–µ",
+    "\x10ï¼®ï½ï½’ï½ï½ï½Œã€€\x0Fï¼¥\x04ï½Žï½„ï½‰ï½Žï½‡ ï¼“ ï¼š \x10ë§ê°\x04ì˜ \x08ìš´ëª…",
+    "\x1Fï¼¨ï½‰ï½„ï½„ï½…ï½Žã€€\x0Fï¼¥\x04ï½Žï½„ï½‰ï½Žï½‡ ï¼” ï¼š \x1Fê¸°ì–µì„¸ê³„\x04ì˜ \x10ë¶•ê´´",
 }
 
 for i=1, 5 do
 Trigger2X(FP,{CD(Win,500,AtLeast),CD(EDNum,i)},
     RotatePlayer({
-        DisplayExtText(string.rep("\x0D\x0D\n", 10),4),
-        DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 56),4),
-        DisplayExtText("\x0D\x0D\x13\x06== \x04¸¶¸°Å°¿ì±â \x07£Í£å£í£ï£ò£ù_£² \x06==\x0D\x0D\n\x0D\x0D\x13\x07£½\x04The Wonderful Abstractions of a Lost Memory\x07£½ \x0D\x0D\n\x0D\x0D\x13\x10Å¬¸®¾î\x04 ÇÏ¼Ì½À´Ï´Ù.",4),
-        DisplayExtText("\x0D\x0D\x13"..EDText[i],4),
-        DisplayExtText("\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ",4),
-        DisplayExtText("\x0D\x0D\x13\x04"..string.rep("¡ª", 56),4),
-        DisplayExtText("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04£Ô£è£á£î£ë¡¡£ù£ï£õ¡¡£æ£ï£ò¡¡£Ð£ì£á£ù£é£î£ç",4),
+        DisplayTextX(string.rep("\x0D\x0D\n", 10),4),
+        DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 56),4),
+        DisplayTextX("\x0D\x0D\x13\x06== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x07ï¼­ï½…ï½ï½ï½’ï½™_ï¼’ \x06==\x0D\x0D\n\x0D\x0D\x13\x07ï¼\x04The Wonderful Abstractions of a Lost Memory\x07ï¼ \x0D\x0D\n\x0D\x0D\x13\x10í´ë¦¬ì–´\x04 í•˜ì…¨ìŠµë‹ˆë‹¤.",4),
+        DisplayTextX("\x0D\x0D\x13"..EDText[i],4),
+        DisplayTextX("\x0D\x0D\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤",4),
+        DisplayTextX("\x0D\x0D\x13\x04"..string.rep("â€•", 56),4),
+        DisplayTextX("\x0D\x0D\x13\x03Made \x06by \x04GALAXY_BURST\x0D\x0D\n\x0D\x0D\x13\x04ï¼´ï½ˆï½ï½Žï½‹ã€€ï½™ï½ï½•ã€€ï½†ï½ï½’ã€€ï¼°ï½Œï½ï½™ï½‰ï½Žï½‡",4),
     },HumanPlayers,FP))
 end
 
 
 
 Trigger2X(FP,{CD(Win,5000,AtLeast),CD(EDNum,1)},
-RotatePlayer({DisplayExtText(StrDesignX("\x04ÃÑÇÕ \x08µ¥½º Ä«¿îÆ®\x04°¡ \x06400 ÀÌ»ó\x04ÀÔ´Ï´Ù. ´Ù½Ã µµÀüÇØÁÖ¼¼¿ä."),4),
+RotatePlayer({DisplayTextX(StrDesignX("\x04ì´í•© \x08ë°ìŠ¤ ì¹´ìš´íŠ¸\x04ê°€ \x06400 ì´ìƒ\x04ìž…ë‹ˆë‹¤. ë‹¤ì‹œ ë„ì „í•´ì£¼ì„¸ìš”."),4),
 PlayWAVX("staredit\\wav\\button3.wav"),
 PlayWAVX("staredit\\wav\\button3.wav"),
 PlayWAVX("staredit\\wav\\button3.wav")

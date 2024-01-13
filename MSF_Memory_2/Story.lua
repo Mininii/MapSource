@@ -10,33 +10,33 @@ function InputStory()
 function AxiomStory(T,Text,AddTrig)
     Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT)}, {
         RotatePlayer({
-            DisplayExtText(string.rep("\n", 20),4),
-            DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
-            DisplayExtText("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
-            DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
+            DisplayTextX(string.rep("\n", 20),4),
+            DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+            DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
+            DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
         },HumanPlayers,FP);
         SetCDeaths(FP,Add,1,ButtonSound);
         AddTrig
     })
 end
 
-AxiomStory(5000*2,"\x04±× ¾î¶² \x10°í³­ \x04±× ÀÌ»óÀÇ °ÍÀÌ ±â´Ù¸°´Ù.")
-AxiomStory(5000*3,"\x04¸ğµç \x07µµÀü\x04À» \x0F´É°¡\x04ÇÏ°í, ¸ğµç \x11º¯Ä¢\x04À» \x1DÃÊ°ú\x04ÇÏ´Â °Í.")
-AxiomStory(5000*4,"\x07ºû\x04°ú \x10´ë¸³\x04ÀÇ \x1F±â¾ï\x04µéÀ» °ŞÀº ÀÏµé°ú... \x08°ğ °ßµ®³¾ ÀÏµé...")
-AxiomStory(5000*5,"\x17´ç½Å\x04Àº ±× \x1C³¡\x04À» µµ´ŞÇÏ±â À§ÇØ¼­...")
-AxiomStory(5000*6,"\x04±×°ÍµéÀ» ÀÌ°÷±îÁö µ¥·Á¿Â \x10¾Ë ¼ö ¾ø´Â ±æ\x04À» ¶È°°ÀÌ °É¾î¾ß¸¸ ÇÑ´Ù.")
-AxiomStory(5000*7,"\x04´ç½ÅµéÀÇ \x06¿î\x11¸í\x04À» ³Ñ¾î ¹Ù¶óº¸°í, ÀÌ ±â¾ïÀÇ \x07¾Æ¸§´Ù¿î ºñ¹Ğ\x04µéÀ» ¹àÇô³»¶ó.")
-AxiomStory(5000*8,"\x04ÀÌ°Í¸¸Àº È®½ÇÈ÷ ±â¾ïÇÏ¶ó. \x07Æ²¸²¾øÀÌ ÀÌ ±æÀº È¦·Î Ã£À» ¼ö ÀÖ´Â °ÍÀÌ ¾Æ´Ï´Ù.")
+AxiomStory(5000*2,"\x04ê·¸ ì–´ë–¤ \x10ê³ ë‚œ \x04ê·¸ ì´ìƒì˜ ê²ƒì´ ê¸°ë‹¤ë¦°ë‹¤.")
+AxiomStory(5000*3,"\x04ëª¨ë“  \x07ë„ì „\x04ì„ \x0FëŠ¥ê°€\x04í•˜ê³ , ëª¨ë“  \x11ë³€ì¹™\x04ì„ \x1Dì´ˆê³¼\x04í•˜ëŠ” ê²ƒ.")
+AxiomStory(5000*4,"\x07ë¹›\x04ê³¼ \x10ëŒ€ë¦½\x04ì˜ \x1Fê¸°ì–µ\x04ë“¤ì„ ê²ªì€ ì¼ë“¤ê³¼... \x08ê³§ ê²¬ëŒë‚¼ ì¼ë“¤...")
+AxiomStory(5000*5,"\x17ë‹¹ì‹ \x04ì€ ê·¸ \x1Cë\x04ì„ ë„ë‹¬í•˜ê¸° ìœ„í•´ì„œ...")
+AxiomStory(5000*6,"\x04ê·¸ê²ƒë“¤ì„ ì´ê³³ê¹Œì§€ ë°ë ¤ì˜¨ \x10ì•Œ ìˆ˜ ì—†ëŠ” ê¸¸\x04ì„ ë˜‘ê°™ì´ ê±¸ì–´ì•¼ë§Œ í•œë‹¤.")
+AxiomStory(5000*7,"\x04ë‹¹ì‹ ë“¤ì˜ \x06ìš´\x11ëª…\x04ì„ ë„˜ì–´ ë°”ë¼ë³´ê³ , ì´ ê¸°ì–µì˜ \x07ì•„ë¦„ë‹¤ìš´ ë¹„ë°€\x04ë“¤ì„ ë°í˜€ë‚´ë¼.")
+AxiomStory(5000*8,"\x04ì´ê²ƒë§Œì€ í™•ì‹¤íˆ ê¸°ì–µí•˜ë¼. \x07í‹€ë¦¼ì—†ì´ ì´ ê¸¸ì€ í™€ë¡œ ì°¾ì„ ìˆ˜ ìˆëŠ” ê²ƒì´ ì•„ë‹ˆë‹¤.")
 
 Trigger2X(FP, {CDeaths(FP,AtLeast,5000*9,StoryT)}, {
     SetCD(StartStoryTelling,0),
     RotatePlayer({
         PlayWAVX("staredit\\wav\\AxiomPreview.wav"),
         PlayWAVX("staredit\\wav\\AxiomPreview.wav"),
-        DisplayExtText(string.rep("\n", 20),4),
-        DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
-        DisplayExtText("\x0D\x0D!H\x13\x10£Á\x04£ø£é£ï£í¡¡\x08£ï\x04£æ¡¡\x11£ô\x04£è£å¡¡\x1F£Å£î£ä\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\x0D\x0D!H\x13\x04InsertÅ°¸¦ ´­·¯ ÁøÇà»óÈ²À» È®ÀÎÇÒ ¼ö ÀÖ½À´Ï´Ù.",0),
-        DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
+        DisplayTextX(string.rep("\n", 20),4),
+        DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+        DisplayTextX("\x0D\x0D!H\x13\x10ï¼¡\x04ï½˜ï½‰ï½ï½ã€€\x08ï½\x04ï½†ã€€\x11ï½”\x04ï½ˆï½…ã€€\x1Fï¼¥ï½ï½„\n\x0D\x0D!H\x13"..AxStrArr[1].."\n\x0D\x0D!H\x13"..AxStrArr[2].."\n\x0D\x0D!H\x13"..AxStrArr[3].."\n\x0D\x0D!H\x13"..AxStrArr[4].."\n\x0D\x0D!H\x13\x04Insertí‚¤ë¥¼ ëˆŒëŸ¬ ì§„í–‰ìƒí™©ì„ í™•ì¸í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.",0),
+        DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
     },HumanPlayers,FP);
 })
 
@@ -47,32 +47,32 @@ CIfOnce(FP,{CD(StartStoryTelling2,1)})
 function AxiomStory(T,Text,AddTrig)
 Trigger2X(FP, {CDeaths(FP,AtLeast,T,StoryT2)}, {
     RotatePlayer({
-        DisplayExtText(string.rep("\n", 20),4),
-        DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
-        DisplayExtText("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
-        DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
+        DisplayTextX(string.rep("\n", 20),4),
+        DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+        DisplayTextX("\x12\n\n\x0D\x0D!H\x13"..Text.."\n\n\n",0),
+        DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
     },HumanPlayers,FP);
     SetCDeaths(FP,Add,1,ButtonSound);
     AddTrig
 })
 end
 
---AxiomStory(5000*1,"\x04ÀÌ°ÍÀ¸·Î, \x07¸ğµç Á¶°Ç\x04À» ¸¸Á·ÇÏ¿´´Ù.")
---AxiomStory(5000*2,"\x04´ç½ÅÀº ÀÌ ÀÌ¾ß±âÀÇ \x1CÁ¾ÁöºÎ\x04¸¦ ÂïÀ» ±Ç¸®°¡ ÁÖ¾îÁ³´Ù.")
---AxiomStory(5000*3,"\x04ÀØÁö ¾Ê¾Ò´Â°¡..? ±×·¡. \x07ºĞ¸íÈ÷ ´ç½ÅÀº ¸Á°¢ÀÇ ±æÀ» °È°í ÀÖ¾ú´Ù.")
---AxiomStory(5000*4,"\x04´õÀÌ»óÀÇ \x08ºñ±Ø\x04À» ¸ØÃß±â À§ÇØ ¿òÁ÷¿©¾ß ÇÒ °ÍÀÌ´Ù.")
---AxiomStory(5000*5,"\x04ÀÌÁ¦ ±× ³¡Àº, ºĞ¸íÈ÷ ¹Ù·Î ¾Õ¿¡ Á¸ÀçÇÑ´Ù.")
---AxiomStory(5000*6,"\x04ÀÚ, ³ª¾Æ°¡¶ó. ±×¸®°í \x06¿î\x11¸í\x04À» ¹Ù²Ù¾î¶ó! \x07ÀÌ¾ß±âÀÇ ³¡À» ¸ÂÀÌÇÏ¶ó!")--
+--AxiomStory(5000*1,"\x04ì´ê²ƒìœ¼ë¡œ, \x07ëª¨ë“  ì¡°ê±´\x04ì„ ë§Œì¡±í•˜ì˜€ë‹¤.")
+--AxiomStory(5000*2,"\x04ë‹¹ì‹ ì€ ì´ ì´ì•¼ê¸°ì˜ \x1Cì¢…ì§€ë¶€\x04ë¥¼ ì°ì„ ê¶Œë¦¬ê°€ ì£¼ì–´ì¡Œë‹¤.")
+--AxiomStory(5000*3,"\x04ìŠì§€ ì•Šì•˜ëŠ”ê°€..? ê·¸ë˜. \x07ë¶„ëª…íˆ ë‹¹ì‹ ì€ ë§ê°ì˜ ê¸¸ì„ ê±·ê³  ìˆì—ˆë‹¤.")
+--AxiomStory(5000*4,"\x04ë”ì´ìƒì˜ \x08ë¹„ê·¹\x04ì„ ë©ˆì¶”ê¸° ìœ„í•´ ì›€ì§ì—¬ì•¼ í•  ê²ƒì´ë‹¤.")
+--AxiomStory(5000*5,"\x04ì´ì œ ê·¸ ëì€, ë¶„ëª…íˆ ë°”ë¡œ ì•ì— ì¡´ì¬í•œë‹¤.")
+--AxiomStory(5000*6,"\x04ì, ë‚˜ì•„ê°€ë¼. ê·¸ë¦¬ê³  \x06ìš´\x11ëª…\x04ì„ ë°”ê¾¸ì–´ë¼! \x07ì´ì•¼ê¸°ì˜ ëì„ ë§ì´í•˜ë¼!")--
 
 Trigger2X(FP, {CDeaths(FP,AtLeast,5000*0,StoryT2)}, {
     SetCD(StartStoryTelling2,0),
 RotatePlayer({
     PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
     PlayWAVX("staredit\\wav\\AxiomComp.ogg"),
-    DisplayExtText(string.rep("\n", 20),4),
-    DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
-    DisplayExtText("\x0D\x0D!H\x13\x10£Á\x04£ø£é£ï£í¡¡\x08£ï\x04£æ¡¡\x11£ô\x04£è£å¡¡\x1F£Å£î£ä\n\n\x0D\x0D!H\x13\x07¢¦£È£á£ó¡¡£Â£å£å£î¡¡£Á£ã£ô£é£ö£á£ô£å£ä¢¦\n\x0D\x0D!H\x13\x04A \x17truth \x0Fhowls \x04from the \x10A\x04xiom \x08o\x04f \x11t\x04he \x1FEnd\n\n\n",0),
-    DisplayExtText("\x13\x04"..string.rep("¡ª", 56),4),
+    DisplayTextX(string.rep("\n", 20),4),
+    DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+    DisplayTextX("\x0D\x0D!H\x13\x10ï¼¡\x04ï½˜ï½‰ï½ï½ã€€\x08ï½\x04ï½†ã€€\x11ï½”\x04ï½ˆï½…ã€€\x1Fï¼¥ï½ï½„\n\n\x0D\x0D!H\x13\x07ï½ï¼¨ï½ï½“ã€€ï¼¢ï½…ï½…ï½ã€€ï¼¡ï½ƒï½”ï½‰ï½–ï½ï½”ï½…ï½„ï½\n\x0D\x0D!H\x13\x04A \x17truth \x0Fhowls \x04from the \x10A\x04xiom \x08o\x04f \x11t\x04he \x1FEnd\n\n\n",0),
+    DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
 },HumanPlayers,FP);
 })
 

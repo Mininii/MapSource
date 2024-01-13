@@ -2,16 +2,16 @@
 ---@param Str? string
 ---@return string
 function StrDesign(Str)
-	return "\x0D\x0D\x07¡¤\x11¡¤\x08¡¤\x07¡¼ "..Str.." \x07¡½\x08¡¤\x11¡¤\x07¡¤"
+	return "\x0D\x0D\x07Â·\x11Â·\x08Â·\x07ã€ "..Str.." \x07ã€‘\x08Â·\x11Â·\x07Â·"
 end
 
 ---@param Str? string
 ---@return string
 function StrDesignX(Str)
-	return "\x0D\x0D\x13\x07¡¤\x11¡¤\x08¡¤\x07¡¼ "..Str.." \x07¡½\x08¡¤\x11¡¤\x07¡¤"
+	return "\x0D\x0D\x13\x07Â·\x11Â·\x08Â·\x07ã€ "..Str.." \x07ã€‘\x08Â·\x11Â·\x07Â·"
 end
 function StrDesignX2(Str)
-	return "\x13\x07¡¤\x11¡¤\x08¡¤\x07¡¼ "..Str.." \x07¡½\x08¡¤\x11¡¤\x07¡¤"
+	return "\x13\x07Â·\x11Â·\x08Â·\x07ã€ "..Str.." \x07ã€‘\x08Â·\x11Â·\x07Â·"
 end
 function TestSet(val)
 	if val == 1 then 
@@ -45,10 +45,10 @@ function Install_BackupCP(Player)
 		CallTrigger(Player,LoadCp_CallIndex,nil)
 	end
 end
-function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿­ ±¸¼ºÇÏ±â
-	local HeaderV = CreateVar(Player) -- Çì´õ°¡ ÀúÀåµÈ V
-	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- ±¸Á¶¿ÀÇÁ¼Â È®Àå º¯¼ö TempV
-	local Index = FuncAlloc -- FuncAlloc¿¡¼­ ¶óº§ ¹Ş¾Æ¿È
+function Install_EXCC(Player,ArrSize,ResetFlag) -- í™•ì¥ êµ¬ì¡°ì˜¤í”„ì…‹ ë‹¨ë½ ì „ìš© ë°°ì—´ êµ¬ì„±í•˜ê¸°
+	local HeaderV = CreateVar(Player) -- í—¤ë”ê°€ ì €ì¥ëœ V
+	local EXCunitTemp = CreateVarArr(ArrSize,Player) -- êµ¬ì¡°ì˜¤í”„ì…‹ í™•ì¥ ë³€ìˆ˜ TempV
+	local Index = FuncAlloc -- FuncAllocì—ì„œ ë¼ë²¨ ë°›ì•„ì˜´
 	FuncAlloc = FuncAlloc + 3
 	table.insert(CtrigInitArr[Player+1],SetCtrigX(Player,HeaderV[2],0x15C,0,SetTo,Player,Index+2,0x15C,1,1))--{"X",EXCC_Forward,0x15C,1,2}--CC_Header
 	local EXCUnitArr = {}
@@ -58,13 +58,13 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 
 	if ResetFlag ~= nil then
 		if type(ResetFlag) == "number" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”
 			for i = 1, #EXCunitTemp do
 				table.insert(EXCunit_Reset,SetCtrig1X("X","X",CAddr("Value",i,0),0,SetTo,0))
 			end
 			return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr,EXCunit_Reset}
 		elseif type(ResetFlag) == "table" then
-			local EXCunit_Reset = {} -- ÇÊ¿ä½Ã ¸®¼Â ¶Ç´Â °ª Á¶Á¤ Å×ÀÌºí(Å¸ÀÌ¸Óor°ªÃÊ±âÈ­ µî)
+			local EXCunit_Reset = {} -- í•„ìš”ì‹œ ë¦¬ì…‹ ë˜ëŠ” ê°’ ì¡°ì • í…Œì´ë¸”(íƒ€ì´ë¨¸orê°’ì´ˆê¸°í™” ë“±)
 			for i = 1, #EXCunitTemp do
 				if ResetFlag[i]~= nil then
 					if type(ResetFlag[i]) == "table" then
@@ -95,32 +95,32 @@ function Install_EXCC(Player,ArrSize,ResetFlag) -- È®Àå ±¸Á¶¿ÀÇÁ¼Â ´Ü¶ô Àü¿ë ¹è¿
 		return {Player,Index,HeaderV,EXCunitTemp,EXCUnitArr}
 	end
 end
-function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ¹«Á¶°Ç T¾×¼Ç, ³Ê¹«¸¹ÀÌ ¾µ °æ¿ì ¼º´É ÇÏ¶ô ¿ì·Á ÀÖÀ½
+function Set_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ë¬´ì¡°ê±´ Tì•¡ì…˜, ë„ˆë¬´ë§ì´ ì“¸ ê²½ìš° ì„±ëŠ¥ í•˜ë½ ìš°ë ¤ ìˆìŒ
 	return TSetMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
 
-function Set_EXCC(Line,Type,Value) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª X
+function Set_EXCC(Line,Type,Value) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’ X
 	return SetV(EXCC_TempVarArr[Line+1],Value,Type)
 end
-function Set_EXCCX(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» ¾²°í½ÍÀ»¶§. ½ÇÁ¦°ª
+function Set_EXCCX(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ì“°ê³ ì‹¶ì„ë•Œ. ì‹¤ì œê°’
 	if Mask == nil then Mask = 0xFFFFFFFF end
 	return TSetMemoryX(_Add(EXCC_TempHeader,((0x20*Line)/4)),Type,Value,Mask)
 end
 
 
-function Cond_EXCC(Line,Type,Value,Mask) -- EXCC´Ü¶ô ³»ºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC(Line,Type,Value,Mask) -- EXCCë‹¨ë½ ë‚´ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return CVar(FP,EXCC_TempVarArr[Line+1][2],Type,Value,Mask)
 end
-function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
-function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§.
+function Cond_EXCC2X(EXCC_init,CUnitIndex,Line,Type,Value,Mask) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ.
 	return TMemoryX(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value,Mask)
 end
-function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCC´Ü¶ô ¿ÜºÎ¿¡¼­ °ªÀ» °Ë»çÇÏ°í ½ÍÀ»¶§. TTORÀü¿ë
+function _Cond_EXCC2(EXCC_init,CUnitIndex,Line,Type,Value) -- EXCCë‹¨ë½ ì™¸ë¶€ì—ì„œ ê°’ì„ ê²€ì‚¬í•˜ê³  ì‹¶ì„ë•Œ. TTORì „ìš©
 	return _TMemory(_Add(_Mul(CUnitIndex,_Mov(0x970/4)),_Add(EXCC_init[3],((0x20*Line)/4))),Type,Value)
 end
 EXCC_initArr = {}
@@ -158,7 +158,7 @@ function EXCC_Part1(EXCC_init,Actions)
 	}	
 	
 end
--- NJump Trig »ğÀÔ ºÎºĞ (Á¶°Ç¸¸Á·½Ã Jump)
+-- NJump Trig ì‚½ì… ë¶€ë¶„ (ì¡°ê±´ë§Œì¡±ì‹œ Jump)
 function EXCC_Part2()
 	PlayerID = EXCC_Player
 	PlayerID = PlayerConvert(PlayerID)
@@ -306,7 +306,7 @@ function UnitLimit(Player,UID,Limit,Text,ReturnResources)
 		
 		actions = {
 			KillUnitAt(1,UID,"Anywhere",Player);
-			DisplayExtText(StrDesign("\x04"..Text.." "..Limit.."±â¸¦ ³Ñ¾î¼­ ¼ÒÁöÇÒ ¼ö ¾ø½À´Ï´Ù. \x1CÀÚ¿ø ¹İÈ¯ \x1F+ "..ReturnResources.." Ore\x07"),4);
+			DisplayText(StrDesign("\x04"..Text.." "..Limit.."ê¸°ë¥¼ ë„˜ì–´ì„œ ì†Œì§€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x1Cìì› ë°˜í™˜ \x1F+ "..ReturnResources.." Ore\x07"),4);
 			SetResources(Player,Add,ReturnResources,Ore);
 			PreserveTrigger();
 		},
@@ -340,12 +340,12 @@ function IBGM_EPDX(Player,MaxPlayer,MSQC_Recives,Option_NT,BGMDeathsT)
 
 	for j, k in pairs(BGMDeathsT) do
 		for i = 0, MaxPlayer do
-			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- ºê±İÅ¸ÀÌ¸Ó
-			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- ºê±İÅ¸ÀÌ¸Ó
+			CTrigger(Player,{HumanCheck(i,1)},{TSetDeathsX(i,Subtract,MSQC_Recives,k,0xFFFFFF)},1) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
+			CTrigger(Player,{HumanCheck(i,0)},{SetDeaths(i,SetTo,0,k)},1) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
 		end
 		CDoActions(Player,{TSetDeathsX(Player,Subtract,MSQC_Recives,k,0xFFFFFF),
 		SetDeathsX(Player,SetTo,0,k,0xFF000000),
-		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- ºê±İÅ¸ÀÌ¸Ó
+		SetDeaths(8,SetTo,0,k),SetDeaths(9,SetTo,0,k),SetDeaths(10,SetTo,0,k),SetDeaths(11,SetTo,0,k)}) -- ë¸Œê¸ˆíƒ€ì´ë¨¸
 	end
 end
 
@@ -368,12 +368,16 @@ function S_to_EmS(Str)
 		if Check<=0x20 or Check==string.byte(" ",1) then
 			table.insert(X,string.sub(Str,i,i))
 		else	
-			table.insert(X,string.char(163,128+string.byte(string.sub(Str,i,i),1)))
+			if Check>=97 and Check<=97+26 then
+				table.insert(X,string.char(239,189,32+string.byte(string.sub(Str,i,i),1)))
+			else
+				table.insert(X,string.char(239,188,96+string.byte(string.sub(Str,i,i),1)))
+			end
 		end
+		--239,188,96+n
 	end
 	return table.concat(X),X
 end
-
 function N_to_EmN(Num)
 	if type(Num) ~= "string" then Num = tostring(Num) end
 	T,X = S_to_EmS(Num)
@@ -388,7 +392,7 @@ function N_to_EmN(Num)
 	return table.concat(X)
 end
 function Conv_HStr(Str)
-	return "\x10¡¼ "..S_to_EmS(Convert_StrCode(Str)).." \x10¡½"
+	return "\x10ã€ "..S_to_EmS(Convert_StrCode(Str)).." \x10ã€‘"
 end
 function Conv_HStr2(Str)
 	return S_to_EmS(Convert_StrCode(Str))
@@ -412,10 +416,10 @@ function Convert_StrCode(Str)
 	return Str
 end
 HeroPointArr = {}
-function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,DmgType,EraUngmeojulFlag) --  ¿µÀÛ À¯´Ö ¼³Á¤ ÇÔ¼ö
+function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,DmgType,EraUngmeojulFlag) --  ì˜ì‘ ìœ ë‹› ì„¤ì • í•¨ìˆ˜
 	if DmgType == nil then DmgType = 0 end
-	local TextType1 = " \x08Ã³Ä¡\x04"
-	local TextType2 = " \x07È¹µæ\x04"
+	local TextType1 = " \x08ì²˜ì¹˜\x04"
+	local TextType2 = " \x07íšë“\x04"
 	local Name2
 	if Type == 1 then
 		Name2 = TextType1
@@ -427,9 +431,9 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	else
 		PushErrorMsg("Need_Input_TextType")
 	end
-	local Text = "\x10±â¾ï\x04ÀÇ "..Name..""..Name2.." \x1F£«"..N_to_EmN(Point).."\x1F£Ğ£ô£ó"
+	local Text = "\x10ê¸°ì–µ\x04ì˜ "..Name..""..Name2.." \x1Fï¼‹"..N_to_EmN(Point).."\x1Fï¼°ï½”ï½“"
 	if EraUngmeojulFlag ~= nil then
-		table.insert(EraUngmeojulT,{Index,"\x10±â¾ï\x04ÀÇ "..Name})
+		table.insert(EraUngmeojulT,{Index,"\x10ê¸°ì–µ\x04ì˜ "..Name})
 	end
 	local X = {}
 	
@@ -442,13 +446,13 @@ function CreateHeroPointArr(Index,KillPoint,HPRate,ShieldRate,Name,Point,Type,Dm
 	table.insert(HeroPointArr,X)
 	
 end
-function InstallHeroPoint() -- CreateHeroPointArr¿¡¼­ Àü¼Û¹ŞÀº ¿µ¿õ Æ÷ÀÎÆ® Á¤º¸ ¼³Ä¡ ÇÔ¼ö. CunitCtrig ´Ü¶ô¿¡ Æ÷ÇÔµÊ.
+function InstallHeroPoint() -- CreateHeroPointArrì—ì„œ ì „ì†¡ë°›ì€ ì˜ì›… í¬ì¸íŠ¸ ì •ë³´ ì„¤ì¹˜ í•¨ìˆ˜. CunitCtrig ë‹¨ë½ì— í¬í•¨ë¨.
 	for i = 1, #HeroPointArr do
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
-			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayExtText(CT,4);},HumanPlayers,FP)})
+			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
 			Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
 			f_LoadCp()
 			if index == 68 then
@@ -488,7 +492,7 @@ function Install_DeathNotice()
 			AddV(DCV,2);
 		})
 		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
-		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ",PName(j-1),"\x04ÀÇ "..Color[j].."£Ì\x11£õ\x03£í\x18£é"..Color[j].."£Á "..Color[j].."£Í\x04£á£ò£é£î£åÀÌ \x16ºû\x04À» \x04ÀÒ¾ú½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07Â·\x11Â·\x08Â·\x07ã€ ",PName(j-1),"\x04ì˜ "..Color[j].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[j].."ï¼¡ "..Color[j].."ï¼­\x04ï½ï½’ï½‰ï½ï½…ì´ \x16ë¹›\x04ì„ \x04ìƒì—ˆìŠµë‹ˆë‹¤. \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 		f_LoadCp()
 		DoActions(FP,MoveCp(Add,6*4))
 	CIfEnd()
@@ -502,7 +506,7 @@ function Install_DeathNotice()
 			AddV(DCV,1);
 		})
 		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
-		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ",PName(j-1),"\x04ÀÇ £Í\x04£á£ò£é£î£åÀÌ \x16ºû\x04À» \x04ÀÒ¾ú½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07Â·\x11Â·\x08Â·\x07ã€ ",PName(j-1),"\x04ì˜ ï¼­\x04ï½ï½’ï½‰ï½ï½…ì´ \x16ë¹›\x04ì„ \x04ìƒì—ˆìŠµë‹ˆë‹¤. \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 		f_LoadCp()
 	CIfEnd()
 	CIf(FP,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
@@ -512,7 +516,7 @@ function Install_DeathNotice()
 			AddV(DCV,1);
 		})
 		Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
-		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07¡¤\x11¡¤\x08¡¤\x07¡¼ ",PName(j-1),"\x04ÀÇ \x1B£È \x04£Í\x04£á£ò£é£î£åÀÌ \x16ºû\x04À» \x04ÀÒ¾ú½À´Ï´Ù. \x07¡½\x08¡¤\x11¡¤\x07¡¤"})
+		DisplayPrint(HumanPlayers,{"\x0D\x0D!H\x07Â·\x11Â·\x08Â·\x07ã€ ",PName(j-1),"\x04ì˜ \x1Bï¼¨ \x04ï¼­\x04ï½ï½’ï½‰ï½ï½…ì´ \x16ë¹›\x04ì„ \x04ìƒì—ˆìŠµë‹ˆë‹¤. \x07ã€‘\x08Â·\x11Â·\x07Â·"})
 		f_LoadCp()
 	CIfEnd()
 	DoActions(FP,MoveCp(Subtract,6*4))
@@ -541,14 +545,14 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 		DefaultAttackLoc = 9
 		DefaultAttackLocCheck = 1
 	end
-f_RepeatTypeErr = "\x07¡º \x08ERROR : \x04Àß¸øµÈ RepeatTypeÀÌ ÀÔ·ÂµÇ¾ú½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_RepeatErr = "\x07¡º \x08ERROR : \x04f_Repeat¿¡¼­ ¹®Á¦°¡ ¹ß»ıÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_RepeatErr2 = "\x07¡º \x08ERROR : \x04Set_Repeat¿¡¼­ Àß¸øµÈ UnitID(0)À» ÀÔ·Â¹Ş¾Ò½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_GunSendErrT = "\x07¡º \x08ERROR \x04: G_CA_SpawnSet ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-G_CA_PosErr = "\x07¡º \x03CAUCTION : \x04»ı¼º ÁÂÇ¥°¡ ¸Ê ¹ÛÀ» ¹ş¾î³µ½À´Ï´Ù.\x07 ¡»"
-f_GunErrT = "\x07¡º \x08ERROR \x04: G_CAPlot Not Found. \x07¡»"
-f_GunFuncT = "\x07¡º \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07¡»"
-f_GunFuncT2 = "\x07¡º \x03TESTMODE OP \x04: G_CAPlot Sended. \x07¡»"
+f_RepeatTypeErr = "\x07ã€ \x08ERROR : \x04ì˜ëª»ëœ RepeatTypeì´ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_RepeatErr = "\x07ã€ \x08ERROR : \x04f_Repeatì—ì„œ ë¬¸ì œê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_RepeatErr2 = "\x07ã€ \x08ERROR : \x04Set_Repeatì—ì„œ ì˜ëª»ëœ UnitID(0)ì„ ì…ë ¥ë°›ì•˜ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_GunSendErrT = "\x07ã€ \x08ERROR \x04: G_CA_SpawnSet ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+G_CA_PosErr = "\x07ã€ \x03CAUCTION : \x04ìƒì„± ì¢Œí‘œê°€ ë§µ ë°–ì„ ë²—ì–´ë‚¬ìŠµë‹ˆë‹¤.\x07 ã€"
+f_GunErrT = "\x07ã€ \x08ERROR \x04: G_CAPlot Not Found. \x07ã€"
+f_GunFuncT = "\x07ã€ \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07ã€"
+f_GunFuncT2 = "\x07ã€ \x03TESTMODE OP \x04: G_CAPlot Sended. \x07ã€"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Gun_TempSpawnSet2 = CreateVar(FP)
 local Gun_TempSpawnSet3 = CreateVar(FP)
@@ -597,23 +601,23 @@ local G_CA_BakY = CreateVar(FP)
 local G_CA_WSTestStrPtr = CreateVar(FP)
 local G_CA_WSTestVA = CreateVArr(5,FP)
 local TargetRotation = CreateVar(FP)
-Call_Repeat = SetCallForward() -- À¯´Ö»ı¼ººÎ
+Call_Repeat = SetCallForward() -- ìœ ë‹›ìƒì„±ë¶€
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
-	CIfX(FP,{CVar(FP,RepeatType[2],Exactly,101)}) -- ÀÌÆåÆ®À¯´Ö or Åº¸·À¯´Ö
+	CIfX(FP,{CVar(FP,RepeatType[2],Exactly,101)}) -- ì´í™íŠ¸ìœ ë‹› or íƒ„ë§‰ìœ ë‹›
 
 		CIfX(FP,CVar(FP,G_CA_TempTable[13][2],Exactly,0))
-			CreateBulletXY(Gun_TempSpawnSet1,20,nil,{G_CA_TempTable[11],G_CA_TempTable[12]},FP)-- À§Ä¡·Î ½î±â
-			--SetBullet(Gun_TempSpawnSet1,20,nil,{G_CA_TempTable[11],G_CA_TempTable[12]}) -- À§Ä¡·Î ½î±â
+			CreateBulletXY(Gun_TempSpawnSet1,20,nil,{G_CA_TempTable[11],G_CA_TempTable[12]},FP)-- ìœ„ì¹˜ë¡œ ì˜ê¸°
+			--SetBullet(Gun_TempSpawnSet1,20,nil,{G_CA_TempTable[11],G_CA_TempTable[12]}) -- ìœ„ì¹˜ë¡œ ì˜ê¸°
 		CElseIfX(CVar(FP,G_CA_TempTable[13][2],Exactly,1))
-			CreateBullet(Gun_TempSpawnSet1,20,0,nil,FP) -- °¢µµ¾øÀÌ ½î±â
+			CreateBullet(Gun_TempSpawnSet1,20,0,nil,FP) -- ê°ë„ì—†ì´ ì˜ê¸°
 		CElseIfX(CVar(FP,G_CA_TempTable[13][2],Exactly,2))
-			CreateBullet(Gun_TempSpawnSet1,20,G_CA_TempTable[14],nil,FP)--°¢µµ·Î ½î±â
-		CElseIfX({CVar(FP,G_CA_TempTable[13][2],Exactly,3)})--´ºÅ¬¸®¾î·±Ä¡
+			CreateBullet(Gun_TempSpawnSet1,20,G_CA_TempTable[14],nil,FP)--ê°ë„ë¡œ ì˜ê¸°
+		CElseIfX({CVar(FP,G_CA_TempTable[13][2],Exactly,3)})--ë‰´í´ë¦¬ì–´ëŸ°ì¹˜
 			CallTrigger(FP, Call_Nuke)
 		CElseX()
-			DoActions2X(FP,RotatePlayer({DisplayExtText(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+			DoActions2X(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 		CIfXEnd()
 	CElseX()
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
@@ -631,7 +635,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				SetCVar(FP,G_CA_TempTable[12][2],SetTo,0);
 				SetCVar(FP,G_CA_TempTable[13][2],SetTo,0);
 				SetCVar(FP,G_CA_TempTable[14][2],SetTo,0);
-			}) -- TempRepeat·Î »ı¼ºÇßÀ» °æ¿ì
+			}) -- TempRepeatë¡œ ìƒì„±í–ˆì„ ê²½ìš°
 			
 			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,221)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV1)},1)
 			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
@@ -658,22 +662,22 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_Y,TRepeatY)
 			CIfEnd()
 		CIfEnd()
-		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- »ı¼ºÇÃ·¹ÀÌ¾î°¡ ¼³Á¤µÇÁö ¾Ê¾ÒÀ»°æ¿ì
+		CIfX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetSwitch(RandSwitch,Random),SetSwitch(RandSwitch2,Random)}) -- ìƒì„±í”Œë ˆì´ì–´ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ì„ê²½ìš°
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,4)},{preserved})
 		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Cleared)},{SetCVar(FP,CreatePlayer[2],SetTo,5)},{preserved})
 		TriggerX(FP,{Switch(RandSwitch,Cleared),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,6)},{preserved})
 		TriggerX(FP,{Switch(RandSwitch,Set),Switch(RandSwitch2,Set)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
 		CIfXEnd()
-		if DefaultAttackLocCheck == 1 then -- µğÆúÆ® ·ÎÄÉÀÌ¼ÇÀÌ 0ÀÏ °æ¿ì RepeatType¿¡ µû¶ó Áß½ÉÁ¡À¸·Î ¾îÅÃ
-			CIfX(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,1),CVar(FP,RepeatType[2],Exactly,194)})}) -- ¾îÅÃ ÀÏ¹İ ÇØ´çÇÃ·¹ÀÌ¾î À§Ä¡·Î
+		if DefaultAttackLocCheck == 1 then -- ë””í´íŠ¸ ë¡œì¼€ì´ì…˜ì´ 0ì¼ ê²½ìš° RepeatTypeì— ë”°ë¼ ì¤‘ì‹¬ì ìœ¼ë¡œ ì–´íƒ
+			CIfX(FP,{TTOR({CVar(FP,RepeatType[2],Exactly,1),CVar(FP,RepeatType[2],Exactly,194)})}) -- ì–´íƒ ì¼ë°˜ í•´ë‹¹í”Œë ˆì´ì–´ ìœ„ì¹˜ë¡œ
 				CIfX(FP,Never())
 			for i = 0, 3 do
 				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
 					Simple_SetLocX(FP,DefaultAttackLoc,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2)
 			end
-				CElseX() -- ÇØ´çÇÃ·¹ÀÌ¾î°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì 
+				CElseX() -- í•´ë‹¹í”Œë ˆì´ì–´ê°€ ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš° 
 				CTrigger(FP, {TTCVar(FP,TargetRotation[2],NotSame,0xFFFFFFFF)}, {SetV(TargetRotation,CreatePlayer)}, 1)
-					CIfX(FP,{CD(Theorist,0)})--ÀÌ·ĞÄ¡¸ğµå°¡ ¾Æ´Ò °æ¿ì ÇöÁ¸ÇÏ´Â ÇÃ·¹ÀÌ¾î¿¡°Ô ¾îÅÃ
+					CIfX(FP,{CD(Theorist,0)})--ì´ë¡ ì¹˜ëª¨ë“œê°€ ì•„ë‹ ê²½ìš° í˜„ì¡´í•˜ëŠ” í”Œë ˆì´ì–´ì—ê²Œ ì–´íƒ
 						local L_Gun_Order2 = def_sIndex()
 						NJumpXEnd(FP,L_Gun_Order2)
 
@@ -687,7 +691,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 							CIfEnd()
 						end
 						for j = 0, 3 do
-						NJumpX(FP,L_Gun_Order2,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- Å¸°Ù ¼³Á¤ ½Ã ÇÃ·¹ÀÌ¾î°¡ ¾øÀ» °æ¿ì ´Ù½Ã ¿¬»êÇÔ
+						NJumpX(FP,L_Gun_Order2,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- íƒ€ê²Ÿ ì„¤ì • ì‹œ í”Œë ˆì´ì–´ê°€ ì—†ì„ ê²½ìš° ë‹¤ì‹œ ì—°ì‚°í•¨
 						end
 						
 						CIfX(FP,Never())
@@ -695,10 +699,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 							CElseIfX({CVar(FP,TargetRotation[2],Exactly,i+4),HumanCheck(i,1)})
 							Simple_SetLocX(FP,DefaultAttackLoc,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2,TargetArr[i+1][1]+2,TargetArr[i+1][2]+2)
 						end
-						CElseX() -- TargetRotationÀÌ 0xFFFFFFFFÀÏ °æ¿ì »ı¼º Áß½ÉÁ¡¿¡ ¾îÅÃ
+						CElseX() -- TargetRotationì´ 0xFFFFFFFFì¼ ê²½ìš° ìƒì„± ì¤‘ì‹¬ì ì— ì–´íƒ
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 						CIfXEnd()
-					CElseX()--ÀÌ·ĞÄ¡¸ğµåÀÏ °æ¿ì »ı¼º Áß½ÉÁ¡¿¡ ¾îÅÃ
+					CElseX()--ì´ë¡ ì¹˜ëª¨ë“œì¼ ê²½ìš° ìƒì„± ì¤‘ì‹¬ì ì— ì–´íƒ
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 					CIfXEnd()
 				CIfXEnd()
@@ -707,9 +711,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CMov(FP,G_CA_BakY,G_CA_TempTable[9])
 
 				CIfX(FP,Never())
-					CElseIfX({CD(tesStart,1,AtLeast)})--testify ¹ßµ¿½Ã ¿ì¼±. ¾îÅÃÁöÁ¡ = »ı»êÁß½ÉÁ¡
+					CElseIfX({CD(tesStart,1,AtLeast)})--testify ë°œë™ì‹œ ìš°ì„ . ì–´íƒì§€ì  = ìƒì‚°ì¤‘ì‹¬ì 
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
-					CElseIfX({CD(EDNum,1,AtLeast)})--º¸½ºÀü ¿ì¼±. ¾îÅÃÁöÁ¡ = »ı»êÁß½ÉÁ¡
+					CElseIfX({CD(EDNum,1,AtLeast)})--ë³´ìŠ¤ì „ ìš°ì„ . ì–´íƒì§€ì  = ìƒì‚°ì¤‘ì‹¬ì 
 					Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 
 				for i = 0, 3 do
@@ -718,10 +722,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 						CMov(FP,G_CA_TempTable[8],TargetArr[i+1][1])
 						CMov(FP,G_CA_TempTable[9],TargetArr[i+1][2])
 				end
-				CElseX() -- ÇØ´çÇÃ·¹ÀÌ¾î°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
+				CElseX() -- í•´ë‹¹í”Œë ˆì´ì–´ê°€ ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš°
 				CTrigger(FP, {TTCVar(FP,TargetRotation[2],NotSame,0xFFFFFFFF)}, {SetV(TargetRotation,CreatePlayer)}, 1)
 				
-					CIfX(FP,{CD(Theorist,0)})--ÀÌ·ĞÄ¡¸ğµå°¡ ¾Æ´Ò °æ¿ì ÇöÁ¸ÇÏ´Â ÇÃ·¹ÀÌ¾î¿¡°Ô ¾îÅÃ
+					CIfX(FP,{CD(Theorist,0)})--ì´ë¡ ì¹˜ëª¨ë“œê°€ ì•„ë‹ ê²½ìš° í˜„ì¡´í•˜ëŠ” í”Œë ˆì´ì–´ì—ê²Œ ì–´íƒ
 
 						local L_Gun_Order = def_sIndex()
 						NJumpXEnd(FP,L_Gun_Order)
@@ -736,7 +740,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 							CIfEnd()
 						end
 						for j = 0, 3 do
-						NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- Å¸°Ù ¼³Á¤ ½Ã ÇÃ·¹ÀÌ¾î°¡ ¾øÀ» °æ¿ì ´Ù½Ã ¿¬»êÇÔ
+						NJumpX(FP,L_Gun_Order,{CVar(FP,TargetRotation[2],Exactly,j+4),HumanCheck(j,0)}) -- íƒ€ê²Ÿ ì„¤ì • ì‹œ í”Œë ˆì´ì–´ê°€ ì—†ì„ ê²½ìš° ë‹¤ì‹œ ì—°ì‚°í•¨
 						end
 						
 						CIfX(FP,Never())
@@ -746,15 +750,15 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 								CMov(FP,G_CA_TempTable[8],TargetArr[i+1][1])
 								CMov(FP,G_CA_TempTable[9],TargetArr[i+1][2])
 						end
-						CElseX() -- TargetRotationÀÌ 0xFFFFFFFFÀÏ °æ¿ì »ı¼º Áß½ÉÁ¡¿¡ ¾îÅÃ
+						CElseX() -- TargetRotationì´ 0xFFFFFFFFì¼ ê²½ìš° ìƒì„± ì¤‘ì‹¬ì ì— ì–´íƒ
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 						CIfXEnd()
 
-					CElseX()--ÀÌ·ĞÄ¡¸ğµåÀÏ °æ¿ì »ı¼º Áß½ÉÁ¡¿¡ ¾îÅÃ
+					CElseX()--ì´ë¡ ì¹˜ëª¨ë“œì¼ ê²½ìš° ìƒì„± ì¤‘ì‹¬ì ì— ì–´íƒ
 						Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 					CIfXEnd()
 				CIfXEnd()
-			CElseX() -- ¾îÅÃ ÀÏ¹İ µµÇüÁß½ÉÁ¡
+			CElseX() -- ì–´íƒ ì¼ë°˜ ë„í˜•ì¤‘ì‹¬ì 
 			Simple_SetLocX(FP,DefaultAttackLoc,G_CA_TempTable[8],G_CA_TempTable[9],G_CA_TempTable[8],G_CA_TempTable[9])
 
 			CIfXEnd()
@@ -778,12 +782,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CElseX()
 		for j = 4, 7 do
 			CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,j),TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,22+j-4,CreatePlayer,{energy = 100}),TMoveUnit(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),22+j-4,1)},1)
-			CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,j),CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,22+j-4,CreatePlayer,{energy = 100, burrowed = true}),TMoveUnit(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),22+j-4,1)},1) -- ¹ö·Î¿ì»óÅÂ·Î ¼ÒÈ¯
+			CTrigger(FP,{CVar(FP,CreatePlayer[2],Exactly,j),CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,22+j-4,CreatePlayer,{energy = 100, burrowed = true}),TMoveUnit(1,_Mov(Gun_TempSpawnSet1,0xFF),_Mov(CreatePlayer,0xFF),22+j-4,1)},1) -- ë²„ë¡œìš°ìƒíƒœë¡œ ì†Œí™˜
 		end
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 		Convert_CPosXY()
 		CIfXEnd()
-		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,3)},{TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TKillUnit(84,CreatePlayer)},1)-- ¾îÅÃ¾øÀ½+¿ÉÀú¹öÀÌÆåÆ®
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,3)},{TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TKillUnit(84,CreatePlayer)},1)-- ì–´íƒì—†ìŒ+ì˜µì €ë²„ì´í™íŠ¸
 		
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
@@ -794,30 +798,30 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		 {TSetMemoryX(_Add(G_CA_Nextptrs,40),SetTo,50*16777216,0xFF000000)}, 1)
 
 
-			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0)) -- ¾îÅÃ ÀÏ¹İ
+			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0)) -- ì–´íƒ ì¼ë°˜
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
 					Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,1))-- ¾îÅÃ ÇØ´çÇÃ·¹ÀÌ¾î À§Ä¡
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,1))-- ì–´íƒ í•´ë‹¹í”Œë ˆì´ì–´ ìœ„ì¹˜
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP,{
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))-- ¾îÅÃ¾øÀ½+¿ÉÀú¹öÀÌÆåÆ®
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,4))-- ¾îÅÃ¾øÀ½
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,5))-- ±×³É ÅÍÁö´Â À¯´Ö
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))-- ì–´íƒì—†ìŒ+ì˜µì €ë²„ì´í™íŠ¸
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,4))-- ì–´íƒì—†ìŒ
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,5))-- ê·¸ëƒ¥ í„°ì§€ëŠ” ìœ ë‹›
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,19),SetTo,0,0xFF00)
 			})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- ¾îÅÃ ÇØ´çÇÃ·¹ÀÌ¾î À§Ä¡ + ÆĞ·¯»çÀÌÆ®
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,6))-- ì–´íƒ í•´ë‹¹í”Œë ˆì´ì–´ ìœ„ì¹˜ + íŒ¨ëŸ¬ì‚¬ì´íŠ¸
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- Æ¯¼ö»ı¼ºÆ®¸®°Å
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,100),{TSetMemoryX(_Add(G_CA_Nextptrs,9),SetTo,0*65536,0xFF0000),TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000)})-- íŠ¹ìˆ˜ìƒì„±íŠ¸ë¦¬ê±°
 			local LPos= CreateVar(FP)
 			CMov(FP,LPos,_Add(G_CA_X,_Mul(G_CA_Y,65536)))
 			TriggerX(FP,{CVar(FP,LPos[2],AtLeast,32768,0xFFFF)},{SetCVar(FP, LPos[2], SetTo, 0, 0xFFFF)},{preserved})
@@ -862,8 +866,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CTrigger(FP,{CVar(FP,G_CA_TempTable[17][2],Exactly,4,4+0xF0000000)},{Set_EXCC2X(DUnitCalc,G_CA_UnitIndex,12,SetTo,4,4)},1)
 				
 				
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,186))-- Á¤¾ßµ¶+Ãæµ¹ÆÇÁ¤»èÁ¦
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,186))-- ì •ì•¼ë…+ì¶©ëŒíŒì •ì‚­ì œ
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
@@ -873,8 +877,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
 				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- Á¤¾ßµ¶
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))-- ì •ì•¼ë…
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
@@ -883,7 +887,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeaths(_Add(G_CA_Nextptrs,22),SetTo,CPos,0),
 				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,188)) -- À¯´Ö ·£´ı ¼Óµµ ¼³Á¤ + Á¤¾ßµ¶
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,188)) -- ìœ ë‹› ëœë¤ ì†ë„ ì„¤ì • + ì •ì•¼ë…
 				TempSpeedVar = f_CRandNum(4000)
 				CDoActions(FP,{
 					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,TempSpeedVar,0),
@@ -891,8 +895,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- Á¤¾ßµ¶ + ¿ÉÀú¹öÀÌÆåÆ®
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,189)) -- ì •ì•¼ë… + ì˜µì €ë²„ì´í™íŠ¸
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
@@ -902,7 +906,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetDeaths(_Add(G_CA_Nextptrs,4),SetTo,CPos,0),
 				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,190)) -- »ı¼º ÀÏ¹İ¾îÅÃ + Á¤¾ßµ¶ÀÌÆåÆ®
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,190)) -- ìƒì„± ì¼ë°˜ì–´íƒ + ì •ì•¼ë…ì´í™íŠ¸
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
@@ -911,7 +915,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 				})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- °ÇÀÛº¸½ºÀü¿ë : ÆĞ·¯»çÀÌÆ® + P9 ¹«ÀûÀ¯´Ö + ÀüÇÃ·¹ÀÌ¾î ¼¾ÅÍºä
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,72),{SetMemoryX(0x666458, SetTo, 391,0xFFFF)}) -- ê±´ì‘ë³´ìŠ¤ì „ìš© : íŒ¨ëŸ¬ì‚¬ì´íŠ¸ + P9 ë¬´ì ìœ ë‹› + ì „í”Œë ˆì´ì–´ ì„¼í„°ë·°
 				CDoActions(FP,{
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
@@ -925,14 +929,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				--CMov(FP,0x57f120,G_CA_Nextptrs)
 				f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
 				DoActions2(FP,RotatePlayer({CenterView(1)},HumanPlayers,FP))
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,192)) -- ¹«ÀûÀ¯´ÖÀ¸·Î »ı¼ºÇÏ±â
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,192)) -- ë¬´ì ìœ ë‹›ìœ¼ë¡œ ìƒì„±í•˜ê¸°
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
 			})
 			
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,193))-- Á¤¾ßµ¶+Ãæµ¹ÆÇÁ¤»èÁ¦, ÃÖ´ëÃ¼·Â 10ÆÛ¼¾Æ®·Î ³ÊÇÁ
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,193))-- ì •ì•¼ë…+ì¶©ëŒíŒì •ì‚­ì œ, ìµœëŒ€ì²´ë ¥ 10í¼ì„¼íŠ¸ë¡œ ë„ˆí”„
 			
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,_Div(_Read(_Add(Gun_TempSpawnSet1,EPDF(0x662350))),10));
@@ -946,21 +950,21 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CTrigger(FP,{TMemory(_Add(G_CA_Nextptrs,2),AtMost,255)},{TSetMemory(_Add(G_CA_Nextptrs,2),SetTo,256)},1)
 
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,194))-- ¿şÀÌºê ¾îÅÃ
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,194))-- ì›¨ì´ë¸Œ ì–´íƒ
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP,{
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,1,SetTo,0);
 			})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,195))-- ¾îÅÃ ÀÏ¹İ Ãæµ¹ÆÇÁ¤»èÁ¦
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,195))-- ì–´íƒ ì¼ë°˜ ì¶©ëŒíŒì •ì‚­ì œ
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP,{
 				Order("Men", Force2, 1, Attack, DefaultAttackLoc+1);
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,196))-- testify Àü¿ë Á¤¾ßµ¶+Ãæµ¹ÆÇÁ¤»èÁ¦, ÀÌ¼Ó1
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,196))-- testify ì „ìš© ì •ì•¼ë…+ì¶©ëŒíŒì •ì‚­ì œ, ì´ì†1
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 			Convert_CPosXY()
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
@@ -972,7 +976,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1),
 				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,1,0xFFFF),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,197))-- testify Àü¿ë ºñÇàÃ¼ ÀÌµ¿¼Óµµ Áß¾Óºñ·Ê ÀÏÁ¤ÇÏ°Ô, °ø°İÁöÁ¡Àº Áß¾Ó
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,197))-- testify ì „ìš© ë¹„í–‰ì²´ ì´ë™ì†ë„ ì¤‘ì•™ë¹„ë¡€ ì¼ì •í•˜ê²Œ, ê³µê²©ì§€ì ì€ ì¤‘ì•™
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			local TPosX, TPosY,SRet = CreateVars(3,FP)
 			DoActions(FP, Order("Men", Force2, 1, Attack, DefaultAttackLoc+1))
@@ -984,7 +988,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
 				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,198))-- testify Àü¿ë ºñÇàÃ¼ ÀÌµ¿¼Óµµ Áß¾Óºñ·Ê ÀÏÁ¤ÇÏ°Ô, P9 ´ë±â»óÅÂ
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,198))-- testify ì „ìš© ë¹„í–‰ì²´ ì´ë™ì†ë„ ì¤‘ì•™ë¹„ë¡€ ì¼ì •í•˜ê²Œ, P9 ëŒ€ê¸°ìƒíƒœ
 			local TPosX, TPosY,SRet = CreateVars(3,FP)
 			CiSub(FP,TPosX,CPosX,G_CA_TempTable[8])
 			CiSub(FP,TPosY,CPosY,G_CA_TempTable[9])
@@ -997,9 +1001,9 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
 				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
 			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- ¹ö·Î¿ì »ı¼º(À§¿¡¼­ ÀÌ¹Ì »ı¼ºÇØ³ùÀ¸¹Ç·Î ¿¹¿ÜÃ³¸®¸¸ ÇÔ)
-			CElseX() -- RepeatTypeÀÌ Àß¸ø ¼³Á¤µÇ¾úÀ»°æ¿ì ¿¡·¯¸Ş¼¼Áö Ç¥Ãâ
-				DoActions2X(FP,RotatePlayer({DisplayExtText(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- ë²„ë¡œìš° ìƒì„±(ìœ„ì—ì„œ ì´ë¯¸ ìƒì„±í•´ë†¨ìœ¼ë¯€ë¡œ ì˜ˆì™¸ì²˜ë¦¬ë§Œ í•¨)
+			CElseX() -- RepeatTypeì´ ì˜ëª» ì„¤ì •ë˜ì—ˆì„ê²½ìš° ì—ëŸ¬ë©”ì„¸ì§€ í‘œì¶œ
+				DoActions2X(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
 		CIfEnd()
 	CIfXEnd()
@@ -1153,7 +1157,7 @@ end
 
 Set_Repeat = SetCallForward()
 SetCall(FP)
-Trigger2X(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayExtText(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
+Trigger2X(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,0)},{RotatePlayer({DisplayTextX(f_RepeatErr2,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP),SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
 TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,256)},{SetCVar(FP,Repeat_TempV[2],SetTo,0)},{preserved})
 CIf(FP,CVar(FP,Repeat_TempV[2],AtLeast,1))
 	CMov(FP,Spawn_TempW,Repeat_TempV)
@@ -1243,22 +1247,22 @@ CDoActions(FP,{
 
 if Limit == 1 then
 	CIf(FP,CD(TestMode,1))
-	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
+	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)},{preserved})
 	--ItoDec(FP,G_CA_CUTV[1],VArr(G_CA_WSTestVA,0),0,nil,0)
 	--f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
-	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+	--TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --	ItoDec(FP,G_CA_CUTV[2],VArr(G_CA_WSTestVA,0),0,nil,0)
 --	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
---	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --	ItoDec(FP,G_CA_CUTV[3],VArr(G_CA_WSTestVA,0),0,nil,0)
 --	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
---	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --	ItoDec(FP,G_CA_CUTV[4],VArr(G_CA_WSTestVA,0),0,nil,0)
 --	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
---	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 --	ItoDec(FP,G_CA_CUTV[5],VArr(G_CA_WSTestVA,0),0,nil,0)
 --	f_Movcpy(FP,G_CA_WSTestStrPtr,VArr(G_CA_WSTestVA,0),4*4)
---	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
+--	TriggerX(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX("\x0D\x0D\x0DG_CA_WS".._0D,4)},HumanPlayers,FP)},{preserved})
 	CIfEnd()
 
 end
@@ -1273,7 +1277,7 @@ CAdd(FP,G_CA_LineV,0x970/4)
 CJump(FP,Write_SpawnSet_Jump)
 NElseX()
 
-DoActions2X(FP,{RotatePlayer({DisplayExtText(f_GunSendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+DoActions2X(FP,{RotatePlayer({DisplayTextX(f_GunSendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 
 NIfXEnd()
 
@@ -1828,7 +1832,7 @@ function Install_Call_G_CA()
 				SetCVar(FP, G_CA_TempTable[18][2], SetTo, 0),
 			})
 			if Limit == 1 then
-				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseIfX({CVar(FP,G_CA_TempTable[6][2],Exactly,100),CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			
@@ -1838,11 +1842,11 @@ function Install_Call_G_CA()
 			end
 				CDoActions(FP,G_CB_InputCAct)
 			if Limit == 1 then
-				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
+				--Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)},{preserved})
 			end
 			CElseX()
 			if Limit == 1 then
-				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayExtText(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
+				Trigger2X(FP,{CD(TestMode,1)},{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)},{preserved})
 			end
 			
 				DoActionsX(FP,{
@@ -1938,7 +1942,7 @@ function CreateEffUnit(Condition,Height,EffType,Color)
 	
 CallTriggerX(FP,Call_EffUnit,Condition,{
 	SetMemoryW(0x666462, SetTo, EffType);
-	SetMemoryB(0x66321C, SetTo, Height); -- ³ôÀÌ
+	SetMemoryB(0x66321C, SetTo, Height); -- ë†’ì´
 	SetCVar(FP,SendEff[1][2],SetTo,EPDF(ret2));
 	SetCVar(FP,SendEff[2][2],SetTo,Color);
 	SetCVar(FP,SendEff[3][2],SetTo,Mask);
@@ -1973,7 +1977,7 @@ function CreateEffUnitX(Condition,EffType,Color)
 
 	CDoActions(FP, {
 		TSetMemoryW(0x666460, 1, SetTo, EffType);
-		SetMemoryB(0x66321C, SetTo, 20); -- ³ôÀÌ
+		SetMemoryB(0x66321C, SetTo, 20); -- ë†’ì´
 		TSetCVar(FP,SendEff[1][2],SetTo,_EPD(ret2));
 		TSetCVar(FP,SendEff[2][2],SetTo,ret3);
 		TSetCVar(FP,SendEff[3][2],SetTo,Mask);
@@ -2000,7 +2004,7 @@ function InvDisable(UnitID,Owner,Condition,Str)
             MinimapPing(1),
             PlayWAVX("staredit\\wav\\start.ogg"),
             PlayWAVX("staredit\\wav\\start.ogg"),
-            DisplayExtText("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\x0D\x0D\n\x0D\x0D!H"..StrDesignX2(Str).."\n\x0D\x0D\n\x0D\x0D\x13\x04£¡£¡£¡¡¡\x02£Õ£Î£Ì£Ï£Ã£Ë\x04¡¡£¡£¡£¡\n\x0D\x0D\x13\x04",4)
+            DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x02ï¼µï¼®ï¼¬ï¼¯ï¼£ï¼«\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\n\x0D\x0D!H"..StrDesignX2(Str).."\n\x0D\x0D\n\x0D\x0D\x13\x04ï¼ï¼ï¼ã€€\x02ï¼µï¼®ï¼¬ï¼¯ï¼£ï¼«\x04ã€€ï¼ï¼ï¼\n\x0D\x0D\x13\x04",4)
         },HumanPlayers,FP);
         SetInvincibility(Disable,UnitID,Owner,1);
     })
@@ -2057,8 +2061,8 @@ end
 function StoryPrint(T,Text,AddTrig)
 	Trigger2X(FP,{Gun_Line(8,AtLeast,T)},{
 		RotatePlayer({
-			DisplayExtText("\x0D\x0D"..string.rep("\n", 20),4),
-			DisplayExtText("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
+			DisplayTextX("\x0D\x0D"..string.rep("\n", 20),4),
+			DisplayTextX("\x0D\x0D\x12\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13"..Text.."\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n",0),
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,ButtonSound);
 		AddTrig
@@ -2101,7 +2105,7 @@ CDoActions(FP,{
 })
 NIfEnd()
 SetCallEnd()
-CBulletErrT = "\x07¡º \x08ERROR \x04: CreateBullet_EPD ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+CBulletErrT = "\x07ã€ \x08ERROR \x04: CreateBullet_EPD ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 
 Call_CBulletA = SetCallForward()
 SetCall(FP)
@@ -2208,7 +2212,7 @@ SetCallEnd()
 --CJump(FP,CBullet_ArrCheck)
 --NElseX()--
 
---DoActions2(FP,{RotatePlayer({DisplayExtText(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})--
+--DoActions2(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})--
 
 --NIfXEnd()--
 
@@ -2304,7 +2308,7 @@ SetCallEnd()
 
 
 
-function SetBulletSpeed(Value,BreakDis) -- ¾ß¸¶Åä°Ç Flingy Speed
+function SetBulletSpeed(Value,BreakDis) -- ì•¼ë§ˆí† ê±´ Flingy Speed
 	if BreakDis ~= nil then
 		return {
 			SetMemory(0x6CA170, SetTo,0xFFFFFFFF-Value);
@@ -2320,8 +2324,8 @@ function SetBulletSpeed(Value,BreakDis) -- ¾ß¸¶Åä°Ç Flingy Speed
 end
 function SetFlingySpeed(FID,Value)
 	return {
-		SetMemory(0x6C9EF8+(4*FID),SetTo,0xFFFFFFFF-Value),--ÃÖ°í¼Óµµ
-		SetMemoryW(0x6C9C78+(2*FID),SetTo,Value)--°¡¼Óµµ
+		SetMemory(0x6C9EF8+(4*FID),SetTo,0xFFFFFFFF-Value),--ìµœê³ ì†ë„
+		SetMemoryW(0x6C9C78+(2*FID),SetTo,Value)--ê°€ì†ë„
 	}
 end
 function WeaponTimeLeft(WepID,Value)
@@ -2393,7 +2397,7 @@ function Install_NukeLibrary()
 	CDoActions(FP,{CreateUnit(1,215,1,FP),
 		TSetMemoryX(_Add(NextEPD,0x110/4), SetTo, 420,0xFFFF),
 	})
-	f_Read(FP,_Add(NextEPD,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+	f_Read(FP,_Add(NextEPD,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 	f_Read(FP,0x628438,nil,NextEPD,0xFFFFFF)
 	CDoActions(FP,{CreateUnit(1,14,1,FP),
 	TSetMemory(_Add(NextEPD,0x80/4), SetTo, Nextptrs),
@@ -2404,14 +2408,14 @@ function Install_NukeLibrary()
 end
 
 
----@param UnitPtr? table -- º¸½º À¯´ÖÀÇ EPD°¡ ´ã±ä ÁÖ¼Ò
----@param UnitHPRetV? table -- º¸½º À¯´ÖÀÇ È®Àå HP¸¦ ¸®ÅÏ¹Ş´Â V/VA
----@param Preset? table -- 6°³ÀÇ ÇÁ¸®¼Â ÀÔ·Â°ø°£. {} ÇüÅÂ·Î ÀÔ·Â
----@param CAfunc? string -- º¸½º ÆĞÅÏ µîÀÇ CAFunc ÀÔ·Â°ø°£. CB[3]ÀÌ 1ÀÌ»óÀÏ °æ¿ì ÇØ´ç ÇÔ¼ö°¡ ÀÛµ¿µÇÁö ¾ÊÀ½
----@param PlayerID? number -- Æ®¸®°Å ÇÃ·¹ÀÌ¾î
----@param Condition? table -- CABoss ¹ßµ¿ Á¶°Ç
----@param Action? table -- Á¶°ÇÀÌ ¸¸Á·µÉ¶§ ½ÇÇàÇÒ ¾×¼Ç
----@return table,table -- ÇØ´çÇÔ¼öÀÇ ¸®ÅÏ°ª = CA,CB
+---@param UnitPtr? table -- ë³´ìŠ¤ ìœ ë‹›ì˜ EPDê°€ ë‹´ê¸´ ì£¼ì†Œ
+---@param UnitHPRetV? table -- ë³´ìŠ¤ ìœ ë‹›ì˜ í™•ì¥ HPë¥¼ ë¦¬í„´ë°›ëŠ” V/VA
+---@param Preset? table -- 6ê°œì˜ í”„ë¦¬ì…‹ ì…ë ¥ê³µê°„. {} í˜•íƒœë¡œ ì…ë ¥
+---@param CAfunc? string -- ë³´ìŠ¤ íŒ¨í„´ ë“±ì˜ CAFunc ì…ë ¥ê³µê°„. CB[3]ì´ 1ì´ìƒì¼ ê²½ìš° í•´ë‹¹ í•¨ìˆ˜ê°€ ì‘ë™ë˜ì§€ ì•ŠìŒ
+---@param PlayerID? number -- íŠ¸ë¦¬ê±° í”Œë ˆì´ì–´
+---@param Condition? table -- CABoss ë°œë™ ì¡°ê±´
+---@param Action? table -- ì¡°ê±´ì´ ë§Œì¡±ë ë•Œ ì‹¤í–‰í•  ì•¡ì…˜
+---@return table,table -- í•´ë‹¹í•¨ìˆ˜ì˜ ë¦¬í„´ê°’ = CA,CB
 function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	CIf(PlayerID,{CV(UnitPtr,19025,AtLeast),CV(UnitPtr,19025+(84*1699),AtMost),Condition},Action)
 	
@@ -2446,23 +2450,23 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 	end
 	CB = CreateVarArr(9,PlayerID)
 
-	--ÀÌÇÏ ÇÁ¸®¼Â
-	--Preset[1] = PattNum -- ½ÃÀÛ ÆĞÅÏ ³Ñ¹ö °áÁ¤. 0¿¡¼­ ½ÃÀÛ½Ã nilÀÔ·ÂÇØµµµÊ
-	--Preset[2] = initPattT -- º¸½º ¼ÒÈ¯ ÈÄ ÀÛµ¿ ´ë±â½Ã°£. 1ÇÁ·¹ÀÓ ´ÜÀ§
-	--Preset[3] = Lock type -- º¸½º¸¦ °íÁ¤½ÃÅ³Áö °áÁ¤ÇÔ. 1 ÀÔ·Â½Ã ºÎºĞ°íÁ¤µÊ(¹Ì¼¼ÇÏ°Ô ÀÌµ¿ÇÔ). ¸¶¸°, °í½ºÆ®·ù ¸ğµÎ »ç¿ë°¡´É. ´Ü, 2 ÀÌ»ó ÀÔ·Â½Ã ¿ÏÀü°íÁ¤µÇ´Âµ¥ ÃÖ°í¼Óµµ, °¡¼Óµµ Á¶ÀÛ½Ã Æ¨±è
-	--Preset[4] = initHP -- ÃÊ±â HP ÀÔ·Â(½ÇÁ¦°ªÀº MaxHP + InitHP)
-	--Preset[5] = MaxHP -- ¹«Àû»óÅÂ·Î ¸¸µé¶§ ÃÖ´ëÃ¼·Â°ª. ¸¶¸° °ø°İ·ÂÀÌ ³Ê¹« ³ôÀ» °æ¿ì 800¸¸ÂëÀ¸·Î Àâ¾ÆÁà¾ßµÊ
-	--Preset[6] = ExtendHPFlag -- È®Àå Ã¼·Â ±â´É »ç¿ë ¿©ºÎ. 1ÀÏ °æ¿ì »ç¿ë¾ÈÇÔ
-	-- ÀÌÇÏ ³»ºÎº¯¼ö
-	--CB[1] = Unused -- »ç¿ë¾ÈµÊ. »ç¿ëÀÚ°¡ ÀÚÀ¯·Ó°Ô »ç¿ë °¡´É
-	--CB[2] = ExHP -- ÇöÀç È®ÀåµÈ HP°ªÀÌ ÀúÀåµÈ º¯¼ö. ÀÌ °ªÀ» º¯°æÇÏ¸é Ã¼·ÂÀ» ÀÚÀ¯·Ó°Ô ´Ã·È´Ù ÁÙ¿´´Ù ÇÒ ¼ö ÀÖÀ½
-	--CB[3] = PattT -- º¸½º ÀÛµ¿ ´ë±â½Ã°£. ÀÌ °ªÀÌ 1 ÀÌ»óÀÏ °æ¿ì ¹«Àû. 1ÇÁ·¹ÀÓ ´ÜÀ§·Î 1¾¿ °¨¼ÒµÊ
-	--CB[4] = Unused -- »ç¿ë¾ÈµÊ. »ç¿ëÀÚ°¡ ÀÚÀ¯·Ó°Ô »ç¿ë °¡´É
-	--CB[5] = DeathFlag -- Á×¾ùÀ» °æ¿ì ÀÌ °ªÀÌ 1ÀÌ µÊ.
-	--CB[6] = Enable BossKill -- ÀÌ °ªÀÌ 0ÀÏ °æ¿ì º¸½º¸¦ Á×ÀÏ¼ö ÀÖ´Â »óÅÂ°¡ µÊ. ¾ÆÁ÷ Á×ÀÌ±â ½ÈÀ»¶§ ÀÌ °ªÀ» 1·Î ¹Ù²Ù¸é µÊ
-	--CB[7] = Temp -- ³»ºÎ »ç¿ë º¯¼ö. »ç¿ëÀÚ°¡ °ª º¯°æ ±İÁö
-	--CB[8] = Temp -- ³»ºÎ »ç¿ë º¯¼ö. »ç¿ëÀÚ°¡ °ª º¯°æ ±İÁö
-	--CB[9] = Unused -- »ç¿ë¾ÈµÊ. »ç¿ëÀÚ°¡ ÀÚÀ¯·Ó°Ô »ç¿ë °¡´É
+	--ì´í•˜ í”„ë¦¬ì…‹
+	--Preset[1] = PattNum -- ì‹œì‘ íŒ¨í„´ ë„˜ë²„ ê²°ì •. 0ì—ì„œ ì‹œì‘ì‹œ nilì…ë ¥í•´ë„ë¨
+	--Preset[2] = initPattT -- ë³´ìŠ¤ ì†Œí™˜ í›„ ì‘ë™ ëŒ€ê¸°ì‹œê°„. 1í”„ë ˆì„ ë‹¨ìœ„
+	--Preset[3] = Lock type -- ë³´ìŠ¤ë¥¼ ê³ ì •ì‹œí‚¬ì§€ ê²°ì •í•¨. 1 ì…ë ¥ì‹œ ë¶€ë¶„ê³ ì •ë¨(ë¯¸ì„¸í•˜ê²Œ ì´ë™í•¨). ë§ˆë¦°, ê³ ìŠ¤íŠ¸ë¥˜ ëª¨ë‘ ì‚¬ìš©ê°€ëŠ¥. ë‹¨, 2 ì´ìƒ ì…ë ¥ì‹œ ì™„ì „ê³ ì •ë˜ëŠ”ë° ìµœê³ ì†ë„, ê°€ì†ë„ ì¡°ì‘ì‹œ íŠ•ê¹€
+	--Preset[4] = initHP -- ì´ˆê¸° HP ì…ë ¥(ì‹¤ì œê°’ì€ MaxHP + InitHP)
+	--Preset[5] = MaxHP -- ë¬´ì ìƒíƒœë¡œ ë§Œë“¤ë•Œ ìµœëŒ€ì²´ë ¥ê°’. ë§ˆë¦° ê³µê²©ë ¥ì´ ë„ˆë¬´ ë†’ì„ ê²½ìš° 800ë§Œì¯¤ìœ¼ë¡œ ì¡ì•„ì¤˜ì•¼ë¨
+	--Preset[6] = ExtendHPFlag -- í™•ì¥ ì²´ë ¥ ê¸°ëŠ¥ ì‚¬ìš© ì—¬ë¶€. 1ì¼ ê²½ìš° ì‚¬ìš©ì•ˆí•¨
+	-- ì´í•˜ ë‚´ë¶€ë³€ìˆ˜
+	--CB[1] = Unused -- ì‚¬ìš©ì•ˆë¨. ì‚¬ìš©ìê°€ ììœ ë¡­ê²Œ ì‚¬ìš© ê°€ëŠ¥
+	--CB[2] = ExHP -- í˜„ì¬ í™•ì¥ëœ HPê°’ì´ ì €ì¥ëœ ë³€ìˆ˜. ì´ ê°’ì„ ë³€ê²½í•˜ë©´ ì²´ë ¥ì„ ììœ ë¡­ê²Œ ëŠ˜ë ¸ë‹¤ ì¤„ì˜€ë‹¤ í•  ìˆ˜ ìˆìŒ
+	--CB[3] = PattT -- ë³´ìŠ¤ ì‘ë™ ëŒ€ê¸°ì‹œê°„. ì´ ê°’ì´ 1 ì´ìƒì¼ ê²½ìš° ë¬´ì . 1í”„ë ˆì„ ë‹¨ìœ„ë¡œ 1ì”© ê°ì†Œë¨
+	--CB[4] = Unused -- ì‚¬ìš©ì•ˆë¨. ì‚¬ìš©ìê°€ ììœ ë¡­ê²Œ ì‚¬ìš© ê°€ëŠ¥
+	--CB[5] = DeathFlag -- ì£½ì—‡ì„ ê²½ìš° ì´ ê°’ì´ 1ì´ ë¨.
+	--CB[6] = Enable BossKill -- ì´ ê°’ì´ 0ì¼ ê²½ìš° ë³´ìŠ¤ë¥¼ ì£½ì¼ìˆ˜ ìˆëŠ” ìƒíƒœê°€ ë¨. ì•„ì§ ì£½ì´ê¸° ì‹«ì„ë•Œ ì´ ê°’ì„ 1ë¡œ ë°”ê¾¸ë©´ ë¨
+	--CB[7] = Temp -- ë‚´ë¶€ ì‚¬ìš© ë³€ìˆ˜. ì‚¬ìš©ìê°€ ê°’ ë³€ê²½ ê¸ˆì§€
+	--CB[8] = Temp -- ë‚´ë¶€ ì‚¬ìš© ë³€ìˆ˜. ì‚¬ìš©ìê°€ ê°’ ë³€ê²½ ê¸ˆì§€
+	--CB[9] = Unused -- ì‚¬ìš©ì•ˆë¨. ì‚¬ìš©ìê°€ ììœ ë¡­ê²Œ ì‚¬ìš© ê°€ëŠ¥
 	CIfOnce(PlayerID)--init
 	CDoActions(PlayerID,{SetV(CB[3],Preset[2]),SetV(CB[2],CA[4])},1)
 	CTrigger(PlayerID,{CV(CA[3],1,AtLeast)},{
@@ -2487,7 +2491,7 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 
 
 
-		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--»ì¾ÆÀÖ´Â°æ¿ì
+		CIfX(PlayerID,{TMemoryX(_Add(UnitPtr,19),AtLeast,1*256,0xFF00)})--ì‚´ì•„ìˆëŠ”ê²½ìš°
 		
 			CTrigger(PlayerID,{TMemory(_Add(UnitPtr,2), AtMost, (Preset[5])*256),CV(CB[2],0,AtMost),CV(CB[6],1,AtLeast)},{TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF),TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5])*256)},1)
 			CTrigger(PlayerID,{CV(CB[3],1,AtLeast)},{TSetMemory(_Add(UnitPtr,2), SetTo, (Preset[5]*256)),TSetMemoryX(_Add(UnitPtr,24), SetTo, 65535*256,0xFFFFFF)},1)
@@ -2524,14 +2528,14 @@ function CABoss(UnitPtr,UnitHPRetV,Preset,CAfunc,PlayerID,Condition,Action)
 				CABossPlayerID = PlayerID
 				CABossDataArr = CA
 				CABossTempArr = CB
-				if CAfunc ~= nil then -- ÆĞÅÏÀÛ¼º´Ü¶ô
+				if CAfunc ~= nil then -- íŒ¨í„´ì‘ì„±ë‹¨ë½
 					_G[CAfunc]()
 				end
-			CElseX({SubV(CB[3],1)})--ÆĞÅÏÅ¸ÀÌ¸Ó 1ÀÌ»óÀÏ °æ¿ì ¹«Àû, ÆĞÅÏÀÛµ¿Á¤Áö
+			CElseX({SubV(CB[3],1)})--íŒ¨í„´íƒ€ì´ë¨¸ 1ì´ìƒì¼ ê²½ìš° ë¬´ì , íŒ¨í„´ì‘ë™ì •ì§€
 			CIfXEnd()
 	-------------------------------------------------------------------------
 
-		CElseX() -- Á×Àº°æ¿ì
+		CElseX() -- ì£½ì€ê²½ìš°
 			CDoActions(PlayerID,{SetV(UnitPtr,0),SetV(CB[5],1)})
 		CIfXEnd()
 	CIfEnd()
@@ -2559,38 +2563,38 @@ function SetWeaponsDat2X(PatchTable,WepID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="DmgBase" then
-				PatchInsertLoc(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- °ø°İ·Â
+				PatchInsertLoc(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- ê³µê²©ë ¥
 			elseif j=="DmgFactor" then
-				PatchInsertLoc(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- Ãß°¡°ø°İ·Â
+				PatchInsertLoc(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- ì¶”ê°€ê³µê²©ë ¥
 			elseif j=="Cooldown" then
-				PatchInsertLoc(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- °ø¼Ó
+				PatchInsertLoc(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- ê³µì†
 			elseif j=="Splash" then
 				if type(k)=="boolean" then
 					if k == true then
-						PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ½ºÇÃÅ¸ÀÔ(ÀÏ¹æÇü)
+						PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ìŠ¤í”Œíƒ€ì…(ì¼ë°©í˜•)
 					else
-						PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- ½ºÇÃÅ¸ÀÔ(½ºÇÃ¾øÀ½)
+						PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- ìŠ¤í”Œíƒ€ì…(ìŠ¤í”Œì—†ìŒ)
 					end
 				elseif type(k)~="table" or #k~=3 then
 					PushErrorMsg("Splash Inputdata Error")
 				else
-					PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ½ºÇÃÅ¸ÀÔ(ÀÏ¹æÇü)
-					PatchInsertLoc(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --½ºÇÃ ¾È
-					PatchInsertLoc(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --½ºÇÃ Áß
-					PatchInsertLoc(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --½ºÇÃ ¹Û
+					PatchInsertLoc(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- ìŠ¤í”Œíƒ€ì…(ì¼ë°©í˜•)
+					PatchInsertLoc(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --ìŠ¤í”Œ ì•ˆ
+					PatchInsertLoc(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --ìŠ¤í”Œ ì¤‘
+					PatchInsertLoc(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --ìŠ¤í”Œ ë°–
 				end
 			elseif j=="RangeMin" then
-				PatchInsertLoc(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- »ç°Å¸® ÃÖ¼Ò
+				PatchInsertLoc(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ì‚¬ê±°ë¦¬ ìµœì†Œ
 			elseif j=="RangeMax" then
-				PatchInsertLoc(SetMemory(0x657470+(WepID *4),SetTo,k)) -- »ç°Å¸® ÃÖ´ë
+				PatchInsertLoc(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ì‚¬ê±°ë¦¬ ìµœëŒ€
 			elseif j=="TargetFlag" then
 				PatchInsertLoc(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
 			elseif j=="UpgradeType" then
 				PatchInsertLoc(SetMemoryB(0x6571D0 + WepID, SetTo, k))
 			elseif j=="ObjectNum" then
-				PatchInsertLoc(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- Åõ»çÃ¼¼ö
+				PatchInsertLoc(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- íˆ¬ì‚¬ì²´ìˆ˜
 			elseif j=="IconType" then
-				PatchInsertLoc(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- ¾ÆÀÌÄÜ
+				PatchInsertLoc(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- ì•„ì´ì½˜
 			elseif j== "Behavior" then
 				PatchInsertLoc(SetMemoryB(0x656670+WepID,SetTo,k))
 			elseif j== "LaunchX" then
@@ -2606,7 +2610,7 @@ function SetWeaponsDat2X(PatchTable,WepID,Property)
 			elseif j== "FlingyID" then
 				PatchInsertLoc(SetMemory(0x656CA8+(WepID *4),SetTo,k))
 			elseif j== "WepName" then
-				PatchInsertLoc(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ÀÌ¸§
+				PatchInsertLoc(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ì´ë¦„
 			elseif j== "DmgType" then
 				PatchInsertLoc(SetMemoryB(0x657258+(WepID),SetTo,k)) -- 
 				
@@ -2626,7 +2630,7 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 
 	end
 	if type(UnitID) == "string" then
-		UnitID = ParseUnit(UnitID) -- ½ºÆ®¸µÀ¸·Î À¯´ÖÀÌ¸§ ÀÔ·Â°¡´É
+		UnitID = ParseUnit(UnitID) -- ìŠ¤íŠ¸ë§ìœ¼ë¡œ ìœ ë‹›ì´ë¦„ ì…ë ¥ê°€ëŠ¥
 	end
 	if UnitID>=228 then PushErrorMsg("UnitID Index Overflow") end
 	if type(Property)~= "table" then
@@ -2634,7 +2638,7 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="MinCost" then
-				PatchInsertLoc(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- ¹Ì³×¶ö
+				PatchInsertLoc(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- ë¯¸ë„¤ë„
 			elseif j=="Playerable" then
 				local SType
 				if type(k)=="boolean" then
@@ -2655,11 +2659,11 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 				PatchInsertLoc(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,SType))
 				PatchInsertLoc(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,SType))
 			elseif j=="GasCost"  then
-				PatchInsertLoc(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- °¡½º
+				PatchInsertLoc(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- ê°€ìŠ¤
 			elseif j=="BuildTime"  then
-				PatchInsertLoc(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- »ı»ê¼Óµµ
+				PatchInsertLoc(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ìƒì‚°ì†ë„
 			elseif j=="SuppCost"  then
-				PatchInsertLoc(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ¼­ÇÃ
+				PatchInsertLoc(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ì„œí”Œ
 			elseif j=="HP"  then
 				PatchInsertLoc(SetMemory(0x662350 + (UnitID*4),SetTo,k*256))
 			elseif j=="Shield"  then
@@ -2675,15 +2679,15 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 					PatchInsertLoc(SetMemoryW(0x660E00 + (UnitID *2), SetTo, k))
 				end
 			elseif j=="Armor" then
-				PatchInsertLoc(SetMemoryB(0x65FEC8 + (UnitID),SetTo,k)) -- ¹æ¾î·Â
+				PatchInsertLoc(SetMemoryB(0x65FEC8 + (UnitID),SetTo,k)) -- ë°©ì–´ë ¥
 			elseif j=="GroupFlag" then
-				PatchInsertLoc(SetMemoryB(0x6637A0 + (UnitID),SetTo,k)) -- ±×·ì
+				PatchInsertLoc(SetMemoryB(0x6637A0 + (UnitID),SetTo,k)) -- ê·¸ë£¹
 			elseif j=="Height" then
-				PatchInsertLoc(SetMemoryB(0x663150 + (UnitID),SetTo,k)) -- °Ç¼³Å©±â
+				PatchInsertLoc(SetMemoryB(0x663150 + (UnitID),SetTo,k)) -- ê±´ì„¤í¬ê¸°
 			elseif j=="BdDimX" then
-				PatchInsertLoc(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- °Ç¼³Å©±â
+				PatchInsertLoc(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- ê±´ì„¤í¬ê¸°
 			elseif j=="BdDimY" then
-				PatchInsertLoc(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- °Ç¼³Å©±â
+				PatchInsertLoc(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- ê±´ì„¤í¬ê¸°
 			elseif j=="SizeL" then
 				PatchInsertLoc(SetMemoryX(0x6617C8 + (UnitID*8),SetTo,(k),0xFFFF))
 			elseif j=="SizeU" then
@@ -2693,7 +2697,7 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 			elseif j=="SizeD" then
 				PatchInsertLoc(SetMemoryX(0x6617CC + (UnitID*8),SetTo,(k*65536),0xFFFF0000))
 			elseif j=="SuppProv" then
-				PatchInsertLoc(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- ¼­ÇÃ°ø±Ş·®
+				PatchInsertLoc(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- ì„œí”Œê³µê¸‰ëŸ‰
 			elseif j=="AdvFlag" then
 				if type(k)~= "table" or #k~=2 then
 					PushErrorMsg("AdvFlag Inputdata Error")
@@ -2762,5 +2766,384 @@ function SetUnitsDat2X(PatchTable,UnitID,Property)
 			end
 			
 		end
+	end
+end
+
+
+LabelUseArr = {}
+
+function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
+	if Player == "X" then 
+		Player = nil
+	end
+	if Index == "X" then 
+		Index = nil
+	end
+	if Next == "X" then 
+		Next = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index ~= nil and LabelUseArr[Index]==nil then
+		LabelUseArr[Index] = true
+	end
+
+
+	local Pflag
+	if Player == nil then
+		Pflag = 0
+	else
+		if Player >= 0 and Player <= 7 then
+			Pflag = Player + 1
+		else
+			Pflag = 0
+		end
+	end
+
+	local Mflag
+	if Mask == nil then
+		Mflag = 0
+		Mask = 0
+	else
+		--Mflag = 32 (Rflag)
+		Mflag = 0x80
+	end
+
+	local Nflag
+	if Next == 0 or Next == nil then
+		Nflag = 0
+	elseif Next == 1 then 
+		Nflag = 16
+	else
+		Nflag = 0
+		Address = Address + 0x970*Next
+	end
+
+	local Cflag
+	if Index == nil then
+		Index = 0
+		Cflag = 64
+	else
+		Cflag = 0
+	end
+
+	local Xflag = 0
+	if Index >= 0x10000 then
+		Index = Index - 0x10000
+		Xflag = 128
+	end
+
+	local Rflag
+	Rflag = Pflag + Nflag + Cflag + Xflag
+
+	local ExCtrigX = Condition(Mask,Address/4,Value,Index,Type,0xFF,Rflag,0x10+Mflag) -- #DefCond
+	return ExCtrigX
+end
+
+function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	if Index1~=nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Index2~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1 + Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local ExSetCtrigX = Action(Mask,Index1,Rflag1,Rflag2,Address1/4,Addr2,Index2,0x5,Type,0x14+Mflag2) -- #DefAct (PauseGame = 0x5)
+	return ExSetCtrigX
+end
+
+function SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Index1 ~= nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local ExSetCtrig1X = Action(Mask,Index1,Rflag1,0,Address1/4,Value,0,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig1X
+end
+
+function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index2 ~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local Offset2
+	if Offset == "Cp" then
+		Offset2 = 13
+	else
+		Offset2 = EPD(Offset)
+	end
+
+	local ExSetCtrig2X = Action(Mask,0,Rflag1,Rflag2,Offset2,Addr2,Index2,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig2X
+end
+
+
+function LabelUseCheck() -- Label ì‚¬ìš© ì²´í¬
+	local C = {}
+	for k,v in pairs(LabelArr) do
+		if v ~= 0xFFE0 then
+			if not C[v] then
+				C[v] = true
+			end
+		else
+			Prohibited_Label()
+		end
+	end
+	for k, v in pairs(LabelUseArr) do
+		if k~=nil and C[k]== nil then
+			_G["Undefined Label! Current Label : 0x"..string.format("%X",k)]() -- push error msg
+		end
+		
 	end
 end
