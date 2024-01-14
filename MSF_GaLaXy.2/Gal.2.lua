@@ -38,9 +38,9 @@ MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
-Limit = 0
+Limit = 1
 GunSafety = 0
-VName = "Ver.2.1"
+VName = "Ver.2.2T"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 onInit()
@@ -2951,6 +2951,20 @@ Trigger {
 		}
 		}
 	
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			isname(i,"Hybrid)_GOD60");
+			CDeaths(FP,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,1,LimitC);
+			
+		}
+		}
+	
 end
 Trigger {
 	players = {FP},
@@ -4852,6 +4866,20 @@ TriggerX(FP,{CDeaths(FP,AtMost,4,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\
 CWhileEnd()
 DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
 TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
+
+if Limit == 1 then -- 공속무한 모듈
+		
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)'
+		Trigger2(FP, {
+			DeathsX(19025+(84*i)+19,AtMost,5,0,0xFF),
+			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),},{
+			SetDeaths(19025+(84*i)+21,SetTo,0,0),
+			SetDeathsX(19025+(84*i)+21,SetTo,0,1,0xFF00),
+			},{preserved})
+	end
+
+end
+
 
 Install_boss()
 CIf(FP,CVar(FP,count[2],AtMost,GunLimit))

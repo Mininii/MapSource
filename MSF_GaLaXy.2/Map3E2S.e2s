@@ -19,11 +19,12 @@ triggerSetTouse : True
 triggerPlayer : 7
 E_ProjectSET
 S_DatEditSET
+0,0,0,-4
 0,0,6,-7
 0,0,15,105
 0,0,20,98
 0,0,57,1
-0,0,100,4
+0,0,60,-111
 0,0,160,152
 0,0,179,5
 0,0,180,46
