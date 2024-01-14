@@ -167,6 +167,7 @@ RunAIScript(P8VON),
 
 DoActionsX(P1, {}, nil,0x5001)
 EndCtrig()
+LabelUseCheck()
 ErrorCheck()
 SetCallErrorCheck()
 --os.execute("mkdir " .. "banflag")

@@ -1,8 +1,12 @@
 
 
+
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\MSF_Memory_2\\main.lua")
+--__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- 맵파일 경로(\를 \\로 바꿔야함)
+--__SubDirSetting(__encode_cp949(Curdir.."MapSource\\MSF_Memory_2")) -- Main.lua 폴더경로 (\를 \\로 바꿔야함, 없으면 비우기)
+
+
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 LD2XOption = 1
 if LD2XOption == 1 then
@@ -30,7 +34,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 
 ------------------------------------------------------------------------------------------------------------------------------
-
+--ttt =  "ａ"
+--tttt = "a"
+--PushErrorMsg(""..string.byte(ttt, 1, 1).." "..string.byte(ttt, 2, 2).." "..string.byte(ttt, 3, 3).." "..string.byte(tttt, 1, 1))
 TestSet(1)
 	EVFFlag = 0
 	CheatEnableFlag = 0
@@ -108,6 +114,7 @@ NoAirCollisionX(FP)
 --Enable_HideErrorMessage(FP)
 init_Setting()
 EndCtrig()
+LabelUseCheck()
 ErrorCheck()
 SetCallErrorCheck()
 

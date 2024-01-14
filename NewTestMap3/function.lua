@@ -1,6 +1,4 @@
-function DisplayExtText(Text, AlwaysDisplay)
-	return DisplayText(Text, AlwaysDisplay)
-end
+
 function Install_BackupCP(Player)
 	BackupCp = CreateVar(Player)
 	SaveCp_CallIndex = SetCallForward()
@@ -1757,4 +1755,384 @@ function PopSubtitleData()
 
 	io.close(Subtitle)
 	
+end
+
+
+
+LabelUseArr = {}
+
+function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
+	if Player == "X" then 
+		Player = nil
+	end
+	if Index == "X" then 
+		Index = nil
+	end
+	if Next == "X" then 
+		Next = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index ~= nil and LabelUseArr[Index]==nil then
+		LabelUseArr[Index] = true
+	end
+
+
+	local Pflag
+	if Player == nil then
+		Pflag = 0
+	else
+		if Player >= 0 and Player <= 7 then
+			Pflag = Player + 1
+		else
+			Pflag = 0
+		end
+	end
+
+	local Mflag
+	if Mask == nil then
+		Mflag = 0
+		Mask = 0
+	else
+		--Mflag = 32 (Rflag)
+		Mflag = 0x80
+	end
+
+	local Nflag
+	if Next == 0 or Next == nil then
+		Nflag = 0
+	elseif Next == 1 then 
+		Nflag = 16
+	else
+		Nflag = 0
+		Address = Address + 0x970*Next
+	end
+
+	local Cflag
+	if Index == nil then
+		Index = 0
+		Cflag = 64
+	else
+		Cflag = 0
+	end
+
+	local Xflag = 0
+	if Index >= 0x10000 then
+		Index = Index - 0x10000
+		Xflag = 128
+	end
+
+	local Rflag
+	Rflag = Pflag + Nflag + Cflag + Xflag
+
+	local ExCtrigX = Condition(Mask,Address/4,Value,Index,Type,0xFF,Rflag,0x10+Mflag) -- #DefCond
+	return ExCtrigX
+end
+
+function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	if Index1~=nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Index2~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1 + Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local ExSetCtrigX = Action(Mask,Index1,Rflag1,Rflag2,Address1/4,Addr2,Index2,0x5,Type,0x14+Mflag2) -- #DefAct (PauseGame = 0x5)
+	return ExSetCtrigX
+end
+
+function SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Index1 ~= nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local ExSetCtrig1X = Action(Mask,Index1,Rflag1,0,Address1/4,Value,0,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig1X
+end
+
+function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index2 ~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local Offset2
+	if Offset == "Cp" then
+		Offset2 = 13
+	else
+		Offset2 = EPD(Offset)
+	end
+
+	local ExSetCtrig2X = Action(Mask,0,Rflag1,Rflag2,Offset2,Addr2,Index2,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig2X
+end
+
+
+function LabelUseCheck() -- Label 사용 체크
+	local C = {}
+	for k,v in pairs(LabelArr) do
+		if v ~= 0xFFE0 then
+			if not C[v] then
+				C[v] = true
+			end
+		else
+			Prohibited_Label()
+		end
+	end
+	for k, v in pairs(LabelUseArr) do
+		if k~=nil and C[k]== nil then
+			_G["Undefined Label! Current Label : 0x"..string.format("%X",k)]() -- push error msg
+		end
+		
+	end
 end

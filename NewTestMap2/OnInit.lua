@@ -94,7 +94,7 @@ iTblJump = def_sIndex()
 	MarStra = {}
 	MarStrs = {}
 	for i = 0, 6 do
-		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07『 \x0D\x0D\x0D\x0D\x0D\x0D단. "..MakeiStrVoid(20).." \x07』\x0D\x0D\x0D\x0D\x0D")
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArrX(FP,"\x07『 \x0D\x0D\x0D\x0D\x0D\x0D단. "..MakeiStrVoid(20).." \x07』\x0D\x0D\x0D\x0D\x0D")
 	end
 	CJumpEnd(FP,iTblJump)
 

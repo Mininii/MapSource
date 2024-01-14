@@ -166,13 +166,13 @@
 		for j,k in pairs(TPArr) do
 			if type(k) == "number" then
 				if  k>= 8 then PushErrorMsg("Invalid TargetPlayer. Please Select P1~P8") end
-				if OP_Hold ~= nil then
+				if OP_Hold ~= "X" then 
 					CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k),SetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
 				else
 					CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k)})
 				end
 			else --type == V
-				if OP_Hold ~= nil then
+				if OP_Hold ~= "X" then 
 					CDoActions(FP,{TSetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
 				end
 				CMov(FP,dp.Print13V,k)
@@ -750,6 +750,8 @@
 				PushErrorMsg("OP_Hold Factor Error. Help: {DeathUnit,Value}")
 			end
 			OP_Hold = DP_OP_Hold
+		else
+			OP_Hold = "X"
 		end
 
 

@@ -62,19 +62,19 @@ Trigger {
 	}
 }
 
-Trigger { -- ÆÛ¼¾Æ® µ¥¹ÌÁö ¼¼ÆÃ
+Trigger { -- í¼ì„¼íŠ¸ ë°ë¯¸ì§€ ì„¸íŒ…
 	players = {P8},
 	actions = {
-		SetMemory(0x515B88,SetTo,256);---------Å©±â 0
-		SetMemory(0x515B8C,SetTo,256);---------Å©±â 1
-		SetMemory(0x515B90,SetTo,256);---------Å©±â 2
-		SetMemory(0x515B94,SetTo,256);---------Å©±â 3
-		SetMemory(0x515B98,SetTo,256);---------Å©±â 4
-		SetMemory(0x515B9C,SetTo,256);---------Å©±â 5
-		SetMemory(0x515BA0,SetTo,256);---------Å©±â 6
-		SetMemory(0x515BA4,SetTo,256);---------Å©±â 7
-		SetMemory(0x515BA8,SetTo,256);---------Å©±â 8
-		SetMemory(0x515BAC,SetTo,256);---------Å©±â 9
+		SetMemory(0x515B88,SetTo,256);---------í¬ê¸° 0
+		SetMemory(0x515B8C,SetTo,256);---------í¬ê¸° 1
+		SetMemory(0x515B90,SetTo,256);---------í¬ê¸° 2
+		SetMemory(0x515B94,SetTo,256);---------í¬ê¸° 3
+		SetMemory(0x515B98,SetTo,256);---------í¬ê¸° 4
+		SetMemory(0x515B9C,SetTo,256);---------í¬ê¸° 5
+		SetMemory(0x515BA0,SetTo,256);---------í¬ê¸° 6
+		SetMemory(0x515BA4,SetTo,256);---------í¬ê¸° 7
+		SetMemory(0x515BA8,SetTo,256);---------í¬ê¸° 8
+		SetMemory(0x515BAC,SetTo,256);---------í¬ê¸° 9
 		SetMemory(0x515BB0,SetTo,256);--0 PlayerMarine
 		SetMemory(0x515BB4,SetTo,256);--1 PlayerMarine
 		SetMemory(0x515BB8,SetTo,256);--2 PlayerMarine
@@ -83,10 +83,10 @@ Trigger { -- ÆÛ¼¾Æ® µ¥¹ÌÁö ¼¼ÆÃ
 		SetMemory(0x515BC4,SetTo,256*80);--5
 		SetMemory(0x515BC8,SetTo,256);--6
 		SetMemory(0x515BCC,SetTo,256);--7 default
-		SetMemory(0x515BD0,SetTo,256*2);--8 ³ë¸Ö¸¶¸°
-		SetMemory(0x515BD4,SetTo,256*4);--9 ¿µ¿õ¸¶¸°
+		SetMemory(0x515BD0,SetTo,256*2);--8 ë…¸ë©€ë§ˆë¦°
+		SetMemory(0x515BD4,SetTo,256*4);--9 ì˜ì›…ë§ˆë¦°
 		SetMemory(0x6616B0, SetTo, 2097615);
 		SetMemory(0x6643B0, SetTo, 536870916);
-		SetMemory(0x666460, SetTo, 32965359);-- 204¹øÀ¯´Ö ÀÌÆåÆ®À¯´ÖÀ¸·Î »ç¿ë
+		SetMemory(0x666460, SetTo, 32965359);-- 204ë²ˆìœ ë‹› ì´í™íŠ¸ìœ ë‹›ìœ¼ë¡œ ì‚¬ìš©
 	},
 }

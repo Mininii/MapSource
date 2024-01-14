@@ -64,7 +64,7 @@ end
 	QNest = CSMakePolygon(4,48,0,PlotSizeCalc(4,5),PlotSizeCalc(4,4))
 	EChamb = CSMakePolygon(6,32,0,PlotSizeCalc(6,6),PlotSizeCalc(6,5))
 	
-	--ÇØÃ³¸®
+	--í•´ì²˜ë¦¬
 	Circle3 = CSMakeCircle(6,48,0,PlotSizeCalc(6,3),0) --1
 	Polygon6 = CSMakePolygon(6,48,0,PlotSizeCalc(6,3),0) --2
 	Polygon6_2 = CSMakePolygon(6,48,45,PlotSizeCalc(6,3),0) --3
@@ -72,7 +72,7 @@ end
 	local Shape1 = CSMakeStar(6,120,72,0,PlotSizeCalc(6*2,3),0)
     Star6_2 = CS_OverlapX(CS_CropRA(Shape1,{0,1200},{30,150}),CS_CropRA(Shape1,{0,1200},{210,330}))
 
-	--·¹¾î
+	--ë ˆì–´
 	Star2 = CSMakeStar(5,120,80,180,PlotSizeCalc(5*2,2),0)
 	Star3 = CSMakePolygon(5,128,0,PlotSizeCalc(5,1),1)
 	Pol_6_1 = CS_Intersect(CSMakePolygon(6,32,0,PlotSizeCalc(6,7),0),CS_Merge(CSMakeLine(6,32,0,(8*6)+1,0),CSMakePolygon(6,32,0,PlotSizeCalc(6,7),PlotSizeCalc(6,6)),8,0),8,0)
@@ -107,13 +107,13 @@ end
 	H00_1_96L = CS_ConnectPathX(H00_1,96,1)
 	H00_1_128L = CS_ConnectPathX(H00_1,128,1)
 
---k*math.cos(T) + l*math.cos(k*T), k*math.sin(T) - l*math.sin(k*T) >> (k+1)°¢
+--k*math.cos(T) + l*math.cos(k*T), k*math.sin(T) - l*math.sin(k*T) >> (k+1)ê°
 function Create_HyperCycloid(k)
-	function C_HC(T) return {(k-1)*math.cos(T) + math.cos((k-1)*T), (k-1)*math.sin(T) - math.sin((k-1)*T)} end --ÇÏÀÌÆ÷»çÀÌÅ¬·ÎÀÌµå (¿ø¿ÜºÎ ¿øÁÖ¸¦ µµ´Â ¿ÜÁ¢¿øÀÇ ÀÚÃë)
+	function C_HC(T) return {(k-1)*math.cos(T) + math.cos((k-1)*T), (k-1)*math.sin(T) - math.sin((k-1)*T)} end --í•˜ì´í¬ì‚¬ì´í´ë¡œì´ë“œ (ì›ì™¸ë¶€ ì›ì£¼ë¥¼ ë„ëŠ” ì™¸ì ‘ì›ì˜ ìì·¨)
 	return CS_RatioXY(CS_RemoveStack(CSMakeGraphT({32,32},"C_HC",0,0,24,24,70),10,0),1.5,1.5) 
 end
 
-function HyperCycloidA(T) return {4*math.cos(T) + math.cos(4*T), 4*math.sin(T) - math.sin(4*T)} end --ÇÏÀÌÆ÷»çÀÌÅ¬·ÎÀÌµå (¿ø¿ÜºÎ ¿øÁÖ¸¦ µµ´Â ¿ÜÁ¢¿øÀÇ ÀÚÃë)
+function HyperCycloidA(T) return {4*math.cos(T) + math.cos(4*T), 4*math.sin(T) - math.sin(4*T)} end --í•˜ì´í¬ì‚¬ì´í´ë¡œì´ë“œ (ì›ì™¸ë¶€ ì›ì£¼ë¥¼ ë„ëŠ” ì™¸ì ‘ì›ì˜ ìì·¨)
  HCA0 = CSMakeGraphT({32,32},"HyperCycloidA",0,0,24,24,70)
  HCA = CS_RatioXY(CS_RemoveStack(HCA0,10,0),1.5,1.5) 
 
@@ -128,11 +128,11 @@ HCB = CS_RatioXY(CS_RemoveStack(HCB0,12,0),1.5,1.5)
 function HyperCycloidC(T) return {12*math.sin(T) - 4*math.sin(3*T), 13*math.cos(T) - 5*math.cos(2*T) - 2*math.cos(3*T) - math.cos(4*T)} end
 HCCC = CSMakeGraphT({12,12},"HyperCycloidC",0,0,2,2,51) 
 HCC0 = CS_Rotate(HCCC,180)
-HCC = CS_RemoveStack(HCC0,15,0) -------ÇÏÆ®
+HCC = CS_RemoveStack(HCC0,15,0) -------í•˜íŠ¸
 
 --------------------------------------------------------------
---k*math.cos(T) - l*math.cos(k*T), k*math.sin(T) - l*math.sin(k*T) >> ¿¡ÇÇ»çÀÌÅ¬·ÎÀÌµå (¿ø³»ºÎ ¿øÁÖ¸¦ µµ´Â ³»Á¢¿øÀÇ ÀÚÃë)
---K°¡ Á¤¼öÀÏ¶§
+--k*math.cos(T) - l*math.cos(k*T), k*math.sin(T) - l*math.sin(k*T) >> ì—í”¼ì‚¬ì´í´ë¡œì´ë“œ (ì›ë‚´ë¶€ ì›ì£¼ë¥¼ ë„ëŠ” ë‚´ì ‘ì›ì˜ ìì·¨)
+--Kê°€ ì •ìˆ˜ì¼ë•Œ
 
 function HyperCycloidD(T) return {6*math.cos(T) - 2*math.cos(6*T), 6*math.sin(T) - 2*math.sin(6*T)} end 
 HCD0 = CSMakeGraphT({24,24},"HyperCycloidD",0,0,1,1,90)
@@ -140,7 +140,7 @@ HCD = CS_RemoveStack(HCD0,20,0)
 
 --------------------------------------------------------------
 
---K°¡ À¯¸®¼öÀÏ¶§
+--Kê°€ ìœ ë¦¬ìˆ˜ì¼ë•Œ
 
 function HyperCycloid1(T) return {2.1*math.cos(T) - math.cos(2.1*T), 2.1*math.sin(T) - math.sin(2.1*T)} end 
 Hp0 = CSMakeGraphT({192,192},"HyperCycloid1",0,0,10,10,200)
@@ -157,7 +157,7 @@ SLineB = CS_MoveXY(CSMakePolygonX(5,60,18,45,20),860,0)
 SFM2 = CS_Merge(CS_Merge(SFM1,SLineA,5,0),SLineB,5,0)
 SFM3 =CS_Kaleidoscope(SFM2,6,0,0)
 
-SF1 = CS_Vector2D(CS_RemoveStack(SFM3,12),1,"SF_Vector") -- ´«¼ÛÀÌ
+SF1 = CS_Vector2D(CS_RemoveStack(SFM3,12),1,"SF_Vector") -- ëˆˆì†¡ì´
 
 --------------------------------------------------------------
 
@@ -167,31 +167,31 @@ C1 = CSMakeCircle(8,60,0,441,169)
 S1 = CSMakePolygon(4,45,45,13,0)
 S2 = CS_MoveXY(S1,700,0)
 M1 = CS_Merge(S2,C1,1,0)
-SS1 = CS_KaleidoscopeX(M1,20,0,0) --- Å«¹ÙÄû
+SS1 = CS_KaleidoscopeX(M1,20,0,0) --- í°ë°”í€´
 
 C2 = CSMakeCircle(8,45,0,122,50)
 S3 = CSMakeLineX(3,70,0,35,15)
-SS2 = CS_Merge(S3,C2,1,0) --- ÀÛÀº¹ÙÄû
+SS2 = CS_Merge(S3,C2,1,0) --- ì‘ì€ë°”í€´
 
 MM = CS_Merge(SS1,SS2,1,0)
-SS3 = CS_RemoveStack(MM,5,0) -------20°³ Åé´Ï¹ÙÄû
+SS3 = CS_RemoveStack(MM,5,0) -------20ê°œ í†±ë‹ˆë°”í€´
 
-WheelA = CS_Vector2D(SS3,1,"S1_Vector") -- Åé´Ï¹ÙÄû
+WheelA = CS_Vector2D(SS3,1,"S1_Vector") -- í†±ë‹ˆë°”í€´
 
 --------------------------------------------------------------
 
 
-CircleA = CSMakeCircle(6,60,0,61,19) ---- ÀÛÀº ¿ø
-EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- ÀÛÀº Å¸¿ø
-EllipseRA = CS_Rotate(EllipseA,15) ---- ÀÛÀº Å¸¿ø È¸Àü
+CircleA = CSMakeCircle(6,60,0,61,19) ---- ì‘ì€ ì›
+EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- ì‘ì€ íƒ€ì›
+EllipseRA = CS_Rotate(EllipseA,15) ---- ì‘ì€ íƒ€ì› íšŒì „
 
-CircleB = CSMakeCircle(6,40,0,91,19+18) ---- Å« ¿ø
-EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- Å« Å¸¿ø
-EllipseRB = CS_Rotate(EllipseB,40) ---- Å« Å¸¿ø È¸Àü
-EllipseRAD = CS_MoveXY(EllipseRA,0,500) ---- Å« Å¸¿ø ÆòÇàÀÌµ¿
-EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- ÀÛÀºÅ¸¿ø Å«Å¸¿ø ÇÕ
+CircleB = CSMakeCircle(6,40,0,91,19+18) ---- í° ì›
+EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- í° íƒ€ì›
+EllipseRB = CS_Rotate(EllipseB,40) ---- í° íƒ€ì› íšŒì „
+EllipseRAD = CS_MoveXY(EllipseRA,0,500) ---- í° íƒ€ì› í‰í–‰ì´ë™
+EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- ì‘ì€íƒ€ì› í°íƒ€ì› í•©
 
-EllipseMirror = CS_MirrorX(EllipseShape,500,1,1) --³ªºñ
+EllipseMirror = CS_MirrorX(EllipseShape,500,1,1) --ë‚˜ë¹„
 
 EllipseMirror1 = CS_MoveXY(EllipseMirror,-500,-250)
 

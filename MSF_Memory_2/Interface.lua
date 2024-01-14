@@ -14,9 +14,9 @@ function Interface()
 	local P4 = { 111, 165, 159, 164}
 	local P5 = { 0xFF0000, 0xFF000000, 0xFF, 0xFF00 }
 	local P6 = {
-	StrDesign("\x04ÄÃ·¯ ½ºÅ² ´ÜÀ§°¡ \x1F+10\x04 \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04ÄÃ·¯ ½ºÅ² ´ÜÀ§°¡ \x02ÃÊ±âÈ­ \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04ÄÃ·¯ ½ºÅ² ´ÜÀ§°¡ \x1C+1 \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),}
+	StrDesign("\x04ì»¬ëŸ¬ ìŠ¤í‚¨ ë‹¨ìœ„ê°€ \x1F+10\x04 \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ì»¬ëŸ¬ ìŠ¤í‚¨ ë‹¨ìœ„ê°€ \x02ì´ˆê¸°í™” \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ì»¬ëŸ¬ ìŠ¤í‚¨ ë‹¨ìœ„ê°€ \x1C+1 \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),}
 	local PCMode = CreateCcodeArr(4)
 	local PC1=CreateVar2(FP,nil,nil,P4[1])
 	local PC2=CreateVar2(FP,nil,nil,P4[2])
@@ -38,12 +38,12 @@ function Interface()
 })
 
 	GiveRateT = {
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F5000 Ore\x04 \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F10000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F50000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F100000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F500000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù."),
-	StrDesign("\x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F1000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.")}
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F5000 Ore\x04 \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F10000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F50000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F100000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F500000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F1000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.")}
 	for i = 0, 3 do
 		local PCMode2 = {1,10,P4[i+1]}
 		CIf(FP,HumanCheck(i,1),{SetV(CurAtk[i+1],0),SetV(CurHP[i+1],0),SetMemory(0x662350+(MarID[i+1]*4),SetTo,(5000*256)-255),SetMemory(0x515BB0+(i*4),SetTo,256*5),SetV(MarHPRead[i+1],(5000*256)-255)})
@@ -103,7 +103,7 @@ function Interface()
 
 		
 	for k = 0, 5 do
-	Trigger { -- ±âºÎ ±İ¾× º¯°æ
+	Trigger { -- ê¸°ë¶€ ê¸ˆì•¡ ë³€ê²½
 		players = {i},
 		conditions = {
 			Label(0);
@@ -114,7 +114,7 @@ function Interface()
 			ModifyUnitEnergy(All,70,i,64,0);
 			GiveUnits(All,70,i,"Anywhere",11);
 			RemoveUnitAt(All,70,"Anywhere",11);
-			DisplayExtText("\x0D\x0D"..GiveRateT[k+1],4);
+			DisplayText("\x0D\x0D"..GiveRateT[k+1],4);
 			SetCDeaths(FP,Add,1,GiveRate[i+1]);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
 			PreserveTrigger();
@@ -123,7 +123,7 @@ function Interface()
 	end
 	for k = 0, 2 do
 	UnitButton(i, 54, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
-		DisplayExtText("\x0D\x0D"..P6[k+1],4);
+		DisplayText("\x0D\x0D"..P6[k+1],4);
 		SetCDeaths(FP,Add,1,PCMode[i+1]);})
 	if k == 2 then
 	UnitButton(i, 50, {CDeaths(FP,Exactly,k,PCMode[i+1])}, {
@@ -156,7 +156,7 @@ function Interface()
 	end
 		
 
-Trigger { -- ¼ÒÈ¯ ¸¶¸°
+Trigger { -- ì†Œí™˜ ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -168,7 +168,7 @@ actions = {
 	RemoveUnitAt(1,"Terran Wraith","Anywhere",i);
 	SetDeaths(i,Add,1,"Terran Wraith");
 	--CreateUnitWithProperties(1,32,2+i,i,{energy = 100});
-	DisplayExtText(StrDesign("\x04£Í£á£ò£é£î£åÀ» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..NMCost.." O r e"),4);
+	DisplayText(StrDesign("\x04ï¼­ï½ï½’ï½‰ï½ï½…ì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..NMCost.." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	--SetCDeaths(FP,Add,1,MarCreate);
 	PreserveTrigger();
@@ -176,7 +176,7 @@ actions = {
 }
 
 
-Trigger { -- Á¶ÇÕ ¿µ¿õ¸¶¸°
+Trigger { -- ì¡°í•© ì˜ì›…ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -189,13 +189,13 @@ actions = {
 	RemoveUnitAt(1,32,26+i,i);
 	SetResources(i,Subtract,HMCost,Ore);
 	CreateUnitWithProperties(1,20,2+i,i,{energy = 100});
-	DisplayExtText(StrDesign("\x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© \x04£Í£á£ò£é£î£åÀ» \x1B£È \x04£Í£á£ò£é£î£åÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..HMCost.." O r e"),4);
+	DisplayText(StrDesign("\x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x04ï¼­ï½ï½’ï½‰ï½ï½…ì„ \x1Bï¼¨ \x04ï¼­ï½ï½’ï½‰ï½ï½…ìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..HMCost.." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
-Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì¡°í•© ë£¨ë¯¸ì•„ë§ˆë¦°
 	players = {i},
 	conditions = {
 		Label(0);
@@ -210,7 +210,7 @@ Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
 		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-		DisplayExtText(StrDesign("\x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© \x1B£È \x04£Í£á£ò£é£î£åÀ» "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£åÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..LMCost.." O r e"),4);
+		DisplayText(StrDesign("\x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x1Bï¼¨ \x04ï¼­ï½ï½’ï½‰ï½ï½…ì„ "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…ìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..LMCost.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
 		AddCD(CreateMarine1[i+1],1);
@@ -219,7 +219,7 @@ Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
 	},
 }
 
-Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì¡°í•© ë£¨ë¯¸ì•„ë§ˆë¦°
 	players = {i},
 	conditions = {
 		Label(0);
@@ -234,7 +234,7 @@ Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
 		ModifyUnitEnergy(1,20,i,26+i,0);
 		RemoveUnitAt(1,20,26+i,i);
 		--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-		DisplayExtText(StrDesign("\x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© \x1B£È \x04£Í£á£ò£é£î£åÀ» "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£åÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..LMCost2.." O r e"),4);
+		DisplayText(StrDesign("\x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x1Bï¼¨ \x04ï¼­ï½ï½’ï½‰ï½ï½…ì„ "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…ìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..LMCost2.." O r e"),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		AddCD(CreateMarine1[i+1],1);
 		SetCDeaths(FP,Add,1,FastMarine[i+1]);
@@ -243,7 +243,7 @@ Trigger { -- Á¶ÇÕ ·ç¹Ì¾Æ¸¶¸°
 	},
 }
 
-Trigger { -- ¼ÒÈ¯ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì†Œí™˜ ë£¨ë¯¸ì•„ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -256,13 +256,13 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	SetResources(i,Add,NMCost+HMCost+LMCost,Ore);
-	DisplayExtText(StrDesign(Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£å \x19ºü¸¥ ¼ÒÈ¯\x04 Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£å12±â Á¶ÇÕ) \x1FÀÚ¿ø \x04¹İÈ¯ + \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
+	DisplayText(StrDesign(Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½… \x19ë¹ ë¥¸ ì†Œí™˜\x04 ì¡°ê±´ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…12ê¸° ì¡°í•©) \x1Fìì› \x04ë°˜í™˜ + \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
-Trigger { -- ¼ÒÈ¯ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì†Œí™˜ ë£¨ë¯¸ì•„ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -275,13 +275,13 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	SetResources(i,Add,NMCost+HMCost+LMCost2,Ore);
-	DisplayExtText(StrDesign(Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£å \x19ºü¸¥ ¼ÒÈ¯\x04 Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£å12±â Á¶ÇÕ) \x1FÀÚ¿ø \x04¹İÈ¯ + \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
+	DisplayText(StrDesign(Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½… \x19ë¹ ë¥¸ ì†Œí™˜\x04 ì¡°ê±´ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…12ê¸° ì¡°í•©) \x1Fìì› \x04ë°˜í™˜ + \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
-Trigger { -- ¼ÒÈ¯ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì†Œí™˜ ë£¨ë¯¸ì•„ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -294,14 +294,14 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-	DisplayExtText(StrDesign("\x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£åÀ» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
+	DisplayText(StrDesign("\x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…ì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..(LMCost+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
 	PreserveTrigger();
 },
 }
-Trigger { -- ¼ÒÈ¯ ·ç¹Ì¾Æ¸¶¸°
+Trigger { -- ì†Œí™˜ ë£¨ë¯¸ì•„ë§ˆë¦°
 players = {i},
 conditions = {
 	Label(0);
@@ -314,7 +314,7 @@ actions = {
 	ModifyUnitEnergy(1,28,i,64,0);
 	RemoveUnitAt(1,28,64,i);
 	--CreateUnitWithProperties(1,MarID[i+1],2+i,i,{energy = 100});
-	DisplayExtText(StrDesign("\x1F±¤¹°\x04À» ¼Ò¸ğÇÏ¿© "..Color[i+1].."£Ì\x11£õ\x03£í\x18£é"..Color[i+1].."£Á "..Color[i+1].."£Í\x04£á£ò£é£î£åÀ» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
+	DisplayText(StrDesign("\x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ "..Color[i+1].."ï¼¬\x11ï½•\x03ï½\x18ï½‰"..Color[i+1].."ï¼¡ "..Color[i+1].."ï¼­\x04ï½ï½’ï½‰ï½ï½…ì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..(LMCost2+HMCost+NMCost).." O r e"),4);
 	SetCDeaths(FP,Add,1,CUnitRefrash);
 	AddCD(CreateMarine2[i+1],1);
 	SetCD(CUnitFlag,1);
@@ -337,7 +337,7 @@ actions = {
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- ÀÚµ¿È¯Àü
+	Trigger { -- ìë™í™˜ì „
 		players = {i},
 		conditions = {
 			Label();
@@ -347,7 +347,7 @@ actions = {
 			ModifyUnitEnergy(1,"Terran Vulture",i,64,0);
 			RemoveUnitAt(1,"Terran Vulture","Anywhere",i);
 			SetDeaths(i,SetTo,1,"Terran Barracks");
-			DisplayExtText(StrDesign("\x07ÀÚµ¿È¯Àü\x04À» »ç¿ëÇÏ¼Ì½À´Ï´Ù."),4);
+			DisplayText(StrDesign("\x07ìë™í™˜ì „\x04ì„ ì‚¬ìš©í•˜ì…¨ìŠµë‹ˆë‹¤."),4);
 			SetCDeaths(FP,Add,1,CUnitRefrash);
 			PreserveTrigger();
 		},
@@ -388,7 +388,7 @@ actions = {
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- º¸È£¸· °¡µ¿
+	Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
 	players = {i},
 	conditions = {
 		Label(0);
@@ -399,7 +399,7 @@ actions = {
 		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayExtText(StrDesign("\x04ÀÌ¹Ì \x1CºûÀÇ º¸È£¸·\x04À» »ç¿ëÁßÀÔ´Ï´Ù. ÀÚ¿ø ¹İÈ¯ + \x1F"..ShCost.." Ore"),4);
+		DisplayText(StrDesign("\x04ì´ë¯¸ \x1Cë¹›ì˜ ë³´í˜¸ë§‰\x04ì„ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤. ìì› ë°˜í™˜ + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -407,7 +407,7 @@ actions = {
 	},
 	}
 
-	Trigger { -- º¸È£¸· °¡µ¿
+	Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
 	players = {i},
 	conditions = {
 		Label(0);
@@ -419,7 +419,7 @@ actions = {
 		SetResources(i,Add,ShCost,Ore);
 		ModifyUnitEnergy(1,19,i,64,0);
 		RemoveUnitAt(1,19,"Anywhere",i);
-		DisplayExtText(StrDesign("\x1CºûÀÇ º¸È£¸·\x04ÀÌ ÇöÀç \x0EÄğÅ¸ÀÓ \x04ÁßÀÔ´Ï´Ù. ÀÚ¿ø ¹İÈ¯ + \x1F"..ShCost.." Ore"),4);
+		DisplayText(StrDesign("\x1Cë¹›ì˜ ë³´í˜¸ë§‰\x04ì´ í˜„ì¬ \x0Eì¿¨íƒ€ì„ \x04ì¤‘ì…ë‹ˆë‹¤. ìì› ë°˜í™˜ + \x1F"..ShCost.." Ore"),4);
 		PlayWAV("sound\\Misc\\PError.WAV");
 		PlayWAV("sound\\Misc\\PError.WAV");
 		SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -437,7 +437,7 @@ Trigger2X(i,{
 	ModifyUnitEnergy(1,19,i,64,0);
 	RemoveUnitAt(1,19,"Anywhere",i);
 },{preserved})
-Trigger { -- º¸È£¸· °¡µ¿
+Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
 	players = {i},
 	conditions = {
 		Label(0);
@@ -452,7 +452,7 @@ Trigger { -- º¸È£¸· °¡µ¿
 }
 	DoActions(i,{SetMemory(0x582294+(4*i),Subtract,1)})
 
-Trigger { -- º¸È£¸· °¡µ¿
+Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
 	players = {i},
 	conditions = {
 		Label(0);
@@ -460,7 +460,7 @@ Trigger { -- º¸È£¸· °¡µ¿
 		Memory(0x582294+(4*i),AtMost,1199);
 	},
 	actions = {
-		DisplayExtText(StrDesign("\x1CºûÀÇ º¸È£¸·\x04 »ç¿ëÀÌ Á¾·áµÇ¾ú½À´Ï´Ù."),4);
+		DisplayText(StrDesign("\x1Cë¹›ì˜ ë³´í˜¸ë§‰\x04 ì‚¬ìš©ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤."),4);
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		SetCDeaths(i,SetTo,0,ShUsed);
@@ -468,7 +468,7 @@ Trigger { -- º¸È£¸· °¡µ¿
 		PreserveTrigger();
 	},
 }
-Trigger { -- º¸È£¸· °¡µ¿
+Trigger { -- ë³´í˜¸ë§‰ ê°€ë™
 	players = {i},
 	conditions = {
 		Label(0);
@@ -476,7 +476,7 @@ Trigger { -- º¸È£¸· °¡µ¿
 		Memory(0x582294+(4*i),AtMost,0);
 	},
 	actions = {
-		DisplayExtText(StrDesign("\x1CºûÀÇ º¸È£¸·\x04 ÄğÅ¸ÀÓÀÌ Á¾·áµÇ¾ú½À´Ï´Ù."),4);
+		DisplayText(StrDesign("\x1Cë¹›ì˜ ë³´í˜¸ë§‰\x04 ì¿¨íƒ€ì„ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤."),4);
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		PlayWAV("staredit\\wav\\GMode.ogg");
 		SetCDeaths(i,SetTo,0,ShCool);
@@ -485,17 +485,17 @@ Trigger { -- º¸È£¸· °¡µ¿
 }
 
 
-Trigger2X(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 Á÷Á¢ ÆÄ±« \x07º¸³Ê½º \x1F£«"..N_to_EmN(50000).." \x1F£Ğ£ô£ó"),4)},{preserved})
-Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 Á÷Á¢ ÆÄ±« \x07º¸³Ê½º \x1F£«"..N_to_EmN(30000).." \x1F£Ğ£ô£ó"),4)},{preserved})
-Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 Á÷Á¢ ÆÄ±« \x07º¸³Ê½º \x1F£«"..N_to_EmN(30000).." \x1F£Ğ£ô£ó"),4)},{preserved})
-Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayExtText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 Á÷Á¢ ÆÄ±« \x07º¸³Ê½º \x1F£«"..N_to_EmN(30000).." \x1F£Ğ£ô£ó"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,150)},{SetKills(i,Subtract,1,150),SetScore(i,Add,50000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<19>B<04>onus").."\x04 ì§ì ‘ íŒŒê´´ \x07ë³´ë„ˆìŠ¤ \x1Fï¼‹"..N_to_EmN(50000).." \x1Fï¼°ï½”ï½“"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 ì§ì ‘ íŒŒê´´ \x07ë³´ë„ˆìŠ¤ \x1Fï¼‹"..N_to_EmN(30000).." \x1Fï¼°ï½”ï½“"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 ì§ì ‘ íŒŒê´´ \x07ë³´ë„ˆìŠ¤ \x1Fï¼‹"..N_to_EmN(30000).." \x1Fï¼°ï½”ï½“"),4)},{preserved})
+Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,30000,Kills),DisplayText("\x0D\x0D!H"..StrDesignX2(Conv_HStr("<1D>F<4>it").."\x04 ì§ì ‘ íŒŒê´´ \x07ë³´ë„ˆìŠ¤ \x1Fï¼‹"..N_to_EmN(30000).." \x1Fï¼°ï½”ï½“"),4)},{preserved})
 
 TriggerX(i,{CDeaths(FP,AtLeast,6,GiveRate[i+1])},{SetCDeaths(FP,Subtract,6,GiveRate[i+1])},{preserved})
 TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[i+1])},{preserved})
 	for j=0, 3 do
 		if i~=j then
 		for l=0, 5 do
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {i},
 			conditions = {
 				Label(0);
@@ -507,12 +507,12 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 			actions = {
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayExtText(StrDesign("\x04ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù."),4);
+				DisplayText(StrDesign("\x04ì”ì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤."),4);
 				SetCDeaths(FP,Add,1,CUnitRefrash);
 				PreserveTrigger();
 			},
 			}
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {i},
 			conditions = {
 				Label(0);
@@ -527,16 +527,16 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 				SetResources(j,Add,GiveRate2[l+1],Ore);
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
-				DisplayExtText(StrDesign(PlayerString[j+1].."\x04¿¡°Ô \x1F"..GiveRate2[l+1].." Ore\x04¸¦ ±âºÎÇÏ¿´½À´Ï´Ù."),4);
+				DisplayText(StrDesign(PlayerString[j+1].."\x04ì—ê²Œ \x1F"..GiveRate2[l+1].." Ore\x04ë¥¼ ê¸°ë¶€í•˜ì˜€ìŠµë‹ˆë‹¤."),4);
 				SetMemory(0x6509B0,SetTo,j);
-				DisplayExtText(StrDesign(PlayerString[i+1].."\x04¿¡°Ô \x1F"..GiveRate2[l+1].." Ore\x04¸¦ ±âºÎ¹Ş¾Ò½À´Ï´Ù."),4);
+				DisplayText(StrDesign(PlayerString[i+1].."\x04ì—ê²Œ \x1F"..GiveRate2[l+1].." Ore\x04ë¥¼ ê¸°ë¶€ë°›ì•˜ìŠµë‹ˆë‹¤."),4);
 				SetMemory(0x6509B0,SetTo,i);
 				SetCDeaths(FP,Add,1,CUnitRefrash);
 				PreserveTrigger();
 			},
 			}
 		end
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {i},
 			conditions = {
 				Label();
@@ -545,7 +545,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 				HumanCheck(j,0);
 			},
 			actions = {
-				DisplayExtText(StrDesign(PlayerString[j+1].."\x04ÀÌ(°¡) Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."),4);
+				DisplayText(StrDesign(PlayerString[j+1].."\x04ì´(ê°€) ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."),4);
 				--SetMemoryB(0x58D2B0+(46*i)+GiveUnitID[j+1],SetTo,0);
 				ModifyUnitEnergy(All,GiveUnitID[j+1],i,64,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",i);
@@ -566,7 +566,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 	for j = 0, 3 do
 	TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
 	TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
-		DisplayExtText(DelayMedicT[j+1],4),
+		DisplayText(DelayMedicT[j+1],4),
 		SetCDeaths(FP,Add,1,DelayMedic[i+1]),
 		GiveUnits(All,72,i,"Anywhere",P12),
 		ModifyUnitEnergy(1,72,P12,64,0);
@@ -621,7 +621,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		GiveUnits(All,22,i,"Anywhere",P12);
 		ModifyUnitEnergy(All,22,P12,64,0);
 		RemoveUnitAt(All,22,"Anywhere",P12);
-		DisplayExtText(StrDesign("\x1CBGM\x04À» µèÁö ¾Ê½À´Ï´Ù."),4);
+		DisplayText(StrDesign("\x1CBGM\x04ì„ ë“£ì§€ ì•ŠìŠµë‹ˆë‹¤."),4);
 		SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 	},{preserved})
@@ -630,16 +630,16 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		GiveUnits(All,22,i,"Anywhere",P12);
 		ModifyUnitEnergy(All,22,P12,64,0);
 		RemoveUnitAt(All,22,"Anywhere",P12);
-		DisplayExtText(StrDesign("\x1CBGM\x04À» µè½À´Ï´Ù."),4);
+		DisplayText(StrDesign("\x1CBGM\x04ì„ ë“£ìŠµë‹ˆë‹¤."),4);
 		SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 	},{preserved})
 
 
-	UnitLimit(i,7,25,"SCV´Â",500)
-	UnitLimit(i,125,15,"º¡Ä¿´Â",8000)
-	UnitLimit(i,124,15,"ÅÍ·¿Àº",4000)
-	Trigger { -- ½ºÆÀÆÑ
+	UnitLimit(i,7,25,"SCVëŠ”",500)
+	UnitLimit(i,125,15,"ë²™ì»¤ëŠ”",8000)
+	UnitLimit(i,124,15,"í„°ë ›ì€",4000)
+	Trigger { -- ìŠ¤íŒ€íŒ©
 	players = {i},
 	conditions = {
 		Label(0);
@@ -650,12 +650,12 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,71);
 		ModifyUnitEnergy(1,71,i,64,0);
 		RemoveUnitAt(1,71,"Anywhere",i);
-		DisplayExtText(StrDesign("\x04¿ø°İ \x1B½ºÆÀÆÑ\x04±â´ÉÀ» »ç¿ëÇÕ´Ï´Ù."),4);
+		DisplayText(StrDesign("\x04ì›ê²© \x1BìŠ¤íŒ€íŒ©\x04ê¸°ëŠ¥ì„ ì‚¬ìš©í•©ë‹ˆë‹¤."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},
 	}
-	Trigger { -- ½ºÆÀÆÑ
+	Trigger { -- ìŠ¤íŒ€íŒ©
 	players = {i},
 	conditions = {
 		Label(0);
@@ -666,12 +666,12 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,74);
 		ModifyUnitEnergy(1,74,i,64,0);
 		RemoveUnitAt(1,74,"Anywhere",i);
-		DisplayExtText(StrDesign("\x04¸ÖÆ¼ \x07½ºÅ¾\x04±â´ÉÀ» »ç¿ëÇÕ´Ï´Ù."),4);
+		DisplayText(StrDesign("\x04ë©€í‹° \x07ìŠ¤íƒ‘\x04ê¸°ëŠ¥ì„ ì‚¬ìš©í•©ë‹ˆë‹¤."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},
 	}
-	Trigger { -- ½ºÆÀÆÑ
+	Trigger { -- ìŠ¤íŒ€íŒ©
 	players = {i},
 	conditions = {
 		Label(0);
@@ -682,7 +682,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 		SetDeaths(i,Add,1,75);
 		ModifyUnitEnergy(1,75,i,64,0);
 		RemoveUnitAt(1,75,"Anywhere",i);
-		DisplayExtText(StrDesign("\x04¸ÖÆ¼ \x11È¦µå\x04±â´ÉÀ» »ç¿ëÇÕ´Ï´Ù."),4);
+		DisplayText(StrDesign("\x04ë©€í‹° \x11í™€ë“œ\x04ê¸°ëŠ¥ì„ ì‚¬ìš©í•©ë‹ˆë‹¤."),4);
 		SetCDeaths(FP,Add,1,CUnitRefrash);
 		PreserveTrigger();
 	},
@@ -692,7 +692,7 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 	if Limit == 1 then
 		--TriggerX(FP,{CD(TestMode,1)},{SetResources(Force1,SetTo,0x66666666,Ore)})
 	end
-	--¼±ÅÃÀÎ½Ä ÇÇÅë º¸ÀÓ ºñ°øÀ¯
+	--ì„ íƒì¸ì‹ í”¼í†µ ë³´ì„ ë¹„ê³µìœ 
 --DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))
 
 local HealT = CreateCcode()
@@ -709,28 +709,28 @@ DoActionsX(FP,SetCDeaths(FP,Add,1,HealT))
 
 local iStrinit = def_sIndex()
 CJump(FP, iStrinit)
-t01 = " 0000000000 \x04(00000\x0D\x04) - 00000  \x1B£Ä£í£ç"
-t02 = " 0000000000 \x04(00000\x0D\x04) - 00\x1F.0 £¥"
+t01 = " 0000000000 \x04(00000\x0D\x04) - 00000  \x1Bï¼¤ï½ï½‡"
+t02 = " 0000000000 \x04(00000\x0D\x04) - 00\x1F.0 ï¼…"
 iStrSize1 = GetiStrSize(0,t01)
 iStrSize2 = GetiStrSize(0,t02)
-S1 = MakeiTblString(1463,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-S2 = MakeiTblString(1464,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
+S1 = MakeiTblString(1463,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+S2 = MakeiTblString(1464,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
 iTbl1 = GetiTblId(FP,1463,S1) --NMDMG
 iTbl2 = GetiTblId(FP,1464,S2) --PerDMG
-Str1, Str1a, Str1s = SaveiStrArr(FP,t01)
-Str2, Str2a, Str2s = SaveiStrArr(FP,t02)
+Str1, Str1a, Str1s = SaveiStrArrX(FP,t01)
+Str2, Str2a, Str2s = SaveiStrArrX(FP,t02)
 
 BT = {
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x10£Ä\x04£é£ö£é£ä£å \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x15£Ô\x04£å£î£å£â£ò£é£ó \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x18£Ä\x04£å£í£é£ó£å \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1B£Á\x04£î£ï£í£á£ì£ù \x11¡·\x08¡¤\x11¡¤\x07¡¤"
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x10ï¼¤\x04ï½‰ï½–ï½‰ï½„ï½… \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x15ï¼´\x04ï½…ï½ï½…ï½‚ï½’ï½‰ï½“ \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x18ï¼¤\x04ï½…ï½ï½‰ï½“ï½… \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x1Bï¼¡\x04ï½ï½ï½ï½ï½Œï½™ \x11ã€‹\x08Â·\x11Â·\x07Â·"
 }
 BT2 = {
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1F£É\x04nfinite \x10£Ä\x04ivide, \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x10£Ğ\x04entiment in \x15£Ô\x04enebris \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x19£×\x04orld \x18£Ä\x04emication \x11¡·\x08¡¤\x11¡¤\x07¡¤",
-	"\x07¡¤\x11¡¤\x08¡¤\x11¡¶ \x1C£Á\x04rcana \x1B£Á\x04nomaly \x11¡·\x08¡¤\x11¡¤\x07¡¤"
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x1Fï¼©\x04nfinite \x10ï¼¤\x04ivide, \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x10ï¼°\x04entiment in \x15ï¼´\x04enebris \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x19ï¼·\x04orld \x18ï¼¤\x04emication \x11ã€‹\x08Â·\x11Â·\x07Â·",
+	"\x07Â·\x11Â·\x08Â·\x11ã€Š \x1Cï¼¡\x04rcana \x1Bï¼¡\x04nomaly \x11ã€‹\x08Â·\x11Â·\x07Â·"
 }
 BStr= {}
 BStra= {}
@@ -739,7 +739,7 @@ BStr2= {}
 BStr2a= {}
 BStr2s= {}
 
-BName, BNamea, BNames = SaveiStrArr(FP,MakeiStrLetter("\x0D", GetiStrSize(0,BT2[2])+5))
+BName, BNamea, BNames = SaveiStrArrX(FP,MakeiStrLetter("\x0D", GetiStrSize(0,BT2[2])+5))
 
 BNArr={}
 
@@ -748,8 +748,8 @@ BTblArr = {}
 for j,k in pairs({87,74,5,2}) do
 	table.insert(BNArr,MakeiTblString(k+1,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,BT2[j])+5),"Base",1))
 	table.insert(BTblArr,GetiTblId(FP,k+1,BNArr[j]))
-	BStr[j],BStra[j],BStrs[j] = SaveiStrArr(FP,BT[j])
-	BStr2[j],BStr2a[j],BStr2s[j] = SaveiStrArr(FP,BT2[j])
+	BStr[j],BStra[j],BStrs[j] = SaveiStrArrX(FP,BT[j])
+	BStr2[j],BStr2a[j],BStr2s[j] = SaveiStrArrX(FP,BT2[j])
 end
 
 CJumpEnd(FP, iStrinit)
@@ -839,7 +839,7 @@ local SelATK = CreateVar(FP)
 
 
 		
-	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- ¿ø°İ
+	CIf(FP,CDeaths(FP,AtLeast,1,CUnitFlag)) -- ì›ê²©
 		CMov(FP,0x6509B0,19025+19)
 		CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 			CIf(FP,{DeathsX(CurrentPlayer,AtMost,3,0,0xFF),DeathsX(CurrentPlayer,AtLeast,256,0,0xFF00)})
@@ -876,7 +876,7 @@ local SelATK = CreateVar(FP)
 					TSetDeaths(_Sub(BackupCp,15),SetTo,TempPos,0)})
 				f_LoadCp()
 			CIfEnd()
-			CIf(FP,CD(MarDup,1))--°ãÄ¡±â½ÇÇà
+			CIf(FP,CD(MarDup,1))--ê²¹ì¹˜ê¸°ì‹¤í–‰
 				f_SaveCp()
 				CIf(FP,{TTMemoryX(_Add(BackupCp,6), NotSame, 111,0xFF),TMemoryX(_Add(BackupCp,36),Exactly,0,0xA00000)})
 					CDoActions(FP,{
@@ -885,7 +885,7 @@ local SelATK = CreateVar(FP)
 				CIfEnd()
 				f_LoadCp()
 			CIfEnd()
-			CIf(FP,CD(MarDup,2))--°ãÄ¡±âÇØÁ¦
+			CIf(FP,CD(MarDup,2))--ê²¹ì¹˜ê¸°í•´ì œ
 				f_SaveCp()
 				CIf(FP,{TTMemoryX(_Add(BackupCp,6), NotSame, 111,0xFF),TMemoryX(_Add(BackupCp,36),Exactly,0xA00000,0xA00000)})
 					CDoActions(FP,{
@@ -903,7 +903,7 @@ local SelATK = CreateVar(FP)
 		CWhileEnd()
 	CIfEnd()
 	DoActionsX(FP,{SetCp(FP),SetDeaths(Force1,SetTo,0,71),SetDeaths(Force1,SetTo,0,74),SetDeaths(Force1,SetTo,0,75),SetCDeaths(FP,SetTo,0,CUnitFlag)})
-	CIf(FP,CD(MarDup2,1)) -- ¹¶Ä¡±â ½ÇÇà
+	CIf(FP,CD(MarDup2,1)) -- ë­‰ì¹˜ê¸° ì‹¤í–‰
 	
 	Player_0x4D = CreateVarArr(4,FP)
 	Player_0x18 = CreateVarArr(4,FP)
@@ -949,8 +949,8 @@ for i=0, 3 do
 	CIfEnd()
 
 	for i = 128,131 do
-		ObserverChatToOb(FP,0x58D740+(20*59),i,"END",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x1CÃ¤ÆÃ¡æ°üÀüÀÚ\x04¿¡°Ô ¸Ş¼¼Áö¸¦ º¸³À´Ï´Ù.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
-		ObserverChatToAll(FP,0x58D740+(20*59),i,"HOME",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x07Ã¤ÆÃ¡æÀüÃ¼\x04¿¡°Ô ¸Ş¼¼Áö¸¦ º¸³À´Ï´Ù.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
-		ObserverChatToNone(FP,0x58D740+(20*59),i,"INSERT",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x02Ã¤ÆÃ¡æ´ë»ó¾øÀ½\x04¿¡°Ô ¸Ş¼¼Áö¸¦ º¸³À´Ï´Ù.(±Ó¸» ¸í·É¾î µî Àü¿ë)").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+		ObserverChatToOb(FP,0x58D740+(20*59),i,"END",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x1Cì±„íŒ…â†’ê´€ì „ì\x04ì—ê²Œ ë©”ì„¸ì§€ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+		ObserverChatToAll(FP,0x58D740+(20*59),i,"HOME",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x07ì±„íŒ…â†’ì „ì²´\x04ì—ê²Œ ë©”ì„¸ì§€ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+		ObserverChatToNone(FP,0x58D740+(20*59),i,"INSERT",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x02ì±„íŒ…â†’ëŒ€ìƒì—†ìŒ\x04ì—ê²Œ ë©”ì„¸ì§€ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.(ê·“ë§ ëª…ë ¹ì–´ ë“± ì „ìš©)").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
 	end
 end
