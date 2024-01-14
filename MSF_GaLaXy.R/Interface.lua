@@ -1,18 +1,18 @@
 function Interface()
 	local InfWhile = CreateCcode()
 	
-	Trigger { -- Á¶ÇÕ¹ý insertÅ°
+	Trigger { -- ì¡°í•©ë²• insertí‚¤
 		players = {Force1},
 		conditions = {
 			Memory(0x596A44, Exactly, 0x00000100);
 		},
 		actions = {
-			--DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04°£´Ü Á¶ÇÕ¹ý\n\x12\x04Marine + \x1F"..HMCost.."¿ø \x04= \x1BH \x04Marine\n\x12\x1BH \x04Marine + \x1F"..GMCost.."¿ø \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."¿ø \x04= \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á\n\x12\x04È÷µçÁ¶ÇÕÀº ¾ø½À´Ï´Ù.\n\x12\x04È¯Àü : \x03¹è·°¿¡¼­ F¸¦ ´©¸£¼¼¿ä.\n\x12\x04´Ý±â : \x03Delete\n\n\n",4);
-			DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04°£´Ü È®·üÇ¥\n\x12\x04Marine \x07- \x0E65.00%\n\x12\x1BH \x04Marine \x07- \x0F20.00%\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x07- \x108.90%\n\x12\x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á \x07- \x114.10%\n\x12\x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á \x07- \x081.70%\n\x12\x07£Ó\x1F£Õ\x1C£Ð\x0E£Å\x0F£Ò\x10£Î\x17£Ï\x11£Ö\x08£Á \x07- \x1D0.25%\n\x12\x11£Ñ\x1F£Õ\x1B£Á\x16£Ó\x10£Á\x1D£Ò \x07- \x1F0.05%\n\x12\x04\x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á\x04 ±îÁö ÇÏÀ§ À¯´Ö 3±â·Î \x07Á¶ÇÕ°¡´É\n\x12\x04È¯Àü : \x03¹è·°¿¡¼­ F¸¦ ´©¸£¼¼¿ä. \x04´Ý±â : \x03Delete",4);
+			--DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04ê°„ë‹¨ ì¡°í•©ë²•\n\x12\x04Marine + \x1F"..HMCost.."ì› \x04= \x1BH \x04Marine\n\x12\x1BH \x04Marine + \x1F"..GMCost.."ì› \x04= \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04 + \x1F"..NeCost.."ì› \x04= \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡\n\x12\x04ížˆë“ ì¡°í•©ì€ ì—†ìŠµë‹ˆë‹¤.\n\x12\x04í™˜ì „ : \x03ë°°ëŸ­ì—ì„œ Fë¥¼ ëˆ„ë¥´ì„¸ìš”.\n\x12\x04ë‹«ê¸° : \x03Delete\n\n\n",4);
+			DisplayText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x12\x04ê°„ë‹¨ í™•ë¥ í‘œ\n\x12\x04Marine \x07- \x0E65.00%\n\x12\x1BH \x04Marine \x07- \x0F20.00%\n\x12\x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x07- \x108.90%\n\x12\x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ \x07- \x114.10%\n\x12\x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡ \x07- \x081.70%\n\x12\x07ï¼³\x1Fï¼µ\x1Cï¼°\x0Eï¼¥\x0Fï¼²\x10ï¼®\x17ï¼¯\x11ï¼¶\x08ï¼¡ \x07- \x1D0.25%\n\x12\x11ï¼±\x1Fï¼µ\x1Bï¼¡\x16ï¼³\x10ï¼¡\x1Dï¼² \x07- \x1F0.05%\n\x12\x04\x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡\x04 ê¹Œì§€ í•˜ìœ„ ìœ ë‹› 3ê¸°ë¡œ \x07ì¡°í•©ê°€ëŠ¥\n\x12\x04í™˜ì „ : \x03ë°°ëŸ­ì—ì„œ Fë¥¼ ëˆ„ë¥´ì„¸ìš”. \x04ë‹«ê¸° : \x03Delete",4);
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- Ã¤ÆÃÃ¢ Á¤¸® deleteÅ°
+	Trigger { -- ì±„íŒ…ì°½ ì •ë¦¬ deleteí‚¤
 		players = {Force1},
 		conditions = {
 			Memory(0x596A44, Exactly, 65536);
@@ -22,7 +22,7 @@ function Interface()
 			PreserveTrigger();
 			},
 		}
-		Trigger { -- µ¿¸Í»óÅÂ °íÁ¤
+		Trigger { -- ë™ë§¹ìƒíƒœ ê³ ì •
 		players = {Force1},
 		actions = {
 			SetAllianceStatus(Force1,Ally);
@@ -30,7 +30,7 @@ function Interface()
 			PreserveTrigger();
 		},
 	}
-	Trigger { -- ºñÀü preserved Á¦°Å
+	Trigger { -- ë¹„ì „ preserved ì œê±°
 	players = {Force1},
 	actions = {
 		RunAIScript("Turn ON Shared Vision for Player 1");
@@ -42,8 +42,8 @@ function Interface()
 		RunAIScript("Turn ON Shared Vision for Player 7");
 	},
 }
-	for i = 1, 6 do -- °­Åð±â´É
-		Trigger { -- °­ÅðÅäÅ«
+	for i = 1, 6 do -- ê°•í‡´ê¸°ëŠ¥
+		Trigger { -- ê°•í‡´í† í°
 			players = {FP},
 			conditions = {
 				Label(0);
@@ -56,28 +56,28 @@ function Interface()
 				},
 			}
 			for j = 1, 4 do
-				Trigger { -- °­ÅðÅäÅ«
+				Trigger { -- ê°•í‡´í† í°
 					players = {i},
 					conditions = {
 						Label(0);
 						CDeaths(FP,Exactly,j,BanCode[i]);
 					},
 					actions = {
-						RotatePlayer({DisplayTextX("\x07¡º "..PlayerString[i+1].."\x04¿¡°Ô \x08°æ°í°¡ ÃÑ "..j.."È¸ ´©Àû\x04 µÇ¾ú½À´Ï´Ù. ÃÑ 5È¸ ´©Àû½Ã \x08°­Åð Ã³¸® \x04µË´Ï´Ù. \x07¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+						RotatePlayer({DisplayTextX("\x07ã€Ž "..PlayerString[i+1].."\x04ì—ê²Œ \x08ê²½ê³ ê°€ ì´ "..j.."íšŒ ëˆ„ì \x04 ë˜ì—ˆìŠµë‹ˆë‹¤. ì´ 5íšŒ ëˆ„ì ì‹œ \x08ê°•í‡´ ì²˜ë¦¬ \x04ë©ë‹ˆë‹¤. \x07ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
 						},
 					}
 			end
-			Trigger { -- °­Åð
+			Trigger { -- ê°•í‡´
 			players = {i},
 			conditions = {
 				Label(0);
 				CDeaths(FP,AtLeast,5,BanCode[i]);
 			},
 			actions = {
-				RotatePlayer({DisplayTextX("\x07¡º \x04"..PlayerString[i+1].."\x04ÀÇ °­ÅðÃ³¸®°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\x07 ¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+				RotatePlayer({DisplayTextX("\x07ã€Ž \x04"..PlayerString[i+1].."\x04ì˜ ê°•í‡´ì²˜ë¦¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 				},
 			}
-			Trigger { -- °­Åð µå¶ø
+			Trigger { -- ê°•í‡´ ë“œëž
 				players = {i},
 				conditions = {
 					Label(0);
@@ -97,20 +97,20 @@ function Interface()
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
-					DisplayText("\x07¡º \x04´ç½ÅÀº °­µÇ´çÇß½À´Ï´Ù. µå¶ø ÄÚµå 0x32223223 ÀÛµ¿.\x07 ¡»",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
+					DisplayText("\x07ã€Ž \x04ë‹¹ì‹ ì€ ê°•ë˜ë‹¹í–ˆìŠµë‹ˆë‹¤. ë“œëž ì½”ë“œ 0x32223223 ìž‘ë™.\x07 ã€",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);
 					
 					},
@@ -119,7 +119,7 @@ function Interface()
 			
 			end
 	for i = 0, 6 do
-		Trigger { -- °­Åð
+		Trigger { -- ê°•í‡´
 		players = {i},
 		conditions = {
 			Label(0);
@@ -133,19 +133,19 @@ function Interface()
 		}
 		
 		
-		Trigger { -- °­Åð
+		Trigger { -- ê°•í‡´
 		players = {i},
 		conditions = {
 			Label(0);
 			CDeaths(FP, AtLeast, 2, DMode);
-			Score(i,Custom,AtLeast,100);--µ¥Ä« 100 ÀÌ»óÀÏ °æ¿ì
+			Score(i,Custom,AtLeast,100);--ë°ì¹´ 100 ì´ìƒì¼ ê²½ìš°
 		},
 		actions = {
-			RotatePlayer({DisplayTextX("\x07¡º \x04"..PlayerString[i+1].."\x04°¡ µ¥½ºÄ«¿îÆ® ¾Æ¿ôÀ¸·Î ÀÎÇØ \x06µå¶ø \x04´çÇß½À´Ï´Ù.\x07 ¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			RotatePlayer({DisplayTextX("\x07ã€Ž \x04"..PlayerString[i+1].."\x04ê°€ ë°ìŠ¤ì¹´ìš´íŠ¸ ì•„ì›ƒìœ¼ë¡œ ì¸í•´ \x06ë“œëž \x04ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 			},
 		}
 		
-		Trigger { -- °­Åð
+		Trigger { -- ê°•í‡´
 		players = {i},
 		conditions = {
 			Label(0);
@@ -154,17 +154,17 @@ function Interface()
 			Bring(i, Exactly, 0, "Men", 64);
 		},
 		actions = {
-			RotatePlayer({DisplayTextX("\x07¡º \x04"..PlayerString[i+1].."\x04°¡ ¸ðµçÀ¯´Ö Àü¸ê·Î ÀÎÇØ \x06µå¶ø \x04´çÇß½À´Ï´Ù.\x07 ¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			RotatePlayer({DisplayTextX("\x07ã€Ž \x04"..PlayerString[i+1].."\x04ê°€ ëª¨ë“ ìœ ë‹› ì „ë©¸ë¡œ ì¸í•´ \x06ë“œëž \x04ë‹¹í–ˆìŠµë‹ˆë‹¤.\x07 ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
 			},
 		}
 		
-		Trigger { -- °­Åð µå¶ø
+		Trigger { -- ê°•í‡´ ë“œëž
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(FP, Exactly, 2, DMode);--µå¶ø¸ðµå
-				Score(i,Custom,AtLeast,100);--µ¥Ä« 100 ÀÌ»óÀÏ °æ¿ì
-				Memory(0x57F1B0, Exactly, i)--·ÎÄÃÇÃ·¹ÀÌ¾î¾ÆÀÌµð
+				CDeaths(FP, Exactly, 2, DMode);--ë“œëžëª¨ë“œ
+				Score(i,Custom,AtLeast,100);--ë°ì¹´ 100 ì´ìƒì¼ ê²½ìš°
+				Memory(0x57F1B0, Exactly, i)--ë¡œì»¬í”Œë ˆì´ì–´ì•„ì´ë””
 				
 			},
 			actions = {
@@ -180,31 +180,31 @@ function Interface()
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				SetCD(Drop, 1),--µå¶ø
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				SetCD(Drop, 1),--ë“œëž
 				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);--ExitDrop
 				},
 			}
-		Trigger { -- °­Åð ÀÀ¾ø
+		Trigger { -- ê°•í‡´ ì‘ì—†
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(FP, Exactly, 3, DMode);--µå¶ø¸ðµå
-				Score(i,Custom,AtLeast,100);--µ¥Ä« 100 ÀÌ»óÀÏ °æ¿ì
-				Memory(0x57F1B0, Exactly, i)--·ÎÄÃÇÃ·¹ÀÌ¾î¾ÆÀÌµð
+				CDeaths(FP, Exactly, 3, DMode);--ë“œëžëª¨ë“œ
+				Score(i,Custom,AtLeast,100);--ë°ì¹´ 100 ì´ìƒì¼ ê²½ìš°
+				Memory(0x57F1B0, Exactly, i)--ë¡œì»¬í”Œë ˆì´ì–´ì•„ì´ë””
 				
 			},
 			actions = {
@@ -220,32 +220,32 @@ function Interface()
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				SetCD(InfWhile, 1),--ÀÀ´ä¾øÀ½
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				SetCD(InfWhile, 1),--ì‘ë‹µì—†ìŒ
 				},
 			}
 			
-		Trigger { -- °­Åð µå¶ø
+		Trigger { -- ê°•í‡´ ë“œëž
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(FP, Exactly, 2, DMode);--µå¶ø¸ðµå
+				CDeaths(FP, Exactly, 2, DMode);--ë“œëžëª¨ë“œ
 				CDeaths(FP,AtLeast,1,GStart),
 				Bring(i, Exactly, 0, "Men", 64);
-				Memory(0x57F1B0, Exactly, i)--·ÎÄÃÇÃ·¹ÀÌ¾î¾ÆÀÌµð
+				Memory(0x57F1B0, Exactly, i)--ë¡œì»¬í”Œë ˆì´ì–´ì•„ì´ë””
 				
 			},
 			actions = {
@@ -261,32 +261,32 @@ function Interface()
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ¹ÙÅÁÈ­¸é°¡¼­ ¹Ù¶÷Á» ½ý°í¿À½Ã±¸¿ä.\x07 ¡»",4);
-				SetCD(Drop, 1),--µå¶ø
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ë°”íƒ•í™”ë©´ê°€ì„œ ë°”ëžŒì¢€ ì¬ê³ ì˜¤ì‹œêµ¬ìš”.\x07 ã€",4);
+				SetCD(Drop, 1),--ë“œëž
 				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);--ExitDrop
 				},
 			}
-		Trigger { -- °­Åð ÀÀ¾ø
+		Trigger { -- ê°•í‡´ ì‘ì—†
 			players = {i},
 			conditions = {
 				Label(0);
-				CDeaths(FP, Exactly, 3, DMode);--µå¶ø¸ðµå
+				CDeaths(FP, Exactly, 3, DMode);--ë“œëžëª¨ë“œ
 				CDeaths(FP,AtLeast,1,GStart),
 				Bring(i, Exactly, 0, "Men", 64);
-				Memory(0x57F1B0, Exactly, i)--·ÎÄÃÇÃ·¹ÀÌ¾î¾ÆÀÌµð
+				Memory(0x57F1B0, Exactly, i)--ë¡œì»¬í”Œë ˆì´ì–´ì•„ì´ë””
 				
 			},
 			actions = {
@@ -302,21 +302,21 @@ function Interface()
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				DisplayText("\x07¡º \x04Àú·±.. ¾ó¸¶³ª Á×À¸½Å °Ì´Ï±î? Á» ´õ ³ë·ÂÇÏ¼¼¿ä. ½ºÅ¸°¡ ½Ã°øÀÇ ÆøÇ³¿¡ ºüÁý´Ï´Ù.\x07 ¡»",4);
-				SetCD(InfWhile, 1),--ÀÀ´ä¾øÀ½
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				DisplayText("\x07ã€Ž \x04ì €ëŸ°.. ì–¼ë§ˆë‚˜ ì£½ìœ¼ì‹  ê²ë‹ˆê¹Œ? ì¢€ ë” ë…¸ë ¥í•˜ì„¸ìš”. ìŠ¤íƒ€ê°€ ì‹œê³µì˜ í­í’ì— ë¹ ì§‘ë‹ˆë‹¤.\x07 ã€",4);
+				SetCD(InfWhile, 1),--ì‘ë‹µì—†ìŒ
 				},
 			}
 
@@ -340,19 +340,19 @@ function Interface()
 			Trigger2(i,{DeathsX(i,Exactly,0,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
-				DisplayText("\x07¡º \x1CBGM\x04À» µèÁö ¾Ê½À´Ï´Ù. \x07¡»",4);
+				DisplayText("\x07ã€Ž \x1CBGM\x04ì„ ë“£ì§€ ì•ŠìŠµë‹ˆë‹¤. \x07ã€",4);
 				SetDeathsX(i,SetTo,1*16777216,12,0xFF000000);
 			},{preserved})
 
 			Trigger2(i,{DeathsX(i,Exactly,1*16777216,12,0xFF000000);Command(i,AtLeast,1,3);},{
 				GiveUnits(All,3,i,"Anywhere",P12);
 				RemoveUnitAt(All,3,"Anywhere",P12);
-				DisplayText("\x07¡º \x1CBGM\x04À» µè½À´Ï´Ù. \x07¡»",4);
+				DisplayText("\x07ã€Ž \x1CBGM\x04ì„ ë“£ìŠµë‹ˆë‹¤. \x07ã€",4);
 				SetDeathsX(i,SetTo,0*16777216,12,0xFF000000);
 			},{preserved})
 
 			for k = 0, 5 do
-				Trigger { -- ±âºÎ ±Ý¾× º¯°æ
+				Trigger { -- ê¸°ë¶€ ê¸ˆì•¡ ë³€ê²½
 					players = {i},
 					conditions = {
 						Label(0);
@@ -400,7 +400,7 @@ Trigger {
 	}
 }
 
-Trigger { -- ÀÚµ¿È¯Àü
+Trigger { -- ìžë™í™˜ì „
 players = {i},
 conditions = {
 	Command(i,AtLeast,1,"Terran Vulture");
@@ -408,7 +408,7 @@ conditions = {
 actions = {
 	RemoveUnitAt(1,"Terran Vulture","Anywhere",i);
 	SetDeaths(i,SetTo,50,"Terran Barracks");
-	DisplayText(StrDesign("\x07ÀÚµ¿È¯Àü\x04À» »ç¿ëÇÏ¼Ì½À´Ï´Ù. - \x1F1000 O r e"),4);
+	DisplayText(StrDesign("\x07ìžë™í™˜ì „\x04ì„ ì‚¬ìš©í•˜ì…¨ìŠµë‹ˆë‹¤. - \x1F1000 O r e"),4);
 	PreserveTrigger();
 },
 }
@@ -450,14 +450,14 @@ end
 
 local ACArr = {0,20,100,16}
 local ACArr2 = {
-	StrDesign("\x04º»Áø ±ÙÃ³ÀÇ ¸ðµç \x04Marine \x04À» Á¶ÇÕÇÕ´Ï´Ù."),
-	StrDesign("\x04º»Áø ±ÙÃ³ÀÇ ¸ðµç \x1BH \x04Marine \x04À» Á¶ÇÕÇÕ´Ï´Ù."),
-	StrDesign("\x04º»Áø ±ÙÃ³ÀÇ ¸ðµç \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04À» Á¶ÇÕÇÕ´Ï´Ù."),
-	StrDesign("\x04º»Áø ±ÙÃ³ÀÇ ¸ðµç \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á \x04À» Á¶ÇÕÇÕ´Ï´Ù.")
+	StrDesign("\x04ë³¸ì§„ ê·¼ì²˜ì˜ ëª¨ë“  \x04Marine \x04ì„ ì¡°í•©í•©ë‹ˆë‹¤."),
+	StrDesign("\x04ë³¸ì§„ ê·¼ì²˜ì˜ ëª¨ë“  \x1BH \x04Marine \x04ì„ ì¡°í•©í•©ë‹ˆë‹¤."),
+	StrDesign("\x04ë³¸ì§„ ê·¼ì²˜ì˜ ëª¨ë“  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04ì„ ì¡°í•©í•©ë‹ˆë‹¤."),
+	StrDesign("\x04ë³¸ì§„ ê·¼ì²˜ì˜ ëª¨ë“  \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ \x04ì„ ì¡°í•©í•©ë‹ˆë‹¤.")
 }
 
 for j,k in pairs({50,51,53,54}) do
-	Trigger { -- ÀÚµ¿Á¶ÇÕ
+	Trigger { -- ìžë™ì¡°í•©
 	players = {FP},
 	conditions = {
 		Label();
@@ -475,7 +475,7 @@ for j,k in pairs({50,51,53,54}) do
 	}
 
 end
-Trigger { -- ÀÚµ¿Á¶ÇÕ
+Trigger { -- ìžë™ì¡°í•©
 players = {FP},
 conditions = {
 	Label();
@@ -489,13 +489,13 @@ actions = {
 	MoveUnit(All, 16, i, 21, 3);
 	SetCD(AutoCombiCcode[i+1], 1);
 	SetCp(i);
-	DisplayText(StrDesign("\x04º»Áø ±ÙÃ³ÀÇ ¸ðµç \x1FÁ¶ÇÕ °¡´É À¯´Ö \x04À» Á¶ÇÕÇÕ´Ï´Ù."),4);
+	DisplayText(StrDesign("\x04ë³¸ì§„ ê·¼ì²˜ì˜ ëª¨ë“  \x1Fì¡°í•© ê°€ëŠ¥ ìœ ë‹› \x04ì„ ì¡°í•©í•©ë‹ˆë‹¤."),4);
 	SetCp(FP);
 	PreserveTrigger();
 },
 }
 
-Trigger { -- ÀÚµ¿Á¶ÇÕ
+Trigger { -- ìžë™ì¡°í•©
 players = {FP},
 conditions = {
 	Label();
@@ -554,7 +554,7 @@ local TempOre=CreateVar(FP)
 
 HealT = CreateCcode()
 
-Trigger { -- ÈúÁ¸Æ®¸®°Å
+Trigger { -- ížì¡´íŠ¸ë¦¬ê±°
 players = {FP},
 	conditions = {
 		Label(0);
@@ -572,7 +572,7 @@ players = {FP},
 
 CIf(FP,{CDeaths(FP,Exactly,50,HealT)})
 
-for j=0,10 do -- ÆÄÀÏ·± °¹¼ö¸¶´Ù º¡Ä¿ Ã¼·Â ¼³Á¤
+for j=0,10 do -- íŒŒì¼ëŸ° ê°¯ìˆ˜ë§ˆë‹¤ ë²™ì»¤ ì²´ë ¥ ì„¤ì •
 	TriggerX(FP,{CD(PyCCode,j)},{ModifyUnitHitPoints(All,125,AllPlayers,21,100-(9*j));},{preserved})
 end
 
@@ -669,7 +669,7 @@ NIf(FP,Never())
 		ModifyUnitShields(All,"Men",i,"Anywhere",100),
 		ModifyUnitShields(All,"Buildings",i,"Anywhere",100)
 	},{preserved})
-	for j=0,10 do -- ÆÄÀÏ·± °¹¼ö¸¶´Ù º¡Ä¿ Ã¼·Â ¼³Á¤
+	for j=0,10 do -- íŒŒì¼ëŸ° ê°¯ìˆ˜ë§ˆë‹¤ ë²™ì»¤ ì²´ë ¥ ì„¤ì •
 		TriggerX(FP,{CD(PyCCode,j)},{ModifyUnitHitPoints(All,125,i,21,100-(9*j));},{preserved})
 	end
 	TriggerX(FP,{CV(HiddenHPM,1,AtLeast)},{
@@ -742,7 +742,7 @@ CallTriggerX(FP,Call_OCU,MemoryB(0x58D2B0+(46*i)+2,AtLeast,1),{
 })
 DoActions2(FP,UpButtonSetArr)
 CIf(FP,{CD(FormCcode,0)})
-	for NB = 0, 6 do -- Áßº¡ Æ®¸®°Å
+	for NB = 0, 6 do -- ì¤‘ë²™ íŠ¸ë¦¬ê±°
 	Trigger {
 		players = {FP},
 		conditions = {
@@ -780,7 +780,7 @@ TriggerX(FP,{CV(HondonMode,0)},{
 	SetMemory(0x6C9EF8 + (74*4),SetTo,1);},{preserved})
 	for j=0, 6 do
 
---	Trigger { -- ¼ÒÈ¯ ¸¶¸°
+--	Trigger { -- ì†Œí™˜ ë§ˆë¦°
 --	players = {j},
 --	conditions = {
 --		Command(j,AtLeast,1,"Terran Firebat");
@@ -788,12 +788,12 @@ TriggerX(FP,{CV(HondonMode,0)},{
 --	actions = {
 --		RemoveUnitAt(1,"Terran Firebat","Anywhere",j);
 --		CreateUnitWithProperties(1,0,4,j,{energy = 100});
---		DisplayText("\x02¢º \x04MarineÀ» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..NMCost.." O r e",4);
+--		DisplayText("\x02â–¶ \x04Marineì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..NMCost.." O r e",4);
 --		SetDeaths(j,SetTo,1,101);
 --		PreserveTrigger();
 --	},
 --}
---Trigger { -- ¼ÒÈ¯ °¶¸¶
+--Trigger { -- ì†Œí™˜ ê°¤ë§ˆ
 --players = {j},
 --conditions = {
 --	Command(j,AtLeast,1,1);
@@ -802,12 +802,12 @@ TriggerX(FP,{CV(HondonMode,0)},{
 --actions = {
 --	SetResources(j,Add,NMCost+GMCost+HMCost,ore);
 --	RemoveUnitAt(1,1,"Anywhere",j);
---	DisplayText("\x02¢º \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x19ºü¸¥ ¼ÒÈ¯\x04 Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x0424±â Á¶ÇÕ) ÀÚ¿ø ¹ÝÈ¯ + \x1F"..(NMCost+GMCost+HMCost).." O r e",4);
+--	DisplayText("\x02â–¶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x19ë¹ ë¥¸ ì†Œí™˜\x04 ì¡°ê±´ì´ ë§žì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x0424ê¸° ì¡°í•©) ìžì› ë°˜í™˜ + \x1F"..(NMCost+GMCost+HMCost).." O r e",4);
 --	PreserveTrigger();
 --},
 --}
 
---Trigger { -- ¼ÒÈ¯ °¶¸¶
+--Trigger { -- ì†Œí™˜ ê°¤ë§ˆ
 --players = {j},
 --conditions = {
 --	Deaths(j,AtLeast,24,125);
@@ -815,7 +815,7 @@ TriggerX(FP,{CV(HondonMode,0)},{
 --},
 --actions = {
 --	RemoveUnitAt(1,1,"Anywhere",j);
---	DisplayText("\x02¢º \x1F±¤¹°\x04À» ¼Ò¸ðÇÏ¿© \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arineÀ» \x19¼ÒÈ¯\x04ÇÏ¿´½À´Ï´Ù. - \x1F"..(GMCost+NMCost+HMCost).." O r e",4);
+--	DisplayText("\x02â–¶ \x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arineì„ \x19ì†Œí™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F"..(GMCost+NMCost+HMCost).." O r e",4);
 --	CreateUnitWithProperties(1,100,4,j,{energy = 100});
 --	SetDeaths(j,SetTo,1,101);
 --	PreserveTrigger();
@@ -824,7 +824,7 @@ TriggerX(FP,{CV(HondonMode,0)},{
 
 
 
-Trigger { -- °¡Ã­ 10°³
+Trigger { -- ê°€ì±  10ê°œ
 players = {j},
 conditions = {
 	Command(j,AtLeast,1,1);
@@ -832,11 +832,11 @@ conditions = {
 },
 actions = {
 	RemoveUnitAt(1,1,"Anywhere",j);
-	DisplayText("\x02¢º \x07·£´ý ¸¶¸° »Ì±â 10È¸ \x04Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - \x07·£´ý ¸¶¸° »Ì±â \x0430È¸ ÀÌ»ó ½ÇÇà)",4);
+	DisplayText("\x02â–¶ \x07ëžœë¤ ë§ˆë¦° ë½‘ê¸° 10íšŒ \x04ì¡°ê±´ì´ ë§žì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - \x07ëžœë¤ ë§ˆë¦° ë½‘ê¸° \x0430íšŒ ì´ìƒ ì‹¤í–‰)",4);
 	PreserveTrigger();
 },
 }
-Trigger { -- °¡Ã­ 10°³
+Trigger { -- ê°€ì±  10ê°œ
 players = {j},
 conditions = {
 	Deaths(j,AtLeast,30,125);
@@ -845,12 +845,12 @@ conditions = {
 },
 actions = {
 	RemoveUnitAt(1,1,"Anywhere",j);
-	DisplayText("\x02¢º \x07·£´ý ¸¶¸° »Ì±â 10È¸ \x04Á¶°ÇÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. (Á¶°Ç - \x1F300,000 Ore \x04º¸À¯)",4);
+	DisplayText("\x02â–¶ \x07ëžœë¤ ë§ˆë¦° ë½‘ê¸° 10íšŒ \x04ì¡°ê±´ì´ ë§žì§€ ì•ŠìŠµë‹ˆë‹¤. (ì¡°ê±´ - \x1F300,000 Ore \x04ë³´ìœ )",4);
 	PreserveTrigger();
 },
 }
 
-Trigger { -- °¡Ã­ 10°³
+Trigger { -- ê°€ì±  10ê°œ
 players = {j},
 conditions = {
 	Label();
@@ -861,7 +861,7 @@ conditions = {
 actions = {
 	RemoveUnitAt(1,1,"Anywhere",j);
 	SetResources(j,Subtract,NMCost10X,Ore);
-	DisplayText("\x02¢º \x1F±¤¹°\x04À» ¼Ò¸ðÇÏ¿© \x07·£´ý ¸¶¸° »Ì±â 10È¸\x04¸¦ \x19½ÇÇà\x04ÇÕ´Ï´Ù. - \x1F300,000 O r e",4);
+	DisplayText("\x02â–¶ \x1Fê´‘ë¬¼\x04ì„ ì†Œëª¨í•˜ì—¬ \x07ëžœë¤ ë§ˆë¦° ë½‘ê¸° 10íšŒ\x04ë¥¼ \x19ì‹¤í–‰\x04í•©ë‹ˆë‹¤. - \x1F300,000 O r e",4);
 	AddCD(RandMarCcode[j+1],10);
 	SetDeaths(j,SetTo,1,101);
 	PreserveTrigger();
@@ -869,7 +869,7 @@ actions = {
 }
 
 
-Trigger { -- Á¶ÇÕ ¿µ¿õ¸¶¸°
+Trigger { -- ì¡°í•© ì˜ì›…ë§ˆë¦°
 players = {j},
 conditions = {
 	Memory(0x628438,AtLeast,1);
@@ -881,11 +881,11 @@ actions = {
 	CreateUnitWithProperties(1,20,39,j,{energy = 100});
 	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
 	MoveUnit(1, 20, j, 39, 1),Order(20, j, 39, Attack, 4);
-	DisplayText("\x02¢º \x04Marine \x043±â¸¦ Á¶ÇÕÇÏ¿© \x1BH \x04MarineÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù.",4);
+	DisplayText("\x02â–¶ \x04Marine \x043ê¸°ë¥¼ ì¡°í•©í•˜ì—¬ \x1BH \x04Marineìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤.",4);
 	PreserveTrigger();
 },
 }
-Trigger { -- Á¶ÇÕ °¶·°½Ã ¸¶¸°
+Trigger { -- ì¡°í•© ê°¤ëŸ­ì‹œ ë§ˆë¦°
 players = {j},
 conditions = {
 	Memory(0x628438,AtLeast,1);
@@ -898,14 +898,14 @@ actions = {
 	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
 	MoveUnit(1, 100, j, 39, 1),Order(100, j, 39, Attack, 4);
 	SetDeaths(j,Add,1,125);
-	DisplayText("\x02¢º \x1BH \x04Marine \x043±â¸¦ Á¶ÇÕÇÏ¿© \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arineÀ¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù.",4);
+	DisplayText("\x02â–¶ \x1BH \x04Marine \x043ê¸°ë¥¼ ì¡°í•©í•˜ì—¬ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arineìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤.",4);
 	PreserveTrigger();
 },
 }
 if TestStart == 1 then
 	DoActions(j, {CreateUnit(1,60,4,j)},1)
 end
-Trigger { -- Á¶ÇÕ ³×ºæ¶ó
+Trigger { -- ì¡°í•© ë„¤ë·¸ë¼
 players = {j},
 conditions = {
 	Label(0);
@@ -916,14 +916,14 @@ conditions = {
 actions = {
 	ModifyUnitEnergy(3,100,j,3,0);
 	RemoveUnitAt(3,100,3,j);
-	DisplayText("\x02¢º \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043±â¸¦ Á¶ÇÕÇÏ¿© \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á À¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù.",4);
+	DisplayText("\x02â–¶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043ê¸°ë¥¼ ì¡°í•©í•˜ì—¬ \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ ìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤.",4);
 	CreateUnitWithProperties(1,16,39,j,{energy = 100});
 	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
 	MoveUnit(1, 16, j, 39, 1),Order(16, j, 39, Attack, 4);
 	PreserveTrigger();
 },
 }
-Trigger { -- Á¶ÇÕ Å×¶ó
+Trigger { -- ì¡°í•© í…Œë¼
 players = {j},
 conditions = {
 	Label(0);
@@ -939,7 +939,7 @@ actions = {
 	SetMemory(0x6C9EF8 + (74*4),SetTo,1);
 	ModifyUnitEnergy(3,16,j,3,0);
 	RemoveUnitAt(3,16,3,j);
-	DisplayText("\x02¢º \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á \x043±â¸¦ Á¶ÇÕÇÏ¿© \x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á À¸·Î \x19º¯È¯\x04ÇÏ¿´½À´Ï´Ù.",4);
+	DisplayText("\x02â–¶ \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ \x043ê¸°ë¥¼ ì¡°í•©í•˜ì—¬ \x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡ ìœ¼ë¡œ \x19ë³€í™˜\x04í•˜ì˜€ìŠµë‹ˆë‹¤.",4);
 	CreateUnitWithProperties(1,99,39,j,{energy = 100});
 	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
 	MoveUnit(1, 99, j, 39, 1),Order(99, j, 39, Attack, 4);
@@ -963,11 +963,11 @@ TriggerX(j,{CV(HondonMode,0)},{
 
 	end
 
-	for k=0, 6 do -- ±âºÎ½Ã½ºÅÛ
+	for k=0, 6 do -- ê¸°ë¶€ì‹œìŠ¤í…œ
 		for j=0, 6 do
 		if k~=j then
 		for i=0, 5 do
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {k},
 			conditions = {
 				Label(0);
@@ -980,11 +980,11 @@ TriggerX(j,{CV(HondonMode,0)},{
 			actions = {
 				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);`
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-				DisplayText("\x07¡º \x04ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù. \x07¡»",4);
+				DisplayText("\x07ã€Ž \x04ìž”ì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. \x07ã€",4);
 				PreserveTrigger();
 			},
 			}
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {k},
 			conditions = {
 				Label(0);
@@ -1001,15 +1001,15 @@ TriggerX(j,{CV(HondonMode,0)},{
 				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);
 				
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-				DisplayText("\x07¡º "..PlayerString[j+1].."\x04¿¡°Ô \x1F"..GiveRate2[i+1].." Ore\x04¸¦ ±âºÎÇÏ¿´½À´Ï´Ù. \x07¡»",4);
+				DisplayText("\x07ã€Ž "..PlayerString[j+1].."\x04ì—ê²Œ \x1F"..GiveRate2[i+1].." Ore\x04ë¥¼ ê¸°ë¶€í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€",4);
 				SetMemory(0x6509B0,SetTo,j);
-				DisplayText("\x12\x07¡º"..PlayerString[k+1].."\x04¿¡°Ô \x1F"..GiveRate2[i+1].." Ore\x04¸¦ ±âºÎ¹Þ¾Ò½À´Ï´Ù.\x02 \x07¡»",4);
+				DisplayText("\x12\x07ã€Ž"..PlayerString[k+1].."\x04ì—ê²Œ \x1F"..GiveRate2[i+1].." Ore\x04ë¥¼ ê¸°ë¶€ë°›ì•˜ìŠµë‹ˆë‹¤.\x02 \x07ã€",4);
 				SetMemory(0x6509B0,SetTo,k);
 				PreserveTrigger();
 			},
 			}
 		end
-		Trigger { -- µ· ±âºÎ ½Ã½ºÅÛ
+		Trigger { -- ëˆ ê¸°ë¶€ ì‹œìŠ¤í…œ
 			players = {k},
 			conditions = {
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
@@ -1017,14 +1017,14 @@ TriggerX(j,{CV(HondonMode,0)},{
 				HumanCheck(j,0);
 			},
 			actions = {
-				DisplayText("\x07¡º "..PlayerString[j+1].."\x04ÀÌ(°¡) Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù. \x07¡»",4);
+				DisplayText("\x07ã€Ž "..PlayerString[j+1].."\x04ì´(ê°€) ì¡´ìž¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. \x07ã€",4);
 				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
 				PreserveTrigger();
 			},
 			}
 	end end end
-	CallTxt = "\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04\n\x13\x04\x04ÇöÀç ¸¶¸°Å°¿ì±â \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01¡Ä\x07t \x04¸¦ ÇÃ·¹ÀÌ ÁßÀÔ´Ï´Ù.\n\x13\n\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\x13\x0FCreator \x04: GALAXY_BURST\n\x13\x07Á¦ÀÛÀÚ ¿ÀÇÂÄ«Åå \x04: https://open.kakao.com/o/sejFLxdb\n\x13\x04\n\x13\x04Áö¿ø±Ý \x1F2000 Ore\x04¸¦ ¹Þ¾Ò½À´Ï´Ù.\n\x13\x04\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	CallTxt = "\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04\n\x13\x04\x04í˜„ìž¬ ë§ˆë¦°í‚¤ìš°ê¸° \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01âˆž\x07t \x04ë¥¼ í”Œë ˆì´ ì¤‘ìž…ë‹ˆë‹¤.\n\x13\n\x13\x1FCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(ã¤>ã……<)ã¤\n\x13\x0FCreator \x04: GALAXY_BURST\n\x13\x07ì œìž‘ìž ì˜¤í”ˆì¹´í†¡ \x04: https://open.kakao.com/o/sejFLxdb\n\x13\x04\n\x13\x04ì§€ì›ê¸ˆ \x1F2000 Ore\x04ë¥¼ ë°›ì•˜ìŠµë‹ˆë‹¤.\n\x13\x04\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 	TriggerX(FP,{CD(ButtonSound,1,AtLeast)},{
 		RotatePlayer({
 		PlayWAVX("staredit\\wav\\button3.wav"),
@@ -1091,17 +1091,17 @@ TriggerX(j,{CV(HondonMode,0)},{
 	DoActions(FP,{SetDeaths(Force1,SetTo,0,34)})
 	CIfEnd()
 	
-	CIf(FP, CD(Drop,1,AtLeast),{AddCD(Drop,1),KillUnit("Any unit",Force1)}) -- µ¥Ä«¾Æ¿ô½Ã ÀÚ±â¸ðµçÀ¯´Ö ÅÍÁü. 3Æ½ÈÄ µå¶ø
+	CIf(FP, CD(Drop,1,AtLeast),{AddCD(Drop,1),KillUnit("Any unit",Force1)}) -- ë°ì¹´ì•„ì›ƒì‹œ ìžê¸°ëª¨ë“ ìœ ë‹› í„°ì§. 3í‹±í›„ ë“œëž
 		TriggerX(FP,{CD(Drop,3,AtLeast)},{SetCp(8),RunAIScript(P8VON),SetCp(9),RunAIScript(P8VON),SetCp(10),RunAIScript(P8VON),SetCp(11),RunAIScript(P8VON)})
 	CIfEnd()
-	CIf(FP,{CD(InfWhile,1,AtLeast)},{AddCD(InfWhile,1),KillUnit("Any unit",Force1)}) -- µ¥Ä«¾Æ¿ô½Ã ÀÚ±â¸ðµçÀ¯´Ö ÅÍÁü. 3Æ½ÈÄ ÀÀ¾ø
+	CIf(FP,{CD(InfWhile,1,AtLeast)},{AddCD(InfWhile,1),KillUnit("Any unit",Force1)}) -- ë°ì¹´ì•„ì›ƒì‹œ ìžê¸°ëª¨ë“ ìœ ë‹› í„°ì§. 3í‹±í›„ ì‘ì—†
 	CWhile(FP, CD(InfWhile,4,AtLeast))
 	CWhileEnd()
 	CIfEnd()
 
 
 	
---¼±ÅÃÀÎ½Ä ÇÇÅë º¸ÀÓ
+--ì„ íƒì¸ì‹ í”¼í†µ ë³´ìž„
 SelEPD,SelHP,SelSh,SelMaxHP = CreateVars(4,FP)
 SelUID = CreateVar(FP)
 CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})

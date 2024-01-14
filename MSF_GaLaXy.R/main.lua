@@ -1,29 +1,18 @@
 
---dofile("C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\MapSource\\MSF_GaLaXy.2\\Gal.2.lua")
 
---X2_Mode = 0
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\MSF_GaLaXy.R\\main.lua")
+--__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- 맵파일 경로(\를 \\로 바꿔야함)
+--__SubDirSetting(__encode_cp949(Curdir.."MapSource\\MSF_GaLaXy.R")) -- Main.lua 폴더경로 (\를 \\로 바꿔야함, 없으면 비우기)
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
+
+X2_Mode = 1
 LD2XOption = 1
-if LD2XOption == 1 then
-	if X2_Mode == 1 then
-		Mapdir="C:\\euddraft0.9.2.0\\MSF_GaLaXy_R_2X"
-	else
-		Mapdir="C:\\euddraft0.9.2.0\\MSF_GaLaXy.R"
-	end 
-	MapFolder = "MSF_GaLaXy.R"
-	__StringArray = {}
-	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
-	Loader2XFName = "Loader.lua"
-else
-	Loader2XFName = "Loader2X.lua"
-	MapFolder = "MSF_GaLaXy.R"
-end
+
+MapFolder = "MSF_GaLaXy.R"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
+     if dir:match "%.[Ll][Uu][Aa]$" then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -124,10 +113,3 @@ end
 EndCtrig()
 ErrorCheck()
 SetCallErrorCheck()
-
-
-
-if LD2XOption == 1 then
-	__PopStringArray()
-	io.close(__TRIGchkptr)
-end

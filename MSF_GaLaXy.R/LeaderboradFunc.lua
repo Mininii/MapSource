@@ -5,7 +5,7 @@ function LeaderBoardF()
 	local LeaderBoardT = CreateCcode()
     CIf(FP,{Switch("Switch 201",Set)})
 	for i = 1, 3 do
-	Trigger { -- Å³ Æ÷ÀÎÆ® ¸®´õº¸µå, Áı±ÙÃ³ À¯´Ö ¿À´õ½ÃÅ°±â, ½¯µå È¸º¹, Àú±Û¸µ È÷µå¶ó ¾îÅÃ¶¥
+	Trigger { -- í‚¬ í¬ì¸íŠ¸ ë¦¬ë”ë³´ë“œ, ì§‘ê·¼ì²˜ ìœ ë‹› ì˜¤ë”ì‹œí‚¤ê¸°, ì‰´ë“œ íšŒë³µ, ì €ê¸€ë§ íˆë“œë¼ ì–´íƒë•…
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -20,7 +20,7 @@ function LeaderBoardF()
 		PreserveTrigger();
 	},
 }
-Trigger { -- µ¥½º ½ºÄÚ¾î ¸®´õº¸µå
+Trigger { -- ë°ìŠ¤ ìŠ¤ì½”ì–´ ë¦¬ë”ë³´ë“œ
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -36,7 +36,7 @@ Trigger { -- µ¥½º ½ºÄÚ¾î ¸®´õº¸µå
 		PreserveTrigger();
 },
 }
-Trigger { -- µ¥½º ½ºÄÚ¾î ¸®´õº¸µå
+Trigger { -- ë°ìŠ¤ ìŠ¤ì½”ì–´ ë¦¬ë”ë³´ë“œ
 	players = {FP},
 	conditions = {
 		Label(0);
@@ -52,7 +52,7 @@ Trigger { -- µ¥½º ½ºÄÚ¾î ¸®´õº¸µå
 		PreserveTrigger();
 },
 }
-Trigger { -- Å³ ½ºÄÚ¾î ¸®´õº¸µå
+Trigger { -- í‚¬ ìŠ¤ì½”ì–´ ë¦¬ë”ë³´ë“œ
 	players = {FP},
 	conditions = {
 		Label(0);

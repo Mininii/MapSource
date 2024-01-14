@@ -10,7 +10,7 @@ function Waves()
 	function CallSet(Time,CUTable,TimerFlag,NoticeFlag)
 		if TimerFlag==1 then
 			for i = 1,5 do
-				TriggerX(FP,{CD(GMode,1),ElapsedTimeX(Exactly,Time-(i*2))},{RotatePlayer({DisplayTextX("\x13\x04"..i.."ÃÊ ³²¾Ò½À´Ï´Ù.",4)},HumanPlayers,FP),SetCD(ButtonSound,1)})
+				TriggerX(FP,{CD(GMode,1),ElapsedTimeX(Exactly,Time-(i*2))},{RotatePlayer({DisplayTextX("\x13\x04"..i.."ì´ˆ ë‚¨ì•˜ìŠµë‹ˆë‹¤.",4)},HumanPlayers,FP),SetCD(ButtonSound,1)})
 			end
 		end
 		local Y
@@ -63,7 +63,7 @@ function Waves()
 	local WaveT2 = CreateCcode()
 	local DGDeath = CreateCcode()
 	local WarpDeath = CreateCcode()
-	Trigger2X(FP,{CommandLeastAt(189,20)},{AddCD(WarpDeath,1),SetScore(Force1,Add,500000,Kills),AddV(ExRateV,50),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08£¡ £¡ £¡ \x04ÀûÀÇ »ı»ê±âÁö \x18Warp Gate\x04¸¦ ÆÄ±«ÇÏ¿´´Ù!\x17 + 500000 P t s, \x1F+ 5.0% Exchange Rate\x08 £¡ £¡ £¡\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+	Trigger2X(FP,{CommandLeastAt(189,20)},{AddCD(WarpDeath,1),SetScore(Force1,Add,500000,Kills),AddV(ExRateV,50),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08ï¼ ï¼ ï¼ \x04ì ì˜ ìƒì‚°ê¸°ì§€ \x18Warp Gate\x04ë¥¼ íŒŒê´´í•˜ì˜€ë‹¤!\x17 + 500000 P t s, \x1F+ 5.0% Exchange Rate\x08 ï¼ ï¼ ï¼\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 	
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(WarpDeath,0)},{AddCD(WaveT,1)})
 		CIf(FP,CD(WaveT,3000,AtLeast),SetCD(WaveT,0))
@@ -85,8 +85,8 @@ function Waves()
 		CIfEnd()
 	CIfEnd()
 	
-	Trigger2X(FP,{CommandLeastAt(152,18)},{AddCD(DGDeath,1),SetScore(Force1,Add,100000,Kills),SetInvincibility(Disable,152,FP,19),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08£¡ £¡ £¡ \x04ÀûÀÇ »ı»ê±âÁö \x18Daggoth\x04¸¦ ÆÄ±«ÇÏ¿´´Ù!\x17 + 100000 P t s\x08 £¡ £¡ £¡\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
-	Trigger2X(FP,{CommandLeastAt(152,19)},{AddCD(DGDeath,1),SetScore(Force1,Add,100000,Kills),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08£¡ £¡ £¡ \x04ÀûÀÇ »ı»ê±âÁö \x18Daggoth\x04¸¦ ÆÄ±«ÇÏ¿´´Ù!\x17 + 100000 P t s\x08 £¡ £¡ £¡\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+	Trigger2X(FP,{CommandLeastAt(152,18)},{AddCD(DGDeath,1),SetScore(Force1,Add,100000,Kills),SetInvincibility(Disable,152,FP,19),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08ï¼ ï¼ ï¼ \x04ì ì˜ ìƒì‚°ê¸°ì§€ \x18Daggoth\x04ë¥¼ íŒŒê´´í•˜ì˜€ë‹¤!\x17 + 100000 P t s\x08 ï¼ ï¼ ï¼\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+	Trigger2X(FP,{CommandLeastAt(152,19)},{AddCD(DGDeath,1),SetScore(Force1,Add,100000,Kills),RotatePlayer({DisplayTextX("\n\n\n\n\n\x13\x08ï¼ ï¼ ï¼ \x04ì ì˜ ìƒì‚°ê¸°ì§€ \x18Daggoth\x04ë¥¼ íŒŒê´´í•˜ì˜€ë‹¤!\x17 + 100000 P t s\x08 ï¼ ï¼ ï¼\n\n",4),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(DGDeath,1,AtMost)},{AddCD(WaveT2,1)})
 	TriggerX(FP,{Bring(FP, AtLeast, 1, 48, 32)},{MoveUnit(1, 48, FP, 32, 2),MoveUnit(1, 48, FP, 32, 12),MoveUnit(1, 48, FP, 32, 13),Order(48,FP,38,Attack,4)},{preserved})
@@ -139,7 +139,7 @@ function Waves()
 	CIf(FP,{CD(GMode,2,AtLeast)})
 	for j, k in pairs(TTCUTable) do
 		CIfOnce(FP,Bring(Force1,AtLeast,1,"Men",TTArr[j]))
-		DoActions2(FP,{RotatePlayer({DisplayTextX("\x13\x04´©±º°¡°¡ \x08ÀûÀÇ \x07¿µ¿ª\x04À» Ä§¹üÇÏ¿´½À´Ï´Ù."),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
+		DoActions2(FP,{RotatePlayer({DisplayTextX("\x13\x04ëˆ„êµ°ê°€ê°€ \x08ì ì˜ \x07ì˜ì—­\x04ì„ ì¹¨ë²”í•˜ì˜€ìŠµë‹ˆë‹¤."),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 		GetLocCenter(TTArr[j]-1,G_CA_X,G_CA_Y)
 		for l, m in pairs(k) do
 			f_TempRepeat(nil,m[1],m[2],nil,nil,"CG",1)

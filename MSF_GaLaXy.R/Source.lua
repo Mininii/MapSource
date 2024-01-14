@@ -14,10 +14,10 @@ function Source()
 	BurEx1P = 190
 	GunLimit = 1500
 
-	ExArr = {--È¯Àü·ü
-		{},--ÀÌÁö
-		{},--ÇÏµå
-		{},--»½
+	ExArr = {--í™˜ì „ë¥ 
+		{},--ì´ì§€
+		{},--í•˜ë“œ
+		{},--ë»¥
 	}
 	for i = 1, 7 do
 		table.insert(ExArr[1],EasyEx1P+(ExRate*(i-1)))
@@ -47,26 +47,26 @@ function Source()
 	F12 =202
 	ESC =199
 	Tab =214
-	Str00 = CreateCText(FP,"\x12\x02¡ß")
-	Str01 = CreateCText(FP,"\x04ÀÇ \x04Marine\x04ÀÌ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	Str02 = CreateCText(FP,"\x04ÀÇ \x1BH \x04Marine\x04ÀÌ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	Str03 = CreateCText(FP,"\x04ÀÇ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04ÀÌ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	Str04 = CreateCText(FP,"\x04ÀÇ \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	TeText = CreateCText(FP,"\x04ÀÇ \x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	SuText = CreateCText(FP,"\x04ÀÇ \x07£Ó\x1F£Õ\x1C£Ğ\x0E£Å\x0F£Ò\x10£Î\x17£Ï\x11£Ö\x08£Á \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	QuaText = CreateCText(FP,"\x04ÀÇ \x11£Ñ\x1F£Õ\x1B£Á\x16£Ó\x10£Á\x1D£Ò \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	Str05 = CreateCText(FP,"\x04ÀÇ \x04SCV\x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß")
-	Str12 = CreateCText(FP,"\x12\x07¡º \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str19 = CreateCText(FP,"\x13\x15¢º ¢º ¢º [\x04 ")
-	Str20 = CreateCText(FP," \x11»ç»ì\x10 +\x17 ")
-	Str21 = CreateCText(FP," P t s \x15] \x15¢¸ ¢¸ ¢¸")
-	Str22 = CreateCText(FP,"\x04 ¹Ì³×¶öÀ» ¼ÒºñÇÏ¿© ÃÑ \x0d\x0d\x0d\x0d\x0d\x0d")
-	Str23 = CreateCText(FP,"\x04 \x04È¸ ¾÷±×·¹ÀÌµå¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù. \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str24 = CreateCText(FP,"\x07¡»\x0d\x0d\x0d\x0d\x0d\x0d")
-	Str26 = CreateCText(FP,"\x04ÇöÀç ¼±ÅÃ°¡´É ÇÃ·¹ÀÌ¾î´Â...")
-	MGPStr1 = CreateCText(FP,"\x13\x07¡º \x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© ")
-	MGPStr2 = CreateCText(FP," ¹Ì³×¶öÀ» \x07¾ò¾ú½À´Ï´Ù. \x04ÃàÇÏµå¸³´Ï´Ù! \x07¡»")
-	MGPStr3 = CreateCText(FP," ¹Ì³×¶öÀ» \x08ÀÒ¾ú½À´Ï´Ù. \x04Àú·±... \x07¡»")
+	Str00 = CreateCText(FP,"\x12\x02â—†")
+	Str01 = CreateCText(FP,"\x04ì˜ \x04Marine\x04ì´ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	Str02 = CreateCText(FP,"\x04ì˜ \x1BH \x04Marine\x04ì´ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	Str03 = CreateCText(FP,"\x04ì˜ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x04ì´ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	Str04 = CreateCText(FP,"\x04ì˜ \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	TeText = CreateCText(FP,"\x04ì˜ \x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡ \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	SuText = CreateCText(FP,"\x04ì˜ \x07ï¼³\x1Fï¼µ\x1Cï¼°\x0Eï¼¥\x0Fï¼²\x10ï¼®\x17ï¼¯\x11ï¼¶\x08ï¼¡ \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	QuaText = CreateCText(FP,"\x04ì˜ \x11ï¼±\x1Fï¼µ\x1Bï¼¡\x16ï¼³\x10ï¼¡\x1Dï¼² \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	Str05 = CreateCText(FP,"\x04ì˜ \x04SCV\x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†")
+	Str12 = CreateCText(FP,"\x12\x07ã€ \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str19 = CreateCText(FP,"\x13\x15â–¶ â–¶ â–¶ [\x04 ")
+	Str20 = CreateCText(FP," \x11ì‚¬ì‚´\x10 +\x17 ")
+	Str21 = CreateCText(FP," P t s \x15] \x15â—€ â—€ â—€")
+	Str22 = CreateCText(FP,"\x04 ë¯¸ë„¤ë„ì„ ì†Œë¹„í•˜ì—¬ ì´ \x0d\x0d\x0d\x0d\x0d\x0d")
+	Str23 = CreateCText(FP,"\x04 \x04íšŒ ì—…ê·¸ë ˆì´ë“œë¥¼ ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str24 = CreateCText(FP,"\x07ã€\x0d\x0d\x0d\x0d\x0d\x0d")
+	Str26 = CreateCText(FP,"\x04í˜„ì¬ ì„ íƒê°€ëŠ¥ í”Œë ˆì´ì–´ëŠ”...")
+	MGPStr1 = CreateCText(FP,"\x13\x07ã€ \x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ ")
+	MGPStr2 = CreateCText(FP," ë¯¸ë„¤ë„ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x04ì¶•í•˜ë“œë¦½ë‹ˆë‹¤! \x07ã€")
+	MGPStr3 = CreateCText(FP," ë¯¸ë„¤ë„ì„ \x08ìƒì—ˆìŠµë‹ˆë‹¤. \x04ì €ëŸ°... \x07ã€")
 
 	
 
@@ -82,42 +82,42 @@ function Source()
 	BanToken = {84,69,70,88,71,98}
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0","\x08#X_MAX"}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
-	P = {"\x081ÀÎ","\x0E2ÀÎ","\x0F3ÀÎ","\x104ÀÎ","\x115ÀÎ","\x186ÀÎ","\x167ÀÎ"}
+	P = {"\x081ì¸","\x0E2ì¸","\x0F3ì¸","\x104ì¸","\x115ì¸","\x186ì¸","\x167ì¸"}
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
 	DelayMedicT = {
-		"\x1E¢º \x1D¿¹¾à¸Şµñ\x04À» \x1B2Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F300 Ore\x1E ¢¸",
-		"\x1E¢º \x1D¿¹¾à¸Şµñ\x04À» \x1B3Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F350 Ore\x1E ¢¸",
-		"\x1E¢º \x1D¿¹¾à¸Şµñ\x04À» \x1B4Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F400 Ore\x1E ¢¸",
-		"\x1E¢º \x1D¿¹¾à¸Şµñ\x04À» \x1BºñÈ°¼ºÈ­(1Tick)\x04ÇÏ¿´½À´Ï´Ù. - \x1F250 Ore\x1E ¢¸"}
+		"\x1Eâ–¶ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B2Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F300 Ore\x1E â—€",
+		"\x1Eâ–¶ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B3Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F350 Ore\x1E â—€",
+		"\x1Eâ–¶ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B4Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F400 Ore\x1E â—€",
+		"\x1Eâ–¶ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1Bë¹„í™œì„±í™”(1Tick)\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F250 Ore\x1E â—€"}
 
-	GiveRateT = {"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F5000 Ore\x04 \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
-	"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F10000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
-	"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F50000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
-	"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F100000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
-	"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F500000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»",
-	"\x07¡º \x04±âºÎ±İ¾× ´ÜÀ§°¡ \x1F1000 Ore \x04·Î º¯°æµÇ¾ú½À´Ï´Ù.\x07 ¡»"}
+	GiveRateT = {"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F5000 Ore\x04 \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
+	"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F10000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
+	"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F50000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
+	"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F100000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
+	"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F500000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€",
+	"\x07ã€ \x04ê¸°ë¶€ê¸ˆì•¡ ë‹¨ìœ„ê°€ \x1F1000 Ore \x04ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\x07 ã€"}
 
 	
 --Str25 = {
---CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07¼±ÅÃ¿Ï·á"),
---CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07¼±ÅÃ¿Ï·á"),
---CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07¼±ÅÃ¿Ï·á"),
---CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07¼±ÅÃ¿Ï·á"),
---CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x03[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07¼±ÅÃ¿Ï·á"),
+--CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+--CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+--CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+--CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST\x04 \x04[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+--CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x03[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07ì„ íƒì™„ë£Œ"),
 --}
 Str25 = {
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07¼±ÅÃ¿Ï·á"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07ì„ íƒì™„ë£Œ"),
 }
 Str27 = {
-CreateCText(FP,"\x04 : \x04[Q] \x0EÂÌº¸\x04ÀÇ \x04ÀÏ¹İ¸ğµå \x04[W] \x08»ó³²ÀÚ\x04ÀÇ \x06µå¶ø¸ğµå \x04[E] \x10µ¹¾ÆÀÌ\x04ÀÇ \x11ÀÀ´ä¾øÀ½¸ğµå \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x03[Q] \x0EÂÌº¸\x04ÀÇ \x04ÀÏ¹İ¸ğµå \x04[W] \x08»ó³²ÀÚ\x04ÀÇ \x06µå¶ø¸ğµå \x04[E] \x10µ¹¾ÆÀÌ\x04ÀÇ \x11ÀÀ´ä¾øÀ½¸ğµå \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EÂÌº¸\x04ÀÇ \x04ÀÏ¹İ¸ğµå \x03[W] \x08»ó³²ÀÚ\x04ÀÇ \x06µå¶ø¸ğµå \x04[E] \x10µ¹¾ÆÀÌ\x04ÀÇ \x11ÀÀ´ä¾øÀ½¸ğµå \x04[Y] \x07¼±ÅÃ¿Ï·á"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EÂÌº¸\x04ÀÇ \x04ÀÏ¹İ¸ğµå \x04[W] \x08»ó³²ÀÚ\x04ÀÇ \x06µå¶ø¸ğµå \x03[E] \x10µ¹¾ÆÀÌ\x04ÀÇ \x11ÀÀ´ä¾øÀ½¸ğµå \x04[Y] \x07¼±ÅÃ¿Ï·á"),
+CreateCText(FP,"\x04 : \x04[Q] \x0Eì«„ë³´\x04ì˜ \x04ì¼ë°˜ëª¨ë“œ \x04[W] \x08ìƒë‚¨ì\x04ì˜ \x06ë“œëëª¨ë“œ \x04[E] \x10ëŒì•„ì´\x04ì˜ \x11ì‘ë‹µì—†ìŒëª¨ë“œ \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x03[Q] \x0Eì«„ë³´\x04ì˜ \x04ì¼ë°˜ëª¨ë“œ \x04[W] \x08ìƒë‚¨ì\x04ì˜ \x06ë“œëëª¨ë“œ \x04[E] \x10ëŒì•„ì´\x04ì˜ \x11ì‘ë‹µì—†ìŒëª¨ë“œ \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x04[Q] \x0Eì«„ë³´\x04ì˜ \x04ì¼ë°˜ëª¨ë“œ \x03[W] \x08ìƒë‚¨ì\x04ì˜ \x06ë“œëëª¨ë“œ \x04[E] \x10ëŒì•„ì´\x04ì˜ \x11ì‘ë‹µì—†ìŒëª¨ë“œ \x04[Y] \x07ì„ íƒì™„ë£Œ"),
+CreateCText(FP,"\x04 : \x04[Q] \x0Eì«„ë³´\x04ì˜ \x04ì¼ë°˜ëª¨ë“œ \x04[W] \x08ìƒë‚¨ì\x04ì˜ \x06ë“œëëª¨ë“œ \x03[E] \x10ëŒì•„ì´\x04ì˜ \x11ì‘ë‹µì—†ìŒëª¨ë“œ \x04[Y] \x07ì„ íƒì™„ë£Œ"),
 }
 
 DifLeaderBoard = {
@@ -213,24 +213,24 @@ DifLeaderBoard = {
 	BanCode = CreateCcodeArr(6)
 	DelayMedic = CreateCcodeArr(7)
 	GiveRate = CreateCcodeArr(7)
-	HactCcode = CreateCcode() -- 0ÀÏ°æ¿ì
-	LairCcode = CreateCcode() -- 0ÀÏ°æ¿ì
-	HiveCcode = CreateCcode() -- 0ÀÏ°æ¿ì
-	PyCCode = CreateCcode() -- 9ÀÏ°æ¿ì
-	XelCcode = CreateCcode() -- 4ÀÏ°æ¿ì
-	IonCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	FaciCcode = CreateCcode() -- 4ÀÏ°æ¿ì
-	ChryCcode = CreateCcode() -- 4ÀÏ°æ¿ì
-	CereCcode = CreateCcode() -- 4ÀÏ°æ¿ì
-	CenCcode = CreateCcode() -- 4ÀÏ°æ¿ì
-	NexCcode = CreateCcode() -- 2ÀÏ°æ¿ì
-	CocoonCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	GeneCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	OverGCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	OvrmCcode = CreateCcode() -- 2ÀÏ°æ¿ì
-	PsiCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	FormCcode = CreateCcode() -- 1ÀÏ°æ¿ì
-	CellCcode = CreateCcode() -- 3ÀÏ°æ¿ì
+	HactCcode = CreateCcode() -- 0ì¼ê²½ìš°
+	LairCcode = CreateCcode() -- 0ì¼ê²½ìš°
+	HiveCcode = CreateCcode() -- 0ì¼ê²½ìš°
+	PyCCode = CreateCcode() -- 9ì¼ê²½ìš°
+	XelCcode = CreateCcode() -- 4ì¼ê²½ìš°
+	IonCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	FaciCcode = CreateCcode() -- 4ì¼ê²½ìš°
+	ChryCcode = CreateCcode() -- 4ì¼ê²½ìš°
+	CereCcode = CreateCcode() -- 4ì¼ê²½ìš°
+	CenCcode = CreateCcode() -- 4ì¼ê²½ìš°
+	NexCcode = CreateCcode() -- 2ì¼ê²½ìš°
+	CocoonCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	GeneCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	OverGCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	OvrmCcode = CreateCcode() -- 2ì¼ê²½ìš°
+	PsiCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	FormCcode = CreateCcode() -- 1ì¼ê²½ìš°
+	CellCcode = CreateCcode() -- 3ì¼ê²½ìš°
 	BossCcode = CreateCcode()
 	Emer_EscapeC = CreateCcodeArr(7)
 	Drop = CreateCcode()

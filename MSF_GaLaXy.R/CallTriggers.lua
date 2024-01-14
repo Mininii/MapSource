@@ -17,9 +17,9 @@ function Install_CallTriggers()
 		f_Div(FP,CPosY,_Mov(0x10000))
 	SetCallEnd()
 
-	-- ÀúÀåµÈ À¯´ÖÁ¤º¸¸¦ µ¥ÀÌÅÍ ¹è¿­¿¡¼­ ºÒ·¯¿Â ÈÄ Àç¹èÄ¡
+	-- ì €ì¥ëœ ìœ ë‹›ì •ë³´ë¥¼ ë°ì´í„° ë°°ì—´ì—ì„œ ë¶ˆëŸ¬ì˜¨ í›„ ì¬ë°°ì¹˜
 	-- 0xYYYYXXXX 0xLLIIPPUU
-	-- X = ÁÂÇ¥ X, Y = ÁÂÇ¥ Y, L = À¯´Ö ½Äº°ÀÚ, I = ¹«Àû ÇÃ·¡±×, P = ÇÃ·¹ÀÌ¾îID, U = À¯´ÖID
+	-- X = ì¢Œí‘œ X, Y = ì¢Œí‘œ Y, L = ìœ ë‹› ì‹ë³„ì, I = ë¬´ì  í”Œë˜ê·¸, P = í”Œë ˆì´ì–´ID, U = ìœ ë‹›ID
 	f_ReplaceX = InitCFunc(FP)
 	FRPara = CFunc(f_ReplaceX)
 	UDataTemp = CreateVarArr(2,FP)
@@ -34,7 +34,7 @@ function Install_CallTriggers()
 		DoActionsX(FP,SetCD(X2_Hero,0))
 		NJumpXEnd(FP,X2_Jump)
 	end
-		NIfX(FP,Memory(0x628438,AtLeast,1)) -- Äµ³´Ã¼Å©.
+		NIfX(FP,Memory(0x628438,AtLeast,1)) -- ìº”ë‚«ì²´í¬.
 		CMov(FP,CPos,UDataTemp[1])
 		Convert_CPosXY()
 		CMov(FP,Gun_LV,UDataTemp[2],nil,0xFF000000)
@@ -83,14 +83,14 @@ function Install_CallTriggers()
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
 			CTrigger(FP,{CVar(FP,RepHeroIndex[2],AtMost,104)},{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)},1)
 		
-		CTrigger(FP,{CVar(FP,UDataTemp[2][2],Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ¹«ÀûÇÃ·¡±× 1ÀÏ°æ¿ì ¹«Àû»óÅÂ·Î ¹Ù²Ş
+		CTrigger(FP,{CVar(FP,UDataTemp[2][2],Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ë¬´ì í”Œë˜ê·¸ 1ì¼ê²½ìš° ë¬´ì ìƒíƒœë¡œ ë°”ê¿ˆ
 		if X2_Mode == 1 then
 			NJumpX(FP,X2_Jump,{CV(RepHeroIndex,104,AtMost),CD(X2_Hero,0,AtMost)},{AddCD(X2_Hero,1)})
 		end
 		CAdd(FP,UnitDataPtr,1)
 		CJump(FP,FRJump)
 		NElseX()
-		f_ReplaceErrT = "\x07¡º \x08ERROR : \x04Äµ³´À¸·Î ÀÎÇØ f_Replace¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+		f_ReplaceErrT = "\x07ã€ \x08ERROR : \x04ìº”ë‚«ìœ¼ë¡œ ì¸í•´ f_Replaceë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		NIfXEnd()
 	NIfEnd()
@@ -106,7 +106,7 @@ function Install_CallTriggers()
 		DoActionsX(FP,SetCD(X2_Hero,0))
 		NJumpXEnd(FP,X2_Jump)
 	end
-		NIfX(FP,Memory(0x628438,AtLeast,1)) -- Äµ³´Ã¼Å©.
+		NIfX(FP,Memory(0x628438,AtLeast,1)) -- ìº”ë‚«ì²´í¬.
 		f_SaveCp()
 		CMov(FP,Gun_LV,0)
 		f_Read(FP,BackupCP,CPos)
@@ -157,13 +157,13 @@ function Install_CallTriggers()
 			TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
 			CTrigger(FP,{CVar(FP,RepHeroIndex[2],AtMost,104)},{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)},1)
 		
-		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ¹«ÀûÇÃ·¡±× 1ÀÏ°æ¿ì ¹«Àû»óÅÂ·Î ¹Ù²Ş
+		CTrigger(FP,{TMemoryX(_Add(BackupCP,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ë¬´ì í”Œë˜ê·¸ 1ì¼ê²½ìš° ë¬´ì ìƒíƒœë¡œ ë°”ê¿ˆ
 		f_LoadCp()
 		if X2_Mode == 1 then
 			NJumpX(FP,X2_Jump,{CV(RepHeroIndex,104,AtMost),CD(X2_Hero,0,AtMost)},{AddCD(X2_Hero,1)})
 		end
 		NElseX()
-		f_ReplaceErrT = "\x07¡º \x08ERROR : \x04Äµ³´À¸·Î ÀÎÇØ f_Replace¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+		f_ReplaceErrT = "\x07ã€ \x08ERROR : \x04ìº”ë‚«ìœ¼ë¡œ ì¸í•´ f_Replaceë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 		DoActions(FP,{RotatePlayer({DisplayTextX(f_ReplaceErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		NIfXEnd()
 	SetCallEnd()
@@ -205,7 +205,7 @@ CJump(FP,OCU_Jump)
 NWhileEnd()
 NJump(FP,OCU_Jump2,CVar(FP,UpCount[2],Exactly,0),{
 		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x12\x07¡º \x04ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù. \x07¡»",4),
+		DisplayText("\x12\x07ã€ \x04ì”ì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. \x07ã€",4),
 		SetMemory(0x6509B0,SetTo,FP)
 		})
 ItoDec(FP,CurrentFactor,VArr(UpCompTxt,0),2,0x1F,0)
@@ -239,11 +239,11 @@ local MGAmount = {20000,100000,500000,2000000,10000000}
 local MGPerX = {0,50000,35000,13000,1500,500}
 local TotalGPer = 0
 local MGT = {
-	StrDesignX("\x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© 50.0% È®·ü·Î \x1F 20,000 ¹Ì³×¶ö\x04À» \x07¾ò¾ú½À´Ï´Ù..."),
-	StrDesignX("\x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© 35.0% È®·ü·Î \x1F 100,000 ¹Ì³×¶ö\x04À» \x07¾ò¾ú½À´Ï´Ù."),
-	StrDesignX("\x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© 13.0% È®·ü·Î \x1F 500,000 ¹Ì³×¶ö\x04À» \x07¾ò¾ú½À´Ï´Ù."),
-	StrDesignX("\x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© 1.5% È®·ü·Î \x1F 2,000,000 ¹Ì³×¶ö\x04À» \x07¾ò¾ú½À´Ï´Ù. \x04ÃàÇÏµå¸³´Ï´Ù!"),
-	StrDesignX("\x1F¹Ì³×¶ö ¹Ú½º\x04¸¦ °³ºÀÇÏ¿© 0.5% È®·ü·Î \x1F 10,000,000 ¹Ì³×¶ö\x04À» \x07¾ò¾ú½À´Ï´Ù. \x04ÃàÇÏµå¸³´Ï´Ù!"),
+	StrDesignX("\x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ 50.0% í™•ë¥ ë¡œ \x1F 20,000 ë¯¸ë„¤ë„\x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤..."),
+	StrDesignX("\x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ 35.0% í™•ë¥ ë¡œ \x1F 100,000 ë¯¸ë„¤ë„\x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesignX("\x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ 13.0% í™•ë¥ ë¡œ \x1F 500,000 ë¯¸ë„¤ë„\x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesignX("\x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ 1.5% í™•ë¥ ë¡œ \x1F 2,000,000 ë¯¸ë„¤ë„\x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x04ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
+	StrDesignX("\x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ë¥¼ ê°œë´‰í•˜ì—¬ 0.5% í™•ë¥ ë¡œ \x1F 10,000,000 ë¯¸ë„¤ë„\x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x04ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
 }
 local errt = ""
 for j,k in pairs(MGAmount) do
@@ -254,12 +254,12 @@ for j,k in pairs(MGAmount) do
 	if j == 5 then WAVRet = PlayWAV("staredit\\wav\\button3.wav") end
 	if j == 4 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer),CV(MinGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04°¡ \x1F¹Ì³×¶ö ¹Ú½º\x04¿¡¼­ 1.5% È®·ü·Î \x1F2,000,000 ¹Ì³×¶ö\x04À» ¾ò¾ú½À´Ï´Ù. ÃàÇÏµå¸³´Ï´Ù!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer),CV(MinGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04ê°€ \x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ì—ì„œ 1.5% í™•ë¥ ë¡œ \x1F2,000,000 ë¯¸ë„¤ë„\x04ì„ ì–»ì—ˆìŠµë‹ˆë‹¤. ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP)}, {preserved})
 		end
 	end
 	if j == 5 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer),CV(MinGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04°¡ \x1F¹Ì³×¶ö ¹Ú½º\x04¿¡¼­ 0.5% È®·ü·Î \x1F10,000,000 ¹Ì³×¶ö\x04À» ¾ò¾ú½À´Ï´Ù. ÃàÇÏµå¸³´Ï´Ù!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP)}, {preserved})
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer),CV(MinGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04ê°€ \x1Fë¯¸ë„¤ë„ ë°•ìŠ¤\x04ì—ì„œ 0.5% í™•ë¥ ë¡œ \x1F10,000,000 ë¯¸ë„¤ë„\x04ì„ ì–»ì—ˆìŠµë‹ˆë‹¤. ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP)}, {preserved})
 		end
 	end
 	CTrigger(FP,{VRange(MinGachaRand, TotalGPer, MGPerX[j+1]-1+TotalGPer)}, {TSetMemory(0x6509B0, SetTo, MinGachaP),TSetResources(MinGachaP, Add, MGAmount[j], Ore),WAVRet,DisplayText(MGT[j], 4)}, {preserved})
@@ -273,19 +273,19 @@ MarGacha = SetCallForward()
 ELevel = CreateVar(FP)
 SetCall(FP)
 MinGachaRand = f_CRandNum(100000)
-local MarGPer = {100000,50000,35000,10000,3500,1000,490,10}--ÀÏ¸¶ ¿µ¸¶ °¶¸¶ ³×ºæ¶ó Å×¶ó ½´ÆÛ³ë¹Ù ÄùÀÌ»ç
-local MarGPerX = {0,65000,20000,8900,4100,1700,250,50}--ÀÏ¸¶ ¿µ¸¶ °¶¸¶ ³×ºæ¶ó Å×¶ó ½´ÆÛ³ë¹Ù ÄùÀÌ»ç
+local MarGPer = {100000,50000,35000,10000,3500,1000,490,10}--ì¼ë§ˆ ì˜ë§ˆ ê°¤ë§ˆ ë„¤ë·¸ë¼ í…Œë¼ ìŠˆí¼ë…¸ë°” í€˜ì´ì‚¬
+local MarGPerX = {0,65000,20000,8900,4100,1700,250,50}--ì¼ë§ˆ ì˜ë§ˆ ê°¤ë§ˆ ë„¤ë·¸ë¼ í…Œë¼ ìŠˆí¼ë…¸ë°” í€˜ì´ì‚¬
 local TotalGPer = 0
-local MarGUID = {0,20,100,16,99,12,60}--ÀÏ¸¶ ¿µ¸¶ °¶¸¶ ³×ºæ¶ó Å×¶ó ½´ÆÛ³ë¹Ù ÄùÀÌ»ç
--- °¢À¯´ÖÀº Å×¶óºÎÅÍ Á¦¿Ü, 3±â ÇÕÄ¥°æ¿ì »óÀ§À¯´Ö 1±â·Î º¯È¯°¡´É
+local MarGUID = {0,20,100,16,99,12,60}--ì¼ë§ˆ ì˜ë§ˆ ê°¤ë§ˆ ë„¤ë·¸ë¼ í…Œë¼ ìŠˆí¼ë…¸ë°” í€˜ì´ì‚¬
+-- ê°ìœ ë‹›ì€ í…Œë¼ë¶€í„° ì œì™¸, 3ê¸° í•©ì¹ ê²½ìš° ìƒìœ„ìœ ë‹› 1ê¸°ë¡œ ë³€í™˜ê°€ëŠ¥
 local MGT = {
-	StrDesign("\x0465.00% È®·ü·Î Marine \x04À» \x07¾ò¾ú½À´Ï´Ù."),
-	StrDesign("\x0420.00% È®·ü·Î \x1BH \x04Marine \x04À» \x07¾ò¾ú½À´Ï´Ù."),
-	StrDesign("\x048.90% È®·ü·Î \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04À» \x07¾ò¾ú½À´Ï´Ù."),
-	StrDesign("\x044.10% È®·ü·Î \x11£Î\x07£Å\x1F£Â\x1C£Õ\x17£Ì\x11£Á \x04¸¦ \x07¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!"),
-	StrDesign("\x041.70% È®·ü·Î \x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á \x04¸¦ \x07¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!"),
-	StrDesign("\x040.25% È®·ü·Î \x07£Ó\x1F£Õ\x1C£Ğ\x0E£Å\x0F£Ò\x10£Î\x17£Ï\x11£Ö\x08£Á \x04¸¦\x07¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!"),
-	StrDesign("\x040.05% È®·ü·Î \x11£Ñ\x1F£Õ\x1B£Á\x16£Ó\x10£Á\x1D£Ò \x04¸¦\x07¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!"),
+	StrDesign("\x0465.00% í™•ë¥ ë¡œ Marine \x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x0420.00% í™•ë¥ ë¡œ \x1BH \x04Marine \x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x048.90% í™•ë¥ ë¡œ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x04ì„ \x07ì–»ì—ˆìŠµë‹ˆë‹¤."),
+	StrDesign("\x044.10% í™•ë¥ ë¡œ \x11ï¼®\x07ï¼¥\x1Fï¼¢\x1Cï¼µ\x17ï¼¬\x11ï¼¡ \x04ë¥¼ \x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
+	StrDesign("\x041.70% í™•ë¥ ë¡œ \x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡ \x04ë¥¼ \x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
+	StrDesign("\x040.25% í™•ë¥ ë¡œ \x07ï¼³\x1Fï¼µ\x1Cï¼°\x0Eï¼¥\x0Fï¼²\x10ï¼®\x17ï¼¯\x11ï¼¶\x08ï¼¡ \x04ë¥¼\x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
+	StrDesign("\x040.05% í™•ë¥ ë¡œ \x11ï¼±\x1Fï¼µ\x1Bï¼¡\x16ï¼³\x10ï¼¡\x1Dï¼² \x04ë¥¼\x07ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!"),
 }
 
 
@@ -298,13 +298,13 @@ for j = 1, #MarGPerX-1 do
 	errt = errt..TotalGPer.."  "..MarGPerX[j+1]-1+TotalGPer.."\n"
 	if j == 6 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04°¡ 0.25% È®·ü·Î \x07£Ó\x1F£Õ\x1C£Ğ\x0E£Å\x0F£Ò\x10£Î\x17£Ï\x11£Ö\x08£Á \x04¸¦\x07 ¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP),
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04ê°€ 0.25% í™•ë¥ ë¡œ \x07ï¼³\x1Fï¼µ\x1Cï¼°\x0Eï¼¥\x0Fï¼²\x10ï¼®\x17ï¼¯\x11ï¼¶\x08ï¼¡ \x04ë¥¼\x07 ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg"),PlayWAVX("staredit\\wav\\clear2.ogg")}, HumanPlayers, FP),
 		}, {preserved})
 		end
 	end
 	if j == 7 then
 		for p = 0, 6 do
-			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04°¡ 0.05% È®·ü·Î \x11£Ñ\x1F£Õ\x1B£Á\x16£Ó\x10£Á\x1D£Ò \x04¸¦\x07 ¾ò¾ú½À´Ï´Ù. \x11ÃàÇÏµå¸³´Ï´Ù!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP),
+			Trigger2X(FP,{VRange(MinGachaRand, TotalGPer,MarGPerX[j+1]-1+TotalGPer),CV(MarGachaP,p)}, {RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04ê°€ 0.05% í™•ë¥ ë¡œ \x11ï¼±\x1Fï¼µ\x1Bï¼¡\x16ï¼³\x10ï¼¡\x1Dï¼² \x04ë¥¼\x07 ì–»ì—ˆìŠµë‹ˆë‹¤. \x11ì¶•í•˜ë“œë¦½ë‹ˆë‹¤!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP),
 		}, {preserved})
 		end
 	end

@@ -3,8 +3,8 @@ function Include_GunData(Size,LineNum)
 	local G_TempV,G_A,GunID = CreateVariables(3,FP)
 	local GunPlayer = CreateVar(FP)
 	local CIndex = FuncAlloc
-	f_GunSendT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	f_GunSendT2 = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: ¼º°øÇÑ f_GunSendÀÇ EXCunit Number : ")
+	f_GunSendT = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	f_GunSendT2 = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: ì„±ê³µí•œ f_GunSendì˜ EXCunit Number : ")
 	G_A = CreateVar(FP)
 	FuncAlloc = FuncAlloc + 1
 	G_Send = SetCallForward()
@@ -13,9 +13,9 @@ function Include_GunData(Size,LineNum)
 	Actived_Gun = CreateVar(FP)
 	f_GunNum = CreateVar(FP)
 	G_TempH = CreateVar(FP)
-	f_GunT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	G_SendErrT = "\x07¡º \x08ERROR : \x04f_GunÀÇ ¸ñ·ÏÀÌ °¡µæ Â÷ G_Send¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	f_GunT2 = CreateCText(FP," \x07¡»")
+	f_GunT = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	G_SendErrT = "\x07ã€ \x08ERROR : \x04f_Gunì˜ ëª©ë¡ì´ ê°€ë“ ì°¨ G_Sendë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	f_GunT2 = CreateCText(FP," \x07ã€")
 	local f_GunNumT = CreateVArray(FP,5)
 	Var_InputCVar = {}
 	Var_Lines = LineNum
@@ -41,32 +41,32 @@ function Include_GunData(Size,LineNum)
 		f_Read(FP,BackupCp,GunID,"X",0xFF,1)
 		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
 		function GunBGM(ID,Type,Text,Point,OtherTrig)
-			local GText = "\n\n\n\n\n\x13\x08£¡ £¡ £¡ \x04ÀûÀÇ "..Text.." ÆÄ±«ÇÏ¿´´Ù!\x17 + "..Point.." P t s\x08 £¡ £¡ £¡\n\n"
+			local GText = "\n\n\n\n\n\x13\x08ï¼ ï¼ ï¼ \x04ì ì˜ "..Text.." íŒŒê´´í•˜ì˜€ë‹¤!\x17 + "..Point.." P t s\x08 ï¼ ï¼ ï¼\n\n"
 			if Type == nil then
 				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			else
 				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			end
 		end
-		GunBGM(131,nil,"±âÁö \x18Hatchery \x04¸¦",25000,{SetCD(NosBGM,1)})
-		GunBGM(132,nil,"±âÁö \x18Lair \x04¸¦",35000,{SetCD(NosBGM,1)})
-		GunBGM(133,4,"±âÁö \x18Hive \x04¸¦",50000)
-		GunBGM(175,5,"\x04Áê¸² \x11¹«³ÊÁø \x07½ÅÀü \x04À»",300000)
-		GunBGM(127,5,"\x07Áê¸² \x06»ê¸ÆÀÇ \x11°á°è \x04¸¦",500000)
-		GunBGM(109,6,"º¸±Ş°í \x18Supply Depot \x04À»",100000)
-		GunBGM(156,6,"¼öÁ¤Å¾ \x18Pylon \x04À»",100000)
-		GunBGM(154,nil,"¿¬°áÃ¼ \x18Nexus \x04¸¦",150000,{SetCD(NosBGM,1)})
-		GunBGM(116,7,"¿¬±¸¼Ò \x18Facility \x04À»",30000)
-		GunBGM(150,7,"¹øµ¥±â \x18Mature Crysalis \x04À»",30000)
-		GunBGM(151,4,"Á¤½ÅÃ¼ \x18Cerebrate \x04À»",60000)
-		GunBGM(130,4,"°¨¿°Ã¼ \x18Center \x04¸¦",60000)
-		GunBGM(201,8,"Á¤½ÅÃ¼ \x18Cocoon \x04À»",150000)
-		GunBGM(200,8,"¹ßÀü¼Ò \x18Generator \x04¸¦",250000)
-		GunBGM(147,8,"¿ÏÀüÃ¼ \x18Overmind G \x04¸¦",400000)
-		GunBGM(148,8,"ÃÊ¿ùÃ¼ \x18Overmind \x04¸¦",100000)
-		GunBGM(173,8,"¼öÁ¤ ÁıÇÕÃ¼ \x18Formation \x04À»",100000)
-		GunBGM(190,8,"±³¶õ±â \x18Psi Disrupter \x04¸¦",300000)
-		GunBGM(168,nil,"ºÀÀÎ \x18Stasis Cell \x04À»",50000)
+		GunBGM(131,nil,"ê¸°ì§€ \x18Hatchery \x04ë¥¼",25000,{SetCD(NosBGM,1)})
+		GunBGM(132,nil,"ê¸°ì§€ \x18Lair \x04ë¥¼",35000,{SetCD(NosBGM,1)})
+		GunBGM(133,4,"ê¸°ì§€ \x18Hive \x04ë¥¼",50000)
+		GunBGM(175,5,"\x04ì¥¬ë¦¼ \x11ë¬´ë„ˆì§„ \x07ì‹ ì „ \x04ì„",300000)
+		GunBGM(127,5,"\x07ì¥¬ë¦¼ \x06ì‚°ë§¥ì˜ \x11ê²°ê³„ \x04ë¥¼",500000)
+		GunBGM(109,6,"ë³´ê¸‰ê³  \x18Supply Depot \x04ì„",100000)
+		GunBGM(156,6,"ìˆ˜ì •íƒ‘ \x18Pylon \x04ì„",100000)
+		GunBGM(154,nil,"ì—°ê²°ì²´ \x18Nexus \x04ë¥¼",150000,{SetCD(NosBGM,1)})
+		GunBGM(116,7,"ì—°êµ¬ì†Œ \x18Facility \x04ì„",30000)
+		GunBGM(150,7,"ë²ˆë°ê¸° \x18Mature Crysalis \x04ì„",30000)
+		GunBGM(151,4,"ì •ì‹ ì²´ \x18Cerebrate \x04ì„",60000)
+		GunBGM(130,4,"ê°ì—¼ì²´ \x18Center \x04ë¥¼",60000)
+		GunBGM(201,8,"ì •ì‹ ì²´ \x18Cocoon \x04ì„",150000)
+		GunBGM(200,8,"ë°œì „ì†Œ \x18Generator \x04ë¥¼",250000)
+		GunBGM(147,8,"ì™„ì „ì²´ \x18Overmind G \x04ë¥¼",400000)
+		GunBGM(148,8,"ì´ˆì›”ì²´ \x18Overmind \x04ë¥¼",100000)
+		GunBGM(173,8,"ìˆ˜ì • ì§‘í•©ì²´ \x18Formation \x04ì„",100000)
+		GunBGM(190,8,"êµë€ê¸° \x18Psi Disrupter \x04ë¥¼",300000)
+		GunBGM(168,nil,"ë´‰ì¸ \x18Stasis Cell \x04ì„",50000)
 
 		Convert_CPosXY()
 		CMov(FP,G_A,0)
@@ -163,7 +163,7 @@ function Include_GunData(Size,LineNum)
 	local G_TempW = CreateVar(FP)
 	local CurLoc,CurLoc2 = CreateVars(2,FP)
 	local GunCaseCheck = CreateCcode()
-	local GunCaseErrT = "\x07¡º \x08ERROR : \x04µî·ÏµÇÁö ¾ÊÀº °ÇÀÛÀÌ ÀÛµ¿ÇÏ¿© ÀÚµ¿À¸·Î SuspendÇÏ¿´½À´Ï´Ù. °ÇÀÛÀ» µî·ÏÇØÁÖ¼¼¿ä.\x07 ¡»"
+	local GunCaseErrT = "\x07ã€ \x08ERROR : \x04ë“±ë¡ë˜ì§€ ì•Šì€ ê±´ì‘ì´ ì‘ë™í•˜ì—¬ ìë™ìœ¼ë¡œ Suspendí•˜ì˜€ìŠµë‹ˆë‹¤. ê±´ì‘ì„ ë“±ë¡í•´ì£¼ì„¸ìš”.\x07 ã€"
 	f_GunTable = {}
 	function CIf_GCase(Index)
 		CIf(FP,{Gun_Line(0,Exactly,Index),Gun_Line(54,AtMost,0)},{SetCD(GunCaseCheck,1)})
@@ -216,7 +216,7 @@ function Include_GunData(Size,LineNum)
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 			CMov(FP,G_CA_X,CPosX)
 			CMov(FP,G_CA_Y,CPosY)
-			--¿©±â¿¡ TempRepeat³ª G_CA_SpawnSetÀ» ÀÔ·Â
+			--ì—¬ê¸°ì— TempRepeatë‚˜ G_CA_SpawnSetì„ ì…ë ¥
 			for j, k in pairs(HatcCUTable) do
 				for l,m in pairs(k) do
 					if type(m[2]) == "table" then
@@ -281,7 +281,7 @@ function Include_GunData(Size,LineNum)
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 			CMov(FP,G_CA_X,CPosX)
 			CMov(FP,G_CA_Y,CPosY)
-			--¿©±â¿¡ TempRepeat³ª G_CA_SpawnSetÀ» ÀÔ·Â
+			--ì—¬ê¸°ì— TempRepeatë‚˜ G_CA_SpawnSetì„ ì…ë ¥
 			for j, k in pairs(LairCUTable) do
 				for l,m in pairs(k) do
 					if type(m[2]) == "table" then

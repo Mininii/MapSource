@@ -1,7 +1,7 @@
 function Operator_Trig()
     Cunit2 = CreateVar(FP)
 	CurrentOP = CreateVar(FP)
-    CIfX(FP,Never()) -- »óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ô ½ÃÀÛ
+    CIfX(FP,Never()) -- ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ ì‹œì‘
 	for i = 0, 6 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
@@ -75,7 +75,7 @@ function Operator_Trig()
 		CIfEnd()
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
-    CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ¹è¼ÓÁ¶Á¤ Æ®¸®°Å
+    CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ë°°ì†ì¡°ì • íŠ¸ë¦¬ê±°
         CMov(FP,CurrentSpeed,SpeedVar)
         for i = 1, 11 do
             Trigger { -- No comment (E93EF7A9)
@@ -86,7 +86,7 @@ function Operator_Trig()
                 },
                 actions = {PreserveTrigger();
                     RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-                    DisplayTextX("\x13\x07¡º \x0F¹è¼Ó º¯°æ \x10- "..XSpeed[i].." \x07¡»", 4)},HumanPlayers,FP);
+                    DisplayTextX("\x13\x07ã€ \x0Fë°°ì† ë³€ê²½ \x10- "..XSpeed[i].." \x07ã€", 4)},HumanPlayers,FP);
                     SetMemory(0x5124F0,SetTo,SpeedV[i]);
                 },
             }
