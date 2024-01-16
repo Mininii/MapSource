@@ -28,10 +28,24 @@ end
 function PatchInput()
 	DoActions2(FP,PatchArr,1)
 	DoActions2(FP,PatchArr2,1)
-	DoActions2(AllPlayers,PatchArrPrsv)
+	DoActions2(FP,PatchArrPrsv)
+	
 end
 
+function Getdebugmsg(infonum)
+	local file1 = debug.getinfo(infonum).source
+	local DebugMsg = string.sub(file1, #file1-13, #file1)..":"..debug.getinfo(infonum).currentline.." in global "..debug.getinfo(infonum).name
+	return DebugMsg
+end
 function PatchInsert(Act)
+--	if Limit == 1 then
+--	
+--	
+--	table.insert(PatchArr,RotatePlayer({DisplayTextX(Getdebugmsg(1), 4)}, HumanPlayers, FP))
+--	table.insert(PatchArr,RotatePlayer({DisplayTextX(Getdebugmsg(2), 4)}, HumanPlayers, FP))
+--	table.insert(PatchArr,RotatePlayer({DisplayTextX(Getdebugmsg(3), 4)}, HumanPlayers, FP))
+--	table.insert(PatchArr,RotatePlayer({DisplayTextX(Getdebugmsg(4), 4)}, HumanPlayers, FP))
+--end
 	table.insert(PatchArr,Act)
 end
 function PatchInsert2(Act)
@@ -42,7 +56,7 @@ function PatchInsertPrsv(Act)
 end
 
 function PatchInsertC(Cond)
-	--table.insert(MCTCondArr,Cond)
+	--PushMCT(Cond)
 end
 
 function SetUnitsDatX(UnitID,Property)
@@ -307,10 +321,22 @@ function Print_13X(PlayerID,TargetPlayer,String)
 end
 
 function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName,DefType,GroupFlag,RangeMax)
+	local TempWID = WepID
+	local TempWID2 = 130
+	if UnitID == 62 then TempWID2 = WepID end
+	if 
+	UnitID == 3 or 
+	UnitID == 5 or 
+	UnitID == 17 or 
+	UnitID == 23 or 
+	UnitID == 25 or 
+	UnitID == 30 then TempWID = 130 
+	SetUnitsDatX(UnitID+1, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=TempWID2,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag})
+	end
 	if GroupFlag == nil then GroupFlag= 0xA end
 	if DefType == nil then DefType = 0 end
 	if RangeMax == nil then RangeMax = 6*32 end
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=WepID,AirWeapon=130,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=TempWID,AirWeapon=TempWID2,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
@@ -318,90 +344,80 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	IdleOrder = 2,
 	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
 })
-if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=RangeMax,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
-else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=RangeMax,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
-end
+if ObjNum == nil then ObjNum = 1 end
+SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=RangeMax,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
 
 
 end
 
+MCTErrorCheck = {}
+function PushMCT(Offset,Cond)
+	
+	if MCTErrorCheck[Offset] == nil then
+		MCTErrorCheck[Offset] = true
+		table.insert(MCTCondArr,Cond)
+		table.insert(MCTCondArr2,Offset)
+		table.insert(MCTCondArr3,Getdebugmsg(1).."\n"..Getdebugmsg(2).."\n"..Getdebugmsg(3).."\n"..Getdebugmsg(4))
+	else
+		PushErrorMsg("MCT Duplicated!! : "..Offset.."  Value : "..Cond[3])
+	end
 
-
-
-function SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WeaponName)
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},DefUpType=0,SeekRange=7,GroupFlag=0xA,
-	HumanInitAct = 2,
-	ComputerInitAct = 2,
-	AttackOrder = 10,
-	AttackMoveOrder = 2,
-	IdleOrder = 2,
-	RClickAct = 1,SizeL=1,SizeU=1,SizeR=1,SizeD=1
-
-})
-
-if ObjNum~=nil then
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=ObjNum,Splash=false})
-else
-	SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=1,Splash=false})
 end
-end
-function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ifTType,ObjNum)
+
+function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ObjNum,ECost)
+	local pertotal = 0
+	for p,z in pairs(Per) do
+		pertotal = pertotal + z
+	end if pertotal ~= 100000 then PushErrorMsg("Percent Total Error : "..Per[1].." "..Per[2].." "..Per[3].." "..Per[4]) end
 	local WepName = {}
 	local DamageFactor = Damage/10
 	if Damage == 0 then
 		Damage = 65500/2
 		DamageFactor = 728/2
 	end
-	WepName[1] = 1469
-	WepName[3] = 1468
-	WepName[4] = 1447
-	WepName[5] = 1446
-	WepName[12] = 1445
-	WepName[24] = 1444
-	WepName[48] = 1443
-	WepName[72] = 1442
-
-	if ifTType ~= nil then
-		SetUnitAbilityT(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WepName[Cooldown])
-		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID+1,Exactly,WepID))
-		if UnitID==62 then
-			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,104))
-		else
-			table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID+1,Exactly,130))
-		end
+	
+	SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,1469)--자동계산후 TBL에 쏠 예정
+	if 
+	UnitID == 3 or 
+	UnitID == 5 or 
+	UnitID == 17 or 
+	UnitID == 23 or 
+	UnitID == 25 or 
+	UnitID == 30 then 
+		PushMCT(0x6636B8+UnitID,MemoryB(0x6636B8+UnitID,Exactly,130))
+		PushMCT(0x6636B8+UnitID+1,MemoryB(0x6636B8+UnitID+1,Exactly,WepID))
+	elseif UnitID == 62 then
+		PushMCT(0x6636B8+UnitID,MemoryB(0x6636B8+UnitID,Exactly,WepID))
+		PushMCT(0x6616E0+UnitID,MemoryB(0x6616E0+UnitID,Exactly,WepID))
 	else
-		SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,WepName[Cooldown])
-		table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
+		PushMCT(0x6636B8+UnitID,MemoryB(0x6636B8+UnitID,Exactly,WepID))
 	end
+
+
 	if Level>=26 and Level<=50 then
 		SetUnitsDatX(UnitID, {GroupFlag=0xA+0x20})--Factories
-		table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,0xA+0x20)) 
+		PushMCT(0x6637A0 + (UnitID),MemoryB(0x6637A0 + (UnitID),Exactly,0xA+0x20)) 
 	else
-		table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,0xA)) 
+		PushMCT(0x6637A0 + (UnitID),MemoryB(0x6637A0 + (UnitID),Exactly,0xA)) 
 	end
 	SetUnitsDatX(UnitID, {Class=193})
-	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp})
+	table.insert(LevelUnitArr,{Level,UnitID,Per,Exp,ECost})
 
 	--AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
 	--table.insert(AutoEnchArr2,CreateCcodeArr(7))
-	table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
-	table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,DamageFactor)) 
-	table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
-	table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
+	PushMCT(0x656EB0+(WepID *2),MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
+	PushMCT(0x657678+(WepID *2),MemoryW(0x657678+(WepID *2),Exactly,DamageFactor)) 
+	PushMCT(0x656FB8+WepID,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
+	PushMCT(0x6571D0+WepID,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
 
-	table.insert(MCTCondArr,MemoryB(0x663150 + (UnitID),Exactly,4)) 
-	table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,0+0x20000000,4+8+0x20000000)) 
-	table.insert(MCTCondArr,Memory(0x657470+(WepID *4),Exactly,6*32)) 
-	table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
-	if ObjNum == nil then ObjNum =1 end
-	table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,ObjNum)) 
-	if Limit == 1 then
-		if PUT[UnitID] == nil then PUT[UnitID]=true else error("PUT_Duplicated : "..UnitID) end
-		if PWT[WepID] == nil then PWT[WepID]=true else error("PWT_Duplicated : "..WepID) end
-	end
-	
+	PushMCT(0x663150 + (UnitID),MemoryB(0x663150 + (UnitID),Exactly,4)) 
+	PushMCT(0x664080 + (UnitID*4),MemoryX(0x664080 + (UnitID*4),Exactly,0+0x20000000,4+8+0x20000000)) 
+	PushMCT(0x657470+(WepID *4),Memory(0x657470+(WepID *4),Exactly,6*32)) 
+	PushMCT(0x6566F8+WepID,MemoryB(0x6566F8+WepID,Exactly,1)) 
+	if ObjNum == nil then ObjNum = 1 end
+	PushMCT(0x6564E0+WepID,MemoryB(0x6564E0+WepID,Exactly,ObjNum)) 
+	if PUT[UnitID] == nil then PUT[UnitID]=true else PushErrorMsg("PUT_Duplicated : "..UnitID) end
+	if PWT[WepID] == nil then PWT[WepID]=true else PushErrorMsg("PWT_Duplicated : "..WepID) end
 	
 end
 
@@ -424,19 +440,19 @@ function SetPersonalUnit(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,Wea
 })
 SetWeaponsDatX(WepID,{WepName=WeaponName,Cooldown = Cooldown,DmgBase=Damage,DmgFactor=DamageFactor,UpgradeType=UpgradeID,RangeMax=6*32,DmgType=3,TargetFlag=2,ObjectNum=2,Splash=false})
 
-table.insert(MCTCondArr,MemoryB(0x6636B8+UnitID,Exactly,WepID))
-table.insert(MCTCondArr,MemoryB(0x6637A0 + (UnitID),Exactly,GroupFlag)) 
-table.insert(MCTCondArr,MemoryB(0x6616E0+UnitID,Exactly,130))
---table.insert(MCTCondArr,MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
---table.insert(MCTCondArr,MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
-table.insert(MCTCondArr,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
-table.insert(MCTCondArr,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
-table.insert(MCTCondArr,MemoryB(0x663150 + (UnitID),Exactly,4)) 
-table.insert(MCTCondArr,MemoryX(0x664080 + (UnitID*4),Exactly,973078528,0xFFFFFFFF)) 
-table.insert(MCTCondArr,Memory(0x657470+(WepID *4),Exactly,6*32)) 
-table.insert(MCTCondArr,MemoryB(0x6566F8+WepID,Exactly,1)) 
+--PushMCT(MemoryW(0x656EB0+(WepID *2),Exactly,Damage)) 
+--PushMCT(MemoryW(0x657678+(WepID *2),Exactly,Damage/10)) 
+PushMCT(0x6636B8+UnitID,MemoryB(0x6636B8+UnitID,Exactly,WepID))
+PushMCT(0x6637A0 + (UnitID),MemoryB(0x6637A0 + (UnitID),Exactly,GroupFlag)) 
+PushMCT(0x6616E0+UnitID,MemoryB(0x6616E0+UnitID,Exactly,130))
+PushMCT(0x656FB8+WepID,MemoryB(0x656FB8+WepID,Exactly,Cooldown)) 
+PushMCT(0x6571D0+WepID,MemoryB(0x6571D0+WepID,Exactly, UpgradeID)) 
+PushMCT(0x663150 + (UnitID),MemoryB(0x663150 + (UnitID),Exactly,4)) 
+PushMCT(0x664080 + (UnitID*4),MemoryX(0x664080 + (UnitID*4),Exactly,973078528,0xFFFFFFFF)) 
+PushMCT(0x657470+(WepID *4),Memory(0x657470+(WepID *4),Exactly,6*32)) 
+PushMCT(0x6566F8+WepID,MemoryB(0x6566F8+WepID,Exactly,1)) 
 
-table.insert(MCTCondArr,MemoryB(0x6564E0+WepID,Exactly,2)) 
+PushMCT(0x6564E0+WepID,MemoryB(0x6564E0+WepID,Exactly,2)) 
 
 end
 function PopLevelUnit()
@@ -448,30 +464,27 @@ function PopLevelUnit()
 	PerDataArr = CreateVArr(#LevelUnitArr, FP)
 	PerDataArr2 = CreateVArr(#LevelUnitArr, FP)
 	PerDataArr3 = CreateVArr(#LevelUnitArr, FP)
-	BuyDataArr = CreateArr(#AutoBuyArr,FP)
+	PerDataArr4 = CreateVArr(#LevelUnitArr, FP)
+	ECostArr = CreateVArr(#LevelUnitArr, FP)
 	for j = 0, 9 do
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr,j),SetTo,0))
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoEnchArr2,j),SetTo,0))
 		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(AutoSellArr,j),SetTo,0))
-		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j),SetTo,0))
 	end
-	BuyDataWArr = CreateWArr(#AutoBuyArr,FP)
 	for j,k in pairs(LevelUnitArr) do
 		
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(LevelDataArr,j-1),SetTo,k[2]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr2,j-1),SetTo,math.floor(k[3]/10)))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr3,j-1),SetTo,math.floor(k[3]/100)))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3][1]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr2,j-1),SetTo,k[3][2]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr3,j-1),SetTo,k[3][3]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr4,j-1),SetTo,k[3][4]))
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ExpDataArr,j-1),SetTo,k[4]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ECostArr,j-1),SetTo,k[5]))
 	end
 	
-	for j,k in pairs(AutoBuyArr) do
-		table.insert(CtrigInitArr[FP+1],SetMemX(Arr(BuyDataArr,j-1),SetTo,k[1]))
-		--table.insert(CtrigInitArr[FP+1],SetCWAar(WArr(BuyDataWArr,j-1),SetTo,k[2]))
-	end
 	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- 최강유닛 강화확률 감추기
 
-	GetUnitVArr = CreateVArrArr(7, #LevelUnitArr, FP)
+	GetUnitVArr = CreateVArrArr(8, #LevelUnitArr, FP)
 end
 
 function CIfKeyFunc(CP,Key,ContentStr,DisContentStr,Conditions,CondActions,DisCondActions)
@@ -535,17 +548,63 @@ function BtnSetEnd()
 end
 
 
-function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossFlag)
-	local DPSArrX = CreateArr(96*4, FP)
-	local TotalDPS = CreateWar(FP)
-	local TotalDPS2 = CreateWar(FP)
-	local DPSCheckV = CreateVar(FP)
-	local DpsDest = CreateVar(FP)
-	local GetMoney = CreateWar(FP)
-	local DPSCheck = CreateCcode()
-	local DPSCheck2 = CreateVar(FP)
-	local ResetCheck = CreateCcode()
-	CIfX(FP,{CV(UnitPtr,19025,AtLeast)},{AddCD(DPSCheck,1),SetCD(ResetCheck,0)})
+function PVWArrX(VW)
+	if VW[1][4]=="V" then
+		return VArrX(GetVArray(VW[1], 7), VArrI, VArrI4)
+	elseif VW[1][4]=="W" then
+		return WArrX(GetWArray(VW[1], 7), WArrI,WArrI4)
+	else PushErrorMsg("PVWArrX_VWType_Error")
+	end
+end
+function PVtoV(PVW,VW)
+	if VW == nil then
+		if PVW[1][4] == "V" then
+			VW = CreateVar(FP)
+		elseif PVW[1][4] == "W" then
+			VW = CreateWar(FP)
+		end
+	end
+	if PVW[1][4] == "V" then
+		CMovX(FP,VW,PVWArrX(PVW),nil,nil,nil,1)
+	elseif PVW[1][4] == "W" then
+		f_LMov(FP, VW, PVWArrX(PVW), nil, nil, 1)
+	else PushErrorMsg("PVtoV_InputError")
+	end
+return VW
+end
+
+function VtoPV(VW,PVW)
+	if VW[4] == "V" then
+		CMovX(FP,PVWArrX(PVW),VW,nil,nil,nil,1)
+	elseif VW[4] == "W" then
+		f_LMov(FP, PVWArrX(PVW),VW, nil, nil, 1)
+	else PushErrorMsg("VtoPV_InputError")
+	end
+end
+
+
+function DPSBuildingX(CP,PUnitPtr,Multiplier,MultiplierV,TotalDPSDest,PMoneyV,PMoneyV2,BossFlag)
+	local Arr_DPSArrX = CreateArrArr(8,96*4, FP)
+	local Arr_TotalDPS = CreateWarArr(8,FP)
+	local Arr_TotalDPS2 = CreateWarArr(8,FP)
+	local Arr_GetMoney = CreateWarArr(8,FP)
+	local Arr_DPSCheckV = CreateVarArr(8,FP)
+	local Arr_DpsDest = CreateVarArr(8,FP)
+	local Arr_DPSCheck2 = CreateVarArr(8,FP)
+
+	local UnitPtr = PVtoV(PUnitPtr)
+	local MoneyV = PVtoV(PMoneyV)
+	local MoneyV2 = PVtoV(PMoneyV2)
+	local TotalDPS = PVtoV(Arr_TotalDPS)
+	local TotalDPS2 = PVtoV(Arr_TotalDPS2)
+	local GetMoney = PVtoV(Arr_GetMoney)
+	local DPSCheckV = PVtoV(Arr_DPSCheckV)
+	local DpsDest = PVtoV(Arr_DpsDest)
+	local DPSCheck2 = PVtoV(Arr_DPSCheck2)
+	
+	CIfX(FP,{CV(UnitPtr,19025,AtLeast)},{})
+
+
 	TriggerX(FP,{CV(DPSCheck2,96*4,AtLeast)},{SetV(DPSCheck2,0)},{preserved})
 
 		
@@ -558,8 +617,14 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 	CMov(FP,DpsDest,0)
 	CIfXEnd()
 	f_LAdd(FP, TotalDPS, TotalDPS, {DpsDest,0})
-	f_LSub(FP, TotalDPS, TotalDPS, {_ReadF(ArrX(DPSArrX,DPSCheck2)),0})
-	CMov(FP,ArrX(DPSArrX,DPSCheck2),DpsDest)
+	for i = 0, 7 do
+		CIf(FP,{CV(GCP,i)})
+		
+		f_LSub(FP, TotalDPS, TotalDPS, {_ReadF(ArrX(Arr_DPSArrX[i+1],DPSCheck2)),0})
+		CMov(FP,ArrX(Arr_DPSArrX[i+1],DPSCheck2),DpsDest)
+		CIfEnd()
+	end 
+
 	CIfX(FP,{TTNWar(TotalDPS,AtLeast,"16")})
 	f_LDiv(FP, TotalDPS2,TotalDPS,"16")
 	CElseX()
@@ -567,59 +632,38 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 	CIfXEnd()
 
 
+	if type(TotalDPSDest) ~= "table" then PushErrorMsg("TotalDPSDest InputError") end
+	for j,k in pairs(TotalDPSDest) do
+		
+		if type(k) == "number" then
+			CDoActions(FP,{TSetMemory(_Add(GCP,k), SetTo, _Cast(0,TotalDPS2))})
+		elseif k == Ore or k == Gas then
+			CDoActions(FP,{TSetResources(CP, SetTo, _Cast(0,TotalDPS2), k)})
+		elseif k[1][4] == "W" then
+			f_LMov(FP,PVWArrX(k),TotalDPS2)
+		elseif k[1][4] == "V" then
+			CMovX(FP,PVWArrX(k),_Cast(0,TotalDPS2),nil,nil,nil,1)
+		elseif k == nil then return nil
+		else
+			PushErrorMsg("TotalDPSDest InputError")
+		end 
+	end
 
 
-	--CMov(FP,TotalDPS,0)
-	--for j = 1, 24 do
-	--	CTrigger(FP, {CD(DPSCheck,j)},{TSetNVar(DPS[j], SetTo, DpsDest)},1)
-	--	CAdd(FP,TotalDPS,DPS[j])
-	--end
-
-
-
-	if type(TotalDPSDest) == "table" then
-		for j,k in pairs(TotalDPSDest) do
-			if type(k) == "number" then
-				CDoActions(FP,{TSetMemory(k, SetTo, _Cast(0,TotalDPS2))})
-			elseif k[4] == "W" then
-				f_LMov(FP,k,TotalDPS2)
-			elseif k[4] == "V" then
-				f_Cast(FP, {k,0}, TotalDPS2)
-			elseif k == Ore or k == Gas then
-				CDoActions(FP,{TSetResources(CP, SetTo, _Cast(0,TotalDPS2), k)})
-			elseif k == nil then return nil
-			else
-				PushErrorMsg("TotalDPSDest InputError")
-			end 
-		end
-	elseif type(TotalDPSDest) == "number" then
-		CDoActions(FP,{TSetMemory(TotalDPSDest, SetTo, _Cast(0,TotalDPS2))})
-	elseif TotalDPSDest[4] == "W" then
-		--CMov(FP,TotalDPSDest,TotalDPS2)
-		f_LMov(FP,TotalDPSDest,TotalDPS2)
-	elseif TotalDPSDest[4] == "V" then
-		CMov(FP,TotalDPSDest,_Cast(0,TotalDPS2))
-	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
-		CDoActions(FP,{TSetResources(CP, SetTo, _Cast(0,TotalDPS2), TotalDPSDest)})
-	elseif TotalDPSDest == nil then return nil
-	else
-		PushErrorMsg("TotalDPSDest InputError")
-	end 
 
 
 	
 	DoActionsX(FP,{AddV(DPSCheck2,1)})
-	--TriggerX(FP,{CD(DPSCheck,24,AtLeast)},{SetCD(DPSCheck,0)},{preserved})
-	if MoneyV ~= nil then
+	if PMoneyV ~= nil then
 		CIf(FP,{CV(DpsDest,1,AtLeast)})
 			local TempV = CreateVar(FP)
 			CMov(FP,TempV,DpsDest)
 			
 			if MultiplierV ~= nil then
-				if MultiplierV[4]=="V" then
-					f_LMov(FP,GetMoney,_LMul({MultiplierV,0},{TempV,0}))
-				elseif MultiplierV[4]=="W" then
-					f_LMov(FP,GetMoney,_LMul(MultiplierV,{TempV,0}))
+				if MultiplierV[1][4]=="V" then
+					f_LMov(FP,GetMoney,_LMul({PVWArrX(MultiplierV),0},{TempV,0}))
+				elseif MultiplierV[1][4]=="W" then
+					f_LMov(FP,GetMoney,_LMul(PVWArrX(MultiplierV),{TempV,0}))
 				end
 			else
 				f_Cast(FP, GetMoney,{TempV,0},nil, nil, 1)
@@ -633,7 +677,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 				f_LMod(FP, GetMoney, GetMoney, "100000000000")--1000억이 넘는 값은 지운다
 				local TempCast = CreateVar(FP)
 				f_Cast(FP, {TempCast,0}, TempDiv, nil, nil, 1)
-				CAdd(FP,iv.Money2[CP+1],TempCast)--1000경원수표추가
+				CAdd(FP,MoneyV2,TempCast)--1000경원수표추가
 				CIfEnd()
 				f_LMul(FP, GetMoney, GetMoney,Multiplier)
 			elseif Multiplier ~= nil then
@@ -645,7 +689,7 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 			CIfX(FP,{TTNWar(GetMoney, ">", _LSub("18446744073709551615",MoneyV))})--오버플로우일경우 더하지말고 GetMoney를 1000경원짜리에 맞춘다.
 				local TempW = CreateWar(FP)
 				f_LSub(FP, TempW, "10000000000000000000", GetMoney)--1000경-벌은돈=빼야할남은돈
-				CAdd(FP,iv.Money2[CP+1],1)--1000경원수표추가
+				CAdd(FP,MoneyV2,1)--1000경원수표추가
 				f_LSub(FP, MoneyV, MoneyV, TempW)--현재돈 << 현재돈 - 빼야할남은돈
 
 				
@@ -658,62 +702,71 @@ function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossF
 
 		CIfEnd()
 	end
-	CIf(FP,{TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)},{SetV(UnitPtr,0)})
+	
+	VtoPV(MoneyV,PMoneyV)
+	VtoPV(MoneyV2,PMoneyV2)
+	VtoPV(TotalDPS,Arr_TotalDPS)
+	VtoPV(TotalDPS2,Arr_TotalDPS2)
+	VtoPV(GetMoney,Arr_GetMoney)
+	VtoPV(DPSCheckV,Arr_DPSCheckV)
+	VtoPV(DpsDest,Arr_DpsDest)
+	VtoPV(DPSCheck2,Arr_DPSCheck2)
+
+	CIf(FP,{TMemoryX(_Add(UnitPtr,17), Exactly, 0, 0xFF00)},{TSetMemory(_TMem(PVWArrX(PUnitPtr)),SetTo,0)})
+	local PResetArr = {}
+	for i = 0, 7 do
 	local ResetArr = {}
 	for nn = 0, (96*4)-1 do
-		table.insert(ResetArr,SetMemX(Arr(DPSArrX,nn), SetTo, 0))
+		table.insert(ResetArr,SetMemX(Arr(Arr_DPSArrX[i+1],nn), SetTo, 0))
 		
 	end
-	table.insert(ResetArr,SetV(TotalDPS,0))
-	table.insert(ResetArr,SetV(TotalDPS2,0))
-	table.insert(ResetArr,SetV(DPSCheckV,0))
-	table.insert(ResetArr,SetV(DpsDest,0))
-	table.insert(ResetArr,SetV(DPSCheck2,0))
-	table.insert(ResetArr,SetCD(DPSCheck,0))
-	table.insert(ResetArr,SetNWar(GetMoney, SetTo,"0"))
+	table.insert(ResetArr,SetV(Arr_TotalDPS[i+1],0))
+	table.insert(ResetArr,SetV(Arr_TotalDPS2[i+1],0))
+	table.insert(ResetArr,SetV(Arr_DPSCheckV[i+1],0))
+	table.insert(ResetArr,SetV(Arr_DpsDest[i+1],0))
+	table.insert(ResetArr,SetV(Arr_DPSCheck2[i+1],0))
+	table.insert(ResetArr,SetNWar(Arr_GetMoney[i+1], SetTo,"0"))
 
-	if type(TotalDPSDest) == "table" then
-		for j,k in pairs(TotalDPSDest) do
-			if type(k) == "number" then
-				table.insert(ResetArr,SetMemory(k, SetTo, 0))
-			elseif k[4] == "W" then
-				table.insert(ResetArr,SetNWar(k,SetTo,"0"))
-			elseif k[4] == "V" then
-				table.insert(ResetArr,SetV(k, 0))
-			elseif k == Ore or k == Gas then
-				table.insert(ResetArr,SetResources(CP, SetTo, 0, k))
-			elseif k == nil then return nil
-			else
-				PushErrorMsg("TotalDPSDest InputError")
-			end 
-		end
-	elseif type(TotalDPSDest) == "number" then
-		table.insert(ResetArr,SetMemory(TotalDPSDest, SetTo, 0))
-	elseif TotalDPSDest[4] == "V" then
-		table.insert(ResetArr,SetV(TotalDPSDest,0))
-	elseif TotalDPSDest == Ore or TotalDPSDest == Gas then
-		table.insert(ResetArr,SetResources(CP, SetTo, 0, TotalDPSDest))
-	elseif TotalDPSDest == nil then return nil
-	else
-		PushErrorMsg("TotalDPSDest InputError")
-	end 
+
+	
+	if type(TotalDPSDest) ~= "table" then PushErrorMsg("TotalDPSDest InputError") end
+	for j,k in pairs(TotalDPSDest) do
+		if type(k) == "number" then
+			table.insert(ResetArr,SetMemory(k+(i*4), SetTo, 0))
+		elseif k == Ore or k == Gas then
+			table.insert(ResetArr,SetResources(i, SetTo, 0, k))
+		elseif k[1][4] == "W" then
+			table.insert(ResetArr,SetNWar(k[i+1],SetTo,"0"))
+		elseif k[1][4] == "V" then
+			table.insert(ResetArr,SetV(k[i+1], 0))
+		elseif k == nil then return nil
+		else
+			PushErrorMsg("TotalDPSDest InputError")
+		end 
+	end
+
+
+
 	--DoActions2X(FP, ResetArr)
+	table.insert(PResetArr,ResetArr)
+	end
 
 	CIfEnd()
 
 	CIfXEnd()
-	return ResetArr
+	return PResetArr
 end
 
-function Debug_DPSBuilding(UnitPtrDest,BuildingID,BuildingLoc)
+function Debug_DPSBuildingX(PUnitPtrDest,BuildingID,BuildingLoc)
+	local UnitPtrDest = PVtoV(PUnitPtrDest)
 	CIf(FP,{CV(UnitPtrDest,0),Memory(0x628438, AtLeast, 1)})
 	f_Read(FP, 0x628438, nil, Nextptrs)
-	CDoActions(FP, {TSetNVar(UnitPtrDest, SetTo, _Add(Nextptrs,2)),CreateUnit(1,BuildingID,BuildingLoc,FP)})
+	CDoActions(FP, {TSetMemory(_TMem(PVWArrX(PUnitPtrDest)),SetTo,_Add(Nextptrs,2)),TCreateUnit(1,BuildingID,_Add(GCP,BuildingLoc),FP),TGiveUnits(All, BuildingID, FP, _Add(GCP,BuildingLoc), P9)})
 	CSub(FP,CurCunitI,Nextptrs,19025)
 	f_Div(FP,CurCunitI,_Mov(84))
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,BuildingID))})
 	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,1,SetTo,CT_GNextRandV)})
-	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,FP))})
+	CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,_Xor(CT_GNextRandV,P9))})
 	CIfEnd()
 
 end

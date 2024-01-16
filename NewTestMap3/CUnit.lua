@@ -16,8 +16,66 @@ end
 
 local NBTemp = CreateVar(FP)
 local TempSCCool = CreateVar(FP)
+local UID = CreateVar(FP)
+local ReturnUnit1 = CreateVar(FP)
+local ReturnUnit2 = CreateVar(FP)
 NBagLoop(FP,NBagArr,{NBTemp})
-CMov(FP,0x6509B0,NBTemp,25)
+CMov(FP,0x6509B0,NBTemp,69)--스팀타이머체크구간
+CIf(FP,{DeathsX(CurrentPlayer, AtLeast, 1*256, 0, 0xFF00)},{SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF00)})
+f_Read(FP, _Add(NBTemp,19), GCP,nil,0xFF,1)
+f_Read(FP, _Add(NBTemp,25), UID,nil,0xFF,1)
+CDoActions(FP, {TSetMemory(_Add(NBTemp,2), Add, 10*256)})
+CMov(FP,Result,0)
+for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
+	local ResultUnit1
+	local ResultUnit2
+	if LevelUnitArr[j-1] ~= nil then ResultUnit2=LevelUnitArr[j-1][2]
+	else ResultUnit2=0
+	end
+	if LevelUnitArr[j+1] ~= nil then ResultUnit1=LevelUnitArr[j+1][2]
+	else ResultUnit1=0
+	end
+	CallTriggerX(FP, Call_Ench, {CV(UID,k[2])},{SetV(EnchNum,k[1]),SetNWar(EnchCost,SetTo,tostring(k[5])),SetV(ReturnUnit1,ResultUnit1),SetV(ReturnUnit2,ResultUnit2),
+	SetV(E1Range[1],0),SetV(E1Range[2],k[3][1]),
+	SetV(E2Range[1],k[3][1]+1),SetV(E2Range[2],k[3][1]+k[3][2]),
+	SetV(E3Range[1],k[3][1]+k[3][2]+1),SetV(E3Range[2],k[3][1]+k[3][2]+k[3][3]),
+	SetV(E4Range[1],k[3][1]+k[3][2]+k[3][3]+1),SetV(E4Range[2],k[3][1]+k[3][2]+k[3][3]+k[3][4])})
+end
+CIf(FP,{CV(Result,1,AtLeast)})
+	f_Read(FP, _Add(NBTemp,10), CPos)
+	Convert_CPosXY()
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CIfX(FP, {CV(Result,1)},{TRemoveUnitAt(1, UID, 1, GCP)})-- 성공시
+	CDoActions(FP, {
+		SetNVar(SAmount,SetTo,1),
+		TSetNVar(SUnitID,SetTo,ReturnUnit1),
+		SetNVar(SLocation,SetTo,1),
+		SetNVar(DLocation,SetTo,0),
+		TSetNVar(SPlayer,SetTo,GCP)
+	})
+	CallTrigger(FP, CreateStackedUnit)
+
+
+	CElseIfX(CV(Result,2))-- 유지시
+	
+	CElseIfX(CV(Result,3),{TKillUnitAt(1, UID, 1, GCP)})-- 하락시
+
+	CDoActions(FP, {
+		SetNVar(SAmount,SetTo,1),
+		TSetNVar(SUnitID,SetTo,ReturnUnit2),
+		SetNVar(SLocation,SetTo,1),
+		SetNVar(DLocation,SetTo,0),
+		TSetNVar(SPlayer,SetTo,GCP)
+	})
+	CallTrigger(FP, CreateStackedUnit)
+
+	CElseX({TKillUnitAt(1, UID, 1, GCP)})-- 파괴시
+
+	CIfXEnd()
+
+CIfEnd()
+
+CIfEnd()
 
 --CIfX(FP,{DeathsX(CurrentPlayer, Exactly, 88, 0, 0xFF)})
 
@@ -89,7 +147,8 @@ CTKillT = {}
 	EXCC_Part1(CT_Cunit)
 	CIf(FP,{DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
 	CAdd(FP,0x6509B0,6)
-	CIf(FP,{DeathsX(CurrentPlayer, NotSame, 47, 0, 0xFF)})
+	
+	EXCC_BreakCalc({DeathsX(CurrentPlayer, Exactly, 47, 0, 0xFF)})
 	CAdd(FP,0x6509B0,30)
 
 	local TempV = CreateVar(FP)
@@ -112,9 +171,7 @@ CTKillT = {}
 		})
 	end
 
-	CSub(FP,0x6509B0,30)
-	CIfEnd()
-	CSub(FP,0x6509B0,6)
+	CSub(FP,0x6509B0,36)
 	CIfEnd()
 
 --	--0x4D 가 107 Or 10일떄 0x5C인식
@@ -253,7 +310,7 @@ CTKillT = {}
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
 		EXCC_Part4X(i,{
 			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
-			DeathsX(19025+(84*i)+19,AtMost,7,0,0xFF),
+			DeathsX(19025+(84*i)+19,AtMost,8,0,0xFF),
 		},
 		{MoveCp(Add,19*4),
 		SetCVar(FP,CurCunitI2[2],SetTo,i),--SetResources(P1,Add,1,Gas)

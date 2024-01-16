@@ -128,7 +128,7 @@ CJump(AllPlayers,init_func)
 	CT_Cunit = Install_EXCC(FP,4,nil)
 	Include_CRandNum(FP)
 	Data()
-	--Install_CallTriggers()
+	Install_CallTriggers()
 	
 CJumpEnd(AllPlayers,init_func)
 

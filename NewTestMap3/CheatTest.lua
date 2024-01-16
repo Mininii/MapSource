@@ -40,6 +40,7 @@ function CT_Next()
 MemoryCT = CreateCcode()
 --error(#MCTCondArr)
 DoActionsX(FP,{SetCD(MemoryCT,0),})
+
 if Limit==1 then
 	MCTCondArr[1] = Memory(0x5124F0, Exactly, TestSpeedNum)
 end--
@@ -57,6 +58,18 @@ for j,k in pairs(condarr) do
 end
 --error(#condarr)--
 if TestStart == 1 then
+	for j,k in pairs(MCTCondArr) do
+		NIfNot(FP, {k})
+		local ReturnValue = CreateVar(FP)
+		DoActions(FP, {{
+			
+			RotatePlayer({DisplayTextX(MCTCondArr3[j],4);},Force1,FP),
+			RotatePlayer({DisplayTextX("\x13\x07『 Offset : "..MCTCondArr2[j]..", Value : "..k[3].." 』",4);},Force1,FP),
+		}})
+		f_Read(FP,MCTCondArr2[j],ReturnValue)
+		DisplayPrint(Force1, {ReturnValue})
+		NIfNotEnd()
+	end
 	CTrigger(FP,{
 		CD(MemoryCT,#condarr-1,AtMost)
 	},{RotatePlayer({
