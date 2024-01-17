@@ -478,6 +478,7 @@ end
 
 
 function AddCD(Code,Value)
+	if Code == nil then PushErrorMsg("Undefined Code!") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -487,6 +488,7 @@ function AddCD(Code,Value)
 	end
 end
 function SubCD(Code,Value)
+	if Code == nil then PushErrorMsg("Undefined Code!") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -496,6 +498,7 @@ function SubCD(Code,Value)
 	end
 end
 function SetCD(Code,Value)
+	if Code == nil then PushErrorMsg("Undefined Code!") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -505,6 +508,7 @@ function SetCD(Code,Value)
 	end
 end
 function SetCDX(Code,Value,Mask)
+	if Code == nil then PushErrorMsg("Undefined Code!") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
