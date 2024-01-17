@@ -954,7 +954,7 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 			end
 		end
 		CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-		for i = 0, 6 do
+		for i = 0, 7 do
 			CTrigger(FP,{CV(CP,i)},{TSetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, GetFAcc2)},{preserved})
 		end
 		CElseX()
@@ -998,7 +998,7 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 			end
 			f_LSub(FP, GetBuyTicket, GetBuyTicket, GetFAccW)
 			CIfX(FP,{TDeathsX(CP,Exactly,2,3,2),TMemory(_TMem(Arr(AutoSellArr,_Add(CP,(LvUniit-1)*7))), Exactly, 0),TMemory(_TMem(Arr(AutoEnchArr,_Add(CP,(LvUniit-1)*7))), Exactly, 1)})
-			for i = 0, 6 do
+			for i = 0, 7 do
 				CTrigger(FP,{CV(CP,i)},{TSetCVAar(VArr(GetUnitVArr[i+1], LvUniit-1), Add, GetFAcc)},{preserved})
 			end
 			CElseX()
@@ -1152,7 +1152,7 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 		--if DeathUnit == 3 then Pushdsadas() end
 		
 	if Player == AllPlayers then
-		for i = 0, 6 do
+		for i = 0, 7 do
 			table.insert(ttable,SetCVar(FP, BPArr[DeathUnit][i+1][2], SetTo, 2^Flag, 2^Flag))
 		end
 	else
@@ -1500,46 +1500,23 @@ function EXCC_End()
 end
 	
 
-function SCA_DataLoad(Player,Dest,Sourceptr) --Dest == W then Use SourceUnit, SourceUnit+1
-	if Dest[4]=="V" then
-		f_Read(FP,_Add(Sourceptr,18*Player),Dest)
-	elseif Dest[4]=="W" then
-		if #Sourceptr~=2 then PushErrorMsg("SCA_Sourceptr_Inputdata_Error") end
-		f_LRead(FP, {_Add(Sourceptr[1],18*Player),_Add(Sourceptr[2],18*Player)}, Dest, nil, 1)
-	else
-		PushErrorMsg("SCA_Dest_Inputdata_Error")
-	end
-end
-function SCA_DataSave(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
-	if Source[4]=="V" then
-		CDoActions(FP, {TSetMemory(_Add(Destptr,18*Player), SetTo, Source)})
-	elseif Source[4]=="W" then
-		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
-		CDoActions(FP, {
-			TSetMemory(_Add(Destptr[1],18*Player), SetTo, _Cast(0,Source)),
-			TSetMemory(_Add(Destptr[2],18*Player), SetTo, _Cast(1,Source))
-		})
-	else
-		PushErrorMsg("SCA_Source_Inputdata_Error")
-	end
-end
 
 
 function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Dest == W then Use SourceUnit, SourceUnit+1
 	if Type~= nil then
 		if Dest[1][4]=="V" then
-			CIf(FP,{TMemory(_Add(Sourceptr,Player), Type,Value)})
+			CIf(FP,{TMemory(_Add(Player,Sourceptr), Type,Value)})
 		elseif Dest[1][4]=="W" then
 			CIf(FP,{TTOR({
-				_TMemory(_Add(Sourceptr[1],Player), Type,Value),
-				_TMemory(_Add(Sourceptr[2],Player), Type,Value)
+				_TMemory(_Add(Player,Sourceptr[1]), Type,Value),
+				_TMemory(_Add(Player,Sourceptr[2]), Type,Value)
 			})})
 		end
 	end
 	local TempRead
 	if Dest[1][4]=="V" then
 		TempRead = CreateVar(FP)
-		f_Read(FP,_Add(Sourceptr,Player),TempRead,nil,nil,1)
+		f_Read(FP,_Add(Player,Sourceptr),TempRead,nil,nil,1)
 		if DestType == Add then
 			CMovX(FP, VArrX(GetVArray(Dest[1], 7),VArrI,VArrI4), TempRead, Add)
 		else
@@ -1550,7 +1527,7 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Des
 		local Temp32 = CreateVar(FP)
 		local Temp64 = CreateVar(FP)
 		TempRead = CreateWar(FP)
-		f_LRead(FP, {_Add(Sourceptr[1],Player),_Add(Sourceptr[2],Player)}, TempRead)
+		f_LRead(FP, {_Add(Player,Sourceptr[1]),_Add(Player,Sourceptr[2])}, TempRead)
 		if DestType == Add then
 			CIfX(FP,{TTNWar(TempRead,AtLeast,"0x8000000000000000")})
 			f_LNeg(FP, TempRead, TempRead)
@@ -1592,12 +1569,12 @@ function SCA_DataLoadG(Player,Dest,Sourceptr,DataName,Type,Value,DestType) --Des
 end
 function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
 	if Source[1][4]=="V" then
-		CDoActions(FP, {TSetMemory(_Add(Destptr,Player), SetTo, VArrX(GetVArray(Source[1], 7),VArrI,VArrI4))})
+		CDoActions(FP, {TSetMemory(_Add(Player,Destptr), SetTo, VArrX(GetVArray(Source[1], 7),VArrI,VArrI4))})
 	elseif Source[1][4]=="W" then
 		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
 		CDoActions(FP, {
-			TSetMemory(_Add(Destptr[1],Player), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
-			TSetMemory(_Add(Destptr[2],Player), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
+			TSetMemory(_Add(Player,Destptr[1]), SetTo, _Cast(0,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4))),
+			TSetMemory(_Add(Player,Destptr[2]), SetTo, _Cast(1,WArrX(GetWArray(Source[1], 7),WArrI,WArrI4)))
 		})
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
@@ -1605,12 +1582,12 @@ function SCA_DataSaveG(Player,Source,Destptr) --Source == W then Use DestUnit, D
 end
 function SCA_DataSaveG2(Player,Source,Destptr) --Source == W then Use DestUnit, DestUnit+1
 	if Source[4]=="V" then
-		CDoActions(FP, {TSetMemory(_Add(Destptr,Player), SetTo, Source)})
+		CDoActions(FP, {TSetMemory(_Add(Player,Destptr), SetTo, Source)})
 	elseif Source[4]=="W" then
 		if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
 		CDoActions(FP, {
-			TSetMemory(_Add(Destptr[1],Player), SetTo, _Cast(0,Source)),
-			TSetMemory(_Add(Destptr[2],Player), SetTo, _Cast(1,Source))
+			TSetMemory(_Add(Player,Destptr[1]), SetTo, _Cast(0,Source)),
+			TSetMemory(_Add(Player,Destptr[2]), SetTo, _Cast(1,Source))
 		})
 	else
 		PushErrorMsg("SCA_Source_Inputdata_Error")
@@ -1626,14 +1603,17 @@ function CreateDataV(DataName,Value)
 	table.insert(VWArr,{Ret,Ret2,DataName})
 return Ret,Ret2
 end
-function CreateDataPV(DataName,SCADeathData,LocOp,Value)
+function CreateDataPV(DataName,SCADataNum,LocOp,Value)
 	if Value == nil then Value = 0 end
 	
 	local Ret = CreateVarArr2(8,Value,FP)
 	local Ret2 = CreateVarArr2(8,Value,FP)
 	table.insert(PVWArr,{Ret,Ret2,DataName})
-	if SCADeathData ~= nil then
-		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
+	if SCADataNum ~= nil then
+		if SCADataNumChk[SCADataNum] == nil then SCADataNumChk[SCADataNum] = true
+		else PushErrorMsg("SCA Data Number Duplicated!! Current Number : "..SCADataNum)
+		end
+		table.insert(SCA_DataArr,{Ret,SCADataNum-1,DataName})
 	end
 	if LocOp == 1 then 
 		local Ret3 = CreateVar(FP)
@@ -1642,14 +1622,23 @@ function CreateDataPV(DataName,SCADeathData,LocOp,Value)
 	else return Ret,Ret2
 	end
 end
-function CreateDataPW(DataName,SCADeathData,LocOp,Value)
+
+function CreateDataPW(DataName,SCADataNum,LocOp,Value)
 	if Value == nil then Value = 0 end
 	local Ret = CreateWarArr2(8,Value,FP)
 	local Ret2 = CreateWarArr2(8,Value,FP)
 	table.insert(PVWArr,{Ret,Ret2,DataName})
-	if SCADeathData ~= nil then
-		if #SCADeathData~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
-		table.insert(SCA_DataArr,{Ret,SCADeathData,DataName})
+	if SCADataNum ~= nil then
+		if #SCADataNum~=2 then PushErrorMsg("SCADeathData_InputData_Error") end
+		if SCADataNumChk[SCADataNum[1]] == nil then SCADataNumChk[SCADataNum[1]] = true
+		else PushErrorMsg("SCA Data Number Duplicated!! Current Number : "..SCADataNum[1])
+		end
+		if SCADataNumChk[SCADataNum[2]] == nil then SCADataNumChk[SCADataNum[2]] = true
+		else PushErrorMsg("SCA Data Number Duplicated!! Current Number : "..SCADataNum[2])
+		end
+		SCADataNum[1] = SCADataNum[1]-1
+		SCADataNum[2] = SCADataNum[2]-1
+		table.insert(SCA_DataArr,{Ret,SCADataNum,DataName})
 	end
 	if LocOp == 1 then 
 		local Ret3 = CreateWar(FP)
@@ -1821,6 +1810,9 @@ function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
 	if Index == "X" then 
 		Index = nil
 	end
+	if Index == 0 then 
+		Index = nil
+	end
 	if Next == "X" then 
 		Next = nil
 	end
@@ -1890,6 +1882,9 @@ function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EP
 	if Index1 == "X" then 
 		Index1 = nil
 	end
+	if Index1 == 0 then 
+		Index1 = nil
+	end
 	if Next1 == "X" then 
 		Next1 = nil
 	end
@@ -1897,6 +1892,9 @@ function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EP
 		Player2 = nil
 	end
 	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Index2 == 0 then 
 		Index2 = nil
 	end
 	if Next2 == "X" then 
@@ -2020,6 +2018,9 @@ function SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
 	if Index1 == "X" then 
 		Index1 = nil
 	end
+	if Index1 == 0 then 
+		Index1 = nil
+	end
 	if Index1 ~= nil and LabelUseArr[Index1]==nil then
 		LabelUseArr[Index1] = true
 	end
@@ -2086,6 +2087,9 @@ function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
 		Player2 = nil
 	end
 	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Index2 == 0 then 
 		Index2 = nil
 	end
 	if Next2 == "X" then 

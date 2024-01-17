@@ -148,4 +148,115 @@ VtoPV(EnchMoney,iv.Money)
 
 SetCallEnd()
 
+Call_SCA_DataSaveAll = SetCallForward()
+PlayerV = CreateVar(FP)
+SetCall(FP)
+CAdd(FP,PlayerV,_Mul(GCP,500),SCA_DataPtrV)
+for j,k in pairs(SCA_DataArr) do
+	SCA_DataSaveG(PlayerV,k[1],k[2])
+end
+
+SetCallEnd()
+Call_SCA_DataLoadAll = SetCallForward()
+SetCall(FP)
+CAdd(FP,PlayerV,_Mul(GCP,500),SCA_DataPtrV)
+for j,k in pairs(SCA_DataArr) do
+	SCA_DataLoadG(PlayerV,k[1],k[2],k[3])
+end
+
+SetCallEnd()
+Call_SCA_DataLoadSetTo = SetCallForward()
+SetCall(FP)
+CAdd(FP,PlayerV,_Mul(GCP,500),SCA_DataPtrV)
+for j,k in pairs(SCA_DataArr) do
+	SCA_DataLoadG(PlayerV,k[1],k[2],k[3],AtLeast,1,SetTo)
+end
+SetCallEnd()
+Call_SCA_DataLoadAdd = SetCallForward()
+SetCall(FP)
+CAdd(FP,PlayerV,_Mul(GCP,500),SCA_DataPtrV)
+
+for j,k in pairs(SCA_DataArr) do
+	SCA_DataLoadG(PlayerV,k[1],k[2],k[3],AtLeast,1,Add)
+end
+SetCallEnd()
+
+
+
+Call_CT = SetCallForward()
+SetCall(FP)
+
+CTPEXP = CreateWar(FP)
+CTPLevel = CreateVar(FP)
+CTStatP = CreateVar(FP)
+CTStatP2 = CreateVar(FP)
+CTCurEXP = CreateWar(FP)
+CTTotalExp = CreateWar(FP)
+CTLIndex = CreateVar(FP)
+CT_PrevLMulW = CreateWar(FP)
+CT_NextLMulW = CreateWar(FP)
+CTMaxExp = CreateWar(FP)
+
+
+ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 150), 8)--151 포커스
+f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTCurEXP, nil, 1)
+ConvertLArr(FP, CTLIndex, _Add(CTPLevel, 151), 8)--151 포커스
+f_LRead(FP, LArrX({EXPArr_dp},CTLIndex), CTTotalExp, nil, 1)
+f_LRead(FP, LArrX({EXPArr_dp},151+LevelLimit), CTMaxExp, nil, 1)
+DoActionsX(FP,{SetCDX(iv.StatTest,16,16)})
+CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTCurEXP),TTNWar(CTPEXP, AtMost, CTTotalExp)},{SetCDX(iv.StatTest,0,16)},1)
+--CTrigger(FP,{TTNWar(CTPEXP, AtLeast, CTMaxExp)},{SetCDX(iv.StatTest,32,32)},1)
+if Limit == 1 then
+--	DisplayPrint(iv.LCP, {"\x13\x04CTPEXP : ",CTPEXP,"   CTCurEXP : ",CTCurEXP,"   CTTotalExp : ",CTTotalExp})
+end
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx2)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPerEx3[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPerEx3)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer2)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer3[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer3)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer4[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer4)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_TotalEPer4X[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_TotalEPer4X)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_BreakShield[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_BreakShield)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_BreakShield2[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_BreakShield2)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer44[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_XEPer44)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer45[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_XEPer45)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer46[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_XEPer46)))
+--CAdd(FP,iv.CTStatP2,_Mul(_Div(VArrX(GetVArray(iv.Stat_XEPer47[1], 7), VArrI, VArrI4),_Mov(100)),_Mov(Cost_Stat_XEPer47)))
+--CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_BossSTic[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_BossSTic)))
+--CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_LV3Incm[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_LV3Incm)))
+--CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_Upgrade[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_Upgrade)))
+--CAdd(FP,iv.CTStatP2,_Mul(VArrX(GetVArray(iv.Stat_BossLVUP[1], 7), VArrI, VArrI4),_Mov(Cost_Stat_BossLVUP)))
+
+
+SetCallEnd()
+
+
+SCA_cp = CreateVar(FP)
+function SCA_DataReset(cp,cond,Act) -- 슬롯 불러오기 or 저장전 데이터 초기화를 위한 함수
+	CallTriggerX(FP, Call_DataReset, cond, {SetV(SCA_cp,cp),Act})
+	
+end
+Call_DataReset = SetCallForward()
+SetCall(FP)
+local Pl = CreateVar(FP)
+CAdd(FP,Pl,_Mul(SCA_cp,500),SCA_DataPtrV)
+for j,k in pairs(SCA_DataArr) do
+	local Destptr = k[2]
+	local Player = SCA_cp
+	local Source = k[1][1]--1P기준
+if Source[4]=="V" then
+	CDoActions(FP, {TSetMemory(_Add(Pl,Destptr), SetTo, 0)})
+elseif Source[4]=="W" then
+	if #Destptr~=2 then PushErrorMsg("SCA_Destptr_Inputdata_Error") end
+	CDoActions(FP, {
+		TSetMemory(_Add(Pl,Destptr[1]), SetTo, 0),
+		TSetMemory(_Add(Pl,Destptr[2]), SetTo, 0)
+	})
+else
+	PushErrorMsg("SCA_Source_Inputdata_Error")
+end
+
+end
+SetCallEnd()
 end

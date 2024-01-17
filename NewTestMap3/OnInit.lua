@@ -76,6 +76,7 @@ function onInit_EUD()
 	end
 	
 
+	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	
 	Trigger2X(FP, {
 		CDeaths(FP,Exactly,1,LimitX);
@@ -148,6 +149,10 @@ function onInit_EUD()
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
 	CAdd(FP,CI,1)
 	CForEnd()
+	f_Read(FP, SCA_DataPtr, nil, SCA_DataPtrV)
+
+
+	
 
 	CIfEnd()
 end

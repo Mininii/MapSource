@@ -36,11 +36,14 @@ VerText = "\x19ver\x07. \x040\x07.\x0401"
 TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 1--0x1D
+	TestSpeedNum = 0x1D--0x1D
 else
 SpeedTestMode = 0
 SlotEnable =1
 end
+SaveLimit = 0
+
+
 LimitVer = 1
 StatVer = 1
 StatVer2 = 1
@@ -49,8 +52,13 @@ SetForces({P1,P2,P3,P4,P5,P6,P7,P8},{},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 
 FP = P1
 SetFixedPlayer(FP) -- 메인 트러기 플레이어. 
+--Datafile()
 Enable_HumanCheck() -- 컴퓨터 체크 필요시 PlayerCheck(Player,Status) 사용
 StartCtrig(1,FP,nil,1,"C:\\Temp")
+
+for i = 0, 7 do
+	DoActions(i, SetCp(i))
+end
 Trigger {
 	players = {P2,P3,P4,P5,P6,P7,P8},
 	conditions = {
@@ -115,7 +123,7 @@ end
 TriggerX(P1, {Switch("Switch 187",Set)}, {
 	SetDeaths(0,SetTo,0,0);}, {preserved},0x5000)
 CIf(FP,Switch("Switch 1",Cleared),SetSwitch("Switch 1",Set))
-
+NoAirCollisionX(FP)
 DPInitActArr = DP_Start_init(FP,nil,0x4000,0x6000,1)
 
 
@@ -124,7 +132,7 @@ init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Install_BackupCP(FP)
 	Include_Vars()
-	Include_Conv_CPosXY(FP,{4096*2,4096*2})
+	Include_Conv_CPosXY(FP,{6144,6144})
 	CT_Cunit = Install_EXCC(FP,4,nil)
 	Include_CRandNum(FP)
 	Data()
@@ -145,7 +153,7 @@ CT_PrevCP()
 _G[DPInitActArr[1]](DPInitActArr[2],DPInitActArr[3],DPInitActArr[4],DPInitActArr[5])
 
 onInit_EUD() -- onPluginStart
-
+Operator()
 Interface()
 
 CUnit()
