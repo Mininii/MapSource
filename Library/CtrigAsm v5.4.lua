@@ -1,3 +1,10 @@
+TEP30Flag = 0
+for k, v in pairs(_G) do
+if k == "__mapdirsetting" then
+	TEP30Flag = 1
+end
+end
+
 P1=0
 P2=1
 P3=2
@@ -1745,6 +1752,9 @@ function V(Index,Player,Next) -- Return(Variable Data)
 	if Player == nil then
 		Player = "X"
 	end
+	if Next == nil then
+		Next = 0
+	end
 	return {Player,Index,Next,"V"}
 end
 
@@ -1755,12 +1765,18 @@ function Vi(Index,Deviation,Player,Next) -- Return(Variable Data+) : T,TT Cond/A
 	if Player == nil then
 		Player = "X"
 	end
+	if Next == nil then
+		Next = 0
+	end
 	return {Player,Index,Next,"V",Deviation}
 end
 
 function W(Index,Player,Next) -- Return(Wariable Data)
 	if Player == nil then
 		Player = "X"
+	end
+	if Next == nil then
+		Next = 0
 	end
 	return {Player,Index,Next,"W"}
 end
@@ -1772,6 +1788,9 @@ function Wi(Index,Deviation,Player,Next) -- Return(Wariable Data+) : T,TT Cond/A
 	if Player == nil then
 		Player = "X"
 	end
+	if Next == nil then
+		Next = 0
+	end
 	return {Player,Index,Next,"W",Deviation}
 end
 
@@ -1781,6 +1800,9 @@ function SV(SVariable,Line,Player,Next) -- Return(SVariable Data)
 	end
 	if Player == nil then
 		Player = "X"
+	end
+	if Next == nil then
+		Next = 0
 	end
 	return {Player,SVariable[2],Next,"SV",SVariable[3],Line}
 end
@@ -1798,7 +1820,9 @@ function Mem(Player,Index,Address,Next,EPDflag) -- Return(Ctrig Memory Data)
 	else
 		EPDflag = 1
 	end
-
+	if Next == nil then
+		Next = 0
+	end
 	if Address == "X" or Address == nil then
 		Address = 0
 	end
@@ -1827,7 +1851,6 @@ function _Mem(Variable,Address,Next,EPDflag) -- Convert(Variable Data -> Ctrig M
 end
 
 function LMem(Player,Index,Address,Next,EPDflag) -- Return(Ctrig Memory Data)
-
 	if Player == nil then
 		Player = {"X","X"}
 	elseif type(Player) ~= "table" then
@@ -1840,6 +1863,9 @@ function LMem(Player,Index,Address,Next,EPDflag) -- Return(Ctrig Memory Data)
 	end
 	if type(Index) ~= "table" then
 		Index = {Index,Index}
+	end
+	if Next == nil then
+		Next = {0,0}
 	end
 	if type(Next) ~= "table" then
 		Next = {Next,Next}
@@ -44328,18 +44354,33 @@ function ParseHotkey(String) -- N : NumberPad / C : Ctrl & A : Alt / S : Shift
 end
 
 function ParseButtonType(String)
-	local ButtonTypeCodeDict = {
-		['\xC0\xCF\xB9\xDD\xB8\xED\xB7\xC9']= 0,['\xC0\xAF\xB4\xD6\xBB\xFD\xBB\xEA']= 1,['N\xBE\xF7\xB1\xD7\xB7\xB9\xC0\xCC\xB5\xE5']= 2,['\xBD\xBA\xC5\xB3\xBB\xE7\xBF\xEB']= 3,['\xC5\xD7\xC5\xA9\xBE\xF7\xB1\xD7\xB7\xB9\xC0\xCC\xB5\xE5']= 4,['\xC0\xAF\xB4\xD6\xBA\xAF\xC5\xC2']= 5,['None']= 8,
-		-- ['일반명령']= 0,['유닛생산']= 1,['N업그레이드']= 2,['스킬사용']= 3,['테크업그레이드']= 4,['유닛변태']= 5,['None']= 8,
-	}
-	local Type = ButtonTypeCodeDict[String]
-		if Type == nil then
-		PushErrorMsg(String.." Doesn't Exist.")
+	if TEP30Flag == 1 then
+		local ButtonTypeCodeDict = {
+			['일반명령']= 0,['유닛생산']= 1,['N업그레이드']= 2,['스킬사용']= 3,['테크업그레이드']= 4,['유닛변태']= 5,['None']= 8,
+			-- ['일반명령']= 0,['유닛생산']= 1,['N업그레이드']= 2,['스킬사용']= 3,['테크업그레이드']= 4,['유닛변태']= 5,['None']= 8,
+		}
+		local Type = ButtonTypeCodeDict[String]
+			if Type == nil then
+			PushErrorMsg(String.." Doesn't Exist.")
+		end
+		return Type
+	else
+		local ButtonTypeCodeDict = {
+			['\xC0\xCF\xB9\xDD\xB8\xED\xB7\xC9']= 0,['\xC0\xAF\xB4\xD6\xBB\xFD\xBB\xEA']= 1,['N\xBE\xF7\xB1\xD7\xB7\xB9\xC0\xCC\xB5\xE5']= 2,['\xBD\xBA\xC5\xB3\xBB\xE7\xBF\xEB']= 3,['\xC5\xD7\xC5\xA9\xBE\xF7\xB1\xD7\xB7\xB9\xC0\xCC\xB5\xE5']= 4,['\xC0\xAF\xB4\xD6\xBA\xAF\xC5\xC2']= 5,['None']= 8,
+			-- ['일반명령']= 0,['유닛생산']= 1,['N업그레이드']= 2,['스킬사용']= 3,['테크업그레이드']= 4,['유닛변태']= 5,['None']= 8,
+		}
+		local Type = ButtonTypeCodeDict[String]
+			if Type == nil then
+			PushErrorMsg(String.." Doesn't Exist.")
+		end
+		return Type
 	end
-	return Type
 end
 
 function tbl_to_itbl(String,Type,Hotkey,Hexflag)
+	if TEP30Flag == 1 then
+		String = __encode_cp949(String)
+	end
 	local ret = {}
 	for i = 1, #String do
 		table.insert(ret,string.byte(String,i))
@@ -44539,69 +44580,147 @@ function str_to_istr(String)
 	-- \x01 02 03 04 05 06 07 08 0E 0F 10 11 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F = ColorCode (<0x20, 09,0A,0B,0C,0D,12,13)
 	-- else (1byte) : C _ _ X / -- else (2byte) : C _ X X
 
-	local iret = {}
-	if STRXFlag == 0 then
-		iret = {0xD,0xD,0xD}
-	end
-
-	local prt = 0
-	local i = 1
-	local Null = 0
-	while true do
-		local v = ret[i]
-		if v == 0x0 then
-			if #iret%4 == 0 then
-				table.insert(iret,0x0)
-			end
-			table.insert(iret,0x0)
-			table.insert(iret,0x0)
-			table.insert(iret,0x0)
-			Null = 1
-			break
-		elseif (v>=0x20 and v<=0x7F) or (v>=0x9 and v<=0xD) or (v>=0x12 and v<=0x13) then -- 1byte
-			if prt == 0 then
-				table.insert(iret,0xD)
-			end
-			table.insert(iret,0xD)
-			table.insert(iret,0xD)
-			table.insert(iret,v)
-			prt = 0
-			i = i+1
-		elseif v >= 0x80 then -- 2byte
-			if prt == 0 then
-				table.insert(iret,0xD)
-			end
-			local w = ret[i+1]
-			table.insert(iret,0xD)
-			table.insert(iret,v)
-			table.insert(iret,w)
-			prt = 0
-			i = i+2
-		else -- Colorcode
-			local w = ret[i+1]
-			if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
-				i = i+1 -- continue
-			else
-				table.insert(iret,v)
-				prt = 1
-				i = i+1
-			end
+	if TEP30Flag == 1 then
+		local iret = {}
+		if STRXFlag == 0 then
+			iret = {0xD,0xD,0xD}
 		end
-		if i > #ret then break end
-	end
-	local Size
-	if Null == 0 then
-		Size = math.floor(#iret/4)
+
+		local prt = 0
+		local i = 1
+		local Null = 0
+		while true do
+			local v = ret[i]
+			if v == 0x0 then
+				if #iret%4 == 0 then
+					table.insert(iret,0x0)
+				end
+				table.insert(iret,0x0)
+				table.insert(iret,0x0)
+				table.insert(iret,0x0)
+				Null = 1
+				break
+			elseif (v>=0x20 and v<=0x7F) or (v>=0x9 and v<=0xD) or (v>=0x12 and v<=0x13) then -- 1byte
+				if prt == 0 then
+					table.insert(iret,0xD)
+				end
+				table.insert(iret,0xD)
+				table.insert(iret,0xD)
+				table.insert(iret,v)
+				prt = 0
+				i = i+1
+			elseif v >= 0xE0 then -- 3byte
+				if prt == 0 then
+					table.insert(iret,0xD)
+				end
+				local w = ret[i+1]
+				local x = ret[i+2]
+				table.insert(iret,v)
+				table.insert(iret,w)
+				table.insert(iret,x)
+				prt = 0
+				i = i+3
+			elseif v >= 0x80 then -- 2byte
+				if prt == 0 then
+					table.insert(iret,0xD)
+				end
+				local w = ret[i+1]
+				table.insert(irec,0xD)
+				table.insert(iret,v)
+				table.insert(iret,w)
+				prt = 0
+				i = i+2
+			else -- Colorcode
+				local w = ret[i+1]
+				if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
+					i = i+1 -- continue
+				else
+					table.insert(iret,v)
+					prt = 1
+					i = i+1
+				end
+			end
+			if i > #ret then break end
+		end
+		local Size
+		if Null == 0 then
+			Size = math.floor(#iret/4)
+		else
+			Size = math.floor((#iret-1)/4)
+		end
+		iret = utf8_from(iret)
+		return iret, Size
 	else
-		Size = math.floor((#iret-1)/4)
+		local iret = {}
+		if STRXFlag == 0 then
+			iret = {0xD,0xD,0xD}
+		end
+
+		local prt = 0
+		local i = 1
+		local Null = 0
+		while true do
+			local v = ret[i]
+			if v == 0x0 then
+				if #iret%4 == 0 then
+					table.insert(iret,0x0)
+				end
+				table.insert(iret,0x0)
+				table.insert(iret,0x0)
+				table.insert(iret,0x0)
+				Null = 1
+				break
+			elseif (v>=0x20 and v<=0x7F) or (v>=0x9 and v<=0xD) or (v>=0x12 and v<=0x13) then -- 1byte
+				if prt == 0 then
+					table.insert(iret,0xD)
+				end
+				table.insert(iret,0xD)
+				table.insert(iret,0xD)
+				table.insert(iret,v)
+				prt = 0
+				i = i+1
+			elseif v >= 0x80 then -- 2byte
+				if prt == 0 then
+					table.insert(iret,0xD)
+				end
+				local w = ret[i+1]
+				table.insert(iret,0xD)
+				table.insert(iret,v)
+				table.insert(iret,w)
+				prt = 0
+				i = i+2
+			else -- Colorcode
+				local w = ret[i+1]
+				if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
+					i = i+1 -- continue
+				else
+					table.insert(iret,v)
+					prt = 1
+					i = i+1
+				end
+			end
+			if i > #ret then break end
+		end
+		local Size
+		if Null == 0 then
+			Size = math.floor(#iret/4)
+		else
+			Size = math.floor((#iret-1)/4)
+		end
+		iret = utf8_from(iret)
+		return iret, Size
 	end
-	iret = utf8_from(iret)
-	return iret, Size
 end
 
 function str_to_iutf8(String,flag)
-	local ret = cp949_to_utf8(String)
-	table.remove(ret,#ret)
+	local ret
+	if TEP30Flag == 1 then
+		ret={}
+		String:gsub(".",function(c) table.insert(ret,string.byte(c)) end)
+	else
+		ret = cp949_to_utf8(String)
+		table.remove(ret,#ret)
+	end
 
 	-- \x01 02 03 04 05 06 07 08 0E 0F 10 11 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F = ColorCode (<0x20, 09,0A,0B,0C,0D,12,13)
 	-- else (1byte) : C _ _ X / -- else (2byte) : C _ X X
@@ -44638,7 +44757,7 @@ function str_to_iutf8(String,flag)
 			table.insert(iret,v)
 			prt = 0
 			i = i+1
-		elseif v >= 0x80 then -- 3byte
+		elseif v >= 0xE0 then -- 3byte
 			if prt == 0 then
 				table.insert(iret,0xD)
 			end
@@ -44649,6 +44768,16 @@ function str_to_iutf8(String,flag)
 			table.insert(iret,x)
 			prt = 0
 			i = i+3
+		elseif v >= 0x80 then -- 2byte
+			if prt == 0 then
+				table.insert(iret,0xD)
+			end
+			local w = ret[i+1]
+			table.insert(iret,0xD)
+			table.insert(iret,v)
+			table.insert(iret,w)
+			prt = 0
+			i = i+2
 		else -- Colorcode
 			local w = ret[i+1]
 			if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
@@ -44671,6 +44800,10 @@ function str_to_iutf8(String,flag)
 end
 
 function str_to_icp949(String,flag)
+	if TEP30Flag == 1 then
+		String = __encode_cp949(String)
+	end
+
 	local ret = {}
 	for i = 1, #String do
 		table.insert(ret,string.byte(String,i))
@@ -44860,9 +44993,18 @@ function CreateSVA1(iStrArr,Size,PlayerID)
 	return Ret
 end
 
-function SaveiStrArr(PlayerID,String,SVA32)
+function SaveiStrArr(PlayerID,String,SVA32,tblflag)
 	local Arr, Size, ret
-	Arr, Size = str_to_icp949(String,1)
+	if TEP30Flag == 1 then
+		if tblflag == 1 then
+			Arr, Size = str_to_icp949(String,1)
+		else
+			Arr, Size = str_to_iutf8(String,1)
+		end
+	else
+		Arr, Size = str_to_icp949(String,1)
+	end
+
 	if SVA32 == 1 then
 		ret = CreateSVA32(Arr,Size,PlayerID)
 	else
@@ -44871,12 +45013,20 @@ function SaveiStrArr(PlayerID,String,SVA32)
 	return ret, Arr, Size
 end
 
-function SaveiStrptr(PlayerID,String,SVA32)
+function SaveiStrptr(PlayerID,String,SVA32,tblflag)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
 	local Arr, Size, ret
-	Arr, Size = str_to_icp949(String,1)
+	if TEP30Flag == 1 then
+		if tblflag == 1 then
+			Arr, Size = str_to_icp949(String,1)
+		else
+			Arr, Size = str_to_iutf8(String,1)
+		end
+	else
+		Arr, Size = str_to_icp949(String,1)
+	end
 	if SVA32 == 1 then
 		ret = f_GetFileSVArrptrN(PlayerID,Arr,1,32,"SVA32",1)
 		return {ret[1],ret[2],ret[3],"SVA32",math.ceil(Size/32),Size}, Arr, Size
@@ -44886,12 +45036,20 @@ function SaveiStrptr(PlayerID,String,SVA32)
 	end
 end
 
-function SaveiStrFile(PlayerID,String)
+function SaveiStrFile(PlayerID,String,tblflag)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
 	local Arr, Size, ret
-	Arr, Size = str_to_icp949(String,1)
+	if TEP30Flag == 1 then
+		if tblflag == 1 then
+			Arr, Size = str_to_icp949(String,1)
+		else
+			Arr, Size = str_to_iutf8(String,1)
+		end
+	else
+		Arr, Size = str_to_icp949(String,1)
+	end
 
 	ret = f_GetFileArrptr(PlayerID,Arr,1,1)
 	return ret, Arr, Size
@@ -45015,8 +45173,14 @@ end
 
 function DwSaveiStrArrX(PlayerID,String,SVA32)
 	local Arr, Size, ret
-	Arr = cp949_to_utf8(String)
-	table.remove(Arr,#Arr)
+	if TEP30Flag == 1 then
+		Arr = {}
+		String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+	else
+		Arr = cp949_to_utf8(String)
+		table.remove(Arr,#Arr)
+	end
+	
 	Size = math.ceil(#Arr/4)
 	if #Arr%4 == 3 then
 		table.insert(Arr,0xD)
@@ -45041,8 +45205,13 @@ function DwSaveiStrptrX(PlayerID,String,SVA32)
 		Need_STRCTRIGASM()
 	end
 	local Arr, Size, ret
-	Arr = cp949_to_utf8(String)
-	table.remove(Arr,#Arr)                                                                              
+	if TEP30Flag == 1 then
+		Arr = {}
+		String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+	else
+		Arr = cp949_to_utf8(String)
+		table.remove(Arr,#Arr)
+	end                                                                            
 	Size = math.ceil(#Arr/4)
 	if #Arr%4 == 3 then
 		table.insert(Arr,0xD)
@@ -45068,8 +45237,13 @@ function DwSaveiStrFileX(PlayerID,String)
 		Need_STRCTRIGASM()
 	end
 	local Arr, Size, ret
-	Arr = cp949_to_utf8(String)
-	table.remove(Arr,#Arr)                                                                              
+	if TEP30Flag == 1 then
+		Arr = {}
+		String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+	else
+		Arr = cp949_to_utf8(String)
+		table.remove(Arr,#Arr)
+	end                                                                             
 	Size = math.ceil(#Arr/4)
 	if #Arr%4 == 3 then
 		table.insert(Arr,0xD)
@@ -45100,37 +45274,81 @@ function MakeiStrVoid(Size,flag)
 	return Void
 end
 
-function MakeiStrLetter(Letter,Size,flag)
+function MakeiStrLetter(Letter,Size,flag,cp949flag)
 	local Void = ""
-	if flag == 0 or flag == "X" or flag == nil then
-		for i = 1, Size do
-			Void = Void..Letter
-		end
-	else
-		local ret = {}
-		for i = 1, #Letter do
-			table.insert(ret,string.byte(Letter,i))
-		end
+	if TEP30Flag == 1 and (cp949flag == nil or cp949flag == 0) then	
+		if flag == 0 or flag == "X" or flag == nil then
+			for i = 1, Size do
+				Void = Void..Letter
+			end
+		else
+			local ret = {}
+			for i = 1, #Letter do
+				table.insert(ret,string.byte(Letter,i))
+			end
 
-		if (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
-			for i = 1, Size do
-				Void = Void..'\x0D'..'\x0D'..'\x0D'..Letter
-			end
-		elseif v >= 0x80 then -- 2byte
-			for i = 1, Size do
-				Void = Void..'\x0D'..'\x0D'..Letter
-			end
-		else -- Colorcode
-			local w = ret[2]
-			if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
-				MakeiStrLetter_InputData_Error()
-			elseif (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
+			if (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
 				for i = 1, Size do
-					Void = Void..'\x0D'..'\x0D'..Letter
+					Void = Void..'\x0D'..'\x0D'..'\x0D'..Letter
+				end
+			elseif v >= 0xE0 then -- 3byte
+				for i = 1, Size do
+					Void = Void..'\x0D'..Letter
 				end
 			elseif v >= 0x80 then -- 2byte
 				for i = 1, Size do
-					Void = Void..'\x0D'..Letter
+					Void = Void..'\x0D'..'\x0D'..Letter
+				end
+			else -- Colorcode
+				local w = ret[2]
+				if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
+					MakeiStrLetter_InputData_Error()
+				elseif (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
+					for i = 1, Size do
+						Void = Void..'\x0D'..'\x0D'..Letter
+					end
+				elseif v >= 0xE0 then -- 3byte
+					for i = 1, Size do
+						Void = Void..Letter
+					end
+				elseif v >= 0x80 then -- 2byte
+					for i = 1, Size do
+						Void = Void..'\x0D'..Letter
+					end
+				end
+			end
+		end
+	else
+		if flag == 0 or flag == "X" or flag == nil then
+			for i = 1, Size do
+				Void = Void..Letter
+			end
+		else
+			local ret = {}
+			for i = 1, #Letter do
+				table.insert(ret,string.byte(Letter,i))
+			end
+
+			if (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
+				for i = 1, Size do
+					Void = Void..'\x0D'..'\x0D'..'\x0D'..Letter
+				end
+			elseif v >= 0x80 then -- 2byte
+				for i = 1, Size do
+					Void = Void..'\x0D'..'\x0D'..Letter
+				end
+			else -- Colorcode
+				local w = ret[2]
+				if (w >= 0x1 and w <= 0x8) or (w >= 0xE and w <= 0x11) or (w >= 0x14 and w <= 0x1F) then -- ColorCode
+					MakeiStrLetter_InputData_Error()
+				elseif (ret[1]>=0x20 and ret[1]<=0x7F) or (ret[1]>=0x9 and ret[1]<=0xD) or (ret[1]>=0x12 and ret[1]<=0x13) then -- 1byte
+					for i = 1, Size do
+						Void = Void..'\x0D'..'\x0D'..Letter
+					end
+				elseif v >= 0x80 then -- 2byte
+					for i = 1, Size do
+						Void = Void..'\x0D'..Letter
+					end
 				end
 			end
 		end
@@ -45157,10 +45375,15 @@ function SVA1(SVA1,Index)
 end
 
 function CA__Input(Input,SVA1,Mask)
-	if Mask == nil then
-		Mask = 0xFFFF00FF
+	if TEP30Flag == 1 then
+		if Mask == nil then
+			Mask = 0xFFFFFFFF
+		end
+	else
+		if Mask == nil then
+			Mask = 0xFFFF00FF
+		end
 	end
-
 	local PlayerID = CAPrintPlayerID
 	local CA = CAPrintDataArr
 	local CB = CAPrintCreateArr
@@ -46734,8 +46957,13 @@ function CA__DwSetValue(SVA1,String,Index,Preserve,utf8flag)
 	local Arr, Size, Mask, Max
 
 	if utf8flag == 1 then
-		Arr = cp949_to_utf8(String)
-		table.remove(Arr,#Arr)
+		if TEP30Flag == 1 then
+			Arr = {}
+			String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+		else
+			Arr = cp949_to_utf8(String)
+			table.remove(Arr,#Arr)
+		end
 		Size = #Arr
 		Max = math.ceil(Size/4)-1
 	else
@@ -46860,8 +47088,14 @@ function CA__DwSetValue(SVA1,String,Index,Preserve,utf8flag)
 end
 
 function CA__SetMask(SVA1,Mask,Start,End,Preserve)
-	if Mask == nil then
-		Mask = 0xFFFF00FF
+	if TEP30Flag == 1 then
+		if Mask == nil then
+			Mask = 0xFFFFFFFF
+		end
+	else
+		if Mask == nil then
+			Mask = 0xFFFF00FF
+		end
 	end
 	if Start == nil then
 		Start = 0
@@ -47551,9 +47785,16 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 	if Mask == nil then
 		Mask  = 0xFFFFFFFF
 	end
-	if RecoverMask == nil then
-		RecoverMask = 0xFFFF00FF
+	if TEP30Flag == 1 then
+		if RecoverMask == nil then
+			RecoverMask = 0xFFFFFFFF
+		end
+	else
+		if RecoverMask == nil then
+			RecoverMask = 0xFFFF00FF
+		end
 	end
+	
 	local PlayerID = CAPrintPlayerID
 	local CA = CAPrintDataArr
 	local CB = CAPrintCreateArr
@@ -47756,11 +47997,20 @@ function CA__Mov(SVA1,Output,Mask,RecoverMask)
 end
 
 function CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
-	if Mask == nil then
-		Mask = 0xFFFF00FF
-	end
-	if RecoverMask == nil then
-		RecoverMask = 0xFFFF00FF
+	if TEP30Flag == 1 then
+		if RecoverMask == nil then
+			RecoverMask = 0xFFFFFFFF
+		end
+		if Mask == nil then
+			Mask = 0xFFFFFFFF
+		end
+	else
+		if RecoverMask == nil then
+			RecoverMask = 0xFFFF00FF
+		end
+		if Mask == nil then
+			Mask = 0xFFFF00FF
+		end
 	end
 	local PlayerID = CAPrintPlayerID
 	local CA = CAPrintDataArr
@@ -48075,6 +48325,9 @@ function CA__OverWrite(SVA32,Index,Null,Preserve)
 end
 
 function MakeiStrData(Letter,Fill) -- X for CA__ConvertLetter
+	if TEP30Flag == 1 then
+		Letter = __encode_cp949(Letter)
+	end
 	local Temp
 	local A = {}
 	for i = 1, #Letter do
@@ -48110,6 +48363,10 @@ function MakeiStrData(Letter,Fill) -- X for CA__ConvertLetter
 end
 
 function MakeiStrDiff(Start,End) -- B-A for CA__ConvertLetter
+	if TEP30Flag == 1 then
+		Start = __encode_cp949(Start)
+		End = __encode_cp949(End)
+	end
 	local A = {}
 	for i = 1, #Start do
 		table.insert(A,string.byte(Start,i))
@@ -48135,25 +48392,55 @@ end
 
 function MakeiStrDataX(Letter,Fill) -- X for CA__ConvertLetter
 	local Temp
-	local A = cp949_to_utf8(Letter)
-	table.remove(A,#A)
+	local A
+	if TEP30Flag == 1 then
+		A = {}
+		Letter:gsub(".",function(c) table.insert(A,string.byte(c)) end)
+	else
+		A = cp949_to_utf8(Letter)
+		table.remove(A,#A)
+	end
 	if Fill == 1 then
 		if #A == 1 then -- 1
-			Temp = A[1]*16777216+0x0D0D0D
+			if (A[1]>=0x20) or (A[1]>=0x9 and A[1]<=0xD) or (A[1]>=0x12 and A[1]<=0x13) then -- 1byte
+				Temp = A[1]*16777216 + 0x0D0D0D
+			else
+				Temp = A[1] + 0x0D0D0D00
+			end
 		elseif #A == 2 then -- 1+1
-			Temp = A[1]+A[2]*16777216+0x0D0D00
+			if (A[1] >= 0x1 and A[1] <= 0x8) or (A[1] >= 0xE and A[1] <= 0x11) or (A[1] >= 0x14 and A[1] <= 0x1F) then -- ColorCode
+				Temp = A[1]+A[2]*16777216 + 0x0D0D00
+			else -- 2
+				Temp = A[1]*65536+A[2]*16777216 + 0x0D0D
+			end
 		elseif #A == 3 then -- 3
-			Temp = A[1]*256+A[2]*65536+A[3]*16777216+0x0D
+			if (A[1] >= 0x1 and A[1] <= 0x8) or (A[1] >= 0xE and A[1] <= 0x11) or (A[1] >= 0x14 and A[1] <= 0x1F) then -- ColorCode
+				Temp = A[1]+A[2]*65536+A[3]*16777216 + 0x0D00
+			else -- 3
+				Temp = A[1]*256+A[2]*65536+A[3]*16777216 + 0x0D
+			end
 		elseif #A == 4 then -- 1+3
 			Temp = A[1]+A[2]*256+A[3]*65536+A[4]*16777216
 		end
 	else
 		if #A == 1 then -- 1
-			Temp = A[1]*16777216
+			if (A[1]>=0x20) or (A[1]>=0x9 and A[1]<=0xD) or (A[1]>=0x12 and A[1]<=0x13) then -- 1byte
+				Temp = A[1]*16777216
+			else
+				Temp = A[1]
+			end
 		elseif #A == 2 then -- 1+1
-			Temp = A[1]+A[2]*16777216
+			if (A[1] >= 0x1 and A[1] <= 0x8) or (A[1] >= 0xE and A[1] <= 0x11) or (A[1] >= 0x14 and A[1] <= 0x1F) then -- ColorCode
+				Temp = A[1]+A[2]*16777216
+			else -- 2
+				Temp = A[1]*65536+A[2]*16777216
+			end
 		elseif #A == 3 then -- 3
-			Temp = A[1]*256+A[2]*65536+A[3]*16777216
+			if (A[1] >= 0x1 and A[1] <= 0x8) or (A[1] >= 0xE and A[1] <= 0x11) or (A[1] >= 0x14 and A[1] <= 0x1F) then -- ColorCode
+				Temp = A[1]+A[2]*65536+A[3]*16777216
+			else -- 3
+				Temp = A[1]*256+A[2]*65536+A[3]*16777216
+			end
 		elseif #A == 4 then -- 1+3
 			Temp = A[1]+A[2]*256+A[3]*65536+A[4]*16777216
 		end
@@ -48163,18 +48450,32 @@ function MakeiStrDataX(Letter,Fill) -- X for CA__ConvertLetter
 end
 
 function MakeiStrDiffX(Start,End) -- B-A for CA__ConvertLetter
-	local A = cp949_to_utf8(Start)
-	local B = cp949_to_utf8(End)
-	table.remove(A,#A)
-	table.remove(B,#B)
+	local A
+	local B
+	if TEP30Flag == 1 then
+		A = {}
+		Start:gsub(".",function(c) table.insert(A,string.byte(c)) end)
+		B = {}
+		End:gsub(".",function(c) table.insert(B,string.byte(c)) end)
+	else
+		A = cp949_to_utf8(Start)
+		table.remove(A,#A)
+		B = cp949_to_utf8(End)
+		table.remove(B,#B)
+	end
+
 	local X, Y 
 	if #A == 1 then
 		X = A[1]*16777216 + 0x0D0D00
+	elseif #A == 2 then
+		X = A[1]*65536 + A[2]*16777216 + 0x0D00
 	elseif #A == 3 then
 		X = A[1]*256 + A[2]*65536 + A[3]*16777216
 	end
 	if #B == 1 then
 		Y = B[1]*16777216 + 0x0D0D00
+	elseif #B == 2 then
+		Y = B[1]*65536 + B[2]*16777216 + 0x0D00
 	elseif #B == 3 then
 		Y = B[1]*256 + B[2]*65536 + B[3]*16777216
 	end
@@ -55826,7 +56127,15 @@ function GetStrSize(cp949flag,String,Null)
 		Null = 1
 	end
 	if cp949flag == "X" or cp949flag == nil or cp949flag == 0 then -- utf8 Size
-		String = cp949_to_utf8(String)
+		if TEP30Flag == 1 then
+			local tmp = String
+			String = {}
+			tmp:gsub(".",function(c) table.insert(String,string.byte(c)) end)
+			table.insert(String,0)
+		else
+			String = cp949_to_utf8(String)
+		end
+
 		Size = #String-1+Null
 	else -- cp949 Size
 		Size = #String+Null
@@ -55847,10 +56156,21 @@ function GetStrArr(cp949flag,String,Null)
 	end
 	if cp949flag == "X" or cp949flag == nil or cp949flag == 0 then -- utf8 Size
 		if Null == 0 then
-			Arr = cp949_to_utf8(String)
-			table.remove(Arr,#Arr)
+			if TEP30Flag == 1 then
+				Arr = {}
+				String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+			else
+				Arr = cp949_to_utf8(String)
+				table.remove(Arr,#Arr)
+			end
 		else
-			Arr = cp949_to_utf8(String)
+			if TEP30Flag == 1 then
+				Arr = {}
+				String:gsub(".",function(c) table.insert(Arr,string.byte(c)) end)
+				table.insert(Arr,0)
+			else
+				Arr = cp949_to_utf8(String)
+			end
 		end
 	else -- cp949 Size
 		for i = 1, #String do
@@ -55939,7 +56259,14 @@ function Print_String(PlayerID, Dest, String, InitBytes) -- EPD / CPRead
        		str = '\0\0\x0D'..str 
         end
 
-        local t = cp949_to_utf8(str)
+        local t
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
 
         while n <= #t do
         	if n+4 > #t then
@@ -56030,7 +56357,14 @@ function Print_StringX(PlayerID, DestVA, String, InitBytes) -- EPD / CPRead
        		str = '\0\0\x0D'..str 
         end
 
-        local t = cp949_to_utf8(str)
+        local t
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
 
         while n <= #t do
         	if n+4 > #t then
@@ -58122,283 +58456,294 @@ end
 -- 64비트 정수 입력용 내부 함수 -------------------------------------------------------------------------------------------------------------------------
 
 function I64(Number)
-	local Ret1, Ret2
-	if type(Number) == "number" then -- I32
-		return Number
-	elseif type(Number) == "table" then
-		return Number
-	elseif type(Number) == "string" then
-		local Check = string.sub(Number,1,2) 
-		if Check == "0x" or Check == "0X" then -- Hex
-			local str1, str2, lenT, len1, len2
-			lenT = string.len(Number)
-			if lenT >= 19 or lenT <= 2 then
-				I64_InputError()
-			end
-			len1 = 0
-			len2 = lenT-2
-			if len2 >= 9 then
-				len2 = 8
-				len1 = lenT - 10
-			end
-			
-			if len1 == 0 then
-				str2 = string.sub(Number,1,lenT) 
-				Ret1 = 0
-				Ret2 = tonumber(str2)
-			else
-				str1 = string.sub(Number,1,2+len1) 
-				str2 = "0x"..string.sub(Number,3+len1,lenT) 
-				Ret1 = tonumber(str1)
-				Ret2 = tonumber(str2)
-			end
-			return {Ret2, Ret1}
-		else -- Dec
-			local str1, str2, lenT, len1, len2
-			lenT = string.len(Number)
-			local Neg = 0
-			if string.sub(Number,1,1) == "-" then
-				Neg = 1
-				Number = string.sub(Number,2,lenT)
-				lenT = lenT - 1
-			end 
-			if lenT >= 21 or lenT == 0 then
-				I64_InputError()
-			end
-			len1 = 0
-			len2 = lenT
-			if len2 >= 11 then
-				len2 = 10
-				len1 = lenT - 10
-			end
-			local pt1, pt2
-			if len1 == 0 then
-				str2 = string.sub(Number,1,lenT) 
-				pt1 = 0.0
-				pt2 = tonumber(str2)
-			else
-				str1 = string.sub(Number,1,len1) 
-				str2 = string.sub(Number,1+len1,lenT) 
-				pt1 = tonumber(str1)
-				pt2 = tonumber(str2)
-			end
-
-			if Neg == 1 then
-				local Ret = I64Neg(pt1,pt2)
-				pt1 = Ret[1]
-				pt2 = Ret[2]
-			end
-
-			local Top = {
-			922337203.0,
-			461168601.0,
-			230584300.0,
-			115292150.0,
-			57646075.0,
-			28823037.0,
-			14411518.0,
-			7205759.0,
-
-			3602879.0,
-			1801439.0,
-			900719.0,
-			450359.0,
-			225179.0,
-			112589.0,
-			56294.0,
-			28147.0,
-
-			14073.0,
-			7036.0,
-			3518.0,
-			1759.0,
-			879.0,
-			439.0,
-			219.0,
-			109.0,
-
-			54.0,
-			27.0,
-			13.0,
-			6.0,
-			3.0,
-			1.0,
-			0.0,
-			0.0,
-
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0,
-			0.0
-			}
-			local Bottom = {
-			6854775808.0,
-			8427387904.0,
-			9213693952.0,
-			4606846976.0,
-			2303423488.0,
-			6151711744.0,
-			8075855872.0,
-			4037927936.0,
-
-			7018963968.0,
-			8509481984.0,
-			9254740992.0,
-			9627370496.0,
-			9813685248.0,
-			9906842624.0,
-			9953421312.0,
-			4976710656.0,
-
-			7488355328.0,
-			8744177664.0,
-			4372088832.0,
-			2186044416.0,
-			6093022208.0,
-			8046511104.0,
-			9023255552.0,
-			9511627776.0,
-
-			9755813888.0,
-			4877906944.0,
-			7438953472.0,
-			8719476736.0,
-			4359738368.0,
-			7179869184.0,
-			8589934592.0,
-			4294967296.0,
-
-			2147483648.0,
-			1073741824.0,
-			536870912.0,
-			268435456.0,
-			134217728.0,
-			67108864.0,
-			33554432.0,
-			16777216.0,
-
-			8388608.0,
-			4194304.0,
-			2097152.0,
-			1048576.0,
-			524288.0,
-			262144.0,
-			131072.0,
-			65536.0,
-
-			32768.0,
-			16384.0,
-			8192.0,
-			4096.0,
-			2048.0,
-			1024.0,
-			512.0,
-			256.0,
-
-			128.0,
-			64.0,
-			32.0,
-			16.0,
-			8.0,
-			4.0,
-			2.0,
-			1.0
-			}
-
-			local Bit = {
-			0x80000000,
-			0x40000000,
-			0x20000000,
-			0x10000000,
-			0x8000000,
-			0x4000000,
-			0x2000000,
-			0x1000000,
-
-			0x800000,
-			0x400000,
-			0x200000,
-			0x100000,
-			0x80000,
-			0x40000,
-			0x20000,
-			0x10000,
-
-			0x8000,
-			0x4000,
-			0x2000,
-			0x1000,
-			0x800,
-			0x400,
-			0x200,
-			0x100,
-
-			0x80,
-			0x40,
-			0x20,
-			0x10,
-			0x8,
-			0x4,
-			0x2,
-			0x1,
-			}
-			Ret1 = 0
-			Ret2 = 0
-			for i = 63, 32, -1 do
-				local index = 64-i 
-				local Ret = I64Sub(pt1,pt2,Top[index],Bottom[index])
-				if Ret ~= 0 then
-					pt1 = Ret[1]
-					pt2 = Ret[2]
-					Ret1 = Ret1 + Bit[index]
-				end
-			end
-
-			for i = 31, 0, -1 do
-				local index = 64-i
-				local Ret = I64Sub(pt1,pt2,Top[index],Bottom[index])
-				if Ret ~= 0 then
-					pt1 = Ret[1]
-					pt2 = Ret[2]
-					Ret2 = Ret2 + Bit[32-i]
-				end
-			end
-
-			return {Ret2, Ret1}
+	if TEP30Flag == 1 then
+		if type(Number) == "number" then -- I32
+			return {bit64.band(Number,0xFFFFFFFF),bit64.rshift(bit64.band(Number,0xFFFFFFFF00000000),32)}
+		elseif type(Number) == "table" then
+			return Number
+		elseif type(Number) == "string" then
+			local Num = tonumber(Number)
+			return {bit64.band(Number,0xFFFFFFFF),bit64.rshift(bit64.band(Number,0xFFFFFFFF00000000),32)}
 		end
 	else
-		I64_InputError()
+		local Ret1, Ret2
+		if type(Number) == "number" then -- I32
+			return Number
+		elseif type(Number) == "table" then
+			return Number
+		elseif type(Number) == "string" then
+			local Check = string.sub(Number,1,2) 
+			if Check == "0x" or Check == "0X" then -- Hex
+				local str1, str2, lenT, len1, len2
+				lenT = string.len(Number)
+				if lenT >= 19 or lenT <= 2 then
+					I64_InputError()
+				end
+				len1 = 0
+				len2 = lenT-2
+				if len2 >= 9 then
+					len2 = 8
+					len1 = lenT - 10
+				end
+				
+				if len1 == 0 then
+					str2 = string.sub(Number,1,lenT) 
+					Ret1 = 0
+					Ret2 = tonumber(str2)
+				else
+					str1 = string.sub(Number,1,2+len1) 
+					str2 = "0x"..string.sub(Number,3+len1,lenT) 
+					Ret1 = tonumber(str1)
+					Ret2 = tonumber(str2)
+				end
+				return {Ret2, Ret1}
+			else -- Dec
+				local str1, str2, lenT, len1, len2
+				lenT = string.len(Number)
+				local Neg = 0
+				if string.sub(Number,1,1) == "-" then
+					Neg = 1
+					Number = string.sub(Number,2,lenT)
+					lenT = lenT - 1
+				end 
+				if lenT >= 21 or lenT == 0 then
+					I64_InputError()
+				end
+				len1 = 0
+				len2 = lenT
+				if len2 >= 11 then
+					len2 = 10
+					len1 = lenT - 10
+				end
+				local pt1, pt2
+				if len1 == 0 then
+					str2 = string.sub(Number,1,lenT) 
+					pt1 = 0.0
+					pt2 = tonumber(str2)
+				else
+					str1 = string.sub(Number,1,len1) 
+					str2 = string.sub(Number,1+len1,lenT) 
+					pt1 = tonumber(str1)
+					pt2 = tonumber(str2)
+				end
+
+				if Neg == 1 then
+					local Ret = I64Neg(pt1,pt2)
+					pt1 = Ret[1]
+					pt2 = Ret[2]
+				end
+
+				local Top = {
+				922337203.0,
+				461168601.0,
+				230584300.0,
+				115292150.0,
+				57646075.0,
+				28823037.0,
+				14411518.0,
+				7205759.0,
+
+				3602879.0,
+				1801439.0,
+				900719.0,
+				450359.0,
+				225179.0,
+				112589.0,
+				56294.0,
+				28147.0,
+
+				14073.0,
+				7036.0,
+				3518.0,
+				1759.0,
+				879.0,
+				439.0,
+				219.0,
+				109.0,
+
+				54.0,
+				27.0,
+				13.0,
+				6.0,
+				3.0,
+				1.0,
+				0.0,
+				0.0,
+
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+				}
+				local Bottom = {
+				6854775808.0,
+				8427387904.0,
+				9213693952.0,
+				4606846976.0,
+				2303423488.0,
+				6151711744.0,
+				8075855872.0,
+				4037927936.0,
+
+				7018963968.0,
+				8509481984.0,
+				9254740992.0,
+				9627370496.0,
+				9813685248.0,
+				9906842624.0,
+				9953421312.0,
+				4976710656.0,
+
+				7488355328.0,
+				8744177664.0,
+				4372088832.0,
+				2186044416.0,
+				6093022208.0,
+				8046511104.0,
+				9023255552.0,
+				9511627776.0,
+
+				9755813888.0,
+				4877906944.0,
+				7438953472.0,
+				8719476736.0,
+				4359738368.0,
+				7179869184.0,
+				8589934592.0,
+				4294967296.0,
+
+				2147483648.0,
+				1073741824.0,
+				536870912.0,
+				268435456.0,
+				134217728.0,
+				67108864.0,
+				33554432.0,
+				16777216.0,
+
+				8388608.0,
+				4194304.0,
+				2097152.0,
+				1048576.0,
+				524288.0,
+				262144.0,
+				131072.0,
+				65536.0,
+
+				32768.0,
+				16384.0,
+				8192.0,
+				4096.0,
+				2048.0,
+				1024.0,
+				512.0,
+				256.0,
+
+				128.0,
+				64.0,
+				32.0,
+				16.0,
+				8.0,
+				4.0,
+				2.0,
+				1.0
+				}
+
+				local Bit = {
+				0x80000000,
+				0x40000000,
+				0x20000000,
+				0x10000000,
+				0x8000000,
+				0x4000000,
+				0x2000000,
+				0x1000000,
+
+				0x800000,
+				0x400000,
+				0x200000,
+				0x100000,
+				0x80000,
+				0x40000,
+				0x20000,
+				0x10000,
+
+				0x8000,
+				0x4000,
+				0x2000,
+				0x1000,
+				0x800,
+				0x400,
+				0x200,
+				0x100,
+
+				0x80,
+				0x40,
+				0x20,
+				0x10,
+				0x8,
+				0x4,
+				0x2,
+				0x1,
+				}
+				Ret1 = 0
+				Ret2 = 0
+				for i = 63, 32, -1 do
+					local index = 64-i 
+					local Ret = I64Sub(pt1,pt2,Top[index],Bottom[index])
+					if Ret ~= 0 then
+						pt1 = Ret[1]
+						pt2 = Ret[2]
+						Ret1 = Ret1 + Bit[index]
+					end
+				end
+
+				for i = 31, 0, -1 do
+					local index = 64-i
+					local Ret = I64Sub(pt1,pt2,Top[index],Bottom[index])
+					if Ret ~= 0 then
+						pt1 = Ret[1]
+						pt2 = Ret[2]
+						Ret2 = Ret2 + Bit[32-i]
+					end
+				end
+
+				return {Ret2, Ret1}
+			end
+		else
+			I64_InputError()
+		end
 	end
 end
 
@@ -58463,21 +58808,29 @@ end
 
 function I64Mul(a,b,c,d)
 	local Ret = {0,0}
-	local Temp = {a,b}
-	for i = 0, 31 do
-		local CBit = 2^i
-		if bit32.band(d, CBit) == CBit then
-			Ret = I64Add(Ret[1],Ret[2],Temp[1],Temp[2])
-		end
-		Temp = I64Add(Temp[1],Temp[2],Temp[1],Temp[2])
-	end
-	if c ~= 0 then
+	if TEP30Flag == 1 then
+		local A = bit64.lshift(a,32)+b
+		local B = bit64.lshift(c,32)+d
+		local C = A*B
+		Ret[1] = bit64.rshift(bit64.band(C,0xFFFFFFFF00000000),32)
+		Ret[2] = bit64.band(C,0xFFFFFFFF)
+	else
+		local Temp = {a,b}
 		for i = 0, 31 do
 			local CBit = 2^i
-			if bit32.band(c, CBit) == CBit then
+			if bit32.band(d, CBit) == CBit then
 				Ret = I64Add(Ret[1],Ret[2],Temp[1],Temp[2])
 			end
 			Temp = I64Add(Temp[1],Temp[2],Temp[1],Temp[2])
+		end
+		if c ~= 0 then
+			for i = 0, 31 do
+				local CBit = 2^i
+				if bit32.band(c, CBit) == CBit then
+					Ret = I64Add(Ret[1],Ret[2],Temp[1],Temp[2])
+				end
+				Temp = I64Add(Temp[1],Temp[2],Temp[1],Temp[2])
+			end
 		end
 	end
 	return Ret
@@ -75103,8 +75456,9 @@ function f_GetFileArrptr(PlayerID,FileArray,ElementSize,LoadCheck)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -75160,6 +75514,31 @@ function SaveFileArr(FileArray,ElementSize,FileName)
     local size = Fileptr:seek("end")
 	io.close(Fileptr)
 	return size
+end
+
+
+function SaveTempFileInit()
+	function exists(file)
+	   local ok, err, code = os.rename(file, file)
+	   if not ok then
+	      if code == 13 then
+	         -- Permission denied, but it exists
+	         return true
+	      end
+	   end
+	   return ok, err
+	end
+
+	--- Check if a directory exists in this path
+	function isdir(path)
+	   -- "/" works on both Unix and Windows
+	   return exists(path.."/")
+	end
+
+	if isdir(FileDirectory.."temp") == nil then
+		local DirName = "\""..FileDirectory.."temp\""
+		os.execute("mkdir " .. DirName)
+	end
 end
 
 function f_GetFileptrN(PlayerID,FileName,Repeat,LoadCheck) -- 1st EPD = N
@@ -75268,8 +75647,9 @@ function f_GetFileArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -75345,13 +75725,14 @@ function f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local SVA1 = 0
 	if Repeat == "SVA1" then
 		SVA1 = 1
 		Repeat = 1
 	end
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -75528,8 +75909,9 @@ function f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -75703,6 +76085,7 @@ function f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadChe
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local SVA32 = 0
 	local SVA32X
 	if Repeat == "SVA32" then
@@ -75715,7 +76098,7 @@ function f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadChe
 		SVA32X = 8
 	end
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -97567,6 +97950,9 @@ function TtoA(String)
 end
 
 function PatchCRGB(P1Color,P2Color,P3Color,P4Color,P5Color,P6Color,P7Color,P8Color) -- Type or Color (0xBBGGRR)
+	if TEP30Flag == 1 then
+		PatchCRGB_is_deprecated()
+	end
 	-- Type = 03 (Unused) / 02 (Custom RGB) / 01 (Select) / 00 (Random)  
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
@@ -97760,6 +98146,9 @@ ExtTextArr = {}
 ExtTextFile = {}
 ExtTextIndex = 1
 function DisplayExtText(Text,AlwaysDisplay) -- EndCtrig에서 ExtText 파일 생성함
+	if TEP30Flag == 1 then
+		DisplayExtText_is_deprecated()
+	end
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -97778,8 +98167,9 @@ function f_PatchSTRxArr(PlayerID)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
+	SaveTempFileInit()
 	local Ret
-	local FileName = "SCTRIGASMFILE"
+	local FileName = "temp\\SCTRIGASMFILE"
 	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 	if FileNameIndex < 0x10 then
 		FileName = FileName.."000"..HEX[FileNameIndex+1]
@@ -99216,3 +99606,890 @@ function ResetCache2(PlayerID,Cache2,Number,Start,End)
 		ResetCache2_InputData_Error()
 	end
 end
+
+
+BMPNameIndex = 0
+function CS_PrintBMP(Shape,Xpx,Ypx,Limit) -- Shape -> GRP 
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+	
+	local NShape = CS_RatioXY(Shape,1/Xpx,1/Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+	
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+		GRPFile:write(string.char(0xFF))
+		GRPFile:write(string.char(0xFF))
+		GRPFile:write(string.char(0xFF))
+	end
+
+	io.close(GRPFile)
+	
+	__PrintBMP(FilePath)
+end
+
+
+function CS_PrintBMPX(Shape,TargetXpx,TargetYpx,Limit) -- Shape -> GRP 
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+	
+	TargetXpx = TargetXpx - 1
+	TargetYpx = TargetYpx - 1
+	local XSize = CS_GetXmax(Shape)-CS_GetXmin(Shape)
+	local YSize = CS_GetYmax(Shape)-CS_GetYmin(Shape)
+
+	local Xpx = (TargetXpx)/XSize
+	local Ypx = (TargetYpx)/YSize
+	local NShape = CS_RatioXY(Shape,Xpx,Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+	
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+		GRPFile:write(string.char(0xFF))
+		GRPFile:write(string.char(0xFF))
+		GRPFile:write(string.char(0xFF))
+	end
+
+	io.close(GRPFile)
+	
+	__PrintBMP(FilePath)
+end
+
+
+function CS_PrintBMPColor(Shape,ColorArr,Xpx,Ypx,Limit) -- Shape -> GRP 
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+	
+	local NShape = CS_RatioXY(Shape,1/Xpx,1/Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+	
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0xD0,0xE0,0xCC},
+		{0x38,0xFC,0xFC},
+		
+		{0x08,0x80,0x08},
+		{0x7C,0xFC,0xFC},
+		{0xB0,0xC4,0xEC},
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+
+		if ColorArr[k-1] == nil then
+			GRPFile:write(string.char(RGBArr[Num][1]))
+			GRPFile:write(string.char(RGBArr[Num][2]))
+			GRPFile:write(string.char(RGBArr[Num][3]))
+		else
+			GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+		end
+
+		Num = Num + 1
+		if Num > 16 then
+			Num = 1
+		end
+	end
+
+	io.close(GRPFile)
+	
+	__PrintBMP(FilePath)
+end
+
+
+function CS_PrintBMPColorX(Shape,ColorArr,TargetXpx,TargetYpx,Limit) -- Shape -> GRP 
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+	
+	TargetXpx = TargetXpx - 1
+	TargetYpx = TargetYpx - 1
+	local XSize = CS_GetXmax(Shape)-CS_GetXmin(Shape)
+	local YSize = CS_GetYmax(Shape)-CS_GetYmin(Shape)
+
+	local Xpx = (TargetXpx)/XSize
+	local Ypx = (TargetYpx)/YSize
+	local NShape = CS_RatioXY(Shape,Xpx,Ypx)
+
+	local Xmin = CS_GetXmin(NShape)
+	local Ymin = CS_GetYmin(NShape)
+
+	NShape = CS_MoveXY(NShape,-Xmin,-Ymin)
+	NShape = CS_Round(NShape,0)
+
+	local XMax = CS_GetXmax(NShape)
+	local YMax = CS_GetYmax(NShape)
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0xD0,0xE0,0xCC},
+		{0x38,0xFC,0xFC},
+		
+		{0x08,0x80,0x08},
+		{0x7C,0xFC,0xFC},
+		{0xB0,0xC4,0xEC},
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		GRPFile:seek("set",54+3*NShape[k][1]+((YNum)-NShape[k][2])*XFill)
+
+		if ColorArr[k-1] == nil then
+			GRPFile:write(string.char(RGBArr[Num][1]))
+			GRPFile:write(string.char(RGBArr[Num][2]))
+			GRPFile:write(string.char(RGBArr[Num][3]))
+		else
+			GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+			GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+		end
+
+		Num = Num + 1
+		if Num > 16 then
+			Num = 1
+		end
+	end
+
+	io.close(GRPFile)
+	
+	__PrintBMP(FilePath)
+end
+
+function CS_PrintBMPGraph(Shape,ColorArr,areaX,areaY,CenterAxis,MainSize,SubSize,AxisColor,DotSize,Xpx,Ypx,Alert,Limit) -- Shape -> GRP
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	if Limit == nil then
+		Limit = 100000000
+	end
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+
+	if CenterAxis == nil then
+		CenterAxis = 0
+	end
+ 
+	if DotSize == nil or DotSize < 1 then DotSize = 1 end
+	if Xpx == nil then Xpx = 1 end
+	if Ypx == nil then Ypx = 1 end
+	local NShape = CS_RatioXY(Shape,1/Xpx,1/Ypx)
+
+	local MainX, MainY, SubX, SubY, YLoc, XLoc
+	if AxisColor == nil then
+		AxisColor = {}
+	end
+	if MainSize ~= nil then 
+		MainSize = math.abs(MainSize)
+		MainX = MainSize/Xpx
+		MainY = MainSize/Ypx
+		if AxisColor[2] == nil then
+			AxisColor[2] = {}
+			AxisColor[2][1] = 0xC0
+			AxisColor[2][2] = 0xC0
+			AxisColor[2][3] = 0xC0
+		else
+			local AxisTemp = AxisColor[2]
+			AxisColor[2] = {}
+			AxisColor[2][1] = bit32.band(AxisTemp,0xFF)
+			AxisColor[2][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+			AxisColor[2][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+		end
+	end
+	if SubSize ~= nil then 
+		SubSize = math.abs(SubSize)
+		SubX = SubSize/Xpx
+		SubY = SubSize/Ypx
+		if AxisColor[3] == nil then
+			AxisColor[3] = {}
+			AxisColor[3][1] = 0xE8
+			AxisColor[3][2] = 0xE8
+			AxisColor[3][3] = 0xE8
+		else
+			local AxisTemp = AxisColor[3]
+			AxisColor[3] = {}
+			AxisColor[3][1] = bit32.band(AxisTemp,0xFF)
+			AxisColor[3][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+			AxisColor[3][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+		end
+	end
+
+	if AxisColor[4] == nil then
+		AxisColor[4] = 0xFF
+	else
+		AxisColor[4] = bit32.band(AxisColor[4],0xFF)
+	end
+
+	local Xmin = math.floor(CS_GetXmin(NShape))
+	local Ymin = math.floor(CS_GetYmin(NShape))
+	local Xmax = math.floor(CS_GetXmax(NShape)+1)
+	local Ymax = math.floor(CS_GetYmax(NShape)+1)
+
+	if areaX == nil then
+		areaX = {}
+	end
+	if areaY == nil then
+		areaY = {}
+	end
+	if type(areaX) == "number" then areaX = {-areaX/2,areaX/2} end
+	if type(areaY) == "number" then areaY = {-areaY/2,areaY/2} end
+
+	if areaX[1] == nil then areaX[1] = Xmin end
+	if areaX[2] == nil then areaX[2] = Xmax end
+	if areaY[1] == nil then areaY[1] = Ymin end
+	if areaY[2] == nil then areaY[2] = Ymax end
+
+	if type(areaX[1]) == "table" then areaX[1] = areaX[1][1]+Xmin end
+	if type(areaX[2]) == "table" then areaX[2] = areaX[2][1]+Xmax end
+	if type(areaY[1]) == "table" then areaY[1] = areaY[1][1]+Ymin end
+	if type(areaY[2]) == "table" then areaY[2] = areaY[2][1]+Ymax end
+
+	NShape = CS_MoveXY(NShape,-areaX[1],-areaY[1])
+	NShape = CS_Round(NShape,0)
+
+	local XMax = areaX[2] - areaX[1]
+	local YMax = areaY[2] - areaY[1]
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = math.floor(XMax)
+	local YNum = math.floor(YMax)
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(AxisColor[4]))
+		end
+	end
+
+	if SubSize ~= nil then
+		YLoc = SubY - areaY[1]%SubY 
+		while true do
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)-YLoc)*XFill))
+				GRPFile:write(string.char(AxisColor[3][1]))
+				GRPFile:write(string.char(AxisColor[3][2]))
+				GRPFile:write(string.char(AxisColor[3][3]))
+			end
+			YLoc = YLoc + SubY
+			if YLoc > YNum then break end
+		end
+
+		XLoc = SubX - areaX[1]%SubX 
+		while true do
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54+3*XLoc+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[3][1]))
+				GRPFile:write(string.char(AxisColor[3][2]))
+				GRPFile:write(string.char(AxisColor[3][3]))
+			end
+			XLoc = XLoc + SubX
+			if XLoc > XNum then break end
+		end
+	end
+
+	if MainSize ~= nil then
+		YLoc = MainY - areaY[1]%MainY 
+		while true do
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)-YLoc)*XFill))
+				GRPFile:write(string.char(AxisColor[2][1]))
+				GRPFile:write(string.char(AxisColor[2][2]))
+				GRPFile:write(string.char(AxisColor[2][3]))
+			end
+			YLoc = YLoc + MainY
+			if YLoc > YNum then break end
+		end
+
+		XLoc = MainX - areaX[1]%MainX 
+		while true do
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54+3*XLoc+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[2][1]))
+				GRPFile:write(string.char(AxisColor[2][2]))
+				GRPFile:write(string.char(AxisColor[2][3]))
+			end
+			XLoc = XLoc + MainX
+			if XLoc > XNum then break end
+		end
+	end
+
+	if AxisColor[1] == nil then
+		AxisColor[1] = {}
+		AxisColor[1][1] = 0
+		AxisColor[1][2] = 0
+		AxisColor[1][3] = 0
+	else
+		local AxisTemp = AxisColor[1]
+		AxisColor[1] = {}
+		AxisColor[1][1] = bit32.band(AxisTemp,0xFF)
+		AxisColor[1][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
+		AxisColor[1][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
+	end
+
+	if CenterAxis ~= 0 then
+		if areaY[1] <= 0 then -- X축
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)+areaY[1])*XFill))
+				GRPFile:write(string.char(AxisColor[1][1]))
+				GRPFile:write(string.char(AxisColor[1][2]))
+				GRPFile:write(string.char(AxisColor[1][3]))
+			end
+		end
+
+		if areaX[1] <= 0 then -- Y축
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54-3*areaX[1]+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[1][1]))
+				GRPFile:write(string.char(AxisColor[1][2]))
+				GRPFile:write(string.char(AxisColor[1][3]))
+			end
+		end
+	end
+
+	local RGBArr = {
+		{0x04,0x04,0xF4},
+		{0xCC,0x48,0x0C},
+		{0x94,0xB4,0x2C},
+		{0x9C,0x40,0x88},
+		{0x14,0x8C,0xF8},
+		{0x14,0x30,0x70},
+		{0x80,0x80,0x80}, -- Grey
+		{0x00,0xFF,0xFF}, -- Pure Yellow
+		
+		{0x08,0x80,0x08},
+		{0x00,0x80,0x80}, -- Olive
+		{0xFF,0x00,0xFF}, -- Magenta
+		{0xD4,0x68,0x40},
+		{0x7C,0xA4,0x74},
+		{0xB8,0x90,0x90},
+		{0xFC,0xE4,0x00},
+		{0x18,0xFC,0x10},
+	}
+	if ColorArr == nil then ColorArr = {} end
+
+	local Num = 1
+	for k = 2, NShape[1]+1 do
+		if NShape[k][1] <= XNum and NShape[k][1] >= 0 and NShape[k][2] <= YNum and NShape[k][2] >= 0 then
+			if DotSize == 1 then
+				GRPFile:seek("set",54+3*(NShape[k][1])+((YNum)-(NShape[k][2]))*XFill)
+
+				if ColorArr[k-1] == nil then
+					GRPFile:write(string.char(RGBArr[Num][1]))
+					GRPFile:write(string.char(RGBArr[Num][2]))
+					GRPFile:write(string.char(RGBArr[Num][3]))
+				else
+					GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+					GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+					GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+				end
+			else
+				local StX = NShape[k][1]-DotSize+1
+				local StY = NShape[k][2]-DotSize+1
+				if StX < 0 then StX = 0 end
+				if StY < 0 then StY = 0 end
+
+				local EnX = NShape[k][1]+DotSize-1
+				local EnY = NShape[k][2]+DotSize-1
+				if EnX > XNum then EnX = XNum end
+				if EnY > YNum then EnY = YNum end
+
+				for p = StX, EnX, 1 do
+					for q = StY, EnY, 1 do 
+						GRPFile:seek("set",54+3*(p)+((YNum)-(q))*XFill)
+
+						if ColorArr[k-1] == nil then
+							GRPFile:write(string.char(RGBArr[Num][1]))
+							GRPFile:write(string.char(RGBArr[Num][2]))
+							GRPFile:write(string.char(RGBArr[Num][3]))
+						else
+							GRPFile:write(string.char(bit32.band(ColorArr[k-1],0xFF)))
+							GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF00),8)))
+							GRPFile:write(string.char(bit32.rshift(bit32.band(ColorArr[k-1],0xFF0000),16)))
+						end
+					end
+				end
+			end
+
+			Num = Num + 1
+			if Num > 16 then
+				Num = 1
+			end
+		else
+			if Alert == 1 then
+				CS_BMPGraph_Shape_is_outside_the_region_shown()
+			end
+		end
+	end
+
+	io.close(GRPFile)
+	
+	__PrintBMP(FilePath)
+end
+
+function PrintValueMsg(...)
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+
+	local Message = "\n"
+	local arg = table.pack(...)
+	for k = 1, arg.n do
+		if type(arg[k]) == "string" then
+			Message = Message..arg[k].."\n"
+		elseif type(arg[k]) == "function" then
+			Message = Message.."function".."\n"
+		elseif type(arg[k]) == "table" then
+			if type(arg[k][1]) == "table" then
+				for i = 1, #arg[k][1] do
+					if type(arg[k][1][i]) == "string" then
+						Message = Message..arg[k][1][i].."  "
+					elseif type(arg[k][1][i]) == "function" then
+						Message = Message.."function".."  "
+					elseif type(arg[k][1][i]) == "number" then
+						if arg[k][2] == "X" or arg[k][2] == "x" then
+							Message = Message..string.format("%X",arg[k][1][i]).."  "
+						elseif arg[k][2] == "F" or arg[k][2] == "f"  then
+							Message = Message..string.format("%f",arg[k][1][i]).."  "
+						else
+							Message = Message..string.format("%d",math.floor(arg[k][1][i])).."  "
+						end
+					elseif arg[k][1][i] == nil then
+						Message = Message.."nil".."  "
+					elseif type(arg[k][1][i]) == "table" then
+						Message = Message.."table".."  "
+					else
+						PushValueMsg_InputError()
+					end
+				end
+				Message = Message.."\n"
+			elseif arg[k][2] == "X" or arg[k][2] == "x" then
+				Message = Message..string.format("%X",arg[k][1]).."\n"
+			elseif arg[k][2] == "F" or arg[k][2] == "f"  then
+				Message = Message..string.format("%f",arg[k][1]).."\n"
+			else
+				Message = Message..string.format("%d",math.floor(arg[k][1])).."\n"
+			end
+		elseif type(arg[k]) == "number" then
+			Message = Message..string.format("%d",math.floor(arg[k])).."\n"
+		elseif arg[k] == nil then
+			Message = Message.."nil".."\n"
+		else
+			PushValueMsg_InputError()
+		end 
+	end
+	__Print(Message)
+end
+
+
+function CS_PrintBMPMask(MaskPath) -- Shape -> GRP 
+	if TEP30Flag == 0 then
+		NEED_TEP3_VERSION()
+	end
+	
+	local Limit = 100000000
+	
+	local pathmode = 0
+	if string.find(MaskPath,"\\") then
+		pathmode = 1
+	end
+	
+	local FileName
+	if pathmode == 0 then
+		FileName = FileDirectory..MaskPath
+	else
+		FileName = MaskPath
+	end
+	
+	local fptr = io.open(FileName, "rb")
+	if fptr == nil then
+		CS_MaskPath_InVaild()
+	end
+	local SX = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	local SY = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+
+	local FileName = "\\PRINTBMP"
+	local HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+	if BMPNameIndex < 0x10 then
+		FileName = FileName.."000"..HEX[BMPNameIndex+1]
+	elseif BMPNameIndex < 0x100 then
+		FileName = FileName.."00"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x1000 then
+		FileName = FileName.."0"..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	elseif BMPNameIndex < 0x10000 then
+		FileName = FileName..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF000),12)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF00),8)+1]..HEX[bit32.rshift(bit32.band(BMPNameIndex, 0xF0),4)+1]..HEX[bit32.band(BMPNameIndex, 0xF)+1]
+	else
+		BMPIndex_Overflow()
+	end
+
+	local Xmin = 0
+	local Ymin = 0
+
+	local FilePath = __CurrentPath..FileName..".BMP"
+	local GRPFile = io.open(FilePath, "wb")
+
+	local XNum = SX-1
+	local YNum = SY-1
+	
+	local XFill = math.ceil(3*(XNum+1)/4)*4
+
+	-- Write BMP Header
+	GRPFile:write("B") -- bfType
+	GRPFile:write("M") -- bfType
+	GRPFile:write(string.char(_ParseDW(14+40+XFill*(YNum+1)))) -- bfSize
+	GRPFile:write(string.char(_ParseDW(0))) -- bfReserved1 & bfReserved2
+	GRPFile:write(string.char(_ParseDW(14+40))) -- bfOffBits
+
+	GRPFile:write(string.char(_ParseDW(40))) -- biSize
+	GRPFile:write(string.char(_ParseDW(XNum+1))) -- biWidth
+	GRPFile:write(string.char(_ParseDW(YNum+1))) -- biHeight
+	GRPFile:write(string.char(_ParseW(1))) -- biPlanes
+	GRPFile:write(string.char(_ParseW(24))) -- biBitCount
+	GRPFile:write(string.char(_ParseDW(0))) -- biCompression
+	GRPFile:write(string.char(_ParseDW(XFill*(YNum+1)))) -- biSizeImage
+
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biXPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(0x2E20)))-- biYPelsPerMeter
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrUsed
+	GRPFile:write(string.char(_ParseDW(2))) -- biClrImportant
+
+	if (YNum+1)*XFill >= Limit then
+		BMPConvert_Limit_Overflow()
+	end
+
+	for i = 0, YNum, 1 do
+		for j = 0, XFill-1, 1 do
+			GRPFile:write(string.char(0))
+		end
+	end
+	for i = 0, YNum do
+		for j = 0, XNum do
+			local Val = string.byte(fptr:read(1))
+			if Val == 1 then
+				GRPFile:seek("set",54+3*j+((YNum)-i)*XFill)
+				GRPFile:write(string.char(0xFF))
+				GRPFile:write(string.char(0xFF))
+				GRPFile:write(string.char(0xFF))
+			end
+		end
+	end
+
+	io.close(GRPFile)
+	io.close(fptr)
+	
+	__PrintBMP(FilePath)
+end
+

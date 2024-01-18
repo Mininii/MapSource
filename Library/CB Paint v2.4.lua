@@ -226,6 +226,236 @@ function CSMakePolygonX(Point,Radius,Angle,Number,Hollow)
 	return Shape	
 end
 
+function CSMakePathPolygon(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+	
+	local RTempA
+	local RTempB
+	local ATempA
+	local ATempB
+
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				table.insert(Shape,{0,0})
+				Remain = Remain - 1
+			end
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+
+				if Case == Point then
+					RTempA = ((Level-1) * RArr[Case])
+					RTempB = ((Level-1) * RArr[1])
+					ATempA = AArr[Case]
+					ATempB = AArr[1]
+				else
+					RTempA = ((Level-1) * RArr[Case])
+					RTempB = ((Level-1) * RArr[Case+1])
+					ATempA = AArr[Case]
+					ATempB = AArr[Case+1]
+				end
+					
+			   	x1 = RTempA * math.cos(ATempA)
+			   	x2 = RTempB * math.cos(ATempB)
+			   	y1 = RTempA * math.sin(ATempA)
+			   	y2 = RTempB * math.sin(ATempB)
+
+			   	LX = ((Pts+1)*x1+(Level-Pts-2)*x2) / (Level-1)
+			   	LY = ((Pts+1)*y1+(Level-Pts-2)*y2) / (Level-1)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+			Main = Main + 1
+		end
+	end 
+
+	return Shape
+end
+
+function CSMakePathPolygonX(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius/2
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+
+	local RTempA
+	local RTempB
+	local ATempA
+	local ATempB
+	
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 2
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   		Main = Main + (Level-2)*Point
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+					
+				if Case == Point then
+					RTempA = ((Level-2) * RArr[Case]) + RArr[Case]
+					RTempB = ((Level-2) * RArr[1]) + RArr[1]
+					ATempA = AArr[Case]
+					ATempB = AArr[1]
+				else
+					RTempA = ((Level-2) * RArr[Case]) + RArr[Case]
+					RTempB = ((Level-2) * RArr[Case+1]) + RArr[Case+1]
+					ATempA = AArr[Case]
+					ATempB = AArr[Case+1]
+				end
+				
+			   	x1 = RTempA * math.cos(ATempA)
+			   	x2 = RTempB * math.cos(ATempB)
+			   	y1 = RTempA * math.sin(ATempA)
+			   	y2 = RTempB * math.sin(ATempB)
+
+			   	LX = ((Pts+1)*x1+(Level-Pts-2)*x2) / (Level-1)
+			   	LY = ((Pts+1)*y1+(Level-Pts-2)*y2) / (Level-1)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+		end
+	end 
+
+	return Shape	
+end
+
 function CSMakeCircle(Point,Radius,Angle,Number,Hollow)
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
@@ -346,6 +576,696 @@ function CSMakeCircleX(Point,Radius,Angle,Number,Hollow)
 		end
 	end 
 
+	return Shape	
+end
+
+
+function CSMakePathCircle(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+
+	local NR = 0
+	local NA = 0
+	local LX = nil
+	local LY = nil
+	local minA = 0
+	local remB = 0
+	
+	local RTempA
+	local RTempB
+	local ATempA
+	local ATempB
+	
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				table.insert(Shape,{0,0})
+				Remain = Remain - 1
+			end
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+
+				if Case == Point then
+					RTempA = ((Level-1) * RArr[Case])
+					RTempB = ((Level-1) * RArr[1])
+					ATempA = AArr[Case]
+					ATempB = AArr[1]
+				else
+					RTempA = ((Level-1) * RArr[Case])
+					RTempB = ((Level-1) * RArr[Case+1])
+					ATempA = AArr[Case]
+					ATempB = AArr[Case+1]
+				end
+			
+				minA = ATempA
+				remB = ATempB - ATempA
+				if remB < 0 then
+					remB = remB + math.pi*2
+				end
+			
+			   	NR = ((Pts+1)*RTempA+(Level-Pts-2)*RTempB) / (Level-1)
+			   	NA = ((Pts+1)*(0)+(Level-Pts-2)*(remB)) / (Level-1) + minA
+					
+				LX = NR * math.cos(NA)
+			   	LY = NR * math.sin(NA)
+						
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+			Main = Main + 1
+		end
+	end 
+
+	return Shape
+end
+
+function CSMakePathCircleX(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius/2
+	end
+
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+
+	local NR = 0
+	local NA = 0
+	local LX = nil
+	local LY = nil
+	local minA = 0
+	local remB = 0
+
+	local RTempA
+	local RTempB
+	local ATempA
+	local ATempB
+	
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 2
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   		Main = Main + (Level-2)*Point
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+					
+				if Case == Point then
+					RTempA = ((Level-2) * RArr[Case]) + RArr[Case]
+					RTempB = ((Level-2) * RArr[1]) + RArr[1]
+					ATempA = AArr[Case]
+					ATempB = AArr[1]
+				else
+					RTempA = ((Level-2) * RArr[Case]) + RArr[Case]
+					RTempB = ((Level-2) * RArr[Case+1]) + RArr[Case+1]
+					ATempA = AArr[Case]
+					ATempB = AArr[Case+1]
+				end
+				
+				minA = ATempA
+				remB = ATempB - ATempA
+				if remB < 0 then
+					remB = remB + math.pi*2
+				end
+				
+				NR = ((Pts+1)*RTempA+(Level-Pts-2)*RTempB) / (Level-1)
+			   	NA = ((Pts+1)*(0)+(Level-Pts-2)*remB) / (Level-1) + minA
+			   		
+				LX = NR * math.cos(NA)
+			   	LY = NR * math.sin(NA)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+		end
+	end 
+
+	return Shape	
+end
+
+
+function CSMakePathStar(Path,Center,StarAngle,Radius,Angle,Number,Hollow) -- 원점을 기준으로 별모양을 설정함
+	local NPath = {Path[1]*2}
+	
+	for i = 2, Path[1]+1 do
+		NPath[2*i-2] = {Path[i][1],Path[i][2]}
+	end
+	
+	local SA = math.rad(StarAngle/2)
+	
+	for i = 2, Path[1]+1 do
+		local x1
+		local x2
+		local y1
+		local y2
+		
+		if i == Path[1]+1 then
+			x1 = Path[i][1]
+			y1 = Path[i][2]
+			x2 = Path[2][1]
+			y2 = Path[2][2]
+		else
+			x1 = Path[i][1]
+			y1 = Path[i][2]
+			x2 = Path[i+1][1]
+			y2 = Path[i+1][2]
+		end
+		
+		local Cx = (x1+x2)/2
+		local Cy = (y1+y2)/2
+		local Tx
+		local Ty
+		local Tx2
+		local Ty2
+		local length = math.sqrt((Cx-x2)^2+(Cy-y2)^2)
+		local Sx
+		local Sy
+		
+		if math.abs(y1-y2) < 0.00001 then
+			Tx = Cx
+			Ty = Cy + 0.01
+			Ty2 = Cy - 0.01
+			local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+			if Ret[1] == 0 then -- out
+				if StarAngle > 180 then
+					Sx = Cx
+					Sy = Cy + length*math.cos(SA)
+				else
+					Sx = Cx
+					Sy = Cy - length*math.cos(SA)
+				end
+			else
+				if StarAngle <= 180 then
+					Sx = Cx
+					Sy = Cy + length*math.cos(SA)
+				else
+					Sx = Cx
+					Sy = Cy - length*math.cos(SA)
+				end
+			end
+		else
+			local b = -(x2-x1)/(y2-y1)
+			Tx = Cx + math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+			Tx2 = Cx - math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+			Ty = Cy + b*(Tx-Cx)
+			Ty2 = Cy + b*(Tx2-Cx)
+			local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+			if Ret[1] == 0 then -- out
+				if StarAngle > 180 then
+					Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				else
+					Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				end
+			else
+				if StarAngle <= 180 then
+					Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				else
+					Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				end
+			end
+		end
+		
+		NPath[2*i-1] = {Sx,Sy}
+	end
+	
+	local Shape = CSMakePathPolygon(NPath,Center,Radius,Angle,Number,Hollow)
+	return Shape
+end
+
+function CSMakePathStarX(Path,Center,StarAngle,Radius,Angle,Number,Hollow)
+	local NPath = {Path[1]*2}
+	
+	for i = 2, Path[1]+1 do
+		NPath[2*i-2] = {Path[i][1],Path[i][2]}
+	end
+	
+	local SA = math.rad(StarAngle/2)
+	
+	for i = 2, Path[1]+1 do
+		local x1
+		local x2
+		local y1
+		local y2
+		
+		if i == Path[1]+1 then
+			x1 = Path[i][1]
+			y1 = Path[i][2]
+			x2 = Path[2][1]
+			y2 = Path[2][2]
+		else
+			x1 = Path[i][1]
+			y1 = Path[i][2]
+			x2 = Path[i+1][1]
+			y2 = Path[i+1][2]
+		end
+		
+		local Cx = (x1+x2)/2
+		local Cy = (y1+y2)/2
+		local Tx
+		local Ty
+		local Tx2
+		local Ty2
+		local length = math.sqrt((Cx-x2)^2+(Cy-y2)^2)
+		local Sx
+		local Sy
+		
+		if math.abs(y1-y2) < 0.00001 then
+			Tx = Cx
+			Ty = Cy + 0.01
+			Ty2 = Cy - 0.01
+			local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+			if Ret[1] == 0 then -- out
+				if StarAngle > 180 then
+					Sx = Cx
+					Sy = Cy + length*math.cos(SA)
+				else
+					Sx = Cx
+					Sy = Cy - length*math.cos(SA)
+				end
+			else
+				if StarAngle <= 180 then
+					Sx = Cx
+					Sy = Cy + length*math.cos(SA)
+				else
+					Sx = Cx
+					Sy = Cy - length*math.cos(SA)
+				end
+			end
+		else
+			local b = -(x2-x1)/(y2-y1)
+			Tx = Cx + math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+			Tx2 = Cx - math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+			Ty = Cy + b*(Tx-Cx)
+			Ty2 = Cy + b*(Tx2-Cx)
+			local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+			if Ret[1] == 0 then -- out
+				if StarAngle > 180 then
+					Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				else
+					Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				end
+			else
+				if StarAngle <= 180 then
+					Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				else
+					Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+					Sy = Cy + b*(Sx-Cx)
+				end
+			end
+		end
+		
+		NPath[2*i-1] = {Sx,Sy}
+	end
+	
+	local Shape = CSMakePathPolygonX(NPath,Center,Radius,Angle,Number,Hollow)
+	return Shape	
+end
+
+
+function CSMakePathCStar(Path,Center,StarAngle,Radius,Angle,Number,Hollow) -- 원점을 기준으로 별모양을 설정함
+	local Circle = 0
+	if StarAngle == nil then
+		StarAngle = 0
+		Circle = 1
+	end
+	local NPath = {Path[1]*2}
+	
+	for i = 2, Path[1]+1 do
+		NPath[2*i-2] = {Path[i][1],Path[i][2]}
+	end
+	
+	local SA = math.rad(StarAngle/2)
+	if Circle == 0 then
+		for i = 2, Path[1]+1 do
+			local x1
+			local x2
+			local y1
+			local y2
+			
+			if i == Path[1]+1 then
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[2][1]
+				y2 = Path[2][2]
+			else
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[i+1][1]
+				y2 = Path[i+1][2]
+			end
+			
+			local Cx = (x1+x2)/2
+			local Cy = (y1+y2)/2
+			local Tx
+			local Ty
+			local Tx2
+			local Ty2
+			local length = math.sqrt((Cx-x2)^2+(Cy-y2)^2)
+			local Sx
+			local Sy
+			
+			if math.abs(y1-y2) < 0.00001 then
+				Tx = Cx
+				Ty = Cy + 0.01
+				Ty2 = Cy - 0.01
+				local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+				if Ret[1] == 0 then -- out
+					if StarAngle > 180 then
+						Sx = Cx
+						Sy = Cy + length*math.cos(SA)
+					else
+						Sx = Cx
+						Sy = Cy - length*math.cos(SA)
+					end
+				else
+					if StarAngle <= 180 then
+						Sx = Cx
+						Sy = Cy + length*math.cos(SA)
+					else
+						Sx = Cx
+						Sy = Cy - length*math.cos(SA)
+					end
+				end
+			else
+				local b = -(x2-x1)/(y2-y1)
+				Tx = Cx + math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+				Tx2 = Cx - math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+				Ty = Cy + b*(Tx-Cx)
+				Ty2 = Cy + b*(Tx2-Cx)
+				local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+				if Ret[1] == 0 then -- out
+					if StarAngle > 180 then
+						Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					else
+						Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					end
+				else
+					if StarAngle <= 180 then
+						Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					else
+						Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					end
+				end
+			end
+			
+			NPath[2*i-1] = {Sx,Sy}
+		end
+	else
+		for i = 2, Path[1]+1 do
+			local x1
+			local x2
+			local y1
+			local y2
+			
+			if i == Path[1]+1 then
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[2][1]
+				y2 = Path[2][2]
+			else
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[i+1][1]
+				y2 = Path[i+1][2]
+			end
+			local R1, A1 = CS_GetPolar(x1,y1,0)
+			local R2, A2 = CS_GetPolar(x2,y2,0)
+			
+			local minA = A1
+			local remB = A2 - A1
+			if remB < 0 then
+				remB = remB + math.pi*2
+			end
+			
+			local NR = (R1+R2)/2
+			local NA = remB/2 + minA
+			
+			local Sx = NR*math.cos(NA)
+			local Sy = NR*math.sin(NA) 
+			NPath[2*i-1] = {Sx,Sy}
+		end
+	end
+	
+	local Shape = CSMakePathCircle(NPath,Center,Radius,Angle,Number,Hollow)
+	return Shape
+end
+
+function CSMakePathCStarX(Path,Center,StarAngle,Radius,Angle,Number,Hollow)
+	local Circle = 0
+	if StarAngle == nil then
+		StarAngle = 0
+		Circle = 1
+	end
+	local NPath = {Path[1]*2}
+	
+	for i = 2, Path[1]+1 do
+		NPath[2*i-2] = {Path[i][1],Path[i][2]}
+	end
+	
+	local SA = math.rad(StarAngle/2)
+	
+	if Circle == 0 then
+		for i = 2, Path[1]+1 do
+			local x1
+			local x2
+			local y1
+			local y2
+			
+			if i == Path[1]+1 then
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[2][1]
+				y2 = Path[2][2]
+			else
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[i+1][1]
+				y2 = Path[i+1][2]
+			end
+			
+			local Cx = (x1+x2)/2
+			local Cy = (y1+y2)/2
+			local Tx
+			local Ty
+			local Tx2
+			local Ty2
+			local length = math.sqrt((Cx-x2)^2+(Cy-y2)^2)
+			local Sx
+			local Sy
+			
+			if math.abs(y1-y2) < 0.00001 then
+				Tx = Cx
+				Ty = Cy + 0.01
+				Ty2 = Cy - 0.01
+				local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+				if Ret[1] == 0 then -- out
+					if StarAngle > 180 then
+						Sx = Cx
+						Sy = Cy + length*math.cos(SA)
+					else
+						Sx = Cx
+						Sy = Cy - length*math.cos(SA)
+					end
+				else
+					if StarAngle <= 180 then
+						Sx = Cx
+						Sy = Cy + length*math.cos(SA)
+					else
+						Sx = Cx
+						Sy = Cy - length*math.cos(SA)
+					end
+				end
+			else
+				local b = -(x2-x1)/(y2-y1)
+				Tx = Cx + math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+				Tx2 = Cx - math.sqrt((length/math.tan(89.9))^2/(1+b^2))
+				Ty = Cy + b*(Tx-Cx)
+				Ty2 = Cy + b*(Tx2-Cx)
+				local Ret = CS_CheckPathX({1,{Tx,Ty}},Path)
+				if Ret[1] == 0 then -- out
+					if StarAngle > 180 then
+						Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					else
+						Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					end
+				else
+					if StarAngle <= 180 then
+						Sx = Cx + math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					else
+						Sx = Cx - math.sqrt((length/math.tan(SA))^2/(1+b^2))
+						Sy = Cy + b*(Sx-Cx)
+					end
+				end
+			end
+			
+			NPath[2*i-1] = {Sx,Sy}
+		end
+	else
+		for i = 2, Path[1]+1 do
+			local x1
+			local x2
+			local y1
+			local y2
+			
+			if i == Path[1]+1 then
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[2][1]
+				y2 = Path[2][2]
+			else
+				x1 = Path[i][1]
+				y1 = Path[i][2]
+				x2 = Path[i+1][1]
+				y2 = Path[i+1][2]
+			end
+			local R1, A1 = CS_GetPolar(x1,y1,0)
+			local R2, A2 = CS_GetPolar(x2,y2,0)
+			
+			local minA = A1
+			local remB = A2 - A1
+			if remB < 0 then
+				remB = remB + math.pi*2
+			end
+			
+			local NR = (R1+R2)/2
+			local NA = remB/2 + minA
+			
+			local Sx = NR*math.cos(NA)
+			local Sy = NR*math.sin(NA) 
+			NPath[2*i-1] = {Sx,Sy}
+		end
+	end
+	
+	local Shape = CSMakePathCircleX(NPath,Center,Radius,Angle,Number,Hollow)
 	return Shape	
 end
 
@@ -558,6 +1478,249 @@ function CSMakeStarX(Point,StarAngle,Radius,Angle,Number,Hollow)
 	return Shape	
 end
 
+
+function CSMakeCStar(Point,StarAngle,Radius,Angle,Number,Hollow)
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local SA
+	local Circle = 0
+	if StarAngle == nil then
+		SA = 0
+		Circle = 1
+	elseif type(StarAngle) == "number" then
+		SA = StarAngle
+	else
+		SA = math.deg(2*math.atan(math.sin(math.rad(180/Point))/((StarAngle[1]/Radius)-1+(math.cos(math.rad(180/Point)))))) 
+	end
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+	local StarRadius = Radius * (math.cos(math.rad(180/Point))-math.sin(math.rad(180/Point))/math.tan(math.rad(SA/2)))
+	
+	if Circle == 1 then
+		StarRadius = Radius
+	end
+	Point = Point*2
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp1s
+	local Temp2
+	local Temp3
+
+	local LX = nil
+	local LY = nil
+
+	local NR
+	local NA
+	local minA
+	local remB
+	
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				table.insert(Shape,{0,0})
+				Remain = Remain - 1
+			end
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+
+				if Case%2 == 0 then
+				   	Temp1 = ((Level-1) * Radius)
+				   	Temp1s = ((Level-1) * StarRadius)
+				   	Temp2 = math.rad(Angle+(360*(Case-1))/Point)
+				   	Temp3 = math.rad(Angle+(360*Case)/Point)
+						
+					minA = Temp2
+					remB = Temp3 - minA
+					if remB < 0 then
+						remB = remB + math.pi*2
+					end
+					NR = ((Pts+1)*Temp1+(Level-Pts-2)*Temp1s) / (Level-1)
+					NA = ((Pts+1)*0+(Level-Pts-2)*remB) / (Level-1) + minA
+				else
+					Temp1 = ((Level-1) * Radius)
+					Temp1s = ((Level-1) * StarRadius)
+				   	Temp2 = math.rad(Angle+(360*(Case-1))/Point)
+				   	Temp3 = math.rad(Angle+(360*Case)/Point)
+
+					minA = Temp2
+					remB = Temp3 - minA
+					if remB < 0 then
+						remB = remB + math.pi*2
+					end
+					NR = ((Pts+1)*Temp1s+(Level-Pts-2)*Temp1) / (Level-1)
+					NA = ((Pts+1)*0+(Level-Pts-2)*remB) / (Level-1) + minA
+				end
+
+				LX = NR* math.cos(NA)
+				LY = NR* math.sin(NA)
+
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+		end
+	end 
+
+	return Shape	
+end
+
+function CSMakeCStarX(Point,StarAngle,Radius,Angle,Number,Hollow)
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+	
+	local SA
+	local Circle = 0
+	if StarAngle == nil then
+		SA = 0
+		Circle = 1
+	elseif type(StarAngle) == "number" then
+		SA = StarAngle
+	else
+		SA = math.deg(2*math.atan(math.sin(math.rad(180/Point))/((StarAngle[1]/Radius)-1+(math.cos(math.rad(180/Point)))))) 
+	end
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+	local StarRadius = Radius * (math.cos(math.rad(180/Point))-math.sin(math.rad(180/Point))/math.tan(math.rad(SA/2)))
+	
+	if Circle == 1 then
+		StarRadius = Radius
+	end
+	local HalfRad = Radius/2
+	local HalfStarRad = StarRadius/2
+
+	Point = Point*2
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp1s
+	local Temp2
+	local Temp3
+	local InitRadius = Radius / 2 --(2*math.sin(math.rad(180/Point)))
+	local InitStarRadius = StarRadius / 2 --(2*math.sin(math.rad(180/Point)))
+
+	local LX = nil
+	local LY = nil
+	
+	local NR
+	local NA
+	local minA
+	local remB
+
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 2
+		   		Temp = (Level*(Level-1)*Point)/2 + 1
+		   		TempA = ((Level*Level-3*Level+2)*Point)/2 + 1
+		   		Main = Main + (Level-2)*Point
+		   	end
+		   	Case = 1
+		   	TempB = Level-1
+		   	while true do
+			   	if Main <= TempA+TempB then break end
+			   	Case = Case + 1
+			   	TempB = Case*(Level-1)
+			end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				Pts = (TempA + TempB) - Main
+
+				if Case%2 == 0 then
+				   	Temp1 = ((Level-2) * HalfRad) + InitRadius
+				   	Temp1s = ((Level-2) * HalfStarRad) + InitStarRadius
+				   	Temp2 = math.rad(Angle+(360*(Case-1))/Point)
+				   	Temp3 = math.rad(Angle+(360*Case)/Point)
+				   
+					minA = Temp2
+					remB = Temp3 - minA
+					if remB < 0 then
+						remB = remB + math.pi*2
+					end
+					NR = ((Pts+1)*Temp1+(Level-Pts-2)*Temp1s) / (Level-1)
+					NA = ((Pts+1)*0+(Level-Pts-2)*remB) / (Level-1) + minA
+				else
+					Temp1 = ((Level-2) * HalfRad) + InitRadius
+					Temp1s = ((Level-2) * HalfStarRad) + InitStarRadius
+				   	Temp2 = math.rad(Angle+(360*(Case-1))/Point)
+				   	Temp3 = math.rad(Angle+(360*Case)/Point)
+				   
+					minA = Temp2
+					remB = Temp3 - minA
+					if remB < 0 then
+						remB = remB + math.pi*2
+					end
+					NR = ((Pts+1)*Temp1s+(Level-Pts-2)*Temp1) / (Level-1)
+					NA = ((Pts+1)*0+(Level-Pts-2)*remB) / (Level-1) + minA
+				end
+				
+				LX = NR* math.cos(NA)
+				LY = NR* math.sin(NA)
+
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+		end
+	end 
+
+	return Shape	
+end
+
 function CSMakeLine(Point,Radius,Angle,Number,Hollow)
 	local Shape = {Number-Hollow}
 	if Number < Hollow then
@@ -691,7 +1854,192 @@ function CSMakeLineX(Point,Radius,Angle,Number,Hollow)
 
 	return Shape	
 end
- 
+
+
+
+
+function CSMakePathLine(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp2
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				table.insert(Shape,{0,0})
+				Remain = Remain - 1
+			end
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = ((Level-1)*Point) + 1
+		   		Case = 0
+		   	end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+			   	Temp1 = ((Level-1) * RArr[Case+1])
+			   	Temp2 = AArr[Case+1]
+
+			   	LX = Temp1 * math.cos(Temp2)
+			   	LY = Temp1 * math.sin(Temp2)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+			Case = Case + 1
+		end
+	end 
+
+	return Shape	
+end
+
+function CSMakePathLineX(Path,Center,Radius,Angle,Number,Hollow)
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius/2
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp2
+	local HalfRad = Radius/2
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+	local InitRadius = Radius / 2 --(2*math.sin(math.rad(180/Point)))
+
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = ((Level-1)*Point) + 1
+		   		Case = 0
+		   	end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+			   	Temp1 = ((Level-2) * RArr[Case+1]) + RArr[Case+1]
+			   	Temp2 = AArr[Case+1]
+
+			   	LX = Temp1 * math.cos(Temp2)
+			   	LY = Temp1 * math.sin(Temp2)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+			Case = Case + 1
+		end
+	end 
+
+	return Shape	
+end
+
  -- function SnowFlake_funcY(X) return -X end 
 function CSMakeGraphX(Ratio,funcY,Start,Direction,StepSize,StepRange,Number)
 	local XRatio
@@ -756,6 +2104,206 @@ function CSMakeGraphX(Ratio,funcY,Start,Direction,StepSize,StepRange,Number)
 		table.insert(Shape,{NX*XRatio,NY*YRatio})
 	end
 	return Shape
+end
+
+
+
+function CSMakePathSpiral(Path,Center,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Θ-A))
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius
+	end
+	
+	local Point = NPath[1]
+
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp2
+	local Temp3
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+	local TA, TR, pA, pB, pC, pX
+	pA = Magnificent
+	pB = Coefficient
+	pX = math.abs(pB/(pA*math.sqrt(1+pB*pB)))
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+				table.insert(Shape,{0,0})
+				Remain = Remain - 1
+			end
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = ((Level-1)*Point) + 1
+		   		Case = 0
+		   	end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+			   	Temp1 = ((Level-1) * RArr[Case+1]) -- R -> l
+			   	Temp2 = AArr[Case+1] -- A -> A
+
+			   	pC = pB*(math.rad(Angle)+Temp2)
+			   	TA = (math.log(Temp1*pX)+pC)/pB
+			   	TR = pA*math.exp(pB*(TA-math.rad(Angle)-Temp2))
+
+			   	LX = TR * math.cos(TA)
+			   	LY = TR * math.sin(TA)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+			Case = Case + 1
+		end
+	end 
+
+	return Shape	
+end
+
+function CSMakePathSpiralX(Path,Center,Magnificent,Coefficient,Radius,Angle,Number,Hollow) -- r = M*exp(C(Θ-A))
+	local NPath = CS_MoveCenter(Path,0,0)
+
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local RArr = {}
+	local AArr = {}
+	for i = 2, NPath[1]+1 do
+		local R, A = CS_GetPolar(NPath[i][1]-Center[1],NPath[i][2]-Center[2],0)
+		table.insert(RArr,R)
+		table.insert(AArr,A)
+	end
+	local RMax = 0
+	for k, v in pairs(RArr) do
+		if RMax < v then
+			RMax = v
+		end
+	end
+	for k, v in pairs(RArr) do
+		RArr[k] = (v/RMax)*Radius/2
+	end
+	
+	local Point = NPath[1]
+	
+	local Shape = {Number-Hollow}
+	if Number < Hollow then
+		CS_InputError()
+	end
+	Angle = Angle - 90
+
+	local Main = 1
+	local Level = 1
+	local Remain = Number
+	local Case = 0
+	local Pts = 0
+
+	local Temp
+	local TempA
+	local TempB
+	local Temp1
+	local Temp2
+	local Temp3
+	local HalfRad = Radius/2
+
+	local x1 = 0
+	local x2 = 0
+	local y1 = 0
+	local y2 = 0
+	local LX = nil
+	local LY = nil
+	local InitRadius = Radius / 2 --(2*math.sin(math.rad(180/Point)))
+	local TA, TR, pA, pB, pC, pX
+	pA = Magnificent
+	pB = Coefficient
+	pX = math.abs(pB/(pA*math.sqrt(1+pB*pB)))
+	while true do
+		if Remain == 0 then break end
+		if Main == 1 then
+			Main = 2
+			Level = 2
+			Temp = Point + 1
+			TempA = 1
+		else
+			while true do
+		   		if Main <= Temp then break end
+		   		Level = Level + 1
+		   		Temp = ((Level-1)*Point) + 1
+		   		Case = 0
+		   	end
+
+			if Hollow >= 1 then
+				Hollow = Hollow - 1
+			else
+			   	Temp1 = ((Level-2) * RArr[Case+1]) + RArr[Case+1]
+			   	Temp2 = AArr[Case+1]
+
+			   	pC = pB*(math.rad(Angle)+Temp2)
+			   	TA = (math.log(Temp1*pX)+pC)/pB
+			   	TR = pA*math.exp(pB*(TA-math.rad(Angle)-Temp2))
+
+			   	LX = TR * math.cos(TA)
+			   	LY = TR * math.sin(TA)
+			   		
+			   	table.insert(Shape,{LX,LY})
+			   	Remain = Remain - 1
+			end
+
+			Main = Main + 1
+			Case = Case + 1
+		end
+	end 
+
+	return Shape	
 end
 
  -- function SnowFlake_funcX(Y) return -Y end 
@@ -1350,6 +2898,41 @@ function CS_GetPolar(X,Y,CenterAngle)
 	end
 
 	return PR, PA
+end
+
+function CS_GetRadius(X,Y)
+	local PR
+	PR = math.sqrt(X^2+Y^2)
+
+	return PR
+end
+
+function CS_GetAngle(X,Y,CenterAngle)
+	local PA
+	if X == 0 and Y == 0 then
+		PA = CenterAngle
+	else
+		if X>=0 and Y>=0 then
+			PA = math.abs(math.atan(Y/X))
+		elseif X<0 and Y>=0 then
+			PA = math.pi - math.abs(math.atan(Y/X))
+		elseif X<0 and Y<0 then
+			PA = math.pi + math.abs(math.atan(Y/X))
+		elseif X>=0 and Y<0 then
+			PA = 2*math.pi - math.abs(math.atan(Y/X))
+		end
+	end
+
+	return PA
+end
+
+function CS_GetSideAngle(Angle1,Angle2)
+	local remB = Angle2 - Angle1
+
+	if remB < 0 then
+		remB = remB + math.pi*2
+	end
+	return remB
 end
 
 function CS_FixShape(Shape)
@@ -4007,6 +5590,125 @@ function CS_CheckPath(Shape,Path,Outside)
 	end
 end
 
+function CS_CheckPathX(Shape,Path)
+	if Shape == nil then
+		CS_InputError()
+	end
+	if Path == nil then
+		CS_InputError()
+	end
+	local Outside = 0
+
+	local Domain = {}
+	for i = 1, Path[1] do
+		table.insert(Domain,{0,0,0,0}) 
+		if i < Path[1] then
+			if Path[i+1][1] <= Path[i+2][1] then
+				Domain[i][1] = Path[i+1][1]
+				Domain[i][2] = Path[i+2][1]
+			else
+				Domain[i][2] = Path[i+1][1]
+				Domain[i][1] = Path[i+2][1]
+			end
+			if Path[i+1][2] <= Path[i+2][2] then
+				Domain[i][3] = Path[i+1][2]
+				Domain[i][4] = Path[i+2][2]
+			else
+				Domain[i][4] = Path[i+1][2]
+				Domain[i][3] = Path[i+2][2]
+			end
+		else
+			if Path[i+1][1] <= Path[2][1] then
+				Domain[i][1] = Path[i+1][1]
+				Domain[i][2] = Path[2][1]
+			else
+				Domain[i][2] = Path[i+1][1]
+				Domain[i][1] = Path[2][1]
+			end
+			if Path[i+1][2] <= Path[2][2] then
+				Domain[i][3] = Path[i+1][2]
+				Domain[i][4] = Path[2][2]
+			else
+				Domain[i][4] = Path[i+1][2]
+				Domain[i][3] = Path[2][2]
+			end
+		end
+	end
+
+	local GA = {}
+	local GB = {}
+	for i = 1, Path[1]  do
+		if Domain[i][1] == Domain[i][2] then
+			GA[i] = "X"
+			GB[i] = Domain[i][1]
+		else
+			if i < Path[1] then
+				GA[i] = (Path[i+2][2] - Path[i+1][2])/(Path[i+2][1] - Path[i+1][1])
+				GB[i] = Path[i+1][2] - GA[i]*Path[i+1][1]
+			else
+				GA[i] = (Path[2][2] - Path[i+1][2])/(Path[2][1] - Path[i+1][1])
+				GB[i] = Path[i+1][2] - GA[i]*Path[i+1][1]
+			end
+		end
+	end
+
+	local Ret = {} -- in = 2 / edge = 1 / out = 0
+	for i = 1, Shape[1] do
+		local NX, NY
+		NX = Shape[i+1][1]
+		NY = Shape[i+1][2]
+		for j = 1, Path[1] do
+			if GA[j] == "X" then
+				if NX == GB[j] and NY>=Domain[j][3] and NY<=Domain[j][4] then
+					table.insert(Ret,1)
+					goto CS_CheckPathNext 
+				end
+			else
+				if NY == NX*GA[j]+GB[j] and NX>=Domain[j][1] and NX<=Domain[j][2] then
+					table.insert(Ret,1)
+					goto CS_CheckPathNext 
+				end
+			end
+		end
+		local k = 0.00001
+		local l = NY-k*NX 
+		local Count = 0
+		local Check = 0
+		for j = 1, Path[1] do
+			::CS_CheckPathReset1::
+			if Check == 1 then
+				k = math.random(1,99999)+math.random(1,99999)/100000
+				l = NY-k*NX 
+			end
+			if GA[j] == k then
+				if GB[j] == l then -- 일치
+					Check = 1
+					goto CS_CheckPathReset1
+				end
+			else -- 교점 1개
+				if GA[j] == "X" then
+					local RY = k*GB[j]+l
+					if GB[j] >= NX and RY >= Domain[j][3] and RY <= Domain[j][4] then
+						Count = Count + 1
+					end
+				else
+					local RX = (GB[j]-l)/(k-GA[j])
+					if RX >= NX and RX >= Domain[j][1] and RX <= Domain[j][2] then
+						Count = Count + 1
+					end
+				end
+			end
+		end
+		if Count%2 == 0 then
+			table.insert(Ret,0)
+		else
+			table.insert(Ret,2)
+		end
+		::CS_CheckPathNext::
+	end
+	return Ret
+end
+
 function CS_CropPath(Shape,Path,Outside)
 	if Shape == nil then
 		CS_InputError()
@@ -5330,7 +7032,10 @@ function CSPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,C
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId =  ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5429,7 +7134,10 @@ function CSPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5530,7 +7238,10 @@ function CSPlotX(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,PlayerID,
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId =  ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5639,7 +7350,10 @@ function CSPlotXWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5746,7 +7460,10 @@ function CSPlotAct(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,SizeofL
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5863,7 +7580,10 @@ function CSPlotActWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Pl
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5987,7 +7707,10 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 		Direction = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -5996,8 +7719,11 @@ function CSPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Order
 	if OrderShape == nil then
 		CS_InputError()
 	end
-	
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -6199,7 +7925,10 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Direction = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -6209,7 +7938,10 @@ function CSPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		CS_InputError()
 	end
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -6396,8 +8128,27 @@ end
 CSSaveInitCheck = 0
 function CSSaveInit()
 	if CSSaveInitCheck == 0 then
-		local DirName = "\""..FileDirectory.."CS\""
-		os.execute("mkdir " .. DirName)
+		function exists(file)
+		   local ok, err, code = os.rename(file, file)
+		   if not ok then
+		      if code == 13 then
+		         -- Permission denied, but it exists
+		         return true
+		      end
+		   end
+		   return ok, err
+		end
+
+		--- Check if a directory exists in this path
+		function isdir(path)
+		   -- "/" works on both Unix and Windows
+		   return exists(path.."/")
+		end
+
+		if isdir(FileDirectory.."CS") == nil then
+			local DirName = "\""..FileDirectory.."CS\""
+			os.execute("mkdir " .. DirName)
+		end
 		CSSaveInitCheck = 1
 	end
 end
@@ -8399,7 +10150,10 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8600,7 +10354,10 @@ function CAPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -8803,13 +10560,19 @@ function CAPlotOrder(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Prese
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -9117,13 +10880,19 @@ function CAPlotOrderWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -9430,7 +11199,10 @@ function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CA
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9649,7 +11421,10 @@ function CAPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -9870,13 +11645,19 @@ function CAPlotOrder2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pres
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -10202,13 +11983,19 @@ function CAPlotOrderWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -11837,7 +13624,10 @@ function CXPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXf
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12043,7 +13833,10 @@ function CXPlotWithProperties(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotS
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12249,7 +14042,10 @@ function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CX
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12473,7 +14269,10 @@ function CXPlotWithProperties2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,Plot
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -12702,6 +14501,10 @@ function CS_Level(Type,Point,Number)
 	elseif Type == "Star" then
 		return Point*(Number*(Number-1)) + 1
 	elseif Type == "StarX" then
+		return Point*(Number*Number)*2
+	elseif Type == "CStar" then
+		return Point*(Number*(Number-1)) + 1
+	elseif Type == "CStarX" then
 		return Point*(Number*Number)*2
 	elseif Type == "Spiral" then
 		return (Number-1) * Point + 1
@@ -13354,7 +15157,10 @@ function CBPlot(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Pr
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -13707,7 +15513,10 @@ function CBPlotWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUn
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
@@ -14059,13 +15868,19 @@ function CBPlotOrder(Shape,LoopMax,Owner,UnitId,Location,CenterXY,PerUnit,PlotSi
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -14515,13 +16330,19 @@ function CBPlotOrderWithProperties(Shape,LoopMax,Owner,UnitId,Location,CenterXY,
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId
 	local LocD = 0x58DC6C+0x14*LocId
 
-	local OLocId,OrderLocation=ConvertLocation(OrderLocation)
+	local OLocId = OrderLocation
+	if type(OrderLocation) == "string" then
+		OLocId = ParseLocation(OLocId)-1
+	end
 	local OLocL = 0x58DC60+0x14*OLocId
 	local OLocU = 0x58DC64+0x14*OLocId
 	local OLocR = 0x58DC68+0x14*OLocId
@@ -29864,7 +31685,11 @@ function CB_ResetCacheX(LoopMaxCache,Start,End)
 	end
 end
 
-function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisColor,DotSize,Xpx,Ypx,Alert,Limit) -- Shape -> GRP 
+function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,CenterAxis,MainSize,SubSize,AxisColor,DotSize,Xpx,Ypx,Alert,Limit) -- Shape -> GRP 
+	if CenterAxis == nil then
+		CenterAxis = 0
+	end
+
 	if DotSize == nil or DotSize < 1 then DotSize = 1 end
 	if Limit == nil then
 		Limit = 100000000
@@ -29910,6 +31735,12 @@ function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisCo
 			AxisColor[3][2] = bit32.rshift(bit32.band(AxisTemp,0xFF00),8)
 			AxisColor[3][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
 		end
+	end
+
+	if AxisColor[4] == nil then
+		AxisColor[4] = 0xFF
+	else
+		AxisColor[4] = bit32.band(AxisColor[4],0xFF)
 	end
 
 	local Xmin = math.floor(CS_GetXmin(NShape))
@@ -29976,7 +31807,7 @@ function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisCo
 
 	for i = 0, YNum, 1 do
 		for j = 0, XFill-1, 1 do
-			GRPFile:write(string.char(0xFF))
+			GRPFile:write(string.char(AxisColor[4]))
 		end
 	end
 
@@ -30045,21 +31876,23 @@ function CS_BMPGraph(Shape,ColorArr,FileName,areaX,areaY,MainSize,SubSize,AxisCo
 		AxisColor[1][3] = bit32.rshift(bit32.band(AxisTemp,0xFF0000),16)
 	end
 
-	if areaY[1] <= 0 then -- X축
-		for i = 0, XNum do
-			GRPFile:seek("set",math.floor(54+3*i+((YNum)+areaY[1])*XFill))
-			GRPFile:write(string.char(AxisColor[1][1]))
-			GRPFile:write(string.char(AxisColor[1][2]))
-			GRPFile:write(string.char(AxisColor[1][3]))
+	if CenterAxis ~= 0 then
+		if areaY[1] <= 0 then -- X축
+			for i = 0, XNum do
+				GRPFile:seek("set",math.floor(54+3*i+((YNum)+areaY[1])*XFill))
+				GRPFile:write(string.char(AxisColor[1][1]))
+				GRPFile:write(string.char(AxisColor[1][2]))
+				GRPFile:write(string.char(AxisColor[1][3]))
+			end
 		end
-	end
 
-	if areaX[1] <= 0 then -- Y축
-		for i = 0, YNum do
-			GRPFile:seek("set",math.floor(54-3*areaX[1]+((YNum)-i)*XFill))
-			GRPFile:write(string.char(AxisColor[1][1]))
-			GRPFile:write(string.char(AxisColor[1][2]))
-			GRPFile:write(string.char(AxisColor[1][3]))
+		if areaX[1] <= 0 then -- Y축
+			for i = 0, YNum do
+				GRPFile:seek("set",math.floor(54-3*areaX[1]+((YNum)-i)*XFill))
+				GRPFile:write(string.char(AxisColor[1][1]))
+				GRPFile:write(string.char(AxisColor[1][2]))
+				GRPFile:write(string.char(AxisColor[1][3]))
+			end
 		end
 	end
 
@@ -30994,6 +32827,651 @@ function CS_FillPatternPathX(Path,Outside,Pattern,VectorX,VectorY,offsetX,offset
 	return CS_CropPath(CS_FillPatternX(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),Path,Outside)
 end
 
+function CS_GetMaskSize(MaskPath)
+	if MaskPath == nil then
+		CS_InputError()
+	end
+
+	local pathmode = 0
+	if string.find(MaskPath,"\\") then
+		pathmode = 1
+	end
+	
+	local FileName
+	if pathmode == 0 then
+		FileName = FileDirectory..MaskPath
+	else
+		FileName = MaskPath
+	end
+
+	local fptr = io.open(FileName, "rb")
+	if fptr == nil then
+		CS_MaskPath_InVaild()
+	end
+
+	local SX = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	local SY = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+
+	io.close(fptr)
+
+	return SX, SY
+end
+
+function CS_CropMask(Shape,MaskPath,Center,Range,Xpx,Ypx)
+	if MaskPath == nil then
+		CS_InputError()
+	end
+
+	if Shape == nil then
+		CS_InputError()
+	end
+	
+	local pathmode = 0
+	if string.find(MaskPath,"\\") then
+		pathmode = 1
+	end
+	
+	local FileName
+	if pathmode == 0 then
+		FileName = FileDirectory..MaskPath
+	else
+		FileName = MaskPath
+	end
+	
+	if Range == nil then
+		Range = 4
+	end
+	
+	local RangeArr = {0,0,0,0,0,0}
+	if type(Range) == "number" then
+		local R = Range
+		Range = {}
+		for i = 1, R do
+			table.insert(Range,R)
+		end
+		if R == 0 then
+			table.insert(Range,0)
+		end
+	end
+	for k, v in pairs(Range) do
+		if v >= -1 and v <= 4 then
+			RangeArr[math.floor(v)+2] = 1
+		end
+	end
+	
+	if Xpx == nil then Xpx = 1 end
+	if Ypx == nil then Ypx = 1 end
+	
+	local fptr = io.open(FileName, "rb")
+	if fptr == nil then
+		CS_MaskPath_InVaild()
+	end
+	
+	local NShape = {0}
+	local Ret = {}
+	
+	local SX = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	local SY = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	if Center == nil then
+		Center = {-SX*Xpx/2,-SY*Ypx/2}
+	else
+		Center[1] = Center[1] - SX*Xpx/2
+		Center[2] = Center[2] - SY*Ypx/2
+	end
+
+	for i = 2, Shape[1]+1 do
+		local Num
+		local PX = Shape[i][1]
+		local PY = Shape[i][2]
+		
+		local Xindex = math.floor((PX-Center[1])/Xpx)
+		local Yindex = math.floor((PY-Center[2])/Ypx)
+		
+		local P1c,P2c,P3c,P4c
+		if Xindex < 0 or Xindex >= SX or Yindex < 0 or Yindex >= SY then
+			Num = -1
+		else
+			fptr:seek("set",SX*(Yindex)+Xindex+8)
+			P1c = string.byte(fptr:read(1))
+			if Xindex == SX-1 then
+				P2c = 0
+			else
+				fptr:seek("set",SX*(Yindex)+Xindex+1+8)
+				P2c = string.byte(fptr:read(1))
+			end
+			
+			if Yindex == SY-1 then
+				P3c = 0
+			else
+				fptr:seek("set",SX*((Yindex+1))+Xindex+8)
+				P3c = string.byte(fptr:read(1))
+			end
+			
+			if Xindex == SX-1 or Yindex == SY-1 then
+				P4c = 0
+			else
+				fptr:seek("set",SX*((Yindex+1))+Xindex+1+8)
+				P4c = string.byte(fptr:read(1))
+			end
+			Num = P1c + P2c + P3c + P4c
+		end
+		table.insert(Ret,Num)
+	end
+
+	for i = 2, Shape[1]+1 do
+		if RangeArr[Ret[i-1]+2] == 1 then
+			table.insert(NShape,{Shape[i][1],Shape[i][2]})
+			NShape[1] = NShape[1]+1
+		end
+	end
+	io.close(fptr)
+	
+	return NShape, Ret
+end
+
+function CS_CropMaskX(Shape,MaskPath,Center,Range,XSize,YSize)
+	if MaskPath == nil then
+		CS_InputError()
+	end
+
+	if Shape == nil then
+		CS_InputError()
+	end
+	
+	local pathmode = 0
+	if string.find(MaskPath,"\\") then
+		pathmode = 1
+	end
+	
+	local FileName
+	if pathmode == 0 then
+		FileName = FileDirectory..MaskPath
+	else
+		FileName = MaskPath
+	end
+	
+	if Range == nil then
+		Range = 4
+	end
+	
+	local RangeArr = {0,0,0,0,0,0}
+	if type(Range) == "number" then
+		local R = Range
+		Range = {}
+		for i = 1, R do
+			table.insert(Range,R)
+		end
+		if R == 0 then
+			table.insert(Range,0)
+		end
+	end
+	for k, v in pairs(Range) do
+		if v >= 0 and v <= 4 then
+			RangeArr[math.floor(v)+2] = 1
+		end
+	end
+	
+	local fptr = io.open(FileName, "rb")
+	if fptr == nil then
+		CS_MaskPath_InVaild()
+	end
+	
+	local NShape = {0}
+	local Ret = {}
+	
+	local SX = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	local SY = string.byte(fptr:read(1))+string.byte(fptr:read(1))*256+string.byte(fptr:read(1))*65536+string.byte(fptr:read(1))*16777216
+	if XSize == nil then XSize = (CS_GetXmax(Shape)-CS_GetXmin(Shape)) end
+	if YSize == nil then YSize = (CS_GetYmax(Shape)-CS_GetYmin(Shape)) end
+	local Xpx = XSize / SX
+	local Ypx = YSize / SY
+	
+	if Center == nil then
+		Center = {-XSize/2,-YSize/2}
+	else
+		Center[1] = Center[1] - XSize/2
+		Center[2] = Center[2] - YSize/2
+	end
+
+	for i = 2, Shape[1]+1 do
+		local Num
+		local PX = Shape[i][1]
+		local PY = Shape[i][2]
+		
+		local Xindex = math.floor((PX-Center[1])/Xpx)
+		local Yindex = math.floor((PY-Center[2])/Ypx)
+		
+		local P1c,P2c,P3c,P4c
+		if Xindex < 0 or Xindex >= SX or Yindex < 0 or Yindex >= SY then
+			Num = -1
+		else
+			fptr:seek("set",SX*(Yindex)+Xindex+8)
+			P1c = string.byte(fptr:read(1))
+			if Xindex == SX-1 then
+				P2c = 0
+			else
+				fptr:seek("set",SX*(Yindex)+Xindex+1+8)
+				P2c = string.byte(fptr:read(1))
+			end
+			
+			if Yindex == SY-1 then
+				P3c = 0
+			else
+				fptr:seek("set",SX*((Yindex+1))+Xindex+8)
+				P3c = string.byte(fptr:read(1))
+			end
+			
+			if Xindex == SX-1 or Yindex == SY-1 then
+				P4c = 0
+			else
+				fptr:seek("set",SX*((Yindex+1))+Xindex+1+8)
+				P4c = string.byte(fptr:read(1))
+			end
+			Num = P1c + P2c + P3c + P4c
+		end
+		table.insert(Ret,Num)
+	end
+
+	for i = 2, Shape[1]+1 do
+		if RangeArr[Ret[i-1]+2] == 1 then
+			table.insert(NShape,{Shape[i][1],Shape[i][2]})
+			NShape[1] = NShape[1]+1
+		end
+	end
+	io.close(fptr)
+	
+	return NShape, Ret
+end
+
+
+function CS_FillMaskXY(MaskPath,Center,Edge,sizeX,sizeY,Range,Xpx,Ypx,Angle)
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Xmax,Xmin,Ymax,Ymin
+	if Angle == nil then
+		Xmin = (-SX/2) + Center[1]
+		Xmax = (SX/2) + Center[1]
+		Ymin = (-SY/2) + Center[2]
+		Ymax = (SY/2) + Center[2]
+		
+		return CS_CropMask(CS_FillXY(Edge,{Xmin,Xmax},{Ymin,Ymax},sizeX,sizeY),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+	else
+		Xmin = (-SX/2)*math.sqrt(2)
+		Xmax = (SX/2)*math.sqrt(2)
+		Ymin = (-SY/2)*math.sqrt(2)
+		Ymax = (SY/2)*math.sqrt(2)
+		
+		local Shape = CS_CropXY(CS_Rotate(CS_FillXY(Edge,{Xmin,Xmax},{Ymin,Ymax},sizeX,sizeY),Angle),{-SX/2,SX/2},{-SY/2,SY/2},{1,1},{1,1})
+		return CS_CropMask(CS_MoveXY(Shape,Center[1],Center[2]),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+	end
+end
+
+
+
+function CS_FillMaskHX(MaskPath,Center,Edge,sizeX,sizeY,Direction,Range,Xpx,Ypx,Angle)
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Xmax,Xmin,Ymax,Ymin
+	if Angle == nil then
+		Xmin = (-SX/2) + Center[1]
+		Xmax = (SX/2) + Center[1]
+		Ymin = (-SY/2) + Center[2]
+		Ymax = (SY/2) + Center[2]
+		
+		return CS_CropMask(CS_FillHX(Edge,{Xmin,Xmax},{Ymin,Ymax},sizeX,sizeY,Direction),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+	else
+		Xmin = (-SX/2)*math.sqrt(2)
+		Xmax = (SX/2)*math.sqrt(2)
+		Ymin = (-SY/2)*math.sqrt(2)
+		Ymax = (SY/2)*math.sqrt(2)
+		
+		local Shape = CS_CropXY(CS_Rotate(CS_FillHX(Edge,{Xmin,Xmax},{Ymin,Ymax},sizeX,sizeY,Direction),Angle),{-SX/2,SX/2},{-SY/2,SY/2},{1,1},{1,1})
+		return CS_CropMask(CS_MoveXY(Shape,Center[1],Center[2]),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+	end
+end
+
+function CS_FillMaskRD(MaskPath,Center,Edge,sizeX,sizeY,StackSizeX,StackSizeY,Range,Xpx,Ypx)
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Xmax,Xmin,Ymax,Ymin
+	Xmin = (-SX/2) + Center[1]
+	Xmax = (SX/2) + Center[1]
+	Ymin = (-SY/2) + Center[2]
+	Ymax = (SY/2) + Center[2]
+		
+	return CS_CropMask(CS_FillRD(Edge,{Xmin,Xmax},{Ymin,Ymax},sizeX,sizeY,StackSizeX,StackSizeY),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+end
+
+function CS_FillMaskRA(MaskPath,Center,Edge,sizeR,sizeA,Rmin,dX,dY,Range,Xpx,Ypx,Angle)
+	if dX == nil then
+		dX = 0
+	end
+	if dY == nil then
+		dY = 0
+	end
+	local Radd = math.sqrt(dX^2+dY^2)
+	if Rmin == nil then
+		Rmin = 0
+	end
+	
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Rmax = math.sqrt((SX/2)^2+(SY/2)^2) + Radd
+	local Xmax,Xmin,Ymax,Ymin
+	
+	if Angle == nil then
+		Angle = 0
+	end
+	Xmin = (-SX/2)
+	Xmax = (SX/2)
+	Ymin = (-SY/2)
+	Ymax = (SY/2)
+		
+	local Shape = CS_CropXY(CS_MoveXY(CS_Rotate(CS_FillRA(Edge,{Rmin,Rmax},{0,360},sizeR,sizeA),Angle),dX,dY),{-SX/2,SX/2},{-SY/2,SY/2},{1,1},{1,1})
+	return CS_CropMask(CS_MoveXY(Shape,Center[1],Center[2]),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+	
+end
+
+function CS_VectorMask2D(Shape,Ratio,VectorFunc,MaskPath,Center,Range,Xpx,Ypx)
+	local XRatio
+	local YRatio
+	if type(Ratio) == "number" then
+		XRatio = Ratio
+		YRatio = Ratio
+	else
+		if Ratio[1] == nil then
+			XRatio = 1
+		else
+			XRatio = Ratio[1]
+		end
+		if Ratio[2] == nil then
+			YRatio = 1
+		else
+			YRatio = Ratio[2]
+		end
+	end
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	local RangeArr = {0,0,0,0,0,0}
+	if type(Range) == "number" then
+		local R = Range
+		Range = {}
+		for i = 1, R do
+			table.insert(Range,R)
+		end
+		if R == 0 then
+			table.insert(Range,0)
+		end
+	end
+	for k, v in pairs(Range) do
+		if v >= -1 and v <= 4 then
+			RangeArr[math.floor(v)+2] = 1
+		end
+	end
+	
+	local RetShape, RetT, NShape
+	RetShape, RetT = CS_CropMask(Shape,MaskPath,Center,Range,Xpx,Ypx)
+	
+	NShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		local NX, NY, PX, PY
+		NX = Shape[i+1][1]
+		NY = Shape[i+1][2]
+		
+		local Ret
+		if RangeArr[RetT[i]+2] == 1 then
+			Ret = _G[VectorFunc](NX/XRatio,NY/YRatio)
+		else
+			Ret = {NX,NY}
+		end 
+		PX = Ret[1]
+		PY = Ret[2]
+		table.insert(NShape,{PX*XRatio,PY*YRatio})
+	end
+	return NShape
+end
+
+
+function CS_VectorMask2DPolar(Shape,Ratio,VectorFunc,MaskPath,Center,Range,Xpx,Ypx)
+	local XRatio
+	local YRatio
+	if type(Ratio) == "number" then
+		XRatio = Ratio
+		YRatio = Ratio
+	else
+		if Ratio[1] == nil then
+			XRatio = 1
+		else
+			XRatio = Ratio[1]
+		end
+		if Ratio[2] == nil then
+			YRatio = 1
+		else
+			YRatio = Ratio[2]
+		end
+	end
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	local RangeArr = {0,0,0,0,0,0}
+	if type(Range) == "number" then
+		local R = Range
+		Range = {}
+		for i = 1, R do
+			table.insert(Range,R)
+		end
+		if R == 0 then
+			table.insert(Range,0)
+		end
+	end
+	for k, v in pairs(Range) do
+		if v >= -1 and v <= 4 then
+			RangeArr[math.floor(v)+2] = 1
+		end
+	end
+	
+	local RetShape, RetT, NShape
+	RetShape, RetT = CS_CropMask(Shape,MaskPath,Center,Range,Xpx,Ypx)
+	
+	local NShape = {Shape[1]}
+	for i = 1, Shape[1] do
+		local NX, NY, PX, PY, NR, NA
+		NX = Shape[i+1][1]
+		NY = Shape[i+1][2]
+
+		if RangeArr[RetT[i]+2] == 1 then
+			NX = NX/XRatio
+			NY = NY/YRatio
+			NR, NA = CS_GetPolar(NX,NY,0)
+
+			local Ret = _G[VectorFunc](NR,NA)
+			PR = Ret[1]
+			PA = Ret[2]
+
+			NX = PR*math.cos(PA)
+			NY = PR*math.sin(PA)	
+			table.insert(NShape,{NX*XRatio,NY*YRatio})
+		else
+			table.insert(NShape,{NX,NY})
+		end
+	end
+	return NShape
+end
+
+
+
+function CS_FillPatternMask(MaskPath,Center,Range,Xpx,Ypx,Pattern,VectorX,VectorY,offsetX,offsetY,Angle)
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Xmax,Xmin,Ymax,Ymin
+	Xmin = (-SX/2) + Center[1]
+	Xmax = (SX/2) + Center[1]
+	Ymin = (-SY/2) + Center[2]
+	Ymax = (SY/2) + Center[2]
+
+	return CS_CropMask(CS_FillPattern(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+end
+
+function CS_FillPatternMaskX(MaskPath,Center,Range,Xpx,Ypx,Pattern,VectorX,VectorY,offsetX,offsetY,Angle)
+	local SX, SY
+	SX, SY = CS_GetMaskSize(MaskPath)
+	
+	if type(Xpx) == "table" then
+		if Xpx[1] == nil then
+			Xpx = 1
+		else
+			Xpx = Xpx[1]/SX
+		end
+	end
+	if type(Ypx) == "table" then
+		if Ypx[1] == nil then
+			Ypx = 1
+		else
+			Ypx = Ypx[1]/SY
+		end
+	end
+	
+	if Center == nil then
+		Center = {0,0}
+	end
+	
+	local Xmax,Xmin,Ymax,Ymin
+	Xmin = (-SX/2) + Center[1]
+	Xmax = (SX/2) + Center[1]
+	Ymin = (-SY/2) + Center[2]
+	Ymax = (SY/2) + Center[2]
+
+	return CS_CropMask(CS_FillPatternX(Pattern,{Xmin,Xmax},{Ymin,Ymax},VectorX,VectorY,offsetX,offsetY,Angle),MaskPath,{Center[1],Center[2]},Range,Xpx,Ypx)
+end
+
+
 --[[ 미구현 함수들 (Update 예정)
  Include_CVPaint
  CVPlot
@@ -31019,7 +33497,10 @@ function CVPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 		Preserve = nil
 	end
 
-	local LocId,Location=ConvertLocation(Location)
+	local LocId = Location
+	if type(Location) == "string" then
+		LocId = ParseLocation(LocId)-1
+	end
 	local LocL = 0x58DC60+0x14*LocId
 	local LocU = 0x58DC64+0x14*LocId
 	local LocR = 0x58DC68+0x14*LocId

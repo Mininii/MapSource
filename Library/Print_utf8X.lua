@@ -104,7 +104,15 @@ function print_utf8(line, offset, string)
         if dst % 4 >= 1 then
             for i = 1, dst % 4 do str = '\0'..str end
         end
-        local t = cp949_to_utf8(str)
+        local t 
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
+
         while n <= #t do
             ret[#ret+1] = SetMemory(dst - dst % 4 +n-1, SetTo, _dw(t, n))
             n = n + 4
@@ -124,7 +132,14 @@ function check_utf8(line, offset, string)
         if dst % 4 >= 1 then
             for i = 1, dst % 4 do str = '\0'..str end
         end
-        local t = cp949_to_utf8(str)
+        local t 
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
         while n <= #t do
             ret[#ret+1] = Memory(dst - dst % 4 +n-1, Exactly, _dw(t, n))
             n = n + 4
@@ -144,7 +159,14 @@ function print_utf8X(line, offset, string, Mask)
         if dst % 4 >= 1 then
             for i = 1, dst % 4 do str = '\0'..str end
         end
-        local t = cp949_to_utf8(str)
+        local t 
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
         while n <= #t do
             ret[#ret+1] = SetMemoryX(dst - dst % 4 +n-1, SetTo, _dw(t, n),Mask)
             n = n + 4
@@ -164,7 +186,14 @@ function check_utf8X(line, offset, string, Mask)
         if dst % 4 >= 1 then
             for i = 1, dst % 4 do str = '\0'..str end
         end
-        local t = cp949_to_utf8(str)
+        local t 
+        if TEP30Flag == 1 then
+			t = {}
+			str:gsub(".",function(c) table.insert(t,string.byte(c)) end)
+			table.insert(t,0)
+		else
+			t = cp949_to_utf8(str)
+		end
         while n <= #t do
             ret[#ret+1] = MemoryX(dst - dst % 4 +n-1, Exactly, _dw(t, n),Mask)
             n = n + 4
