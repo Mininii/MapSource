@@ -4,7 +4,6 @@ function onInit_EUD()
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x1D)}) -- 기본 2배속
 	end
-	PatchInit()
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(173, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
@@ -77,6 +76,7 @@ function onInit_EUD()
 	end
 	
 
+	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})
 	
 	Trigger2X(FP, {
 		CDeaths(FP,Exactly,1,LimitX);
@@ -130,9 +130,12 @@ function onInit_EUD()
 
 	for i = 0, 7 do
 		CIf(FP,{HumanCheck(i, 1)})
-		DoActions(FP, {CreateUnit(12, 0, 34+i, i)})
 		f_Read(FP, 0x628438, nil, Nextptrs)
-		CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,2+i,FP)})
+		CDoActions(FP, {TSetNVar(DpsLV1[i+1], SetTo, _Add(Nextptrs,2)),CreateUnit(1,127,2+i,FP),GiveUnits(All, 127, FP, 2+i, P9)})
+		CSub(FP,CurCunitI,Nextptrs,19025)
+		f_Div(FP,CurCunitI,_Mov(84))
+		CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,127)})
+		CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,2,SetTo,P9)})
 		CIfEnd()
 	end
 
@@ -141,14 +144,15 @@ function onInit_EUD()
 	CT_UID = CreateVar(FP)
 	CT_PID = CreateVar(FP)
 	f_Read(FP, _Add(_Mul(CI,84),19025+25),CT_UID, nil, 0xFF,1)
-	CMov(FP,0x6509B0,FP)
 	f_Read(FP, _Add(_Mul(CI,84),19025+19),CT_PID, nil, 0xFF,1)
-	CMov(FP,0x6509B0,FP)
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,0,SetTo,CT_UID,0xFF)})
 	CDoActions(FP, {Set_EXCC2X(CT_Cunit,CI,2,SetTo,CT_PID,0xFF)})
-	CMov(FP,0x6509B0,FP)
 	CAdd(FP,CI,1)
 	CForEnd()
+	f_Read(FP, SCA_DataPtr, nil, SCA_DataPtrV)
+
+
+	
 
 	CIfEnd()
 end

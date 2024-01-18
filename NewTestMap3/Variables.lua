@@ -26,7 +26,106 @@ function Include_Vars()
 	LimitX, LimitC,TestMode = CreateCcodes(3)
 	LimitM = CreateCcodeArr(8)
 	LimitSaveEnable = CreateCcode()
+	SCA_DataPtr = 0x58f600
+	LimitVerPtr = 0x58f454
+	SCA_DataPtrV = CreateVar(FP)
 
+	SCADataNumChk = {}
+	SCA = {}
+	iv = {}
+	ct = {}
+		
+
+	function SCA.CreateVar(PlayerID,DataNum)
+		CreateVarXAlloc = CreateVarXAlloc + 1
+		if CreateVarXAlloc > CreateMaxVAlloc then
+			CreateVariable_IndexAllocation_Overflow()
+		end
+		if PlayerID == nil then
+			PlayerID = AllPlayers
+		end
+		table.insert(CreateVarPArr,{"V",PlayerID})
+		local Ret = V(CreateVarXAlloc)
+		if type(PlayerID) == "number" then
+			Ret[1] = PlayerID
+		end
+		table.insert(SCA.DataPtrArr, Ret)
+		return Ret
+	end
+
+	function SCA.Available(CP)
+		return DeathsX(CP, Exactly, 3, 1,3)
+	end
+	function SCA.NoSlotLoadAvailable(CP)--슬롯 로드완료 상태가 아닐때만
+		return DeathsX(CP, Exactly, 3, 1,3+64)
+	end
+	function SCA.SlotLoadCmp(CP)--사용가능 + 슬롯로드완료
+		return DeathsX(CP, Exactly, 3+64, 1,3+64)
+	end
+	function SCA.NotAvailable(CP)
+		return DeathsX(CP, Exactly, 0, 1,2)
+	end
+	function SCA.Reset(CP)
+		return SetDeaths(CP, SetTo, 0, 1)
+	end
+	function SCA.LoadCmp(CP)--사용가능 + 로드완료
+		return DeathsX(CP, Exactly, 7, 1,7)
+	end
+	function SCA.SaveCmp(CP)--사용가능 + 저장완료
+		return DeathsX(CP, Exactly, 11, 1,11)
+	end
+	function SCA.TimeLoadCmp(CP)--사용가능 + 시간로드완료
+		return DeathsX(CP, Exactly, 19, 1,19)
+	end
+
+	VoidAreaOffset = 0x58f60C
+	VoidAreaAlloc = 0x58f60C-4
+	VoidAreaLimit = 0x5967F0
+
+	SCA.GlobalCheck2 = CreateCcode()
+	SCA.GlobalCheck = CreateCcode()
+	SCA.GlobalLoadFlag = CreateCcode()
+	SCA.CheckTime = CreateCcode()
+	SCA.GLoadCmp = CreateCcode()
+	SCA.GReload = CreateCcode()
+	SCA.LoadSlot1 = CreateCcodeArr(8)
+
+	SCA.LoadCheckArr = CreateCcodeArr(8)
+	SCA.GlobalData = CreateVoidArr(20)
+	SCA.GlobalVarArr = CreateVarArr(20, FP)
+	ct.GlobalVarArr = CreateVarArr(20, FP)
+	SCA.Year = CreateVoid()
+	SCA.Month = CreateVoid()
+	SCA.Hour = CreateVoid()
+	SCA.Day = CreateVoid()
+	SCA.Week = CreateVoid()
+	SCA.Min = CreateVoid()
+	SCA.ArrPtr = CreateVoid()
+
+	SCA.YearV = CreateVar(FP)
+	SCA.MonthV = CreateVar(FP)
+	SCA.HourV = CreateVar(FP)
+	SCA.DayV = CreateVar(FP)
+	SCA.WeekV = CreateVar(FP)
+	SCA.MinV = CreateVar(FP)
+	
+	--System
+	GCP = CreateVar(FP)
+	GCPW = CreateWar(FP)
+	VArrI = CreateVar(FP)
+	VArrI4 = CreateVar(FP)
+	WArrI = CreateWar(FP)
+	WArrI4 = CreateWar(FP)
+	iv.CheatDetect = CreateCcode()
+	iv.StatTest = CreateCcode()
+
+	
+	--General
+	iv.Time = CreateVar(FP)
+	iv.Time2 = CreateVar(FP)
+	iv.Time3 = CreateVar(FP)
+	iv.Time4 = CreateVar(FP)
+	iv.PCheckV = CreateVar(FP)--플레이어 수 체크
 
 	--EPD
 	DpsLV1 = CreateVarArr(8, FP) -- 첫번째 DPS건물
@@ -37,7 +136,8 @@ function Include_Vars()
 	CT_GNextRandV = CreateVar(FP)
 	CT_GPrevRandW = CreateWar(FP)
 	CT_GNextRandW = CreateWar(FP)
-	
+	MCTCondArr2 = {0x5124F0}
+	MCTCondArr3 = {"-"}
 	if Limit==1 then
 	MCTCondArr = {
 		Memory(0x5124F0, Exactly, TestSpeedNum)
@@ -49,4 +149,32 @@ function Include_Vars()
 	end
 	
 	ctarr = {{},{},{},{},{},{},{},{}}
+
+
+	
+	PatchInit() -- 유닛 패치 테이블 초기화
+
+	PUT={}
+	PWT={}
+	LevelUnitArr = {}
+
+	PushLevelUnit(1,{45000,55000,0,0},0,0,0,24,1,60,nil,50)--마린 10원
+	PushLevelUnit(2,{40000,45000,15000,0},0,1,2,72,10,59,nil,120)--고스트
+	PushLevelUnit(3,{38000,40000,22000,0},0,2,4,72,20,59,nil,300)--벌쳐 300원
+	PushLevelUnit(4,{35000,35000,30000,0},0,7,13,48,20,59,nil,550)--에씨비 
+	PushLevelUnit(5,{30000,35000,30000,5000},1,8,16,48,30,59,nil,1000)--레이스 4000원
+	PushLevelUnit(6,{30000,34000,30000,6000},3,5,11,48,50,59,nil,2500)--탱크
+	PushLevelUnit(7,{28000,35000,30000,7000},7,3,7,48,80,59,nil,6000)--골럇 
+	PushLevelUnit(8,{26000,36000,30000,8000},11,32,25,72,60,59,nil,15000)--파벳 3타 2만원
+	PushLevelUnit(9,{24000,37000,30000,9000},15,58,103,48,80,59,nil,50000)--발키리 2타
+	PushLevelUnit(10,{20000,40000,30000,10000},25,12,19,48,250,59,nil,100000)--배틀
+	PopLevelUnit()
+
+	
+	LevelLimit = 300000
+
+	EXPArr = f_GetFileptr(FP, "expdata", 1)
+	EXPArr_dp = f_GetFileptr(FP, "expdata_dp", 1)
+
+
 end
