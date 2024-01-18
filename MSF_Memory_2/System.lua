@@ -1177,7 +1177,7 @@ DoActions2X(FP,{RotatePlayer({
 	PlayWAVX("staredit\\wav\\Game_Over.ogg");},HumanPlayers,FP)},1)
 TriggerX(FP,{CD(TestMode,0),CD(DefeatCC,100,AtLeast)},{RotatePlayer({Defeat()},MapPlayers,FP)})
 CIfEnd()
-MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08경고. 매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08경고를 무시하고 비인가 프로그램을 사용하실 경우 게임에서 강제퇴장 됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 BanCode2 = CreateCcodeArr(4)
 for i = 0, 3 do
 	CIf(FP,HumanCheck(i,1),SubV(WarnCT[i+1],1))
@@ -1194,17 +1194,35 @@ for i = 0, 3 do
 	--	CIfEnd()
 	--	DisplayPrintEr(i, {"아픔감지기 : 1. ",APM1,"  2. ",APM2,"  3. ",APM3})
 	--end
-	TriggerX(FP, {Deaths(i,AtLeast,1,140),CV(WarnC[i+1],0)},{SetV(WarnCT[i+1],24*30),SetV(WarnC[i+1],1),SetCp(i),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),DisplayText(MacroWarn, 4)})
 	
-	TriggerX(FP, {Deaths(i,AtLeast,1,140),CV(WarnC[i+1],1),CV(WarnCT[i+1],0,AtMost)},{SetCD(BanCode2[i+1],1)})
-	Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다. \x03사유 \x04: \x08핵 또는 매크로 사용"),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
-	})
-		local WAVT = {}
-		for k = 0, 9 do
-			table.insert(WAVT,PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV"))
-			table.insert(WAVT,DisplayTextX(StrDesign("\x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동."),4))
-		end
-			Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);Memory(0x57F1B0, Exactly, i)},{RotatePlayer(WAVT,i,i),SetMemory(0xCDDDCDDC,SetTo,1);})
+	--TriggerX(FP, {Deaths(i,AtLeast,1,140),CV(WarnC[i+1],0)},{SetV(WarnCT[i+1],24*30),SetV(WarnC[i+1],1),SetCp(i),,,DisplayText(MacroWarn, 4)})
+	
+	--TriggerX(FP, {Deaths(i,AtLeast,1,140),CV(WarnC[i+1],1),CV(WarnCT[i+1],0,AtMost)},{SetCD(BanCode2[i+1],1)})
+
+	TriggerX(FP, {Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
+	TriggerX(FP, {CD(BanCode2[i+1],1)}, {
+		SetMemory(0x59CC78, SetTo, -1048576),
+		SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			LocalPlayerID(i);
+			CD(BanCode2[i+1],1)
+		},
+		actions = {
+			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);
+		},
+		flag = {preserved}
+	}
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04가 매크로를 사용하여 \x08찌리리릿 500배 \x04당하셨습니다."),4),PlayWAVX("staredit\\wav\\zzirizziri.ogg"),PlayWAVX("staredit\\wav\\zzirizziri.ogg")},HumanPlayers,FP);})
+	--	local WAVT = {}
+	--	for k = 0, 9 do
+	--		table.insert(WAVT,PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV"))
+	--		table.insert(WAVT,DisplayTextX(StrDesign("\x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동."),4))
+	--	end
+	--		Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);Memory(0x57F1B0, Exactly, i)},{RotatePlayer(WAVT,i,i),SetMemory(0xCDDDCDDC,SetTo,1);})
 
 	CIfEnd()
 	--PlayWAV("sound\\Bullet\\TNsFir00.wav");

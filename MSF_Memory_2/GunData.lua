@@ -1024,8 +1024,12 @@ end
 	DoActionsX(FP,{SetCD(WarpCheck,1),SetInvincibility(Enable,189,Force2,64)})
 
 	for i = 4, 7 do
+		CIfX(FP,{CD(TestMode,1)})
 		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
 		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom 달성시 특수패턴
+		CElseX()
+		TriggerX(FP,{GCP(i)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
+		CIfXEnd()
 	end
 	CIfX(FP,{Gun_Line(30,Exactly,1)})
 

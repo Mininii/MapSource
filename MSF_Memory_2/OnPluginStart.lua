@@ -347,10 +347,10 @@ end
 	--G_CA_init()
 
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
-	T_YY = 2022
-	T_MM = 05
-	T_DD = 11
-	T_HH = 12
+	T_YY = 2024
+	T_MM = 01
+	T_DD = 16
+	T_HH = 00
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
 		DoActions(FP,{RotatePlayer({SetAllianceStatus(Force2,Ally)}, {P5,P6,P7,P8}, FP)})

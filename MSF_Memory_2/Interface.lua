@@ -374,20 +374,33 @@ actions = {
 			PreserveTrigger();
 		},
 	}
-	Trigger {
-		players = {i},
-		conditions = {
-			Label();
-			CD(Theorist,0);
-			Command(i,AtLeast,1,23);
-		},
-		actions = {
-			ModifyUnitEnergy(1,23,i,64,0);
-			RemoveUnitAt(1,23,"Anywhere",i);
-			SetCD(Theorist,1);
-			PreserveTrigger();
-		},
-	}
+	if Limit == 1 then
+		Trigger {
+			players = {i},
+			conditions = {
+				Label();
+				CD(Theorist,0);
+			},
+			actions = {
+				SetCD(Theorist,1);
+			},
+		}
+	else
+		Trigger {
+			players = {i},
+			conditions = {
+				Label();
+				CD(Theorist,0);
+				Command(i,AtLeast,1,23);
+			},
+			actions = {
+				ModifyUnitEnergy(1,23,i,64,0);
+				RemoveUnitAt(1,23,"Anywhere",i);
+				SetCD(Theorist,1);
+				PreserveTrigger();
+			},
+		}
+	end
 	Trigger { -- 보호막 가동
 	players = {i},
 	conditions = {
@@ -760,11 +773,18 @@ for i= 1, 4 do
 end
 CIfEnd()
 
+CIfX(FP,{CD(TestMode,1)})
 for i= 1, 4 do
 	CIfOnce(FP,{CD(AxiomCcode[i],1)})
 	CS__InputVA(FP,BTblArr[i],0,BStr2[i],BStr2s[i],nil,0,BStr2s[i])
 	CIfEnd()
 end
+CIfXEnd()
+
+
+
+
+
 
 local CurEPD = CreateVar(FP)
 local SelWepID = CreateVar(FP)

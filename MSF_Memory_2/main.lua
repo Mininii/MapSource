@@ -41,8 +41,8 @@ TestSet(1)
 	EVFFlag = 0
 	CheatEnableFlag = 0
 if Limit == 1 then
-	EVFFlag = 0
-	AtkSpeedMode = 1
+	EVFFlag = 1
+	AtkSpeedMode = 0
 	CheatEnableFlag = 0
 	TheoristTestMode = 0
 	GBossTestMode = 2
