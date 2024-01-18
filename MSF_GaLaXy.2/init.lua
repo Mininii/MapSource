@@ -54,25 +54,25 @@ function onInit()
 	end
 	
 
-	f_GunT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	f_GunErrT = "\x07¡º \x08ERROR \x04: G_CAPlot Not Found. \x07¡»"
-	f_GunFuncT = "\x07¡º \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07¡»"
-	f_GunSendT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	f_GunSendT2 = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: ¼º°øÇÑ f_GunSendÀÇ EXCunit Number : ")
-	G_SendErrT = "\x07¡º \x08ERROR : \x04f_GunÀÇ ¸ñ·ÏÀÌ °¡µæ Â÷ G_Send¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	f_ReplaceErrT = "\x07¡º \x08ERROR : \x04Äµ³´À¸·Î ÀÎÇØ f_Replace¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	CBulletErrT = "\x07¡º \x08ERROR \x04: CreateBullet_EPD ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04ÀÇ \x07£Ó\x1F£Õ\x1C£Ð\x0E£Å\x0F£Ò\x10£Î\x17£Ï\x11£Ö\x08£Á \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	QuaText = CreateCText(FP,"\x0d\x0d\x0d\x04ÀÇ \x11£Ñ\x1F£Õ\x1B£Á\x16£Ó\x10£Á\x1D£Ò \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06500\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	TeText = CreateCText(FP,"\x0d\x0d\x0d\x04ÀÇ \x10£Ô\x07£Å\x0F£Ò£Ò\x1F£Á \x04°¡ \x1C¿ìÁÖ\x04ÀÇ \x15¸ÕÁö\x04·Î µ¹¾Æ°¬½À´Ï´Ù.. \x02¡ß\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x065\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	SuT00 = CreateCText(FP,"\x0d\x0d\x0d\x12\x02¡ß \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	f_GunT = CreateCText(FP,"\x07ã€Ž \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ìž : ")
+	f_GunErrT = "\x07ã€Ž \x08ERROR \x04: G_CAPlot Not Found. \x07ã€"
+	f_GunFuncT = "\x07ã€Ž \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07ã€"
+	f_GunSendT = CreateCText(FP,"\x07ã€Ž \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ìž : ")
+	f_GunSendT2 = CreateCText(FP,"\x07ã€Ž \x03TESTMODE OP \x04: ì„±ê³µí•œ f_GunSendì˜ EXCunit Number : ")
+	G_SendErrT = "\x07ã€Ž \x08ERROR : \x04f_Gunì˜ ëª©ë¡ì´ ê°€ë“ ì°¨ G_Sendë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œìž‘ìžì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	f_ReplaceErrT = "\x07ã€Ž \x08ERROR : \x04ìº”ë‚«ìœ¼ë¡œ ì¸í•´ f_Replaceë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œìž‘ìžì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	CBulletErrT = "\x07ã€Ž \x08ERROR \x04: CreateBullet_EPD ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ìž…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œìž‘ìžì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04ì˜ \x07ï¼³\x1Fï¼µ\x1Cï¼°\x0Eï¼¥\x0Fï¼²\x10ï¼®\x17ï¼¯\x11ï¼¶\x08ï¼¡ \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	QuaText = CreateCText(FP,"\x0d\x0d\x0d\x04ì˜ \x11ï¼±\x1Fï¼µ\x1Bï¼¡\x16ï¼³\x10ï¼¡\x1Dï¼² \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06500\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	TeText = CreateCText(FP,"\x0d\x0d\x0d\x04ì˜ \x10ï¼´\x07ï¼¥\x0Fï¼²ï¼²\x1Fï¼¡ \x04ê°€ \x1Cìš°ì£¼\x04ì˜ \x15ë¨¼ì§€\x04ë¡œ ëŒì•„ê°”ìŠµë‹ˆë‹¤.. \x02â—†\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x065\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	SuT00 = CreateCText(FP,"\x0d\x0d\x0d\x12\x02â—† \x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	
 	DefStr1 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d")
-	DefStr2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04(ÀÌ)°¡ \x1C¹æ¾î·Â \x04¾÷±×·¹ÀÌµå¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù.\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
+	DefStr2 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04(ì´)ê°€ \x1Cë°©ì–´ë ¥ \x04ì—…ê·¸ë ˆì´ë“œë¥¼ ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤.\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
 	
 
 
-	InFormation = "\n\n\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(ªÄ>¤µ<)ªÄ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04ÀÌ ¹®±¸°¡ ¶ã °æ¿ì \x07Á¤½Ä¹öÀü\x04ÀÔ´Ï´Ù. \n\x13\x04¹«´Ü ¼öÁ¤¸ÊÀ» ÁÖÀÇÇØÁÖ¼¼¿ä.\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	InFormation = "\n\n\n\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(ã¤>ã……<)ã¤ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04ì´ ë¬¸êµ¬ê°€ ëœ° ê²½ìš° \x07ì •ì‹ë²„ì „\x04ìž…ë‹ˆë‹¤. \n\x13\x04ë¬´ë‹¨ ìˆ˜ì •ë§µì„ ì£¼ì˜í•´ì£¼ì„¸ìš”.\n\x14\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 
 
 	--Balance
@@ -258,7 +258,7 @@ function SetZergGroupFlags(UnitID)
 	
 	HondonPatch(75)
 	HondonPatch(82)
-	HondonPatch(70) -- ¹èÆ²
+	HondonPatch(70) -- ë°°í‹€
 	HondonPatch(80)
 	for j, k in pairs(HondonFlingyArr) do
 		HondonPatch(k)
@@ -282,19 +282,19 @@ function SetZergGroupFlags(UnitID)
 	unitSizePatch(87,5)
 	unitSizePatch(89,5)
 	
-	Trigger { -- ÆÛ¼¾Æ® µ¥¹ÌÁö ¼¼ÆÃ, ¹öÆ°¼Â
+	Trigger { -- í¼ì„¼íŠ¸ ë°ë¯¸ì§€ ì„¸íŒ…, ë²„íŠ¼ì…‹
 		players = {FP},
 		actions = {
-			SetMemory(0x515B88,SetTo,256);---------Å©±â 0
-			SetMemory(0x515B8C,SetTo,256);---------Å©±â 1
-			SetMemory(0x515B90,SetTo,256);---------Å©±â 2
-			SetMemory(0x515B94,SetTo,256);---------Å©±â 3
-			SetMemory(0x515B98,SetTo,256);---------Å©±â 4
-			SetMemory(0x515B9C,SetTo,256);---------Å©±â 5
-			SetMemory(0x515BA0,SetTo,256);---------Å©±â 6
-			SetMemory(0x515BA4,SetTo,256);---------Å©±â 7
-			SetMemory(0x515BA8,SetTo,256);---------Å©±â 8
-			SetMemory(0x515BAC,SetTo,256);---------Å©±â 9
+			SetMemory(0x515B88,SetTo,256);---------í¬ê¸° 0
+			SetMemory(0x515B8C,SetTo,256);---------í¬ê¸° 1
+			SetMemory(0x515B90,SetTo,256);---------í¬ê¸° 2
+			SetMemory(0x515B94,SetTo,256);---------í¬ê¸° 3
+			SetMemory(0x515B98,SetTo,256);---------í¬ê¸° 4
+			SetMemory(0x515B9C,SetTo,256);---------í¬ê¸° 5
+			SetMemory(0x515BA0,SetTo,256);---------í¬ê¸° 6
+			SetMemory(0x515BA4,SetTo,256);---------í¬ê¸° 7
+			SetMemory(0x515BA8,SetTo,256);---------í¬ê¸° 8
+			SetMemory(0x515BAC,SetTo,256);---------í¬ê¸° 9
 			SetMemory(0x515BB0,SetTo,256);
 			SetMemory(0x515BB4,SetTo,256);
 			SetMemory(0x515BB8,SetTo,256+256);

@@ -21,10 +21,10 @@ function Install_Shape()
 	H00_1_96L = CS_ConnectPathX(H00_1,96,1)
 	H00_1_128L = CS_ConnectPathX(H00_1,128,1)
 
-	Cere_Z = CSMakeCircle(8,32,0,PlotSizeCalc(8,9),1) -- À¯´Ö »ı¼º Àú±×À¯´Ö
-	Cere_N = CSMakeCircle(8,72,0,PlotSizeCalc(8,3),1) -- À¯´Ö »ı¼º ³ë¸»
-	Cere_H = CSMakeCircle(8,60,0,PlotSizeCalc(8,5),1) -- À¯´Ö »ı¼º ÇÏµå
-	Cere_B = CSMakeCircle(8,48,0,PlotSizeCalc(8,7),1) -- À¯´Ö »ı¼º ¹ö½ºÆ®	
+	Cere_Z = CSMakeCircle(8,32,0,PlotSizeCalc(8,9),1) -- ìœ ë‹› ìƒì„± ì €ê·¸ìœ ë‹›
+	Cere_N = CSMakeCircle(8,72,0,PlotSizeCalc(8,3),1) -- ìœ ë‹› ìƒì„± ë…¸ë§
+	Cere_H = CSMakeCircle(8,60,0,PlotSizeCalc(8,5),1) -- ìœ ë‹› ìƒì„± í•˜ë“œ
+	Cere_B = CSMakeCircle(8,48,0,PlotSizeCalc(8,7),1) -- ìœ ë‹› ìƒì„± ë²„ìŠ¤íŠ¸	
 
 	Ovrm = {12  ,{2112, 3574},{1984, 3488},{2112, 3392},{1984, 3264},{2112, 3168},{1792, 2976},{1984, 2880},{2368, 3072},{2560, 2976},{2752, 3072},{2944, 3008},{3136, 3072}}
 
@@ -45,10 +45,10 @@ function Install_Shape()
 
 	
 
-	HLC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{0,4096},{-4096,4096}) -- µ¿ ¹İ¿ø
-	HRC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,0},{-4096,4096}) -- ¼­ ¹İ¿ø
-	HUC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,4096},{0,4096}) -- ³² ¹İ¿ø
-	HDC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,4096},{-4096,0}) -- ºÏ ¹İ¿ø
+	HLC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{0,4096},{-4096,4096}) -- ë™ ë°˜ì›
+	HRC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,0},{-4096,4096}) -- ì„œ ë°˜ì›
+	HUC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,4096},{0,4096}) -- ë‚¨ ë°˜ì›
+	HDC = CS_CropXY(CSMakeCircle(180,500,0,181,1),{-4096,4096},{-4096,0}) -- ë¶ ë°˜ì›
 	BSh1 = {2   ,{512, 1856},{1760, 2464}}
 	BSh2 = {2   ,{128, 2272},{1536, 3040}}
 	Boss2 = CS_ConnectPathX(BSh1,32)

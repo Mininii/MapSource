@@ -33,7 +33,7 @@ function Install_boss()
 		end
 		table.insert(CtrigInitArr[7],SetCtrigX(FP,CBullet_InputH[2],0x15C,0,SetTo,FP,CBulletIndex,0x15C,1,0))
 
-		DoActions(FP,{SetMemoryB(0x6636B8+204, SetTo, 125), -- ���⺯��
+		DoActions(FP,{SetMemoryB(0x6636B8+204, SetTo, 125), -- 무기변경
 			SetInvincibility(Enable,"Men",Force1,"Location 2")})
 		if Limit == 1 then
 			CIfX({Force1,FP},CDeaths(FP,AtLeast,1,TestMode))
@@ -75,8 +75,8 @@ function Install_boss()
 
 		CIfEnd()
 
-		Trigger2(FP,{CountdownTimer(AtMost,20)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08�ءءءءءءءءءءء�\x07 N O T I C E\x08 �ءءءءءءءءءءء�\n\n\n\x13\x08������ �� \x0FU\x04nknown\x08.2 \x04���� ������ �� ���۵˴ϴ�.\n\n\n\x13\x08�ءءءءءءءءءءء�\x07 N O T I C E\x08 �ءءءءءءءءءءء�",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP)})
-		Trigger2(FP,{CountdownTimer(AtMost,0)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08�ءءءءءءءءء�\x07 I N F O R M A T I O N\x08 �ءءءءءءءءء�\n\n\x04\x13�� �̸� : \x0FU\x04nknown\x08.2\n\x13\x10�ɷ� : \x04������ ������ ź�� ����, \x11��\x1F��\x1B��\x16��\x10��\x1D�� \x04��ų ��ȭ, \x08��󿡰� ���� ���밨�� ������.\n\x13\x0Eóġ��� : \x04ź�� ���� ��Ʈ��\n\x13\x04����� \x03������ ��Ʈ��\x04�� �����ּ���!\n\n\x13\x08�ءءءءءءءءء�\x07 I N F O R M A T I O N\x08 �ءءءءءءءءء�",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP),
+		Trigger2(FP,{CountdownTimer(AtMost,20)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 적 \x0FU\x04nknown\x08.2 \x04와의 전투가 곧 시작됩니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP)})
+		Trigger2(FP,{CountdownTimer(AtMost,0)},{CopyCpAction({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※\n\n\x04\x13적 이름 : \x0FU\x04nknown\x08.2\n\x13\x10능력 : \x04강력한 광범위 탄막 공격, \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04스킬 약화, \x08대상에게 강한 적대감을 느낀다.\n\x13\x0E처치방법 : \x04탄막 파훼 컨트롤\n\x13\x04당신의 \x03진정한 컨트롤\x04을 보여주세요!\n\n\x13\x08※※※※※※※※※※\x07 I N F O R M A T I O N\x08 ※※※※※※※※※※",4),PlayWAVX("sound\\glue\\bnetclick.wav"),MinimapPing("Location 31")},HumanPlayers,FP),
 			GiveUnits(1,186,11,64,FP),SetInvincibility(Disable,186,FP,64),SetDeaths(Force1,SetTo,1,48)})
 		local BT_Ready = CreateCcode()
 		local BT_Ready2 = CreateCcode()
@@ -239,7 +239,7 @@ function Install_boss()
 				TriggerX(FP,{CDeaths(FP,AtLeast,48,BT3)},{SetCDeaths(FP,SetTo,0,BT3)},{preserved})
 			CIfEnd()
 			CIf(FP,CDeaths(FP,Exactly,4,B_P),{SetCDeaths(FP,Add,1,BP4_T1)})
-				local BonusText = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07�ءءءءءءءءءءء�\x08 N O T I C E\x07 �ءءءءءءءءءءء�\n\n\x13\x02�� \x08! BONUS STAGE ! \x02��\n\n\x13\x04���ݺ��� ������ ���簡 ������������ ������ ���� �־��ּ���!\n\x13\x04������ ���翡 ���� ������ ������ �����մϴ�!\n\n\x13\x07�ءءءءءءءءءءء�\x08 N O T I C E\x07 �ءءءءءءءءءءء�"
+				local BonusText = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\x13\x02▶ \x08! BONUS STAGE ! \x02◀\n\n\x13\x04지금부터 미지의 존재가 쓰러질때까지 마음껏 딜을 넣어주세요!\n\x13\x04미지의 존재에 대한 딜량이 점수를 결정합니다!\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※"
 
 				DoActions(FP,{Order("Men",Force1,64,Attack,31)},1)
 				Trigger2X(FP,{CDeaths(FP,AtLeast,300,BP4_T1)},{CopyCpAction({DisplayTextX(BonusText,4),PlayWAVX("sound\\glue\\bnetclick.wav");MinimapPing(31);},HumanPlayers,FP)})
@@ -258,7 +258,7 @@ function Install_boss()
 			CMov(FP,B_A1,0)
 		CIfXEnd()
 local S_N_R,N_A,N_X,N_Y = CreateVars(4)
-BClearT = "\n\n\n\n\n\n\n\n\n\n\n\x13\x08�ءءءءءءءءءءء�\x07 N O T I C E\x08 �ءءءءءءءءءءء�\n\n\n\x13\x08������ �� \x0FU\x04nknown\x08.2 \x04�� \x04����Ʈ�Ƚ��ϴ�.\n\n\n\x13\x08�ءءءءءءءءءءء�\x07 N O T I C E\x08 �ءءءءءءءءءءء�"
+BClearT = "\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※\n\n\n\x13\x08최후의 적 \x0FU\x04nknown\x08.2 \x04를 \x04쓰러트렸습니다.\n\n\n\x13\x08※※※※※※※※※※※※\x07 N O T I C E\x08 ※※※※※※※※※※※※"
 	Trigger2X(FP,{CountdownTimer(AtMost,0),CVar(FP,FBH[2],Exactly,0)},{CopyCpAction({DisplayTextX(BClearT,4),PlayWAVX("staredit\\wav\\clear.ogg"),PlayWAVX("staredit\\wav\\clear.ogg"),PlayWAVX("staredit\\wav\\clear.ogg")},HumanPlayers,FP),SetSwitch("Switch 130",Set),SetDeaths(P12,SetTo,1,186),SetCDeaths(FP,SetTo,1,Win)},{preserved})
 		G_CA_SetSpawn({CDeaths(FP,Exactly,1,BT_Ready2),CGMode(2)},{84},{P_6},{0},"MAX",nil,nil,BossXY)
 		G_CA_SetSpawn({CDeaths(FP,Exactly,1,BT_Ready2),CGMode(3)},{84},{S_8},{2},nil,nil,nil,BossXY)

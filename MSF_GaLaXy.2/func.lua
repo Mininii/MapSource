@@ -1,16 +1,36 @@
-function GetStrSizeD(cp949flag,String)
+
+
+
+function GetStrSizeD(cp949flag,String,Null)
 	if type(String) == "number" then
 		String = ToString(String)
 	end
 	local Size = 0
+	if Null == nil then
+		Null = 0
+	else
+		Null = 1
+	end
 	if cp949flag == "X" or cp949flag == nil or cp949flag == 0 then -- utf8 Size
-		String = cp949_to_utf8(String)
-		Size = #String-1
+		if TEP30Flag == 1 then
+			local tmp = String
+			String = {}
+			tmp:gsub(".",function(c) table.insert(String,string.byte(c)) end)
+			table.insert(String,0)
+		else
+			String = cp949_to_utf8(String)
+		end
+
+		Size = #String-1+Null
 	else -- cp949 Size
-		Size = #String
+		Size = #String+Null
 	end
 	return Size
 end
+
+
+
+
 
 function SetUnitClass(UnitID)
 	if type(UnitID) == "string" then
@@ -46,7 +66,7 @@ end
 
 
 function GunBreak(GName,Point,BGMIndex)
-	local GunText = "\n\n\n\n\n\x13\x08£¡ £¡ £¡ \x04ÀûÀÇ "..GName.." ÆÄ±«ÇÏ¿´´Ù!\x17 + "..Point.." P t s\x08 £¡ £¡ £¡\n\n"
+	local GunText = "\n\n\n\n\n\x13\x08ï¼ ï¼ ï¼ \x04ì ì˜ "..GName.." íŒŒê´´í•˜ì˜€ë‹¤!\x17 + "..Point.." P t s\x08 ï¼ ï¼ ï¼\n\n"
 		DoActionsX(FP,{
 			RotatePlayer({DisplayTextX(GunText,4)},HumanPlayers,FP);
 			SetScore(Force1,Add,Point,Kills);
@@ -110,23 +130,23 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 				table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 			end
 			if type(Preset[1]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (°íÁ¤) [1]
+				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (ê³ ì •) [1]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (ê³ ì •)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (°¡º¯) [2]
+			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (ê°€ë³€) [2]
 			if type(Preset[3]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (°íÁ¤) [3]
+				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (ê³ ì •) [3]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (ê³ ì •)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (°¡º¯) [4]
+			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (ê°€ë³€) [4]
 			if type(Preset[5]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (°íÁ¤) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (ê³ ì •) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (ê³ ì •)
 			end
-			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (°¡º¯) [6]
+			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (ê°€ë³€) [6]
 			-------- Preset Limit --------------------------------
 			CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 			CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -306,23 +326,23 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 				table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 			end
 			if type(Preset[1]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (°íÁ¤) [1]
+				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (ê³ ì •) [1]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (ê³ ì •)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (°¡º¯) [2]
+			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (ê°€ë³€) [2]
 			if type(Preset[3]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (°íÁ¤) [3]
+				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (ê³ ì •) [3]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (ê³ ì •)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (°¡º¯) [4]
+			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (ê°€ë³€) [4]
 			if type(Preset[5]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (°íÁ¤) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (ê³ ì •) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (°íÁ¤)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (ê³ ì •)
 			end
-			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (°¡º¯) [6]
+			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (ê°€ë³€) [6]
 			-------- Preset Limit --------------------------------
 			CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 			CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -399,7 +419,7 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 				CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 				CAPlotVarAlloc = CAPlotVarAlloc + 7
 				if CXfunc ~= nil then
-					_G[CXfunc]() -- ZÁÂÇ¥´Â ¿©±â¼­ CX_ ÇÔ¼ö¿¡ ÀÇÇØ X,YÁÂÇ¥°ª¿¡ ¿µÇâÀ» ¹ÌÄ§
+					_G[CXfunc]() -- Zì¢Œí‘œëŠ” ì—¬ê¸°ì„œ CX_ í•¨ìˆ˜ì— ì˜í•´ X,Yì¢Œí‘œê°’ì— ì˜í–¥ì„ ë¯¸ì¹¨
 				end
 				NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 		-------------------------------------------------------------------------
@@ -422,7 +442,7 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 				CMov(PlayerID,LocD,V(CA[9]),PlotSize)
 				CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
 				if CXfunc2 ~= nil then
-					_G[CXfunc2]() -- ZÁÂÇ¥´Â ¿©±â¼­ CX_ ÇÔ¼ö¿¡ ÀÇÇØ X,YÁÂÇ¥°ª¿¡ ¿µÇâÀ» ¹ÌÄ§
+					_G[CXfunc2]() -- Zì¢Œí‘œëŠ” ì—¬ê¸°ì„œ CX_ í•¨ìˆ˜ì— ì˜í•´ X,Yì¢Œí‘œê°’ì— ì˜í–¥ì„ ë¯¸ì¹¨
 				end
 				if CenterXY == nil then
 					CMov(PlayerID,LocL,V(CA2[1]))
@@ -458,11 +478,11 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 	if DefaultAttackLoc == nil then
 		PushErrorMsg("G_CA_DefaultXY_InputData_Error")
 	end
-f_RepeatTypeErr = "\x07¡º \x08ERROR : \x04Àß¸øµÈ RepeatTypeÀÌ ÀÔ·ÂµÇ¾ú½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_RepeatErr = "\x07¡º \x08ERROR : \x04f_Repeat¿¡¼­ ¹®Á¦°¡ ¹ß»ıÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_RepeatErr2 = "\x07¡º \x08ERROR : \x04Set_Repeat¿¡¼­ Àß¸øµÈ UnitID(0)À» ÀÔ·Â¹Ş¾Ò½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-f_GunSendErrT = "\x07¡º \x08ERROR \x04: G_CA_SpawnSet ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-G_CA_PosErr = "\x07¡º \x03CAUCTION : \x04»ı¼º ÁÂÇ¥°¡ ¸Ê ¹ÛÀ» ¹ş¾î³µ½À´Ï´Ù.\x07 ¡»"
+f_RepeatTypeErr = "\x07ã€ \x08ERROR : \x04ì˜ëª»ëœ RepeatTypeì´ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_RepeatErr = "\x07ã€ \x08ERROR : \x04f_Repeatì—ì„œ ë¬¸ì œê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_RepeatErr2 = "\x07ã€ \x08ERROR : \x04Set_Repeatì—ì„œ ì˜ëª»ëœ UnitID(0)ì„ ì…ë ¥ë°›ì•˜ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+f_GunSendErrT = "\x07ã€ \x08ERROR \x04: G_CA_SpawnSet ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+G_CA_PosErr = "\x07ã€ \x03CAUCTION : \x04ìƒì„± ì¢Œí‘œê°€ ë§µ ë°–ì„ ë²—ì–´ë‚¬ìŠµë‹ˆë‹¤.\x07 ã€"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
@@ -1213,7 +1233,7 @@ function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
 
 end
 
-function SetBulletSpeed(Value,BreakDis) -- ¾ß¸¶Åä°Ç Flingy Speed
+function SetBulletSpeed(Value,BreakDis) -- ì•¼ë§ˆí† ê±´ Flingy Speed
 	if BreakDis ~= nil then
 		return {
 			SetMemory(0x6CA170, SetTo,0xFFFFFFFF-Value);

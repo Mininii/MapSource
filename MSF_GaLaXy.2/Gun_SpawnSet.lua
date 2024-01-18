@@ -11,14 +11,14 @@ function GunData()
 
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0),Gun_Line(0,Exactly,132)})
 			CDoActions(FP,{Gun_SetLine(4,Add,f_CRandNum(80,395))})
-			GunBreak("±‚¡ˆ \x18Lair \x04∏¶",20000,2)
+			GunBreak("Í∏∞ÏßÄ \x18Lair \x04Î•º",20000,2)
 			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 --			G_CA_SetSpawn(nil,{54},"ACAS",{"NBYD"})
 --			G_CA_SetSpawn(nil,{54},{S_5},{2})
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0),Gun_Line(0,Exactly,133)})
 			CDoActions(FP,{Gun_SetLine(4,Add,f_CRandNum(80,395))})
-			GunBreak("±‚¡ˆ \x18Hive \x04∏¶",30000,4)
+			GunBreak("Í∏∞ÏßÄ \x18Hive \x04Î•º",30000,4)
 			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 --			G_CA_SetSpawn(nil,{55},"ACAS",{"NBYD"})
 			G_CA_SetSpawn({CDeaths(FP, AtLeast, 3, GMode),Command(Force2,Exactly,0,"Stasis Cell/Prison")},{23,74,88},{P_6,S_3,P_3},{1,1,4},"MAX",nil,nil,{3776,3808})
@@ -37,48 +37,21 @@ function GunData()
 		CDoActions(FP,{TSetMemory(_Add(CurLoc,EPDF(0x58DC6C + (20*(189-64)))),SetTo,_Add(Var_TempTable[3],32*9))})
 		
 		
-		CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",2),nil,SetTo,CurLoc2)})
-		CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",3),nil,SetTo,CurLoc2)})
-		CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",2),nil,SetTo,CurLoc2)})
-		CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",3),nil,SetTo,CurLoc2)})
-		CDoActions(FP,{TSetCtrig1X("X",0x582,CAddr("CMask",2),nil,SetTo,CurLoc2)})
-	
-		Trigger { -- No comment (00F60EE3)
-			players = {FP},
-			conditions = {
-				Label(0x580);
-				Bring(Force2, AtLeast, 6, "Men", 1);
-				Bring(Force1, AtMost, 2, "Men", 1);
-			},
-			actions = {
-				SetCVar(FP,PaneltyPoint[2],Add,1);
-				PreserveTrigger();
-			},
-			}
-		Trigger { -- No comment (00F60EE3)
-			players = {FP},
-			conditions = {
-				Label(0x581);
-				Bring(Force2, AtLeast, 6, "Men", 1);
-				Bring(Force1, AtLeast, 3, "Men", 1);
-			},
-			actions = {
-				SetCDeaths(FP,Add,1,BonusP);
-				PreserveTrigger();
-			},
-			}
-		Trigger { -- No comment (00F60EE3)
-			players = {FP},
-			conditions = {
-				Label(0x582);
-				Bring(Force2, AtMost, 5, "Men", 1);
-			},
-			actions = {
-				SetCDeaths(FP,Add,1,BonusP);
-				PreserveTrigger();
-			},
-			}
+		--CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+		--CDoActions(FP,{TSetCtrig1X("X",0x580,CAddr("CMask",3),nil,SetTo,CurLoc2)})
+		--CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+		--CDoActions(FP,{TSetCtrig1X("X",0x581,CAddr("CMask",3),nil,SetTo,CurLoc2)})
+		--CDoActions(FP,{TSetCtrig1X("X",0x582,CAddr("CMask",2),nil,SetTo,CurLoc2)})
+		CIfX(FP,{TBring(Force2, AtLeast, 6, "Men", CurLoc2)})
+		CTrigger(FP, {TBring(Force1, AtMost, 2, "Men", CurLoc2);TBring(Force1, AtMost, 0, 12, CurLoc2);TBring(Force1, AtMost, 0, 60, CurLoc2);}, {
+			SetCVar(FP,PaneltyPoint[2],Add,1);
+		},1)
+		CTrigger(FP, {TTOR({_TBring(Force1, AtLeast, 2+1, "Men", CurLoc2);_TBring(Force1, AtLeast, 0+1, 12, CurLoc2);_TBring(Force1, AtLeast, 0+1, 60, CurLoc2);})}, {
+			SetCDeaths(FP,Add,1,BonusP);
+		},1)
 
+		CElseX({SetCDeaths(FP,Add,1,BonusP);})
+		CIfXEnd()
 
 
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
@@ -114,10 +87,10 @@ function GunData()
 				UnitIDV2Table = {78,19,79,81,66,52,50,25}
 				for i = 1, 8 do
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i+1)},{
-						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV1Table[i]);-- ∑πæÓ
+						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV1Table[i]);-- Î†àÏñ¥
 					},{preserved})
 					TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i+1)},{
-						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV2Table[i]);-- «œ¿Ã∫Í
+						SetCVar(FP,UnitIDV2[2],SetTo,UnitIDV2Table[i]);-- ÌïòÏù¥Î∏å
 					},{preserved})
 				end
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(3,AtLeast,2),Gun_Line(3,AtMost,5)},{
@@ -142,16 +115,16 @@ function GunData()
 					},{preserved})
 				end
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,10)},{
-					SetCVar(FP,UnitIDV1[2],SetTo,27); -- ≥™∏”¡ˆ ∑πæÓ
+					SetCVar(FP,UnitIDV1[2],SetTo,27); -- ÎÇòÎ®∏ÏßÄ Î†àÏñ¥
 				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,10)},{
-					SetCVar(FP,UnitIDV1[2],SetTo,102); -- ø‹∞˚ «œ¿Ã∫Í
+					SetCVar(FP,UnitIDV1[2],SetTo,102); -- Ïô∏Í≥Ω ÌïòÏù¥Î∏å
 				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,11)},{
-					SetCVar(FP,UnitIDV1[2],SetTo,98); -- æ»¬  ∑πæÓ
+					SetCVar(FP,UnitIDV1[2],SetTo,98); -- ÏïàÏ™Ω Î†àÏñ¥
 				},{preserved})
 				TriggerX(FP,{Gun_Line(5,AtLeast,1),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,11)},{
-					SetCVar(FP,UnitIDV1[2],SetTo,29); -- æ»¬  «œ¿Ã∫Í
+					SetCVar(FP,UnitIDV1[2],SetTo,29); -- ÏïàÏ™Ω ÌïòÏù¥Î∏å
 				},{preserved})
 				local BreakCcode = CreateCcode()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,0,BreakCcode))
@@ -334,7 +307,7 @@ function GunData()
 	CIf(FP,Gun_Line(0,Exactly,216)) -- BdIndex Chrysalis
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,10)})
-			GunBreak("π¯µ•±‚ \x18Small Chrysalis \x04∏¶",45000,3)
+			GunBreak("Î≤àÎç∞Í∏∞ \x18Small Chrysalis \x04Î•º",45000,3)
 			Trigger2X(FP,{Switch(RandSwitch,Set)},{SetCDeaths(FP,Add,1,BGMType)},{preserved})
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,AtLeast,5),Gun_Line(5,AtMost,39)})
@@ -351,7 +324,7 @@ function GunData()
 	CIfEnd()
 	CIf(FP,Gun_Line(0,Exactly,190)) -- BdIndex Core of Galaxy
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
-			GunBreak("Ω…√˛∫Œ \x18Core of Galaxy \x04∏¶",111111,6)
+			GunBreak("Ïã¨Ï∏µÎ∂Ä \x18Core of Galaxy \x04Î•º",111111,6)
 		CIfEnd()
 		local DisGunUnitID = {21,80,28,86,98,27,88}
 		for i = 0, #DisGunUnitID - 1 do
@@ -368,15 +341,15 @@ function GunData()
 			}
 		end
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtMost,0)},{
-			SetMemory(0x6CA010, SetTo, 1707);--πË∆≤
-			SetMemory(0x6C9F8C, SetTo, 1707);--æ∆∫Ò≈Õ
-			SetMemory(0x6C9FA4, SetTo, 1707);--Ω∫ƒ´øÙ
+			SetMemory(0x6CA010, SetTo, 1707);--Î∞∞ÌãÄ
+			SetMemory(0x6C9F8C, SetTo, 1707);--ÏïÑÎπÑÌÑ∞
+			SetMemory(0x6C9FA4, SetTo, 1707);--Ïä§Ïπ¥ÏõÉ
 		
 		},{preserved})
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			SetMemory(0x6CA010, SetTo, 20000);--πË∆≤
-			SetMemory(0x6C9F8C, SetTo, 20000);--æ∆∫Ò≈Õ
-			SetMemory(0x6C9FA4, SetTo, 20000);--Ω∫ƒ´øÙ
+			SetMemory(0x6CA010, SetTo, 20000);--Î∞∞ÌãÄ
+			SetMemory(0x6C9F8C, SetTo, 20000);--ÏïÑÎπÑÌÑ∞
+			SetMemory(0x6C9FA4, SetTo, 20000);--Ïä§Ïπ¥ÏõÉ
 		},{preserved})
 
 		CTrigger(FP,{Gun_Line(4,AtLeast,1)},{Gun_SetLine(4,SetTo,0),Gun_SetLine(3,Add,1)},1)
@@ -432,15 +405,15 @@ function GunData()
 		CTrigger(FP,{CDeaths(FP,AtLeast,3,GMode)},{Gun_SetLine(3,SetTo,2)},1)
 		
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtMost,0)},{
-			SetMemory(0x6CA010, SetTo, 640);--πË∆≤
-			SetMemory(0x6C9F8C, SetTo, 1280);--æ∆∫Ò≈Õ
-			SetMemory(0x6C9FA4, SetTo, 1280);--Ω∫ƒ´øÙ
+			SetMemory(0x6CA010, SetTo, 640);--Î∞∞ÌãÄ
+			SetMemory(0x6C9F8C, SetTo, 1280);--ÏïÑÎπÑÌÑ∞
+			SetMemory(0x6C9FA4, SetTo, 1280);--Ïä§Ïπ¥ÏõÉ
 		
 		},{preserved})
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			SetMemory(0x6CA010, SetTo, 20000);--πË∆≤
-			SetMemory(0x6C9F8C, SetTo, 20000);--æ∆∫Ò≈Õ
-			SetMemory(0x6C9FA4, SetTo, 20000);--Ω∫ƒ´øÙ
+			SetMemory(0x6CA010, SetTo, 20000);--Î∞∞ÌãÄ
+			SetMemory(0x6C9F8C, SetTo, 20000);--ÏïÑÎπÑÌÑ∞
+			SetMemory(0x6C9FA4, SetTo, 20000);--Ïä§Ïπ¥ÏõÉ
 		
 		},{preserved})
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(5,AtLeast,(#DisGunUnitID)),},{
@@ -457,7 +430,7 @@ function GunData()
 			G_CA_SetSpawn({CGMode(2)},{25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
 			G_CA_SetSpawn({CGMode(3)},{84,84,84,84},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
 			G_CA_SetSpawn({CGMode(3)},{25,25,25,25},"ACAS",{"Chry_1","Chry_2","Chry_3","Chry_4"},1,nil,nil,{0,0})
-			GunBreak("∫Ú! «— \x18Monster Kraken! \x04¿ª",222222,6)
+			GunBreak("ÎπÖ! Ìïú \x18Monster Kraken! \x04ÏùÑ",222222,6)
 		CIfEnd()
 		CTrigger(FP,{CGMode(1)},{Gun_SetLine(4,Add,35)},1)
 		CTrigger(FP,{CGMode(2)},{Gun_SetLine(4,Add,23)},1)
@@ -523,7 +496,7 @@ function GunData()
 		CIfEnd()
 
 		TriggerX(FP,{CVar(FP,HondonMode[2],AtLeast,1)},{
-			SetMemory(0x6CA010, SetTo, 20000);--πË∆≤
+			SetMemory(0x6CA010, SetTo, 20000);--Î∞∞ÌãÄ
 		
 		},{preserved})
 		CTrigger(FP,{Gun_Line(54,AtMost,0),Gun_Line(4,AtLeast,1100),},{Gun_DoSuspend(),SetCDeaths(FP,Add,1,SPGunCond)},1)
@@ -535,13 +508,13 @@ function GunData()
 
 	CIf(FP,TTOR({Gun_Line(0,Exactly,156),Gun_Line(0,Exactly,109),Gun_Line(0,Exactly,173)})) -- BdIndex Pylon Supply Formation
 		CIf(FP,{Gun_Line(0,Exactly,156),Gun_Line(4,Exactly,0)})
-			GunBreak("ºˆ¡§≈æ \x18Pylon \x04¿ª",100000,8)
+			GunBreak("ÏàòÏ†ïÌÉë \x18Pylon \x04ÏùÑ",100000,8)
 		CIfEnd()
 		CIf(FP,{Gun_Line(0,Exactly,109),Gun_Line(4,Exactly,0)})
-			GunBreak("∫∏±ﬁ∞Ì \x18Supply \x04∏¶",100000,8)
+			GunBreak("Î≥¥Í∏âÍ≥† \x18Supply \x04Î•º",100000,8)
 		CIfEnd()
 		CIf(FP,{Gun_Line(0,Exactly,173),Gun_Line(4,Exactly,0)})
-			GunBreak("ºˆ¡§ ¡˝«’√º \x18Formation \x04¿ª",300000,6)
+			GunBreak("ÏàòÏ†ï ÏßëÌï©Ï≤¥ \x18Formation \x04ÏùÑ",300000,6)
 		CIfEnd()
 		CTrigger(FP,{Gun_Line(4,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,1830)},1)
 		CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(5,Add,1)},1)
@@ -690,7 +663,7 @@ function GunData()
 	CIfEnd()
 	CIf(FP,{Gun_Line(0,Exactly,201)}) -- BdIndex Cocoon
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
-			GunBreak("∞≈¥Î ∞Ìƒ° \x18Overmind Cocoon \x04¿ª",300000,8)
+			GunBreak("Í±∞ÎåÄ Í≥†Ïπò \x18Overmind Cocoon \x04ÏùÑ",300000,8)
 			DoActions(FP,{
 				Simple_CalcLoc(0,-32*8,-32*8,32*8,32*8),
 				KillUnitAt(All,"Sunken Colony",1,Force2);
@@ -853,7 +826,7 @@ function GunData()
 	CIfEnd()
 	CIf(FP,{Gun_Line(0,Exactly,175)}) -- BdIndex Xel'Naga
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
-			GunBreak("ªÁø¯ \x18Xel'Naga \x04∏¶",255555,8)
+			GunBreak("ÏÇ¨Ïõê \x18Xel'Naga \x04Î•º",255555,8)
 		CIfEnd()
 
 		for i =0, 5 do
@@ -884,7 +857,7 @@ function GunData()
 	CIfEnd()
 	CIf(FP,{Gun_Line(0,Exactly,152)}) -- BdIndex Daggoth
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
-			GunBreak("øœ¿¸√º \x18DaGGoTh \x04∏¶",150000,8)
+			GunBreak("ÏôÑÏ†ÑÏ≤¥ \x18DaGGoTh \x04Î•º",150000,8)
 		CIfEnd()
 		local CurTime = CreateVar(FP)
 		local CurTime2 = CreateVar(FP)
@@ -943,7 +916,7 @@ function GunData()
 	CIf(FP,{Gun_Line(0,Exactly,151)}) -- BdIndex Cerebrate
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("¡§Ω≈√º \x18Cerebrate \x04∏¶",200000,8)
+			GunBreak("Ï†ïÏã†Ï≤¥ \x18Cerebrate \x04Î•º",200000,8)
 		CIfEnd()
 		DisPos = {4000,2240}
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
@@ -990,7 +963,7 @@ function GunData()
 	CIf(FP,{Gun_Line(0,Exactly,148)}) -- BdIndex Overmind
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("√ ø˘√º \x18OverMind \x04∏¶",100000,6)
+			GunBreak("Ï¥àÏõîÏ≤¥ \x18OverMind \x04Î•º",100000,6)
 		CIfEnd()
 
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
@@ -1026,7 +999,7 @@ function GunData()
 	CIf(FP,{Gun_Line(0,Exactly,150)}) -- BdIndex Overmind
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("∫Ú! «— \x18Large Chrysalis \x04∏¶",50000,4)
+			GunBreak("ÎπÖ! Ìïú \x18Large Chrysalis \x04Î•º",50000,4)
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
 			G_CA_SetSpawn({CGMode(1)},{25},"ACAS",{"Chry_N","Chry_N","Chry_N"},{1,255,1},190)
@@ -1040,7 +1013,7 @@ function GunData()
 	CIf(FP,{Gun_Line(0,Exactly,154)}) -- BdIndex Nexus
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 		CDoActions(FP,{Gun_SetLine(3,Add,1),Gun_SetLine(6,Add,32*4)})
-			GunBreak("ø¨∞·√º \x18Nexus \x04∏¶",200000,8)
+			GunBreak("Ïó∞Í≤∞Ï≤¥ \x18Nexus \x04Î•º",200000,8)
 			DoActions(FP,CopyCpAction({RunAIScript("Turn ON Shared Vision for Player 7")},MapPlayers,FP))
 		CIfEnd()
 		CTrigger(FP,{Gun_Line(4,Exactly,500)},{Gun_SetLine(3,Add,1)})
@@ -1075,7 +1048,7 @@ function GunData()
 	CIf(FP,{Gun_Line(0,Exactly,200)}) -- BdIndex Generator
 		CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(3,Add,1),Gun_SetLine(6,Add,32*4)})
-			GunBreak("πﬂ¿¸º“ \x18Generator \x04∏¶",200000,8)
+			GunBreak("Î∞úÏ†ÑÏÜå \x18Generator \x04Î•º",200000,8)
 			DoActions(FP,CopyCpAction({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP))
 		CIfEnd()
 		CTrigger(FP,{Gun_Line(4,Exactly,500)},{Gun_SetLine(3,Add,1)})
@@ -1132,7 +1105,7 @@ function GunData()
 	CIfEnd()
 
 --	CIf(FP,{Gun_Line(3,Exactly,0),Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
---		GunBreak("Ω…√˛∫Œ \x18Core of Galaxy \x04∏¶",333333,6)
+--		GunBreak("Ïã¨Ï∏µÎ∂Ä \x18Core of Galaxy \x04Î•º",333333,6)
 --	CIfEnd()
 	CDoActions(FP,{Gun_SetLine(4,Add,1)})
 	CIf(FP,{Gun_Line(54,AtLeast,1),}) -- SuspendCode
