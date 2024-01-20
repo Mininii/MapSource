@@ -1116,10 +1116,9 @@ function GunData()
 			CAdd(FP,G_TempW,0x20/4)
 		CWhileEnd()
 		if Limit == 1 then
-			ItoDec(FP,f_GunNum,VArr(f_GunNumT,0),2,0x1F,0)
-			_0DPatchX(FP,f_GunNumT,5)
-			f_Movcpy(FP,_Add(f_GunStrPtr,f_GunT[2]),VArr(f_GunNumT,0),5*4)
-			DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_Gun".._0D,4)},HumanPlayers,FP)})
+			
+
+			DisplayPrint(HumanPlayers, {"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ",f_GunNum," \x07』"})
 		end
 	CIfEnd()
 

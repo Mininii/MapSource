@@ -9,6 +9,7 @@ function onInit()
 	SpeedV = {0x2A,0x24,0x20,0x1D,0x19,0x15,0x11,0xC,0x8,0x4,0x1}
 	GiveRate2 = {1000, 5000, 10000, 50000, 100000,500000} 
 	Player = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6"}
+	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
 	Color = {"\x08","\x0E","\x0F","\x10","\x11","\x15"}
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15}
 	Marine = {}
@@ -53,15 +54,15 @@ function onInit()
 		table.insert(ButtonSetPatch2,SetMemoryW(0x65FD00 + (ButtonSetArr[i]*2), SetTo, 0))
 	end
 	
-
-	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
 	f_GunErrT = "\x07『 \x08ERROR \x04: G_CAPlot Not Found. \x07』"
 	f_GunFuncT = "\x07『 \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07』"
-	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
-	f_GunSendT2 = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	G_SendErrT = "\x07『 \x08ERROR : \x04f_Gun의 목록이 가득 차 G_Send를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	f_ReplaceErrT = "\x07『 \x08ERROR : \x04캔낫으로 인해 f_Replace를 실행할 수 없습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
 	CBulletErrT = "\x07『 \x08ERROR \x04: CreateBullet_EPD 목록이 가득 차 데이터를 입력하지 못했습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』"
+
+	f_GunT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_Gun Suspend 성공. f_Gun 실행자 : ")
+	f_GunSendT = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ")
+	f_GunSendT2 = CreateCText(FP,"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ")
 	SuText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06100\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	QuaText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x06500\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
 	TeText = CreateCText(FP,"\x0d\x0d\x0d\x04의 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ \x04가 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \x02◆\n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x065\x04)\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
@@ -438,6 +439,7 @@ function SetZergGroupFlags(UnitID)
 	RepY = CreateVar()
 	RepY = CreateVar()
 	HondonMode = CreateVar()
+	AtkSpeedMode = CreateVar()
 	DBossPlaguePatch = CreateVar()
 	HiddenHP = CreateVar()
 	HiddenATK = CreateVar()
@@ -529,6 +531,7 @@ function SetZergGroupFlags(UnitID)
 	OverCocooncomp = CreateCcode()
 	CanOut = CreateCcode()
 	ToggleHondon = CreateCcode()
+	ToggleAtkSp = CreateCcode()
 	ZombieCheck = CreateCcode()
 	Die_SEC = CreateCcode()
 	SoundLimitT = CreateCcode()

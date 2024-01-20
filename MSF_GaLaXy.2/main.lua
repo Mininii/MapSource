@@ -444,7 +444,6 @@ ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
 _0DPatchforVArr(FP,Names[i+1],6)
 end
 f_GetStrXptr(FP,HeroTxtStrPtr,"\x0D\x0D\x0DHK".._0D)
-f_GetStrXptr(FP,UPCompStrPtr,"\x0D\x0D\x0DUPC".._0D)
 f_GetStrXptr(FP,f_GunSendStrPtr,"\x0D\x0D\x0Df_GunSend".._0D)
 f_GetStrXptr(FP,f_GunStrPtr,"\x0D\x0D\x0Df_Gun".._0D)
 f_GetStrXptr(FP,HiddenModeStrPtr,"HD".._0D)
@@ -476,8 +475,6 @@ t18 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x13\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 t19 = "\x0d\x0d\x0d\x0d\x0d\x0d\x13\x15▶ ▶ ▶ [\x04 \x0d\x0d\x0d\x0d\x0d\x0d"
 t20 = "\x0d\x0d\x0d\x0d\x0d\x0d \x11사살\x10 +\x17 \x0d\x0d\x0d\x0d\x0d\x0d"
 t21 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d P t s \x15] \x15◀ ◀ ◀\x0d\x0d\x0d\x0d\x0d\x0d"
-t22 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 미네랄을 소비하여 총 \x0d\x0d\x0d\x0d\x0d\x0d"
-t23 = "\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x04 \x04회 업그레이드를 완료하였습니다. \x07』\x0d\x0d\x0d\x0d\x0d\x0d"
 
 t24 = "현재 선택가능 플레이어는...\x0d\x0d\x0d\x0d\x0d"
 t25 = {
@@ -537,8 +534,6 @@ Print_String(FP,_TMem(Arr(Str18,0)),t18,0)
 Print_String(FP,_TMem(Arr(Str19,0)),t19,0)
 Print_String(FP,_TMem(Arr(Str20,0)),t20,0)
 Print_String(FP,_TMem(Arr(Str21,0)),t21,0)
-Print_String(FP,_TMem(Arr(Str22,0)),t22,0)
-Print_String(FP,_TMem(Arr(Str23,0)),t23,0)
 Print_String(FP,_TMem(Arr(Str24,0)),t24,0)
 
 Str25L = {}
@@ -577,8 +572,6 @@ Str18L = GetStrSizeD(0,t18)
 Str19L = GetStrSizeD(0,t19)
 Str20L = GetStrSizeD(0,t20)
 Str21L = GetStrSizeD(0,t21)
-Str22L = GetStrSizeD(0,t22)
-Str23L = GetStrSizeD(0,t23)
 Str24L = GetStrSizeD(0,t24)
 for i = 0, 5 do
 t03 = "\x0d\x0d\x0d\x04의 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy "..Color[i+1].."M\x16arine\x04이 \x1C우주\x04의 \x15먼지\x04로 돌아갔습니다.. \n\x12\x04(\x08Death \x10C\x0Fount \x04+ \x061\x04)\x02◆\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
@@ -623,11 +616,6 @@ f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19L-3+0x20),_TMem(Arr(Str20,0),"X","X",1),Str2
 --ItoDec(FP,HPoint,_TMem(Arr(HPointT,0),"X","X",1),2,0x1F,0)
 --f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19L+0x20+Str20L),_TMem(Arr(HPointT,0),"X","X",1),16)
 f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19L-3+0x20+Str20L-3+16),_TMem(Arr(Str21,0),"X","X",1),Str21L-3)
-f_Memcpy(FP,UPCompStrPtr,_TMem(Arr(Str12,0),"X","X",1),Str12L-3)
---f_Memcpy(FP,_Add(UPCompStrPtr,Str12L-3),_TMem(Arr(UpCompTxt,0),"X","X",1),5*4)
-f_Memcpy(FP,_Add(UPCompStrPtr,Str12L-3+20),_TMem(Arr(Str22,0),"X","X",1),Str22L-3)
---f_Memcpy(FP,_Add(UPCompStrPtr,Str12L-3+20+Str22L-3),_TMem(Arr(UpCompRet,0),"X","X",1),5*4)
-f_Memcpy(FP,_Add(UPCompStrPtr,Str12L-3+20+Str22L-3+20),_TMem(Arr(Str23,0),"X","X",1),Str23L-3)
 --f_Read(FP,0x6559A8,InfArmorFactor,"X",0xFFFF)
 f_Read(FP,0x6559A8,InfArmorFactor,"X",0xFFFF)
 --f_Read(FP,,InfWeaponFactor,"X",0xFFFF0000)
@@ -658,1104 +646,9 @@ f_Div(FP,InfWeaponFactor,65536)
 --table.insert(tab,print_utf82(0x591000+(0x20*i),DecodeUnit(i)))
 --end
 --DoActions2(P8,tab)
+UnitNameTrig()
 
 
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591000, SetTo, 0x6972614D);
-		SetMemory(0x591004, SetTo, 0x0000656E);
-		SetMemory(0x591020, SetTo, 0xEC8C85ED);
-		SetMemory(0x591024, SetTo, 0x8AEDA48A);
-		SetMemory(0x591028, SetTo, 0xA0B3EAB8);
-		SetMemory(0x59102C, SetTo, 0xEDA48AEC);
-		SetMemory(0x591030, SetTo, 0x0000B88A);
-		SetMemory(0x591040, SetTo, 0x72726554);
-		SetMemory(0x591044, SetTo, 0x56206E61);
-		SetMemory(0x591048, SetTo, 0x75746C75);
-		SetMemory(0x59104C, SetTo, 0x00006572);
-		SetMemory(0x591060, SetTo, 0x656C6142);
-		SetMemory(0x591064, SetTo, 0x00007378);
-		SetMemory(0x591080, SetTo, 0x696C6F47);
-		SetMemory(0x591084, SetTo, 0x20687461);
-		SetMemory(0x591088, SetTo, 0x72727554);
-		SetMemory(0x59108C, SetTo, 0x00007465);
-		SetMemory(0x5910A0, SetTo, 0xEFA3BCEF);
-		SetMemory(0x5910A4, SetTo, 0xBDEF81BD);
-		SetMemory(0x5910A8, SetTo, 0x83BDEF8C);
-		SetMemory(0x5910AC, SetTo, 0xEF95BDEF);
-		SetMemory(0x5910B0, SetTo, 0xBDEF8CBD);
-		SetMemory(0x5910B4, SetTo, 0x94BDEF81);
-		SetMemory(0x5910B8, SetTo, 0xEF8FBDEF);
-		SetMemory(0x5910BC, SetTo, 0x0000B2BC);
-		SetMemory(0x5910C0, SetTo, 0x6B6E6154);
-		SetMemory(0x5910C4, SetTo, 0x72755420);
-		SetMemory(0x5910C8, SetTo, 0x20746572);
-		SetMemory(0x5910CC, SetTo, 0x65707974);
-		SetMemory(0x5910D0, SetTo, 0x31202020);
-		SetMemory(0x5910D4, SetTo, 0x00000000);
-		SetMemory(0x5910E0, SetTo, 0x00564353);
-		SetMemory(0x591100, SetTo, 0x69617257);
-		SetMemory(0x591104, SetTo, 0x00006874);
-		SetMemory(0x591120, SetTo, 0x72726554);
-		SetMemory(0x591124, SetTo, 0x53206E61);
-		SetMemory(0x591128, SetTo, 0x6E656963);
-		SetMemory(0x59112C, SetTo, 0x56206563);
-		SetMemory(0x591130, SetTo, 0x65737365);
-		SetMemory(0x591134, SetTo, 0x0000006C);
-		SetMemory(0x591140, SetTo, 0x20697547);
-		SetMemory(0x591144, SetTo, 0x746E6F4D);
-		SetMemory(0x591148, SetTo, 0x00006761);
-		SetMemory(0x591160, SetTo, 0xEFA4BCEF);
-		SetMemory(0x591164, SetTo, 0xBDEF92BD);
-		SetMemory(0x591168, SetTo, 0x90BDEF8F);
-		SetMemory(0x59116C, SetTo, 0xEFA4BCEF);
-		SetMemory(0x591170, SetTo, 0xBDEF85BD);
-		SetMemory(0x591174, SetTo, 0x84BDEF81);
-		SetMemory(0x591178, SetTo, 0x00000000);
-		SetMemory(0x591180, SetTo, 0x72726554);
-		SetMemory(0x591184, SetTo, 0x42206E61);
-		SetMemory(0x591188, SetTo, 0x6C747461);
-		SetMemory(0x59118C, SetTo, 0x75726365);
-		SetMemory(0x591190, SetTo, 0x72657369);
-		SetMemory(0x591194, SetTo, 0x00000000);
-		SetMemory(0x5911A0, SetTo, 0x746C7556);
-		SetMemory(0x5911A4, SetTo, 0x20657275);
-		SetMemory(0x5911A8, SetTo, 0x64697053);
-		SetMemory(0x5911AC, SetTo, 0x4D207265);
-		SetMemory(0x5911B0, SetTo, 0x00656E69);
-		SetMemory(0x5911C0, SetTo, 0x6C63754E);
-		SetMemory(0x5911C4, SetTo, 0x20726165);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x5911C8, SetTo, 0x7373694D);
-		SetMemory(0x5911CC, SetTo, 0x00656C69);
-		SetMemory(0x5911E0, SetTo, 0x69766943);
-		SetMemory(0x5911E4, SetTo, 0x6E61696C);
-		SetMemory(0x5911E8, SetTo, 0x00000000);
-		SetMemory(0x591200, SetTo, 0xEFAEBCEF);
-		SetMemory(0x591204, SetTo, 0xBCEFA5BC);
-		SetMemory(0x591208, SetTo, 0xB5BCEFA2);
-		SetMemory(0x59120C, SetTo, 0xEFACBCEF);
-		SetMemory(0x591210, SetTo, 0x0000A1BC);
-		SetMemory(0x591220, SetTo, 0x6E616C41);
-		SetMemory(0x591224, SetTo, 0x68635320);
-		SetMemory(0x591228, SetTo, 0x72617A65);
-		SetMemory(0x59122C, SetTo, 0x00000000);
-		SetMemory(0x591240, SetTo, 0x6E616C41);
-		SetMemory(0x591244, SetTo, 0x72755420);
-		SetMemory(0x591248, SetTo, 0x00746572);
-		SetMemory(0x591260, SetTo, 0x206D694A);
-		SetMemory(0x591264, SetTo, 0x6E796152);
-		SetMemory(0x591268, SetTo, 0x5620726F);
-		SetMemory(0x59126C, SetTo, 0x75746C75);
-		SetMemory(0x591270, SetTo, 0x00006572);
-		SetMemory(0x591280, SetTo, 0x614D2048);
-		SetMemory(0x591284, SetTo, 0x656E6972);
-		SetMemory(0x591288, SetTo, 0x00000000);
-		SetMemory(0x5912A0, SetTo, 0x206D6F54);
-		SetMemory(0x5912A4, SetTo, 0x617A614B);
-		SetMemory(0x5912A8, SetTo, 0x796B736E);
-		SetMemory(0x5912AC, SetTo, 0x00000000);
-		SetMemory(0x5912C0, SetTo, 0x6567614D);
-		SetMemory(0x5912C4, SetTo, 0x6E616C6C);
-		SetMemory(0x5912C8, SetTo, 0x63532820);
-		SetMemory(0x5912CC, SetTo, 0x636E6569);
-		SetMemory(0x5912D0, SetTo, 0x65562065);
-		SetMemory(0x5912D4, SetTo, 0x6C657373);
-		SetMemory(0x5912D8, SetTo, 0x00000029);
-		SetMemory(0x5912E0, SetTo, 0x756D6445);
-		SetMemory(0x5912E4, SetTo, 0x4420646E);
-		SetMemory(0x5912E8, SetTo, 0x20656B75);
-		SetMemory(0x5912EC, SetTo, 0x00000047);
-		SetMemory(0x591300, SetTo, 0x656B7544);
-		SetMemory(0x591304, SetTo, 0x72755420);
-		SetMemory(0x591308, SetTo, 0x20746572);
-		SetMemory(0x59130C, SetTo, 0x65707974);
-		SetMemory(0x591310, SetTo, 0x31202020);
-		SetMemory(0x591314, SetTo, 0x00000000);
-		SetMemory(0x591320, SetTo, 0x756D6445);
-		SetMemory(0x591324, SetTo, 0x4420646E);
-		SetMemory(0x591328, SetTo, 0x20656B75);
-		SetMemory(0x59132C, SetTo, 0x00000053);
-		SetMemory(0x591340, SetTo, 0x656B7544);
-		SetMemory(0x591344, SetTo, 0x72755420);
-		SetMemory(0x591348, SetTo, 0x20746572);
-		SetMemory(0x59134C, SetTo, 0x65707974);
-		SetMemory(0x591350, SetTo, 0x32202020);
-		SetMemory(0x591354, SetTo, 0x00000000);
-		SetMemory(0x591360, SetTo, 0x74637241);
-		SetMemory(0x591364, SetTo, 0x73757275);
-		SetMemory(0x591368, SetTo, 0x6E654D20);
-		SetMemory(0x59136C, SetTo, 0x006B7367);
-		SetMemory(0x591380, SetTo, 0x65707948);
-		SetMemory(0x591384, SetTo, 0x6E6F6972);
-		SetMemory(0x591388, SetTo, 0x00000000);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x5913A0, SetTo, 0x61726F4E);
-		SetMemory(0x5913A4, SetTo, 0x49492064);
-		SetMemory(0x5913A8, SetTo, 0x00000000);
-		SetMemory(0x5913C0, SetTo, 0x72726554);
-		SetMemory(0x5913C4, SetTo, 0x53206E61);
-		SetMemory(0x5913C8, SetTo, 0x65676569);
-		SetMemory(0x5913CC, SetTo, 0x6E615420);
-		SetMemory(0x5913D0, SetTo, 0x5328206B);
-		SetMemory(0x5913D4, SetTo, 0x65676569);
-		SetMemory(0x5913D8, SetTo, 0x646F4D20);
-		SetMemory(0x5913DC, SetTo, 0x00002965);
-		SetMemory(0x5913E0, SetTo, 0x6B6E6154);
-		SetMemory(0x5913E4, SetTo, 0x72755420);
-		SetMemory(0x5913E8, SetTo, 0x20746572);
-		SetMemory(0x5913EC, SetTo, 0x65707974);
-		SetMemory(0x5913F0, SetTo, 0x32202020);
-		SetMemory(0x5913F4, SetTo, 0x00000000);
-		SetMemory(0x591400, SetTo, 0x65726946);
-		SetMemory(0x591404, SetTo, 0x00746162);
-		SetMemory(0x591420, SetTo, 0x6E616353);
-		SetMemory(0x591424, SetTo, 0x2072656E);
-		SetMemory(0x591428, SetTo, 0x65657753);
-		SetMemory(0x59142C, SetTo, 0x00000070);
-		SetMemory(0x591440, SetTo, 0x72726554);
-		SetMemory(0x591444, SetTo, 0x4D206E61);
-		SetMemory(0x591448, SetTo, 0x63696465);
-		SetMemory(0x59144C, SetTo, 0x00000000);
-		SetMemory(0x591460, SetTo, 0x7672614C);
-		SetMemory(0x591464, SetTo, 0x00000061);
-		SetMemory(0x591480, SetTo, 0x00676745);
-		SetMemory(0x5914A0, SetTo, 0x6772655A);
-		SetMemory(0x5914A4, SetTo, 0x676E696C);
-		SetMemory(0x5914A8, SetTo, 0x00000000);
-		SetMemory(0x5914C0, SetTo, 0x72647948);
-		SetMemory(0x5914C4, SetTo, 0x73696C61);
-		SetMemory(0x5914C8, SetTo, 0x0000006B);
-		SetMemory(0x5914E0, SetTo, 0x72746C55);
-		SetMemory(0x5914E4, SetTo, 0x73696C61);
-		SetMemory(0x5914E8, SetTo, 0x0000006B);
-		SetMemory(0x591500, SetTo, 0x6F6F7242);
-		SetMemory(0x591504, SetTo, 0x6E696C64);
-		SetMemory(0x591508, SetTo, 0x00000067);
-		SetMemory(0x591520, SetTo, 0x6E6F7244);
-		SetMemory(0x591524, SetTo, 0x00000065);
-		SetMemory(0x591540, SetTo, 0x7265764F);
-		SetMemory(0x591544, SetTo, 0x64726F6C);
-		SetMemory(0x591548, SetTo, 0x00000000);
-		SetMemory(0x591560, SetTo, 0x6174754D);
-		SetMemory(0x591564, SetTo, 0x6B73696C);
-		SetMemory(0x591568, SetTo, 0x00000000);
-		SetMemory(0x591580, SetTo, 0x72617547);
-		SetMemory(0x591584, SetTo, 0x6E616964);
-		SetMemory(0x591588, SetTo, 0x00000000);
-		SetMemory(0x5915A0, SetTo, 0x65657551);
-		SetMemory(0x5915A4, SetTo, 0x0000006E);
-		SetMemory(0x5915C0, SetTo, 0x69666544);
-		SetMemory(0x5915C4, SetTo, 0x0072656C);
-		SetMemory(0x5915E0, SetTo, 0x756F6353);
-		SetMemory(0x5915E4, SetTo, 0x00656772);
-		SetMemory(0x591600, SetTo, 0x72726F54);
-		SetMemory(0x591604, SetTo, 0x75717361);
-		SetMemory(0x591608, SetTo, 0x00000065);
-		SetMemory(0x591620, SetTo, 0x7274614D);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591624, SetTo, 0x63726169);
-		SetMemory(0x591628, SetTo, 0x51282068);
-		SetMemory(0x59162C, SetTo, 0x6E656575);
-		SetMemory(0x591630, SetTo, 0x00000029);
-		SetMemory(0x591640, SetTo, 0x65666E49);
-		SetMemory(0x591644, SetTo, 0x64657473);
-		SetMemory(0x591648, SetTo, 0x72655420);
-		SetMemory(0x59164C, SetTo, 0x006E6172);
-		SetMemory(0x591660, SetTo, 0x65666E49);
-		SetMemory(0x591664, SetTo, 0x64657473);
-		SetMemory(0x591668, SetTo, 0x72654B20);
-		SetMemory(0x59166C, SetTo, 0x61676972);
-		SetMemory(0x591670, SetTo, 0x0000006E);
-		SetMemory(0x591680, SetTo, 0x6C636E55);
-		SetMemory(0x591684, SetTo, 0x006E6165);
-		SetMemory(0x5916A0, SetTo, 0x746E7548);
-		SetMemory(0x5916A4, SetTo, 0x4B207265);
-		SetMemory(0x5916A8, SetTo, 0x656C6C69);
-		SetMemory(0x5916AC, SetTo, 0x00000072);
-		SetMemory(0x5916C0, SetTo, 0x6F766544);
-		SetMemory(0x5916C4, SetTo, 0x6E697275);
-		SetMemory(0x5916C8, SetTo, 0x6E4F2067);
-		SetMemory(0x5916CC, SetTo, 0x00000065);
-		SetMemory(0x5916E0, SetTo, 0x756B754B);
-		SetMemory(0x5916E4, SetTo, 0x20617A6C);
-		SetMemory(0x5916E8, SetTo, 0x6174754D);
-		SetMemory(0x5916EC, SetTo, 0x6B73696C);
-		SetMemory(0x5916F0, SetTo, 0x00000000);
-		SetMemory(0x591700, SetTo, 0x756B754B);
-		SetMemory(0x591704, SetTo, 0x20617A6C);
-		SetMemory(0x591708, SetTo, 0x72617547);
-		SetMemory(0x59170C, SetTo, 0x6E616964);
-		SetMemory(0x591710, SetTo, 0x00000000);
-		SetMemory(0x591720, SetTo, 0x7274614D);
-		SetMemory(0x591724, SetTo, 0x63726169);
-		SetMemory(0x591728, SetTo, 0x00000068);
-		SetMemory(0x591740, SetTo, 0x72726554);
-		SetMemory(0x591744, SetTo, 0x56206E61);
-		SetMemory(0x591748, SetTo, 0x796B6C61);
-		SetMemory(0x59174C, SetTo, 0x00656972);
-		SetMemory(0x591760, SetTo, 0x6F636F43);
-		SetMemory(0x591764, SetTo, 0x00006E6F);
-		SetMemory(0x591780, SetTo, 0x746F7250);
-		SetMemory(0x591784, SetTo, 0x2073736F);
-		SetMemory(0x591788, SetTo, 0x73726F43);
-		SetMemory(0x59178C, SetTo, 0x00726961);
-		SetMemory(0x5917A0, SetTo, 0x746F7250);
-		SetMemory(0x5917A4, SetTo, 0x2073736F);
-		SetMemory(0x5917A8, SetTo, 0x6B726144);
-		SetMemory(0x5917AC, SetTo, 0x6D655420);
-		SetMemory(0x5917B0, SetTo, 0x72616C70);
-		SetMemory(0x5917B4, SetTo, 0x00000000);
-		SetMemory(0x5917C0, SetTo, 0x6F766544);
-		SetMemory(0x5917C4, SetTo, 0x72657275);
-		SetMemory(0x5917C8, SetTo, 0x00000000);
-		SetMemory(0x5917E0, SetTo, 0x72726554);
-		SetMemory(0x5917E4, SetTo, 0x726F7469);
-		SetMemory(0x5917E8, SetTo, 0x69442079);
-		SetMemory(0x5917EC, SetTo, 0x6F736976);
-		SetMemory(0x5917F0, SetTo, 0x00000072);
-		SetMemory(0x591800, SetTo, 0x746F7250);
-		SetMemory(0x591804, SetTo, 0x2073736F);
-		SetMemory(0x591808, SetTo, 0x626F7250);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x59180C, SetTo, 0x00000065);
-		SetMemory(0x591820, SetTo, 0x6C61655A);
-		SetMemory(0x591824, SetTo, 0x0000746F);
-		SetMemory(0x591840, SetTo, 0x67617244);
-		SetMemory(0x591844, SetTo, 0x006E6F6F);
-		SetMemory(0x591860, SetTo, 0x706D6554);
-		SetMemory(0x591864, SetTo, 0x20747365);
-		SetMemory(0x591868, SetTo, 0x6E697242);
-		SetMemory(0x59186C, SetTo, 0x00726567);
-		SetMemory(0x591880, SetTo, 0x67756F4E);
-		SetMemory(0x591884, SetTo, 0x00007468);
-		SetMemory(0x5918A0, SetTo, 0x74756853);
-		SetMemory(0x5918A4, SetTo, 0x00656C74);
-		SetMemory(0x5918C0, SetTo, 0x756F6353);
-		SetMemory(0x5918C4, SetTo, 0x00000074);
-		SetMemory(0x5918E0, SetTo, 0x646C6F43);
-		SetMemory(0x5918E4, SetTo, 0x726F5320);
-		SetMemory(0x5918E8, SetTo, 0x65726563);
-		SetMemory(0x5918EC, SetTo, 0x00000072);
-		SetMemory(0x591900, SetTo, 0x746F7250);
-		SetMemory(0x591904, SetTo, 0x2073736F);
-		SetMemory(0x591908, SetTo, 0x72726143);
-		SetMemory(0x59190C, SetTo, 0x00726569);
-		SetMemory(0x591920, SetTo, 0x746F7250);
-		SetMemory(0x591924, SetTo, 0x2073736F);
-		SetMemory(0x591928, SetTo, 0x65746E49);
-		SetMemory(0x59192C, SetTo, 0x70656372);
-		SetMemory(0x591930, SetTo, 0x00726F74);
-		SetMemory(0x591940, SetTo, 0x6B726144);
-		SetMemory(0x591944, SetTo, 0x6D655420);
-		SetMemory(0x591948, SetTo, 0x72616C70);
-		SetMemory(0x59194C, SetTo, 0x00004720);
-		SetMemory(0x591960, SetTo, 0x6172655A);
-		SetMemory(0x591964, SetTo, 0x006C7574);
-		SetMemory(0x591980, SetTo, 0x73736154);
-		SetMemory(0x591984, SetTo, 0x72616461);
-		SetMemory(0x591988, SetTo, 0x72655A2F);
-		SetMemory(0x59198C, SetTo, 0x6C757461);
-		SetMemory(0x591990, SetTo, 0x00000000);
-		SetMemory(0x5919A0, SetTo, 0x696E6546);
-		SetMemory(0x5919A4, SetTo, 0x005A2078);
-		SetMemory(0x5919C0, SetTo, 0x696E6546);
-		SetMemory(0x5919C4, SetTo, 0x00442078);
-		SetMemory(0x5919E0, SetTo, 0x73736154);
-		SetMemory(0x5919E4, SetTo, 0x72616461);
-		SetMemory(0x5919E8, SetTo, 0x00000000);
-		SetMemory(0x591A00, SetTo, 0x6F6A6F4D);
-		SetMemory(0x591A04, SetTo, 0x00000000);
-		SetMemory(0x591A20, SetTo, 0x62726157);
-		SetMemory(0x591A24, SetTo, 0x676E6972);
-		SetMemory(0x591A28, SetTo, 0x00007265);
-		SetMemory(0x591A40, SetTo, 0x746E6147);
-		SetMemory(0x591A44, SetTo, 0x68746972);
-		SetMemory(0x591A48, SetTo, 0x2820726F);
-		SetMemory(0x591A4C, SetTo, 0x72726143);
-		SetMemory(0x591A50, SetTo, 0x29726569);
-		SetMemory(0x591A54, SetTo, 0x00000000);
-		SetMemory(0x591A60, SetTo, 0x746F7250);
-		SetMemory(0x591A64, SetTo, 0x2073736F);
-		SetMemory(0x591A68, SetTo, 0x76616552);
-		SetMemory(0x591A6C, SetTo, 0x00007265);
-		SetMemory(0x591A80, SetTo, 0x746F7250);
-		SetMemory(0x591A84, SetTo, 0x2073736F);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591A88, SetTo, 0x6573624F);
-		SetMemory(0x591A8C, SetTo, 0x72657672);
-		SetMemory(0x591A90, SetTo, 0x00000000);
-		SetMemory(0x591AA0, SetTo, 0x746F7250);
-		SetMemory(0x591AA4, SetTo, 0x2073736F);
-		SetMemory(0x591AA8, SetTo, 0x72616353);
-		SetMemory(0x591AAC, SetTo, 0x00006261);
-		SetMemory(0x591AC0, SetTo, 0x696E6144);
-		SetMemory(0x591AC4, SetTo, 0x68746F6D);
-		SetMemory(0x591AC8, SetTo, 0x00000000);
-		SetMemory(0x591AE0, SetTo, 0x61646C41);
-		SetMemory(0x591AE4, SetTo, 0x00736972);
-		SetMemory(0x591B00, SetTo, 0x61747241);
-		SetMemory(0x591B04, SetTo, 0x0073696E);
-		SetMemory(0x591B20, SetTo, 0x6E796852);
-		SetMemory(0x591B24, SetTo, 0x6E6F6461);
-		SetMemory(0x591B28, SetTo, 0x00000000);
-		SetMemory(0x591B40, SetTo, 0x676E6542);
-		SetMemory(0x591B44, SetTo, 0x61616C61);
-		SetMemory(0x591B48, SetTo, 0x4A282073);
-		SetMemory(0x591B4C, SetTo, 0x6C676E75);
-		SetMemory(0x591B50, SetTo, 0x00002965);
-		SetMemory(0x591B60, SetTo, 0x73756E55);
-		SetMemory(0x591B64, SetTo, 0x74206465);
-		SetMemory(0x591B68, SetTo, 0x20657079);
-		SetMemory(0x591B6C, SetTo, 0x00312020);
-		SetMemory(0x591B80, SetTo, 0x73756E55);
-		SetMemory(0x591B84, SetTo, 0x74206465);
-		SetMemory(0x591B88, SetTo, 0x20657079);
-		SetMemory(0x591B8C, SetTo, 0x00322020);
-		SetMemory(0x591BA0, SetTo, 0x6E616353);
-		SetMemory(0x591BA4, SetTo, 0x20646974);
-		SetMemory(0x591BA8, SetTo, 0x73654428);
-		SetMemory(0x591BAC, SetTo, 0x29747265);
-		SetMemory(0x591BB0, SetTo, 0x00000000);
-		SetMemory(0x591BC0, SetTo, 0x616B614B);
-		SetMemory(0x591BC4, SetTo, 0x28207572);
-		SetMemory(0x591BC8, SetTo, 0x6C697754);
-		SetMemory(0x591BCC, SetTo, 0x74686769);
-		SetMemory(0x591BD0, SetTo, 0x00000029);
-		SetMemory(0x591BE0, SetTo, 0x6E676152);
-		SetMemory(0x591BE4, SetTo, 0x75617361);
-		SetMemory(0x591BE8, SetTo, 0x41282072);
-		SetMemory(0x591BEC, SetTo, 0x57206873);
-		SetMemory(0x591BF0, SetTo, 0x646C726F);
-		SetMemory(0x591BF4, SetTo, 0x00000029);
-		SetMemory(0x591C00, SetTo, 0x61737255);
-		SetMemory(0x591C04, SetTo, 0x206E6F64);
-		SetMemory(0x591C08, SetTo, 0x65634928);
-		SetMemory(0x591C0C, SetTo, 0x726F5720);
-		SetMemory(0x591C10, SetTo, 0x0029646C);
-		SetMemory(0x591C20, SetTo, 0x6B72754C);
-		SetMemory(0x591C24, SetTo, 0x45207265);
-		SetMemory(0x591C28, SetTo, 0x00006767);
-		SetMemory(0x591C40, SetTo, 0x73726F43);
-		SetMemory(0x591C44, SetTo, 0x00726961);
-		SetMemory(0x591C60, SetTo, 0x696D6153);
-		SetMemory(0x591C64, SetTo, 0x75442072);
-		SetMemory(0x591C68, SetTo, 0x206E6172);
-		SetMemory(0x591C6C, SetTo, 0x6F684728);
-		SetMemory(0x591C70, SetTo, 0x00297473);
-		SetMemory(0x591C80, SetTo, 0x614C6147);
-		SetMemory(0x591C84, SetTo, 0x4D207958);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591C88, SetTo, 0x6E697261);
-		SetMemory(0x591C8C, SetTo, 0x00000065);
-		SetMemory(0x591CA0, SetTo, 0x2070614D);
-		SetMemory(0x591CA4, SetTo, 0x65766552);
-		SetMemory(0x591CA8, SetTo, 0x72656C61);
-		SetMemory(0x591CAC, SetTo, 0x00000000);
-		SetMemory(0x591CC0, SetTo, 0x61726547);
-		SetMemory(0x591CC4, SetTo, 0x44206472);
-		SetMemory(0x591CC8, SetTo, 0x6C614775);
-		SetMemory(0x591CCC, SetTo, 0x0000656C);
-		SetMemory(0x591CE0, SetTo, 0x6B72754C);
-		SetMemory(0x591CE4, SetTo, 0x00007265);
-		SetMemory(0x591D00, SetTo, 0x65666E49);
-		SetMemory(0x591D04, SetTo, 0x64657473);
-		SetMemory(0x591D08, SetTo, 0x72754420);
-		SetMemory(0x591D0C, SetTo, 0x00006E61);
-		SetMemory(0x591D20, SetTo, 0x72736944);
-		SetMemory(0x591D24, SetTo, 0x69747075);
-		SetMemory(0x591D28, SetTo, 0x46206E6F);
-		SetMemory(0x591D2C, SetTo, 0x646C6569);
-		SetMemory(0x591D30, SetTo, 0x00000000);
-		SetMemory(0x591D40, SetTo, 0x72726554);
-		SetMemory(0x591D44, SetTo, 0x43206E61);
-		SetMemory(0x591D48, SetTo, 0x616D6D6F);
-		SetMemory(0x591D4C, SetTo, 0x4320646E);
-		SetMemory(0x591D50, SetTo, 0x65746E65);
-		SetMemory(0x591D54, SetTo, 0x00000072);
-		SetMemory(0x591D60, SetTo, 0x614C6147);
-		SetMemory(0x591D64, SetTo, 0x43207958);
-		SetMemory(0x591D68, SetTo, 0x61736D6F);
-		SetMemory(0x591D6C, SetTo, 0x00000074);
-		SetMemory(0x591D80, SetTo, 0x72726554);
-		SetMemory(0x591D84, SetTo, 0x4E206E61);
-		SetMemory(0x591D88, SetTo, 0x656C6375);
-		SetMemory(0x591D8C, SetTo, 0x53207261);
-		SetMemory(0x591D90, SetTo, 0x006F6C69);
-		SetMemory(0x591DA0, SetTo, 0x70707553);
-		SetMemory(0x591DA4, SetTo, 0x0000796C);
-		SetMemory(0x591DC0, SetTo, 0x72726554);
-		SetMemory(0x591DC4, SetTo, 0x52206E61);
-		SetMemory(0x591DC8, SetTo, 0x6E696665);
-		SetMemory(0x591DCC, SetTo, 0x00797265);
-		SetMemory(0x591DE0, SetTo, 0x614C6147);
-		SetMemory(0x591DE4, SetTo, 0x42207958);
-		SetMemory(0x591DE8, SetTo, 0x61727261);
-		SetMemory(0x591DEC, SetTo, 0x00736B63);
-		SetMemory(0x591E00, SetTo, 0x72726554);
-		SetMemory(0x591E04, SetTo, 0x41206E61);
-		SetMemory(0x591E08, SetTo, 0x65646163);
-		SetMemory(0x591E0C, SetTo, 0x0000796D);
-		SetMemory(0x591E20, SetTo, 0x72726554);
-		SetMemory(0x591E24, SetTo, 0x46206E61);
-		SetMemory(0x591E28, SetTo, 0x6F746361);
-		SetMemory(0x591E2C, SetTo, 0x00007972);
-		SetMemory(0x591E40, SetTo, 0x72726554);
-		SetMemory(0x591E44, SetTo, 0x53206E61);
-		SetMemory(0x591E48, SetTo, 0x70726174);
-		SetMemory(0x591E4C, SetTo, 0x0074726F);
-		SetMemory(0x591E60, SetTo, 0x72726554);
-		SetMemory(0x591E64, SetTo, 0x43206E61);
-		SetMemory(0x591E68, SetTo, 0x72746E6F);
-		SetMemory(0x591E6C, SetTo, 0x54206C6F);
-		SetMemory(0x591E70, SetTo, 0x7265776F);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591E74, SetTo, 0x00000000);
-		SetMemory(0x591E80, SetTo, 0x72726554);
-		SetMemory(0x591E84, SetTo, 0x53206E61);
-		SetMemory(0x591E88, SetTo, 0x6E656963);
-		SetMemory(0x591E8C, SetTo, 0x46206563);
-		SetMemory(0x591E90, SetTo, 0x6C696361);
-		SetMemory(0x591E94, SetTo, 0x00797469);
-		SetMemory(0x591EA0, SetTo, 0x72726554);
-		SetMemory(0x591EA4, SetTo, 0x43206E61);
-		SetMemory(0x591EA8, SetTo, 0x7265766F);
-		SetMemory(0x591EAC, SetTo, 0x704F2074);
-		SetMemory(0x591EB0, SetTo, 0x00000073);
-		SetMemory(0x591EC0, SetTo, 0x72726554);
-		SetMemory(0x591EC4, SetTo, 0x50206E61);
-		SetMemory(0x591EC8, SetTo, 0x69737968);
-		SetMemory(0x591ECC, SetTo, 0x4C207363);
-		SetMemory(0x591ED0, SetTo, 0x00006261);
-		SetMemory(0x591EE0, SetTo, 0x73756E55);
-		SetMemory(0x591EE4, SetTo, 0x54206465);
-		SetMemory(0x591EE8, SetTo, 0x61727265);
-		SetMemory(0x591EEC, SetTo, 0x6C42206E);
-		SetMemory(0x591EF0, SetTo, 0x74206764);
-		SetMemory(0x591EF4, SetTo, 0x20657079);
-		SetMemory(0x591EF8, SetTo, 0x00312020);
-		SetMemory(0x591F00, SetTo, 0x72726554);
-		SetMemory(0x591F04, SetTo, 0x4D206E61);
-		SetMemory(0x591F08, SetTo, 0x69686361);
-		SetMemory(0x591F0C, SetTo, 0x5320656E);
-		SetMemory(0x591F10, SetTo, 0x00706F68);
-		SetMemory(0x591F20, SetTo, 0x73756E55);
-		SetMemory(0x591F24, SetTo, 0x54206465);
-		SetMemory(0x591F28, SetTo, 0x61727265);
-		SetMemory(0x591F2C, SetTo, 0x6C42206E);
-		SetMemory(0x591F30, SetTo, 0x74206764);
-		SetMemory(0x591F34, SetTo, 0x20657079);
-		SetMemory(0x591F38, SetTo, 0x00322020);
-		SetMemory(0x591F40, SetTo, 0x72726554);
-		SetMemory(0x591F44, SetTo, 0x45206E61);
-		SetMemory(0x591F48, SetTo, 0x6E69676E);
-		SetMemory(0x591F4C, SetTo, 0x69726565);
-		SetMemory(0x591F50, SetTo, 0x4220676E);
-		SetMemory(0x591F54, SetTo, 0x00007961);
-		SetMemory(0x591F60, SetTo, 0x72726554);
-		SetMemory(0x591F64, SetTo, 0x41206E61);
-		SetMemory(0x591F68, SetTo, 0x726F6D72);
-		SetMemory(0x591F6C, SetTo, 0x00000079);
-		SetMemory(0x591F80, SetTo, 0x72726554);
-		SetMemory(0x591F84, SetTo, 0x4D206E61);
-		SetMemory(0x591F88, SetTo, 0x69737369);
-		SetMemory(0x591F8C, SetTo, 0x5420656C);
-		SetMemory(0x591F90, SetTo, 0x65727275);
-		SetMemory(0x591F94, SetTo, 0x00000074);
-		SetMemory(0x591FA0, SetTo, 0x614C6147);
-		SetMemory(0x591FA4, SetTo, 0x42207958);
-		SetMemory(0x591FA8, SetTo, 0x656B6E75);
-		SetMemory(0x591FAC, SetTo, 0x00000072);
-		SetMemory(0x591FC0, SetTo, 0x61726F4E);
-		SetMemory(0x591FC4, SetTo, 0x49492064);
-		SetMemory(0x591FC8, SetTo, 0x72432820);
-		SetMemory(0x591FCC, SetTo, 0x65687361);
-		SetMemory(0x591FD0, SetTo, 0x61422064);
-		SetMemory(0x591FD4, SetTo, 0x656C7474);
-		SetMemory(0x591FD8, SetTo, 0x69757263);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x591FDC, SetTo, 0x29726573);
-		SetMemory(0x591FE0, SetTo, 0x00000000);
-		SetMemory(0x591FE0, SetTo, 0x206E6F49);
-		SetMemory(0x591FE4, SetTo, 0x6E6E6143);
-		SetMemory(0x591FE8, SetTo, 0x00006E6F);
-		SetMemory(0x592000, SetTo, 0x6A617255);
-		SetMemory(0x592004, SetTo, 0x79724320);
-		SetMemory(0x592008, SetTo, 0x6C617473);
-		SetMemory(0x59200C, SetTo, 0x00000000);
-		SetMemory(0x592020, SetTo, 0x6C61684B);
-		SetMemory(0x592024, SetTo, 0x43207369);
-		SetMemory(0x592028, SetTo, 0x74737972);
-		SetMemory(0x59202C, SetTo, 0x00006C61);
-		SetMemory(0x592040, SetTo, 0x65666E49);
-		SetMemory(0x592044, SetTo, 0x64657473);
-		SetMemory(0x592048, SetTo, 0x6E654320);
-		SetMemory(0x59204C, SetTo, 0x00726574);
-		SetMemory(0x592060, SetTo, 0x63746148);
-		SetMemory(0x592064, SetTo, 0x79726568);
-		SetMemory(0x592068, SetTo, 0x00000000);
-		SetMemory(0x592080, SetTo, 0x7269614C);
-		SetMemory(0x592084, SetTo, 0x00000000);
-		SetMemory(0x5920A0, SetTo, 0x65766948);
-		SetMemory(0x5920A4, SetTo, 0x00000000);
-		SetMemory(0x5920C0, SetTo, 0x7564794E);
-		SetMemory(0x5920C4, SetTo, 0x61432073);
-		SetMemory(0x5920C8, SetTo, 0x006C616E);
-		SetMemory(0x5920E0, SetTo, 0x72647948);
-		SetMemory(0x5920E4, SetTo, 0x73696C61);
-		SetMemory(0x5920E8, SetTo, 0x6544206B);
-		SetMemory(0x5920EC, SetTo, 0x0000006E);
-		SetMemory(0x592100, SetTo, 0x69666544);
-		SetMemory(0x592104, SetTo, 0x2072656C);
-		SetMemory(0x592108, SetTo, 0x6E756F4D);
-		SetMemory(0x59210C, SetTo, 0x00000064);
-		SetMemory(0x592120, SetTo, 0x61657247);
-		SetMemory(0x592124, SetTo, 0x20726574);
-		SetMemory(0x592128, SetTo, 0x72697053);
-		SetMemory(0x59212C, SetTo, 0x00000065);
-		SetMemory(0x592140, SetTo, 0x65657551);
-		SetMemory(0x592144, SetTo, 0x2073276E);
-		SetMemory(0x592148, SetTo, 0x7473654E);
-		SetMemory(0x59214C, SetTo, 0x00000000);
-		SetMemory(0x592160, SetTo, 0x6C6F7645);
-		SetMemory(0x592164, SetTo, 0x6F697475);
-		SetMemory(0x592168, SetTo, 0x6843206E);
-		SetMemory(0x59216C, SetTo, 0x65626D61);
-		SetMemory(0x592170, SetTo, 0x00000072);
-		SetMemory(0x592180, SetTo, 0x72746C55);
-		SetMemory(0x592184, SetTo, 0x73696C61);
-		SetMemory(0x592188, SetTo, 0x6143206B);
-		SetMemory(0x59218C, SetTo, 0x6E726576);
-		SetMemory(0x592190, SetTo, 0x00000000);
-		SetMemory(0x5921A0, SetTo, 0x72697053);
-		SetMemory(0x5921A4, SetTo, 0x00000065);
-		SetMemory(0x5921C0, SetTo, 0x77617053);
-		SetMemory(0x5921C4, SetTo, 0x676E696E);
-		SetMemory(0x5921C8, SetTo, 0x6F6F5020);
-		SetMemory(0x5921CC, SetTo, 0x0000006C);
-		SetMemory(0x5921E0, SetTo, 0x65657243);
-		SetMemory(0x5921E4, SetTo, 0x6F432070);
-		SetMemory(0x5921E8, SetTo, 0x796E6F6C);
-		SetMemory(0x5921EC, SetTo, 0x00000000);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592200, SetTo, 0x726F7053);
-		SetMemory(0x592204, SetTo, 0x6F432065);
-		SetMemory(0x592208, SetTo, 0x796E6F6C);
-		SetMemory(0x59220C, SetTo, 0x00000000);
-		SetMemory(0x592220, SetTo, 0x73756E55);
-		SetMemory(0x592224, SetTo, 0x5A206465);
-		SetMemory(0x592228, SetTo, 0x20677265);
-		SetMemory(0x59222C, SetTo, 0x67646C42);
-		SetMemory(0x592230, SetTo, 0x00000000);
-		SetMemory(0x592240, SetTo, 0x6B6E7553);
-		SetMemory(0x592244, SetTo, 0x43206E65);
-		SetMemory(0x592248, SetTo, 0x6E6F6C6F);
-		SetMemory(0x59224C, SetTo, 0x00000079);
-		SetMemory(0x592260, SetTo, 0x736E6F4D);
-		SetMemory(0x592264, SetTo, 0x20726574);
-		SetMemory(0x592268, SetTo, 0x6B61724B);
-		SetMemory(0x59226C, SetTo, 0x00216E65);
-		SetMemory(0x592280, SetTo, 0x7265764F);
-		SetMemory(0x592284, SetTo, 0x646E694D);
-		SetMemory(0x592288, SetTo, 0x00000000);
-		SetMemory(0x5922A0, SetTo, 0x72747845);
-		SetMemory(0x5922A4, SetTo, 0x6F746361);
-		SetMemory(0x5922A8, SetTo, 0x00000072);
-		SetMemory(0x5922C0, SetTo, 0x21676942);
-		SetMemory(0x5922C4, SetTo, 0x79724320);
-		SetMemory(0x5922C8, SetTo, 0x696C6173);
-		SetMemory(0x5922CC, SetTo, 0x00000073);
-		SetMemory(0x5922E0, SetTo, 0x65726543);
-		SetMemory(0x5922E4, SetTo, 0x74617262);
-		SetMemory(0x5922E8, SetTo, 0x00000065);
-		SetMemory(0x592300, SetTo, 0x67676144);
-		SetMemory(0x592304, SetTo, 0x0068546F);
-		SetMemory(0x592320, SetTo, 0x73756E55);
-		SetMemory(0x592324, SetTo, 0x5A206465);
-		SetMemory(0x592328, SetTo, 0x20677265);
-		SetMemory(0x59232C, SetTo, 0x67646C42);
-		SetMemory(0x592330, SetTo, 0x00003520);
-		SetMemory(0x592340, SetTo, 0x746F7250);
-		SetMemory(0x592344, SetTo, 0x2073736F);
-		SetMemory(0x592348, SetTo, 0x7578654E);
-		SetMemory(0x59234C, SetTo, 0x00000073);
-		SetMemory(0x592360, SetTo, 0x746F7250);
-		SetMemory(0x592364, SetTo, 0x2073736F);
-		SetMemory(0x592368, SetTo, 0x6F626F52);
-		SetMemory(0x59236C, SetTo, 0x73636974);
-		SetMemory(0x592370, SetTo, 0x63614620);
-		SetMemory(0x592374, SetTo, 0x74696C69);
-		SetMemory(0x592378, SetTo, 0x00000079);
-		SetMemory(0x592380, SetTo, 0x6F6C7950);
-		SetMemory(0x592384, SetTo, 0x0000006E);
-		SetMemory(0x5923A0, SetTo, 0x746F7250);
-		SetMemory(0x5923A4, SetTo, 0x2073736F);
-		SetMemory(0x5923A8, SetTo, 0x69737341);
-		SetMemory(0x5923AC, SetTo, 0x616C696D);
-		SetMemory(0x5923B0, SetTo, 0x00726F74);
-		SetMemory(0x5923C0, SetTo, 0x746F7250);
-		SetMemory(0x5923C4, SetTo, 0x2073736F);
-		SetMemory(0x5923C8, SetTo, 0x73756E55);
-		SetMemory(0x5923CC, SetTo, 0x74206465);
-		SetMemory(0x5923D0, SetTo, 0x20657079);
-		SetMemory(0x5923D4, SetTo, 0x00312020);
-		SetMemory(0x5923E0, SetTo, 0x746F7250);
-		SetMemory(0x5923E4, SetTo, 0x2073736F);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x5923E8, SetTo, 0x6573624F);
-		SetMemory(0x5923EC, SetTo, 0x74617672);
-		SetMemory(0x5923F0, SetTo, 0x0079726F);
-		SetMemory(0x592400, SetTo, 0xED95B0EA);
-		SetMemory(0x592404, SetTo, 0xB1EAB487);
-		SetMemory(0x592408, SetTo, 0xBCACEBB4);
-		SetMemory(0x59240C, SetTo, 0x00000000);
-		SetMemory(0x592420, SetTo, 0x746F7250);
-		SetMemory(0x592424, SetTo, 0x2073736F);
-		SetMemory(0x592428, SetTo, 0x73756E55);
-		SetMemory(0x59242C, SetTo, 0x74206465);
-		SetMemory(0x592430, SetTo, 0x20657079);
-		SetMemory(0x592434, SetTo, 0x00322020);
-		SetMemory(0x592440, SetTo, 0x746F6850);
-		SetMemory(0x592444, SetTo, 0x43206E6F);
-		SetMemory(0x592448, SetTo, 0x6F6E6E61);
-		SetMemory(0x59244C, SetTo, 0x0000006E);
-		SetMemory(0x592460, SetTo, 0x746F7250);
-		SetMemory(0x592464, SetTo, 0x2073736F);
-		SetMemory(0x592468, SetTo, 0x61746943);
-		SetMemory(0x59246C, SetTo, 0x206C6564);
-		SetMemory(0x592470, SetTo, 0x4120666F);
-		SetMemory(0x592474, SetTo, 0x006E7564);
-		SetMemory(0x592480, SetTo, 0x746F7250);
-		SetMemory(0x592484, SetTo, 0x2073736F);
-		SetMemory(0x592488, SetTo, 0x65627943);
-		SetMemory(0x59248C, SetTo, 0x74656E72);
-		SetMemory(0x592490, SetTo, 0x20736369);
-		SetMemory(0x592494, SetTo, 0x65726F43);
-		SetMemory(0x592498, SetTo, 0x00000000);
-		SetMemory(0x5924A0, SetTo, 0x746F7250);
-		SetMemory(0x5924A4, SetTo, 0x2073736F);
-		SetMemory(0x5924A8, SetTo, 0x706D6554);
-		SetMemory(0x5924AC, SetTo, 0x2072616C);
-		SetMemory(0x5924B0, SetTo, 0x68637241);
-		SetMemory(0x5924B4, SetTo, 0x73657669);
-		SetMemory(0x5924B8, SetTo, 0x00000000);
-		SetMemory(0x5924C0, SetTo, 0x746F7250);
-		SetMemory(0x5924C4, SetTo, 0x2073736F);
-		SetMemory(0x5924C8, SetTo, 0x67726F46);
-		SetMemory(0x5924CC, SetTo, 0x00000065);
-		SetMemory(0x5924E0, SetTo, 0x746F7250);
-		SetMemory(0x5924E4, SetTo, 0x2073736F);
-		SetMemory(0x5924E8, SetTo, 0x72617453);
-		SetMemory(0x5924EC, SetTo, 0x65746167);
-		SetMemory(0x5924F0, SetTo, 0x00000000);
-		SetMemory(0x592500, SetTo, 0x73617453);
-		SetMemory(0x592504, SetTo, 0x43207369);
-		SetMemory(0x592508, SetTo, 0x006C6C65);
-		SetMemory(0x592520, SetTo, 0x746F7250);
-		SetMemory(0x592524, SetTo, 0x2073736F);
-		SetMemory(0x592528, SetTo, 0x65656C46);
-		SetMemory(0x59252C, SetTo, 0x65422074);
-		SetMemory(0x592530, SetTo, 0x6E6F6361);
-		SetMemory(0x592534, SetTo, 0x00000000);
-		SetMemory(0x592540, SetTo, 0x746F7250);
-		SetMemory(0x592544, SetTo, 0x2073736F);
-		SetMemory(0x592548, SetTo, 0x69627241);
-		SetMemory(0x59254C, SetTo, 0x20726574);
-		SetMemory(0x592550, SetTo, 0x62697254);
-		SetMemory(0x592554, SetTo, 0x6C616E75);
-		SetMemory(0x592558, SetTo, 0x00000000);
-		SetMemory(0x592560, SetTo, 0x746F7250);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592564, SetTo, 0x2073736F);
-		SetMemory(0x592568, SetTo, 0x6F626F52);
-		SetMemory(0x59256C, SetTo, 0x73636974);
-		SetMemory(0x592570, SetTo, 0x70755320);
-		SetMemory(0x592574, SetTo, 0x74726F70);
-		SetMemory(0x592578, SetTo, 0x79614220);
-		SetMemory(0x59257C, SetTo, 0x00000000);
-		SetMemory(0x592580, SetTo, 0x746F7250);
-		SetMemory(0x592584, SetTo, 0x2073736F);
-		SetMemory(0x592588, SetTo, 0x65696853);
-		SetMemory(0x59258C, SetTo, 0x4220646C);
-		SetMemory(0x592590, SetTo, 0x65747461);
-		SetMemory(0x592594, SetTo, 0x00007972);
-		SetMemory(0x5925A0, SetTo, 0x6D726F46);
-		SetMemory(0x5925A4, SetTo, 0x6F697461);
-		SetMemory(0x5925A8, SetTo, 0x0000006E);
-		SetMemory(0x5925C0, SetTo, 0x706D6554);
-		SetMemory(0x5925C4, SetTo, 0x0000656C);
-		SetMemory(0x5925E0, SetTo, 0x276C6558);
-		SetMemory(0x5925E4, SetTo, 0x6167614E);
-		SetMemory(0x5925E8, SetTo, 0x6D655420);
-		SetMemory(0x5925EC, SetTo, 0x00656C70);
-		SetMemory(0x592600, SetTo, 0x656E694D);
-		SetMemory(0x592604, SetTo, 0x206C6172);
-		SetMemory(0x592608, SetTo, 0x6C656946);
-		SetMemory(0x59260C, SetTo, 0x54282064);
-		SetMemory(0x592610, SetTo, 0x20657079);
-		SetMemory(0x592614, SetTo, 0x00002931);
-		SetMemory(0x592620, SetTo, 0x656E694D);
-		SetMemory(0x592624, SetTo, 0x206C6172);
-		SetMemory(0x592628, SetTo, 0x6C656946);
-		SetMemory(0x59262C, SetTo, 0x54282064);
-		SetMemory(0x592630, SetTo, 0x20657079);
-		SetMemory(0x592634, SetTo, 0x00002932);
-		SetMemory(0x592640, SetTo, 0x656E694D);
-		SetMemory(0x592644, SetTo, 0x206C6172);
-		SetMemory(0x592648, SetTo, 0x6C656946);
-		SetMemory(0x59264C, SetTo, 0x54282064);
-		SetMemory(0x592650, SetTo, 0x20657079);
-		SetMemory(0x592654, SetTo, 0x00002933);
-		SetMemory(0x592660, SetTo, 0x72616353);
-		SetMemory(0x592664, SetTo, 0x00006261);
-		SetMemory(0x592680, SetTo, 0x64697053);
-		SetMemory(0x592684, SetTo, 0x4D207265);
-		SetMemory(0x592688, SetTo, 0x00656E69);
-		SetMemory(0x5926A0, SetTo, 0x746E6143);
-		SetMemory(0x5926A4, SetTo, 0x00616E69);
-		SetMemory(0x5926C0, SetTo, 0x696E694D);
-		SetMemory(0x5926C4, SetTo, 0x5020676E);
-		SetMemory(0x5926C8, SetTo, 0x6674616C);
-		SetMemory(0x5926CC, SetTo, 0x006D726F);
-		SetMemory(0x5926E0, SetTo, 0x65646E49);
-		SetMemory(0x5926E4, SetTo, 0x646E6570);
-		SetMemory(0x5926E8, SetTo, 0x20746E65);
-		SetMemory(0x5926EC, SetTo, 0x6D6D6F43);
-		SetMemory(0x5926F0, SetTo, 0x20646E61);
-		SetMemory(0x5926F4, SetTo, 0x746E6543);
-		SetMemory(0x5926F8, SetTo, 0x00007265);
-		SetMemory(0x592700, SetTo, 0x65646E49);
-		SetMemory(0x592704, SetTo, 0x646E6570);
-		SetMemory(0x592708, SetTo, 0x20746E65);
-		SetMemory(0x59270C, SetTo, 0x72617453);
-		SetMemory(0x592710, SetTo, 0x74726F70);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592714, SetTo, 0x00000000);
-		SetMemory(0x592720, SetTo, 0x706D754A);
-		SetMemory(0x592724, SetTo, 0x74614720);
-		SetMemory(0x592728, SetTo, 0x00000065);
-		SetMemory(0x592740, SetTo, 0x6E697552);
-		SetMemory(0x592744, SetTo, 0x00000073);
-		SetMemory(0x592760, SetTo, 0x6461794B);
-		SetMemory(0x592764, SetTo, 0x6E697261);
-		SetMemory(0x592768, SetTo, 0x79724320);
-		SetMemory(0x59276C, SetTo, 0x6C617473);
-		SetMemory(0x592770, SetTo, 0x726F4620);
-		SetMemory(0x592774, SetTo, 0x6974616D);
-		SetMemory(0x592778, SetTo, 0x00006E6F);
-		SetMemory(0x592780, SetTo, 0x70736556);
-		SetMemory(0x592784, SetTo, 0x20656E65);
-		SetMemory(0x592788, SetTo, 0x73796547);
-		SetMemory(0x59278C, SetTo, 0x00007265);
-		SetMemory(0x5927A0, SetTo, 0x70726157);
-		SetMemory(0x5927A4, SetTo, 0x74614720);
-		SetMemory(0x5927A8, SetTo, 0x00000065);
-		SetMemory(0x5927C0, SetTo, 0x65726F43);
-		SetMemory(0x5927C4, SetTo, 0x20666F20);
-		SetMemory(0x5927C8, SetTo, 0x616C6147);
-		SetMemory(0x5927CC, SetTo, 0x00007978);
-		SetMemory(0x5927E0, SetTo, 0x6772655A);
-		SetMemory(0x5927E4, SetTo, 0x72614D20);
-		SetMemory(0x5927E8, SetTo, 0x0072656B);
-		SetMemory(0x592800, SetTo, 0xEF9FBCEF);
-		SetMemory(0x592804, SetTo, 0xBCEF9FBC);
-		SetMemory(0x592808, SetTo, 0x3128209F);
-		SetMemory(0x59280C, SetTo, 0x00293239);
-		SetMemory(0x592820, SetTo, 0xEF9FBCEF);
-		SetMemory(0x592824, SetTo, 0xBCEF9FBC);
-		SetMemory(0x592828, SetTo, 0x3128209F);
-		SetMemory(0x59282C, SetTo, 0x00293339);
-		SetMemory(0x592840, SetTo, 0x6772655A);
-		SetMemory(0x592844, SetTo, 0x61654220);
-		SetMemory(0x592848, SetTo, 0x006E6F63);
-		SetMemory(0x592860, SetTo, 0x72726554);
-		SetMemory(0x592864, SetTo, 0x42206E61);
-		SetMemory(0x592868, SetTo, 0x6F636165);
-		SetMemory(0x59286C, SetTo, 0x0000006E);
-		SetMemory(0x592880, SetTo, 0x746F7250);
-		SetMemory(0x592884, SetTo, 0x2073736F);
-		SetMemory(0x592888, SetTo, 0x63616542);
-		SetMemory(0x59288C, SetTo, 0x00006E6F);
-		SetMemory(0x5928A0, SetTo, 0x6772655A);
-		SetMemory(0x5928A4, SetTo, 0x616C4620);
-		SetMemory(0x5928A8, SetTo, 0x65422067);
-		SetMemory(0x5928AC, SetTo, 0x6E6F6361);
-		SetMemory(0x5928B0, SetTo, 0x00000000);
-		SetMemory(0x5928C0, SetTo, 0x72726554);
-		SetMemory(0x5928C4, SetTo, 0x46206E61);
-		SetMemory(0x5928C8, SetTo, 0x2067616C);
-		SetMemory(0x5928CC, SetTo, 0x63616542);
-		SetMemory(0x5928D0, SetTo, 0x00006E6F);
-		SetMemory(0x5928E0, SetTo, 0x746F7250);
-		SetMemory(0x5928E4, SetTo, 0x2073736F);
-		SetMemory(0x5928E8, SetTo, 0x67616C46);
-		SetMemory(0x5928EC, SetTo, 0x61654220);
-		SetMemory(0x5928F0, SetTo, 0x006E6F63);
-		SetMemory(0x592900, SetTo, 0x65776F50);
-		SetMemory(0x592904, SetTo, 0x65472072);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592908, SetTo, 0x6172656E);
-		SetMemory(0x59290C, SetTo, 0x00726F74);
-		SetMemory(0x592920, SetTo, 0x7265764F);
-		SetMemory(0x592924, SetTo, 0x646E696D);
-		SetMemory(0x592928, SetTo, 0x636F4320);
-		SetMemory(0x59292C, SetTo, 0x006E6F6F);
-		SetMemory(0x592940, SetTo, 0x6B726144);
-		SetMemory(0x592944, SetTo, 0x61775320);
-		SetMemory(0x592948, SetTo, 0x00006D72);
-		SetMemory(0x592960, SetTo, 0x6863614E);
-		SetMemory(0x592964, SetTo, 0x73694D6F);
-		SetMemory(0x592968, SetTo, 0x656C6973);
-		SetMemory(0x59296C, SetTo, 0x00000000);
-		SetMemory(0x592980, SetTo, 0x6F6F6C46);
-		SetMemory(0x592984, SetTo, 0x61482072);
-		SetMemory(0x592988, SetTo, 0x20686374);
-		SetMemory(0x59298C, SetTo, 0x554E5528);
-		SetMemory(0x592990, SetTo, 0x29444553);
-		SetMemory(0x592994, SetTo, 0x00000000);
-		SetMemory(0x5929A0, SetTo, 0x7466654C);
-		SetMemory(0x5929A4, SetTo, 0x70705520);
-		SetMemory(0x5929A8, SetTo, 0x4C207265);
-		SetMemory(0x5929AC, SetTo, 0x6C657665);
-		SetMemory(0x5929B0, SetTo, 0x6F6F4420);
-		SetMemory(0x5929B4, SetTo, 0x00000072);
-		SetMemory(0x5929C0, SetTo, 0x68676952);
-		SetMemory(0x5929C4, SetTo, 0x70552074);
-		SetMemory(0x5929C8, SetTo, 0x20726570);
-		SetMemory(0x5929CC, SetTo, 0x6576654C);
-		SetMemory(0x5929D0, SetTo, 0x6F44206C);
-		SetMemory(0x5929D4, SetTo, 0x0000726F);
-		SetMemory(0x5929E0, SetTo, 0x7466654C);
-		SetMemory(0x5929E4, SetTo, 0x74695020);
-		SetMemory(0x5929E8, SetTo, 0x6F6F4420);
-		SetMemory(0x5929EC, SetTo, 0x00000072);
-		SetMemory(0x592A00, SetTo, 0x68676952);
-		SetMemory(0x592A04, SetTo, 0x69502074);
-		SetMemory(0x592A08, SetTo, 0x6F442074);
-		SetMemory(0x592A0C, SetTo, 0x0000726F);
-		SetMemory(0x592A20, SetTo, 0x696E694D);
-		SetMemory(0x592A24, SetTo, 0x4769696E);
-		SetMemory(0x592A28, SetTo, 0x00006E75);
-		SetMemory(0x592A40, SetTo, 0x7466654C);
-		SetMemory(0x592A44, SetTo, 0x6C615720);
-		SetMemory(0x592A48, SetTo, 0x694D206C);
-		SetMemory(0x592A4C, SetTo, 0x6C697373);
-		SetMemory(0x592A50, SetTo, 0x72542065);
-		SetMemory(0x592A54, SetTo, 0x00007061);
-		SetMemory(0x592A60, SetTo, 0x7466654C);
-		SetMemory(0x592A64, SetTo, 0x6C615720);
-		SetMemory(0x592A68, SetTo, 0x6C46206C);
-		SetMemory(0x592A6C, SetTo, 0x20656D61);
-		SetMemory(0x592A70, SetTo, 0x70617254);
-		SetMemory(0x592A74, SetTo, 0x00000000);
-		SetMemory(0x592A80, SetTo, 0x68676952);
-		SetMemory(0x592A84, SetTo, 0x61572074);
-		SetMemory(0x592A88, SetTo, 0x4D206C6C);
-		SetMemory(0x592A8C, SetTo, 0x69737369);
-		SetMemory(0x592A90, SetTo, 0x5420656C);
-		SetMemory(0x592A94, SetTo, 0x00706172);
-		SetMemory(0x592AA0, SetTo, 0x68676952);
-		SetMemory(0x592AA4, SetTo, 0x61572074);
-		SetMemory(0x592AA8, SetTo, 0x46206C6C);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592AAC, SetTo, 0x656D616C);
-		SetMemory(0x592AB0, SetTo, 0x61725420);
-		SetMemory(0x592AB4, SetTo, 0x00000070);
-		SetMemory(0x592AC0, SetTo, 0x72617453);
-		SetMemory(0x592AC4, SetTo, 0x6F4C2074);
-		SetMemory(0x592AC8, SetTo, 0x69746163);
-		SetMemory(0x592ACC, SetTo, 0x00006E6F);
-		SetMemory(0x592AE0, SetTo, 0x67616C46);
-		SetMemory(0x592AE4, SetTo, 0x00000000);
-		SetMemory(0x592B00, SetTo, 0x6C616D53);
-		SetMemory(0x592B04, SetTo, 0x6843206C);
-		SetMemory(0x592B08, SetTo, 0x61737972);
-		SetMemory(0x592B0C, SetTo, 0x0073696C);
-		SetMemory(0x592B20, SetTo, 0x20697350);
-		SetMemory(0x592B24, SetTo, 0x74696D45);
-		SetMemory(0x592B28, SetTo, 0x00726574);
-		SetMemory(0x592B40, SetTo, 0x2E305823);
-		SetMemory(0x592B44, SetTo, 0x9EBDEF35);
-		SetMemory(0x592B48, SetTo, 0x2E355823);
-		SetMemory(0x592B4C, SetTo, 0x00002030);
-		SetMemory(0x592B60, SetTo, 0x7961684B);
-		SetMemory(0x592B64, SetTo, 0x69726164);
-		SetMemory(0x592B68, SetTo, 0x7243206E);
-		SetMemory(0x592B6C, SetTo, 0x61747379);
-		SetMemory(0x592B70, SetTo, 0x0000006C);
-		SetMemory(0x592B80, SetTo, 0x656E694D);
-		SetMemory(0x592B84, SetTo, 0x206C6172);
-		SetMemory(0x592B88, SetTo, 0x6E756843);
-		SetMemory(0x592B8C, SetTo, 0x5428206B);
-		SetMemory(0x592B90, SetTo, 0x20657079);
-		SetMemory(0x592B94, SetTo, 0x00002931);
-		SetMemory(0x592BA0, SetTo, 0x656E694D);
-		SetMemory(0x592BA4, SetTo, 0x206C6172);
-		SetMemory(0x592BA8, SetTo, 0x6E756843);
-		SetMemory(0x592BAC, SetTo, 0x5428206B);
-		SetMemory(0x592BB0, SetTo, 0x20657079);
-		SetMemory(0x592BB4, SetTo, 0x00002932);
-		SetMemory(0x592BC0, SetTo, 0x70736556);
-		SetMemory(0x592BC4, SetTo, 0x20656E65);
-		SetMemory(0x592BC8, SetTo, 0x2062724F);
-		SetMemory(0x592BCC, SetTo, 0x6F725028);
-		SetMemory(0x592BD0, SetTo, 0x73736F74);
-		SetMemory(0x592BD4, SetTo, 0x70795420);
-		SetMemory(0x592BD8, SetTo, 0x29312065);
-		SetMemory(0x592BDC, SetTo, 0x00000000);
-		SetMemory(0x592BE0, SetTo, 0x70736556);
-		SetMemory(0x592BE4, SetTo, 0x20656E65);
-		SetMemory(0x592BE8, SetTo, 0x2062724F);
-		SetMemory(0x592BEC, SetTo, 0x6F725028);
-		SetMemory(0x592BF0, SetTo, 0x73736F74);
-		SetMemory(0x592BF4, SetTo, 0x70795420);
-		SetMemory(0x592BF8, SetTo, 0x29322065);
-		SetMemory(0x592BFC, SetTo, 0x00000000);
-		SetMemory(0x592C00, SetTo, 0x70736556);
-		SetMemory(0x592C04, SetTo, 0x20656E65);
-		SetMemory(0x592C08, SetTo, 0x20636153);
-		SetMemory(0x592C0C, SetTo, 0x72655A28);
-		SetMemory(0x592C10, SetTo, 0x79542067);
-		SetMemory(0x592C14, SetTo, 0x31206570);
-		SetMemory(0x592C18, SetTo, 0x00000029);
-		SetMemory(0x592C20, SetTo, 0x70736556);
-		SetMemory(0x592C24, SetTo, 0x20656E65);
-		SetMemory(0x592C28, SetTo, 0x20636153);
-		PreserveTrigger();
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	actions = {
-		SetMemory(0x592C2C, SetTo, 0x72655A28);
-		SetMemory(0x592C30, SetTo, 0x79542067);
-		SetMemory(0x592C34, SetTo, 0x32206570);
-		SetMemory(0x592C38, SetTo, 0x00000029);
-		SetMemory(0x592C40, SetTo, 0x70736556);
-		SetMemory(0x592C44, SetTo, 0x20656E65);
-		SetMemory(0x592C48, SetTo, 0x6B6E6154);
-		SetMemory(0x592C4C, SetTo, 0x65542820);
-		SetMemory(0x592C50, SetTo, 0x6E617272);
-		SetMemory(0x592C54, SetTo, 0x70795420);
-		SetMemory(0x592C58, SetTo, 0x29312065);
-		SetMemory(0x592C5C, SetTo, 0x00000000);
-		SetMemory(0x592C60, SetTo, 0x70736556);
-		SetMemory(0x592C64, SetTo, 0x20656E65);
-		SetMemory(0x592C68, SetTo, 0x6B6E6154);
-		SetMemory(0x592C6C, SetTo, 0x65542820);
-		SetMemory(0x592C70, SetTo, 0x6E617272);
-		SetMemory(0x592C74, SetTo, 0x70795420);
-		SetMemory(0x592C78, SetTo, 0x29322065);
-		SetMemory(0x592C7C, SetTo, 0x00000000);
-		PreserveTrigger();
-	},
-}
-
-
-
-f_Memcpy(FP,f_GunSendStrPtr,_TMem(Arr(f_GunSendT[3],0),"X","X",1),f_GunSendT[2])
-f_Memcpy(FP,f_GunStrPtr,_TMem(Arr(f_GunT[3],0),"X","X",1),f_GunT[2])
 
 CMov(FP,0x6509B0,EPDF(0x591000))
 NWhile(FP,Memory(0x6509B0,AtMost,EPDF(0x591000+(0x20*227))))
@@ -1824,8 +717,9 @@ ItoDec(FP,CurrentFactor,VArr(UpCompTxt,0),2,0x1F,0)
 ItoDec(FP,UpCount,VArr(UpCompRet,0),2,0x19,0)
 _0DPatchforVArr(FP,UpCompRet,4)
 _0DPatchforVArr(FP,UpCompTxt,4)
-f_Movcpy(FP,_Add(UPCompStrPtr,Str12L-3),VArr(UpCompTxt,0),5*4)
-f_Movcpy(FP,_Add(UPCompStrPtr,Str12L-3+20+Str22L-3),VArr(UpCompRet,0),5*4)
+
+
+
 --[[
 for i = 0, 5 do
 CIf(FP,{CVar(FP,UpgradeCP[2],Exactly,i),Command(i,AtLeast,1,"Terran Medic")})
@@ -1852,11 +746,7 @@ Trigger {
 	}
 end
 --]]
-CDoActions(FP,{
-		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x0D\x0D\x0DUPC".._0D,4),
-		SetMemory(0x6509B0,SetTo,FP)
-		})
+DisplayPrint(UpgradeCP,{"\x12\x07『 \x1F",CurrentFactor," \x04미네랄을 소비하여 총 \x19",UpCount," \x04회 업그레이드를 완료하였습니다."})
 NJumpEnd(FP,0x24)
 SetCallEnd()
 
@@ -1876,26 +766,14 @@ NElseX()
 f_Mod(FP,HPoint,65536)
 NIfXEnd()
 CMov(FP,HPoint10,_Mul(HPoint,HPointVar))
-ItoDec(FP,HPoint10,VArr(HPointT,0),2,0x1F,0)
-for j=0,4 do
-TriggerX(FP,{VArrayX(VArr(HPointT,j),"Value",Exactly,0,0xFF)},{
-SetVArrayX(VArr(HPointT,j),"Value",SetTo,0x0D,0xFF)
-},{preserved})
-TriggerX(FP,{VArrayX(VArr(HPointT,j),"Value",Exactly,0,0xFF00)},{
-SetVArrayX(VArr(HPointT,j),"Value",SetTo,0x0D*0x100,0xFF00)
-},{preserved})
-TriggerX(FP,{VArrayX(VArr(HPointT,j),"Value",Exactly,0,0xFF0000)},{
-SetVArrayX(VArr(HPointT,j),"Value",SetTo,0x0D*0x10000,0xFF0000)
-},{preserved})
-TriggerX(FP,{VArrayX(VArr(HPointT,j),"Value",Exactly,0,0xFF000000)},{
-SetVArrayX(VArr(HPointT,j),"Value",SetTo,0x0D*0x1000000,0xFF000000)
-},{preserved})
-end
-f_Movcpy(FP,_Add(HeroTxtStrPtr,Str19L+0x20+Str20L),VArr(HPointT,0),16)
-f_Memcpy(FP,_Add(HeroTxtStrPtr,Str19L),_Add(_Mul(HIndex,_Mov(0x20)),UnitNamePtr),0x20)
 CDoActions(FP,{TSetScore(Force1,Add,HPoint10,Kills)})
-HText = "\x0D\x0D\x0DHK".._0D
-DoActions(FP,CopyCpAction({DisplayTextX(HText,4)},HumanPlayers,FP))
+function HeroTextFunc()
+	f_Memcpy(FP,_Add(RetV,Dev),_Add(_Mul(HIndex,_Mov(0x20)),UnitNamePtr),0x20)
+	Dev = Dev+0x20
+	BSize=BSize+0x20
+end
+DisplayPrint(HumanPlayers,{"\x13\x15▶ ▶ ▶ [\x04 ",HeroTextFunc," \x11사살\x10 +\x17 \x1F",HPoint10," P t s \x15] \x15◀ ◀ ◀"})
+
 TriggerX(FP,{CDeaths(FP,AtMost,2,SoundLimit)},{CopyCpAction({PlayWAVX("staredit\\wav\\HeroKill.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit)},{preserved})
 
 f_LoadCp()
@@ -1945,10 +823,7 @@ CDoActions(FP,{
 })
 --CMov(FP,_Add(_Mul(CurrentArr,12),0x58D740),_ReadF(BackupPosData))
 if Limit == 1 then
-	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
-	_0DPatchX(FP,f_GunNumT,5)
-	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
-	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+	DisplayPrint(HumanPlayers,{"\x07『 \x03TESTMODE OP \x04: f_GunSend 성공. f_Gun 실행자 : ",G_CA,". \x07』"})
 end
 CElseX()
 DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -1981,10 +856,7 @@ CDoActions(FP,{
 })
 --CMov(FP,_Add(_Mul(CurrentArr,12),0x58D740),_ReadF(BackupPosData))
 if Limit == 1 then
-	ItoDec(FP,G_CA,VArr(f_GunNumT,0),2,0x1F,0)
-	_0DPatchX(FP,f_GunNumT,5)
-	f_Movcpy(FP,_Add(f_GunSendStrPtr,f_GunSendT[2]),VArr(f_GunNumT,0),5*4)
-	DoActions(FP,{RotatePlayer({DisplayTextX("\x0D\x0D\x0Df_GunSend".._0D,4)},HumanPlayers,FP)})
+	DisplayPrint(HumanPlayers,{"\x07『 \x03TESTMODE OP \x04: 성공한 f_GunSend의 EXCunit Number : ",G_CA,". \x07』"})
 end
 CElseX()
 DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -2120,6 +992,40 @@ Trigger {
 	actions = {
 		SetCVar(FP,HondonMode[2],SetTo,0);
 		SetCDeaths(FP,SetTo,1,ToggleHondon);
+		SetCDeaths(FP,SetTo,1,ToggleSound);
+		PreserveTrigger();
+	}
+	}
+
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		Deaths(CurrentPlayer,AtLeast,1,40);
+		CVar(FP,AtkSpeedMode[2],AtMost,0);
+		CDeaths(FP,AtMost,0,ToggleAtkSp);
+		
+	},
+	actions = {
+		SetCVar(FP,AtkSpeedMode[2],SetTo,1);
+		SetCDeaths(FP,SetTo,1,ToggleAtkSp);
+		SetCDeaths(FP,SetTo,1,ToggleSound);
+		PreserveTrigger();
+	}
+	}
+	
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		Deaths(CurrentPlayer,AtLeast,1,40);
+		CVar(FP,AtkSpeedMode[2],AtLeast,1);
+		CDeaths(FP,AtMost,0,ToggleAtkSp);
+		
+	},
+	actions = {
+		SetCVar(FP,AtkSpeedMode[2],SetTo,0);
+		SetCDeaths(FP,SetTo,1,ToggleAtkSp);
 		SetCDeaths(FP,SetTo,1,ToggleSound);
 		PreserveTrigger();
 	}
@@ -2308,6 +1214,18 @@ Trigger {
 		}
 		}
 	
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			Deaths(CurrentPlayer,AtMost,0,40);
+		},
+		actions = {
+			SetCDeaths(FP,SetTo,0,ToggleAtkSp);
+			PreserveTrigger();
+		}
+		}
+	
 Trigger {
 	players = {FP},
 	conditions = {
@@ -2356,7 +1274,7 @@ Trigger {
 		Deaths(CurrentPlayer,AtLeast,1,210);
 	},
 	actions = {
-		SetCDeaths(FP,SetTo,1,Gmode);
+		SetCDeaths(FP,SetTo,1,GMode);
 		PreserveTrigger();
 	}
 	}
@@ -2367,7 +1285,7 @@ Trigger {
 		Deaths(CurrentPlayer,AtLeast,1,211);
 	},
 	actions = {
-		SetCDeaths(FP,SetTo,2,Gmode);
+		SetCDeaths(FP,SetTo,2,GMode);
 		PreserveTrigger();
 	}
 	}
@@ -2378,7 +1296,7 @@ Trigger {
 		Deaths(CurrentPlayer,AtLeast,1,212);
 	},
 	actions = {
-		SetCDeaths(FP,SetTo,3,Gmode);
+		SetCDeaths(FP,SetTo,3,GMode);
 		PreserveTrigger();
 	}
 	}
@@ -2549,66 +1467,23 @@ Trigger { -- 인트로1
 CIf(FP,CDeaths(FP,Exactly,0,ModeO))
 
 CIf(FP,CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode))
-HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"
-HiddenModeStr2 = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x08: ON) \x10]\x0D\x0D\x0D\x0D\x0D"
-CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr,0)
-CelseX()
-Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr2,0)
-CIfXEnd()
-HiddenModeL = GetStrSizeD(0,HiddenModeStr)
-HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~버튼"
-WavFile = "staredit\\wav\\Unlock.ogg"
-	Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 1);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 2);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 3);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 4);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 5);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 128);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 129);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 130);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, 131);
-		PlayWAV(WavFile);
-		DisplayText(HiddenFindT,4);
-		DisplayText("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);
-		SetMemory(0x6509B0, SetTo, FP);
-	}
-	}
 
+
+--HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"
+--HiddenModeStr2 = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x08: ON) \x10]\x0D\x0D\x0D\x0D\x0D"
+--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+--Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr,0)
+--CElseX()
+--Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr2,0)
+--CIfXEnd()
+--HiddenModeL = GetStrSizeD(0,HiddenModeStr)
+HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10기타옵션 \x07활성화 \x04: ~, TAB 버튼"
+WavFile = "staredit\\wav\\Unlock.ogg"
+DoActions(FP,{RotatePlayer({
+	PlayWAVX(WavFile);
+	DisplayTextX(HiddenFindT,4);
+	SetCDeaths(FP,SetTo,1,ToggleSound);
+},HumanPlayers,FP)},1)
 
 --[[
 Trigger {
@@ -2636,205 +1511,65 @@ Trigger {
 	},
 }
 --]]
-for i = 2, 0, -1 do
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenHP[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenHPM[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenATK[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenATKM[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenPts[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenPtsM[2],AtLeast,(2^i),(2^i));
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);
-		PreserveTrigger();
-	}
-}
+--f_Movcpy(FP,HiddenModeStrPtr,VArr(HiddenModeT,0),HiddenModeL-3)
+
+CIf(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{SetCDeaths(FP,SetTo,0,ToggleSound);})
+
+HiddenDisplay = CreateVarArr(3,FP)
+
+HiddenColor = CreateVarArr(3,FP)
+
+CMov(FP,HiddenDisplay[1],0)
+CMov(FP,HiddenDisplay[2],0)
+CMov(FP,HiddenDisplay[3],0)
+CAdd(FP,HiddenDisplay[1],HiddenHP)
+CAdd(FP,HiddenDisplay[2],HiddenATK)
+CAdd(FP,HiddenDisplay[3],HiddenPts)
+CiSub(FP,HiddenDisplay[1],HiddenHPM)
+CiSub(FP,HiddenDisplay[2],HiddenATKM)
+CiSub(FP,HiddenDisplay[3],HiddenPtsM)
+
+ColorT = {0x1F,0x0F,0x1C,0x1E,0x1D,0x4,0x19,0x3,0x11,0x10,0x08}
+for i = 1, 3 do
+	for j = 0, 10 do
+		TriggerX(FP,{CV(HiddenDisplay[i],j-5)},{SetV(HiddenColor[i],ColorT[11-j])},{preserved})
+	end
 end
 
-
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenHPM[2],AtLeast,1);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,4),SetTo,0x2D*256,0xFF00);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenHPM[2],AtMost,0);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,4),SetTo,0x0D*256,0xFF00);
-		PreserveTrigger();
-	}
-}
-
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenATKM[2],AtLeast,1);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,7),SetTo,0x2D*65536,0xFF0000);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenATKM[2],AtMost,0);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,7),SetTo,0x0D*65536,0xFF0000);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenPtsM[2],AtLeast,1);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,10),SetTo,0x2D*16777216,0xFF000000);
-		PreserveTrigger();
-	}
-}
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenPtsM[2],AtMost,0);
-		
-	},
-	actions = {
-		SetCVAar(VArr(HiddenModeT,10),SetTo,0x0D*16777216,0xFF000000);
-		PreserveTrigger();
-	}
-}
-
-f_Movcpy(FP,HiddenModeStrPtr,VArr(HiddenModeT,0),HiddenModeL-3)
-
-
-
-
+hondondisplay = CreateVarArr(4,FP)
+AtkSpeedDisplay = CreateVarArr(4,FP)
+TriggerX(FP,{CV(HondonMode,0)},{
+	SetV(hondondisplay[1],string.byte("\x04",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("F",1,1)),
+	SetV(hondondisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(HondonMode,1)},{
+	SetV(hondondisplay[1],string.byte("\x08",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("N",1,1)),
+	SetV(hondondisplay[4],string.byte(" ",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,0)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x04",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("F",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,1)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x1F",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("N",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte(" ",1,1)),
+},{preserved})
 
 WavFile = "staredit\\wav\\sel_g.ogg"
-	Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,AtLeast,1,ToggleSound);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		PlayWAV(WavFile);
-		DisplayText("HD".._0D,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		SetCDeaths(FP,SetTo,0,ToggleSound);
-		PreserveTrigger();
-	}
-	}
+
+--HondonMode
+--AtkSpeedMode
+DisplayPrint(HumanPlayers,{"\x13\x10[ \x04(\x08HP \x04: ",HiddenColor[1][2],HiddenDisplay[1],"\x04) (\x1BATK \x04: ",HiddenColor[2][2],HiddenDisplay[2],"\x04) (\x1FPts \x04: ",HiddenColor[3][2],HiddenDisplay[3],"\x04) (\x10혼돈 옵션 \x04: ",hondondisplay,"\x04) (\x1F공속무한모드 \x04: ",AtkSpeedDisplay,"\x04)  \x10]"})
+DoActions(FP,{RotatePlayer({PlayWAVX(WavFile);},HumanPlayers,FP)})
+CIfEnd()
 
 CIfEnd()
 Trigger {
@@ -3015,51 +1750,6 @@ CIf(FP,{CDeaths(FP,Exactly,0,SelectorT),CVar(FP,SelCP[2],Exactly,j-1)})
 f_Memcpy(FP,0x641598,_TMem(Arr(Str24,0),"X","X",1),Str24L)
 f_Movcpy(FP,0x641598+Str24L-3,VArr(Names[j],0),4*6)
 CIfEnd()
---[[
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		
-		CDeaths(FP,Exactly,0,SelectorT);
-		CVar(FP,SelCP[2],Exactly,j-1);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(Text2,4);
-		DisplayText("\x0D\x0D\x0D"..Player[j].."".._0D,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		PreserveTrigger();
-	}
-	}
-]]
 end
 CIf(FP,{CDeaths(FP,Exactly,0,ModeSel),CDeaths(FP,Exactly,0,BGMSel)})
 
@@ -3067,7 +1757,7 @@ CIf(FP,{CDeaths(FP,Exactly,0,ModeSel),CDeaths(FP,Exactly,0,BGMSel)})
 
 
 for i = 0, 3 do
-CIf(FP,CDeaths(FP,Exactly,i,Gmode))
+CIf(FP,CDeaths(FP,Exactly,i,GMode))
 f_Memcpy(FP,0x641598+Str24L+(4*6)-5,_TMem(Arr(Str25[i+1],0),"X","X",1),Str25L[i+1])
 CIfEnd()
 end
@@ -3186,11 +1876,12 @@ WavFile = "staredit\\wav\\sel_o.ogg"
 
 
 Text1 = "\x13\x07난이도\x04를 선택해주세요.\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 30초 후 자동으로 \x0EEASY\x04모드가 선택됩니다."
+TriggerX(FP,{},{})
 Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,Exactly,0,Gmode);
+		CDeaths(FP,Exactly,0,GMode);
 		CDeaths(FP,Exactly,0,ModeSel);
 		CDeaths(FP,Exactly,0,BGMSel);
 	},
@@ -3220,113 +1911,6 @@ Trigger { -- 인트로1
 	},
 	}
 
---[[
-Text1 = "\x13\x07난이도\x04를 선택해주세요.\n\x13\x03[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x04[E] \x11BURST\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 15초 후 자동으로 \x0EEASY\x04모드가 선택됩니다."
-Trigger { -- 인트로1
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,1,Gmode);
-		CDeaths(FP,Exactly,0,ModeSel);
-		CDeaths(FP,Exactly,0,BGMSel);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		PreserveTrigger();
-		
-	},
-	}
-Text1 = "\x13\x07난이도\x04를 선택해주세요.\n\x13\x04[Q] \x0EEASY\n\x13\x03[W] \x08HARD\n\x13\x04[E] \x11BURST\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 15초 후 자동으로 \x0EEASY\x04모드가 선택됩니다."
-Trigger { -- 인트로1
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,2,Gmode);
-		CDeaths(FP,Exactly,0,ModeSel);
-		CDeaths(FP,Exactly,0,BGMSel);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		PreserveTrigger();
-		
-	},
-	}
-Text1 = "\x13\x07난이도\x04를 선택해주세요.\n\x13\x04[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x03[E] \x11BURST\n\x13\x04선택 완료 후 Y버튼을 눌러주세요. 15초 후 자동으로 \x0EEASY\x04모드가 선택됩니다."
-Trigger { -- 인트로1
-	players = {FP},
-	conditions = {
-		Label(0);
-		CDeaths(FP,Exactly,3,Gmode);
-		CDeaths(FP,Exactly,0,ModeSel);
-		CDeaths(FP,Exactly,0,BGMSel);
-	},
-	actions = {
-		SetMemory(0x6509B0, SetTo, 0);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 1);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 2);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 3);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 4);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 5);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 128);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 129);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 130);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, 131);
-		DisplayText(Text1,4);
-		SetMemory(0x6509B0, SetTo, FP);
-		PreserveTrigger();
-		
-	},
-	}
---]]
 CIf(FP,{TTCDeaths(FP,NotSame,CurrentMode,GMode)})
 
 WavFile = "staredit\\wav\\sel_g.ogg"
@@ -3362,7 +1946,7 @@ Trigger { -- 인트로1
 	players = {FP},
 	conditions = {
 		Label(0);
-		CDeaths(FP,Exactly,i,Gmode);
+		CDeaths(FP,Exactly,i,GMode);
 	},
 	actions = {
 		SetCVar(FP,CurrentMode[2],SetTo,i);
@@ -3379,7 +1963,7 @@ Trigger {
 		Label(0);
 		CDeaths(FP,Exactly,0,ModeO);
 		CDeaths(FP,AtLeast,1,ModeSel);
-		CDeaths(FP,AtLeast,1,Gmode);
+		CDeaths(FP,AtLeast,1,GMode);
 		CDeaths(FP,Exactly,0,BGMSel);
 	},
 	actions = {
@@ -3413,7 +1997,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeSel);
-		CDeaths(FP,Exactly,1,Gmode);
+		CDeaths(FP,Exactly,1,GMode);
 		CDeaths(FP,Exactly,0,BGMSel);
 	},
 	actions = {
@@ -3466,7 +2050,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeSel);
-		CDeaths(FP,Exactly,2,Gmode);
+		CDeaths(FP,Exactly,2,GMode);
 		CDeaths(FP,Exactly,0,BGMSel);
 	},
 	actions = {
@@ -3511,7 +2095,7 @@ Trigger { -- 인트로1
 	conditions = {
 		Label(0);
 		CDeaths(FP,AtLeast,1,ModeSel);
-		CDeaths(FP,Exactly,3,Gmode);
+		CDeaths(FP,Exactly,3,GMode);
 		CDeaths(FP,Exactly,0,BGMSel);
 	},
 	actions = {
@@ -3685,7 +2269,7 @@ Trigger {
 		Label(0);
 		CDeaths(FP,Exactly,0,ModeO);
 		CDeaths(FP,AtLeast,1,ModeSel);
-		CDeaths(FP,AtLeast,1,Gmode);
+		CDeaths(FP,AtLeast,1,GMode);
 		CDeaths(FP,Exactly,2,BGMSel);
 	},
 	actions = {
@@ -4390,6 +2974,7 @@ Trigger { -- 인트로1
 		
 	},
 	}
+	
 CIfEnd()
 CMov(FP,Dx,_ReadF(0x51CE8C))
 CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
@@ -4661,22 +3246,22 @@ end
 
 
 
-Call_GunPosSave(132,0)
-Call_GunPosSave(133,1)
-Call_GunPosSave(216,2)
-Call_GunPosSave(190,3)
-Call_GunPosSave(147,4)
-Call_GunPosSave(156,5)
-Call_GunPosSave(109,6)
-Call_GunPosSave(173,7)
-Call_GunPosSave(201,8)
-Call_GunPosSave(175,9)
-Call_GunPosSave(152,10)
-Call_GunPosSave(151,11)
-Call_GunPosSave(148,12)
-Call_GunPosSave(150,13)
-Call_GunPosSave(154,13)
-Call_GunPosSave(200,13)
+Call_GunPosSave(132)
+Call_GunPosSave(133)
+Call_GunPosSave(216)
+Call_GunPosSave(190)
+Call_GunPosSave(147)
+Call_GunPosSave(156)
+Call_GunPosSave(109)
+Call_GunPosSave(173)
+Call_GunPosSave(201)
+Call_GunPosSave(175)
+Call_GunPosSave(152)
+Call_GunPosSave(151)
+Call_GunPosSave(148)
+Call_GunPosSave(150)
+Call_GunPosSave(154)
+Call_GunPosSave(200)
 CIf(FP,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 DoActions(FP,MoveCp(Subtract,6*4))
 for j = 1, 6 do
@@ -4860,8 +3445,7 @@ CWhileEnd()
 DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
 TriggerX(FP,{CDeaths(FP,AtLeast,100,SoundLimitT)},{SetCDeaths(FP,SetTo,0,SoundLimit),SetCDeaths(FP,SetTo,0,SoundLimitT)},{preserved})
 
-if Limit == 1 then -- 공속무한 모듈
-		
+	CIf(FP,{CV(AtkSpeedMode,1,AtLeast)})
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)'
 		Trigger2(FP, {
 			DeathsX(19025+(84*i)+19,AtMost,5,0,0xFF),
@@ -4871,8 +3455,7 @@ if Limit == 1 then -- 공속무한 모듈
 			},{preserved})
 	end
 
-end
-
+	CIfEnd()
 
 Install_boss()
 CIf(FP,CVar(FP,count[2],AtMost,GunLimit))
@@ -5109,6 +3692,7 @@ Trigger {
 		CVar(FP,HiddenHPM[2],Exactly,0);
 		CVar(FP,HiddenATKM[2],Exactly,0);
 		CVar(FP,HondonMode[2],Exactly,0);
+		CVar(FP,AtkSpeedMode[2],Exactly,0);
 		
 	},
 	actions = {
@@ -8433,6 +7017,36 @@ Trigger2X(FP,{CGMode(2,AtLeast),MemoryB(0x58D2B0+(46*j),AtLeast,255);},{
 			PlayWAVX("sound\\Terran\\Frigate\\AfterOn.wav")
 	},HumanPlayers,FP);})
 end
+
+BanCode2 = CreateCcodeArr(6)
+WarnCT = CreateVarArr(6)
+MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+for i = 0, 5 do
+	CIf(FP,HumanCheck(i,1),SubV(WarnCT[i+1],1))
+	TriggerX(FP, {Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
+	TriggerX(FP, {CD(BanCode2[i+1],1)}, {
+		SetMemory(0x59CC78, SetTo, -1048576),
+		SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
+
+	Trigger {
+		players = {FP},
+		conditions = {
+			Label(0);
+			LocalPlayerID(i);
+			CD(BanCode2[i+1],1)
+		},
+		actions = {
+			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);
+		},
+		flag = {preserved}
+	}
+	Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04가 매크로를 사용하여 \x08찌리리릿 500배 \x04당하셨습니다."),4),PlayWAVX("staredit\\wav\\zzirizziri.ogg"),PlayWAVX("staredit\\wav\\zzirizziri.ogg")},HumanPlayers,FP);})
+
+
+	CIfEnd()
+end
+
+
 
 Trigger { -- 지속캔낫 감지용
 	players = {FP},
