@@ -4,45 +4,25 @@
 		if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
 			f_SaveCp()
 		end--
-		local BSize = 0
-		for j,k in pairs(arg) do -- StrSizeCalc
-			if type(k) == "string" then
-				local CT = GetStrSize(0,k)
-				BSize=BSize+CT
-			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
-				BSize = BSize+(4*5)
-			elseif type(k)=="table" and k[4]=="V" then
-				if k["fwc"] == true then
-					BSize=BSize+(4*12)
-				else
-					BSize=BSize+(4*4)
-				end
-			elseif type(k)=="table" and k[4]=="W" then
-				BSize=BSize+(4*5)
-			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
-				BSize = BSize+#k
-			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
-				BSize=BSize+1
-			else
-				PushErrorMsg("Print_Inputdata_Error")
-			end
-		end
-		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
+		BSize = 0
 		
 
 		dp.Alloc = dp.Alloc+1
-		local RetV = CreateVar(FP)
-		local Dev = 0
-		table.insert(dp.StrXKeyArr,{RetV,StrT})
+		RetV = CreateVar(FP)
+		Dev = 0
 
 		
 		dp.StrXIndex=dp.StrXIndex+1
 		for j,k in pairs(arg) do
-			if type(k) == "string" then
+			if type(k) == "function" then
+				k()
+			elseif type(k) == "string" then
 				local CT = CreateCText(FP,k)
+				BSize=BSize+CT[2]
 				table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
 				Dev=Dev+CT[2]
 			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+				BSize = BSize+(4*5)
 				if k[2] == "LocalPlayerID" then
 					table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
 				elseif type(k[2])=="number" then
@@ -55,33 +35,42 @@
 				Dev=Dev+(4*5)
 			elseif type(k)=="table" and k[4]=="V" then
 				if k["fwc"] == true then
+					BSize=BSize+(4*12)
 					CMov(FP,dp.publicItoDecV,k)
 					CallTrigger(FP,dp.Call_IToDecX)
 					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
 					Dev=Dev+(4*12)
 				else
+					BSize=BSize+(4*4)
 					CMov(FP,dp.publicItoDecV,k)
 					CallTrigger(FP,dp.Call_IToDec)
 					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
 					Dev=Dev+(4*4)
 				end
 			elseif type(k)=="table" and k[4]=="W" then
+				BSize=BSize+(4*5)
 				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
 				CallTrigger(FP,dp.Call_lIToDec)
 				f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
 				Dev=Dev+(4*5)
 			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+				BSize = BSize+#k
 				for o,p in pairs(k) do
 					CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
 					Dev=Dev+(1)
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+				BSize=BSize+1
 				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
 				Dev=Dev+(1)
 			else
 				PushErrorMsg("Print_Inputdata_Error")
 			end
 		end
+		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
+		table.insert(dp.StrXKeyArr,{RetV,StrT})
+
+
 		if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
 			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)},nil,nil)
 		elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
@@ -89,6 +78,9 @@
 		else
 			DoActionsX(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)},nil,nil)
 		end
+		RetV = nil
+		Dev = nil
+		BSize = nil
 	end
 
 
