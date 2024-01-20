@@ -6,6 +6,10 @@ DLocation = CreateVar(FP)
 SPlayer = CreateVar(FP)
 SAmount = CreateVar(FP)
 SetCall(FP)
+
+
+
+
 	CTrigger(FP,{CV(SPlayer,0x7FFFFFFF)},{SetV(SPlayer,GCP)},{preserved})
 	CTrigger(FP,{CV(SLocation,0x7FFFFFFF,AtLeast)},{SubV(SLocation,0x7FFFFFFF),AddV(SLocation,GCP)},{preserved})
 	CTrigger(FP,{CV(DLocation,0x7FFFFFFF,AtLeast)},{SubV(DLocation,0x7FFFFFFF),AddV(DLocation,GCP)},{preserved})
@@ -138,7 +142,7 @@ CElseIfX({TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])
 DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
 
 CElseX(SetV(Result,4))--실패
-DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하여 \x08유닛이 파괴되었습니다.. \x07』"})
+DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
 CIfXEnd()
 
 CElseX()
@@ -259,4 +263,36 @@ end
 
 end
 SetCallEnd()
+
+
+	
+Call_SetEPerStr = SetCallForward()
+SetCall(FP)
+EVarArr1 = CreateVarArr(6, FP)
+GEVar = CreateVar(FP)
+EVarArr2 = {EVarArr1[1],EVarArr1[2],EVarArr1[3]}
+EVarArr3 = {EVarArr1[4],EVarArr1[5],EVarArr1[6]}
+
+for i = 1, 6 do
+	Byte_NumSet(GEVar,EVarArr1[i],10^(6-i),1,0x30)
+end
+SetEPerStr(EVarArr1)
+
+SetCallEnd()
+
+Call_SetEPerStr2 = SetCallForward()
+SetCall(FP)
+EVarArr1_2 = CreateVarArr(6, FP)
+GEVar_2 = CreateVar(FP)
+EVarArr2_2 = {EVarArr1_2[1],EVarArr1_2[2],EVarArr1_2[3]}
+EVarArr3_2 = {EVarArr1_2[4],EVarArr1_2[5],EVarArr1_2[6]}
+
+for i = 1, 6 do
+	Byte_NumSet(GEVar_2,EVarArr1_2[i],10^(6-i),1,0x30)
+end
+SetEPerStr(EVarArr1_2)
+
+SetCallEnd()
+
+
 end

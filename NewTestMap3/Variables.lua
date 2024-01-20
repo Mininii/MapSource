@@ -111,6 +111,7 @@ function Include_Vars()
 	
 	--System
 	GCP = CreateVar(FP)
+	LCP = CreateVar(FP)
 	GCPW = CreateWar(FP)
 	VArrI = CreateVar(FP)
 	VArrI4 = CreateVar(FP)
@@ -118,7 +119,7 @@ function Include_Vars()
 	WArrI4 = CreateWar(FP)
 	iv.CheatDetect = CreateCcode()
 	iv.StatTest = CreateCcode()
-
+	Etbl = CreateVar(FP)
 	
 	--General
 	iv.Time = CreateVar(FP)
@@ -157,17 +158,17 @@ function Include_Vars()
 	PUT={}
 	PWT={}
 	LevelUnitArr = {}
-
+	--{Level,UnitID,Per,Exp,ECost}
 	PushLevelUnit(1,{45000,55000,0,0},0,0,0,24,1,60,nil,50)--마린 10원
 	PushLevelUnit(2,{40000,45000,15000,0},0,1,2,72,10,59,nil,120)--고스트
-	PushLevelUnit(3,{38000,40000,22000,0},0,2,4,72,20,59,nil,300)--벌쳐 300원
-	PushLevelUnit(4,{35000,35000,30000,0},0,7,13,48,20,59,nil,550)--에씨비 
-	PushLevelUnit(5,{30000,35000,30000,5000},1,8,16,48,30,59,nil,1000)--레이스 4000원
-	PushLevelUnit(6,{30000,34000,30000,6000},3,5,11,48,50,59,nil,2500)--탱크
-	PushLevelUnit(7,{28000,35000,30000,7000},7,3,7,48,80,59,nil,6000)--골럇 
-	PushLevelUnit(8,{26000,36000,30000,8000},11,32,25,72,60,59,nil,15000)--파벳 3타 2만원
-	PushLevelUnit(9,{24000,37000,30000,9000},15,58,103,48,80,59,nil,50000)--발키리 2타
-	PushLevelUnit(10,{20000,40000,30000,10000},25,12,19,48,250,59,nil,100000)--배틀
+	PushLevelUnit(3,{38000,40000,22000,0},0,2,4,72,30,59,nil,300)--벌쳐 300원
+	PushLevelUnit(4,{35000,35000,30000,0},0,7,13,48,40,59,nil,550)--에씨비 
+	PushLevelUnit(5,{30000,35000,30000,5000},1,8,16,48,100,59,nil,1000)--레이스 4000원
+	PushLevelUnit(6,{30000,34000,30000,6000},3,5,11,48,250,59,nil,2500)--탱크
+	PushLevelUnit(7,{28000,35000,30000,7000},7,3,7,48,1000,59,nil,6000)--골럇 
+	PushLevelUnit(8,{26000,36000,30000,8000},11,32,25,72,1500,59,nil,10000)--파벳 3타 2만원
+	PushLevelUnit(9,{24000,37000,30000,9000},15,58,103,48,5000,59,nil,50000)--발키리 2타
+	PushLevelUnit(10,{20000,40000,30000,10000},25,12,19,48,12000,59,nil,100000)--배틀
 	PopLevelUnit()
 
 	
