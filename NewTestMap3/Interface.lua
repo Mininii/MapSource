@@ -5,17 +5,34 @@ function Interface()
 	it_Call = SetCallForward()
 	SetCall(FP)
 	
-
-	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
-	FixText(FP, 1)
-	CIfEnd()
-	DisplayPrint(GCP, {"내돈 : ",PVtoV(iv.Money)})
-	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
-	FixText(FP, 2)
-	CIfEnd()
 	DPSBuildingX(GCP,DpsLV1,nil,iv.BuildMul1,{iv.TempO,Ore},iv.Money,iv.Money2)
 	Debug_DPSBuildingX(DpsLV1,127,95)
+
+	
+	CIf(FP,{TMemory(0x512684, Exactly, GCP)})
+
+	
+	f_LMov(FP,iv.ExpLoc,_LSub(WArrX(GetWArray(iv.PEXP[1], 7),WArrI,WArrI4), WArrX(GetWArray(iv.CurEXP[1], 7),WArrI,WArrI4)),nil,nil,1)
+	f_LMov(FP,iv.TotalExpLoc,_LSub(WArrX(GetWArray(iv.TotalExp[1], 7), WArrI,WArrI4), WArrX(GetWArray(iv.CurEXP[1], 7), WArrI,WArrI4)),nil,nil,1)
+	for j,k in pairs(LocalDataArr) do
+		if k[1][4]=="V" then
+			local LocPVA = GetVArray(k[1], 7)
+			CMovX(FP,k[2],VArrX(LocPVA,VArrI,VArrI4),nil,nil,nil,1)
+		elseif k[1][4]=="W" then
+			local LocPWA = GetWArray(k[1], 7)
+			f_LMovX(FP, k[2], WArrX(LocPWA, WArrI,WArrI4), SetTo, nil,nil, 1)
+		else
+			PushErrorMsg("LocalDataArr_InputError")
+		end
+	end
+	
+	CIfEnd()
+
+
 	SetCallEnd()
+
+
+
 	CJumpEnd(FP, it_jump)
 
 	CMov(FP,iv.PCheckV,0)
@@ -24,7 +41,7 @@ function Interface()
 		CIf(FP,HumanCheck(i, 1),{SubV(SaveAvTime[i+1],1)})
 		TriggerX(FP,{},{AddV(iv.PCheckV,1)},{preserved})
 		CallTriggerX(FP,it_Call, {},{SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i)),SetV(VArrI,604*i),SetV(VArrI4,2416*i),SetNWar(WArrI, SetTo, {604*i,604*i}),SetNWar(WArrI4, SetTo, {2416*i,2416*i})})
-		CreateUnitStackedCp({}, 12, 0, 34, nil,nil,1)
+		CreateUnitStackedCp({}, 1, 0, 34, nil,nil,1)
 
 
 		
@@ -57,15 +74,15 @@ function Interface()
 	NJumpEnd(FP, StatTestJump)--스탯 무결성 검사 실패시 자동으로 초기화
 
 	CTrigger(FP, {TTNVar(iv.PStatVer[i+1], NotSame, StatVer)}, {SetCp(i),
-	DisplayExtText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),}, 1)
+	DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x07버전 업"), 4),}, 1)
 	for h = 1, 5 do
 		local NBit = 2^(h-1)
 		CTrigger(FP, {CDX(iv.StatTest,NBit,NBit)}, {SetCp(i),
-		DisplayExtText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),}, 1)
+		DisplayText(StrDesignX("\x04스탯이 \x07초기화\x04되었습니다. \x08사유 \x04: \x10레벨, 스탯 무결성 검사 실패. \x04실패코드 : "..h), 4),}, 1)
 	end
 	--CIf(FP,{CV(iv.PStatVer[i+1], 14,AtMost)})
 	--	CTrigger(FP, {CV(SCA.WeekV,4),CV(iv.WeekCheck[i+1],3)}, {SetV(iv.FirstRewardLim2[i+1],0),SetV(iv.WeekCheck[i+1],SCA.WeekV),SetCp(i),
-	--	DisplayExtText(StrDesignX("\x04주간 첫 달성 보상 남은횟수가 \x07초기화\x04되었습니다. \x08사유 \x04: 주간 글로벌 데이터 버그로 인한 조치"), 4)})
+	--	DisplayText(StrDesignX("\x04주간 첫 달성 보상 남은횟수가 \x07초기화\x04되었습니다. \x08사유 \x04: 주간 글로벌 데이터 버그로 인한 조치"), 4)})
 
 	--CIfEnd()
 	CIf(FP,CD(iv.StatTest,1,AtLeast))
@@ -75,8 +92,8 @@ function Interface()
 	TriggerX(FP,{CDX(iv.StatTest,2^(6-1),2^(6-1)),LocalPlayerID(i)},{
 		SetCp(i),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("LV\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayText("LV\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);
 
 	})
@@ -98,8 +115,8 @@ function Interface()
 		TriggerX(FP, {CD(iv.CheatDetect,1),LocalPlayerID(i)}, {
 			SetCp(i),
 			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("LB\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-			DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+			DisplayText("LB\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+			DisplayText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 			SetMemory(0xCDDDCDDC,SetTo,1);})
 			if Limit == 1 then
 				CElseX()--레벨이 0일 경우 이쪽으로
@@ -116,8 +133,8 @@ function Interface()
 	CMov(FP,iv.PStatVer[i+1],StatVer)--저장 여부에 관계없이 로드완료시 스탯버전 항목 초기화
 		
 	if Limit == 1 then --테스트 참가 유저 테스터유저 칭호 지급
-		TriggerX(FP, {}, {SetCp(i),DisplayExtText(StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다."), 4)}, {preserved})
-		TriggerX(FP, {CVX(iv.TesterFlag[i+1],0,2)}, {SetVX(iv.TesterFlag[i+1],2,2),SetCp(i),DisplayExtText(StrDesignX("\x07테스터 보상\x04이 지급되었습니다!!!").."\n"..StrDesignX("보상내용 : \x04시즌2 \x1F테스터 \x04칭호(영구지급), \x17DPC(디스코드 코인)"), 4)}, {preserved})
+		TriggerX(FP, {}, {SetCp(i),DisplayText(StrDesignX("\x07테스트 맵\x04에서의 SCA 로드가 \x10감지\x04되었습니다! 테스트맵 플레이에 협조해 주셔서 감사합니다."), 4)}, {preserved})
+		TriggerX(FP, {CVX(iv.TesterFlag[i+1],0,2)}, {SetVX(iv.TesterFlag[i+1],2,2),SetCp(i),DisplayText(StrDesignX("\x07테스터 보상\x04이 지급되었습니다!!!").."\n"..StrDesignX("보상내용 : \x04시즌2 \x1F테스터 \x04칭호(영구지급), \x17DPC(디스코드 코인)"), 4)}, {preserved})
 	end
 	CIfEnd()
 
@@ -167,6 +184,7 @@ end
 
 
 
+	TriggerX(FP,{CD(iv.StatEff[i+1],1)},{SetCD(iv.StatEffLoc,1)},{preserved})
 		CIfEnd()
 	end
 --	if Limit == 1 then

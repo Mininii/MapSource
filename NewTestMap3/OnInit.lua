@@ -4,10 +4,16 @@ function onInit_EUD()
 	else
 		CIfOnce(FP,nil,{SetMemory(0x5124F0,SetTo,0x1D)}) -- 기본 2배속
 	end
+	--DPSBuilding
 	SetUnitsDatX(127, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(190, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 	SetUnitsDatX(173, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,Armor = 0,StarEditFlag=0x1C7})
 
+
+	--Effect Unit
+	SetUnitsDatX(84, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,AdvFlag={0x4,0x4+0x80},Height=12})
+	SetUnitsDatX(50, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,AdvFlag={0x4,0x4+0x80},Height=12})
+	SetUnitsDatX(49, {BdDimX=1,BdDimY=1,SizeL=1,SizeU=1,SizeR=1,SizeD=1,HP=8320000,AdvFlag={0x4,0x4+0x80},Height=12,Graphic=86})
 
 	PatchInput()
 
@@ -96,7 +102,7 @@ function onInit_EUD()
 --		end
 --		CTrigger(FP,{TTMemory(0x51CE84,NotSame,1000)},{
 --			RotatePlayer({
---				DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거하거나 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x1B또한 이 맵은 배틀넷에서만 플레이 가능합니다. 배틀넷에서 진행해 주십시오."),4);
+--				DisplayText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거하거나 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x1B또한 이 맵은 배틀넷에서만 플레이 가능합니다. 배틀넷에서 진행해 주십시오."),4);
 --			},Force1,FP);
 --			SetMemory(0xCDDDCDDC,SetTo,1);},1)
 			
@@ -153,6 +159,7 @@ function onInit_EUD()
 
 
 	
+	f_GetTblptr(FP, Etbl, 334)
 
 	CIfEnd()
 end

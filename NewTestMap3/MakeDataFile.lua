@@ -49,9 +49,9 @@ EXPArr = {}
 --        local XI = 3
 --		EXPArr[i] = 10+((i-1)*(i*XI))
 --	end
-    mw2 = 10
+    mw2 = 1
     mw = 0
-    mw3 = 6
+    mw3 = 1
     cci=0
     
 for i = 1, 300001 do

@@ -51,12 +51,11 @@ CIf(FP,{CV(Result,1,AtLeast)})
 		TSetNVar(SUnitID,SetTo,ReturnUnit1),
 		SetNVar(SLocation,SetTo,1),
 		SetNVar(DLocation,SetTo,0),
-		TSetNVar(SPlayer,SetTo,GCP)
+		TSetNVar(SPlayer,SetTo,GCP),
 	})
 	CallTrigger(FP, CreateStackedUnit)
 
-
-	CElseIfX(CV(Result,2))-- 유지시
+	CElseIfX(CV(Result,2),{TCreateUnitWithProperties(1, 84, 1, GCP,{hallucinated = false}),KillUnit(84, AllPlayers)})-- 유지시
 	
 	CElseIfX(CV(Result,3),{TKillUnitAt(1, UID, 1, GCP)})-- 하락시
 
@@ -65,11 +64,19 @@ CIf(FP,{CV(Result,1,AtLeast)})
 		TSetNVar(SUnitID,SetTo,ReturnUnit2),
 		SetNVar(SLocation,SetTo,1),
 		SetNVar(DLocation,SetTo,0),
-		TSetNVar(SPlayer,SetTo,GCP)
+		TSetNVar(SPlayer,SetTo,GCP),TCreateUnitWithProperties(1, 50, 1, GCP,{hallucinated = false}),KillUnit(50, AllPlayers)
 	})
 	CallTrigger(FP, CreateStackedUnit)
 
-	CElseX({TKillUnitAt(1, UID, 1, GCP)})-- 파괴시
+	CElseX({TKillUnitAt(1, UID, 1, GCP),TCreateUnitWithProperties(1, 49, 1, GCP,{hallucinated = false}),KillUnit(49, AllPlayers)})-- 파괴시
+	CDoActions(FP, {
+		SetNVar(SAmount,SetTo,1),
+		TSetNVar(SUnitID,SetTo,LevelUnitArr[1][2]),
+		SetNVar(SLocation,SetTo,1),
+		SetNVar(DLocation,SetTo,0),
+		TSetNVar(SPlayer,SetTo,GCP),
+	})
+	CallTrigger(FP, CreateStackedUnit)
 
 	CIfXEnd()
 
@@ -167,7 +174,7 @@ CTKillT = {}
 	else
 		TriggerX(FP, {DeathsX(CurrentPlayer,Exactly,0x00000004,0 ,0x00000004 )}, {RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+			DisplayText("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 	end
 
@@ -229,7 +236,7 @@ CTKillT = {}
 --		else
 --			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
 --				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
---				DisplayExtText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+--				DisplayText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 --			})
 --		end
 --		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
@@ -278,7 +285,7 @@ CTKillT = {}
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayText("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
@@ -297,7 +304,7 @@ CTKillT = {}
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayText("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
