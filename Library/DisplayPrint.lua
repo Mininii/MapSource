@@ -1,6 +1,28 @@
 
 		
-	function DisplayPrint(TargetPlayers,arg) -- ext text ver
+	function DisplayPrint(TargetPlayers,arg,FixTextPreset) -- ext text ver
+		if FixTextPreset == 3 or 1 then
+			
+		local TPArr = {}
+		if type(TargetPlayers) == "number"  then
+			TPArr = {TargetPlayers}
+		end
+
+		if #TPArr == 1 then
+			CIf(FP, {TMemory(0x512684,Exactly,TPArr[1])})
+		else
+			local CondArr = {}
+			for j,k in pairs(TPArr) do
+				table.insert(CondArr, _TMemory(0x512684,Exactly,k))
+			end
+			CIf(FP,{TTOR(CondArr)})
+			
+		end
+		FixText(FP,1)
+
+
+		CIfEnd()
+		end
 		if TargetPlayers == CurrentPlayer or TargetPlayers == "CP" then
 			f_SaveCp()
 		end--
@@ -81,6 +103,31 @@
 		RetV = nil
 		Dev = nil
 		BSize = nil
+		
+		if FixTextPreset == 3 or 2 then
+			
+			local TPArr = {}
+			if type(TargetPlayers) == "number"  then
+				TPArr = {TargetPlayers}
+			end
+	
+			if #TPArr == 1 then
+				CIf(FP, {TMemory(0x512684,Exactly,TPArr[1])})
+			else
+				local CondArr = {}
+				for j,k in pairs(TPArr) do
+					table.insert(CondArr, _TMemory(0x512684,Exactly,k))
+				end
+				CIf(FP,{TTOR(CondArr)})
+				
+			end
+			FixText(FP,2)
+	
+	
+			CIfEnd()
+			end
+
+
 	end
 
 
