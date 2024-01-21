@@ -120,6 +120,7 @@ function Include_Vars()
 	iv.CheatDetect = CreateCcode()
 	iv.StatTest = CreateCcode()
 	Etbl = CreateVar(FP)
+	SettingUnit1 = CreateVarArr(8, FP)-- 1~25강 유닛 자동강화 설정기
 	
 	--General
 	iv.Time = CreateVar(FP)
@@ -169,6 +170,15 @@ function Include_Vars()
 	PushLevelUnit(8,{26000,36000,30000,8000},11,32,25,72,1500,59,nil,10000)--파벳 3타 2만원
 	PushLevelUnit(9,{24000,37000,30000,9000},15,58,103,48,5000,59,nil,50000)--발키리 2타
 	PushLevelUnit(10,{20000,40000,30000,10000},25,12,19,48,12000,59,nil,100000)--배틀
+	PushLevelUnit(11,{18000,38000,34000,10000},25,39,40,24,15000,59,nil,500000)--울트라
+	PushLevelUnit(12,{16000,36000,38000,10000},25,38,38,24,32000,59,nil,2000000)--히드라
+	PushLevelUnit(13,{14000,34000,42000,10000},25,43,48,12,30000,59,nil,8000000)--뮤탈
+	PushLevelUnit(14,{12000,32000,46000,10000},25,44,46,12,50000,59,nil,60000000)--가디언
+	PushLevelUnit(15,{10000,30000,50000,10000},25,37,35,5,60000,59,nil,0)--저글링
+
+	
+
+
 	PopLevelUnit()
 
 	

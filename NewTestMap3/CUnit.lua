@@ -27,6 +27,10 @@ f_Read(FP, _Add(NBTemp,25), UID,nil,0xFF,1)
 CDoActions(FP, {TSetMemory(_Add(NBTemp,2), Add, 10*256)})
 CMov(FP,Result,0)
 for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
+	if j == #LevelUnitArr then
+		CTrigger(FP,{CV(UID,k[2])},{SetV(Result,0),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이미 최강 단계에 도달한 유닛은 \x08강화할 수 없습니다."), 4)},{preserved})
+
+	else
 	local ResultUnit1
 	local ResultUnit2
 	if LevelUnitArr[j-1] ~= nil then ResultUnit2=LevelUnitArr[j-1][2]
@@ -40,6 +44,7 @@ for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
 	SetV(E2Range[1],k[3][1]+1),SetV(E2Range[2],k[3][1]+k[3][2]),
 	SetV(E3Range[1],k[3][1]+k[3][2]+1),SetV(E3Range[2],k[3][1]+k[3][2]+k[3][3]),
 	SetV(E4Range[1],k[3][1]+k[3][2]+k[3][3]+1),SetV(E4Range[2],k[3][1]+k[3][2]+k[3][3]+k[3][4])})
+	end
 end
 CIf(FP,{CV(Result,1,AtLeast)})
 	f_Read(FP, _Add(NBTemp,10), CPos)
@@ -51,10 +56,10 @@ CIf(FP,{CV(Result,1,AtLeast)})
 		TSetNVar(SUnitID,SetTo,ReturnUnit1),
 		SetNVar(SLocation,SetTo,1),
 		SetNVar(DLocation,SetTo,0),
-		TSetNVar(SPlayer,SetTo,GCP),
+		TSetNVar(SPlayer,SetTo,GCP),TCreateUnitWithProperties(1, 84, 1, GCP,{hallucinated = true}),KillUnit(84, AllPlayers)
 	})
 	CallTrigger(FP, CreateStackedUnit)
-
+	
 	CElseIfX(CV(Result,2),{TCreateUnitWithProperties(1, 84, 1, GCP,{hallucinated = false}),KillUnit(84, AllPlayers)})-- 유지시
 	
 	CElseIfX(CV(Result,3),{TKillUnitAt(1, UID, 1, GCP)})-- 하락시
@@ -135,6 +140,8 @@ UIDPtr =  CreateVar(FP)
 PIDPtr =  CreateVar(FP)
 CurCunitI2 = CreateVar(FP)
 CIf(FP,CV(iv.CUnitT,36,AtLeast),{SetV(iv.CUnitT,0)})
+
+
 --if Limit == 0 then
 --else
 --	CIf(FP,{Never(),CV(iv.CUnitT,36,AtLeast)},{SetV(iv.CUnitT,0)})
@@ -156,6 +163,7 @@ CTKillT = {}
 	CAdd(FP,0x6509B0,6)
 	
 	EXCC_BreakCalc({DeathsX(CurrentPlayer, Exactly, 47, 0, 0xFF)})
+	EXCC_BreakCalc({DeathsX(CurrentPlayer, Exactly, 101, 0, 0xFF)})
 	CAdd(FP,0x6509B0,30)
 
 	local TempV = CreateVar(FP)

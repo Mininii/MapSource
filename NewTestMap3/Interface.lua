@@ -4,9 +4,17 @@ function Interface()
 	CJump(FP, it_jump)
 	it_Call = SetCallForward()
 	SetCall(FP)
+	local GetPUnitLevel = CreateVar(FP)
+	local GetPUnitCool = CreateVar(FP)
 	
 	DPSBuildingX(GCP,DpsLV1,nil,iv.BuildMul1,{iv.TempO,Ore},iv.Money,iv.Money2)
 	Debug_DPSBuildingX(DpsLV1,127,95)
+
+
+	
+
+
+
 
 	
 	CIf(FP,{TMemory(0x512684, Exactly, GCP)})
@@ -41,7 +49,7 @@ function Interface()
 		CIf(FP,HumanCheck(i, 1),{SubV(SaveAvTime[i+1],1)})
 		TriggerX(FP,{},{AddV(iv.PCheckV,1)},{preserved})
 		CallTriggerX(FP,it_Call, {},{SetV(GCP,i),SetNWar(GCPW,SetTo,tostring(i)),SetV(VArrI,604*i),SetV(VArrI4,2416*i),SetNWar(WArrI, SetTo, {604*i,604*i}),SetNWar(WArrI4, SetTo, {2416*i,2416*i})})
-		CreateUnitStackedCp({}, 1, 0, 34, nil,nil,1)
+		CreateUnitStackedCp({}, 3, 0, 34, nil,nil,1)
 
 
 		

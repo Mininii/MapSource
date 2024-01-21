@@ -117,7 +117,7 @@ PVtoV(iv.Money, EnchMoney)
 CMov(FP,EnchNum2,EnchNum,1)
 CMov(FP,EnchNum3,EnchNum,-1)
 if Limit == 1 then
-	DisplayPrint(GCP, {EnchCost})
+	--DisplayPrint(GCP, {EnchCost})
 end
 CIfX(FP, {TTNWar(EnchMoney,AtLeast,EnchCost)}, {})
 f_LSub(FP, EnchMoney, EnchMoney, EnchCost)
@@ -133,20 +133,20 @@ end
 
 
 CIfX(FP,{TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])},SetV(Result,1))--성공
-DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x07성공\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x07",EnchNum2,"강 \x07』"})
+DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x07성공\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x07",EnchNum2,"강 \x07』"})
 
 CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])},SetV(Result,2))--유지
-DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
+DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
 
 CElseIfX({TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])},SetV(Result,3))--하락
-DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
+DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
 
 CElseX(SetV(Result,4))--실패
-DisplayPrint(GCP,{"\x13\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
+DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
 CIfXEnd()
 
 CElseX()
-DisplayPrint(GCP,{StrDesignX("\x04잔액이 부족하여 강화할 수 없습니다.")})
+DisplayPrint(GCP,{"\x12\x07『 \x04잔액이 부족합니다. \x03",EnchMoney," \x04/ \x1F",EnchCost," \x07』"})
 CIfXEnd()
 VtoPV(EnchMoney,iv.Money)
 
@@ -291,6 +291,100 @@ for i = 1, 6 do
 	Byte_NumSet(GEVar_2,EVarArr1_2[i],10^(6-i),1,0x30)
 end
 SetEPerStr(EVarArr1_2)
+
+SetCallEnd()
+
+G_Btnptr = CreateVar(FP)
+G_BtnFnm = CreateVar(FP)
+G_PushBtnm = CreateVar(FP)
+
+
+Call_BtnFnc = SetCallForward()
+
+
+SetCall(FP)
+PUnitCurLevel = CreateVarArr2(8,0xFFFFFFFF,FP)
+CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(1699*84))})
+	CIf(FP,{TMemory(_Add(G_Btnptr,0x98/4),AtMost,0 + 227*65536)}) -- 버튼 눌럿을경우
+	
+		--Print_13X(FP,GCP)
+
+		f_Read(FP,_Add(G_Btnptr,0x98/4),G_PushBtnm)
+		CrShift(FP,G_PushBtnm,16)
+
+		CIfX(FP,{Never()})
+		--CElseIfX({CV(G_BtnFnm,1)})
+			--local AutoBuyVArr = GetVArray(iv.AutoBuyCode[1], 8)
+			--local AutoBuyVArr2 = GetVArray(iv.AutoBuyCode2[1], 8)
+			--local GetABData = CreateVar(FP)
+
+		CElseIfX({CV(G_BtnFnm,1)})--자동강화
+			local GetArrNum = CreateVar(FP)
+			local TxtColor = CreateVar(FP)
+			f_Mul(FP, GetArrNum, G_PushBtnm, 8)
+			CAdd(FP,GetArrNum,GCP)
+
+			DoActionsX(FP,{SetV(TxtColor,0x06),AddV(G_PushBtnm,1)})
+			TriggerX(FP, {CV(G_PushBtnm,26,AtLeast)}, SetV(TxtColor,0x0F), {preserved})
+
+			CIf(FP,{CV(G_BtnFnm,1)})
+				CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
+				DisplayPrintEr(GCP, {StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."),})
+				CTrigger(FP, {}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP)}, {preserved})		
+				CElseX()
+				CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
+				DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(강화 우선 적용됨) \x07』",})
+					CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
+				CElseX()
+				DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(강화 우선 적용됨) \x07』",})
+					CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
+				CIfXEnd()
+				CIfXEnd()
+
+			CIfEnd()
+			--CIf(FP,{CV(G_BtnFnm,4,AtLeast),CV(G_BtnFnm,5,AtMost)})
+			--	CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
+			--	DisplayPrintEr(GCP, {StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."),})
+			--	CTrigger(FP, {}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP)}, {preserved})		
+			--	CElseX()
+			--	CIfX(FP,{TMemory(_TMem(ArrX(AutoSellArr,GetArrNum)),Exactly,0)})
+			--	
+			--	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x07ON \04(강화 우선 적용됨) \x07』",})
+			--		
+			--		CMovX(FP,ArrX(AutoSellArr,GetArrNum),1)
+
+			--	CElseX()
+			--	
+			--	DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x07자동판매 \x08OFF \04(강화 우선 적용됨) \x07』",})
+
+			--		CMovX(FP,ArrX(AutoSellArr,GetArrNum),0)
+			--	CIfXEnd()
+		CIfXEnd()
+
+			--CIfEnd()
+
+	CIfEnd()--ShopEnd
+	CDoActions(FP,{
+		TSetMemory(_Add(G_Btnptr,0x98/4),SetTo,0 + 228*65536);
+		TSetMemory(_Add(G_Btnptr,0x9C/4),SetTo,228 + 228*65536);
+		TSetMemoryX(_Add(G_Btnptr,0xA0/4),SetTo,228,0xFFFF)})
+CIfEnd()
+
+
+	
+SetCallEnd()
+
+
+Call_BtnInit = SetCallForward()
+
+local BtnFncArr = {
+	SettingUnit1, -- 1~25강유닛 자동강화 설정
+}
+SetCall(FP)
+for j,k in pairs(BtnFncArr) do
+	PVtoV(SettingUnit1,G_Btnptr)
+	CallTriggerX(FP,Call_BtnFnc,{CV(G_Btnptr,1,AtLeast)},{SetV(G_BtnFnm,j)})
+end
 
 SetCallEnd()
 

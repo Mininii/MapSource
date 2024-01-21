@@ -550,9 +550,9 @@ end
 
 function PVWArrX(VW)
 	if VW[1][4]=="V" then
-		return VArrX(GetVArray(VW[1], 7), VArrI, VArrI4)
+		return VArrX(GetVArray(VW[1], 8), VArrI, VArrI4)
 	elseif VW[1][4]=="W" then
-		return WArrX(GetWArray(VW[1], 7), WArrI,WArrI4)
+		return WArrX(GetWArray(VW[1], 8), WArrI,WArrI4)
 	else PushErrorMsg("PVWArrX_VWType_Error")
 	end
 end
