@@ -18,13 +18,13 @@ SetCall(FP)
 	CWhile(FP,{CV(SAmount,1,AtLeast)},{SubV(SAmount,1)})
 	TriggerX(FP, {CV(SUnitID,16)}, {SetMemoryB(0x669E28+237, SetTo, 0)}, {preserved})
 	TriggerX(FP, {CV(SUnitID,78)}, {SetMemoryB(0x669E28+237, SetTo, 16)}, {preserved})
-	CIf(FP,{Memory(0x628438, AtLeast, 1)},{})--SetCD(TBLFlag,1)
+	CIf(FP,{Memory(0x628438, AtLeast, 1)},{SetCD(TBLFlag,1)})--
 		f_Read(FP, 0x628438, nil, Nextptrs)
-		CDoActions(FP, {TCreateUnit(1,SUnitID,SLocation,SPlayer),
+		CDoActions(FP, {TCreateUnitWithProperties(1,SUnitID,SLocation,SPlayer,{energy=100}),
 			TSetDeaths(_Add(Nextptrs,13),SetTo,4000,0),
 			TSetDeathsX(_Add(Nextptrs,18),SetTo,4000,0,0xFFFF),
 			TSetMemoryX(_Add(Nextptrs,8),SetTo,127*65536,0xFF0000),
-			--TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
+			TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 		})
 		--local NBTemp = CreateVar(FP)
 		--NBagLoop(FP,NBagArr,{NBTemp})
@@ -116,6 +116,7 @@ E1Range = CreateVarArr(2, FP)
 PVtoV(iv.Money, EnchMoney)
 CMov(FP,EnchNum2,EnchNum,1)
 CMov(FP,EnchNum3,EnchNum,-1)
+AutoOp = CreateCcode()
 if Limit == 1 then
 	--DisplayPrint(GCP, {EnchCost})
 end
@@ -133,20 +134,27 @@ end
 
 
 CIfX(FP,{TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])},SetV(Result,1))--성공
-DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x07성공\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x07",EnchNum2,"강 \x07』"})
-
+	CIf(FP,CD(AutoOp,0))
+		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x07성공\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x07",EnchNum2,"강 \x07』"})
+	CIfEnd()
 CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])},SetV(Result,2))--유지
-DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
+	CIf(FP,CD(AutoOp,0))
+		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
+	CIfEnd()
 
 CElseIfX({TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])},SetV(Result,3))--하락
-DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
-
+	CIf(FP,CD(AutoOp,0))
+		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
+	CIfEnd()
 CElseX(SetV(Result,4))--실패
-DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
+	CIf(FP,CD(AutoOp,0))
+		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
+	CIfEnd()
 CIfXEnd()
-
 CElseX()
-DisplayPrint(GCP,{"\x12\x07『 \x04잔액이 부족합니다. \x03",EnchMoney," \x04/ \x1F",EnchCost," \x07』"})
+	CIf(FP,CD(AutoOp,0))
+		DisplayPrint(GCP,{"\x12\x07『 \x04잔액이 부족합니다. \x03",EnchMoney," \x04/ \x1F",EnchCost," \x07』"})
+	CIfEnd()
 CIfXEnd()
 VtoPV(EnchMoney,iv.Money)
 
@@ -329,14 +337,14 @@ CIf(FP,{CVar(FP,G_Btnptr[2],AtLeast,19025),CVar(FP,G_Btnptr[2],AtMost,19025+(169
 
 			CIf(FP,{CV(G_BtnFnm,1)})
 				CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr2,GetArrNum)),Exactly,0)})
-				DisplayPrintEr(GCP, {StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."),})
+				DisplayPrint(GCP, {StrDesign("\x08ERROR \x04: 최소 1회 이상 해당 유닛의 강화를 성공해야합니다."),})
 				CTrigger(FP, {}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP)}, {preserved})		
 				CElseX()
 				CIfX(FP,{TMemory(_TMem(ArrX(AutoEnchArr,GetArrNum)),Exactly,0)})
-				DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(강화 우선 적용됨) \x07』",})
+				DisplayPrint(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x07ON \04(강화 우선 적용됨) \x07』",})
 					CMovX(FP,ArrX(AutoEnchArr,GetArrNum),1)
 				CElseX()
-				DisplayPrintEr(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(강화 우선 적용됨) \x07』",})
+				DisplayPrint(GCP, {"\x07『 ",TxtColor[2],G_PushBtnm,"강 \x04유닛 \x1B자동강화 \x08OFF \04(강화 우선 적용됨) \x07』",})
 					CMovX(FP,ArrX(AutoEnchArr,GetArrNum),0)
 				CIfXEnd()
 				CIfXEnd()
@@ -373,20 +381,5 @@ CIfEnd()
 
 	
 SetCallEnd()
-
-
-Call_BtnInit = SetCallForward()
-
-local BtnFncArr = {
-	SettingUnit1, -- 1~25강유닛 자동강화 설정
-}
-SetCall(FP)
-for j,k in pairs(BtnFncArr) do
-	PVtoV(SettingUnit1,G_Btnptr)
-	CallTriggerX(FP,Call_BtnFnc,{CV(G_Btnptr,1,AtLeast)},{SetV(G_BtnFnm,j)})
-end
-
-SetCallEnd()
-
 
 end

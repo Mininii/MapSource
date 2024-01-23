@@ -36,7 +36,7 @@ VerText = "\x19ver\x07. \x040\x07.\x0401"
 TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
-	TestSpeedNum = 0x1D--0x1D
+	TestSpeedNum = 1--0x1D
 else
 SpeedTestMode = 0
 SlotEnable =1
@@ -161,6 +161,7 @@ CUnit()
 Text()
 CT_Next()
 init_Setting()
+DoActions2(FP,PatchArrPrsv)
 CIfEnd()--FP 트리거 종료부
 
 DoActions(AllPlayers, {SetAllianceStatus(Force1, Ally),

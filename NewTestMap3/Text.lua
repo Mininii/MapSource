@@ -3,7 +3,9 @@ function Text()
 	--TBL
 	
 	SelEPD,SelPer,SelUID,SelMaxHP,SelPl,SelI,CurEPD = CreateVars(7,FP)
+	SelWID = CreateVar(FP)
 	SelEXP = CreateWar(FP)
+	SelUID2 = CreateVar(FP)
 	BossFlag = CreateCcode()
 	BossFlag2 = CreateCcode()
 	SellTicketFlag = CreateCcode()
@@ -15,28 +17,86 @@ function Text()
 	TotalEPerLoc4 = CreateVar(FP)
 	CostLoc = CreateVar(FP)
 	CostLocVA =CreateVArr(4,FP)
+	AtkDmgV = CreateVar(FP)
+	AtkSpeedV = CreateVar(FP)
+	AtkDmgB = CreateVarArr(5,FP)
+	AtkSpeedB = CreateVarArr(2,FP)
+
 	
+	iStrSector = def_sIndex()
+	CJump(FP, iStrSector)
+	
+	t00 = "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
+	
+	t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
+	Reset, Reseta, Resets = SaveiStrArrX(FP,t00)
+
+	EStr0, EStr0a, EStr0s = SaveiStrArrX(FP,"\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	EStr1, EStr1a, EStr1s = SaveiStrArrX(FP,"\x08판매 불가 유닛")
+	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
+
+	Str1, Str1a, Str1s = SaveiStrArrX(FP,MakeiStrVoid(54))
+	Str2, Str2a, Str2s = SaveiStrArrX(FP,MakeiStrVoid(54))
+
+	iStrL = GetiStrId(FP,MakeiStrVoid(54)) 
+	StrL, StrLa, StrLs = SaveiStrArrX(FP,MakeiStrVoid(54))
+	local MoneyLoc = iv.MoneyLoc
+	LevelLoc = iv.LevelLoc
+	TotalExpLoc = iv.TotalExpLoc
+	ExpLoc = iv.ExpLoc
+	
+	S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
+	iTbl2 = GetiTblId(FP,764,S1)
+
+
+
+
+	local TempFf = CreateWar(FP)
+	local TempFf2 = CreateVar(FP)
+	local StatEffLoc = iv.StatEffLoc--CreateCcode()
+	local StatPLoc = iv.StatPLoc
+	local CredLoc = iv.CredLoc
+	CJumpEnd(FP, iStrSector)
+
+
 	
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1)}) -- 클릭유닛인식(로컬)
 	CMov(FP,SelPl,0)
 	f_Read(FP,0x6284B8,nil,SelEPD)
-	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
-	CMov(FP,SelUID,_ReadF(_Add(SelEPD,25)),nil,0xFF,1)
 	
 	CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(PUnitFlag,0),SetCD(XEperFlag,0),SetCD(BossFlag,0),SetCD(BossFlag2,0)}) -- 유닛선택시 1회만 실행
+	CMov(FP,CurEPD,SelEPD)
+	f_Read(FP,_Add(SelEPD,19),SelPl,"X",0xFF)
+	CMov(FP,SelUID,_ReadF(_Add(SelEPD,25)),nil,0xFF,1)
+	CMov(FP,SelUID2,SelUID)
+	
+	TriggerX(FP, {CV(SelUID,3)},{AddV(SelUID,1)},{preserved})
+	TriggerX(FP, {CV(SelUID,5)},{AddV(SelUID,1)},{preserved})
+	TriggerX(FP, {CV(SelUID,17)},{AddV(SelUID,1)},{preserved})
+	TriggerX(FP, {CV(SelUID,23)},{AddV(SelUID,1)},{preserved})
+	TriggerX(FP, {CV(SelUID,25)},{AddV(SelUID,1)},{preserved})
+	TriggerX(FP, {CV(SelUID,30)},{AddV(SelUID,1)},{preserved})
+	f_BreadX(FP,0x6636B8,SelUID,SelWID)
+	f_WreadX(FP,0x656EB0,SelWID,AtkDmgV) 
+	f_BreadX(FP,0x656FB8,SelWID,AtkSpeedV)
+	CMov(FP,SelUID,SelUID2)
 
 	
-	CMov(FP,CurEPD,SelEPD)
+
+	--AtkInfoTbl
+
+	
 	CMov(FP,0x6509B0,LCP)
 
 	
-	for i = 1, 10 do
+	for i = 1, 15 do
 		CIf(FP,{CV(SelUID,LevelUnitArr[i][2])})
 		CMov(FP,TotalEPerLoc1,LevelUnitArr[i][3][1])
 		CMov(FP,TotalEPerLoc2,LevelUnitArr[i][3][2])
 		CMov(FP,TotalEPerLoc3,LevelUnitArr[i][3][3])
 		CMov(FP,TotalEPerLoc4,LevelUnitArr[i][3][4])
 		CMov(FP,CostLoc,LevelUnitArr[i][5])
+		f_LMov(FP, SelEXP, tostring(LevelUnitArr[i][4])  ,nil,nil, 1)
 		CIfEnd()
 	end
 	ItoDec(FP,CostLoc,VArr(CostLocVA,0),2,nil,0)
@@ -67,38 +127,67 @@ function Text()
 		CDoActions(FP,{TBwrite(_Add(Etbl,85+28+4+i),SetTo,EVarArr1[i+4])})
 	end
 
-
-	CIfEnd()
-
-
-
-
-
-
-	CIfEnd()
-
-	iStrSector = def_sIndex()
-	CJump(FP, iStrSector)
 	
-	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
+	
+	for i = 1, 2 do
+		Byte_NumSet(AtkSpeedV,AtkSpeedB[i],10^(2-i),1,0x30)
+	end
+	for i = 1, 5 do
+		Byte_NumSet(AtkDmgV,AtkDmgB[i],10^(5-i),1,0x30)
+	end
+	TriggerX(FP,{CV(AtkSpeedB[1],0x30,AtMost)},{SetV(AtkSpeedB[1],0x0D)},{preserved})
+	TriggerX(FP,{CV(AtkDmgB[1],0x30,AtMost)},{SetV(AtkDmgB[1],0x0D)},{preserved})
+	TriggerX(FP,{CV(AtkDmgB[1],0x30,AtMost),CV(AtkDmgB[2],0x30,AtMost)},{SetV(AtkDmgB[2],0x0D)},{preserved})
+	TriggerX(FP,{CV(AtkDmgB[1],0x30,AtMost),CV(AtkDmgB[2],0x30,AtMost),CV(AtkDmgB[3],0x30,AtMost)},{SetV(AtkDmgB[3],0x0D)},{preserved})
+	TriggerX(FP,{CV(AtkDmgB[1],0x30,AtMost),CV(AtkDmgB[2],0x30,AtMost),CV(AtkDmgB[3],0x30,AtMost),CV(AtkDmgB[4],0x30,AtMost)},{SetV(AtkDmgB[4],0x0D)},{preserved})
+	for i = 1, 2 do
+		CDoActions(FP,{TBwrite(_Add(AtkInfoTbl,13+i),SetTo,AtkSpeedB[i])})
+	end
+	for i = 1, 5 do
+		CDoActions(FP,{TBwrite(_Add(AtkInfoTbl,29+i),SetTo,AtkDmgB[i])})
+	end
 
-	Str1, Str1a, Str1s = SaveiStrArrX(FP,MakeiStrVoid(54))
-	Str2, Str2a, Str2s = SaveiStrArrX(FP,MakeiStrVoid(54))
 
-	iStrL = GetiStrId(FP,MakeiStrVoid(54)) 
-	StrL, StrLa, StrLs = SaveiStrArrX(FP,MakeiStrVoid(54))
-	local MoneyLoc = iv.MoneyLoc
-	LevelLoc = iv.LevelLoc
-	TotalExpLoc = iv.TotalExpLoc
-	ExpLoc = iv.ExpLoc
+	
+	CIfX(FP,{TTNWar(SelEXP,AtMost,"0")})--경험치가 없을경우 혹은 판매 불가 상태일 경우
+
+	CS__InputVA(FP,iTbl2,0,Reset,Resets,nil,0,Resets)
+	CS__InputVA(FP,iTbl2,0,EStr1,EStr1s,nil,0,EStr1s)
+	CElseX()--경험치가 있을경우
+		CS__InputVA(FP,iTbl2,0,Reset,Resets,nil,0,Resets)
+		CS__SetValue(FP,EStr0,t04,nil,0)
+		f_LMul(FP, SelEXP, SelEXP, "10")
+		CS__lItoCustom(FP,SVA1(EStr0,14),SelEXP,nil,nil,{10,20},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10,11,12,14,15,16,18,19,20,22,23,24,26},nil,{{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0})
+	
+		TriggerX(FP, {
+			CSVA1(SVA1(EStr0,15+24), Exactly, 0x0D*0x1000000, 0xFF000000)
+		}, {
+			SetCSVA1(SVA1(EStr0,15+24), SetTo, string.byte("0")*0x1000000,0xFF000000),
+		}, {preserved})
+		TriggerX(FP, {
+			CSVA1(SVA1(EStr0,15+26), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+		}, {
+			SetCSVA1(SVA1(EStr0,15+26), SetTo, 0x0D*0x1000000,0xFF000000),
+			SetCSVA1(SVA1(EStr0,15+25), SetTo, 0x0D*0x1000000,0xFF000000),
+		}, {preserved})
+		CS__InputVA(FP,iTbl2,0,EStr0,EStr0s,nil,0,EStr0s)
+		CElseIfX({CD(BossFlag,1)})--보스건물일경우
+		--DPS 게이지 표기 작성할것
+	CIfXEnd()
 
 
-	local TempFf = CreateWar(FP)
-	local TempFf2 = CreateVar(FP)
-	local StatEffLoc = iv.StatEffLoc--CreateCcode()
-	local StatPLoc = iv.StatPLoc
-	local CredLoc = iv.CredLoc
-	CJumpEnd(FP, iStrSector)
+
+
+
+	CIfEnd()
+
+
+
+
+
+
+	CIfEnd()
+
 
 	FixText(FP, 1)
 	
@@ -226,7 +315,8 @@ function Text()
 	FixText(FP, 2)
 
 	CMov(FP,0x6509B0,FP)
-
+	TriggerX(FP, {Memory(0x628438, AtLeast, 1),CD(TBLFlag,0)},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP)} , {preserved})
+	DoActionsX(FP,{SetCD(TBLFlag,0)})
 
 
 end

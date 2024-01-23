@@ -21,10 +21,18 @@ local ReturnUnit1 = CreateVar(FP)
 local ReturnUnit2 = CreateVar(FP)
 NBagLoop(FP,NBagArr,{NBTemp})
 CMov(FP,0x6509B0,NBTemp,69)--스팀타이머체크구간
-CIf(FP,{DeathsX(CurrentPlayer, AtLeast, 1*256, 0, 0xFF00)},{SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF00)})
+
+MPJump = def_sIndex()
+NIf(FP,{DeathsX(CurrentPlayer, AtLeast, 1*256, 0, 0xFF00)},{SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF00),TSetMemory(_Add(NBTemp,2), Add, 10*256),SetCD(AutoOp, 0)})
+NJumpEnd(FP, MPJump)
+CDoActions(FP, {
+	TSetDeaths(_Add(NBTemp,13),SetTo,4000,0),
+	TSetDeathsX(_Add(NBTemp,18),SetTo,4000,0,0xFFFF),
+	TSetMemoryX(_Add(NBTemp,8),SetTo,127*65536,0xFF0000),})
+
+
 f_Read(FP, _Add(NBTemp,19), GCP,nil,0xFF,1)
 f_Read(FP, _Add(NBTemp,25), UID,nil,0xFF,1)
-CDoActions(FP, {TSetMemory(_Add(NBTemp,2), Add, 10*256)})
 CMov(FP,Result,0)
 for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
 	if j == #LevelUnitArr then
@@ -69,9 +77,18 @@ CIf(FP,{CV(Result,1,AtLeast)})
 		TSetNVar(SUnitID,SetTo,ReturnUnit2),
 		SetNVar(SLocation,SetTo,1),
 		SetNVar(DLocation,SetTo,0),
-		TSetNVar(SPlayer,SetTo,GCP),TCreateUnitWithProperties(1, 50, 1, GCP,{hallucinated = false}),KillUnit(50, AllPlayers)
+		TSetNVar(SPlayer,SetTo,GCP)--,TCreateUnitWithProperties(1, 50, 1, GCP,{hallucinated = false}),KillUnit(50, AllPlayers)
 	})
 	CallTrigger(FP, CreateStackedUnit)
+	CDoActions(FP, {
+		SetNVar(SAmount,SetTo,1),
+		TSetNVar(SUnitID,SetTo,50),
+		SetNVar(SLocation,SetTo,1),
+		SetNVar(DLocation,SetTo,0),
+		TSetNVar(SPlayer,SetTo,GCP)
+	})
+	CallTrigger(FP, CreateStackedUnit)
+	DoActions(FP, KillUnit(50, AllPlayers))
 
 	CElseX({TKillUnitAt(1, UID, 1, GCP),TCreateUnitWithProperties(1, 49, 1, GCP,{hallucinated = false}),KillUnit(49, AllPlayers)})-- 파괴시
 	CDoActions(FP, {
@@ -87,7 +104,8 @@ CIf(FP,{CV(Result,1,AtLeast)})
 
 CIfEnd()
 
-CIfEnd()
+NIfEnd()
+NJump(FP, MPJump, {TMemoryX(_Add(NBTemp,40),AtMost,10*0x1000000,0xFF000000)},{TSetMemoryX(_Add(NBTemp,40),SetTo,200*0x1000000,0xFF000000),SetCD(AutoOp,1)})
 
 --CIfX(FP,{DeathsX(CurrentPlayer, Exactly, 88, 0, 0xFF)})
 

@@ -28,7 +28,6 @@ end
 function PatchInput()
 	DoActions2(FP,PatchArr,1)
 	DoActions2(FP,PatchArr2,1)
-	DoActions2(FP,PatchArrPrsv)
 	
 end
 
@@ -336,7 +335,7 @@ function SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjN
 	if GroupFlag == nil then GroupFlag= 0xA end
 	if DefType == nil then DefType = 0 end
 	if RangeMax == nil then RangeMax = 6*32 end
-	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000,4+8+0x20000000},GroundWeapon=TempWID,AirWeapon=TempWID2,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
+	SetUnitsDatX(UnitID, {Shield=false,MinCost=0,GasCost=0,SuppCost=0,Height=4,AdvFlag={0+0x20000000+404815872,4+8+0x20000000+404815872},GroundWeapon=TempWID,AirWeapon=TempWID2,DefUpType=DefType,SeekRange=7,GroupFlag=GroupFlag,
 	HumanInitAct = 2,
 	ComputerInitAct = 2,
 	AttackOrder = 10,
@@ -376,7 +375,7 @@ function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ObjN
 	--	DamageFactor = 728/2
 	--end
 	
-	SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,1469)--자동계산후 TBL에 쏠 예정
+	SetUnitAbility(UnitID,WepID,Cooldown,Damage,DamageFactor,UpgradeID,ObjNum,1469,60)--자동계산후 TBL에 쏠 예정
 	if 
 	UnitID == 3 or 
 	UnitID == 5 or 
@@ -456,9 +455,9 @@ PushMCT(0x6564E0+WepID,MemoryB(0x6564E0+WepID,Exactly,2))
 
 end
 function PopLevelUnit()
-	AutoEnchArr = CreateArr(7*#LevelUnitArr, FP)
-	AutoEnchArr2 = CreateArr(7*#LevelUnitArr, FP)
-	AutoSellArr = CreateArr(7*#LevelUnitArr, FP)
+	AutoEnchArr = CreateArr(8*#LevelUnitArr, FP)
+	AutoEnchArr2 = CreateArr(8*#LevelUnitArr, FP)
+	AutoSellArr = CreateArr(8*#LevelUnitArr, FP)
 	LevelDataArr = CreateVArr(#LevelUnitArr, FP)
 	ExpDataArr = CreateVArr(#LevelUnitArr, FP)
 	PerDataArr = CreateVArr(#LevelUnitArr, FP)
@@ -482,7 +481,7 @@ function PopLevelUnit()
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ECostArr,j-1),SetTo,k[5]))
 	end
 	
-	SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], {DefUpType=60}) -- 최강유닛 강화확률 감추기
+	--SetUnitsDatX(LevelUnitArr[#LevelUnitArr][2], ) -- 최강유닛 강화확률 감추기
 
 	GetUnitVArr = CreateVArrArr(8, #LevelUnitArr, FP)
 end

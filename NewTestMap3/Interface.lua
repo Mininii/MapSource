@@ -35,6 +35,17 @@ function Interface()
 	end
 	
 	CIfEnd()
+	
+	local BtnFncArr = {
+		SettingUnit1, -- 1~25강유닛 자동강화 설정
+	}
+
+	for j,k in pairs(BtnFncArr) do
+		PVtoV(SettingUnit1,G_Btnptr)
+		CallTriggerX(FP,Call_BtnFnc,{CV(G_Btnptr,1,AtLeast)},{SetV(G_BtnFnm,j)})
+	end
+
+
 
 
 	SetCallEnd()
@@ -193,6 +204,28 @@ end
 
 
 	TriggerX(FP,{CD(iv.StatEff[i+1],1)},{SetCD(iv.StatEffLoc,1)},{preserved})
+
+
+	
+	
+	local AutoEnable = {}
+	local AutoEnable2 = {}
+	local AutoEnable3 = {}
+	for j, k in pairs(LevelUnitArr) do
+		table.insert(AutoEnable, SetMemX(Arr(AutoEnchArr2,((j-1)*8)+i), SetTo, 1))
+		
+		Trigger2X(FP, {Command(i,AtLeast,1,k[2])}, AutoEnable)
+
+
+		
+		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*8)+i), Exactly, 1)},{ModifyUnitEnergy(All, k[2], i, 64, 1)},{preserved})
+		--TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
+
+
+	end
+
+
+
 		CIfEnd()
 	end
 --	if Limit == 1 then
