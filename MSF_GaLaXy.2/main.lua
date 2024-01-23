@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 1
 GunSafety = 0
-VName = "Ver.2.2T"
+VName = "Ver.2.2"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 DP_Start_init(FP)
@@ -2892,7 +2892,7 @@ Trigger { -- 인트로1
 		conditions = {
 			Label(0);
 			CDeaths(FP,AtLeast,1,ModeO);
-			CDeaths(FP,AtLeast,1,Testmode);
+			CDeaths(FP,AtLeast,1,TestMode);
 		},
 		actions = {
 			SetCDeaths(FP,SetTo,20+(24*5),ModeT)
@@ -3010,7 +3010,7 @@ CIfX(FP,Never())
 
 for i = 0, 5 do
 CElseIfX(HumanCheck(i,1))
-f_Read(FP,0x6284E8+(i*0x30),Cunit2,Cunit3)
+f_Read(FP,0x6284E8+(i*0x30),CUnit2,CUnit3)
 --CMov(FP,Dt,_ReadF(0x58A364+48*180+4*i))--
 Trigger {
 	players = {FP},
@@ -3047,8 +3047,8 @@ CMov(FP,ExchangeRate,ExrateBackup)
 CIfEnd()
 
 
-CIfX(FP,{CVar(FP,Cunit3[2],AtLeast,1),CVar(FP,Cunit3[2],AtMost,0x7FFFFFFF)})
-CMov(FP,0x6509B0,Cunit3)
+CIfX(FP,{CVar(FP,CUnit3[2],AtLeast,1),CVar(FP,CUnit3[2],AtMost,0x7FFFFFFF)})
+CMov(FP,0x6509B0,CUnit3)
 
 CIfX(FP,{CDeaths(FP,AtLeast,1,TestMode),Deaths(P1,AtLeast,1,203),Switch("Switch 200",Cleared)})
 DoActions(FP,MoveCp(Add,25*4))
@@ -3180,7 +3180,7 @@ TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
 TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(CPosX,18)),
 TSetMemory(0x58DC64 + 0x14*0,SetTo,_Sub(CPosY,18)),
 TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
-Createunit(1,84,1,FP)
+CreateUnit(1,84,1,FP)
 })
 f_TempRepeatX(nil,CocoonUID,1)
 CMov(FP,CocoonValue2,_Mod(CocoonValue,_Mov(4)))
@@ -3946,7 +3946,7 @@ TSetMemory(0x58DC60 + 0x14*0,SetTo,_Sub(CPosX,18)),
 TSetMemory(0x58DC68 + 0x14*0,SetTo,_Add(CPosX,18)),
 TSetMemory(0x58DC64 + 0x14*0,SetTo,_Sub(CPosY,18)),
 TSetMemory(0x58DC6C + 0x14*0,SetTo,_Add(CPosY,18)),
-TCreateunit(1,_Div(RepHeroIndex,_Mov(0x1000000)),1,_Add(_Mod(_Rand(),_Mov(2)),_Mov(6)))
+TCreateUnit(1,_Div(RepHeroIndex,_Mov(0x1000000)),1,_Add(_Mod(_Rand(),_Mov(2)),_Mov(6)))
 })
 f_LoadCp()
 CAdd(FP,0x6509B0,1)
@@ -4320,7 +4320,7 @@ Trigger {
 		MoveCp(Subtract,10*4);
 		SetDeathsX(CurrentPlayer,SetTo,i*0x10000,0,0xFF0000);
 		MoveCp(Add,10*4);
-		SetCDeaths(FP,Add,1,CCode(0x1001,i));
+		SetCDeaths(FP,Add,1,Ccode(0x1001,i));
 		PreserveTrigger();
 	}
 	}
@@ -4341,7 +4341,7 @@ Trigger {
 		MoveCp(Subtract,10*4);
 		SetDeathsX(CurrentPlayer,SetTo,i*0x10000,0,0xFF0000);
 		MoveCp(Add,10*4);
-		SetCDeaths(FP,Add,1,CCode(0x1002,i));
+		SetCDeaths(FP,Add,1,Ccode(0x1002,i));
 		PreserveTrigger();
 	}
 	}
@@ -4445,35 +4445,35 @@ DoActionsX(FP,SetCDeaths(FP,Add,1,WaveC))
 TriggerX(FP,{CDeaths(FP,AtLeast,4,WaveC)},{SetCDeaths(FP,SetTo,0,WaveC)},{preserved})
 CIfEnd()
 
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",81)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",81)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 81",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{53, 54},P_3,4,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",82)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",82)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 82",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{53, 54},P_3,4,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",83)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",83)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 83",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{48,53,55},P_4,3,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",84)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",84)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 84",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",85)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",85)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 85",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{17,15,21},P_4,2,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",86)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",86)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 86",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{77,78,80},S_3,1,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",87)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",87)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 87",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
 CIfEnd()
-CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",88)},{CopyCPAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
+CIfOnce(FP,{Bring(Force1,AtLeast,1,"Men",88)},{CopyCpAction({PlayWAVX("staredit\\wav\\seeya.ogg")},HumanPlayers,FP)})
 GetLocCenter("Location 88",Var_TempTable[2],Var_TempTable[3])
 G_CA_SetSpawn(nil,{51,48,56},P_4,2,"MAX")
 CIfEnd()
@@ -6551,7 +6551,7 @@ DoActions(FP,SetDeaths(Force1,SetTo,0,8))
 CIfEnd()
 
 CIf(FP,CDeaths(FP,AtLeast,1,MultiCon))
-local OrderCool = CreateCCodeArr(6)
+local OrderCool = CreateCcodeArr(6)
 local CUnitFlag = CreateCcode()
 local MulCon = CreateVarArr(6,FP)
 local TempPos = CreateVar(FP)
@@ -7764,29 +7764,29 @@ Trigger {
 }
 end
 InvDisable({CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtLeast,15,Chry_cond)},201,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｃｏｃｏｏｎ")
-InvDisable({CDeaths(FP,AtMost,0,CCode(0x1001,0)),CDeaths(FP,AtMost,0,CCode(0x1001,1)),CDeaths(FP,AtMost,0,CCode(0x1002,0)),CDeaths(FP,AtMost,0,CCode(0x1002,1))},148,Force2,6,"ＯｖｅｒＭｉｎｄ")
+InvDisable({CDeaths(FP,AtMost,0,Ccode(0x1001,0)),CDeaths(FP,AtMost,0,Ccode(0x1001,1)),CDeaths(FP,AtMost,0,Ccode(0x1002,0)),CDeaths(FP,AtMost,0,Ccode(0x1002,1))},148,Force2,6,"ＯｖｅｒＭｉｎｄ")
 InvDisable({CDeaths(FP,AtLeast,4,B_Chry_cond)},147,Force2,31,"Ｍｏｎｓｔｅｒ　Ｋｒａｋｅｎ")
-InvDisable({CDeaths(FP,AtMost,0,CCode(0x1001,2)),CDeaths(FP,AtMost,0,CCode(0x1002,2))},175,Force2,37,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
-InvDisable({CDeaths(FP,AtMost,0,CCode(0x1001,3)),CDeaths(FP,AtMost,0,CCode(0x1002,3))},175,Force2,38,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
-InvDisable({CDeaths(FP,AtMost,0,CCode(0x1001,4)),CDeaths(FP,AtMost,0,CCode(0x1002,4))},175,Force2,39,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
-InvDisable({CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtMost,0,CCode(0x1001,5)),CDeaths(FP,AtMost,0,CCode(0x1002,5))},190,Force2,40,"Ｃｏｒｅ　ｏｆ　ＧａＬａＸｙ")
+InvDisable({CDeaths(FP,AtMost,0,Ccode(0x1001,2)),CDeaths(FP,AtMost,0,Ccode(0x1002,2))},175,Force2,37,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
+InvDisable({CDeaths(FP,AtMost,0,Ccode(0x1001,3)),CDeaths(FP,AtMost,0,Ccode(0x1002,3))},175,Force2,38,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
+InvDisable({CDeaths(FP,AtMost,0,Ccode(0x1001,4)),CDeaths(FP,AtMost,0,Ccode(0x1002,4))},175,Force2,39,"Ｘｅｌ＇Ｎａｇａ　Ｔｅｍｐｌｅ")
+InvDisable({CDeaths(FP,AtLeast,2,GMode),CDeaths(FP,AtMost,0,Ccode(0x1001,5)),CDeaths(FP,AtMost,0,Ccode(0x1002,5))},190,Force2,40,"Ｃｏｒｅ　ｏｆ　ＧａＬａＸｙ")
 InvDisable({CDeaths(FP,AtLeast,5,Sup_Cond)},173,Force2,41,"Ｆｏｒｍａｔｉｏｎ")
 InvDisable({CDeaths(FP,AtLeast,5,Py_Cond)},173,Force2,42,"Ｆｏｒｍａｔｉｏｎ")
 InvDisable({CDeaths(FP,AtLeast,1,OverCocooncomp),CDeaths(FP,AtLeast,2,BossKill)},168,Force2,36,"Ｓｔａｓｉｓ　Ｃｅｌｌ")
 InvDisable({
-CDeaths(FP,AtMost,0,CCode(0x1001,6)),
-CDeaths(FP,AtMost,0,CCode(0x1001,7)),
-CDeaths(FP,AtMost,0,CCode(0x1001,8)),
-CDeaths(FP,AtMost,0,CCode(0x1001,9)),
-CDeaths(FP,AtMost,0,CCode(0x1002,6)),
-CDeaths(FP,AtMost,0,CCode(0x1002,7)),
-CDeaths(FP,AtMost,0,CCode(0x1002,8)),
-CDeaths(FP,AtMost,0,CCode(0x1002,9))},152,Force2,43,"Ｄａｇｇｏｔｈ")
+CDeaths(FP,AtMost,0,Ccode(0x1001,6)),
+CDeaths(FP,AtMost,0,Ccode(0x1001,7)),
+CDeaths(FP,AtMost,0,Ccode(0x1001,8)),
+CDeaths(FP,AtMost,0,Ccode(0x1001,9)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,6)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,7)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,8)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,9))},152,Force2,43,"Ｄａｇｇｏｔｈ")
 InvDisable({
-CDeaths(FP,AtMost,0,CCode(0x1001,10)),
-CDeaths(FP,AtMost,0,CCode(0x1001,11)),
-CDeaths(FP,AtMost,0,CCode(0x1002,10)),
-CDeaths(FP,AtMost,0,CCode(0x1002,11))},152,Force2,44,"Ｄａｇｇｏｔｈ")
+CDeaths(FP,AtMost,0,Ccode(0x1001,10)),
+CDeaths(FP,AtMost,0,Ccode(0x1001,11)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,10)),
+CDeaths(FP,AtMost,0,Ccode(0x1002,11))},152,Force2,44,"Ｄａｇｇｏｔｈ")
 InvDisable({
 CDeaths(FP,AtLeast,15,Chry_cond),
 CDeaths(FP,AtLeast,12,SPGunCond),
@@ -9006,7 +9006,7 @@ CIfEnd()
 for i=0, 5 do
 NJump(FP,0x500+i,Deaths(i,Exactly,0,111))
 CIf(FP,Score(i,Kills,AtLeast,1000))
-CAdd(FP,0x57F0F0+(i*4),_Mul(_DIv(_ReadF(0x581F04+(i*4)),_Mov(1000)),{FP,ExchangeRate[2],nil,"V"}))
+CAdd(FP,0x57F0F0+(i*4),_Mul(_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)),{FP,ExchangeRate[2],nil,"V"}))
 CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 CIfEnd()
 DoActions(FP,SetDeaths(i,Subtract,1,111))

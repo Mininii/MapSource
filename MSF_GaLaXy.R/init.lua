@@ -330,10 +330,10 @@ function init()
 			DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 
 			
-	T_YY = 2022
-	T_MM = 12
-	T_DD = 23
-	T_HH = 00
+	T_YY = 2024
+	T_MM = 01
+	T_DD = 25
+	T_HH = 01
 	function InputTesterID(Player,ID)
 		Trigger {
 			players = {FP},

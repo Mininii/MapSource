@@ -4,11 +4,12 @@ DoActions2(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)})
 if AutoSettingMode == true then
 	am={}
 	am.GMode = 3
-	am.DMode = 3
-	am.HiddenATK = 1
+	am.DMode = 1
+	am.HiddenATK = 0
 	am.HiddenHP = 0
 	am.HiddenPts = 1
 	am.HondonMode = 1
+	am.AtkSpeedMode = 1
 	am.Timer = CreateCcode()
 	am.ErrorFlag = CreateCcode()
 	
@@ -37,6 +38,7 @@ if AutoSettingMode == true then
 		SetCD(GMode,am.GMode),
 		SetCD(DMode,am.DMode),
 		SetV(HondonMode,am.HondonMode),
+		SetV(AtkSpeedMode,am.AtkSpeedMode),
 		--RemoveUnit(115, AllPlayers);
 		SettingArr
 })
@@ -44,6 +46,7 @@ if AutoSettingMode == true then
 	TriggerX(FP,{CD(GMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
 	TriggerX(FP,{CD(DMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
 	TriggerX(FP,{CV(HondonMode,2,AtLeast)},{SetCD(am.ErrorFlag,1)})
+	TriggerX(FP,{CV(AtkSpeedMode,2,AtLeast)},{SetCD(am.ErrorFlag,1)})
 
 
 	CIfX(FP,{CD(am.ErrorFlag,1)},{{
@@ -57,7 +60,65 @@ if AutoSettingMode == true then
 	CElseX()
 
 	DoActions(FP,{RotatePlayer({PlayWAVX("staredit\\wav\\Select.ogg"),DisplayTextX(StrDesignX("맵 설정에 의해 모든 옵션이 자동으로 설정되었습니다."), 4)}, HumanPlayers, FP)},1)
-	TriggerX(FP,{CD(am.Timer,24*3)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX("\x13\x10[ \x04(\x08HP \x04: "..am.HiddenHP..") (\x1BATK \x04: "..am.HiddenATK..") (\x1FPts \x04: "..am.HiddenPts..") (\x10혼돈 옵션 \x04: "..HondonTxt[am.HondonMode+1]..") \x10]", 4)}, HumanPlayers, FP)})
+
+	CIf(FP,{CD(am.Timer,24*3)})
+	
+HiddenDisplay = CreateVarArr(3,FP)
+
+HiddenColor = CreateVarArr(3,FP)
+
+CMov(FP,HiddenDisplay[1],0)
+CMov(FP,HiddenDisplay[2],0)
+CMov(FP,HiddenDisplay[3],0)
+CAdd(FP,HiddenDisplay[1],HiddenHP)
+CAdd(FP,HiddenDisplay[2],HiddenATK)
+CAdd(FP,HiddenDisplay[3],HiddenPts)
+CiSub(FP,HiddenDisplay[1],HiddenHPM)
+CiSub(FP,HiddenDisplay[2],HiddenATKM)
+CiSub(FP,HiddenDisplay[3],HiddenPtsM)
+
+ColorT = {0x1F,0x0F,0x1C,0x1E,0x1D,0x4,0x19,0x3,0x11,0x10,0x08}
+for i = 1, 3 do
+	for j = 0, 10 do
+		TriggerX(FP,{CV(HiddenDisplay[i],j-5)},{SetV(HiddenColor[i],ColorT[11-j])},{preserved})
+	end
+end
+
+hondondisplay = CreateVarArr(4,FP)
+AtkSpeedDisplay = CreateVarArr(4,FP)
+TriggerX(FP,{CV(HondonMode,0)},{
+	SetV(hondondisplay[1],string.byte("\x04",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("F",1,1)),
+	SetV(hondondisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(HondonMode,1)},{
+	SetV(hondondisplay[1],string.byte("\x08",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("N",1,1)),
+	SetV(hondondisplay[4],string.byte(" ",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,0)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x04",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("F",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,1)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x1F",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("N",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte(" ",1,1)),
+},{preserved})
+
+WavFile = "staredit\\wav\\Sel2.ogg"
+
+--HondonMode
+--AtkSpeedMode
+DisplayPrint(HumanPlayers,{"\x13\x10[ \x04(\x08HP \x04: ",HiddenColor[1][2],HiddenDisplay[1],"\x04) (\x1BATK \x04: ",HiddenColor[2][2],HiddenDisplay[2],"\x04) (\x1FPts \x04: ",HiddenColor[3][2],HiddenDisplay[3],"\x04) (\x10혼돈 옵션 \x04: ",hondondisplay,"\x04) (\x1F공속무한모드 \x04: ",AtkSpeedDisplay,"\x04)  \x10]"})
+DoActions(FP,{RotatePlayer({PlayWAVX(WavFile);},HumanPlayers,FP)})
+
+	CIfEnd()
 	TriggerX(FP,{CD(am.Timer,24*6)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX(Text1[am.GMode], 4)}, HumanPlayers, FP)})
 	TriggerX(FP,{CD(am.Timer,24*9)},{RotatePlayer({PlayWAVX("staredit\\wav\\Sel2.ogg"),DisplayTextX(Text2[am.DMode], 4)}, HumanPlayers, FP)})
 	TriggerX(FP,{CD(am.Timer,24*12)},{SetCD(ModeO,1)})
@@ -103,6 +164,8 @@ TriggerX(FP,{CD(TestMode,1)},{SetDeaths(Force1,SetTo,55,125),RotatePlayer({RunAI
 CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,SelectorT),})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,0)},{SetCVar(FP,HondonMode[2],SetTo,1),SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(66,{CVar(FP,HondonMode[2],Exactly,1)},{SetCVar(FP,HondonMode[2],SetTo,0),SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(67,{CVar(FP,AtkSpeedMode[2],Exactly,0)},{SetCVar(FP,AtkSpeedMode[2],SetTo,1),SetCDeaths(FP,SetTo,1,ToggleSound)})
+KeyInput(67,{CVar(FP,AtkSpeedMode[2],Exactly,1)},{SetCVar(FP,AtkSpeedMode[2],SetTo,0),SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(60,{CVar(FP,HiddenHP[2],AtMost,4);},{SetCVar(FP,HiddenHP[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(63,{CVar(FP,HiddenHPM[2],AtMost,4);},{SetCVar(FP,HiddenHPM[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
 KeyInput(61,{CVar(FP,HiddenATK[2],AtMost,4);},{SetCVar(FP,HiddenATK[2],Add,1);SetCDeaths(FP,SetTo,1,ToggleSound)})
@@ -119,40 +182,74 @@ TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);CVar(FP,HiddenPts[2],AtLeast,1);},
 --TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,1);},{SetCVar(FP,HiddenPts[2],SetTo,0)},{preserved})
 
 
-HiddenModeStr = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x04: OFF) \x10]\x0D\x0D\x0D\x0D\x0D"
-HiddenModeStr2 = "\x0D\x0D\x0D\x0D\x13\x10[ \x04(\x08HP \x04: -0) (\x1BATK \x04: -0) (\x1FPts \x04: -0) (\x10혼돈 옵션 \x08: ON) \x10]\x0D\x0D\x0D\x0D\x0D"
-CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr,0)
-CElseX()
-Print_StringX(FP,VArr(HiddenModeT,0),HiddenModeStr2,0)
-CIfXEnd()
-HiddenModeL = GetStrSize(0,HiddenModeStr)--
-HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x10혼돈 옵션 \x07활성화 \x04: ~ 버튼"
+HiddenFindT = "\x13\x04히든 커맨드 입력성공.\n\x13\x04값 올림 버튼 : \x071,2,3. \x04내림 버튼 : \x07A,S,D\n\x13\x07기타옵션 \x04활성화 \x04: ~, Tab 버튼"
 WavFile = "staredit\\wav\\Unlock.ogg"
 DoActions2X(FP,{
 	RotatePlayer({
 		PlayWAVX(WavFile);
-		DisplayTextX(HiddenFindT,4);
-		DisplayTextX("\x13\x10[ \x04(\x08HP \x04: 0) (\x1BATK \x04: 0) (\x1FPts \x04: 0) (\x10혼돈 옵션 \x04: OFF) \x10]",4);},HumanPlayers,FP)
+		DisplayTextX(HiddenFindT,4);},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,ToggleSound);
 },1)
-for i = 2, 0, -1 do
-	TriggerX(FP,{CVar(FP,HiddenHP[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{preserved})
-	TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,4),SetTo,(2^i)*65536,(2^i)*65536);},{preserved})
-	TriggerX(FP,{CVar(FP,HiddenATK[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{preserved})
-	TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,7),SetTo,(2^i)*16777216,(2^i)*16777216);},{preserved})
-	TriggerX(FP,{CVar(FP,HiddenPts[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{preserved})
-	TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,(2^i),(2^i));},{SetCVAar(VArr(HiddenModeT,11),SetTo,(2^i)*1,(2^i)*1);},{preserved})
-end
-TriggerX(FP,{CVar(FP,HiddenHPM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x2D*256,0xFF00);},{preserved})
-TriggerX(FP,{CVar(FP,HiddenHPM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,4),SetTo,0x0D*256,0xFF00);},{preserved})
-TriggerX(FP,{CVar(FP,HiddenATKM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x2D*65536,0xFF0000);},{preserved})
-TriggerX(FP,{CVar(FP,HiddenATKM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,7),SetTo,0x0D*65536,0xFF0000);},{preserved})
-TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtLeast,1);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x2D*16777216,0xFF000000);},{preserved})
-TriggerX(FP,{CVar(FP,HiddenPtsM[2],AtMost,0);},{SetCVAar(VArr(HiddenModeT,10),SetTo,0x0D*16777216,0xFF000000);},{preserved})
 
-f_Movcpy(FP,HiddenModeStrPtr,VArr(HiddenModeT,0),HiddenModeL)
+
+CIf(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{SetCDeaths(FP,SetTo,0,ToggleSound);})
+
+HiddenDisplay = CreateVarArr(3,FP)
+
+HiddenColor = CreateVarArr(3,FP)
+
+CMov(FP,HiddenDisplay[1],0)
+CMov(FP,HiddenDisplay[2],0)
+CMov(FP,HiddenDisplay[3],0)
+CAdd(FP,HiddenDisplay[1],HiddenHP)
+CAdd(FP,HiddenDisplay[2],HiddenATK)
+CAdd(FP,HiddenDisplay[3],HiddenPts)
+CiSub(FP,HiddenDisplay[1],HiddenHPM)
+CiSub(FP,HiddenDisplay[2],HiddenATKM)
+CiSub(FP,HiddenDisplay[3],HiddenPtsM)
+
+ColorT = {0x1F,0x0F,0x1C,0x1E,0x1D,0x4,0x19,0x3,0x11,0x10,0x08}
+for i = 1, 3 do
+	for j = 0, 10 do
+		TriggerX(FP,{CV(HiddenDisplay[i],j-5)},{SetV(HiddenColor[i],ColorT[11-j])},{preserved})
+	end
+end
+
+hondondisplay = CreateVarArr(4,FP)
+AtkSpeedDisplay = CreateVarArr(4,FP)
+TriggerX(FP,{CV(HondonMode,0)},{
+	SetV(hondondisplay[1],string.byte("\x04",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("F",1,1)),
+	SetV(hondondisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(HondonMode,1)},{
+	SetV(hondondisplay[1],string.byte("\x08",1,1)),
+	SetV(hondondisplay[2],string.byte("O",1,1)),
+	SetV(hondondisplay[3],string.byte("N",1,1)),
+	SetV(hondondisplay[4],string.byte(" ",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,0)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x04",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("F",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte("F",1,1)),
+},{preserved})
+TriggerX(FP,{CV(AtkSpeedMode,1)},{
+	SetV(AtkSpeedDisplay[1],string.byte("\x1F",1,1)),
+	SetV(AtkSpeedDisplay[2],string.byte("O",1,1)),
+	SetV(AtkSpeedDisplay[3],string.byte("N",1,1)),
+	SetV(AtkSpeedDisplay[4],string.byte(" ",1,1)),
+},{preserved})
+
 WavFile = "staredit\\wav\\sel_g.ogg"
-Trigger2X(FP,{CDeaths(FP,AtLeast,1,ToggleSound);},{RotatePlayer({PlayWAVX(WavFile);DisplayTextX("HD".._0D,4);},HumanPlayers,FP),SetCDeaths(FP,SetTo,0,ToggleSound);},{preserved})
+
+--HondonMode
+--AtkSpeedMode
+DisplayPrint(HumanPlayers,{"\x13\x10[ \x04(\x08HP \x04: ",HiddenColor[1][2],HiddenDisplay[1],"\x04) (\x1BATK \x04: ",HiddenColor[2][2],HiddenDisplay[2],"\x04) (\x1FPts \x04: ",HiddenColor[3][2],HiddenDisplay[3],"\x04) (\x10혼돈 옵션 \x04: ",hondondisplay,"\x04) (\x1F공속무한모드 \x04: ",AtkSpeedDisplay,"\x04)  \x10]"})
+DoActions(FP,{RotatePlayer({PlayWAVX(WavFile);},HumanPlayers,FP)})
+CIfEnd()
+
+
 CIfEnd()
 
 CIf(FP,{CDeaths(FP,Exactly,0,ModeSel)})

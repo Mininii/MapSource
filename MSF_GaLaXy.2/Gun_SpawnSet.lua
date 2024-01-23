@@ -295,8 +295,8 @@ function GunData()
 					CIfEnd()
 				CIfEnd()
 			for i = 0, 11 do
-				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1001,i))},{preserved})
-				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,CCode(0x1002,i))},{preserved})
+				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,132),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,Ccode(0x1001,i))},{preserved})
+				TriggerX(FP,{Gun_Line(5,AtLeast,2),Gun_Line(0,Exactly,133),Gun_Line(3,Exactly,i)},{SetCDeaths(FP,Subtract,1,Ccode(0x1002,i))},{preserved})
 			end
 			CIfEnd()
 			CDoActions(FP,{Gun_SetLine(4,SetTo,0),Gun_SetLine(5,Add,1)})
@@ -754,9 +754,9 @@ function GunData()
 		}
 		TriggerX(FP,{Gun_Line(4,Exactly,481)},{
 			SetMemory(0x6509B0,SetTo,6),
-			SetAllianceStatus(force1,Ally);
+			SetAllianceStatus(Force1,Ally);
 			SetMemory(0x6509B0,SetTo,7),
-			SetAllianceStatus(force1,Ally);
+			SetAllianceStatus(Force1,Ally);
 		},{preserved})
 		for i = 0, 9 do
 			TriggerX(FP,{Gun_Line(4,Exactly,481+(10*i))},{
@@ -767,9 +767,9 @@ function GunData()
 		end
 		TriggerX(FP,{Gun_Line(4,Exactly,481+(10*9))},{
 			SetMemory(0x6509B0,SetTo,6),
-			SetAllianceStatus(force1,Enemy);
+			SetAllianceStatus(Force1,Enemy);
 			SetMemory(0x6509B0,SetTo,7),
-			SetAllianceStatus(force1,Enemy);
+			SetAllianceStatus(Force1,Enemy);
 		},{preserved})
 		
 		NIf(FP,{Gun_Line(4,AtLeast,482),Gun_Line(4,AtMost,579),CVar(FP,CurrentChunk[2],AtMost,63)})
@@ -819,8 +819,8 @@ function GunData()
 			TSetMemory(0x58DC6C + 0x14*0,SetTo,_Mul(_Add(CCY,1),_Mov(512))),
 			SetCDeaths(FP,Add,1,SPGunCond);
 			SetCDeaths(FP,Add,1,OverCocooncomp);
-			Order(80,force2,64,Attack,1),
-			Order(21,force2,64,Attack,1),
+			Order(80,Force2,64,Attack,1),
+			Order(21,Force2,64,Attack,1),
 			})
 		NIfEnd()
 	CIfEnd()

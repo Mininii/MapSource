@@ -135,6 +135,7 @@ DifLeaderBoard = {
 	SelCP=CreateVar(FP)
 	HiddenModeT = CreateVArr(20,FP)
 	HondonMode = CreateVar(FP)
+	AtkSpeedMode = CreateVar(FP)
 	HiddenMode = CreateCcode()
 	KeyToggle = CreateCcode()
 	ToggleSound = CreateCcode()

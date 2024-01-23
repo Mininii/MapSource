@@ -85,7 +85,7 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 
 	function CAPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAfunc,PlayerID,Condition,PerAction,Preserve,CAfunc2)
 		if Shape == nil then
-			CS_InputError()
+			PushErrorMsg("CS_InputError")
 		end
 	
 		if Preserve == 0 then
@@ -278,7 +278,7 @@ function Include_G_CA_Library(DefaultAttackLoc,Start_G_CLine,StartIndex,Size_of_
 	end
 	function CXPlot2(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CXfunc,PlayerID,Condition,PerAction,Preserve,CXfunc2)
 		if Shape == nil then
-			CX_InputError()
+			PushErrorMsg("CX_InputError")
 		end
 	
 		if Preserve == 0 then
@@ -818,7 +818,7 @@ function G_CAPlot(ShapeTable)
 				CTrigger(FP,{CVar(FP,G_CA_Temp[2][2],Exactly,j,0xFF)},{SetCVar(FP,CA[5],SetTo,(k[1]/50)+1)},1)
 			end
 		else
-			G_CAPlot_InputData_Error()
+			PushErrorMsg("G_CAPlot_InputData_Error")
 		end
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
@@ -874,7 +874,7 @@ function T_to_BiteBuffer(Table)
 	if type(Table) == "table" then
 		local ret = 0
 		if #Table >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i, j in pairs(Table) do
 			if type(j) == "string" and j =="ACAS" then
@@ -891,17 +891,17 @@ end
 
 function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType,CenterXY,Owner,PreserveFlag)
 	if type(G_CA_CUTable) ~= "table" then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_SNTable) ~= "table" then
 		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
 	elseif G_CA_SNTable == nil then 
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_SLTable) ~= "table" then
 		G_CA_SLTable = {G_CA_SLTable,G_CA_SLTable,G_CA_SLTable,G_CA_SLTable}
 	elseif G_CA_SLTable == nil then
-		G_CA_SetSpawn_Inputdata_Error()
+		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
 	if type(G_CA_RepeatType) ~= "table" then
 		G_CA_RepeatType = {G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType,G_CA_RepeatType}
@@ -910,7 +910,7 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 	local X = {}
 	if type(G_CA_SLTable) == "table" then
 		if #G_CA_SLTable >= 5 then
-			BiteStack_is_Over_5()
+			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CA_SLTable[i] ~= nil then
@@ -928,14 +928,14 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 						PushErrorMsg("G_CA_SetSpawn_String_Shape_NotFound")
 					end
 				else
-					G_CA_SLTable_InputData_Error()
+					PushErrorMsg("G_CA_SLTable_InputData_Error")
 				end
 			else
 				table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256))
 			end
 		end
 	else
-		G_CA_SLTable_InputData_Error()
+		PushErrorMsg("G_CA_SLTable_InputData_Error")
 	end
 	local LMRet = 0
 	if G_CA_LMTable == "MAX" then
@@ -973,62 +973,6 @@ function CGMode(Level,Type)
 	if Type == nil then Type = Exactly end
 	return CDeaths(FP,Type,Level,GMode)
 end
---{G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_CenterType}
-function G_CA_SetSpawnX(Condition,...)
-	local arg = table.pack(...)
-	local G_CA_CUTable = {}
-	local G_CA_SNTable = {}
-	local G_CA_SLTable = {}
-	local G_CA_LMTable = {}
-	local G_CA_RepeatType = {}
-
-	if arg.n >= 5 then
-		BiteStack_is_Over_5()
-	end
-	for i = 1, arg.n do
-		if type(arg[i]) ~= "table" then
-			G_CA_SetSpawnX_InputData_Error()
-		end
-	end
-
-	for i = 1, arg.n do
-		table.insert(G_CA_CUTable,arg[i][1])
-		table.insert(G_CA_SNTable,arg[i][2])
-		table.insert(G_CA_SLTable,arg[i][3])
-		table.insert(G_CA_LMTable,arg[i][4])
-		table.insert(G_CA_RepeatType,arg[i][5])
-	end
-
-
-	local X = {}
-	if #G_CA_SLTable>= 1 then
-		for j, k in pairs(G_CA_SLTable)do
-			if type(k) == "number" then
-				table.insert(X,SetCVar(FP,SL_TempV[j][2],SetTo,12*k))
-			elseif type(G_CA_SLTable[i]) == "string" then
-				for j, k in pairs(G_CA2_ShapeTable) do
-					if G_CA_SLTable[i] == k then
-						table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256+j))
-					end
-				end
-			else
-				G_CA_SLTable_InputData_Error()
-			end
-		end
-	else
-		for i = 1, 4 do
-			table.insert(X,SetCVar(FP,SL_TempV[i][2],SetTo,256))
-		end
-	end
-
-	CallTriggerX(FP,Write_SpawnSet,Condition,{
-		SetCVar(FP,G_CA_LineV[2],SetTo,Start_G_CLine),
-		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
-		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
-		SetCVar(FP,G_CA_LMTV[2],SetTo,T_to_BiteBuffer(G_CA_LMTable)),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
-	})
-end
 
 function Install_Load_CAPlot()
 	Load_CAPlot_Shape = SetCallForward()
@@ -1049,11 +993,11 @@ end
 --	local G_CA_RepeatType = {}--
 
 --	if arg.n >= 5 then
---		BiteStack_is_Over_5()
+--		PushErrorMsg("BiteStack_is_Over_5")
 --	end
 --	for i = 1, arg.n do
 --		if type(arg[i]) ~= "table" then
---			G_CA_SetSpawnX_InputData_Error()
+--			PushErrorMsg("G_CA_SetSpawnX_InputData_Error")
 --		end
 --	end--
 
@@ -1078,7 +1022,7 @@ end
 --					end
 --				end
 --			else
---				G_CA_SLTable_InputData_Error()
+--				PushErrorMsg("G_CA_SLTable_InputData_Error")
 --			end
 --		end
 --	else

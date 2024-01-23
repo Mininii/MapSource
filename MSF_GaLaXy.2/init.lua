@@ -266,22 +266,22 @@ function SetZergGroupFlags(UnitID)
 	end
 	
 	for i = 37,57 do
-	unitSizePatch(i,3)
+	UnitSizePatch(i,3)
 	end
 	for i = 60,81 do
-	unitSizePatch(i,5)
+	UnitSizePatch(i,5)
 	end
-	unitSizePatch(103,5)
-	unitSizePatch(3,5)
-	unitSizePatch(5,1)
-	unitSizePatch(10,5)
-	unitSizePatch(15,5)
-	unitSizePatch(17,5)
-	unitSizePatch(19,5)
-	unitSizePatch(25,5)
-	unitSizePatch(32,4)
-	unitSizePatch(87,5)
-	unitSizePatch(89,5)
+	UnitSizePatch(103,5)
+	UnitSizePatch(3,5)
+	UnitSizePatch(5,1)
+	UnitSizePatch(10,5)
+	UnitSizePatch(15,5)
+	UnitSizePatch(17,5)
+	UnitSizePatch(19,5)
+	UnitSizePatch(25,5)
+	UnitSizePatch(32,4)
+	UnitSizePatch(87,5)
+	UnitSizePatch(89,5)
 	
 	Trigger { -- 퍼센트 데미지 세팅, 버튼셋
 		players = {FP},
@@ -477,7 +477,7 @@ function SetZergGroupFlags(UnitID)
 	LimitX = CreateCcode()
 	TestMode = CreateCcode()
 	B_P = CreateCcode()
-	BanCode = CreateCCodeArr(5) -- 18~23
+	BanCode = CreateCcodeArr(5) -- 18~23
 	ModeT2 = CreateCcode()
 	ModeSel = CreateCcode()
 	BGMMode = CreateCcode()
@@ -507,7 +507,7 @@ function SetZergGroupFlags(UnitID)
 	ExchangeRateTMinusFlag = CreateCcode()
 	GunBossT3 = CreateCcode()
 	DBossGen = CreateCcode()
-	HMDeaths = CreateCCodeArr(6)
+	HMDeaths = CreateCcodeArr(6)
 	DoWhileCon = CreateCcode()
 	--LairCCodeId = Ccode(0x1001,--)
 	--HiveCCodeId = Ccode(0x1002,--)

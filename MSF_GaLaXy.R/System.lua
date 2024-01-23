@@ -301,10 +301,9 @@ CWhileEnd()
 	CMov(FP,0x6509B0,FP)
 	CIfEnd()
 	DoActions(FP, {KillUnit(188,P12)})
-	
-	if Limit == 1 then
+	CIf(FP,{CV(AtkSpeedMode,1,AtLeast)})
 		
-	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)'
+	for i = 0, 1699 do -- 공속무한모듈
 		Trigger2(FP, {
 			DeathsX(19025+(84*i)+19,AtMost,6,0,0xFF),
 			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),},{
@@ -312,8 +311,8 @@ CWhileEnd()
 			SetDeathsX(19025+(84*i)+21,SetTo,0,1,0xFF00),
 			},{preserved})
 	end
+	CIfEnd()
 
-	end
 
 	TriggerX(FP,{CD(SoundLimit,5,AtMost),CD(DSound,1,AtLeast)},{SetCD(DSound,0),AddCD(SoundLimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\die_se.ogg")},HumanPlayers,FP)},{preserved})
     DoActionsX(FP,SetCDeaths(FP,Add,1,SoundLimitT))
@@ -529,7 +528,7 @@ for k = 1, 7 do
 	ClearText2 = "\x13"..PlayersT[k]..", "..GModeT[i].." Mode"
 	ClearText3 = "\x13\x04클리어 하셨습니다.\n\x13\x04Creator - GALAXY_BURST\n\x13\x04- - - - - - - - - - - - - -\n\x13\x04Thanks For Playing\n\x13\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x04 축하드립니다 \x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆\x0E★\x10☆"
 	ClearText4 = "\x13\x18Hidden Mode \x04적용됨"
-	ClearText5 = "HD".._0D
+	--ClearText5 = "HD".._0D
 	
 
 Trigger2X(FP,{
@@ -555,15 +554,25 @@ Trigger2X(FP,{
 		DisplayTextX(ClearText1,4);
 		DisplayTextX(ClearText2,4);
 		DisplayTextX(ClearText4,4);
-		DisplayTextX(ClearText5,4);
-		DisplayTextX(ClearText3,4);
 		PlayWAVX("staredit\\wav\\clear2.ogg");
 		PlayWAVX("staredit\\wav\\clear2.ogg");
 		PlayWAVX("staredit\\wav\\clear2.ogg");},HumanPlayers,FP)
 	)
+
+
+
 	
 end
 end
+
+CIfOnce(FP,{
+	CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),
+	CDeaths(FP,AtLeast,280,Win);})
+DisplayPrint(HumanPlayers,{"\x13\x10[ \x04(\x08HP \x04: ",HiddenColor[1][2],HiddenDisplay[1],"\x04) (\x1BATK \x04: ",HiddenColor[2][2],HiddenDisplay[2],"\x04) (\x1FPts \x04: ",HiddenColor[3][2],HiddenDisplay[3],"\x04) (\x10혼돈 옵션 \x04: ",hondondisplay,"\x04) (\x1F공속무한모드 \x04: ",AtkSpeedDisplay,"\x04)  \x10]"})
+DoActions2(FP, {RotatePlayer({
+	DisplayTextX(ClearText3,4);}, HumanPlayers, FP)})
+CIfEnd()
+
 function DisplayDeathRank(Player,GM,Sc1,Sc2,Text,GameOverFlag)
 	local X = nil
 	local Y = nil

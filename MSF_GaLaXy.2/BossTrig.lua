@@ -265,7 +265,7 @@ BClearT = "\n\n\n\n\n\n\n\n\n\n\n\x13\x08※※※※※※※※※※※※\x0
 	CIfEnd({SetCDeaths(FP,SetTo,0,BT_Ready2)})
 	CIf(FP,Switch("Switch 130",Set))
 		CWhile(FP,{CVar(FP,N_A[2],AtMost,359),CVar(FP,S_N_R[2],AtMost,2400)})
-			f_lengthdir(FP,S_N_R,N_A,N_X,N_Y)
+		f_Lengthdir(FP,S_N_R,N_A,N_X,N_Y)
 			CAdd(FP,N_X,BossXY[1])
 			CAdd(FP,N_Y,BossXY[2])
 			CTrigger(FP,{
