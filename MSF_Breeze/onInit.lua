@@ -1,41 +1,50 @@
 function onInit_EUD()
-	-- ¹Ù·Î À§¿¡ StartCtrig() ÀÖ¾î¾ßÇÔ --
+	-- ë°”ë¡œ ìœ„ì— StartCtrig() ìˆì–´ì•¼í•¨ --
 MarCur = CreateVar()
 MarPrev = CreateVar()
 MarValue = CreateVar()
--- Ã¹ ¹øÂ° ÇÃ·¹ÀÌ¾î°¡ P1ÀÏ °æ¿ì (¾Æ´Ò°æ¿ì P1À» ´Ù¸¥ ÇÃ·¹ÀÌ¾î·Î ¹Ù²ã¾ßÇÔ)
+-- ì²« ë²ˆì§¸ í”Œë ˆì´ì–´ê°€ P1ì¼ ê²½ìš° (ì•„ë‹ê²½ìš° P1ì„ ë‹¤ë¥¸ í”Œë ˆì´ì–´ë¡œ ë°”ê¿”ì•¼í•¨)
 CRead(P1,MarCur,0x58A364) 
-CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValue¿¡ Ãß°¡µÈ ¸¶¸° µ¥½º°ªÀ» ÀúÀåÇÔ
-CRead(P1,MarPrev,0x58A364) 
+CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValueì— ì¶”ê°€ëœ ë§ˆë¦° ë°ìŠ¤ê°’ì„ ì €ì¥í•¨
 
 
 
 
+	for i = 0, 227 do
+	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000}})--ëª¨ë“  ìœ ë‹›ì„ ë§ˆë²•ì‚¬ë¡œ
+	end
+	SetUnitsDatX(162,{AdvFlag={0,0x80000}})--í¬í†  íŒŒì¼ëŸ° ë¶ˆí•„ìš”
+
+	if TestStart == 1 then
+		SetUnitsDatX(0,{HP=9999})--í…ŒìŠ¤íŠ¸
+		SetUnitsDatX(20,{HP=9999})--í…ŒìŠ¤íŠ¸
+		SetWeaponsDatX(0, {DmgBase=1000})--í…ŒìŠ¤íŠ¸
+		SetWeaponsDatX(1, {DmgBase=2000})--í…ŒìŠ¤íŠ¸
+	
+	end
 
 
-
-
-	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(125,{HP=2000,MinCost=2000,BuildTime=15})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
+	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(125,{HP=3500,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
 	for j,k in pairs(MedicTrig) do
-		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+(j*50),GasCost=0,BuildTime = j,SuppCost = 0,RdySnd=999})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
+		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+(j*50),GasCost=0,BuildTime = j,SuppCost = 0,RdySnd=999})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
 	end
 	for j,k in pairs(GiveUnitID) do
-		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
+		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
 		table.insert(PatchArr,SetMemoryB(0x57F27C + ((j-1) * 228) + k,SetTo,0))
 	end
 	for j,k in pairs(BanToken) do
-		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
+		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
 	end
-	SetUnitsDatX(3,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
-	SetUnitsDatX(83,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--ÇÃ·¹ÀÌ¾î¸¸ »ç¿ë°¡´É, ¿ä±¸Á¶°ÇÀ» ¹«Á¶°Ç?À¸·Î
+	SetUnitsDatX(3,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
+	SetUnitsDatX(83,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--í”Œë ˆì´ì–´ë§Œ ì‚¬ìš©ê°€ëŠ¥, ìš”êµ¬ì¡°ê±´ì„ ë¬´ì¡°ê±´?ìœ¼ë¡œ
 	for j, k in pairs({37,38,39,41,43,44,45,46,47}) do
-		SetUnitsDatX(k,{MinCost=0,GasCost=0,BuildTime=15})--Àú±×À¯´Ö¼³Á¤
+		SetUnitsDatX(k,{MinCost=0,GasCost=0,BuildTime=15})--ì €ê·¸ìœ ë‹›ì„¤ì •
 	end
 
 
@@ -50,12 +59,12 @@ CRead(P1,MarPrev,0x58A364)
 		end
 		
 	end
-	SetUnitsDatX(115,{AdvFlag={1677721601,0xFFFFFFFF},BdDimX=1,BdDimY=1})--°­Åğ°Ç¹°¼¼ÆÃ
+	SetUnitsDatX(115,{AdvFlag={1677721601,0xFFFFFFFF},BdDimX=1,BdDimY=1})--ê°•í‡´ê±´ë¬¼ì„¸íŒ…
 
 	CIfOnce(FP)
 	local LimitX = CreateCcode()
 	local LimitC = CreateCcode()
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit¼³Á¤
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limitì„¤ì •
 	function InputTesterID(Player,ID)
 		Trigger {
 			players = {FP},
@@ -70,7 +79,7 @@ CRead(P1,MarPrev,0x58A364)
 			}
 		}
 	end
-		for i = 0, 7 do -- Á¤¹ö¾Æ´Ñµ¥ ÇÃ·¹ÀÌ¾îÁß ÇØ´çÇÏ´Â ´Ğ³×ÀÓ ¾øÀ¸¸é °×Æ¨±è
+		for i = 0, 7 do -- ì •ë²„ì•„ë‹Œë° í”Œë ˆì´ì–´ì¤‘ í•´ë‹¹í•˜ëŠ” ë‹‰ë„¤ì„ ì—†ìœ¼ë©´ ê²œíŠ•ê¹€
 			InputTesterID(i,"GALAXY_BURST") 
 			InputTesterID(i,"RonaRonaTTang") 
 		end
@@ -80,7 +89,7 @@ CRead(P1,MarPrev,0x58A364)
 			CDeaths(FP,Exactly,1,LimitX);
 			CDeaths(FP,Exactly,0,LimitC);}, {
 				RotatePlayer({
-					DisplayTextX(StrDesignX("\x1BÅ×½ºÆ® Àü¿ë ¸ÊÀÔ´Ï´Ù. Á¤½Ä¹öÁ¯À¸·Î ½ÃÀÛÇØÁÖ¼¼¿ä.").."\n"..StrDesignX("\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿."),4);
+					DisplayTextX(StrDesignX("\x1Bí…ŒìŠ¤íŠ¸ ì „ìš© ë§µì…ë‹ˆë‹¤. ì •ì‹ë²„ì ¼ìœ¼ë¡œ ì‹œì‘í•´ì£¼ì„¸ìš”.").."\n"..StrDesignX("\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™."),4);
 				Defeat();
 				},HumanPlayers,FP);
 				Defeat();
@@ -92,32 +101,34 @@ CRead(P1,MarPrev,0x58A364)
 	
 	end
 	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 500, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
-	NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
-
-	
-	for i = 0, 6 do
-		ItoName(FP,i,VArr(Names[i+1],0),ColorCode[i+1])
-		_0DPatchforVArr(FP,Names[i+1],6)
-		for j = 1, 4 do
-			f_GetStrXptr(FP,NMStrPtrArr[j][i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."NM"..(j).._0D)
-			f_GetStrXptr(FP,HMStrPtrArr[j][i+1],"\x0D\x0D\x0D"..ColorCode[i+1].."HM"..(j).._0D)
-			Install_CText1(NMStrPtrArr[j][i+1],Str00,_G["Str0"..j],Names[i+1])
-			Install_CText1(HMStrPtrArr[j][i+1],Str00,_G["Str0"..(j+4)],Names[i+1])
-			
-		end
+	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
+	CunitIndex = CreateVar(FP)
+	RepHeroIndex = CreateVar(FP)
+	CFor(FP,19025,19025+(84*1700),84)
+	CI = CForVariable()
+	condbox = {}
+	for j,k in pairs(UnitPointArr) do
+		table.insert(condbox,CV(RepHeroIndex,k[1]))
 	end
-
-
 	
+	f_Read(FP,_Add(CI,25),RepHeroIndex)
+	CIf(FP,{TTOR(condbox)})
+	CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
 	CIfEnd()
-	table.insert(PatchArrPrsv, SetCp(FP))
+	CAdd(FP,CunitIndex,1)
+	CForEnd()
+	CIfEnd()
 	table.insert(PatchArrPrsv, RemoveUnitAt(All, "Dark Swarm", 2, AllPlayers))
-	table.insert(PatchArrPrsv, SetMemory(0x6562F8, SetTo, 1179664))
 	
 	
 
 
-	DoActions2(FP, PatchArrPrsv)
+	DoActions2(AllPlayers, PatchArrPrsv)
+	DoActions2(AllPlayers, {
+		ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
+		ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100),
+		ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
+	},1)
 	
 	Trigger {
 		players = {FP},

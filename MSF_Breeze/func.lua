@@ -23,38 +23,38 @@ function SetWeaponsDatX(WepID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="DmgBase" then
-				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- ∞¯∞›∑¬
+				PatchInsert(SetMemoryW(0x656EB0+(WepID *2),SetTo,k)) -- Í≥µÍ≤©Î†•
 			elseif j=="DmgFactor" then
-				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- √ﬂ∞°∞¯∞›∑¬
+				PatchInsert(SetMemoryW(0x657678+(WepID *2),SetTo,k)) -- Ï∂îÍ∞ÄÍ≥µÍ≤©Î†•
 			elseif j=="Cooldown" then
-				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- ∞¯º”
+				PatchInsert(SetMemoryB(0x656FB8+(WepID *1),SetTo,k)) -- Í≥µÏÜç
 			elseif j=="Splash" then
 				if type(k)=="boolean" then
 					if k == true then
-						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- Ω∫«√≈∏¿‘(¿œπÊ«¸)
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- Ïä§ÌîåÌÉÄÏûÖ(ÏùºÎ∞©Ìòï)
 					else
-						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- Ω∫«√≈∏¿‘(Ω∫«√æ¯¿Ω)
+						PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,1)) -- Ïä§ÌîåÌÉÄÏûÖ(Ïä§ÌîåÏóÜÏùå)
 					end
 				elseif type(k)~="table" or #k~=3 then
 					PushErrorMsg("Splash Inputdata Error")
 				else
-					PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- Ω∫«√≈∏¿‘(¿œπÊ«¸)
-					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --Ω∫«√ æ»
-					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --Ω∫«√ ¡ﬂ
-					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --Ω∫«√ π€
+					PatchInsert(SetMemoryB(0x6566F8+WepID,SetTo,3)) -- Ïä§ÌîåÌÉÄÏûÖ(ÏùºÎ∞©Ìòï)
+					PatchInsert(SetMemoryW(0x656888+(WepID*2),SetTo,k[1])) --Ïä§Ìîå Ïïà
+					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --Ïä§Ìîå Ï§ë
+					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --Ïä§Ìîå Î∞ñ
 				end
 			elseif j=="RangeMin" then
-				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ªÁ∞≈∏Æ √÷º“
+				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- ÏÇ¨Í±∞Î¶¨ ÏµúÏÜå
 			elseif j=="RangeMax" then
-				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ªÁ∞≈∏Æ √÷¥Î
+				PatchInsert(SetMemory(0x657470+(WepID *4),SetTo,k)) -- ÏÇ¨Í±∞Î¶¨ ÏµúÎåÄ
 			elseif j=="TargetFlag" then
 				PatchInsert(SetMemoryW(0x657998 + (WepID*2), SetTo, k))
 			elseif j=="UpgradeType" then
 				PatchInsert(SetMemoryB(0x6571D0 + WepID, SetTo, k))
 			elseif j=="ObjectNum" then
-				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- ≈ıªÁ√ººˆ
+				PatchInsert(SetMemoryB(0x6564E0+WepID,SetTo,k)) -- Ìà¨ÏÇ¨Ï≤¥Ïàò
 			elseif j=="IconType" then
-				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- æ∆¿Ãƒ‹
+				PatchInsert(SetMemoryW(0x656780+(WepID *2),SetTo,k)) -- ÏïÑÏù¥ÏΩò
 			elseif j== "Behavior" then
 				PatchInsert(SetMemoryB(0x656670+WepID,SetTo,k))
 			elseif j== "LaunchX" then
@@ -70,7 +70,7 @@ function SetWeaponsDatX(WepID,Property)
 			elseif j== "FlingyID" then
 				PatchInsert(SetMemory(0x656CA8+(WepID *4),SetTo,k))
 			elseif j== "WepName" then
-				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- ¿Ã∏ß
+				PatchInsert(SetMemoryW(0x6572E0+(WepID *2),SetTo,k)) -- Ïù¥Î¶Ñ
 			else
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
 			end
@@ -92,7 +92,7 @@ end
 
 function SetUnitsDatX(UnitID,Property)
 	if type(UnitID) == "string" then
-		UnitID = ParseUnit(UnitID) -- Ω∫∆Æ∏µ¿∏∑Œ ¿Ø¥÷¿Ã∏ß ¿‘∑¬∞°¥…
+		UnitID = ParseUnit(UnitID) -- Ïä§Ìä∏ÎßÅÏúºÎ°ú Ïú†ÎãõÏù¥Î¶Ñ ÏûÖÎ†•Í∞ÄÎä•
 	end
 	if UnitID>=228 then PushErrorMsg("UnitID Index Overflow") end
 	if type(Property)~= "table" then
@@ -100,7 +100,7 @@ function SetUnitsDatX(UnitID,Property)
 	else
 		for j,k in pairs(Property) do
 			if j=="MinCost" then
-				PatchInsert(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- πÃ≥◊∂ˆ
+				PatchInsert(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- ÎØ∏ÎÑ§ÎûÑ
 			elseif j=="Playerable" then
 				local SType
 				if type(k)=="boolean" then
@@ -133,11 +133,11 @@ function SetUnitsDatX(UnitID,Property)
 				end
 
 			elseif j=="GasCost"  then
-				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- ∞°Ω∫
+				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- Í∞ÄÏä§
 			elseif j=="BuildTime"  then
-				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ª˝ªÍº”µµ
+				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- ÏÉùÏÇ∞ÏÜçÎèÑ
 			elseif j=="SuppCost"  then
-				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- º≠«√
+				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- ÏÑúÌîå
 			elseif j=="HP"  then
 				PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,k*256))
 			elseif j=="Shield"  then
@@ -152,9 +152,9 @@ function SetUnitsDatX(UnitID,Property)
 					PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, k))
 				end
 			elseif j=="BdDimX"  then
-				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- ∞«º≥≈©±‚
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- Í±¥ÏÑ§ÌÅ¨Í∏∞
 			elseif j=="BdDimY" then
-				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- ∞«º≥≈©±‚
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- Í±¥ÏÑ§ÌÅ¨Í∏∞
 			elseif j=="SizeL" then
 				PatchInsert(SetMemoryX(0x6617C8 + (UnitID*8),SetTo,(k),0xFFFF))
 			elseif j=="SizeU" then
@@ -164,7 +164,7 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="SizeD" then
 				PatchInsert(SetMemoryX(0x6617CC + (UnitID*8),SetTo,(k*65536),0xFFFF0000))
 			elseif j=="SuppProv" then
-				PatchInsert(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- º≠«√∞¯±ﬁ∑Æ
+				PatchInsert(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- ÏÑúÌîåÍ≥µÍ∏âÎüâ
 			elseif j=="AdvFlag" then
 				if type(k)~= "table" or #k~=2 then
 					PushErrorMsg("AdvFlag Inputdata Error")
@@ -238,7 +238,7 @@ end
 
 function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",Length1},{2,"2.Wav",Length2},...,{N,"N.Wav",LengthN}}
 	STPopTrigArr(PlayerID)	
-	local Arr = CreateVarArr(3,PlayerID) -- Temp / •ƒT / Delay 
+	local Arr = CreateVarArr(3,PlayerID) -- Temp / ŒîT / Delay 
 
 	f_Read(PlayerID,0x51CE8C,Arr[1])
 
@@ -366,23 +366,23 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 				table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 			end
 			if type(Preset[1]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 			if type(Preset[3]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 			if type(Preset[5]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
-			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 			-------- Preset Limit --------------------------------
 			CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 			CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -562,23 +562,23 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 				table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 			end
 			if type(Preset[1]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+				CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+			CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 			if type(Preset[3]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+				CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 			end
-			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+			CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 			if type(Preset[5]) == "number" then
-				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+				CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 			else
-				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+				CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 			end
-			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+			CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 			-------- Preset Limit --------------------------------
 			CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 			CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
@@ -655,7 +655,7 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 				CAPlotCreateArr = {CAPlotVarAlloc-3,CAPlotVarAlloc-2,CAPlotVarAlloc-1,CAPlotVarAlloc,CAPlotVarAlloc+1,CAPlotVarAlloc+2,CAPlotVarAlloc+3,CAPlotVarAlloc+4,CAPlotVarAlloc+5,CAPlotVarAlloc+6}
 				CAPlotVarAlloc = CAPlotVarAlloc + 7
 				if CXfunc ~= nil then
-					_G[CXfunc]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+					_G[CXfunc]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 				end
 				NJump(PlayerID,CAPlotJumpAlloc,CVar("X",CB[10],AtLeast,1),{SetCVar("X",CB[10],SetTo,0),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1)})
 		-------------------------------------------------------------------------
@@ -678,7 +678,7 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 				CMov(PlayerID,LocD,V(CA[9]),PlotSize)
 				CDoActions(PlayerID,{TCreateUnit(V(CB[1]),V(CB[2]),Location,V(CB[3])),SetCVar("X",CA[4],Add,1),SetCVar("X",CA[6],Add,1),PerAction})
 				if CXfunc2 ~= nil then
-					_G[CXfunc2]() -- Z¡¬«•¥¬ ø©±‚º≠ CX_ «‘ºˆø° ¿««ÿ X,Y¡¬«•∞™ø° øµ«‚¿ª πÃƒß
+					_G[CXfunc2]() -- ZÏ¢åÌëúÎäî Ïó¨Í∏∞ÏÑú CX_ Ìï®ÏàòÏóê ÏùòÌï¥ X,YÏ¢åÌëúÍ∞íÏóê ÏòÅÌñ•ÏùÑ ÎØ∏Ïπ®
 				end
 				if CenterXY == nil then
 					CMov(PlayerID,LocL,V(CA2[1]))
@@ -714,14 +714,14 @@ function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
 	if DefaultAttackLoc == nil then
 		PushErrorMsg("G_CA_DefaultXY_InputData_Error")
 	end
-f_RepeatTypeErr = "\x07°∫ \x08ERROR : \x04¿ﬂ∏¯µ» RepeatType¿Ã ¿‘∑¬µ«æ˙Ω¿¥œ¥Ÿ! Ω∫≈©∏∞º¶¿∏∑Œ ¡¶¿€¿⁄ø°∞‘ ¡¶∫∏«ÿ¡÷ººø‰!\x07 °ª"
-f_RepeatErr = "\x07°∫ \x08ERROR : \x04f_Repeatø°º≠ πÆ¡¶∞° πﬂª˝«ﬂΩ¿¥œ¥Ÿ! Ω∫≈©∏∞º¶¿∏∑Œ ¡¶¿€¿⁄ø°∞‘ ¡¶∫∏«ÿ¡÷ººø‰!\x07 °ª"
-f_RepeatErr2 = "\x07°∫ \x08ERROR : \x04Set_Repeatø°º≠ ¿ﬂ∏¯µ» UnitID(0)¿ª ¿‘∑¬πﬁæ“Ω¿¥œ¥Ÿ! Ω∫≈©∏∞º¶¿∏∑Œ ¡¶¿€¿⁄ø°∞‘ ¡¶∫∏«ÿ¡÷ººø‰!\x07 °ª"
-f_GunSendErrT = "\x07°∫ \x08ERROR \x04: G_CA_SpawnSet ∏Ò∑œ¿Ã ∞°µÊ ¬˜ µ•¿Ã≈Õ∏¶ ¿‘∑¬«œ¡ˆ ∏¯«ﬂΩ¿¥œ¥Ÿ! Ω∫≈©∏∞º¶¿∏∑Œ ¡¶¿€¿⁄ø°∞‘ ¡¶∫∏«ÿ¡÷ººø‰!\x07 °ª"
-G_CA_PosErr = "\x07°∫ \x03CAUCTION : \x04ª˝º∫ ¡¬«•∞° ∏  π€¿ª π˛æÓ≥µΩ¿¥œ¥Ÿ.\x07 °ª"
-f_GunFuncT = "\x07°∫ \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07°ª"
-f_GunSpawnSet = "\x07°∫ \x03TESTMODE OP \x04: G_CAPlot SpawnSet Initiation. \x07°ª"
-f_GunErrT = "\x07°∫ \x08ERROR \x04: G_CAPlot Not Found. \x07°ª"
+f_RepeatTypeErr = "\x07„Äé \x08ERROR : \x04ÏûòÎ™ªÎêú RepeatTypeÏù¥ ÏûÖÎ†•ÎêòÏóàÏäµÎãàÎã§! Ïä§ÌÅ¨Î¶∞ÏÉ∑ÏúºÎ°ú Ï†úÏûëÏûêÏóêÍ≤å Ï†úÎ≥¥Ìï¥Ï£ºÏÑ∏Ïöî!\x07 „Äè"
+f_RepeatErr = "\x07„Äé \x08ERROR : \x04f_RepeatÏóêÏÑú Î¨∏Ï†úÍ∞Ä Î∞úÏÉùÌñàÏäµÎãàÎã§! Ïä§ÌÅ¨Î¶∞ÏÉ∑ÏúºÎ°ú Ï†úÏûëÏûêÏóêÍ≤å Ï†úÎ≥¥Ìï¥Ï£ºÏÑ∏Ïöî!\x07 „Äè"
+f_RepeatErr2 = "\x07„Äé \x08ERROR : \x04Set_RepeatÏóêÏÑú ÏûòÎ™ªÎêú UnitID(0)ÏùÑ ÏûÖÎ†•Î∞õÏïòÏäµÎãàÎã§! Ïä§ÌÅ¨Î¶∞ÏÉ∑ÏúºÎ°ú Ï†úÏûëÏûêÏóêÍ≤å Ï†úÎ≥¥Ìï¥Ï£ºÏÑ∏Ïöî!\x07 „Äè"
+f_GunSendErrT = "\x07„Äé \x08ERROR \x04: G_CA_SpawnSet Î™©Î°ùÏù¥ Í∞ÄÎìù Ï∞® Îç∞Ïù¥ÌÑ∞Î•º ÏûÖÎ†•ÌïòÏßÄ Î™ªÌñàÏäµÎãàÎã§! Ïä§ÌÅ¨Î¶∞ÏÉ∑ÏúºÎ°ú Ï†úÏûëÏûêÏóêÍ≤å Ï†úÎ≥¥Ìï¥Ï£ºÏÑ∏Ïöî!\x07 „Äè"
+G_CA_PosErr = "\x07„Äé \x03CAUCTION : \x04ÏÉùÏÑ± Ï¢åÌëúÍ∞Ä Îßµ Î∞ñÏùÑ Î≤óÏñ¥ÎÇ¨ÏäµÎãàÎã§.\x07 „Äè"
+f_GunFuncT = "\x07„Äé \x03TESTMODE OP \x04: G_CAPlot Suspended. \x07„Äè"
+f_GunSpawnSet = "\x07„Äé \x03TESTMODE OP \x04: G_CAPlot SpawnSet Initiation. \x07„Äè"
+f_GunErrT = "\x07„Äé \x08ERROR \x04: G_CAPlot Not Found. \x07„Äè"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
@@ -1398,10 +1398,423 @@ end
 	end
 end
 
-function Install_CText1(StrPtr,CText1,CText2,PlayerVArr)
+function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,SeekRange,Point,Text)
+	local TempWID = WepID
+	local TempWID2 = 130
+	if Point~=nil then
+		table.insert(UnitPointArr, {UnitID,Point,Text})
+	end
+	if UnitID == 62 then TempWID2 = WepID end
+	if UnitID == 98 then TempWID2 = WepID end
+	if 
+	UnitID == 3 or 
+	UnitID == 5 or 
+	UnitID == 17 or 
+	UnitID == 23 or 
+	UnitID == 25 or 
+	UnitID == 30 then TempWID = 130 
+	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
+	end
+	
+	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange
+})
+if ObjNum == nil then ObjNum = 1 end
+SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})
 
-	f_Memcpy(FP,StrPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
-	f_Movcpy(FP,_Add(StrPtr,CText1[2]),VArr(PlayerVArr,0),4*5)
-	f_Memcpy(FP,_Add(StrPtr,CText1[2]+(4*6)+3),_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
 
+end
+
+
+
+LabelUseArr = {}
+
+function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
+	if Player == "X" then 
+		Player = nil
+	end
+	if Index == "X" then 
+		Index = nil
+	end
+	if Index == 0 then 
+		Index = nil
+	end
+	if Next == "X" then 
+		Next = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index ~= nil and LabelUseArr[Index]==nil then
+		LabelUseArr[Index] = true
+	end
+
+
+	local Pflag
+	if Player == nil then
+		Pflag = 0
+	else
+		if Player >= 0 and Player <= 7 then
+			Pflag = Player + 1
+		else
+			Pflag = 0
+		end
+	end
+
+	local Mflag
+	if Mask == nil then
+		Mflag = 0
+		Mask = 0
+	else
+		--Mflag = 32 (Rflag)
+		Mflag = 0x80
+	end
+
+	local Nflag
+	if Next == 0 or Next == nil then
+		Nflag = 0
+	elseif Next == 1 then 
+		Nflag = 16
+	else
+		Nflag = 0
+		Address = Address + 0x970*Next
+	end
+
+	local Cflag
+	if Index == nil then
+		Index = 0
+		Cflag = 64
+	else
+		Cflag = 0
+	end
+
+	local Xflag = 0
+	if Index >= 0x10000 then
+		Index = Index - 0x10000
+		Xflag = 128
+	end
+
+	local Rflag
+	Rflag = Pflag + Nflag + Cflag + Xflag
+
+	local ExCtrigX = Condition(Mask,Address/4,Value,Index,Type,0xFF,Rflag,0x10+Mflag) -- #DefCond
+	return ExCtrigX
+end
+
+function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Index1 == 0 then 
+		Index1 = nil
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Index2 == 0 then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	if Index1~=nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Index2~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1 + Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local ExSetCtrigX = Action(Mask,Index1,Rflag1,Rflag2,Address1/4,Addr2,Index2,0x5,Type,0x14+Mflag2) -- #DefAct (PauseGame = 0x5)
+	return ExSetCtrigX
+end
+
+function SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
+	if Player1 == "X" then 
+		Player1 = nil
+	end
+	if Index1 == "X" then 
+		Index1 = nil
+	end
+	if Index1 == 0 then 
+		Index1 = nil
+	end
+	if Index1 ~= nil and LabelUseArr[Index1]==nil then
+		LabelUseArr[Index1] = true
+	end
+	if Next1 == "X" then 
+		Next1 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+
+	local Pflag1
+	if Player1 == nil then
+		Pflag1 = 0
+	else
+		if Player1 >= 0 and Player1 <= 7 then
+			Pflag1 = Player1 + 1
+		else
+			Pflag1 = 0
+		end
+	end
+
+	local Nflag1
+	if Next1 == 0 or Next1 == nil then
+		Nflag1 = 0
+	elseif Next1 == 1 then 
+		Nflag1 = 16
+	else
+		Nflag1 = 0
+		Address1 = Address1 + 0x970*Next1
+	end
+
+	local Cflag1
+	if Index1 == nil then
+		Index1 = 0
+		Cflag1 = 32
+	else
+		Cflag1 = 0
+	end
+
+	local Xflag1 = 0
+	if Index1 >= 0x10000 then
+		Index1 = Index1 - 0x10000
+		Xflag1 = 64
+	end
+
+	local Rflag1
+	Rflag1 = Pflag1 + Nflag1 + Cflag1 + Xflag1
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local ExSetCtrig1X = Action(Mask,Index1,Rflag1,0,Address1/4,Value,0,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig1X
+end
+
+function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+	if Player2 == "X" then 
+		Player2 = nil
+	end
+	if Index2 == "X" then 
+		Index2 = nil
+	end
+	if Index2 == 0 then 
+		Index2 = nil
+	end
+	if Next2 == "X" then 
+		Next2 = nil
+	end
+	if EPD2 == "X" then
+		EPD2 = nil
+	end
+	if Mask == "X" then 
+		Mask = nil
+	end
+	if Index2 ~=nil and LabelUseArr[Index2]==nil then
+		LabelUseArr[Index2] = true
+	end
+
+	local Pflag2
+	if Player2 == nil then
+		Pflag2 = 0
+	else
+		if Player2 >= 0 and Player2 <= 7 then
+			Pflag2 = Player2 + 1
+		else
+			Pflag2 = 0
+		end
+	end
+
+	local Nflag2
+	if Next2 == 0 or Next2 == nil then
+		Nflag2 = 0
+	elseif Next2 == 1 then 
+		Nflag2 = 16
+	else
+		Nflag2 = 0
+		Address2 = Address2 + 0x970*Next2
+	end
+
+	local Mflag2
+	if Mask == nil then
+		Mflag2 = 0
+		Mask = 0
+	else
+		--Mflag2 = 64 (Rflag2)
+		Mflag2 = 0x80
+	end
+
+	local Addr2
+	if EPD2 == 0 or EPD2 == nil then
+		Addr2 = Address2
+		Eflag2 = 0
+	else
+		Addr2 = Address2/4
+		Eflag2 = 32
+	end
+
+	local Cflag2
+	if Index2 == nil then
+		Index2 = 0
+		Cflag2 = 128
+	else
+		Cflag2 = 0
+	end
+
+	local Xflag2 = 0
+	if Index2 >= 0x10000 then
+		Index2 = Index2 - 0x10000
+		Xflag2 = 128
+	end
+
+	local Rflag1
+	Rflag1 = Xflag2
+	local Rflag2
+	Rflag2 = Pflag2 + Nflag2 + Eflag2 + Cflag2
+
+	local Offset2
+	if Offset == "Cp" then
+		Offset2 = 13
+	else
+		Offset2 = EPD(Offset)
+	end
+
+	local ExSetCtrig2X = Action(Mask,0,Rflag1,Rflag2,Offset2,Addr2,Index2,0x5,Type,0x14+Mflag2) -- (PauseGame = 0x5)
+	return ExSetCtrig2X
+end
+
+
+function LabelUseCheck() -- Label ÏÇ¨Ïö© Ï≤¥ÌÅ¨
+	local C = {}
+	for k,v in pairs(LabelArr) do
+		if v ~= 0xFFE0 then
+			if not C[v] then
+				C[v] = true
+			end
+		else
+			Prohibited_Label()
+		end
+	end
+	for k, v in pairs(LabelUseArr) do
+		if k~=nil and C[k]== nil then
+			_G["Undefined Label! Current Label : 0x"..string.format("%X",k)]() -- push error msg
+		end
+		
+	end
 end

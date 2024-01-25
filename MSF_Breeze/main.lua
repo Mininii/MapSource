@@ -1,26 +1,17 @@
+
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\MSF_Breeze\\main.lua")
-
---¼ÓµµÃøÁ¤¿ë
+--__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- ë§µíŒŒì¼ ê²½ë¡œ(\ë¥¼ \\ë¡œ ë°”ê¿”ì•¼í•¨)
+--__SubDirSetting(__encode_cp949(Curdir.."MapSource\\MSF_Breeze")) -- Main.lua í´ë”ê²½ë¡œ (\ë¥¼ \\ë¡œ ë°”ê¿”ì•¼í•¨, ì—†ìœ¼ë©´ ë¹„ìš°ê¸°)
+--ì†ë„ì¸¡ì •ìš©
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-LD2XOption = 1
-if LD2XOption == 1 then
-	Mapdir="C:\\euddraft0.9.2.0\\MSF_Breeze"
-	__StringArray = {}
-	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
-	__TRIGChkptrT = {}
-	__TTI = 1
-	Loader2XFName = "Loader.lua"
-else
-	Loader2XFName = "Loader2X.lua"
-end
+
 
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
+     if dir:match "%.[Ll][Uu][Aa]$"  then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -35,9 +26,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x04Ver. Beta. 0.7"
+VerText = "\x04Ver. 1.0"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
@@ -49,9 +40,10 @@ SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
-
+DP_Start_init(FP)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
+	DUnitCalc = Install_EXCC(FP,15,1)
 	Include_CtrigPlib(360,"Switch 100")
 	Include_CBPaint()
 	Include_Vars()
@@ -59,23 +51,43 @@ CJump(AllPlayers,init_func)
 	Install_GetCLoc(FP,0,nilunit)
 	Include_CRandNum(FP)
 	Include_G_CA_Library(2,0x600,32)
+	Shape()
+
+	S_3 = G_CAPlot(S_3_ShT)
+	S_4 = G_CAPlot(S_4_ShT)
+	S_5 = G_CAPlot(S_5_ShT)
+	S_6 = G_CAPlot(S_6_ShT)
+	S_7 = G_CAPlot(S_7_ShT)
+	S_8 = G_CAPlot(S_8_ShT)
+	P_3 = G_CAPlot(P_3_ShT)
+	P_4 = G_CAPlot(P_4_ShT)
+	P_5 = G_CAPlot(P_5_ShT)
+	P_6 = G_CAPlot(P_6_ShT)
+	P_7 = G_CAPlot(P_7_ShT)
+	P_8 = G_CAPlot(P_8_ShT)
+	
+Install_Load_CAPlot()
+Install_Call_G_CA()
+G_CA_Lib_ErrorCheck()
+	if #G_CAPlot_Shape_InputTable >= 256 then
+		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
+	end
+	
+G_CAPlot2(G_CAPlot_Shape_InputTable)
+
 CJumpEnd(AllPlayers,init_func)
 
 onInit_EUD() -- onPluginStart
 
 
 Interface()
+System()
 Waves()
 
--- ¸¶Áö¸· ÇÃ·¹ÀÌ¾î°¡ P8ÀÏ °æ¿ì (¾Æ´Ò°æ¿ì P8À» ´Ù¸¥ ÇÃ·¹ÀÌ¾î·Î ¹Ù²ã¾ßÇÔ)
--- ¹Ù·Î ¾Æ·¡¿¡ EndCtrig() ÀÖ¾î¾ßÇÔ --
+CRead(P8,V(MarPrev[2],P1),0x58A364) 
+init_Setting()
+
 EndCtrig()
+LabelUseCheck()
 ErrorCheck()
 SetCallErrorCheck()
-
-
-if LD2XOption == 1 then
-__PopStringArray()
-io.close(__TRIGchkptr)
-end
-

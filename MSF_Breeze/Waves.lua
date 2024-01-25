@@ -15,29 +15,48 @@ function SetWave(Condition,WaveC,XYTable,NUTable)
 		CIfEnd()
 	CIfEnd()
 end
+--Sample
+--{G_CA_CUTable, G_CA_SNTable, G_CA_SLTable, "MAX", 1, nil, FP, 1}
+--G_CA_SetSpawn({CVar(FP,UnitIDV3[2],AtLeast,1)},{UID3I},"ACAS",{"L00_1_164F"},"MAX")
+--G_CA_SetSpawn({Gun_Line(5,Exactly,0)},ZergUnit1,{P_4,S_5},{4,2})
 
-function GunWave(GunID,LocID,NUTable,BGMTypes)
+function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	local GunCcode = CreateCcode()
+	local CountMax = 0
+	local NUTableCnt = 0
+	local G_CA_argsCnt = 0
+	if G_CA_args then
+		G_CA_argsCnt = #G_CA_args
+	end
+
+	CountMax = math.max(CountMax, #NUTable, G_CA_argsCnt)
 	TriggerX(FP, CommandLeastAt(GunID,LocID), {SetCD(GunCcode,1)})
-	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,960,AtMost)},{AddCD(GunCcode,1)})
-		GetLocCenter(LocID-1, CPosX, CPosY)
+	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,480*CountMax,AtMost)},{AddCD(GunCcode,1)})
+		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
 		DoActionsX(FP, {SetV(BGMType,BGMTypes)}, 1)
 		local NUCArr = {}
+		G_CA_SetSpawn({CD(GunCcode,2)},{84},{S_5},{3},"MAX",nil,nil,FP,1)
+		G_CA_SetSpawn({CD(GunCcode,482)},{84},{S_5},{3},"MAX",nil,nil,FP,1)
 		for j, k in pairs(NUTable) do
 			local NUCcode = CreateCcode()
 			table.insert(NUCArr,SetCD(NUCcode,0))
-			f_TempRepeatX({CD(NUCcode,k[2]-1,AtMost)},k[1],1,nil,FP,{CPosX,CPosY})
+			f_TempRepeatX({CD(NUCcode,48,AtLeast),CD(NUCcode,48+k[2]-1,AtMost)},k[1],1,nil,FP)
 			DoActionsX(FP,{AddCD(NUCcode)})
+		end
+		if G_CA_args then
+		for j,k in pairs(G_CA_args) do
+			G_CA_SetSpawn({CD(GunCcode,48+((j-1)*480),AtLeast)},table.unpack(k))
+		end
 		end
 		TriggerX(FP,{CD(GunCcode,480,AtLeast)},NUCArr)
 	CIfEnd({SetCp(FP)})
 	
 end
-	DoActions(FP,SetCp(FP))
+	DoActions(FP,{SetCp(FP),KillUnit(84, FP)})
 
 	
-	GunWave(131,18,{{38,20},{39,15},{43,25},{40,15}},2)
-	GunWave(131,19,{{38,20},{39,15},{43,25},{40,15}},2)
+	GunWave(131,18,{{38,20},{39,15},{43,25},{40,15}},2,{{{38}, {S_4}, {3}, "MAX", nil, nil, FP, 1}})
+	GunWave(131,19,{{38,20},{39,15},{43,25},{40,15}},2,{{{38}, {S_4}, {3}, "MAX", nil, nil, FP, 1}})
 	
 	GunWave(132,20,{{38,10},{39,15},{39,10},{43,16},{44,9}},3)
 	GunWave(132,21,{{38,10},{39,15},{39,10},{43,16},{44,9}},3)
@@ -60,20 +79,20 @@ end
 		GunWave(150,i,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
 	end
 	--TriggerX(FP, {}, {}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 25000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ºÎÈ­Àå ÆÄ±«! \x1F+ 25,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 132)}, {SetDeaths(FP, Subtract, 1, 132),SetScore(Force1, Add, 35000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07¹ø½ÄÁö ÆÄ±«! \x1F+ 35,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 133)}, {SetDeaths(FP, Subtract, 1, 133),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07±º¶ô ÆÄ±«! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 148)}, {SetDeaths(FP, Subtract, 1, 148),SetScore(Force1, Add, 80000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ÃÊ¿ùÃ¼ ÆÄ±«! \x1F+ 80,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
-	Trigger2(FP, {Deaths(FP, AtLeast, 1, 150)}, {SetDeaths(FP, Subtract, 1, 150),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07´Ù ÀÚ¶õ ¹øµ¥±â ÆÄ±«! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 25000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ë¶€í™”ì¥ íŒŒê´´! \x1F+ 25,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 132)}, {SetDeaths(FP, Subtract, 1, 132),SetScore(Force1, Add, 35000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ë²ˆì‹ì§€ íŒŒê´´! \x1F+ 35,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 133)}, {SetDeaths(FP, Subtract, 1, 133),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07êµ°ë½ íŒŒê´´! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 148)}, {SetDeaths(FP, Subtract, 1, 148),SetScore(Force1, Add, 80000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ì´ˆì›”ì²´ íŒŒê´´! \x1F+ 80,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(FP, AtLeast, 1, 150)}, {SetDeaths(FP, Subtract, 1, 150),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07ë‹¤ ìë€ ë²ˆë°ê¸° íŒŒê´´! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
 
 
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 130, 5)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04°¨¿°µÈ »ç·ÉºÎ ÆÄ±«! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ ´õ °­·ÂÇÑ ¸ó½ºÅÍ°¡ ÃâÇöÇÕ´Ï´Ù."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[1],1),SetInvincibility(Disable, 151, FP, 8),SetInvincibility(Disable, 151, FP, 9)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 151, 8)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04Á¤½ÅÃ¼ ÆÄ±«! + 50,000 Pts"),4),DisplayTextX(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ ´õ °­·ÂÇÑ ¸ó½ºÅÍ°¡ ÃâÇöÇÕ´Ï´Ù."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 50000, Kills),SetCD(WaveS[2],1),SetInvincibility(Disable, 201, FP, 10)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 151, 9)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04Á¤½ÅÃ¼ ÆÄ±«! + 50,000 Pts"),4),DisplayTextX(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ ´õ °­·ÂÇÑ ¸ó½ºÅÍ°¡ ÃâÇöÇÕ´Ï´Ù."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 50000, Kills),SetCD(WaveS[3],1),SetInvincibility(Disable, 201, FP, 11)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 201, 10)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ÃÊ¿ùÃ¼ °íÄ¡ ÆÄ±«! + 80,000 Pts"),4),DisplayTextX(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ ´õ °­·ÂÇÑ ¸ó½ºÅÍ°¡ ÃâÇöÇÕ´Ï´Ù."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 80000, Kills),SetCD(WaveS[4],1),SetInvincibility(Disable, 152, FP, 12)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 201, 11)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ÃÊ¿ùÃ¼ °íÄ¡ ÆÄ±«! + 80,000 Pts"),4),DisplayTextX(StrDesignX("\x04ÀÌÁ¦ºÎÅÍ ´õ °­·ÂÇÑ ¸ó½ºÅÍ°¡ ÃâÇöÇÕ´Ï´Ù."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 80000, Kills),SetCD(WaveS[5],1),SetInvincibility(Disable, 152, FP, 13)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 12)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04Á¤½ÅÃ¼ ´Ù°í½º ÆÄ±«! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04°¨¿°µÈ µà¶õ°ú ÄÉ¸®°ÇÀ» Ã³Ä¡ÇÏ½Ê½Ã¿À!"),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[6],1)})
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 13)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04Á¤½ÅÃ¼ ´Ù°í½º ÆÄ±«! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04°¨¿°µÈ µà¶õ°ú ÄÉ¸®°ÇÀ» Ã³Ä¡ÇÏ½Ê½Ã¿À!"),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[7],1)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 130, 5)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ê°ì—¼ëœ ì‚¬ë ¹ë¶€ íŒŒê´´! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04ì´ì œë¶€í„° ë” ê°•ë ¥í•œ ëª¬ìŠ¤í„°ê°€ ì¶œí˜„í•©ë‹ˆë‹¤."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[1],1),SetInvincibility(Disable, 151, FP, 8),SetInvincibility(Disable, 151, FP, 9)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 151, 8)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì •ì‹ ì²´ íŒŒê´´! + 50,000 Pts"),4),DisplayTextX(StrDesignX("\x04ì´ì œë¶€í„° ë” ê°•ë ¥í•œ ëª¬ìŠ¤í„°ê°€ ì¶œí˜„í•©ë‹ˆë‹¤."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 50000, Kills),SetCD(WaveS[2],1),SetInvincibility(Disable, 201, FP, 10)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 151, 9)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì •ì‹ ì²´ íŒŒê´´! + 50,000 Pts"),4),DisplayTextX(StrDesignX("\x04ì´ì œë¶€í„° ë” ê°•ë ¥í•œ ëª¬ìŠ¤í„°ê°€ ì¶œí˜„í•©ë‹ˆë‹¤."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 50000, Kills),SetCD(WaveS[3],1),SetInvincibility(Disable, 201, FP, 11)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 201, 10)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì´ˆì›”ì²´ ê³ ì¹˜ íŒŒê´´! + 80,000 Pts"),4),DisplayTextX(StrDesignX("\x04ì´ì œë¶€í„° ë” ê°•ë ¥í•œ ëª¬ìŠ¤í„°ê°€ ì¶œí˜„í•©ë‹ˆë‹¤."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 80000, Kills),SetCD(WaveS[4],1),SetInvincibility(Disable, 152, FP, 12)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 201, 11)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì´ˆì›”ì²´ ê³ ì¹˜ íŒŒê´´! + 80,000 Pts"),4),DisplayTextX(StrDesignX("\x04ì´ì œë¶€í„° ë” ê°•ë ¥í•œ ëª¬ìŠ¤í„°ê°€ ì¶œí˜„í•©ë‹ˆë‹¤."),4)}, HumanPlayers, FP),SetScore(Force1, Add, 80000, Kills),SetCD(WaveS[5],1),SetInvincibility(Disable, 152, FP, 13)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 12)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì •ì‹ ì²´ ë‹¤ê³ ìŠ¤ íŒŒê´´! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04ê°ì—¼ëœ ë“€ë€ê³¼ ì¼€ë¦¬ê±´ì„ ì²˜ì¹˜í•˜ì‹­ì‹œì˜¤!"),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[6],1)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 13)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04ì •ì‹ ì²´ ë‹¤ê³ ìŠ¤ íŒŒê´´! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04ê°ì—¼ëœ ë“€ë€ê³¼ ì¼€ë¦¬ê±´ì„ ì²˜ì¹˜í•˜ì‹­ì‹œì˜¤!"),4)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[7],1)})
 	Trigger2X(FP,{},{SetInvincibility(Enable, 147, FP, 64)},{preserved})
 	Trigger2X(FP,{CD(WaveS[6],1),CD(WaveS[7],1),Bring(FP,AtMost,0,51,64),Bring(FP,AtMost,0,104,64),Bring(FP,AtMost,1,"Buildings",64)},{SetInvincibility(Disable, 147, FP, 64)},{preserved})
 	SetWave({CD(WaveS[1],0)},WaveT[1],{1536,1088},{{40,15},{37,10}})
@@ -90,8 +109,9 @@ end
 	f_TempRepeat({CD(WaveS[7],1)},51,15,nil,FP,{1792,1968},1)
 	f_TempRepeat({CD(WaveS[7],1)},104,15,nil,FP,{1792,1968},1)
 	WinCcode = CreateCcode()
-	Trigger2X(FP,{Bring(FP, AtMost, 0, 147, 64)},{RotatePlayer({DisplayTextX(StrDesignX("\x04±×·¸°Ô ¿ì¸®´Â ¸ğµç ±«¹°µéÀ» Ã³Ä¡ÇÏ°í ÁıÀ¸·Î µ¹¾Æ°¬´Ù."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, MapPlayers,FP),AddCD(WinCcode,1)})
+	Trigger2X(FP,{Bring(FP, AtMost, 0, 147, 64)},{RotatePlayer({DisplayTextX(StrDesignX("\x04ê·¸ë ‡ê²Œ ìš°ë¦¬ëŠ” ëª¨ë“  ê´´ë¬¼ë“¤ì„ ì²˜ì¹˜í•˜ê³  ì§‘ìœ¼ë¡œ ëŒì•„ê°”ë‹¤."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, MapPlayers,FP),AddCD(WinCcode,1)})
 	TriggerX(FP,{CD(WinCcode,1,AtLeast)},{AddCD(WinCcode,1)},{preserved})
 	Trigger2X(FP,{CD(WinCcode,150,AtLeast)},{RotatePlayer({Victory()}, MapPlayers,FP)})
 
+	Create_G_CA_Arr()
 end
