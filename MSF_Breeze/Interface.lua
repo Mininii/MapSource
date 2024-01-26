@@ -38,6 +38,7 @@ function Interface()
 --	Trigger2X(FP,{CD(OPCcode,300,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04마린들은 결심했다. 얼른 이 \x08저그놈들의 머리통을 날려버리고 집으로 돌아가자고!"))}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,450,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),DisplayTextX(StrDesignX("\x04승리 조건 : 모든 저그를 처치하고 6시의 초월체를 파괴하세요."))}, HumanPlayers, FP)})
 	
+Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i)})
@@ -128,46 +129,25 @@ for i = 1, 6 do -- 강퇴기능
 	local ExchangeP = CreateVar(FP)
 	MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 	for i = 0, 6 do
-		DoActions(i, {SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCp(i)})
-		local DeathCond
-		local DeathAct
-		if i == 0 then
-			DeathCond = NVar(MarValue,AtLeast,1);
-			DeathAct = SetNVar(MarValue,Subtract,1);
-		else
-			DeathCond = Deaths(i, AtLeast, 1, 0)
-			DeathAct = SetDeaths(i, Subtract, 1, 0)
-		end
-		DeathCond2 = Deaths(i, AtLeast, 1, 20)
-		DeathAct2 = SetDeaths(i, Subtract, 1, 20)
+		CreatingUnit = CreateVar(FP)
+		CreatingUID = CreateVar(FP)
+		CreatingUnitHP = CreateVar(FP)
+		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
 		
-		NMArr = {
-		"\x04의 마린\x04이 산책하다가 \x08발을 삐끗했습니다... \x07』",
-		"\x04의 마린\x04이 \x08벌에 쏘였습니다... \x07』",
-		"\x04의 마린\x04이 산들바람을 이기지 못하고 \x08날라갔습니다... \x07』",
-		"\x04의 마린\x04이 \x08뱀에게 물렸습니다... \x07』"}
-		HMArr = {
-		"\x04의 \x1B영웅마린\x04이 산책하다가 \x08발을 삐끗했습니다... \x07』",
-		"\x04의 \x1B영웅마린\x04이 \x08벌에 쏘였습니다... \x07』",
-		"\x04의 \x1B영웅마린\x04이 산들바람을 이기지 못하고 \x08날라갔습니다... \x07』",
-		"\x04의 \x1B영웅마린\x04이 \x08뱀에게 물렸습니다... \x07』"}
-		for j = 1, 4 do
-			local SW1 = Cleared
-			local SW2 = Cleared
-			if j == 2 then SW1 = Set end if j == 3 then SW2 = Set end if j==4 then SW1 = Set SW2 = Set end
-			CIf(FP,{DeathCond,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{DeathAct,SetScore(i, Add, 1, Custom)})
-			DoActions2(FP, {RotatePlayer({PlayWAVX("sound\\Terran\\Medic\\TMPss06.wav")},HumanPlayers, FP)})
-			DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),NMArr[j+1]})
-			CIfEnd()
-			CIf(FP,{DeathCond2,Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{DeathAct2,SetScore(i, Add, 2, Custom)})
-			DoActions2(FP, {RotatePlayer({PlayWAVX("sound\\Terran\\Medic\\TMPss06.wav")},HumanPlayers, FP)})
-			DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),HMArr[j+1]})
-			CIfEnd()
-			
+		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
+		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
+		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
+		f_Read(FP, _Add(CreatingUnit,25), CreatingUID)
+		f_Read(FP, _Add(CreatingUID,EPD(0x662350)), CreatingUnitHP)
+		CDoActions(FP, {TSetMemory(_Add(CreatingUnit,2), SetTo, CreatingUnitHP)})
+		DisplayPrint(HumanPlayers, {"BarPos : ",BarPos[i+1],"   CreatingUnit : ",CreatingUnit,"   CreatingUID : ",CreatingUID,"   CreatingUnitHP : ",CreatingUnitHP})
+		CIfEnd()
+		CIfEnd()
+		if Limit == 1 then
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
+		
 		end
 
-		CIf(FP,HumanCheck(i,1))
-		
 		TriggerX(FP, {Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
 		TriggerX(FP, {CD(BanCode2[i+1],1)}, {
 			SetMemory(0x59CC78, SetTo, -1048576),

@@ -8,7 +8,7 @@ end
 function SetWave(Condition,WaveC,XYTable,NUTable)
 	
 	CIf(FP,Condition,{AddCD(WaveC,1)})
-		CIf(FP,CD(WaveC,250,AtLeast),SetCD(WaveC,0))
+		CIf(FP,CD(WaveC,700,AtLeast),SetCD(WaveC,0))
 		for j, k in pairs(NUTable) do
 			f_TempRepeat({},k[1],k[2],nil,FP,XYTable)
 		end
@@ -35,8 +35,12 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
 		DoActionsX(FP, {SetV(BGMType,BGMTypes)}, 1)
 		local NUCArr = {}
-		G_CA_SetSpawn({CD(GunCcode,2)},{84},{S_5},{3},"MAX",nil,nil,FP,1)
-		G_CA_SetSpawn({CD(GunCcode,482)},{84},{S_5},{3},"MAX",nil,nil,FP,1)
+		
+		if G_CA_args then
+		for j,k in pairs(G_CA_args) do
+			G_CA_SetSpawn({CD(GunCcode,2+(480*(j-1)))},{84},k[2],k[3],"MAX",nil,nil,FP,1)
+		end
+		end
 		for j, k in pairs(NUTable) do
 			local NUCcode = CreateCcode()
 			table.insert(NUCArr,SetCD(NUCcode,0))
@@ -55,29 +59,57 @@ end
 	DoActions(FP,{SetCp(FP),KillUnit(84, FP)})
 
 	
-	GunWave(131,18,{{38,20},{39,15},{43,25},{40,15}},2,{{{38}, {S_4}, {3}, "MAX", nil, nil, FP, 1}})
-	GunWave(131,19,{{38,20},{39,15},{43,25},{40,15}},2,{{{38}, {S_4}, {3}, "MAX", nil, nil, FP, 1}})
+	--SetUnitAbility(19,5,5600,false,nil,333,1,nil,nil,38000,"짐 레이너 (V)")
+	--SetUnitAbility(17,9,3800,false,nil,250,1,nil,nil,25000,"앨런 세자르")
+	--SetUnitAbility(21,18,2800,false,nil,200,1,nil,nil,22000,"톰 카잔스키")
+	--SetUnitAbility(28,23,4000,false,nil,600,1,nil,nil,45000,"히페리온")
+	--SetUnitAbility(23,12,40000,false,nil,3000,1,nil,nil,150000,"에드먼드 듀크 (Tank)")
+	--SetUnitAbility(25,28,2100,false,nil,740,1,nil,nil,30000,"에드먼드 듀크 (Siege)")
+	--SetUnitAbility(10,26,7000,false,nil,490,1,nil,nil,60000,"구이 몬타그")
+	--SetUnitAbility(77,65,2200,1750,nil,350,1,nil,nil,30000,"피닉스 (Z)")
+	--SetUnitAbility(78,67,1600,2800,nil,400,1,nil,nil,27000,"피닉스 (D)")
+	--SetUnitAbility(88,114,1500,1800,nil,220,1,nil,nil,27000,"아르타니스")
+	--SetUnitAbility(76,71,500,4000,nil,450,1,nil,nil,40000,"테사다르 / 제라툴")
+	--SetUnitAbility(86,78,2500,1500,nil,600,1,nil,nil,35000,"다니모스")
+	--SetUnitAbility(79,69,5600,4400,nil,400,1,nil,nil,50000,"테사다르")
+	--SetUnitAbility(75,85,25000,4500,nil,1050,1,nil,nil,100000,"제라툴")
+	--SetUnitAbility(98,100,3500,1200,nil,300,1,nil,nil,45000,"라자갈")
+	--SetUnitAbility(162,80,5000,5000,nil,650,1,nil,nil,45000,"광자포")
+
 	
-	GunWave(132,20,{{38,10},{39,15},{39,10},{43,16},{44,9}},3)
-	GunWave(132,21,{{38,10},{39,15},{39,10},{43,16},{44,9}},3)
+	GunWave(131,18,{{38,20},{39,15},{43,25},{40,15}},2,{{{54,55}, P_5, 2, "MAX", nil, nil, FP, 1},{{53,55}, P_4, 3, "MAX", nil, nil, FP, 1}})
+	GunWave(131,19,{{38,20},{39,15},{43,25},{40,15}},2,{{{54,55}, P_5, 2, "MAX", nil, nil, FP, 1},{{53,55}, P_4, 3, "MAX", nil, nil, FP, 1}})
+	
+	GunWave(132,20,{{38,10},{39,15},{39,10},{43,16},{44,9}},3,{{{77,56}, P_3, 2, "MAX", nil, nil, FP, 1},{{77,56}, P_5, 2, "MAX", nil, nil, FP, 1}})
+	GunWave(132,21,{{38,10},{39,15},{39,10},{43,16},{44,9}},3,{{{78,56}, P_3, 2, "MAX", nil, nil, FP, 1},{{78,56}, P_5, 2, "MAX", nil, nil, FP, 1}})
 
-	GunWave(133,22,{{38,25},{39,15},{44,25}},4)
-	GunWave(133,23,{{38,25},{39,15},{44,25}},4)
+	GunWave(132,41,{{38,10},{39,15},{39,10},{43,16},{44,9}},3,{{{17,56}, P_4, 2, "MAX", nil, nil, FP, 1},{{17,56}, P_5, 2, "MAX", nil, nil, FP, 1}})
+	GunWave(132,42,{{38,10},{39,15},{39,10},{43,16},{44,9}},3,{{{19,56}, P_3, 2, "MAX", nil, nil, FP, 1},{{19,56}, P_4, 2, "MAX", nil, nil, FP, 1}})
 
-	GunWave(131,24,{{54,20},{53,15}},2)
-	GunWave(131,25,{{54,20},{53,15}},2)
+	GunWave(133,22,{{38,25},{39,15},{44,25}},4,{{{10,21}, P_5, 2, "MAX", nil, nil, FP, 1},{{10,21}, P_4, 3, "MAX", nil, nil, FP, 1}})
+	GunWave(133,23,{{38,25},{39,15},{44,25}},4,{{{78,88}, P_3, 3, "MAX", nil, nil, FP, 1},{{78,88}, P_4, 3, "MAX", nil, nil, FP, 1}})
+
+	GunWave(131,24,{{54,20},{53,15}},2,{{{53,56}, P_5, 2, "MAX", nil, nil, FP, 1},{{48,56}, P_4, 3, "MAX", nil, nil, FP, 1}})
+	GunWave(131,25,{{54,20},{53,15}},2,{{{53,56}, P_5, 2, "MAX", nil, nil, FP, 1},{{48,56}, P_4, 3, "MAX", nil, nil, FP, 1}})
 
 	GunWave(132,26,{{53,10},{54,15},{48,10},{54,16},{55,9}},3)
 	GunWave(132,27,{{53,10},{54,15},{48,10},{54,16},{55,9}},3)
-	for i = 28, 33 do
-		GunWave(133,i,{{53,25},{48,15},{55,25}},4)
-	end
+	GunWave(133,28,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,29,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,30,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,31,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,32,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,33,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,43,{{53,25},{48,15},{55,25}},4)
+	GunWave(133,44,{{53,25},{48,15},{55,25}},4)
 	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},5)
 	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},5)
 
-	for i = 36, 40 do
-		GunWave(150,i,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
-	end
+	GunWave(150,36,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
+	GunWave(150,37,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
+	GunWave(150,38,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
+	GunWave(150,39,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
+	GunWave(150,40,{{51,3},{104,5},{56,25},{53,15},{54,20}},5)
 	--TriggerX(FP, {}, {}, {preserved})
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 25000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07부화장 파괴! \x1F+ 25,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 132)}, {SetDeaths(FP, Subtract, 1, 132),SetScore(Force1, Add, 35000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07번식지 파괴! \x1F+ 35,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})

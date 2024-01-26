@@ -743,50 +743,28 @@ end
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
-		for i = 0, 3 do
-			if i == 0 then RS1 = Cleared RS2=Cleared end
-			if i == 1 then RS1 = Set RS2=Cleared end
-			if i == 2 then RS1 = Cleared RS2=Set end
-			if i == 3 then RS1 = Set RS2=Set end
-			TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,14+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,14+i)},{preserved})
-		end
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
 
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
 
 		CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
-		if X2_Mode == 1 then
-			CIfX(FP,Never())
-			for i = 0, 3 do
-				CElseIfX({CVar(FP,TRepeatX[2],Exactly,0x80000000-i)})
-				Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,Simple_CalcLoc(0,X2_XYArr[i+1][1],X2_XYArr[i+1][2],X2_XYArr[i+1][1],X2_XYArr[i+1][2]))
-			end
-			CIfXEnd()
-		else
-			Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
-		end
+		Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
 
 		CElseX()
-		if X2_Mode == 1 then
-			Simple_SetLocX(FP,0,3712*2,288*2,3712*2,288*2)
-		else
-			Simple_SetLocX(FP,0,3712,288,3712,288)
-		end
+		Simple_SetLocX(FP,0,3712,288,3712,288)
 		CIfXEnd()
 		CIfEnd()
 
 
 		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
-		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,FuncAlloc)
-		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,FuncAlloc+1)
-		FuncAlloc=FuncAlloc+2
+		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
+		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
 		
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP,15,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(15,-4,-4,4,4)})
-		CDoActions(FP,{TMoveUnit(1,Gun_TempSpawnSet1,Force2,16,1)})
 
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
@@ -1398,7 +1376,7 @@ end
 	end
 end
 
-function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,SeekRange,Point,Text)
+function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint)
 	local TempWID = WepID
 	local TempWID2 = 130
 	if Point~=nil then
@@ -1416,7 +1394,7 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
 	end
 	
-	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange
+	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint
 })
 if ObjNum == nil then ObjNum = 1 end
 SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})

@@ -1,11 +1,6 @@
 function onInit_EUD()
 	-- 바로 위에 StartCtrig() 있어야함 --
-MarCur = CreateVar()
-MarPrev = CreateVar()
-MarValue = CreateVar()
 -- 첫 번째 플레이어가 P1일 경우 (아닐경우 P1을 다른 플레이어로 바꿔야함)
-CRead(P1,MarCur,0x58A364) 
-CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValue에 추가된 마린 데스값을 저장함
 
 
 
@@ -15,18 +10,20 @@ CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValue에 추가된 마린 데스값을 
 	end
 	SetUnitsDatX(162,{AdvFlag={0,0x80000}})--포토 파일런 불필요
 
-	if TestStart == 1 then
-		SetUnitsDatX(0,{HP=9999})--테스트
-		SetUnitsDatX(20,{HP=9999})--테스트
-		SetWeaponsDatX(0, {DmgBase=1000})--테스트
-		SetWeaponsDatX(1, {DmgBase=2000})--테스트
-	
-	end
+	--if TestStart == 1 then
+	--	SetUnitsDatX(0,{HP=9999})--테스트
+	--	SetUnitsDatX(20,{HP=9999})--테스트
+	--	SetWeaponsDatX(0, {DmgBase=1000})--테스트
+	--	SetWeaponsDatX(1, {DmgBase=2000})--테스트
+	--
+	--end
 
 
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(125,{HP=3500,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -64,6 +61,9 @@ CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValue에 추가된 마린 데스값을 
 	CIfOnce(FP)
 	local LimitX = CreateCcode()
 	local LimitC = CreateCcode()
+	for i = 0, 7 do
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1)})
+	end
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
 	function InputTesterID(Player,ID)
 		Trigger {
@@ -100,18 +100,30 @@ CSub(P1,MarValue,MarCur,MarPrev) -- P1MarValue에 추가된 마린 데스값을 
 		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1)})
 	
 	end
-	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 500, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
+	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 25000, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 	CunitIndex = CreateVar(FP)
 	RepHeroIndex = CreateVar(FP)
+	PlayerV=CreateVar(FP)
 	CFor(FP,19025,19025+(84*1700),84)
 	CI = CForVariable()
+	
 	condbox = {}
 	for j,k in pairs(UnitPointArr) do
 		table.insert(condbox,CV(RepHeroIndex,k[1]))
 	end
 	
 	f_Read(FP,_Add(CI,25),RepHeroIndex)
+	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
+	CIf(FP,{CV(RepHeroIndex,111)})
+	for i = 0,6 do
+		CIf(FP,CVX(PlayerV,i,0xFF))
+		CMov(FP,BarPos[i+1],CI)
+		--DisplayPrint(HumanPlayers, {"배럭 등록 완료"})
+		CIfEnd()
+	end
+	
+	CIfEnd()
 	CIf(FP,{TTOR(condbox)})
 	CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
 	CIfEnd()
