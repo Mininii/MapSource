@@ -10,8 +10,13 @@ function Include_Vars()
 	ObEff = 84
 	nilunit = 181
 
-	--Vars
+	--Arr
 	
+	UnitIDArr = CreateArr(1700, FP)
+	UnitPosArr = CreateArr(1700, FP)
+	
+	--Vars
+	Nextptrs = CreateVar(FP)
 	BGMType = CreateVar(FP)
 	Dt = CreateVar(FP)
 	TestMode = CreateCcode()
@@ -19,11 +24,17 @@ function Include_Vars()
 	CurCunitI2 = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
 	BarPos = CreateVarArr(7,FP)
+	CunitIndex = CreateVar(FP)
+	RepHeroIndex = CreateVar(FP)
+	PlayerV=CreateVar(FP)
+	UnitRepIndex = CreateVar(FP)
+
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
 	RandSwitch1 = "Switch 100"
 	RandSwitch2 = "Switch 101"
+	JYD = "Set Unit Order To: Junk Yard Dog"
 	DelayMedicT = {
 		StrDesign("\x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F250 Ore\x07"),
 		StrDesign("\x1D예약메딕\x04을 \x1B3Tick\x04으로 변경합니다. - \x1F300 Ore\x07"),
@@ -88,34 +99,29 @@ function Include_Vars()
 	--TBLFile = f_GetFileptr(FP,"custom_txt.tbl",1) -- 제작했던 아무 TBL이나 AbsolutePath에 넣고 로드
 	--TBLFiles = f_GetFileSize("custom_txt.tbl") -- 예제에 사용된 tbl은 뎡디터2의 Data폴더에서 가져옴
 	UnitPointArr = {}
+	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54}--재배치 등록 위치
+	for j, k in pairs(UnitPointArr2) do
+		SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4
+	})
+	end
+
 	SetUnitAbility(19,5,5600,false,nil,333,1,nil,nil,38000,"짐 레이너 (V)",5000)
 	SetUnitAbility(17,9,3800,false,nil,250,1,nil,nil,25000,"앨런 세자르",3500)
 	SetUnitAbility(21,18,2800,false,nil,200,1,nil,nil,22000,"톰 카잔스키",3000)
 	SetUnitAbility(28,23,4000,false,nil,600,1,nil,nil,45000,"히페리온",7500)
-	SetUnitAbility(23,12,40000,false,nil,3000,1,nil,nil,150000,"에드먼드 듀크 (Tank)",40000)
+	SetUnitAbility(23,12,40000,false,nil,2000,1,nil,nil,150000,"에드먼드 듀크 (Tank)",40000)
 	SetUnitAbility(25,28,2100,false,nil,740,1,nil,nil,30000,"에드먼드 듀크 (Siege)",3800)
 	SetUnitAbility(10,26,7000,false,nil,490,1,nil,nil,60000,"구이 몬타그",5000)
 	SetUnitAbility(77,65,2200,1750,nil,350,1,nil,nil,30000,"피닉스 (Z)",3000)
-	SetUnitAbility(78,67,1600,2800,nil,400,1,nil,nil,27000,"피닉스 (D)",3500)
+	SetUnitAbility(78,67,1600,2800,nil,1000,1,nil,nil,27000,"피닉스 (D)",3500)
 	SetUnitAbility(88,114,1500,1800,nil,220,1,nil,nil,27000,"아르타니스",4000)
 	SetUnitAbility(76,71,500,4000,nil,450,1,nil,nil,40000,"테사다르 / 제라툴",6000)
 	SetUnitAbility(86,78,2500,1500,nil,600,1,nil,nil,35000,"다니모스",7000)
 	SetUnitAbility(79,69,5600,4400,nil,400,1,nil,nil,50000,"테사다르",10000)
-	SetUnitAbility(75,85,25000,4500,nil,1050,1,nil,nil,100000,"제라툴",60000)
+	SetUnitAbility(75,85,85000,4500,nil,1050,1,nil,nil,300000,"제라툴",60000)
 	SetUnitAbility(98,100,3500,1200,nil,300,1,nil,nil,75000,"라자갈",20000)
 	SetUnitAbility(162,80,5000,5000,nil,650,1,nil,nil,65000,"광자포",10000)
-
-
-	
-
-
-	
-
-
-
-
-
-
+	SetUnitAbility(29,21,27000,false,nil,900,1,nil,nil,95000,"노라드 II",7500)
 
 
 

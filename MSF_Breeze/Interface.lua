@@ -46,6 +46,84 @@ Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUn
 	end
     CIfXEnd()
 
+	Cunit2 = CreateVar(FP)
+	if Limit == 1 then
+		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
+		CIf({FP},CD(TestMode,1)) -- 테스트 트리거
+		
+		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+		CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
+		CMov(FP,0x6509B0,19025+9) --CUnit 시작지점 +19 (0x4C)
+		CWhile(FP,Memory(0x6509B0,AtMost,19025+9 + (84*1699)),{SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF0000),SetMemory(0x6509b0,Add,84)})
+		CWhileEnd()
+		CMov(FP,0x6509B0,FP)
+		CIfEnd()
+	
+			Trigger {
+				players = {FP},
+				conditions = {
+					Label(0);
+					Deaths(CurrentPlayer,AtLeast,1,204);
+				},
+				actions = {
+					KillUnit("Men",Force2);
+					KillUnit(143,Force2);
+					KillUnit(144,Force2);
+					KillUnit(146,Force2);
+					PreserveTrigger();
+				}
+				}
+			TestUPtr = CreateVar(FP)
+			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
+			--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
+			--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
+			--CIfEnd()
+	
+			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+			CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
+				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,207)})
+					CMov(FP,0x6509B0,Cunit2,25)
+					CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,58,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
+						MoveCp(Add,15*4);
+						SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF000000);
+						MoveCp(Subtract,21*4);
+						SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+						MoveCp(Add,6*4);
+					},1)
+				CIfEnd()
+	
+				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203)})
+					CMov(FP,0x6509B0,Cunit2,25)
+					f_SaveCp()
+					TestUID = CreateVar(FP)
+					TestP = CreateVar(FP)
+					f_Read(FP,BackupCp,TestUID,nil,0xFF,1)
+					f_Read(FP,_Sub(BackupCp,6),TestP,nil,0xFF,1)
+					CDoActions(FP,{TSetMemory(_Add(_Mul(TestUID,12),TestP),Add,1)})
+					f_LoadCp()
+					CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,58,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
+						MoveCp(Subtract,6*4);
+						SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+						MoveCp(Add,6*4);
+					},1)
+				CIfEnd()
+				
+				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+				CMov(FP,0x6509B0,Cunit2,19)
+				f_SaveCp()
+				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
+				f_LoadCp()
+	
+			CIfEnd()
+		CIfEnd()
+	
+		CMov(FP,0x6509B0,FP)--상위플레이어 단락
+				end
+
+
+
 
 
 
@@ -140,7 +218,7 @@ for i = 1, 6 do -- 강퇴기능
 		f_Read(FP, _Add(CreatingUnit,25), CreatingUID)
 		f_Read(FP, _Add(CreatingUID,EPD(0x662350)), CreatingUnitHP)
 		CDoActions(FP, {TSetMemory(_Add(CreatingUnit,2), SetTo, CreatingUnitHP)})
-		DisplayPrint(HumanPlayers, {"BarPos : ",BarPos[i+1],"   CreatingUnit : ",CreatingUnit,"   CreatingUID : ",CreatingUID,"   CreatingUnitHP : ",CreatingUnitHP})
+		--DisplayPrint(HumanPlayers, {"BarPos : ",BarPos[i+1],"   CreatingUnit : ",CreatingUnit,"   CreatingUID : ",CreatingUID,"   CreatingUnitHP : ",CreatingUnitHP})
 		CIfEnd()
 		CIfEnd()
 		if Limit == 1 then
@@ -148,7 +226,7 @@ for i = 1, 6 do -- 강퇴기능
 		
 		end
 
-		TriggerX(FP, {Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
+		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
 		TriggerX(FP, {CD(BanCode2[i+1],1)}, {
 			SetMemory(0x59CC78, SetTo, -1048576),
 			SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
@@ -285,15 +363,15 @@ players = {i},
 conditions = {
 	Label(0);
 	Bring(i,AtLeast,1,0,5); 
-	Accumulate(i,AtLeast,9500,Ore);
+	Accumulate(i,AtLeast,4500,Ore);
 	Accumulate(i,AtMost,0x7FFFFFFF,Ore);
 },
 actions = {
 	ModifyUnitEnergy(1,0,i,5,0);
 	RemoveUnitAt(1,0,5,i);
-	SetResources(i,Subtract,9500,Ore);
+	SetResources(i,Subtract,4500,Ore);
 	CreateUnitWithProperties(1,20,2,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F9500 O r e"),4);
+	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F4500 O r e"),4);
 	--SetCDeaths(FP,Add,1,CUnitRefrash);
 	--SetCD(CUnitFlag,1);
 	PreserveTrigger();
@@ -301,6 +379,7 @@ actions = {
 }
 	
 DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
+SetAllianceStatus(P12,Enemy),--P12 적으로
 RunAIScript("Turn ON Shared Vision for Player 1");
 RunAIScript("Turn ON Shared Vision for Player 2");
 RunAIScript("Turn ON Shared Vision for Player 3");
@@ -309,6 +388,18 @@ RunAIScript("Turn ON Shared Vision for Player 5");
 RunAIScript("Turn ON Shared Vision for Player 6");
 RunAIScript("Turn ON Shared Vision for Player 7");
 })
+if Limit == 1 then
+	TriggerX(i, {Switch("Switch 254", Set)}, {
+		RunAIScript("Turn ON Shared Vision for Player 1");
+		RunAIScript("Turn ON Shared Vision for Player 2");
+		RunAIScript("Turn ON Shared Vision for Player 3");
+		RunAIScript("Turn ON Shared Vision for Player 4");
+		RunAIScript("Turn ON Shared Vision for Player 5");
+		RunAIScript("Turn ON Shared Vision for Player 6");
+		RunAIScript("Turn ON Shared Vision for Player 7");
+		RunAIScript("Turn ON Shared Vision for Player 8");})
+	
+end
 	end
 
 	for k=0, 6 do -- 기부시스템

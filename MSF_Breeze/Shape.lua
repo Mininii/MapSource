@@ -41,14 +41,20 @@ function Shape()
 		local X = {}
 		for i = LvMin, LvMax do
 			 if Type == "Polygon" then
-				  table.insert(X,CSMakePolygon(Points,((16*9)-(16*i))+24,0,PlotSizeCalc(Points,i),0))
+				  table.insert(X,CSMakePolygon(Points,240/i,0,PlotSizeCalc(Points,i),0))
 				  
 			 elseif Type == "Star" then
-				  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),(36*6)-(36*i),180,PlotSizeCalc(Points*2,i),0))
+				  table.insert(X,CSMakeStar(Points,165-(12*(Points-2)),240/i,180,PlotSizeCalc(Points*2,i),0))
 			 end
 		end
 		return X
 	end
+	Shape8000 = {3   ,{32, 224},{32, 32},{448, 32}}
+	Shape8001 = {3   ,{3040, 224},{3040, 32},{2624, 32}}
+	LOverM= CS_MoveXY(CS_FillPathXY(Shape8000, 1, 32, 32, 0),-160,-128)
+	ROverM= CS_MoveXY(CS_FillPathXY(Shape8001, 1, 32, 32, 0),-2912,-128)
+	
+	
 	S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
 	S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
 	S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
@@ -63,6 +69,8 @@ function Shape()
 	P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
 
 	G_CAPlot_Shape_InputTable = {
+		"LOverM",
+		"ROverM",
 		
 
 	}

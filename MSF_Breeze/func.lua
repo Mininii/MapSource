@@ -852,12 +852,17 @@ CMov(FP,RepeatType,0)
 SetCallEnd()
 function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags)
 	if Owner == nil then Owner = 0xFFFFFFFF end
+	
 	if Type == nil then Type = 0 end
 	local SetX = 0 
 	local SetY = 0
 	if type(CenterXY) == "table" then
 		SetX = CenterXY[1]
 		SetY = CenterXY[2]
+	elseif CenterXY == nil then
+		SetX = 0xFFFFFFFF
+		SetY = 0xFFFFFFFF
+
 	elseif CenterXY == "CG" then
 		SetX = 0x80000000
 		SetY = 0x80000000
@@ -964,6 +969,7 @@ local G_CA_LMTV = CreateVar(FP)
 local G_CA_RPTV = CreateVar(FP)
 local G_CA_CTTV = CreateVar(FP)
 local G_CA_CPTV = CreateVar(FP)
+local G_CA_SZTV = CreateVar(FP)
 local G_CA_XPos = CreateVar(FP)
 local G_CA_YPos = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
@@ -1036,6 +1042,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CA_LineTemp,5*(0x20/4)),SetTo,G_CA_RPTV),
 	TSetMemory(_Add(G_CA_LineTemp,6*(0x20/4)),SetTo,G_CA_CTTV),
 	TSetMemory(_Add(G_CA_LineTemp,9*(0x20/4)),SetTo,G_CA_CPTV),
+	TSetMemory(_Add(G_CA_LineTemp,10*(0x20/4)),SetTo,G_CA_SZTV),
 })
 CIfX(FP,{CVar(FP,G_CA_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CA_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
@@ -1070,7 +1077,7 @@ SetCallEnd()
 
 local CA_TempUID = CreateVar(FP)
 local CA_Suspend = CreateCcode()
-local G_CA_Temp = Create_VTable(10)
+local G_CA_Temp = Create_VTable(11)
 
 Call_CA_Repeat = SetCallForward()
 SetCall(FP)
@@ -1100,6 +1107,11 @@ end
 function CA_Func1()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
+	local SizeTemp = CreateVar(FP)
+	CIf(FP,{TTCVar(FP,G_CA_Temp[11][2],NotSame,100,0xFF)})
+		CMov(FP, SizeTemp, G_CA_Temp[11], nil, 0xFF, 1)
+		CA_RatioXY(SizeTemp, 100, SizeTemp, 100)
+	CIfEnd()
 end
 local G_CA_CallStack = {}
 local G_CA_IndexAlloc = 1
@@ -1190,10 +1202,18 @@ function T_to_BiteBuffer(Table)
 	return BiteValue
 end
 
-function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,CenterXY,Owner,PreserveFlag)
+function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMTable,G_CA_RepeatType,G_CA_SizeTable,CenterXY,Owner,PreserveFlag)
+	if G_CA_SizeTable == nil then G_CA_SizeTable = 100 end
+
+
 	if type(G_CA_CUTable) ~= "table" then
 		PushErrorMsg("G_CA_SetSpawn_Inputdata_Error")
 	end
+
+	if type(G_CA_SizeTable) ~= "table" then
+		G_CA_SizeTable = {G_CA_SizeTable,G_CA_SizeTable,G_CA_SizeTable,G_CA_SizeTable}
+	end
+	
 	if type(G_CA_SNTable) ~= "table" then
 		G_CA_SNTable = {G_CA_SNTable,G_CA_SNTable,G_CA_SNTable,G_CA_SNTable}
 	elseif G_CA_SNTable == nil then 
@@ -1264,7 +1284,8 @@ function G_CA_SetSpawn(Condition,G_CA_CUTable,G_CA_SNTable,G_CA_SLTable,G_CA_LMT
 		SetCVar(FP,G_CA_CUTV[2],SetTo,T_to_BiteBuffer(G_CA_CUTable)),X,
 		SetCVar(FP,G_CA_SNTV[2],SetTo,T_to_BiteBuffer(G_CA_SNTable)),
 		SetCVar(FP,G_CA_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),Y,
+		SetCVar(FP,G_CA_RPTV[2],SetTo,T_to_BiteBuffer(G_CA_RepeatType)),
+		SetCVar(FP,G_CA_SZTV[2],SetTo,T_to_BiteBuffer(G_CA_SizeTable)),Y,
 		SetCVar(FP,G_CA_CPTV[2],SetTo,Owner),
 	},PreserveFlag)
 end
@@ -1296,6 +1317,7 @@ function Install_Call_G_CA()
 				TSetCVar(FP,G_CA_Temp[8][2],SetTo,G_CA_TempTable[8]),
 				TSetCVar(FP,G_CA_Temp[9][2],SetTo,G_CA_TempTable[9]),
 				TSetCVar(FP,G_CA_Temp[10][2],SetTo,G_CA_TempTable[10]),
+				TSetCVar(FP,G_CA_Temp[11][2],SetTo,G_CA_TempTable[11],0xFF),
 			})
 			CallTrigger(FP,Load_CAPlot_Shape)
 			CIfX(FP,{CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtMost,0,CA_Suspend)})
@@ -1307,6 +1329,7 @@ function Install_Call_G_CA()
 					TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,G_CA_Temp[5],0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,G_CA_Temp[6],0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,G_CA_Temp[7],0xFF),
+					TSetMemoryX(Vi(G_CA_TempH[2],10*(0x20/4)),SetTo,G_CA_Temp[11],0xFF),
 				})
 			CElseIfX({CDeaths(FP,AtLeast,1,G_CA_Launch),CDeaths(FP,AtLeast,1,CA_Suspend)})
 			CDoActions(FP,{
@@ -1317,6 +1340,7 @@ function Install_Call_G_CA()
 				TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
 				TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
 				TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0,0xFF),
+				TSetMemoryX(Vi(G_CA_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
 			})
 			if TestStart == 1 then
 			DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
@@ -1334,6 +1358,7 @@ function Install_Call_G_CA()
 					TSetMemoryX(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
 					TSetMemoryX(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,0,0xFF),
+					TSetMemoryX(Vi(G_CA_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
 				})
 			CIfXEnd()
 		CElseIfX({CVar(FP,G_CA_TempTable[1][2],AtMost,0,0xFF),CVar(FP,G_CA_TempTable[1][2],AtLeast,1)})
@@ -1345,6 +1370,7 @@ function Install_Call_G_CA()
 			TSetMemory(Vi(G_CA_TempH[2],4*(0x20/4)),SetTo,_Div(G_CA_TempTable[5],_Mov(256))),
 			TSetMemory(Vi(G_CA_TempH[2],5*(0x20/4)),SetTo,_Div(G_CA_TempTable[6],_Mov(256))),
 			TSetMemory(Vi(G_CA_TempH[2],6*(0x20/4)),SetTo,_Div(G_CA_TempTable[7],_Mov(256))),
+			TSetMemory(Vi(G_CA_TempH[2],10*(0x20/4)),SetTo,_Div(G_CA_TempTable[11],_Mov(256))),
 		})
 		CIfXEnd()
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CA_Launch)})
@@ -1382,8 +1408,11 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	if Point~=nil then
 		table.insert(UnitPointArr, {UnitID,Point,Text})
 	end
+	table.insert(UnitPointArr2, UnitID)
+
 	if UnitID == 62 then TempWID2 = WepID end
 	if UnitID == 98 then TempWID2 = WepID end
+	if UnitID == 86 then TempWID2 = WepID end
 	if 
 	UnitID == 3 or 
 	UnitID == 5 or 
@@ -1394,7 +1423,7 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
 	end
 	
-	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint
+	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=4,SizeU=4,SizeR=4,SizeD=4
 })
 if ObjNum == nil then ObjNum = 1 end
 SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})

@@ -66,15 +66,15 @@ CJump(AllPlayers,init_func)
 	P_6 = G_CAPlot(P_6_ShT)
 	P_7 = G_CAPlot(P_7_ShT)
 	P_8 = G_CAPlot(P_8_ShT)
+	if #G_CAPlot_Shape_InputTable >= 256 then
+		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
+	end
+	G_CAPlot2(G_CAPlot_Shape_InputTable)
 	
 Install_Load_CAPlot()
 Install_Call_G_CA()
 G_CA_Lib_ErrorCheck()
-	if #G_CAPlot_Shape_InputTable >= 256 then
-		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
-	end
 	
-G_CAPlot2(G_CAPlot_Shape_InputTable)
 
 CJumpEnd(AllPlayers,init_func)
 
@@ -86,7 +86,10 @@ System()
 Waves()
 
 init_Setting()
-Enable_HideErrorMessage(FP)
+if Limit == 0 then
+	Enable_HideErrorMessage(FP)
+end
+
 EndCtrig()
 LabelUseCheck()
 ErrorCheck()

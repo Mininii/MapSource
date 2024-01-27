@@ -1,14 +1,29 @@
 function onInit_EUD()
 	-- 바로 위에 StartCtrig() 있어야함 --
 -- 첫 번째 플레이어가 P1일 경우 (아닐경우 P1을 다른 플레이어로 바꿔야함)
+	UnitRepIndex2 = CreateVar(FP)
+	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast)})
 
-
+	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
+	f_Read(FP, ArrX(UnitPosArr,UnitRepIndex2), CPos)
+	f_Read(FP, ArrX(UnitIDArr,UnitRepIndex2), RepHeroIndex)
+	Convert_CPosXY()
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CIf(FP,{Memory(0x628438, AtLeast, 1)})
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+	CDoActions(FP, {TCreateUnit(1, RepHeroIndex, 1, FP),Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	CIfEnd()
+	CAdd(FP,UnitRepIndex2,1)
+	CSub(FP,UnitRepIndex,1)
+	CWhileEnd()
+	CIfEnd()
 
 
 	for i = 0, 227 do
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000}})--모든 유닛을 마법사로
 	end
-	SetUnitsDatX(162,{AdvFlag={0,0x80000}})--포토 파일런 불필요
+	SetUnitsDatX(162,{AdvFlag={0x400200,0x480200},BdDimX=1,BdDimY=1})--포토 파일런 불필요
 
 	--if TestStart == 1 then
 	--	SetUnitsDatX(0,{HP=9999})--테스트
@@ -24,7 +39,7 @@ function onInit_EUD()
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(125,{HP=3500,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(125,{HP=3000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -64,7 +79,14 @@ function onInit_EUD()
 	for i = 0, 7 do
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1)})
 	end
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode)}) -- Limit설정
+	
+if TestStart == 1 then
+	DoActionsX(FP,{SetSwitch("Switch 254", Set)}) -- Limit설정
+end
+if Limit == 1 then
+	DoActionsX(FP,{SetSwitch("Switch 253", Set)}) -- Limit설정
+end
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64),}) -- Limit설정
 	function InputTesterID(Player,ID)
 		Trigger {
 			players = {FP},
@@ -102,19 +124,23 @@ function onInit_EUD()
 	end
 	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 25000, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
-	CunitIndex = CreateVar(FP)
-	RepHeroIndex = CreateVar(FP)
-	PlayerV=CreateVar(FP)
+
+
+
 	CFor(FP,19025,19025+(84*1700),84)
 	CI = CForVariable()
 	
 	condbox = {}
-	for j,k in pairs(UnitPointArr) do
-		table.insert(condbox,CV(RepHeroIndex,k[1]))
+	for j,k in pairs(UnitPointArr2) do
+		table.insert(condbox,CV(RepHeroIndex,k))
 	end
 	
 	f_Read(FP,_Add(CI,25),RepHeroIndex)
 	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
+	
+
+
+
 	CIf(FP,{CV(RepHeroIndex,111)})
 	for i = 0,6 do
 		CIf(FP,CVX(PlayerV,i,0xFF))
@@ -125,12 +151,21 @@ function onInit_EUD()
 	
 	CIfEnd()
 	CIf(FP,{TTOR(condbox)})
-	CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	f_Read(FP,_Add(CI,10),CPos)
+	CMov(FP,ArrX(UnitPosArr,UnitRepIndex),CPos)
+	CMov(FP,ArrX(UnitIDArr,UnitRepIndex),RepHeroIndex,nil,0xFF,1)
+	--CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	CAdd(FP,UnitRepIndex,1)
 	CIfEnd()
 	CAdd(FP,CunitIndex,1)
 	CForEnd()
+	for j,k in pairs(UnitPointArr2) do
+		DoActions(FP, {RemoveUnit(k, FP)})
+	end
+
+
 	CIfEnd()
-	table.insert(PatchArrPrsv, RemoveUnitAt(All, "Dark Swarm", 2, AllPlayers))
+	table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 2, AllPlayers))
 	
 	
 
