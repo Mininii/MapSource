@@ -28,7 +28,7 @@ end
 
 VerText = "\x04Ver. 1.0"
 
-TestSet(1)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
@@ -66,6 +66,7 @@ CJump(AllPlayers,init_func)
 	P_6 = G_CAPlot(P_6_ShT)
 	P_7 = G_CAPlot(P_7_ShT)
 	P_8 = G_CAPlot(P_8_ShT)
+	Cir = G_CAPlot(Cir)
 	if #G_CAPlot_Shape_InputTable >= 256 then
 		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
 	end

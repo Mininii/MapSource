@@ -266,7 +266,7 @@ for i = 1, 6 do -- 강퇴기능
 		CIf(FP,Score(i,Kills,AtLeast,1000))
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mov(10)))--고정 10%
+		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mov(13)))--고정 13%
 		CMov(FP,ExchangeP,0)
 		CIfEnd()
 		DoActions(FP,SetDeaths(i,Subtract,1,111))
