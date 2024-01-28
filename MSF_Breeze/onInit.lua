@@ -24,6 +24,15 @@ function onInit_EUD()
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000}})--모든 유닛을 마법사로
 	end
 	SetUnitsDatX(162,{AdvFlag={0x400200,0x480200},BdDimX=1,BdDimY=1})--포토 파일런 불필요
+	for j,k in pairs({89,90,93,94,95,96}) do
+		SetUnitsDatX(k, {HumanInitAct = 2,
+		ComputerInitAct = 2,
+		AttackOrder = 10,
+		AttackMoveOrder = 2,
+		IdleOrder = 2,
+		RClickAct = 1,SizeL=3,SizeU=3,SizeR=3,SizeD=3})
+		
+	end
 
 	--if TestStart == 1 then
 	--	SetUnitsDatX(0,{HP=9999})--테스트
@@ -106,6 +115,26 @@ end
 			InputTesterID(i,"RonaRonaTTang") 
 		end
 		
+	T_YY = 2024
+	T_MM = 01
+	T_DD = 28
+	T_HH = 00
+	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
+	if Limit == 1 then
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				Memory(0x6D0F38,AtMost,GlobalTime);
+	
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				
+			}
+		}
+        
+	end
 	
 		Trigger2X(FP, {
 			CDeaths(FP,Exactly,1,LimitX);
@@ -116,13 +145,23 @@ end
 				},HumanPlayers,FP);
 				Defeat();
 				SetMemory(0xCDDDCDDC,SetTo,1);})
+
+				
+
+
 	DoActions2(FP, PatchArr)
 	DoActions2(FP, PatchArr2)
 	if TestStart == 1 then
 		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1)})
 	
 	end
-	DoActions(FP, {CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 25000, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
+	DoActions(FP, {	SetMemoryB(0x57F27C + (0 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,0),
+	SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 25000, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 
 

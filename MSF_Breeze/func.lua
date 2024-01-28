@@ -269,24 +269,55 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			else
 				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
 			end
-			for j, k in pairs(TargetPlayer) do
-				Trigger {players = {PlayerID},
-					conditions = {
-						Label(0);
-						Cond2;
-						LocalPlayerID(k);
-						DeathsX(k,Exactly,0*16777216,12,0xFF000000);
-					},
-					actions = {
-						Act1;
-						SetCp(k);
-						PlayWAV(v[2]);
-						PlayWAV(v[2]);
-						SetCp(PlayerID);
-						SetNVar(Arr[3],Add,v[3]);
-					},
-					flag = {preserved}
-				}
+			if type(v[2]) == "table" then
+				local WAVs = CreateCcodeArr(12)
+					for j, k in pairs(TargetPlayer) do
+						
+					for o,p in pairs(v[2]) do
+							Trigger {players = {PlayerID},
+								conditions = {
+									Label(0);
+									CD(WAVs[j],o-1);
+									Cond2;
+									LocalPlayerID(k);
+									DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+								},
+								actions = {
+									AddCD(WAVs[j], 1);
+									Act1;
+									SetCp(k);
+									PlayWAV(p);
+									PlayWAV(p);
+									SetCp(PlayerID);
+									SetNVar(Arr[3],Add,v[3]);
+								},
+								flag = {preserved}
+							}
+						end
+						TriggerX(PlayerID, {CD(WAVs[j],#v[2],AtLeast)}, {SetCD(WAVs[j], 0);},{preserved})
+					end
+
+			else
+				for j, k in pairs(TargetPlayer) do
+					
+					Trigger {players = {PlayerID},
+						conditions = {
+							Label(0);
+							Cond2;
+							LocalPlayerID(k);
+							DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+						},
+						actions = {
+							Act1;
+							SetCp(k);
+							PlayWAV(v[2]);
+							PlayWAV(v[2]);
+							SetCp(PlayerID);
+							SetNVar(Arr[3],Add,v[3]);
+						},
+						flag = {preserved}
+					}
+				end
 			end
 		end
 	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
@@ -302,6 +333,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			}
 		end
 	CIfXEnd()
+	return Arr[2]
 end
 
 function Include_G_CA_Library(DefaultAttackLoc,StartIndex,Size_of_G_CA_Arr)
@@ -740,7 +772,10 @@ if X2_Mode==1 then
 		{-128,-128},{128,-128},{-128,128},{128,128},
 	}
 end
+local DefaultAttackLocV = CreateVar(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+	CMov(FP,DefaultAttackLocV,DefaultAttackLoc)
+	TriggerX(FP,{Command(FP,AtLeast,1,94)},{SetV(DefaultAttackLocV,49)},{preserved})
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
@@ -771,7 +806,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLoc);
+					TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);
 				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
 				CDoActions(FP,{
@@ -789,7 +824,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920)})
 				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLoc);
+					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);
 					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 					

@@ -19,34 +19,47 @@ function Interface()
 	end
 	Install_UnitCount(FP)
 
-	IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
+	Dt = IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
 		{1,"staredit\\wav\\BrOP.ogg",188*1000},
-		{2,"staredit\\wav\\BGM1.ogg",80*1000},
-		{3,"staredit\\wav\\BGM2.ogg",101*1000},
-		{4,"staredit\\wav\\BGM3.ogg",74*1000},
-		{5,"staredit\\wav\\BGM4.ogg",60*1000},
+		{2,{"staredit\\wav\\BGM1_1.ogg","staredit\\wav\\BGM1_2.ogg"},45*1000},
+		{3,{"staredit\\wav\\BGM2_1.ogg","staredit\\wav\\BGM2_2.ogg"},45*1000},
+		{4,{"staredit\\wav\\BGM3_1.ogg","staredit\\wav\\BGM3_2.ogg"},42*1000},
+		{5,"staredit\\wav\\MB.ogg",37*1000},
 	})
-	
-	DoActionsX(FP, {SetV(BGMType,1),KillUnit(72, P12),KillUnit(84, P12),
-	SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
-	SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
-},1)
+	if TestStart == 1 then
+		DoActionsX(FP, {KillUnit(72, P12),KillUnit(84, P12),
+		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
+		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
+	},1)
+	else
+		DoActionsX(FP, {SetV(BGMType,1),KillUnit(72, P12),KillUnit(84, P12),
+		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
+		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
+	},1)
+	end
 	OPCcode = CreateCcode()
 	DoActionsX(FP, {AddCD(OPCcode,1)})
 	Trigger2X(FP,{CD(OPCcode,1,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,150,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x08아니근데 들판에 저그들이 왜이렇게 많아???"))}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,300,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04마린들은 결심했다. 얼른 이 \x08저그놈들의 머리통을 날려버리고 집으로 돌아가자고!"))}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,450,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),DisplayTextX(StrDesignX("\x04승리 조건 : 모든 저그를 처치하고 6시의 초월체를 파괴하세요."))}, HumanPlayers, FP)})
-	
+	if Limit == 1 then
+		DoActions2X(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)},1)
+		Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+	end
+Cunit2 = CreateVar(FP)
 Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i)})
+		if Limit == 1 then
+			
+			f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
+		end
 
 	end
     CIfXEnd()
 
-	Cunit2 = CreateVar(FP)
 	if Limit == 1 then
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
@@ -75,7 +88,8 @@ Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUn
 				}
 				}
 			TestUPtr = CreateVar(FP)
-			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
+			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, 47, CurrentOP)},{preserved})
+			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 			--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
 			--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
 			--CIfEnd()
@@ -222,7 +236,7 @@ for i = 1, 6 do -- 강퇴기능
 		CIfEnd()
 		CIfEnd()
 		if Limit == 1 then
-			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,100),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
 		
 		end
 
@@ -517,4 +531,13 @@ end
 	ModifyUnitHitPoints(All,"Men",Force1,2,100),
 	ModifyUnitShields(All,"Men",Force1,2,100)},{preserved})
 	DoActionsX(FP,{SetCDeaths(FP,Add,1,HealT),ModifyUnitHitPoints(All, 125, Force1, 2, 100)})
+
+	
+	for i = 128,131 do
+		ObserverChatToOb(FP,0x58D740+(20*59),i,"END",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x1C채팅→관전자\x04에게 메세지를 보냅니다.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+		ObserverChatToAll(FP,0x58D740+(20*59),i,"HOME",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x07채팅→전체\x04에게 메세지를 보냅니다.").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+		ObserverChatToNone(FP,0x58D740+(20*59),i,"INSERT",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x02채팅→대상없음\x04에게 메세지를 보냅니다.(귓말 명령어 등 전용)").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
+	end
+
+	
 end

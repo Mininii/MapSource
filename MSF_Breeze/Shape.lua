@@ -67,10 +67,15 @@ function Shape()
 	P_6_ShT = Create_SortTable(MakeLevelShape("Polygon",6,1,8))
 	P_7_ShT = Create_SortTable(MakeLevelShape("Polygon",7,1,8))
 	P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
-
+	Cir = CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0)
+	Cir2 = CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0)
+	Cir3 = CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 3), 0)
+	Cir4 = CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 4), 0)
+	Cir5 = CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 5), 0)
+	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 2), 0)
 	G_CAPlot_Shape_InputTable = {
 		"LOverM",
-		"ROverM",
+		"ROverM","Poly","Cir","Cir2","Cir3","Cir4","Cir5"
 		
 
 	}
