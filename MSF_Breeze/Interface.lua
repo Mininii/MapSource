@@ -263,7 +263,7 @@ for i = 1, 6 do -- 강퇴기능
 			CAdd(FP,0x582174+(4*i),count)
 		ExJump = def_sIndex()--주석화 : 자동환전
 		--NJump(FP,ExJump,{Deaths(i,AtMost,0,111),Bring(i,AtMost,0,"Men",3),Bring(i,AtMost,0,"Men",4)})
-		CIf(FP,Score(i,Kills,AtLeast,1000))
+		CIf(FP,{CDeaths(FP,AtMost,0,BanCode2[i+1]),Score(i,Kills,AtLeast,1000)})
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mov(13)))--고정 13%

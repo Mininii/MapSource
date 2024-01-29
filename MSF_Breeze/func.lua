@@ -1467,8 +1467,11 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	UnitID == 30 then TempWID = 130 
 	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
 	end
-	
-	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=4,SizeU=4,SizeR=4,SizeD=4
+	local Size = 4
+	if UnitID == 74 or UnitID == 75 then
+		Size = nil
+	end
+	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
 })
 if ObjNum == nil then ObjNum = 1 end
 SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})

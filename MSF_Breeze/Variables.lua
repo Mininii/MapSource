@@ -101,8 +101,7 @@ function Include_Vars()
 	UnitPointArr = {}
 	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54}--재배치 등록 위치
 	for j, k in pairs(UnitPointArr2) do
-		SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4
-	})
+			SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4})
 	end
 
 	SetUnitAbility(19,5,5600,false,nil,333,1,nil,nil,38000,"짐 레이너 (V)",5000)
@@ -119,7 +118,7 @@ function Include_Vars()
 	SetUnitAbility(86,78,2500,1500,nil,600,1,nil,nil,35000,"다니모스",7000)
 	SetUnitAbility(79,69,5600,4400,nil,400,1,nil,nil,50000,"테사다르",10000)
 	SetUnitAbility(75,85,85000,4500,nil,1050,1,nil,nil,300000,"제라툴",60000)
-	SetUnitAbility(98,100,3500,1200,nil,300,1,nil,nil,75000,"라자갈",20000)
+	SetUnitAbility(98,100,3500,1200,nil,350,1,nil,nil,75000,"라자갈",20000)
 	SetUnitAbility(162,80,5000,5000,nil,650,1,nil,nil,65000,"광자포",10000)
 	SetUnitAbility(29,21,22000,false,nil,900,1,nil,nil,95000,"노라드 II",7500)
 
