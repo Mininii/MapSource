@@ -272,6 +272,11 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 			if type(v[2]) == "table" then
 				local WAVs = CreateCcodeArr(12)
 					for j, k in pairs(TargetPlayer) do
+						local Pl = k
+						if Pl == P9 then Pl = 128
+						elseif Pl == P10 then Pl = 129
+						elseif Pl == P11 then Pl = 130
+						elseif Pl == P12 then Pl = 131 end
 						
 					for o,p in pairs(v[2]) do
 							Trigger {players = {PlayerID},
@@ -279,13 +284,13 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 									Label(0);
 									CD(WAVs[j],o-1);
 									Cond2;
-									LocalPlayerID(k);
+									LocalPlayerID(Pl);
 									DeathsX(k,Exactly,0*16777216,12,0xFF000000);
 								},
 								actions = {
 									AddCD(WAVs[j], 1);
 									Act1;
-									SetCp(k);
+									SetCp(Pl);
 									PlayWAV(p);
 									PlayWAV(p);
 									SetCp(PlayerID);
@@ -299,17 +304,22 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 
 			else
 				for j, k in pairs(TargetPlayer) do
+					local Pl = k
+					if Pl == P9 then Pl = 128
+					elseif Pl == P10 then Pl = 129
+					elseif Pl == P11 then Pl = 130
+					elseif Pl == P12 then Pl = 131 end
 					
 					Trigger {players = {PlayerID},
 						conditions = {
 							Label(0);
 							Cond2;
-							LocalPlayerID(k);
+							LocalPlayerID(Pl);
 							DeathsX(k,Exactly,0*16777216,12,0xFF000000);
 						},
 						actions = {
 							Act1;
-							SetCp(k);
+							SetCp(Pl);
 							PlayWAV(v[2]);
 							PlayWAV(v[2]);
 							SetCp(PlayerID);
