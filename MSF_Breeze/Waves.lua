@@ -439,9 +439,11 @@ end
 		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF)}, {SetDeathsX(i, Add, 1500, 12,0xFFFFFF),SetCp(i),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg")})
 		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF)}, {SetMemory(0x590000, SetTo, 1),},{preserved})
 		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),Deaths(i, AtLeast, 1, 14)}, {AddV(WinCheck,1)},{preserved})
-		TriggerX(FP, {CD(CPt[7],1),CV(WinCheck,i+1),CV(PCheckV,i+1)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)})
 		DoActions(FP, {SetDeaths(i, SetTo, 0, 14)})
 		CIfEnd()
+	end
+	for i = 0, 6 do
+	TriggerX(FP, {CD(CPt[7],1),CV(WinCheck,i+1),CV(PCheckV,i+1)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)})
 	end
 
 
