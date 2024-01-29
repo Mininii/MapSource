@@ -41,6 +41,9 @@ function onInit_EUD()
 	--	SetWeaponsDatX(1, {DmgBase=2000})--테스트
 	--
 	--end
+	SetUnitsDatX(84,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1})--이펙트유닛 크기 1로 조정
+	SetUnitsDatX(72,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1})--이펙트유닛 크기 1로 조정
+	SetUnitsDatX(1,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1,})--이펙트유닛 크기 1로 조정
 
 
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
