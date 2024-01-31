@@ -54,11 +54,26 @@ function Shape()
 	LOverM= CS_MoveXY(CS_FillPathXY(Shape8000, 1, 32, 32, 0),-160,-128)
 	ROverM= CS_MoveXY(CS_FillPathXY(Shape8001, 1, 32, 32, 0),-2912,-128)
 	
+	LOvP = {4  ,{864, 0},{576, 0},{0, 288},{0, 448}}
+	ROvP = {4, {2176, 0},{2496, 0},{96*32, 288},{96*32, 448}}
+	LOvPF = CS_MoveXY(CS_FillPathXY(LOvP, 1, 32, 32, 0),-160,-128)
+	ROvPF = CS_MoveXY(CS_FillPathXY(ROvP, 1, 32, 32, 0),-2912,-128)
 	Cir = Create_SortTable({CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
 	CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0),
 	CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 3), 0),
 	CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 4), 0),
 	CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 5), 0)	})
+	Shape1032 = {5   ,{2464, 1216},{2336, 1280},{2048, 1280},{1920, 1216},{2176, 1088}}
+	Shape1001 = {4   ,{2048, 1280},{1920, 1216},{1664, 1312},{1792, 1440}}
+	Shape1003 = {4   ,{1664, 1312},{1792, 1440},{1312, 1440},{1408, 1312}}
+	Shape1034 = {4   ,{1312, 1440},{1408, 1312},{1152, 1216},{1024, 1280}}
+	Shape1007 = {5   ,{1024, 1280},{800, 1280},{640, 1184},{896, 1088},{1152, 1216}}
+	Chry5 = CS_MoveXY(CS_FillPathXY(Shape1032, 1, 24, 24, 0),-2176,-1152)
+	Chry4 = CS_MoveXY(CS_FillPathXY(Shape1001, 1, 24, 24, 0),-1824,-1312)
+	Chry3 = CS_MoveXY(CS_FillPathXY(Shape1003, 1, 24, 24, 0),-1536,-1536)
+	Chry2 = CS_MoveXY(CS_FillPathXY(Shape1034, 1, 24, 24, 0),-1248,-1312)
+	Chry1 = CS_MoveXY(CS_FillPathXY(Shape1007, 1, 24, 24, 0),-896,-1152)
+
 	S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
 	S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
 	S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
@@ -74,7 +89,15 @@ function Shape()
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 2), 0)
 	G_CAPlot_Shape_InputTable = {
 		"LOverM",
-		"ROverM","Poly"
+		"ROverM","Poly",
+		"LOvPF",
+		"ROvPF",
+		
+		"Chry5",
+		"Chry4",
+		"Chry3",
+		"Chry2",
+		"Chry1",
 		
 
 	}

@@ -226,7 +226,7 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j== "KillScore" then
 				PatchInsert(SetMemoryW(0x663EB8+(UnitID *2),SetTo,k))--KillScore
 			elseif j== "ComputerAI" then
-				PatchInsert(SetMemoryB(0x660178+(UnitID),SetTo,k))--KillScore
+				PatchInsert(SetMemoryB(0x660178+(UnitID),SetTo,k))--ComputerAI
 			else
 				
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
@@ -772,6 +772,9 @@ local Repeat_TempV = CreateVar(FP)
 local CreatePlayer = CreateVar(FP)
 local CA_Repeat_Check = CreateCcode()
 local TRepeatX,TRepeatY = CreateVars(2,FP)
+
+G_CA_BackupX = CreateVar(FP)
+G_CA_BackupY = CreateVar(FP)
 G_CA_X = CreateVar(FP)
 G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward()
@@ -788,6 +791,16 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	TriggerX(FP,{Command(FP,AtLeast,1,94)},{SetV(DefaultAttackLocV,49)},{preserved})
 		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
 		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+		for i = 0, 3 do
+            if i == 0 then RS1 = Cleared RS2=Cleared end
+            if i == 1 then RS1 = Set RS2=Cleared end
+            if i == 2 then RS1 = Cleared RS2=Set end
+            if i == 3 then RS1 = Set RS2=Set end
+            TriggerX(FP,{CD(GMode,1),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,14+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,14+i)},{preserved})
+        end
+		local LocIndex = FuncAlloc
+        FuncAlloc=FuncAlloc+2
+		
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
 
@@ -803,14 +816,23 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 
 		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
+
+		CIfX(FP,{CD(GMode,0)})
 		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
 		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
-		
+		CElseX()
+		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,LocIndex)
+        CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,LocIndex+1)
+		CIfXEnd()
+
+
+
 		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 		Convert_CPosXY()
-		Simple_SetLocX(FP,15,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(15,-4,-4,4,4)})
+		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
 
+        CTrigger(FP,{CD(GMode,1)},{TMoveUnit(1,Gun_TempSpawnSet1,Force2,72,1)},{preserved})
 			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
@@ -839,6 +861,12 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 					
 				})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,32))
+			CDoActions(FP,{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
+				TSetMemoryX(_Add(G_CA_Nextptrs,8), SetTo, 127*65536,0xFF0000),
+				TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,20000,0),
+				TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
 				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
@@ -888,6 +916,10 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
+			CIf(FP,{CD(CA_Repeat_Check,1)},{})
+			Simple_SetLocX(FP,0,G_CA_BackupX,G_CA_BackupY,G_CA_BackupX,G_CA_BackupY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CDoActions(FP,{TOrder(Gun_TempSpawnSet1,Force2,72,Attack,1)})
+			CIfEnd()
 			
 		CIfEnd()
 
@@ -1020,6 +1052,19 @@ local G_CA_YPos = CreateVar(FP)
 local SL_TempV = Create_VTable(4)
 local SL_Ret = CreateVar(FP)
 
+local Write_SpawnSet_Jump = def_sIndex()
+local G_CA_Arr_IndexAlloc = StartIndex
+local G_CA_InputCVar = {}
+local G_CA_Lines = 55
+local G_CA_TempTable = CreateVarArr(G_CA_Lines,FP)
+local G_CA_TempH = CreateVar(FP)
+local G_CA_Num = CreateVar(FP)
+for i = 1, G_CA_Lines do
+	table.insert(G_CA_InputCVar,SetCVar(FP,G_CA_TempTable[i][2],SetTo,0))
+end
+local G_CA_InputH = CreateVar(FP)
+local G_CA_LineTemp = CreateVar(FP)
+
 
 Call_SLCalc = SetCallForward()
 SetCall(FP)
@@ -1038,19 +1083,6 @@ for i = 1, 4 do
 end
 SetCallEnd()
 
-
-local Write_SpawnSet_Jump = def_sIndex()
-local G_CA_Arr_IndexAlloc = StartIndex
-local G_CA_InputCVar = {}
-local G_CA_Lines = 55
-local G_CA_TempTable = CreateVarArr(G_CA_Lines,FP)
-local G_CA_TempH = CreateVar(FP)
-local G_CA_Num = CreateVar(FP)
-for i = 1, G_CA_Lines do
-	table.insert(G_CA_InputCVar,SetCVar(FP,G_CA_TempTable[i][2],SetTo,0))
-end
-local G_CA_InputH = CreateVar(FP)
-local G_CA_LineTemp = CreateVar(FP)
 table.insert(CtrigInitArr[FP+1],SetCtrigX(FP,G_CA_InputH[2],0x15C,0,SetTo,FP,StartIndex,0x15C,1,0))
 
 Write_SpawnSet = SetCallForward()
@@ -1182,6 +1214,8 @@ function G_CAPlot(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
+	CMov(FP,G_CA_BackupX,G_CA_TempTable[8])
+	CMov(FP,G_CA_BackupY,G_CA_TempTable[9])
 	CAPlot2(ShapeTable,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func1",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
@@ -1219,6 +1253,9 @@ function G_CAPlot2(ShapeTable)
 	CElseX()
 		CMov(FP,V(CA[5]),G_CA_Temp[5])
 	CIfXEnd()
+	CMov(FP,G_CA_BackupX,G_CA_TempTable[8])
+	CMov(FP,G_CA_BackupY,G_CA_TempTable[9])
+	
 	CAPlot2(Y,FP,nilunit,0,{G_CA_TempTable[8],G_CA_TempTable[9]},1,32,{0,0,0,0,0,1},"CA_Func1",FP,nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)},"CA_Repeat")
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
@@ -1472,7 +1509,7 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	if UnitID == 74 or UnitID == 75 then
 		Size = nil
 	end
-	SetUnitsDatX(UnitID, {HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
+	SetUnitsDatX(UnitID, {AdvFlag={0x40,0x40},ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
 })
 if ObjNum == nil then ObjNum = 1 end
 SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})

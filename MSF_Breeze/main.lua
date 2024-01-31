@@ -26,9 +26,9 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x04Ver. 1.1"
+VerText = "\x04Ver. 1.2"
 
-TestSet(0)
+TestSet(2)
 if Limit == 1 then
 	VerText = VerText.."T"
 	

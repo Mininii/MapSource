@@ -29,19 +29,27 @@ function Interface()
 		{5,"staredit\\wav\\MB.ogg",37*1000},
 	})
 	if TestStart == 1 then
-		DoActionsX(FP, {KillUnit(72, P12),KillUnit(84, P12),
+		DoActionsX(FP, {SetAllianceStatus(AllPlayers, Ally),
 		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
 		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
 	},1)
 	else
-		DoActionsX(FP, {SetV(BGMType,1),KillUnit(72, P12),KillUnit(84, P12),
+		DoActionsX(FP, {SetAllianceStatus(AllPlayers, Ally),
 		SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 미니맵
 		SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8컬러
 	},1)
 	end
+	GS = CreateCcode()
+	TriggerX(Force1, {CD(GS,1)}, {
+		SetAllianceStatus(P12,Enemy),--P12 적으로
+		SetAllianceStatus(FP,Enemy),--FP 적으로
+		SetAllianceStatus(Force1,Ally),--FP 적으로
+	}, {preserved})
+	TriggerX(FP, {CD(GS,1)}, {
+		SetAllianceStatus(Force1,Enemy),--FP 적으로
+	}, {preserved})
 	OPCcode = CreateCcode()
 	DoActionsX(FP, {AddCD(OPCcode,1)})
-	Trigger2X(FP,{CD(OPCcode,1,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,150,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x08아니근데 들판에 저그들이 왜이렇게 많아???"))}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,300,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04마린들은 결심했다. 얼른 이 \x08저그놈들의 머리통을 날려버리고 집으로 돌아가자고!"))}, HumanPlayers, FP)})
 --	Trigger2X(FP,{CD(OPCcode,450,AtLeast)},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),DisplayTextX(StrDesignX("\x04승리 조건 : 모든 저그를 처치하고 6시의 초월체를 파괴하세요."))}, HumanPlayers, FP)})
@@ -50,7 +58,6 @@ function Interface()
 		Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
 	end
 Cunit2 = CreateVar(FP)
-GS = CreateCcode()
 CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i),GiveUnits(All, 15, AllPlayers, 64, i)})
@@ -63,19 +70,41 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
     CIfXEnd()
 
 
-	CIf(FP,{CD(GS,0)},{MoveUnit(All, "Men", Force1, 64, 50),})
+	CIf(FP,{CD(GS,0)},{MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)})
 	GST = CreateCcode()
-	DoActions2(FP, {RotatePlayer({CenterView(50)}, HumanPlayers, FP)})
+	CDoActions(FP, {TCreateUnit(1, 15, 59, CurrentOP)},1)
+	TriggerX(FP, {Bring(AllPlayers, AtMost, 0, 15, 59)}, {MoveUnit(All, 15, AllPlayers, 64, 59)},{preserved})
+
+	DoActions2(FP, {RotatePlayer({CenterView(59)}, HumanPlayers, FP)})
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04난이도를 선택해 주십시오.").."\n"..StrDesignX("\x04- \x03난이도 설명 \x04-"), 4)}, HumanPlayers, FP)},1)
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다."), 4)}, HumanPlayers, FP)},1)
-	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 추가 방해 요소가 많아져 조금 더 어려워졌으나 환전률이 소폭 상승하였습니다."), 4)}, HumanPlayers, FP)},1)
-	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 51)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
-	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 52)}, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers),SetCD(GMode,1)})
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 더 어려워졌으나 공격력 최대 업글 가능 횟수 상승됩니다."), 4)}, HumanPlayers, FP)},1)
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 58)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 57)}, {SetCD(GST,1),SetCD(GMode,1),SetV(ExRate,11),
+		SetMemoryB(0x58D088+(46*0)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*1)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*2)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*3)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*4)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*5)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*6)+7,SetTo,150),
+		SetMemoryB(0x58D088+(46*0)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*1)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*2)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*3)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*4)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*5)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*6)+0,SetTo,0),
+		RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),RemoveUnit(15, AllPlayers)})
 	TriggerX(FP, {CD(GST,1,AtLeast)},{AddCD(GST,1)},{preserved})
 	TriggerX(FP, {CD(GST,100,AtLeast)},{SetCD(GS,1)},{preserved})
 	CIfEnd()
-	CIfOnce(FP,{CD(GS,1)},{SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2),SetResources(Force1, Add, 25000, Ore),RemoveUnit(15, AllPlayers),RemoveUnit(195, AllPlayers),RemoveUnit(196, AllPlayers)})
+
+
+
+	CIfOnce(FP,{CD(GS,1)},{SetV(BGMType,1),SetCp(FP),KillUnit(72, P12),KillUnit(84, P12),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2),SetResources(Force1, Add, 25000, Ore),RemoveUnit(15, AllPlayers),RemoveUnit(195, AllPlayers),RemoveUnit(196, AllPlayers)})
 	DoActions2(FP, {RotatePlayer({CenterView(2)}, HumanPlayers, FP)})
+	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 
@@ -245,6 +274,7 @@ for i = 1, 6 do -- 강퇴기능
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
 		
+		
 		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
@@ -254,9 +284,25 @@ for i = 1, 6 do -- 강퇴기능
 		--DisplayPrint(HumanPlayers, {"BarPos : ",BarPos[i+1],"   CreatingUnit : ",CreatingUnit,"   CreatingUID : ",CreatingUID,"   CreatingUnitHP : ",CreatingUnitHP})
 		CIfEnd()
 		CIfEnd()
-		if Limit == 1 then
-			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,100),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
+		GetLocCenter(64+i, CPosX, CPosY)
+		CIf(FP,{TTOR({_TTCVar(FP,CPosX[2],NotSame,2),_TTCVar(FP,CPosY[2],NotSame,2)})})
 		
+			--CNeg(FP,CPosX)
+			--CAdd(FP,CPosX,96*32)
+
+		CTrigger(FP, {}, {SetV(PPosY[i+1],CPosY)}, {preserved})
+		CTrigger(FP, {}, {SetV(PPosX[i+1],CPosX)}, {preserved})
+		CIfEnd()
+		
+		
+		
+		if Limit == 1 then
+			CIf(FP,CD(TestMode,1))
+				DisplayPrint(i, {"\x13\x04X : ",PPosX[i+1],"   Y : ",PPosY[i+1]}, 3)
+			CIfEnd()
+			--TriggerX(FP,{CD(TestMode,1)},{SetInvincibility(Enable, "Buildings", FP, 64)},{preserved})--SetV(CurEXP,0x7FFFFFFF)
+			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,100),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
+			TriggerX(FP,{CD(TestMode,1),CD(GMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,150),SetMemoryB(0x58D2B0+(i*46),SetTo,0)})--SetV(CurEXP,0x7FFFFFFF)
 		end
 
 		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
@@ -285,7 +331,8 @@ for i = 1, 6 do -- 강퇴기능
 		CIf(FP,{CDeaths(FP,AtMost,0,BanCode2[i+1]),Score(i,Kills,AtLeast,1000)})
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
-		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mov(13)))--고정 13%
+		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),ExRate))--노말 13% 프로페셔널 20%
+
 		CMov(FP,ExchangeP,0)
 		CIfEnd()
 		DoActions(FP,SetDeaths(i,Subtract,1,111))
@@ -412,7 +459,6 @@ actions = {
 }
 	
 DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
-SetAllianceStatus(P12,Enemy),--P12 적으로
 RunAIScript("Turn ON Shared Vision for Player 1");
 RunAIScript("Turn ON Shared Vision for Player 2");
 RunAIScript("Turn ON Shared Vision for Player 3");

@@ -24,6 +24,45 @@ function CIfGunWave(GunID,LocID,TimerMax,BGMTypes)
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
 	return GunCcode
 end
+
+function SetTT(LocID,Unitargs,G_CA_args) -- 개별영침
+	local TTC = CreateCcode()
+	for i = 0, 6 do
+		TriggerX(i, {Bring(i, AtLeast, 1, "Men", LocID)}, {AddCD(TTC,1)})
+	end
+	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
+		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
+		for j,k in pairs(Unitargs) do
+			f_TempRepeatX({},k[1],k[2],nil,FP)
+		end
+		if G_CA_args then
+		for j,k in pairs(G_CA_args) do
+			G_CA_SetSpawn({},table.unpack(k))
+		end
+		end
+		
+	CIfEnd()
+end
+function SetTTX(SLoc,Locs,Unitargs,G_CA_args) -- 개별영침 n구간중 1개만 인식되면 사라짐
+	local TTC = CreateCcode()
+	local LTTC = CreateCcode()
+	for i = 0, 6 do
+		for j,k in pairs(Locs) do
+			TriggerX(i, {CDeaths(i, AtMost, 0, LTTC),Bring(i, AtLeast, 1, "Men", k)}, {AddCD(TTC,1),SetCDeaths(i, Add, 1, LTTC)})
+		end
+	end
+	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
+		GetLocCenter(SLoc-1, G_CA_X, G_CA_Y)
+		for j,k in pairs(Unitargs) do
+			f_TempRepeatX({},k[1],k[2],nil,FP)
+		end
+		if G_CA_args then
+		for j,k in pairs(G_CA_args) do
+			G_CA_SetSpawn({},table.unpack(k))
+		end
+		end
+	CIfEnd()
+end
 --Sample
 --{G_CA_CUTable, G_CA_SNTable, G_CA_SLTable, "MAX", 1, nil, FP, 1}
 --G_CA_SetSpawn({CVar(FP,UnitIDV3[2],AtLeast,1)},{UID3I},"ACAS",{"L00_1_164F"},"MAX")
@@ -42,6 +81,7 @@ BGM2S = CreateCcode()
 BGM3S = CreateCcode()
 function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	local GunCcode = CreateCcode()
+	local CurGunP = CreateVar(FP)
 	local CountMax = 0
 	local NUTableCnt = 0
 	local G_CA_argsCnt = 0
@@ -52,8 +92,25 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	CountMax = math.max(CountMax, #NUTable, G_CA_argsCnt)
 	TriggerX(FP, CommandLeastAt(GunID,LocID), {SetCD(GunCcode,1)})
 	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,480*CountMax,AtMost)},{AddCD(GunCcode,1),SetSwitch(RandSwitch1,Random),})
+		CIfOnce(FP)
+		if GunID == 150 or GunID == 148 then
+			
+		for i = 0, 6 do
+			TriggerX(FP, {CD(GMode,1),Kills(i, AtLeast, 1, GunID)}, {SetV(CurGunP,i),SetKills(i, Subtract, 1, GunID)})
+		end
+		end
+		CIfEnd()
 		DoActionsX(FP, SetV(BGMType,BGMTypes), 1)
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
+		
+		if GunID == 150 or GunID == 148 then
+			
+		for i = 0, 6 do
+			CTrigger(FP, {CD(GMode,1),CD(GunCcode,480,AtLeast),CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
+		end
+
+		end
+
 		local NUCArr = {}
 		
 		if G_CA_args then
@@ -127,34 +184,49 @@ end
 	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,28}, "ACAS", "LOverM", "MAX", nil, nil, nil, FP, 1},{{25,28}, "ACAS", "LOverM", "MAX", nil, nil, nil, FP, 1}})
 	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,28}, "ACAS", "ROverM", "MAX", nil, nil, nil, FP, 1},{{25,28}, "ACAS", "ROverM", "MAX", nil, nil, nil, FP, 1}})
 
-	CElseX()
-	
-	GunWave(133,22,{{38,25},{39,15},{44,25}},3,{{{10,21,17}, {P_5,S_5,P_6}, {4,1,3}, 0, nil, nil, nil, FP, 1},{{10,21,17}, {P_4,S_5,S_4}, {3,2,1}, 0, nil, nil, nil, FP, 1}})
-	GunWave(133,23,{{38,25},{39,15},{44,25}},3,{{{78,88,77}, {P_3,S_5,P_6}, {4,1,5}, 0, nil, nil, nil, FP, 1},{{78,88,77}, {P_4,S_5,P_6}, {5,2,6}, 0, nil, nil, nil, FP, 1}})
-	GunWave(133,28,{{53,25},{21,15},{48,15},{55,25}},3,{{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {1,3,3,3}, "MAX", nil, nil, nil, FP, 1},{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {1,3,3,3}, "MAX", nil, nil, nil, FP, 1}})
-	GunWave(133,29,{{53,25},{21,15},{48,15},{55,25}},3,{{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {1,3,3,3}, "MAX", nil, nil, nil, FP, 1},{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {1,3,3,3}, "MAX", nil, nil, nil, FP, 1}})
-	GunWave(133,30,{{53,25},{48,15},{55,25}},3,{{{25,19,77,29}, {S_6,P_6,P_6,P_4}, {1,2,3,2}, 10, nil, nil, nil, FP, 1},{{25,19,77,29}, {S_8,P_6,P_6,P_4}, {1,2,3,2}, 10, nil, nil, nil, FP, 1}})
-	GunWave(133,31,{{53,25},{48,15},{55,25}},3,{{{25,17,78,29}, {S_6,P_6,P_6,P_4}, {1,2,3,2}, 10, nil, nil, nil, FP, 1},{{25,17,78,29}, {S_8,P_6,P_6,P_4}, {1,2,3,2}, 10, nil, nil, nil, FP, 1}})
-	GunWave(133,32,{{53,25},{48,15},{55,25}},3,{{{25,10,17,28}, {S_6,P_5,P_6,P_7}, {1,2,3,3}, 10, nil, nil, nil, FP, 1},{{25,10,17,28}, {S_8,P_5,P_6,P_7}, {1,2,3,3}, 10, nil, nil, nil, FP, 1}})
-	GunWave(133,33,{{53,25},{48,15},{55,25}},3,{{{25,23,19,28}, {S_6,P_5,P_6,P_7}, {1,1,3,3}, 10, nil, nil, nil, FP, 1},{{25,23,19,28}, {S_8,P_5,P_6,P_7}, {1,1,3,3}, 10, nil, nil, nil, FP, 1}})
-	GunWave(133,43,{{53,25},{48,15},{55,25}},3,{{{98,79,56,48}, {P_6,P_5,P_6,P_7}, {2,3,3,3}, 10, nil, nil, nil, FP, 1},{{98,79,56,48}, {P_8,P_5,P_6,P_7}, {2,3,3,3}, 10, nil, nil, nil, FP, 1}})
-	GunWave(133,44,{{53,25},{48,15},{55,25}},3,{{{98,79,56,48}, {P_6,P_8,P_6,P_7}, {2,1,3,3}, 10, nil, nil, nil, FP, 1},{{98,75,56,48}, {P_8,P_8,P_6,P_7}, {2,1,3,3}, 10, nil, nil, nil, FP, 1}})
-	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,28}, "ACAS", "LOverM", "MAX", nil, nil, nil, FP, 1},{{25,28}, "ACAS", "LOverM", "MAX", nil, nil, nil, FP, 1}})
-	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,28}, "ACAS", "ROverM", "MAX", nil, nil, nil, FP, 1},{{25,28}, "ACAS", "ROverM", "MAX", nil, nil, nil, FP, 1}})
-
-	CIfXEnd()
-
-
-
-
 	GunWave(150,36,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98}, S_6, 1, "MAX", nil, nil, nil, FP, 1},{{98}, S_6, 1, "MAX", nil, nil, nil, FP, 1}})
 	GunWave(150,37,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98}, S_6, 1, "MAX", nil, nil, nil, FP, 1},{{98}, S_6, 1, "MAX", nil, nil, nil, FP, 1}})
 	GunWave(150,38,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98,29}, S_5, 1, "MAX", nil, nil, nil, FP, 1},{{98,29}, S_5, 1, "MAX", nil, nil, nil, FP, 1}}) -- 중보건물. 따로 안넣어도됨
 	GunWave(150,39,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{29}, S_6, 1, "MAX", nil, nil, nil, FP, 1},{{29}, S_6, 1, "MAX", nil, nil, nil, FP, 1}})
 	GunWave(150,40,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{29}, S_6, 1, "MAX", nil, nil, nil, FP, 1},{{29}, S_6, 1, "MAX", nil, nil, nil, FP, 1}})
+
+	CElseX()
+	--SetTT(LocID,Unitargs)
+	SetTTX(8,{8,50,51},{{88,15},{21,15}})
+	SetTTX(8,{9,52,53},{{88,15},{21,15}})
+	SetTT(54,{{25,15},{28,15}})
+	SetTT(55,{{25,15},{28,15}})
+	SetTT(56,{{23,5}})
+
+	GunWave(133,22,{{38,25},{39,15},{44,25}},3,{{{10,21,17}, {P_5,S_5,P_6}, {4,1,3}, 5, nil, nil, nil, FP, 1},{{10,21,17}, {P_4,S_5,S_4}, {3,2,1}, 5, nil, nil, nil, FP, 1}})
+	GunWave(133,23,{{38,25},{39,15},{44,25}},3,{{{78,88,77}, {P_3,S_5,P_6}, {4,1,5}, 5, nil, nil, nil, FP, 1},{{78,88,77}, {P_4,S_5,P_6}, {5,2,6}, 5, nil, nil, nil, FP, 1}})
+	GunWave(133,28,{{53,25},{21,15},{48,15},{55,25}},3,{{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {4,6,3,3}, "MAX", nil, nil, nil, FP, 1},{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {4,6,3,3}, "MAX", nil, nil, nil, FP, 1}})
+	GunWave(133,29,{{53,25},{21,15},{48,15},{55,25}},3,{{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {4,6,3,3}, "MAX", nil, nil, nil, FP, 1},{{25,56,53,48}, {P_8,P_5,P_6,P_7}, {4,6,3,3}, "MAX", nil, nil, nil, FP, 1}})
+	GunWave(133,30,{{53,25},{48,15},{55,25}},3,{{{25,19,77,29}, {S_6,P_6,P_6,P_5}, {1,2,3,1}, 10, nil, nil, nil, FP, 1},{{25,19,77,29}, {S_8,P_6,P_6,P_6}, {1,2,3,1}, 10, nil, nil, nil, FP, 1}})
+	GunWave(133,31,{{53,25},{48,15},{55,25}},3,{{{25,17,78,29}, {S_6,P_6,P_6,P_5}, {1,2,3,1}, 10, nil, nil, nil, FP, 1},{{25,17,78,29}, {S_8,P_6,P_6,P_6}, {1,2,3,1}, 10, nil, nil, nil, FP, 1}})
+	GunWave(133,32,{{53,25},{48,15},{55,25}},3,{{{25,10,17,28}, {S_6,P_5,P_6,P_7}, {1,2,3,3}, 10, nil, nil, nil, FP, 1},{{25,10,17,28}, {S_8,P_5,P_6,P_7}, {1,2,3,3}, 10, nil, nil, nil, FP, 1}})
+	GunWave(133,33,{{53,25},{48,15},{55,25}},3,{{{25,23,19,28}, {S_6,P_5,P_6,P_7}, {1,1,3,3}, 10, nil, nil, nil, FP, 1},{{25,23,19,28}, {S_8,P_5,P_6,P_7}, {1,1,3,3}, 10, nil, nil, nil, FP, 1}})
+	GunWave(133,43,{{53,25},{48,15},{55,25}},3,{{{98,79,56,77}, {P_6,P_5,P_6,P_7}, {2,3,3,4}, 10, nil, nil, nil, FP, 1},{{98,79,56,77}, {P_8,P_5,P_6,P_7}, {2,3,3,4}, 10, nil, nil, nil, FP, 1}})
+	GunWave(133,44,{{53,25},{48,15},{55,25}},3,{{{98,79,56,78}, {P_6,P_8,P_6,P_7}, {2,1,3,4}, 10, nil, nil, nil, FP, 1},{{98,75,56,78}, {P_8,P_8,P_6,P_7}, {2,1,3,4}, 10, nil, nil, nil, FP, 1}})
+	GunWave(148,34,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,29}, "ACAS", {"LOvPF","LOverM"}, "MAX", nil, nil, nil, FP, 1},{{25,29}, "ACAS", {"LOvPF","LOverM"}, "MAX", nil, nil, nil, FP, 1}})
+	GunWave(148,35,{{53,20},{54,30},{48,15},{55,25}},4,{{{25,29}, "ACAS", {"ROvPF","ROverM"}, "MAX", nil, nil, nil, FP, 1},{{25,29}, "ACAS", {"ROvPF","ROverM"}, "MAX", nil, nil, nil, FP, 1}})
+	
+	GunWave(150,36,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98,79}, "ACAS", "Chry1", "MAX", nil, nil, nil, FP, 1},{{98,79}, "ACAS", "Chry1", "MAX", nil, nil, nil, FP, 1}})
+	GunWave(150,37,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98,79}, "ACAS", "Chry2", "MAX", nil, nil, nil, FP, 1},{{98,79}, "ACAS", "Chry2", "MAX", nil, nil, nil, FP, 1}})
+	GunWave(150,38,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{98,29,79,17}, "ACAS", "Chry3", "MAX", nil, nil, nil, FP, 1},{{98,29,79,17}, "ACAS", "Chry3", "MAX", nil, nil, nil, FP, 1}}) -- 중보건물. 따로 안넣어도됨
+	GunWave(150,39,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{29,17}, "ACAS", "Chry4", "MAX", nil, nil, nil, FP, 1},{{29,17}, "ACAS", "Chry4", "MAX", nil, nil, nil, FP, 1}})
+	GunWave(150,40,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{29,17}, "ACAS", "Chry5", "MAX", nil, nil, nil, FP, 1},{{29,17}, "ACAS", "Chry5", "MAX", nil, nil, nil, FP, 1}})
+	
+	CIfXEnd()
+
+
+
 	TCC=CIfGunWave(168,46,1505,5)
 	local NR = CreateCcode()
+	GunCcode = CreateCcode()
+	CurGunP = CreateVar(FP)
 	DoActionsX(FP,{AddCD(NR,1)})
+	CIfX(FP,{CD(GMode,0)})
 	f_TempRepeat({}, 88, 1, 201, FP)
 	f_TempRepeat({}, 21, 1, 201, FP)
 	CIf(FP,{CD(NR,10,AtLeast)},SubCD(NR,10))
@@ -163,8 +235,44 @@ end
 	f_TempRepeat({}, 29, 1, 201, FP,{1376,768})
 	f_TempRepeat({}, 29, 1, 201, FP,{1536,672})
 	CIfEnd()
-	DoActions(FP, {Order(88, FP, 46, Move, 46),Order(21, FP, 46, Move, 46),Order(29, FP, 46, Move, 46),})
-	TriggerX(FP, {CD(TCC,250)}, {SetCD(TCC,999999),SetCp(FP),RunAIScriptAt(JYD, 46),SetInvincibility(Disable, "Men", FP, 46)})
+	CElseX()
+	f_TempRepeat({}, 88, 1, 32, FP)
+	f_TempRepeat({}, 21, 1, 32, FP)
+	CIf(FP,{CD(NR,10,AtLeast)},SubCD(NR,10))
+	f_TempRepeat({}, 29, 1, 32, FP,{1536,896})
+	f_TempRepeat({}, 29, 1, 32, FP,{1696,768})
+	f_TempRepeat({}, 29, 1, 32, FP,{1376,768})
+	f_TempRepeat({}, 29, 1, 32, FP,{1536,672})
+	CIfEnd()
+
+	CIfXEnd()
+	
+	for i = 0, 6 do
+		TriggerX(FP, {CD(GMode,1),Kills(i, AtLeast, 1, 168)}, {SetV(CurGunP,i),SetKills(i, Subtract, 1, 168)})
+	end
+
+	for i = 0, 6 do
+		CTrigger(FP, {CD(GMode,1),CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
+	end
+	NA = CreateVar(FP)
+	f_Lengthdir(FP, 128, NA, CPosX, CPosY)
+	CAdd(FP,NA,15)
+	Simple_SetLocX(FP,0, _Add(G_CA_X,CPosX), _Add(G_CA_Y,CPosY), _Add(G_CA_X,CPosX), _Add(G_CA_Y,CPosY))
+	CTrigger(FP, {CD(GMode,0)}, {Order(88, FP, 46, Move, 46),Order(21, FP, 46, Move, 46),Order(29, FP, 46, Move, 46)},{preserved})
+	CTrigger(FP, {CD(GMode,1)}, {TOrder(88, FP, 64, Move, 1),TOrder(21, FP, 64, Move, 1),TOrder(29, FP, 64, Move, 1)},{preserved})
+
+
+	TriggerX(FP, {CD(TCC,250),CD(GMode,0)}, {SetCD(TCC,999999),SetCp(FP),RunAIScriptAt(JYD, 46),SetInvincibility(Disable, "Men", FP, 64)})
+	CIfOnce(FP,{CD(TCC,250),CD(GMode,1)})
+		CFor(FP, 19025, 19025+(84*1700), 84)
+		CI = CForVariable()
+			CTrigger(FP, {TTOR({
+				_TMemoryX(_Add(CI,25), Exactly, 88,0xFF),_TMemoryX(_Add(CI,25), Exactly, 21,0xFF),_TMemoryX(_Add(CI,25), Exactly, 29,0xFF),
+			})}, {TSetMemoryX(_Add(CI,19), SetTo, 187*256, 0xFF00),
+			TSetDeathsX(_Add(CI,18),SetTo,4000,0,0xFFFF)}, {preserved})
+		CForEnd()
+	CIfEnd()
+	TriggerX(FP, {CD(TCC,250),CD(GMode,1)}, {SetCD(TCC,999999),SetCp(FP),RunAIScriptAt(JYD, 46),SetInvincibility(Disable, "Men", FP, 64)})
 	CIfEnd()
 	--TriggerX(FP, {}, {}, {preserved})
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 131)}, {SetDeaths(FP, Subtract, 1, 131),SetScore(Force1, Add, 25000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07부화장 파괴! \x1F+ 25,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
@@ -347,20 +455,27 @@ end
 	CT = CreateCcode()
 	DoActionsX(FP, {SubCD(CT,1)})
 	TriggerX(FP,{CD(CPt[7],0),CD(CT,0)}, {SetInvincibility(Disable, 94, FP, 64)},{preserved})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7500000*256)}, {SetCD(CPt2[1],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7000000*256)}, {SetCD(CPt[1],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6500000*256)}, {SetCD(CPt2[2],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6000000*256)}, {SetCD(CPt[2],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5500000*256)}, {SetCD(CPt2[3],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5000000*256)}, {SetCD(CPt[3],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4500000*256)}, {SetCD(CPt2[4],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4000000*256)}, {SetCD(CPt[4],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3500000*256)}, {SetCD(CPt2[5],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3000000*256)}, {SetCD(CPt[5],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2500000*256)}, {SetCD(CPt2[6],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2000000*256)}, {SetCD(CPt[6],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256)}, {SetCD(CPt2[7],1),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1000000*256)}, {SetCD(CPt[7],1),AddCD(CT,500000),SetInvincibility(Enable, "Any unit", AllPlayers, 64),SetDeaths(FP, SetTo, 1, 94),TSetMemory(_Add(BossPtr,2), SetTo, 1000000*256)},{preserved})
+	CIf(FP,{TMemory(_Add(BossPtr,2),AtMost,4000000*256),CD(GMode,1)},{MoveLocation(49, 94, FP, 64)})
+	GetLocCenter(48, G_CA_X, G_CA_Y)
+	CPC= CreateCcode()
+	TriggerX(FP, {CD(CT,50,AtMost),CD(CT,1,AtLeast)}, {Order("Any unit", FP, 64, Move, 48)},{preserved})
+	TriggerX(FP, {CD(CT,0,AtMost),CD(CPC,0,AtMost)}, {SetCD(CPC,1),Order("Any unit", FP, 64, Attack, 48)},{preserved})
+
+	CIfEnd()
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7500000*256)}, {SetCD(CPt2[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7000000*256)}, {SetCD(CPt[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6500000*256)}, {SetCD(CPt2[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6000000*256)}, {SetCD(CPt[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5500000*256)}, {SetCD(CPt2[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5000000*256)}, {SetCD(CPt[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4500000*256)}, {SetCD(CPt2[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4000000*256)}, {SetCD(CPt[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3500000*256)}, {SetCD(CPt2[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3000000*256)}, {SetCD(CPt[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2500000*256)}, {SetCD(CPt2[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2000000*256)}, {SetCD(CPt[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256)}, {SetCD(CPt2[7],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1000000*256)}, {SetCD(CPt[7],1),SetCD(CPC,0),AddCD(CT,500000),SetInvincibility(Enable, "Any unit", AllPlayers, 64),SetDeaths(FP, SetTo, 1, 94),TSetMemory(_Add(BossPtr,2), SetTo, 1000000*256)},{preserved})
 
 	CIfOnce(FP,{CV(NR,64,AtMost)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)

@@ -16,6 +16,7 @@ function Include_Vars()
 	UnitPosArr = CreateArr(1700, FP)
 	
 	--Vars
+	ExRate = CreateVar2(FP, nil, nil, 13)
 	Nextptrs = CreateVar(FP)
 	BGMType = CreateVar(FP)
 	TestMode = CreateCcode()
@@ -29,6 +30,8 @@ function Include_Vars()
 	PlayerV=CreateVar(FP)
 	UnitRepIndex = CreateVar(FP)
 	GMode = CreateCcode()
+	PPosX = CreateVarArr(7, FP)
+	PPosY = CreateVarArr(7, FP)
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
