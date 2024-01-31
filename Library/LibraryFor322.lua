@@ -1116,6 +1116,13 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거�
 		CMov(PlayerID,DestX,RetX)
 		CMov(PlayerID,DestY,RetY)
 	end
+	function TGetLocCenter(Location,DestX,DestY)
+		CDoActions(PlayerID, {TMoveLocation(TempLoc, TempUnit, PlayerID, Location)})
+
+		CallTrigger(PlayerID,Call_GetCLoc,{Simple_SetLoc(TempLocID,0,0,0,0)})
+		CMov(PlayerID,DestX,RetX)
+		CMov(PlayerID,DestY,RetY)
+	end
 	function SetLocCenter(Location,DestLocation)
 		local Location2, Location = ConvertLocation(Location)
 		CallTrigger(PlayerID,Call_GetCLoc,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
