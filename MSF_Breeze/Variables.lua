@@ -28,7 +28,7 @@ function Include_Vars()
 	RepHeroIndex = CreateVar(FP)
 	PlayerV=CreateVar(FP)
 	UnitRepIndex = CreateVar(FP)
-
+	GMode = CreateCcode()
 	--strings
 	
 	_0D = string.rep("\x0D",200) 

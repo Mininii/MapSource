@@ -1,4 +1,6 @@
 function Interface()
+
+
 	local DelayMedic = CreateCcodeArr(7)
 	local GiveRate = CreateCcodeArr(7)
 	local BanCode = CreateCcodeArr(6)
@@ -18,7 +20,7 @@ function Interface()
 			CAdd(FP,count,count5)
 	end
 	Install_UnitCount(FP)
-
+	
 	Dt = IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
 		{1,"staredit\\wav\\BrOP.ogg",188*1000},
 		{2,{"staredit\\wav\\BGM1_1.ogg","staredit\\wav\\BGM1_2.ogg"},45*1000},
@@ -48,10 +50,10 @@ function Interface()
 		Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
 	end
 Cunit2 = CreateVar(FP)
-Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
-    CIfX(FP,Never()) -- 상위플레이어 단락 시작
+GS = CreateCcode()
+CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
-        CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i)})
+        CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i),GiveUnits(All, 15, AllPlayers, 64, i)})
 		if Limit == 1 then
 			
 			f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
@@ -59,6 +61,23 @@ Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUn
 
 	end
     CIfXEnd()
+
+
+	CIf(FP,{CD(GS,0)},{MoveUnit(All, "Men", Force1, 64, 50),})
+	GST = CreateCcode()
+	DoActions2(FP, {RotatePlayer({CenterView(50)}, HumanPlayers, FP)})
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04난이도를 선택해 주십시오.").."\n"..StrDesignX("\x04- \x03난이도 설명 \x04-"), 4)}, HumanPlayers, FP)},1)
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다."), 4)}, HumanPlayers, FP)},1)
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 추가 방해 요소가 많아져 조금 더 어려워졌으나 환전률이 소폭 상승하였습니다."), 4)}, HumanPlayers, FP)},1)
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 51)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 52)}, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers),SetCD(GMode,1)})
+	TriggerX(FP, {CD(GST,1,AtLeast)},{AddCD(GST,1)},{preserved})
+	TriggerX(FP, {CD(GST,100,AtLeast)},{SetCD(GS,1)},{preserved})
+	CIfEnd()
+	CIfOnce(FP,{CD(GS,1)},{SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2),SetResources(Force1, Add, 25000, Ore),RemoveUnit(15, AllPlayers),RemoveUnit(195, AllPlayers),RemoveUnit(196, AllPlayers)})
+	DoActions2(FP, {RotatePlayer({CenterView(2)}, HumanPlayers, FP)})
+	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
+	CIfEnd()
 
 	if Limit == 1 then
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
@@ -539,5 +558,5 @@ end
 		ObserverChatToNone(FP,0x58D740+(20*59),i,"INSERT",10,nil,{SetMemory(0x6509B0,SetTo,i),DisplayText("\x0D\x0D!H"..StrDesign("\x02채팅→대상없음\x04에게 메세지를 보냅니다.(귓말 명령어 등 전용)").."\x0D\x0D",4),PlayWAV("staredit\\wav\\button3.wav"),SetMemory(0x6509B0,SetTo,FP)})
 	end
 
-	
+
 end

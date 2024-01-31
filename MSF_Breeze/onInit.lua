@@ -164,7 +164,7 @@ end
 	SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,0),
 	SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,0),
 	SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetResources(Force1, Add, 25000, Ore),SetCp(FP),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2)})
+	SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetCp(FP)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 
 

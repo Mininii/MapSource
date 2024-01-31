@@ -1139,13 +1139,14 @@ local G_CA_Launch = CreateCcode()
 function CA_Repeat()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
-	if X2_Mode == 1 then 
-		CIfX(FP,{CVar(FP,CA[8],AtMost,4096*2),CVar(FP,CA[9],AtMost,4096*2)})
-	else
-		CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
-	end
+	
+	CIfX(FP,{CVar(FP,CA[8],AtMost,4096),CVar(FP,CA[9],AtMost,4096)})
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
-	CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})--RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)
+	if Limit == 1 then
+		CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})--
+	else
+		CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})--RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)
+	end
 	CIfXEnd()
 end
 
