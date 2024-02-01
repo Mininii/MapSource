@@ -883,6 +883,34 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
 				})
 
+
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,18))
+			
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);
+			})
+			local RandVar = CreateVar(FP)
+			CMov(FP,RandVar,0)
+			for i = 0, 6 do
+				DoActions(FP, {SetSwitch(RandSwitch1, Random)})
+				TriggerX(FP, {HumanCheck(i, 1),Switch(RandSwitch1, Set)}, {SetVX(RandVar,2^i,2^i)}, {preserved})
+			end
+			CTrigger(FP,{CD(GMode,1),},{
+				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x100,0x100); -- 클로킹
+				TSetMemoryX(_Add(G_CA_Nextptrs,57),SetTo,RandVar,0xFF); -- 현재건작 유저 인식
+				TSetMemoryX(_Add(G_CA_Nextptrs,73),SetTo,_Mul(RandVar,0x100),0xFF00); -- 현재건작 유저 인식
+				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+				TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,1,0xFF); -- 개별건작 표식
+				TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,1*256,0xFF00);
+				TSetMemoryX(_Add(G_CA_Nextptrs,70),SetTo,48*16777216,0xFF000000); -- 개별건작 타이머
+
+			},{preserved})
+
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,147))
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()

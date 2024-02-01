@@ -193,10 +193,12 @@ end
 	CElseX()
 	--SetTT(LocID,Unitargs)
 	SetTTX(8,{8,50,51},{{88,15},{21,15}})
-	SetTTX(8,{9,52,53},{{88,15},{21,15}})
+	SetTTX(9,{9,52,53},{{88,15},{21,15}})
 	SetTT(54,{{25,15},{28,15}})
 	SetTT(55,{{25,15},{28,15}})
-	SetTT(56,{{23,5}})
+	SetTT(73,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP, 1}})
+	SetTT(74,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP, 1}})
+	SetTT(56,{{23,5}},{{{88,21,76,17}, {P_6,S_6,P_4,S_4}, {3,1,3,1}, "MAX", nil, nil, nil, FP}})
 
 	GunWave(133,22,{{38,25},{39,15},{44,25}},3,{{{10,21,17}, {P_5,S_5,P_6}, {4,1,3}, 5, nil, nil, nil, FP, 1},{{10,21,17}, {P_4,S_5,S_4}, {3,2,1}, 5, nil, nil, nil, FP, 1}})
 	GunWave(133,23,{{38,25},{39,15},{44,25}},3,{{{78,88,77}, {P_3,S_5,P_6}, {4,1,5}, 5, nil, nil, nil, FP, 1},{{78,88,77}, {P_4,S_5,P_6}, {5,2,6}, 5, nil, nil, nil, FP, 1}})
@@ -317,7 +319,9 @@ end
 	
 	TriggerX(FP,{CD(WinCcode,1,AtLeast)},{AddCD(WinCcode,1)},{preserved})
 	Trigger2X(FP,{CD(WinCcode,150,AtLeast)},{RotatePlayer({Victory()}, MapPlayers,FP)})
-	Trigger2X(FP,{CD(WinCcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 \x08지옥같은 산들바람\x04의 원흉인 \x03카카루\x04를 제거하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, MapPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 \x08지옥같은 산들바람\x04의 원흉인 \x03카카루\x04를 제거하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, HumanPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,0)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : 노말"), 4)}, HumanPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : \x11프로페셔널"), 4)}, HumanPlayers,FP),})
 
 	
 	--WaveS[2] 라그나사우르
@@ -326,14 +330,44 @@ end
 	--WaveS[5] 벤갈라스
 	--MB5 다고스 두개이후 스캔티드
 	--
-	MBPtr = CreateVarArr(5, FP)
 	CIfOnce(FP, {Memory(0x628438, AtLeast, 1),CD(WaveS[2],1)},{})
+	for i = 0, 6 do
+			TriggerX(FP,{Kills(i,AtLeast,1,151)},{
+				SetNVar(VFlagB[1],SetTo,2^i);
+				SetNVar(VFlag256B[1],SetTo,(2^i)*256);
+				SetKills(i,SetTo,0,151);
+			},{preserved})
+	end 
+
+
 	f_Read(FP, 0x628438, nil, MBPtr[1])
+
+
 	DoActions(FP, {CreateUnit(1, 95, 8, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03라그나사우르 \x08출현!!!"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 
 
 	CIf(FP,{Command(FP,AtLeast,1,95),CV(MBPtr[1],1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(49, 95, FP, 64),MoveLocation(1, 95, FP, 64)})
+	
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[1],1000,AtMost)},{
+		TSetMemoryX(Vi(MBPtr[1][2],55),SetTo,0x100,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[1][2],57),SetTo,VFlagB[1],0xFF); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[1][2],73),SetTo,VFlag256B[1],0xFF00); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[1][2],72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+		TSetMemoryX(Vi(MBPtr[1][2],72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+		TSetMemoryX(Vi(MBPtr[1][2],35),SetTo,1,0xFF); -- 개별건작 표식
+		TSetMemoryX(Vi(MBPtr[1][2],35),SetTo,1*256,0xFF00);
+		AddV(VTimerB[1],1)
+	},{preserved})
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[1],1001,AtLeast)},{
+		TSetMemoryX(Vi(MBPtr[1][2],72),SetTo,0*256,0xFF00);  -- Disable Parasite Flag
+		TSetMemoryX(Vi(MBPtr[1][2],72),SetTo,0*16777216,0xFF000000);  -- Disable Blind
+		TSetMemoryX(Vi(MBPtr[1][2],55),SetTo,0,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[1][2],57),SetTo,0xFF,0xFF); -- 현재건작 유저 인식
+	},{preserved})
+
+
+
 	MBPtC = CreateCcode()
 	DoActionsX(FP, {SubCD(MBPtC,1)})
 	CIf(FP,{CD(MBPtC,0)},{AddCD(MBPtC,120)})
@@ -345,23 +379,76 @@ end
 
 
 	CIfOnce(FP, {Memory(0x628438, AtLeast, 1),CD(WaveS[3],1)})
+	
+	for i = 0, 6 do
+		TriggerX(FP,{Kills(i,AtLeast,1,151)},{
+			SetNVar(VFlagB[2],SetTo,2^i);
+			SetNVar(VFlag256B[2],SetTo,(2^i)*256);
+			SetKills(i,SetTo,0,151);
+		},{preserved})
+end 
 	f_Read(FP, 0x628438, nil, MBPtr[2])
 	DoActions(FP, {CreateUnit(1, 89, 9, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03라이나돈 \x08출현!!!"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 
 	CIf(FP,{Command(FP,AtLeast,1,89),CV(MBPtr[2],1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(1, 89, FP, 64)})
+	
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[2],1000,AtMost)},{
+		TSetMemoryX(Vi(MBPtr[2][2],55),SetTo,0x100,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[2][2],57),SetTo,VFlagB[2],0xFF); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[2][2],73),SetTo,VFlag256B[2],0xFF00); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[2][2],72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+		TSetMemoryX(Vi(MBPtr[2][2],72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+		TSetMemoryX(Vi(MBPtr[2][2],35),SetTo,1,0xFF); -- 개별건작 표식
+		TSetMemoryX(Vi(MBPtr[2][2],35),SetTo,1*256,0xFF00);
+		AddV(VTimerB[2],1)
+	},{preserved})
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[2],1001,AtLeast)},{
+		TSetMemoryX(Vi(MBPtr[2][2],72),SetTo,0*256,0xFF00);  -- Disable Parasite Flag
+		TSetMemoryX(Vi(MBPtr[2][2],72),SetTo,0*16777216,0xFF000000);  -- Disable Blind
+		TSetMemoryX(Vi(MBPtr[2][2],55),SetTo,0,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[2][2],57),SetTo,0xFF,0xFF); -- 현재건작 유저 인식
+	},{preserved})
+
+
+
 	for i = 14,1,-1 do
 		CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(3, 74, 1, FP,{invincible = true})})
 	end
 	CIfEnd()
 
 	CIfOnce(FP, {Memory(0x628438, AtLeast, 1),CD(WaveS[4],1)})
+	
+	for i = 0, 6 do
+		TriggerX(FP,{Kills(i,AtLeast,1,201)},{
+			SetNVar(VFlagB[3],SetTo,2^i);
+			SetNVar(VFlag256B[3],SetTo,(2^i)*256);
+			SetKills(i,SetTo,0,201);
+		},{preserved})
+end 
 	f_Read(FP, 0x628438, nil, MBPtr[3])
 	DoActions(FP, {CreateUnit(1, 96, 10, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03우르사돈 \x08출현!!!"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 
 
 	CIf(FP,{Command(FP,AtLeast,1,96),CV(MBPtr[3],1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(49, 96, FP, 64),MoveLocation(1, 96, FP, 64)})
+	
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[3],1000,AtMost)},{
+		TSetMemoryX(Vi(MBPtr[3][2],55),SetTo,0x100,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[3][2],57),SetTo,VFlagB[3],0xFF); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[3][2],73),SetTo,VFlag256B[3],0xFF00); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[3][2],72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+		TSetMemoryX(Vi(MBPtr[3][2],72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+		TSetMemoryX(Vi(MBPtr[3][2],35),SetTo,1,0xFF); -- 개별건작 표식
+		TSetMemoryX(Vi(MBPtr[3][2],35),SetTo,1*256,0xFF00);
+		AddV(VTimerB[3],1)
+	},{preserved})
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[3],1001,AtLeast)},{
+		TSetMemoryX(Vi(MBPtr[3][2],72),SetTo,0*256,0xFF00);  -- Disable Parasite Flag
+		TSetMemoryX(Vi(MBPtr[3][2],72),SetTo,0*16777216,0xFF000000);  -- Disable Blind
+		TSetMemoryX(Vi(MBPtr[3][2],55),SetTo,0,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[3][2],57),SetTo,0xFF,0xFF); -- 현재건작 유저 인식
+	},{preserved})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
 	MBPtC = CreateCcode()
 	DoActionsX(FP, {SubCD(MBPtC,1)})
@@ -373,14 +460,73 @@ end
 	
 
 	CIfOnce(FP, {Memory(0x628438, AtLeast, 1),CD(WaveS[5],1)})
+	
+	for i = 0, 6 do
+		TriggerX(FP,{Kills(i,AtLeast,1,201)},{
+			SetNVar(VFlagB[4],SetTo,2^i);
+			SetNVar(VFlag256B[4],SetTo,(2^i)*256);
+			SetKills(i,SetTo,0,201);
+		},{preserved})
+end 
 	f_Read(FP, 0x628438, nil, MBPtr[4])
 	DoActions(FP, {CreateUnit(1, 90, 11, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03벤갈라스 \x08출현!!!"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 
+	
+
+	CIf(FP,{Command(FP,AtLeast,1,90),CV(MBPtr[4],1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(49, 90, FP, 64),MoveLocation(1, 90, FP, 64)})
+
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[4],1000,AtMost)},{
+		TSetMemoryX(Vi(MBPtr[4][2],55),SetTo,0x100,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[4][2],57),SetTo,VFlagB[4],0xFF); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[4][2],73),SetTo,VFlag256B[4],0xFF00); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[4][2],72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+		TSetMemoryX(Vi(MBPtr[4][2],72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+		TSetMemoryX(Vi(MBPtr[4][2],35),SetTo,1,0xFF); -- 개별건작 표식
+		TSetMemoryX(Vi(MBPtr[4][2],35),SetTo,1*256,0xFF00);
+		AddV(VTimerB[4],1)
+	},{preserved})
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[4],1001,AtLeast)},{
+		TSetMemoryX(Vi(MBPtr[4][2],72),SetTo,0*256,0xFF00);  -- Disable Parasite Flag
+		TSetMemoryX(Vi(MBPtr[4][2],72),SetTo,0*16777216,0xFF000000);  -- Disable Blind
+		TSetMemoryX(Vi(MBPtr[4][2],55),SetTo,0,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[4][2],57),SetTo,0xFF,0xFF); -- 현재건작 유저 인식
+	},{preserved})
+	CIfEnd()
+
 
 	CIfOnce(FP, {Memory(0x628438, AtLeast, 1),CD(MB5,1)})
+	
+	for i = 0, 6 do
+		TriggerX(FP,{Kills(i,AtLeast,1,152)},{
+			SetNVar(VFlagB[5],SetTo,2^i,2^i);
+			SetNVar(VFlag256B[5],SetTo,(2^i)*256,(2^i)*256);
+			SetKills(i,SetTo,0,152);
+		},{preserved})
+	end 
 	f_Read(FP, 0x628438, nil, MBPtr[5])
 	DoActions(FP, {CreateUnit(1, 93, 48, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03스캔티드 \x08출현!!!"), 4)}, HumanPlayers, FP)})
+	CIfEnd()
+	
+
+	CIf(FP,{Command(FP,AtLeast,1,93),CV(MBPtr[5],1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(49, 93, FP, 64),MoveLocation(1, 93, FP, 64)})
+
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[5],1000,AtMost)},{
+		TSetMemoryX(Vi(MBPtr[5][2],55),SetTo,0x100,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[5][2],57),SetTo,VFlagB[5],0xFF); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[5][2],73),SetTo,VFlag256B[5],0xFF00); -- 현재건작 유저 인식
+		TSetMemoryX(Vi(MBPtr[5][2],72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+		TSetMemoryX(Vi(MBPtr[5][2],72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+		TSetMemoryX(Vi(MBPtr[5][2],35),SetTo,1,0xFF); -- 개별건작 표식
+		TSetMemoryX(Vi(MBPtr[5][2],35),SetTo,1*256,0xFF00);
+		AddV(VTimerB[5],1)
+	},{preserved})
+	CTrigger(FP,{CD(GMode,1),CV(VTimerB[5],1001,AtLeast)},{
+		TSetMemoryX(Vi(MBPtr[5][2],72),SetTo,0*256,0xFF00);  -- Disable Parasite Flag
+		TSetMemoryX(Vi(MBPtr[5][2],72),SetTo,0*16777216,0xFF000000);  -- Disable Blind
+		TSetMemoryX(Vi(MBPtr[5][2],55),SetTo,0,0x100); -- 클로킹
+		TSetMemoryX(Vi(MBPtr[5][2],57),SetTo,0xFF,0xFF); -- 현재건작 유저 인식
+	},{preserved})
 	CIfEnd()
 
 
@@ -402,6 +548,14 @@ end
 
 
 	CIfOnce(FP,{Bring(FP, AtMost, 0, 147, 64),Memory(0x628438, AtLeast, 1),},{SetDeathsX(Force1, Add, 100, 12, 0xFFFFFF),SetCD(BossStart,1),Order("Any unit", FP, 64, Attack, 47)})
+
+	for i = 0, 6 do
+		TriggerX(FP,{Kills(i,AtLeast,1,147)},{
+			SetNVar(VFlagB[6],SetTo,2^i,2^i);
+			SetNVar(VFlag256B[6],SetTo,(2^i)*256,(2^i)*256);
+			SetKills(i,SetTo,0,147);
+		},{preserved})
+	end 
 	BossPtr = CreateVar(FP)
 	f_Read(FP, 0x628438, nil, BossPtr)
 	DoActions(FP, {CreateUnit(1, 94, 47, FP)})
@@ -455,100 +609,149 @@ end
 	CT = CreateCcode()
 	DoActionsX(FP, {SubCD(CT,1)})
 	TriggerX(FP,{CD(CPt[7],0),CD(CT,0)}, {SetInvincibility(Disable, 94, FP, 64)},{preserved})
-	CIf(FP,{TMemory(_Add(BossPtr,2),AtMost,4000000*256),CD(GMode,1)},{MoveLocation(49, 94, FP, 64)})
+	CIf(FP,{TMemory(_Add(BossPtr,2),AtMost,2500000*256),CD(GMode,1)},{MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
 	CPC= CreateCcode()
 	TriggerX(FP, {CD(CT,50,AtMost),CD(CT,1,AtLeast)}, {Order("Any unit", FP, 64, Move, 48)},{preserved})
 	TriggerX(FP, {CD(CT,0,AtMost),CD(CPC,0,AtMost)}, {SetCD(CPC,1),Order("Any unit", FP, 64, Attack, 48)},{preserved})
 
 	CIfEnd()
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7500000*256)}, {SetCD(CPt2[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7000000*256)}, {SetCD(CPt[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6500000*256)}, {SetCD(CPt2[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6000000*256)}, {SetCD(CPt[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5500000*256)}, {SetCD(CPt2[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5000000*256)}, {SetCD(CPt[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4500000*256)}, {SetCD(CPt2[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4000000*256)}, {SetCD(CPt[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3500000*256)}, {SetCD(CPt2[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3000000*256)}, {SetCD(CPt[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2500000*256)}, {SetCD(CPt2[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2000000*256)}, {SetCD(CPt[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256)}, {SetCD(CPt2[7],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
-	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1000000*256)}, {SetCD(CPt[7],1),SetCD(CPC,0),AddCD(CT,500000),SetInvincibility(Enable, "Any unit", AllPlayers, 64),SetDeaths(FP, SetTo, 1, 94),TSetMemory(_Add(BossPtr,2), SetTo, 1000000*256)},{preserved})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,6000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[2],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,5000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[3],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,4000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[4],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,3000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[5],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[7],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[7],1),SetCD(CPC,0),AddCD(CT,500000),SetInvincibility(Enable, "Any unit", AllPlayers, 64),SetDeaths(FP, SetTo, 1, 94),TSetMemory(_Add(BossPtr,2), SetTo, 1000000*256)},{preserved})
 
+	CTrigger(FP, {CD(GMode,1),TMemory(_Add(BossPtr,2),AtMost,1500000*256),Bring(FP, AtLeast, 11, "Any unit", 64)}, {SetInvincibility(Enable, 94, FP, 64)},{preserved})
+	CIf(FP,CD(GMode,1))
+	CunitCtrig_Part1(FP)
+	MoveCp("X",70*4)
+	NJumpX(FP,0x303,Deaths(CurrentPlayer,AtLeast,1*16777216,0)) -- GunTimer
+	
+	DoActions(FP,{ -- GunTimer Exactly 0
+		MoveCp(Add,2*4);
+		SetDeathsX(CurrentPlayer,SetTo,0*256,0,0xFF00); -- Disable Parasite Flag
+		SetDeathsX(CurrentPlayer,SetTo,0*16777216,0,0xFF000000); -- Disable Blind
+		MoveCp(Subtract,37*4);
+		SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF); -- Unused 0x8C
+		MoveCp(Add,20*4);
+		SetDeathsX(CurrentPlayer,SetTo,0,0,0x100); -- Unused 0x8C
+
+		MoveCp(Add,2*4);
+		SetDeathsX(CurrentPlayer,SetTo,0xFF,0,0xFF); -- Unused 0x8C
+
+		MoveCp(Add,15*4);
+	})
+	
+	ClearCalc()
+	NJumpXEnd(FP,0x303) -- If GunTimer AtLeast 1 (Arrival Point)
+	
+	DoActions(FP,MoveCp(Add,3*4)) -- Unused Timer
+	
+	for i = 0, 6 do -- If VFlag256 == 2^5, Set P6
+	Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,256*(2^i),0,0xFF00)},{
+		MoveCp(Subtract,16*4);
+		SetDeathsX(CurrentPlayer,SetTo,2^i,0,0xFF);
+		MoveCp(Add,16*4)},{Preserved})
+	end
+	
+	ClearCalc()
+	CunitCtrig_Part2()
+	CunitCtrig_Part3X()
+	for i = 0, 1699 do
+	CunitCtrig_Part4X(i,{
+		DeathsX(EPDF(0x628298-0x150*i+(35*4)),Exactly,1,0,0xFF); -- EPD 35 Unused 0x8C
+	},
+	{
+		SetDeathsX(EPDF(0x628298-0x150*i+(57*4)),SetTo,0,0,0xFF); -- 
+		SetDeathsX(EPDF(0x628298-0x150*i+(55*4)),SetTo,0x100,0,0x100); -- 
+		MoveCp(Add,70*4)})
+	end
+	CunitCtrig_End()
+	CIfEnd()
 	CIfOnce(FP,{CV(NR,64,AtMost)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {88,77}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {88,77}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[1],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {21,17}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {21,17}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[1],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {28,78}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {28,78}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[2],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {21,76}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {21,76}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[2],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {88,78}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {88,78}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[3],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {88,17}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {88,17}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[3],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {21,19}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {21,19}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[4],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {86,17}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {86,17}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[4],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {28,25}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {28,25}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[5],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,75}, Cir, 1, "MAX", nil, nil, nil, FP, 1)
-		G_CA_SetSpawn({}, {21,19}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,75}, Cir, 1, "MAX", 18, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {21,19}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[5],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,10}, Cir, 2, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,10}, Cir, 2, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[6],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,78}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,78}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[6],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {98,79}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {98,79}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[7],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,23}, Cir, 1, "MAX", nil, nil, nil, FP, 1)
-		G_CA_SetSpawn({}, {19,86}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,23}, Cir, 1, "MAX", 18, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {19,86}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
+	
+
 
 	CIfEnd()
 
@@ -556,8 +759,10 @@ end
 	CIf(FP,{CD(BossStart,1)},{SetMemory(0x590000, SetTo, 0)})
 	PCheckV = CreateVar(FP)
 	WinCheck = CreateVar(FP)
+	DebugCc = CreateCcode()
 	CMov(FP,PCheckV,0)
-	CMov(FP,WinCheck,0)
+		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94)}, {AddCD(DebugCc,1)},{preserved})
+		CMov(FP,WinCheck,0)
 	for i = 0, 6 do
 		CIf(FP,{HumanCheck(i, 1)},{AddV(PCheckV,1)})
 		CSub(FP, DtoA(i,12), Dt)
@@ -574,6 +779,7 @@ end
 		DoActions(FP, {SetDeaths(i, SetTo, 0, 14)})
 		CIfEnd()
 	end
+	TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),CD(DebugCc,200,AtLeast)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)},{preserved})
 	for i = 0, 6 do
 	TriggerX(FP, {CD(CPt[7],1),CV(WinCheck,i+1),CV(PCheckV,i+1)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)})
 	end

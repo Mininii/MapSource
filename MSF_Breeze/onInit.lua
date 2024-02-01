@@ -3,16 +3,17 @@ function onInit_EUD()
 -- 첫 번째 플레이어가 P1일 경우 (아닐경우 P1을 다른 플레이어로 바꿔야함)
 	UnitRepIndex2 = CreateVar(FP)
 	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast)})
-
+	RepPlayerID = CreateVar(FP)
 	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
 	f_Read(FP, ArrX(UnitPosArr,UnitRepIndex2), CPos)
 	f_Read(FP, ArrX(UnitIDArr,UnitRepIndex2), RepHeroIndex)
+	f_Read(FP, ArrX(PlayerIDArr,UnitRepIndex2), RepPlayerID)
 	Convert_CPosXY()
 	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-	CDoActions(FP, {TCreateUnit(1, RepHeroIndex, 1, FP),Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	CDoActions(FP, {TCreateUnit(1, RepHeroIndex, 1, RepPlayerID),Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
 	CIfEnd()
 	CAdd(FP,UnitRepIndex2,1)
 	CSub(FP,UnitRepIndex,1)
@@ -56,7 +57,7 @@ function onInit_EUD()
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for j,k in pairs(MedicTrig) do
-		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+(j*50),GasCost=0,BuildTime = j,SuppCost = 0,RdySnd=999})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+((j-1)*50),GasCost=0,BuildTime = j-1,SuppCost = 0,RdySnd=999})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
 	for j,k in pairs(GiveUnitID) do
 		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -196,15 +197,19 @@ end
 	f_Read(FP,_Add(CI,10),CPos)
 	CMov(FP,ArrX(UnitPosArr,UnitRepIndex),CPos)
 	CMov(FP,ArrX(UnitIDArr,UnitRepIndex),RepHeroIndex,nil,0xFF,1)
+	CMov(FP,ArrX(PlayerIDArr,UnitRepIndex),PlayerV,nil,0xFF,1)
 	--CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
 	CAdd(FP,UnitRepIndex,1)
 	CIfEnd()
 	CAdd(FP,CunitIndex,1)
 	CForEnd()
+	removebox = {}
 	for j,k in pairs(UnitPointArr2) do
-		DoActions(FP, {RemoveUnit(k, FP)})
+		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
+		table.insert(removebox,RemoveUnit(k, AllPlayers))
 	end
 
+	DoActions2(FP, removebox)
 
 	CIfEnd()
 	table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 2, AllPlayers))

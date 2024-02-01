@@ -77,7 +77,8 @@ EXCC_ClearCalc()
 		DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
 		},
 		{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
-		SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
+		--SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
+		SetDeathsX(19025+(84*i)+35,SetTo,0,0,0xFF); -- 
 		MoveCp(Add,19*4),
 		SetCVar(FP,CurCunitI2[2],SetTo,i)
 		})

@@ -106,12 +106,35 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	DoActions2(FP, {RotatePlayer({CenterView(2)}, HumanPlayers, FP)})
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
+	CIf(FP,{CD(GMode,1)})
+		CFor(FP,19025,19025+(84*1700),84)
+			CI = CForVariable()
+			CTrigger(FP, {TTOR({
+				_TMemoryX(_Add(CI,25), Exactly, 150,0xFF),
+				_TMemoryX(_Add(CI,25), Exactly, 148,0xFF),
+				_TMemoryX(_Add(CI,25), Exactly, 147,0xFF),
+			})}, {
+				TSetMemoryX(_Add(CI,55), SetTo, 0x100,0x100),
+				TSetMemoryX(_Add(CI,57), SetTo, 0,0xFF),
+			}, {preserved})
+		CForEnd()
+	CIfEnd()
 	CIfEnd()
 
 	if Limit == 1 then
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
-		CIf({FP},CD(TestMode,1)) -- 테스트 트리거
+		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
+
+		
+	for i = 0, 1699 do
+		TriggerX(FP,{ -- 테스트모드 무한스팀
+			DeathsX(EPDF(0x628298-0x150*i+(25*4)),Exactly,20,0,0xFF); -- EPD 35 Unused 0x8C
+		},
+		{
+			SetDeathsX(EPDF(0x628298-0x150*i+(69*4)),SetTo,255*256,0,0xFF00); -- \
+		},{preserved})
+		end
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
@@ -344,13 +367,14 @@ for i = 1, 6 do -- 강퇴기능
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[2],SetTo,0),
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[3],SetTo,0),
 			SetMemoryB(0x57F27C+(228*i)+MedicTrig[4],SetTo,0),
+			SetMemoryB(0x57F27C+(228*i)+MedicTrig[5],SetTo,0),
 		})
 
 
 
 
 
-		for j = 0, 3 do
+		for j = 0, 4 do
 		TriggerX(i,{CDeaths(FP,Exactly,j,DelayMedic[i+1])},{SetMemoryB(0x57F27C+(228*i)+MedicTrig[j+1],SetTo,1)},{preserved})
 		TriggerX(i,{Command(i,AtLeast,1,72),CDeaths(FP,Exactly,j,DelayMedic[i+1])},{
 			DisplayText(DelayMedicT[j+1],4),
@@ -360,11 +384,22 @@ for i = 1, 6 do -- 강퇴기능
 			--SetCDeaths(FP,Add,1,CUnitRefrash);
 			RemoveUnitAt(1,72,"Anywhere",P12)},{preserved})
 		end
-		TriggerX(i,{CDeaths(FP,AtLeast,4,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,4,DelayMedic[i+1])},{preserved})
+		TriggerX(i,{CDeaths(FP,AtLeast,5,DelayMedic[i+1])},{SetCDeaths(FP,Subtract,5,DelayMedic[i+1])},{preserved})
 	
+
 		local MedicTrigJump = def_sIndex()
-		for j = 1, 4 do
-				NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
+		for j = 1, 5 do
+			if Limit == 1 then
+				
+				local TestT = CreateCcode()
+				TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
+				NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CD(TestT,8,AtLeast)},{SetCD(TestT,0)})
+				NJumpX(FP,MedicTrigJump,{CD(TestMode,1),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
+				--NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
+				NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
+			else
+				NJumpX(FP,MedicTrigJump,{Command(i,AtLeast,1,MedicTrig[j])},{})
+			end
 		end
 		
 			NIf(FP,Never())
@@ -374,11 +409,13 @@ for i = 1, 6 do -- 강퇴기능
 						ModifyUnitEnergy(All,MedicTrig[2],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[3],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[4],i,64,0);
+						ModifyUnitEnergy(All,MedicTrig[5],i,64,0);
 						--SetCDeaths(FP,Add,1,CUnitRefrash);
 						RemoveUnit(MedicTrig[1],i),
 						RemoveUnit(MedicTrig[2],i),
 						RemoveUnit(MedicTrig[3],i),
 						RemoveUnit(MedicTrig[4],i),
+						RemoveUnit(MedicTrig[5],i),
 						ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
 						ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
 						ModifyUnitShields(All,"Men",i,"Anywhere",100),
@@ -467,7 +504,7 @@ RunAIScript("Turn ON Shared Vision for Player 5");
 RunAIScript("Turn ON Shared Vision for Player 6");
 RunAIScript("Turn ON Shared Vision for Player 7");
 })
-if Limit == 1 then
+if false then
 	TriggerX(i, {Switch("Switch 254", Set)}, {
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");
