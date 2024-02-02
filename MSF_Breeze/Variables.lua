@@ -58,7 +58,7 @@ function Include_Vars()
 	GiveUnitID = {64,65,66,67,61,63,68}
 	BanToken = {84,69,70,60,71,98}
 
-	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x18P6","\x16P7"} 
+	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
 
 	Str00 = CreateCText(FP,"\x12\x07『 ")
 	Str01 = CreateCText(FP,"\x04의 마린\x04이 산책하다가 \x08발을 삐끗했습니다... \x07』")

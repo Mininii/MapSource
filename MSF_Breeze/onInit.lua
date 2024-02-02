@@ -52,7 +52,7 @@ function onInit_EUD()
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(125,{HP=3000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(125,{HP=5000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -236,5 +236,66 @@ end
 			
 		},
 	}
+
+
+
+	CIf(FP, CD(GMode,1))
+	CMov(FP,CunitIndex,0)
+	GunSel = CreateVar(FP)
+	CMov(FP,0x6509B0,19025+25)
+	CIf(FP,{CV(GunSel,9,AtMost)})
+		CFor(FP, 19025, 19025+(84*1700), 84)
+		CI = CForVariable()
+
+		CIf(FP,{CV(GunSel,10,AtMost),TTOR({
+			DeathsX(CurrentPlayer,Exactly,134,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,135,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,136,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,137,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,138,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,139,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,140,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,141,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,142,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,149,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,176,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,177,0,0xFF),
+			DeathsX(CurrentPlayer,Exactly,178,0,0xFF),
+		})})
+		RandV = f_CRandNum(100000, 0)
+		CIf(FP, {CV(RandV,500,AtMost),TMemoryX(_Add(CI,9), Exactly, 0,0xFF0000)})
+		
+		if Limit == 1 then
+		CIf(FP,{CD(TestMode,1)})
+		f_SaveCp()
+		f_Read(FP, _Add(CI,10), CPos, nil, nil, 1)
+		Convert_CPosXY()
+		f_Read(FP, 0x628438, nil, Nextptrs)
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+		CDoActions(FP, {CreateUnit(1,84,1,FP),GiveUnits(All, 84, FP, 1, P9),TSetMemory(_Add(Nextptrs,2), SetTo, _Mul(GunSel,256))})
+		f_LoadCp()
+		CIfEnd()
+		end
+
+
+		CAdd(FP,GunSel,1)
+		CDoActions(FP,  {TSetMemoryX(_Add(CI,9), SetTo, 1*65536,0xFF0000),Set_EXCC2(DUnitCalc, CunitIndex, 2, SetTo, GunSel)})
+		CIfEnd()
+
+		CIfEnd()
+
+
+
+
+
+
+
+
+
+		CAdd(FP,0x6509B0,84)
+		CAdd(FP,CunitIndex,1)
+		CForEnd()
+	CIfEnd()
+	CIfEnd()
 
 end

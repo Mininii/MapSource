@@ -28,7 +28,7 @@ end
 function SetTT(LocID,Unitargs,G_CA_args) -- 개별영침
 	local TTC = CreateCcode()
 	for i = 0, 6 do
-		TriggerX(i, {Bring(i, AtLeast, 1, "Men", LocID)}, {AddCD(TTC,1)})
+		Trigger2X(i, {CD(GMode,1),Bring(i, AtLeast, 1, "Men", LocID)}, {AddCD(TTC,1),RotatePlayer({MinimapPing(LocID),DisplayTextX(StrDesignX(PlayerString[i+1].." \x04가 \x08적의 영역\x04을 \x03침범\x04했습니다.."), 4)}, HumanPlayers, i)})
 	end
 	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
@@ -40,15 +40,16 @@ function SetTT(LocID,Unitargs,G_CA_args) -- 개별영침
 			G_CA_SetSpawn({},table.unpack(k))
 		end
 		end
+		DoActions2(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\warn2.ogg"),PlayWAVX("staredit\\wav\\warn2.ogg"),PlayWAVX("staredit\\wav\\warn2.ogg")},HumanPlayers,FP)})
 		
-	CIfEnd()
+		CIfEnd()
 end
 function SetTTX(SLoc,Locs,Unitargs,G_CA_args) -- 개별영침 n구간중 1개만 인식되면 사라짐
 	local TTC = CreateCcode()
 	local LTTC = CreateCcode()
 	for i = 0, 6 do
 		for j,k in pairs(Locs) do
-			TriggerX(i, {CDeaths(i, AtMost, 0, LTTC),Bring(i, AtLeast, 1, "Men", k)}, {AddCD(TTC,1),SetCDeaths(i, Add, 1, LTTC)})
+			Trigger2X(i, {CD(GMode,1),CDeaths(i, AtMost, 0, LTTC),Bring(i, AtLeast, 1, "Men", k)}, {AddCD(TTC,1),SetCDeaths(i, Add, 1, LTTC),RotatePlayer({MinimapPing(SLoc),DisplayTextX(StrDesignX(PlayerString[i+1].." \x04가 \x08적의 영역\x04을 \x03침범\x04했습니다.."), 4)}, HumanPlayers, i)})
 		end
 	end
 	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
@@ -61,6 +62,7 @@ function SetTTX(SLoc,Locs,Unitargs,G_CA_args) -- 개별영침 n구간중 1개만
 			G_CA_SetSpawn({},table.unpack(k))
 		end
 		end
+		DoActions2(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\warn2.ogg"),PlayWAVX("staredit\\wav\\warn2.ogg"),PlayWAVX("staredit\\wav\\warn2.ogg")},HumanPlayers,FP)})
 	CIfEnd()
 end
 --Sample
@@ -196,8 +198,8 @@ end
 	SetTTX(9,{9,52,53},{{88,15},{21,15}})
 	SetTT(54,{{25,15},{28,15}})
 	SetTT(55,{{25,15},{28,15}})
-	SetTT(73,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP, 1}})
-	SetTT(74,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP, 1}})
+	SetTT(73,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP}})
+	SetTT(74,{{25,30}},{{{29}, S_8, 0, "MAX", nil, nil, nil, FP}})
 	SetTT(56,{{23,5}},{{{88,21,76,17}, {P_6,S_6,P_4,S_4}, {3,1,3,1}, "MAX", nil, nil, nil, FP}})
 
 	GunWave(133,22,{{38,25},{39,15},{44,25}},3,{{{10,21,17}, {P_5,S_5,P_6}, {4,1,3}, 5, nil, nil, nil, FP, 1},{{10,21,17}, {P_4,S_5,S_4}, {3,2,1}, 5, nil, nil, nil, FP, 1}})
@@ -535,6 +537,7 @@ end
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 96)}, {SetInvincibility(Disable, 152, FP, 12),RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03우르사돈 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 90)}, {SetInvincibility(Disable, 152, FP, 13),RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03벤갈라스 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 93)}, {RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03스캔티드 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
+	TriggerX(FP, {Deaths(FP, AtLeast, 1, 90)}, {KillUnit(91, FP)},{preserved})
 	
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 93),Bring(FP,AtMost,1,"Buildings",64)}, {SetInvincibility(Disable, 147, FP, 64)},{preserved})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 96)}, {RemoveUnit(1, FP)},{preserved})
@@ -607,6 +610,7 @@ end
 	CPt = CreateCcodeArr(7)
 	CPt2 = CreateCcodeArr(7)
 	CT = CreateCcode()
+	CTrigger(FP, {CD(GMode,1)}, {SubCD(CT,1)},{preserved})
 	DoActionsX(FP, {SubCD(CT,1)})
 	TriggerX(FP,{CD(CPt[7],0),CD(CT,0)}, {SetInvincibility(Disable, 94, FP, 64)},{preserved})
 	CIf(FP,{TMemory(_Add(BossPtr,2),AtMost,2500000*256),CD(GMode,1)},{MoveLocation(49, 94, FP, 64)})
@@ -736,18 +740,18 @@ end
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[6],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,78}, Cir, 3, "MAX", 18, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,78}, Cir, 3, "MAX", nil, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt[6],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {98,79}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {98,79}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	CIfOnce(FP,{CD(CPt2[7],1)},{Simple_SetLoc(0, 0, 0, 0, 0),Simple_SetLoc(48, 0, 0, 16*32, 16*32),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
-		G_CA_SetSpawn({}, {29,23}, Cir, 1, "MAX", 18, nil, nil, FP, 1)
-		G_CA_SetSpawn({}, {19,86}, Cir, 4, "MAX", 18, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {29,23}, Cir, 1, "MAX", nil, nil, nil, FP, 1)
+		G_CA_SetSpawn({}, {19,86}, Cir, 4, "MAX", nil, nil, nil, FP, 1)
 		DoActions(FP, {Order("Any unit", FP, 64, Attack, 49)})
 	CIfEnd()
 	
