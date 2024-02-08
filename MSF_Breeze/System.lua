@@ -21,6 +21,9 @@ function System()
 	HeroIndex = CreateVar(FP)
 	PlayerArea = def_sIndex()
 	EnemyArea = def_sIndex()
+
+
+
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
 NJump(FP, PlayerArea, {DeathsX(CurrentPlayer, AtMost, 6, 0, 0xFF)})
 NJump(FP, EnemyArea, {DeathsX(CurrentPlayer, AtLeast, 7, 0, 0xFF)})
@@ -66,7 +69,10 @@ CIf(FP,{CD(GMode,1),Command(FP,AtLeast,1,90),TTOR({
 	f_Read(FP, _Sub(BackupCp,15), CPos, nil, nil, 1)
 	Convert_CPosXY()
 	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-	DoActions(FP, {CreateUnit(1, 91, 1, FP)})
+	CIf(FP, Memory(0x628438, AtLeast, 1))
+	f_Read(FP, 0x628438, nil, Nextptrs)
+	CDoActions(FP, {CreateUnit(1, 91, 1, FP),TSetMemoryX(_Add(Nextptrs,68), SetTo, 400,0xFFFF)})
+	CIfEnd()
 	f_LoadCp()
 CIfEnd()
 DoActions(FP, {SetMemory(0x6509B0, Subtract, 6)})
@@ -77,7 +83,9 @@ NJumpEnd(FP, EnemyArea)
 	f_SaveCp()
 	f_Read(FP, _Add(BackupCp,6), HeroIndex, nil, nil, 1)
 	for j,k in pairs(UnitPointArr) do
-		Trigger2X(FP, {CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2], Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..k[2].." P t s"), 4)}, HumanPlayers, FP)},{preserved})
+		Trigger2X(FP, {CD(EVFCcode,0),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2], Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..k[2].." P t s"), 4)}, HumanPlayers, FP)},{preserved})
+		Trigger2X(FP, {CD(EVFCcode,1),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2]*3, Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..(k[2]*3).." P t s"), 4)}, HumanPlayers, FP)},{preserved})
+		
 	end
 	f_LoadCp()
 	CIfEnd()
@@ -125,8 +133,8 @@ NJumpEnd(FP, EnemyArea)
 		DeathsX(CurrentPlayer,Exactly,146,0,0xFF),
 	})})
 	f_SaveCp()
-	f_TempRepeat({}, 21, 2, 187, FP, {1536,1920})
-	f_TempRepeat({}, 88, 2, 187, FP, {1536,1920})
+	f_TempRepeat({}, 21, 3, 187, FP, {1536,1920})
+	f_TempRepeat({}, 88, 3, 187, FP, {1536,1920})
 	f_LoadCp()
 	
 	CIfEnd()
@@ -146,6 +154,75 @@ EXCC_ClearCalc()
 		})
 	end
 	EXCC_End()
+
+
+
+	CanC = CreateVar(FP)
+	CanCT = CreateCcode()
+	DefeatCC = CreateCcode()
+CIf(FP,{--캔발동
+Command(FP,AtLeast,1,147);
+	CV(CanC,1,AtMost);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit("Factories",Force2);
+	SetCDeaths(FP,SetTo,24*30,CanCT);
+	AddV(CanC,1);})
+
+Trigger2X(FP,{},{
+	RotatePlayer({
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\canwarn.wav"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+		},HumanPlayers,FP);
+},{preserved})
+CIfEnd()
+CIf(FP, {--캔발동
+Command(FP,AtLeast,1,147);
+	CV(CanC,2,AtLeast);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	AddV(CanC,1);
+	KillUnit("Factories",Force2);
+	SetCDeaths(FP,Add,1,DefeatCC);
+	SetCDeaths(FP,SetTo,24*30,CanCT);})
+	
+	Trigger2X(FP,{},{
+		RotatePlayer({
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\CanOver.ogg"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+			},HumanPlayers,FP);
+	},{preserved})
+CIfEnd()
+
+DoActions2X(FP,{SubCD(CanCT,1)})
+
+CIf(FP,CD(DefeatCC,1,AtLeast))
+DoActionsX(FP,{AddCD(DefeatCC,1)})
+DoActions2X(FP,{RotatePlayer({
+	DisplayTextX(string.rep("\n", 20),4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x08캔낫이 3회 이상 발동되어\n",4);
+	DisplayTextX("\x13\x08게임에서 패배하였습니다.",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+},HumanPlayers,FP)},1)
+TriggerX(FP,{CD(TestMode,0),CD(DefeatCC,100,AtLeast)},{RotatePlayer({Defeat()},MapPlayers,FP)})
+CIfEnd()
+for i = 0, 6 do
+CIf(FP,{HumanCheck(i, 1)})
+CMov(FP,0x582294+(i*4),CanC)
+CAdd(FP,0x582294+(i*4),CanC)
+CIfEnd()
+end
 
 
 end

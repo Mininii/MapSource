@@ -7,6 +7,7 @@ function Include_Vars()
 	MapPlayers = {0,1,2,3,4,5,6}
 	ObPlayers = {P8,P9,P10,P11,P12}
 	MedicTrig = {34,9,88,80,21}
+	MedicTick = {1,2,3,4,5}
 	ObEff = 84
 	nilunit = 181
 
@@ -43,11 +44,11 @@ function Include_Vars()
 	RandSwitch2 = "Switch 101"
 	JYD = "Set Unit Order To: Junk Yard Dog"
 	DelayMedicT = {
-		StrDesign("\x1D예약메딕\x04을 \x1B1Tick\x04으로 변경합니다. - \x1F200 Ore\x07"),
-		StrDesign("\x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F250 Ore\x07"),
-		StrDesign("\x1D예약메딕\x04을 \x1B3Tick\x04으로 변경합니다. - \x1F300 Ore\x07"),
-		StrDesign("\x1D예약메딕\x04을 \x1B4Tick\x04으로 변경합니다. - \x1F350 Ore\x07"),
-		StrDesign("\x1D예약메딕\x04을 \x1B비활성화(0Tick)\x04하였습니다. - \x1F150 Ore\x07")}
+		StrDesign("\x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F200 Ore\x07"),
+		StrDesign("\x1D예약메딕\x04을 \x1B3Tick\x04으로 변경합니다. - \x1F250 Ore\x07"),
+		StrDesign("\x1D예약메딕\x04을 \x1B4Tick\x04으로 변경합니다. - \x1F300 Ore\x07"),
+		StrDesign("\x1D예약메딕\x04을 \x1B5Tick\x04으로 변경합니다. - \x1F350 Ore\x07"),
+		StrDesign("\x1D예약메딕\x04을 \x1B비활성화(1Tick)\x04하였습니다. - \x1F150 Ore\x07")}
 
 	GiveRateT = {"\x07『 \x04기부금액 단위가 \x1F5000 Ore\x04 \x04로 변경되었습니다.\x07 』",
 	"\x07『 \x04기부금액 단위가 \x1F10000 Ore \x04로 변경되었습니다.\x07 』",
@@ -107,9 +108,9 @@ function Include_Vars()
 	--TBLFile = f_GetFileptr(FP,"custom_txt.tbl",1) -- 제작했던 아무 TBL이나 AbsolutePath에 넣고 로드
 	--TBLFiles = f_GetFileSize("custom_txt.tbl") -- 예제에 사용된 tbl은 뎡디터2의 Data폴더에서 가져옴
 	UnitPointArr = {}
-	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54,20}--재배치 등록 위치
+	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54}--재배치 등록 위치
 	for j, k in pairs(UnitPointArr2) do
-			SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4})
+			SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4,GroupFlag=0x29})
 	end
 	SetUnitsDatX(20, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
 

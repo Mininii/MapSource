@@ -634,8 +634,10 @@ end
 	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,2000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[6],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
 	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[7],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
 	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1000000*256)}, {SetV(VTimerB[6],0),SetCD(CPt[7],1),SetCD(CPC,0),AddCD(CT,500000),SetInvincibility(Enable, "Any unit", AllPlayers, 64),SetDeaths(FP, SetTo, 1, 94),TSetMemory(_Add(BossPtr,2), SetTo, 1000000*256)},{preserved})
-
-	CTrigger(FP, {CD(GMode,1),TMemory(_Add(BossPtr,2),AtMost,1500000*256),Bring(FP, AtLeast, 11, "Any unit", 64)}, {SetInvincibility(Enable, 94, FP, 64)},{preserved})
+	if TestStart == 0 then
+		CTrigger(FP, {CD(GMode,1),TMemory(_Add(BossPtr,2),AtMost,1500000*256),Bring(FP, AtLeast, 11, "Any unit", 64)}, {SetInvincibility(Enable, 94, FP, 64)},{preserved})
+		
+	end
 	CIf(FP,CD(GMode,1))
 	CunitCtrig_Part1(FP)
 	MoveCp("X",70*4)
@@ -662,9 +664,9 @@ end
 	DoActions(FP,MoveCp(Add,3*4)) -- Unused Timer
 	
 	for i = 0, 6 do -- If VFlag256 == 2^5, Set P6
-	Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,256*(2^i),0,0xFF00)},{
+	Trigger2(FP,{DeathsX(CurrentPlayer,Exactly,256*(2^i),0,256*(2^i))},{
 		MoveCp(Subtract,16*4);
-		SetDeathsX(CurrentPlayer,SetTo,2^i,0,0xFF);
+		SetDeathsX(CurrentPlayer,SetTo,2^i,0,2^i);
 		MoveCp(Add,16*4)},{Preserved})
 	end
 	
@@ -763,13 +765,12 @@ end
 	CIf(FP,{CD(BossStart,1)},{SetMemory(0x590000, SetTo, 0)})
 	PCheckV = CreateVar(FP)
 	WinCheck = CreateVar(FP)
-	DebugCc = CreateCcode()
 	CMov(FP,PCheckV,0)
-		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94)}, {AddCD(DebugCc,1)},{preserved})
+		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94)}, {},{preserved})
 		CMov(FP,WinCheck,0)
 	for i = 0, 6 do
 		CIf(FP,{HumanCheck(i, 1)},{AddV(PCheckV,1)})
-		CSub(FP, DtoA(i,12), Dt)
+		CDoActions(FP, {TSetDeathsX(i, Subtract, Dt, 12,0xFFFFFF)})
 		for j = 1, 16 do
 			BGMNum = j
 			if BGMNum <= 9 then BGMNum = "0"..BGMNum end
@@ -783,7 +784,6 @@ end
 		DoActions(FP, {SetDeaths(i, SetTo, 0, 14)})
 		CIfEnd()
 	end
-	TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),CD(DebugCc,200,AtLeast)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)},{preserved})
 	for i = 0, 6 do
 	TriggerX(FP, {CD(CPt[7],1),CV(WinCheck,i+1),CV(PCheckV,i+1)}, {AddCD(WinCcode,1),KillUnit("Any unit", FP)})
 	end

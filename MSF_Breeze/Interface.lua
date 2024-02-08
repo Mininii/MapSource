@@ -70,7 +70,24 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
     CIfXEnd()
 
 
+	EVFCcode = CreateCcode()
 	GST2 = CreateCcode()
+	TriggerX(FP, {CD(EVFCcode,1)}, {
+		SetMemoryB(0x58D088+(46*0)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*1)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*2)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*3)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*4)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*5)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*6)+7,SetTo,255),
+		SetMemoryB(0x58D088+(46*0)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*1)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*2)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*3)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*4)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*5)+0,SetTo,255),
+		SetMemoryB(0x58D088+(46*6)+0,SetTo,255),
+	}, {preserved})
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
 	GST = CreateCcode()
 	CDoActions(FP, {TCreateUnit(1, 15, 59, CurrentOP)},1)
@@ -78,8 +95,11 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	TriggerX(FP,{CD(GST2,600,AtLeast)},{MoveUnit(All, 15, AllPlayers, 64, 58)},{preserved})
 	DoActions2(FP, {RotatePlayer({CenterView(59)}, HumanPlayers, FP)})
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04난이도를 선택해 주십시오.").."\n"..StrDesignX("\x04- \x03난이도 설명 \x04-"), 4)}, HumanPlayers, FP)},1)
-	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다."), 4)}, HumanPlayers, FP)},1)
-	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 더 어려워졌으나 공격력 최대 업글 가능 횟수 상승됩니다."), 4)}, HumanPlayers, FP)},1)
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다. 공방에서 플레이하시길 추천드립니다."), 4)}, HumanPlayers, FP)},1)
+	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 공방에서 플레이하기에 매우 어려워졌으나 공격력 최대 업글 가능 횟수 상승됩니다."), 4)}, HumanPlayers, FP)},1)
+	for i = 0, 6 do
+	TriggerX(FP, {CD(LimitT[i+1],1),Bring(i, AtLeast, 1, 15, 76)}, {SetCD(EVFCcode,1),RotatePlayer({DisplayTextX(StrDesignX("\x07EVF Mode\x04가 활성화되었습니다. 업글제한 삭제, 영작포인트 3배"), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),})
+	end
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 58)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 57)}, {SetCD(GST,1),SetCD(GMode,1),--SetV(ExRate,11),
 		SetMemoryB(0x58D088+(46*0)+7,SetTo,150),
@@ -89,13 +109,13 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		SetMemoryB(0x58D088+(46*4)+7,SetTo,150),
 		SetMemoryB(0x58D088+(46*5)+7,SetTo,150),
 		SetMemoryB(0x58D088+(46*6)+7,SetTo,150),
-		SetMemoryB(0x58D088+(46*0)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*1)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*2)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*3)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*4)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*5)+0,SetTo,0),
-		SetMemoryB(0x58D088+(46*6)+0,SetTo,0),
+		SetMemoryB(0x58D088+(46*0)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*1)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*2)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*3)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*4)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*5)+0,SetTo,10),
+		SetMemoryB(0x58D088+(46*6)+0,SetTo,10),
 		SetDeaths(Force1, SetTo, 1, 49);
 		SetMemoryX(0x664080 + (86*4),SetTo,0x400200,0x400200),
 		SetMemoryX(0x664080 + (98*4),SetTo,0x400200,0x400200),
@@ -355,7 +375,40 @@ for i = 1, 6 do -- 강퇴기능
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
 		
-		
+
+
+
+
+
+
+
+
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,Exactly,1)) -- 공업 255회
+		CDoActions(FP,{
+			SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
+			SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
+			SetCVar(FP,TempUpgradeLimPtr[2],SetTo,EPD(AtkUpgradeLimPtrArr[i+1])),
+			SetCVar(FP,TempUpgradeLimMaskRet[2],SetTo,256^AtkUpgradeMaskLimRetArr[i+1]),
+			SetCVar(FP,UpgradeCP[2],SetTo,i),
+			SetCVar(FP,UpgradeFlag[2],SetTo,1),
+			SetCD(UpResultFlag,0);
+			SetMemoryB(0x58D2B0+(46*i)+18,SetTo,0)})
+		CallTrigger(FP,OneClickUpgrade)
+		NIfEnd()
+		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,1)) -- 체업 255회
+		CDoActions(FP,{
+			SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(HPUpgradePtrArr[i+1])),
+			SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^HPUpgradeMaskRetArr[i+1]),
+			SetCVar(FP,TempUpgradeLimPtr[2],SetTo,EPD(HPUpgradeLimPtrArr[i+1])),
+			SetCVar(FP,TempUpgradeLimMaskRet[2],SetTo,256^HPUpgradeMaskLimRetArr[i+1]),
+			SetCVar(FP,UpgradeCP[2],SetTo,i),
+			SetCVar(FP,UpgradeFlag[2],SetTo,2),
+			SetCD(UpResultFlag,0);
+			SetMemoryB(0x58D2B0+(46*i)+19,SetTo,0)})
+		CallTrigger(FP,OneClickUpgrade)
+		NIfEnd()
+	
+
 		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
@@ -383,7 +436,7 @@ for i = 1, 6 do -- 강퇴기능
 			CIfEnd()
 			--TriggerX(FP,{CD(TestMode,1)},{SetInvincibility(Enable, "Buildings", FP, 64)},{preserved})--SetV(CurEXP,0x7FFFFFFF)
 			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,100),SetMemoryB(0x58D2B0+(i*46),SetTo,50)})--SetV(CurEXP,0x7FFFFFFF)
-			TriggerX(FP,{CD(TestMode,1),CD(GMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,150),SetMemoryB(0x58D2B0+(i*46),SetTo,0)})--SetV(CurEXP,0x7FFFFFFF)
+			TriggerX(FP,{CD(TestMode,1),CD(GMode,1)},{SetMemoryB(0x58D2B0+7+(i*46),SetTo,150),SetMemoryB(0x58D2B0+(i*46),SetTo,10)})--SetV(CurEXP,0x7FFFFFFF)
 		end
 
 		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
@@ -447,7 +500,7 @@ for i = 1, 6 do -- 강퇴기능
 
 		local MedicTrigJump = def_sIndex()
 		for j = 1, 5 do
-			if Limit == 1 then
+			if false then--Limit == 1 then
 				
 				local TestT = CreateCcode()
 				TriggerX(FP,{CD(TestMode,1)},{AddCD(TestT,1)},{preserved})
@@ -577,11 +630,12 @@ end
 	end
 
 	for k=0, 6 do -- 기부시스템
+		CIf(FP,{HumanCheck(k, 1)})
 		for j=0, 6 do
 		if k~=j then
 		for i=0, 5 do
 		Trigger { -- 돈 기부 시스템
-			players = {k},
+			players = {FP},
 			conditions = {
 				Label(0);
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
@@ -593,50 +647,47 @@ end
 			actions = {
 				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);`
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
+				SetCp(k);
 				DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
+				SetCp(FP);
 				PreserveTrigger();
 			},
 			}
-		Trigger { -- 돈 기부 시스템
-			players = {k},
-			conditions = {
-				Label(0);
-				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
+			CallTriggerX(FP, GiveAlarm, {
 				Command(k,AtLeast,1,GiveUnitID[j+1]);
 				HumanCheck(j,1);
 				CDeaths(FP,Exactly,i,GiveRate[k+1]);
 				Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
 				Accumulate(k,AtMost,0x7FFFFFFF,Ore);
-			},
-			actions = {
+			}, {
 				SetResources(k,Subtract,GiveRate2[i+1],Ore);
 				SetResources(j,Add,GiveRate2[i+1],Ore);
-				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);
-				
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-				DisplayText("\x07『 "..PlayerString[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다. \x07』",4);
-				SetMemory(0x6509B0,SetTo,j);
-				DisplayText("\x12\x07『"..PlayerString[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다.\x02 \x07』",4);
-				SetMemory(0x6509B0,SetTo,k);
-				PreserveTrigger();
-			},
-			}
+				SetV(GivePrevP, k);
+				SetV(GiveNextP, j);
+				SetV(GiveMin, GiveRate2[i+1]);
+			})
 		end
 		Trigger { -- 돈 기부 시스템
-			players = {k},
+			players = {FP},
 			conditions = {
 				--MemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],AtLeast,1);
 				Command(k,AtLeast,1,GiveUnitID[j+1]);
 				HumanCheck(j,0);
 			},
 			actions = {
+				SetCp(k);
 				DisplayText("\x07『 "..PlayerString[j+1].."\x04이(가) 존재하지 않습니다. \x07』",4);
+				SetCp(FP);
 				--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
 				PreserveTrigger();
 			},
 			}
-	end end end
+	end 
+end 
+CIfEnd()
+end
 
 	--LeaderBoard
 	local LeaderBoardT = CreateCcode()

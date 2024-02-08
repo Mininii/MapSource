@@ -24,6 +24,10 @@ function onInit_EUD()
 	for i = 0, 227 do
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000}})--모든 유닛을 마법사로
 	end
+	SetUnitsDatX(130,{GroupFlag=0x11})--그룹플래그
+	SetUnitsDatX(131,{GroupFlag=0x11})--그룹플래그
+	SetUnitsDatX(132,{GroupFlag=0x11})--그룹플래그
+	SetUnitsDatX(133,{GroupFlag=0x11})--그룹플래그
 	SetUnitsDatX(162,{AdvFlag={0x400200,0x480200},BdDimX=1,BdDimY=1})--포토 파일런 불필요
 	for j,k in pairs({89,90,93,94,95,96}) do
 		SetUnitsDatX(k, {HumanInitAct = 2,
@@ -57,7 +61,7 @@ function onInit_EUD()
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for j,k in pairs(MedicTrig) do
-		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+((j-1)*50),GasCost=0,BuildTime = j-1,SuppCost = 0,RdySnd=999})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+((j-1)*50),GasCost=0,BuildTime = MedicTick[j],SuppCost = 0,RdySnd=999})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
 	for j,k in pairs(GiveUnitID) do
 		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=0,GasCost=0,BuildTime = 1,SuppCost = 0})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -87,11 +91,19 @@ function onInit_EUD()
 	SetUnitsDatX(115,{AdvFlag={1677721601,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 
 	CIfOnce(FP)
-	local LimitX = CreateCcode()
-	local LimitC = CreateCcode()
-	for i = 0, 7 do
-		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1)})
+	LimitX = CreateCcode()
+	LimitT = CreateCcodeArr(7)
+	LimitC = CreateCcode()
+	for i = 0, 6 do
+		DoActions(FP, {
+			GiveUnits(1, 111, P12, 64, i),
+			GiveUnits(1, 122, P12, 64, i),
+			GiveUnits(1, 125, P12, 64, i),
+		},1)
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 1344+(i*64),160, 1344+(i*64),160),CreateUnit(1, 107, 1, i)})
+		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i)})
 	end
+	
 	
 if TestStart == 1 then
 	DoActionsX(FP,{SetSwitch("Switch 254", Set)}) -- Limit설정
@@ -101,6 +113,8 @@ if Limit == 1 then
 end
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64),}) -- Limit설정
 	function InputTesterID(Player,ID)
+		if Limit == 1 then
+			
 		Trigger {
 			players = {FP},
 			conditions = {
@@ -110,13 +124,31 @@ end
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
+				SetCDeaths(FP,SetTo,1,LimitT[Player+1]);
 				
 			}
 		}
+	else
+		
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				--CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetCDeaths(FP,SetTo,1,LimitC);
+				SetCDeaths(FP,SetTo,1,LimitT[Player+1]);
+				
+				
+			}
+		}
+		end
 	end
+
 		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 			InputTesterID(i,"GALAXY_BURST") 
-			InputTesterID(i,"RonaRonaTTang") 
 		end
 		
 	T_YY = 2024
@@ -212,7 +244,7 @@ end
 	DoActions2(FP, removebox)
 
 	CIfEnd()
-	table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 2, AllPlayers))
+	table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 64, AllPlayers))
 	
 	
 
@@ -236,10 +268,14 @@ end
 			
 		},
 	}
+	CanAct = {}
 
+	for i = 0, 6 do
+		table.insert(CanAct,SetMemory(0x582264 + (i*4),SetTo,3*2))
+		table.insert(CanAct,SetMemory(0x5822C4 + (i*4),SetTo,3*2))
+	end
 
-
-	CIf(FP, CD(GMode,1))
+	CIf(FP, CD(GMode,1),CanAct)
 	CMov(FP,CunitIndex,0)
 	GunSel = CreateVar(FP)
 	CMov(FP,0x6509B0,19025+25)

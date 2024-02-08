@@ -227,6 +227,9 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryW(0x663EB8+(UnitID *2),SetTo,k))--KillScore
 			elseif j== "ComputerAI" then
 				PatchInsert(SetMemoryB(0x660178+(UnitID),SetTo,k))--ComputerAI
+			elseif j == "GroupFlag" then
+				PatchInsert(SetMemoryB(0x6637A0+(UnitID),SetTo,k))--Group
+				
 			else
 				
 				PushErrorMsg("Wrong Property Name Detected!! : "..j)
@@ -901,7 +904,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			CTrigger(FP,{CD(GMode,1),},{
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x100,0x100); -- 클로킹
 				TSetMemoryX(_Add(G_CA_Nextptrs,57),SetTo,RandVar,0xFF); -- 현재건작 유저 인식
-				TSetMemoryX(_Add(G_CA_Nextptrs,73),SetTo,_Mul(RandVar,0x100),0xFF00); -- 현재건작 유저 인식
+				TSetMemoryX(_Add(G_CA_Nextptrs,73),SetTo,_Mul(RandVar,256),0xFF00); -- 현재건작 유저 인식
 				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
 				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
 				TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,1,0xFF); -- 개별건작 표식
