@@ -33,8 +33,8 @@ end
 
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-TestSet(1)
-VNum = "3.5"
+TestSet(0)
+VNum = "3.6"
 
 AutoSettingMode = false
 

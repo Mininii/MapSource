@@ -441,6 +441,20 @@ Trigger { -- 인트로1
 		
 	},
 	}
+	Trigger { -- 드랍모드일경우 강퇴건물 삭제
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,AtLeast,2,DMode);
+		},
+		actions = {
+			KillUnit(115, AllPlayers);
+			PreserveTrigger();
+			
+		},
+		}
+
+	
 OPArr = {
 {"\n\n\n\n\n\n\n\n\n\n\x13\x15★ 마 린 키 우 기 GaLaXy:ReB∞t ★\n\n\n\n\n",0,nil},
 {"\n\n\n\n\n\n\n\n\n\n\x13\x05★ 마 린 키 우 기 GaLaXy:ReB∞t ★\n\n\n\n\n",5,nil},

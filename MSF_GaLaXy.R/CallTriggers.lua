@@ -313,6 +313,7 @@ for j = 1, #MarGPerX-1 do
 	
 
 end
+
 --PushErrorMsg(errt)
 TotalGPer = TotalGPer+MarGPerX[8]
 --PushErrorMsg(TotalGPer)
@@ -323,6 +324,15 @@ for p = 0, 6 do
 end
 
 
+for p = 0, 6 do
+	CIf(FP,{CD(DropShield[p+1],0),CD(DMode,2,AtLeast),CV(MarGachaP,p)})
+	MinGachaRand = f_CRandNum(100000)
+	
+	Trigger2X(FP,{VRange(MinGachaRand, 0,9)}, {CreateUnit(1, 215, 47+p, p),SetCD(DropShield[p+1],1),RotatePlayer({DisplayTextX("\x13\x04"..string.rep("=",50).."\n\n\n"..StrDesignX(PlayerString[p+1].."\x04가 0.01% 확률로 \x11드랍 방지권 \x04을\x07 얻었습니다. \x11축하드립니다!!!!").."\n\n\n\x13\x04"..string.rep("=",50), 4),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg"),PlayWAVX("staredit\\wav\\Clear3.ogg")}, HumanPlayers, FP),
+})
+	CIfEnd()
+end
+	
 
 SetCallEnd()
 

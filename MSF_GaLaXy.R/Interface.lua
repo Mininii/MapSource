@@ -1,5 +1,4 @@
 function Interface()
-	local InfWhile = CreateCcode()
 	
 	Trigger { -- 조합법 insert키
 		players = {Force1},
@@ -81,7 +80,7 @@ function Interface()
 				players = {i},
 				conditions = {
 					Label(0);
-					CDeaths(FP,AtLeast,5,BanCode[i]);Memory(0x57F1B0, Exactly, i)
+					CDeaths(FP,AtLeast,5,BanCode[i]);
 					
 				},
 				actions = {
@@ -97,21 +96,21 @@ function Interface()
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-					SetMemory(0xCDDDCDDC,SetTo,1);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					DisplayText("\x07『 \x04당신은 강되당했습니다. 패배 트리거 작동\x07 』",4);
+					Defeat();
 					
 					},
 				}
@@ -155,16 +154,49 @@ function Interface()
 		},
 		actions = {
 			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 모든유닛 전멸로 인해 \x06드랍 \x04당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			
+			
 			},
 		}
 		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(FP, AtLeast, 2, DMode);
+			Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+			CD(DropShield[i+1],1,AtLeast);
+		},
+		actions = {
+			DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 드랍 방지권이 있어 드랍되지 않습니다.\x07 』",4);
+			Defeat();
+			},
+		}
+		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CDeaths(FP, AtLeast, 2, DMode);
+			CDeaths(FP,AtLeast,1,GStart),
+			Bring(i, Exactly, 0, "Men", 64);
+			CD(DropShield[i+1],1,AtLeast);
+		},
+		actions = {
+			DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 드랍 방지권이 있어 드랍되지 않습니다.\x07 』",4);
+
+			Defeat();
+			
+			},
+		}
 		Trigger { -- 강퇴 드랍
 			players = {i},
 			conditions = {
 				Label(0);
 				CDeaths(FP, Exactly, 2, DMode);--드랍모드
 				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
-				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				CD(DropShield[i+1],0);
+				Memory(0x57F1B0, Exactly, i);--로컬플레이어아이디
 				
 			},
 			actions = {
@@ -204,6 +236,7 @@ function Interface()
 				Label(0);
 				CDeaths(FP, Exactly, 3, DMode);--드랍모드
 				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+				CD(DropShield[i+1],0);
 				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
 				
 			},
@@ -245,6 +278,7 @@ function Interface()
 				CDeaths(FP, Exactly, 2, DMode);--드랍모드
 				CDeaths(FP,AtLeast,1,GStart),
 				Bring(i, Exactly, 0, "Men", 64);
+				CD(DropShield[i+1],0);
 				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
 				
 			},
@@ -286,6 +320,7 @@ function Interface()
 				CDeaths(FP, Exactly, 3, DMode);--드랍모드
 				CDeaths(FP,AtLeast,1,GStart),
 				Bring(i, Exactly, 0, "Men", 64);
+				CD(DropShield[i+1],0);
 				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
 				
 			},
@@ -625,13 +660,13 @@ CIfEnd()
 DoActionsX(FP,{SubCD(HealT,1)})
 
 	for j = 1, 5 do
-TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+7,Exactly,50+(200-(40*j)))},{
+TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+7,Exactly,100+(150-(30*j)))},{
 	SetMemoryB(0x58D088+(46*i)+8,SetTo,0),
 	SetMemoryB(0x58D088+(46*i)+9,SetTo,0),
 	SetMemoryB(0x57F27C + (i * 228) + 1,SetTo,1),
 })
 
-TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+14,Exactly,50+(200-(40*j)))},{
+TriggerX(FP,{CVar(FP,HiddenATKM[2],Exactly,j),MemoryB(0x58D2B0+(46*i)+14,Exactly,100+(150-(30*j)))},{
 	SetMemoryB(0x58D088+(46*i)+13,SetTo,0),
 })
 
@@ -1091,10 +1126,10 @@ TriggerX(j,{CV(HondonMode,0)},{
 	DoActions(FP,{SetDeaths(Force1,SetTo,0,34)})
 	CIfEnd()
 	
-	CIf(FP, CD(Drop,1,AtLeast),{AddCD(Drop,1),KillUnit("Any unit",Force1)}) -- 데카아웃시 자기모든유닛 터짐. 3틱후 드랍
+	CIf(FP, CD(Drop,1,AtLeast),{AddCD(Drop,1),ModifyUnitEnergy(All, "Any unit", Force1, 64, 0);KillUnit("Any unit",Force1)}) -- 데카아웃시 모든유닛 터짐. 3틱후 드랍
 		TriggerX(FP,{CD(Drop,3,AtLeast)},{SetCp(8),RunAIScript(P8VON),SetCp(9),RunAIScript(P8VON),SetCp(10),RunAIScript(P8VON),SetCp(11),RunAIScript(P8VON)})
 	CIfEnd()
-	CIf(FP,{CD(InfWhile,1,AtLeast)},{AddCD(InfWhile,1),KillUnit("Any unit",Force1)}) -- 데카아웃시 자기모든유닛 터짐. 3틱후 응없
+	CIf(FP,{CD(InfWhile,1,AtLeast)},{AddCD(InfWhile,1),ModifyUnitEnergy(All, "Any unit", Force1, 64, 0),KillUnit("Any unit",Force1)}) -- 데카아웃시 모든유닛 터짐. 3틱후 응없
 	CWhile(FP, CD(InfWhile,4,AtLeast))
 	CWhileEnd()
 	CIfEnd()

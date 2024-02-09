@@ -202,6 +202,8 @@ CWhileEnd()
 
 	DUArr={0,20,100,16,7,99,12,60}
 	DCArr = {1,1,2,3,0,5,10,20}
+	EXCC_BreakCalc({CD(Drop,1,AtLeast)})
+	EXCC_BreakCalc({CD(InfWhile,1,AtLeast)})
 	for i = 0, 6 do
 		CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
 		DoActions(FP,MoveCp(Add,6*4))
@@ -642,7 +644,13 @@ end
 
 
 
-CElseIfX({Switch("Switch 201",Set),CD(DMode,2,AtLeast)},{SetMemory(0x59CC80,SetTo,0),SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)})--관전이고 뭐고 모두 ExitDrop 실행
+CElseIfX({Switch("Switch 201",Set),CD(DMode,2,AtLeast)},{})--관전이고 뭐고 모두 ExitDrop 실행
+for i = 0, 6 do
+	TriggerX(FP, {CD(DropShield[i+1],0,AtMost),LocalPlayerID(i)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)}, {preserved}) -- 드랍 방지권 = ExitDrop 실행안함
+end
+for i = 128, 131 do
+	TriggerX(FP, {LocalPlayerID(i)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)}, {preserved})
+end
 CIfXEnd()
 DoActions(FP,{SetResources(FP,Add,0x12345678,OreAndGas)},1)
 TriggerX(FP,{Deaths(FP,AtLeast,4,10)},{SetMemoryX(0x663ECC, SetTo, 400,0xFFFF);

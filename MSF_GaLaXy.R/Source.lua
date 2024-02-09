@@ -234,7 +234,9 @@ DifLeaderBoard = {
 	CellCcode = CreateCcode() -- 3일경우
 	BossCcode = CreateCcode()
 	Emer_EscapeC = CreateCcodeArr(7)
+	DropShield = CreateCcodeArr(7)
 	Drop = CreateCcode()
+	InfWhile = CreateCcode()
 	TempUnitReadV = CreateVar(FP)
 	function Create_VoidEPDHeaderV(Player,Size)
 		local Void = f_GetVoidptr(Player,Size)
