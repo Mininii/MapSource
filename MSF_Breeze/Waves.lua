@@ -774,11 +774,11 @@ end
 		for j = 1, 16 do
 			BGMNum = j
 			if BGMNum <= 9 then BGMNum = "0"..BGMNum end
-			TriggerX(FP,{Deaths(FP, AtMost, 0, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF),DeathsX(i, AtMost, 0, 12,0xFF000000),Deaths(i, Exactly, j-1, 13)},{SetDeaths(i, Add, 1, 13),SetDeathsX(i, Add, 1500, 12, 0xFFFFFF),SetCp(i),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg"),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg"),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg"),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg"),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg")},{preserved})
+			TriggerX(FP,{Deaths(FP, AtMost, 0, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF),DeathsX(i, AtMost, 0, 12,0xFF000000),Deaths(i, Exactly, j-1, 13)},{SetDeaths(i, Add, 1, 13),SetDeathsX(i, Add, 1500, 12, 0xFFFFFF),SetCp(i),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg"),PlayWAV("staredit\\wav\\Boss_0"..BGMNum..".ogg")},{preserved})
 		
 		end
 		TriggerX(FP, Deaths(i, AtLeast, 16, 13), {SetDeaths(i, Subtract, 16, 13)}, {preserved})
-		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF)}, {SetDeathsX(i, Add, 1500, 12,0xFFFFFF),SetCp(i),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg")})
+		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF)}, {SetDeathsX(i, Add, 1500, 12,0xFFFFFF),SetCp(i),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg"),PlayWAV("staredit\\wav\\BossEnd.ogg")})
 		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),DeathsX(i, AtMost, 100, 12,0xFFFFFF)}, {SetMemory(0x590000, SetTo, 1),},{preserved})
 		TriggerX(FP, {Deaths(FP, AtLeast, 1, 94),Deaths(i, AtLeast, 1, 14)}, {AddV(WinCheck,1)},{preserved})
 		DoActions(FP, {SetDeaths(i, SetTo, 0, 14)})
