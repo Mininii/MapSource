@@ -83,6 +83,7 @@ BGM2S = CreateCcode()
 BGM3S = CreateCcode()
 function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	local GunCcode = CreateCcode()
+	local EnableMLocCcode = CreateCcode()
 	local CurGunP = CreateVar(FP)
 	local CountMax = 0
 	local NUTableCnt = 0
@@ -106,13 +107,19 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
 		
 		if GunID == 150 or GunID == 148 then
-			
+			CTrigger(FP, {CD(GMode,1),CD(GunCcode,480,AtLeast)}, {SetCD(EnableMLocCcode,1)})
+			CTrigger(FP, {CD(GMode,1),CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
+		else
+			CTrigger(FP, {CD(GMode,1),CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
+		end
+		CIf(FP, CD(GMode,1))
 		for i = 0, 6 do
-			CTrigger(FP, {CD(GMode,1),CD(GunCcode,480,AtLeast),CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
+			CTrigger(FP, {CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
 		end
-
-		end
-
+		CIfEnd()
+		
+		
+		
 		local NUCArr = {}
 		
 		if G_CA_args then

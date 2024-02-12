@@ -83,8 +83,8 @@ NJumpEnd(FP, EnemyArea)
 	f_SaveCp()
 	f_Read(FP, _Add(BackupCp,6), HeroIndex, nil, nil, 1)
 	for j,k in pairs(UnitPointArr) do
-		Trigger2X(FP, {CD(EVFCcode,0),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2], Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..k[2].." P t s"), 4)}, HumanPlayers, FP)},{preserved})
-		Trigger2X(FP, {CD(EVFCcode,1),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2]*3, Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..(k[2]*3).." P t s"), 4)}, HumanPlayers, FP)},{preserved})
+		Trigger2X(FP, {CD(UTAGECcode,0),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2], Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..k[2].." P t s"), 4)}, HumanPlayers, FP)},{preserved})
+		Trigger2X(FP, {CD(UTAGECcode,1),CVX(HeroIndex, k[1], 0xFF)}, {SetScore(Force1, Add, k[2]*EVFPtsMul, Kills),RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..(k[2]*EVFPtsMul).." P t s"), 4)}, HumanPlayers, FP)},{preserved})
 		
 	end
 	f_LoadCp()
@@ -108,7 +108,7 @@ NJumpEnd(FP, EnemyArea)
 	G_CA_SetSpawn({CV(TrapNum,9)}, {29,25}, {P_4,S_8}, {2,1}, "MAX", nil, nil, nil, FP)
 	G_CA_SetSpawn({CV(TrapNum,10)}, {23,75}, {P_3,S_3}, {1,0}, "MAX", nil, nil, nil, FP)
 	DoActions2(FP, {RotatePlayer({PlayWAVX("staredit\\wav\\warn.ogg"),PlayWAVX("staredit\\wav\\warn.ogg"),PlayWAVX("staredit\\wav\\warn.ogg")}, HumanPlayers, FP)})
-
+	
 
 	f_LoadCp()
 	CIfEnd()
@@ -215,6 +215,8 @@ DoActions2X(FP,{RotatePlayer({
 	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 },HumanPlayers,FP)},1)
+
+TriggerX(FP,{CD(UTAGECcode,1,AtLeast)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);},{preserved})
 TriggerX(FP,{CD(TestMode,0),CD(DefeatCC,100,AtLeast)},{RotatePlayer({Defeat()},MapPlayers,FP)})
 CIfEnd()
 for i = 0, 6 do
