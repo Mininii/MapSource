@@ -96,11 +96,8 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	TriggerX(FP, CommandLeastAt(GunID,LocID), {SetCD(GunCcode,1)})
 	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,480*CountMax,AtMost)},{AddCD(GunCcode,1),SetSwitch(RandSwitch1,Random),})
 		CIfOnce(FP)
-		if GunID == 150 or GunID == 148 then
-			
 		for i = 0, 6 do
 			TriggerX(FP, {CD(GMode,1),Kills(i, AtLeast, 1, GunID)}, {SetV(CurGunP,i),SetKills(i, Subtract, 1, GunID)})
-		end
 		end
 		CIfEnd()
 		DoActionsX(FP, SetV(BGMType,BGMTypes), 1)
@@ -112,7 +109,7 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 		else
 			CTrigger(FP, {CD(GMode,1),CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
 		end
-		CIf(FP, CD(GMode,1))
+		CIf(FP, {CD(GMode,1),CD(EnableMLocCcode,1)})
 		for i = 0, 6 do
 			CTrigger(FP, {CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
 		end

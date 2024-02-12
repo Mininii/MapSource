@@ -70,7 +70,6 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
     CIfXEnd()
 
 
-	UTAGECcode = CreateCcode()
 	GST2 = CreateCcode()
 	TriggerX(FP, {CD(UTAGECcode,1)}, {
 		SetMemoryB(0x58D088+(46*0)+7,SetTo,255),
@@ -87,6 +86,7 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		SetMemoryB(0x58D088+(46*4)+0,SetTo,50),
 		SetMemoryB(0x58D088+(46*5)+0,SetTo,50),
 		SetMemoryB(0x58D088+(46*6)+0,SetTo,50),
+		SetMemoryB(0x65FEC8+0, SetTo, 255),SetMemoryB(0x65FEC8+20, SetTo, 255),SetMemoryB(0x65FEC8+125, SetTo, 255),SetMemoryB(0x6635D0 + 125,SetTo,0)
 	}, {preserved})
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
 	GST = CreateCcode()

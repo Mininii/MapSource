@@ -37,6 +37,7 @@ function Include_Vars()
 	VTimerB = CreateVarArr(6,FP)
 	VFlagB = CreateVarArr(6,FP)
 	VFlag256B = CreateVarArr(6,FP)
+	UTAGECcode = CreateCcode()
 	--strings
 	
 	_0D = string.rep("\x0D",200) 

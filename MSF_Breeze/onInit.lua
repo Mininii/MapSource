@@ -274,15 +274,12 @@ end
 		table.insert(CanAct,SetMemory(0x582264 + (i*4),SetTo,3*2))
 		table.insert(CanAct,SetMemory(0x5822C4 + (i*4),SetTo,3*2))
 	end
-	
+
 	CIf(FP, CD(GMode,1),CanAct)
 	CMov(FP,CunitIndex,0)
-	LoopLockCcode = CreateCcode()
 	GunSel = CreateVar(FP)
-	FailRandV = CreateVar(FP)
 	CMov(FP,0x6509B0,19025+25)
-	CMov(FP,FailRandV,0)
-	CIf(FP,{CV(GunSel,9,AtMost),CD(LoopLockCcode,0)})
+	CIf(FP,{CV(GunSel,9,AtMost)})
 		CFor(FP, 19025, 19025+(84*1700), 84)
 		CI = CForVariable()
 
@@ -302,7 +299,6 @@ end
 			DeathsX(CurrentPlayer,Exactly,178,0,0xFF),
 		})})
 		RandV = f_CRandNum(100000, 0)
-		TriggerX(FP,{CD(UTAGECcode,1,AtLeast),CV(RandV,501,AtLeast)},{AddV(FailRandV,1)},{preserved})
 		CIf(FP, {CV(RandV,500,AtMost),TMemoryX(_Add(CI,9), Exactly, 0,0xFF0000)})
 		
 		if Limit == 1 then
@@ -320,7 +316,6 @@ end
 
 		CAdd(FP,GunSel,1)
 		CDoActions(FP,  {TSetMemoryX(_Add(CI,9), SetTo, 1*65536,0xFF0000),Set_EXCC2(DUnitCalc, CunitIndex, 2, SetTo, GunSel)})
-		TriggerX(FP,{CD(UTAGECcode,1,AtLeast)},{SetV(GunSel,0)},{preserved})
 		CIfEnd()
 
 		CIfEnd()
@@ -337,7 +332,6 @@ end
 		CAdd(FP,CunitIndex,1)
 		CForEnd()
 	CIfEnd()
-	TriggerX(FP, {CD(UTAGECcode,1,AtLeast),CV(FailRandV,0)}, {SetCD(LoopLockCcode,1)})
 	CIfEnd()
 
 end
