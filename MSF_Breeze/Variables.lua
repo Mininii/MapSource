@@ -132,6 +132,7 @@ function Include_Vars()
 	SetUnitAbility(98,100,3500,1200,nil,350,1,nil,nil,75000,"라자갈",20000)
 	SetUnitAbility(162,80,5000,5000,nil,650,1,nil,nil,65000,"광자포",10000)
 	SetUnitAbility(29,21,22000,false,nil,900,1,nil,nil,95000,"노라드 II",7500)
+	SetUnitAbility(30,27,322,false,nil,3222,1,nil,nil,1611,"정체성 공성 전차",3222)
 
 
 

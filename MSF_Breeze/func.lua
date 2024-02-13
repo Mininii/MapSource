@@ -840,16 +840,17 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);
-				})
+				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
+				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
 			
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
+			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 			CDoActions(FP,{
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);
 				TSetMemory(_Add(G_CA_Nextptrs,2), SetTo, _Div(_ReadF(_Add(Gun_TempSpawnSet1,EPD(0x662350))),2)),
 			})
 
@@ -903,9 +904,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);
-			})
+				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
+				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 			local RandVar = CreateVar(FP)
 			CMov(FP,RandVar,0)
 			for i = 0, 6 do
@@ -954,6 +954,16 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
 				TOrder(Gun_TempSpawnSet1, Force2, 1, Move, 36);
 			})
+			CElseIfX(CVar(FP,RepeatType[2],Exactly,202))
+			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
+			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+			
+			CMov(FP,CunitIndex,_Div(_Sub(G_CA_Nextptrs,19025),_Mov(84)))
+			CDoActions(FP, {Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
