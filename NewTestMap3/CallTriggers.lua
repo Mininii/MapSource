@@ -127,9 +127,9 @@ GetEPer = f_CRandNum(100000) -- 랜덤 난수 생성. GetEPer 사용 종료까�
 if Limit == 1 then
 DisplayPrint(GCP,{"\x04출력된 난수 : ",GetEPer})
 DisplayPrint(GCP,{"\x1F계산된 성공 확률 : ",E1Range[1]," \x04~ ",E1Range[2]})
-DisplayPrint(GCP,{"\x1F계산된 유지 확률 : ",E2Range[1]," \x04~ ",E2Range[2]})
-DisplayPrint(GCP,{"\x1F계산된 하락 확률 : ",E3Range[1]," \x04~ ",E3Range[2]})
-DisplayPrint(GCP,{"\x1F계산된 파괴 확률 : ",E4Range[1]," \x04~ ",E4Range[2]})
+--DisplayPrint(GCP,{"\x1F계산된 유지 확률 : ",E2Range[1]," \x04~ ",E2Range[2]})
+--DisplayPrint(GCP,{"\x1F계산된 하락 확률 : ",E3Range[1]," \x04~ ",E3Range[2]})
+--DisplayPrint(GCP,{"\x1F계산된 파괴 확률 : ",E4Range[1]," \x04~ ",E4Range[2]})
 end
 
 
@@ -137,19 +137,23 @@ CIfX(FP,{TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])}
 	CIf(FP,CD(AutoOp,0))
 		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x07성공\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x07",EnchNum2,"강 \x07』"})
 	CIfEnd()
-CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])},SetV(Result,2))--유지
+CElseX({},SetV(Result,2))--유지
 	CIf(FP,CD(AutoOp,0))
 		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
 	CIfEnd()
-
-CElseIfX({TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])},SetV(Result,3))--하락
-	CIf(FP,CD(AutoOp,0))
-		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
-	CIfEnd()
-CElseX(SetV(Result,4))--실패
-	CIf(FP,CD(AutoOp,0))
-		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
-	CIfEnd()
+--CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])},SetV(Result,2))--유지
+--	CIf(FP,CD(AutoOp,0))
+--		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x07강화 \x04단계가 \x10유지됩니다. \x07』"})
+--	CIfEnd()
+--
+--CElseIfX({TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])},SetV(Result,3))--하락
+--	CIf(FP,CD(AutoOp,0))
+--		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하였습니다!. \x17",EnchNum,"강 \x04→ \x08",EnchNum3,"강 \x07』"})
+--	CIfEnd()
+--CElseX(SetV(Result,4))--실패
+--	CIf(FP,CD(AutoOp,0))
+--		DisplayPrint(GCP,{"\x12\x07『 \x04강화에 \x08실패\x04하여 \x08단계가 초기화 되었습니다.. \x07』"})
+--	CIfEnd()
 CIfXEnd()
 CElseX()
 	CIf(FP,CD(AutoOp,0))

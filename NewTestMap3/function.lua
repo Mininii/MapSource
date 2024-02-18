@@ -365,9 +365,9 @@ end
 
 function PushLevelUnit(Level,Per,Exp,UnitID,WepID,Cooldown,Damage,UpgradeID,ObjNum,ECost)
 	local pertotal = 0
-	for p,z in pairs(Per) do
-		pertotal = pertotal + z
-	end if pertotal ~= 100000 then PushErrorMsg("Percent Total Error : "..Per[1].." "..Per[2].." "..Per[3].." "..Per[4]) end
+	--for p,z in pairs(Per) do
+	--	pertotal = pertotal + z
+	--end if pertotal ~= 100000 then PushErrorMsg("Percent Total Error : "..Per[1].." "..Per[2].." "..Per[3].." "..Per[4]) end
 	local WepName = {}
 	local DamageFactor = 0
 	--if Damage == 0 then
@@ -473,10 +473,11 @@ function PopLevelUnit()
 	for j,k in pairs(LevelUnitArr) do
 		
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(LevelDataArr,j-1),SetTo,k[2]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3][1]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr2,j-1),SetTo,k[3][2]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr3,j-1),SetTo,k[3][3]))
-		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr4,j-1),SetTo,k[3][4]))
+		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3]))
+		--table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr,j-1),SetTo,k[3][1]))
+		--table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr2,j-1),SetTo,k[3][2]))
+		--table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr3,j-1),SetTo,k[3][3]))
+		--table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(PerDataArr4,j-1),SetTo,k[3][4]))
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ExpDataArr,j-1),SetTo,k[4]))
 		table.insert(CtrigInitArr[FP+1],SetCVAar(VArr(ECostArr,j-1),SetTo,k[5]))
 	end
