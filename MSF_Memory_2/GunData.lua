@@ -1024,16 +1024,12 @@ end
 	DoActionsX(FP,{SetCD(WarpCheck,1),SetInvincibility(Enable,189,Force2,64)})
 
 	for i = 4, 7 do
-		CIfX(FP,{CD(TestMode,1)})
 		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
 		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom 달성시 특수패턴
-		CElseX()
-		TriggerX(FP,{GCP(i)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
-		CIfXEnd()
 	end
 	CIfX(FP,{Gun_Line(30,Exactly,1)})
 
-	CIf(FP,{GCP(4)})
+	CIf(FP,{GCP(4)})--divide
 		
 	CrSwitch = CreateCcode()
 	
@@ -1064,24 +1060,50 @@ end
 
 		CMov(FP,N_A,0)
 		TempRand = f_CRandNum(360)
+		local N_A_Rand = CreateVar(FP)
+		CMov(FP,N_A_Rand,TempRand)
 		CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
-		f_Lengthdir(FP,N_R,_Add(N_A,TempRand),N_X,N_Y)
+		f_Lengthdir(FP,N_R,_Add(N_A,N_A_Rand),N_X,N_Y)
 		
 		CAdd(FP,N_X,G_CA_CenterX)
 		CAdd(FP,N_Y,G_CA_CenterY)
 
 		Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,10)
 
 		CWhile(FP,{CD(CrSwitch,1,AtLeast)},{SubCD(CrSwitch,1)})
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		
+		CDoActions(FP, {TSetCVar(FP,InputMaxRand[2],SetTo,N_R),TSetCVar(FP,Oprnd[2],SetTo,0)})
+		CallTrigger(FP,CRandNum)
+		N_X2 = CreateVar(FP)
+		N_Y2 = CreateVar(FP)
+		f_Lengthdir(FP,TempRand,_Add(N_A,N_A_Rand),N_X2,N_Y2)
+		CAdd(FP,N_X2,G_CA_CenterX)
+		CAdd(FP,N_Y2,G_CA_CenterY)
+		TempRand = f_CRandNum(360)
+		CFor(FP,0,360,90)
+		CI=CForVariable()
+		N_X3 = CreateVar(FP)
+		N_Y3 = CreateVar(FP)
+		f_Lengthdir(FP,64,_Add(CI,TempRand),N_X3,N_Y3)
+		CAdd(FP,N_X3,N_X2)
+		CAdd(FP,N_Y3,N_Y2)
+		Simple_SetLocX(FP,0,N_X3,N_Y3,N_X3,N_Y3)
 
-		DoActions(FP,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),CreateUnit(1,84,1,FP),KillUnit(84,FP),SetMemoryB(0x6636B8+94,SetTo,130)})
+		CIf(FP,{Memory(0x628438, AtLeast, 1)})
+
+		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+		DoActions(FP,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),SetMemoryB(0x669E28+116, SetTo, 12),CreateUnit(1,84,1,FP),KillUnit(84,FP),SetMemoryB(0x6636B8+94,SetTo,130)})
 		CDoActions(FP,{
 			TSetDeaths(_Add(Nextptrs,13),SetTo,100,0),
 			TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000),
 			TSetDeathsX(_Add(Nextptrs,18),SetTo,100,0,0xFFFF)})
+
+		CIfEnd()
+
+
+		CForEnd()
 		CWhileEnd()
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,10)
 		
 
 
@@ -1096,6 +1118,9 @@ end
 		G_CA_SetSpawn({Gun_Line(8,AtLeast,20240)},{84},"ACAS","Warp1",nil,5,nil,"CP",nil,nil,1)
 
 
+	CIfEnd()
+	CIf(FP,{GCP(5)})--tenebris
+		
 	CIfEnd()
 
 
