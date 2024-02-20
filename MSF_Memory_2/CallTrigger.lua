@@ -692,6 +692,86 @@ function NUGive(Var,UnitID)
 	CallTriggerX(FP, CallCGArr, Gun_Line(8,AtLeast,Var), {SetV(CGTemp[3],UnitID)}, 1)--RotatePlayer({DisplayTextX("TGCheckPr",4)}, HumanPlayers, FP)
 	TriggerX(FP,{Gun_Line(8,AtLeast,Var)},{Order(UnitID,Force2,64,Attack,64),SetInvincibility(Disable,UnitID,Force2,64)})
 end
+
+SrchMode = CreateVar(FP) -- 0=좌 1=상 2=우 3=하 4=전방향
+
+DirLoc1 = 0
+DirLoc2 = 9
+MapSizeX = 32*128
+MapSizeY = 32*128
+
+DirRetX = CreateVar(FP)
+DirRetY = CreateVar(FP)
+SearchUnit = CreateVar(FP)
+SearchOwner = CreateVar(FP)
+Mode4CenterX = CreateVar(FP)
+Mode4CenterY = CreateVar(FP)
+DirSrch = SetCallForward()
+SetCall(FP)
+
+CMov(FP,DirRetX,0)
+CMov(FP,DirRetY,0)
+DoActions(FP, {Simple_SetLoc(DirLoc1, 0, 0, 0, 0)})
+
+CFor(FP,0,MapSizeX,32)
+LocTemp = CForVariable()
+LocTemp2 = CreateVar(FP)
+CNeg(FP, LocTemp2,LocTemp)
+
+CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,0)})})
+Simple_SetLocX(FP, DirLoc2, 0, 0, LocTemp, MapSizeY)--좌
+CIf(FP,{CV(SrchMode,4)})
+
+CIfEnd()
+
+DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
+CIfEnd()
+
+CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,1)})})
+Simple_SetLocX(FP, DirLoc2, 0, 0, MapSizeX, LocTemp)--상
+
+DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
+CIfEnd()
+
+CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,2)})})
+Simple_SetLocX(FP, DirLoc2, _Add(LocTemp2,MapSizeX), 0, MapSizeX, MapSizeY)--우
+
+DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
+CIfEnd()
+
+CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,3)})})
+Simple_SetLocX(FP, DirLoc2, 0, _Add(LocTemp2,MapSizeX), MapSizeX, MapSizeY)--하
+
+DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
+CIfEnd()
+
+
+CForEnd()
+
+f_Read(FP,0x58DC60+0x14*0,DirRetX,"X",0xFFFFFFFF)
+f_Read(FP,0x58DC64+0x14*0,DirRetY,"X",0xFFFFFFFF)
+if Limit == 1 then
+	Simple_SetLocX(FP,0, DirRetX,DirRetY,DirRetX,DirRetY)
+	DoActions(FP, {CreateUnit(1, 84, 1, FP),KillUnit(84, FP)})
+	DisplayPrint(HumanPlayers, {"X : ",DirRetX,"   Y : ",DirRetY})
+end
+
+
+
+SetCallEnd()
+function DirectionSearch(Condition,Mode,UnitID,Player)
+	CallTriggerX(FP,DirSrch,Condition,{
+		SetV(SrchMode,Mode),
+		SetV(SearchUnit,UnitID),
+		SetV(SearchOwner,Player),})
+		return DirRetX,DirRetY
+end
+
+
 	
 end
 

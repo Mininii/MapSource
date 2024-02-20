@@ -187,6 +187,7 @@ function Operator_Trig()
 		--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
 		--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
 		--CIfEnd()
+		
 
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
@@ -223,8 +224,22 @@ function Operator_Trig()
 			f_SaveCp()
 			CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 			f_LoadCp()
-
 		CIfEnd()
+		
+		f_SaveCp()
+		CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
+		EXCCUnitHP = CreateVar(FP)
+		CUnitHP = CreateVar(FP)
+		f_Read(FP,_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*7)/4))),EXCCUnitHP)
+		f_Read(FP,_Add(Cunit2,2),CUnitHP)
+		CDiv(FP,EXCCUnitHP,256)
+		CDiv(FP,CUnitHP,256)
+		DisplayPrint(CurrentOP, {"CUnitHP : ",CUnitHP,"   EXCCUnitHP : ",EXCCUnitHP})
+		
+
+
+		f_LoadCp()
+
 	CIfEnd()
 
 	CMov(FP,0x6509B0,FP)--상위플레이어 단락

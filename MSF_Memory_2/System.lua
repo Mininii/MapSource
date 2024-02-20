@@ -408,9 +408,31 @@ HPRegenTable = {64}
 		end
 
 	CSub(FP,0x6509B0,17)
+	EXCC_BreakCalc({TDeaths(CurrentPlayer,AtMost,0,0)})
+	CIfX(FP,{TDeaths(CurrentPlayer,AtMost,Vi(TempMarHPRead[2],-256),0)})
 
-	CIfX(FP,{TDeaths(CurrentPlayer,AtMost,Vi(TempMarHPRead[2],-256),0)},{TSetDeaths(CurrentPlayer,Add,MarHPRegen,0)})
+	CDoActions(FP, {TSetDeaths(CurrentPlayer,Add,MarHPRegen,0)})
+	local ReadHP = CreateVar(FP)
+	local SumHP = CreateVar(FP)
+	CIf(FP,{CV(EXCC_TempVarArr[7+1],1,AtLeast)})
+	f_SaveCp()
+		f_Read(FP, BackupCp, ReadHP)
+	f_LoadCp()
+	CAdd(FP,SumHP,EXCC_TempVarArr[7+1],ReadHP)
+	CIfX(FP,{CV(SumHP,TempMarHPRead,AtLeast)})
+	CDoActions(FP, {Set_EXCCX(7, SetTo, _Sub(EXCC_TempVarArr[7+1],_Sub(TempMarHPRead,ReadHP))),TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
+
+	CElseX()
+	CDoActions(FP, {Set_EXCCX(7, SetTo, 0),TSetDeaths(CurrentPlayer,Add,EXCC_TempVarArr[7+1],0)})
+
+	CIfXEnd()
+	CIfEnd()
+
 	CElseX({TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
+
+	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtMost,_Add(TempMarHPRead,-256))}, {Set_EXCCX(7,Add,MarHPRegen)}, {preserved})
+	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtLeast,TempMarHPRead)}, {Set_EXCCX(7,SetTo,TempMarHPRead)}, {preserved})
+
 	CIfXEnd()
 	CAdd(FP,0x6509B0,17)
 
@@ -449,16 +471,20 @@ HPRegenTable = {64}
 	
 	CIf(FP,{CV(Level,40,AtLeast),Cond_EXCC(3,AtMost,0)})
 		MarSkill = def_sIndex()
+		MarSkillAttackTargetPtr = CreateVar(FP)
+		MarSkillAttackTargetEPD = CreateVar(FP)
+
 		CJump(FP,MarSkill)
 		CallMarSkill = SetCallForward()
 		SetCall(FP)
 		f_SaveCp()
-
-		CIfX(FP,{TMemoryX(_Add(BackupCp,50),AtLeast,1*256,0xFF00)})
+		--+4 공격대상ptr
+		CIfX(FP,{TMemoryX(_Add(BackupCp,50),AtLeast,1*256,0xFF00)})--69
 		CDoActions(FP,{Set_EXCCX(3,SetTo,15)})
 		CElseX()
 		CDoActions(FP,{Set_EXCCX(3,SetTo,25)})
 		CIfXEnd()
+		f_Read(FP,_Add(BackupCp,4),MarSkillAttackTargetPtr,MarSkillAttackTargetEPD)
 
 		f_Read(FP,_Sub(BackupCp,9),CPos)
 		CMov(FP,CPlayer,_Read(BackupCp),nil,0xFF)
@@ -471,13 +497,18 @@ HPRegenTable = {64}
 		--TriggerX(FP,{HumanCheck(i,1)},{SetCVar(FP,MarSkillCA[5],Subtract,1)},{preserved})
 		end
 		function MarListSkillUnitFunc()
-			CIf(FP,Memory(0x628438,AtLeast,1))
+			CIf(FP,{Memory(0x628438,AtLeast,1),TMemoryX(_Add(MarSkillAttackTargetEPD,19),AtLeast,1*256,0xFF00)})--공격대상이 살아있을 경우에만 발동함
 			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			
 			CDoActions(FP,{
 				TCreateUnit(1,183,1,CPlayer),
-				TSetDeathsX(_Add(Nextptrs,19),SetTo,152*256,0,0xFF00),
+				TSetDeathsX(_Add(Nextptrs,19),SetTo,10*256,0,0xFF00),
+				TSetDeathsX(_Add(Nextptrs,19),SetTo,1*65536,0,0xFF0000),
+				TSetDeaths(_Add(Nextptrs,23),SetTo,MarSkillAttackTargetPtr,0),
 				TSetDeathsX(_Add(Nextptrs,9),SetTo,0*65536,0,0xFF0000),
-				TSetDeaths(_Add(Nextptrs,22),SetTo,2048+(2048*65536),0),
+				TSetDeathsX(_Add(Nextptrs,21),SetTo,0,0,0xFF),
+				TSetDeathsX(_Add(Nextptrs,21),SetTo,0,1,0xFF00),
+				--TSetDeaths(_Add(Nextptrs,22),SetTo,2048+(2048*65536),0),
 			})
 			CIfEnd()
 		end

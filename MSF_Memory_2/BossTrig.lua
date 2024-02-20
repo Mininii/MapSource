@@ -13,7 +13,16 @@ function BossTrig()
 	TV = CreateVarArr(10,FP)
 
 
+
+
+	
+
+
+
+
+B1Mode = CreateCcode()
 	CIf(FP,CV(BPtrArr[1],1,AtLeast),{AddCD(B1C[2],1)})--하템보스
+		DoActionsX(FP, SetCD(B1Mode,4), 1)
 		TriggerX(FP,{CD(Theorist,1,AtLeast)},{SetInvincibility(Enable, 87, P5, 64)})
 		CIf(FP,CD(B1C[1],0))
 			TriggerX(FP,{CD(B1C[2],15,AtLeast)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
@@ -22,7 +31,13 @@ function BossTrig()
 				CMov(FP,TV[2],f_CRandNum(360))
 				f_Lengthdir(FP,TV[1],TV[2],N_X,N_Y)
 				DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,0)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,1)}, {SetMemoryB(0x669E28+116, SetTo, 16);},{preserved})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,2)}, {SetMemoryB(0x669E28+116, SetTo, 13);},{preserved})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,3)}, {SetMemoryB(0x669E28+116, SetTo, 10);},{preserved})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,4)}, {SetMemoryB(0x669E28+116, SetTo, 12);},{preserved})
 				Simple_SetLoc2X(FP,0,N_X,N_Y,N_X,N_Y,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64),SetMemoryB(0x6636B8+94,SetTo,130)})
+				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
 			CWhileEnd()
 			DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
 			DoActions(FP,{Order(94,P5,64,Move,1),})
@@ -39,10 +54,18 @@ function BossTrig()
 					CIf(FP,DeathsX(CurrentPlayer,Exactly,94,0,0xFF))
 						f_SaveCp()
 						CMov(FP,TV[1],BackupCp,-25)
+						CIfX(FP,{CD(AxiomCcode[1],0)})
 						CMov(FP,TV[2],f_CRandNum(500,100))
-						CMov(FP,TV[3],f_CRandNum(100))
-						CDoActions(FP,{TSetDeaths(_Add(TV[1],13),SetTo,TV[2],0),TSetDeaths(_Add(TV[1],2),SetTo,_Add(f_CRandNum(100*256),100*256),0),TSetDeathsX(_Add(TV[1],9),SetTo,0,0,0xFF0000),
-						TSetDeathsX(_Add(TV[1],18),SetTo,TV[2],0,0xFFFF)})
+						CMov(FP,TV[3],TV[2])
+						CElseX()
+						CMov(FP,TV[2],f_CRandNum(7000,450))
+						CMov(FP,TV[3],24)
+						CIfXEnd()
+						CTrigger(FP,{CD(AxiomCcode[1],0)},{TSetDeaths(_Add(TV[1],2),SetTo,_Add(f_CRandNum(100*256),100*256),0),},{preserved})
+						CDoActions(FP,{
+							TSetDeaths(_Add(TV[1],13),SetTo,TV[2],0),
+							TSetDeathsX(_Add(TV[1],9),SetTo,0,0,0xFF0000),
+						TSetDeathsX(_Add(TV[1],18),SetTo,TV[3],0,0xFFFF)})
 						f_LoadCp()
 					CIfEnd()
 					CSub(FP,0x6509B0,6)
@@ -54,10 +77,50 @@ function BossTrig()
 			CIfEnd()
 			TriggerX(FP,{CD(B1C[3],1,AtLeast)},{AddCD(B1C[3],1)},{preserved})
 			TriggerX(FP,{CD(B1C[3],100)},{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64),SetMemoryB(0x6636B8+94,SetTo,125)},{preserved})
-			TriggerX(FP,{CD(B1C[3],100,AtLeast),Bring(P5,AtMost,0,94,64)},{SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0)},{preserved})
-			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0)},{preserved})
+			TriggerX(FP,{CD(B1C[3],100,AtLeast),Bring(P5,AtMost,0,94,64)},{SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
+			
+			CIf(FP,{CD(AxiomCcode[1],1,AtLeast),CD(B1C[3],100,AtLeast)})
+
+			for y = 0, 4 do
+			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, P5)
+			end
+			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+			
+			DoActions(FP, {Simple_CalcLoc(0, -1, 1, -1, 1),ModifyUnitHitPoints(1, 94, P5, 1, 0)})
+
+--			CIf(FP,{Bring(FP, AtLeast, 100, 94, 64)})
+--			for y = 0, 4 do
+--			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
+--			end
+--			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+--			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
+--			CIfEnd()
+--			CIf(FP,{Bring(FP, AtLeast, 200, 94, 64)})
+--			for y = 0, 4 do
+--			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
+--			end
+--			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+--			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
+--			CIfEnd()
+--			CIf(FP,{Bring(FP, AtLeast, 300, 94, 64)})
+--			for y = 0, 4 do
+--			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
+--			end
+--			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+--			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
+--			CIfEnd()
+--			CIf(FP,{Bring(FP, AtLeast, 400, 94, 64)})
+--			for y = 0, 4 do
+--			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
+--			end
+--			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+--			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
+--			CIfEnd()--
+
 			CIfEnd()
-		
+			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
+			CIfEnd()
+		TriggerX(FP, {CD(B1Mode,5,AtLeast)}, {SetCD(B1Mode,0)},{preserved})
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1])},1)
 	CIfEnd()
 

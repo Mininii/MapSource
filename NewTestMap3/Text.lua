@@ -27,12 +27,22 @@ function Text()
 	CJump(FP, iStrSector)
 	
 	t00 = "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
-	
+	t01 = "\x07강화확률 \x04: \x0D\x0D000.000\x08%\x0D\x0D"
+
+	t03 = "\x05- 강화 불가 유닛 -"
+
+	t02 = "\x08★\x11☆\x08★ \x1F최 강 유 닛 \x08★\x11☆\x08★"
 	t04 = "\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d"
 	Reset, Reseta, Resets = SaveiStrArrX(FP,t00)
+	TStr1, TStr1a, TStr1s = SaveiStrArrX(FP,t01)
+	TStr3, TStr3a, TStr3s = SaveiStrArrX(FP,t03)
 
+
+	TStr0, TStr0a, TStr0s = SaveiStrArrX(FP,t00)
+
+	TStr2, TStr2a, TStr2s = SaveiStrArrX(FP,t02)
 	EStr0, EStr0a, EStr0s = SaveiStrArrX(FP,"\x19EXP\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x04 : \x0D0,000,000,000,000,000,000.0\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	EStr1, EStr1a, EStr1s = SaveiStrArrX(FP,"\x08판매 불가 유닛")
+	EStr1, EStr1a, EStr1s = SaveiStrArrX(FP,"\x06- 판매 불가 유닛 -")
 	iStr1 = GetiStrId(FP,MakeiStrWord(MakeiStrVoid(54).."\r\n",3)) 
 
 	Str1, Str1a, Str1s = SaveiStrArrX(FP,MakeiStrVoid(54))
@@ -46,9 +56,12 @@ function Text()
 	ExpLoc = iv.ExpLoc
 	
 	S1 = MakeiTblString(764,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
+
+
+
+	S0 = MakeiTblString(1495,"None",'None',MakeiStrLetter("\x0D",GetiStrSize(0,t00)+5),"Base",1) -- 단축키없음
+	iTbl1 = GetiTblId(FP,1495,S0)
 	iTbl2 = GetiTblId(FP,764,S1)
-
-
 
 
 	local TempFf = CreateWar(FP)
@@ -91,10 +104,12 @@ function Text()
 	
 	for i = 1, 15 do
 		CIf(FP,{CV(SelUID,LevelUnitArr[i][2])})
-		CMov(FP,TotalEPerLoc1,LevelUnitArr[i][3][1])
-		CMov(FP,TotalEPerLoc2,LevelUnitArr[i][3][2])
-		CMov(FP,TotalEPerLoc3,LevelUnitArr[i][3][3])
-		CMov(FP,TotalEPerLoc4,LevelUnitArr[i][3][4])
+		CMov(FP,TotalEPerLoc1,LevelUnitArr[i][3])
+		CMov(FP,SelPer,LevelUnitArr[i][3])
+		--CMov(FP,TotalEPerLoc1,LevelUnitArr[i][3][1])
+		--CMov(FP,TotalEPerLoc2,LevelUnitArr[i][3][2])
+		--CMov(FP,TotalEPerLoc3,LevelUnitArr[i][3][3])
+		--CMov(FP,TotalEPerLoc4,LevelUnitArr[i][3][4])
 		CMov(FP,CostLoc,LevelUnitArr[i][5])
 		f_LMov(FP, SelEXP, tostring(LevelUnitArr[i][4])  ,nil,nil, 1)
 		CIfEnd()
@@ -108,24 +123,24 @@ function Text()
 		CDoActions(FP,{TBwrite(_Add(Etbl,26+28+i),SetTo,EVarArr1[i+1])})
 		CDoActions(FP,{TBwrite(_Add(Etbl,26+28+4+i),SetTo,EVarArr1[i+4])})
 	end
-	CMov(FP,GEVar,TotalEPerLoc2)
-	CallTrigger(FP, Call_SetEPerStr)
-	for i = 0, 2 do
-		CDoActions(FP,{TBwrite(_Add(Etbl,45+28+i),SetTo,EVarArr1[i+1])})
-		CDoActions(FP,{TBwrite(_Add(Etbl,45+28+4+i),SetTo,EVarArr1[i+4])})
-	end
-	CMov(FP,GEVar,TotalEPerLoc3)
-	CallTrigger(FP, Call_SetEPerStr)
-	for i = 0, 2 do
-		CDoActions(FP,{TBwrite(_Add(Etbl,64+28+i),SetTo,EVarArr1[i+1])})
-		CDoActions(FP,{TBwrite(_Add(Etbl,64+28+4+i),SetTo,EVarArr1[i+4])})
-	end
-	CMov(FP,GEVar,TotalEPerLoc4)
-	CallTrigger(FP, Call_SetEPerStr)
-	for i = 0, 2 do
-		CDoActions(FP,{TBwrite(_Add(Etbl,85+28+i),SetTo,EVarArr1[i+1])})
-		CDoActions(FP,{TBwrite(_Add(Etbl,85+28+4+i),SetTo,EVarArr1[i+4])})
-	end
+--	CMov(FP,GEVar,TotalEPerLoc2)
+--	CallTrigger(FP, Call_SetEPerStr)
+--	for i = 0, 2 do
+--		CDoActions(FP,{TBwrite(_Add(Etbl,45+28+i),SetTo,EVarArr1[i+1])})
+--		CDoActions(FP,{TBwrite(_Add(Etbl,45+28+4+i),SetTo,EVarArr1[i+4])})
+--	end
+--	CMov(FP,GEVar,TotalEPerLoc3)
+--	CallTrigger(FP, Call_SetEPerStr)
+--	for i = 0, 2 do
+--		CDoActions(FP,{TBwrite(_Add(Etbl,64+28+i),SetTo,EVarArr1[i+1])})
+--		CDoActions(FP,{TBwrite(_Add(Etbl,64+28+4+i),SetTo,EVarArr1[i+4])})
+--	end
+--	CMov(FP,GEVar,TotalEPerLoc4)
+--	CallTrigger(FP, Call_SetEPerStr)
+--	for i = 0, 2 do
+--		CDoActions(FP,{TBwrite(_Add(Etbl,85+28+i),SetTo,EVarArr1[i+1])})
+--		CDoActions(FP,{TBwrite(_Add(Etbl,85+28+4+i),SetTo,EVarArr1[i+4])})
+--	end
 
 	
 	
@@ -175,17 +190,111 @@ function Text()
 		--DPS 게이지 표기 작성할것
 	CIfXEnd()
 
+	
+	CIfX(FP,{CV(SelUID,LevelUnitArr[#LevelUnitArr][2])})--최강유닛일경우
+		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+		CS__InputVA(FP,iTbl1,0,TStr2,TStr2s,nil,0,TStr2s)
+
+	
+
+	CElseIfX({CD(XEperFlag,0),CV(SelPer,0)})--강화유닛이 아닐 경우
+		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+		CS__InputVA(FP,iTbl1,0,TStr3,TStr3s,nil,0,TStr3s)
+	CElseIfX({CD(BossFlag,1)})--보스건물일경우
+		--현재 DPS 요구치 표기는 별도
+	CElseX()--그외
+	MFlag = CreateCcode()
+		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
+
+
+
+		--CS__SetValue(FP,TStr1,t01,nil,0)
+		CS__ItoCustom(FP,SVA1(TStr1,7+1),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+	--8 9 10
+	--12 13 14
+	CS__InputTA(FP,{CSVA1(SVA1(TStr1,10+1), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
+	local TempV =CreateVar(FP)
+	local TempV2 =CreateVar(FP)
+	CMod(FP,TempV,SelPer,1000)
+	CDiv(FP,TempV2,SelPer,1000)
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,12+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,11+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,12+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	
+	CIf(FP,{CV(TempV2,0)})
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,8)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,9)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,10)
+	CS__SetValue(FP,TStr1,"\x080",nil,11)
+	
+	CIfEnd()
+	CIf(FP,{CV(TempV,0)})
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,12)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,13)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,14)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,15)
+	CIfEnd()
+
+	CIf(FP,{CV(TempV2,0),CV(TempV,1,AtLeast)})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,13), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,13), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,14), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,14), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,15), Exactly, string.byte("\x0D")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,15), SetTo, string.byte("0")*0x1000000,0xFF000000),
+	}, {preserved})
+
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,13+1), Exactly, string.byte("0")*0x1000000, 0xFF000000),
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,13+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	TriggerX(FP, {
+		CSVA1(SVA1(TStr1,14+1), Exactly, string.byte("0")*0x1000000, 0xFF000000)
+	}, {
+		SetCSVA1(SVA1(TStr1,14+1), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
+	}, {preserved})
+	
+	CIfEnd()
+
+	
+		CS__InputVA(FP,iTbl1,0,TStr1,TStr1s,nil,0,TStr1s)
+	CIfXEnd()
+
 
 
 
 
 	CIfEnd()
-
-
-
-
-
-
 	CIfEnd()
 
 

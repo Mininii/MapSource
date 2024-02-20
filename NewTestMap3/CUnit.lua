@@ -48,10 +48,11 @@ for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
 	else ResultUnit1=0
 	end
 	CallTriggerX(FP, Call_Ench, {CV(UID,k[2])},{SetV(EnchNum,k[1]),SetNWar(EnchCost,SetTo,tostring(k[5])),SetV(ReturnUnit1,ResultUnit1),SetV(ReturnUnit2,ResultUnit2),
-	SetV(E1Range[1],0),SetV(E1Range[2],k[3][1]),
-	SetV(E2Range[1],k[3][1]+1),SetV(E2Range[2],k[3][1]+k[3][2]),
-	SetV(E3Range[1],k[3][1]+k[3][2]+1),SetV(E3Range[2],k[3][1]+k[3][2]+k[3][3]),
-	SetV(E4Range[1],k[3][1]+k[3][2]+k[3][3]+1),SetV(E4Range[2],k[3][1]+k[3][2]+k[3][3]+k[3][4])})
+	SetV(E1Range[1],0),SetV(E1Range[2],k[3]),
+	--SetV(E2Range[1],k[3][1]+1),SetV(E2Range[2],k[3][1]+k[3][2]),
+	--SetV(E3Range[1],k[3][1]+k[3][2]+1),SetV(E3Range[2],k[3][1]+k[3][2]+k[3][3]),
+	--SetV(E4Range[1],k[3][1]+k[3][2]+k[3][3]+1),SetV(E4Range[2],k[3][1]+k[3][2]+k[3][3]+k[3][4])
+})
 	end
 end
 CIf(FP,{CV(Result,1,AtLeast)})
@@ -68,8 +69,8 @@ CIf(FP,{CV(Result,1,AtLeast)})
 	})
 	CallTrigger(FP, CreateStackedUnit)
 	
-	CElseIfX(CV(Result,2),{TCreateUnitWithProperties(1, 84, 1, GCP,{hallucinated = false}),KillUnit(84, AllPlayers)})-- 유지시
-	
+	CElseIfX(CV(Result,2),{})-- 유지시
+	CDoActions(FP,{TCreateUnit(1, 84, 1, GCP),KillUnit(84, AllPlayers)})
 	CElseIfX(CV(Result,3),{TKillUnitAt(1, UID, 1, GCP)})-- 하락시
 
 	CDoActions(FP, {
@@ -90,13 +91,13 @@ CIf(FP,{CV(Result,1,AtLeast)})
 	CallTrigger(FP, CreateStackedUnit)
 	DoActions(FP, KillUnit(50, AllPlayers))
 
-	CElseX({TKillUnitAt(1, UID, 1, GCP),TCreateUnitWithProperties(1, 49, 1, GCP,{hallucinated = false}),KillUnit(49, AllPlayers)})-- 파괴시
+	CElseX({TKillUnitAt(1, UID, 1, GCP),})-- 파괴시
 	CDoActions(FP, {
 		SetNVar(SAmount,SetTo,1),
 		TSetNVar(SUnitID,SetTo,LevelUnitArr[1][2]),
 		SetNVar(SLocation,SetTo,1),
 		SetNVar(DLocation,SetTo,0),
-		TSetNVar(SPlayer,SetTo,GCP),
+		TSetNVar(SPlayer,SetTo,GCP),TCreateUnitWithProperties(1, 49, 1, GCP,{hallucinated = false}),KillUnit(49, AllPlayers)
 	})
 	CallTrigger(FP, CreateStackedUnit)
 
