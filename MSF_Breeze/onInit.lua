@@ -275,7 +275,16 @@ end
 		table.insert(CanAct,SetMemory(0x5822C4 + (i*4),SetTo,3*2))
 	end
 
-	CIf(FP, CD(GMode,1),CanAct)
+	CanAct2 = {}
+
+	for i = 0, 6 do
+		table.insert(CanAct2,SetMemory(0x582264 + (i*4),SetTo,0))
+		table.insert(CanAct2,SetMemory(0x5822C4 + (i*4),SetTo,0))
+	end
+
+	TriggerX(FP, {CD(UTAGECcode,0)}, CanAct, {preserved})
+	TriggerX(FP, {CD(UTAGECcode,1)}, CanAct2, {preserved})
+	CIf(FP, CD(GMode,1))
 	CMov(FP,CunitIndex,0)
 	GunSel = CreateVar(FP)
 	CMov(FP,0x6509B0,19025+25)

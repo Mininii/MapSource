@@ -118,9 +118,9 @@ NJumpEnd(FP, EnemyArea)
 	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,4)}, {21,17}, {S_5,P_5}, {2,5}, "MAX", 1, nil, nil, FP)
 	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,5)}, {28,19}, {S_3,P_4}, {3,6}, "MAX", 1, nil, nil, FP)
 	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,6)}, {98,76}, {P_6,P_7}, {5,6}, "MAX", 1, nil, nil, FP)
-	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,7)}, {162,10}, {P_4,P_5}, {4,5}, "MAX", 1, nil, nil, FP)
+	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,7)}, {162,10}, {P_4,P_5}, {6,5}, "MAX", 1, nil, nil, FP)
 	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,8)}, {86,79}, {S_7,P_8}, {2,5}, "MAX", 1, nil, nil, FP)
-	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,9)}, {29,25}, {P_4,P_8}, {4,6}, "MAX", 1, nil, nil, FP)
+	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,9)}, {29,25}, {P_4,P_8}, {5,6}, "MAX", 1, nil, nil, FP)
 	G_CA_SetSpawn({CD(UTAGECcode,1,AtLeast),CV(TrapNum,10)}, {30}, {P_3}, {5}, "MAX", nil, nil, nil, FP)
 
 
@@ -153,8 +153,8 @@ NJumpEnd(FP, EnemyArea)
 
 	f_TempRepeat({CD(UTAGECcode,0)}, 21, 3, 187, FP, {1536,1920})
 	f_TempRepeat({CD(UTAGECcode,0)}, 88, 3, 187, FP, {1536,1920})
-	f_TempRepeat({CD(UTAGECcode,1,AtLeast)}, 21, 10, 188, FP, {1536,1920})
-	f_TempRepeat({CD(UTAGECcode,1,AtLeast)}, 88, 10, 188, FP, {1536,1920})
+	f_TempRepeat({CD(UTAGECcode,1,AtLeast)}, 21, 6, 188, FP, {1536,1920})
+	f_TempRepeat({CD(UTAGECcode,1,AtLeast)}, 88, 6, 188, FP, {1536,1920})
 	CIf(FP,{CD(UTAGECcode,1,AtLeast)})
 	f_Read(FP, _Sub(BackupCp,15), CPos, nil, nil, 1)
 	Convert_CPosXY()
@@ -187,9 +187,12 @@ EXCC_ClearCalc()
 
 	CanC = CreateVar(FP)
 	CanCT = CreateCcode()
+	CanW = CreateVar(FP)
 	DefeatCC = CreateCcode()
+
+CIfX(FP,{CD(UTAGECcode,0)})
 CIf(FP,{--캔발동
-Command(FP,AtLeast,1,147);
+	Command(FP,AtLeast,1,147);
 	CV(CanC,1,AtMost);
 	CDeaths(FP,AtMost,0,CanCT);
 	Memory(0x628438,AtMost,0);
@@ -244,11 +247,43 @@ DoActions2X(FP,{RotatePlayer({
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 },HumanPlayers,FP)},1)
 
-TriggerX(FP,{CD(UTAGECcode,1,AtLeast)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);},{preserved})
 TriggerX(FP,{CD(TestMode,0),CD(DefeatCC,100,AtLeast)},{RotatePlayer({Defeat()},MapPlayers,FP)})
 CIfEnd()
+CElseX()
+
+CIf(FP,{--캔발동
+	Command(FP,AtLeast,1,147);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit("Factories",Force2);
+	SetCDeaths(FP,SetTo,24*30,CanCT);
+	AddV(CanW,10);})
+
+Trigger2X(FP,{},{
+	RotatePlayer({
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\canwarn.wav"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+		},HumanPlayers,FP);
+},{preserved})
+CIfEnd()
+DoActions2X(FP,{SubCD(CanCT,1)})
+CWhile(FP, {Memory(0x628438,AtLeast,1);CV(CanW,1,AtLeast)}, SubV(CanW, 1))
+	--191
+	f_TempRepeat({}, 8, 3, 191, FP, {1536,1920})
+CWhileEnd()
+
+
+CIfXEnd()
+
+
+
+
+
 for i = 0, 6 do
-CIf(FP,{HumanCheck(i, 1)})
+CIf(FP,{HumanCheck(i, 1),CD(UTAGECcode,0)})
 CMov(FP,0x582294+(i*4),CanC)
 CAdd(FP,0x582294+(i*4),CanC)
 CIfEnd()

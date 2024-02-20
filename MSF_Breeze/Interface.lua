@@ -86,6 +86,7 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		SetMemoryB(0x58D088+(46*4)+0,SetTo,50),
 		SetMemoryB(0x58D088+(46*5)+0,SetTo,50),
 		SetMemoryB(0x58D088+(46*6)+0,SetTo,50),
+		SetMemory(0x662350 + (125*4),SetTo,167772*256),
 		SetMemoryB(0x65FEC8+0, SetTo, 100),SetMemoryB(0x65FEC8+20, SetTo, 100),SetMemoryB(0x65FEC8+125, SetTo, 100),SetMemoryB(0x6635D0 + 125,SetTo,0)
 	}, {preserved})
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
@@ -98,7 +99,7 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다. 공방에서 플레이하시길 추천드립니다."), 4)}, HumanPlayers, FP)},1)
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 공방에서 플레이하기에 매우 어려워졌으나 공격력 최대 업글 가능 횟수 상승됩니다."), 4)}, HumanPlayers, FP)},1)
 	for i = 0, 6 do
-	TriggerX(FP, {CD(LimitT[i+1],1),Bring(i, AtLeast, 1, 15, 76)}, {SetCD(UTAGECcode,1),RotatePlayer({DisplayTextX(StrDesignX("\x07연회장 모드\x04가 활성화되었습니다.").."\n"..StrDesignX("기본 방어력 100 제공, 공업 제한 삭제, 영작포인트 "..EVFPtsMul.."배, 건작 패턴 다수 변경"), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),})
+	TriggerX(FP, {CD(LimitT[i+1],1),Bring(i, AtLeast, 1, 15, 76)}, {SetCD(UTAGECcode,1),RotatePlayer({DisplayTextX(StrDesignX("\x07연회장 모드\x04가 활성화되었습니다.").."\n"..StrDesignX("기본 방어력 100 제공, 공업 제한 삭제, 벙커 체력 증가, 영작포인트 "..EVFPtsMul.."배, 건작 패턴 다수 변경"), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),})
 	end
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 58)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 57)}, {SetCD(GST,1),SetCD(GMode,1),--SetV(ExRate,11),

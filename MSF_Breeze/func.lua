@@ -886,6 +886,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
 				TempSpeedVar = f_CRandNum(8000)
 				CDoActions(FP,{
+					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
 					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,_Add(TempSpeedVar,500),0),
 					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,_Add(TempSpeedVar,500),0,0xFFFF)})
 				--CElseX()
@@ -898,7 +899,20 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 					TSetMemory(_Add(G_CA_Nextptrs,2), SetTo, _Div(_ReadF(_Add(Gun_TempSpawnSet1,EPD(0x662350))),2)),
 				})
 
+				CElseIfX(CVar(FP,RepeatType[2],Exactly,191))
 
+				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+				CDoActions(FP,{
+					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,4000,0),
+					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
+				--CElseX()
+				--CDoActions(FP,{
+				--	TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
+				--	TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
+				--CIfXEnd()
+				CDoActions(FP,{
+					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
+				})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,18))
 			
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
