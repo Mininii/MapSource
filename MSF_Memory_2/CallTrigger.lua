@@ -695,8 +695,11 @@ end
 
 SrchMode = CreateVar(FP) -- 0=좌 1=상 2=우 3=하 4=전방향
 
-DirLoc1 = 0
-DirLoc2 = 9
+DirLocMain = 0
+DirLoc2 = 250
+DirLoc3 = 251
+DirLoc4 = 252
+DirLoc5 = 253
 MapSizeX = 32*128
 MapSizeY = 32*128
 
@@ -704,70 +707,121 @@ DirRetX = CreateVar(FP)
 DirRetY = CreateVar(FP)
 SearchUnit = CreateVar(FP)
 SearchOwner = CreateVar(FP)
-Mode4CenterX = CreateVar(FP)
-Mode4CenterY = CreateVar(FP)
+DirSrchCenterX = CreateVar(FP)
+DirSrchCenterY = CreateVar(FP)
 DirSrch = SetCallForward()
-SetCall(FP)
+SetCall(FP) 
 
 CMov(FP,DirRetX,0)
 CMov(FP,DirRetY,0)
-DoActions(FP, {Simple_SetLoc(DirLoc1, 0, 0, 0, 0)})
+DoActions(FP, {Simple_SetLoc(DirLocMain, 0, 0, 0, 0)})
+if MapSizeX%32~=0 then PushErrorMsg("Must Have Divide MapSizeX to 32") end
+if MapSizeY%32~=0 then PushErrorMsg("Must Have Divide MapSizeY to 32") end
+TempX1 = CreateVar(FP)
+TempX2 = CreateVar(FP)
+TempX3 = CreateVar(FP)
+TempX4 = CreateVar(FP)
+LocTempX1 = CreateVar(FP)
+LocTempY1 = CreateVar(FP)
+LocTempX2 = CreateVar(FP)
+LocTempY2 = CreateVar(FP)
+CiSub(FP,LocTempX1,DirSrchCenterX,2048)
+CAdd(FP,LocTempX2,DirSrchCenterX,2048)
+CiSub(FP,LocTempY1,DirSrchCenterY,2048)
+CAdd(FP,LocTempY2,DirSrchCenterY,2048)
 
-CFor(FP,0,MapSizeX,32)
-LocTemp = CForVariable()
-LocTemp2 = CreateVar(FP)
-CNeg(FP, LocTemp2,LocTemp)
+Simple_SetLocX(FP, DirLoc2, 0, 0, LocTempX1, MapSizeY)--좌
+Simple_SetLocX(FP, DirLoc3, 0, 0, MapSizeX, LocTempY1)--상
+Simple_SetLocX(FP, DirLoc4, LocTempX2, 0, MapSizeX, MapSizeY)--우
+Simple_SetLocX(FP, DirLoc5, 0, LocTempY2, MapSizeX, MapSizeY)--하
+--if Limit == 1 then
+--	local Ret1, Ret2, Ret3, Ret4 = CreateVars(4)
+--	f_Read(FP,0x58DC60+0x14*DirLoc2,Ret1,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC64+0x14*DirLoc2,Ret2,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC68+0x14*DirLoc2,Ret3,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC6C+0x14*DirLoc2,Ret4,"X",0xFFFFFFFF)
+--	DisplayPrint(HumanPlayers, {"DirLoc2 : ",Ret1," | ",Ret2," | ",Ret3," | ",Ret4})
+--	f_Read(FP,0x58DC60+0x14*DirLoc3,Ret1,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC64+0x14*DirLoc3,Ret2,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC68+0x14*DirLoc3,Ret3,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC6C+0x14*DirLoc3,Ret4,"X",0xFFFFFFFF)
+--	DisplayPrint(HumanPlayers, {"DirLoc3 : ",Ret1," | ",Ret2," | ",Ret3," | ",Ret4})
+--	f_Read(FP,0x58DC60+0x14*DirLoc4,Ret1,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC64+0x14*DirLoc4,Ret2,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC68+0x14*DirLoc4,Ret3,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC6C+0x14*DirLoc4,Ret4,"X",0xFFFFFFFF)
+--	DisplayPrint(HumanPlayers, {"DirLoc4 : ",Ret1," | ",Ret2," | ",Ret3," | ",Ret4})
+--	f_Read(FP,0x58DC60+0x14*DirLoc5,Ret1,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC64+0x14*DirLoc5,Ret2,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC68+0x14*DirLoc5,Ret3,"X",0xFFFFFFFF)
+--	f_Read(FP,0x58DC6C+0x14*DirLoc5,Ret4,"X",0xFFFFFFFF)
+--	DisplayPrint(HumanPlayers, {"DirLoc5 : ",Ret1," | ",Ret2," | ",Ret3," | ",Ret4})
+--end
+--CAdd(FP,LocTempX1,32)
+--CSub(FP,LocTempX2,32)
+--CAdd(FP,LocTempY1,32)
+--CSub(FP,LocTempY2,32)
+CFor(FP,0,math.max(MapSizeX, MapSizeY),32)
+CI = CForVariable()
 
-CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,0)})})
-Simple_SetLocX(FP, DirLoc2, 0, 0, LocTemp, MapSizeY)--좌
-CIf(FP,{CV(SrchMode,4)})
 
-CIfEnd()
+NIf(FP,{CV(CI,math.max(MapSizeX, MapSizeY),AtMost),TTLoc(DirLoc2, "R",iAtMost,MapSizeX),TTOR({CV(SrchMode,4),CV(SrchMode,0)})},{KillUnitAt(1, nilunit, DirLoc2+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {TMoveLocation(DirLocMain+1, SearchUnit, SearchOwner, DirLoc2+1),SetV(CI,math.max(MapSizeX, MapSizeY)-32)},{preserved})
+DoActions(FP, {SetLoc(DirLoc2, "R", Add, 32)})
+NIfEnd()
 
-DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
-CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
-CIfEnd()
 
-CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,1)})})
-Simple_SetLocX(FP, DirLoc2, 0, 0, MapSizeX, LocTemp)--상
 
-DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
-CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
-CIfEnd()
+NIf(FP,{CV(CI,math.max(MapSizeX, MapSizeY),AtMost),TTLoc(DirLoc3, "D",iAtMost,MapSizeY),TTOR({CV(SrchMode,4),CV(SrchMode,1)})},{KillUnitAt(1, nilunit, DirLoc3+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc3+1)}, {TMoveLocation(DirLocMain+1, SearchUnit, SearchOwner, DirLoc3+1),SetV(CI,math.max(MapSizeX, MapSizeY)-32)},{preserved})
+DoActions(FP, {SetLoc(DirLoc3, "D", Add, 32)})
+NIfEnd()
 
-CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,2)})})
-Simple_SetLocX(FP, DirLoc2, _Add(LocTemp2,MapSizeX), 0, MapSizeX, MapSizeY)--우
 
-DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
-CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
-CIfEnd()
+NIf(FP,{CV(CI,math.max(MapSizeX, MapSizeY),AtMost),Loc(DirLoc4, "L",AtLeast,1),TTOR({CV(SrchMode,4),CV(SrchMode,2)})},{KillUnitAt(1, nilunit, DirLoc4+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc4+1)}, {TMoveLocation(DirLocMain+1, SearchUnit, SearchOwner, DirLoc4+1),SetV(CI,math.max(MapSizeX, MapSizeY)-32)},{preserved})
+DoActions(FP, {SetLoc(DirLoc4, "L", Subtract, 32)})
+NIfEnd()
 
-CIf(FP,{CV(LocTemp,MapSizeX,AtMost),TTOR({CV(SrchMode,4),CV(SrchMode,3)})})
-Simple_SetLocX(FP, DirLoc2, 0, _Add(LocTemp2,MapSizeX), MapSizeX, MapSizeY)--하
-
-DoActions(FP, {KillUnitAt(1, nilunit, DirLoc2+1, P12)})
-CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc2+1)}, {SetV(LocTemp,MapSizeX-32),TMoveLocation(DirLoc1+1, SearchUnit, SearchOwner, DirLoc2+1)}, {preserved})
-CIfEnd()
+NIf(FP,{CV(CI,math.max(MapSizeX, MapSizeY),AtMost),Loc(DirLoc5, "U",AtLeast,1),TTOR({CV(SrchMode,4),CV(SrchMode,3)})},{KillUnitAt(1, nilunit, DirLoc5+1, P12)})
+CTrigger(FP, {TBring(SearchOwner, AtLeast, 1, SearchUnit, DirLoc5+1)}, {TMoveLocation(DirLocMain+1, SearchUnit, SearchOwner, DirLoc5+1),SetV(CI,math.max(MapSizeX, MapSizeY)-32)},{preserved})
+DoActions(FP, {SetLoc(DirLoc5, "U", Subtract, 32)})
+NIfEnd()
 
 
 CForEnd()
 
 f_Read(FP,0x58DC60+0x14*0,DirRetX,"X",0xFFFFFFFF)
 f_Read(FP,0x58DC64+0x14*0,DirRetY,"X",0xFFFFFFFF)
-if Limit == 1 then
-	Simple_SetLocX(FP,0, DirRetX,DirRetY,DirRetX,DirRetY)
-	DoActions(FP, {CreateUnit(1, 84, 1, FP),KillUnit(84, FP)})
-	DisplayPrint(HumanPlayers, {"X : ",DirRetX,"   Y : ",DirRetY})
-end
+--if Limit == 1 then
+--	Simple_SetLocX(FP,0, DirRetX,DirRetY,DirRetX,DirRetY)
+--	DoActions(FP, {CreateUnit(1, 84, 1, FP),KillUnit(84, FP)})
+--	DisplayPrint(HumanPlayers, {"X : ",DirRetX,"   Y : ",DirRetY})
+--end
 
 
 
 SetCallEnd()
-function DirectionSearch(Condition,Mode,UnitID,Player)
+function DirectionSearch(Condition,Mode,UnitID,Player,CenterMode)
+	local CC = {
+		SetV(DirSrchCenterX,MapSizeX/2),
+		SetV(DirSrchCenterY,MapSizeY/2),}
+	if CenterMode ~= nil then CC = {} end
 	CallTriggerX(FP,DirSrch,Condition,{
 		SetV(SrchMode,Mode),
 		SetV(SearchUnit,UnitID),
-		SetV(SearchOwner,Player),})
+		SetV(SearchOwner,Player),CC})
+		return DirRetX,DirRetY
+end
+function DirectionSearchX(Condition,Mode,UnitID,Player,CenterXY)
+	CDoActions(FP, {
+		SetV(SrchMode,Mode),
+		SetV(SearchUnit,UnitID),
+		SetV(SearchOwner,Player),
+		SetV(DirSrchCenterX,CenterXY[1]),
+		SetV(DirSrchCenterY,CenterXY[2])
+	})
+	CallTriggerX(FP,DirSrch,Condition)
 		return DirRetX,DirRetY
 end
 

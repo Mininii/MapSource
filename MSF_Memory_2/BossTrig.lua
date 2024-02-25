@@ -25,7 +25,9 @@ B1Mode = CreateCcode()
 		DoActionsX(FP, SetCD(B1Mode,4), 1)
 		TriggerX(FP,{CD(Theorist,1,AtLeast)},{SetInvincibility(Enable, 87, P5, 64)})
 		CIf(FP,CD(B1C[1],0))
-			TriggerX(FP,{CD(B1C[2],15,AtLeast)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
+		
+			TriggerX(FP,{CD(B1C[2],15,AtLeast),CD(AxiomCcode[1],0)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
+			TriggerX(FP,{CD(B1C[2],5,AtLeast),CD(AxiomCcode[1],1,AtLeast)},{SetCD(TC[1],10),SetCD(B1C[2],0)},{preserved})
 			CWhile(FP,CD(TC[1],1,AtLeast),SubCD(TC[1],1))
 				CMov(FP,TV[1],f_CRandNum(128))
 				CMov(FP,TV[2],f_CRandNum(360))
@@ -42,7 +44,10 @@ B1Mode = CreateCcode()
 			DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
 			DoActions(FP,{Order(94,P5,64,Move,1),})
 		CIfEnd()
-		TriggerX(FP,{Bring(P5,AtLeast,100,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
+		local B1PV = CreateVar(FP)
+		DoActionsX(FP, {SetV(B1PV,100)})
+		TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)},{SetV(B1PV,450)} ,{preserved})
+		CTrigger(FP,{TBring(P5,AtLeast,B1PV,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
 		CIf(FP,CD(B1C[1],1),AddCD(B1C[3],1))
 			CIf(FP,CD(B1C[3],1),{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64)}) --100~500
 				
@@ -78,48 +83,72 @@ B1Mode = CreateCcode()
 			TriggerX(FP,{CD(B1C[3],1,AtLeast)},{AddCD(B1C[3],1)},{preserved})
 			TriggerX(FP,{CD(B1C[3],100)},{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64),SetMemoryB(0x6636B8+94,SetTo,125)},{preserved})
 			TriggerX(FP,{CD(B1C[3],100,AtLeast),Bring(P5,AtMost,0,94,64)},{SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
-			
-			CIf(FP,{CD(AxiomCcode[1],1,AtLeast),CD(B1C[3],100,AtLeast)})
+			local B1X = CreateVar(FP)
+			local B1A = CreateVar(FP)
+			local B1A2 = CreateVar(FP)
+			CIf(FP,{CD(AxiomCcode[1],1,AtLeast)},{}) -- Axiom 전용 패턴
+				CIf(FP,{CD(B1C[3],100,AtLeast)})
+					f_Read(FP,_Add(BPtrArr[1],10),CPos)
+					Convert_CPosXY()
+					CMov(FP,DirSrchCenterX,CPosX)
+					CMov(FP,DirSrchCenterY,CPosY)
+					for y = 0, 4 do
+					DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, P5,1)
+					end
+					Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+					DoActions(FP, {Simple_CalcLoc(0, -1, -1, 1, 1),ModifyUnitHitPoints(1, 94, P5, 1, 0),GiveUnits(1, 94, P5, 1, P6)})
 
-			for y = 0, 4 do
-			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, P5)
-			end
-			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
-			
-			DoActions(FP, {Simple_CalcLoc(0, -1, 1, -1, 1),ModifyUnitHitPoints(1, 94, P5, 1, 0)})
-
---			CIf(FP,{Bring(FP, AtLeast, 100, 94, 64)})
---			for y = 0, 4 do
---			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
---			end
---			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
---			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
---			CIfEnd()
---			CIf(FP,{Bring(FP, AtLeast, 200, 94, 64)})
---			for y = 0, 4 do
---			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
---			end
---			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
---			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
---			CIfEnd()
---			CIf(FP,{Bring(FP, AtLeast, 300, 94, 64)})
---			for y = 0, 4 do
---			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
---			end
---			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
---			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
---			CIfEnd()
---			CIf(FP,{Bring(FP, AtLeast, 400, 94, 64)})
---			for y = 0, 4 do
---			DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, FP)
---			end
---			Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
---			DoActions(FP, {ModifyUnitHitPoints(1, 94, FP, 1, 0)})
---			CIfEnd()--
-
+					for i = 0, 3 do
+						CIf(FP,{Bring(P5, AtLeast, 100+(100*i), 94, 64)})
+						for y = 0, 4 do
+						DCX,DCY = DirectionSearch({CD(B1Mode,y)}, y, 94, P5,1)
+						end
+						Simple_SetLocX(FP,0, DCX, DCY, DCX, DCY)
+						DoActions(FP, {Simple_CalcLoc(0, -1, -1, 1, 1),ModifyUnitHitPoints(1, 94, P5, 1, 0),GiveUnits(1, 94, P5, 1, P6)})
+						CIfEnd()
+					end
+				CIfEnd()
 			CIfEnd()
 			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
 			CIfEnd()
+
+
+
+			CIf(FP,{CD(AxiomCcode[1],1,AtLeast)},{SubV(B1X,1),RemoveUnitAt(All, 88, 53, P11),SetBulletSpeed(400)}) -- Axiom 전용 패턴
+			TriggerX(FP, {CV(B1X,0)}, {KillUnit(88, P11)}, {preserved})
+			CIf(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,10*256,0xFF00),TMemory(_Add(BPtrArr[1],23),AtLeast,1),CV(B1X,0)},{SetV(B1X,100)})--공격중인 상태이며 대상이 있을경우
+			CMov(FP,B1A,_rShift(_ReadF(_Add(BPtrArr[1],8)), 8),nil,0xFF,1)
+			CMov(FP,B1A2,_ReadF(_Add(BPtrArr[1],8)),nil,0xFF00FF00,1)
+			CFor(FP, 0, 10, 1)
+			CI = CForVariable()
+			
+			CIf(FP,{Memory(0x628438,AtLeast,1)})
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			f_Read(FP,_Add(BPtrArr[1],10),CPos)
+			CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0, CPosX, CPosY, CPosX, CPosY)
+				CDoActions(FP, {CreateUnit(1, 88, 1, FP),
+				TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
+				TSetMemoryX(_Add(Nextptrs,8), SetTo, B1A2,0xFF00FF00),
+				TSetMemoryX(_Add(Nextptrs,8), SetTo, 0,0xFF0000),
+				TSetDeaths(_Add(Nextptrs,13),SetTo,_Add(_Mul(CI,100),100),0),
+				TSetDeathsX(_Add(Nextptrs,18),SetTo,_Add(_Mul(CI,100),100),0,0xFFFF),
+				--TSetDeathsX(_Add(Nextptrs,18),SetTo,_lShift(_Add(B1A,_lShift(B1A, 8)), 16),0,0xFFFF0000),
+				Set_EXCC2(DUnitCalc,CunitIndex,16,SetTo,B1A),
+			})
+			f_CGive(FP, Nextptrs, nil, P11, FP)
+			DoActions(FP, {Order(88, P11, 64, Move, 53)})
+
+			CIfEnd()
+				
+			CForEnd()
+
+			CIfEnd()
+			CIfEnd()
+		
+
+
 		TriggerX(FP, {CD(B1Mode,5,AtLeast)}, {SetCD(B1Mode,0)},{preserved})
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1])},1)
 	CIfEnd()
@@ -143,7 +172,7 @@ B1Mode = CreateCcode()
 		DoActionsX(FP,SubCD(B2C[1],1))
 		
 
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6),SetDeaths(5,SetTo,1,BossUID[2])},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6),SetDeaths(5,SetTo,1,BossUID[2]),ModifyUnitEnergy(All, 88, P11, 64, 0),KillUnit(88, P11)},1)
 	CIfEnd()
 
 
@@ -274,10 +303,11 @@ B1Mode = CreateCcode()
 		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
 	InvDisable2(189,i,{ -- axiom 활성화시에는 브금꺼져야 부술수있음
 		CD(AxiomCcode[i-3],1),
-		Deaths(0,Exactly,0,12),
-		Deaths(1,Exactly,0,12),
-		Deaths(2,Exactly,0,12),
-		Deaths(3,Exactly,0,12),
+		DeathsX(0,Exactly,0,12,0xFFFFFF),
+		DeathsX(1,Exactly,0,12,0xFFFFFF),
+		DeathsX(2,Exactly,0,12,0xFFFFFF),
+		DeathsX(3,Exactly,0,12,0xFFFFFF),
+		DeathsX(FP,AtMost,0,12,0xFFFFFF),
 		CV(BPtrArr[1],0,AtMost),
 		CV(BPtrArr[2],0,AtMost),
 		CV(BPtrArr[3],0,AtMost),

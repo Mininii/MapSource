@@ -746,6 +746,16 @@ HPRegenTable = {64}
 		CForEnd()
 		f_LoadCp()
 	CIfEnd()
+	CIf(FP,{CD(AxiomCcode[1],1,AtLeast),Command(P5, AtLeast, 1, 87),DeathsX(CurrentPlayer,Exactly,88,0,0xFF),Cond_EXCC(16, AtLeast, 1)}) -- Axiom 하템패턴
+		f_SaveCp()
+		CIf(FP,{TMemoryX(_Sub(BackupCp,6),Exactly,P11,0xFF)})
+		f_Read(FP,_Sub(BackupCp,15),CPos)
+		Convert_CPosXY()
+		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],64), {CPosX,CPosY}, FP)
+		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],192), {CPosX,CPosY}, FP)
+		CIfEnd()
+		f_LoadCp()
+	CIfEnd()
 
 
 
