@@ -155,6 +155,33 @@ B1Mode = CreateCcode()
 
 
 	CIf(FP,CV(BPtrArr[2],1,AtLeast))--닼템보스
+		CIf(FP,{CD(AxiomCcode[2],1,AtLeast)},{AddCD(B2C[2],1),AddCD(B2C[3],1)}) -- Axiom 전용 패턴
+			TriggerX(FP,{CD(B2C[2],500,AtLeast)},{SetMemory(0x657A9C,Add,1),SetCD(B2C[2],0)},{preserved}) -- 일정시간 지난경우 밝기 회복
+			TriggerX(FP,{Memory(0x657A9C,AtLeast,32)},{SetMemory(0x657A9C,SetTo,31)},{preserved})
+			DSkillRetX,DSkillRetY = CreateVars(2, FP)
+			DSkillX, DSkillY = CreateVars(2,FP)
+			CIf(FP,{CV(DSkillX,1,AtLeast),CV(DSkillY,1,AtLeast),CD(B2C[3],240,AtLeast)},{})
+			CMov(FP,DSkillRetX,DSkillX)
+			CMov(FP,DSkillRetY,DSkillY)
+			CIf(FP,{TTOR({CD(B2C[3],240),CD(B2C[3],280)})})
+			CFor(FP,45,45+360,90)
+				CIA = CForVariable()
+				CFor(FP, 16, 16*12, 16)
+				CIR = CForVariable()
+					f_Lengthdir(FP, CIR, CIA, CPosX, CPosY)
+					Simple_SetLocX(FP, 0, _Add(DSkillRetX,CPosX), _Add(DSkillRetY,CPosY), _Add(DSkillRetX,CPosX), _Add(DSkillRetY,CPosY))
+					TriggerX(FP, {CD(B2C[3],240)}, {CreateUnitWithProperties(1,84,1,P6,{hallucinated=true}),KillUnit(84, P6)}, {preserved}) -- 예고선
+					TriggerX(FP, {CD(B2C[3],280)}, {Simple_SetLoc(0, -16, -16, 16, 16),SetMemoryB(0x6644F8+84, SetTo, 15),CreateUnitWithProperties(1,84,1,P6,{hallucinated=false}),KillUnit(84, P6),KillUnitAt(All, "Men", 1, Force1),SetMemoryB(0x6644F8+84, SetTo, 50)}, {preserved}) -- 즉사기
+
+				CForEnd()
+			CForEnd()
+			CIfEnd()
+			
+			TriggerX(FP,{CD(B2C[3],281,AtLeast)},{SetCD(B2C[3],0)},{preserved}) --
+
+
+			CIfEnd()
+		CIfEnd()
 		
 		
 		DoActions2(FP,{Simple_SetLoc(0,0,0,64,64),Simple_SetLoc(9,0,0,64,64),MoveLocation(1,BossUID[2],P6,64),MoveLocation(10,BossUID[2],P6,64),Order(49,P6,64,Move,1)})
@@ -172,7 +199,7 @@ B1Mode = CreateCcode()
 		DoActionsX(FP,SubCD(B2C[1],1))
 		
 
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6),SetDeaths(5,SetTo,1,BossUID[2]),ModifyUnitEnergy(All, 88, P11, 64, 0),KillUnit(88, P11)},1)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[2],19),Exactly,0,0xFF00)},{SetV(BPtrArr[2],0),KillUnit(61, P6),SetDeaths(5,SetTo,1,BossUID[2]),ModifyUnitEnergy(All, 88, P11, 64, 0),KillUnit(88, P11),SetMemory(0x657A9C,SetTo,31)},1)
 	CIfEnd()
 
 

@@ -157,6 +157,13 @@ function Operator_Trig()
         table.insert(SingleGunTestMode,RemoveUnit(k,P12))
     end
 	table.insert(SingleGunTestMode,SetV(CurEXP,0x7FFFFFFF))
+	table.insert(SingleGunTestMode,SetCD(AxiomCcode[1],1))
+	table.insert(SingleGunTestMode,SetCD(AxiomCcode[2],1))
+	table.insert(SingleGunTestMode,SetCD(AxiomCcode[3],1))
+	table.insert(SingleGunTestMode,SetCD(AxiomCcode[4],1))
+	table.insert(SingleGunTestMode,SetCD(SpecialEEggCcode,4))
+
+	
     Trigger2X(FP,Deaths(CurrentPlayer,AtLeast,1,208),SingleGunTestMode)
 	CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
 	CMov(FP,0x6509B0,19025+9) --CUnit 시작지점 +19 (0x4C)
@@ -225,16 +232,16 @@ function Operator_Trig()
 			CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 			f_LoadCp()
 			
-		f_SaveCp()
-		CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
-		EXCCUnitHP = CreateVar(FP)
-		CUnitHP = CreateVar(FP)
-		f_Read(FP,_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*16)/4))),EXCCUnitHP)
-		f_Read(FP,_Add(Cunit2,2),CUnitHP)
-		CDiv(FP,EXCCUnitHP,256)
-		CDiv(FP,CUnitHP,256)
-		DisplayPrint(CurrentOP, {"CUnitHP : ",CUnitHP,"   EXCCUnitHP : ",EXCCUnitHP})
-		f_LoadCp()
+		--f_SaveCp()
+		--CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
+		--EXCCUnitHP = CreateVar(FP)
+		--CUnitHP = CreateVar(FP)
+		--f_Read(FP,_Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*7)/4))),EXCCUnitHP)
+		--f_Read(FP,_Add(Cunit2,2),CUnitHP)
+		--CDiv(FP,EXCCUnitHP,256)
+		--CDiv(FP,CUnitHP,256)
+		--DisplayPrint(CurrentOP, {"CUnitHP : ",CUnitHP,"   EXCCUnitHP : ",EXCCUnitHP})
+		--f_LoadCp()
 		
 		CIfEnd()
 		
@@ -449,9 +456,13 @@ CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
 CA__SetNext(HStr4,8,SetTo,0,54-1,0)
 CMov(FP,HLine,0)
 EffCV2 = CreateVArr(11, FP)
+VArrI,VArrI4 = CreateVars(2,FP)
+
+DoActionsX(FP, {SetV(VArrI,0),SetV(VArrI4,0)})
+
 CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
 	f_ChatOffset(FP,HLine,0,ChatOff) 
-    CMovX(FP,HCheck,VArr(EffCV2,HLine))
+    CMovX(FP,HCheck,VArrX(EffCV2, VArrI, VArrI4))
     CIfX(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"\x0D\x0D!H"))},{SetNVar(HCheck,SetTo,3)})
 --    for i = 0, 3 do
 --        CElseIfX({HumanCheck(i, 1),TTbytecmp(ChatOff,VArr(Names2[i+1],0),PLength[i+1])},{SetNVar(HCheck,SetTo,4)})
@@ -491,8 +502,8 @@ CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
     CIfEnd()
 
 
-    CMovX(FP,VArr(EffCV2,HLine),HCheck)
-CWhileEnd(SetNVar(HLine,Add,1)) 
+    CMovX(FP,VArrX(EffCV2, VArrI, VArrI4),HCheck)
+CWhileEnd({SetNVar(HLine,Add,1),AddV(VArrI,604),AddV(VArrI4,2416)}) 
 end 
 CDPrint(0,11,{"\x0D",0,0},{Force1,Force2,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
 

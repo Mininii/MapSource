@@ -1120,6 +1120,12 @@ end
 
 	CIfEnd()
 	CIf(FP,{GCP(5)})--tenebris
+		--박자에 맞춰서 원이 심장고동치듯 움직일것. Snare에 맞춰서 일정 각도에서 저글링이 터지는 모션 추가할것.
+	CIfEnd()
+	CIf(FP,{GCP(6)})--Demication
+		
+	CIfEnd()
+	CIf(FP,{GCP(7)})--Anomaly
 		
 	CIfEnd()
 
@@ -1174,7 +1180,7 @@ end
 				{1632,-1824+4096},
 				{-1632+4096,-1824+4096}}
 			for j = 4, 7 do
-				Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
+				Trigger2X(FP,{GCP(j)},{Simple_SetLoc(0,WarpXY[j-3][1],WarpXY[j-3][2],WarpXY[j-3][1],WarpXY[j-3][2]),CreateUnitWithProperties(1,BossUID[j-3],1,j,{energy=100}),RotatePlayer({PlayWAVX("staredit\\wav\\JBossAwak.wav"),PlayWAVX("staredit\\wav\\JBossAwak.wav"),PlayWAVX("staredit\\wav\\JBossAwak.wav"),PlayWAVX("staredit\\wav\\JBossAwak.wav"),DisplayTextX("\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x14\x0D\x0D\n\x14\x0D\x0D\n\x0D\x0D!H\x13\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].." \x10】 \x04가 \x08봉인\x04에서 \x17해방\x04되었습니다.\n\x0D\x0D\x14\n\x0D\x0D\x14\n\x0D\x0D\x13\x04！！！　\x08ＢＯＳＳ　ＢＡＴＴＬＥ\x04　！！！\n\x0D\x0D\x13\x04",4)},HumanPlayers,FP)})
 				CTrigger(FP,{GCP(j)},{SetV(BPtrArr[j-3],Nextptrs)})
 			end
 			
@@ -1353,7 +1359,7 @@ end
 	end
 	local tesPatchT = {}
 	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- 스킬유닛무기 재설정
-	SetWeaponsDat2X(tesPatchT,121,{DmgBase=1000})--핵배틀딜너프
+	SetWeaponsDat2X(tesPatchT,121,{DmgBase=777})--핵배틀딜너프
 	SetWeaponsDat2X(tesPatchT,62,{DmgBase=999})--프로브딜버프
 	
 
@@ -1364,7 +1370,6 @@ end
 	end
 
 	table.insert(tesPatchT,SetMemoryB(0x669E28+440, SetTo, 8))
-	table.insert(tesPatchT,SetMemoryB(0x669E28+441, SetTo, 8))
 	table.insert(tesPatchT,SetMemoryB(0x669E28+441, SetTo, 8))
 	
 	
@@ -3090,6 +3095,14 @@ Trigger2X(FP,{},{RotatePlayer({
 			KillUnit(30, Force2),
 
 		})	
+			--랜덤 리맵핑 아크라이트 쇼크캐논 + 벌쳐 타격 이미지. 워프 번적임 제외할것
+			local RandRemappingArr = {0,10,12,13,16}
+			RandVar = f_CRandNum(5)
+			for j,k in pairs(RandRemappingArr) do
+				TriggerX(FP, {CV(RandVar,j-1)}, {SetMemoryB(0x669E28+533, SetTo, k);},{preserved})
+				TriggerX(FP, {CV(RandVar,j-1)}, {SetMemoryB(0x669E28+440, SetTo, k);},{preserved})
+			end
+
 			TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 			DoActionsX(FP,{SetV(PattV[1],6),Order("Men",Force2,64,Attack,64)},1)
 			CIf(FP,{CV(PattV[1],4,AtMost)})

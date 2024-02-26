@@ -333,11 +333,14 @@ HPRegenTable = {64}
 	CMov(FP,CPlayer,_ReadF(_Add(BackupCp,9)),nil,0xFF)
 	CMov(FP,CPos,_ReadF(BackupCp))
 	Convert_CPosXY()
+	CMov(FP,DSkillX,CPosX)
+	CMov(FP,DSkillY,CPosY)
 	Simple_SetLocX(FP,0,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,1,P6)}) --
 	CIf(FP,Memory(0x628438,AtLeast,1))
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CTrigger(FP,{},{TCreateUnit(1,214,1,CPlayer),TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)},1)
 	CIfEnd()
+	TriggerX(FP, {CD(AxiomCcode[2],1,AtLeast)},{SetMemory(0x657A9C,Subtract,4)}, {preserved}) -- 옵저버 먹을경우 밝기 감소
 	f_LoadCp()
 
 	EXCC_ClearCalc()
@@ -885,7 +888,7 @@ HPRegenTable = {64}
 	f_SHRead(FP, _Add(CreateUnitStackOYPosArr,CreateUnitStackPtr), OPosY)
 	f_SHRead(FP, _Add(CreateUnitStackUIDArr,CreateUnitStackPtr), TempUID)
 	f_SHRead(FP, _Add(CreateUnitStackPlayerArr,CreateUnitStackPtr), TempPID)
-	CTrigger(FP,{TMemory(_Add(CreateUnitStackFlagArr,CreateUnitStackPtr),AtLeast,1)},{SetV(TempFlag,1)},1)
+	f_SHRead(FP, _Add(CreateUnitStackFlagArr,CreateUnitStackPtr), TempFlag)
 	DoActionsX(FP,{SubV(CreateUnitStackPtr,1)})
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	NIf(FP,{CV(TempUID,1,AtLeast)})
@@ -904,7 +907,7 @@ HPRegenTable = {64}
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 		Simple_SetLocX(FP,9,OPosX,OPosY,OPosX,OPosY)
 		DoActions2(FP,{Order("Men",Force2,1,Attack,10),Simple_CalcLoc(0,-64,-64,64,64)})
-		CTrigger(FP,{CV(TempFlag,1)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
+		CTrigger(FP,{CV(TempFlag,1,AtLeast)},{TSetMemory(_Add(Nextptrs,13),SetTo,64)},1)
 		--CTrigger(FP,{Cond_EXCC(12,Exactly,4,4)},{TSetMemory(0x6509B0,SetTo,_Mov(CPlayer,0xFF)),RunAIScriptAt(JYD,1)},1)
 	NIfEnd()
 	TriggerX(FP,CVar(FP,TempUID[2],Exactly,118,0xFF),{SetMemoryX(0x664080 + (118*4),SetTo,0,1),SetMemory(0x662860+(118*4),SetTo,64+(64*65536))},{preserved})
@@ -1329,7 +1332,7 @@ CIfEnd()
 
 for j = 4, 7 do
 	Trigger2X(FP,{CD(AxiomCcode[j-3],0),Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,500000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x07기억\x04의 수호자 \x10【 "..HName[j-3].."\x10 】 \x04를 처치하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F５００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
-	Trigger2X(FP,{CD(AxiomCcode[j-3],1),Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,1000000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),PlayWAVX("staredit\\wav\\E_Clear.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].."\x10 】 \x04를 \x1F해방\x04하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F１，０００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
+	Trigger2X(FP,{CD(AxiomCcode[j-3],1),Deaths(j,AtLeast,1,BossUID[j-3])},{SetScore(Force1,Add,1000000,Kills),RotatePlayer({PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),PlayWAVX("staredit\\wav\\JBoss.ogg"),DisplayTextX("\n\n\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x14\x14\n\x0D\x0D!H\x13\x04\x10종말\x04의 \x11공리 \x10【 "..HName2[j-3].."\x10 】 \x04를 \x1F해방\x04하였습니다.\n\x0D\x0D!H\x13\x04+ \x1F１，０００，０００ Ｐｔｓ\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x07ＢＯＳＳ　ＣＬＥＡＲ\x04　！！！\n\x0D\x0D\x13\x04\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14",4)},HumanPlayers,FP)})
 end
 TargetRotation = CreateVar(FP)
 WBreak=CreateCcode()

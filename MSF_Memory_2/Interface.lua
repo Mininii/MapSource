@@ -707,17 +707,15 @@ TriggerX(i,{CDeaths(FP,AtLeast,3,PCMode[i+1])},{SetCDeaths(FP,Subtract,3,PCMode[
 	end
 	--선택인식 피통 보임 비공유
 --DoActionsX(FP,SetMemory(0x58F448,SetTo,0xFFFFFFFF))
-
+local HealActT = {}
 local HealT = CreateCcode()
-CIf(FP,CDeaths(FP,AtLeast,50,HealT),SetCDeaths(FP,SetTo,0,HealT))
 for i = 0, 3 do
-	Trigger2(FP,{HumanCheck(i,1)},{
-		ModifyUnitHitPoints(All,"Men",Force1,i+2,100),
-		ModifyUnitShields(All,"Men",Force1,i+2,100),
-		ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100),
-		ModifyUnitShields(All,"Buildings",Force1,i+2,100)},{preserved})
+	table.insert(HealActT, ModifyUnitHitPoints(All,"Men",Force1,i+2,100))
+	table.insert(HealActT, ModifyUnitShields(All,"Men",Force1,i+2,100))
+	table.insert(HealActT, ModifyUnitHitPoints(All,"Buildings",Force1,i+2,100))
+	table.insert(HealActT, ModifyUnitShields(All,"Buildings",Force1,i+2,100))
 end
-CIfEnd()
+TriggerX(FP,CDeaths(FP,AtLeast,50,HealT),{SetCDeaths(FP,SetTo,0,HealT),HealActT},{preserved})
 DoActionsX(FP,SetCDeaths(FP,Add,1,HealT))
 
 local iStrinit = def_sIndex()
@@ -773,13 +771,11 @@ for i= 1, 4 do
 end
 CIfEnd()
 
-CIfX(FP,{CD(TestMode,1)})
 for i= 1, 4 do
 	CIfOnce(FP,{CD(AxiomCcode[i],1)})
 	CS__InputVA(FP,BTblArr[i],0,BStr2[i],BStr2s[i],nil,0,BStr2s[i])
 	CIfEnd()
 end
-CIfXEnd()
 
 
 
