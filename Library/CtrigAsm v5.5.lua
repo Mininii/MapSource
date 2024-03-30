@@ -4,6 +4,11 @@ if k == "__mapdirsetting" then
 	TEP30Flag = 1
 end
 end
+TEP30STRx = 0
+__STRxSwitchX = 0
+IncludeSTRxFlag = 0
+IncludeSTRXCheck = 0
+IncludeSTRXCheck2 = 0
 
 P1=0
 P2=1
@@ -18,9 +23,6 @@ P10=9
 P11=10
 P12=11
 
-CSetTo = 10
-CAdd = 11
-CSubtract = 12
 AtLeast = 0
 AtMost = 1
 Exactly = 10
@@ -43,8 +45,10 @@ NotSame = 9
 STRXFlag = 0
 
 CtrigInitArr = {}
+STRxInitArr = {}
 for i = 1, 8 do
 	CtrigInitArr[i] = {}
+	STRxInitArr[i] = {}
 end
 
 CJumpArr = {}
@@ -101,7 +105,7 @@ CSwitchptr = 0
 IndexAlloc = 0xC000 -- 0xC000 ~ 0xEFFF : If, While / 0xA000 ~ 0xBFFF : Jump
 IndexAllocLimit = 0xF000
 FuncAlloc = 0x1D000 -- 0x1D000 ~ 0x1FFFF : CMul, CDiv, CMod / CtrigFunc
-FuncAllocLimit = 0x20000
+FuncAllocLimit = 0x1FF00
 JumpStartAlloc = 0xA000
 JumpEndAlloc = 0xB000
 FlagAllocBase = 0xF300
@@ -229,6 +233,8 @@ CheckInclude_MatheMatics = 0
 CheckInclude_MiscFunctions = 0
 CheckInclude_64BitLibrary = 0
 CheckInclude_CtrigPlib = 0
+
+__LabelUseArr = {}
 -- 맵 정보 입력 관련 함수 ---------------------------------------------------------------
 
 function SetFixedPlayer(PlayerID)
@@ -388,10 +394,111 @@ function PlayerConvertX(PlayerID)
 
 	return Temp
 end
+-- STRxSwitch 함수 ---------------------------------------------------------------------
+__STRxArr = {}
+
+function STRxStart()
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if __STRxSwitch < 0 then
+		Need_STRCTRIG_COMPILE_MODE()
+	elseif __STRxSwitch == 1 then
+		STRxStart_Duplicated()
+	end
+	__STRxSwitchSetting(1)
+end
+
+function STRxEnd()
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if __STRxSwitch < 0 then
+		Need_STRCTRIG_COMPILE_MODE()
+	elseif __STRxSwitch == 0 then
+		STRxEnd_Duplicated()
+	elseif #__STRxArr > 0 then
+		STRxEnd_Input_Error()
+	end
+
+	__STRxSwitchSetting(0)
+end
+
+function STRxIn(Player)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if __STRxSwitch < 0 then
+		Need_STRCTRIG_COMPILE_MODE()
+	elseif __STRxSwitch == 1 then
+		STRxIn_Duplicated()
+	end
+	if Player == nil then
+		Player = AllPlayers
+	end
+	STRxJump(Player,IndexAlloc)
+	STRxStart()
+	Trigger {
+		players = {Player},
+		conditions = {Label(IndexAlloc)},
+	}
+	table.insert(__STRxArr, IndexAlloc+1)
+	IndexAlloc = IndexAlloc + 0x2
+end
+
+function STRxOut(Player)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if __STRxSwitch < 0 then
+		Need_STRCTRIG_COMPILE_MODE()
+	elseif __STRxSwitch == 0 then
+		STRxOut_Duplicated()
+	elseif #__STRxArr == 0 then
+		STRxOut_Input_Error()
+	end
+	if Player == nil then
+		Player = AllPlayers
+	end
+	local Index = __STRxArr[1]
+	table.remove(__STRxArr,1)
+
+	STRxJump(Player,Index)
+	STRxEnd()
+	Trigger {
+		players = {Player},
+		conditions = {Label(Index)},
+	}
+end
+
+function STRxJump(Player,Dest,DestPlayer)
+	if STRCTRIGASM == 0 then
+		Need_STRCTRIGASM()
+	end
+	if __STRxSwitch < 0 then
+		Need_STRCTRIG_COMPILE_MODE()
+	end
+
+	if DestPlayer == nil then
+		DestPlayer = "X"
+	end
+	DoActionsX(Player,{SetCtrigX("X","X",0x4,0,SetTo,DestPlayer,Dest,0x0,0,0)})
+end
+
+function STRxCheck()
+	if __STRxSwitch == 0 then
+		PushValueMsg("TRIG")
+	elseif __STRxSwitch < 0 then
+		PushValueMsg("Not STRCTRIG Compile Mode")
+	else
+		PushValueMsg("STRx")
+	end
+end
 
 -- CtrigAsm 표준 환경 설치 함수 ---------------------------------------------------------
 
-function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,LStack)
+function StartCtrig(IncludeSTRx,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,LStack)
+	STRXFlag = 1
 	if IncludePlayer == nil then IncludePlayer = AllPlayers end
 	IncludePlayerID = IncludePlayer
 	-- Init Alloc 
@@ -410,6 +517,29 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 	else
 		CreateLStackVarXAlloc = 32
 	end
+
+	if IncludeSTRx == 0 or IncludeSTRx == nil or IncludeSTRx == "X" or IncludeSTRx == "STRx" then
+		IncludeSTRxFlag = 0
+	else
+		IncludeSTRxFlag = 1
+	end
+	if STRCTRIG == 0 or STRCTRIG == nil or STRCTRIG == "X" then
+		STRCTRIGASM = 0
+	else
+		STRCTRIGASM = 1
+	end
+	if AbsolutePath ~= nil then
+		SetFileDirectory(AbsolutePath)
+	end
+	if TEP30Flag == 1 then 
+		if STRCTRIGASM == 1 and __STRxSwitch >= 0 then
+			TEP30STRx = 1
+		end
+	end
+
+	if TEP30STRx == 1 then
+		STRxStart()
+	end
 	CFuncParaVarArr = CreateVarArr(CFuncParaVarNum,FixPlayer) -- CFunc x16
 	CFuncRetVarArr = CreateVarArr(CFuncParaVarNum,FixPlayer) -- CFunc x16
 	VFuncParaVarArr = CreateVarArr(CFuncParaVarNum,FixPlayer) -- CFunc x16
@@ -419,19 +549,15 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 	LStackArr = CreateWArr(CreateLStackVarXAlloc,FixPlayer)
 	LStackptr = CreateVar(FixPlayer)
 	LStackptr2 = CreateWar(FixPlayer)
-	
-	if STRX == 0 or STRX == nil or STRX == "X" or STRX == "STR" then
-		STRXFlag = 0
-	else
-		STRXFlag = 1
-	end
-	if STRCTRIG == 0 or STRCTRIG == nil or STRCTRIG == "X" then
-		STRCTRIGASM = 0
-	else
-		STRCTRIGASM = 1
-	end
-	if AbsolutePath ~= nil then
-		SetFileDirectory(AbsolutePath)
+	if TEP30STRx == 1 then
+		STRxEnd()
+
+	Trigger { -- .py 구분자용
+		players = {AllPlayers},
+		conditions = {
+			 Condition(0,0,0,0,Exactly,0xFB,0,0x2);
+		},
+	}
 	end
 	Trigger {
 		players = {AllPlayers},
@@ -443,6 +569,23 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 			SetNext(0xFFFB,0xFFFC);
 		},
 	}
+
+	if TEP30STRx == 1 then
+		STRxStart()
+			Trigger { -- STRx Section Start
+				players = {P1,P2,P3,P4,P5,P6,P7,P8},
+				conditions = {
+					Label(0x1FFF0);
+					Disabled(DeathsX(0,Exactly,FixPlayer,0,0));
+				},
+				flag = {Preserved}
+			}
+		STRxEnd()
+	end
+	
+	if TEP30STRx == 1 then
+		STRxStart()
+	end
 	if NSQC == nil then
 		NSQC = 0
 	end
@@ -465,6 +608,9 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 	for i = 1, 10 do -- CRet
 		CVariable(AllPlayers,0xFFF0 + i)
 	end
+	if TEP30STRx == 1 then
+		STRxEnd()
+	end
 
 	if STRCTRIGASM == 0 then
 		Trigger {
@@ -477,22 +623,42 @@ function StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,L
 			},
 		}
 	else
-		Trigger {
-			players = {AllPlayers},
-			conditions = {
-				Label(0xFFFC);
-			},
-			actions = {
-				SetNext(0xFFFC,0xFFFD);
-				Disabled(SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0));
-			},
-			flag = {Preserved},
-		}
+		if TEP30STRx == 1 then
+			Trigger {
+				players = {AllPlayers},
+				conditions = {
+					Label(0xFFFC);
+				},
+				actions = {
+					SetNext(0xFFFC,0xFFFD);
+					Disabled(SetCtrigX("X",0x1FFF2,0x4,0,SetTo,"X",0x1FFF3,0x0,0,0));
+				},
+				flag = {Preserved},
+			}
+		else
+			Trigger {
+				players = {AllPlayers},
+				conditions = {
+					Label(0xFFFC);
+				},
+				actions = {
+					SetNext(0xFFFC,0xFFFD);
+					Disabled(SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFF,0x0,0,0));
+				},
+				flag = {Preserved},
+			}
+		end
 	end
 	return NSQCVArray
 end
 
 function EndCtrig()
+	if TEP30Flag == 1 then
+		if __STRxSwitch == 1 or #__STRxArr > 0 then
+			STRxPair_missing()
+		end
+	end
+
 	if #iStringKeyArr > 0 then
 		if STRXFlag == 0 then -- STR Table
 			ISTRCheck = 1
@@ -505,7 +671,60 @@ function EndCtrig()
 		ITBLCheck = 1
 		FPTBLCheck = 1
 	end
+
 	Include_Last()
+
+	if TEP30STRx == 1 then 
+		Trigger { -- ExitDrop 1
+				players = {AllPlayers},
+				conditions = {
+					Label(0x1FFF6);
+				},
+				actions = {
+					SetCtrigX("X","X",0x4,0,SetTo,"X",0x1FFF2,0x0,0,0);
+				},
+				flag = {Preserved}
+			}
+		STRxStart()
+		Trigger { -- STRx Pass
+			players = {P1,P2,P3,P4,P5,P6,P7,P8},
+			conditions = { 
+				Label(0);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,"X",0xFFFF,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- ExitDrop 2
+				players =  {P1,P2,P3,P4,P5,P6,P7,P8},
+				conditions = {
+					Label(0x1FFF2);
+				},
+				flag = {Preserved}
+			}
+
+		Trigger { -- ExitDrop 3
+				players =  {P1,P2,P3,P4,P5,P6,P7,P8},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					SetCtrigX("X",0x1FFF2,0x4,0,SetTo,"X",0x1FFF2,0x0,0,0);
+					SetCtrigX("X","X",0x4,0,SetTo,"X",0x1FFF3,0x0,0,0);
+				},
+				flag = {Preserved}
+			}
+
+		STRxEnd()
+		Trigger { -- ExitDrop 4
+				players = {AllPlayers},
+				conditions = {
+					Label(0x1FFF3);
+				},
+				flag = {Preserved}
+			}
+	end
 
 	if STRCTRIGASM == 0 then
 		Trigger {
@@ -515,28 +734,285 @@ function EndCtrig()
 			},
 		}
 	else
-		Trigger {
+		if TEP30STRx == 1 then
+			Trigger {
+				players = {AllPlayers},
+				conditions = { 
+					Label(0xFFFD);
+				},
+				actions = {
+					Disabled(SetCtrigX("X",0xFFFC,0x4,0,SetTo,"X",0x1FFF6,0x0,0,0));
+				},
+				flag = {Preserved},
+			}
+		else
+			Trigger {
+				players = {AllPlayers},
+				conditions = { 
+					Label(0xFFFD);
+				},
+				actions = {
+					Disabled(SetCtrigX("X",0xFFFC,0x4,0,SetTo,"X",0xFFFD,0x0,0,0));
+				},
+				flag = {Preserved},
+			}
+			Trigger {
+				players = {AllPlayers},
+				conditions = { 
+					Label(0);
+				},
+				actions = {
+					Disabled(SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,0));
+				},
+				flag = {Preserved},
+			}
+		end
+	end
+	
+	InitCtrig()
+
+	if TEP30STRx == 1 then
+		Trigger { -- STRx init
 			players = {AllPlayers},
 			conditions = { 
-				Label(0xFFFD);
+				Label(0x1FFF4);
+				CtrigX(P1,0x1FFE0,0x15C,0,Exactly,0);
 			},
 			actions = {
-				Disabled(SetCtrigX("X",0xFFFC,0x4,0,SetTo,"X",0xFFFD,0x0,0,0));
+				SetCtrigX("X","X",0x4,0,SetTo,P1,0x1FFE0,0x0,0,0);
+				SetCtrigX(P8,0x1FFEF,0x15C,0,SetTo,"X",0x1FFF5,0x0,0,0);
+				SetCtrig1X(P1,0x1FFE0,0x15C,0,SetTo,1);
 			},
 			flag = {Preserved},
 		}
-		Trigger {
-			players = {AllPlayers},
+
+		STRxStart()
+
+		Trigger { -- STRx init 1
+			players = {P1},
 			conditions = { 
-				Label(0);
+				Label(0x1FFE0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P2},
+			conditions = { 
+				Label(0x1FFE2);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P3},
+			conditions = { 
+				Label(0x1FFE4);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P4},
+			conditions = { 
+				Label(0x1FFE6);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P5},
+			conditions = { 
+				Label(0x1FFE8);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P6},
+			conditions = { 
+				Label(0x1FFEA);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P7},
+			conditions = { 
+				Label(0x1FFEC);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P8},
+			conditions = { 
+				Label(0x1FFEE);
+			},
+			flag = {Preserved},
+		}
+
+		InitSTRx()
+
+		Trigger { -- STRx init 2
+			players = {P1},
+			conditions = { 
+				Label(0x1FFE1);
 			},
 			actions = {
-				Disabled(SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,0));
+				SetCtrigX("X","X",0x4,0,SetTo,P2,0x1FFE2,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P2},
+			conditions = { 
+				Label(0x1FFE3);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P3,0x1FFE4,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P3},
+			conditions = { 
+				Label(0x1FFE5);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P4,0x1FFE6,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P4},
+			conditions = { 
+				Label(0x1FFE7);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P5,0x1FFE8,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P5},
+			conditions = { 
+				Label(0x1FFE9);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P6,0x1FFEA,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P6},
+			conditions = { 
+				Label(0x1FFEB);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P7,0x1FFEC,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P7},
+			conditions = { 
+				Label(0x1FFED);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P8,0x1FFEE,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P8},
+			conditions = { 
+				Label(0x1FFEF);
+			},
+			actions = {
+				SetCtrig1X("X","X",0x4,0,SetTo,0);
+			},
+			flag = {Preserved},
+		}
+
+		STRxEnd()
+
+		Trigger { -- STRx init
+			players = {AllPlayers},
+			conditions = { 
+				Label(0x1FFF5);
 			},
 			flag = {Preserved},
 		}
 	end
-	InitCtrig()
+	
+	if TEP30STRx == 1 then
+		Trigger { -- STRx init2
+			players = {AllPlayers},
+			conditions = { 
+				Label(0x1FFF7);
+				CtrigX(P1,0x1FFD0,0x15C,0,Exactly,0);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P1,0x1FFD0,0x0,0,0);
+				SetCtrigX(P8,0x1FFDF,0x15C,0,SetTo,"X",0x1FFF8,0x0,0,0);
+				SetCtrig1X(P1,0x1FFD0,0x15C,0,SetTo,1);
+			},
+			flag = {Preserved},
+		}
+
+		STRxStart()
+
+		Trigger { -- STRx init 1
+			players = {P1},
+			conditions = { 
+				Label(0x1FFD0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P2},
+			conditions = { 
+				Label(0x1FFD2);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P3},
+			conditions = { 
+				Label(0x1FFD4);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P4},
+			conditions = { 
+				Label(0x1FFD6);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P5},
+			conditions = { 
+				Label(0x1FFD8);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P6},
+			conditions = { 
+				Label(0x1FFDA);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P7},
+			conditions = { 
+				Label(0x1FFDC);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 1
+			players = {P8},
+			conditions = { 
+				Label(0x1FFDE);
+			},
+			flag = {Preserved},
+		}
+	end
 
 	if CheckInclude_Wireframe == 1 then
 		Trigger {
@@ -568,6 +1044,99 @@ function EndCtrig()
 		f_InitiTblptr(v[2],v[3],v[3],v[4],v[1])
 	end
 
+	if TEP30STRx == 1 then
+		Trigger { -- STRx init 2
+			players = {P1},
+			conditions = { 
+				Label(0x1FFD1);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P2,0x1FFD2,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P2},
+			conditions = { 
+				Label(0x1FFD3);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P3,0x1FFD4,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P3},
+			conditions = { 
+				Label(0x1FFD5);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P4,0x1FFD6,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P4},
+			conditions = { 
+				Label(0x1FFD7);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P5,0x1FFD8,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P5},
+			conditions = { 
+				Label(0x1FFD9);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P6,0x1FFDA,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P6},
+			conditions = { 
+				Label(0x1FFDB);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P7,0x1FFDC,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P7},
+			conditions = { 
+				Label(0x1FFDD);
+			},
+			actions = {
+				SetCtrigX("X","X",0x4,0,SetTo,P8,0x1FFDE,0x0,0,0);
+			},
+			flag = {Preserved},
+		}
+		Trigger { -- STRx init 2
+			players = {P8},
+			conditions = { 
+				Label(0x1FFDF);
+			},
+			actions = {
+				SetCtrig1X("X","X",0x4,0,SetTo,0);
+			},
+			flag = {Preserved},
+		}
+
+		STRxEnd()
+
+		Trigger { -- STRx init
+			players = {AllPlayers},
+			conditions = { 
+				Label(0x1FFF8);
+			},
+			flag = {Preserved},
+		}
+	end
+
 	if STRCTRIGASM == 0 then
 		Trigger {
 			players = {AllPlayers},
@@ -580,24 +1149,44 @@ function EndCtrig()
 				SetNext(0xFFFE,0xFFFF);
 			},
 		}
-	else
-		Trigger {
-			players = {AllPlayers},
-			conditions = {
-				Label(0xFFFE);
-			},
-			actions = {
-				SetNext(0xFFFE,0xFFFF);
-				SetCtrigX("X",0xFFFC,0x158,0,SetTo,"X",0xFFFC,0x4,1,0);
-				SetCtrigX("X",0xFFFC,0x15C,0,SetTo,"X",0xFFFC,0x0,0,1);
-				SetCtrigX("X",0xFFFD,0x4,1,SetTo,"X",0xFFFF,0x0,0,0);
-				SetCtrig1X("X",0xFFFD,0x164,1,SetTo,0x0,0x2);
-				SetCtrig1X("X",0xFFFD,0x164,0,SetTo,0x0,0x2);
-				SetCtrig1X("X",0xFFFC,0x184,0,SetTo,0x0,0x2);
-			},
-		}
+	else 
+		if TEP30STRx == 1 then
+			Trigger {
+				players = {AllPlayers},
+				conditions = {
+					Label(0xFFFE);
+				},
+				actions = {
+					SetNext(0xFFFE,0xFFFF);
+					SetCtrigX("X",0xFFFC,0x158,0,SetTo,"X",0xFFFC,0x4,1,0);
+					SetCtrigX("X",0xFFFC,0x15C,0,SetTo,"X",0xFFFC,0x0,0,1);
+					SetCtrig1X("X",0xFFFC,0x184,0,SetTo,0x0,0x2);
+					SetCtrig1X("X",0xFFFD,0x164,0,SetTo,0x0,0x2);
+					SetCtrigX("X",0xFFFD,0x4,1,SetTo,"X",0xFFFF,0x0,0,0);
+				},
+			}
+		else
+			Trigger {
+				players = {AllPlayers},
+				conditions = {
+					Label(0xFFFE);
+				},
+				actions = {
+					SetNext(0xFFFE,0xFFFF);
+					SetCtrigX("X",0xFFFC,0x158,0,SetTo,"X",0xFFFC,0x4,1,0);
+					SetCtrigX("X",0xFFFC,0x15C,0,SetTo,"X",0xFFFC,0x0,0,1);
+					SetCtrigX("X",0xFFFD,0x4,1,SetTo,"X",0xFFFF,0x0,0,0);
+					SetCtrig1X("X",0xFFFD,0x164,1,SetTo,0x0,0x2);
+					SetCtrig1X("X",0xFFFD,0x164,0,SetTo,0x0,0x2);
+					SetCtrig1X("X",0xFFFC,0x184,0,SetTo,0x0,0x2);
+				},
+			}
+		end
 	end
 
+	if TEP30STRx == 1 then
+		STRxStart()
+	end
 	local FlagAllocIndex = FlagAllocBase+math.ceil(FlagAlloc/480)-1
 	for i = FlagAllocBase, FlagAllocIndex do
 		Trigger {
@@ -669,8 +1258,19 @@ function EndCtrig()
 	if TBLStringTable ~= 0 then
 		io.close(TBLStringTable)
 	end
+	if TEP30STRx == 1 then
+		STRxEnd()
+	end
+
 	for i = CreateVarInitIndex, CreateVarXAlloc do
 		local k = i - CreateVarInitIndex+1
+
+		if TEP30STRx == 1 then 
+			if CreateVarPArr[k]["STRx"] == 1 or CreateVarPArr[k][1] == "FA" then
+				STRxStart()
+			end
+		end
+
 		if CreateVarPArr[k][1] == "V" then
 			 CVariable(CreateVarPArr[k][2],i)
 		elseif CreateVarPArr[k][1] == "V2" then
@@ -1057,6 +1657,15 @@ function EndCtrig()
 				flag = {Preserved}
 			}
 		end
+		if TEP30STRx == 1 then 
+			if CreateVarPArr[k]["STRx"] == 1 or CreateVarPArr[k][1] == "FA" then
+				STRxEnd()
+			end
+		end
+	end
+
+	if TEP30STRx == 1 then
+		STRxStart()
 	end
 	local CcodeVarX = math.ceil(CreateCCodeAlloc/480)
 	for i = 1, CcodeVarX do 
@@ -1077,6 +1686,10 @@ function EndCtrig()
 			CSVariable(AllPlayers,i,j)
 		end
 	end
+	if TEP30STRx == 1 then
+		STRxEnd()
+	end
+
 	local StringAct = {}
 	for k, v in pairs (StringKeyArr) do
 		table.insert(StringAct,Disabled(DisplayText(v,4)))
@@ -1086,10 +1699,32 @@ function EndCtrig()
 	if ExtTextIndex > 1 then
 		f_PatchSTRxArr(FixPlayer)
 	end
+
+	if TEP30STRx == 1 then
+		STRxStart()
+			Trigger { -- STRx Section End
+				players = {P1,P2,P3,P4,P5,P6,P7,P8},
+				conditions = {
+					Label(0x1FFF1);
+				},
+				actions = {
+					SetCtrigX("X","X",0x4,0,SetTo,"X",0xFFFF,0x0,0,0);
+				},
+				flag = {Preserved}
+			}
+		STRxEnd()
+	end
+
 	Trigger { 
 		players = {AllPlayers},
 		conditions = {
 			Label(0xFFFF);
+		},
+	}
+	Trigger { -- .py 구분자용
+		players = {AllPlayers},
+		conditions = {
+			 Condition(0,0,0,0,Exactly,0xFA,0,0x2);
 		},
 	}
 	AllocCheck()
@@ -1123,6 +1758,10 @@ function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
 	end
 	if Mask == "X" then 
 		Mask = nil
+	end
+
+	if Index ~= nil and __LabelUseArr[Index]==nil then
+		__LabelUseArr[Index] = true
 	end
 
 	local Pflag
@@ -1200,6 +1839,13 @@ function SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EP
 	end
 	if Mask == "X" then 
 		Mask = nil
+	end
+
+	if Index1~=nil and __LabelUseArr[Index1]==nil then
+		__LabelUseArr[Index1] = true
+	end
+	if Index2~=nil and __LabelUseArr[Index2]==nil then
+		__LabelUseArr[Index2] = true
 	end
 
 	local Pflag1
@@ -1313,6 +1959,10 @@ function SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
 		Mask = nil
 	end
 
+	if Index1 ~= nil and __LabelUseArr[Index1]==nil then
+		__LabelUseArr[Index1] = true
+	end
+
 	local Pflag1
 	if Player1 == nil then
 		Pflag1 = 0
@@ -1379,6 +2029,10 @@ function SetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
 	end
 	if Mask == "X" then 
 		Mask = nil
+	end
+
+	if Index2 ~=nil and __LabelUseArr[Index2]==nil then
+		__LabelUseArr[Index2] = true
 	end
 
 	local Pflag2
@@ -1503,6 +2157,7 @@ end
 function ErrorCheck() -- Ctrig 문법 오류 점검 함수
 	--AllocCheck() 기본적용됨
 	LabelCheck()
+	LabelUseCheck()
 	ControlCheck()
 end
 
@@ -1551,6 +2206,25 @@ function LabelCheck() -- Label 중복 체크
 		else
 			Prohibited_Label()
 		end
+	end
+end
+
+function LabelUseCheck() -- Label 선언 체크
+	local C = {}
+	for k,v in pairs(LabelArr) do
+		if v ~= 0xFFE0 then
+			if not C[v] then
+				C[v] = true
+			end
+		else
+			Prohibited_Label()
+		end
+	end
+	for k, v in pairs(__LabelUseArr) do
+		if k~=nil and C[k]== nil then
+			_G["Undefined Label! Current Label : 0x"..string.format("%X",k)]() -- push error msg
+		end
+		
 	end
 end
 
@@ -9322,8 +9996,14 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 						flag = {Preserved}
 					}
 			PlayerID = PlayerConvert(PlayerID)
-			for k, P in pairs(PlayerID) do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+			if TEP30STRx == 1 and __STRxSwitch == 1 then
+				for k, P in pairs(PlayerID) do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+				end
+			else
+				for k, P in pairs(PlayerID) do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+				end
 			end
 			IndexAlloc = IndexAlloc + 0x3
 		elseif Repeat[1][4] == "V" then
@@ -9412,8 +10092,14 @@ function SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single,UnPack) --
 						flag = {Preserved}
 					}
 			PlayerID = PlayerConvert(PlayerID)
-			for k, P in pairs(PlayerID) do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+			if TEP30STRx == 1 and __STRxSwitch == 1 then
+				for k, P in pairs(PlayerID) do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+				end
+			else
+				for k, P in pairs(PlayerID) do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+				end
 			end
 			IndexAlloc = IndexAlloc + 0x3
 		else
@@ -9447,10 +10133,17 @@ function SLoopNEnd(Actions)
 					flag = {Preserved}
 				}
 
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
-		end
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
+			end
+		end		
 		IndexAlloc = IndexAlloc + 0x1
 	else
 		local Index = SLoopNArr[SLoopNptr] + 2
@@ -9473,10 +10166,17 @@ function SLoopNEnd(Actions)
 					flag = {Preserved}
 				}
 
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
-		end
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,1,SetTo,"X",Index-1,0x0,0,0))
+			end
+		end	
 		IndexAlloc = IndexAlloc + 0x1
 	end
 end
@@ -9492,8 +10192,14 @@ function CJump(PlayerID,sIndex)
 		},
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1],SetNext(sIndex+JumpStartAlloc,sIndex+JumpEndAlloc,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1],SetNext(sIndex+JumpStartAlloc,sIndex+JumpEndAlloc,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1],SetNext(sIndex+JumpStartAlloc,sIndex+JumpEndAlloc,1))
+		end
 	end
 	table.insert(CJumpArr,sIndex)
 end
@@ -9553,11 +10259,20 @@ function NJump(PlayerID,sIndex,Conditions,Actions,UnPack)
 		},
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x15C,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x15C,0,SetTo,"X",sIndex+JumpStartAlloc,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x15C,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x15C,0,SetTo,"X",sIndex+JumpStartAlloc,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x15C,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x158,0,SetTo,"X",sIndex+JumpStartAlloc,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpEndAlloc,0x15C,0,SetTo,"X",sIndex+JumpStartAlloc,0x0,0,1))
+		end
 	end
 	table.insert(NJumpArr,sIndex)
 end
@@ -9774,12 +10489,22 @@ function CIfEnd(Actions,UnPack)
 	table.remove(CIfPArr,CIfptr)
 	CIfptr = CIfptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
 	end
 
 	if UnPack == 1 then
@@ -9933,14 +10658,24 @@ function NIfEnd()
 	table.remove(NIfPArr,NIfptr)
 	NIfptr = NIfptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
 	end
-	
+
 	Trigger {
 		players = {PlayerID},
 		conditions = {
@@ -10083,15 +10818,26 @@ function CWhileEnd(Actions,UnPack)
 	table.remove(CWhilePArr,CWhileptr)
 	CWhileptr = CWhileptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
 	end
-
+	
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -10314,14 +11060,26 @@ function CWhileXEnd(Actions,UnPack)
 	table.remove(CWhileXPArr,CWhileXptr)
 	CWhileXptr = CWhileXptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-2,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
 	end
+
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -10499,14 +11257,26 @@ function NWhileEnd(Actions,UnPack)
 	table.remove(NWhilePArr,NWhileptr)
 	NWhileptr = NWhileptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
 	end
+	
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -10748,14 +11518,26 @@ function NWhileXEnd(Actions,UnPack)
 	table.remove(NWhileXPArr,NWhileXptr)
 	NWhileXptr = NWhileXptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
 	end
+	
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -10813,12 +11595,22 @@ function DoWhileEnd(Loop_Conditions, Actions,UnPack)
 	table.remove(DWhilePArr,DWhileptr)
 	DWhileptr = DWhileptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+		end
 	end
+	
 	if UnPack == 1 then
 		for k, v in pairs(Loop_Conditions) do
 			local Temp = CunPack(v)
@@ -10923,15 +11715,28 @@ function CForEnd(Actions,UnPack)
 	table.remove(CForStep,CForptr)
 	CForptr = CForptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x4,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+		end
 	end
+	
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -11161,20 +11966,39 @@ function CIfXEnd()
 	table.insert(CIfXArr[CIfXptr],IndexAlloc+1)
 	IndexAlloc = IndexAlloc + 0x2
 
-	for k, P in pairs(PlayerID) do
-		local Size = 0
-		for i, index in pairs(CIfXArr[CIfXptr]) do
-			Size = Size + 1
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			local Size = 0
+			for i, index in pairs(CIfXArr[CIfXptr]) do
+				Size = Size + 1
+			end
+			for i = 1, Size-1 do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x4,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x158,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x15C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x0,0,1))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x178,0,SetTo,"X",IndexAlloc-1,0x158,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x17C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x198,0,SetTo,"X",IndexAlloc-1,0x15C,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x19C,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
+			end
 		end
-		for i = 1, Size-1 do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x4,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x158,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x15C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x0,0,1))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x178,0,SetTo,"X",IndexAlloc-1,0x158,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x17C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x198,0,SetTo,"X",IndexAlloc-1,0x15C,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x19C,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
+	else
+		for k, P in pairs(PlayerID) do
+			local Size = 0
+			for i, index in pairs(CIfXArr[CIfXptr]) do
+				Size = Size + 1
+			end
+			for i = 1, Size-1 do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x4,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x158,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x15C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x0,0,1))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x178,0,SetTo,"X",IndexAlloc-1,0x158,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x17C,0,SetTo,"X",CIfXArr[CIfXptr][i],0x4,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x198,0,SetTo,"X",IndexAlloc-1,0x15C,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",CIfXArr[CIfXptr][i],0x19C,0,SetTo,"X",CIfXArr[CIfXptr][i+1]-1,0x0,0,0))
+			end
 		end
 	end
 
@@ -20255,7 +21079,10 @@ function CMov(PlayerID,Dest,Source,Deviation,Mask,Clear) -- <<
 	end
 end
 
-function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
+function CWrite(PlayerID,Dest,Source,Deviation,Mask,Type) -- << (CRead 대응)
+	if Type == nil then
+		Type = SetTo
+	end
 	STPopTrigArr(PlayerID)
 	if Mask == "X" then
 		Mask = nil
@@ -20315,7 +21142,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
 						Label(0);
 					},
 					actions = {
-						FSetMemoryX(0,SetTo,Source,Mask);
+						FSetMemoryX(0,Type,Source,Mask);
 					},
 					flag = {Preserved}
 				}
@@ -20351,7 +21178,7 @@ function CWrite(PlayerID,Dest,Source,Deviation,Mask) -- << (CRead 대응)
 						Label(0);
 					},
 					actions = {
-						FSetMemoryX(0,SetTo,0,Mask);
+						FSetMemoryX(0,Type,0,Mask);
 					},
 					flag = {Preserved}
 				}
@@ -20386,6 +21213,7 @@ function ClShift(PlayerID,Dest,Source,Operand,Mask) -- << (x2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			ClShift_InputData_Error()
@@ -20757,10 +21585,10 @@ function CAdd(PlayerID,Dest,Source,Operand,Mask) -- +
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CAdd_InputData_Error()
 		end
 
 		if type(Dest) == "number" then -- Add 0x58A364, 1 : 0x58A364 += 1
@@ -21020,10 +21848,10 @@ function CSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = 0)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CSub_InputData_Error()
 		end
 		if type(Dest) == "number" then -- Sub 0x58A364, 1 : 0x58A364 -= 1
 			if type(Source) == "number" then
@@ -21291,10 +22119,10 @@ function CiSub(PlayerID,Dest,Source,Operand,Mask) -- - (1 - 2 = -1)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CiSub_InputData_Error()
 		end
 		if type(Dest) == "number" then -- iSub 0x58A364, 1 : 0x58A364 -= 1
 			if type(Source) == "number" then
@@ -22314,6 +23142,7 @@ function CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit) -- *, Y만 Limit bi
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CMul_InputData_Error()
@@ -22790,6 +23619,7 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y 둘다 Limit
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CDiv_InputData_Error()
@@ -22977,10 +23807,19 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y 둘다 Limit
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -23383,10 +24222,19 @@ function CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- /, X,Y 둘다 Limit
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -23625,6 +24473,7 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y 둘다 Limit
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CMod_InputData_Error()
@@ -23812,10 +24661,19 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y 둘다 Limit
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -24221,10 +25079,19 @@ function CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- %, X,Y 둘다 Limit
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -24460,6 +25327,7 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv의 Signed 연
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiDiv_InputData_Error()
@@ -24796,10 +25664,19 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv의 Signed 연
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -25559,10 +26436,19 @@ function CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CDiv의 Signed 연
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -26009,6 +26895,7 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod의 Signed 연
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CiMod_InputData_Error()
@@ -26335,13 +27222,22 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod의 Signed 연
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
-
+					
 					for i = 0, Bit do
 						local CBit = 2^(Bit-i)
 						Trigger { -- (Bit+4 ~ 2*Bit+4)
@@ -27043,10 +27939,19 @@ function CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit) -- CMod의 Signed 연
 					end
 
 					PlayerID = PlayerConvert(PlayerID)
-					for k, P in pairs(PlayerID) do
-						table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
-						for i = 2, (Bit+3) do
-							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+					if TEP30STRx == 1 and __STRxSwitch == 1 then
+						for k, P in pairs(PlayerID) do
+							table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
+						end
+					else
+						for k, P in pairs(PlayerID) do
+							table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,0,SetTo,"X",FuncAlloc,0x0,0,3)) --> Create Local Var
+							for i = 2, (Bit+3) do
+								table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i,SetTo,"X",CRet[1],0x0,0,0)) -- -> VarX
+							end
 						end
 					end
 
@@ -27537,6 +28442,7 @@ function COr(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			COr_InputData_Error()
@@ -27822,6 +28728,7 @@ function CAnd(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CAnd_InputData_Error()
@@ -28112,6 +29019,7 @@ function CXor(PlayerID,Dest,Source,Operand,Mask)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
 			CXor_InputData_Error()
@@ -28532,6 +29440,13 @@ FWRXCall1 = 0
 FWRXCall2 = 0
 FWRXCheck = 0
 function Include_DataTransfer() -- f_Read / f_EPD / f_Memcpy
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	if CheckInclude_DataTransfer == 0 then
 		CheckInclude_DataTransfer = 1
 	local IncludePlayer = IncludePlayerID
@@ -29280,6 +30195,11 @@ function Include_DataTransfer() -- f_Read / f_EPD / f_Memcpy
 		FMEMCall2 =	FuncAlloc
 		FuncAlloc = FuncAlloc + 1
 	end
+
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 
 FiMULCall1 = 0
@@ -29302,6 +30222,13 @@ FIMODCall3 = 0
 FABSCall1 = 0
 FABSCall2 = 0
 function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	if CheckInclude_ArithMetic == 0 then
 		CheckInclude_ArithMetic = 1
 	local IncludePlayer = IncludePlayerID
@@ -29491,12 +30418,19 @@ function Include_ArithMetic() -- f_Mul f_Div f_iDiv f_Mod f_iMod f_Abs
 
 	local PlayerID = IncludePlayer
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		for i = 1, 32 do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc+2,0x4,i,SetTo,"X",FuncAlloc+2,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			for i = 1, 32 do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc+2,0x4,i,SetTo,"X",FuncAlloc+2,0x0,0,0))
+			end
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			for i = 1, 32 do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc+2,0x4,i,SetTo,"X",FuncAlloc+2,0x0,0,0))
+			end
 		end
 	end
-
 
 FMULCall0 = FuncAlloc+2
 FMULCall1 = FuncAlloc
@@ -29989,10 +30923,20 @@ FuncAlloc = FuncAlloc+5
 
 		local PlayerID = IncludePlayer
 		PlayerID = PlayerConvert(PlayerID)
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,-1,SetTo,"X",FuncAlloc,0x0,0,1)) -- Clear -> B1
-			for i = 1, 32 do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i+32,SetTo,"X",FuncAlloc,0x0,0,0)) -- BF -> X
+
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,-1,SetTo,"X",FuncAlloc,0x0,0,1)) -- Clear -> B1
+				for i = 1, 32 do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i+32,SetTo,"X",FuncAlloc,0x0,0,0)) -- BF -> X
+				end
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,-1,SetTo,"X",FuncAlloc,0x0,0,1)) -- Clear -> B1
+				for i = 1, 32 do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",FuncAlloc,0x4,i+32,SetTo,"X",FuncAlloc,0x0,0,0)) -- BF -> X
+				end
 			end
 		end
 
@@ -30192,6 +31136,10 @@ FuncAlloc = FuncAlloc+5
 	FABSCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 end
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 
 
@@ -30224,6 +31172,13 @@ FSQUR = {}
 AngleCycle = 0
 LengthdirMode = 0
 function Include_MatheMatics(Cycle,LengthdirX) -- f_Sqrt / f_Lengthdir / f_Atan2 / f_log2 / f_Square | Cycle = 2*pi, 4의 배수여야함
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	if CheckInclude_MatheMatics == 0 then
 		CheckInclude_MatheMatics = 1
 	AngleCycle = Cycle
@@ -30303,6 +31258,10 @@ function Include_MatheMatics(Cycle,LengthdirX) -- f_Sqrt / f_Lengthdir / f_Atan2
 	FSQURCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 end
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 
 FRAND = 0
@@ -30346,6 +31305,13 @@ FCGUCall1 = 0
 FCGUCall2 = 0
 FCGUCheck = 0
 function Include_MiscFunctions(SeedSwitch) -- f_Rand 
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	if CheckInclude_MiscFunctions == 0 then
 		CheckInclude_MiscFunctions = 1
 	local IncludePlayer = IncludePlayerID
@@ -30440,6 +31406,10 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 	FPSTRXCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 -- f_GetTblptr - Ret[1] : Tbl Index  Ret[2] = Type | Ret[3] = Tblptr  
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
 	for i = 0, 2 do
 		CVariable(IncludePlayer,FuncAlloc+i) -- Local Variable
 		table.insert(FPTBL,FuncAlloc+i)
@@ -30450,7 +31420,18 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 	FPTBLCall2 = FuncAlloc+1
 	FPTBLCall0 = FuncAlloc+2
 	FuncAlloc = FuncAlloc + 3
+
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
+
 -- f_GetiStrXepd - Ret[1] : StringId | Ret[2] = Strepd
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
+
 	for i = 0, 1 do
 		CVariable(IncludePlayer,FuncAlloc+i) -- Local Variable
 		table.insert(FISTRX,FuncAlloc+i)
@@ -30461,6 +31442,10 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 	FISTRXCall2 = FuncAlloc+1
 	FuncAlloc = FuncAlloc + 2
 
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
 -- f_InitiStrptr - Ret[1] : Offset , Ret[2] : EPD, Ret[3] : EPDX, Ret[4] : Size (4N+3), Ret[5] : EPD Backup
 		for i = 0, 4 do
 			CVariable(IncludePlayer,FuncAlloc+i)
@@ -30472,6 +31457,11 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 		ISTRCall2 =	FuncAlloc+1
 		FuncAlloc = FuncAlloc + 2
 	-- f_InitiTblptr - Ret[1] : Offset , Ret[2] : EPD, Ret[3] : EPDX, Ret[4] : Size (4N+3), Ret[5] : EPD Backup, Ret[6] : PointerEPD, Ret[7] : PointerEPDX
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
+
 		for i = 0, 6 do
 			CVariable(IncludePlayer,FuncAlloc+i)
 			table.insert(ITBL,FuncAlloc+i)
@@ -30481,6 +31471,16 @@ function Include_MiscFunctions(SeedSwitch) -- f_Rand
 		ITBLCall1 =	FuncAlloc
 		ITBLCall2 =	FuncAlloc+1
 		FuncAlloc = FuncAlloc + 2
+	end
+	
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
+
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
 	end
 end
 
@@ -37441,6 +38441,47 @@ function ORPopCondArr(PlayerID) -- 구버젼 호환용 함수
 	end
 end
 
+function InitSTRx()
+	for P = 1, 8 do
+
+		local k = 1
+		local Size = #STRxInitArr[P]
+
+		while k <= Size do
+			if Size - k + 1 >= 64 then
+				local X = {}
+				for i = 0, 63 do
+					table.insert(X, STRxInitArr[P][k])
+					k = k + 1
+				end
+				Trigger {
+						players = {P-1},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+							X,
+						},
+					}
+			else
+				local X = {}
+				repeat
+					table.insert(X, STRxInitArr[P][k])
+					k = k + 1
+				until k == Size + 1
+				Trigger {
+						players = {P-1},
+						conditions = {
+							Label(0);
+						},
+						actions = {
+							X,
+						},
+					}
+			end
+		end
+	end
+end
 
 function InitCtrig()
 	for P = 1, 8 do
@@ -44625,7 +45666,7 @@ function str_to_istr(String)
 					table.insert(iret,0xD)
 				end
 				local w = ret[i+1]
-				table.insert(irec,0xD)
+				table.insert(iret,0xD)
 				table.insert(iret,v)
 				table.insert(iret,w)
 				prt = 0
@@ -44876,12 +45917,17 @@ function str_to_icp949(String,flag)
 end
 
 function GetiStrId(PlayerId,String)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local Size
 	String, Size = str_to_istr(String)
 	StringKey = ParseString(String)
 	table.insert(StringKeyArr,StringKey)
 	local V = CreateVar(PlayerId)
-	table.insert(iStringKeyArr,{StringKey,PlayerId,V,Size})
+	table.insert(iStringKeyArr,{["STRx"]=__STRxSwitchX,StringKey,PlayerId,V,Size})
 	return {V,StringKey,Size,String}
 end
 
@@ -44908,8 +45954,14 @@ function MakeiTblString(TBLIndex,Type,Hotkey,String,Name,Hexflag)
 end
 
 function GetiTblId(PlayerId,TBLIndex,Size)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
+
 	local V = CreateVar(PlayerId)
-	table.insert(iTBLIndexArr,{TBLIndex,PlayerId,V,Size})
+	table.insert(iTBLIndexArr,{["STRx"]=__STRxSwitchX,TBLIndex,PlayerId,V,Size})
 	return {V,TBLIndex,Size}
 end
 
@@ -44942,6 +45994,11 @@ function GetiStrSize(cp949flag,String)
 end
 
 function CreateSVA32(iStrArr,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -44951,7 +46008,7 @@ function CreateSVA32(iStrArr,Size,PlayerID)
 	end
 	local PSize = Size
 	Size = math.ceil(Size/32)
-	table.insert(CreateVarPArr,{"SVA32",PlayerID,iStrArr,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA32",PlayerID,iStrArr,Size})
 	local Ret = {"X",CreateVarXAlloc,0,"SVA32",Size,PSize}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -44960,6 +46017,11 @@ function CreateSVA32(iStrArr,Size,PlayerID)
 end
 
 function CreateSVA32X(iStrArr,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -44969,7 +46031,7 @@ function CreateSVA32X(iStrArr,Size,PlayerID)
 	end
 	local PSize = Size
 	Size = math.ceil(Size/32)
-	table.insert(CreateVarPArr,{"SVA32X",PlayerID,iStrArr,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA32X",PlayerID,iStrArr,Size})
 	local Ret = {"X",CreateVarXAlloc,0,"SVA32",Size,PSize}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -44978,6 +46040,11 @@ function CreateSVA32X(iStrArr,Size,PlayerID)
 end
 
 function CreateSVA1(iStrArr,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -44985,7 +46052,7 @@ function CreateSVA1(iStrArr,Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"SVA1",PlayerID,iStrArr,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA1",PlayerID,iStrArr,Size})
 	local Ret = {"X",CreateVarXAlloc,0,"V",0,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -51105,7 +52172,66 @@ end
 0xA3E1 ~ 0xA3FA : ａ～ｚ (0x61~0x7A)
 0xA3FB ~ 0xA3FE : {|}~ (0x7B~0x7E)
 +0
-0x7F : ]]--
+0x7F : 
+
+-----------------------
+		SetMemoryX(0x000000, SetTo, 0, 0x8080E300); (0x20) +0x8080E3
+		==========================================
+		SetMemoryX(0x000000, SetTo, 0, 0x81BCEF00); (0x21~0x2F)
+		SetMemoryX(0x000000, SetTo, 0, 0x82BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x83BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x84BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x85BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x86BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x87BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x88BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x89BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8ABCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8BBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8CBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8DBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8EBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x8FBCEF00);
+	-----------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0x90BCEF00); (0x30~0x39)
+		SetMemoryX(0x000000, SetTo, 0, 0x91BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x92BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x93BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x94BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x95BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x96BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x97BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x98BCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x99BCEF00);
+-----------------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0x9ABCEF00); (0x3A~0x40)
+		SetMemoryX(0x000000, SetTo, 0, 0x9BBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x9CBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x9DBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x9EBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x9FBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0xA0BCEF00);
+-------------------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0xA1BCEF00); (0x41~0x5A)
+		SetMemoryX(0x000000, SetTo, 0, 0xBABCEF00);
+-------------------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0xBBBCEF00); (0x5B~0x60)
+		SetMemoryX(0x000000, SetTo, 0, 0xA6BFEF00); 0x5C -> X
+		SetMemoryX(0x000000, SetTo, 0, 0xBDBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0xBEBCEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0xBFBCEF00);
+		--/////////////////////////////////////////////
+		SetMemoryX(0x000000, SetTo, 0, 0x80BDEF00); (0x60)
+-------------------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0x81BDEF00); (0x61~0x7A)
+		SetMemoryX(0x000000, SetTo, 0, 0x9ABDEF00);
+-------------------------------------------------------
+		SetMemoryX(0x000000, SetTo, 0, 0x9BBDEF00); (0x7B~0x7E)
+		SetMemoryX(0x000000, SetTo, 0, 0x7C000000); 0x7C -> X
+		SetMemoryX(0x000000, SetTo, 0, 0x9DBDEF00);
+		SetMemoryX(0x000000, SetTo, 0, 0x9EBDEF00);
+
+]]--
 
 function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 	local PlayerID = CAPrintPlayerID
@@ -51138,7 +52264,7 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 	local Mask
 	local ZeroData
 	if utf8flag == 1 then
-		Mask = {0xFFFFFFFF,0x00FFFFFF,0xFFFFFF00,0x00FFFF00,0x0D0D00,0x8080E300,0x60AFE200}
+		Mask = {0xFFFFFFFF,0x00FFFFFF,0xFFFFFF00,0x00FFFF00,0x0D0D00,0x8080E300,0x60BCEF00-0x000D0D00}
 		ZeroData = bit32.band(MakeiStrDataX(Init,1),0xFFFFFF00)
 	else
 		Mask = {0xFFFF00FF,0x00FF00FF,0xFFFF0000,0x00FF0000,0x0D0000,0xA1A10000,0x80960000}
@@ -51215,19 +52341,48 @@ function CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
 				},
 				flag = {Preserved}
 			}
-			Trigger {
-				players = {PlayerID},
-				conditions = {
-					Label(0);
-					MemoryB(Base+i,AtLeast,1);
-					CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtLeast,0x21000000,0xFF000000);
-					CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtMost,0x7E000000,0xFF000000);
-				},
-				actions = {
-					SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,Add,Mask[7],Mask[3]);
-				},
-				flag = {Preserved}
-			}
+			if utf8flag == 1 then
+				Trigger {
+					players = {PlayerID},
+					conditions = {
+						Label(0);
+						MemoryB(Base+i,AtLeast,1);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtLeast,0x21000000,0xFF000000);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtMost,0x5F000000,0xFF000000);
+					},
+					actions = {
+						SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,Add,Mask[7],Mask[3]);
+					},
+					flag = {Preserved}
+				}
+				Trigger {
+					players = {PlayerID},
+					conditions = {
+						Label(0);
+						MemoryB(Base+i,AtLeast,1);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtLeast,0x60000000,0xFF000000);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtMost,0x7E000000,0xFF000000);
+					},
+					actions = {
+						SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,Add,Mask[7]-0x3FFF0000,Mask[3]);
+					},
+					flag = {Preserved}
+				}
+			else
+				Trigger {
+					players = {PlayerID},
+					conditions = {
+						Label(0);
+						MemoryB(Base+i,AtLeast,1);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtLeast,0x21000000,0xFF000000);
+						CtrigX(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,AtMost,0x7E000000,0xFF000000);
+					},
+					actions = {
+						SetCtrig1X(SVA1[1],SVA1[2],0x15C,SVA1[3]+SVA1[5]+i,Add,Mask[7],Mask[3]);
+					},
+					flag = {Preserved}
+				}
+			end
 		end
 	end
 end
@@ -71229,6 +72384,13 @@ FLiMODCall2 = 0
 FLDivCheck = 0
 FLDivAlloc = 0
 function Include_64BitLibrary(SeedSwitch) -- f_LRead / f_LReadX / f_LAdd / f_LSub / f_LNeg / f_LiSub / f_LAbs / f_LRand / f_LlShift / f_LMul / f_LiMul
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	if CheckInclude_64BitLibrary == 0 then
 		CheckInclude_64BitLibrary = 1
 	local IncludePlayer = IncludePlayerID
@@ -72008,6 +73170,11 @@ FuncAlloc = FuncAlloc + 6
 	table.insert(FLReadXCall,FuncAlloc+1)
 	FuncAlloc = FuncAlloc + 2
 end
+
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 ------------------------------------------------------------------------------------------------------
 
@@ -74333,6 +75500,11 @@ function f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) -- SV << ΔSV(A)
 end
 
 function CreateVar(PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74340,7 +75512,7 @@ function CreateVar(PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"V",PlayerID})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V",PlayerID})
 	local Ret = V(CreateVarXAlloc)
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74349,6 +75521,11 @@ function CreateVar(PlayerID)
 end
 
 function CreateVar2(PlayerID,Offset,Type,Value,Mask)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74356,7 +75533,7 @@ function CreateVar2(PlayerID,Offset,Type,Value,Mask)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"V2",PlayerID,Offset,Type,Value,Mask})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V2",PlayerID,Offset,Type,Value,Mask})
 	local Ret = V(CreateVarXAlloc)
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74365,6 +75542,11 @@ function CreateVar2(PlayerID,Offset,Type,Value,Mask)
 end
 
 function CreateVars(Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74374,7 +75556,7 @@ function CreateVars(Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"V",PlayerID})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V",PlayerID})
 		table.insert(ret,V(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74386,6 +75568,11 @@ function CreateVars(Number,PlayerID)
 end
 
 function CreateVars(Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74395,7 +75582,7 @@ function CreateVars(Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"V",PlayerID})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V",PlayerID})
 		table.insert(ret,V(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74407,6 +75594,11 @@ function CreateVars(Number,PlayerID)
 end
 
 function CreateVar2s(Number,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74416,7 +75608,7 @@ function CreateVar2s(Number,Value,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"V2",PlayerID,nil,SetTo,Value[i],nil})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V2",PlayerID,nil,SetTo,Value[i],nil})
 		table.insert(ret,V(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74428,6 +75620,11 @@ function CreateVar2s(Number,Value,PlayerID)
 end
 
 function CreateVarArr(Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74437,7 +75634,7 @@ function CreateVarArr(Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"V",PlayerID})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V",PlayerID})
 		table.insert(ret,V(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74449,6 +75646,11 @@ function CreateVarArr(Number,PlayerID)
 end
 
 function CreateVarArr2(Number,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74458,7 +75660,7 @@ function CreateVarArr2(Number,Value,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"V2",PlayerID,nil,SetTo,Value[i],nil})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"V2",PlayerID,nil,SetTo,Value[i],nil})
 		table.insert(ret,V(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74470,6 +75672,11 @@ function CreateVarArr2(Number,Value,PlayerID)
 end
 
 function CreateWar(PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74477,7 +75684,7 @@ function CreateWar(PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"W",PlayerID})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W",PlayerID})
 	local Ret = W(CreateVarXAlloc)
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74486,6 +75693,11 @@ function CreateWar(PlayerID)
 end
 
 function CreateWar2(PlayerID,Offset,Type,Value,Mask)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74493,7 +75705,7 @@ function CreateWar2(PlayerID,Offset,Type,Value,Mask)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"W2",PlayerID,Offset,Type,Value,Mask})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W2",PlayerID,Offset,Type,Value,Mask})
 	local Ret = W(CreateVarXAlloc)
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74502,6 +75714,11 @@ function CreateWar2(PlayerID,Offset,Type,Value,Mask)
 end
 
 function CreateWars(Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74511,7 +75728,7 @@ function CreateWars(Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"W",PlayerID})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W",PlayerID})
 		table.insert(ret,W(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74523,6 +75740,11 @@ function CreateWars(Number,PlayerID)
 end
 
 function CreateWar2s(Number,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74532,7 +75754,7 @@ function CreateWar2s(Number,Value,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"W2",PlayerID,nil,SetTo,Value[i],nil})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W2",PlayerID,nil,SetTo,Value[i],nil})
 		table.insert(ret,W(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74544,6 +75766,11 @@ function CreateWar2s(Number,Value,PlayerID)
 end
 
 function CreateWarArr(Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74553,7 +75780,7 @@ function CreateWarArr(Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"W",PlayerID})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W",PlayerID})
 		table.insert(ret,W(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74565,6 +75792,11 @@ function CreateWarArr(Number,PlayerID)
 end
 
 function CreateWarArr2(Number,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74574,7 +75806,7 @@ function CreateWarArr2(Number,Value,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"W2",PlayerID,nil,SetTo,Value[i],nil})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"W2",PlayerID,nil,SetTo,Value[i],nil})
 		table.insert(ret,W(CreateVarXAlloc))
 	end
 	if type(PlayerID) == "number" then
@@ -74586,6 +75818,11 @@ function CreateWarArr2(Number,Value,PlayerID)
 end
 
 function CreateSVar(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74593,7 +75830,7 @@ function CreateSVar(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"SV",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SV",PlayerID,Size})
 	local Ret = {SV({"S",CreateVarXAlloc,Size}),{"S",CreateVarXAlloc,Size}}
 	if type(PlayerID) == "number" then
 		Ret[1][1] = PlayerID
@@ -74602,6 +75839,11 @@ function CreateSVar(Size,PlayerID)
 end
 
 function CreateSVar2(Size,PlayerID,Offset,Type,Value,Mask)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74609,7 +75851,7 @@ function CreateSVar2(Size,PlayerID,Offset,Type,Value,Mask)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"SV2",PlayerID,Size,Offset,Type,Value,Mask})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SV2",PlayerID,Size,Offset,Type,Value,Mask})
 	local Ret = {SV({"S",CreateVarXAlloc,Size}),{"S",CreateVarXAlloc,Size}}
 	if type(PlayerID) == "number" then
 		Ret[1][1] = PlayerID
@@ -74618,6 +75860,11 @@ function CreateSVar2(Size,PlayerID,Offset,Type,Value,Mask)
 end
 
 function CreateSVars(Size,Number,PlayerID)	
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74627,7 +75874,7 @@ function CreateSVars(Size,Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"SV",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SV",PlayerID,Size})
 		table.insert(ret,{SV({"S",CreateVarXAlloc,Size}),{"S",CreateVarXAlloc,Size}})
 	end
 	if type(PlayerID) == "number" then
@@ -74639,6 +75886,11 @@ function CreateSVars(Size,Number,PlayerID)
 end
 
 function CreateSVarArr(Size,Number,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74648,7 +75900,7 @@ function CreateSVarArr(Size,Number,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"SV",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SV",PlayerID,Size})
 		table.insert(ret,{SV({"S",CreateVarXAlloc,Size}),{"S",CreateVarXAlloc,Size}})
 	end
 	if type(PlayerID) == "number" then
@@ -74729,6 +75981,11 @@ function CreateNcodeArr(Number)
 end
 
 function CreateVArr(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74736,7 +75993,7 @@ function CreateVArr(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"VA",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA",PlayerID,Size})
 	local Ret = {"X",CreateVarXAlloc,0,"V",0,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74745,6 +76002,11 @@ function CreateVArr(Size,PlayerID)
 end
 
 function CreateVArr2(Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74752,7 +76014,7 @@ function CreateVArr2(Size,Value,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"VA2",PlayerID,Size,Value})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA2",PlayerID,Size,Value})
 	local Ret = {"X",CreateVarXAlloc,0,"V",0,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74761,6 +76023,11 @@ function CreateVArr2(Size,Value,PlayerID)
 end
 
 function CreateWArr(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74768,7 +76035,7 @@ function CreateWArr(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"WA",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA",PlayerID,Size})
 	local Ret = {"X",CreateVarXAlloc,0,"W",0,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74777,6 +76044,11 @@ function CreateWArr(Size,PlayerID)
 end
 
 function CreateWArr2(Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74784,7 +76056,7 @@ function CreateWArr2(Size,Value,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"WA2",PlayerID,Size,Value})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA2",PlayerID,Size,Value})
 	local Ret = {"X",CreateVarXAlloc,0,"W",0,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74793,6 +76065,11 @@ function CreateWArr2(Size,Value,PlayerID)
 end
 
 function CreateSVArr(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74800,7 +76077,7 @@ function CreateSVArr(Number,Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"SVA",PlayerID,Size,Number})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA",PlayerID,Size,Number})
 	local Ret = {"X",CreateVarXAlloc,0,"SA",Number,Size}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74809,6 +76086,11 @@ function CreateSVArr(Number,Size,PlayerID)
 end
 
 function CreateArr(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74816,7 +76098,7 @@ function CreateArr(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"A",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"A",PlayerID,Size})
 	local Ret = {"X",CreateVarXAlloc,0,0}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74825,6 +76107,11 @@ function CreateArr(Size,PlayerID)
 end
 
 function CreateLArr(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
@@ -74832,7 +76119,7 @@ function CreateLArr(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"LA",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"LA",PlayerID,Size})
 	local Ret = {"X",CreateVarXAlloc,0,0}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -74849,6 +76136,11 @@ function CreateLDb(ByteSize,PlayerID)
 end
 
 function CreateVArrs(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74858,7 +76150,7 @@ function CreateVArrs(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"VA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"V",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -74870,6 +76162,11 @@ function CreateVArrs(Number,Size,PlayerID)
 end
 
 function CreateVArr2s(Number,Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74880,7 +76177,7 @@ function CreateVArr2s(Number,Size,Value,PlayerID)
 			PlayerID = AllPlayers
 		end
 		if Value[i] == nil then Value[i] = {} end
-		table.insert(CreateVarPArr,{"VA2",PlayerID,Size,Value[i]})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA2",PlayerID,Size,Value[i]})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"V",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -74892,6 +76189,11 @@ function CreateVArr2s(Number,Size,Value,PlayerID)
 end
 
 function CreateWArrs(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74901,7 +76203,7 @@ function CreateWArrs(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"WA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"W",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -74913,6 +76215,11 @@ function CreateWArrs(Number,Size,PlayerID)
 end
 
 function CreateWArr2s(Number,Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74923,7 +76230,7 @@ function CreateWArr2s(Number,Size,Value,PlayerID)
 			PlayerID = AllPlayers
 		end
 		if Value[i] == nil then Value[i] = {} end
-		table.insert(CreateVarPArr,{"WA2",PlayerID,Size,Value[i]})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA2",PlayerID,Size,Value[i]})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"W",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -74935,6 +76242,11 @@ function CreateWArr2s(Number,Size,Value,PlayerID)
 end
 
 function CreateSVArrs(Numbers,Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Numbers do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74944,7 +76256,7 @@ function CreateSVArrs(Numbers,Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"SVA",PlayerID,Size,Number})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA",PlayerID,Size,Number})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"SA",Number,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -74956,6 +76268,11 @@ function CreateSVArrs(Numbers,Number,Size,PlayerID)
 end
 
 function CreateArrs(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74965,7 +76282,7 @@ function CreateArrs(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"A",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"A",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,0})
 	end
 	if type(PlayerID) == "number" then
@@ -74977,6 +76294,11 @@ function CreateArrs(Number,Size,PlayerID)
 end
 
 function CreateLArrs(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -74986,7 +76308,7 @@ function CreateLArrs(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"LA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"LA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,0})
 	end
 	if type(PlayerID) == "number" then
@@ -75006,6 +76328,11 @@ function CreateLDbs(Number,ByteSize,PlayerID)
 end
 
 function CreateVArrArr(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75015,7 +76342,7 @@ function CreateVArrArr(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"VA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"V",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -75027,6 +76354,11 @@ function CreateVArrArr(Number,Size,PlayerID)
 end
 
 function CreateVArrArr2(Number,Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75037,7 +76369,7 @@ function CreateVArrArr2(Number,Size,Value,PlayerID)
 			PlayerID = AllPlayers
 		end
 		if Value[i] == nil then Value[i] = {} end
-		table.insert(CreateVarPArr,{"VA2",PlayerID,Size,Value[i]})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VA2",PlayerID,Size,Value[i]})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"V",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -75049,6 +76381,11 @@ function CreateVArrArr2(Number,Size,Value,PlayerID)
 end
 
 function CreateWArrArr(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75058,7 +76395,7 @@ function CreateWArrArr(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"WA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"W",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -75070,6 +76407,11 @@ function CreateWArrArr(Number,Size,PlayerID)
 end
 
 function CreateWArrArr2(Number,Size,Value,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75080,7 +76422,7 @@ function CreateWArrArr2(Number,Size,Value,PlayerID)
 			PlayerID = AllPlayers
 		end
 		if Value[i] == nil then Value[i] = {} end
-		table.insert(CreateVarPArr,{"WA2",PlayerID,Size,Value[i]})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"WA2",PlayerID,Size,Value[i]})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"W",0,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -75092,6 +76434,11 @@ function CreateWArrArr2(Number,Size,Value,PlayerID)
 end
 
 function CreateSVArrArr(Numbers,Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Numbers do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75101,7 +76448,7 @@ function CreateSVArrArr(Numbers,Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"SVA",PlayerID,Size,Number})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"SVA",PlayerID,Size,Number})
 		table.insert(ret,{"X",CreateVarXAlloc,0,"SA",Number,Size})
 	end
 	if type(PlayerID) == "number" then
@@ -75113,6 +76460,11 @@ function CreateSVArrArr(Numbers,Number,Size,PlayerID)
 end
 
 function CreateArrArr(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75122,7 +76474,7 @@ function CreateArrArr(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"A",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"A",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,0})
 	end
 	if type(PlayerID) == "number" then
@@ -75134,6 +76486,11 @@ function CreateArrArr(Number,Size,PlayerID)
 end
 
 function CreateLArrArr(Number,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	local ret = {}
 	for i = 1, Number do
 		CreateVarXAlloc = CreateVarXAlloc + 1
@@ -75143,7 +76500,7 @@ function CreateLArrArr(Number,Size,PlayerID)
 		if PlayerID == nil then
 			PlayerID = AllPlayers
 		end
-		table.insert(CreateVarPArr,{"LA",PlayerID,Size})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"LA",PlayerID,Size})
 		table.insert(ret,{"X",CreateVarXAlloc,0,0})
 	end
 	if type(PlayerID) == "number" then
@@ -75169,16 +76526,31 @@ function f_GetVoidptr(PlayerID,Size,Fill)
 	if Fill == nil then Fill = 0 end
 	if Size < 1 then f_GetVoidptr_InputData_Error() end
 	local Number = math.ceil(Size/0x970)
-	Trigger {
-		players = {P10,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			SetDeathsX(0,SetTo,Number,0,Fill);
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P10,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Number,0,Fill);
+			},
+		}
+		STRxEnd()
+	else 
+		Trigger {
+			players = {P10,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Number,0,Fill);
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	local Ret = {"X",FuncAlloc-1,0x970,0}
 	if type(PlayerID) == "number" then
@@ -75192,16 +76564,31 @@ function f_GetVArrptr(PlayerID,Size) -- Index 1, P11 (STRCTRIG)
 		Need_STRCTRIGASM()
 	end
 	if Size < 1 then f_GetVArrptr_InputData_Error() end
-	Trigger {
-		players = {P11,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			SetDeathsX(0,SetTo,Size,0,1);
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,1);
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,1);
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	local Ret = {"X",FuncAlloc-1,1,"V",0,Size}
 	if type(PlayerID) == "number" then
@@ -75215,16 +76602,31 @@ function f_GetWArrptr(PlayerID,Size) -- Index 2
 		Need_STRCTRIGASM()
 	end
 	if Size < 1 then f_GetWArrptr_InputData_Error() end
-	Trigger {
-		players = {P11,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			SetDeathsX(0,SetTo,Size,0,2);
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,2);
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,2);
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	local Ret = {"X",FuncAlloc-1,1,"W",0,Size}
 	if type(PlayerID) == "number" then
@@ -75239,16 +76641,31 @@ function f_GetSVArrptr(PlayerID,Size,Number) -- Index 3 ~ 34
 	end
 	if Size < 1 then f_GetSVArrptr_InputData_Error() end
 	if Number < 1 or Number > 33 then f_GetSVArrptr_InputData_Error() end
-	Trigger {
-		players = {P11,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			SetDeathsX(0,SetTo,Size,0,2+Number);
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,2+Number);
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P11,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				SetDeathsX(0,SetTo,Size,0,2+Number);
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	local Ret = {"X",FuncAlloc-1,1,"SA",Number,Size}
 	if type(PlayerID) == "number" then
@@ -75399,17 +76816,31 @@ function f_GetFileptr(PlayerID,FileName,LoadCheck)
 		k = k+8
 		if k > #ret then break end
 	end
-
-	Trigger {
-		players = {P9,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			FileAct;
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P9,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P9,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	if LoadCheck == 1 then
 		local Check = f_GetFileSize(FileName)
@@ -75570,17 +77001,31 @@ function f_GetFileptrN(PlayerID,FileName,Repeat,LoadCheck) -- 1st EPD = N
 		k = k+8
 		if k > #ret then break end
 	end
-
-	Trigger {
-		players = {P9,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			FileAct;
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P9,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P9,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	if LoadCheck == 1 then
 		local Check = f_GetFileSize(FileName)
@@ -75621,17 +77066,31 @@ function f_GetTRIGptrN(PlayerID,FileName,Repeat,LoadCheck) -- 1st EPD = N
 		k = k+8
 		if k > #ret then break end
 	end
-
-	Trigger {
-		players = {P12,PlayerID},
-		conditions = {
-			Label(FuncAlloc);
-			Never();
-		},
-		actions = {
-			FileAct;
-		},
-	}
+	if TEP30STRx == 1 and __STRxSwitch == 0 then
+		STRxStart()
+		Trigger {
+			players = {P12,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+		STRxEnd()
+	else
+		Trigger {
+			players = {P12,PlayerID},
+			conditions = {
+				Label(FuncAlloc);
+				Never();
+			},
+			actions = {
+				FileAct;
+			},
+		}
+	end
 	FuncAlloc = FuncAlloc + 1
 	if LoadCheck == 1 then
 		local Check = f_GetFileSize(FileName)
@@ -76580,9 +78039,16 @@ function CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
 		flag = {Preserved}
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+1,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+1,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+1,0x0,0,1))
+		end
 	end
+	
 	IndexAlloc = IndexAlloc + 2
 end
 
@@ -81473,12 +82939,26 @@ function InitVFuncX(PlayerID,CFunction) -- W의 Player와 CFunction의 플레이
 	if CFunction[3] == nil then
 		local Ret = CreateWar(PlayerID)
 		PlayerID = PlayerConvert(PlayerID)
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
-			table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
+				table.insert(STRxInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
+				table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+			end
 		end
+	
 		return Ret
 	else
+		if TEP30Flag == 1 then
+			__STRxSwitchX = __STRxSwitch
+		else
+			__STRxSwitchX = -1
+		end
+
 		local Number = #CFunction[3]
 
 		local PID = "X"
@@ -81489,15 +82969,22 @@ function InitVFuncX(PlayerID,CFunction) -- W의 Player와 CFunction의 플레이
 		if CreateVarXAlloc > CreateMaxVAlloc then
 			CreateVariable_IndexAllocation_Overflow()
 		end
-		table.insert(CreateVarPArr,{"VFP",PlayerID,Number,CFunction[3]})
+		table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"VFP",PlayerID,Number,CFunction[3]})
 
 		local VFptr = {PID,CreateVarXAlloc,0,"V"}
 		local Ret = CreateWar(PlayerID)
 
 		PlayerID = PlayerConvert(PlayerID)
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
-			table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
+				table.insert(STRxInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x15C,Ret[3],SetTo,CFunction[1],CFunction[2],0x0,0,1))
+				table.insert(CtrigInitArr[P+1], SetCtrigX(Ret[1],Ret[2],0x19C,Ret[3],SetTo,CFunction[1],CFunction[2]+1,0x4,1,0))
+			end
 		end
 
 		return {Ret,VFptr}
@@ -81757,9 +83244,16 @@ function CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
 		flag = {Preserved}
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",IndexAlloc+2,0x0,0,1))
+		end
 	end
+	
 	IndexAlloc = IndexAlloc + 3
 end
 
@@ -82014,17 +83508,31 @@ function ExitDrop(PlayerID,DropPlayer)
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
-	Trigger {
-		players = {PlayerID},
-		conditions = {
-			Label(0);
-			LocalPlayerID(DropPlayer);
-		},
-		actions = {
-			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);
-		},
-		flag = {Preserved}
-	}
+	if TEP30STRx == 1 then 
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+				LocalPlayerID(DropPlayer);
+			},
+			actions = {
+				SetCtrigX("X",0x1FFF2,0x4,0,SetTo,"X",0x1FFF2,0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+	else
+		Trigger {
+			players = {PlayerID},
+			conditions = {
+				Label(0);
+				LocalPlayerID(DropPlayer);
+			},
+			actions = {
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);
+			},
+			flag = {Preserved}
+		}
+	end
 end
 
 function PauseCount(Player,Type,Value)
@@ -82099,6 +83607,13 @@ end
 
 
 function Include_Last()
+	if IncludeSTRxFlag == 1 then
+		if TEP30STRx == 1 and __STRxSwitch == 0 then
+			STRxStart()
+			IncludeSTRXCheck = 1
+		end
+	end
+
 	local IncludePlayer = IncludePlayerID
 	local LastCJumpAlloc = CAPlotJumpAlloc
 	CAPlotJumpAlloc = CAPlotJumpAlloc + 1
@@ -82106,6 +83621,7 @@ function Include_Last()
 	if FCBPAINTCheck == 1 then
 		Include_CBLast(IncludePlayer)
 	end
+
 --------------------------------------------------
 if FCGUCheck == 1 then
 -- f_CGive - Ret[1] : PTR / Ret[2] : EPD+19 / Ret[3] : Prev PID / Ret[4] : New PID
@@ -82437,7 +83953,12 @@ if FPSTRXCheck == 1 then
 		}
 end
 -----------------------------------------------------------
+
 if FPTBLCheck == 1 then
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
 -- f_GetTblptr - Ret[1] : Tbl Index  Ret[2] = Type | Ret[3] = Tblptr  
 	Trigger {
 				players = {IncludePlayer},
@@ -82521,9 +84042,22 @@ if FPTBLCheck == 1 then
 			},
 			flag = {Preserved}
 		}
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
 end
+
+
+
 -----------------------------------------------------------
+
+
 if FISTRXCheck == 1 then
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
 -- f_GetiStrXepd - Ret[1] : StringId | Ret[2] = Strepd
 	Trigger { 
 			players = {IncludePlayer},
@@ -82563,7 +84097,13 @@ if FISTRXCheck == 1 then
 			},
 			flag = {Preserved}
 		}
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
 end
+
+
 -----------------------------------------------------------
 if ISTRCheck == 1 then
 	-- f_InitiStrptr - Ret[1] : Offset , Ret[2] : EPD, Ret[3] : EPDX, Ret[4] : Size (4N+3), Ret[5] : EPD Backup
@@ -82609,6 +84149,10 @@ if ISTRCheck == 1 then
 end
 -----------------------------------------------------------
 if ITBLCheck == 1 then
+	if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+		STRxStart()
+		IncludeSTRXCheck2 = 1
+	end
 	-- f_InitiTblptr - Ret[1] : Offset , Ret[2] : EPD, Ret[3] : EPDX, Ret[4] : Size (4N+3), Ret[5] : EPD Backup, Ret[6] : PointerEPD, Ret[7] : PointerEPDX
 		Trigger {
 				players = {IncludePlayer},
@@ -82655,6 +84199,10 @@ if ITBLCheck == 1 then
 				},
 				flag = {Preserved}
 			}
+	if IncludeSTRXCheck2 == 1 then
+		STRxEnd()
+		IncludeSTRXCheck2 = 0
+	end
 end
 -----------------------------------------------------------
 -- f_Sqrt - Ret[1] : Input Value / Ret[2] = Output | Ret = √X 
@@ -82720,9 +84268,17 @@ if FSQRTCheck == 1 then
 
 	local PlayerID = IncludePlayer
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		for i = 18, 46, 2 do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FSQRTCall1,0x4,i,SetTo,"X",FSQRTCall2,0x0,0,1)) -- -> X*X
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			for i = 18, 46, 2 do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",FSQRTCall1,0x4,i,SetTo,"X",FSQRTCall2,0x0,0,1)) -- -> X*X
+			end
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			for i = 18, 46, 2 do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FSQRTCall1,0x4,i,SetTo,"X",FSQRTCall2,0x0,0,1)) -- -> X*X
+			end
 		end
 	end
 
@@ -90553,10 +92109,19 @@ if FLDivCheck == 1 then
 
 		local PlayerID = IncludePlayer
 		PlayerID = PlayerConvert(PlayerID)
-		for k, P in pairs(PlayerID) do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,-2,SetTo,"X",FLDivAlloc,0x0,0,1)) -- Clear -> B1
-			for i = 1, 64 do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i+64,SetTo,"X",FLDivAlloc,0x0,0,0)) -- BF -> X
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,-2,SetTo,"X",FLDivAlloc,0x0,0,1)) -- Clear -> B1
+				for i = 1, 64 do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i+64,SetTo,"X",FLDivAlloc,0x0,0,0)) -- BF -> X
+				end
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,-2,SetTo,"X",FLDivAlloc,0x0,0,1)) -- Clear -> B1
+				for i = 1, 64 do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i+64,SetTo,"X",FLDivAlloc,0x0,0,0)) -- BF -> X
+				end
 			end
 		end
 
@@ -90664,10 +92229,19 @@ if FLDivCheck == 1 then
 
 		local PlayerID = IncludePlayer
 		PlayerID = PlayerConvert(PlayerID)
-		for k, P in pairs(PlayerID) do
-			for i = 0, 63 do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,256-3*i-1,SetTo,"X",FLDivAlloc,0x0,0,64-i)) -- β -> W
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i-64,SetTo,"X",FLDivAlloc,0x0,0,68+3*i)) -- CRet -> Next
+		if TEP30STRx == 1 and __STRxSwitch == 1 then
+			for k, P in pairs(PlayerID) do
+				for i = 0, 63 do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,256-3*i-1,SetTo,"X",FLDivAlloc,0x0,0,64-i)) -- β -> W
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i-64,SetTo,"X",FLDivAlloc,0x0,0,68+3*i)) -- CRet -> Next
+				end
+			end
+		else
+			for k, P in pairs(PlayerID) do
+				for i = 0, 63 do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,256-3*i-1,SetTo,"X",FLDivAlloc,0x0,0,64-i)) -- β -> W
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLDivAlloc,0x4,i-64,SetTo,"X",FLDivAlloc,0x0,0,68+3*i)) -- CRet -> Next
+				end
 			end
 		end
 
@@ -91183,13 +92757,25 @@ if FLMulCheck == 1 then
 
 	local PlayerID = IncludePlayer
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+3,0x4,0,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,-2,SetTo,"X",FLMulAlloc+2,0x0,0,0))
-		for i = 1, 64 do
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,i,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
+
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",FLMulAlloc+3,0x4,0,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,-2,SetTo,"X",FLMulAlloc+2,0x0,0,0))
+			for i = 1, 64 do
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,i,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
+			end
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+3,0x4,0,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,-2,SetTo,"X",FLMulAlloc+2,0x0,0,0))
+			for i = 1, 64 do
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",FLMulAlloc+2,0x4,i,SetTo,"X",FLMulAlloc+2,0x0,0,-2))
+			end
 		end
 	end
+
 
 FLMulAlloc = FLMulAlloc + 6
 end
@@ -92296,6 +93882,10 @@ if FLReadXCheck == 1 then
 end
 -----------------------------------------------------------
 CJumpEnd(IncludePlayer,LastCJumpAlloc)
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 
 function NIfNotOnce2(PlayerID, Conditions, Actions) -- > Jump 무관
@@ -92323,13 +93913,22 @@ function NIfNotEnd()
 	table.remove(CIfPArr,CIfptr)
 	CIfptr = CIfptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index-1,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index-1,0x0,0,1))
+		end
 	end
-	
+
 	Trigger {
 		players = {PlayerID},
 		conditions = {
@@ -92395,9 +93994,16 @@ function NJumpNot(PlayerID,sIndex,Conditions,Actions,UnPack)
 		},
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",sIndex+JumpStartAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+		end
 	end
+	
 	table.insert(NJumpArr,sIndex)
 end
 
@@ -92465,9 +94071,17 @@ function NJumpNotX(PlayerID,sIndex,Conditions,Actions,UnPack)
 		},
 	}
 	PlayerID = PlayerConvert(PlayerID)
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",IndexAlloc,0x4,0,SetTo,"X",sIndex+JumpEndAlloc,0x0,0,1))
+		end
 	end
+	
 	table.insert(NJumpArr,sIndex)
 	IndexAlloc = IndexAlloc+1
 end
@@ -92555,10 +94169,18 @@ function NWhileNotEnd(Actions,UnPack)
 	table.remove(CWhilePArr,CWhileptr)
 	CWhileptr = CWhileptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-2,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+		end
 	end
 
 	if UnPack == 1 then
@@ -92837,10 +94459,18 @@ function NWhileNotXEnd(Actions,UnPack)
 	table.remove(CWhileXPArr,CWhileXptr)
 	CWhileXptr = CWhileXptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index-1,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-3,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",Index,0x0,0,1))
+		end
 	end
 
 	if UnPack == 1 then
@@ -92902,12 +94532,22 @@ function DoWhileNotEnd(Loop_Conditions, Actions,UnPack)
 	table.remove(DWhilePArr,DWhileptr)
 	DWhileptr = DWhileptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x158,0,SetTo,"X",Index,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x15C,0,SetTo,"X",Index,0x0,0,1))
+		end
 	end
+	
 	if UnPack == 1 then
 		for k, v in pairs(Loop_Conditions) do
 			local Temp = CunPack(v)
@@ -93363,25 +95003,50 @@ function NIfXEnd()
 	table.insert(NIfXArr[NIfXptr],IndexAlloc+1)
 	IndexAlloc = IndexAlloc + 0x2
 
-	for k, P in pairs(PlayerID) do
-		local Size = 0
-		for i, index in pairs(NIfXArr[NIfXptr]) do
-			Size = Size + 1
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			local Size = 0
+			for i, index in pairs(NIfXArr[NIfXptr]) do
+				Size = Size + 1
+			end
+			for i = 1, Size-1 do
+				if NIfXNotArr[NIfXptr][i] == 1 then
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,2))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
+				else
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,1,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+				end
+			end
 		end
-		for i = 1, Size-1 do
-			if NIfXNotArr[NIfXptr][i] == 1 then
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,2))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
-			else
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,1,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+	else
+		for k, P in pairs(PlayerID) do
+			local Size = 0
+			for i, index in pairs(NIfXArr[NIfXptr]) do
+				Size = Size + 1
+			end
+			for i = 1, Size-1 do
+				if NIfXNotArr[NIfXptr][i] == 1 then
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,2))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
+				else
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x4,0,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i+1]-1,0x4,-1,SetTo,"X",IndexAlloc-1,0x0,0,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,0,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,0,SetTo,"X",NIfXArr[NIfXptr][i],0x0,0,1))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x158,1,SetTo,"X",NIfXArr[NIfXptr][i],0x4,1,0))
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",NIfXArr[NIfXptr][i],0x15C,1,SetTo,"X",NIfXArr[NIfXptr][i+1]-1,0x0,0,0))
+				end
 			end
 		end
 	end
@@ -93493,13 +95158,24 @@ function NForEnd()
 	table.remove(NForStepArr,NForptr)
 	NForptr = NForptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
 	end
 
 	if Actions ~= nil then
@@ -93690,39 +95366,77 @@ function NSwitchEnd()
 		},
 	}
 
-	for _, P in pairs(PlayerID) do
-		if CSwitchCaseArr[CSwitchptr]["Default"] == nil then
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
-			for i = 0, 2^(BitSize)-1 do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",Index,0x0,0,1))
-				table.insert(CtrigInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
-			end
-		else
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
-			for i = 0, 2^(BitSize)-1 do
-				table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
-				table.insert(CtrigInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
-			end
-		end
-
-		for k, v in pairs(CSwitchKeyArr[CSwitchptr]) do
-			local BitSize2 = 0
-			local Ret = 0
-			for i = 0, 31 do
-				local CBit = 2^i
-				if bit32.band(CBit,keybit) ~= 0 then
-					if bit32.band(v,CBit) ~= 0 then
-						Ret = Ret + 2^BitSize2
-					end
-					BitSize2 = BitSize2 + 1
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for _, P in pairs(PlayerID) do
+			if CSwitchCaseArr[CSwitchptr]["Default"] == nil then
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+				for i = 0, 2^(BitSize)-1 do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",Index,0x0,0,1))
+					table.insert(STRxInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
+				end
+			else
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
+				for i = 0, 2^(BitSize)-1 do
+					table.insert(STRxInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
+					table.insert(STRxInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
 				end
 			end
 
-			table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*Ret,1,SetTo,"X",CSwitchCaseArr[CSwitchptr][k],0x0,0,1))
+			for k, v in pairs(CSwitchKeyArr[CSwitchptr]) do
+				local BitSize2 = 0
+				local Ret = 0
+				for i = 0, 31 do
+					local CBit = 2^i
+					if bit32.band(CBit,keybit) ~= 0 then
+						if bit32.band(v,CBit) ~= 0 then
+							Ret = Ret + 2^BitSize2
+						end
+						BitSize2 = BitSize2 + 1
+					end
+				end
+
+				table.insert(STRxInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*Ret,1,SetTo,"X",CSwitchCaseArr[CSwitchptr][k],0x0,0,1))
+			end
+		end
+	else
+		for _, P in pairs(PlayerID) do
+			if CSwitchCaseArr[CSwitchptr]["Default"] == nil then
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index,0x0,0,1))
+				for i = 0, 2^(BitSize)-1 do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",Index,0x0,0,1))
+					table.insert(CtrigInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
+				end
+			else
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x4,0,SetTo,"X",IndexAlloc,0x0,0,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",IndexAlloc,0x4,1,0))
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
+				for i = 0, 2^(BitSize)-1 do
+					table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*i,1,SetTo,"X",CSwitchCaseArr[CSwitchptr]["Default"],0x0,0,1))
+					table.insert(CtrigInitArr[P+1], SetCtrig1X("X",JumpIndex,0x948+0x10*i,1,SetTo,8))
+				end
+			end
+
+			for k, v in pairs(CSwitchKeyArr[CSwitchptr]) do
+				local BitSize2 = 0
+				local Ret = 0
+				for i = 0, 31 do
+					local CBit = 2^i
+					if bit32.band(CBit,keybit) ~= 0 then
+						if bit32.band(v,CBit) ~= 0 then
+							Ret = Ret + 2^BitSize2
+						end
+						BitSize2 = BitSize2 + 1
+					end
+				end
+
+				table.insert(CtrigInitArr[P+1], SetCtrigX("X",JumpIndex,0x4+0x10*Ret,1,SetTo,"X",CSwitchCaseArr[CSwitchptr][k],0x0,0,1))
+			end
 		end
 	end
 
@@ -93736,6 +95450,11 @@ function NSwitchEnd()
 end
 
 function NStack(PlayerID,Number,Size) 
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	-- ptr : EPD / ptr2 : Next + EPD Mask Type
 
 	if Number < 1 or Number > 32 then
@@ -93752,8 +95471,8 @@ function NStack(PlayerID,Number,Size)
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
 	end
-	table.insert(CreateVarPArr,{"NP1",PlayerID,Number,NVArr[2]})
-	table.insert(CreateVarPArr,{"NP2",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP1",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP2",PlayerID,Number,NVArr[2]})
 
 	local Nptr1 = {PID,CreateVarXAlloc-1,0,"V"}
 	local Nptr2 = {PID,CreateVarXAlloc,0,"V"}
@@ -94251,6 +95970,11 @@ end
 
 function NQueue(PlayerID,Number,Size)
 	-- ptr : EPD + Rear(0x30) / ptr2 : Next + EPD Mask + Front(0x30) 
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 
 	if Number < 1 or Number > 32 then
 		NQueue_InputData_Error()
@@ -94266,8 +95990,8 @@ function NQueue(PlayerID,Number,Size)
 	if CreateVarXAlloc > CreateMaxVAlloc then
 		CreateVariable_IndexAllocation_Overflow()
 	end
-	table.insert(CreateVarPArr,{"NP1",PlayerID,Number,NVArr[2]})
-	table.insert(CreateVarPArr,{"NP2",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP1",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP2",PlayerID,Number,NVArr[2]})
 
 	local Nptr1 = {PID,CreateVarXAlloc-1,0,"V"} -- rear
 	local Nptr2 = {PID,CreateVarXAlloc,0,"V"} -- front
@@ -94888,6 +96612,11 @@ end
 
 function NBag(PlayerID,Number,Size)
 	-- ptr : EPD + Rear(0x30) / ptr2 : Next + EPD Mask + Front(0x30) 
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 
 	if Number < 1 or Number > 32 then
 		NBag_InputData_Error()
@@ -94904,10 +96633,10 @@ function NBag(PlayerID,Number,Size)
 		CreateVariable_IndexAllocation_Overflow()
 	end
 
-	table.insert(CreateVarPArr,{"NP1",PlayerID,Number,NVArr[2]})
-	table.insert(CreateVarPArr,{"NP2",PlayerID,Number,NVArr[2]})
-	table.insert(CreateVarPArr,{"NP1",PlayerID,Number,NVArr[2]})
-	table.insert(CreateVarPArr,{"NP2",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP1",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP2",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP1",PlayerID,Number,NVArr[2]})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"NP2",PlayerID,Number,NVArr[2]})
 
 	local Nptr1 = {PID,CreateVarXAlloc-3,0,"V"} 
 	local Nptr2 = {PID,CreateVarXAlloc-2,0,"V"}
@@ -95368,14 +97097,26 @@ function NBagLoopEnd(Actions,UnPack)
 	NWhileXptr = NWhileXptr - 1
 	NBagLoopptr = NBagLoopptr - 1
 
-	for k, P in pairs(PlayerID) do
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
-		table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+	if TEP30STRx == 1 and __STRxSwitch == 1 then
+		for k, P in pairs(PlayerID) do
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(STRxInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
+	else
+		for k, P in pairs(PlayerID) do
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index,0x4,0,SetTo,"X",Index-4,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-2,0x4,0,SetTo,"X",Index,0x0,0,1))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-3,0x15C,0,SetTo,"X",Index-1,0x0,0,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x158,0,SetTo,"X",Index-3,0x4,1,0))
+			table.insert(CtrigInitArr[P+1], SetCtrigX("X",Index-1,0x15C,0,SetTo,"X",Index-2,0x0,0,0))
+		end
 	end
+	
 	if UnPack == 1 then
 		if Actions ~= nil then
 		for k, v in pairs(Actions) do
@@ -95455,10 +97196,10 @@ function CEPD(PlayerID,Dest,Source,Deviation)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CEPD_InputData_Error()
 		end
 
 		local CBit = bit32.lshift(1,2)-1
@@ -95628,10 +97369,10 @@ function CrShift(PlayerID,Dest,Source,Operand) -- >> (/2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CrShift_InputData_Error()
 		end
 
 		if type(Source) == "number" then
@@ -95961,10 +97702,10 @@ function ClShift2(PlayerID,Dest,Source,Operand) -- >> (/2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			ClShift2_InputData_Error()
 		end
 
 		if type(Source) == "number" then
@@ -96390,10 +98131,10 @@ function CXor2(PlayerID,Dest,Source,Operand) -- >> (/2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CXor2_InputData_Error()
 		end
 
 		if type(Source) == "number" then
@@ -96625,10 +98366,10 @@ function CNot2(PlayerID,Dest,Source) -- >> (/2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CNot2_InputData_Error()
 		end
 
 			local Not2Act = {}
@@ -96742,10 +98483,10 @@ function CNeg2(PlayerID,Dest,Source) -- >> (/2)
 		if type(Dest) == "table" and Dest[4] == "VA" then
 			PDest = Dest
 			Dest = {"X",CRet[8],0,"V"}
+			MovX(PlayerID,Dest,PDest)
 		end
 		if type(Dest) == "table" and Dest[4] == "A" then
-			PDest = Dest
-			Dest = {"X",CRet[8],0,"V"}
+			CNeg2_InputData_Error()
 		end
 
 			local Neg2Act = {}
@@ -97059,6 +98800,12 @@ function _Neg2(Source)
 end
 
 function CreateFArr(Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
+
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -97071,7 +98818,7 @@ function CreateFArr(Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"FA",PlayerID,Size})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"FA",PlayerID,Size})
 	local Ret = {"X",CreateVarXAlloc,0x970,0}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -97080,6 +98827,11 @@ function CreateFArr(Size,PlayerID)
 end
 
 function CreateFArrX(Fill,Size,PlayerID)
+	if TEP30Flag == 1 then
+		__STRxSwitchX = __STRxSwitch
+	else
+		__STRxSwitchX = -1
+	end
 	if STRCTRIGASM == 0 then
 		Need_STRCTRIGASM()
 	end
@@ -97093,7 +98845,7 @@ function CreateFArrX(Fill,Size,PlayerID)
 	if PlayerID == nil then
 		PlayerID = AllPlayers
 	end
-	table.insert(CreateVarPArr,{"FA",PlayerID,Size,Fill})
+	table.insert(CreateVarPArr,{["STRx"]=__STRxSwitchX,"FA",PlayerID,Size,Fill})
 	local Ret = {"X",CreateVarXAlloc,0x970,0}
 	if type(PlayerID) == "number" then
 		Ret[1] = PlayerID
@@ -98249,6 +100001,11 @@ FWIREINITCall1 = 0
 FWIREINITCall2 = 0
 CheckInclude_Wireframe = 0
 function Include_Wireframe(Init)
+if TEP30STRx == 1 and __STRxSwitch == 0 then -- EndCtrig Call
+	STRxStart()
+	IncludeSTRXCheck = 1
+end
+
 if CheckInclude_Wireframe == 0 then
 	CheckInclude_Wireframe = 1
 
@@ -98375,6 +100132,10 @@ if CheckInclude_Wireframe == 0 then
 	FWIREINITCall2 = FuncAlloc
 	FuncAlloc = FuncAlloc + 1
 end
+	if IncludeSTRXCheck == 1 then
+		STRxEnd()
+		IncludeSTRXCheck = 0
+	end
 end
 
 function Is64Bit()
