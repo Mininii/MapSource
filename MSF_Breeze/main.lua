@@ -28,7 +28,7 @@ end
 
 VerText = "\x04Ver. 1.7"
 EVFPtsMul = 2
-TestSet(1)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	
@@ -54,7 +54,6 @@ CJump(AllPlayers,init_func)
 	Include_CRandNum(FP)
 	Include_G_CA_Library(2,0x600,32)
 	Shape()
-
 	S_3 = G_CAPlot(S_3_ShT)
 	S_4 = G_CAPlot(S_4_ShT)
 	S_5 = G_CAPlot(S_5_ShT)
@@ -72,7 +71,6 @@ CJump(AllPlayers,init_func)
 		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
 	end
 	G_CAPlot2(G_CAPlot_Shape_InputTable)
-	
 Install_Load_CAPlot()
 Install_Call_G_CA()
 G_CA_Lib_ErrorCheck()
@@ -99,6 +97,7 @@ end
 
 TempMul_254,TempMul_255,TempMul_1,TempFactor = CreateVars(4,FP)
 UpgradeCP,TempUpgradePtr,TempUpgradeMaskRet,UpgradeMax,UpResearched,UpCost,UpCompleted = CreateVariables(8)
+UpMaster = CreateCcode()
 
 TempUpgradeLimPtr = CreateVar(FP)
 TempUpgradeLimMaskRet = CreateVar(FP)
@@ -189,13 +188,18 @@ SetCall(FP)
 	DisplayPrint(UpgradeCP, {"\x12\x07『 \x04업글 완료 후 가격 : \x1F",ResultMinCostBase,"  \x07』"})
 
 	end
+	CTrigger(FP,{TCVar(FP,UpLimit[2],Exactly,UpResearched)},{
+		TSetMemory(0x6509B0,SetTo,UpgradeCP),
+		DisplayText("\x12\x07『 \x04업그레이드가 모두 완료되었습니다. \x07』",4),
+		SetMemory(0x6509B0,SetTo,FP),SetCD(UpMaster,1)
+	},{preserved})
 	CElseX()
 	CTrigger(FP,{TCVar(FP,UpLimit[2],Exactly,UpResearched)},{
 		TSetMemory(0x6509B0,SetTo,UpgradeCP),
 		DisplayText("\x12\x07『 \x04이미 업그레이드가 모두 완료되었습니다. \x07』",4),
-		SetMemory(0x6509B0,SetTo,FP)
+		SetMemory(0x6509B0,SetTo,FP),SetCD(UpMaster,1)
 	},{preserved})
-	CTrigger(FP,CVar(FP,UpCompleted[2],Exactly,0),{
+	CTrigger(FP,{TTCVar(FP,UpLimit[2],NotSame,UpResearched),CVar(FP,UpCompleted[2],Exactly,0)},{
 		TSetMemory(0x6509B0,SetTo,UpgradeCP),
 		DisplayText("\x12\x07『 \x04잔액이 부족합니다. \x07』",4),
 		SetMemory(0x6509B0,SetTo,FP)

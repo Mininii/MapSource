@@ -12,11 +12,11 @@ function Include_Vars()
 	nilunit = 181
 
 	--Arr
-	
-	UnitIDArr = CreateArr(1700, FP)
-	UnitPosArr = CreateArr(1700, FP)
-	PlayerIDArr = CreateArr(1700, FP)
+	UnitIDArr = CreateFArr(1700, FP)
+	UnitPosArr = CreateFArr(1700, FP)
+	PlayerIDArr = CreateFArr(1700, FP)
 	--Vars
+	SELimit = CreateCcode()
 	ExRate = CreateVar2(FP, nil, nil, 13)
 	Nextptrs = CreateVar(FP)
 	BGMType = CreateVar(FP)
@@ -26,6 +26,7 @@ function Include_Vars()
 	CurCunitI2 = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
 	BarPos = CreateVarArr(7,FP)
+	BarRally = CreateVarArr(7,FP)
 	CunitIndex = CreateVar(FP)
 	RepHeroIndex = CreateVar(FP)
 	PlayerV=CreateVar(FP)
@@ -135,6 +136,4 @@ function Include_Vars()
 	SetUnitAbility(30,27,322,false,nil,3222,1,nil,nil,1611,"정체성 공성 전차",3222)
 
 
-
-	
 end

@@ -25,6 +25,14 @@ function CIfGunWave(GunID,LocID,TimerMax,BGMTypes)
 	return GunCcode
 end
 
+function CIfGunWave2(GunID,LocID,TimerMax,BGMTypes)
+	local GunCcode = CreateCcode()
+	TriggerX(FP, Bring(P12, AtMost, 0, GunID, LocID), {SetCD(GunCcode,1),SetV(BGMType,BGMTypes)})--RotatePlayer({DisplayTextX("\x13GunID : "..GunID.."    LocID : "..LocID)}, HumanPlayers, FP)
+	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,TimerMax,AtMost)},{AddCD(GunCcode,1)})
+		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
+	return GunCcode
+end
+
 function SetTT(LocID,Unitargs,G_CA_args) -- 개별영침
 	local TTC = CreateCcode()
 	for i = 0, 6 do
@@ -97,7 +105,7 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 	CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,480*CountMax,AtMost)},{AddCD(GunCcode,1),SetSwitch(RandSwitch1,Random),})
 		CIfOnce(FP)
 		for i = 0, 6 do
-			TriggerX(FP, {CD(GMode,1),Kills(i, AtLeast, 1, GunID)}, {SetV(CurGunP,i),SetKills(i, Subtract, 1, GunID)})
+			CTrigger(FP, {TTOR({CD(GMode,1),CD(UTAGECcode,1,AtLeast)}),Kills(i, AtLeast, 1, GunID)}, {SetV(CurGunP,i),SetKills(i, Subtract, 1, GunID)})
 		end
 		CIfEnd()
 		DoActionsX(FP, SetV(BGMType,BGMTypes), 1)
@@ -105,11 +113,11 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 		
 		if GunID == 150 or GunID == 148 then
 			CTrigger(FP, {CD(GMode,1),CD(GunCcode,480,AtLeast)}, {SetCD(EnableMLocCcode,1)})
-			CTrigger(FP, {CD(GMode,1),CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
+			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
 		else
-			CTrigger(FP, {CD(GMode,1),CD(UTAGECcode,1,AtLeast)}, {SetCD(EnableMLocCcode,1)})
+			CTrigger(FP, {TTOR({CD(GMode,1),CD(UTAGECcode,1,AtLeast)})}, {SetCD(EnableMLocCcode,1)})
 		end
-		CIf(FP, {CD(GMode,1),CD(EnableMLocCcode,1)})
+		CIf(FP, {TTOR({CD(GMode,1),CD(UTAGECcode,1,AtLeast)}),CD(EnableMLocCcode,1)})
 		for i = 0, 6 do
 			CTrigger(FP, {CV(CurGunP,i)}, {SetV(G_CA_X,PPosX[i+1]),SetV(G_CA_Y,PPosY[i+1])},{preserved})
 		end
@@ -226,9 +234,24 @@ end
 	GunWave(150,40,{{51,15},{104,15},{56,25},{53,15},{54,20}},4,{{{29,17}, "ACAS", "Chry5", "MAX", nil, nil, nil, FP, 1},{{29,17}, "ACAS", "Chry5", "MAX", nil, nil, nil, FP, 1}})
 	
 	CIfXEnd()
+	--PlayWAVX("staredit\\wav\\Glass.wav")
 
-
-
+--	FRM=CIfGunWave2(173,5,1005)
+--	CFor(FP, 0, 360, 90)
+--	local CI = CForVariable()
+--	FNA = CreateVar(FP)
+--	f_Lengthdir(FP, _Add(CI,FNA), 250, CPosX, CPosY)
+--	Simple_SetLocX(FP, 0, _Add(CPosX,1536),_Add(CPosY,1088),_Add(CPosX,1536),_Add(CPosY,1088))
+--	DoActions(FP, {CreateUnit(1, 84, 1, FP),KillUnit(84, FP)})
+--	CForEnd()
+--	G_CA_SetSpawn({CD(FRM,0,AtLeast)}, {29}, "ACAS", "Form", "MAX", 18, nil, {0,0}, FP, 1)
+--	G_CA_SetSpawn({CD(FRM,500,AtLeast)}, {162}, "ACAS", "Form", "MAX", 18, nil, {0,0}, FP, 1)
+--	G_CA_SetSpawn({CD(FRM,1000,AtLeast)}, {30}, "ACAS", "Form", "MAX", 18, nil, {0,0}, FP, 1)
+--	TriggerX(FP, {CD(FRM,0,AtLeast)}, {RotatePlayer({PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav")}, HumanPlayers, FP)})
+--	TriggerX(FP, {CD(FRM,500,AtLeast)}, {RotatePlayer({PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav")}, HumanPlayers, FP)})
+--	TriggerX(FP, {CD(FRM,1000,AtLeast)}, {RotatePlayer({PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav")}, HumanPlayers, FP)})
+--	CAdd(FP,FNA,1)
+--	CIfEnd()
 	TCC=CIfGunWave(168,46,1505,5)
 	local NR = CreateCcode()
 	GunCcode = CreateCcode()
@@ -307,16 +330,27 @@ end
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 148)}, {SetDeaths(FP, Subtract, 1, 148),SetScore(Force1, Add, 80000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07초월체 파괴! \x1F+ 80,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 150)}, {SetDeaths(FP, Subtract, 1, 150),SetScore(Force1, Add, 50000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07다 자란 번데기 파괴! \x1F+ 50,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
 	Trigger2(FP, {Deaths(FP, AtLeast, 1, 168)}, {SetDeaths(FP, Subtract, 1, 168),SetScore(Force1, Add, 100000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07정지장 파괴! \x1F+ 100,000 Pts"),4)}, HumanPlayers, FP)}, {preserved})
+	Trigger2(FP, {Deaths(P12, AtLeast, 1, 173)}, {SetScore(Force1, Add, 1000000, Kills),RotatePlayer({DisplayTextX(StrDesignX("\x07조합소 파괴! \x1F+ 1,000,000 Pts"),4)}, HumanPlayers, FP)})
 
+	G_CA_SetSpawn({Deaths(P12, AtLeast, 1, 173)}, {30}, "ACAS", "Form", "MAX", 18, nil, {0,0}, FP, 1)
+
+	TriggerX(FP, {Deaths(P12, AtLeast, 1, 173)}, {RotatePlayer({PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav"),PlayWAVX("staredit\\wav\\glass.wav")}, HumanPlayers, FP)})
 
 	Trigger2X(FP,{Bring(FP, AtMost, 0, 130, 5)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04감염된 사령부 파괴! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04이제부터 더 강력한 몬스터가 출현합니다."),4),DisplayTextX(StrDesignX("\x04중앙 \x03정지장 \x07무적 해제, \x03영웅마린 \x11바로뽑기 \x07해금"),4),MinimapPing(46)}, HumanPlayers, FP),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[1],1),SetInvincibility(Disable, 151, FP, 8),SetInvincibility(Disable, 168, FP, 46),SetInvincibility(Disable, 151, FP, 9),Order("Any unit", FP, 64, Attack, 2),
 	SetMemoryB(0x57F27C + (0 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,1),
-				SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,1)
+	SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,1),
+	SetMemoryB(0x57F27C + (0 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (1 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (2 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (3 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (4 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (5 * 228) + 8,SetTo,1),
+	SetMemoryB(0x57F27C + (6 * 228) + 8,SetTo,1),
 	})
 	MB5 = CreateCcode()
 	Trigger2X(FP,{Bring(FP, AtMost, 0, 151, 8)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04정신체 파괴! + 50,000 Pts"),4),DisplayTextX(StrDesignX("\x04이제부터 더 강력한 몬스터가 출현합니다."),4)}, HumanPlayers, FP),SetV(BGMType,5),SetScore(Force1, Add, 50000, Kills),SetCD(WaveS[2],1)})
@@ -346,6 +380,7 @@ end
 	Trigger2X(FP,{CD(WinCcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 \x08지옥같은 산들바람\x04의 원흉인 \x03카카루\x04를 제거하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, HumanPlayers,FP),})
 	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,0)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : 노말"), 4)}, HumanPlayers,FP),})
 	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : \x11프로페셔널"), 4)}, HumanPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(UTAGECcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("연회장 모드 적용됨"), 4)}, HumanPlayers,FP),})
 
 	
 	--WaveS[2] 라그나사우르
@@ -593,7 +628,7 @@ end
 	CIf(FP,{Command(FP,AtLeast,1,94),CV(BossPtr,1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
 	NoAirCollisionX(FP)
 	DoActionsX(FP, {SetV(NR,164)}, 1)
-	CIf(FP,{CV(NR,64,AtLeast),CV(NR,164,AtMost)})
+	NSw = CreateCcode()
 	GetLocCenter(48, G_CA_X, G_CA_Y)
 	NA = CreateVar(FP)
 	f_Lengthdir(FP, NR, NA, CPosX, CPosY)
@@ -627,8 +662,13 @@ end
 	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 	DoActions(FP, {CreateUnitWithProperties(1, 84, 1, FP,{hallucinated=true})})
 	CiSub(FP,NA,2)
-	CSub(FP, NR, 2)
-	CIfEnd()
+
+	TriggerX(FP, {CV(NR,164,AtLeast)}, {SetCD(NSw,0)}, {preserved})
+	TriggerX(FP, {CV(NR,64,AtMost)}, {SetCD(NSw,1)}, {preserved})
+	
+	TriggerX(FP, {CD(NSw,0)}, {AddV(NR,-2)}, {preserved})
+	TriggerX(FP, {CD(NSw,1)}, {AddV(NR,2)}, {preserved})
+	
 	CPt = CreateCcodeArr(7)
 	CPt2 = CreateCcodeArr(7)
 	CT = CreateCcode()

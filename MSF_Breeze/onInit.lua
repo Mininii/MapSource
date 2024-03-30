@@ -53,6 +53,7 @@ function onInit_EUD()
 
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=9000*6,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -191,13 +192,22 @@ end
 		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1)})
 	
 	end
-	DoActions(FP, {	SetMemoryB(0x57F27C + (0 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,0),
-	SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetCp(FP)})
+	DoActions2(FP, {	
+		SetMemoryB(0x57F27C + (0 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),
+		SetMemoryB(0x57F27C + (0 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (5 * 228) + 8,SetTo,0),
+		SetMemoryB(0x57F27C + (6 * 228) + 8,SetTo,0),
+	CreateUnit(1, 115, 7, FP),SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetCp(FP)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 
 
@@ -210,11 +220,14 @@ end
 		table.insert(condbox,CV(RepHeroIndex,k))
 	end
 	
-	f_Read(FP,_Add(CI,25),RepHeroIndex)
+	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
 	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
 	
 
 
+	CIf(FP,{CV(RepHeroIndex,173)})
+	CDoActions(FP, {TSetMemory(_Add(CI,2), SetTo, 8380000*256)})
+	CIfEnd()
 
 	CIf(FP,{CV(RepHeroIndex,111)})
 	for i = 0,6 do
@@ -252,7 +265,8 @@ end
 	DoActions2(AllPlayers, PatchArrPrsv)
 	DoActions2(AllPlayers, {
 		ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
-		ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100),
+		ModifyUnitHitPoints(All, "Any unit", Force1, "Anywhere", 100),
+		ModifyUnitHitPoints(All, "Any unit", Force2, "Anywhere", 100),
 		ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
 	},1)
 	

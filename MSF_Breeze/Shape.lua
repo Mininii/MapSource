@@ -49,6 +49,9 @@ function Shape()
 		end
 		return X
 	end
+	ShapeB084 = {4   ,{1184, 32},{1888, 32},{1888, 448},{1184, 448}}
+	Form = CS_FillPathXY(ShapeB084, 1, 24, 24, 0)
+
 	Shape8000 = {3   ,{32, 224},{32, 32},{448, 32}}
 	Shape8001 = {3   ,{3040, 224},{3040, 32},{2624, 32}}
 	LOverM= CS_MoveXY(CS_FillPathXY(Shape8000, 1, 32, 32, 0),-160,-128)
@@ -97,7 +100,7 @@ function Shape()
 		"Chry4",
 		"Chry3",
 		"Chry2",
-		"Chry1",
+		"Chry1","Form"
 		
 
 	}

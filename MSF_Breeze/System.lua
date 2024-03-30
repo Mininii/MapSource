@@ -43,14 +43,14 @@ for i = 0, 6 do
 		if j == 2 then SW1 = Set end if j == 3 then SW2 = Set end if j==4 then SW1 = Set SW2 = Set end
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF),Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{SetScore(i, Add, 1, Custom)})
 		f_SaveCp()
-		DoActions2(FP, {RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)})
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)},{preserved})
 		DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),NMArr[j]})
 		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (4000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 2000 Ore"), 4)}, {preserved})
 		f_LoadCp()
 		CIfEnd()
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{SetScore(i, Add, 2, Custom)})
 		f_SaveCp()
-		DoActions2(FP, {RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)})
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)},{preserved})
 		DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),HMArr[j]})
 		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (4500+4000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 4250 Ore"), 4)}, {preserved})
 		f_LoadCp()
@@ -89,17 +89,19 @@ NJumpEnd(FP, EnemyArea)
 			CD(UTAGECcode,0),
 			CVX(HeroIndex, k[1], 0xFF)}, {
 				SetScore(Force1, Add, k[2], Kills),
-				RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),
-				PlayWAVX("staredit\\wav\\Computer Beep.wav"),
-				PlayWAVX("staredit\\wav\\Computer Beep.wav"),
+				RotatePlayer({
+					PlayWAVX("staredit\\wav\\kill_se.wav"),
+					PlayWAVX("staredit\\wav\\Computer Beep.wav"),
+					PlayWAVX("staredit\\wav\\Computer Beep.wav"),
 				DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..k[2].." P t s"), 4)}, HumanPlayers, FP)},{preserved})
 		Trigger2X(FP, {
 			CD(UTAGECcode,1),
 			CVX(HeroIndex, k[1], 0xFF)}, {
 				SetScore(Force1, Add, k[2]*EVFPtsMul, Kills),
-				RotatePlayer({PlayWAVX("staredit\\wav\\kill_se.wav"),
-				PlayWAVX("staredit\\wav\\Computer Beep.wav"),
-				PlayWAVX("staredit\\wav\\Computer Beep.wav"),
+				RotatePlayer({
+					PlayWAVX("staredit\\wav\\kill_se.wav"),
+					PlayWAVX("staredit\\wav\\Computer Beep.wav"),
+					PlayWAVX("staredit\\wav\\Computer Beep.wav"),
 				DisplayTextX(StrDesignX("\x04적 유닛 \x03"..k[3].." \x07처치! \x1F+ "..(k[2]*EVFPtsMul).." P t s"), 4)}, HumanPlayers, FP)},{preserved})
 	end
 	f_LoadCp()
@@ -195,6 +197,13 @@ EXCC_ClearCalc()
 		})
 	end
 	EXCC_End()
+
+	
+SETimer = CreateCcode()
+TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
+DoActionsX(FP,{SetCDeaths(FP,Subtract,1,SETimer)})
+
+
 
 
 

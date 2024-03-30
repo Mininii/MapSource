@@ -71,7 +71,7 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 
 
 	GST2 = CreateCcode()
-	TriggerX(FP, {CD(UTAGECcode,1)}, {
+	Trigger2X(FP, {CD(UTAGECcode,1)}, {
 		SetMemoryB(0x58D088+(46*0)+7,SetTo,255),
 		SetMemoryB(0x58D088+(46*1)+7,SetTo,255),
 		SetMemoryB(0x58D088+(46*2)+7,SetTo,255),
@@ -87,6 +87,14 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		SetMemoryB(0x58D088+(46*5)+0,SetTo,50),
 		SetMemoryB(0x58D088+(46*6)+0,SetTo,50),
 		SetMemory(0x662350 + (125*4),SetTo,167772*256),
+		SetMemory(0x662350 + (93*4),SetTo,400000*256),
+		SetMemoryW(0x656EB0+(25 *2),SetTo,65535),
+		SetMemory(0x657470+(0 *4),SetTo,224),
+		SetMemory(0x657470+(1 *4),SetTo,224),
+		SetMemoryB(0x662DB8+0,SetTo,224/32),
+		SetMemoryB(0x662DB8+20,SetTo,224/32),
+		SetInvincibility(Disable, 173, P12, 64);
+		SetDeaths(Force1, SetTo, 1, 49);
 		SetMemoryB(0x65FEC8+0, SetTo, 100),SetMemoryB(0x65FEC8+20, SetTo, 100),SetMemoryB(0x65FEC8+125, SetTo, 100),SetMemoryB(0x6635D0 + 125,SetTo,0)
 	}, {preserved})
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
@@ -98,9 +106,9 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04난이도를 선택해 주십시오.").."\n"..StrDesignX("\x04- \x03난이도 설명 \x04-"), 4)}, HumanPlayers, FP)},1)
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 : 이전 버전의 난이도와 같습니다. 공방에서 플레이하시길 추천드립니다."), 4)}, HumanPlayers, FP)},1)
 	DoActions2(FP, {RotatePlayer({DisplayTextX(StrDesignX("\x11프로페셔널 \x04: 공방에서 플레이하기에 매우 어려워졌으나 공격력 최대 업글 가능 횟수 상승됩니다."), 4)}, HumanPlayers, FP)},1)
-	for i = 0, 6 do
-	TriggerX(FP, {CD(LimitT[i+1],1),Bring(i, AtLeast, 1, 15, 76)}, {SetCD(UTAGECcode,1),RotatePlayer({DisplayTextX(StrDesignX("\x07연회장 모드\x04가 활성화되었습니다.").."\n"..StrDesignX("기본 방어력 100 제공, 공업 제한 삭제, 벙커 체력 증가, 영작포인트 "..EVFPtsMul.."배, 건작 패턴 다수 변경"), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),})
-	end
+
+	TriggerX(FP, {Bring(AllPlayers, AtLeast, 1, 15, 76)}, {SetCD(UTAGECcode,1),RotatePlayer({DisplayTextX(StrDesignX("\x07연회장 모드\x04가 활성화되었습니다.").."\n"..StrDesignX("기본 방어력 100 제공, 공업 제한 삭제, 벙커 체력 증가, 영작포인트 "..EVFPtsMul.."배, 건작 패턴이 \x08막장\x07으로 변경됩니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),})
+
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 58)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04노말 난이도가 선택되었습니다."), 4),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg"),PlayWAVX("staredit\\wav\\GameStart.ogg")}, HumanPlayers, FP),SetCD(GST,1),RemoveUnit(15, AllPlayers)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 15, 57)}, {SetCD(GST,1),SetCD(GMode,1),--SetV(ExRate,11),
 		SetMemoryB(0x58D088+(46*0)+7,SetTo,150),
@@ -169,6 +177,10 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	end
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
+	for i = 0, 6 do
+		Trigger2X(FP, {CV(SetPlayers,1),HumanCheck(i, 1)},{GiveUnits(All, 125, P11, 64, i),SetInvincibility(Disable, 125, i, 64)})
+	end
+	Trigger2X(FP, {CV(SetPlayers,2,AtLeast)},{RemoveUnit(125, P11)})
 	CIf(FP,{CD(GMode,1)})
 		CFor(FP,19025,19025+(84*1700),84)
 			CI = CForVariable()
@@ -381,6 +393,7 @@ for i = 1, 6 do -- 강퇴기능
 
 		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,Exactly,1)) -- 공업 255회
 		CDoActions(FP,{
+			SetCD(UpMaster,0),
 			SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(AtkUpgradePtrArr[i+1])),
 			SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^AtkUpgradeMaskRetArr[i+1]),
 			SetCVar(FP,TempUpgradeLimPtr[2],SetTo,EPD(AtkUpgradeLimPtrArr[i+1])),
@@ -390,9 +403,11 @@ for i = 1, 6 do -- 강퇴기능
 			SetCD(UpResultFlag,0);
 			SetMemoryB(0x58D2B0+(46*i)+18,SetTo,0)})
 		CallTrigger(FP,OneClickUpgrade)
+		TriggerX(FP, {CD(UpMaster,1)}, {SetMemoryB(0x58D088 + (i * 46) + 18,SetTo,0)}, {preserved})
 		NIfEnd()
 		NIf(FP,MemoryB(0x58D2B0+(46*i)+19,Exactly,1)) -- 체업 255회
 		CDoActions(FP,{
+			SetCD(UpMaster,0),
 			SetCVar(FP,TempUpgradePtr[2],SetTo,EPD(HPUpgradePtrArr[i+1])),
 			SetCVar(FP,TempUpgradeMaskRet[2],SetTo,256^HPUpgradeMaskRetArr[i+1]),
 			SetCVar(FP,TempUpgradeLimPtr[2],SetTo,EPD(HPUpgradeLimPtrArr[i+1])),
@@ -402,10 +417,19 @@ for i = 1, 6 do -- 강퇴기능
 			SetCD(UpResultFlag,0);
 			SetMemoryB(0x58D2B0+(46*i)+19,SetTo,0)})
 		CallTrigger(FP,OneClickUpgrade)
+		TriggerX(FP, {CD(UpMaster,1)}, {SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0)}, {preserved})
 		NIfEnd()
 	
 
 		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
+
+		CIf(FP,{TTMemory(_Add(BarPos[i+1],62), NotSame, BarRally[i+1])})
+			f_Read(FP, _Add(BarPos[i+1],62), BarRally[i+1])
+			if Limit == 1 then
+				Convert_CPosXY(BarRally[i+1])
+				DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"},3)
+			end
+		CIfEnd()
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
 		f_Read(FP, _Add(CreatingUnit,25), CreatingUID)
@@ -601,6 +625,57 @@ actions = {
 	PreserveTrigger();
 },
 }
+
+
+
+CreateMarine1 = CreateCcode()
+
+TriggerX(FP, {Command(i, AtLeast, 1, 8)},{
+	ModifyUnitEnergy(1,8,i,64,0);
+	RemoveUnitAt(1,8,64,i);
+	AddCD(CreateMarine1,6);
+},{preserved})
+
+
+
+
+
+CWhile(FP,{CD(CreateMarine1,1,AtLeast),Memory(0x628438,AtLeast,1)},{SubCD(CreateMarine1,1),
+SetSwitch(RandSwitch1, Random),
+SetSwitch(RandSwitch2, Random)})
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+
+
+
+
+for y = 0, 3 do
+	if y == 0 then RS1 = Cleared RS2=Cleared end
+	if y == 1 then RS1 = Set RS2=Cleared end
+	if y == 2 then RS1 = Cleared RS2=Set end
+	if y == 3 then RS1 = Set RS2=Set end
+	TriggerX(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {CreateUnitWithProperties(1,20,14+y,i,{energy = 100})}, {preserved})
+end
+
+CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
+		f_Read(FP,_Add(BarPos[i+1],10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+		f_Read(FP,_Add(Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 249, CPosX, CPosY, CPosX, CPosY)
+		CDoActions(FP, {MoveUnit(1, 20, i, 250, 1)})
+	CIfEnd()
+	CIf(FP,{TTMemory(_Add(BarPos[i+1],10),NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1)})
+		CDoActions(FP,{TSetDeathsX(_Add(Nextptrs,19),SetTo,6*256,0,0xFF00),
+		TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0),TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
+	CIfEnd()
+CIfEnd()
+CWhileEnd()
+
+
+
+
 	
 DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
 RunAIScript("Turn ON Shared Vision for Player 1");
@@ -715,6 +790,15 @@ end
 			PreserveTrigger();
 	},
 	}
+	CIf(FP,{CDeaths(FP,Exactly,400,LeaderBoardT);})
+	CMov(FP, 0x6509B0, 19025+2)
+	CFor(FP,19025+19,19025+(1700*84)+19,84) -- 좀비유닛탐지
+	CI = CForVariable()
+	CTrigger(FP, {Deaths(CurrentPlayer, AtMost, 0,0),TMemoryX(CI, AtLeast,1*256, 0xFF00)}, {SetDeaths(CurrentPlayer, Add, 1*256, 0)},{preserved})
+	CAdd(FP,0x6509B0,84)
+	CForEnd()
+	CMov(FP, 0x6509B0, FP)
+	CIfEnd()
 	Trigger { -- 킬 스코어 리더보드
 		players = {FP},
 		conditions = {
