@@ -1,8 +1,7 @@
 
 		
-	function DisplayPrint(TargetPlayers,arg,FixTextPreset) -- ext text ver
-		if FixTextPreset == 3 or 1 then
-			
+	function DisplayPrint(TargetPlayers,arg,FixTextPreset,SoundRepeat) -- ext text ver
+		if FixTextPreset == 3 or FixTextPreset == 1 then
 		local TPArr = {}
 		if type(TargetPlayers) == "number"  then
 			TPArr = {TargetPlayers}
@@ -91,20 +90,40 @@
 		end
 		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
 		table.insert(dp.StrXKeyArr,{RetV,StrT})
-
-
 		if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
-			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)},nil,nil)
+			local Act = {TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)}
+			if SoundRepeat ~= nil then
+				for j,k in pairs(SoundRepeat) do
+					table.insert(Act, PlayWAV(k))
+				end
+				
+			end
+			CDoActions(FP,Act,nil,nil)
 		elseif type(TargetPlayers)=="table" and TargetPlayers[4]=="V" then
-			CDoActions(FP,{TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)},nil,nil)
+			
+			local Act = {TSetMemory(0x6509B0,SetTo,TargetPlayers),DisplayText(StrT,4)}
+			if SoundRepeat ~= nil then
+				for j,k in pairs(SoundRepeat) do
+					table.insert(Act, PlayWAV(k))
+				end
+				
+			end
+			CDoActions(FP,Act,nil,nil)
 		else
-			DoActionsX(FP,{RotatePlayer({DisplayTextX(StrT,4)},TargetPlayers,FP)},nil,nil)
+			local RotAct = {DisplayTextX(StrT,4)}
+			if SoundRepeat ~= nil then
+				for j,k in pairs(SoundRepeat) do
+					table.insert(RotAct, PlayWAVX(k))
+				end
+				
+			end
+			DoActionsX(FP,{RotatePlayer(RotAct,TargetPlayers,FP)},nil,nil)
 		end
 		RetV = nil
 		Dev = nil
 		BSize = nil
 		
-		if FixTextPreset == 3 or 2 then
+		if FixTextPreset == 3 or FixTextPreset == 2 then
 			
 			local TPArr = {}
 			if type(TargetPlayers) == "number"  then
@@ -197,7 +216,7 @@
 				PushErrorMsg("Print_Inputdata_Error")
 			end
 		end
-		local TPArr = {}
+		local TPArr = TargetPlayer
 		if type(TargetPlayer) == "number"  then
 			TPArr = {TargetPlayer}
 		end
@@ -830,11 +849,9 @@
 		
 		dp.Call_Print13X = CreateCallIndex()
 		dp.Print13V = CreateVar(FP)
-		if CheckInclude_64BitLibrary == 1 then
-			dp.publiclItoDecVArr =CreateVArr(5,FP)
-			dp.publiclItoDecW = CreateWar(FP)
-			dp.Call_lIToDec = CreateCallIndex()
-		end
+		dp.publiclItoDecVArr =CreateVArr(5,FP)
+		dp.publiclItoDecW = CreateWar(FP)
+		dp.Call_lIToDec = CreateCallIndex()
 		dp.VtoNamePtr = CreateVar(FP)
 		dp.VtoNameV = CreateVar(FP)
 		

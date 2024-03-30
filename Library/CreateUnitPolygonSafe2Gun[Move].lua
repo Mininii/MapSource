@@ -698,111 +698,24 @@ function CreateUnitLineSafeGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Rad
 end
 function CreateUnitLineSafeGun(PlayerID,Condition,Number,LocId,SizeofLoc,Radius,Angle,Points,Preserve,ForPlayer,nuTable)
 
-
-        local tn = {}
+	local tn = {}
 	local tu = {}
 	local tc=#nuTable/2
 	for i=1,tc do
 		tn[i]=nuTable[i*2-1]
 		tu[i]=nuTable[i*2]
 	end
-	local Distance = Radius
-	local X = {}
-	local Main = 1
-	local Level = 1
-	local Remain = Number
-	local x1 = 0
-	local x2 = 0
-	local y1 = 0
-	local y2 = 0
-	local Pts = 0
-	local Case = 0
-	SizeofLoc = bit32.band(SizeofLoc, 0xFFFFFFFF)
-	local TempSize = 0xFFFFFFFF - SizeofLoc + 1
 
-	dX = 0
-	dY = 0
-	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,TempSize))
-	table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,SizeofLoc))
-	table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,TempSize))
-	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,SizeofLoc))
-		for j=1,tc do
-				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
-			end
-	table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc))
-	table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize))
-	table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc))
-	table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize))
-	Level = 2
-	Remain = Remain - 1
 
-	while true do
-
-		if Remain == 0 then break end
-		   
-		Case = Points
-		while true do
-
-			if Case == 0 then break end
-
-			dX = ((Level-1) * Distance) * math.cos(math.rad(Angle+(360*(Case-1))/Points))
-			dY = ((Level-1) * Distance) * math.sin(math.rad(Angle+(360*(Case-1))/Points))
-
-			table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,dX-SizeofLoc))
-			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,dX+SizeofLoc))
-			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,dY-SizeofLoc))
-			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,dY+SizeofLoc))
-		for j=1,tc do
-				table.insert(X,CreateUnit(tn[j],tu[j],LocId+1,ForPlayer))
-			end
-			table.insert(X,SetMemory(0x58DC60+0x14*LocId,Add,SizeofLoc-dX))
-			table.insert(X,SetMemory(0x58DC68+0x14*LocId,Add,TempSize-dX))
-			table.insert(X,SetMemory(0x58DC64+0x14*LocId,Add,SizeofLoc-dY))
-			table.insert(X,SetMemory(0x58DC6C+0x14*LocId,Add,TempSize-dY))
-		            
-		    Case = Case - 1
-
-		end
-
-		Remain = Remain - 1
-		Level = Level + 1
-
-    end 
-
-	local k = {}
-
-	while true do
-		if #X / 63 <= 0 then break end
-
-		for i = 1, 63 do
-			table.insert(k, X[i])
-		end
-
-		if Preserve ~= 0 then
-			table.insert(k, PreserveTrigger())
-		end
-
-		Trigger { 
-			players = {PlayerID},
-			
-			conditions = {
-				Condition,
-			},
-			actions = {
-				k,
-			},
-		}
-
-		if Preserve ~= 0 then
-			table.remove(k,1)
-		end
-
-		for i = 1, 63 do
-			table.remove(k,1)
-			table.remove(X,1)
-		end
-
+	if Preserve ~= 0 then
+		Preserve=1
 	end
+	Angle = Angle + 90
+	for j,k in pairs(tn) do
+		CSPlot(CSMakeLine(Points,Radius,Angle,Number,0), ForPlayer, tu[j], LocId, nil, tn[j], SizeofLoc, PlayerID, Condition,nil,Preserve)
+	end
+	
+	
 	
 end
 function CreateUnitLineSafeWithPropertiesGunMove(PlayerID,Condition,Number,LocId,SizeofLoc,Radius,Angle,Points,Preserve,ForPlayer,Dest,Inst,nuTable,Properties)
