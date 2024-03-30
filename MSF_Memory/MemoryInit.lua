@@ -32,26 +32,42 @@ function HeroSpawnSetForBYD(Player,Level,UnitID1,UnitID2,Sw1,Sw2,BYDOutPut)
 end
 
 function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag)
-	local Y = {Actions}
-	local Z = {RotateActions}
-	local A = {}
-	table.insert(A,DisplayTextX(UnivToString,4))
-	for j, y in pairs(RotateActions) do
-		table.insert(A,y)
-	end
+	if type(Text) == "string" then
+		FlagT = {}
+		if Flag == 1 then
+			FlagT = {preserved}
+		end
+		local Y = {Actions}
+		local Z = {RotateActions}
+		local A = {}
+		table.insert(A,DisplayTextX(Text,4))
+		for j, y in pairs(RotateActions) do
+			table.insert(A,y)
+		end
+		Trigger2X(Player, conditions, {RotatePlayer(A,RotatePlayers,Player),Y}, FlagT)
 
-	if Flag == 1 then
-		CIf(Player,conditions)
 	else
-		CIfOnce(Player,conditions)
+		local Y = {Actions}
+		local Z = {RotateActions}
+		local A = {}
+		table.insert(A,DisplayTextX(UnivToString,4))
+		for j, y in pairs(RotateActions) do
+			table.insert(A,y)
+		end
+	
+		if Flag == 1 then
+			CIf(Player,conditions)
+		else
+			CIfOnce(Player,conditions)
+		end
+	
+		f_Memcpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
+		DoActionsX(Player,{
+				RotatePlayer(A,RotatePlayers,Player),Y
+		})
+		f_Memcpy(Player,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
+		CIfEnd()
 	end
-
-	f_Memcpy(Player,UnivStrPtr,_TMem(Arr(Text[3],0),"X","X",1),Text[2])
-	DoActionsX(Player,{
-			RotatePlayer(A,RotatePlayers,Player),Y
-	})
-	f_Memcpy(P6,UnivStrPtr,_TMem(Arr(StrReset[3],0),"X","X",1),StrReset[2])
-	CIfEnd()
 end
 
 function TemRotate()
@@ -60,180 +76,15 @@ function TemRotate()
 	local CB = CAPlotCreateArr
 	CAdd(FP,TemX,Dt)
 	CDiv(FP,TemAngle,TemX,270)
-	CA_Rotate(TemAngle) -- SX ∏∏≈≠ »∏¿¸
+	CA_Rotate(TemAngle) -- SX ÎßåÌÅº ÌöåÏ†Ñ
 end
 function TemRotate2()
 	local PlayerID = CAPlotPlayerID
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
 	CDiv(FP,TemAngle2,_Mul(B6_RT,10),333)
-	CA_Rotate(TemAngle2) -- SX ∏∏≈≠ »∏¿¸
+	CA_Rotate(TemAngle2) -- SX ÎßåÌÅº ÌöåÏ†Ñ
 end
-
-
--- init_Trig
-
-
-Trigger {
-	players = {AllPlayers},
-	actions = {
-		SetAllianceStatus(AllPlayers,Ally);
-	},
-}
-Trigger { -- StartPCheck
-	players = {Force1},
-	actions = {
-		SetDeaths(CurrentPlayer,SetTo,1,"Psi Emitter");
-	},
-}
-Trigger {
-	players = {P7},
-	actions = {
-		RunAIScript("Turn ON Shared Vision for Player 6");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetResources(CurrentPlayer,SetTo,10000000,OreAndGas);
-		RunAIScriptAt("Expansion Zerg Campaign Insane",21);
-		RunAIScriptAt("Value This Area Higher",21);
-		SetMemory(0x582144 + (4 * 6),SetTo,1600);
-		SetMemory(0x5821A4 + (4 * 6),SetTo,1600);
-		ModifyUnitEnergy(All,"Any unit",Force2,"Anywhere",100);
-		SetSwitch("Switch 1", Random);
-		},
-	}
-Trigger { -- ∫∏Ω∫∏˜ ª˝º∫
-	players = {P8},
-	actions = {
-		RunAIScript("Turn ON Shared Vision for Player 6");
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		SetResources(CurrentPlayer,SetTo,10000000,OreAndGas);
-		RunAIScriptAt("Expansion Zerg Campaign Insane",20);
-		RunAIScriptAt("Value This Area Higher",20);
-		SetMemory(0x582144 + (4 * 7),SetTo,1600);
-		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
-		SetInvincibility(Disable,"Mineral Field (Type 1)",AllPlayers,"Anywhere");
-		SetInvincibility(Disable,"Mineral Field (Type 2)",AllPlayers,"Anywhere");
-		SetInvincibility(Disable,"Mineral Field (Type 3)",AllPlayers,"Anywhere");
-		GiveUnits(All,"Mineral Field (Type 1)",P12,"Anywhere",P7);
-		GiveUnits(All,"Mineral Field (Type 2)",P12,"Anywhere",P7);
-		GiveUnits(All,"Mineral Field (Type 3)",P12,"Anywhere",P7);
-
-
-		CreateUnit(1,30,68,P6);
-		SetInvincibility(Enable,30,P6,"Anywhere");
-		GiveUnits(1,30,P6,"Anywhere",P12);
-		CreateUnit(1,12,184,P6);
-		SetInvincibility(Enable,12,P6,"Anywhere");
-		GiveUnits(1,12,P6,"Anywhere",P12);    
-		SetMemoryX(0x669F14, SetTo, 16*256,0xFF00);
-		CreateUnit(1,82,214,P6);
-		SetInvincibility(Enable,82,P6,"Anywhere");
-		GiveUnits(1,82,P6,"Anywhere",P12);
-		SetMemoryX(0x669F14, SetTo, 0*256,0xFF00);
-		},
-	}
-Trigger {
-	players = {Force2},
-	conditions = {  
-		Command(CurrentPlayer,AtLeast,10,42);
-		
-	},
-	actions = {
-		KillUnitAt(1,42,"Anywhere",CurrentPlayer);
-		PreserveTrigger();
-		
-	},
-}
-Trigger {
-	players = {Force2},
-	conditions = {
-		Command(CurrentPlayer,AtLeast,50,35);
-		
-	},
-	actions = {
-		KillUnit(35,CurrentPlayer);
-		PreserveTrigger();
-		
-	},
-}
-Trigger { -- ƒƒ«ª≈Õ «√∑π¿ÃæÓ ªˆªÛ º≥¡§
-	players = {P6},
-	conditions = {
-		Always();
-	},
-	actions = {
-		RunAIScript("Turn ON Shared Vision for Player 7");
-		RunAIScript("Turn ON Shared Vision for Player 8");
-		SetMemoryX(0x581DDC,SetTo,128*1,0xFF); --P7 πÃ¥œ∏  
-		SetMemoryX(0x581DA4,SetTo,128*65536,0xFF0000), --P7 ƒ√∑Ø
-		GiveUnits(All,125,P6,"Anywhere",P12);
-		
-},
-}
-
-Trigger { -- EUD Editor Preserve
-	players = {P6},
-	conditions = {
-		Always();
-	},
-	actions = {
-		SetMemory(0x660B10, SetTo, 5);
-		SetMemory(0x660A74, SetTo, 327682);
-		SetMemory(0x660A7C, SetTo, 131072);
-		SetMemory(0x660A80, SetTo, 131074);
-		SetMemory(0x660A84, SetTo, 131072);
-		SetMemory(0x660A88, SetTo, 2);
-		SetMemory(0x660A94, SetTo, 131072);
-		SetMemory(0x660AB4, SetTo, 2);
-		SetMemory(0x660AD8, SetTo, 327680);
-		SetMemory(0x660A9C, SetTo, 5);
-		SetMemory(0x660ADC, SetTo, 5);
-		SetMemory(0x660AE8, SetTo, 327685);
-		SetMemory(0x660AF0, SetTo, 327685);
-		SetMemory(0x660AF4, SetTo, 327685);
-		SetMemory(0x660AF8, SetTo, 327680);
-		SetMemory(0x660AFC, SetTo, 131077);
-		SetMemory(0x660B00, SetTo, 14090245);
-		SetMemory(0x660B14, SetTo, 327680);
-		SetMemory(0x660B18, SetTo, 14942213);
-		SetMemory(0x660B1C, SetTo, 5);
-		SetMemory(0x660B68, SetTo, 17760527);
-		PreserveTrigger();
-		Comment("EUD Editor Preserve");
-	},
-}
-Trigger { -- ∆€ºæ∆Æ µ•πÃ¡ˆ ºº∆√
-	players = {P6},
-	actions = {
-		SetMemory(0x515B88,SetTo,256);---------≈©±‚ 0
-		SetMemory(0x515B8C,SetTo,256);---------≈©±‚ 1
-		SetMemory(0x515B90,SetTo,256);---------≈©±‚ 2
-		SetMemory(0x515B94,SetTo,256);---------≈©±‚ 3
-		SetMemory(0x515B98,SetTo,256);---------≈©±‚ 4
-		SetMemory(0x515B9C,SetTo,256);---------≈©±‚ 5
-		SetMemory(0x515BA0,SetTo,256);---------≈©±‚ 6
-		SetMemory(0x515BA4,SetTo,256);---------≈©±‚ 7
-		SetMemory(0x515BA8,SetTo,256);---------≈©±‚ 8
-		SetMemory(0x515BAC,SetTo,256);---------≈©±‚ 9
-		SetMemory(0x515BC4,SetTo,20480);
-		SetMemory(0x515BC8,SetTo,10240);
-		SetMemory(0x515BCC,SetTo,5120);
-		SetMemory(0x515BD0,SetTo,40960);
-		SetMemory(0x515BD4,SetTo,256);
-	},
-}
-
-
-Trigger {
-	players = {P6},
-	actions = {
-		KillUnit("Vespene Geyser",AllPlayers);
-		ModifyUnitShields(All,174,AllPlayers,"Anywhere",100); --174 Temple
-		ModifyUnitShields(All,200,AllPlayers,"Anywhere",100); --200 Generator
-		ModifyUnitEnergy(All,8,Force2,"Anywhere",100);
-		PreserveTrigger();
-	}
-}
-
 
 
 -- function CAfunc(Table) local CA = CAPlotDataArr -- Custom Code Section -- end
@@ -293,23 +144,23 @@ function CAPlot(Shape,Owner,UnitId,Location,CenterXY,PerUnit,PlotSize,Preset,CAf
 			table.insert(TempAct,SetCVar("X",CA[10],SetTo,Shape[1]))
 		end
 		if type(Preset[1]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (∞Ì¡§) [1]
+			CVariable2(PlayerID,CAPlotVarAlloc+0,"X",SetTo,Preset[1]) -- Shape Select (Í≥†Ï†ï) [1]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+0) -- Shape Select (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (∞°∫Ø) [2]
+		CVariable(PlayerID,CAPlotVarAlloc+1) -- Delay Timer (Í∞ÄÎ≥Ä) [2]
 		if type(Preset[3]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (∞Ì¡§) [3]
+			CVariable2(PlayerID,CAPlotVarAlloc+2,"X",SetTo,Preset[3]) -- Delay Adder (Í≥†Ï†ï) [3]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+2) -- Delay Adder (Í≥†Ï†ï)
 		end
-		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (∞°∫Ø) [4]
+		CVariable(PlayerID,CAPlotVarAlloc+3) -- Loop Counter (Í∞ÄÎ≥Ä) [4]
 		if type(Preset[5]) == "number" then
-			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (∞Ì¡§) [5]
+			CVariable2(PlayerID,CAPlotVarAlloc+4,"X",SetTo,Preset[5]) -- Loop Limit (Í≥†Ï†ï) [5]
 		else
-			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (∞Ì¡§)
+			CVariable(PlayerID,CAPlotVarAlloc+4) -- Loop Limit (Í≥†Ï†ï)
 		end
-		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (∞°∫Ø) [6]
+		CVariable2(PlayerID,CAPlotVarAlloc+5,"X",SetTo,1) -- Current index (Í∞ÄÎ≥Ä) [6]
 		-------- Preset Limit --------------------------------
 		CVariable(PlayerID,CAPlotVarAlloc+6) -- Temp Index
 		CVariable(PlayerID,CAPlotVarAlloc+7) -- Temp X
